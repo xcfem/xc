@@ -99,29 +99,19 @@ int XC::BisectionLineSearch::search(double s0, double s1, LinearSOE &theSOE, Inc
         count++;
         etaU *= 2.0;
 
-        //actualiza la diferencia incremental y 
-        //determina el nuevo vector de desequilibrio.
+        //Updates la diferencia incremental and 
+        //computes the new unbalanced vector.
         x= dU;
         x*= etaU-etaJ;
 	    
-        if(theIntegrator.update(x) < 0)
-          {
-            std::cerr << "WARNING XC::BisectionLineSearch::search() -";
-            std::cerr << "the XC::Integrator failed in update()\n";	
-            return -1;
-          }
+        const int tmp= updateAndUnbalance(theIntegrator);
+        if(tmp!=0)
+          return tmp;
 
-        if(theIntegrator.formUnbalance() < 0)
-          {
-            std::cerr << "WARNING XC::BisectionLineSearch::search() -";
-            std::cerr << "the XC::Integrator failed in formUnbalance()\n";	
-            return -2;
-          }
-
-        //nuevo residuo
+        //new unbalanced vector
         const Vector &ResidJ = theSOE.getB();
     
-        //nuevo valor de sU
+        //new value for sU
         sU = dU ^ ResidJ;
 
         // check if we have a solution we are happy with
@@ -164,32 +154,22 @@ int XC::BisectionLineSearch::search(double s0, double s1, LinearSOE &theSOE, Inc
         if(r>r0)
           eta =  1.0;
     
-        //actualiza la diferencia incremental y 
-        //determina el nuevo vector de desequilibrio.
+        //Updates la diferencia incremental and 
+        //computes the new unbalanced vector.
         x= dU;
         x*= eta-etaJ;
 	    
-        if(theIntegrator.update(x) < 0)
-          {
-            std::clog << "WARNING XC::BisectionLineSearch::search() -";
-            std::clog << "the XC::Integrator failed in update()\n";	
-            return -1;
-          }
-    
-        if(theIntegrator.formUnbalance() < 0)
-          {
-            std::cerr << "WARNING XC::BisectionLineSearch::search() -";
-            std::cerr << "the XC::Integrator failed in formUnbalance()\n";	
-            return -2;
-          }
+        const int tmp= updateAndUnbalance(theIntegrator);
+        if(tmp!=0)
+          return tmp;
 
-        //nuevo residuo
+        //new unbalanced
         const Vector &ResidJ = theSOE.getB();
     
-        //nuevo valor de s
+        //new value for s
         s= dU ^ ResidJ;
     
-        //nuevo valor de r 
+        //new value for r 
         r= fabs( s / s0 ); 
 
         // set variables for next iteration

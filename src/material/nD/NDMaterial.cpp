@@ -100,10 +100,11 @@ double XC::NDMaterial::getnu(void)
 double XC::NDMaterial::getpsi(void)
   { return 0.0; }
 
-// nuevos métodos para recorder requested by Zhouhui Yang .. MAY NOT STAY
+//! @brief Returns commited stresses
 const XC::Vector &XC::NDMaterial::getCommittedStress(void) 
   { return this->getStress(); }
 
+//! @brief Returns commited strains
 const XC::Vector &XC::NDMaterial::getCommittedStrain(void) 
   { return this->getStrain(); }
 
@@ -111,7 +112,8 @@ const XC::Vector &XC::NDMaterial::getCommittedStrain(void)
 //! @brief Asigna el trial strain value.
 int XC::NDMaterial::setTrialStrain(const Vector &v)
   {
-    std::cerr << nombre_clase() << "::setTrialStrain -- subclass responsibility\n";
+    std::cerr << nombre_clase() << "::" << __FUNCTION__
+              << "; subclass responsibility\n";
     return -1;    
   }
 

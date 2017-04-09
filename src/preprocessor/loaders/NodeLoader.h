@@ -44,20 +44,20 @@ class NodeLoader: public Loader
   private:
     size_t ngdl_def_nodo; //!< Default number of DOFs for new nodes.
     size_t ncoo_def_nodo; //!< Number of coordinates for new nodes (1,2 or 3).
-    Node *nodo_semilla; //!< Seed node for semi-automatic meshing.
+    Node *seed_node; //!< Seed node for semi-automatic meshing.
     void libera(void);
     Node *new_node(const int &tag,const size_t &dim,const int &ngdl,const double &x,const double &y=0.0,const double &z=0.0);
   public:
     NodeLoader(Preprocessor *);
     virtual ~NodeLoader(void);
-    const Node *get_nodo_semilla(void) const
-      { return nodo_semilla; }
-    Node *nuevoNodo(const double &x,const double &y,const double &z);
-    Node *nuevoNodo(const double &x,const double &y);
-    Node *nuevoNodo(const double &x);
-    Node *nuevoNodo(const Pos3d &p);
-    Node *nuevoNodo(const Pos2d &p);
-    Node *nuevoNodo(const Vector &);
+    const Node *get_seed_node(void) const
+      { return seed_node; }
+    Node *newNode(const double &x,const double &y,const double &z);
+    Node *newNode(const double &x,const double &y);
+    Node *newNode(const double &x);
+    Node *newNode(const Pos3d &p);
+    Node *newNode(const Pos2d &p);
+    Node *newNode(const Vector &);
     Node *newSeedNode(void);
     Node *newNodeIDXYZ(const int &,const double &,const double &,const double &);
     Node *newNodeIDXY(const int &,const double &,const double &);

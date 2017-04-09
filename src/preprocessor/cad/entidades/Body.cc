@@ -184,12 +184,12 @@ bool XC::Body::BodyFace::checkNDivs(void) const
   { return surface->checkNDivs(); }
 
 //! @brief Lanza la creación de nodos de las cara.
-void XC::Body::BodyFace::crea_nodos(void)
+void XC::Body::BodyFace::create_nodes(void)
   {
     if(surface)
-      surface->crea_nodos();
+      surface->create_nodes();
     else
-      std::cerr << ":Body::BodyFace::crea_nodos; pointer "
+      std::cerr << ":Body::BodyFace::create_nodes; pointer "
                 << "to surface is null." << std::endl;
   }
 

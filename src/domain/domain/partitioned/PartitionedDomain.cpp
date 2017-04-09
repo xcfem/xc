@@ -863,10 +863,10 @@ int XC::PartitionedDomain::setPartitioner(DomainPartitioner *thePartitioner)
 int XC::PartitionedDomain::partition(int numPartitions, bool usingMain, int mainPartitionID)
   {
     int result= 0;
-    // Necesitamos crear el grafo de elementos antes que los nuevos subdomains.
+    // We must create element graph before the creation of new subdomains.
     // DO NOT REMOVE THIS LINE __ EVEN IF COMPILER WARNS ABOUT UNUSED VARIABLE
     //const Graph &theEleGraph= getElementGraph();
-    getElementGraph(); //Pero esto sí se puede hacer ¿NO?
+    getElementGraph(); //But this is Ok, isn't it?
 
     // now we call partition on the domainPartitioner which does the partitioning
     DomainPartitioner *thePartitioner= this->getPartitioner();
@@ -988,10 +988,10 @@ int XC::PartitionedDomain::buildEleGraph(Graph &theEleGraph)
     while((tagdObjPtr= theEles2()) != 0)
       {
         int ElementTag= tagdObjPtr->getTag();
-        Vertex nuevo(count,ElementTag);
+        Vertex newVertex(count,ElementTag);
 
 
-        theEleGraph.addVertex(nuevo);
+        theEleGraph.addVertex(newVertex);
         theElementTagVertices[ElementTag]= count++;
       }
 

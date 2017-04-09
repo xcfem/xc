@@ -41,7 +41,7 @@
 XC::MapEsquemas3d::MapEsquemas3d(Cad *cad)
   : MapCadMember<TritrizPtrPnt>(cad) {}
 
-//! @brief Crea un nuevo esquema bidimensional.
+//! @brief Creates a new esquema bidimensional.
 XC::TritrizPtrPnt *XC::MapEsquemas3d::makeNew(void)
   {
     TritrizPtrPnt *retval= busca(getTag());

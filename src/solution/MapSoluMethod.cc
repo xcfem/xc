@@ -68,7 +68,7 @@ XC::SoluMethod *XC::MapSoluMethod::getSoluMethod(const std::string &cod)
     return retval;
   }
 
-//! @brief Crea un nuevo solution method con el código being passed as parameter.
+//! @brief Creates a new solution method con el código being passed as parameter.
 //! @brief Si ya existe returns a pointer al mismo.
 XC::SoluMethod &XC::MapSoluMethod::creaSoluMethod(const std::string &cod,ModelWrapper *sm)
   {
@@ -80,7 +80,7 @@ XC::SoluMethod &XC::MapSoluMethod::creaSoluMethod(const std::string &cod,ModelWr
     return *retval;
   }
 
-//! @brief Crea un nuevo solution method con el código being passed as parameter.
+//! @brief Creates a new solution method con el código being passed as parameter.
 XC::SoluMethod &XC::MapSoluMethod::newSoluMethod(const std::string &cod_solu_method,const std::string &cod_solu_model)
   {
     ProcSoluControl *sc= dynamic_cast<ProcSoluControl *>(Owner());

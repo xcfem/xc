@@ -42,7 +42,7 @@ XC::MapSisRef::MapSisRef(Cad *cad)
   : MapCadMember<SisRef>(cad) {}
 
 //! @brief Creates a new reference system of the type being passed as paramenter.
-XC::SisRef *XC::MapSisRef::Nuevo(const std::string &tipo)
+XC::SisRef *XC::MapSisRef::New(const std::string &tipo)
   {
     SisRef *retval= busca(getTag());
     if(!retval) //New reference system.
@@ -55,7 +55,8 @@ XC::SisRef *XC::MapSisRef::Nuevo(const std::string &tipo)
             tag++;
           }
         else
-	  std::cerr << "MapSisRef::NuevoSisRef; reference system type: '" << tipo
+	  std::cerr << nombre_clase() << "::" << __FUNCTION__
+	            << "; reference system type: '" << tipo
                     << "' unknown." << std::endl;
       }
     return retval;

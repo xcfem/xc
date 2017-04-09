@@ -24,10 +24,10 @@
 // along with this program.
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
-//crea_elem.h
+//create_elem.h
 
-#ifndef CREA_ELEM_H
-#define CREA_ELEM_H
+#ifndef CREATE_ELEM_H
+#define CREATE_ELEM_H
 
 namespace XC {
 class Element;

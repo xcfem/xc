@@ -32,7 +32,7 @@
 #include "domain/mesh/node/Node.h"
 #include "domain/mesh/MeshEdges.h"
 
-void XC::DqPtrsElem::crea_arbol(void)
+void XC::DqPtrsElem::create_arbol(void)
   {
     kdtreeElements.clear();
     for(iterator i= begin();i!=end();i++)
@@ -50,12 +50,12 @@ XC::DqPtrsElem::DqPtrsElem(EntCmd *owr)
 //! @brief Copy constructor.
 XC::DqPtrsElem::DqPtrsElem(const DqPtrsElem &otro)
   : DqPtrs<Element>(otro)
-  { crea_arbol(); }
+  { create_arbol(); }
 
 //! @brief Copy constructor.
 XC::DqPtrsElem::DqPtrsElem(const std::deque<Element *> &ts)
   : DqPtrs<Element>(ts)
-  { crea_arbol(); }
+  { create_arbol(); }
 
 //! @brief Copy constructor.
 XC::DqPtrsElem::DqPtrsElem(const std::set<const Element *> &st)

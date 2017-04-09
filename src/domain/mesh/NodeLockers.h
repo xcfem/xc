@@ -48,7 +48,7 @@ class NodeLockers: public EntCmd, public MovableObject
     friend class Mesh;
     NodeLocker *busca_node_locker(const std::string &);
     const NodeLocker *busca_node_locker(const std::string &) const;
-    NodeLocker *nuevoNodeLocker(const std::string &nmb);
+    NodeLocker *newNodeLocker(const std::string &nmb);
     void borraNodeLocker(const std::string &nmb);
 
     DbTagData &getDbTagData(void) const;

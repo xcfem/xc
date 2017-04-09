@@ -150,7 +150,7 @@ void XC::Edge::SetElemSize(const double &sz)
 void XC::Edge::divide(void)
   {
     const MatrizPos3d posiciones= get_posiciones();
-    crea_puntos(posiciones);
+    create_points(posiciones);
   }
 
 //! @brief Returns a pointer to node which indices are being passed as parameters.
@@ -263,7 +263,7 @@ MatrizPos3d XC::Edge::GetPosNodosDir(void) const
     const size_t nn= NumNodos();
     MatrizPos3d retval(nn);
     for(size_t i=1;i<=nn;i++)
-      retval(i,1)= pos_nodo(*GetNodo(i));
+      retval(i,1)= pos_node(*GetNodo(i));
     return retval;
   }
 
@@ -273,7 +273,7 @@ MatrizPos3d XC::Edge::GetPosNodosInv(void) const
     const size_t nn= NumNodos();
     MatrizPos3d retval(nn);
     for(size_t i=1;i<=nn;i++)
-      retval(i,1)= pos_nodo(*GetNodo(nn-i+1));
+      retval(i,1)= pos_node(*GetNodo(nn-i+1));
     return retval;
   }
 
@@ -297,7 +297,7 @@ const std::string &XC::Edge::NombresSupsTocan(void) const
 std::set<const XC::Edge *> XC::Edge::GetLadosHomologos(const std::set<const XC::Edge *> &lh) const
   {
     std::set<const Edge *> retval;
-    std::set<const Edge *> nuevos_adyacentes;
+    std::set<const Edge *> new_adyacentes;
 
     if(!sups_linea.empty())
       {
@@ -308,21 +308,21 @@ std::set<const XC::Edge *> XC::Edge::GetLadosHomologos(const std::set<const XC::
               {
                 std::set<const XC::Edge *>::const_iterator k= lh.find(h);
                 if(k==lh.end()) //Not already added
-                  nuevos_adyacentes.insert(h);
+                  new_adyacentes.insert(h);
               }
           }
       }
-    for(std::set<const XC::Edge *>::const_iterator i= nuevos_adyacentes.begin();i!=nuevos_adyacentes.end();i++)
+    for(std::set<const XC::Edge *>::const_iterator i= new_adyacentes.begin();i!=new_adyacentes.end();i++)
       retval.insert(*i);
-    if(retval.size()>lh.size()) //Hay lados nuevos.
+    if(retval.size()>lh.size()) //There are new edges.
       {
-        for(std::set<const XC::Edge *>::const_iterator i= nuevos_adyacentes.begin();i!=nuevos_adyacentes.end();i++)
+        for(std::set<const XC::Edge *>::const_iterator i= new_adyacentes.begin();i!=new_adyacentes.end();i++)
           {
             std::set<const XC::Edge *> tmp= (*i)->GetLadosHomologos(retval);
             for(std::set<const XC::Edge *>::const_iterator j= tmp.begin();j!=tmp.end();j++)
               if(this!=*j) retval.insert(*j);
           }
-        nuevos_adyacentes.erase(nuevos_adyacentes.begin(),nuevos_adyacentes.end());
+        new_adyacentes.erase(new_adyacentes.begin(),new_adyacentes.end());
       }
     return retval;
   }
@@ -361,11 +361,11 @@ std::set<const XC::Edge *> XC::GetLineasTocan(const Pnt &p)
   { return p.EdgesTocan(); }
 
 //! @brief Returns an matrix of positions along the line.
-MatrizPos3d XC::Edge::get_pos_nodos(void) const
+MatrizPos3d XC::Edge::get_pos_nodes(void) const
   { return get_posiciones(); }
 
 //! @brief Creates the nodes for both end points of the edge.
-void XC::Edge::crea_nodos_en_extremos(void)
+void XC::Edge::create_nodes_en_extremos(void)
   {
     if(verborrea>4)
       std::clog << "Creating nodes for '" << GetNombre() << "' edge ends...";   
@@ -376,7 +376,7 @@ void XC::Edge::crea_nodos_en_extremos(void)
         return;
       }
     else
-      P1()->crea_nodos();
+      P1()->create_nodes();
 
     Node *nodo_p1= P1()->GetNodo(1,1,1);
     assert(nodo_p1);
@@ -389,7 +389,7 @@ void XC::Edge::crea_nodos_en_extremos(void)
         return;
       }
     else
-      P2()->crea_nodos();
+      P2()->create_nodes();
 
     Node *nodo_p2= P2()->GetNodo(1,1,1);
     assert(nodo_p2);
@@ -398,11 +398,11 @@ void XC::Edge::crea_nodos_en_extremos(void)
     nodos(1,filas,cols)= nodo_p2; //Nodo del end point.
 
     if(verborrea>4)
-     std::cerr << "Edge::crea_nodos_en_extremos(); creados." << std::endl;
+     std::cerr << "Edge::create_nodes_en_extremos(); creados." << std::endl;
   }
 
 //! @brief Cretes nodes of the object.
-void XC::Edge::crea_nodos(void)
+void XC::Edge::create_nodes(void)
   {
     if(verborrea>4)
       std::clog << "Creating nodes for edge: '" << GetNombre() << "'...";
@@ -411,15 +411,15 @@ void XC::Edge::crea_nodos(void)
     if(nodos.Null())
       {
         if(!get_preprocessor())
-          std::cerr << "Edge::crea_nodos; preprocessor undefined." << std::endl;
+          std::cerr << "Edge::create_nodes; preprocessor undefined." << std::endl;
         else
           {
-            const MatrizPos3d posiciones= get_pos_nodos();
+            const MatrizPos3d posiciones= get_pos_nodes();
             const size_t filas= posiciones.getNumFilas();
             const size_t cols= posiciones.getNumCols();
             nodos= TritrizPtrNod(1,filas,cols);
 
-            crea_nodos_en_extremos();
+            create_nodes_en_extremos();
 
 
             if((filas*cols)>2) //Si tiene nodos intermedios...
@@ -430,16 +430,16 @@ void XC::Edge::crea_nodos(void)
                 const size_t col_ini= (col_fin == 1 ? 1 : 2);
                 for(register size_t j= fila_ini;j<=fila_fin;j++)
                   for(register size_t k= col_ini;k<=col_fin;k++)
-                    crea_nodo(posiciones(j,k),1,j,k);
+                    create_node(posiciones(j,k),1,j,k);
               }
           }
         if(verborrea>4)
-	  std::clog << "Edge::crea_nodos(); creados " << nodos.NumPtrs() << " nodo(s)." << std::endl;
+	  std::clog << "Edge::create_nodes(); creados " << nodos.NumPtrs() << " nodo(s)." << std::endl;
       }
     else
       {
         if(verborrea>2)
-          std::clog << "Edge::crea_nodos; los nodos of the line: '" << GetNombre() << "' already exist." << std::endl;
+          std::clog << "Edge::create_nodes; los nodos of the line: '" << GetNombre() << "' already exist." << std::endl;
       }
     if(verborrea>4)
       std::clog << "creados." << std::endl;
@@ -450,8 +450,8 @@ void XC::Edge::genMesh(meshing_dir dm)
   {
     if(verborrea>3)
       std::clog << "Meshing edge...(" << GetNombre() << ")...";   
-    crea_nodos();
-    crea_elementos(dm);
+    create_nodes();
+    create_elements(dm);
     if(verborrea>3)
       std::clog << "done." << std::endl;
   }

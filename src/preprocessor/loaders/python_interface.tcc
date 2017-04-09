@@ -24,19 +24,19 @@ class_<XC::Loader, bases<EntCmd,XC::MovableObject>, boost::noncopyable >("Loader
   .add_property("getDomain", make_function( &XC::Loader::getDomain, return_internal_reference<>() ),"Returns a reference to the domain.")
     ;
 
-XC::Node *(XC::NodeLoader::*nuevoNodoFromXYZ)(const double &x,const double &y,const double &z)= &XC::NodeLoader::nuevoNodo;
-XC::Node *(XC::NodeLoader::*nuevoNodoFromXY)(const double &x,const double &y)= &XC::NodeLoader::nuevoNodo;
-XC::Node *(XC::NodeLoader::*nuevoNodoFromVector)(const XC::Vector &)= &XC::NodeLoader::nuevoNodo;
+XC::Node *(XC::NodeLoader::*newNodeFromXYZ)(const double &x,const double &y,const double &z)= &XC::NodeLoader::newNode;
+XC::Node *(XC::NodeLoader::*newNodeFromXY)(const double &x,const double &y)= &XC::NodeLoader::newNode;
+XC::Node *(XC::NodeLoader::*newNodeFromVector)(const XC::Vector &)= &XC::NodeLoader::newNode;
 class_<XC::NodeLoader, bases<XC::Loader>, boost::noncopyable >("NodeLoader", no_init)
   .add_property("numGdls", &XC::NodeLoader::getNumGdls, &XC::NodeLoader::setNumGdls)
   .add_property("dimEspace", &XC::NodeLoader::getDimEspacio, &XC::NodeLoader::setDimEspacio)
   .add_property("defaultTag", &XC::NodeLoader::getDefaultTag, &XC::NodeLoader::setDefaultTag)
   .def("calculateNodalReactions", &XC::NodeLoader::calculateNodalReactions,"Calcula las reacciones en los nodos.")
   .def("getNode", &XC::NodeLoader::getNode,return_internal_reference<>(),"Returns the nodo cuyo identificador being passed as parameter.")
-  .def("newNodeXYZ", nuevoNodoFromXYZ,return_internal_reference<>(),"Crea un nodo con las coordenadas being passed as parameters.")
-  .def("newNodeFromVector", nuevoNodoFromVector,return_internal_reference<>(),"Crea un nodo con las coordenadas being passed as parameters.")
+  .def("newNodeXYZ", newNodeFromXYZ,return_internal_reference<>(),"Crea un nodo con las coordenadas being passed as parameters.")
+  .def("newNodeFromVector", newNodeFromVector,return_internal_reference<>(),"Crea un nodo con las coordenadas being passed as parameters.")
   .def("newNodeIDXYZ", &XC::NodeLoader::newNodeIDXYZ,return_internal_reference<>(),"Crea un nodo con el tag y las coordenadas being passed as parameters.")
-  .def("newNodeXY", nuevoNodoFromXY,return_internal_reference<>(),"Crea un nodo con las coordenadas being passed as parameters.")
+  .def("newNodeXY", newNodeFromXY,return_internal_reference<>(),"Crea un nodo con las coordenadas being passed as parameters.")
   .def("newNodeIDXY", &XC::NodeLoader::newNodeIDXY,return_internal_reference<>(),"Crea un nodo con el tag y las coordenadas being passed as parameters.")
   .def("newNodeIDV", &XC::NodeLoader::newNodeIDV,return_internal_reference<>(),"Crea un nodo con el tag y las coordenadas being passed as parameters.")
   .def("newSeedNode", &XC::NodeLoader::newSeedNode,return_internal_reference<>(),"Crea un nodo con las coordenadas being passed as parameters.")
@@ -44,7 +44,7 @@ class_<XC::NodeLoader, bases<XC::Loader>, boost::noncopyable >("NodeLoader", no_
   ;
 
 class_<XC::MaterialLoader, bases<XC::Loader>, boost::noncopyable >("MaterialLoader", no_init)
-  .def("newMaterial", &XC::MaterialLoader::nuevoMaterial,return_internal_reference<>(),"Creates a new material.")
+  .def("newMaterial", &XC::MaterialLoader::newMaterial,return_internal_reference<>(),"Creates a new material.")
   .def("getMaterial", &XC::MaterialLoader::getMaterial,return_internal_reference<>(),"Returns the material cuyo nombre being passed as parameter.")
   .def("materialExists",&XC::MaterialLoader::existeMaterial,"True if material is already defined.")
   .def("getName",&XC::MaterialLoader::getName,"Returns the name thats corresponds to the identifier.")
@@ -75,7 +75,7 @@ class_<XC::ProtoElementLoader, bases<XC::Loader>, boost::noncopyable >("ProtoEle
   .add_property("defaultMaterial", make_function( &XC::ProtoElementLoader::getDefaultMaterial, return_value_policy<copy_const_reference>() ), &XC::ProtoElementLoader::setDefaultMaterial)
   .add_property("defaultTransformation", make_function( &XC::ProtoElementLoader::getDefaultTransf, return_value_policy<copy_const_reference>() ), &XC::ProtoElementLoader::setDefaultTransf)
   .add_property("defaultIntegrator", make_function( &XC::ProtoElementLoader::getDefaultIntegrator, return_value_policy<copy_const_reference>() ), &XC::ProtoElementLoader::setDefaultIntegrator)
-  .def("newElement", &XC::ProtoElementLoader::nuevoElemento,return_internal_reference<>(),"Crea un elemento del tipo being passed as parameter.")
+  .def("newElement", &XC::ProtoElementLoader::newElement,return_internal_reference<>(),"Crea un elemento del tipo being passed as parameter.")
    ;
 
 class_<XC::ElementLoader::SeedElemLoader, bases<XC::ProtoElementLoader>, boost::noncopyable >("SeedElement", no_init)

@@ -66,9 +66,9 @@ class MaterialVector: public std::vector<MAT *>, public EntCmd, public MovableOb
     ~MaterialVector(void)
       { clearAll(); }
 
-    void setMaterial(const MAT *nuevo_mat);
-    void setMaterial(size_t i,MAT *nuevo_mat);
-    void setMaterial(const MAT *nuevo_mat,const std::string &tipo);
+    void setMaterial(const MAT *);
+    void setMaterial(size_t i,MAT *);
+    void setMaterial(const MAT *,const std::string &tipo);
     bool empty(void) const;
     int commitState(void);
     int revertToLastCommit(void);
@@ -106,7 +106,8 @@ MaterialVector<MAT>::MaterialVector(const size_t &nMat,const MAT *matModel)
           {
             (*i)= matModel->getCopy();
             if(!(*i))
-              std::cerr<<" MaterialVector -- failed allocate material model pointer\n";
+              std::cerr << nombre_clase() << "::" << __FUNCTION__
+		        << "; failed allocate material model pointer\n";
           }
       }
   }
@@ -124,7 +125,8 @@ void MaterialVector<MAT>::alloc(const std::vector<MAT *> &mats)
           {
             (*this)[i]= mats[i]->getCopy();
             if(!(*this)[i])
-              std::cerr<<" MaterialVector -- failed allocate material model pointer\n";
+              std::cerr << nombre_clase() << "::" << __FUNCTION__
+		        << "; failed allocate material model pointer\n";
           }
       }
   }
@@ -144,41 +146,43 @@ MaterialVector<MAT> &MaterialVector<MAT>::operator=(const MaterialVector<MAT> &o
   }
 
 template <class MAT>
-void MaterialVector<MAT>::setMaterial(const MAT *nuevo_mat)
+void MaterialVector<MAT>::setMaterial(const MAT *new_mat)
   {
     clear_materials();
-    if(nuevo_mat)
+    if(new_mat)
       {
         for(iterator i= mat_vector::begin();i!=mat_vector::end();i++)
           {
-            (*i)= nuevo_mat->getCopy();
+            (*i)= new_mat->getCopy();
             if(!(*i))
-              std::cerr<<" MaterialVector -- failed allocate material model pointer\n";
+              std::cerr << nombre_clase() << "::" << __FUNCTION__
+		        << "; failed allocate material model pointer\n";
           }
       }
   }
 
 template <class MAT>
-void MaterialVector<MAT>::setMaterial(const MAT *nuevo_mat, const std::string &tipo)
+void MaterialVector<MAT>::setMaterial(const MAT *new_mat, const std::string &tipo)
   {
     clear_materials();
-    if(nuevo_mat)
+    if(new_mat)
       {
         for(iterator i= mat_vector::begin();i!=mat_vector::end();i++)
           {
-            (*i)= nuevo_mat->getCopy(tipo.c_str());
+            (*i)= new_mat->getCopy(tipo.c_str());
             if(!(*i))
-              std::cerr<<" MaterialVector::setMaterial -- failed allocate material model pointer\n";
+              std::cerr << nombre_clase() << "::" << __FUNCTION__
+		        << "; failed allocate material model pointer\n";
           }
       }
   }
 
 template <class MAT>
-void MaterialVector<MAT>::setMaterial(size_t i,MAT *nuevo_mat)
+void MaterialVector<MAT>::setMaterial(size_t i,MAT *new_mat)
   {
     if((*this)[i])
       delete (*this)[i];
-    (*this)[i]= nuevo_mat;
+    (*this)[i]= new_mat;
   }
 
 template <class MAT>
@@ -349,7 +353,8 @@ double MaterialVector<MAT>::getMeanGeneralizedStrainByName(const std::string &co
     else if(cod == "n12")
       retval= this->getMeanGeneralizedStrain(MEMBRANE_RESPONSE_n12);
     else
-      std::cerr << "stress code: '" << cod << " unknown." << std::endl;
+      std::cerr << nombre_clase() << "::" << __FUNCTION__
+		<< "stress code: '" << cod << " unknown." << std::endl;
     return retval;
   }
 
@@ -391,7 +396,8 @@ double MaterialVector<MAT>::getMeanGeneralizedStressByName(const std::string &co
     else if(cod == "q23")
       retval= this->getMeanGeneralizedStress(PLATE_RESPONSE_q23);
     else
-      std::cerr << "stress code: '" << cod << " unknown." << std::endl;
+      std::cerr << nombre_clase() << "::" << __FUNCTION__
+		<< "stress code: '" << cod << " unknown." << std::endl;
     return retval;
   }
 
@@ -440,7 +446,8 @@ void MaterialVector<MAT>::setInitialGeneralizedStrains(const std::vector<Vector>
     const size_t nMat= this->size();
     const size_t sz= std::min(nMat,iS.size());
     if(iS.size()<nMat)
-      std::cerr << "MaterialVector::setInitialGeneralizedStrains; received: "
+      std::cerr << nombre_clase() << "::" << __FUNCTION__
+	        << "; received: "
                 << iS.size() << " generalized strain vectors, expected: "
                 << nMat << ".\n";
     for(size_t i= 0;i<sz;i++)
@@ -454,8 +461,9 @@ void MaterialVector<MAT>::addInitialGeneralizedStrains(const std::vector<Vector>
     const size_t nMat= this->size();
     const size_t sz= std::min(nMat,iS.size());
     if(iS.size()<nMat)
-      std::cerr << "MaterialVector::setInitialGeneralizedStrains; se recibieron: "
-                << iS.size() << " generalized strain vectors, se esperaban: "
+      std::cerr << nombre_clase() << "::" << __FUNCTION__
+	        << "; received: "
+                << iS.size() << " generalized strain vectors, expected: "
                 << nMat << ".\n";
     for(size_t i= 0;i<sz;i++)
       (*this)[i]->addInitialGeneralizedStrain(iS[i]);
@@ -530,7 +538,7 @@ int MaterialVector<MAT>::sendSelf(CommParameters &cp)
     const int dataTag=getDbTag();
     res+= cp.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
-      std::cerr << "WARNING MaterialVector::sendSelf() - " 
+      std::cerr << nombre_clase() << "::" << __FUNCTION__
                 << dataTag << " failed to send ID";
     return res;
   }
@@ -543,7 +551,7 @@ int MaterialVector<MAT>::recvSelf(const CommParameters &cp)
     inicComm(2);
     int res= cp.receiveIdData(getDbTagData(),dataTag);
     if(res<0)
-      std::cerr << "WARNING MaterialVector::recvSelf() - "
+      std::cerr << nombre_clase() << "::" << __FUNCTION__
                 << dataTag << " failed to receive ID\n";
     else
       res+= recvData(cp);

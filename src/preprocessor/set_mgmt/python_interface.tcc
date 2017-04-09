@@ -106,11 +106,11 @@ class_<dq_ptrs_pnt, bases<EntCmd>, boost::noncopyable >("dq_ptrs_pnt",no_init)
   .def("clear",&dq_ptrs_pnt::clear,"Removes all items.")
    ;
 
-class_<XC::Set::lst_ptr_puntos, bases<dq_ptrs_pnt>, boost::noncopyable >("lstPnts",no_init)
-  .def("append", &XC::Set::lst_ptr_puntos::push_back,"Appends a point at the end of the list.")
-  .def("pushFront", &XC::Set::lst_ptr_puntos::push_front,"Push point at the beginning of the list.")
-  .add_property("size", &XC::Set::lst_ptr_puntos::size, "Returns list size.")
-  .def("__len__",&XC::Set::lst_ptr_puntos::size, "Returns list size.")
+class_<XC::Set::lst_ptr_points, bases<dq_ptrs_pnt>, boost::noncopyable >("lstPnts",no_init)
+  .def("append", &XC::Set::lst_ptr_points::push_back,"Appends a point at the end of the list.")
+  .def("pushFront", &XC::Set::lst_ptr_points::push_front,"Push point at the beginning of the list.")
+  .add_property("size", &XC::Set::lst_ptr_points::size, "Returns list size.")
+  .def("__len__",&XC::Set::lst_ptr_points::size, "Returns list size.")
    ;
 
 typedef XC::DqPtrs<XC::Edge> dq_ptrs_lineas;
@@ -156,7 +156,7 @@ class_<XC::Set::lst_ptr_cuerpos, bases<dq_ptrs_cuerpos>, boost::noncopyable >("l
    ;
 
 
-XC::Set::lst_ptr_puntos &(XC::Set::*GetPuntos)(void)= &XC::Set::GetPuntos;
+XC::Set::lst_ptr_points &(XC::Set::*GetPuntos)(void)= &XC::Set::GetPuntos;
 XC::Set::lst_ptr_lineas &(XC::Set::*GetLineas)(void)= &XC::Set::GetLineas;
 XC::Set::lst_surface_ptrs &(XC::Set::*getSurfaces)(void)= &XC::Set::getSurfaces;
 XC::Set::lst_ptr_cuerpos &(XC::Set::*GetCuerpos)(void)= &XC::Set::GetCuerpos;

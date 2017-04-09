@@ -92,7 +92,7 @@ class MaterialLoader: public Loader
     bool existeGeomSection(const std::string &nmb) const;
     bool InteractionDiagramExists(const std::string &nmb) const;
     bool InteractionDiagramExists2d(const std::string &nmb) const;
-    Material *nuevoMaterial(const std::string &,const std::string &);
+    Material *newMaterial(const std::string &,const std::string &);
     Material &getMaterial(const std::string &);
     GeomSection *newSectionGeometry(const std::string &);
     GeomSection &getGeomSection(const std::string &);

@@ -51,14 +51,14 @@ class MEDMeshing: public MEDObject
     mutable std::deque<MEDGroupInfo> med_groups;
     mutable std::deque<MEDFieldInfo *> med_fields;
 
-    static const std::string str_grupo_nodos;
-    static const std::string str_grupo_elementos;
+    static const std::string str_node_group;
+    static const std::string str_element_group;
 
     mutable MEDMEM::MESHING mesh;
     MEDMeshing(const MEDMeshing &);
     MEDMeshing &operator=(const MEDMeshing &);
   protected:
-    void nuevo_nodo(size_t i,const std::vector<double> &coo);
+    void new_node(size_t i,const std::vector<double> &coo);
 
     friend class MEDGroupInfo;
     MEDMEM::MESHING &getMEDMesh(void) const;

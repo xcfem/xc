@@ -143,7 +143,7 @@ void XC::Set::numera(void)
 //! @brief Desplaza los elementos of the set.
 void XC::Set::mueve(const Vector3d &desplaz)
   {
-    for(lst_ptr_puntos::iterator i= puntos.begin();i!=puntos.end();i++)
+    for(lst_ptr_points::iterator i= puntos.begin();i!=puntos.end();i++)
       (*i)->Mueve(desplaz);
     SetMeshComp::mueve(desplaz);
   }
@@ -151,7 +151,7 @@ void XC::Set::mueve(const Vector3d &desplaz)
 //! @brief Applies the transformation to the elements of the set.
 void XC::Set::Transforma(const TrfGeom &trf)
   {
-    for(lst_ptr_puntos::iterator i= puntos.begin();i!=puntos.end();i++)
+    for(lst_ptr_points::iterator i= puntos.begin();i!=puntos.end();i++)
       (*i)->Transforma(trf);
     SetMeshComp::Transforma(trf);
   }
@@ -164,50 +164,51 @@ void XC::Set::Transforma(const size_t &indice_trf)
       Transforma(*trf);
   }
 
-//! @brief Creates a copia de los elementos of the set y los mete en otro
-//! which name is being passed as parameter.Las coordenadas de los
-//! nuevos puntos serán las que resulten de sumar a las del primitivo el
-//! vector being passed as parameter.
-void XC::Set::crea_copia(const std::string &nombre,const Vector3d &v= Vector3d())
+//! @brief Creates a copy of the elements of the set and put them in another
+//! set with the name is being passed as parameter. The coordinates of the new
+//! points will be obtained by adding to the original coordinates those
+//! of the vector being passed as parameter.
+void XC::Set::create_copy(const std::string &nombre,const Vector3d &v= Vector3d())
   {
     Preprocessor *preprocessor= get_preprocessor();
     if(!preprocessor)
       {
-        std::cerr << "Set::crea_copia; preprocessor not assigned." << std::endl;
+        std::cerr << nombre_clase() << "::" << __FUNCTION__
+	          << "; preprocessor not assigned." << std::endl;
 	return;
       }
-    Set *nuevo_set= get_preprocessor()->get_sets().crea_set(nombre);
-    std::clog << "Set::crea_copia; ¡ojo! no se ha implementado la copia"
+    Set *new_set= get_preprocessor()->get_sets().create_set(nombre);
+    std::clog << "Set::create_copia; ¡ojo! no se ha implementado la copia"
               << " de nodos ni de elementos." << std::endl;
     //Copiamos los puntos.
-    std::map<std::string,std::string> nombres_nuevos_puntos;
-    for(lst_ptr_puntos::iterator i= puntos.begin();i!=puntos.end();i++)
+    std::map<std::string,std::string> new_points_names;
+    for(lst_ptr_points::iterator i= puntos.begin();i!=puntos.end();i++)
       {
         const std::string nombre_viejo= (*i)->GetNombre();
-        const std::string nombre_nuevo= nombre+nombre_viejo;
-        Pnt *nuevo_punto= get_preprocessor()->getCad().getPuntos().Copia(*i,v);
-        nuevo_punto->BorraPtrNodElem();
-        nuevo_set->puntos.push_back(nuevo_punto);
-        nombres_nuevos_puntos[nombre_viejo]= nombre_nuevo;
+        const std::string new_name= nombre+nombre_viejo;
+        Pnt *new_point= get_preprocessor()->getCad().getPuntos().Copia(*i,v);
+        new_point->BorraPtrNodElem();
+        new_set->puntos.push_back(new_point);
+        new_points_names[nombre_viejo]= new_name;
       }
     //Copy lines.
-    std::map<std::string,std::string> nombres_nuevos_lineas;
+    std::map<std::string,std::string> new_lines_names;
     for(lst_ptr_lineas::iterator i= lineas.begin();i!=lineas.end();i++)
       {
         const std::string nombre_viejo= (*i)->GetNombre();
-        const std::string nombre_nuevo= nombre+nombre_viejo;
-        Edge *nuevo_edge= get_preprocessor()->getCad().getLineas().createCopy(*i);
-        nuevo_edge->BorraPtrNodElem();
-        nuevo_set->lineas.push_back(nuevo_edge);
-        nombres_nuevos_lineas[nombre_viejo]= nombre_nuevo;
-        const size_t nv= nuevo_edge->NumVertices();
+        const std::string new_name= nombre+nombre_viejo;
+        Edge *new_edge= get_preprocessor()->getCad().getLineas().createCopy(*i);
+        new_edge->BorraPtrNodElem();
+        new_set->lineas.push_back(new_edge);
+        new_lines_names[nombre_viejo]= new_name;
+        const size_t nv= new_edge->NumVertices();
         for(size_t i= 0;i<nv;i++)
           {
-            const Pnt *vertice_viejo= nuevo_edge->GetVertice(i);
+            const Pnt *vertice_viejo= new_edge->GetVertice(i);
             const std::string nombre_viejo= vertice_viejo->GetNombre();
-            const std::string nombre_nuevo= nombres_nuevos_lineas[nombre_viejo];
-            Pnt *nuevo_punto= nuevo_set->puntos.BuscaNmb(nombre_nuevo);
-            nuevo_edge->SetVertice(i,nuevo_punto);
+            const std::string new_name= new_lines_names[nombre_viejo];
+            Pnt *new_point= new_set->puntos.BuscaNmb(new_name);
+            new_edge->SetVertice(i,new_point);
 	  }
       }
   }
@@ -217,7 +218,7 @@ void XC::Set::point_meshing(meshing_dir dm)
   {
     if(verborrea>2)
       std::clog << "Meshing points...";
-    for(lst_ptr_puntos::iterator i= puntos.begin();i!=puntos.end();i++)
+    for(lst_ptr_points::iterator i= puntos.begin();i!=puntos.end();i++)
       (*i)->genMesh(dm);
     if(verborrea>2)
       std::clog << "done." << std::endl;
@@ -328,14 +329,14 @@ void XC::Set::CompletaHaciaAbajo(void)
         lineas.insert(lineas.end(),ll.begin(),ll.end());
 
         //Elementos.
-        TritrizPtrElem &ttz_elementos= (*i)->GetTtzElementos();
-        const size_t ncapas= ttz_elementos.GetCapas();
-        const size_t nfilas= ttz_elementos.getNumFilas();
-        const size_t ncols= ttz_elementos.getNumCols();
+        TritrizPtrElem &ttz_elements= (*i)->GetTtzElementos();
+        const size_t ncapas= ttz_elements.GetCapas();
+        const size_t nfilas= ttz_elements.getNumFilas();
+        const size_t ncols= ttz_elements.getNumCols();
         for(size_t i=1;i<=ncapas;i++)
           for(size_t j=1;j<=nfilas;j++)
             for(size_t k=1;k<=ncols;k++)
-              agregaElemento(ttz_elementos(i,j,k));
+              agregaElemento(ttz_elements(i,j,k));
 
       }
     for(lin_iterator i=lineas.begin();i!=lineas.end();i++)
@@ -346,14 +347,14 @@ void XC::Set::CompletaHaciaAbajo(void)
           puntos.push_back(const_cast<Pnt *>((*i)->GetVertice(j)));
 
         //Elementos.
-        TritrizPtrElem &ttz_elementos= (*i)->GetTtzElementos();
-        const size_t ncapas= ttz_elementos.GetCapas();
-        const size_t nfilas= ttz_elementos.getNumFilas();
-        const size_t ncols= ttz_elementos.getNumCols();
+        TritrizPtrElem &ttz_elements= (*i)->GetTtzElementos();
+        const size_t ncapas= ttz_elements.GetCapas();
+        const size_t nfilas= ttz_elements.getNumFilas();
+        const size_t ncols= ttz_elements.getNumCols();
         for(size_t i=1;i<=ncapas;i++)
           for(size_t j=1;j<=nfilas;j++)
             for(size_t k=1;k<=ncols;k++)
-              agregaElemento(ttz_elementos(i,j,k));
+              agregaElemento(ttz_elements(i,j,k));
       }
     SetMeshComp::CompletaHaciaAbajo();
   }
@@ -383,7 +384,7 @@ void XC::Set::CompletaHaciaArriba(void)
   }
 
 //! @brief Selecciona los puntos cuyos tags being passed as parameters.
-void XC::Set::sel_puntos_lista(const ID &tags)
+void XC::Set::sel_points_lista(const ID &tags)
   {
     const size_t sz= tags.Size();
     if(sz>0)
@@ -485,7 +486,7 @@ int XC::Set::recvData(const CommParameters &cp)
     ID tmp;
     int res= SetMeshComp::recvData(cp);
 //     tmp= puntos.receiveTags(9,10,getDbTagData(),cp);
-//     sel_puntos_lista(tmp);
+//     sel_points_lista(tmp);
 //     tmp= lineas.receiveTags(11,12,getDbTagData(),cp);
 //     sel_lineas_lista(tmp);
 //     tmp= surfaces.receiveTags(13,14,getDbTagData(),cp);

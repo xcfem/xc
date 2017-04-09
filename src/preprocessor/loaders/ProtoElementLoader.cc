@@ -27,7 +27,7 @@
 //ProtoElementLoader.cc
 
 #include "ProtoElementLoader.h"
-#include "crea_elem.h"
+#include "create_elem.h"
 
 #include "domain/mesh/element/truss_beam_column/truss/CorotTruss.h"
 #include "domain/mesh/element/truss_beam_column/truss/CorotTrussSection.h"
@@ -191,7 +191,7 @@ XC::CrdTransf *XC::ProtoElementLoader::get_ptr_transf_coo(void) const
 //!   para solid analysis.
 //! - zero_length[tag]: Defines a zero length element (ZeroLength).
 //! - zero_length_section[tag]: Defines a zero length element with section type material (ZeroLengthSection).
-XC::Element *XC::ProtoElementLoader::crea_elemento(const std::string &cmd,int tag_elem)
+XC::Element *XC::ProtoElementLoader::create_element(const std::string &cmd,int tag_elem)
   {
     Element *retval= nullptr;
     if(cmd == "truss")
@@ -204,7 +204,7 @@ XC::Element *XC::ProtoElementLoader::crea_elemento(const std::string &cmd,int ta
       retval= new_element_dim_gen_mat<CorotTrussSection>(tag_elem, dim_elem, get_ptr_material());
     else if(cmd == "muelle")
       {
-        std::cerr << "ProtoElementLoader::crea_elemento; 'muelle' is DEPRECATED use 'spring'" << std::endl;
+        std::cerr << "ProtoElementLoader::create_element; 'muelle' is DEPRECATED use 'spring'" << std::endl;
         retval= new_element_dim_gen_mat<Spring>(tag_elem, dim_elem, get_ptr_material());
       }
     else if(cmd == "spring")
@@ -300,13 +300,13 @@ XC::Element *XC::ProtoElementLoader::crea_elemento(const std::string &cmd,int ta
   }
 
 //! @brief Creates a new element.
-XC::Element *XC::ProtoElementLoader::nuevoElemento(const std::string &tipo,const ID &iNodos)
+XC::Element *XC::ProtoElementLoader::newElement(const std::string &tipo,const ID &iNodos)
   {
     const int tag_elem= getDefaultTag();
     Element *retval= preprocessor->getDomain()->getElement(tag_elem);
-    if(!retval) //no existe (efectivament es nuevo).
+    if(!retval) //It doesn't already exists.
       {
-        retval= crea_elemento(tipo,tag_elem);
+        retval= create_element(tipo,tag_elem);
         if(retval)
           {
             retval->setIdNodos(iNodos);

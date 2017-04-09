@@ -89,7 +89,7 @@ const XC::NodeLocker *XC::NodeLockers::buscaNodeLocker(const int &tag) const
     return retval;
   }
 
-XC::NodeLocker *XC::NodeLockers::nuevoNodeLocker(const std::string &nmb)
+XC::NodeLocker *XC::NodeLockers::newNodeLocker(const std::string &nmb)
   {
     NodeLocker *retval= nullptr;
     if(!nmb.empty())
@@ -104,15 +104,15 @@ XC::NodeLocker *XC::NodeLockers::nuevoNodeLocker(const std::string &nmb)
                 tag++;
               }
             else
-              std::cerr << "NodeLockers::nuevoNodeLocker; no se pudo crear: '"
+              std::cerr << "NodeLockers::newNodeLocker; no se pudo crear: '"
                         << nmb << "'\n";
           }
         else
-	  std::clog << "NodeLockers::nuevoNodeLocker; ya existe: '"
+	  std::clog << "NodeLockers::newNodeLocker; ya existe: '"
                     << nmb << "'\n";
       }
     else
-      std::cerr << "NodeLockers::nuevoNodeLocker; se pasó un nombre vacío." << std::endl;
+      std::cerr << "NodeLockers::newNodeLocker; se pasó un nombre vacío." << std::endl;
     return retval;
   }
 
@@ -247,7 +247,7 @@ int XC::NodeLockers::recvData(const CommParameters &cp)
         for(size_t i= 0;i<sz;i++)
           {
             res+= cp.receiveString(label,labelData,CommMetaData(i));
-            tmp= nuevoNodeLocker(label);
+            tmp= newNodeLocker(label);
             if(tmp)
               res+= cp.receiveMovable(*tmp,objData,CommMetaData(i));
             else

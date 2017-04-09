@@ -73,14 +73,14 @@ XC::DamageModelVector &XC::DamageModelVector::operator=(const DamageModelVector 
     return *this;
   }
 
-void XC::DamageModelVector::setDamageModel(const DamageModel *nuevo_dmg)
+void XC::DamageModelVector::setDamageModel(const DamageModel *new_dmg)
   {
     borra_dmg_models();
-    if(nuevo_dmg)
+    if(new_dmg)
       {
         for(iterator i= dmg_model_vector::begin();i!=dmg_model_vector::end();i++)
           {
-            (*i)= nuevo_dmg->getCopy();
+            (*i)= new_dmg->getCopy();
             if(!(*i))
               std::cerr<<" DamageModelVector -- failed allocate damages model pointer\n";
           }

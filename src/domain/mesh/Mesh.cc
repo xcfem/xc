@@ -465,7 +465,7 @@ void XC::Mesh::freeze_dead_nodes(const std::string &nmbLocker)
   {
     NodeLocker *locker= lockers.busca_node_locker(nmbLocker);
     if(!locker) //Hipótesis nueva.
-      locker= lockers.nuevoNodeLocker(nmbLocker);
+      locker= lockers.newNodeLocker(nmbLocker);
     if(locker)
       {
         NodeIter &theNodeIter= getNodes();

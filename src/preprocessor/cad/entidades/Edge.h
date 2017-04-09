@@ -56,7 +56,7 @@ class Edge: public EntMdlr
 
     virtual Pnt *P1(void);
     virtual Pnt *P2(void);
-    void crea_nodos_en_extremos(void);
+    void create_nodes_en_extremos(void);
   public:
     Edge(Preprocessor *m,const size_t &nd= 4);
     Edge(const std::string &nombre= "",Preprocessor *m= nullptr,const size_t &nd= 4);
@@ -93,11 +93,11 @@ class Edge: public EntMdlr
     bool Toca(const Body &b) const;
     bool Extremo(const Pnt &) const;
     virtual BND3d Bnd(void) const= 0;
-    virtual void crea_nodos(void);
+    virtual void create_nodes(void);
     virtual void genMesh(meshing_dir dm);
 
     virtual MatrizPos3d get_posiciones(void) const= 0;
-    virtual MatrizPos3d get_pos_nodos(void) const;
+    virtual MatrizPos3d get_pos_nodes(void) const;
 
     virtual Node *GetNodo(const size_t &i1,const size_t &j,const size_t &k=1);
     virtual const Node *GetNodo(const size_t &i,const size_t &j,const size_t &k=1) const;

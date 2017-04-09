@@ -284,14 +284,14 @@ void XC::Block::add_caras(const std::vector<size_t> &indices_caras)
   }
 
 //! @brief Lanza la creación de nodos de las caras.
-void XC::Block::crea_nodos_caras(void)
+void XC::Block::create_nodes_caras(void)
   {
-    sups[0].crea_nodos();
-    sups[1].crea_nodos();
-    sups[2].crea_nodos();
-    sups[3].crea_nodos();
-    sups[4].crea_nodos();
-    sups[5].crea_nodos();
+    sups[0].create_nodes();
+    sups[1].create_nodes();
+    sups[2].create_nodes();
+    sups[3].create_nodes();
+    sups[4].create_nodes();
+    sups[5].create_nodes();
   }
 
 //! @brief Returns (ndivI+1)*(ndivJ+1)*(ndivK+1) positions for the nodes.
@@ -351,13 +351,13 @@ size_t XC::Block::NDivK(void) const
   { return GetArista(5)->NDiv(); }
 
 //! @brief Crea los nodos del bloque.
-void XC::Block::crea_nodos(void)
+void XC::Block::create_nodes(void)
   {
-    std::cout << "Entra Block::crea_nodos" << std::endl;
+    std::cout << "Entra Block::create_nodes" << std::endl;
     checkNDivs();
     if(nodos.Null())
       {
-        crea_nodos_caras();
+        create_nodes_caras();
         BodyFace &base= sups[0];
         BodyFace &tapa= sups[5];
         BodyFace &latIzdo= sups[1];
@@ -369,7 +369,7 @@ void XC::Block::crea_nodos(void)
         const size_t filas= NDivJ()+1;
         const size_t cols= NDivI()+1;
         nodos = TritrizPtrNod(capas,filas,cols); //Punteros a nodo.
-        TritrizPos3d pos_nodos= get_posiciones(); //Posiciones de los nodos.
+        TritrizPos3d pos_nodes= get_posiciones(); //Posiciones de los nodos.
 
         //Vertices.
 	nodos(1,1,1)= GetVertice(1)->GetNodo();
@@ -421,9 +421,9 @@ void XC::Block::crea_nodos(void)
                 nodos(1,J,K)= base.GetNodo(i,j);
               else
                 nodos(1,J,K)= base.GetNodo(j,i);
-              d2= dist2(nodos(1,J,K)->getPosInicial3d(),pos_nodos(1,J,K));
+              d2= dist2(nodos(1,J,K)->getPosInicial3d(),pos_nodes(1,J,K));
               if(d2>1e-4)
-		std::cerr << "Block::crea_nodos; error al enlazar el nodo: ("
+		std::cerr << "Block::create_nodes; error al enlazar el nodo: ("
                           << i << "," << j << ") de la base." << std::endl;
 	      std::cout << "i= " << i << " j= " << j << " J= " << J << " K= " << K 
                         << " dist2= " << d2 << std::endl;
@@ -456,11 +456,11 @@ void XC::Block::crea_nodos(void)
         for(size_t k= 2;k<capas;k++) //Capas interiores.
           for(size_t j= 2;j<filas;j++) //Filas interiores.
             for(size_t i= 2;i<cols;i++) //Columnas interiores.
-              crea_nodo(pos_nodos(i,j,k),i,j,k);
+              create_node(pos_nodes(i,j,k),i,j,k);
       }
     else
       if(verborrea>2)
-        std::clog << "Block::crea_nodos; los nodos de la entidad: '" << GetNombre() << "' ya existen." << std::endl;      
+        std::clog << "Block::create_nodes; los nodos de la entidad: '" << GetNombre() << "' ya existen." << std::endl;      
   }
 
 //! @brief Triggers mesh generation.
@@ -468,9 +468,9 @@ void XC::Block::genMesh(meshing_dir dm)
   {
     if(verborrea>3)
       std::clog << "Mesing Block...(" << GetNombre() << ")...";
-    crea_nodos();
+    create_nodes();
     if(elementos.Null())
-      crea_elementos(dm);
+      create_elements(dm);
     else
       if(verborrea>2)
         std::clog << "Block::genMesh; los nodos de la entidad: '" << GetNombre() << "' ya existen." << std::endl;      

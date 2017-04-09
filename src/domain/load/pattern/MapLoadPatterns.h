@@ -56,9 +56,9 @@ class MapLoadPatterns: public LoadLoaderMember
     int tag_spc; //!< Default tag for new imposed node displacement.
 
     template <class TS>
-    TimeSeries *crea_time_series(const std::string &);
+    TimeSeries *create_time_series(const std::string &);
     template <class LP>
-    LoadPattern *crea_load_pattern(const std::string &);
+    LoadPattern *create_load_pattern(const std::string &);
   public:
     typedef map_loadpatterns::iterator iterator;
     typedef map_loadpatterns::const_iterator const_iterator;
@@ -135,7 +135,7 @@ class MapLoadPatterns: public LoadLoaderMember
 
 //! @brief Crea un objeto TimeSeries.
 template <class TS>
-TimeSeries *XC::MapLoadPatterns::crea_time_series(const std::string &cod_ts)
+TimeSeries *XC::MapLoadPatterns::create_time_series(const std::string &cod_ts)
   {
     TimeSeries *ts= buscaTS(cod_ts);
     if(!ts) //No existe.
@@ -151,7 +151,7 @@ TimeSeries *XC::MapLoadPatterns::crea_time_series(const std::string &cod_ts)
 
 //! @brief Creates a new load pattern.
 template <class LP>
-LoadPattern *XC::MapLoadPatterns::crea_load_pattern(const std::string &cod_lp)
+LoadPattern *XC::MapLoadPatterns::create_load_pattern(const std::string &cod_lp)
   {
     int &tag_lp= this->getTagLP();
     LoadPattern *lp= buscaLoadPattern(cod_lp);

@@ -50,7 +50,7 @@ class UniformGrid: public EntMdlr
   protected:
 
     void actualiza_topologia(void);
-    void crea_nodos(void);
+    void create_nodes(void);
   public:
     UniformGrid(Preprocessor *m,const size_t &i= 0);
     UniformGrid(const std::string &nombre= "",Preprocessor *m= nullptr,const size_t &i= 0);

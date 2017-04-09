@@ -184,8 +184,8 @@ XC::Edge *XC::MapLineas::createDividedLine(Pnt *pA,Pnt *pB)
     return tmp;
   }
 
-//! @brief Creates a nuevo arco de circunferencia entre los puntos being passed as parameters
-//! and la inserta en the set de lados.
+//! @brief Creates a new arc of circle between the points
+//! being passed as parameters and inserts it in the edge set.
 XC::Edge *XC::MapLineas::createArc(Pnt *pA,Pnt *pB,Pnt *pC)
   {
     Edge *tmp= nullptr;

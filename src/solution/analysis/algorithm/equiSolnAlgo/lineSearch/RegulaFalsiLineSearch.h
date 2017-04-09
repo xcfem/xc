@@ -74,7 +74,7 @@
 #ifndef RegulaFalsiLineSearch_h
 #define RegulaFalsiLineSearch_h
 
-#include <solution/analysis/algorithm/equiSolnAlgo/lineSearch/LineSearch.h>
+#include "LineSearch.h"
 namespace XC {
 class Vector;
 

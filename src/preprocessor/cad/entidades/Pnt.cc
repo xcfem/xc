@@ -144,20 +144,20 @@ double XC::Pnt::DistanciaA2(const Pos3d &pt) const
   { return dist2(p,pt);  }
 
 //! @brief Creates nodes.
-void XC::Pnt::crea_nodos(void)
+void XC::Pnt::create_nodes(void)
   {
     if(getGenMesh() && (NumNodos()==0))
       {
         MatrizPos3d tmp(1,1,GetPos());
         TritrizPos3d ptos(1,tmp);
-        EntMdlr::crea_nodos(ptos);
+        EntMdlr::create_nodes(ptos);
       }
   }
 
 //! @brief Creates mesh.
 void XC::Pnt::genMesh(meshing_dir dm)
   {
-    crea_nodos();
+    create_nodes();
   }
 
 //! @brief Returns true if the point owns a node (is meshed).

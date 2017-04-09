@@ -98,7 +98,7 @@ XC::MapSet::iterator XC::MapSet::end(void)
   { return sets.end(); }
 
 //! @brief Creates a new set con el nombre que se le being passed as parameter.
-XC::Set *XC::MapSet::crea_set(const std::string &nmb)
+XC::Set *XC::MapSet::create_set(const std::string &nmb)
   {
     Set *tmp =nullptr;
     if(!existe(nmb)) //Set is new.
@@ -142,15 +142,15 @@ void XC::MapSet::cierra_set(const std::string &nmb)
   }
 
 //! @bref Creates a structured set copia del que se le being passed as parameter.
-XC::SetEstruct *XC::MapSet::crea_set_estruct(const SetEstruct &set_estruct)
+XC::SetEstruct *XC::MapSet::create_set_estruct(const SetEstruct &set_estruct)
   {
     const std::string nmb= set_estruct.GetNombre();
     if(existe(nmb)) //The set exists
       {
-	std::cerr << "the set: " << nmb << " ya existe. No se inserta el nuevo." << std::endl;
+	std::cerr << "the set: " << nmb << " already exists. Doing nothing." << std::endl;
         return nullptr;
       }
-    else //the set es nuevo.
+    else //the set is new.
       {
 	SetEstruct *retval= set_estruct.getCopy();
         if(retval) sets[nmb]= retval;
@@ -158,21 +158,22 @@ XC::SetEstruct *XC::MapSet::crea_set_estruct(const SetEstruct &set_estruct)
       }
   }
 
-//! @bref Creates a structured set copia del que se le being passed as parameter.
+//! @bref Creates a copy of the structured set being passed as parameter.
 XC::SetBase *XC::MapSet::broke_set(const std::string &nmb,const std::string &nmb_clase)
   {
     SetBase *retval= nullptr;
     if(existe(nmb)) //The set exists
       retval= busca_set(nmb);
-    else //the set es nuevo.
+    else //the set is new.
       {
         if(nmb_clase == "XC::Set")
           retval= new Set(nmb,preprocessor);
 //         else if(nmb_clase == "XC::SetEstruct")
 //           retval= new SetEstruct(nmb,preprocessor);
         else
-	  std::cerr << "MapSet::broke_set; el nombre de clase: '"
-                    << nmb_clase << "' es desconocido." << std::endl;
+	  std::cerr << nombre_clase() << "::" << __FUNCTION__
+	            << "; class name: '"
+                    << nmb_clase << "' unknown." << std::endl;
       }
     return retval;
   }
@@ -187,7 +188,7 @@ XC::EntMdlr *XC::MapSet::inserta_ent_mdlr(EntMdlr *ent_mdlr)
 	std::cerr << "the set: " << nmb << " already exists. New set not inserted." << std::endl;
         return nullptr;
       }
-    else //the set es nuevo.
+    else //the set is new.
       {
         entidades[nmb]= ent_mdlr;
         return ent_mdlr;
@@ -208,7 +209,7 @@ XC::SetEstruct *XC::MapSet::busca_set_estruct(const std::string &nmb)
 void XC::MapSet::setup_total(void)
   {
     const std::string str_tot= "total";
-    total= crea_set(str_tot);
+    total= create_set(str_tot);
   }
 
 //! @brief Default constructor.
@@ -233,7 +234,7 @@ XC::MapSet &XC::MapSet::operator=(const MapSet &otro)
 
 //! @brief Creates a new set with the name which is passed as a parameter.
 XC::Set *XC::MapSet::defSet(const std::string &nmb)
-  { return crea_set(nmb); }
+  { return create_set(nmb); }
 
 //! @brief Deletes the set and removes it from the sets map.
 void XC::MapSet::removeSet(const std::string &nmb)

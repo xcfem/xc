@@ -111,8 +111,8 @@ int XC::LoadControl::update(const Vector &deltaU)
     myModel->incrDisp(deltaU);    
     if(updateModel() < 0)
       {
-        std::cerr << "LoadControl::update - fallo al actualizar el modelo"
-                  << " para el nuevo dU\n";
+        std::cerr << nombre_clase() << "::" << __FUNCTION__
+	          << "; update failed for the new dU\n";
         return -1;
       }
 
@@ -165,7 +165,8 @@ int XC::LoadControl::sendSelf(CommParameters &cp)
 
     res+= cp.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
-      std::cerr << nombre_clase() << "sendSelf() - failed to send data\n";
+        std::cerr << nombre_clase() << "::" << __FUNCTION__
+                  << "; failed to send data\n";
     return res;
   }
 
@@ -176,13 +177,15 @@ int XC::LoadControl::recvSelf(const CommParameters &cp)
     int res= cp.receiveIdData(getDbTagData(),dataTag);
 
     if(res<0)
-      std::cerr << nombre_clase() << "::recvSelf - failed to receive ids.\n";
+        std::cerr << nombre_clase() << "::" << __FUNCTION__
+                  << "; failed to receive ids.\n";
     else
       {
         //setTag(getDbTagDataPos(0));
         res+= recvData(cp);
         if(res<0)
-          std::cerr << nombre_clase() << "::recvSelf - failed to receive data.\n";
+          std::cerr << nombre_clase() << "::" << __FUNCTION__
+                    << "; failed to receive data.\n";
       }
     return res;
   }

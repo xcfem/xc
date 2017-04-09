@@ -71,7 +71,8 @@ int XC::ProtoArcLength::newStep(void)
     applyLoadModel(vectores.getCurrentLambda());
     if(updateModel() < 0)
       {
-        std::cerr << "DisplacementControl::newStep - falló la actualización para el nuevo dU\n";
+        std::cerr << nombre_clase() << "::" << __FUNCTION__
+	          << "; update failed for the new dU\n";
         return -1;
       }
 
@@ -85,8 +86,8 @@ int XC::ProtoArcLength::update(const Vector &dU)
     AnalysisModel *mdl= getAnalysisModelPtr();
     if(!mdl || !theLinSOE)
       {
-	std::cerr << "WARNING XC::ArcLength1::update() ";
-	std::cerr << "No XC::AnalysisModel or LinearSOE has been set\n";
+        std::cerr << nombre_clase() << "::" << __FUNCTION__
+	          << "; no AnalysisModel or LinearSOE has been set\n";
 	return -1;
       }
 
@@ -101,7 +102,8 @@ int XC::ProtoArcLength::update(const Vector &dU)
     applyLoadModel(vectores.getCurrentLambda());    
     if(updateModel() < 0)
       {
-        std::cerr << "ProtoArcLength::update - falló la actualización para el nuevo dU.\n";
+        std::cerr << nombre_clase() << "::" << __FUNCTION__
+	          << "; update failed for the new dU\n";
       }
     
     // set the X soln in linearSOE to be deltaU for convergence Test
@@ -158,7 +160,8 @@ int XC::ProtoArcLength::sendSelf(CommParameters &cp)
 
     res+= cp.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
-      std::cerr << nombre_clase() << "sendSelf() - failed to send data\n";
+      std::cerr << nombre_clase() << "::" << __FUNCTION__
+	        << "; failed to send data\n";
     return res;
   }
 
@@ -170,13 +173,15 @@ int XC::ProtoArcLength::recvSelf(const CommParameters &cp)
     int res= cp.receiveIdData(getDbTagData(),dataTag);
 
     if(res<0)
-      std::cerr << nombre_clase() << "::recvSelf - failed to receive ids.\n";
+      std::cerr << nombre_clase() << "::" << __FUNCTION__
+	        << "; failed to receive ids.\n";
     else
       {
         //setTag(getDbTagDataPos(0));
         res+= recvData(cp);
         if(res<0)
-          std::cerr << nombre_clase() << "::recvSelf - failed to receive data.\n";
+           std::cerr << nombre_clase() << "::" << __FUNCTION__
+                     << "; failed to receive ids.\n";
       }
     return res;
   }

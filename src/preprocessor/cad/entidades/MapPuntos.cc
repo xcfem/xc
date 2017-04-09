@@ -44,19 +44,19 @@ XC::MapPuntos::MapPuntos(Cad *cad)
   : MapEnt<Pnt>(cad) {}
 
 
-//! @brief Inserta el nuevo punto en the set total y the opened sets.
-void XC::MapPuntos::UpdateSets(Pnt *nuevo_punto) const
+//! @brief Inserta el new point en the set total y the opened sets.
+void XC::MapPuntos::UpdateSets(Pnt *new_point) const
   {
     Cad *cad= const_cast<Cad *>(dynamic_cast<const Cad *>(Owner()));
     Preprocessor *preprocessor= cad->getPreprocessor();
-    preprocessor->get_sets().get_set_total()->GetPuntos().push_back(nuevo_punto);
-    preprocessor->get_sets().inserta_ent_mdlr(nuevo_punto);
+    preprocessor->get_sets().get_set_total()->GetPuntos().push_back(new_point);
+    preprocessor->get_sets().inserta_ent_mdlr(new_point);
     MapSet::map_sets &abiertos= preprocessor->get_sets().get_sets_abiertos();
     for(MapSet::map_sets::iterator i= abiertos.begin();i!= abiertos.end();i++)
       {
         Set *ptr_set= dynamic_cast<Set *>((*i).second);
         assert(ptr_set);
-        ptr_set->GetPuntos().push_back(nuevo_punto);
+        ptr_set->GetPuntos().push_back(new_point);
       }
   }
 
@@ -116,7 +116,7 @@ Plano3d XC::MapPuntos::getPlano(const Indice &i,const Indice &j,const Indice &k)
   }
 
 
-//! @brief Creates a nuevo punto.
+//! @brief Creates a new point.
 XC::Pnt *XC::MapPuntos::Crea(void)
   {
     Preprocessor *preprocessor= getPreprocessor();
@@ -128,24 +128,24 @@ XC::Pnt *XC::MapPuntos::Crea(void)
     return retval;
   }
 
-//! @brief Creates a nuevo punto.
-XC::Pnt *XC::MapPuntos::Nuevo(void)
+//! @brief Creates a new point.
+XC::Pnt *XC::MapPuntos::New(void)
   {
     Pnt *retval= busca(getTag());
-    if(!retval) //El punto es nuevo.
+    if(!retval) //The point is new.
       retval= Crea();
     return retval;
   }
 
 
 //! @brief Creates a new point at the position being passed as parameter.
-XC::Pnt *XC::MapPuntos::Nuevo(const Pos3d &pos)
+XC::Pnt *XC::MapPuntos::New(const Pos3d &pos)
   {
     Pnt *retval= busca(getTag());
     if(retval)
       std::cerr << nombre_clase() << "::" << __FUNCTION__ << "; point with tag: " 
                 << getTag() << " already exists, doing nothing." << std::endl;
-    else //El punto es nuevo.
+    else //The point is new.
       {
         retval= Crea();
         retval->Pos()= pos;
@@ -153,27 +153,27 @@ XC::Pnt *XC::MapPuntos::Nuevo(const Pos3d &pos)
     return retval;
   }
 
-//! @brief Lee un nuevo punto desde archivo.
-XC::Pnt *XC::MapPuntos::Nuevo(const size_t &tag,const Pos3d &pos)
+//! @brief Creates a new point with the tag being passed as parameter.
+XC::Pnt *XC::MapPuntos::New(const size_t &tag,const Pos3d &pos)
   {
-    bool nuevo= true;
+    bool isNew= true;
     size_t old_tag= getTag();
     Pnt *retval= nullptr;
-    setTag(tag); //Identificador del punto.
+    setTag(tag); //Point identifier.
     retval= busca(getTag());
     if(retval)
-      nuevo= false;
+      isNew= false;
     else
       retval= Crea();
-    if(!nuevo)
+    if(!isNew)
       setTag(old_tag);
     retval->setPos(pos); //Sets the position.
     return retval;
   }
 
-//! @brief Creates a nuevo punto, copia del being passed as parameter con
+//! @brief Creates a new point, copia del being passed as parameter con
 //! el nombre que le toca según el valor del tag. Las coordenadas del
-//! nuevo punto serán las que resulten de sumar a las del primitivo el
+//! new point serán las que resulten de sumar a las del primitivo el
 //! vector being passed as parameter.
 XC::Pnt *XC::MapPuntos::Copia(const Pnt *p,const Vector3d &v= Vector3d())
   {
@@ -186,7 +186,7 @@ XC::Pnt *XC::MapPuntos::Copia(const Pnt *p,const Vector3d &v= Vector3d())
     if(retval)
       std::cerr << nombre_clase() << "::" << __FUNCTION__ << "; el punto con identificador: " 
                 << getTag() << " ya existe, no se hacen cambios." << std::endl;
-    else //El punto es nuevo.
+    else //The point is new.
       {
         retval= new Pnt(*p);
         if(retval)

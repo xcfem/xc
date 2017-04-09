@@ -195,7 +195,7 @@ bool DqPtrs<T>::push_back(T *t)
     bool retval= false;
     if(t)
       {
-        if(find(begin(),end(),t) == end()) //El elemento es nuevo.
+        if(find(begin(),end(),t) == end()) //It's a new element.
           {
             lst_ptr::push_back(t);
             retval= true;

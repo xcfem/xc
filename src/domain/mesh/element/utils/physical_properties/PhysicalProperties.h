@@ -57,7 +57,7 @@ class PhysicalProperties: public EntCmd, public MovableObject
     PhysicalProperties(const size_t &nMat= 0,const MAT *matModel= nullptr);
     void setMaterial(const MAT *);
     void setMaterial(const MAT *,const std::string &tipo);
-    void setMaterial(size_t i,const MAT *nuevo_mat);
+    void setMaterial(size_t i,const MAT *);
 
     // public methods to set the state of the properties
     int commitState(void);

@@ -64,43 +64,43 @@ XC::Preprocessor &XC::Preprocessor::operator=(const Preprocessor &otro)
 
 //! @brief Inserts the pointer to the node in the "total" set and in the 
 //! sets that are currently opened.
-void XC::Preprocessor::UpdateSets(Node *nuevo_nodo)
+void XC::Preprocessor::UpdateSets(Node *new_node)
   {
-    sets.get_set_total()->agregaNodo(nuevo_nodo);
+    sets.get_set_total()->agregaNodo(new_node);
     MapSet::map_sets &abiertos= sets.get_sets_abiertos();
     for(MapSet::map_sets::iterator i= abiertos.begin();i!= abiertos.end();i++)
       {
         Set *ptr_set= dynamic_cast<Set *>((*i).second);
         assert(ptr_set);
-        ptr_set->agregaNodo(nuevo_nodo);
+        ptr_set->agregaNodo(new_node);
       }
   }
 
 //! @brief Inserts the pointer to the element in the "total" set and in the 
 //! sets that are currently opened.
-void XC::Preprocessor::UpdateSets(Element *nuevo_elem)
+void XC::Preprocessor::UpdateSets(Element *new_elem)
   {
-    sets.get_set_total()->agregaElemento(nuevo_elem);
+    sets.get_set_total()->agregaElemento(new_elem);
     MapSet::map_sets &abiertos= sets.get_sets_abiertos();
     for(MapSet::map_sets::iterator i= abiertos.begin();i!= abiertos.end();i++)
       {
         Set *ptr_set= dynamic_cast<Set *>((*i).second);
         assert(ptr_set);
-        ptr_set->agregaElemento(nuevo_elem);
+        ptr_set->agregaElemento(new_elem);
       }
   }
 
 //! @brief Inserts the pointer to the constraint in the "total" set and in the 
 //! sets that are currently opened.
-void XC::Preprocessor::UpdateSets(Constraint *nuevo_constraint)
+void XC::Preprocessor::UpdateSets(Constraint *new_constraint)
   {
-    sets.get_set_total()->GetConstraints().push_back(nuevo_constraint);
+    sets.get_set_total()->GetConstraints().push_back(new_constraint);
     MapSet::map_sets &abiertos= sets.get_sets_abiertos();
     for(MapSet::map_sets::iterator i= abiertos.begin();i!= abiertos.end();i++)
       {
         Set *ptr_set= dynamic_cast<Set *>((*i).second);
         assert(ptr_set);
-        ptr_set->GetConstraints().push_back(nuevo_constraint);
+        ptr_set->GetConstraints().push_back(new_constraint);
       }
   }
 

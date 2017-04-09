@@ -53,7 +53,7 @@ XC::TrfGeom *XC::MapTrfGeom::newTransformation(const std::string &type)
       retval= Nueva<Rotation>();
     else if(type == "reflection") //Crea una nueva reflexión.
       retval= Nueva<Reflection>();
-    else if(type == "scaling") //Crea un nuevo scaling.
+    else if(type == "scaling") //Creates a new scaling.
       retval= Nueva<Scaling>();
     else if(type == "translation") //Crea una nueva translation.
       retval= Nueva<Translation>();

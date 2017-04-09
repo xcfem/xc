@@ -30,7 +30,7 @@ void XC::MEDMapNumCeldasPorTipo::agrega_celda(const MED_EN::medGeometryElement &
     iterator i= tipos.find(tipo);
     if(i!=tipos.end())
       i->second++;
-    else //nuevo tipo.
+    else //new type.
       tipos[tipo]= 1;
   }
 

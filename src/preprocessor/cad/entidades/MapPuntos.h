@@ -63,9 +63,9 @@ class MapPuntos: public MapEnt<Pnt>
     Recta3d getRecta(const Indice &i,const Indice &j) const;
     Plano3d getPlano(const Indice &i,const Indice &j,const Indice &k) const;
 
-    Pnt *Nuevo(void);
-    Pnt *Nuevo(const Pos3d &);
-    Pnt *Nuevo(const size_t &,const Pos3d &);
+    Pnt *New(void);
+    Pnt *New(const Pos3d &);
+    Pnt *New(const size_t &,const Pos3d &);
 
     Pnt *Copia(const Pnt *,const Vector3d &v);
     void Copia(const std::vector<MapPuntos::Indice> &);

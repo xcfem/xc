@@ -274,7 +274,7 @@ const XC::CmbEdge::Lado *XC::CmbEdge::ultima_linea(void) const
   }
 
 //! @brief Returns a pointer to the first punto.
-const XC::Pnt *XC::CmbEdge::primer_punto(void) const
+const XC::Pnt *XC::CmbEdge::first_point(void) const
   {
     const Lado *pl= primera_linea();
     if(pl)
@@ -284,7 +284,7 @@ const XC::Pnt *XC::CmbEdge::primer_punto(void) const
    }
 
 //! @brief Returns a pointer to the último punto.
-const XC::Pnt *XC::CmbEdge::ultimo_punto(void) const
+const XC::Pnt *XC::CmbEdge::last_point(void) const
   {
     const Lado *ul= ultima_linea();
     if(ul)
@@ -295,15 +295,15 @@ const XC::Pnt *XC::CmbEdge::ultimo_punto(void) const
 
 //! @brief Returns a constant pointer to start point.
 const XC::Pnt *XC::CmbEdge::P1(void) const
-  { return primer_punto(); }
+  { return first_point(); }
 //! @brief Returns a constant pointer to end point.
 const XC::Pnt *XC::CmbEdge::P2(void) const
-  { return ultimo_punto(); }
+  { return last_point(); }
 
 XC::Pnt *XC::CmbEdge::P1(void)
-  { return const_cast<Pnt *>(primer_punto()); }
+  { return const_cast<Pnt *>(first_point()); }
 XC::Pnt *XC::CmbEdge::P2(void)
-  { return const_cast<Pnt *>(ultimo_punto()); }
+  { return const_cast<Pnt *>(last_point()); }
 
 void XC::CmbEdge::reverse(void)
   {
@@ -367,17 +367,17 @@ MatrizPos3d XC::CmbEdge::get_posiciones(void) const
                 cont++;
               }
           }
-        retval(npos)= ultimo_punto()->GetPos();
+        retval(npos)= last_point()->GetPos();
       }
     return retval;
   }
 
 
 //! @brief Triggers node creation on the edges.
-void XC::CmbEdge::crea_nodos_lineas(void)
+void XC::CmbEdge::create_nodes_lineas(void)
   {
     for(std::deque<Lado>::iterator i=lineas.begin();i!=lineas.end();i++)
-      (*i).Borde()->crea_nodos();
+      (*i).Borde()->create_nodes();
   }
 
 //! @brief Triggers meshing of lines.
@@ -490,8 +490,8 @@ XC::Edge *XC::CmbEdge::NuevaLinea(Pnt *pA,Pnt *pB)
     return retval;
   }
 
-//! @brief Creates a nuevo arco de circunferencia entre los puntos being passed as parameters
-//! y la inserta en the set de lados.
+//! @brief Creates a new circle arc between the points being passed
+//! as parameters and put it in the edge set.
 XC::Edge *XC::CmbEdge::NuevaLinea(Pnt *pA,Pnt *pB,Pnt *pC)
   {
     ArcoCircunf *retval= nullptr;
@@ -500,9 +500,11 @@ XC::Edge *XC::CmbEdge::NuevaLinea(Pnt *pA,Pnt *pB,Pnt *pC)
     if(retval)
       inserta(retval);
     else
-      std::cerr << "CmbEdge::NuevaLinea; arc between points: "
+      std::cerr << nombre_clase() << "::" << __FUNCTION__
+	        << "; arc between points: "
                 << pA->GetNombre() << ", " << pB->GetNombre()
-                << " and " << pC->GetNombre() << " not found in definition of surface: '"
+                << " and " << pC->GetNombre()
+		<< " not found in definition of surface: '"
                 << GetNombre() << "'" << std::endl;
     return retval;
   }

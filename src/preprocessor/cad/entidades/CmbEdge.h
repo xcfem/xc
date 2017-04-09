@@ -101,12 +101,12 @@ class CmbEdge: public Edge
     const Lado *ultima_linea(void) const;
 
 
-    const Pnt *primer_punto(void) const;
-    const Pnt *ultimo_punto(void) const;
+    const Pnt *first_point(void) const;
+    const Pnt *last_point(void) const;
 
   protected:
 
-    void crea_nodos_lineas(void);
+    void create_nodes_lineas(void);
     void line_meshing(meshing_dir dm);
     Pnt *P1(void);
     Pnt *P2(void);

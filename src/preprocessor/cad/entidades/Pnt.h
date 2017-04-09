@@ -55,7 +55,7 @@ class Pnt: public EntMdlr
   protected:
 
     virtual void actualiza_topologia(void);
-    void crea_nodos(void);
+    void create_nodes(void);
   public:
     Pnt(Preprocessor *m,const Pos3d &pto= Pos3d());
     Pnt(const std::string &nombre= "",Preprocessor *m= nullptr,const Pos3d &pto= Pos3d());

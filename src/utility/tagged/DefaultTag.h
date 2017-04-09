@@ -36,7 +36,7 @@ namespace XC {
 class DefaultTag
   {
   private:
-    int default_tag; //<! tag para el nuevo nodo.
+    int default_tag; //<! tag for the new entity.
   public:
     // constructors
     inline DefaultTag(int tag= 0)

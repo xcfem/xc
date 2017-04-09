@@ -663,7 +663,7 @@ void XC::Node::Transforma(const TrfGeom &trf)
 
 //! @brief Return the 3D position of the node.
 //! @param initialGeometry: if true initial position of the node is considered.
-Pos3d XC::pos_nodo(const Node &nod,bool initialGeometry)
+Pos3d XC::pos_node(const Node &nod,bool initialGeometry)
   {
     if(initialGeometry)
       return nod.getPosInicial3d();

@@ -105,9 +105,9 @@ class_<map_puntos, bases<map_cm_puntos>, boost::noncopyable >("map_puntos", no_i
   .def("getNearest", getNearestPoint, return_internal_reference<>(),"Returns the nearest point.")
    ;
 
-XC::Pnt *(XC::MapPuntos::*newPoint)(void)= &XC::MapPuntos::Nuevo;
-XC::Pnt *(XC::MapPuntos::*newPointFromPos3d)(const Pos3d &)= &XC::MapPuntos::Nuevo;
-XC::Pnt *(XC::MapPuntos::*newPointIDPos3d)(const size_t &,const Pos3d &)= &XC::MapPuntos::Nuevo;
+XC::Pnt *(XC::MapPuntos::*newPoint)(void)= &XC::MapPuntos::New;
+XC::Pnt *(XC::MapPuntos::*newPointFromPos3d)(const Pos3d &)= &XC::MapPuntos::New;
+XC::Pnt *(XC::MapPuntos::*newPointIDPos3d)(const size_t &,const Pos3d &)= &XC::MapPuntos::New;
 class_<XC::MapPuntos, bases<map_puntos>, boost::noncopyable >("MapPuntos", no_init)
   .def("newPnt", newPoint, return_internal_reference<>(),"Creates a point.")
   .def("newPntFromPos3d", newPointFromPos3d, return_internal_reference<>(),"Creates a point in the position.")

@@ -51,7 +51,7 @@ class DqPtrsElem: public DqPtrs<Element>
     inline iterator end(void)
       { return DqPtrs<Element>::end(); }
   protected:
-    void crea_arbol(void);
+    void create_arbol(void);
   public:
     typedef DqPtrs<Element>::const_iterator const_iterator;
     typedef DqPtrs<Element>::iterator iterator;

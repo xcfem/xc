@@ -57,7 +57,7 @@ void XC::IntegratorVectors::resize(const int &size)
       phat.resize(size);
   }
 
-//! @brief Realiza las operaciones correspondientes a un nuevo paso.
+//! @brief Performs a new step.
 void XC::IntegratorVectors::newStep(const double &dLambda,const Vector &dUhat)
   {
     deltaLambdaStep= dLambda;

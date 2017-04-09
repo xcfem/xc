@@ -40,7 +40,7 @@ class MEDMapIndices
     typedef std::map<int,int>::iterator iterator;
 
   public:
-    void nuevo_tag(size_t i);
+    void new_tag(size_t i);
 
     int getMEDIndice(const size_t &i) const;
     std::vector<int> getMEDIndices(const std::vector<int> &) const;

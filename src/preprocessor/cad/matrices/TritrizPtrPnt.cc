@@ -204,9 +204,9 @@ std::deque<size_t> XC::TritrizPtrPnt::CopiaPuntos(const RangoTritriz &rango,cons
             const Pnt *p= operator()(i,j,k);
             if(p)
               {
-                Pnt *nuevo= cad->getPuntos().Copia(p,vectorOffset);
-                (*this)(i+offsetIndices[0],j+offsetIndices[1],k+offsetIndices[2])= nuevo;
-                retval.push_back(nuevo->GetTag());
+                Pnt *newPt= cad->getPuntos().Copia(p,vectorOffset);
+                (*this)(i+offsetIndices[0],j+offsetIndices[1],k+offsetIndices[2])= newPt;
+                retval.push_back(newPt->GetTag());
               }
           }
     return retval;
@@ -340,9 +340,9 @@ XC::MatrizPtrPnt XC::TritrizPtrPnt::getCeldaPuntos(const size_t &i,const size_t 
 //             const Pnt *p= operator()(i,j,k);
 //             if(p)
 //               {
-//                 Pnt *nuevo= cad->getPuntos().Copia(p,vectorOffset);
-//                 (*this)(i+offsetIndices[0],j+offsetIndices[1],k+offsetIndices[2])= nuevo;
-//                 retval.push_back(nuevo->GetTag());
+//                 Pnt *newPt= cad->getPuntos().Copia(p,vectorOffset);
+//                 (*this)(i+offsetIndices[0],j+offsetIndices[1],k+offsetIndices[2])= newPt;
+//                 retval.push_back(newPt->GetTag());
 //               }
 //           }
 //     return retval;

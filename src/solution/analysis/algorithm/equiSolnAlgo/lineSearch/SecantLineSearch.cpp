@@ -109,24 +109,16 @@ int XC::SecantLineSearch::search(double s0, double s1, LinearSOE &theSOE, Increm
     if (r   > r0    )  eta =  1.0;
     if (eta < minEta)  eta = minEta;
     
-    //actualiza la diferencia incremental y 
-    //determina el nuevo vector de desequilibrio.
+    //updates the diferencia incremental y 
+    //computes the new unbalanced vector.
     x= dU;
     x*= eta-etaJ;
 	    
-    if (theIntegrator.update(x) < 0) {
-      std::cerr << "WARNING XC::SecantLineSearch::search() -";
-      std::cerr << "the XC::Integrator failed in update()\n";	
-      return -1;
-    }
-    
-    if (theIntegrator.formUnbalance() < 0) {
-      std::cerr << "WARNING XC::SecantLineSearch::search() -";
-      std::cerr << "the XC::Integrator failed in formUnbalance()\n";	
-      return -2;
-    }	
+    const int tmp= updateAndUnbalance(theIntegrator);
+    if(tmp!=0)
+      return tmp;
 
-    //new_ residual
+    //new residual
     const Vector &ResidJ = theSOE.getB();
     
     //new_ value of s
@@ -135,10 +127,11 @@ int XC::SecantLineSearch::search(double s0, double s1, LinearSOE &theSOE, Increm
     //new_ value of r 
     r = fabs( s / s0 ); 
 
-    if (printFlag == 0) {
+    if (printFlag == 0)
+      {
       std::cerr << "Secant Line Search - iteration: " << count 
 	   << " , eta(j) : " << eta << " , Ratio |sj/s0| = " << r << std::endl;
-    }
+      }
 
     if (etaJ == eta)
       count = maxIter;

@@ -36,8 +36,8 @@
 #include "domain/mesh/node/Node.h"
 #include "ProblemaEF.h"
 
-const std::string XC::MEDMeshing::str_grupo_nodos= "_nodos";
-const std::string XC::MEDMeshing::str_grupo_elementos= "_elementos";
+const std::string XC::MEDMeshing::str_node_group= "_nodos";
+const std::string XC::MEDMeshing::str_element_group= "_elementos";
 
 // @brief Returns med mesh to export.
 XC::MEDMeshing::MEDMeshing(const ProblemaEF &prb) 
@@ -93,11 +93,11 @@ void XC::MEDMeshing::defineMEDGroups(void)
               {
                 Set set_nodos(*set);
                 set_nodos.clearElementos();
-                set_nodos.Nombre()= nmb+str_grupo_nodos;
+                set_nodos.Nombre()= nmb+str_node_group;
                 med_groups.push_back(MEDGroupInfo(this,set_nodos));
                 Set set_elementos(*set);
                 set_elementos.clearNodos();
-                set_elementos.Nombre()= nmb+str_grupo_elementos;
+                set_elementos.Nombre()= nmb+str_element_group;
                 med_groups.push_back(MEDGroupInfo(this,set_elementos));
               }
           }
@@ -121,9 +121,9 @@ XC::MEDGroupInfo *XC::MEDMeshing::getGroupInfo(const Set &set,const FieldInfo &f
     MEDGroupInfo *retval= nullptr;
     std::string nmb_grupo= "";
     if(field.isDefinedOnNodes())
-      nmb_grupo= set.GetNombre()+str_grupo_nodos;
+      nmb_grupo= set.GetNombre()+str_node_group;
     else if(field.isDefinedOnElements())
-      nmb_grupo= set.GetNombre()+str_grupo_elementos;
+      nmb_grupo= set.GetNombre()+str_element_group;
     retval= getGroupInfo(nmb_grupo);
     if(!retval)
       std::cerr << "MEDMeshing::getGroupInfo; no se encotró el grupo: "

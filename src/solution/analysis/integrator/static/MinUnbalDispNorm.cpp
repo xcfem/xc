@@ -147,7 +147,8 @@ int XC::MinUnbalDispNorm::newStep(void)
     applyLoadModel(vectores.getCurrentLambda());    
     if(updateModel() < 0)
       {
-        std::cerr << "MinUnbalDispNorm::newStep- falló la actualización para el nuevo dU\n";
+        std::cerr << nombre_clase() << "::" << __FUNCTION__
+		  << "; update failed for the new dU\n";
         return -1;
       }
     return 0;
@@ -194,7 +195,8 @@ int XC::MinUnbalDispNorm::update(const Vector &dU)
 
     if(updateModel() < 0)
       {
-        std::cerr << "XC::MinUnbalDispNorm::update- falló la actualización para el nuevo dU\n";
+        std::cerr << nombre_clase() << "::" << __FUNCTION__
+	          << "; update failed for the new dU\n";
         return -1;
       }
 

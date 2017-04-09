@@ -136,7 +136,7 @@ XC::Edge *XC::Linea::splitAtLambda(const double &lambda)
     Edge *retval= nullptr;
     const Segmento3d s= getSegmento();
     const Pos3d pN= s.PtoParametricas(lambda);
-    Pnt *p= crea_punto(pN);
+    Pnt *p= create_point(pN);
     const double l= s.Longitud();
     retval= split_at(p,lambda,l);
     return retval;
@@ -148,7 +148,7 @@ XC::Edge *XC::Linea::splitAtCooNatural(const double &chi)
     Edge *retval= nullptr;
     const Segmento3d s= getSegmento();
     const Pos3d pN= s.PtoCooNatural(chi);
-    Pnt *p= crea_punto(pN);
+    Pnt *p= create_point(pN);
     retval= split_at(p,s.getParamCooNatural(chi),s.Longitud());
     return retval;
   }

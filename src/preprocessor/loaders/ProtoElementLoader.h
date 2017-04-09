@@ -48,7 +48,7 @@ class Element;
 //! used by the meshing routines.
 class ProtoElementLoader: public Loader
   {
-    Element *crea_elemento(const std::string &cmd,int tag_elem);
+    Element *create_element(const std::string &cmd,int tag_elem);
 
     std::string nmb_mat; //!< When appropriate, material name for the new element.
     int num_sec; //!< When appropriate, number of sections (integration points) on one-dimensional elements.
@@ -85,7 +85,7 @@ class ProtoElementLoader: public Loader
     void setDefaultIntegrator(const std::string &);
     const std::string &getDefaultIntegrator(void) const;
 
-    Element *nuevoElemento(const std::string &,const ID &);
+    Element *newElement(const std::string &,const ID &);
 
   };
 

@@ -224,21 +224,21 @@ XC::TimeSeries *XC::MapLoadPatterns::newTimeSeries(const std::string &tipo, cons
   {
     TimeSeries *ts= nullptr;
     if(tipo == "constant_ts")
-      ts= crea_time_series<ConstantSeries>(cod_ts);
+      ts= create_time_series<ConstantSeries>(cod_ts);
     else if(tipo == "linear_ts")
-      ts= crea_time_series<LinearSeries>(cod_ts);
+      ts= create_time_series<LinearSeries>(cod_ts);
     else if(tipo == "path_ts")
-      ts= crea_time_series<PathSeries>(cod_ts);
+      ts= create_time_series<PathSeries>(cod_ts);
     else if(tipo == "path_time_ts")
-      ts= crea_time_series<PathTimeSeries>(cod_ts);
+      ts= create_time_series<PathTimeSeries>(cod_ts);
     else if(tipo == "pulse_ts")
-      ts= crea_time_series<PulseSeries>(cod_ts);
+      ts= create_time_series<PulseSeries>(cod_ts);
     else if(tipo == "rectangular_ts")
-      ts= crea_time_series<RectangularSeries>(cod_ts);
+      ts= create_time_series<RectangularSeries>(cod_ts);
     else if(tipo == "triangular_ts")
-      ts= crea_time_series<TriangleSeries>(cod_ts);
+      ts= create_time_series<TriangleSeries>(cod_ts);
     else if(tipo == "trig_ts")
-      ts= crea_time_series<TrigSeries>(cod_ts);
+      ts= create_time_series<TrigSeries>(cod_ts);
     else
       std::cerr << "Time series type: '" << tipo
                 << "' unknown." << std::endl;
@@ -253,13 +253,13 @@ XC::LoadPattern *XC::MapLoadPatterns::newLoadPattern(const std::string &tipo,con
   {
     LoadPattern *retval= nullptr;
     if(tipo == "load_pattern" || tipo == "default" )
-      retval=  crea_load_pattern<LoadPattern>(cod_lp);
+      retval=  create_load_pattern<LoadPattern>(cod_lp);
     else if(tipo == "uniform_excitation")
-      retval= crea_load_pattern<UniformExcitation>(cod_lp);
+      retval= create_load_pattern<UniformExcitation>(cod_lp);
     else if(tipo == "multi_support_pattern")
-      retval= crea_load_pattern<MultiSupportPattern>(cod_lp);
+      retval= create_load_pattern<MultiSupportPattern>(cod_lp);
     else if(tipo == "pbowl_loading")
-      retval= crea_load_pattern<PBowlLoading>(cod_lp);
+      retval= create_load_pattern<PBowlLoading>(cod_lp);
     return retval;
   }
 

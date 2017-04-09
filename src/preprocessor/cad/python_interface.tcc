@@ -41,7 +41,7 @@ typedef XC::MapCadMember<XC::SisRef> MapCadSisRef;
 class_<MapCadSisRef, bases<XC::MapCadMemberBase>, boost::noncopyable >("MapCadSisRef", no_init);
 
 
-XC::SisRef *(XC::MapSisRef::*newReferenceSystem)(const std::string &)= &XC::MapSisRef::Nuevo;
+XC::SisRef *(XC::MapSisRef::*newReferenceSystem)(const std::string &)= &XC::MapSisRef::New;
 class_<XC::MapSisRef, bases<MapCadSisRef>, boost::noncopyable >("MapSisRef", no_init)
 .def("newReferenceSystem", make_function(newReferenceSystem,return_internal_reference<>() ))
   ;

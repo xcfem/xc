@@ -114,31 +114,31 @@ XC::FiberSectionRepr *XC::FiberSectionBase::getFiberSectionRepr(void)
   }
 
 //! @brief Creare a new fiber set.
-void XC::FiberSectionBase::crea_set_fibras(const std::string &nmb)
-  { sets_fibras.crea_set_fibras(nmb); }
+void XC::FiberSectionBase::create_fiber_set(const std::string &nmb)
+  { sets_fibras.create_fiber_set(nmb); }
 
 //! @brief Creates a fiber set which name is being passed as parameter.
-XC::FiberSectionBase::set_fibras_iterator XC::FiberSectionBase::get_set_fibras(const std::string &nmb_set)
-  { return sets_fibras.get_set_fibras(nmb_set); }
+XC::FiberSectionBase::fiber_set_iterator XC::FiberSectionBase::get_fiber_set(const std::string &nmb_set)
+  { return sets_fibras.get_fiber_set(nmb_set); }
 
 
 // //! @brief Creates a fiber set with those that fulfill the condition
 // //! being passed as parameter.
-// XC::FiberSectionBase::set_fibras_iterator XC::FiberSectionBase::sel(const std::string &nmb_set,const std::string &cond)
+// XC::FiberSectionBase::fiber_set_iterator XC::FiberSectionBase::sel(const std::string &nmb_set,const std::string &cond)
 //   {
-//     set_fibras_iterator i= get_set_fibras(nmb_set);
+//     fiber_set_iterator i= get_fiber_set(nmb_set);
 //     fibras.Cumplen(cond,(*i).second);
 //     return i;
 //   }
 
 // //! @brief Creates a fiber set that belongs to the set with the name nmb_set_org, and satisfy the contition being passed as parameter.
-// XC::FiberSectionBase::set_fibras_iterator XC::FiberSectionBase::resel(const std::string &nmb_set,const std::string &nmb_set_org,const std::string &cond)
+// XC::FiberSectionBase::fiber_set_iterator XC::FiberSectionBase::resel(const std::string &nmb_set,const std::string &nmb_set_org,const std::string &cond)
 //   {
-//     set_fibras_iterator i= sets_fibras.end();
+//     fiber_set_iterator i= sets_fibras.end();
 //     if(nmb_set != nmb_set_org)
 //       {
-//         i= get_set_fibras(nmb_set);
-//         set_fibras_iterator j= sets_fibras.find(nmb_set_org);
+//         i= get_fiber_set(nmb_set);
+//         fiber_set_iterator j= sets_fibras.find(nmb_set_org);
 //         if(j == sets_fibras.end())
 //           {
 //             std::clog << "Origin fibers set: '" << nmb_set_org
@@ -151,9 +151,9 @@ XC::FiberSectionBase::set_fibras_iterator XC::FiberSectionBase::get_set_fibras(c
 //   }
 
 //! @brief Creates a fiber set which material has the tag being passed as parameter.
-XC::FiberSectionBase::set_fibras_iterator XC::FiberSectionBase::sel_mat_tag(const std::string &nmb_set,const int &matTag)
+XC::FiberSectionBase::fiber_set_iterator XC::FiberSectionBase::sel_mat_tag(const std::string &nmb_set,const int &matTag)
   {
-    set_fibras_iterator i= get_set_fibras(nmb_set);
+    fiber_set_iterator i= get_fiber_set(nmb_set);
     fibras.SelMatTag(matTag,(*i).second);
     return i;
   }
@@ -162,7 +162,7 @@ XC::FiberSectionBase::set_fibras_iterator XC::FiberSectionBase::sel_mat_tag(cons
 //! @param nmb_set: new set name.
 //! @param nmb_set_org: set that contains the fibers.
 //! @param matTag: material tag.
-XC::FiberSectionBase::set_fibras_iterator XC::FiberSectionBase::resel_mat_tag(const std::string &nmb_set,const std::string &nmb_set_org,const int &matTag)
+XC::FiberSectionBase::fiber_set_iterator XC::FiberSectionBase::resel_mat_tag(const std::string &nmb_set,const std::string &nmb_set_org,const int &matTag)
   { return sets_fibras.resel_mat_tag(nmb_set,nmb_set_org,matTag); }
  
 
@@ -424,7 +424,7 @@ double XC::FiberSectionBase::getAcEficazNeta(const double &hEfMax,const std::str
     std::list<Poligono2d> contourAcEficazBruta= getContourAcEficazBruta(hEfMax);
     if(!contourAcEficazBruta.empty())
       {
-        set_fibras_const_iterator i= sets_fibras.find(nmbSetArmaduras);
+        fiber_set_const_iterator i= sets_fibras.find(nmbSetArmaduras);
         if(i!=sets_fibras.end())
           {
             const DqFibras &armaduras= (*i).second; //Armaduras.
@@ -448,7 +448,7 @@ double XC::FiberSectionBase::calcAcEficazFibras(const double &hEfMax,const std::
     std::list<Poligono2d> contourAcEficazBruta= getContourAcEficazBruta(hEfMax);
     if(!contourAcEficazBruta.empty())
       {
-        set_fibras_const_iterator i= sets_fibras.find(nmbSetArmaduras);
+        fiber_set_const_iterator i= sets_fibras.find(nmbSetArmaduras);
         if(i!=sets_fibras.end())
           {
             const DqFibras &armaduras= (*i).second; //Armaduras.
@@ -468,7 +468,7 @@ double XC::FiberSectionBase::calcAcEficazFibras(const double &hEfMax,const std::
 //! @brief Computes concrete cover of the fibers.
 void XC::FiberSectionBase::calcRecubrimientos(const std::string &nmbSetArmaduras) const
   {
-    set_fibras_const_iterator i= sets_fibras.find(nmbSetArmaduras);
+    fiber_set_const_iterator i= sets_fibras.find(nmbSetArmaduras);
     if(i!=sets_fibras.end())
       {
         const DqFibras &armaduras= (*i).second; //Armaduras.
@@ -485,7 +485,7 @@ void XC::FiberSectionBase::calcRecubrimientos(const std::string &nmbSetArmaduras
 //! @brief Computes spacing of the fibers.
 void XC::FiberSectionBase::calcSeparaciones(const std::string &nmbSetArmaduras) const
   {
-    set_fibras_const_iterator i= sets_fibras.find(nmbSetArmaduras);
+    fiber_set_const_iterator i= sets_fibras.find(nmbSetArmaduras);
     if(i!=sets_fibras.end())
       {
         const DqFibras &armaduras= (*i).second; //Armaduras.

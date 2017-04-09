@@ -259,7 +259,7 @@ void XC::SoluMethod::copia_integrator(Integrator *ptr)
      std::cerr << "SoluMethod::copia_integrator; null pointer to integrator." << std::endl;
   }
 
-//! @brief Define un nuevo integrator.
+//! @brief Defines a new integrator.
 XC::Integrator &XC::SoluMethod::newIntegrator(const std::string &tipo, const Vector &params)
   {
     if(alloc_integrator(tipo,params))

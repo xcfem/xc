@@ -43,7 +43,7 @@ class MEDVertexInfo: public MEDBaseInfo
     std::vector<std::string> nombresUnidades; //!< Names of the units ("cm","cm","cm",...).
 
   protected:
-    void nuevo_vertice(size_t i,const std::vector<double> &coo);
+    void new_vertice(size_t i,const std::vector<double> &coo);
 
   public:
     MEDVertexInfo(void);

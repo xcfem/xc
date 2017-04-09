@@ -38,7 +38,7 @@ class MEDBaseInfo: public MEDObject
   {
   protected:
     MEDMapIndices indices; //!< Map between XC and MED indexes.
-    void nuevo_tag(size_t tag);
+    void new_tag(size_t tag);
   public:
     const MEDMapIndices &getMapIndices(void) const;
     virtual void clear(void);

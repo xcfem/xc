@@ -74,8 +74,8 @@ class MapSet: public EntCmd, public MovableObject
     bool existe(const std::string &nmb) const;
     friend class EntMdlr;
 
-    Set *crea_set(const std::string &);
-    SetEstruct *crea_set_estruct(const SetEstruct &);
+    Set *create_set(const std::string &);
+    SetEstruct *create_set_estruct(const SetEstruct &);
     SetBase *broke_set(const std::string &,const std::string &);
 
     SetBase *busca_set(const std::string &nmb);

@@ -56,13 +56,33 @@
 // 
 // What: "@(#)LineSearch.C, revA"
 
-#include <solution/analysis/algorithm/equiSolnAlgo/lineSearch/LineSearch.h>
-#include <utility/matrix/Vector.h>
-#include <solution/system_of_eqn/linearSOE/LinearSOE.h>
+#include "LineSearch.h"
+#include "utility/matrix/Vector.h"
+#include "solution/system_of_eqn/linearSOE/LinearSOE.h"
+#include "solution/analysis/integrator/IncrementalIntegrator.h"
 
 
 XC::LineSearch::LineSearch(int clasTag,const double &tol, const int &mi,const double &mneta,const double &mxeta,const int &flag)
   :MovableObject(clasTag), tolerance(tol), maxIter(mi), minEta(mneta), maxEta(mxeta),printFlag(flag) {}
+
+int XC::LineSearch::updateAndUnbalance(IncrementalIntegrator &theIntegrator)
+  {
+    int retval= 0;
+    if(theIntegrator.update(x) < 0)
+      {
+        std::cerr << nombre_clase() << "::" << __FUNCTION__
+	        << "; the integrator failed in update()\n";	
+        retval= -1;
+      }
+    
+    if(theIntegrator.formUnbalance() < 0)
+      {
+        std::cerr << nombre_clase() << "::" << __FUNCTION__
+                  << "the integrator failed in formUnbalance()\n";	
+        retval= -2;
+      }
+    return retval;
+  }
 
 int XC::LineSearch::newStep(LinearSOE &theSOE)
   {

@@ -43,17 +43,17 @@ XC::MapUniformGrids::MapUniformGrids(Cad *cad)
   : MapEnt<UniformGrid>(cad) {}
 
 //! @brief Inserta la nueva linea en the set total y the opened sets.
-void XC::MapUniformGrids::UpdateSets(UniformGrid *nuevo_unif_grid) const
+void XC::MapUniformGrids::UpdateSets(UniformGrid *new_unif_grid) const
   {
     Preprocessor *preprocessor= const_cast<Preprocessor *>(getPreprocessor());
-    preprocessor->get_sets().get_set_total()->GetUniformGrids().push_back(nuevo_unif_grid);
-    preprocessor->get_sets().inserta_ent_mdlr(nuevo_unif_grid);
+    preprocessor->get_sets().get_set_total()->GetUniformGrids().push_back(new_unif_grid);
+    preprocessor->get_sets().inserta_ent_mdlr(new_unif_grid);
     MapSet::map_sets &abiertos= preprocessor->get_sets().get_sets_abiertos();
     for(MapSet::map_sets::iterator i= abiertos.begin();i!= abiertos.end();i++)
       {
         Set *ptr_set= dynamic_cast<Set *>((*i).second);
         assert(ptr_set);
-        ptr_set->GetUniformGrids().push_back(nuevo_unif_grid);
+        ptr_set->GetUniformGrids().push_back(new_unif_grid);
       }
   }
 

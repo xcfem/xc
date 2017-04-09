@@ -186,6 +186,6 @@ class_<map_fiber_sets, boost::noncopyable >("MapFiberSets", no_init)
   ;
 
 class_<XC::FiberSets , bases<map_fiber_sets>, boost::noncopyable >("FiberSets", no_init)
-  .def("create",make_function(&XC::FiberSets::crea_set_fibras, return_internal_reference<>()),"creates set.")
+  .def("create",make_function(&XC::FiberSets::create_fiber_set, return_internal_reference<>()),"creates set.")
   ;
 

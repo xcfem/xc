@@ -35,8 +35,8 @@ void XC::MEDBaseInfo::clear(void)
   { indices.clear(); }
 
 //! @brief Appends i to the indices.
-void XC::MEDBaseInfo::nuevo_tag(size_t i)
-  { indices.nuevo_tag(i); }
+void XC::MEDBaseInfo::new_tag(size_t i)
+  { indices.new_tag(i); }
 
 //! @brief Returns a const reference to the indices container.
 const XC::MEDMapIndices &XC::MEDBaseInfo::getMapIndices(void) const

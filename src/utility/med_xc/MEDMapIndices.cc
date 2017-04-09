@@ -28,7 +28,7 @@
 void XC::MEDMapIndices::clear(void)
   { indices.clear(); }
 
-void XC::MEDMapIndices::nuevo_tag(size_t i)
+void XC::MEDMapIndices::new_tag(size_t i)
   {
     const int numVertices= indices.size()+1;
     indices[i]= numVertices;

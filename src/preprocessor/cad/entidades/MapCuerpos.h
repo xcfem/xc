@@ -51,17 +51,17 @@ class MapCuerpos: public MapEnt<Body>
     bool checkNDivs(void) const;
 
     template <class B>
-    Body *Nuevo(void);
+    Body *New(void);
 
   };
 
 
-//! @brief Crea un nuevo cuerpo.
+//! @brief Creates a new cuerpo.
 template <class B>
-Body *MapCuerpos::Nuevo(void)
+Body *MapCuerpos::New(void)
   {
     Body *retval= busca(getTag());
-    if(!retval) //El cuerpo es nuevo.
+    if(!retval) //It doesn't already exist.
       {
         Preprocessor *preprocessor= getPreprocessor();
         retval= new B(preprocessor);

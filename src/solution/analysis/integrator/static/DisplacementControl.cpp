@@ -181,7 +181,8 @@ int XC::DisplacementControl::newStep(void)
     applyLoadModel(vectores.getCurrentLambda());
     if(updateModel() < 0)
       {
-        std::cerr << "DisplacementControl::newStep - falló la actualización para el nuevo dU\n";
+        std::cerr << nombre_clase() << "::" << __FUNCTION__
+		  << "; update failed for the new dU\n";
         return -1;
       }
     numIncrLastStep = 0;
@@ -225,11 +226,12 @@ int XC::DisplacementControl::update(const Vector &dU)
 
     // update the model
     theModel->incrDisp(vectores.getDeltaU());
-    //applyLoadModel(currentLambda); XXX Comentado LCPT 3-07-2009 (Si se ejecuta falsea el pseudoTime).
+    //applyLoadModel(currentLambda); XXX Commented out by LCPT 3-07-2009 (If executed pseudoTime becomes wrong).
 
     if(updateModel() < 0)
       {
-        std::cerr << "DisplacementControl::update - falló la actualización para el nuevo dU.\n";
+        std::cerr << nombre_clase() << "::" << __FUNCTION__
+		  << "; update failed for the new dU.\n";
         return -1;
       }
 	

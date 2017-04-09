@@ -105,17 +105,17 @@ void XC::UniformGrid::add_to_sets(std::set<SetBase *> &sets)
   }
 
 //! @brief Creates mesh nodes.
-void XC::UniformGrid::crea_nodos(void)
+void XC::UniformGrid::create_nodes(void)
   {
-    TritrizPos3d ptos= crea_uniform_grid(Bnd(),ndiv_x,ndiv_y,ndiv_z);
-    EntMdlr::crea_nodos(ptos);
+    TritrizPos3d ptos= create_uniform_grid(Bnd(),ndiv_x,ndiv_y,ndiv_z);
+    EntMdlr::create_nodes(ptos);
   }
 
 //! @brief Triggers mesh creation.
 void XC::UniformGrid::genMesh(meshing_dir dm)
   {
-    crea_nodos();
-    crea_elementos(dm);
+    create_nodes();
+    create_elements(dm);
   }
 
 

@@ -48,7 +48,7 @@ XC::MEDVertexInfo::MEDVertexInfo(const Mesh &mesh)
         const Pos3d pos= theNode->getPosInicial3d();
         std::vector<double> coo(3);
         coo[0]= pos.x();coo[1]= pos.y();coo[2]= pos.z();
-        nuevo_vertice(tag,coo);
+        new_vertice(tag,coo);
       }
   }
 
@@ -60,14 +60,14 @@ void XC::MEDVertexInfo::clear(void)
   }
 
 //! @brief Creates the i-th vertex.
-void XC::MEDVertexInfo::nuevo_vertice(size_t i,const std::vector<double> &coo)
+void XC::MEDVertexInfo::new_vertice(size_t i,const std::vector<double> &coo)
   {
     const size_t sz= coo.size();
     if(sz>=spaceDimension)
       {
         for(size_t j= 0;j<spaceDimension;j++)
           coordenadas.push_back(coo[j]);
-        nuevo_tag(i);
+        new_tag(i);
       }
     else
       std::cerr << nombre_clase() << "::" << __FUNCTION__
@@ -84,7 +84,7 @@ void XC::MEDVertexInfo::newVertex(const size_t &i,const boost::python::list &l)
     std::vector<double> coo(sz,0.0);
     for(size_t j=0; j<sz; j++)
       coo[j]= boost::python::extract<double>(l[j]);
-    nuevo_vertice(i,coo);
+    new_vertice(i,coo);
   }
 
 //! @brief Acceso al vector de coordenadas.

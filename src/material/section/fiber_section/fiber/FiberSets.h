@@ -43,8 +43,8 @@ class FiberSets: public std::map<std::string,DqFibras>, public EntCmd
   public:
     FiberSets(void); 
 
-    DqFibras &crea_set_fibras(const std::string &nombre);
-    iterator get_set_fibras(const std::string &nmb_set);
+    DqFibras &create_fiber_set(const std::string &nombre);
+    iterator get_fiber_set(const std::string &nmb_set);
     iterator sel_mat_tag(DqFibras &fibras, const std::string &nmb_set,const int &matTag);
     iterator resel_mat_tag(const std::string &nmb_set,const std::string &nmb_set_org,const int &matTag);
   };

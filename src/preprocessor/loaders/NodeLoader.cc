@@ -41,12 +41,12 @@
 
 void XC::NodeLoader::libera(void)
   {
-    if(nodo_semilla) delete nodo_semilla;
-    nodo_semilla= nullptr; 
+    if(seed_node) delete seed_node;
+    seed_node= nullptr; 
   }
 
 XC::NodeLoader::NodeLoader(Preprocessor *preprocessor)
-  : Loader(preprocessor), ngdl_def_nodo(2),ncoo_def_nodo(3),nodo_semilla(nullptr) {}
+  : Loader(preprocessor), ngdl_def_nodo(2),ncoo_def_nodo(3),seed_node(nullptr) {}
 
 //! @brief Destructor.
 XC::NodeLoader::~NodeLoader(void)
@@ -106,14 +106,14 @@ XC::Node *XC::NodeLoader::duplicateNode(const int &tagNodoOrg)
     return retval;
   }
 
-XC::Node *XC::NodeLoader::nuevoNodo(const double &x,const double &y,const double &z)
+XC::Node *XC::NodeLoader::newNode(const double &x,const double &y,const double &z)
   {
     const int tg= getDefaultTag(); //Before seed node creation.
-    if(!nodo_semilla)
-      nodo_semilla= new_node(0,ncoo_def_nodo,ngdl_def_nodo,0.0,0.0,0.0);
+    if(!seed_node)
+      seed_node= new_node(0,ncoo_def_nodo,ngdl_def_nodo,0.0,0.0,0.0);
 
-    const size_t dim= nodo_semilla->getDim();
-    const int ngdl= nodo_semilla->getNumberDOF();
+    const size_t dim= seed_node->getDim();
+    const int ngdl= seed_node->getNumberDOF();
     Node *retval= new_node(tg,dim,ngdl,x,y,z);
     if(retval)
       {
@@ -123,14 +123,14 @@ XC::Node *XC::NodeLoader::nuevoNodo(const double &x,const double &y,const double
     return retval;
   }
 
-XC::Node *XC::NodeLoader::nuevoNodo(const double &x,const double &y)
+XC::Node *XC::NodeLoader::newNode(const double &x,const double &y)
   {
     const int tg= getDefaultTag(); //Before seed node creation.
-    if(!nodo_semilla)
-      nodo_semilla= new_node(0,ncoo_def_nodo,ngdl_def_nodo,0.0,0.0);
+    if(!seed_node)
+      seed_node= new_node(0,ncoo_def_nodo,ngdl_def_nodo,0.0,0.0);
 
-    const size_t dim= nodo_semilla->getDim();
-    const int ngdl= nodo_semilla->getNumberDOF();
+    const size_t dim= seed_node->getDim();
+    const int ngdl= seed_node->getNumberDOF();
     Node *retval= new_node(tg,dim,ngdl,x,y);
     if(retval)
       {
@@ -141,14 +141,14 @@ XC::Node *XC::NodeLoader::nuevoNodo(const double &x,const double &y)
   }
 
 
-XC::Node *XC::NodeLoader::nuevoNodo(const double &x)
+XC::Node *XC::NodeLoader::newNode(const double &x)
   {
     const int tg= getDefaultTag(); //Before seed node creation.
-    if(!nodo_semilla)
-      nodo_semilla= new_node(0,ncoo_def_nodo,ngdl_def_nodo,0.0);
+    if(!seed_node)
+      seed_node= new_node(0,ncoo_def_nodo,ngdl_def_nodo,0.0);
 
-    const size_t dim= nodo_semilla->getDim();
-    const int ngdl= nodo_semilla->getNumberDOF();
+    const size_t dim= seed_node->getDim();
+    const int ngdl= seed_node->getNumberDOF();
     Node *retval= new_node(tg,dim,ngdl,x);
     if(retval)
       {
@@ -159,24 +159,24 @@ XC::Node *XC::NodeLoader::nuevoNodo(const double &x)
   }
 
 //! @brief Creates a nede at the position being passed as parameter.
-XC::Node *XC::NodeLoader::nuevoNodo(const Pos3d &p)
-  { return nuevoNodo(p.x(),p.y(),p.z()); }
+XC::Node *XC::NodeLoader::newNode(const Pos3d &p)
+  { return newNode(p.x(),p.y(),p.z()); }
 
 //! @brief Creates a nede at the position being passed as parameter.
-XC::Node *XC::NodeLoader::nuevoNodo(const Pos2d &p)
-  { return nuevoNodo(p.x(),p.y()); }
+XC::Node *XC::NodeLoader::newNode(const Pos2d &p)
+  { return newNode(p.x(),p.y()); }
 
 //! @brief Creates a nede at the position being passed as parameter.
-XC::Node *XC::NodeLoader::nuevoNodo(const Vector &coo)
+XC::Node *XC::NodeLoader::newNode(const Vector &coo)
   {
     int sz= coo.Size();
     Node *retval= nullptr;
     if(sz==1)
-      retval= nuevoNodo(coo[0]);
+      retval= newNode(coo[0]);
     else if(sz==2)
-      retval= nuevoNodo(coo[0],coo[1]);
+      retval= newNode(coo[0],coo[1]);
     else if(sz>=3)
-      retval= nuevoNodo(coo[0],coo[1],coo[2]);
+      retval= newNode(coo[0],coo[1],coo[2]);
     else
       std::cerr << nombre_clase() << "::" << __FUNCTION__ << "; vector empty."
                 << std::endl;
@@ -187,27 +187,27 @@ XC::Node *XC::NodeLoader::nuevoNodo(const Vector &coo)
 XC::Node *XC::NodeLoader::newSeedNode(void)
   {
     libera();
-    nodo_semilla= new_node(0,ncoo_def_nodo,ngdl_def_nodo,0.0,0.0,0.0);
-    return nodo_semilla;
+    seed_node= new_node(0,ncoo_def_nodo,ngdl_def_nodo,0.0,0.0,0.0);
+    return seed_node;
   }
 
 XC::Node *XC::NodeLoader::newNodeIDV(const int &tag,const Vector &coo)
   { 
     setDefaultTag(tag);
-    return nuevoNodo(coo);
+    return newNode(coo);
   } 
 
 XC::Node *XC::NodeLoader::newNodeIDXYZ(const int &tag,const double &x,const double &y,const double &z)
   { 
     setDefaultTag(tag);
-    Node *retval= nuevoNodo(x,y,z);
+    Node *retval= newNode(x,y,z);
     return retval;
   } 
 
 XC::Node *XC::NodeLoader::newNodeIDXY(const int &tag,const double &x,const double &y)
   {
     setDefaultTag(tag);
-    return nuevoNodo(x,y);
+    return newNode(x,y);
   } 
 
 

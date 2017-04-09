@@ -96,6 +96,7 @@ class LineSearch: public MovableObject, public EntCmd
     friend class NewtonLineSearch;
     LineSearch(int classTag,const double &tol= 0.8, const int &mi= 10,const double &mneta= 0.1,const double &mxeta= 10,const int &flag= 1);
     virtual LineSearch *getCopy(void) const= 0;
+    int updateAndUnbalance(IncrementalIntegrator &);
   public:
     inline virtual ~LineSearch(void) {}
     // virtual functions

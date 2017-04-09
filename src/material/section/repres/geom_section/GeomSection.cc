@@ -136,7 +136,7 @@ XC::Eje *XC::GeomSection::busca_eje(const size_t &id)
   {
     Eje *retval= nullptr;
     lst_ejes::iterator i= ejes.find(id);
-    if(i!= ejes.end()) //Point exists..
+    if(i!= ejes.end()) //Point exists.
       retval= (*i).second;
     return retval;
   }
@@ -170,7 +170,7 @@ XC::SisRefScc *XC::GeomSection::creaSisRef(const std::string &tipo)
     return retval;
   }
 
-//! @brief Crea un nuevo punto.
+//! @brief Creates a new point.
 XC::Spot *XC::GeomSection::creaSpot(const Pos2d &p)
   {
     Spot *retval= busca_spot(tag_spot);

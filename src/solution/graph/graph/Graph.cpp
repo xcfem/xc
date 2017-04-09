@@ -79,8 +79,8 @@ void XC::Graph::copia(const Graph &otro)
       {
         const int vertexTag= vertexPtr->getTag();
         const int vertexRef= vertexPtr->getRef();
-        Vertex nuevo(vertexTag, vertexRef);
-        this->addVertex(nuevo, false);
+        Vertex newVertex(vertexTag, vertexRef);
+        this->addVertex(newVertex, false);
       }
 
     // loop through other adding all the edges that exist in other
@@ -296,13 +296,13 @@ int XC::Graph::merge(Graph &other)
         if(vertexPtr == 0)
           {
             int vertexRef = vertexPtrOther->getRef();
-            Vertex nuevo(vertexTag, vertexRef);
+            Vertex newVertex(vertexTag, vertexRef);
             if(!vertexPtr)
               {
 	        std::cerr << "Graph::merge - out of memory\n";
 	        return -1;
               }
-            this->addVertex(nuevo, false);
+            this->addVertex(newVertex, false);
           }
       }
 

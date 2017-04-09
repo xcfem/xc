@@ -468,8 +468,8 @@ XC::Material *load_material(int tag_mat,const std::string &cmd,XC::MaterialLoade
     return retval;
   }
 
-//! @brief Define un nuevo material.
-XC::Material *XC::MaterialLoader::nuevoMaterial(const std::string &cmd,const std::string &cod_mat)
+//! @brief Defines a new material.
+XC::Material *XC::MaterialLoader::newMaterial(const std::string &cmd,const std::string &cod_mat)
   {
     Material *retval= load_material(tag_mat,cmd,this);
     if(retval)
@@ -477,7 +477,7 @@ XC::Material *XC::MaterialLoader::nuevoMaterial(const std::string &cmd,const std
         retval->set_owner(this);
         if(materials.find(cod_mat)!=materials.end()) //El material existe.
           {
-	    std::clog << "MaterialLoader::nuevo_material; ¡ojo! se redefine el material: '"
+	    std::clog << "MaterialLoader::new_material; ¡ojo! se redefine el material: '"
                       << cod_mat << "'." << std::endl;
             delete materials[cod_mat];
           }
@@ -487,14 +487,15 @@ XC::Material *XC::MaterialLoader::nuevoMaterial(const std::string &cmd,const std
     return retval;
   }
 
-//! @brief Define un nuevo material.
+//! @brief Defines a new material.
 XC::GeomSection *XC::MaterialLoader::newSectionGeometry(const std::string &cod)
   {
     XC::GeomSection *retval= nullptr;
-    if(geom_secciones.find(cod)!=geom_secciones.end()) //La geometria of the section existe.
+    if(geom_secciones.find(cod)!=geom_secciones.end()) //Section geometry already exists.
       {
-	std::cerr << "MaterialLoader::newSectionGeometry; warning! section: '"
-                      << cod << "' already exists. "<< '.' << std::endl;
+	std::cerr << nombre_clase() << "::" << __FUNCTION__
+	          << "; warning! section: '"
+                  << cod << "' already exists. "<< '.' << std::endl;
         retval= geom_secciones[cod];
        }
     else

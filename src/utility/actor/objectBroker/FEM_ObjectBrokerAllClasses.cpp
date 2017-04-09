@@ -87,7 +87,7 @@
 XC::FEM_ObjectBrokerAllClasses::FEM_ObjectBrokerAllClasses(void)
   :lastDomainSolver(nullptr) {}
 
-//! @brief Crea un nuevo actor de la clase cuyo tag being passed as parameter.
+//! @brief Creates a new actor de la clase cuyo tag being passed as parameter.
 XC::Actor *XC::FEM_ObjectBrokerAllClasses::getNewActor(int classTag, Channel *theChannel)
   {
     switch(classTag)
@@ -104,7 +104,7 @@ XC::Actor *XC::FEM_ObjectBrokerAllClasses::getNewActor(int classTag, Channel *th
       }
   }
 
-//! @brief Crea un nuevo PartitionedModelBuilder de la clase cuyo tag being passed as parameter.
+//! @brief Creates a new PartitionedModelBuilder de la clase cuyo tag being passed as parameter.
 XC::PartitionedModelBuilder *XC::FEM_ObjectBrokerAllClasses::getPtrNewPartitionedModelBuilder(Subdomain &theSubdomain,int classTag)
   {
     switch(classTag)

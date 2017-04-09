@@ -50,9 +50,9 @@ XC::MEDGroupInfo::MEDGroupInfo(MEDMeshing *mesh,const Set &set)
       {
         tipo_entidad= MED_EN::MED_NODE;
 	const DqPtrsNode nodos= set.GetNodos();
-        const MEDMapIndices &indices_nodos= mesh->getMapIndicesVertices();
+        const MEDMapIndices &node_indexes= mesh->getMapIndicesVertices();
         for(Set::nod_const_iterator i= nodos.begin();i!=nodos.end();i++)
-          nuevo_vertice((*i)->getTag(),indices_nodos);
+          new_vertice((*i)->getTag(),node_indexes);
       }
     else if(numNodos==0) //Set of elementos.
       {
@@ -96,7 +96,7 @@ std::vector<int> &XC::MEDGroupInfo::getIndicesElementosTipo(const MED_EN::medGeo
   }
 
 //! @brief Appends a vertex to the group.
-void XC::MEDGroupInfo::nuevo_vertice(size_t tag,const MEDMapIndices &ind)
+void XC::MEDGroupInfo::new_vertice(size_t tag,const MEDMapIndices &ind)
   {
     tipo_entidad= MED_EN::MED_NODE;
     std::vector<int> &c= getIndicesElementosTipo(MED_EN::MED_NONE);

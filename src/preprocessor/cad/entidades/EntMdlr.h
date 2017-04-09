@@ -62,12 +62,12 @@ class EntMdlr: public SetEstruct
     friend class SetMeshComp;
     friend class Cad;
     virtual void actualiza_topologia(void)= 0;
-    void crea_nodos(const TritrizPos3d &);
-    Node *crea_nodo(const Pos3d &pos,size_t i=1,size_t j=1, size_t k=1);
-    bool crea_elementos(meshing_dir dm);
-    Pnt *crea_punto(const Pos3d &);
-    void crea_puntos(const MatrizPos3d &);
-    SetEstruct *crea_set_fila(const RangoTritriz &,const std::string &);
+    void create_nodes(const TritrizPos3d &);
+    Node *create_node(const Pos3d &pos,size_t i=1,size_t j=1, size_t k=1);
+    bool create_elements(meshing_dir dm);
+    Pnt *create_point(const Pos3d &);
+    void create_points(const MatrizPos3d &);
+    SetEstruct *create_set_fila(const RangoTritriz &,const std::string &);
 
     void clearAll(void);
   public:

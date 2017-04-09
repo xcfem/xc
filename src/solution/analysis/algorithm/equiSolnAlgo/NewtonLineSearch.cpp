@@ -151,15 +151,15 @@ int XC::NewtonLineSearch::solveCurrentStep(void)
     theTest->set_owner(getSoluMethod());
     if(theTest->start() < 0)
       {
-        std::cerr << "XC::NewtonLineSearch::solveCurrentStep() -";
-        std::cerr << "the XC::ConvergenceTest object failed in start()\n";
+        std::cerr << nombre_clase() << "::" << __FUNCTION__ << "; ";
+        std::cerr << "the convergence test object failed in start()\n";
         return -3;
       }
 
     if(theIntegrator->formUnbalance() < 0)
       {
-        std::cerr << "WARNING XC::NewtonLineSearch::solveCurrentStep() -";
-        std::cerr << "the XC::Integrator failed in formUnbalance()\n";
+        std::cerr << nombre_clase() << "::" << __FUNCTION__ << "; ";
+        std::cerr << "the integrator failed in formUnbalance()\n";
         return -2;
       }
 
@@ -172,15 +172,15 @@ int XC::NewtonLineSearch::solveCurrentStep(void)
         //form the tangent
         if(theIntegrator->formTangent() < 0)
           {
-            std::cerr << "WARNING XC::NewtonLineSearch::solveCurrentStep() -";
-            std::cerr << "the XC::Integrator failed in formTangent()\n";
+            std::cerr << nombre_clase() << "::" << __FUNCTION__ << "; ";
+            std::cerr << "the integrator failed in formTangent()\n";
             return -1;
           }
 
         //solve
         if(theSOE->solve() < 0)
           {
-            std::cerr << "WARNING XC::NewtonLineSearch::solveCurrentStep() -";
+            std::cerr << nombre_clase() << "::" << __FUNCTION__ << "; ";
             std::cerr << "the LinearSysOfEqn failed in solve()\n";
             return -3;
           }
@@ -193,36 +193,36 @@ int XC::NewtonLineSearch::solveCurrentStep(void)
 
        if(theIntegrator->update(theSOE->getX()) < 0)
           {
-            std::cerr << "WARNING XC::NewtonLineSearch::solveCurrentStep() -";
-            std::cerr << "the XC::Integrator failed in update()\n";
+            std::cerr << nombre_clase() << "::" << __FUNCTION__ << "; ";
+            std::cerr << "the integrator failed in update()\n";
             return -4;
           }
 
         if(theIntegrator->formUnbalance() < 0)
           {
-            std::cerr << "WARNING XC::NewtonLineSearch::solveCurrentStep() -";
-            std::cerr << "the XC::Integrator failed in formUnbalance()\n";
+            std::cerr << nombre_clase() << "::" << __FUNCTION__ << "; ";
+            std::cerr << "the integrator failed in formUnbalance()\n";
             return -2;
           }
 
-        //nuevo residuo
+        //new unbalanced vector
         const Vector &Resid = theSOE->getB() ;
 
-        //nuevo valor de s
+        //new valur for s
         const double s= - ( dx0 ^ Resid );
 
         if(theLineSearch)
           theLineSearch->search(s0, s, *theSOE, *theIntegrator);
 
-        this->record(0); //Llama al método record(...) de todos los recorders definidos.
+        this->record(0); //Calls record method for all the recorders.
         result = theTest->test();
       }
     while (result == -1);
 
     if(result == -2)
       {
-        std::cerr << "XC::NewtonLineSearch::solveCurrentStep() -";
-        std::cerr << "the ConvergenceTest object failed in test()\n"
+        std::cerr << nombre_clase() << "::" << __FUNCTION__ << "; ";
+        std::cerr << "the convergence test object failed in test()\n"
                   << "convergence test message: "
 		  << theTest->getStatusMsg(1) << std::endl;
 

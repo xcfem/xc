@@ -86,7 +86,7 @@ int XC::RegulaFalsiLineSearch::search(double s0, double s1, LinearSOE &theSOE, I
   double etaJ   = 1.0;
 
 
-  const XC::Vector &dU = theSOE.getX();
+  const Vector &dU = theSOE.getX();
 
   if (printFlag == 0) {
     std::cerr << "RegulaFalsi Line Search - initial: "
@@ -113,30 +113,22 @@ int XC::RegulaFalsiLineSearch::search(double s0, double s1, LinearSOE &theSOE, I
     if (eta < minEta)  eta = minEta;
 
     
-    //actualiza la diferencia incremental y 
-    //determina el nuevo vector de desequilibrio.
+    //Updates la diferencia incremental and 
+    //computes the new unbalanced vector.
     x= dU;
     x*= eta-etaJ;
 	    
-    if (theIntegrator.update(x) < 0) {
-      std::cerr << "WARNING XC::RegulaFalsiLineSearch::search() -";
-      std::cerr << "the XC::Integrator failed in update()\n";	
-      return -1;
-    }
-    
-    if (theIntegrator.formUnbalance() < 0) {
-      std::cerr << "WARNING XC::RegulaFalsiLineSearch::search() -";
-      std::cerr << "the XC::Integrator failed in formUnbalance()\n";	
-      return -2;
-    }	
+    const int tmp= updateAndUnbalance(theIntegrator);
+    if(tmp!=0)
+      return tmp;
 
-    //nuevo residuo
-    const Vector &ResidJ = theSOE.getB();
+    //new unbalanced vector
+    const Vector &ResidJ= theSOE.getB();
     
-    //nuevo valor de s
+    //new value for s
     s= dU ^ ResidJ;
     
-    //nuevo valor de r 
+    //new value for r 
     r= fabs( s / s0 ); 
 
 

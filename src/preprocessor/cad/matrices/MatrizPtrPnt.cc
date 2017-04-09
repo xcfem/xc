@@ -43,7 +43,7 @@
 
 
 
-void XC::MatrizPtrPnt::setPnt(const size_t &j,const size_t &k,const int &id_punto)
+void XC::MatrizPtrPnt::setPnt(const size_t &j,const size_t &k,const int &id_point)
   {
     if(check_range(j,k))
       {
@@ -54,7 +54,7 @@ void XC::MatrizPtrPnt::setPnt(const size_t &j,const size_t &k,const int &id_punt
                     << j << "," << k 
                     << ") is already assigned to point: "
                     << tmp->GetNombre() << std::endl;
-        at(j,k)= c->getPuntos().busca(id_punto);
+        at(j,k)= c->getPuntos().busca(id_point);
      }
    else
      std::cerr << "(MatrizPtrPnt::setPnt): '"
@@ -246,9 +246,9 @@ std::deque<size_t> XC::MatrizPtrPnt::CopiaPuntos(const RangoMatriz &rango,const 
           const Pnt *p= operator()(i,j);
           if(p)
             {
-              Pnt *nuevo= cad->getPuntos().Copia(p,vectorOffset);
-              (*this)(i+offsetIndices[0],j+offsetIndices[1])= nuevo;
-              retval.push_back(nuevo->GetTag());
+              Pnt *newPt= cad->getPuntos().Copia(p,vectorOffset);
+              (*this)(i+offsetIndices[0],j+offsetIndices[1])= newPt;
+              retval.push_back(newPt->GetTag());
             }
         }
     return retval;

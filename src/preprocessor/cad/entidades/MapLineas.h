@@ -90,12 +90,12 @@ Edge *XC::MapLineas::Crea(void)
     return retval;
   }
 
-//! @brief Crea un nuevo Edge.
+//! @brief Creates a new Edge.
 template <class E>
 Edge *MapLineas::Nueva(void)
   {
     Edge *retval= busca(getTag());
-    if(!retval) //El edge es nuevo.
+    if(!retval) //El edge is new.
       retval= Crea<E>();
     return retval;
   }

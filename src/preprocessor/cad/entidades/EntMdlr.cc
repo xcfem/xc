@@ -187,7 +187,7 @@ const XC::Element *XC::EntMdlr::buscaElemento(const int &tag) const
   { return elementos.buscaElemento(tag); }
 
 //! @brief Creates a set that corresponds to a row of nodes and elements.
-XC::SetEstruct *XC::EntMdlr::crea_set_fila(const RangoTritriz &rango,const std::string &nmb)
+XC::SetEstruct *XC::EntMdlr::create_set_fila(const RangoTritriz &rango,const std::string &nmb)
   {
     SetEstruct *retval= nullptr;
     if(get_preprocessor())
@@ -195,23 +195,23 @@ XC::SetEstruct *XC::EntMdlr::crea_set_fila(const RangoTritriz &rango,const std::
         MapSet &map_set= get_preprocessor()->get_sets();
         if(rango.EsFilaI())
           {
-            retval= map_set.crea_set_estruct(GetVarRefFilaI(rango,nmb));
+            retval= map_set.create_set_estruct(GetVarRefFilaI(rango,nmb));
           }
         else if(rango.EsFilaJ())
           {
             XC::SetFilaJ fj= GetVarRefFilaJ(rango,nmb);
-            retval= map_set.crea_set_estruct(fj);
+            retval= map_set.create_set_estruct(fj);
           }
         else if(rango.EsFilaK())
           {
-            retval= map_set.crea_set_estruct(GetVarRefFilaK(rango,nmb));
+            retval= map_set.create_set_estruct(GetVarRefFilaK(rango,nmb));
           }
         else
-	  std::cerr <<  "EntMdlr::crea_set_fila; no se pudo crear the set fila." << std::endl;
+	  std::cerr <<  "EntMdlr::create_set_fila; no se pudo crear the set fila." << std::endl;
       }
     else
       {
-	std::cerr << "EntMdlr::crea_set_fila; falta a pointer to preprocessor." << std::endl;
+	std::cerr << "EntMdlr::create_set_fila; falta a pointer to preprocessor." << std::endl;
         return nullptr;
       }
     return retval;
@@ -232,15 +232,15 @@ XC::Vector XC::EntMdlr::getSimpsonWeights(const std::string &ijk,const std::stri
   }
 
 //! @brief Creates a node at the position being passed as parameter.
-XC::Node *XC::EntMdlr::crea_nodo(const Pos3d &pos,size_t i,size_t j, size_t k)
+XC::Node *XC::EntMdlr::create_node(const Pos3d &pos,size_t i,size_t j, size_t k)
   {
-    Node *retval= get_preprocessor()->getNodeLoader().nuevoNodo(pos);
+    Node *retval= get_preprocessor()->getNodeLoader().newNode(pos);
     nodos(i,j,k)= retval;
     return retval;
   }
 
 //! @brief Creates nodes at the positions being passed as parameters.
-void XC::EntMdlr::crea_nodos(const TritrizPos3d &posiciones)
+void XC::EntMdlr::create_nodes(const TritrizPos3d &posiciones)
   {
     const size_t capas= posiciones.GetCapas();
     if(capas<1) return;
@@ -254,23 +254,23 @@ void XC::EntMdlr::crea_nodos(const TritrizPos3d &posiciones)
         for(register size_t i= 1;i<=capas;i++)
           for(register size_t j= 1;j<=filas;j++)
             for(register size_t k= 1;k<=cols;k++)
-              crea_nodo(posiciones(i,j,k),i,j,k);
+              create_node(posiciones(i,j,k),i,j,k);
         if(verborrea>5)
-	  std::cerr << "EntMdlr::crea_nodos(); creados " << nodos.NumPtrs() << " nodo(s)." << std::endl;
+	  std::cerr << "EntMdlr::create_nodes(); creados " << nodos.NumPtrs() << " nodo(s)." << std::endl;
       }
     else
       if(verborrea>2)
-        std::clog << "EntMdlr::crea_nodos; los nodos de la entidad: '" << GetNombre() << "' ya existen." << std::endl;
+        std::clog << "EntMdlr::create_nodes; los nodos de la entidad: '" << GetNombre() << "' ya existen." << std::endl;
   }
 
-//! @brief Crea los elementos en los nodos que se crearon en crea_nodos.
-bool XC::EntMdlr::crea_elementos(meshing_dir dm)
+//! @brief Crea los elementos en los nodos que se crearon en create_nodes.
+bool XC::EntMdlr::create_elements(meshing_dir dm)
   {
     bool retval= false;
     if(!nodos.empty())
       {
         if(nodos.HasNull())
-          std::cerr << "EntMdlr::crea_elementos; existen pointers to node nulos."
+          std::cerr << "EntMdlr::create_elements; existen pointers to node nulos."
                     << " No se crean elementos." << std::endl;
         else
           if(elementos.Null())
@@ -287,16 +287,16 @@ bool XC::EntMdlr::crea_elementos(meshing_dir dm)
                       retval= true;
                     }
                   else if(verborrea>0)
-                    std::clog << "EntMdlr::crea_elementos; seed element not set." << std::endl;
+                    std::clog << "EntMdlr::create_elements; seed element not set." << std::endl;
                   if(verborrea>4)
                     std::clog << "creados." << std::endl;
                 }
               else
-                std::cerr << "EntMdlr::crea_elementos; pointer to preprocessor needed." << std::endl;
+                std::cerr << "EntMdlr::create_elements; pointer to preprocessor needed." << std::endl;
             }
       }
     else
-      std::cerr << "EntMdlr::crea_elementos; there is no nodes for the elements." << std::endl;
+      std::cerr << "EntMdlr::create_elements; there is no nodes for the elements." << std::endl;
 
     return retval;
   }
@@ -310,11 +310,11 @@ const bool &XC::EntMdlr::getGenMesh(void) const
   { return doGenMesh; }
 
 //! @brief Creates a point at the position being passed as parameter.
-XC::Pnt *XC::EntMdlr::crea_punto(const Pos3d &pos)
-  { return get_preprocessor()->getCad().getPuntos().Nuevo(pos); }
+XC::Pnt *XC::EntMdlr::create_point(const Pos3d &pos)
+  { return get_preprocessor()->getCad().getPuntos().New(pos); }
 
 //! @brief Creates points at the positions being passed as parameters.
-void XC::EntMdlr::crea_puntos(const MatrizPos3d &posiciones)
+void XC::EntMdlr::create_points(const MatrizPos3d &posiciones)
   {
     if(verborrea>4)
       std::clog << "Creando puntos linea: '" << GetNombre() << "'...";   
@@ -327,7 +327,7 @@ void XC::EntMdlr::crea_puntos(const MatrizPos3d &posiciones)
         for(size_t i= 1;i<=filas;i++)
           for(size_t j= 1;j<=cols;j++)
             {
-              crea_punto(posiciones(i,j));
+              create_point(posiciones(i,j));
               cont++;
             }
       }

@@ -48,7 +48,7 @@ class DqPtrsNode: public DqPtrs<Node>
   {
     KDTreeNodes kdtreeNodos; //!< space-partitioning data structure for organizing nodes.
   protected:
-    void crea_arbol(void);
+    void create_arbol(void);
   public:
     typedef DqPtrs<Node>::const_iterator const_iterator;
     typedef DqPtrs<Node>::iterator iterator;

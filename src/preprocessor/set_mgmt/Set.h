@@ -64,9 +64,9 @@ class Set: public SetMeshComp
   {
   public:
     void numera(void);
-    typedef DqPtrsNmb<Pnt> lst_ptr_puntos; //!< Point set.
-    typedef lst_ptr_puntos::iterator pnt_iterator; //!< point set iterator.
-    typedef lst_ptr_puntos::const_iterator pnt_const_iterator; //!< point set const iterator.
+    typedef DqPtrsNmb<Pnt> lst_ptr_points; //!< Point set.
+    typedef lst_ptr_points::iterator pnt_iterator; //!< point set iterator.
+    typedef lst_ptr_points::const_iterator pnt_const_iterator; //!< point set const iterator.
 
     typedef DqPtrsNmb<Edge> lst_ptr_lineas; //!< Line set.
     typedef lst_ptr_lineas::iterator lin_iterator; //!< Line set iterator.
@@ -81,7 +81,7 @@ class Set: public SetMeshComp
     typedef DqPtrsNmb<UniformGrid> lst_ptr_uniform_grids; //!< Unifrom grid set.
 
   protected:
-    lst_ptr_puntos puntos; //!< point set.
+    lst_ptr_points puntos; //!< point set.
     lst_ptr_lineas lineas; //!< line set.
     lst_surface_ptrs surfaces; //!< surface set.
     lst_ptr_cuerpos cuerpos; //!< body set.
@@ -90,7 +90,7 @@ class Set: public SetMeshComp
     void clearAll(void);
     void copia_listas(const Set &);
     //void agrega_listas_cond(const Set &,const std::string &);
-    void crea_copia(const std::string &,const Vector3d &v);
+    void create_copy(const std::string &,const Vector3d &v);
 
     DbTagData &getDbTagData(void) const;
     int sendData(CommParameters &);
@@ -112,12 +112,12 @@ class Set: public SetMeshComp
     void clear(void);
 
     //! @brief Returns a const reference to the point container.
-    virtual const lst_ptr_puntos &GetPuntos(void) const
+    virtual const lst_ptr_points &GetPuntos(void) const
       { return puntos; }
     //! @brief Return a reference to the the point container.
-    virtual lst_ptr_puntos &GetPuntos(void)
+    virtual lst_ptr_points &GetPuntos(void)
       { return puntos; }
-    void sel_puntos_lista(const ID &);
+    void sel_points_lista(const ID &);
     bool In(const Pnt *) const;
 
     //! @brief Return a const reference to the line container.

@@ -30,7 +30,7 @@
 #include "preprocessor/cad/trf/TrfGeom.h"
 #include "xc_basic/src/funciones/algebra/ExprAlgebra.h"
 
-void XC::DqPtrsNode::crea_arbol(void)
+void XC::DqPtrsNode::create_arbol(void)
   {
     kdtreeNodos.clear();
     for(iterator i= begin();i!=end();i++)
@@ -48,12 +48,12 @@ XC::DqPtrsNode::DqPtrsNode(EntCmd *owr)
 //! @brief Copy constructor.
 XC::DqPtrsNode::DqPtrsNode(const DqPtrsNode &otro)
   : DqPtrs<Node>(otro)
-  { crea_arbol(); }
+  { create_arbol(); }
 
 //! @brief Copy constructor.
 XC::DqPtrsNode::DqPtrsNode(const std::deque<Node *> &ts)
   : DqPtrs<Node>(ts)
-  { crea_arbol(); }
+  { create_arbol(); }
 
 //! @brief Copy constructor.
 XC::DqPtrsNode::DqPtrsNode(const std::set<const Node *> &st)
@@ -135,7 +135,7 @@ void XC::DqPtrsNode::mueve(const Vector3d &desplaz)
   {
     for(iterator i= begin();i!=end();i++)
       (*i)->Mueve(desplaz);
-    crea_arbol();
+    create_arbol();
   }
 
 //! @brief Applies the transformation to the elements of the set.
@@ -144,7 +144,7 @@ void XC::DqPtrsNode::transforma(const TrfGeom &trf)
     //Transforma 
     for(iterator i= begin();i!=end();i++)
       (*i)->Transforma(trf);
-    crea_arbol();
+    create_arbol();
   }
 
 //! @brief Returns (if it exists) a pointer to the node

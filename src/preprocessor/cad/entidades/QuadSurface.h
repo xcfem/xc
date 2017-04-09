@@ -68,7 +68,7 @@ class QuadSurface: public Face
 
     bool checkNDivs(const size_t &i,const size_t &j) const;
     bool checkNDivs(void) const;
-    void crea_nodos(void);
+    void create_nodes(void);
     void genMesh(meshing_dir dm);
   };
 

@@ -57,8 +57,8 @@ class NMyMzPointCloud;
 class FiberSectionBase: public SeccionBarraPrismatica
   {
   public:
-    typedef FiberSets::iterator set_fibras_iterator;
-    typedef FiberSets::const_iterator set_fibras_const_iterator;
+    typedef FiberSets::iterator fiber_set_iterator;
+    typedef FiberSets::const_iterator fiber_set_const_iterator;
   private:
     Vector eTrial; //!< trial section deformations 
     Vector eInic; //!< initial section deformations 
@@ -75,8 +75,8 @@ class FiberSectionBase: public SeccionBarraPrismatica
     void setup_repres(void);
     inline void alloc_fibers(int numFibras,const Fiber *muestra= nullptr)
       { fibras.allocFibers(numFibras,muestra); }
-    void crea_set_fibras(const std::string &nombre);
-    set_fibras_iterator get_set_fibras(const std::string &nmb_set);
+    void create_fiber_set(const std::string &nombre);
+    fiber_set_iterator get_fiber_set(const std::string &nmb_set);
     virtual double get_dist_to_neutral_axis(const double &,const double &) const;
     Pos3d Esf2Pos3d(void) const;
     Pos3d getNMyMz(const DeformationPlane &);
@@ -153,10 +153,10 @@ class FiberSectionBase: public SeccionBarraPrismatica
     
     inline FiberSets &getFiberSets(void)
       { return sets_fibras; }
-    //set_fibras_iterator sel(const std::string &nmb_set,const std::string &cond);
-    set_fibras_iterator sel_mat_tag(const std::string &nmb_set,const int &matTag);
-    //set_fibras_iterator resel(const std::string &nmb_set,const std::string &nmb_set_org,const std::string &cond);
-    set_fibras_iterator resel_mat_tag(const std::string &nmb_set,const std::string &nmb_set_org,const int &matTag);
+    //fiber_set_iterator sel(const std::string &nmb_set,const std::string &cond);
+    fiber_set_iterator sel_mat_tag(const std::string &nmb_set,const int &matTag);
+    //fiber_set_iterator resel(const std::string &nmb_set,const std::string &nmb_set_org,const std::string &cond);
+    fiber_set_iterator resel_mat_tag(const std::string &nmb_set,const std::string &nmb_set_org,const int &matTag);
     inline virtual double getCdgY(void) const
       { return fibras.getYCdg(); }
     double getArea(void) const;

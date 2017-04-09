@@ -75,8 +75,8 @@ XC::ModelWrapper &XC::MapModelWrapper::creaModelWrapper(const std::string &cod)
       retval= getModelWrapper(cod);
     else
       {
-        ModelWrapper nuevo(nullptr);
-        retval= &(solu_models[cod]= nuevo);
+        ModelWrapper newWrapper(nullptr);
+        retval= &(solu_models[cod]= newWrapper);
       }
     return *retval;
   }

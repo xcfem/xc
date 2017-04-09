@@ -399,13 +399,13 @@ Vector3d XC::QuadSurface::getKVector(void) const
   }
 
 //! @brief Creates surface nodes.
-void XC::QuadSurface::crea_nodos(void)
+void XC::QuadSurface::create_nodes(void)
   {
 
     checkNDivs();
     if(nodos.Null())
       {
-        crea_nodos_lineas();
+        create_nodes_lineas();
 
         const size_t filas= NDivJ()+1;
         const size_t cols= NDivI()+1;
@@ -433,14 +433,14 @@ void XC::QuadSurface::crea_nodos(void)
           nodos(1,j,cols)= lineas[1].GetNodo(j);
 
 
-        MatrizPos3d pos_nodos= get_posiciones(); //Posiciones de los nodos.
+        MatrizPos3d pos_nodes= get_posiciones(); //Posiciones de los nodos.
         for(size_t j= 2;j<filas;j++) //Filas interiores.
           for(size_t k= 2;k<cols;k++) //Columnas interiores.
-            crea_nodo(pos_nodos(j,k),1,j,k);
+            create_node(pos_nodes(j,k),1,j,k);
       }
     else
       if(verborrea>2)
-        std::clog << "QuadSurface::crea_nodos; los nodos de la entidad: '" << GetNombre() << "' ya existen." << std::endl;      
+        std::clog << "QuadSurface::create_nodes; los nodos de la entidad: '" << GetNombre() << "' ya existen." << std::endl;      
   }
 
 //! @brief Triggers mesh creation.
@@ -448,9 +448,9 @@ void XC::QuadSurface::genMesh(meshing_dir dm)
   {
     if(verborrea>3)
       std::clog << "Meshing quadrilateral surface...(" << GetNombre() << ")...";
-    crea_nodos();
+    create_nodes();
     if(elementos.Null())
-      crea_elementos(dm);
+      create_elements(dm);
     else
       if(verborrea>2)
         std::clog << "QuadSurface::genMesh; elements for surface: '" << GetNombre() << "' already exist." << std::endl;      

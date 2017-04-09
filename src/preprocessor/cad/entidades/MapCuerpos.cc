@@ -43,18 +43,19 @@
 XC::MapCuerpos::MapCuerpos(Cad *cad)
   : MapEnt<Body>(cad) {}
 
-//! @brief Inserta el nuevo cuerpo en the set total y the opened sets.
-void XC::MapCuerpos::UpdateSets(Body *nuevo) const
+//! @brief Inserts the new body in the total set and in the set
+//! that are open.
+void XC::MapCuerpos::UpdateSets(Body *newBody) const
   {
     Preprocessor *preprocessor= const_cast<Preprocessor *>(getPreprocessor());
-    preprocessor->get_sets().get_set_total()->GetCuerpos().push_back(nuevo);
-    preprocessor->get_sets().inserta_ent_mdlr(nuevo);
+    preprocessor->get_sets().get_set_total()->GetCuerpos().push_back(newBody);
+    preprocessor->get_sets().inserta_ent_mdlr(newBody);
     MapSet::map_sets &abiertos= preprocessor->get_sets().get_sets_abiertos();
     for(MapSet::map_sets::iterator i= abiertos.begin();i!= abiertos.end();i++)
       {
         Set *ptr_set= dynamic_cast<Set *>((*i).second);
         assert(ptr_set);
-        ptr_set->GetCuerpos().push_back(nuevo);
+        ptr_set->GetCuerpos().push_back(newBody);
       }
   }
 

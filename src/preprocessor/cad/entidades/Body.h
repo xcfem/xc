@@ -86,7 +86,7 @@ class Body: public EntMdlr
         const Pnt *GetVertice(const size_t &) const;
         Pnt *GetVertice(const size_t &);
         virtual MatrizPos3d get_posiciones(void) const;
-        void crea_nodos(void);
+        void create_nodes(void);
         bool checkNDivs(void) const;
         Node *GetNodo(const size_t &,const size_t &);
       };

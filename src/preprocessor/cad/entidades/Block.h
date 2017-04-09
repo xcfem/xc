@@ -45,7 +45,7 @@ class Block: public Body
     void inserta(const size_t &);
     //XXX void add_puntos(const std::vector<size_t> &);
     void add_caras(const std::vector<size_t> &);
-    void crea_nodos_caras(void);
+    void create_nodes_caras(void);
     TritrizPos3d get_posiciones(void) const;
 
     virtual BodyFace *GetFace(const size_t &i);
@@ -69,7 +69,7 @@ class Block: public Body
     size_t NDivJ(void) const;
     size_t NDivK(void) const;
     bool checkNDivs(void) const;
-    void crea_nodos(void);
+    void create_nodes(void);
     void genMesh(meshing_dir dm);
 
 

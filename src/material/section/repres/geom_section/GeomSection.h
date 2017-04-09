@@ -161,12 +161,12 @@ class GeomSection: public SeccionInerte
     friend std::ostream &operator<<(std::ostream &s, GeomSection &fiberSectionRepr);    
   };
 
-//! @brief Crea un nuevo Eje.
+//! @brief Creates a new axis.
 template <class E>
 Eje *XC::GeomSection::creaEje(void)
   {
     Eje *retval= busca_eje(tag_eje);
-    if(!retval) //El Eje es nuevo.
+    if(!retval) //It doesn't already exist
       {
         retval= new E(this);
         if(retval)

@@ -32,7 +32,7 @@ size_t XC::MEDCellBaseInfo::getNumeroElementos(void) const
 void XC::MEDCellBaseInfo::new_cell(size_t tag,const MED_EN::medGeometryElement &tipo)
   {
     cell_types.agrega_celda(tipo);
-    MEDBaseInfo::nuevo_tag(tag);
+    MEDBaseInfo::new_tag(tag);
   }
 
 const XC::MEDMapNumCeldasPorTipo &XC::MEDCellBaseInfo::getMapCellTypes(void) const

@@ -134,7 +134,8 @@ int XC::DistributedDisplacementControl::newStep(void)
     applyLoadModel(vectores.getCurrentLambda());    
     if(updateModel() < 0)
       {
-        std::cerr << "DistributedDisplacementControl::newStep - falló la actualización para el nuevo dU\n";
+        std::cerr << nombre_clase() << "::" << __FUNCTION__
+	          << "; update failed for the new dU\n";
         return -1;
       }
     numIncrLastStep = 0;
@@ -178,7 +179,8 @@ int XC::DistributedDisplacementControl::update(const XC::Vector &dU)
     applyLoadModel(vectores.getCurrentLambda());    
     if(updateModel() < 0)
       {
-        std::cerr << "DistributedDisplacementControl::update - falló la actualización para el nuevo dU\n";
+        std::cerr << nombre_clase() << "::" << __FUNCTION__
+	          << "; update failed for the new dU\n";
         return -1;
       }
 

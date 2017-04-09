@@ -41,7 +41,7 @@
 XC::MapEsquemas2d::MapEsquemas2d(Cad *cad)
   : MapCadMember<MatrizPtrPnt>(cad) {}
 
-//! @brief Crea un nuevo punto.
+//! @brief Creates a new punto.
 XC::MatrizPtrPnt *XC::MapEsquemas2d::Crea(void)
   {
     MatrizPtrPnt *retval= new MatrizPtrPnt();
@@ -52,11 +52,11 @@ XC::MatrizPtrPnt *XC::MapEsquemas2d::Crea(void)
     return retval;
   }
 
-//! @brief Crea un nuevo esquema bidimensional.
+//! @brief Creates a new esquema bidimensional.
 XC::MatrizPtrPnt *XC::MapEsquemas2d::makeNew(void)
   {
     MatrizPtrPnt *retval= busca(getTag());
-    if(!retval) //El esquema es nuevo.
+    if(!retval) //El esquema is new.
       retval= Crea();
     return retval;
   }
