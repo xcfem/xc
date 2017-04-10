@@ -162,7 +162,7 @@ XC::ForceBeamColumn2d::ForceBeamColumn2d (int tag, int nodeI, int nodeJ,
                                           int maxNumIters, double tolerance):
   NLForceBeamColumn2dBase(tag,ELE_TAG_ForceBeamColumn2d,0),beamIntegr(nullptr), v0()
   {
-    theNodes.set_id_nodos(nodeI,nodeJ);
+    theNodes.set_id_nodes(nodeI,nodeJ);
 
     alloc(bi);
     if(!beamIntegr)

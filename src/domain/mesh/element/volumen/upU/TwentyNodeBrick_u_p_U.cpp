@@ -136,7 +136,7 @@ XC::TwentyNodeBrick_u_p_U::TwentyNodeBrick_u_p_U(int element_number,
     perm.val(1,1) = permb_x;
     perm.val(2,2) = permb_y;
     perm.val(3,3) = permb_z;
-    theNodes.set_id_nodos(node_numb_1,node_numb_2,node_numb_3,node_numb_4,node_numb_5,node_numb_6,node_numb_7,node_numb_8,node_numb_9,node_numb_10,node_numb_11,node_numb_12,node_numb_13,node_numb_14,node_numb_15,node_numb_16,node_numb_17,node_numb_18,node_numb_19,node_numb_20);
+    theNodes.set_id_nodes(node_numb_1,node_numb_2,node_numb_3,node_numb_4,node_numb_5,node_numb_6,node_numb_7,node_numb_8,node_numb_9,node_numb_10,node_numb_11,node_numb_12,node_numb_13,node_numb_14,node_numb_15,node_numb_16,node_numb_17,node_numb_18,node_numb_19,node_numb_20);
 
   }
 

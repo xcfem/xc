@@ -58,7 +58,7 @@ XC::Element1D::Element1D(int tag, int classTag)
 //! @brief Constructor.
 XC::Element1D::Element1D(int tag, int classTag,int Nd1,int Nd2)
   : ElementBase<2>(tag,classTag), longsTributarias(2,0.0)
-  { theNodes.set_id_nodos(Nd1,Nd2); }
+  { theNodes.set_id_nodes(Nd1,Nd2); }
 
 
 void XC::Element1D::vector2dUniformLoadGlobal(const Vector &v)
@@ -294,7 +294,7 @@ void meshing_on_i(const XC::Element1D &e,const XC::TritrizPtrNod::const_ref_fila
 	XC::Element *tmp= e.getCopy();
         const int Nd1= nodos(i)->getTag();
         const int Nd2= nodos(i+1)->getTag();
-        tmp->getNodePtrs().set_id_nodos(Nd1,Nd2);
+        tmp->getNodePtrs().set_id_nodes(Nd1,Nd2);
         elementos(i)= tmp;
       }
   }
@@ -307,7 +307,7 @@ void meshing_on_j(const XC::Element1D &e,const XC::TritrizPtrNod::const_ref_fila
 	XC::Element *tmp= e.getCopy();
         const int Nd1= nodos(j)->getTag();
         const int Nd2= nodos(j+1)->getTag();
-        tmp->getNodePtrs().set_id_nodos(Nd1,Nd2);
+        tmp->getNodePtrs().set_id_nodes(Nd1,Nd2);
         elementos(j)= tmp;
       }
   }
@@ -320,7 +320,7 @@ void meshing_on_k(const XC::Element1D &e,const XC::TritrizPtrNod::const_ref_fila
 	XC::Element *tmp= e.getCopy();
         const int Nd1= nodos(k)->getTag();
         const int Nd2= nodos(k+1)->getTag();
-        tmp->getNodePtrs().set_id_nodos(Nd1,Nd2);
+        tmp->getNodePtrs().set_id_nodes(Nd1,Nd2);
         elementos(k)= tmp;
       }
   }
@@ -437,7 +437,7 @@ XC::TritrizPtrElem XC::Element1D::cose(const SetEstruct &f1,const SetEstruct &f2
             Element *tmp= getCopy();
             const int Nd1= f1.GetNodo(i,j,k)->getTag();
             const int Nd2= f2.GetNodo(i,j,k)->getTag();
-            tmp->getNodePtrs().set_id_nodos(Nd1,Nd2);
+            tmp->getNodePtrs().set_id_nodes(Nd1,Nd2);
             retval(i,1,1)= tmp;
           }
     return retval;

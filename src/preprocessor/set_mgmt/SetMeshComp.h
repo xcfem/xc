@@ -47,11 +47,12 @@ class Element;
 class Node;
 class Constraint;
 
-class LimiteElemento
-  {
-    Element *ptr_elemento; //!< Pointer to element.
-    int indice; //!< Edge of face index.
-  };
+/* DEPRECATED */
+/* class LimiteElemento */
+/*   { */
+/*     Element *ptr_element; //!< Pointer to element. */
+/*     int indice; //!< Edge of face index. */
+/*   }; */
 
 //!  @ingroup Set
 //! 
@@ -118,7 +119,7 @@ class SetMeshComp: public SetBase
     //! @brief Clears the nodes of the set.
     void clearNodos(void)
       { nodes.clearAll(); }
-    void sel_nodos_lista(const ID &);
+    void sel_nodes_from_list(const ID &);
     bool In(const Node *) const;
 
     //! @brief Returns the number of elements of the set.
@@ -135,7 +136,7 @@ class SetMeshComp: public SetBase
     //! @brief Clears out the elements of the set.
     void clearElementos(void)
       { elements.clearAll(); }
-    void sel_elementos_lista(const ID &tags);
+    void sel_elements_from_list(const ID &tags);
     bool In(const Element *) const;
 
     //! @brief Return the lista de constraints of the set.
@@ -147,7 +148,7 @@ class SetMeshComp: public SetBase
     //! @brief Erases la lista de constraints of the set.
     void clearConstraints(void)
       { constraints.clearAll(); }
-    void sel_constraints_lista(const ID &tags);
+    void sel_constraints_from_list(const ID &tags);
 
     void appendFromGeomEntity(const SetBase &);
 

@@ -54,7 +54,7 @@ void XC::SetBase::fix(const SFreedom_Constraint &)
     std::cerr << "Método fix() no implementado." << std::endl;
   }
 
-//! @brief Returns the tags de los nodos en un vector de enteros.
+//! @brief Returns the tags of the nodes en un vector de enteros.
 const XC::ID &XC::SetBase::getIdNodeTags(void) const
   {
     static ID retval;
@@ -70,7 +70,7 @@ const XC::ID &XC::SetBase::getIdNodeTags(void) const
     return retval;
   }
 
-//! @brief Returns the tags de los elementos en un vector de enteros.
+//! @brief Returns the tags of the elements en un vector de enteros.
 const XC::ID &XC::SetBase::getIdElementTags(void) const
   {
     static ID retval;
@@ -131,7 +131,7 @@ void XC::SetBase::resetTributarias(void) const
   }
  
 //! @brief Calcula las longitudes tributarias correspondientes a cada
-//! nodo de los elementos of the set.
+//! nodo of the elements of the set.
 void XC::SetBase::calculaLongsTributarias(bool initialGeometry) const
   {
     const std::set<int> tmp= getElementTags();
@@ -155,7 +155,7 @@ void XC::SetBase::calculaLongsTributarias(bool initialGeometry) const
   }
 
 //! @brief Calcula las áreas tributarias correspondientes a cada
-//! nodo de los elementos of the set.
+//! nodo of the elements of the set.
 void XC::SetBase::calculaAreasTributarias(bool initialGeometry) const
   {
     const std::set<int> tmp= getElementTags();
@@ -179,7 +179,7 @@ void XC::SetBase::calculaAreasTributarias(bool initialGeometry) const
   }
 
 //! @brief Calcula los volúmenes tributarios correspondientes a cada
-//! nodo de los elementos of the set.
+//! nodo of the elements of the set.
 void XC::SetBase::calculaVolsTributarios(bool initialGeometry) const
   {
     const std::set<int> tmp= getElementTags();

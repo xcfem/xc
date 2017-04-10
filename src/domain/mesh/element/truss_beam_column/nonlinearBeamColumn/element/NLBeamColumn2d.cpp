@@ -122,7 +122,7 @@ XC::NLBeamColumn2d::NLBeamColumn2d (int tag, int nodeI, int nodeJ,
  maxSubdivisions(maxSub), cosTheta(0.0), sinTheta(0.0)
   {
     load.reset(NEGD);
-    theNodes.set_id_nodos(nodeI,nodeJ);
+    theNodes.set_id_nodes(nodeI,nodeJ);
 
     // get copy of the sections
     setSections(sectionPtrs);

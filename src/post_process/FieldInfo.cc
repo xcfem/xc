@@ -27,13 +27,13 @@
 
 //! @brief Constructor.
 XC::FieldInfo::FieldInfo(const std::string &nmb)
-  : EntConNmb(nmb),nmb_set("total"),sobre_nodos(true), sobre_puntos_gauss(false), componentsType("double"),
+  : EntConNmb(nmb),nmb_set("total"),on_nodes(true), on_gauss_points(false), componentsType("double"),
     iterationNumber(0), orderNumber(0), time(0)  {}
 
 void XC::FieldInfo::definedOnGaussPoints(void)
   {
     definedOnElements();
-    sobre_puntos_gauss= true;
+    on_gauss_points= true;
   }
 
 //! @brief Assigns field component names.

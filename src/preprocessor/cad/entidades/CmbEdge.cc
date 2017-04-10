@@ -109,7 +109,7 @@ MatrizPos3d XC::CmbEdge::Lado::get_posiciones(void) const
       return MatrizPos3d();
   }
 
-//! @brief Returns the identificadores de los nodos en sentido directo.
+//! @brief Returns the identificadores of the nodes en sentido directo.
 std::vector<int> XC::CmbEdge::Lado::GetTagsNodosDir(void) const
   {
     if(directo)
@@ -126,7 +126,7 @@ std::vector<int> XC::CmbEdge::Lado::GetTagsNodosInv(void) const
       return edge->GetTagsNodosDir();
   }
 
-//! @brief Returns the posiciones de los nodos en sentido directo.
+//! @brief Returns the posiciones of the nodes en sentido directo.
 MatrizPos3d XC::CmbEdge::Lado::GetPosNodosDir(void) const
   {
     if(directo)
@@ -135,7 +135,7 @@ MatrizPos3d XC::CmbEdge::Lado::GetPosNodosDir(void) const
       return edge->GetPosNodosInv();
   }
 
-//! @brief Returns the posiciones de los nodos en sentido inverso.
+//! @brief Returns the posiciones of the nodes en sentido inverso.
 MatrizPos3d XC::CmbEdge::Lado::GetPosNodosInv(void) const
   {
     if(directo)

@@ -114,7 +114,7 @@ XC::ShellMITC4Base::ShellMITC4Base(int tag, int classTag,int node1,int node2,int
   : QuadBase4N<SectionFDPhysicalProperties>(tag,classTag,physProp), theCoordTransf(nullptr),
     p0(), inicDisp(4,Vector())
   {
-    theNodes.set_id_nodos(node1,node2,node3,node4);
+    theNodes.set_id_nodes(node1,node2,node3,node4);
     alloc(crdTransf);
     theCoordTransf->initialize(theNodes);
   }

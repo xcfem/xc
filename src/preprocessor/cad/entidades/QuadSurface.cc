@@ -433,7 +433,7 @@ void XC::QuadSurface::create_nodes(void)
           nodos(1,j,cols)= lineas[1].GetNodo(j);
 
 
-        MatrizPos3d pos_nodes= get_posiciones(); //Posiciones de los nodos.
+        MatrizPos3d pos_nodes= get_posiciones(); //Posiciones of the nodes.
         for(size_t j= 2;j<filas;j++) //Filas interiores.
           for(size_t k= 2;k<cols;k++) //Columnas interiores.
             create_node(pos_nodes(j,k),1,j,k);

@@ -66,7 +66,7 @@ int XC::ShellCrdTransf3dBase::initialize(const NodePtrs &ptrs)
     return 0;
   }
 
-//! @brief actualiza las coordenadas locales de los nodos.
+//! @brief actualiza las local coordinates of the nodes.
 int XC::ShellCrdTransf3dBase::setup_nodal_local_coordinates(double xl[2][4]) const
   {
     //local nodal coordinates in plane of shell
@@ -333,7 +333,7 @@ const XC::Matrix &XC::ShellCrdTransf3dBase::getVectorGlobalCoordFromLocal(const 
     return retval;
   }
 
-//! @brief Returns the vector expresado en coordenadas locales.
+//! @brief Returns the vector expresado en local coordinates.
 const XC::Vector &XC::ShellCrdTransf3dBase::getVectorLocalCoordFromGlobal(const Vector &globalCoords) const
   {
     static Vector vectorCoo(3);

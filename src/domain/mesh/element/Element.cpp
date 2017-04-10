@@ -160,11 +160,11 @@ size_t XC::Element::getDimension(void) const
 
 //! @brief Asigna los nodos.
 void XC::Element::setIdNodos(const std::vector<int> &inodos)
-  { getNodePtrs().set_id_nodos(inodos); }
+  { getNodePtrs().set_id_nodes(inodos); }
 
 //! @brief Asigna los nodos.
 void XC::Element::setIdNodos(const ID &inodos)
-  { getNodePtrs().set_id_nodos(inodos); }
+  { getNodePtrs().set_id_nodes(inodos); }
 
 //! @brief Asigna el domain al elemento.
 void XC::Element::setDomain(Domain *theDomain)
@@ -176,7 +176,7 @@ void XC::Element::setDomain(Domain *theDomain)
         getNodePtrs().inic();
       }
     else
-      getNodePtrs().set_ptr_nodos(theDomain);
+      getNodePtrs().set_node_ptrs(theDomain);
   }
 
 
@@ -748,19 +748,19 @@ int XC::Element::setMaterialParameter(Material *theMaterial,const std::vector<st
 std::vector<int> XC::Element::getIdxNodes(void) const
   { return getNodePtrs().getIdx(); }
 
-//! @brief Returns the valor máximo de la coordenada i de los nodos of the element.
+//! @brief Returns the valor máximo de la coordenada i of the nodes of the element.
 double XC::Element::MaxCooNod(int icoo) const
   { return getNodePtrs().MaxCooNod(icoo); }
 
-//! @brief Returns the minimum value de la coordenada i de los nodos of the element.
+//! @brief Returns the minimum value de la coordenada i of the nodes of the element.
 double XC::Element::MinCooNod(int icoo) const
   { return getNodePtrs().MinCooNod(icoo); }
 
-//! @brief Returns the coordenadas de los nodos.
+//! @brief Returns the coordinates of the nodes.
 const XC::Matrix &XC::Element::getCooNodos(void) const
   { return getNodePtrs().getCoordinates(); }
 
-//! @brief Returns the coordenadas de los nodos.
+//! @brief Returns the coordinates of the nodes.
 std::list<Pos3d> XC::Element::getPosNodos(bool initialGeometry) const
   { return getNodePtrs().getPosiciones(initialGeometry); }
 
@@ -901,7 +901,7 @@ double XC::Element::getDist(const Pos3d &p,bool initialGeometry) const
     return 0.0;
   }
 
-//! @brief Returns the coordenadas del centro de gravedad of the element.
+//! @brief Returns the coordinates del centro de gravedad of the element.
 Pos3d XC::Element::getPosCdg(bool initialGeometry) const
   {
     std::cerr << "getPosCdg not implemented para los elementos de tipo: "
@@ -910,7 +910,7 @@ Pos3d XC::Element::getPosCdg(bool initialGeometry) const
     return retval;
   }
 
-//! @brief Returns the coordenadas del centro de gravedad of the element.
+//! @brief Returns the coordinates del centro de gravedad of the element.
 XC::Vector XC::Element::getCooCdg(bool initialGeometry) const
   {
     const Pos3d cdg= getPosCdg(initialGeometry);

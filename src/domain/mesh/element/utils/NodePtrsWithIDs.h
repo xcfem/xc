@@ -53,7 +53,7 @@ class NodePtrsWithIDs: public NodePtrs, public MovableObject
 
 
     friend class Element;
-    void set_ptr_nodos(Domain *domain);
+    void set_node_ptrs(Domain *domain);
   public:
     NodePtrsWithIDs(Element *owr,size_t numNodos);
 
@@ -67,23 +67,23 @@ class NodePtrsWithIDs: public NodePtrs, public MovableObject
     int getTagNode(const int &i) const;
 
 
-    void set_id_nodos(int Nd1,int Nd2);
-    void set_id_nodos(int nd1,int nd2,int nd3);
-    void set_id_nodos(int nd1,int nd2,int nd3,int nd4);
-    void set_id_nodos(int nd1,int nd2,int nd3,int nd4,int nd5);
-    void set_id_nodos(int nd1,int nd2,int nd3,int nd4,int nd5,int nd6);
-    void set_id_nodos(int nd1,int nd2,int nd3,int nd4,int nd5,int nd6,int nd7);
-    void set_id_nodos(int nd1,int nd2,int nd3,int nd4,int nd5,int nd6,int nd7,int nd8);
-    void set_id_nodos(int nd1,int nd2,int nd3,int nd4,int nd5,int nd6,int nd7,int nd8,int nd9);
-    void set_id_nodos(int nd1,int nd2,int nd3,int nd4,int nd5,int nd6,int nd7,int nd8,int nd9,int nd10
+    void set_id_nodes(int Nd1,int Nd2);
+    void set_id_nodes(int nd1,int nd2,int nd3);
+    void set_id_nodes(int nd1,int nd2,int nd3,int nd4);
+    void set_id_nodes(int nd1,int nd2,int nd3,int nd4,int nd5);
+    void set_id_nodes(int nd1,int nd2,int nd3,int nd4,int nd5,int nd6);
+    void set_id_nodes(int nd1,int nd2,int nd3,int nd4,int nd5,int nd6,int nd7);
+    void set_id_nodes(int nd1,int nd2,int nd3,int nd4,int nd5,int nd6,int nd7,int nd8);
+    void set_id_nodes(int nd1,int nd2,int nd3,int nd4,int nd5,int nd6,int nd7,int nd8,int nd9);
+    void set_id_nodes(int nd1,int nd2,int nd3,int nd4,int nd5,int nd6,int nd7,int nd8,int nd9,int nd10
                       ,int nd11,int nd12,int nd13,int nd14,int nd15,int nd16,int nd17,int nd18,int nd19,int nd20);
-    void set_id_nodos(int nd1,int nd2,int nd3,int nd4,int nd5,int nd6,int nd7,
+    void set_id_nodes(int nd1,int nd2,int nd3,int nd4,int nd5,int nd6,int nd7,
                                            int nd8,int nd9,int nd10,int nd11,int nd12,int nd13,
                                            int nd14,int nd15,int nd16,int nd17,int nd18,int nd19,
                                            int nd20, int nd21, int nd22,int nd23, int nd24, int nd25,
 		      int nd26,int nd27);
-    void set_id_nodos(const std::vector<int> &inodos);
-    void set_id_nodos(const ID &inodos);
+    void set_id_nodes(const std::vector<int> &inodos);
+    void set_id_nodes(const ID &inodos);
     void Print(std::ostream &os) const;
     int sendSelf(CommParameters &);
     int recvSelf(const CommParameters &);

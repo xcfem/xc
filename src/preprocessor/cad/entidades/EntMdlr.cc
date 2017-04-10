@@ -279,11 +279,11 @@ bool XC::EntMdlr::create_elements(meshing_dir dm)
                 {
                   if(verborrea>4)
                     std::clog << "Creando elementos entidad: '" << GetNombre() << "'...";   
-                  const Element *smll= get_preprocessor()->getElementLoader().get_elemento_semilla();
+                  const Element *smll= get_preprocessor()->getElementLoader().get_seed_element();
                   if(smll)
                     {
                       elementos= smll->put_on_mesh(nodos,dm);
-                      agrega_elementos(elementos);
+                      add_elements(elementos);
                       retval= true;
                     }
                   else if(verborrea>0)

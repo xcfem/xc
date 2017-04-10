@@ -300,10 +300,10 @@ void XC::Node::freeze_if_dead(NodeLocker *locker)
   {
     if(isDead())
       {
-        const size_t tag_nodo= getTag();
+        const size_t nodeTag= getTag();
         for(int id_gdl= 0;id_gdl<numberDOF;id_gdl++)
           {
-            SFreedom_Constraint *sp= locker->addSFreedom_Constraint(tag_nodo,id_gdl,0.0);
+            SFreedom_Constraint *sp= locker->addSFreedom_Constraint(nodeTag,id_gdl,0.0);
             if(sp)
               coacciones_freeze.insert(sp->getTag());
           }

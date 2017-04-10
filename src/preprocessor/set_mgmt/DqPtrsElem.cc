@@ -237,7 +237,7 @@ void XC::DqPtrsElem::alive_elements(void)
       }
   }
 
-//! @brief Calcula los esfuerzos en cada uno de los elementos.
+//! @brief Calcula los esfuerzos en cada uno of the elements.
 void XC::DqPtrsElem::calc_resisting_force(void)
   {
     Element *tmp= nullptr;
@@ -249,7 +249,7 @@ void XC::DqPtrsElem::calc_resisting_force(void)
       }
   }
 
-//! @brief Returns the tags de los elementos.
+//! @brief Returns the tags of the elements.
 std::set<int> XC::DqPtrsElem::getTags(void) const
   {
     std::set<int> retval;

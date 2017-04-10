@@ -40,8 +40,8 @@ class FieldInfo: public EntConNmb
   {
   protected:
     std::string nmb_set; //!< name of the set.
-    bool sobre_nodos; //!< True if defined over the nodes of the set.
-    bool sobre_puntos_gauss; //!< Verdadero si se define sobre puntos de Gauss de los elementos.
+    bool on_nodes; //!< True if defined over the nodes of the set.
+    bool on_gauss_points; //!< Verdadero si se define sobre puntos de Gauss of the elements.
     std::vector<std::string> componentNames; //!< Name of the field components.
     std::vector<std::string> componentDescriptions; //!< Field components description.
     std::vector<std::string> componentUnits; //!< Units for each component.
@@ -55,15 +55,15 @@ class FieldInfo: public EntConNmb
     FieldInfo(const std::string &);
 
     inline bool isDefinedOnNodes(void) const
-      { return sobre_nodos; }
+      { return on_nodes; }
     inline void definedOnNodes(void)
-      { sobre_nodos= true; }
+      { on_nodes= true; }
     inline bool isDefinedOnElements(void) const
       { return !isDefinedOnNodes(); }
     inline void definedOnElements(void)
-      { sobre_nodos= false; }
+      { on_nodes= false; }
     inline bool isDefinedOnGaussPoints(void) const
-      { return sobre_puntos_gauss; }
+      { return on_gauss_points; }
     void definedOnGaussPoints(void);
     void setSetName(const std::string &nmb)
       { nmb_set= nmb; }

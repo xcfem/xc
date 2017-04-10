@@ -80,7 +80,7 @@ template <class PhysProp>
 XC::TriBase3N<PhysProp>::TriBase3N(int tag, int classTag, int node1, int node2, int node3,const PhysProp &pp)
   : ElemPlano<3,PhysProp>(tag,classTag,pp)
   {
-    this->theNodes.set_id_nodos(node1,node2,node3);
+    this->theNodes.set_id_nodes(node1,node2,node3);
   }
 
 //! @brief Put the element on the mesh being passed as parameter.

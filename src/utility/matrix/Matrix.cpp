@@ -1315,7 +1315,7 @@ double XC::Matrix::Norm2(void) const
 double XC::Matrix::Norm(void) const
   { return sqrt(Norm2()); }
 
-//! @brief Returns the valor máximo de los elementos del vector
+//! @brief Returns the valor máximo of the elements del vector
 //! que resulta de sumar los elementos de las filas.
 double XC::Matrix::rowNorm(void) const
   {
@@ -1323,7 +1323,7 @@ double XC::Matrix::rowNorm(void) const
     for(register int i=1;i<this->noRows();i++) maximo= std::max(maximo,rowSum(i));
     return maximo;
   }
-//! @brief Returns the valor máximo de los elementos del vector
+//! @brief Returns the valor máximo of the elements del vector
 //! que resulta de sumar los elementos de las columnas.
 double XC::Matrix::columnNorm(void) const
   {

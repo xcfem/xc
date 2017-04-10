@@ -237,7 +237,7 @@ XC::Node *XC::Edge::GetUltimoNodo(void)
     return retval;
   }
 
-//! @brief Returns the identificadores de los nodos en sentido directo.
+//! @brief Returns the identificadores of the nodes en sentido directo.
 std::vector<int> XC::Edge::GetTagsNodosDir(void) const
   {
     const size_t nn= NumNodos();
@@ -247,7 +247,7 @@ std::vector<int> XC::Edge::GetTagsNodosDir(void) const
     return retval;
   }
 
-//! @brief Returns the identificadores de los nodos en sentido directo.
+//! @brief Returns the identificadores of the nodes en sentido directo.
 std::vector<int> XC::Edge::GetTagsNodosInv(void) const
   {
     const size_t nn= NumNodos();
@@ -257,7 +257,7 @@ std::vector<int> XC::Edge::GetTagsNodosInv(void) const
     return retval;
   }
 
-//! @brief Returns the posiciones de los nodos en sentido directo.
+//! @brief Returns the posiciones of the nodes en sentido directo.
 MatrizPos3d XC::Edge::GetPosNodosDir(void) const
   {
     const size_t nn= NumNodos();
@@ -267,7 +267,7 @@ MatrizPos3d XC::Edge::GetPosNodosDir(void) const
     return retval;
   }
 
-//! @brief Returns the posiciones de los nodos en sentido inverso.
+//! @brief Returns the posiciones of the nodes en sentido inverso.
 MatrizPos3d XC::Edge::GetPosNodosInv(void) const
   {
     const size_t nn= NumNodos();

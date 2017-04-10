@@ -104,7 +104,7 @@ XC::Twenty_Node_Brick::Twenty_Node_Brick(int tag,int node1, int node2, int node3
   : Twenty_Node_Brick_Base(tag, ELE_TAG_Twenty_Node_Brick,NDMaterialPhysicalProperties(27,&theMaterial)), bf(bForces),
   Ki(nullptr)//, kc(bulk), rho(rhof)
   {
-    theNodes.set_id_nodos(node1 ,node2 ,node3 ,node4 ,node5 ,node6 ,node7 ,node8 ,node9 ,node10 ,node11 ,node12 ,node13 ,node14 ,node15 ,node16 ,node17 ,node18 ,node19 ,node20);
+    theNodes.set_id_nodes(node1 ,node2 ,node3 ,node4 ,node5 ,node6 ,node7 ,node8 ,node9 ,node10 ,node11 ,node12 ,node13 ,node14 ,node15 ,node16 ,node17 ,node18 ,node19 ,node20);
 
 //  printf("b %15.6e %15.6e %15.6e \n", b1, b2,b3);
 // calculate local shape functions and derivatives

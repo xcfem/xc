@@ -31,18 +31,18 @@
 
 //! Constructor.
 XC::MEDGaussModel::MEDGaussModel(const std::string &nmb,const MED_EN::medGeometryElement &tp,const GaussModel &gm)
-  : nombre(nmb),tipo(tp), num_nodos(gm.getNumberOfReferenceNodes()),num_gauss_pt(gm.getNumGaussPoints()), model(nullptr)
+  : nombre(nmb),tipo(tp), num_nodes(gm.getNumberOfReferenceNodes()),num_gauss_pt(gm.getNumGaussPoints()), model(nullptr)
   { 
     const size_t dim= tp/100; //Dimension of the space in which the element is defined.
-    coo_nodos_ref.resize(num_nodos*dim,0);
+    ref_nodes_coo.resize(num_nodes*dim,0);
     const std::deque<Pos3d> &nodos= gm.getReferenceNodesPositions(); size_t conta= 0;
     for(std::deque<Pos3d>::const_iterator i=nodos.begin();i!=nodos.end();i++)
       {
-        coo_nodos_ref[conta]= i->x(); conta++;
+        ref_nodes_coo[conta]= i->x(); conta++;
         if(dim>1) 
-          { coo_nodos_ref[conta]= i->y(); conta++;}
+          { ref_nodes_coo[conta]= i->y(); conta++;}
         if(dim>2) 
-          { coo_nodos_ref[conta]= i->z(); conta++;}
+          { ref_nodes_coo[conta]= i->z(); conta++;}
       }
     coo_gauss_pt.resize(num_gauss_pt*dim,0);
     gauss_weights.resize(num_gauss_pt,0);
@@ -77,6 +77,6 @@ const MED_EN::medGeometryElement &XC::MEDGaussModel::getTipo(void) const
 //! @brief Dumps the gauss model into MED.
 void XC::MEDGaussModel::to_med(void) const
   {
-    model= new med_gauss_model(nombre,tipo,num_gauss_pt,&coo_nodos_ref[0],&coo_gauss_pt[0],&gauss_weights[0]);
+    model= new med_gauss_model(nombre,tipo,num_gauss_pt,&ref_nodes_coo[0],&coo_gauss_pt[0],&gauss_weights[0]);
   }
 

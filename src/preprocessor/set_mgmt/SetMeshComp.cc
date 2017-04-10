@@ -420,11 +420,12 @@ void XC::SetMeshComp::CompletaHaciaAbajo(void)
 //! or more of the objects that already are in the set.
 void XC::SetMeshComp::CompletaHaciaArriba(void)
   {
-    std::cerr << "SetMeshComp::CompletaHaciaArriba() implementation pending." << std::endl;
+    std::cerr << nombre_clase() << "::" << __FUNCTION__
+              << "; implementation pending." << std::endl;
   }
 
 //! @brief Select the nodes identified by the tags being passed as parameters.
-void XC::SetMeshComp::sel_nodos_lista(const ID &tags)
+void XC::SetMeshComp::sel_nodes_from_list(const ID &tags)
   {
     const size_t sz= tags.Size();
     if(sz>0)
@@ -434,12 +435,13 @@ void XC::SetMeshComp::sel_nodos_lista(const ID &tags)
           for(size_t i= 0;i<sz;i++)
             nodes.push_back(preprocessor->getDomain()->getNode(tags(i)));
         else
-          std::cerr << "SetMeshComp::sel_nodos_lista; preprocessor needed." << std::endl;
+          std::cerr << nombre_clase() << "::" << __FUNCTION__
+	            << "; preprocessor needed." << std::endl;
       }
   }
 
 //! @brief Selects the elements identified by the tags being passed as parameters.
-void XC::SetMeshComp::sel_elementos_lista(const ID &tags)
+void XC::SetMeshComp::sel_elements_from_list(const ID &tags)
   {
     const size_t sz= tags.Size();
     if(sz>0)
@@ -455,7 +457,7 @@ void XC::SetMeshComp::sel_elementos_lista(const ID &tags)
   }
 
 //! @brief Selecciona las coacciones cuyos tags being passed as parameters.
-void XC::SetMeshComp::sel_constraints_lista(const ID &tags)
+void XC::SetMeshComp::sel_constraints_from_list(const ID &tags)
   {
     const size_t sz= tags.Size();
     if(sz>0)
@@ -505,11 +507,11 @@ int XC::SetMeshComp::recvData(const CommParameters &cp)
     ID tmp;
     int res= SetBase::recvData(cp);
     tmp= nodes.receiveTags(3,4,getDbTagData(),cp);
-    sel_nodos_lista(tmp);
+    sel_nodes_from_list(tmp);
     tmp= elements.receiveTags(5,6,getDbTagData(),cp);
-    sel_elementos_lista(tmp);
+    sel_elements_from_list(tmp);
     tmp= constraints.receiveTags(7,8,getDbTagData(),cp);
-    sel_constraints_lista(tmp);
+    sel_constraints_from_list(tmp);
     return res;
   }
 

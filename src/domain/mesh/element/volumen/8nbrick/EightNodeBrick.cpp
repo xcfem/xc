@@ -204,7 +204,7 @@ XC::EightNodeBrick::EightNodeBrick(int element_number,
       }
 
       // Set connected external node IDs
-      theNodes.set_id_nodos(node_numb_1,node_numb_2,node_numb_3,node_numb_4,node_numb_5,node_numb_6,node_numb_7,node_numb_8);
+      theNodes.set_id_nodes(node_numb_1,node_numb_2,node_numb_3,node_numb_4,node_numb_5,node_numb_6,node_numb_7,node_numb_8);
   }
 
 //====================================================================

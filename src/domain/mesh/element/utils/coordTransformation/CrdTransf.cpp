@@ -110,7 +110,7 @@ std::string XC::CrdTransf::getName(void) const
 
 
 //! @brief Asigna los pointers to node dorsal y frontal.
-int XC::CrdTransf::set_ptr_nodos(Node *nodeIPointer, Node *nodeJPointer)
+int XC::CrdTransf::set_node_ptrs(Node *nodeIPointer, Node *nodeJPointer)
   {
     nodeIPtr = nodeIPointer;
     nodeJPtr = nodeJPointer;

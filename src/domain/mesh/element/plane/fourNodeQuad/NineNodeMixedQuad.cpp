@@ -91,7 +91,7 @@ XC::NineNodeMixedQuad::NineNodeMixedQuad(int tag,int node1,int node2,int node3,i
                                          NDMaterial &theMat)
   :ElemWithMaterial<9,NDMaterialPhysicalProperties>(tag, ELE_TAG_NineNodeMixedQuad,NDMaterialPhysicalProperties(9,nullptr)), Ki(0)
   {
-    theNodes.set_id_nodos(node1,node2,node3,node4,node5,node6,node7,node8,node9);
+    theNodes.set_id_nodes(node1,node2,node3,node4,node5,node6,node7,node8,node9);
     physicalProperties.setMaterial(&theMat,"AxiSymmetric2D");
   }
 

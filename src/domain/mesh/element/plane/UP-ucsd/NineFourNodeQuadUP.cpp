@@ -93,7 +93,7 @@ XC::NineFourNodeQuadUP::NineFourNodeQuadUP(int tag, int nd1, int nd2, int nd3, i
     perm[1] = p2;
 
     // Set connected external node IDs
-    theNodes.set_id_nodos(nd1,nd2,nd3,nd4,nd5,nd6,nd7,nd8,nd9);
+    theNodes.set_id_nodes(nd1,nd2,nd3,nd4,nd5,nd6,nd7,nd8,nd9);
   }
 
 

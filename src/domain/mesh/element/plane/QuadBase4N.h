@@ -79,7 +79,7 @@ template <class PhysProp>
 XC::QuadBase4N<PhysProp>::QuadBase4N(int tag, int classTag, int node1, int node2, int node3, int node4,const PhysProp &pp)
   : ElemPlano<4,PhysProp>(tag,classTag,pp)
   {
-    this->theNodes.set_id_nodos(node1,node2,node3,node4);
+    this->theNodes.set_id_nodes(node1,node2,node3,node4);
   }
 
 

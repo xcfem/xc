@@ -102,7 +102,7 @@ void XC::DqPtrsConstraint::numera(void)
       }
   }
 
-//! @brief Returns the tags de los elementos.
+//! @brief Returns the tags of the elements.
 std::set<int> XC::DqPtrsConstraint::getTags(void) const
   {
     std::set<int> retval;

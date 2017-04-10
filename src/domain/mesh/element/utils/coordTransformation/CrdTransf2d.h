@@ -89,7 +89,7 @@ class CrdTransf2d: public CrdTransf
     inline double T45(void) const
       { return  sinTheta*nodeJOffset(1)+cosTheta*nodeJOffset(0); }
 
-    void disp_init_nodos(void);
+    void nodes_init_disp(void);
     int computeElemtLengthAndOrient(void) const;
 
     int sendData(CommParameters &cp);

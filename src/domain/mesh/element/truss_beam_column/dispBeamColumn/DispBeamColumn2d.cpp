@@ -87,7 +87,7 @@ XC::DispBeamColumn2d::DispBeamColumn2d(int tag, int nd1, int nd2,
     set_transf(&coordTransf);
 
     // Set connected external node IDs
-    theNodes.set_id_nodos(nd1,nd2);
+    theNodes.set_id_nodes(nd1,nd2);
 
     q0[0] = 0.0;
     q0[1] = 0.0;

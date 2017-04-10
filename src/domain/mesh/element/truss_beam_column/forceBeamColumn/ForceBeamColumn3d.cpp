@@ -127,7 +127,7 @@ XC::ForceBeamColumn3d::ForceBeamColumn3d (int tag, int nodeI, int nodeJ,
                                       int maxNumIters, double tolerance):
   NLForceBeamColumn3dBase(tag,ELE_TAG_ForceBeamColumn3d, numSec), beamIntegr(nullptr),v0()
   {
-    theNodes.set_id_nodos(nodeI,nodeJ);
+    theNodes.set_id_nodes(nodeI,nodeJ);
 
     alloc(bi);
     if(!beamIntegr)

@@ -63,7 +63,7 @@ int XC::NodePtrsWithIDs::getTagNode(const int &i) const
   { return connectedExternalNodes(i); }
 
 //! @brief Sets the node identifiers (tags).
-void XC::NodePtrsWithIDs::set_id_nodos(const std::vector<int> &inodos)
+void XC::NodePtrsWithIDs::set_id_nodes(const std::vector<int> &inodos)
   {
     const size_t numNodes= getNumExternalNodes();
     if(numNodes != inodos.size())
@@ -75,7 +75,7 @@ void XC::NodePtrsWithIDs::set_id_nodos(const std::vector<int> &inodos)
   }
 
 //! @brief Sets the node identifiers (tags).
-void XC::NodePtrsWithIDs::set_id_nodos(const ID &inodos)
+void XC::NodePtrsWithIDs::set_id_nodes(const ID &inodos)
   {
     const int numNodes= getNumExternalNodes();
     if(numNodes != inodos.Size())
@@ -87,14 +87,14 @@ void XC::NodePtrsWithIDs::set_id_nodos(const ID &inodos)
   }
 
 //! @brief Asigna los pointers to los nodos.
-void XC::NodePtrsWithIDs::set_ptr_nodos(Domain *domain)
+void XC::NodePtrsWithIDs::set_node_ptrs(Domain *domain)
   {
     if(domain)
       NodePtrs::setPtrs(domain,connectedExternalNodes);
   }
 
 //! @brief Sets identifiers for nodes 1 and 2.
-void XC::NodePtrsWithIDs::set_id_nodos(int Nd1,int Nd2)
+void XC::NodePtrsWithIDs::set_id_nodes(int Nd1,int Nd2)
   {
     assert(connectedExternalNodes.Size()>=2);
     connectedExternalNodes(0)= Nd1;
@@ -102,69 +102,69 @@ void XC::NodePtrsWithIDs::set_id_nodos(int Nd1,int Nd2)
   }
 
 //! @brief Sets identifiers for nodes 1 to 3.
-void XC::NodePtrsWithIDs::set_id_nodos(int nd1, int nd2, int nd3)
+void XC::NodePtrsWithIDs::set_id_nodes(int nd1, int nd2, int nd3)
   {
-    set_id_nodos(nd1,nd2);
+    set_id_nodes(nd1,nd2);
     assert(connectedExternalNodes.Size()>=4);
     connectedExternalNodes(2)= nd3;
   }
 
 //! @brief Sets identifiers for nodes 1 to 4.
-void XC::NodePtrsWithIDs::set_id_nodos(int nd1, int nd2, int nd3, int nd4)
+void XC::NodePtrsWithIDs::set_id_nodes(int nd1, int nd2, int nd3, int nd4)
   {
-    set_id_nodos(nd1,nd2,nd3);
+    set_id_nodes(nd1,nd2,nd3);
     assert(connectedExternalNodes.Size()>=4);
     connectedExternalNodes(3)= nd4;
   }
 
 //! @brief Sets identifiers for nodes 1 to 5.
-void XC::NodePtrsWithIDs::set_id_nodos(int nd1, int nd2, int nd3, int nd4, int nd5)
+void XC::NodePtrsWithIDs::set_id_nodes(int nd1, int nd2, int nd3, int nd4, int nd5)
   {
-    set_id_nodos(nd1,nd2,nd3,nd4);
+    set_id_nodes(nd1,nd2,nd3,nd4);
     assert(connectedExternalNodes.Size()>=5);
     connectedExternalNodes(4)= nd5;
   }
 
 //! @brief Sets identifiers for nodes 1 to 6.
-void XC::NodePtrsWithIDs::set_id_nodos(int nd1, int nd2, int nd3, int nd4, int nd5, int nd6)
+void XC::NodePtrsWithIDs::set_id_nodes(int nd1, int nd2, int nd3, int nd4, int nd5, int nd6)
   {
-    set_id_nodos(nd1,nd2,nd3,nd4,nd5);
+    set_id_nodes(nd1,nd2,nd3,nd4,nd5);
     assert(connectedExternalNodes.Size()>=6);
     connectedExternalNodes(5)= nd6;
   }
 
 //! @brief Sets identifiers for nodes 1 to 7.
-void XC::NodePtrsWithIDs::set_id_nodos(int nd1, int nd2, int nd3, int nd4, int nd5, int nd6, int nd7)
+void XC::NodePtrsWithIDs::set_id_nodes(int nd1, int nd2, int nd3, int nd4, int nd5, int nd6, int nd7)
   {
-    set_id_nodos(nd1,nd2,nd3,nd4,nd5,nd6);
+    set_id_nodes(nd1,nd2,nd3,nd4,nd5,nd6);
     assert(connectedExternalNodes.Size()>=7);
     connectedExternalNodes(6)= nd7;
   }
 
 //! @brief Sets identifiers for nodes 1 to 8.
-void XC::NodePtrsWithIDs::set_id_nodos(int nd1, int nd2, int nd3, int nd4,int nd5,int nd6,int nd7,int nd8)
+void XC::NodePtrsWithIDs::set_id_nodes(int nd1, int nd2, int nd3, int nd4,int nd5,int nd6,int nd7,int nd8)
   {
-    set_id_nodos(nd1,nd2,nd3,nd4,nd5,nd6,nd7);
+    set_id_nodes(nd1,nd2,nd3,nd4,nd5,nd6,nd7);
     assert(connectedExternalNodes.Size()>=8);
     connectedExternalNodes(7)= nd8;
   }
 
 //! @brief Sets identifiers for nodes 1 to 9.
-void XC::NodePtrsWithIDs::set_id_nodos(int nd1, int nd2, int nd3, int nd4,int nd5,int nd6,int nd7,int nd8,int nd9)
+void XC::NodePtrsWithIDs::set_id_nodes(int nd1, int nd2, int nd3, int nd4,int nd5,int nd6,int nd7,int nd8,int nd9)
   {
-    set_id_nodos(nd1,nd2,nd3,nd4,nd5,nd6,nd7,nd8);
+    set_id_nodes(nd1,nd2,nd3,nd4,nd5,nd6,nd7,nd8);
     assert(connectedExternalNodes.Size()>=9);
     connectedExternalNodes(8)= nd9;
   }
 
 //! @brief Sets identifiers for nodes 1 to 20.
-void XC::NodePtrsWithIDs::set_id_nodos(int nd1,  int nd2,  int nd3,  int nd4,
+void XC::NodePtrsWithIDs::set_id_nodes(int nd1,  int nd2,  int nd3,  int nd4,
                    int nd5,  int nd6,  int nd7,  int nd8,
                    int nd9,  int nd10, int nd11, int nd12,
                    int nd13, int nd14, int nd15, int nd16,
 					   int nd17, int nd18, int nd19, int nd20)
   {
-    set_id_nodos(nd1,nd2,nd3,nd4,nd5,nd6,nd7,nd8,nd9);
+    set_id_nodes(nd1,nd2,nd3,nd4,nd5,nd6,nd7,nd8,nd9);
     assert(connectedExternalNodes.Size()>=20);
     connectedExternalNodes(9)= nd10;
     connectedExternalNodes(10)= nd11;
@@ -180,13 +180,13 @@ void XC::NodePtrsWithIDs::set_id_nodos(int nd1,  int nd2,  int nd3,  int nd4,
   }
 
 //! @brief Sets identifiers for nodes 1 to 27.
-void XC::NodePtrsWithIDs::set_id_nodos(int nd1,int nd2,int nd3,int nd4,int nd5,int nd6,int nd7,
+void XC::NodePtrsWithIDs::set_id_nodes(int nd1,int nd2,int nd3,int nd4,int nd5,int nd6,int nd7,
                                            int nd8,int nd9,int nd10,int nd11,int nd12,int nd13,
                                            int nd14,int nd15,int nd16,int nd17,int nd18,int nd19,
                                            int nd20, int nd21, int nd22,int nd23, int nd24, int nd25,
                                            int nd26,int nd27)
   {
-    set_id_nodos(nd1,nd2,nd3,nd4,nd5,nd6,nd7,nd8,nd9,nd10,nd11,nd12,nd13,nd14,nd15,nd16,nd17,nd18,nd19,nd20);
+    set_id_nodes(nd1,nd2,nd3,nd4,nd5,nd6,nd7,nd8,nd9,nd10,nd11,nd12,nd13,nd14,nd15,nd16,nd17,nd18,nd19,nd20);
     assert(connectedExternalNodes.Size()>=27);
     connectedExternalNodes(20)= nd21;
     connectedExternalNodes(21)= nd22;

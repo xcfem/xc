@@ -178,7 +178,7 @@ XC::TwentySevenNodeBrick::TwentySevenNodeBrick(int element_number,
       }
 
       // Set connected external node IDs
-    theNodes.set_id_nodos(node_numb_1,node_numb_2,node_numb_3,node_numb_4,node_numb_5,node_numb_6,node_numb_7,node_numb_8,node_numb_9,node_numb_10,node_numb_11,node_numb_12,node_numb_13,node_numb_14,node_numb_15,node_numb_16,node_numb_17,node_numb_18,node_numb_19,node_numb_20,node_numb_21,node_numb_22,node_numb_23,node_numb_24,node_numb_25,node_numb_26,node_numb_27);
+    theNodes.set_id_nodes(node_numb_1,node_numb_2,node_numb_3,node_numb_4,node_numb_5,node_numb_6,node_numb_7,node_numb_8,node_numb_9,node_numb_10,node_numb_11,node_numb_12,node_numb_13,node_numb_14,node_numb_15,node_numb_16,node_numb_17,node_numb_18,node_numb_19,node_numb_20,node_numb_21,node_numb_22,node_numb_23,node_numb_24,node_numb_25,node_numb_26,node_numb_27);
 
 
 }
@@ -1358,7 +1358,7 @@ XC::BJtensor XC::TwentySevenNodeBrick::mass_matrix(const XC::BJtensor & M)
   }
 
 
-//! @brief Returns the coordenadas de los nodos.
+//! @brief Returns the coordinates of the nodes.
 XC::BJtensor XC::TwentySevenNodeBrick::Nodal_Coordinates(void) const
   {
     const int dimensions[] = {27,3};

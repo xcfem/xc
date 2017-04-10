@@ -90,7 +90,7 @@ XC::Joint3D::Joint3D(int tag, int nd1, int nd2, int nd3, int nd4, int nd5, int n
 
 
     // Save external node id's
-    theNodes.set_id_nodos(nd1,nd2,nd3,nd4,nd5,nd6,IntNodeTag);
+    theNodes.set_id_nodes(nd1,nd2,nd3,nd4,nd5,nd6,IntNodeTag);
     setDomain(TheDomain);
 
     // check for a two dimensional domain, since this element supports only two dimensions

@@ -46,7 +46,7 @@ class SetEstruct: public SetBase
   {
   protected:
     friend class Preprocessor;
-    void agrega_elementos(const TritrizPtrElem &);
+    void add_elements(const TritrizPtrElem &);
 
     NodePtrSet getNodePtrSet(void);
   public:

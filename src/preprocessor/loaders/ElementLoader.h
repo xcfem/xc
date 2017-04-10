@@ -50,9 +50,9 @@ class ElementLoader: public ProtoElementLoader
       public:
         SeedElemLoader(Preprocessor *preprocessor)
           : ProtoElementLoader(preprocessor), semilla(nullptr) {}
-	Element *GetElementoSemilla(void)
+	Element *GetSeedElement(void)
           { return semilla; }
-	const Element *GetElementoSemilla(void) const
+	const Element *GetSeedElement(void) const
           { return semilla; }
         int getDefaultTag(void) const;
         void clearAll(void);
@@ -69,8 +69,8 @@ class ElementLoader: public ProtoElementLoader
     void new_element(Element *e);
     inline SeedElemLoader &getSeedElemLoader(void)
       { return seed_elem_loader; }
-    const Element *get_elemento_semilla(void) const
-      { return seed_elem_loader.GetElementoSemilla(); }
+    const Element *get_seed_element(void) const
+      { return seed_elem_loader.GetSeedElement(); }
 
     virtual void Agrega(Element *);
 

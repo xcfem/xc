@@ -92,7 +92,7 @@ XC::Joint2D::Joint2D(int tag, int nd1, int nd2, int nd3, int nd4, int IntNodeTag
 
 
     
-    theNodes.set_id_nodos(nd1,nd2,nd3,nd4,IntNodeTag); // Save external node id's
+    theNodes.set_id_nodes(nd1,nd2,nd3,nd4,IntNodeTag); // Save external node id's
     setDomain(theDomain);
 
     // check for a two dimensional domain, since this element supports only two dimensions
@@ -216,7 +216,7 @@ XC::Joint2D::Joint2D(int tag, int nd1, int nd2, int nd3, int nd4, int IntNodeTag
 
 
     // Save external node id's
-    theNodes.set_id_nodos(nd1,nd2,nd3,nd4,IntNodeTag);
+    theNodes.set_id_nodes(nd1,nd2,nd3,nd4,IntNodeTag);
     setDomain(theDomain);
 
     // check for a two dimensional domain, since this element supports only two dimensions

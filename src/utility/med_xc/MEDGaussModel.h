@@ -42,8 +42,8 @@ class MEDGaussModel: public MEDObject
   private:
     std::string nombre; //!< set name.
     MED_EN::medGeometryElement tipo; //!< Tipo de celda (MED_TRIA3,MED_QUAD4,MED_POINT1,...).
-    int num_nodos;
-    std::vector<double> coo_nodos_ref; //!< Reference nodes coordinates.
+    int num_nodes;
+    std::vector<double> ref_nodes_coo; //!< Reference nodes coordinates.
     int num_gauss_pt;
     std::vector<double> coo_gauss_pt; //!< Gauss points coordinates.
     std::vector<double> gauss_weights; //!< Gauss points weights.

@@ -46,7 +46,7 @@ XC::BrickBase::BrickBase(int tag,int classTag,const NDMaterialPhysicalProperties
 XC::BrickBase::BrickBase(int tag, int classTag, int node1, int node2, int node3, int node4,int node5,int node6,int node7,int node8, const NDMaterialPhysicalProperties &pp) 
   : ElemWithMaterial<8,NDMaterialPhysicalProperties>(tag,classTag,pp)
   {
-    theNodes.set_id_nodos(node1,node2,node3,node4,node5,node6,node7,node8);
+    theNodes.set_id_nodes(node1,node2,node3,node4,node5,node6,node7,node8);
   }
 
 //! @brief Return the element dimension (0, 1, 2 o3 3).
@@ -78,7 +78,7 @@ XC::TritrizPtrElem XC::BrickBase::put_on_mesh(const XC::TritrizPtrNod &nodos,mes
                 const int &Nd6= nodos(i+1,j,k+1)->getTag();
                 const int &Nd7= nodos(i+1,j+1,k+1)->getTag();
                 const int &Nd8= nodos(i+1,j+1,k)->getTag();
-                tmp->getNodePtrs().set_id_nodos(Nd1,Nd2,Nd3,Nd4,Nd5,Nd6,Nd7,Nd8);
+                tmp->getNodePtrs().set_id_nodes(Nd1,Nd2,Nd3,Nd4,Nd5,Nd6,Nd7,Nd8);
                 retval(i,j,k)= tmp;
               }
       }

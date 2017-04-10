@@ -130,7 +130,7 @@ XC::TwentyEightNodeBrickUP::TwentyEightNodeBrickUP(int tag,
                                                const BodyForces3D &bForces)
 :ElemWithMaterial<20,NDMaterialPhysicalProperties>(tag, ELE_TAG_Twenty_Eight_Node_BrickUP,NDMaterialPhysicalProperties(27,&theMaterial)), bf(bForces), rho(rhof), kc(bulk), Ki(0)
   {
-    theNodes.set_id_nodos(node1 ,node2 ,node3 ,node4 ,node5 ,node6 ,node7 ,node8 ,node9 ,node10 ,node11 ,node12 ,node13 ,node14 ,node15 ,node16 ,node17 ,node18 ,node19 ,node20);
+    theNodes.set_id_nodes(node1 ,node2 ,node3 ,node4 ,node5 ,node6 ,node7 ,node8 ,node9 ,node10 ,node11 ,node12 ,node13 ,node14 ,node15 ,node16 ,node17 ,node18 ,node19 ,node20);
 
     // Permeabilities
     perm[0] = p1;

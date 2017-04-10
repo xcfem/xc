@@ -35,7 +35,7 @@ void XC::MEDMapConectividad::nueva_celda(const MED_EN::medGeometryElement &tipo,
       c.push_back(map_indices_vertices.getMEDIndice(conex(i)));
   }
 
-//! @brief Returns the vector con la conectividad de los elementos
+//! @brief Returns the vector con la conectividad of the elements
 //! del tipo being passed as parameter.
 std::vector<int> &XC::MEDMapConectividad::getConnectivity(const int &tipoElem)
   {
@@ -46,7 +46,7 @@ std::vector<int> &XC::MEDMapConectividad::getConnectivity(const int &tipoElem)
       return med_cell_connectivity[tipoElem];
   }
 
-//! @brief Returns the vector con la conectividad de los elementos
+//! @brief Returns the vector con la conectividad of the elements
 //! del tipo being passed as parameter.
 const std::vector<int> &XC::MEDMapConectividad::getConnectivity(const int &tipoElem) const
   { return med_cell_connectivity.find(tipoElem)->second; }

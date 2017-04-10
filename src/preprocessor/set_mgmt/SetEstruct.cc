@@ -137,8 +137,8 @@ XC::ElementEdges XC::SetEstruct::getElementEdges(void)
     return getElementEdgesEntreNodos(nodos);
   }
 
-//! @brief Agrega al modelo los elementos being passed as parameters.
-void XC::SetEstruct::agrega_elementos(const TritrizPtrElem &elementos)
+//! @brief Adds to the model the elements being passed as parameters.
+void XC::SetEstruct::add_elements(const TritrizPtrElem &elementos)
   {
     const size_t capas= elementos.GetCapas();
     if(capas<1) return;
@@ -150,7 +150,7 @@ void XC::SetEstruct::agrega_elementos(const TritrizPtrElem &elementos)
           get_preprocessor()->getElementLoader().Agrega(elementos(i,j,k));
   }
 
-//! @brief Returns the tags de los nodos.
+//! @brief Returns the tags of the nodes.
 std::set<int> XC::SetEstruct::getNodeTags(void) const
   {
     std::set<int> retval;
@@ -188,7 +188,7 @@ boost::python::list XC::SetEstruct::getNodes(void)
   }
 
 
-//! @brief Returns the tags de los elementos.
+//! @brief Returns the tags of the elements.
 std::set<int> XC::SetEstruct::getElementTags(void) const
   {
     std::set<int> retval;

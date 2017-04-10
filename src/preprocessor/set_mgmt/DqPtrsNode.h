@@ -80,8 +80,8 @@ class DqPtrsNode: public DqPtrs<Node>
     size_t getNumLiveNodes(void) const;
     size_t getNumDeadNodes(void) const;
 
-    bool InNodeTag(const int tag_nodo) const;
-    bool InNodeTags(const ID &tag_nodos) const;
+    bool InNodeTag(const int ) const;
+    bool InNodeTags(const ID &) const;
     std::set<int> getTags(void) const;
 
     Node *buscaNodo(const int &tag);

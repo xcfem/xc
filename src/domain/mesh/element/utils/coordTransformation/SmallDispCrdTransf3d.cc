@@ -159,11 +159,11 @@ const XC::Vector &XC::SmallDispCrdTransf3d::getBasicTrialDisp(void) const
     const Vector &disp1 = nodeIPtr->getTrialDisp();
     const Vector &disp2 = nodeJPtr->getTrialDisp();
 
-    static double ug[12]; //Desplazamiento de los nodos en coordenadas globales.
+    static double ug[12]; //Desplazamiento of the nodes en global coordinates.
     inic_ug(disp1,disp2,ug);
     modif_ug_init_disp(ug);
 
-    static double ul[12]; //Desplazamiento de los nodos en coordenadas locales.
+    static double ul[12]; //Desplazamiento of the nodes en local coordinates.
     global_to_local(ug,ul);
 
     static double Wu[3];

@@ -231,7 +231,7 @@ int XC::NodePtrs::getTotalDOFs(void) const
     return retval;
   }
 
-//! @brief Returns the maximum value de la coordenada i de los nodos.
+//! @brief Returns the maximum value de la coordenada i of the nodes.
 double XC::NodePtrs::MaxCooNod(int icoo) const
   {
     assert(!theNodes.empty());
@@ -243,7 +243,7 @@ double XC::NodePtrs::MaxCooNod(int icoo) const
     return retval;
   }
 
-//! @brief Returns the minimum value de la coordenada i de los nodos.
+//! @brief Returns the minimum value de la coordenada i of the nodes.
 double XC::NodePtrs::MinCooNod(int icoo) const
   {
     assert(!theNodes.empty());
@@ -255,7 +255,7 @@ double XC::NodePtrs::MinCooNod(int icoo) const
     return retval;
   }
 
-//! @brief Returns a vector con los tags de los nodos.
+//! @brief Returns a vector con los tags of the nodes.
 const std::vector<int> &XC::NodePtrs::getTags(void) const
   {
     static std::vector<int> retval;
@@ -276,7 +276,7 @@ std::vector<int> XC::NodePtrs::getIdx(void) const
     return retval;     
   }
 
-//! @brief Returns a matriz con las coordenadas de los nodos.
+//! @brief Returns a matriz con las coordinates of the nodes.
 const XC::Matrix &XC::NodePtrs::getCoordinates(void) const
   {
     static Matrix retval;
@@ -304,7 +304,7 @@ Pos3d XC::NodePtrs::getPosNodo(const size_t &i,bool initialGeometry) const
       return theNodes[i]->getPosFinal3d();
   }
 
-//! @brief Returns a matriz con las posiciones de los nodos.
+//! @brief Returns a matriz con las posiciones of the nodes.
 std::list<Pos3d> XC::NodePtrs::getPosiciones(bool initialGeometry) const
   {
     std::list<Pos3d> retval;
@@ -314,7 +314,7 @@ std::list<Pos3d> XC::NodePtrs::getPosiciones(bool initialGeometry) const
     return retval;
   }
 
-//! @brief Returns the centro de gravedad de las posiciones de los nodos.
+//! @brief Returns the centro de gravedad de las posiciones of the nodes.
 Pos3d XC::NodePtrs::getPosCdg(bool initialGeometry) const
   {
     Pos3d retval;

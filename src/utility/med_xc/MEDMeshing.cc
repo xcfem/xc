@@ -91,14 +91,14 @@ void XC::MEDMeshing::defineMEDGroups(void)
               med_groups.push_back(MEDGroupInfo(this,*set));
             else
               {
-                Set set_nodos(*set);
-                set_nodos.clearElementos();
-                set_nodos.Nombre()= nmb+str_node_group;
-                med_groups.push_back(MEDGroupInfo(this,set_nodos));
-                Set set_elementos(*set);
-                set_elementos.clearNodos();
-                set_elementos.Nombre()= nmb+str_element_group;
-                med_groups.push_back(MEDGroupInfo(this,set_elementos));
+                Set set_nodes(*set);
+                set_nodes.clearElementos();
+                set_nodes.Nombre()= nmb+str_node_group;
+                med_groups.push_back(MEDGroupInfo(this,set_nodes));
+                Set set_elements(*set);
+                set_elements.clearNodos();
+                set_elements.Nombre()= nmb+str_element_group;
+                med_groups.push_back(MEDGroupInfo(this,set_elements));
               }
           }
       }

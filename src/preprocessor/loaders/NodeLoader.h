@@ -42,8 +42,8 @@ class Node;
 class NodeLoader: public Loader
   {
   private:
-    size_t ngdl_def_nodo; //!< Default number of DOFs for new nodes.
-    size_t ncoo_def_nodo; //!< Number of coordinates for new nodes (1,2 or 3).
+    size_t ngdl_def_node; //!< Default number of DOFs for new nodes.
+    size_t ncoo_def_node; //!< Number of coordinates for new nodes (1,2 or 3).
     Node *seed_node; //!< Seed node for semi-automatic meshing.
     void libera(void);
     Node *new_node(const int &tag,const size_t &dim,const int &ngdl,const double &x,const double &y=0.0,const double &z=0.0);
@@ -65,13 +65,13 @@ class NodeLoader: public Loader
     Node *duplicateNode(const int &);
 
     size_t getDimEspacio(void) const
-      { return ncoo_def_nodo; }
+      { return ncoo_def_node; }
     void setDimEspacio(const size_t &dim)
-      { ncoo_def_nodo= dim; }
+      { ncoo_def_node= dim; }
     void setNumGdls(const size_t &ngdl)
-      { ngdl_def_nodo= ngdl; }
+      { ngdl_def_node= ngdl; }
     size_t getNumGdls(void) const
-      { return ngdl_def_nodo; }
+      { return ngdl_def_node; }
     Node *getNode(const int &tag);
     int getDefaultTag(void) const;
     void setDefaultTag(const int &tag);

@@ -84,7 +84,7 @@ XC::DispBeamColumn3d::DispBeamColumn3d(int tag, int nd1, int nd2,
     set_transf(&coordTransf);
 
     // Set connected external node IDs
-    theNodes.set_id_nodos(nd1,nd2);
+    theNodes.set_id_nodes(nd1,nd2);
   }
 
 XC::DispBeamColumn3d::DispBeamColumn3d(int tag,int numSec,const Material *m,const CrdTransf *trf)

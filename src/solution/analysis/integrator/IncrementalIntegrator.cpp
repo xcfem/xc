@@ -242,7 +242,7 @@ int XC::IncrementalIntegrator::formNodalUnbalance(void)
     return res;
   }
 
-//! @brief Forma el vector residuo de los elementos.
+//! @brief Forma el unbalanced load vector of the elements.
 int XC::IncrementalIntegrator::formElementResidual(void)
   {
     // loop through the FE_Elements and add the residual

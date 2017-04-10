@@ -45,7 +45,7 @@ XC::ShellCorotCrdTransf3d::ShellCorotCrdTransf3d(void)
 XC::ShellCorotCrdTransf3d::ShellCorotCrdTransf3d(const Vector &v1,const Vector &v2,const Vector &v3)
   : ShellCrdTransf3dBase(v1,v2,v3) {}
 
-//! @brief Calcula los vectores básicos a partir de las coordenadas de los nodos.
+//! @brief Calcula los vectores básicos a partir de las coordinates of the nodes.
 XC::ShellCorotCrdTransf3d::ShellCorotCrdTransf3d(const NodePtrs &theNodes)
   : ShellCrdTransf3dBase()
   { initialize(theNodes); }
@@ -135,7 +135,7 @@ XC::Matrix XC::ShellCorotCrdTransf3d::getR(void) const
     return retval;
   }
 
-//! @brief Returns the vector expresado en coordenadas
+//! @brief Returns the vector expresado en coordinates
 //! locales a partir del desplazamiento expresado en globales.
 XC::Vector XC::ShellCorotCrdTransf3d::global_to_local(const Vector &di,const Vector &vi0) const
   {

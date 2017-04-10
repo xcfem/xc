@@ -110,7 +110,7 @@ XC::NLBeamColumn3d::NLBeamColumn3d(int tag, int nodeI, int nodeJ,
   : NLForceBeamColumn3dBase(tag,ELE_TAG_NLBeamColumn3d,numSections,nullptr,&coordTransf)
   {
     load.reset(NEGD);
-    theNodes.set_id_nodos(nodeI,nodeJ);
+    theNodes.set_id_nodes(nodeI,nodeJ);
 
     // get copy of the sections
     isTorsion= setSections(sectionPtrs);

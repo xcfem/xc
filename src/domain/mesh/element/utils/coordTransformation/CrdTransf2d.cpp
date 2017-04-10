@@ -106,9 +106,9 @@ void XC::CrdTransf2d::set_rigid_joint_offsetJ(const Vector &rigJntOffset2)
   }
 
 
-//! @brief Comprueba si existen desplazamientos iniciales en los nodos
-//! y, si es asi, 
-void XC::CrdTransf2d::disp_init_nodos(void)
+//! @brief Checks for initial displacements on nodes
+//! and, if they exist, 
+void XC::CrdTransf2d::nodes_init_disp(void)
   {
     // see if there is some initial displacements at nodes
     if(initialDispChecked == false)
@@ -141,7 +141,7 @@ void XC::CrdTransf2d::disp_init_nodos(void)
 //! of the nodes.
 int XC::CrdTransf2d::initialize(Node *nodeIPointer, Node *nodeJPointer)
   {
-    set_ptr_nodos(nodeIPointer,nodeJPointer);
+    set_node_ptrs(nodeIPointer,nodeJPointer);
     
     // see if there is some initial displacements at nodes
     if(initialDispChecked == false)
@@ -497,7 +497,7 @@ XC::Matrix XC::CrdTransf2d::getLocalAxes(bool initialGeometry) const
     return retval;
   }
 
-//! @brief Returns the punto expresado en coordenadas globales.
+//! @brief Returns the punto expresado en global coordinates.
 const XC::Vector &XC::CrdTransf2d::getPointGlobalCoordFromBasic(const double &xi) const
   {
     static Vector local_coord(2),global_coord(2);
@@ -534,7 +534,7 @@ Ref2d2d XC::CrdTransf2d::getLocalReference(void) const
     return Ref2d2d(getPosNodeI(),Vector2d(vI[0],vI[1]));
   }
 
-//! @brief Returns the coordenadas locales del punto a partir de las globales.
+//! @brief Returns the local coordinates del punto a partir de las globales.
 XC::Vector XC::CrdTransf2d::getPointLocalCoordFromGlobal(const Vector &xg) const
   {
     Ref2d2d ref= getLocalReference();
@@ -544,7 +544,7 @@ XC::Vector XC::CrdTransf2d::getPointLocalCoordFromGlobal(const Vector &xg) const
     return retval;  
   }
 
-//! @brief Returns the puntos expresados en coordenadas globales.
+//! @brief Returns the puntos expresados en global coordinates.
 const XC::Matrix &XC::CrdTransf2d::getPointsGlobalCoordFromBasic(const Vector &basicCoords) const
   {
     static Matrix retval;
@@ -560,7 +560,7 @@ const XC::Matrix &XC::CrdTransf2d::getPointsGlobalCoordFromBasic(const Vector &b
     return retval;
   }
 
-//! @brief Returns the vector expresado en coordenadas globales.
+//! @brief Returns the vector expresado en global coordinates.
 const XC::Vector &XC::CrdTransf2d::getVectorGlobalCoordFromLocal(const Vector &localCoords) const
   {
     static XC::Vector retval(2);
@@ -570,7 +570,7 @@ const XC::Vector &XC::CrdTransf2d::getVectorGlobalCoordFromLocal(const Vector &l
     return retval;
   }
 
-//! @brief Returns the vectores expresados en coordenadas globales.
+//! @brief Returns the vectores expresados en global coordinates.
 const XC::Matrix &XC::CrdTransf2d::getVectorGlobalCoordFromLocal(const Matrix &localCoords) const
   {
     static Matrix retval;
@@ -585,7 +585,7 @@ const XC::Matrix &XC::CrdTransf2d::getVectorGlobalCoordFromLocal(const Matrix &l
     return retval;
   }
 
-//! @brief Returns the vector expresado en coordenadas locales.
+//! @brief Returns the vector expresado en local coordinates.
 const XC::Vector &XC::CrdTransf2d::getVectorLocalCoordFromGlobal(const Vector &globalCoords) const
   {
     static XC::Vector retval(2);
@@ -594,7 +594,7 @@ const XC::Vector &XC::CrdTransf2d::getVectorLocalCoordFromGlobal(const Vector &g
     return retval;
   }
 
-//! @brief Returns the coordenadas de los nodos.
+//! @brief Returns the coordinates of the nodes.
 const XC::Matrix &XC::CrdTransf2d::getCooNodos(void) const
   {
     static Matrix retval;

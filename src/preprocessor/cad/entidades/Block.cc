@@ -369,7 +369,7 @@ void XC::Block::create_nodes(void)
         const size_t filas= NDivJ()+1;
         const size_t cols= NDivI()+1;
         nodos = TritrizPtrNod(capas,filas,cols); //Punteros a nodo.
-        TritrizPos3d pos_nodes= get_posiciones(); //Posiciones de los nodos.
+        TritrizPos3d pos_nodes= get_posiciones(); //Posiciones of the nodes.
 
         //Vertices.
 	nodos(1,1,1)= GetVertice(1)->GetNodo();

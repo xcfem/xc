@@ -97,7 +97,7 @@ XC::Vector XC::CrdTransf3d::get_xz_vector(void) const
     return retval;
   }
 
-//! brief Rellena el vector de desplazamiento globales de los nodos.
+//! brief Rellena el vector de desplazamiento globales of the nodes.
 void XC::CrdTransf3d::inic_ug(const Vector &d1,const Vector &d2,double *ug)
   {
     for(register int i=0;i<6;i++) //Desplazamiento obtenido del cálculo.
@@ -107,7 +107,7 @@ void XC::CrdTransf3d::inic_ug(const Vector &d1,const Vector &d2,double *ug)
       }
   }
 
-//! brief Modifical el vector de desplazamiento globales de los nodos
+//! brief Modifical el vector de desplazamiento globales of the nodes
 //! de acuerdo con los desplazamientos iniciales.
 void XC::CrdTransf3d::modif_ug_init_disp(double *ug) const
   {
@@ -164,7 +164,7 @@ void XC::CrdTransf3d::calc_Wu(const double *ug,double *ul,double *Wu) const
   }
 
 //! Sean dx1,dy1,dz1,gx1,gy1,gz1 los desplazamientos y giros del nodo dorsal y dx2,dy2,dz2,gx2,gy2,gz2
-//! los del nodo frontal expresados en coordenadas locales. This function gets the following displacements
+//! los del nodo frontal expresados en local coordinates. This function gets the following displacements
 //! on the ul parameter and returns the following magnitudes on the ub vector:
 //! -ub(0)= dx2-dx1: element elongation.
 //! -ub(1)= (dy1-dy2)/L+gz1: rotation of node 1 about z axis.
@@ -238,9 +238,9 @@ void XC::CrdTransf3d::set_rigid_joint_offsetJ(const Vector &rigJntOffset2)
 int XC::CrdTransf3d::initialize(Node *nodeIPointer, Node *nodeJPointer)
   {
     int error;
-    set_ptr_nodos(nodeIPointer,nodeJPointer);
+    set_node_ptrs(nodeIPointer,nodeJPointer);
 
-    // Chequea si existe algún desplazamiento inicial de los nodos.
+    // Chequea si existe algún desplazamiento inicial of the nodes.
     if(initialDispChecked == false)
       {
         const Vector &nodeIDisp = nodeIPtr->getDisp();
@@ -360,7 +360,7 @@ Ref3d3d XC::CrdTransf3d::getLocalReference(void) const
     return Ref3d3d(getPosNodeI(),Vector3d(vI[0],vI[1],vI[2]),Vector3d(vJ[0],vJ[1],vJ[2]));
   }
 
-//! @brief Returns the coordenadas locales del punto a partir de las globales.
+//! @brief Returns the local coordinates del punto a partir de las globales.
 XC::Vector XC::CrdTransf3d::getPointLocalCoordFromGlobal(const Vector &xg) const
   {
     Ref3d3d ref= getLocalReference();
@@ -370,7 +370,7 @@ XC::Vector XC::CrdTransf3d::getPointLocalCoordFromGlobal(const Vector &xg) const
     return retval;  
   }
 
-//! @brief Returns the punto expresado en coordenadas globales.
+//! @brief Returns the punto expresado en global coordinates.
 const XC::Vector &XC::CrdTransf3d::getPointGlobalCoordFromBasic(const double &xi) const
   {
     static Vector local_coord(3),global_coord(3);
@@ -380,7 +380,7 @@ const XC::Vector &XC::CrdTransf3d::getPointGlobalCoordFromBasic(const double &xi
     return global_coord;
   }
 
-//! @brief Returns the puntos expresados en coordenadas globales.
+//! @brief Returns the puntos expresados en global coordinates.
 const XC::Matrix &XC::CrdTransf3d::getPointsGlobalCoordFromBasic(const Vector &basicCoords) const
   {
     static Matrix retval;
@@ -408,7 +408,7 @@ const XC::Vector &XC::CrdTransf3d::getVectorGlobalCoordFromLocal(const Vector &l
   }
 
 //! @brief Returns the vectores formados por las filas de la matriz
-//! expresados en coordenadas globales y colocados en otra matriz.
+//! expresados en global coordinates y colocados en otra matriz.
 const XC::Matrix &XC::CrdTransf3d::getVectorGlobalCoordFromLocal(const Matrix &localCoords) const
   {
     calculaEjesLocales(); //Actualiza la matriz R.
@@ -425,7 +425,7 @@ const XC::Matrix &XC::CrdTransf3d::getVectorGlobalCoordFromLocal(const Matrix &l
     return retval;
   }
 
-//! @brief Returns the vector expresado en coordenadas locales.
+//! @brief Returns the vector expresado en local coordinates.
 const XC::Vector &XC::CrdTransf3d::getVectorLocalCoordFromGlobal(const Vector &globalCoords) const
   {
     calculaEjesLocales(); //Actualiza la matriz R.
@@ -435,7 +435,7 @@ const XC::Vector &XC::CrdTransf3d::getVectorLocalCoordFromGlobal(const Vector &g
     return vectorCoo;
   }
 
-//! @brief Returns the coordenadas de los nodos.
+//! @brief Returns the coordinates of the nodes.
 const XC::Matrix &XC::CrdTransf3d::getCooNodos(void) const
   {
     static Matrix retval;

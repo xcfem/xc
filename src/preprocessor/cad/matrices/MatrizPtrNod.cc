@@ -95,7 +95,7 @@ XC::Node *XC::MatrizPtrNod::getNearestNode(const Pos3d &p)
     if(nfilas*ncols>500)
       std::clog << "La matriz de nodos es tiene "
                 << nfilas*ncols << " elementos "
-                << " es mejor buscar por coordenadas en the set asociado."
+                << " es mejor buscar por coordinates en the set asociado."
                 << std::endl;
     for(size_t j= 1;j<=nfilas;j++)
       for(size_t k= 1;k<=ncols;k++)
@@ -129,7 +129,7 @@ void XC::MatrizPtrNod::fix(const SFreedom_Constraint &semilla) const
         operator()(j,k)->fix(semilla);
   }
 
-//! @brief Returns a matriz con los identificadores de los nodos.
+//! @brief Returns a matriz con los identificadores of the nodes.
 m_int XC::MatrizPtrNod::getTags(void) const
   {
     const size_t nfilas= getNumFilas();

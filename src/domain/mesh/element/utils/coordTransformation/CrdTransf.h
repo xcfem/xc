@@ -94,7 +94,7 @@ class CrdTransf: public TaggedObject, public MovableObject
     std::vector<double> nodeJInitialDisp; //!< Initial displacement for J node.
     bool initialDispChecked;
 
-    int set_ptr_nodos(Node *nodeIPointer, Node *nodeJPointer);
+    int set_node_ptrs(Node *nodeIPointer, Node *nodeJPointer);
 
     int sendData(CommParameters &cp);
     int recvData(const CommParameters &cp);

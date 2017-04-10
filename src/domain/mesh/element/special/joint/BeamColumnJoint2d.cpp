@@ -77,7 +77,7 @@ ElemWithMaterial<4,BeamColumnJointPhysicalProperties>(tag,ELE_TAG_BeamColumnJoin
   Uecommit(12), UeIntcommit(4), UeprCommit(12), UeprIntCommit(4),
   BCJoint(13,16), dg_df(4,13), dDef_du(13,4), K(12,12), R(12)
   {
-    theNodes.set_id_nodos(Nd1,Nd2,Nd3,Nd4);
+    theNodes.set_id_nodes(Nd1,Nd2,Nd3,Nd4);
 
     Uecommit.Zero();
     UeIntcommit.Zero();
@@ -98,7 +98,7 @@ ElemWithMaterial<4,BeamColumnJointPhysicalProperties>(tag,ELE_TAG_BeamColumnJoin
   Uecommit(12), UeIntcommit(4), UeprCommit(12), UeprIntCommit(4),
   BCJoint(13,16), dg_df(4,13), dDef_du(13,4), K(12,12), R(12)
   {
-    theNodes.set_id_nodos(Nd1,Nd2,Nd3,Nd4);
+    theNodes.set_id_nodes(Nd1,Nd2,Nd3,Nd4);
 
 
         Uecommit.Zero();
