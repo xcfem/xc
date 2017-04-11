@@ -44,7 +44,7 @@
 XC::LoadLoader::LoadLoader(Preprocessor *owr)
   : Loader(owr), lpatterns(this), tag_lp(0), combinations(this) {}
 
-//! @brief Agrega el load pattern al domain.
+//! @brief Adds the load patter to the domain.
 void XC::LoadLoader::addToDomain(const std::string &lp_code)
   {
     LoadPattern *lp= lpatterns.buscaLoadPattern(lp_code);

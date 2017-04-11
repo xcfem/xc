@@ -41,7 +41,7 @@ class MEDMapNumCeldasPorTipo
     typedef std::map<MED_EN::medGeometryElement,int>::iterator iterator;
     typedef std::vector<MED_EN::medGeometryElement> vector_tipos;
 
-    void agrega_celda(const MED_EN::medGeometryElement &);
+    void add_cell(const MED_EN::medGeometryElement &);
 
     size_t getNumberOfTypes(void) const;
     size_t getNumCeldas(void) const;

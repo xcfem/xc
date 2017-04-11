@@ -55,7 +55,7 @@ XC::ElementLoader::SeedElemLoader &XC::ElementLoader::SeedElemLoader::operator=(
   }
 
 //! @brief Defines seed element.
-void XC::ElementLoader::SeedElemLoader::agrega(XC::Element *e)
+void XC::ElementLoader::SeedElemLoader::add(XC::Element *e)
   {
     libera();
     assert(e);
@@ -107,7 +107,7 @@ XC::Element *XC::ElementLoader::getElement(int tag)
   }
 
 //! @brief Adds the element to the model.
-void XC::ElementLoader::agrega(Element *e)
+void XC::ElementLoader::add(Element *e)
   {
     if(e)
       new_element(e);
@@ -121,12 +121,12 @@ void XC::ElementLoader::clearAll(void)
 
 //! @brief Adds the element to asignándole primero el tag que corresponde,
 //! se emplea en la clase EntPMdlr.
-void XC::ElementLoader::Agrega(Element *e)
+void XC::ElementLoader::Add(Element *e)
   {
     if(e)
       {
         e->setTag(Element::getDefaultTag().getTag());
-        agrega(e);
+        add(e);
 	Element::getDefaultTag()++;
       }
   }

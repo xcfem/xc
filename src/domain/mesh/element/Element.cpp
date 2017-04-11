@@ -166,13 +166,14 @@ void XC::Element::setIdNodos(const std::vector<int> &inodos)
 void XC::Element::setIdNodos(const ID &inodos)
   { getNodePtrs().set_id_nodes(inodos); }
 
-//! @brief Asigna el domain al elemento.
+//! @brief Sets the domain for the element.
 void XC::Element::setDomain(Domain *theDomain)
   {
     MeshComponent::setDomain(theDomain);
     if(!theDomain)
       {
-        std::cerr << "Element::setDomain -- Domain is null\n";
+        std::cerr << nombre_clase() << "::" << __FUNCTION__
+	          << " the domain parameter is null\n";
         getNodePtrs().inic();
       }
     else
@@ -471,7 +472,7 @@ const XC::Matrix &XC::Element::getDampSensitivity(int gradNumber)
   }
 
 
-//! @brief Agrega las reacciones a los nodos.
+//! @brief Adds nodal reactions.
 int XC::Element::addResistingForceToNodalReaction(bool inclInertia)
   {
     int result = 0;
@@ -695,7 +696,7 @@ XC::ID XC::Element::getLocalIndexNodesEdge(const size_t &i) const
     return retval;
   }
 
-//! @brief Returns the sets a los que pertenece este elemento.
+//! @brief Returns the sets to which the element belongs.
 std::set<XC::SetBase *> XC::Element::get_sets(void) const
   {
     std::set<SetBase *> retval;
@@ -904,8 +905,8 @@ double XC::Element::getDist(const Pos3d &p,bool initialGeometry) const
 //! @brief Returns the coordinates del centro de gravedad of the element.
 Pos3d XC::Element::getPosCdg(bool initialGeometry) const
   {
-    std::cerr << "getPosCdg not implemented para los elementos de tipo: "
-              << nombre_clase() << std::endl;
+    std::cerr << __FUNCTION__ << " not implemented for type: "
+              << nombre_clase() << " elements." << std::endl;
     static Pos3d retval;
     return retval;
   }

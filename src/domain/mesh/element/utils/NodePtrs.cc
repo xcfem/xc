@@ -120,7 +120,7 @@ bool XC::NodePtrs::hasNull(void) const
     return retval;
   }
 
-//! @brief Asigna los pointers to partir de los identificadores de elemento.
+//! @brief Sets the node pointers from the node identifiers.
 void XC::NodePtrs::setPtrs(Domain *theDomain, const ID &theNodeTags)
   {
     inic();
@@ -141,7 +141,8 @@ void XC::NodePtrs::setPtrs(Domain *theDomain, const ID &theNodeTags)
       }
   }
 
-//! @brief Returns an iterator al elemento cuyo tag is being passed as parameter.
+//! @brief Returns an iterator to the node identified by the
+//! tag being passed as parameter.
 XC::NodePtrs::iterator XC::NodePtrs::find(const int &tag)
   {
     iterator retval= end();
@@ -151,7 +152,8 @@ XC::NodePtrs::iterator XC::NodePtrs::find(const int &tag)
     return retval;
   }
 
-//! @brief Returns an iterator al elemento cuyo tag is being passed as parameter.
+//! @brief Returns an iterator to the node identified by the
+//! tag being passed as parameter.
 XC::NodePtrs::const_iterator XC::NodePtrs::find(const int &tag) const
   {
     const_iterator retval= end();
@@ -411,7 +413,7 @@ void XC::NodePtrs::resetTributarias(void) const
       theNodes[i]->resetTributaria();    
   }
 
-//! @brief Agrega al la magnitud tributaria de cada node i
+//! @brief Adds to the la magnitud tributaria de cada node i
 //! la componente i del vector being passed as parameter.
 void XC::NodePtrs::vuelcaTributarias(const std::vector<double> &t) const
   {

@@ -91,9 +91,9 @@ XC::Element *XC::MatrizPtrElem::getNearestElement(const Pos3d &p)
     const size_t nfilas= getNumFilas();
     const size_t ncols= getNumCols();
     if(nfilas*ncols>500)
-      std::clog << "La matriz de elementos es tiene "
-                << nfilas*ncols << " componentes "
-                << " es mejor buscar por coordenadas en the set asociado."
+      std::clog << "The element matrix has "
+                << nfilas*ncols << " components "
+                << " is better to search by coordinates in the associated set."
                 << std::endl;
     for(size_t j= 1;j<=nfilas;j++)
       for(size_t k= 1;k<=ncols;k++)

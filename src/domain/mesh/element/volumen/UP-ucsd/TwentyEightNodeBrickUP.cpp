@@ -157,7 +157,7 @@ XC::TwentyEightNodeBrickUP::~TwentyEightNodeBrickUP(void)
   }
 
 
-//! @brief Asigna el domain al elemento
+//! @brief Sets the domain for the element.
 void  XC::TwentyEightNodeBrickUP::setDomain(Domain *theDomain )
   {
     int dof;

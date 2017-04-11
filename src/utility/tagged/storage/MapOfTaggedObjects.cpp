@@ -102,7 +102,7 @@ int XC::MapOfTaggedObjects::setSize(int newSize)
     return 0;
   }
 
-//! @brief Agrega un componente al contenedor.
+//! @brief Adds a component to the container.
 bool XC::MapOfTaggedObjects::addComponent(TaggedObject *newComponent)
   {
     int tag = newComponent->getTag();
@@ -113,7 +113,7 @@ bool XC::MapOfTaggedObjects::addComponent(TaggedObject *newComponent)
       {
         newComponent->set_owner(this);
 	theMap.insert(value_type(tag,newComponent));
-        transmitIDs= true; //Se agrega un componente.
+        transmitIDs= true; //Component added.
 		      
 	// check if sucessfully added 
 	theEle = theMap.find(tag);
@@ -135,7 +135,7 @@ bool XC::MapOfTaggedObjects::addComponent(TaggedObject *newComponent)
     return true;  // o.k.
   }
 
-//! @brief Agrega un componente al contenedor.
+//! @brief Adds a component to the container.
 bool XC::MapOfTaggedObjects::removeComponent(int tag)
   {
     bool retval= false;

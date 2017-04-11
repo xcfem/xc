@@ -24,14 +24,14 @@
 #include "MEDCellBaseInfo.h"
 
 
-//! @brief Returns the número de elementos.
+//! @brief Returns the number of elements.
 size_t XC::MEDCellBaseInfo::getNumberOfElements(void) const
   { return cell_types.getNumCeldas(); }
 
-//! @brief Agrega la conectividad de una celda.
+//! @brief Adds cell connectivity.
 void XC::MEDCellBaseInfo::new_cell(size_t tag,const MED_EN::medGeometryElement &tipo)
   {
-    cell_types.agrega_celda(tipo);
+    cell_types.add_cell(tipo);
     MEDBaseInfo::new_tag(tag);
   }
 

@@ -209,7 +209,7 @@ std::set<XC::SetBase *> XC::Pnt::get_sets(void) const
     return retval;
   }
 
-//! @brief Agrega el punto a the sets being passed as parameters.
+//! @brief Adds the point to the set being passed as parameters.
 void XC::Pnt::add_to_sets(std::set<SetBase *> &sets)
   {
     for(std::set<SetBase *>::iterator i= sets.begin();i!= sets.end();i++)

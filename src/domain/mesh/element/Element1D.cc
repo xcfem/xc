@@ -286,7 +286,7 @@ void XC::Element1D::strainLoad(const DeformationPlane &p1,const DeformationPlane
 size_t XC::Element1D::getDimension(void) const
   { return 1; }
 
-void meshing_on_i(const XC::Element1D &e,const XC::TritrizPtrNod::const_ref_fila_i &nodos,XC::TritrizPtrElem::var_ref_fila_i &elementos)
+void meshing_on_i(const XC::Element1D &e,const XC::TritrizPtrNod::const_ref_fila_i &nodos,XC::TritrizPtrElem::var_ref_fila_i &elements)
   {
     const size_t ncapas= nodos.GetCapas();
     for(size_t i=1;i<ncapas;i++)
@@ -295,11 +295,11 @@ void meshing_on_i(const XC::Element1D &e,const XC::TritrizPtrNod::const_ref_fila
         const int Nd1= nodos(i)->getTag();
         const int Nd2= nodos(i+1)->getTag();
         tmp->getNodePtrs().set_id_nodes(Nd1,Nd2);
-        elementos(i)= tmp;
+        elements(i)= tmp;
       }
   }
 
-void meshing_on_j(const XC::Element1D &e,const XC::TritrizPtrNod::const_ref_fila_j &nodos,XC::TritrizPtrElem::var_ref_fila_j &elementos)
+void meshing_on_j(const XC::Element1D &e,const XC::TritrizPtrNod::const_ref_fila_j &nodos,XC::TritrizPtrElem::var_ref_fila_j &elements)
   {
     const size_t nfilas= nodos.getNumFilas();
     for(size_t j=1;j<nfilas;j++)
@@ -308,11 +308,11 @@ void meshing_on_j(const XC::Element1D &e,const XC::TritrizPtrNod::const_ref_fila
         const int Nd1= nodos(j)->getTag();
         const int Nd2= nodos(j+1)->getTag();
         tmp->getNodePtrs().set_id_nodes(Nd1,Nd2);
-        elementos(j)= tmp;
+        elements(j)= tmp;
       }
   }
 
-void meshing_on_k(const XC::Element1D &e,const XC::TritrizPtrNod::const_ref_fila_k &nodos,XC::TritrizPtrElem::var_ref_fila_k &elementos)
+void meshing_on_k(const XC::Element1D &e,const XC::TritrizPtrNod::const_ref_fila_k &nodos,XC::TritrizPtrElem::var_ref_fila_k &elements)
   {
     const size_t ncols= nodos.getNumCols();
     for(size_t k=1;k<ncols;k++)
@@ -321,31 +321,31 @@ void meshing_on_k(const XC::Element1D &e,const XC::TritrizPtrNod::const_ref_fila
         const int Nd1= nodos(k)->getTag();
         const int Nd2= nodos(k+1)->getTag();
         tmp->getNodePtrs().set_id_nodes(Nd1,Nd2);
-        elementos(k)= tmp;
+        elements(k)= tmp;
       }
   }
 
-void XC::Element1D::unidimensional_meshing(const XC::TritrizPtrNod &nodos,XC::TritrizPtrElem &elementos) const
+void XC::Element1D::unidimensional_meshing(const XC::TritrizPtrNod &nodos,XC::TritrizPtrElem &elements) const
   {
     const size_t ncapas= nodos.GetCapas();
     const size_t nfilas= nodos.getNumFilas();
     const size_t ncols= nodos.getNumCols();
     if(nodos.EsFilaI())
       {
-        elementos= TritrizPtrElem(ncapas-1,MatrizPtrElem(1,1));
-        TritrizPtrElem::var_ref_fila_i fila_elem= elementos.GetVarRefFilaI(1,1);
+        elements= TritrizPtrElem(ncapas-1,MatrizPtrElem(1,1));
+        TritrizPtrElem::var_ref_fila_i fila_elem= elements.GetVarRefFilaI(1,1);
         meshing_on_i(*this,nodos.GetConstRefFilaI(1,1),fila_elem);
       }
     else if(nodos.EsFilaJ())
       {
-        elementos= TritrizPtrElem(ncapas,MatrizPtrElem(nfilas-1,ncols));
-        TritrizPtrElem::var_ref_fila_j fila_elem= elementos.GetVarRefFilaJ(1,1);
+        elements= TritrizPtrElem(ncapas,MatrizPtrElem(nfilas-1,ncols));
+        TritrizPtrElem::var_ref_fila_j fila_elem= elements.GetVarRefFilaJ(1,1);
         meshing_on_j(*this,nodos.GetConstRefFilaJ(1,1),fila_elem);
       }
     else if(nodos.EsFilaK())
       {
-        elementos= TritrizPtrElem(ncapas,MatrizPtrElem(nfilas,ncols-1));
-        TritrizPtrElem::var_ref_fila_k fila_elem= elementos.GetVarRefFilaK(1,1);
+        elements= TritrizPtrElem(ncapas,MatrizPtrElem(nfilas,ncols-1));
+        TritrizPtrElem::var_ref_fila_k fila_elem= elements.GetVarRefFilaK(1,1);
         meshing_on_k(*this,nodos.GetConstRefFilaK(1,1),fila_elem);
       }
   }
@@ -673,7 +673,7 @@ double XC::Element1D::getLongTributaria(const Node *nod) const
   {
     double retval= 0;
     const int i= theNodes.find(nod);
-    if(i>=0) //El nodo es de este elemento.
+    if(i>=0) //Node is in this element.
       retval= longsTributarias[i];
     return retval;
   }

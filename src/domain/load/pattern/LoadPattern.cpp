@@ -265,7 +265,7 @@ void XC::LoadPattern::removeFromDomain(void)
       std::cerr << "WARNING: LoadPattern::removeFromDomain() - null pointer to the domain\n";
   }
 
-//! @brief Agrega the load sobre nodo being passed as parameter.
+//! @brief Adds the nodal load being passed as parameter.
 bool XC::LoadPattern::addNodalLoad(NodalLoad *load)
   {
     Domain *theDomain = this->getDomain();
@@ -310,7 +310,7 @@ XC::ElementalLoad *XC::LoadPattern::newElementalLoad(const std::string &cmd)
     return retval;
   }
 
-//! @brief Agrega the load over element being passed as parameter.
+//! @brief Adds the element load being passed as parameter.
 bool XC::LoadPattern::addElementalLoad(ElementalLoad *load)
   {
     Domain *theDomain= getDomain();
@@ -358,7 +358,7 @@ bool XC::LoadPattern::newElementalLoad(ElementalLoad *load)
 //     return retval;
 //   }
 
-//! @brief Agrega la coacción being passed as parameter.
+//! @brief Adds the constraint being passed as parameter.
 bool XC::LoadPattern::addSFreedom_Constraint(SFreedom_Constraint *theSp)
   { return NodeLocker::addSFreedom_Constraint(theSp); }
 

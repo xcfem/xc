@@ -82,8 +82,8 @@ class SetMeshComp: public SetBase
   protected:
     void clearAll(void);
     void copia_listas(const SetMeshComp &);
-    void agrega_listas(const SetMeshComp &);
-    void agrega_listas_cond(const SetMeshComp &,const std::string &);
+    void extend_lists(const SetMeshComp &);
+    void extend_lists_cond(const SetMeshComp &,const std::string &);
 
     DbTagData &getDbTagData(void) const;
     int sendData(CommParameters &);
@@ -102,7 +102,7 @@ class SetMeshComp: public SetBase
     size_t getNumberOfNodes(void) const
       { return nodes.size(); }
     //! @brief Appends a node.
-    void agregaNodo(Node *nPtr);
+    void addNode(Node *nPtr);
     //! @brief Return the node container.
     virtual const DqPtrsNode &GetNodos(void) const
       { return nodes; }

@@ -89,7 +89,7 @@ class Set: public SetMeshComp
 
     void clearAll(void);
     void copia_listas(const Set &);
-    //void agrega_listas_cond(const Set &,const std::string &);
+    //void extend_lists_cond(const Set &,const std::string &);
     void create_copy(const std::string &,const Vector3d &v);
 
     DbTagData &getDbTagData(void) const;
@@ -156,7 +156,7 @@ class Set: public SetMeshComp
 
     void genMesh(meshing_dir dm);
 
-    void agrega_listas(const Set &);
+    void extend_lists(const Set &);
 
     void CompletaHaciaArriba(void);
     void CompletaHaciaAbajo(void);

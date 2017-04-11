@@ -24,8 +24,8 @@
 #include "MEDMapNumCeldasPorTipo.h"
 #include <iostream>
 
-//! @brief Agrega una celda del tipo being passed as parameter.
-void XC::MEDMapNumCeldasPorTipo::agrega_celda(const MED_EN::medGeometryElement &tipo)
+//! @brief Adds a cell of the type being passed as parameter.
+void XC::MEDMapNumCeldasPorTipo::add_cell(const MED_EN::medGeometryElement &tipo)
   {
     iterator i= tipos.find(tipo);
     if(i!=tipos.end())
@@ -38,11 +38,11 @@ void XC::MEDMapNumCeldasPorTipo::agrega_celda(const MED_EN::medGeometryElement &
 void XC::MEDMapNumCeldasPorTipo::clear(void)
   { tipos.clear(); }
 
-//! @brief Returns the número de tipos de celda.
+//! @brief Returns the number of cell types.
 size_t XC::MEDMapNumCeldasPorTipo::getNumberOfTypes(void) const
   { return tipos.size(); }
 
-//! @brief Returns the número total de elementos.
+//! @brief Returns the number of cells.
 size_t XC::MEDMapNumCeldasPorTipo::getNumCeldas(void) const
   {
     size_t retval= 0;
@@ -50,7 +50,7 @@ size_t XC::MEDMapNumCeldasPorTipo::getNumCeldas(void) const
       retval+= i->second;
     return retval;
   }
-//! @brief Returns the número de elementos por cada tipo de celda.
+//! @brief Returns the number of elements for each cell type.
 std::vector<int> XC::MEDMapNumCeldasPorTipo::getNumCeldasPorTipo(void) const
   {
     const int numTipos= getNumberOfTypes();

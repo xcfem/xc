@@ -364,9 +364,10 @@ const XC::Matrix &XC::ElasticBeam3d::getInitialStiff(void) const
     const double eiyz= ctes_scc.EIyz();
     const double eimax= std::max(ctes_scc.EIz(),ctes_scc.EIy());
     if(std::abs(eiyz/eimax)>1e-5) //Producto de inercia no nulo.
-      std::cerr << "ElasticBeam3d::getTangentStiff; este elemento no"
-                << " debe usarse con secciones que tienen"
-                << " su producto de inercia no nulo."
+      std::cerr << nombre_clase() << "::" << __FUNCTION__
+	        << "; this element must not"
+                << " be used with sections that has "
+                << " a non-zero product of inertia."
                 << std::endl;
 
     const double L = theCoordTransf->getInitialLength();

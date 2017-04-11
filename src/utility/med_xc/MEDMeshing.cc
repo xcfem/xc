@@ -36,8 +36,8 @@
 #include "domain/mesh/node/Node.h"
 #include "ProblemaEF.h"
 
-const std::string XC::MEDMeshing::str_node_group= "_nodos";
-const std::string XC::MEDMeshing::str_element_group= "_elementos";
+const std::string XC::MEDMeshing::str_node_group= "_nodes";
+const std::string XC::MEDMeshing::str_element_group= "_elements";
 
 // @brief Returns med mesh to export.
 XC::MEDMeshing::MEDMeshing(const ProblemaEF &prb) 

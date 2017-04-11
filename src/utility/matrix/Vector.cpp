@@ -874,8 +874,7 @@ XC::Vector &XC::Vector::operator-=(double fact)
 
 
 
-// Vector &operator*=(double fact):
-//! @brief El *= operator multiplica cada elemento por el factor.
+//! @brief The *= operator multiplies each element by the factor.
 XC::Vector &XC::Vector::operator*=(double fact)
   {
     for(int i=0; i<sz; i++)

@@ -113,7 +113,7 @@ XC::ListReinfLayer::~ListReinfLayer(void)
 void XC::ListReinfLayer::clear(void)
   { libera(); }
 
-//! @brief Agrega una región al contenedor.
+//! @brief Adds a rebar layer to the container.
 XC::ReinfLayer *XC::ListReinfLayer::push_back(const ReinfLayer &reg)
   {
     ReinfLayer *tmp= reg.getCopy();

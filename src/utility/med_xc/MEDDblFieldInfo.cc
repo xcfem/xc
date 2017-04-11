@@ -64,10 +64,10 @@ void XC::MEDDblFieldInfo::populateOnNodes(const Set &set,const FieldInfo &fi)
       std::cerr << "Components property name is empty" << std::endl;
   }
 
-//! @brief Asigna los valores del campo en los elementos.
+//! @brief Set the field values for the elements.
 void XC::MEDDblFieldInfo::populateOnElements(const Set &set,const FieldInfo &fi)
   {
-    const DqPtrsElem &elementos= set.getElements();
+    const DqPtrsElem &elements= set.getElements();
     const size_t dim= fi.getNumberOfComponents();
     int conta= 1; std::vector<double> valor(dim);
     const std::string nmb_prop= fi.getComponentsProperty();
@@ -75,7 +75,7 @@ void XC::MEDDblFieldInfo::populateOnElements(const Set &set,const FieldInfo &fi)
       std::cerr << "Components property name is empty" << std::endl;
     else
       {
-        for(DqPtrsElem::const_iterator j= elementos.begin();j!=elementos.end();j++,conta++)
+        for(DqPtrsElem::const_iterator j= elements.begin();j!=elements.end();j++,conta++)
           {
             boost::python::object pyObj(boost::ref(*j));
             boost::python::object tmp= EntCmd_eval(pyObj,nmb_prop);
@@ -98,7 +98,7 @@ void XC::MEDDblFieldInfo::populateOnElements(const Set &set,const FieldInfo &fi)
 //! @brief Asigna los valores del campo en los puntos de Gauss.
 void XC::MEDDblFieldInfo::populateOnGaussPoints(const Set &set,const FieldInfo &fi)
   {
-    const DqPtrsElem &elementos= set.getElements();
+    const DqPtrsElem &elements= set.getElements();
     const size_t dim= fi.getNumberOfComponents();
     int conta= 1;
     m_double valor;
@@ -107,7 +107,7 @@ void XC::MEDDblFieldInfo::populateOnGaussPoints(const Set &set,const FieldInfo &
       std::cerr << "Components property name is empty" << std::endl;
     else
       {
-        for(DqPtrsElem::const_iterator j= elementos.begin();j!=elementos.end();j++,conta++)
+        for(DqPtrsElem::const_iterator j= elements.begin();j!=elements.end();j++,conta++)
           {
             boost::python::object pyObj(boost::ref(*j));
             boost::python::object tmp= EntCmd_eval(pyObj,nmb_prop);

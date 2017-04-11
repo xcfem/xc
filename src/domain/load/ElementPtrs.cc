@@ -44,7 +44,8 @@ XC::ElementPtrs::ElementPtrs(void)
 XC::ElementPtrs::~ElementPtrs(void)
   { theElements.clear(); }
 
-//! @brief Asigna los pointers to partir de los identificadores de elemento.
+//! @brief Set the element pointers from the element identifiers being passed
+//! as parameter.
 void XC::ElementPtrs::setPtrs(Domain *theDomain, const ID &theElementTags)
   {
     size_t sz= theElementTags.Size();
@@ -64,7 +65,8 @@ void XC::ElementPtrs::setPtrs(Domain *theDomain, const ID &theElementTags)
       }
   }
 
-//! @brief Returns an iterator al elemento cuyo tag being passed as parameter.
+//! @brief Returns an iterator to the element identified by the
+//! tag being passed as parameter.
 XC::ElementPtrs::iterator XC::ElementPtrs::find(const int &tag)
   {
     iterator retval= end();
@@ -74,7 +76,8 @@ XC::ElementPtrs::iterator XC::ElementPtrs::find(const int &tag)
     return retval;
   }
 
-//! @brief Returns an iterator al elemento cuyo tag being passed as parameter.
+//! @brief Returns an iterator to the element identified by the
+//! tag being passed as parameter.
 XC::ElementPtrs::const_iterator XC::ElementPtrs::find(const int &tag) const
   {
     const_iterator retval= end();

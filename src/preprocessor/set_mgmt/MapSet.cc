@@ -517,7 +517,7 @@ std::set<XC::SetBase *> XC::MapSet::get_sets(const Node *n)
     return retval;
   }
 
-//! @brief Returns the sets que contienen the pointer a elemento
+//! @brief Returns the sets that containt the element pointer
 //! being passed as parameter.
 std::set<XC::SetBase *> XC::MapSet::get_sets(const Element *e)
   {

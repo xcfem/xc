@@ -57,7 +57,7 @@ class ProtoElementLoader: public Loader
     std::string nmb_integ; //!< If required, integrator identifier for the new element.
     int dir; //!< If required (i.e. for zero length elements), direction of the element material.
   protected:
-    virtual void agrega(Element *)= 0;
+    virtual void add(Element *)= 0;
     MaterialLoader &get_material_loader(void) const;
     MaterialLoader::const_iterator get_iter_material(void) const;
     Material *get_ptr_material(void) const;

@@ -39,7 +39,7 @@
 XC::ElementEdges::ElementEdges(void)
   : EntCmd() {}
 
-//! @brief Asigna los pointers to partir de los identificadores de elemento.
+//! @brief Set the pointers from the element identifiers.
 void XC::ElementEdges::setPtrs(Domain *theDomain, const ID &theElementTags, const ID &theEdgesIndex)
   {
     size_t sz= theElementTags.Size();
@@ -55,14 +55,16 @@ void XC::ElementEdges::setPtrs(Domain *theDomain, const ID &theElementTags, cons
               (*this)[i]= ElementEdge(tmp,theEdgesIndex(i));
             else
               {
-                std::cerr << "WARNING - XC::ElementEdges::setDomain - ele with tag "
+                std::cerr << nombre_clase() << "::" << __FUNCTION__
+		          << "; Warning! ele with tag "
 	                  << theElementTags(i) << " does not exist in the domain\n";
               }
           }
       }
   }
 
-//! @brief Returns an iterator al elemento cuyo tag being passed as parameter.
+//! @brief Returns an iterator to the element identified by the
+//! tag being passed as parameter.
 XC::ElementEdges::iterator XC::ElementEdges::find(const int &tag)
   {
     iterator retval= end();
@@ -72,7 +74,8 @@ XC::ElementEdges::iterator XC::ElementEdges::find(const int &tag)
     return retval;
   }
 
-//! @brief Returns an iterator al elemento cuyo tag being passed as parameter.
+//! @brief Returns an iterator to the element identified by the
+//! tag being passed as parameter.
 XC::ElementEdges::const_iterator XC::ElementEdges::find(const int &tag) const
   {
     const_iterator retval= end();

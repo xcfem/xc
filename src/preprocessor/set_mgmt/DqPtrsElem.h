@@ -62,9 +62,9 @@ class DqPtrsElem: public DqPtrs<Element>
     DqPtrsElem(const DqPtrsElem &otro);
     explicit DqPtrsElem(const std::deque<Element *> &ts);
     explicit DqPtrsElem(const std::set<const Element *> &ts);
-    DqPtrsElem &operator=(const DqPtrsElem &otro);
-    void agrega(const DqPtrsElem &otro);
-    //void agrega_cond(const DqPtrsElem &otro,const std::string &cond);
+    DqPtrsElem &operator=(const DqPtrsElem &);
+    void extend(const DqPtrsElem &);
+    //void extend_cond(const DqPtrsElem &otro,const std::string &cond);
     bool push_back(Element *);
     bool push_front(Element *);
     void clearAll(void);

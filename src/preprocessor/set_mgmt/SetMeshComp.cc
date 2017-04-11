@@ -77,11 +77,11 @@ void XC::SetMeshComp::copia_listas(const SetMeshComp &otro)
 
 //! @brief Appends to this set the objects from the set
 //! being passed as parameter.
-void XC::SetMeshComp::agrega_listas(const SetMeshComp &otro)
+void XC::SetMeshComp::extend_lists(const SetMeshComp &otro)
   {
-    nodes.agrega(otro.nodes);
-    elements.agrega(otro.elements);
-    constraints.agrega(otro.constraints);
+    nodes.extend(otro.nodes);
+    elements.extend(otro.elements);
+    constraints.extend(otro.constraints);
   }
 
 //! @brief Appends to this set the objects the nodes and elements from the set
@@ -100,11 +100,11 @@ void XC::SetMeshComp::appendFromGeomEntity(const SetBase &s)
 
 // ///! @brief Appends to this set the objects from the set
 // //! being passed as parameter that satisfy the condition.
-// void XC::SetMeshComp::agrega_listas_cond(const SetMeshComp &otro,const std::string &cond)
+// void XC::SetMeshComp::extend_lists_cond(const SetMeshComp &otro,const std::string &cond)
 //   {
-//     nodes.agrega_cond(otro.nodes,cond);
-//     elements.agrega_cond(otro.elements,cond);
-//     constraints.agrega_cond(otro.constraints,cond);
+//     nodes.extend_cond(otro.nodes,cond);
+//     elements.extend_cond(otro.elements,cond);
+//     constraints.extend_cond(otro.constraints,cond);
 //   }
 
 //!  @brief Clears all the objectsof the lists.
@@ -126,7 +126,7 @@ void XC::SetMeshComp::clearAll(void)
   }
 
 //! @brief Adds the pointer to node being passed as parameter.
-void XC::SetMeshComp::agregaNodo(Node *nPtr)
+void XC::SetMeshComp::addNode(Node *nPtr)
   { nodes.push_back(nPtr); }
 
 //! @brief Adds the pointer to element being passed as parameter.

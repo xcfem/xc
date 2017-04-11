@@ -139,7 +139,7 @@ int XC::ArrayOfTaggedObjects::setSize(int newSize)
     return 0;
   }
 
-//! @brief Agrega un elemento al contenedor.
+//! @brief Adds a component to the container.
 bool XC::ArrayOfTaggedObjects::addComponent(TaggedObject *newComponent)
   {
     // check to see that no other component already exists
@@ -194,7 +194,7 @@ bool XC::ArrayOfTaggedObjects::addComponent(TaggedObject *newComponent)
     if(positionLastNoFitEntry > positionLastEntry)
       positionLastEntry= positionLastNoFitEntry;
     fitFlag= false;
-    transmitIDs= true; //Se agrega un componente.
+    transmitIDs= true; //Component added.
     return true;  // o.k.
   }
 

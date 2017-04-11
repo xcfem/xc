@@ -46,8 +46,7 @@ std::set<XC::Element *> XC::getElementsBetweenNodes(Node &n1, Node &n2)
     return retval;
   }
 
-//! @brief Returns the bordes de elemento que tienen por extremos
-//! a ambos nodos.
+//! @brief Returns the element edges that have both nodes as ends.
 XC::ElementEdges XC::getElementEdgesEntreNodos(Node *n1, Node *n2)
   {
     ElementEdges retval;

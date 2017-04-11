@@ -61,8 +61,8 @@ class DqPtrsNode: public DqPtrs<Node>
     explicit DqPtrsNode(const std::deque<Node *> &ts);
     explicit DqPtrsNode(const std::set<const Node *> &ts);
     DqPtrsNode &operator=(const DqPtrsNode &otro);
-    void agrega(const DqPtrsNode &otro);
-    //void agrega_cond(const DqPtrsNode &otro,const std::string &cond);
+    void extend(const DqPtrsNode &otro);
+    //void extend_cond(const DqPtrsNode &otro,const std::string &cond);
     bool push_back(Node *);
     bool push_front(Node *);
     void clearAll(void);

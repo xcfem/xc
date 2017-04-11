@@ -1274,6 +1274,7 @@ XC::Matrix XC::identity(const Matrix &m)
     return retval; 
   }
 
+//! @brief Returns the sum of the i-th row.
 double XC::Matrix::rowSum(int i) const
   {
     double sumaf= (*this)(i,0);
@@ -1282,6 +1283,7 @@ double XC::Matrix::rowSum(int i) const
     return sumaf;
   }
 
+//! @brief Returns the sum of the j-th row.
 double XC::Matrix::columnSum(int j) const
   {
     double sumac= (*this)(0,j);
@@ -1315,19 +1317,20 @@ double XC::Matrix::Norm2(void) const
 double XC::Matrix::Norm(void) const
   { return sqrt(Norm2()); }
 
-//! @brief Returns the valor máximo of the elements del vector
-//! que resulta de sumar los elementos de las filas.
+//! @brief Returns the maximum value of the elements of the vector
+//! that results that contains the row sums.
 double XC::Matrix::rowNorm(void) const
   {
     double maximo= rowSum(0);
     for(register int i=1;i<this->noRows();i++) maximo= std::max(maximo,rowSum(i));
     return maximo;
   }
-//! @brief Returns the valor máximo of the elements del vector
-//! que resulta de sumar los elementos de las columnas.
+
+//! @brief Returns the maximum value of the elements of the vector
+//! that results that contains the column sums.
 double XC::Matrix::columnNorm(void) const
   {
     double maximo= columnSum(0);
-    for(register int j=1;j<this->noCols();j++) maximo= std::max(maximo,rowSum(j));
+    for(register int j=1;j<this->noCols();j++) maximo= std::max(maximo,columnSum(j));
     return maximo;
   }

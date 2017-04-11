@@ -73,7 +73,7 @@ XC::DqFibras &XC::DqFibras::operator=(const DqFibras &otro)
     return *this;
   }
 
-//! @brief Agrega al contenedor la fibra being passed as parameter.
+//! @brief Adds to the contenedor la fibra being passed as parameter.
 XC::Fiber *XC::DqFibras::inserta(const Fiber &f)
   {
     Fiber *retval= f.getCopy();
@@ -81,7 +81,7 @@ XC::Fiber *XC::DqFibras::inserta(const Fiber &f)
     return retval;
   }
 
-//! @brief Agrega al contenedor the pointer a fibra being passed as parameter.
+//! @brief Adds to the contenedor the pointer a fibra being passed as parameter.
 void XC::DqFibras::push_back(Fiber *f)
    { dq_ptr_fibras::push_back(f); }
 
@@ -1857,7 +1857,7 @@ int XC::DqFibras::updateKRCDG(FiberSectionGJ &SectionGJ,KRSeccion &krGJ)
     krGJ.kData[4]= krGJ.kData[1]; //Stiffness matrix symmetry.
     krGJ.kData[8]= krGJ.kData[2];
     krGJ.kData[9]= krGJ.kData[6];
-    krGJ.kData[15]= SectionGJ.getGJ(); //(3,3)->15 //Los seis elementos restantes de krGJ.kData son nulos.
+    krGJ.kData[15]= SectionGJ.getGJ(); //(3,3)->15 //The remaining six elements of krGJ.kData are zero.
 
     krGJ.rData[3]= SectionGJ.getGJ()*SectionGJ.getSectionDeformation()(3); //Torsion.
     return 0;
@@ -1920,7 +1920,7 @@ int XC::DqFibras::setTrialSectionDeformation(FiberSectionGJ &SectionGJ,KRSeccion
     krGJ.kData[4]= krGJ.kData[1]; //Stiffness matrix symmetry.
     krGJ.kData[8]= krGJ.kData[2];
     krGJ.kData[9]= krGJ.kData[6];
-    krGJ.kData[15]= SectionGJ.getGJ(); //(3,3)->15 //Los seis elementos restantes de krGJ.kData son nulos.
+    krGJ.kData[15]= SectionGJ.getGJ(); //(3,3)->15 //The remaining six elements of krGJ.kData are zero.
 
     krGJ.rData[3]= SectionGJ.getGJ()*SectionGJ.getSectionDeformation()(3); //Torsion.
     return retval;
@@ -1983,7 +1983,7 @@ const XC::Matrix &XC::DqFibras::getInitialTangent(const FiberSectionGJ &SectionG
     kInitialData[8]= kInitialData[2]; //Simetría.
     kInitialData[9]= kInitialData[6]; //Simetría.
 
-    kInitialData[15]= SectionGJ.GJ; //(3,3)->15 //Los seis elementos restantes de kInitialData son nulos.
+    kInitialData[15]= SectionGJ.GJ; //(3,3)->15 //The remaining six elements of krGJ.kData are zero.
     return kInitial;
   }
 

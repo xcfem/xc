@@ -120,7 +120,7 @@ void XC::Beam3dUniformLoad::addReactionsInBasicSystem(const double &L,const doub
     const double wx= Wx()*loadFactor;  // Axial (+ve from node I to J)
     //const double tx= Tx()*loadFactor;  // Torsor
 
-    //Esfuerzos sobre elemento.
+    //Forces over the element.
     const double Vy = 0.5*wy*L; // Cortante en y en los extremos of the element.
     const double Vz = 0.5*wz*L; // Cortante en z.
     const double P = wx*L; //Axil.
@@ -144,9 +144,9 @@ void XC::Beam3dUniformLoad::addFixedEndForcesInBasicSystem(const double &L,const
     const double wx = Wx()*loadFactor;  // Axial (+ve from node I to J)
     //const double tx= Tx()*loadFactor;  // Torsor
 
-    //Esfuerzos sobre elemento.
-    const double Mz = wy*L*L/12.0; // Momento flector en z en los extremos of the element: wy*L*L/12
-    const double My = wz*L*L/12.0; // Momento flector en y en los extremos of the element: wz*L*L/12
+    //Forces over the element.
+    const double Mz = wy*L*L/12.0; // Momento flector en z at the ends of the element: wy*L*L/12
+    const double My = wz*L*L/12.0; // Momento flector en y at the ends of the element: wz*L*L/12
     const double P = wx*L; //Axil.
 
     // Fixed end forces in basic system

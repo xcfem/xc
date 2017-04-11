@@ -46,7 +46,7 @@ class ElementLoader: public ProtoElementLoader
         SeedElemLoader &operator=(const SeedElemLoader &otro);
         void libera(void);
       protected:
-        void agrega(Element *);
+        void add(Element *);
       public:
         SeedElemLoader(Preprocessor *preprocessor)
           : ProtoElementLoader(preprocessor), semilla(nullptr) {}
@@ -61,7 +61,7 @@ class ElementLoader: public ProtoElementLoader
   private:
     SeedElemLoader seed_elem_loader; //!< Seed element for meshing.
   protected:
-    virtual void agrega(Element *);
+    virtual void add(Element *);
   public:
     ElementLoader(Preprocessor *);
     Element *getElement(int tag);
@@ -72,7 +72,7 @@ class ElementLoader: public ProtoElementLoader
     const Element *get_seed_element(void) const
       { return seed_elem_loader.GetSeedElement(); }
 
-    virtual void Agrega(Element *);
+    virtual void Add(Element *);
 
     int getDefaultTag(void) const;
     void setDefaultTag(const int &tag);

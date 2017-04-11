@@ -138,16 +138,16 @@ XC::ElementEdges XC::SetEstruct::getElementEdges(void)
   }
 
 //! @brief Adds to the model the elements being passed as parameters.
-void XC::SetEstruct::add_elements(const TritrizPtrElem &elementos)
+void XC::SetEstruct::add_elements(const TritrizPtrElem &elements)
   {
-    const size_t capas= elementos.GetCapas();
+    const size_t capas= elements.GetCapas();
     if(capas<1) return;
-    const size_t filas= elementos(1).getNumFilas();
-    const size_t cols= elementos(1).getNumCols();
+    const size_t filas= elements(1).getNumFilas();
+    const size_t cols= elements(1).getNumCols();
     for(register size_t i= 1;i<=capas;i++)
       for(register size_t j= 1;j<=filas;j++)
         for(register size_t k= 1;k<=cols;k++)
-          get_preprocessor()->getElementLoader().Agrega(elementos(i,j,k));
+          get_preprocessor()->getElementLoader().Add(elements(i,j,k));
   }
 
 //! @brief Returns the tags of the nodes.

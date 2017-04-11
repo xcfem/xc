@@ -173,7 +173,7 @@ const std::string &XC::MapLoadPatterns::getNombreLoadPattern(const LoadPattern *
     return retval;
   }
 
-//! @brief Agrega el load pattern al domain.
+//! @brief Adds the load pattern to the domain.
 void XC::MapLoadPatterns::addToDomain(const std::string &lp_code)
   {
     LoadPattern *lp= buscaLoadPattern(lp_code);
@@ -181,7 +181,8 @@ void XC::MapLoadPatterns::addToDomain(const std::string &lp_code)
       {
         bool result= getDomain()->addLoadPattern(lp);
         if((!result) && (verborrea>3))
-          std::cerr << "MapLoadPatterns::addToDomain; no se pudo agregar la acción: '"
+          std::cerr << nombre_clase() << "::" << __FUNCTION__
+	            << "; can't add the load pattern: '"
                     << lp_code << "'\n";
       }
     else

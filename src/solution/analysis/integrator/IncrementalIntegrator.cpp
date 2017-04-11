@@ -87,7 +87,7 @@ int XC::IncrementalIntegrator::formTangent(int statFlag)
 	return -1;
       }
 
-    theSOE->zeroA(); //Anula los elementos de la matriz.
+    theSOE->zeroA(); //Zeroes the matrix elements.
     
     // the loops to form and add the tangents are broken into two for 
     // efficiency when performing parallel computations - CHANGE

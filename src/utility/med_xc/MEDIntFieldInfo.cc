@@ -62,10 +62,10 @@ void XC::MEDIntFieldInfo::populateOnNodes(const Set &set,const FieldInfo &fi)
       }
   }
 
-//! @brief Asigna los valores del campo en los elementos.
+//! @brief Sets the values of the fields in the elements.
 void XC::MEDIntFieldInfo::populateOnElements(const Set &set,const FieldInfo &fi)
   {
-    const DqPtrsElem &elementos= set.getElements();
+    const DqPtrsElem &elements= set.getElements();
     const size_t dim= fi.getNumberOfComponents();
     int conta= 1; std::vector<int> valor(dim);
     const std::string nmb_prop= fi.getComponentsProperty();
@@ -73,7 +73,7 @@ void XC::MEDIntFieldInfo::populateOnElements(const Set &set,const FieldInfo &fi)
       std::cerr << "Components property name is empty" << std::endl;
     else
       {
-        for(DqPtrsElem::const_iterator j= elementos.begin();j!=elementos.end();j++,conta++)
+        for(DqPtrsElem::const_iterator j= elements.begin();j!=elements.end();j++,conta++)
           {
             boost::python::object pyObj(boost::ref(*j));
             boost::python::object tmp= EntCmd_eval(pyObj,nmb_prop);
@@ -98,11 +98,11 @@ void XC::MEDIntFieldInfo::populateOnGaussPoints(const Set &set,const FieldInfo &
   {
     std::cerr << "MEDIntFieldInfo::populateOnGaussPoints not implemented" << std::endl;
 
-    // const DqPtrsElem &elementos= set.getElements();
+    // const DqPtrsElem &elements= set.getElements();
     // const size_t dim= fi.getNumberOfComponents();
     // int conta= 1; m_int valor;
     // const std::string nmb_prop= fi.getComponentsProperty();
-    // for(DqPtrsElem::const_iterator j= elementos.begin();j!=elementos.end();j++,conta++)
+    // for(DqPtrsElem::const_iterator j= elements.begin();j!=elements.end();j++,conta++)
     //   {
     //     valor= convert_to_m_int((*j)->GetPrp(nmb_prop));
     //     const MED_EN::medGeometryElement tipo= (*j)->getMEDCellType();

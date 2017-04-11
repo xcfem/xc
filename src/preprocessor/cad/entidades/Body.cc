@@ -240,7 +240,7 @@ std::set<XC::SetBase *> XC::Body::get_sets(void) const
     return retval;
   }
 
-//! @brief Agrega el cuerpo a the sets being passed as parameters.
+//! @brief Adds the body to the set being passed as parameter.
 void XC::Body::add_to_sets(std::set<SetBase *> &sets)
   {
     for(std::set<SetBase *>::iterator i= sets.begin();i!= sets.end();i++)

@@ -47,7 +47,7 @@ XC::MEDCellInfo::MEDCellInfo(const Mesh &mesh,const MEDMapIndices &map_indices)
       }
   }
 
-//! @brief Agrega la conectividad de una celda.
+//! @brief Adds cell connectivity.
 void XC::MEDCellInfo::nueva_celda(size_t tag,const MED_EN::medGeometryElement &tipo,const ID &conex,const MEDMapIndices &map_indices_vertices)
   {
     MEDCellBaseInfo::new_cell(tag,tipo);

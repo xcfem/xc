@@ -915,7 +915,7 @@ const XC::Matrix &XC::Node::getDamp(void)
       }
   }
 
-//! @brief Agrega a la magnitud tributaria la longitud,
+//! @brief Adds to the magnitud tributaria la longitud,
 //! área o volumen being passed as parameter.
 void XC::Node::addTributaria(const double &t) const
   { tributaria+= t; }
@@ -1413,13 +1413,13 @@ std::set<XC::SetBase *> XC::Node::get_sets(void) const
     return retval;
   }
 
-//! @brief Agrega el nodo a the sets being passed as parameters.
+//! @brief Adds the node to the sets being passed as parameters.
 void XC::Node::add_to_sets(std::set<SetBase *> &sets)
   {
     for(std::set<SetBase *>::iterator i= sets.begin();i!= sets.end();i++)
       {
         SetMeshComp *s= dynamic_cast<SetMeshComp *>(*i);
-        if(s) s->agregaNodo(this);
+        if(s) s->addNode(this);
       }
   }
 
@@ -1641,7 +1641,7 @@ const XC::MeshEdge *XC::Node::next(const std::deque<MeshEdge> &edges, const std:
 
 
 //! @brief Return the action of the elements from the set over this node.
-const XC::Vector &XC::Node::getResistingForce(const std::set<const Element *> &elementos,const bool &inc_inertia) const
+const XC::Vector &XC::Node::getResistingForce(const std::set<const Element *> &elements,const bool &inc_inertia) const
   {
     static Vector retval;
     retval.resize(numberDOF);
@@ -1654,7 +1654,7 @@ const XC::Vector &XC::Node::getResistingForce(const std::set<const Element *> &e
               const Element *ptrElem= dynamic_cast<const Element *>(*i);
               if(ptrElem)
                 {
-                  if(elementos.count(ptrElem)>0)
+                  if(elements.count(ptrElem)>0)
                     {
                       if(!inc_inertia)
                         retval+= ptrElem->getNodeResistingForce(this);
@@ -1672,11 +1672,11 @@ const XC::Vector &XC::Node::getResistingForce(const std::set<const Element *> &e
 
 //! @brief Returns the sliding vector system that represents
 //! the action of the elements of the set over the node.
-SVD3d XC::Node::getResistingSVD3d(const std::set<const Element *> &elementos,const bool &inc_inertia) const
+SVD3d XC::Node::getResistingSVD3d(const std::set<const Element *> &elements,const bool &inc_inertia) const
   {
     SVD3d retval;
     const Pos3d o= getPosInicial3d();
-    const Vector &v= getResistingForce(elementos,inc_inertia);
+    const Vector &v= getResistingForce(elements,inc_inertia);
     if(numberDOF==2)
       retval= SVD3d(o,Vector3d(v[0],v[1],0));
     else if(numberDOF==3)

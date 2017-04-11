@@ -84,9 +84,9 @@ XC::Element *XC::TritrizPtrElem::getNearestElement(const Pos3d &p)
     double d= DBL_MAX;
     double tmp;
     if(ncapas>100)
-      std::clog << "La «tritriz» de elementos es tiene "
-                << ncapas << " capas "
-                << " es mejor buscar por coordenadas en the set asociado."
+      std::clog << "The element «tritriz» has"
+                << ncapas << " layers "
+                << " is better to search by coordinates in the associated set."
                 << std::endl;
     for(size_t i=1;i<=ncapas;i++)
       {

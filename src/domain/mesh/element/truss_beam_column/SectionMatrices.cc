@@ -58,7 +58,7 @@ XC::SectionMatrices::SectionMatrices(const size_t &sz)
 void XC::SectionMatrices::resize(const size_t &sz)
   { alloc(sz); }
 
-//! @brief Inicializa los elementos which index being passed as parameter.
+//! @brief Initializes the i-th elements.
 void XC::SectionMatrices::initialize(const size_t &i,const int &order)
   {
     fsSubdivide[i]= Matrix(order,order);

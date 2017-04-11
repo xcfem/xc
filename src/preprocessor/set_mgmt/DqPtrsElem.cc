@@ -75,16 +75,17 @@ XC::DqPtrsElem &XC::DqPtrsElem::operator=(const DqPtrsElem &otro)
     return *this;
   }
 
-//! @brief Agrega a ésta lista los elementos de la que se le being passed as parameter.
-void XC::DqPtrsElem::agrega(const DqPtrsElem &otro)
+//! @brief Extend this list with the elements of the container
+//! being passed as parameter.
+void XC::DqPtrsElem::extend(const DqPtrsElem &otro)
   {
     for(register const_iterator i= otro.begin();i!=otro.end();i++)
       push_back(*i);
   }
 
-// //! @brief Agrega a ésta lista los elementos de la que se le being passed as parameter,
-// //! si cumplen la condición.
-// void XC::DqPtrsElem::agrega_cond(const DqPtrsElem &otro,const std::string &cond)
+// //! @brief Extend this list with the elements of the container
+// //! being passed as parameter that fulfill the condition.
+// void XC::DqPtrsElem::extend_cond(const DqPtrsElem &otro,const std::string &cond)
 //   {
 //     bool result= false;
 //     for(register const_iterator i= otro.begin();i!=otro.end();i++)
@@ -213,7 +214,7 @@ void XC::DqPtrsElem::numera(void)
       }
   }
 
-//! @brief Desactiva los elementos.
+//! @brief Deactivates the elements.
 void XC::DqPtrsElem::kill_elements(void)
   {
     Element *tmp= nullptr;
@@ -225,7 +226,7 @@ void XC::DqPtrsElem::kill_elements(void)
       }
   }
 
-//! @brief Reactiva los elementos.
+//! @brief Activates the elements.
 void XC::DqPtrsElem::alive_elements(void)
   {
     Element *tmp= nullptr;

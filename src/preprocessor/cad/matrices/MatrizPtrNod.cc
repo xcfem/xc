@@ -93,9 +93,9 @@ XC::Node *XC::MatrizPtrNod::getNearestNode(const Pos3d &p)
     const size_t nfilas= getNumFilas();
     const size_t ncols= getNumCols();
     if(nfilas*ncols>500)
-      std::clog << "La matriz de nodos es tiene "
-                << nfilas*ncols << " elementos "
-                << " es mejor buscar por coordinates en the set asociado."
+      std::clog << "Node matrix has "
+                << nfilas*ncols << " elements "
+                << " better to look by coordinates in the associated set."
                 << std::endl;
     for(size_t j= 1;j<=nfilas;j++)
       for(size_t k= 1;k<=ncols;k++)

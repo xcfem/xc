@@ -324,7 +324,8 @@ bool XC::Domain::addLoadPattern(LoadPattern *load)
     else
       {
         if(verborrea>3)
-          std::cerr << "Domain::addLoadPattern; no se pudo agregar la acción de tag: "
+          std::cerr << nombre_clase() << "::" << __FUNCTION__
+	            << "; can't add load pattern identified by: "
                     << load->getTag() << "'\n";
       }
     return result;
@@ -482,7 +483,7 @@ bool XC::Domain::removeSFreedom_Constraint(int singleFreedomTag, int loadPattern
 void XC::Domain::clearDOF_GroupPtr(void)
   { mesh.clearDOF_GroupPtr(); }
 
-//! @brief Returns an iterator a los elementos del domain.
+//! @brief Returns an iterator to the element container.
 XC::ElementIter &XC::Domain::getElements()
   { return mesh.getElements(); }
 
@@ -545,7 +546,7 @@ const XC::Node *XC::Domain::getNode(int tag) const
 int XC::Domain::getCommitTag(void) const
   { return commitTag; }
 
-//! @brief Returns the número de elementos.
+//! @brief Returns the number of elements.
 int XC::Domain::getNumElements(void) const
   { return mesh.getNumElements(); }
 
@@ -833,7 +834,7 @@ std::ostream &XC::operator<<(std::ostream &s, XC::Domain &M)
     return s;
   }
 
-//! @brief Agrega un recorder al modelo.
+//! @brief Adds a recorder to the model.
 int XC::Domain::addRecorder(Recorder &theRecorder)
   {
     if(theRecorder.setDomain(*this) != 0)
@@ -846,7 +847,7 @@ int XC::Domain::addRecorder(Recorder &theRecorder)
     return 0;
   }
 
-//! @brief Agrega una región.
+//! @brief Adds a region.
 int XC::Domain::addRegion(MeshRegion &theRegion)
   {
     if(!theRegions)
@@ -864,11 +865,11 @@ XC::MeshRegion *XC::Domain::getRegion(int tag)
     return retval;
   }
 
-//! @brief Construye el grafo de elementos.
+//! @brief Builds the element graph.
 int XC::Domain::buildEleGraph(Graph &theEleGraph)
   { return mesh.buildEleGraph(theEleGraph); }
 
-//! @brief Construye el grafo de nodos.
+//! @brief Builds the node graph.
 int XC::Domain::buildNodeGraph(Graph &theNodeGraph)
   { return mesh.buildNodeGraph(theNodeGraph); }
 

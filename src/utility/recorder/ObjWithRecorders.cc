@@ -167,7 +167,7 @@ XC::ObjWithRecorders::~ObjWithRecorders(void)
     theRecorders.erase(theRecorders.begin(),theRecorders.end());
   }
 
-//! @brief Agrega un objeto recorder.
+//! @brief Adds a recorder.
 int XC::ObjWithRecorders::addRecorder(Recorder &theRecorder)
   {
     theRecorders.push_back(&theRecorder);

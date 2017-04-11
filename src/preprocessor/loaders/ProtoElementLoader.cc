@@ -161,28 +161,28 @@ XC::CrdTransf *XC::ProtoElementLoader::get_ptr_transf_coo(void) const
                   << nmb_transf << "' not found.\n";
     return retval;
   }
-//! @brief Procesa los comandos que se emplean para definir
-//! los elementos of the finite element model. Interpreta
-//! los siguientes comandos (if the identifier (tag) is not
+//! @brief Process the comands used to define
+//! the elements of the finite element model. It interprets
+//! the following commands (if the identifier (tag) is not
 //! specified a default value will be assigned):
 //!
-//! - truss[tag]: Define un elemento de tipo barra articulada (Truss). 
+//! - truss[tag]: Defines a truss element (Truss). 
 //! - truss_section[tag]: Defines a truss element with section type material.
 //! - corot_truss[tag]: Defines a truss element with corotational formulation. 
 //! - corot_truss_section[tag]: Defines a truss element with corotational formulation and section type material.
-//! - beam2d_02[tag]: Define un elemento de tipo barra (beam2d02) for plane problems. 
-//! - beam2d_03[tag]: Define un elemento de tipo barra (beam2d03) for plane problems. 
-//! - beam2d_04[tag]: Define un elemento de tipo barra (beam2d04) for plane problems.
-//! - beam3d_01[tag]: Define un elemento de tipo barra (beam3d01) for 3D problems.
-//! - beam3d_02[tag]: Define un elemento de tipo barra (beam2d02) for 3D problems.
-//! - elastic_beam2d[tag]: Define un elemento de tipo barra (ElasticBeam2d) for plane problems.
-//! - elastic_beam3d[tag]: Define un elemento de tipo barra (ElasticBeam3d) for 3D problems.
-//! - force_beam_column_2d[tag]: Define un elemento de tipo barra (ForceBeamColumn2d) no lineal,
+//! - beam2d_02[tag]: Defines a beam-column element (beam2d02) for plane problems. 
+//! - beam2d_03[tag]: Defines a beam-column element (beam2d03) for plane problems. 
+//! - beam2d_04[tag]: Defines a beam-column element (beam2d04) for plane problems.
+//! - beam3d_01[tag]: Defines a beam-column element (beam3d01) for 3D problems.
+//! - beam3d_02[tag]: Defines a beam-column element (beam2d02) for 3D problems.
+//! - elastic_beam2d[tag]: Defines a beam-column element (ElasticBeam2d) for plane problems.
+//! - elastic_beam3d[tag]: Defines a beam-column element (ElasticBeam3d) for 3D problems.
+//! - force_beam_column_2d[tag]: Defines a beam-column element (ForceBeamColumn2d) no lineal,
 //!   for plane problems.
-//! - force_beam_column_3d[tag]: Define un elemento de tipo barra (ForceBeamColumn3d) no lineal,
+//! - force_beam_column_3d[tag]: Defines a beam-column element (ForceBeamColumn3d) no lineal,
 //!   for 3D problems.
-//! - shell_mitc4[tag]: Define un elemento de tipo shell (ShellMITC4),
-//! - shell_nl[tag]: Define un elemento de tipo shell (ShellNL),
+//! - shell_mitc4[tag]: Defines a shell element (ShellMITC4),
+//! - shell_nl[tag]: Defines a shell element (ShellNL),
 //!   for shell problems.
 //! - quad4n[tag]: Defines a four node quad (FourNodeQuad),
 //! - tri31[tag]: Defines a three node triangle with just a Gauss point (Tri31),
@@ -310,7 +310,7 @@ XC::Element *XC::ProtoElementLoader::newElement(const std::string &tipo,const ID
         if(retval)
           {
             retval->setIdNodos(iNodos);
-            agrega(retval);
+            add(retval);
           }
       }
     else

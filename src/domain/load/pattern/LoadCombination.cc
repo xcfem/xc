@@ -223,7 +223,7 @@ void XC::LoadCombination::removeFromDomain(void)
   }
 
 //! @brief Adds a component to the combination.
-void XC::LoadCombination::agrega_sumando(const sumando &sum)
+void XC::LoadCombination::add_component(const sumando &sum)
   {
     const LoadPattern *lp= sum.Caso();
     if((sum.Factor()!= 0.0) && lp)
@@ -257,7 +257,7 @@ void XC::LoadCombination::interpreta_descomp(const std::string &str_descomp)
               {
                 LoadPattern *lp= loader->getLoadPatterns().buscaLoadPattern(nmb_hipot);
                 if(lp)
-                  agrega_sumando(sumando(factor,lp));
+                  add_component(sumando(factor,lp));
                 else
 	          std::cerr << nombre_clase() << "::" << __FUNCTION__
 		            << " load case identified by: '" 
@@ -454,7 +454,7 @@ int XC::LoadCombination::recvSelf(const CommParameters &cp)
 XC::LoadCombination &XC::LoadCombination::suma(const LoadCombination &otro)
   {
     for(const_iterator i= otro.begin();i!=otro.end();i++)
-      agrega_sumando(*i);
+      add_component(*i);
     limpia_ceros();
     return *this;
   }
@@ -480,7 +480,7 @@ XC::LoadCombination &XC::LoadCombination::suma(const std::string &nmbComb)
 XC::LoadCombination &XC::LoadCombination::resta(const LoadCombination &otro)
   {
     for(const_iterator i= otro.begin();i!=otro.end();i++)
-      agrega_sumando((*i).getNeg());
+      add_component((*i).getNeg());
     limpia_ceros();
     return *this;
   }

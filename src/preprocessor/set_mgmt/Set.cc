@@ -84,28 +84,28 @@ void XC::Set::copia_listas(const Set &otro)
     uniform_grids.set_owner(this);
   }
 
-//! @brief Agrega a this set the objects of the set
+//! @brief Extend this set with the objects of the set
 //! being passed as parameter.
-void XC::Set::agrega_listas(const Set &otro)
+void XC::Set::extend_lists(const Set &otro)
   {
-    SetMeshComp::agrega_listas(otro);
-    puntos.agrega(otro.puntos);
-    lineas.agrega(otro.lineas);
-    surfaces.agrega(otro.surfaces);
-    cuerpos.agrega(otro.cuerpos);
-    uniform_grids.agrega(otro.uniform_grids);
+    SetMeshComp::extend_lists(otro);
+    puntos.extend(otro.puntos);
+    lineas.extend(otro.lineas);
+    surfaces.extend(otro.surfaces);
+    cuerpos.extend(otro.cuerpos);
+    uniform_grids.extend(otro.uniform_grids);
   }
 
-// //! @brief Adds to this set the object from the set
+// //! @brief Extend this set with the objects from the set
 // //! being passed as parameter that fulfill the condition.
-// void XC::Set::agrega_listas_cond(const Set &otro,const std::string &cond)
+// void XC::Set::extend_lists_cond(const Set &otro,const std::string &cond)
 //   {
-//     SetMeshComp::agrega_listas_cond(otro,cond);
-//     puntos.agrega_cond(otro.puntos,cond);
-//     lineas.agrega_cond(otro.lineas,cond);
-//     surfaces.agrega_cond(otro.surfaces,cond);
-//     cuerpos.agrega_cond(otro.cuerpos,cond);
-//     uniform_grids.agrega_cond(otro.uniform_grids,cond);
+//     SetMeshComp::extend_lists_cond(otro,cond);
+//     puntos.extend_cond(otro.puntos,cond);
+//     lineas.extend_cond(otro.lineas,cond);
+//     surfaces.extend_cond(otro.surfaces,cond);
+//     cuerpos.extend_cond(otro.cuerpos,cond);
+//     uniform_grids.extend_cond(otro.uniform_grids,cond);
 //   }
 
 //! @brief Vacía las listas of the set.
@@ -130,7 +130,7 @@ void XC::Set::clearAll(void)
     uniform_grids.clearAll();
   }
 
-//! @brief Set indices for the set objects (nodos,elementos,puntos...) to its use in VTK.
+//! @brief Set indices for the set objects (nodes,elements,points...) to its use in VTK.
 void XC::Set::numera(void)
   {
     SetMeshComp::numera();
@@ -140,7 +140,7 @@ void XC::Set::numera(void)
 //     numera_lista(cuerpos);
   }
 
-//! @brief Desplaza los elementos of the set.
+//! @brief Moves the objects of the set.
 void XC::Set::mueve(const Vector3d &desplaz)
   {
     for(lst_ptr_points::iterator i= puntos.begin();i!=puntos.end();i++)
@@ -178,8 +178,9 @@ void XC::Set::create_copy(const std::string &nombre,const Vector3d &v= Vector3d(
 	return;
       }
     Set *new_set= get_preprocessor()->get_sets().create_set(nombre);
-    std::clog << "Set::create_copia; ¡ojo! no se ha implementado la copia"
-              << " de nodos ni de elementos." << std::endl;
+    std::clog << nombre_clase() << "::" << __FUNCTION__
+              << "; warning! copy of nodes and elements"
+              << " not implemented." << std::endl;
     //Copiamos los puntos.
     std::map<std::string,std::string> new_points_names;
     for(lst_ptr_points::iterator i= puntos.begin();i!=puntos.end();i++)
@@ -257,7 +258,7 @@ void XC::Set::body_meshing(meshing_dir dm)
       std::clog << "done." << std::endl;
   }
 
-//! @brief Crea nodos y, en su caso, elementos en los puntos of the set.
+//! @brief Creates nodes and, eventually, elements on the points of the set.
 void XC::Set::uniform_grid_meshing(meshing_dir dm)
   {
     if(verborrea>2)
@@ -275,7 +276,7 @@ void XC::Set::genMesh(meshing_dir dm)
   {
     Preprocessor *mdl= get_preprocessor();
     assert(mdl);
-    mdl->get_sets().abre_set(GetNombre()); //Para que nodos y elementos entren en this set.
+    mdl->get_sets().abre_set(GetNombre()); //To let nodes and elements enter this set.
 
     if(verborrea>1)
       std::clog << "Meshing set: " << GetNombre() << " ...";

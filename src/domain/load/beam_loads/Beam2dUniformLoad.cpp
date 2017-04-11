@@ -158,7 +158,7 @@ void XC::Beam2dUniformLoad::addReactionsInBasicSystem(const double &L,const doub
     const double wa= WAxial()*loadFactor;  // Axial
     const double wy= WTrans()*loadFactor;  // Transverse
 
-    //Esfuerzos sobre elemento.
+    //Forces over element.
     const double V = 0.5*wy*L; // Shear force in the element ends.
     const double P= wa*L; //Axil.
 
@@ -177,7 +177,7 @@ void XC::Beam2dUniformLoad::addFixedEndForcesInBasicSystem(const double &L,const
     const double wy = WTrans()*loadFactor;  // Transverse
     const double wx = WAxial()*loadFactor;  // Axial (+ve from node I to J)
 
-    //Esfuerzos sobre elemento.
+    //Forces over element.
     const double Mz = wy*L*L/12.0; // z bending moment at the ends of the element.
     const double P = wx*L; //Axial force at the back end.
 

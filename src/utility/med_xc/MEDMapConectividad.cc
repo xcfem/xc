@@ -26,7 +26,7 @@
 #include "utility/matrix/ID.h"
 #include <iostream>
 
-//! @brief Agrega la conectividad de una celda.
+//! @brief Adds cell connectivity.
 void XC::MEDMapConectividad::nueva_celda(const MED_EN::medGeometryElement &tipo,const ID &conex,const MEDMapIndices &map_indices_vertices)
   {
     std::vector<int> &c= getConnectivity(tipo);

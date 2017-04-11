@@ -143,7 +143,7 @@ void XC::NodeLocker::setDomain(Domain *theDomain)
     ForceReprComponent::setDomain(theDomain);
   }
 
-//! @brief Agrega una la coacción mononodal being passed as parameter.
+//! @brief Adds the single freedom constraint being passed as parameter.
 XC::SFreedom_Constraint *XC::NodeLocker::addSFreedom_Constraint(const int &tagNodo,const int &id_gdl,const double &valor)
   {
     SFreedom_Constraint *theSPC= new SFreedom_Constraint(nextTag,tagNodo,id_gdl,valor);
@@ -152,7 +152,7 @@ XC::SFreedom_Constraint *XC::NodeLocker::addSFreedom_Constraint(const int &tagNo
     return theSPC;
   }
 
-//! @brief Agrega una la coacción mononodal being passed as parameter.
+//! @brief Adds the single freedom constraint being passed as parameter.
 bool XC::NodeLocker::addSFreedom_Constraint(SFreedom_Constraint *theSp)
   {
     Domain *theDomain= this->getDomain();

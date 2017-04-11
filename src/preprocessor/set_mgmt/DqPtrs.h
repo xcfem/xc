@@ -69,9 +69,9 @@ class DqPtrs: public EntCmd, protected std::deque<T *>
     DqPtrs(const DqPtrs &otro);
     explicit DqPtrs(const std::deque<T *> &ts);
     explicit DqPtrs(const std::set<const T *> &ts);
-    DqPtrs &operator=(const DqPtrs &otro);
-    void agrega(const DqPtrs &otro);
-    //void agrega_cond(const DqPtrs &otro,const std::string &cond);
+    DqPtrs &operator=(const DqPtrs &);
+    void extend(const DqPtrs &);
+    //void extend_cond(const DqPtrs &otro,const std::string &cond);
     bool push_back(T *);
     bool push_front(T *);
     inline bool empty(void) const
@@ -144,10 +144,10 @@ DqPtrs<T> &DqPtrs<T>::operator=(const DqPtrs &otro)
     return *this;
   }
 
-//! @brief Appends to this lists the pointers from the list
+//! @brief Extend this container with the pointers from the container
 //! being passed as parameter.
 template <class T>
-void DqPtrs<T>::agrega(const DqPtrs &otro)
+void DqPtrs<T>::extend(const DqPtrs &otro)
   {
     for(register const_iterator i= otro.begin();i!=otro.end();i++)
       push_back(*i);

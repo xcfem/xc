@@ -57,8 +57,8 @@ XC::MEDGroupInfo::MEDGroupInfo(MEDMeshing *mesh,const Set &set)
     else if(numNodes==0) //element set.
       {
         tipo_entidad= MED_EN::MED_CELL;   
-	const DqPtrsElem elementos= set.getElements();
-        for(Set::elem_const_iterator i= elementos.begin();i!=elementos.end();i++)
+	const DqPtrsElem elements= set.getElements();
+        for(Set::elem_const_iterator i= elements.begin();i!=elements.end();i++)
           nueva_celda((*i)->getTag(),(*i)->getMEDCellType());
       }
     else
@@ -119,8 +119,8 @@ void XC::MEDGroupInfo::nueva_celda(size_t tag,const MED_EN::medGeometryElement &
 const std::string &XC::MEDGroupInfo::getNombre(void) const
   { return nombre; }
 
-//! @brief Returns the vector con las posiciones de los distintos
-//! tipos de elemento en el vector de indices de elementos.
+//! @brief Returns the vector with the positions of the different element types
+//! int the vector of element indexes.
 std::vector<int> XC::MEDGroupInfo::getVectorIndicesTipos(void) const
   {
     const size_t num_tipos= indices_tipo.size();

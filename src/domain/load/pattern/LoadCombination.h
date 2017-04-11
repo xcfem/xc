@@ -81,7 +81,7 @@ class LoadCombination: public ForceReprComponent
     void set_domain(void);
     friend class Domain;
     friend class FEM_ObjectBroker;
-    void agrega_sumando(const sumando &);
+    void add_component(const sumando &);
     void interpreta_descomp(const std::string &str);
     void limpia_ceros(void);
     void clear(void);
