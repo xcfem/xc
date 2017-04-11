@@ -69,7 +69,7 @@
 namespace XC {
 //! \ingroup fElem
 //
-//! @brief Interfaz con los elementos de FEAP.
+//! @brief Interface with FEAP elements.
 class fElmt02 : public fElement
   {
   public:

@@ -44,7 +44,7 @@ namespace XC{
 
 //! @ingroup CadMR
 //
-//! @brief Base para las matrices de pointers to nodes, elementos y puntos.
+//! @brief Base class for matrices of pointers to nodes, elements and points.
 template <class T>
 class MatrizPtrBase: public MatrizT<T *,std::vector<T *> >, public EntCmd
   {

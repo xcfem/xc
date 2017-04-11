@@ -47,13 +47,6 @@ class Element;
 class Node;
 class Constraint;
 
-/* DEPRECATED */
-/* class LimiteElemento */
-/*   { */
-/*     Element *ptr_element; //!< Pointer to element. */
-/*     int indice; //!< Edge of face index. */
-/*   }; */
-
 //!  @ingroup Set
 //! 
 //!  @brief Set of mesh components (nodes, elements and constraints).
@@ -105,47 +98,47 @@ class SetMeshComp: public SetBase
     SetMeshComp(const SetMeshComp &otro);
     SetMeshComp &operator=(const SetMeshComp &otro);
 
-    //! @brief Returns the number of nodes of the set.
-    size_t NumNodos(void) const
+    //! @brief Returns the number of nodes.
+    size_t getNumberOfNodes(void) const
       { return nodes.size(); }
     //! @brief Appends a node.
     void agregaNodo(Node *nPtr);
-    //! @brief Return the nodes of the set.
+    //! @brief Return the node container.
     virtual const DqPtrsNode &GetNodos(void) const
       { return nodes; }
-    //! @brief Return the nodes of the set.
+    //! @brief Return the nodes container.
     virtual DqPtrsNode &GetNodos(void)
       { return nodes; }
-    //! @brief Clears the nodes of the set.
+    //! @brief Clears out the nodes.
     void clearNodos(void)
       { nodes.clearAll(); }
     void sel_nodes_from_list(const ID &);
     bool In(const Node *) const;
 
-    //! @brief Returns the number of elements of the set.
-    size_t NumElementos(void) const
+    //! @brief Returns the number of elements.
+    size_t getNumberOfElements(void) const
       { return elements.size(); }
-    //! @brief Agrega un elemento la lista de elementos of the set.
-    void agregaElemento(Element *ePtr);
-    //! @brief Returns the elements of the set.
-    virtual const DqPtrsElem &GetElementos(void) const
+    //! @brief Adds an element.
+    void addElement(Element *ePtr);
+    //! @brief Returns the element container.
+    virtual const DqPtrsElem &getElements(void) const
       { return elements; }
-    //! @brief Returns the elements of the set.
-    virtual DqPtrsElem &GetElementos(void)
+    //! @brief Returns the elements container.
+    virtual DqPtrsElem &getElements(void)
       { return elements; }
-    //! @brief Clears out the elements of the set.
-    void clearElementos(void)
+    //! @brief Clears out the elements.
+    void clearElements(void)
       { elements.clearAll(); }
     void sel_elements_from_list(const ID &tags);
     bool In(const Element *) const;
 
-    //! @brief Return the lista de constraints of the set.
+    //! @brief Return the constraints container.
     virtual const DqPtrsConstraint &GetConstraints(void) const
       { return constraints; }
-    //! @brief Return the lista de constraints of the set.
+    //! @brief Return the constraints container.
     virtual DqPtrsConstraint &GetConstraints(void)
       { return constraints; }
-    //! @brief Erases la lista de constraints of the set.
+    //! @brief Clears out the constraints.
     void clearConstraints(void)
       { constraints.clearAll(); }
     void sel_constraints_from_list(const ID &tags);
@@ -175,10 +168,10 @@ class SetMeshComp: public SetBase
     elem_const_iterator elem_begin(void) const;
     elem_iterator elem_end(void);
     elem_const_iterator elem_end(void) const;
-    Element *buscaElemento(const int &tag);
-    const Element *buscaElemento(const int &tag) const;
-    Element *getNearestElement(const Pos3d &p);
-    const Element *getNearestElement(const Pos3d &p) const;
+    Element *findElement(const int &);
+    const Element *findElement(const int &) const;
+    Element *getNearestElement(const Pos3d &);
+    const Element *getNearestElement(const Pos3d &) const;
 
     void kill_elements(void);
     void alive_elements(void);

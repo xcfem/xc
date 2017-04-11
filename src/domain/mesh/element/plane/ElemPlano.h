@@ -89,7 +89,7 @@ void XC::ElemPlano<NNODOS, PhysProp>::checkElem(void)
         const double area= this->getArea();
         if(area<1e-3)
           {
-            std::cerr << "Elemento: " << this->getTag() << " with nodes: [";
+            std::cerr << "Element: " << this->getTag() << " with nodes: [";
             const std::vector<int> inodos= this->getNodePtrs().getTags();
             std::vector<int>::const_iterator i= inodos.begin();
             std::cerr << *i;
@@ -101,7 +101,7 @@ void XC::ElemPlano<NNODOS, PhysProp>::checkElem(void)
       }
   }
 
-//! @brief Asigna el domain al elemento.
+//! @brief Sets the element domain.
 template <int NNODOS,class PhysProp>
 void XC::ElemPlano<NNODOS, PhysProp>::setDomain(Domain *theDomain)
   {
@@ -146,7 +146,7 @@ double XC::ElemPlano<NNODOS, PhysProp>::getAreaTributaria(const Node *nod) const
   {
     double retval= 0.0;
     const int i= this->theNodes.find(nod);
-    if(i>=0) //El nodo es de este elemento.
+    if(i>=0) //The node belongs to this element.
       retval= areasTributarias[i];
     return retval;
   }

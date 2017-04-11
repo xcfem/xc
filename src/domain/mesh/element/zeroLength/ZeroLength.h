@@ -85,7 +85,7 @@ class Response;
 
 //! \ingroup ElemZL
 //
-//! @brief Elemento de longitud cero.
+//! @brief Zero length material.
 class ZeroLength: public Element0D
   {
   private:

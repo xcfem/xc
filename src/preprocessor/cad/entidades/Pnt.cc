@@ -146,7 +146,7 @@ double XC::Pnt::DistanciaA2(const Pos3d &pt) const
 //! @brief Creates nodes.
 void XC::Pnt::create_nodes(void)
   {
-    if(getGenMesh() && (NumNodos()==0))
+    if(getGenMesh() && (getNumberOfNodes()==0))
       {
         MatrizPos3d tmp(1,1,GetPos());
         TritrizPos3d ptos(1,tmp);
@@ -164,7 +164,7 @@ void XC::Pnt::genMesh(meshing_dir dm)
 bool XC::Pnt::tieneNodo(void) const
   {
     bool retval= false;
-    if(NumNodos()>0)
+    if(getNumberOfNodes()>0)
       retval= (GetNodo()!= nullptr);
     return retval;      
   }

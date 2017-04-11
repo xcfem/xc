@@ -21,18 +21,18 @@
 //----------------------------------------------------------------------------
 //python_interface.tcc
 
-XC::TritrizPtrNod &(XC::EntMdlr::*getTtzNodos)(void)= &XC::EntMdlr::GetTtzNodos;
-XC::TritrizPtrElem &(XC::EntMdlr::*getTtzElementos)(void)= &XC::EntMdlr::GetTtzElementos;
+XC::TritrizPtrNod &(XC::EntMdlr::*getTtzNodes)(void)= &XC::EntMdlr::getTtzNodes;
+XC::TritrizPtrElem &(XC::EntMdlr::*getTtzElements)(void)= &XC::EntMdlr::getTtzElements;
 XC::Node *(XC::EntMdlr::*getNodeEntMdlr)(const size_t &i,const size_t &,const size_t &)= &XC::EntMdlr::GetNodo;
 XC::Node *(XC::EntMdlr::*getNearestNodeEntMdlr)(const Pos3d &)= &XC::EntMdlr::getNearestNode;
-XC::Element *(XC::EntMdlr::*getElementEntMdlr)(const size_t &i,const size_t &,const size_t &)= &XC::EntMdlr::GetElemento; 
+XC::Element *(XC::EntMdlr::*getElementEntMdlr)(const size_t &i,const size_t &,const size_t &)= &XC::EntMdlr::getElement; 
 
 
 XC::Element *(XC::EntMdlr::*getNearestElementEntMdlr)(const Pos3d &)= &XC::EntMdlr::getNearestElement;
 class_<XC::EntMdlr, bases<XC::SetEstruct>, boost::noncopyable >("EntMdlr", no_init)
   .add_property("getIdx", &XC::EntMdlr::getIdx)
-  .add_property("getNodeLayers", make_function( getTtzNodos, return_internal_reference<>() ))
-  .add_property("getElementLayers", make_function( getTtzElementos, return_internal_reference<>() ))
+  .add_property("getNodeLayers", make_function( getTtzNodes, return_internal_reference<>() ))
+  .add_property("getElementLayers", make_function( getTtzElements, return_internal_reference<>() ))
   .add_property("getVtkCellType", &XC::EntMdlr::getVtkCellType)
   .def("getNode",make_function(getNodeEntMdlr, return_internal_reference<>() ),"Returns (i,j,k) node.")
   .def("getNearestNode",make_function(getNearestNodeEntMdlr, return_internal_reference<>() ),"Returns nearest node.")

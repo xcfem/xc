@@ -56,13 +56,13 @@ class_<XC::SetBase, bases<XC::EntMdlrBase>, boost::noncopyable >("SetBase", no_i
   .def("isFaceIn",isFaceIn,"True if sets contains face.")
   .def("isBodyIn",isBodyIn,"True if sets contains body.")
   .def("isUniformGridIn",isUniformGridIn,"True if sets contains uniform grid.")
-  .add_property("getNumNodes",&XC::SetBase::NumNodos)
-  .add_property("getNumElements",&XC::SetBase::NumElementos)
+  .add_property("getNumNodes",&XC::SetBase::getNumberOfNodes,"Returns the number or nodes.")
+  .add_property("getNumElements",&XC::SetBase::getNumberOfElements,"Returns the number or elements.")
    ;
 
 class_<XC::SetEstruct, bases<XC::SetBase>, boost::noncopyable >("SetEstruct", no_init)
-  .add_property("getNumNodes", &XC::SetEstruct::NumNodos)
-  .add_property("getNumElements", &XC::SetEstruct::NumElementos)
+  .add_property("getNumNodes", &XC::SetEstruct::getNumberOfNodes,"Returns the number or nodes.")
+  .add_property("getNumElements", &XC::SetEstruct::getNumberOfElements,"Returns the number or elements.")
   .add_property("isIRow", &XC::SetEstruct::EsFilaI)
   .add_property("isJRow", &XC::SetEstruct::EsFilaJ)
   .add_property("isKRow", &XC::SetEstruct::EsFilaK)

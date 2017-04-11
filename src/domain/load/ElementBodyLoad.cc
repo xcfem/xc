@@ -82,7 +82,7 @@ int XC::ElementBodyLoad::removeElement(int tag)
 //! @brief Imprime el objeto.
 void XC::ElementBodyLoad::Print(std::ostream &s, int flag) const
   {
-    s << "  Elementos sobre los que actúa: " << getElementTags();
+    s << "  loaded elements: " << getElementTags();
   }
 
 //! @brief Send data through the channel being passed as parameter.

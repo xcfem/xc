@@ -37,7 +37,7 @@ class ElementEdges;
 
 typedef std::set<Node *> NodePtrSet;
 
-std::set<Element *> getElementosEntreNodos(Node &, Node &);
+std::set<Element *> getElementsBetweenNodes(Node &, Node &);
 std::set<Element *> getConnectedElements(const NodePtrSet &);
 ElementEdges getElementEdgesEntreNodos(Node *, Node *);
 ElementEdges getElementEdgesEntreNodos(const NodePtrSet &);

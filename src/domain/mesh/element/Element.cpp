@@ -717,7 +717,7 @@ void XC::Element::add_to_sets(std::set<SetBase *> &sets)
     for(std::set<SetBase *>::iterator i= sets.begin();i!= sets.end();i++)
       {
         SetMeshComp *s= dynamic_cast<SetMeshComp *>(*i);
-        if(s) s->agregaElemento(this);
+        if(s) s->addElement(this);
       }
   }
 

@@ -76,14 +76,14 @@ class_<XC::DqPtrsConstraint, bases<dq_ptrs_constraint>, boost::noncopyable >("Dq
    ;
 
 XC::DqPtrsNode &(XC::SetMeshComp::*GetNodosRef)(void)= &XC::SetMeshComp::GetNodos;
-XC::DqPtrsElem &(XC::SetMeshComp::*GetElementosRef)(void)= &XC::SetMeshComp::GetElementos;
+XC::DqPtrsElem &(XC::SetMeshComp::*getElementsRef)(void)= &XC::SetMeshComp::getElements;
 XC::DqPtrsConstraint &(XC::SetMeshComp::*GetConstraintsRef)(void)= &XC::SetMeshComp::GetConstraints;
 XC::Node *(XC::SetMeshComp::*getNearestNodeSetMeshComp)(const Pos3d &)= &XC::SetMeshComp::getNearestNode;
 XC::Element *(XC::SetMeshComp::*getNearestElementSetMeshComp)(const Pos3d &)= &XC::SetMeshComp::getNearestElement;
 void (XC::SetMeshComp::*transforms)(const XC::TrfGeom &)= &XC::SetMeshComp::Transforma;
 class_<XC::SetMeshComp, bases<XC::SetBase>, boost::noncopyable >("SetMeshComp",no_init)
   .add_property("getNodes", make_function(GetNodosRef, return_internal_reference<>() ))
-  .add_property("getElements", make_function(GetElementosRef, return_internal_reference<>() ))
+  .add_property("getElements", make_function(getElementsRef, return_internal_reference<>() ))
   .add_property("getConstraints", make_function(GetConstraintsRef, return_internal_reference<>() ))
   .def("getNearestNode",make_function(getNearestNodeSetMeshComp, return_internal_reference<>() ),"Returns nearest node.")
   .def("getNearestElement",make_function(getNearestElementSetMeshComp, return_internal_reference<>() ),"Returns nearest element.")

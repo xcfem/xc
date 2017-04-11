@@ -46,19 +46,19 @@
 
 //! @brief Constructor.
 XC::EntMdlr::EntMdlr(Preprocessor *m,const size_t &i)
-  : SetEstruct("",m), idx(i), doGenMesh(true), nodos(), elementos() {}
+  : SetEstruct("",m), idx(i), doGenMesh(true), ttzNodes(), ttzElements() {}
 
 //! @brief Constructor.
 //! @param nombre: Object identifier.
 //! @param i: index to be used in VTK arrays.
 //! @param m: Pointer to preprocessor.
 XC::EntMdlr::EntMdlr(const std::string &nombre,const size_t &i,Preprocessor *m)
-  : SetEstruct(nombre,m), idx(i), doGenMesh(true), nodos(), elementos() {}
+  : SetEstruct(nombre,m), idx(i), doGenMesh(true), ttzNodes(), ttzElements() {}
 
 
 //! @brief Copy constructor.
 XC::EntMdlr::EntMdlr(const EntMdlr &otro)
-  : SetEstruct(otro), idx(otro.idx), doGenMesh(true), nodos(otro.nodos), elementos(otro.elementos) {}
+  : SetEstruct(otro), idx(otro.idx), doGenMesh(true), ttzNodes(otro.ttzNodes), ttzElements(otro.ttzElements) {}
 
 //! @brief Assignment operator.
 XC::EntMdlr &XC::EntMdlr::operator=(const EntMdlr &otro)
@@ -66,8 +66,8 @@ XC::EntMdlr &XC::EntMdlr::operator=(const EntMdlr &otro)
     SetEstruct::operator=(otro);
     idx= otro.idx;
     doGenMesh= otro.doGenMesh;
-    nodos= otro.nodos;
-    elementos= otro.elementos;
+    ttzNodes= otro.ttzNodes;
+    ttzElements= otro.ttzElements;
     return *this;
   }
 
@@ -100,16 +100,16 @@ void XC::EntMdlr::clearAll(void)
 //! @brief Clears pointer to nodes and elements.
 void XC::EntMdlr::BorraPtrNodElem(void)
   {
-    nodos.clearAll();
-    elementos.clearAll();
+    ttzNodes.clearAll();
+    ttzElements.clearAll();
   }
 
 //! @brief Returns a pointer to the node which indexes are
 //! being passed as parameters.
 XC::Node *XC::EntMdlr::GetNodo(const size_t &i,const size_t &j,const size_t &k)
   {
-    if(!nodos.Null())
-      return nodos(i,j,k);
+    if(!ttzNodes.Null())
+      return ttzNodes(i,j,k);
     else
       return nullptr;
   }
@@ -118,15 +118,15 @@ XC::Node *XC::EntMdlr::GetNodo(const size_t &i,const size_t &j,const size_t &k)
 //! being passed as parameters.
 const XC::Node *XC::EntMdlr::GetNodo(const size_t &i,const size_t &j,const size_t &k) const
   {
-    if(!nodos.Null())
-      return nodos(i,j,k);
+    if(!ttzNodes.Null())
+      return ttzNodes(i,j,k);
     else
       return nullptr;
   }
 
 //! @brief Returns the node closest to the point being passed as parameter.
 XC::Node *XC::EntMdlr::getNearestNode(const Pos3d &p)
-  { return nodos.getNearestNode(p); }
+  { return ttzNodes.getNearestNode(p); }
 
 //! @brief Returns the node closest to the point being passed as parameter.
 const XC::Node *XC::EntMdlr::getNearestNode(const Pos3d &p) const
@@ -137,34 +137,34 @@ const XC::Node *XC::EntMdlr::getNearestNode(const Pos3d &p) const
 
 //! @brief Returns the indexes of the node being passed as parameter.
 XC::ID XC::EntMdlr::getNodeIndices(const Node *n) const
-  { return nodos.getNodeIndices(n); }
+  { return ttzNodes.getNodeIndices(n); }
 
 //! @brief Returns the tags of the nodes.
 std::vector<int> XC::EntMdlr::getTagsNodos(void) const
-  { return nodos.getTags(); }
+  { return ttzNodes.getTags(); }
 
 //! @brief Returns a pointer to the element which indexes
 //! are being passed as paremeters.
-XC::Element *XC::EntMdlr::GetElemento(const size_t &i,const size_t &j,const size_t &k)
+XC::Element *XC::EntMdlr::getElement(const size_t &i,const size_t &j,const size_t &k)
   {
-    if(!elementos.Null())
-      return elementos(i,j,k);
+    if(!ttzElements.Null())
+      return ttzElements(i,j,k);
     else
       return nullptr;
   }
 
 //! @brief Returns a pointer to the element which indices are being passed as paremeters.
-const XC::Element *XC::EntMdlr::GetElemento(const size_t &i,const size_t &j,const size_t &k) const
+const XC::Element *XC::EntMdlr::getElement(const size_t &i,const size_t &j,const size_t &k) const
   {
-    if(!elementos.Null())
-      return elementos(i,j,k);
+    if(!ttzElements.Null())
+      return ttzElements(i,j,k);
     else
       return nullptr;
   }
 
 //! @brief Returns the element closest to the point being passed as parameter.
 XC::Element *XC::EntMdlr::getNearestElement(const Pos3d &p)
-  { return elementos.getNearestElement(p); }
+  { return ttzElements.getNearestElement(p); }
 
 //! @brief Returns the element closest to the point being passed as parameter.
 const XC::Element *XC::EntMdlr::getNearestElement(const Pos3d &p) const
@@ -175,16 +175,21 @@ const XC::Element *XC::EntMdlr::getNearestElement(const Pos3d &p) const
 
 //! @brief Returns a pointer to the node cuyo identificador is being passed as parameter.
 XC::Node *XC::EntMdlr::buscaNodo(const int &tag)
-  { return nodos.buscaNodo(tag); }
+  { return ttzNodes.buscaNodo(tag); }
+
 //! @brief Returns a pointer to the node cuyo identificador is being passed as parameter.
 const XC::Node *XC::EntMdlr::buscaNodo(const int &tag) const
-  { return nodos.buscaNodo(tag); }
-//! @brief Returns a pointer to the element cuyo identificador is being passed as parameter.
-XC::Element *XC::EntMdlr::buscaElemento(const int &tag)
-  { return elementos.buscaElemento(tag); }
-//! @brief Returns a pointer to the element cuyo identificador is being passed as parameter.
-const XC::Element *XC::EntMdlr::buscaElemento(const int &tag) const
-  { return elementos.buscaElemento(tag); }
+  { return ttzNodes.buscaNodo(tag); }
+
+//! @brief Returns a pointer to the element
+//! identified by the tag being passed as parameter.
+XC::Element *XC::EntMdlr::findElement(const int &tag)
+  { return ttzElements.findElement(tag); }
+
+//! @brief Returns a pointer to the element
+//! identified by the tag being passed as parameter.
+const XC::Element *XC::EntMdlr::findElement(const int &tag) const
+  { return ttzElements.findElement(tag); }
 
 //! @brief Creates a set that corresponds to a row of nodes and elements.
 XC::SetEstruct *XC::EntMdlr::create_set_fila(const RangoTritriz &rango,const std::string &nmb)
@@ -223,11 +228,11 @@ XC::Vector XC::EntMdlr::getSimpsonWeights(const std::string &ijk,const std::stri
     Vector retval;
     const ExprAlgebra e(strExpr);
     if(ijk=="i")
-      retval= nodos.IntegSimpsonFilaI(f,c,e,n);
+      retval= ttzNodes.IntegSimpsonFilaI(f,c,e,n);
     else if(ijk=="j")
-      retval= nodos.IntegSimpsonFilaJ(f,c,e,n);
+      retval= ttzNodes.IntegSimpsonFilaJ(f,c,e,n);
     else if(ijk=="k")
-      retval= nodos.IntegSimpsonFilaK(f,c,e,n);
+      retval= ttzNodes.IntegSimpsonFilaK(f,c,e,n);
     return retval;
   }
 
@@ -235,7 +240,7 @@ XC::Vector XC::EntMdlr::getSimpsonWeights(const std::string &ijk,const std::stri
 XC::Node *XC::EntMdlr::create_node(const Pos3d &pos,size_t i,size_t j, size_t k)
   {
     Node *retval= get_preprocessor()->getNodeLoader().newNode(pos);
-    nodos(i,j,k)= retval;
+    ttzNodes(i,j,k)= retval;
     return retval;
   }
 
@@ -244,11 +249,11 @@ void XC::EntMdlr::create_nodes(const TritrizPos3d &posiciones)
   {
     const size_t capas= posiciones.GetCapas();
     if(capas<1) return;
-    if(nodos.Null())
+    if(ttzNodes.Null())
       {
         const size_t filas= posiciones(1).getNumFilas();
         const size_t cols= posiciones(1).getNumCols();
-        nodos = TritrizPtrNod(capas,filas,cols);
+        ttzNodes = TritrizPtrNod(capas,filas,cols);
 
         if(!get_preprocessor()) return;
         for(register size_t i= 1;i<=capas;i++)
@@ -256,40 +261,44 @@ void XC::EntMdlr::create_nodes(const TritrizPos3d &posiciones)
             for(register size_t k= 1;k<=cols;k++)
               create_node(posiciones(i,j,k),i,j,k);
         if(verborrea>5)
-	  std::cerr << "EntMdlr::create_nodes(); creados " << nodos.NumPtrs() << " nodo(s)." << std::endl;
+	  std::cerr << "EntMdlr::create_nodes(); creados " << ttzNodes.NumPtrs() << " nodo(s)." << std::endl;
       }
     else
       if(verborrea>2)
         std::clog << "EntMdlr::create_nodes; los nodos de la entidad: '" << GetNombre() << "' ya existen." << std::endl;
   }
 
-//! @brief Crea los elementos en los nodos que se crearon en create_nodes.
+//! @brief Creates elements on the nodes created
+//! in create_nodes.
 bool XC::EntMdlr::create_elements(meshing_dir dm)
   {
     bool retval= false;
-    if(!nodos.empty())
+    if(!ttzNodes.empty())
       {
-        if(nodos.HasNull())
-          std::cerr << "EntMdlr::create_elements; existen pointers to node nulos."
-                    << " No se crean elementos." << std::endl;
+        if(ttzNodes.HasNull())
+          std::cerr << nombre_clase() << "::" << __FUNCTION__
+	            << "; there are null pointers."
+                    << " Elements were not created." << std::endl;
         else
-          if(elementos.Null())
+          if(ttzElements.Null())
             {
               if(get_preprocessor())
                 {
                   if(verborrea>4)
-                    std::clog << "Creando elementos entidad: '" << GetNombre() << "'...";   
+                    std::clog << "Creating elements of entity: '"
+			      << GetNombre() << "'...";   
                   const Element *smll= get_preprocessor()->getElementLoader().get_seed_element();
                   if(smll)
                     {
-                      elementos= smll->put_on_mesh(nodos,dm);
-                      add_elements(elementos);
+                      ttzElements= smll->put_on_mesh(ttzNodes,dm);
+                      add_elements(ttzElements);
                       retval= true;
                     }
                   else if(verborrea>0)
-                    std::clog << "EntMdlr::create_elements; seed element not set." << std::endl;
+                    std::clog << nombre_clase() << "::" << __FUNCTION__
+		              << "; seed element not set." << std::endl;
                   if(verborrea>4)
-                    std::clog << "creados." << std::endl;
+                    std::clog << "created." << std::endl;
                 }
               else
                 std::cerr << "EntMdlr::create_elements; pointer to preprocessor needed." << std::endl;
@@ -374,7 +383,7 @@ double XC::EntMdlr::DistanciaA(const Pos3d &pt) const
 
 //! @brief Fixes the nodes of the set.
 void XC::EntMdlr::fix(const SFreedom_Constraint &spc)
-  { nodos.fix(spc); }
+  { ttzNodes.fix(spc); }
 
 //! @brief Destructor.
 XC::EntMdlr::~EntMdlr(void)

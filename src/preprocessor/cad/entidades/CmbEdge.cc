@@ -178,7 +178,7 @@ XC::Node *XC::CmbEdge::Lado::GetNodo(const size_t &i)
           retval=  edge->GetNodo(i);
         else
           {
-            const size_t n= edge->NumNodos();
+            const size_t n= edge->getNumberOfNodes();
             retval=  edge->GetNodo(n-i+1);
           }
       }
@@ -189,7 +189,7 @@ XC::Node *XC::CmbEdge::Lado::GetNodo(const size_t &i)
 const XC::Node *XC::CmbEdge::Lado::GetNodo(const size_t &i) const
   {
     if(!edge) return nullptr;
-    const size_t n= edge->NumNodos();
+    const size_t n= edge->getNumberOfNodes();
     if(directo)
       return edge->GetNodo(i);
     else
@@ -395,20 +395,20 @@ void XC::CmbEdge::genMesh(meshing_dir dm)
     line_meshing(dm);
     
     //pointers to nodes.
-    nodos= TritrizPtrNod(1,NDiv()+1,1);
+    ttzNodes= TritrizPtrNod(1,NDiv()+1,1);
     size_t offset_j= 0;// Columna inicial.
     for(std::deque<Lado>::const_iterator i=lineas.begin();i!=lineas.end();i++)
       {
-        nodos.PutCaja(0,offset_j,0,(*i).Borde()->GetTtzNodos());
-        offset_j+= (*i).Borde()->GetNumFilasNodos()-1;
+        ttzNodes.PutCaja(0,offset_j,0,(*i).Borde()->getTtzNodes());
+        offset_j+= (*i).Borde()->getNumNodeRows()-1;
       }
-    //pointers to elementos.
-    elementos= TritrizPtrElem(1,NDiv(),1);
+    //pointers to elements.
+    ttzElements= TritrizPtrElem(1,NDiv(),1);
     offset_j= 0;// Columna inicial.
     for(std::deque<Lado>::const_iterator i=lineas.begin();i!=lineas.end();i++)
       {
-        elementos.PutCaja(0,offset_j,0,(*i).Borde()->GetTtzElementos());
-        offset_j+= (*i).Borde()->GetNumFilasElementos()-1;
+        ttzElements.PutCaja(0,offset_j,0,(*i).Borde()->getTtzElements());
+        offset_j+= (*i).Borde()->getNumElementRows()-1;
       }
     if(verborrea>3)
       std::clog << "done." << std::endl;

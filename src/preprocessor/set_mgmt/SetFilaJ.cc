@@ -33,7 +33,7 @@
 #include "domain/mesh/element/Element.h"
 
 XC::SetFilaJ::SetFilaJ(EntMdlr &e,const size_t &f,const size_t &c,const std::string &nmb,XC::Preprocessor *preprocessor)
-  : SetFila<tfilanod,tfilaelem>(e.GetTtzNodos().GetVarRefFilaJ(f,c),e.GetTtzElementos().GetVarRefFilaJ(f,c),nmb,preprocessor) {}
+  : SetFila<tfilanod,tfilaelem>(e.getTtzNodes().GetVarRefFilaJ(f,c),e.getTtzElements().GetVarRefFilaJ(f,c),nmb,preprocessor) {}
 
 XC::SetFilaJ::SetFilaJ(EntMdlr &e,const size_t &capa,const RangoIndice &rango_filas,const size_t &c,const std::string &nmb,Preprocessor *preprocessor)
-  : SetFila<tfilanod,tfilaelem>(e.GetTtzNodos().GetVarRefFilaJ(capa,rango_filas,c),e.GetTtzElementos().GetVarRefFilaJ(capa,rango_filas,c),nmb,preprocessor) {}
+  : SetFila<tfilanod,tfilaelem>(e.getTtzNodes().GetVarRefFilaJ(capa,rango_filas,c),e.getTtzElements().GetVarRefFilaJ(capa,rango_filas,c),nmb,preprocessor) {}

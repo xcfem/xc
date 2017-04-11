@@ -31,7 +31,7 @@
 #include "domain/mesh/element/Element.h"
 
 //! @brief Returns the elements that are connected to both nodes.
-std::set<XC::Element *> XC::getElementosEntreNodos(Node &n1, Node &n2)
+std::set<XC::Element *> XC::getElementsBetweenNodes(Node &n1, Node &n2)
   {
     const std::set<Element *> set1= n1.getConnectedElements();
     const std::set<Element *> set2= n2.getConnectedElements();
@@ -53,7 +53,7 @@ XC::ElementEdges XC::getElementEdgesEntreNodos(Node *n1, Node *n2)
     ElementEdges retval;
     if(n1 && n2)
       {
-        const std::set<Element *> elems= getElementosEntreNodos(*n1,*n2);
+        const std::set<Element *> elems= getElementsBetweenNodes(*n1,*n2);
         for(std::set<Element *>::const_iterator i= elems.begin();i!=elems.end();i++)
           {
             const int edge= (*i)->getEdgeNodes(n1,n2);

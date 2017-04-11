@@ -37,7 +37,7 @@ class ShellCorotCrdTransf3d;
 
 //! \ingroup ElemPlanos
 //
-//! @brief Elemento shell MIT C4.
+//! @brief MIT C4 shell element.
 class CorotShellMITC4 : public ShellMITC4Base
   {
     static ShellCorotCrdTransf3d corot_trf;

@@ -36,7 +36,7 @@ class Vector;
 
 //! \ingroup ElemFV
 //
-//! @brief Esfuerzos en un elemento de tipo barra 3D.
+//! @brief Internal forces for a beam column 3D element.
 class FVectorBeamColumn3d: public FVectorData<5>
   {
   public:

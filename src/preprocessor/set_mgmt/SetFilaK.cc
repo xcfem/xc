@@ -33,7 +33,7 @@
 #include "domain/mesh/element/Element.h"
 
 XC::SetFilaK::SetFilaK(EntMdlr &e,const size_t &f,const size_t &c,const std::string &nmb,XC::Preprocessor *preprocessor)
-  : SetFila<tfilanod,tfilaelem>(e.GetTtzNodos().GetVarRefFilaK(f,c),e.GetTtzElementos().GetVarRefFilaK(f,c),nmb,preprocessor) {}
+  : SetFila<tfilanod,tfilaelem>(e.getTtzNodes().GetVarRefFilaK(f,c),e.getTtzElements().GetVarRefFilaK(f,c),nmb,preprocessor) {}
 
 XC::SetFilaK::SetFilaK(EntMdlr &e,const size_t &capa,const size_t &f,const RangoIndice &rango_cols,const std::string &nmb,Preprocessor *preprocessor)
-  : SetFila<tfilanod,tfilaelem>(e.GetTtzNodos().GetVarRefFilaK(capa,f,rango_cols),e.GetTtzElementos().GetVarRefFilaK(capa,f,rango_cols),nmb,preprocessor) {}
+  : SetFila<tfilanod,tfilaelem>(e.getTtzNodes().GetVarRefFilaK(capa,f,rango_cols),e.getTtzElements().GetVarRefFilaK(capa,f,rango_cols),nmb,preprocessor) {}

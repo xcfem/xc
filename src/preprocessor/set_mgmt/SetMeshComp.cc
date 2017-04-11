@@ -130,7 +130,7 @@ void XC::SetMeshComp::agregaNodo(Node *nPtr)
   { nodes.push_back(nPtr); }
 
 //! @brief Adds the pointer to element being passed as parameter.
-void XC::SetMeshComp::agregaElemento(Element *ePtr)
+void XC::SetMeshComp::addElement(Element *ePtr)
   { elements.push_back(ePtr); }
 
 //! @brief Returns true if the node belongs to the set.
@@ -227,14 +227,14 @@ XC::SetMeshComp::constraint_const_iterator XC::SetMeshComp::constraints_end(void
   { return constraints.end(); }
 
 //! @brief Returns (if it exists) a pointer to the node
-//! cuyo tag is being passed as parameter.
-XC::Element *XC::SetMeshComp::buscaElemento(const int &tag)
-  { return elements.buscaElemento(tag); }
+//! identified by the tag being passed as parameter.
+XC::Element *XC::SetMeshComp::findElement(const int &tag)
+  { return elements.findElement(tag); }
 
 //! @brief Returns (if it exists) a pointer to the node
-//! cuyo tag is being passed as parameter.
-const XC::Element *XC::SetMeshComp::buscaElemento(const int &tag) const
-  { return elements.buscaElemento(tag); }
+//! identified by the tag being passed as parameter.
+const XC::Element *XC::SetMeshComp::findElement(const int &tag) const
+  { return elements.findElement(tag); }
 
 //! @brief Returns, if it exists, a pointer to the constraint
 //! which tag is being passed as parameter.

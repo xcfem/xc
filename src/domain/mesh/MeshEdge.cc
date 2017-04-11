@@ -84,14 +84,15 @@ XC::MeshEdge::ElementConstPtrSet XC::MeshEdge::getConnectedElements(void) const
     return retval;
   }
 
-//! @brief Returns a deque<Element *> with the elements from the set that share the edge.
+//! @brief Returns a deque<Element *> with the elements
+//! from the set that share the edge.
 XC::MeshEdge::ElementConstPtrSet XC::MeshEdge::getConnectedElements(const DqPtrsElem &elemSet) const
   {
     ElementConstPtrSet retval;
     ElementConstPtrSet tmp= getConnectedElements();
     for(ElementConstPtrSet::const_iterator i= tmp.begin();i!=tmp.end();i++)
       {
-	const Element *elemPtr= elemSet.buscaElemento((*i)->getTag());
+	const Element *elemPtr= elemSet.findElement((*i)->getTag());
 	if(elemPtr)
 	  retval.insert(elemPtr);
       }

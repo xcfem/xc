@@ -69,7 +69,7 @@ class Element;
 
 //! \ingroup Elem
 //
-//! @brief Iterador sobre el contenedor de elementos.
+//! @brief Iterator over an element container.
 class ElementIter
   {
   public:

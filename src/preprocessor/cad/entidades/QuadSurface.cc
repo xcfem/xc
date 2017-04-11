@@ -350,7 +350,7 @@ void XC::QuadSurface::defGridPoints(const boost::python::list &l)
     setPuntos(tmp);
   }
 
-//! @brief Returns (ndivI+1)*(ndivJ+1) posiciones para los nodos.
+//! @brief Returns (ndivI+1)*(ndivJ+1) positions to place the nodes.
 MatrizPos3d XC::QuadSurface::get_posiciones(void) const
   {
     MatrizPos3d retval;
@@ -403,13 +403,13 @@ void XC::QuadSurface::create_nodes(void)
   {
 
     checkNDivs();
-    if(nodos.Null())
+    if(ttzNodes.Null())
       {
         create_nodes_lineas();
 
         const size_t filas= NDivJ()+1;
         const size_t cols= NDivI()+1;
-        nodos = TritrizPtrNod(1,filas,cols);
+        ttzNodes = TritrizPtrNod(1,filas,cols);
 
 
         //j=1
@@ -417,20 +417,20 @@ void XC::QuadSurface::create_nodes(void)
           {
             Lado &ll= lineas[0];
             Node *nn= ll.GetNodo(k);
-            nodos(1,1,k)= nn;
+            ttzNodes(1,1,k)= nn;
           }
 
         //j=filas.
         for(size_t k=1;k<=cols;k++) //En sentido inverso.
-          nodos(1,filas,k)= lineas[2].GetNodoInv(k);
+          ttzNodes(1,filas,k)= lineas[2].GetNodoInv(k);
 
 
         //k=1
         for(size_t j=2;j<filas;j++) //En sentido inverso.
-          nodos(1,j,1)= lineas[3].GetNodoInv(j);
+          ttzNodes(1,j,1)= lineas[3].GetNodoInv(j);
         //k=cols.
         for(size_t j=2;j<filas;j++)
-          nodos(1,j,cols)= lineas[1].GetNodo(j);
+          ttzNodes(1,j,cols)= lineas[1].GetNodo(j);
 
 
         MatrizPos3d pos_nodes= get_posiciones(); //Posiciones of the nodes.
@@ -440,7 +440,9 @@ void XC::QuadSurface::create_nodes(void)
       }
     else
       if(verborrea>2)
-        std::clog << "QuadSurface::create_nodes; los nodos de la entidad: '" << GetNombre() << "' ya existen." << std::endl;      
+        std::clog << nombre_clase() << "::" << __FUNCTION__
+	          << "; nodes of entity: '" << GetNombre()
+		  << "' already exist." << std::endl;      
   }
 
 //! @brief Triggers mesh creation.
@@ -449,11 +451,13 @@ void XC::QuadSurface::genMesh(meshing_dir dm)
     if(verborrea>3)
       std::clog << "Meshing quadrilateral surface...(" << GetNombre() << ")...";
     create_nodes();
-    if(elementos.Null())
+    if(ttzElements.Null())
       create_elements(dm);
     else
       if(verborrea>2)
-        std::clog << "QuadSurface::genMesh; elements for surface: '" << GetNombre() << "' already exist." << std::endl;      
+        std::clog << nombre_clase() << "::" << __FUNCTION__
+	          << "; elements for surface: '" << GetNombre()
+		  << "' already exist." << std::endl;      
     if(verborrea>3)
       std::clog << "done." << std::endl;
   }

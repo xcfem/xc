@@ -47,30 +47,30 @@ XC::TritrizPtrElem::TritrizPtrElem(const size_t capas,const size_t filas,const s
   }
 
 //! @brief Returns (if it exists) a pointer to the element
-//! cuyo tag is being passed as parameter.
-XC::Element *XC::TritrizPtrElem::buscaElemento(const int &tag)
+//! identified by the tag being passed as parameter.
+XC::Element *XC::TritrizPtrElem::findElement(const int &tag)
   {
     Element *retval= nullptr;
     const size_t ncapas= GetCapas();
     for(size_t i=1;i<=ncapas;i++)
       {
         MatrizPtrElem &capa= operator()(i);
-        retval= capa.buscaElemento(tag);
+        retval= capa.findElement(tag);
         if(retval) break;
       }
     return retval;
   }
 
 //! @brief Returns (if it exists) a pointer to the element
-//! cuyo tag is being passed as parameter.
-const XC::Element *XC::TritrizPtrElem::buscaElemento(const int &tag) const
+//! identified by the tag being passed as parameter.
+const XC::Element *XC::TritrizPtrElem::findElement(const int &tag) const
   {
     const Element *retval= nullptr;
     const size_t ncapas= GetCapas();
     for(size_t i=1;i<=ncapas;i++)
       {
         const MatrizPtrElem &capa= operator()(i);
-        retval= capa.buscaElemento(tag);
+        retval= capa.findElement(tag);
         if(retval) break;
       }
     return retval;

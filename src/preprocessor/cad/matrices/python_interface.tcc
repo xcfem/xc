@@ -127,17 +127,17 @@ class_<matriz_ptr_elements, bases<matriz_t_ptr_elements,EntCmd>, boost::noncopya
   ;
 
 XC::Element *(XC::MatrizPtrElem::*getNearestElementMatrizPtrElem)(const Pos3d &)= &XC::MatrizPtrElem::getNearestElement;
-XC::Element *(XC::MatrizPtrElem::*getElementWithTag)(const int &)= &XC::MatrizPtrElem::buscaElemento;
+XC::Element *(XC::MatrizPtrElem::*getElementWithTag)(const int &)= &XC::MatrizPtrElem::findElement;
 class_<XC::MatrizPtrElem, bases<matriz_ptr_elements>, boost::noncopyable >("MatrizPtrElem", no_init)
   .def("getNearestElement",make_function(getNearestElementMatrizPtrElem, return_internal_reference<>() ),"Returns nearest element.")
   .def("getElementWithTag",make_function(getElementWithTag, return_internal_reference<>() ),"Returns element by tag.")
   ;
 
 typedef std::vector<XC::MatrizPtrElem> vector_mp_elements;
-XC::MatrizPtrElem &(vector_mp_elements::*getCapaElementos)(size_t )= &vector_mp_elements::at;
+XC::MatrizPtrElem &(vector_mp_elements::*getElementLayer)(size_t )= &vector_mp_elements::at;
 class_<vector_mp_elements, boost::noncopyable >("vector_mp_elements", no_init)
   .def(vector_indexing_suite<vector_mp_elements>() )
-  .def("getLayer", getCapaElementos, return_internal_reference<>(), "returns element layer.")
+  .def("getLayer", getElementLayer, return_internal_reference<>(), "returns element layer.")
   ;
 
 typedef XC::TritrizPtrBase<XC::MatrizPtrElem> tritriz_elements;
@@ -148,7 +148,7 @@ class_<tritriz_elements, bases<vector_mp_elements,EntCmd>, boost::noncopyable >(
   ;
 
 XC::Element *(XC::TritrizPtrElem::*getNearestElementTritrizPtrElem)(const Pos3d &)= &XC::TritrizPtrElem::getNearestElement;
-XC::Element *(XC::TritrizPtrElem::*getElementWithTagTritrizPtrElem)(const int &)= &XC::TritrizPtrElem::buscaElemento;
+XC::Element *(XC::TritrizPtrElem::*getElementWithTagTritrizPtrElem)(const int &)= &XC::TritrizPtrElem::findElement;
 class_<XC::TritrizPtrElem, bases<tritriz_elements>, boost::noncopyable >("TrtrizPtrElem", no_init)
   .def("getNearestElement",make_function(getNearestElementTritrizPtrElem, return_internal_reference<>() ),"Returns nearest element.")
   .def("getElementWithTag",make_function(getElementWithTagTritrizPtrElem, return_internal_reference<>() ),"Returns element by tag.")

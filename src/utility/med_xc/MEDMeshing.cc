@@ -83,16 +83,16 @@ void XC::MEDMeshing::defineMEDGroups(void)
         if(set)
           {
             const std::string nmb= set->GetNombre();
-            const size_t numNodos= set->NumNodos();
-            const size_t numElementos= set->NumElementos();
-            if((numElementos==0) && (numNodos==0))
+            const size_t numNodes= set->getNumberOfNodes();
+            const size_t numElements= set->getNumberOfElements();
+            if((numElements==0) && (numNodes==0))
               continue;
-            else if((numElementos==0) || (numNodos==0))
+            else if((numElements==0) || (numNodes==0))
               med_groups.push_back(MEDGroupInfo(this,*set));
             else
               {
                 Set set_nodes(*set);
-                set_nodes.clearElementos();
+                set_nodes.clearElements();
                 set_nodes.Nombre()= nmb+str_node_group;
                 med_groups.push_back(MEDGroupInfo(this,set_nodes));
                 Set set_elements(*set);

@@ -36,7 +36,7 @@ namespace XC {
 
 //! \ingroup ElemFV
 //
-//! @brief Esfuerzos en un elemento de tipo barra 2D.
+//! @brief Internal forces for a beam-column 2D element.
 class FVectorBeamColumn2d: public FVectorData<3>
   {
   public:

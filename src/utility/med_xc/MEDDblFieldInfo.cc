@@ -67,7 +67,7 @@ void XC::MEDDblFieldInfo::populateOnNodes(const Set &set,const FieldInfo &fi)
 //! @brief Asigna los valores del campo en los elementos.
 void XC::MEDDblFieldInfo::populateOnElements(const Set &set,const FieldInfo &fi)
   {
-    const DqPtrsElem &elementos= set.GetElementos();
+    const DqPtrsElem &elementos= set.getElements();
     const size_t dim= fi.getNumberOfComponents();
     int conta= 1; std::vector<double> valor(dim);
     const std::string nmb_prop= fi.getComponentsProperty();
@@ -98,7 +98,7 @@ void XC::MEDDblFieldInfo::populateOnElements(const Set &set,const FieldInfo &fi)
 //! @brief Asigna los valores del campo en los puntos de Gauss.
 void XC::MEDDblFieldInfo::populateOnGaussPoints(const Set &set,const FieldInfo &fi)
   {
-    const DqPtrsElem &elementos= set.GetElementos();
+    const DqPtrsElem &elementos= set.getElements();
     const size_t dim= fi.getNumberOfComponents();
     int conta= 1;
     m_double valor;

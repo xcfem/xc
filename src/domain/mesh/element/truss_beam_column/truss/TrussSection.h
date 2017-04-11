@@ -74,7 +74,7 @@ class SectionForceDeformation;
 
 //! \ingroup TrussElem
 //
-//! @brief Elemento de tipo barra articulada con material de tipo SectionForceDeformation.
+//! @brief Truss element with SectionForceDeformation material.
 class TrussSection : public TrussBase
   {
   private:

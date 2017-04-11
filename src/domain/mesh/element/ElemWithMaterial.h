@@ -35,7 +35,7 @@ namespace XC {
 
 //! \ingroup Elem
 //
-//! @brief Elemento con material
+//! @brief Element with material
 template <int NNODOS,class PhysProp>
 class ElemWithMaterial : public ElementBase<NNODOS>
   {

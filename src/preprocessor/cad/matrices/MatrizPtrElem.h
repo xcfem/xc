@@ -45,7 +45,7 @@ namespace XC{
 //
 //! @ingroup CadMR
 //
-//! @brief Matriz de pointers to elementos.
+//! @brief Matrix of pointers to elements.
 class MatrizPtrElem: public MatrizPtrBase<Element>
   {
   protected:
@@ -55,8 +55,8 @@ class MatrizPtrElem: public MatrizPtrBase<Element>
     MatrizPtrElem(const size_t &f=0,const size_t &c=0)
       : MatrizPtrBase<Element>(f,c) {}
 
-    Element *buscaElemento(const int &tag);
-    const Element *buscaElemento(const int &tag) const;
+    Element *findElement(const int &);
+    const Element *findElement(const int &) const;
     Element *getNearestElement(const Pos3d &p);
     const Element *getNearestElement(const Pos3d &p) const;
 

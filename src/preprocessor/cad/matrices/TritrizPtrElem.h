@@ -39,7 +39,7 @@ namespace XC{
 
 //! \ingroup CadMR
 //! 
-//! @brief "Tritriz" de pointers to elementos.
+//! @brief "Tritriz" of pointers to elements.
 class TritrizPtrElem: public TritrizPtrBase<MatrizPtrElem>
   {
   protected:
@@ -49,8 +49,8 @@ class TritrizPtrElem: public TritrizPtrBase<MatrizPtrElem>
     TritrizPtrElem(const size_t capas= 0,const MatrizPtrElem &m= MatrizPtrElem());
     TritrizPtrElem(const size_t ,const size_t ,const size_t );
 
-    Element *buscaElemento(const int &tag);
-    const Element *buscaElemento(const int &tag) const;
+    Element *findElement(const int &);
+    const Element *findElement(const int &) const;
     Element *getNearestElement(const Pos3d &p);
     const Element *getNearestElement(const Pos3d &p) const;
 

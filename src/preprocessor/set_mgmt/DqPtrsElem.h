@@ -25,7 +25,6 @@
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
 //DqPtrsElem.h
-//deque de pointers to elemento.
 
 
 #ifndef DQPTRSELEM_H
@@ -41,7 +40,7 @@ class TrfGeom;
 
 //!  \ingroup Set
 //! 
-//!  \brief Contenedor de pointers to elementos.
+//!  \brief Pointer to element container.
 //! 
 class DqPtrsElem: public DqPtrs<Element>
   {
@@ -83,10 +82,10 @@ class DqPtrsElem: public DqPtrs<Element>
 
     void calc_resisting_force(void);
 
-    Element *buscaElemento(const int &tag);
-    const Element *buscaElemento(const int &tag) const;
-    Element *getNearestElement(const Pos3d &p);
-    const Element *getNearestElement(const Pos3d &p) const;
+    Element *findElement(const int &);
+    const Element *findElement(const int &) const;
+    Element *getNearestElement(const Pos3d &);
+    const Element *getNearestElement(const Pos3d &) const;
     std::deque<Polilinea3d> getContours(bool undeformedGeometry= true) const;
 
     void numera(void);

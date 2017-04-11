@@ -71,7 +71,7 @@ class UniaxialMaterial;
 
 //! \ingroup Elem
 //
-//! @brief Prototipo de elemento.
+//! @brief Element prototype.
 class NewElement : public Element
   {
   private:

@@ -39,7 +39,7 @@ namespace XC {
 template <size_t SZ>
 //! \ingroup ElemFV
 //
-//! @brief Clase auxiliar para los esfuerzos en un elemento de tipo barra.
+//! @brief Auxiliary class for the internal forces in a beam-column element.
 class FVectorData: public FVector
   {
   protected:

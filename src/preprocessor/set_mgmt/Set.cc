@@ -328,15 +328,15 @@ void XC::Set::CompletaHaciaAbajo(void)
         lst_ptr_lineas ll((*i)->GetEdges());
         lineas.insert(lineas.end(),ll.begin(),ll.end());
 
-        //Elementos.
-        TritrizPtrElem &ttz_elements= (*i)->GetTtzElementos();
+        //Elements.
+        TritrizPtrElem &ttz_elements= (*i)->getTtzElements();
         const size_t ncapas= ttz_elements.GetCapas();
         const size_t nfilas= ttz_elements.getNumFilas();
         const size_t ncols= ttz_elements.getNumCols();
         for(size_t i=1;i<=ncapas;i++)
           for(size_t j=1;j<=nfilas;j++)
             for(size_t k=1;k<=ncols;k++)
-              agregaElemento(ttz_elements(i,j,k));
+              addElement(ttz_elements(i,j,k));
 
       }
     for(lin_iterator i=lineas.begin();i!=lineas.end();i++)
@@ -346,15 +346,15 @@ void XC::Set::CompletaHaciaAbajo(void)
         for(register size_t j=1;j<=nv;j++)
           puntos.push_back(const_cast<Pnt *>((*i)->GetVertice(j)));
 
-        //Elementos.
-        TritrizPtrElem &ttz_elements= (*i)->GetTtzElementos();
+        //Elements.
+        TritrizPtrElem &ttz_elements= (*i)->getTtzElements();
         const size_t ncapas= ttz_elements.GetCapas();
         const size_t nfilas= ttz_elements.getNumFilas();
         const size_t ncols= ttz_elements.getNumCols();
         for(size_t i=1;i<=ncapas;i++)
           for(size_t j=1;j<=nfilas;j++)
             for(size_t k=1;k<=ncols;k++)
-              agregaElemento(ttz_elements(i,j,k));
+              addElement(ttz_elements(i,j,k));
       }
     SetMeshComp::CompletaHaciaAbajo();
   }

@@ -425,11 +425,11 @@ XC::TritrizPtrElem XC::Element1D::put_on_mesh(const TritrizPtrNod &nodos,meshing
 
 XC::TritrizPtrElem XC::Element1D::cose(const SetEstruct &f1,const SetEstruct &f2) const
   {
-    const size_t nelem= f1.NumNodos();
+    const size_t nelem= f1.getNumberOfNodes();
     TritrizPtrElem retval(nelem,1,1);
-    const size_t ncapas= std::min(f1.GetNumCapasNodos(),f2.GetNumCapasNodos());
-    const size_t nfilas= std::min(f1.GetNumFilasNodos(),f2.GetNumFilasNodos());
-    const size_t ncols= std::min(f1.GetNumColsNodos(),f2.GetNumColsNodos());
+    const size_t ncapas= std::min(f1.getNumNodeLayers(),f2.getNumNodeLayers());
+    const size_t nfilas= std::min(f1.getNumNodeRows(),f2.getNumNodeRows());
+    const size_t ncols= std::min(f1.getNumNodeColumns(),f2.getNumNodeColumns());
     for(size_t i=1;i<=ncapas;i++)
       for(size_t j=1;j<=nfilas;j++)
         for(size_t k=1;k<=ncols;k++)

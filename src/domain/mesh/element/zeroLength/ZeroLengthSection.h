@@ -72,8 +72,8 @@ class Response;
 //! @defgroup ElemZL Zero length elements.
 //
 //! \ingroup ElemZL
-//! @brief Elemento de longitud cero con material
-//! de tipo SectionForceDeformation.
+//! @brief Zero length element with
+//! SectionForceDeformation material.
 class ZeroLengthSection: public Element0D
   {
   private:

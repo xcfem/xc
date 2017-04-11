@@ -80,13 +80,13 @@ void XC::Preprocessor::UpdateSets(Node *new_node)
 //! sets that are currently opened.
 void XC::Preprocessor::UpdateSets(Element *new_elem)
   {
-    sets.get_set_total()->agregaElemento(new_elem);
+    sets.get_set_total()->addElement(new_elem);
     MapSet::map_sets &abiertos= sets.get_sets_abiertos();
     for(MapSet::map_sets::iterator i= abiertos.begin();i!= abiertos.end();i++)
       {
         Set *ptr_set= dynamic_cast<Set *>((*i).second);
         assert(ptr_set);
-        ptr_set->agregaElemento(new_elem);
+        ptr_set->addElement(new_elem);
       }
   }
 

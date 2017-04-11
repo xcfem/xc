@@ -64,36 +64,36 @@ class SetFila: public SetEstruct
       { return fila_nod(i); }
     const reference_nod Nodo(const size_t &i) const
       { return fila_nod(i); }
-    reference_elem Elemento(const size_t &i)
+    reference_elem Element(const size_t &i)
       { return fila_elem(i); }
-    const reference_elem Elemento(const size_t &i) const
+    const reference_elem Element(const size_t &i) const
       { return fila_elem(i); }
 
     RangoTritriz RangoNodos(void) const
       { return RangoTritriz(fila_nod); }
-    RangoTritriz RangoElementos(void) const
+    RangoTritriz ElementRange(void) const
       { return RangoTritriz(fila_elem); }
 
-    virtual size_t GetNumCapasNodos(void) const
+    virtual size_t getNumNodeLayers(void) const
       { return fila_nod.GetCapas(); }
-    virtual size_t GetNumFilasNodos(void) const
+    virtual size_t getNumNodeRows(void) const
       { return fila_nod.getNumFilas(); }
-    virtual size_t GetNumColsNodos(void) const
+    virtual size_t getNumNodeColumns(void) const
       { return fila_nod.getNumCols(); }
-    virtual size_t GetNumCapasElementos(void) const
+    virtual size_t getNumElementLayers(void) const
       { return fila_elem.GetCapas(); }
-    virtual size_t GetNumFilasElementos(void) const
+    virtual size_t getNumElementRows(void) const
       { return fila_elem.getNumFilas(); }
-    virtual size_t GetNumColsElementos(void) const
+    virtual size_t getNumElementColumns(void) const
       { return fila_elem.getNumCols(); }
 
-    virtual Node *GetNodo(const size_t &i=1,const size_t &j=1,const size_t &k=1)
+    virtual XC::Node *GetNodo(const size_t &i=1,const size_t &j=1,const size_t &k=1)
       { return fila_nod(i,j,k); }
-    virtual const Node *GetNodo(const size_t &i=1,const size_t &j=1,const size_t &k=1) const
+    virtual const XC::Node *GetNodo(const size_t &i=1,const size_t &j=1,const size_t &k=1) const
       { return fila_nod(i,j,k); }
-    virtual Element *GetElemento(const size_t &i=1,const size_t &j=1,const size_t &k=1)
+    virtual XC::Element *getElement(const size_t &i=1,const size_t &j=1,const size_t &k=1)
       { return fila_elem(i,j,k); }
-    virtual const Element *GetElemento(const size_t &i=1,const size_t &j=1,const size_t &k=1) const
+    virtual const XC::Element *getElement(const size_t &i=1,const size_t &j=1,const size_t &k=1) const
       { return fila_elem(i,j,k); }
 
     //void fix(int &tag_fix,const SFreedom_Constraint &);

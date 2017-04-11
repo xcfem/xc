@@ -178,14 +178,15 @@ XC::Node *XC::Face::GetNodo(const size_t &i,const size_t &j)
 const XC::Node *XC::Face::GetNodo(const size_t &i,const size_t &j) const
   {
     const Node *retval= nullptr;
-    if(nodos.EsCapaICte())
+    if(ttzNodes.EsCapaICte())
       retval= CmbEdge::GetNodo(1,i,j);
-    else if(nodos.EsCapaJCte())
+    else if(ttzNodes.EsCapaJCte())
       retval= CmbEdge::GetNodo(i,1,j);
-    else if(nodos.EsCapaKCte())
+    else if(ttzNodes.EsCapaKCte())
       retval= CmbEdge::GetNodo(i,j,1);
     else
-      std::cerr << "Face::GetNodo; el node set is not one-dimensional." << std::endl;
+      std::cerr << nombre_clase() << "::" << __FUNCTION__
+	        << "; the node set is not one-dimensional." << std::endl;
     return retval;
   }
 

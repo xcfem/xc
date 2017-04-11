@@ -114,7 +114,7 @@ void XC::Edge::SetNDiv(const size_t &nd)
   {
     if(ndiv!=nd) //Si cambia el number of divisions
       {
-        if(nodos.empty()) //Not meshed.
+        if(ttzNodes.empty()) //Not meshed.
           {
             const size_t ns= sups_linea.size();
             if(ns>1)
@@ -167,7 +167,7 @@ XC::Node *XC::Edge::GetNodo(const size_t &i)
 
 //! @brief Returns a pointer to node which index is being passed as parameter.
 const XC::Node *XC::Edge::GetNodo(const size_t &i) const
-  { return nodos.getAtI(i); }
+  { return ttzNodes.getAtI(i); }
 
 //! @brief Returns the nodo which index is being passed as parameter empezando por el principio.
 XC::Node *XC::Edge::GetNodoDir(const size_t &i)
@@ -179,11 +179,11 @@ const XC::Node *XC::Edge::GetNodoDir(const size_t &i) const
 
 //! @brief Returns the nodo which index is being passed as parameter empezando por el final.
 XC::Node *XC::Edge::GetNodoInv(const size_t &i)
-  { return GetNodo(NumNodos()-i+1); }
+  { return GetNodo(getNumberOfNodes()-i+1); }
 
 //! @brief Returns the nodo which index is being passed as parameter empezando por el final.
 const XC::Node *XC::Edge::GetNodoInv(const size_t &i) const
-  { return GetNodo(NumNodos()-i+1); }
+  { return GetNodo(getNumberOfNodes()-i+1); }
 
 //! @brief Returns the first node of the line.
 const XC::Node *XC::Edge::GetPrimerNodo(void) const
@@ -240,7 +240,7 @@ XC::Node *XC::Edge::GetUltimoNodo(void)
 //! @brief Returns the identificadores of the nodes en sentido directo.
 std::vector<int> XC::Edge::GetTagsNodosDir(void) const
   {
-    const size_t nn= NumNodos();
+    const size_t nn= getNumberOfNodes();
     std::vector<int> retval(nn);
     for(size_t i=1;i<=nn;i++)
       retval[i-1]= GetNodo(i)->getTag();
@@ -250,7 +250,7 @@ std::vector<int> XC::Edge::GetTagsNodosDir(void) const
 //! @brief Returns the identificadores of the nodes en sentido directo.
 std::vector<int> XC::Edge::GetTagsNodosInv(void) const
   {
-    const size_t nn= NumNodos();
+    const size_t nn= getNumberOfNodes();
     std::vector<int> retval(nn);
     for(size_t i=1;i<=nn;i++)
       retval[i-1]= GetNodo(nn-i+1)->getTag();
@@ -260,7 +260,7 @@ std::vector<int> XC::Edge::GetTagsNodosInv(void) const
 //! @brief Returns the posiciones of the nodes en sentido directo.
 MatrizPos3d XC::Edge::GetPosNodosDir(void) const
   {
-    const size_t nn= NumNodos();
+    const size_t nn= getNumberOfNodes();
     MatrizPos3d retval(nn);
     for(size_t i=1;i<=nn;i++)
       retval(i,1)= pos_node(*GetNodo(i));
@@ -270,7 +270,7 @@ MatrizPos3d XC::Edge::GetPosNodosDir(void) const
 //! @brief Returns the posiciones of the nodes en sentido inverso.
 MatrizPos3d XC::Edge::GetPosNodosInv(void) const
   {
-    const size_t nn= NumNodos();
+    const size_t nn= getNumberOfNodes();
     MatrizPos3d retval(nn);
     for(size_t i=1;i<=nn;i++)
       retval(i,1)= pos_node(*GetNodo(nn-i+1));
@@ -378,9 +378,9 @@ void XC::Edge::create_nodes_en_extremos(void)
     else
       P1()->create_nodes();
 
-    Node *nodo_p1= P1()->GetNodo(1,1,1);
-    assert(nodo_p1);
-    nodos(1,1,1)= nodo_p1; //Nodo del start point.
+    Node *node_p1= P1()->GetNodo(1,1,1);
+    assert(node_p1);
+    ttzNodes(1,1,1)= node_p1; //Nodo del start point.
       
     if(!P2())
       {
@@ -391,14 +391,15 @@ void XC::Edge::create_nodes_en_extremos(void)
     else
       P2()->create_nodes();
 
-    Node *nodo_p2= P2()->GetNodo(1,1,1);
-    assert(nodo_p2);
-    const size_t filas= nodos.getNumFilas();
-    const size_t cols= nodos.getNumCols();
-    nodos(1,filas,cols)= nodo_p2; //Nodo del end point.
+    Node *node_p2= P2()->GetNodo(1,1,1);
+    assert(node_p2);
+    const size_t filas= ttzNodes.getNumFilas();
+    const size_t cols= ttzNodes.getNumCols();
+    ttzNodes(1,filas,cols)= node_p2; //Nodo del end point.
 
     if(verborrea>4)
-     std::cerr << "Edge::create_nodes_en_extremos(); creados." << std::endl;
+      std::cerr << nombre_clase() << "::" << __FUNCTION__
+	        << "; creados." << std::endl;
   }
 
 //! @brief Cretes nodes of the object.
@@ -408,7 +409,7 @@ void XC::Edge::create_nodes(void)
       std::clog << "Creating nodes for edge: '" << GetNombre() << "'...";
 
  
-    if(nodos.Null())
+    if(ttzNodes.Null())
       {
         if(!get_preprocessor())
           std::cerr << "Edge::create_nodes; preprocessor undefined." << std::endl;
@@ -417,12 +418,12 @@ void XC::Edge::create_nodes(void)
             const MatrizPos3d posiciones= get_pos_nodes();
             const size_t filas= posiciones.getNumFilas();
             const size_t cols= posiciones.getNumCols();
-            nodos= TritrizPtrNod(1,filas,cols);
+            ttzNodes= TritrizPtrNod(1,filas,cols);
 
             create_nodes_en_extremos();
 
 
-            if((filas*cols)>2) //Si tiene nodos intermedios...
+            if((filas*cols)>2) //If it has intermediate nodes...
               {
                 const size_t fila_fin= std::max(filas-1,size_t(1));
                 const size_t fila_ini= (fila_fin == 1 ? 1 : 2);
@@ -434,15 +435,18 @@ void XC::Edge::create_nodes(void)
               }
           }
         if(verborrea>4)
-	  std::clog << "Edge::create_nodes(); creados " << nodos.NumPtrs() << " nodo(s)." << std::endl;
+	  std::clog << nombre_clase() << "::" << __FUNCTION__
+	            << "; creados " << ttzNodes.NumPtrs()
+		    << " nodo(s)." << std::endl;
       }
     else
       {
         if(verborrea>2)
-          std::clog << "Edge::create_nodes; los nodos of the line: '" << GetNombre() << "' already exist." << std::endl;
+          std::clog << nombre_clase() << "::" << __FUNCTION__
+	            << "; nodes of the line: '" << GetNombre() << "' already exist." << std::endl;
       }
     if(verborrea>4)
-      std::clog << "creados." << std::endl;
+      std::clog << "created." << std::endl;
   }
 
 //! @brief Triggers mesh generation.

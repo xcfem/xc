@@ -65,7 +65,7 @@ void XC::MEDIntFieldInfo::populateOnNodes(const Set &set,const FieldInfo &fi)
 //! @brief Asigna los valores del campo en los elementos.
 void XC::MEDIntFieldInfo::populateOnElements(const Set &set,const FieldInfo &fi)
   {
-    const DqPtrsElem &elementos= set.GetElementos();
+    const DqPtrsElem &elementos= set.getElements();
     const size_t dim= fi.getNumberOfComponents();
     int conta= 1; std::vector<int> valor(dim);
     const std::string nmb_prop= fi.getComponentsProperty();
@@ -98,7 +98,7 @@ void XC::MEDIntFieldInfo::populateOnGaussPoints(const Set &set,const FieldInfo &
   {
     std::cerr << "MEDIntFieldInfo::populateOnGaussPoints not implemented" << std::endl;
 
-    // const DqPtrsElem &elementos= set.GetElementos();
+    // const DqPtrsElem &elementos= set.getElements();
     // const size_t dim= fi.getNumberOfComponents();
     // int conta= 1; m_int valor;
     // const std::string nmb_prop= fi.getComponentsProperty();

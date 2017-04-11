@@ -54,14 +54,14 @@ class SetEstruct: public SetBase
     SetEstruct(const SetEstruct &otro);
     SetEstruct &operator=(const SetEstruct &otro);
     virtual SetEstruct *getCopy(void) const= 0;
-    virtual size_t GetNumCapasNodos(void) const= 0;
-    virtual size_t GetNumFilasNodos(void) const= 0;
-    virtual size_t GetNumColsNodos(void) const= 0;
-    virtual size_t GetNumCapasElementos(void) const= 0;
-    virtual size_t GetNumFilasElementos(void) const= 0;
-    virtual size_t GetNumColsElementos(void) const= 0;
-    size_t NumNodos(void) const;
-    size_t NumElementos(void) const;
+    virtual size_t getNumNodeLayers(void) const= 0;
+    virtual size_t getNumNodeRows(void) const= 0;
+    virtual size_t getNumNodeColumns(void) const= 0;
+    virtual size_t getNumElementLayers(void) const= 0;
+    virtual size_t getNumElementRows(void) const= 0;
+    virtual size_t getNumElementColumns(void) const= 0;
+    size_t getNumberOfNodes(void) const;
+    size_t getNumberOfElements(void) const;
     bool In(const Node *) const;
     bool In(const Element *) const;
 
@@ -82,15 +82,15 @@ class SetEstruct: public SetBase
     inline Node *getNodeIJK(const size_t &i,const size_t &j,const size_t &k)
       { return GetNodo(i,j,k); }
 
-    virtual Element *GetElemento(const size_t &i=1,const size_t &j=1,const size_t &k=1)= 0;
-    virtual const Element *GetElemento(const size_t &i=1,const size_t &j=1,const size_t &k=1) const= 0;
+    virtual Element *getElement(const size_t &i=1,const size_t &j=1,const size_t &k=1)= 0;
+    virtual const Element *getElement(const size_t &i=1,const size_t &j=1,const size_t &k=1) const= 0;
 
     inline Element *getElementI(const size_t &i)
-      { return GetElemento(i,1,1); }
+      { return getElement(i,1,1); }
     inline Element *getElementIJ(const size_t &i,const size_t &j)
-      { return GetElemento(i,j,1); }
+      { return getElement(i,j,1); }
     inline Element *getElementIJK(const size_t &i,const size_t &j,const size_t &k)
-      { return GetElemento(i,j,k); }
+      { return getElement(i,j,k); }
 
     std::set<int> getNodeTags(void) const;
     boost::python::list getNodes(void);

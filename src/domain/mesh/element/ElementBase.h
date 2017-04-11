@@ -40,7 +40,8 @@ class Node;
 
 //! \ingroup Elem
 //
-//! @brief Elemento con pointers to nodes
+//! @brief Base class for finite element with
+//! pointer to nodes container
 template <int NNODOS>
 class ElementBase: public Element
   {
@@ -106,7 +107,7 @@ template <int NNODOS>
 XC::NodePtrsWithIDs &XC::ElementBase<NNODOS>::getNodePtrs(void)
   { return theNodes; }
 
-//! @brief Asigna el material al elemento a partir of the pointer being passed as parameter.
+//! @brief Casts the material pointer to a suitable type.
 template <int NNODOS> template <class TIPOMAT>
 TIPOMAT *ElementBase<NNODOS>::cast_material(const Material *ptr_mat)
   {
@@ -116,15 +117,18 @@ TIPOMAT *ElementBase<NNODOS>::cast_material(const Material *ptr_mat)
       retval= tmp->getCopy();
     else
       {
-        std::cerr << "FATAL XC::ElementBase::cast_material - elemento: " << getTag() 
-                  << " el material " << ptr_mat->getTag()
-                  << " es de tipo inadecuado." << std::endl;
+        std::cerr << nombre_clase() << "::" << __FUNCTION__
+	          << "; on element: " << getTag() 
+                  << " the material " << ptr_mat->getTag()
+                  << " has not a suitable type." << std::endl;
         abort();
       }
     if(!retval)
       {
-	std::cerr << "FATAL XC::ElementBase::cast_material - elemento:" << getTag() <<
-	  "can't get a copy of the material with tag: " << ptr_mat->getTag() << std::endl;
+	std::cerr << nombre_clase() << "::" << __FUNCTION__
+	          << "; on element: " << getTag()
+		  << "can't get a copy of the material with tag: "
+		  << ptr_mat->getTag() << std::endl;
         abort();
       }
     return retval;

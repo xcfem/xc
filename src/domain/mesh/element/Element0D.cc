@@ -227,9 +227,9 @@ void XC::Element0D::setUp(int Nd1, int Nd2, const Vector &x, const Vector &yp)
 
 XC::TritrizPtrElem XC::Element0D::cose(const SetEstruct &f1,const SetEstruct &f2) const
   {
-    const size_t ncapas= f1.GetNumCapasNodos();
-    const size_t nfilas= f1.GetNumFilasNodos();
-    const size_t ncols= f1.GetNumColsNodos();
+    const size_t ncapas= f1.getNumNodeLayers();
+    const size_t nfilas= f1.getNumNodeRows();
+    const size_t ncols= f1.getNumNodeColumns();
     TritrizPtrElem retval(ncapas,nfilas,ncols);
     const size_t dimf1= f1.Dimension();
     const size_t dimf2= f2.Dimension();
@@ -246,7 +246,7 @@ XC::TritrizPtrElem XC::Element0D::cose(const SetEstruct &f1,const SetEstruct &f2
           {
             if(f2.EsFilaI())
               {
-                const size_t n= std::min(ncapas,f2.GetNumCapasNodos());
+                const size_t n= std::min(ncapas,f2.getNumNodeLayers());
                 for(size_t i=1;i<=n;i++)
                   {
                     Element *tmp= getCopy();
@@ -258,7 +258,7 @@ XC::TritrizPtrElem XC::Element0D::cose(const SetEstruct &f1,const SetEstruct &f2
               }
             if(f2.EsFilaJ())
               {
-                const size_t n= std::min(ncapas,f2.GetNumFilasNodos());
+                const size_t n= std::min(ncapas,f2.getNumNodeRows());
                 for(size_t i=1;i<=n;i++)
                   {
                     Element *tmp= getCopy();
@@ -270,7 +270,7 @@ XC::TritrizPtrElem XC::Element0D::cose(const SetEstruct &f1,const SetEstruct &f2
               }
             if(f2.EsFilaK())
               {
-                const size_t n= std::min(ncapas,f2.GetNumColsNodos());
+                const size_t n= std::min(ncapas,f2.getNumNodeColumns());
                 for(size_t i=1;i<=n;i++)
                   {
                     Element *tmp= getCopy();
@@ -285,7 +285,7 @@ XC::TritrizPtrElem XC::Element0D::cose(const SetEstruct &f1,const SetEstruct &f2
           {
             if(f2.EsFilaI())
               {
-                const size_t n= std::min(nfilas,f2.GetNumCapasNodos());
+                const size_t n= std::min(nfilas,f2.getNumNodeLayers());
                 for(size_t i=1;i<=n;i++)
                   {
                     Element *tmp= getCopy();
@@ -297,7 +297,7 @@ XC::TritrizPtrElem XC::Element0D::cose(const SetEstruct &f1,const SetEstruct &f2
               }
             if(f2.EsFilaJ())
               {
-                const size_t n= std::min(nfilas,f2.GetNumFilasNodos());
+                const size_t n= std::min(nfilas,f2.getNumNodeRows());
                 for(size_t i=1;i<=n;i++)
                   {
                     Element *tmp= getCopy();
@@ -309,7 +309,7 @@ XC::TritrizPtrElem XC::Element0D::cose(const SetEstruct &f1,const SetEstruct &f2
               }
             if(f2.EsFilaK())
               {
-                const size_t n= std::min(nfilas,f2.GetNumColsNodos());
+                const size_t n= std::min(nfilas,f2.getNumNodeColumns());
                 for(size_t i=1;i<=n;i++)
                   {
                     Element *tmp= getCopy();
@@ -324,7 +324,7 @@ XC::TritrizPtrElem XC::Element0D::cose(const SetEstruct &f1,const SetEstruct &f2
           {
             if(f2.EsFilaI())
               {
-                const size_t n= std::min(ncols,f2.GetNumCapasNodos());
+                const size_t n= std::min(ncols,f2.getNumNodeLayers());
                 for(size_t i=1;i<=n;i++)
                   {
                     Element *tmp= getCopy();
@@ -336,7 +336,7 @@ XC::TritrizPtrElem XC::Element0D::cose(const SetEstruct &f1,const SetEstruct &f2
               }
             if(f2.EsFilaJ())
               {
-                const size_t n= std::min(ncols,f2.GetNumFilasNodos());
+                const size_t n= std::min(ncols,f2.getNumNodeRows());
                 for(size_t i=1;i<=n;i++)
                   {
                     Element *tmp= getCopy();
@@ -348,7 +348,7 @@ XC::TritrizPtrElem XC::Element0D::cose(const SetEstruct &f1,const SetEstruct &f2
               }
             if(f2.EsFilaK())
               {
-                const size_t n= std::min(ncols,f2.GetNumColsNodos());
+                const size_t n= std::min(ncols,f2.getNumNodeColumns());
                 for(size_t i=1;i<=n;i++)
                   {
                     Element *tmp= getCopy();

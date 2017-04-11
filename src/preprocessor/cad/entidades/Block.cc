@@ -201,7 +201,7 @@ size_t XC::Block::indice(Face *s) const
   {
     size_t retval= 0;
     if(sups[0].Vacia())
-      retval= 0; //Es la base.
+      retval= 0; //It's the base.
     else //Base is already set.
       {
         const Face *base= sups[0].Surface();
@@ -283,7 +283,7 @@ void XC::Block::add_caras(const std::vector<size_t> &indices_caras)
       inserta(indices_caras[i]);
   }
 
-//! @brief Lanza la creación de nodos de las caras.
+//! @brief Triggers the creation of nodes on faces.
 void XC::Block::create_nodes_caras(void)
   {
     sups[0].create_nodes();
@@ -350,12 +350,12 @@ size_t XC::Block::NDivJ(void) const
 size_t XC::Block::NDivK(void) const
   { return GetArista(5)->NDiv(); }
 
-//! @brief Crea los nodos del bloque.
+//! @brief Create nodes for the block.
 void XC::Block::create_nodes(void)
   {
     std::cout << "Entra Block::create_nodes" << std::endl;
     checkNDivs();
-    if(nodos.Null())
+    if(ttzNodes.Null())
       {
         create_nodes_caras();
         BodyFace &base= sups[0];
@@ -368,34 +368,34 @@ void XC::Block::create_nodes(void)
         const size_t capas= NDivK()+1;
         const size_t filas= NDivJ()+1;
         const size_t cols= NDivI()+1;
-        nodos = TritrizPtrNod(capas,filas,cols); //Punteros a nodo.
+        ttzNodes = TritrizPtrNod(capas,filas,cols); //Punteros a nodo.
         TritrizPos3d pos_nodes= get_posiciones(); //Posiciones of the nodes.
 
         //Vertices.
-	nodos(1,1,1)= GetVertice(1)->GetNodo();
-        nodos(1,filas,1)= GetVertice(2)->GetNodo();
-	nodos(1,filas,cols)= GetVertice(3)->GetNodo();
-        nodos(1,1,cols)= GetVertice(4)->GetNodo();
-	nodos(capas,1,1)= GetVertice(5)->GetNodo();
-        nodos(capas,filas,1)= GetVertice(6)->GetNodo();
-	nodos(capas,filas,cols)= GetVertice(7)->GetNodo();
-        nodos(capas,1,cols)= GetVertice(8)->GetNodo();
+	ttzNodes(1,1,1)= GetVertice(1)->GetNodo();
+        ttzNodes(1,filas,1)= GetVertice(2)->GetNodo();
+	ttzNodes(1,filas,cols)= GetVertice(3)->GetNodo();
+        ttzNodes(1,1,cols)= GetVertice(4)->GetNodo();
+	ttzNodes(capas,1,1)= GetVertice(5)->GetNodo();
+        ttzNodes(capas,filas,1)= GetVertice(6)->GetNodo();
+	ttzNodes(capas,filas,cols)= GetVertice(7)->GetNodo();
+        ttzNodes(capas,1,cols)= GetVertice(8)->GetNodo();
 
-        const Node *n1= nodos(1,1,1);
-        const Node *n2= nodos(1,filas,1);
-        const Node *n3= nodos(1,filas,cols);
-        const Node *n4= nodos(1,1,cols);
-        const Node *n5= nodos(capas,1,1);
-        const Node *n6= nodos(capas,filas,1);
-        const Node *n7= nodos(capas,filas,cols);
-        const Node *n8= nodos(capas,1,cols);
+        const Node *n1= ttzNodes(1,1,1);
+        const Node *n2= ttzNodes(1,filas,1);
+        const Node *n3= ttzNodes(1,filas,cols);
+        const Node *n4= ttzNodes(1,1,cols);
+        const Node *n5= ttzNodes(capas,1,1);
+        const Node *n6= ttzNodes(capas,filas,1);
+        const Node *n7= ttzNodes(capas,filas,cols);
+        const Node *n8= ttzNodes(capas,1,cols);
 
     std::cout << "capas= " << capas << std::endl;
     std::cout << "filas= " << filas << std::endl;
     std::cout << "cols= " << cols << std::endl;
 
     std::cout << "base" << std::endl;
-        //Enlazamos con los nodos de la base i=1
+        //Linking with the nodes of the base i=1
         ID IJK1= base.Surface()->getNodeIndices(n1);
         ID IJK2= base.Surface()->getNodeIndices(n2);
         ID IJK4= base.Surface()->getNodeIndices(n4);
@@ -418,10 +418,10 @@ void XC::Block::create_nodes(void)
               size_t J= (IJK2[ind_i]-IJK1[ind_i])/(nf-1)*(i-1)+IJK1[ind_i];
               size_t K= (IJK4[ind_j]-IJK1[ind_j])/(nc-1)*(j-1)+IJK1[ind_j];
               if(ind_i<ind_j)
-                nodos(1,J,K)= base.GetNodo(i,j);
+                ttzNodes(1,J,K)= base.GetNodo(i,j);
               else
-                nodos(1,J,K)= base.GetNodo(j,i);
-              d2= dist2(nodos(1,J,K)->getPosInicial3d(),pos_nodes(1,J,K));
+                ttzNodes(1,J,K)= base.GetNodo(j,i);
+              d2= dist2(ttzNodes(1,J,K)->getPosInicial3d(),pos_nodes(1,J,K));
               if(d2>1e-4)
 		std::cerr << "Block::create_nodes; error al enlazar el nodo: ("
                           << i << "," << j << ") de la base." << std::endl;
@@ -438,7 +438,7 @@ void XC::Block::create_nodes(void)
             {
               size_t J= (IJK2[1]-IJK1[1])/(filas-1)*(i-1)+IJK1[1];
               size_t K= (IJK2[2]-IJK1[2])/(cols-1)*(j-1)+IJK1[2];
-              nodos(capas,J,K)= tapa.GetNodo(i,j);
+              ttzNodes(capas,J,K)= tapa.GetNodo(i,j);
             }
 
         //Lateral izquierdo j=1.
@@ -449,7 +449,7 @@ void XC::Block::create_nodes(void)
             {
               size_t J= (IJK2[1]-IJK1[1])/(filas-1)*(j-1)+IJK1[1];
               size_t K= (IJK2[2]-IJK1[2])/(filas-1)*(j-1)+IJK1[2];
-              nodos(capas,J,K)= tapa.GetNodo(i,j);
+              ttzNodes(capas,J,K)= tapa.GetNodo(i,j);
             }
 	*/
 
@@ -460,7 +460,9 @@ void XC::Block::create_nodes(void)
       }
     else
       if(verborrea>2)
-        std::clog << "Block::create_nodes; los nodos de la entidad: '" << GetNombre() << "' ya existen." << std::endl;      
+        std::clog << nombre_clase() << "::" << __FUNCTION__
+	          << "; nodes of entity: '" << GetNombre()
+		  << "' already exist." << std::endl;      
   }
 
 //! @brief Triggers mesh generation.
@@ -469,11 +471,13 @@ void XC::Block::genMesh(meshing_dir dm)
     if(verborrea>3)
       std::clog << "Mesing Block...(" << GetNombre() << ")...";
     create_nodes();
-    if(elementos.Null())
+    if(ttzElements.Null())
       create_elements(dm);
     else
       if(verborrea>2)
-        std::clog << "Block::genMesh; los nodos de la entidad: '" << GetNombre() << "' ya existen." << std::endl;      
+        std::clog << nombre_clase() << "::" << __FUNCTION__
+	          << "; nodes of entity: '" << GetNombre()
+		  << "' already exist." << std::endl;      
     if(verborrea>3)
       std::clog << "done." << std::endl;
   }

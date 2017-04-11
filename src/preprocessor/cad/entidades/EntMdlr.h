@@ -56,8 +56,8 @@ class EntMdlr: public SetEstruct
     size_t idx; //!< @brief Object index (to be used as index for VTK arrays).
     bool doGenMesh; //!< True if the point must be meshed (node will be created). For exemple is false when it's the middle point of a line.
   protected:
-    TritrizPtrNod nodos;
-    TritrizPtrElem elementos;
+    TritrizPtrNod ttzNodes;
+    TritrizPtrElem ttzElements;
     friend class Set;
     friend class SetMeshComp;
     friend class Cad;
@@ -82,44 +82,44 @@ class EntMdlr: public SetEstruct
       { return idx; }
 
     inline bool TieneNodos(void) const
-      { return !nodos.empty(); }
-    virtual size_t GetNumCapasNodos(void) const
-      { return nodos.GetCapas(); }
-    virtual size_t GetNumFilasNodos(void) const
-      { return nodos.getNumFilas(); }
-    virtual size_t GetNumColsNodos(void) const
-      { return nodos.getNumCols(); }
-    virtual size_t GetNumCapasElementos(void) const
-      { return elementos.GetCapas(); }
-    virtual size_t GetNumFilasElementos(void) const
-      { return elementos.getNumFilas(); }
-    virtual size_t GetNumColsElementos(void) const
-      { return elementos.getNumCols(); }
+      { return !ttzNodes.empty(); }
+    virtual size_t getNumNodeLayers(void) const
+      { return ttzNodes.GetCapas(); }
+    virtual size_t getNumNodeRows(void) const
+      { return ttzNodes.getNumFilas(); }
+    virtual size_t getNumNodeColumns(void) const
+      { return ttzNodes.getNumCols(); }
+    virtual size_t getNumElementLayers(void) const
+      { return ttzElements.GetCapas(); }
+    virtual size_t getNumElementRows(void) const
+      { return ttzElements.getNumFilas(); }
+    virtual size_t getNumElementColumns(void) const
+      { return ttzElements.getNumCols(); }
 
     virtual Node *GetNodo(const size_t &i=1,const size_t &j=1,const size_t &k=1);
     virtual const Node *GetNodo(const size_t &i=1,const size_t &j=1,const size_t &k=1) const;
     Node *getNearestNode(const Pos3d &p);
     const Node *getNearestNode(const Pos3d &p) const;
     ID getNodeIndices(const Node *) const;
-    virtual Element *GetElemento(const size_t &i=1,const size_t &j=1,const size_t &k=1);
-    virtual const Element *GetElemento(const size_t &i=1,const size_t &j=1,const size_t &k=1) const;
+    virtual Element *getElement(const size_t &i=1,const size_t &j=1,const size_t &k=1);
+    virtual const Element *getElement(const size_t &i=1,const size_t &j=1,const size_t &k=1) const;
     Node *buscaNodo(const int &tag);
     const Node *buscaNodo(const int &tag) const;
     std::vector<int> getTagsNodos(void) const;
 
-    Element *buscaElemento(const int &tag);
-    const Element *buscaElemento(const int &tag) const;
+    Element *findElement(const int &);
+    const Element *findElement(const int &) const;
     Element *getNearestElement(const Pos3d &p);
     const Element *getNearestElement(const Pos3d &p) const;
 
-    TritrizPtrNod &GetTtzNodos(void)
-      { return nodos; }
-    const TritrizPtrNod &GetTtzNodos(void) const
-      { return nodos; }
-    TritrizPtrElem &GetTtzElementos(void)
-      { return elementos; }
-    const TritrizPtrElem &GetTtzElementos(void) const
-      { return elementos; }
+    TritrizPtrNod &getTtzNodes(void)
+      { return ttzNodes; }
+    const TritrizPtrNod &getTtzNodes(void) const
+      { return ttzNodes; }
+    TritrizPtrElem &getTtzElements(void)
+      { return ttzElements; }
+    const TritrizPtrElem &getTtzElements(void) const
+      { return ttzElements; }
     //! @brief Return the object dimension (0, 1, 2 or 3).
     virtual unsigned short int GetDimension(void) const= 0;
     virtual BND3d Bnd(void) const= 0;

@@ -132,9 +132,9 @@ const XC::Element *XC::DqPtrsElem::getNearestElement(const Pos3d &p) const
     return this_no_const->getNearestElement(p);
   }
 
-//! @brief Returns (if it exists) a pointer al elemento
-//! cuyo tag is being passed as parameter.
-XC::Element *XC::DqPtrsElem::buscaElemento(const int &tag)
+//! @brief Returns (if it exists) a pointer to the element
+//! identified by the tag being passed as parameter.
+XC::Element *XC::DqPtrsElem::findElement(const int &tag)
   {
     Element *retval= nullptr;
     Element *tmp= nullptr;
@@ -153,9 +153,9 @@ XC::Element *XC::DqPtrsElem::buscaElemento(const int &tag)
     return retval;
   }
 
-//! @brief Returns (if it exists) a pointer al elemento
-//! cuyo tag is being passed as parameter.
-const XC::Element *XC::DqPtrsElem::buscaElemento(const int &tag) const
+//! @brief Returns (if it exists) a pointer to the element
+//! identified by the tag being passed as parameter.
+const XC::Element *XC::DqPtrsElem::findElement(const int &tag) const
   {
     const Element *retval= nullptr;
     const Element *tmp= nullptr;

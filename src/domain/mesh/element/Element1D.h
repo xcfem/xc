@@ -47,7 +47,7 @@ class DeformationPlane;
 //! @defgroup OneDimensionalElem One-dimensional elements.
 //
 //! @ingroup OneDimensionalElem
-//! @brief Elemento unidimensional (beam,truss,...)
+//! @brief Base class for one-dimensional elements (beam,truss,...)
 class Element1D : public ElementBase<2>
   {
     void unidimensional_meshing(const TritrizPtrNod &,TritrizPtrElem &) const;

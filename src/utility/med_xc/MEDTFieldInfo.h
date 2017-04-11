@@ -155,9 +155,9 @@ void MEDTFieldInfo<T>::setGaussModel(const MEDGaussModel &gm)
 template <class T>
 void MEDTFieldInfo<T>::defineGaussModels(const Set &set)
   {
-     const DqPtrsElem &elementos= set.GetElementos();
+     const DqPtrsElem &elements= set.getElements();
      std::set<std::string> nombres;
-     for(DqPtrsElem::const_iterator j= elementos.begin();j!=elementos.end();j++)
+     for(DqPtrsElem::const_iterator j= elements.begin();j!=elements.end();j++)
        {
           MEDGaussModel gm= (*j)->getMEDGaussModel();
           const std::string nmb= gm.getNombre();
@@ -180,7 +180,7 @@ void MEDTFieldInfo<T>::setValueIJ(int i, int j,const T &valor)
       std::cerr << "j index: " << j
                 << " out of range (1," << nc
                 << ").\n" << std::endl;
-    const int ne= getGrupo().getNumeroElementos();
+    const int ne= getGrupo().getNumberOfElements();
     if(i>ne)
       std::cerr << "i index: " << i
                 << " out of range (1," << ne
@@ -198,7 +198,7 @@ void MEDTFieldInfo<T>::setValueIJK(int i, int j,int k,int t,const T &valor)
       std::cerr << "j index: " << j
                 << " out of range (1," << nc
                 << ").\n" << std::endl;
-    const int ne= getGrupo().getNumeroElementos();
+    const int ne= getGrupo().getNumberOfElements();
     if(i>ne)
       std::cerr << "i index: " << i
                 << " out of range (1," << ne

@@ -40,7 +40,7 @@ class Vector;
 //! @defgroup ElemFV Element internal forces.
 //
 //! \ingroup ElemFV
-//! @brief Esfuerzos en un elemento.
+//! @brief Element internal forces.
 class FVector
   {
   public:

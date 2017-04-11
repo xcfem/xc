@@ -25,7 +25,7 @@
 
 
 //! @brief Returns the número de elementos.
-size_t XC::MEDCellBaseInfo::getNumeroElementos(void) const
+size_t XC::MEDCellBaseInfo::getNumberOfElements(void) const
   { return cell_types.getNumCeldas(); }
 
 //! @brief Agrega la conectividad de una celda.

@@ -48,9 +48,9 @@ class MEDGroupInfo: public MEDCellBaseInfo
     MEDGroupInfo(MEDMeshing *mesh,const std::string &);
     MEDGroupInfo(MEDMeshing *mesh,const Set &);
 
-    std::vector<int> &getIndicesElementosTipo(const MED_EN::medGeometryElement &);
+    std::vector<int> &getElementOfTypeIndices(const MED_EN::medGeometryElement &);
     std::vector<int> getVectorIndicesTipos(void) const;
-    std::vector<int> getIndicesElementos(void) const;
+    std::vector<int> getElementIndices(void) const;
 
     const MEDMeshing &getMesh(void) const;
     MEDMEM::GROUP *getGrupoMED(void) const;

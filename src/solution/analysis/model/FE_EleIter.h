@@ -72,7 +72,7 @@ class FE_Element;
 
 //! @ingroup AnalysisModel
 //
-//! @brief Iterator over the finite elementos of the model.
+//! @brief Iterator over the finite element of the model.
 class FE_EleIter 
   {
   private:

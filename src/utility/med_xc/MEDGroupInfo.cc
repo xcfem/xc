@@ -44,9 +44,9 @@ XC::MEDGroupInfo::MEDGroupInfo(MEDMeshing *mesh,const Set &set)
   { 
     set_owner(mesh);
     indices= mesh->getMapIndicesCeldas();
-    const size_t numNodos= set.NumNodos();
-    const size_t numElementos= set.NumElementos();
-    if(numElementos==0) //node set.
+    const size_t numNodes= set.getNumberOfNodes();
+    const size_t numElements= set.getNumberOfElements();
+    if(numElements==0) //node set.
       {
         tipo_entidad= MED_EN::MED_NODE;
 	const DqPtrsNode nodos= set.GetNodos();
@@ -54,10 +54,10 @@ XC::MEDGroupInfo::MEDGroupInfo(MEDMeshing *mesh,const Set &set)
         for(Set::nod_const_iterator i= nodos.begin();i!=nodos.end();i++)
           new_vertice((*i)->getTag(),node_indexes);
       }
-    else if(numNodos==0) //Set of elementos.
+    else if(numNodes==0) //element set.
       {
         tipo_entidad= MED_EN::MED_CELL;   
-	const DqPtrsElem elementos= set.GetElementos();
+	const DqPtrsElem elementos= set.getElements();
         for(Set::elem_const_iterator i= elementos.begin();i!=elementos.end();i++)
           nueva_celda((*i)->getTag(),(*i)->getMEDCellType());
       }
@@ -86,7 +86,7 @@ MEDMEM::GROUP *XC::MEDGroupInfo::getGrupoMED(void) const
 
 //! @brief Returns the vector with the indexes of the elements
 //! that match the type being passed as parameter.
-std::vector<int> &XC::MEDGroupInfo::getIndicesElementosTipo(const MED_EN::medGeometryElement &tipo)
+std::vector<int> &XC::MEDGroupInfo::getElementOfTypeIndices(const MED_EN::medGeometryElement &tipo)
   {
     map_indices_tipo::iterator i= indices_tipo.find(tipo);
     if(i!=indices_tipo.end())
@@ -99,7 +99,7 @@ std::vector<int> &XC::MEDGroupInfo::getIndicesElementosTipo(const MED_EN::medGeo
 void XC::MEDGroupInfo::new_vertice(size_t tag,const MEDMapIndices &ind)
   {
     tipo_entidad= MED_EN::MED_NODE;
-    std::vector<int> &c= getIndicesElementosTipo(MED_EN::MED_NONE);
+    std::vector<int> &c= getElementOfTypeIndices(MED_EN::MED_NONE);
     const int idx= ind.getMEDIndice(tag);
     c.push_back(idx);
     MEDCellBaseInfo::new_cell(tag,MED_EN::MED_NONE);
@@ -109,7 +109,7 @@ void XC::MEDGroupInfo::new_vertice(size_t tag,const MEDMapIndices &ind)
 void XC::MEDGroupInfo::nueva_celda(size_t tag,const MED_EN::medGeometryElement &tipo)
   {
     tipo_entidad= MED_EN::MED_CELL;
-    std::vector<int> &c= getIndicesElementosTipo(tipo);
+    std::vector<int> &c= getElementOfTypeIndices(tipo);
     const int idx= indices.getMEDIndice(tag);
     c.push_back(idx);
     MEDCellBaseInfo::new_cell(tag,tipo);
@@ -136,7 +136,7 @@ std::vector<int> XC::MEDGroupInfo::getVectorIndicesTipos(void) const
 
 //! @brief Returns a vector with the indexes of the elements ordered
 //! by type.
-std::vector<int> XC::MEDGroupInfo::getIndicesElementos(void) const
+std::vector<int> XC::MEDGroupInfo::getElementIndices(void) const
   {
     std::vector<int> retval;
     for(map_indices_tipo::const_iterator i=indices_tipo.begin();i!=indices_tipo.end();i++)
@@ -154,7 +154,7 @@ void XC::MEDGroupInfo::to_med(void) const
     med_group->setEntity(tipo_entidad);
     MEDCellBaseInfo::to_support_med(*med_group);
     const std::vector<int> index= getVectorIndicesTipos();
-    const std::vector<int> value= getIndicesElementos();
+    const std::vector<int> value= getElementIndices();
     med_group->setNumber(&index[0],&value[0]);
     mesh.getMEDMesh().addGroup(*med_group);
   }
