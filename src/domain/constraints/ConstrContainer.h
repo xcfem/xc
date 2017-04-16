@@ -146,16 +146,16 @@ class ConstrContainer: public MeshComponentContainer
     virtual int getNumLoadPatterns(void) const;
     virtual int getNumNodeLockers(void) const;
 
-    std::deque<int> getTagsSPsNode(int theNode, int theDOF) const;
-    std::deque<int> getTagsSPsNode(int theNode) const;
-    std::deque<int> getTagsMPsNode(int theNode, int theDOF) const;
-    std::deque<int> getTagsMPsNode(int theNode) const;
+    std::deque<int> getTagsSPsNode(int , int ) const;
+    std::deque<int> getTagsSPsNode(int ) const;
+    std::deque<int> getTagsMPsNode(int , int ) const;
+    std::deque<int> getTagsMPsNode(int ) const;
     std::deque<int> getTagsLPs(void) const;
     std::deque<int> getTagsNLs(void) const;
-    bool nodeAffectedBySPs(int nodeTag) const;
-    bool nodeAffectedByMPs(int nodeTag) const;
-    bool nodeAffectedByMRMPs(int tagNodo) const;
-    bool nodeAffectedBySPsOMPs(int nodeTag) const;
+    bool nodeAffectedBySPs(int ) const;
+    bool nodeAffectedByMPs(int ) const;
+    bool nodeAffectedByMRMPs(int ) const;
+    bool nodeAffectedBySPsOMPs(int ) const;
     std::string getLoadPatternsNames(void) const;
 
     virtual int calculateNodalReactions(bool inclInertia, const double &);

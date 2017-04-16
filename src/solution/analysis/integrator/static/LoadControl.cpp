@@ -103,8 +103,8 @@ int XC::LoadControl::update(const Vector &deltaU)
     LinearSOE *theSOE = this->getLinearSOEPtr();
     if((!myModel) || (!theSOE))
       {
-	std::cerr << "WARNING XC::LoadControl::update() ";
-	std::cerr << "No XC::AnalysisModel or LinearSOE has been set\n";
+	std::cerr << nombre_clase() << "::" << __FUNCTION__
+	          << "; no AnalysisModel or LinearSOE has been set\n";
 	return -1;
       }
 

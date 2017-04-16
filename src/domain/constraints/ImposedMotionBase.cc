@@ -33,21 +33,26 @@
 #include "domain/mesh/node/Node.h"
 
 //! @brief Constructor.
+//! @param classTag: tag of the object class.
 XC::ImposedMotionBase::ImposedMotionBase(int classTag)
 :SFreedom_Constraint(classTag), groundMotionTag(0), patternTag(0),
  theGroundMotion(nullptr), theNode(nullptr), theGroundMotionResponse(3) {}
 
-// constructor for a subclass to use
+//! @brief Constructor.
+//! @param classTag: tag of the object class.
+//! @param tag: tag for the multi-freedom constraint.
 XC::ImposedMotionBase::ImposedMotionBase(int classTag,int tag, int node, int ndof, int pattern, int motion)
 :SFreedom_Constraint(tag, node, ndof, classTag),
  groundMotionTag(motion), patternTag(pattern), theGroundMotion(nullptr), theNode(nullptr), theGroundMotionResponse(3) {}
 
+//! @brief Destructor.
 XC::ImposedMotionBase::~ImposedMotionBase(void)
   {
     if(theNode)
       theNode->disconnect(this);
   }
 
+//! @brief Sets the domain of the constraint.
 void XC::ImposedMotionBase::setDomain(Domain *theDomain)
   {
     if(theDomain == nullptr)
@@ -71,21 +76,24 @@ void XC::ImposedMotionBase::setDomain(Domain *theDomain)
       }
   }
 
+//! @brief Returns true if the prescribed value is zero.
 bool XC::ImposedMotionBase::isHomogeneous(void) const
   { return true; }
 
-//! @brief Returns the valor impuesto.
+//! @brief Returns the prescribed value.
 double XC::ImposedMotionBase::getValue(void) const
   {
     // always return 0.0 - applyConstraint() sets the values at XC::Node 
     return theGroundMotionResponse(0);
   }
 
+//! @brief Gets the constraint motion.
 int XC::ImposedMotionBase::getMotion(void)
   {
     if(!theNode)
       {
-        std::cerr << "ImposedMotionBase::getMotion - pointer to nodo nulo."
+        std::cerr << nombre_clase() << "::" << __FUNCTION__
+	          << "; null pointer to node: "
                   <<  getNodeTag() <<  "\n";
       }
     if(!theGroundMotion)

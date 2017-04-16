@@ -59,14 +59,7 @@
 // Revision: A
 //
 // Purpose: This file contains the class definition for MFreedom_Constraint.
-// MFreedom_Constraint is a class which stores the information for a multi
-// point constraint. A multipoint constraint relates certain dof at 
-// a constrained node to be related to certain dof at a retained node: 
-//                      {Uc} = [Ccr] {Ur}
-//
-// The MFreedom_Constraint class assumes time invariant constraints, i.e. the
-// constraint matrix does not change over time. All the methods are declared
-// as pure virtual, which will allow subclasses for time varying constraints.
+// MFreedom_Constraint is a class 
 //
 // What: "@(#) MFreedom_Constraint, revA"
 
@@ -75,16 +68,23 @@
 
 
 namespace XC {
-class Matrix;
 class ID;
 
 //! @ingroup CContMP
 //
-//! @brief Multi-freedom constraint.
+//! @brief Multi-freedom constraint. Objectt of this class store
+//! the information for a multifreedom constraint. A multifreedom
+//! constraint relates certain dof at a constrained node to be
+//! related to certain dof at a retained node: 
+//!                      {Uc} = [Ccr] {Ur}
+//!
+//! The MFreedom_Constraint class assumes time invariant constraints, i.e. the
+//! constraint matrix does not change over time. All the methods are declared
+//! as pure virtual, which will allow subclasses for time varying constraints.
 class MFreedom_Constraint: public MFreedom_ConstraintBase
   {
   protected:
-    int retainedNodeTag; //!< Tag del nodo retenido.
+    int retainedNodeTag; //!< Tag of the retained node.
 
     ID retainDOF;  //!< ID of retained DOF at retained node
     
@@ -104,15 +104,15 @@ class MFreedom_Constraint: public MFreedom_ConstraintBase
     MFreedom_Constraint(int tag,int nodeRetain, int nodeConstr, const ID &constrainedDOF, const ID &retainedDOF,int classTag);    
 
     MFreedom_Constraint(int tag,int nodeRetain, int nodeConstr, Matrix &constrnt,ID &constrainedDOF,ID &retainedDOF);
-    MFreedom_Constraint(const MFreedom_Constraint &otro);
-    MFreedom_Constraint &operator=(const MFreedom_Constraint &otro);
 
-    // method to get information about the constraint
-    virtual inline const int &getNodeRetained(void) const //Tag del nodo retenido o master.
+    // methods to get information about the constraint
+    //! @brief Returns the tag of the retained (or master) node.
+    virtual inline const int &getNodeRetained(void) const
       { return retainedNodeTag; }
-    virtual inline int &getNodeRetained(void) //Tag del nodo retenido o master.
+    //! @brief Returns the tag of the retained (or master) node.
+    virtual inline int &getNodeRetained(void) 
       { return retainedNodeTag; }
-    bool afectaANodo(int tagNodo) const;
+    bool affectsNode(int ) const;
     virtual const ID &getRetainedDOFs(void) const;            
     virtual int applyConstraint(double pseudoTime);
 

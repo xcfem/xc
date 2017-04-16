@@ -44,99 +44,55 @@
 **                                                                    **
 ** ****************************************************************** */
                                                                         
-// $Revision: 1.3 $
-// $Date: 2003/04/02 22:02:52 $
-// $Source: /usr/local/cvs/OpenSees/SRC/system_of_eqn/linearSOE/bandSPD/BandSPDLinLapackSolver.cpp,v $
-                                                                        
-                                                                        
-// File: ~/system_of_eqn/linearSOE/bandSPD/BandSPDLinLapackSolver.h
+#ifndef MFreedom_Joint_h
+#define MFreedom_Joint_h
+
+// Written: Arash Altoontash, Gregory Deierlein
+// Created: 08/01
+// Revision: Arash
+
+// Purpose: This file contains the class definition for MFreedom_Joint.
+// It is a sub class for MFreedom_Constraint specialized to be used for simple joint 
+// connection element. MFreedom_Joint defines a nonlinear, time dependent multi 
+// point constraint.
 //
-// Written: fmk 
-// Created: 11/96
-// Revision: A
+
+#include <domain/constraints/MFreedom_Constraint.h>
+
+namespace XC {
+
+class Node;
+class Matrix;
+class ID;
+
+
+//! @ingroup CContMP
 //
-// Description: This file contains the implementation of XC::BandSPDLinLapackSolver.
-//
-// What: "@(#) BandSPDLinLapackSolver.h, revA"
-
-#include <solution/system_of_eqn/linearSOE/bandSPD/BandSPDLinLapackSolver.h>
-#include <solution/system_of_eqn/linearSOE/bandSPD/BandSPDLinSOE.h>
-
-XC::BandSPDLinLapackSolver::BandSPDLinLapackSolver()
-  :BandSPDLinSolver(SOLVER_TAGS_BandSPDLinLapackSolver)
-  {}
-
-extern "C" int dpbsv_(char *UPLO, int *N, int *KD, int *NRHS, 
-		      double *A, int *LDA, double *B, int *LDB, 
-		      int *INFO);
-
-extern "C" int dpbtrs_(char *UPLO, int *N, int *KD, int *NRHS, 
-		       double *A, int *LDA, double *B, int *LDB, 
-		       int *INFO);
-
-int XC::BandSPDLinLapackSolver::solve(void)
+//! @brief Base class for joint constraints.
+class MFreedom_Joint : public MFreedom_Constraint
   {
-    if(!theSOE)
-      {
-	std::cerr << nombre_clase() << "::" << __FUNCTION__
-	          << "; no LinearSOE object has been set\n";
-	return -1;
-      }
+  protected:
+    Node *RetainedNode; //!<  to identify the retained node
+    Node *ConstrainedNode; //!<  to identify  the constrained node
+    int LargeDisplacement; //!<  flag for large displacements enabled; LrgDsp=0 means large displacement is not enabled
+    // 0 for constant constraint matrix(small deformations)
+    // 1 for time varying constraint matrix(large deformations)
+    // 2 for large deformations with length correction
+    double Length0;
+  public:
+    // constructors        
+    MFreedom_Joint(int tag, int classTag);
+    MFreedom_Joint(Domain *theDomain, int tag, int classTag, int nodeRetain, int nodeConstr, int LrgDsp);
+    ~MFreedom_Joint(void);
 
-    int n = theSOE->size;
-    int kd = theSOE->half_band -1;
-    int ldA = kd +1;
-    int nrhs = 1;
-    int ldB = n;
-    int info;
-    double *Aptr = theSOE->A.getDataPtr();
-    double *Xptr = theSOE->getPtrX();
-    double *Bptr = theSOE->getPtrB();
+    // method to get information about the constraint
+    bool isTimeVarying(void) const;
+    void setDomain(Domain *theDomain);
 
-    // first copy B into X
-    for(int i=0; i<n; i++)
-      *(Xptr++) = *(Bptr++);
-    Xptr= theSOE->getPtrX();
+    // methods for output
+    void Print(std::ostream &s, int flag =0);
+  };
+} // end of XC namespace
 
-    char strU[]= "U";
-    // now solve AX = Y
-    { if (theSOE->factored == false)          
-	dpbsv_(strU,&n,&kd,&nrhs,Aptr,&ldA,Xptr,&ldB,&info);
-      else
-	dpbtrs_(strU,&n,&kd,&nrhs,Aptr,&ldA,Xptr,&ldB,&info);
-    }
-
-    // check if successfull
-    if(info != 0)
-      {
-	std::cerr << "WARNING XC::BandSPDLinLapackSolver::solve() - the LAPACK";
-	std::cerr << " routines returned " << info << std::endl;
-	return -info;
-      }
-    theSOE->factored = true;
-
-    return 0;
-  }
-    
-
-
-int XC::BandSPDLinLapackSolver::setSize()
-  {
-    // nothing to do    
-    return 0;
-  }
-
-int XC::BandSPDLinLapackSolver::sendSelf(CommParameters &cp)
-  {
-    // nothing to do
-    return 0;
-  }
-
-int XC::BandSPDLinLapackSolver::recvSelf(const CommParameters &cp)
-  {
-    // nothing to do
-    return 0;
-  }
-
-
+#endif
 

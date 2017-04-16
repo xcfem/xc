@@ -46,10 +46,8 @@ namespace XC {
 class PlateBase: public SectionForceDeformation
   {
   protected:
-    double h; // plate thickness
-
+    double h; //!< plate thickness
   public: 
-
     PlateBase(int tag,int classTag);
     PlateBase(int classTag);
     PlateBase(int tag,int classTag, double h);
@@ -60,9 +58,7 @@ class PlateBase: public SectionForceDeformation
       { return h; }
     void setH(const double &d)
       { h= d; }
-
-  }; //end of PlateBase declarations
-
+  };
 } // end of XC namespace
 
 #endif

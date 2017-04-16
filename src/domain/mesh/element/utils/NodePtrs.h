@@ -110,6 +110,8 @@ class NodePtrs: public EntCmd
     double MaxCooNod(int i) const;
     double MinCooNod(int i) const;
     std::vector<int> getIdx(void) const;
+    bool checkDimension(const size_t &dim) const;
+    size_t getDimension(void) const;
     const Matrix &getCoordinates(void) const;
     Pos3d getPosNodo(const size_t &i,bool initialGeometry= true) const;
     std::list<Pos3d> getPosiciones(bool initialGeometry= true) const;

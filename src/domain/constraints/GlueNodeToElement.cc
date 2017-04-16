@@ -34,10 +34,16 @@
 
 #include <domain/constraints/GlueNodeToElement.h>
 
-// constructor for FEM_ObjectBroker
+//! @brief Constructor.
+//! @param tag: tag for the constraint.
 XC::GlueNodeToElement::GlueNodeToElement(int tag)		
  : MRMFreedom_Constraint(tag,CNSTRNT_TAG_GlueNodeToElement) {}
 
+//! @brief Constructor.
+//! @param tag: tag for the constraint.
+//! @param node: node to be glued.
+//! @param elem: element to glue to.
+//! @param constrainedDOF: constrained degrees of freedom.
 XC::GlueNodeToElement::GlueNodeToElement(int tag, const Node &node,const Element &elem, const ID &constrainedDOF)
   : MRMFreedom_Constraint(tag, elem, node, constrainedDOF) {}
 

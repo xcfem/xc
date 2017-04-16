@@ -525,7 +525,7 @@ const XC::Matrix &XC::ShellMITC4Base::getInitialStiff(void) const
               }//end for p
             BJ= assembleB( Bmembrane, Bbend, Bshear );
 
-           //save the B-matrix
+	    //save the B-matrix
            for(p=0; p<nstress; p++)
              {
                for(q=0; q<ndf; q++ )
@@ -565,7 +565,6 @@ const XC::Matrix &XC::ShellMITC4Base::getInitialStiff(void) const
                   BJ(p,q) *= (-1.0);
               } //end for p
 
-
             //transpose 
             //BJtran= transpose( 8, ndf, BJ );
             for(p=0; p<ndf; p++)
@@ -597,8 +596,11 @@ const XC::Matrix &XC::ShellMITC4Base::getInitialStiff(void) const
                     for(q=0; q<ndf; q++ )
                       BK(p,q)= saveB[p][q][k];
                   }//end for p
-        
-        
+       
+                //stiffJK= BJtranD * BK;
+                // +  transpose( 1,ndf,BdrillJ ) * BdrillK; 
+                stiffJK.addMatrixProduct(0.0, BJtranD,BK,1.0 );
+
                 //drilling B matrix
                 drillPointer= computeBdrill( k, shp );
                 for(p=0; p<ndf; p++ )
@@ -606,10 +608,6 @@ const XC::Matrix &XC::ShellMITC4Base::getInitialStiff(void) const
                     BdrillK[p]= *drillPointer;
                     drillPointer++;
                   }//end for p
-
-                //stiffJK= BJtranD * BK;
-                // +  transpose( 1,ndf,BdrillJ ) * BdrillK; 
-                stiffJK.addMatrixProduct(0.0, BJtranD,BK,1.0 );
         
                 for(p=0;p<ndf;p++)
                   {
@@ -623,7 +621,7 @@ const XC::Matrix &XC::ShellMITC4Base::getInitialStiff(void) const
           jj += ndf;
         } // end for j loop
  
-      } //end for i gauss loop 
+      } //end for i gauss loop
     theCoordTransf->getGlobalTangent(stiff);
     Ki= stiff;
     return stiff;
@@ -1123,7 +1121,7 @@ void XC::ShellMITC4Base::formResidAndTangent(int tang_flag) const
           } // end for j
     
 
-        //send the strain to the material 
+        //send the strain to the material
         success= const_cast<SectionForceDeformation *>(physicalProperties[i])->setTrialSectionDeformation( strain );
 
         //compute the stress
@@ -1312,23 +1310,18 @@ const XC::Matrix &XC::ShellMITC4Base::computeBmembrane( int node, const double s
   }
 
 //! @brief assemble a B matrix
-const XC::Matrix &XC::ShellMITC4Base::assembleB( const XC::Matrix &Bmembrane, const XC::Matrix &Bbend, const XC::Matrix &Bshear ) const
+//! @param Bmembrane: membrane B matrix (3x2)
+//! @param Bbend:  plate bending B matrix (3x2)
+//! @param Bshear: plate shear B matrix (2x3)
+const XC::Matrix &XC::ShellMITC4Base::assembleB(const Matrix &Bmembrane, const Matrix &Bbend, const Matrix &Bshear) const
   {
 
-    //Matrix Bbend(3,3);  // plate bending B matrix
-
-    //Matrix Bshear(2,3); // plate shear B matrix
-
-    //Matrix Bmembrane(3,2); // plate membrane B matrix
     static Matrix B(8,6);
     static Matrix BmembraneShell(3,3);
     static Matrix BbendShell(3,3);
     static Matrix BshearShell(2,6);
     static Matrix Gmem(2,3);
     static Matrix Gshear(3,6);
-
-    int p, q;
-    int pp;
 
 //
 // For Shell :
@@ -1360,65 +1353,63 @@ const XC::Matrix &XC::ShellMITC4Base::assembleB( const XC::Matrix &Bmembrane, co
     Gmem(1,1)= g2[1];
     Gmem(1,2)= g2[2];
 
-      //BmembraneShell= Bmembrane * Gmem;
-      BmembraneShell.addMatrixProduct(0.0, Bmembrane,Gmem,1.0 );
+    //BmembraneShell= Bmembrane * Gmem;
+    BmembraneShell.addMatrixProduct(0.0, Bmembrane,Gmem,1.0 );
 
 
-      //shell modified bending terms
+    //shell modified bending terms
+    Matrix &Gbend= Gmem;
 
-      Matrix &Gbend= Gmem;
-
-      //BbendShell= Bbend * Gbend;
-      BbendShell.addMatrixProduct(0.0, Bbend,Gbend,1.0 );
+    //BbendShell= Bbend * Gbend;
+    BbendShell.addMatrixProduct(0.0, Bbend,Gbend,1.0 );
 
 
-      //shell modified shear terms
+    //shell modified shear terms
+    Gshear.Zero( );
 
-      Gshear.Zero( );
+    const Vector &g3= theCoordTransf->G3();
+    Gshear(0,0)= g3[0];
+    Gshear(0,1)= g3[1];
+    Gshear(0,2)= g3[2];
 
-      const Vector &g3= theCoordTransf->G3();
-      Gshear(0,0)= g3[0];
-      Gshear(0,1)= g3[1];
-      Gshear(0,2)= g3[2];
+    Gshear(1,3)= g1[0];
+    Gshear(1,4)= g1[1];
+    Gshear(1,5)= g1[2];
 
-      Gshear(1,3)= g1[0];
-      Gshear(1,4)= g1[1];
-      Gshear(1,5)= g1[2];
+    Gshear(2,3)= g2[0];
+    Gshear(2,4)= g2[1];
+    Gshear(2,5)= g2[2];
 
-      Gshear(2,3)= g2[0];
-      Gshear(2,4)= g2[1];
-      Gshear(2,5)= g2[2];
-
-      //BshearShell= Bshear * Gshear;
-      BshearShell.addMatrixProduct(0.0, Bshear,Gshear,1.0 );
-
+    //BshearShell= Bshear * Gshear;
+    BshearShell.addMatrixProduct(0.0, Bshear,Gshear,1.0 );
 
     B.Zero( );
 
     //assemble B from sub-matrices
 
     //membrane terms
-    for( p= 0; p < 3; p++ )
+    for(int p= 0; p < 3; p++ )
       {
-        for( q= 0; q < 3; q++ )
+        for(int q= 0; q < 3; q++ )
           B(p,q)= BmembraneShell(p,q);
       } //end for p
 
 
     //bending terms
-    for( p= 3; p < 6; p++ )
+    int pp;
+    for(int p= 3; p < 6; p++ )
       {
         pp= p - 3;
-        for( q= 3; q < 6; q++ )
+        for(int q= 3; q < 6; q++ )
           B(p,q)= BbendShell(pp,q-3);
       } // end for p
 
 
     //shear terms
-    for( p= 0; p < 2; p++ )
+    for(int p= 0; p < 2; p++ )
       {
         pp= p + 6;
-        for( q= 0; q < 6; q++ )
+        for(int q= 0; q < 6; q++ )
           { B(pp,q)= BshearShell(p,q); } // end for q
       } //end for p
 

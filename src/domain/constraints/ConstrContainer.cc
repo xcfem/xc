@@ -778,14 +778,14 @@ std::deque<int> XC::ConstrContainer::getTagsNLs(void) const
   }
 
 //! @brief Returns true if the node is affected by one or more single freedom constraints.
-bool XC::ConstrContainer::nodeAffectedBySPs(int tagNodo) const
+bool XC::ConstrContainer::nodeAffectedBySPs(int nodeTag) const
   {
     bool retval= false;
     ConstrContainer *this_no_const= const_cast<ConstrContainer *>(this);
     SFreedom_ConstraintIter &theSPs= this_no_const->getDomainAndLoadPatternSPs();
     SFreedom_Constraint *theSP;
     while((theSP= theSPs()) != 0)
-      if(theSP->getNodeTag() == tagNodo)
+      if(theSP->getNodeTag() == nodeTag)
         {
           retval= true;
           break;
@@ -794,14 +794,14 @@ bool XC::ConstrContainer::nodeAffectedBySPs(int tagNodo) const
   }
 
 //! @brief Returns true if the node is affected by one or more multi-freedom constraints.
-bool XC::ConstrContainer::nodeAffectedByMPs(int tagNodo) const
+bool XC::ConstrContainer::nodeAffectedByMPs(int nodeTag) const
   {
     bool retval= false;
     ConstrContainer *this_no_const= const_cast<ConstrContainer *>(this);
     MFreedom_ConstraintIter &theMPs= this_no_const->getMPs();
     MFreedom_Constraint *theMP;
     while((theMP= theMPs()) != 0)
-      if(theMP->afectaANodo(tagNodo))
+      if(theMP->affectsNode(nodeTag))
         {
           retval= true;
           break;
@@ -810,14 +810,14 @@ bool XC::ConstrContainer::nodeAffectedByMPs(int tagNodo) const
   }
 
 //! @brief Returns true if the node is affected by one or more multi-row multi-freedom constraints.
-bool XC::ConstrContainer::nodeAffectedByMRMPs(int tagNodo) const
+bool XC::ConstrContainer::nodeAffectedByMRMPs(int nodeTag) const
   {
     bool retval= false;
     ConstrContainer *this_no_const= const_cast<ConstrContainer *>(this);
     MRMFreedom_ConstraintIter &theMRMPs= this_no_const->getMRMPs();
     MRMFreedom_Constraint *theMRMP;
     while((theMRMP= theMRMPs()) != 0)
-      if(theMRMP->afectaANodo(tagNodo))
+      if(theMRMP->affectsNode(nodeTag))
         {
           retval= true;
           break;

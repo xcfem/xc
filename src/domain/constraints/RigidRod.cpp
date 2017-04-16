@@ -62,6 +62,7 @@
 #include <utility/matrix/Matrix.h>
 #include <utility/matrix/ID.h>
 
+//! @brief Object setup.
 void XC::RigidRod::setup(Domain *theDomain)
   {
     RigidBase::setDomain(theDomain);
@@ -73,8 +74,10 @@ void XC::RigidRod::setup(Domain *theDomain)
     int dimC = crdC.Size();
     if(dimR != dimC)
       {
-        std::cerr << "XC::RigidRod::RigidRod - mismatch in dimension " <<
-          "between constrained XC::Node " <<  getNodeConstrained() <<  " and Retained node " << getNodeRetained() << std::endl;
+        std::cerr << nombre_clase() << "::" << __FUNCTION__
+	          << "; mismatch in dimension "
+		  << "between constrained node " <<  getNodeConstrained()
+		  <<  " and Retained node " << getNodeRetained() << std::endl;
         return;
       }
 
@@ -82,16 +85,20 @@ void XC::RigidRod::setup(Domain *theDomain)
     int numDOF = nodeR->getNumberDOF();
     if(numDOF != nodeC->getNumberDOF())
       {
-        std::cerr << "XC::RigidRod::RigidRod - mismatch in numDOF " <<
-          "between constrained XC::Node " <<  getNodeConstrained() <<  " and Retained node " << getNodeRetained() << std::endl;
+        std::cerr << nombre_clase() << "::" << __FUNCTION__
+	          << "; mismatch in numDOF "
+		  << "between constrained node " <<  getNodeConstrained()
+		  <<  " and retained node " << getNodeRetained() << std::endl;
         return;
       }
 
     // check the number of dof at the nodes >= dimension of problem
     if(numDOF < dimR)
       {
-        std::cerr << "XC::RigidRod::RigidRod - numDOF at nodes " << getNodeRetained() << " and " << getNodeConstrained() <<
-          "must be >= dimension of problem\n";
+        std::cerr << nombre_clase() << "::" << __FUNCTION__
+		  << ";  - numDOF at nodes " << getNodeRetained()
+		  << " and " << getNodeConstrained()
+		  << "must be >= dimension of problem\n";
         return;
       }
 
@@ -114,10 +121,12 @@ void XC::RigidRod::setup(Domain *theDomain)
     set_constrained_retained_dofs(id,id);
   }
 
+//! @brief Constructor.
 XC::RigidRod::RigidRod(int mPtag)
   : RigidBase(mPtag) {}
 
 
+//! @brief Constructor.
 XC::RigidRod::RigidRod(int mPtag,const int &nm, const int &ns)
   : RigidBase(mPtag,nm,ns,0) {}
 

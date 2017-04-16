@@ -68,48 +68,24 @@
  
                                 // main degree of freedom for rotation
 
-// constructor for FEM_ObjectBroker
+//! @brief Constructor.
 XC::MFreedom_Joint2D::MFreedom_Joint2D(void)
- : MFreedom_Constraint(0, CNSTRNT_TAG_MFreedom_Joint2D ),
-   MainDOF(0), AuxDOF(0), FixedEnd(0),
-   RetainedNode(nullptr), ConstrainedNode(nullptr),
-   LargeDisplacement(0), Length0(0.0)
+ : MFreedom_Joint(0, CNSTRNT_TAG_MFreedom_Joint2D),
+   MainDOF(0), AuxDOF(0), FixedEnd(0)
   {}
 
 
-// general constructor for XC::ModelBuilder
+//! @brief Constructor.
+//! @param theDomain: domain where the constraint is defined.
+//! @param tag: tag for the multi-freedom constraint.
+//! @param nodeRetain: identifier of the retained node.
+//! @param nodeConstr: identifier of the constrained node.
+//! @param LrgDsp: true if large displacement (geometric non-linearity) must be expected: 0 for constant constraint matrix(small deformations), 1 for time varying constraint matrix(large deformations), 2 for large deformations with length correction.
 XC::MFreedom_Joint2D::MFreedom_Joint2D(Domain *domain, int tag, int nodeRetain, int nodeConstr,int Maindof, int fixedend, int LrgDsp )
-  : MFreedom_Constraint(tag,nodeRetain,nodeConstr,CNSTRNT_TAG_MFreedom_Joint2D ),
-    MainDOF(Maindof), AuxDOF(0), FixedEnd(fixedend),
-    RetainedNode(nullptr), ConstrainedNode(nullptr),
-    LargeDisplacement( LrgDsp ), Length0(0.0)
+  : MFreedom_Joint(domain,tag,CNSTRNT_TAG_MFreedom_Joint2D,nodeRetain,nodeConstr,LrgDsp),
+    MainDOF(Maindof), AuxDOF(0), FixedEnd(fixedend)
   {
     setDomain(domain);
-    if(getDomain() == nullptr)
-      {
-        std::cerr << "WARNING MFreedom_Joint2D(): Specified domain does not exist";
-        std::cerr << "Domain = 0\n";
-        return;
-      }
-
-    this->setTag(tag);
-
-    // get node pointers of constrainted and retained nodes
-    ConstrainedNode = getDomain()->getNode(getNodeConstrained());
-    if(ConstrainedNode == nullptr)
-      {
-        std::cerr << "MFreedom_Joint2D::MFreedom_Joint2D: constrained node: ";
-        std::cerr << getNodeConstrained() << "does not exist in model\n";
-        exit(0);
-      }
-
-    RetainedNode = getDomain()->getNode(getNodeRetained());
-    if(RetainedNode == nullptr)
-      {
-        std::cerr << "XC::MFreedom_Joint2D::MFreedom_Joint2D: retained node: ";
-        std::cerr << getNodeRetained() << "does not exist in model\n";
-        exit(0);
-      }
 
     // check for proper degrees of freedom
     int RnumDOF = RetainedNode->getNumberDOF();
@@ -206,17 +182,10 @@ XC::MFreedom_Joint2D::MFreedom_Joint2D(Domain *domain, int tag, int nodeRetain, 
  
     if(constraintMatrix.Nula())
        {
-         std::cerr << "XC::MFreedom_Joint2D::MFreedom_Joint2D - ran out of memory \ncan not generate the constraint matrix";
+         std::cerr << nombre_clase() << "::" << __FUNCTION__
+	           << "; ran out of memory \ncan not generate the constraint matrix";
          exit(-1);
        }
-  }
-
-XC::MFreedom_Joint2D::~MFreedom_Joint2D(void)
-  {
-    if(RetainedNode)
-      RetainedNode->disconnect(this);
-    if(ConstrainedNode)
-      ConstrainedNode->disconnect(this);
   }
 
 
@@ -260,16 +229,7 @@ int XC::MFreedom_Joint2D::applyConstraint(double timeStamp)
     return 0;
    }
 
-
-bool XC::MFreedom_Joint2D::isTimeVarying(void) const
-  {
-     if(LargeDisplacement != 0 )
-       return true;
-     else
-       return false;
-  }
-
-
+//! @brief Sends the object through the channel being passed as parameter.
 int XC::MFreedom_Joint2D::sendSelf(CommParameters &cp)
   {
     static ID data(18);
@@ -283,18 +243,21 @@ int XC::MFreedom_Joint2D::sendSelf(CommParameters &cp)
     const int dataTag= getDbTag();
     result = cp.sendIdData(getDbTagData(),dataTag);
     if(result<0)
-      std::cerr << "WARNING MFreedom_Joint2D::sendSelf - error sending XC::ID data\n";
+      std::cerr << nombre_clase() << "::" << __FUNCTION__
+	        << "; error sending ID data\n";
     return result;  
   }
 
 
+//! @brief Receives the object through the channel being passed as parameter.
 int XC::MFreedom_Joint2D::recvSelf(const CommParameters &cp)
   {
     static ID data(18);
     const int dataTag= getDbTag();
     int result = cp.receiveIdData(getDbTagData(),dataTag);
     if(result < 0)
-      std::cerr << "WARNING XC::MFreedom_Joint2D::recvSelf - error receiving XC::ID data\n";
+      std::cerr << nombre_clase() << "::" << __FUNCTION__
+	        << "; error receiving ID data\n";
     else
       {
         result+= recvData(cp);
@@ -312,7 +275,8 @@ const XC::Matrix &XC::MFreedom_Joint2D::getConstraint(void) const
   {
     if(constraintMatrix.Nula())
       {
-        std::cerr << "MFreedom_Joint2D::getConstraint - no XC::Matrix was set\n";
+        std::cerr << nombre_clase() << "::" << __FUNCTION__
+                  << "; no matrix was set\n";
         exit(-1);
       }    
 
@@ -321,12 +285,12 @@ const XC::Matrix &XC::MFreedom_Joint2D::getConstraint(void) const
     if(LargeDisplacement == 2 )
       {
         // get the coordinates of the two nodes - check dimensions are the same FOR THE MOMENT
-        const XC::Vector &crdR = RetainedNode->getCrds();
-        const XC::Vector &crdC = ConstrainedNode->getCrds();
+        const Vector &crdR = RetainedNode->getCrds();
+        const Vector &crdC = ConstrainedNode->getCrds();
 
         // get commited displacements of nodes to get updated coordinates
-        const XC::Vector &dispR = RetainedNode->getTrialDisp();
-        const XC::Vector &dispC = ConstrainedNode->getTrialDisp();
+        const Vector &dispR = RetainedNode->getTrialDisp();
+        const Vector &dispC = ConstrainedNode->getTrialDisp();
 
         double deltaX = dispC(0) + crdC(0) - dispR(0) - crdR(0);
         double deltaY = dispC(1) + crdC(1) - dispR(1) - crdR(1);
@@ -363,15 +327,5 @@ void XC::MFreedom_Joint2D::Print(std::ostream &s, int flag )
   }
 
 
-void XC::MFreedom_Joint2D::setDomain(Domain *domain)
-  {
-    MFreedom_Constraint::setDomain(domain);
-    RetainedNode= getDomain()->getNode(getNodeRetained());
-    if(RetainedNode)
-      RetainedNode->connect(this);
-    ConstrainedNode= getDomain()->getNode(getNodeConstrained());
-    if(ConstrainedNode)
-      ConstrainedNode->connect(this);
-  }
 
 

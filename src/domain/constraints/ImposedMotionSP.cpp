@@ -79,6 +79,7 @@ XC::ImposedMotionSP::~ImposedMotionSP(void)
   }
 
 
+//! @brief Applies the constraint.
 int XC::ImposedMotionSP::applyConstraint(double time)
   {
     // on first 
@@ -120,7 +121,7 @@ int XC::ImposedMotionSP::applyConstraint(double time)
     return 0;
   }
 
-
+//! @brief Printing.
 void XC::ImposedMotionSP::Print(std::ostream &s, int flag) 
   {
     s << "ImposedMotionSP: " << this->getTag();

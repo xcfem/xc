@@ -31,11 +31,13 @@
 #include "domain/mesh/node/Node.h"
 #include "domain/domain/Domain.h"
 
+//! @brief Sets the domain for the constraint.
 void XC::RigidBase::setDomain(Domain *theDomain)
   {
     if(theDomain == nullptr)
       {
-        std::cerr << "WARNING RigidBase::SetDomain: Specified domain does not exist";
+        std::cerr << nombre_clase() << "::" << __FUNCTION__
+	          << "; specified domain does not exist";
         std::cerr << "Domain = 0\n";
         return;
       }
@@ -47,26 +49,36 @@ void XC::RigidBase::setDomain(Domain *theDomain)
         nodeR = theDomain->getNode(getNodeRetained());
         if(!nodeR)
           {
-            std::cerr << "XC::RigidBase::setup - retained node " <<  getNodeRetained() <<  " not in domain\n";
+            std::cerr << nombre_clase() << "::" << __FUNCTION__
+		      << "; retained node " <<  getNodeRetained()
+		      <<  " not in domain\n";
           }
         else
           nodeR->connect(this);
         nodeC = theDomain->getNode(getNodeConstrained());
         if(!nodeC)
           {
-            std::cerr << "XC::RigidBase::setup - constrained node " <<  getNodeConstrained() <<  " not in domain\n";
+            std::cerr << nombre_clase() << "::" << __FUNCTION__
+		      << "; constrained node " <<  getNodeConstrained()
+		      <<  " not in domain\n";
           }
         else
           nodeC->connect(this);
       }
   }
 
-XC::RigidBase::RigidBase(int mPtag)
-  : MFreedom_Constraint(mPtag), nodeR(nullptr), nodeC(nullptr) {}
+//! @brief Constructor.
+//! @param tag: tag for the constraint.
+XC::RigidBase::RigidBase(int tag)
+  : MFreedom_Constraint(tag), nodeR(nullptr), nodeC(nullptr) {}
 
-XC::RigidBase::RigidBase(int mPtag,const int &masterNode, const int &slaveNode, int classTag)
-  : MFreedom_Constraint(mPtag,masterNode,slaveNode,classTag), nodeR(nullptr), nodeC(nullptr) {}
+//! @brief Constructor.
+//! @param tag: tag for the constraint.
+//! @param classTag: tag of the object class.
+XC::RigidBase::RigidBase(int tag,const int &masterNode, const int &slaveNode, int classTag)
+  : MFreedom_Constraint(tag,masterNode,slaveNode,classTag), nodeR(nullptr), nodeC(nullptr) {}
 
+//! @brief Destructor.
 XC::RigidBase::~RigidBase(void)
   {
     if(nodeR)

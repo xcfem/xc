@@ -187,7 +187,7 @@ int XC::NodeDispVectors::incrTrialDisp(const size_t &nDOF,const Vector &incrDisp
           }
         for(size_t i=0;i<nDOF;i++)
           {
-            double incrDispI = incrDispl(i);
+            const double incrDispI = incrDispl(i);
             values[i]= incrDispI;
             values[i+2*nDOF]= incrDispI;
             values[i+3*nDOF]= incrDispI;

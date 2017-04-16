@@ -48,29 +48,46 @@
 #include "med.h"
 #include "vtkCellType.h"
 
+//! @brief Set the constraint matrix.
 void XC::MFreedom_ConstraintBase::set_constraint(const Matrix &c)
   { constraintMatrix= c; }
 
+//! @brief Set the constrained degrees of freedom.
+//! @param constrainedDOF: constrained degrees of freedom.
 void XC::MFreedom_ConstraintBase::set_constrained_dofs(const ID &constrainedDOF)
   { constrDOF= constrainedDOF; }
 
-// constructor for FEM_ObjectBroker
-XC::MFreedom_ConstraintBase::MFreedom_ConstraintBase(int tag,int clasTag)		
-  :Constraint(tag,0,clasTag) {}
+//! @brief Constructor.
+//! @param tag: tag for the constraint.
+//! @param classTag: tag of the object class.
+XC::MFreedom_ConstraintBase::MFreedom_ConstraintBase(int tag,int classTag)		
+  :Constraint(tag,0,classTag) {}
 
-// constructor for Subclass
-XC::MFreedom_ConstraintBase::MFreedom_ConstraintBase(int tag, int nodeConstr, int clasTag)
-  :Constraint(tag, nodeConstr, clasTag) {}
+//! @brief Constructor to be called from subclasses.
+//! @param tag: tag for the constraint.
+//! @param nodeConstr: identifier of the constrained node.
+//! @param classTag: tag of the object class.
+XC::MFreedom_ConstraintBase::MFreedom_ConstraintBase(int tag, int nodeConstr, int classTag)
+  :Constraint(tag, nodeConstr, classTag) {}
 
-// constructor for Subclass
-XC::MFreedom_ConstraintBase::MFreedom_ConstraintBase(int tag, int nodeConstr,const ID &constrainedDOF, int clasTag)
-  :Constraint(tag, nodeConstr, clasTag)
+//! @brief Constructor to be called from subclasses.
+//! @param tag: tag for the constraint.
+//! @param nodeConstr: identifier of the constrained node.
+//! @param constrainedDOF: constrained degrees of freedom.
+//! @param classTag: tag of the object class.
+XC::MFreedom_ConstraintBase::MFreedom_ConstraintBase(int tag, int nodeConstr,const ID &constrainedDOF, int classTag)
+  :Constraint(tag, nodeConstr, classTag)
   {
     set_constrained_dofs(constrainedDOF);    
   }
 
 
-// general constructor for XC::ModelBuilder
+//! @brief Constructor.
+//! @param tag: tag for the constraint.
+//! @param nodeConstr: identifier of the constrained node.
+//! @param constr: constraint matrix.
+//! @param constrainedDOF: constrained degrees of freedom.
+//! @param classTag: tag of the object class.
 XC::MFreedom_ConstraintBase::MFreedom_ConstraintBase(int tag, int nodeConstr, const Matrix &constr,const ID &constrainedDOF,int classTag)
   :Constraint(tag, nodeConstr, classTag)
   {
@@ -78,12 +95,14 @@ XC::MFreedom_ConstraintBase::MFreedom_ConstraintBase(int tag, int nodeConstr, co
     set_constraint(constr);
   }
 
-//! @brief Returns true ifafecta to the node cuyo tag being passed as parameter.
-bool XC::MFreedom_ConstraintBase::afectaANodo(int tagNodo) const
+//! @brief Returns true if the constraints affects the
+//! node identified by the tag being passed as parameter.
+bool XC::MFreedom_ConstraintBase::affectsNode(int nodeTag) const
   {
-    return (tagNodo== getNodeConstrained());
+    return (nodeTag== getNodeConstrained());
   }
 
+//! @brief Returns the identifiers of the constrained degrees of fredom.
 const XC::ID &XC::MFreedom_ConstraintBase::getConstrainedDOFs(void) const
   {
     // return the ID corresponding to constrained DOF of Ccr
@@ -91,6 +110,7 @@ const XC::ID &XC::MFreedom_ConstraintBase::getConstrainedDOFs(void) const
   }
 
 
+//! @brief Returns true if the constraint varies with time.
 bool XC::MFreedom_ConstraintBase::isTimeVarying(void) const
   { return false; }
 
@@ -103,6 +123,7 @@ int XC::MFreedom_ConstraintBase::addResistingForceToNodalReaction(bool inclInert
     return 0;
   }
 
+//! @brief Returns the constraint matrix.
 const XC::Matrix &XC::MFreedom_ConstraintBase::getConstraint(void) const
   { return constraintMatrix; }
 
@@ -124,6 +145,7 @@ int XC::MFreedom_ConstraintBase::recvData(const CommParameters &cp)
     return res;
   }
 
+//! @brief Printing.
 void XC::MFreedom_ConstraintBase::Print(std::ostream &s, int flag)
   {     
     s << "MFreedom_ConstraintBase: " << this->getTag() << "\n";

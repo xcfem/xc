@@ -64,27 +64,32 @@
 #include <utility/matrix/Matrix.h>
 #include <utility/matrix/ID.h>
 
+//! @brief Computes the constraint matrix.
 XC::Matrix XC::RigidBeam::setup_matrix(int numDOF,const Vector &crdR,const Vector &crdC,ID &id)
   {
     const int dimR = crdR.Size();
     const int dimC = crdC.Size();
 
-    // construct the tranformation matrix Ccr, where  Uc = Ccr Ur & set the diag, Ccr = I
+    // construct the transformation matrix Ccr, where  {Uc} = [Ccr] {Ur} & set the diag, Ccr = I
     Matrix retval(numDOF,numDOF);
     retval.Zero();
 
     if(dimR != dimC)
       {
-        std::cerr << "RigidBeam::setup_matrix - mismatch in dimension "  <<
-	  "between constrained Node " <<  getNodeConstrained() <<  " and Retained node" << getNodeRetained() << std::endl;
+        std::cerr << nombre_clase() << "::" << __FUNCTION__
+	          << "; mismatch in dimension "
+		  << "between constrained node " <<  getNodeConstrained()
+		  <<  " and retained node" << getNodeRetained() << std::endl;
         return retval;
       }
 
     // check the number of dof at the nodes >= dimension of problem
     if(numDOF < dimR)
       {    
-	std::cerr << "RigidBeam::RigidBeam - numDOF at nodes " << 
-	  getNodeRetained() << " and " <<  getNodeConstrained() <<  "must be >= dimension of problem\n";
+	std::cerr << nombre_clase() << "::" << __FUNCTION__
+		  << "; numDOF at nodes " << getNodeRetained()
+		  << " and " <<  getNodeConstrained()
+		  <<  "must be >= dimension of problem\n";
         return retval;
       }
 
@@ -125,21 +130,26 @@ XC::Matrix XC::RigidBeam::setup_matrix(int numDOF,const Vector &crdR,const Vecto
           }
         else
           { // not valid
-            std::cerr << "RigidBeam::RigidBeam -  for nodes " <<
-	      getNodeRetained() << "and " << getNodeConstrained() <<  "nodes do not have valid numDOF for their dimension\n";
+            std::cerr << nombre_clase() << "::" << __FUNCTION__
+		      << "; for nodes " << getNodeRetained()
+		      << "and " << getNodeConstrained()
+		      <<  "nodes do not have valid numDOF for their dimension\n";
             return retval;
           }
       }
     // check the number of dof at the nodes >= dimension of problem
     if(numDOF < dimR)
       {
-        std::cerr << "XC::RigidBeam::RigidBeam - numDOF at nodes " <<
-	  getNodeRetained() << " and " <<  getNodeConstrained() <<  "must be >= dimension of problem\n";
+        std::cerr << nombre_clase() << "::" << __FUNCTION__
+		  << "; numDOF at nodes " << getNodeRetained()
+		  << " and " <<  getNodeConstrained()
+		  <<  "must be >= dimension of problem\n";
         return retval;
       }
     return retval;
   }
 
+//! @brief Object setup.
 void XC::RigidBeam::setup(Domain *theDomain)
   {
     setDomain(theDomain);
@@ -157,7 +167,7 @@ void XC::RigidBeam::setup(Domain *theDomain)
           }
         else
           {
-            // create the XC::ID to identify the constrained dof
+            // create the ID to identify the constrained dof
             ID id(numDOF);
 
             // get the coordinates of the two nodes - check dimensions are the same FOR THE MOMENT
@@ -171,9 +181,11 @@ void XC::RigidBeam::setup(Domain *theDomain)
       }
   }
 
+//! @brief Constructor.
 XC::RigidBeam::RigidBeam(int mPtag)
   : RigidBase(mPtag) {}
 
+//! @brief Constructor.
 XC::RigidBeam::RigidBeam(int mPtag,const int &nm, const int &ns)
   : RigidBase(mPtag,nm,ns,0) {}
 

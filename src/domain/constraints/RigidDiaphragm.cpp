@@ -54,7 +54,7 @@
 // Written: fmk 1/99
 // Revised:
 //
-// Purpose: This file contains the class implementation for XC::RigidDiaphragm.
+// Purpose: This file contains the class implementation for RigidDiaphragm.
 
 
 #include "RigidDiaphragm.h"
@@ -66,6 +66,12 @@
 #include <utility/matrix/ID.h>
 
 
+//! @brief Constructor.
+//! @param theDomain: domain where the constraint is defined.
+//! @param nR: identifier of the retained node.
+//! @param nC: identifiers of the constrained nodes.
+//! @param perpPlaneConstrained: direction of perpendicular to constained plane: 0, 1 or 3.
+//! @param startMPtag: tag for the first multi-freedom constraint (one constraint for each node).
 XC::RigidDiaphragm::RigidDiaphragm(Domain &theDomain, int nR, ID &nC, int perpPlaneConstrained, int startMPtag)
   : MFreedom_Constraint(startMPtag)
   {
@@ -74,12 +80,13 @@ XC::RigidDiaphragm::RigidDiaphragm(Domain &theDomain, int nR, ID &nC, int perpPl
     // check plane is valid, i.e. perpPlaneConstrained must be 0, 1 or 2
     if(perpPlaneConstrained < 0 || perpPlaneConstrained > 2)
       {
-        std::cerr << "XC::RigidDiaphragm::RigidDiaphragm - " <<
-          "the dirn of perpendicular to constrained plane" << perpPlaneConstrained <<  "not valid\n";
+        std::cerr << nombre_clase() << "::" << __FUNCTION__
+	          << "; the directionn of perpendicular to constrained plane"
+		  << perpPlaneConstrained <<  " not valid\n";
         return;
       }
 
-    // check constrainedNodes XC::ID does not contain the retained node
+    // check constrainedNodes ID does not contain the retained node
     if(nC.getLocation(nR) >= 0)
       {
         std::cerr << "XC::RigidDiaphragm::RigidDiaphragm - " <<
@@ -91,8 +98,8 @@ XC::RigidDiaphragm::RigidDiaphragm(Domain &theDomain, int nR, ID &nC, int perpPl
     Node *nodeR = theDomain.getNode(nR);
     if(!nodeR)
       {
-        std::cerr << "RigidDiaphragm::RigidDiaphragm - " <<
-          "retained Node" <<  nR <<  "not in domain\n";
+        std::cerr << nombre_clase() << "::" << __FUNCTION__
+		  << "; retained Node" <<  nR <<  "not in domain\n";
         return;
       }
     else
@@ -101,8 +108,9 @@ XC::RigidDiaphragm::RigidDiaphragm(Domain &theDomain, int nR, ID &nC, int perpPl
     const Vector &crdR = nodeR->getCrds();
     if((nodeR->getNumberDOF() != 6) || (crdR.Size() != 3))
       {
-        std::cerr << "XC::RigidDiaphragm::RigidDiaphragm - " <<
-          "retained XC::Node" << nR << "not in 3d space with 6 dof\n";
+        std::cerr << nombre_clase() << "::" << __FUNCTION__
+		  << "; retained XC::Node" << nR
+		  << "not in 3D space with 6 dof\n";
         return;
       }
 
@@ -160,13 +168,14 @@ XC::RigidDiaphragm::RigidDiaphragm(Domain &theDomain, int nR, ID &nC, int perpPl
                       mat(1,2) = deltaX;
                     }
                   else
-                      std::cerr << "XC::RigidDiaphragm::RigidDiaphragm - ignoring constrained XC::Node " << ndC << ", not in xy plane\n";
-                      // rigid diaphragm in xz plane
+		    std::cerr << nombre_clase() << "::" << __FUNCTION__
+		              << "; ignoring constrained node " << ndC << ", not in xy plane\n";
+                      
                 }
               else
-                if(perpPlaneConstrained == 1)
+                if(perpPlaneConstrained == 1) // rigid diaphragm in xz plane
                   {
-                    // check constrained node in xy plane with retained node
+                    // check constrained node in xz plane with retained node
                     if(deltaY == 0.0)
                       {
                         // dof corresponding to dX, dZ and theta Y (0,2,4)
@@ -176,12 +185,14 @@ XC::RigidDiaphragm::RigidDiaphragm(Domain &theDomain, int nR, ID &nC, int perpPl
                         mat(1,2) = -deltaX;
                       }
                     else
-                      std::cerr << "XC::RigidDiaphragm::RigidDiaphragm - ignoring constrained XC::Node " << ndC << ", not in xz plane\n";
-                     // rigid diaphragm in yz plane
+                      std::cerr << nombre_clase() << "::" << __FUNCTION__
+			        << "; ignoring constrained node "
+				<< ndC << ", not in xz plane\n";
+                                
                   }
-                else
+                else // rigid diaphragm in yz plane
                   {
-                    // check constrained node in xy plane with retained node
+                    // check constrained node in yz plane with retained node
                     if(deltaX == 0.0)
                       {
                         // dof corresponding to dY, dZ and theta X (1,2,3)
@@ -191,42 +202,47 @@ XC::RigidDiaphragm::RigidDiaphragm(Domain &theDomain, int nR, ID &nC, int perpPl
                         mat(1,2) = deltaY;
                       }
                     else
-		      std::cerr << "XC::RigidDiaphragm::RigidDiaphragm - ignoring constrained XC::Node " 
-                                << ndC << ", not in xz plane\n";
+		      std::cerr << nombre_clase() << "::" << __FUNCTION__
+				<< "; ignoring constrained node " 
+                                << ndC << ", not in yz plane\n";
                   }
-              // create the XC::MFreedom_Constraint
-              MFreedom_Constraint *newC = new XC::MFreedom_Constraint(startMPtag+i, nR, ndC,mat, id, id);
+              // create the MFreedom_Constraint
+              MFreedom_Constraint *newC = new MFreedom_Constraint(startMPtag+i, nR, ndC,mat, id, id);
               if(newC == 0)
                 {
-                  std::cerr << "XC::RigidDiaphragm::RigidDiaphragm - ignoring constrained XC::Node " << ndC <<
-                   ", out of memory\n";
+                  std::cerr << nombre_clase() << "::" << __FUNCTION__
+			    << "; ignoring constrained node "
+			    << ndC << ", out of memory\n";
                 }
               else
                 {
                   // add the constraint to the domain
                  if(theDomain.addMFreedom_Constraint(newC) == false)
                    {
-                     std::cerr << "XC::RigidDiaphragm::RigidDiaphragm - ignoring constrained XC::Node " << ndC <<
-                     ", failed to add\n";
+                     std::cerr << nombre_clase() << "::" << __FUNCTION__
+			       << ";  ignoring constrained node "
+			       << ndC << ", failed to add\n";
                      delete newC;
                    }
                 }
 
         }
       else  // node not in 3d space
-        std::cerr << "XC::RigidDiaphragm::RigidDiaphragm - ignoring constrained XC::Node " << ndC <<
-          ", not 3d node\n";
+        std::cerr << nombre_clase() << "::" << __FUNCTION__
+	          << "; ignoring constrained node "
+		  << ndC << ", not 3d node\n";
       }
     else // node does not exist
-      std::cerr << "XC::RigidDiaphragm::RigidDiaphragm - ignoring constrained XC::Node " << ndC <<
-        " as no node in domain\n";
+      std::cerr << nombre_clase() << "::" << __FUNCTION__
+		<< "; ignoring constrained node "
+		<< ndC << " as no node in domain\n";
     } // for each node in constrained nodes
   }
 
 //! @brief Destructor.
 XC::RigidDiaphragm::~RigidDiaphragm(void)
   {
-    //XXX Put here calls to disconnec.
+    //XXX Put here calls to disconnect.
   }
 
 

@@ -61,7 +61,7 @@
 // point constraint.
 //
 
-#include <domain/constraints/MFreedom_Constraint.h>
+#include "MFreedom_Joint.h"
 #include "utility/matrix/Vector.h"
 
 
@@ -73,7 +73,7 @@ class Node;
 //! @ingroup CContMP
 //
 //! @brief ??.
-class MFreedom_Joint3D: public MFreedom_Constraint
+class MFreedom_Joint3D: public MFreedom_Joint
   {
   private:
     int nodeRotation; //!< tag for the node to define the rotation vector
@@ -82,12 +82,6 @@ class MFreedom_Joint3D: public MFreedom_Constraint
     int nodeDisplacement; //!< tag for the node to define the rotation vector
     // for shear displacement
     int DispDOF; //!< tag for the shear mode that results in displacement
-    int LargeDisplacement; //!< flag for large displacements
-    // 0 for constant constraint matrix(small deformations)
-    // 1 for time varying constraint matrix(large deformations)
-    // 2 for large deformations with length correction
-    Node *RetainedNode;	//!< to identify the retained node
-    Node *ConstrainedNode; //!< to identify  the constrained node
     Node *RotationNode;
     Node *DisplacementNode;
     
@@ -96,10 +90,9 @@ class MFreedom_Joint3D: public MFreedom_Constraint
     
     int dbTag3;	//!< need a dbTag for the two ID's
     
-    double Length0;
   public:
     // constructors        
-    MFreedom_Joint3D();
+    MFreedom_Joint3D(void);
 
     MFreedom_Joint3D(Domain *theDomain, int tag, int nodeRetain, int nodeConstr,
 		int nodeRot, int Rotdof, int nodeDisp, int Dispdof, int LrgDsp = 0 );
@@ -107,7 +100,6 @@ class MFreedom_Joint3D: public MFreedom_Constraint
 
     // method to get information about the constraint
     int applyConstraint(double pseudoTime);
-    bool isTimeVarying(void) const;
     const Matrix &getConstraint(void);    
     void setDomain(Domain *theDomain);
 

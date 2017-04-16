@@ -71,7 +71,7 @@ void XC::NodePtrsWithIDs::set_id_nodes(const std::vector<int> &inodos)
 	        << "; " 
                 << numNodes << " node indexes were expected." << std::endl;
     for(register size_t i= 0;i<numNodes;i++)
-      connectedExternalNodes(i) = inodos[i];
+      connectedExternalNodes(i)= inodos[i];
   }
 
 //! @brief Sets the node identifiers (tags).

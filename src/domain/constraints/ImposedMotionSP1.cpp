@@ -72,10 +72,13 @@ XC::ImposedMotionSP1::ImposedMotionSP1(void)
 XC::ImposedMotionSP1::ImposedMotionSP1(int tag, int node, int ndof, int pattern, int motion)
  :ImposedMotionBase(CNSTRNT_TAG_ImposedMotionSP1,tag, node, ndof,pattern,motion) {}
 
-
+//! @brief Returns true if it's an homogeneous constraint
+//! (prescribed value for the DOF is zero).
 bool XC::ImposedMotionSP1::isHomogeneous(void) const
   { return false; }
 
+//! @brief Applies constraint at the pseudo-time being passed
+//! as parameter.
 int XC::ImposedMotionSP1::applyConstraint(double time)
   {
     // on first 
@@ -133,6 +136,7 @@ int XC::ImposedMotionSP1::recvSelf(const CommParameters &cp)
     return res;
   }
 
+//! @brief Printing.
 void XC::ImposedMotionSP1::Print(std::ostream &s, int flag) 
   {
     s << "ImposedMotionSP1: " << this->getTag();

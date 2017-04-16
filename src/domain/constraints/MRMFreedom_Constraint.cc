@@ -51,26 +51,43 @@
 #include "xc_utils/src/geom/pos_vec/Pos3d.h"
 
 
-// constructor for FEM_ObjectBroker			// Arash
+//! @brief Constructor.	// Arash
+//! @param tag: tag for the constraint.
+//! @param classTag: tag of the object class.
 XC::MRMFreedom_Constraint::MRMFreedom_Constraint(int tag,int clasTag)		
  : MFreedom_ConstraintBase(tag,0,clasTag) {}
 
-// constructor for FEM_ObjectBroker			// LCPT
+//! @brief Constructor. // LCPT
+//! @param tag: tag for the constraint.
 XC::MRMFreedom_Constraint::MRMFreedom_Constraint(int tag)		
  : MFreedom_ConstraintBase(tag, 0,CNSTRNT_TAG_MRMFreedom_Constraint) {}
 
-// constructor for Subclass
+//! @brief Constructor to be called from subclasses.
+//! @param tag: tag for the constraint.
+//! @param retainedNodes: tags of the retained nodes.
+//! @param nodeConstr: identifier of the constrained node.
+//! @param constrainedDOF: identifiers of the constrained degrees of freedom.
 XC::MRMFreedom_Constraint::MRMFreedom_Constraint(int tag, const ID &retainedNodes, int nodeConstr,const ID &constrainedDOF)
   : MFreedom_ConstraintBase(tag, nodeConstr, constrainedDOF, CNSTRNT_TAG_MRMFreedom_Constraint), 
     retainedNodeTags(retainedNodes) {}
 
-// constructor for Subclass
-XC::MRMFreedom_Constraint::MRMFreedom_Constraint(int tag, const ID &retainedNodes, int nodeConstr,const ID &constrainedDOF, int clasTag)
-  : MFreedom_ConstraintBase(tag, nodeConstr, constrainedDOF, clasTag),
+//! @brief Constructor to be called from subclasses.
+//! @param tag: tag for the constraint.
+//! @param retainedNodes: tags of the retained nodes.
+//! @param nodeConstr: identifier of the constrained node.
+//! @param constrainedDOF: identifiers of the constrained degrees of freedom.
+//! @param classTag: tag of the object class.
+XC::MRMFreedom_Constraint::MRMFreedom_Constraint(int tag, const ID &retainedNodes, int nodeConstr,const ID &constrainedDOF, int classTag)
+  : MFreedom_ConstraintBase(tag, nodeConstr, constrainedDOF, classTag),
    retainedNodeTags(retainedNodes) { }
 
 
-// general constructor for XC::ModelBuilder
+//! Constructor.
+//! @param tag: tag for the constraint.
+//! @param retainedNodes: tags of the retained nodes.
+//! @param nodeConstr: identifier of the constrained node.
+//! @param constr: constraint matrix.
+//! @param constrainedDOF: identifiers of the constrained degrees of freedom.
 XC::MRMFreedom_Constraint::MRMFreedom_Constraint(int tag, const ID &retainedNodes, int nodeConstr, const Matrix &constr,const ID &constrainedDOF)
   : MFreedom_ConstraintBase(tag, nodeConstr, constr, constrainedDOF, CNSTRNT_TAG_MRMFreedom_Constraint), retainedNodeTags(retainedNodes) {}
 
@@ -78,12 +95,12 @@ XC::MRMFreedom_Constraint::MRMFreedom_Constraint(int tag,const Element &elem, co
   : MFreedom_ConstraintBase(tag, node.getTag(), constrainedDOF, CNSTRNT_TAG_MRMFreedom_Constraint)
   {
     retainedNodeTags= elem.getNodePtrs().getExternalNodes();
-    const size_t numNodos= retainedNodeTags.Size();
+    const size_t numNodes= retainedNodeTags.Size();
     const size_t numGdls= constrainedDOF.Size();
-    constraintMatrix= Matrix(numGdls,numNodos*numGdls);
+    constraintMatrix= Matrix(numGdls,numNodes*numGdls);
     Pos3d pos= node.getPosInicial3d(); //XXX Time dependence?
     const Vector interpolationFactors= elem.getInterpolationFactors(pos);
-    for(size_t j= 0;j<numNodos;j++)
+    for(size_t j= 0;j<numNodes;j++)
       {
         const int offset= j*numGdls;
         for(size_t i= 0;i<numGdls;i++)
@@ -91,10 +108,11 @@ XC::MRMFreedom_Constraint::MRMFreedom_Constraint(int tag,const Element &elem, co
       }
   }
 
+//! @brief Returns the number of DOF groups.
 int XC::MRMFreedom_Constraint::getNumDofGroups(void) const
   { return retainedNodeTags.Size()+1; }//retained(n)+constrained(1)
 
-//! @brief Number of affected DOFs.
+//! @brief Number of the degrees of freedom affected by the constraint.
 int XC::MRMFreedom_Constraint::getNumDofs(void) const
   { return getNumDofGroups()*getConstrainedDOFs().Size();  }
 
@@ -113,18 +131,19 @@ int XC::MRMFreedom_Constraint::getNumConstrainedDofs(void) const
   { return getConstrainedDOFs().Size();  }
 
 
-//! @brief Returns true ifafecta to the node cuyo tag being passed as parameter.
-bool XC::MRMFreedom_Constraint::afectaANodo(int tagNodo) const
+//! @brief Returns true if the constraint affect the node
+//! identified by the tag being passed as parameter.
+bool XC::MRMFreedom_Constraint::affectsNode(int nodeTag) const
   {
     bool retval= false;
-    if (tagNodo== getNodeConstrained())
+    if (nodeTag== getNodeConstrained())
       retval= true;
     else
       {
         const ID &rNodes= getRetainedNodeTags();
         const size_t sz= rNodes.Size();
         for(size_t i= 0;i<sz;i++)
-          if(tagNodo==rNodes(i))
+          if(nodeTag==rNodes(i))
             {
  	      retval= true;
               break;
@@ -133,6 +152,7 @@ bool XC::MRMFreedom_Constraint::afectaANodo(int tagNodo) const
     return retval;
   }
 
+//! @brief Applies the constraint.
 int XC::MRMFreedom_Constraint::applyConstraint(double timeStamp)
   {
     // does nothing MRMFreedom_Constraint objects are time invariant
@@ -207,7 +227,8 @@ int XC::MRMFreedom_Constraint::sendSelf(CommParameters &cp)
     const int dataTag= getDbTag();
     result = cp.sendIdData(getDbTagData(),dataTag);
     if(result < 0)
-      std::cerr << "WARNING MRMFreedom_Constraint::sendSelf - error sending ID data\n";
+      std::cerr << nombre_clase() << "::" << __FUNCTION__
+	        << "; error sending ID data\n";
     return result;
   }
 
@@ -219,13 +240,14 @@ int XC::MRMFreedom_Constraint::recvSelf(const CommParameters &cp)
     const int dataTag= getDbTag();
     int res= cp.receiveIdData(getDbTagData(),dataTag);
     if(res<0)
-      std::cerr << "MRMFreedom_Constraint::recvSelf() - data could not be received\n" ;
+      std::cerr << nombre_clase() << "::" << __FUNCTION__
+	        << "; error receiving ID data\n";
     else
       res+= recvData(cp);
     return res;
   }
 
-
+//! @brief Printing.
 void XC::MRMFreedom_Constraint::Print(std::ostream &s, int flag)
   {     
     s << "MRMFreedom_Constraint: " << this->getTag() << "\n";
@@ -239,11 +261,12 @@ void XC::MRMFreedom_Constraint::Print(std::ostream &s, int flag)
 //! @brief Interfaz con VTK.
 int XC::MRMFreedom_Constraint::getVtkCellType(void) const
   {
-    std::cerr << "MRMFreedom_Constraint::getVtkCellType; not implemented." << std::endl;
+    std::cerr << nombre_clase() << "::" << __FUNCTION__
+              << "; not implemented." << std::endl;
     return VTK_EMPTY_CELL;
   }
 
-//! @brief Interfaz con el formato MED de Salome.
+//! @brief Interfce with Salome MED format.
 int XC::MRMFreedom_Constraint::getMEDCellType(void) const
   { 
     std::cerr << "MRMFreedom_Constraint::getMEDCellType; not implemented." << std::endl;

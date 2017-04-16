@@ -16,18 +16,18 @@ alpha= 1.2e-5 # Coeficiente de dilatación del acero
 h= 2e-2
 A= h*h # Área de la barra expresada en metros cuadrados
 I= (h)**4/12 # Cross section moment of inertia (m4)
-AT= 10 # Incremento de temperatura expresado en grados centígrados
+AT= 10.0 # Incremento de temperatura expresado en grados centígrados
 
 prueba= xc.ProblemaEF()
 preprocessor=  prueba.getPreprocessor
 nodes= preprocessor.getNodeLoader
-nodes.dimEspace= 2 # coord. for each node (x,y).
+nodes.dimEspace= 3 # coord. for each node (x,y).
 nodes.numGdls= 6 # DOF for each node (Ux,Uy).
 nodes.defaultTag= 1 #First node number.
-nod= nodes.newNodeXY(0.0,0.0)
-nod= nodes.newNodeXY(L,0.0)
-nod= nodes.newNodeXY(L,h)
-nod= nodes.newNodeXY(0,h)
+nod1= nodes.newNodeXYZ(0.0,0.0,0.0)
+nod2= nodes.newNodeXYZ(L,0.0,0.0)
+nod3= nodes.newNodeXYZ(L,h,0.0)
+nod4= nodes.newNodeXYZ(0,h,0.0)
 
 
 # Materials definition
@@ -37,23 +37,22 @@ memb1= typical_materials.defElasticMembranePlateSection(preprocessor, "memb1",E,
 elementos= preprocessor.getElementLoader
 elementos.defaultMaterial= "memb1"
 elementos.defaultTag= 1
-elem= elementos.newElement("shell_mitc4",xc.ID([1,2,3,4]))
+elem1= elementos.newElement("shell_mitc4",xc.ID([nod1.tag,nod2.tag,nod3.tag,nod4.tag]))
 
 
-    
 # Constraints
 coacciones= preprocessor.getConstraintLoader
 
-spc= coacciones.newSPConstraint(1,0,0.0)
-spc= coacciones.newSPConstraint(2,0,0.0)
-spc= coacciones.newSPConstraint(3,0,0.0)
-spc= coacciones.newSPConstraint(4,0,0.0)
-spc= coacciones.newSPConstraint(1,2,0.0)
-spc= coacciones.newSPConstraint(2,2,0.0)
-spc= coacciones.newSPConstraint(3,2,0.0)
-spc= coacciones.newSPConstraint(4,2,0.0)
-spc= coacciones.newSPConstraint(1,1,0.0)
-spc= coacciones.newSPConstraint(2,1,0.0)
+spc= coacciones.newSPConstraint(nod1.tag,0,0.0)
+spc= coacciones.newSPConstraint(nod2.tag,0,0.0)
+spc= coacciones.newSPConstraint(nod3.tag,0,0.0)
+spc= coacciones.newSPConstraint(nod4.tag,0,0.0)
+spc= coacciones.newSPConstraint(nod1.tag,2,0.0)
+spc= coacciones.newSPConstraint(nod2.tag,2,0.0)
+spc= coacciones.newSPConstraint(nod3.tag,2,0.0)
+spc= coacciones.newSPConstraint(nod4.tag,2,0.0)
+spc= coacciones.newSPConstraint(nod1.tag,1,0.0)
+spc= coacciones.newSPConstraint(nod2.tag,1,0.0)
 
 # Loads definition
 cargas= preprocessor.getLoadLoader
@@ -65,7 +64,7 @@ casos.currentTimeSeries= "ts"
 lp0= casos.newLoadPattern("default","0")
 #casos.currentLoadPattern= "0"
 eleLoad= lp0.newElementalLoad("shell_strain_load")
-eleLoad.elementTags= xc.ID([1]) 
+eleLoad.elementTags= xc.ID([elem1.tag])
 eleLoad.setStrainComp(0,0,alpha*AT) #(id of Gauss point, id of component, value)
 eleLoad.setStrainComp(1,0,alpha*AT)
 eleLoad.setStrainComp(2,0,alpha*AT)

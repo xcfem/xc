@@ -57,24 +57,20 @@
 
 #define sign(a) ( (a)>0 ? 1:-1 )
 
-double  XC::LovelyInnerProduct( const XC::Vector &v, const XC::Vector &w )
-{
-  int i;
+//! @brief Returns the inner product of the arguments.
+double  XC::LovelyInnerProduct(const Vector &v, const Vector &w)
+  {
+    double dot = 0.0;
+    for(int i = 0;i<3;i++)
+      dot+= v(i)*w(i);
+    return dot;
+  }
 
-  double dot = 0.0;
-
-  for ( i = 0; i < 3; i++ )
-    dot +=  v(i)*w(i);
-
-  return dot;
-
-}
-
-
+//! @brief Returns the vector norm.
 double XC::LovelyNorm(const Vector &v) 
   { return sqrt(LovelyInnerProduct(v,v)); }
 
-
+//! @brief Returns the cross product of the arguments.
 XC::Vector XC::LovelyCrossProduct(const Vector &v, const Vector &w)
   {
     Vector cross(3);
@@ -84,64 +80,62 @@ XC::Vector XC::LovelyCrossProduct(const Vector &v, const Vector &w)
     return cross;
   }
 
+//! @brief compute eigenvalues and vectors for a 3 x 3 symmetric matrix
+//!
+//!.... INPUTS:
+//!        M(3,3) - matrix with initial values (only upper half used)
+//!
+//!.... OUTPUTS
+//!        v(3,3) - matrix of eigenvectors (by column)
+//!        d(3)   - eigenvalues associated with columns of v
+//!        rot    - number of rotations to diagonalize
+//!
+//!---------------------------------------------------------------eig3==
 
+//!.... Storage done as follows:
+//!
+//!       | v(1,1) v(1,2) v(1,3) |     |  d(1)  a(1)  a(3)  |
+//!       | v(2,1) v(2,2) v(2,3) |  =  |  a(1)  d(2)  a(2)  |
+//!       | v(3,1) v(3,2) v(3,3) |     |  a(3)  a(2)  d(3)  |
+//!
+//!       Transformations performed on d(i) and a(i) and v(i,j) become
+//!        the eigenvectors.  
+//!
+//!---------------------------------------------------------------eig3==
 XC::Vector XC::LovelyEig(const Matrix &M ) 
   {
-//.... compute eigenvalues and vectors for a 3 x 3 symmetric matrix
-//
-//.... INPUTS:
-//        M(3,3) - matrix with initial values (only upper half used)
-//
-//.... OUTPUTS
-//        v(3,3) - matrix of eigenvectors (by column)
-//        d(3)   - eigenvalues associated with columns of v
-//        rot    - number of rotations to diagonalize
-//
-//---------------------------------------------------------------eig3==
+    int     rot, its, i, j , k;
+    double  g, h, aij, sm, thresh, t, c, s, tau;
 
-//.... Storage done as follows:
-//
-//       | v(1,1) v(1,2) v(1,3) |     |  d(1)  a(1)  a(3)  |
-//       | v(2,1) v(2,2) v(2,3) |  =  |  a(1)  d(2)  a(2)  |
-//       | v(3,1) v(3,2) v(3,3) |     |  a(3)  a(2)  d(3)  |
-//
-//        Transformations performed on d(i) and a(i) and v(i,j) become
-//        the eigenvectors.  
-//
-//---------------------------------------------------------------eig3==
+    static Matrix  v(3,3);
+    static Vector  d(3);
+    static Vector  a(3);
+    static Vector  b(3); 
+    static Vector  z(3);
 
-  int     rot, its, i, j , k;
-  double  g, h, aij, sm, thresh, t, c, s, tau;
-
-  static Matrix  v(3,3);
-  static Vector  d(3);
-  static Vector  a(3);
-  static Vector  b(3); 
-  static Vector  z(3);
-
-  static const double tol = 1.0e-08;
+    static const double tol = 1.0e-08;
  
-// set v = M 
-  v = M;
+    // set v = M 
+    v = M;
 
-//.... move array into one-d arrays
+    //.... move array into one-d arrays
 
-  a(0) = v(0,1);
-  a(1) = v(1,2);
-  a(2) = v(2,0);
+    a(0)= v(0,1);
+    a(1)= v(1,2);
+    a(2)= v(2,0);
 
 
-  for ( i = 0; i < 3; i++ ) {
-       d(i) = v(i,i);
-       b(i) = v(i,i);
-       z(i) = 0.0;
+    for( i = 0; i < 3; i++ )
+      {
+        d(i) = v(i,i);
+        b(i) = v(i,i);
+        z(i) = 0.0;
 
-       for ( j = 0; j < 3; j++ ) 
+        for ( j = 0; j < 3; j++ ) 
   	  v(i,j) = 0.0;
 
-       v(i,i) = 1.0;
-
-  } //end for i
+        v(i,i) = 1.0;
+      } //end for i
 
    rot = 0;
    its = 0;

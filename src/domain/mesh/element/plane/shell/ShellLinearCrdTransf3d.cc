@@ -85,6 +85,11 @@ int XC::ShellLinearCrdTransf3d::initialize(const NodePtrs &ptrs)
     v1-= coor0;
     v1*= 0.50;
 
+    //normalize v1
+    //double length= LovelyNorm( v1 );
+    double length= v1.Norm( );
+    v1/= length;
+
     v2.Zero( );
     //v2= 0.5 * ( coor3 + coor2 - coor1 - coor0 );
     v2= coor3;
@@ -92,12 +97,6 @@ int XC::ShellLinearCrdTransf3d::initialize(const NodePtrs &ptrs)
     v2-= coor1;
     v2-= coor0;
     v2*= 0.50;
-
-    //normalize v1
-    //double length= LovelyNorm( v1 );
-    double length= v1.Norm( );
-    v1/= length;
-
 
     //Gram-Schmidt process for v2
 
@@ -115,10 +114,9 @@ int XC::ShellLinearCrdTransf3d::initialize(const NodePtrs &ptrs)
     length= v2.Norm( );
     v2/= length;
 
-
     //cross product for v3
     v3= LovelyCrossProduct( v1, v2 );
-
+    
     g1= v1; g2= v2; g3= v3;
     return 0;
   }

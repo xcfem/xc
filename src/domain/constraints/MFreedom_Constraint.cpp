@@ -75,44 +75,64 @@
 #include "med.h"
 #include "vtkCellType.h"
 
+//! @brief Sets the retained degrees of freedom.
 void XC::MFreedom_Constraint::set_retained_dofs(const ID &retainedDOF)
   { retainDOF= retainedDOF; }
 
+//! @brief Sets the retained and constrained degrees of freedom.
 void XC::MFreedom_Constraint::set_constrained_retained_dofs(const ID &constrainedDOF,const ID &retainedDOF)
   {
     set_constrained_dofs(constrainedDOF);
     set_retained_dofs(retainedDOF);
   }
 
-// constructor for FEM_ObjectBroker			// Arash
-XC::MFreedom_Constraint::MFreedom_Constraint(int tag,int clasTag)		
- : MFreedom_ConstraintBase(tag,0,clasTag),
+//! !@brief Constructor. //Arash
+XC::MFreedom_Constraint::MFreedom_Constraint(int tag,int classTag)		
+ : MFreedom_ConstraintBase(tag,0,classTag),
    retainedNodeTag(0) {}
 
-// constructor for FEM_ObjectBroker			// LCPT
+//! Constructor. // LCPT
 XC::MFreedom_Constraint::MFreedom_Constraint(int tag)		
  : MFreedom_ConstraintBase(tag, 0,CNSTRNT_TAG_MFreedom_Constraint),
    retainedNodeTag(0) {}
 
-// constructor for Subclass
-XC::MFreedom_Constraint::MFreedom_Constraint(int tag, int nodeRetain, int nodeConstr, int clasTag)
- : MFreedom_ConstraintBase(tag, nodeConstr, clasTag),
-   retainedNodeTag(nodeRetain) {}
+//! Constructor to be called from subclasses.
+//! @param tag: tag for the multi-freedom constraint.
+//! @param nodeRetain: identifier of the retained node.
+//! @param nodeConstr: identifier of the constrained node.
+//! @param classTag: identifief for the class.
+XC::MFreedom_Constraint::MFreedom_Constraint(int tag, int nodeRetain, int nodeConstr, int classTag)
+ : MFreedom_ConstraintBase(tag, nodeConstr, classTag), retainedNodeTag(nodeRetain) {}
 
-// constructor for Subclass
-XC::MFreedom_Constraint::MFreedom_Constraint(int tag, int nodeRetain, int nodeConstr,const ID &constrainedDOF,const ID &retainedDOF, int clasTag)
- : MFreedom_ConstraintBase(tag, nodeConstr, clasTag),
-   retainedNodeTag(nodeRetain)
+//! Constructor to be called from subclasses.
+//! @param tag: tag for the multi-freedom constraint.
+//! @param nodeRetain: identifier of the retained node.
+//! @param nodeConstr: identifier of the constrained node.
+//! @param constrainedDOF: constrained degrees of freedom.
+//! @param retainedDOF: retained degrees of freedom.
+//! @param classTag: identifief for the class.
+XC::MFreedom_Constraint::MFreedom_Constraint(int tag, int nodeRetain, int nodeConstr,const ID &constrainedDOF,const ID &retainedDOF, int classTag)
+ : MFreedom_ConstraintBase(tag, nodeConstr, classTag), retainedNodeTag(nodeRetain)
   { set_constrained_retained_dofs(constrainedDOF,retainedDOF); }
 
-// constructor for Subclass
+//! Constructor to be called from subclasses.
+//! @param tag: tag for the multi-freedom constraint.
+//! @param nodeRetain: identifier of the retained node.
+//! @param nodeConstr: identifier of the constrained node.
+//! @param constrainedDOF: constrained degrees of freedom.
+//! @param retainedDOF: retained degrees of freedom.
 XC::MFreedom_Constraint::MFreedom_Constraint(int tag, int nodeRetain, int nodeConstr,const ID &constrainedDOF,const ID &retainedDOF)
- : MFreedom_ConstraintBase(tag, nodeConstr,CNSTRNT_TAG_MFreedom_Constraint), 
-   retainedNodeTag(nodeRetain)
+ : MFreedom_ConstraintBase(tag, nodeConstr,CNSTRNT_TAG_MFreedom_Constraint), retainedNodeTag(nodeRetain)
   { set_constrained_retained_dofs(constrainedDOF,retainedDOF); }
 
 
-// general constructor for XC::ModelBuilder
+//! @brief Constructor.
+//! @param tag: tag for the multi-freedom constraint.
+//! @param nodeRetain: identifier of the retained node.
+//! @param nodeConstr: identifier of the constrained node.
+//! @param constr: constraint matrix.
+//! @param constrainedDOF: constrained degrees of freedom.
+//! @param retainedDOF: retained degrees of freedom.
 XC::MFreedom_Constraint::MFreedom_Constraint(int tag, int nodeRetain, int nodeConstr, Matrix &constr,
 			     ID &constrainedDOF, ID &retainedDOF)
  : MFreedom_ConstraintBase(tag, nodeConstr, CNSTRNT_TAG_MFreedom_Constraint),
@@ -122,42 +142,26 @@ XC::MFreedom_Constraint::MFreedom_Constraint(int tag, int nodeRetain, int nodeCo
     set_constraint(constr);
   }
 
-//! @brief Copy constructor.
-XC::MFreedom_Constraint::MFreedom_Constraint(const MFreedom_Constraint &otro)
-  : MFreedom_ConstraintBase(otro), retainedNodeTag(otro.retainedNodeTag)
-  {
-    set_constrained_dofs(otro.constrDOF);
-    set_retained_dofs(otro.retainDOF);
-    set_constraint(otro.constraintMatrix);
-  }
-//! @brief Operador de asignación.
-XC::MFreedom_Constraint &XC::MFreedom_Constraint::operator=(const MFreedom_Constraint &otro)
-  {
-    MFreedom_ConstraintBase::operator=(otro);
-    retainedNodeTag= otro.retainedNodeTag;
-    set_constrained_dofs(otro.constrDOF);
-    set_retained_dofs(otro.retainDOF);
-    set_constraint(otro.constraintMatrix);
-    return *this;
-  }
 
 //! @brief Returns true ifafecta to the node cuyo tag being passed as parameter.
-bool XC::MFreedom_Constraint::afectaANodo(int tagNodo) const
-  { return ( (tagNodo== getNodeConstrained()) || (tagNodo== getNodeRetained()));}
+bool XC::MFreedom_Constraint::affectsNode(int nodeTag) const
+  { return ( (nodeTag== getNodeConstrained()) || (nodeTag== getNodeRetained()));}
 
+//! @brief Returns the identifiers of the retained degrees of freedom.
 const XC::ID &XC::MFreedom_Constraint::getRetainedDOFs(void) const
   {
     // return the XC::ID corresponding to retained DOF of Ccr
     return retainDOF;    
   }
 
+//! @brief Applies the constraint at the pseudo-time being passed as parameter.
 int XC::MFreedom_Constraint::applyConstraint(double timeStamp)
   {
     // does nothing XC::MFreedom_Constraint objects are time invariant
     return 0;
   }
 
-//! @brief Send data through the channel being passed as parameter.
+//! @brief Sends data through the channel being passed as parameter.
 int XC::MFreedom_Constraint::sendData(CommParameters &cp)
   {
     int res= MFreedom_ConstraintBase::sendData(cp);
@@ -166,7 +170,7 @@ int XC::MFreedom_Constraint::sendData(CommParameters &cp)
     return res;
   }
 
-//! @brief Receive data through the channel being passed as parameter.
+//! @brief Receives data through the channel being passed as parameter.
 int XC::MFreedom_Constraint::recvData(const CommParameters &cp)
   {
     int res= MFreedom_ConstraintBase::recvData(cp);
@@ -201,7 +205,7 @@ int XC::MFreedom_Constraint::recvSelf(const CommParameters &cp)
     return res;
   }
 
-
+//! @brief Printing.
 void XC::MFreedom_Constraint::Print(std::ostream &s, int flag)
   {     
     s << "MFreedom_Constraint: " << this->getTag() << "\n";
@@ -220,7 +224,7 @@ int XC::MFreedom_Constraint::getVtkCellType(void) const
     return VTK_EMPTY_CELL;
   }
 
-//! @brief Interfaz con el formato MED de Salome.
+//! @brief Interface with Salome MED format.
 int XC::MFreedom_Constraint::getMEDCellType(void) const
   { return MED_SEG2; }
 

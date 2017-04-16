@@ -57,6 +57,7 @@ XC::ShellCrdTransf3dBase::ShellCrdTransf3dBase(const Vector &v1,const Vector &v2
 int XC::ShellCrdTransf3dBase::initialize(const NodePtrs &ptrs)
   {
     theNodes= &ptrs;
+    theNodes->checkDimension(3);
     vpos_centroide.Zero();
     vpos_centroide+= ptrs[0]->getCrds();
     vpos_centroide+= ptrs[1]->getCrds();

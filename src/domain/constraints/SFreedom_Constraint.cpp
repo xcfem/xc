@@ -69,23 +69,23 @@
 #include "vtkCellType.h"
 
 //! @brief Default constructor.
-XC::SFreedom_Constraint::SFreedom_Constraint(int clasTag)
-  :Constraint(clasTag), dofNumber(0), valueR(0.0), valueC(0.0), isConstant(true), loadPatternTag(-1) {}
+XC::SFreedom_Constraint::SFreedom_Constraint(int classTag)
+  : Constraint(classTag), dofNumber(0), valueR(0.0), valueC(0.0), isConstant(true), loadPatternTag(-1) {}
 
 //! @brief Constructor.
 //! @param tag: Constraint identifier.
 //! @param nodeTag: identifier of the node to constraint tag.
 XC::SFreedom_Constraint::SFreedom_Constraint(int tag, int nodeTag)
-  :Constraint(tag, nodeTag,CNSTRNT_TAG_SFreedom_Constraint),dofNumber(0), valueR(0.0), valueC(0.0), isConstant(true), 
-   loadPatternTag(-1) {}
+  : Constraint(tag, nodeTag,CNSTRNT_TAG_SFreedom_Constraint),dofNumber(0), valueR(0.0), valueC(0.0),
+    isConstant(true), loadPatternTag(-1) {}
 
 // constructor for a subclass to use
 //! @brief Constructor.
 //! @param tag: Constraint identifier.
 //! @param nodeTag: identifier of the node to constraint.
 //! @param ndof: DOF number to constraint.
-XC::SFreedom_Constraint::SFreedom_Constraint(int tag, int nodeTag, int ndof, int clasTag)
-  :Constraint(tag, nodeTag,clasTag), dofNumber(ndof), valueR(0.0), valueC(0.0), isConstant(true), 
+XC::SFreedom_Constraint::SFreedom_Constraint(int tag, int nodeTag, int ndof, int classTag)
+  :Constraint(tag, nodeTag,classTag), dofNumber(ndof), valueR(0.0), valueC(0.0), isConstant(true), 
    loadPatternTag(-1)
  // valueC is set to 1.0 so that homo will be false when recvSelf() invoked
  // should be ok as valueC cannot be used by subclasses and subclasses should
@@ -107,7 +107,7 @@ XC::SFreedom_Constraint::SFreedom_Constraint(int tag, int nodeTag, int ndof, dou
 XC::SFreedom_Constraint *XC::SFreedom_Constraint::getCopy(void) const
   { return new SFreedom_Constraint(*this); }
 
-//! @brief Copia con otro tag, se emplea en ConstraintLoader::addSFreedom_Constraint(tag_nod,semilla).
+//! @brief Returns a copy of the contraint with a different tag, it's used in ConstraintLoader::addSFreedom_Constraint(nodeTag,seed).
 XC::SFreedom_Constraint *XC::SFreedom_Constraint::getCopy(const int &spTag) const
   { 
     SFreedom_Constraint *retval= new SFreedom_Constraint(*this);
@@ -124,7 +124,8 @@ int XC::SFreedom_Constraint::getDOF_Number(void) const
 double XC::SFreedom_Constraint::getValue(void) const
   { return valueC; }
 
-//! @brief Aplica la coacción.
+//! @brief Applies the constraint with the load factor
+//! being passed as parameter.
 int XC::SFreedom_Constraint::applyConstraint(double loadFactor)
   {
     // as SFreedom_Constraint objects are time invariant nothing is done
@@ -133,7 +134,8 @@ int XC::SFreedom_Constraint::applyConstraint(double loadFactor)
     return 0;
   }
 
-//! @brief Returns true ifse trata de una coacción homogénea (valor impuesto nulo).
+//! @brief Returns true if it's an homogeneous constraint
+//! (prescribed value for the DOF is zero).
 bool XC::SFreedom_Constraint::isHomogeneous(void) const
   {
     if(valueR == 0.0)
@@ -148,6 +150,7 @@ void XC::SFreedom_Constraint::setLoadPatternTag(int tag)
   { loadPatternTag = tag; }
 
 //! @brief Returns the load pattern tag of the constraint.
+//! @param tag: load pattern identifier.
 int XC::SFreedom_Constraint::getLoadPatternTag(void) const
   { return loadPatternTag;  }
 
@@ -159,7 +162,7 @@ XC::DbTagData &XC::SFreedom_Constraint::getDbTagData(void) const
     return retval;
   }
 
-//! @brief Send data through the channel being passed as parameter.
+//! @brief Sends data through the channel being passed as parameter.
 int XC::SFreedom_Constraint::sendData(CommParameters &cp)
   {
     int res= Constraint::sendData(cp);
@@ -169,7 +172,7 @@ int XC::SFreedom_Constraint::sendData(CommParameters &cp)
     return res;
   }
 
-//! @brief Receive data through the channel being passed as parameter.
+//! @brief Receives data through the channel being passed as parameter.
 int XC::SFreedom_Constraint::recvData(const CommParameters &cp)
   {
     int res= Constraint::recvData(cp);
@@ -204,11 +207,13 @@ int XC::SFreedom_Constraint::recvSelf(const CommParameters &cp)
     return res;
   }
 
+//! @brief Returns the cell type to be used to represent
+//! the object in VTK graphics.
 int XC::SFreedom_Constraint::getVtkCellType(void) const
   { return VTK_VERTEX; }
 
 
-//! @brief Imprime la coacción.
+//! @brief Prints constraint information.
 void XC::SFreedom_Constraint::Print(std::ostream &s, int flag) 
   {
     Constraint::Print(s,flag);

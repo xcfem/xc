@@ -65,38 +65,38 @@
 #include <utility/actor/objectBroker/FEM_ObjectBroker.h>
 #include <cmath>
 
-// constructor for FEM_ObjectBroker
+//! @brief Constructor.
 XC::MFreedom_Joint3D::MFreedom_Joint3D(void)
- :MFreedom_Constraint(0, CNSTRNT_TAG_MFreedom_Joint3D ),
+ :MFreedom_Joint(0, CNSTRNT_TAG_MFreedom_Joint3D ),
   nodeRotation(0), RotDOF(0),
-  nodeDisplacement(0), DispDOF(0), LargeDisplacement(0),
-  RetainedNode(nullptr), ConstrainedNode(nullptr), RotationNode(nullptr), DisplacementNode(nullptr),
-  RotNormVect(0), DspNormVect(0), dbTag3(0), Length0(0.0)
+  nodeDisplacement(0), DispDOF(0),
+  RotationNode(nullptr), DisplacementNode(nullptr),
+  RotNormVect(0), DspNormVect(0), dbTag3(0)
   {}
 
 
-// general constructor for XC::ModelBuilder
+//! @brief Constructor.
+//! @param theDomain: domain where the constraint is defined.
+//! @param tag: tag for the multi-freedom constraint.
+//! @param nodeRetain: identifier of the retained node.
+//! @param nodeConstr: identifier of the constrained node.
+//! @param LrgDsp: true if large displacement (geometric non-linearity) must be expected: 0 for constant constraint matrix(small deformations), 1 for time varying constraint matrix(large deformations), 2 for large deformations with length correction.
 XC::MFreedom_Joint3D::MFreedom_Joint3D(Domain *theDomain, int tag, int nodeRetain, int nodeConstr,
-		int nodeRot, int Rotdof, int nodeDisp, int Dispdof, int LrgDsp )
-  :MFreedom_Constraint(tag,nodeRetain,nodeConstr,CNSTRNT_TAG_MFreedom_Joint3D),
+		int nodeRot, int Rotdof, int nodeDisp, int Dispdof, int LrgDsp)
+  :MFreedom_Joint(theDomain,tag,CNSTRNT_TAG_MFreedom_Joint3D,nodeRetain,nodeConstr,LrgDsp),
   nodeRotation(nodeRot), RotDOF(Rotdof), nodeDisplacement(nodeDisp), DispDOF(Dispdof), 
-  LargeDisplacement(LrgDsp), RetainedNode(nullptr), ConstrainedNode(nullptr),
   RotationNode(nullptr), DisplacementNode(nullptr),
-  RotNormVect(3), DspNormVect(3), dbTag3(0), Length0(0.0)
+  RotNormVect(3), DspNormVect(3), dbTag3(0)
   {
     setDomain(theDomain);
 
-    this->setTag(tag);
-
-
-  
-  
     // check for proper degrees of freedom
     int RnumDOF = RetainedNode->getNumberDOF();
     int CnumDOF = ConstrainedNode->getNumberDOF();
     if(RnumDOF != 9 || CnumDOF != 6 )
       {
-        std::cerr << "MFreedom_Joint3D::MFreedom_Joint3D - mismatch in numDOF\n DOF not supported by this type of constraint";
+        std::cerr << nombre_clase() << "::" << __FUNCTION__
+	          << "; mismatch in numDOF\n DOF not supported by this type of constraint";
         return;
       }
   
@@ -104,7 +104,8 @@ XC::MFreedom_Joint3D::MFreedom_Joint3D(Domain *theDomain, int tag, int nodeRetai
     // check the main degree of freedom. Assign auxilary DOF 
     if( RotDOF<6 || RotDOF>8 || DispDOF<6 || DispDOF>8 || RotDOF==DispDOF )
       {
-        std::cerr << "MFreedom_Joint3D::MFreedom_Joint3D - Wrong degrees of freedom" ;
+        std::cerr << nombre_clase() << "::" << __FUNCTION__
+		  << "; Wrong degrees of freedom" ;
         return;
       }
   
@@ -120,7 +121,8 @@ XC::MFreedom_Joint3D::MFreedom_Joint3D(Domain *theDomain, int tag, int nodeRetai
 
     if(dimRet != 3 || dimCon != 3 || dimRot != 3 || dimDsp != 3 )
       {
-        std::cerr << "XC::MFreedom_Joint3D::MFreedom_Joint3D - mismatch in dimnesion\n dimension not supported by this type of constraint";
+        std::cerr << nombre_clase() << "::" << __FUNCTION__
+	          << "; mismatch in dimnesion\n dimension not supported by this type of constraint";
         return;
       }
   
@@ -132,7 +134,10 @@ XC::MFreedom_Joint3D::MFreedom_Joint3D(Domain *theDomain, int tag, int nodeRetai
   
     Length0= sqrt( deltaX*deltaX + deltaY*deltaY + deltaY*deltaY );
     if(Length0 <= 1.0e-12)
-      { std::cerr << "XC::MFreedom_Joint3D::MFreedom_Joint3D - The constraint length is zero\n"; }
+      {
+	std::cerr << nombre_clase() << "::" << __FUNCTION__
+		  << "; the constraint length is zero\n";
+      }
   
     // calculate the normal vectors for the rotation mode and displacement mode
     for(int i = 0 ; i<3 ; i++ )
@@ -142,9 +147,12 @@ XC::MFreedom_Joint3D::MFreedom_Joint3D(Domain *theDomain, int tag, int nodeRetai
       }
   
     if(RotNormVect.Norm() <= 1.0e-12 || DspNormVect.Norm() <= 1.0e-12 )
-      { std::cerr << "XC::MFreedom_Joint3D::MFreedom_Joint3D - the normal vector for the rotation mode or the displacement mode is zero\n"; }
-    RotNormVect = RotNormVect / RotNormVect.Norm();
-    DspNormVect = DspNormVect / DspNormVect.Norm();
+      {
+	std::cerr << nombre_clase() << "::" << __FUNCTION__
+	          << "; the normal vector for the rotation mode or the displacement mode is zero\n";
+      }
+    RotNormVect= RotNormVect / RotNormVect.Norm();
+    DspNormVect= DspNormVect / DspNormVect.Norm();
   
   
     // allocate and set up the constranted and retained id's
@@ -184,109 +192,104 @@ XC::MFreedom_Joint3D::MFreedom_Joint3D(Domain *theDomain, int tag, int nodeRetai
     constraintMatrix (1,7) = deltaY*DspNormVect(0) - deltaX*DspNormVect(1) ;
   }
 
+//! @brief Destructor.
 XC::MFreedom_Joint3D::~MFreedom_Joint3D(void)
   {
-    if(RetainedNode)
-      RetainedNode->disconnect(this);
-    if(ConstrainedNode)
-      ConstrainedNode->disconnect(this);
     if(RotationNode)
       RotationNode->disconnect(this);
     if(DisplacementNode)
       DisplacementNode->disconnect(this);
   }
 
+//! @brief Applies the constraint at the pseudo-time
+//! being passed as parameter.
 int XC::MFreedom_Joint3D::applyConstraint(double timeStamp)
-{
-  if ( LargeDisplacement != 0 )
-    {
-      // calculate the constraint at this moment
+  {
+    if(LargeDisplacement!=0)
+      {
+        // calculate the constraint at this moment
       
-      // get the coordinates of the two nodes - check dimensions are the same FOR THE MOMENT
-      const Vector &crdRet = RetainedNode->getCrds();
-      const Vector &crdCon = ConstrainedNode->getCrds();
-      const Vector &crdRot = RotationNode->getCrds();
-      const Vector &crdDsp = DisplacementNode->getCrds();
+        // get the coordinates of the two nodes - check dimensions are the same FOR THE MOMENT
+        const Vector &crdRet = RetainedNode->getCrds();
+        const Vector &crdCon = ConstrainedNode->getCrds();
+        const Vector &crdRot = RotationNode->getCrds();
+        const Vector &crdDsp = DisplacementNode->getCrds();
       
-      // get commited displacements of nodes to get updated coordinates
-      const Vector &dispRet = RetainedNode->getDisp();
-      const Vector &dispCon = ConstrainedNode->getDisp();
-      const Vector &dispRot = RotationNode->getDisp();
-      const Vector &dispDsp = DisplacementNode->getDisp();
+        // get commited displacements of nodes to get updated coordinates
+        const Vector &dispRet = RetainedNode->getDisp();
+        const Vector &dispCon = ConstrainedNode->getDisp();
+        const Vector &dispRot = RotationNode->getDisp();
+        const Vector &dispDsp = DisplacementNode->getDisp();
       
-      const double deltaX = dispCon(0) + crdCon(0) - dispRet(0) - crdRet(0);
-      const double deltaY = dispCon(1) + crdCon(1) - dispRet(1) - crdRet(1);
-      const double deltaZ = dispCon(2) + crdCon(2) - dispRet(2) - crdRet(2);
+        const double deltaX = dispCon(0) + crdCon(0) - dispRet(0) - crdRet(0);
+        const double deltaY = dispCon(1) + crdCon(1) - dispRet(1) - crdRet(1);
+        const double deltaZ = dispCon(2) + crdCon(2) - dispRet(2) - crdRet(2);
       
-      for ( int i = 0 ; i<3 ; i++ )
-	{
-	  RotNormVect(i)= dispRot(i) + crdRot(i) - dispRet(i) - crdRet(i);
-	  DspNormVect(i)= dispDsp(i) + crdDsp(i) - dispRet(i) - crdRet(i);	
-	}
+        for( int i = 0 ; i<3 ; i++ )
+	  {
+	    RotNormVect(i)= dispRot(i) + crdRot(i) - dispRet(i) - crdRet(i);
+	    DspNormVect(i)= dispDsp(i) + crdDsp(i) - dispRet(i) - crdRet(i);	
+	  }
       
-      RotNormVect = RotNormVect / RotNormVect.Norm();
-      DspNormVect = DspNormVect / DspNormVect.Norm();
+        RotNormVect = RotNormVect / RotNormVect.Norm();
+        DspNormVect = DspNormVect / DspNormVect.Norm();
       
       
-      constraintMatrix.Zero();
+        constraintMatrix.Zero();
       
-      constraintMatrix (0,0) = 1.0 ;
-      constraintMatrix (1,1) = 1.0 ;
-      constraintMatrix (2,2) = 1.0 ;
-      constraintMatrix (1,3) = -deltaZ;
-      constraintMatrix (2,3) = deltaY;
-      constraintMatrix (3,3) = 1.0 ;
-      constraintMatrix (0,4) = deltaZ;
-      constraintMatrix (2,4) = -deltaX;
-      constraintMatrix (4,4) = 1.0 ;
-      constraintMatrix (0,5) = -deltaY;
-      constraintMatrix (1,5) = deltaX;
-      constraintMatrix (5,5) = 1.0 ;
-      constraintMatrix (3,6) = RotNormVect(0);
-      constraintMatrix (4,6) = RotNormVect(1);
-      constraintMatrix (5,6) = RotNormVect(2);
-      constraintMatrix (0,7) = deltaZ*DspNormVect(1) - deltaY*DspNormVect(2);
-      constraintMatrix (1,7) = deltaX*DspNormVect(2) - deltaZ*DspNormVect(0) ;
-      constraintMatrix (2,7) = deltaY*DspNormVect(0) - deltaX*DspNormVect(1) ;
-    }
-  return 0;
-}
+        constraintMatrix (0,0) = 1.0 ;
+        constraintMatrix (1,1) = 1.0 ;
+        constraintMatrix (2,2) = 1.0 ;
+        constraintMatrix (1,3) = -deltaZ;
+        constraintMatrix (2,3) = deltaY;
+        constraintMatrix (3,3) = 1.0 ;
+        constraintMatrix (0,4) = deltaZ;
+        constraintMatrix (2,4) = -deltaX;
+        constraintMatrix (4,4) = 1.0 ;
+        constraintMatrix (0,5) = -deltaY;
+        constraintMatrix (1,5) = deltaX;
+        constraintMatrix (5,5) = 1.0 ;
+        constraintMatrix (3,6) = RotNormVect(0);
+        constraintMatrix (4,6) = RotNormVect(1);
+        constraintMatrix (5,6) = RotNormVect(2);
+        constraintMatrix (0,7) = deltaZ*DspNormVect(1) - deltaY*DspNormVect(2);
+        constraintMatrix (1,7) = deltaX*DspNormVect(2) - deltaZ*DspNormVect(0) ;
+        constraintMatrix (2,7) = deltaY*DspNormVect(0) - deltaX*DspNormVect(1) ;
+      }
+    return 0;
+  }
 
 
-bool
-XC::MFreedom_Joint3D::isTimeVarying(void) const
-{
-  if ( LargeDisplacement != 0 ) return true;
-  
-  return false;
-}
 
-
+//! @brief Sends the object through the channel being passed as parameter.
 int XC::MFreedom_Joint3D::sendSelf(CommParameters &cp)
   {
-    std::cerr << "MFreedom_Joint3D::sendSelf not implemented." << std::endl;
+    std::cerr << nombre_clase() << "::" << __FUNCTION__
+              << ": not implemented." << std::endl;
     return 0;
   }
 
-
+//! @brief Receives the object through the channel being passed as parameter.
 int XC::MFreedom_Joint3D::recvSelf(const CommParameters &cp)
   {
-    std::cerr << "MFreedom_Joint3D::recvSelf not implemented." << std::endl;
+    std::cerr << nombre_clase() << "::" << __FUNCTION__
+              << ": not implemented." << std::endl;
     return 0;
   }
 
-
+//! @brief Returns the constraint matrix.
 const XC::Matrix &XC::MFreedom_Joint3D::getConstraint(void)
   {
     if(constraintMatrix.Nula())
       {
-        std::cerr << "MFreedom_Joint3D::getConstraint - no XC::Matrix was set\n";
+        std::cerr << nombre_clase() << "::" << __FUNCTION__
+		  << "; no matrix was set\n";
         exit(-1);
       }    
     
     // Length correction
     // to correct the trial displacement
-    if( LargeDisplacement == 2 )
+    if(LargeDisplacement == 2)
       {
 	// get the coordinates of the two nodes - check dimensions are the same FOR THE MOMENT
 	const Vector &crdR = RetainedNode->getCrds();
@@ -326,6 +329,7 @@ const XC::Matrix &XC::MFreedom_Joint3D::getConstraint(void)
     return constraintMatrix;
   }
 
+//! @brief Printing.
 void XC::MFreedom_Joint3D::Print(std::ostream &s, int flag )
   {
     s << "MFreedom_Joint3D: " << this->getTag() << "\n";
@@ -338,49 +342,31 @@ void XC::MFreedom_Joint3D::Print(std::ostream &s, int flag )
   }
 
 
+//! @brief Sets the domain of the constraint.
 void XC::MFreedom_Joint3D::setDomain(Domain *theDomain)
   {
-    if(theDomain == nullptr)
-      {
-        std::cerr << "WARNING MFreedom_Joint3D::SetDomain: Specified domain does not exist";
-        std::cerr << "Domain = 0\n";
-        return;
-      }
-    MFreedom_Constraint::setDomain(theDomain);
+    MFreedom_Joint::setDomain(theDomain);
 
     if(theDomain)
       {
-        RetainedNode = theDomain->getNode(getNodeRetained());
-        if(RetainedNode)  RetainedNode->connect(this);
-        ConstrainedNode = theDomain->getNode(getNodeConstrained());
-        if(ConstrainedNode) ConstrainedNode->connect(this);
         RotationNode = theDomain->getNode(nodeRotation);
-        if(RotationNode) RotationNode->connect(this);
+        if(RotationNode)
+	  RotationNode->connect(this);
+	else
+          {
+            std::cerr << nombre_clase() << "::" << __FUNCTION__
+		      << "; nodeRotation: " << nodeRotation
+		      << "does not exist in model\n";
+          }
+	  
         DisplacementNode = theDomain->getNode(nodeDisplacement);
-        if(DisplacementNode) DisplacementNode->connect(this);
-    
-        if(ConstrainedNode == nullptr)
+        if(DisplacementNode)
+	  DisplacementNode->connect(this);
+        else    
           {
-            std::cerr << "MFreedom_Joint3D::setDomain: constrained node: ";
-            std::cerr << getNodeConstrained() << "does not exist in model\n";
-          }
-  
-        if(RetainedNode == nullptr)
-          {
-            std::cerr << "MFreedom_Joint3D::setDomain: retained node: ";
-            std::cerr << getNodeRetained() << "does not exist in model\n";
-          }
-  
-        if(RotationNode == nullptr)
-          {
-            std::cerr << "MFreedom_Joint3D::setDomain: nodeRotation: ";
-            std::cerr << nodeRotation << "does not exist in model\n";
-          }
-  
-        if(DisplacementNode == nullptr)
-          {
-            std::cerr << "MFreedom_Joint3D::setDomain: nodeDisplacement: ";
-            std::cerr << nodeDisplacement << "does not exist in model\n";
+            std::cerr << nombre_clase() << "::" << __FUNCTION__
+                      << "; nodeDisplacement: " << nodeDisplacement
+		      << "does not exist in model\n";
           }
       }
   }

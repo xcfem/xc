@@ -80,7 +80,7 @@ class MFreedom_ConstraintBase: public Constraint
       { return constrNodeTag; }
     virtual inline int &getNodeConstrained(void)
       { return constrNodeTag; }
-    bool afectaANodo(int tagNodo) const;
+    bool affectsNode(int ) const;
     virtual const ID &getConstrainedDOFs(void) const;        
     virtual const Matrix &getConstraint(void) const;
 

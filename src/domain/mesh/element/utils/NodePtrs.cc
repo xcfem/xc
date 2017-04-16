@@ -278,20 +278,71 @@ std::vector<int> XC::NodePtrs::getIdx(void) const
     return retval;     
   }
 
+//! @brief Checks that the dimensions of the node coordinates
+//! are all equal to the number being passed as parameter.
+bool XC::NodePtrs::checkDimension(const size_t &dim) const
+  {
+    bool retval= true;
+    const size_t sz= theNodes.size();
+    for(size_t i=0; i<sz; i++)
+      {
+        if(theNodes[i])
+	  {
+            if(dim!= theNodes[i]->getDim())
+	      {
+	        std::cerr << nombre_clase() << "::" << __FUNCTION__
+	                  << " wrong dimension of node coordinates in node: "
+	                  << i << " was: " << theNodes[i]->getDim()
+		          << ", must be: " << dim
+	                  << std::endl;
+	        retval= false;
+	        break;
+              }
+	  }
+	else
+          std::cerr << nombre_clase() << "::" << __FUNCTION__
+	            << "; pointer to node 0 is null."
+	            << std::endl;
+      }
+    return retval;
+  }
+
+//! @brief Returns the dimension of the node coordinates.
+size_t XC::NodePtrs::getDimension(void) const
+  {
+    size_t retval= 0;
+    if(!theNodes.empty())
+      {
+        if(theNodes[0])
+	  { retval= theNodes[0]->getDim(); }
+        else
+	  {
+	    std::cerr << nombre_clase() << "::" << __FUNCTION__
+	              << "; pointer to node 0 is null."
+	              << std::endl;
+	  }
+      }
+    else
+      std::cerr << nombre_clase() << "::" << __FUNCTION__
+                << "; node pointers container is empty."
+                << std::endl;
+    return retval;
+  }
+
 //! @brief Returns a matriz con las coordinates of the nodes.
 const XC::Matrix &XC::NodePtrs::getCoordinates(void) const
   {
     static Matrix retval;
     const size_t sz= theNodes.size();
-    retval= Matrix(sz,3);
+    const size_t dim= getDimension();
+    retval= Matrix(sz,dim);
     for(size_t i=0; i<sz; i++)
       {
         if(theNodes[i])
           {
             const Vector &coo= theNodes[i]->getCrds();
-            retval(i,0)= coo[0];
-            retval(i,1)= coo[1];
-            retval(i,2)= coo[2];
+	    for(size_t j= 0;j<dim;j++)
+              retval(i,j)= coo[j];
           }
       }
     return retval;

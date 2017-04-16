@@ -468,6 +468,7 @@ python tests/materials/ehe/test_fluencia_01.py
 python tests/materials/ehe/test_fluencia_02.py
 python tests/materials/ehe/test_fluencia_03.py
 python tests/materials/ehe/test_retraccion_01.py
+#python tests/materials/ehe/test_retraccion_02.py
 python tests/materials/ehe/test_relajacion_01.py
 
 echo "$BLEU" "  Steel design verifications (EAE)." "$NORMAL"

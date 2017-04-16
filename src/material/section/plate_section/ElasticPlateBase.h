@@ -50,7 +50,6 @@ class ElasticPlateBase: public PlateBase
     int recvData(const CommParameters &cp);
 
   public : 
-
     ElasticPlateBase(int tag,int classTag);
     ElasticPlateBase(int classTag);
     ElasticPlateBase(int tag,int classTag, double E, double nu, double h);
@@ -74,10 +73,7 @@ class ElasticPlateBase: public PlateBase
       { return (0.5*E/(1.0+nu)*h); }
     inline double bendingModulus(void) const
       { return (E*(h*h*h)/12.0/( 1.0 - nu*nu )); }
-
-
-  }; //end of ElasticPlateBase declarations
-
+  };
 } // end of XC namespace
 
 #endif

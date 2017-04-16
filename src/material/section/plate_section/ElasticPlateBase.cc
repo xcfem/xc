@@ -34,31 +34,31 @@
 //parameters
 const double XC::ElasticPlateBase::five6 = 5.0/6.0 ; //shear correction
 
-//! @brief Constuctor.
+//! @brief Constructor.
 XC::ElasticPlateBase::ElasticPlateBase(int tag,int classTag)
   : XC::PlateBase(tag, classTag), E(0.0), nu(0.0) {}
 
-//null constructor
+//! @brief Null constructor
 XC::ElasticPlateBase::ElasticPlateBase(int classTag)
   :XC::PlateBase( 0, classTag),
    E(0.0), nu(0.0) { }
 
-//full constructor
+//! @brief Constructor.
 XC::ElasticPlateBase::ElasticPlateBase(int tag, int classTag,
                                            double young,
                                            double poisson,
                                            double thickness)
   :XC::PlateBase(tag,classTag,h), E(young), nu(poisson) {}
 
-//swap history variables
+//! @brief swap history variables
 int XC::ElasticPlateBase::commitState(void) 
   { return 0 ; }
 
-//revert to last saved state
+//! @brief revert to last saved state
 int XC::ElasticPlateBase::revertToLastCommit(void)
   { return 0 ; }
 
-//revert to start
+//! @brief revert to start
 int XC::ElasticPlateBase::revertToStart(void)
   { return 0; }
 

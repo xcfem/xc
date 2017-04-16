@@ -55,9 +55,7 @@
 // Revised:
 //
 // Purpose: This file contains the class definition for RigidRod.
-// RigidRod is a class which constructs MFreedom_Constraint objects
-// for a rigid rod, all translational dof are constrained to be equal
-// at the retained and constarined nodes.
+
 
 #ifndef RigidRod_h
 #define RigidRod_h
@@ -70,8 +68,9 @@ class ID;
 
 //! @ingroup CContMP
 //
-//! @brief Impone la igualdad de desplazamientos traslacionales
-//! entre dos nodos.
+//! @brief constructs MFreedom_Constraint objects
+//! for a rigid rod, all translational dof are constrained to be equal
+//! at the retained and constarined nodes.
 class RigidRod: public RigidBase
   {
   public:

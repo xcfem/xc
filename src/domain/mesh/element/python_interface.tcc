@@ -53,6 +53,8 @@ class_<XC::NodePtrsWithIDs, bases<XC::NodePtrs>, boost::noncopyable >("NodePtrsW
 
 XC::NodePtrsWithIDs &(XC::Element::*getNodePtrsRef)(void)= &XC::Element::getNodePtrs;
 const XC::Vector &(XC::Element::*getResistingForceRef)(void) const= &XC::Element::getResistingForce;
+const XC::Matrix &(XC::Element::*getInitialStiffRef)(void) const= &XC::Element::getInitialStiff;
+const XC::Matrix &(XC::Element::*getTangentStiffRef)(void) const= &XC::Element::getTangentStiff;
 class_<XC::Element, XC::Element *,bases<XC::MeshComponent>, boost::noncopyable >("Element", no_init)
   .add_property("getNodes", make_function( getNodePtrsRef, return_internal_reference<>() ))
   .add_property("getIdxNodes",&XC::Element::getIdxNodes)
@@ -62,6 +64,8 @@ class_<XC::Element, XC::Element *,bases<XC::MeshComponent>, boost::noncopyable >
   .def("revertToStart", &XC::Element::revertToStart,"Returns the element to its initial state.")
   .def("getNumDOF", &XC::Element::getNumDOF,"Returns the number of element DOFs.")
   .def("getResistingForce",make_function(getResistingForceRef, return_internal_reference<>() ),"Calculates element's resisting force.")
+  .def("getTangentStiff",make_function(getTangentStiffRef, return_internal_reference<>() ),"Returns tangent stiffness matrix.")
+  .def("getInitialStiff",make_function(getInitialStiffRef, return_internal_reference<>() ),"Returns initial stiffness matrix.")
   .def("setDeadSRF",XC::Element::setDeadSRF,"Assigns Stress Reduction Factor for element deactivation.")
   .add_property("getVtkCellType",&XC::Element::getVtkCellType,"Returns cell type for Vtk graphics.")
   .def("getMEDCellType",&XC::Element::getVtkCellType,"Returns cell type for MED file writing.")

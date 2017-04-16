@@ -107,7 +107,7 @@ int XC::Linear::resuelve(void)
     if(theSOE->solve() < 0) //launches SOE solution.
       {
 	std::cerr << "WARNING XC::Linear::solveCurrentStep() -";
-	std::cerr << "the " << nombre_clase() << " failed in solve()\n";	
+	std::cerr << "the " << theSOE->nombre_clase() << " failed in solve()\n";	
 	return -3;
       }
 
@@ -115,8 +115,8 @@ int XC::Linear::resuelve(void)
 
     if(theIncIntegrator->update(deltaU) < 0) //Actualiza movimientos.
       {
-	std::cerr << "WARNING XC::Linear::solveCurrentStep() -";
-	std::cerr << "the XC::Integrator failed in update()\n";	
+	std::cerr << nombre_clase() << "::" << __FUNCTION__ 
+	          << "the integrator failed in update()\n";	
 	return -4;
       }
     return 0;

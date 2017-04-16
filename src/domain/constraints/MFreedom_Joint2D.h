@@ -61,7 +61,7 @@
 // point constraint.
 //
 
-#include <domain/constraints/MFreedom_Constraint.h>
+#include "MFreedom_Joint.h"
 
 namespace XC {
 
@@ -73,29 +73,21 @@ class ID;
 //! @ingroup CContMP
 //
 //! @brief ??.
-class MFreedom_Joint2D : public MFreedom_Constraint
+class MFreedom_Joint2D : public MFreedom_Joint
   {
   private:
     int MainDOF; //!<  main degree of freedom for rotation
     int AuxDOF; //!<  Auxilary degree of freedom for shear
     int FixedEnd; //!<  fixed rotational degree of freedom at the end released = 0 , fixed = 1
     
-    Node *RetainedNode; //!<  to identify the retained node
-    Node *ConstrainedNode; //!<  to identify  the constrained node
-
-    int LargeDisplacement; //!<  flag for large displacements enabled; LrgDsp=0 means large displacement is not enabled
-    double Length0;
   public:
     // constructors        
     MFreedom_Joint2D(void);
 
     MFreedom_Joint2D(Domain *theDomain, int tag, int nodeRetain, int nodeConstr,int Maindof, int fixedend , int LrgDsp = 0 ); //LrgDsp=0 means large displacement is not enabled
-    ~MFreedom_Joint2D(void);
 
     // method to get information about the constraint
     int applyConstraint(double pseudoTime);
-    bool isTimeVarying(void) const;
-    void setDomain(Domain *theDomain);
     virtual const Matrix &getConstraint(void) const;
 
     // methods for output

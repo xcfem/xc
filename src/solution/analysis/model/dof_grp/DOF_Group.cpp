@@ -508,23 +508,23 @@ void XC::DOF_Group::setNodeAccel(const Vector &udotdot)
   }
 
 
-// void setNodeIncrDisp(const XC::Vector &u);
-//        Method to set the corresponding nodes displacements to the
-//        values in u, components identified by myID;
-
+//! @brief Method to set the corresponding nodes displacements to the
+//" values in u, components identified by myID
 void XC::DOF_Group::incrNodeDisp(const Vector &u)
   {
     if(!myNode)
       {
-        std::cerr << "DOF_Group::setNodeDisp: 0 XC::Node Pointer\n";
+        std::cerr << nombre_clase() << "::" << __FUNCTION__
+	          << "; null node pointer\n";
         exit(-1);
       }
 
-    Vector &disp = unbalAndTangent.getResidual();;
+    Vector &disp= unbalAndTangent.getResidual();
 
     if(disp.Size() == 0)
       {
-        std::cerr << "DOF_Group::setNodeIncrDisp - out of space\n";
+        std::cerr << nombre_clase() << "::" << __FUNCTION__
+	          << "; out of space\n";
         return;
       }
 
@@ -534,9 +534,9 @@ void XC::DOF_Group::incrNodeDisp(const Vector &u)
       {
         const int loc= myID(i);
         if(loc >= 0)
-          disp(i) = u(loc);
+          disp(i)= u(loc);
         else
-          disp(i) = 0.0;
+          disp(i)= 0.0;
       }
     myNode->incrTrialDisp(disp);
   }

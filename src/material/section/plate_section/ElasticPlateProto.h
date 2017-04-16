@@ -70,8 +70,7 @@ class ElasticPlateProto : public ElasticPlateBase
     const Vector& getSectionDeformation(void) const;
 
     int revertToStart(void);
-
-  }; //end of ElasticPlateProto declarations
+  };
 
 //static vector and matrices
 template <int SZ>
@@ -130,6 +129,7 @@ const XC::Vector &XC::ElasticPlateProto<SZ>::getSectionDeformation(void) const
 template <int SZ>
 int XC::ElasticPlateProto<SZ>::revertToStart(void)
   {
+    trialStrain.Zero();
     initialStrain.Zero();
     return ElasticPlateBase::revertToStart();
   }
