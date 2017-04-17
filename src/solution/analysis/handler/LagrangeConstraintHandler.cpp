@@ -81,6 +81,9 @@
 
 
 //! @brief Constructor.
+//! @param owr: pointer to the model wrapper that owns the handler.
+//! @param sp: factor to be used with the single freedom constraints.
+//! @param mp: factor to be used with the multi-freedom constraints.
 XC::LagrangeConstraintHandler::LagrangeConstraintHandler(ModelWrapper *owr,const double &sp,const double &mp)
   :FactorsConstraintHandler(owr,HANDLER_TAG_LagrangeConstraintHandler,sp,mp) {}
 
@@ -88,7 +91,7 @@ XC::LagrangeConstraintHandler::LagrangeConstraintHandler(ModelWrapper *owr,const
 XC::ConstraintHandler *XC::LagrangeConstraintHandler::getCopy(void) const
   { return new LagrangeConstraintHandler(*this); }
 
-
+//! @brief Handle the constraints.
 int XC::LagrangeConstraintHandler::handle(const ID *nodesLast)
   {
     // first check links exist to a Domain and an XC::AnalysisModel object
@@ -96,10 +99,10 @@ int XC::LagrangeConstraintHandler::handle(const ID *nodesLast)
     AnalysisModel *theModel = this->getAnalysisModelPtr();
     Integrator *theIntegrator = this->getIntegratorPtr();
 
-    if((theDomain == 0) || (theModel == 0) || (theIntegrator == 0))
+    if((!theDomain) || (!theModel) || (!theIntegrator))
       {
-        std::cerr << "WARNING XC::LagrangeConstraintHandler::handle() - ";
-        std::cerr << " no se ha asignado domain, modelo o integrator.\n";
+        std::cerr << nombre_clase() << "::" << __FUNCTION__
+	          << "; domain, model or integrator was not set.\n";
         return -1;
       }
 
@@ -196,9 +199,9 @@ int XC::LagrangeConstraintHandler::handle(const ID *nodesLast)
                   }
                 else
                   {
-                    std::cerr << "WARNING XC::LagrangeConstraintHandler::handle() ";
-                    std::cerr << " - boundary sp constraint in subdomain";
-                    std::cerr << " this should not be - results suspect \n";
+                    std::cerr << nombre_clase() << "::" << __FUNCTION__
+		              << "; boundary sp constraint in subdomain"
+                              << " this should not be - results suspect \n";
                   }
             }
         }

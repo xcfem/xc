@@ -58,7 +58,11 @@
 #include <utility/matrix/Vector.h>
 
 
-
+//! @brief Constructor.
+//! @param owr: pointer to the model wrapper that owns the handler.
+//! @param classTag: identifier of the class.
+//! @param sp: factor to be used with the single freedom constraints.
+//! @param mp: factor to be used with the multi-freedom constraints.
 XC::FactorsConstraintHandler::FactorsConstraintHandler(ModelWrapper *owr,int classTag,const double &sp,const double &mp)
   :ConstraintHandler(owr,classTag), alphaSP(sp), alphaMP(mp) {}
 
@@ -78,6 +82,7 @@ int XC::FactorsConstraintHandler::recvData(const CommParameters &cp)
     return res;
   }
 
+//! @brief Send object through the channel being passed as parameter.
 int XC::FactorsConstraintHandler::sendSelf(CommParameters &cp)
   {
     setDbTag(cp);
@@ -87,10 +92,12 @@ int XC::FactorsConstraintHandler::sendSelf(CommParameters &cp)
 
     res+= cp.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
-      std::cerr << nombre_clase() << "sendSelf() - failed to send data\n";
+      std::cerr << nombre_clase() << __FUNCTION__
+                << "; failed to send data\n";
     return res;
   }
 
+//! @brief Receives object through the channel being passed as parameter.
 int XC::FactorsConstraintHandler::recvSelf(const CommParameters &cp)  
   {
     inicComm(3);
@@ -98,13 +105,15 @@ int XC::FactorsConstraintHandler::recvSelf(const CommParameters &cp)
     int res= cp.receiveIdData(getDbTagData(),dataTag);
 
     if(res<0)
-      std::cerr << nombre_clase() << "::recvSelf - failed to receive ids.\n";
+      std::cerr << nombre_clase() << __FUNCTION__
+	        << "; failed to receive ids.\n";
     else
       {
         //setTag(getDbTagDataPos(0));
         res+= recvData(cp);
         if(res<0)
-          std::cerr << nombre_clase() << "::recvSelf - failed to receive data.\n";
+          std::cerr << nombre_clase() << __FUNCTION__
+                    << "; failed to receive data.\n";
       }
     return res;
   }

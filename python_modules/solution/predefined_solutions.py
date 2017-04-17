@@ -93,6 +93,23 @@ class SolutionProcedure(object):
     self.solver= self.soe.newSolver("super_lu_solver")
     self.analysis= self.solu.newAnalysis("static_analysis","smt","")
     return self.analysis;
+  def simpleTransformationStaticLinear(self,prb):
+    ''' Simple solution algorithm with a transformation constraint handler.'''
+    self.solu= prb.getSoluProc
+    self.solCtrl= self.solu.getSoluControl
+    solModels= self.solCtrl.getModelWrapperContainer
+    self.sm= solModels.newModelWrapper("sm")
+    self.numberer= self.sm.newNumberer("default_numberer")
+    self.numberer.useAlgorithm("rcm")
+    self.cHandler= self.sm.newConstraintHandler("transformation_constraint_handler")
+    solMethods= self.solCtrl.getSoluMethodContainer
+    self.smt= solMethods.newSoluMethod("smt","sm")
+    self.solAlgo= self.smt.newSolutionAlgorithm("linear_soln_algo")
+    self.integ= self.smt.newIntegrator("load_control_integrator",xc.Vector([]))
+    self.soe= self.smt.newSystemOfEqn("sparse_gen_col_lin_soe")
+    self.solver= self.soe.newSolver("super_lu_solver")
+    self.analysis= self.solu.newAnalysis("static_analysis","smt","")
+    return self.analysis;
   def simpleNewtonRaphson(self,prb):
     self.solu= prb.getSoluProc
     self.solCtrl= self.solu.getSoluControl

@@ -79,6 +79,7 @@
 #include "domain/domain/subdomain/Subdomain.h"
 
 //! @brief Constructor.
+//! @param owr: pointer to the model wrapper that owns the handler.
 XC::PlainHandler::PlainHandler(ModelWrapper *owr)
   :ConstraintHandler(owr,HANDLER_TAG_PlainHandler) {}
 
@@ -86,6 +87,7 @@ XC::PlainHandler::PlainHandler(ModelWrapper *owr)
 XC::ConstraintHandler *XC::PlainHandler::getCopy(void) const
   { return new PlainHandler(*this); }
 
+//! @brief Handle the constraints.
 int XC::PlainHandler::handle(const ID *nodesLast)
   {
     // first check links exist to a XC::Domain and an XC::AnalysisModel object
@@ -93,13 +95,12 @@ int XC::PlainHandler::handle(const ID *nodesLast)
     AnalysisModel *theModel = this->getAnalysisModelPtr();
     Integrator *theIntegrator = this->getIntegratorPtr();    
     
-    if((theDomain == 0) || (theModel == 0) || (theIntegrator == 0))
+    if((!theDomain) || (!theModel) || (!theIntegrator))
       {
-        std::cerr << "WARNING PlainHandler::handle() - ";
-        std::cerr << " no se ha asignado domain, modelo o integrator.\n";
+        std::cerr << nombre_clase() << "::" << __FUNCTION__
+                  << "; domain, model or integrator was not set.\n";
         return -1;
       }
-
 
     // initialse the DOF_Groups and add them to the AnalysisModel.
     //    : must of course set the initial IDs
@@ -122,24 +123,26 @@ int XC::PlainHandler::handle(const ID *nodesLast)
         int nodeID = nodPtr->getTag();
         SFreedom_ConstraintIter &theSPs = theDomain->getConstraints().getDomainAndLoadPatternSPs();
         while((spPtr = theSPs()) != 0)
-            if(spPtr->getNodeTag() == nodeID) {
-                if(spPtr->isHomogeneous() == false) {
-                    std::cerr << "WARNING XC::PlainHandler::handle() - ";
-                    std::cerr << " non-homogeneos constraint";
-                    std::cerr << " for node " << spPtr->getNodeTag();
-                    std::cerr << " homo assumed\n";
-                }
+            if(spPtr->getNodeTag() == nodeID)
+              {
+                if(spPtr->isHomogeneous() == false)
+                  std::cerr << nombre_clase() << "::" << __FUNCTION__
+                            << ";  non-homogeneos constraint"
+                            << " for node " << spPtr->getNodeTag()
+                            << " homo assumed\n";
                 const ID &id = dofPtr->getID();
                 int dof = spPtr->getDOF_Number();                
-                if(id(dof) == -2) {
+                if(id(dof) == -2)
+                  {
                         dofPtr->setID(spPtr->getDOF_Number(),-1);
                         countDOF--;        
-                } else {
-                    std::cerr << "WARNING XC::PlainHandler::handle() - ";
-                    std::cerr << " multiple single pointconstraints at DOF " << dof;
-                    std::cerr << " for node " << spPtr->getNodeTag() << std::endl;
-                }
-            }
+                  }
+                else
+                  std::cerr << nombre_clase() << "::" << __FUNCTION__
+                            << "; multiple single pointconstraints at DOF "
+                            << dof << " for node " << spPtr->getNodeTag()
+                            << std::endl;
+              }
 
         // loop through the MFreedom_Constraints to see if any of the
         // DOFs are constrained, note constraint matrix must be diagonal
@@ -151,22 +154,18 @@ int XC::PlainHandler::handle(const ID *nodesLast)
             if(mpPtr->getNodeConstrained() == nodeID)
               {
                 if(mpPtr->isTimeVarying() == true)
-                  {
-                    std::cerr << "WARNING XC::PlainHandler::handle() - ";
-                    std::cerr << " time-varying constraint";
-                    std::cerr << " for node " << nodeID;
-                    std::cerr << " non-varyng assumed\n";
-                  }
+                  std::cerr << nombre_clase() << "::" << __FUNCTION__
+                            << ";  time-varying constraint"
+                            << " for node " << nodeID
+                            << " non-varying assumed\n";
                 const Matrix &C = mpPtr->getConstraint();
                 int numRows = C.noRows();
                 int numCols = C.noCols();
                 if(numRows != numCols)
-                  {
-                    std::cerr << "WARNING PlainHandler::handle() - ";
-                        std::cerr << " constraint matrix not diagonal, ignoring constraint";
-                        std::cerr << " for node " << nodeID << std::endl;
-                        std::cerr << " non-varyng assumed\n";
-                  }
+                  std::cerr << nombre_clase() << "::" << __FUNCTION__
+                            << " constraint matrix not diagonal,"
+                            << " ignoring constraint for node "
+                            << nodeID << std::endl;
                 else
                   {
                     int ok = 0;
@@ -177,14 +176,12 @@ int XC::PlainHandler::handle(const ID *nodesLast)
                           if(i != j)
                             if(C(i,j) != 0.0)
                           ok = 1;
-		      }
-                    if(ok != 0)
-                      {
-                        std::cerr << "WARNING XC::PlainHandler::handle() - ";
-                        std::cerr << " constraint matrix not identity, ignoring constraint";
-                        std::cerr << " for node " << nodeID << std::endl;
-                        std::cerr << " non-varyng assumed\n";
                       }
+                    if(ok != 0)
+                      std::cerr << nombre_clase() << "::" << __FUNCTION__
+                                << "; constraint matrix not identity,"
+                                << " ignoring constraint for node "
+                                << nodeID << std::endl;
                     else
                       {
                         const ID &dofs = mpPtr->getConstrainedDOFs();
@@ -198,17 +195,16 @@ int XC::PlainHandler::handle(const ID *nodesLast)
                                 countDOF--;        
                               }
                             else
-                              {
-                                std::cerr << "WARNING XC::PlainHandler::handle() - ";
-                                std::cerr << " constraint at dof " << dof << " already specified for constrained node";
-                                std::cerr << " in MFreedom_Constraint at node " << nodeID << std::endl;
-                              }
-                                        
-			  }
-		      }
-		  }
-	      }
-	  }
+                              std::cerr << nombre_clase() << "::" << __FUNCTION__
+                                        << ";  constraint at dof " << dof
+                                        << " already specified for constrained node"
+                                        << " in MFreedom_Constraint at node "
+                                        << nodeID << std::endl;
+                          }
+                      }
+                  }
+              }
+          }
         // loop through the MFreedom_Constraints to see if any of the
         // DOFs are constrained, note constraint matrix must be diagonal
         // with 1's on the diagonal
@@ -216,7 +212,8 @@ int XC::PlainHandler::handle(const ID *nodesLast)
         MRMFreedom_Constraint *mrmpPtr;
         while((mrmpPtr = theMRMPs()) != 0)
           {
-	    std::cerr << "PlainHandler::handle loop through the MRMFreedom_Constraints." << std::endl;
+            std::cerr << nombre_clase() << "::" << __FUNCTION__
+		      << "; loop through the MRMFreedom_Constraints." << std::endl;
           }
       }
 
@@ -226,25 +223,28 @@ int XC::PlainHandler::handle(const ID *nodesLast)
     // now see if we have to set any of the dof's to -3
     //    int numLast = 0;
     if(nodesLast != 0) 
-        for (int i=0; i<nodesLast->Size(); i++) {
+        for(int i=0; i<nodesLast->Size(); i++)
+	  {
             int nodeID = (*nodesLast)(i);
             Node *nodPtr = theDomain->getNode(nodeID);
-            if(nodPtr != 0) {
+            if(nodPtr != 0)
+	      {
                 dofPtr = nodPtr->getDOF_GroupPtr();
                 
-                const XC::ID &id = dofPtr->getID();
+                const ID &id = dofPtr->getID();
                 // set all the dof values to -3
                 for (int j=0; j < id.Size(); j++) 
-                    if(id(j) == -2) {
+                    if(id(j) == -2)
+		      {
                         dofPtr->setID(j,-3);
                         count3++;
-                    } else {
-                        std::cerr << "WARNING XC::PlainHandler::handle() ";
-                        std::cerr << " - boundary sp constraint in subdomain";
-                        std::cerr << " this should not be - results suspect \n";
-                    }
-            }
-        }
+                      }
+		    else
+		      std::cerr << nombre_clase() << "::" << __FUNCTION__
+		                << "; boundary sp constraint in subdomain"
+		                << " this should not be - results suspect \n";
+	      }
+	  }
     
     // initialise the FE_Elements and add to the XC::AnalysisModel.
     ElementIter &theEle = theDomain->getElements();

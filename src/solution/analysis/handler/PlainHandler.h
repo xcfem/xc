@@ -71,7 +71,7 @@ class DOF_Group;
 
 //! @ingroup AnalysisCH
 //
-//! @brief Gestor de coacciones trivial.
+//! @brief Trivial constraint handler.
 class PlainHandler : public ConstraintHandler
   {
     friend class ModelWrapper;
@@ -79,7 +79,6 @@ class PlainHandler : public ConstraintHandler
     PlainHandler(ModelWrapper *);
     ConstraintHandler *getCopy(void) const;
   public:
-
     int handle(const ID *nodesNumberedLast =0);
 
     int sendSelf(CommParameters &);

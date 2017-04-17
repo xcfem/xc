@@ -433,8 +433,8 @@ XC::TransformationDOF_Group *XC::AnalysisModel::createTransformationDOF_Group(co
         addDOF_Group(dofPtr);
       }
     else
-      std::cerr << "WARNING AnalysisModel::createTransformationDOF_Group() "
-                << "- ran out of memory"
+      std::cerr << nombre_clase() << "::" << __FUNCTION__
+                << "; ran out of memory"
                 << " creating DOF_Group " << tag << std::endl;
     return dofPtr;
   }
@@ -443,15 +443,15 @@ XC::TransformationDOF_Group *XC::AnalysisModel::createTransformationDOF_Group(co
   {
     assert(mrmp);
     assert(handler);
-    TransformationDOF_Group *dofPtr=new TransformationDOF_Group(tag,myNode,mrmp,handler);
+    TransformationDOF_Group *dofPtr= new TransformationDOF_Group(tag,myNode,mrmp,handler);
     if(dofPtr)
       {
         myNode->setDOF_GroupPtr(dofPtr);
         addDOF_Group(dofPtr);
       }
     else
-      std::cerr << "WARNING AnalysisModel::createTransformationDOF_Group() "
-                << "- ran out of memory"
+      std::cerr << nombre_clase() << "::" << __FUNCTION__
+                << "; ran out of memory"
                 << " creating DOF_Group " << tag << std::endl;
     return dofPtr;
   }
@@ -466,8 +466,8 @@ XC::TransformationDOF_Group *XC::AnalysisModel::createTransformationDOF_Group(co
         addDOF_Group(dofPtr);
       }
     else
-      std::cerr << "WARNING AnalysisModel::createTransformationDOF_Group() "
-                << "- ran out of memory"
+      std::cerr << nombre_clase() << "::" << __FUNCTION__
+                << "; ran out of memory"
                 << " creating DOF_Group " << tag << std::endl;
     return dofPtr;
   }

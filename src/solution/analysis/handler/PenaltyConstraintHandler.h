@@ -71,7 +71,7 @@ namespace XC {
 class FE_Element;
 class DOF_Group;
 
- const double DefaultPenaltyFactor= 1e7; //10^(p/2) siendo p el number of digits decimales.
+const double DefaultPenaltyFactor= 1e7; //10^(p/2) being p the number of decimal digits.
 
 //! @ingroup AnalysisCH
 //
@@ -84,11 +84,9 @@ class PenaltyConstraintHandler : public FactorsConstraintHandler
   {
     friend class ModelWrapper;
     friend class FEM_ObjectBroker;
-    PenaltyConstraintHandler(ModelWrapper *,const double &alphaSP= DefaultPenaltyFactor,
-                             const double &alphaMP= DefaultPenaltyFactor);
+    PenaltyConstraintHandler(ModelWrapper *,const double &alphaSP= DefaultPenaltyFactor, const double &alphaMP= DefaultPenaltyFactor);
     ConstraintHandler *getCopy(void) const;
   public:
-
     int handle(const ID *nodesNumberedLast =0);
   };
 } // end of XC namespace

@@ -82,7 +82,7 @@ class ModelWrapper;
 //! @defgroup AnalysisCH Analysis constraint handlers.
 //
 //! @ingroup AnalysisCH
-//! @brief ConstraintHandlers enforce the single and multi point 
+//! @brief ConstraintHandlers enforce the single and multi freedom 
 //! constraints that exist in the domain by creating the appropriate FE_Element
 //! and DOF_Group objects.
 class ConstraintHandler: public MovableObject, public EntCmd

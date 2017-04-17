@@ -154,6 +154,7 @@ const XC::ID &XC::MFreedom_Constraint::getRetainedDOFs(void) const
     return retainDOF;    
   }
 
+
 //! @brief Applies the constraint at the pseudo-time being passed as parameter.
 int XC::MFreedom_Constraint::applyConstraint(double timeStamp)
   {

@@ -69,6 +69,7 @@
 #include "solution/analysis/UnbalAndTangent.h"
 
 namespace XC {
+class MFreedom_ConstraintBase;
 class MFreedom_Constraint;
 class MRMFreedom_Constraint;
 class SFreedom_Constraint;
@@ -83,28 +84,34 @@ class TransformationConstraintHandler;
 class TransformationDOF_Group: public DOF_Group
   {
   private:
-    MFreedom_Constraint *theMP;
-    MRMFreedom_Constraint *theMRMP;
+    MFreedom_Constraint *theMP; //!< Pointer to multi-freedom constraint.
+    MRMFreedom_Constraint *theMRMP; //!< Pointer to multi-row, multi-freedom constraint.
     
     Matrix Trans;
     ID modID;
     int modNumDOF;
     UnbalAndTangent unbalAndTangentMod;
     
-    std::vector<SFreedom_Constraint *> theSPs;
+    std::vector<SFreedom_Constraint *> theSPs; //!< Pointers to single-freedom constraints.
     
     // static variables - single copy for all objects of the class	    
     static UnbalAndTangentStorage unbalAndTangentArrayMod; //!< array of class wide vectors and matrices
-    static int numTransDOFs;           // number of objects        
-    static TransformationConstraintHandler *theHandler;
+    static int numTransDOFs; //!< number of objects        
+    static TransformationConstraintHandler *theHandler; //!< Transformation constraint handler.
 
   protected:
     friend class AnalysisModel;
     TransformationDOF_Group(int tag, Node *myNode, MFreedom_Constraint *, TransformationConstraintHandler*);
     TransformationDOF_Group(int tag, Node *myNode, MRMFreedom_Constraint *, TransformationConstraintHandler*);
-    TransformationDOF_Group(int tag, Node *myNode, TransformationConstraintHandler *);    
+    TransformationDOF_Group(int tag, Node *myNode, TransformationConstraintHandler *);
+    std::vector<SFreedom_Constraint *> getSFreedomConstraintArray(int ) const;
+    MFreedom_ConstraintBase *getMFreedomConstraint(void);
+    const MFreedom_ConstraintBase *getMFreedomConstraint(void) const;
+    const Vector &setupResidual(int numCNodeDOF, const ID &,const ID &, const Vector &, const std::vector<Node *> &,const Vector &(Node::*response)(void) const);
+    const Vector &getCommittedResponse(const Vector &(Node::*response)(void) const);
+    void setupResidual(const Vector &,int (Node::*setTrial)(const Vector &));
   public:
-    ~TransformationDOF_Group();    
+    ~TransformationDOF_Group();
     
     // methods dealing with the ID and transformation matrix
     int doneID(void);    
@@ -127,9 +134,9 @@ class TransformationDOF_Group: public DOF_Group
     const Vector &getM_Force(const Vector &x, double fact = 1.0);
     
     // methods to obtain committed responses from the nodes
-    const Vector & getCommittedDisp(void);
-    const Vector & getCommittedVel(void);
-    const Vector & getCommittedAccel(void);
+    const Vector &getCommittedDisp(void);
+    const Vector &getCommittedVel(void);
+    const Vector &getCommittedAccel(void);
     
     // methods to update the trial response at the nodes
     void setNodeDisp(const Vector &u);

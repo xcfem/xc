@@ -81,6 +81,7 @@
 
 
 //! @brief Constructor.
+//! @param owr: pointer to the model wrapper that owns the handler.
 XC::TransformationConstraintHandler::TransformationConstraintHandler(ModelWrapper *owr)
   :ConstraintHandler(owr,HANDLER_TAG_TransformationConstraintHandler),
  theFEs(), theDOFs(),numDOF(0),numConstrainedNodes(0) {}
@@ -90,25 +91,25 @@ XC::TransformationConstraintHandler::TransformationConstraintHandler(ModelWrappe
 XC::ConstraintHandler *XC::TransformationConstraintHandler::getCopy(void) const
   { return new TransformationConstraintHandler(*this); }
 
+//! @brief Handle the constraints.
 int XC::TransformationConstraintHandler::handle(const ID *nodesLast)
   {
     // first check links exist to a Domain and an AnalysisModel object
     Domain *theDomain= this->getDomainPtr();
     if(!theDomain)
-      std::cerr << "WARNING TransformationConstraintHandler::handle() - "
-                << " pointer to domain nulo." << std::endl;
+      std::cerr << nombre_clase() << "::" << __FUNCTION__
+                << "; null pointer to domain." << std::endl;
     AnalysisModel *theModel= this->getAnalysisModelPtr();
     if(!theModel)
-      std::cerr << "WARNING TransformationConstraintHandler::handle() - "
-                << " pointer to analysis model nulo." << std::endl;
+      std::cerr << nombre_clase() << "::" << __FUNCTION__
+		<< " pointer to analysis model is null." << std::endl;
     Integrator *theIntegrator= this->getIntegratorPtr();
     if(!theIntegrator)
-      std::cerr << "WARNING TransformationConstraintHandler::handle() - "
-                << " pointer to integrator nulo." << std::endl;
+      std::cerr << nombre_clase() << "::" << __FUNCTION__
+                << " pointer to integrator is null." << std::endl;
 
     // get number of elements and nodes in the domain
     // and init the theFEs and theDOFs arrays
-    int numMPConstraints= theDomain->getConstraints().getNumMPs();
 
     //    int numSPConstraints= theDomain->getConstraints().getNumSPs();
     int numSPConstraints= 0;
@@ -120,11 +121,12 @@ int XC::TransformationConstraintHandler::handle(const ID *nodesLast)
 
     numDOF= 0;
 
-    int i= -1;
+    //int i= -1;
 
     // create an ID of constrained node tags in MFreedom_Constraints
+    const int numMPConstraints= theDomain->getConstraints().getNumMPs();
     IDVarSize constrainedNodesMP(0, numMPConstraints);
-    std::vector<MFreedom_Constraint *> mps(numMPConstraints,static_cast<MFreedom_Constraint *>(nullptr));
+    std::vector<MFreedom_Constraint *> mfs(numMPConstraints,static_cast<MFreedom_Constraint *>(nullptr));
     if(numMPConstraints != 0)
       {
         MFreedom_ConstraintIter &theMPs= theDomain->getConstraints().getMPs();
@@ -132,18 +134,18 @@ int XC::TransformationConstraintHandler::handle(const ID *nodesLast)
         int index= 0;
         while((theMP= theMPs()) != 0)
           {
-            int nodeConstrained= theMP->getNodeConstrained();
+            const int nodeConstrained= theMP->getNodeConstrained();
             numDOF++;
             constrainedNodesMP[index]= nodeConstrained;
-            mps[index]= theMP;
+            mfs[index]= theMP;
             index++;
           }
       }
 
-    int numMRMPConstraints= theDomain->getConstraints().getNumMRMPs();
     // create an ID of constrained node tags in MRMFreedom_Constraints
+    const int numMRMPConstraints= theDomain->getConstraints().getNumMRMPs();
     IDVarSize constrainedNodesMRMP(0, numMRMPConstraints);
-    std::vector<MRMFreedom_Constraint *> mrmps(numMRMPConstraints,static_cast<MRMFreedom_Constraint *>(nullptr));
+    std::vector<MRMFreedom_Constraint *> mrmfs(numMRMPConstraints,static_cast<MRMFreedom_Constraint *>(nullptr));
     if(numMRMPConstraints != 0)
       {
         MRMFreedom_ConstraintIter &theMRMPs= theDomain->getConstraints().getMRMPs();
@@ -151,10 +153,10 @@ int XC::TransformationConstraintHandler::handle(const ID *nodesLast)
         int index= 0;
         while((theMRMP= theMRMPs()) != 0)
           {
-            int nodeConstrained= theMRMP->getNodeConstrained();
+            const int nodeConstrained= theMRMP->getNodeConstrained();
             numDOF++;
             constrainedNodesMRMP[index]= nodeConstrained;
-            mrmps[index]= theMRMP;
+            mrmfs[index]= theMRMP;
             index++;
           }
       }
@@ -169,7 +171,7 @@ int XC::TransformationConstraintHandler::handle(const ID *nodesLast)
         int index= 0;
         while((theSP= theSPs()) != 0)
           {
-            int constrainedNode= theSP->getNodeTag();
+            const int constrainedNode= theSP->getNodeTag();
             numDOF++;
             constrainedNodesSP[index]= constrainedNode;
             sps[index]= theSP;
@@ -180,13 +182,14 @@ int XC::TransformationConstraintHandler::handle(const ID *nodesLast)
     // create an array for the DOF_Groups and zero it
     if(numDOF <= 0)
       {
-        std::cerr << " DOF_Groups array of size " << numDOF << std::endl;
+        std::cerr << nombre_clase() << "::" << __FUNCTION__
+		  << " DOF_Groups array of size " << numDOF << std::endl;
         return -3;
       }
     theDOFs= std::vector<DOF_Group *>(numDOF,static_cast<DOF_Group *>(nullptr));
 
 
-    //create a DOF_Group for each XC::Node and add it to the XC::AnalysisModel.
+    //create a DOF_Group for each node and add it to the analysis model.
     //    :must of course set the initial IDs
     NodeIter &theNod= theDomain->getNodes();
     Node *nodPtr= nullptr;
@@ -197,20 +200,21 @@ int XC::TransformationConstraintHandler::handle(const ID *nodesLast)
 
     numConstrainedNodes= 0;
     numDOF= 0;
-    while((nodPtr= theNod()) != 0)
+    while((nodPtr= theNod()) != 0) //For each node.
       {
 
-        DOF_Group *dofPtr= 0;
+        DOF_Group *dofPtr= nullptr;
 
         const int nodeTag= nodPtr->getTag();
         int numNodalDOF= nodPtr->getNumberDOF();
         int loc= -1;
         int createdDOF= 0;
 
+	//Multi-freedom constraints.
         loc= constrainedNodesMP.getLocation(nodeTag);
         if(loc >= 0)
           {
-            TransformationDOF_Group *tDofPtr= theModel->createTransformationDOF_Group(numDofGrp++, nodPtr, mps[loc], this);
+            TransformationDOF_Group *tDofPtr= theModel->createTransformationDOF_Group(numDofGrp++, nodPtr, mfs[loc], this);
             createdDOF= 1;
             dofPtr= tDofPtr;
 
@@ -233,6 +237,36 @@ int XC::TransformationConstraintHandler::handle(const ID *nodesLast)
               }
           }
 
+	//Multi-row, multi-freedom constraints.
+        if(createdDOF == 0)
+          {
+            loc= constrainedNodesMRMP.getLocation(nodeTag);
+            if(loc >= 0)
+              {
+                TransformationDOF_Group *tDofPtr= theModel->createTransformationDOF_Group(numDofGrp++, nodPtr, mrmfs[loc], this);
+                createdDOF= 1;
+                dofPtr= tDofPtr;
+                // add any SPs
+                if(numSPConstraints != 0)
+                  {
+                    loc= constrainedNodesSP.getLocation(nodeTag);
+                    if(loc >= 0)
+                      {
+                        tDofPtr->addSFreedom_Constraint(*(sps[loc]));
+                        for(int i= loc+1; i<numSPConstraints; i++)
+                          {
+                            if(constrainedNodesSP(i) == nodeTag)
+                              tDofPtr->addSFreedom_Constraint(*(sps[i]));
+                          }
+                      }
+                    // add the DOF to the array
+                    theDOFs[numDOF++]= dofPtr;
+                    numConstrainedNodes++;
+                  }
+              }
+          }
+
+	//Single freedom constraints.
         if(createdDOF == 0)
           {
             loc= constrainedNodesSP.getLocation(nodeTag);
@@ -268,11 +302,12 @@ int XC::TransformationConstraintHandler::handle(const ID *nodesLast)
           }
 
         if(dofPtr == 0)
-          std::cerr << "TransformationConstraintHandler::handle() - error in logic\n";
+          std::cerr << nombre_clase() << "::" << __FUNCTION__
+		    << "; error in logic.\n";
 
       }
 
-    // create the FE_Elements for the Elements and add to the XC::AnalysisModel
+    // create the FE_Elements for the elements and add them to the analysis model
     ElementIter &theEle= theDomain->getElements();
     Element *elePtr;
     FE_Element *fePtr= nullptr;
@@ -329,7 +364,8 @@ int XC::TransformationConstraintHandler::handle(const ID *nodesLast)
     // create an array for the FE_elements and zero it
     if(numFE<=0)
       {
-        std::cerr << " FE_Element array of size " << numFE << std::endl;
+        std::cerr << nombre_clase() << "::" << __FUNCTION__
+	          << "; FE_Element array of size " << numFE << std::endl;
         return -2;
       }
 
@@ -345,11 +381,11 @@ int XC::TransformationConstraintHandler::handle(const ID *nodesLast)
       }
     theModel->setNumEqn(countDOF);
 
-    // set the number of eqn in the model
+    // set the number of equations in the model
     // now see if we have to set any of the dof's to -3
     //    int numLast= 0;
     if(nodesLast != 0)
-      for(i=0; i<nodesLast->Size(); i++)
+      for(int i=0; i<nodesLast->Size(); i++)
         {
           int nodeID= (*nodesLast)(i);
           Node *nodPtr= theDomain->getNode(nodeID);
@@ -366,11 +402,9 @@ int XC::TransformationConstraintHandler::handle(const ID *nodesLast)
                       count3++;
                     }
                   else
-                    {
-                      std::cerr << "WARNING TransformationConstraintHandler::handle() ";
-                      std::cerr << " - boundary sp constraint in subdomain";
-                      std::cerr << " this should not be - results suspect \n";
-                    }
+                    std::cerr << nombre_clase() << "::" << __FUNCTION__
+  		              << "; boundary sp constraint in subdomain"
+                              << " this should not be - results suspect \n";
                 }
             }
 	}
@@ -385,7 +419,6 @@ void XC::TransformationConstraintHandler::clearAll(void)
 
     // reset the numbers
     numDOF= 0;
-
     ConstraintHandler::clearAll();
   }
 
@@ -429,4 +462,4 @@ int XC::TransformationConstraintHandler::doneNumberingDOF(void)
       elePtr->setID();
 
     return 0;
-}
+  }

@@ -64,9 +64,13 @@
 #include <solution/analysis/model/FE_EleIter.h>
 #include <solution/analysis/model/fe_ele/FE_Element.h>
 
-XC::ConstraintHandler::ConstraintHandler(ModelWrapper *owr,int clasTag)
-  :MovableObject(clasTag), EntCmd(owr) {}
+//! @brief Constructor.
+//! @param owr: pointer to the model wrapper that owns the handler.
+//! @param classTag: identifier of the class.
+XC::ConstraintHandler::ConstraintHandler(ModelWrapper *owr,int classTag)
+  :MovableObject(classTag), EntCmd(owr) {}
 
+//! @brief Numbering of degrees of freedom.
 int XC::ConstraintHandler::doneNumberingDOF(void)
   {
     // iterate through the FE_Element getting them to set their IDs
@@ -79,9 +83,11 @@ int XC::ConstraintHandler::doneNumberingDOF(void)
     return 0;
   }
 
+//! @brief Updates the state of the constraints.
 int XC::ConstraintHandler::update(void)
   { return 0; }
 
+//! @brief ??
 int XC::ConstraintHandler::applyLoad(void)
   { return 0; }
 
@@ -141,7 +147,7 @@ XC::Integrator *XC::ConstraintHandler::getIntegratorPtr(void)
     return sm->getIntegratorPtr();
   }
 
-//! @brief For the nodes reset the DOF_Group pointers to nullptr
+//! @brief Resets the DOF_Group pointers to nullptr for all the nodes.
 void XC::ConstraintHandler::clearAll(void)
   {
     Domain *theDomain = this->getDomainPtr();
