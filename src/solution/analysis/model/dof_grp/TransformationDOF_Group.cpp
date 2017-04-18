@@ -87,23 +87,46 @@ std::vector<XC::SFreedom_Constraint *> XC::TransformationDOF_Group::getSFreedomC
     return retval;
   }
 
+//! @brief Initializes object arrays.
+void XC::TransformationDOF_Group::arrays_setup(int numNodalDOF, int numConstrainedNodeRetainedDOF, int numRetainedNodeDOF)  
+  {
+    modNumDOF= numConstrainedNodeRetainedDOF + numRetainedNodeDOF;
+    unbalAndTangentMod= UnbalAndTangent(modNumDOF,unbalAndTangentArrayMod);
+
+    // create ID and transformation matrix
+    modID= ID(modNumDOF);
+    Trans= Matrix(numNodalDOF, modNumDOF);
+
+    // initially set the id values to -2 for any dof still due to constrained node
+    for(int i=0; i<numConstrainedNodeRetainedDOF; i++)
+      modID(i)= -2;
+    
+    // // for all the constrained dof values set to -1 LCPT COMMENTED OUT: IS EXACTLY
+    // THE SAME THAT THEY DO IN THE LINES "LA" AND "LB" (see below).
+    // for(int j=numConstrainedNodeRetainedDOF; j<modNumDOF; j++)
+    //   modID(j)= -1;
+
+    // for all the dof corresponding to the retained node set initially to -1
+    // we don't initially assign these equation nos. - this is done in doneID()
+    for(int k=numConstrainedNodeRetainedDOF; k<modNumDOF; k++) //LINE LA
+      modID(k)= -1;                                            //LINE LB
+  }
+
 
 XC::TransformationDOF_Group::TransformationDOF_Group(int tag, Node *node, MFreedom_Constraint *mp, TransformationConstraintHandler *theTHandler)  
   :DOF_Group(tag,node), theMP(mp), theMRMP(nullptr), unbalAndTangentMod(0,unbalAndTangentArrayMod), theSPs()
   {
     // determine the number of DOF 
-    int numNodalDOF= node->getNumberDOF();
+    const int numNodalDOF= node->getNumberDOF();
     const ID &retainedDOF= theMP->getRetainedDOFs();
     const ID &constrainedDOF= theMP->getConstrainedDOFs();    
-    int numNodalDOFConstrained= constrainedDOF.Size();
-    int numConstrainedNodeRetainedDOF= numNodalDOF - numNodalDOFConstrained;
-    int numRetainedNodeDOF= retainedDOF.Size();
-
-    modNumDOF= numConstrainedNodeRetainedDOF + numRetainedNodeDOF;
-    unbalAndTangentMod= UnbalAndTangent(modNumDOF,unbalAndTangentArrayMod);
+    const int numNodalDOFConstrained= constrainedDOF.Size();
+    const int numConstrainedNodeRetainedDOF= numNodalDOF - numNodalDOFConstrained;
+    const int numRetainedNodeDOF= retainedDOF.Size();
 
     // create SFreedom_Constraint array
     theSPs= getSFreedomConstraintArray(numNodalDOF);
+    arrays_setup(numNodalDOF,numConstrainedNodeRetainedDOF,numRetainedNodeDOF);
 
     /***********************
     // set the XC::SFreedom_Constraint corresponding to the dof in modID
@@ -123,23 +146,6 @@ XC::TransformationDOF_Group::TransformationDOF_Group(int tag, Node *node, MFreed
     }
     *******************/
      
-    // create ID and transformation matrix
-    modID= ID(modNumDOF);
-    Trans= Matrix(numNodalDOF, modNumDOF);
-
-    // initially set the id values to -2 for any dof still due to constrained node
-    for(int i=0; i<numConstrainedNodeRetainedDOF; i++)
-      modID(i)= -2;
-    
-    // for all the constrained dof values set to -1
-    for(int j=numConstrainedNodeRetainedDOF; j<modNumDOF; j++)
-      modID(j)= -1;
-
-    // for all the dof corresponding to the retained node set initially to -1
-    // we don't initially assign these equation nos. - this is done in doneID()
-    for(int k=numConstrainedNodeRetainedDOF; k<modNumDOF; k++)
-      modID(k)= -1;
-    
     numTransDOFs++;
     theHandler= theTHandler;
   }
@@ -151,33 +157,15 @@ XC::TransformationDOF_Group::TransformationDOF_Group(int tag, Node *node, MRMFre
     const int numNodalDOF= node->getNumberDOF();
     const ID &retainedDOF= theMRMP->getRetainedDOFs();
     const ID &constrainedDOF= theMRMP->getConstrainedDOFs();    
-    int numNodalDOFConstrained= constrainedDOF.Size();
-    int numConstrainedNodeRetainedDOF= numNodalDOF - numNodalDOFConstrained;
-    int numRetainedNodeDOF= retainedDOF.Size();
-
-    modNumDOF= numConstrainedNodeRetainedDOF + numRetainedNodeDOF;
-    unbalAndTangentMod= UnbalAndTangent(modNumDOF,unbalAndTangentArrayMod);
+    const int numNodalDOFConstrained= constrainedDOF.Size();
+    const int numConstrainedNodeRetainedDOF= numNodalDOF - numNodalDOFConstrained;
+    const int numRetainedNodeDOF= retainedDOF.Size();
 
     // create SFreedom_Constraint array
     theSPs= getSFreedomConstraintArray(numNodalDOF);
+    arrays_setup(numNodalDOF,numConstrainedNodeRetainedDOF,numRetainedNodeDOF);
 
-    // create ID and transformation matrix
-    modID= ID(modNumDOF);
-    Trans= Matrix(numNodalDOF, modNumDOF);
-
-    // initially set the id values to -2 for any dof still due to constrained node
-    for(int i=0; i<numConstrainedNodeRetainedDOF; i++)
-      modID(i)= -2;
-    
-    // for all the constrained dof values set to -1
-    for(int j=numConstrainedNodeRetainedDOF; j<modNumDOF; j++)
-      modID(j)= -1;
-    
-    // for all the dof corresponding to the retained node set initially to -1
-    // we don't initially assign these equation nos. - this is done in doneID()
-    for(int k=numConstrainedNodeRetainedDOF; k<modNumDOF; k++)
-      modID(k)= -1;
-
+    numTransDOFs++;
     theHandler= theTHandler;
   }
 
@@ -204,21 +192,20 @@ XC::TransformationDOF_Group::TransformationDOF_Group(int tag, Node *node, Transf
     int nodeTag= node->getTag();
     SFreedom_ConstraintIter &theSPIter= theDomain->getConstraints().getSPs();
     SFreedom_Constraint *sp;
-    while ((sp= theSPIter()) != 0) {
-        if(sp->getNodeTag() == nodeTag) {
+    while ((sp= theSPIter()) != 0)
+      {
+        if(sp->getNodeTag() == nodeTag)
+	  {
             int dof= sp->getDOF_Number();
             theSPs[dof]= sp;
-        }
-    }
-
+          }
+      }
     numTransDOFs++;
     theHandler= theTHandler;
   }
 
 
-// ~TransformationDOF_Group();    
-//        destructor.
-
+//! @brief Destructor.
 XC::TransformationDOF_Group::~TransformationDOF_Group()
   {
     numTransDOFs--;
@@ -344,6 +331,52 @@ const XC::Vector &XC::TransformationDOF_Group::setupResidual(int numCNodeDOF, co
     return unbalAndTangentMod.getResidual();
   }
 
+//! @brief Returns the number of retained nodes.
+size_t XC::TransformationDOF_Group::getNumRetainedNodes(void)
+  {
+    size_t retval= 0;
+    const MFreedom_ConstraintBase *mfc= getMFreedomConstraint();
+    if(mfc)
+      {
+        if(theMP)
+          {
+            retval= 1;
+          }
+        else // theMRMP is not null
+          {
+	    const ID &retainedNodes= theMRMP->getRetainedNodeTags();
+	    retval= retainedNodes.size();
+          }
+      }
+    return retval;
+  }
+
+//! @brief Returns a vector with the pointers to the retained nodes.
+std::vector<XC::Node *> XC::TransformationDOF_Group::getPointersToRetainedNodes(void)
+  {
+    std::vector<Node *> retval(1,nullptr);   
+
+    const MFreedom_ConstraintBase *mfc= getMFreedomConstraint();
+    if(mfc)
+      {
+        Domain *theDomain= myNode->getDomain();
+        if(theMP)
+          {
+            const int retainedNode= theMP->getNodeRetained();
+	    retval[0]= theDomain->getNode(retainedNode);   
+          }
+        else // theMRMP is not null
+          {
+	    const ID &retainedNodes= theMRMP->getRetainedNodeTags();
+	    const size_t sz= retainedNodes.size();
+	    retval.resize(sz,nullptr);
+	    for(size_t i= 0;i<sz;i++)
+	      retval[i]= theDomain->getNode(retainedNodes[i]);
+          }
+      }
+    return retval;
+  }
+
 //! @brief Returns the commited value for the response.
 const XC::Vector &XC::TransformationDOF_Group::getCommittedResponse(const Vector &(Node::*response)(void) const)
   {
@@ -354,25 +387,11 @@ const XC::Vector &XC::TransformationDOF_Group::getCommittedResponse(const Vector
       return responseC;
     else
       {
-        Domain *theDomain= myNode->getDomain();
         int numCNodeDOF= myNode->getNumberDOF();
         const ID &constrainedDOF= mfc->getConstrainedDOFs();            
         const ID &retainedDOF= mfc->getRetainedDOFs();
-        if(theMP)
-          {
-            const int retainedNode= theMP->getNodeRetained();
-	    std::vector<Node *> ptrsToRetainedNodes(1,theDomain->getNode(retainedNode));   
-            return setupResidual(numCNodeDOF,constrainedDOF,retainedDOF,responseC,ptrsToRetainedNodes,response);
-          }
-        else // theMRMP is not null
-          {
-	    const ID &retainedNodes= theMRMP->getRetainedNodeTags();
-	    const size_t sz= retainedNodes.size();
-	    std::vector<Node *> ptrsToRetainedNodes(sz,nullptr);
-	    for(size_t i= 0;i<sz;i++)
-	      ptrsToRetainedNodes[i]= theDomain->getNode(retainedNodes[i]);
-            return setupResidual(numCNodeDOF,constrainedDOF,retainedDOF,responseC,ptrsToRetainedNodes,response);
-          }
+	const std::vector<Node *> ptrsToRetainedNodes= getPointersToRetainedNodes();
+        return setupResidual(numCNodeDOF,constrainedDOF,retainedDOF,responseC,ptrsToRetainedNodes,response);
       }
   }
 
@@ -603,12 +622,11 @@ int XC::TransformationDOF_Group::doneID(void)
     DOF_Group *retainedGroup= retainedNodePtr->getDOF_GroupPtr();
     const ID &otherID= retainedGroup->getID();
     
-    // set the XC::ID for those dof corresponding to dof at another node
+    // set the ID for those dof corresponding to dof at another node
     for(int i=0; i<numRetainedNodeDOF; i++)
       {
-        int dof= retainedDOF(i);
-        int id= otherID(dof);
-        modID(i+numRetainedDOF)= id;
+        const int dof= retainedDOF(i);
+        modID(i+numRetainedDOF)= otherID(dof);
       }
     
     // if constraint is not time-varying determine the transformation matrix

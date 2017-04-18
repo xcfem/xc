@@ -99,6 +99,7 @@ class TransformationDOF_Group: public DOF_Group
     static int numTransDOFs; //!< number of objects        
     static TransformationConstraintHandler *theHandler; //!< Transformation constraint handler.
 
+    void arrays_setup(int numNodalDOF, int numConstrainedNodeRetainedDOF, int numRetainedNodeDOF);  
   protected:
     friend class AnalysisModel;
     TransformationDOF_Group(int tag, Node *myNode, MFreedom_Constraint *, TransformationConstraintHandler*);
@@ -107,6 +108,8 @@ class TransformationDOF_Group: public DOF_Group
     std::vector<SFreedom_Constraint *> getSFreedomConstraintArray(int ) const;
     MFreedom_ConstraintBase *getMFreedomConstraint(void);
     const MFreedom_ConstraintBase *getMFreedomConstraint(void) const;
+    size_t getNumRetainedNodes(void);
+    std::vector<Node *> getPointersToRetainedNodes(void);
     const Vector &setupResidual(int numCNodeDOF, const ID &,const ID &, const Vector &, const std::vector<Node *> &,const Vector &(Node::*response)(void) const);
     const Vector &getCommittedResponse(const Vector &(Node::*response)(void) const);
     void setupResidual(const Vector &,int (Node::*setTrial)(const Vector &));
