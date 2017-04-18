@@ -862,6 +862,8 @@
 /usr/local/lib/python2.7/dist-packages/xcVtk/malla_ef/vtk_dibuja_ids_elementos.pyc
 /usr/local/lib/python2.7/dist-packages/xcVtk/malla_ef/vtk_dibuja_nodos.py
 /usr/local/lib/python2.7/dist-packages/xcVtk/malla_ef/vtk_dibuja_nodos.pyc
+/usr/local/lib/python2.7/dist-packages/xcVtk/malla_ef/vtk_display_limit_state.py
+/usr/local/lib/python2.7/dist-packages/xcVtk/malla_ef/vtk_display_limit_state.pyc
 /usr/local/lib/python2.7/dist-packages/xcVtk/malla_ef/vtk_grafico_ef.py
 /usr/local/lib/python2.7/dist-packages/xcVtk/malla_ef/vtk_grafico_ef.pyc
 /usr/local/lib/python2.7/dist-packages/xcVtk/malla_ef/vtk_load_elem.py

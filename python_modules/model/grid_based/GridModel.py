@@ -25,6 +25,7 @@ from xcVtk.malla_ef import QuickGraphics as qg
 import ijkGrid as grid
 import math
 from postprocess import utils_display
+from xcVtk.malla_ef import vtk_display_limit_state
 
 class NamedObjectsMap(dict):
   '''dictionary of objects which have a name.'''
@@ -1036,3 +1037,17 @@ class QuickGraphics(qg.QuickGraphics):
   '''
   def __init__(self,model):
     super(QuickGraphics,self).__init__(model.getFEProblem())
+
+
+def displayFieldDirs1and2(limitStateLabel,argument,setDisp,component,fUnitConv,fileName,captionTexts):
+  '''Display a field defined over bi-dimensional elements in its two directions.
+
+  :param limitStateLabel: label that identifies the limit state.
+  :param argument: name of the control var to represent.
+  :param xcSet: represent the field over those elements with "genDescr" and "sectDescr" attributes.
+  :param component: component of the control var to represent.
+  :param fUnitConv: unit conversion factor (i.e N->kN => fUnitConv= 1e-3).
+  :param fileName: file name to store the image. If none -> window on screen.
+  :param captionTexts: dictionary of caption texts. 
+  '''
+  vtk_display_limit_state.displayFieldDirs1and2Base(limitStateLabel,argument,setDisp.elSet,setDisp.genDescr,setDisp.sectDescr,component,fUnitConv,fileName,captionTexts)
