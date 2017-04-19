@@ -399,6 +399,9 @@ class CrackControlVars(ControlVarsBase):
   def getMaxSteelStress(self):
     '''Maximum value for rebar stresses.'''
     return max(self.crackControlVarsPos.steelStress,self.crackControlVarsNeg.steelStress)
+  def getMaxN(self):
+    '''Maximum internal axial force.'''
+    return max(self.crackControlVarsPos.N,self.crackControlVarsNeg.N)
   def getLaTeXFields(self,factor= 1e-3):
     ''' Returns a string with the intermediate fields of the LaTeX string.
         factor: factor for units (default 1e-3 -> kN)'''
