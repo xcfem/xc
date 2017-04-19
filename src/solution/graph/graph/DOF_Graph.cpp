@@ -130,7 +130,7 @@ XC::DOF_Graph::DOF_Graph(const AnalysisModel &theModel)
 	          }
               }
           }
-     }
+      }
   }
 
 

@@ -314,7 +314,6 @@ int XC::TransformationConstraintHandler::handle(const ID *nodesLast)
 
     int numFE= 0;
     std::set<int> transformedEle;
-
     while((elePtr= theEle()) != 0)
       {
         int flag= 0;
@@ -332,7 +331,7 @@ int XC::TransformationConstraintHandler::handle(const ID *nodesLast)
             int isConstrainedNode= 0;
             for(size_t i=0; i<nodesSize; i++)
               {
-                int nodeTag= nodes(i);
+                const int nodeTag= nodes(i);
                 if(numMPConstraints != 0)
                   {
                     int loc= constrainedNodesMP.getLocation(nodeTag);
@@ -342,6 +341,12 @@ int XC::TransformationConstraintHandler::handle(const ID *nodesLast)
                         i= nodesSize;
                       }
                   }
+                if(numMRMPConstraints != 0)
+                  {
+                    std::cerr << nombre_clase() << "::" << __FUNCTION__
+	                      << "; processing of multi retained node"
+			      << " constraints not yet implemented." << std::endl;
+		  }
                 if(numSPConstraints != 0 && isConstrainedNode == 0)
                   {
                     int loc= constrainedNodesSP.getLocation(nodeTag);
@@ -360,9 +365,10 @@ int XC::TransformationConstraintHandler::handle(const ID *nodesLast)
           }
       }
 
+    const size_t numberOfElements= theDomain->getNumElements();
 
     // create an array for the FE_elements and zero it
-    if(numFE<=0)
+    if(numberOfElements>0 && numFE<=0)
       {
         std::cerr << nombre_clase() << "::" << __FUNCTION__
 	          << "; FE_Element array of size " << numFE << std::endl;
@@ -379,12 +385,13 @@ int XC::TransformationConstraintHandler::handle(const ID *nodesLast)
         fePtr= theModel->createTransformationFE(numFeEle, elePtr,transformedEle,theFEs);
         numFeEle++;
       }
+
     theModel->setNumEqn(countDOF);
 
     // set the number of equations in the model
     // now see if we have to set any of the dof's to -3
     //    int numLast= 0;
-    if(nodesLast != 0)
+    if(nodesLast)
       for(int i=0; i<nodesLast->Size(); i++)
         {
           int nodeID= (*nodesLast)(i);

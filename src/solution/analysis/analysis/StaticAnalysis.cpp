@@ -309,8 +309,8 @@ int XC::StaticAnalysis::domainChanged(void)
     int result= getConstraintHandlerPtr()->handle();
     if(result < 0)
       {
-        std::cerr << "StaticAnalysis::domainChanged() - "
-                  << "ConstraintHandler::handle() failed." << std::endl;
+        std::cerr << nombre_clase() << "::" << __FUNCTION__
+                  << "; ConstraintHandler::handle() failed." << std::endl;
         return -1;
       }
 
@@ -321,16 +321,16 @@ int XC::StaticAnalysis::domainChanged(void)
     result= getDOF_NumbererPtr()->numberDOF();
     if(result < 0)
       {
-        std::cerr << "StaticAnalysis::domainChanged() - "
-                  << "DOF_Numberer::numberDOF() failed." << std::endl;
+        std::cerr << nombre_clase() << "::" << __FUNCTION__
+                  << "; DOF_Numberer::numberDOF() failed." << std::endl;
         return -2;
       }
 
     result= getConstraintHandlerPtr()->doneNumberingDOF();
     if(result < 0)
       {
-        std::cerr << "StaticAnalysis::domainChanged() - "
-                  << "ConstraintHandler::doneNumberingDOF() failed." << std::endl;
+        std::cerr << nombre_clase() << "::" << __FUNCTION__
+                  << "; constraintHandler::doneNumberingDOF() failed." << std::endl;
         return -3;
       }
 
@@ -341,8 +341,8 @@ int XC::StaticAnalysis::domainChanged(void)
     result= getLinearSOEPtr()->setSize(theGraph);
     if(result < 0)
       {
-        std::cerr << "StaticAnalysis::domainChanged() - "
-                  << "LinearSOE::setSize() failed." << std::endl;
+        std::cerr << nombre_clase() << "::" << __FUNCTION__
+                  << "; LinearSOE::setSize() failed." << std::endl;
         return -4;
       }
 
@@ -352,16 +352,16 @@ int XC::StaticAnalysis::domainChanged(void)
     result= getStaticIntegratorPtr()->domainChanged();
     if(result < 0)
       {
-        std::cerr << "StaticAnalysis::domainChanged() - "
-                  << "fallo en Integrator::domainChanged()." << std::endl;
+        std::cerr << nombre_clase() << "::" << __FUNCTION__
+                  << "Integrator::domainChanged() failed." << std::endl;
         return -5;
       }
 
     result= getEquiSolutionAlgorithmPtr()->domainChanged();
     if(result < 0)
       {
-        std::cerr << "StaticAnalysis::domainChanged() - "
-                  << "fallo en Algorithm::domainChanged()." << std::endl;
+        std::cerr << nombre_clase() << "::" << __FUNCTION__
+                  << "; Algorithm::domainChanged() failed." << std::endl;
         return -6;
       }
 

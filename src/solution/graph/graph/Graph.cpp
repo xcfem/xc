@@ -67,37 +67,49 @@ void XC::Graph::inic(const size_t &sz)
 
 void XC::Graph::copia(const Graph &otro)
   {
-    inic(otro.getNumVertex());
-
-    Graph &otro_no_const= const_cast<Graph &>(otro);
-
-    VertexIter &otherVertices= otro_no_const.getVertices();
-    Vertex *vertexPtr= nullptr;
-
-    // loop through other creating vertices if tag not the same in this
-    while((vertexPtr = otherVertices()) != nullptr)
+    const size_t numVertex= otro.getNumVertex();
+    if(numVertex>0)
       {
-        const int vertexTag= vertexPtr->getTag();
-        const int vertexRef= vertexPtr->getRef();
-        Vertex newVertex(vertexTag, vertexRef);
-        this->addVertex(newVertex, false);
-      }
+        inic(numVertex);
 
-    // loop through other adding all the edges that exist in other
-    VertexIter &otherVertices2 = otro_no_const.getVertices();
-    while((vertexPtr = otherVertices2()) != nullptr)
-      {
-        int vertexTag = vertexPtr->getTag();
-        const std::set<int> &adjacency= vertexPtr->getAdjacency();
-        for(std::set<int>::const_iterator i=adjacency.begin(); i!=adjacency.end(); i++)
+        Graph &otro_no_const= const_cast<Graph &>(otro);
+
+        VertexIter &otherVertices= otro_no_const.getVertices();
+        Vertex *vertexPtr= nullptr;
+
+        // loop through other creating vertices if tag not the same in this
+        while((vertexPtr = otherVertices()) != nullptr)
           {
-            if(this->addEdge(vertexTag, *i) < 0)
+            const int vertexTag= vertexPtr->getTag();
+            const int vertexRef= vertexPtr->getRef();
+            Vertex newVertex(vertexTag, vertexRef);
+            this->addVertex(newVertex, false);
+          }
+
+        // loop through other adding all the edges that exist in other
+        VertexIter &otherVertices2 = otro_no_const.getVertices();
+        while((vertexPtr = otherVertices2()) != nullptr)
+          {
+            int vertexTag = vertexPtr->getTag();
+            const std::set<int> &adjacency= vertexPtr->getAdjacency();
+            for(std::set<int>::const_iterator i=adjacency.begin(); i!=adjacency.end(); i++)
               {
-	        std::cerr << "Graph::merge - could not add an edge!\n";
-	        return;
+                if(this->addEdge(vertexTag, *i) < 0)
+                  {
+	            std::cerr << "Graph::" << __FUNCTION__
+		              << "; could not add an edge!\n";
+	            return;
+                  }
               }
           }
       }
+    else
+      {
+        inic(32);
+	numEdge= 0;
+	nextFreeTag= START_VERTEX_NUM;
+      }
+    theVertexIter= VertexIter(&myVertices);
   }
 
 //! @brief Constructor.

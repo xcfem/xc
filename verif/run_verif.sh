@@ -162,6 +162,7 @@ echo "$BLEU" "  Constraint handler tests." "$NORMAL"
 python tests/solution/constraint_handler/plain_handler_test_01.py
 python tests/solution/constraint_handler/transformation_handler_test_01.py
 python tests/solution/constraint_handler/transformation_handler_test_02.py
+python tests/solution/constraint_handler/transformation_handler_test_03.py
 python tests/solution/constraint_handler/lagrange_handler_test_01.py
 
 #autovalores
