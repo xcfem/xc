@@ -82,7 +82,7 @@ const double &XC::LinearBucklingEigenAnalysis::getEigenvalue(int mode) const
   {
     const double &gamma= EigenAnalysis::getEigenvalue(mode);
     static double retval= 0.0;
-    retval= 1.0/(1.0-gamma); //Bathe página 632.
+    retval= 1.0/(1.0-gamma); //Bathe page 632.
     return retval;
   }
 

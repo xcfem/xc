@@ -252,7 +252,18 @@ void XC::FullGenEigenSOE::zeroM(void)
   {
     EigenSOE::zeroM();
     M.Zero();
-    factored = false;
+    factored= false;
+  }
+
+//! @brief Makes M the identity matrix (to find stiffness matrix eigenvalues).
+void XC::FullGenEigenSOE::identityM(void)
+  {
+    EigenSOE::identityM();
+    //M.Identity();
+    const int sz= M.Size();
+    for(int i=0;i<sz;i++)
+      M(i)= 1.0;
+    factored= false;
   }
 
 

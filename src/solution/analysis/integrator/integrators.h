@@ -46,6 +46,7 @@
 
 //eigen
 #include <solution/analysis/integrator/EigenIntegrator.h>
+#include <solution/analysis/integrator/eigen/KEigenIntegrator.h>
 #include <solution/analysis/integrator/eigen/LinearBucklingIntegrator.h>
 
 //transient

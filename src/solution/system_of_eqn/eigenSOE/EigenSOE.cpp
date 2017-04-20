@@ -55,6 +55,7 @@
 
 #include "boost/numeric/ublas/io.hpp"
 #include "boost/numeric/ublas/vector.hpp"
+#include "boost/numeric/ublas/matrix.hpp"
 #include "utility/matrix/Matrix.h"
 
 //! @brief Constructor.
@@ -158,7 +159,18 @@ XC::EigenSolver *XC::EigenSOE::getSolver(void)
 void XC::EigenSOE::zeroM(void)
   {
     massMatrix.clear();
-    return;
+  }
+
+//! @brief Makes M the identity matrix (to find stiffness matrix eigenvalues).
+void XC::EigenSOE::identityM(void)
+  {
+    const size_t sz1= massMatrix.size1();
+    const size_t sz2= massMatrix.size2();
+    if(sz1!=sz2)
+      std::cerr << nombre_clase() << "::" << __FUNCTION__
+                << "mass matrix is not square " << sz1
+                << "x" << sz2 << ".\n";
+    massMatrix= boost::numeric::ublas::identity_matrix<double>(std::min(sz1,sz2));
   }
 
 //! @brief Returns the autovector que corresponde al modo being passed as parameter.

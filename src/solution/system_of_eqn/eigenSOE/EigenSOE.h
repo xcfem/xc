@@ -91,6 +91,7 @@ class EigenSOE : public SystemOfEqn
     virtual int setSize(Graph &theGraph) = 0;
     virtual void zeroA(void) = 0;
     virtual void zeroM(void);
+    virtual void identityM(void);
 
     const int &getNumModes(void) const;
 

@@ -157,7 +157,7 @@ void XC::Matrix::Identity(void)
   {
     Zero();
     if(noRows()!=noCols())
-      std::cerr << "Matrix::Identity; la matriz no es cuadrada." << std::endl;
+      std::cerr << "Matrix::Identity; not an square matrix." << std::endl;
     const int n= std::min(noRows(),noCols());
     for(int i=0;i<n;i++)
       (*this)(i,i)= 1.0;

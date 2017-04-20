@@ -23,3 +23,5 @@
 
 class_<XC::LinearBucklingIntegrator , bases<XC::EigenIntegrator>, boost::noncopyable >("LinearBucklingIntegrator", no_init);
 
+class_<XC::KEigenIntegrator , bases<XC::EigenIntegrator>, boost::noncopyable >("KEigenIntegrator", no_init);
+

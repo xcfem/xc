@@ -209,6 +209,14 @@ void XC::BandArpackppSOE::zeroM(void)
     M.Anula();
   }
 
+//! @brief Makes M the identity matrix (to find stiffness matrix eigenvalues).
+void XC::BandArpackppSOE::identityM(void)
+  {
+    EigenSOE::identityM();
+    M.Identity();
+  }
+
+
 int XC::BandArpackppSOE::sendSelf(CommParameters &cp)
   { return 0; }
     

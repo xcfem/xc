@@ -225,7 +225,16 @@ void XC::SymBandEigenSOE::zeroM(void)
   {
     EigenSOE::zeroM();
     M.Zero();
-    return;
+  }
+
+//! @brief Makes M the identity matrix (to find stiffness matrix eigenvalues).
+void XC::SymBandEigenSOE::identityM(void)
+  {
+    EigenSOE::identityM();
+    //M.Identity();
+    const int sz= M.Size();
+    for(int i=0;i<sz;i++)
+      M(i)= 1.0;
   }
 
 int XC::SymBandEigenSOE::sendSelf(CommParameters &cp)

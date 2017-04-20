@@ -88,6 +88,7 @@ class SymArpackSOE : public ArpackSOE
       
     virtual void zeroA(void);
     virtual void zeroM(void);
+    virtual void identityM(void);
     
     int sendSelf(CommParameters &);
     int recvSelf(const CommParameters &);

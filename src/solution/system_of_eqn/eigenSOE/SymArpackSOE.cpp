@@ -328,6 +328,12 @@ void XC::SymArpackSOE::zeroM(void)
     EigenSOE::zeroM();
   }
 
+//! @brief Makes M the identity matrix (to find stiffness matrix eigenvalues).
+void XC::SymArpackSOE::identityM(void)
+  {
+    EigenSOE::identityM();
+  }
+
 int XC::SymArpackSOE::sendSelf(CommParameters &cp)
   { return 0; }
 

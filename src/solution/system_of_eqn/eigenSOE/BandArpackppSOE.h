@@ -62,6 +62,7 @@ class BandArpackppSOE : public ArpackSOE
    
     virtual void zeroA(void);
     virtual void zeroM(void);
+    virtual void identityM(void);
 
     inline const msp_double &getA(void) const
       { return A; }

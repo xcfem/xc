@@ -43,59 +43,41 @@
 **   Filip C. Filippou (filippou@ce.berkeley.edu)                     **
 **                                                                    **
 ** ****************************************************************** */
+                                                                        
+#ifndef KEigenIntegrator_h
+#define KEigenIntegrator_h
 
-// $Revision: 1.1 $
-// $Date: 2007/11/29 19:31:08 $
-// $Source: /usr/local/cvs/OpenSees/SRC/system_of_eqn/eigenSOE/FullGenEigenSOE.h,v $
-
-
-#ifndef FullGenEigenSOE_h
-#define FullGenEigenSOE_h
-
-// Written: Andreas Schellenberg (andreas.schellenberg@gmx.net)
-// Created: 11/07
-// Revision: A
-//
-// Description: This file contains the class definition for
-// FullGenEigenSOE, which stores full nonsymmetric matrices,
-// A and M, for generalized eigenvalue computations.
-
-#include "EigenSOE.h"
-#include "utility/matrix/Vector.h"
+#include "solution/analysis/integrator/EigenIntegrator.h"
 
 namespace XC {
-class FullGenEigenSolver;
 
-//! @ingroup EigenSOE
+
+//! @ingroup EigenIntegrator
 //
-//! @brief Dense matrix eigenproblem system of equations.
-class FullGenEigenSOE : public EigenSOE
+//! @brief Integrator used to obtain the eigenvalues and
+//! eigenvectors of the stiffness matrix.
+class KEigenIntegrator: public EigenIntegrator
   {
-  private:
-    Vector A;
-    Vector M;
   protected:
-    bool setSolver(EigenSolver *);
-
-    friend class SoluMethod;
-    friend class FullGenEigenSolver;
-    FullGenEigenSOE(SoluMethod *);
-    SystemOfEqn *getCopy(void) const;
+    KEigenIntegrator(SoluMethod *);
+    Integrator *getCopy(void) const;
   public:
-    virtual int setSize(Graph &theGraph);
+     
+    // methods to form the M= I (identity) matrix.
+    virtual int formM(void);
+     
+    // methods to instruct the FE_Element and DOF_Group objects
+    // how to determing their contribution to M
+    virtual int formEleTangM(FE_Element *);
+    virtual int formNodTangM(DOF_Group *);
 
-    virtual int addA(const Matrix &, const ID &, double fact = 1.0);
-    virtual int addM(const Matrix &, const ID &, double fact = 1.0);    
-
-    virtual void zeroA(void);
-    virtual void zeroM(void);
-    virtual void identityM(void);
-
-    int sendSelf(CommParameters &);
-    int recvSelf(const CommParameters &);
   };
-inline SystemOfEqn *FullGenEigenSOE::getCopy(void) const
-  { return new FullGenEigenSOE(*this); }
+inline Integrator *KEigenIntegrator::getCopy(void) const
+  { return new KEigenIntegrator(*this); }
 } // end of XC namespace
 
 #endif
+
+
+
+

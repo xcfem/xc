@@ -56,7 +56,7 @@
 // EigenIntegrator is an algorithmic class for setting up the finite element 
 // equations for a eigen problem analysis.
 //
-// This class is inheritanted from the base class of XC::Integrator which was
+// This class is inheritanted from the base class of Integrator which was
 // created by fmk (Frank).
 
 
@@ -139,7 +139,7 @@ int XC::EigenIntegrator::formK()
     return result;    
   }
 
-//! @brief Ensambla la mass matrix.
+//! @brief Mass matrix assembly.
 int XC::EigenIntegrator::formM(void)
   {
     AnalysisModel *mdl= getAnalysisModelPtr();
