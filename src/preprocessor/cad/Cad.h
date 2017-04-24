@@ -65,7 +65,7 @@ class SisRef;
 //! Management of geometry entities:
 //! points, lines, surfaces, bodies, etc.
 //!
-//! Maintains containers for this entities.
+//! Maintain containers for this entities.
 class Cad: public EntCmd
   {
   private:
@@ -76,15 +76,15 @@ class Cad: public EntCmd
     void numera(void);
   private:
     MapSisRef reference_systems; //!< Reference systems container.
-    MapTrfGeom transformaciones_geometricas; //!< Geometric transformation container.
+    MapTrfGeom transformaciones_geometricas; //!< Geometric transformations container.
 
-    MapPuntos puntos; //!< Point container.
-    MapLineas edges; //!< Edge container.
-    MapSurfaces faces; //!< Surface container.
-    MapCuerpos cuerpos; //!< Body container.
-    MapUniformGrids unif_grid; //!< Uniform grid container.
-    MapEsquemas2d esquemas2d; //!< Bi-dimensional scheme container.
-    MapEsquemas3d esquemas3d; //!< Three-dimensional scheme container.
+    MapPuntos puntos; //!< Points container.
+    MapLineas edges; //!< Edges container.
+    MapSurfaces faces; //!< Surfaces container.
+    MapCuerpos cuerpos; //!< Bodys container.
+    MapUniformGrids unif_grid; //!< Uniform grids container.
+    MapEsquemas2d esquemas2d; //!< Bi-dimensional schemes container.
+    MapEsquemas3d esquemas3d; //!< Three-dimensional schemes container.
 
   protected:
 

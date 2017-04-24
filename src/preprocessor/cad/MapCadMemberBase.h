@@ -38,7 +38,7 @@ class Cad;
 
 //! @ingroup Cad
 //
-//! @brief Base para los contenedores de entidades del modelo.
+//! @brief Base class for entity containers of the model
 class MapCadMemberBase: public EntCmd
   {
   public:

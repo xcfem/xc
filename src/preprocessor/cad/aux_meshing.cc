@@ -32,7 +32,7 @@
 #include "preprocessor/cad/matrices/TritrizPtrNod.h"
 #include "preprocessor/cad/matrices/TritrizPtrElem.h"
 
-//! @ brief Meshes one layer (i= constant).
+//! @ brief Mesh one layer (i= constant) of 4-nodes quadrangles.
 void meshing_quad4N_on_jk(const XC::Element &e,const XC::TritrizPtrNod::const_ref_capa_i_cte &nodos,XC::TritrizPtrElem::var_ref_capa_i_cte &elements)
   {
     const size_t nfilas= nodos.getNumFilas();
@@ -54,7 +54,7 @@ void meshing_quad4N_on_jk(const XC::Element &e,const XC::TritrizPtrNod::const_re
         }
   }
 
-//! @ brief Meshes one row (j= constant).
+//! @ brief Mesh one row (j= constant) of 4-nodes quadrangles.
 void meshing_quad4N_on_ik(const XC::Element &e,const XC::TritrizPtrNod::const_ref_capa_j_cte &nodos,XC::TritrizPtrElem::var_ref_capa_j_cte &elements)
   {
     const size_t ncapas= nodos.GetCapas();
@@ -73,7 +73,7 @@ void meshing_quad4N_on_ik(const XC::Element &e,const XC::TritrizPtrNod::const_re
         }
   }
 
-//! @ brief Meshes one column (k= constant).
+//! @ brief Mesh one column (k= constant)  of 4-nodes quadrangles.
 void meshing_quad4N_on_ij(const XC::Element &e,const XC::TritrizPtrNod::const_ref_capa_k_cte &nodos,XC::TritrizPtrElem::var_ref_capa_k_cte &elements)
   {
     const size_t ncapas= nodos.GetCapas();
@@ -92,6 +92,7 @@ void meshing_quad4N_on_ij(const XC::Element &e,const XC::TritrizPtrNod::const_re
         }
   }
 
+//! @ brief Mesh a quadrangle with 4-node elements
 void meshing_quad4N_bidimensional(const XC::Element &e,const XC::TritrizPtrNod &nodos,XC::TritrizPtrElem &elements)
   {
     const size_t ncapas= nodos.GetCapas();
@@ -118,11 +119,11 @@ void meshing_quad4N_bidimensional(const XC::Element &e,const XC::TritrizPtrNod &
             meshing_quad4N_on_ij(e,nodos.GetConstRefCapaKCte(1),capa_elem);
           }
       }
-    else  //Hay pointers nulos.
+    else  //There are null pointers.
       std::cerr << "meshing_quad4N_bidimensional; existen pointers to node nulos." << std::endl;
   }
 
-//! @brief Places the element on the mesh being passed as parameter.
+//! @brief Place the elements on the mesh passed as parameter.
 XC::TritrizPtrElem XC::put_quad4N_on_mesh(const Element &e,const TritrizPtrNod &nodos,meshing_dir dm)
   {
     const size_t ncapas= nodos.GetCapas();
@@ -197,24 +198,25 @@ XC::TritrizPtrElem XC::put_quad4N_on_mesh(const Element &e,const TritrizPtrNod &
     return retval;
   }
 
-//! @ brief Meshes one layer (i= constant).
+//! @ brief Mesh one layer (i= constant) with 9-nodes elements.
 void meshing_quad9N_on_jk(const XC::Element &e,const XC::TritrizPtrNod::const_ref_capa_i_cte &nodos,XC::TritrizPtrElem::var_ref_capa_i_cte &elements)
   {
     std::cerr << "meshing_quad9N_on_jk not implemented." << std::endl;
   }
 
-//! @ brief Meshes one row (j= constant).
+//! @ brief Mesh one row (j= constant)  with 9-nodes elements.
 void meshing_quad9N_on_ik(const XC::Element &e,const XC::TritrizPtrNod::const_ref_capa_j_cte &nodos,XC::TritrizPtrElem::var_ref_capa_j_cte &elements)
   {
     std::cerr << "meshing_quad9N_on_ik not implemented." << std::endl;
   }
 
-//! @ brief Meshes one column (k= constant).
+//! @ brief Mesh one column (k= constant) with 9-nodes elements.
 void meshing_quad9N_on_ij(const XC::Element &e,const XC::TritrizPtrNod::const_ref_capa_k_cte &nodos,XC::TritrizPtrElem::var_ref_capa_k_cte &elements)
   {
     std::cerr << "meshing_quad9N_on_ij not implemented." << std::endl;
   }
 
+//! @ brief Mesh one quadrangle  with 9-nodes elements.
 void meshing_quad9N_bidimensional(const XC::Element &e,const XC::TritrizPtrNod &nodos,XC::TritrizPtrElem &elements)
   {
     const size_t ncapas= nodos.GetCapas();
@@ -241,12 +243,12 @@ void meshing_quad9N_bidimensional(const XC::Element &e,const XC::TritrizPtrNod &
             meshing_quad9N_on_ij(e,nodos.GetConstRefCapaKCte(1),capa_elem);
           }
       }
-    else  //Hay pointers nulos.
+    else  //There are null pointers.
       std::cerr <<  __FUNCTION__
 		<< "; there were null pointers to nodes." << std::endl;
   }
 
-//! @brief Places the element on the mesh being passed as parameter.
+//! @brief Places the elements on the mesh passed as parameter.
 XC::TritrizPtrElem XC::put_quad9N_on_mesh(const Element &e,const TritrizPtrNod &nodos,meshing_dir dm)
   {
     const size_t ncapas= nodos.GetCapas();

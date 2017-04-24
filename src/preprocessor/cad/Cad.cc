@@ -63,7 +63,7 @@ XC::Cad::Cad(Preprocessor *mod)
     puntos(this), edges(this), faces(this), cuerpos(this), unif_grid(this),
     esquemas2d(this), esquemas3d(this) {}
 
-//! @brief Assigns indexes to the objects (nodes,elements,points,...)
+//! @brief Assign indexes to the objects (nodes,elements,points,...)
 //! to be used in VTK arrays.
 void XC::Cad::numera(void)
   {
@@ -73,8 +73,8 @@ void XC::Cad::numera(void)
     cuerpos.numera();
   }
 
-//! @brief Returns the «edge» que tiene por extremos los puntos
-//! which indices are being passed as parameter.
+//! @brief Return the «edge» that has as end points those
+//! whose indices are passed as parameters.
 XC::Edge *XC::Cad::busca_edge_extremos(const MapPuntos::Indice &pA,const MapPuntos::Indice &pB)
   {
     Edge *retval= nullptr;
@@ -96,8 +96,8 @@ XC::Edge *XC::Cad::busca_edge_extremos(const MapPuntos::Indice &pA,const MapPunt
     return retval;
   }
 
-//! @brief Returns the «edge» que tiene por extremos los puntos
-//! which indices are being passed as parameter.
+//! @brief Returs the «edge» that has as end points those
+//! whose indices are passed as parameter.
 const XC::Edge *XC::Cad::busca_edge_extremos(const MapPuntos::Indice &pA,const MapPuntos::Indice &pB) const
   {
     const Edge *retval= nullptr;
@@ -119,7 +119,7 @@ const XC::Edge *XC::Cad::busca_edge_extremos(const MapPuntos::Indice &pA,const M
     return retval;
   }
 
-//! @brief Conciliates number of divisions of the lines.
+//! @brief Conciliate number of divisions of the lines.
 void XC::Cad::conciliaNDivs(void)
   {
     if(!faces.empty())
@@ -154,7 +154,7 @@ void XC::Cad::conciliaNDivs(void)
       }
   }
 
-//! @brief Busca la entidad cuyo nombre being passed as parameter.
+//! @brief Search for the entity whose name is passed as a parameter.
 XC::SetEstruct *XC::Cad::busca_set_estruct(const MapUniformGrids::Indice &id)
   {
     SetEstruct *retval= puntos.busca(id);
@@ -163,7 +163,7 @@ XC::SetEstruct *XC::Cad::busca_set_estruct(const MapUniformGrids::Indice &id)
     return retval;
   }
 
-//! @brief Erases todas las entidades geométricas.
+//! @brief Erase all the geometry entities.
 void XC::Cad::clearAll(void)
   {
     reference_systems.clearAll();

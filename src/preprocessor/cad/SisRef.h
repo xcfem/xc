@@ -42,8 +42,8 @@ namespace XC {
 //
 //! @ingroup CadSR
 //!
-//! @brief Reference system to be used for make easier to define
-//! point positions.
+//! @brief Reference system to be used for simpliflying the definition
+//! of point positions.
 class SisRef: public EntMdlrBase
   {
   protected:
@@ -63,17 +63,14 @@ class SisRef: public EntMdlrBase
     Vector3d GetJ(const Pos3d &) const;
     Vector3d GetK(const Pos3d &) const;
 
-    //! @brief Return the posicion del punto p expresado en locales
-    //! expresada en coordenadas globales.
+    //! @brief Return the global coordinates of point p.
     virtual Pos3d GetPosGlobal(const Pos3d &p) const= 0;
-    //! @brief Returns the vector v expresado en locales
-    //! expresado en coordenadas globales.
+    //! @brief Return the global coordinates of vector v.
     virtual Vector3d GetCooGlobales(const Vector3d &v) const= 0;
-    //! @brief Return the posicion del punto p expresado en globales
+    //! @brief Return the local coordinates of point p.
     //! expresada en coordenadas locales.
     virtual Pos3d GetPosLocal(const Pos3d &p) const= 0;
-    //! @brief Returns the vector v expresado en globales
-    //! expresado en coordenadas locales.
+    //! @brief Return the local coordinates of vector v.
     virtual Vector3d GetCooLocales(const Vector3d &v) const= 0;
 
 

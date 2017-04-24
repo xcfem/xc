@@ -28,7 +28,7 @@
 
 #include "MeshingParams.h"
 
-//! @brief Returns mesh direction from the string being passed as parameter (i, j or k).
+//! @brief Return mesh direction from the string being passed as parameter (i, j or k).
 XC::meshing_dir XC::str_to_meshing_dir(const std::string &str)
   {
     meshing_dir retval= dirm_i;

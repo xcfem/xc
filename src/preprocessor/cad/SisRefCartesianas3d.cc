@@ -34,33 +34,32 @@
 #include "domain/mesh/element/Element.h"
 #include "domain/mesh/node/Node.h"
 
+//! @brief Origin of the 3D cartesian coordinate system
 Pos3d XC::SisRefCartesianas3d::getOrg(void) const
   { return ref.Org(); }
 
+//! @brief Origin of the 3D cartesian coordinate system
 void XC::SisRefCartesianas3d::setOrg(const Pos3d &p)
   { ref.Org()= p; }
 
+//! @brief 3D cartesian coordinate system by three points
 void XC::SisRefCartesianas3d::TresPuntos(const Pos3d &p1,const Pos3d &p2, const Pos3d &p3)
   { ref= Ref3d3d(p1,p2,p3); }
 
-//! @brief Returns the i-th axis unit vector expressed in global coordinates
-//! for the position being passed as parameter.
+//! @brief Return the i-th axis unit vector expressed in the global coordinate
+//! system for the position passed as parameter.
 Vector3d XC::SisRefCartesianas3d::GetVDirEje(const size_t &i,const Pos3d &) const
   { return ref.GetVDirEje(i); }
 
-//! @brief Return the posicion del punto p expresado en locales
-//! expresada en coordenadas globales.
+//! @brief Return the global coordinates of point p. 
 Pos3d XC::SisRefCartesianas3d::GetPosGlobal(const Pos3d &p) const
   { return ref.GetPosGlobal(p); }
-//! @brief Returns the vector v expresado en locales
-//! expresado en coordenadas globales.
+//! @brief Return the global coordinates of vector v.
 Vector3d XC::SisRefCartesianas3d::GetCooGlobales(const Vector3d &v) const
   { return ref.GetCooGlobales(v); }
-//! @brief Return the posicion del punto p expresado en globales
-//! expresada en coordenadas locales.
+//! @brief Return the local coordinates of point p.
 Pos3d XC::SisRefCartesianas3d::GetPosLocal(const Pos3d &p) const
   { return ref.GetPosLocal(p); }
-//! @brief Returns the vector v expresado en globales
-//! expresado en coordenadas locales.
+//! @brief Return the local coordinates of vector v.
 Vector3d XC::SisRefCartesianas3d::GetCooLocales(const Vector3d &v) const
   { return ref.GetCooLocales(v); }

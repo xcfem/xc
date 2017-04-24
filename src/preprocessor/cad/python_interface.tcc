@@ -28,7 +28,7 @@
 class_<XC::SisRef, bases<XC::EntMdlrBase>, boost::noncopyable >("SisRef", no_init);
 
 class_<XC::SisRefCartesianas3d, bases<XC::SisRef>, boost::noncopyable >("SisRefCartesianas3d", no_init)
-.add_property("org",&XC::SisRefCartesianas3d::getOrg,&XC::SisRefCartesianas3d::setOrg)
+.add_property("org",&XC::SisRefCartesianas3d::getOrg,&XC::SisRefCartesianas3d::setOrg,"Origin of the 3D cartesian coordinate system")
   ;
 
 class_<XC::MapCadMemberBase, bases<EntCmd>, boost::noncopyable >("MapCadMemberBase", no_init)

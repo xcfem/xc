@@ -30,18 +30,18 @@
 #include "xc_utils/src/geom/pos_vec/Vector3d.h"
 
 
-//! @brief Returns the $\vec{i}$ unit vector expressed in global coordinates
-//! for the position being passed as parameter.
+//! @brief Return the $\vec{i}$ unit vector expressed in the global coordinate
+//! system for the position passed as parameter.
 Vector3d XC::SisRef::GetI(const Pos3d &p) const
   { return GetVDirEje(1,p); }
 
-//! @brief Returns the $\vec{j}$ unit vector expressed in global coordinates
-//! for the position being passed as parameter.
+//! @brief Return the $\vec{j}$ unit vector expressed in the global coordinate
+//! system for the position being passed as parameter.
 Vector3d XC::SisRef::GetJ(const Pos3d &p) const
   { return GetVDirEje(2,p); }
 
-//! @brief Returns the $\vec{k}$ unit vector expressed in global coordinates
-//! for the position being passed as parameter.
+//! @brief Return the $\vec{k}$ unit vector expressed in the global coordinate
+//! system for the position being passed as parameter.
 Vector3d XC::SisRef::GetK(const Pos3d &p) const
   { return GetVDirEje(3,p); }
 
