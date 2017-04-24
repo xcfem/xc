@@ -802,165 +802,148 @@ const XC::Vector &XC::TransformationDOF_Group::getAccSensitivity(int gradNumber)
 
 int XC::TransformationDOF_Group::saveSensitivity(Vector *u,Vector *udot,Vector *udotdot, int gradNum,int numGrads)
   {
-    if(theMRMP != nullptr)
-      std::cerr << nombre_clase() << "::" << __FUNCTION__
-		<< " is not implemented for multi retained nodes constraints."
-                << std::endl;
-
+    int retval= 0;
+    const MFreedom_ConstraintBase *mfc= getMFreedomConstraint();
     // call base class method and return if no MFreedom_Constraint
-    if(theMP == 0)
+    if(!mfc)
       {
-        return this->DOF_Group::saveSensitivity(u, udot, udotdot, gradNum, numGrads);
-      }
-  
-    // Get sensitivities for my dof out of vectors
-    Vector myV(modNumDOF);
-        
-    const ID &theID= this->getID();
-    for(int i=0; i<modNumDOF; i++)
-      {
-        int loc= theID(i);
-        if(loc >= 0)
-          (unbalAndTangentMod.getResidual())(i)= (*u)(loc);
-        // DO THE SP STUFF
-      }    
-    const Matrix *T= this->getT();
-    if(T)
-      {
-        // unbalAndTangent.getResidual()= (*T) * (unbalAndTangentMod.getResidual());
-        myV.addMatrixVector(0.0, *T, unbalAndTangentMod.getResidual(), 1.0);
+        retval= this->DOF_Group::saveSensitivity(u, udot, udotdot, gradNum, numGrads);
       }
     else
-      myV= unbalAndTangentMod.getResidual();
+      {
+        // Get sensitivities for my dof out of vectors
+        Vector myV(modNumDOF);
+        
+        const ID &theID= this->getID();
+        for(int i=0; i<modNumDOF; i++)
+          {
+            int loc= theID(i);
+            if(loc >= 0)
+              (unbalAndTangentMod.getResidual())(i)= (*u)(loc);
+            // DO THE SP STUFF
+          }    
+        const Matrix *T= this->getT();
+        if(T)
+          {
+            // unbalAndTangent.getResidual()= (*T) * (unbalAndTangentMod.getResidual());
+            myV.addMatrixVector(0.0, *T, unbalAndTangentMod.getResidual(), 1.0);
+          }
+        else
+          myV= unbalAndTangentMod.getResidual();
 
 
-  // Vel and Acc sensitivities only if they are being delivered
-  if((udot != 0) && (udotdot != 0))
-    {
-      Vector myVdot(modNumDOF);
-      Vector myVdotdot(modNumDOF);
-      for(int i=0; i<modNumDOF; i++)
-        {
-          int loc= theID(i);
-          if(loc >= 0)
-            (unbalAndTangentMod.getResidual())(i)= (*udot)(loc);
-          // DO THE SP STUFF
-        }    
+        // Vel and Acc sensitivities only if they are being delivered
+        if((udot != 0) && (udotdot != 0))
+          {
+            Vector myVdot(modNumDOF);
+            Vector myVdotdot(modNumDOF);
+            for(int i=0; i<modNumDOF; i++)
+              {
+                int loc= theID(i);
+                if(loc >= 0)
+                  (unbalAndTangentMod.getResidual())(i)= (*udot)(loc);
+                // DO THE SP STUFF
+              }    
 
-      if(T)
-        {
-          // unbalAndTangent.getResidual()= (*T) * (unbalAndTangentMod.getResidual());
-          myVdot.addMatrixVector(0.0, *T, unbalAndTangentMod.getResidual(), 1.0);
-        }
-      else
-       myVdot= unbalAndTangentMod.getResidual();
+            if(T)
+              {
+                // unbalAndTangent.getResidual()= (*T) * (unbalAndTangentMod.getResidual());
+                myVdot.addMatrixVector(0.0, *T, unbalAndTangentMod.getResidual(), 1.0);
+              }
+            else
+              myVdot= unbalAndTangentMod.getResidual();
 
-      for(int j=0; j<modNumDOF; j++)
-        {
-          int loc= theID(j);
-          if(loc >= 0)
-            (unbalAndTangentMod.getResidual())(j)= (*udotdot)(loc);
-          // DO THE SP STUFF
-        }
-      if(T)
-        {
-          // unbalAndTangent.getResidual()= (*T) * (unbalAndTangentMod.getResidual());
-          myVdotdot.addMatrixVector(0.0, *T, unbalAndTangentMod.getResidual(), 1.0);
-        }
-      else
-        myVdotdot= unbalAndTangentMod.getResidual();
-      myNode->saveSensitivity(&myV, &myVdot, &myVdotdot, gradNum, numGrads);
-    }
-  else
-    myNode->saveSensitivity(&myV,nullptr,nullptr,gradNum,numGrads);
-  return 0;
-}
+            for(int j=0; j<modNumDOF; j++)
+              {
+                int loc= theID(j);
+                if(loc >= 0)
+                  (unbalAndTangentMod.getResidual())(j)= (*udotdot)(loc);
+                // DO THE SP STUFF
+              }
+            if(T)
+              {
+                // unbalAndTangent.getResidual()= (*T) * (unbalAndTangentMod.getResidual());
+                myVdotdot.addMatrixVector(0.0, *T, unbalAndTangentMod.getResidual(), 1.0);
+              }
+            else
+              myVdotdot= unbalAndTangentMod.getResidual();
+            myNode->saveSensitivity(&myV, &myVdot, &myVdotdot, gradNum, numGrads);
+          }
+        else
+          myNode->saveSensitivity(&myV,nullptr,nullptr,gradNum,numGrads);
+      }
+    return retval;
+  }
 
 void XC::TransformationDOF_Group::addM_ForceSensitivity(const XC::Vector &Udotdot, double fact)
   {
-    if(theMRMP != nullptr)
-      std::cerr << nombre_clase() << "::" << __FUNCTION__
-		<< " is not implemented for multi retained nodes constraints."
-                << std::endl;
-
+    const MFreedom_ConstraintBase *mfc= getMFreedomConstraint();
     // call base class method and return if no MFreedom_Constraint
-    if(theMP == 0 || modID.Nulo())
+    if(!mfc || modID.Nulo())
+      { this->DOF_Group::addM_ForceSensitivity(Udotdot, fact); }
+    else
       {
-        this->DOF_Group::addM_ForceSensitivity(Udotdot, fact);
-        return;
-      }
-    
-    for(int i=0; i<modNumDOF; i++)
-      {
-        const int loc= modID(i);
-        if(loc >= 0)
-          (unbalAndTangentMod.getResidual())(i)= Udotdot(loc);
-        else         // DO THE SP STUFF
-          (unbalAndTangentMod.getResidual())(i)= 0.0;            
-      }    
+        for(int i=0; i<modNumDOF; i++)
+          {
+            const int loc= modID(i);
+            if(loc >= 0)
+              (unbalAndTangentMod.getResidual())(i)= Udotdot(loc);
+            else         // DO THE SP STUFF
+              (unbalAndTangentMod.getResidual())(i)= 0.0;            
+          }    
 
-    Vector unmod(Trans.noRows());
-    //unmod= Trans * (unbalAndTangentMod.getResidual());
-    unmod.addMatrixVector(0.0, Trans, unbalAndTangentMod.getResidual(), 1.0);
-    this->DOF_Group::addM_ForceSensitivity(unmod, fact);
+        Vector unmod(Trans.noRows());
+        //unmod= Trans * (unbalAndTangentMod.getResidual());
+        unmod.addMatrixVector(0.0, Trans, unbalAndTangentMod.getResidual(), 1.0);
+        this->DOF_Group::addM_ForceSensitivity(unmod, fact);
+      }
   }
 
 void XC::TransformationDOF_Group::addD_Force(const XC::Vector &Udot, double fact)
   {
-    if(theMRMP != nullptr)
-      std::cerr << nombre_clase() << "::" << __FUNCTION__
-		<< " is not implemented for multi retained nodes constraints."
-                << std::endl;
-
+    const MFreedom_ConstraintBase *mfc= getMFreedomConstraint();
     // call base class method and return if no MFreedom_Constraint
-    if(theMP == 0 || modID.Nulo())
+    if(!mfc || modID.Nulo())
+      { this->DOF_Group::addD_Force(Udot, fact); }
+    else
       {
-        this->DOF_Group::addD_Force(Udot, fact);
-        return;
+        for(int i=0; i<modNumDOF; i++)
+          {
+            const int loc= modID(i);
+            if(loc >= 0)
+              (unbalAndTangentMod.getResidual())(i)= Udot(loc);
+            else         // DO THE SP STUFF
+              (unbalAndTangentMod.getResidual())(i)= 0.0;            
+          }    
+        Vector unmod(Trans.noRows());
+        //unmod= Trans * (unbalAndTangentMod.getResidual());
+        unmod.addMatrixVector(0.0, Trans, unbalAndTangentMod.getResidual(), 1.0);
+        this->DOF_Group::addD_Force(unmod, fact);
       }
-    
-    for(int i=0; i<modNumDOF; i++)
-      {
-        const int loc= modID(i);
-        if(loc >= 0)
-          (unbalAndTangentMod.getResidual())(i)= Udot(loc);
-        else         // DO THE SP STUFF
-          (unbalAndTangentMod.getResidual())(i)= 0.0;            
-      }    
-
-    Vector unmod(Trans.noRows());
-    //unmod= Trans * (unbalAndTangentMod.getResidual());
-    unmod.addMatrixVector(0.0, Trans, unbalAndTangentMod.getResidual(), 1.0);
-    this->DOF_Group::addD_Force(unmod, fact);
   }
 
 void XC::TransformationDOF_Group::addD_ForceSensitivity(const XC::Vector &Udot, double fact)
   {
-    if(theMRMP != nullptr)
-      std::cerr << nombre_clase() << "::" << __FUNCTION__
-		<< " is not implemented for multi retained nodes constraints."
-                << std::endl;
-
+    const MFreedom_ConstraintBase *mfc= getMFreedomConstraint();
     // call base class method and return if no MFreedom_Constraint
-    if(theMP == 0 || modID.Nulo())
+    if(!mfc || modID.Nulo())
+      { this->DOF_Group::addD_ForceSensitivity(Udot, fact); }
+    else
       {
-        this->DOF_Group::addD_ForceSensitivity(Udot, fact);
-        return;
-      }
-    
-    for(int i=0; i<modNumDOF; i++)
-      {
-        const int loc= modID(i);
-        if(loc >= 0)
-          (unbalAndTangentMod.getResidual())(i)= Udot(loc);
-        else         // DO THE SP STUFF
-          (unbalAndTangentMod.getResidual())(i)= 0.0;    
-      }    
+        for(int i=0; i<modNumDOF; i++)
+          {
+            const int loc= modID(i);
+            if(loc >= 0)
+              (unbalAndTangentMod.getResidual())(i)= Udot(loc);
+            else         // DO THE SP STUFF
+              (unbalAndTangentMod.getResidual())(i)= 0.0;    
+          }    
 
-    Vector unmod(Trans.noRows());
-    //unmod= Trans * (unbalAndTangentMod.getResidual());
-    unmod.addMatrixVector(0.0, Trans, unbalAndTangentMod.getResidual(), 1.0);
-    this->DOF_Group::addD_ForceSensitivity(unmod, fact);
+        Vector unmod(Trans.noRows());
+        //unmod= Trans * (unbalAndTangentMod.getResidual());
+        unmod.addMatrixVector(0.0, Trans, unbalAndTangentMod.getResidual(), 1.0);
+        this->DOF_Group::addD_ForceSensitivity(unmod, fact);
+      }
   }
 
 // AddingSensitivity:END //////////////////////////////////////////
