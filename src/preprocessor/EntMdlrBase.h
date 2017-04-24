@@ -41,7 +41,7 @@ class Face;
 
 //!  \ingroup Preprocessor
 //! 
-//!  \brief Base de los objetos del preprocessor.
+//!  \brief Base class of the preprocessor objects.
 class EntMdlrBase: public EntConNmb, public MovableObject
   {
   private:

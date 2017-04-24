@@ -37,7 +37,7 @@ namespace XC {
 
 //! @ingroup CadSR
 //!
-//! @brief Tridimensiona reference system.
+//! @brief Three-dimensional reference system.
 class SisRefCartesianas3d: public SisRef
   {
     Ref3d3d ref;//!< Reference system.

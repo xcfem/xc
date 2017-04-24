@@ -46,7 +46,7 @@ XC::Preprocessor::Preprocessor(EntCmd *owr,DataOutputHandler::map_output_handler
     cad(this),sets(this)
   { domain= new Domain(this,oh); }
 
-//! @brief Copy constructor (prohibida).
+//! @brief Copy constructor (prohibited).
 XC::Preprocessor::Preprocessor(const Preprocessor &otro)
   : EntCmd(otro), MovableObject(otro), domain(nullptr), materialHandler(this), transf(this), beamIntegrators(this),
     nodes(this), elements(this), loads(this), constraints(this),
@@ -55,14 +55,14 @@ XC::Preprocessor::Preprocessor(const Preprocessor &otro)
     std::cerr << "No se puede copiar un objeto de clase Preprocessor." << std::endl;
   }
 
-//! @brief Assignment operator (prohibida).
+//! @brief Assignment operator (prohibited).
 XC::Preprocessor &XC::Preprocessor::operator=(const Preprocessor &otro)
   {
     std::cerr << "No se puede asignar un objeto de clase Preprocessor." << std::endl;
     return *this;
   }
 
-//! @brief Inserts the pointer to the node in the "total" set and in the 
+//! @brief Insert the pointer to the node in the "total" set and in the 
 //! sets that are currently opened.
 void XC::Preprocessor::UpdateSets(Node *new_node)
   {
@@ -76,7 +76,7 @@ void XC::Preprocessor::UpdateSets(Node *new_node)
       }
   }
 
-//! @brief Inserts the pointer to the element in the "total" set and in the 
+//! @brief Insert the pointer to the element in the "total" set and in the 
 //! sets that are currently opened.
 void XC::Preprocessor::UpdateSets(Element *new_elem)
   {
@@ -90,7 +90,7 @@ void XC::Preprocessor::UpdateSets(Element *new_elem)
       }
   }
 
-//! @brief Inserts the pointer to the constraint in the "total" set and in the 
+//! @brief Insert the pointer to the constraint in the "total" set and in the 
 //! sets that are currently opened.
 void XC::Preprocessor::UpdateSets(Constraint *new_constraint)
   {
@@ -113,12 +113,12 @@ XC::Preprocessor::~Preprocessor(void)
   }
 
 
-//! @brief Assigns Stress Reduction Factor for element deactivation.
+//! @brief Assign Stress Reduction Factor for element deactivation.
 void XC::Preprocessor::setDeadSRF(const double &d)
   { Element::setDeadSRF(d); }
 
-//! @brief Returns a pointer to the set or geometric entity with
-//! the name being passed as paramenter.
+//! @brief Return a pointer to the set or geometric entity with
+//! the name being passed as a parameter.
 XC::SetEstruct *XC::Preprocessor::busca_set_estruct(const std::string &nmb)
   {
     SetEstruct *retval= sets.busca_set_estruct(nmb);
@@ -139,7 +139,7 @@ void XC::Preprocessor::resetLoadCase(void)
   }
 
 
-//! @brief Deletes all preprocessor entities.
+//! @brief Delete all preprocessor entities.
 void XC::Preprocessor::clearAll(void)
   {
     sets.reset();
@@ -155,7 +155,7 @@ void XC::Preprocessor::clearAll(void)
     materialHandler.clearAll();
   }
 
-//! @brief Returns a pointer to the la database.
+//! @brief Return a pointer to the database.
 XC::FE_Datastore *XC::Preprocessor::getDataBase(void)
   {
     FE_Datastore *retval= nullptr;
@@ -165,8 +165,8 @@ XC::FE_Datastore *XC::Preprocessor::getDataBase(void)
     return retval;
   }
 
-//! @brief Returns a vector para almacenar los dbTags
-//! de los miembros de la clase.
+//! @brief Return a vector to store the dbTags
+//! of the class members
 XC::DbTagData &XC::Preprocessor::getDbTagData(void) const
   {
     static DbTagData retval(10);
@@ -207,7 +207,7 @@ int XC::Preprocessor::recvData(const CommParameters &cp)
     return res;
   }
 
-//! @brief Sends object through the channel being passed as parameter.
+//! @brief Send object through the channel being passed as parameter.
 int XC::Preprocessor::sendSelf(CommParameters &cp)
   {
     setDbTag(cp);
@@ -221,7 +221,7 @@ int XC::Preprocessor::sendSelf(CommParameters &cp)
     return res;
   }
 
-//! @brief Receives object through the channel being passed as parameter.
+//! @brief Receive object through the channel being passed as parameter.
 int XC::Preprocessor::recvSelf(const CommParameters &cp)
   {
     inicComm(10);

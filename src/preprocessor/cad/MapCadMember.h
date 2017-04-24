@@ -66,7 +66,7 @@ template <class T>
 MapCadMember<T>::MapCadMember(Cad *cad)
   : MapCadMemberBase(cad) {}
 
-//! @brief Returns a pointer to the la entidad cuyo identificador being passed as parameter.
+//! @brief Return a pointer to the geometry entity whose identifier is passed as parameter.
 template <class T>
 T * MapCadMember<T>::busca(const Indice &id)
   {    T * retval= nullptr;
@@ -76,7 +76,7 @@ T * MapCadMember<T>::busca(const Indice &id)
     return retval;
   }
 
-//! @brief Returns a pointer to the la entidad cuyo nombre being passed as parameter.
+//! @brief Return a pointer to the entity whose identifier is passed as parameter.
 template <class T>
 const T * MapCadMember<T>::busca(const Indice &id) const
   {
@@ -87,13 +87,13 @@ const T * MapCadMember<T>::busca(const Indice &id) const
     return retval;
   }
 
-//! @brief Returns true if the entity already exists.
+//! @brief Return true if the entity already exists.
 template <class T>
 bool MapCadMember<T>::existe(const Indice &id) const
   { return (busca(id)!=nullptr); }
 
 
-//! @brief Returns the entity with tag iEnt.
+//! @brief Return the entity with tag iEnt.
 template <class T>
 T * MapCadMember<T>::get(const size_t &iEnt)
   {
@@ -105,7 +105,7 @@ T * MapCadMember<T>::get(const size_t &iEnt)
     return retval;   
   }
 
-//! @brief Erases todas las entidades.
+//! @brief Erase all the entities.
 template <class T>
 void MapCadMember<T>::clearAll(void)
   {
@@ -119,7 +119,7 @@ void MapCadMember<T>::clearAll(void)
     this->clear();
   }
 
-//! @brief Returns container's keys.
+//! @brief Return the container's keys.
 template <class T>
 boost::python::list MapCadMember<T>::getKeys(void) const
   {

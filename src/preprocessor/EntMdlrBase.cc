@@ -37,10 +37,10 @@
 #include "domain/mesh/element/Element.h"
 #include "domain/mesh/node/Node.h"
 
-//! @brief Returns a pointer to the preprocessor.
+//! @brief Return a pointer to the preprocessor.
 const XC::Preprocessor *XC::EntMdlrBase::get_preprocessor(void) const
   { return preprocessor; }
-//! @brief Returns a pointer to the preprocessor.
+//! @brief Return a pointer to the preprocessor.
 XC::Preprocessor *XC::EntMdlrBase::get_preprocessor(void)
   { return preprocessor; }
 
@@ -62,14 +62,14 @@ XC::EntMdlrBase &XC::EntMdlrBase::operator=(const EntMdlrBase &otro)
     return *this;
   }
 
-//! @brief Returns the object identifier in the model (tag).
+//! @brief Return the object identifier in the model (tag).
 size_t XC::EntMdlrBase::GetTag(void) const
   {
     const std::string tmp= GetNombre().substr(1);
     return boost::lexical_cast<size_t>(tmp);
   }
 
-//! @brief Checks for preprocessor.
+//! @brief Check for preprocessor.
 bool XC::EntMdlrBase::check_preprocessor(void) const
   {
     if(preprocessor)
@@ -84,7 +84,7 @@ bool XC::EntMdlrBase::check_preprocessor(void) const
       }
   }
 
-//! @brief Returns a pointer to the point identified by
+//! @brief Return a pointer to the point identified by
 //! the tag being passed as parameter.
 XC::Pnt *XC::EntMdlrBase::BuscaPnt(const size_t &id_punto)
   {
@@ -97,7 +97,7 @@ XC::Pnt *XC::EntMdlrBase::BuscaPnt(const size_t &id_punto)
     return retval;
   }
 
-//! @brief Returns a const pointer to the point identified by
+//! @brief Return a const pointer to the point identified by
 //! the tag being passed as parameter.
 const XC::Pnt *XC::EntMdlrBase::BuscaPnt(const size_t &id_punto) const
   {
@@ -110,7 +110,7 @@ const XC::Pnt *XC::EntMdlrBase::BuscaPnt(const size_t &id_punto) const
     return retval;
   }
 
-//! @brief Returns a pointer to the edge identified by
+//! @brief Return a pointer to the edge identified by
 //! the tag being passed as parameter.
 XC::Edge *XC::EntMdlrBase::BuscaEdge(const size_t &id_edge)
   {
@@ -123,7 +123,7 @@ XC::Edge *XC::EntMdlrBase::BuscaEdge(const size_t &id_edge)
     return retval;
   }
 
-//! @brief Returns a pointer to the edge identified by
+//! @brief Return a pointer to the edge identified by
 //! the tag being passed as parameter.
 const XC::Edge *XC::EntMdlrBase::BuscaEdge(const size_t &id_edge) const
   {
@@ -136,7 +136,7 @@ const XC::Edge *XC::EntMdlrBase::BuscaEdge(const size_t &id_edge) const
     return retval;
   }
 
-//! @brief Returns a pointer to the face identified by
+//! @brief Return a pointer to the face identified by
 //! the tag being passed as parameter.
 XC::Face *XC::EntMdlrBase::BuscaFace(const size_t &id_face)
   {
@@ -209,7 +209,7 @@ int XC::EntMdlrBase::sendData(CommParameters &cp)
     return res;
   }
 
-//! @brief Receives members through the channel being passed as parameter.
+//! @brief Receive members through the channel being passed as parameter.
 int XC::EntMdlrBase::recvData(const CommParameters &cp)
   {
     std::string tmp;
@@ -219,7 +219,7 @@ int XC::EntMdlrBase::recvData(const CommParameters &cp)
     return res;
   }
 
-//! @brief Sends object through the channel being passed as parameter.
+//! @brief Send objects through the channel being passed as parameter.
 int XC::EntMdlrBase::sendSelf(CommParameters &cp)
   {
     setDbTag(cp);
@@ -233,7 +233,7 @@ int XC::EntMdlrBase::sendSelf(CommParameters &cp)
     return res;
   }
 
-//! @brief Receives object through the channel being passed as parameter.
+//! @brief Receive objects through the channel being passed as parameter.
 int XC::EntMdlrBase::recvSelf(const CommParameters &cp)
   {
     inicComm(3);
