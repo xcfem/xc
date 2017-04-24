@@ -422,28 +422,11 @@ XC::LagrangeDOF_Group *XC::AnalysisModel::createLagrangeDOF_Group(const int &tag
     return dofPtr;
   }
 
-XC::TransformationDOF_Group *XC::AnalysisModel::createTransformationDOF_Group(const int &tag, Node *myNode, MFreedom_Constraint *mp, TransformationConstraintHandler *handler)
+XC::TransformationDOF_Group *XC::AnalysisModel::createTransformationDOF_Group(const int &tag, Node *myNode, MFreedom_ConstraintBase *mp, TransformationConstraintHandler *handler)
   {
     assert(mp);
     assert(handler);
     TransformationDOF_Group *dofPtr=new TransformationDOF_Group(tag,myNode,mp,handler);
-    if(dofPtr)
-      {
-        myNode->setDOF_GroupPtr(dofPtr);
-        addDOF_Group(dofPtr);
-      }
-    else
-      std::cerr << nombre_clase() << "::" << __FUNCTION__
-                << "; ran out of memory"
-                << " creating DOF_Group " << tag << std::endl;
-    return dofPtr;
-  }
-
-XC::TransformationDOF_Group *XC::AnalysisModel::createTransformationDOF_Group(const int &tag, Node *myNode, MRMFreedom_Constraint *mrmp, TransformationConstraintHandler *handler)
-  {
-    assert(mrmp);
-    assert(handler);
-    TransformationDOF_Group *dofPtr= new TransformationDOF_Group(tag,myNode,mrmp,handler);
     if(dofPtr)
       {
         myNode->setDOF_GroupPtr(dofPtr);
