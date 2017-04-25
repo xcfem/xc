@@ -43,24 +43,24 @@ class Pnt;
 
 //! \ingroup CadEnt
 //!
-//! @brief Orden en de los lados de una cara del hexaedro.
+//! @brief Order in edges of an hexaedron face.
 struct SecuenciaLados
   {
-    size_t l1; //!< Índice lado 1.
-    size_t l2; //!< Índice lado 2.
-    size_t l3; //!< Índice lado 3.
-    size_t l4; //!< Índice lado 4.
-    bool dirt; //!< Directo o inverso.
+    size_t l1; //!< Index edge 1.
+    size_t l2; //!< Index edge 2.
+    size_t l3; //!< Index edge 3.
+    size_t l4; //!< Index edge 4.
+    bool dirt; //!< Direct or reverse.
 
     SecuenciaLados(const size_t primero= 1,const bool &directo= true);
-    //! @brief Returns true if the edge sequence is direct (edge1 -> edge4).
+    //! @brief Return true if the edge sequence is direct (edge1 -> edge4).
     const bool &Directo(void) const
       { return dirt; }
   };
 
 //! \ingroup CadEnt
 //!
-//! @brief Six faces solid.
+//! @brief Six-faced solid.
 class Body: public EntMdlr
   {
   protected:
@@ -99,11 +99,11 @@ class Body: public EntMdlr
     //! @brief Return the object dimension.
     inline virtual unsigned short int GetDimension(void) const
       { return 3; }
-    //! @brief Returns the number of lines of the object.
+    //! @brief Return the number of lines in the object.
     virtual size_t NumLineas(void) const= 0;
-    //! @brief Returns the number of vertices of the object.
+    //! @brief Return the number of vertices in the object.
     virtual size_t NumVertices(void) const= 0;
-    //! @brief Returns the number of vertices of the object.
+    //! @brief Return the number of faces in the object.
     virtual size_t NumFaces(void) const= 0;
     virtual std::set<const Face *> getSurfaces(void)= 0;
     virtual const BodyFace *GetFace(const size_t &i) const= 0;

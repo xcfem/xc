@@ -125,7 +125,7 @@ class CmbEdge: public Edge
     size_t NDiv(void) const;
     void SetNDiv(const size_t &nd);
 
-    //! @brief Returns the number of sides.
+    //! @brief Return the number of edges.
     size_t NumEdges(void) const
       { return lineas.size(); }
     inline std::deque<Lado> &getLados(void)
@@ -134,7 +134,7 @@ class CmbEdge: public Edge
 
     double getLongitud(void) const;
 
-    //! @brief Returns the number of vertices.
+    //! @brief Return the number of vertices.
     virtual size_t NumVertices(void) const
       { return NumEdges()+1; }
 

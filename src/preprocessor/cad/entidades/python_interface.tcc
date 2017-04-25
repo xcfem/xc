@@ -69,11 +69,11 @@ class_<XC::QuadSurface, XC::QuadSurface *, bases<XC::Face>, boost::noncopyable >
    ;
 
 
-class_<XC::Body, XC::Body *, bases<XC::EntMdlr>, boost::noncopyable >("Body", no_init)
+class_<XC::Body, XC::Body *, bases<XC::EntMdlr>, boost::noncopyable >("Body","Six-faced body." ,no_init)
   .add_property("getIdxVertices",&XC::Edge::getIndicesVertices)
    ;
 
-class_<XC::Block, XC::Block *, bases<XC::Body>, boost::noncopyable >("Block", no_init);
+class_<XC::Block, XC::Block *, bases<XC::Body>, boost::noncopyable >("Block", "Six-faced solid.",no_init);
 
 class_<XC::UniformGrid, XC::UniformGrid *, bases<XC::EntMdlr>, boost::noncopyable >("UniformGrid", no_init)
   .add_property("org", make_function(&XC::UniformGrid::getOrg, return_internal_reference<>() ), &XC::UniformGrid::setOrg)
@@ -157,10 +157,10 @@ class_<map_faces, bases<map_cm_faces>, boost::noncopyable >("map_faces", no_init
 class_<XC::MapSurfaces, bases<map_faces>, boost::noncopyable >("MapSurfaces", no_init)
    .def("newQuadSurfacePts", &XC::MapSurfaces::newQuadSurfacePts, return_internal_reference<>(),"Creates a quadrilateral surface.")
    .def("newQuadSurfaceLines", &XC::MapSurfaces::newQuadSurfaceLines, return_internal_reference<>(),"Creates a quadrilateral surface.")
-   .def("newQuadSurfaceGridPts", &XC::MapSurfaces::newQuadSurfaceGridPoints, return_internal_reference<>(),"Creates a quadrilateral surface.")
-   .def("get", &XC::MapSurfaces::get, return_internal_reference<>(),"Returns the i-th face.")
+   .def("newQuadSurfaceGridPts", &XC::MapSurfaces::newQuadSurfaceGridPoints, return_internal_reference<>(),"Create a quadrilateral surface.")
+   .def("get", &XC::MapSurfaces::get, return_internal_reference<>(),"Return the i-th face.")
    .def("conciliaNDivs", &XC::MapSurfaces::conciliaNDivs)
-   .def("checkNDivs",&XC::MapSurfaces::checkNDivs)
+.def("checkNDivs",&XC::MapSurfaces::checkNDivs,"Check the number of divisions.")
    ;
 
 typedef XC::MapCadMember<XC::Body> map_cm_bodies;

@@ -38,10 +38,10 @@ namespace XC {
 
 //! \ingroup CadEnt
 //!
-//! @brief Arco de circunferencia.
+//! @brief Circumference arc.
 class ArcoCircunf: public LineaBase
   {
-    Pnt *p3; //!< Punto intermedio del arco.
+    Pnt *p3; //!< Midpoint of the arc.
   protected:
 
     const SectorCircular3d get_sector_circular3d(void) const;
@@ -66,7 +66,7 @@ class ArcoCircunf: public LineaBase
     double getRadio(void) const;
     double getLambda(const Pos3d &) const;
 
-    //! @brief Returns the number of vertices.
+    //! @brief Return the number of vertices.
     inline virtual size_t NumVertices(void) const
       { return 3; }
     virtual const Pnt *GetVertice(const size_t &i) const;

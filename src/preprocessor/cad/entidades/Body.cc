@@ -63,29 +63,29 @@ XC::SecuenciaLados::SecuenciaLados(const size_t primero,const bool &directo)
 XC::Body::BodyFace::BodyFace(XC::Face *ptr,const size_t &p,const bool &d)
   : surface(ptr), sec_lados(p,d) {}
 
-//! @brief Returns a pointer to the surface that limits the solid.
+//! @brief Return a pointer to the surface that limits the solid.
 XC::Face *XC::Body::BodyFace::Surface(void)
   { return surface; }
-//! @brief Returns a pointer to the surface that limits the solid.
+//! @brief Return a pointer to the surface that limits the solid.
 const XC::Face *XC::Body::BodyFace::Surface(void) const
   { return surface; }
-//! @brief Sets the surface that limites the solid.
+//! @brief Set the surface that limites the solid.
 void XC::Body::BodyFace::SetSurf(XC::Face *s)
   { surface= s; }
-//! @brief Returns the name of the surface that limits the solid.
+//! @brief Return the name of the surface that limits the solid.
 const std::string &XC::Body::BodyFace::GetNombre(void) const
   { return surface->GetNombre(); }
-//! @brief Returns true if the surface doesn't exists.
+//! @brief Return true if the surface doesn't exists.
 bool XC::Body::BodyFace::Vacia(void) const
   { return (surface==nullptr); }
-//! @brief Returns the number of edges of the surface.
+//! @brief Return the number of edges on the surface.
 size_t XC::Body::BodyFace::NumLineas(void) const
   { return surface->NumEdges(); }
-//! @brief Returns the number of vertices of the surface.
+//! @brief Return the number of vertices on the surface.
 size_t XC::Body::BodyFace::NumVertices(void) const
   { return surface->NumVertices(); }
 
-//! @brief Returns the pointer al lado de la cara, which index is being passed as parameter.
+//! @brief Return the pointer to the side face whose index is passed as parameter.
 const XC::CmbEdge::Lado *XC::Body::BodyFace::GetLado(const size_t &i) const
   {
     if(!surface) return nullptr;
@@ -112,11 +112,11 @@ const XC::CmbEdge::Lado *XC::Body::BodyFace::GetLado(const size_t &i) const
     return retval;
   }
 
-//! @brief Returns a pointer to the i-th edge of the face.
+//! @brief Return a pointer to the i-th edge of the face.
 XC::CmbEdge::Lado *XC::Body::BodyFace::GetLado(const size_t &i)
   { return const_cast<CmbEdge::Lado *>(static_cast<const BodyFace &>(*this).GetLado(i)); }
 
-//! @brief Returns a pointer to the i-th vertex of the face.
+//! @brief Return a pointer to the i-th vertex of the face.
 const XC::Pnt *XC::Body::BodyFace::GetVertice(const size_t &i) const
   {
     const CmbEdge::Lado *l= GetLado(i);
@@ -130,18 +130,18 @@ const XC::Pnt *XC::Body::BodyFace::GetVertice(const size_t &i) const
     return nullptr;
   }
 
-//! @brief Returns a pointer to the i-th vertex of the face.
+//! @brief Return a pointer to the i-th vertex of the face.
 XC::Pnt *XC::Body::BodyFace::GetVertice(const size_t &i)
   { return const_cast<Pnt *>(static_cast<const BodyFace &>(*this).GetVertice(i)); }
 
-//! @brief Returns a pointer to the (i,j) node of the face.
+//! @brief Return a pointer to the (i,j) node of the face.
 XC::Node *XC::Body::BodyFace::GetNodo(const size_t &i,const size_t &j)
   {
     assert(surface);
     return surface->GetNodo(i,j);
   }
 
-//! @brief Return the posiciones para los nodos de la cara.
+//! @brief Return the positions for the nodes on a face.
 MatrizPos3d XC::Body::BodyFace::get_posiciones(void) const
   {
     if(!surface)
@@ -160,8 +160,8 @@ MatrizPos3d XC::Body::BodyFace::get_posiciones(void) const
     const CmbEdge::Lado *l2= GetLado(2);
     const CmbEdge::Lado *l3= GetLado(3);
     const CmbEdge::Lado *l4= GetLado(4);
-    //Filas de puntos cuasi paralelas a l2 y l4 y con indice creciente desde l4 hasta l2.
-    //Columnas de puntos cuasi paralelas a l1 y l3 y con indice creciente desde l1 hasta l3.
+    //Rows of points quasi-parllels to l2 and l4 and increasing index from l4 to l2.
+    //Columns of point quasi.parallels to l1 and l3 and increasing index from l1 to l3.
     if(l1->NDiv()!=l3->NDiv())
       {
         std::cerr << "Lines 1 and 3 have different number of divisions. Can't generate mesh." << std::endl;
@@ -179,11 +179,11 @@ MatrizPos3d XC::Body::BodyFace::get_posiciones(void) const
     return MatrizPos3d(ptos_l1,ptos_l2,ptos_l3,ptos_l4);
   }
 
-//! @brief Checks the number of divisions.
+//! @brief Check the number of divisions.
 bool XC::Body::BodyFace::checkNDivs(void) const
   { return surface->checkNDivs(); }
 
-//! @brief Lanza la creación de nodos de las cara.
+//! @brief Trigger the creation of nodes on faces.
 void XC::Body::BodyFace::create_nodes(void)
   {
     if(surface)
@@ -220,11 +220,11 @@ BND3d XC::Body::Bnd(void) const
   }
 
 //! @brief Return the bodies that touch the surface
-//! being passed as parameter (neighbors).
+//! passed as parameter (neighbors).
 std::set<const XC::Body *> XC::GetCuerposTocan(const Face &s)
   { return s.CuerposTocan(); }
 
-//! @brief Returns the sets a los que pertenece este cuerpo.
+//! @brief Return the sets to wich the body belongs.
 std::set<XC::SetBase *> XC::Body::get_sets(void) const
   {
     std::set<SetBase *> retval;
@@ -240,7 +240,7 @@ std::set<XC::SetBase *> XC::Body::get_sets(void) const
     return retval;
   }
 
-//! @brief Adds the body to the set being passed as parameter.
+//! @brief Add the body to the set passed as parameter.
 void XC::Body::add_to_sets(std::set<SetBase *> &sets)
   {
     for(std::set<SetBase *>::iterator i= sets.begin();i!= sets.end();i++)
@@ -250,7 +250,7 @@ void XC::Body::add_to_sets(std::set<SetBase *> &sets)
       }
   }
 
-//! @brief Unpdates topology of the surface being passed as parameter (inserts neighbor).
+//! @brief Unpdate topology of the surface passed as parameter (inserts neighbor).
 void XC::Body::set_surf(Face *s)
   {
     if(s)

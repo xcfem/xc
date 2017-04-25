@@ -59,12 +59,12 @@
 // Numbering of faces:
 //
 //                
-//       +--------+         0: Base; vertices 1,2,3,4.
-//      /   5    /|         1: Lateral izquierdo; vertices 1,2,6,5.
-//     /        / |         2: Cara frontal; vertices 2,3,7,6.
-//    +--------+  |         3: Lateral derecho; vertices 3,4,8,7.
-//    |        | 3|         4: Cara dorsal; vertices 1,4,8,5.
-//    |        |  +         5: Tapa; vertices 5,6,7,8.
+//       +--------+         0: Bottom face; vertices 1,2,3,4.
+//      /   5    /|         1: Left-side face; vertices 1,2,6,5.
+//     /        / |         2: Front face; vertices 2,3,7,6.
+//    +--------+  |         3: Right-side face; vertices 3,4,8,7.
+//    |        | 3|         4: Dorsal face; vertices 1,4,8,5.
+//    |        |  +         5: Top face; vertices 5,6,7,8.
 //    |   2    | /
 //    |        |/
 //    +--------+
@@ -79,11 +79,11 @@ XC::SetEstruct *XC::Block::getCopy(void) const
   { return new Block(*this); }
 
 
-//! @brief Interfaz con VTK.
+//! @brief Interface with VTK.
 int XC::Block::getVtkCellType(void) const
   { return VTK_HEXAHEDRON; }
 
-//! @brief Interfaz con el formato MED de Salome.
+//! @brief Interface with MED format of Salome.
 int XC::Block::getMEDCellType(void) const
   { return MED_HEXA8; }
 
@@ -93,23 +93,23 @@ bool XC::Block::checkNDivs(void) const
     return (sups[0].checkNDivs() && sups[1].checkNDivs() && sups[2].checkNDivs() && sups[3].checkNDivs() && sups[4].checkNDivs() && sups[5].checkNDivs());
   }
 
-//! @brief Returns the number of edges.
+//! @brief Return the number of edges.
 size_t XC::Block::NumLineas(void) const
   { return 12; }
 
-//! @brief Returns the number of vertices.
+//! @brief Return the number of vertices.
 size_t XC::Block::NumVertices(void) const
   { return 8; }
 
-//! @brief Returns the number of faces.
+//! @brief Return the number of faces.
 size_t XC::Block::NumFaces(void) const
   { return 6; }
 
-//! @brief Return the face with the index being passed as parameter.
+//! @brief Return the face with the index passed as parameter.
 const XC::Block::BodyFace *XC::Block::GetFace(const size_t &i) const
   { return &sups[i-1]; }
 
-//! @brief Return the face with the index being passed as parameter.
+//! @brief Return the face with the index passed as parameter.
 XC::Block::BodyFace *XC::Block::GetFace(const size_t &i)
   { return &sups[i-1]; }
 
@@ -144,7 +144,7 @@ const XC::CmbEdge::Lado *XC::Block::GetArista(const size_t &i) const
     return retval;
   }
 
-//! @brief Returns the i-th vertex.
+//! @brief Return the i-th vertex of the solid.
 const XC::Pnt *XC::Block::GetVertice(const size_t &i) const
   {
     if(i<=4)
@@ -155,7 +155,7 @@ const XC::Pnt *XC::Block::GetVertice(const size_t &i) const
       return nullptr;
   }
 
-//! @brief Returns the i-th vertex.
+//! @brief Return the i-th vertex of the solid.
 XC::Pnt *XC::Block::GetVertice(const size_t &i)
   {
     if(i<=4)
@@ -166,7 +166,7 @@ XC::Pnt *XC::Block::GetVertice(const size_t &i)
       return nullptr;
   }
 
-//! @brief Returns the surfaces that close the solid.
+//! @brief Return the surfaces that close the solid.
 std::set<const XC::Face *> XC::Block::getSurfaces(void)
   {
     std::set<const Face *> retval;
@@ -179,7 +179,7 @@ std::set<const XC::Face *> XC::Block::getSurfaces(void)
     return retval;
   }
 
-//! @brief Updates topology of the enclosing surface (neighbors).
+//! @brief Update topology of the enclosing surface (neighbors).
 void XC::Block::actualiza_topologia(void)
   {
     if(!sups[0].Vacia()) set_surf(sups[0].Surface());
@@ -190,7 +190,7 @@ void XC::Block::actualiza_topologia(void)
     if(!sups[5].Vacia()) set_surf(sups[5].Surface());
   }
 
-//! Returns the index of the surface being passed as parameter
+//! Return the index of the surface passed as parameter
 //! as follows:
 //! - If the surface is the first one that defines the solid,
 //! then that one is the base.
@@ -207,47 +207,47 @@ size_t XC::Block::indice(Face *s) const
         const Face *base= sups[0].Surface();
         size_t primero= base->BordeComun(*s); //Linea comun de "s" con la base.
         if(primero)
-          retval= primero; //Es un lateral.
+          retval= primero; //Is a side face.
         else
-          retval= 5; //Es la tapa.
+          retval= 5; //Is the top face.
       }
     return retval;
   }
 
-//! @brief Sets the surface as solid limit.
+//! @brief Set the surface as solid limit.
 void XC::Block::coloca(const size_t &i,Face *s)
   {
     size_t primero= 1;
     int sentido= 1;
-    if( (i>0) && (i<5)) //Es un lateral
+    if( (i>0) && (i<5)) //Is a side face.
       {
         const Face *base= sups[0].Surface();
         primero= s->BordeComun(*base); //Index of the line in common with the base.
         const Edge *linea= base->GetLado(i)->Borde();
         sentido= base->SentidoBorde(linea,*s);
       }
-    if(i == 5) //Es la tapa
+    if(i == 5) //Is the top face
       {
-        //Buscamos una cara asignada.
+        //Seek for an assigned face.
         size_t icara= 1;
         Face *cara= sups[1].Surface();
         if(!cara) { icara=2; cara= sups[icara].Surface(); }
         if(!cara) { icara=3; cara= sups[icara].Surface(); }
         if(!cara) { icara=4; cara= sups[icara].Surface(); }
         if(!cara)
-          std::cerr << "Error: Block; antes de introducir la cara 5 hay que introducir la 1 o la 2 o la 3 o la 4." << std::endl;
+          std::cerr << "Error: Block; before introducing face 5 you must introduceeither the 1 , 2 , 3 or 4 faces." << std::endl;
         else
           {
             primero= cara->BordeComun(*s); //Index of the line in common of s with the face.
-            if(primero) //Tienen lado común.
+            if(primero) //They have a common edge.
               {
                 const Edge *linea= cara->GetLado(primero)->Borde();
                 sentido= -cara->SentidoBorde(linea,*s);
               }
-            else //No tienen lado común.
+            else //They don't share a common edge.
               {
-                std::cerr << "Error: Block(" << GetNombre() << "); la cara " << s->GetNombre() 
-                          << " no tiene lado común con la cara " << cara->GetNombre() << '.' << std::endl;
+                std::cerr << "Error: Block(" << GetNombre() << "); the face " << s->GetNombre() 
+                          << " does not share a common edge with face " << cara->GetNombre() << '.' << std::endl;
               }
           }
       }
@@ -258,11 +258,11 @@ void XC::Block::coloca(const size_t &i,Face *s)
       if(sentido==-1)
         directo= false;
       else
-        std::cerr << "The surfaces have not an common edge." << std::endl;
+        std::cerr << "The surfaces do not share a common edge." << std::endl;
     sups[i]= BodyFace(s,primero,directo);
   }
 
-//! @brief Inserts the surface with the identifier being passed as parameter
+//! @brief Insert the surface with the identifier passed as parameter
 //! (if found).
 void XC::Block::inserta(const size_t &i)
   {
@@ -274,7 +274,7 @@ void XC::Block::inserta(const size_t &i)
 		<< " not found." << std::endl;
   }
 
-//! @brief Creates and inserts the faces from the indices being passed
+//! @brief Create and insert the faces from the indices passed
 //! as parameter.
 void XC::Block::add_caras(const std::vector<size_t> &indices_caras)
   {
@@ -283,7 +283,7 @@ void XC::Block::add_caras(const std::vector<size_t> &indices_caras)
       inserta(indices_caras[i]);
   }
 
-//! @brief Triggers the creation of nodes on faces.
+//! @brief Trigger the creation of nodes on faces.
 void XC::Block::create_nodes_caras(void)
   {
     sups[0].create_nodes();
@@ -294,29 +294,29 @@ void XC::Block::create_nodes_caras(void)
     sups[5].create_nodes();
   }
 
-//! @brief Returns (ndivI+1)*(ndivJ+1)*(ndivK+1) positions for the nodes.
+//! @brief Return (ndivI+1)*(ndivJ+1)*(ndivK+1) positions for the nodes.
 //!
-//! La "tritriz" de puntos devuelta esta organizada de la siguiente manera.
-//! - The point (0,1,1) (capa,fila,col) correspond with vertex  1.
-//! - The layer index goes from 0 for face 1 1 to ncapas for face 6.
-//! - The row index goes from 1 for face 5 to nfilas for face 3.
-//! - The column index goes from 1 for face 2 to ncol for face 4.
+//! The returned 3D-matrix of points is organized as follows:
+//! - The point (0,1,1) (layer,row,column) corresponds to vertex  1.
+//! - The layer index ranges from 0 for face 1 to ncapas for face 6.
+//! - The row index ranges from 1 for face 5 to nfilas for face 3.
+//! - The column index rangess from 1 for face 2 to ncol for face 4.
 //!
-//! En consecuencia:
-//! - The edge 1 has indices (0,j=1..nfil,1) 
-//! - The edge 2 has indices (0,nfil,k=1..ncol) 
-//! - The edge 3 has indices (0,j=1..nfil,ncol)
-//! - The edge 4 has indices (0,1,k=1..ncol)
+//! So:
+//! - Edge 1 has indices (0,j=1..nfil,1) 
+//! - Edge 2 has indices (0,nfil,k=1..ncol) 
+//! - Edge 3 has indices (0,j=1..nfil,ncol)
+//! - Edge 4 has indices (0,1,k=1..ncol)
 
-//! - The edge 5 has indices (i=0..ncapas,1,1) 
-//! - The edge 6 has indices (i=0..ncapas,nfil,1) 
-//! - The edge 7 has indices (i=0..ncapas,nfil,ncol) 
-//! - The edge 8 has indices (i=0..ncapas,1,ncol) 
+//! - Edge 5 has indices (i=0..ncapas,1,1) 
+//! - Edge 6 has indices (i=0..ncapas,nfil,1) 
+//! - Edge 7 has indices (i=0..ncapas,nfil,ncol) 
+//! - Edge 8 has indices (i=0..ncapas,1,ncol) 
 
-//! - The edge 9 has indices (ncapas,j=1..nfil,1) 
-//! - The edge 10 has indices (ncapas,nfil,k=1..ncol) 
-//! - The edge 11 has indices (ncapas,j=1..nfil,ncol) 
-//! - The edge 12 has indices (ncapas,1,k=1..ncol) 
+//! - Edge 9 has indices (ncapas,j=1..nfil,1) 
+//! - Edge 10 has indices (ncapas,nfil,k=1..ncol) 
+//! - Edge 11 has indices (ncapas,j=1..nfil,ncol) 
+//! - Edge 12 has indices (ncapas,1,k=1..ncol) 
 TritrizPos3d XC::Block::get_posiciones(void) const
   {
     const size_t ndiv_12= NDivI();
@@ -338,15 +338,15 @@ TritrizPos3d XC::Block::get_posiciones(void) const
     return retval;
   }
 
-//! @brief Returns the número de divisiones según la arista 1->2.
+//! @brief Return the number of divisions along the edge 1->2.
 size_t XC::Block::NDivI(void) const
   { return GetArista(1)->NDiv(); }
 
-//! @brief Returns the número de divisiones según la arista 2->3.
+//! @brief Return the number of divisions along the edge 2->3.
 size_t XC::Block::NDivJ(void) const
   { return GetArista(2)->NDiv(); }
 
-//! @brief Returns the número de divisiones según la arista 1->5.
+//! @brief Return the number of divisions along the edge 1->5.
 size_t XC::Block::NDivK(void) const
   { return GetArista(5)->NDiv(); }
 
@@ -423,8 +423,8 @@ void XC::Block::create_nodes(void)
                 ttzNodes(1,J,K)= base.GetNodo(j,i);
               d2= dist2(ttzNodes(1,J,K)->getPosInicial3d(),pos_nodes(1,J,K));
               if(d2>1e-4)
-		std::cerr << "Block::create_nodes; error al enlazar el nodo: ("
-                          << i << "," << j << ") de la base." << std::endl;
+		std::cerr << "Block::create_nodes; error while linking node: ("
+                          << i << "," << j << ") in face." << std::endl;
 	      std::cout << "i= " << i << " j= " << j << " J= " << J << " K= " << K 
                         << " dist2= " << d2 << std::endl;
             }
@@ -465,11 +465,11 @@ void XC::Block::create_nodes(void)
 		  << "' already exist." << std::endl;      
   }
 
-//! @brief Triggers mesh generation.
+//! @brief Trigger mesh generation.
 void XC::Block::genMesh(meshing_dir dm)
   {
     if(verborrea>3)
-      std::clog << "Mesing Block...(" << GetNombre() << ")...";
+      std::clog << "Meshing Block...(" << GetNombre() << ")...";
     create_nodes();
     if(ttzElements.Null())
       create_elements(dm);

@@ -35,7 +35,7 @@ namespace XC {
 
 //! \ingroup CadEnt
 //!
-//! @brief Six faces body.
+//! @brief Six-faced body.
 class Block: public Body
   {
     BodyFace sups[6];

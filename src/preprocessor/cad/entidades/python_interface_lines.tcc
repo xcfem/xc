@@ -52,15 +52,15 @@ class_<XC::DividedLine, bases<XC::Linea>, boost::noncopyable >("DividedLine", no
   .def("setLongs",&XC::DividedLine::setLongs,"Asigns length for each division.")
   ;
 
-class_<XC::ArcoCircunf, bases<XC::LineaBase>, boost::noncopyable >("CircleArc", no_init)
-  .def("getAngle", &XC::ArcoCircunf::getAnguloComprendido,"Returns the angle of the arc.")
-  .def("getTheta1",&XC::ArcoCircunf::getTheta1,"Returns initial angle.")
-  .def("getTheta2",&XC::ArcoCircunf::getTheta2,"Returns final angle.")
-  .def("getCentro",&XC::ArcoCircunf::getCentro,"Returns center.")
-  .def("getPInic",&XC::ArcoCircunf::getPInic,"Returns initial point.")
-  .def("getPFin",&XC::ArcoCircunf::getPFin,"Returns final point.")
-  .def("getPMed",&XC::ArcoCircunf::getPMed,"Returns mid point.")
-  .def("getRadio",&XC::ArcoCircunf::getRadio,"Returns radius.")
+class_<XC::ArcoCircunf, bases<XC::LineaBase>, boost::noncopyable >("CircleArc", "Circumference arc.",no_init)
+  .def("getAngle", &XC::ArcoCircunf::getAnguloComprendido,"Return the angle subtended by the arc.")
+  .def("getTheta1",&XC::ArcoCircunf::getTheta1,"Return the start angle.")
+  .def("getTheta2",&XC::ArcoCircunf::getTheta2,"Return the end angle.")
+  .def("getCentro",&XC::ArcoCircunf::getCentro,"Return the center of the circumference.")
+  .def("getPInic",&XC::ArcoCircunf::getPInic,"Return start point of the arc.")
+  .def("getPFin",&XC::ArcoCircunf::getPFin,"Return end point of the arc.")
+  .def("getPMed",&XC::ArcoCircunf::getPMed,"Return the midpoint of the arc.")
+  .def("getRadio",&XC::ArcoCircunf::getRadio,"Return the radius of the circumference.")
    ;
 
 XC::Edge *(XC::CmbEdge::Lado::*getEdge)(void)= &XC::CmbEdge::Lado::Borde;
@@ -78,9 +78,9 @@ class_<dq_lados, boost::noncopyable >("DqEdges", no_init)
    ;
 
 
-class_<XC::CmbEdge, bases<XC::Edge>, boost::noncopyable >("CmbEdge", no_init)
-  .add_property("getNumVertices", &XC::CmbEdge::NumVertices)
-  .add_property("getNumEdges", &XC::CmbEdge::NumEdges)
+class_<XC::CmbEdge, bases<XC::Edge>, boost::noncopyable >("CmbEdge","Compound line",no_init)
+  .add_property("getNumVertices", &XC::CmbEdge::NumVertices,"Return the number of vertices.")
+  .add_property("getNumEdges", &XC::CmbEdge::NumEdges,"Return the number of edges.")
   .add_property("getEdges", make_function( &XC::CmbEdge::getLados, return_internal_reference<>()))
   .def("addLines",&XC::CmbEdge::addLines, return_internal_reference<>(),"Add lines to the sequence.")
   .def("addPoints",&XC::CmbEdge::addPoints, return_internal_reference<>(),"Add points to the sequence.")
