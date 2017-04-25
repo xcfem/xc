@@ -35,7 +35,7 @@ namespace XC {
 
 //! \ingroup CadEnt
 //!
-//! @brief Segmento de recta entre dos Pnt.
+//! @brief Line segment between two points.
 class DividedLine: public Linea
   {
     std::vector<double> longs; //!< Lenght of the line segments.

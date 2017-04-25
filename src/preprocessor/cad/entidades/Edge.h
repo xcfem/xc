@@ -42,7 +42,7 @@ class Body;
 
 //! \ingroup CadEnt
 //!
-//! @brief Base class for one-dimensional geometric objects.
+//! @brief Base class for one-dimensional geometry objects.
 class Edge: public EntMdlr
   {
     friend class CmbEdge;
@@ -67,7 +67,7 @@ class Edge: public EntMdlr
     virtual const Pnt *P1(void) const;
     virtual const Pnt *P2(void) const;
     bool ExtremosEn(const Pnt *,const Pnt *) const;
-    //! @brief Returns the number of vertices.
+    //! @brief Return the number of vertices.
     virtual size_t NumVertices(void) const= 0;
 
     virtual double getLongitud(void) const= 0;
@@ -84,10 +84,10 @@ class Edge: public EntMdlr
     std::set<const XC::Edge *> GetLadosHomologos(const std::set<const XC::Edge *> &) const;
     void actualiza_topologia(void);
 
-    //! @brief Returns the surfaces that touch the line.
+    //! @brief Return the surfaces that touch the line.
     const std::set<const Face *> &SupsTocan(void) const
       { return sups_linea; }
-    //! @brief Returns the surface names that touch the line.
+    //! @brief Return the surface names that touch the line.
     const std::string &NombresSupsTocan(void) const;
     bool Toca(const Face &s) const;
     bool Toca(const Body &b) const;
