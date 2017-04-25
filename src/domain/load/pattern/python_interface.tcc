@@ -23,8 +23,8 @@
 
 
 class_<XC::NodeLocker,XC::NodeLocker *, bases<XC::ForceReprComponent>, boost::noncopyable >("NodeLocker", no_init)
-  .def("newSPConstraint", &XC::NodeLocker::newSPConstraint,return_internal_reference<>(),"Creates a new single freedom constraint.")
-  .def("removeSPConstraint", &XC::NodeLocker::removeSFreedom_Constraint,"Creates a new multi-freedom constraint.")
+  .def("newSPConstraint", &XC::NodeLocker::newSPConstraint,return_internal_reference<>(),"\n" "newSPConstraint(tag_nod,id_gdl,valor) \n" "Create a single-point boundary constraint by assigning a value=valor to the degree of freedom gdl of node whose ID is tag_nod.")
+  .def("removeSPConstraint", &XC::NodeLocker::removeSFreedom_Constraint,"Remove a single-point boundary constraint.")
   .def("clearAll",&XC::NodeLocker::clearAll)
   ;
 

@@ -48,7 +48,7 @@ void XC::DividedLine::setLongs(const XC::Vector &ls)
     SetNDiv(longs.size());
   }
 
-//! @brief Returns ndiv+1 positions along the line spaced
+//! @brief Return ndiv+1 positions along the line spaced
 //! according to the lengths specifiend in the longs member.
 MatrizPos3d XC::DividedLine::get_posiciones(void) const
   {

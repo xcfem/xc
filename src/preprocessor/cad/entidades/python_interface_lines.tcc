@@ -23,18 +23,18 @@
 
 XC::Node *(XC::Edge::*getFirstNodePtr)(void)= &XC::Edge::GetPrimerNodo;
 XC::Node *(XC::Edge::*getLastNodePtr)(void)= &XC::Edge::GetUltimoNodo;
-class_<XC::Edge, bases<XC::EntMdlr>, boost::noncopyable >("Edge", no_init)
-  .add_property("nDiv", &XC::Edge::NDiv, &XC::Edge::SetNDiv)
-  .def("setElemSize",&XC::Edge::SetElemSize)
-  .add_property("getNumVertices", &XC::Edge::NumVertices)
-  .add_property("getIdxVertices",&XC::Edge::getIndicesVertices)
-  .add_property("firstNode",make_function(getFirstNodePtr, return_internal_reference<>()))
-  .add_property("lastNode",make_function(getLastNodePtr, return_internal_reference<>()))
-  .def("getLong", &XC::Edge::getLongitud,"Returns the length of the edge.")
-  .def("getTang", &XC::Edge::getTang, return_internal_reference<>(),"Returns a vector tangent to the edge.")
-  .def("divide",&XC::Edge::divide,"Creates points along the line.")
-  .def("getKPoints",&XC::Edge::getKPoints,"Return endpoints of the line.")
-  .def("getTagsNodes",&XC::Edge::GetTagsNodosDir,"Return node tags in direct order.")
+class_<XC::Edge, bases<XC::EntMdlr>, boost::noncopyable >("Edge","Base class for one-dimensional geometry objects." ,no_init)
+  .add_property("nDiv", &XC::Edge::NDiv, &XC::Edge::SetNDiv,"Number of divisions.")
+  .def("setElemSize",&XC::Edge::SetElemSize,"Set the element size")
+  .add_property("getNumVertices", &XC::Edge::NumVertices,"Return the number of vertices.")
+  .add_property("getIdxVertices",&XC::Edge::getIndicesVertices,"Return the IDs of the vertices")
+  .add_property("firstNode",make_function(getFirstNodePtr, return_internal_reference<>()),"Return the first node of the edge")
+  .add_property("lastNode",make_function(getLastNodePtr, return_internal_reference<>()),"Return the last node of the edge")
+  .def("getLong", &XC::Edge::getLongitud,"Return the length of the edge.")
+  .def("getTang", &XC::Edge::getTang, return_internal_reference<>(),"Return a vector tangent to the edge.")
+  .def("divide",&XC::Edge::divide,"Create points along the line.")
+  .def("getKPoints",&XC::Edge::getKPoints,"Return the end points of the edge.")
+  .def("getTagsNodes",&XC::Edge::GetTagsNodosDir,"Return node tags in forward order.")
   .def("getTagsNodesReverse",&XC::Edge::GetTagsNodosInv,"Return node tags in reverse order.")
    ;
 
@@ -48,7 +48,7 @@ class_<XC::Linea, bases<XC::LineaBase>, boost::noncopyable >("Line", no_init)
   .def("splitAtNaturalCoordinate", make_function(&XC::Linea::splitAtCooNatural, return_internal_reference<>()),"Breaks the line at the point defined by the natural coordinate (0.0->1.0).")
    ;
 
-class_<XC::DividedLine, bases<XC::Linea>, boost::noncopyable >("DividedLine", no_init)
+class_<XC::DividedLine, bases<XC::Linea>, boost::noncopyable >("DividedLine", "Line segment between two points.",no_init)
   .def("setLongs",&XC::DividedLine::setLongs,"Asigns length for each division.")
   ;
 
@@ -67,8 +67,8 @@ XC::Edge *(XC::CmbEdge::Lado::*getEdge)(void)= &XC::CmbEdge::Lado::Borde;
 class_<XC::CmbEdge::Lado,bases<EntCmd> >("Lado", no_init)
   .add_property("isDirect", &XC::CmbEdge::Lado::esDirecto)
   .add_property("getEdge", make_function(getEdge, return_internal_reference<>()))
-  .def("getLong", &XC::CmbEdge::Lado::getLongitud,"Returns side's length.")
-  .def("getTang", &XC::CmbEdge::Lado::getTang, return_internal_reference<>(),"Returns a vector tangent to the edge.")
+  .def("getLong", &XC::CmbEdge::Lado::getLongitud,"Return edge's length.")
+  .def("getTang", &XC::CmbEdge::Lado::getTang, return_internal_reference<>(),"Return a vector tangent to the edge.")
   ;
 
 typedef std::deque<XC::CmbEdge::Lado> dq_lados;
