@@ -149,17 +149,13 @@ void XC::TransformationDOF_Group::initialize(TransformationConstraintHandler *th
     theHandler= theTHandler;
   }
 
-XC::TransformationDOF_Group::TransformationDOF_Group(int tag, Node *node, MFreedom_Constraint *mp, TransformationConstraintHandler *theTHandler)  
-  :DOF_Group(tag,node), theMP(mp), theMRMP(nullptr), unbalAndTangentMod(0,unbalAndTangentArrayMod), theSPs()
-  { initialize(theHandler); }
-
-XC::TransformationDOF_Group::TransformationDOF_Group(int tag, Node *node, MRMFreedom_Constraint *mrmp, TransformationConstraintHandler *theTHandler)  
-  :DOF_Group(tag,node), theMP(nullptr), theMRMP(mrmp),unbalAndTangentMod(0,unbalAndTangentArrayMod),theSPs()
+XC::TransformationDOF_Group::TransformationDOF_Group(int tag, Node *node, MFreedom_ConstraintBase *m, TransformationConstraintHandler *theTHandler)  
+  :DOF_Group(tag,node), mfc(m), unbalAndTangentMod(0,unbalAndTangentArrayMod), theSPs()
   { initialize(theHandler); }
 
 void XC::TransformationDOF_Group::setID(int dof, int value)
   {
-    if(!theMP & !theMRMP)
+    if(!mfc)
       this->DOF_Group::setID(dof,value);
     else
       modID(dof)= value;
@@ -167,7 +163,7 @@ void XC::TransformationDOF_Group::setID(int dof, int value)
         
 
 XC::TransformationDOF_Group::TransformationDOF_Group(int tag, Node *node, TransformationConstraintHandler *theTHandler)
-  :DOF_Group(tag,node), theMP(nullptr), theMRMP(nullptr), modNumDOF(node->getNumberDOF()),
+  :DOF_Group(tag,node), mfc(nullptr), modNumDOF(node->getNumberDOF()),
    unbalAndTangentMod(node->getNumberDOF(),unbalAndTangentArrayMod),theSPs() 
   {
     // create space for the SFreedom_Constraint array
@@ -273,17 +269,7 @@ const XC::Vector &XC::TransformationDOF_Group::getUnbalance(Integrator *theInteg
 
 //! @brief Returns a pointer to the multi-freedom constraint.
 const XC::MFreedom_ConstraintBase *XC::TransformationDOF_Group::getMFreedomConstraint(void) const
-  {
-    const MFreedom_ConstraintBase *retval= nullptr;
-    if(theMP && theMRMP)
-      std::cerr << nombre_clase() << "::" << __FUNCTION__
-	        << "; ERROR both pointers are not null." << std::endl;
-    else if(theMP)
-      retval= theMP;
-    else
-      retval= theMRMP;
-    return retval;
-  }
+  { return mfc; }
 
 //! @brief Returns a pointer to the multi-freedom constraint.
 XC::MFreedom_ConstraintBase *XC::TransformationDOF_Group::getMFreedomConstraint(void)
@@ -321,23 +307,7 @@ const XC::Vector &XC::TransformationDOF_Group::setupResidual(int numCNodeDOF, co
 
 //! @brief Returns the number of retained nodes.
 size_t XC::TransformationDOF_Group::getNumRetainedNodes(void) const
-  {
-    size_t retval= 0;
-    const MFreedom_ConstraintBase *mfc= getMFreedomConstraint();
-    if(mfc)
-      {
-        if(theMP)
-          {
-            retval= 1;
-          }
-        else // theMRMP is not null
-          {
-	    const ID &retainedNodes= theMRMP->getRetainedNodeTags();
-	    retval= retainedNodes.size();
-          }
-      }
-    return retval;
-  }
+  { return mfc->getNumRetainedNodes(); }
 
 //! @brief Returns the number of retained degrees of freedom (retained nodes x retained DOFs on each node).
 size_t XC::TransformationDOF_Group::getNumRetainedNodeDOFs(void) const
@@ -359,22 +329,7 @@ std::vector<XC::Node *> XC::TransformationDOF_Group::getPointersToRetainedNodes(
 
     const MFreedom_ConstraintBase *mfc= getMFreedomConstraint();
     if(mfc)
-      {
-        Domain *theDomain= myNode->getDomain();
-        if(theMP)
-          {
-            const int retainedNode= theMP->getNodeRetained();
-	    retval[0]= theDomain->getNode(retainedNode);   
-          }
-        else // theMRMP is not null
-          {
-	    const ID &retainedNodes= theMRMP->getRetainedNodeTags();
-	    const size_t sz= retainedNodes.size();
-	    retval.resize(sz,nullptr);
-	    for(size_t i= 0;i<sz;i++)
-	      retval[i]= theDomain->getNode(retainedNodes[i]);
-          }
-      }
+      retval= mfc->getPointersToRetainedNodes();
     return retval;
   }
 

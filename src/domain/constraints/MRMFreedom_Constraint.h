@@ -78,17 +78,23 @@ class MRMFreedom_Constraint: public MFreedom_ConstraintBase
 
 
     // method to get information about the constraint
+    //! @brief Returns the tags of the retained nodes.
     virtual inline const ID &getRetainedNodeTags(void) const
       { return retainedNodeTags; }
+    //! @brief Returns the tags of the retained nodes.
     virtual inline ID &getRetainedNodeTags(void)
       { return retainedNodeTags; }
+    //! @brief Returns the indexes of the degrees of freedom.
     inline virtual const ID &getRetainedDOFs(void) const
       { return getConstrainedDOFs(); } //Same as constrained.
+    virtual size_t getNumRetainedNodes(void) const
+      { return retainedNodeTags.size(); }
+    std::vector<XC::Node *> getPointersToRetainedNodes(void) const;
     int getNumDofGroups(void) const;         
     int getNumDofs(void) const;           
     int getNumRetainedDofs(void) const;           
     int getNumConstrainedDofs(void) const;           
-    int getNumLagrangeDofs(void) const;           
+    int getNumLagrangeDofs(void) const;
     bool affectsNode(int ) const;
     virtual int applyConstraint(double pseudoTime);
 

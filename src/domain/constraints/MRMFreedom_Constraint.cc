@@ -152,6 +152,18 @@ bool XC::MRMFreedom_Constraint::affectsNode(int nodeTag) const
     return retval;
   }
 
+//! @brief Returns a vector with the pointers to the retained nodes.
+std::vector<XC::Node *> XC::MRMFreedom_Constraint::getPointersToRetainedNodes(void) const
+  {
+    const ID &retainedNodes= getRetainedNodeTags();
+    const size_t sz= retainedNodes.size();
+    std::vector<Node *> retval(sz,nullptr);
+    Domain *theDomain= getDomain();
+    for(size_t i= 0;i<sz;i++)
+      retval[i]= theDomain->getNode(retainedNodes[i]);
+    return retval;
+  }
+
 //! @brief Applies the constraint.
 int XC::MRMFreedom_Constraint::applyConstraint(double timeStamp)
   {

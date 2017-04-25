@@ -84,8 +84,7 @@ class TransformationConstraintHandler;
 class TransformationDOF_Group: public DOF_Group
   {
   private:
-    MFreedom_Constraint *theMP; //!< Pointer to multi-freedom constraint.
-    MRMFreedom_Constraint *theMRMP; //!< Pointer to multi-row, multi-freedom constraint.
+    MFreedom_ConstraintBase *mfc; //!< Pointer to multi-freedom constraint.
     
     Matrix Trans;
     ID modID;
@@ -103,8 +102,7 @@ class TransformationDOF_Group: public DOF_Group
     void initialize(TransformationConstraintHandler *);
   protected:
     friend class AnalysisModel;
-    TransformationDOF_Group(int tag, Node *myNode, MFreedom_Constraint *, TransformationConstraintHandler*);
-    TransformationDOF_Group(int tag, Node *myNode, MRMFreedom_Constraint *, TransformationConstraintHandler*);
+    TransformationDOF_Group(int tag, Node *myNode, MFreedom_ConstraintBase *, TransformationConstraintHandler*);
     TransformationDOF_Group(int tag, Node *myNode, TransformationConstraintHandler *);
     std::vector<SFreedom_Constraint *> getSFreedomConstraintArray(int ) const;
     MFreedom_ConstraintBase *getMFreedomConstraint(void);

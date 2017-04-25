@@ -85,6 +85,7 @@ class LagrangeMRMFreedom_FE;
 class PenaltySFreedom_FE;
 class PenaltyMFreedom_FE;
 class PenaltyMRMFreedom_FE;
+class MFreedom_ConstraintBase;
 class TransformationFE;
 class DOF_Group;
 class LagrangeDOF_Group;
@@ -162,8 +163,8 @@ class AnalysisModel: public MovableObject, public EntCmd
     virtual LagrangeDOF_Group *createLagrangeDOF_Group(const int &, SFreedom_Constraint *);
     virtual LagrangeDOF_Group *createLagrangeDOF_Group(const int &, MFreedom_Constraint *);
     virtual LagrangeDOF_Group *createLagrangeDOF_Group(const int &, MRMFreedom_Constraint *);
-    virtual TransformationDOF_Group *createTransformationDOF_Group(const int &, Node *, MFreedom_Constraint *, TransformationConstraintHandler*);
-    virtual TransformationDOF_Group *createTransformationDOF_Group(const int &, Node *, MRMFreedom_Constraint *, TransformationConstraintHandler*);
+    virtual TransformationDOF_Group *createTransformationDOF_Group(const int &, Node *, MFreedom_ConstraintBase *, TransformationConstraintHandler*);
+    //virtual TransformationDOF_Group *createTransformationDOF_Group(const int &, Node *, MRMFreedom_Constraint *, TransformationConstraintHandler*);
     virtual TransformationDOF_Group *createTransformationDOF_Group(const int &, Node *, TransformationConstraintHandler*);
     virtual FE_Element *createFE_Element(const int &, Element *);
     virtual LagrangeSFreedom_FE *createLagrangeSFreedom_FE(const int &, SFreedom_Constraint &, DOF_Group &,const double &);

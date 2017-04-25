@@ -154,6 +154,17 @@ const XC::ID &XC::MFreedom_Constraint::getRetainedDOFs(void) const
     return retainDOF;    
   }
 
+//! @brief Returns a vector with the pointers to the retained nodes.
+std::vector<XC::Node *> XC::MFreedom_Constraint::getPointersToRetainedNodes(void) const
+  {
+    std::vector<Node *> retval(1,nullptr);   
+
+    Domain *theDomain= getDomain();
+    const int retainedNode= getNodeRetained();
+    retval[0]= theDomain->getNode(retainedNode);   
+    return retval;
+  }
+
 
 //! @brief Applies the constraint at the pseudo-time being passed as parameter.
 int XC::MFreedom_Constraint::applyConstraint(double timeStamp)

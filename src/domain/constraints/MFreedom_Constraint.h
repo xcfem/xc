@@ -112,6 +112,10 @@ class MFreedom_Constraint: public MFreedom_ConstraintBase
     //! @brief Returns the tag of the retained (or master) node.
     virtual inline int &getNodeRetained(void) 
       { return retainedNodeTag; }
+    //! @brief Returns the number of retained nodes.
+    virtual size_t getNumRetainedNodes(void) const
+      { return 1; }
+    std::vector<XC::Node *> getPointersToRetainedNodes(void) const;
     bool affectsNode(int ) const;
     virtual const ID &getRetainedDOFs(void) const;            
     virtual int applyConstraint(double pseudoTime);
