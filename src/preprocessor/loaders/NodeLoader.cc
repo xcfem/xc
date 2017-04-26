@@ -52,15 +52,15 @@ XC::NodeLoader::NodeLoader(Preprocessor *preprocessor)
 XC::NodeLoader::~NodeLoader(void)
   { libera(); }
 
-//! @brief Returns the default value for next node.
+//! @brief Return the default value for next node.
 int XC::NodeLoader::getDefaultTag(void) const
   { return Node::getDefaultTag().getTag(); }
 
-//! @brief Sets the default value for next node.
+//! @brief Set the default value for next node.
 void XC::NodeLoader::setDefaultTag(const int &tag)
   { Node::getDefaultTag().setTag(tag); }
 
-//! @brief Clears all. los nodos y 
+//! @brief Clear all nodes.
 void XC::NodeLoader::clearAll(void)
   {
     libera();
@@ -158,15 +158,15 @@ XC::Node *XC::NodeLoader::newNode(const double &x)
     return retval;
   }
 
-//! @brief Creates a nede at the position being passed as parameter.
+//! @brief Create a nede at the position passed as parameter.
 XC::Node *XC::NodeLoader::newNode(const Pos3d &p)
   { return newNode(p.x(),p.y(),p.z()); }
 
-//! @brief Creates a nede at the position being passed as parameter.
+//! @brief Creates a nede at the position passed as parameter.
 XC::Node *XC::NodeLoader::newNode(const Pos2d &p)
   { return newNode(p.x(),p.y()); }
 
-//! @brief Creates a nede at the position being passed as parameter.
+//! @brief Creates a nede at the position passed as parameter.
 XC::Node *XC::NodeLoader::newNode(const Vector &coo)
   {
     int sz= coo.Size();
@@ -211,11 +211,12 @@ XC::Node *XC::NodeLoader::newNodeIDXY(const int &tag,const double &x,const doubl
   } 
 
 
-//! @brief Crea el nodo cuyo identificador being passed as parameter.
+//! @brief Create the node whose ID is passed as parameter.
 XC::Node *XC::NodeLoader::getNode(const int &tag)
   { return getDomain()->getNode(tag); }
 
-//! @brief Calcula las reacciones en los nodos.
+//! @brief Calculate nodal reaction forces and moments.
+//! @param inclInertia: if True, the unbalance load vector for each node is calculated including inertial forces.
 void XC::NodeLoader::calculateNodalReactions(bool inclInertia)
   {
     getDomain()->calculateNodalReactions(inclInertia,1e-4);

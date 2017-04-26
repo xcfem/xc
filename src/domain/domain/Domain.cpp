@@ -996,7 +996,7 @@ void XC::Domain::setNodeReactionException(const int &n)
 void XC::Domain::checkNodalReactions(const double &tol)
   { mesh.checkNodalReactions(tol); }
 
-//! @brief Calcula las reacciones en los nodos del domain.
+//! @brief Calculate nodal reaction forces and moments.
 int XC::Domain::calculateNodalReactions(bool inclInertia,const double &tol)
   {
     int retval= mesh.calculateNodalReactions(inclInertia,tol);

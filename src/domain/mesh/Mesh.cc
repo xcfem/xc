@@ -1079,7 +1079,9 @@ void XC::Mesh::checkNodalReactions(const double &tol)
         { theNode->checkReactionForce(max_norm_reac*tol); }
   }
 
-//! @brief Calcula las reacciones en los nodos del domain.
+//! @brief Calculate nodal reaction forces and moments.
+//! @param inclInertia: if True, the unbalance load vector for each node is calculated including inertial forces.
+//! @param tol: tolerance for the checking of reactions.
 int XC::Mesh::calculateNodalReactions(bool inclInertia, const double &tol)
   {
     Node *theNode= nullptr;

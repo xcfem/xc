@@ -825,7 +825,7 @@ const XC::Vector &XC::Node::getUnbalancedLoad(void)
   { return unbalLoad; }
 
 
-//! @brief Returns unbalanced load vector including inertial forces.
+//! @brief Return unbalanced load vector including inertial forces.
 const XC::Vector &XC::Node::getUnbalancedLoadIncInertia(void)
   {
     unbalLoadWithInertia= this->getUnbalancedLoad();
@@ -1734,7 +1734,7 @@ void XC::Node::checkReactionForce(const double &tol)
       }
   }
 
-//! @brief Calcula las reacciones en este nodo (se emplea en Domain::calculateNodalReactions).
+//! @brief Calculate the reactions in this node (used in en Domain::calculateNodalReactions).
 int XC::Node::resetReactionForce(bool inclInertia)
   {
     reaction.Zero();

@@ -21,19 +21,19 @@
 //----------------------------------------------------------------------------
 //python_interface.tcc
 class_<XC::Loader, bases<EntCmd,XC::MovableObject>, boost::noncopyable >("Loader", no_init)
-  .add_property("getDomain", make_function( &XC::Loader::getDomain, return_internal_reference<>() ),"Returns a reference to the domain.")
+  .add_property("getDomain", make_function( &XC::Loader::getDomain, return_internal_reference<>() ),"Return a reference to the domain.")
     ;
 
 XC::Node *(XC::NodeLoader::*newNodeFromXYZ)(const double &x,const double &y,const double &z)= &XC::NodeLoader::newNode;
 XC::Node *(XC::NodeLoader::*newNodeFromXY)(const double &x,const double &y)= &XC::NodeLoader::newNode;
 XC::Node *(XC::NodeLoader::*newNodeFromVector)(const XC::Vector &)= &XC::NodeLoader::newNode;
 class_<XC::NodeLoader, bases<XC::Loader>, boost::noncopyable >("NodeLoader", no_init)
-  .add_property("numGdls", &XC::NodeLoader::getNumGdls, &XC::NodeLoader::setNumGdls)
-  .add_property("dimEspace", &XC::NodeLoader::getDimEspacio, &XC::NodeLoader::setDimEspacio)
-  .add_property("defaultTag", &XC::NodeLoader::getDefaultTag, &XC::NodeLoader::setDefaultTag)
-  .def("calculateNodalReactions", &XC::NodeLoader::calculateNodalReactions,"Calcula las reacciones en los nodos.")
+  .add_property("numGdls", &XC::NodeLoader::getNumGdls, &XC::NodeLoader::setNumGdls,"Number of degrees of freedom per node.")
+  .add_property("dimEspace", &XC::NodeLoader::getDimEspacio, &XC::NodeLoader::setDimEspacio, "Espace dimension.")
+  .add_property("defaultTag", &XC::NodeLoader::getDefaultTag, &XC::NodeLoader::setDefaultTag,"Starting ID number to apply to the next creation of nodes ")
+  .def("calculateNodalReactions", &XC::NodeLoader::calculateNodalReactions,"\n""calculateNodalReactions(inclInertia)\n""Calculate nodal reaction forces and moments.\n""If inclInertia is True, the unbalance load vector for each node is calculated including inertial forces.\n" "A tolerance of 1e-4 is taken as default value for the checking of the reaction forces and moments. \n")
   .def("getNode", &XC::NodeLoader::getNode,return_internal_reference<>(),"Returns the nodo cuyo identificador being passed as parameter.")
-  .def("newNodeXYZ", newNodeFromXYZ,return_internal_reference<>(),"Crea un nodo con las coordenadas being passed as parameters.")
+  .def("newNodeXYZ", newNodeFromXYZ,return_internal_reference<>(),"\n""newNodeXY(x,y,z)""Create a node from global coordinates (x,y,z).")
   .def("newNodeFromVector", newNodeFromVector,return_internal_reference<>(),"Crea un nodo con las coordenadas being passed as parameters.")
   .def("newNodeIDXYZ", &XC::NodeLoader::newNodeIDXYZ,return_internal_reference<>(),"Crea un nodo con el tag y las coordenadas being passed as parameters.")
   .def("newNodeXY", newNodeFromXY,return_internal_reference<>(),"Crea un nodo con las coordenadas being passed as parameters.")
