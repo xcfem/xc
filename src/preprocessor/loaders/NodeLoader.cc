@@ -85,6 +85,7 @@ XC::Node *XC::NodeLoader::new_node(const int &tag,const size_t &dim,const int &n
     return retval;
   }
 
+//! @brief Create a duplicate copy of node whose tag is passed as parameter
 XC::Node *XC::NodeLoader::duplicateNode(const int &tagNodoOrg)
   {
     Node *retval= nullptr;
@@ -166,7 +167,7 @@ XC::Node *XC::NodeLoader::newNode(const Pos3d &p)
 XC::Node *XC::NodeLoader::newNode(const Pos2d &p)
   { return newNode(p.x(),p.y()); }
 
-//! @brief Creates a nede at the position passed as parameter.
+//! @brief Create a node at the position pointed by the vector passed as parameter.
 XC::Node *XC::NodeLoader::newNode(const Vector &coo)
   {
     int sz= coo.Size();
@@ -197,6 +198,7 @@ XC::Node *XC::NodeLoader::newNodeIDV(const int &tag,const Vector &coo)
     return newNode(coo);
   } 
 
+//! @brief Create a node whose ID=tag from global coordinates (x,y,z).
 XC::Node *XC::NodeLoader::newNodeIDXYZ(const int &tag,const double &x,const double &y,const double &z)
   { 
     setDefaultTag(tag);
@@ -211,7 +213,7 @@ XC::Node *XC::NodeLoader::newNodeIDXY(const int &tag,const double &x,const doubl
   } 
 
 
-//! @brief Create the node whose ID is passed as parameter.
+//! @brief Get the node whose ID is passed as parameter.
 XC::Node *XC::NodeLoader::getNode(const int &tag)
   { return getDomain()->getNode(tag); }
 
