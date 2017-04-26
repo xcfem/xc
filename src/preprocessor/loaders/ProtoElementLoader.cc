@@ -299,7 +299,10 @@ XC::Element *XC::ProtoElementLoader::create_element(const std::string &cmd,int t
     return retval;
   }
 
-//! @brief Creates a new element.
+//! @brief Create a new element.
+//! @param tipo: type of element. Available types:'truss','truss_section','corot_truss','corot_truss_section','muelle', 'spring', 'beam2d_02', 'beam2d_03',  'beam2d_04', 'beam3d_01', 'beam3d_02', 'elastic_beam2d', 'elastic_beam3d', 'beam_with_hinges_2d', 'beam_with_hinges_3d', 'nl_beam_column_2d', 'nl_beam_column_3d','force_beam_column_2d', 'force_beam_column_3d', 'shell_mitc4', ' shell_nl', 'quad4n', 'tri31', 'brick', 'zero_length', 'zero_length_contact_2d', 'zero_length_contact_3d', 'zero_length_section'.
+//! @param iNodos: nodes ID, e.g. xc.ID([1,2]) to create a linear element from node 1 to node 2.
+
 XC::Element *XC::ProtoElementLoader::newElement(const std::string &tipo,const ID &iNodos)
   {
     const int tag_elem= getDefaultTag();

@@ -70,12 +70,12 @@ class_<XC::BeamIntegratorLoader, bases<XC::Loader>, boost::noncopyable >("BeamIn
  ;
 
 class_<XC::ProtoElementLoader, bases<XC::Loader>, boost::noncopyable >("ProtoElementLoader", no_init)
-  .add_property("dimElem", &XC::ProtoElementLoader::getDimElem, &XC::ProtoElementLoader::setDimElem)
-  .add_property("numSections", &XC::ProtoElementLoader::getNumSections, &XC::ProtoElementLoader::setNumSections)
-  .add_property("defaultMaterial", make_function( &XC::ProtoElementLoader::getDefaultMaterial, return_value_policy<copy_const_reference>() ), &XC::ProtoElementLoader::setDefaultMaterial)
-  .add_property("defaultTransformation", make_function( &XC::ProtoElementLoader::getDefaultTransf, return_value_policy<copy_const_reference>() ), &XC::ProtoElementLoader::setDefaultTransf)
-  .add_property("defaultIntegrator", make_function( &XC::ProtoElementLoader::getDefaultIntegrator, return_value_policy<copy_const_reference>() ), &XC::ProtoElementLoader::setDefaultIntegrator)
-  .def("newElement", &XC::ProtoElementLoader::newElement,return_internal_reference<>(),"Creates an element of the type being passed as parameter.")
+ .add_property("dimElem", &XC::ProtoElementLoader::getDimElem, &XC::ProtoElementLoader::setDimElem, "Set the default dimension for the elements to be created: 0, 1, 2 or 3 for 0D, 1D, 2D or 3D, respectively.")
+  .add_property("numSections", &XC::ProtoElementLoader::getNumSections, &XC::ProtoElementLoader::setNumSections, "Set the default number of sections for the elements to be created")
+  .add_property("defaultMaterial", make_function( &XC::ProtoElementLoader::getDefaultMaterial, return_value_policy<copy_const_reference>() ), &XC::ProtoElementLoader::setDefaultMaterial,"Set the default material (called by its name) for the elements to be created")
+  .add_property("defaultTransformation", make_function( &XC::ProtoElementLoader::getDefaultTransf, return_value_policy<copy_const_reference>() ), &XC::ProtoElementLoader::setDefaultTransf,"Set the default coordinate transformation (called by its name) for the elements to be created")
+  .add_property("defaultIntegrator", make_function( &XC::ProtoElementLoader::getDefaultIntegrator, return_value_policy<copy_const_reference>() ), &XC::ProtoElementLoader::setDefaultIntegrator,"Set the default integrator (called by its name) for the elements to be created")
+  .def("newElement", &XC::ProtoElementLoader::newElement,return_internal_reference<>(),"\n newElement(tipo,iNodos): Create a new element of type 'tipo' from the nodes passed as parameter with the XC.ID object 'iNodos'. \n" "Parameters:\n""-tipo: type of element. Available types:'truss','truss_section','corot_truss','corot_truss_section','muelle', 'spring', 'beam2d_02', 'beam2d_03',  'beam2d_04', 'beam3d_01', 'beam3d_02', 'elastic_beam2d', 'elastic_beam3d', 'beam_with_hinges_2d', 'beam_with_hinges_3d', 'nl_beam_column_2d', 'nl_beam_column_3d','force_beam_column_2d', 'force_beam_column_3d', 'shell_mitc4', ' shell_nl', 'quad4n', 'tri31', 'brick', 'zero_length', 'zero_length_contact_2d', 'zero_length_contact_3d', 'zero_length_section'. \n""-iNodos: nodes ID, e.g. xc.ID([1,2]) to create a linear element from node 1 to node 2. \n")
    ;
 
 class_<XC::ElementLoader::SeedElemLoader, bases<XC::ProtoElementLoader>, boost::noncopyable >("SeedElement", no_init)
