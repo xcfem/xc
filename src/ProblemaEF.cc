@@ -86,7 +86,7 @@ XC::FE_Datastore *XC::ProblemaEF::defineDatabase(const std::string &tipo, const 
 XC::ProblemaEF::~ProblemaEF(void)
   { clearAll(); }
 
-//! @brief Erases todas las entidades del problema.
+//! @brief Delete all entities in the FE problem
 void XC::ProblemaEF::clearAll(void)
   {
     for(DataOutputHandler::map_output_handlers::iterator i= output_handlers.begin();i!=output_handlers.end();i++)

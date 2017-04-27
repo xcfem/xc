@@ -75,7 +75,7 @@
 XC::DomainDecompAlgo::DomainDecompAlgo(SoluMethod *owr)
   :SolutionAlgorithm(owr,DomDecompALGORITHM_TAGS_DomainDecompAlgo) {}
 
-//! @brief Resuelve el paso actual.
+//! @brief Solve current step.
 int XC::DomainDecompAlgo::solveCurrentStep(void)
   {
     IncrementalIntegrator *theIntegrator= dynamic_cast<IncrementalIntegrator *>(getIntegratorPtr());

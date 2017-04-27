@@ -72,15 +72,15 @@ BOOST_PYTHON_MODULE(xc)
     XC::Preprocessor &(XC::ProblemaEF::*getPreprocessorRef)(void)= &XC::ProblemaEF::getPreprocessor;
     XC::ProcSolu &(XC::ProblemaEF::*getSoluProcRef)(void)= &XC::ProblemaEF::getSoluProc;
     class_<XC::ProblemaEF, bases<EntCmd>, boost::noncopyable>("ProblemaEF")
-      .def("getXCVersion",  make_function(&XC::ProblemaEF::getXCVersion,return_value_policy<copy_const_reference>()),"Returns XC program version string.").staticmethod("getXCVersion")
-      .def("getXCVersionShort",  make_function(&XC::ProblemaEF::getXCVersionShort,return_value_policy<copy_const_reference>()),"Returns XC program (short) version string.").staticmethod("getXCVersionShort")
-      .add_property("getDomain", make_function( getDomainRef, return_internal_reference<>() ),"Returns a reference to the domain.")
-      .add_property("getPreprocessor", make_function( getPreprocessorRef, return_internal_reference<>() ))
-      .add_property("getSoluProc", make_function( getSoluProcRef, return_internal_reference<>() ))
-      .add_property("getDatabase", make_function( &XC::ProblemaEF::getDataBase, return_internal_reference<>() ))
-      .def("newDatabase", make_function( &XC::ProblemaEF::defineDatabase, return_internal_reference<>() ))
-      .add_property("getFields", make_function( &XC::ProblemaEF::getFields, return_internal_reference<>() ),"Returns fields definition (export).")
-      .def("clearAll",&XC::ProblemaEF::clearAll)
+      .def("getXCVersion",  make_function(&XC::ProblemaEF::getXCVersion,return_value_policy<copy_const_reference>()),"Return XC program version string.").staticmethod("getXCVersion")
+      .def("getXCVersionShort",  make_function(&XC::ProblemaEF::getXCVersionShort,return_value_policy<copy_const_reference>()),"Return XC program (short) version string.").staticmethod("getXCVersionShort")
+      .add_property("getDomain", make_function( getDomainRef, return_internal_reference<>() ),"Return a reference to the domain.")
+      .add_property("getPreprocessor", make_function( getPreprocessorRef, return_internal_reference<>() ),"Return a reference to the preprocessor.")
+      .add_property("getSoluProc", make_function( getSoluProcRef, return_internal_reference<>() ),"Return a reference to the solver")
+      .add_property("getDatabase", make_function( &XC::ProblemaEF::getDataBase, return_internal_reference<>() ),"Return a reference to the data base")
+      .def("newDatabase", make_function( &XC::ProblemaEF::defineDatabase, return_internal_reference<>() ),"Create a data base")
+      .add_property("getFields", make_function( &XC::ProblemaEF::getFields, return_internal_reference<>() ),"Return fields definition (export).")
+      .def("clearAll",&XC::ProblemaEF::clearAll,"Delete all entities in the FE problem.")
    ;
     def("getXCVersion",XC::getXCVersion);
     def("getXCVersionShort",XC::getXCVersionShort);

@@ -140,10 +140,11 @@ XC::ProcSolu &XC::ProcSolu::operator=(const ProcSolu &otro)
     return *this;
   }
 
-//! @brief Returns the modelo a su estado original.
+//! @brief Return the model to their initial state.
 void XC::ProcSolu::revertToStart(void)
   { solu_control.revertToStart(); }
 
+//! @brief Delete all entities in the FE problem.
 void XC::ProcSolu::clearAll(void)
   {
     solu_control.clearAll();
@@ -174,7 +175,7 @@ const XC::Domain *XC::ProcSolu::getDomainPtr(void) const
     return prb->getDomain();
   }
 
-//! @brief Returns a pointer to the integrator.
+//! @brief Return a pointer to the integrator.
 XC::Integrator *XC::ProcSolu::getIntegratorPtr(void)
   {
     Integrator *retval= nullptr;
@@ -183,7 +184,7 @@ XC::Integrator *XC::ProcSolu::getIntegratorPtr(void)
     return retval;
   }
 
-//! @brief Returns a pointer to the integrator.
+//! @brief Return a pointer to the integrator.
 const XC::Integrator *XC::ProcSolu::getIntegratorPtr(void) const
   {
     const Integrator *retval= nullptr;
@@ -192,6 +193,7 @@ const XC::Integrator *XC::ProcSolu::getIntegratorPtr(void) const
     return retval;
   }
 
+//! @brief Return a pointer to the output handlers
 XC::DataOutputHandler::map_output_handlers *XC::ProcSolu::getOutputHandlers(void) const
   {
     const ProblemaEF *prb= getProblemaEF();
@@ -199,7 +201,7 @@ XC::DataOutputHandler::map_output_handlers *XC::ProcSolu::getOutputHandlers(void
     return prb->getOutputHandlers();
   }
 
-//! @brief Returns a pointer to the DomainSolver.
+//! @brief Return a pointer to the DomainSolver.
 const XC::DomainSolver *XC::ProcSolu::getDomainSolverPtr(void) const
   {
     const DomainSolver *retval= nullptr;
@@ -208,7 +210,7 @@ const XC::DomainSolver *XC::ProcSolu::getDomainSolverPtr(void) const
     return retval;
   }
 
-//! @brief Returns a pointer to the DomainSolver.
+//! @brief Return a pointer to the Domain Solver.
 XC::DomainSolver *XC::ProcSolu::getDomainSolverPtr(void)
   {
     DomainSolver *retval= nullptr;
@@ -217,7 +219,7 @@ XC::DomainSolver *XC::ProcSolu::getDomainSolverPtr(void)
     return retval;
   }
 
-//! @brief Returns a pointer to the subdomain.
+//! @brief Return a pointer to the subdomain.
 const XC::Subdomain *XC::ProcSolu::getSubdomainPtr(void) const
   {
     const Subdomain *retval= nullptr;
@@ -226,7 +228,7 @@ const XC::Subdomain *XC::ProcSolu::getSubdomainPtr(void) const
     return retval;
   }
 
-//! @brief Returns a pointer to the subdomain.
+//! @brief Return a pointer to the subdomain.
 XC::Subdomain *XC::ProcSolu::getSubdomainPtr(void)
   {
     Subdomain *retval= nullptr;
@@ -235,25 +237,25 @@ XC::Subdomain *XC::ProcSolu::getSubdomainPtr(void)
     return retval;
   }
 
-//! @brief Returns a reference to the objects
-//! that controls the solution procedure.
+//! @brief Return a reference to the objects
+//! that control the solution procedure.
 XC::ProcSoluControl &XC::ProcSolu::getSoluControl(void)
   { return solu_control; }
 
-//! @brief Returns a reference to the objects
-//! that controls the solution procedure.
+//! @brief Return a reference to the objects
+//! that control the solution procedure.
 const XC::ProcSoluControl &XC::ProcSolu::getSoluControl(void) const
   { return solu_control; }
 
-//! @brief Returns a pointer to the analysis.
+//! @brief Return a pointer to the analysis.
 XC::Analysis *XC::ProcSolu::getAnalysisPtr(void)
   { return theAnalysis; }
 
-//! @brief Returns a pointer to the analysis.
+//! @brief Return a pointer to the analysis.
 const XC::Analysis *XC::ProcSolu::getAnalysisPtr(void) const
   { return theAnalysis; }
 
-//! @brief Returns a reference to the analysis object.
+//! @brief Return a reference to the analysis object.
 XC::Analysis &XC::ProcSolu::getAnalysis(void)
   {
     if(!theAnalysis)
