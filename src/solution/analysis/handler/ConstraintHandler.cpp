@@ -115,7 +115,7 @@ const XC::Domain *XC::ConstraintHandler::getDomainPtr(void) const
     return sm->getDomainPtr();
   }
 
-//! @brief Returns a const pointer to the analysis model.
+//! @brief Return a const pointer to the analysis model.
 const XC::AnalysisModel *XC::ConstraintHandler::getAnalysisModelPtr(void) const
   {
     const ModelWrapper *sm= getModelWrapper();

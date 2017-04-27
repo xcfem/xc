@@ -39,6 +39,13 @@ namespace XC {
 //! \ingroup CadEnt
 //!
 //! @brief Circumference arc.
+//! brief description continue
+//!
+//! Detailed description begings after a blank line
+//! - Habra que dejar mas lineas en blanco
+//!
+//! Probemos
+  
 class ArcoCircunf: public LineaBase
   {
     Pnt *p3; //!< Midpoint of the arc.
