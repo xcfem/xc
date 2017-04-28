@@ -209,8 +209,8 @@ int XC::MRMFreedom_Constraint::addResistingForceToNodalReaction(bool inclInertia
         rN->addReactionForce(tmp,1.0);
       }
     if(inclInertia)
-      std::cerr << "ERROR; MRMFreedom_Constraint::addResistingForceToNodalReaction"
-                << " inertia effects not yet implemented." << std::endl;
+      std::cerr << nombre_clase() << "::" << __FUNCTION__
+	        << " ERROR;  inertia effects not yet implemented." << std::endl;
     return 0;
   }
 

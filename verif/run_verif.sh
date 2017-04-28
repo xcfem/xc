@@ -257,6 +257,7 @@ python tests/constraints/test_glue_node_to_element_01.py
 python tests/constraints/test_glue_node_to_element_02.py
 python tests/constraints/test_glue_node_to_element_03.py
 python tests/constraints/test_glue_node_to_element_04.py
+python tests/constraints/test_glue_node_to_element_05.py
 
 #Tests de cargas
 echo "$BLEU" "Loads tests." "$NORMAL"

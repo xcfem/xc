@@ -86,7 +86,7 @@ nodes.calculateNodalReactions(False)
 
 reactionNode10= nodes.getNode(10).getReaction
 ratio1= reactionNode10.Norm()
-svdReactionNodes= nodalReactions.getReactionFromNodes(nodes,"UVWRxRyRz",[1,2,3,4])
+svdReactionNodes= nodalReactions.getReactionFromNodes(nodes,"UVWRxRyRz",elem.getNodes.getExternalNodes)
 actionNode10= xc.Vector(loadOnDOFs)
 actionNode10Norm= actionNode10.Norm()
 svdAction= nodalReactions.getSVDfromVDesliz("UVWRxRyRz",n10.get3dCoo,actionNode10)

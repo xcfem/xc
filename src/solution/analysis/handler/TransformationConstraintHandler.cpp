@@ -116,7 +116,7 @@ int XC::TransformationConstraintHandler::handle(const ID *nodesLast)
     SFreedom_ConstraintIter &theSP1s= theDomain->getConstraints().getDomainAndLoadPatternSPs();
     SFreedom_Constraint *theSP1;
     while((theSP1= theSP1s()) != 0)
-        numSPConstraints++;
+      numSPConstraints++;
 
 
     numDOF= 0;
@@ -237,7 +237,7 @@ int XC::TransformationConstraintHandler::handle(const ID *nodesLast)
               }
           }
 
-	//Multi-row, multi-freedom constraints.
+	//Multi retained node, multi-freedom constraints.
         if(createdDOF == 0)
           {
             loc= constrainedNodesMRMP.getLocation(nodeTag);
@@ -343,9 +343,12 @@ int XC::TransformationConstraintHandler::handle(const ID *nodesLast)
                   }
                 if(numMRMPConstraints != 0)
                   {
-                    std::cerr << nombre_clase() << "::" << __FUNCTION__
-	                      << "; processing of multi retained node"
-			      << " constraints not yet implemented." << std::endl;
+                    int loc= constrainedNodesMRMP.getLocation(nodeTag);
+                    if(loc >= 0)
+                      {
+                        isConstrainedNode= 1;
+                        i= nodesSize;
+                      }
 		  }
                 if(numSPConstraints != 0 && isConstrainedNode == 0)
                   {
@@ -377,7 +380,7 @@ int XC::TransformationConstraintHandler::handle(const ID *nodesLast)
 
     ElementIter &theEle1= theDomain->getElements();
 
-    // int numConstraints= numMPConstraints+numSPConstraints;
+    // int numConstraints= numMRMPConstraints+numMPConstraints+numSPConstraints;
     int numFeEle= 0;
 
     while((elePtr= theEle1()) != 0)
