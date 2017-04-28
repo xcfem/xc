@@ -39,15 +39,15 @@
 XC::MapModelWrapper::MapModelWrapper(ProcSoluControl *owr)
   : EntCmd(owr) {}
 
-//! @brief Returns true ifexiste el método cuyo nombre
-//! being passed as parameter.
+//! @brief Return true if the method whose name is
+//! passed as parameter exists.
 bool XC::MapModelWrapper::existeModelWrapper(const std::string &cod) const
   { 
     map_model_wrapper::const_iterator i= solu_models.find(cod);
     return (i != solu_models.end());
   }
 
-//! @brief Returns a pointer to the solution method.
+//! @brief Return a pointer to the solution method.
 XC::ModelWrapper *XC::MapModelWrapper::getModelWrapper(const std::string &cod)
   {
     ModelWrapper *retval= nullptr;
@@ -57,7 +57,7 @@ XC::ModelWrapper *XC::MapModelWrapper::getModelWrapper(const std::string &cod)
     return retval;
   }
 
-//! @brief Returns a const pointer to the solution method.
+//! @brief Return a const pointer to the solution method.
 const XC::ModelWrapper *XC::MapModelWrapper::getModelWrapper(const std::string &cod) const
   {
     const ModelWrapper *retval= nullptr;

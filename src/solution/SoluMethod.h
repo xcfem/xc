@@ -67,11 +67,11 @@ class ID;
 //!  \ingroup Solu
 //! 
 //! @brief Solution procedure for the finite element problem. The
-//! solution procedure is definde by specifiying:
+//! solution procedure is defined by specifiying:
 //! - Wrapper for the finite element model.
 //! - Solution algorithm.
 //! - Integration scheme.
-//! - Solver for the system of eauqtions.
+//! - Solver for the system of equations.
 //  - Convergence test.
 class SoluMethod: public EntCmd
   {

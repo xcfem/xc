@@ -21,10 +21,10 @@
 //----------------------------------------------------------------------------
 //python_interface.tcc
 
-class_<XC::DOF_Numberer, bases<XC::MovableObject,EntCmd>, boost::noncopyable >("DOFNumberer", no_init)
-    .def("useAlgorithm", &XC::DOF_Numberer::useAlgorithm,return_internal_reference<>(),"Sets the algorithm to use to numerate the graph; «Reverse Cuthill-Macgee» or simple.")
+class_<XC::DOF_Numberer, bases<XC::MovableObject,EntCmd>, boost::noncopyable >("DOFNumberer", "A DOF numberer is responsible for assigning the equation numbers to the individual DOFs in each of the DOF groups in the analysis model.",no_init)
+    .def("useAlgorithm", &XC::DOF_Numberer::useAlgorithm,return_internal_reference<>(),"\n""useAlgorithm(nmb)""Set the algorithm to be used for numerating the graph \n" "Parameters: \n""nmb: name of the algorithm, 'rcm' for Reverse Cuthill-Macgee or 'simple' for simple algorithm.")
     ;
 
 // class_<XC::ParallelNumberer, bases<XC::DOF_Numberer>, boost::noncopyable >("ParallelNumberer", no_init);
 
-class_<XC::PlainNumberer, bases<XC::DOF_Numberer>, boost::noncopyable >("PlainNumberer", no_init);
+class_<XC::PlainNumberer, bases<XC::DOF_Numberer>, boost::noncopyable >("PlainNumberer", "\n""The plain numberer assigns equation numbers to DOFs on a first come first serve basis, that is, it gets the DOF_GrpIter and assigns the equation numbers to de DOFs as it iterrates through the iter.",no_init);

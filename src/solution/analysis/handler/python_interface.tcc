@@ -21,7 +21,7 @@
 //----------------------------------------------------------------------------
 //python_interface.tcc
 
-class_<XC::ConstraintHandler, bases<XC::MovableObject,EntCmd>, boost::noncopyable >("ConstraintHandler", "ConstraintHandlers enforce the single and multi freedom constraints that exist in the domain by creating the appropriate FE_Element and DOF_Group objects.",no_init)
+class_<XC::ConstraintHandler, bases<XC::MovableObject,EntCmd>, boost::noncopyable >("ConstraintHandler", "Constraint handlers enforce the single and multi freedom constraints that exist in the domain by creating the appropriate FE_Element and DOF_Group objects.",no_init)
     ;
 
 class_<XC::FactorsConstraintHandler, bases<XC::ConstraintHandler>, boost::noncopyable >("FactorsConstraintHandler", "Base class for penalty and Lagrange constraints handlers.",no_init)

@@ -80,7 +80,7 @@
 #include <domain/constraints/MRMFreedom_ConstraintIter.h>
 #include <solution/analysis/model/DOF_GrpIter.h>
 
-//! @brief Crea el numerador de grafos que se le solicita. 
+//! @brief Create the graph numberer (
 void XC::DOF_Numberer::alloc(const std::string &str)
   {
     libera();
@@ -132,7 +132,7 @@ XC::DOF_Numberer &XC::DOF_Numberer::operator=(const DOF_Numberer &otro)
     return *this;
   }
 
-//! @brief Sets the algorithm que se usará para numerar el grafo
+//! @brief Sets the algorithm to be used for numerating the graph
 //! «Reverse Cuthill-Macgee» o simple.
 void XC::DOF_Numberer::useAlgorithm(const std::string &nmb)
   { alloc(nmb); }
@@ -147,7 +147,7 @@ XC::DOF_Numberer *XC::DOF_Numberer::getCopy(void) const
 
 int XC::DOF_Numberer::numberDOF(int lastDOF_Group) 
   {
-    // check we have a model and a numberer
+    // check if we have a model and a numberer
     Domain *theDomain= nullptr;
     AnalysisModel *am= getAnalysisModelPtr();
     if(am)
@@ -205,7 +205,7 @@ int XC::DOF_Numberer::numberDOF(int lastDOF_Group)
           }
       }
 
-    // iterate throgh  the DOFs second time setting -3 values
+    // iterate through  the DOFs second time setting -3 values
     for(int k=0; k<size; k++)
       {
         const int dofGroupTag= orderedRefs(k);
@@ -439,7 +439,7 @@ int XC::DOF_Numberer::numberDOF(ID &lastDOFs)
 }
 
 
-//! @brief Send object members through the channel being passed as parameter.
+//! @brief Send object members through the channel passed as parameter.
 int XC::DOF_Numberer::sendData(CommParameters &cp)
   {
     //setDbTagDataPos(0,getTag());

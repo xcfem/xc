@@ -40,8 +40,7 @@
 XC::MapSoluMethod::MapSoluMethod(ProcSoluControl *owr)
   : EntCmd(owr) {}
 
-//! @brief Returns true ifexiste el método cuyo nombre
-//! being passed as parameter.
+//! @brief Return true if the solution method exists
 bool XC::MapSoluMethod::existeSoluMethod(const std::string &cod) const
   { 
     map_solu_method::const_iterator i= solu_methods.find(cod);
