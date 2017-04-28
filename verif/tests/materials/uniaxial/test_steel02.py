@@ -1,6 +1,12 @@
 # -*- coding: utf-8 -*-
 # home made test
 
+__author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
+__copyright__= "Copyright 2015, LCPT and AOO"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com"
+
 fy= 2600 # Tensión de cedencia del acero.
 E= 2.1e6 # Módulo de Young del acero.
 l= 1 # Distancia entre nodes
