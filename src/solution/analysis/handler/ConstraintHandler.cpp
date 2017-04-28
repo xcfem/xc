@@ -83,7 +83,7 @@ int XC::ConstraintHandler::doneNumberingDOF(void)
     return 0;
   }
 
-//! @brief Updates the state of the constraints.
+//! @brief Update the state of the constraints.
 int XC::ConstraintHandler::update(void)
   { return 0; }
 
@@ -91,15 +91,15 @@ int XC::ConstraintHandler::update(void)
 int XC::ConstraintHandler::applyLoad(void)
   { return 0; }
 
-//! @brief Returns a pointer to the model wrapper.
+//! @brief Return a pointer to the model wrapper.
 XC::ModelWrapper *XC::ConstraintHandler::getModelWrapper(void)
   { return dynamic_cast<ModelWrapper *>(Owner()); }
 
-//! @brief Returns a const pointer to the model wrapper.
+//! @brief Return a const pointer to the model wrapper.
 const XC::ModelWrapper *XC::ConstraintHandler::getModelWrapper(void) const
   { return dynamic_cast<const ModelWrapper *>(Owner()); }
 
-//! @brief Returns a pointer to the domain.
+//! @brief Return a pointer to the Domain object associated with the ConstraintHandler.
 XC::Domain *XC::ConstraintHandler::getDomainPtr(void)
   {
     ModelWrapper *sm= getModelWrapper();
@@ -107,7 +107,7 @@ XC::Domain *XC::ConstraintHandler::getDomainPtr(void)
     return sm->getDomainPtr();
   }
 
-//! @brief Returns a const pointer to the domain.
+//! @brief Return a const pointer to the domain object associated with the ConstraintHandler.
 const XC::Domain *XC::ConstraintHandler::getDomainPtr(void) const
   {
     const ModelWrapper *sm= getModelWrapper();
@@ -115,7 +115,7 @@ const XC::Domain *XC::ConstraintHandler::getDomainPtr(void) const
     return sm->getDomainPtr();
   }
 
-//! @brief Return a const pointer to the analysis model.
+//! @brief Return a const pointer to the analysis model object associated with the ConstraintHandler.
 const XC::AnalysisModel *XC::ConstraintHandler::getAnalysisModelPtr(void) const
   {
     const ModelWrapper *sm= getModelWrapper();
@@ -123,7 +123,7 @@ const XC::AnalysisModel *XC::ConstraintHandler::getAnalysisModelPtr(void) const
     return sm->getAnalysisModelPtr();
   }
 
-//! @brief Returns a pointer to the analysis model.
+//! @brief Returns a pointer to the AnalysisModel object associated with the ConstraintHandler.
 XC::AnalysisModel *XC::ConstraintHandler::getAnalysisModelPtr(void)
   {
     ModelWrapper *sm= getModelWrapper();
@@ -131,7 +131,7 @@ XC::AnalysisModel *XC::ConstraintHandler::getAnalysisModelPtr(void)
     return sm->getAnalysisModelPtr();
   }
 
-//! @brief Returns a pointer to the integrator.
+//! @brief Return a pointer to the Integrator object associated with the ConstraintHandler.
 const XC::Integrator *XC::ConstraintHandler::getIntegratorPtr(void) const
   {
     const ModelWrapper *sm= getModelWrapper();
@@ -139,7 +139,7 @@ const XC::Integrator *XC::ConstraintHandler::getIntegratorPtr(void) const
     return sm->getIntegratorPtr();
   }
 
-//! @brief Returns a pointer to the integrator.
+//! @brief Returns a pointer to the Integrator object associated with the ConstraintHandler.
 XC::Integrator *XC::ConstraintHandler::getIntegratorPtr(void)
   {
     ModelWrapper *sm= getModelWrapper();
@@ -147,7 +147,7 @@ XC::Integrator *XC::ConstraintHandler::getIntegratorPtr(void)
     return sm->getIntegratorPtr();
   }
 
-//! @brief Resets the DOF_Group pointers to nullptr for all the nodes.
+//! @brief Reset the DOF_Group pointers to nullptr for all the nodes.
 void XC::ConstraintHandler::clearAll(void)
   {
     Domain *theDomain = this->getDomainPtr();
@@ -155,13 +155,13 @@ void XC::ConstraintHandler::clearAll(void)
       theDomain->clearDOF_GroupPtr();
   }
 
-//! @brief Send object members through the channel being passed as parameter.
+//! @brief Send object members through the channel passed as parameter.
 int XC::ConstraintHandler::sendData(CommParameters &cp)
   {
     return 0;
   }
 
-//! @brief Receives object members through the channel being passed as parameter.
+//! @brief Receive object members through the channel passed as parameter.
 int XC::ConstraintHandler::recvData(const CommParameters &cp)
   {
     return 0;

@@ -76,7 +76,7 @@ const double DefaultPenaltyFactor= 1e7; //10^(p/2) being p the number of decimal
 //! @ingroup AnalysisCH
 //
 //! @brief PenaltyConstraintHandler is a 
-//! constraint handler for handling constraints using the penalty method.
+//! constraint handler that deals with both single and multi point constraints using the penalty method.
 //! for each element and degree-of-freedom at a node it constructs regular
 //! FE_Element and DOF_Groups; for each SFreedom_Constraint and MFreedom_Constraint
 //! PenaltySFreedom_FE and PenaltyMFreedom_FE elements are created.

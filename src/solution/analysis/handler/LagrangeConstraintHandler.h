@@ -71,13 +71,19 @@ namespace XC {
 class FE_Element;
 class DOF_Group;
 
-//! @ingroup AnalysisCH
+/**
+ * @ingroup AnalysisCH
 //
-//! @brief Constraint handler for handling constraints using the Lagrange
-//! multipliers method. For each element and degree-of-freedom at a node
-//! it constructs regular FE_Element and DOF_Groups;
-//! for each SFreedom_Constraint and MFreedom_Constraint
-//! LagrangeSFreedom_FE and LagrangeMFreedom_FE elements are created.
+ * @brief Constraint handler for handling constraints using the Lagrange
+ * multipliers method. 
+ *
+ * For each element and degree-of-freedom at a node
+ * it constructs regular FE_Element and DOF_Groups;
+ * for each SFreedom_Constraint and MFreedom_Constraint
+ * LagrangeSFreedom_FE and LagrangeMFreedom_FE elements are created.
+ * It is these objects that enforce the constraints by modifying the tangent 
+ * matrix and residual vector.
+ */
 class LagrangeConstraintHandler : public FactorsConstraintHandler
   {
   protected:
