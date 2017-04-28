@@ -35,9 +35,11 @@ namespace XC {
 class FE_Element;
 class DOF_Group;
 
-//! @ingroup AnalysisCH
-//
-//! @brief Base class for penalty and Lagrange constraints handlers.
+/**
+ * @ingroup AnalysisCH
+ *
+ * @brief Base class for penalty and Lagrange constraints handlers.
+ */
 class FactorsConstraintHandler: public ConstraintHandler
   {
   protected:
@@ -48,16 +50,16 @@ class FactorsConstraintHandler: public ConstraintHandler
     int recvData(const CommParameters &);
     FactorsConstraintHandler(ModelWrapper *,int classTag,const double &alphaSP,const double &alphaMP);
   public:
-    //! @brief Sets the factor used with single freedom constraints.
+    //! @brief Set the factor used with single freedom constraints.
     inline void setAlphaSP(const double &a)
       { alphaSP= a; }
-    //! @brief Returns the factor used with single freedom constraints.
+    //! @brief Return the factor used with single freedom constraints.
     double getAlphaSP(void) const
       { return alphaSP; }
-    //! @brief Sets the factor used with multi-freedom constraints.
+    //! @brief Set the factor used with multi-freedom constraints.
     inline void setAlphaMP(const double &a)
       { alphaMP= a; }
-    //! @brief Returns the factor used with multi-freedom constraints.
+    //! @brief Return the factor used with multi-freedom constraints.
     double getAlphaMP(void) const
       { return alphaMP; }
     

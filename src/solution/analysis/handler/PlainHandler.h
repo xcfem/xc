@@ -69,9 +69,13 @@ namespace XC {
 class FE_Element;
 class DOF_Group;
 
-//! @ingroup AnalysisCH
-//
-//! @brief Trivial constraint handler.
+/**
+ * @ingroup AnalysisCH
+ *
+ * @brief Trivial constraint handler.
+ *
+ * This class only deals with homogeneous single point constraints. To do this it creates regular FE_Element and DOF_Group objects and enforces the constraints by specifying that degrees-of-freedom which are constrained are not assigned an equation number. Pointers to the DOF_Group and FE_Element objects are kept in two arrays. 
+*/
 class PlainHandler : public ConstraintHandler
   {
     friend class ModelWrapper;
