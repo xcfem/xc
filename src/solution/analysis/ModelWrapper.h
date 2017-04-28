@@ -46,11 +46,13 @@ class Integrator;
 //! @ingroup Analysis
 //
 //! @brief Wrapper for the finite element model "seen" from the solver.
-//! The model wrapper is definied by:
-//! - Domein of the finite element model.
+//
+//! The model wrapper is defined by:
+//! - Domain of the finite element model.
 //! - Analysis model.
 //! - Constraint handler.
 //! - DOF numberer.
+//
 //! This object is a container for those entities.
 class ModelWrapper: public EntCmd
   {
@@ -91,22 +93,22 @@ class ModelWrapper: public EntCmd
     Integrator *getIntegratorPtr(void);
     const Integrator *getIntegratorPtr(void) const;
 
-    //! @brief Returns a pointer to the manejador de coacciones.
+    //! @brief Return a pointer to the constraints handler.
     inline ConstraintHandler *getConstraintHandlerPtr(void)
       { return theHandler; }
-    //! @brief Returns a pointer to the manejador de coacciones.
+    //! @brief Return a pointer to the constraints handler.
     inline const ConstraintHandler *getConstraintHandlerPtr(void) const
       { return theHandler; }
-    //! @brief Returns a pointer to the renumerador.
+    //! @brief Return a pointer to the DOF numberer.
     inline DOF_Numberer *getDOF_NumbererPtr(void)
       { return theDOFNumberer; }
-    //! @brief Returns a pointer to the renumerador.
+    //! @brief Return a pointer to the DOF numberer.
     inline const DOF_Numberer *getDOF_NumbererPtr(void) const
       { return theDOFNumberer; }
-    //! @brief Returns a pointer to the analysis model.
+    //! @brief Return a pointer to the analysis model.
     inline AnalysisModel *getAnalysisModelPtr(void)
       { return theModel; }
-    //! @brief Returns a pointer to the analysis model.
+    //! @brief Return a pointer to the analysis model.
     inline const AnalysisModel *getAnalysisModelPtr(void) const
       { return theModel; }
     int setNumberer(DOF_Numberer &theNumberer);

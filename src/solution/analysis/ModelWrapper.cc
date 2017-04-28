@@ -30,14 +30,14 @@
 #include "solution/SoluMethod.h"
 #include <solution/analysis/model/AnalysisModel.h>
 
-//Gestor coacciones.
+//Constraints handler.
 #include <solution/analysis/handler/ConstraintHandler.h>
 #include <solution/analysis/handler/LagrangeConstraintHandler.h>
 #include <solution/analysis/handler/PenaltyConstraintHandler.h>
 #include <solution/analysis/handler/PlainHandler.h>
 #include <solution/analysis/handler/TransformationConstraintHandler.h>
 
-//Numerador.
+//Numberer.
 #include "solution/analysis/numberer/DOF_Numberer.h"
 #include "solution/analysis/numberer/ParallelNumberer.h"
 #include "solution/analysis/numberer/PlainNumberer.h"
@@ -115,7 +115,7 @@ void XC::ModelWrapper::copia_constraint_handler(const ConstraintHandler *ptr)
       std::cerr << "ModelWrapper::copia_constraint_handler; null pointer to constraint handler." << std::endl;
   }
 
-//! @brief Crea un numerador del tipo being passed as parameter.
+//! @brief Create a constraints handler of the type passed as parameter.
 XC::ConstraintHandler &XC::ModelWrapper::newConstraintHandler(const std::string &nmb)
   {
     alloc_constraint_handler(nmb);
@@ -158,8 +158,8 @@ bool XC::ModelWrapper::alloc_numerador(const std::string &nmb)
     else if(nmb=="parallel_numberer")
       theDOFNumberer= new ParallelNumberer(this);
     else
-      std::cerr << "ModelWrapper::alloc_numerador. ERROR; no se pudo"
-                << " interpretar la cadena: '" << nmb << "'\n";
+      std::cerr << "ModelWrapper::alloc_numerador. ERROR; can't interpret"
+                << " string: '" << nmb << "'\n";
     return setup_numerador();
   }
 
@@ -176,7 +176,7 @@ void XC::ModelWrapper::copia_numerador(const DOF_Numberer *dn)
      std::cerr << "ModelWrapper::copia_numerador; null pointer to DOF freedom." << std::endl;
   }
 
-//! @brief Crea un numerador del tipo being passed as parameter.
+//! @brief Creates a numberer of the type passed as parameter.
 XC::DOF_Numberer &XC::ModelWrapper::newNumberer(const std::string &nmb)
   {
     alloc_numerador(nmb);
@@ -230,7 +230,7 @@ XC::ModelWrapper::~ModelWrapper(void)
 void XC::ModelWrapper::clearAll(void)
   { libera(); }
 
-//! @brief Returns a pointer to the domain.
+//! @brief Return a pointer to the domain.
 XC::Domain *XC::ModelWrapper::getDomainPtr(void)
   {
     SoluMethod *sm= getSoluMethod();
@@ -238,7 +238,7 @@ XC::Domain *XC::ModelWrapper::getDomainPtr(void)
     return sm->getDomainPtr();
   }
 
-//! @brief Returns a pointer to the domain.
+//! @brief Return a pointer to the domain.
 const XC::Domain *XC::ModelWrapper::getDomainPtr(void) const
   {
     const SoluMethod *sm= getSoluMethod();
@@ -246,7 +246,7 @@ const XC::Domain *XC::ModelWrapper::getDomainPtr(void) const
     return sm->getDomainPtr();
   }
 
-//! @brief Returns a pointer to the integrator.
+//! @brief Return a pointer to the integrator.
 XC::Integrator *XC::ModelWrapper::getIntegratorPtr(void)
   {
     SoluMethod *sm= getSoluMethod();
@@ -254,7 +254,7 @@ XC::Integrator *XC::ModelWrapper::getIntegratorPtr(void)
     return sm->getIntegratorPtr();
   }
 
-//! @brief Returns a pointer to the integrator.
+//! @brief Return a pointer to the integrator.
 const XC::Integrator *XC::ModelWrapper::getIntegratorPtr(void) const
   {
     const SoluMethod *sm= getSoluMethod();
@@ -280,7 +280,7 @@ void XC::ModelWrapper::brokeAnalysisModel(const CommParameters &cp,const ID &dat
     theModel->set_owner(this);
   }
 
-//! @brief Sets the renumerador to use in the analysis.
+//! @brief Set the numberer to be used in the analysis.
 int XC::ModelWrapper::setNumberer(DOF_Numberer &theNewNumberer) 
   {
     copia_numerador(&theNewNumberer);
@@ -292,17 +292,17 @@ bool XC::ModelWrapper::CheckPointers(void)
   {
     if(!theModel)
       {
-        std::cerr << "ModelWrapper::check_pointers; error, no se ha establecido el analysis model." << std::endl;
+        std::cerr << "ModelWrapper::check_pointers; error, you haven't set the analysis model." << std::endl;
         return false;
       }
     if(!theHandler)
       {
-        std::cerr << "ModelWrapper::check_pointers; error, no se ha establecido el gestor de coacciones." << std::endl;
+        std::cerr << "ModelWrapper::check_pointers; error, you haven't set the constraints handler." << std::endl;
         return false;
       }
     if(!theDOFNumberer)
       {
-        std::cerr << "ModelWrapper::check_pointers; error, no se ha estableciodo el renumerador." << std::endl;
+        std::cerr << "ModelWrapper::check_pointers; error, you haven't set the numberer." << std::endl;
         return false;
       }
     return true;

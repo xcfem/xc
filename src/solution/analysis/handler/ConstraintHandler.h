@@ -85,11 +85,11 @@ class ModelWrapper;
  *
  * A constraint handler is responsible for:
  *
- *   -creating the FE_Element and DOF_Group objects and adding them to the AnalysisModel;
+ *   - creating the FE_Element and DOF_Group objects and adding them to the AnalysisModel;
  *
- *   -setting the initial DOF equation numbers to $-1$, $-2$ or $-3$. A $-1$ indicates to the DOF_Numberer object that no equation number is to be allocated for this DOF, a $-3$ that this DOF is to be among the last group of dof to be numbered.
+ *   - setting the initial DOF equation numbers to -1, -2 or -3. A -1 indicates to the DOF_Numberer object that no equation number is to be allocated for this DOF, a -3 that this DOF is to be among the last group of dof to be numbered.
  *
- *   -deleting the DOF_Group and FE_Element objects that it created.
+ *   - deleting the DOF_Group and FE_Element objects that it created.
  */
 class ConstraintHandler: public MovableObject, public EntCmd
   {
