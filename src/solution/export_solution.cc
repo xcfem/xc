@@ -34,16 +34,16 @@ void export_solution(void)
 
 class_<XC::ConvergenceTest, bases<XC::MovableObject,EntCmd>, boost::noncopyable >("ConvergenceTest", no_init);
 
-class_<XC::SoluMethod, bases<EntCmd>, boost::noncopyable >("SoluMethod", no_init)
-    .def("newSolutionAlgorithm", &XC::SoluMethod::newSolutionAlgorithm,return_internal_reference<>(),"Defines the solution algorithm to use.")
-    .def("newIntegrator", &XC::SoluMethod::newIntegrator,return_internal_reference<>(),"Define el integrator to use.")
-    .def("newSystemOfEqn", &XC::SoluMethod::newSystemOfEqn,return_internal_reference<>(),"Define el system of equations to use.")
-    .def("newConvergenceTest", &XC::SoluMethod::newConvergenceTest,return_internal_reference<>(),"Define el criterio de convergencia to use.")
+ class_<XC::SoluMethod, bases<EntCmd>, boost::noncopyable >("SoluMethod", "Solution methods container",no_init)
+    .def("newSolutionAlgorithm", &XC::SoluMethod::newSolutionAlgorithm,return_internal_reference<>(),"\n""newSolutionAlgorithm(tipo) \n""Define the solution algorithm to be used.\n" "Parameters: \n""tipo: type of solution algorithm. Available types: 'bfgs_soln_algo', 'broyden_soln_algo','krylov_newton_soln_algo','linear_soln_algo','modified_newton_soln_algo','newton_raphson_soln_algo','newton_line_search_soln_algo','periodic_newton_soln_algo','frequency_soln_algo','standard_eigen_soln_algo','linear_buckling_soln_algo' \n")
+    .def("newIntegrator", &XC::SoluMethod::newIntegrator,return_internal_reference<>()," \n""newIntegrator(tipo,params) \n""Define the integrator to be used. \n""Parameters: \n""tipo: type of integrator. Available types:  'arc_length_integrator', 'arc_length1_integrator', 'displacement_control_integrator', 'distributed_displacement_control_integrator', 'HS_constraint_integrator', 'load_control_integrator', 'load_path_integrator', 'min_unbal_disp_norm_integrator', 'eigen_integrator', 'linear_buckling_integrator', 'alpha_os_integrator', 'alpha_os_generalized_integrator', 'central_difference_integrator', 'central_difference_alternative_integrator', 'central_difference_no_damping_integrator', 'collocation_integrator', 'collocation_hybrid_simulation_integrator', 'HHT_integrator', 'HHT1_integrator', 'HHT_explicit_integrator', 'HHT_generalized_integrator', 'HHT_generalized_explicit_integrator', 'HHT_hybrid_simulation_integrator', 'newmark_integrator', 'newmark1_integrator', 'newmark_explicit_integrator' 'newmark_hybrid_simulation_integrator', 'wilson_theta_integrator'. \n""params: parameters depending upon the integrator type. \n")
+    .def("newSystemOfEqn", &XC::SoluMethod::newSystemOfEqn,return_internal_reference<>()," \n""newSystemOfEqn(tipo) \n""Define the system of equations to be used. \n""Parameters: \n""tipo: type of system of equations. Available types: 'band_arpack_soe', 'band_arpackpp_soe', 'sym_arpack_soe', 'sym_band_eigen_soe', 'full_gen_eigen_soe', 'band_gen_lin_soe', 'distributed_band_gen_lin_soe', 'band_spd_lin_soe', 'distributed_band_spd_lin_soe', 'diagonal_soe', 'distributed_diagonal_soe', 'full_gen_lin_soe', 'profile_spd_lin_soe', 'distributed_profile_spd_lin_soe', 'sparse_gen_col_lin_soe', 'distributed_sparse_gen_col_lin_soe', 'sparse_gen_row_lin_soe', 'distributed_sparse_gen_row_lin_soe', 'sym_sparse_lin_soe'.  \n")
+    .def("newConvergenceTest", &XC::SoluMethod::newConvergenceTest,return_internal_reference<>()," \n""newConvergenceTest(cmd) \n""Define the convergence test to be used. \n""Parameters: \n""cmd: type of convergente test. Available types: 'energy_inc_conv_test', 'fixed_num_iter_conv_test', 'norm_disp_incr_conv_test', 'norm_unbalance_conv_test', 'relative_energy_incr_conv_test', 'relative_norm_disp_incr_conv_test', 'relative_norm_unbalance_conv_test', 'relative_total_norm_disp_incr_conv_test'. \n")
     ;
 
 class_<XC::MapSoluMethod, bases<EntCmd>, boost::noncopyable >("MapSoluMethod", no_init)
-    .add_property("existeSoluMethod", &XC::MapSoluMethod::existeSoluMethod)
-    .def("newSoluMethod", &XC::MapSoluMethod::newSoluMethod,return_internal_reference<>(),"Creates a new solution procedure.")
+  .add_property("existeSoluMethod", &XC::MapSoluMethod::existeSoluMethod,"\n""existeSoluMethod(cod) \n""Return true if the solution method exists \n" "Parameters: \n" "cod: name of the solution method \n")
+    .def("newSoluMethod", &XC::MapSoluMethod::newSoluMethod,return_internal_reference<>(),"\n""newSoluMethod(cod_solu_method,cod_solu_model) \n""Create a new solution procedure.\n""Parameters: \n" "cod_solu_method: name to identify the solution method. \n""cod_solu_model: name of the model wrapper \n")
     ;
 
 XC::ModelWrapper *(XC::ProcSoluControl::*getModelWrapperPtr)(const std::string &)= &XC::ProcSoluControl::getModelWrapper;
@@ -57,7 +57,7 @@ XC::ProcSoluControl &(XC::ProcSolu::*getSoluControlRef)(void)= &XC::ProcSolu::ge
 class_<XC::ProcSolu, bases<EntCmd>, boost::noncopyable >("ProcSolu", no_init)
     .add_property("getSoluControl", make_function( getSoluControlRef, return_internal_reference<>() ))
     .add_property("getAnalysis", make_function( &XC::ProcSolu::getAnalysis, return_internal_reference<>() ))
-    .def("newAnalysis", &XC::ProcSolu::newAnalysis,return_internal_reference<>(),"Creates a new analysis.")
+    .def("newAnalysis", &XC::ProcSolu::newAnalysis,return_internal_reference<>(),"Create a new analysis.")
     ;
 
   }

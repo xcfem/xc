@@ -326,7 +326,7 @@ bool XC::SoluMethod::alloc_system_of_equations(const std::string &nmb,AnalysisMo
 //     else if(nmb=="umfpack_gen_lin_soe")
 //       theSOE =new UmfpackGenLinSOE();
     else
-      std::cerr << "Syztem of equations: '"
+      std::cerr << "System of equations: '"
                 << nmb << "' unknown." << std::endl;
 
     if(theSOE)
@@ -409,7 +409,7 @@ void XC::SoluMethod::copia_conv_test(ConvergenceTest *ptr)
      std::cerr << "SoluMethod::copia_conv_test; null pointer to convergence test." << std::endl;
   }
 
-//! @brief Sets convergence test to use.
+//! @brief Set convergence test to be used.
 XC::ConvergenceTest &XC::SoluMethod::newConvergenceTest(const std::string &cmd)
   {
     alloc_conv_test(cmd);
