@@ -29,15 +29,15 @@ kx= typical_materials.defElasticMaterial(preprocessor, "kx",KX)
 ky= typical_materials.defElasticMaterial(preprocessor, "ky",KY)
 
 
-tagNodoFijo= define_apoyos.defApoyoXYRigZ(preprocessor, 1,7,"kx","ky")
+tagNodoFijo= define_apoyos.defApoyoXYRigZ(preprocessor, nod.tag,7,"kx","ky")
   
 # Constraints
 coacciones= preprocessor.getConstraintLoader
 
 #
-spc= coacciones.newSPConstraint(1,3,0.0) # Nodo 1
-spc= coacciones.newSPConstraint(1,4,0.0)
-spc= coacciones.newSPConstraint(1,5,0.0)
+spc= coacciones.newSPConstraint(nod.tag,3,0.0) # nod1 Rx= 0,Ry= 0 and Rz= 0
+spc= coacciones.newSPConstraint(nod.tag,4,0.0)
+spc= coacciones.newSPConstraint(nod.tag,5,0.0)
 
 
 # Loads definition
@@ -50,7 +50,7 @@ ts= casos.newTimeSeries("constant_ts","ts")
 casos.currentTimeSeries= "ts"
 #Load case definition
 lp0= casos.newLoadPattern("default","0")
-lp0.newNodalLoad(1,xc.Vector([FX,FY,FZ,0,0,0]))
+lp0.newNodalLoad(nod.tag,xc.Vector([FX,FY,FZ,0,0,0]))
 #We add the load case to domain.
 casos.addToDomain("0")
 
@@ -60,23 +60,22 @@ analisis= predefined_solutions.simple_static_linear(prueba)
 result= analisis.analyze(1)
 
 
-nodes.calculateNodalReactions(True)
+nodes.calculateNodalReactions(False)
 nodes= preprocessor.getNodeLoader
 
-nod1= nodes.getNode(1)
-deltax= nod1.getDisp[0]
-deltay= nod1.getDisp[1]
-deltaz= nod1.getDisp[2] 
-RZ= nod1.getReaction[2] 
+deltax= nod.getDisp[0]
+deltay= nod.getDisp[1]
+deltaz= nod.getDisp[2] 
 RX= nodes.getNode(tagNodoFijo).getReaction[0]
 RY= nodes.getNode(tagNodoFijo).getReaction[1] 
+RZ= nodes.getNode(tagNodoFijo).getReaction[2] 
 
 
-ratio1= -RX/FX
-ratio2= (KX*deltax)/FX
-ratio3= -RY/FY
-ratio4= (KY*deltay)/FY
-ratio5= -RZ/FZ
+ratio1= (FX+RX)/FX
+ratio2= (FX-KX*deltax)/FX
+ratio3= (FY+RY)/FY
+ratio4= (FY-KY*deltay)/FY
+ratio5= (FZ+RZ)/FZ
 ratio6= deltaz
 
 ''' 
@@ -96,7 +95,7 @@ print "ratio6= ",(ratio6)
   
 import os
 fname= os.path.basename(__file__)
-if (abs(ratio1-1.0)<1e-5) & (abs(ratio2-1.0)<1e-5) & (abs(ratio3-1.0)<1e-5) & (abs(ratio4-1.0)<1e-5)  & (abs(ratio5-1.0)<1e-5) & (abs(ratio6)<1e-5) :
+if (abs(ratio1)<1e-5) & (abs(ratio2)<1e-5) & (abs(ratio3)<1e-5) & (abs(ratio4)<1e-5)  & (abs(ratio5)<1e-5) & (abs(ratio6)<1e-5) :
   print "test ",fname,": ok."
 else:
   print "test ",fname,": ERROR."

@@ -83,12 +83,12 @@ def defApoyoXYZ(preprocessor,iNod, iElem, matKXName, matKYName, matKZName):
     spc= coacciones.newSPConstraint(retvalNodTag,i,0.0)
   return retvalNodTag
 
-'''
-Define un apoyo para el nodo cuyo tag se pasa como parámetro.
+def defApoyoUniaxialProb2D(preprocessor, iNod, iElem, nmbMat, dir):
+  '''
+  Define un apoyo para el nodo cuyo tag se pasa como parámetro.
    Las rigidez del apoyo viene dada por el material que se pasa como parámetro.
    La dirección en la que actúa el apoyo la pasamos mediante un vector
-'''
-def defApoyoUniaxialProb2D(preprocessor, iNod, iElem, nmbMat, dir):
+  '''
   # Node duplication
   nodos= preprocessor.getNodeLoader
   nod= nodos.duplicateNode(iNod)

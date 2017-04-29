@@ -127,6 +127,8 @@ class MFreedom_Constraint: public MFreedom_ConstraintBase
     int getVtkCellType(void) const;
     int getMEDCellType(void) const;
 
+    int addResistingForceToNodalReaction(bool inclInertia);
+
     virtual void Print(std::ostream &s, int flag =0);
 
   };

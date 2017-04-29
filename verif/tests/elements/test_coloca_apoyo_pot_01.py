@@ -38,20 +38,20 @@ apoyosPot.defineMaterialesTeflon(preprocessor, diamPot,"teflonKX","teflonKY")
 nodes= preprocessor.getNodeLoader
 predefined_spaces.gdls_resist_materiales3D(nodes)
 nodes.defaultTag= 1 #First node number.
-nod= nodes.newNodeXYZ(1,1,1)
-nod= nodes.newNodeXYZ(1,1,1)
+nod1= nodes.newNodeXYZ(1,1,1)
+nod2= nodes.newNodeXYZ(1,1,1)
 
 
 
-apoyo_pot.colocaApoyoFicticioPotDeslizanteNodos(preprocessor, 1,2,1,"teflonKX","teflonKY")
+apoyo_pot.colocaApoyoFicticioPotDeslizanteNodos(preprocessor, nod1.tag,nod2.tag,1,"teflonKX","teflonKY")
 # Constraints
 coacciones= preprocessor.getConstraintLoader
 
 #
-fix_node_6dof.fixNode6DOF(coacciones,1)
-spc= coacciones.newSPConstraint(2,3,0.0) # Nodo 2
-spc= coacciones.newSPConstraint(2,4,0.0)
-spc= coacciones.newSPConstraint(2,5,0.0)
+fix_node_6dof.fixNode6DOF(coacciones,nod1.tag)
+spc= coacciones.newSPConstraint(nod2.tag,3,0.0) # Nodo 2
+spc= coacciones.newSPConstraint(nod2.tag,4,0.0)
+spc= coacciones.newSPConstraint(nod2.tag,5,0.0)
 
 
 # Loads definition

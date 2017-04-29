@@ -217,6 +217,45 @@ int XC::MFreedom_Constraint::recvSelf(const CommParameters &cp)
     return res;
   }
 
+//! @brief Add to nodes the actions due to this constraint.
+//! See "Calculation within MSC/Nastran of the forces transmitted by
+//! multipoint constraints (MPC) and the forces generated in support
+//! constraints" by E, de la Fuente and J. San Millán (INTA), Spain.
+int XC::MFreedom_Constraint::addResistingForceToNodalReaction(bool inclInertia)
+  {
+    const size_t numConstrainedDOFs= constrDOF.Size(); //ID of constrained DOFs at constrained node
+    Domain *dom= getDomain();
+    Node *cN= dom->getNode(getNodeConstrained());
+    const int numNodalDOF = cN->getNumberDOF();
+
+    //Add reaction to constrained node.
+    //R_m = F_m= K_mm u_m - P_m (see page 3).
+    const Vector cNReaction= cN->getReaction().getComponents(constrDOF);
+    Vector Rm(numConstrainedDOFs);
+    for(size_t i= 0;i<numConstrainedDOFs;i++)
+      Rm(i)= -cNReaction(i);
+
+    Vector tmp(numNodalDOF);
+    tmp.putComponents(Rm,constrDOF);
+    cN->addReactionForce(tmp,1.0);
+
+    //Add reaction to retained node.
+    Vector Rn(numConstrainedDOFs);
+    //R_n = -G^T R_m (see page 4).
+    Rn.addMatrixTransposeVector(1.0,constraintMatrix,Rm,-1.0);
+    Vector RnNod(numConstrainedDOFs);
+    RnNod.Extract(Rn,0,1.0);
+    tmp.Zero();
+    tmp.putComponents(RnNod,constrDOF);
+    Node *rN= dom->getNode(getNodeRetained());
+    rN->addReactionForce(tmp,1.0);
+
+    if(inclInertia)
+      std::cerr << nombre_clase() << "::" << __FUNCTION__
+	        << " ERROR;  inertia effects not yet implemented." << std::endl;
+    return 0;
+  }
+
 //! @brief Printing.
 void XC::MFreedom_Constraint::Print(std::ostream &s, int flag)
   {     

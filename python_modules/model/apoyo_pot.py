@@ -14,19 +14,14 @@ def colocaApoyoFicticioPotDeslizanteNodos(preprocessor,iNodA, iNodB, iElem, nmbM
   eDofs= preprocessor.getConstraintLoader.newEqualDOF(iNodA,iNodB,xc.ID([2]))
 
 
-def getReacApoyoFicticioPotDeslizanteNodos(preprocessor,iElem):
+def getReacApoyoFicticioPotDeslizanteNodos(preprocessor,iElem,inclInertia= False):
   '''Devuelve las reacciones en un elemento que representa a un apoyo pot deslizante '''
   nodos= preprocessor.getNodeLoader
-  nodos.calculateNodalReactions(True)
+  nodos.calculateNodalReactions(inclInertia)
   
   elem= preprocessor.getElementLoader.getElement(iElem)
   reac0= elem.getNodes[0].getReaction
-  reac1= elem.getNodes[1].getReaction
-  RX= reac0[0]
-  RY= reac0[1]
-  RZ= reac1[2]
-  vReac= xc.Vector([RX,RY,RZ])
-  return vReac
+  return xc.Vector([reac0[0],reac0[1],reac0[2]])
 
 
 '''
@@ -39,19 +34,15 @@ def colocaApoyoFicticioPotDeslizanteXNodos(preprocessor, iNodA, iNodB, iElem, nm
   eDofs= preprocessor.getConstraintLoader.newEqualDOF(iNodA,iNodB,xc.ID([1,2]))
 
 
-def getReacApoyoFicticioPotDeslizanteXNodos(preprocessor,iElem):
+def getReacApoyoFicticioPotDeslizanteXNodos(preprocessor,iElem,inclInertia= False):
   #Devuelve las reacciones en un elemento que representa a un apoyo pot deslizante 
   nodos= preprocessor.getNodeLoader
-  nodos.calculateNodalReactions(True)
+  nodos.calculateNodalReactions(inclInertia)
   
   elem= preprocessor.getElementLoader.getElement(iElem)
   reac0= elem.getNodes[0].getReaction
-  reac1= elem.getNodes[1].getReaction
-  RX= reac0[0]
-  RY= reac1[1]
-  RZ= reac1[2]
-  vReac= xc.Vector([RX,RY,RZ])
-  return vReac
+  return xc.Vector([reac0[0],reac0[1],reac0[2]])
+
 
 '''
 Define un elemento elástico que modeliza aproximadamente
@@ -62,16 +53,12 @@ def colocaApoyoFicticioPotDeslizanteYNodos(preprocessor, iNodA, iNodB, iElem, nm
   define_apoyos.colocaApoyoYEntreNodos(preprocessor, iNodA,iNodB,iElem,nmbMatTeflonKY)
   eDofs= preprocessor.getConstraintLoader.newEqualDOF(iNodA,iNodB,xc.ID([0,2]))
 
-def getReacApoyoFicticioPotDeslizanteYNodos(preprocessor,iElem):
+def getReacApoyoFicticioPotDeslizanteYNodos(preprocessor,iElem,inclInertia= False):
   # Devuelve las reacciones en un elemento que representa a un apoyo pot deslizante
   nodos= preprocessor.getNodeLoader
-  nodos.calculateNodalReactions(True)
+  nodos.calculateNodalReactions(inclInertia)
   
   elem= preprocessor.getElementLoader.getElement(iElem)
   reac0= elem.getNodes[0].getReaction
-  reac1= elem.getNodes[1].getReaction
-  RX= reac1[0]
-  RY= reac0[1]
-  RZ= reac1[2]
-  vReac= xc.Vector([RX,RY,RZ])
-  return vReac
+  return xc.Vector([reac0[0],reac0[1],reac0[2]])
+
