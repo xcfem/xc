@@ -40,10 +40,13 @@ class_<XC::RayleighDampingFactors, bases<EntCmd>, boost::noncopyable >("Rayleigh
 #include "utils/fvectors/python_interface.tcc"
 #include "utils/physical_properties/python_interface.tcc"
 
+typedef XC::NodePtrs::vector_ptr_nodes vector_ptr_nodes;
+class_<vector_ptr_nodes, boost::noncopyable>("vector_ptr_nodes")
+  .def(vector_indexing_suite<vector_ptr_nodes>() )
+  ;
+
 XC::Node *(XC::NodePtrs::*getNearestNodePtr)(const Pos3d &,bool initialGeometry)= &XC::NodePtrs::getNearestNode;
-class_<XC::NodePtrs, bases<EntCmd>, boost::noncopyable >("NodePtrs", no_init)
-  .def("__getitem__",&XC::NodePtrs::getNodePtr, return_value_policy<reference_existing_object>())
-  .def("__len__",&XC::NodePtrs::size)
+class_<XC::NodePtrs, bases<EntCmd,vector_ptr_nodes>, boost::noncopyable >("NodePtrs", no_init)
   .def("getNearestNode",make_function(getNearestNodePtr, return_internal_reference<>() ),"Returns nearest node.")
   ;
 

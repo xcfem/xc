@@ -42,13 +42,13 @@
 
 //! @brief Constructor.
 XC::NodePtrs::NodePtrs(Element *owr,const size_t &sz)
-  : EntCmd(owr), theNodes(sz,nullptr) {}
+  : EntCmd(owr), vector_ptr_nodes(sz,nullptr) {}
 
 //! @brief Constructor de copia.
 XC::NodePtrs::NodePtrs(const NodePtrs &otro)
-  : EntCmd(otro), theNodes(otro.theNodes.size(),nullptr) 
+  : EntCmd(otro), vector_ptr_nodes(otro.size(),nullptr) 
   {
-    const size_t sz= theNodes.size();
+    const size_t sz= size();
     if(sz>0)
       {
         const ContinuaReprComponent *owr= dynamic_cast<const ContinuaReprComponent *>(Owner());
@@ -63,8 +63,8 @@ XC::NodePtrs &XC::NodePtrs::operator=(const NodePtrs &otro)
   {
     inic();
     EntCmd::operator=(otro);
-    theNodes= vector_ptr_nodes(otro.theNodes.size(),nullptr);
-    const size_t sz= theNodes.size();
+    resize(otro.size(),nullptr);
+    const size_t sz= size();
     if(sz>0)
       {
         const ContinuaReprComponent *owr= dynamic_cast<const ContinuaReprComponent *>(Owner());
@@ -80,7 +80,7 @@ XC::NodePtrs &XC::NodePtrs::operator=(const NodePtrs &otro)
 XC::NodePtrs::~NodePtrs(void)
   {
     inic();
-    theNodes.clear();
+    clear();
   }
 
 void XC::NodePtrs::disconnect(void)
@@ -108,10 +108,10 @@ void XC::NodePtrs::inic(void)
 bool XC::NodePtrs::hasNull(void) const
   {
     bool retval= false;
-    const size_t sz= theNodes.size();
+    const size_t sz= size();
     for(size_t i=0; i<sz; i++)
       {
-        if(!theNodes[i])
+        if(!(*this)[i])
           {
             retval= true;
             break;
@@ -125,18 +125,19 @@ void XC::NodePtrs::setPtrs(Domain *theDomain, const ID &theNodeTags)
   {
     inic();
     const size_t sz= theNodeTags.Size();
-    theNodes.resize(sz,nullptr);
+    resize(sz,nullptr);
     ContinuaReprComponent *owr= dynamic_cast<ContinuaReprComponent *>(Owner());
     assert(owr);
     for(size_t i=0; i<sz; i++)
       {
-        theNodes[i]= theDomain->getNode(theNodeTags(i));
-        if(theNodes[i])
-          theNodes[i]->connect(owr);
+        (*this)[i]= theDomain->getNode(theNodeTags(i));
+        if((*this)[i])
+          (*this)[i]->connect(owr);
         else
           {
-            std::cerr << "WARNING - NodePtrs::setDomain - node with tag ";
-	    std::cerr << theNodeTags(i) << " does not exist in the domain\n";
+            std::cerr << nombre_clase() << "::" << __FUNCTION__
+	              << "; node with tag " << theNodeTags(i)
+		      << " does not exist in the domain.\n";
           }
       }
   }
@@ -179,37 +180,32 @@ int XC::NodePtrs::find(const Node *nPtr) const
 //! @brief Returns a pointer to the node at the position
 //! being passed as parameter.
 XC::Node *XC::NodePtrs::getNodePtr(const size_t &i)
-  { return theNodes[i]; }
+  { return (*this)[i]; }
 
 //! @brief Returns a const reference to the node at the position
 //! being passed as parameter.
 XC::NodePtrs::const_reference XC::NodePtrs::operator()(const size_t &i) const
-  { return theNodes[i]; }
-
-//! @brief Returns a const reference to the node at the position
-//! being passed as parameter.
-XC::NodePtrs::const_reference XC::NodePtrs::operator[](const size_t &i) const
-  { return theNodes[i]; }
+  { return (*this)[i]; }
 
 //!@brief Asigna the pointer to node i.
 void XC::NodePtrs::set_node(const size_t &i,Node *n)
   {
     ContinuaReprComponent *owr= dynamic_cast<ContinuaReprComponent *>(Owner());
-    if(theNodes[i])
+    if((*this)[i])
       {
-        if(theNodes[i]!=n)
+        if((*this)[i]!=n)
           {
-            theNodes[i]->disconnect(owr);
-            theNodes[i]= n;
+            (*this)[i]->disconnect(owr);
+            (*this)[i]= n;
             if(n)
-              theNodes[i]->connect(owr);
+              (*this)[i]->connect(owr);
           }
       }
     else
       {
-        theNodes[i]= n;
+        (*this)[i]= n;
         if(n)
-          theNodes[i]->connect(owr);
+          (*this)[i]->connect(owr);
       }
   }
 
@@ -219,7 +215,7 @@ XC::ID XC::NodePtrs::getNumDOFs(void) const
     const int numNodes= size();
     ID retval(numNodes);
     for(int i=0; i<numNodes; i++)
-      retval(i)= theNodes[i]->getNumberDOF();
+      retval(i)= (*this)[i]->getNumberDOF();
     return retval;
   }
 
@@ -229,14 +225,14 @@ int XC::NodePtrs::getTotalDOFs(void) const
     const int numNodes= size();
     int retval= 0;
     for(int i=0; i<numNodes; i++)
-      retval+= theNodes[i]->getNumberDOF();
+      retval+= (*this)[i]->getNumberDOF();
     return retval;
   }
 
 //! @brief Returns the maximum value de la coordenada i of the nodes.
 double XC::NodePtrs::MaxCooNod(int icoo) const
   {
-    assert(!theNodes.empty());
+    assert(!empty());
     const_iterator i= begin();
     double retval= (*i)->getCrds()[icoo];
     i++;
@@ -248,7 +244,7 @@ double XC::NodePtrs::MaxCooNod(int icoo) const
 //! @brief Returns the minimum value de la coordenada i of the nodes.
 double XC::NodePtrs::MinCooNod(int icoo) const
   {
-    assert(!theNodes.empty());
+    assert(!empty());
     const_iterator i= begin();
     double retval= (*i)->getCrds()[icoo];
     i++;
@@ -261,20 +257,20 @@ double XC::NodePtrs::MinCooNod(int icoo) const
 const std::vector<int> &XC::NodePtrs::getTags(void) const
   {
     static std::vector<int> retval;
-    const size_t sz= theNodes.size();
+    const size_t sz= size();
     retval.resize(sz);
     for(size_t i=0; i<sz; i++)
-      if(theNodes[i]) retval[i]= theNodes[i]->getTag();
+      if((*this)[i]) retval[i]= (*this)[i]->getTag();
     return retval;    
   }
 
 std::vector<int> XC::NodePtrs::getIdx(void) const
   {
-    const size_t sz= theNodes.size();
+    const size_t sz= size();
     std::vector<int> retval(sz,-1);
     for(size_t i=0; i<sz; i++)
-      if(theNodes[i])
-        retval[i]= theNodes[i]->getIdx();
+      if((*this)[i])
+        retval[i]= (*this)[i]->getIdx();
     return retval;     
   }
 
@@ -283,16 +279,16 @@ std::vector<int> XC::NodePtrs::getIdx(void) const
 bool XC::NodePtrs::checkDimension(const size_t &dim) const
   {
     bool retval= true;
-    const size_t sz= theNodes.size();
+    const size_t sz= size();
     for(size_t i=0; i<sz; i++)
       {
-        if(theNodes[i])
+        if((*this)[i])
 	  {
-            if(dim!= theNodes[i]->getDim())
+            if(dim!= (*this)[i]->getDim())
 	      {
 	        std::cerr << nombre_clase() << "::" << __FUNCTION__
 	                  << " wrong dimension of node coordinates in node: "
-	                  << i << " was: " << theNodes[i]->getDim()
+	                  << i << " was: " << (*this)[i]->getDim()
 		          << ", must be: " << dim
 	                  << std::endl;
 	        retval= false;
@@ -311,10 +307,10 @@ bool XC::NodePtrs::checkDimension(const size_t &dim) const
 size_t XC::NodePtrs::getDimension(void) const
   {
     size_t retval= 0;
-    if(!theNodes.empty())
+    if(!empty())
       {
-        if(theNodes[0])
-	  { retval= theNodes[0]->getDim(); }
+        if((*this)[0])
+	  { retval= (*this)[0]->getDim(); }
         else
 	  {
 	    std::cerr << nombre_clase() << "::" << __FUNCTION__
@@ -333,14 +329,14 @@ size_t XC::NodePtrs::getDimension(void) const
 const XC::Matrix &XC::NodePtrs::getCoordinates(void) const
   {
     static Matrix retval;
-    const size_t sz= theNodes.size();
+    const size_t sz= size();
     const size_t dim= getDimension();
     retval= Matrix(sz,dim);
     for(size_t i=0; i<sz; i++)
       {
-        if(theNodes[i])
+        if((*this)[i])
           {
-            const Vector &coo= theNodes[i]->getCrds();
+            const Vector &coo= (*this)[i]->getCrds();
 	    for(size_t j= 0;j<dim;j++)
               retval(i,j)= coo[j];
           }
@@ -352,16 +348,16 @@ const XC::Matrix &XC::NodePtrs::getCoordinates(void) const
 Pos3d XC::NodePtrs::getPosNodo(const size_t &i,bool initialGeometry) const
   {
     if(initialGeometry)
-      return theNodes[i]->getPosInicial3d();
+      return (*this)[i]->getPosInicial3d();
     else
-      return theNodes[i]->getPosFinal3d();
+      return (*this)[i]->getPosFinal3d();
   }
 
 //! @brief Returns a matriz con las posiciones of the nodes.
 std::list<Pos3d> XC::NodePtrs::getPosiciones(bool initialGeometry) const
   {
     std::list<Pos3d> retval;
-    const size_t sz= theNodes.size();
+    const size_t sz= size();
     for(size_t i=0;i<sz;i++)
       retval.push_back(getPosNodo(i,initialGeometry));
     return retval;
@@ -371,7 +367,7 @@ std::list<Pos3d> XC::NodePtrs::getPosiciones(bool initialGeometry) const
 Pos3d XC::NodePtrs::getPosCdg(bool initialGeometry) const
   {
     Pos3d retval;
-    const size_t sz= theNodes.size();
+    const size_t sz= size();
     if(sz>0)
       {
         Vector3d tmp= getPosNodo(0,initialGeometry).VectorPos();;
@@ -415,19 +411,19 @@ XC::Node *XC::NodePtrs::getNearestNode(const Pos3d &p,bool initialGeometry)
   {
     Node *retval= nullptr;
     double d= DBL_MAX;
-    const size_t sz= theNodes.size();
-    if(!theNodes.empty() && !hasNull())
+    const size_t sz= size();
+    if(!empty() && !hasNull())
       {
-        d= theNodes[0]->getDist2(p,initialGeometry);
-        retval= theNodes[0];
+        d= (*this)[0]->getDist2(p,initialGeometry);
+        retval= (*this)[0];
         double tmp;
         for(size_t i=1;i<sz;i++)
           {
-            tmp= theNodes[i]->getDist2(p,initialGeometry);
+            tmp= (*this)[i]->getDist2(p,initialGeometry);
             if(tmp<d)
               {
                 d= tmp;
-                retval= theNodes[i];
+                retval= (*this)[i];
               }
           }
       }
@@ -445,9 +441,9 @@ const XC::Node *XC::NodePtrs::getNearestNode(const Pos3d &p,bool initialGeometry
 int XC::NodePtrs::getIndiceNodo(const Node *ptrNod) const
   {
     int retval= -1;
-    const size_t sz= theNodes.size();
+    const size_t sz= size();
     for(size_t i=0;i<sz;i++)
-      if(theNodes[i]==ptrNod)
+      if((*this)[i]==ptrNod)
         {
           retval= i;
           break;
@@ -459,19 +455,19 @@ int XC::NodePtrs::getIndiceNodo(const Node *ptrNod) const
 //! @brief Resets tributary areas (or lengths or volumes) of connected nodes.
 void XC::NodePtrs::resetTributarias(void) const
   {
-    const size_t sz= theNodes.size();
+    const size_t sz= size();
     for(size_t i=0;i<sz;i++)
-      theNodes[i]->resetTributaria();    
+      (*this)[i]->resetTributaria();    
   }
 
 //! @brief Adds to the la magnitud tributaria de cada node i
 //! la componente i del vector being passed as parameter.
 void XC::NodePtrs::vuelcaTributarias(const std::vector<double> &t) const
   {
-    const size_t sz= theNodes.size();
+    const size_t sz= size();
     assert(sz== t.size());
     for(size_t i=0;i<sz;i++)
-      theNodes[i]->addTributaria(t[i]);
+      (*this)[i]->addTributaria(t[i]);
   }
 
 //! @brief Returns a vector that contains the distribution factors
@@ -485,7 +481,7 @@ XC::Vector XC::NodePtrs::getDistributionFactor(int mode) const
     int loc = 0;
     for(int i=0; i<numNodes; i++)
       {
-        const Vector df= theNodes[i]->getDistributionFactor(mode);
+        const Vector df= (*this)[i]->getDistributionFactor(mode);
         for(int j=0; j<df.Size(); j++)
           { retval(loc++)= df[j]; }
       }
@@ -502,7 +498,7 @@ XC::Matrix XC::NodePtrs::getNodeVectors(const Vector &v) const
     int loc = 0;
     for(int i=0; i<numNodes; i++)
       {
-        const int nc= theNodes[i]->getNumberDOF();
+        const int nc= (*this)[i]->getNumberDOF();
         for(int j=0; j<nc; j++)
           { retval(i,j)= v[loc++]; }
       }

@@ -36,7 +36,7 @@ XC::Vector (XC::Node::*getMaxModalVelocityForGdls)(int,const double &,const boos
 XC::Vector (XC::Node::*getMaxModalAccelerationForGdls)(int,const double &,const boost::python::list &) const= &XC::Node::getMaxModalAccelerationForGdls;
 
 void (XC::Node::*fixGdls)(const XC::ID &, const XC::Vector &)= &XC::Node::fix;
-class_<XC::Node, bases<XC::MeshComponent>, boost::noncopyable >("Node", no_init)
+class_<XC::Node, XC::Node *, bases<XC::MeshComponent>, boost::noncopyable >("Node", no_init)
   .add_property("getCoo", make_function( getCooRef, return_internal_reference<>() ))
   .add_property("mass",make_function(&XC::Node::getMass, return_internal_reference<>()) ,&XC::Node::setMass)
   .add_property("get3dCoo", &XC::Node::getCrds3d)

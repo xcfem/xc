@@ -51,7 +51,7 @@ class Vector;
 //! @ingroup FEMisc
 //
 //! @brief Pointers to nodes.
-class NodePtrs: public EntCmd
+class NodePtrs: public EntCmd, public std::vector<Node *>
   {
   public:
     typedef std::vector<Node *> vector_ptr_nodes;
@@ -60,8 +60,6 @@ class NodePtrs: public EntCmd
     typedef vector_ptr_nodes::iterator iterator;
     typedef vector_ptr_nodes::const_iterator const_iterator;
 
-  private:
-    vector_ptr_nodes theNodes; //!< node set.
   protected:
     void disconnect(void);
     void setPtrs(Domain *theDomain, const ID &theNodeTags);
@@ -74,31 +72,12 @@ class NodePtrs: public EntCmd
 
     void inic(void);
 
-    inline size_t size(void) const
-      { return theNodes.size(); }
-    inline const_reference front() const
-      { return theNodes.front(); }
-    inline reference front()
-      { return theNodes.front(); }
-    inline const_reference back() const
-      { return theNodes.back(); }
-    inline reference back()
-      { return theNodes.back(); }
-    inline const_iterator begin() const
-      { return theNodes.begin(); }
-    inline iterator begin()
-      { return theNodes.begin(); }
-    inline const_iterator end() const
-      { return theNodes.end(); }
-    inline iterator end()
-      { return theNodes.end(); }
     iterator find(const int &);
     const_iterator find(const int &) const;
     int find(const Node *) const;
 
     Node *getNodePtr(const size_t &);
     const_reference operator()(const size_t &i) const;
-    const_reference operator[](const size_t &i) const;
     void set_node(const size_t &i,Node *);
 
     bool hasNull(void) const;
@@ -127,8 +106,6 @@ class NodePtrs: public EntCmd
 
     const std::vector<int> &getTags(void) const;
     int getIndiceNodo(const Node *) const;
-
-
   };
 } // end of XC namespace
 
