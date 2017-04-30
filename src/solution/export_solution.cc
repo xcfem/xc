@@ -47,17 +47,17 @@ class_<XC::MapSoluMethod, bases<EntCmd>, boost::noncopyable >("MapSoluMethod", n
     ;
 
 XC::ModelWrapper *(XC::ProcSoluControl::*getModelWrapperPtr)(const std::string &)= &XC::ProcSoluControl::getModelWrapper;
-class_<XC::ProcSoluControl, bases<EntCmd>, boost::noncopyable >("SoluControl", no_init)
-    .add_property("getModelWrapper", make_function( getModelWrapperPtr, return_internal_reference<>() ))
-    .add_property("getModelWrapperContainer",  make_function(&XC::ProcSoluControl::getModelWrapperContainer, return_internal_reference<>()) )
-    .add_property("getSoluMethodContainer",  make_function(&XC::ProcSoluControl::getSoluMethodContainer, return_internal_reference<>()) )
+class_<XC::ProcSoluControl, bases<EntCmd>, boost::noncopyable >("SoluControl", "Container for the objects that control the solution procedure", no_init)
+  .add_property("getModelWrapper", make_function( getModelWrapperPtr, return_internal_reference<>() )," \n""getModelWrapper(cod) \n""Return a pointer to the model wrapper \n""Parameters: \n""cod: name of the model wrapper \n")
+    .add_property("getModelWrapperContainer",  make_function(&XC::ProcSoluControl::getModelWrapperContainer, return_internal_reference<>()) ," \n""Return a reference to the model wrapper container. \n")
+    .add_property("getSoluMethodContainer",  make_function(&XC::ProcSoluControl::getSoluMethodContainer, return_internal_reference<>()) ," \n""Return a reference to the solution procedures container. \n")
     ;
 
 XC::ProcSoluControl &(XC::ProcSolu::*getSoluControlRef)(void)= &XC::ProcSolu::getSoluControl;
-class_<XC::ProcSolu, bases<EntCmd>, boost::noncopyable >("ProcSolu", no_init)
-    .add_property("getSoluControl", make_function( getSoluControlRef, return_internal_reference<>() ))
-    .add_property("getAnalysis", make_function( &XC::ProcSolu::getAnalysis, return_internal_reference<>() ))
-    .def("newAnalysis", &XC::ProcSolu::newAnalysis,return_internal_reference<>(),"Create a new analysis.")
+ class_<XC::ProcSolu, bases<EntCmd>, boost::noncopyable >("ProcSolu","Definition of the analysis by its type and the parameters that control the solution procedure.",no_init)
+   .add_property("getSoluControl", make_function( getSoluControlRef, return_internal_reference<>() )," \n"" Return a reference to the objects  that control the solution procedure.\n")
+   .add_property("getAnalysis", make_function( &XC::ProcSolu::getAnalysis, return_internal_reference<>() )," \n"" Return a reference to the analysis object. \n")
+    .def("newAnalysis", &XC::ProcSolu::newAnalysis,return_internal_reference<>()," \n""newAnalysis(nmb,cod_solu_metodo,cod_solu_eigenM) \n""Definition of a new analysis.""Parameters: \n""nmb: name of the type of analysis. Available types: 'direct_integration_analysis', 'eigen_analysis', 'modal_analysis','linear_buckling_analysis', 'linear_buckling_eigen_analysis', 'static_analysis', 'variable_time_step_direct_integration_analysis' \n""cod_solu_metodo: name of the solution method container \n""cod_solu_eigenM: name of the solution method (only when linear buckling analysis defined).\n")
     ;
 
   }

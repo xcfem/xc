@@ -140,7 +140,7 @@ void XC::EigenSOE::resize_mass_matrix_if_needed(const size_t &sz)
       massMatrix= sparse_matrix(sz,sz,0.0);
   }
 
-//! @brief Solves the eigenproblem con the number of modos being passed as parameter.
+//! @brief Solve the eigenproblem con the number of modos passed as parameter.
 int XC::EigenSOE::solve(int numModes)
   { return (theSolver->solve(numModes)); }
 
@@ -151,7 +151,7 @@ int XC::EigenSOE::solve(void)
     return -1;
   }
 
-//! @brief Returns a pointer to the solver que se emplea para resolver the eigenproblem.
+//! @brief Return a pointer to the solver used to solve the eigenproblem.
 XC::EigenSolver *XC::EigenSOE::getSolver(void)
   { return theSolver; }
 
@@ -173,11 +173,11 @@ void XC::EigenSOE::identityM(void)
     massMatrix= boost::numeric::ublas::identity_matrix<double>(std::min(sz1,sz2));
   }
 
-//! @brief Returns the autovector que corresponde al modo being passed as parameter.
+//! @brief Returns the autovector que corresponde al modo passed as parameter.
 const XC::Vector &XC::EigenSOE::getEigenvector(int mode) const
   { return theSolver->getEigenvector(mode); }
 
-//! @brief Returns the autovector que corresponde al modo being passed as parameter
+//! @brief Returns the autovector que corresponde al modo passed as parameter
 //! normalizado de modo que la componente máxima valga 1 (norma_infinito).
 XC::Vector XC::EigenSOE::getNormalizedEigenvector(int mode) const
   { return theSolver->getNormalizedEigenvector(mode); }
@@ -192,7 +192,7 @@ XC::Matrix XC::EigenSOE::getEigenvectors(void) const
 XC::Matrix XC::EigenSOE::getNormalizedEigenvectors(void) const
   { return theSolver->getNormalizedEigenvectors(); }
 
-//! @brief Returns the eigenvalue of the mode being passed as parameter.
+//! @brief Returns the eigenvalue of the mode passed as parameter.
 const double &XC::EigenSOE::getEigenvalue(int mode) const
   { return theSolver->getEigenvalue(mode); }
 
@@ -322,8 +322,8 @@ double XC::EigenSOE::getTotalMass(void) const
     return retval;
   }
 
-//! @brief Return the equivalennt static force for the mode
-//! being passed as parameter.
+//! @brief Return the equivalent static force for the mode
+//! passed as parameter.
 XC::Vector XC::EigenSOE::getEquivalentStaticLoad(int mode,const double &accel_mode) const
   {
     Vector tmp= getDistributionFactor(mode);

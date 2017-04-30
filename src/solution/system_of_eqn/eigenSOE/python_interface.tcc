@@ -21,8 +21,8 @@
 //----------------------------------------------------------------------------
 //python_interface.tcc
 
-class_<XC::EigenSOE, bases<XC::SystemOfEqn>, boost::noncopyable >("EigenSOE", no_init)
-  .def("newSolver", &XC::EigenSOE::newSolver,return_internal_reference<>(),"Solver to use.")
+class_<XC::EigenSOE, bases<XC::SystemOfEqn>, boost::noncopyable >("EigenSOE", "Base class for eigenproblem systems of equations.", no_init)
+.def("newSolver", &XC::EigenSOE::newSolver,return_internal_reference<>()," \n""newSolver(tipo)""Define the solver to be used.""Parameters: \n""tipo: type of solver. Available types: 'band_arpack_solver', 'band_arpackpp_solver', 'sym_band_eigen_solver', 'full_gen_eigen_solver', 'sym_arpack_solver'")
   ;
 
 class_<XC::ArpackSOE, bases<XC::EigenSOE>, boost::noncopyable >("ArpackSOE", no_init)
