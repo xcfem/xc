@@ -1,14 +1,21 @@
 # -*- coding: utf-8 -*-
 
-#Test de funcionamiento del cálculo de la deformación en el alma
+#Verification test of the cálculo de la deformación en el alma
 #según el artículo 44.2.3.2.2 de EHE. Lo único que se pretende
 #con el test es comprobar que la fórmula está bien escrita en la macro.
 
 from __future__ import division
+
 import sys
 
 from materials.ehe import comprobVEHE08
 import math
+
+__author__= "Luis C. Pérez Tato (LCPT)"
+__copyright__= "Copyright 2014, LCPT"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com"
 
 #Coeficientes de seguridad.
 gammaC= 1.5
@@ -21,10 +28,10 @@ Md=0 #Valor absoluto del momento de cálculo.
 Vd=0 #Valor absoluto del cortante efectivo de cálculo (artículo 42.2.2).
 Td=0 #Torsor de cálculo.
 z=10 #Brazo mecánico.
-AsPas=1/4 #Área de la de la reinforcement longitudinal pasiva traccionada anclada a una distancia mayor que el depth útil de la sección en estudio.
-AsAct=1/8 #Área de la de la reinforcement longitudinal activa traccionada anclada a una distancia mayor que el depth útil de la sección en estudio.
-Es=1000 #Elastic modulus del acero de la reinforcement pasiva (AQUI FICTICIO).
-Ep=2000 #Elastic modulus del acero de la reinforcement activa (AQUI FICTICIO).
+AsPas=1/4 #de area la reinforcement longitudinal pasiva traccionada anclada a una distancia mayor que el depth útil de la sección en estudio.
+AsAct=1/8 #de area la reinforcement longitudinal activa traccionada anclada a una distancia mayor que el depth útil de la sección en estudio.
+Es=1000 #Elastic modulus of the steel de la reinforcement pasiva (AQUI FICTICIO).
+Ep=2000 #Elastic modulus of the steel de la reinforcement activa (AQUI FICTICIO).
 Fp=0 #Fuerza producida por el pretensado en la sección (positiva si es de tracción).
 Ae=0.01 #Área encerrada por la línea media de la sección hueca eficaz.
 ue=1 #Perímetro de la línea media de la sección hueca eficaz.

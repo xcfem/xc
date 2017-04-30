@@ -15,7 +15,7 @@ from solution import predefined_solutions
 from materials import typical_materials
 from model import fix_node_6dof
 
-E= 2.1e9 # Módulo de Young del acero.
+E= 2.1e9 # Young modulus of the steel.
 nu= 0.3 # Poisson's ratio.
 h= .1 # Espesor.
 L= 1.0 # Lado.

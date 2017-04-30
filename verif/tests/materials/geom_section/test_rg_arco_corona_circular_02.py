@@ -9,6 +9,12 @@ from model import predefined_spaces
 from materials import typical_materials
 import math
 
+__author__= "Luis C. Pérez Tato (LCPT)"
+__copyright__= "Copyright 2014, LCPT"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com"
+
 alpha= math.radians(45)
 R= 5*math.sqrt(2)
 r= 4.0*math.sqrt(2)

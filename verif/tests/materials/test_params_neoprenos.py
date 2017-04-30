@@ -4,6 +4,12 @@
 
 from materials import apoyosNeopreno
 
+__author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
+__copyright__= "Copyright 2015, LCPT and AOO"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com"
+
 G= 900e3 # Módulo de cortante del neopreno
 a= 0.3 # Dimensión paralela al eje del dintel.
 b= 0.3 # Dimensión normal al eje del dintel.

@@ -8,6 +8,12 @@ from model import predefined_spaces
 from materials import typical_materials
 import math
 
+__author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
+__copyright__= "Copyright 2015, LCPT and AOO"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com"
+
 Es= 2.1e11
 n= 7.365
 Ec= Es/n

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-#Test de funcionamiento del cálculo de Vsu.
+#Verification test of the cálculo de Vsu.
 #El resultado se compara con el obtenidos del ejercicio ER-CA-02 de
 #www.areadecalculo.com. Según la norma EHE-08».
 
@@ -10,17 +10,23 @@ import sys
 from materials.ehe import comprobVEHE08
 import math
 
-Nd=1224e3 #Axil de cálculo.
+__author__= "Luis C. Pérez Tato (LCPT)"
+__copyright__= "Copyright 2014, LCPT"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com"
+
+Nd=1224e3 #Design axial internal force.
 Md=0 #Momento de cálculo.
 Vd=125e3 #Cortante efectivo de cálculo (artículo 42.2.2).
 Td=0 #Torsor de cálculo.
 d=0.55 #Canto útil.
 z=0.9*d #Brazo mecánico.
 Asl=9.425e-4
-AsAct=0 #Área de la reinforcement activa
-AsTrsv=math.pi*(6e-3/2)**2*4/0.2 #Área de la reinforcement transversal
-Es=200e9 #Elastic modulus del acero de la reinforcement pasiva.
-Ep=Es #Elastic modulus del acero de la reinforcement activa.
+AsAct=0 #reinforcement area activa
+AsTrsv=math.pi*(6e-3/2)**2*4/0.2 #reinforcement area transversal
+Es=200e9 #Elastic modulus of the steel de la reinforcement pasiva.
+Ep=Es #Elastic modulus of the steel de la reinforcement activa.
 Fp=0 #Fuerza producida por el pretensado en la sección (positiva si es de tracción).
 Ae=0.01 #Área encerrada por la línea media de la sección hueca eficaz.
 ue=1 #Perímetro de la línea media de la sección hueca eficaz.

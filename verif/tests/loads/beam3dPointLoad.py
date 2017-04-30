@@ -11,11 +11,17 @@ from model import predefined_spaces
 from model import fix_node_6dof
 from materials import typical_materials
 
+__author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
+__copyright__= "Copyright 2015, LCPT and AOO"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com"
+
 E= 2e6 # Elastic modulus
 nu= 0.3 # Poisson's ratio
 G= E/(2*(1+nu)) # Shear modulus
 L= 20 # Bar length.
-h= 0.30 # Cross section height
+h= 0.30 # Cross section depth
 b= 0.2 # Cross section width.
 A= b*h # Cross section area.
 Iz= b*h**3/12 # Cross section moment of inertia

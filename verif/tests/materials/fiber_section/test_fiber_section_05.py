@@ -1,17 +1,23 @@
 # -*- coding: utf-8 -*-
-''' Test de funcionamiento de una sección de hormigón armado.
+''' Verification test of una sección de hormigón armado.
    los resultados se comparan con los obtenidos del prontuario.
    informático del hormigón estructural (Cátedra de hormigón de la ETSICCP-IECA
    UPM). '''
 
-# Macros
+
 import xc_base
 import geom
 import xc
 from misc import banco_pruebas_scc3d
 from solution import predefined_solutions
 
-areaFi16= 2.01e-4 # Área de las barras expresado en metros cuadrados.
+__author__= "Luis C. Pérez Tato (LCPT)"
+__copyright__= "Copyright 2014, LCPT"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com"
+
+areaFi16= 2.01e-4 # Área de las barras expressed in square meters.
 brazo= 0.5 # Brazo de las barras respecto al eje de la sección.
 
 
@@ -19,7 +25,7 @@ from materials.ehe import EHE_reinforcing_steel
 from model import fix_node_6dof
 
 # Coeficientes de seguridad.
-gammas= 1.15 # Coeficiente de minoración de la resistencia del acero.
+gammas= 1.15 # Coeficiente de minoración de la resistencia of the steel.
 
 
 MzDato= 10e3

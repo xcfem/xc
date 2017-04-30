@@ -1,21 +1,23 @@
 # -*- coding: utf-8 -*-
 # Home made test
-# Diagrama tensión deformación de cálculo del acero B400S
+# Design stress-strain diagram of B400S steel
 import xc_base
 import geom
 import xc
-
-
 from materials.ehe import EHE_reinforcing_steel
 from materials import reinforcingSteelTest
 
-
+__author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
+__copyright__= "Copyright 2015, LCPT and AOO"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com"
 
 # Model definition
 prueba= xc.ProblemaEF()
 prueba.logFileName= "/tmp/borrar.log" # Para no imprimir mensajes de advertencia
 preprocessor=  prueba.getPreprocessor
-# Definimos materiales
+# Define materials
 errMax= reinforcingSteelTest.testDiagDAceroArmar(preprocessor, EHE_reinforcing_steel.B400S)
 
 

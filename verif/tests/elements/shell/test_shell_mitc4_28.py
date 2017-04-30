@@ -16,7 +16,7 @@ from model import predefined_spaces
 from model import fix_node_6dof
 from materials import typical_materials
 
-E= 2.1e6 # Módulo de Young del acero.
+E= 2.1e6 # Young modulus of the steel.
 nu= 0.3 # Poisson's ratio.
 h= 0.1 # Espesor.
 dens= 1.33 # Densidad kg/m2.

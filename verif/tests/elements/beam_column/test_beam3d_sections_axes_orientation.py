@@ -31,7 +31,7 @@ import geom
 import xc
 import numpy as np
 import csv
-# Macros
+
 from materials.fiber_section import defSeccionHASimple
 from postprocess import RCMaterialDistribution
 from materials.sia262 import concreteSIA262 as concrete

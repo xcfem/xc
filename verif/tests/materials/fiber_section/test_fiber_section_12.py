@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Test de funcionamiento de una sección de hormigón pretensado.
+# Verification test of una sección de hormigón pretensado.
 from __future__ import division
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
@@ -8,8 +8,8 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
-# prueba.logFileName= "/tmp/borrar.log"  #Para no imprimir mensajes de advertencia.
-# Macros
+# prueba.logFileName= "/tmp/borrar.log"  #Ignore warning messages
+
 import xc_base
 import geom
 import xc

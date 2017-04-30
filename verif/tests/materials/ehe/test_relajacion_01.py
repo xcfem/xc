@@ -1,12 +1,24 @@
 # -*- coding: utf-8 -*-
-''' Test comprobación del cálculo del coeficiente de fluencia
+''' Verification test of the cálculo del coeficiente de fluencia
    según EHE-08. '''
 from __future__ import division
+
+__author__= "Luis C. Pérez Tato (LCPT)"
+__copyright__= "Copyright 2014, LCPT"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com"
 import xc_base
 import geom
 import xc
 
 from materials.ehe import relajacion_acero
+
+__author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
+__copyright__= "Copyright 2015, LCPT and AOO"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com"
 
 
 alpha= 0.7

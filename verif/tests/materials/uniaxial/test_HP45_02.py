@@ -15,11 +15,9 @@ from materials import typical_materials
 from materials import concreteBase
 from materials.ehe import EHE_concrete
 
-
-
 # Model definition
 prueba= xc.ProblemaEF()
-prueba.logFileName= "/tmp/borrar.log" # Para no imprimir mensajes de advertencia.
+prueba.logFileName= "/tmp/borrar.log" # Ignore warning messages
 preprocessor=  prueba.getPreprocessor
 HP45= EHE_concrete.HA45
 errMax= concreteBase.testTangDHormigon(preprocessor, HP45)

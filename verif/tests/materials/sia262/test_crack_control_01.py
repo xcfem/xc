@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
-''' Home-made Test de funcionamiento de la comprobación a fisuración de una sección de hormigón armado.
+''' Home-made Verification test of la comprobación a fisuración de una sección de hormigón armado.
 '''
 
 import xc_base
 import geom
 import xc
-# Macros
+
 from misc import banco_pruebas_scc3d
 from solution import predefined_solutions # Procedimiento de solución
 from materials.fiber_section import defSeccionHASimple
@@ -18,6 +18,12 @@ from materials.ehe import EHE_reinforcing_steel
 from materials.sia262 import steelSIA262
 from materials.sia262 import crackControlSIA262 as cc
 from model import fix_node_6dof
+
+__author__= "Luis C. Pérez Tato (LCPT)"
+__copyright__= "Copyright 2014, LCPT"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com"
 
 areaFi22= steelSIA262.section_barres_courantes[22e-3]
 areaFi26= steelSIA262.section_barres_courantes[26e-3]

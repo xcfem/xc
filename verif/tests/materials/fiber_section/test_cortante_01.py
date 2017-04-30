@@ -1,19 +1,12 @@
 # -*- coding: utf-8 -*-
-# Test de funcionamiento de la comprobación a cortante de una sección de hormigón armado.
+# Verification test of la comprobación a cortante de una sección de hormigón armado.
 #    Algunos resultados se comparan con los obtenidos del ejercicio ER-CS-01 de
 #    www.areadecalculo.com. Según la norma EHE-08».
 from __future__ import division
 
-__author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
-__copyright__= "Copyright 2015, LCPT and AOO"
-__license__= "GPL"
-__version__= "3.0"
-__email__= "l.pereztato@gmail.com"
 
-# Macros
 from misc import banco_pruebas_scc3d
 from solution import predefined_solutions
-
 
 from materials.ehe import EHE_concrete
 from materials.ehe import EHE_reinforcing_steel
@@ -28,13 +21,19 @@ from model import fix_node_6dof
 from materials import typical_materials
 import math
 
+__author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
+__copyright__= "Copyright 2015, LCPT and AOO"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com"
+
 # Coeficientes de seguridad.
 gammac= 1.5 # Coeficiente de minoración de la resistencia del hormigón.
-gammas= 1.15 # Coeficiente de minoración de la resistencia del acero.
+gammas= 1.15 # Coeficiente de minoración de la resistencia of the steel.
 
-width= 0.3 # Ancho de la sección expresado en metros.
-depth= 0.4 # Canto de la sección expresado en metros.
-cover= 0.05 # Recubrimiento de la sección expresado en metros.
+width= 0.3 # Section width expressed in meters.
+depth= 0.4 # Section depth expressed in meters.
+cover= 0.05 # Concrete cover expressed in meters.
 areaBarra=4e-4
 
 NDato= -400e3 # Axil para comprobar el cortante.

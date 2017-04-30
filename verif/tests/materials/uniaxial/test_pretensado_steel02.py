@@ -3,11 +3,11 @@
 # Comprobación pretensado en material de tipo steel02
 
 L= 1.0 # Bar length (m)
-E= 190e9 # Elastic modulus expresado en MPa
-A= 140e-6 # Área de la barra expresada en metros cuadrados
-fMax= 1860e6 # Carga unitaria máxima del material expresada en MPa.
-fy= 1171e6 # Tensión de límite elástico del material expresada en Pa.
-tInic= 0.75**2*fMax # Pretensado final (incial al 75 por ciento y 25 por ciento de pérdidas totales).
+E= 190e9 # Elastic modulus expressed in MPa
+A= 140e-6 # bar area expressed in square meters
+fMax= 1860e6 # Maximum unit load of the material expressed in MPa.
+fy= 1171e6 # Yield stress of the material expressed in Pa.
+tInic= 0.75**2*fMax # Effective prestress (0.75*P0 y 25% prestress losses).
 
 import math
 import xc_base
@@ -17,6 +17,12 @@ from solution import predefined_solutions
 from model import predefined_spaces
 from model import fix_node_6dof
 from materials import typical_materials
+
+__author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
+__copyright__= "Copyright 2015, LCPT and AOO"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com"
 
 # Problem type
 prueba= xc.ProblemaEF()

@@ -18,6 +18,12 @@
 # STATIC SIGN CONVENTION: forces and stresses are positive or negative according to their directions along the coordinate axes. 
 # DEFORMATION SIGN CONVENTION: forces and stresses are positive if they produce elongation (or tension).
 
+__author__= "Luis C. Pérez Tato (LCPT)"
+__copyright__= "Copyright 2014, LCPT"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com"
+
 # Material properties
 E= 2.1e6 # Elastic modulus (Pa)
 

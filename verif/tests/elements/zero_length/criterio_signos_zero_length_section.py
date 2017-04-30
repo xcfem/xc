@@ -38,7 +38,7 @@ Iy= 1/12.0*width*depth**3 # Cross section moment of inertia (m4)
 Iz= 1/12.0*depth*width**3 # Cross section moment of inertia (m4)
 
 # Geometry
-L= 0 # Longitud expresada en metros
+L= 0 # Longitud expressed in meters
 
 # Load
 F= 1e3 # Load magnitude (kN)

@@ -1,11 +1,17 @@
 # -*- coding: utf-8 -*-
-# Test de funcionamiento del comando «rotate» para una sección elástica en 3d.
+# Verification test of the comando «rotate» para una sección elástica en 3d.
 
 import xc_base
 import geom
 import xc
 from materials import typical_materials
 import math
+
+__author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
+__copyright__= "Copyright 2015, LCPT and AOO"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com"
 
 Iz= 4
 Iy= 1
@@ -15,7 +21,7 @@ ratio2= 10
 ratio3= 10
 prueba= xc.ProblemaEF()
 preprocessor=  prueba.getPreprocessor   
-# Definimos materiales
+# Define materials
 scc= typical_materials.defElasticSection3d(preprocessor, "scc",1,1,1,Iz,Iy,4)
 scc.sectionProperties.rotate(math.radians(45))
 

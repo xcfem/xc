@@ -3,6 +3,11 @@
 
 from materials.ehe import EHE_concrete
 
+__author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (A_OO)"
+__copyright__= "Copyright 2015, LCPT and AO_O"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com ana.ortega.ort@gmal.com"
 
 fck= 25e6
 gammac=1.5

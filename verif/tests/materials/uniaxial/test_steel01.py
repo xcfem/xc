@@ -1,14 +1,13 @@
 # -*- coding: utf-8 -*-
 # home made test
 
-fy= 2600 # Tensión de cedencia del acero.
-E= 2.1e6 # Módulo de Young del acero.
+fy= 2600 # Tensión de cedencia of the steel.
+E= 2.1e6 # Young modulus of the steel.
 l= 1 # Distancia entre nodes
 epsy= fy/E # Deformación para la que se produce la cedencia
 D= 1.5*epsy # Displacement magnitude impuesto
 F= 1.05*E*epsy # Fuerza a aplicar.
-Nsteps= 10 # Número de pasos para el análisis.
-
+Nsteps= 10 # number of analysis steps.
 
 import math
 import xc_base
@@ -19,6 +18,12 @@ from model import predefined_spaces
 from model import fix_node_6dof
 from model import cargas_nodo
 from materials import typical_materials
+
+__author__= "Luis C. Pérez Tato (LCPT)"
+__copyright__= "Copyright 2014, LCPT"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com"
 
 # Puntos de la función tensión - deformación
 x_modelo= [0.0002,0.0004,0.0006,0.0008,0.001,0.0012,0.0014,0.0016,0.0014,0.0012,0.001,0.0008,0.0006,0.0004,0.0002,8.13152e-20,-0.0002,-0.0004,-0.0006,-0.0008,-0.001,-0.0012,-0.0014,-0.0016,-0.0014,-0.0012,-0.001,-0.0008,-0.0006,-0.0004,-0.0002,-8.13152e-20,0.0002,0.0004,0.0006,0.0008,0.001,0.0012,0.0014,0.0016]
@@ -62,7 +67,7 @@ spc= coacciones.newSPConstraint(2,1,0.0) # Node 2
 # Loads definition
 cargas= preprocessor.getLoadLoader
 casos= cargas.getLoadPatterns
-#modulación de la carga en el tiempo:
+#time series for the load pattern:
 ts= casos.newTimeSeries("trig_ts","ts")
 ts.factor= 1
 ts.tStart= 0

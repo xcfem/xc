@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-''' Test de funcionamiento del cálculo del diagrama de interacción.
+''' Verification test of the cálculo del diagrama de interacción.
    Elaboración propia. '''
 from __future__ import division
 
@@ -9,7 +9,7 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
-# Macros
+
 import xc_base
 import geom
 import xc
@@ -22,10 +22,10 @@ import math
 gammac= 1.5  # concrete safety coefficient
 gammas= 1.15 # reinforcement steel safety coefficient
 
-radius= 0.75/2.0 # Radio de la sección expresado en metros.
-diam= 20e-3 # Diámetro de las barras expresado en metros.
-cover= 0.06+12e-3+diam/2.0 # Recubrimiento de la sección expresado en metros.
-areaFi20= math.pi*(diam/2.0)**2 # Área de las barras expresado en metros cuadrados.
+radius= 0.75/2.0 # Radio de la sección expressed in meters.
+diam= 20e-3 # Diámetro de las barras expressed in meters.
+cover= 0.06+12e-3+diam/2.0 # Concrete cover expressed in meters.
+areaFi20= math.pi*(diam/2.0)**2 # Área de las barras expressed in square meters.
 
 
 prueba= xc.ProblemaEF()

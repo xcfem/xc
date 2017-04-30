@@ -2,13 +2,20 @@
 # Home made test.
 
 from __future__ import division
+from actions.wind import windSIA261
+import math
+
+__author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
+__copyright__= "Copyright 2016, AOO and LCPT"
+__license__= "GPL"
+__version__= "1.0"
+__email__= "l.pereztato@gmail.com  ana.Ortega.Ort@gmail.com"
 
 E= 30e6 # Young modulus (psi)
 nu= 0.33 # Coeficiente de Poison
 rho= 1.5 # Densidad
 
-from actions.wind import windSIA261
-import math
+
 
 z= 10
 catTerrain= "III"

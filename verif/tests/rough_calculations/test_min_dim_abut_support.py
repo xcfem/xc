@@ -1,6 +1,11 @@
 # -*- coding: utf-8 -*-
 import rough_calculations.ng_min_dim_of_abutment_support
 
+__author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
+__copyright__= "Copyright 2015, LCPT and AOO"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com"
 
 b2= rough_calculations.ng_min_dim_of_abutment_support.getBminPontFlotant(45,"E","Z3a","COII")
 

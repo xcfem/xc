@@ -1,5 +1,12 @@
 # -*- coding: utf-8 -*-
 from __future__ import division
+
+__author__= "Luis C. Pérez Tato (LCPT)"
+__copyright__= "Copyright 2014, LCPT"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com"
+
 import math
 from rough_calculations import cable_stayed_bridge_simple_model as bm
 

@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-''' Test para comprobar el análisis modal espectral
+''' Test para comprobar el response spectrum modal analysis
 tomado de la publicación de Andrés Sáez Pérez: «Estructuras III»
  E.T.S. de Arquitectura de Sevilla (España). '''
 import xc_base
@@ -11,6 +11,12 @@ from model import predefined_spaces
 from solution import predefined_solutions
 from materials import typical_materials
 import math
+
+__author__= "Luis C. Pérez Tato (LCPT)"
+__copyright__= "Copyright 2014, LCPT"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com"
 
 masaPorPlanta= 134.4e3
 matrizMasasNodo= xc.Matrix([[masaPorPlanta,0,0],[0,masaPorPlanta,0],[0,0,0]])

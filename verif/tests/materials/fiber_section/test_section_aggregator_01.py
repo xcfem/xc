@@ -1,8 +1,14 @@
 # -*- coding: utf-8 -*-
-# Test de funcionamiento de una sección metálica rectangular de fibras de elastoplástico.
+# Verification test of una sección metálica rectangular de fibras de elastoplástico.
 #    elaborado a partir de Nociones de cálculo plástico. C. Benito Hernández.
 #    página 26 y siguientes.
 
+
+__author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
+__copyright__= "Copyright 2015, LCPT and AOO"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com"
 
 # Rectangular cross-section definition
 nmbSecc= "scc10x20"

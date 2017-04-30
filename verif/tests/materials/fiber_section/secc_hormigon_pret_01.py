@@ -6,10 +6,10 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
-width= 0.2 # Ancho de la sección expresado en metros.
-depth= 0.4 # Ancho de la sección expresado en metros.
-cover= 0.05 # Recubrimiento de la sección expresado en metros.
-areaCordones= 140e-6 # Área de los cordones expresada en metros cuadrados.
+width= 0.2 # Section width expressed in meters.
+depth= 0.4 # Section width expressed in meters.
+cover= 0.05 # Concrete cover expressed in meters.
+areaCordones= 140e-6 # Área de los cordones expressed in square meters.
 
 def gmSecHP01(nmbGeomSecc,concrDiagName,nmbDiagAceroPret):
   # Hormigón

@@ -39,7 +39,7 @@ preprocessor=  prueba.getPreprocessor
 nodes= preprocessor.getNodeLoader
 predefined_spaces.gdls_resist_materiales2D(nodes)
 
-# Definimos materiales
+# Define materials
 kY= typical_materials.defElasticMaterial(preprocessor, "kY",k*L/numDiv)
 nodes.newSeedNode()
 # Geometric transformations
@@ -47,7 +47,7 @@ trfs= preprocessor.getTransfCooLoader
 lin= trfs.newLinearCrdTransf2d("lin")
 
 
-# Definimos materiales
+# Define materials
 scc= typical_materials.defElasticSection2d(preprocessor, "scc",A,E,I)
 
 
@@ -135,7 +135,7 @@ yAdimCentroVano= l1LastNode.getDisp[1]/EIbeta3
 
 
 ''' El valor adimensional de la flecha en el centro del vano
-se midió en la figura 2 del artículo «Beams o quasi-Winkler
+se midió en la figura 2 of the article «Beams o quasi-Winkler
 foundations» de M. N. Pavlovic y S. Tsikkos. '''
 yAdimCentroVanoTeor= 0.12353
 ratio1= beta*L-3*math.pi

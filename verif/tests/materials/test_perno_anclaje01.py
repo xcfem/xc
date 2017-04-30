@@ -8,6 +8,12 @@ from materials.pernos_anclaje import EOTA_TR029_traccion
 import math
 import geom
 
+__author__= "Luis C. Pérez Tato (LCPT)"
+__copyright__= "Copyright 2014, LCPT"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com"
+
 def sqr(a):
   return a*a
 

@@ -1,7 +1,13 @@
 # -*- coding: utf-8 -*-
 # home made test
 
-E= 2.1e6 # Módulo de Young del acero en kg/cm2.
+__author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
+__copyright__= "Copyright 2015, LCPT and AOO"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com"
+
+E= 2.1e6 # Young modulus of the steel en kg/cm2.
 nu= 0.3 # Poisson's ratio.
 h= 0.1 # Espesor.
 dens= 1.33 # Densidad kg/m2.

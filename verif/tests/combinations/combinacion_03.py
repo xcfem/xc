@@ -10,6 +10,11 @@ from model import predefined_spaces
 from model import fix_node_6dof
 from materials import typical_materials
 
+__author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
+__copyright__= "Copyright 2015, LCPT and AOO"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com"
 
 prueba= xc.ProblemaEF()
 preprocessor=  prueba.getPreprocessor  

@@ -9,6 +9,12 @@ import xc
 from materials.perfiles_metalicos.arcelor import perfiles_ipe_arcelor as ipe
 from materials import aceros_estructurales as steel
 
+__author__= "Luis C. Pérez Tato (LCPT)"
+__copyright__= "Copyright 2014, LCPT"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com"
+
 test= xc.ProblemaEF()
 preprocessor=  test.getPreprocessor
 

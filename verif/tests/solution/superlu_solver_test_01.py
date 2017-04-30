@@ -9,6 +9,12 @@ from model import predefined_spaces
 from solution import predefined_solutions
 from materials import typical_materials
 
+__author__= "Luis C. Pérez Tato (LCPT)"
+__copyright__= "Copyright 2014, LCPT"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com"
+
 E= 30e6 # Young modulus (psi)
 l= 10 # Bar length in inches
 a= 0.3*l # Longitud del tramo a

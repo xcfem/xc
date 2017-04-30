@@ -7,11 +7,17 @@ import geom
 import xc
 from materials.ehe import EHE_concrete
 
+__author__= "Luis C. Pérez Tato (LCPT)"
+__copyright__= "Copyright 2014, LCPT"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com"
+
 concrHA30=EHE_concrete.HA30
 concrHA30.cemType='N'
 fckHA30= 30e6 # Resistencia característica del hormigón HA-30.
 Hrel= 0.8 # Humedad relativa del aire.
-Ec= 2e5*9.81/1e-4 # Módulo de Young del hormigón en Pa.
+Ec= 2e5*9.81/1e-4 # Young modulus del hormigón en Pa.
 nuC= 0.2 # Poisson's ratio del hormigón EHE-08.
 hLosa= 0.2 # Espesor.
 densLosa= 2500*hLosa # Densidad de la losa kg/m2.
@@ -27,11 +33,11 @@ F= 5.5e4 # Load magnitude en N
 tS= 7 # Inicio del secado.
 
 # Armadura activa
-Ep= 190e9 # Elastic modulus expresado en MPa
-Ap= 140e-6 # Área de la barra expresada en metros cuadrados
-fMax= 1860e6 # Carga unitaria máxima del material expresada en MPa.
-fy= 1171e6 # Tensión de límite elástico del material expresada en Pa.
-tInic= 0.75**2*fMax # Pretensado final (incial al 75 por ciento y 25 por ciento de pérdidas totales).
+Ep= 190e9 # Elastic modulus expressed in MPa
+Ap= 140e-6 # bar area expressed in square meters
+fMax= 1860e6 # Maximum unit load of the material expressed in MPa.
+fy= 1171e6 # Yield stress of the material expressed in Pa.
+tInic= 0.75**2*fMax # Effective prestress (0.75*P0 y 25% prestress losses).
 
 import xc_base
 import geom

@@ -22,7 +22,7 @@ nDivIJ= 2
 nDivJK= 2
 y0= 0
 z0= 0
-L= 1 # Longitud del elmento expresada en metros.
+L= 1 # Longitud del elmento expressed in meters.
 
 # Problem type
 prueba= xc.ProblemaEF()
@@ -38,8 +38,8 @@ lin= trfs.newLinearCrdTransf3d("lin")
 lin.xzVector= xc.Vector([0,1,0])
 
 # Materials definition
-fy= 275e6 # Tensión de cedencia del acero.
-E= 210e9 # Módulo de Young del acero.
+fy= 275e6 # Tensión de cedencia of the steel.
+E= 210e9 # Young modulus of the steel.
 acero= typical_materials.defSteel01(preprocessor, "acero",E,fy,0.001)
 
 # Secciones

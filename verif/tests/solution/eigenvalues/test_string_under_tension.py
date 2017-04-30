@@ -14,6 +14,12 @@ from solution import predefined_solutions
 from materials import typical_materials
 import math
 
+__author__= "Luis C. Pérez Tato (LCPT)"
+__copyright__= "Copyright 2014, LCPT"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com"
+
 NumDiv= 13
 E= 30e6 # Young modulus (psi)
 l= 100.0 # Longitud de la cuerda in inches

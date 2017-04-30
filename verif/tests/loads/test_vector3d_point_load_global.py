@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 from __future__ import division
-# -*- coding: utf-8 -*-
 # home made test
 # Reference:  Expresiones de la flecha el el Prontuario de
 # Estructuras Metálicas del CEDEX. Apartado 3.3 Carga puntual sobre ménsula.
@@ -15,12 +14,18 @@ from model import fix_node_6dof
 from materials import typical_materials
 import math
 
+__author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
+__copyright__= "Copyright 2015, LCPT and AOO"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com"
+
 
 E= 2e6 # Elastic modulus
 nu= 0.3 # Poisson's ratio
 G= E/(2*(1+nu)) # Shear modulus
 L= 20 # Bar length.
-h= 0.30 # Cross section height
+h= 0.30 # Cross section depth
 b= 0.20 # Cross section width.
 A= b*h # Cross section area.
 Iz= b*h**3/12.0 # Cross section moment of inertia

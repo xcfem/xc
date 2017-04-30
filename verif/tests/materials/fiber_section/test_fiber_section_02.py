@@ -1,8 +1,13 @@
 # -*- coding: utf-8 -*-
-# Test de funcionamiento de una sección metálica rectangular de fibras de material elastoplástico.
+# Verification test of una sección metálica rectangular de fibras de material elastoplástico.
 #    elaborado a partir de «Nociones de cálculo plástico». C. Benito Hernández.
 #    página 26 y siguientes.
 
+__author__= "Luis C. Pérez Tato (LCPT)"
+__copyright__= "Copyright 2014, LCPT"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com"
 
 # Rectangular cross-section definition
 from materials import sccRectg
@@ -19,11 +24,11 @@ from misc import banco_pruebas_scc3d
 
 prueba= xc.ProblemaEF()
 preprocessor=  prueba.getPreprocessor
-prueba.logFileName= "/tmp/borrar.log" # Para no imprimir mensajes de advertencia.
+prueba.logFileName= "/tmp/borrar.log" # Ignore warning messages
 
 scc10x20= sccRectg.sccRectang()
 scc10x20.b= 10 # Cross section width [cm]
-scc10x20.h= 20 # Cross section height [cm]
+scc10x20.h= 20 # Cross section depth [cm]
 scc10x20.nDivIJ= 32
 scc10x20.nDivJK= 32
 
@@ -35,8 +40,8 @@ if(not pth):
 execfile(pth+"/macros_test_fiber_section.py")
 
 
-fy= 2600 # Tensión de cedencia del material expresada en kp/cm2.
-E= 2.1e6 # Módulo de Young del material en kp/cm2.
+fy= 2600 # Tensión de cedencia of the material expressed in kp/cm2.
+E= 2.1e6 # Young modulus of the material en kp/cm2.
 
 # Materials definition
 epp= typical_materials.defElasticPPMaterial(preprocessor, "epp",E,fy,-fy)

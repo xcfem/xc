@@ -1,10 +1,13 @@
 # -*- coding: utf-8 -*-
 
-#*    Nov. 2015   Ana Ortega    *
-
 from __future__ import division
 from materials.ec2 import EC2_concrete
 
+__author__= "Ana Ortega (AO_O) "
+__copyright__= "Copyright 2015, AO_O"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "ana.ortega@ciccp.es "
 
 fckDat=[12,16,20,25,30,35,40,45,50,55,60,70,80,90]
 fcmCalc=[]

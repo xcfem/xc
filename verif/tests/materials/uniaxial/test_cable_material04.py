@@ -11,6 +11,12 @@ from model import fix_node_6dof
 from materials import typical_materials
 import math
 
+__author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
+__copyright__= "Copyright 2015, LCPT and AOO"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com"
+
 E= 30e6 # Young modulus (psi)
 l= 10 # Cable length in inches
 sigmaPret= 1500 # Prestressing force (pounds)
@@ -63,7 +69,7 @@ lPattern= "0"
 lp0= casos.newLoadPattern("default",lPattern)
 #casos.currentLoadPattern= lPattern
 lp0.newNodalLoad(2,xc.Vector([0,-F,0,0,0,0]))
-casos.addToDomain(lPattern) # Añadimos la hipótesis al dominio
+casos.addToDomain(lPattern) # Añadimos la hipótesis to the domain
 
 # Procedimiento de solución
 analisis= predefined_solutions.simple_newton_raphson(prueba)

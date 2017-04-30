@@ -1,5 +1,12 @@
 # -*- coding: utf-8 -*-
 # Home made test
+
+__author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
+__copyright__= "Copyright 2015, LCPT and AOO"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com"
+
 # Obtención de las rigideces de un apoyo de neopreno rectangular.
 
 from materials.sia263 import fatigueControlSIA263 as fc

@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Test de funcionamiento del comando addFiber
+# Verification test of the comando addFiber
 import xc_base
 import geom
 import xc
@@ -7,6 +7,11 @@ from solution import predefined_solutions
 from model import predefined_spaces
 from materials import typical_materials
 
+__author__= "Luis C. Pérez Tato (LCPT)"
+__copyright__= "Copyright 2014, LCPT"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com"
 
 yF= 2.0
 F= 2100
@@ -18,7 +23,7 @@ eps= F/(Area*Es)
 
 # Problem type
 prueba= xc.ProblemaEF()
-prueba.logFileName= "/tmp/borrar.log" # Para no imprimir mensajes de advertencia.
+prueba.logFileName= "/tmp/borrar.log" # Ignore warning messages
 preprocessor=  prueba.getPreprocessor
 nodes= preprocessor.getNodeLoader
 predefined_spaces.gdls_resist_materiales2D(nodes)
@@ -29,7 +34,7 @@ nod= nodes.newNodeXY(1,0)
 nod= nodes.newNodeXY(1,0)
 
 
-# Definimos materiales
+# Define materials
 A= 0.0
 yG= 0.0
 

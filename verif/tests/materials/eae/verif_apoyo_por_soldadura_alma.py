@@ -7,25 +7,30 @@ de la instrucción EAE.'''
 from materials.eae import apoyo_por_soldadura_alma
 import math
 
+__author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
+__copyright__= "Copyright 2015, LCPT and AOO"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com"
 
 # Loads
 Vd= 8585*9.81 # Valor de cálculo de la carga
 
 # Geometry
-h= 270e-3 # Canto de la viga expresado en metros.
-tw= 6.6e-3 # Espesor del alma expresado en metros.
-a= 4e-3 # Espesor de garganta expresado en metros.
+h= 270e-3 # Beam cross-section depth expressed in meters.
+tw= 6.6e-3 # Espesor del alma expressed in meters.
+a= 4e-3 # Espesor de garganta expressed in meters.
 l= 5.15925e-2 # Longitud de los cordones.
 
 # Material properties
 fy= 275e6 # Acero S-275-JR
 fyd= fy/1.1 # Minoración límite elástico
-fu= 430e6 # Resistencia a tracción  del acero de las piezas a soldar S-275-JR (tabla 59.8.2 pág 304 EAE).
-Es= 2e11 # Elastic modulus del acero.
+fu= 430e6 # Resistencia a tracción  of the steel de las piezas a soldar S-275-JR (tabla 59.8.2 pág 304 EAE).
+Es= 2e11 # Elastic modulus of the steel.
 
 # DATOS seguridad
 betaW= 0.8 # Coeficiente de correlación para S-275 (tabla 59.8.2 pág 304 EAE).
-gammaMw= 1.0/math.sqrt(3) # Coeficiente de minoración del acero para uniones (artículo 59.8.2 página 304 EAE).
+gammaMw= 1.0/math.sqrt(3) # Coeficiente de minoración of the steel para uniones (artículo 59.8.2 página 304 EAE).
 
 
 

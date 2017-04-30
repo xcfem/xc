@@ -7,6 +7,12 @@ from materials.sia262 import concreteSIA262
 from materials.sia262 import steelSIA262
 from materials.sia262 import minimal_reinforcement
 
+__author__= "Luis C. Pérez Tato (LCPT)"
+__copyright__= "Copyright 2014, LCPT"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com"
+
 fctm= concreteSIA262.c25_30.fctm()/1e6
 ratio1= abs(fctm-2.56496392002)/2.56496392002
 

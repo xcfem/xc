@@ -1,12 +1,6 @@
 # -*- coding: utf-8 -*-
 
 
-__author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
-__copyright__= "Copyright 2015, LCPT and AOO"
-__license__= "GPL"
-__version__= "3.0"
-__email__= "l.pereztato@gmail.com"
-
 import xc_base
 import geom
 import xc
@@ -18,9 +12,15 @@ from materials import RCsectionsContainer as sc
 from solution import predefined_solutions
 from materials.sia262 import normalStressesSIA262 as ns #Change SIA262->EHE
 
+__author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
+__copyright__= "Copyright 2015, LCPT and AOO"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com"
+
 prueba= xc.ProblemaEF()
 prueba.logFileName= "/tmp/borrar.log" # Para no imprimir mensajes de advertencia
-prueba.errFileName= "/tmp/borrar.err" # Para no imprimir mensajes de advertencia sobre error máximo en cálculo del diagrama de interacción.
+prueba.errFileName= "/tmp/borrar.err" # Ignore warning messagessobre error máximo en cálculo del diagrama de interacción.
 
 import os
 pth= os.path.dirname(__file__)
@@ -41,7 +41,7 @@ for eTag in elementTags:
 concrete= EHE_concrete.HA30
 concrete.alfacc=0.85  #f_maxd= 0.85*fcd coef. de fatiga del hormigón (en general alfacc=1)
 reinfSteel= EHE_reinforcing_steel.B500S
-areaFi8= 0.50e-4 #XXX Área de las barras expresado en metros cuadrados.
+areaFi8= 0.50e-4 #XXX Área de las barras expressed in square meters.
 areaFi10=0.785e-4
 areaFi12=1.13e-4 
 areaFi16= 2.01e-4

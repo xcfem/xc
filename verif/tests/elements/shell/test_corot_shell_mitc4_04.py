@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-''' Tomado de la página 114 del artículo Development of Membrane, Plate and
+''' Tomado de la página 114 of the article Development of Membrane, Plate and
  Flat Shell Elements in Java '''
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
@@ -16,9 +16,9 @@ from model import predefined_spaces
 from materials import typical_materials
 
 L= 6.0 # Longitud de la viga expresada in inches.
-h= 0.8 # Canto de la viga expresado in inches.
-t= 1 # Ancho de la viga expresado in inches.
-E= 30000 # Módulo de Young del material expresado en ksi.
+h= 0.8 # Beam cross-section depth expressed in inches.
+t= 1 # Beam cross-section width expressed in inches.
+E= 30000 # Young modulus of the material expressed in ksi.
 nu= 0.3 # Poisson's ratio.
 # Load
 F= 10 # Load magnitude en kips

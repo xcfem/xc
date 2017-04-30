@@ -8,6 +8,12 @@ import os
 from model import predefined_spaces
 from materials import typical_materials
 
+__author__= "Luis C. Pérez Tato (LCPT)"
+__copyright__= "Copyright 2014, LCPT"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com"
+
 ndivX= 5
 ndivY= 8
 ndivZ= 2
@@ -15,7 +21,7 @@ ndivZ= 2
 # Problem type
 prueba= xc.ProblemaEF()
 preprocessor=  prueba.getPreprocessor
-# Definimos materiales
+# Define materials
 elast3d= typical_materials.defElasticIsotropic3d(preprocessor, "elast3d",30e6,0.3,0.0)
 
 nodes= preprocessor.getNodeLoader

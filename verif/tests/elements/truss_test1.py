@@ -28,7 +28,7 @@ preprocessor=  prueba.getPreprocessor
 nodes= preprocessor.getNodeLoader
 
 predefined_spaces.gdls_elasticidad2D(nodes)
-nodes.defaultTag= 1 #El número del próximo nodo será 1.
+nodes.defaultTag= 1 #Number for next node will be 1.
 nodes.newNodeXYZ(0,0,0)
 nodes.newNodeXYZ(0,l-a-b,0)
 nodes.newNodeXYZ(0,l-a,0)
@@ -40,7 +40,7 @@ elast= typical_materials.defElasticMaterial(preprocessor, "elast",E)
 # la carga. Puesto que no se van a determinar tensiones
 # se emplea una sección arbitraria de área unidad
 elements= preprocessor.getElementLoader
-elements.dimElem= 2 #Las barras se definen e un espacio bidimensional.
+elements.dimElem= 2 #Bars defined ina a two dimensional space.
 elements.defaultMaterial= "elast"
 elements.defaultTag= 1 #Tag for the next element.
 truss= elements.newElement("truss",xc.ID([1,2]));
@@ -51,21 +51,21 @@ truss= elements.newElement("truss",xc.ID([3,4]));
 truss.area= 1
 
 coacciones= preprocessor.getConstraintLoader
-#Impedimos el movimiento del nodo 1.
+#Constrain the displacement of node 1.
 spc= coacciones.newSPConstraint(1,0,0.0)
 spc= coacciones.newSPConstraint(1,1,0.0)
-#Impedimos el movimiento del nodo 4.
+#Constrain the displacement of node 4.
 spc= coacciones.newSPConstraint(4,0,0.0)
 spc= coacciones.newSPConstraint(4,1,0.0)
-#Impedimos el movimiento del nodo 2 según X (gdl 0).
+#Constrain the displacement of node 2 in X axis (gdl 0).
 spc= coacciones.newSPConstraint(2,0,0.0)
-#Impedimos el movimiento del nodo 3 según X (gdl 0).
+#Constrain the displacement of node 3 in X axis (gdl 0).
 spc= coacciones.newSPConstraint(3,0,0.0)
 
 cargas= preprocessor.getLoadLoader
 #Contenedor de hipótesis de carga:
 casos= cargas.getLoadPatterns
-#modulación de la carga en el tiempo:
+#time series for the load pattern:
 ts= casos.newTimeSeries("constant_ts","ts")
 casos.currentTimeSeries= "ts"
 #Load case definition
@@ -73,7 +73,7 @@ lp0= casos.newLoadPattern("default","0")
 lp0.newNodalLoad(2,xc.Vector([0,-F2]))
 lp0.newNodalLoad(3,xc.Vector([0,-F1]))
 
-#Agregamos el caso de carga al dominio.
+#Add the load pattern to the domain.
 casos.addToDomain("0")
 
 # Solution

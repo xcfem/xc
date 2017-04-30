@@ -1,14 +1,13 @@
 # -*- coding: utf-8 -*-
 
 from __future__ import division
+from materials.ehe import EHE_concrete
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
 __copyright__= "Copyright 2015, LCPT and AOO"
 __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
-
-from materials.ehe import EHE_concrete
 
 fckDat=[20,25,30,35,40,45,50,55,60,70,80,90,100]
 fcmCalc=[]

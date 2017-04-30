@@ -10,10 +10,15 @@ from solution import predefined_solutions
 from materials import typical_materials
 import math
 
+__author__= "Luis C. Pérez Tato (LCPT)"
+__copyright__= "Copyright 2014, LCPT"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com"
 
-L= 1 # Longitud de la ménsula en metros
-b= 0.05 # Cross section width en metros
-h= 0.10 # Cross section heighten metros
+L= 1 # Longitud de la ménsula en meters
+b= 0.05 # Cross section width en meters
+h= 0.10 # Cross section depth en meters
 A= b*h # Cross section area en m2
 I= 1/12.0*b*h**3 # Momento de inercia en m4
 J= 10*I # Cross section torsion constant
@@ -21,7 +26,7 @@ theta= math.radians(30)
 E=2.0E11 # Elastic modulus en N/m2
 nu= 0.3 # Poisson's ratio
 G= E/(2*(1+nu)) # Shear modulus
-dens= 7800 # Densidad del acero en kg/m3
+dens= 7800 # Densidad of the steel en kg/m3
 m= A*dens
 
 NumDiv= 10
@@ -31,7 +36,7 @@ preprocessor=  prueba.getPreprocessor
 nodes= preprocessor.getNodeLoader
 
 predefined_spaces.gdls_resist_materiales3D(nodes)
-# Definimos materiales
+# Define materials
 scc= typical_materials.defElasticSection3d(preprocessor, "scc",A,E,G,I,I,J)
 
 

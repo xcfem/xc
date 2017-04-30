@@ -9,6 +9,12 @@ from materials.sia262 import minimal_reinforcement
 from materials.sia262 import shearSIA262
 from rough_calculations import ng_simple_bending_reinforcement
 
+__author__= "Luis C. Pérez Tato (LCPT)"
+__copyright__= "Copyright 2014, LCPT"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com"
+
 beton= concreteSIA262.c25_30
 acier= steelSIA262.B500A
 acier.gammaS= 1.15 #EC2 takes 500/435

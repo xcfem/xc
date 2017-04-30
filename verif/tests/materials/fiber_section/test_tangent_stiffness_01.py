@@ -8,12 +8,18 @@ from model import predefined_spaces
 from solution import predefined_solutions
 from materials import typical_materials
 
-width= 0.2 # Cross section width expresado en metros.
-depth= 0.4 # Cross section width expresado en metros.
-E= 2.1e6 # Módulo de Young del material en kp/cm2.
+__author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
+__copyright__= "Copyright 2015, LCPT and AOO"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com"
+
+width= 0.2 # Cross section width expressed in meters.
+depth= 0.4 # Cross section width expressed in meters.
+E= 2.1e6 # Young modulus of the material en kp/cm2.
 prueba= xc.ProblemaEF()
 preprocessor=  prueba.getPreprocessor
-# Definimos materiales
+# Define materials
 
 ela= typical_materials.defElasticMaterial(preprocessor, "ela",E)
 

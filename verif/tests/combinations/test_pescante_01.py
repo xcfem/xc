@@ -2,6 +2,7 @@
 
 from __future__ import division
 
+
 b= 0.4
 h= 0.8
 A= b*h
@@ -20,6 +21,11 @@ from solution import predefined_solutions
 from model import predefined_spaces
 from model import fix_node_6dof
 from materials import typical_materials
+__author__= "Luis C. Pérez Tato (LCPT)"
+__copyright__= "Copyright 2014, LCPT"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com"
 
 #
 #     3   2     4

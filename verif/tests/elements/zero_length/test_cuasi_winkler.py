@@ -39,7 +39,7 @@ preprocessor=  prueba.getPreprocessor
 nodes= preprocessor.getNodeLoader
 predefined_spaces.gdls_resist_materiales2D(nodes)
 
-# Definimos materiales
+# Define materials
 kY= typical_materials.defElastNoTensMaterial(preprocessor, "kY",k*L/numDiv)
 nodes.newSeedNode()
 # Geometric transformations
@@ -143,7 +143,7 @@ for n in l2.getNodes():
 
 
 ''' Los valores adimensionales de la flecha mínima en el centro del vano
-y la máxima próxima al apoyo se midieron en la figura 2 del artículo
+y la máxima próxima al apoyo se midieron en la figura 2 of the article
 «Beams on quasi-Winkler foundations» de M. N. Pavlovic y S. Tsikkos. '''
 yAdimCentroVanoTeor= -0.1254
 yAdimMaximaTeor= 0.0229

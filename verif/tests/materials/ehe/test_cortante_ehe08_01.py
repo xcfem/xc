@@ -1,12 +1,17 @@
 # -*- coding: utf-8 -*-
 
 
-#Test comprobación del cálculo del cortante de agotamiento por compresión oblicua del alma (Vu1) según el artículo 44.2.3.1 de EHE-08.
+#Verification test of the cálculo del cortante de agotamiento por compresión oblicua del alma (Vu1) según el artículo 44.2.3.1 de EHE-08.
 import sys
 
 from materials.ehe import comprobVEHE08
 import math
 
+__author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
+__copyright__= "Copyright 2015, LCPT and AOO"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com"
 
 fck=30e6
 fcd=fck/1.5

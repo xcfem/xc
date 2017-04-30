@@ -2,11 +2,17 @@
 # Test from Ansys manual
 # Reference:  Strength of Material, Part I, Elementary Theory & Problems, pg. 98, problem 4
 
+__author__= "Luis C. Pérez Tato (LCPT)"
+__copyright__= "Copyright 2014, LCPT"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com"
+
 E= 30e6 # Young modulus (psi)
 l= 20*12 # Bar length in inches
 a= 10*12 # Longitud del voladizo
-h= 30 # Canto de la viga in inches.
-A= 50.65 # Área de la viga in inches cuadradas
+h= 30 # Beam cross-section depth in inches.
+A= 50.65 # viga area in inches cuadradas
 I= 7892 # Inercia de la viga in inches a la cuarta
 w= 10000/12 # Load por unidad de longitud (pounds)/pulgada.
 

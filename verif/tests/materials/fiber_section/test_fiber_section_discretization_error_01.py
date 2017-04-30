@@ -9,6 +9,12 @@ from model import predefined_spaces
 from solution import predefined_solutions
 from materials import typical_materials
 
+__author__= "Luis C. Pérez Tato (LCPT)"
+__copyright__= "Copyright 2014, LCPT"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com"
+
 width= 1
 depth= 2
 areaTeor= width*depth

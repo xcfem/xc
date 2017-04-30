@@ -1,9 +1,4 @@
 # -*- coding: utf-8 -*-
-__author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (A_OO)"
-__copyright__= "Copyright 2015, LCPT and AO_O"
-__license__= "GPL"
-__version__= "3.0"
-__email__= "l.pereztato@gmail.com ana.ortega.ort@gmal.com"
 
 # Test for checking the reg_cuad command
 
@@ -12,6 +7,12 @@ import xc_base
 import geom
 import xc
 from materials import typical_materials
+
+__author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (A_OO)"
+__copyright__= "Copyright 2015, LCPT and AO_O"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com ana.ortega.ort@gmal.com"
 
 width= 10 # Cross-section width [cm]
 depth= 20 # Cross-section height [cm]

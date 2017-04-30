@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
-''' Test de funcionamiento de una sección de hormigón armado.
+''' Verification test of una sección de hormigón armado.
    los resultados se comparan con los obtenidos del prontuario.
    informático del hormigón estructural (Cátedra de hormigón de la ETSICCP-IECA
    UPM). '''
 
-# prueba.logFileName= "/tmp/borrar.log"  #Para no imprimir mensajes de advertencia.
-# Macros
+# prueba.logFileName= "/tmp/borrar.log"  #Ignore warning messages
+
 import xc_base
 import geom
 import xc
@@ -18,7 +18,13 @@ from materials.ehe import EHE_reinforcing_steel
 from materials.fiber_section import createFiberSets
 from model import fix_node_6dof
 
-MzDato= 55.949e3 #El prontuario informático sólo llega hasta ~54.4 kN m al considerar el diagrama simplificado del acero.
+__author__= "Luis C. Pérez Tato (LCPT)"
+__copyright__= "Copyright 2014, LCPT"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com"
+
+MzDato= 55.949e3 #El prontuario informático sólo llega hasta ~54.4 kN m al considerar el diagrama simplificado of the steel.
 NDato= 0.0 
 prueba= xc.ProblemaEF()
 preprocessor=  prueba.getPreprocessor

@@ -1,14 +1,20 @@
 # -*- coding: utf-8 -*-
-''' Test de funcionamiento del cálculo del diagrama de interacción.
+''' Verification test of the cálculo del diagrama de interacción.
    Elaboración propia. Carga el diagrama de interacción obtenido en test_diag_interaccion01. '''
 from __future__ import division
-# Macros
+
 import xc_base
 import geom
 import xc
 
 from materials.ehe import EHE_concrete
 from materials.ehe import EHE_reinforcing_steel
+
+__author__= "Luis C. Pérez Tato (LCPT)"
+__copyright__= "Copyright 2014, LCPT"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com"
 
 prueba= xc.ProblemaEF()
 preprocessor=  prueba.getPreprocessor

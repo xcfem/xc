@@ -18,7 +18,7 @@ from materials.ehe import EHE_concrete
 
 # Model definition
 prueba= xc.ProblemaEF()
-prueba.logFileName= "/tmp/borrar.log" # Para no imprimir mensajes de advertencia.
+prueba.logFileName= "/tmp/borrar.log" # Ignore warning messages
 mdlr= prueba.getPreprocessor
 concr=EHE_concrete.HA25
 concr.alfacc=0.85 #f_maxd= 0.85*fcd

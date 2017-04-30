@@ -3,6 +3,12 @@
 import math
 from rough_calculations import ng_isolated_footing as za
 
+__author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
+__copyright__= "Copyright 2015, LCPT and AOO"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com"
+
 footing= za.IsolatedFooting(1.0)
 iBeta01= footing.getNearSlopeReductionFactor(math.radians(30),8*footing.Lzapata)
 iBeta02= footing.getNearSlopeReductionFactor(math.atan(2/3.0),0.0)

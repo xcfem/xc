@@ -6,6 +6,12 @@ from __future__ import division
 import sys
 import materials.sia262.anchorage
 
+__author__= "Luis C. Pérez Tato (LCPT)"
+__copyright__= "Copyright 2014, LCPT"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com"
+
 phi= 12e-3
 fsd= 435e6
 fck= 16e6

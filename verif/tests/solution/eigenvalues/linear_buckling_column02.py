@@ -17,9 +17,15 @@ from solution import predefined_solutions
 from materials import typical_materials
 import math
 
-L= 4 # Longitud de la columna en metros
-b= 0.2 # Cross section width en metros
-h= 0.2 # Cross section heighten metros
+__author__= "Luis C. Pérez Tato (LCPT)"
+__copyright__= "Copyright 2014, LCPT"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com"
+
+L= 4 # Longitud de la columna en meters
+b= 0.2 # Cross section width en meters
+h= 0.2 # Cross section depth en meters
 A= b*h # Cross section area en m2
 I= 1/12.0*b*h**3 # Momento de inercia en m4
 E=30E9 # Elastic modulus en N/m2

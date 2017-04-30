@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
-''' Test de funcionamiento de una sección de hormigón armado.
+''' Verification test of una sección de hormigón armado.
    Elaboración propia. '''
 
-# Macros
+
 import math
 import xc_base
 import geom
@@ -13,15 +13,21 @@ from materials.ehe import EHE_concrete
 from materials.ehe import EHE_reinforcing_steel
 from materials import reinforcingSteelTest
 
+__author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (A_OO)"
+__copyright__= "Copyright 2015, LCPT and AO_O"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com ana.ortega.ort@gmal.com"
+
 # Coeficientes de seguridad.
 gammac= 1.5 # Coeficiente de minoración de la resistencia del hormigón.
-gammas= 1.15 # Coeficiente de minoración de la resistencia del acero.
+gammas= 1.15 # Coeficiente de minoración de la resistencia of the steel.
 
-width= 0.2 # Ancho de la sección expresado en metros.
-depth= 0.4 # Ancho de la sección expresado en metros.
-cover= 0.05 # Recubrimiento de la sección expresado en metros.
-diam= 16e-3 # Diámetro de las barras expresado en metros.
-areaFi16= 2.01e-4 # Área de las barras expresado en metros cuadrados.
+width= 0.2 # Section width expressed in meters.
+depth= 0.4 # Section width expressed in meters.
+cover= 0.05 # Concrete cover expressed in meters.
+diam= 16e-3 # Diámetro de las barras expressed in meters.
+areaFi16= 2.01e-4 # Área de las barras expressed in square meters.
 
 e1= -10e-3 # Deformación axil de prueba 1.
 sgc1= EHE_concrete.HA25.sigmac(e1)
@@ -51,7 +57,7 @@ prueba= xc.ProblemaEF()
 prueba.logFileName= "/tmp/borrar.log" # Don't print warnings.
 
 preprocessor=  prueba.getPreprocessor
-# Definimos materiales
+# Define materials
 tag= EHE_concrete.HA25.defDiagD(preprocessor)
 dgDHA25= EHE_concrete.HA25.getDiagD(preprocessor)
 Ec= dgDHA25.getTangent

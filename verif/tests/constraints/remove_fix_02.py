@@ -1,5 +1,12 @@
 # -*- coding: utf-8 -*-
 # home made test
+
+__author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
+__copyright__= "Copyright 2015, LCPT and AOO"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com"
+
 # Se comprueba el funcionamiento de remove_fix.
 
 import xc_base
@@ -28,7 +35,7 @@ prueba= xc.ProblemaEF()
 preprocessor=  prueba.getPreprocessor   
 nodes= preprocessor.getNodeLoader
 predefined_spaces.gdls_resist_materiales3D(nodes)
-prueba.logFileName= "/tmp/borrar.log" # Para no imprimir mensajes de advertencia.
+prueba.logFileName= "/tmp/borrar.log" # Ignore warning messages
 nodes.defaultTag= 1 #First node number.
 nod= nodes.newNodeXYZ(0,0.0,0.0)
 nod= nodes.newNodeXYZ(L,0.0,0.0)
@@ -39,8 +46,8 @@ lin= trfs.newLinearCrdTransf3d("lin")
 lin.xzVector= xc.Vector([0,1,0])
 
 # Materials definition
-fy= 275e6 # Tensión de cedencia del acero.
-E= 210e9 # Módulo de Young del acero.
+fy= 275e6 # Tensión de cedencia of the steel.
+E= 210e9 # Young modulus of the steel.
 acero= typical_materials.defSteel01(preprocessor, "acero",E,fy,0.001)
 
 respT= typical_materials.defElasticMaterial(preprocessor, "respT",1e10) # Respuesta de la sección a torsión.

@@ -1,10 +1,17 @@
 # -*- coding: utf-8 -*-
-# Macros
+
 
 from actions.wind import vientoCTE
 from actions.wind import vientoCubiertaDosAguasCTE
 from actions.wind import vientoParamVerticalesCTE
 import math
+
+__author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
+__copyright__= "Copyright 2015, LCPT and AOO"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com"
+
 #execfile("interpolacion.lcmdm")
 
 cpPruebaF= vientoCubiertaDosAguasCTE.cpDosAguasZonaFVTrsv(5.5,math.radians(30))

@@ -82,7 +82,7 @@ casos.currentTimeSeries= "ts"
 lp0= casos.newLoadPattern("default","0")
 lp0.newNodalLoad(2,xc.Vector([N,0,0,0,My,Mz])) #Section's y axis is element z axis.
 
-#Agregamos el caso de carga al dominio.
+#Add the load pattern to the domain.
 casos.addToDomain("0")
 
 # Solution

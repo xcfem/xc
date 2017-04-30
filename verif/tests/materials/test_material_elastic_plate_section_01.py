@@ -1,6 +1,13 @@
 # -*- coding: utf-8 -*-
 # Home made test
-E= 2.1e6 # Módulo de Young del acero.
+
+__author__= "Luis C. Pérez Tato (LCPT)"
+__copyright__= "Copyright 2014, LCPT"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com"
+
+E= 2.1e6 # Young modulus of the steel.
 nu= 0.3 # Poisson's ratio.
 h= 0.1 # Espesor.
 
@@ -13,7 +20,7 @@ from materials import typical_materials
 # Model definition
 prueba= xc.ProblemaEF()
 preprocessor=  prueba.getPreprocessor
-# Definimos materiales
+# Define materials
 prueba= typical_materials.defElasticPlateSection(preprocessor, "prueba",E,nu,0.0,h)
 
 ratio1= (prueba.E-E)/E

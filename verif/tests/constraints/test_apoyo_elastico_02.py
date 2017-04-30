@@ -24,7 +24,7 @@ nodes.defaultTag= 1 #First node number.
 nod= nodes.newNodeXYZ(1,1,1)
 
     
-# Definimos materiales
+# Define materials
 kx= typical_materials.defElasticMaterial(preprocessor, "kx",KX)
 ky= typical_materials.defElasticMaterial(preprocessor, "ky",KY)
 

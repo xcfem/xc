@@ -1,6 +1,19 @@
 # -*- coding: utf-8 -*-
 
 from __future__ import division
+import xc_base
+import geom
+import xc
+from solution import predefined_solutions
+from model import predefined_spaces
+from model import fix_node_6dof
+from materials import typical_materials
+
+__author__= "Luis C. Pérez Tato (LCPT)"
+__copyright__= "Copyright 2014, LCPT"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com"
 
 b= 0.4
 h= 0.8
@@ -13,13 +26,6 @@ Iz= (1/12.0*b*h**3) # Cross section moment of inertia (m4)
 J= 0.721e-8 # Cross section torsion constant (m4)
 densHorm= 2500 # Densidad del hormigón armado.
 
-import xc_base
-import geom
-import xc
-from solution import predefined_solutions
-from model import predefined_spaces
-from model import fix_node_6dof
-from materials import typical_materials
 
 #
 #     3   2     4

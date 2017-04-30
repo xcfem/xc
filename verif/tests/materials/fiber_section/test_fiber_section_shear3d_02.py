@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Test de funcionamiento de la sección de fibras con rigideces
+# Verification test of la sección de fibras con rigideces
 #    a cortante y torsion. Elaboración propia.
 
 
@@ -15,9 +15,15 @@ from model import predefined_spaces
 from model import fix_node_6dof
 from materials import typical_materials
 
+__author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (A_OO)"
+__copyright__= "Copyright 2015, LCPT and AO_O"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com ana.ortega.ort@gmal.com"
+
 scc1x1= sccRectg.sccRectang()
-scc1x1.b= 1 # Cross section width expresado en cm.
-scc1x1.h= 1 # Cross section heightexpresado en cm.
+scc1x1.b= 1 # Cross section width expressed in cm.
+scc1x1.h= 1 # Cross section depth expressed in cm.
 scc1x1.nDivIJ= 32
 scc1x1.nDivJK= 32
 
@@ -32,7 +38,7 @@ fy= 2600 # yield strength [kp/cm2].
 E= 1e6   # elastic moculus [kp/cm2].
 
 prueba= xc.ProblemaEF()
-prueba.logFileName= "/tmp/borrar.log" # Para no imprimir mensajes de advertencia.
+prueba.logFileName= "/tmp/borrar.log" # Ignore warning messages
 preprocessor=  prueba.getPreprocessor
 # Materials definition
 elast= typical_materials.defElasticMaterial(preprocessor, "elast",E)

@@ -3,6 +3,12 @@
 soldadura a partir del ejemplo de la página 57 de la monografia
 «Estudio de los diferentes métodos de dimensionamiento para uniones atornilladas y soldadas de acuerdo con la normativa vigente» de Marc Masnou Malgosa.'''
 
+__author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
+__copyright__= "Copyright 2015, LCPT and AOO"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com"
+
 from materials.eae import resistencia_cordon_soldadura
 import math
 

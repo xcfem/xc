@@ -3,6 +3,12 @@
 
 from rough_calculations import ng_cantilever as cv
 
+__author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
+__copyright__= "Copyright 2015, LCPT and AOO"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com"
+
 # Wind according to SIA 261
 Q= 7.32e3
 EI= 732.9e3

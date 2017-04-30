@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
-''' Test de funcionamiento de la comprobación a fisuración de una sección de hormigón armado.'''
+''' Verification test of la comprobación a fisuración de una sección de hormigón armado.'''
 
 import xc_base
 import geom
 import xc
-# Macros
+
 from misc import banco_pruebas_scc3d
 from solution import predefined_solutions # Procedimiento de solución
 
@@ -15,9 +15,15 @@ from materials.ehe import fisuracionEHE
 from model import fix_node_6dof
 import math
 
-width= 1.0 # Ancho de la sección expresado en metros.
-depth= 1.0 # Canto de la sección expresado en metros.
-cover= 0.03 # Recubrimiento de la sección expresado en metros.
+__author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
+__copyright__= "Copyright 2015, LCPT and AOO"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com"
+
+width= 1.0 # Section width expressed in meters.
+depth= 1.0 # Section depth expressed in meters.
+cover= 0.03 # Concrete cover expressed in meters.
 areaFi10=0.79e-4
 areaFi25=4.91e-4
 

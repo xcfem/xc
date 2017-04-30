@@ -10,7 +10,7 @@ __email__= "l.pereztato@gmail.com"
 
 L= 2.0 # Lado del elemento.
 t= 0.2 # Canto del elemento.
-E= 2.1e6 # Módulo de Young del acero.
+E= 2.1e6 # Young modulus of the steel.
 nu= 0.3 # Poisson's ratio.
 # Load
 F= 10 # Load magnitude

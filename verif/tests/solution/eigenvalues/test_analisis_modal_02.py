@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-''' Test para comprobar el análisis modal espectral
+''' Test para comprobar el response spectrum modal analysis
 tomado de la publicación de Andrés Sáez Pérez: «Estructuras III»
  E.T.S. de Arquitectura de Sevilla (España). '''
 from __future__ import division
@@ -12,6 +12,12 @@ from model import predefined_spaces
 from solution import predefined_solutions
 from materials import typical_materials
 import math
+
+__author__= "Luis C. Pérez Tato (LCPT)"
+__copyright__= "Copyright 2014, LCPT"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com"
 
 masaPorPlanta= 134.4e3
 matrizMasasNodo= xc.Matrix([[masaPorPlanta,0,0],[0,0,0],[0,0,0]])
@@ -125,7 +131,7 @@ soe= smt.newSystemOfEqn("sym_band_eigen_soe")
 solver= soe.newSolver("sym_band_eigen_solver")
 
 analysis= solu.newAnalysis("modal_analysis","smt","")
-ac= 0.69 # Aceleración de cálculo.
+ac= 0.69 # Design acceleration.
 T0= 0.24
 T1= 0.68
 meseta= 2.28
@@ -211,9 +217,9 @@ print "masaTotal: ",masaTotal
 print "ratio3= ",ratio3
 print "factoresDistribucion: ",factoresDistribucion
 print "ratio4= ",ratio4
-print "\n  carga estática equivalente modo 1: ",cargaModo1
-print "  carga estática equivalente modo 2: ",cargaModo2
-print "  carga estática equivalente modo 3: ",cargaModo3
+print "\n  equivalent static load mode 1: ",cargaModo1
+print "  equivalent static load mode 2: ",cargaModo2
+print "  equivalent static load mode 3: ",cargaModo3
 print "ratio5= ",ratio5
 '''
 

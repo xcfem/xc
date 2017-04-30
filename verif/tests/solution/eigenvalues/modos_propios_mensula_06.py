@@ -10,16 +10,22 @@ from solution import predefined_solutions
 from materials import typical_materials
 import math
 
+__author__= "Luis C. Pérez Tato (LCPT)"
+__copyright__= "Copyright 2014, LCPT"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com"
+
 L= 16 # Longitud de la ménsula in inches.
 b= 4 # Ancho de la ménsula in inches.
 h= 1 # Espesor de la ménsula in inches.
 nuMat= 0 # Poisson's ratio.
-EMat= 30E6 # Módulo de Young en psi.
+EMat= 30E6 # Young modulus en psi.
 espChapa= h # Espesor en m.
 area= b*espChapa # Cross section area en m2
 inercia1= 1/12.0*espChapa*b**3 # Momento de inercia en m4
 inercia2= 1/12.0*b*espChapa**3 # Momento de inercia en m4
-dens= 0.000728 # Densidad del material en lb-sec2/in4
+dens= 0.000728 # Densidad of the material en lb-sec2/in4
 m= b*h*dens
 
 NumDiv= 10
@@ -30,7 +36,7 @@ preprocessor=  prueba.getPreprocessor
 nodes= preprocessor.getNodeLoader
 
 predefined_spaces.gdls_resist_materiales3D(nodes)
-# Definimos materiales
+# Define materials
 elast= typical_materials.defElasticMembranePlateSection(preprocessor, "elast",EMat,nuMat,espChapa*dens,espChapa)
 
 puntos= preprocessor.getCad.getPoints

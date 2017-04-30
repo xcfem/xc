@@ -10,6 +10,12 @@ from model import predefined_spaces
 from model import fix_node_6dof
 from materials import typical_materials
 
+__author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
+__copyright__= "Copyright 2015, LCPT and AOO"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com"
+
 # Material properties
 E= 2.1e6*9.81/1e-4 # Elastic modulus (Pa)
 nu= 0.3 # Poisson's ratio
@@ -80,11 +86,11 @@ comb= combs.newLoadCombination("COMB","1.33*A+1.5*B")
 
 # Procedimiento de solución
 # Resolvemos para el caso A
-cargas.addToDomain("A") # Añadimos la combinación al dominio
+cargas.addToDomain("A") # Añadimos la combinación to the domain
 analisis= predefined_solutions.simple_static_linear(prueba)
 result= analisis.analyze(1)
 
-lpA.removeFromDomain() # Quitamos la carga del dominio
+lpA.removeFromDomain() # Quitamos la carga del domain
 
 nodes= preprocessor.getNodeLoader
 nod2= nodes.getNode(2)

@@ -7,13 +7,13 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
-fy= 2600 # Tensión de cedencia del acero.
-E= 2.1e6 # Módulo de Young del acero.
+fy= 2600 # Tensión de cedencia of the steel.
+E= 2.1e6 # Young modulus of the steel.
 l= 1 # Distancia entre nodes
 epsy= fy/E # Deformación para la que se produce la cedencia
 D= 1.5*epsy # Displacement magnitude impuesto
 F= 1.05*E*epsy # Fuerza a aplicar.
-Nsteps= 10 # Número de pasos para el análisis.
+Nsteps= 10 # number of analysis steps.
 
 import math
 import xc_base

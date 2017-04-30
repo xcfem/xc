@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
-''' Test de funcionamiento de la comprobación a fisuración de una sección de hormigón armado.
+''' Verification test of la comprobación a fisuración de una sección de hormigón armado.
    Los resultados se comparan con los obtenidos del «Prontuario informático del hormigón armado». '''
 
-# Macros
+
 import xc_base
 import geom
 import xc
@@ -15,9 +15,15 @@ from materials.ehe import EHE_reinforcing_steel
 from materials.ehe import fisuracionEHE
 from model import fix_node_6dof
 
-width= 1.0 # Ancho de la sección expresado en metros.
-depth= 0.25 # Canto de la sección expresado en metros.
-cover= 0.035 # Recubrimiento de la sección expresado en metros.
+__author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (A_OO)"
+__copyright__= "Copyright 2015, LCPT and AO_O"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com ana.ortega.ort@gmal.com"
+
+width= 1.0 # Section width expressed in meters.
+depth= 0.25 # Section depth expressed in meters.
+cover= 0.035 # Concrete cover expressed in meters.
 areaFi12=1.13e-4
 
 NDato= 0.0 # Axil para comprobar fisuración.

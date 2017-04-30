@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
-''' Test de funcionamiento de la comprobación a fisuración de una sección de hormigón armado.
+''' Verification test of la comprobación a fisuración de una sección de hormigón armado.
    Los resultados se comparan con los obtenidos del problema 9 del
    libro «El hormigón armado en problemas. Según la norma EHE». '''
 
 import xc_base
 import geom
 import xc
-# Macros
+
 from misc import banco_pruebas_scc3d
 from solution import predefined_solutions # Procedimiento de solución
 
@@ -16,9 +16,15 @@ from materials.ehe import EHE_reinforcing_steel
 from materials.ehe import fisuracionEHE
 from model import fix_node_6dof
 
-width= 1.70 # Ancho de la sección expresado en metros.
-depth= 1.10 # Canto de la sección expresado en metros.
-cover= 0.05 # Recubrimiento de la sección expresado en metros.
+__author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (A_OO)"
+__copyright__= "Copyright 2015, LCPT and AO_O"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com ana.ortega.ort@gmal.com"
+
+width= 1.70 # Section width expressed in meters.
+depth= 1.10 # Section depth expressed in meters.
+cover= 0.05 # Concrete cover expressed in meters.
 areaFi20=3.14e-4
 areaFi25=4.91e-4
 areaFi32=8.04e-4

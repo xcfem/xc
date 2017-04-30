@@ -13,8 +13,8 @@ from materials import paramRectangularSection
 from materials import defSeccAggregation
 
 
-h= 0.30 # Canto de la viga.
-b= 0.2 # Ancho de la viga.
+h= 0.30 # Beam cross-section depth.
+b= 0.2 # Beam cross-section width.
 E= 2e6 # Elastic modulus
 
 prueba= xc.ProblemaEF()
@@ -24,7 +24,7 @@ nodes= preprocessor.getNodeLoader
 seccPrueba= paramRectangularSection.RectangularSection("prueba",b,h)
 matseccPrueba=typical_materials.MaterialData(name='mt',E=E,nu=0.3,rho=2500)
 
-# Definimos materiales
+# Define materials
 defSeccAggregation.defSeccAggregation2d(preprocessor, seccPrueba,matseccPrueba)
 matPrueba= preprocessor.getMaterialLoader.getMaterial("prueba")
 tang= matPrueba.getTangentStiffness()

@@ -10,16 +10,22 @@ from solution import predefined_solutions
 from materials import typical_materials
 import math
 
-L= 1 # Longitud de la mensula en metros
-b= 0.05 # Cross section width en metros
-h= 0.1 # Cross section heighten metros
+__author__= "Luis C. Pérez Tato (LCPT)"
+__copyright__= "Copyright 2014, LCPT"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com"
+
+L= 1 # Longitud de la mensula en meters
+b= 0.05 # Cross section width en meters
+h= 0.1 # Cross section depth en meters
 nuMat= 0.3 # Poisson's ratio.
-EMat= 2.0E11 # Módulo de Young en N/m2.
+EMat= 2.0E11 # Young modulus en N/m2.
 espChapa= h # Espesor en m.
 area= b*espChapa # Cross section area en m2
 inercia1= 1/12.0*espChapa*b**3 # Momento de inercia en m4
 inercia2= 1/12.0*b*espChapa**3 # Momento de inercia en m4
-dens= 7800 # Densidad del acero en kg/m3
+dens= 7800 # Densidad of the steel en kg/m3
 m= b*h*dens
 
 NumDiv= 10
@@ -30,7 +36,7 @@ preprocessor=  prueba.getPreprocessor
 nodes= preprocessor.getNodeLoader
 
 predefined_spaces.gdls_resist_materiales3D(nodes)
-# Definimos materiales
+# Define materials
 elast= typical_materials.defElasticMembranePlateSection(preprocessor, "elast",EMat,nuMat,espChapa*dens,espChapa)
 
 puntos= preprocessor.getCad.getPoints

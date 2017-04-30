@@ -9,6 +9,11 @@ from solution import predefined_solutions
 from materials import typical_materials
 from model import fix_node_6dof
 
+__author__= "Luis C. Pérez Tato (LCPT)"
+__copyright__= "Copyright 2014, LCPT"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com"
 
 E= 30e6 # Young modulus (psi)
 l= 10 # Cable length in inches

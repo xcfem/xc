@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-#Test comprobación del cálculo del cortante de agotamiento por
+#Verification test of the cálculo del cortante de agotamiento por
 #resistencia a tracción del hormigón (Vu2) en una sección
 #SIN reinforcement de cortante según los artículos 44.2.3.2.1.1
 #y  44.2.3.2.1.2 de EHE-08.
@@ -9,6 +9,12 @@ import sys
 from materials.ehe import comprobVEHE08
 from materials.ehe import EHE_concrete
 import math
+
+__author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
+__copyright__= "Copyright 2015, LCPT and AOO"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com"
 
 fck=25e6
 gammac=1.5

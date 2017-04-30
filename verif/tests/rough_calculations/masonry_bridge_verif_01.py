@@ -1,10 +1,16 @@
 #-*- coding: utf-8 -*-
+from __future__ import division
 
-#Ultimate load of a masonry bridge according to thesis of Alix Grandjean: "Capacité portante de ponts en arc en maçonnerie de pierre naturelle". École Polytechnique Féderale de Lausanne.
+# Ultimate load of a masonry bridge according to thesis of Alix Grandjean: "Capacité portante de ponts en arc en maçonnerie de pierre naturelle". École Polytechnique Féderale de Lausanne.
 
 #See Annexe 14 page 235
 
-from __future__ import division
+__author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
+__copyright__= "Copyright 2015, LCPT and AOO"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com"
+
 import math
 import sys
 import rough_calculations.masonryVault

@@ -19,8 +19,8 @@ from materials import typical_materials
 E= 30e6 # Young modulus (psi)
 l= 20*12 # Bar length in inches
 a= 10*12 # Longitud del voladizo
-h= 30 # Canto de la viga in inches.
-A= 50.65 # Área de la viga in inches cuadradas
+h= 30 # Beam cross-section depth in inches.
+A= 50.65 # viga area in inches cuadradas
 I= 7892 # Inercia de la viga in inches a la cuarta
 w= 10000/12.0 # Carga por unidad de longitud (pounds)/pulgada.
 

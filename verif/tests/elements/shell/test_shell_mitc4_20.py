@@ -30,7 +30,7 @@ NumDivJ= int(math.ceil(CooMaxY/0.25))
 E= 2.1e10 # Elastic modulus en N/m2
 nu= 0.0 # Coeficiente de Poison
 G= E/2/(1+nu)
-thickness= 0.2 # Cross section heightexpresado en metros.
+thickness= 0.2 # Cross section depth expressed in meters.
 unifLoad= 20e3 # Carga uniforme en N/m2.
 nLoad= unifLoad*CooMaxX*CooMaxY/NumDivI/NumDivJ # Carga tributaria para cada nodo
 
@@ -46,10 +46,10 @@ predefined_spaces.gdls_resist_materiales3D(nodes)
 nodes.newSeedNode()
 
 
-# Definimos materiales
+# Define materials
 elast= typical_materials.defElasticMaterial(preprocessor, "elast",E)
 
-# Definimos materiales
+# Define materials
 nmb1= typical_materials.defElasticMembranePlateSection(preprocessor, "memb1",E,nu,0.0,thickness)
 
 

@@ -6,6 +6,12 @@ import xc
 import math
 import os
 
+__author__= "Luis C. Pérez Tato (LCPT)"
+__copyright__= "Copyright 2014, LCPT"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com"
+
 R= 2.0
 cos45= math.cos(math.radians(45))
 sin45= cos45

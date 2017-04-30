@@ -1,15 +1,21 @@
 # -*- coding: utf-8 -*-
-''' Test de funcionamiento de una sección de hormigón armado empleando
+''' Verification test of una sección de hormigón armado empleando
    el material fiber_section_GJ. '''
 
-# Macros
+
 import math
 import xc_base
 import geom
 import xc
 from misc import banco_pruebas_scc3d
 
-areaFi16= 2.01e-4 # Área de las barras expresado en metros cuadrados.
+__author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (A_OO)"
+__copyright__= "Copyright 2015, LCPT and AO_O"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com ana.ortega.ort@gmal.com"
+
+areaFi16= 2.01e-4 # Área de las barras expressed in square meters.
 brazo= 0.5 # Brazo de las barras respecto al eje de la sección.
 
 
@@ -18,7 +24,7 @@ from model import fix_node_6dof
 from solution import predefined_solutions
 
 # Coeficientes de seguridad.
-gammas= 1.15 # Coeficiente de minoración de la resistencia del acero.
+gammas= 1.15 # Coeficiente de minoración de la resistencia of the steel.
 
 
 

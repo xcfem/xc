@@ -8,6 +8,12 @@ import xc
 from rough_calculations import nb_poussee_terres as pt
 import math
 
+__author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
+__copyright__= "Copyright 2016, AOO and LCPT"
+__license__= "GPL"
+__version__= "1.0"
+__email__= "l.pereztato@gmail.com  ana.Ortega.Ort@gmail.com"
+
 fi= math.pi/4.0
 pDist= 1.0/math.sqrt(2)
 P= pDist/4/math.tan(math.pi/4.0+fi/2.0)

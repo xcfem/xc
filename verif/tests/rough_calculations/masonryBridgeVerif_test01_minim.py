@@ -7,6 +7,12 @@ import numpy as np
 import pydoc
 import rough_calculations.masonryVault as masonryVault
 
+__author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
+__copyright__= "Copyright 2015, LCPT and AOO"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com"
+
 #Obtención de los coeficientes del polinomio a partir de 4 puntos del arco 
 #(los 4 puntos que tomamos son los obtenidos como coordenadas de las rótulas 
 #en el ejemplo de la tesis)
@@ -31,7 +37,7 @@ arcGeom.arcSpan=15             #arch span [m]
 
 
 fillChar= masonryVault.FillingCharacteristics()
-fillChar.angPhi= math.radians(30)   #angle de frottement interne
+fillChar.angPhi= math.radians(30)   #internal friction angle
 fillChar.cohesion=0                 #cohésion
 fillChar.mp= 0.33                   #Correction factor.
 fillChar.mc= 0.01                   #Correction factor.

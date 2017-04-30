@@ -38,7 +38,7 @@ elementos.defaultTag= 1 #Tag for the next element.
 brick= elementos.newElement("brick",xc.ID([9,10,11,12,13,14,15,16]));
 
 coacciones= preprocessor.getConstraintLoader
-#Impedimos el movimiento del nodo 1.
+#Constrain the displacement of node 1.
 
 nod9.fix(xc.ID([0,1,2]),xc.Vector([0,0,0]))
 nod10.fix(xc.ID([0,1,2]),xc.Vector([0,0,0]))

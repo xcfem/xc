@@ -5,6 +5,12 @@ from __future__ import division
 import math
 from rough_calculations import suspension_bridge_simple_model as sbm
 
+__author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
+__copyright__= "Copyright 2016, AOO and LCPT"
+__license__= "GPL"
+__version__= "1.0"
+__email__= "l.pereztato@gmail.com  ana.Ortega.Ort@gmail.com"
+
 GWBridge= sbm.SuspensionBridgeRoughModel(325,377,3500,650)
 
 q= 39+8

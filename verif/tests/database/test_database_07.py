@@ -8,7 +8,13 @@ from model import predefined_spaces
 from model import fix_node_6dof
 from materials import typical_materials
 
-E= 2.1e6 # Módulo de Young del acero.
+__author__= "Luis C. Pérez Tato (LCPT)"
+__copyright__= "Copyright 2014, LCPT"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com"
+
+E= 2.1e6 # Young modulus of the steel.
 nu= 0.3 # Poisson's ratio.
 h= 0.1 # Espesor.
 dens= 1.33 # Densidad kg/m2.

@@ -9,14 +9,14 @@ __email__= "l.pereztato@gmail.com"
 from materials.ehe import EHE_reinforcing_steel
 from materials.ehe import EHE_concrete
 
-defSec= dict(width= 0.2, # Ancho de la sección expresado en metros.
-depth= 0.4, # Canto de la sección expresado en metros.
-cover= 0.05, # Recubrimiento de la sección expresado en metros.
+defSec= dict(width= 0.2, # Section width expressed in meters.
+depth= 0.4, # Section depth expressed in meters.
+cover= 0.05, # Concrete cover expressed in meters.
 nIJ= 11, # Número de divisiones en la dirección IJ.
 nJK= 11, # Número de divisiones en la dirección JK.
-areaCordones= 140e-6, # Área de los cordones expresada en metros cuadrados.
-diamBarra= 16e-3, # Diámetro de las barras expresado en metros.
-areaBarra= 2.01e-4 # Área de las barras expresado en metros cuadrados.
+areaCordones= 140e-6, # Área de los cordones expressed in square meters.
+diamBarra= 16e-3, # Diámetro de las barras expressed in meters.
+areaBarra= 2.01e-4 # Área de las barras expressed in square meters.
   )
 
 def gmSecHA01(nmbGeomSecc,defSec,concrDiagName,nmbDiagAceroArmar):

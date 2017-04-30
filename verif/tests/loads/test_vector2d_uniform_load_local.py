@@ -11,6 +11,12 @@ from model import fix_node_3dof
 from materials import typical_materials
 from model import movs_nodo_3gdl
 
+__author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
+__copyright__= "Copyright 2015, LCPT and AOO"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com"
+
 # Geometry
 width= .05
 depth= .1
@@ -21,7 +27,7 @@ z0= 0
 L= 2.0 # Bar length (m)
 Iy= width*depth**3/12 # Cross section moment of inertia (m4)
 Iz= depth*width**3/12 # Cross section moment of inertia (m4)
-E= 210e9 # Módulo de Young del acero.
+E= 210e9 # Young modulus of the steel.
 nu= 0.3 # Poisson's ratio
 G= E/(2*(1+nu)) # Shear modulus
 J= .2e-1 # Cross section torsion constant (m4)
@@ -46,7 +52,7 @@ lin= trfs.newLinearCrdTransf2d("lin")
 
 
 # Materials definition
-fy= 275e6 # Tensión de cedencia del acero.
+fy= 275e6 # Tensión de cedencia of the steel.
 acero= typical_materials.defSteel01(preprocessor, "acero",E,fy,0.001)
 
 respT= typical_materials.defElasticMaterial(preprocessor, "respT",G*J) # Respuesta de la sección a torsión.

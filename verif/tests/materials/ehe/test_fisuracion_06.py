@@ -1,17 +1,10 @@
 # -*- coding: utf-8 -*-
-''' Test de funcionamiento de la comprobación a fisuración de una sección de hormigón armado.
+''' Verification test of la comprobación a fisuración de una sección de hormigón armado.
    Los resultados se comparan con los obtenidos del «Prontuario informático del hormigón armado». '''
-
-__author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
-__copyright__= "Copyright 2015, LCPT and AOO"
-__license__= "GPL"
-__version__= "3.0"
-__email__= "l.pereztato@gmail.com"
-
 import xc_base
 import geom
 import xc
-# Macros
+
 from misc import banco_pruebas_scc3d
 from solution import predefined_solutions # Procedimiento de solución
 from materials.fiber_section import defSeccionHASimple
@@ -21,6 +14,12 @@ from materials.ehe import EHE_concrete
 from materials.ehe import EHE_reinforcing_steel
 from materials.ehe import fisuracionEHE
 from model import fix_node_6dof
+
+__author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
+__copyright__= "Copyright 2015, LCPT and AOO"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com"
 
 datosScc1LosC= defSeccionHASimple.RecordRCSimpleSection()
 datosScc1LosC.sectionName= "secHA1LosC"

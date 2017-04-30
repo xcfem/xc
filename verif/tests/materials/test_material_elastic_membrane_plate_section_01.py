@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # Home made test
-E= 2.1e6 # Módulo de Young del acero.
+E= 2.1e6 # Young modulus of the steel.
 nu= 0.3 # Poisson's ratio.
 h= 0.1 # Espesor.
 dens= 1.33 # Densidad kg/m2.
@@ -11,10 +11,17 @@ import xc
 from model import predefined_spaces
 from materials import typical_materials
 
+__author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
+__copyright__= "Copyright 2015, LCPT and AOO"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com"
+
+
 # Model definition
 prueba= xc.ProblemaEF()
 preprocessor=  prueba.getPreprocessor
-# Definimos materiales
+# Define materials
 prueba= typical_materials.defElasticMembranePlateSection(preprocessor, "prueba",E,nu,dens,h)
 
 

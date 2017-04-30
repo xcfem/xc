@@ -10,11 +10,17 @@ from model import predefined_spaces
 from model import fix_node_3dof
 from materials import typical_materials
 
+__author__= "Luis C. Pérez Tato (LCPT)"
+__copyright__= "Copyright 2014, LCPT"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com"
+
 NumDiv= 10
 CooMax= 10
 
-b= 0.05 # Cross section width en metros
-h= 0.10 # Cross section heighten metros
+b= 0.05 # Cross section width en meters
+h= 0.10 # Cross section depth en meters
 A= b*h # Cross section area en m2
 I= 1/12.0*b*h**3 # Momento de inercia en m4
 E=2.0E11 # Elastic modulus en N/m2

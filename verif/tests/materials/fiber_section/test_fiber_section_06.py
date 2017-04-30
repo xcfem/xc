@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-''' Test de funcionamiento de una sección de hormigón armado.
+''' Verification test of una sección de hormigón armado.
    los resultados se comparan con los obtenidos del prontuario.
    informático del hormigón estructural (Cátedra de hormigón de la ETSICCP-IECA
    UPM). '''
@@ -10,7 +10,7 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
-# Macros
+
 import math
 import xc_base
 import geom
@@ -21,7 +21,7 @@ from materials.ehe import EHE_reinforcing_steel
 
 # Coeficientes de seguridad.
 gammac= 1.5 # Coeficiente de minoración de la resistencia del hormigón.
-gammas= 1.15 # Coeficiente de minoración de la resistencia del acero.
+gammas= 1.15 # Coeficiente de minoración de la resistencia of the steel.
 
 
 CurvZ1= 11.474e-3 # Curvatura de prueba 1.
@@ -30,7 +30,7 @@ x1= 0.0997 # Profundidad de la fibra neutra 1.
 CurvZ2= 34.787e-3 # Curvatura de prueba 2.
 x2= 0.0649 # Profundidad de la fibra neutra 2.
 prueba= xc.ProblemaEF()
-prueba.logFileName= "/tmp/borrar.log" # Para no imprimir mensajes de advertencia.
+prueba.logFileName= "/tmp/borrar.log" # Ignore warning messages
 preprocessor=  prueba.getPreprocessor
 
 concr=EHE_concrete.HA25
@@ -38,7 +38,7 @@ concr.alfacc=0.85    #f_maxd= 0.85*fcd coeficiente de fatiga del hormigón (gene
 
 tag= concr.defDiagD(preprocessor)
 tag= EHE_reinforcing_steel.B500S.defDiagD(preprocessor)
-# Definimos materiales
+# Define materials
 import os
 pth= os.path.dirname(__file__)
 if(not pth):

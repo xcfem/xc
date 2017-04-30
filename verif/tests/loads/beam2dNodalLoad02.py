@@ -13,10 +13,16 @@ from materials import typical_materials
 from materials import paramRectangularSection
 from materials import defSeccAggregation
 
+__author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
+__copyright__= "Copyright 2015, LCPT and AOO"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com"
+
 E= 2e9 # Elastic modulus
 L= 20 # Bar length.
-h= 0.30 # Canto de la viga.
-b= 0.2 # Ancho de la viga.
+h= 0.30 # Beam cross-section depth.
+b= 0.2 # Beam cross-section width.
 A= b*h # Cross section area.
 I= b*h**3/12 # Inercia de la viga in inches a la cuarta
 x= 0.5 # Abcisa relativa en la que se aplica la carga puntual.

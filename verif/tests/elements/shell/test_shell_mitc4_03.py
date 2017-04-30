@@ -8,9 +8,9 @@ __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
 L= 6.0 # Longitud de la viga expresada in inches.
-h= 0.8 # Canto de la viga expresado in inches.
-t= 1 # Ancho de la viga expresado in inches.
-E= 30000 # Módulo de Young del material expresado en ksi.
+h= 0.8 # Beam cross-section depth expressed in inches.
+t= 1 # Beam cross-section width expressed in inches.
+E= 30000 # Young modulus of the material expressed in ksi.
 nu= 0.3 # Poisson's ratio.
 # Load
 F= 10 # Load magnitude en kips

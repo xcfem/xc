@@ -44,8 +44,8 @@ lin= trfs.newLinearCrdTransf3d("lin")
 lin.xzVector= xc.Vector([0,1,0])
 
 # Materials definition
-fy= 275e6 # Tensión de cedencia del acero.
-E= 210e9 # Módulo de Young del acero.
+fy= 275e6 # Tensión de cedencia of the steel.
+E= 210e9 # Young modulus of the steel.
 acero= typical_materials.defSteel01(preprocessor, "acero",E,fy,0.001)
 
 respT= typical_materials.defElasticMaterial(preprocessor, "respT",1e10) # Respuesta de la sección a torsión.

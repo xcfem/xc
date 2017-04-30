@@ -1,6 +1,12 @@
 # -*- coding: utf-8 -*-
 from __future__ import division
 
+__author__= "Luis C. Pérez Tato (LCPT)"
+__copyright__= "Copyright 2014, LCPT"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com"
+
 def simpson(f, a, b, n):
   """Approximates the definite integral of f from a to b by
   the composite Simpson's rule, using n subintervals"""

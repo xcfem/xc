@@ -1,12 +1,5 @@
 # -*- coding: utf-8 -*-
 from __future__ import division
-
-__author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (A_OO)"
-__copyright__= "Copyright 2015, LCPT and AO_O"
-__license__= "GPL"
-__version__= "3.0"
-__email__= "l.pereztato@gmail.com ana.ortega.ort@gmal.com"
-
 ''' Test for checking the shear-strength verificacion of a reinforced concrete section.
    Some comparison values are obtained from example ER-CA-02 of
    www.areadecalculo.com. Calculation is carried on according to EHE-08 standard. '''
@@ -30,6 +23,13 @@ from materials import typical_materials
 
 from model import fix_node_6dof
 import math
+
+__author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (A_OO)"
+__copyright__= "Copyright 2015, LCPT and AO_O"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com ana.ortega.ort@gmal.com"
+
 
 # Data
 
@@ -130,7 +130,7 @@ analOk= analisis.analyze(10)
 
 secHAParamsCortante= cortanteEHE.ShearControllerEHE('ULS_shear')
 
-secHAParamsCortante.AsTrsv= areaBarrasEHE.Fi6*numRamas/0.2 # Área de la reinforcement transversal
+secHAParamsCortante.AsTrsv= areaBarrasEHE.Fi6*numRamas/0.2 # reinforcement area transversal
 secHAParamsCortante.theta= math.radians(45)
 secHAParamsCortante.alpha= math.radians(90)
 

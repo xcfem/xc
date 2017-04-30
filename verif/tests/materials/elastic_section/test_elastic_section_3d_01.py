@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Test de funcionamiento de una sección elástica en 3d
+# Verification test of una sección elástica en 3d
 
 import xc_base
 import geom
@@ -11,8 +11,14 @@ from materials import typical_materials
 from materials import paramRectangularSection
 from misc import banco_pruebas_scc3d
 
+__author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
+__copyright__= "Copyright 2015, LCPT and AOO"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com"
+
 prueba= xc.ProblemaEF()
-prueba.logFileName= "/tmp/borrar.log" # Para no imprimir mensajes de advertencia.
+prueba.logFileName= "/tmp/borrar.log" # Ignore warning messages
 preprocessor=  prueba.getPreprocessor
 
 # Rectangular cross-section definition

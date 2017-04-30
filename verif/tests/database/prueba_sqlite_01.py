@@ -4,6 +4,12 @@ import sqlite3 as sqlite
 from sqliteUtils import macros_sqlite
 from misc import ansysToEsfBarra
 
+__author__= "Luis C. Pérez Tato (LCPT)"
+__copyright__= "Copyright 2014, LCPT"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com"
+
 import os
 pth= os.path.dirname(__file__)
 #print "pth= ", pth

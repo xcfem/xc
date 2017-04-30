@@ -13,7 +13,7 @@ import xc
 from model import predefined_spaces
 from materials import typical_materials
 
-E= 2.1e6 # Módulo de Young del acero en kg/cm2.
+E= 2.1e6 # Young modulus of the steel en kg/cm2.
 nu= 0.3 # Poisson's ratio.
 h= 0.1 # Espesor.
 dens= 1.33 # Densidad kg/m2.
@@ -22,7 +22,7 @@ mov= xc.Vector([1,1,1,0,0,0])
 
 # Problem type
 prueba= xc.ProblemaEF()
-prueba.logFileName= "/tmp/borrar.log" # Para no imprimir mensajes de advertencia.
+prueba.logFileName= "/tmp/borrar.log" # Ignore warning messages
 preprocessor=  prueba.getPreprocessor
 nodes= preprocessor.getNodeLoader
 predefined_spaces.gdls_resist_materiales3D(nodes)

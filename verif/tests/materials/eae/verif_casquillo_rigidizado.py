@@ -7,6 +7,11 @@ de Vicente Cudós Samblancat.'''
 from materials.eae import comprobacion_casquillo_rigidizado
 import math
 
+__author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
+__copyright__= "Copyright 2015, LCPT and AOO"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com"
 
 # Geometry
 H= 0.2
@@ -18,7 +23,7 @@ tRig= 8e-3 # Espesor del rigidizador.
 # Material properties
 fy= 2600*9.81/1e-4 # Acero A42b
 fyd= fy/1.0 # Minoración límite elástico
-Es= 2.1e6*9.81/1e-4 # Elastic modulus del acero.
+Es= 2.1e6*9.81/1e-4 # Elastic modulus of the steel.
 
 # Resultados parciales.
 c= comprobacion_casquillo_rigidizado.widthMax(tChapa,l,H)

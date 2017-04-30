@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
-''' Test de funcionamiento del cálculo del diagrama de interacción.
+''' Verification test of the cálculo del diagrama de interacción.
    Elaboración propia. '''
 from __future__ import division
-# Macros
+
 import xc_base
 import geom
 import xc
@@ -10,20 +10,26 @@ import xc
 from materials.ehe import EHE_concrete
 from materials.ehe import EHE_reinforcing_steel
 
+__author__= "Luis C. Pérez Tato (LCPT)"
+__copyright__= "Copyright 2014, LCPT"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com"
+
 # Coeficientes de seguridad.
 gammac= 1.5 # Coeficiente de minoración de la resistencia del hormigón.
-gammas= 1.15 # Coeficiente de minoración de la resistencia del acero.
+gammas= 1.15 # Coeficiente de minoración de la resistencia of the steel.
 
-width= 0.2 # Ancho de la sección expresado en metros.
-depth= 0.4 # Ancho de la sección expresado en metros.
-cover= 0.05 # Recubrimiento de la sección expresado en metros.
-diam= 16e-3 # Diámetro de las barras expresado en metros.
-areaFi16= 2.01e-4 # Área de las barras expresado en metros cuadrados.
+width= 0.2 # Section width expressed in meters.
+depth= 0.4 # Section width expressed in meters.
+cover= 0.05 # Concrete cover expressed in meters.
+diam= 16e-3 # Diámetro de las barras expressed in meters.
+areaFi16= 2.01e-4 # Área de las barras expressed in square meters.
 
 
 prueba= xc.ProblemaEF()
 preprocessor=  prueba.getPreprocessor
-# Definimos materiales
+# Define materials
 concr=EHE_concrete.HA25
 concr.alfacc=0.85    #f_maxd= 0.85*fcd coeficiente de fatiga del hormigón (generalmente alfacc=1)
 concrMatTag25= concr.defDiagD(preprocessor)

@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-''' Test de funcionamiento de la comprobación a fisuración de una sección de hormigón armado.
+''' Verification test of la comprobación a fisuración de una sección de hormigón armado.
    Comprobación a tracción simple. '''
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
@@ -11,7 +11,7 @@ __email__= "l.pereztato@gmail.com"
 import xc_base
 import geom
 import xc
-# Macros
+
 from misc import banco_pruebas_scc3d
 from solution import predefined_solutions # Procedimiento de solución
 
@@ -21,9 +21,9 @@ from materials.ehe import EHE_reinforcing_steel
 from materials.ehe import fisuracionEHE
 from model import fix_node_6dof
 
-width= 0.25 # Ancho de la sección expresado en metros.
-depth= 0.25 # Canto de la sección expresado en metros.
-cover= 0.0375 # Recubrimiento de la sección expresado en metros.
+width= 0.25 # Section width expressed in meters.
+depth= 0.25 # Section depth expressed in meters.
+cover= 0.0375 # Concrete cover expressed in meters.
 areaFi25=4.91e-4
 
 NDato= 700e3 # Axil para comprobar fisuración.

@@ -13,6 +13,12 @@ from model import fix_nodes_lines
 from model import cargas_nodo
 from materials import typical_materials
 
+__author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
+__copyright__= "Copyright 2015, LCPT and AOO"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com"
+
 NumDiv= 100
 E= 30e6 # Young modulus (psi)
 lng= 10 # Cable length in inches
@@ -32,7 +38,7 @@ predefined_spaces.gdls_resist_materiales3D(nodes)
 nodes.newSeedNode()
 
     
-# Definimos materiales
+# Define materials
 typical_materials.defCableMaterial(preprocessor, "cable",E,sigmaPret,0.0)
     
 ''' Se definen nodos en los puntos de aplicación de
@@ -43,7 +49,7 @@ typical_materials.defCableMaterial(preprocessor, "cable",E,sigmaPret,0.0)
 seedElemLoader= preprocessor.getElementLoader.seedElemLoader
 seedElemLoader.defaultMaterial= "cable"
 seedElemLoader.dimElem= 3
-seedElemLoader.defaultTag= 1 #El número del próximo elemento será 1.
+seedElemLoader.defaultTag= 1 #Number for the next element will be 1.
 truss= seedElemLoader.newElement("corot_truss",xc.ID([1,2]))
 truss.area= area
 # fin de la definición del elemento semilla

@@ -1,6 +1,12 @@
 import rough_calculations.ng_punzonamiento
 
 
+__author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
+__copyright__= "Copyright 2016, AOO and LCPT"
+__license__= "GPL"
+__version__= "1.0"
+__email__= "l.pereztato@gmail.com  ana.Ortega.Ort@gmail.com"
+
 #CASO 1
 
 qk=2      #kN/m2

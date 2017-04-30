@@ -1,17 +1,22 @@
 # -*- coding: utf-8 -*-
 
-#Test de funcionamiento del cálculo de Vsu.
+#Verification test of the cálculo de Vsu.
 #El resultado se compara con el obtenidos del ejercicio ER-CA-02 de
 #www.areadecalculo.com. Según la norma EHE-08».
 
 import sys
-
 from materials.ehe import comprobVEHE08
 from materials.ehe import areaBarrasEHE
 import math
 
+__author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
+__copyright__= "Copyright 2015, LCPT and AOO"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com"
+
 #Coeficientes de seguridad.
-gammas= 1.15 #Coeficiente de minoración de la resistencia del acero.
+gammas= 1.15 #Coeficiente de minoración de la resistencia of the steel.
 
 numBarrasEstribo=4
 areaShReinfBranchsEstribo=numBarrasEstribo*areaBarrasEHE.Fi6

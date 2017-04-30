@@ -1,16 +1,22 @@
 # -*- coding: utf-8 -*-
 # home made test
-''' Comprobación del funcionamiento de restore.
-   En el segundo análisis la solución se obtiene
-   en la primera iteración puesto que se recupera
-   el estado del modelo de la base de datos. '''
+''' Check of the restore function.
+   In the second analysis the solution is obtained
+   at the first iteration because the state
+   of the model is restored from the database. '''
+
+__author__= "Luis C. Pérez Tato (LCPT)"
+__copyright__= "Copyright 2014, LCPT"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com"
 
 L= 1.0 # Bar length (m)
-E= 190e9 # Elastic modulus expresado en MPa
-A= 140e-6 # Área de la barra expresada en metros cuadrados
-fMax= 1860e6 # Carga unitaria máxima del material expresada en MPa.
-fy= 1171e6 # Tensión de límite elástico del material expresada en Pa.
-tInic= 0.75**2*fMax # Pretensado final (incial al 75 por ciento y 25 por ciento de pérdidas totales).
+E= 190e9 # Elastic modulus expressed in Pa
+A= 140e-6 # bar area expressed in square meters
+fMax= 1860e6 # Maximum unit load of the material expressed in Pa.
+fy= 1171e6 # Yield stress of the material expressed in Pa.
+tInic= 0.75**2*fMax # Effective prestress (0.75*P0 y 25% prestress losses).
 
 import xc_base
 import geom

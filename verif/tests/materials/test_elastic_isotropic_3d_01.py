@@ -17,7 +17,7 @@ import xc
 from model import predefined_spaces
 from materials import typical_materials
 
-# Definimos materiales
+# Define materials
 prueba= xc.ProblemaEF()
 preprocessor=  prueba.getPreprocessor
 mat= typical_materials.defElasticIsotropic3d(preprocessor, "elastIso3d",E,nu,rho)

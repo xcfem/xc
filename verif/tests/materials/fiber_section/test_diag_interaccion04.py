@@ -1,21 +1,26 @@
 # -*- coding: utf-8 -*-
-''' Test de funcionamiento del cálculo del diagrama de interacción.
+''' Verification test of the cálculo del diagrama de interacción.
    Elaboración propia. '''
 
-# Macros
+
 import xc_base
 import geom
 import xc
 from materials.ehe import EHE_concrete
 from materials.ehe import EHE_reinforcing_steel
 
+__author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (A_OO)"
+__copyright__= "Copyright 2015, LCPT and AO_O"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com ana.ortega.ort@gmal.com"
 
 
 FCs= []
 
 prueba= xc.ProblemaEF()
 preprocessor=  prueba.getPreprocessor
-# Definimos materiales
+# Define materials
 materiales= preprocessor.getMaterialLoader
 diagInteg= materiales.newInteractionDiagram("diagInteg")
 diagInteg.readFrom("/tmp/prueba_diag_interaccion02.dat")

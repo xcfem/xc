@@ -5,7 +5,7 @@
     Ashok D. Belegundu.
     Prentice Hall, México 1999 '''
 
-E= 2.1e6 # Módulo de Young del acero en kg/cm2.
+E= 2.1e6 # Young modulus of the steel en kg/cm2.
 nu= 0.3 # Poisson's ratio.
 h= 0.1 # Espesor.
 dens= 1.33 # Densidad kg/m2.
@@ -17,6 +17,12 @@ import xc
 from postprocess import med_xc_vars
 from model import predefined_spaces
 from materials import typical_materials
+
+__author__= "Luis C. Pérez Tato (LCPT)"
+__copyright__= "Copyright 2014, LCPT"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com"
 
 fName= "/tmp/test_exporta_med02.med"
 spaceDim= -1
@@ -34,7 +40,7 @@ numGruposNodes= None
 numGruposElementos= None
 
 prueba= xc.ProblemaEF()
-prueba.logFileName= "/tmp/borrar.log" # Para no imprimir mensajes de advertencia.
+prueba.logFileName= "/tmp/borrar.log" # Ignore warning messages
 preprocessor=  prueba.getPreprocessor
 nodes= preprocessor.getNodeLoader
 predefined_spaces.gdls_resist_materiales3D(nodes)

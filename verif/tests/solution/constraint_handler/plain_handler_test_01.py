@@ -1,6 +1,13 @@
 # -*- coding: utf-8 -*-
 # Test from Ansys manual
 # Reference:  Strength of Material, Part I, Elementary Theory & Problems, pg. 26, problem 10
+
+__author__= "Luis C. Pérez Tato (LCPT)"
+__copyright__= "Copyright 2014, LCPT"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com"
+
 E= 30e6 # Young modulus (psi)
 l= 10 # Bar length in inches
 a= 0.3*l # Longitud del tramo a

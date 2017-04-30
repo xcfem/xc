@@ -9,6 +9,12 @@ import sys
 from model import predefined_spaces
 from materials import typical_materials
 
+__author__= "Luis C. Pérez Tato (LCPT)"
+__copyright__= "Copyright 2014, LCPT"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com"
+
 CooMaxX= 2
 CooMaxY= 1
 E= 30e6 # Young modulus (psi)
@@ -20,8 +26,8 @@ numNodes= 0
 numElem= 0
 # Problem type
 prueba= xc.ProblemaEF()
-prueba.logFileName= "/tmp/borrar.log" # Para no imprimir mensajes de advertencia.
-prueba.errFileName= "/tmp/borrar.err" # Para no imprimir mensajes de advertencia.
+prueba.logFileName= "/tmp/borrar.log" # Ignore warning messages
+prueba.errFileName= "/tmp/borrar.err" # Ignore warning messages
 preprocessor=  prueba.getPreprocessor
 nodes= preprocessor.getNodeLoader
 

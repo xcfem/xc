@@ -1,18 +1,18 @@
 # -*- coding: utf-8 -*-
-# Test de funcionamiento de una sección de hormigón pretensado.
+# Verification test of una sección de hormigón pretensado.
 from __future__ import division
 
-__author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
-__copyright__= "Copyright 2015, LCPT and AOO"
-__license__= "GPL"
-__version__= "3.0"
-__email__= "l.pereztato@gmail.com"
-
-# Macros
 import xc_base
 import geom
 import xc
 from misc import banco_pruebas_scc3d
+
+
+__author__= "Luis C. Pérez Tato (LCPT)"
+__copyright__= "Copyright 2014, LCPT"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com"
 
 
 from materials.ehe import EHE_concrete

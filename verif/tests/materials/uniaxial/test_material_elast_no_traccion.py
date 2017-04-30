@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 # Home made test
 
-E= 2.1e6 # Módulo de Young del material.
-Nsteps= 10 # Número de pasos para el análisis.
+E= 2.1e6 # Young modulus of the material.
+Nsteps= 10 # number of analysis steps.
 lStrain=[] 
 lStress=[]
 vStrainTeor= [-0.01,-0.008,-0.006,-0.004,-0.002,0,0.002,0.004,0.006,0.008,0.01]
@@ -17,11 +17,17 @@ from model import predefined_spaces
 from model import fix_node_6dof
 from materials import typical_materials
 
+__author__= "Luis C. Pérez Tato (LCPT)"
+__copyright__= "Copyright 2014, LCPT"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com"
+
 # Model definition
 prueba= xc.ProblemaEF()
-prueba.logFileName= "/tmp/borrar.log" # Para no imprimir mensajes de advertencia.
+prueba.logFileName= "/tmp/borrar.log" # Ignore warning messages
 preprocessor=  prueba.getPreprocessor
-# Definimos materiales
+# Define materials
 sIni= -0.01
 sFin= 0.01
 incr= ((sFin-sIni)/Nsteps)

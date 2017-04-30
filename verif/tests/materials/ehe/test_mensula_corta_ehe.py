@@ -8,6 +8,12 @@ import sys
 
 from materials.ehe import mensula_cortaEHE08
 
+__author__= "Luis C. Pérez Tato (LCPT)"
+__copyright__= "Copyright 2014, LCPT"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com"
+
 Fvd=1000e3 #Carga vertical en la ménsula, positiva hacia abajo (N).
 Fhd=100e3 #Carga horizontal en la ménsula, positiva hacia afuera (N).
 tipoJunta="monolitica" #Tipo de junta de acuerdo con el apartado 64.1.2.1.

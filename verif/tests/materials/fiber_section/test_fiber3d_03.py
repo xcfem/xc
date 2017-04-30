@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Test de funcionamiento del modelo de fibras.
+# Verification test of the modelo de fibras.
 
 import xc_base
 import geom
@@ -8,6 +8,12 @@ from model import predefined_spaces
 from solution import predefined_solutions
 from materials import typical_materials
 import math
+
+__author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
+__copyright__= "Copyright 2015, LCPT and AOO"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com"
 
 yF= 2.0 # Fibra en el primer cuadrante.
 zF= 3.0

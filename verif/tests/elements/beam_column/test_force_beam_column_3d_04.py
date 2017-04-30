@@ -26,7 +26,7 @@ z0= 0
 L= 1.5 # Bar length (m)
 Iy= width*depth**3/12 # Cross section moment of inertia (m4)
 Iz= depth*width**3/12 # Cross section moment of inertia (m4)
-E= 210e9 # Módulo de Young del acero.
+E= 210e9 # Young modulus of the steel.
 nu= 0.3 # Poisson's ratio
 G= E/(2*(1+nu)) # Shear modulus
 J= .2e-1 # Cross section torsion constant (m4)
@@ -49,7 +49,7 @@ lin= trfs.newLinearCrdTransf3d("lin")
 lin.xzVector= xc.Vector([0,1,0])
 
 # Materials definition
-fy= 275e6 # Tensión de cedencia del acero.
+fy= 275e6 # Tensión de cedencia of the steel.
 acero= typical_materials.defSteel01(preprocessor, "acero",E,fy,0.001)
 
 respT= typical_materials.defElasticMaterial(preprocessor, "respT",G*J) # Respuesta de la sección a torsión.

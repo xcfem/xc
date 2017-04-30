@@ -8,8 +8,14 @@ from model import predefined_spaces
 from materials import typical_materials
 import math
 
-fy= 2600 # Tensión de cedencia del material expresada en kp/cm2.
-E= 2.1e6 # Módulo de Young del material en kp/cm2.
+__author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
+__copyright__= "Copyright 2015, LCPT and AOO"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com"
+
+fy= 2600 # Tensión de cedencia of the material expressed in kp/cm2.
+E= 2.1e6 # Young modulus of the material en kp/cm2.
 xA= 1/3.0
 yA= 3/4.0
 prueba= xc.ProblemaEF()

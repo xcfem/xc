@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-''' Test de funcionamiento de una sección de hormigón armado.
+''' Verification test of una sección de hormigón armado.
    Los resultados se comparan con los obtenidos del prontuario.
    informático del hormigón estructural (Cátedra de hormigón de la ETSICCP-IECA
    UPM).
@@ -12,8 +12,8 @@ Los resultados obtenidos son aceptables teniendo en cuenta que:
 - La discretización de la sección empleada en el modelo de fibras introduce un error.
  '''
 
-# prueba.logFileName= "/tmp/borrar.log"  #Para no imprimir mensajes de advertencia.
-# Macros
+# prueba.logFileName= "/tmp/borrar.log"  #Ignore warning messages
+
 from __future__ import division
 import xc_base
 import geom
@@ -21,16 +21,21 @@ import xc
 from misc import banco_pruebas_scc3d
 from solution import predefined_solutions
 
-
 from materials.ehe import EHE_concrete
 from materials.ehe import EHE_reinforcing_steel
 from materials.fiber_section import createFiberSets
 from materials import regimenSeccion
 from model import fix_node_6dof
 
+__author__= "Luis C. Pérez Tato (LCPT)"
+__copyright__= "Copyright 2014, LCPT"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com"
+
 # Coeficientes de seguridad.
 gammac= 1.5 # Coeficiente de minoración de la resistencia del hormigón.
-gammas= 1.15 # Coeficiente de minoración de la resistencia del acero.
+gammas= 1.15 # Coeficiente de minoración de la resistencia of the steel.
 
 CurvZ= 11.474e-3 # Curvatura de prueba 1.
 x1= 0.0997 # Profundidad de la fibra neutra 1.

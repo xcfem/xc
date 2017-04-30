@@ -2,6 +2,12 @@
 ''' Home made test a partir del ejemplo expuesto
 en la página C-17 del "Bridge Strudl Manual" de noviembre de 1973 '''
 
+__author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (A_OO)"
+__copyright__= "Copyright 2015, LCPT and AO_O"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com ana.ortega.ort@gmal.com"
+
 bs= 26.51
 bi= 21.05
 h= 5.48

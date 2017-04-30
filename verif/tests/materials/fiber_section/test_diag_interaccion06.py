@@ -1,15 +1,8 @@
 # -*- coding: utf-8 -*-
-''' Test de funcionamiento del cálculo del diagrama de interacción.
+''' Verification test of the cálculo del diagrama de interacción.
    Elaboración propia. '''
 from __future__ import division
 
-__author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
-__copyright__= "Copyright 2015, LCPT and AOO"
-__license__= "GPL"
-__version__= "3.0"
-__email__= "l.pereztato@gmail.com"
-
-# Macros
 import xc_base
 import geom
 import xc
@@ -19,6 +12,12 @@ from materials.ehe import EHE_reinforcing_steel
 import math
 from materials.sia262 import steelSIA262
 from materials.fiber_section import defSeccionHASimple
+
+__author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
+__copyright__= "Copyright 2015, LCPT and AOO"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com"
 
 areaFi6= steelSIA262.section_barres_courantes[6e-3]
 areaFi8= steelSIA262.section_barres_courantes[8e-3]

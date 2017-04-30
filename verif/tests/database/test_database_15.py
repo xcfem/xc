@@ -9,7 +9,13 @@ from solution import predefined_solutions
 from materials import typical_materials
 from model import fix_node_6dof
 
-E= 2.1e9 # Módulo de Young del acero.
+__author__= "Luis C. Pérez Tato (LCPT)"
+__copyright__= "Copyright 2014, LCPT"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com"
+
+E= 2.1e9 # Young modulus of the steel.
 nu= 0.3 # Poisson's ratio.
 h= .1 # Espesor.
 L= 1 # Lado.

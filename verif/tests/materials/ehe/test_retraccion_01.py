@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-''' Test comprobación del cálculo de la deformación por retraccion
+''' Verification test of the cálculo de la deformación por retraccion
    según EHE-08. '''
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"

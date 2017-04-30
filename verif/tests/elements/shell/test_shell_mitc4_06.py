@@ -15,7 +15,7 @@ CooMaxY= 2
 E= 17472000 # Elastic modulus en lb/in2
 nu= 0.3 # Coeficiente de Poison
 G= 6720000
-thickness= 0.0001 # Cross section heightexpresado in inches.
+thickness= 0.0001 # Cross section depth expressed in inches.
 unifLoad= 0.0001 # Carga uniforme en lb/in2.
 ptLoad= 0.0004 # Carga puntual en lb.
 
@@ -32,7 +32,7 @@ prueba= xc.ProblemaEF()
 preprocessor=  prueba.getPreprocessor
 nodes= preprocessor.getNodeLoader
 predefined_spaces.gdls_resist_materiales3D(nodes)
-# Definimos materiales
+# Define materials
 
 elast= typical_materials.defElasticMaterial(preprocessor, "elast",E)
 nmb1= typical_materials.defElasticMembranePlateSection(preprocessor, "memb1",E,nu,0.0,thickness)

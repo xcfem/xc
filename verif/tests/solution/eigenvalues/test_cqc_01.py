@@ -15,6 +15,12 @@ import math
 from actions.quake import escribeCargasModo
 import numpy
 
+__author__= "Luis C. Pérez Tato (LCPT)"
+__copyright__= "Copyright 2014, LCPT"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com"
+
 masaExtremo= 1e-2 # Masa en kg.
 matrizMasasNodo= xc.Matrix([[masaExtremo,0,0,0,0,0],
                                          [0,masaExtremo,0,0,0,0],
@@ -193,14 +199,14 @@ print "ratio3= ",ratio3
 print "factoresParticipacionModalX: ",factoresParticipacionModalX
 print "factoresParticipacionModalXTeor: ",factoresParticipacionModalXTeor
 print "ratio4= ",ratio4
-print "********** desplazamiento máximo modo 1: ",maxDispMod1*1000
-print "********** desplazamiento máximo modo 1 (ejemplo): ",maxDispMod1Teor*1000
+print "********** desplazamiento máximo mode 1: ",maxDispMod1*1000
+print "********** desplazamiento máximo mode 1 (ejemplo): ",maxDispMod1Teor*1000
 print "ratioM1= ",ratioM1
-print "********** desplazamiento máximo modo 2: ",maxDispMod2*1000
-print "********** desplazamiento máximo modo 2 (ejemplo): ",maxDispMod2Teor*1000
+print "********** desplazamiento máximo mode 2: ",maxDispMod2*1000
+print "********** desplazamiento máximo mode 2 (ejemplo): ",maxDispMod2Teor*1000
 print "ratioM2= ",ratioM2
-print "********** desplazamiento máximo modo 3: ",maxDispMod3*1000
-print "********** desplazamiento máximo modo 3 (ejemplo): ",maxDispMod3Teor*1000
+print "********** desplazamiento máximo mode 3: ",maxDispMod3*1000
+print "********** desplazamiento máximo mode 3 (ejemplo): ",maxDispMod3Teor*1000
 print "ratioM3= ",ratioM3
 #print "maxDispCQC= ",maxDispCQC*1e3
 #print "maxDispCQCTeor= ",maxDispCQCTeor*1e3
