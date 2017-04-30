@@ -47,8 +47,8 @@ XC::ProcSolu *XC::ProcSoluControl::getProcSolu(void)
 const XC::ProcSolu *XC::ProcSoluControl::getProcSolu(void) const
   { return dynamic_cast<const ProcSolu *>(Owner()); }
 
-//! @brief Returns a pointer to the domain on which
-//! the solution algortithm operates.
+//! @brief Return a pointer to the domain on which
+//! the solution algorithm operates.
 XC::Domain *XC::ProcSoluControl::getDomain(void)
   {
     ProcSolu *ps= getProcSolu();
@@ -56,8 +56,8 @@ XC::Domain *XC::ProcSoluControl::getDomain(void)
     return ps->getDomainPtr();
   }
 
-//! @brief Returns a pointer to the domain on which
-//! the solution algortithm operates.
+//! @brief Return a pointer to the domain on which
+//! the solution algorithm operates.
 const XC::Domain *XC::ProcSoluControl::getDomain(void) const
   {
     const ProcSolu *ps= getProcSolu();
@@ -65,7 +65,7 @@ const XC::Domain *XC::ProcSoluControl::getDomain(void) const
     return ps->getDomainPtr();
   }
 
-//! @brief Returns a pointer to the integrator.
+//! @brief Return a pointer to the integrator.
 XC::Integrator *XC::ProcSoluControl::getIntegratorPtr(void)
   {
     ProcSolu *ps= getProcSolu();
@@ -73,7 +73,7 @@ XC::Integrator *XC::ProcSoluControl::getIntegratorPtr(void)
     return ps->getIntegratorPtr();
   }
 
-//! @brief Returns a const pointer to the integrator.
+//! @brief Return a const pointer to the integrator.
 const XC::Integrator *XC::ProcSoluControl::getIntegratorPtr(void) const
   {
     const ProcSolu *ps= getProcSolu();
@@ -81,7 +81,7 @@ const XC::Integrator *XC::ProcSoluControl::getIntegratorPtr(void) const
     return ps->getIntegratorPtr();
   }
 
-//! @bried Returns a reference to the model wrapper container.
+//! @bried Return a reference to the model wrapper container.
 XC::MapModelWrapper &XC::ProcSoluControl::getModelWrapperContainer(void)
   { return solu_models; }
 
@@ -89,32 +89,32 @@ XC::MapModelWrapper &XC::ProcSoluControl::getModelWrapperContainer(void)
 XC::MapSoluMethod &XC::ProcSoluControl::getSoluMethodContainer(void)
   { return solu_methods; }
 
-//! @brief Returns a pointer to the model wrapper with the identifier
+//! @brief Return a pointer to the model wrapper with the identifier
 //! being passed as parameter.
 const XC::ModelWrapper *XC::ProcSoluControl::getModelWrapper(const std::string &cod) const
   { return solu_models.getModelWrapper(cod); }
 
-//! @brief Returns a pointer to the model wrapper wich the identifier
-//! is being passed as parameter.
+//! @brief Return a pointer to the model wrapper with the identifier
+//! passed as parameter.
 XC::ModelWrapper *XC::ProcSoluControl::getModelWrapper(const std::string &cod)
   { return solu_models.getModelWrapper(cod); }
 
-//! @brief Returns a const pointer to the solution method.
+//! @brief Return a const pointer to the solution method.
 const XC::SoluMethod *XC::ProcSoluControl::getSoluMethod(const std::string &cod) const
   { return solu_methods.getSoluMethod(cod); }
 
-//! @brief Returns a const pointer to the solution method.
+//! @brief Return a const pointer to the solution method.
 XC::SoluMethod *XC::ProcSoluControl::getSoluMethod(const std::string &cod)
   { return solu_methods.getSoluMethod(cod); }
 
-//! @brief Returns todo a su estado original.
+//! @brief Revert to the initial state.
 void XC::ProcSoluControl::revertToStart(void)
   {
     getDomain()->revertToStart();
     solu_methods.revertToStart();
   }
 
-//! @brief Clears all.
+//! @brief Clear all.
 void XC::ProcSoluControl::clearAll(void)
   {
     solu_models.clearAll();

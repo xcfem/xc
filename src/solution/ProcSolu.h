@@ -49,9 +49,9 @@ class ProblemaEF;
 //! 
 //! @brief Solution procedure for the finite element problem.
 //!
-//! This objects allows the definition of the problem to analyza by
+//! This objects allows the definition of the problem to be analyzed by
 //! specifiying:.
-//! - The type of the analysis: static, dynamic, eigenvalues,...
+//! - The type of analysis: static, dynamic, eigenvalues,...
 //! - The parameters that control the solution procedure.
 class ProcSolu: public EntCmd
   {
