@@ -26,23 +26,23 @@ class LimitStateData(object):
     self.outputDataBaseFileName= outputDataBaseFileName
     self.controller= None
   def getInternalForcesFileName(self):
-    '''Returns the file name to read: combination name, element number and internal forces.'''
+    '''Return the file name to read: combination name, element number and internal forces.'''
     return self.internal_forces_results_directory+'intForce_'+ self.label +'.csv'
   def getDisplacementsFileName(self):
-    '''Returns the file name to read: combination name, node number and displacements (ux,uy,uz,rotX,rotY,rotZ).'''
+    '''Return the file name to read: combination name, node number and displacements (ux,uy,uz,rotX,rotY,rotZ).'''
     return self.internal_forces_results_directory+'displ_'+ self.label +'.csv'
   def getOutputDataBaseFileName(self):
-    '''Returns the output file name without extension.'''
+    '''Return the output file name without extension.'''
     return self.check_results_directory+self.outputDataBaseFileName
   def getOutputDataFileName(self):
-    '''Returns the Python executable file name.'''
+    '''Return the Python executable file name.'''
     return self.getOutputDataBaseFileName() + '.py'
   def loadPickleObject(objName):
-    '''reads a Python object from a pickle file.'''
+    '''Read a Python object from a pickle file.'''
     with open(name + '.pkl', 'r') as f:
       return pickle.load(f)
   def saveAll(self,feProblem,combContainer,setCalc,fConvIntForc= 1.0):
-    '''Writes internal forces, displacements, .., for each combination
+    '''Write internal forces, displacements, .., for each combination
      
       :param feProblem: XC finite element problem to deal with.
       :param setCalc: set of entities for which the verification is 

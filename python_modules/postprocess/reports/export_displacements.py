@@ -19,6 +19,7 @@ def exportDisplacements(combNm, nodSet, fDesc):
   :param  nodSet: set of nodes
   :param  fDesc:  name of the file to save the displacements
   '''
+  fDesc.write(" Comb. , Node , Ux , Uy , Uz , ROTx , ROTy , ROTz \n")
   for n in nodSet:
     strDisp= str(n.getDisp).rstrip().replace(' ',', ') #displacement vector [ux,uy,uz,rotx,roty,rotz]
     fDesc.write(combNm+", "+str(n.tag)+", " + strDisp+'\n')
