@@ -111,7 +111,7 @@ class QuickGraphics(object):
     for n in nodSet:
       n.setProp('propToDisp',n.getDisp[vCompDisp])
     field= Fields.ScalarField('propToDisp',"getProp",None,fConvUnits)
-    defDisplay= self.getDisplay(vwName=viewName,hCamF= CamFct)
+    defDisplay= self.getDisplay(vwName=viewName,hCamF= hCamFct)
     defDisplay.displayMesh(xcSet=self.xcSet,field=field,diagrams= None, fName=fileName,caption=self.loadCaseName+' '+itemToDisp+' '+unitDescription+' '+self.xcSet.name)
 
   def displayIntForc(self,itemToDisp='',setToDisplay=None,fConvUnits=1.0,unitDescription= '',viewName='XYZPos',hCamFct=1.0,fileName=None):
@@ -144,7 +144,7 @@ class QuickGraphics(object):
       mat= e.getPhysicalProperties.getVectorMaterials
       e.setProp(propName,mat.getMeanGeneralizedStressByName(vCompDisp))
     field= Fields.ExtrapolatedProperty(propName,"getProp",self.xcSet,fUnitConv= fConvUnits)
-    defDisplay= self.getDisplay(vwName=viewName,hCamF= CamFct)
+    defDisplay= self.getDisplay(vwName=viewName,hCamF= hCamFct)
     field.display(defDisplay=defDisplay,fName=fileName,caption=self.loadCaseName+' '+itemToDisp+' '+unitDescription +' '+self.xcSet.name)
 
   def displayIntForcDiag(self,itemToDisp='',setToDisplay=None,fConvUnits=1.0,scaleFactor=1.0,unitDescription= '',viewName='XYZPos',hCamFct=1.0,fileName=None):
