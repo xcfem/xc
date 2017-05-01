@@ -237,6 +237,7 @@ matIntForc=np.array(6*[np.array([0,0,0])]) #array to which import the resulting
                                            #local axes for the two sections of
                                            #each element
 internalForcesListing= csv.reader(f)
+internalForcesListing.next()
 for lst in internalForcesListing:
   if (len(lst)>0): #lst: list of internal forces for each combination and
                    #element

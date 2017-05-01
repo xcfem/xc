@@ -121,6 +121,7 @@ nCols= len(mean)
 nRows= 0
 import csv
 cr = csv.reader(open(fName,"rb"))
+cr.next()
 for row in cr:
   nRows+= 1
   sectionIndex= eval(row[2])
