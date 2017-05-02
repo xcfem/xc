@@ -76,13 +76,21 @@ XC::Channel::Channel(void)
     tag = numChannel;
   }
 
+//! @brief Return true if channel is a data store.
 bool XC::Channel::isDatastore(void) const
   { return false; }
 
+//! @brief Return next available database tag.
+//!
+//! Return the next available database tag, must be an integer value
+//! greater than 0, 0 is used by the objects to check if they have yet
+//! been assigned a database tag. The method defined for the Channel base
+//! class always returns 0, only database channel objects need worry
+//! about assigning unique integer values.
 int XC::Channel::getDbTag(void) const
   { return 0; }
 
-//! @brief Return the lista de dbTags usados.
+//! @brief Return the list of dbTags already used.
 const XC::ID &XC::Channel::getUsedTags(void) const
   {
     static ID retval;
@@ -94,14 +102,14 @@ const XC::ID &XC::Channel::getUsedTags(void) const
     return retval;
   }
 
-//! @brief Comprueba si ya se ha usado este dbTag.
+//! @brief Check if a \p dbTag is already used.
 bool XC::Channel::checkDbTag(const int &dbTag)
   {
     bool retval= true;
     if(usedDbTags.find(dbTag)!=usedDbTags.end())
       {
-        std::cerr << "Channel::checkDbTag; el dbTag " << dbTag
-                  << " ya se ha usado." << std::endl;
+        std::cerr << "Channel::checkDbTag; dbTag " << dbTag
+                  << " is already used." << std::endl;
         retval= false;
       }
     else
@@ -109,20 +117,22 @@ bool XC::Channel::checkDbTag(const int &dbTag)
     return retval;
   }
 
+//! @brief Reset used database tags set.
 void XC::Channel::clearDbTags(void)
   { usedDbTags.clear(); }
 
+//! @brief Return the object tag.
 int XC::Channel::getTag(void) const
   { return tag; }
 
-//! @brief Envía el objeto a través de éste canal.
+//! @brief Send \p theObject.
 int XC::Channel::sendMovable(int commitTag, MovableObject &theObject)
   {
     CommParameters cp(commitTag,*this);
     return theObject.sendSelf(cp);
   }
 
-//! @brief Recibe el objeto a través de éste canal.
+//! @brief Receive \p theObject.
 int XC::Channel::receiveMovable(int commitTag, MovableObject &theObject, FEM_ObjectBroker &theBroker)
   {
     CommParameters cp(commitTag,*this, theBroker);

@@ -74,6 +74,7 @@ namespace XC {
 //
 //! @ingroup Matrix
 //
+//! @brief Vector of integers.
 class ID: public EntCmd, public std::vector<int>
   {
   public:
@@ -93,13 +94,17 @@ class ID: public EntCmd, public std::vector<int>
     inline virtual ~ID(){}
  
     // utility methods
+    //! @brief Returns the vector size.
     inline int Size(void) const
       { return size(); }
     void Zero(void);
+    //! @brief Returns a const pointer to the vector data.
     inline const int *getDataPtr(void) const
       { return &(*this)[0]; }
+    //! @brief Returns a const pointer to the vector data.
     inline int *getDataPtr(void)
       { return &(*this)[0]; }
+    //! @brief Returns true if the vector is empty.
     inline bool Nulo(void) const
       { return empty(); }
     int resize(const int &newSize);
@@ -109,8 +114,10 @@ class ID: public EntCmd, public std::vector<int>
     bool checkRange(const int &) const;
     int &operator()(const int &);
     const int &operator()(const int &) const;
+    //! @brief Returns a reference to the element at position i in the container (does range checking => slower than () operator).
     inline int &operator[](const int &i)
       { return this->at(i); }
+    //! @brief Returns a reference to the element at position i in the container (does range checking => slower than () operator).
     inline const int &operator[](const int &i) const
       { return this->at(i); }
   
@@ -147,6 +154,7 @@ inline bool ID::checkRange(const int &i) const
       return true;
   }
  
+//! @brief Returns a reference to the element at position i in the container (does not range checking => faster than [] operator).
 inline int &ID::operator()(const int &i) 
   {
 #ifdef _G3DEBUG
@@ -157,6 +165,7 @@ inline int &ID::operator()(const int &i)
     return (*this)[i];
   }
 
+//! @brief Returns a const reference to the element at position i in the container (does not range checking => faster than [] operator).
 inline const int &ID::operator()(const int &i) const 
   {
 #ifdef _G3DEBUG

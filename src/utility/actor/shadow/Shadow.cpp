@@ -68,100 +68,145 @@
 #include <utility/matrix/ID.h>
 #include <utility/actor/objectBroker/FEM_ObjectBroker.h>
 
+//! @brief Constructor. Sets the channel and the broker.
+//!
+//! This constructor is used when the actor process is already up and
+//! running. The constructor sets its channel to be \p theChan, its 
+//! associated object broker to be \p myBroker.
 XC::Shadow::Shadow(Channel &theChan, FEM_ObjectBroker &myBroker)
-  :theRemoteActorsAddress(nullptr), commitTag(0), theChannel(&theChan), theBroker(&myBroker)
-  { theChannel->setUpConnection(); }
+  : ShadowActorBase(theChan,myBroker), theRemoteActorsAddress(nullptr)
+  {}
 
 
+//! @brief Constructor. Sets the channel, the broker, and the
+//! address to send data.
+//!
+//! This constructor is used when the actor process is already up and
+//! running. The constructor sets its channel to be \p theChan, its 
+//! associated object broker to be \p myBroker, and the address to
+//! which it will send data to be \p thaAddress.
 XC::Shadow::Shadow(Channel &theChan, FEM_ObjectBroker &myBroker, ChannelAddress &theAddress)
-  :theRemoteActorsAddress(&theAddress), commitTag(0), theChannel(&theChan), theBroker(&myBroker)
-  { theChannel->setUpConnection(); }
+  : ShadowActorBase(theChan,myBroker), theRemoteActorsAddress(&theAddress)
+  {}
 
+//! @brief Constructor. Sets the channel and the broker and gets
+//! the channel from the machine broker.
 XC::Shadow::Shadow(int actorType, FEM_ObjectBroker &myBroker, MachineBroker &theMachineBroker, int compDemand)
-  :theRemoteActorsAddress(nullptr), commitTag(0), theBroker(&myBroker)
+  :ShadowActorBase(actorType,myBroker,theMachineBroker, compDemand), theRemoteActorsAddress(nullptr)
   {
-    // start the remote actor process running
-    theChannel = theMachineBroker.startActor(actorType, compDemand);
-    if(theChannel < 0)
-      {
-        std::cerr << "Shadow::Shadow - could not start remote actor\n";
-        std::cerr << " using program " << actorType << std::endl;
-        exit(-1);
-      }
-
-    // now call setUpShadow on the channel
-    theChannel->setUpConnection();
     theRemoteActorsAddress = theChannel->getLastSendersAddress();
   }
 
+//! @brief Send object.
+//!
+//! Will send the MovableObject \p theObject to
+//! the actor object through the shadows channel. It returns the
+//! result of invoking sendObj(0,0,theObject, theBroker, theActorsAddress)
+//! on the shadow's associated channel #theChannel. 
 int XC::Shadow::sendObject(MovableObject &theObject)
-  { return theChannel->sendObj(commitTag, theObject, theRemoteActorsAddress); }
+  { return theChannel->sendObj(getCommitTag(), theObject, theRemoteActorsAddress); }
 
+//! @brief Receive object.
+//!
+//! Will cause the object to read the MovableObject \p theObject
+//! from the channel. It will return the result of invoking
+//! recvObj(0,0,theObject, theBroker, theActorsAddress) on the
+//! shadows associated channel #theChannel.
 int XC::Shadow::recvObject(MovableObject &theObject)
 {
-    return theChannel->recvObj(commitTag, theObject,*theBroker, theRemoteActorsAddress);
+    return theChannel->recvObj(getCommitTag(), theObject,*theBroker, theRemoteActorsAddress);
 }
 
 
-int
-XC::Shadow::recvMessage(Message &theMessage)
+//! @brief Send message.
+//!
+//! Will send the \p theMessage to
+//! the actor message through the shadows channel. It returns the
+//! result of invoking sendObj(0,0,theMessage, theBroker, theActorsAddress)
+//! on the shadow's associated channel #theChannel. 
+int XC::Shadow::recvMessage(Message &theMessage)
 {
-    return theChannel->recvMsg(0, commitTag, theMessage, theRemoteActorsAddress);
+    return theChannel->recvMsg(0, getCommitTag(), theMessage, theRemoteActorsAddress);
 }
 
-int
-XC::Shadow::sendMessage(const XC::Message &theMessage)
-{
-    return theChannel->sendMsg(0, commitTag, theMessage, theRemoteActorsAddress);
-}
+//! @brief Receive message.
+//!
+//! Will cause to read the \p theMessage
+//! from the channel. It will return the result of invoking
+//! recvObj(0,0,theMessage, theBroker, theActorsAddress) on the
+//! shadows associated channel #theChannel.
+int XC::Shadow::sendMessage(const XC::Message &theMessage)
+  {
+    return theChannel->sendMsg(0, getCommitTag(), theMessage, theRemoteActorsAddress);
+  }
 
-int
-XC::Shadow::sendMatrix(const XC::Matrix &theMatrix)
-{
-    return theChannel->sendMatrix(0, commitTag, theMatrix, theRemoteActorsAddress);
-}
+//! @brief Send matrix.
+//!
+//! Will send the \p theMatrix to
+//! the actor matrix through the shadows channel. It returns the
+//! result of invoking sendObj(0,0,theMatrix, theBroker, theActorsAddress)
+//! on the shadow's associated channel #theChannel. 
+int XC::Shadow::sendMatrix(const XC::Matrix &theMatrix)
+  {
+    return theChannel->sendMatrix(0, getCommitTag(), theMatrix, theRemoteActorsAddress);
+  }
 
-int
-XC::Shadow::recvMatrix(Matrix &theMatrix)
-{
-    return theChannel->recvMatrix(0, commitTag, theMatrix, theRemoteActorsAddress);
-}
+//! @brief Receive matrix.
+//!
+//! Will cause to read the \p theMatrix
+//! from the channel. It will return the result of invoking
+//! recvObj(0,0,theMatrix, theBroker, theActorsAddress) on the
+//! shadows associated channel #theChannel.
+int XC::Shadow::recvMatrix(Matrix &theMatrix)
+  {
+    return theChannel->recvMatrix(0, getCommitTag(), theMatrix, theRemoteActorsAddress);
+  }
 
-int
-XC::Shadow::sendVector(const XC::Vector &theVector)
-{
-    return theChannel->sendVector(0, commitTag, theVector, theRemoteActorsAddress);
-}
+//! @brief Send vector.
+//!
+//! Will send the \p theVector to
+//! the actor vector through the shadows channel. It returns the
+//! result of invoking sendObj(0,0,theVector, theBroker, theActorsAddress)
+//! on the shadow's associated channel #theChannel. 
+int XC::Shadow::sendVector(const XC::Vector &theVector)
+  {
+    return theChannel->sendVector(0, getCommitTag(), theVector, theRemoteActorsAddress);
+  }
 
-int
-XC::Shadow::recvVector(Vector &theVector)
-{
-    return theChannel->recvVector(0, commitTag, theVector, theRemoteActorsAddress);
-}
+//! @brief Receive vector.
+//!
+//! Will cause to read the \p theVector
+//! from the channel. It will return the result of invoking
+//! recvObj(0,0,theVector, theBroker, theActorsAddress) on the
+//! shadows associated channel #theChannel.
+int XC::Shadow::recvVector(Vector &theVector)
+  {
+    return theChannel->recvVector(0, getCommitTag(), theVector, theRemoteActorsAddress);
+  }
 
-int
-XC::Shadow::sendID(const XC::ID &theID)
-{
-    return theChannel->sendID(0, commitTag, theID, theRemoteActorsAddress);
-}
+//! @brief Send integer vector.
+//!
+//! Will send the \p theID to
+//! the actor integer vector through the shadows channel. It returns the
+//! result of invoking sendObj(0,0,theID, theBroker, theActorsAddress)
+//! on the shadow's associated channel #theChannel. 
+int XC::Shadow::sendID(const XC::ID &theID)
+  {
+    return theChannel->sendID(0, getCommitTag(), theID, theRemoteActorsAddress);
+  }
 
-int
-XC::Shadow::recvID(ID &theID)
-{
-    return theChannel->recvID(0, commitTag, theID, theRemoteActorsAddress);
-}
+//! @brief Receive integer vector.
+//!
+//! Will cause to read the \p theID
+//! from the channel. It will return the result of invoking
+//! recvObj(0,0,theID, theBroker, theActorsAddress) on the
+//! shadows associated channel #theChannel.
+int XC::Shadow::recvID(ID &theID)
+  {
+    return theChannel->recvID(0, getCommitTag(), theID, theRemoteActorsAddress);
+  }
 
-
-void XC::Shadow::setCommitTag(int tag)
-  { commitTag = tag; }
-
-
-XC::Channel *XC::Shadow::getChannelPtr(void) const
-  { return theChannel; }
-
-XC::FEM_ObjectBroker *XC::Shadow::getObjectBrokerPtr(void) const
-  { return theBroker; }
-
+//! @brief Return a pointer to the channel in the actors address space. 
 XC::ChannelAddress *XC::Shadow::getActorAddressPtr(void) const
   { return theRemoteActorsAddress; }
 

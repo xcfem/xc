@@ -80,13 +80,19 @@ class FEM_ObjectBroker;
 //
 //! @brief Channel is an abstract base class which defines the channel
 //! interface.
-//! A channel is a point of communication in a program, a mailbox to/from
-//! which data enters/leaves a program.
+//!
+//! is a point of communication in a program, a
+//! mailbox to/from which data enters/leaves a program. Channels are
+//! objects through which the objects in the current processes address
+//! space can interact with objects in another processes address space. A
+//! channel in one process space is associated with a channel in the
+//! address space of another process space. The interaction is in the form
+//! of data sent between the two processes along the connection line.
 class Channel: public EntCmd
   {
   private:
-    static int numChannel;
-    int tag; //! channel identifier;
+    static int numChannel; //!< Number of channels.
+    int tag; //!< channel identifier;
     std::set<int> usedDbTags;//!< dbTags already used.
   protected:
     int sendMovable(int commitTag, MovableObject &);
@@ -96,8 +102,16 @@ class Channel: public EntCmd
     inline virtual ~Channel(void) {}
 
     // methods to set up the channel in an actor space
+    //! @brief When creating remote actors the channels created in the actor
+    //! space need to know how to contact the shadows channels. This
+    //! information is provided in the string returned from this method. It
+    //! is used by the machine broker when starting the remote process. It
+    //! places this information as the last arguments to the program.
     virtual char *addToProgram(void) =0;
     virtual int setUpConnection(void) =0;
+    //! @brief A method invoked to set specify the next address that the next
+    //! messages to be sent if {\em sendMessage()} or received if {\em
+    //! recvMessage()} is invoked with a null pointer.
     virtual int setNextAddress(const ChannelAddress &theAddress) =0;
     virtual ChannelAddress *getLastSendersAddress(void) =0;
 
@@ -109,24 +123,111 @@ class Channel: public EntCmd
     int getTag(void) const;
     
     // methods to send/receive messages and objects on channels.
-    virtual int sendObj(int commitTag, MovableObject &, ChannelAddress *theAddress= nullptr) =0;
-    virtual int recvObj(int commitTag, MovableObject &, FEM_ObjectBroker &, ChannelAddress *theAddress= nullptr) =0;
+    //! @brief To send the object \p theObj and the commit tag \p commitTag
+    //! to a remote Channel whose address is given by \p theAddress. If
+    //! \p theAddress is 0, the Channel sends to the Channel with the
+    //! address last set in a send..(), recv..(), or {\p
+    //! setNextAddress() operation. To return 0 if successful, a negative
+    //! number if not.
+    virtual int sendObj(int commitTag, MovableObject &theObj, ChannelAddress *theAddress= nullptr) =0;
+    //! @biref To receive the object \p theObj with the commit tag \p commitTag
+    //! from a remote Channel whose address is given by \p theAddress. If
+    //! \p theAddress is 0, the Channel receives from the Channel with the
+    //! address last set in a send..(), recv..()}, or setNextAddress()
+    //! operation. To return 0 if successful, a negative number if not.
+    virtual int recvObj(int commitTag, MovableObject &theObj, FEM_ObjectBroker &theBroker, ChannelAddress *theAddress= nullptr) =0;
     template <class inputIterator>
     int sendObjs(int commitTag,const inputIterator &first,const inputIterator &last,ChannelAddress *theAddress= nullptr);
     template <class inputIterator>
     int recvObjs(int commitTag,const inputIterator &first,const inputIterator &last, FEM_ObjectBroker &, ChannelAddress *theAddress= nullptr);
 
-    virtual int sendMsg(int dbTag, int commitTag, const Message &, ChannelAddress *theAddress= nullptr) =0;  
-    virtual int recvMsg(int dbTag, int commitTag, Message &,ChannelAddress *theAddress= nullptr) =0;  
+    //! @brief A method invoked to send the data in the Message object \p
+    //! theMsg to another Channel object. The object will obtain the
+    //! data and size of the data to be sent by invoking getData() and
+    //! getSize() on theMsg. The channel object is then
+    //! responsible for sending that data to the remote channel address given
+    //! by \p theAddress. If \p theAddress is 0, the Channel sends to
+    //! the Channel with the address last set in a send..()}, recv..(),
+    //! or setNextAddress() operation. To return 0 if successful, a
+    //! negative number if not.
+    virtual int sendMsg(int dbTag, int commitTag, const Message &theMsg, ChannelAddress *theAddress= nullptr) =0;
     
-    virtual int sendMatrix(int dbTag, int commitTag, const Matrix &,ChannelAddress *theAddress= nullptr) =0;  
-    virtual int recvMatrix(int dbTag, int commitTag, Matrix &, ChannelAddress *theAddress= nullptr) =0;  
- 
-    virtual int sendVector(int dbTag, int commitTag, const Vector &, ChannelAddress *theAddress= nullptr) =0;
-    virtual int recvVector(int dbTag, int commitTag, Vector &, ChannelAddress *theAddress= nullptr) =0;
+    //! @brief Invoked to send the data in the Message object \p
+    //! theMsg to another Channel object. The object will obtain the
+    //! the size of the data that is being received by invoking getSize()
+    //! on theMsg. The channel object is then responsible for
+    //! receiving that amount of data from the channel whose address is given
+    //! by \p theAddress. If \p theAddress is 0, the Channel receives from
+    //! the Channel with the address last set in a send..(), recv..(),
+    //! or setNextAddress() operation. To return 0 if successful, a
+    //! negative number if not.
+    virtual int recvMsg(int dbTag, int commitTag, Message &theMsg, ChannelAddress *theAddress= nullptr) =0;  
 
-    virtual int sendID(int dbTag, int commitTag,const ID &, ChannelAddress *theAddress= nullptr) =0;  
-    virtual int recvID(int dbTag, int commitTag,ID &, ChannelAddress *theAddress= nullptr) =0;      
+    //! @brief Invoked to receive the data in the Matrix object \p
+    //! theMatrix to another Channel object. The object will obtain the
+    //! data and size of the data to be sent by invoking getData() and
+    //! getSize() on theMatrix. The channel object is then
+    //! responsible for sending that data to the remote channel address given
+    //! by \p theAddress. If \p theAddress is 0, the Channel sends to
+    //! the Channel with the address last set in a send..()}, recv..(),
+    //! or setNextAddress() operation. To return 0 if successful, a
+    //! negative number if not.
+    virtual int sendMatrix(int dbTag, int commitTag, const Matrix &theMatrix,ChannelAddress *theAddress= nullptr) =0;  
+
+    //! @brief Invoked to receive the data in the Matrix object \p
+    //! theMatrix to another Channel object. The object will obtain the
+    //! data and size of the data to be sent by invoking getData() and
+    //! getSize() on theMatrix. The channel object is then
+    //! responsible for sending that data to the remote channel address given
+    //! by \p theAddress. If \p theAddress is 0, the Channel sends to
+    //! the Channel with the address last set in a send..()}, recv..(),
+    //! or setNextAddress() operation. To return 0 if successful, a
+    //! negative number if not.
+    virtual int recvMatrix(int dbTag, int commitTag, Matrix &theMatrix, ChannelAddress *theAddress= nullptr) =0;  
+ 
+    //! @brief Invoked to receive the data in the Vector object \p
+    //! theVector to another Channel object. The object will obtain the
+    //! data and size of the data to be sent by invoking getData() and
+    //! getSize() on theVector. The channel object is then
+    //! responsible for sending that data to the remote channel address given
+    //! by \p theAddress. If \p theAddress is 0, the Channel sends to
+    //! the Channel with the address last set in a send..()}, recv..(),
+    //! or setNextAddress() operation. To return 0 if successful, a
+    //! negative number if not.
+    virtual int sendVector(int dbTag, int commitTag, const Vector &theVector, ChannelAddress *theAddress= nullptr) =0;
+
+    //! @brief Invoked to receive the data in the Vector object \p
+    //! theVector to another Channel object. The object will obtain the
+    //! data and size of the data to be sent by invoking getData() and
+    //! getSize() on theVector. The channel object is then
+    //! responsible for sending that data to the remote channel address given
+    //! by \p theAddress. If \p theAddress is 0, the Channel sends to
+    //! the Channel with the address last set in a send..()}, recv..(),
+    //! or setNextAddress() operation. To return 0 if successful, a
+    //! negative number if not.
+    virtual int recvVector(int dbTag, int commitTag, Vector &theVector, ChannelAddress *theAddress= nullptr) =0;
+
+    //! @brief Invoked to receive the data in the ID object \p
+    //! theID to another Channel object. The object will obtain the
+    //! data and size of the data to be sent by invoking getData() and
+    //! getSize() on theID. The channel object is then
+    //! responsible for sending that data to the remote channel address given
+    //! by \p theAddress. If \p theAddress is 0, the Channel sends to
+    //! the Channel with the address last set in a send..()}, recv..(),
+    //! or setNextAddress() operation. To return 0 if successful, a
+    //! negative number if not.
+    virtual int sendID(int dbTag, int commitTag,const ID &theID, ChannelAddress *theAddress= nullptr) =0;  
+
+    //! @brief Invoked to receive the data in the ID object \p
+    //! theID to another Channel object. The object will obtain the
+    //! data and size of the data to be sent by invoking getData() and
+    //! getSize() on theID. The channel object is then
+    //! responsible for sending that data to the remote channel address given
+    //! by \p theAddress. If \p theAddress is 0, the Channel sends to
+    //! the Channel with the address last set in a send..()}, recv..(),
+    //! or setNextAddress() operation. To return 0 if successful, a
+    //! negative number if not.
+    virtual int recvID(int dbTag, int commitTag,ID &theID, ChannelAddress *theAddress= nullptr) =0;      
   };
 
 //! @brief Send the objects on interval [first,last).

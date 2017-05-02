@@ -64,6 +64,15 @@ namespace XC {
 //! @ingroup IPComm
 //
 //! @brief Message between processes.
+//!
+//! Messages are objects that can be sent between Channels. They
+//! are provided to allow data of arbitrary length and type, e.g. structs,
+//! to be sent between processes running on similar machine
+//! architectures. WARNING Sending Messages between machines with different
+//! architectures can result in erroneuos data being received. Each
+//! Message object keeps a pointer to the data it represents and an integer
+//! outlining the data size. There is no copy of the data kept by the
+//! Message.
 class Message
   {
   private:

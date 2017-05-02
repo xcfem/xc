@@ -61,6 +61,7 @@
 #ifndef Shadow_h
 #define Shadow_h
 
+#include "utility/actor/ShadowActorBase.h"
 
 
 namespace XC {
@@ -76,15 +77,20 @@ class ID;
 class FEM_ObjectBroker;
 
 //! @ingroup IPComm
-//
-class Shadow
+//!
+//! Local object associated with an actor.
+//!
+//! Object associated with an Actor object which
+//! may exist in another process. The Shadow acts like a normal object in
+//! the users address space, data and processing that is done by the
+//! Shadow may be stored and processed in a remote process, the Actor object
+//! resides in this remote address space. The Actor and the Shadow both
+//! have a Channel, a communication port. This allows the two to
+//! communicate with each other.
+class Shadow: public ShadowActorBase
   {
   private:
-    ChannelAddress *theRemoteActorsAddress;    
-    int commitTag;
-  protected:
-    Channel *theChannel;    
-    FEM_ObjectBroker *theBroker;
+    ChannelAddress *theRemoteActorsAddress; //!< Adress of the actor.    
   public:
     Shadow(Channel &theChannel, FEM_ObjectBroker &);
 
@@ -102,11 +108,8 @@ class Shadow
     virtual int recvVector(Vector &theVector);      
     virtual int sendID(const ID &theID);  
     virtual int recvID(ID &theID);      
-    void setCommitTag(int commitTag);
 
-    Channel 		  *getChannelPtr(void) const;
-    FEM_ObjectBroker 	  *getObjectBrokerPtr(void) const;        
-    ChannelAddress        *getActorAddressPtr(void) const;
+    ChannelAddress *getActorAddressPtr(void) const;
   };
 } // end of XC namespace
 

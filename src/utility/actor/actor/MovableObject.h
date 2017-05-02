@@ -88,11 +88,19 @@ class CommMetaData;
 //! @ingroup IPComm
 //
 //! @brief Object that can move between processes.
+//!
+//! Objects which are able to send/receive themselves through
+//! Channel objects. With each movable object is associated a
+//! unique class identifier, it is this id which
+//! will allow object brokers in remote processes to create an object of
+//! the correct type. In addition when databases are being used, each
+//! MovableObject will have a unique database tag, it is this integer
+//! which will allow the objects to retrieve their own data from the database.
 class MovableObject: public DistributedBase
   {
   private:
-    int classTag;
-    int dbTag;
+    int classTag; //!< Identifier of the object class.
+    int dbTag; //!< Object identifier in the database.
   public:
     MovableObject(int classTag, int dbTag);        
     MovableObject(int classTag);   
@@ -105,8 +113,28 @@ class MovableObject: public DistributedBase
     void setDbTag(int dbTag);
     void setDbTag(CommParameters &);
 
-    virtual int sendSelf(CommParameters &) =0;
-    virtual int recvSelf(const CommParameters &) =0;
+    //! @brief Send the object.
+    //!
+    //! Each object has to send the data needed to be able to reproduce
+    //! that object in a remote process. The object uses the methods
+    //! provided by \p cp object to send the data to another channel
+    //! at the remote actor, the address of the channel is set before
+    //! this method is called.
+    //! An object of similar type at the remote actor is invoked with a
+    //! receiveSelf() to receive the data. Returns 0 if successful
+    //! (successful in that the data got to the channel), or a - if no
+    //! data was sent.
+    virtual int sendSelf(CommParameters &cp) =0;
+    
+    //! @brief Receive the object.
+    //!
+    //! Each object has to receive the data needed to be able to
+    //! recreate itself in the new process after it
+    //! has been sent through \p cp. If the object is an
+    //! aggregation containing other objects, new objects of the correct type
+    //! can be constructed using #theBroker. To return 0 if successful
+    //! or a -1 if not.
+    virtual int recvSelf(const CommParameters &cp) =0;
 
     // methods for sensitivity studies
     virtual int setParameter(const std::vector<std::string> &argv, Parameter &param);

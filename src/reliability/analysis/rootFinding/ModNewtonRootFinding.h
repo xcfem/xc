@@ -65,35 +65,28 @@
 #include <reliability/domain/components/ReliabilityDomain.h>
 
 namespace XC {
-  class GFunEvaluator;
+class GFunEvaluator;
 class ModNewtonRootFinding : public RootFinding
-{
+  {
+  private:
+    ReliabilityDomain *theReliabilityDomain;
+    ProbabilityTransformation *theProbabilityTransformation;
+    GFunEvaluator *theGFunEvaluator;
 
-public:
-	ModNewtonRootFinding(ReliabilityDomain *theReliabilityDomain,
+    int maxIter;
+    double tol;
+    double maxStepLength;
+  public:
+    ModNewtonRootFinding(ReliabilityDomain *theReliabilityDomain,
 					  ProbabilityTransformation *theProbabilityTransformation,
 					  GFunEvaluator *theGFunEvaluator,
 					  int maxIter,
 					  double tol,
 					  double maxStepLength);
 
-	~ModNewtonRootFinding();
-
-	Vector findLimitStateSurface(int space, double g, Vector Direction, Vector thePoint);
-
-
-protected:
-
-private:
-	ReliabilityDomain *theReliabilityDomain;
-	ProbabilityTransformation *theProbabilityTransformation;
-	GFunEvaluator *theGFunEvaluator;
-
-	int maxIter;
-	double tol;
-	double maxStepLength;
-
-};
+    ~ModNewtonRootFinding();
+    Vector findLimitStateSurface(int space, double g, Vector Direction, Vector thePoint);
+  };
 } // end of XC namespace
 
 #endif

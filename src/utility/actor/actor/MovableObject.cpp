@@ -64,35 +64,42 @@
 #include "utility/actor/channel/Channel.h"
 #include "utility/matrix/ID.h"
 
-//! @brief Constructor.
+//! @brief Constructor. Sets the class tag and the database tag.
+//!
+//! Sets the objects class identifier to \p cTag:
+//! this is a unique id for each class of instantiable movable
+//! objects. The identifier will allow an object broker to recognize the
+//! object type to be instantiated. Sets the objects database tag to \p
+//! dTag: this is a unique id for identifying the object in a database.
 XC::MovableObject::MovableObject(int cTag, int dTag)
   :classTag(cTag), dbTag(dTag) {}
 
 
-//! @brief Constructor.
+//! @brief Constructor. Sets the objects class identifier to \p theTag 
+//! and sets the objects database tag to 0.
 XC::MovableObject::MovableObject(int theTag)
   :classTag(theTag), dbTag(0) {}
 
-//! @brief Copy constructor.
+//! @brief Copy constructor. Doesn't copy the dbTag.
 XC::MovableObject::MovableObject(const MovableObject &otro)
   :classTag(otro.classTag), dbTag(0) {}
 
-//! @brief Operacdor asignación.
+//! @brief Operacdor asignación. Doesn't copy the dbTag.
 XC::MovableObject &XC::MovableObject::operator=(const MovableObject &otro)
   {
     classTag= otro.classTag;
     return *this;
   }
 
-//! @brief Returns the tag de la clase.
+//! @brief Return the class identifier.
 int XC::MovableObject::getClassTag(void) const
   { return classTag; }
 
-//! @brief Returns the tag para la database.
+//! @brief Return the object identifier in the database.
 int XC::MovableObject::getDbTag(void) const
   { return dbTag; }
 
-//! @brief Returns the tag para la database.
+//! @brief Return the object identifier in the database.
 int XC::MovableObject::getDbTag(CommParameters &cp)
   {
     if(dbTag==0)
@@ -100,36 +107,35 @@ int XC::MovableObject::getDbTag(CommParameters &cp)
     return dbTag;
   }
 
-//! @brief Asigna el tag para la database.
+//! @brief Sets the object identifier in the database.
 void XC::MovableObject::setDbTag(int newTag)
   { dbTag = newTag; }
 
-//! @brief Asigna, sólo si es preciso, el tag para la database.
+//! @brief Sets the object identifier in the database if not
+//! already set.
 void XC::MovableObject::setDbTag(CommParameters &cp)
   {
     if(dbTag==0)
       dbTag = cp.getDbTag();
   }
 
+//! @brief Sets the value \p param to the parameter \p argv. 
 int XC::MovableObject::setParameter(const std::vector<std::string> &argv, Parameter &param)
   { return 0; }
 
+//! @brief Updates the parameter identified by \p parameterID with \p info. 
 int XC::MovableObject::updateParameter(int parameterID, Information &info)
   { return 0; }
 
+//! @brief Activates the parameter identified by \p parameterID
 int XC::MovableObject::activateParameter(int parameterID)
   { return 0; }
 
-//! @brief Returns the identificador de la variable cuyo
-//! nombre being passed as parameter.
-int XC::MovableObject::setVariable(const std::string &variable, Information &theInfo)
+//! @brief Set the value of the variable idenfified by \p var.
+int XC::MovableObject::setVariable(const std::string &var, Information &theInfo)
   { return -1; }
 
+//! @brief Return the value of the variable idenfified by \p var.
 int XC::MovableObject::getVariable(const std::string &variable, Information &theInfo)
   { return -1; }
 
-// int XC::sendMovable(MovableObject &mv,CommParameters &cp,const CommMetaData &meta)
-//   { return cp.sendMovable(mv,meta); }
-
-// int XC::receiveMovable(MovableObject &mv,CommParameters &cp,const CommMetaData &meta)
-//   { return cp.receiveMovable(mv,meta); }

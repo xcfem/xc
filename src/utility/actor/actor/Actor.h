@@ -62,6 +62,8 @@
 // What: "@(#) Actor.h, revA"
 
 #include <vector>
+#include "utility/actor/ShadowActorBase.h"
+
 
 namespace XC {
 
@@ -75,34 +77,42 @@ class Vector;
 class ID;
 class FEM_ObjectBroker;
 
-class ActorMethod
+//! @brief Wrapper for pointers to methods of the Actor class.
+struct ActorMethod
   {
-  public:
-    int tag;
+    int tag;//!< Object identifier.
+    //! @brief Returns the pointer to the method.
     int (*theMethod)();
+    //! @brief Constructor.
     inline ActorMethod(int tg, int (*f)())
       : tag(tg), theMethod(f) {}
+    //! @brief Virtual constructor.
+    inline ActorMethod *getCopy(void) const
+      { return new ActorMethod(*this); }
   };
 
 //! @ingroup IPComm
 //
-//! @brief 
-class Actor
+//! @brief  Remote object associated with a shadow (local) object.
+//!
+//! An actor is associated with a shadow object. The shadow
+//! acts like a normal object in the users address space, data and
+//! processing that is done by the shadow may be stored and processed in a
+//! remote process, the actor resides in this remote address space. The
+//! actor and the shadow both have a channel, a communication port. This
+//! allows the two to communicate with each other.
+class Actor: public ShadowActorBase
   {
   private:	
-    int numMethods, maxNumMethods;
-    std::vector<ActorMethod *> actorMethods;
+    int numMethods; //!< Number of methods already stored.
+    int maxNumMethods; //!< Maximum number of methods to store.
+    std::vector<ActorMethod *> actorMethods; //!< Actor method container.
     ChannelAddress *theRemoteShadowsAddress;
 
-    int commitTag;
-
-    void libera(void);
+    void free_memory(void);
     void alloc(const std::vector<ActorMethod *> &otro);
     int alloc_method(const ActorMethod &);
 
-  protected:
-    FEM_ObjectBroker *theBroker; 
-    Channel *theChannel;
   public:
     Actor(Channel &theChannel, FEM_ObjectBroker &theBroker,int numActorMethods =0);
     Actor(const Actor &);
@@ -111,9 +121,9 @@ class Actor
     
     virtual int  run(void) = 0;
 
-    virtual int  addMethod(int tag, int (*fp)());
-    virtual int  getMethod();
-    virtual int  processMethod(int tag);
+    virtual int addMethod(int tag, int (*fp)());
+    virtual int getMethod();
+    virtual int processMethod(int tag);
 
     virtual int sendObject(MovableObject &theObject, ChannelAddress *theAddress =0);  
     virtual int recvObject(MovableObject &theObject, ChannelAddress *theAddress =0);
@@ -130,12 +140,8 @@ class Actor
     virtual int sendID(const ID &theID, ChannelAddress *theAddress =0);   
     virtual int recvID(ID &theID, ChannelAddress *theAddress =0);  
 
-    Channel *getChannelPtr(void) const;
-    FEM_ObjectBroker *getObjectBrokerPtr(void) const;    
     ChannelAddress *getShadowsAddressPtr(void) const;            
 
-    virtual int barrierCheck(int result);
-    void setCommitTag(int commitTag);
   };
 
 } // end of XC namespace

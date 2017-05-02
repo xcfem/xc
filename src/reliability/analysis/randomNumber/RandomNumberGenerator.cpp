@@ -57,8 +57,9 @@
 // Written by Terje Haukaas (haukaas@ce.berkeley.edu)
 //
 
-#include <reliability/analysis/randomNumber/RandomNumberGenerator.h>
+#include "RandomNumberGenerator.h"
 
+//! @brief Constructor.
 XC::RandomNumberGenerator::RandomNumberGenerator(){}
 
 

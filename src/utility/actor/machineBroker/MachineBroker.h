@@ -62,32 +62,29 @@
 #define MachineBroker_h
 
 #include <vector>
+#include "utility/actor/ObjectWithObjBroker.h"
+#include "utility/matrix/ID.h"
 
 namespace XC {
 class Channel;
 class FEM_ObjectBroker;
-class ID;
 
 //! @ingroup IPComm
 //
 //! @brief A MachineBroker is responsible
 //! for getting an actor process running on the parallel machine.
-class MachineBroker
+class MachineBroker: public ObjectWithObjBroker
   {
   private:
-    FEM_ObjectBroker *theObjectBroker;
-
     std::vector<Channel *> actorChannels; // channels owned with running actor processes
     int numActorChannels;
     int numActiveChannels;
-    ID *activeChannels;
+    ID activeChannels;
 
-    void libera(void);
-    void alloc(const std::size_t &);
     MachineBroker(const MachineBroker &);
     MachineBroker &operator=(const MachineBroker &);
   public:
-    MachineBroker(FEM_ObjectBroker *theObjectBroker);
+    MachineBroker(FEM_ObjectBroker *);
     virtual ~MachineBroker();
 
     // methods to return info about local process id and num processes
@@ -101,10 +98,9 @@ class MachineBroker
     virtual int finishedWithActor(Channel *);
 
     // methods to get and free Channels (processes)
-    virtual Channel *getMyChannel(void)        =0;
-    virtual Channel *getRemoteProcess(void)    =0;
-    virtual int freeProcess(Channel *)         =0;
-
+    virtual Channel *getMyChannel(void) =0;
+    virtual Channel *getRemoteProcess(void) =0;
+    virtual int freeProcess(Channel *) =0;
   };
 } // end of XC namespace
 

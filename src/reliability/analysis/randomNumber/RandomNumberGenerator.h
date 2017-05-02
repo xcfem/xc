@@ -60,18 +60,19 @@
 #ifndef RandomNumberGenerator_h
 #define RandomNumberGenerator_h
 
-#include <utility/matrix/Vector.h>
+#include "utility/matrix/Vector.h"
 
 namespace XC {
+//! @brief Base class for random number generators.
 class RandomNumberGenerator
   {
   public:
-	RandomNumberGenerator();
+    RandomNumberGenerator();
 
-	virtual int		generate_nIndependentStdNormalNumbers(int n, int seed=0) =0;
-	virtual int     generate_nIndependentUniformNumbers(int n, double lower, double upper, int seed=0) =0;
-	virtual Vector	getGeneratedNumbers() =0;
-	virtual int     getSeed() =0;
+    virtual int generate_nIndependentStdNormalNumbers(int n, int seed=0) =0;
+    virtual int generate_nIndependentUniformNumbers(int n, double lower, double upper, int seed=0) =0;
+    virtual const Vector &getGeneratedNumbers() const=0;
+    virtual int getSeed() =0;
   };
 } // end of XC namespace
 

@@ -135,6 +135,13 @@ class Parameter;
 //! @brief FEM_ObjectBroker is is an object broker class for the finite element
 //! method. All methods are virtual to allow for subclasses; which can be
 //! used by programmers when introducing new subclasses of the main objects.
+//!
+//! object used to create a new blank 
+//! of a certain type in a process. The explicit type of object
+//! created depends on the method invoked and the integer classTag
+//! passed as an argument to the method. Once the object has been created, 
+//! recvSelf() can be invoked on the object to instantiate the object
+//! with it's data.
 class FEM_ObjectBroker
   {
   private:
@@ -143,11 +150,9 @@ class FEM_ObjectBroker
   public:
     FEM_ObjectBroker();
 
-    virtual Actor*getNewActor(int classTag, Channel *theChannel);
+    virtual Actor* getNewActor(int classTag, Channel *theChannel);
 
-    virtual PartitionedModelBuilder *
-      getPtrNewPartitionedModelBuilder(Subdomain &theSub,
-				       int classTag);
+    virtual PartitionedModelBuilder *getPtrNewPartitionedModelBuilder(Subdomain &theSub, int classTag);
 
     virtual GraphNumberer *getPtrNewGraphNumberer(int classTag);
     virtual Vertex *getNewVertex(int classTag);

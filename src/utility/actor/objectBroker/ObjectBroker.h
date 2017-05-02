@@ -68,7 +68,10 @@ namespace XC {
 
 //! @ingroup IPComm
 //
-//! @brief Base class for brokers.
+//! @brief Base class for object brokers.
+//!
+//! ObjectBrokers are objects in remote processes which
+//! create new objects in the remote process.
 class ObjectBroker
   {
     public:

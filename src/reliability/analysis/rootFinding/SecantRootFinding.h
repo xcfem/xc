@@ -65,29 +65,26 @@
 #include <reliability/domain/components/ReliabilityDomain.h>
 
 namespace XC {
-  class GFunEvaluator;
+class GFunEvaluator;
 class SecantRootFinding : public RootFinding
-{
-
-public:
-	SecantRootFinding(ReliabilityDomain *theReliabilityDomain,
+  {
+  public:
+    int maxIter;
+    double tol;
+    double maxStepLength;
+    SecantRootFinding(ReliabilityDomain *theReliabilityDomain,
 					  ProbabilityTransformation *theProbabilityTransformation,
 					  GFunEvaluator *theGFunEvaluator,
 					  int maxIter,
 					  double tol,
 					  double maxStepLength);
 
-	Vector findLimitStateSurface(int space, double g, Vector Direction, Vector thePoint);
+    Vector findLimitStateSurface(int space, double g, Vector Direction, Vector thePoint);
 private:
-	ReliabilityDomain *theReliabilityDomain;
-	ProbabilityTransformation *theProbabilityTransformation;
-	GFunEvaluator *theGFunEvaluator;
-
-	int maxIter;
-	double tol;
-	double maxStepLength;
-
-};
+    ReliabilityDomain *theReliabilityDomain;
+    ProbabilityTransformation *theProbabilityTransformation;
+    GFunEvaluator *theGFunEvaluator;
+  };
 } // end of XC namespace
 
 #endif

@@ -56,28 +56,39 @@
 #include <cstring>
 #include <iostream>
 
+//! @brief Construct an empty message.
 XC::Message::Message(void)
-  :length(0),data(nullptr)
-  {}
+  :length(0),data(nullptr) {}
 
+//! @brief Construct a message for sending/receiving an array containing \p
+//! size doubles.
 XC::Message::Message(double *Ptr,int size)
   {
     length = size*sizeof(double);
     data = reinterpret_cast<char *>(Ptr);
   }
 
+//! @brief Construct a message for sending/receiving an array containing \p
+//! size ints.
 XC::Message::Message(int *Ptr, int size)
   {
     length = size*sizeof(int);
     data = reinterpret_cast<char *>(Ptr);
   }
 
+//! To construct a message for sending/receiving a string of \p size
+//! characters or a struct.
 XC::Message::Message(char *Ptr, int size)
   {
     length = size*sizeof(char);
     data = Ptr;
   }
 
+//! Will put the data given by the character pointer \p
+//! theData of size endLoc -startLoc into the data array pointed to
+//! by the Message starting at location $startLoc$ in this array. Returns 0 if
+//! successful; an error message is printed and a -1 is returned if
+//! not. The routine bcopy() is used to copy the data.
 int XC::Message::putData(char *theData, int startLoc, int endLoc)
   {
     if(startLoc > 0 && startLoc <= length && endLoc <= length && endLoc > startLoc)
@@ -89,14 +100,17 @@ int XC::Message::putData(char *theData, int startLoc, int endLoc)
       }
     else
       {
-	std::cerr << "XC::Message::putData() - invalid length of data given\n";
+	std::cerr << "Message::putData() - invalid length of data given\n";
 	return -1;
       }
   }
 
+//! @brief Returns a const char * pointer to the messages data.
 const char *XC::Message::getData(void)
   { return data; }
 
+//! @brief Get the size of the array. The unit of size is that of a
+//! character. 
 int XC::Message::getSize(void)
   { return length; }
 

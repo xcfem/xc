@@ -51,33 +51,20 @@
 // Written: fmk
 // Revision: A
 
-#include "utility/actor/machineBroker/MachineBroker.h"
-#include "utility/matrix/ID.h"
+#include "MachineBroker.h"
 #include "../channel/Channel.h"
 
 #include "../actor/Actor.h"
 #include "../objectBroker/FEM_ObjectBroker.h"
 
-void XC::MachineBroker::libera(void)
-  {
-    if(activeChannels)
-      {
-        delete activeChannels;
-        activeChannels= nullptr;
-      }
-  }
 
-void XC::MachineBroker::alloc(const std::size_t &sz)
-  {
-    libera();
-    activeChannels=new ID(sz);
-  }
-
+//! @brief Constructor. Set the object broker.
 XC::MachineBroker::MachineBroker(FEM_ObjectBroker *theBroker)
-  :theObjectBroker(theBroker), actorChannels(0), numActorChannels(0), numActiveChannels(0), activeChannels(nullptr) {}
+  : ObjectWithObjBroker(theBroker), actorChannels(0), numActorChannels(0), numActiveChannels(0), activeChannels() {}
 
+//! @brief Destructor.
 XC::MachineBroker::~MachineBroker(void)
-  { libera(); }
+  {}
 
 
 int XC::MachineBroker::shutdown(void)
@@ -99,7 +86,7 @@ int XC::MachineBroker::shutdown(void)
 
     if(!actorChannels.empty())
       {
-        libera();
+        activeChannels.resize(0);
         numActorChannels = 0;
         numActiveChannels = 0;
       }
@@ -132,7 +119,7 @@ int XC::MachineBroker::runActors(void)
         else
           {
             // create an actor of approriate type
-            Actor *theActor= theObjectBroker->getNewActor(actorType, theChannel);
+            Actor *theActor= getObjectBrokerPtr()->getNewActor(actorType, theChannel);
             if(!theActor)
               {
                 std::cerr << "MachineBroker::run(void) - invalid actor type\n";
@@ -155,12 +142,18 @@ int XC::MachineBroker::runActors(void)
       }
     return 0;
   }
-
-
+//! @brief Invoked to start the program.
+//! 
+//! @brief Invoked to start the program, #actorProgram, on the parallel
+//! machine. The remote actor process uses information supplied by 
+//! #theChannel to allow the remote process to connect to the local
+//! process. The integer \p compDemand provides an indication of the
+//! computational demands of the remote process in a heterogeneous
+//! environment. 
 XC::Channel *XC::MachineBroker::startActor(int actorType, int compDemand)
   {
     if(compDemand != 0) 
-      std::cerr << "XC::MachineBroker::startActor() - does not take computational demand variable into account\n";
+      std::cerr << "MachineBroker::startActor() - does not take computational demand variable into account\n";
 
     Channel *theChannel= nullptr;
 
@@ -169,12 +162,12 @@ XC::Channel *XC::MachineBroker::startActor(int actorType, int compDemand)
       {
         for(int i=0; i<numActorChannels; i++)
           {
-            if((*activeChannels)(i) == 0)
+            if(activeChannels(i) == 0)
               {
                 theChannel = actorChannels[i];
                 i=numActorChannels;
                 numActiveChannels++;
-                (*activeChannels)(i) = 1;
+                activeChannels(i) = 1;
               }
           }
       }
@@ -189,10 +182,7 @@ XC::Channel *XC::MachineBroker::startActor(int actorType, int compDemand)
             return 0;
           }
         actorChannels.resize(numActorChannels+1,nullptr);
-        if(activeChannels)
-          activeChannels->resize(numActorChannels+1);
-        else
-          alloc(numActorChannels+1);
+        activeChannels.resize(numActorChannels+1);
 
         numActorChannels++;
         numActiveChannels++;    
@@ -230,7 +220,7 @@ int XC::MachineBroker::finishedWithActor(Channel *theChannel)
         if(theChannel == actorChannels[i])
           {
             numActiveChannels--;
-            (*activeChannels)(i) = 0;
+            activeChannels(i)= 0;
             return 0;
           }
       }

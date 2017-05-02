@@ -62,19 +62,9 @@
 #include <reliability/domain/distributions/NormalRV.h>
 #include <utility/matrix/Vector.h>
 
-
+//! @brief Constructor.
 XC::CStdLibRandGenerator::CStdLibRandGenerator()
-  :RandomNumberGenerator(), generatedNumbers(nullptr) {}
-
-XC::CStdLibRandGenerator::~CStdLibRandGenerator()
-  {
-    if(generatedNumbers)
-      delete generatedNumbers;
-  }
-
-
-
-
+  :RandomNumberGenerator(), generatedNumbers() {}
 
 int XC::CStdLibRandGenerator::generate_nIndependentUniformNumbers(int n, double lower, double upper, int seedIn)
   {
@@ -101,14 +91,7 @@ int XC::CStdLibRandGenerator::generate_nIndependentUniformNumbers(int n, double 
 
     seed= randomNumberBetween0AndRAND_MAX;
       
-    if(generatedNumbers == 0)
-      { generatedNumbers = new Vector(n); }
-    else if(generatedNumbers->Size()!=n)
-      {
-        delete generatedNumbers;
-        generatedNumbers = new XC::Vector(n);
-      }
-    (*generatedNumbers) = randomArray;
+    generatedNumbers= randomArray;
     return 0;
   }
 
@@ -165,24 +148,15 @@ int XC::CStdLibRandGenerator::generate_nIndependentStdNormalNumbers(int n, int s
     }
     seed = randomNumberBetween0AndRAND_MAX;
 
-    if (generatedNumbers == 0) {
-            generatedNumbers = new XC::Vector(n);
-    }
-    else if (generatedNumbers->Size() != n) {
-            delete generatedNumbers;
-            generatedNumbers = new XC::Vector(n);
-    }
-    (*generatedNumbers) = randomArray;
-
+    generatedNumbers= randomArray;
     delete aStdNormRV;
-
     return 0;
-}
+  }
 
 
 
-XC::Vector XC::CStdLibRandGenerator::getGeneratedNumbers()
-  { return (*generatedNumbers); }
+const XC::Vector &XC::CStdLibRandGenerator::getGeneratedNumbers(void) const
+  { return generatedNumbers; }
 
 
 int XC::CStdLibRandGenerator::getSeed()

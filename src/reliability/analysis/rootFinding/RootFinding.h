@@ -60,16 +60,16 @@
 #ifndef RootFinding_h
 #define RootFinding_h
 
-#include <utility/matrix/Vector.h>
+#include "utility/matrix/Vector.h"
 
 namespace XC {
+//! @brief Base class for root finding algorithms.
 class RootFinding
-{
+  {
+  public:
+    RootFinding(void);
 
-public:
-	RootFinding();
-
-	virtual Vector findLimitStateSurface(int space, double g, Vector Direction, Vector thePoint) =0;
+    virtual Vector findLimitStateSurface(int space, double g, Vector Direction, Vector thePoint) =0;
   };
 } // end of XC namespace
 

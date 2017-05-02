@@ -62,23 +62,18 @@
 
 namespace XC {
 class CStdLibRandGenerator : public RandomNumberGenerator
-{
+  {
+  private:
+    Vector generatedNumbers;
+    int seed;
+  public:
+    CStdLibRandGenerator(void);
 
-public:
-	CStdLibRandGenerator();
-	~CStdLibRandGenerator();
-
-	int		generate_nIndependentStdNormalNumbers(int n, int seed=0);
-	int     generate_nIndependentUniformNumbers(int n, double lower, double upper, int seed=0);
-	Vector	getGeneratedNumbers();
-	int     getSeed();
-
-protected:
-
-private:
-	Vector *generatedNumbers;
-	int seed;
-};
+    int	generate_nIndependentStdNormalNumbers(int n, int seed=0);
+    int generate_nIndependentUniformNumbers(int n, double lower, double upper, int seed=0);
+    const Vector &getGeneratedNumbers(void) const;
+    int getSeed();
+  };
 } // end of XC namespace
 
 #endif
