@@ -75,7 +75,6 @@ def estimateSigmaCPlanB(sccData, N, M):
 def getConcreteLimitStress(sccData,kc,controlVars):
   '''4.3.8.3.1 SIA 262 2013'''
   fcd= sccData.concrType.fcd()
-  #print "sigma_c0= ", sigma_c0/1e6, " sigma_c1= ", sigma_c1/1e6
   concreteStresses= controlVars.getConcreteMaxMinStresses()
   sg_max= concreteStresses[0]
   sg_min= concreteStresses[1]
@@ -147,9 +146,8 @@ class FatigueController(lsc.LimitStateControllerBase):
       sigma_sNeg= stressCalc.sgsp
       sigma_c= stressCalc.sgc
       #print "sgc0= ", stressCalc.sgc0
-
       controlVars= e.getProp(self.limitStateLabel)
-      resultsComb= cv.FatigueControlBaseVars(combNm,N, My, Mz,Vy,sigma_sPos, sigma_sNeg,sigma_c)
+      resultsComb= cv.FatigueControlBaseVars(combNm,-1.0,N, My, Mz,Vy,sigma_sPos, sigma_sNeg,sigma_c)
       if(index==0):
         controlVars.state0= resultsComb
       else:
@@ -168,6 +166,7 @@ class FatigueController(lsc.LimitStateControllerBase):
         FCflex= diagInt.getCapacityFactor(posEsf)
         controlVars.Mu= My/FCflex
         controlVars.Vu= secHAParamsCortante.calcVu(N,My, controlVars.Mu, Vy)
+        
         controlVars.shearLimit= getShearLimit(section,controlVars,controlVars.Vu)
         controlVars.concreteShearCF= getShearCF(controlVars)
         e.setProp(self.limitStateLabel,controlVars)
