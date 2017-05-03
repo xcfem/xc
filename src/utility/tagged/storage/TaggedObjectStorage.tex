@@ -44,24 +44,24 @@ Does nothing.\\
 \indent {\em virtual ~TaggedObjectStorage();} \\ 
 Does nothing. Provided so that the concrete subclasses destructor will
 be invoked. The subclasses destructor is NOT to delete the objects
-stored in the object. {\em clearAll()} can be invoked by the
+stored in the object. clearAll() can be invoked by the
 programmer if this is required. \\
 
 \noindent {\bf Public Member Functions} \\
 \indent {\em virtual int setSize(int newSize) =0;}\\
-To provide an indication to the container object that {\em newSize}
+To provide an indication to the container object that \p newSize
 components are likely to be added. This is only a hint, it should be
-acceptable for more or less objects than {\em newSize} to be added to
+acceptable for more or less objects than \p newSize to be added to
 the container. \\
 
 \indent {\em virtual bool addComponent(TaggedObject *newComponent);}\\
-To add the object {\em newComponent} to the container. To return
-{\em true} if the object was added to the container, {\em false}
+To add the object \p newComponent to the container. To return
+\p true if the object was added to the container, \p false
 otherwise. The object should not be added if another object with a
 similar tag already exists in the container.\\
  
 \indent {\em virtual TaggedObject *removeComponent(int tag) =0;}\\
-To remove the component whose tag is given by {\em tag} from the
+To remove the component whose tag is given by \p tag from the
 container. To return a pointer to the removed object if successful,
 $0$ if not.\\ 
 
@@ -70,7 +70,7 @@ To return the number of components currently stored in the container. \\
 
 \indent {\em virtual TaggedObject *getComponentPtr(int tag) =0;}\\
 To return a pointer to the TaggedObject whose identifier is given by
-{\em tag}. If the object has not been added to the container $0$ is to
+\p tag. If the object has not been added to the container $0$ is to
 be returned. \\
 
 \indent {\em virtual TaggedObjectIter \&getComponents(void) =0;}\\
@@ -82,7 +82,7 @@ To return an empty copy of the container. \\
 
 \indent {\em virtual void clearAll(bool invokeDestructor = true) =0;}\\
 To remove all objects from the container and {\bf to invoke the
-destructor on these objects} if {\em invokeDestructor} is {\em true}. \\
+destructor on these objects} if \p invokeDestructor is \p true. \\
 
 \indent {\em virtual void Print(OPS_Stream \&s, int flag =0) =0;}\\
 To invoke {\em Print(s,flag)} on all objects which have been added to

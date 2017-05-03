@@ -38,18 +38,18 @@ FEM\_ObjectBroker \&theBroker);}\\
 \indent {\em CTestNormDispIncr(double tol, int maxNumIter);}  \\
 The integer {\em CLASS\_TAGS\_CTestNormDispIncr}, defined in
 $<$classTags.h$>$, is passed to the ConvergenceTest constructor. Sets
-the tolerance used in {\em test()} to be {\em tol}, the max number
-of iterations to be performed to {\em maxNumIter} and the print
+the tolerance used in test() to be \p tol, the max number
+of iterations to be performed to \p maxNumIter and the print
 flag used to determine what, if anything, is printed on each test to
-{\em printFlag}. \\
+\p printFlag. \\
 
 
 \indent {\em CTestNormDispIncr();}  \\
 To be used by the FEM\_ObjectBroker object in parallel programs. The
 integer {\em CLASS\_TAGS\_CTestNormDispIncr}, defined in
 $<$classTags.h$>$, is passed to the ConvergenceTest constructor. Sets
-the tolerance used in {\em test()} to be {\em 0.0} and {\em maxNumIter} 
-to be $0$. These will be set when {\em recvSelf()} is invoked on the object. \\
+the tolerance used in test() to be {\em 0.0} and \p maxNumIter 
+to be $0$. These will be set when recvSelf() is invoked on the object. \\
 
 
 \noindent {\bf Destructor} \\
@@ -58,12 +58,12 @@ Does nothing. \\
 
 \noindent {\bf Public Methods }  \\
 \indent {\em int setTolerance(double newTol);} \\
-Sets the tolerance used in {\em test()} to be {\em newTol}. \\
+Sets the tolerance used in test() to be \p newTol. \\
 
 \indent {\em int setEquiSolnAlgo(EquiSolnAlgo \&theAlgo);} \\
-It sets a pointer to {\em theAlgo}'s LinearSOE object. Returns $0$ if
+It sets a pointer to \p theAlgo's LinearSOE object. Returns $0$ if
 successful, a $-1$ is returned and an error message printed if no
-LinearSOE object has been set in {\em theAlgo}. \\
+LinearSOE object has been set in \p theAlgo. \\
 
 \indent {\em int start(void);} \\
 Sets an integer indicating the current number of iterations, {\em
@@ -72,10 +72,10 @@ and $-1$ are returned if no LinearSOE object has been set. \\
 
 \indent {\em int test(void);} \\
 Returns {currentNumIter} if if the two norm of the LinearSOE objects X
-Vector is less than the tolerance {\em tol}. If no LinearSOE has been
-set $-2$ is returned. If the {\em currentNumIter} $>=$ {\em
+Vector is less than the tolerance \p tol. If no LinearSOE has been
+set $-2$ is returned. If the \p currentNumIter $>=$ {\em
 maxNumIter} an error message is printed and $-2$ is returned. If none
-of these conditions is met, the {\em currentnumIter} is incremented
+of these conditions is met, the \p currentnumIter is incremented
 and $-1$ is returned. If the print flag is $0$ nothing is printed to
 opserr during the method, if $1$ the current iteration and norm are
 printed to opserr, and if $2$ the norm and number of iterations to convergence
@@ -83,18 +83,18 @@ are printed to opserr. \\
 
 
 \indent {\em int sendSelf(int commitTag, Channel \&theChannel);}\\ 
-Creates a Vector of size 3, puts the tolerance value {\em tol}, {\em
-numIncr} and {\em printFlag}
-in this, and then invokes {\em sendVector()} on {\em
+Creates a Vector of size 3, puts the tolerance value \p tol, {\em
+numIncr} and \p printFlag
+in this, and then invokes sendVector() on {\em
 theChannel}. Returns $0$ if successful. A warning message is printed
 and a negative number if the Channel object fails to send the Vector.\\ 
 
 \indent {\em int recvSelf(int commitTag, Channel \&theChannel,
 FEM\_ObjectBroker \&theBroker);}\\ 
-Creates a Vector of size 3, invokes {\em recvVector()} on {\em
-theChannel}, and sets the values of {\em tol}, {\em numIncr} and {\em printFlag}.
+Creates a Vector of size 3, invokes recvVector() on {\em
+theChannel}, and sets the values of \p tol, \p numIncr and \p printFlag.
 Returns $0$ if successful. If the Channel object fails to receive the
-Vector, {\em tol} is set to $1.0e-8$, {\em numIter} to $25$, a warning
+Vector, \p tol is set to $1.0e-8$, \p numIter to $25$, a warning
 message is printed, and a negative number returned.
 
 

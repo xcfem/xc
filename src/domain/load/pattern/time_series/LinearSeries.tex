@@ -42,16 +42,16 @@ Does nothing. \\
 
 \noindent {\bf Public Methods} \\
 \indent {\em  virtual double getFactor(double pseudoTime);}\\
-Returns the product of {\em cFactor} and {\em pseudoTime}. \\
+Returns the product of \p cFactor and \p pseudoTime. \\
 
 \indent {\em  virtual int sendSelf(int commitTag, Channel
 \&theChannel);}\\
-Creates a vector of size 1 into which it places {\em cFactor} and
-invokes {\em sendVector()} on the Channel object. \\
+Creates a vector of size 1 into which it places \p cFactor and
+invokes sendVector() on the Channel object. \\
 
 \indent {\em  virtual int recvSelf(int commitTag, Channel \&theChannel,
 FEM\_ObjectBroker \&theBroker);}\\
-Does the mirror image of {\em sendSelf()}. \\
+Does the mirror image of sendSelf(). \\
 
 \indent {\em  virtual void Print(std::ostream \&s, int flag =0) =0;}\\
-Prints the string 'LinearSeries' and the factor{\em cFactor}.
+Prints the string 'LinearSeries' and the factor\p cFactor.

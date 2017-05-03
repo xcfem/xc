@@ -52,12 +52,12 @@ substructuring operations on a ProfileSPDLinSOE object. EXPAND. \\
 \noindent {\bf Public Methods}  \\
 \indent {\em int condenseA(int numInt);} \\
 Causes the condenser to form $A_{ee}^* = A_{ee} -A_{ei} A_{ii}^{-1} A_{ie}$, where
-$A_{ii}$ is the first {\em numInt} rows of the $A$ matrix.  The
+$A_{ii}$ is the first \p numInt rows of the $A$ matrix.  The
 original $A$ is changed as a result. $A_{ee}^*$ is to be stored in $A_{ee}$. \\
 
 {\em int condenseRHS(int numInt);} \\
 Causes the condenser to form $B_e^* = B_e - A_{ei} A_{ii}^{-1} B_i$, where $A_{ii}$ 
-is the first {\em numInt} rows of $A$. The original $B$ is changed as a result. 
+is the first \p numInt rows of $A$. The original $B$ is changed as a result. 
 $B_e^*$ is to be stored in $B_e$. \\
 
 {\em int computeCondensedMatVect(Vector \&u, int numInt);} \\
@@ -75,11 +75,11 @@ computeCondensedMatVect()}. \\
 
 {\em int setComputedXext(const Vector \&u);} \\
 Sets the computed value of the unknowns in $X_e$ corresponding to the
-external equations to {\em u}. The number of external equations is
+external equations to \p u. The number of external equations is
 given by the size of vector $u$.\\
 
 {\em  int solveXint(void);} \\
 To compute the internal equation numbers $X_i$ given the value set
-for the external equations in the last call to {\em setComputedXext()}. \\
+for the external equations in the last call to setComputedXext(). \\
 
 

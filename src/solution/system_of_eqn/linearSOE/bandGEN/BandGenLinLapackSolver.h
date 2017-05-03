@@ -70,6 +70,11 @@ namespace XC {
 //! @ingroup Solver
 //
 //! @brief <a href="http://http://www.netlib.org/lapack/" target="_new"> Lapack</a> based band general matrix SOE solver.
+//!
+//! A BandGenLinLapackSolver object can be constructed to solve
+//! a BandGenLinSOE object. It obtains the solution by making calls on the
+//! the LAPACK library. The class is defined to be a friend of the 
+//! BandGenLinSOE class.
 class BandGenLinLapackSolver: public BandGenLinSolver
   {
   private:

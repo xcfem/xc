@@ -42,7 +42,7 @@ FEM\_ObjectBroker \&theBroker); }\\
 \indent {\em ElasticMaterial(int tag, int classTag);}  \\
 To construct an ElasticMaterial with an integer identifier {\em
 tag}, an elastic tangent modulus of $E$ and a current strain
-$\epsilon$ of $0.0$. The integers {\em tag} and
+$\epsilon$ of $0.0$. The integers \p tag and
 MAT\_TAG\_ElasticMaterial, defined in $<$classTags.h$>$, are passed 
 to the UniaxialMaterial classes constructor. \\
 
@@ -73,26 +73,26 @@ Returns $0$. \\
 
 \indent {\em UniaxialMaterial *getCopy(void); } \\
 returns a pointer to a new ElasticMaterial object, constructed
-using the same values of {\em tag} and $E$. It is up to the caller to
+using the same values of \p tag and $E$. It is up to the caller to
 ensure that the destructor is invoked. \\
 
 \indent {\em    int sendSelf(int commitTag, Channel \&theChannel); }\\
-Creates a Vector of size $2$ into which it places  {\em tag} and
-{\em E}. Invokes {\em sendVector()} on  {\em theChannel} using the
-ElasticMaterialObjects {\em dbTag}, the integer {\em commitTag} and
+Creates a Vector of size $2$ into which it places  \p tag and
+\p E. Invokes sendVector() on  \p theChannel using the
+ElasticMaterialObjects \p dbTag, the integer \p commitTag and
 the Vector as arguments. Returns $0$ if successful, a warning message
 and a negative number are returned if the Channel object fails to send
 the Vector. \\
 
 \indent {\em    int recvSelf(int commitTag, Channel \&theChannel, 
 		 FEM\_ObjectBroker \&theBroker); }\\
-Creates a Vector of size $2$. Invokes {\em recvVector()} on  {\em
-theChannel} using the ElasticMaterialObjects {\em dbTag}, the integer
-{\em commitTag} and the Vector as arguments. Using the data in the
-Vector to set it's {\em tag} and $E$. Returns $0$ if successful, a
-warning message is printed, {\em tag} and $E$ are set to $0.0$, and a
+Creates a Vector of size $2$. Invokes recvVector() on  {\em
+theChannel} using the ElasticMaterialObjects \p dbTag, the integer
+\p commitTag and the Vector as arguments. Using the data in the
+Vector to set it's \p tag and $E$. Returns $0$ if successful, a
+warning message is printed, \p tag and $E$ are set to $0.0$, and a
 negative number is returned if the Channel object fails to receive
 the Vector. \\
 
 \indent {\em    void Print(OPS_Stream \&s, int flag =0);} \\
-Prints to the stream {\em s} the objects {\em tag} and $E$ values. \\
+Prints to the stream \p s the objects \p tag and $E$ values. \\

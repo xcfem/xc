@@ -41,7 +41,7 @@ Used to construct a PathTimeSeries when the data points and time
 values are specified in a Vectors. The tag
 TSERIES\_TAG\_PathTimeSeries is passed to the TimeSeries 
 constructor. Sets the constant factor used in the relation to {\em
-cFactor}. Constructs two new Vectors equal to {\em thePath} and {\em
+cFactor}. Constructs two new Vectors equal to \p thePath and {\em
 time}. Prints a warning message if no space is available for the
 Vectors or if the two Vectors are not of the same size.\\ 
 
@@ -50,7 +50,7 @@ cFactor);}\\
 Used to construct a PathTimeSeries when the data points and time
 values are specified in files. The tag TSERIES\_TAG\_PathTimeSeries is
 passed to the TimeSeries constructor. Sets the constant factor used in
-the relation to {\em cFactor}. Opens the two files and counts the
+the relation to \p cFactor. Opens the two files and counts the
 number of entries in each, if different prints a warning message and
 returns. Constructs the two vectors for the data and reads the data
 from the files into the two vectors. Prints a warning message if no
@@ -68,24 +68,24 @@ Invokes the destructor on the two Vectors created to hold the data. \\
 
 \noindent {\bf Public Methods} \\
 \indent {\em  virtual double getFactor(double pseudoTime);}\\
-Determines the load factor based on the {\em pseudoTime} and the data
-points. Returns $0.0$ if {\em pseudoTime} is greater than time of last
+Determines the load factor based on the \p pseudoTime and the data
+points. Returns $0.0$ if \p pseudoTime is greater than time of last
 data point, otherwise returns a linear interpolation of the data
-points times the factor {\em cFactor}. \\
+points times the factor \p cFactor. \\
 
 \indent {\em  virtual int sendSelf(int commitTag, Channel
 \&theChannel);}\\
-Creates a vector of size 4 into which it places {\em cFactor}, the
-size of {\em thePath} and two  database tag for {\em 
-thaPath} and {\em time} Vectors.  Invokes {\em sendVector()} on the
+Creates a vector of size 4 into which it places \p cFactor, the
+size of \p thePath and two  database tag for {\em 
+thaPath} and \p time Vectors.  Invokes sendVector() on the
 Channel with this newly created Vector object, and then again with the
-{\em time} and {\em thePath} Vectors.\\
+\p time and \p thePath Vectors.\\
 
 \indent {\em  virtual int recvSelf(int commitTag, Channel \&theChannel,
 FEM\_ObjectBroker \&theBroker);}\\
-Does the mirror image of {\em sendSelf()}. \\
+Does the mirror image of sendSelf(). \\
 
 \indent {\em  virtual void Print(std::ostream \&s, int flag =0) =0;}\\
-Prints the string 'PathTimeSeries', the factor{\em cFactor}, and the time
-increment {\em dT}. If {\em flag} is equal to $1.0$ {\em
-thePath} and {\em time} Vector are also printed\\
+Prints the string 'PathTimeSeries', the factor\p cFactor, and the time
+increment \p dT. If \p flag is equal to $1.0$ {\em
+thePath} and \p time Vector are also printed\\

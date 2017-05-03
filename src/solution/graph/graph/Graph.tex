@@ -50,29 +50,29 @@ used to store the Vertices.\\
 
 \indent {\em Graph(int numVertices);} \\
 To create an empty Graph. Creates an ArrayOfTagged object of initial
-size {\em numVertices} in which to store the Vertices. The
+size \p numVertices in which to store the Vertices. The
 ArrayOfTagged object is used to store the Vertices. \\ 
 
 \indent {\em Graph(TaggedObjectStorage \&theVerticesStorage);}\\ 
-To create an empty Graph. The {\em theVerticesStorage} object is used to
-store the Vertices. {\em clearAll()} is invoked on this object to
+To create an empty Graph. The \p theVerticesStorage object is used to
+store the Vertices. clearAll() is invoked on this object to
 ensure it is empty. \\
 
 \noindent {\bf Destructor}  \\
 \indent {\em virtual~$\tilde{}$Graph();}  \\
-Invokes {\em clearAll()} on the storage object used to store the
+Invokes clearAll() on the storage object used to store the
 Vertices. It then invokes delete on the storage object used, which was
 either passed or created in the constructor. \\
 
 \noindent {\bf Public Methods }  \\
 \indent {\em virtual bool addVertex(Vertex *vertexPtr, bool
 checkAdjacency = true);} \\
-Causes the graph to add a vertex to the graph. If {\em checkAdjacency}
-is {\em true}, a check is made to ensure that all the Vertices in the
+Causes the graph to add a vertex to the graph. If \p checkAdjacency
+is \p true, a check is made to ensure that all the Vertices in the
 adjacency list of the Vertex are in the Graph. If a vertex in the
 adjacency is not in the Graph the vertex is not added, a warning
-message is printed and {\em false} is returned. If successful,
-returns the result of invoking {\em addComponent()} on the
+message is printed and \p false is returned. If successful,
+returns the result of invoking addComponent() on the
 TaggedStorage object used to store the Vertices. \\
 
 
@@ -80,11 +80,11 @@ TaggedStorage object used to store the Vertices. \\
 {\em virtual int addEdge(int vertexTag, int otherVertexTag); } \\
 Causes the Graph to add an edge {\em (vertexTag,otherVertexTag)} to
 the Graph. A check is first made to see if vertices with tags given by
-{\em vertexTag} and {\em otherVertexTag} exist in the graph. If they
+\p vertexTag and \p otherVertexTag exist in the graph. If they
 do not exist a $-1$ is returned, otherwise the method invokes {\em
 addEdge()} on each of the corresponding vertices in the 
-graph. Increments {\em numEdge} by $1$ and returns $0$ if sucessfull,
-a $1$ if the edge already existed, and a $-2$ if one {\em addEdge()}
+graph. Increments \p numEdge by $1$ and returns $0$ if sucessfull,
+a $1$ if the edge already existed, and a $-2$ if one addEdge()
 was successful, but the other was not.\\  
 
 {\em virtual Vertex *getVertexPtr(int vertexTag);} \\
@@ -108,12 +108,12 @@ numEdge}. \\
 \indent {\em virtual Vertex *removeVertex(int vertexTag, bool
 removeEdgeFlag = true );} \\
 To remove the Vertex from the Graph whose tag is equal to {\em
-vertexTag}. If {\em removeEdgeFlag} is {\em true} will also remove the
+vertexTag}. If \p removeEdgeFlag is \p true will also remove the
 Vertex from the remaining Vertices adjacency lists. returns a pointer
 to the removed Vertex if successful, $0$ if the Vertex was not in the
 Graph. Invokes {\em removeComponent(vertexTag)} on the vertex
 storage object and casts this to a Vertex * if not null. DOES NOT YET
-DEAL WITH {\em removeEdgeFlag}. \\
+DEAL WITH \p removeEdgeFlag. \\
 
 {\em virtual void Print(std::ostream \&s, int flag =0);} \\
 A method to print the graph. Invokes {\em Print(s, flag)} on the vertex
@@ -121,4 +121,4 @@ storage object. \\
 
 \indent {\em friend std::ostream \&operator<<(std::ostream \&s, const Graph 
 \&G);} \\
-Invokes {\em Print()} on the Graph {\em G}.
+Invokes Print() on the Graph \p G.

@@ -55,24 +55,24 @@ FEM\_ObjectBroker \&theBroker);}\\
 \indent {\em LoadPath(Vector \&loadPath);}\\ 
 The integer INTEGRATOR\_TAGS\_LoadPath (defined in
 $<$classTags.h$>$) is passed to the StaticIntegrator classes
-constructor. A vector object {\em path} is created which is a copy of
-{\em loadPath} and an index into this vector is set to $0$.\\
+constructor. A vector object \p path is created which is a copy of
+\p loadPath and an index into this vector is set to $0$.\\
 
 \indent {\em LoadPath();}\\ 
 The integer INTEGRATOR\_TAGS\_LoadPath (defined in $<$classTags.h$>$) is
 passed to the StaticIntegrator classes constructor. No vector object
 is created. Provided for the FEM\_ObjectBroker to create a blank
-object, {\em recvSelf()} should be invoked on this object. \\
+object, recvSelf() should be invoked on this object. \\
 
 \noindent {\bf Destructor} \\
 \indent {\em $\tilde{ }$LoadPath();}\\ 
-Invokes the destructor on the vector {\em path}. \\
+Invokes the destructor on the vector \p path. \\
 
 \noindent {\bf Public Methods}\\
 \indent {\em int newStep(void);} \\
-The object obtains the current value of $\lambda$ from the {\em path}
+The object obtains the current value of $\lambda$ from the \p path
 vector using the current index. The index is then incremented by
-$1$. If the index is greater than the size of {\em path}, $\lambda$ is
+$1$. If the index is greater than the size of \p path, $\lambda$ is
 set to $0$ and an error message is printed. It will then invoke
 {\em applyLoadDomain(0.0, $\lambda$)} on the AnalysisModel
 object. Returns $0$ if successful. A warning message is printed and a
@@ -88,9 +88,9 @@ associated with the object. \\
 
 
 {\em int sendSelf(int commitTag, Channel \&theChannel); } \\ 
-Places the size if {\em path} and the index in an ID of size 2 and send this
-ID. Then sends the Vector {\em path}. Returns $0$ if successful, a
-warning message is printed and a $-1$ is returned if {\em theChannel}
+Places the size if \p path and the index in an ID of size 2 and send this
+ID. Then sends the Vector \p path. Returns $0$ if successful, a
+warning message is printed and a $-1$ is returned if \p theChannel
 fails to send the ID or the Vector. \\ 
 
 {\em int recvSelf(int commitTag, Channel \&theChannel, 
@@ -98,7 +98,7 @@ FEM\_ObjectBroker \&theBroker); } \\
 Receives in a ID of size 2 the size of the vector and current index.
 Creates a new Vector and receives the Vector from the Channel. 
 Returns $0$ if successful, a warning message is printed and a $-1$ is
-returned if {\em theChannel} fails to receive the Vector or the ID.\\
+returned if \p theChannel fails to receive the Vector or the ID.\\
 
 {\em int Print(OPS\_Stream \&s, int flag = 0);}\\
 The object sends to $s$ its type, the current value of $\lambda$.

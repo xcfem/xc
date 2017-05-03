@@ -29,7 +29,7 @@ the interface that all subclasses must provide. \\
 
 \noindent {\bf Constructors}  \\
 \indent {\em ConvergenceTest();}  \\
-The integer {\em classTag} is passed to the MovableObject constructor. \\
+The integer \p classTag is passed to the MovableObject constructor. \\
 
 \noindent {\bf Destructor} \\
 \indent {\em virtual $\tilde{}$ConvergenceTest();} \\ 
@@ -42,7 +42,7 @@ To set the corresponding EquiSolnAlgo class. \\
 \indent {\em virtual int test(void) =0;} \\
 To return a postive number if the convergence criteria defined for the
 object has been satisfied, the positibe number equal to the number of times 
-since {\em start} that {\em test()} has been invoked. Otherwise a negative number 
+since \p start that test() has been invoked. Otherwise a negative number 
 is to be returned. A {\em -2} 
 is returned if the test fails to meet the criteria and no more tests are to be 
 performed due to limits set, i.e. the maximum number of iterations, otherwise a

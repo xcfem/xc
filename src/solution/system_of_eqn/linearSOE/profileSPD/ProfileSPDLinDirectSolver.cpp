@@ -56,10 +56,6 @@
 // Revision: A
 //
 // Description: This file contains the implementation for ProfileSPDLinSOESolver
-// Description: This file contains the class definition for 
-// ProfileSPDLinDirectSolver. ProfileSPDLinDirectSolver is a subclass 
-// of LinearSOESOlver. It solves a XC::ProfileSPDLinSOE object using
-// the LDL^t factorization.
 
 // What: "@(#) ProfileSPDLinDirectSolver.C, revA"
 
@@ -67,21 +63,24 @@
 #include <solution/system_of_eqn/linearSOE/profileSPD/ProfileSPDLinSOE.h>
 #include <cmath>
 
+//! @brief Constructor. A unique class tag defined in classTags.h
+//! is passed to the base class constructor.
 XC::ProfileSPDLinDirectSolver::ProfileSPDLinDirectSolver(double tol)
-  :ProfileSPDLinDirectBase(SOLVER_TAGS_ProfileSPDLinDirectSolver,tol){}
+  : ProfileSPDLinDirectBase(SOLVER_TAGS_ProfileSPDLinDirectSolver,tol){}
 
 int XC::ProfileSPDLinDirectSolver::setSize(void)
   {
 
-    if (theSOE == 0) {
-	std::cerr << "XC::ProfileSPDLinDirectSolver::setSize()";
-	std::cerr << " No system has been set\n";
+    if(!theSOE)
+      {
+	std::cerr << nombre_clase() << "::" << __FUNCTION__
+		  << "; No system of equations has been set.\n";
 	return -1;
-    }
+      }
 
     // check for XC::quick return 
-    if (theSOE->size == 0)
-	return 0;
+    if(theSOE->size == 0)
+      return 0;
     
     size = theSOE->size;
     
@@ -107,19 +106,22 @@ int XC::ProfileSPDLinDirectSolver::setSize(void)
 
     size = theSOE->size;
     return 0;
-}
+  }
 
+//! @brief Computes the solution.
+//!
+//! The solver first copies the B vector into X.
+//! The solve process changes $A$ and $X$.
+int XC::ProfileSPDLinDirectSolver::solve(void)
+  {
 
-int 
-XC::ProfileSPDLinDirectSolver::solve(void)
-{
-
-    // check for XC::quick returns
-    if (theSOE == 0) {
-	std::cerr << "XC::ProfileSPDLinDirectSolver::solve(void): ";
-	std::cerr << " - No ProfileSPDSOE has been assigned\n";
+    // check for quick returns
+    if(!theSOE)
+      {
+	std::cerr << nombre_clase() << "::" << __FUNCTION__
+		  << "; no system of equations has been assigned\n";
 	return -1;
-    }
+      }
     
     if (theSOE->size == 0)
 	return 0;
@@ -158,26 +160,29 @@ XC::ProfileSPDLinDirectSolver::solve(void)
 	// if the matrix has not been factored already factor it into U^t D U
 	// storing D^-1 in invD as we go
 
-	double a00 = theSOE->A[0];
-	if (a00 <= 0.0) {
-	  std::cerr << "XC::ProfileSPDLinDirectSolver::solve() - ";
-	  std::cerr << " aii < 0 (i, aii): (0,0)\n"; 
-	  return(-2);
-	}    
+	const double &a00 = theSOE->A[0];
+	if(a00 <= 0.0)
+	  {
+            std::cerr << nombre_clase() << "::" << __FUNCTION__
+		      << "; aii < 0 (i, aii): (0,0)\n"; 
+	    return(-2);
+	  }    
 	
         invD[0] = 1.0/theSOE->A[0];	
 	
 	// for every col across 
-	for (int i=1; i<theSize; i++) {
-
+	for(int i=1; i<theSize; i++)
+	  {
 	    int rowitop = RowTop[i];
 	    ajiPtr = topRowPtr[i];
 
-	    for (int j=rowitop; j<i; j++) {
+	    for(int j=rowitop; j<i; j++)
+	      {
 		double tmp = *ajiPtr;
 		int rowjtop = RowTop[j];
 
-		if (rowitop > rowjtop) {
+		if(rowitop > rowjtop)
+		  {
 
 		    akjPtr = topRowPtr[j] + (rowitop-rowjtop);
 		    akiPtr = topRowPtr[i];
@@ -186,8 +191,9 @@ XC::ProfileSPDLinDirectSolver::solve(void)
 			tmp -= *akjPtr++ * *akiPtr++ ;
 
 		    *ajiPtr++ = tmp;
-		}
-		else {
+		  }
+		else
+		  {
 		    akjPtr = topRowPtr[j];
 		    akiPtr = topRowPtr[i] + (rowjtop-rowitop);
 
@@ -195,8 +201,8 @@ XC::ProfileSPDLinDirectSolver::solve(void)
 			tmp -= *akjPtr++ * *akiPtr++ ;
 
 		    *ajiPtr++ = tmp;
-		}
-	    }
+		  }
+	      }
 
 	    /* now form i'th col of [U] and determine [dii] */
 
@@ -205,29 +211,33 @@ XC::ProfileSPDLinDirectSolver::solve(void)
 	    double *bjPtr  = &X[rowitop];  
 	    double tmp = 0;	    
 	    
-	    for (int jj=rowitop; jj<i; jj++) {
+	    for (int jj=rowitop; jj<i; jj++)
+	      {
 		double aji = *ajiPtr;
 		double lij = aji * invD[jj];
 		tmp -= lij * *bjPtr++; 		
 		*ajiPtr++ = lij;
 		aii = aii - lij*aji;
-	    }
+	      }
 	    
 	    // check that the diag > the tolerance specified
-	    if (aii == 0.0) {
-		std::cerr << "XC::ProfileSPDLinDirectSolver::solve() - ";
-		std::cerr << " aii < 0 (i, aii): (" << i << ", " << aii << ")\n"; 
+	    if(aii == 0.0)
+	      {
+		std::cerr << nombre_clase() << "::" << __FUNCTION__
+			  << "; aii < 0 (i, aii): (" << i << ", "
+			  << aii << ")\n"; 
 		return(-2);
-	    }
-	    if (fabs(aii) <= minDiagTol) {
-		std::cerr << "XC::ProfileSPDLinDirectSolver::solve() - ";
-		std::cerr << " aii < minDiagTol (i, aii): (" << i;
-		std::cerr << ", " << aii << ")\n"; 
+	      }
+	    if (fabs(aii) <= minDiagTol)
+	      {
+		std::cerr << nombre_clase() << "::" << __FUNCTION__
+			  << "; aii < minDiagTol (i, aii): (" << i
+			  << ", " << aii << ")\n"; 
 		return(-2);
-	    }		
+	      }		
 	    invD[i] = 1.0/aii; 
 	    X[i] += tmp;	    
-	}
+	  }
 
 	theSOE->factored = true;
 	theSOE->numInt = 0;
@@ -241,7 +251,8 @@ XC::ProfileSPDLinDirectSolver::solve(void)
 
 
 	// now do the back substitution storing result in X
-	for (int k=(theSize-1); k>0; k--) {
+	for(int k=(theSize-1); k>0; k--)
+	  {
 
 	    int rowktop = RowTop[k];
 	    double bk = X[k];
@@ -249,15 +260,17 @@ XC::ProfileSPDLinDirectSolver::solve(void)
 
 	    for (int j=rowktop; j<k; j++) 
 		X[j] -= *ajiPtr++ * bk;
-	}   	 	
-    }
+	  }   	 	
+      }
 
-    else {
+    else
+      {
 
 	// JUST DO SOLVE
 
 	// do forward substitution 
-	for (int i=1; i<theSize; i++) {
+	for (int i=1; i<theSize; i++)
+	  {
 	    
 	    int rowitop = RowTop[i];	    
 	    double *ajiPtr = topRowPtr[i];
@@ -268,7 +281,7 @@ XC::ProfileSPDLinDirectSolver::solve(void)
 		tmp -= *ajiPtr++ * *bjPtr++; 
 	    
 	    X[i] += tmp;
-	}
+	  }
 
 	// divide by diag term 
 	double *bjPtr = X; 
@@ -278,7 +291,8 @@ XC::ProfileSPDLinDirectSolver::solve(void)
 
 
 	// now do the back substitution storing result in X
-	for (int k=(theSize-1); k>0; k--) {
+	for (int k=(theSize-1); k>0; k--)
+	  {
 
 	    int rowktop = RowTop[k];
 	    double bk = X[k];
@@ -286,8 +300,8 @@ XC::ProfileSPDLinDirectSolver::solve(void)
 
 	    for (int j=rowktop; j<k; j++) 
 		X[j] -= *ajiPtr++ * bk;
-	}   	 
-    }    
+	  }  	 
+      }    
     
     /*
     std::cerr << "BBBB " << theSOE->getB();
@@ -295,47 +309,53 @@ XC::ProfileSPDLinDirectSolver::solve(void)
     */
     
     return 0;
-}
+  }
 
+//! @brief Returns the determinant.
 double XC::ProfileSPDLinDirectSolver::getDeterminant(void) 
-{
-   int theSize = theSOE->size;
-   double determinant = 1.0;
-   for (int i=0; i<theSize; i++)
-     determinant *= invD[i];
-   determinant = 1.0/determinant;
-   return determinant;
-}
+  {
+    int theSize = theSOE->size;
+    double determinant = 1.0;
+    for (int i=0; i<theSize; i++)
+      determinant *= invD[i];
+    determinant = 1.0/determinant;
+     return determinant;
+  }
 
+//! @brief Sets the system of equations to solve.
 int XC::ProfileSPDLinDirectSolver::setProfileSOE(ProfileSPDLinSOE &theNewSOE)
   {
-    if (theSOE != 0) {
-	std::cerr << "XC::ProfileSPDLinDirectSolver::setProfileSOE() - ";
-	std::cerr << " has already been called \n";	
-	return -1;
-    }
-    
-    theSOE = &theNewSOE;
-    return 0;
-}
+    int retval= 0;
+    if(theSOE)
+      {
+	std::cerr << nombre_clase() << "::" << __FUNCTION__
+		  << ";  has already been called \n";	
+	retval= -1;
+      }
+    else
+      theSOE= &theNewSOE;
+    return retval;
+  }
 	
 
 int XC::ProfileSPDLinDirectSolver::factor(int n)
-{
+  {
 
     // check for XC::quick returns
-    if (theSOE == 0) {
-	std::cerr << "XC::ProfileSPDLinDirectSolver::factor: ";
+    if(theSOE == 0)
+      {
+	std::cerr << nombre_clase() << "::" << __FUNCTION__;
 	std::cerr << " - No ProfileSPDSOE has been assigned\n";
 	return -1;
-    }
+      }
 
     int theSize = theSOE->size;    
-    if (n > theSize) {
-	std::cerr << "XC::ProfileSPDLinDirectSolver::factor: ";
+    if(n > theSize)
+      {
+	std::cerr << nombre_clase() << "::" << __FUNCTION__;
 	std::cerr << " - n " << n << " greater than size of system" << theSize << std::endl;
 	return -1;
-    }
+      }
 
     if(theSize == 0 || n == 0)
 	return 0;
@@ -397,12 +417,12 @@ int XC::ProfileSPDLinDirectSolver::factor(int n)
 	    
 	    // check that the diag > the tolerance specified
 	    if (aii <= 0.0) {
-		std::cerr << "XC::ProfileSPDLinDirectSolver::solve() - ";
+		std::cerr << nombre_clase() << "::" << __FUNCTION__ << "; ";
 		std::cerr << " aii < 0 (i, aii): (" << i << ", " << aii << ")\n"; 
 		return(-2);
 	    }
 	    if (aii <= minDiagTol) {
-		std::cerr << "XC::ProfileSPDLinDirectSolver::solve() - ";
+		std::cerr << nombre_clase() << "::" << __FUNCTION__ << "; ";
 		std::cerr << " aii < minDiagTol (i, aii): (" << i;
 		std::cerr << ", " << aii << ")\n"; 
 		return(-2);
@@ -415,7 +435,7 @@ int XC::ProfileSPDLinDirectSolver::factor(int n)
 	
     }	
     return 0;
-}
+  }
 
 
 /*
@@ -488,17 +508,15 @@ int XC::ProfileSPDLinDirectSolver::factor(int n)
 }
 */
 
-int
-XC::ProfileSPDLinDirectSolver::sendSelf(CommParameters &cp)
-{
+int XC::ProfileSPDLinDirectSolver::sendSelf(CommParameters &cp)
+  {
     return 0;
-}
+  }
 
 
-int 
-XC::ProfileSPDLinDirectSolver::recvSelf(const CommParameters &cp)
-{
+int XC::ProfileSPDLinDirectSolver::recvSelf(const CommParameters &cp)
+  {
     return 0;
-}
+  }
 
 

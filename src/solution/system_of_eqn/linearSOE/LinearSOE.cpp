@@ -100,11 +100,13 @@
 
 //#include <solution/system_of_eqn/linearSOE/umfGEN/UmfpackGenLinSolver.h>
 
-//! @brief Constructor.
+//! @brief Constructor. The integer \p classTag} is passed to
+//! the constructor of the base class. 
 XC::LinearSOE::LinearSOE(SoluMethod *owr,int classtag)
   :SystemOfEqn(owr,classtag), theSolver(nullptr) {}
 
-void XC::LinearSOE::libera(void)
+//! @brief Frees memory.
+void XC::LinearSOE::free_memory(void)
   {
     if(theSolver)
       {
@@ -113,11 +115,12 @@ void XC::LinearSOE::libera(void)
       }
   }
 
-void XC::LinearSOE::copia(const LinearSOESolver *newSolver)
+//! @brief Copy the solver.
+void XC::LinearSOE::copy(const LinearSOESolver *newSolver)
   {
     if(newSolver)
       {
-        libera();
+        free_memory();
         LinearSOESolver *tmp= newSolver->getCopy();
         if(tmp)
           setSolver(tmp);
@@ -126,13 +129,20 @@ void XC::LinearSOE::copia(const LinearSOESolver *newSolver)
       }
   }
 
-//! @brief Sets the solver al system of equations.
+//! @brief Sets the solver for the system of equations.
+//!
+//! This is invoked to set the currently associated LinearSOESolver object to 
+//! be \p newSolver. Each subclass will provide it's own variation of 
+//! setSolver() method (needed so subclasses can verify type of Solver
+//! object passed). the subclasses in their variation of the setSolver()
+//! method (unless they wish to implement their own solve()
+//! method) invoke this method. Returns $0$.
 bool XC::LinearSOE::setSolver(LinearSOESolver *newSolver)
   {
     bool retval= false;
     if(newSolver)
       {
-        libera();
+        free_memory();
         theSolver= newSolver;
         theSolver->setLinearSOE(this);
         const int solverOK= theSolver->setSize();
@@ -191,13 +201,19 @@ XC::LinearSOESolver &XC::LinearSOE::newSolver(const std::string &tipo)
 
 //! @brief Destructor.
 XC::LinearSOE::~LinearSOE(void)
-  { libera(); }
+  { free_memory(); }
 
-//! @brief Resuelve el system of equations.
+//! @brief Computes the solution of the system of equations.
+//!
+//! Causes the SystemOfEqn object to invoke solve() on the currently
+//! associated solver object. Returns a $0$ if successful,
+//! negative number if not; the actual value depending on the
+//! LinearSOESolver. To solve a linear system of equations means to find
+//! $x$ such that the equation $Ax=b$ is satisfied. 
 int XC::LinearSOE::solve(void)
   { return (getSolver()->solve()); }
 
-//! @brief Returns the determinante de la matriz del sistema.
+//! @brief Returns the determinant of the system matrix.
 double XC::LinearSOE::getDeterminant(void)
   { return getSolver()->getDeterminant(); }
 

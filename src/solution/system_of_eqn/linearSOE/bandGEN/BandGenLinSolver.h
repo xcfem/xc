@@ -73,6 +73,10 @@ class BandGenLinSOE;
 //! @ingroup Solver
 //
 //! @brief Base class for band general linear SOE solvers.
+//!
+//! BandGenLinSolver is an abstract class.  The BandGenLinSolver
+//! class provides access for each subclass to the BandGenLinSOE object
+//! through the pointer #theSOE, which is a protected pointer.
 class BandGenLinSolver : public LinearSOESolver
   {
   protected:

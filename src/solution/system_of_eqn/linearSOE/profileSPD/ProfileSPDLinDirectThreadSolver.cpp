@@ -120,7 +120,7 @@ int XC::ProfileSPDLinDirectThreadSolver::setSize(void)
   {
     if(theSOE == 0)
       {
-	std::cerr << "XC::ProfileSPDLinDirectThreadSolver::setSize()";
+	std::cerr << nombre_clase() << "::" << __FUNCTION__;
 	std::cerr << " No system has been set\n";
 	return -1;
       }
@@ -162,7 +162,7 @@ int XC::ProfileSPDLinDirectThreadSolver::solve(void)
 {
     // check for XC::quick returns
     if (theSOE == 0) {
-	std::cerr << "XC::ProfileSPDLinDirectThreadSolver::solve(void): ";
+	std::cerr << nombre_clase() << "::" << __FUNCTION__;
 	std::cerr << " - No ProfileSPDSOE has been assigned\n";
 	return -1;
     }
@@ -305,7 +305,7 @@ int
 XC::ProfileSPDLinDirectThreadSolver::setProfileSOE(ProfileSPDLinSOE &theNewSOE)
 {
     if (theSOE != 0) {
-	std::cerr << "XC::ProfileSPDLinDirectThreadSolver::setProfileSOE() - ";
+	std::cerr << nombre_clase() << "::" << __FUNCTION__ << "; ";
 	std::cerr << " has already been called \n";	
 	return -1;
     }
@@ -437,13 +437,13 @@ void *ProfileSPDLinDirectThreadSolver_Worker(void *arg)
 
 	      // check that the diag > the tolerance specified
 	      if (ajj <= 0.0) {
-		std::cerr << "XC::ProfileSPDLinDirectThreadSolver::solve() - ";
+		std::cerr << nombre_clase() << "::" << __FUNCTION__ << "; ";
 		std::cerr << " aii < 0 (i, aii): (" << currentRow << ", " << ajj << ")\n"; 
 		TCB_ProfileSPDDirectThreadSolver.info = -2;
 		return nullptr;
 	      }
 	      if (ajj <= minDiagTol) {
-		std::cerr << "XC::ProfileSPDLinDirectThreadSolver::solve() - ";
+		std::cerr << nombre_clase() << "::" << __FUNCTION__ << "; ";
 		std::cerr << " aii < minDiagTol (i, aii): (" << currentRow;
 		std::cerr << ", " << ajj << ")\n"; 
 		TCB_ProfileSPDDirectThreadSolver.info = -2;

@@ -180,8 +180,8 @@ FEM\_ObjectBroker \&theBroker);}\\
 \indent {\em ArcLength1(double dS, double alpha = 1.0);}\\ \\
 The integer INTEGRATOR\_TAGS\_ArcLength1 (defined in
 $<$classTags.h$>$) is passed to the StaticIntegrator classes
-constructor. The value of $\alpha$ is set to {\em alpha} and 
-$\Delta s$ to {\em dS}. \\
+constructor. The value of $\alpha$ is set to \p alpha and 
+$\Delta s$ to \p dS. \\
 
 \noindent {\bf Destructor} \\
 \indent {\em $\tilde{ }$ArcLength1();}\\ 
@@ -191,11 +191,11 @@ domainChanged()}. \\
 \noindent {\bf Public Methods}\\
 
 {\em int newStep(void);} \\
-{\em newStep()} performs the first iteration, that is it solves for 
+newStep() performs the first iteration, that is it solves for 
 $\lambda_n^{(1)}$ and $\Delta \U_n^{(1)}$ and updates the model with
 $\Delta \U_n^{(1)}$ and increments the load factor by
 $\lambda_n^{(1)}$. To do this it must set the rhs of the LinearSOE to
-$\P$, invoke {\em formTangent()} on itself and solve the LinearSOE to
+$\P$, invoke formTangent() on itself and solve the LinearSOE to
 get $\Delta \Uh_n^{(1)}$. \\
 
 {\em int update(const Vector \&$\Delta U$);} \\
@@ -221,15 +221,15 @@ model is then decremented by $1.0$. \\
 
 {\em int sendSelf(int commitTag, Channel \&theChannel); } \\ 
 Places the values of $\Delta s$ and $\alpha$ in a
-vector of size $2$ and invokes {\em sendVector()} on {\em theChannel}.
+vector of size $2$ and invokes sendVector() on \p theChannel.
 Returns $0$ if successful, a warning message is printed and
-a $-1$ is returned if {\em theChannel} fails to send the Vector. \\
+a $-1$ is returned if \p theChannel fails to send the Vector. \\
 
 {\em int recvSelf(int commitTag, Channel \&theChannel, 
 FEM\_ObjectBroker \&theBroker); } \\ 
 Receives in a Vector of size 2 the values of $\Delta s$ and $\alpha$.
 Returns $0$ if successful, a warning message is printed, $\delta
-\lambda$ is set to $0$, and a $-1$ is returned if {\em theChannel}
+\lambda$ is set to $0$, and a $-1$ is returned if \p theChannel
 fails to receive the Vector.\\
 
 {\em int Print(OPS\_Stream \&s, int flag = 0);}\\

@@ -36,9 +36,9 @@ To construct a GraphPartitioner. \\
 
 \noindent {\bf Public Methods }  \\
 \indent {\em virtual int partition(Graph \&theGraph, int numPart) =0;} \\
-This is the method invoked to partition the graph into {\em numPart}
+This is the method invoked to partition the graph into \p numPart
 partitions. On completion of the routine each vertex will be assigned
-a color $1$ through {\em numPart}, the color assigned indicating the
+a color $1$ through \p numPart, the color assigned indicating the
 partition to which the vertex belongs. Returns a $0$ if successful, a
 negative number if not; the value depending on the subclass.  \\
 

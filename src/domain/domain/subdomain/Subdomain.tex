@@ -79,7 +79,7 @@ Elements residing in different Subdomains. \\
 
 \noindent {\bf Constructors}  \\
 \indent {\em Subdomain(int tag);}  \\
-Constructs an empty Subdomain with a number given by {\em tag}. The
+Constructs an empty Subdomain with a number given by \p tag. The
 storage of the Elements, constraints and loads are handled by the base
 Domain class, the storage of the internal and external nodes are
 handle by the Subdomain class. For storage of the Nodes objects of
@@ -96,7 +96,7 @@ are not upperbounds on the number of components that can be added. \\
 \indent\indent\indent\indent TaggedObjectStorage \&theLCsStorage, \\
 \indent\indent\indent\indent TaggedObjectStorage \&theMPsStorage, \\
 \indent\indent\indent\indent TaggedObjectStorage \&theSPsStorage);} \\
-Constructs an empty Subdomain with a number given by {\em tag}. The
+Constructs an empty Subdomain with a number given by \p tag. The
 components of the subdomain are stored in the storage objects given in
 the argument for the constructor. \\ 
 
@@ -108,22 +108,22 @@ and external nodes. \\
 
 \noindent {\bf Public Methods modified from Domain class}  \\
 \indent {\em virtual bool addNode(Node *theNodePtr);} \\
-A Method to add the node pointed to by {\em theNoedPtr} to the
+A Method to add the node pointed to by \p theNoedPtr to the
 Subdomain. This node is an internal node to the domain and is
-returned in calls to {\em getNodes()} and {\em getInternalNodes()}. 
-Invokes {\em setDomain(this)} on the Node and {\em domainChanged()} on
+returned in calls to getNodes()} and {\em getInternalNodes(). 
+Invokes setDomain(this)} on the Node and {\em domainChanged() on
 itself.\\ 
 
 {\em virtual Node *removeNode(int tag); } \\
-To remove a Node whose tag is given by {\em tag} from the
+To remove a Node whose tag is given by \p tag from the
 Subdomain. Returns $0$ if the Node is not in the Subdoamin, otherwise
 it removes the pointer to the node from the storage object, invokes
-{\em domainChange()} on itself, and returns the pointer to the
+domainChange() on itself, and returns the pointer to the
 Node. If the Node is external, the destructor is called on the
-DummyNode. Invokes {\em domainChanged()} on itself. \\ 
+DummyNode. Invokes domainChanged() on itself. \\ 
 
 {\em virtual Node *getNode(int tag); } \\
-To return a pointer to the Node whose tag is given by {\em tag} from
+To return a pointer to the Node whose tag is given by \p tag from
 the Subdomain. Returns $0$ if the Node is not in the Subdoamin,
 otherwise returns a pointer to the Node, if external a pointer to the
 DummyNode is returned. \\ 
@@ -139,8 +139,8 @@ Sets the corresponding DomainDecompositionAnalysis object to be {\em
 theAnalysis}. \\
 
 {\em void commit(void);} \\
-invokes the base Domain classes {\em commit()} method. It then goes through
-all the Nodes in the Subdomain, invoking {\em commitState()} on the Nodes. \\
+invokes the base Domain classes commit() method. It then goes through
+all the Nodes in the Subdomain, invoking commitState() on the Nodes. \\
 
 
 \noindent {\bf Public Methods inherited from Element now implemented} \\
@@ -155,12 +155,12 @@ as external nodes and have yet to be removed from the subdomain. \\
 
 {\em virtual int getNumDOF(void);}\\
 Returns the num of external dof associated with the subdomain, the number
-returned is the result of invoking {\em getNumExternalEqn()} on
+returned is the result of invoking getNumExternalEqn() on
 the DomainDecompAnalysis object assocaited with the Subdomain. If
 no Analysis yet associated with the Subdomain $0$ is returned. \\
 
 {\em virtual void commitState(void);}\\ 
-Invokes {\em commit()} on itself. \\
+Invokes commit() on itself. \\
     
 {\em virtual const Matrix \&getStiff(void);}\\
 For this class does nothing but print an error message. Subtypes may
@@ -179,36 +179,36 @@ corresponding to some comination of the condensed stifffness and mass
 matrices. Returns a zero matrix of dimensions (1x1). \\
 
 {\em virtual const Vector \&getResistingForce(void);}\\
-Returns the Vector obtained from invoking {\em getCondensedRHS()} on
+Returns the Vector obtained from invoking getCondensedRHS() on
 the DomainDecompositionAnalysis object. \\
 
 {\em virtual bool isSubdomain(void);}\\
-Returns {\em true}. Subtypes can change this. The result of changing
+Returns \p true. Subtypes can change this. The result of changing
 this will be that the corresponding FE\_Elements will ask for the
 stiffness, mass and damping matrices to form the tangent and will ask
 for the residual to form the residual for the system of equations. \\
 
 {\em int sendSelf(Channel \&theChannel, FEM\_ObjectBroker \&theBroker);}\\
-Sends an ID of size 2 to the channel, sending {\em theAnalysis-$>$getClassTag()} and the integer $0$,
+Sends an ID of size 2 to the channel, sending theAnalysis-$>$getClassTag() and the integer $0$,
 if a link exists to a DomainDecompAnalyssi object. 
-{\em sendSelf()} is then invoked on theDomainDecompAnalysis object if the link exists. \\
+sendSelf() is then invoked on theDomainDecompAnalysis object if the link exists. \\
 
 {\em int recvSelf(Channel \&theChannel, FEM\_ObjectBroker \&theBroker);}\\
-Receives an ID of size 2 from the channel. If the integer $0$ is sent {\em theBroker}
+Receives an ID of size 2 from the channel. If the integer $0$ is sent \p theBroker
 is asked to construct a new DomainDecompositionAnalysis object using the class tag also sent.
-Returns resultt of invoking {\em recvSelf()} on this object. \\
+Returns resultt of invoking recvSelf() on this object. \\
 
 \noindent {\bf Public Methods introduced for the Subdomain class} \\
 \indent {\em virtual bool addExternalNode(Node *theNodePtr);} \\
-A Method to add the node pointed to by {\em theNoedPtr} to the
+A Method to add the node pointed to by \p theNoedPtr to the
 Subdomain. This node is an external node to the subdomain and is
-returned in calls to {\em getExternalNodes()} and {\em
+returned in calls to getExternalNodes() and {\em
 getNodes()}. A DummyNode is created and added to the external nodes storage object. 
-Invokes {\em setDomain(this)} on the DummyNode and {\em domainChanged()} on itself.\\
+Invokes setDomain(this)} on the DummyNode and {\em domainChanged() on itself.\\
 
 \indent{\em virtual NodeIter \&getInternalNodeIter();} \\
 Returns an iter to the internal nodes of the subdomain, nodes that are
-added using the {\em addNode()} command.\\
+added using the addNode() command.\\
 
 \indent{\em virtual const ID \&getExternalNodeIter();} \\
 Returns an ID identifyng the node numbers of all nodes that have been
@@ -216,19 +216,19 @@ added using the {\em addExternalNode(Node *)} method. \\
 
 
 {\em virtual int computeTang(void);}\\
-The method first starts a Timer object running. {\em formTang()}, 
+The method first starts a Timer object running. formTang(), 
 is then invoked on the DomainDecompositionAnalysis object. The
-Timer is then stopped and the real time is added to the {\em realCost}. 
-Returns the result of invoking {\em formTang}. \\
+Timer is then stopped and the real time is added to the \p realCost. 
+Returns the result of invoking \p formTang. \\
 
 {\em virtual int computeResidual(void);}\\
-The method first starts a Timer object running. {\em formResidual()}, 
+The method first starts a Timer object running. formResidual(), 
 is then invoked on the DomainDecompositionAnalysis object. The
-Timer is then stopped and the real time is added to the {\em realCost}. 
-Returns the result of invoking {\em formResidual}. \\
+Timer is then stopped and the real time is added to the \p realCost. 
+Returns the result of invoking \p formResidual. \\
 
 {\em virtual const Matrix \&getTang(void);    }\\
-Returns the Matrix obtained from invoking {\em getTangent()} on
+Returns the Matrix obtained from invoking getTangent() on
 the DomainDecompositionAnalysis object. \\
 
 
@@ -237,17 +237,17 @@ Sets the corresponding {\em FE\_Element} to be that poited to by {\em
 theFEelePtr} . \\
 
 {\em const Vector \&getLastExternalSysResponse(void);}\\
-Returns the Vector obtained by calling {\em getLastSysResponse()} on
+Returns the Vector obtained by calling getLastSysResponse() on
 the associated FE\_Element. \\
 
 {\em virtual int computeNodalResponse(void);}\\
 To set the nodal responses for the nodes in the subdomain. Returns the
-result of invoking {\em computeInternalResponse()} on the DomainDecomposition
+result of invoking computeInternalResponse() on the DomainDecomposition
 analysis object associated with the subdomain.\\ 
 
 {\em double getCost(void); }\\
-Returns the current value of {\em realCost}, restting the value of {\em realCost} to be 0.0. The
-value of {\em realCost} is added to when {\em computeTang()} and {\em computeREsidual} are invoked on the
+Returns the current value of \p realCost, restting the value of \p realCost to be 0.0. The
+value of \p realCost is added to when computeTang() and \p computeREsidual are invoked on the
 Subdomain. \\
 
 \noindent {\bf Protected Member Functions}  \\

@@ -50,10 +50,10 @@ this constraint, $\C = [-\I$ $\C_{cr}]$. Nothing is added to the residual. \\
 \indent {\em LagrangeMP\_FE(Domain \&theDomain, MP\_Constraint \&theMP,
 double alpha);}\\
 To construct a LagrangeMP\_FE element to enforce the constraint
-specified by the MP\_Constraint {\em theMP} using a default value for
+specified by the MP\_Constraint \p theMP using a default value for
 $\alpha$ of $alpha$. The FE\_Element class constructor is called with
-the integers $3$ and the two times the size of the {\em retainedID}
-plus the size of the {\em constrainedID} at the MP\_Constraint {\em
+the integers $3$ and the two times the size of the \p retainedID
+plus the size of the \p constrainedID at the MP\_Constraint {\em
 theMP} plus . A Matrix and a Vector object are created for adding the
 contributions to the tangent and the residual. The residual is
 zeroed. If the
@@ -61,7 +61,7 @@ MP\_Constraint is not time varying, then the contribution to the
 tangent is determined. Links are set to the retained and constrained
 nodes. The DOF\_Group tag ID is set using the tag of the constrained
 Nodes DOF\_Group, the tag of the retained Node Dof\_group and the tag
-of the LagrangeDOF\_Group, {\em theGroup}. A warning message is printed and 
+of the LagrangeDOF\_Group, \p theGroup. A warning message is printed and 
 the program is terminated if either not enough memory is available for
 the Matrices and Vector or the constrained and retained Nodes of their
 DOF\_Groups do not exist. \\
@@ -90,7 +90,7 @@ component to $-1$). \\
 
 \indent {\em virtual const Matrix \&getTangent(Integrator *theIntegrator);} \\
 If the MP\_Constraint is time-varying, from the MP\_Constraint
-{\em theMP} it obtains the current $C_{cr}$ matrix; it then adds the
+\p theMP it obtains the current $C_{cr}$ matrix; it then adds the
 contribution to the tangent matrix. Returns this tangent Matrix.
 
 \indent {\em virtual const Vector \&getResidual(Integrator *theIntegrator);} \\

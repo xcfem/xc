@@ -20,7 +20,7 @@ NEEDS FINISHING. \\
 \noindent {\bf Description} \\ 
 \indent A UniformExcitation is an object which adds the loads imposed
 by a single ground excitation to the model. For a UniformExcitation
-this means that the {\em R} matrix at each node will have $1$ column
+this means that the \p R matrix at each node will have $1$ column
 and all entries but those corresponding to the degree of freedom
 direction will be set to $0$, the value for the degree of freedom
 direction will be set to $1$.\\
@@ -39,7 +39,7 @@ FEM\_ObjectBroker \&theBroker);}\\
 
 \noindent {\bf Constructor} \\ 
 \indent {\em UniformExcitation(GroundMotion \&theMotion, int dof, int tag);}\\ \\
-The integers {\em LOAD\_TAG\_UniformExcitation} and {\em classTag} are
+The integers {\em LOAD\_TAG\_UniformExcitation} and \p classTag are
 passed to the Load classes constructor. \\
 
 \noindent {\bf Destructor} \\

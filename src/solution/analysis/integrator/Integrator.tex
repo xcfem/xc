@@ -41,7 +41,7 @@ ID \&id) =0;} \\ \\
 
 \noindent {\bf Constructor} \\
 \indent {\em Integrator(int classTag);}\\ 
-{\em classTag} is passed to the MovableObject classes constructor. \\
+\p classTag is passed to the MovableObject classes constructor. \\
 
 \noindent {\bf Destructor} \\
 \indent {\em virtual~$\tilde{}$Integrator();}\\ 
@@ -54,35 +54,35 @@ when it is invoked. To return $0$ if successful, a negative number if
 not. This base class returns $0$.\\
 
 \indent {\em  virtual int formEleTangent(FE\_Element *theEle) =0;} \\
-Called upon to determine the FE\_Element {\em theEle}s matrix
+Called upon to determine the FE\_Element \p theEles matrix
 contribution to the SystemOfEqn object. To return $0$ if successful,
 a negative number otherwise. \\ 
  
 
 \indent {\em  virtual int formNodTangent(DOF\_Group *theDof) =0;} \\
-Called upon to determine the DOF\_Group {\em theDof}s matrix
+Called upon to determine the DOF\_Group \p theDofs matrix
 contribution to the SystemOfEqn object. To return $0$ if successful,
 a negative number otherwise. \\ 
 
 
 \indent {\em  virtual int formEleResidual(FE\_Element *theEle) =0;} \\
-Called upon to determine the FE\_Element {\em theEle}s vector
+Called upon to determine the FE\_Element \p theEles vector
 contribution to the SystemOfEqn object. To return $0$ if successful,
 a negative number otherwise. \\ 
 
 
 \indent {\em virtual int formNodUnbalance(DOF\_Group *theDof) =0;} \\
-Called upon to determine the DOF\_Group {\em theDof}s vector
+Called upon to determine the DOF\_Group \p theDofs vector
 contribution to the SystemOfEqn object. To return $0$ if successful,
 a negative number otherwise. \\ 
 
 {\em virtual int getLastResponse(Vector \&result, const ID \&id) =0;} \\
 Called upon to get the result quantities for the components specified
-in the ID {\em id} and to place them in the Vector {\em result}. This
+in the ID \p id and to place them in the Vector \p result. This
 is provided for domain decomposition methods. To return $0$ if
 successful, a negative number otherwise. \\ 
 
 \indent {\em virtual void Print(OPS\_Stream \&s, int flag = 0) =0;}\\
 The Integrator is to send information to the stream based on the
-integer {\em flag}. 
+integer \p flag. 
 

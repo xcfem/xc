@@ -101,17 +101,17 @@ operations.
 \indent\indent\indent\indent\indent\indent\indent LinearSOE \&theSOE, \\
 \indent\indent\indent\indent\indent\indent\indent DomainDecompositionSolver \&theSolver);} \\
 The constructor sets all the links required by the objects in the aggregation. To
-do this it invokes {\em setLinks(theDomain)} on {\em theModel},
-{\em setLinks(theSubdomain,theModel,theIntegrator)} on {\em theHandler}, 
-{\em setLinks(theModel)} on {\em theNumberer}, it invokes {\em
-setLinks(theModel, theSOE)} on {\em theIntegrator}, and it invokes {\em
+do this it invokes {\em setLinks(theDomain)} on \p theModel,
+{\em setLinks(theSubdomain,theModel,theIntegrator)} on \p theHandler, 
+{\em setLinks(theModel)} on \p theNumberer, it invokes {\em
+setLinks(theModel, theSOE)} on \p theIntegrator, and it invokes {\em
 setLinks(theModel,theIntegrator, theSOE,theSolver,theSubdomain)} on {\em
-theSolnAlgo}. Finally it invokes {\em setAnalysis(*this)} on {\em theSubdomain}. \\
+theSolnAlgo}. Finally it invokes {\em setAnalysis(*this)} on \p theSubdomain. \\
 
 \indent {\em DomainDecompositionAnalysis(Subdomain \&theDomain);} \\
 A constructor that is used when creating a DomainDecompositionObject which
 is to receive itself afterwards. Sets the links to the Subdomain. It is
-essential that this object {\em recvSelf()} before DomainDecompositionAnalysis
+essential that this object recvSelf() before DomainDecompositionAnalysis
 methods are invoked as their invocation will cause segmentation faults. 
 Invokes {\em setAnalysis(this)} on the Subdomain. \\
 
@@ -138,49 +138,49 @@ theConstraintHandler-$>$handle(theSubdomain-$>$getExternalNodes());\\
 \indent\indent theLinSysOfEqn-$>$setSize(theAnalysisModel-$>$getDOFGraph);  \\
 \indent\indent theIntegrator-$>$domainChanged(); \\
 \indent\indent theAlgorithm-$>$domainChanged(); \\ }
-Finally {\em tangFormed} is marked as {\em false}. \\
+Finally \p tangFormed is marked as \p false. \\
 
 {\em int getNumExternalEqn(void);} \\
 A method to return the number of external degrees-of-freedom on the
-Subdomain interface, this information is returned when {\em handle()}
-is invoked on {\em theConstraintHandler}. \\
+Subdomain interface, this information is returned when handle()
+is invoked on \p theConstraintHandler. \\
 
 {\em     virtual int  computeInternalResponse(void);}\\
-A method which invokes {\em solveCurrentStep()} on {\em theAlgorithm}.  \\
+A method which invokes solveCurrentStep() on \p theAlgorithm.  \\
 
 {\em     virtual int  formTangent(void);}\\
 A method to form the condensed tangent matrix, given the current
 number of internal dof. It first checks to see if the Subdomain has
-changed, by  invoking {\em hasDomainChanged()} on the Subdomain; if it
-has {\em invokeChangeOnAnalysis()} is invoked on the {\em
-Subdomain}. It then checks to see if {\em counter} is equal to $-1$ or
+changed, by  invoking hasDomainChanged() on the Subdomain; if it
+has invokeChangeOnAnalysis() is invoked on the {\em
+Subdomain}. It then checks to see if \p counter is equal to $-1$ or
 not; a $-1$ indicating the tangent has already been formed in order
 that the residual could be determined. If this is not the case {\em
-formTangent()} is invoked on {\em theIntegrator}, {\em condenseA()} is
-invoked on {\em theSolver} object, a flag is set to indicate that the
-tangent has been formed, and the {\em counter} is incremented. Returns
-a $0$ if successfull, if either the {\em formTangent()} or {\em
+formTangent()} is invoked on \p theIntegrator, condenseA() is
+invoked on \p theSolver object, a flag is set to indicate that the
+tangent has been formed, and the \p counter is incremented. Returns
+a $0$ if successfull, if either the formTangent() or {\em
 condenseA()} method returns a negative number this number is
 returned. \\  
 
 {\em     virtual int  formResidual(void);}\\
 A method to form the condensed residual vector, given the current
 number of internal dof. A check to see if the Subdomain has changed is first made, 
-this is done by invoking {\em hasDomainChanged()} on the Subdomain; if it has 
-been modified {\em invokeChangeOnAnalysis()} 
-is invoked on the {\em Subdomain}. If the tangent has not yet been formed
-it invokes {\em formTangent()} on itself and sets the {\em counter} to $-1$.
-To form the residual {\em formUnbalance()} is invoked on {\em theIntegrator} and
-{\em condenseRHS(numInt)} is invoked on {\em theSolver}. Returns $0$ or the negative
-number that was returned if either {\em formUnbalance()} or {\em condenseRHS()} failed.\\
+this is done by invoking hasDomainChanged() on the Subdomain; if it has 
+been modified invokeChangeOnAnalysis() 
+is invoked on the \p Subdomain. If the tangent has not yet been formed
+it invokes formTangent() on itself and sets the \p counter to $-1$.
+To form the residual formUnbalance() is invoked on \p theIntegrator and
+{\em condenseRHS(numInt)} is invoked on \p theSolver. Returns $0$ or the negative
+number that was returned if either formUnbalance()} or {\em condenseRHS() failed.\\
 
 {\em int  formTangVectProduct(Vector \&u);}\\
 A method to form the product of the condensed tangent matrix times the
 vector $u$. A check to see if the Subdomain has changed is first made, 
-this is done by invoking {\em hasDomainChanged()} on the Subdomain; if it has 
-been modified {\em invokeChangeOnAnalysis()} 
-is invoked on the {\em Subdomain}. If the tangent has not yet been formed
-it invokes {\em formTangent()} on itself and sets the {\em counter} to $-1$.
+this is done by invoking hasDomainChanged() on the Subdomain; if it has 
+been modified invokeChangeOnAnalysis() 
+is invoked on the \p Subdomain. If the tangent has not yet been formed
+it invokes formTangent() on itself and sets the \p counter to $-1$.
 Finally the result of invoking {\em computeCondensedMatVect(numInt, u)} on {\em
 theSolver} is returned. \\
 
@@ -188,28 +188,28 @@ theSolver} is returned. \\
 {\em virtual Matrix \&getTangent();}\\
 A method which returns the portion of A corresponding to internal
 equation numbers. A check to see if the Subdomain has changed is first made, 
-this is done by invoking {\em hasDomainChanged()} on the Subdomain; if it has 
-been modified {\em invokeChangeOnAnalysis()} is invoked on the {\em Subdomain}. 
-If the tangent has not yet been formed {\em formTangent()} is invoked. 
-The method returns the result of invoking {\em getCondensedA()} on {\em theSolver()}. \\
+this is done by invoking hasDomainChanged() on the Subdomain; if it has 
+been modified invokeChangeOnAnalysis() is invoked on the \p Subdomain. 
+If the tangent has not yet been formed formTangent() is invoked. 
+The method returns the result of invoking getCondensedA()} on {\em theSolver(). \\
 
 
 {\em virtual Vector \&getResidual();}\\
 A method which returns the portion of the $b$ corresponding
 to the external equation numbers. A check to see if the Subdomain has changed is first made, 
-this is done by invoking {\em hasDomainChanged()} on the Subdomain; if it has 
-been modified {\em invokeChangeOnAnalysis()} is invoked on the {\em Subdomain}
-and {\em formResidual()} is called.  The object returns the Vector obtained from 
-invoking {\em getCondensedRHS()} on the solver. \\ 
+this is done by invoking hasDomainChanged() on the Subdomain; if it has 
+been modified invokeChangeOnAnalysis() is invoked on the \p Subdomain
+and formResidual() is called.  The object returns the Vector obtained from 
+invoking getCondensedRHS() on the solver. \\ 
 
 
 {\em const Vector \&getTangVectProduct();}\\
-Returns the result of invoking {\em getCondensedMatVect()} on the
+Returns the result of invoking getCondensedMatVect() on the
 solver. A check to see if the Subdomain has changed is first made, 
-this is done by invoking {\em hasDomainChanged()} on the Subdomain; if it has 
-been modified {\em invokeChangeOnAnalysis()} is invoked on the {\em Subdomain}. 
-The object returns the Vector obtained from invoking {\em getCondensedMatVect()} 
-on {\em theSolver}. \\
+this is done by invoking hasDomainChanged() on the Subdomain; if it has 
+been modified invokeChangeOnAnalysis() is invoked on the \p Subdomain. 
+The object returns the Vector obtained from invoking getCondensedMatVect() 
+on \p theSolver. \\
 
 
 {\em int sendSelf(Channel \&theChannel, FEM\_ObjectBroker \&theBroker);}\\
@@ -218,20 +218,20 @@ the aggregation. This ID is sent and then {\em sendSelf(theChannel,theBroker)} i
 invoked on each of the aggregates. Returns 0.\\
 
 {\em int recvSelf(Channel \&theChannel, FEM\_ObjectBroker \&theBroker);}\\
-Creates an ID and receives data into it from {\em theChannel}. Based on the
-class tags in the ID {\em theBroker} is then asked to return pointers to
+Creates an ID and receives data into it from \p theChannel. Based on the
+class tags in the ID \p theBroker is then asked to return pointers to
 new objects required in the aggregation.  {\em sendSelf(theChannel,theBroker)} is
-invoked on each of these new aggregate objects. Finally {\em setLinks} is
+invoked on each of these new aggregate objects. Finally \p setLinks is
 invoked on each of these objects with the correct arguments and {\em setAnalysis(this)} 
-is invoked on the {\em Subdomain}.  Returns 0.\\
+is invoked on the \p Subdomain.  Returns 0.\\
 
 
 \noindent {\bf Protected Methods}  \\
 \indent {\em Subdomain  *getSubdomainPtr(void) const;} \\
-A const member function which returns a pointer to {\em theSubdomain}. \\
+A const member function which returns a pointer to \p theSubdomain. \\
 
 {\em ConstraintHandler *getConstraintHandlerPtr(void) const;}\\
-A const member function which returns a pointer to {\em theSubdomain}.\\
+A const member function which returns a pointer to \p theSubdomain.\\
 
 {\em DOF\_Numberer *getDOF\_NumbererPtr(void) const;}\\
 A const member function which returns a pointer to {\em
@@ -250,9 +250,9 @@ A const member function which returns a pointer to {\em
 theIntegrator}.\\
 
 {\em LinearSOE *getLinSOEPtr(void) const;}\\
-A const member function which returns a pointer to {\em theSOE}.\\
+A const member function which returns a pointer to \p theSOE.\\
 
 \indent {\em DomainSolver *getDomainSolverPtr(void) const;} \\
-A const member function which returns a pointer to {\em theSolver}.
+A const member function which returns a pointer to \p theSolver.
 associated with the DomainDecompositionAnalysis object. \\
 

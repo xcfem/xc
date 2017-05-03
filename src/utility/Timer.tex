@@ -41,28 +41,28 @@ Does nothing. \\
 \noindent {\bf Public Methods }  \\
 \indent {\em  void start(void);}\\
 Sets the accounting variables to mark the start of accounting period
-using the unix functions {\em times()} and {\em getrusage}.\\
+using the unix functions times() and \p getrusage.\\
 
 \indent {\em  void pause(void);}\\
 Sets the accounting variables to mark the end of accounting period
-using the unix functions {\em times()} and {\em getrusage}.\\
+using the unix functions times() and \p getrusage.\\
 
 
 \indent {\em  double getReal(void) const;}\
 Uses the difference between the starting and ending accounting
 variables to determine the elapsed real time between the last calls to
-{\em start()} and {\em pause()}. Returns this value in units of seconds.\\
+start()} and {\em pause(). Returns this value in units of seconds.\\
 
 \indent {\em  double getCPU(void) const;}\\
 Uses the difference between the starting and ending accounting
 variables to determine the CPU time allocated the process between the
-last calls to {\em start()} and {\em pause()}. Returns this value in
+last calls to start()} and {\em pause(). Returns this value in
 units of seconds.\\
 
 \indent {\em  int getNumPageFaults(void) const;}\\
 Uses the difference between the starting and ending accounting
 variables to determine the number of page faults that required reading
-of pages from disk between the last calls to {\em start()} and {\em
+of pages from disk between the last calls to start() and {\em
 pause()}. Returns this value. \\
 
 
@@ -72,8 +72,8 @@ variables to determine the real time, CPU time, operating system time
 allocate the process, total number of page faults, number of page
 faults that required reading of pages from memory, and number of page
 faults that required no reading from disk between the last calls to
-{\em start()} and {\em pause()}. Send these values to {\em s}. \\
+start()} and {\em pause(). Send these values to \p s. \\
 
 \indent {\em friend OPS_Stream \&operator$<<$(OPS_Stream \&s, const Timer \&E); }\\
-Invokes {\em Print(s)} on the Timer object {\em E}. 
+Invokes {\em Print(s)} on the Timer object \p E. 
 

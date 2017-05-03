@@ -77,12 +77,19 @@ namespace XC {
 //
 //! @ingroup Solver
 //
-//! @brief Equation solver.
+//! @brief Solver for a system of equations.
+//!
+//! object is responsible for performing
+//! the numerical operations on its associated SystemOfEqn object.
 class Solver : public MovableObject, public EntCmd
   {
   protected:
     Solver(int classTag);    
   public:
+    //! @brief Causes the solver to compute the solution of
+    //! the system of equations. Return  $0$ if successful ,
+    //! negative number if not; the actual value
+    //! depending on the type of Solver.
     virtual int solve(void) = 0;
   };
 

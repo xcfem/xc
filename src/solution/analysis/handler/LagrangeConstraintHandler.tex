@@ -43,13 +43,13 @@ alphaMP);}\\  \\
 \indent {\em LagrangeConstraintHandler(double alphaSp, double alphaMP);}\\ 
 The integer {\em HANDLER\_TAG\_LagrangeConstraintHandler} (defined in
 $<$classTags.h$>$) is passed to the LagrangeConstraintHandler
-constructor. Stores {\em alphaSP} and {\em alphaMP} which are needed
+constructor. Stores \p alphaSP and \p alphaMP which are needed
 to construct the LagrangeSFreedom\_FE and LagrangeMP\_FE objects in {\em
 handle()}. \\
 
 \noindent {\bf Destructor} \\
 \indent {\em virtual~ $\tilde{}$LagrangeConstraintHandler();}\\ 
-Currently invokes {\em clearAll()}, this will change when {\em
+Currently invokes clearAll(), this will change when {\em
 clearAll()} is rewritten. \\
 
 \noindent {\bf Public Methods }\\
@@ -65,32 +65,32 @@ DOF\_Group for each node and setting the initial id for each dof to
 $-2$ or $-3$ if the node identifier is in {\em
 nodesToBeNumberedLast}. The object then iterates through the Elements
 of the Domain creating a FE\_Element for each Element, if the Element
-is a Subdomain {\em setFE\_ElementPtr()} is invoked on the Subdomain
+is a Subdomain setFE\_ElementPtr() is invoked on the Subdomain
 with the new FE\_Element as the argument. If not enough memory is
 available for any DOF\_Group or FE\_element a warning message is
 printed and a $-4$ or $-5$ is returned. 
 The object then iterates through the SFreedom\_Constraints
 of the Domain creating a LagrangeSFreedom\_FE for each constraint, using the
-Domain, the constraint and {\em alphaSP} as the arguments in the
+Domain, the constraint and \p alphaSP as the arguments in the
 constructor.
 The object then iterates through the MP\_Constraints
 of the Domain creating a LagrangeMP\_FE for each constraint, using the
-Domain, the constraint and {\em alphaMP} as the arguments in the constructor.
+Domain, the constraint and \p alphaMP as the arguments in the constructor.
 Finally the method returns the
 number of degrees-of-freedom associated with the DOF\_Groups in {\em
 nodesToBeNumberedLast}. \\
 
 {\em virtual void clearAll(void) =0;} \\
 Currently this invokes delete on all the FE\_element and DOF\_Group
-objects created in {\em handle()} and the arrays used to store
+objects created in handle() and the arrays used to store
 pointers to these objects. FOR ANALYSIS INVOLVING DYNAMIC LOAD
 BALANCING, RE-MESHING AND CONTACT THIS MUST CHANGE. \\
 
 {\em int sendSelf(int commitTag, Channel \&theChannel); } \\
-Sends in a Vector of size 2 {\em alphaSP} and {\em alphaMP}. Returns
+Sends in a Vector of size 2 \p alphaSP and \p alphaMP. Returns
 $0$ if successful. \\
 
 {\em int recvSelf(int commitTag, Channel \&theChannel, FEM\_ObjectBroker
 \&theBroker); } \\
-Receives in a Vector of size 2 the values {\em alphaSP} and {\em
+Receives in a Vector of size 2 the values \p alphaSP and {\em
 alphaMP}. Returns $0$ if successful. 

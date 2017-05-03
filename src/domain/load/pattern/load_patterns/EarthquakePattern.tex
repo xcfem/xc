@@ -21,8 +21,8 @@ HAVE TO SET R IN NODES EACH APPLYLOAD.\\
 \indent The EarthquakePattern class is an abstract class. An
 EarthquakePattern is an object which adds earthquake loads to
 models. This abstract class keeps track of the GroundMotion objects
-and implements the {\em applyLoad()} method. It is up to the concrete
-subclasses to set the appropriate values of {\em R} at each node in
+and implements the applyLoad() method. It is up to the concrete
+subclasses to set the appropriate values of \p R at each node in
 the model.\\
 
 \noindent {\bf Class Interface} \\
@@ -37,7 +37,7 @@ the model.\\
 
 \noindent {\bf Constructor} \\ 
 \indent {\em EarthquakePattern(int tag, int classTag);}\\ 
-The integers {\em tag} and {\em classTag} are passed to the
+The integers \p tag and \p classTag are passed to the
 LoadPattern classes constructor. \\
 
 \noindent {\bf Destructor} \\
@@ -51,10 +51,10 @@ pointers to the GroundMotion objects.\\
 Obtains from each GroundMotion, the velocity and acceleration for the
 time specified. These values are placed in two Vectors of size equal
 to the number of GroundMotion objects. For each node in the Domain
-{\em addInertiaLoadToUnbalance()} is invoked with the acceleration Vector
+addInertiaLoadToUnbalance() is invoked with the acceleration Vector
 objects. SIMILAR OPERATION WITH VEL and ACCEL NEEDS TO BE INVOKED ON
 ELEMENTS .. NEED TO MODIFY ELEMENT INTERFACE \\
 
 \indent {\em int addMotion(GroundMotion \&theMotion)} \\
-Adds the GroundMotion, {\em theMotion} to the list of GroundMotion
+Adds the GroundMotion, \p theMotion to the list of GroundMotion
 objects. \\

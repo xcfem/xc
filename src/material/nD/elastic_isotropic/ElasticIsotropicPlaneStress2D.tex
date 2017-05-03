@@ -38,8 +38,8 @@ double v);}  \\ \\
 \noindent {\bf Constructor}  \\
 \indent {\em ElasticIsotropicPlaneStress2D (int tag, double E, double v);}  \\
 To construct an ElasticIsotropicPlaneStress2D whose unique integer tag
-among NDMaterials in the domain is given by {\em tag}.  The material
-model have Young's modulus {\em E} and Poisson's ratio {\em v}. \\
+among NDMaterials in the domain is given by \p tag.  The material
+model have Young's modulus \p E and Poisson's ratio \p v. \\
 
 \noindent {\bf Destructor} \\
 \indent {\em $\tilde{ }$ElasticIsotropicPlaneStress2D ();} \\
@@ -48,7 +48,7 @@ Does nothing. \\
 \noindent {\bf Public Methods} \\
 \indent {\em int setTrialStrain (const Vector \&strain); }  \\
 Sets the value of the current trial strain vector, $\myepsilon$,
-to be {\em strain}. Returns $0$. \\
+to be \p strain. Returns $0$. \\
 
 \begin{displaymath}
 \myepsilon := \left[
@@ -98,5 +98,5 @@ Returns $0$. \\
 
 \indent {\em NDMaterial *getCopy (void); } \\
 Returns a pointer to a new ElasticIsotropicPlaneStress2D, with the
-same values for {\em tag}, {\em E}, and $\nu$. It is up to the
+same values for \p tag, \p E, and $\nu$. It is up to the
 caller to ensure that the destructor is invoked. \\

@@ -28,7 +28,7 @@ specified. \\
 
 \noindent {\bf Constructor} \\ 
 \indent {\em TimeSeries(int tag);}\\ 
-The integer {\em classTag} is passed to the MovableObject classes
+The integer \p classTag is passed to the MovableObject classes
 constructor. \\
 
 \noindent {\bf Destructor} \\
@@ -39,7 +39,7 @@ Does nothing. \\
 \indent {\em  virtual double getFactor(double pseudoTime) =0;}\\
 To return the current load factor for the given value of {\em
 pseudoTime} to be applied to the loads and single-point constraints in
-a LoadPattern based on the value of {\em pseudoTime}. \\
+a LoadPattern based on the value of \p pseudoTime. \\
 
 \indent {\em  virtual void Print(std::ostream \&s, int flag =0) =0;}\\
-To print to the stream {\em s} output based on the value of {\em flag}.
+To print to the stream \p s output based on the value of \p flag.

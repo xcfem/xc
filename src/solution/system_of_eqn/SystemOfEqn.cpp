@@ -64,6 +64,8 @@
 #include "solution/SoluMethod.h"
 #include "solution/graph/graph/Graph.h"
 
+//! @brief Constructor. The integer \p classTag is provided to
+//! the constructor for the base class MovableObject.
 XC::SystemOfEqn::SystemOfEqn(SoluMethod *owr,int clasTag)
   : MovableObject(clasTag), EntCmd(owr) {}
 

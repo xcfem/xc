@@ -109,7 +109,7 @@ integer. \\
 
 \indent {\em int validateBaseRelationsWrite(int commitTag); }\\
 The object first checks to see if the Domain has already been
-committed to the database with a similar {\em commitTag}. If it has, a
+committed to the database with a similar \p commitTag. If it has, a
 check is made to ensure that the current domain stamp and the one at
 the time of this last commit are the same. If they are different, an
 error message is printed and $-1$ is returned. A check is then made to
@@ -125,12 +125,12 @@ printed if an error occurs. \\
 
 \indent {\em int validateBaseRelationsRead(int commitTag); }\\ 
 The object first obtains from the Domain relation the information for
-{\em commitTag}. If no information exists, an error message is printed
+\p commitTag. If no information exists, an error message is printed
 and a $-1$ is returned. A check is then made to see if the domain
 stamp for this entity and the Domain objects current stamp are the
-same. If different, {\em clearAll()} is invoked on the Domain, and
+same. If different, clearAll() is invoked on the Domain, and
 from the component base relations new domain components are created,
-are asked to {\em recvSelf()} from {\em *this} and these new
+are asked to recvSelf() from {\em *this} and these new
 components are added to the Domain. Finally the current time, domain
 stamp and load factor are set using the information in the entity. 
 Returns $1$ if the domain needed to be cleared and new component
@@ -157,14 +157,14 @@ Returns $0$. \\
 \indent\indent\indent\indent\indent		MovableObject \&theObject, \\
 \indent\indent\indent\indent\indent		ChannelAddress *theAddress =0);}\\
 Returns the result of invoking {\em sendSelf(commitTag, *this)} on
-{\em theObject}. \\
+\p theObject. \\
 
 \indent {\em int recvObj(int commitTag, \\
 \indent\indent\indent\indent\indent		MovableObject \&theObject, \\
 \indent\indent\indent\indent\indent		FEM\_ObjectBroker \&theBroker, \\
 \indent\indent\indent\indent\indent		ChannelAddress *theAddress =0);}\\
 Returns the result of invoking {\em recvSelf(commitTag, *this, theBroker)} on
-{\em theObject}. \\
+\p theObject. \\
 		
 \indent {\em int sendMsg(int dbTag, int commitTag,  \\
 \indent\indent\indent\indent\indent		const Message \&, \\
@@ -184,7 +184,7 @@ for matrices of this size has not yet been created, one is created now
 and the cell in the array of file pointers is set. If file can not be
 created a warning message is printed and program is terminated. A sequential search
 is made in the file to see if information is already stored for a Matrix with
-this {\em dbTag} and {\em commitTag}. The data is then written at this
+this \p dbTag and \p commitTag. The data is then written at this
 location, or eof if no location was found. The end of file location
 for Matrices of this size is updated. If successful $0$ is
 returned. A warning message and a negative number is returned if the
@@ -197,7 +197,7 @@ First determines the size of the matrix, $noRows * noCols$. If a files
 for matrices of this size has not yet been created, an error message
 is printed and $-1$ is returned.  A sequential search
 is made in the file to see if information is already stored for a Matrix with
-this {\em dbTag} and {\em commitTag}. If no information is stored a
+this \p dbTag and \p commitTag. If no information is stored a
 $-1$ is returned. If information is stored, the information is
 retrieved and the data in the Matrix is set. returns $0$ if
 successful. \\
@@ -210,7 +210,7 @@ for Vectors of this size has not yet been created, one is created now
 and the cell in the array of file pointers is set. If file can not be
 created a warning message is printed and program is terminated. A sequential search
 is made in the file to see if information is already stored for a Vector with
-this {\em dbTag} and {\em commitTag}. The data is then written at this
+this \p dbTag and \p commitTag. The data is then written at this
 location, or eof if no location was found. The end of file location
 for Vectors of this size is updated. If successful $0$ is
 returned. A warning message and a negative number is returned if the
@@ -222,7 +222,7 @@ operation fails: $-1$ if Vector size is too large. \\
 If a file for Vectors of this size has not yet been created, an error message
 is printed and $-1$ is returned.  A sequential search
 is made in the file to see if information is already stored for a Vector with
-this {\em dbTag} and {\em commitTag}. If no information is stored a
+this \p dbTag and \p commitTag. If no information is stored a
 $-1$ is returned. If information is stored, the information is
 retrieved and the data in the Vector is set. Returns $0$ if
 successful. \\
@@ -235,7 +235,7 @@ for IDs of this size has not yet been created, one is created now
 and the cell in the array of file pointers is set. If file can not be
 created a warning message is printed and program is terminated. A sequential search
 is made in the file to see if information is already stored for a ID with
-this {\em dbTag} and {\em commitTag}. The data is then written at this
+this \p dbTag and \p commitTag. The data is then written at this
 location, or eof if no location was found. The end of file location
 for IDss of this size is updated. If successful $0$ is
 returned. A warning message and a negative number is returned if the
@@ -247,6 +247,6 @@ operation fails: $-1$ if ID size is too large. \\
 If a file for IDs of this size has not yet been created, an error message
 is printed and $-1$ is returned.  A sequential search
 is made in the file to see if information is already stored for a ID with
-this {\em dbTag} and {\em commitTag}. If no information is stored a
+this \p dbTag and \p commitTag. If no information is stored a
 $-1$ is returned. If information is stored, the information is
 retrieved and the data in the ID is set. Returns $0$ if successful. 

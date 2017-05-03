@@ -139,7 +139,7 @@ length and equation~\ref{eq:e=av} reduces to
 \varepsilon(x) = \frac{v_1}{L}.
 \end{equation}
 
-After computing the axial strain, the method {\em setTrialStrain()} should be invoked
+After computing the axial strain, the method setTrialStrain() should be invoked
 with the updated strain.
 
 \subsection{Equilibrium}
@@ -174,7 +174,7 @@ q_1 = \sigma A,
 
 \noindent since ${\bf a}(x) = \frac{1}{L}$.
 To obtain the current value of material stress, $\sigma$, the method
-{\em getStress()} must be invoked. Then the truss force can be transformed
+getStress() must be invoked. Then the truss force can be transformed
 to the global system via equation~\ref{eq:p=Tq}, i.e.,
 
 \begin{equation}
@@ -225,7 +225,7 @@ ${\bf e} = \varepsilon$,
 \end{align}
 
 \noindent where $D_t$ is the material tangent, which is returned upon invoking
-the method {\em getTangent()}. Combining equations~\ref{eq:k},~\ref{eq:kb},
+the method getTangent(). Combining equations~\ref{eq:k},~\ref{eq:kb},
 and~\ref{eq:ks}, the familiar truss stiffness equation is recovered,
 
 \begin{equation}

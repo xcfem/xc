@@ -45,7 +45,7 @@ temporary variable for algorithms which work with graphs. \\
 \indent {\em Vertex(int tag, int ref, double weight=0, int color =0);}  \\
 To construct a Vertex whose tag, reference, weight and color are as
 given by the arguments. The degree of the vertex is set to $0$. The
-integer {\em tag} is passed to the TaggedObject classes constructor.\\
+integer \p tag is passed to the TaggedObject classes constructor.\\
 
 \noindent {\bf Destructor}  \\
 \indent {\em virtual~$\tilde{}$Vertex();}  \\
@@ -53,13 +53,13 @@ Does nothing. \\
 
 \noindent {\bf Public Methods }  \\
 \indent {\em virtual void setWeight(double newWeight);} \\
-To set the weight of the vertex to {\em newWeight} \\    
+To set the weight of the vertex to \p newWeight \\    
 
 {\em virtual void setColor(int newColor);} \\
-To set the color of the vertex to {\em newColor} \\    
+To set the color of the vertex to \p newColor \\    
 
 {\em virtual void setTmp(int newTmp);} \\
-To set the temporary variable of the vertex to {\em newTmp} \\    
+To set the temporary variable of the vertex to \p newTmp \\    
 
 {\em virtual int getTag(void) const;}. \\
 Returns the vertices tag.\\
@@ -78,14 +78,14 @@ Returns the vertices temporary variable. \\
 
 {\em virtual int addEdge(int otherTag); } \\
 If the adjacency list for that vertex does not already contain {\em
-otherTag}, {\em otherTag} is added to the adjacency list and the
+otherTag}, \p otherTag is added to the adjacency list and the
 degree of the vertex is incremented by $1$. Returns a $0$ if
 sucessfull, a $1$ if edge already existed and a negative number if
 not. Note that no check is done by the vertex to see that a vertex
-with {\em otherTag} exists in the graph. The adjacency list for a
+with \p otherTag exists in the graph. The adjacency list for a
 Vertex is stored in an ID object containing the adjacent Vertices
-tags. A check is made to see if {\em otherTag} is in this ID using
-{\em getLocation()}, if it needs to be added the {\em [degree]}
+tags. A check is made to see if \p otherTag is in this ID using
+getLocation(), if it needs to be added the {\em [degree]}
 operator is invoked on the ID. \\ 
 
 {\em virtual int getDegree(void) const;} \\

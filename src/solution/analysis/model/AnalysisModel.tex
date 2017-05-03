@@ -110,7 +110,7 @@ is invoked.\\
 
 \noindent {\bf Public Member Functions - Population/Depopulation}  \\
 \indent {\em virtual bool addFE\_Element(FE\_Element *theElement);}  \\
-Adds the FE\_Element pointed to by {\em theElement} to the domain and
+Adds the FE\_Element pointed to by \p theElement to the domain and
 invokes {\em setAnalysisModel(*this)} on the FE\_Element. If the
 array for the FE\_Elements is large enough, it adds this pointer to
 the array and increments the number of FE\_Elements in the array. If
@@ -118,19 +118,19 @@ the array is not large enough, a new one double in size is
 constructed, all the old pointers are copied to this new array and the
 new pointer is then added. If not enough room is available for this
 array, an error message is printed and the program is
-terminated. Returns {\em true}, otherwise {\em false} if {\em
+terminated. Returns \p true, otherwise \p false if {\em
 theElement} is $0$ or derived class used which does not implement the
 method. \\ 
 
 {\em virtual bool addDOF\_Group(DOF\_Group *theGroup);}  \\
-Adds the DOF\_Group pointed to by {\em theGroup} to the domain. If the
+Adds the DOF\_Group pointed to by \p theGroup to the domain. If the
 array for the DOF\_Groups is large enough, it adds this pointer to
 the array and increments the number of DOF\_Groups in the array. If
 the array is not large enough, a new one double in size is
 constructed, all the old pointers are copied to this new array and the
 new pointer is then added. If not enough room is available for this
 array, an error message is printed and the program is
-terminated. Returns {\em true}, otherwise {\em false} if {\em
+terminated. Returns \p true, otherwise \p false if {\em
 theGroup} is $0$ or derived class used which does not implement the
 method. \\ 
 
@@ -141,7 +141,7 @@ Clears from the model all FE\_Element and DOF\_Group objects that have
 been added to the analysis model using the above two methods. It does
 this by setting the components in the two arrays of pointers equal to
 $0$ and setting the number of components to $0$. If the Graphs have
-been created their destructor is invoked. Also sets {\em numEqn} to $0$. \\
+been created their destructor is invoked. Also sets \p numEqn to $0$. \\
 
 \noindent {\bf Public Member Functions - Access}  \\
 \indent {\em virtual int getNumDOF\_Groups(void) const;}\\
@@ -151,7 +151,7 @@ model.\\
 \indent {\em virtual DOF\_Group *getDOF\_GroupPtr(int tag);}\\
 Returns a pointer to the DOF\_Group object whose tag is given by {\em
 tag}.  It first checks to see if the DOF\_Group object is at the
-location in the array given by {\em tag}; if not it searches through
+location in the array given by \p tag; if not it searches through
 the array to find the DOF\_Group object. Returns a pointer to the
 object if found, otherwise $0$ is returned.\\
 
@@ -168,8 +168,8 @@ DOF\_Numberer when it is numbering the dofs. \\
 
 \indent {\em virtual int getNumEqn(void) const;} \\
 Returns the number of DOFs in the model which have been assigned
-an equation number. Returns the value passed in {\em setNumEqn()},
-if {\em setNumEqn()} was not invoked $0$ is returned.\\
+an equation number. Returns the value passed in setNumEqn(),
+if setNumEqn() was not invoked $0$ is returned.\\
 
 {\em virtual const Graph \&getDOFGraph(void);} \\
 Returns the DOF connectivity graph for the individual dofs in the
@@ -238,7 +238,7 @@ incrNodeAccel(accel)} on each DOF\_Group. \\
 \noindent {\bf Public Member Functions - Trigger}  \\
 \indent {\em void setLinks(Domain \&theDomain)} \\
 Method to set the link to the associated Domain. Invoked by
-during the construction of the {\em Analysis} object.\\
+during the construction of the \p Analysis object.\\
 
 {\em virtual void applyLoadDomain(double timeStep = 0.0, double
 loadFactor = 1.0);}\\
@@ -249,41 +249,41 @@ message is printed. \\
 
 
 {\em virtual int commitDomain(void);} \\
-Method which invokes {\em commit()} on the domain: this is an
+Method which invokes commit() on the domain: this is an
 operation which causes all nodes in the domain to take the current
 values of response quantities and copy them into the accepted values. 
 Returns $0$ if successful , a negative number if not: $-1$ if no
-Domain has been set and $-2$ if {\em commit()} fails on the Domain.\\
+Domain has been set and $-2$ if commit() fails on the Domain.\\
 
 {\em virtual int revertDomainToLastCommit(void);} \\
-Method which invokes {\em revertToLastCommit()} on the domain: this is an
+Method which invokes revertToLastCommit() on the domain: this is an
 operation which causes all nodes in the domain to set the trial
 response quantities equal to the last committed response quantities.
 Returns $0$ if successful , a negative number if not: $-1$ if no
-Domain has been set and $-2$ if {\em revertToLastCommit}() fails on
+Domain has been set and $-2$ if \p revertToLastCommit() fails on
 the Domain.\\ 
 
 {\em virtual void updateDomain(void);}\\
-Method which invokes {\em update()} on the domain. If no Domain has
+Method which invokes update() on the domain. If no Domain has
 been set nothing is done and an error message is printed. \\ 
 
 \indent {\em virtual double getCurrentDomainTime(void);} \\
 To get the current time in the Domain. If no Domain has been set a
 warning message is printed and $0.0$ is returned, otherwise the result
-of invoking {\em getCurrentTime()} on the Domain is returned. \\
+of invoking getCurrentTime() on the Domain is returned. \\
 
 \indent {\em virtual void   setCurrentDomainTime(double newTime);}\\
-To set the current time in the Domain to be {\em newTime}. If no
+To set the current time in the Domain to be \p newTime. If no
 Domain has been set a warning message is printed, otherwise 
 {\em setCurrentTime(newTime)} is invoked on the Domain. \\
 
 \indent {\em virtual double getCurrentDomainLoadFactor(void);}\\
 To get the current load factor in the Domain. If no Domain has been set a
 warning message is printed and $0.0$ is returned, otherwise the result
-of invoking {\em getCurrentLoadFactor()} on the Domain is returned. \\
+of invoking getCurrentLoadFactor() on the Domain is returned. \\
 
 \indent {\em virtual void setCurrentDomainLoadFactor(double newFactor)};\\
-To set the current load factor in the Domain to be {\em newFactor}. If no
+To set the current load factor in the Domain to be \p newFactor. If no
 Domain has been set a warning message is printed, otherwise 
 {\em setCurrentLoadFactor(newFactor)} is invoked on the Domain. \\
 
@@ -301,6 +301,6 @@ Returns $0$.  \\
 \noindent {\bf Protected Member Functions}  \\
 \indent {\em Domain *getDomainPtr(void) const;} \\
 Returns a pointer to the associated Domain, that is the Domain
-set when {\em setLinks()} was last invoked. 
+set when setLinks() was last invoked. 
 
 

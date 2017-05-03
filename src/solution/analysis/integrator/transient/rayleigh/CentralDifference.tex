@@ -70,13 +70,13 @@ FEM\_ObjectBroker \&theBroker);}\\
 \indent {\em CentralDifference(bool dispFlag = true);}\\ 
 Sets $\gamma$ to $1/2$ and $\beta$ to $1/4$. Sets a flag indicating
 whether the incremental solution is done in terms of displacement,
-$\Delta \U$, if {\em dispFlag} is {\em true}, or  
-acceleration, $\Delta \ddot \U$, if {\em dispFlag} is {\em false}. \\
+$\Delta \U$, if \p dispFlag is \p true, or  
+acceleration, $\Delta \ddot \U$, if \p dispFlag is \p false. \\
 
 \indent {\em CentralDifference(double gamma, double beta, bool dispFlag = true);}\\ 
-Sets $\gamma$ to {\em gamma} and $\beta$ to {\em beta}. Sets a flag
+Sets $\gamma$ to \p gamma and $\beta$ to \p beta. Sets a flag
 indicating whether the incremental solution is done in terms of
-displacement or acceleration to {\em dispFlag}. \\
+displacement or acceleration to \p dispFlag. \\
 
 \noindent {\bf Destructor} \\
 \indent {\em virtual~ $\tilde{}$CentralDifference();}\\ 
@@ -86,7 +86,7 @@ Invokes the destructor on the Vector objects created. \\
 \indent {\em int formEleTangent(FE\_Element *theEle);} \\
 This tangent for each FE\_Element is defined to be $\K_e = c1 \K + c2
 \D + c3 \M$, where c1,c2 and c3 were determined in the last invocation
-of the {\em newStep()} method.  The method returns $0$ after
+of the newStep() method.  The method returns $0$ after
 performing the following operations:
 \begin{tabbing}
 while \= \+ while \= while \= \kill
@@ -124,26 +124,26 @@ The following are performed when this method is invoked:
 \item First sets the values of the three constants {\em c1}, {\em c2}
 and {\em c3} depending on the flag indicating whether incremental
 displacements or accelerations are being solved for at each iteration.
-If {\em dispFlag} was {\em true}, {\em c1} is set to $1.0$, {\em c2} to $
+If \p dispFlag was \p true, {\em c1} is set to $1.0$, {\em c2} to $
 \gamma / (\beta * deltaT)$ and {\em c3} to $1/ (\beta * deltaT^2)$. If
-the flag is {\em false} {\em c1} is set to $\beta * deltaT^2$, {\em c2} to $
+the flag is \p false {\em c1} is set to $\beta * deltaT^2$, {\em c2} to $
 \gamma * deltaT$ and {\em c3} to $1.0$. 
 \item Then the Vectors for response quantities at time $t$ are set
 equal to those at time $t + \Delta t$.
 \item Then the velocity and accelerations approximations at time $t +
 \delta t$ are set using the difference approximations if {\em
-dispFlag} was {\em true}. (displacement and velocity if {\em false}).
+dispFlag} was \p true. (displacement and velocity if \p false).
 \item The response quantities at the DOF\_Group objects are updated
-with the new approximations by invoking {\em setResponse()} on the
+with the new approximations by invoking setResponse() on the
 AnalysisModel with new quantities for time $t + \Delta t$.
 \item current time is obtained from the AnalysisModel, incremented by
 $\Delta t$, and {\em applyLoad(time, 1.0)} is invoked on the
 AnalysisModel. 
-\item Finally {\em updateDomain()} is invoked on the AnalysisModel.
+\item Finally updateDomain() is invoked on the AnalysisModel.
 \end{enumerate}
 The method returns $0$ if successful, otherwise a negative number is
-returned: $-1$ if $\gamma$ or $\beta$ are $0$, $-2$ if {\em dispFlag}
-was true and $\Delta t$ is $0$, and $-3$ if {\em domainChanged()}
+returned: $-1$ if $\gamma$ or $\beta$ are $0$, $-2$ if \p dispFlag
+was true and $\Delta t$ is $0$, and $-3$ if domainChanged()
 failed or has not been called. \\
 
 {\em int update(const Vector \&$\Delta U$);} \\
@@ -152,8 +152,8 @@ response quantities at time $t + \Delta t$. The displacement Vector is
 incremented by $ c1 * \Delta U$, the velocity Vector by $
 c2 * \Delta U$, and the acceleration Vector by $c3 * \Delta U$. 
 The response at the DOF\_Group objects are then updated by invoking
-{\em setResponse()} on the AnalysisModel with quantities at time $t +
-\Delta t$. Finally {\em updateDomain()} is invoked on the
+setResponse() on the AnalysisModel with quantities at time $t +
+\Delta t$. Finally updateDomain() is invoked on the
 AnalysisModel. Returns
 $0$ if successful. A warning message is printed and a negative number
 returned if an error occurs: $-1$ if no associated AnalysisModel, $-2$
@@ -161,15 +161,15 @@ if the Vector objects have not been created, $-3$ if the Vector
 objects and $\delta U$ are of different sizes. \\
 
 {\em int sendSelf(int commitTag, Channel \&theChannel); } \\ 
-Places the $\beta$ and $\gamma$ and {\em dispFlag} into a vector if size 3
-and invokes {\em sendVector} on the Channel with this Vector. Returns
+Places the $\beta$ and $\gamma$ and \p dispFlag into a vector if size 3
+and invokes \p sendVector on the Channel with this Vector. Returns
 $0$ if successful, a warning message is printed and a $-1$ is
-returned if {\em theChannel} fails to send the Vector. \\ 
+returned if \p theChannel fails to send the Vector. \\ 
 
 {\em int recvSelf(int commitTag, Channel \&theChannel, 
 FEM\_ObjectBroker \&theBroker); } \\ 
 Receives in a Vector of size 3 the values of $\beta$, $\gamma$ and
-{\em dispFlag}. Returns $0$ if successful, a warning message is printed,
+\p dispFlag. Returns $0$ if successful, a warning message is printed,
 $\delta \lambda$ is set to $0$, and a $-1$ is returned if {\em
 theChannel} fails to receive the Vector.\\
 

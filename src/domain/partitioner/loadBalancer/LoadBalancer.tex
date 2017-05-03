@@ -41,7 +41,7 @@ Does nothing. Provided so the subclasses destructor will be called. \\
 \indent {\em virtual void setLinks(DomainPartitioner
 \&thePartitioner);} \\
 Sets the pointer to the DomainPartitioner object associated with the
-LoadBalancer to point to {\em thePartitioner}. \\
+LoadBalancer to point to \p thePartitioner. \\
 
 {\em virtual int balance(Graph \&theWeightedGraph) =0;} \\ 
 Each subclass must provide an implementation of this method. This
@@ -49,7 +49,7 @@ method is invoked to balance the PartitionedDomain. The Graph {\em
 theWeightedGraph} is a weighted graph in which the vertices represent
 the Subdomains, the edges Subdomains sharing common boundary nodes and
 the weight the cost of the previous Subdomain calculations (determined
-by invoking {\em getCost()} on the Subdomains). \\
+by invoking getCost() on the Subdomains). \\
 
 
 \noindent {\bf Protected Methods}  \\

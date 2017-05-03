@@ -38,13 +38,13 @@ displayMode, float fact); } \\
 
 \noindent {\bf Constructor}  \\
 \indent {\em DomainComponent(int tag, int classTag);}  \\
-Constructs a DomainComponent with a tag given by {\em tag}, whose
-class tag is given by {\em classTag}. The tag of
+Constructs a DomainComponent with a tag given by \p tag, whose
+class tag is given by \p classTag. The tag of
 a component is some unique means of identifying the component among
 like components, i.e. the tag of a node would be its unique node
-number. The {\em classTag} is a means of identifying the class of the object.
-No domain is associated with the object. The integer {\em tag} is
-passed to the TaggedObject constructor and the integer {\em classTag}
+number. The \p classTag is a means of identifying the class of the object.
+No domain is associated with the object. The integer \p tag is
+passed to the TaggedObject constructor and the integer \p classTag
 is passed to the MovableObject constructor. \\
 
 \noindent {\bf Destructor}  \\
@@ -55,20 +55,20 @@ called. \\
 \noindent {\bf Public Methods}  \\
 \indent {\em virtual void setDomain(Domain *theDomain);} \\
 Sets the encompassing domain of the component to that given by {\em
-theDomain}. This method is invoked by {\em theDomain} when the component is
+theDomain}. This method is invoked by \p theDomain when the component is
 being added to the domain, in an {\em addDomain..} invocation (see
 interface for Domain). \\
 
 \indent {\em virtual Domain *getDomain(void) const;}\\
 Returns a pointer to the Domain to which the component was added,
-or $0$ if the {\em setDomain()} command was never called on the
+or $0$ if the setDomain() command was never called on the
 object. \\
 
 \indent {\em virtual int displaySelf(Renderer \&theRenderer, int
 displayMode, float fact); } \\ 
-To cause the object to display itself using {\em theRenderer}. The
-integer {\em displayMode} is used to indicate what is to be displayed
-and the float {\em fact} is used to factor the nodal displacements. 
+To cause the object to display itself using \p theRenderer. The
+integer \p displayMode is used to indicate what is to be displayed
+and the float \p fact is used to factor the nodal displacements. 
 To return $0$ if successful, a negative number if not. This base
 class simply returns $0$. Its up to the subclasses to override this
 method if the objects are to be rendered.

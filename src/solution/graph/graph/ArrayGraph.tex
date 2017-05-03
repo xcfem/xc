@@ -49,15 +49,15 @@ instance.} \\
 \noindent {\bf Constructors}  \\
 \indent {\em ArrayGraph(int arraySize);}  \\
 To construct an empty ArrayGraph. Creates a Vertex ** array, {\em
-theVertices} of size {\em arraySize} and sets the number of vertices,
-{\em numVertex}, and number of edges {\em numEdge} to $0$. If it fails
-to get an array of appropriate size it sets its {\em arraySize} to
+theVertices} of size \p arraySize and sets the number of vertices,
+\p numVertex, and number of edges \p numEdge to $0$. If it fails
+to get an array of appropriate size it sets its \p arraySize to
 $0$; subclasses can check if successfull construction by invoking the
-protected member function {\em getArraySize()}. \\
+protected member function getArraySize(). \\
 
 \noindent {\bf Destructor}  \\
 \indent {\em virtual~$\tilde{}$ArrayGraph();}  \\
-Goes through {\em theVertices} and anywhere it finds a non-zero pointer,
+Goes through \p theVertices and anywhere it finds a non-zero pointer,
 invokes the vertex destructor on that pointer. It then invokes the
 destructor on theVertices array. \\
 
@@ -68,18 +68,18 @@ Method to add a vertex to the graph. If the adjacency list
 of the vertex is not empty the graph will first check to see all
 vertices in the the the vertices adjacency list exist in the graph
 before the vertex is added. It then checks if it neeeds a new array
-and if so creates one, i.e. if the {\em arraySize} $=$ {\em
+and if so creates one, i.e. if the \p arraySize $=$ {\em
 numVertex} it creates a new array, whose size is double the original
 and copies the pointers to the vertices, before invoking {\em
 delete()} on the old array. It now tries to add the vertex in the
-array at location {\em vertexTag}. If this fails it adds at the first
+array at location \p vertexTag. If this fails it adds at the first
 empty location it comes to. Returns a 0 if successfull addition, a
 $-1$ otherwise and a message to opserr explaining the problem. \\ 
 
 {\em virtual int addEdge(int vertexTag, int otherVertexTag); } \\
 Causes the Graph to add an edge {\em (vertexTag,otherVertexTag)} to
 the Graph. A check is first made to see if vertices with tags given by
-{\em vertexTag} and {\em otherVertexTag} exist in the graph. If they
+\p vertexTag and \p otherVertexTag exist in the graph. If they
 do not exist a $-1$ is returned, otherwise the method invokes {\em
 addEdge()} on each of the corresponding vertices in the 
 graph. Returns $0$ or a positive integer if sucessfull (positive if
@@ -88,13 +88,13 @@ edge has already been added), a negative number if not.\\
 
 {\em virtual Vertex *getVertexPtr(int vertexTag);} \\
 A method which returns a pointer to the vertex whose tag is given by {\em
-vertexTag}. The method first looks at location {\em vertexTag} for the
+vertexTag}. The method first looks at location \p vertexTag for the
 vertex, otherwise it must search through the array until it finds the
 vertex it is looking for. If no such vertex exists in the graph $0$ is
 returned.\\ 
 
 {\em virtual VertexIter \&getVertices(void);} \\
-A method which first invokes {\em reset()} on the graphs ArrayVertexIter
+A method which first invokes reset() on the graphs ArrayVertexIter
 and then returns a reference to this iter.\\
 
 {\em virtual int getNumVertex(void) const;} \\
@@ -108,7 +108,7 @@ A method to return the number of edges in the graph, returns numEdge. \\
 A method to print the graph. It first prints out numVertex and numEdge
 and then on each newline prints the vertexTag and the edges for that
 vertex. It does this by going through theVertices array and invoking
-{\em Print()}  on each non-zero pointer.\\
+Print()  on each non-zero pointer.\\
 
 \noindent {\bf Protected Methods }  \\
 \indent {\em virtual int getArraySize(void) const;} \\

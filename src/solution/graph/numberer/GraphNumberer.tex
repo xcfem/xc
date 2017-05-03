@@ -19,8 +19,8 @@
 class defines the interface that all programmers must provide when
 introducing new GraphNumberer subclasses. A GraphNumberer is an
 algorithmic class for numbering the Vertices of a Graph; that is
-assigning a unique integer value ($0$ through {\em numVertex} $-1$) to
-each Vertex (uses {\em tmp} variable of Vertex) of the Graph. \\
+assigning a unique integer value ($0$ through \p numVertex $-1$) to
+each Vertex (uses \p tmp variable of Vertex) of the Graph. \\
 
 
 \noindent {\bf Class Interface }  \\
@@ -37,7 +37,7 @@ lastVertexTag = -1) =0;}\\
 
 \noindent {\bf Constructor}  \\
 \indent {\em GraphNumberer(int classTag);}  \\
-The integer {\em classTag} is passed to the MovableObject classes
+The integer \p classTag is passed to the MovableObject classes
 constructor.\\ 
 
 \noindent {\bf Destructor}  \\
@@ -48,26 +48,26 @@ Does nothing. \\
 \indent {\em virtual const ID \&number(Graph \&theGraph, int
 lastVertex = -1) =0;}\\
 This is the method invoked to perform the graph numbering, that is to
-assign a unique integer $1$ through {\em numVertex}, to each Vertex in
+assign a unique integer $1$ through \p numVertex, to each Vertex in
 the Graph. Returns an ordered ID containing the vertex references in the order
 of the numbering, i.e. $ID(0)$ contains the integer reference for the
 vertex assigned the number 1, $ID(1)$ contains the integer reference for the
 vertex assigned the number 2 and so on. A side effect of the numbering
-is that the {\em Tmp} variable of each vertex is set to the number
-assigned to that vertex. If {\em lastVertex} is not $-1$ the Vertex
-whose tag is given by {\em lastVertex} should be numbered last (it
+is that the \p Tmp variable of each vertex is set to the number
+assigned to that vertex. If \p lastVertex is not $-1$ the Vertex
+whose tag is given by \p lastVertex should be numbered last (it
 does not have to be though THIS MAY CHANGE).\\
 
 \indent {\em virtual const ID \&number(Graph \&theGraph, const ID
 \&lastVertices) =0;}\\
 This is the method invoked to perform the graph numbering, that is to
-assign a unique integer $1$ through {\em numVertex}, to each Vertex in
+assign a unique integer $1$ through \p numVertex, to each Vertex in
 the Graph. Returns an ordered ID containing the vertex references in the order
 of the numbering, i.e. $ID(0)$ contains the integer reference for the
 vertex assigned the number 1, $ID(1)$ contains the integer reference for the
 vertex assigned the number 2 and so on. A side effect of the numbering
-is that the {\em Tmp} variable of each vertex is set to the number
-assigned to that vertex. {\em lastVertices} is used as a hint to
+is that the \p Tmp variable of each vertex is set to the number
+assigned to that vertex. \p lastVertices is used as a hint to
 indicate that these Vertices should be numbered last (they do not have
 to be though THIS MAY CHANGE).
 

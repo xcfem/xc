@@ -282,7 +282,7 @@ const XC::Vector& XC::FullGenEigenSolver::getEigenvector(int mode) const
       }
     else
       {
-        std::cerr << "FullGenEigenSolver::getEigenvector() - "
+        std::cerr << nombre_clase() << "::" << __FUNCTION__ << "; "
             << "eigenvectors not computed yet\n";
         eigenV.Zero();
       }      
@@ -305,7 +305,7 @@ const double &XC::FullGenEigenSolver::getEigenvalue(int mode) const
           { return eigenvalue[mode-1]; }
         else
           {
-            std::cerr << "FullGenEigenSolver::getEigenvalue() - "
+            std::cerr << nombre_clase() << "::" << __FUNCTION__ << "; "
                       << "eigenvalues not yet computed\n";
             return retval;
           }

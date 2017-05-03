@@ -12,7 +12,7 @@
 
 \noindent {\bf Description}  \\
 \indent The Vector class provides the vector abstraction. A vector of
-order {\em size} is an ordered 1d array of {\em size} numbers. For
+order \p size is an ordered 1d array of \p size numbers. For
 example a vector of order 5: \\
 
 \indent\indent $ x = [x_0$ $x_1$ $x_2$  $x_3$ $x_4]$ \\
@@ -72,23 +72,23 @@ Vector \&V);} \\
 To construct a Vector of order $0$. \\
 
 \indent {\em  Vector(int size);}  \\
-To construct a Vector of order {\em size}. The constructor creates an
+To construct a Vector of order \p size. The constructor creates an
 array to store the data and zeroes this array. If not enough memory is
 available a warning message is printed and a Vector of order $0$ is 
-returned. The {\em Zero()}  method is invoked on the new Vector before
+returned. The Zero()  method is invoked on the new Vector before
 it is returned.\\ 
 
 \indent {\em  Vector(double *data, int size)}  \\
-To construct a Vector of order {\em size} whose data will be stored in the
-array pointed to by {\em data}. The array pointed to by data is not set to
+To construct a Vector of order \p size whose data will be stored in the
+array pointed to by \p data. The array pointed to by data is not set to
 zero by the constructor. Note that delete will not be called on this array
 in the destructor. It is up to the user to ensure that the array pointed to
-by {\em data} is at least as large as {\em size}, if this is not the case
+by \p data is at least as large as \p size, if this is not the case
 erroneous results or a segmentation fault may occur.\\
 
 \indent {\em  Vector(const Vector \&other); }  \\
 To construct a Vector using another Vector. The new Vector will be
-identical to the Vector {\em other}. The constructor creates an array
+identical to the Vector \p other. The constructor creates an array
 to store the data and zeroes this array. If not enough memory is available
 a warning message is printed and a Vector of order $0$ is returned. The
 contents of the array are then set equal to the contents of {\em
@@ -101,7 +101,7 @@ passed in the constructor, the space is not deallocated.\\
 
 \noindent {\bf Public Member Functions }  \\
 \indent {\em int Size() const;} \\
-Returns the order of the Vector, {\em size}. \\
+Returns the order of the Vector, \p size. \\
 
 \indent {\em void Zero();} \\
 Zeros out the Vector, i.e. sets all the components of the Vector to
@@ -110,70 +110,70 @@ $0$. \\
 \indent {\em int Assemble(const Vector \&V, 
 const ID \&loc,
 double fact = 1.0);} \\
-Assembles into the current Vector the Vector {\em V}. The contents of the
+Assembles into the current Vector the Vector \p V. The contents of the
 current Vector at location ({\em loc(i)}) is set equal to the current
-value plus {\em fact} times the value of the Vector {\em V} at
-location ({\em i}). returns $0$ if successful. A warning message is
-printed for each invalid location in the current Vector or {\em V} and a
+value plus \p fact times the value of the Vector \p V at
+location (\p i). returns $0$ if successful. A warning message is
+printed for each invalid location in the current Vector or \p V and a
 $-1$ is returned. \\ 
 
 \indent {\em void addVector(const Vector \&other, double fact = 1.0);} \\
-To add a factor {\em fact} times the Vector {\em other} to the current
+To add a factor \p fact times the Vector \p other to the current
 Vector. returns $0$ if successful. An error message is printed and
 $-1$ is returned if Vectors are not of the same size. Checks are made
-to see if the number of operations can be reduced if {\em fact} is $0$
+to see if the number of operations can be reduced if \p fact is $0$
 or $1$. \\ 
 
 \indent {\em void addMatrixVector(const Matrix \&m, Vector \&v, double
 fact = 1.0);} \\ 
-To add a factor {\em fact} times the Vector formed by the product of
-the matrix {\em m} and the Vector {\em v} to the current Vector. No
+To add a factor \p fact times the Vector formed by the product of
+the matrix \p m and the Vector \p v to the current Vector. No
 temporary Vector is created. Returns $0$ if successful. Prints a
 warning message and returns $-1$ if sizes are incompatible. Checks are
-made to see if the number of operations can be reduced if {\em fact}
+made to see if the number of operations can be reduced if \p fact
 is $0$ or $1$. \\ 
 
 
 \indent {\em double Norm(void)} \\
-Returns the 2 norm of the Vector. Returns the {\em sqrt()} of the
+Returns the 2 norm of the Vector. Returns the sqrt() of the
 result of invoking the $\hat{ }$ operator on the current Vector with
 the current Vector as the argument. \\ 
 
 \noindent {\bf Overloaded Operator Functions}  \\
 \indent {\em double \&operator()(int x) const;} \\
-Returns the data at location {\em x} in the Vector. Assumes ({\em x}) 
+Returns the data at location \p x in the Vector. Assumes (\p x) 
 is a valid location in the Vector, i.e. $0 <= x $ order, a
 segmentation fault or erroneous results can occur if this is not the 
 case. \\ 
 
 \indent {\em double \&operator()(int x);} \\
-Used to set the data at location({\em x}) in the Vector. Assumes ({\em x})
+Used to set the data at location(\p x) in the Vector. Assumes (\p x)
 is a valid location in the Vector, i.e. $0 <= x < $ order, a
 segmentation fault or erroneous results can occur if this is not the
 case. \\ 
 
 \indent {\em double \&operator[](int x) const;} \\
-To safely return the data at location {\em x} in the Vector. Checks to
-ensure {\em x} is a valid location, i.e. $0 <= x $ order. If {\em x}
+To safely return the data at location \p x in the Vector. Checks to
+ensure \p x is a valid location, i.e. $0 <= x $ order. If \p x
 is not a valid location a warning message is printed and
 VECTOR\_NOT\_VALID\_ENTRY (a static class variable) is returned. This
 is a slower but safer version of {\em () const}.\\ 
 
 \indent {\em double \&operator[](int x);} \\
-Used to safely set the data at location({\em x}) in the Vector. Checks
-to ensure {\em x} is a valid location, i.e. $0 <= x $ order. If {\em
+Used to safely set the data at location(\p x) in the Vector. Checks
+to ensure \p x is a valid location, i.e. $0 <= x $ order. If {\em
 x} is not a valid location a warning message is printed and
 VECTOR\_NOT\_VALID\_ENTRY (a static class variable) is modified. This
-is a slower but safer version of {\em ()}.\\ 
+is a slower but safer version of ().\\ 
 
 \indent {\em Vector operator()(const ID \&loc) const;}\\ 
-Returns a Vector of order {\em loc.Size()}. The contents of the new
+Returns a Vector of order loc.Size(). The contents of the new
 Vector are given by the contents of the current Vector at the
-locations given by the {\em loc}. For example the contents of the new
+locations given by the \p loc. For example the contents of the new
 Vector at location $i$ are equal to the contents of the current Vector
 at location {\em loc(i)}. Creates a new Vector, copies the data from
 the current Vector and returns the new Vector. For each invalid
-location specified in {\em loc} for the current Vector, a warning
+location specified in \p loc for the current Vector, a warning
 message is printed.\\ 
 
 \indent {\em Vector \&operator=(const Vector \&other);}\\
@@ -185,74 +185,74 @@ warning message is printed and the order of the current Vector is set
 to $0$.\\ 
 
 \indent {\em  Vector \&operator+=(double fact);} \\
-A method to add {\em fact} to each component of the current Vector. \\
+A method to add \p fact to each component of the current Vector. \\
 
 \indent {\em Vector \&operator-=(double fact);} \\
-A method to subtract {\em fact} from each component of the current Vector. \\
+A method to subtract \p fact from each component of the current Vector. \\
 
 \indent {\em Vector \&operator*=(double fact);} \\
 A method to multiply each component of the current Vector by fact. \\
 
 \indent {\em Vector \&operator/=(double fact); } \\
 A method which will divide each component of the current Vector by
-{\em fact}. If {\em fact} is equal to zero an warning message is printed
+\p fact. If \p fact is equal to zero an warning message is printed
 and the components of the Vector are set to VECTOR\_VERY\_LARGE\_VALUE
 (defined in $<$Vector.h$>$). \\
 
 \indent {\em Vector operator+(double fact) const;} \\
 A method to return a new Vector whose components are equal to the
-components of the current Vector plus the value {\em fact}. A new Vector
+components of the current Vector plus the value \p fact. A new Vector
 is constructed using the current Vector as an argument to the
 constructor; before the new matrix is returned, the {\em +=} operator
-is invoked on the matrix with {\em fact}. If the new Vector and
+is invoked on the matrix with \p fact. If the new Vector and
 current Vector are of different size, i.e. constructor fails to get
 enough memory, a warning message is printed. \\ 
 
 \indent {\em Vector operator-(double fact) const;} \\
 A method to return a new Vector whose components are equal to the
-components of the current Vector minus the value {\em fact}.  A new Vector
+components of the current Vector minus the value \p fact.  A new Vector
 is constructed using the current Vector as an argument to the
 constructor; before the new matrix is returned, the {\em -=} operator
-is invoked on the matrix with {\em fact}. If the new Vector and
+is invoked on the matrix with \p fact. If the new Vector and
 current Vector are of different size, i.e. constructor fails to get
 enough memory, a warning message is printed. \\ 
 
 
 \indent {\em  Vector operator*(double fact) const;} \\
 A method to return a new Vector whose components are equal to the
-components of the current Vector times the value {\em fact}.  A new Vector
+components of the current Vector times the value \p fact.  A new Vector
 is constructed using the current Vector as an argument to the
 constructor; before the new matrix is returned, the {\em *=} operator
-is invoked on the matrix with {\em fact}. If the new Vector and
+is invoked on the matrix with \p fact. If the new Vector and
 current Vector are of different sizes, a warning message is printed. \\
 
 
 \indent {\em  Vector operator/(double fact) const;} \\
 A method to return a new Vector whose components are equal to the
-components of the current Vector divided the value {\em fact}. A new
+components of the current Vector divided the value \p fact. A new
 Vector is constructed using the current Vector as an argument to the
 constructor; before the new matrix is returned, the {\em /=} operator
-is invoked on the matrix with {\em fact}. Warning messages are printed
-if {\em fact} is equal to $0$ or if the new Vector and current Vector
+is invoked on the matrix with \p fact. Warning messages are printed
+if \p fact is equal to $0$ or if the new Vector and current Vector
 are of different sizes. \\ 
 
 \indent {\em  Vector \&operator+=(const Vector \&V);} \\
-A method to add the contents of the Vector {\em V} to the current
+A method to add the contents of the Vector \p V to the current
 Vector. If Vectors are not of same order a warning message is printed
 and nothing is done.  \\ 
 
 \indent {\em Vector \&operator-=(const Vector \&V);} \\
-A method to subtract the contents of the Vector {\em V} from the
+A method to subtract the contents of the Vector \p V from the
 current Vector. If Vectors are not of same order a warning message is
 printed and nothing is done.  \\ 
 
 
 \indent {\em  Vector operator+(const Vector \&V);} \\
 A method to return a new Vector which is equal to the sum of the
-the current Vector and the Vector {\em V}. A new Vector is constructed
+the current Vector and the Vector \p V. A new Vector is constructed
 using the current Vector as an argument to the constructor; before the
 new matrix is returned, the {\em +=} operator is invoked on the matrix
-with {\em V}. If the current Vector and {\em V} are not of the same size,
+with \p V. If the current Vector and \p V are not of the same size,
 a warning message is printed and a copy of the current Vector is
 returned. A warning message is also returned if the new Vector is not
 of the correct size, i.e. ran out of memory. \\ 
@@ -260,10 +260,10 @@ of the correct size, i.e. ran out of memory. \\
 
 \indent {\em  Vector operator-(const Vector \&V);} \\
 A method to return a new Vector which is equal to the the current
-Vector minus the Vector {\em V}. A new Vector is constructed using the
+Vector minus the Vector \p V. A new Vector is constructed using the
 current Vector as an argument to the constructor; before the new
 matrix is returned, the {\em -=} operator is invoked on the matrix
-with {\em V}. If the current Vector and {\em V} are not of the same size,
+with \p V. If the current Vector and \p V are not of the same size,
 a warning message is printed and a copy of the current Vector is
 returned. A warning message is also returned if the new Vector is not
 of the correct size, i.e. ran out of memory. \\ 
@@ -271,26 +271,26 @@ of the correct size, i.e. ran out of memory. \\
 
 \indent {\em double operator{ }$ \hat{ }$(const Vector \&V) const;   } \\
 A method to return the dot product of the current Vector and the
-Vector {\em V}. If the current Vector and {\em V} are not of the same
+Vector \p V. If the current Vector and \p V are not of the same
 size, a warning message is printed and $0$ returned. \\ 
 
 \indent {\em Vector operator/(const Matrix \&M) const; } \\
 A method to return a new Vector, $x$, equal to the solution of the
 matrix equation $Mx=$ the current Vector. A new Vector is created for
-the return of size {\em M.noRows()}. A new Matrix is created of order
-{\em M.noRows()} x {\em M.noRows()} and set equal to {\em M} if {\em
-M} is square, or $M^tM$ if {\em M} is not square. The new Vector is
+the return of size M.noRows(). A new Matrix is created of order
+M.noRows()} x {\em M.noRows() and set equal to \p M if {\em
+M} is square, or $M^tM$ if \p M is not square. The new Vector is
 then set equal to the result of invoking {\em Solve(*this)} on the new
 Matrix. \\ 
 
 {\em friend OPS_Stream \&operator$<<$(OPS_Stream \&s, const Vector \&V);} \\
-A function to print out the contents of the Vector {\em V} to the
-output stream {\em s}. prints out the contents of the Vector in the
+A function to print out the contents of the Vector \p V to the
+output stream \p s. prints out the contents of the Vector in the
 stream and then prints the newline character. \\
 
 {\em friend istream \&operator$>>$(istream \&s, const Vector \&V);} \\
-A function to read the contents of the Vector {\em V} from the input
-stream {\em s}. Sets the components of {\em V} equal to the next {\em
+A function to read the contents of the Vector \p V from the input
+stream \p s. Sets the components of \p V equal to the next {\em
 V.Size()} entries in the stream.\\ 
 
 

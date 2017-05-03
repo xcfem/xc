@@ -40,8 +40,8 @@ double v);}  \\ \\
 \noindent {\bf Constructor}  \\
 \indent {\em ElasticIsotropicMaterial (int tag, int classTag);}  \\
 To construct an ElasticIsotropicMaterial whose unique integer tag
-among NDMaterials in the domain is given by {\em tag}, and whose class
-tag is given by {\em classTag}.  These tags are passed to the
+among NDMaterials in the domain is given by \p tag, and whose class
+tag is given by \p classTag.  These tags are passed to the
 NDMaterial class constructor. \\
 
 \noindent {\bf Destructor} \\
@@ -72,5 +72,5 @@ Outputs an error indicating this method is a subclass reponsibility. \\
 
 \indent {\em virtual ElasticIsotropicMaterial *getModel (const char *type); } \\
 Returns a specific implementation of an ElasticIsotropicMaterial by
-switching on {\em type}.  Outputs an error if {\em type} is not valid.
+switching on \p type.  Outputs an error if \p type is not valid.
 This is the prototype method.

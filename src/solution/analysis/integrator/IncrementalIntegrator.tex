@@ -49,7 +49,7 @@ some function of the solution to the linear system of equations. \\
 
 \noindent {\bf Constructor} \\
 \indent {\em IncrementalIntegrator(int classTag);}\\ 
-The integer {\em classTag} is passed to the Integrator classes
+The integer \p classTag is passed to the Integrator classes
 constructor. Pointers to the AnalysisModel and LinearSOE are set to
 $0$.\\
 
@@ -63,7 +63,7 @@ Does nothing. \\
 Invoked by the Analysis object to set up the links the
 IncrementalIntegrator objects needs to perform its operations.
 Sets the pointers to the AnalysisModel and LinearSOE objects to point
-to {\em theAnalaysisModel} and {\em theSOE}. \\
+to \p theAnalaysisModel and \p theSOE. \\
 
 {\em virtual int formTangent(void);} \\
 Invoked to form the structure tangent matrix. The method first loops
@@ -80,7 +80,7 @@ elePtr-$>$getID(), $1.0$) $<$ 0) \+ \\
 return $-1$; \-\- 
 \end{tabbing}
 \noindent Returns $0$ if successful, otherwise an error
-message is printed an a $-1$ is returned if {\em setLinks()} has not
+message is printed an a $-1$ is returned if setLinks() has not
 been called, or $-2$ if failure to add an FE\_Elements tangent to the
 LinearSOE. The two loops are introduced to allow for efficient
 parallel programming. THIS MAY CHANGE TO REDUCE MEMORY DEMANDS.\\  
@@ -131,30 +131,30 @@ implementation of this method. \\
 {\em virtual int commit(void) =0;} \\
 Invoked by the SolutionAlgorithm to inform the Integrator that current
 state of domain is on solution path. Returns the result of invoking
-{\em commitDomain()} on the AnalysisModel object associated with the
+commitDomain() on the AnalysisModel object associated with the
 Integrator. \\
 
 
 \noindent {\bf Public Method added for Domain Decomposition}\\
 \indent {\em virtual int getLastResponse(Vector \&result, const ID \&id);} \\
-Returns in {\em result} values for the last solution to the system of
+Returns in \p result values for the last solution to the system of
 equation object whose location in the solution vector is given by {\em
-id}. For a location specified by a negative integer in {\em id} 0.0 will be
-returned in {\em result}. Returns a $0$ if successful, a warning
+id}. For a location specified by a negative integer in \p id 0.0 will be
+returned in \p result. Returns a $0$ if successful, a warning
 message and a negative number is returned if an error occurs. $-1$ if
-{\em setSize()} has not been called and a $-2$ if location in {\em id} is
+setSize() has not been called and a $-2$ if location in \p id is
 greater than $order-1$ of $b$ vector.\\
 
 \noindent {\bf Protected Methods}  \\
 \indent {\em LinearSOE *getLinearSOEPtr(void) const;} \\
 A const member function which returns a pointer to the LinearSOE
-associated with the IncrementalIntegrator object, i.e. {\em theSOE}
-passed in {\em setLinks()}. \\
+associated with the IncrementalIntegrator object, i.e. \p theSOE
+passed in setLinks(). \\
 
 {\em AnalysisModel *getAnalysisModelPtr(void) const;} \\
 A const member function which returns a pointer to the AnalysisModel
-associated with the IncrementalIntegrator object, i.e. {\em theModel}
-passed in {\em setLinks()}. \\
+associated with the IncrementalIntegrator object, i.e. \p theModel
+passed in setLinks(). \\
 
 
 {\em virtual int formNodalUnbalance(void);} \\
@@ -172,7 +172,7 @@ dofGroupPtr-$>$getID()) \\
 \end{tabbing}
 \noindent Returns $0$ if successful, otherwise a  negative number is
 returned and a warning message is printed if an error occurred. Note,
-no test is made to ensure {\em setLinks()} has been invoked.\\
+no test is made to ensure setLinks() has been invoked.\\
 
 
 {\em virtual int formElementResidual(void);} \\
@@ -189,7 +189,7 @@ theSOE.addA(elePtr-$>$getResidual(this), elePtr-$>$getID()) \+ \\
 \end{tabbing}
 \noindent Returns $0$ if successful, otherwise a warning message is
 printed and a negative number is returned if an error occurs. Note, no
-test is made to ensure {\em setLinks()} has been invoked.\\
+test is made to ensure setLinks() has been invoked.\\
 
 
 

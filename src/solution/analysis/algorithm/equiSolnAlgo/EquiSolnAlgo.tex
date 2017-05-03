@@ -44,7 +44,7 @@ increment in a static analysis. \\
 
 \noindent {\bf Constructor} \\ 
 \indent {\em EquiSolnAlgo(int classTag);}\\ 
-The integer {\em classTag} is passed to the SolutionAlgorithm classes
+The integer \p classTag is passed to the SolutionAlgorithm classes
 constructor. \\
 
 \noindent {\bf Destructor} \\
@@ -70,22 +70,22 @@ value otherwise. \\
 
 \indent {\em virtual void Print(OPS\_Stream \&s, int flag = 0) =0;}\\
 The Integrator is to send information to the stream based on the
-integer {\em flag}. \\
+integer \p flag. \\
 
 \indent {\em AnalysisModel *getAnalysisModelPtr(void) const;} \\
 A const member function which returns a pointer to the AnalysisModel
-associated with the EquiSolnAlgo object, {\em theModel} passed in {\em
+associated with the EquiSolnAlgo object, \p theModel passed in {\em
 setLinks()}. $0$ returned if one not yet associated. \\
 
 {\em IncrementalIntegrator *getIncrementalIntegratorPtr(void) const;} \\
 A const member function which returns a pointer to the StaticMethod
-associated with the StaticSolnAlgo object, {\em theIntegrator} passed
-in {\em setLinks()}. $0$ returned if one not yet associated. \\
+associated with the StaticSolnAlgo object, \p theIntegrator passed
+in setLinks(). $0$ returned if one not yet associated. \\
  
 {\em LinSysOfEqn *getLinearSOEptr(void) const;} \\
 A const member function which returns a pointer to the LinearSOE
-associated with the EquiSolnAlgo object, {\em theLinearSOE} passed in
-{\em setLinks()}. $0$ returned if one not yet associated. \\
+associated with the EquiSolnAlgo object, \p theLinearSOE passed in
+setLinks(). $0$ returned if one not yet associated. \\
 
 
 

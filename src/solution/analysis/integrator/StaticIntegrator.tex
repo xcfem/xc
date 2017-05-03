@@ -22,7 +22,7 @@ IncrementalIntegrator provided to implement the common methods among
 integrator classes used in performing a static analysis on the
 FE\_Model. The StaticIntegrator class provides an implementation of
 the methods to form the FE\_Element and DOF\_Group contributions to
-the tangent and residual. A pure virtual method {\em newStep()} is
+the tangent and residual. A pure virtual method newStep() is
 also defined in the interface, this is the method first called at each
 iteration in a static analysis, see the StaticAnalysis class. \\
 
@@ -87,7 +87,7 @@ load control, arc length, and displacement control. \\
 
 \noindent {\bf Constructors} \\
 \indent {\em StaticIntegrator(int classTag);}\\ 
-The integer {\em classTag} is passed to the
+The integer \p classTag is passed to the
 IncrementalIntegrator classes constructor. \\
 
 \noindent {\bf Destructor} \\
@@ -96,7 +96,7 @@ Does nothing. Provided so that the subclasses destructors will be called.\\
 
 \noindent {\bf Public Methods}\\
 \indent {\em virtual int formEleTangent(FE\_Element *theEle);} \\
-To form the tangent matrix of the FE\_Element, {\em theEle}, is
+To form the tangent matrix of the FE\_Element, \p theEle, is
 instructed to zero this matrix and then add it's $K$ matrix to the
 tangent, i.e. it performs the following: 
 \begin{tabbing}
@@ -107,7 +107,7 @@ theEle-$>$addKtoTang()
 \noindent The method returns $0$. \\
 
 {\em virtual int formEleResidual(FE\_Element *theEle);} \\
-To form the residual vector of the FE\_Element, {\em theEle}, is
+To form the residual vector of the FE\_Element, \p theEle, is
 instructed to zero the vector and then add it's $R$ vector to
 the residual, i.e. it performs the following: 
 \begin{tabbing}
@@ -123,7 +123,7 @@ printed if it is. Returns -1. \\
 
 
 {\em virtual int formNodUnbalance(DOF\_Group *theDof);} \\
-To form the unbalance vector of the DOF\_Group, {\em theDof}, is
+To form the unbalance vector of the DOF\_Group, \p theDof, is
 instructed to zero the vector and then add it's $P$ vector to the
 unbalance, i.e. it performs the following: 
 \begin{tabbing}

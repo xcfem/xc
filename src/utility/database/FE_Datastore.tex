@@ -35,8 +35,8 @@ subclasses. \\
 
 \noindent {\bf Constructor}  \\
 \indent {\em FE\_Datastore(Domain \&theDomain);}  \\ \\
-The Domain object {\em theDomain} is passed to the ModelBuilder
-constructor. A pointer is kept to {\em theBroker} object.\\
+The Domain object \p theDomain is passed to the ModelBuilder
+constructor. A pointer is kept to \p theBroker object.\\
 
 \noindent {\bf Destructor} \\
 \indent {\em virtual~ $\tilde{}$FE\_Datastore();}\\ 
@@ -50,12 +50,12 @@ to/from the database. \\
 
 \indent {\em virtual int commitState(int commitTag) = 0;}\\
 Invoked to store the current state of the domain in the database. The
-integer {\em commitTag} is used to identify the state for subsequent
+integer \p commitTag is used to identify the state for subsequent
 calls to restore the information from the database. To return
 $0$ if successful, a negative number if not. 
 
 In the implementation for the FE\_Datastore class, the object first
-invokes {\em validateBaseRelationsWrite()} on itself. If this method 
+invokes validateBaseRelationsWrite() on itself. If this method 
 returns $0$, the object then loops over all the components of the
 Domain object invoking {\em sendSelf(commitTag, this)} on each of
 these objects. Returns $0$ if successful, a negative number if
@@ -69,7 +69,7 @@ of the domain when {\em commitState(commitTag)} was invoked. To return
 $0$ if successful, a negative number if not. 
 
 In the implementation for the FE\_Datastore class, the object first
-invokes {\em validateBaseRelationsRead()} on itself. If this method 
+invokes validateBaseRelationsRead() on itself. If this method 
 returns $0$, the object then loops over all the components of the
 Domain object invoking {\em recvSelf(commitTag, this)} on each of
 these objects. Returns $0$ if successful, a negative number if
@@ -100,4 +100,4 @@ $1$ if they are up to date and the component data has been received from the
 database, and a negative number if the method fails. \\
 
 \indent {\em FEM\_ObjectBroker *getObjectBroker(void);}\\
-Returns a pointer to {\em theBroker} object passed in the constructor. 
+Returns a pointer to \p theBroker object passed in the constructor. 

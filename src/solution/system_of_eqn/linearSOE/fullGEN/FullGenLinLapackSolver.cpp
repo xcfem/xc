@@ -64,7 +64,12 @@
 #include <solution/system_of_eqn/linearSOE/fullGEN/FullGenLinLapackSolver.h>
 #include <solution/system_of_eqn/linearSOE/fullGEN/FullGenLinSOE.h>
 
-XC::FullGenLinLapackSolver::FullGenLinLapackSolver()
+//! @brief Constructor.
+//!
+//! A unique class tag defined in classTags.h is passed to the
+//! FullGenLinSolver constructor. Sets the size of #iPiv to 0, 
+//! \p iPiv being an integer array needed by the LAPACK routines.
+XC::FullGenLinLapackSolver::FullGenLinLapackSolver(void)
   : FullGenLinSolver(SOLVER_TAGS_FullGenLinLapackSolver) {}
 
 
@@ -72,7 +77,18 @@ extern "C" int dgesv_(int *N, int *NRHS, double *A, int *LDA, int *iPiv,
 		      double *B, int *LDB, int *INFO);
 
 extern "C" int dgetrs_(char *TRANS, int *N, int *NRHS, double *A, int *LDA, 
-		       int *iPiv, double *B, int *LDB, int *INFO);		       
+		       int *iPiv, double *B, int *LDB, int *INFO);
+
+//! @brief Computes the solution.
+//!
+//! First copies B into X and then solves the FullGenLinSOE system 
+//! it is associated with (pointer kept by parent class) by calling the LAPACK 
+//! routines dgesv(), if the system is marked as not having been factored,
+//! or dgetrs(), if system is marked as having been factored. If the
+//! solution is successfully obtained, i.e. the LAPACK routines return 0
+//! in the INFO argument, it marks the system has having been
+//! factored and returns 0, otherwise it prints a warning message and
+//! returns INFO. The solve process changes A and X.
 int XC::FullGenLinLapackSolver::solve(void)
   {
     if(!theSOE)
@@ -84,7 +100,7 @@ int XC::FullGenLinLapackSolver::solve(void)
     
     int n= theSOE->size;
     
-    // check for XC::quick return
+    // check for quick return
     if(n == 0)
       return 0;
     
@@ -120,19 +136,25 @@ int XC::FullGenLinLapackSolver::solve(void)
     }
     
     // check if successfull
-    if (info != 0) {
-	std::cerr << "WARNING XC::FullGenLinLapackSolver::solve()";
-	std::cerr << " - lapack solver failed - " << info << " returned\n";
+    if(info != 0)
+      {
+	std::cerr << nombre_clase() << "::" << __FUNCTION__
+	          << "; lapack solver failed - " << info
+		  << " returned.\n";
 	return -info;
     }
-
     
     theSOE->factored = true;
     return 0;
-}
-
-
-int XC::FullGenLinLapackSolver::setSize()
+  }
+//! @brief Sets the size of #iPiv from the size of the system of equations.
+//!
+//! Is used to construct a 1d integer array, #iPiv that is needed by
+//! the LAPACK solvers. It checks to see if current size of #iPiv is
+//! large enough, if not it resizes it. Returns 0 if sucessfull,
+//! prints a warning message and returns a -1 if not enough memory
+//! is available for this new array.
+int XC::FullGenLinLapackSolver::setSize(void)
   {
     const int n = theSOE->size;
     if(n > 0)
@@ -144,21 +166,23 @@ int XC::FullGenLinLapackSolver::setSize()
       return 0;
     else
       {
-	std::cerr << "WARNING XC::FullGenLinLapackSolver::setSize()"
-	          << " - ran out of memory\n";
+	std::cerr << nombre_clase() << "::" << __FUNCTION__
+	          << "; ran out of memory.\n";
 	return -1;	
       }
     return 0;
   }
 
-int XC::FullGenLinLapackSolver::sendSelf(CommParameters &cp)
+//! @brief Does nothing.
+int XC::FullGenLinLapackSolver::sendSelf(CommParameters &)
 
   {
     // nothing to do
     return 0;
   }
 
-int XC::FullGenLinLapackSolver::recvSelf(const CommParameters &cp)
+//! @brief Does nothing.
+int XC::FullGenLinLapackSolver::recvSelf(const CommParameters &)
   {
     // nothing to do
     return 0;

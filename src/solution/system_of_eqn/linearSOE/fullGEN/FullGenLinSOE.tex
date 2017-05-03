@@ -75,23 +75,23 @@ FEM\_ObjectBroker \&theBroker);}\\
 
 \noindent {\bf Constructors}  \\
 \indent {\em FullGenLinSOE(FullGenLinSolver \&solver);}  \\
-The {\em solver} and a unique class tag (defined in $<$classTags.h$>$)
+The \p solver and a unique class tag (defined in $<$classTags.h$>$)
 are passed to the LinearSOE constructor. The system size is set
 to $0$ and the matrix $A$ is marked as not having been factored. Invokes
-{\em setLinearSOE(*this)} on the {\em solver}. No memory is
+{\em setLinearSOE(*this)} on the \p solver. No memory is
 allocated for the 3 1d arrays. \\  
 
 
 {\em FullGenLinSOE(int N, FullGenLinSolver \&solver); }\\
-The {\em solver} and a unique class tag (defined in $<$classTags.h$>$)
+The \p solver and a unique class tag (defined in $<$classTags.h$>$)
 are passed to the LinearSOE constructor. The system size is set
 to $N$ and the matrix $A$ is marked as not having been
 factored. Obtains memory from the heap for the 1d arrays storing the
 data for $A$, $x$ and $b$ and stores the size of these arrays. If not
 enough memory is available for these arrays a warning message is
 printed and the system size is set to $0$. Invokes {\em
-setLinearSOE(*this)} and {\em setSize()} on {\em solver},
-printing a warning message if {\em setSize()} returns a negative
+setLinearSOE(*this)} and setSize() on \p solver,
+printing a warning message if setSize() returns a negative
 number. Also creates Vector objects for $x$ and $b$ using the {\em
 (double *,int)} Vector constructor. \\
 
@@ -101,18 +101,18 @@ Calls delete on any arrays created. \\
 
 \noindent {\bf Public Methods} \\
 \indent {\em  int setFullGEnSolver(FullGenLinSolver \&newSolver);}\\
-Invokes {\em setLinearSOE(*this)} on {\em newSolver}.
-If the system size is not equal to $0$, it also invokes {\em setSize()}
-on {\em newSolver}, printing a warning and returning $-1$ if this
+Invokes {\em setLinearSOE(*this)} on \p newSolver.
+If the system size is not equal to $0$, it also invokes setSize()
+on \p newSolver, printing a warning and returning $-1$ if this
 method returns a number less than $0$. Finally it returns the result
-of invoking the LinearSOE classes {\em setSolver()} method. \\
+of invoking the LinearSOE classes setSolver() method. \\
 
 \indent {\em int getNumEqn(void) =0; } \\
 A method which returns the current size of the system. \\
 
 \indent {\em  int setSize(const Graph \&theGraph); } \\ 
-The size of the system is determined by invoking {\em getNumVertex()}
-on {\em theGraph}. If the old space allocated for the 1d arrays is not
+The size of the system is determined by invoking getNumVertex()
+on \p theGraph. If the old space allocated for the 1d arrays is not
 big enough, it the old space is returned to the heap and new space is
 allocated from the heap. Prints a warning message, sets size to $0$
 and returns a $-1$, if not enough memory is available on the heap for the 
@@ -120,39 +120,39 @@ and returns a $-1$, if not enough memory is available on the heap for the
 zeroed and $A$ is marked as being unfactored. If the system size has
 increased, new Vector objects for $x$ and $b$ using the {\em (double
 *,int)} Vector constructor are created. Finally, the result of
-invoking {\em setSize()} on the associated Solver object is returned. \\
+invoking setSize() on the associated Solver object is returned. \\
 
 
 \indent {\em int addA(const Matrix \&M, const ID \& loc,
 doublefact = 1.0) =0;} \\
-First tests that {\em loc} and {\em M} are of compatible sizes; if not
+First tests that \p loc and \p M are of compatible sizes; if not
 a warning message is printed and a $-1$ is returned. The LinearSOE
-object then assembles {\em fact} times the Matrix {\em 
+object then assembles \p fact times the Matrix {\em 
 M} into the matrix $A$. The Matrix is assembled into $A$ at the
-locations given by the ID object {\em loc}, i.e. $a_{loc(i),loc(j)} +=
+locations given by the ID object \p loc, i.e. $a_{loc(i),loc(j)} +=
 fact * M(i,j)$. If the location specified is outside the range,
-i.e. $(-1,-1)$ the corresponding entry in {\em M} is not added to
-$A$. If {\em fact} is equal to $0.0$ or $1.0$, more efficient steps
+i.e. $(-1,-1)$ the corresponding entry in \p M is not added to
+$A$. If \p fact is equal to $0.0$ or $1.0$, more efficient steps
 are performed. Returns $0$.  \\
 
 
 {\em int addB(const Vector \& V, const ID \& loc,
 double fact = 1.0) =0;} \\
-First tests that {\em loc} and {\em V} are of compatible sizes; if not
+First tests that \p loc and \p V are of compatible sizes; if not
 a warning message is printed and a $-1$ is returned. The LinearSOE
-object then assembles {\em fact} times the Vector {\em V} into
+object then assembles \p fact times the Vector \p V into
 the vector $b$. The Vector is assembled into $b$ at the locations
-given by the ID object {\em loc}, i.e. $b_{loc(i)} += fact * V(i)$. If a
+given by the ID object \p loc, i.e. $b_{loc(i)} += fact * V(i)$. If a
 location specified is outside the range, e.g. $-1$, the corresponding
-entry in {\em V} is not added to $b$. If {\em fact} is equal to $0.0$,
+entry in \p V is not added to $b$. If \p fact is equal to $0.0$,
 $1.0$ or $-1.0$, more efficient steps are performed. Returns $0$. \\
 
 
 {\em int setB(const Vector \& V, double fact = 1.0) =0;} \\
-First tests that {\em V} and the size of the system are of compatible
+First tests that \p V and the size of the system are of compatible
 sizes; if not a warning message is printed and a $-1$ is returned. The
-LinearSOE object then sets the vector {\em b} to be {\em fact} times
-the Vector {\em V}. If {\em fact} is equal to $0.0$, $1.0$ or $-1.0$,
+LinearSOE object then sets the vector \p b to be \p fact times
+the Vector \p V. If \p fact is equal to $0.0$, $1.0$ or $-1.0$,
 more efficient steps are performed. Returns $0$. \\ 
 
 {\em void zeroA(void) =0;} \\
@@ -172,7 +172,7 @@ Returns the Vector object created for $b$. \\
 Returns the 2-norm of the vector $x$. \\
 
 {\em void setX(int loc, double value) =0;}\\
-If {\em loc} is within the range of $x$, sets $x(loc) = value$. \\
+If \p loc is within the range of $x$, sets $x(loc) = value$. \\
 
 \indent {\em int sendSelf(int commitTag, Channel \&theChannel);}\\ 
 Returns $0$. The object does not send any data or connectivity

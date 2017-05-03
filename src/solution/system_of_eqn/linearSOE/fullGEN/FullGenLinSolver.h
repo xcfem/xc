@@ -71,6 +71,9 @@ class FullGenLinSOE;
 //! @ingroup Solver
 //
 //! @brief Base class for full (dense) general linear SOE solvers.
+//!
+//! Provides access for each subclass to the FullGenLinSOE object
+//! through the pointer #theSOE, which is a protected pointer.
 class FullGenLinSolver : public LinearSOESolver
   {
   protected:

@@ -37,7 +37,7 @@ TaggedObject \&m);} \\  \\
 
 \noindent {\bf Constructors}  \\
 \indent {\em TaggedObject(int tag);}  \\
-Constructs a TaggedObject with a tag given by {\em tag}. The tag of
+Constructs a TaggedObject with a tag given by \p tag. The tag of
 a component is some unique means of identifying the component among
 like components, i.e. the tag of a node would be its unique node number. \\
 
@@ -53,16 +53,16 @@ for performance.\\
 
 \indent {\em virtual void Print(OPS_Stream \&s, int flag =0) =0;} \\
 A pure virtual function. The component is to output itself to the output
-stream {\em s}. The integer {\em flag} can be used to select just what
+stream \p s. The integer \p flag can be used to select just what
 should be output, by default $0$ is passed. \\
 
 \indent {\em friend OPS_Stream \&operator$<<$(OPS_Stream \&s, TaggedObject \&m);} \\  
-Invokes {\em Print(s)} on the TaggedObject {\em m}. \\
+Invokes {\em Print(s)} on the TaggedObject \p m. \\
 
 \noindent {\bf Protected Member Functions}  \\
 \indent {\em virtual void setTag(int newTag);} \\
-Sets the tag of the object to be {\em newTag}. It is provided so that
-MovableObjects can set their tag in {\em recvSelf()}.
+Sets the tag of the object to be \p newTag. It is provided so that
+MovableObjects can set their tag in recvSelf().
 
 
 

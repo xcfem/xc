@@ -30,12 +30,12 @@ numReleases);} \\ \\
 
 \noindent {\bf  Constructors  }\\
 \indent {\em ShedHeaviest(); }\\ 
-Sets {\em numRealeases} to $1$ and  {\em factorGreater} to
-$1.0$. These are the paramemeters used in the {\em balance()}
+Sets \p numRealeases to $1$ and  \p factorGreater to
+$1.0$. These are the paramemeters used in the balance()
 method. \\ 
 
 \indent {\em ShedHeaviest(double factorGreater, int numReleases);} \\
-Sets the parameters used in the {\em balance()} method. \\
+Sets the parameters used in the balance() method. \\
 
 \noindent {\bf Destructor } \\
 \indent {\em virtual~ $\tilde{}$ShedHeaviest();}  \\ 
@@ -43,11 +43,11 @@ Does nothing. \\
 
 \noindent {\bf  Public Methods} \\
 \indent {\em virtual int balance(Graph \&theWeightedGraph) =0;} \\ 
-The heaviest loaded partition, {\em max}, is first determined by
-iterating through the Graph {\em theWeightedGraph} looking at the
+The heaviest loaded partition, \p max, is first determined by
+iterating through the Graph \p theWeightedGraph looking at the
 vertex weights. Then {\em releaseBoundary(max, theWieightedGraph,
 true, factorGreater)} is invoked on the
-DomainPartitioner {\em numRelease} times. Returns $0$ if successfull,
+DomainPartitioner \p numRelease times. Returns $0$ if successfull,
 otherwise a negative number and a warning message are returned if
 either no link has been set to the DomainPartitioner or {\em
 releaseBoundary()} returns a negative number. \\

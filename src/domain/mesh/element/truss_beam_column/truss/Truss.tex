@@ -57,7 +57,7 @@ object. \\
 
 \indent {\em Truss();}  \\
 This is the constructor invoked by an FEM\_ObjectBroker object. It
-constructs an empty Truss element. The {\em recvSelf()} method must be
+constructs an empty Truss element. The recvSelf() method must be
 invoked on the object for it to set the internal data. \\
 
 \noindent {\bf Destructor} \\
@@ -77,15 +77,15 @@ the dimension of the problem and the number of dof associated with the
 nodes.  \\
 
 {\em int commitState(void);} \\
-The Truss element returns the result of invoking {\em commitState()}
+The Truss element returns the result of invoking commitState()
 on it's associated UniaxialMaterial object. \\
 
 {\em int revertToLastCommit(void);} \\
-The Truss element returns the result of invoking {\em revertToLastCommit()}
+The Truss element returns the result of invoking revertToLastCommit()
 on it's associated UniaxialMaterial object. \\
 
 {\em int revertToStart(void);} \\
-The Truss element returns the result of invoking {\em revertToStart()}
+The Truss element returns the result of invoking revertToStart()
 on it's associated UniaxialMaterial object. \\
 
 {\em Matrix \&getTangentStiff(void);} \\

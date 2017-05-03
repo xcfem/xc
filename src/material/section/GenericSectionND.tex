@@ -50,9 +50,9 @@ FEM\_ObjectBroker \&theBroker); }\\
 \indent {\em GenericSectionND (int tag, NDMaterial \&m,
 const ID \&code);}  \\
 Constructs a GenericSectionND whose unique integer tag among
-SectionForceDeformation objects in the domain is given by {\em tag}. Obtains
-a copy of the NDMaterial {\em m} via a call to {\em getCopy()}.
-The section code is set to be {\em code}. \\
+SectionForceDeformation objects in the domain is given by \p tag. Obtains
+a copy of the NDMaterial \p m via a call to getCopy().
+The section code is set to be \p code. \\
 
 \noindent {\bf Destructor} \\
 \indent {\em $\tilde{ }$GenericSectionND ();}\\ 
@@ -60,36 +60,36 @@ Invokes the destructor of the NDMaterial. \\
 
 \noindent {\bf Public Methods} \\
 \indent {\em int setTrialSectionDeformation (const Vector \&def); }  \\
-Sets the trial section deformation vector, $\esec$, to be {\em def}, then invokes
-{\em setTrialStrain()} on the NDMaterial. \\
+Sets the trial section deformation vector, $\esec$, to be \p def, then invokes
+setTrialStrain() on the NDMaterial. \\
 
 \indent {\em const Vector \&getSectionDeformation (void); } \\
 Returns the trial section deformation vector, $\esec$. \\
 
 \indent {\em const Vector \&getStressResultant (void); } \\
 Sets the section resisting force, $\ssec$, to be the result of invoking 
-{\em getStress()} on the NDMaterial, then returns $\ssec$. \\
+getStress() on the NDMaterial, then returns $\ssec$. \\
 
 \indent {\em const Vector \&getPrevStressResultant (void); } \\
 Returns the section resisting force, $\ssec$, from the previous trial state. \\
 
 \indent {\em const Matrix \&getSectionTangent (void); } \\
 Sets the section tangent stiffness matrix, $\ksec$, to be the result of
-invoking {\em getTangent()} on the NDMaterial, then returns $\ksec$. \\
+invoking getTangent() on the NDMaterial, then returns $\ksec$. \\
 
 \indent {\em const Matrix \&getPrevSectionTangent (void); } \\
 Returns the section tangent stiffness matrix, $\ksec$ from the previous trial state. \\
 
 \indent {\em int commitState (void); } \\
-Invokes {\em commitState()} on the NDMaterial and returns the
+Invokes commitState() on the NDMaterial and returns the
 result of that invocation. \\
 
 \indent {\em int revertToLastCommit (void); } \\
-Invokes {\em revertToLastCommit()} on the NDMaterial and returns the
+Invokes revertToLastCommit() on the NDMaterial and returns the
 result of that invocation. \\
 
 \indent {\em int revertToStart (void); } \\
-Invokes {\em revertToStart()} on the NDMaterial and returns the
+Invokes revertToStart() on the NDMaterial and returns the
 result of that invocation. \\
 
 \indent {\em SectionForceDeformation *getCopy (void); } \\
@@ -102,7 +102,7 @@ Returns the section ID code that indicates the type of response quantities
 returned by this instance of GenericSectionND. \\
 
 \indent {\em int getOrder (void); } \\
-Returns the result of invoking {\em getOrder()} on the NDMaterial. \\
+Returns the result of invoking getOrder() on the NDMaterial. \\
 
 \indent {\em int sendSelf (int commitTag, Channel \&theChannel); }\\
 FILL IN. \\
@@ -112,6 +112,6 @@ FILL IN. \\
 FILL IN. \\
 
 \indent {\em void Print (OPS_Stream \&s, int flag = 0);} \\
-Prints to the stream {\em s} the object's {\em tag}, then invokes
-{\em Print()} on the NDMaterial using the same values of {\em s}
-and {\em flag}. \\
+Prints to the stream \p s the object's \p tag, then invokes
+Print() on the NDMaterial using the same values of \p s
+and \p flag. \\

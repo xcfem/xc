@@ -54,8 +54,8 @@ Mass and Damping Matrices\\
 \noindent {\bf Constructor}  \\
 \indent {\em Element(int tag, int classTag);}  \\
 To construct an element whose unique integer among elements in the
-domain is given by {\em tag}, and whose class identifier is given
-by {\em classTag}. Both of these integers are passed to the
+domain is given by \p tag, and whose class identifier is given
+by \p classTag. Both of these integers are passed to the
 DomainComponent constructor. \\
 
 \noindent {\bf Destructor} \\
@@ -155,7 +155,7 @@ $$
 {\em virtual Vector \&getResistingForceIncInertia(void) =0;} \\
 Returns the resisting force vector for the element with inertia forces
 included. This is equal to the applied load due to element loads
-(loads set using {\em addLoad()}, minus the loads at the nodes due to
+(loads set using addLoad(), minus the loads at the nodes due to
 internal stresses in the element due to the current trial response
 quantities, i.e.
 $$
@@ -166,15 +166,15 @@ $$
 
 
 \indent {\em virtual int setResponse(char **argv, int argc, Information \&eleInformation);}\\
-{\em setResponse()} is a method invoked to determine if the element
+setResponse() is a method invoked to determine if the element
 will respond to a request for a certain of information. The
 information requested of the element is passed in the array of char
-pointers {\em argv} of length {em argc}. If the element does not
+pointers \p argv of length {em argc}. If the element does not
 respond to the request a $-1$ is returned. If it does respond, an
 integer value greater than or equal to $0$ is returned. This is the
-{\em responseID} passed in the {\em getResponse()} method. In addition
+\p responseID passed in the getResponse() method. In addition
 the Element object is responsible for setting the Information object
-{\em eleInformation} with the type of the return, i.e. {\em IntType,
+\p eleInformation with the type of the return, i.e. {\em IntType,
 DoubleType, MatrixType, VectorType, IDType}, and for creating a Matrix,
 Vector or ID object for the Information object, if the information to
 be returned is of any of these types. The information object is

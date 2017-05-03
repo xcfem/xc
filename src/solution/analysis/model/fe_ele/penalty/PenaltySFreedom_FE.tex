@@ -40,8 +40,8 @@ the constraint.\\
 \indent {\em PenaltySFreedom\_FE(Domain \&theDomain, SFreedom\_Constraint \&theSP,
 double alpha = 1.0e8);}\\
 To construct a PenaltySFreedom\_FE element to enforce the constraint
-specified by the SFreedom\_Constraint {\em theSP} using a value for
-$\alpha$ of {\em alpha} (which, if none is specified, defaults to
+specified by the SFreedom\_Constraint \p theSP using a value for
+$\alpha$ of \p alpha (which, if none is specified, defaults to
 $1.0e8$). The FE\_Element class constructor is called with 
 the integers $1$ and $1$. A Matrix and a Vector object of order $1$
 are created to return the tangent and residual contributions, with the
@@ -85,11 +85,11 @@ degree-of-freedom is invalid. Returns this residual Vector set.
 fact = 1.0);    }\\
 Sets the FE\_Elements contribution to the residual to be
 $\alpha * (U\_s - disp\_t)$, where $U\_s$ is the specified value of the
-constraint and $disp\_t$ the value in {\em disp}
+constraint and $disp\_t$ the value in \p disp
 corresponding to constrained degree-of-freedom. Prints a warning
 message and sets this contribution to $0$ if the mapping, determined in
-{\em setID()}, for the the specified constrained degree-of-freedom lies 
-outside {\em disp}. \\  
+setID(), for the the specified constrained degree-of-freedom lies 
+outside \p disp. \\  
 
 
 

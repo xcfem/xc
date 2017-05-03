@@ -64,31 +64,31 @@ E, double I, double A, double G, double alpha,
 SectionForceDeformation \&sectionI, double ratioI,
 SectionForceDeformation \&sectionJ, double ratioJ,
 const Vector \&distrLoad, double massDens);}  \\
-Constructs a BeamWithHinges2D object with tag {\em tag}, unique among all elements
+Constructs a BeamWithHinges2D object with tag \p tag, unique among all elements
 in the domain.  The end nodes of the element are set to be those with tags 
-{\em nodeI} and {\em nodeJ}.  The elastic properties of the interior beam region
-are set to be {\em E}, the modulus of elasticity; {\em I}, the second moment of
-area of the beam cross-section; {\em A}, the beam cross-sectional area; {\em G},
-the shear modulus; and {\em alpha}, the cross-section shape factor for elastic shear 
-effects.  Element hinges are created by obtaining copies of {\em sectionI} and {\em sectionJ}.
-The hinge lengths are specified as ratios of the total element length, {\em ratioI}
-and {\em ratioJ}.  The element distributed load (reference value) is set to be {\em distrLoad},
-and the element mass density per unit length is {\em massDens}. \\
+\p nodeI and \p nodeJ.  The elastic properties of the interior beam region
+are set to be \p E, the modulus of elasticity; \p I, the second moment of
+area of the beam cross-section; \p A, the beam cross-sectional area; \p G,
+the shear modulus; and \p alpha, the cross-section shape factor for elastic shear 
+effects.  Element hinges are created by obtaining copies of \p sectionI and \p sectionJ.
+The hinge lengths are specified as ratios of the total element length, \p ratioI
+and \p ratioJ.  The element distributed load (reference value) is set to be \p distrLoad,
+and the element mass density per unit length is \p massDens. \\
 
 \indent {\em BeamWithHinges2D (int tag, int nodeI, int nodeJ, double
 E, double I, double A, double G, double alpha,
 SectionForceDeformation \&sectionI, double ratioI,
 SectionForceDeformation \&sectionJ, double ratioJ,
 double massDens);}  \\
-Constructs a BeamWithHinges2D object with tag {\em tag}, unique among all elements
+Constructs a BeamWithHinges2D object with tag \p tag, unique among all elements
 in the domain.  The end nodes of the element are set to be those with tags 
-{\em nodeI} and {\em nodeJ}.  The elastic properties of the interior beam region
-are set to be {\em E}, the modulus of elasticity; {\em I}, the second moment of
-area of the beam cross-section; {\em A}, the beam cross-sectional area; {\em G},
-the shear modulus; and {\em alpha}, the cross-section shape factor for elastic shear 
-effects.  Element hinges are created by obtaining copies of {\em sectionI} and {\em sectionJ}.
-The hinge lengths are specified as ratios of the total element length, {\em ratioI}
-and {\em ratioJ}.  The element mass density per unit length is {\em massDens}. \\
+\p nodeI and \p nodeJ.  The elastic properties of the interior beam region
+are set to be \p E, the modulus of elasticity; \p I, the second moment of
+area of the beam cross-section; \p A, the beam cross-sectional area; \p G,
+the shear modulus; and \p alpha, the cross-section shape factor for elastic shear 
+effects.  Element hinges are created by obtaining copies of \p sectionI and \p sectionJ.
+The hinge lengths are specified as ratios of the total element length, \p ratioI
+and \p ratioJ.  The element mass density per unit length is \p massDens. \\
 
 \indent {\em BeamWithHinges2D ();} \\
 Constructs a blank BeamWithHinges2D object. \\
@@ -108,15 +108,15 @@ Returns an ID containing the tags of the two external nodes for this element. \\
 Returns 6, the number of degrees of freedom for this element. \\ 
 
 {\em int commitState(void);} \\
-Invokes {\em commitState()} on each section and returns the sum of the result of
+Invokes commitState() on each section and returns the sum of the result of
 these invocations. \\
 
 {\em int revertToLastCommit(void);} \\
-Invokes {\em revertToLastCommit()} on each section and returns the sum of the result of
+Invokes revertToLastCommit() on each section and returns the sum of the result of
 these invocations. \\
 
 {\em int revertToStart(void);} \\
-Invokes {\em revertToStart()} on each section and returns the sum of the result of
+Invokes revertToStart() on each section and returns the sum of the result of
 these invocations. \\
 
 {\em const Matrix \&getTangentStiff(void);} \\

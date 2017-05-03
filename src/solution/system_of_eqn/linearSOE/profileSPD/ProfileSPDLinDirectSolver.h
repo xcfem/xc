@@ -74,6 +74,12 @@ class ProfileSPDLinSOE;
 //
 //! @brief It solves a ProfileSPDLinSOE object using
 //! the LDL^t factorization.
+//!
+//! Solves a ProfileSPDLinSOE object. It does this by direct means, using the
+//! $LDL^t$ variation of the cholesky factorization. The matrx $A$ is
+//! factored one column at a time using a left-looking approach. No BLAS
+//! or LAPACK routines are called for the factorization or subsequent
+//! substitution.
 class ProfileSPDLinDirectSolver : public ProfileSPDLinDirectBase
   {
   protected:
@@ -94,6 +100,7 @@ class ProfileSPDLinDirectSolver : public ProfileSPDLinDirectBase
     int recvSelf(const CommParameters &);
   };
 
+//! @brief Virtual constructor.
 inline LinearSOESolver *ProfileSPDLinDirectSolver::getCopy(void) const
    { return new ProfileSPDLinDirectSolver(*this); }
 } // end of XC namespace

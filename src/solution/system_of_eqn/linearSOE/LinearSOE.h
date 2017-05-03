@@ -75,21 +75,26 @@ class ID;
 //
 //! @ingroup LinearSOE
 //
-//! @brief Linea system of equations.
-//! This is the class definition for LinearSOE.
-//! LinearSOE is an abstract base class and thus no objects of it's type
+//! @brief Linear system of equations.
+//!
+//! Abstract base class and thus no objects of it's type
 //! can be instantiated. It has pure virtual functions which must be
 //! implemented in it's derived classes. LinearSystemOfEqn is an abstraction 
 //! of the linear system of equation given by : [A]{X} = {B} - {C},
 //! where A is a matrix and B,C and X are vectors. To solve the equation means
 //! given A, B and C to find the unknown X such that the equation is satisfied.
+//! LinearSOE object is responsible for storing these equations and for
+//! providing methods at the interface to set up and obtain the
+//! equations. Each LinearSOE object will be associated with a
+//! LinearSOESolver object. It is the LinearSOESolver objects that is
+//! responsible for solving the linear system of equations.
 class LinearSOE : public SystemOfEqn
   {
   private:
     LinearSOESolver *theSolver;
+    void free_memory(void);
+    void copy(const LinearSOESolver *);
   protected:
-    void libera(void);
-    void copia(const LinearSOESolver *);
     friend class FEM_ObjectBroker;
     virtual bool setSolver(LinearSOESolver *);
     int setSolverSize(void);
@@ -100,22 +105,58 @@ class LinearSOE : public SystemOfEqn
 
     virtual int solve(void);    
 
-    virtual int setSize(Graph &theGraph) =0;    
+    //! @brief Determines and sets the size of the system.
+    //!
+    //! Invoked to allow the LinearSOE object to determine the size
+    //! and sparsity of the matrix $A$ and vectors $x$ and $b$. This
+    //! information can be deduced from the number of vertices and
+    //! the connectivity between the vertices in the Graph object \p theGraph.
+    //! To return $0$ if sucessfull, a negative number if not.
+    virtual int setSize(Graph &theGraph) =0;
+    //! @brief Returns the number of equations in the system.
     virtual int getNumEqn(void) const =0;
     
-    virtual int addA(const Matrix &, const ID &, double fact = 1.0) =0;
-    virtual int addB(const Vector &, const ID &,const double &fact= 1.0) =0;    
-    virtual int setB(const Vector &, const double &fact= 1.0) =0;        
+    //! The LinearSOE object assembles \p fact times the Matrix \p M
+    //! into the matrix $A$. The Matrix is assembled into $A$ at the
+    //! locations given by the ID object \p loc, i.e.
+    //! $a_{loc(i),loc(j)}+= M(i,j)$. Numbering in $A$ starts
+    //! at $(0,0)$, i.e. C style. If allocation specified is outside
+    //! the range, i.e. $(-1,-1)$ the corresponding entry in \p M
+    //! is not added to $A$. To return $0$ if sucessfull, a
+    //! negative number if not.
+    virtual int addA(const Matrix &M, const ID &loc, double fact = 1.0) =0;
 
+    //! The LinearSOE object assembles \p fact times the Vector \p V into
+    //! the vector $b$. The Vector is assembled into $b$ at the locations
+    //! given by the ID object {\em loc}, i.e. $b_{loc(i)} += V(i)$. If a
+    //! location specified is outside the range, e.g. $-1$, the corresponding
+    //! entry in {\em V} is not added to $b$. To return $0$ if sucessfull, a
+    //! negative number if not.
+    virtual int addB(const Vector &V, const ID &loc,const double &fact= 1.0) =0;    
+
+    //! The LinearSOE object sets the vector \p b to be \p fact times
+    //! the vector \p V. To return $0$ if sucessfull, a negative number if
+    //! not.
+    virtual int setB(const Vector &V, const double &fact= 1.0) =0;        
+
+    //! @brief To zero the matrix $A$, i.e. set all the components of $A$ to $0$.
     virtual void zeroA(void) =0;
+    //! @brief To zero the vector $b$, i.e. set all the components of $b$ to $0$.
     virtual void zeroB(void) =0;
 
+    //! @brief Return a const reference to the vector $x$.
     virtual const Vector &getX(void) const= 0;
+    //! @brief Return a const reference to the vector $b$.
     virtual const Vector &getB(void) const= 0;    
     virtual double getDeterminant(void);
+    //! @brief Return the 2-norm of the vector $x$.
     virtual double normRHS(void) const= 0;
 
+    //! The LinearSOE object is responsible for setting $x(loc) = value$. This
+    //! is needed in domain decomposition methods and could be useful in
+    //! iterative solution strategies when an initial approximation is known.
     virtual void setX(int loc, double value) =0;
+    //! @brief Sets the vector $x$.
     virtual void setX(const Vector &X) =0;
     
     LinearSOESolver *getSolver(void);

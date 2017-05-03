@@ -49,7 +49,7 @@ Does nothing. \\
 The solver first copies the B vector into X and then solves the
 BandSPDLinSOE system by calling the LAPACK routines {\em 
 dpbsv()}, if the system is marked as not having been factored,
-and {\em dpbtrs()} if system is marked as having been factored. 
+and dpbtrs() if system is marked as having been factored. 
 If the solution is successfully obtained, i.e. the LAPACK routines
 return $0$ in the INFO argument, it marks the system has having been 
 factored and returns $0$, otherwise it prints a warning message and

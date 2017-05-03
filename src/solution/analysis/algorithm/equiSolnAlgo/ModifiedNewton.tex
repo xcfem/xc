@@ -98,31 +98,31 @@ theIntegrator-$>$update(theSOE-$>$getX()); \- \\
 
 
 \noindent The method returns a 0 if successful, otherwise a negative number is
-returned; a $-1$ if error during {\em formTangent()}, a $-2$ if
-error during {\em formUnbalance()}, a $-3$ if error during {\em
-solve()}, and a $-4$ if error during {\em update()}.
+returned; a $-1$ if error during formTangent(), a $-2$ if
+error during formUnbalance(), a $-3$ if error during {\em
+solve()}, and a $-4$ if error during update().
 If an error occurs in any of the above operations the method stops at
 that routine, none of the subsequent operations are invoked. A $-5$ is
 returned if any one of the links has not been setup.\\
 
 {\em void setTest(ConvergenceTest \&theTest);} \\
 A method to set the tolerance criteria of the algorithm to be equal to
-the value {\em theTol}. \\
+the value \p theTol. \\
 
 {\em int sendSelf(int commitTag, Channel \&theChannel);}\\
-Creates an ID object, puts the values of the {\em theTest} objects
+Creates an ID object, puts the values of the \p theTest objects
 class and database tags into this ID.
-It then invokes {\em sendVector()} on the Channel object {\em
+It then invokes sendVector() on the Channel object {\em
 theChannel} to send the data to the remote object. It then invokes
-{\em sendSelf()} on {\em theTest}. Returns $0$ if successful, the
+sendSelf() on \p theTest. Returns $0$ if successful, the
  channel error if not. \\
 
 {\em int recvSelf(int commitTag, Channel \&theChannel, FEM\_ObjectBroker
 \&theBroker);}\\ 
-Creates an ID object, invokes {\em recvVector()} on the Channel
+Creates an ID object, invokes recvVector() on the Channel
 object. Uses the data in the ID to create a ConvergenceTest object of
-appropriate type and sets its dbTag. It then invokes {\em recvSelf()}
+appropriate type and sets its dbTag. It then invokes recvSelf()
 on this test object.  \\
 
 {\em int Print(OPS\_Stream \&s, int flag =0);} \\
-Sends the string 'ModifiedNewton' to the stream if {\em flag} equals $0$.
+Sends the string 'ModifiedNewton' to the stream if \p flag equals $0$.

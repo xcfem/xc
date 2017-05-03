@@ -78,7 +78,7 @@ int XC::ProfileSPDLinDirectBlockSolver::setSize(void)
 
     if(theSOE == 0)
       {
-	std::cerr << "XC::ProfileSPDLinDirectBlockSolver::setSize()";
+	std::cerr << nombre_clase() << "::" << __FUNCTION__;
 	std::cerr << " No system has been set\n";
 	return -1;
       }
@@ -121,7 +121,7 @@ int XC::ProfileSPDLinDirectBlockSolver::solve(void)
     // check for XC::quick returns
     if(theSOE == 0)
       {
-	std::cerr << "XC::ProfileSPDLinDirectBlockSolver::solve(void): ";
+	std::cerr << nombre_clase() << "::" << __FUNCTION__;
 	std::cerr << " - No ProfileSPDSOE has been assigned\n";
 	return -1;
       }
@@ -209,12 +209,12 @@ int XC::ProfileSPDLinDirectBlockSolver::solve(void)
 
 	      // check that the diag > the tolerance specified
 	      if (ajj <= 0.0) {
-		std::cerr << "XC::ProfileSPDLinDirectBlockSolver::solve() - ";
+		std::cerr << nombre_clase() << "::" << __FUNCTION__ << "; ";
 		std::cerr << " aii < 0 (i, aii): (" << currentRow << ", " << ajj << ")\n"; 
 		return(-2);
 	      }
 	      if (ajj <= minDiagTol) {
-		std::cerr << "XC::ProfileSPDLinDirectBlockSolver::solve() - ";
+		std::cerr << nombre_clase() << "::" << __FUNCTION__ << "; ";
 		std::cerr << " aii < minDiagTol (i, aii): (" << currentRow;
 		std::cerr << ", " << ajj << ")\n"; 
 		return(-2);
@@ -339,7 +339,7 @@ int XC::ProfileSPDLinDirectBlockSolver::solve(void)
 int XC::ProfileSPDLinDirectBlockSolver::setProfileSOE(ProfileSPDLinSOE &theNewSOE)
 {
     if (theSOE != 0) {
-	std::cerr << "XC::ProfileSPDLinDirectBlockSolver::setProfileSOE() - ";
+	std::cerr << nombre_clase() << "::" << __FUNCTION__ << "; ";
 	std::cerr << " has already been called \n";	
 	return -1;
     }

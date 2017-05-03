@@ -53,7 +53,7 @@ In a similar manner, the transformation of basic forces, {\bf q}, to forces
 
 \noindent where {\bf p} is implicitly a function of {\bf u} via the basic forces,
 {\bf q}, as well as an explicit function of {\bf u}. The explicit dependence on
-{\bf u} takes into account {\em approximate} geometric nonlinearities such as
+{\bf u} takes into account \p approximate geometric nonlinearities such as
 P-$\Delta$. These transformations are shown schematically in
 figure~\ref{fig:Transformation}.
 
@@ -173,10 +173,10 @@ strain-displacement matrix is then,
 \end{equation}
 
 \noindent The basic displacements, {\bf v}, can be obtained by invoking
-the method {\em getBasicTrialDisp()}.
+the method getBasicTrialDisp().
 After computing section deformations from basic displacements via
 equation~\ref{eq:e=av}, the
-method {\em setTrialSectionDeformation()} may be invoked with the updated
+method setTrialSectionDeformation() may be invoked with the updated
 deformations, {\bf e}.
 
 \subsection{Equilibrium}
@@ -199,9 +199,9 @@ moment, $M$,
 \end{equation}
 
 To obtain the current value of section stress resultants, {\bf s}, the method
-{\em getStressResultant()} must be invoked. To perform the transformation from
+getStressResultant() must be invoked. To perform the transformation from
 basic to global resisting force (equation~\ref{eq:p=p(q,u)}), the method
-{\em getGlobalResistingForce()} should be invoked.
+getGlobalResistingForce() should be invoked.
 
 \subsection{Element Stiffness}
 To solve the structural system of equations, the element stiffness must be assembled
@@ -229,10 +229,10 @@ Differentiating equation~\ref{eq:q} gives,
 \end{align}
 
 The section tangent stiffness matrix, ${\bf k}_s$, is returned upon invoking the
-method {\em getSectionTangent()}. After computing the basic stiffness, ${\bf k}_b$,
-the method {\em getGlobalStiffMatrix()} should be invoked to perform the
+method getSectionTangent(). After computing the basic stiffness, ${\bf k}_b$,
+the method getGlobalStiffMatrix() should be invoked to perform the
 transformation in equation~\ref{eq:stiff}. The remaining partial derivatives in
-equation~\ref{eq:stiff} are computed by the {\em getGlobalStiffMatrix()} method.
+equation~\ref{eq:stiff} are computed by the getGlobalStiffMatrix() method.
 
 \subsection{Numerical Quadrature}
 In general, the element integrals, equations~\ref{eq:q} and~\ref{eq:kb}, cannot

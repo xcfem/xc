@@ -51,7 +51,7 @@ constructor. Sets the GraphNumberer to be used in the numbering to {\em
 theGraphNumberer()}. \\
 
 \indent {\em DOF\_Numberer(int classTag);}\\ 
-Provided for subclasses. The integer {\em classTag} is passed to the
+Provided for subclasses. The integer \p classTag is passed to the
 MovableObject classes constructor. \\
 
 
@@ -81,14 +81,14 @@ tag is given by {\em lastDOF\_Group} are numbered last in a $-2$ or
 $-3$ group. The initial values of these equation numbers have been set
 by the ConstraintHandler object to be $-1$, $-2$ or $-3$, all dofs
 with a $-3$ are to be assigned higher equation numbers than those
-assigned a $-2$. To set the {\em numEqn} in the AnalysisModel and to
-return the number of equations {\em numEqn} if successful, a negative
+assigned a $-2$. To set the \p numEqn in the AnalysisModel and to
+return the number of equations \p numEqn if successful, a negative
 number if not.  
 
 This base class performs the ordering by getting an ID containing the
 ordered DOF\_Group tags, obtained by invoking {\em
 number(theModel-$>$getDOFGroupGraph(), lastDOF\_Group)} on the
-GraphNumberer, {\em theGraphNumberer}, passed in the constructor. The
+GraphNumberer, \p theGraphNumberer, passed in the constructor. The
 base class then makes two passes through the DOF\_Group objects in the
 AnalysisModel by looping through this ID; in the first pass assigning the
 equation numbers incrementally to any degree-of-freedom marked with a
@@ -96,9 +96,9 @@ $-2$ and in the second pass assigning the equation numbers
 incrementally to any degree-of-freedom marked with a $-3$. It then
 iterates through the FE\_Elements in the AnalsisModel invoking {\em
 setID()} on each object. Finally {\em setNumEqn(numEqn)} is invoked on
-the AnalysisModel. Return {\em numEqn} if successful, a warning
+the AnalysisModel. Return \p numEqn if successful, a warning
 message and a negative number is returned if an error occurs; $-1$ is
-returned if {\em setLinks()} has not yet been invoked, $-2$ if no
+returned if setLinks() has not yet been invoked, $-2$ if no
 GraphNumberer was passed in the constructor, $-3$ if the
 number of {\em DOF\_Groups} in AnalysisModel and size of ID returned
 are not the same, and a $-4$ if there is no DOF\_Group corresponding
@@ -113,8 +113,8 @@ tag is given in {\em lastDOF\_Groups} are numbered last in a $-2$ or
 $-3$ group. The initial values of these equation numbers have been set
 by the ConstraintHandler object to be $-1$, $-2$ or $-3$, all dofs
 with a $-3$ are to be assigned higher equation numbers than those
-assigned a $-2$. To set the {\em numEqn} in the AnalysisModel and to
-return the number of equations {\em numEqn} if successful, a negative
+assigned a $-2$. To set the \p numEqn in the AnalysisModel and to
+return the number of equations \p numEqn if successful, a negative
 number if not.  
 
 This method in the base class is almost identical to the one just
@@ -130,7 +130,7 @@ FEM\_ObjectBroker \&theBroker);}\\
 The DOF\_Numberer sends the class identifier and database tag of the
 GraphNumberer in a ID to the channel, if no GraphNumberer is
 associated a $-1$ is sent as the class tag. The object then invokes
-{\em sendSelf()} on the GraphNumberer. \\ 
+sendSelf() on the GraphNumberer. \\ 
 
 \indent {\em virtual int recvSelf(int commitTag, Channel \&theChannel, FEM\_ObjectBroker \&theBroker);}\\
 The DOF\_Numberer receives the class identifier and database tag of
@@ -143,11 +143,11 @@ recvSelf()} on that GraphNumberer. \\
 \noindent {\bf Protected Methods}  \\
 \indent {\em AnalysisModel *getAnalysisModelPtr(void) const;} \\
 A const member function to return the AnalysisModel object associated with
-the DOF\_Numberer, {\em theModel}. \\
+the DOF\_Numberer, \p theModel. \\
 
 \indent {\em GraphNumberer *getGraphNumbererPtr(void) const;} \\
 A const member function to return the GraphNumberer object associated with
-the DOF\_Numberer, {\em theGraphNumberer}. \\
+the DOF\_Numberer, \p theGraphNumberer. \\
 
 
 

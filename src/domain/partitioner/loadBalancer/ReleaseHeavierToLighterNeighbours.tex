@@ -31,12 +31,12 @@ factorGreater, int numReleases);} \\ \\
 
 \noindent {\bf  Constructors  }\\
 \indent {\em ReleaseHeavierToLighterNeighbours(); }\\ 
-Sets {\em numRealeases} to $1$ and {\em factorGreater} to $1.0$. These
-are the paramemeters used in the {\em balance()} method. \\
+Sets \p numRealeases to $1$ and \p factorGreater to $1.0$. These
+are the paramemeters used in the balance() method. \\
 
 \indent {\em ReleaseHeavierToLighterNeighbours(double factorGreater,
 int numReleases);} \\ 
-Sets the parameters used in the {\em balance()} method. \\
+Sets the parameters used in the balance() method. \\
 
 \noindent {\bf Destructor } \\
 \indent {\em virtual~ $\tilde{}$ReleaseHeavierToLighterNeighbours();}  \\ 
@@ -44,12 +44,12 @@ Does nothing. \\
 
 \noindent {\bf  Public Methods} \\
 \indent {\em virtual int balance(Graph \&theWeightedGraph) =0;} \\ 
-For {\em numRelease} times the Vertices of {\em theWeightedGraph} are
+For \p numRelease times the Vertices of \p theWeightedGraph are
 iterated through. For each Vertex, $i$, {\em releaseBoundary(i,
 theWeightedGraph, true, factorGreater)} is invoked on
 the DomainPartitioner. Returns $0$ if succesfull, otherwise a negative
 number and a warning message are returned if either no link has been
-set to the DomainPartitioner or {\em releaseBoundary()} returns a
+set to the DomainPartitioner or releaseBoundary() returns a
 negative number. \\ 
 
 

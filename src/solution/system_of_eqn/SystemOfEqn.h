@@ -81,6 +81,11 @@ class SoluMethod;
 //! @ingroup SOE
 //
 //! @brief System of equations base class.
+//!
+//! Responsible for storing the system of equations it represents.
+//! A Solver object, which is associated with the SystemOfEqn object, is
+//! responsible for performing the numerical operations to solve for the
+//! system of equations.
 class SystemOfEqn: public MovableObject, public EntCmd
   {
     SoluMethod *getSoluMethod(void);
@@ -91,11 +96,14 @@ class SystemOfEqn: public MovableObject, public EntCmd
 
     friend class SoluMethod;
     SystemOfEqn(SoluMethod *,int classTag);
+    //! @brief Virtual constructor.
     virtual SystemOfEqn *getCopy(void) const= 0;
   public:
     inline virtual ~SystemOfEqn(void) {}
     int checkSize(Graph &theGraph) const;
-    virtual int solve(void) = 0;
+    //! @brief Invoked to cause the system of equation object to solve
+    //! itself. To return 0 if successful, negative number if not.
+    virtual int solve(void)= 0;
   };
 } // end of XC namespace
 

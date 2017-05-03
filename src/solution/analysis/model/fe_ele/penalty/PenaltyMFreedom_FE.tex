@@ -41,10 +41,10 @@ $\C_{cr}]$. Nothing is added to the residual. \\
 \indent {\em PenaltyMP\_FE(Domain \&theDomain, MP\_Constraint \&theMP,
 double alpha);}\\
 To construct a PenaltyMP\_FE element to enforce the constraint
-specified by the MP\_Constraint {\em theMP} using a default value for
+specified by the MP\_Constraint \p theMP using a default value for
 $\alpha$ of $alpha$. The FE\_Element class constructor is called with
-the integers $2$ and the size of the {\em retainedID} plus the size of
-the {\em constrainedID} at the MP\_Constraint {\em theMP}. A Matrix
+the integers $2$ and the size of the \p retainedID plus the size of
+the \p constrainedID at the MP\_Constraint \p theMP. A Matrix
 and a Vector object are created for adding the contributions to the
 tangent and the residual. The residual is zeroed. A Matrix is created
 to store the $C$ Matrix. If the MP\_Constraint is not time varying,
@@ -67,8 +67,8 @@ Causes the PenaltyMP\_FE to determine the mapping between it's equation
 numbers and the degrees-of-freedom. This information is obtained by
 using the mapping information at the DOF\_Group objects associated with
 the constrained and retained nodes to determine the mappings between
-the degrees-of-freedom identified in the {\em constrainedID} and the
-{\em retainedID} at the MP\_Constraint {\em theMP}. Returns $0$ if
+the degrees-of-freedom identified in the \p constrainedID and the
+\p retainedID at the MP\_Constraint \p theMP. Returns $0$ if
 successful. Prints a warning message and returns a negative number if
 an error occurs: $-2$ if the
 Node has no associated DOF\_Group, $-3$ if the constrained DOF
@@ -80,7 +80,7 @@ component to $-1$). \\
 
 \indent {\em virtual Matrix \&getTangent(Integrator *theIntegrator);} \\
 If the MP\_Constraint is time-varying, from the MP\_Constraint
-{\em theMP} it obtains the current $C_{cr}$ matrix; it then forms the
+\p theMP it obtains the current $C_{cr}$ matrix; it then forms the
 $C$ matrix and finally it sets the tangent matrix to be $\alpha
 C^TC$. Returns the tangent matrix. \\
 

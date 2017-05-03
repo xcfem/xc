@@ -104,7 +104,7 @@ int XC::ProfileSPDLinDirectSkypackSolver::setSize(void)
 
     if(theSOE == 0)
       {
-	std::cerr << "WARNING XC::ProfileSPDLinDirectSkypackSolver::setSize()";
+	std::cerr << nombre_clase() << "::" << __FUNCTION__;
 	std::cerr << " No system has been set\n";
 	return -1;
       }
@@ -138,7 +138,7 @@ int XC::ProfileSPDLinDirectSkypackSolver::solve(void)
     // check for XC::quick returns
     if(theSOE == 0)
       {
-	std::cerr << "XC::ProfileSPDLinDirectSkypackSolver::solve(void): ";
+	std::cerr << nombre_clase() << "::" << __FUNCTION__;
 	std::cerr << " - No ProfileSPDSOE has been assigned\n";
 	return -1;
       }
@@ -150,7 +150,7 @@ int XC::ProfileSPDLinDirectSkypackSolver::solve(void)
     // check that work area invD has been created
     if(invD.Nulo())
       {
-	std::cerr << "ProfileSPDLinDirectSkypackSolver::solve(void): ";
+	std::cerr << nombre_clase() << "::" << __FUNCTION__;
 	std::cerr << " - no space for invD - has setSize() been called?\n";
 	return -1;
       }	
@@ -215,7 +215,7 @@ int XC::ProfileSPDLinDirectSkypackSolver::solve(void)
       
     // return
     if (INFO < 0) {
-	std::cerr << "WARNING XC::ProfileSPDLinDirectSkypackSolver::solve()";
+	std::cerr << nombre_clase() << "::" << __FUNCTION__;
 	std::cerr << " error value returned from skyss()\n";
     }    
 

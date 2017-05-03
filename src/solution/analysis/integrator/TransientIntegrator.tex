@@ -20,7 +20,7 @@
 \indent TransientIntegrator is an abstract subclass of IncrementalIntegrator.
 A subclass of it is used when performing a nonlinear transient
 analysis of the problem using a direct integration method. The
-TransientIntegrator class redefines the {\em formTangent()} method of
+TransientIntegrator class redefines the formTangent() method of
 the IncrementalIntegrator class and it defines a new method {\em
 newStep()} which is invoked by the DirectIntegrationAnalysis class at
 each new time step.  \\
@@ -128,7 +128,7 @@ to the linear system of equations. \\
 
 \noindent {\bf Constructor} \\
 \indent {\em TransientIntegrator(int classTag);}\\ 
-The integer {\em classTag} is passed to the IncrementalIntegrator
+The integer \p classTag is passed to the IncrementalIntegrator
 classes constructor. \\
 
 \noindent {\bf Destructor} \\
@@ -162,7 +162,7 @@ FE\_Elements, to allow for efficient parallel programming when the
 FE\_Elements are associated with a ShadowSubdomain.\\ 
 
 {\em virtual int formEleResidual(FE\_Element *theEle);} \\
-Called upon by the FE\_Element {\em theEle} to determine it's
+Called upon by the FE\_Element \p theEle to determine it's
 contribution to the rhs of the equation. The following are invoked
 before $0$ is returned.
 \begin{tabbing}
@@ -172,7 +172,7 @@ theEle-$>$addRIncInertiaToResid() \\
 \end{tabbing}
 
 {\em virtual int formNodUnbalance(DOF\_Group *theDof);} \\
-Called upon by the DOF\_Group {\em theDof} to determine it's
+Called upon by the DOF\_Group \p theDof to determine it's
 contribution to the rhs of the equation. The following are invoked
 before $0$ is returned.
 \begin{tabbing}

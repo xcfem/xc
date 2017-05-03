@@ -21,12 +21,12 @@ location, hence it has zero length.
 The nodes are connected by 
 of uniaxial materials to represent the force-deformation relationship for the element. 
 
-ZeroLength elements are constructed with a {\em tag} in a domain of {\em dimension} 1, 2, or 3,
+ZeroLength elements are constructed with a \p tag in a domain of \p dimension 1, 2, or 3,
 connected by nodes {\em Nd1} and {\em Nd2}. 
-The vector {\em x} defines the local x-axis for the element and the vector {\em yprime}
+The vector \p x defines the local x-axis for the element and the vector \p yprime
 lies in the local x-y plane for the element.  The local z-axis is the cross product between 
-{\em x} and {\em yprime}, and the local y-axis is the cross product between the local z-axis
-and {\em x}.
+\p x and \p yprime, and the local y-axis is the cross product between the local z-axis
+and \p x.
 \\
 
 \noindent {\bf Class Interface} \\
@@ -94,10 +94,10 @@ and {\em x}.
 	       const Vector\& yprime,
 	       UniaxialMaterial\& theMaterial,
 	       int direction );} \\
-Construct a ZeroLength element with {\em tag} .
-The force-deformation relationship for the element is given by a pointer {\em theMaterial} to a
-{\bf UniaxialMaterial} model acting in local {\em direction}.
-The local {\em direction} is 1, 2, 3, for translation in the local x, y, z axes or 4, 5, 6 
+Construct a ZeroLength element with \p tag .
+The force-deformation relationship for the element is given by a pointer \p theMaterial to a
+{\bf UniaxialMaterial} model acting in local \p direction.
+The local \p direction is 1, 2, 3, for translation in the local x, y, z axes or 4, 5, 6 
 for rotation about the local x, y, z axes. 
 \\
 
@@ -109,19 +109,19 @@ for rotation about the local x, y, z axes.
 	       int n1dMat,
 	       UniaxialMaterial** theMaterial,  
 	       const ID\& direction );} \\
-Construct a ZeroLength element with {\em tag} .
+Construct a ZeroLength element with \p tag .
 The force-deformation relationship is given by the {\em n1dMat} pointers
-{\em theMaterial} to {\bf UniaxialMaterial} models. 
-{\em direction} is an {\bf ID}  of length {\em n1dMat} that gives
-the local direction for each corresponding entry in the array {\em theMaterial}
-The local {\em direction} is 1, 2, 3, for translation in the local x, y, z axes or 4, 5, 6 
+\p theMaterial to {\bf UniaxialMaterial} models. 
+\p direction is an {\bf ID}  of length {\em n1dMat} that gives
+the local direction for each corresponding entry in the array \p theMaterial
+The local \p direction is 1, 2, 3, for translation in the local x, y, z axes or 4, 5, 6 
 for rotation about the local x, y, z axes. 
 \\
 
 \indent {\em    ZeroLength();} \\ 
 This is the constructor invoked by an {\bf FEM\_ObjectBroker} object. It
 constructs an empty ZeroLength element with two nodes.
-The {\em recvSelf()} method is
+The recvSelf() method is
 invoked on the object for it to set the internal data. 
 \\
 
@@ -222,7 +222,7 @@ ID  or -1 if error.  Currently, only the one uniaxial material can be set.
 \\
 
 \indent {\em    int getResponse(int responseID, Information \&eleInformation);} \\
-Get response information for {\em responseID}.  Return 0 if successful, -1 otherwise.
+Get response information for \p responseID.  Return 0 if successful, -1 otherwise.
 \\
 
 

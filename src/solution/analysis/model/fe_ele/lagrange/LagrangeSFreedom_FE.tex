@@ -45,8 +45,8 @@ the constraint.\\
 \indent {\em LagrangeSFreedom\_FE(Domain \&theDomain, SFreedom\_Constraint \&theSP,
 DOF\_Group \&theGroup, double alpha = 1.0);}\\
 To construct a LagrangeSFreedom\_FE element to enforce the constraint
-specified by the SFreedom\_Constraint {\em theSP} using a value for
-$\alpha$ of {\em alpha} (which, if none is specified, defaults to
+specified by the SFreedom\_Constraint \p theSP using a value for
+$\alpha$ of \p alpha (which, if none is specified, defaults to
 $1.0$). The FE\_Element class constructor is called with 
 the integers $2$ and $2$. A Matrix and a Vector object of order $2$
 are created to return the tangent and residual contributions, with the
@@ -69,7 +69,7 @@ in the constructor, the DOF\_group corresponding to the Node
 associated with the constraint is determined. From this {\em
 DOF\_Group} object the mapping for the constrained degree of freedom
 is determined and the myID(0) in the base class is set. The myID(1) is
-determined from the Lagrange DOF\_Group {\em theGroup} passed in the
+determined from the Lagrange DOF\_Group \p theGroup passed in the
 constructor. Returns $0$ if 
 successful. Prints a warning message and returns a negative number if
 an error occurs: $-2$ if the
@@ -95,7 +95,7 @@ fact = 1.0);    }\\
 Sets the FE\_Elements contribution to the residual:
 \[ \left\{ \begin{array}{c} 0 \\ \alpha(u_s - u_t) \end{array} \right\} \]
 where $U_s$ is the specified value of the
-constraint and $U_t$ the current trial displacement in {\em disp}
+constraint and $U_t$ the current trial displacement in \p disp
 corresponding to constrained degree-of-freedom. Prints a warning
 message and sets this contribution to $0$ if the specified constrained
 degree-of-freedom is invalid. \\ 

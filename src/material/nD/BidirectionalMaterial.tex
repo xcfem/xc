@@ -42,11 +42,11 @@ FEM\_ObjectBroker \&theBroker); } \\
 \noindent {\bf Constructors} \\
 \indent {\em BidirectionalMaterial(int tag, double E, double fy, double Hiso, double Hkin);} \\
 Constructs a BidirectionalMaterial whose unique integer among
-NDMaterials in the domain is given by {\em tag}.
-Sets the elastic modulus to {\em E}, initial yield stress
-to {\em fy}, and isotropic and kinematic hardening moduli to 
-{\em Hiso} and {\em Hkin}, respectively. Sets all committed history
-variables to $0.0$. The integers {\em tag} and ND\_TAG\_Bidirectional, 
+NDMaterials in the domain is given by \p tag.
+Sets the elastic modulus to \p E, initial yield stress
+to \p fy, and isotropic and kinematic hardening moduli to 
+\p Hiso and \p Hkin, respectively. Sets all committed history
+variables to $0.0$. The integers \p tag and ND\_TAG\_Bidirectional, 
 defined in $<$classTags.h$>$, are passed to the NDMaterial 
 constructor. \\ 
 
@@ -62,7 +62,7 @@ Does nothing. \\
 
 \noindent {\bf Public Methods} \\
 \indent {\em int setTrialStrain(const Vector \&strain); } \\
-Sets the trial strain of this material to be {\em strain}. Returns 0. \\
+Sets the trial strain of this material to be \p strain. Returns 0. \\
 
 \indent {\em const Vector \&getStrain(void); } \\
 Returns the current trial strain of this material. \\
@@ -74,7 +74,7 @@ Box $1.5$. \\
 
 \indent {\em const Matrix \&getTangent(void); } \\
 Returns the tangent consistent with the stress computed by the radial
-return mapping algorithm in {\em getStress()}. \\
+return mapping algorithm in getStress(). \\
 
 \indent {\em int commitState(void); } \\
 Sets the committed history variables to be their corresponding trial
@@ -103,4 +103,4 @@ receive operation fails. \\
 
 \indent {\em void Print(OPS_Stream \&s, int flag);} \\
 Prints the tag of this object and its elastic modulus, initial yield
-stress, and hardening moduli to the stream {\em s}.
+stress, and hardening moduli to the stream \p s.

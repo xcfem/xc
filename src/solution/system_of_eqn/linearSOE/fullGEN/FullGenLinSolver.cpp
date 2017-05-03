@@ -66,9 +66,13 @@
 #include <solution/system_of_eqn/linearSOE/fullGEN/FullGenLinSolver.h>
 #include <solution/system_of_eqn/linearSOE/fullGEN/FullGenLinSOE.h>
 
+//! @brief Constructor. The integer classTag is passed
+//! to the base class constructor.
 XC::FullGenLinSolver::FullGenLinSolver(int theClassTag)    
-:LinearSOESolver(theClassTag), theSOE(0) {}    
+ : LinearSOESolver(theClassTag), theSOE(0) {}
 
+//! @brief Sets the link to the \p soe object. This is the
+//! object on which the solver will perform the numerical computations.
 bool XC::FullGenLinSolver::setLinearSOE(LinearSOE *soe)
   {
     bool retval= false;
@@ -79,7 +83,9 @@ bool XC::FullGenLinSolver::setLinearSOE(LinearSOE *soe)
         retval= true;
       }
     else
-      std::cerr << "PetscSolver::setLinearSOE: el system of equations no es del tipo adecuado para este solver." << std::endl;
+      std::cerr << nombre_clase() << "::" << __FUNCTION__
+	        << "; system of equations is not of a"
+	        << " suitable type for this solver." << std::endl;
     return retval;
   }
 

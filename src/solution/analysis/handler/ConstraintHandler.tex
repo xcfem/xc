@@ -43,7 +43,7 @@ the DOF\_Group and FE\_Element objects that it created.\end{enumerate}
 
 \noindent {\bf Constructor} \\
 \indent {\em ConstraintHandler(int classTag);}\\ 
-The integer {\em classTag} is passed to the MovableObject constructor. \\
+The integer \p classTag is passed to the MovableObject constructor. \\
 
 \noindent {\bf Destructor} \\
 \indent {\em virtual~ $\tilde{}$ConstraintHandler();}\\ 
@@ -54,9 +54,9 @@ Does nothing. \\
 \indent\indent\indent\indent\indent AnalysisModel \&theModel, \\
 \indent\indent\indent\indent\indent Integrator \&theIntegrator);} \\
 Invoked to set the links that the ConstraintHandler will need. These
-include links to the Domain, {\em theDomain}, for which the
+include links to the Domain, \p theDomain, for which the
 ConstraintHandler object will apply the constraints and the
-AnalysisModel, {\em theModel}, to which the ConstraintHandler will add
+AnalysisModel, \p theModel, to which the ConstraintHandler will add
 the FE\_Element and DOF\_Group objects. \\
 
 \indent {\em virtual int handle(const ID *nodesToBeNumberedLast =0) =0;} \\
@@ -86,20 +86,20 @@ Invoked to inform the ConstraintHandler object that the FE\_Elements
 and DOF\_Groups it constructed are no longer part of the AnalysisModel. The
 ConstraintHandler can delete these objects if necessary; or the
 ConstraintHandler can store them and use them in subsequent calls to
-{\em handle()}. \\ 
+handle(). \\ 
 
 \noindent {\bf Protected Methods}  \\
 \indent {\em Domain *getDomainPtr(void) const;} \\
 A const member function to return the Domain object associated with
-the ConstraintHandler, {\em theDomain}. \\
+the ConstraintHandler, \p theDomain. \\
 
 {\em AnalysisModel *getAnalysisModelPtr(void) const;} \\
 A const member function to return the AnalysisModel object associated with
-the ConstraintHandler, {\em theModel}. \\
+the ConstraintHandler, \p theModel. \\
 
 {\em Integrator *getIntegratorPtr(void) const;} \\
 A const member function to return the Integrator object associated with
-the ConstraintHandler, {\em theIntegrator}. 
+the ConstraintHandler, \p theIntegrator. 
 
 
 

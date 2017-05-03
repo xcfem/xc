@@ -71,6 +71,10 @@ namespace XC {
 //! @ingroup Solver
 //
 //! @brief <a href="http://http://www.netlib.org/lapack/" target="_new"> Lapack</a> based full (dense) general matrix SOE solver.
+//!
+//! Solver for a FullGenLinSOE object. It obtains the solution by
+//! making calls on the the LAPACK library. The class is defined
+//! to be a friend of the FullGenLinSOE class.
 class FullGenLinLapackSolver : public FullGenLinSolver
   {
   private:
@@ -88,6 +92,7 @@ class FullGenLinLapackSolver : public FullGenLinSolver
     int recvSelf(const CommParameters &);
   };
 
+//! @brief Virtual constructor.
 inline LinearSOESolver *FullGenLinLapackSolver::getCopy(void) const
    { return new FullGenLinLapackSolver(*this); }
 } // end of XC namespace

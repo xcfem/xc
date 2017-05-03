@@ -54,7 +54,7 @@ To construct an ElasticSection3D with an integer identifier {\em
 tag}, an elastic modulus of $E$, a second moment of area about the local
 z-axis, $I_z$, a second moment of area about the local y-axis, $I_y$, a polar
 moment of intertia of $J$, a section area of $A$, an elastic shear modulus of $G$, 
-and a shape factor of $\alpha$. The integers {\em tag} and MAT\_TAG\_ElasticSection3D,
+and a shape factor of $\alpha$. The integers \p tag and MAT\_TAG\_ElasticSection3D,
 defined in $<$classTags.h$>$, are passed to the SectionForceDeformation
 class constructor. \\
 
@@ -169,7 +169,7 @@ Returns $0$. \\
 
 \indent {\em SectionForceDeformation *getCopy (void); } \\
 Returns a pointer to a new ElasticSection3D object, constructed
-using the same values of {\em tag}, $E$, $A$, $I_z$, $I_y$, $J$, $G$, and $\alpha$.
+using the same values of \p tag, $E$, $A$, $I_z$, $I_y$, $J$, $G$, and $\alpha$.
 It is up to the caller to ensure that the destructor is invoked. \\
 
 \indent {\em const ID \&getType (void); } \\
@@ -196,24 +196,24 @@ code := \left[
 Returns 6. \\
 
 \indent {\em    int sendSelf(int commitTag, Channel \&theChannel); }\\
-Creates a Vector of size $8$ into which it places  {\em tag},
-$E$, $A$, $I_z$, $I_y$, $J$, $G$, and $\alpha$. Invokes {\em sendVector()} on 
-{\em theChannel} using the ElasticSection3D objects {\em dbTag}, the integer
-{\em commitTag} and the Vector as arguments. Returns $0$ if successful, a warning
+Creates a Vector of size $8$ into which it places  \p tag,
+$E$, $A$, $I_z$, $I_y$, $J$, $G$, and $\alpha$. Invokes sendVector() on 
+\p theChannel using the ElasticSection3D objects \p dbTag, the integer
+\p commitTag and the Vector as arguments. Returns $0$ if successful, a warning
 message and a negative number are returned if the Channel object fails to send
 the Vector. \\
 
 \indent {\em    int recvSelf(int commitTag, Channel \&theChannel, 
 		 FEM\_ObjectBroker \&theBroker); }\\
-Creates a Vector of size $8$. Invokes {\em recvVector()} on  {\em
-theChannel} using the ElasticSection3D objects {\em dbTag}, the integer
-{\em commitTag} and the Vector as arguments. Using the data in the
-Vector to set its {\em tag}, $E$, $A$, $I_z$, $I_y$, $J$, $G$, and $\alpha$.
+Creates a Vector of size $8$. Invokes recvVector() on  {\em
+theChannel} using the ElasticSection3D objects \p dbTag, the integer
+\p commitTag and the Vector as arguments. Using the data in the
+Vector to set its \p tag, $E$, $A$, $I_z$, $I_y$, $J$, $G$, and $\alpha$.
 Returns $0$ if successful, a warning message is printed and a negative number
 is returned if the Channel object fails to receive the Vector. \\
 
 \indent {\em    void Print(OPS_Stream \&s, int flag =0);} \\
-Prints to the stream {\em s} the object's {\em tag}, $E$, $A$, $I_z$, $I_y$, $J$, 
+Prints to the stream \p s the object's \p tag, $E$, $A$, $I_z$, $I_y$, $J$, 
 $G$, and $\alpha$ values. \\
 
 

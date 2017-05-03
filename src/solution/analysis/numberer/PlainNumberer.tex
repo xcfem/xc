@@ -50,7 +50,7 @@ The PlainNumberer will twice obtain the DOF\_GroupIter from the
 AnalysisModel. It iterates twice through the DOF\_Groups first
 assigning the dofs with eqn numbers assigned -2 a number and 
 then on the next pass the dofs assigned -3. The PlainNumberer then
-invokes {\em setID()} on each FE\_Element in the
+invokes setID() on each FE\_Element in the
 AnalysisModel. Finally it invokes {\em setEqnNum(numEqn)} on the
 AnalyisModel. Returns a positive integer equal to the last equation
 number set if successful, a negative number if not; the value of 

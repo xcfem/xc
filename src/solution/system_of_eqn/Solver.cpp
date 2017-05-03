@@ -65,7 +65,8 @@
 
 #include <solution/system_of_eqn/Solver.h>
 
-//! @brief Constructor.
+//! @brief Constructor. The integer \p classTag is passed to the
+//! base class constructor. 
 XC::Solver::Solver(int classTag)
   : MovableObject(classTag), EntCmd() {}
 

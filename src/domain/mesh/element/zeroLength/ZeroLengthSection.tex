@@ -21,12 +21,12 @@ location, hence it has zero length.
 The nodes are connected by a SectionForceDeformation object which
 represents the force-deformation relationship for the element. 
 
-ZeroLengthSection elements are constructed with a {\em tag} in a domain of {\em dimension} 2 or 3,
+ZeroLengthSection elements are constructed with a \p tag in a domain of \p dimension 2 or 3,
 connected by nodes {\em Nd1} and {\em Nd2}. 
-The vector {\em x} defines the local x-axis for the element and the vector {\em yprime}
+The vector \p x defines the local x-axis for the element and the vector \p yprime
 lies in the local x-y plane for the element.  The local z-axis is the cross product between 
-{\em x} and {\em yprime}, and the local y-axis is the cross product between the local z-axis
-and {\em x}.
+\p x and \p yprime, and the local y-axis is the cross product between the local z-axis
+and \p x.
 \\
 
 \noindent {\bf Class Interface} \\
@@ -81,18 +81,18 @@ and {\em x}.
 	       const Vector\& x,
 	       const Vector\& yprime,
 	       SectionForceDeformation\& theSection);} \\
-Construct a ZeroLengthSection element with {\em tag} .
+Construct a ZeroLengthSection element with \p tag .
 The force-deformation relationship for the element is obtained by invoking
-{\em getCopy()} on the {\bf SectionForceDeformation} pointer {\em theSection}.
-The section model acts in the local space defined by the {\em x} and
-{\em yprime} vectors. The section axial force-deformation acts along the 
+getCopy() on the {\bf SectionForceDeformation} pointer \p theSection.
+The section model acts in the local space defined by the \p x and
+\p yprime vectors. The section axial force-deformation acts along the 
 element local x-axis and the section y-z axes directly corresponsd to the
 local element y-z axes. \\
 
 \indent {\em    ZeroLengthSection();} \\ 
 This is the constructor invoked by an {\bf FEM\_ObjectBroker} object. It
 constructs an empty ZeroLengthSection element with two nodes.
-The {\em recvSelf()} method is
+The recvSelf() method is
 invoked on the object for it to set the internal data. 
 \\
 
@@ -139,7 +139,7 @@ Return 0 if successful, !0 otherwise.
 \indent {\em    const Matrix \&getTangentStiff(void);} \\
 Return tangent stiffness matrix for element.  The element tangent is computed
 from the section tangent matrix, $k_b$, as $K_e = A^T k_b A$.  The section
-tangent is obtained by calling {\em getSectionTangent()}.
+tangent is obtained by calling getSectionTangent().
 \\
 
 \indent {\em    const Matrix \&getSecantStiff(void);} \\    
@@ -170,11 +170,11 @@ The element has no mass, so this operation has no effect and returns 0.
 \indent {\em    const Vector \&getResistingForce(void);} \\
 Return resisting force vector for element.  The element resisting force is computed
 from the section stress resultants, $s$, as $P_e = A^T s$.  The section
-stress resulant is obtained by calling {\em getStressResultant()}.
+stress resulant is obtained by calling getStressResultant().
 \\
 
 \indent {\em    const Vector \&getResistingForceIncInertia(void);} \\            
-Returns the result of {\em getResistingForce()} as there is no element mass.
+Returns the result of getResistingForce() as there is no element mass.
 \\
 
 \indent {\em    int sendSelf(int commitTag, Channel \&theChannel);} \\

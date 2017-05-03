@@ -95,22 +95,22 @@ invoked by an FEM\_ObjectBroker. \\
 
 
 \indent {\em WilsonTheta(double theta);}\\ 
-Sets $\Theta$ to {\em theta}, $\gamma$ to $(1.5 - \alpha)$ and $\beta$
+Sets $\Theta$ to \p theta, $\gamma$ to $(1.5 - \alpha)$ and $\beta$
 to $0.25*\alpha^2$. addition, a flag is set indicating that Rayleigh
 damping will not be used. \\ 
 
 \indent {\em WilsonTheta(double theta);}\\ 
-Sets $\Theta$ to {\em theta}, $\gamma$ to $(1.5 - \alpha)$ and $\beta$
+Sets $\Theta$ to \p theta, $\gamma$ to $(1.5 - \alpha)$ and $\beta$
 to $0.25*\alpha^2$. In addition, a flag is set indicating that Rayleigh
 damping will not be used. \\
 
 \indent {\em WilsonTheta(double theta, double alphaM, double betaK);}\\ 
 This constructor is invoked if Rayleigh damping is to be used, 
-i.e. $\D = \alpha_M M + \beta_K K$. Sets $\Theta$ to {\em theta},
+i.e. $\D = \alpha_M M + \beta_K K$. Sets $\Theta$ to \p theta,
 $\gamma$ to $(1.5 - \alpha)$, $\beta$ to $0.25*\alpha^2$, $\alpha_M$ to
-{\em alphaM} and $\beta_K$ to {\em betaK}. Sets a flag indicating whether the
+\p alphaM and $\beta_K$ to \p betaK. Sets a flag indicating whether the
 incremental solution is done in terms of displacement or acceleration
-to {\em dispFlag} and a flag indicating that Rayleigh damping will 
+to \p dispFlag and a flag indicating that Rayleigh damping will 
 be used. \\ 
 
 
@@ -122,7 +122,7 @@ Invokes the destructor on the Vector objects created. \\
 \indent {\em int formEleTangent(FE\_Element *theEle);} \\
 This tangent for each FE\_Element is defined to be $\K_e = c1 \K
 + c2  \D + c3 \M$, where c1,c2 and c3 were determined in the last invocation
-of the {\em newStep()} method. Returns $0$ after performing the
+of the newStep() method. Returns $0$ after performing the
 following operations:  
 \begin{tabbing}
 while \= \+ while \= while \= \kill
@@ -155,7 +155,7 @@ If the size of the LinearSOE has changed, the object deletes any old Vectors
 created and then creates $6$ new Vector objects of size equal to {\em
 theLinearSOE-$>$getNumEqn()}. There is a Vector object created to store
 the current displacement, velocity and accelerations at times $t$ and
-$t + \Delta t$ (between {\em newStep()} and {\em commit()} the $t +
+$t + \Delta t$ (between newStep()} and {\em commit() the $t +
 \Delta t$ quantities store $t + \Theta \Delta t$ quantities).
 The response quantities at time $t + \Delta t$ are
 then set by iterating over the DOF\_Group objects in the model and
@@ -192,7 +192,7 @@ while \= while \= while \= while \= \kill
 \dot \U_t -2 \Udd_t $ 
 \end{tabbing}
 \item The response quantities at the DOF\_Group objects are updated
-with the new approximations by invoking {\em setResponse()} on the
+with the new approximations by invoking setResponse() on the
 AnalysisModel with quantities at time $t + \Theta \Delta t$.
 \begin{tabbing}
 while \= while \= while \= while \= \kill
@@ -202,11 +202,11 @@ while \= while \= while \= while \= \kill
 \item current time is obtained from the AnalysisModel, incremented by
 $\Theta \Delta t$, and {\em applyLoad(time, 1.0)} is invoked on the
 AnalysisModel. 
-\item Finally {\em updateDomain()} is invoked on the AnalysisModel.
+\item Finally updateDomain() is invoked on the AnalysisModel.
 \end{enumerate}
 The method returns $0$ if successful, otherwise a negative number is
-returned: $-1$ if $\gamma$ or $\beta$ are $0$, $-2$ if {\em dispFlag}
-was true and $\Delta t$ is $0$, and $-3$ if {\em domainChanged()}
+returned: $-1$ if $\gamma$ or $\beta$ are $0$, $-2$ if \p dispFlag
+was true and $\Delta t$ is $0$, and $-3$ if domainChanged()
 failed or has not been called. \\
 
 
@@ -217,10 +217,10 @@ response quantities at time $t + \Theta \Delta t$. The displacement Vector is
 incremented by $ c1 * \Delta U$, the velocity Vector by $
 c2 * \Delta U$, and the acceleration Vector by $c3 * \Delta U$. 
 The response quantities at the DOF\_Group objects are then updated
-with the new approximations by invoking {\em setResponse()} on the
+with the new approximations by invoking setResponse() on the
 AnalysisModel with displacements, velocities and accelerations at time
 $t + \Theta \Delta t$.
-Finally {\em updateDomain()} is invoked on the AnalysisModel. 
+Finally updateDomain() is invoked on the AnalysisModel. 
 \begin{tabbing}
 while \= while \= while \= while \= \kill
 \>\> $ \U_{t + \theta \Delta t} += \Delta \U$ \\
@@ -243,12 +243,12 @@ objects and $\Delta U$ are of different sizes. \\
 First the quantities at time $t + \Delta t$ are determined using the
 quantities at time $t$ and $t + \Theta \Delta t$.
 Then the response quantities at the DOF\_Group objects are updated
-with the new approximations by invoking {\em setResponse()} on the
+with the new approximations by invoking setResponse() on the
 AnalysisModel with displacement, velocity and accelerations at time $t +
 \Delta t$. The time is obtained from the AnalysisModel and $(\Theta
 -1) \Delta t$ is subtracted from the value. The time is set in the
 Domain by invoking {\em setCurrentDomainTime(time)} on the
-AnalysisModel. Finally {\em updateDomain()} and {\em commitDomain()}
+AnalysisModel. Finally updateDomain()} and {\em commitDomain()
 are invoked on the AnalysisModel. 
 \begin{tabbing}
 while \= while \= while \= while \= \kill
@@ -267,21 +267,21 @@ while \= while \= while \= while \= \kill
 \end{tabbing}
 Returns $0$ if successful, a warning
 message and a negative number if not: $-1$ if no AnalysisModel
-associated with the object and $-2$ if {\em commitDomain()} failed. \\
+associated with the object and $-2$ if commitDomain() failed. \\
 
 
 {\em int sendSelf(int commitTag, Channel \&theChannel); } \\ 
 Places $\Theta$, rayleigh damping flag, $\alpha_M$ and $\beta_K$ in a
-vector if size 4 and invokes {\em sendVector} on the Channel with this
+vector if size 4 and invokes \p sendVector on the Channel with this
 Vector. Returns $0$ if successful, a warning message is printed and a
-$-1$ is returned if {\em theChannel} fails to send the Vector. \\ 
+$-1$ is returned if \p theChannel fails to send the Vector. \\ 
 
 {\em int recvSelf(int commitTag, Channel \&theChannel, 
 FEM\_ObjectBroker \&theBroker); } \\ 
 Receives in a Vector of size 4 the value of $\Theta$, the rayleigh
 damping flag, $\alpha_M$ and $\beta_K$.. Returns $0$ if
 successful, a warning message is printed,  $\Theta$ is set to $0$, the
-rayleigh damping flag to {\em false}, and a $-1$ is returned if {\em
+rayleigh damping flag to \p false, and a $-1$ is returned if {\em
 theChannel} fails to receive the Vector.\\ 
 
 {\em int Print(OPS\_Stream \&s, int flag = 0);}\\

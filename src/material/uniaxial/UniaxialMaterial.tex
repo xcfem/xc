@@ -41,8 +41,8 @@ constitution for a particular point in the domain. \\
 \noindent {\bf Constructor}  \\
 \indent {\em UniaxialMaterial (int tag, int classTag);}  \\
 To construct a UniaxialMaterial whose unique integer among
-UniaxialMaterials in the domain is given by {\em tag}, and whose class
-identifier is given by {\em classTag}. These integers are passed to
+UniaxialMaterials in the domain is given by \p tag, and whose class
+identifier is given by \p classTag. These integers are passed to
 the Material class constructor. \\
 
 \noindent {\bf Destructor} \\
@@ -52,7 +52,7 @@ Does nothing. \\
 \noindent {\bf Public Methods} \\
 \indent {\em virtual int setTrialStrain (double strain) = 0; }  \\
 Sets the value of the trial strain, that value used by {\em
-getStress()} and {\em getTangent()}, to be {\em strain}. To
+getStress()} and getTangent(), to be \p strain. To
 return $0$ if successful, a negative number if not. \\
 
 \indent {\em virtual double getStress (void) = 0; } \\

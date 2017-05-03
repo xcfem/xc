@@ -33,7 +33,7 @@ aggregation.\\
 
 \noindent {\bf Constructor} \\ 
 \indent {\em SolutionAlgorithm(int classTag);}\\ 
-The integer {\em classTag} is passed to the MovableObject classes
+The integer \p classTag is passed to the MovableObject classes
 constructor. \\
 
 \noindent {\bf Destructor} \\
@@ -46,8 +46,8 @@ recorder objects. \\
 \noindent {\bf Public Methods}  \\
 \indent {\em virtual int domainChanged(void); } \\
 Is called by the Analysis if the domain changes. It is called after
-{\em domainChange()} has been called on the ConstraintHandler,
-DOF\_Numberer and the Integrator and after {\em setSize()} has been
+domainChange() has been called on the ConstraintHandler,
+DOF\_Numberer and the Integrator and after setSize() has been
 called on the SystemOfEqn object. For base class nothing is done and
 $0$ is returned. The subclasses can provide their own implementation
 of this method if anything needs to be done, e.g. memory allocation,
@@ -55,7 +55,7 @@ To return $0$ if successful, a negative number if not. \\
 
 
 \indent {\em  virtual int  addRecorder(Recorder \&theRecorder);}\\
-To add a recorder object {\em theRecorder} to the
+To add a recorder object \p theRecorder to the
 SolutionAlgorithm. returns $0$ if successfull, a warning message and a
 $-1$ is returned if not enough mempry is available. \\
 

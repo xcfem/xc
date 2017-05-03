@@ -66,9 +66,13 @@
 #include <solution/system_of_eqn/linearSOE/bandGEN/BandGenLinSolver.h>
 #include <solution/system_of_eqn/linearSOE/bandGEN/BandGenLinSOE.h>
 
+//! @brief Constructor. The integer classTag is passed to the
+//! base class constructor.
 XC::BandGenLinSolver::BandGenLinSolver(int classTags)    
   : LinearSOESolver(classTags), theSOE(nullptr) {}    
 
+//! @brief sets up the link between the \p soe object pointer and the
+//! BandGenLinSolver, that it is sets the pointer the subclasses use.
 bool XC::BandGenLinSolver::setLinearSOE(LinearSOE *soe)
   {
     bool retval= false;
@@ -79,10 +83,14 @@ bool XC::BandGenLinSolver::setLinearSOE(LinearSOE *soe)
         retval= true;
       }
     else
-      std::cerr  << nombre_clase() << "::setLinearSOE: el system of equations no es del tipo adecuado para este solver." << std::endl;
+      std::cerr  << nombre_clase() << "::" << __FUNCTION__
+	         << " system of equations is not of a suitable type"
+	         << " for this solver." << std::endl;
     return retval;
   }
 
+//! @brief sets up the link between the \p theBandGenSOE object and the
+//! BandGenLinSolver, that it is sets the pointer the subclasses use.
 bool XC::BandGenLinSolver::setLinearSOE(BandGenLinSOE &theBandGenSOE)
   { return setLinearSOE(&theBandGenSOE); }
 
