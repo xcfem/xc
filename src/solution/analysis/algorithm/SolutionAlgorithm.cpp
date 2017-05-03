@@ -74,20 +74,20 @@ XC::SolutionAlgorithm::SolutionAlgorithm(SoluMethod *owr,int clasTag)
       ObjWithRecorders::setLinks(dom);
   }
 
-//! @brief Realiza los cambios que sean necesarios como consecuencia de un cambio en el domain.
+//! @brief Perform the appropiate changes as a result of a change in the domain.
 int XC::SolutionAlgorithm::domainChanged(void)
   { return 0; }
 
-//! @brief Returns a pointer to the solution method which owns this object.
+//! @brief Return a pointer to the solution method which owns this object.
 XC::SoluMethod *XC::SolutionAlgorithm::getSoluMethod(void)
   { return dynamic_cast<SoluMethod *>(Owner()); }
 
-//! @brief Returns a pointer to the solution method which owns this object.
+//! @brief Return a pointer to the solution method which owns this object.
 const XC::SoluMethod *XC::SolutionAlgorithm::getSoluMethod(void) const
   { return dynamic_cast<const SoluMethod *>(Owner()); }
 
 
-//! @brief Returns a const pointer to the analysis model.
+//! @brief Return a const pointer to the analysis model.
 const XC::AnalysisModel *XC::SolutionAlgorithm::getAnalysisModelPtr(void) const
   {
     const SoluMethod *sm= getSoluMethod();
@@ -95,7 +95,7 @@ const XC::AnalysisModel *XC::SolutionAlgorithm::getAnalysisModelPtr(void) const
     return sm->getAnalysisModelPtr();
   }
 
-//! @brief Returns a pointer to the analysis model.
+//! @brief Return a pointer to the analysis model.
 XC::AnalysisModel *XC::SolutionAlgorithm::getAnalysisModelPtr(void)
   {
     const SoluMethod *sm= getSoluMethod();
@@ -103,7 +103,7 @@ XC::AnalysisModel *XC::SolutionAlgorithm::getAnalysisModelPtr(void)
     return sm->getAnalysisModelPtr();
   }
 
-//! @brief Returns a pointer to the integrator.
+//! @brief Return a pointer to the integrator.
 XC::Integrator *XC::SolutionAlgorithm::getIntegratorPtr(void)
   {
     SoluMethod *sm= getSoluMethod();
@@ -111,7 +111,7 @@ XC::Integrator *XC::SolutionAlgorithm::getIntegratorPtr(void)
     return sm->getIntegratorPtr();
   }
 
-//! @brief Returns a const pointer to the integrator.
+//! @brief Return a const pointer to the integrator.
 const XC::Integrator *XC::SolutionAlgorithm::getIntegratorPtr(void) const
   {
     const SoluMethod *sm= getSoluMethod();
@@ -119,7 +119,7 @@ const XC::Integrator *XC::SolutionAlgorithm::getIntegratorPtr(void) const
     return sm->getIntegratorPtr();
   }
 
-//! @brief Returns a pointer to the linear system of equations.
+//! @brief Return a pointer to the linear system of equations.
 XC::LinearSOE *XC::SolutionAlgorithm::getLinearSOEPtr(void)
   {
     SoluMethod *sm= getSoluMethod();
@@ -127,7 +127,7 @@ XC::LinearSOE *XC::SolutionAlgorithm::getLinearSOEPtr(void)
     return sm->getLinearSOEPtr();
   }
 
-//! @brief Returns a const pointer to the linear system of equations.
+//! @brief Return a const pointer to the linear system of equations.
 const XC::LinearSOE *XC::SolutionAlgorithm::getLinearSOEPtr(void) const
   {
     const SoluMethod *sm= getSoluMethod();
@@ -135,7 +135,7 @@ const XC::LinearSOE *XC::SolutionAlgorithm::getLinearSOEPtr(void) const
     return sm->getLinearSOEPtr();
   }
 
-//! @brief Returns a pointer to the eigen system of equations.
+//! @brief Return a pointer to the eigen system of equations.
 XC::EigenSOE *XC::SolutionAlgorithm::getEigenSOEPtr(void)
   {
     SoluMethod *sm= getSoluMethod();
@@ -143,7 +143,7 @@ XC::EigenSOE *XC::SolutionAlgorithm::getEigenSOEPtr(void)
     return sm->getEigenSOEPtr();
   }
 
-//! @brief Returns a const pointer to the eigen system of equations.
+//! @brief Return a const pointer to the eigen system of equations.
 const XC::EigenSOE *XC::SolutionAlgorithm::getEigenSOEPtr(void) const
   {
     const SoluMethod *sm= getSoluMethod();
@@ -151,7 +151,7 @@ const XC::EigenSOE *XC::SolutionAlgorithm::getEigenSOEPtr(void) const
     return sm->getEigenSOEPtr();
   }
 
-//! @brief Returns a const pointer to the DomainSolver.
+//! @brief Return a const pointer to the DomainSolver.
 const XC::DomainSolver *XC::SolutionAlgorithm::getDomainSolverPtr(void) const
   {
     const SoluMethod *sm= getSoluMethod();
@@ -159,7 +159,7 @@ const XC::DomainSolver *XC::SolutionAlgorithm::getDomainSolverPtr(void) const
     return sm->getDomainSolverPtr();
   }
 
-//! @brief Returns a pointer to the DomainSolver.
+//! @brief Return a pointer to the DomainSolver.
 XC::DomainSolver *XC::SolutionAlgorithm::getDomainSolverPtr(void)
   {
     SoluMethod *sm= getSoluMethod();
@@ -167,7 +167,7 @@ XC::DomainSolver *XC::SolutionAlgorithm::getDomainSolverPtr(void)
     return sm->getDomainSolverPtr();
   }
 
-//! @brief Returns a const pointer to the subdomain.
+//! @brief Return a const pointer to the subdomain.
 const XC::Subdomain *XC::SolutionAlgorithm::getSubdomainPtr(void) const
   {
     const SoluMethod *sm= getSoluMethod();
@@ -175,7 +175,7 @@ const XC::Subdomain *XC::SolutionAlgorithm::getSubdomainPtr(void) const
     return sm->getSubdomainPtr();
   }
 
-//! @brief Returns a pointer to the subdomain.
+//! @brief Return a pointer to the subdomain.
 XC::Subdomain *XC::SolutionAlgorithm::getSubdomainPtr(void)
   {
     SoluMethod *sm= getSoluMethod();
@@ -183,7 +183,7 @@ XC::Subdomain *XC::SolutionAlgorithm::getSubdomainPtr(void)
     return sm->getSubdomainPtr();
   }
 
-//! @brief Returns a pointer to the domain.
+//! @brief Return a pointer to the domain.
 XC::Domain *XC::SolutionAlgorithm::get_domain_ptr(void)
   {
     SoluMethod *sm= getSoluMethod();
@@ -191,13 +191,13 @@ XC::Domain *XC::SolutionAlgorithm::get_domain_ptr(void)
     return sm->getDomainPtr();
   }
 
-//! @brief Send object members through the channel being passed as parameter.
+//! @brief Send object members through the channel passed as parameter.
 int XC::SolutionAlgorithm::sendData(CommParameters &cp)
   {
     return 0;
   }
 
-//! @brief Receives object members through the channel being passed as parameter.
+//! @brief Receive object members through the channel passed as parameter.
 int XC::SolutionAlgorithm::recvData(const CommParameters &cp)
   {
     return 0;

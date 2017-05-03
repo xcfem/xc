@@ -82,7 +82,7 @@ class SoluMethod;
 //
 //! @ingroup AnalAlgo
 //
-//! @brief Base class for solution algorithms.
+//! @brief Base class for solution algorithms.  A SolutionAlgorithm object performs the steps in the analysis by specifying the sequence of operations to be performed by members in the analysis aggregation.
 class SolutionAlgorithm: public MovableObject, public ObjWithRecorders
   {
   protected:

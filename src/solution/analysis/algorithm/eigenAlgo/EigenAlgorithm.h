@@ -75,7 +75,7 @@ class EigenIntegrator;
 
 //! @ingroup AnalAlgo
 //
-//! @defgroup EigenAlgo Solution algoriths for eigenproblems.
+//! @defgroup EigenAlgo Solution algorithms for eigenproblems.
 //
 //! @ingroup EigenAlgo
 //

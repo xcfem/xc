@@ -73,7 +73,7 @@
 XC::FrequencyAlgo::FrequencyAlgo(SoluMethod *owr)
   :EigenAlgorithm(owr,EigenALGORITHM_TAGS_Frequency) {}
 
-//! @brief Obtiene los eigenvalues para el paso actual.
+//! @brief Calculate the eigenvalues for the current step.
 int XC::FrequencyAlgo::solveCurrentStep(int nModes)
   {
     AnalysisModel *theModel= getAnalysisModelPtr();
@@ -83,7 +83,7 @@ int XC::FrequencyAlgo::solveCurrentStep(int nModes)
     if((theModel == 0) || (theIntegrator == 0) || (theSOE == 0))
       {
         std::cerr << "WARNING FrequencyAlgo::solverCurrentStep() - ";
-        std::cerr << " no se ha asignado domain, modelo o integrator.\n";
+        std::cerr << " domain, model or integrator not assigned.\n";
         return -1;
       }
 
@@ -94,7 +94,7 @@ int XC::FrequencyAlgo::solveCurrentStep(int nModes)
         return -2;
       }
 
-    if(theIntegrator->formM()<0) //Forma la mass matrix.
+    if(theIntegrator->formM()<0) //Form the mass matrix.
       {
         std::cerr << "WARNING FrequencyAlgo::solverCurrentStep() - ";
         std::cerr << "the Integrator failed in formM().\n";
@@ -108,19 +108,19 @@ int XC::FrequencyAlgo::solveCurrentStep(int nModes)
         return -4;
       }
 
-    eigen_to_model(nModes); //Envia eigenvectors (modos) y eigenvalues al modelo.
+    eigen_to_model(nModes); //Sends eigenvectors and eigenvalues to the model.
     return 0;
   }
 
-//! @brief Envía.
+//! @brief Send.
 int XC::FrequencyAlgo::sendSelf(CommParameters &cp)
   { return 0; }
 
-//! @breif Recibe.
+//! @breif Receive.
 int XC::FrequencyAlgo::recvSelf(const CommParameters &cp)
   { return 0; }
 
-//! @brief Imprime el objeto.
+//! @brief Print the object.
 void XC::FrequencyAlgo::Print(std::ostream &s, int flag)
   { s << "\t Eigen Algorithm \n"; }
 

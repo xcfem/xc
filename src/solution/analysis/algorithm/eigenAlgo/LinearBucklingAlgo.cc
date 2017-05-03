@@ -41,8 +41,8 @@ XC::LinearBucklingIntegrator *XC::LinearBucklingAlgo::getLinearBucklingIntegrato
       {
         retval= dynamic_cast<LinearBucklingIntegrator *>(theIntegrator);
         if(!retval)
-	  std::cerr << "LinearBucklingAlgo::getLinearBucklingIntegrator; el integrator"
-                    << " no es del tipo adecuado." << std::endl;
+	  std::cerr << "LinearBucklingAlgo::getLinearBucklingIntegrator; the integrator"
+                    << " is not of the right type." << std::endl;
       }
     return retval;
   }
@@ -51,7 +51,7 @@ XC::LinearBucklingIntegrator *XC::LinearBucklingAlgo::getLinearBucklingIntegrato
 XC::LinearBucklingAlgo::LinearBucklingAlgo(SoluMethod *owr)
   :EigenAlgorithm(owr,EigenALGORITHM_TAGS_LinearBuckling) {}
 
-//! @brief Obtiene los eigenvalues para el paso actual.
+//! @brief Solves the current step.
 int XC::LinearBucklingAlgo::solveCurrentStep(int numModes)
   {
     AnalysisModel *theModel= getAnalysisModelPtr();
@@ -60,7 +60,7 @@ int XC::LinearBucklingAlgo::solveCurrentStep(int numModes)
     if((theModel == 0) || (theIntegrator == 0) || (theSOE == 0))
       {
         std::cerr << "WARNING LinearBucklingAlgo::solverCurrentStep() - ";
-        std::cerr << " no se ha asignado domain, modelo o integrator.\n";
+        std::cerr << " domain, model or integrator not assigned.\n";
         return -1;
       }
 
@@ -82,7 +82,7 @@ int XC::LinearBucklingAlgo::solveCurrentStep(int numModes)
     return 0;
   }
 
-//! @brief Vuelca los eigenvalues en el modelo (see Finite Element Procedures. Klaus Jurgen Bathe página 632).
+//! @brief Dump the eigenvalues into the model (see Finite Element Procedures. Klaus Jurgen Bathe página 632).
 void XC::LinearBucklingAlgo::eigen_to_model(int numModes)
   {
     AnalysisModel *theModel= getAnalysisModelPtr();
@@ -97,7 +97,7 @@ void XC::LinearBucklingAlgo::eigen_to_model(int numModes)
           theEigenvalues[i-1]= 1.0/denom;
         else
           {
-	    std::cerr << "Error en LinearBucklingAlgo::eigen_to_model;" 
+	    std::cerr << "Error in LinearBucklingAlgo::eigen_to_model;" 
                       << "theSOE.eigenvalue(" << i << ")= "
                       << ev << std::endl;
 	    theEigenvalues[i-1]= 1e99;
@@ -107,15 +107,15 @@ void XC::LinearBucklingAlgo::eigen_to_model(int numModes)
     theModel->setEigenvalues(theEigenvalues);
   }
 
-//! @brief Imprime el objeto.
+//! @brief Print the object
 void XC::LinearBucklingAlgo::Print(std::ostream &s, int flag)
   { s << "\t Linear Buckling Algorithm \n"; }
 
-//! @brief Envía.
+//! @brief Send.
 int XC::LinearBucklingAlgo::sendSelf(CommParameters &cp)
   { return 0; }
 
-//! @breif Recibe.
+//! @breif Receive.
 int XC::LinearBucklingAlgo::recvSelf(const CommParameters &cp)
   { return 0; }
 
