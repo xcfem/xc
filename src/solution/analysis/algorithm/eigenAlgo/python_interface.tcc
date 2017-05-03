@@ -21,11 +21,11 @@
 //----------------------------------------------------------------------------
 //python_interface.tcc
 
-class_<XC::EigenAlgorithm, bases<XC::SolutionAlgorithm>, boost::noncopyable >("EigenAlgorithm", no_init);
+class_<XC::EigenAlgorithm, bases<XC::SolutionAlgorithm>, boost::noncopyable >("EigenAlgorithm", "Solution algorithm for eigenproblems.",no_init);
 
-class_<XC::FrequencyAlgo, bases<XC::EigenAlgorithm>, boost::noncopyable >("FrequencyAlgo", no_init);
+class_<XC::FrequencyAlgo, bases<XC::EigenAlgorithm>, boost::noncopyable >("FrequencyAlgo","Solution algorithm for obtaining the natural frequencies of the model", no_init);
 
-class_<XC::LinearBucklingAlgo, bases<XC::EigenAlgorithm>, boost::noncopyable >("LinearBucklingAlgo", no_init);
+class_<XC::LinearBucklingAlgo, bases<XC::EigenAlgorithm>, boost::noncopyable >("LinearBucklingAlgo", "Solution algorithm for linear buckling analysis", no_init);
 
-class_<XC::StandardEigenAlgo, bases<XC::EigenAlgorithm>, boost::noncopyable >("StandardEigenAlgo", no_init);
+class_<XC::StandardEigenAlgo, bases<XC::EigenAlgorithm>, boost::noncopyable >("StandardEigenAlgo", "Solution algorithm for standard eigenvalue problems", no_init);
 

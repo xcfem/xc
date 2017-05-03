@@ -21,5 +21,5 @@
 //----------------------------------------------------------------------------
 //python_interface.tcc
 
-class_<XC::DomainDecompAlgo, bases<XC::SolutionAlgorithm>, boost::noncopyable >("DomainDecompAlgo", no_init);
+class_<XC::DomainDecompAlgo, bases<XC::SolutionAlgorithm>, boost::noncopyable >("DomainDecompAlgo", "Domain decomposition solution algorithm. Define the sequence of operations to be performed in the analysis by static equilibrium of a finite element model.",no_init);
 

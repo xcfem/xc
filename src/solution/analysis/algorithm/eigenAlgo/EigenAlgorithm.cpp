@@ -73,11 +73,11 @@
 XC::EigenAlgorithm::EigenAlgorithm(SoluMethod *owr,int classTag)
   :SolutionAlgorithm(owr,classTag) {}
 
-//! @brief Returns a pointer to the integrator.
+//! @brief Return a pointer to the integrator.
 XC::EigenIntegrator *XC::EigenAlgorithm::getEigenIntegratorPtr()
   { return dynamic_cast<EigenIntegrator *>(getIntegratorPtr()); }
 
-//! @brief Vuelca los eigenvalues en el modelo.
+//! @brief Dump the eigenvalues into the model.
 void XC::EigenAlgorithm::eigen_to_model(int numModes)
   {
     AnalysisModel *theModel= getAnalysisModelPtr();

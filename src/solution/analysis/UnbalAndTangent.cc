@@ -88,7 +88,7 @@ void XC::UnbalAndTangent::copia(const UnbalAndTangent &otro)
       }             
   }
 
-//! @brief Construictor.
+//! @brief Constructor.
 XC::UnbalAndTangent::UnbalAndTangent(const size_t &n,UnbalAndTangentStorage &a)
   :nDOF(n), theResidual(nullptr), theTangent(nullptr), unbalAndTangentArray(a) 
   { alloc(); }
@@ -130,14 +130,14 @@ XC::Matrix &XC::UnbalAndTangent::getTangent(void)
     return *theTangent;
   }
 
-//! @brief Returns the vector residuo.
+//! @brief Returns the residual vector.
 const XC::Vector &XC::UnbalAndTangent::getResidual(void) const
   {
     assert(theResidual);
     return *theResidual;
   }
 
-//! @brief Returns the vector residuo.
+//! @brief Return the residual vector.
 XC::Vector &XC::UnbalAndTangent::getResidual(void)
   {
     assert(theResidual);

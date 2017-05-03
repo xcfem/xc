@@ -66,7 +66,7 @@
 XC::StandardEigenAlgo::StandardEigenAlgo(SoluMethod *owr)
   :EigenAlgorithm(owr,EigenALGORITHM_TAGS_Standard) {}
 
-//! @brief Obtiene los eigenvalues para el paso actual.
+//! @brief Calculate the eigenvalues for the current step.
 int XC::StandardEigenAlgo::solveCurrentStep(int numModes)
   {
     AnalysisModel *theModel= getAnalysisModelPtr();
@@ -74,7 +74,7 @@ int XC::StandardEigenAlgo::solveCurrentStep(int numModes)
     EigenSOE *theSOE = getEigenSOEPtr();
     if((theModel == 0) || (theIntegrator == 0) || (theSOE == 0))
       {
-        std::cerr << "StandardEigenAlgo::solverCurrentStep() -- no se ha asignado domain, modelo o integrator.\n";
+        std::cerr << "StandardEigenAlgo::solverCurrentStep() -- domain, model or integrator not assigned.\n";
         return -1;
       }
   
@@ -95,15 +95,15 @@ int XC::StandardEigenAlgo::solveCurrentStep(int numModes)
     return 0;
   }
 
-//! @brief Envía.
+//! @brief Send.
 int XC::StandardEigenAlgo::sendSelf(CommParameters &cp)
   { return 0; }
 
-//! @brief Recibe.
+//! @brief Receive.
 int XC::StandardEigenAlgo::recvSelf(const CommParameters &cp)
   { return 0; }
 
-//! @brief Imprime el objeto.
+//! @brief Print.
 void XC::StandardEigenAlgo::Print(std::ostream &s, int flag)
   {
     s << "\tStandardEigenAlgo\n";

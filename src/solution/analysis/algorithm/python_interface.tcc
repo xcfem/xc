@@ -21,7 +21,7 @@
 //----------------------------------------------------------------------------
 //python_interface.tcc
 
-class_<XC::SolutionAlgorithm, bases<XC::MovableObject,XC::ObjWithRecorders>, boost::noncopyable >("SolutionAlgorithm", no_init);
+class_<XC::SolutionAlgorithm, bases<XC::MovableObject,XC::ObjWithRecorders>, boost::noncopyable >("SolutionAlgorithm", "Implement the steps in the analysis by specifying the sequence of operations to be performed by members in the analysis aggregation.",no_init);
 
 #include "domainDecompAlgo/python_interface.tcc"
 #include "eigenAlgo/python_interface.tcc"
