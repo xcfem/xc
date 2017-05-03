@@ -81,7 +81,7 @@ class TransientDomainDecompositionAnalysis: public DomainDecompositionAnalysis
     int initialize(void);
     int domainChanged(void);
 
-    // methods for non standard domain deomposition analysis
+    // methods for non standard domain decomposition analysis
     int analyze(double dT);
     bool doesIndependentAnalysis(void);    
 
@@ -107,6 +107,8 @@ class TransientDomainDecompositionAnalysis: public DomainDecompositionAnalysis
     int sendSelf(CommParameters &);
     int recvSelf(const CommParameters &);
   };
+
+//! @brief Virtual constructor.
 inline Analysis *TransientDomainDecompositionAnalysis::getCopy(void) const
   { return new TransientDomainDecompositionAnalysis(*this); }
 } // end of XC namespace

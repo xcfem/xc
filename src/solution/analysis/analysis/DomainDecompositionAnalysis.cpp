@@ -136,6 +136,8 @@ void XC::DomainDecompositionAnalysis::clearAll(void)
   }
 
 //! @brief Performs the analysis.
+//!
+//! @param dT: time increment.
 int XC::DomainDecompositionAnalysis::analyze(double dT)
   { return 0; }
 
@@ -448,8 +450,8 @@ int XC::DomainDecompositionAnalysis::recvSelf(const CommParameters &cp)
       }
     else
       {
-	std::cerr << "DomainDecompositionAnalysis::recvSelf";
-	std::cerr << " - failed to get the XC::ConstraintHandler\n";
+	std::cerr << nombre_clase() << "::" << __FUNCTION__
+	          << "; failed to get the ConstraintHandler.\n";
 	return -1;
       }
 
@@ -461,8 +463,8 @@ int XC::DomainDecompositionAnalysis::recvSelf(const CommParameters &cp)
       }
     else
       {
-	std::cerr << "DomainDecompositionAnalysis::recvSelf";
-	std::cerr << " - failed to get the DOF Numberer\n";
+	std::cerr << nombre_clase() << "::" << __FUNCTION__
+		  << "; failed to get the DOF Numberer\n";
 	return -1;
       }
 
@@ -474,8 +476,8 @@ int XC::DomainDecompositionAnalysis::recvSelf(const CommParameters &cp)
 	getAnalysisModelPtr()->recvSelf(cp);
       }
     else {
-	std::cerr << "DomainDecompositionAnalysis::recvSelf";
-	std::cerr << " - failed to get the AnalysisModel\n";
+	std::cerr << nombre_clase() << "::" << __FUNCTION__
+		  << "; failed to get the AnalysisModel\n";
 	return -1;
     }        
 
@@ -488,8 +490,8 @@ int XC::DomainDecompositionAnalysis::recvSelf(const CommParameters &cp)
       }
     else
       {
-	std::cerr << "DomainDecompositionAnalysis::recvSelf";
-	std::cerr << " - failed to get the Domain Decomp Algo\n";
+	std::cerr << nombre_clase() << "::" << __FUNCTION__
+		  << "; failed to get the domain decomposition algorithm.\n";
 	return -1;
       }            
 
@@ -501,8 +503,8 @@ int XC::DomainDecompositionAnalysis::recvSelf(const CommParameters &cp)
       }
     else
       {
-	std::cerr << "DomainDecompositionAnalysis::recvSelf";
-	std::cerr << " - failed to get the XC::IncrementalIntegrator\n";
+	std::cerr << nombre_clase() << "::" << __FUNCTION__
+		  << "; failed to get the IncrementalIntegrator.\n";
 	return -1;
       }        	
 
@@ -511,8 +513,8 @@ int XC::DomainDecompositionAnalysis::recvSelf(const CommParameters &cp)
 
     if(getLinearSOEPtr() == 0 || theSolver == 0)
       {
-	std::cerr << "DomainDecompositionAnalysis::recvSelf";
-	std::cerr << " - failed to get the LinearSOE and the DomainSolver \n";
+	std::cerr << nombre_clase() << "::" << __FUNCTION__
+	          << "; failed to get the LinearSOE or the solver.\n";
 	return -1;
       }
     else
@@ -532,7 +534,8 @@ int XC::DomainDecompositionAnalysis::recvSelf(const CommParameters &cp)
 int XC::DomainDecompositionAnalysis::setAlgorithm(EquiSolnAlgo &theAlgorithm)
   {
     Analysis::setAlgorithm(theAlgorithm);
-    std::cerr << "DomainDecompositionAnalysis::setAlgorithm() - not implemented\n";
+    std::cerr << nombre_clase() << "::" << __FUNCTION__
+	      << "; not implemented\n";
     return -1;
   }
 
@@ -540,7 +543,8 @@ int XC::DomainDecompositionAnalysis::setAlgorithm(EquiSolnAlgo &theAlgorithm)
 int XC::DomainDecompositionAnalysis::setIntegrator(IncrementalIntegrator &theIntegrator) 
   {
     Analysis::setIntegrator(theIntegrator);
-    std::cerr << "DomainDecompositionAnalysis::setIntegrator() - not implemented\n";
+    std::cerr << nombre_clase() << "::" << __FUNCTION__
+	      << "; not implemented\n";
     return -1;
   }
 
@@ -549,7 +553,8 @@ int XC::DomainDecompositionAnalysis::setIntegrator(IncrementalIntegrator &theInt
 int XC::DomainDecompositionAnalysis::setLinearSOE(LinearSOE &theSOE)
   {
     Analysis::setLinearSOE(theSOE);
-    std::cerr << "DomainDecompositionAnalysis::setLinearSOE() - not implemented\n";
+    std::cerr << nombre_clase() << "::" << __FUNCTION__
+	      << "; not implemented\n";
     return -1;
   }
 

@@ -95,6 +95,8 @@ void XC::EigenAnalysis::clearAll(void)
   }
 
 //! @brief Performs the analysis.
+//!
+//! @param numModes: number of modes to compute.
 int XC::EigenAnalysis::analyze(int numModes)
   {
     int result= 0;
@@ -112,7 +114,8 @@ int XC::EigenAnalysis::analyze(int numModes)
 	result = domainChanged();
 	if(result < 0)
           {
-	    std::cerr << "EigenAnalysis::analyze() - domainChanged failed\n";
+	    std::cerr << nombre_clase() << "::" << __FUNCTION__
+		      << "; domainChanged failed\n";
 	    return -1;
 	  }
       }
@@ -120,13 +123,15 @@ int XC::EigenAnalysis::analyze(int numModes)
     result = getEigenIntegratorPtr()->newStep();
     if(result < 0)
       {
-        std::cerr << "EigenAnalysis::analyze() - integrator failed\n";
+        std::cerr << nombre_clase() << "::" << __FUNCTION__
+		  << "; integrator failed\n";
 	return -2;
       }
     result = getEigenSolutionAlgorithmPtr()->solveCurrentStep(numModes);
     if(result < 0)
       {
-        std::cerr << "EigenAnalysis::analyze() - algorithm failed\n";
+        std::cerr << nombre_clase() << "::" << __FUNCTION__
+		  << "; algorithm failed\n";
 	return -3;
       }
     metodo_solu->set_owner(old);
@@ -141,7 +146,7 @@ int XC::EigenAnalysis::domainChanged(void)
     int result= getConstraintHandlerPtr()->handle();
     if(result < 0)
       {
-        std::cerr << "EigenAnalysis::domainChanged() - ";
+        std::cerr << nombre_clase() << "::" << __FUNCTION__ << "; ";
         std::cerr << "ConstraintHandler::handle() failed." << std::endl;
         return -1;
       }
@@ -150,14 +155,14 @@ int XC::EigenAnalysis::domainChanged(void)
     result= getDOF_NumbererPtr()->numberDOF();
     if(result < 0)
       {
-        std::cerr << "EigenAnalysis::domainChanged() - ";
+        std::cerr << nombre_clase() << "::" << __FUNCTION__ << "; ";
         std::cerr << "failed in equation numbering." << std::endl;
         return -2;
       }
     result= getConstraintHandlerPtr()->doneNumberingDOF();
     if(result < 0)
       {
-        std::cerr << "EigenAnalysis::domainChanged() - ";
+        std::cerr << nombre_clase() << "::" << __FUNCTION__ << "; ";
         std::cerr << "fallo en doneNumberingDOF()." << std::endl;
         return -3;
       }
@@ -193,7 +198,8 @@ int XC::EigenAnalysis::domainChanged(void)
 int XC::EigenAnalysis::setAlgorithm(EigenAlgorithm &theAlgo)
   {
     Analysis::setAlgorithm(theAlgo);
-    std::cerr << "EigenAnalysis::setAlgorithm() - does nothing yet\n";
+    std::cerr << nombre_clase() << "::" << __FUNCTION__
+	      << "; does nothing yet\n";
     return 0;
   }
 
@@ -201,7 +207,8 @@ int XC::EigenAnalysis::setAlgorithm(EigenAlgorithm &theAlgo)
 int XC::EigenAnalysis::setIntegrator(EigenIntegrator &theIntegrator)
   {
     Analysis::setIntegrator(theIntegrator);
-    std::cerr << "EigenAnalysis::setIntegrator() - does nothing yet\n";    
+    std::cerr << nombre_clase() << "::" << __FUNCTION__
+	      << "; does nothing yet\n";    
     return 0;
   }
 

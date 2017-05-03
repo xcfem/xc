@@ -102,6 +102,8 @@ bool XC::StaticDomainDecompositionAnalysis::doesIndependentAnalysis(void)
 
 
 //! @brief Performs the analysis.
+//!
+//! @param dT: time increment.
 int XC::StaticDomainDecompositionAnalysis::analyze(double dT)
   {
     assert(metodo_solu);

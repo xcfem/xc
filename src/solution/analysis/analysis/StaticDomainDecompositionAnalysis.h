@@ -83,7 +83,7 @@ class StaticDomainDecompositionAnalysis: public DomainDecompositionAnalysis
     int initialize(void);
     int domainChanged(void);
 
-    // methods for non standard domain deomposition analysis
+    // methods for non standard domain decomposition analysis
     int analyze(double dT);
     bool doesIndependentAnalysis(void);    
 

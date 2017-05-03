@@ -87,6 +87,8 @@ class VariableTimeStepDirectIntegrationAnalysis: public DirectIntegrationAnalysi
 
     int analyze(int numSteps, double dT, double dtMin, double dtMax, int Jd);
   };
+
+//! @brief Virtual constructor.
 inline Analysis *VariableTimeStepDirectIntegrationAnalysis::getCopy(void) const
   { return new VariableTimeStepDirectIntegrationAnalysis(*this); }
 } // end of XC namespace

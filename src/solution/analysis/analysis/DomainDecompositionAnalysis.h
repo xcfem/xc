@@ -145,6 +145,8 @@ class DomainDecompositionAnalysis: public Analysis, public MovableObject
     virtual int setLinearSOE(LinearSOE &theSOE);
     virtual int setConvergenceTest(ConvergenceTest &theTest);
   };
+
+//! @brief Virtual constructor.
 inline Analysis *DomainDecompositionAnalysis::getCopy(void) const
   { return new DomainDecompositionAnalysis(*this); }
 } // end of XC namespace

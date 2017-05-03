@@ -58,6 +58,10 @@ void XC::LinearBucklingAnalysis::clearAll(void)
   }
 
 //! @brief Performs the analysis.
+//!
+//! @param numSteps: number of steps in the analysis
+//! (for static analysis, if the loads are constant it's useless to
+//! increase the number of steps so \p numSteps= 1)
 int XC::LinearBucklingAnalysis::analyze(int numSteps)
   {
     assert(metodo_solu);

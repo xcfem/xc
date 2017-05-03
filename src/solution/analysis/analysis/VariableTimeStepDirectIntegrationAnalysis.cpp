@@ -73,6 +73,11 @@ XC::VariableTimeStepDirectIntegrationAnalysis::VariableTimeStepDirectIntegration
   :DirectIntegrationAnalysis(metodo) {}    
 
 //! @brief Performs the analysis.
+//! 
+//! @param numSteps: number of steps in the analysis.
+//! @param dT: time increment.
+//! @param dtMin: Minimum value for the time increment.
+//! @param dtMax: Maximum value for the time increment.
 int XC::VariableTimeStepDirectIntegrationAnalysis::analyze(int numSteps, double dT, double dtMin, double dtMax, int Jd)
   {
     assert(metodo_solu);
@@ -97,7 +102,8 @@ int XC::VariableTimeStepDirectIntegrationAnalysis::analyze(int numSteps, double 
 
         if(this->checkDomainChange() != 0)
           {
-            std::cerr << "XC::VariableTimeStepDirectIntegrationAnalysis::analyze() - failed checkDomainChange\n";
+            std::cerr << nombre_clase() << "::" << __FUNCTION__
+		      << "; failed checkDomainChange\n";
             return -1;
           }
 
@@ -138,8 +144,10 @@ int XC::VariableTimeStepDirectIntegrationAnalysis::analyze(int numSteps, double 
             // if last dT was <= min specified the analysis FAILS - return FAILURE
             if(currentDt <= dtMin)
               {
-	        std::cerr << "XC::VariableTimeStepDirectIntegrationAnalysis::analyze() - ";
-	        std::cerr << " failed at time " << theDom->getTimeTracker().getCurrentTime() << std::endl;
+	        std::cerr << nombre_clase() << "::" << __FUNCTION__
+			  << "; failed at time "
+			  << theDom->getTimeTracker().getCurrentTime()
+			  << std::endl;
                 return result;
               }
             // if still here reset result for next loop

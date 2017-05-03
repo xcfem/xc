@@ -105,7 +105,7 @@ void XC::StaticAnalysis::clearAll(void)
     // AddingSensitivity:END //////////////////////////////////////
   }
 
-//! @brief Solicita la domain que avance un paso en the analysis.
+//! @brief Ask the domain to performa a new analysis step.
 int XC::StaticAnalysis::new_domain_step(int num_step)
   {
     AnalysisModel *am= getAnalysisModelPtr();
@@ -113,18 +113,23 @@ int XC::StaticAnalysis::new_domain_step(int num_step)
     int result= newStepDomain(am);
     if(result < 0)
       {
-        std::cerr << "StaticAnalysis::new_domain_step() - the AnalysisModel failed"
+        std::cerr << nombre_clase() << "::" << __FUNCTION__
+		  << "; the AnalysisModel failed"
                   << " at step: " << num_step << " with domain at load factor "
                   << getDomainPtr()->getTimeTracker().getCurrentTime()
-		  << " after " << getConvergenceTest()->getCurrentIter()-1 << " iterations." << std::endl;
+		  << " after " << getConvergenceTest()->getCurrentIter()-1
+		  << " iterations." << std::endl;
+	std::cerr << "In a static analysis, "
+	          << " a number of steps greater than 1 is useless"
+	          << " if the loads and constraints are constant";
         getDomainPtr()->revertToLastCommit();
         return -2;
       }
     return result;
   }
 
-//! @brief Comprueba si se ha producido algún cambio en el domain desde
-//! el último paso of the analysis. Se utiliza en el método run_analysis_step.
+//! @brief Check if the domain has changed after the last analysis step.
+//! It's used in run_analysis_step method.
 int XC::StaticAnalysis::check_domain_change(int num_step,int numSteps)
   {
     int result= 0;
@@ -137,23 +142,33 @@ int XC::StaticAnalysis::check_domain_change(int num_step,int numSteps)
 
         if(result < 0)
           {
-            std::cerr << "StaticAnalysis::check_domain_change() - domainChanged failed";
-            std::cerr << " at step " << num_step << " of " << numSteps << std::endl;
+            std::cerr << nombre_clase() << "::" << __FUNCTION__
+		      << "; domainChanged failed"
+		      << " at step " << num_step << " of "
+		      << numSteps << std::endl;
+    	    std::cerr << "In a static analysis, "
+	              << " a number of steps greater than 1 is useless"
+	              << " if the loads and constraints are constant";
             return -1;
           }
       }
     return result;
   }
 
-//! @brief Solicita al integrator que avance un paso en the analysis.
+//! @brief Ask the integrator to perform a new step in the analysis.
 int XC::StaticAnalysis::new_integrator_step(int num_step)
   {
     const int result= getStaticIntegratorPtr()->newStep();
     if(result < 0)
       {
-        std::cerr << "StaticAnalysis::new_integrator_step() - the Integrator failed"
+        std::cerr << nombre_clase() << "::" << __FUNCTION__
+		  << "; the Integrator failed"
                   << " at step: " << num_step << " with domain at load factor "
-                  << getDomainPtr()->getTimeTracker().getCurrentTime() << std::endl;
+                  << getDomainPtr()->getTimeTracker().getCurrentTime()
+		  << std::endl;
+        std::cerr << "In a static analysis, "
+                  << " a number of steps greater than 1 is useless"
+                  << " if the loads and constraints are constant";
         getDomainPtr()->revertToLastCommit();
         return -2;
       }
@@ -166,9 +181,14 @@ int XC::StaticAnalysis::solve_current_step(int num_step)
     const int result= getEquiSolutionAlgorithmPtr()->solveCurrentStep();
     if(result < 0)
       {
-        std::cerr << "StaticAnalysis::new_domain_step() - the Algorithm failed"
+        std::cerr << nombre_clase() << "::" << __FUNCTION__
+		  << "; the Algorithm failed"
                   << " at step: " << num_step << " with domain at load factor "
-                  << getDomainPtr()->getTimeTracker().getCurrentTime() << std::endl;
+                  << getDomainPtr()->getTimeTracker().getCurrentTime()
+		  << std::endl;
+        std::cerr << "In a static analysis, "
+                  << " a number of steps greater than 1 is useless"
+                  << " if the loads and constraints are constant";	  
         getDomainPtr()->revertToLastCommit();
         getStaticIntegratorPtr()->revertToLastStep();
         return -3;
@@ -176,7 +196,7 @@ int XC::StaticAnalysis::solve_current_step(int num_step)
     return result;
   }
 
-//! @brief Calcula las sensibilidades para el paso actual of the analysis.
+//! @brief Computes sensitivities for the current analysis step.
 int XC::StaticAnalysis::compute_sensitivities_step(int num_step)
   {
     int result= 0;
@@ -186,9 +206,15 @@ int XC::StaticAnalysis::compute_sensitivities_step(int num_step)
         result= theSensitivityAlgorithm->computeSensitivities();
         if(result < 0)
           {
-            std::cerr << "StaticAnalysis::compute_sensitivities_step() - the XC::SensitivityAlgorithm failed";
-            std::cerr << " at step: " << num_step << " with domain at load factor ";
-            std::cerr << getDomainPtr()->getTimeTracker().getCurrentTime() << std::endl;
+            std::cerr << nombre_clase() << "::" << __FUNCTION__
+		      << "; the XC::SensitivityAlgorithm failed"
+		      << " at step: " << num_step
+		      << " with domain at load factor "
+		      << getDomainPtr()->getTimeTracker().getCurrentTime()
+		      << std::endl;
+            std::cerr << "In a static analysis, "
+                      << " a number of steps greater than 1 is useless"
+                      << " if the loads and constraints are constant";
             getDomainPtr()->revertToLastCommit();
             getStaticIntegratorPtr()->revertToLastStep();
             return -5;
@@ -204,10 +230,14 @@ int XC::StaticAnalysis::commit_step(int num_step)
     int result= getStaticIntegratorPtr()->commit();
     if(result < 0)
       {
-        std::cerr << "StaticAnalysis::commit_step() - "
+        std::cerr << nombre_clase() << "::" << __FUNCTION__ << "; "
                   << "the Integrator failed to commit"
                   << " at step: " << num_step << " with domain at load factor "
-                  << getDomainPtr()->getTimeTracker().getCurrentTime() << std::endl;
+                  << getDomainPtr()->getTimeTracker().getCurrentTime()
+		  << std::endl;
+        std::cerr << "In a static analysis, "
+                  << " a number of steps greater than 1 is useless"
+                  << " if the loads and constraints are constant";	  
         getDomainPtr()->revertToLastCommit();
         getStaticIntegratorPtr()->revertToLastStep();
         return -4;
@@ -251,6 +281,10 @@ int XC::StaticAnalysis::run_analysis_step(int num_step,int numSteps)
   }
 
 //! @brief Performs the analysis.
+//!
+//! @param numSteps: number of steps in the analysis
+//! (for static analysis, if the loads are constant it's useless to
+//! increase the number of steps so \p numSteps= 1)
 int XC::StaticAnalysis::analyze(int numSteps)
   {
     assert(metodo_solu);
@@ -278,13 +312,15 @@ int XC::StaticAnalysis::initialize(void)
         domainStamp= stamp;
         if(this->domainChanged() < 0)
           {
-            std::cerr << "DirectIntegrationAnalysis::initialize() - domainChanged() failed\n";
+            std::cerr << nombre_clase() << "::" << __FUNCTION__
+		      << "; domainChanged() failed\n";
             return -1;
           }
       }
     if(getStaticIntegratorPtr()->initialize() < 0)
       {
-        std::cerr << "DirectIntegrationAnalysis::initialize() - integrator initialize() failed\n";
+        std::cerr << nombre_clase() << "::" << __FUNCTION__
+		  << "; integrator initialize() failed\n";
         return -2;
       }
     else

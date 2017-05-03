@@ -121,6 +121,8 @@ class StaticAnalysis: public Analysis
 #endif
     // AddingSensitivity:END /////////////////////////////////
   };
+
+//! @brief Virtual constructor.
 inline Analysis *StaticAnalysis::getCopy(void) const
   { return new StaticAnalysis(*this); }
 } // end of XC namespace

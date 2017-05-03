@@ -101,6 +101,8 @@ bool XC::TransientDomainDecompositionAnalysis::doesIndependentAnalysis(void)
   { return true; }
 
 //! @brief Performs the analysis.
+//!
+//! @param dT: time increment.
 int XC::TransientDomainDecompositionAnalysis::analyze(double dT)
   {
     assert(metodo_solu);
@@ -109,7 +111,7 @@ int XC::TransientDomainDecompositionAnalysis::analyze(double dT)
     int result = 0;
     Domain *the_Domain = this->getDomainPtr();
 
-    // check for change in XC::Domain since last step. As a change can
+    // check for change in Domain since last step. As a change can
     // occur in a commit() in a domaindecomp with load balancing
     // this must now be inside the loop
     int stamp = the_Domain->hasDomainChanged();
@@ -119,7 +121,8 @@ int XC::TransientDomainDecompositionAnalysis::analyze(double dT)
         result= this->domainChanged();
         if(result < 0)
           {
-            std::cerr << "XC::TransientDomainDecompositionAnalysis::analyze() - domainChanged failed";
+            std::cerr << nombre_clase() << "::" << __FUNCTION__
+	              << "; domainChanged failed";
             return -1;
           }	
       }
@@ -127,9 +130,11 @@ int XC::TransientDomainDecompositionAnalysis::analyze(double dT)
     // result =newStepDomain(theAnalysisModel);
     if(result < 0)
       {
-        std::cerr << "XC::TransientDomainDecompositionAnalysis::analyze() - the XC::AnalysisModel failed";
-        std::cerr << " with domain at load factor ";
-        std::cerr << the_Domain->getTimeTracker().getCurrentTime() << std::endl;
+        std::cerr << nombre_clase() << "::" << __FUNCTION__
+	          << "; the AnalysisModel failed"
+		  << " with domain at load factor "
+		  << the_Domain->getTimeTracker().getCurrentTime()
+		  << std::endl;
         the_Domain->revertToLastCommit();
         return -2;
       }
@@ -137,9 +142,11 @@ int XC::TransientDomainDecompositionAnalysis::analyze(double dT)
     result = getTransientIntegratorPtr()->newStep(dT);
     if(result < 0)
       {
-        std::cerr << "XC::TransientDomainDecompositionAnalysis::analyze() - the XC::Integrator failed";
-        std::cerr << " with domain at load factor ";
-        std::cerr << the_Domain->getTimeTracker().getCurrentTime() << std::endl;
+        std::cerr << nombre_clase() << "::" << __FUNCTION__
+		  << "; the Integrator failed"
+		  << " with domain at load factor "
+		  << the_Domain->getTimeTracker().getCurrentTime()
+		  << std::endl;
         the_Domain->revertToLastCommit();
         return -2;
       }
@@ -147,9 +154,11 @@ int XC::TransientDomainDecompositionAnalysis::analyze(double dT)
     result = getEquiSolutionAlgorithmPtr()->solveCurrentStep();
     if(result < 0)
       {
-        std::cerr << "XC::TransientDomainDecompositionAnalysis::analyze() - the Algorithm failed";
-        std::cerr << " with domain at load factor ";
-        std::cerr << the_Domain->getTimeTracker().getCurrentTime() << std::endl;
+        std::cerr << nombre_clase() << "::" << __FUNCTION__
+		  << "; the Algorithm failed"
+		  << " with domain at load factor "
+		  << the_Domain->getTimeTracker().getCurrentTime()
+		  << std::endl;
         the_Domain->revertToLastCommit();	    
         getTransientIntegratorPtr()->revertToLastStep();
         return -3;
@@ -158,10 +167,11 @@ int XC::TransientDomainDecompositionAnalysis::analyze(double dT)
     result = getTransientIntegratorPtr()->commit();
     if(result < 0)
       {
-        std::cerr << "TransientDomainDecompositionAnalysis::analyze() - ";
-        std::cerr << "the Integrator failed to commit";
-        std::cerr << " with domain at load factor ";
-        std::cerr << the_Domain->getTimeTracker().getCurrentTime() << std::endl;
+        std::cerr << nombre_clase() << "::" << __FUNCTION__
+		  << "the Integrator failed to commit"
+		  << " with domain at load factor "
+		  << the_Domain->getTimeTracker().getCurrentTime()
+		  << std::endl;
         the_Domain->revertToLastCommit();	    
         getTransientIntegratorPtr()->revertToLastStep();
         return -4;
@@ -177,19 +187,24 @@ int XC::TransientDomainDecompositionAnalysis::initialize(void)
     
     // check if domain has undergone change
     int stamp = the_Domain->hasDomainChanged();
-    if (stamp != domainStamp) {
-      domainStamp = stamp;	
-      if (this->domainChanged() < 0) {
-	std::cerr << "XC::DirectIntegrationAnalysis::initialize() - domainChanged() failed\n";
-	return -1;
-      }	
-    }
-    if (getTransientIntegratorPtr()->initialize() < 0) {
-	std::cerr << "XC::DirectIntegrationAnalysis::initialize() - integrator initialize() failed\n";
+    if(stamp != domainStamp)
+      {
+        domainStamp = stamp;	
+        if(this->domainChanged() < 0)
+	  {
+	    std::cerr << nombre_clase() << "::" << __FUNCTION__
+		      << "; domainChanged() failed\n";
+	    return -1;
+          }	
+      }
+    if(getTransientIntegratorPtr()->initialize() < 0)
+      {
+	std::cerr << nombre_clase() << "::" << __FUNCTION__
+		  << "; integrator initialize() failed\n";
 	return -2;
-    } else
+      }
+    else
       getTransientIntegratorPtr()->commit();
-    
     return 0;
   }
 
@@ -197,21 +212,22 @@ int XC::TransientDomainDecompositionAnalysis::initialize(void)
 int XC::TransientDomainDecompositionAnalysis::domainChanged(void)
   {
 
-  int result = 0;
+    int result = 0;
   
-  getAnalysisModelPtr()->clearAll();    
-  getConstraintHandlerPtr()->clearAll();
+    getAnalysisModelPtr()->clearAll();    
+    getConstraintHandlerPtr()->clearAll();
 
-  // now we invoke handle() on the constraint handler which
-  // causes the creation of XC::FE_Element and XC::DOF_Group objects
-  // and their addition to the XC::AnalysisModel.
+    // now we invoke handle() on the constraint handler which
+    // causes the creation of XC::FE_Element and XC::DOF_Group objects
+    // and their addition to the XC::AnalysisModel.
   
-  result = getConstraintHandlerPtr()->handle();
-  if (result < 0) {
-    std::cerr << "XC::TransientDomainDecompositionAnalysis::handle() - ";
-    std::cerr << "XC::ConstraintHandler::handle() failed";
-    return -1;
-  }	
+    result = getConstraintHandlerPtr()->handle();
+    if(result < 0)
+      {
+        std::cerr << nombre_clase() << "::" << __FUNCTION__ << "; ";
+        std::cerr << "XC::ConstraintHandler::handle() failed";
+        return -1;
+      }	
   
   // we now invoke number() on the numberer which causes
   // equation numbers to be assigned to all the DOFs in the
@@ -219,7 +235,7 @@ int XC::TransientDomainDecompositionAnalysis::domainChanged(void)
 
   result = getDOF_NumbererPtr()->numberDOF();
   if (result < 0) {
-    std::cerr << "XC::TransientDomainDecompositionAnalysis::handle() - ";
+    std::cerr << nombre_clase() << "::" << __FUNCTION__ << "; ";
     std::cerr << "XC::DOF_Numberer::numberDOF() failed";
     return -2;
   }	    
@@ -229,7 +245,7 @@ int XC::TransientDomainDecompositionAnalysis::domainChanged(void)
   Graph &theGraph = getAnalysisModelPtr()->getDOFGraph();
   result = getLinearSOEPtr()->setSize(theGraph);
   if (result < 0) {
-    std::cerr << "XC::TransientDomainDecompositionAnalysis::handle() - ";
+    std::cerr << nombre_clase() << "::" << __FUNCTION__ << "; ";
     std::cerr << "XC::LinearSOE::setSize() failed";
     return -3;
   }	    
@@ -239,14 +255,14 @@ int XC::TransientDomainDecompositionAnalysis::domainChanged(void)
   
   result = getTransientIntegratorPtr()->domainChanged();
   if (result < 0) {
-    std::cerr << "XC::TransientDomainDecompositionAnalysis::setAlgorithm() - ";
+    std::cerr << nombre_clase() << "::" << __FUNCTION__ << "; ";
     std::cerr << "XC::Integrator::domainChanged() failed";
     return -4;
   }	    
 
   result = getEquiSolutionAlgorithmPtr()->domainChanged();
   if (result < 0) {
-    std::cerr << "XC::TransientDomainDecompositionAnalysis::setAlgorithm() - ";
+    std::cerr << nombre_clase() << "::" << __FUNCTION__ << "; ";
     std::cerr << "XC::Algorithm::domainChanged() failed";
     return -5;
   }	        
@@ -258,14 +274,16 @@ int XC::TransientDomainDecompositionAnalysis::domainChanged(void)
 //! @brief Returns the number of external equations.
 int XC::TransientDomainDecompositionAnalysis::getNumExternalEqn(void)
   {
-    std::cerr << "XC::TransientDomainDecompositionAnalysis::getNumExternalEqn() - should never be called\n";
+    std::cerr << nombre_clase() << "::" << __FUNCTION__
+	      << "; should never be called\n";
     return 0;
   }
 
 //! @brief Returns the number of equations internas.
 int XC::TransientDomainDecompositionAnalysis::getNumInternalEqn(void)
   {
-    std::cerr << "XC::TransientDomainDecompositionAnalysis::getNumInternalEqn() - should never be called\n";
+    std::cerr << nombre_clase() << "::" << __FUNCTION__
+	      << "; should never be called\n";
     return 0;
   }
 
@@ -278,28 +296,32 @@ int XC::TransientDomainDecompositionAnalysis::newStep(double dT)
 
 int XC::TransientDomainDecompositionAnalysis::computeInternalResponse(void)
   {
-    std::cerr << "XC::TransientDomainDecompositionAnalysis::computeInternalResponse() - should never be called\n";
+    std::cerr << nombre_clase() << "::" << __FUNCTION__
+	      << "; should never be called\n";
     return 0;
   }
 
 //! @brief Forma la tangent stiffness matrix.
 int XC::TransientDomainDecompositionAnalysis::formTangent(void)
   {
-    std::cerr << "XC::TransientDomainDecompositionAnalysis::formTangent() - should never be called\n";
+    std::cerr << nombre_clase() << "::" << __FUNCTION__
+	      << "; should never be called\n";
     return 0;
   }
 
 //! @brief Forma el vector residuo.
 int XC::TransientDomainDecompositionAnalysis::formResidual(void)
   {
-    std::cerr << "XC::TransientDomainDecompositionAnalysis::formResidual() - should never be called\n";
+    std::cerr << nombre_clase() << "::" << __FUNCTION__
+	      << "; should never be called\n";
     return 0;
   }
 
 //! @brief ??
 int XC::TransientDomainDecompositionAnalysis::formTangVectProduct(Vector &force)
   {
-    std::cerr << "XC::TransientDomainDecompositionAnalysis::formTangVectProduct() - should never be called\n";
+    std::cerr << nombre_clase() << "::" << __FUNCTION__
+	      << "; should never be called\n";
     return 0;
   }
 
@@ -307,15 +329,17 @@ int XC::TransientDomainDecompositionAnalysis::formTangVectProduct(Vector &force)
 const XC::Matrix &XC::TransientDomainDecompositionAnalysis::getTangent(void)
   {
     static XC::Matrix errMatrix;
-    std::cerr << "XC::TransientDomainDecompositionAnalysis::getTangent() - should never be called\n";
+    std::cerr << nombre_clase() << "::" << __FUNCTION__
+	      << "; should never be called\n";
     return errMatrix;
   }
 
-//! @brief Returns the vector residuo.
+//! @brief Returns the unbalanced vector.
 const XC::Vector &XC::TransientDomainDecompositionAnalysis::getResidual(void)
   {
     static XC::Vector errVector;
-    std::cerr << "XC::TransientDomainDecompositionAnalysis::getResidual() - should never be called\n";
+    std::cerr << nombre_clase() << "::" << __FUNCTION__
+	      << "; should never be called\n";
     return errVector;
   }
 
@@ -323,7 +347,8 @@ const XC::Vector &XC::TransientDomainDecompositionAnalysis::getResidual(void)
 const XC::Vector &XC::TransientDomainDecompositionAnalysis::getTangVectProduct(void)
   {
     static XC::Vector errVector;
-    std::cerr << "XC::TransientDomainDecompositionAnalysis::getTangVectProduct() - should never be called\n";
+    std::cerr << nombre_clase() << "::" << __FUNCTION__
+	      << "; should never be called\n";
     return errVector;
   }
   
@@ -337,7 +362,8 @@ int XC::TransientDomainDecompositionAnalysis::sendSelf(CommParameters &cp)
 
     if(getEquiSolutionAlgorithmPtr() == 0)
       {
-        std::cerr << "XC::TransientDomainDecompositionAnalysis::sendSelf() - no objects exist!\n";
+        std::cerr << nombre_clase() << "::" << __FUNCTION__
+		  << "; no objects exist!\n";
         return -1;
       }
 
@@ -361,31 +387,36 @@ int XC::TransientDomainDecompositionAnalysis::sendSelf(CommParameters &cp)
     // invoke sendSelf() on all the objects
     if(getConstraintHandlerPtr()->sendSelf(cp) != 0)
       {
-        std::cerr << "XC::TransientDomainDecompositionAnalysis::sendSelf() - failed to send handler\n";
+        std::cerr << nombre_clase() << "::" << __FUNCTION__
+		  << "; failed to send handler\n";
         return -1;
       }
 
     if(getDOF_NumbererPtr()->sendSelf(cp) != 0)
       {
-        std::cerr << "XC::TransientDomainDecompositionAnalysis::sendSelf() - failed to send numberer\n";
+        std::cerr << nombre_clase() << "::" << __FUNCTION__
+		  << "; failed to send numberer\n";
         return -1;
       }
 
     if(getAnalysisModelPtr()->sendSelf(cp) != 0)
       {
-        std::cerr << "XC::TransientDomainDecompositionAnalysis::sendSelf() - failed to send model\n";
+        std::cerr << nombre_clase() << "::" << __FUNCTION__
+		  << "; failed to send model\n";
         return -1;
       }
 
     if(getEquiSolutionAlgorithmPtr()->sendSelf(cp) != 0)
       {
-        std::cerr << "XC::TransientDomainDecompositionAnalysis::sendSelf() - failed to send algorithm\n";
+        std::cerr << nombre_clase() << "::" << __FUNCTION__
+		  << "; failed to send algorithm\n";
         return -1;
       }
 
     if(getLinearSOEPtr()->sendSelf(cp) != 0)
       {
-       std::cerr << "XC::TransientDomainDecompositionAnalysis::sendSelf() - failed to send SOE\n";
+       std::cerr << nombre_clase() << "::" << __FUNCTION__
+		  << "; failed to send SOE\n";
        return -1;
       }
     else 
@@ -395,20 +426,23 @@ int XC::TransientDomainDecompositionAnalysis::sendSelf(CommParameters &cp)
 
     if(theSolver->sendSelf(cp) != 0)
       {
-        std::cerr << "XC::TransientDomainDecompositionAnalysis::sendSelf() - failed to send XC::Solver\n";
+        std::cerr << nombre_clase() << "::" << __FUNCTION__
+		  << "; failed to send XC::Solver\n";
         return -1;
       }
 
     if(getTransientIntegratorPtr()->sendSelf(cp) != 0)
       {
-        std::cerr << "XC::TransientDomainDecompositionAnalysis::sendSelf() - failed to send integrator\n";
+        std::cerr << nombre_clase() << "::" << __FUNCTION__
+		  << "; failed to send integrator\n";
         return -1;
       }
 
     if(metodo_solu->getConvergenceTestPtr() != 0)
       if(metodo_solu->getConvergenceTestPtr()->sendSelf(cp) != 0)
         {
-          std::cerr << "XC::TransientDomainDecompositionAnalysis::sendSelf() - failed to send integrator\n";
+          std::cerr << nombre_clase() << "::" << __FUNCTION__
+		    << "; failed to send integrator\n";
           return -1;
         }
     return 0;

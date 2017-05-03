@@ -78,6 +78,9 @@ class TransientAnalysis: public Analysis
     TransientAnalysis(SoluMethod *);
   public:
     //! @brief Performs the analysis.
+    //!
+    //! @param numSteps: number of steps in the analysis.
+    //! @param dT: time increment.
     virtual int analyze(int numSteps, double dT) = 0;    
   };
 } // end of XC namespace

@@ -79,6 +79,8 @@ class LinearBucklingAnalysis: public StaticAnalysis
     virtual const Vector &getEigenvector(int mode);
     virtual const double &getEigenvalue(int mode) const;
   };
+
+//! @brief Virtual constructor.
 inline Analysis *LinearBucklingAnalysis::getCopy(void) const
   { return new LinearBucklingAnalysis(*this); }
 } // end of XC namespace

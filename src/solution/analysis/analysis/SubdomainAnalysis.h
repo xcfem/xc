@@ -135,6 +135,7 @@ class SubdomainAnalysis: public Analysis, public MovableObject
     virtual int recvSelf(const CommParameters &);
   };
 
+//! @brief Virtual constructor.
 inline Analysis *SubdomainAnalysis::getCopy(void) const
   { return new SubdomainAnalysis(*this); }
 } // end of XC namespace
