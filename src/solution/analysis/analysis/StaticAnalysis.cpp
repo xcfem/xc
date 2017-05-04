@@ -119,9 +119,10 @@ int XC::StaticAnalysis::new_domain_step(int num_step)
                   << getDomainPtr()->getTimeTracker().getCurrentTime()
 		  << " after " << getConvergenceTest()->getCurrentIter()-1
 		  << " iterations." << std::endl;
-	std::cerr << "In a static analysis, "
-	          << " a number of steps greater than 1 is useless"
-	          << " if the loads and constraints are constant";
+	if(num_step>1)
+	  std::cerr << "In a static analysis, "
+	            << " a number of steps greater than 1 is useless"
+	            << " if the loads and constraints are constant";
         getDomainPtr()->revertToLastCommit();
         return -2;
       }
@@ -146,9 +147,10 @@ int XC::StaticAnalysis::check_domain_change(int num_step,int numSteps)
 		      << "; domainChanged failed"
 		      << " at step " << num_step << " of "
 		      << numSteps << std::endl;
-    	    std::cerr << "In a static analysis, "
-	              << " a number of steps greater than 1 is useless"
-	              << " if the loads and constraints are constant";
+	    if(num_step>1)
+    	      std::cerr << "In a static analysis, "
+	                << " a number of steps greater than 1 is useless"
+	                << " if the loads and constraints are constant";
             return -1;
           }
       }
@@ -166,9 +168,10 @@ int XC::StaticAnalysis::new_integrator_step(int num_step)
                   << " at step: " << num_step << " with domain at load factor "
                   << getDomainPtr()->getTimeTracker().getCurrentTime()
 		  << std::endl;
-        std::cerr << "In a static analysis, "
-                  << " a number of steps greater than 1 is useless"
-                  << " if the loads and constraints are constant";
+	if(num_step>1)
+          std::cerr << "In a static analysis, "
+                    << " a number of steps greater than 1 is useless"
+                    << " if the loads and constraints are constant";
         getDomainPtr()->revertToLastCommit();
         return -2;
       }
@@ -186,9 +189,10 @@ int XC::StaticAnalysis::solve_current_step(int num_step)
                   << " at step: " << num_step << " with domain at load factor "
                   << getDomainPtr()->getTimeTracker().getCurrentTime()
 		  << std::endl;
-        std::cerr << "In a static analysis, "
-                  << " a number of steps greater than 1 is useless"
-                  << " if the loads and constraints are constant";	  
+	if(num_step>1)
+          std::cerr << "In a static analysis, "
+                    << " a number of steps greater than 1 is useless"
+                    << " if the loads and constraints are constant";	  
         getDomainPtr()->revertToLastCommit();
         getStaticIntegratorPtr()->revertToLastStep();
         return -3;
@@ -212,9 +216,10 @@ int XC::StaticAnalysis::compute_sensitivities_step(int num_step)
 		      << " with domain at load factor "
 		      << getDomainPtr()->getTimeTracker().getCurrentTime()
 		      << std::endl;
-            std::cerr << "In a static analysis, "
-                      << " a number of steps greater than 1 is useless"
-                      << " if the loads and constraints are constant";
+	    if(num_step>1)
+              std::cerr << "In a static analysis, "
+                        << " a number of steps greater than 1 is useless"
+                        << " if the loads and constraints are constant";
             getDomainPtr()->revertToLastCommit();
             getStaticIntegratorPtr()->revertToLastStep();
             return -5;
@@ -235,9 +240,10 @@ int XC::StaticAnalysis::commit_step(int num_step)
                   << " at step: " << num_step << " with domain at load factor "
                   << getDomainPtr()->getTimeTracker().getCurrentTime()
 		  << std::endl;
-        std::cerr << "In a static analysis, "
-                  << " a number of steps greater than 1 is useless"
-                  << " if the loads and constraints are constant";	  
+	if(num_step>1)
+          std::cerr << "In a static analysis, "
+                    << " a number of steps greater than 1 is useless"
+                    << " if the loads and constraints are constant";	  
         getDomainPtr()->revertToLastCommit();
         getStaticIntegratorPtr()->revertToLastStep();
         return -4;
