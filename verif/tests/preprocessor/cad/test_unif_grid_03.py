@@ -25,7 +25,7 @@ preprocessor=  prueba.getPreprocessor
 elast3d= typical_materials.defElasticIsotropic3d(preprocessor, "elast3d",30e6,0.3,0.0)
 
 nodes= preprocessor.getNodeLoader
-predefined_spaces.gdls_elasticidad3D(nodes)
+modelSpace= predefined_spaces.SolidMechanics3D(nodes)
 
 
 nodes.newSeedNode()

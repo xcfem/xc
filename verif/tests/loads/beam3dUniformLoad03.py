@@ -31,7 +31,7 @@ matSeccPrueba= typical_materials.MaterialData("matprueba",E=7E9,nu=0.3,rho=2500)
 
 
 # Problem type
-predefined_spaces.gdls_resist_materiales3D(nodes)
+modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
 # Definimos el material
 defSeccAggregation.defSeccAggregation3d(preprocessor, seccPrueba,matSeccPrueba)
 nodes.defaultTag= 1 #First node number.

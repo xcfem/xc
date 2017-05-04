@@ -7,37 +7,100 @@ __version__= "3.0"
 __email__= "l.pereztato@ciccp.es, ana.Ortega@ciccp.es "
 
 import xc
+from miscUtils import LogMessages as lmsg
 
+class PredefinedSpace(object):
+  def __init__(self,nodes,dimSpace,numGdls):
+    '''Defines the dimension of the space and the number 
+       of DOFs for each node.
 
+       :param nodes: preprocessor nodes loader
+       :param dimSpace: dimension of the space (1, 2 or 3)
+       :param numGdls: number of degrees of freedom for each node.
+    '''
+    nodes.dimEspace= dimSpace
+    nodes.numGdls= numGdls
 
-def gdls_elasticidad2D(nodos):
+class SolidMechanics2D(PredefinedSpace):
+  def __init__(self,nodes):
+    '''Defines the dimension of the space: nodes by two coordinates (x,y) 
+       and two DOF for each node (Ux,Uy)
+
+       :param nodes: preprocessor nodes loader
+    '''
+    super(SolidMechanics2D,self).__init__(nodes,2,2)
+    self.Ux= 0
+    self.Uy= 1
+
+def gdls_elasticidad2D(nodes):
   '''Defines the dimension of the space: nodes by two coordinates (x,y) and two DOF for each node (Ux,Uy)
 
-  :param nodos: nodes loader
+  :param nodes: nodes loader
   '''
-  nodos.dimEspace= 2 #two coord. for each node (x,y).
-  nodos.numGdls= 2 #two DOF for each node (Ux,Uy).
+  lmsg.warning('gdls_elasticidad2D DEPRECATED; use SolidMechanics2D.')
+  return SolidMechanics2D(nodes)
 
-def gdls_resist_materiales2D(nodos):
+class StructuralMechanics2D(PredefinedSpace):
+  def __init__(self,nodes):
+    '''Defines the dimension of the space: nodes by two coordinates (x,y) 
+       and three DOF for each node (Ux,Uy,theta)
+
+       :param nodes: preprocessor nodes loader
+    '''
+    super(StructuralMechanics2D,self).__init__(nodes,2,3)
+    self.Ux= 0
+    self.Uy= 1
+    self.Theta= 2
+
+def gdls_resist_materiales2D(nodes):
   '''Defines the dimension of the space: nodes by two coordinates (x,y) and three DOF for each node (Ux,Uy,theta)
 
-  :param nodos: nodes loader
+  :param nodes: preprocessor nodes loader
   '''
-  nodos.dimEspace= 2 #two coord. for each node (x,y).
-  nodos.numGdls= 3 #three DOF for each node (Ux,Uy,theta).
+  lmsg.warning('gdls_resist_materiales2D DEPRECATED; use StructuralMechanics2D.')
+  return StructuralMechanics2D(nodes)
 
-def gdls_elasticidad3D(nodos):
-  '''Defines the dimension of the space: nodes by three coordinates (x,y,z) and three DOF for each node (Ux,Uy,Uz)
+class SolidMechanics3D(PredefinedSpace):
+  def __init__(self,nodes):
+    '''Defines the dimension of the space: nodes by three coordinates (x,y,z) 
+       and two DOF for each node (Ux,Uy,Uz)
 
-  :param nodos: nodes loader
+       :param nodes: preprocessor nodes loader
+    '''
+    super(SolidMechanics3D,self).__init__(nodes,3,3)
+    self.Ux= 0
+    self.Uy= 1
+    self.Uz= 2
+
+def gdls_elasticidad3D(nodes):
+  '''Defines the dimension of the space: nodes by three coordinates (x,y,z) 
+     and three DOF for each node (Ux,Uy,Uz)
+
+  :param nodes: preprocessor nodes loader
   '''
-  nodos.dimEspace= 3 #three coord. for each node (x,y,z).
-  nodos.numGdls= 3 #three DOF for each node (Ux,Uy,Uz).
+  lmsg.warning('gdls_elasticidad3D DEPRECATED; use SolidMechanics3D.')
+  return SolidMechanics3D(nodes)
 
-def gdls_resist_materiales3D(nodos):
+
+class StructuralMechanics3D(PredefinedSpace):
+  def __init__(self,nodes):
+    '''Defines the dimension of the space: nodes by three coordinates (x,y,z) and 
+       six DOF for each node (Ux,Uy,Uz,thetaX,thetaY,thetaZ)
+
+       :param nodes: preprocessor nodes loader
+    '''
+    super(StructuralMechanics3D,self).__init__(nodes,3,6)
+    self.Ux= 0
+    self.Uy= 1
+    self.Uz= 2
+    self.ThetaX= 3
+    self.ThetaY= 4
+    self.ThetaZ= 5
+    
+def gdls_resist_materiales3D(nodes):
   '''Defines the dimension of the space: nodes by three coordinates (x,y,z) and six DOF for each node (Ux,Uy,Uz,thetaX,thetaY,thetaZ)
 
-  :param nodos: nodes loader
+  :param nodes: preprocessor nodes loader
   '''
-  nodos.dimEspace= 3 #three coord. for each node (x,y,z).
-  nodos.numGdls= 6 #six DOF for each node (ux,uy,uz,thetaX,thetaY,thetaZ)
+  lmsg.warning('gdls_resist_materiales3D DEPRECATED; use StructuralMechanics3D.')
+  return StructuralMechanics3D(nodes)

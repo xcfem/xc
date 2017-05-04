@@ -28,7 +28,7 @@ F= 1.5e3 # Load magnitude (kN)
 prueba= xc.ProblemaEF()
 preprocessor=  prueba.getPreprocessor   
 nodes= preprocessor.getNodeLoader
-predefined_spaces.gdls_elasticidad3D(nodes)
+modelSpace= predefined_spaces.SolidMechanics3D(nodes)
 nodes.defaultTag= 1 #First node number.
 nod= nodes.newNodeXYZ(0,0.0,0.0)
 nod= nodes.newNodeXYZ(L,0.0,0.0)

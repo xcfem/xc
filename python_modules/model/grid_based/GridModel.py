@@ -921,7 +921,7 @@ class GridModel(object):
     self.grid.generatePoints() #Key points generation.
     self.materialData.setup(self.getPreprocessor()) #Material definition.
     nodes= self.getPreprocessor().getNodeLoader
-    predefined_spaces.gdls_resist_materiales3D(nodes)
+    modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
     nodes.newSeedNode()
 #    self.dicQuadSurf= dict() #Surfaces dictionary.
     if(hasattr(self,'conjSup')):

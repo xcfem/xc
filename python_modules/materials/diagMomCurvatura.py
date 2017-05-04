@@ -15,12 +15,12 @@ def getDiagMomentoCurvatura3d(preprocessor, nmbSecc, esfAxil, maxK, numIncr):
   :param maxK: Curvatura máxima alcanzada durante el análisis.
   :param numIncr: Número de incrementos en que se divide el intervalo 0->maxK.
   '''
-  nodos= preprocessor.getNodeLoader
+  nodes= preprocessor.getNodeLoader
 
-  predefined_spaces.gdls_resist_materiales3D(nodos)
-  nodos.newNodeIDXYZ(1001,1,0,0)
+  modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
+  nodes.newNodeIDXYZ(1001,1,0,0)
 
-  nodos.newNodeIDXYZ(1002,1,0,0)
+  nodes.newNodeIDXYZ(1002,1,0,0)
   elementos= preprocessor.getElementLoader
   elementos.defaultMaterial= nmbSecc
   elementos.defaultTag= 2001 #Tag for the next element.

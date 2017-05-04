@@ -30,7 +30,7 @@ n= 1e6 # Carga uniforme axial.
 prueba= xc.ProblemaEF()
 preprocessor=  prueba.getPreprocessor   
 nodes= preprocessor.getNodeLoader
-predefined_spaces.gdls_resist_materiales2D(nodes)
+modelSpace= predefined_spaces.StructuralMechanics2D(nodes)
 nodes.defaultTag= 1 #First node number.
 nod= nodes.newNodeXY(0,0)
 nod= nodes.newNodeXY(L,0.0)

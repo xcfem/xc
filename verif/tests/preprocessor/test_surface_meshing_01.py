@@ -31,7 +31,7 @@ prueba.errFileName= "/tmp/borrar.err" # Ignore warning messages
 preprocessor=  prueba.getPreprocessor
 nodes= preprocessor.getNodeLoader
 
-predefined_spaces.gdls_elasticidad2D(nodes)# Materials definition
+modelSpace= predefined_spaces.SolidMechanics2D(nodes)# Materials definition
 elast= typical_materials.defElasticMaterial(preprocessor, "elast",3000)
 
 nodes.newSeedNode()

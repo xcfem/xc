@@ -27,7 +27,7 @@ prueba= xc.ProblemaEF()
 preprocessor=  prueba.getPreprocessor
 nodes= preprocessor.getNodeLoader
 
-predefined_spaces.gdls_elasticidad2D(nodes)
+modelSpace= predefined_spaces.SolidMechanics2D(nodes)
 nodes.defaultTag= 1 #Number for next node will be 1.
 nodes.newNodeXYZ(0,0,0)
 nodes.newNodeXYZ(0,l-a-b,0)

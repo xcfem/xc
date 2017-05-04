@@ -32,7 +32,7 @@ prueba.logFileName= "/tmp/borrar.log" # Ignore warning messages
 preprocessor=  prueba.getPreprocessor
 nodes= preprocessor.getNodeLoader
 
-predefined_spaces.gdls_resist_materiales3D(nodes)
+modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
 nodes.defaultTag= 1 #First node number.
 nod= nodes.newNodeXYZ(1,0,0)
 nod= nodes.newNodeXYZ(1,0,0)

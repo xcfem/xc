@@ -7,12 +7,12 @@ from model import predefined_spaces
 from model import fix_node_6dof
 
 def modeloSecc2d(preprocessor,nmbS):
-  nodos= preprocessor.getNodeLoader
+  nodes= preprocessor.getNodeLoader
 
-  predefined_spaces.gdls_resist_materiales2D(nodos)
-  nodos.defaultTag= 1 #El número del próximo nodo será 1.
-  nodos.newNodeXY(1,0)
-  nodos.newNodeXY(1,0)
+  modelSpace= predefined_spaces.StructuralMechanics2D(nodes)
+  nodes.defaultTag= 1 #El número del próximo nodo será 1.
+  nodes.newNodeXY(1,0)
+  nodes.newNodeXY(1,0)
 
   elementos= preprocessor.getElementLoader
   elementos.dimElem= 1
@@ -27,9 +27,9 @@ def nuevoZeroLengthSecc2d(preprocessor,nmbS, tagNodo, tagElem):
   idNod1= tagNodo
   idNod2= (tagNodo+1)
 
-   # Definimos nodos
-  nodos.newNodeIDXYZ(idNod1,tagNodo,0,0)
-  nodos.newNodeIDXYZ(idNod2,tagNodo,0,0)
+   # Define nodes
+  nodes.newNodeIDXYZ(idNod1,tagNodo,0,0)
+  nodes.newNodeIDXYZ(idNod2,tagNodo,0,0)
 
   coacciones= preprocessor.getConstraintLoader
   fix_node_6dof.fixNode6DOF(coacciones,idNod1)

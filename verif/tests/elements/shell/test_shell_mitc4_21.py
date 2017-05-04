@@ -26,7 +26,7 @@ q= -2
 prueba= xc.ProblemaEF()
 preprocessor=  prueba.getPreprocessor
 nodes= preprocessor.getNodeLoader
-predefined_spaces.gdls_resist_materiales3D(nodes)
+modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
 nodes.newNodeIDXYZ(1,0,0,0)
 nodes.newNodeIDXYZ(2,1,0,0)
 nodes.newNodeIDXYZ(3,1,1,0)

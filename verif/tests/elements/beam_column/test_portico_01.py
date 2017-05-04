@@ -35,7 +35,7 @@ P= 1000 # Carga (pounds)-fuerza.
 prueba= xc.ProblemaEF()
 preprocessor=  prueba.getPreprocessor
 nodes= preprocessor.getNodeLoader
-predefined_spaces.gdls_resist_materiales2D(nodes)
+modelSpace= predefined_spaces.StructuralMechanics2D(nodes)
 nodes.defaultTag= 1
 nodes.newNodeXY(0,0) # Primer pórtico.
 nod= nodes.newNodeXY(0,H)

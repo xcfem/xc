@@ -41,7 +41,7 @@ ptoAplic= xc.Vector([1+x*L*math.sqrt(2)/2.0,3+x*L*math.sqrt(2)/2.0,0])
 prueba= xc.ProblemaEF()
 preprocessor=  prueba.getPreprocessor   
 nodes= preprocessor.getNodeLoader
-predefined_spaces.gdls_resist_materiales3D(nodes)
+modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
 
 nodes.defaultTag= 1 #First node number.
 nod= nodes.newNodeXYZ(1,3,0)

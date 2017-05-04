@@ -24,7 +24,7 @@ cooCentroElemTeor= xc.Vector([-1.36603,1.36603,0])
 prueba= xc.ProblemaEF()
 preprocessor=  prueba.getPreprocessor
 nodes= preprocessor.getNodeLoader
-predefined_spaces.gdls_elasticidad3D(nodes)
+modelSpace= predefined_spaces.SolidMechanics3D(nodes)
 # Materials definition
 elast= typical_materials.defElasticMaterial(preprocessor, "elast",3000)
 

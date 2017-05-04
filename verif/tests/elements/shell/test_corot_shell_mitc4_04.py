@@ -29,7 +29,7 @@ from model import fix_node_6dof
 prueba= xc.ProblemaEF()
 preprocessor=  prueba.getPreprocessor
 nodes= preprocessor.getNodeLoader
-predefined_spaces.gdls_resist_materiales3D(nodes)
+modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
 nodes.defaultTag= 1 #First node number.
 nod= nodes.newNodeXYZ(0,0,0)
 nod= nodes.newNodeXYZ(L/3,0,0)

@@ -65,7 +65,7 @@ problem=xc.ProblemaEF()              #necesary to create this instance of
                                      #the class xc.ProblemaEF()
 preprocessor=problem.getPreprocessor
 nodes= preprocessor.getNodeLoader     #nodes container
-predefined_spaces.gdls_resist_materiales3D(nodos=nodes)  #Defines the dimension of nodes  three coordinates (x,y,z) and six DOF for each node (Ux,Uy,Uz,thetaX,thetaY,thetaZ)
+modelSpace= predefined_spaces.StructuralMechanics3D(nodes)  #Defines the dimension of nodes  three coordinates (x,y,z) and six DOF for each node (Ux,Uy,Uz,thetaX,thetaY,thetaZ)
 
 
 nodes.defaultTag= 1 #First node number.

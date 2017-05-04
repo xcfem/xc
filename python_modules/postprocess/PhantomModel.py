@@ -122,7 +122,7 @@ class PhantomModel(object):
 
     retval= []
     nodes= self.preprocessor.getNodeLoader
-    predefined_spaces.gdls_resist_materiales3D(nodes)
+    modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
     elements= self.preprocessor.getElementLoader
     coacciones= self.preprocessor.getConstraintLoader
     # Definimos materiales

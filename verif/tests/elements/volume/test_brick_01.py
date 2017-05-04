@@ -21,7 +21,7 @@ preprocessor=  prueba.getPreprocessor
 elast= typical_materials.defElasticIsotropic3d(preprocessor, "elast3d",200000,0.3,0.0)
 
 nodes= preprocessor.getNodeLoader 
-predefined_spaces.gdls_elasticidad3D(nodes)
+modelSpace= predefined_spaces.SolidMechanics3D(nodes)
 nodes.defaultTag= 1 #Next node number.
 nod1= nodes.newNodeXYZ(100,0,100)
 nod2= nodes.newNodeXYZ(0,0,100)

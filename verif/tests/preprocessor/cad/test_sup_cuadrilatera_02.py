@@ -29,7 +29,7 @@ prueba.logFileName= "/tmp/borrar.log" # Ignore warning messages
 preprocessor=  prueba.getPreprocessor
 nodes= preprocessor.getNodeLoader
 
-predefined_spaces.gdls_elasticidad2D(nodes)# Materials definition
+modelSpace= predefined_spaces.SolidMechanics2D(nodes)# Materials definition
 
 elast= typical_materials.defElasticMaterial(preprocessor, "elast",3000)
 elast2d= typical_materials.defElasticIsotropicPlaneStress(preprocessor, "elast2d",E,nu,rho)

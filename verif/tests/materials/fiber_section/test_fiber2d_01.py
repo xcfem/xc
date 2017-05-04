@@ -26,7 +26,7 @@ prueba= xc.ProblemaEF()
 prueba.logFileName= "/tmp/borrar.log" # Ignore warning messages
 preprocessor=  prueba.getPreprocessor
 nodes= preprocessor.getNodeLoader
-predefined_spaces.gdls_resist_materiales2D(nodes)
+modelSpace= predefined_spaces.StructuralMechanics2D(nodes)
 
 # Definimos nodos
 nodes.defaultTag= 1 #First node number.

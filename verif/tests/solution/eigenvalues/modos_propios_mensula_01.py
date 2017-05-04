@@ -31,7 +31,7 @@ NumDiv= 10
 prueba= xc.ProblemaEF()
 preprocessor=  prueba.getPreprocessor
 nodes= preprocessor.getNodeLoader
-predefined_spaces.gdls_resist_materiales2D(nodes)
+modelSpace= predefined_spaces.StructuralMechanics2D(nodes)
 
 # Define materials
 scc= typical_materials.defElasticSection2d(preprocessor, "scc",A,E,I)

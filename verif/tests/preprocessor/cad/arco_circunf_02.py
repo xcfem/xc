@@ -26,7 +26,7 @@ preprocessor=  prueba.getPreprocessor
 elast= typical_materials.defElasticMaterial(preprocessor, "elast",3000)
 
 nodes= preprocessor.getNodeLoader
-predefined_spaces.gdls_elasticidad3D(nodes)
+modelSpace= predefined_spaces.SolidMechanics3D(nodes)
 nodes.newSeedNode()
 seedElemLoader= preprocessor.getElementLoader.seedElemLoader
 seedElemLoader.defaultMaterial= "elast"

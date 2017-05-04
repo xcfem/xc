@@ -42,7 +42,7 @@ preprocessor=  prueba.getPreprocessor
 prueba.logFileName= "/tmp/borrar.log" # Para no imprimir mensajes de advertencia
 nodes= preprocessor.getNodeLoader
 
-predefined_spaces.gdls_resist_materiales3D(nodes)
+modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
 nodes.newSeedNode()
 
 

@@ -31,7 +31,7 @@ preprocessor=  prb.getPreprocessor
 nodes= preprocessor.getNodeLoader
 
 # Problem type
-predefined_spaces.gdls_elasticidad2D(nodes)
+modelSpace= predefined_spaces.SolidMechanics2D(nodes)
 
 nodes.defaultTag= 1 #First node number.
 nodes.newNodeXYZ(0,0,0)

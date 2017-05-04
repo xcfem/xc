@@ -51,8 +51,8 @@ def simulaShellElemFromTable(preprocessor,nmbDBase, nmbTablaElem, sectionName, o
      nmbTableElem: Nombre de la tabla que contiene los índices de elemento.
      sectionName: Nombre de la sección que se asigna a cada elemento.
   '''
-  nodos= preprocessor.getNodeLoader
-  prdefined_spaces.gdls_resist_materiales3D(nodos)
+  nodes= preprocessor.getNodeLoader
+  modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
   elements= preprocessor.getElementLoader
   elements.dimElem= 1
   elements.defaultMaterial= sectionName

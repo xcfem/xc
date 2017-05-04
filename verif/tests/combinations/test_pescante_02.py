@@ -40,7 +40,7 @@ densHorm= 2500 # Densidad del hormigón armado.
 prueba= xc.ProblemaEF()
 preprocessor=  prueba.getPreprocessor
 nodes= preprocessor.getNodeLoader
-predefined_spaces.gdls_resist_materiales3D(nodes)
+modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
 nodes.defaultTag= 1 #First node number.
 nod1= nodes.newNodeXYZ(2.0,0.0,0.0)
 nod2= nodes.newNodeXYZ(2.0,0.0,4.0)

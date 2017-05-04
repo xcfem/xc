@@ -38,7 +38,7 @@ preprocessor=  prueba.getPreprocessor
 nodes= preprocessor.getNodeLoader
 
 # Problem type
-predefined_spaces.gdls_resist_materiales3D(nodes)
+modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
 nodes.defaultTag= 1 #First node number.
 nodes.newNodeXYZ(0,0.0,0.0)
 nodes.newNodeXYZ(L,0.0,0.0)

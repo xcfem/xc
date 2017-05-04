@@ -24,7 +24,7 @@ prueba= xc.ProblemaEF()
 prueba.logFileName= "/tmp/borrar.log" # Para no imprimir mensajes de advertencia
 preprocessor=  prueba.getPreprocessor
 nodes= preprocessor.getNodeLoader
-predefined_spaces.gdls_elasticidad2D(nodes)
+modelSpace= predefined_spaces.SolidMechanics2D(nodes)
 
 # This is the element set:
 #

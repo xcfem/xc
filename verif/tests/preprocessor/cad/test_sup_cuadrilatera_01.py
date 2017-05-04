@@ -27,7 +27,7 @@ nu= 0.3 # Coeficiente de Poison
 rho= 0.0 # Densidad
 
 # Problem type
-predefined_spaces.gdls_elasticidad2D(nodes)
+modelSpace= predefined_spaces.SolidMechanics2D(nodes)
 
 nodes.newSeedNode()
 

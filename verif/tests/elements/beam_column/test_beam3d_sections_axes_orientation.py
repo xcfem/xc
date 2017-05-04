@@ -96,7 +96,7 @@ test.errFileName= "/tmp/borrar.err" # Don't print errors.
 preprocessor=  test.getPreprocessor   
 nodes= preprocessor.getNodeLoader
 # Problem type
-predefined_spaces.gdls_resist_materiales3D(nodes) #Defines the dimension of
+modelSpace= predefined_spaces.StructuralMechanics3D(nodes) #Defines the dimension of
                   #the space: nodes by three coordinates (x,y,z) and six
                   #DOF for each node (Ux,Uy,Uz,thetaX,thetaY,thetaZ)
 

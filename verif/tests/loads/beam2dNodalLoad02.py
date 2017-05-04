@@ -36,7 +36,7 @@ nodes= preprocessor.getNodeLoader
 sccPrueba= paramRectangularSection.RectangularSection("prueba",b,h)
 matSccPrueba=typical_materials.MaterialData(name='matSec',E=E,nu=0.3,rho=2500)
 
-predefined_spaces.gdls_resist_materiales2D(nodes)
+modelSpace= predefined_spaces.StructuralMechanics2D(nodes)
 # Definimos el material
 defSeccAggregation.defSeccAggregation2d(preprocessor, sccPrueba,matSccPrueba)
 nodes.defaultTag= 1 #First node number.

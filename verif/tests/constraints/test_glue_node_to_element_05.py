@@ -27,7 +27,7 @@ p3= geom.Pos3d(1,1,0)
 p4= geom.Pos3d(0,1,0)
 
 # Problem type
-predefined_spaces.gdls_resist_materiales3D(nodes)
+modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
 n1= nodes.newNodeXYZ(p1.x,p1.y,p1.z)
 n2= nodes.newNodeXYZ(p2.x,p2.y,p2.z)
 n3= nodes.newNodeXYZ(p3.x,p3.y,p3.z)

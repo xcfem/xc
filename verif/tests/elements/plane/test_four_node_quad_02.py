@@ -29,7 +29,7 @@ prueba= xc.ProblemaEF()
 preprocessor=  prueba.getPreprocessor
 nodes= preprocessor.getNodeLoader
 
-predefined_spaces.gdls_elasticidad2D(nodes)
+modelSpace= predefined_spaces.SolidMechanics2D(nodes)
 
 nodes.defaultTag= 1; nodes.newNodeXY(0,0)
 nodes.defaultTag= 2; nodes.newNodeXY(L/3,0)

@@ -20,7 +20,7 @@ ndivZ= 500
 prueba= xc.ProblemaEF()
 preprocessor=  prueba.getPreprocessor
 nodes= preprocessor.getNodeLoader
-predefined_spaces.gdls_elasticidad3D(nodes)
+modelSpace= predefined_spaces.SolidMechanics3D(nodes)
 # Define materials
 elast= typical_materials.defElasticMaterial(preprocessor, "elast",3000)
 

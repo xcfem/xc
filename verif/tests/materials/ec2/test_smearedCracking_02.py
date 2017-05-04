@@ -56,7 +56,7 @@ Flist=np.arange(0e3,400e3,10e3)     # axial force [N]
 prueba= xc.ProblemaEF()
 preprocessor=  prueba.getPreprocessor
 nodes= preprocessor.getNodeLoader     #nodes container
-predefined_spaces.gdls_resist_materiales2D(nodos=nodes)  #Defines the dimension of nodes  three coordinates (x,y,z) and six DOF for each node (Ux,Uy,theta)
+modelSpace= predefined_spaces.StructuralMechanics2D(nodes)  #Defines the dimension of nodes  three coordinates (x,y,z) and six DOF for each node (Ux,Uy,theta)
 
 
 nodes.defaultTag= 1 #First node number.

@@ -89,7 +89,7 @@ R0= xc.Vector([RR[0],RR[2],RR[1]])
 
 fourFibersSection.revertToStart()
 nodes= preprocessor.getNodeLoader
-predefined_spaces.gdls_resist_materiales3D(nodes)
+modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
 nodes.defaultTag= 1 #First node number.
 nod= nodes.newNodeXYZ(0.0,0.0,0.0)
 nod= nodes.newNodeXYZ(L,0.0,0.0)

@@ -57,7 +57,7 @@ prueba= xc.ProblemaEF()
 preprocessor=  prueba.getPreprocessor
 nodes= preprocessor.getNodeLoader
 # Problem type
-predefined_spaces.gdls_resist_materiales2D(nodes)
+modelSpace= predefined_spaces.StructuralMechanics2D(nodes)
 nodes.defaultTag= 1 #First node number.
 nodes.newNodeXY(0,0.0)
 nodes.newNodeXY(L,0.0)

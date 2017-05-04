@@ -39,7 +39,7 @@ preprocessor=  prueba.getPreprocessor
 nodes= preprocessor.getNodeLoader
 
 # Problem type
-predefined_spaces.gdls_resist_materiales2D(nodes)
+modelSpace= predefined_spaces.StructuralMechanics2D(nodes)
 # Materials definition
 scc= typical_materials.defElasticSection2d(preprocessor, "scc",A,E,I)
 
