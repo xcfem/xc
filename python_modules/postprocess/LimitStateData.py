@@ -65,6 +65,12 @@ class LimitStateData(object):
     fNameDispl= self.getDisplacementsFileName()
     os.system("rm -f " + fNameInfForc) #Clear obsolete files.
     os.system("rm -f " + fNameDispl)
+    fIntF= open(fNameInfForc,"a")
+    fDisp= open(fNameDispl,"a")
+    fIntF.write(" Comb. , Elem. , Sect. , N , Vy , Vz , T , My , Mz \n")
+    fDisp.write(" Comb. , Node , Ux , Uy , Uz , ROTx , ROTy , ROTz \n")
+    fIntF.close()
+    fDisp.close()
     for key in loadCombinations.getKeys():
       comb= loadCombinations[key]
       feProblem.getPreprocessor.resetLoadCase()

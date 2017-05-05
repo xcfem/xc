@@ -64,7 +64,7 @@ class PhantomModel(object):
     self.internalForcesValues= defaultdict(list)
     internalForcesListing= csv.reader(f)
     internalForcesListing.next()    #skip first line (head)
-    for lst in internalForcesListing:    #lst: list of internal forces for each combination and element 
+    for lst in internalForcesListing:    #lst: list of internal forces for each combination and element
       if(len(lst)>0):
         idComb= lst[0]
         self.idCombs.add(idComb)
