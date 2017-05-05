@@ -11,7 +11,7 @@ __email__= "ana.Ortega@ciccp.es    l.pereztato@ciccp.es"
 from xcVtk.malla_ef import vtk_grafico_ef
 from xcVtk.malla_ef import Fields
 
-def displayFieldDirs1and2Base(limitStateLabel,argument,elementSet,genDescr,sectDescr,component,fUnitConv,fileName,captionTexts):
+def displayFieldDirs1and2Base(limitStateLabel,argument,elementSet,genDescr,sectDescr,component,fUnitConv,fileName,captionTexts,deform=False):
   '''Display a field defined over bi-dimensional elements in its two directions.
 
   :param limitStateLabel: label that identifies the limit state.
@@ -23,6 +23,8 @@ def displayFieldDirs1and2Base(limitStateLabel,argument,elementSet,genDescr,sectD
   :param fUnitConv: unit conversion factor (i.e N->kN => fUnitConv= 1e-3).
   :param fileName: file name to store the image. If none -> window on screen.
   :param captionTexts: dictionary of caption texts. 
+  :param deform: =True for display of current/deformed shape (defaults
+                   to False, i.e. display of initial/undeformed shape)
   '''
   defDisplay= vtk_grafico_ef.RecordDefDisplayEF()
   attributeName= limitStateLabel + 'Sect1'   #Normal stresses limit state direction 1.
@@ -32,9 +34,9 @@ def displayFieldDirs1and2Base(limitStateLabel,argument,elementSet,genDescr,sectD
 
   attributeName= limitStateLabel + 'Sect2'   #Normal stresses limit state direction 2
   field= Fields.getScalarFieldFromControlVar(attributeName,argument,elementSet,component,fUnitConv)
-  field.display(defDisplay,caption= captionBaseText + ', ' + sectDescr[1] )
+  field.display(defDisplay,caption= captionBaseText + ', ' + sectDescr[1],deform=deform )
 
-def displayFieldDirs1and2(limitStateLabel,argument,elementSet,component,fUnitConv,fileName,captionTexts):
+def displayFieldDirs1and2(limitStateLabel,argument,elementSet,component,fUnitConv,fileName,captionTexts,deform=False):
   '''Display a field defined over bi-dimensional elements in its two directions.
 
   :param limitStateLabel: label that identifies the limit state.
@@ -44,5 +46,7 @@ def displayFieldDirs1and2(limitStateLabel,argument,elementSet,component,fUnitCon
   :param fUnitConv: unit conversion factor (i.e N->kN => fUnitConv= 1e-3).
   :param fileName: file name to store the image. If none -> window on screen.
   :param captionTexts: dictionary of caption texts. 
+  :param deform: =True for display of current/deformed shape (defaults
+                   to False, i.e. display of initial/undeformed shape)
   '''
-  displayFieldDirs1and2Base(limitStateLabel,argument,elementSet,elementSet.genDescr,elementSet.sectDescr,component,fUnitConv,fileName,captionTexts)
+  displayFieldDirs1and2Base(limitStateLabel,argument,elementSet,elementSet.genDescr,elementSet.sectDescr,component,fUnitConv,fileName,captionTexts,deform=deform )

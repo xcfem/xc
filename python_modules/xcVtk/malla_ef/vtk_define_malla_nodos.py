@@ -7,7 +7,7 @@ def VtkCargaIdsNodos(recordGrid):
   nmbUGrid.GetPointData().SetStrings(etiqNod)
 
 def VtkDibujaIdsNodos(recordGrid, renderer):
-  # Dibuja las etiquetas de los nodos
+  '''Display node labels'''
   ids= vtk.vtkIdFilter()
   ids.SetInput(recordGrid.uGrid)
   ids.CellIdsOff()

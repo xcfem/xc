@@ -31,15 +31,18 @@ class NodePropertyDiagram(cd.ColoredDiagram):
     else:
       return node.getProp(self.propertyName)
 
-  def appendDataToDiagram(self, eSet,indxDiagrama):
-    # Append property values to diagram .
-    #   eSet: Element set.
+  def appendDataToDiagram(self, eSet,indxDiagrama,deform=False):
+    ''' Append property values to diagram .
+       :param eSet: Element set.
+       :param deform: =True for display of current/deformed shape (defaults
+                       to False, i.e. display of initial/undeformed shape)
+    ''' 
     elems= eSet.getElements
     for e in elems:
       self.vDir= e.getVDirWeakAxisGlobalCoord()
       v0= self.getValueForNode(e.getNodes[0])
       v1= self.getValueForNode(e.getNodes[1])
-      indxDiagrama= self.agregaDatosADiagrama(e,indxDiagrama,v0,v1)
+      indxDiagrama= self.agregaDatosADiagrama(e,indxDiagrama,v0,v1,deform)
 
   def agregaDiagrama(self):
     self.creaEstrucDatosDiagrama()
