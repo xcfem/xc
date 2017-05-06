@@ -1,15 +1,15 @@
-# Must run as root so that we can shutdown backuppc and mount drives 
+# Must run as root so that we can shutdown backuppc and mount drives
 if [ $(whoami) != "root" ]; then
-	echo "Debe ejecutar este guión como «root»."
-	echo "Use 'sudo sh instala_paquetes_debian.sh' e introduzca la contraseña cuando se le pida."
+	echo "You must run this script as root."
+	echo "Use 'sudo sh install_deb_packages.sh' and enter the password when prompted."
 	exit 1
 fi
 
-echo "Algunos paquetes se encuentran en las áreas «contrib» y «non-free» de la distribución Debian por lo que deben incluirse estas áreas en el archivo «sources.list antes de ejecutar este guión."
+echo "Some packages are in the "contrib" and "non-free" areas of the Debian distribution so these areas should be included in the sources.list file before running this script."
 
 # Verificar que el usuario desea continuar
-read -p "Continuar (s/n)?" REPLY
-if [ $REPLY != "s" ]; then
+read -p "Continue (y/n)?" REPLY
+if [ $REPLY != "y" ]; then
 	echo "Exiting..."
 	exit 1
 fi
@@ -18,6 +18,6 @@ apt-get install cmake cimg-dev g++ gfortran gnuplot libarpack2-dev libarpack++2-
 
 #mayavi installation. Some 'mayavi' packages seems
 #to require VTK 6 so we use pip. If you're a Debian user
-#you can help us with this sending us your comments. 
+#you can help us with this sending us your comments.
 
 sudo -H pip install mayavi

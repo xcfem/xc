@@ -146,7 +146,7 @@ class RecordDefDisplay(object):
       sys.stderr.write("View name: '"+self.viewName+"' unknown.")
 
   def setupAxes(self):
-    '''Add an vtkAxesActor to the renerer.'''
+    '''Add an vtkAxesActor to the renderer.'''
     bnd= self.gridRecord.getBND()
     offsetVector= bnd.diagonal*0.1
     offset= offsetVector.getModulo()

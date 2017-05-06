@@ -5,11 +5,11 @@ import xc
 from miscUtils import LogMessages as lmsg
 import creaArraySetData
 
-__author__= "Luis C. Pérez Tato (LCPT) Ana Ortega (AOO)"
-__copyright__= "Copyright 2015, LCPT AOO"
+__author__= "Luis C. Pérez Tato (LCPT) Ana Ortega (AO_O)"
+__copyright__= "Copyright 2015, LCPT AO_O"
 __license__= "GPL"
 __version__= "3.0"
-__email__= "l.pereztato@gmail.com  ana.Ortega.Ort@gmail.com"
+__email__= "l.pereztato@ciccp.es  ana.Ortega@ciccp.es"
 
 
 def VtkDefineActorKPoint(recordGrid, renderer, radius):
@@ -17,11 +17,11 @@ def VtkDefineActorKPoint(recordGrid, renderer, radius):
   It defines the scale, orientation, rendering properties, textures, ...
   
   :ivar recordGrid: unstructured grid (generic data set) to which incorporate
-                the actor KPoint
+                    the actor KPoint
   :ivar renderer:   name of the renderer (lights, views, ...) to be used in the
-                display
+                    display
   :ivar radius:     radius of the spheres to be employed in the KPoints 
-                representation
+                    representation
   '''
   sphereSource= vtk.vtkSphereSource()
   sphereSource.SetRadius(radius)
@@ -44,7 +44,7 @@ def VtkDefineActorKPoint(recordGrid, renderer, radius):
   renderer.AddActor(visKPts)
 
 def VtkDefineActorCells(recordGrid, renderer, tipoRepr):
-  # Actor for the surfaces.
+  ''' Actor for the surfaces.'''
   uGridMapper= vtk.vtkDataSetMapper()
   uGridMapper.SetInput(recordGrid.uGrid)
   cellActor= vtk.vtkActor()

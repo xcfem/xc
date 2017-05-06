@@ -17,7 +17,6 @@ def exportInternalForces(nmbComb, elems, fDesc):
   :param nmbComb: combination name.
   :param elems: element set.
   :param fDesc: file descriptor to write internal forces on.'''
-  fDesc.write(" Comb. , Elem. , Sect. , N , Vy , Vz , T , My , Mz \n")
   for e in elems:
     elementType= e.type()
     if('Shell' in elementType):

@@ -73,7 +73,13 @@ class RecordDefDisplayEF(vtk_grafico_base.RecordDefDisplay):
     visNodos.GetProperty().SetColor(.7, .5, .5)
     self.renderer.AddActor(visNodos)
 
-  def VtkCargaMallaElem(self,field):
+  def VtkCargaMallaElem(self,field,deform=False):
+    '''Load the element mesh
+
+    :param field: scalar field to be represented
+    :param deform:  =True for display of current/deformed shape (defaults
+                    to False, i.e. display of initial/undeformed shape)
+    '''
     # Definimos grid
     self.nodos= vtk.vtkPoints()
     self.gridRecord.uGrid= vtk.vtkUnstructuredGrid()
@@ -114,9 +120,15 @@ class RecordDefDisplayEF(vtk_grafico_base.RecordDefDisplay):
       if(c.getVtkCellType!= vtk.VTK_LINE):
         self.gridRecord.uGrid.InsertNextCell(c.getVtkCellType,vtx)
 
-  def defineEscenaMalla(self, field):
-    # Define la escena de la malla en el dispositivo de salida.
-    self.VtkCargaMallaElem(field)
+  def defineEscenaMalla(self, field,deform=False):
+    '''Define the scene for the mesh
+
+    :param field: scalar field to be represented
+    :param deform: =True for display of current/deformed shape (defaults
+                   to False, i.e. display of initial/undeformed shape) 
+    '''
+    
+    self.VtkCargaMallaElem(field,deform)
     self.renderer= vtk.vtkRenderer()
     self.renderer.SetBackground(self.bgRComp,self.bgGComp,self.bgBComp)
     #self.defineActorNode(0.02)
@@ -144,16 +156,19 @@ class RecordDefDisplayEF(vtk_grafico_base.RecordDefDisplay):
     self.setupGrid(xcSet)
     self.displayGrid(caption)
 
-  def displayMesh(self, xcSet, field= None, diagrams= None, fName= None, caption= ''):
-    ''' Parameters:
-       xcSet: set to be represented
-       field: field to show (optional)
-       diagrams: diagrams to show (optional)
-       fName: name of the graphic file to create (if None then -> screen window).
-       caption: text to display in the graphic.
+  def displayMesh(self, xcSet, field= None, diagrams= None, fName= None, caption= '',deform=False):
+    '''Display the finite element mesh 
+
+    :param xcSet: set to be displayed
+    :param field: scalar field to show (optional)
+    :param diagrams: diagrams to show (optional)
+    :param fName: name of the graphic file to create (if None -> screen window).
+    :param caption: text to display in the graphic.
+    :param deform: =True for display of current/deformed shape (defaults
+                   to False, i.e. display of initial/undeformed shape)
     '''
     self.setupGrid(xcSet)
-    self.defineEscenaMalla(field)
+    self.defineEscenaMalla(field,deform)
     if(diagrams):
       for d in diagrams:
         self.appendDiagram(d)

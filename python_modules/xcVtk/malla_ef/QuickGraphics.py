@@ -32,8 +32,9 @@ class QuickGraphics(object):
   def __init__(self,feProblem):
     self.feProblem= feProblem
     self.xcSet= self.feProblem.getPreprocessor.getSets.getSet('total')
-
-  def solve(self,loadCaseName='',loadCaseExpr=''):
+    self.loadCaseName=''
+    
+  def solve(self,loadCaseName,loadCaseExpr=''):
     self.loadCaseName=loadCaseName
     self.loadCaseExpr=loadCaseExpr
     preprocessor= self.feProblem.getPreprocessor
@@ -90,17 +91,21 @@ class QuickGraphics(object):
     return defDisplay
 
 
-  def displayDispRot(self,itemToDisp='',setToDisplay=None,fConvUnits=1.0,unitDescription= '',viewName='XYZPos',hCamFct=1.0,fileName=None):
+  def displayDispRot(self,itemToDisp='',setToDisplay=None,fConvUnits=1.0,unitDescription= '',viewName='XYZPos',hCamFct=1.0,fileName=None,deform=False):
     '''displays the component of the displacement or rotations in the 
     set of entities.
     
-    :param itemToDisp:  component of the displacement ('uX', 'uY' or 'uZ') or the 
-                  rotation ('rotX', rotY', 'rotZ') to be depicted 
-    :param setToDisplay:   set of entities to be represented (default to all entities)
-    :param fConvUnits:     factor of conversion to be applied to the results (defalts to 1)
+    :param itemToDisp: component of the displacement ('uX', 'uY' or 'uZ') 
+                  or the rotation ('rotX', rotY', 'rotZ') to be depicted 
+    :param setToDisplay:   set of entities to be represented (defaults to all 
+                  entities)
+    :param fConvUnits: factor of conversion to be applied to the results 
+                  (defaults to 1)
     :param unitDescription: string describing units like '[mm] or [cm]'
-    :param fileName:        name of the file to plot the graphic. Defaults to None,
-                            in that case an screen display is generated
+    :param fileName: name of the file to plot the graphic. Defaults to 
+                  None, in that case an screen display is generated
+    :param deform: =True for display of current/deformed shape (defaults
+                   to False, i.e. display of initial/undeformed shape)
     '''
     if(setToDisplay):
       self.xcSet= setToDisplay
@@ -112,25 +117,29 @@ class QuickGraphics(object):
       n.setProp('propToDisp',n.getDisp[vCompDisp])
     field= Fields.ScalarField('propToDisp',"getProp",None,fConvUnits)
     defDisplay= self.getDisplay(vwName=viewName,hCamF= hCamFct)
-    defDisplay.displayMesh(xcSet=self.xcSet,field=field,diagrams= None, fName=fileName,caption=self.loadCaseName+' '+itemToDisp+' '+unitDescription+' '+self.xcSet.name)
+    defDisplay.displayMesh(xcSet=self.xcSet,field=field,diagrams= None, fName=fileName,caption=self.loadCaseName+' '+itemToDisp+' '+unitDescription+' '+self.xcSet.name,deform=deform)
 
-  def displayIntForc(self,itemToDisp='',setToDisplay=None,fConvUnits=1.0,unitDescription= '',viewName='XYZPos',hCamFct=1.0,fileName=None):
+  def displayIntForc(self,itemToDisp='',setToDisplay=None,fConvUnits=1.0,unitDescription= '',viewName='XYZPos',hCamFct=1.0,fileName=None,deform=False):
     '''displays the component of internal forces in the 
     set of entities as a scalar field (i.e. appropiated for shell elements).
     
-    :param itemToDisp:   component of the internal forces ('N1', 'N2', 'N12', 'M1', 'M2', 'M12', 'Q1', 'Q2')
-                         to be depicted 
-    :param setToDisplay: set of entities to be represented (default to all entities)
-    :param fConvUnits:   factor of conversion to be applied to the results (defalts to 1)
+    :param itemToDisp:   component of the internal forces ('N1', 'N2', 'N12', 
+           'M1', 'M2', 'M12', 'Q1', 'Q2') to be depicted 
+    :param setToDisplay: set of entities to be represented (default to all 
+           entities)
+    :param fConvUnits:   factor of conversion to be applied to the results 
+           (defalts to 1)
     :param unitDescription: string like '[kN/m] or [kN m/m]'
     :param viewName:     name of the view  that contains the renderer (possible
-                         options: "XYZPos", "XPos", "XNeg","YPos", "YNeg",
-                         "ZPos", "ZNeg") (defaults to "XYZPos")
+           options: "XYZPos", "XPos", "XNeg","YPos", "YNeg", "ZPos", "ZNeg") 
+           (defaults to "XYZPos")
     :param hCamFct:     factor that applies to the height of the camera position
-                        in order to change perspective of isometric views 
-                        (defaults to 1, usual values 0.1 to 10)
+           in order to change perspective of isometric views (defaults to 1, 
+           usual values 0.1 to 10)
     :param fileName:    name of the file to plot the graphic. Defaults to None,
-                        in that case an screen display is generated
+           in that case an screen display is generated
+    :param deform: =True for display of current/deformed shape (defaults
+           to False, i.e. display of initial/undeformed shape)
     '''
     if(setToDisplay):
       self.xcSet= setToDisplay
@@ -145,9 +154,10 @@ class QuickGraphics(object):
       e.setProp(propName,mat.getMeanGeneralizedStressByName(vCompDisp))
     field= Fields.ExtrapolatedProperty(propName,"getProp",self.xcSet,fUnitConv= fConvUnits)
     defDisplay= self.getDisplay(vwName=viewName,hCamF= hCamFct)
-    field.display(defDisplay=defDisplay,fName=fileName,caption=self.loadCaseName+' '+itemToDisp+' '+unitDescription +' '+self.xcSet.name)
+    field.display(defDisplay=defDisplay,fName=fileName,caption=self.loadCaseName+' '+itemToDisp+' '+unitDescription +' '+self.xcSet.name,deform=deform)
 
-  def displayIntForcDiag(self,itemToDisp='',setToDisplay=None,fConvUnits=1.0,scaleFactor=1.0,unitDescription= '',viewName='XYZPos',hCamFct=1.0,fileName=None):
+
+  def displayIntForcDiag(self,itemToDisp='',setToDisplay=None,fConvUnits=1.0,scaleFactor=1.0,unitDescription= '',viewName='XYZPos',hCamFct=1.0,fileName=None,deform=False):
     '''displays the component of internal forces in the 
     set of entities as a diagram over lines (i.e. appropiated for beam elements).
     
@@ -165,6 +175,8 @@ class QuickGraphics(object):
                         (defaults to 1, usual values 0.1 to 10)
     :param fileName:     name of the file to plot the graphic. Defaults to None,
                          in that case an screen display is generated
+    :param deform: =     True for display of current/deformed shape (defaults
+                         to False, i.e. display of initial/undeformed shape)
     '''
     if(setToDisplay):
       self.xcSet= setToDisplay
@@ -174,13 +186,13 @@ class QuickGraphics(object):
     diagram.agregaDiagrama()
     defDisplay= self.getDisplay(vwName=viewName,hCamF= hCamFct)
     defDisplay.setupGrid(self.xcSet)
-    defDisplay.defineEscenaMalla(None)
+    defDisplay.defineEscenaMalla(None,deform)
     defDisplay.appendDiagram(diagram) #Append diagram to the scene.
 
     caption= self.loadCaseName+' '+itemToDisp+' '+unitDescription +' '+self.xcSet.name
     defDisplay.displayScene(caption=caption,fName=fileName)
 
-  def dispLoadCaseBeamEl(self,loadCaseName='',setToDisplay=None,fUnitConv=1.0,elLoadComp='transComponent',elLoadScaleF=1.0,nodLoadScaleF=1.0,viewName='XYZPos',hCamFct=1.0,caption='',fileName=None):
+  def dispLoadCaseBeamEl(self,loadCaseName='',setToDisplay=None,fUnitConv=1.0,elLoadComp='transComponent',elLoadScaleF=1.0,nodLoadScaleF=1.0,viewName='XYZPos',hCamFct=1.0,caption='',fileName=None,deform=False):
     '''displays the loads applied on beam elements and nodes for a given load case
     :param setToDisplay:    set of beam elements to be represented
     :param fUnitConv:       factor of conversion to be applied to the results (defaults to 1)
@@ -197,13 +209,15 @@ class QuickGraphics(object):
     :param caption:         caption for the graphic
     :param fileName:        name of the file to plot the graphic. Defaults to None,
                             in that case an screen display is generated
+    :param deform: =   True for display of current/deformed shape (defaults
+                       to False, i.e. display of initial/undeformed shape)
     '''
     preprocessor= self.feProblem.getPreprocessor
     loadPatterns= preprocessor.getLoadLoader.getLoadPatterns
     loadPatterns.addToDomain(loadCaseName)
     defDisplay= self.getDisplay(vwName=viewName,hCamF= hCamFct)
     defDisplay.setupGrid(self.xcSet)
-    defDisplay.defineEscenaMalla(None)
+    defDisplay.defineEscenaMalla(None,deform)
     orNodalLBar='H'  #default orientation of scale bar for nodal loads
     # element loads
     diagram= lld.LinearLoadDiagram(scale=elLoadScaleF,fUnitConv=fUnitConv,loadPatternName=loadCaseName,component=elLoadComp)
@@ -222,7 +236,7 @@ class QuickGraphics(object):
       defDisplay.renderer.AddActor2D(vField.scalarBar)
     defDisplay.displayScene(caption=caption,fName=fileName)
 
-  def displayNodeValueDiagram(self,itemToDisp='',setToDisplay=None,fConvUnits=1.0,scaleFactor=1.0,unitDescription= '',viewName='XYZPos',hCamFct=1.0,fileName=None):
+  def displayNodeValueDiagram(self,itemToDisp='',setToDisplay=None,fConvUnits=1.0,scaleFactor=1.0,unitDescription= '',viewName='XYZPos',hCamFct=1.0,fileName=None,deform=False):
     '''displays the a displacement (uX,uY,...) or a property defined in nodes 
     as a diagram over lines (i.e. appropiated for beam elements).
     
@@ -239,6 +253,8 @@ class QuickGraphics(object):
                         (defaults to 1, usual values 0.1 to 10)
     :param fileName:     name of the file to plot the graphic. Defaults to None,
                          in that case an screen display is generated
+    :param deform: =     True for display of current/deformed shape (defaults
+                         to False, i.e. display of initial/undeformed shape)
     '''
     if(setToDisplay):
       self.xcSet= setToDisplay
@@ -248,7 +264,7 @@ class QuickGraphics(object):
     diagram.agregaDiagrama()
     defDisplay= self.getDisplay(vwName=viewName,hCamF= hCamFct)
     defDisplay.setupGrid(self.xcSet)
-    defDisplay.defineEscenaMalla(None)
+    defDisplay.defineEscenaMalla(None,deform)
     defDisplay.appendDiagram(diagram) #Append diagram to the scene.
 
     caption= self.loadCaseName+' '+itemToDisp+' '+unitDescription +' '+self.xcSet.name

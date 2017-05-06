@@ -68,12 +68,12 @@ class ExtrapolatedScalarField(ScalarField):
     super(ExtrapolatedScalarField,self).__init__(name,functionName,component,fUnitConv)
     self.xcSet= xcSet
 
-  def display(self,defDisplay,fName= None,caption= ''):
-    defDisplay.displayMesh(self.xcSet,self,None,fName,caption)
+  def display(self,defDisplay,fName= None,caption= '',deform=False):
+    defDisplay.displayMesh(self.xcSet,self,None,fName,caption,deform)
     
   def plot(self,defDisplay,fName= None,caption= ''):
     lmsg.warning('ExtrapolatedScalarField.plot is DEPRECATED use display.')
-    self.display(defDisplay,fName,caption)
+    self.display(defDisplay,fName,caption,deform)
 
 class ExtrapolatedProperty(ExtrapolatedScalarField):
   '''Scalar field defined as property value at nodes.'''
@@ -83,9 +83,9 @@ class ExtrapolatedProperty(ExtrapolatedScalarField):
   def extrapolate(self):
     extrapolate_elem_attr.extrapolate_elem_function_attr(self.xcSet.getElements,self.name,"getProp", self.name)
 
-  def display(self,defDisplay,fName= None,caption= ''):
+  def display(self,defDisplay,fName= None,caption= '',deform=False):
     self.extrapolate()
-    defDisplay.displayMesh(self.xcSet,self,None,fName,caption)
+    defDisplay.displayMesh(self.xcSet,self,None,fName,caption,deform)
   def plot(self,defDisplay,fName= None,caption= ''):
     lmsg.warning('ExtrapolatedProperty.plot is DEPRECATED use display.')
     self.display(defDisplay,fName,caption)

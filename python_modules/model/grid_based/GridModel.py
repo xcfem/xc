@@ -1039,7 +1039,7 @@ class QuickGraphics(qg.QuickGraphics):
     super(QuickGraphics,self).__init__(model.getFEProblem())
 
 
-def displayFieldDirs1and2(limitStateLabel,argument,setDisp,component,fUnitConv,fileName,captionTexts):
+def displayFieldDirs1and2(limitStateLabel,argument,setDisp,component,fUnitConv,fileName,captionTexts,deform=False):
   '''Display a field defined over bi-dimensional elements in its two directions.
 
   :param limitStateLabel: label that identifies the limit state.
@@ -1049,5 +1049,7 @@ def displayFieldDirs1and2(limitStateLabel,argument,setDisp,component,fUnitConv,f
   :param fUnitConv: unit conversion factor (i.e N->kN => fUnitConv= 1e-3).
   :param fileName: file name to store the image. If none -> window on screen.
   :param captionTexts: dictionary of caption texts. 
+  :param deform: =True for display of current/deformed shape (defaults
+                   to False, i.e. display of initial/undeformed shape)
   '''
-  vtk_display_limit_state.displayFieldDirs1and2Base(limitStateLabel,argument,setDisp.elSet,setDisp.genDescr,setDisp.sectDescr,component,fUnitConv,fileName,captionTexts)
+  vtk_display_limit_state.displayFieldDirs1and2Base(limitStateLabel,argument,setDisp.elSet,setDisp.genDescr,setDisp.sectDescr,component,fUnitConv,fileName,captionTexts,deform)
