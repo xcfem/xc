@@ -1,7 +1,7 @@
 # Must run as root so that we can shutdown backuppc and mount drives
 if [ $(whoami) != "root" ]; then
 	echo "You must run this script as root."
-	echo "Use 'sudo sh install_debian.sh' and enter the password when prompted."
+	echo "Use 'sudo sh install_deb_packages.sh' and enter the password when prompted."
 	exit 1
 fi
 
