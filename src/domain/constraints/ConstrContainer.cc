@@ -745,7 +745,7 @@ std::string XC::ConstrContainer::getLoadPatternsNames(void) const
         const Domain *dom= getDomain();
         if(dom)
           {
-            const Preprocessor *preprocessor= dom->GetPreprocessor();
+            const Preprocessor *preprocessor= dom->getPreprocessor();
             if(preprocessor)
               {
                 const LoadLoader &loadLoader= preprocessor->getLoadLoader();
@@ -898,7 +898,7 @@ int XC::ConstrContainer::recvLPatternsTags(const int &posFlag,const int &posDbTa
         res= cp.receiveID(loadPatternsTags,getDbTagData(),CommMetaData(posDbTag));
     
         assert(dom);
-        Preprocessor *preprocessor= dom->GetPreprocessor();
+        Preprocessor *preprocessor= dom->getPreprocessor();
         if(preprocessor)
           {
             LoadLoader &loadLoader= preprocessor->getLoadLoader();

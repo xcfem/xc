@@ -77,13 +77,12 @@ class FE_Datastore: public Channel
   {
   private:
     FEM_ObjectBroker *theObjectBroker;
-    Preprocessor *preprocessor;
     static int lastDbTag;
     std::set<int> savedStates;
   protected:
     FEM_ObjectBroker *getObjectBroker(void);
-    const Preprocessor *get_preprocessor(void) const
-      { return preprocessor; }
+    const Preprocessor *getPreprocessor(void) const;
+    Preprocessor *getPreprocessor(void);
   public:
     FE_Datastore(Preprocessor &, FEM_ObjectBroker &theBroker);
     inline virtual ~FE_Datastore(void) {} 

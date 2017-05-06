@@ -37,30 +37,17 @@
 #include "domain/mesh/element/Element.h"
 #include "domain/mesh/node/Node.h"
 
-//! @brief Return a pointer to the preprocessor.
-const XC::Preprocessor *XC::EntMdlrBase::get_preprocessor(void) const
-  { return preprocessor; }
-//! @brief Return a pointer to the preprocessor.
-XC::Preprocessor *XC::EntMdlrBase::get_preprocessor(void)
-  { return preprocessor; }
+//! @brief Return a pointer to the object preprocessor.
+const XC::Preprocessor *XC::EntMdlrBase::getPreprocessor(void) const
+  { return dynamic_cast<const Preprocessor *>(Owner()); }
+
+//! @brief Return a pointer to the object preprocessor.
+XC::Preprocessor *XC::EntMdlrBase::getPreprocessor(void)
+  { return dynamic_cast<Preprocessor *>(Owner()); }
 
 //! @brief Constructor.
-XC::EntMdlrBase::EntMdlrBase(const std::string &nmb,Preprocessor *md)
-  : EntConNmb(nmb), MovableObject(0),preprocessor(md) {}
-
-//! @brief Copy constructor.
-XC::EntMdlrBase::EntMdlrBase(const EntMdlrBase &otro)
-  : EntConNmb(otro), MovableObject(otro), preprocessor(otro.preprocessor)
-  {}
-
-//! @brief Assignment operator.
-XC::EntMdlrBase &XC::EntMdlrBase::operator=(const EntMdlrBase &otro)
-  {
-    EntConNmb::operator=(otro);
-    MovableObject::operator=(otro);
-    preprocessor= otro.preprocessor;
-    return *this;
-  }
+XC::EntMdlrBase::EntMdlrBase(const std::string &nmb,Preprocessor *prep)
+  : EntConNmb(nmb,prep), MovableObject(0) {}
 
 //! @brief Return the object identifier in the model (tag).
 size_t XC::EntMdlrBase::GetTag(void) const
@@ -72,7 +59,7 @@ size_t XC::EntMdlrBase::GetTag(void) const
 //! @brief Check for preprocessor.
 bool XC::EntMdlrBase::check_preprocessor(void) const
   {
-    if(preprocessor)
+    if(getPreprocessor())
       return true;
     else
       {
@@ -91,7 +78,7 @@ XC::Pnt *XC::EntMdlrBase::BuscaPnt(const size_t &id_punto)
     Pnt *retval= nullptr;
     if(check_preprocessor())
       {
-        Cad &cad= get_preprocessor()->getCad();
+        Cad &cad= getPreprocessor()->getCad();
         retval= cad.getPuntos().busca(id_punto);
       }
     return retval;
@@ -104,7 +91,7 @@ const XC::Pnt *XC::EntMdlrBase::BuscaPnt(const size_t &id_punto) const
     const Pnt *retval= nullptr;
     if(check_preprocessor())
       {
-        const Cad &cad= get_preprocessor()->getCad();
+        const Cad &cad= getPreprocessor()->getCad();
         retval= cad.getPuntos().busca(id_punto);
       }
     return retval;
@@ -117,7 +104,7 @@ XC::Edge *XC::EntMdlrBase::BuscaEdge(const size_t &id_edge)
     Edge *retval= nullptr;
     if(check_preprocessor())
       {
-        Cad &cad= get_preprocessor()->getCad();
+        Cad &cad= getPreprocessor()->getCad();
         retval= cad.getLineas().busca(id_edge);
       }
     return retval;
@@ -130,7 +117,7 @@ const XC::Edge *XC::EntMdlrBase::BuscaEdge(const size_t &id_edge) const
     const Edge *retval= nullptr;
     if(check_preprocessor())
       {
-        const Cad &cad= get_preprocessor()->getCad();
+        const Cad &cad= getPreprocessor()->getCad();
         retval= cad.getLineas().busca(id_edge);
       }
     return retval;
@@ -143,7 +130,7 @@ XC::Face *XC::EntMdlrBase::BuscaFace(const size_t &id_face)
     Face *retval= nullptr;
     if(check_preprocessor())
       {
-        Cad &cad= get_preprocessor()->getCad();
+        Cad &cad= getPreprocessor()->getCad();
         retval= cad.getSurfaces().busca(id_face);
       }
     return retval;
@@ -156,7 +143,7 @@ const XC::Face *XC::EntMdlrBase::BuscaFace(const size_t &id_face) const
     const Face *retval= nullptr;
     if(check_preprocessor())
       {
-        const Cad &cad= get_preprocessor()->getCad();
+        const Cad &cad= getPreprocessor()->getCad();
         retval= cad.getSurfaces().busca(id_face);
       }
     return retval;

@@ -1005,7 +1005,7 @@ int XC::Domain::calculateNodalReactions(bool inclInertia,const double &tol)
   }
 
 //! @brief Returns (if possible) a pointer to the preprocessor.
-const XC::Preprocessor *XC::Domain::GetPreprocessor(void) const
+const XC::Preprocessor *XC::Domain::getPreprocessor(void) const
   {
     const Preprocessor *retval= nullptr;
     const EntProp *owr= Owner();
@@ -1015,7 +1015,7 @@ const XC::Preprocessor *XC::Domain::GetPreprocessor(void) const
   }
 
 //! @brief Returns (if possible) a pointer to the preprocessor.
-XC::Preprocessor *XC::Domain::GetPreprocessor(void)
+XC::Preprocessor *XC::Domain::getPreprocessor(void)
   {
     Preprocessor *retval= nullptr;
     EntProp *owr= Owner();

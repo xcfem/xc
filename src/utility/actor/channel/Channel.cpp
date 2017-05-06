@@ -55,7 +55,7 @@
 // Created: 11/96
 // Revision: A
 //
-// Purpose: This file contains the implementation of XC::Channel.
+// Purpose: This file contains the implementation of Channel.
 //
 // What: "@(#) Channel.C, revA"
 
@@ -70,7 +70,8 @@
 int XC::Channel::numChannel = 0;
 
 //! @brief Constructor.
-XC::Channel::Channel(void)
+XC::Channel::Channel(EntCmd *owr)
+  : EntCmd(owr)
   {
     numChannel++;
     tag = numChannel;

@@ -29,7 +29,7 @@
 #ifndef CAD_H
 #define CAD_H
 
-#include "xc_utils/src/nucleo/EntCmd.h"
+#include "preprocessor/PreprocessorContainer.h"
 #include <map>
 #include "boost/lexical_cast.hpp"
 #include "preprocessor/cad/entidades/MapPuntos.h"
@@ -49,7 +49,6 @@ class Vector3d;
 
 namespace XC {
 
-class Preprocessor;
 class Pnt;
 class UniformGrid;
 class SetEstruct;
@@ -66,15 +65,13 @@ class SisRef;
 //! points, lines, surfaces, bodies, etc.
 //!
 //! Maintain containers for this entities.
-class Cad: public EntCmd
+class Cad: public PreprocessorContainer
   {
+    friend class Preprocessor;
   private:
-    Preprocessor *preprocessor; //!< Preprocessor.
-
     template <class L>
     static void numera_lista(L &l);
     void numera(void);
-  private:
     MapSisRef reference_systems; //!< Reference systems container.
     MapTrfGeom transformaciones_geometricas; //!< Geometric transformations container.
 
@@ -88,15 +85,10 @@ class Cad: public EntCmd
 
   protected:
 
-    friend class Preprocessor;
     SetEstruct *busca_set_estruct(const MapUniformGrids::Indice &nmb);
   public:
     //! @brief Constructor.
     Cad(Preprocessor *mod= nullptr);
-    inline Preprocessor *getPreprocessor(void)
-      { return preprocessor; } 
-    inline const Preprocessor *getPreprocessor(void) const
-      { return preprocessor; } 
 
     Edge *busca_edge_extremos(const MapPuntos::Indice &,const MapPuntos::Indice &);
     const Edge *busca_edge_extremos(const MapPuntos::Indice &,const MapPuntos::Indice &) const;

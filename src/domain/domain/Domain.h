@@ -257,8 +257,8 @@ class Domain: public ObjWithRecorders, public DistributedBase
     friend int sendDomain(Domain &, int posDbTag,DbTagData &,CommParameters &cp);
     friend int receiveDomain(Domain &, int posDbTag,DbTagData &,const CommParameters &cp);
 
-    const Preprocessor *GetPreprocessor(void) const;
-    Preprocessor *GetPreprocessor(void);
+    const Preprocessor *getPreprocessor(void) const;
+    Preprocessor *getPreprocessor(void);
 
     // nodal methods required in domain interface for parallel interprter
     virtual double getNodeDisp(int nodeTag, int dof, int &errorFlag);

@@ -70,7 +70,7 @@ void XC::Element1D::vector2dUniformLoadGlobal(const Vector &v)
 
 void XC::Element1D::vector2dUniformLoadLocal(const Vector &v)
   {
-    Preprocessor *preprocessor= GetPreprocessor();
+    Preprocessor *preprocessor= getPreprocessor();
     MapLoadPatterns &casos= preprocessor->getLoadLoader().getLoadPatterns();
     static ID eTags(1);
     eTags[0]= getTag(); //Load for this element.
@@ -114,7 +114,7 @@ void XC::Element1D::vector2dPointByRelDistLoadLocal(const double &x,const Vector
     const size_t sz= v.Size();
     if(sz>1)
       {
-        Preprocessor *preprocessor= GetPreprocessor();
+        Preprocessor *preprocessor= getPreprocessor();
         MapLoadPatterns &casos= preprocessor->getLoadLoader().getLoadPatterns();
         static ID eTags(1);
         eTags[0]= getTag(); //Load for this element.
@@ -177,7 +177,7 @@ void XC::Element1D::vector3dUniformLoadLocal(const Vector &v)
     const size_t sz= v.Size();
     if(sz>2)
       {
-        Preprocessor *preprocessor= GetPreprocessor();
+        Preprocessor *preprocessor= getPreprocessor();
         MapLoadPatterns &casos= preprocessor->getLoadLoader().getLoadPatterns();
         static ID eTags(1);
         eTags[0]= getTag(); //Load for this element.
@@ -216,7 +216,7 @@ void XC::Element1D::vector3dPointByRelDistLoadLocal(const double &x,const Vector
     const size_t sz= v.Size();
     if(sz>2)
       {
-        Preprocessor *preprocessor= GetPreprocessor();
+        Preprocessor *preprocessor= getPreprocessor();
         MapLoadPatterns &casos= preprocessor->getLoadLoader().getLoadPatterns();
         static ID eTags(1);
         eTags[0]= getTag(); //Load for this element.
@@ -262,7 +262,7 @@ void XC::Element1D::vector3dPointLoadLocal(const Vector &p,const Vector &v)
 
 void XC::Element1D::strainLoad(const DeformationPlane &p1,const DeformationPlane &p2)
   {
-    Preprocessor *preprocessor= GetPreprocessor();
+    Preprocessor *preprocessor= getPreprocessor();
     MapLoadPatterns &casos= preprocessor->getLoadLoader().getLoadPatterns();
     static ID eTags(1);
     eTags[0]= getTag(); //Load for this element.

@@ -44,13 +44,9 @@ class Face;
 //!  \brief Base class of the preprocessor objects.
 class EntMdlrBase: public EntConNmb, public MovableObject
   {
-  private:
-    Preprocessor *preprocessor; //!< Preprocessor.
   protected:
     LabelContainer labels; //!< Label container.
 
-    const Preprocessor *get_preprocessor(void) const;
-    Preprocessor *get_preprocessor(void);
     bool check_preprocessor(void) const;
     int sendIdsEtiquetas(const int &,const int &, CommParameters &);
     int recvIdsEtiquetas(const int &,const int &, const CommParameters &);
@@ -58,12 +54,8 @@ class EntMdlrBase: public EntConNmb, public MovableObject
     int recvData(const CommParameters &);
   public:
     EntMdlrBase(const std::string &nmb="",Preprocessor *preprocessor= nullptr);
-    EntMdlrBase(const EntMdlrBase &otro);
-    EntMdlrBase &operator=(const EntMdlrBase &otro);
-    inline const Preprocessor *GetPreprocessor(void) const
-      { return get_preprocessor(); }
-    inline Preprocessor *GetPreprocessor(void)
-      { return get_preprocessor(); }
+    const Preprocessor *getPreprocessor(void) const;
+    Preprocessor *getPreprocessor(void);
 
     size_t GetTag(void) const;
 

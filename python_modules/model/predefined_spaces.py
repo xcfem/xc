@@ -18,6 +18,7 @@ class PredefinedSpace(object):
        :param dimSpace: dimension of the space (1, 2 or 3)
        :param numGdls: number of degrees of freedom for each node.
     '''
+    self.preprocessor= nodes.getPreprocessor
     nodes.dimEspace= dimSpace
     nodes.numGdls= numGdls
 
@@ -51,6 +52,40 @@ class StructuralMechanics2D(PredefinedSpace):
     self.Ux= 0
     self.Uy= 1
     self.Theta= 2
+    
+  def fixNode000(self, nodeTag):
+    '''Restrain all three node DOFs (i. e. make them zero).'''
+    constraints= self.preprocessor.getConstraintLoader
+    constraints.newSPConstraint(nodeTag,0,0.0) # nodeTag, DOF, constrValue
+    constraints.newSPConstraint(nodeTag,1,0.0)
+    constraints.newSPConstraint(nodeTag,2,0.0)
+
+  def fixNode00F(self, nodeTag):
+    '''Restrain only displacement DOFs (i. e. Ux= 0 and Uy= 0).'''
+    constraints= self.preprocessor.getConstraintLoader
+    constraints.newSPConstraint(nodeTag,0,0.0) # nodeTag, DOF, constrValue
+    constraints.newSPConstraint(nodeTag,1,0.0)
+
+  def fixNode0FF(self, nodeTag):
+    '''Restrain only X displacement DOF (i. e. Ux= 0).'''
+    self.preprocessor.getConstraintLoader.newSPConstraint(nodeTag,0,0.0) 
+
+  def fixNodeF0F(self, nodeTag):
+    '''Restrain only Y displacement DOF (i. e. Uy= 0).'''
+    self.preprocessor.getConstraintLoader.newSPConstraint(nodeTag,1,0.0) 
+
+  def fixNodeFF0(self, nodeTag):
+    '''Restrain only rotation DOF (i. e. Theta= 0).'''
+    self.preprocessor.getConstraintLoader.newSPConstraint(nodeTag,2,0.0)
+
+  def fixNodesLine(self, line):
+    '''Restrain all DOFs of the line nodes.'''  
+    constraints= self.preprocessor.getConstraintLoader
+    nn= linea.getNumNodes
+    for i in range(1,nn+1):
+      nodeTag= linea.getNodeI(i).tag
+      fixNode000(constraints,nodeTag)
+
 
 def gdls_resist_materiales2D(nodes):
   '''Defines the dimension of the space: nodes by two coordinates (x,y) and three DOF for each node (Ux,Uy,theta)
@@ -96,6 +131,24 @@ class StructuralMechanics3D(PredefinedSpace):
     self.ThetaX= 3
     self.ThetaY= 4
     self.ThetaZ= 5
+
+  def fixNode000_000(self, nodeTag):
+    '''Restrain all six node DOFs (i. e. make them zero).'''
+    constraints= self.preprocessor.getConstraintLoader
+    constraints.newSPConstraint(nodeTag,0,0.0) # nodeTag, DOF, constrValue
+    constraints.newSPConstraint(nodeTag,1,0.0)
+    constraints.newSPConstraint(nodeTag,2,0.0)
+    constraints.newSPConstraint(nodeTag,3,0.0)
+    constraints.newSPConstraint(nodeTag,4,0.0)
+    constraints.newSPConstraint(nodeTag,5,0.0)
+
+  def fixNode000_FFF(self, nodeTag):
+    '''Restrain only displacement DOFs (i. e. Ux= 0, Uy= 0 and Uz= 0).'''
+    constraints= self.preprocessor.getConstraintLoader
+    constraints.newSPConstraint(nodeTag,0,0.0) # nodeTag, DOF, constrValue
+    constraints.newSPConstraint(nodeTag,1,0.0)
+    constraints.newSPConstraint(nodeTag,2,0.0)
+
     
 def gdls_resist_materiales3D(nodes):
   '''Defines the dimension of the space: nodes by three coordinates (x,y,z) and six DOF for each node (Ux,Uy,Uz,thetaX,thetaY,thetaZ)

@@ -21,7 +21,7 @@
 //----------------------------------------------------------------------------
 //python_interface.tcc
 
-class_<XC::FE_Datastore, bases<XC::Channel>, boost::noncopyable  >("FE_Datastore", no_init)
+class_<XC::FE_Datastore, bases<XC::Channel, XC::PreprocessorContainer>, boost::noncopyable  >("FE_Datastore", no_init)
   .def("save",&XC::FE_Datastore::save,"Save problem data.")
   .def("restore",&XC::FE_Datastore::restore,"Restore problem data.")
   ;

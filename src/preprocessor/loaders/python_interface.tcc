@@ -20,9 +20,8 @@
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
 //python_interface.tcc
-class_<XC::Loader, bases<EntCmd,XC::MovableObject>, boost::noncopyable >("Loader", no_init)
-  .add_property("getDomain", make_function( &XC::Loader::getDomain, return_internal_reference<>() ),"Return a reference to the domain.")
-    ;
+class_<XC::Loader, bases<XC::PreprocessorContainer,XC::MovableObject>, boost::noncopyable >("Loader", no_init)
+  ;
 
 XC::Node *(XC::NodeLoader::*newNodeFromXYZ)(const double &x,const double &y,const double &z)= &XC::NodeLoader::newNode;
 XC::Node *(XC::NodeLoader::*newNodeFromXY)(const double &x,const double &y)= &XC::NodeLoader::newNode;

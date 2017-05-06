@@ -30,28 +30,25 @@
 #ifndef MAPFIELDS_H
 #define MAPFIELDS_H
 
+#include "preprocessor/PreprocessorContainer.h"
 #include "FieldInfo.h"
 #include "utility/actor/actor/MovableObject.h"
 #include <deque>
 
 
 namespace XC {
-class Preprocessor;
 
 //!  @ingroup POST_PROCESS
 // 
 //!  @brief Container of field definitions.
-class MapFields: public EntCmd, public MovableObject, public std::deque<FieldInfo>
+class MapFields: public PreprocessorContainer, public MovableObject, public std::deque<FieldInfo>
   {
   public:
     typedef std::deque<FieldInfo> dq_fields;
     typedef dq_fields::iterator iterator;
     typedef dq_fields::const_iterator const_iterator;
   private:
-    Preprocessor *preprocessor; //!< pointer to preprocessor.
-
     bool existe(const std::string &nmb) const;
-
 
     friend class ProblemaEF;
     iterator buscaField(const std::string &nmb);

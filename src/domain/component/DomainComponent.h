@@ -90,8 +90,8 @@ class DomainComponent: public TaggedObject, public MovableObject
       { return idx; }
     virtual void setDomain(Domain *theDomain);
     virtual Domain *getDomain(void) const;
-    const Preprocessor *GetPreprocessor(void) const;
-    Preprocessor *GetPreprocessor(void);
+    const Preprocessor *getPreprocessor(void) const;
+    Preprocessor *getPreprocessor(void);
 
     void set_indice(const size_t &i);
 

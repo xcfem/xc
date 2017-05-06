@@ -197,7 +197,7 @@ XC::Node *XC::Pnt::getNode(void)
 std::set<XC::SetBase *> XC::Pnt::get_sets(void) const
   {
     std::set<SetBase *> retval;
-    const Preprocessor *preprocessor= GetPreprocessor();
+    const Preprocessor *preprocessor= getPreprocessor();
     if(preprocessor)
       {
         MapSet &sets= const_cast<MapSet &>(preprocessor->get_sets());
@@ -235,7 +235,7 @@ void XC::Pnt::Transforma(const TrfGeom &trf)
 //! identified by the index being passed as parameter.
 void XC::Pnt::Transforma(const size_t &indice_trf)
   {
-    TrfGeom *trf= get_preprocessor()->getCad().getTransformacionesGeometricas().busca(indice_trf);
+    TrfGeom *trf= getPreprocessor()->getCad().getTransformacionesGeometricas().busca(indice_trf);
     if(trf)
       Transforma(*trf);
   }

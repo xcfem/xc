@@ -333,7 +333,7 @@ SET(preprocessor_cad_matrices preprocessor/cad/matrices/MatrizPtrPnt preprocesso
 
 SET(preprocessor_cad preprocessor/cad/MapCadMemberBase preprocessor/cad/SisRef preprocessor/cad/MapSisRef preprocessor/cad/SisRefCartesianas3d preprocessor/cad/Cad preprocessor/cad/aux_meshing ${preprocessor_cad_trf} ${preprocessor_cad_entidades} ${preprocessor_cad_matrices} )
 
-SET(preprocessor_loaders preprocessor/loaders/Loader preprocessor/loaders/NodeLoader preprocessor/loaders/ElementLoader preprocessor/loaders/ProtoElementLoader preprocessor/loaders/MaterialLoader preprocessor/loaders/BeamIntegratorLoader preprocessor/loaders/TransfCooLoader preprocessor/loaders/LoadLoaderMember preprocessor/loaders/LoadLoader preprocessor/loaders/ConstraintLoader)
+SET(preprocessor_loaders preprocessor/PreprocessorContainer preprocessor/loaders/Loader preprocessor/loaders/NodeLoader preprocessor/loaders/ElementLoader preprocessor/loaders/ProtoElementLoader preprocessor/loaders/MaterialLoader preprocessor/loaders/BeamIntegratorLoader preprocessor/loaders/TransfCooLoader preprocessor/loaders/LoadLoaderMember preprocessor/loaders/LoadLoader preprocessor/loaders/ConstraintLoader)
 
 SET(preprocessor_set_mgmt preprocessor/set_mgmt/DqPtrsNode preprocessor/set_mgmt/DqPtrsElem preprocessor/set_mgmt/DqPtrsConstraint preprocessor/set_mgmt/SetMeshComp preprocessor/set_mgmt/SetBase preprocessor/set_mgmt/SetEstruct preprocessor/set_mgmt/Set preprocessor/set_mgmt/SetFilaI preprocessor/set_mgmt/SetFilaJ preprocessor/set_mgmt/SetFilaK preprocessor/set_mgmt/MapSet)
 

@@ -128,7 +128,7 @@ XC::Edge *XC::MapLineas::createLine(Pnt *pA,Pnt *pB)
         tmp= busca_edge_ptr_extremos(*pA,*pB);
         if(!tmp)
           {
-            assert(get_preprocessor());
+            assert(getPreprocessor());
             tmp= Nueva<Linea>();
             assert(tmp);
             tmp->SetVertice(1,pA);
@@ -165,7 +165,7 @@ XC::Edge *XC::MapLineas::createDividedLine(Pnt *pA,Pnt *pB)
         tmp= busca_edge_ptr_extremos(*pA,*pB);
         if(!tmp)
           {
-            assert(get_preprocessor());
+            assert(getPreprocessor());
             tmp= Nueva<DividedLine>();
             assert(tmp);
             tmp->SetVertice(1,pA);
@@ -194,7 +194,7 @@ XC::Edge *XC::MapLineas::createArc(Pnt *pA,Pnt *pB,Pnt *pC)
         tmp= busca_edge_ptr_extremos(*pA,*pB,*pC);
         if(!tmp)
           {
-            assert(get_preprocessor());
+            assert(getPreprocessor());
             tmp= Nueva<ArcoCircunf>();
             assert(tmp);
             tmp->SetVertice(1,pA);

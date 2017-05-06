@@ -95,15 +95,15 @@ XC::ProtoElementLoader::ProtoElementLoader(Preprocessor *preprocessor)
  {}
 
 //! @brief Returns a reference to the material handler.
-XC::MaterialLoader &XC::ProtoElementLoader::get_material_loader(void) const
-  { return preprocessor->getMaterialLoader(); }
+const XC::MaterialLoader &XC::ProtoElementLoader::get_material_loader(void) const
+  { return getPreprocessor()->getMaterialLoader(); }
 
 //! @brief Returns an iterator al material que se especifica en nmb_mat.
 XC::MaterialLoader::const_iterator XC::ProtoElementLoader::get_iter_material(void) const
-  { return preprocessor->getMaterialLoader().find(nmb_mat); }
+  { return getPreprocessor()->getMaterialLoader().find(nmb_mat); }
 
 //! @brief Returns a pointer to material que se especifica en nmb_mat.
-XC::Material *XC::ProtoElementLoader::get_ptr_material(void) const
+const XC::Material *XC::ProtoElementLoader::get_ptr_material(void) const
   {
     Material *retval= nullptr;
     MaterialLoader::const_iterator imat= get_iter_material();
@@ -116,16 +116,16 @@ XC::Material *XC::ProtoElementLoader::get_ptr_material(void) const
   }
 
 //! @brief Returns a reference to de integrator handler.
-XC::BeamIntegratorLoader &XC::ProtoElementLoader::get_beam_integrator_loader(void) const
-  { return preprocessor->getBeamIntegratorLoader(); }
+const XC::BeamIntegratorLoader &XC::ProtoElementLoader::get_beam_integrator_loader(void) const
+  { return getPreprocessor()->getBeamIntegratorLoader(); }
 
 //! @brief Returns an iterator al integrator que se especifica en nmb_integ.
 XC::BeamIntegratorLoader::const_iterator XC::ProtoElementLoader::get_iter_beam_integrator(void) const
-  { return preprocessor->getBeamIntegratorLoader().find(nmb_integ); }
+  { return getPreprocessor()->getBeamIntegratorLoader().find(nmb_integ); }
 
 
 //! @brief Returns a pointer to integrator que se especifica en nmb_integ.
-XC::BeamIntegration *XC::ProtoElementLoader::get_ptr_beam_integrator(void) const
+const XC::BeamIntegration *XC::ProtoElementLoader::get_ptr_beam_integrator(void) const
   {
     BeamIntegration *retval= nullptr;
     BeamIntegratorLoader::const_iterator iInteg= get_iter_beam_integrator();
@@ -140,15 +140,15 @@ XC::BeamIntegration *XC::ProtoElementLoader::get_ptr_beam_integrator(void) const
   }
 
 //! @brief Returns a reference to the coordinate transformation loader.
-XC::TransfCooLoader &XC::ProtoElementLoader::get_transf_coo_loader(void) const
-  { return preprocessor->getTransfCooLoader(); }
+const XC::TransfCooLoader &XC::ProtoElementLoader::get_transf_coo_loader(void) const
+  { return getPreprocessor()->getTransfCooLoader(); }
 
 //! @brief Returns an iterator to the coordinate transformation with the name being passed as parameter.
 XC::TransfCooLoader::const_iterator XC::ProtoElementLoader::get_iter_transf_coo(void) const
-  { return preprocessor->getTransfCooLoader().find(nmb_transf); }
+  { return getPreprocessor()->getTransfCooLoader().find(nmb_transf); }
 
 //! @brief Returns a pointer to the coordinate transformation with the name being passed as parameter (nullptr if not found).
-XC::CrdTransf *XC::ProtoElementLoader::get_ptr_transf_coo(void) const
+const XC::CrdTransf *XC::ProtoElementLoader::get_ptr_transf_coo(void) const
   {
     CrdTransf *retval= nullptr;
     TransfCooLoader::const_iterator itrf= get_iter_transf_coo();
@@ -161,6 +161,7 @@ XC::CrdTransf *XC::ProtoElementLoader::get_ptr_transf_coo(void) const
                   << nmb_transf << "' not found.\n";
     return retval;
   }
+
 //! @brief Process the comands used to define
 //! the elements of the finite element model. It interprets
 //! the following commands (if the identifier (tag) is not
@@ -306,7 +307,7 @@ XC::Element *XC::ProtoElementLoader::create_element(const std::string &cmd,int t
 XC::Element *XC::ProtoElementLoader::newElement(const std::string &tipo,const ID &iNodos)
   {
     const int tag_elem= getDefaultTag();
-    Element *retval= preprocessor->getDomain()->getElement(tag_elem);
+    Element *retval= getPreprocessor()->getDomain()->getElement(tag_elem);
     if(!retval) //It doesn't already exists.
       {
         retval= create_element(tipo,tag_elem);

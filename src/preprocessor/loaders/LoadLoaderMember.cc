@@ -54,10 +54,20 @@ XC::LoadLoader *XC::LoadLoaderMember::getLoadLoader(void)
   }
 
 //! @brief Returns the domain.
-XC::Domain *XC::LoadLoaderMember::getDomain(void) const
+const XC::Domain *XC::LoadLoaderMember::getDomain(void) const
+  {
+    const Domain *retval= nullptr;
+    const LoadLoader *loader= getLoadLoader();
+    if(loader)
+      retval= loader->getDomain();
+    return retval;
+  }
+
+//! @brief Returns the domain.
+XC::Domain *XC::LoadLoaderMember::getDomain(void)
   {
     Domain *retval= nullptr;
-    const LoadLoader *loader= getLoadLoader();
+    LoadLoader *loader= getLoadLoader();
     if(loader)
       retval= loader->getDomain();
     return retval;

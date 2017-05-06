@@ -22,7 +22,7 @@
 //python_interface.tcc
 
 XC::Mesh &(XC::Domain::*getMeshRef)(void)= &XC::Domain::getMesh;
-XC::Preprocessor *(XC::Domain::*getPreprocessor)(void)= &XC::Domain::GetPreprocessor;
+XC::Preprocessor *(XC::Domain::*getPreprocessor)(void)= &XC::Domain::getPreprocessor;
 XC::ConstrContainer &(XC::Domain::*getConstraintsRef)(void)= &XC::Domain::getConstraints;
 class_<XC::Domain, bases<XC::ObjWithRecorders>, boost::noncopyable >("Domain", no_init)
   .add_property("getPreprocessor", make_function( getPreprocessor, return_internal_reference<>() ),"returns preprocessor.")

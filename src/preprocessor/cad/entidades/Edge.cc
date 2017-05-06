@@ -411,8 +411,9 @@ void XC::Edge::create_nodes(void)
  
     if(ttzNodes.Null())
       {
-        if(!get_preprocessor())
-          std::cerr << "Edge::create_nodes; preprocessor undefined." << std::endl;
+        if(!getPreprocessor())
+          std::cerr << nombre_clase() << "::" << __FUNCTION__
+	            << "; preprocessor undefined." << std::endl;
         else
           {
             const MatrizPos3d posiciones= get_pos_nodes();
@@ -472,7 +473,7 @@ const XC::Vector &XC::Edge::getTang(const double &s) const
 std::set<XC::SetBase *> XC::Edge::get_sets(void) const
   {
     std::set<SetBase *> retval;
-    const Preprocessor *preprocessor= GetPreprocessor();
+    const Preprocessor *preprocessor= getPreprocessor();
     if(preprocessor)
       {
         MapSet &sets= const_cast<MapSet &>(preprocessor->get_sets());

@@ -56,7 +56,7 @@ XC::MapEsquemas2d &(XC::Cad::*getEsquemas2dRef)(void)= &XC::Cad::getEsquemas2d;
 XC::MapEsquemas3d &(XC::Cad::*getEsquemas3dRef)(void)= &XC::Cad::getEsquemas3d;
 XC::MapUniformGrids &(XC::Cad::*getUniformGridsRef)(void)= &XC::Cad::getUniformGrids;
 XC::Edge *(XC::Cad::*getLineWithEndPoints)(const XC::MapPuntos::Indice &,const XC::MapPuntos::Indice &) = &XC::Cad::busca_edge_extremos;
-class_<XC::Cad, bases<EntCmd>, boost::noncopyable >("Cad", no_init)
+class_<XC::Cad, bases<XC::PreprocessorContainer>, boost::noncopyable >("Cad", no_init)
   .add_property("getReferenceSystems", make_function( getReferenceSystems, return_internal_reference<>() ))
   .add_property("getGeometricTransformations", make_function( getGeometricTransformations, return_internal_reference<>() ))
   .add_property("getPoints", make_function( getMapPuntosRef, return_internal_reference<>() ))

@@ -700,7 +700,7 @@ XC::ID XC::Element::getLocalIndexNodesEdge(const size_t &i) const
 std::set<XC::SetBase *> XC::Element::get_sets(void) const
   {
     std::set<SetBase *> retval;
-    const Preprocessor *preprocessor= GetPreprocessor();
+    const Preprocessor *preprocessor= getPreprocessor();
     if(preprocessor)
       {
         MapSet &sets= const_cast<MapSet &>(preprocessor->get_sets());

@@ -30,7 +30,7 @@
 #ifndef MAPSET_H
 #define MAPSET_H
 
-#include "xc_utils/src/nucleo/EntCmd.h"
+#include "preprocessor/PreprocessorContainer.h"
 #include "utility/actor/actor/MovableObject.h"
 #include <map>
 #include <deque>
@@ -43,7 +43,6 @@ class SetBase;
 class Set;
 class SetEstruct;
 class EntMdlr;
-class Preprocessor;
 class Pnt;
 class Edge;
 class Face;
@@ -54,7 +53,7 @@ class UniformGrid;
 //! 
 //!  @brief Sets container.
 //!  
-class MapSet: public EntCmd, public MovableObject
+class MapSet: public PreprocessorContainer, public MovableObject
   {
     static ID setsDbTags;//! dbTags para the sets.
     static std::deque<std::string> setsClassNames; //! sets class names.
@@ -64,9 +63,7 @@ class MapSet: public EntCmd, public MovableObject
     typedef map_sets::const_iterator const_iterator;
     typedef std::map<std::string,EntMdlr *> map_ent_mdlr;
   private:
-    Preprocessor *preprocessor; //!< Pointer to preprocessor.
-
-    map_sets sets; //!< Sets of entidades.
+    map_sets sets; //!< Sets that contain pointers to entities.
     map_ent_mdlr entidades; //! Geometric entities (points, lines, surfaces,...).
     Set *total; //!< Pointer to total set (Created in constructor).
     map_sets abiertos; //!< Opened sets (those for wich each new entity will be added to).

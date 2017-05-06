@@ -103,7 +103,7 @@ XC::Set *XC::MapSet::create_set(const std::string &nmb)
     Set *tmp =nullptr;
     if(!existe(nmb)) //Set is new.
       {
-        tmp= new Set(nmb,preprocessor);
+        tmp= new Set(nmb,getPreprocessor());
         sets[nmb]= tmp;
       }
     else //Set already exists
@@ -167,9 +167,9 @@ XC::SetBase *XC::MapSet::broke_set(const std::string &nmb,const std::string &nmb
     else //the set is new.
       {
         if(nmb_clase == "XC::Set")
-          retval= new Set(nmb,preprocessor);
+          retval= new Set(nmb,getPreprocessor());
 //         else if(nmb_clase == "XC::SetEstruct")
-//           retval= new SetEstruct(nmb,preprocessor);
+//           retval= new SetEstruct(nmb,getPreprocessor());
         else
 	  std::cerr << nombre_clase() << "::" << __FUNCTION__
 	            << "; class name: '"
@@ -213,21 +213,20 @@ void XC::MapSet::setup_total(void)
   }
 
 //! @brief Default constructor.
-XC::MapSet::MapSet(Preprocessor *m)
-  : EntCmd(m), MovableObject(0), preprocessor(m),total(nullptr)
+XC::MapSet::MapSet(Preprocessor *prep)
+  : PreprocessorContainer(prep), MovableObject(0), total(nullptr)
   { setup_total(); }
 
 //! @brief Copy constructor (DOESN'T COPY SETS).
 XC::MapSet::MapSet(const MapSet &otro)
-  : EntCmd(otro), MovableObject(otro), preprocessor(otro.preprocessor), total(nullptr)
+  : PreprocessorContainer(otro), MovableObject(otro), total(nullptr)
   { setup_total(); }
 
 //! @brief Assignment operator (DOESN'T COPY SETS).
 XC::MapSet &XC::MapSet::operator=(const MapSet &otro)
   {
-    EntCmd::operator=(otro);
+    PreprocessorContainer::operator=(otro);
     MovableObject::operator=(otro);
-    preprocessor= otro.preprocessor;
     setup_total();
     return *this;
   }

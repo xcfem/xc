@@ -60,8 +60,8 @@ XC::MapFields::const_iterator XC::MapFields::buscaField(const std::string &nmb) 
   }
 
 //! @brief Default constructor.
-XC::MapFields::MapFields(Preprocessor *m)
-  : EntCmd(m), MovableObject(0), preprocessor(m) {}
+XC::MapFields::MapFields(Preprocessor *prep)
+  : PreprocessorContainer(prep), MovableObject(0) {}
 
 //! @bred Defines a new field
 XC::FieldInfo &XC::MapFields::newField(const std::string &nmb_field)
