@@ -53,7 +53,7 @@ class PreprocessorContainer: public EntCmd
     inline Preprocessor *getPreprocessor(void)
       { return preprocessor; }
     //! @brief Returns a pointer to the object preprocessor.
-    const Preprocessor *getPreprocessor(void) const
+    inline const Preprocessor *getPreprocessor(void) const
       { return preprocessor; }
     void checkPreprocessor(void);
   };
