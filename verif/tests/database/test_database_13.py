@@ -50,12 +50,12 @@ truss= elementos.newElement("truss",xc.ID([1,2]));
 truss.area= area
     
 # Constraints
-coacciones= preprocessor.getConstraintLoader
+constraints= preprocessor.getConstraintLoader
 #
-spc= coacciones.newSPConstraint(1,0,0.0) # Nodo 1
-spc= coacciones.newSPConstraint(1,1,0.0)
-spc= coacciones.newSPConstraint(2,0,0.0) # Nodo 2
-spc= coacciones.newSPConstraint(2,1,0.0)
+spc= constraints.newSPConstraint(1,0,0.0) # Nodo 1
+spc= constraints.newSPConstraint(1,1,0.0)
+spc= constraints.newSPConstraint(2,0,0.0) # Nodo 2
+spc= constraints.newSPConstraint(2,1,0.0)
 
 
 # Solution
@@ -86,10 +86,11 @@ print "ratio1= ",(ratio1)
 print "ratio2= ",(ratio2)
    '''
 
+from miscUtils import LogMessages as lmsg
 fname= os.path.basename(__file__)
 if (abs(ratio1)<1e-5) & (abs(ratio2)<1e-5):
   print "test ",fname,": ok."
 else:
-  print "test ",fname,": ERROR."
+  lmsg.error(fname+' ERROR.')
 
 os.system("rm -rf /tmp/test13.db") # Your garbage you clean it

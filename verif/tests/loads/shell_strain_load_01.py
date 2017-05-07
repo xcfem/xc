@@ -47,18 +47,18 @@ elem1= elementos.newElement("shell_mitc4",xc.ID([nod1.tag,nod2.tag,nod3.tag,nod4
 
 
 # Constraints
-coacciones= preprocessor.getConstraintLoader
+constraints= preprocessor.getConstraintLoader
 
-spc= coacciones.newSPConstraint(nod1.tag,0,0.0)
-spc= coacciones.newSPConstraint(nod2.tag,0,0.0)
-spc= coacciones.newSPConstraint(nod3.tag,0,0.0)
-spc= coacciones.newSPConstraint(nod4.tag,0,0.0)
-spc= coacciones.newSPConstraint(nod1.tag,2,0.0)
-spc= coacciones.newSPConstraint(nod2.tag,2,0.0)
-spc= coacciones.newSPConstraint(nod3.tag,2,0.0)
-spc= coacciones.newSPConstraint(nod4.tag,2,0.0)
-spc= coacciones.newSPConstraint(nod1.tag,1,0.0)
-spc= coacciones.newSPConstraint(nod2.tag,1,0.0)
+spc= constraints.newSPConstraint(nod1.tag,0,0.0)
+spc= constraints.newSPConstraint(nod2.tag,0,0.0)
+spc= constraints.newSPConstraint(nod3.tag,0,0.0)
+spc= constraints.newSPConstraint(nod4.tag,0,0.0)
+spc= constraints.newSPConstraint(nod1.tag,2,0.0)
+spc= constraints.newSPConstraint(nod2.tag,2,0.0)
+spc= constraints.newSPConstraint(nod3.tag,2,0.0)
+spc= constraints.newSPConstraint(nod4.tag,2,0.0)
+spc= constraints.newSPConstraint(nod1.tag,1,0.0)
+spc= constraints.newSPConstraint(nod2.tag,1,0.0)
 
 # Loads definition
 cargas= preprocessor.getLoadLoader
@@ -104,8 +104,9 @@ print "ratio2= ",ratio2
    '''
 
 import os
+from miscUtils import LogMessages as lmsg
 fname= os.path.basename(__file__)
 if (abs(ratio1)<2e-7) & (abs(ratio2)<1e-10):
   print "test ",fname,": ok."
 else:
-  print "test ",fname,": ERROR."
+  lmsg.error(fname+' ERROR.')

@@ -50,13 +50,13 @@ truss.area= A
 
     
 # Constraints
-coacciones= preprocessor.getConstraintLoader
+constraints= preprocessor.getConstraintLoader
 
 #
-spc= coacciones.newSPConstraint(1,0,0.0)
-spc= coacciones.newSPConstraint(1,1,0.0)
-spc= coacciones.newSPConstraint(2,0,0.0)
-spc= coacciones.newSPConstraint(2,1,0.0)
+spc= constraints.newSPConstraint(1,0,0.0)
+spc= constraints.newSPConstraint(1,1,0.0)
+spc= constraints.newSPConstraint(2,0,0.0)
+spc= constraints.newSPConstraint(2,1,0.0)
 
     
 
@@ -137,10 +137,11 @@ print "fuerza pretensado= ",(tInic*A)
 print "deformación= ",getStrain
 print "ratio= ",ratio
 '''
+from miscUtils import LogMessages as lmsg
 fname= os.path.basename(__file__)
 if abs(ratio)<0.02:
   print "test ",fname,": ok."
 else:
-  print "test ",fname,": ERROR."
+  lmsg.error(fname+' ERROR.')
 
 os.system("rm -rf /tmp/test10.db") # Your garbage you clean it

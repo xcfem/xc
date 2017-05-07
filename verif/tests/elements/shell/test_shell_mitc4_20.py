@@ -73,14 +73,14 @@ s.nDivI= NumDivI
 s.nDivJ= NumDivJ
 
 
-coacciones= preprocessor.getConstraintLoader
+constraints= preprocessor.getConstraintLoader
 
 f1= preprocessor.getSets.getSet("f1")
 f1.genMesh(xc.meshDir.I)
 lados= s.getEdges
 #Edge iterator
 for l in lados:
-  fix_node_6dof.fixNode6DOFLista(coacciones,l.getEdge.getNodeTags())
+  fix_node_6dof.fixNode6DOFLista(constraints,l.getEdge.getNodeTags())
 
 
 # Loads definition
@@ -152,8 +152,9 @@ print "ratio4: ",ratio4
    '''
 
 import os
+from miscUtils import LogMessages as lmsg
 fname= os.path.basename(__file__)
 if (abs(ratio1)<0.5e-2) & (abs(ratio2)<1e-9) & (abs(ratio3)<2e-4) & (abs(ratio4)<0.11):
   print "test ",fname,": ok."
 else:
-  print "test ",fname,": ERROR."
+  lmsg.error(fname+' ERROR.')

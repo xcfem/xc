@@ -26,8 +26,9 @@ errMax= concreteBase.testTangDHormigon(mdlr,concr)
 
 #print "errMax= ",errMax
 import os
+from miscUtils import LogMessages as lmsg
 fname= os.path.basename(__file__)
 if(errMax<1e-15):
   print "test ",fname,": ok."
 else:
-  print "test ",fname,": ERROR."
+  lmsg.error(fname+' ERROR.')

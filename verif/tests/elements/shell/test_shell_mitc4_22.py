@@ -44,12 +44,12 @@ elem= elementos.newElement("shell_mitc4",xc.ID([1,2,3,4]))
 
 
 # Constraints
-coacciones= preprocessor.getConstraintLoader
+constraints= preprocessor.getConstraintLoader
 
-fix_node_6dof.Nodo6DOFGirosLibres(coacciones, 1)
-fix_node_6dof.Nodo6DOFGirosLibres(coacciones, 2)
-fix_node_6dof.Nodo6DOFGirosLibres(coacciones, 3)
-fix_node_6dof.Nodo6DOFGirosLibres(coacciones, 4)
+fix_node_6dof.Nodo6DOFGirosLibres(constraints, 1)
+fix_node_6dof.Nodo6DOFGirosLibres(constraints, 2)
+fix_node_6dof.Nodo6DOFGirosLibres(constraints, 3)
+fix_node_6dof.Nodo6DOFGirosLibres(constraints, 4)
 
 # Loads definition
 cargas= preprocessor.getLoadLoader
@@ -105,9 +105,10 @@ print "ratio4= ",ratio4
 '''
 
 import os
+from miscUtils import LogMessages as lmsg
 fname= os.path.basename(__file__)
 if (ratio1 < 1e-12) & (ratio2 < 1e-12) & (ratio3 < 1e-12) & (ratio4 < 1e-12):
   print "test ",fname,": ok."
 else:
-  print "test ",fname,": ERROR."
+  lmsg.error(fname+' ERROR.')
 

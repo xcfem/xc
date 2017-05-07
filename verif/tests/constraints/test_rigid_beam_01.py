@@ -29,9 +29,9 @@ nod= nodes.newNodeXYZ(L,0.0,0.0)
 
 
 # Constraints
-coacciones= preprocessor.getConstraintLoader
+constraints= preprocessor.getConstraintLoader
 
-fix_node_6dof.fixNode6DOF(coacciones,1)
+fix_node_6dof.fixNode6DOF(constraints,1)
 rr= preprocessor.getConstraintLoader.newRigidBeam(1,2)
 
 
@@ -70,8 +70,9 @@ print ratio1
   '''
 
 import os
+from miscUtils import LogMessages as lmsg
 fname= os.path.basename(__file__)
 if ratio1<1e-9:
   print "test ",fname,": ok."
 else:
-  print "test ",fname,": ERROR."
+  lmsg.error(fname+' ERROR.')

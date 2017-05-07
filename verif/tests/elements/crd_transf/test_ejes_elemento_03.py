@@ -65,9 +65,9 @@ ratio2= ((fuerte[0])**2+(fuerte[1])**2)
 
 
 # Constraints
-coacciones= preprocessor.getConstraintLoader
+constraints= preprocessor.getConstraintLoader
 
-fix_node_6dof.fixNode6DOF(coacciones,1)
+fix_node_6dof.fixNode6DOF(constraints,1)
 
 # Loads definition
 cargas= preprocessor.getLoadLoader
@@ -117,8 +117,9 @@ print "ratio5= ",ratio5
   '''
 
 import os
+from miscUtils import LogMessages as lmsg
 fname= os.path.basename(__file__)
 if (ratio1 < 1e-15) & (ratio2 < 1e-15) & (abs(angSeccion) < 1e-12) & (ratio3 < 1e-5) & (ratio4 < 1e-6) & (ratio5 < 1e-6):
   print "test ",fname,": ok."
 else:
-  print "test ",fname,": ERROR."
+  lmsg.error(fname+' ERROR.')

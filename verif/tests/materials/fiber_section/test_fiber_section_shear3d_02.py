@@ -59,11 +59,11 @@ sa.setRespVyByName("respVy")
 sa.setRespVzByName("respVz")
 sa.setRespTByName("respT")
 
-banco_pruebas_scc3d.modeloSecc3d(preprocessor, "sa")
+banco_pruebas_scc3d.sectionModel(preprocessor, "sa")
 # Constraints
-coacciones= preprocessor.getConstraintLoader
+constraints= preprocessor.getConstraintLoader
 
-fix_node_6dof.fixNode6DOF(coacciones,1)
+fix_node_6dof.fixNode6DOF(constraints,1)
 
 # Loads definition
 cargas= preprocessor.getLoadLoader
@@ -156,8 +156,9 @@ print "ratio3= ",ratio3
 
 
 import os
+from miscUtils import LogMessages as lmsg
 fname= os.path.basename(__file__)
 if((abs(ratio1)<1e-15) & (abs(ratio2)<1e-15) & (abs(ratio3)<1e-12)):
   print "test ",fname,": ok."
 else:
-  print "test ",fname,": ERROR."
+  lmsg.error(fname+' ERROR.')

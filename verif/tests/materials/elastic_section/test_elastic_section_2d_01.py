@@ -32,9 +32,9 @@ matPoteau= scc10x20.defSeccElastica2d(preprocessor,matscc10x20)
 elemZLS= banco_pruebas_scc2d.modeloSecc2d(preprocessor, scc10x20.nmb)
 
 # Constraints
-coacciones= preprocessor.getConstraintLoader
-fix_node_3dof.fixNode000(coacciones,1)
-spc= coacciones.newSPConstraint(2,1,0.0)
+constraints= preprocessor.getConstraintLoader
+fix_node_3dof.fixNode000(constraints,1)
+spc= constraints.newSPConstraint(2,1,0.0)
 
 # Loads definition
 cargas= preprocessor.getLoadLoader
@@ -76,8 +76,9 @@ print " ratio2= ",(ratio2)
    '''
 
 import os
+from miscUtils import LogMessages as lmsg
 fname= os.path.basename(__file__)
 if (abs(ratio1)<1e-15) & (abs(ratio2)<1e-15) :
   print "test ",fname,": ok."
 else:
-  print "test ",fname,": ERROR."
+  lmsg.error(fname+' ERROR.')

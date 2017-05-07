@@ -5,117 +5,20 @@ import xc
 from model import predefined_spaces
 from model import fix_node_6dof
 
-# Define el modelo para probar una sección de fibras.
-def modeloSecc3d(preprocessor,nmbS):
+def sectionModel(preprocessor,nmbS):
+  ''' Defines a model to test a fiber section.'''
   nodes= preprocessor.getNodeLoader
 
   modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
   nodes.defaultTag= 1 #El número del próximo nodo será 1.
-  nodes.newNodeXYZ(1,0,0)
-  nodes.newNodeXYZ(1,0,0)
+  nodA= nodes.newNodeXYZ(1,0,0)
+  nodB= nodes.newNodeXYZ(1,0,0)
 
   elementos= preprocessor.getElementLoader
   elementos.dimElem= 1
   elementos.defaultMaterial= nmbS
   elementos.defaultTag= 1 #Tag for the next element.
-  zls= elementos.newElement("zero_length_section",xc.ID([1,2]));
+  zls= elementos.newElement("zero_length_section",xc.ID([nodA.tag,nodB.tag]));
   return zls
 
-# Define el modelo para probar una sección de fibras.
-def nuevoZeroLengthSecc3d(preprocessor, nmbS, tagNodo, tagElem):
-  idNod1= tagNodo
-  idNod2= (tagNodo+1)
 
-   # Definimos nodes
-  nodes.newNodeIDXYZ(idNod1,tagNodo,0,0)
-  nodes.newNodeIDXYZ(idNod2,tagNodo,0,0)
-
-  coacciones= preprocessor.getConstraintLoader
-  fix_node_6dof.fixNode6DOF(coacciones,idNod1)
-  fix_node_6dof.Nodo6DOFGirosLibres(coacciones,idNod2)
-
-  # Definimos elementos
-  elementos= preprocessor.getElementLoader
-  elementos.defaultMaterial= nmbS
-  elementos.defaultTag= tagElem #Tag for the next element.
-  zls= elementos.newElement("zero_length_section",xc.ID([idNod1,idNod2]));
-
-# '''
-# Crea los elementos a partir de la tabla creada anteriormente
-#    nmbDBase: Nombre de la base de datos donde se guardará la tabla.
-#    nmbTableElem: Nombre de la tabla que contiene los índices de elemento.
-#    sectionName: Nombre de la sección que se asigna a cada elemento.
-# '''
-# def creaElemFromTable(nmbDBase, nmbTablaElem, sectionName):
-#     idElem= 0
-#     idNodo= 0
-#     \sqlite
-#        { 
-#          \nmbDBase
-#            {
-#              \defaultQuery
-#                {
-#                  \get_result{"select * from " + nmbTablaElem}
-#                  \while
-#                    {
-#                      \cond{fetch_row}
-#                      \bucle
-#                        {
-#                          idElem= getInt("ELEM")
-#                          idNodo= 10*idElem
-#                          \nuevoZeroLengthSecc3d(sectionName,int(idNodo),int(idElem))
-#                        }
-#                    }
-#                  \free_result
-#                }
-#            }
-#        }
-#   }
-
-# '''
-# Crea las cargas sobre cada uno de los elementos a partir de las tablas creadas anteriormente
-#    nmbQuery: Nombre de la consulta que se empleara para obtener las cargas.
-#    nmbTbEsf: Nombre de la tabla que contiene los índices de sección.
-#    idSecc: Identificador de la sección.
-# '''
-# def creaCargasFromTable(nmbQuery, nmbTbEsf, idSecc):
-#     idAccion= 
-#     fieldN= 0.0
-#     fieldQ1= 0.0
-#     fieldQ2= 0.0
-#     fieldM1= 0.0
-#     fieldM2= 0.0
-#     iNod= 10*idSecc+1
-#     lmsg.info("Cargando sección: ",int(idSecc),"\n")
-#     lmsg.info("Cargando nodo: ",int(iNod),"\n")
-#     \nmbQuery
-#       {
-#         \get_result{"select * from "+ nmbTbEsf + " where idSecc = " + sqlValue(idSecc)}
-#         \while
-#           {
-#             \cond{fetch_row}
-#             \bucle
-#               {
-#                 idAccion= getStr("ACCION")
-#                 fieldN= rowXXX['AXIL']
-#                 fieldQ1= rowXXX['Q_1']
-#                 fieldQ2= rowXXX['Q_2']
-#                 fieldM1= rowXXX['M_1']
-#                 fieldM2= rowXXX['M_2']
-#                 \preprocessor
-#                   {
-#                     \loads
-#                       {
-#                         \casos
-#                           {
-#                             \load_pattern[idAccion]
-#                             \set_current_load_pattern{idAccion}
-#                             \nodal_load{ \nod{int(iNod)} \val{fieldN,fieldQ1,fieldQ2,0,fieldM1,fieldM2} }
-#                           }
-#                       }
-#                   }
-#               }
-#           }
-#         \free_result
-#       }
-#   }

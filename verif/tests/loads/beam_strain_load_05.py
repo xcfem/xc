@@ -56,9 +56,9 @@ beam2= elementos.newElement("force_beam_column_2d",xc.ID([2,3]));
 
     
 # Constraints
-coacciones= preprocessor.getConstraintLoader
-fix_node_3dof.fixNode000(coacciones,1)
-fix_node_3dof.fixNode000(coacciones,3)
+constraints= preprocessor.getConstraintLoader
+fix_node_3dof.fixNode000(constraints,1)
+fix_node_3dof.fixNode000(constraints,3)
 
 # Loads definition
 cargas= preprocessor.getLoadLoader
@@ -110,8 +110,9 @@ print "cortante= ",cortante
    '''
 
 import os
+from miscUtils import LogMessages as lmsg
 fname= os.path.basename(__file__)
 if (abs(dX)<1e-10) & (abs(ratio)<1e-10) & (abs(momento)<1e-10) & (abs(cortante)<1e-10) :
   print "test ",fname,": ok."
 else:
-  print "test ",fname,": ERROR."
+  lmsg.error(fname+' ERROR.')

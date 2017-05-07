@@ -160,14 +160,14 @@ beam3dZ= elementos.newElement("elastic_beam_3d",xc.ID([0,3]))
 
     
 # Constraints
-coacciones= preprocessor.getConstraintLoader
+constraints= preprocessor.getConstraintLoader
 #
-spc= coacciones.newSPConstraint(0,0,0.0) # Nodo 0
-spc= coacciones.newSPConstraint(0,1,0.0)
-spc= coacciones.newSPConstraint(0,2,0.0)
-spc= coacciones.newSPConstraint(0,3,0.0)
-spc= coacciones.newSPConstraint(0,4,0.0)
-spc= coacciones.newSPConstraint(0,5,0.0)
+spc= constraints.newSPConstraint(0,0,0.0) # Nodo 0
+spc= constraints.newSPConstraint(0,1,0.0)
+spc= constraints.newSPConstraint(0,2,0.0)
+spc= constraints.newSPConstraint(0,3,0.0)
+spc= constraints.newSPConstraint(0,4,0.0)
+spc= constraints.newSPConstraint(0,5,0.0)
 
 # Loads definition
 cargas= preprocessor.getLoadLoader
@@ -329,8 +329,9 @@ result= math.sqrt(result)
 # print 'ratios= ',ratios
 # print 'result= ',result
 import os
+from miscUtils import LogMessages as lmsg
 fname= os.path.basename(__file__)
 if (result<1e-10):
   print "test ",fname,": ok."
 else:
-  print "test ",fname,": ERROR."
+  lmsg.error(fname+' ERROR.')

@@ -64,14 +64,14 @@ define_apoyos.colocaApoyoEntreNodos(preprocessor, 1,2,1,"neopX","neopY","neopZ",
     se emplea una sección arbitraria de área unidad '''
     
 # Constraints
-coacciones= preprocessor.getConstraintLoader
+constraints= preprocessor.getConstraintLoader
 #
-spc= coacciones.newSPConstraint(1,0,0.0) # Nodo 1
-spc= coacciones.newSPConstraint(1,1,0.0)
-spc= coacciones.newSPConstraint(1,2,0.0)
-spc= coacciones.newSPConstraint(1,3,0.0) # Nodo 2
-spc= coacciones.newSPConstraint(1,4,0.0)
-spc= coacciones.newSPConstraint(1,5,0.0)
+spc= constraints.newSPConstraint(1,0,0.0) # Nodo 1
+spc= constraints.newSPConstraint(1,1,0.0)
+spc= constraints.newSPConstraint(1,2,0.0)
+spc= constraints.newSPConstraint(1,3,0.0) # Nodo 2
+spc= constraints.newSPConstraint(1,4,0.0)
+spc= constraints.newSPConstraint(1,5,0.0)
 
 
 # Loads definition
@@ -176,8 +176,9 @@ print "ratio12= ",(ratio12)
    '''
   
 import os
+from miscUtils import LogMessages as lmsg
 fname= os.path.basename(__file__)
 if (abs(ratio1)<1e-5) & (abs(ratio2-1.0)<1e-5) & (abs(ratio3)<1e-5) & (abs(ratio4-1.0)<1e-5)  & (abs(ratio5)<1e-5) & (abs(ratio6-1.0)<1e-3) & (abs(ratio7)<1e-15) & (abs(ratio8)<1e-15) & (abs(ratio9)<1e-15) & (abs(ratio10)<1e-15) & (abs(ratio11)<1e-15) & (abs(ratio12)<1e-15) :
   print "test ",fname,": ok."
 else:
-  print "test ",fname,": ERROR."
+  lmsg.error(fname+' ERROR.')

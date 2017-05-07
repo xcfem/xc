@@ -72,14 +72,14 @@ tagN1= pt1.getNode().tag
 tagN2= pt2.getNode().tag
 
 # Constraints
-coacciones= preprocessor.getConstraintLoader
+constraints= preprocessor.getConstraintLoader
 
-spc= coacciones.newSPConstraint(tagN1,0,0.0) # gdl 0
-spc= coacciones.newSPConstraint(tagN1,1,0.0) # gdl 1
-spc= coacciones.newSPConstraint(tagN1,2,0.0) # gdl 2
-spc= coacciones.newSPConstraint(tagN1,3,0.0) # gdl 0
-spc= coacciones.newSPConstraint(tagN1,4,0.0) # gdl 1
-spc= coacciones.newSPConstraint(tagN1,5,0.0) # gdl 2
+spc= constraints.newSPConstraint(tagN1,0,0.0) # gdl 0
+spc= constraints.newSPConstraint(tagN1,1,0.0) # gdl 1
+spc= constraints.newSPConstraint(tagN1,2,0.0) # gdl 2
+spc= constraints.newSPConstraint(tagN1,3,0.0) # gdl 0
+spc= constraints.newSPConstraint(tagN1,4,0.0) # gdl 1
+spc= constraints.newSPConstraint(tagN1,5,0.0) # gdl 2
 
 
 # Procedimiento de solución
@@ -109,8 +109,9 @@ print "ratio1= ",(ratio1)
    '''
 
 import os
+from miscUtils import LogMessages as lmsg
 fname= os.path.basename(__file__)
 if (abs(ratio1)<5e-3):
   print "test ",fname,": ok."
 else:
-  print "test ",fname,": ERROR."
+  lmsg.error(fname+' ERROR.')

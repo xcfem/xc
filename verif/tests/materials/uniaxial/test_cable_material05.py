@@ -9,7 +9,6 @@ import xc
 from solution import predefined_solutions
 from model import predefined_spaces
 from model import fix_node_6dof
-from model import fix_nodes_lines
 from model import cargas_nodo
 from materials import typical_materials
 
@@ -66,9 +65,9 @@ l1= preprocessor.getSets.getSet("l1")
 l1.genMesh(xc.meshDir.I)
     
 # Constraints
-coacciones= preprocessor.getConstraintLoader
-fix_nodes_lines.ConstraintsForLineExtremeNodes(l,coacciones,fix_node_6dof.fixNode6DOF)
-fix_nodes_lines.ConstraintsForLineInteriorNodes(l,coacciones,fix_node_6dof.Nodo6DOFGirosImpedidos)
+constraints= preprocessor.getConstraintLoader
+predefined_spaces.ConstraintsForLineExtremeNodes(l,modelSpace.fixNode000_000)
+predefined_spaces.ConstraintsForLineInteriorNodes(l,modelSpace.fixNodeFFF_000)
 
 # Loads definition
 cargas= preprocessor.getLoadLoader
@@ -149,9 +148,10 @@ print "ratio3= ",(ratio3)
 '''
     
 import os
+from miscUtils import LogMessages as lmsg
 fname= os.path.basename(__file__)
 if (abs(ratio1)<1e-11) & (abs(ratio2)<1e-11) & (abs(ratio3)<1e-11) :
   print "test ",fname,": ok."
 else:
-  print "test ",fname,": ERROR."
+  lmsg.error(fname+' ERROR.')
 

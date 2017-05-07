@@ -48,12 +48,12 @@ nod= nodes.newNodeXYZ(1,1,1)
 
 apoyo_pot.colocaApoyoFicticioPotDeslizanteYNodos(preprocessor, 1,2,1,"teflonK")
 # Constraints
-coacciones= preprocessor.getConstraintLoader
+constraints= preprocessor.getConstraintLoader
 
-fix_node_6dof.fixNode6DOF(coacciones,1)
-spc= coacciones.newSPConstraint(2,3,0.0) # Nodo 2
-spc= coacciones.newSPConstraint(2,4,0.0)
-spc= coacciones.newSPConstraint(2,5,0.0)
+fix_node_6dof.fixNode6DOF(constraints,1)
+spc= constraints.newSPConstraint(2,3,0.0) # Nodo 2
+spc= constraints.newSPConstraint(2,4,0.0)
+spc= constraints.newSPConstraint(2,5,0.0)
 
 
 # Loads definition
@@ -91,8 +91,9 @@ print "ratio3= ",(ratio3)
    '''
 
 import os
+from miscUtils import LogMessages as lmsg
 fname= os.path.basename(__file__)
 if (ratio1<1e-15) & (ratio2<1e-15) & (ratio3<1e-15):
   print "test ",fname,": ok."
 else:
-  print "test ",fname,": ERROR."
+  lmsg.error(fname+' ERROR.')

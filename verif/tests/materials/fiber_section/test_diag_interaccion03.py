@@ -41,8 +41,9 @@ print "ratio4= ",(ratio4)
    (las coordenadas de los vértices son «calculadas») se pierde precisión por lo
    que ha habido que aumentar la toleracia en el ratio3 respecto al test 01
    (test_diag_interaccion01) '''
+from miscUtils import LogMessages as lmsg
 fname= os.path.basename(__file__)
 if((abs(ratio1)<1e-5) & (abs(ratio2)<1e-5) & (abs(ratio3)<2e-2) & (abs(ratio4)<1e-5)):
   print "test ",fname,": ok."
 else:
-  print "test ",fname,": ERROR."
+  lmsg.error(fname+' ERROR.')

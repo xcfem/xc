@@ -53,11 +53,11 @@ zl2.setupVectors(xc.Vector([-1,1,0]),xc.Vector([-1,-1,0]))
 zl2.setMaterial(0,"k")
 
 # Constraints
-coacciones= preprocessor.getConstraintLoader
-spc= coacciones.newSPConstraint(1,0,0.0) # Nodo 1
-spc= coacciones.newSPConstraint(1,1,0.0)
-spc= coacciones.newSPConstraint(1,2,0.0)
-spc= coacciones.newSPConstraint(2,2,0.0) # Nodo 2
+constraints= preprocessor.getConstraintLoader
+spc= constraints.newSPConstraint(1,0,0.0) # Nodo 1
+spc= constraints.newSPConstraint(1,1,0.0)
+spc= constraints.newSPConstraint(1,2,0.0)
+spc= constraints.newSPConstraint(2,2,0.0) # Nodo 2
 
 
 # Loads definition
@@ -104,8 +104,9 @@ print "ratio2= ",(ratio2)
    '''
   
 import os
+from miscUtils import LogMessages as lmsg
 fname= os.path.basename(__file__)
 if (abs(ratio1)<1e-10) & (abs(ratio2)<1e-10):
   print "test ",fname,": ok."
 else:
-  print "test ",fname,": ERROR."
+  lmsg.error(fname+' ERROR.')

@@ -53,8 +53,9 @@ ratio5= (pt.ue()-3)/3
 
 
 import os
+from miscUtils import LogMessages as lmsg
 fname= os.path.basename(__file__)
 if((ratio1<1e-15) & (ratio2<1e-15) & (ratio3<1e-15) & (ratio4<1e-15) & (ratio5<1e-15)):
   print "test ",fname,": ok."
 else:
-  print "test ",fname,": ERROR."
+  lmsg.error(fname+' ERROR.')

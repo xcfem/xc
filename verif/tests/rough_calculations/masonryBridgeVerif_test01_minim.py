@@ -78,8 +78,9 @@ ratio1= abs(n-nTeor)/nTeor
 # print 'ratio1= ', ratio1
 
 import os
+from miscUtils import LogMessages as lmsg
 fname= os.path.basename(__file__)
 if abs(ratio1)<0.06:
   print "test ",fname,": ok."
 else:
-  print "test ",fname,": ERROR."
+  lmsg.error(fname+' ERROR.')

@@ -58,9 +58,9 @@ elementos.defaultMaterial= "scc"
 elementos.defaultTag= 1 #Tag for next element.
 beam3d= elementos.newElement("elastic_beam_3d",xc.ID([1,2]));
 
-coacciones= preprocessor.getConstraintLoader
+constraints= preprocessor.getConstraintLoader
 
-fix_node_6dof.fixNode6DOF(coacciones,1)
+fix_node_6dof.fixNode6DOF(constraints,1)
 
 cargas= preprocessor.getLoadLoader
 
@@ -122,10 +122,11 @@ print "N1= ",N1
 print "ratio2= ",ratio2
    '''
 
+from miscUtils import LogMessages as lmsg
 fname= os.path.basename(__file__)
 if (abs(ratio1-1.0)<1e-5) & (abs(ratio2-1.0)<1e-5):
   print "test ",fname,": ok."
 else:
-  print "test ",fname,": ERROR."
+  lmsg.error(fname+' ERROR.')
 
 os.system("rm -f /tmp/test03.db") # Your garbage you clean it

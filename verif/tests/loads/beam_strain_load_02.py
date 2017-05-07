@@ -53,9 +53,9 @@ elementos.defaultTag= 1 #Tag for next element.
 beam3d= elementos.newElement("elastic_beam_3d",xc.ID([1,2]));
     
 # Constraints
-coacciones= preprocessor.getConstraintLoader
-fix_node_6dof.fixNode6DOF(coacciones,1)
-fix_node_6dof.fixNode6DOF(coacciones,2)
+constraints= preprocessor.getConstraintLoader
+fix_node_6dof.fixNode6DOF(constraints,1)
+fix_node_6dof.fixNode6DOF(constraints,2)
 
     # Loads definition
 cargas= preprocessor.getLoadLoader
@@ -91,8 +91,9 @@ ratio= ((axil2-N)/N)
 
 
 import os
+from miscUtils import LogMessages as lmsg
 fname= os.path.basename(__file__)
 if abs(ratio)<1e-5:
   print "test ",fname,": ok."
 else:
-  print "test ",fname,": ERROR."
+  lmsg.error(fname+' ERROR.')

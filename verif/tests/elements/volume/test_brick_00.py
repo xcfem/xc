@@ -37,7 +37,7 @@ elementos.defaultMaterial= "elast3d"
 elementos.defaultTag= 1 #Tag for the next element.
 brick= elementos.newElement("brick",xc.ID([9,10,11,12,13,14,15,16]));
 
-coacciones= preprocessor.getConstraintLoader
+constraints= preprocessor.getConstraintLoader
 #Constrain the displacement of node 1.
 
 nod9.fix(xc.ID([0,1,2]),xc.Vector([0,0,0]))
@@ -86,8 +86,9 @@ print "ratio1= ",ratio1
    '''
 
 import os
+from miscUtils import LogMessages as lmsg
 fname= os.path.basename(__file__)
 if(ratio1<1e-12):
   print "test ",fname,": ok."
 else:
-  print "test ",fname,": ERROR."
+  lmsg.error(fname+' ERROR.')

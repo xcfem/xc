@@ -64,12 +64,12 @@ l.nDiv= NumDiv
 
 
 # Constraints
-coacciones= preprocessor.getConstraintLoader
+constraints= preprocessor.getConstraintLoader
 
 #
-spc= coacciones.newSPConstraint(1,0,0.0) # Nodo 2,gdl 0
-spc= coacciones.newSPConstraint(1,1,0.0) # Nodo 2,gdl 1
-spc= coacciones.newSPConstraint(1,2,0.0) # Nodo 2,gdl 2
+spc= constraints.newSPConstraint(1,0,0.0) # Nodo 2,gdl 0
+spc= constraints.newSPConstraint(1,1,0.0) # Nodo 2,gdl 1
+spc= constraints.newSPConstraint(1,2,0.0) # Nodo 2,gdl 2
 
 
 setTotal= preprocessor.getSets.getSet("total")
@@ -102,8 +102,9 @@ print "ratio1= ",(ratio1)
    '''
 
 import os
+from miscUtils import LogMessages as lmsg
 fname= os.path.basename(__file__)
 if (abs(ratio1)<5e-3):
   print "test ",fname,": ok."
 else:
-  print "test ",fname,": ERROR."
+  lmsg.error(fname+' ERROR.')

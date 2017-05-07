@@ -107,6 +107,13 @@ class SolidMechanics3D(PredefinedSpace):
     self.Uy= 1
     self.Uz= 2
 
+  def fixNode000(self, nodeTag):
+    '''Restrain all three node DOFs (i. e. make them zero).'''
+    constraints= self.preprocessor.getConstraintLoader
+    constraints.newSPConstraint(nodeTag,0,0.0) # nodeTag, DOF, constrValue
+    constraints.newSPConstraint(nodeTag,1,0.0)
+    constraints.newSPConstraint(nodeTag,2,0.0)
+
 def gdls_elasticidad3D(nodes):
   '''Defines the dimension of the space: nodes by three coordinates (x,y,z) 
      and three DOF for each node (Ux,Uy,Uz)
@@ -148,7 +155,49 @@ class StructuralMechanics3D(PredefinedSpace):
     constraints.newSPConstraint(nodeTag,0,0.0) # nodeTag, DOF, constrValue
     constraints.newSPConstraint(nodeTag,1,0.0)
     constraints.newSPConstraint(nodeTag,2,0.0)
+    
+  def fixNode000_F00(self, nodeTag):
+    '''Restrain all DOFs except for the rotation about X axis.'''
+    constraints= self.preprocessor.getConstraintLoader
+    constraints.newSPConstraint(nodeTag,0,0.0) # nodeTag, DOF, constrValue
+    constraints.newSPConstraint(nodeTag,1,0.0)
+    constraints.newSPConstraint(nodeTag,2,0.0)
+    constraints.newSPConstraint(nodeTag,4,0.0)
+    constraints.newSPConstraint(nodeTag,5,0.0)   
 
+  def fixNode000_0F0(self, nodeTag):
+    '''Restrain all DOFs except for the rotation about Y axis.'''
+    constraints= self.preprocessor.getConstraintLoader
+    constraints.newSPConstraint(nodeTag,0,0.0) # nodeTag, DOF, constrValue
+    constraints.newSPConstraint(nodeTag,1,0.0)
+    constraints.newSPConstraint(nodeTag,2,0.0)
+    constraints.newSPConstraint(nodeTag,3,0.0)
+    constraints.newSPConstraint(nodeTag,5,0.0)   
+
+  def fixNode000_00F(self, nodeTag):
+    '''Restrain all DOFs except for the rotation about Z axis.'''
+    constraints= self.preprocessor.getConstraintLoader
+    constraints.newSPConstraint(nodeTag,0,0.0) # nodeTag, DOF, constrValue
+    constraints.newSPConstraint(nodeTag,1,0.0)
+    constraints.newSPConstraint(nodeTag,2,0.0)
+    constraints.newSPConstraint(nodeTag,3,0.0)
+    constraints.newSPConstraint(nodeTag,4,0.0)
+
+  def fixNodeF00_00F(self, nodeTag):
+    '''Restrain all DOFs except for X displacement and the
+       rotation about Z axis.'''
+    constraints= self.preprocessor.getConstraintLoader
+    constraints.newSPConstraint(nodeTag,1,0.0) # nodeTag, DOF, constrValue
+    constraints.newSPConstraint(nodeTag,2,0.0)
+    constraints.newSPConstraint(nodeTag,3,0.0)
+    constraints.newSPConstraint(nodeTag,4,0.0)
+
+  def fixNodeFFF_000(self, nodeTag):
+    '''Restrain only rotations (i. e. ThetaX= 0, ThetaY= 0 and ThetaZ= 0).'''
+    constraints= self.preprocessor.getConstraintLoader
+    constraints.newSPConstraint(nodeTag,3,0.0) # nodeTag, DOF, constrValue
+    constraints.newSPConstraint(nodeTag,4,0.0)
+    constraints.newSPConstraint(nodeTag,5,0.0)
     
 def gdls_resist_materiales3D(nodes):
   '''Defines the dimension of the space: nodes by three coordinates (x,y,z) and six DOF for each node (Ux,Uy,Uz,thetaX,thetaY,thetaZ)
@@ -157,3 +206,17 @@ def gdls_resist_materiales3D(nodes):
   '''
   lmsg.warning('gdls_resist_materiales3D DEPRECATED; use StructuralMechanics3D.')
   return StructuralMechanics3D(nodes)
+
+def ConstraintsForLineInteriorNodes(setLinea, constraint):
+  '''Aplying constraint on the interior nodes of a model line.'''
+
+  tags= setLinea.getNodeLayers.getLayer(0).getTagsInteriorNodes()
+  for i in tags:
+    constraint(i)
+
+def ConstraintsForLineExtremeNodes(setLinea, constraint):
+  '''Aplying constraint on the extreme nodes of a model line.'''
+  fN= setLinea.firstNode.tag
+  lN= setLinea.lastNode.tag
+  constraint(fN)
+  constraint(lN)

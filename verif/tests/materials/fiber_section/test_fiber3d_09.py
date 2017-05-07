@@ -88,18 +88,18 @@ elementos.defaultTag= 1
 zl= elementos.newElement("zero_length_section",xc.ID([1,2]))
 
 # Constraints
-coacciones= preprocessor.getConstraintLoader
+constraints= preprocessor.getConstraintLoader
 #
-spc= coacciones.newSPConstraint(1,0,0.0) # Nodo 1
-spc= coacciones.newSPConstraint(1,1,0.0)
-spc= coacciones.newSPConstraint(1,2,0.0)
-spc= coacciones.newSPConstraint(1,3,0.0)
-spc= coacciones.newSPConstraint(1,4,0.0)
-spc= coacciones.newSPConstraint(1,5,0.0)
+spc= constraints.newSPConstraint(1,0,0.0) # Nodo 1
+spc= constraints.newSPConstraint(1,1,0.0)
+spc= constraints.newSPConstraint(1,2,0.0)
+spc= constraints.newSPConstraint(1,3,0.0)
+spc= constraints.newSPConstraint(1,4,0.0)
+spc= constraints.newSPConstraint(1,5,0.0)
 
-spc= coacciones.newSPConstraint(2,1,0.0)
-spc= coacciones.newSPConstraint(2,2,0.0)
-spc= coacciones.newSPConstraint(2,3,0.0)
+spc= constraints.newSPConstraint(2,1,0.0)
+spc= constraints.newSPConstraint(2,2,0.0)
+spc= constraints.newSPConstraint(2,3,0.0)
 
 # Loads definition
 cargas= preprocessor.getLoadLoader
@@ -187,8 +187,9 @@ print "ratio11= ",(ratio11)
 '''
 
 import os
+from miscUtils import LogMessages as lmsg
 fname= os.path.basename(__file__)
 if (abs(ratio1)<1e-8) & (abs(ratio2-1.0)<1e-8) & (abs(ratio3)<1e-8) & (abs(ratio4)<1e-8) & (abs(ratio5)<1e-8) & (abs(ratio6)<1e-8) & (abs(ratio7)<1e-8) & (abs(ratio8)<1e-8) & (abs(ratio9)<1e-8) & (abs(ratio10)<1e-8) & (abs(ratio11)<1e-8) :
   print "test ",fname,": ok."
 else:
-  print "test ",fname,": ERROR."
+  lmsg.error(fname+' ERROR.')

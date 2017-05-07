@@ -66,16 +66,16 @@ s.nDivJ= NumDivJ
 f1= preprocessor.getSets.getSet("f1")
 f1.genMesh(xc.meshDir.I)
 
-coacciones= preprocessor.getConstraintLoader
+constraints= preprocessor.getConstraintLoader
 lados= s.getEdges
 #Edge iterator
 for l in lados:
   vTang= l.getEdge.getTang(0)
   listTagNodes= l.getEdge.getNodeTags()
   if(abs(vTang[1])<1e-6) & (abs(vTang[2])<1e-6):
-    fix_node_6dof.Nodo6DOFGirosYZLibresLista(coacciones,l.getEdge.getNodeTags()) # Borde paralelo al eje X
+    fix_node_6dof.Nodo6DOFGirosYZLibresLista(constraints,l.getEdge.getNodeTags()) # Borde paralelo al eje X
   if(abs(vTang[0])<1e-6) & (abs(vTang[2])<1e-6):
-    fix_node_6dof.Nodo6DOFGirosXZLibresLista(coacciones,l.getEdge.getNodeTags()) # Borde paralelo al eje Y
+    fix_node_6dof.Nodo6DOFGirosXZLibresLista(constraints,l.getEdge.getNodeTags()) # Borde paralelo al eje Y
 
 # Loads definition
 cargas= preprocessor.getLoadLoader
@@ -131,8 +131,9 @@ print "ratio2: ",ratio2
    '''
 
 import os
+from miscUtils import LogMessages as lmsg
 fname= os.path.basename(__file__)
 if (abs(ratio1)<0.18) & (abs(ratio2)<1e-9):
   print "test ",fname,": ok."
 else:
-  print "test ",fname,": ERROR."
+  lmsg.error(fname+' ERROR.')

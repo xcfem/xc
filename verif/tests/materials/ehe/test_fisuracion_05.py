@@ -72,12 +72,12 @@ fiberSectionRepr= secHA.getFiberSectionRepr()
 fiberSectionRepr.setGeomNamed("geomSecHA")
 secHA.setupFibers()
 
-banco_pruebas_scc3d.modeloSecc3d(preprocessor, "secHA")
+banco_pruebas_scc3d.sectionModel(preprocessor, "secHA")
 
 # Constraints
-coacciones= preprocessor.getConstraintLoader
-fix_node_6dof.fixNode6DOF(coacciones,1)
-fix_node_6dof.Nodo6DOFMovXGirosYZLibres(coacciones,2)
+constraints= preprocessor.getConstraintLoader
+fix_node_6dof.fixNode6DOF(constraints,1)
+fix_node_6dof.Nodo6DOFMovXGirosYZLibres(constraints,2)
 
 # Loads definition
 cargas= preprocessor.getLoadLoader
@@ -124,8 +124,9 @@ print "ratio2= ",ratio2
 
 
 import os
+from miscUtils import LogMessages as lmsg
 fname= os.path.basename(__file__)
 if (abs(ratio1)<0.05) & (abs(ratio2)<0.05):
   print "test ",fname,": ok."
 else:
-  print "test ",fname,": ERROR."
+  lmsg.error(fname+' ERROR.')

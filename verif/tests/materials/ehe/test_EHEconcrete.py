@@ -48,11 +48,12 @@ sqrErr= 0.0
 for i in range(0,len(fcmDat)):
   sqrErr+= (fcmDat[i]-fcmCalc[i])**2
 import os
+from miscUtils import LogMessages as lmsg
 fname= os.path.basename(__file__)+'-fcm'
 if sqrErr<1e-8:
   print "test ",fname,": ok."
 else:
-  print "test ",fname,": ERROR."
+  lmsg.error(fname+' ERROR.')
 
 #Test Fctm
 fctmDat=[2.2,2.6,2.9,3.2,3.5,3.8,4.1,4.3, 4.5, 4.9, 5.2, 5.5, 5.8]  #[MPa]
@@ -60,11 +61,12 @@ sqrErr= 0.0
 for i in range(0,len(fctmDat)):
   sqrErr+= (fctmDat[i]-fctmCalc[i])**2
 import os
+from miscUtils import LogMessages as lmsg
 fname= os.path.basename(__file__)+'-fctm'
 if sqrErr<1e-8:
   print "test ",fname,": ok."
 else:
-  print "test ",fname,": ERROR."
+  lmsg.error(fname+' ERROR.')
 
 
 #Test Fctk005
@@ -73,22 +75,24 @@ sqrErr= 0.0
 for i in range(0,len(fctk005Dat)):
   sqrErr+= (fctk005Dat[i]-fctk005Calc[i])**2
 import os
+from miscUtils import LogMessages as lmsg
 fname= os.path.basename(__file__)+'-fctk005'
 if sqrErr<1e-8:
   print "test ",fname,": ok."
 else:
-  print "test ",fname,": ERROR."
+  lmsg.error(fname+' ERROR.')
 #Test Fctk095
 fctk095Dat=[2.9,3.3,3.8,4.2,4.6,4.9,5.3, 5.6, 5.8, 6.3, 6.7, 7.2, 7.5]  #[MPa]
 sqrErr= 0.0
 for i in range(0,len(fctk095Dat)):
   sqrErr+= (fctk095Dat[i]-fctk095Calc[i])**2
 import os
+from miscUtils import LogMessages as lmsg
 fname= os.path.basename(__file__)+'-fctk095'
 if sqrErr<1e-8:
   print "test ",fname,": ok."
 else:
-  print "test ",fname,": ERROR."
+  lmsg.error(fname+' ERROR.')
 
 #Test Ecm
 EcmDat=[26.0, 27.0, 29.0, 30.0, 31.0, 32.0, 33.0, 34.0, 35.0, 36.0, 38.0, 39.0, 40.0] #[GPa]
@@ -96,11 +100,12 @@ sqrErr= 0.0
 for i in range(0,len(EcmDat)):
   sqrErr+= (EcmDat[i]-EcmCalc[i])**2
 import os
+from miscUtils import LogMessages as lmsg
 fname= os.path.basename(__file__)+'-Ecm'
 if sqrErr<1e-8:
   print "test ",fname,": ok."
 else:
-  print "test ",fname,": ERROR."
+  lmsg.error(fname+' ERROR.')
 
 
 #Test Epsc2
@@ -109,11 +114,12 @@ sqrErr= 0.0
 for i in range(0,len(Epsc2Dat)):
   sqrErr+= (Epsc2Dat[i]-Epsc2Calc[i])**2
 import os
+from miscUtils import LogMessages as lmsg
 fname= os.path.basename(__file__)+'-Epsc2'
 if sqrErr<1e-8:
   print "test ",fname,": ok."
 else:
-  print "test ",fname,": ERROR."
+  lmsg.error(fname+' ERROR.')
 
 #Test Epscu2
 Epscu2Dat=[3.5,3.5,3.5,3.5,3.5,3.5,3.5,3.2, 3.0, 2.7,2.6,2.6,2.6] #[per thousand]
@@ -121,11 +127,12 @@ sqrErr= 0.0
 for i in range(0,len(Epscu2Dat)):
   sqrErr+= (Epscu2Dat[i]-Epscu2Calc[i])**2
 import os
+from miscUtils import LogMessages as lmsg
 fname= os.path.basename(__file__)+'-Epscu2'
 if sqrErr<1e-8:
   print "test ",fname,": ok."
 else:
-  print "test ",fname,": ERROR."
+  lmsg.error(fname+' ERROR.')
 
 #Test ExpN
 ExpNDat=[2.0,2.0,2.0,2.0,2.0,2.0,2.0,1.8,1.6,1.5,1.4,1.4,1.4]
@@ -133,9 +140,10 @@ sqrErr= 0.0
 for i in range(0,len(ExpNDat)):
   sqrErr+= (ExpNDat[i]-ExpNCalc[i])**2
 import os
+from miscUtils import LogMessages as lmsg
 fname= os.path.basename(__file__)+'-ExpN'
 if sqrErr<1e-8:
   print "test ",fname,": ok."
 else:
-  print "test ",fname,": ERROR."
+  lmsg.error(fname+' ERROR.')
 

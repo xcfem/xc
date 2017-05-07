@@ -23,8 +23,9 @@ preprocessor=  prueba.getPreprocessor
 mat= typical_materials.defElasticIsotropic3d(preprocessor, "elastIso3d",E,nu,rho)
 
 import os
+from miscUtils import LogMessages as lmsg
 fname= os.path.basename(__file__)
 if (abs(mat.E-E)<1e-15) & (abs(mat.nu-nu)<1e-15) & (abs(mat.rho-rho)<1e-15):
   print "test ",fname,": ok."
 else:
-  print "test ",fname,": ERROR."
+  lmsg.error(fname+' ERROR.')

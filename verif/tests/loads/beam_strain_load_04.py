@@ -51,10 +51,10 @@ elementos.defaultTag= 1
 beam= elementos.newElement("force_beam_column_3d",xc.ID([1,2]));
     
 # Constraints
-coacciones= preprocessor.getConstraintLoader
+constraints= preprocessor.getConstraintLoader
 
-fix_node_6dof.fixNode6DOF(coacciones,1)
-fix_node_6dof.fixNode6DOF(coacciones,2)
+fix_node_6dof.fixNode6DOF(constraints,1)
+fix_node_6dof.fixNode6DOF(constraints,2)
 
 # Loads definition
 cargas= preprocessor.getLoadLoader
@@ -104,8 +104,9 @@ print "cortanteZ= ",cortanteZ
    '''
 
 import os
+from miscUtils import LogMessages as lmsg
 fname= os.path.basename(__file__)
 if (abs(ratio)<1e-10) & (abs(momentoY)<1e-10) & (abs(momentoZ)<1e-10) & (abs(cortanteY)<1e-10) & (abs(cortanteZ)<1e-10):
   print "test ",fname,": ok."
 else:
-  print "test ",fname,": ERROR."
+  lmsg.error(fname+' ERROR.')

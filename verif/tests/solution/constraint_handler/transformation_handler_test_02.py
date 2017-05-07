@@ -64,11 +64,11 @@ beam2d= elementos.newElement("elastic_beam_2d",xc.ID([4,5]))
 beam2d.h= h
     
 # Constraints
-coacciones= preprocessor.getConstraintLoader
+constraints= preprocessor.getConstraintLoader
 #
-spc= coacciones.newSPConstraint(2,0,0.0) # Nodo 2
-spc= coacciones.newSPConstraint(2,1,0.0)
-spc= coacciones.newSPConstraint(4,1,0.0) # Nodo 4
+spc= constraints.newSPConstraint(2,0,0.0) # Nodo 2
+spc= constraints.newSPConstraint(2,1,0.0)
+spc= constraints.newSPConstraint(4,1,0.0) # Nodo 4
 
 
 # Loads definition
@@ -110,9 +110,10 @@ sigma= elem2.getN2/A+elem2.getM2/I*h/2.0
 ratio1= (delta/0.182)
 ratio2= (sigma/(-11400))
 
+from miscUtils import LogMessages as lmsg
 fname= os.path.basename(__file__)
 if (abs(ratio1-1.0)<3e-3) & (abs(ratio2-1.0)<1e-3):
   print "test ",fname,": ok."
 else:
-  print "test ",fname,": ERROR."
+  lmsg.error(fname+' ERROR.')
 

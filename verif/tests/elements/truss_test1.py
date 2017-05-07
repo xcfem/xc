@@ -50,17 +50,17 @@ truss.area= 1
 truss= elements.newElement("truss",xc.ID([3,4]));
 truss.area= 1
 
-coacciones= preprocessor.getConstraintLoader
+constraints= preprocessor.getConstraintLoader
 #Constrain the displacement of node 1.
-spc= coacciones.newSPConstraint(1,0,0.0)
-spc= coacciones.newSPConstraint(1,1,0.0)
+spc= constraints.newSPConstraint(1,0,0.0)
+spc= constraints.newSPConstraint(1,1,0.0)
 #Constrain the displacement of node 4.
-spc= coacciones.newSPConstraint(4,0,0.0)
-spc= coacciones.newSPConstraint(4,1,0.0)
+spc= constraints.newSPConstraint(4,0,0.0)
+spc= constraints.newSPConstraint(4,1,0.0)
 #Constrain the displacement of node 2 in X axis (gdl 0).
-spc= coacciones.newSPConstraint(2,0,0.0)
+spc= constraints.newSPConstraint(2,0,0.0)
 #Constrain the displacement of node 3 in X axis (gdl 0).
-spc= coacciones.newSPConstraint(3,0,0.0)
+spc= constraints.newSPConstraint(3,0,0.0)
 
 cargas= preprocessor.getLoadLoader
 #Contenedor de hipótesis de carga:
@@ -93,10 +93,11 @@ ratio2= (R2-600)/600
 #print "ratio2= ",ratio2
 
 import os
+from miscUtils import LogMessages as lmsg
 fname= os.path.basename(__file__)
 if abs(ratio1)<1e-5 and abs(ratio2)<1e-5:
   print "test ",fname,": ok."
 else:
-  print "test ",fname,": ERROR."
+  lmsg.error(fname+' ERROR.')
 
 

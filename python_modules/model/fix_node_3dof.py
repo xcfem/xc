@@ -1,11 +1,6 @@
 # -*- coding: utf-8 -*-
 
 
-# Impone movimiento nulo en todos los GDL del nodo.
-def fixNode3DOF(coacciones, idNodo):
-  print "obsolete, use fixNode000."
-  fixNode000(coacciones, idNodo)
-
 # UX= 0, UY= 0, THETA= 0
 def fixNode000(coacciones, idNodo):
   coacciones.newSPConstraint(idNodo,0,0.0) # Nodo idNodo

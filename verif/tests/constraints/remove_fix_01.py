@@ -62,9 +62,9 @@ elementos.defaultTag= 1 #Tag for the next element.
 beam3d= elementos.newElement("elastic_beam_3d",xc.ID([1,2]));
 
 # Constraints
-coacciones= preprocessor.getConstraintLoader
-fix_node_6dof.fixNode6DOF(coacciones,1)
-spc= coacciones.newSPConstraint(2,1,0.0)
+constraints= preprocessor.getConstraintLoader
+fix_node_6dof.fixNode6DOF(constraints,1)
+spc= constraints.newSPConstraint(2,1,0.0)
 spcTag= spc.tag
 # \fix[2,1,20]{ \valor{0.0} }
 
@@ -92,8 +92,8 @@ delta0= nod2.getDisp[1]  # Node 2 yAxis displacement
 
 
 
-coacciones= preprocessor.getConstraintLoader
-coacciones.removeSPConstraint(spcTag)
+constraints= preprocessor.getConstraintLoader
+constraints.removeSPConstraint(spcTag)
 #remove_fix{20}
 
 
@@ -131,8 +131,9 @@ print "ratio3= ",ratio3
    '''
 
 import os
+from miscUtils import LogMessages as lmsg
 fname= os.path.basename(__file__)
 if (abs(delta0)<1e-11) & (abs(ratio1)<1e-9) & (ratio2<1e-5) & (abs(ratio3-1.0)<1e-5):
   print "test ",fname,": ok."
 else:
-  print "test ",fname,": ERROR."
+  lmsg.error(fname+' ERROR.')

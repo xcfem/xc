@@ -26,9 +26,10 @@ errMax= concreteBase.testDiagDHormigon(preprocessor, HP45)
 # print "errMax= ",(errMax)
 
 import os
+from miscUtils import LogMessages as lmsg
 fname= os.path.basename(__file__)
 if errMax<1e-8:
   print "test ",fname,": ok."
 else:
-  print "test ",fname,": ERROR."
+  lmsg.error(fname+' ERROR.')
 

@@ -92,8 +92,8 @@ el= elementos.newElement("force_beam_column_2d",xc.ID([1,2]))
 
 
 # Constraints
-coacciones= preprocessor.getConstraintLoader
-fix_node_3dof.fixNode000(coacciones,1)
+constraints= preprocessor.getConstraintLoader
+fix_node_3dof.fixNode000(constraints,1)
 
 # Loads definition
 cargas= preprocessor.getLoadLoader
@@ -163,8 +163,9 @@ print "vReac2= ",vReac2
 print "RN2= ",RN2
    '''
 import os
+from miscUtils import LogMessages as lmsg
 fname= os.path.basename(__file__)
 if (abs(ratio0)<1e-6) & (abs(ratio1)<0.05) & (abs(ratio2)<1e-10) & (abs(ratio3)<1e-10):
   print "test ",fname,": ok."
 else:
-  print "test ",fname,": ERROR."
+  lmsg.error(fname+' ERROR.')

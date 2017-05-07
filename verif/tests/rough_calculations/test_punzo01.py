@@ -40,9 +40,10 @@ ratio2= (Vdmax-387.298334621e3)/387.298334621e3
 #print "ratio2= ",ratio2
 
 import os
+from miscUtils import LogMessages as lmsg
 fname= os.path.basename(__file__)
 if abs(ratio1)<1e-5 and abs(ratio2)<1e-5 and abs(As)<1e-15:
   print "test ",fname,": ok."
 else:
-  print "test ",fname,": ERROR."
+  lmsg.error(fname+' ERROR.')
 

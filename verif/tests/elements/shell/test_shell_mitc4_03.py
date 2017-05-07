@@ -53,16 +53,16 @@ elem= elementos.newElement("shell_mitc4",xc.ID([2,3,7,6]))
 elem= elementos.newElement("shell_mitc4",xc.ID([3,4,8,7]))
 
 # Constraints
-coacciones= preprocessor.getConstraintLoader
+constraints= preprocessor.getConstraintLoader
 
-fix_node_6dof.Nodo6DOFGirosLibres(coacciones, 1)
-spc= coacciones.newSPConstraint(2,2,0.0)
-spc= coacciones.newSPConstraint(3,2,0.0)
-spc= coacciones.newSPConstraint(4,2,0.0)
-fix_node_6dof.Nodo6DOFGirosLibres(coacciones, 5)
-spc= coacciones.newSPConstraint(6,2,0.0)
-spc= coacciones.newSPConstraint(7,2,0.0)
-spc= coacciones.newSPConstraint(8,2,0.0)
+fix_node_6dof.Nodo6DOFGirosLibres(constraints, 1)
+spc= constraints.newSPConstraint(2,2,0.0)
+spc= constraints.newSPConstraint(3,2,0.0)
+spc= constraints.newSPConstraint(4,2,0.0)
+fix_node_6dof.Nodo6DOFGirosLibres(constraints, 5)
+spc= constraints.newSPConstraint(6,2,0.0)
+spc= constraints.newSPConstraint(7,2,0.0)
+spc= constraints.newSPConstraint(8,2,0.0)
 
 # Loads definition
 cargas= preprocessor.getLoadLoader
@@ -123,8 +123,9 @@ print "ratio4= ",ratio4
 '''
 
 import os
+from miscUtils import LogMessages as lmsg
 fname= os.path.basename(__file__)
 if (abs(ratio1)<0.12) & (abs(ratio2)<0.15) & (abs(ratio3)<0.12) & (abs(ratio4)<0.15):
   print "test ",fname,": ok."
 else:
-  print "test ",fname,": ERROR."
+  lmsg.error(fname+' ERROR.')

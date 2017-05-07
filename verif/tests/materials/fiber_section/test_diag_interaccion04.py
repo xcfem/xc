@@ -61,8 +61,9 @@ print "sumQuad= ",sumQuad
 print "ratio1= ",ratio1
  '''
 
+from miscUtils import LogMessages as lmsg
 fname= os.path.basename(__file__)
 if(abs(ratio1)<0.02):
   print "test ",fname,": ok."
 else:
-  print "test ",fname,": ERROR."
+  lmsg.error(fname+' ERROR.')

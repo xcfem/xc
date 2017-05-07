@@ -54,8 +54,8 @@ beam2d= elementos.newElement("elastic_beam_2d",xc.ID([1,2]))
 beam2d.h= h
     
 # Constraints
-coacciones= preprocessor.getConstraintLoader
-fix_node_3dof.fixNode000(coacciones,1)
+constraints= preprocessor.getConstraintLoader
+fix_node_3dof.fixNode000(constraints,1)
 
 
 # Loads definition
@@ -104,8 +104,9 @@ print "ratio1= ",ratio1
  '''
 
 import os
+from miscUtils import LogMessages as lmsg
 fname= os.path.basename(__file__)
 if (abs(ratio0)<1e-10) & (abs(ratio1)<1e-12):
   print "test ",fname,": ok."
 else:
-  print "test ",fname,": ERROR."
+  lmsg.error(fname+' ERROR.')

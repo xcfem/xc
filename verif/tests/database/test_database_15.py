@@ -51,11 +51,11 @@ elem= elementos.newElement("shell_mitc4",xc.ID([1,2,3,4]))
 elem= elementos.newElement("shell_mitc4",xc.ID([5,6,7,8]))
     
 # Constraints
-coacciones= preprocessor.getConstraintLoader
-fix_node_6dof.fixNode6DOF(coacciones,1)
-fix_node_6dof.fixNode6DOF(coacciones,4)
-fix_node_6dof.fixNode6DOF(coacciones,5)
-fix_node_6dof.fixNode6DOF(coacciones,8)
+constraints= preprocessor.getConstraintLoader
+fix_node_6dof.fixNode6DOF(constraints,1)
+fix_node_6dof.fixNode6DOF(constraints,4)
+fix_node_6dof.fixNode6DOF(constraints,5)
+fix_node_6dof.fixNode6DOF(constraints,8)
 
 setTotal= preprocessor.getSets.getSet("total")
 setTotal.killElements()
@@ -192,9 +192,10 @@ print "ratio6= ",ratio6
    '''
 
 import os
+from miscUtils import LogMessages as lmsg
 fname= os.path.basename(__file__)
 if (abs(ratio1)<1e-5) & (abs(ratio2)<1e-5) & (abs(ratio3)<1e-5) & (abs(ratio5)<0.1):
   print "test ",fname,": ok."
 else:
-  print "test ",fname,": ERROR."
+  lmsg.error(fname+' ERROR.')
 os.system("rm -rf /tmp/test15.db") # Your garbage you clean it

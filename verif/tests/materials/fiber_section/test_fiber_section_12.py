@@ -42,13 +42,13 @@ fiberSectionRepr= secHP.getFiberSectionRepr()
 fiberSectionRepr.setGeomNamed("geomSecHormigonPret01")
 secHP.setupFibers()
 
-elem= banco_pruebas_scc3d.modeloSecc3d(preprocessor, "secHP")
+elem= banco_pruebas_scc3d.sectionModel(preprocessor, "secHP")
 
 # Constraints
-coacciones= preprocessor.getConstraintLoader
+constraints= preprocessor.getConstraintLoader
 
-fix_node_6dof.fixNode6DOF(coacciones,1)
-fix_node_6dof.Nodo6DOFMovXGiroZLibres(coacciones,2)
+fix_node_6dof.fixNode6DOF(constraints,1)
+fix_node_6dof.Nodo6DOFMovXGiroZLibres(constraints,2)
 
 # Loads definition
 cargas= preprocessor.getLoadLoader
@@ -131,8 +131,9 @@ print "defN= ",(defN)
  '''
 
 import os
+from miscUtils import LogMessages as lmsg
 fname= os.path.basename(__file__)
 if (abs(ratio1)<1e-10) & (abs(ratio2)<1e-10) & (abs(ratio3)<1e-9) & (abs(ratio5)<1e-9) & (abs(RN2)<1e-9) & (abs(esfMy)<1e-10) & (tipoSolic == 2) & (abs(ratio4)<1e-6) & (analOk == 0.0) :
   print "test ",fname,": ok."
 else:
-  print "test ",fname,": ERROR."
+  lmsg.error(fname+' ERROR.')

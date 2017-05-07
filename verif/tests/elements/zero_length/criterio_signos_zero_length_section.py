@@ -87,8 +87,8 @@ elementos.defaultTag= 1
 zl= elementos.newElement("zero_length_section",xc.ID([1,2]))
 
 # Constraints
-coacciones= preprocessor.getConstraintLoader
-fix_node_6dof.fixNode6DOF(coacciones,1)
+constraints= preprocessor.getConstraintLoader
+fix_node_6dof.fixNode6DOF(constraints,1)
 
 # Loads definition
 cargas= preprocessor.getLoadLoader
@@ -254,10 +254,11 @@ print "ratio4= ",ratio4
 '''
 
 import os
+from miscUtils import LogMessages as lmsg
 fname= os.path.basename(__file__)
 if (ratio1 < 1e-12) & (ratio2 < 1e-12) & (ratio3 < 1e-4) & (ratio4 < 1e-4):
   print "test ",fname,": ok."
 else:
-  print "test ",fname,": ERROR."
+  lmsg.error(fname+' ERROR.')
 
 

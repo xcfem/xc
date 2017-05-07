@@ -36,8 +36,9 @@ sz= s3.getPoints.size
 #print "sz= ", sz
 
 import os
+from miscUtils import LogMessages as lmsg
 fname= os.path.basename(__file__)
 if (sz==3):
   print "test ",fname,": ok."
 else:
-  print "test ",fname,": ERROR."
+  lmsg.error(fname+' ERROR.')

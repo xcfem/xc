@@ -60,8 +60,8 @@ beam2d.h= h
 # fin de la definición de elementos
     
 # Constraints
-coacciones= preprocessor.getConstraintLoader
-fix_node_3dof.fixNode000(coacciones,1)
+constraints= preprocessor.getConstraintLoader
+fix_node_3dof.fixNode000(constraints,1)
 
 
 # Loads definition
@@ -110,8 +110,9 @@ ratio1= ((delta1-delta1Teor)/delta1Teor)
 
 
 import os
+from miscUtils import LogMessages as lmsg
 fname= os.path.basename(__file__)
 if ((abs(ratio0)<1e-10) & (abs(ratio1)<1e-12)):
   print "test ",fname,": ok."
 else:
-  print "test ",fname,": ERROR."
+  lmsg.error(fname+' ERROR.')

@@ -63,8 +63,8 @@ beam3d= elementos.newElement("elastic_beam_3d",xc.ID([1,2]));
 
 
 # Constraints
-coacciones= preprocessor.getConstraintLoader
-fix_node_6dof.fixNode6DOF(coacciones,1)
+constraints= preprocessor.getConstraintLoader
+fix_node_6dof.fixNode6DOF(constraints,1)
 
 # Loads definition
 cargas= preprocessor.getLoadLoader
@@ -129,8 +129,9 @@ print "ratio5= ",ratio5}
 '''
 
 import os
+from miscUtils import LogMessages as lmsg
 fname= os.path.basename(__file__)
 if (abs(ratio1-1.0)<1e-5) & (ratio2<1e-5) & ratio3 & (ratio4<1e-5) & (abs(ratio5-1.0)<1e-5):
   print "test ",fname,": ok."
 else:
-  print "test ",fname,": ERROR."
+  lmsg.error(fname+' ERROR.')

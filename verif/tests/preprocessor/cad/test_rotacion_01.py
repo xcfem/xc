@@ -35,8 +35,9 @@ dist34= points.dist(preprocessor, 3,4)
 #print "dist(3,4)= ",dist34
 
 import os
+from miscUtils import LogMessages as lmsg
 fname= os.path.basename(__file__)
 if (dist34<1e-12):
   print "test ",fname,": ok."
 else:
-  print "test ",fname,": ERROR."
+  lmsg.error(fname+' ERROR.')
