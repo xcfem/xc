@@ -12,7 +12,7 @@ from solution import predefined_solutions # Procedimiento de solución
 from materials.ehe import EHE_concrete
 from materials.ehe import EHE_reinforcing_steel
 from materials.ehe import fisuracionEHE
-from model import fix_node_6dof
+from model import predefined_spaces
 import math
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
@@ -75,9 +75,9 @@ secHA.setupFibers()
 banco_pruebas_scc3d.sectionModel(preprocessor, "secHA")
 
 # Constraints
-constraints= preprocessor.getConstraintLoader
-fix_node_6dof.fixNode6DOF(constraints,1)
-fix_node_6dof.Nodo6DOFMovXGirosYZLibres(constraints,2)
+modelSpace= predefined_spaces.getStructuralMechanics3DSpace(preprocessor)
+modelSpace.fixNode000_000(1)
+modelSpace.fixNodeF00_0FF(2)
 
 # Loads definition
 cargas= preprocessor.getLoadLoader

@@ -11,7 +11,6 @@ import geom
 import xc
 from solution import predefined_solutions
 from model import predefined_spaces
-from model import fix_node_6dof
 from materials import typical_materials
 import math
 
@@ -65,9 +64,8 @@ ratio2= ((fuerte[0])**2+(fuerte[1])**2)
 
 
 # Constraints
-constraints= preprocessor.getConstraintLoader
 
-fix_node_6dof.fixNode6DOF(constraints,1)
+modelSpace.fixNode000_000(1)
 
 # Loads definition
 cargas= preprocessor.getLoadLoader

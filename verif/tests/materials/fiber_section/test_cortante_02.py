@@ -11,7 +11,7 @@ import xc
 from materials.ehe import areaBarrasEHE
 from misc import banco_pruebas_scc3d
 from solution import predefined_solutions
-
+from model import predefined_spaces
 
 from materials.ehe import EHE_concrete
 from materials.ehe import EHE_reinforcing_steel
@@ -21,7 +21,6 @@ from materials.ehe import torsionEHE
 from materials.ehe import areaBarrasEHE
 from materials import typical_materials
 
-from model import fix_node_6dof
 import math
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (A_OO)"
@@ -103,9 +102,8 @@ secHA.setRespTByName("respT")
 banco_pruebas_scc3d.sectionModel(preprocessor, "secHA")
 
 # Constraints
-constraints= preprocessor.getConstraintLoader
-
-fix_node_6dof.fixNode6DOF(constraints,1)
+modelSpace= predefined_spaces.getStructuralMechanics3DSpace(preprocessor)
+modelSpace.fixNode000_000(1)
 
 # Loads definition
 cargas= preprocessor.getLoadLoader

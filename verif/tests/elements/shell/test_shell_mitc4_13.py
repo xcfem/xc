@@ -25,7 +25,6 @@ import geom
 import xc
 from solution import predefined_solutions
 from model import predefined_spaces
-from model import fix_node_6dof
 from materials import typical_materials
 
 # Problem type
@@ -43,13 +42,10 @@ nodes.newSeedNode()
 nmb1= typical_materials.defElasticMembranePlateSection(preprocessor, "memb1",E,nu,0.0,thickness)
 
 
-
 seedElemLoader= preprocessor.getElementLoader.seedElemLoader
 seedElemLoader.defaultMaterial= "memb1"
 seedElemLoader.defaultTag= 1
 elem= seedElemLoader.newElement("shell_mitc4",xc.ID([0,0,0,0]))
-
-
 
 puntos= preprocessor.getCad.getPoints
 pt= puntos.newPntIDPos3d(1,geom.Pos3d(0.0,0.0,0.0))
@@ -62,16 +58,13 @@ s= surfaces.newQuadSurfacePts(1,2,3,4)
 s.nDivI= NumDivI
 s.nDivJ= NumDivJ
 
-
-
 f1= preprocessor.getSets.getSet("f1")
 f1.genMesh(xc.meshDir.I)
-constraints= preprocessor.getConstraintLoader
 lados= s.getEdges
 #Edge iterator
 for l in lados:
-  fix_node_6dof.Nodo6DOFGirosLibresLista(constraints,l.getEdge.getNodeTags())
-
+  for i in l.getEdge.getNodeTags():
+    modelSpace.fixNode000_FFF(i)
 
 # Loads definition
 cargas= preprocessor.getLoadLoader

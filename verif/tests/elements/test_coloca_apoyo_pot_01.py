@@ -18,7 +18,6 @@ import xc_base
 import geom
 import xc
 
-from model import fix_node_6dof
 from materials import apoyosPot
 from model import predefined_spaces
 from model import define_apoyos
@@ -45,13 +44,12 @@ nod2= nodes.newNodeXYZ(1,1,1)
 
 apoyo_pot.colocaApoyoFicticioPotDeslizanteNodos(preprocessor, nod1.tag,nod2.tag,1,"teflonKX","teflonKY")
 # Constraints
-constraints= preprocessor.getConstraintLoader
 
 #
-fix_node_6dof.fixNode6DOF(constraints,nod1.tag)
-spc= constraints.newSPConstraint(nod2.tag,3,0.0) # Nodo 2
-spc= constraints.newSPConstraint(nod2.tag,4,0.0)
-spc= constraints.newSPConstraint(nod2.tag,5,0.0)
+modelSpace.fixNode000_000(nod1.tag)
+spc= modelSpace.constraints.newSPConstraint(nod2.tag,3,0.0) # Nodo 2
+spc= modelSpace.constraints.newSPConstraint(nod2.tag,4,0.0)
+spc= modelSpace.constraints.newSPConstraint(nod2.tag,5,0.0)
 
 
 # Loads definition

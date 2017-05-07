@@ -4,7 +4,6 @@ import geom
 import xc
 from solution import predefined_solutions
 from model import predefined_spaces
-from model import fix_node_6dof
 from materials import typical_materials
 from materials.perfiles_metalicos.aisc import perfiles_w_aisc_metric
 from sympy.physics import units

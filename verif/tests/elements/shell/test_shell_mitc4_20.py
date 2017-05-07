@@ -14,7 +14,6 @@ import geom
 import xc
 from solution import predefined_solutions
 from model import predefined_spaces
-from model import fix_node_6dof
 from model import cargas_nodo
 from materials import typical_materials
 import math
@@ -72,16 +71,14 @@ s= surfaces.newQuadSurfacePts(1,2,3,4)
 s.nDivI= NumDivI
 s.nDivJ= NumDivJ
 
-
-constraints= preprocessor.getConstraintLoader
-
+# Constraints
 f1= preprocessor.getSets.getSet("f1")
 f1.genMesh(xc.meshDir.I)
 lados= s.getEdges
 #Edge iterator
 for l in lados:
-  fix_node_6dof.fixNode6DOFLista(constraints,l.getEdge.getNodeTags())
-
+  for i in l.getEdge.getNodeTags():
+    modelSpace.fixNode000_000(i)
 
 # Loads definition
 cargas= preprocessor.getLoadLoader

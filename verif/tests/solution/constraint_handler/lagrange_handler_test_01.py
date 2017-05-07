@@ -21,7 +21,6 @@ import xc
 from model import predefined_spaces
 from solution import predefined_solutions
 from materials import typical_materials
-from model import fix_node_6dof
 
 # Model definition
 prueba= xc.ProblemaEF()

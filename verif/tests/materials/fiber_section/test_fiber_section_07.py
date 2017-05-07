@@ -20,7 +20,7 @@ brazo= 0.5 # Brazo de las barras respecto al eje de la sección.
 
 
 from materials.ehe import EHE_reinforcing_steel
-from model import fix_node_6dof
+from model import predefined_spaces
 from solution import predefined_solutions
 
 # Coeficientes de seguridad.
@@ -49,10 +49,9 @@ secBarras.setupFibers()
 banco_pruebas_scc3d.sectionModel(preprocessor, "secBarras")
 
 # Constraints
-constraints= preprocessor.getConstraintLoader
-
-fix_node_6dof.fixNode6DOF(constraints,1)
-fix_node_6dof.Nodo6DOFMovXGiroZLibres(constraints,2)
+modelSpace= predefined_spaces.getStructuralMechanics3DSpace(preprocessor)
+modelSpace.fixNode000_000(1)
+modelSpace.fixNodeF00_00F(2)
 
 # Loads definition
 cargas= preprocessor.getLoadLoader

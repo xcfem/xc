@@ -22,7 +22,7 @@ from solution import predefined_solutions
 from materials.ehe import EHE_concrete
 from materials.ehe import EHE_reinforcing_steel
 from materials.fiber_section import createFiberSets
-from model import fix_node_6dof
+from model import predefined_spaces
 
 MzDato= 8e3
 NDato= 299.54e3 # El prontuario informático sólo llega hasta ~285 kN al considerar el diagrama simplificado of the steel. '''
@@ -46,10 +46,9 @@ secHA.setupFibers()
 banco_pruebas_scc3d.sectionModel(preprocessor, "secHA")
 
 # Constraints
-constraints= preprocessor.getConstraintLoader
-
-fix_node_6dof.fixNode6DOF(constraints,1)
-fix_node_6dof.Nodo6DOFMovXGiroZLibres(constraints,2)
+modelSpace= predefined_spaces.getStructuralMechanics3DSpace(preprocessor)
+modelSpace.fixNode000_000(1)
+modelSpace.fixNodeF00_00F(2)
 
 # Loads definition
 cargas= preprocessor.getLoadLoader

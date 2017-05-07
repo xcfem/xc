@@ -18,7 +18,6 @@ import xc_base
 import geom
 import xc
 
-from model import fix_node_6dof
 from materials import apoyosNeopreno
 from model import predefined_spaces
 from model import define_apoyos

@@ -12,7 +12,6 @@ import xc
 from model import predefined_spaces
 from materials import typical_materials
 import math
-from model import fix_node_6dof
 from model import nodalReactions
 from solution import predefined_solutions
 
@@ -44,25 +43,25 @@ elem= elementos.newElement("shell_mitc4",xc.ID([1,2,3,4]))
 
 # Constraints
 constraints= preprocessor.getConstraintLoader
-fix_node_6dof.Nodo6DOFGirosLibres(constraints, 1)
-fix_node_6dof.Nodo6DOFGirosLibres(constraints, 2)
-fix_node_6dof.Nodo6DOFGirosLibres(constraints, 3)
-fix_node_6dof.Nodo6DOFGirosLibres(constraints, 4)
-#fix_node_6dof.fixNode6DOF(constraints, 1)
-#fix_node_6dof.fixNode6DOF(constraints, 2)
-#fix_node_6dof.fixNode6DOF(constraints, 3)
-#fix_node_6dof.fixNode6DOF(constraints, 4)
+modelSpace.fixNode000_FFF(1)
+modelSpace.fixNode000_FFF(2)
+modelSpace.fixNode000_FFF(3)
+modelSpace.fixNode000_FFF(4)
+#modelSpace.fixNode000_000( 1)
+#modelSpace.fixNode000_000( 2)
+#modelSpace.fixNode000_000( 3)
+#modelSpace.fixNode000_000( 4)
 
 #Glued node.
 gluedDOFs= [0,1,2,3,4,5]
 loadOnDOFs= [0,0,0,0,0,0]
 for i in range(0,6):
   if i not in gluedDOFs:
-    constraints.newSPConstraint(10,i,0.0)
+    modelSpace.constraints.newSPConstraint(10,i,0.0)
   else:
     loadOnDOFs[i]= -1000.0
 
-glue= constraints.newGlueNodeToElement(n10,elem,xc.ID(gluedDOFs))
+glue= modelSpace.constraints.newGlueNodeToElement(n10,elem,xc.ID(gluedDOFs))
 
 # Loads definition
 cargas= preprocessor.getLoadLoader

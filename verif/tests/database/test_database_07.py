@@ -5,7 +5,6 @@ import geom
 import xc
 from solution import predefined_solutions
 from model import predefined_spaces
-from model import fix_node_6dof
 from materials import typical_materials
 
 __author__= "Luis C. Pérez Tato (LCPT)"
@@ -45,10 +44,10 @@ elem= elementos.newElement("shell_mitc4",xc.ID([1,2,3,4]))
 # Constraints
 constraints= preprocessor.getConstraintLoader
 
-fix_node_6dof.Nodo6DOFGirosLibres(constraints, 1)
-fix_node_6dof.Nodo6DOFGirosLibres(constraints, 2)
-fix_node_6dof.Nodo6DOFGirosLibres(constraints, 3)
-fix_node_6dof.Nodo6DOFGirosLibres(constraints, 4)
+modelSpace.fixNode000_FFF(1)
+modelSpace.fixNode000_FFF(2)
+modelSpace.fixNode000_FFF(3)
+modelSpace.fixNode000_FFF(4)
 
 # Loads definition
 cargas= preprocessor.getLoadLoader

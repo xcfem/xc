@@ -8,7 +8,6 @@ import xc
 from model import predefined_spaces
 from solution import predefined_solutions
 from materials import typical_materials
-from model import fix_node_6dof
 
 __author__= "Luis C. Pérez Tato (LCPT)"
 __copyright__= "Copyright 2014, LCPT"
@@ -57,9 +56,8 @@ elementos.defaultMaterial= "scc"
 elementos.defaultTag= 1 #Tag for next element.
 beam3d= elementos.newElement("elastic_beam_3d",xc.ID([1,2]));
 
-constraints= preprocessor.getConstraintLoader
 
-fix_node_6dof.fixNode6DOF(constraints,1)
+modelSpace.fixNode000_000(1)
 
 cargas= preprocessor.getLoadLoader
 

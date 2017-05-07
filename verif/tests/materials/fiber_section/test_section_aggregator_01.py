@@ -19,7 +19,6 @@ import geom
 import xc
 from solution import predefined_solutions
 from model import predefined_spaces
-from model import fix_node_6dof
 from materials import typical_materials
 
 # Section geometry
@@ -68,9 +67,8 @@ agg.setAdditions(["T","Vy","Vz"],["respT","respVy","respVz"])
 
 banco_pruebas_scc3d.sectionModel(preprocessor, "sa")
 # Constraints
-constraints= preprocessor.getConstraintLoader
-
-fix_node_6dof.fixNode6DOF(constraints,1)
+modelSpace= predefined_spaces.getStructuralMechanics3DSpace(preprocessor)
+modelSpace.fixNode000_000(1)
 
 # Loads definition
 cargas= preprocessor.getLoadLoader

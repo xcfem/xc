@@ -6,7 +6,6 @@ import geom
 import xc
 from solution import predefined_solutions
 from model import predefined_spaces
-from model import fix_node_6dof
 from materials import typical_materials
 from materials import paramRectangularSection
 from misc import banco_pruebas_scc3d
@@ -33,9 +32,8 @@ matPoteau= scc10x20.defSeccShElastica3d(preprocessor,matscc10x20)
 elemZLS= banco_pruebas_scc3d.sectionModel(preprocessor, scc10x20.nmb)
 
 # Constraints
-constraints= preprocessor.getConstraintLoader
-
-fix_node_6dof.fixNode6DOF(constraints,1)
+modelSpace= predefined_spaces.getStructuralMechanics3DSpace(preprocessor)
+modelSpace.fixNode000_000(1)
 
 # Loads definition
 cargas= preprocessor.getLoadLoader

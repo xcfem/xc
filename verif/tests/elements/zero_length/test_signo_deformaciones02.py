@@ -13,7 +13,6 @@ import geom
 import xc
 from solution import predefined_solutions
 from model import predefined_spaces
-from model import fix_node_6dof
 from materials import typical_materials
 from postprocess import prop_statistics
 
@@ -63,11 +62,10 @@ elementos.dimElem= 1 # Dimension of element space
 zl= elementos.newElement("zero_length_section",xc.ID([1,2]))
 
 # Constraints
-constraints= preprocessor.getConstraintLoader
-fix_node_6dof.fixNode6DOF(constraints,1)
-spc= constraints.newSPConstraint(2,1,0.0)
-spc= constraints.newSPConstraint(2,2,0.0)
-spc= constraints.newSPConstraint(2,3,0.0)
+modelSpace.fixNode000_000(1)
+spc= modelSpace.constraints.newSPConstraint(2,1,0.0)
+spc= modelSpace.constraints.newSPConstraint(2,2,0.0)
+spc= modelSpace.constraints.newSPConstraint(2,3,0.0)
 
 
 # Loads definition

@@ -24,7 +24,6 @@ import geom
 import xc
 from solution import predefined_solutions
 from model import predefined_spaces
-from model import fix_node_6dof
 from materials import typical_materials
 from materials import ShellInternalForces as sif
 from materials import CrossSectionInternalForces as csif
@@ -63,18 +62,13 @@ s= surfaces.newQuadSurfacePts(1,2,3,4)
 s.nDivI= NumDivI
 s.nDivJ= NumDivJ
 
-
-
 f1= preprocessor.getSets.getSet("f1")
 f1.genMesh(xc.meshDir.I)
-constraints= preprocessor.getConstraintLoader
 lados= s.getEdges
 #Edge iterator
 for l in lados:
-  fix_node_6dof.Nodo6DOFGirosLibresLista(constraints,l.getEdge.getNodeTags())
-
-
-
+  for i in l.getEdge.getNodeTags():
+    modelSpace.fixNode000_FFF(i)
 
 # Loads definition
 cargas= preprocessor.getLoadLoader

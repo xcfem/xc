@@ -16,7 +16,7 @@ from solution import predefined_solutions
 from materials.ehe import EHE_concrete
 from materials.ehe import EHE_reinforcing_steel
 from materials.fiber_section import createFiberSets
-from model import fix_node_6dof
+from model import predefined_spaces
 
 __author__= "Luis C. Pérez Tato (LCPT)"
 __copyright__= "Copyright 2014, LCPT"
@@ -48,10 +48,9 @@ secHA.setupFibers()
 banco_pruebas_scc3d.sectionModel(preprocessor, "secHA")
 
 # Constraints
-constraints= preprocessor.getConstraintLoader
-
-fix_node_6dof.fixNode6DOF(constraints,1)
-fix_node_6dof.Nodo6DOFMovXGiroZLibres(constraints,2)
+modelSpace= predefined_spaces.getStructuralMechanics3DSpace(preprocessor)
+modelSpace.fixNode000_000(1)
+modelSpace.fixNodeF00_00F(2)
 
 # Loads definition
 cargas= preprocessor.getLoadLoader

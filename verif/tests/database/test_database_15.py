@@ -7,7 +7,6 @@ import xc
 from model import predefined_spaces
 from solution import predefined_solutions
 from materials import typical_materials
-from model import fix_node_6dof
 
 __author__= "Luis C. Pérez Tato (LCPT)"
 __copyright__= "Copyright 2014, LCPT"
@@ -51,11 +50,10 @@ elem= elementos.newElement("shell_mitc4",xc.ID([1,2,3,4]))
 elem= elementos.newElement("shell_mitc4",xc.ID([5,6,7,8]))
     
 # Constraints
-constraints= preprocessor.getConstraintLoader
-fix_node_6dof.fixNode6DOF(constraints,1)
-fix_node_6dof.fixNode6DOF(constraints,4)
-fix_node_6dof.fixNode6DOF(constraints,5)
-fix_node_6dof.fixNode6DOF(constraints,8)
+modelSpace.fixNode000_000(1)
+modelSpace.fixNode000_000(4)
+modelSpace.fixNode000_000(5)
+modelSpace.fixNode000_000(8)
 
 setTotal= preprocessor.getSets.getSet("total")
 setTotal.killElements()

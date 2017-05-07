@@ -22,7 +22,6 @@ from solution import predefined_solutions
 from model import predefined_spaces
 from materials import typical_materials
 import math
-from model import fix_node_6dof
 
 prueba= xc.ProblemaEF()
 preprocessor=  prueba.getPreprocessor
@@ -53,16 +52,14 @@ elem= elementos.newElement("shell_mitc4",xc.ID([2,3,7,6]))
 elem= elementos.newElement("shell_mitc4",xc.ID([3,4,8,7]))
 
 # Constraints
-constraints= preprocessor.getConstraintLoader
-
-fix_node_6dof.Nodo6DOFGirosLibres(constraints, 1)
-spc= constraints.newSPConstraint(2,2,0.0)
-spc= constraints.newSPConstraint(3,2,0.0)
-spc= constraints.newSPConstraint(4,2,0.0)
-fix_node_6dof.Nodo6DOFGirosLibres(constraints, 5)
-spc= constraints.newSPConstraint(6,2,0.0)
-spc= constraints.newSPConstraint(7,2,0.0)
-spc= constraints.newSPConstraint(8,2,0.0)
+modelSpace.fixNode000_FFF(1)
+spc= modelSpace.constraints.newSPConstraint(2,2,0.0)
+spc= modelSpace.constraints.newSPConstraint(3,2,0.0)
+spc= modelSpace.constraints.newSPConstraint(4,2,0.0)
+modelSpace.fixNode000_FFF(5)
+spc= modelSpace.constraints.newSPConstraint(6,2,0.0)
+spc= modelSpace.constraints.newSPConstraint(7,2,0.0)
+spc= modelSpace.constraints.newSPConstraint(8,2,0.0)
 
 # Loads definition
 cargas= preprocessor.getLoadLoader

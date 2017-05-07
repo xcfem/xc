@@ -6,7 +6,6 @@ import geom
 import xc
 from solution import predefined_solutions
 from model import predefined_spaces
-from model import fix_node_6dof
 from materials import typical_materials
 from materials import paramRectangularSection
 from misc import banco_pruebas_scc3d
@@ -53,10 +52,9 @@ mat= SHS50x50x2_5.defSeccElastica3d(preprocessor,matSHS50x50x2_5)
 elemZLS= banco_pruebas_scc3d.sectionModel(preprocessor, SHS50x50x2_5.nmb)
 
 # Constraints
-constraints= preprocessor.getConstraintLoader
-
-fix_node_6dof.fixNode6DOF(constraints,1)
-fix_node_6dof.Nodo6DOFMovXGiroZLibres(constraints,2)
+modelSpace= predefined_spaces.getStructuralMechanics3DSpace(preprocessor)
+modelSpace.fixNode000_000(1)
+modelSpace.fixNodeF00_00F(2)
 
 # Loads definition
 cargas= preprocessor.getLoadLoader

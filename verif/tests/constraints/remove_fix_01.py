@@ -15,7 +15,6 @@ import xc
 from solution import predefined_solutions
 from model import predefined_spaces
 from materials import typical_materials
-from model import fix_node_6dof
 
 # Material properties
 E= 2.1e6*9.81/1e-4 # Elastic modulus (Pa)
@@ -62,9 +61,8 @@ elementos.defaultTag= 1 #Tag for the next element.
 beam3d= elementos.newElement("elastic_beam_3d",xc.ID([1,2]));
 
 # Constraints
-constraints= preprocessor.getConstraintLoader
-fix_node_6dof.fixNode6DOF(constraints,1)
-spc= constraints.newSPConstraint(2,1,0.0)
+modelSpace.fixNode000_000(1)
+spc= modelSpace.constraints.newSPConstraint(2,1,0.0)
 spcTag= spc.tag
 # \fix[2,1,20]{ \valor{0.0} }
 
@@ -92,8 +90,7 @@ delta0= nod2.getDisp[1]  # Node 2 yAxis displacement
 
 
 
-constraints= preprocessor.getConstraintLoader
-constraints.removeSPConstraint(spcTag)
+modelSpace.constraints.removeSPConstraint(spcTag)
 #remove_fix{20}
 
 

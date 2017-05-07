@@ -17,7 +17,7 @@ from materials.ehe import EHE_concrete
 from materials.ehe import EHE_reinforcing_steel
 from materials.sia262 import steelSIA262
 from materials.sia262 import crackControlSIA262 as cc
-from model import fix_node_6dof
+from model import predefined_spaces
 
 __author__= "Luis C. Pérez Tato (LCPT)"
 __copyright__= "Copyright 2014, LCPT"
@@ -64,9 +64,9 @@ datosScc1LosC.defRCSimpleSection(preprocessor, "k")
 banco_pruebas_scc3d.sectionModel(preprocessor, datosScc1LosC.sectionName)
 
 # Constraints
-constraints= preprocessor.getConstraintLoader
-fix_node_6dof.fixNode6DOF(constraints,1)
-fix_node_6dof.Nodo6DOFMovXGiroYLibres(constraints,2)
+modelSpace= predefined_spaces.getStructuralMechanics3DSpace(preprocessor)
+modelSpace.fixNode000_000(1)
+modelSpace.fixNodeF00_0F0(2)
 
 # Loads definition
 cargas= preprocessor.getLoadLoader

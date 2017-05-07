@@ -7,7 +7,6 @@ import geom
 import xc
 from solution import predefined_solutions
 from model import predefined_spaces
-from model import fix_node_6dof
 from materials import typical_materials
 import math
 
@@ -55,9 +54,9 @@ truss2.area= area
      
 # Constraints
 constraints= preprocessor.getConstraintLoader
-fix_node_6dof.fixNode6DOF(constraints,1)
-fix_node_6dof.Nodo6DOFGirosImpedidos(constraints,2)
-fix_node_6dof.fixNode6DOF(constraints,3)
+modelSpace.fixNode000_000(1)
+modelSpace.fixNodeFFF_000(2)
+modelSpace.fixNode000_000(3)
 
 # Loads definition
 cargas= preprocessor.getLoadLoader

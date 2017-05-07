@@ -17,7 +17,7 @@ import geom
 import xc
 from solution import predefined_solutions
 from model import predefined_spaces
-from model import fix_node_6dof
+from model import predefined_spaces
 from materials import typical_materials
 from solution import predefined_solutions
 from misc import banco_pruebas_scc3d
@@ -60,10 +60,9 @@ extraeParamSccFibras(rectang,scc10x20)
 
 banco_pruebas_scc3d.sectionModel(preprocessor, "rectang")
 # Constraints
-constraints= preprocessor.getConstraintLoader
-
-fix_node_6dof.fixNode6DOF(constraints,1)
-fix_node_6dof.Nodo6DOFMovXGiroZLibres(constraints,2)
+modelSpace= predefined_spaces.getStructuralMechanics3DSpace(preprocessor)
+modelSpace.fixNode000_000(1)
+modelSpace.fixNodeF00_00F(2)
 
 # Loads definition
 cargas= preprocessor.getLoadLoader

@@ -27,7 +27,6 @@ import geom
 import xc
 from solution import predefined_solutions
 from model import predefined_spaces
-from model import fix_node_6dof
 from materials import typical_materials
 
 # Problem type
@@ -66,16 +65,17 @@ s.nDivJ= NumDivJ
 f1= preprocessor.getSets.getSet("f1")
 f1.genMesh(xc.meshDir.I)
 
-constraints= preprocessor.getConstraintLoader
 lados= s.getEdges
 #Edge iterator
 for l in lados:
   vTang= l.getEdge.getTang(0)
   listTagNodes= l.getEdge.getNodeTags()
-  if(abs(vTang[1])<1e-6) & (abs(vTang[2])<1e-6):
-    fix_node_6dof.Nodo6DOFGirosYZLibresLista(constraints,l.getEdge.getNodeTags()) # Borde paralelo al eje X
-  if(abs(vTang[0])<1e-6) & (abs(vTang[2])<1e-6):
-    fix_node_6dof.Nodo6DOFGirosXZLibresLista(constraints,l.getEdge.getNodeTags()) # Borde paralelo al eje Y
+  if(abs(vTang[1])<1e-6) & (abs(vTang[2])<1e-6):# Edge parrallel to X axis
+    for i in l.getEdge.getNodeTags():
+      modelSpace.fixNode000_0FF(i)
+  if(abs(vTang[0])<1e-6) & (abs(vTang[2])<1e-6):# Edge parallel to Y axis
+    for i in l.getEdge.getNodeTags():
+      modelSpace.fixNode000_F0F(i)
 
 # Loads definition
 cargas= preprocessor.getLoadLoader

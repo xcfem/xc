@@ -21,7 +21,6 @@ import xc
 import math
 from solution import predefined_solutions
 from model import predefined_spaces
-from model import fix_node_6dof
 from materials.ec2 import EC2_concrete
 from materials import concreteBase
 from materials.ec2 import EC2_reinforcing_steel
@@ -143,9 +142,9 @@ elementos.defaultTag= 1
 elem= elementos.newElement("zero_length_section",xc.ID([1,2]))
 
 # Constraints
-constCont= preprocessor.getConstraintLoader      #constraints container
-fix_node_6dof.fixNode6DOF(constCont,1)
-fix_node_6dof.Nodo6DOFMovXGiroYLibres(constCont,2)
+constraints= preprocessor.getConstraintLoader      #constraints container
+modelSpace.fixNode000_000(1)
+modelSpace.fixNodeF00_0F0(2)
 # Loads definition
 cargas= preprocessor.getLoadLoader   #loads container
 

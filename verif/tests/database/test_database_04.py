@@ -7,7 +7,6 @@ import xc
 import math
 from model import predefined_spaces
 from materials import typical_materials
-from model import fix_node_6dof
 
 __author__= "Luis C. Pérez Tato (LCPT)"
 __copyright__= "Copyright 2014, LCPT"

@@ -21,7 +21,6 @@ import xc
 import math
 from solution import predefined_solutions
 from model import predefined_spaces
-from model import fix_node_6dof
 from materials.ec2 import EC2_concrete
 from materials import concreteBase
 from materials.ec2 import EC2_reinforcing_steel
@@ -65,7 +64,7 @@ problem=xc.ProblemaEF()              #necesary to create this instance of
                                      #the class xc.ProblemaEF()
 preprocessor=problem.getPreprocessor
 nodes= preprocessor.getNodeLoader     #nodes container
-modelSpace= predefined_spaces.StructuralMechanics3D(nodes)  #Defines the dimension of nodes  three coordinates (x,y,z) and six DOF for each node (Ux,Uy,Uz,thetaX,thetaY,thetaZ)
+modelSpace= predefined_spaces.StructuralMechanics3D(nodes)  #Defines the dimension of node positions: three coordinates (x,y,z) and degrees of freedom: six DOF for each node (Ux,Uy,Uz,thetaX,thetaY,thetaZ)
 
 
 nodes.defaultTag= 1 #First node number.
@@ -128,11 +127,10 @@ elementos.defaultTag= 1
 elem= elementos.newElement("zero_length_section",xc.ID([1,2]))
 
 # Constraints
-constCont= preprocessor.getConstraintLoader      #constraints container
-fix_node_6dof.fixNode6DOF(constCont,1)
-#fix_node_6dof.Nodo6DOFMovYZImpedidos(constCont,2)
-fix_node_6dof.Nodo6DOFMovXGiroYLibres(constCont,2)
-#fix_node_6dof.Nodo6DOFMovXGirosYZLibres(constCont,2)
+constraints= preprocessor.getConstraintLoader      #constraints container
+modelSpace.fixNode000_000(1)
+modelSpace.fixNodeF00_0F0(2)
+
 # Loads definition
 cargas= preprocessor.getLoadLoader   #loads container
 

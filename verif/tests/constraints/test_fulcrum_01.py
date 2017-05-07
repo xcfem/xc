@@ -14,7 +14,6 @@ import xc
 from solution import predefined_solutions
 from model import predefined_spaces
 from materials import typical_materials
-from model import fix_node_6dof
 from model import rigid_beam
 import math
 
@@ -37,7 +36,7 @@ nod= nodes.newNodeXYZ(L,0.0,0.0)
 # Constraints
 constraints= preprocessor.getConstraintLoader
 
-fix_node_6dof.Nodo6DOFGirosLibres(constraints, 1)
+modelSpace.fixNode000(1)
 fulcrum= rigid_beam.creaFulcrumNodos3d(preprocessor, 1,2)
 
 # Loads definition

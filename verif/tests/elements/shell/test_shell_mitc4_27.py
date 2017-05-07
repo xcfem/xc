@@ -17,7 +17,6 @@ F= 10 # Load magnitude
 import xc_base
 import geom
 import xc
-from model import fix_node_6dof
 from model import predefined_spaces
 from materials import typical_materials
 from solution import predefined_solutions
@@ -43,10 +42,9 @@ elem= elementos.newElement("shell_mitc4",xc.ID([1,2,3,4]))
 
 
 # Constraints
-constraints= preprocessor.getConstraintLoader
 
-fix_node_6dof.fixNode6DOF(constraints,1)
-fix_node_6dof.fixNode6DOF(constraints,2)
+modelSpace.fixNode000_000(1)
+modelSpace.fixNode000_000(2)
 
 # Loads definition
 cargas= preprocessor.getLoadLoader

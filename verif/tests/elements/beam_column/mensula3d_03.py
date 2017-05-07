@@ -14,7 +14,6 @@ import xc
 from solution import predefined_solutions
 from model import predefined_spaces
 from materials import typical_materials
-from model import fix_node_6dof
 
 # Material properties
 E= 2.1e6*9.81/1e-4 # Elastic modulus (Pa)
@@ -63,8 +62,7 @@ beam3d= elementos.newElement("elastic_beam_3d",xc.ID([1,2]));
 
 
 # Constraints
-constraints= preprocessor.getConstraintLoader
-fix_node_6dof.fixNode6DOF(constraints,1)
+modelSpace.fixNode000_000(1)
 
 # Loads definition
 cargas= preprocessor.getLoadLoader

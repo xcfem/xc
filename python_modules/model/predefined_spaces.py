@@ -181,6 +181,30 @@ class StructuralMechanics3D(PredefinedSpace):
     self.constraints.newSPConstraint(nodeTag,1,0.0)
     self.constraints.newSPConstraint(nodeTag,2,0.0)
     
+  def fixNode000_0FF(self, nodeTag):
+    '''Restrain the displacements (Ux,Uy and Uz) and
+       the rotation about X axis.'''
+    self.constraints.newSPConstraint(nodeTag,0,0.0) # nodeTag, DOF, constrValue
+    self.constraints.newSPConstraint(nodeTag,1,0.0)
+    self.constraints.newSPConstraint(nodeTag,2,0.0)
+    self.constraints.newSPConstraint(nodeTag,3,0.0)
+
+  def fixNode000_F0F(self, nodeTag):
+    '''Restrain the displacements (Ux,Uy and Uz) and
+       the rotation about Y axis.'''
+    self.constraints.newSPConstraint(nodeTag,0,0.0) # nodeTag, DOF, constrValue
+    self.constraints.newSPConstraint(nodeTag,1,0.0)
+    self.constraints.newSPConstraint(nodeTag,2,0.0)
+    self.constraints.newSPConstraint(nodeTag,4,0.0)
+
+  def fixNode000_FF0(self, nodeTag):
+    '''Restrain the displacements (Ux,Uy and Uz) and
+       the rotation about Z axis.'''
+    self.constraints.newSPConstraint(nodeTag,0,0.0) # nodeTag, DOF, constrValue
+    self.constraints.newSPConstraint(nodeTag,1,0.0)
+    self.constraints.newSPConstraint(nodeTag,2,0.0)
+    self.constraints.newSPConstraint(nodeTag,5,0.0)
+    
   def fixNode000_F00(self, nodeTag):
     '''Restrain all DOFs except for the rotation about X axis.'''
     self.constraints.newSPConstraint(nodeTag,0,0.0) # nodeTag, DOF, constrValue
@@ -205,6 +229,22 @@ class StructuralMechanics3D(PredefinedSpace):
     self.constraints.newSPConstraint(nodeTag,3,0.0)
     self.constraints.newSPConstraint(nodeTag,4,0.0)
 
+  def fixNodeF00_F00(self, nodeTag):
+    '''Restrain all DOFs except for X displacement and the
+       rotation about X axis.'''
+    self.constraints.newSPConstraint(nodeTag,1,0.0) # nodeTag, DOF, constrValue
+    self.constraints.newSPConstraint(nodeTag,2,0.0)
+    self.constraints.newSPConstraint(nodeTag,4,0.0)
+    self.constraints.newSPConstraint(nodeTag,5,0.0)
+
+  def fixNodeF00_0F0(self, nodeTag):
+    '''Restrain all DOFs except for X displacement and the
+       rotation about Y axis.'''
+    self.constraints.newSPConstraint(nodeTag,1,0.0) # nodeTag, DOF, constrValue
+    self.constraints.newSPConstraint(nodeTag,2,0.0)
+    self.constraints.newSPConstraint(nodeTag,3,0.0)
+    self.constraints.newSPConstraint(nodeTag,5,0.0)
+
   def fixNodeF00_00F(self, nodeTag):
     '''Restrain all DOFs except for X displacement and the
        rotation about Z axis.'''
@@ -213,12 +253,49 @@ class StructuralMechanics3D(PredefinedSpace):
     self.constraints.newSPConstraint(nodeTag,3,0.0)
     self.constraints.newSPConstraint(nodeTag,4,0.0)
 
+  def fixNodeF00_0FF(self, nodeTag):
+    '''Restrain all DOFs except for X displacement and the
+       rotations about Y and Z axis.'''
+    self.constraints.newSPConstraint(nodeTag,1,0.0) # nodeTag, DOF, constrValue
+    self.constraints.newSPConstraint(nodeTag,2,0.0)
+    self.constraints.newSPConstraint(nodeTag,3,0.0)
+
   def fixNodeFFF_000(self, nodeTag):
     '''Restrain only rotations (i. e. ThetaX= 0, ThetaY= 0 and ThetaZ= 0).'''
     self.constraints.newSPConstraint(nodeTag,3,0.0) # nodeTag, DOF, constrValue
     self.constraints.newSPConstraint(nodeTag,4,0.0)
     self.constraints.newSPConstraint(nodeTag,5,0.0)
-    
+
+  def LstNodes6DOFConstr(lstNodes,constrCond):
+    '''Constraints the nodes in the list passed as parameter 
+    according to given 6-values set of constraints conditions
+
+    :param preprocessor: preprocessor
+    :param lstNodes:     list of nodes to which apply the 
+                       constraints
+    :param constrCond:   list of constraint conditions, expressed as 
+               [uX, uY, uZ,rotX, rotY, rotZ], where:
+
+             - uX, uY, uZ: translations in the X, Y and Z directions; 
+             - rotX, rotY, rotZ: rotations about the X, Y and Z axis
+             - 'free': means no constraint values 
+    '''
+    for n in lstNodes:
+      for i in range(0,6):
+        if(constrCond[i] <> 'free'):
+          self.constraints.newSPConstraint(n.tag,i,constrCond[i]) 
+
+def getStructuralMechanics3DSpace(preprocessor):
+    '''Return a PredefinedSpace from the dimension of the space 
+       and the number of DOFs for each node obtained from the preprocessor.
+
+       :param preprocessor: preprocessor of the finite element problem.
+    '''
+    nodes= preprocessor.getNodeLoader
+    assert(nodes.dimSpace==3)
+    assert(nodes.numGdls==6)
+    return StructuralMechanics3D(nodes)
+
 def gdls_resist_materiales3D(nodes):
   '''Defines the dimension of the space: nodes by three coordinates (x,y,z) and six DOF for each node (Ux,Uy,Uz,thetaX,thetaY,thetaZ)
 

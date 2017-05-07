@@ -44,7 +44,6 @@ import geom
 import xc
 from solution import predefined_solutions
 from model import predefined_spaces
-from model import fix_node_6dof
 from materials import typical_materials
 
 # Problem type
@@ -108,11 +107,10 @@ truss= elementos.newElement("truss",xc.ID([11,12]));
 truss.area= Ap
 
 # Constraints
-constraints= preprocessor.getConstraintLoader
 
-fix_node_6dof.fixNode6DOF(constraints,1)
-fix_node_6dof.fixNode6DOF(constraints,5)
-fix_node_6dof.fixNode6DOF(constraints,9)
+modelSpace.fixNode000_000(1)
+modelSpace.fixNode000_000(5)
+modelSpace.fixNode000_000(9)
 
 # Loads definition
 cargas= preprocessor.getLoadLoader

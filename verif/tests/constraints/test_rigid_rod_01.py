@@ -9,7 +9,6 @@ import xc
 from solution import predefined_solutions
 from model import predefined_spaces
 from materials import typical_materials
-from model import fix_node_6dof
 import math
 
 # Geometry
@@ -31,7 +30,7 @@ nod= nodes.newNodeXYZ(L,0.0,0.0)
 # Constraints
 constraints= preprocessor.getConstraintLoader
 
-fix_node_6dof.Nodo6DOFGirosLibres(constraints, 1)
+modelSpace.fixNode000(1)
 rr= preprocessor.getConstraintLoader.newRigidRod(1,2)
 
 
