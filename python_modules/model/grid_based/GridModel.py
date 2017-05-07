@@ -179,10 +179,10 @@ class MaterialSurface(MaterialBase):
   def __init__(self,name, grid, material,elemType,elemSize):
     super(MaterialSurface,self).__init__(name,grid,material,elemType,elemSize)
 
-  def generateAreas(self, dicQuadSurf):
+  def generateSurfaces(self, dicQuadSurf):
     self.lstSup= list()
     for ijkRange in self.ranges:
-      self.lstSup+= self.grid.generateAreas(ijkRange,dicQuadSurf)
+      self.lstSup+= self.grid.generateSurfaces(ijkRange,dicQuadSurf)
     for s in self.lstSup:
        s.setElemSizeIJ(self.elemSize,self.elemSize)
 
@@ -281,11 +281,11 @@ class MaterialSurfacesMap(NamedObjectsMap):
   '''MaterialSurfaces dictionary.'''
   def __init__(self,surfaces):
     super(MaterialSurfacesMap,self).__init__(surfaces)
-  def generateAreas(self, dicQuadSurf):
+  def generateSurfaces(self, dicQuadSurf):
     for key in self:
-      self[key].generateAreas(dicQuadSurf)
+      self[key].generateSurfaces(dicQuadSurf)
   def generateMesh(self, preprocessor, dicQuadSurf, firstElementTag= 1):
-    self.generateAreas(dicQuadSurf)
+    self.generateSurfaces(dicQuadSurf)
     preprocessor.getCad.getSurfaces.conciliaNDivs()
     seedElemLoader= preprocessor.getElementLoader.seedElemLoader
     seedElemLoader.defaultTag= firstElementTag

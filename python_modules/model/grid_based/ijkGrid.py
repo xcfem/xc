@@ -13,8 +13,11 @@ import xc_base
 import geom
 import xc
 
-def getSupName(pt1,pt2,pt3,pt4):
+def gridSurfName(pt1,pt2,pt3,pt4):
   return 's'+'%04.0f' % pt1 +'%04.0f' % pt2 +'%04.0f' % pt3 +'%04.0f' % pt4
+
+def gridLinName(pt1,pt2):
+  return 'l'+'%04.0f' % pt1 +'%04.0f' % pt2
 
 class IJKRange(object):
   '''Defines a range of indexes i,j,k in the grid to be used select the region bounded by the coordinates associated with those indexes.
@@ -138,8 +141,6 @@ class ijkGrid(object):
             pt.getPos.y+= vDisp[1]
             pt.getPos.z+= vDisp[2]
              
-
-
   def getTagPntGrid(self,indPnt):
     ''':returns: the tag of the point at indPnt=(i,j,k) index of the grid
 
@@ -158,24 +159,40 @@ class ijkGrid(object):
     (pto1,pto2,pto3,pto4)=tuple([self.getTagPntGrid(ind4Pnt[i]) for i in range(4)])
     surfaces= self.prep.getCad.getSurfaces
     qs= surfaces.newQuadSurfacePts(pto1,pto2,pto3,pto4)
-    qs.name= getSupName(pto1,pto2,pto3,pto4)
+    qs.name= gridSurfName(pto1,pto2,pto3,pto4)
     qs.nDivI=1 #initialization values of number of divisions
     qs.nDivJ=1 
     return qs
 
   def getNameQuadGridSurface(self,ind4Pnt):
-    '''Return the name of the quadrangle surface defined by the 4 vertex 
+    '''Return the name of the quadrangle surface defined by the 4 vertices 
     whose indices in the grid are passed as parameters. 
 
-    :param ind4Pnt: tuple of ordered points defined by their grid indices (i,j,k)
+    :param ind4Pnt: tuple of ordered points defined by their grid indices 
+                    (i,j,k)
     :returns: the quadrangle surface
     '''
     (pto1,pto2,pto3,pto4)=tuple([self.getTagPntGrid(ind4Pnt[i]) for i in range(4)])
-    nameSurf= getSupName(pto1,pto2,pto3,pto4)
+    nameSurf= gridSurfName(pto1,pto2,pto3,pto4)
     return nameSurf
-      
 
-  def generateAreas(self,ijkRange,dicQuadSurf):
+  def newGridLine(self,ind2Pnt):
+    '''Generate the line defined by the 2 end-points whose indices 
+    in the grid are passed as parameters. 
+
+    :param ind2Pnt: tuple of ordered points defined by their grid indices 
+                    (i,j,k)
+    :returns: the line
+    '''
+    (pto1,pto2)=tuple([self.getTagPntGrid(ind2Pnt[i]) for i in range(2)])
+    lines= self.prep.getCad.getLines
+    ln= lines.newLine(pto1,pto2)
+    ln.name= gridLinName(pto1,pto2)
+    ln.nDiv=1 #initialization value
+    return ln
+
+
+  def generateSurfaces(self,ijkRange,dicQuadSurf):
     'generates the surfaces contained in a rectangle defined by the coordinates'
     'that correspond to the positions in the grid ijkRange.ijkMin=[posXmin,posYmin,posZmin] y'
     'ijkRange.ijkMax=[posXmax,posYmax,posZmax]'
@@ -221,7 +238,7 @@ class ijkGrid(object):
     return retval
 
   def generateLines(self,ijkRange,dicLin): 
-    '''generates the lines in an axe parallel to one of the global axes. The function also adds
+    '''generates the lines in an axis parallel to one of the global axes. The function also adds
     the generated lines to the dictionary `dicLin={line_id: xc_line, ...}`
 
     :param ijkRange: range where lines are included (only one coordinate varies)
@@ -233,37 +250,28 @@ class ijkGrid(object):
     j=ijkRange.ijkMin[1]
     k=ijkRange.ijkMin[2]
     if ijkRange.ijkMax[1]==ijkRange.ijkMin[1] and ijkRange.ijkMax[2]==ijkRange.ijkMin[2] :
-        'línea paralela al eje X'
+        'line parallel to X-axis'
         while i<=ijkRange.ijkMax[0]-1:
-            pto1=self.getTagPntGrid((i,j,k))
-            pto2=self.getTagPntGrid((i+1,j,k))
-            l=lines.newLine(pto1,pto2)
-            l.nDiv=1     #se inicializa el nº de divisiones a 1 
+            indPntsLn=((i,j,k),(i+1,j,k))
+            l=self.newGridLine(indPntsLn)
             retval.append(l)
-            nmbrLin='l'+'%04.0f' % pto1 +'%04.0f' % pto2 
-            dicLin[nmbrLin]=l
+            dicLin[l.name]=l
             i+=1
     elif ijkRange.ijkMax[0]==ijkRange.ijkMin[0] and ijkRange.ijkMax[2]==ijkRange.ijkMin[2] :
-        'línea paralela al eje Y'
+        'line parallel to Y-axis'
         while j<=ijkRange.ijkMax[1]-1:
-            pto1=self.getTagPntGrid((i,j,k))
-            pto2=self.getTagPntGrid((i,j+1,k))
-            l=lines.newLine(pto1,pto2)
-            l.nDiv=1     #se inicializa el nº de divisiones a 1 
+            indPntsLn=((i,j,k),(i,j+1,k))
+            l=self.newGridLine(indPntsLn)
             retval.append(l)
-            nmbrLin='l'+'%04.0f' % pto1 +'%04.0f' % pto2 
-            dicLin[nmbrLin]=l
+            dicLin[l.name]=l
             j+=1
     elif ijkRange.ijkMax[0]==ijkRange.ijkMin[0] and ijkRange.ijkMax[1]==ijkRange.ijkMin[1] :
-        'línea paralela al eje Z'
+        'line parallel to Z-axis'
         while k<=ijkRange.ijkMax[2]-1:
-            pto1=self.getTagPntGrid((i,j,k))
-            pto2=self.getTagPntGrid((i,j,k+1))
-            l=lines.newLine(pto1,pto2)
-            l.nDiv=1     #se inicializa el nº de divisiones a 1 
+            indPntsLn=((i,j,k),(i,j,k+1))
+            l=self.newGridLine(indPntsLn)
             retval.append(l)
-            nmbrLin='l'+'%04.0f' % pto1 +'%04.0f' % pto2 
-            dicLin[nmbrLin]=l
+            dicLin[l.name]=l
             k+=1
 #    print dicLin
     return retval
@@ -330,7 +338,7 @@ class ijkGrid(object):
     jmax= ijkRange.ijkMax[1]
     kmax= ijkRange.ijkMax[2]
 
-    'Lines parallels to X axis'
+    'Lines parallel to X axis'
     for k in range(kmin,kmax+1):
         for j in range(jmin,jmax+1):
             for i in range(imin,imax):
@@ -339,7 +347,7 @@ class ijkGrid(object):
                 l= getLin2Pts(lstLinBusq,tagPto1,tagPto2)
                 if l<> None:
                     retval.append(l)
-    'Lines parallels to Y axis'
+    'Lines parallel to Y axis'
     for k in range(kmin,kmax+1):
         for i in range(imin,imax+1):
             for j in range(jmin,jmax):
@@ -348,7 +356,7 @@ class ijkGrid(object):
                 l= getLin2Pts(lstLinBusq,tagPto1,tagPto2)
                 if l<> None:
                     retval.append(l)
-    'Lines parallels to Z axis'
+    'Lines parallel to Z axis'
     for j in range(jmin,jmax+1):
         for i in range(imin,imax+1):
             for k in range(kmin,kmax):
