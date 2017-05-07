@@ -25,12 +25,12 @@ elast2d= typical_materials.defElasticIsotropicPlaneStress(preprocessor, "elast2d
 
 nodes= preprocessor.getNodeLoader
 
-nodes.dimEspace= 3 # Dimensiones de los nodos
-nodes.numGdls= 2 # Grados de libertad de los nodos
+nodes.dimSpace= 3 # 3 coordinates for each node.
+nodes.numGdls= 2 # Two degrees of freedom for each node.
 nodes.newSeedNode()
 seedElemLoader= preprocessor.getElementLoader.seedElemLoader
 seedElemLoader.defaultMaterial= "elast2d"
-seedElemLoader.dimElem= 3
+seedElemLoader.dimElem= 3 # Dimension of element space
 seedElemLoader.defaultTag= 1 #Tag for the next element.
 quad4n= seedElemLoader.newElement("quad4n",xc.ID([0,0,0,0]));
 

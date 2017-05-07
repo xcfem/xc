@@ -7,7 +7,6 @@ import math
 import os
 from solution import predefined_solutions
 from model import predefined_spaces
-from model import fix_node_3dof
 from materials import typical_materials
 
 __author__= "Luis C. Pérez Tato (LCPT)"
@@ -82,7 +81,7 @@ for i in range(1,NumDiv+2):
 
 
 
-fix_node_3dof.fijaNodosLinea3GDL(preprocessor.getConstraintLoader,l1)
+modelSpace.fixNodesLine(line= l1)
 
 
 # Casos de carga

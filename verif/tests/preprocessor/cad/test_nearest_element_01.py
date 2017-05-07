@@ -30,7 +30,7 @@ elast= typical_materials.defElasticMaterial(preprocessor, "elast",2.1e6)
 
 elementos= preprocessor.getElementLoader
 elementos.defaultMaterial= "elast"
-elementos.dimElem= 2
+elementos.dimElem= 2 # Dimension of element space
 elementos.defaultTag= 1 #Tag for the next element.
 for i in range(1,numElementos):
   truss= elementos.newElement("truss",xc.ID([i,i+1]));

@@ -52,7 +52,7 @@ se emplea una sección arbitraria de área unidad '''
 # Elements definition
 elementos= preprocessor.getElementLoader
 elementos.defaultMaterial= "acero"
-elementos.dimElem= 2
+elementos.dimElem= 2 # Dimension of element space
 elementos.defaultTag= 1 #Tag for the next element.
 spring= elementos.newElement("spring",xc.ID([1,2]));
     

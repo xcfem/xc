@@ -15,7 +15,6 @@ import xc
 from solution import predefined_solutions
 from model import predefined_spaces
 from materials import typical_materials
-from model import fix_node_3dof
 
 # Geometry
 width= .05
@@ -56,7 +55,7 @@ beam2d= elementos.newElement("force_beam_column_2d",xc.ID([1,2]));
 
 # Constraints
 constraints= preprocessor.getConstraintLoader
-fix_node_3dof.fixNode000(constraints,1)
+modelSpace.fixNode000(1)
 
 # Loads definition
 cargas= preprocessor.getLoadLoader

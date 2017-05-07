@@ -22,7 +22,6 @@ import xc
 from solution import predefined_solutions
 from model import predefined_spaces
 from materials import typical_materials
-from model import fix_node_3dof
 
 B= 100 # Ancho del pórtico expressed in inches
 H= 100 # Altura del pórtico expressed in inches
@@ -69,10 +68,10 @@ beam2d= elementos.newElement("elastic_beam_2d",xc.ID([8,7]))
 
 # Constraints
 constraints= preprocessor.getConstraintLoader
-fix_node_3dof.fixNode000(constraints,1)
-fix_node_3dof.fixNode000(constraints,3)
-fix_node_3dof.fixNode000(constraints,5)
-fix_node_3dof.fixNode000(constraints,7)
+modelSpace.fixNode000(1)
+modelSpace.fixNode000(3)
+modelSpace.fixNode000(5)
+modelSpace.fixNode000(7)
 
 # Loads definition
 cargas= preprocessor.getLoadLoader

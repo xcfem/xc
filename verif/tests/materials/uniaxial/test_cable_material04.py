@@ -47,7 +47,7 @@ typical_materials.defCableMaterial(preprocessor, "cable",E,sigmaPret,0.0)
 # Elements definition
 elementos= preprocessor.getElementLoader
 elementos.defaultMaterial= "cable"
-elementos.dimElem= 3
+elementos.dimElem= 3 # Dimension of element space
 truss1= elementos.newElement("corot_truss",xc.ID([1,2]));
 truss1.area= area
 truss2= elementos.newElement("corot_truss",xc.ID([2,3]));

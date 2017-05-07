@@ -71,7 +71,7 @@ print "TunloadSlope= ",TunloadSlope
 # Elements definition
 elementos= preprocessor.getElementLoader
 elementos.defaultMaterial= "horm"
-elementos.dimElem= 2
+elementos.dimElem= 2 # Dimension of element space
 #  sintaxis: spring[<tag>] 
 spring= elementos.newElement("spring",xc.ID([1,2]));
     

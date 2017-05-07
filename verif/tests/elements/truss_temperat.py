@@ -13,7 +13,6 @@ import geom
 import xc
 from solution import predefined_solutions
 from model import predefined_spaces
-from model import fix_node_3dof
 from materials import typical_materials
 
 
@@ -39,7 +38,7 @@ elast= typical_materials.defElasticMaterial(preprocessor, "elast",E)
 # Elements definition
 elementos= preprocessor.getElementLoader
 elementos.defaultMaterial= "elast"
-elementos.dimElem= 2
+elementos.dimElem= 2 # Dimension of element space
 elementos.defaultTag= 1 #Tag for the next element.
 truss= elementos.newElement("truss",xc.ID([1,2]));
 truss.area= A

@@ -46,7 +46,7 @@ seccion= typical_materials.defElasticShearSection2d(preprocessor, "seccion",A,E,
 # Elements definition
 elementos= preprocessor.getElementLoader
 elementos.defaultTransformation= "lin" # Transformación de coordenadas para los nuevos elementos
-elementos.dimElem= 2
+elementos.dimElem= 2 # Dimension of element space
 elementos.defaultMaterial= "seccion"
 elementos.defaultTag= 1
 beam= elementos.newElement("force_beam_column_2d",xc.ID([1,2]));

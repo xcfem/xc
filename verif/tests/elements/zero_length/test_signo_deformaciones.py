@@ -88,7 +88,7 @@ agg.setAdditions(["T","Vy","Vz"],["respT","respVy","respVz"])
 # Elements definition
 elementos= preprocessor.getElementLoader
 elementos.defaultMaterial= "sa"
-elementos.dimElem= 1
+elementos.dimElem= 1 # Dimension of element space
 zl= elementos.newElement("zero_length_section",xc.ID([1,2]))
 
 # Constraints

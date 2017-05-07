@@ -16,7 +16,6 @@ import geom
 import xc
 from solution import predefined_solutions
 from model import predefined_spaces
-from model import fix_node_3dof
 from materials import typical_materials
 
 def getInternalForcesBeginNode(elemTag):
@@ -81,7 +80,7 @@ beam2d= elementos.newElement("elastic_beam_2d",xc.ID([1,2]));
 
 
 constraints= preprocessor.getConstraintLoader
-fix_node_3dof.fixNode000(constraints,1)
+modelSpace.fixNode000(1)
 
 cargas= preprocessor.getLoadLoader
 casos= cargas.getLoadPatterns

@@ -16,7 +16,6 @@ import xc
 from materials.perfiles_metalicos.arcelor import perfiles_ipe_arcelor as ipe
 from materials import aceros_estructurales as steel
 from model import predefined_spaces
-from model import fix_node_3dof
 from solution import predefined_solutions
 
 test= xc.ProblemaEF()

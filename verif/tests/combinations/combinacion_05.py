@@ -66,7 +66,7 @@ elem= elementos.newElement("shell_mitc4",xc.ID([7,8,12,11]))
 
 # Armadura activa
 elementos.defaultMaterial= "aceroPret"
-elementos.dimElem= 3
+elementos.dimElem= 3 # Dimension of element space
 truss= elementos.newElement("truss",xc.ID([1,2]));
 truss.area= Ap
 truss= elementos.newElement("truss",xc.ID([2,3]));

@@ -18,7 +18,6 @@ import geom
 import xc
 from solution import predefined_solutions
 from model import predefined_spaces
-from model import fix_node_3dof
 from materials import typical_materials
 
 # Problem type
@@ -45,7 +44,7 @@ ky= typical_materials.defElasticMaterial(preprocessor, "ky",KY)
 # Elements definition
 elementos= preprocessor.getElementLoader
 elementos.defaultMaterial= "kx"
-elementos.dimElem= 2
+elementos.dimElem= 2 # Dimension of element space
 elementos.defaultTag= 1
 elem= elementos.newElement("zero_length",xc.ID([1,2]))
 elem.clearMaterials()

@@ -16,15 +16,14 @@ import geom
 import xc
 from solution import predefined_solutions
 from model import predefined_spaces
-from model import fix_node_3dof
 from materials import typical_materials
 
 # Model definition
 prueba= xc.ProblemaEF()
 preprocessor=  prueba.getPreprocessor
 nodes= preprocessor.getNodeLoader
-nodes.dimEspace= 1
-nodes.numGdls= 1
+nodes.dimSpace= 1 # One coordinate for each node.
+nodes.numGdls= 1 # One degree of freedom for each node.
 
 nodes.defaultTag= 1 #First node number.
 nod= nodes.newNodeXY(1,0)
@@ -36,7 +35,7 @@ elast= typical_materials.defElasticMaterial(preprocessor, "elast",K)
 # Elements definition
 elementos= preprocessor.getElementLoader
 elementos.defaultMaterial= "elast"
-elementos.dimElem= 1
+elementos.dimElem= 1 #Element dimension.
 elementos.defaultTag= 1
 zl= elementos.newElement("zero_length",xc.ID([1,2]))
 

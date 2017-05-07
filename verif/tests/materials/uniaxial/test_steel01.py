@@ -53,7 +53,7 @@ acero= typical_materials.defSteel01(preprocessor, "acero",E,fy,0.001)
 # Elements definition
 elementos= preprocessor.getElementLoader
 elementos.defaultMaterial= "acero"
-elementos.dimElem= 2
+elementos.dimElem= 2 # Dimension of element space
 elementos.defaultTag= 1 #Tag for the next element.
 spring= elementos.newElement("spring",xc.ID([1,2]));
 

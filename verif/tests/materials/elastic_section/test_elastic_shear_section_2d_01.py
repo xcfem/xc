@@ -5,7 +5,6 @@ import xc_base
 import geom
 import xc
 from model import predefined_spaces
-from model import fix_node_3dof
 from materials import typical_materials
 from materials import paramRectangularSection
 from solution import predefined_solutions
@@ -29,11 +28,11 @@ matscc10x20=typical_materials.MaterialData(name='mtrectang',E=2.1e6,nu=0.3,rho=2
 
 # Materials definition
 matPoteau= scc10x20.defSeccShElastica2d(preprocessor,matscc10x20)
-elemZLS= banco_pruebas_scc2d.modeloSecc2d(preprocessor, scc10x20.nmb)
+elemZLS= banco_pruebas_scc2d.sectionModel(preprocessor, scc10x20.nmb)
 
 # Constraints
-constraints= preprocessor.getConstraintLoader
-fix_node_3dof.fixNode000(constraints,1)
+modelSpace= predefined_spaces.getStructuralMechanics2DSpace(preprocessor)
+modelSpace.fixNode000(1)
 
 # Loads definition
 cargas= preprocessor.getLoadLoader

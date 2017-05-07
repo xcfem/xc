@@ -84,7 +84,7 @@ for_each_fiber
 # Elements definition
 elementos= preprocessor.getElementLoader
 elementos.defaultMaterial= "cuadFibras"
-elementos.dimElem= 1
+elementos.dimElem= 1 # Dimension of element space
 elementos.defaultTag= 1
 elem= elementos.newElement("zero_length_section",xc.ID([1,2]))
 

@@ -23,7 +23,6 @@ import geom
 import xc
 from solution import predefined_solutions
 from model import predefined_spaces
-from model import fix_node_3dof
 from materials.ehe import EHE_concrete
 from materials import concreteBase
 from materials import reinforcingSteel
@@ -123,7 +122,7 @@ sctFibers.setupFibers()
 # Elements definition
 elementos= preprocessor.getElementLoader
 elementos.defaultMaterial='sctFibers'
-elementos.dimElem= 1
+elementos.dimElem= 1 # Dimension of element space
 elementos.defaultTag= 1
 elem= elementos.newElement("zero_length_section",xc.ID([1,2]))
 

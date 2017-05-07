@@ -42,7 +42,7 @@ elast= typical_materials.defElasticMaterial(preprocessor, "elast",K)
 # Elements definition
 elementos= preprocessor.getElementLoader
 elementos.defaultMaterial= "elast"
-elementos.dimElem= 2
+elementos.dimElem= 2 # Dimension of element space
 elementos.defaultTag= 1 #First node number.
 spring= elementos.newElement("spring",xc.ID([1,2]));
     

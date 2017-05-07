@@ -44,7 +44,7 @@ se emplea una sección arbitraria de área unidad '''
 # Elements definition
 elementos= preprocessor.getElementLoader
 elementos.defaultMaterial= "cable"
-elementos.dimElem= 2
+elementos.dimElem= 2 # Dimension of element space
 truss= elementos.newElement("corot_truss",xc.ID([1,2]));
 truss.area= area
     

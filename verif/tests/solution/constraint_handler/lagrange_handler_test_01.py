@@ -48,7 +48,7 @@ se emplea una sección arbitraria de área unidad '''
 # Elements definition
 elementos= preprocessor.getElementLoader
 elementos.defaultMaterial= "elast"
-elementos.dimElem= 2
+elementos.dimElem= 2 # Dimension of element space
 #  sintaxis: truss[<tag>] 
 #  sintaxis: truss[tag,nmb_mat,dim] 
 elementos.defaultTag= 1 #Tag for the next element.

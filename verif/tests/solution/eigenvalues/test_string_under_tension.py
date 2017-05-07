@@ -7,7 +7,6 @@ import xc_base
 import geom
 import xc
 
-from model import fix_node_3dof
 from model import predefined_spaces
 from solution import predefined_solutions
 from materials import typical_materials
@@ -47,7 +46,7 @@ typical_materials.defCableMaterial(preprocessor, "cable",E,sigmaPret,Mass)
 # Definimos elemento semilla
 seedElemLoader= preprocessor.getElementLoader.seedElemLoader
 seedElemLoader.defaultMaterial= "cable"
-seedElemLoader.dimElem= 2
+seedElemLoader.dimElem= 2 # Dimension of element space
 seedElemLoader.defaultTag= 1 #Tag for the next element.
 truss= seedElemLoader.newElement("corot_truss",xc.ID([0,0]))
 truss.area= area

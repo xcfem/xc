@@ -44,7 +44,7 @@ typical_materials.defCableMaterial(preprocessor, "cable",E,sigmaPret,0.0)
 # Definimos elemento semilla
 seedElemLoader= preprocessor.getElementLoader.seedElemLoader
 seedElemLoader.defaultMaterial= "cable"
-seedElemLoader.dimElem= 3
+seedElemLoader.dimElem= 3 # Dimension of element space
 seedElemLoader.defaultTag= 1 #Number for the next element will be 1.
 truss= seedElemLoader.newElement("corot_truss",xc.ID([1,2]))
 truss.area= area

@@ -44,7 +44,7 @@ se emplea una sección arbitraria de área unidad '''
 # Elements definition
 elementos= preprocessor.getElementLoader
 elementos.defaultMaterial= "cable"
-elementos.dimElem= 2
+elementos.dimElem= 2 # Dimension of element space
 #  sintaxis: truss[<tag>] 
 elementos.defaultTag= 1 #Tag for the next element.
 truss= elementos.newElement("truss",xc.ID([1,2]));

@@ -7,7 +7,6 @@ import geom
 import xc
 from solution import predefined_solutions
 from model import predefined_spaces
-from model import fix_node_3dof
 from materials import typical_materials
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"

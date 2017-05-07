@@ -12,7 +12,6 @@ import xc
 from solution import predefined_solutions
 from model import predefined_spaces
 from materials import typical_materials
-from model import fix_node_3dof
 from model import define_apoyos
 from model import line_utils
 import math
@@ -89,8 +88,8 @@ idElem= preprocessor.getElementLoader.defaultTag
 
 # Fijamos los nodos extremos.
 constraints= preprocessor.getConstraintLoader
-fix_node_3dof.fixNode00F(constraints,pt1.getTagNode)
-fix_node_3dof.fixNode00F(constraints,pt3.getTagNode)
+modelSpace.fixNode00F(pt1.getTagNode)
+modelSpace.fixNode00F(pt3.getTagNode)
 
 # Apoyamos los interiores.
 l1InteriorNodes= line_utils.LineWrapper(l1).getInteriorNodes()

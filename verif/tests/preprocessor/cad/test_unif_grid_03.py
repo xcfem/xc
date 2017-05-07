@@ -31,7 +31,7 @@ modelSpace= predefined_spaces.SolidMechanics3D(nodes)
 nodes.newSeedNode()
 seedElemLoader= preprocessor.getElementLoader.seedElemLoader
 seedElemLoader.defaultMaterial= "elast3d"
-seedElemLoader.dimElem= 3
+seedElemLoader.dimElem= 3 # Dimension of element space
 seedElemLoader.defaultTag= 1 #Tag for the next element.
 brick= seedElemLoader.newElement("brick",xc.ID([0,0,0,0,0,0,0,0]));
 

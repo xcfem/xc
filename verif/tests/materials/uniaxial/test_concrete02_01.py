@@ -8,7 +8,6 @@ import geom
 import xc
 from solution import predefined_solutions
 from model import predefined_spaces
-from model import fix_node_3dof
 from materials import typical_materials
 from materials import materialGraphics 
 from materials.ehe import EHE_concrete
@@ -25,8 +24,8 @@ __email__= "l.pereztato@gmail.com"
 prueba= xc.ProblemaEF()
 preprocessor=  prueba.getPreprocessor
 nodes= preprocessor.getNodeLoader
-nodes.dimEspace= 1
-nodes.numGdls= 1
+nodes.dimSpace= 1 # One coordinate for each node.
+nodes.numGdls= 1 # One degree of freedom for each node.
 
 nodes.defaultTag= 1 #First node number.
 nod= nodes.newNodeXY(1,0)
@@ -40,7 +39,7 @@ concr=typical_materials.defConcrete02(preprocessor=preprocessor,name='concr25',e
 # Elements definition
 elementos= preprocessor.getElementLoader
 elementos.defaultMaterial='concr25'
-elementos.dimElem= 1
+elementos.dimElem= 1 # Dimension of element space
 elementos.defaultTag= 1
 elem1= elementos.newElement("zero_length",xc.ID([1,2]))
 

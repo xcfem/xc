@@ -5,7 +5,6 @@ import geom
 import xc
 from solution import predefined_solutions
 from model import predefined_spaces
-from model import fix_node_6dof
 
 def getDiagMomentoCurvatura3d(preprocessor, nmbSecc, esfAxil, maxK, numIncr):
   ''' Función que devuelve los puntos del diagrama momento curvatura de una sección.
@@ -27,7 +26,7 @@ def getDiagMomentoCurvatura3d(preprocessor, nmbSecc, esfAxil, maxK, numIncr):
   zls= elementos.newElement("zero_length_section",xc.ID([1001,1002]));
 
   coacciones= preprocessor.getConstraintLoader
-  fix_node_6dof.fixNode6DOF(coacciones,1001)
+  model_space.fixNode000_000(1001)
   coacciones.newSPConstraint(1002,1,0.0)
   coacciones.newSPConstraint(1002,2,0.0)
 

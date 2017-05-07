@@ -23,7 +23,6 @@ import xc_base
 import geom
 import xc
 from model import predefined_spaces
-from model import fix_node_6dof
 from materials import typical_materials
 from materials import paramRectangularSection
 from postprocess import ControlVars as cv
@@ -94,7 +93,7 @@ class PhantomModel(object):
     '''
     nA= self.preprocessor.getNodeLoader.newNodeXYZ(0,0,0)
     nB= self.preprocessor.getNodeLoader.newNodeXYZ(0,0,0)
-    fix_node_6dof.fixNode6DOF(self.preprocessor.getConstraintLoader,nA.tag)
+    self.modelSpace.fixNode000_000(nA.tag)
     if(not fakeSection):
       elements.defaultMaterial= sectionName
     phantomElement= self.preprocessor.getElementLoader.newElement("zero_length_section",xc.ID([nA.tag,nB.tag]))
@@ -122,7 +121,7 @@ class PhantomModel(object):
 
     retval= []
     nodes= self.preprocessor.getNodeLoader
-    modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
+    self.modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
     elements= self.preprocessor.getElementLoader
     coacciones= self.preprocessor.getConstraintLoader
     # Definimos materiales

@@ -12,7 +12,6 @@ import xc_base
 import geom
 import xc
 from model import predefined_spaces
-from model import fix_node_3dof
 import math
 from materials import typical_materials
 

@@ -41,7 +41,7 @@ typical_materials.defSteel02(preprocessor, "aceroPret",E,fy,0.001,tInic)
 # Elements definition
 elementos= preprocessor.getElementLoader
 elementos.defaultMaterial= "aceroPret"
-elementos.dimElem= 2
+elementos.dimElem= 2 # Dimension of element space
 elementos.defaultTag= 1 #Tag for the next element.
 truss= elementos.newElement("truss",xc.ID([1,2]));
 truss.area= A

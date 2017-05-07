@@ -74,7 +74,7 @@ print "fibra: ",tag, " mat. tag:", getMaterial.tag
 # Elements definition
 elementos= preprocessor.getElementLoader
 elementos.defaultMaterial= "cuadFibrasTN"
-elementos.dimElem= 1
+elementos.dimElem= 1 # Dimension of element space
 elementos.defaultTag= 1
 zl= elementos.newElement("zero_length_section",xc.ID([1,2]))
 
