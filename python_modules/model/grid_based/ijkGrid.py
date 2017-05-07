@@ -198,36 +198,36 @@ class ijkGrid(object):
     'ijkRange.ijkMax=[posXmax,posYmax,posZmax]'
     'it fills also the surfaces dictionary.'
     retval= list()
-    i= ijkRange.ijkMin[0]
-    j= ijkRange.ijkMin[1]
-    k= ijkRange.ijkMin[2]
-    if ijkRange.ijkMax[2]== ijkRange.ijkMin[2]:
+    (imin,jmin,kmin)=tuple(ijkRange.ijkMin)
+    (imax,jmax,kmax)=tuple(ijkRange.ijkMax)
+    (i,j,k)=(imin,jmin,kmin)
+    if kmax== kmin:
         'surfaces in XY plane'
-        while i<= ijkRange.ijkMax[0]-1:
-            j= ijkRange.ijkMin[1]
-            while j<= ijkRange.ijkMax[1]-1:
+        while i<= imax-1:
+            j= jmin
+            while j<= jmax-1:
                 indPtsQs=((i,j,k),(i+1,j,k),(i+1,j+1,k),(i,j+1,k))
                 a= self.newQuadGridSurface(indPtsQs)
                 retval.append(a)
                 dicQuadSurf[a.name]= a
                 j+=1
             i+=1
-    elif ijkRange.ijkMax[1]== ijkRange.ijkMin[1]:
+    elif jmax== jmin:
         'surfaces in XZ plane'
-        while i<= ijkRange.ijkMax[0]-1:
-            k= ijkRange.ijkMin[2]
-            while k<= ijkRange.ijkMax[2]-1:
+        while i<= imax-1:
+            k= kmin
+            while k<= kmax-1:
                 indPtsQs=((i,j,k),(i,j,k+1),(i+1,j,k+1),(i+1,j,k))
                 a= self.newQuadGridSurface(indPtsQs)
                 retval.append(a)
                 dicQuadSurf[a.name]= a
                 k+=1
             i+=1
-    elif ijkRange.ijkMax[0]== ijkRange.ijkMin[0]:
+    elif imax== imin:
         'surfaces in YZ plane'
-        while j<= ijkRange.ijkMax[1]-1:
-            k= ijkRange.ijkMin[2]
-            while k<= ijkRange.ijkMax[2]-1:
+        while j<= jmax-1:
+            k= kmin
+            while k<= kmax-1:
                 indPtsQs=((i,j,k),(i,j+1,k),(i,j+1,k+1),(i,j,k+1))
                 a= self.newQuadGridSurface(indPtsQs)
                 retval.append(a)
@@ -246,28 +246,28 @@ class ijkGrid(object):
     '''
     retval= list()
     lines= self.prep.getCad.getLines
-    i=ijkRange.ijkMin[0]
-    j=ijkRange.ijkMin[1]
-    k=ijkRange.ijkMin[2]
-    if ijkRange.ijkMax[1]==ijkRange.ijkMin[1] and ijkRange.ijkMax[2]==ijkRange.ijkMin[2] :
+    (imin,jmin,kmin)=tuple(ijkRange.ijkMin)
+    (imax,jmax,kmax)=tuple(ijkRange.ijkMax)
+    (i,j,k)=(imin,jmin,kmin)
+    if jmax==jmin and kmax==kmin :
         'line parallel to X-axis'
-        while i<=ijkRange.ijkMax[0]-1:
+        while i<=imax-1:
             indPntsLn=((i,j,k),(i+1,j,k))
             l=self.newGridLine(indPntsLn)
             retval.append(l)
             dicLin[l.name]=l
             i+=1
-    elif ijkRange.ijkMax[0]==ijkRange.ijkMin[0] and ijkRange.ijkMax[2]==ijkRange.ijkMin[2] :
+    elif imax==imin and kmax==kmin :
         'line parallel to Y-axis'
-        while j<=ijkRange.ijkMax[1]-1:
+        while j<=jmax-1:
             indPntsLn=((i,j,k),(i,j+1,k))
             l=self.newGridLine(indPntsLn)
             retval.append(l)
             dicLin[l.name]=l
             j+=1
-    elif ijkRange.ijkMax[0]==ijkRange.ijkMin[0] and ijkRange.ijkMax[1]==ijkRange.ijkMin[1] :
+    elif imax==imin and jmax==jmin :
         'line parallel to Z-axis'
-        while k<=ijkRange.ijkMax[2]-1:
+        while k<=kmax-1:
             indPntsLn=((i,j,k),(i,j,k+1))
             l=self.newGridLine(indPntsLn)
             retval.append(l)
@@ -282,36 +282,36 @@ class ijkGrid(object):
     'que corresponden a las posiciones en la rejilla ijkRange.ijkMin=[posXmin,posYmin,posZmin] y'
     'ijkRange.ijkMax=[posXmax,posYmax,posZmax]'
     retval= self.prep.getSets.defSet(nmbrSet)
-    i= ijkRange.ijkMin[0]
-    j= ijkRange.ijkMin[1]
-    k= ijkRange.ijkMin[2]
-    if ijkRange.ijkMax[2]== ijkRange.ijkMin[2]:
+    (imin,jmin,kmin)=tuple(ijkRange.ijkMin)
+    (imax,jmax,kmax)=tuple(ijkRange.ijkMax)
+    (i,j,k)=(imin,jmin,kmin)
+    if kmax== kmin:
         'surfaces in XY plane'
-        while i<= ijkRange.ijkMax[0]-1:
-            j= ijkRange.ijkMin[1]
-            while j<= ijkRange.ijkMax[1]-1:
+        while i<= imax-1:
+            j= jmin
+            while j<= jmax-1:
                 indPtsQs=((i,j,k),(i+1,j,k),(i+1,j+1,k),(i,j+1,k))
                 nameSurf= self.getNameQuadGridSurface(indPtsQs)
                 if nameSurf in dicQuadSurf:
                     retval.getSurfaces.append(dicQuadSurf[nameSurf])
                 j+=1
             i+=1
-    elif ijkRange.ijkMax[1]== ijkRange.ijkMin[1]:
+    elif jmax== jmin:
         'surfaces in XZ plane'
-        while i<= ijkRange.ijkMax[0]-1:
-            k= ijkRange.ijkMin[2]
-            while k<= ijkRange.ijkMax[2]-1:
+        while i<= imax-1:
+            k= kmin
+            while k<= kmax-1:
                 indPtsQs=((i,j,k),(i,j,k+1),(i+1,j,k+1),(i+1,j,k))
                 nameSurf= self.getNameQuadGridSurface(indPtsQs)
                 if nameSurf in dicQuadSurf:
                     retval.getSurfaces.append(dicQuadSurf[nameSurf])
                 k+=1
             i+=1
-    elif ijkRange.ijkMax[0]== ijkRange.ijkMin[0]:
+    elif imax== imin:
         'surfaces in YZ plane'
-        while j<= ijkRange.ijkMax[1]-1:
-            k= ijkRange.ijkMin[2]
-            while k<= ijkRange.ijkMax[2]-1:
+        while j<= jmax-1:
+            k= kmin
+            while k<= kmax-1:
                 indPtsQs=((i,j,k),(i,j+1,k),(i,j+1,k+1),(i,j,k+1))
                 nameSurf= self.getNameQuadGridSurface(indPtsQs)
                 if nameSurf in dicQuadSurf:
@@ -331,12 +331,8 @@ class ijkGrid(object):
 
     retval=[]
     
-    imin= ijkRange.ijkMin[0]
-    jmin= ijkRange.ijkMin[1]
-    kmin= ijkRange.ijkMin[2]
-    imax= ijkRange.ijkMax[0]
-    jmax= ijkRange.ijkMax[1]
-    kmax= ijkRange.ijkMax[2]
+    (imin,jmin,kmin)=tuple(ijkRange.ijkMin)
+    (imax,jmax,kmax)=tuple(ijkRange.ijkMax)
 
     'Lines parallel to X axis'
     for k in range(kmin,kmax+1):
@@ -372,38 +368,36 @@ class ijkGrid(object):
     que corresponden a las posiciones en la rejilla ijkRange.ijkMin=[posXmin,posYmin,posZmin] y
     ijkRange.ijkMax=[posXmax,posYmax,posZmax]'''
     retval= self.prep.getSets.defSet(nombre)
-    i= ijkRange.ijkMin[0]
-    j= ijkRange.ijkMin[1]
-    k= ijkRange.ijkMin[2]
-    if ijkRange.ijkMax[2]== ijkRange.ijkMin[2]:
+    (imin,jmin,kmin)=tuple(ijkRange.ijkMin)
+    (imax,jmax,kmax)=tuple(ijkRange.ijkMax)
+    (i,j,k)=(imin,jmin,kmin)
+    if kmax== kmin:
         'surfaces in XY plane'
-        while i<= ijkRange.ijkMax[0]:
-            j= ijkRange.ijkMin[1]
-            while j<= ijkRange.ijkMax[1]:
+        while i<= imax:
+            j= jmin
+            while j<= jmax:
                 tgpto= self.getTagPntGrid(indPnt=(i,j,k))
                 pto= puntos.get(tgpto)
                 retval.getPoints.append(pto)
                 j+=1
             i+=1
-    elif ijkRange.ijkMax[1]== ijkRange.ijkMin[1]:
+    elif jmax== jmin:
         'surfaces in XZ plane'
-        while i<= ijkRange.ijkMax[0]:
-            k= ijkRange.ijkMin[2]
-            while k<= ijkRange.ijkMax[2]:
+        while i<= imax:
+            k= kmin
+            while k<= kmax:
                 tgpto= self.getTagPntGrid(indPnt=(i,j,k))
                 pto= puntos.get(tgpto)
-                #print pto.tag,pto.getPos.x,pto.getPos.y,pto.getPos.z
                 retval.getPoints.append(pto)
                 k+=1
             i+=1
-    elif ijkRange.ijkMax[0]== ijkRange.ijkMin[0]:
+    elif imax== imin:
         'surfaces in YZ plane'
-        while j<= ijkRange.ijkMax[1]:
-            k= ijkRange.ijkMin[2]
-            while k<= ijkRange.ijkMax[2]:
+        while j<= jmax:
+            k= kmin
+            while k<= kmax:
               tgpto= self.getTagPntGrid(indPnt=(i,j,k))
               pto= puntos.get(tgpto)
-              #print pto.tag,pto.getPos.x,pto.getPos.y,pto.getPos.z
               retval.getPoints.append(pto)
               k+=1
             j+=1
