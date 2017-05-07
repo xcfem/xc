@@ -92,11 +92,11 @@ truss= elementos.newElement("truss",xc.ID([11,12]));
 truss.area= Ap
 
 # Constraints
-coacciones= preprocessor.getConstraintLoader
+constraints= preprocessor.getConstraintLoader
 
-fix_node_6dof.fixNode6DOF(coacciones,1)
-fix_node_6dof.fixNode6DOF(coacciones,5)
-fix_node_6dof.fixNode6DOF(coacciones,9)
+fix_node_6dof.fixNode6DOF(constraints,1)
+fix_node_6dof.fixNode6DOF(constraints,5)
+fix_node_6dof.fixNode6DOF(constraints,9)
 
 # Loads definition
 cargas= preprocessor.getLoadLoader
@@ -186,8 +186,9 @@ print "ratio2= ",ratio2
    '''
 
 import os
+from miscUtils import LogMessages as lmsg
 fname= os.path.basename(__file__)
 if (ratio1<1e-10) & (ratio2<1e-10) :
   print "test ",fname,": ok."
 else:
-  print "test ",fname,": ERROR."
+  lmsg.error(fname+' ERROR.')

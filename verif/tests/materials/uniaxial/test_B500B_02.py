@@ -24,8 +24,9 @@ errMax= reinforcingSteelTest.testDiagDAceroArmar(preprocessor, SIA_reinforcing_s
 
 # print "errMax= ",(errMax)
 import os
+from miscUtils import LogMessages as lmsg
 fname= os.path.basename(__file__)
 if errMax<1e-10:
   print "test ",fname,": ok."
 else:
-  print "test ",fname,": ERROR."
+  lmsg.error(fname+' ERROR.')

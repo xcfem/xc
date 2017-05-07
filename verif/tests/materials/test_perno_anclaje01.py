@@ -137,8 +137,9 @@ print "ratio7= ",(ratio7)
 '''
 
 import os
+from miscUtils import LogMessages as lmsg
 fname= os.path.basename(__file__)
 if (ratio1<5e-4) & (ratio2<5e-4) & (ratio3<5e-4) & (ratio4<5e-5) & (ratio5<0.03) & (ratio6<0.03) & (ratio6<1e-5):
   print "test ",fname,": ok."
 else:
-  print "test ",fname,": ERROR."
+  lmsg.error(fname+' ERROR.')

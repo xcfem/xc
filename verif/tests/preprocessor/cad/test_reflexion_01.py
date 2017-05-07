@@ -35,8 +35,9 @@ z4= pt4.getPos.z
 #print "x4= ", x4
 
 import os
+from miscUtils import LogMessages as lmsg
 fname= os.path.basename(__file__)
 if (abs(x4)<1e-12) & (abs(y4)<1e-12) & (abs(z4)<1e-12):
   print "test ",fname,": ok."
 else:
-  print "test ",fname,": ERROR."
+  lmsg.error(fname+' ERROR.')

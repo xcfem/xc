@@ -105,9 +105,10 @@ ratio= max(ratio,ratio10)
 # print "ppn=", ppn
 
 import os
+from miscUtils import LogMessages as lmsg
 fname= os.path.basename(__file__)
 if (ratio < 1e-14):
   print "test ",fname,": ok."
 else:
-  print "test ",fname,": ERROR."
+  lmsg.error(fname+' ERROR.')
 

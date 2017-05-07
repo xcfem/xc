@@ -70,9 +70,9 @@ beam3= elementos.newElement("elastic_beam_3d",xc.ID([2,4]))
 beam3.rho= densHorm*A
 
 # Constraints
-coacciones= preprocessor.getConstraintLoader
+constraints= preprocessor.getConstraintLoader
 
-fix_node_6dof.fixNode6DOF(coacciones,1)
+fix_node_6dof.fixNode6DOF(constraints,1)
 
 # Loads definition
 cargas= preprocessor.getLoadLoader
@@ -187,9 +187,10 @@ print "ratio2= ",ratio2
 '''
 
 
+from miscUtils import LogMessages as lmsg
 fname= os.path.basename(__file__)
 if (abs(ratio1)<1e-8) & (abs(ratio2)<1e-8):
   print "test ",fname,": ok."
 else:
-  print "test ",fname,": ERROR."
+  lmsg.error(fname+' ERROR.')
 os.system("rm -rf /tmp/test_pescante_02.db") # Your garbage you clean it

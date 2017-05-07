@@ -54,10 +54,10 @@ truss2= elementos.newElement("corot_truss",xc.ID([2,3]));
 truss2.area= area
      
 # Constraints
-coacciones= preprocessor.getConstraintLoader
-fix_node_6dof.fixNode6DOF(coacciones,1)
-fix_node_6dof.Nodo6DOFGirosImpedidos(coacciones,2)
-fix_node_6dof.fixNode6DOF(coacciones,3)
+constraints= preprocessor.getConstraintLoader
+fix_node_6dof.fixNode6DOF(constraints,1)
+fix_node_6dof.Nodo6DOFGirosImpedidos(constraints,2)
+fix_node_6dof.fixNode6DOF(constraints,3)
 
 # Loads definition
 cargas= preprocessor.getLoadLoader
@@ -115,8 +115,9 @@ print "ratio4= ",(ratio4)
    '''
     
 import os
+from miscUtils import LogMessages as lmsg
 fname= os.path.basename(__file__)
 if (abs(ratio1)<1e-11) & (abs(ratio2)<1e-11) & (abs(ratio3)<1e-11) & (abs(ratio4)<1e-11):
   print "test ",fname,": ok."
 else:
-  print "test ",fname,": ERROR."
+  lmsg.error(fname+' ERROR.')

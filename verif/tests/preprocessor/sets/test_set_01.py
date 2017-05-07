@@ -83,11 +83,12 @@ for e in elements:
   print "tag= ",e.tag," nodo I:",e.nod[0].tag," nodo J:",e.nod[1].tag
 '''
 import os
+from miscUtils import LogMessages as lmsg
 fname= os.path.basename(__file__)
 if(abs(prb1.getNumNodes-4)<1e-5) & (abs(prb1.getNumElements-2)<1e-5):
   print "test ",fname,": ok."
 else:
-  print "test ",fname,": ERROR."
+  lmsg.error(fname+' ERROR.')
 
 
 

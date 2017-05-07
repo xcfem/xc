@@ -66,9 +66,8 @@ l1= preprocessor.getSets.getSet("l1")
 l1.genMesh(xc.meshDir.I)
     
 # Constraints
-coacciones= preprocessor.getConstraintLoader
-fix_nodes_lines.ConstraintsForLineExtremeNodes(l1,coacciones,fix_node_3dof.fixNode000)
-fix_nodes_lines.ConstraintsForLineInteriorNodes(l1,coacciones,fix_node_3dof.fixNodeFF0)
+predefined_spaces.ConstraintsForLineExtremeNodes(l1,modelSpace.fixNode000)
+predefined_spaces.ConstraintsForLineInteriorNodes(l1,modelSpace.fixNodeFF0)
 
 
 Nstep= 10  #  apply load in 10 steps
@@ -152,9 +151,10 @@ print "ratio5= ",(ratio5)
    '''
  
 import os
+from miscUtils import LogMessages as lmsg
 fname= os.path.basename(__file__)
 if (abs(ratio1)<1e-4) & (abs(ratio2)<1e-4) & (abs(ratio3)<1e-2) & (abs(ratio3)<1e-2) & (abs(ratio5)<5e-2) :
   print "test ",fname,": ok."
 else:
-  print "test ",fname,": ERROR."
+  lmsg.error(fname+' ERROR.')
   

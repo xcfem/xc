@@ -31,10 +31,10 @@ matPoteau= scc10x20.defSeccElastica3d(preprocessor,matscc10x20)
 elemZLS= banco_pruebas_scc3d.modeloSecc3d(preprocessor, scc10x20.nmb)
 
 # Constraints
-coacciones= preprocessor.getConstraintLoader
+constraints= preprocessor.getConstraintLoader
 
-fix_node_6dof.fixNode6DOF(coacciones,1)
-fix_node_6dof.Nodo6DOFMovXGiroZLibres(coacciones,2)
+fix_node_6dof.fixNode6DOF(constraints,1)
+fix_node_6dof.Nodo6DOFMovXGiroZLibres(constraints,2)
 
 # Loads definition
 cargas= preprocessor.getLoadLoader
@@ -72,8 +72,9 @@ esfMz= scc0.getStressResultantComponent("Mz")
 ratio1= (RM+loadMz)/loadMz
 ratio2= (esfMz-loadMz)/loadMz
 import os
+from miscUtils import LogMessages as lmsg
 fname= os.path.basename(__file__)
 if (abs(ratio1)<1e-5) & (abs(ratio2)<1e-5) :
   print "test ",fname,": ok."
 else:
-  print "test ",fname,": ERROR."
+  lmsg.error(fname+' ERROR.')

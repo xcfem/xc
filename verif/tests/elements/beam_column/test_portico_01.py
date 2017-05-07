@@ -68,11 +68,11 @@ beam2d= elementos.newElement("elastic_beam_2d",xc.ID([6,8]))
 beam2d= elementos.newElement("elastic_beam_2d",xc.ID([8,7]))
 
 # Constraints
-coacciones= preprocessor.getConstraintLoader
-fix_node_3dof.fixNode000(coacciones,1)
-fix_node_3dof.fixNode000(coacciones,3)
-fix_node_3dof.fixNode000(coacciones,5)
-fix_node_3dof.fixNode000(coacciones,7)
+constraints= preprocessor.getConstraintLoader
+fix_node_3dof.fixNode000(constraints,1)
+fix_node_3dof.fixNode000(constraints,3)
+fix_node_3dof.fixNode000(constraints,5)
+fix_node_3dof.fixNode000(constraints,7)
 
 # Loads definition
 cargas= preprocessor.getLoadLoader
@@ -224,8 +224,9 @@ print "ratioM52= ",ratioM52
  '''
 
 import os
+from miscUtils import LogMessages as lmsg
 fname= os.path.basename(__file__)
 if (ratioTheta2<1e-3) & (ratioDelta6<1e-3) & (ratioM12<1e-4) & (ratioM21<1e-4) & (ratioQ<1e-4) & (ratioTheta6<1e-3) & (ratioTheta8<5e-3) & (ratioM61<1e-4) & (ratioQ4<1e-4) & (ratioM51<1e-4) & (ratioM71<5e-4) & (ratioM52<1e-4):
   print "test ",fname,": ok."
 else:
-  print "test ",fname,": ERROR."
+  lmsg.error(fname+' ERROR.')

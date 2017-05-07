@@ -87,7 +87,7 @@ l.nDiv= nDivLineas
 setTotal= preprocessor.getSets.getSet("total")
 setTotal.genMesh(xc.meshDir.I)
 
-coacciones= preprocessor.getConstraintLoader
+constraints= preprocessor.getConstraintLoader
 pt1.getNode().fix(xc.ID([0,1,2]),xc.Vector([0.0,0.0,0.0]))
 pt3.getNode().fix(xc.ID([0,1,2]),xc.Vector([0.0,0.0,0.0]))
 pt5.getNode().fix(xc.ID([0,1,2]),xc.Vector([0.0,0.0,0.0]))
@@ -268,8 +268,9 @@ print "ratioM52= ",ratioM52
 
 
 import os
+from miscUtils import LogMessages as lmsg
 fname= os.path.basename(__file__)
 if (ratioTheta2<1e-2) & (ratioDelta6<1e-2) & (ratioM12<0.05) & (ratioM21<2e-2) & (ratioQ<0.06) & (ratioTheta6<1e-2) & (ratioTheta8<1e-2) & (ratioM61<0.05) & (ratioQ4<0.06) & (ratioM51<0.05) & (ratioM71<0.05) & (ratioM52<0.05):
   print "test ",fname,": ok."
 else:
-  print "test ",fname,": ERROR."
+  lmsg.error(fname+' ERROR.')

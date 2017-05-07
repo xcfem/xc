@@ -46,7 +46,7 @@ elementos.defaultMaterial= IPE200.fiberSection3dName
 beam2d= elementos.newElement("force_beam_column_2d",xc.ID([nod1.tag,nod2.tag]));
 
 # Constraints
-coacciones= preprocessor.getConstraintLoader
+constraints= preprocessor.getConstraintLoader
 modelSpace.fixNode000(nod1.tag)
 
 # Loads definition
@@ -85,8 +85,9 @@ print 'ratio2= ', ratio2
 '''
 
 import os
+from miscUtils import LogMessages as lmsg
 fname= os.path.basename(__file__)
 if (ratio1<1e-12) & (ratio2<0.2):
   print "test ",fname,": ok."
 else:
-  print "test ",fname,": ERROR."
+  lmsg.error(fname+' ERROR.')

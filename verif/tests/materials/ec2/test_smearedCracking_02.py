@@ -128,12 +128,12 @@ elementos.defaultTag= 1
 elem= elementos.newElement("zero_length_section",xc.ID([1,2]))
 
 # Constraints
-coacciones= preprocessor.getConstraintLoader
+constraints= preprocessor.getConstraintLoader
 #newSPConstraint(nodeTag,DOF,value)
-spc= coacciones.newSPConstraint(1,0,0.0) # Node 1, ux=0
-spc= coacciones.newSPConstraint(1,1,0.0) # Node 1, uy=0
-spc= coacciones.newSPConstraint(1,2,0.0) # Node 1, theta=0
-spc= coacciones.newSPConstraint(2,1,0.0) # Node 2, uy=0
+spc= constraints.newSPConstraint(1,0,0.0) # Node 1, ux=0
+spc= constraints.newSPConstraint(1,1,0.0) # Node 1, uy=0
+spc= constraints.newSPConstraint(1,2,0.0) # Node 1, theta=0
+spc= constraints.newSPConstraint(2,1,0.0) # Node 2, uy=0
 
 
 
@@ -198,11 +198,12 @@ ratio1= np.linalg.norm(residStress)/-concrAux.fmaxK()
 ratio2= np.linalg.norm(residStrain)/3.5e-3
 
 import os
+from miscUtils import LogMessages as lmsg
 fname= os.path.basename(__file__)
 if((ratio1<1e-5) and (ratio2<1e-5)) :
   print "test ",fname,": ok."
 else:
-  print "test ",fname,": ERROR."
+  lmsg.error(fname+' ERROR.')
 
 ###  FIGURES & REPORTS
 # #report concrete material

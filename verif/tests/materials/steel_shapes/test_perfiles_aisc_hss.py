@@ -92,9 +92,10 @@ ratio13= abs((convert(hssSection['It'],meter4,inch4)-104.99)/104.99)
 
 
 import os
+from miscUtils import LogMessages as lmsg
 fname= os.path.basename(__file__)
 if((ratio1<1e-6) & (ratio2<1e-6) & (ratio3<1e-6) & (ratio4<1e-6) & (ratio5<1e-6) & (ratio6<1e-5) & (ratio7<1e-6) & (ratio8<1e-5) & (ratio9<1e-6) & (ratio10<1e-5) & (ratio11<1e-5) & (ratio12<1e-5) & (ratio13<1e-5)):
   print "test ",fname,": ok."
 else:
-  print "test ",fname,": ERROR."
+  lmsg.error(fname+' ERROR.')
 

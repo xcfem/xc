@@ -61,8 +61,8 @@ beam3d= elementos.newElement("elastic_beam_3d",xc.ID([1,2]));
 
     
 # Constraints
-coacciones= preprocessor.getConstraintLoader
-fix_node_6dof.fixNode6DOF(coacciones,1)
+constraints= preprocessor.getConstraintLoader
+fix_node_6dof.fixNode6DOF(constraints,1)
 
 
 # Loads definition
@@ -117,8 +117,9 @@ print "ratio1= ",ratio1
  '''
 
 import os
+from miscUtils import LogMessages as lmsg
 fname= os.path.basename(__file__)
 if (abs(ratio0)<1e-10) & (abs(ratio1)<1e-12):
   print "test ",fname,": ok."
 else:
-  print "test ",fname,": ERROR."
+  lmsg.error(fname+' ERROR.')

@@ -55,8 +55,8 @@ print "trf[2]: ","getTrf[2,0]"," ","getTrf[2,1]"," ","getTrf[2,2]"
 
     
 # Constraints
-coacciones= preprocessor.getConstraintLoader
-spc= coacciones.newSPConstraint(1,0,0.0) # Nodo 1
+constraints= preprocessor.getConstraintLoader
+spc= constraints.newSPConstraint(1,0,0.0) # Nodo 1
 
 
 # Loads definition
@@ -117,8 +117,9 @@ retval.savefig(plt,'concrete02_diagram.jpeg')
    '''
   
 import os
+from miscUtils import LogMessages as lmsg
 fname= os.path.basename(__file__)
 if((ratio1<1e-5) and (ratio2<1e-5)) :
   print "test ",fname,": ok."
 else:
-  print "test ",fname,": ERROR."
+  lmsg.error(fname+' ERROR.')

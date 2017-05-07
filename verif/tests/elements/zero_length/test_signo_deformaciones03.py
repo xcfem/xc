@@ -64,11 +64,11 @@ elementos.dimElem= 1
 zl= elementos.newElement("zero_length_section",xc.ID([1,2]))
 
 # Constraints
-coacciones= preprocessor.getConstraintLoader
-fix_node_6dof.fixNode6DOF(coacciones,1)
-spc= coacciones.newSPConstraint(2,1,0.0)
-spc= coacciones.newSPConstraint(2,2,0.0)
-spc= coacciones.newSPConstraint(2,3,0.0)
+constraints= preprocessor.getConstraintLoader
+fix_node_6dof.fixNode6DOF(constraints,1)
+spc= constraints.newSPConstraint(2,1,0.0)
+spc= constraints.newSPConstraint(2,2,0.0)
+spc= constraints.newSPConstraint(2,3,0.0)
 
 
 # Loads definition
@@ -122,8 +122,9 @@ print "vTeor= ", vTeor
 print "error= ", error
 '''
 
+from miscUtils import LogMessages as lmsg
 fname= os.path.basename(__file__)
 if (error < 1e-3):
   print "test ",fname,": ok."
 else:
-  print "test ",fname,": ERROR."
+  lmsg.error(fname+' ERROR.')

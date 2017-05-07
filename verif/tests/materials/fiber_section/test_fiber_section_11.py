@@ -48,10 +48,10 @@ secHA.setupFibers()
 banco_pruebas_scc3d.modeloSecc3d(preprocessor, "secHA")
 
 # Constraints
-coacciones= preprocessor.getConstraintLoader
+constraints= preprocessor.getConstraintLoader
 
-fix_node_6dof.fixNode6DOF(coacciones,1)
-fix_node_6dof.Nodo6DOFMovXGiroZLibres(coacciones,2)
+fix_node_6dof.fixNode6DOF(constraints,1)
+fix_node_6dof.Nodo6DOFMovXGiroZLibres(constraints,2)
 
 # Loads definition
 cargas= preprocessor.getLoadLoader
@@ -137,8 +137,9 @@ print "analOk= ",(analOk)
 
 
 import os
+from miscUtils import LogMessages as lmsg
 fname= os.path.basename(__file__)
 if (abs(ratio1)<1e-10) & (abs(ratio2)<1e-10) & (abs(ratio3)<5e-10) & ratio4 & (abs(ratio5)<5e-10) & (abs(ratio6)<0.001) & (abs(RN2)<5e-10) & (abs(esfMy)<1e-10) & (tipoSolic == 2)  & (analOk == 0.0) :
   print "test ",fname,": ok."
 else:
-  print "test ",fname,": ERROR."
+  lmsg.error(fname+' ERROR.')

@@ -162,9 +162,10 @@ print '  D2= ', D2, ' D2Teor= ', D2Teor, ' ratioD2= ', ratioD2, '\n'
 print 'error= ', error
 '''
 
+from miscUtils import LogMessages as lmsg
 fname= os.path.basename(__file__)
 if (error < 1e-3):
   print "test ",fname,": ok."
 else:
-  print "test ",fname,": ERROR."
+  lmsg.error(fname+' ERROR.')
 

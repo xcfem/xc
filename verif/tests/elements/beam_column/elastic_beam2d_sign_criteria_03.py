@@ -83,8 +83,8 @@ beam2d= elementos.newElement("elastic_beam_2d",xc.ID([1,2]));
 
 
 
-coacciones= preprocessor.getConstraintLoader
-fix_node_3dof.fixNode000(coacciones=coacciones,idNodo=2)
+constraints= preprocessor.getConstraintLoader
+modelSpace.fixNode000(nodeTag=2)
 
 cargas= preprocessor.getLoadLoader
 casos= cargas.getLoadPatterns
@@ -157,8 +157,9 @@ result= math.sqrt(result)
 # print 'result= ',result
 
 import os
+from miscUtils import LogMessages as lmsg
 fname= os.path.basename(__file__)
 if (result<1e-10):
   print "test ",fname,": ok."
 else:
-  print "test ",fname,": ERROR."
+  lmsg.error(fname+' ERROR.')

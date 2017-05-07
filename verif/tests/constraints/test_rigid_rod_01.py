@@ -29,9 +29,9 @@ nod= nodes.newNodeXYZ(L,0.0,0.0)
 
 
 # Constraints
-coacciones= preprocessor.getConstraintLoader
+constraints= preprocessor.getConstraintLoader
 
-fix_node_6dof.Nodo6DOFGirosLibres(coacciones, 1)
+fix_node_6dof.Nodo6DOFGirosLibres(constraints, 1)
 rr= preprocessor.getConstraintLoader.newRigidRod(1,2)
 
 
@@ -73,8 +73,9 @@ ratio1= math.sqrt(deltaX**2+deltaY**2+deltaZ**2)
    '''
 
 import os
+from miscUtils import LogMessages as lmsg
 fname= os.path.basename(__file__)
 if ratio1<1e-11:
   print "test ",fname,": ok."
 else:
-  print "test ",fname,": ERROR."
+  lmsg.error(fname+' ERROR.')

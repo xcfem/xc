@@ -106,11 +106,11 @@ truss= elementos.newElement("truss",xc.ID([11,12]));
 truss.area= Ap
 
 # Constraints
-coacciones= preprocessor.getConstraintLoader
+constraints= preprocessor.getConstraintLoader
 
-fix_node_6dof.fixNode6DOF(coacciones,1)
-fix_node_6dof.fixNode6DOF(coacciones,5)
-fix_node_6dof.fixNode6DOF(coacciones,9)
+fix_node_6dof.fixNode6DOF(constraints,1)
+fix_node_6dof.fixNode6DOF(constraints,5)
+fix_node_6dof.fixNode6DOF(constraints,9)
 
 # Loads definition
 cargas= preprocessor.getLoadLoader
@@ -368,10 +368,11 @@ print "ratio4= ",ratio4
    '''
 
 import os
+from miscUtils import LogMessages as lmsg
 fname= os.path.basename(__file__)
 if (ratio1<1e-5) & (ratio2<1e-5) & (ratio3<1e-5) & (ratio4<1e-5)  :
   print "test ",fname,": ok."
 else:
-  print "test ",fname,": ERROR."
+  lmsg.error(fname+' ERROR.')
 
 os.system("rm -r -f /tmp/test_fluencia_03.db") # Your garbage you clean it

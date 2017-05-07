@@ -63,9 +63,10 @@ ratio2= abs(Mcr2-Mcr2Teor)/Mcr2Teor
 # print 'ratio2= ', ratio2
 
 import os
+from miscUtils import LogMessages as lmsg
 fname= os.path.basename(__file__)
 #Don't make a check over ratio1 SEE NOTE above.
 if(ratio2<0.05):
   print "test ",fname,": ok."
 else:
-  print "test ",fname,": ERROR."
+  lmsg.error(fname+' ERROR.')

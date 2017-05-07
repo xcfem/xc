@@ -49,26 +49,26 @@ elementos.defaultMaterial= "memb1"
 elem= elementos.newElement("shell_mitc4",xc.ID([1,2,3,4]))
 
 # Constraints
-coacciones= preprocessor.getConstraintLoader
-fix_node_6dof.Nodo6DOFGirosLibres(coacciones, 1)
-fix_node_6dof.Nodo6DOFGirosLibres(coacciones, 2)
-fix_node_6dof.Nodo6DOFGirosLibres(coacciones, 3)
-fix_node_6dof.Nodo6DOFGirosLibres(coacciones, 4)
-#fix_node_6dof.fixNode6DOF(coacciones, 1)
-#fix_node_6dof.fixNode6DOF(coacciones, 2)
-#fix_node_6dof.fixNode6DOF(coacciones, 3)
-#fix_node_6dof.fixNode6DOF(coacciones, 4)
+constraints= preprocessor.getConstraintLoader
+fix_node_6dof.Nodo6DOFGirosLibres(constraints, 1)
+fix_node_6dof.Nodo6DOFGirosLibres(constraints, 2)
+fix_node_6dof.Nodo6DOFGirosLibres(constraints, 3)
+fix_node_6dof.Nodo6DOFGirosLibres(constraints, 4)
+#fix_node_6dof.fixNode6DOF(constraints, 1)
+#fix_node_6dof.fixNode6DOF(constraints, 2)
+#fix_node_6dof.fixNode6DOF(constraints, 3)
+#fix_node_6dof.fixNode6DOF(constraints, 4)
 
 #Glued node.
 gluedDOFs= [0,1,2,3,4,5]
 loadOnDOFs= [0,0,0,0,0,0]
 for i in range(0,6):
   if i not in gluedDOFs:
-    coacciones.newSPConstraint(10,i,0.0)
+    constraints.newSPConstraint(10,i,0.0)
   else:
     loadOnDOFs[i]= -1000.0
 
-glue= coacciones.newGlueNodeToElement(n10,elem,xc.ID(gluedDOFs))
+glue= constraints.newGlueNodeToElement(n10,elem,xc.ID(gluedDOFs))
 
 # Loads definition
 cargas= preprocessor.getLoadLoader
@@ -111,8 +111,9 @@ ratio3= svdResid.getMomento().getModulo()/actionNode10Norm
 # print "RN4= ", RN4
 
 import os
+from miscUtils import LogMessages as lmsg
 fname= os.path.basename(__file__)
 if (abs(ratio1)<1e-10) & (abs(ratio2)<1e-9) & (abs(ratio3)<1e-9):
   print "test ",fname,": ok."
 else:
-  print "test ",fname,": ERROR."
+  lmsg.error(fname+' ERROR.')

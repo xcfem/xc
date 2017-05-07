@@ -58,11 +58,11 @@ elementos.defaultTag= 1 #Tag for the next element.
 spring= elementos.newElement("spring",xc.ID([1,2]));
 
 # Constraints
-coacciones= preprocessor.getConstraintLoader
+constraints= preprocessor.getConstraintLoader
 #
-spc= coacciones.newSPConstraint(1,0,0.0) # Node 1
-spc= coacciones.newSPConstraint(1,1,0.0)
-spc= coacciones.newSPConstraint(2,1,0.0) # Node 2
+spc= constraints.newSPConstraint(1,0,0.0) # Node 1
+spc= constraints.newSPConstraint(1,1,0.0)
+spc= constraints.newSPConstraint(2,1,0.0) # Node 2
 
 # Loads definition
 cargas= preprocessor.getLoadLoader
@@ -185,8 +185,9 @@ print "ratio4= ",ratio4
 '''
 
 import os
+from miscUtils import LogMessages as lmsg
 fname= os.path.basename(__file__)
 if((ratio3<1e-12) & (ratio4<1e-11)):
   print "test ",fname,": ok."
 else:
-  print "test ",fname,": ERROR."
+  lmsg.error(fname+' ERROR.')

@@ -60,12 +60,12 @@ print "cols. trf: ",getTrf.ncols
    '''
 
 # Constraints
-coacciones= preprocessor.getConstraintLoader
-spc= coacciones.newSPConstraint(1,0,0.0) # Nodo 1
-spc= coacciones.newSPConstraint(1,1,0.0)
-spc= coacciones.newSPConstraint(1,2,0.0)
-spc= coacciones.newSPConstraint(2,0,0.0) # Nodo 2
-spc= coacciones.newSPConstraint(2,2,0.0) # Nodo 2
+constraints= preprocessor.getConstraintLoader
+spc= constraints.newSPConstraint(1,0,0.0) # Nodo 1
+spc= constraints.newSPConstraint(1,1,0.0)
+spc= constraints.newSPConstraint(1,2,0.0)
+spc= constraints.newSPConstraint(2,0,0.0) # Nodo 2
+spc= constraints.newSPConstraint(2,2,0.0) # Nodo 2
 
 
 # Loads definition
@@ -120,8 +120,9 @@ print "ratio6= ",(ratio6)
    '''
   
 import os
+from miscUtils import LogMessages as lmsg
 fname= os.path.basename(__file__)
 if (abs(ratio1)<1e-12) & (abs(ratio2)<1e-12) & (abs(ratio3-1.0)<1e-12) & (abs(ratio4-1.0)<1e-12)  & (abs(ratio5)<1e-12) & (abs(ratio6)<1e-12) :
   print "test ",fname,": ok."
 else:
-  print "test ",fname,": ERROR."
+  lmsg.error(fname+' ERROR.')

@@ -32,12 +32,12 @@ ky= typical_materials.defElasticMaterial(preprocessor, "ky",KY)
 tagNodoFijo= define_apoyos.defApoyoXYRigZ(preprocessor, nod.tag,7,"kx","ky")
   
 # Constraints
-coacciones= preprocessor.getConstraintLoader
+constraints= preprocessor.getConstraintLoader
 
 #
-spc= coacciones.newSPConstraint(nod.tag,3,0.0) # nod1 Rx= 0,Ry= 0 and Rz= 0
-spc= coacciones.newSPConstraint(nod.tag,4,0.0)
-spc= coacciones.newSPConstraint(nod.tag,5,0.0)
+spc= constraints.newSPConstraint(nod.tag,3,0.0) # nod1 Rx= 0,Ry= 0 and Rz= 0
+spc= constraints.newSPConstraint(nod.tag,4,0.0)
+spc= constraints.newSPConstraint(nod.tag,5,0.0)
 
 
 # Loads definition
@@ -94,8 +94,9 @@ print "ratio6= ",(ratio6)
    '''
   
 import os
+from miscUtils import LogMessages as lmsg
 fname= os.path.basename(__file__)
 if (abs(ratio1)<1e-5) & (abs(ratio2)<1e-5) & (abs(ratio3)<1e-5) & (abs(ratio4)<1e-5)  & (abs(ratio5)<1e-5) & (abs(ratio6)<1e-5) :
   print "test ",fname,": ok."
 else:
-  print "test ",fname,": ERROR."
+  lmsg.error(fname+' ERROR.')

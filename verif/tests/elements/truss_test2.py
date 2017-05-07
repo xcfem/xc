@@ -53,13 +53,13 @@ truss.area= A
 truss= elementos.newElement("truss",xc.ID([2,3]))
 truss.area= A
 
-coacciones= preprocessor.getConstraintLoader
+constraints= preprocessor.getConstraintLoader
 #Zerp movement for node 1.
-spc= coacciones.newSPConstraint(1,0,0.0)
-spc= coacciones.newSPConstraint(1,1,0.0)
+spc= constraints.newSPConstraint(1,0,0.0)
+spc= constraints.newSPConstraint(1,1,0.0)
 #Zerp movement for node 1.
-spc= coacciones.newSPConstraint(3,0,0.0)
-spc= coacciones.newSPConstraint(3,1,0.0)
+spc= constraints.newSPConstraint(3,0,0.0)
+spc= constraints.newSPConstraint(3,1,0.0)
 
 cargas= preprocessor.getLoadLoader
 #Load case container:
@@ -84,9 +84,10 @@ ratio1= delta/(-0.12)
 ratio2= stress/10000
 
 import os
+from miscUtils import LogMessages as lmsg
 fname= os.path.basename(__file__)
 if abs(ratio1-1)<1e-5 and abs(ratio2-1)<1e-5:
   print "test ",fname,": ok."
 else:
-  print "test ",fname,": ERROR."
+  lmsg.error(fname+' ERROR.')
 

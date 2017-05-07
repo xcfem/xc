@@ -21,8 +21,9 @@ ratio1= (delta-0.180221124983)/0.180221124983
 #print "delta= ",delta
 
 import os
+from miscUtils import LogMessages as lmsg
 fname= os.path.basename(__file__)
 if abs(ratio1)<1e-11:
   print "test ",fname,": ok."
 else:
-  print "test ",fname,": ERROR."
+  lmsg.error(fname+' ERROR.')

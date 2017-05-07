@@ -67,8 +67,8 @@ recorder.callbackRecord= cc.controTensRecElastico3d()
 
 
 # Constraints
-coacciones= preprocessor.getConstraintLoader
-fix_node_6dof.fixNode6DOF(coacciones,1)
+constraints= preprocessor.getConstraintLoader
+fix_node_6dof.fixNode6DOF(constraints,1)
 
 # Loads definition
 cargas= preprocessor.getLoadLoader
@@ -121,8 +121,9 @@ print "ratio4= ",ratio4
 
 cumple= (abs(ratio1)<1e-8) & (abs(ratio2)<1e-10) & (abs(ratio3)<1e-10) & (abs(ratio4)<1e-5)
 import os
+from miscUtils import LogMessages as lmsg
 fname= os.path.basename(__file__)
 if cumple:
   print "test ",fname,": ok."
 else:
-  print "test ",fname,": ERROR."
+  lmsg.error(fname+' ERROR.')

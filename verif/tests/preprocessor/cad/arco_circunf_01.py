@@ -48,9 +48,10 @@ ratio2= (lteor/long)
 # print "Longitud del arco: ",long
 # print "Longitud teórica: ",lteor
 
+from miscUtils import LogMessages as lmsg
 fname= os.path.basename(__file__)
 if (abs(ratio1-1.0)<1e-5) and (abs(ratio2-1.0)<1e-5):
   print "test ",fname,": ok."
 else:
-  print "test ",fname,": ERROR."
+  lmsg.error(fname+' ERROR.')
 

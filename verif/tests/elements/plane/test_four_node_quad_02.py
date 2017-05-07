@@ -54,12 +54,12 @@ quad3= elementos.newElement("quad4n",xc.ID([3,4,8,7]))
 quad3.thickness= t
 
 # Constraints
-coacciones= preprocessor.getConstraintLoader
+constraints= preprocessor.getConstraintLoader
 
-spc= coacciones.newSPConstraint(1,0,0.0)
-spc= coacciones.newSPConstraint(1,1,0.0)
-spc= coacciones.newSPConstraint(5,0,0.0)
-spc= coacciones.newSPConstraint(5,1,0.0)
+spc= constraints.newSPConstraint(1,0,0.0)
+spc= constraints.newSPConstraint(1,1,0.0)
+spc= constraints.newSPConstraint(5,0,0.0)
+spc= constraints.newSPConstraint(5,1,0.0)
 
 # Loads definition
 cargas= preprocessor.getLoadLoader
@@ -151,8 +151,9 @@ print "analOk= ",analOk
  '''
 
 import os
+from miscUtils import LogMessages as lmsg
 fname= os.path.basename(__file__)
 if (abs(ratio1)<1e-5) & (abs(ratio2)<1e-5) & (abs(ratio3)<1e-5) & (abs(ratio4)<1e-5) & (abs(ratio5)<1e-12) & (analOk == 0.0):
   print "test ",fname,": ok."
 else:
-  print "test ",fname,": ERROR."
+  lmsg.error(fname+' ERROR.')

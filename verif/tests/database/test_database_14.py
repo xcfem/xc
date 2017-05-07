@@ -57,14 +57,14 @@ beam2d= elementos.newElement("elastic_beam_2d",xc.ID([3,4]))
 beam2d.h= h
     
 # Constraints
-coacciones= preprocessor.getConstraintLoader
+constraints= preprocessor.getConstraintLoader
 #
-spc= coacciones.newSPConstraint(1,0,0.0) # Nodo 1
-spc= coacciones.newSPConstraint(1,1,0.0)
-spc= coacciones.newSPConstraint(1,2,0.0)
-spc= coacciones.newSPConstraint(4,0,0.0) # Nodo 4
-spc= coacciones.newSPConstraint(4,1,0.0)
-spc= coacciones.newSPConstraint(4,2,0.0)
+spc= constraints.newSPConstraint(1,0,0.0) # Nodo 1
+spc= constraints.newSPConstraint(1,1,0.0)
+spc= constraints.newSPConstraint(1,2,0.0)
+spc= constraints.newSPConstraint(4,0,0.0) # Nodo 4
+spc= constraints.newSPConstraint(4,1,0.0)
+spc= constraints.newSPConstraint(4,2,0.0)
 
 
 setTotal= preprocessor.getSets.getSet("total")
@@ -162,10 +162,11 @@ print "ratio4= ",ratio4
    '''
 
 import os
+from miscUtils import LogMessages as lmsg
 fname= os.path.basename(__file__)
 if (abs(ratio1)<1e-5) & (abs(ratio2)<1e-5) & (abs(ratio3)<1e-5):
   print "test ",fname,": ok."
 else:
-  print "test ",fname,": ERROR."
+  lmsg.error(fname+' ERROR.')
 os.system("rm -rf /tmp/test14.db") # Your garbage you clean it
 

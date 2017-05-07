@@ -89,8 +89,8 @@ elementos.defaultTag= 1 #Tag for the next element.
 beam3d= elementos.newElement("elastic_beam_3d",xc.ID([1,2]));
 
 
-coacciones= preprocessor.getConstraintLoader
-fix_node_6dof.fixNode6DOF(coacciones,1)
+constraints= preprocessor.getConstraintLoader
+fix_node_6dof.fixNode6DOF(constraints,1)
 
 elem=preprocessor.getElementLoader.getElement(1) #element 1
 
@@ -225,8 +225,9 @@ result= math.sqrt(result)
 # print 'result= ',result
 
 import os
+from miscUtils import LogMessages as lmsg
 fname= os.path.basename(__file__)
 if (result<1e-10):
   print "test ",fname,": ok."
 else:
-  print "test ",fname,": ERROR."
+  lmsg.error(fname+' ERROR.')
