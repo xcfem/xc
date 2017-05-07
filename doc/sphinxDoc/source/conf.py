@@ -134,7 +134,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'XC'
-copyright = u'2016, Luis Pérez Tato (LCPT) & Ana Ortega (A_OO)'
+copyright = u'2016, Luis Pérez Tato (LCPT) & Ana Ortega (AO_O)'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -287,7 +287,7 @@ latex_elements = {
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
   ('index', 'XC.tex', u'XC Documentation',
-   u'LCPT A\\_OO', 'manual'),
+   u'LCPT AO\\_O', 'manual'),
 ]
 
 # The name of an image file (relative to this directory) to place at the top of
@@ -317,7 +317,7 @@ latex_documents = [
 # (source start file, name, description, authors, manual section).
 man_pages = [
     ('index', 'xc', u'XC Documentation',
-     [u'LCPT A_OO'], 1)
+     [u'LCPT AO_O'], 1)
 ]
 
 # If true, show URL addresses after external links.
@@ -331,7 +331,7 @@ man_pages = [
 #  dir menu entry, description, category)
 texinfo_documents = [
   ('index', 'XC', u'XC Documentation',
-   u'LCPT A_OO', 'XC', 'One line description of project.',
+   u'LCPT AO_O', 'XC', 'One line description of project.',
    'Miscellaneous'),
 ]
 

@@ -132,7 +132,7 @@ class ijkGrid(object):
       for i in r.getIRange():
         for j in r.getJRange():
           for k in r.getKRange():
-            tagp= self.getTagIndices(i,j,k)
+            tagp= self.getTagPntGrid(indPnt=(i,j,k))
             pt= points.get(tagp)
             pt.getPos.x+= vDisp[0]
             pt.getPos.y+= vDisp[1]
@@ -140,54 +140,40 @@ class ijkGrid(object):
              
 
 
-  def getTagIndices(self,i,j,k):
-    ''':returns: the tag of the point at `i,j,k` index of the grid
+  def getTagPntGrid(self,indPnt):
+    ''':returns: the tag of the point at indPnt=(i,j,k) index of the grid
 
-    :param i: grid index that points to the global X coordinates    
-    :param j: grid index that points to the global Y coordinates    
-    :param k: grid index that points to the global Z coordinates    
+    :param indPnt: grid indices that point to the global (X, Y, Z)  coordinates    
     '''
-    tagPto= self.indices.getPnt(i+1,j+1,k+1).tag
+    tagPto= self.indices.getPnt(indPnt[0]+1,indPnt[1]+1,indPnt[2]+1).tag
     return tagPto
 
-  def newQuadSurfaceConstK(self,i,j,k):
-    ''' return indexes for a const k.'''
-    pto1= self.getTagIndices(i,j,k)
-    pto2= self.getTagIndices(i+1,j,k)
-    pto3= self.getTagIndices(i+1,j+1,k)
-    pto4= self.getTagIndices(i,j+1,k)
-    surfaces= self.prep.getCad.getSurfaces
-    retval= surfaces.newQuadSurfacePts(pto1,pto2,pto3,pto4)
-    retval.name= getSupName(pto1,pto2,pto3,pto4)
-    retval.nDivI=1 #se inicializa el nº de divisiones a 1 (otherwise
-    retval.nDivJ=1 #it creates at least 4 divisions on edges common to existing surfaces).
-    return retval
+  def newQuadGridSurface(self,ind4Pnt):
+    '''Generate the quadrangle surface defined by the 4 vertex whose indices 
+    in the grid are passed as parameters. 
 
-  def newQuadSurfaceConstJ(self,i,j,k):
-    ''' return indexes for a const j.'''
-    pto1= self.getTagIndices(i,j,k)
-    pto2= self.getTagIndices(i,j,k+1)
-    pto3= self.getTagIndices(i+1,j,k+1)
-    pto4= self.getTagIndices(i+1,j,k)
+    :param ind4Pnt: tuple of ordered points defined by their grid indices (i,j,k)
+    :returns: the quadrangle surface
+    '''
+    (pto1,pto2,pto3,pto4)=tuple([self.getTagPntGrid(ind4Pnt[i]) for i in range(4)])
     surfaces= self.prep.getCad.getSurfaces
-    retval= surfaces.newQuadSurfacePts(pto1,pto2,pto3,pto4)
-    retval.name= getSupName(pto1,pto2,pto3,pto4)
-    retval.nDivI=1 #se inicializa el nº de divisiones a 1 (otherwise
-    retval.nDivJ=1 #it creates at least 4 divisions on edges common to existing surfaces).
-    return retval
+    qs= surfaces.newQuadSurfacePts(pto1,pto2,pto3,pto4)
+    qs.name= getSupName(pto1,pto2,pto3,pto4)
+    qs.nDivI=1 #initialization values of number of divisions
+    qs.nDivJ=1 
+    return qs
 
-  def newQuadSurfaceConstI(self,i,j,k):
-    ''' return indexes for a const i.'''
-    pto1= self.getTagIndices(i,j,k)
-    pto2= self.getTagIndices(i,j+1,k)
-    pto3= self.getTagIndices(i,j+1,k+1)
-    pto4= self.getTagIndices(i,j,k+1)
-    surfaces= self.prep.getCad.getSurfaces
-    retval= surfaces.newQuadSurfacePts(pto1,pto2,pto3,pto4)
-    retval.name= getSupName(pto1,pto2,pto3,pto4)
-    retval.nDivI=1 #se inicializa el nº de divisiones a 1 (otherwise
-    retval.nDivJ=1 #t creates at least 4 divisions on edges common to existing surfaces).
-    return retval
+  def getNameQuadGridSurface(self,ind4Pnt):
+    '''Return the name of the quadrangle surface defined by the 4 vertex 
+    whose indices in the grid are passed as parameters. 
+
+    :param ind4Pnt: tuple of ordered points defined by their grid indices (i,j,k)
+    :returns: the quadrangle surface
+    '''
+    (pto1,pto2,pto3,pto4)=tuple([self.getTagPntGrid(ind4Pnt[i]) for i in range(4)])
+    nameSurf= getSupName(pto1,pto2,pto3,pto4)
+    return nameSurf
+      
 
   def generateAreas(self,ijkRange,dicQuadSurf):
     'generates the surfaces contained in a rectangle defined by the coordinates'
@@ -203,7 +189,8 @@ class ijkGrid(object):
         while i<= ijkRange.ijkMax[0]-1:
             j= ijkRange.ijkMin[1]
             while j<= ijkRange.ijkMax[1]-1:
-                a= self.newQuadSurfaceConstK(i,j,k)
+                indPtsQs=((i,j,k),(i+1,j,k),(i+1,j+1,k),(i,j+1,k))
+                a= self.newQuadGridSurface(indPtsQs)
                 retval.append(a)
                 dicQuadSurf[a.name]= a
                 j+=1
@@ -213,7 +200,8 @@ class ijkGrid(object):
         while i<= ijkRange.ijkMax[0]-1:
             k= ijkRange.ijkMin[2]
             while k<= ijkRange.ijkMax[2]-1:
-                a= self.newQuadSurfaceConstJ(i,j,k)
+                indPtsQs=((i,j,k),(i,j,k+1),(i+1,j,k+1),(i+1,j,k))
+                a= self.newQuadGridSurface(indPtsQs)
                 retval.append(a)
                 dicQuadSurf[a.name]= a
                 k+=1
@@ -223,7 +211,8 @@ class ijkGrid(object):
         while j<= ijkRange.ijkMax[1]-1:
             k= ijkRange.ijkMin[2]
             while k<= ijkRange.ijkMax[2]-1:
-                a= self.newQuadSurfaceConstI(i,j,k)
+                indPtsQs=((i,j,k),(i,j+1,k),(i,j+1,k+1),(i,j,k+1))
+                a= self.newQuadGridSurface(indPtsQs)
                 retval.append(a)
                 dicQuadSurf[a.name]= a
                 k+=1
@@ -246,8 +235,8 @@ class ijkGrid(object):
     if ijkRange.ijkMax[1]==ijkRange.ijkMin[1] and ijkRange.ijkMax[2]==ijkRange.ijkMin[2] :
         'línea paralela al eje X'
         while i<=ijkRange.ijkMax[0]-1:
-            pto1=self.getTagIndices(i,j,k)
-            pto2=self.getTagIndices(i+1,j,k)
+            pto1=self.getTagPntGrid((i,j,k))
+            pto2=self.getTagPntGrid((i+1,j,k))
             l=lines.newLine(pto1,pto2)
             l.nDiv=1     #se inicializa el nº de divisiones a 1 
             retval.append(l)
@@ -257,8 +246,8 @@ class ijkGrid(object):
     elif ijkRange.ijkMax[0]==ijkRange.ijkMin[0] and ijkRange.ijkMax[2]==ijkRange.ijkMin[2] :
         'línea paralela al eje Y'
         while j<=ijkRange.ijkMax[1]-1:
-            pto1=self.getTagIndices(i,j,k)
-            pto2=self.getTagIndices(i,j+1,k)
+            pto1=self.getTagPntGrid((i,j,k))
+            pto2=self.getTagPntGrid((i,j+1,k))
             l=lines.newLine(pto1,pto2)
             l.nDiv=1     #se inicializa el nº de divisiones a 1 
             retval.append(l)
@@ -268,8 +257,8 @@ class ijkGrid(object):
     elif ijkRange.ijkMax[0]==ijkRange.ijkMin[0] and ijkRange.ijkMax[1]==ijkRange.ijkMin[1] :
         'línea paralela al eje Z'
         while k<=ijkRange.ijkMax[2]-1:
-            pto1=self.getTagIndices(i,j,k)
-            pto2=self.getTagIndices(i,j,k+1)
+            pto1=self.getTagPntGrid((i,j,k))
+            pto2=self.getTagPntGrid((i,j,k+1))
             l=lines.newLine(pto1,pto2)
             l.nDiv=1     #se inicializa el nº de divisiones a 1 
             retval.append(l)
@@ -293,13 +282,10 @@ class ijkGrid(object):
         while i<= ijkRange.ijkMax[0]-1:
             j= ijkRange.ijkMin[1]
             while j<= ijkRange.ijkMax[1]-1:
-                pto1= self.getTagIndices(i,j,k)
-                pto2= self.getTagIndices(i+1,j,k)
-                pto3= self.getTagIndices(i+1,j+1,k)
-                pto4= self.getTagIndices(i,j+1,k)
-                nmbrSup= getSupName(pto1,pto2,pto3,pto4)
-                if nmbrSup in dicQuadSurf:
-                    retval.getSurfaces.append(dicQuadSurf[nmbrSup])
+                indPtsQs=((i,j,k),(i+1,j,k),(i+1,j+1,k),(i,j+1,k))
+                nameSurf= self.getNameQuadGridSurface(indPtsQs)
+                if nameSurf in dicQuadSurf:
+                    retval.getSurfaces.append(dicQuadSurf[nameSurf])
                 j+=1
             i+=1
     elif ijkRange.ijkMax[1]== ijkRange.ijkMin[1]:
@@ -307,13 +293,10 @@ class ijkGrid(object):
         while i<= ijkRange.ijkMax[0]-1:
             k= ijkRange.ijkMin[2]
             while k<= ijkRange.ijkMax[2]-1:
-                pto1= self.getTagIndices(i,j,k)
-                pto2= self.getTagIndices(i,j,k+1)
-                pto3= self.getTagIndices(i+1,j,k+1)
-                pto4= self.getTagIndices(i+1,j,k)
-                nmbrSup= getSupName(pto1,pto2,pto3,pto4)
-                if nmbrSup in dicQuadSurf:
-                    retval.getSurfaces.append(dicQuadSurf[nmbrSup])
+                indPtsQs=((i,j,k),(i,j,k+1),(i+1,j,k+1),(i+1,j,k))
+                nameSurf= self.getNameQuadGridSurface(indPtsQs)
+                if nameSurf in dicQuadSurf:
+                    retval.getSurfaces.append(dicQuadSurf[nameSurf])
                 k+=1
             i+=1
     elif ijkRange.ijkMax[0]== ijkRange.ijkMin[0]:
@@ -321,13 +304,10 @@ class ijkGrid(object):
         while j<= ijkRange.ijkMax[1]-1:
             k= ijkRange.ijkMin[2]
             while k<= ijkRange.ijkMax[2]-1:
-                pto1= self.getTagIndices(i,j,k)
-                pto2= self.getTagIndices(i,j+1,k)
-                pto3= self.getTagIndices(i,j+1,k+1)
-                pto4= self.getTagIndices(i,j,k+1)
-                nmbrSup= getSupName(pto1,pto2,pto3,pto4)
-                if nmbrSup in dicQuadSurf:
-                    retval.getSurfaces.append(dicQuadSurf[nmbrSup])
+                indPtsQs=((i,j,k),(i,j+1,k),(i,j+1,k+1),(i,j,k+1))
+                nameSurf= self.getNameQuadGridSurface(indPtsQs)
+                if nameSurf in dicQuadSurf:
+                    retval.getSurfaces.append(dicQuadSurf[nameSurf])
                 k+=1
             j+=1
     retval.fillDownwards()    
@@ -354,8 +334,8 @@ class ijkGrid(object):
     for k in range(kmin,kmax+1):
         for j in range(jmin,jmax+1):
             for i in range(imin,imax):
-                tagPto1= self.getTagIndices(i,j,k)
-                tagPto2= self.getTagIndices(i+1,j,k)
+                tagPto1= self.getTagPntGrid(i,j,k)
+                tagPto2= self.getTagPntGrid(i+1,j,k)
                 l= getLin2Pts(lstLinBusq,tagPto1,tagPto2)
                 if l<> None:
                     retval.append(l)
@@ -363,8 +343,8 @@ class ijkGrid(object):
     for k in range(kmin,kmax+1):
         for i in range(imin,imax+1):
             for j in range(jmin,jmax):
-                tagPto1= self.getTagIndices(i,j,k)
-                tagPto2= self.getTagIndices(i,j+1,k)
+                tagPto1= self.getTagPntGrid(i,j,k)
+                tagPto2= self.getTagPntGrid(i,j+1,k)
                 l= getLin2Pts(lstLinBusq,tagPto1,tagPto2)
                 if l<> None:
                     retval.append(l)
@@ -372,8 +352,8 @@ class ijkGrid(object):
     for j in range(jmin,jmax+1):
         for i in range(imin,imax+1):
             for k in range(kmin,kmax):
-                tagPto1= self.getTagIndices(i,j,k)
-                tagPto2= self.getTagIndices(i,j,k+1)
+                tagPto1= self.getTagPntGrid(i,j,k)
+                tagPto2= self.getTagPntGrid(i,j,k+1)
                 l= getLin2Pts(lstLinBusq,tagPto1,tagPto2)
                 if l<> None:
                     retval.append(l)
@@ -392,7 +372,7 @@ class ijkGrid(object):
         while i<= ijkRange.ijkMax[0]:
             j= ijkRange.ijkMin[1]
             while j<= ijkRange.ijkMax[1]:
-                tgpto= self.getTagIndices(i,j,k)
+                tgpto= self.getTagPntGrid(indPnt=(i,j,k))
                 pto= puntos.get(tgpto)
                 retval.getPoints.append(pto)
                 j+=1
@@ -402,7 +382,7 @@ class ijkGrid(object):
         while i<= ijkRange.ijkMax[0]:
             k= ijkRange.ijkMin[2]
             while k<= ijkRange.ijkMax[2]:
-                tgpto= self.getTagIndices(i,j,k)
+                tgpto= self.getTagPntGrid(indPnt=(i,j,k))
                 pto= puntos.get(tgpto)
                 #print pto.tag,pto.getPos.x,pto.getPos.y,pto.getPos.z
                 retval.getPoints.append(pto)
@@ -413,7 +393,7 @@ class ijkGrid(object):
         while j<= ijkRange.ijkMax[1]:
             k= ijkRange.ijkMin[2]
             while k<= ijkRange.ijkMax[2]:
-              tgpto= self.getTagIndices(i,j,k)
+              tgpto= self.getTagPntGrid(indPnt=(i,j,k))
               pto= puntos.get(tgpto)
               #print pto.tag,pto.getPos.x,pto.getPos.y,pto.getPos.z
               retval.getPoints.append(pto)
