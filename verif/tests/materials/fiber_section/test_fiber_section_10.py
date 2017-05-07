@@ -43,7 +43,7 @@ fiberSectionRepr= secHA.getFiberSectionRepr()
 fiberSectionRepr.setGeomNamed("geomSecHormigon01")
 secHA.setupFibers()
 
-banco_pruebas_scc3d.modeloSecc3d(preprocessor, "secHA")
+banco_pruebas_scc3d.sectionModel(preprocessor, "secHA")
 
 # Constraints
 constraints= preprocessor.getConstraintLoader

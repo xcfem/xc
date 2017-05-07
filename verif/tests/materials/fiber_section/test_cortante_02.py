@@ -100,7 +100,7 @@ secHA.setRespVyByName("respVy")
 secHA.setRespVzByName("respVz")
 secHA.setRespTByName("respT")
 
-banco_pruebas_scc3d.modeloSecc3d(preprocessor, "secHA")
+banco_pruebas_scc3d.sectionModel(preprocessor, "secHA")
 
 # Constraints
 constraints= preprocessor.getConstraintLoader

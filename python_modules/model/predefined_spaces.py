@@ -191,6 +191,13 @@ class StructuralMechanics3D(PredefinedSpace):
     constraints.newSPConstraint(nodeTag,2,0.0)
     constraints.newSPConstraint(nodeTag,3,0.0)
     constraints.newSPConstraint(nodeTag,4,0.0)
+
+  def fixNodeFFF_000(self, nodeTag):
+    '''Restrain only rotations (i. e. ThetaX= 0, ThetaY= 0 and ThetaZ= 0).'''
+    constraints= self.preprocessor.getConstraintLoader
+    constraints.newSPConstraint(nodeTag,3,0.0) # nodeTag, DOF, constrValue
+    constraints.newSPConstraint(nodeTag,4,0.0)
+    constraints.newSPConstraint(nodeTag,5,0.0)
     
 def gdls_resist_materiales3D(nodes):
   '''Defines the dimension of the space: nodes by three coordinates (x,y,z) and six DOF for each node (Ux,Uy,Uz,thetaX,thetaY,thetaZ)

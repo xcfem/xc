@@ -30,7 +30,7 @@ prueba= xc.ProblemaEF()
 preprocessor=  prueba.getPreprocessor
 # Materials definition
 matPoteau= scc10x20.defSeccShElastica3d(preprocessor,matscc10x20)
-elemZLS= banco_pruebas_scc3d.modeloSecc3d(preprocessor, scc10x20.nmb)
+elemZLS= banco_pruebas_scc3d.sectionModel(preprocessor, scc10x20.nmb)
 
 # Constraints
 constraints= preprocessor.getConstraintLoader

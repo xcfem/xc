@@ -56,7 +56,7 @@ matTagAceroArmar= EHE_reinforcing_steel.B500S.defDiagK(preprocessor)
 
 datosScc1LosC.defRCSimpleSection(preprocessor, "k")
 
-banco_pruebas_scc3d.modeloSecc3d(preprocessor, datosScc1LosC.sectionName)
+banco_pruebas_scc3d.sectionModel(preprocessor, datosScc1LosC.sectionName)
 
 # Constraints
 constraints= preprocessor.getConstraintLoader

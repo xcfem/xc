@@ -57,7 +57,7 @@ secHA.setupFibers()
 #fibras= secHA.getFibers()
 
 
-banco_pruebas_scc3d.modeloSecc3d(preprocessor, "secHA")
+banco_pruebas_scc3d.sectionModel(preprocessor, "secHA")
 # Constraints
 constraints= preprocessor.getConstraintLoader
 

@@ -62,7 +62,7 @@ fiberSectionRepr= secHA.getFiberSectionRepr()
 fiberSectionRepr.setGeomNamed("geomSecHA")
 secHA.setupFibers()
 
-banco_pruebas_scc3d.modeloSecc3d(preprocessor, "secHA")
+banco_pruebas_scc3d.sectionModel(preprocessor, "secHA")
 # Constraints
 constraints= preprocessor.getConstraintLoader
 

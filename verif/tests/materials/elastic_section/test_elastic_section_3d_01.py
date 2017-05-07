@@ -28,7 +28,7 @@ matscc10x20=typical_materials.MaterialData(name='mtrectang',E=2.1e6,nu=0.3,rho=2
 
 # Materials definition
 matPoteau= scc10x20.defSeccElastica3d(preprocessor,matscc10x20)
-elemZLS= banco_pruebas_scc3d.modeloSecc3d(preprocessor, scc10x20.nmb)
+elemZLS= banco_pruebas_scc3d.sectionModel(preprocessor, scc10x20.nmb)
 
 # Constraints
 constraints= preprocessor.getConstraintLoader

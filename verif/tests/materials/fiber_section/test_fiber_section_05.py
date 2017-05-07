@@ -49,7 +49,7 @@ fiberSectionRepr= secBarras.getFiberSectionRepr()
 fiberSectionRepr.setGeomNamed("geomSecBarras")
 secBarras.setupFibers()
 
-banco_pruebas_scc3d.modeloSecc3d(preprocessor, "secBarras")
+banco_pruebas_scc3d.sectionModel(preprocessor, "secBarras")
 
 # Constraints
 constraints= preprocessor.getConstraintLoader

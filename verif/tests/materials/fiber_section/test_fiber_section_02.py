@@ -58,7 +58,7 @@ fiberSectionRepr.setGeomNamed("geomRectang")
 rectang.setupFibers()
 extraeParamSccFibras(rectang,scc10x20)
 
-banco_pruebas_scc3d.modeloSecc3d(preprocessor, "rectang")
+banco_pruebas_scc3d.sectionModel(preprocessor, "rectang")
 # Constraints
 constraints= preprocessor.getConstraintLoader
 

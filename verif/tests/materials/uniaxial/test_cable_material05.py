@@ -9,7 +9,6 @@ import xc
 from solution import predefined_solutions
 from model import predefined_spaces
 from model import fix_node_6dof
-from model import fix_nodes_lines
 from model import cargas_nodo
 from materials import typical_materials
 
@@ -67,8 +66,8 @@ l1.genMesh(xc.meshDir.I)
     
 # Constraints
 constraints= preprocessor.getConstraintLoader
-fix_nodes_lines.ConstraintsForLineExtremeNodes(l,constraints,fix_node_6dof.fixNode6DOF)
-fix_nodes_lines.ConstraintsForLineInteriorNodes(l,constraints,fix_node_6dof.Nodo6DOFGirosImpedidos)
+predefined_spaces.ConstraintsForLineExtremeNodes(l,modelSpace.fixNode000_000)
+predefined_spaces.ConstraintsForLineInteriorNodes(l,modelSpace.fixNodeFFF_000)
 
 # Loads definition
 cargas= preprocessor.getLoadLoader

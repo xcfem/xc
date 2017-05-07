@@ -7,9 +7,7 @@ import geom
 import xc
 from solution import predefined_solutions
 from model import predefined_spaces
-from model import fix_node_6dof
 from materials import typical_materials
-from model import fix_nodes_lines
 from model import cargas_nodo
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
@@ -65,10 +63,8 @@ l1.genMesh(xc.meshDir.I)
     
 # Constraints
 constraints= preprocessor.getConstraintLoader
-fix_nodes_lines.ConstraintsForLineExtremeNodes(l,constraints,fix_node_6dof.fixNode6DOF)
-fix_nodes_lines.ConstraintsForLineInteriorNodes(l,constraints,fix_node_6dof.Nodo6DOFGirosImpedidos)
-    # \CondContornoNodosExtremosLinea("l1",fix_node_6dof.fixNode6DOF)
-    # \CondContornoNodosInterioresLinea("l1","Nodo6GDLGirosImpedidos")
+predefined_spaces.ConstraintsForLineExtremeNodes(l,modelSpace.fixNode000_000)
+predefined_spaces.ConstraintsForLineInteriorNodes(l,modelSpace.fixNodeFFF_000)
 
 # Loads definition
 cargas= preprocessor.getLoadLoader

@@ -66,7 +66,7 @@ agg= materiales.newMaterial("section_aggregator","sa")
 agg.setSection("rectang")
 agg.setAdditions(["T","Vy","Vz"],["respT","respVy","respVz"])
 
-banco_pruebas_scc3d.modeloSecc3d(preprocessor, "sa")
+banco_pruebas_scc3d.sectionModel(preprocessor, "sa")
 # Constraints
 constraints= preprocessor.getConstraintLoader
 
