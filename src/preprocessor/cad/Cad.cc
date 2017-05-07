@@ -57,9 +57,9 @@
 #include "domain/mesh/element/Element.h"
 
 //! @brief Constructor.
-XC::Cad::Cad(Preprocessor *mod)
-  : EntCmd(mod), preprocessor(mod),
-    reference_systems(this), transformaciones_geometricas(this),
+XC::Cad::Cad(Preprocessor *prep)
+  : PreprocessorContainer(prep), reference_systems(this),
+    transformaciones_geometricas(this),
     puntos(this), edges(this), faces(this), cuerpos(this), unif_grid(this),
     esquemas2d(this), esquemas3d(this) {}
 

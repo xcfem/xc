@@ -143,7 +143,7 @@ XC::ShellMITC4Base::~ShellMITC4Base(void)
 const XC::ShellUniformLoad *XC::ShellMITC4Base::vector3dUniformLoadLocal(const Vector &v)
   {
     ShellUniformLoad *retval= nullptr;
-    Preprocessor *preprocessor= GetPreprocessor();
+    Preprocessor *preprocessor= getPreprocessor();
     if(preprocessor)
       {
         MapLoadPatterns &casos= preprocessor->getLoadLoader().getLoadPatterns();
@@ -195,7 +195,7 @@ const XC::ShellUniformLoad *XC::ShellMITC4Base::vector3dUniformLoadGlobal(const 
 //! @brief  
 void XC::ShellMITC4Base::strainLoad(const Matrix &strains)
   {
-    Preprocessor *preprocessor= GetPreprocessor();
+    Preprocessor *preprocessor= getPreprocessor();
     if(preprocessor)
       {
         MapLoadPatterns &casos= preprocessor->getLoadLoader().getLoadPatterns();

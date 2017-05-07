@@ -24,35 +24,42 @@
 // along with this program.
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
-//Loader.cc
+//PreprocessorContainer.cc
 
-#include "Loader.h"
+#include "PreprocessorContainer.h"
 #include "preprocessor/Preprocessor.h"
 #include "domain/domain/Domain.h"
 
 #include "domain/mesh/node/Node.h"
 #include "domain/mesh/element/Element.h"
 
-
 //! @brief Default constructor.
-XC::Loader::Loader(Preprocessor *owr)
-  : PreprocessorContainer(owr), MovableObject(0)
-  {}
+XC::PreprocessorContainer::PreprocessorContainer(Preprocessor *prep)
+  : EntCmd(prep), preprocessor(prep) {}
 
-//! @brief Sends object through the channel being passed as parameter.
-int XC::Loader::sendSelf(CommParameters &cp)
+//! @brief Returns the domain.
+const XC::Domain *XC::PreprocessorContainer::getDomain(void) const
   {
-    std::cerr << nombre_clase() << "::" << __FUNCTION__
-              << "; not implemented.\n";    
-    return -1;
+    if(preprocessor)
+      return preprocessor->getDomain();
+    else
+      {
+	std::cerr << nombre_clase() << __FUNCTION__
+	          << "; preprocessor needed." << std::endl;
+        return nullptr;
+      }
   }
 
-
-//! @brief Receives object through the channel being passed as parameter.
-int XC::Loader::recvSelf(const CommParameters &cp)
+//! @brief Returns the domain.
+XC::Domain *XC::PreprocessorContainer::getDomain(void)
   {
-    std::cerr << nombre_clase() << "::" << __FUNCTION__
-              << "; not implemented.\n";    
-    return -1;
+    if(preprocessor)
+      return preprocessor->getDomain();
+    else
+      {
+	std::cerr << nombre_clase() << __FUNCTION__
+	          << "; preprocessor needed." << std::endl;
+        return nullptr;
+      }
   }
 

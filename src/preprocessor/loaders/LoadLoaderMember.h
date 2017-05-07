@@ -45,7 +45,8 @@ class LoadLoaderMember: public EntCmd, public MovableObject
     LoadLoaderMember(LoadLoader *owr);
     const LoadLoader *getLoadLoader(void) const;
     LoadLoader *getLoadLoader(void);
-    Domain *getDomain(void) const;
+    const Domain *getDomain(void) const;
+    Domain *getDomain(void);
     int &getTagLP(void);
     const int &getTagLP(void) const;
   };

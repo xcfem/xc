@@ -35,13 +35,13 @@ class Element;
 template <typename ELEM>
 ELEM *new_element(int tag_elem)
   {
-    ELEM *retval= new ELEM(tag_elem); //Lo creamos.
+    ELEM *retval= new ELEM(tag_elem); //We create it.
     return retval;
   }
 
 //! @brief Creates a new element and assigns it a material.
 template <typename ELEM>
-ELEM *new_element_gen_mat(int tag_elem, Material *ptrMat)
+ELEM *new_element_gen_mat(int tag_elem, const Material *ptrMat)
   {
     ELEM *retval= new ELEM(tag_elem,ptrMat);
     return retval;
@@ -49,61 +49,61 @@ ELEM *new_element_gen_mat(int tag_elem, Material *ptrMat)
 
 //! @brief Creates a new element and assigns it a material.
 template <typename ELEM>
-ELEM *new_element_dim_gen_mat(int tag_elem,int dime, Material *ptrMat)
+ELEM *new_element_dim_gen_mat(int tag_elem,int dime, const Material *ptrMat)
   {
     ELEM *retval= new ELEM(tag_elem,dime,ptrMat);
     return retval;
   }
 
 template <typename ELEM>
-ELEM *new_element_dim_gen_mat_dir(int tag_elem,int dime, Material *ptrMat,int d)
+ELEM *new_element_dim_gen_mat_dir(int tag_elem,int dime, const Material *ptrMat,int d)
   {
-    ELEM *retval= new ELEM(tag_elem, dime, ptrMat,d); //Lo creamos.
+    ELEM *retval= new ELEM(tag_elem, dime, ptrMat,d); //We create it.
     return retval;
   }
 
 template <typename ELEM>
-ELEM *new_element_gen_mat_crd(int tag_elem, Material *ptrMat, CrdTransf *ptrTrf)
+ELEM *new_element_gen_mat_crd(int tag_elem, const Material *ptrMat, const CrdTransf *ptrTrf)
   {
-    ELEM *retval= new ELEM(tag_elem,ptrMat,ptrTrf); //Lo creamos.
+    ELEM *retval= new ELEM(tag_elem,ptrMat,ptrTrf); //We create it.
     return retval;
   }
 
 template <typename ELEM>
-ELEM *new_element_dim_gen_mat_crd(int tag_elem,int dime, Material *ptrMat, CrdTransf *ptrTrf)
+ELEM *new_element_dim_gen_mat_crd(int tag_elem,int dime, const Material *ptrMat, const CrdTransf *ptrTrf)
   {
-    ELEM *retval= new ELEM(tag_elem,dime,ptrMat,ptrTrf); //Lo creamos.
+    ELEM *retval= new ELEM(tag_elem,dime,ptrMat,ptrTrf); //We create it.
     return retval;
   }
 
 template <typename ELEM>
-ELEM *new_element_ns_gen_mat_crd(int tag_elem, Material *ptrMat, int ns, CrdTransf *ptrTrf)
+ELEM *new_element_ns_gen_mat_crd(int tag_elem, const Material *ptrMat, int ns, const CrdTransf *ptrTrf)
   {
-    ELEM *retval= new ELEM(tag_elem,ns,ptrMat,ptrTrf); //Lo creamos.
+    ELEM *retval= new ELEM(tag_elem,ns,ptrMat,ptrTrf); //We create it.
     return retval;
   }
 
 template <typename ELEM>
-ELEM *new_element_ns_gen_mat_crd_integ(int tag_elem, Material *ptrMat, int ns, CrdTransf *ptrTrf,BeamIntegration *ptrInteg)
+ELEM *new_element_ns_gen_mat_crd_integ(int tag_elem, const Material *ptrMat, int ns, const CrdTransf *ptrTrf,const BeamIntegration *ptrInteg)
   {
-    ELEM *retval= new ELEM(tag_elem,ns,ptrMat,ptrTrf,ptrInteg); //Lo creamos.
+    ELEM *retval= new ELEM(tag_elem,ns,ptrMat,ptrTrf,ptrInteg); //We create it.
     return retval;
   }
 
 template <typename ELEM, typename MAT>
-ELEM *new_element_mat(int tag_elem, Material *ptrMat)
+ELEM *new_element_mat(int tag_elem, const Material *ptrMat)
   {
     ELEM *retval= nullptr;
     const MAT *ptr_mat= dynamic_cast<const MAT *>(ptrMat);
     if(ptr_mat)
-      retval= new ELEM(tag_elem,ptr_mat); //Lo creamos.
+      retval= new ELEM(tag_elem,ptr_mat); //We create it.
     return retval;
   }
 
 template <typename ELEM>
-ELEM *new_element_mat_crd(int tag_elem, Material *ptrMat, CrdTransf *ptrTrf)
+ELEM *new_element_mat_crd(int tag_elem, const Material *ptrMat, const CrdTransf *ptrTrf)
   {
-    ELEM *retval= new ELEM(tag_elem,ptrMat,ptrTrf); //Lo creamos.
+    ELEM *retval= new ELEM(tag_elem,ptrMat,ptrTrf); //We create it.
     return retval;
   }
 } // end of XC namespace

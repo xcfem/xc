@@ -84,7 +84,7 @@ XC::MaterialLoader *XC::ZeroLengthMaterials::get_material_loader(void)
         ZeroLength *elem= dynamic_cast<ZeroLength *>(owr);
         if(elem)
           {
-            Preprocessor *preprocessor= elem->GetPreprocessor();
+            Preprocessor *preprocessor= elem->getPreprocessor();
             if(preprocessor)
               retval= &preprocessor->getMaterialLoader();
             else

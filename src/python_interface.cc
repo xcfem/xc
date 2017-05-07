@@ -44,7 +44,16 @@ BOOST_PYTHON_MODULE(xc)
     using namespace boost::python;
     docstring_options doc_options;
 
+    XC::Domain *(XC::PreprocessorContainer::*getContainerDomain)(void)= &XC::PreprocessorContainer::getDomain;
+    XC::Preprocessor *(XC::PreprocessorContainer::*getContainerPreprocessor)(void)= &XC::PreprocessorContainer::getPreprocessor;
+    class_<XC::PreprocessorContainer, bases<EntCmd>, boost::noncopyable >("PreprocessorContainer", no_init)
+      .add_property("getPreprocessor", make_function( getContainerPreprocessor, return_internal_reference<>() ))
+      .add_property("getDomain", make_function( getContainerDomain, return_internal_reference<>() ),"Return a reference to the domain.")
+      ;
+
     export_utility();
+
+
 //Expose domain components.
 #include "domain/component/python_interface.tcc"
 
@@ -52,6 +61,7 @@ BOOST_PYTHON_MODULE(xc)
 
     class_<XC::MeshComponent, bases<XC::ContinuaReprComponent>, boost::noncopyable >("MeshComponent", no_init)
        ;
+    
 
     export_material_base(); //Materials exposition.
     export_material_uniaxial(); //Materials exposition.

@@ -24,35 +24,40 @@
 // along with this program.
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
-//Loader.cc
+//PreprocessorContainer.h
 
-#include "Loader.h"
-#include "preprocessor/Preprocessor.h"
-#include "domain/domain/Domain.h"
+#ifndef PREPROCESSORCONTAINER_H
+#define PREPROCESSORCONTAINER_H
 
-#include "domain/mesh/node/Node.h"
-#include "domain/mesh/element/Element.h"
+#include "xc_utils/src/nucleo/EntCmd.h"
 
+namespace XC {
+class Domain;
+class Preprocessor;
 
-//! @brief Default constructor.
-XC::Loader::Loader(Preprocessor *owr)
-  : PreprocessorContainer(owr), MovableObject(0)
-  {}
-
-//! @brief Sends object through the channel being passed as parameter.
-int XC::Loader::sendSelf(CommParameters &cp)
+//! @ingroup Preprocessor
+//
+//! @brief Base class for preprocessor containers i. e.
+//! objects that manage model entities: sets, geometric entities,
+//! mesh entities and so on.
+class PreprocessorContainer: public EntCmd
   {
-    std::cerr << nombre_clase() << "::" << __FUNCTION__
-              << "; not implemented.\n";    
-    return -1;
-  }
+    friend class Preprocessor;
+    Preprocessor *preprocessor;
+  public:
+    PreprocessorContainer(Preprocessor *owr);
+    const Domain *getDomain(void) const;
+    Domain *getDomain(void);
 
+    //! @brief Returns a pointer to the object preprocessor.
+    inline Preprocessor *getPreprocessor(void)
+      { return preprocessor; }
+    //! @brief Returns a pointer to the object preprocessor.
+    inline const Preprocessor *getPreprocessor(void) const
+      { return preprocessor; }
+    void checkPreprocessor(void);
+  };
 
-//! @brief Receives object through the channel being passed as parameter.
-int XC::Loader::recvSelf(const CommParameters &cp)
-  {
-    std::cerr << nombre_clase() << "::" << __FUNCTION__
-              << "; not implemented.\n";    
-    return -1;
-  }
+} // end of XC namespace
 
+#endif

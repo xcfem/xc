@@ -140,7 +140,7 @@ bool XC::Face::Toca(const XC::Body &b) const
 std::set<XC::SetBase *> XC::Face::get_sets(void) const
   {
     std::set<SetBase *> retval;
-    const Preprocessor *preprocessor= GetPreprocessor();
+    const Preprocessor *preprocessor= getPreprocessor();
     if(preprocessor)
       {
         MapSet &sets= const_cast<MapSet &>(preprocessor->get_sets());

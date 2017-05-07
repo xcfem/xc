@@ -31,9 +31,9 @@ fs3d= IPE200.getFiberSection3d(preprocessor,'epp')
 L= 1.0
 nodes= preprocessor.getNodeLoader
 modelSpace= predefined_spaces.StructuralMechanics2D(nodes)
-nodes.defaultTag= 1 #First node number.
-nod= nodes.newNodeXY(0,0.0)
-nod= nodes.newNodeXY(L,0.0)
+nodes.defaultTag= 10 #First node number.
+nod1= nodes.newNodeXY(0,0.0)
+nod2= nodes.newNodeXY(L,0.0)
 
 # Geometric transformations
 trfs= preprocessor.getTransfCooLoader
@@ -43,11 +43,11 @@ lin= trfs.newLinearCrdTransf2d("lin")
 elementos= preprocessor.getElementLoader
 elementos.defaultTransformation= "lin" # Transformación de coordenadas para los nuevos elementos
 elementos.defaultMaterial= IPE200.fiberSection3dName
-beam2d= elementos.newElement("force_beam_column_2d",xc.ID([1,2]));
+beam2d= elementos.newElement("force_beam_column_2d",xc.ID([nod1.tag,nod2.tag]));
 
 # Constraints
 coacciones= preprocessor.getConstraintLoader
-fix_node_3dof.fixNode000(coacciones,1)
+modelSpace.fixNode000(nod1.tag)
 
 # Loads definition
 WzplTeor= IPE200.get('Wzpl')
@@ -60,7 +60,7 @@ ts= casos.newTimeSeries("constant_ts","ts")
 casos.currentTimeSeries= "ts"
 #Load case definition
 lp0= casos.newLoadPattern("default","0")
-lp0.newNodalLoad(2,xc.Vector([0,F,0]))
+lp0.newNodalLoad(nod2.tag,xc.Vector([0,F,0]))
 #We add the load case to domain.
 casos.addToDomain("0")
 

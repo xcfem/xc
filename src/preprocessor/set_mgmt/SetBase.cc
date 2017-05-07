@@ -111,7 +111,7 @@ bool XC::SetBase::In(const UniformGrid *) const
 void XC::SetBase::resetTributarias(void) const
   {
     const std::set<int> tmp= getElementTags();
-    const Domain *dom= GetPreprocessor()->getDomain();
+    const Domain *dom= getPreprocessor()->getDomain();
     if(dom)
       {
         for(std::set<int>::const_iterator i= tmp.begin();i!=tmp.end();i++)
@@ -135,7 +135,7 @@ void XC::SetBase::resetTributarias(void) const
 void XC::SetBase::calculaLongsTributarias(bool initialGeometry) const
   {
     const std::set<int> tmp= getElementTags();
-    const Domain *dom= GetPreprocessor()->getDomain();
+    const Domain *dom= getPreprocessor()->getDomain();
     if(dom)
       {
         for(std::set<int>::const_iterator i= tmp.begin();i!=tmp.end();i++)
@@ -159,7 +159,7 @@ void XC::SetBase::calculaLongsTributarias(bool initialGeometry) const
 void XC::SetBase::calculaAreasTributarias(bool initialGeometry) const
   {
     const std::set<int> tmp= getElementTags();
-    const Domain *dom= GetPreprocessor()->getDomain();
+    const Domain *dom= getPreprocessor()->getDomain();
     if(dom)
       {
         for(std::set<int>::const_iterator i= tmp.begin();i!=tmp.end();i++)
@@ -183,7 +183,7 @@ void XC::SetBase::calculaAreasTributarias(bool initialGeometry) const
 void XC::SetBase::calculaVolsTributarios(bool initialGeometry) const
   {
     const std::set<int> tmp= getElementTags();
-    const Domain *dom= GetPreprocessor()->getDomain();
+    const Domain *dom= getPreprocessor()->getDomain();
     if(dom)
       {
         for(std::set<int>::const_iterator i= tmp.begin();i!=tmp.end();i++)

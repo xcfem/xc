@@ -60,9 +60,9 @@
 // What: "@(#) FE_Datastore.C, revA"
 
 #include "utility/database/FE_Datastore.h"
+#include "preprocessor/Preprocessor.h"
 #include <utility/actor/objectBroker/FEM_ObjectBroker.h>
 #include <utility/actor/actor/MovableObject.h>
-#include "preprocessor/Preprocessor.h"
 #include <utility/matrix/ID.h>
 
 
@@ -72,8 +72,16 @@
 int XC::FE_Datastore::lastDbTag(0);
 
 //! @brief Constructor.
-XC::FE_Datastore::FE_Datastore(Preprocessor &m, FEM_ObjectBroker &theBroker) 
-  :theObjectBroker(&theBroker), preprocessor(&m), savedStates() {}
+XC::FE_Datastore::FE_Datastore(Preprocessor &prep, FEM_ObjectBroker &theBroker) 
+  : Channel(&prep), theObjectBroker(&theBroker),  savedStates() {}
+
+//! @brief Returns a pointer to the object preprocessor.
+const XC::Preprocessor *XC::FE_Datastore::getPreprocessor(void) const
+  { return dynamic_cast<const Preprocessor *>(Owner()); }
+
+//! @brief Returns a pointer to the object preprocessor.
+XC::Preprocessor *XC::FE_Datastore::getPreprocessor(void)
+  { return dynamic_cast<Preprocessor *>(Owner()); }
 
 bool XC::FE_Datastore::isDatastore(void) const
   { return true; }
@@ -110,10 +118,10 @@ int XC::FE_Datastore::commitState(int commitTag)
       std::cerr << "FE_Datastore::commitState se esperaba un valor de commitTag mayor que 0, se obtuvo: "
                 << commitTag << std::endl;
     clearDbTags();
-    if(preprocessor)
+    if(getPreprocessor())
       {
         CommParameters cp(commitTag,*this);
-        res = preprocessor->sendSelf(cp);
+        res = getPreprocessor()->sendSelf(cp);
         if(res < 0)
           std::cerr << "FE_Datastore::commitState - modeler failed to sendSelf\n";
         else
@@ -140,16 +148,19 @@ int XC::FE_Datastore::restoreState(int commitTag)
     clearDbTags();
     if(isSaved(commitTag))
       {
-        if(preprocessor)
+        if(getPreprocessor())
           {
             CommParameters cp(commitTag,*this,*theObjectBroker);
-            res= preprocessor->recvSelf(cp);
+            res= getPreprocessor()->recvSelf(cp);
             if(res < 0)
-              { std::cerr << "FE_Datastore::restoreState - preprocessor failed to recvSelf\n"; }
+              std::cerr << nombre_clase() << "::" << __FUNCTION__
+	                << "; preprocessor failed to recvSelf\n";
             ID maxlastDbTag(1);
             res= recvID(-1,commitTag,maxlastDbTag);
             if(res<0)
-              std::cerr << "FE_Datastore::restoreState - failed to get max lastDbTag data from database - problems may arise\n";
+              std::cerr << nombre_clase() << "::" << __FUNCTION__
+                        << ";- failed to get max lastDbTag data"
+		        << " from database - problems may arise\n";
             else
               lastDbTag = maxlastDbTag(0);
           }

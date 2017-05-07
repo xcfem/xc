@@ -101,7 +101,7 @@ XC::Node *XC::NodeLoader::duplicateNode(const int &tagNodoOrg)
         if(retval)
           {
             getDomain()->addNode(retval);
-            preprocessor->UpdateSets(retval);
+            getPreprocessor()->UpdateSets(retval);
           }
       }
     return retval;
@@ -119,7 +119,7 @@ XC::Node *XC::NodeLoader::newNode(const double &x,const double &y,const double &
     if(retval)
       {
         getDomain()->addNode(retval);
-        preprocessor->UpdateSets(retval);
+        getPreprocessor()->UpdateSets(retval);
       }
     return retval;
   }
@@ -136,7 +136,7 @@ XC::Node *XC::NodeLoader::newNode(const double &x,const double &y)
     if(retval)
       {
         getDomain()->addNode(retval);
-        preprocessor->UpdateSets(retval);
+        getPreprocessor()->UpdateSets(retval);
       }
     return retval;
   }
@@ -154,7 +154,7 @@ XC::Node *XC::NodeLoader::newNode(const double &x)
     if(retval)
       {
         getDomain()->addNode(retval);
-        preprocessor->UpdateSets(retval);
+        getPreprocessor()->UpdateSets(retval);
       }
     return retval;
   }

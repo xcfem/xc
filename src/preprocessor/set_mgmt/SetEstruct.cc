@@ -147,7 +147,7 @@ void XC::SetEstruct::add_elements(const TritrizPtrElem &elements)
     for(register size_t i= 1;i<=capas;i++)
       for(register size_t j= 1;j<=filas;j++)
         for(register size_t k= 1;k<=cols;k++)
-          get_preprocessor()->getElementLoader().Add(elements(i,j,k));
+          getPreprocessor()->getElementLoader().Add(elements(i,j,k));
   }
 
 //! @brief Returns the tags of the nodes.

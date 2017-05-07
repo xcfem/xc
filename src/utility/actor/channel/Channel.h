@@ -98,7 +98,7 @@ class Channel: public EntCmd
     int sendMovable(int commitTag, MovableObject &);
     int receiveMovable(int commitTag, MovableObject &, FEM_ObjectBroker &);
   public:
-    Channel(void);
+    Channel(EntCmd *owr= nullptr);
     inline virtual ~Channel(void) {}
 
     // methods to set up the channel in an actor space

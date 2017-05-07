@@ -159,7 +159,7 @@ void XC::Set::Transforma(const TrfGeom &trf)
 //! @brief Aplica to the set the transformation with the index being passed as parameter.
 void XC::Set::Transforma(const size_t &indice_trf)
   {
-    TrfGeom *trf= get_preprocessor()->getCad().getTransformacionesGeometricas().busca(indice_trf);
+    TrfGeom *trf= getPreprocessor()->getCad().getTransformacionesGeometricas().busca(indice_trf);
     if(trf)
       Transforma(*trf);
   }
@@ -170,14 +170,14 @@ void XC::Set::Transforma(const size_t &indice_trf)
 //! of the vector being passed as parameter.
 void XC::Set::create_copy(const std::string &nombre,const Vector3d &v= Vector3d())
   {
-    Preprocessor *preprocessor= get_preprocessor();
+    Preprocessor *preprocessor= getPreprocessor();
     if(!preprocessor)
       {
         std::cerr << nombre_clase() << "::" << __FUNCTION__
 	          << "; preprocessor not assigned." << std::endl;
 	return;
       }
-    Set *new_set= get_preprocessor()->get_sets().create_set(nombre);
+    Set *new_set= getPreprocessor()->get_sets().create_set(nombre);
     std::clog << nombre_clase() << "::" << __FUNCTION__
               << "; warning! copy of nodes and elements"
               << " not implemented." << std::endl;
@@ -187,7 +187,7 @@ void XC::Set::create_copy(const std::string &nombre,const Vector3d &v= Vector3d(
       {
         const std::string nombre_viejo= (*i)->GetNombre();
         const std::string new_name= nombre+nombre_viejo;
-        Pnt *new_point= get_preprocessor()->getCad().getPuntos().Copia(*i,v);
+        Pnt *new_point= getPreprocessor()->getCad().getPuntos().Copia(*i,v);
         new_point->BorraPtrNodElem();
         new_set->puntos.push_back(new_point);
         new_points_names[nombre_viejo]= new_name;
@@ -198,7 +198,7 @@ void XC::Set::create_copy(const std::string &nombre,const Vector3d &v= Vector3d(
       {
         const std::string nombre_viejo= (*i)->GetNombre();
         const std::string new_name= nombre+nombre_viejo;
-        Edge *new_edge= get_preprocessor()->getCad().getLineas().createCopy(*i);
+        Edge *new_edge= getPreprocessor()->getCad().getLineas().createCopy(*i);
         new_edge->BorraPtrNodElem();
         new_set->lineas.push_back(new_edge);
         new_lines_names[nombre_viejo]= new_name;
@@ -274,7 +274,7 @@ void XC::Set::uniform_grid_meshing(meshing_dir dm)
 //! @param dm: Meshing direction.
 void XC::Set::genMesh(meshing_dir dm)
   {
-    Preprocessor *mdl= get_preprocessor();
+    Preprocessor *mdl= getPreprocessor();
     assert(mdl);
     mdl->get_sets().abre_set(GetNombre()); //To let nodes and elements enter this set.
 
@@ -390,10 +390,10 @@ void XC::Set::sel_points_lista(const ID &tags)
     const size_t sz= tags.Size();
     if(sz>0)
       {
-        Preprocessor *preprocessor= get_preprocessor();
+        Preprocessor *preprocessor= getPreprocessor();
         if(preprocessor)
           {
-            Cad &cad= get_preprocessor()->getCad();
+            Cad &cad= getPreprocessor()->getCad();
             for(size_t i= 0;i<sz;i++)
               {
 	        Pnt *ipt= cad.getPuntos().busca(tags(i)); 
@@ -416,10 +416,10 @@ void XC::Set::sel_lineas_lista(const ID &tags)
     const size_t sz= tags.Size();
     if(sz>0)
       {
-        Preprocessor *preprocessor= get_preprocessor();
+        Preprocessor *preprocessor= getPreprocessor();
         if(preprocessor)
           {
-            Cad &cad= get_preprocessor()->getCad();
+            Cad &cad= getPreprocessor()->getCad();
             for(size_t i= 0;i<sz;i++)
               {
 	        Edge *iedge= cad.getLineas().busca(tags(i)); 
@@ -442,10 +442,10 @@ void XC::Set::sel_surfaces_lst(const ID &tags)
     const size_t sz= tags.Size();
     if(sz>0)
       {
-        Preprocessor *preprocessor= get_preprocessor();
+        Preprocessor *preprocessor= getPreprocessor();
         if(preprocessor)
           {
-            Cad &cad= get_preprocessor()->getCad();
+            Cad &cad= getPreprocessor()->getCad();
             for(size_t i= 0;i<sz;i++)
               {
 	        Face *iface= cad.getSurfaces().busca(tags(i)); 

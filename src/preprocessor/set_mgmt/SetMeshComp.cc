@@ -88,7 +88,7 @@ void XC::SetMeshComp::extend_lists(const SetMeshComp &otro)
 //! being passed as parameter.
 void XC::SetMeshComp::appendFromGeomEntity(const SetBase &s)
   {
-    Domain *dom= get_preprocessor()->getDomain();
+    Domain *dom= getPreprocessor()->getDomain();
     const std::set<int> nodeTags= s.getNodeTags();
     for(std::set<int>::const_iterator i= nodeTags.begin();i!=nodeTags.end();i++)
       nodes.push_back(dom->getNode(*i));
@@ -161,7 +161,7 @@ void XC::SetMeshComp::Transforma(const TrfGeom &trf)
 //! @brief Applies to the set the transformation with the identifier being passed as parameter.
 void XC::SetMeshComp::Transforma(const size_t &indice_trf)
   {
-    TrfGeom *trf= get_preprocessor()->getCad().getTransformacionesGeometricas().busca(indice_trf);
+    TrfGeom *trf= getPreprocessor()->getCad().getTransformacionesGeometricas().busca(indice_trf);
     if(trf)
       Transforma(*trf);
   }
@@ -169,7 +169,7 @@ void XC::SetMeshComp::Transforma(const size_t &indice_trf)
 //! @brief Applies the single freedom constraint being passed as parameter to the nodes.
 void XC::SetMeshComp::fix(const SFreedom_Constraint &spc)
   {
-    ConstraintLoader &cl= GetPreprocessor()->getConstraintLoader();
+    ConstraintLoader &cl= getPreprocessor()->getConstraintLoader();
     for(nod_const_iterator i= nodos_begin();i!=nodos_end();i++)
       {
         const int tag_nod= (*i)->getTag();
@@ -430,7 +430,7 @@ void XC::SetMeshComp::sel_nodes_from_list(const ID &tags)
     const size_t sz= tags.Size();
     if(sz>0)
       {
-        Preprocessor *preprocessor= get_preprocessor();
+        Preprocessor *preprocessor= getPreprocessor();
         if(preprocessor)
           for(size_t i= 0;i<sz;i++)
             nodes.push_back(preprocessor->getDomain()->getNode(tags(i)));
@@ -446,7 +446,7 @@ void XC::SetMeshComp::sel_elements_from_list(const ID &tags)
     const size_t sz= tags.Size();
     if(sz>0)
       {
-        Preprocessor *preprocessor= get_preprocessor();
+        Preprocessor *preprocessor= getPreprocessor();
         if(preprocessor)
           for(size_t i= 0;i<sz;i++)
             elements.push_back(preprocessor->getDomain()->getElement(tags(i)));
@@ -462,7 +462,7 @@ void XC::SetMeshComp::sel_constraints_from_list(const ID &tags)
     const size_t sz= tags.Size();
     if(sz>0)
       {
-        Preprocessor *preprocessor= get_preprocessor();
+        Preprocessor *preprocessor= getPreprocessor();
         Constraint *tmp= nullptr;
         if(preprocessor)
           for(size_t i= 0;i<sz;i++)

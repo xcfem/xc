@@ -90,20 +90,20 @@ XC::Domain *XC::DomainComponent::getDomain(void) const
   { return theDomain; }
 
 //! @brief Returns (if possible) a pointer to the preprocessor.
-const XC::Preprocessor *XC::DomainComponent::GetPreprocessor(void) const
+const XC::Preprocessor *XC::DomainComponent::getPreprocessor(void) const
   {
     const Preprocessor *retval= nullptr;
     if(theDomain)
-      retval= theDomain->GetPreprocessor();
+      retval= theDomain->getPreprocessor();
     return retval;
   }
 
 //! @brief Returns (if possible) a pointer to the preprocessor.
-XC::Preprocessor *XC::DomainComponent::GetPreprocessor(void)
+XC::Preprocessor *XC::DomainComponent::getPreprocessor(void)
   {
     Preprocessor *retval= nullptr;
     if(theDomain)
-      retval= theDomain->GetPreprocessor();
+      retval= theDomain->getPreprocessor();
     return retval;
   }
 

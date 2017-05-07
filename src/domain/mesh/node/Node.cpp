@@ -372,14 +372,14 @@ XC::DefaultTag &XC::Node::getDefaultTag(void)
 //! @brief Introduce en el nodo una constraint
 //! como la being passed as parameter.
 XC::SFreedom_Constraint *XC::Node::fix(const SFreedom_Constraint &semilla)
-  { return GetPreprocessor()->getConstraintLoader().addSFreedom_Constraint(getTag(),semilla); }
+  { return getPreprocessor()->getConstraintLoader().addSFreedom_Constraint(getTag(),semilla); }
 
 //! @brief Sets prescribed displacements on the DOFs being passed as parameter.
 void XC::Node::fix(const std::vector<int> &idGdls,const std::vector<double> &valores)
   {
     if(getDomain())
       {
-        ConstraintLoader &cl= GetPreprocessor()->getConstraintLoader();
+        ConstraintLoader &cl= getPreprocessor()->getConstraintLoader();
         const int sz= std::min(idGdls.size(),valores.size());
         if(valores.size()<idGdls.size())
 	  std::cerr << "Vector of prescribed displacements"
@@ -1401,7 +1401,7 @@ int XC::Node::recvSelf(const CommParameters &cp)
 std::set<XC::SetBase *> XC::Node::get_sets(void) const
   {
     std::set<SetBase *> retval;
-    const Preprocessor *preprocessor= GetPreprocessor();
+    const Preprocessor *preprocessor= getPreprocessor();
     if(preprocessor)
       {
         MapSet &sets= const_cast<MapSet &>(preprocessor->get_sets());

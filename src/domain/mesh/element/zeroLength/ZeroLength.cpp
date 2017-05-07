@@ -116,10 +116,10 @@ XC::ZeroLength::ZeroLength(void)
 
 void XC::ZeroLength::setMaterial(const int &dir,const std::string &nmbMat)
   {
-    Preprocessor *preprocessor= GetPreprocessor();
+    Preprocessor *preprocessor= getPreprocessor();
     if(preprocessor)
       {
-        const MaterialLoader &material_loader= GetPreprocessor()->getMaterialLoader();
+        const MaterialLoader &material_loader= getPreprocessor()->getMaterialLoader();
         const Material *ptr_mat= material_loader.find_ptr(nmbMat);
         if(ptr_mat)
           {
@@ -151,10 +151,10 @@ void XC::ZeroLength::setMaterials(const std::deque<int> &dirs,const std::vector<
     if(n!= dirs.size())
     std::cerr << "Error in number of materials; number of directions: " << dirs.size()
               << " number of materials: " << n << std::endl;
-    Preprocessor *preprocessor= GetPreprocessor();
+    Preprocessor *preprocessor= getPreprocessor();
     if(preprocessor)
       {
-        const MaterialLoader &material_loader= GetPreprocessor()->getMaterialLoader();
+        const MaterialLoader &material_loader= getPreprocessor()->getMaterialLoader();
         for(size_t i= 0;i<n;i++)
           {
             const Material *ptr_mat= material_loader.find_ptr(nmbMats[i]);

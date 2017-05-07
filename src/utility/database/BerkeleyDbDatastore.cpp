@@ -207,7 +207,7 @@ bool XC::BerkeleyDbDatastore::create_aux_entities(void)
     dbenv->set_errpfx(dbenv, project.c_str());
 
     //Set up cache size.
-    const Preprocessor *preprocessor= get_preprocessor();
+    const Preprocessor *preprocessor= getPreprocessor();
     if(preprocessor)
       {
         const Domain *dom= preprocessor->getDomain();

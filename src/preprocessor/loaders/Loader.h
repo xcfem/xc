@@ -29,17 +29,13 @@
 #ifndef LOADER_H
 #define LOADER_H
 
-#include "xc_utils/src/nucleo/EntCmd.h"
+#include "preprocessor/PreprocessorContainer.h"
 #include "utility/actor/actor/MovableObject.h"
 #include <map>
 
 namespace XC {
-class Domain;
-class Preprocessor;
-class Channel;
-class FEM_ObjectBroker;
 
-//! \ingroup Preprocessor
+//! @ingroup Preprocessor
 //
 //! @defgroup Ldrs Utilities for model definition.
 //
@@ -47,17 +43,10 @@ class FEM_ObjectBroker;
 //! 
 //! @brief Base class for the preprocessor objects that
 //! create model entities: nodes, elements, loads, etc.
-class Loader: public EntCmd,public MovableObject
+class Loader: public PreprocessorContainer, public MovableObject
   {
-  protected:
-    Preprocessor *preprocessor; //!< Pointer to preprocessor.
-
-    friend class Preprocessor;    
-    void set_preprocessor(Preprocessor *preprocessor);
   public:
     Loader(Preprocessor *owr);
-    ~Loader(void);
-    Domain *getDomain(void) const;
 
     virtual int sendSelf(CommParameters &);
     virtual int recvSelf(const CommParameters &);

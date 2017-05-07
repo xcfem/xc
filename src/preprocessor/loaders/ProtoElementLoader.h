@@ -58,15 +58,15 @@ class ProtoElementLoader: public Loader
     int dir; //!< If required (i.e. for zero length elements), direction of the element material.
   protected:
     virtual void add(Element *)= 0;
-    MaterialLoader &get_material_loader(void) const;
+    const MaterialLoader &get_material_loader(void) const;
     MaterialLoader::const_iterator get_iter_material(void) const;
-    Material *get_ptr_material(void) const;
-    TransfCooLoader &get_transf_coo_loader(void) const;
+    const Material *get_ptr_material(void) const;
+    const TransfCooLoader &get_transf_coo_loader(void) const;
     TransfCooLoader::const_iterator get_iter_transf_coo(void) const;
-    CrdTransf *get_ptr_transf_coo(void) const;
-    BeamIntegratorLoader &get_beam_integrator_loader(void) const;
+    const CrdTransf *get_ptr_transf_coo(void) const;
+    const BeamIntegratorLoader &get_beam_integrator_loader(void) const;
     BeamIntegratorLoader::const_iterator get_iter_beam_integrator(void) const;
-    BeamIntegration *get_ptr_beam_integrator(void) const;
+    const BeamIntegration *get_ptr_beam_integrator(void) const;
 
     friend class Preprocessor;
 

@@ -471,8 +471,8 @@ void XC::CmbEdge::cierra(void)
 XC::Edge *XC::CmbEdge::NuevaLinea(Pnt *pA,Pnt *pB)
   {
     Linea *retval= nullptr;
-    assert(get_preprocessor());
-    retval= dynamic_cast<Linea *>(get_preprocessor()->getCad().getLineas().createLine(pA,pB));
+    assert(getPreprocessor());
+    retval= dynamic_cast<Linea *>(getPreprocessor()->getCad().getLineas().createLine(pA,pB));
     if(retval)
       {
         inserta(retval);
@@ -495,8 +495,8 @@ XC::Edge *XC::CmbEdge::NuevaLinea(Pnt *pA,Pnt *pB)
 XC::Edge *XC::CmbEdge::NuevaLinea(Pnt *pA,Pnt *pB,Pnt *pC)
   {
     ArcoCircunf *retval= nullptr;
-    assert(get_preprocessor());
-    retval= dynamic_cast<ArcoCircunf *>(get_preprocessor()->getCad().getLineas().createArc(pA,pB,pC));
+    assert(getPreprocessor());
+    retval= dynamic_cast<ArcoCircunf *>(getPreprocessor()->getCad().getLineas().createArc(pA,pB,pC));
     if(retval)
       inserta(retval);
     else
