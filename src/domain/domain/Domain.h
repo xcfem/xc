@@ -95,17 +95,35 @@ class RayleighDampingFactors;
 //! @ingroup Dom
 //
 //! @brief Domain (mesh and boundary conditions) of the finite element model.
+//! Is a container class for storing and providing access to
+//! the components of a domain, i.e. nodes, elements, boundary conditions,
+//! and load patterns.
+//!
+//! A Domain is a container class which contains the  all elements,
+//! nodes, load cases, single point constraints and multiple point
+//! constraints that the model builder uses to create the model of the
+//! structure. It provides operations for the following: 
+//! 
+//! - Population: Methods so that the DomainComponents can be addled
+//! to the Domain. 
+//! - Depopulation: Methods so that the DomainComponents can be removed
+//! from the Domain.
+//! - Access: Methods so that other classes, i.e. analysis and design,
+//! can access the DomainComponents.
+//! - Query: Methods for determining the state of the domain.
+//! - Update: Methods for updating the state of the Domain
+//! - Analysis: Methods added for the Analysis class.
 class Domain: public ObjWithRecorders, public DistributedBase
   {
   private:
     PseudoTimeTracker timeTracker;//!< pseudo time
     std::string CallbackCommit; //!< Instrucciones que se ejecutan en cada llamada a commit.
 
-    int dbTag;
+    int dbTag; //!< Tag for the database.
     int currentGeoTag; //!< an integer used to mark if domain has changed
     bool hasDomainChangedFlag; //!< a bool flag used to indicate if GeoTag needs to be ++
     int commitTag;
-    Mesh mesh; //!< Nodes and elements.
+    Mesh mesh; //!< Nodes and element container.
     ConstrContainer constraints;//!< Constraint container.
     Vector theEigenvalues; //!< Eigenvalues.
     Vector modalParticipationFactors; //!< Modal participation factors.

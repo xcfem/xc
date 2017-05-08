@@ -218,17 +218,17 @@ class Element: public MeshComponent
     virtual double getDist2(const Pos3d &p,bool initialGeometry= true) const;
     virtual double getDist(const Pos3d &p,bool initialGeometry= true) const;
 
-    void resetTributarias(void) const;
-    void vuelcaTributarias(const std::vector<double> &) const;
-    virtual void calculaLongsTributarias(bool initialGeometry= true) const;
-    virtual double getLongTributaria(const Node *) const;
-    virtual double getLongTributariaByTag(const int &) const;
-    virtual void calculaAreasTributarias(bool initialGeometry= true) const;
-    virtual double getAreaTributaria(const Node *) const;
-    virtual double getAreaTributariaByTag(const int &) const;
-    virtual void calculaVolsTributarios(bool initialGeometry= true) const;
-    virtual double getVolTributario(const Node *) const;
-    virtual double getVolTributarioByTag(const int &) const;
+    void resetTributaries(void) const;
+    void dumpTributaries(const std::vector<double> &) const;
+    virtual void computeTributaryLengths(bool initialGeometry= true) const;
+    virtual double getTributaryLength(const Node *) const;
+    virtual double getTributaryLengthByTag(const int &) const;
+    virtual void computeTributaryAreas(bool initialGeometry= true) const;
+    virtual double getTributaryArea(const Node *) const;
+    virtual double getTributaryAreaByTag(const int &) const;
+    virtual void computeTributaryVolumes(bool initialGeometry= true) const;
+    virtual double getTributaryVolume(const Node *) const;
+    virtual double getTributaryVolumeByTag(const int &) const;
 
     virtual Vector getInterpolationFactors(const ParticlePos3d &) const;
     virtual Vector getInterpolationFactors(const Pos3d &) const;

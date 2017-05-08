@@ -326,7 +326,7 @@ SVD3d XC::SetMeshComp::getResistingSVD3d(const Plano3d &plano,const Pos3d &centr
         if(ptrNod)
           if(ptrNod->isAlive())
             {
-              if(plano.dist2(ptrNod->getPosInicial3d())<tol2)
+              if(plano.dist2(ptrNod->getInitialPosition3d())<tol2)
                 {
                   connected_to_node= ptrNod->getConnectedElements();
                   if(!connected_to_node.empty())

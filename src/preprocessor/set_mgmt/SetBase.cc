@@ -108,7 +108,7 @@ bool XC::SetBase::In(const UniformGrid *) const
 
 //! @brief Reset tributary areas (or lengths, or volumes) for the nodes that
 //! are connected to the set elements.
-void XC::SetBase::resetTributarias(void) const
+void XC::SetBase::resetTributaries(void) const
   {
     const std::set<int> tmp= getElementTags();
     const Domain *dom= getPreprocessor()->getDomain();
@@ -119,7 +119,7 @@ void XC::SetBase::resetTributarias(void) const
             const int &tag_elem= *i;
             const Element *elem= dom->getElement(tag_elem);
             if(elem)
-              elem->resetTributarias();
+              elem->resetTributaries();
             else
 	      std::cerr << nombre_clase() << "::" << __FUNCTION__
                         << " element identified by: "
@@ -130,9 +130,9 @@ void XC::SetBase::resetTributarias(void) const
       std::cerr << "Undefined domain." << std::endl;    
   }
  
-//! @brief Calcula las longitudes tributarias correspondientes a cada
-//! nodo of the elements of the set.
-void XC::SetBase::calculaLongsTributarias(bool initialGeometry) const
+//! @brief Computes the tributary lengths that correspond to each
+//! node of the element set.
+void XC::SetBase::computeTributaryLengths(bool initialGeometry) const
   {
     const std::set<int> tmp= getElementTags();
     const Domain *dom= getPreprocessor()->getDomain();
@@ -143,7 +143,7 @@ void XC::SetBase::calculaLongsTributarias(bool initialGeometry) const
             const int &tag_elem= *i;
             const Element *elem= dom->getElement(tag_elem);
             if(elem)
-              elem->calculaLongsTributarias(initialGeometry);
+              elem->computeTributaryLengths(initialGeometry);
             else
 	      std::cerr << nombre_clase() << "::" << __FUNCTION__
                         << " element identified by: "
@@ -154,9 +154,9 @@ void XC::SetBase::calculaLongsTributarias(bool initialGeometry) const
       std::cerr << "Undefined domain." << std::endl;
   }
 
-//! @brief Calcula las áreas tributarias correspondientes a cada
-//! nodo of the elements of the set.
-void XC::SetBase::calculaAreasTributarias(bool initialGeometry) const
+//! @brief Computes the tributary areas that correspond to each
+//! node of the element set.
+void XC::SetBase::computeTributaryAreas(bool initialGeometry) const
   {
     const std::set<int> tmp= getElementTags();
     const Domain *dom= getPreprocessor()->getDomain();
@@ -167,7 +167,7 @@ void XC::SetBase::calculaAreasTributarias(bool initialGeometry) const
             const int &tag_elem= *i;
             const Element *elem= dom->getElement(tag_elem);
             if(elem)
-              elem->calculaAreasTributarias(initialGeometry);
+              elem->computeTributaryAreas(initialGeometry);
             else
 	      std::cerr << nombre_clase() << "::" << __FUNCTION__
                         << " element identified by: "
@@ -178,9 +178,9 @@ void XC::SetBase::calculaAreasTributarias(bool initialGeometry) const
       std::cerr << "Undefined domain." << std::endl;
   }
 
-//! @brief Calcula los volúmenes tributarios correspondientes a cada
-//! nodo of the elements of the set.
-void XC::SetBase::calculaVolsTributarios(bool initialGeometry) const
+//! @brief Computes the tributary volumes that correspond to each
+//! node of the element set.
+void XC::SetBase::computeTributaryVolumes(bool initialGeometry) const
   {
     const std::set<int> tmp= getElementTags();
     const Domain *dom= getPreprocessor()->getDomain();
@@ -191,7 +191,7 @@ void XC::SetBase::calculaVolsTributarios(bool initialGeometry) const
             const int &tag_elem= *i;
             const Element *elem= dom->getElement(tag_elem);
             if(elem)
-              elem->calculaVolsTributarios(initialGeometry);
+              elem->computeTributaryVolumes(initialGeometry);
             else
 	      std::cerr << nombre_clase() << "::" << __FUNCTION__
                         << " element identified by: "

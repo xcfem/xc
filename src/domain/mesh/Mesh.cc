@@ -61,8 +61,7 @@
 //! destructor be called.
 void XC::Mesh::libera(void)
   {
-    //delete the objects in the mesh
-    clearAll();
+    clearAll(); //delete the objects in the mesh
 
     // delete all the storage objects
     // SEGMENT FAULT WILL OCCUR IF THESE OBJECTS WERE NOT CONSTRUCTED
@@ -216,22 +215,35 @@ void XC::Mesh::add_elements_to_domain(void)
       }
   }
 
-//! @brief Appends to the domain the element being passed as parameter.
+//! @brief Appends to the mesh the element being passed as parameter.
+//!
+//! To add the element pointed to by theElementPtr to the domain. 
+//! In addition the domain always checks to ensure
+//! that no other element with the same tag exists in the domain.
+//! If the checks are successful, the element is added to
+//! the mesh by invoking addComponent(theElePtr) on
+//! the container for the elements. The mesh then invokes 
+//! add_element_to_domain() on the element. The call returns true
+//! if the element is added, otherwise an error message is
+//! displayed ant false is returned.
 bool XC::Mesh::addElement(Element *element)
   {
     if(!element)
       {
-        std::cerr << "WARNING XC::Mesh::addElement, pointer to element is null." << std::endl;
+        std::cerr << nombre_clase() << "::" << __FUNCTION__
+	          << "; pointer to element is null." << std::endl;
         return false;
       }
     const int eleTag = element->getTag();
 
 
-    // check if an Element with a similar tag already exists in the XC::Mesh
+    // check if an Element with the same tag already exists in the XC::Mesh
     TaggedObject *other = theElements->getComponentPtr(eleTag);
     if(other)
       {
-        std::clog << "XC::Mesh::addElement - element with tag " << eleTag << " already exists in model\n";
+        std::clog << nombre_clase() << "::" << __FUNCTION__
+		  << "; element with tag " << eleTag
+		  << " already exists in model\n";
         return false;
       }
 
@@ -241,7 +253,9 @@ bool XC::Mesh::addElement(Element *element)
     if(result)
       add_element_to_domain(element);
     else
-      std::cerr << "XC::Mesh::addElement - element " << eleTag << " could not be added to container\n";
+      std::cerr << nombre_clase() << "::" << __FUNCTION__
+		<< "; element " << eleTag
+		<< " could not be added to container\n";
     return result;
   }
 
@@ -295,6 +309,15 @@ void XC::Mesh::add_nodes_to_domain(void)
   }
 
 //! @brief Adds to the domain the node being passed as parameter.
+//!
+//! To add the node pointed to by \p node to the mesh. 
+//! The domain first checks that no other node with the same tag,
+//! has been previously added to the domain. The
+//! mesh will then add the node to it's node container object, by
+//! invoking addComponent(node). If successful, the mesh
+//! invokes add_node_to_domain(node) on the node.
+//! The call returns \p true if the
+//! node was added, otherwise an error is printed and false is returned.
 bool XC::Mesh::addNode(Node * node)
   {
     int nodTag = node->getTag();
@@ -302,14 +325,18 @@ bool XC::Mesh::addNode(Node * node)
     TaggedObject *other = theNodes->getComponentPtr(nodTag);
     if(other)
       {
-        std::clog << "XC::Mesh::addNode - node with tag " << nodTag << " already exists in model\n";
+        std::clog << nombre_clase() << "::" << __FUNCTION__
+	          << "; node with tag " << nodTag
+		  << " already exists in model\n";
         return false;
       }
     bool result= theNodes->addComponent(node);
     if(result)
       add_node_to_domain(node);
     else
-      std::cerr << "Mesh::addNode - node with tag " << nodTag << " could not be added to container\n";
+      std::cerr << nombre_clase() << "::" << __FUNCTION__
+	        << "; node with tag " << nodTag
+		<< " could not be added to container\n";
     return result;
   }
 

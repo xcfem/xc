@@ -151,7 +151,7 @@ class FreeLoadContainer(LoadContainerBase):
         surfaceLoadSet.value= totalForceModulus
         surfaceLoadSet.vDir= [totalForce.x/surfaceLoadSet.value,totalForce.y/surfaceLoadSet.value,totalForce.z/surfaceLoadSet.value]
         surfaceLoadSet.value/= totalArea
-        elementContours= surfaceLoadSet.getElements.getContours(True)
+        elementContours= surfaceLoadSet.getElements.getContours(0.0)
         if(len(elementContours)>1):
           lmsg.error('surface load set: '+ setName + ' has more than one contour.  Contours others than first are ignored.')
         surfaceLoadSet.polygon= elementContours[0]

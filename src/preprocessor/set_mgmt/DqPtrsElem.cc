@@ -260,7 +260,7 @@ std::set<int> XC::DqPtrsElem::getTags(void) const
   }
 
 //! @brief Returns the element set contour.
-std::deque<Polilinea3d> XC::DqPtrsElem::getContours(bool undeformedGeometry) const
+std::deque<Polilinea3d> XC::DqPtrsElem::getContours(const double &factor) const
   {
     typedef std::set<const Element *> ElementConstPtrSet;
     const Element *elem= nullptr;
@@ -278,5 +278,5 @@ std::deque<Polilinea3d> XC::DqPtrsElem::getContours(bool undeformedGeometry) con
                 { edgesContour.push_back(meshEdge); }
           }
       }
-    return edgesContour.getContours(undeformedGeometry);
+    return edgesContour.getContours(factor);
   }

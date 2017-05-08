@@ -199,8 +199,8 @@ class ColoredDiagram(vtk_lut_field.LUTField):
       posNodo0= elem.getNodes[0].getInitialPos3d
       posNodo1= elem.getNodes[1].getInitialPos3d
     else:
-      posNodo0= elem.getNodes[0].getCurrentPos3d
-      posNodo1= elem.getNodes[1].getCurrentPos3d
+      posNodo0= elem.getNodes[0].getCurrentPos3d(1.0)
+      posNodo1= elem.getNodes[1].getCurrentPos3d(1.0)
     return self.creaTramoDiagrama(indxDiagrama,posNodo0,v0,posNodo1,v1)
 
 

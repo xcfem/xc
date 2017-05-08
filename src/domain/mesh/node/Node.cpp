@@ -99,10 +99,16 @@ XC::DefaultTag XC::Node::defaultTag;
 
 //! @brief Default constructor.
 //! @param theClassTag: tag of the class.
+//!
+//! To construct a node which has no data, other than the \p classTag
+//! identifier; defaultTag and \p classTag are passed to the DomainComponent
+//! constructor. This is the constructor called by an
+//! FEM_ObjectBroker. The data can be filled in subsequently by a call
+//! to recvSelf().
 XC::Node::Node(int theClassTag)
  :MeshComponent(defaultTag++,theClassTag),numberDOF(0), theDOF_GroupPtr(nullptr), 
   disp(), vel(), accel(), unbalLoad(numberDOF), unbalLoadWithInertia(numberDOF), reaction(numberDOF),
-  alphaM(0.0), tributaria(0.0)
+  alphaM(0.0), tributary(0.0)
   {
     // for FEM_ObjectBroker, recvSelf() must be invoked on object
     parameterID = 0;
@@ -112,12 +118,17 @@ XC::Node::Node(int theClassTag)
 //! @brief Constructor.
 //! @param tag: node identifier.
 //! @param theClassTag: tag of the class.
+//!
+//! To construct a node whose unique integer among nodes in the
+//! domain is given by \p tag and whose classTag is given by \p
+//! classTag. This constructor can be used by 
+//! subclasses who wish to handle their own data management.
 XC::Node::Node(int tag, int theClassTag)
   :MeshComponent(tag,theClassTag),
    numberDOF(0), theDOF_GroupPtr(nullptr),
    disp(), vel(), accel(), 
    unbalLoad(numberDOF), unbalLoadWithInertia(numberDOF), reaction(numberDOF),
-   alphaM(0.0), tributaria(0.0)
+   alphaM(0.0), tributary(0.0)
   {
     defaultTag= tag+1;
     // AddingSensitivity:BEGIN /////////////////////////////////////////
@@ -129,12 +140,21 @@ XC::Node::Node(int tag, int theClassTag)
 //! @param tag: node identifier.
 //! @param ndof: number of degrees of freedom for the node.
 //! @param Crd1: node position (one single coordinate).
+//!
+//! To construct a node for 1d problems whose unique integer among nodes in the
+//! domain is given by \p tag and whose original position in 1d space
+//! is given by (Crd1). With the node is associated \p ndof number
+//! of degrees of freedom. The class tag is NOD_TAG_Node (defined in
+//! classTags.h). A Vector object is created to hold the coordinates. No
+//! storage objects are created to hold the trial and committed response
+//! quantities, mass, load quantities; these are created as needed to
+//! reduce the memory demands on the system in certain situations.
 XC::Node::Node(int tag, int ndof, double Crd1)
   :MeshComponent(tag,NOD_TAG_Node),
    numberDOF(ndof), theDOF_GroupPtr(nullptr),
    Crd(1), disp(), vel(), accel(),
-   mass(ndof,ndof), unbalLoad(numberDOF), unbalLoadWithInertia(numberDOF), reaction(numberDOF),
-   alphaM(0.0), tributaria(0.0)
+   mass(ndof,ndof), unbalLoad(numberDOF), unbalLoadWithInertia(numberDOF),
+   reaction(numberDOF), alphaM(0.0), tributary(0.0)
   {
     defaultTag= tag+1;
     // AddingSensitivity:BEGIN /////////////////////////////////////////
@@ -153,11 +173,20 @@ XC::Node::Node(int tag, int ndof, double Crd1)
 //! @param ndof: number of degrees of freedom for the node.
 //! @param Crd1: node position (first coordinate).
 //! @param Crd2: node position (second coordinate).
+//!
+//! To construct a node for 2d problems whose unique integer among nodes in the
+//! domain is given by \p tag and whose original position in 2d space
+//! is given by (Crd1,Crd2). With the node is associated \p ndof number
+//! of degrees of freedom. The class tag is NOD_TAG_Node. A Vector object
+//! is created to hold the coordinates. No
+//! storage objects are created to hold the trial and committed response
+//! quantities, mass, load quantities; these are created as needed to
+//! reduce the memory demands on the system in certain situations.
 XC::Node::Node(int tag, int ndof, double Crd1, double Crd2)
   :MeshComponent(tag,NOD_TAG_Node),numberDOF(ndof), theDOF_GroupPtr(nullptr),
    Crd(2), disp(), vel(), accel(),
    mass(ndof,ndof), unbalLoad(numberDOF), unbalLoadWithInertia(numberDOF), reaction(numberDOF),
-   alphaM(0.0), tributaria(0.0)
+   alphaM(0.0), tributary(0.0)
   {
     defaultTag= tag+1;
     // AddingSensitivity:BEGIN /////////////////////////////////////////
@@ -178,11 +207,20 @@ XC::Node::Node(int tag, int ndof, double Crd1, double Crd2)
 //! @param Crd1: node position (first coordinate).
 //! @param Crd2: node position (second coordinate).
 //! @param Crd3: node position (third coordinate).
+//!
+//! To construct a node for 3d problems whose unique integer among nodes in the
+//! domain is given by \p tag and whose original position in 3d space
+//! is given by (Crd1,Crd2,Crd3). With the node is associated \p ndof number
+//! of degrees of freedom. The class tag is NOD_TAG_Node. A Vector object
+//! is created to hold the coordinates. No
+//! storage objects are created to hold the trial and committed response
+//! quantities, mass, load quantities; these are created as needed to
+//! reduce the memory demands on the system in certain situations.
 XC::Node::Node(int tag, int ndof, double Crd1, double Crd2, double Crd3)
   :MeshComponent(tag,NOD_TAG_Node), numberDOF(ndof), theDOF_GroupPtr(nullptr),
    Crd(3), disp(), vel(), accel(),
    mass(ndof,ndof), unbalLoad(numberDOF), unbalLoadWithInertia(numberDOF), reaction(numberDOF),
-   alphaM(0.0), tributaria(0.0)
+   alphaM(0.0), tributary(0.0)
   {
     defaultTag= tag+1;
     // AddingSensitivity:BEGIN /////////////////////////////////////////
@@ -206,7 +244,7 @@ XC::Node::Node(int tag, int ndof, const Vector &crds)
    numberDOF(ndof), theDOF_GroupPtr(nullptr),
    Crd(crds), disp(), vel(), accel(),
    mass(ndof,ndof), unbalLoad(numberDOF), unbalLoadWithInertia(numberDOF), reaction(numberDOF),
-    alphaM(0.0), tributaria(0.0)
+    alphaM(0.0), tributary(0.0)
   {
     defaultTag= tag+1;
     // AddingSensitivity:BEGIN /////////////////////////////////////////
@@ -221,12 +259,15 @@ XC::Node::Node(int tag, int ndof, const Vector &crds)
 //!  copy everything but the mass
 //!  we should really set the mass to 0.0
 XC::Node::Node(const Node &otherNode, bool copyMass)
-  :MeshComponent(otherNode), numberDOF(otherNode.numberDOF), theDOF_GroupPtr(nullptr),
-   Crd(otherNode.Crd), disp(otherNode.disp), vel(otherNode.vel), accel(otherNode.accel),
+  :MeshComponent(otherNode), numberDOF(otherNode.numberDOF),
+   theDOF_GroupPtr(nullptr), Crd(otherNode.Crd),
+   disp(otherNode.disp), vel(otherNode.vel), accel(otherNode.accel),
    R(otherNode.R), unbalLoad(otherNode.unbalLoad),
-   unbalLoadWithInertia(otherNode.unbalLoadWithInertia), reaction(otherNode.reaction),
-   alphaM(otherNode.alphaM), tributaria(otherNode.tributaria), theEigenvectors(otherNode.theEigenvectors),
-   connected(otherNode.connected), freeze_constraints(otherNode.freeze_constraints)
+   unbalLoadWithInertia(otherNode.unbalLoadWithInertia),
+   reaction(otherNode.reaction), alphaM(otherNode.alphaM),
+   tributary(otherNode.tributary), theEigenvectors(otherNode.theEigenvectors),
+   connected(otherNode.connected),
+   freeze_constraints(otherNode.freeze_constraints)
   {
     // AddingSensitivity:BEGIN /////////////////////////////////////////
     parameterID = 0;
@@ -406,16 +447,26 @@ void XC::Node::fix(const ID &idGdls,const Vector &valores)
     fix(idGdls,vs);
   }
 
-//! @brief Return the number of node DOFs.
+//! @brief Return the number of node DOFs, associated with
+//! the node. .
 int XC::Node::getNumberDOF(void) const
   { return numberDOF; }
 
 //! @brief Sets the DOF_Group pointer
+//!
+//! Each node, when involved with an analysis, will be associated with a
+//! DOF_Group object. It is the DOF\_Group that contains the ID of equation
+//! numbers. When invoked this method sets the pointer to that DOF_Group
+//! object. 
 void XC::Node::setDOF_GroupPtr(DOF_Group *theDOF_Grp)
   { theDOF_GroupPtr= theDOF_Grp; }
 
 
 //! @brief Gets the DOF_Group pointer
+//!
+//! Method which returns a pointer to the DOF_Group object that was set
+//! using setDOF_GroupPtr. If no pointer has been set a nullptr is
+//! returned.
 XC::DOF_Group *XC::Node::getDOF_GroupPtr(void)
   { return theDOF_GroupPtr; }
 
@@ -424,15 +475,23 @@ XC::DOF_Group *XC::Node::getDOF_GroupPtr(void)
 size_t XC::Node::getDim(void) const
   { return Crd.Size(); }
 
-//! @brief return the vector of nodal coordinates
+//! @brief Return a const reference to the vector of nodal coordinates.
+//!
+//! Returns the original coordinates in a Vector. The size of the vector
+//! is 2 if node object was created for a 2d problem and the size is 3 if
+//! created for a 3d problem.
 const XC::Vector &XC::Node::getCrds(void) const
   { return Crd; }
 
-//! @brief return the vector of nodal coordinates
+//! @brief Return a reference to the vector of nodal coordinates.
+//! 
+//! Returns the original coordinates in a Vector. The size of the vector
+//! is 2 if node object was created for a 2d problem and the size is 3 if
+//! created for a 3d problem.
 XC::Vector &XC::Node::getCrds(void)
   { return Crd; }
 
-//! @brief Returns the coordenadas del nodo en un espacio 3d.
+//! @brief Returns the node coordinates in a 3D space.
 XC::Vector XC::Node::getCrds3d(void) const
   {
     Vector retval(3,0.0);
@@ -450,8 +509,8 @@ XC::Vector XC::Node::getCrds3d(void) const
     return retval;
   }
 
-//! @brief Return the intial position of the node in 2D.
-Pos2d XC::Node::getPosInicial2d(void) const
+//! @brief Return the initial position of the node in 2D.
+Pos2d XC::Node::getInitialPosition2d(void) const
   {
     Pos2d retval;
     const size_t sz= getDim();
@@ -462,8 +521,8 @@ Pos2d XC::Node::getPosInicial2d(void) const
     return retval;
   }
 
-//! @brief Return the intial position of the node in 3D.
-Pos3d XC::Node::getPosInicial3d(void) const
+//! @brief Return the initial position of the node in 3D.
+Pos3d XC::Node::getInitialPosition3d(void) const
   {
     Pos3d retval;
     const size_t sz= getDim();
@@ -476,59 +535,61 @@ Pos3d XC::Node::getPosInicial3d(void) const
     return retval;
   }
 
-//! @brief Return the final position of the node.
-Pos2d XC::Node::getPosFinal2d(void) const
+//! @brief Return the current position of the node scaled by
+//! factor: return initPos+ factor * nodDisplacement.
+Pos2d XC::Node::getCurrentPosition2d(const double &factor) const
   {
-    const Vector &d= getDisp();
+    const Vector fd= factor*getDisp();
     Pos2d retval;
     const size_t sz= getDim();
     if(sz==1)
       {
         if(numberDOF==1)
-          retval= Pos2d(Crd[0]+d[0],0.0);
+          retval= Pos2d(Crd[0]+fd[0],0.0);
         else if(numberDOF==2)
-          retval= Pos2d(Crd[0]+d[0],d[1]);
+          retval= Pos2d(Crd[0]+fd[0],fd[1]);
       }
-    else if(sz==2)
+    else if(sz>=2)
       {
         if(numberDOF==1)
-          retval= Pos2d(Crd[0]+d[0],Crd[1]);
+          retval= Pos2d(Crd[0]+fd[0],Crd[1]);
         else if((numberDOF==2) || (numberDOF==3) || (numberDOF==6))
-          retval= Pos2d(Crd[0]+d[0],Crd[1]+d[1]);
+          retval= Pos2d(Crd[0]+fd[0],Crd[1]+fd[1]);
       }
     return retval;
   }
 
-//! @brief Return the final position of the node.
-Pos3d XC::Node::getPosFinal3d(void) const
+//! @brief Return the current position of the node scaled by
+//! factor: return initPos+ factor * nodDisplacement.
+Pos3d XC::Node::getCurrentPosition3d(const double &factor) const
   {
-    const Vector &d= getDisp();
+    const Vector fd= factor*getDisp();
     Pos3d retval;
     const size_t sz= getDim();
     if(sz==1)
       {
         if(numberDOF==1)
-          retval= Pos3d(Crd[0]+d[0],0.0,0.0);
+          retval= Pos3d(Crd[0]+fd[0],0.0,0.0);
         else if(numberDOF==2)
-          retval= Pos3d(Crd[0]+d[0],d[1],0.0);
+          retval= Pos3d(Crd[0]+fd[0],fd[1],0.0);
         else if((numberDOF==3) || (numberDOF==6))
-          retval= Pos3d(Crd[0]+d[0],d[1],d[2]);
+          retval= Pos3d(Crd[0]+fd[0],fd[1],fd[2]);
       }
     else if(sz==2)
       {
         if(numberDOF==1)
-          retval= Pos3d(Crd[0]+d[0],Crd[1],0.0);
+          retval= Pos3d(Crd[0]+fd[0],Crd[1],0.0);
         else if((numberDOF==2) || (numberDOF==3))
-          retval= Pos3d(Crd[0]+d[0],Crd[1]+d[1],0.0);
+          retval= Pos3d(Crd[0]+fd[0],Crd[1]+fd[1],0.0);
       }
     else if(sz==3)
       {
         if(numberDOF==1)
-          retval= Pos3d(Crd[0]+d[0],Crd[1],Crd[2]);
+          retval= Pos3d(Crd[0]+fd[0],Crd[1],Crd[2]);
         else if(numberDOF==2)
-          retval= Pos3d(Crd[0]+d[0],Crd[1]+d[1],Crd[2]);
+          retval= Pos3d(Crd[0]+fd[0],Crd[1]+fd[1],Crd[2]);
         else if((numberDOF==3) || (numberDOF==6))
-          retval= Pos3d(Crd[0]+d[0],Crd[1]+d[1],Crd[2]+d[2]);
+          retval= Pos3d(Crd[0]+fd[0],Crd[1]+fd[1],Crd[2]+fd[2]);
       }
     return retval;
   }
@@ -623,9 +684,9 @@ double XC::Node::getDist(const Pos2d &p,bool initialGeometry) const
 double XC::Node::getDist2(const Pos3d &p,bool initialGeometry) const
   {
     if(initialGeometry)
-      return ::dist2(getPosInicial3d(),p);
+      return ::dist2(getInitialPosition3d(),p);
     else
-      return ::dist2(getPosFinal3d(),p);
+      return ::dist2(getCurrentPosition3d(),p);
   }
 
 //! @brief Returns the distance from the node to the point
@@ -658,7 +719,7 @@ void XC::Node::setPos(const Pos3d &p)
 void XC::Node::Transforma(const TrfGeom &trf)
   {
     static Pos3d p;
-    setPos(trf.Transforma(getPosInicial3d()));
+    setPos(trf.Transforma(getInitialPosition3d()));
   }
 
 //! @brief Return the 3D position of the node.
@@ -666,21 +727,36 @@ void XC::Node::Transforma(const TrfGeom &trf)
 Pos3d XC::pos_node(const Node &nod,bool initialGeometry)
   {
     if(initialGeometry)
-      return nod.getPosInicial3d();
+      return nod.getInitialPosition3d();
     else
-      return nod.getPosFinal3d();
+      return nod.getCurrentPosition3d(1.0);
   }
 
 
-//! @brief Returns the displacement of the node
+//! @brief Returns the displacement of the node.
+//!
+//! Returns the last committed displacement as a Vector, the vector of
+//! size ndof. If no Vector has yet been allocated, two Vector
+//! objects are created to store the committed and trial response
+//! quantities created.
 const XC::Vector &XC::Node::getDisp(void) const
   { return disp.getData(numberDOF); }
 
-//! @brief Returns the velocity of the node
+//! @brief Returns the velocity of the node.
+//!
+//! Returns the last committed velocity as a Vector, the vector of size
+//! ndof. If no Vector has yet been allocated, two Vector
+//! objects are created to store the committed and trial response
+//! quantities created.
 const XC::Vector &XC::Node::getVel(void) const
   { return vel.getData(numberDOF); }
 
-//! @brief Returns the acceleration of the node
+//! @brief Returns the acceleration of the node.
+//!
+//! Returns the last committed acceleration as a Vector, the vector of
+//! size ndof. If no Vector has yet been allocated, two Vector 
+//! objects are created to store the committed and trial response
+//! quantities created.
 const XC::Vector &XC::Node::getAccel(void) const
   { return accel.getData(numberDOF); }
 
@@ -691,15 +767,27 @@ const XC::Vector &XC::Node::getAccel(void) const
 **
 ** *********************************************************************/
 
-//! @brief Returns the trial value of the displacement of the node
+//! @brief Returns the trial value of the displacement of the node.
+//!
+//! Returns the current trial displacements as a Vector, the vector of
+//! size ndof. If no Vector has yet been allocated, a new Vector is
+//! created and returned.
 const XC::Vector &XC::Node::getTrialDisp(void) const
   { return disp.getTrialData(numberDOF); }
 
-//! @brief Returns the trial value of the velocity of the node
+//! @brief Returns the trial value of the velocity of the node.
+//!
+//! Returns the current trial velocities as a Vector, the vector of size
+//! ndof. If no Vector has yet been allocated, a new Vector is created
+//! and returned.
 const XC::Vector &XC::Node::getTrialVel(void) const
   { return vel.getTrialData(numberDOF); }
 
-//! @brief Returns the trial value of the acceleration of the node
+//! @brief Returns the trial value of the acceleration of the node.
+//!
+//! Returns the current trial accelerations as a Vector, the vector of size
+//! ndof. If no Vector has yet been allocated, a new Vector is created
+//! and returned.
 const XC::Vector &XC::Node::getTrialAccel(void) const
   { return accel.getTrialData(numberDOF); }
 
@@ -707,36 +795,89 @@ const XC::Vector &XC::Node::getTrialAccel(void) const
 const XC::Vector &XC::Node::getIncrDisp(void) const
   { return disp.getIncrDisp(numberDOF); }
 
+//! @brief Return the incremental displacement.
+//!
+//! Returns the incremental displacement as a Vector. The incremental
+//! displacement is equal to the difference between the current trial
+//! displacement and committed displacement (trial - committed).
+//! If no Vector has yet been allocated, three Vector 
+//! objects are created to store the committed, trial and incremental response
+//! quantities.
 const XC::Vector &XC::Node::getIncrDeltaDisp(void) const
   { return disp.getIncrDeltaDisp(numberDOF); }
 
 int XC::Node::setTrialDispComponent(double value, int dof)
   { return disp.setTrialDispComponent(numberDOF,value,dof); }
 
+//! @brief Set the current trial displacement.
+//!
+//! Sets the current trial displacement to be that given by
+//! \p newTrialDisp. Sets the incremental displacement to be trial-committtd.
+//! Returns 0 if successful, an error message is printed and
+//! a $-2$ is returned if \p newTrialDisp is not of size ndof.
 int XC::Node::setTrialDisp(const Vector &newTrialDisp)
   { return disp.setTrialDisp(numberDOF,newTrialDisp); }
 
+//! @brief Set the current trial velocity.
+//!
+//! Sets the current trial velocity to be that given by
+//! \p newTrialVel.
+//! Returns 0 if successful, an error message is printed
+//! and a $-2$ is returned if \p newTrialVel is not of size ndof.
 int XC::Node::setTrialVel(const Vector &newTrialVel)
   { return vel.setTrialData(numberDOF,newTrialVel); }
 
+//! @brief Set the current trial acceleration.
+//!
+//! Sets the current trial acceleration to be that given by
+//! \p newTrialAccel. Returns 0 if successful,
+//! an error message is printed and a -2 is returned if \p
+//! newTrialAccel is not of size ndof. 
 int XC::Node::setTrialAccel(const Vector &newTrialAccel)
   { return accel.setTrialData(numberDOF,newTrialAccel); }
 
+//! @brief Increments the current trial displacement.
+//! 
+//! Sets the current trial displacement to be that given by the addition
+//! of the last trial displacement, assumed 0 if not yet set, and 
+//! trialIncrDisp. Increments the incremental displacement by \p trialIncrDisp.
+//! Returns 0 if successful, an error message is printed and a -2 is
+//! returned if trialIncrDisp is not of size ndof.
 int XC::Node::incrTrialDisp(const Vector &incrDispl)
   { return disp.incrTrialDisp(numberDOF,incrDispl); }
 
+//! @brief Increments the current trial velocity.
+//! 
+//! Sets the current trial velocity to be that given by the addition
+//! of the last trial velocity, assumed 0 if not yet set, and 
+//! trialIncrVel.
+//! Returns 0 if successful, an error message is printed and a -2
+//! is returned if trialIncrVel is not of size ndof.
 int XC::Node::incrTrialVel(const Vector &incrVel)
   { return vel.incrTrialData(numberDOF,incrVel); }
 
+//! @brief Increments the current trial acceleration.
+//!
+//! Sets the current trial acceleration to be that given by the addition
+//! of the last trial Acceleration, assumed 0 if not yet set, and
+//! \p trialIncrAccel.  Returns 0 if successful,
+//! an error message is printed and a -2 is returned if 
+//! trialIncrAccel is not of size \p ndof.
 int XC::Node::incrTrialAccel(const Vector &incrAccel)
   { return accel.incrTrialData(numberDOF,incrAccel); }
 
+//! @brief Causes the node to zero out its unbalanced load vector.
 void XC::Node::zeroUnbalancedLoad(void)
   { unbalLoad.Zero(); }
 
-//! @brief Adds vector to unbalanced load.
+//! @brief Adds vector to the node unbalanced load.
 //! @param add: vector to add.
 //! @param fact: multiplying factor.
+//!
+//! The Node is responsible for adding \p fact times 
+//! add to the current unbalanced load at the Node. If {\em
+//! add is not of size ndof no load is added, an error
+//! message is printed and a -1 is returned. Returns 0 if successful.
 int XC::Node::addUnbalancedLoad(const Vector &add, double fact)
   {
     int retval= -1;
@@ -764,7 +905,12 @@ int XC::Node::addUnbalancedLoad(const Vector &add, double fact)
     return retval;
   }
 
-//! @brief Adds inertial loads to unbalanced load vector.
+//! @brief Adds inertial loads to the node unbalanced load vector.
+//!
+//! To add MINUS \p fact times the product M * R * accel to the
+//! current unbalanced load. Nothing is done if no mass or R matrix have
+//! been set. Prints a warning and returns a -1 if the size of accel and
+//! the number of columns in R are not the same. Returns 0 if successful.
 int XC::Node::addInertiaLoadToUnbalance(const Vector &accelG, double fact)
   {
     // simply return if node has no mass or R matrix
@@ -774,7 +920,8 @@ int XC::Node::addInertiaLoadToUnbalance(const Vector &accelG, double fact)
     // otherwise we must determine MR accelG
     if(accelG.Size() != R.noCols())
       {
-        std::cerr << "Node::addInertiaLoadToUnbalance - accelG not of correct dimension";
+        std::cerr << nombre_clase() << "::" << __FUNCTION__
+	          << "; accelG not of correct dimension";
         return -1;
       }
 
@@ -797,7 +944,8 @@ int XC::Node::addInertiaLoadSensitivityToUnbalance(const XC::Vector &accelG, dou
     // otherwise we must determine MR accelG
     if(accelG.Size() != R.noCols())
       {
-        std::cerr << "Node::addInertiaLoadToUnbalance - accelG not of correct dimension";
+        std::cerr << nombre_clase() << "::" << __FUNCTION__
+		  << "; accelG not of correct dimension";
         return -1;
       }
 
@@ -821,18 +969,24 @@ int XC::Node::addInertiaLoadSensitivityToUnbalance(const XC::Vector &accelG, dou
 
 
 //! @brief Returns unbalanced load vector.
+//!
+//! Returns the current unbalanced load. 
 const XC::Vector &XC::Node::getUnbalancedLoad(void)
   { return unbalLoad; }
 
 
 //! @brief Return unbalanced load vector including inertial forces.
+//!
+//! Returns the current unbalanced load Vector, as defined above,
+//! MINUS the product of the nodes mass matrix and the trial nodal
+//! accelerations. The result is saved in another vector which is returned. 
 const XC::Vector &XC::Node::getUnbalancedLoadIncInertia(void)
   {
     unbalLoadWithInertia= this->getUnbalancedLoad();
 
     if(!mass.Nula())
       {
-        const Vector &theAccel = getTrialAccel(); // in case accel not created
+        const Vector &theAccel= getTrialAccel(); // in case accel not created
         unbalLoadWithInertia.addMatrixVector(1.0, mass, theAccel, -1.0);
 
         if(alphaM != 0.0)
@@ -845,6 +999,12 @@ const XC::Vector &XC::Node::getUnbalancedLoadIncInertia(void)
   }
 
 //! @brief Commits the state of the node.
+//!
+//! Causes the node to set the committed model displacements, velocities and
+//! accelerations to be equal to the current trial displacements, velocities and
+//! accelerations. The incremental displacement is set to 0. No assignment
+//! is done for any of the quantities for which no memory has been
+//! allocated. Returns 0.
 int XC::Node::commitState(void)
   {
     disp.commitState(numberDOF);
@@ -855,6 +1015,12 @@ int XC::Node::commitState(void)
 
 
 //! @brief Returns to the last commited state.
+//!
+//! Causes the node to set the trial nodal displacements, velocities and
+//! accelerations to be equal to the current committed displacements,
+//! velocities and accelerations. The incremental displacement is set to 0.
+//! No assignment is done for any of the trial quantities for which
+//! no memory has been allocated. Returns 0.
 int XC::Node::revertToLastCommit(void)
   {
     disp.revertToLastCommit(numberDOF);
@@ -866,6 +1032,10 @@ int XC::Node::revertToLastCommit(void)
 
 
 //! @brief Returns to the initial state.
+//!
+//! Causes the node to set the trial and committed nodal displacements,
+//! velocities and accelerations to zero. No assignment is done for any of
+//! the trial quantities for which no memory has been allocated. Returns 0.
 int XC::Node::revertToStart(void)
   {
     disp.revertToStart(numberDOF);
@@ -886,10 +1056,17 @@ int XC::Node::revertToStart(void)
   }
 
 //! @brief Return the matriz de masas del nodo.
+//!
+//! Returns the mass matrix set for the node, which is a matrix of size
+//! ndof,ndof. This matrix is equal to that set in setMass()
+//! or zero if setMass() has not been called. If no storage space
+//! has been allocated for the mass, a matrix is now created. An error
+//! message is printed and the program terminated if no space is available
+//! on the heap for this matrix.
 const XC::Matrix &XC::Node::getMass(void)
   { return mass; }
 
-//! @brief Returns the coeficiente de amortiguamiento de Rayleigh.
+//! @brief Sets the Rayleigh dumping factor.
 int XC::Node::setRayleighDampingFactor(double alpham)
   {
     alphaM = alpham;
@@ -915,18 +1092,18 @@ const XC::Matrix &XC::Node::getDamp(void)
       }
   }
 
-//! @brief Adds to the magnitud tributaria la longitud,
-//! área o volumen being passed as parameter.
-void XC::Node::addTributaria(const double &t) const
-  { tributaria+= t; }
+//! @brief Adds to tributary the lentgth,
+//! area o volume being passed as parameter.
+void XC::Node::addTributary(const double &t) const
+  { tributary+= t; }
 
-//! @brief Anula la magnitud tributaria (longitud, área o volumen).
-void XC::Node::resetTributaria(void) const
-  { tributaria= 0; }
+//! @brief Zeroes tributary (length, area or volume).
+void XC::Node::resetTributary(void) const
+  { tributary= 0; }
 
-//! @brief Return the magnitud tributaria (longitud, área o volumen).
-const double &XC::Node::getTributaria(void) const
-  { return tributaria; }
+//! @brief Return tributary value (length, area or volume).
+const double &XC::Node::getTributary(void) const
+  { return tributary; }
 
 const XC::Matrix &XC::Node::getDampSensitivity(void)
   {
@@ -947,6 +1124,11 @@ const XC::Matrix &XC::Node::getDampSensitivity(void)
   }
 
 //! @brief Asigna la matriz de masas to the node.
+//!
+//! Sets the value of the mass at the node. A check is made to ensure that
+//! the \p mass has the same dimensions of the mass matrix associated with the
+//! Node; if incompatible size an error message is printed and -1 returned.
+//! Returns 0 if successful. 
 int XC::Node::setMass(const Matrix &newMass)
   {
     // check right size
@@ -961,6 +1143,11 @@ int XC::Node::setMass(const Matrix &newMass)
     return 0;
   }
 
+//! Creates a Matrix to store the R matrix.
+//! 
+//! Creates a Matrix to store the R matrix. The matrix is of dimension
+//! \p ndof and \p numCol. Zeroes the
+//! matrix R and returns 0 if successful.
 int XC::Node::setNumColR(int numCol)
   {
     if(R.noCols() != numCol)
@@ -969,12 +1156,17 @@ int XC::Node::setNumColR(int numCol)
     return 0;
   }
 
+//! Sets the (row,col) entry of R to be equal to \p Value. If
+//! no matrix R has been specified or the position in R is out of range a
+//! warning message is printed and a -1 is returned. Returns 0 if
+//! successful.
 int XC::Node::setR(int row, int col, double Value)
   {
     // ensure row, col in range (matrix assignment will catch this - extra work)
     if(row < 0 || row > numberDOF || col < 0 || col > R.noCols())
       {
-        std::cerr << "Node:setR() - row, col index out of range\n";
+        std::cerr << nombre_clase() << "::" << __FUNCTION__
+	          << "; row, col index out of range\n";
         return -1;
       }
     // do the assignment
@@ -983,7 +1175,10 @@ int XC::Node::setR(int row, int col, double Value)
   }
 
 
-
+//! This is a method provided for Element objects, the Node object returns
+//! the product of the matrix R and the vector V. If the matrix 
+//! and vector are of inappropriate size a warning message is printed and
+//! a zero vector is returned. 
 const XC::Vector &XC::Node::getRV(const Vector &V)
   {
     // we store the product of RV in unbalLoadWithInertia
@@ -998,8 +1193,9 @@ const XC::Vector &XC::Node::getRV(const Vector &V)
     // check dimesions of R and V
     if(R.noCols() != V.Size())
       {
-        std::cerr << "WARNING XC::Node::getRV() - R and V of incompatable dimesions\n";
-        std::cerr << "R: " << R << "V: " << V;
+        std::cerr << nombre_clase() << "::" << __FUNCTION__
+	          << "; R and V of incompatible dimensions.\n"
+                  << "R: " << R << "V: " << V;
         unbalLoadWithInertia.Zero();
         return unbalLoadWithInertia;
       }
@@ -1010,17 +1206,20 @@ const XC::Vector &XC::Node::getRV(const Vector &V)
   }
 
 
-//! @brief Dimensiona la matriz que contiene a los eigenvectors.
+//! @brief Set the dimensions of the matrix that
+//! constains the eigenvectors.
 int XC::Node::setNumEigenvectors(int numVectorsToStore)
   {
     // ensure a positive number of vectors
     if(numVectorsToStore <= 0)
       {
-        std::cerr << "Node::setNumEigenvectors() - " << numVectorsToStore << " < 0\n";
+        std::cerr << nombre_clase() << "::" << __FUNCTION__
+		  << "; " << numVectorsToStore << " < 0\n";
         return -1;
       }
 
-    // if matrix not yet assigned or not of correct size delete old and create new
+    // if matrix not yet assigned or not of correct size
+    // delete old and create new
     if(getNumModes() != numVectorsToStore)
       theEigenvectors= Matrix(numberDOF, numVectorsToStore);
     else // zero the eigenvector matrix
@@ -1033,13 +1232,15 @@ int XC::Node::setEigenvector(int mode, const Vector &eigenvector)
   {
     if(getNumModes() < mode)
       {
-        std::cerr << "Node::setEigenvectors() - mode " << mode << " invalid\n";
+        std::cerr << nombre_clase() << "::" << __FUNCTION__
+		  << "; mode " << mode << " invalid\n";
         return -1;
       }
 
     if(eigenvector.Size() != numberDOF)
       {
-        std::cerr << "Node::setEigenvectors() - eigenvector of incorrect size\n";
+        std::cerr << nombre_clase() << "::" << __FUNCTION__
+		  << "; eigenvector of incorrect size\n";
         return -2;
       }
     // set the values
@@ -1068,21 +1269,21 @@ XC::Vector XC::Node::getAngularFrequencies(void) const
     return retval;
   }
 
-//! @brief Returns the eigenvectors correspondientes to the node.
+//! @brief Returns the eigenvectors that correspond to the node.
 const XC::Matrix &XC::Node::getEigenvectors(void)
   { return theEigenvectors; }
 
-//! @brief Returns the autovector correspondiente al modo i
+//! @brief Returns the autovector that corresponds to i mode.
 XC::Vector XC::Node::getEigenvector(int mode) const
   { return theEigenvectors.getCol(mode-1); }
 
-//! @brief Returns the autovector correspondiente al modo i
-//! normalizado de modo que la componente máxima valga 1 (norma_infinito).
+//! @brief Returns the autovector that corresponds to i mode
+//! normalized so the maximum values of the components
+//! is 1 (infinite norm).
 XC::Vector XC::Node::getNormalizedEigenvector(int mode) const
   { return normalize_inf(getEigenvector(mode)); }
 
-//! @brief Returns a matriz con los eigenvectors normalizados colocados
-//! por columnas (norma_infinito).
+//! @brief Returns a matrix with the eigenvectors as columns.
 XC::Matrix XC::Node::getNormalizedEigenvectors(void) const
   {
     const int nFilas= theEigenvectors.noRows();
@@ -1213,8 +1414,8 @@ XC::Matrix XC::Node::getDistributionFactors(void) const
     return retval;
   }
 
-//! @brief Return the masa modal efectiva 
-//! correspondiente al modo i.
+//! @brief Return the effective modal mass
+//! that corresponds to i mode.
 double XC::Node::getEffectiveModalMass(int mode) const
   {
     double retval= 0;
@@ -1226,7 +1427,7 @@ double XC::Node::getEffectiveModalMass(int mode) const
     return retval;
   }
 
-//! @brief Returns the effective modal mases.
+//! @brief Returns the effective modal masses.
 XC::Vector XC::Node::getEffectiveModalMasses(void) const
   {
     const int nm= getNumModes();
@@ -1338,7 +1539,7 @@ int XC::Node::sendData(CommParameters &cp)
     res+= cp.sendVector(unbalLoadWithInertia,getDbTagData(),CommMetaData(8));
     res+= cp.sendVector(Crd,getDbTagData(),CommMetaData(9));
     res+= cp.sendMatrix(R,getDbTagData(),CommMetaData(10));
-    res+= cp.sendDoubles(alphaM,tributaria,getDbTagData(),CommMetaData(11)); //Arreglar.
+    res+= cp.sendDoubles(alphaM,tributary,getDbTagData(),CommMetaData(11)); //Arreglar.
     res+= cp.sendMatrix(theEigenvectors,getDbTagData(),CommMetaData(12));
     res+=cp.sendMovable(disp,getDbTagData(),CommMetaData(13));
     res+=cp.sendMovable(vel,getDbTagData(),CommMetaData(14));
@@ -1347,7 +1548,8 @@ int XC::Node::sendData(CommParameters &cp)
     return res;
   }
 
-//! @brief Receives object members through the channel being passed as parameter.
+//! @brief Receives object members through the channel being passed as
+//! parameter.
 int XC::Node::recvData(const CommParameters &cp)
   {
     int res= MeshComponent::recvData(cp);
@@ -1358,7 +1560,7 @@ int XC::Node::recvData(const CommParameters &cp)
     res+= cp.receiveVector(unbalLoadWithInertia,getDbTagData(),CommMetaData(8));
     res+= cp.receiveVector(Crd,getDbTagData(),CommMetaData(9));
     res+= cp.receiveMatrix(R,getDbTagData(),CommMetaData(10));
-    res+= cp.receiveDoubles(alphaM,tributaria,getDbTagData(),CommMetaData(11));
+    res+= cp.receiveDoubles(alphaM,tributary,getDbTagData(),CommMetaData(11));
     res+= cp.receiveMatrix(theEigenvectors,getDbTagData(),CommMetaData(12));
     index= -1;
     res+= cp.receiveMovable(disp,getDbTagData(),CommMetaData(13));
@@ -1372,6 +1574,20 @@ int XC::Node::recvData(const CommParameters &cp)
   }
 
 //! @brief Envia el objeto through the channel being passed as parameter.
+//!
+//! Causes the Node object to send the data needed to init itself on a
+//! remote machine to the CommParameters object \p cp. 
+//! The data sent includes the tag, number of dof, coordinates, committed
+//! response quantities, unbalanced load, mass and participation matrix. 
+//! To do this the Node creates an ID object into which it stores its tag,
+//! the \p ndof and a flag indicating whether any additional
+//! information, i.e. mass, response quantities also need to be sent. In
+//! addition four database tags are also included in this ID object. The
+//! database tags, if not already obtained, are requested from the cp
+//! object (these are needed as each object can only store a single object
+//! of a particular size using it's own database tags -- additional tags
+//! are needed when multiple objects of the same size are needed.
+//! The objects that have been created are then sent.
 int XC::Node::sendSelf(CommParameters &cp)
   {
     inicComm(22);
@@ -1385,6 +1601,14 @@ int XC::Node::sendSelf(CommParameters &cp)
   }
 
 //! @brief Receives object through the channel being passed as parameter.
+//!
+//! Invoked on a remote machine to read its data that was sent by a node
+//! object in another actor when sendSelf() was invoked. As in {\em
+//! sendSelf()}, the Node object creates an ID object. It asks the Channel
+//! object to fill this object with data. Based on the data it creates
+//! Matrix and Vector objects to store the Nodes data and asks the cp
+//! object to fill these with data. The data placed here by the cp
+//! object correspond to the data put there by the sending Node object.
 int XC::Node::recvSelf(const CommParameters &cp)
   {
     const int dataTag= getDbTag();
@@ -1422,12 +1646,15 @@ void XC::Node::add_to_sets(std::set<SetBase *> &sets)
         if(s) s->addNode(this);
       }
   }
-
+//! @brief Prints node data.
+//!
+//! Causes the node to print out its tag, mass matrix, and committed
+//! response quantities. 
 void XC::Node::Print(std::ostream &s, int flag)
   {
     if(flag == 0)
       { // print out everything
-        s << "\n XC::Node: " << getTag() << std::endl;
+        s << "\n "<< nombre_clase()<< ": " << getTag() << std::endl;
         s << "\tCoordinates  : " << Crd;
         disp.Print(s,flag);
         vel.Print(s,flag);
@@ -1675,7 +1902,7 @@ const XC::Vector &XC::Node::getResistingForce(const std::set<const Element *> &e
 SVD3d XC::Node::getResistingSVD3d(const std::set<const Element *> &elements,const bool &inc_inertia) const
   {
     SVD3d retval;
-    const Pos3d o= getPosInicial3d();
+    const Pos3d o= getInitialPosition3d();
     const Vector &v= getResistingForce(elements,inc_inertia);
     if(numberDOF==2)
       retval= SVD3d(o,Vector3d(v[0],v[1],0));

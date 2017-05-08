@@ -96,11 +96,20 @@ class DqPtrsElem;
 //
 //! \ingroup Nod
 //! @brief Mesh node.
+//!
+//! Nodes are points in space connected by the elements. Nodes
+//! have original position, trial displacement, velocity and acceleration, 
+//! and committed displacement, velocity and acceleration (the last
+//! committed trial quantities). Nodes also store information about any
+//! load acting on the node, nodal mass and the nodal participation
+//! matrix. In addition, each Node object keeps track of it's associated
+//! DOF_Group object. The Node interface provides methods to set and
+//! retrieve these quantities.
 class Node: public MeshComponent
   {
   private:
     // private data associated with each node object
-    int numberDOF; //!< number of dof at Node
+    int numberDOF; //!< number of DOFs at Node
     DOF_Group *theDOF_GroupPtr; //!< pointer to associated DOF_Group
     Vector Crd; //!< original nodal coords
     
@@ -114,7 +123,7 @@ class Node: public MeshComponent
     Vector unbalLoadWithInertia;       
     mutable Vector reaction;
     double alphaM; //!< rayleigh damping factor
-    mutable double tributaria; //!< Tributary length, area or volume.
+    mutable double tributary; //!< Tributary length, area or volume.
     
     Matrix theEigenvectors; //Eigenvectors matrix.
 
@@ -188,10 +197,10 @@ class Node: public MeshComponent
     virtual const Vector &getCrds(void) const;
     virtual Vector &getCrds(void);
     Vector getCrds3d(void) const;
-    Pos2d getPosInicial2d(void) const;
-    Pos3d getPosInicial3d(void) const;
-    Pos2d getPosFinal2d(void) const;
-    Pos3d getPosFinal3d(void) const;
+    Pos2d getInitialPosition2d(void) const;
+    Pos3d getInitialPosition3d(void) const;
+    Pos2d getCurrentPosition2d(const double &factor= 1.0) const;
+    Pos3d getCurrentPosition3d(const double &factor= 1.0) const;
     void setPos(const Pos3d &);
     void Mueve(const Vector3d &desplaz);  
     void Transforma(const TrfGeom &trf);
@@ -250,9 +259,9 @@ class Node: public MeshComponent
     virtual int setRayleighDampingFactor(double alphaM);
     virtual const Matrix &getDamp(void);
 
-    void addTributaria(const double &) const;
-    void resetTributaria(void) const;
-    const double &getTributaria(void) const;
+    void addTributary(const double &) const;
+    void resetTributary(void) const;
+    const double &getTributary(void) const;
 
     // public methods for eigen vector
     virtual int setNumEigenvectors(int numVectorsToStore);

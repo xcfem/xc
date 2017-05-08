@@ -48,7 +48,7 @@ template <int NNODOS,class PhysProp>
 class ElemPlano : public ElemWithMaterial<NNODOS, PhysProp>
   {
   protected:
-    mutable std::vector<double> areasTributarias;
+    mutable std::vector<double> tributaryAreas;
   public:
     ElemPlano(int tag, int classTag,const PhysProp &);
     void checkElem(void);
@@ -59,8 +59,8 @@ class ElemPlano : public ElemWithMaterial<NNODOS, PhysProp>
     Pos3d getPosCdg(bool initialGeometry= true) const;
     double getPerimetro(bool initialGeometry= true) const;
     double getArea(bool initialGeometry= true) const;
-    virtual void calculaAreasTributarias(bool initialGeometry= true) const;
-    double getAreaTributaria(const Node *) const;
+    virtual void computeTributaryAreas(bool initialGeometry= true) const;
+    double getTributaryArea(const Node *) const;
 
     double getDist2(const Pos2d &p,bool initialGeometry= true) const;
     double getDist(const Pos2d &p,bool initialGeometry= true) const;
@@ -74,7 +74,7 @@ class ElemPlano : public ElemWithMaterial<NNODOS, PhysProp>
 //! @brief Constructor.
 template <int NNODOS,class PhysProp>
 XC::ElemPlano<NNODOS, PhysProp>::ElemPlano(int tag,int classTag,const PhysProp &physProp)
-  :ElemWithMaterial<NNODOS, PhysProp>(tag,classTag,physProp), areasTributarias(NNODOS,0.0)
+  :ElemWithMaterial<NNODOS, PhysProp>(tag,classTag,physProp), tributaryAreas(NNODOS,0.0)
   {}
 
 //! @brief Sets nodes and checks the element.
@@ -134,20 +134,20 @@ double XC::ElemPlano<NNODOS, PhysProp>::getArea(bool initialGeometry) const
 
 //! @brief Computes tributary areas that correspond to each node.
 template <int NNODOS,class PhysProp>
-void XC::ElemPlano<NNODOS, PhysProp>::calculaAreasTributarias(bool initialGeometry) const
+void XC::ElemPlano<NNODOS, PhysProp>::computeTributaryAreas(bool initialGeometry) const
   {
-    areasTributarias= getPoligono(initialGeometry).getAreasTributarias();
-    this->vuelcaTributarias(areasTributarias);
+    tributaryAreas= getPoligono(initialGeometry).getAreasTributarias();
+    this->dumpTributaries(tributaryAreas);
   }
 
 //! @brief Returns tributary area for the node being passed as parameter.
 template <int NNODOS,class PhysProp>
-double XC::ElemPlano<NNODOS, PhysProp>::getAreaTributaria(const Node *nod) const
+double XC::ElemPlano<NNODOS, PhysProp>::getTributaryArea(const Node *nod) const
   {
     double retval= 0.0;
     const int i= this->theNodes.find(nod);
     if(i>=0) //The node belongs to this element.
-      retval= areasTributarias[i];
+      retval= tributaryAreas[i];
     return retval;
   }
 

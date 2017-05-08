@@ -45,7 +45,7 @@ XC::MEDVertexInfo::MEDVertexInfo(const Mesh &mesh)
     while((theNode = theNodes()) != nullptr)
       {
         const int tag= theNode->getTag();
-        const Pos3d pos= theNode->getPosInicial3d();
+        const Pos3d pos= theNode->getInitialPosition3d();
         std::vector<double> coo(3);
         coo[0]= pos.x();coo[1]= pos.y();coo[2]= pos.z();
         new_vertice(tag,coo);

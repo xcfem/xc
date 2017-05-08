@@ -792,78 +792,75 @@ TritrizPos3d XC::Element::getPuntos(const size_t &ni,const size_t &nj,const size
   }
 
 //! @brief Resets tributary areas of connected nodes.
-void XC::Element::resetTributarias(void) const
-  { getNodePtrs().resetTributarias(); }
+void XC::Element::resetTributaries(void) const
+  { getNodePtrs().resetTributaries(); }
 
 //! @brief Adds to the tributary magnitude of each node
 //! the vector being passed as parameter.
-void XC::Element::vuelcaTributarias(const std::vector<double> &t) const
-  { getNodePtrs().vuelcaTributarias(t); }
+void XC::Element::dumpTributaries(const std::vector<double> &t) const
+  { getNodePtrs().dumpTributaries(t); }
 
 //! @brief Computes the tributary lengths that corresponds to each
 //! node of the element
-void XC::Element::calculaLongsTributarias(bool initialGeometry) const
+void XC::Element::computeTributaryLengths(bool initialGeometry) const
   {
-    std::cerr << "Function calculaLongsTributarias "
+    std::cerr << "Function computeTributaryLengths "
               << "must be overloaded in derived classes."
               << std::endl;
   }
 
 //! @brief Returns the tributary length corresponding to the node being passed
 //! as parameter.
-double XC::Element::getLongTributaria(const Node *) const
+double XC::Element::getTributaryLength(const Node *) const
   { return 0; }
 
 //! @brief Returns the tributary length corresponding to the node cuyo tag se pasa
 //! as parameter.
-double XC::Element::getLongTributariaByTag(const int &tag) const
+double XC::Element::getTributaryLengthByTag(const int &tag) const
   {
     const Node *nod= getDomain()->getNode(tag);
-    return getLongTributaria(nod);
+    return getTributaryLength(nod);
   }
 
-//! @brief Calcula las áreas tributarias that corresponds to cada
-//! nodo of the element
-void XC::Element::calculaAreasTributarias(bool initialGeometry) const
+//! @brief Compute tributary areas for each element node.
+void XC::Element::computeTributaryAreas(bool initialGeometry) const
   {
-    std::cerr << "Function calculaAreasTributarias "
+    std::cerr << "Function computeTributaryAreas "
               << "must be overloaded in derived classes."
               << std::endl;
   }
 
-//! @brief Returns the área tributaria corresponding to the node being passed
-//! as parameter.
-double XC::Element::getAreaTributaria(const Node *) const
+//! @brief Returns the tributary area corresponding to the node.
+double XC::Element::getTributaryArea(const Node *) const
   { return 0; }
 
-//! @brief Returns the área tributaria corresponding to the node cuyo tag se pasa
-//! as parameter.
-double XC::Element::getAreaTributariaByTag(const int &tag) const
+//! @brief Returns the tributary area corresponding to the node.
+double XC::Element::getTributaryAreaByTag(const int &tag) const
   {
     const Node *nod= getDomain()->getNode(tag);
-    return getAreaTributaria(nod);
+    return getTributaryArea(nod);
   }
 
-//! @brief Calcula los volúmenes tributarios that corresponds to cada
-//! nodo of the element
-void XC::Element::calculaVolsTributarios(bool initialGeometry) const
+//! @brief Computes the tributary volumes that corresponds to each
+//! node of the element
+void XC::Element::computeTributaryVolumes(bool initialGeometry) const
   {
-    std::cerr << "Function calculaVolsTributarios "
+    std::cerr << "Function computeTributaryVolumes "
               << "must be overloaded in derived classes."
               << std::endl;
   }
 
 //! @brief Returns the tributary volume corresponding to the node being passed
 //! as parameter.
-double XC::Element::getVolTributario(const Node *) const
+double XC::Element::getTributaryVolume(const Node *) const
   { return 0; }
 
 //! @brief Returns the tributary volume corresponding to the node cuyo tag se pasa
 //! as parameter.
-double XC::Element::getVolTributarioByTag(const int &tag) const
+double XC::Element::getTributaryVolumeByTag(const int &tag) const
   {
     const Node *nod= getDomain()->getNode(tag);
-    return getVolTributario(nod);
+    return getTributaryVolume(nod);
   }
 
 //! @brief Returns the squared distance from the element to the point

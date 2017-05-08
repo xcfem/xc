@@ -421,7 +421,7 @@ void XC::Block::create_nodes(void)
                 ttzNodes(1,J,K)= base.GetNodo(i,j);
               else
                 ttzNodes(1,J,K)= base.GetNodo(j,i);
-              d2= dist2(ttzNodes(1,J,K)->getPosInicial3d(),pos_nodes(1,J,K));
+              d2= dist2(ttzNodes(1,J,K)->getInitialPosition3d(),pos_nodes(1,J,K));
               if(d2>1e-4)
 		std::cerr << "Block::create_nodes; error while linking node: ("
                           << i << "," << j << ") in face." << std::endl;

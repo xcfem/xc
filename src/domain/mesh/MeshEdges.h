@@ -51,11 +51,11 @@ class MeshEdges: public EntCmd, public std::deque<MeshEdge>
 
     std::deque<const MeshEdge *> getLoop(const MeshEdge *) const;
     MeshEdges getEdgesNotInLoop(const std::deque<const MeshEdge *> &) const;
-    std::deque<Polilinea3d> getContours(bool undeformedGeometry) const;
+    std::deque<Polilinea3d> getContours(const double &factor) const;
     void print(std::ostream &) const;
   };
 
-std::deque<Polilinea3d> getContours(MeshEdges edges,bool undeformedGeometry);
+std::deque<Polilinea3d> getContours(MeshEdges edges,const double &factor);
 
 inline std::ostream &operator<<(std::ostream &os, const MeshEdges &me)
   {

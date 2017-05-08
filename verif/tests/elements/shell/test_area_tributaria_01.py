@@ -81,8 +81,8 @@ lp0= casos.newLoadPattern("default","0")
 
 
 f1= preprocessor.getSets.getSet("f1")
-f1.resetTributarias()
-f1.calculaAreasTributarias(False)
+f1.resetTributaries()
+f1.computeTributaryAreas(False)
 areaTributaria= 0.0
 nNodes= f1.getNumNodes
 capa1= f1.getNodeLayers.getLayer(0)
@@ -92,7 +92,7 @@ for i in range(2,nf):
   for j in range(2,nc):
     nodo= capa1.getNode(i,j)
     tagNod= nodo.tag
-    areaTributaria= nodo.getAreaTributaria()
+    areaTributaria= nodo.getTributaryArea()
     lp0.newNodalLoad(tagNod,xc.Vector([0,0,-unifLoad*areaTributaria,0,0,0])) # Carga concentrada
 
 nElems= f1.getNumElements

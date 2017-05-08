@@ -70,10 +70,10 @@ class SetBase: public EntMdlrBase
     virtual bool In(const Body *) const;
     virtual bool In(const UniformGrid *) const;
    
-    void resetTributarias(void) const;
-    void calculaLongsTributarias(bool initialGeometry= true) const;
-    void calculaAreasTributarias(bool initialGeometry= true) const;
-    void calculaVolsTributarios(bool initialGeometry= true) const;
+    void resetTributaries(void) const;
+    void computeTributaryLengths(bool initialGeometry= true) const;
+    void computeTributaryAreas(bool initialGeometry= true) const;
+    void computeTributaryVolumes(bool initialGeometry= true) const;
 
     virtual size_t getNumberOfNodes(void) const= 0;
     virtual size_t getNumberOfElements(void) const= 0;

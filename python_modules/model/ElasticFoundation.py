@@ -37,14 +37,14 @@ class ElasticFoundation(object):
     '''Creates the springs at the nodes.'''
     self.foundationSet= xcSet #Set with elastic supported elements
     self.springs= list() #spring elements.
-    self.foundationSet.resetTributarias()
-    self.foundationSet.calculaAreasTributarias(False)
+    self.foundationSet.resetTributaries()
+    self.foundationSet.computeTributaryAreas(False)
     sNod= self.foundationSet.getNodes
     preprocessor= self.foundationSet.getPreprocessor
     self.createMaterials(preprocessor,self.foundationSet.name)
     idElem= preprocessor.getElementLoader.defaultTag
     for n in sNod:
-      arTribNod=n.getAreaTributaria()
+      arTribNod=n.getTributaryArea()
       self.xSpring.E= self.cRoz*self.wModulus*arTribNod
       self.ySpring.E= self.cRoz*self.wModulus*arTribNod
       self.zSpring.E= self.wModulus*arTribNod
@@ -57,7 +57,7 @@ class ElasticFoundation(object):
     A= 0.0
     for e in self.springs:
       n= e.getNodes[1]
-      a= n.getAreaTributaria()
+      a= n.getTributaryArea()
       pos= n.getInitialPos3d
       A+= a
       dx+= a*pos[0]; dy+= a*pos[1]; dz+= a*pos[2]
@@ -76,7 +76,7 @@ class ElasticFoundation(object):
     for e in self.springs:
       n= e.getNodes[1]
       rf= e.getResistingForce()
-      a= n.getAreaTributaria()
+      a= n.getTributaryArea()
       if(len(rf)==6):
         f3d= geom.Vector3d(rf[0],rf[1],0.0)
         m3d= geom.Vector3d(0.0,0.0,rf[2])

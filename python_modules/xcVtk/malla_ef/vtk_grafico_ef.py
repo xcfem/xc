@@ -181,7 +181,7 @@ class RecordDefDisplayEF(vtk_grafico_base.RecordDefDisplay):
   def displayNodalLoad(self, nod, color, carga, momento, fEscala):
     #actorName= baseName+"%04d".format(nod.tag) # Tag nodo.
 
-    pos= nod.getCurrentPos3d
+    pos= nod.getCurrentPos3d(1.0)
     absCarga= carga.Norm()
     if(absCarga>1e-6):
       utilsVtk.dibujaFlecha(self.renderer,color,pos,carga,fEscala*absCarga)

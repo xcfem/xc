@@ -348,9 +348,9 @@ const XC::Matrix &XC::NodePtrs::getCoordinates(void) const
 Pos3d XC::NodePtrs::getPosNodo(const size_t &i,bool initialGeometry) const
   {
     if(initialGeometry)
-      return (*this)[i]->getPosInicial3d();
+      return (*this)[i]->getInitialPosition3d();
     else
-      return (*this)[i]->getPosFinal3d();
+      return (*this)[i]->getCurrentPosition3d();
   }
 
 //! @brief Returns a matriz con las posiciones of the nodes.
@@ -453,21 +453,21 @@ int XC::NodePtrs::getIndiceNodo(const Node *ptrNod) const
 
 
 //! @brief Resets tributary areas (or lengths or volumes) of connected nodes.
-void XC::NodePtrs::resetTributarias(void) const
+void XC::NodePtrs::resetTributaries(void) const
   {
     const size_t sz= size();
     for(size_t i=0;i<sz;i++)
-      (*this)[i]->resetTributaria();    
+      (*this)[i]->resetTributary();    
   }
 
-//! @brief Adds to the la magnitud tributaria de cada node i
-//! la componente i del vector being passed as parameter.
-void XC::NodePtrs::vuelcaTributarias(const std::vector<double> &t) const
+//! @brief Adds to the tributary quantity of each node i
+//! the i component of the vector being passed as parameter.
+void XC::NodePtrs::dumpTributaries(const std::vector<double> &t) const
   {
     const size_t sz= size();
     assert(sz== t.size());
     for(size_t i=0;i<sz;i++)
-      (*this)[i]->addTributaria(t[i]);
+      (*this)[i]->addTributary(t[i]);
   }
 
 //! @brief Returns a vector that contains the distribution factors

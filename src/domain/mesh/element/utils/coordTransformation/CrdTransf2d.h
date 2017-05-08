@@ -77,7 +77,7 @@ namespace XC {
 class CrdTransf2d: public CrdTransf
   {
   protected:
-    mutable double cosTheta, sinTheta; //! direction cosines of undeformed element wrt to global system 
+    mutable double cosTheta, sinTheta; //!< direction cosines of undeformed element wrt to global system 
     void set_rigid_joint_offsetI(const Vector &rigJntOffsetI);
     void set_rigid_joint_offsetJ(const Vector &rigJntOffsetJ);
     inline double T02(void) const

@@ -277,7 +277,7 @@ std::vector<int> XC::getIdNodosQuad4N(const XC::TritrizPtrNod::const_ref_capa_i_
         retval[0]= ptr->getTag();
         if(retval[0]<0)
           std::cerr << "getIdNodosQuad; error al obtener el identificador de nodo (" << j << ',' << k << ").\n";
-        p1= ptr->getPosInicial3d();
+        p1= ptr->getInitialPosition3d();
       }
 
     Pos3d p2;
@@ -287,7 +287,7 @@ std::vector<int> XC::getIdNodosQuad4N(const XC::TritrizPtrNod::const_ref_capa_i_
         retval[1]= ptr->getTag();
         if(retval[1]<0)
           std::cerr << "getIdNodosQuad; error al obtener el identificador de nodo (" << j << ',' << k+1 << ").\n";
-        p2= ptr->getPosInicial3d();
+        p2= ptr->getInitialPosition3d();
       }
 
     Pos3d p3;
@@ -297,7 +297,7 @@ std::vector<int> XC::getIdNodosQuad4N(const XC::TritrizPtrNod::const_ref_capa_i_
         retval[2]= ptr->getTag();
         if(retval[2]<0)
           std::cerr << "getIdNodosQuad; error al obtener el identificador de nodo (" << j+1 << ',' << k+1 << ").\n";
-        p3= ptr->getPosInicial3d();
+        p3= ptr->getInitialPosition3d();
       }
 
     Pos3d p4;
@@ -307,7 +307,7 @@ std::vector<int> XC::getIdNodosQuad4N(const XC::TritrizPtrNod::const_ref_capa_i_
         retval[3]=ptr->getTag();
         if(retval[3]<0)
           std::cerr << "getIdNodosQuad; error al obtener el identificador de nodo (" << j+1 << ',' << k << ").\n";
-        p4= ptr->getPosInicial3d();
+        p4= ptr->getInitialPosition3d();
       }
 
 //     const Vector3d v2= p2-p1;

@@ -32,7 +32,7 @@
 
 //! @brief Constructor.
 XC::NodePos::NodePos(const Node &n)
-  : KDTreePos(n.getPosInicial3d()), nodPtr(&n) {}
+  : KDTreePos(n.getInitialPosition3d()), nodPtr(&n) {}
 
 //! @brief Constructor.
 XC::NodePos::NodePos(const Pos3d &p)

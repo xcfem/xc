@@ -52,7 +52,7 @@ class Element1D : public ElementBase<2>
   {
     void unidimensional_meshing(const TritrizPtrNod &,TritrizPtrElem &) const;
   protected:
-    mutable std::vector<double> longsTributarias;
+    mutable std::vector<double> tributaryLengths;
 
     TritrizPtrElem put_on_mesh(const TritrizPtrNod &,meshing_dir dm) const;
     TritrizPtrElem cose(const SetEstruct &f1,const SetEstruct &f2) const;
@@ -84,8 +84,8 @@ class Element1D : public ElementBase<2>
     int getVtkCellType(void) const;
     int getMEDCellType(void) const;
 
-    virtual void calculaLongsTributarias(bool initialGeometry= true) const;
-    double getLongTributaria(const Node *) const;
+    virtual void computeTributaryLengths(bool initialGeometry= true) const;
+    double getTributaryLength(const Node *) const;
 
     void vector2dUniformLoadGlobal(const Vector &);
     void vector2dUniformLoadLocal(const Vector &);

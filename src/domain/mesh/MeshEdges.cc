@@ -74,16 +74,13 @@ std::deque<const XC::MeshEdge *> XC::MeshEdges::getLoop(const MeshEdge *first) c
     return retval;
   }
 
-Polilinea3d getPolylineFromLoop(const std::deque<const XC::MeshEdge *> &loop,bool undeformedGeometry)
+Polilinea3d getPolylineFromLoop(const std::deque<const XC::MeshEdge *> &loop, const double &factor)
   {
     Polilinea3d retval;
     Pos3d pt;
     for(std::deque<const XC::MeshEdge *>::const_iterator i= loop.begin();i!=loop.end();i++)
       {
-        if(undeformedGeometry)
-          pt= (*i)->getFirstNode()->getPosInicial3d();
-        else
-          pt= (*i)->getFirstNode()->getPosFinal3d();
+        pt= (*i)->getFirstNode()->getCurrentPosition3d(factor);
         retval.AgregaVertice(pt);
       }
     pt= retval.front(); //First point.
@@ -93,11 +90,11 @@ Polilinea3d getPolylineFromLoop(const std::deque<const XC::MeshEdge *> &loop,boo
 
 
 //! @brief returns closed contours from de edge set.
-std::deque<Polilinea3d> XC::MeshEdges::getContours(bool undeformedGeometry) const
-  { return XC::getContours(*this,undeformedGeometry); }
+std::deque<Polilinea3d> XC::MeshEdges::getContours(const double &factor) const
+  { return XC::getContours(*this,factor); }
 
 //! @brief returns closed contours from de edge set.
-std::deque<Polilinea3d> XC::getContours(MeshEdges edges, bool undeformedGeometry)
+std::deque<Polilinea3d> XC::getContours(MeshEdges edges, const double &factor)
   {
     const size_t max_iter= 100;
     size_t iter= 0;
@@ -107,7 +104,7 @@ std::deque<Polilinea3d> XC::getContours(MeshEdges edges, bool undeformedGeometry
 	MeshEdges::const_iterator i= edges.begin();
         const MeshEdge *first= &(*i);
         std::deque<const MeshEdge *> loop= edges.getLoop(first);
-        retval.push_back(getPolylineFromLoop(loop,undeformedGeometry));
+        retval.push_back(getPolylineFromLoop(loop,factor));
 	edges= edges.getEdgesNotInLoop(loop);
 	iter++;
 	if(iter>max_iter)

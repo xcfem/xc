@@ -112,12 +112,19 @@ void XC::Domain::libera(void)
   }
 
 //! @brief Constructor.
+//!
+//! Constructs an empty domain. The storage for the DomainComponents uses
+//! ArrayOfTaggedObjects objects for each type of object to be stored.
 XC::Domain::Domain(EntCmd *owr,DataOutputHandler::map_output_handlers *oh)
-  :ObjWithRecorders(owr,oh),timeTracker(),CallbackCommit(""), dbTag(0), currentGeoTag(0),
-   hasDomainChangedFlag(false), commitTag(0), mesh(this), constraints(this),
-   theRegions(nullptr), nmbCombActual(""), lastChannel(0), lastGeoSendTag(-1) {}
+  :ObjWithRecorders(owr,oh),timeTracker(),CallbackCommit(""), dbTag(0),
+   currentGeoTag(0), hasDomainChangedFlag(false), commitTag(0),
+   mesh(this), constraints(this), theRegions(nullptr),
+   nmbCombActual(""), lastChannel(0), lastGeoSendTag(-1) {}
 
 //! @brief Constructor.
+//!
+//! Constructs an empty Domain. The initial sizes specified
+//! for these objects are no more needed (so ignored)
 XC::Domain::Domain(EntCmd *owr,int numNodes, int numElements, int numSPs, int numMPs, int numLoadPatterns,int numNodeLockers,DataOutputHandler::map_output_handlers *oh)
   :ObjWithRecorders(owr,oh),timeTracker(), CallbackCommit(""), dbTag(0),
    currentGeoTag(0), hasDomainChangedFlag(false), commitTag(0), mesh(this),
@@ -188,7 +195,16 @@ bool XC::Domain::addElement(Element *element)
 bool XC::Domain::addNode(Node * node)
   { return mesh.addNode(node); }
 
-//! @brief Adds to the domain una constraint monopunto.
+//! @brief Adds a single freedom constraint to the domain.
+//!
+//! To add the single point constraint pointed to by spConstraint to the
+//! domain. 
+//! In addition the container always checks to ensure that no other
+//! constraint with a similar tag exists in the domain. The
+//! domain then invokes setDomain(this) on the 
+//! constraint and domainChange() on itself. The call returns true
+//! if the constraint was added, otherwise the warning() method of
+//! the global ErrorHandler is invoked and false is returned.
 bool XC::Domain::addSFreedom_Constraint(SFreedom_Constraint *spConstraint)
   {
     bool result= constraints.addSFreedom_Constraint(spConstraint);

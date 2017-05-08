@@ -510,7 +510,7 @@ const XC::Vector &XC::CrdTransf2d::getPointGlobalCoordFromBasic(const double &xi
 //! @brief Return the position of the node I.
 Pos2d XC::CrdTransf2d::getPosNodeI(void) const
   {
-    Pos2d retval= nodeIPtr->getPosFinal2d();
+    Pos2d retval= nodeIPtr->getCurrentPosition2d();
     retval+= Vector2d(nodeIOffset(0),nodeIOffset(1));
     if(!nodeIInitialDisp.empty())
       retval-= Vector2d(nodeIInitialDisp[0],nodeIInitialDisp[1]);
@@ -520,7 +520,7 @@ Pos2d XC::CrdTransf2d::getPosNodeI(void) const
 //! @brief Return the position of the node J.
 Pos2d XC::CrdTransf2d::getPosNodeJ(void) const
   {
-    Pos2d retval= nodeJPtr->getPosFinal2d();
+    Pos2d retval= nodeJPtr->getCurrentPosition2d();
     retval+= Vector2d(nodeJOffset(0),nodeJOffset(1));
     if(!nodeJInitialDisp.empty())
       retval-= Vector2d(nodeJInitialDisp[0],nodeJInitialDisp[1]);
@@ -612,8 +612,8 @@ const XC::Matrix &XC::CrdTransf2d::getCooNodos(void) const
 //! @brief Returns puntos distribuidos entre los nodos extremos.
 const XC::Matrix &XC::CrdTransf2d::getCooPuntos(const size_t &ndiv) const
   {
-    const Pos3d p0= nodeIPtr->getPosInicial3d();
-    const Pos3d p1= nodeJPtr->getPosInicial3d();
+    const Pos3d p0= nodeIPtr->getInitialPosition3d();
+    const Pos3d p1= nodeJPtr->getInitialPosition3d();
     MatrizPos3d linea(p0,p1,ndiv);
     static Matrix retval;
     retval= Matrix(ndiv+1,2);
@@ -630,8 +630,8 @@ const XC::Matrix &XC::CrdTransf2d::getCooPuntos(const size_t &ndiv) const
 //! @brief Returns the punto correspondiente a la coordenada 0<=xrel<=1.
 const XC::Vector &XC::CrdTransf2d::getCooPunto(const double &xrel) const
   {
-    const Pos3d p0= nodeIPtr->getPosInicial3d();
-    const Pos3d p1= nodeJPtr->getPosInicial3d();
+    const Pos3d p0= nodeIPtr->getInitialPosition3d();
+    const Pos3d p1= nodeJPtr->getInitialPosition3d();
     const Vector3d v= p1-p0;
     static Vector retval(2);
     const Pos3d tmp= p0+xrel*v;

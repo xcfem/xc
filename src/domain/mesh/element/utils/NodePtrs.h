@@ -101,8 +101,8 @@ class NodePtrs: public EntCmd, public std::vector<Node *>
     bool Out(const SemiEspacio3d &semiEsp,const double &tol= 0.0,bool initialGeometry= true) const;
     bool Corta(const Plano3d &,bool initialGeometry= true) const;
 
-    void resetTributarias(void) const;
-    void vuelcaTributarias(const std::vector<double> &) const;
+    void resetTributaries(void) const;
+    void dumpTributaries(const std::vector<double> &) const;
 
     const std::vector<int> &getTags(void) const;
     int getIndiceNodo(const Node *) const;

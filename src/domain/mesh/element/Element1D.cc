@@ -53,11 +53,11 @@
 
 //! @brief Constructor.
 XC::Element1D::Element1D(int tag, int classTag)
-  : ElementBase<2>(tag,classTag), longsTributarias(2,0.0) {}
+  : ElementBase<2>(tag,classTag), tributaryLengths(2,0.0) {}
 
 //! @brief Constructor.
 XC::Element1D::Element1D(int tag, int classTag,int Nd1,int Nd2)
-  : ElementBase<2>(tag,classTag), longsTributarias(2,0.0)
+  : ElementBase<2>(tag,classTag), tributaryLengths(2,0.0)
   { theNodes.set_id_nodes(Nd1,Nd2); }
 
 
@@ -495,8 +495,8 @@ const XC::Matrix &XC::Element1D::getCooPuntos(const size_t &ndiv) const
       retval= tmp->getCooPuntos(ndiv);
     else
       {
-        const Pos3d p0= theNodes[0]->getPosInicial3d();
-        const Pos3d p1= theNodes[1]->getPosInicial3d();
+        const Pos3d p0= theNodes[0]->getInitialPosition3d();
+        const Pos3d p1= theNodes[1]->getInitialPosition3d();
         MatrizPos3d linea(p0,p1,ndiv);
         retval= Matrix(ndiv+1,3);
         Pos3d tmp;
@@ -520,8 +520,8 @@ const XC::Vector &XC::Element1D::getCooPunto(const double &xrel) const
       retval= tmp->getCooPunto(xrel);
     else
       {
-        const Pos3d p0= theNodes[0]->getPosInicial3d();
-        const Pos3d p1= theNodes[1]->getPosInicial3d();
+        const Pos3d p0= theNodes[0]->getInitialPosition3d();
+        const Pos3d p1= theNodes[1]->getInitialPosition3d();
         const Vector3d v= p1-p0;
         retval= Vector(3);
         const Pos3d tmp= p0+xrel*v;
@@ -536,9 +536,9 @@ const XC::Vector &XC::Element1D::getCooPunto(const double &xrel) const
 Segmento3d XC::Element1D::getSegmento(bool initialGeometry) const
   {
     if(initialGeometry)
-      return Segmento3d(theNodes[0]->getPosInicial3d(),theNodes[1]->getPosInicial3d());
+      return Segmento3d(theNodes[0]->getInitialPosition3d(),theNodes[1]->getInitialPosition3d());
     else
-      return Segmento3d(theNodes[0]->getPosFinal3d(),theNodes[1]->getPosFinal3d());
+      return Segmento3d(theNodes[0]->getCurrentPosition3d(),theNodes[1]->getCurrentPosition3d());
   }
 
 //! @brief Returns the squared distance from the element to the point que
@@ -659,21 +659,21 @@ int XC::Element1D::getMEDCellType(void) const
 
 //! @brief Calcula the tributary lengths that corresponds to cada
 //! nodo of the element
-void XC::Element1D::calculaLongsTributarias(bool initialGeometry) const
+void XC::Element1D::computeTributaryLengths(bool initialGeometry) const
   {
     const double lt= getSegmento(initialGeometry).Longitud()/2.0;
-    longsTributarias[0]= lt;
-    longsTributarias[1]= lt;
-    vuelcaTributarias(longsTributarias);
+    tributaryLengths[0]= lt;
+    tributaryLengths[1]= lt;
+    dumpTributaries(tributaryLengths);
   }
 
 //! @brief Return the tributary length corresponding to the node being passed
 //! as parameter.
-double XC::Element1D::getLongTributaria(const Node *nod) const
+double XC::Element1D::getTributaryLength(const Node *nod) const
   {
     double retval= 0;
     const int i= theNodes.find(nod);
     if(i>=0) //Node is in this element.
-      retval= longsTributarias[i];
+      retval= tributaryLengths[i];
     return retval;
   }
