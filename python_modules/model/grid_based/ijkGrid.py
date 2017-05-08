@@ -193,48 +193,40 @@ class ijkGrid(object):
 
 
   def generateSurfaces(self,ijkRange,dicQuadSurf):
-    'generates the surfaces contained in a rectangle defined by the coordinates'
-    'that correspond to the positions in the grid ijkRange.ijkMin=[posXmin,posYmin,posZmin] y'
-    'ijkRange.ijkMax=[posXmax,posYmax,posZmax]'
-    'it fills also the surfaces dictionary.'
+    '''generate the surfaces limited by a rectangle defined by the coordinates
+    that correspond to the positions in the grid 
+    ijkRange.ijkMin=[posXmin,posYmin,posZmin] y
+    ijkRange.ijkMax=[posXmax,posYmax,posZmax]. 
+    Add those surfaces to the dictionary dicQuadSurf.
+    '''
     retval= list()
-    i= ijkRange.ijkMin[0]
-    j= ijkRange.ijkMin[1]
-    k= ijkRange.ijkMin[2]
-    if ijkRange.ijkMax[2]== ijkRange.ijkMin[2]:
+    (imin,jmin,kmin)=tuple(ijkRange.ijkMin)
+    (imax,jmax,kmax)=tuple(ijkRange.ijkMax)
+    (i,j,k)=(imin,jmin,kmin)  #initial values
+    if kmax== kmin:
         'surfaces in XY plane'
-        while i<= ijkRange.ijkMax[0]-1:
-            j= ijkRange.ijkMin[1]
-            while j<= ijkRange.ijkMax[1]-1:
+        for i in range(imin,imax):
+            for j in range(jmin,jmax):
                 indPtsQs=((i,j,k),(i+1,j,k),(i+1,j+1,k),(i,j+1,k))
                 a= self.newQuadGridSurface(indPtsQs)
                 retval.append(a)
                 dicQuadSurf[a.name]= a
-                j+=1
-            i+=1
-    elif ijkRange.ijkMax[1]== ijkRange.ijkMin[1]:
+    elif jmax== jmin:
         'surfaces in XZ plane'
-        while i<= ijkRange.ijkMax[0]-1:
-            k= ijkRange.ijkMin[2]
-            while k<= ijkRange.ijkMax[2]-1:
+        for i in range(imin,imax):
+            for k in range(kmin,kmax):
                 indPtsQs=((i,j,k),(i,j,k+1),(i+1,j,k+1),(i+1,j,k))
                 a= self.newQuadGridSurface(indPtsQs)
                 retval.append(a)
                 dicQuadSurf[a.name]= a
-                k+=1
-            i+=1
-    elif ijkRange.ijkMax[0]== ijkRange.ijkMin[0]:
+    elif imax== imin:
         'surfaces in YZ plane'
-        while j<= ijkRange.ijkMax[1]-1:
-            k= ijkRange.ijkMin[2]
-            while k<= ijkRange.ijkMax[2]-1:
+        for j in range(jmin,jmax):
+            for k in range(kmin,kmax):
                 indPtsQs=((i,j,k),(i,j+1,k),(i,j+1,k+1),(i,j,k+1))
                 a= self.newQuadGridSurface(indPtsQs)
                 retval.append(a)
                 dicQuadSurf[a.name]= a
-                k+=1
-            j+=1
-#    print dicQuadSurf
     return retval
 
   def generateLines(self,ijkRange,dicLin): 
@@ -246,34 +238,30 @@ class ijkGrid(object):
     '''
     retval= list()
     lines= self.prep.getCad.getLines
-    i=ijkRange.ijkMin[0]
-    j=ijkRange.ijkMin[1]
-    k=ijkRange.ijkMin[2]
-    if ijkRange.ijkMax[1]==ijkRange.ijkMin[1] and ijkRange.ijkMax[2]==ijkRange.ijkMin[2] :
+    (imin,jmin,kmin)=tuple(ijkRange.ijkMin)
+    (imax,jmax,kmax)=tuple(ijkRange.ijkMax)
+    (i,j,k)=(imin,jmin,kmin)  #initial values
+    if jmax==jmin and kmax==kmin :
         'line parallel to X-axis'
-        while i<=ijkRange.ijkMax[0]-1:
+        for i in range(imin,imax):
             indPntsLn=((i,j,k),(i+1,j,k))
             l=self.newGridLine(indPntsLn)
             retval.append(l)
             dicLin[l.name]=l
-            i+=1
-    elif ijkRange.ijkMax[0]==ijkRange.ijkMin[0] and ijkRange.ijkMax[2]==ijkRange.ijkMin[2] :
+    elif imax==imin and kmax==kmin :
         'line parallel to Y-axis'
-        while j<=ijkRange.ijkMax[1]-1:
+        for j in range(jmin,jmax):
             indPntsLn=((i,j,k),(i,j+1,k))
             l=self.newGridLine(indPntsLn)
             retval.append(l)
             dicLin[l.name]=l
-            j+=1
-    elif ijkRange.ijkMax[0]==ijkRange.ijkMin[0] and ijkRange.ijkMax[1]==ijkRange.ijkMin[1] :
+    elif imax==imin and jmax==jmin :
         'line parallel to Z-axis'
-        while k<=ijkRange.ijkMax[2]-1:
+        for k in range(kmin,kmax):
             indPntsLn=((i,j,k),(i,j,k+1))
             l=self.newGridLine(indPntsLn)
             retval.append(l)
             dicLin[l.name]=l
-            k+=1
-#    print dicLin
     return retval
 
   def getSetInRange(self,ijkRange,dicQuadSurf,nmbrSet):
@@ -282,42 +270,33 @@ class ijkGrid(object):
     'que corresponden a las posiciones en la rejilla ijkRange.ijkMin=[posXmin,posYmin,posZmin] y'
     'ijkRange.ijkMax=[posXmax,posYmax,posZmax]'
     retval= self.prep.getSets.defSet(nmbrSet)
-    i= ijkRange.ijkMin[0]
-    j= ijkRange.ijkMin[1]
-    k= ijkRange.ijkMin[2]
-    if ijkRange.ijkMax[2]== ijkRange.ijkMin[2]:
+    (imin,jmin,kmin)=tuple(ijkRange.ijkMin)
+    (imax,jmax,kmax)=tuple(ijkRange.ijkMax)
+    (i,j,k)=(imin,jmin,kmin)
+    if kmax== kmin:
         'surfaces in XY plane'
-        while i<= ijkRange.ijkMax[0]-1:
-            j= ijkRange.ijkMin[1]
-            while j<= ijkRange.ijkMax[1]-1:
+        for i in range(imin,imax):
+            for j in range(jmin,jmax):
                 indPtsQs=((i,j,k),(i+1,j,k),(i+1,j+1,k),(i,j+1,k))
                 nameSurf= self.getNameQuadGridSurface(indPtsQs)
                 if nameSurf in dicQuadSurf:
                     retval.getSurfaces.append(dicQuadSurf[nameSurf])
-                j+=1
-            i+=1
-    elif ijkRange.ijkMax[1]== ijkRange.ijkMin[1]:
+    elif jmax== jmin:
         'surfaces in XZ plane'
-        while i<= ijkRange.ijkMax[0]-1:
-            k= ijkRange.ijkMin[2]
-            while k<= ijkRange.ijkMax[2]-1:
+        for i in range(imin,imax):
+            for k in range(kmin,kmax):
                 indPtsQs=((i,j,k),(i,j,k+1),(i+1,j,k+1),(i+1,j,k))
                 nameSurf= self.getNameQuadGridSurface(indPtsQs)
                 if nameSurf in dicQuadSurf:
                     retval.getSurfaces.append(dicQuadSurf[nameSurf])
-                k+=1
-            i+=1
-    elif ijkRange.ijkMax[0]== ijkRange.ijkMin[0]:
+    elif imax== imin:
         'surfaces in YZ plane'
-        while j<= ijkRange.ijkMax[1]-1:
-            k= ijkRange.ijkMin[2]
-            while k<= ijkRange.ijkMax[2]-1:
+        for j in range(jmin,jmax):
+            for k in range(kmin,kmax):
                 indPtsQs=((i,j,k),(i,j+1,k),(i,j+1,k+1),(i,j,k+1))
                 nameSurf= self.getNameQuadGridSurface(indPtsQs)
                 if nameSurf in dicQuadSurf:
                     retval.getSurfaces.append(dicQuadSurf[nameSurf])
-                k+=1
-            j+=1
     retval.fillDownwards()    
     return retval
 
@@ -331,12 +310,8 @@ class ijkGrid(object):
 
     retval=[]
     
-    imin= ijkRange.ijkMin[0]
-    jmin= ijkRange.ijkMin[1]
-    kmin= ijkRange.ijkMin[2]
-    imax= ijkRange.ijkMax[0]
-    jmax= ijkRange.ijkMax[1]
-    kmax= ijkRange.ijkMax[2]
+    (imin,jmin,kmin)=tuple(ijkRange.ijkMin)
+    (imax,jmax,kmax)=tuple(ijkRange.ijkMax)
 
     'Lines parallel to X axis'
     for k in range(kmin,kmax+1):
@@ -367,48 +342,27 @@ class ijkGrid(object):
                     retval.append(l)
     return retval
 
-  def getSetPtosRange(self,ijkRange,nombre):
-    '''devuelve un set de puntos contenidos en un rectángulo comprendido entre las coordenadas
-    que corresponden a las posiciones en la rejilla ijkRange.ijkMin=[posXmin,posYmin,posZmin] y
-    ijkRange.ijkMax=[posXmax,posYmax,posZmax]'''
-    retval= self.prep.getSets.defSet(nombre)
-    i= ijkRange.ijkMin[0]
-    j= ijkRange.ijkMin[1]
-    k= ijkRange.ijkMin[2]
-    if ijkRange.ijkMax[2]== ijkRange.ijkMin[2]:
-        'surfaces in XY plane'
-        while i<= ijkRange.ijkMax[0]:
-            j= ijkRange.ijkMin[1]
-            while j<= ijkRange.ijkMax[1]:
-                tgpto= self.getTagPntGrid(indPnt=(i,j,k))
-                pto= puntos.get(tgpto)
-                retval.getPoints.append(pto)
-                j+=1
-            i+=1
-    elif ijkRange.ijkMax[1]== ijkRange.ijkMin[1]:
-        'surfaces in XZ plane'
-        while i<= ijkRange.ijkMax[0]:
-            k= ijkRange.ijkMin[2]
-            while k<= ijkRange.ijkMax[2]:
-                tgpto= self.getTagPntGrid(indPnt=(i,j,k))
-                pto= puntos.get(tgpto)
-                #print pto.tag,pto.getPos.x,pto.getPos.y,pto.getPos.z
-                retval.getPoints.append(pto)
-                k+=1
-            i+=1
-    elif ijkRange.ijkMax[0]== ijkRange.ijkMin[0]:
-        'surfaces in YZ plane'
-        while j<= ijkRange.ijkMax[1]:
-            k= ijkRange.ijkMin[2]
-            while k<= ijkRange.ijkMax[2]:
-              tgpto= self.getTagPntGrid(indPnt=(i,j,k))
-              pto= puntos.get(tgpto)
-              #print pto.tag,pto.getPos.x,pto.getPos.y,pto.getPos.z
-              retval.getPoints.append(pto)
-              k+=1
-            j+=1
-    return retval
 
+  def getSetPntRange(self,ijkRange,setName):
+    '''return the set of points in a 3D grid-region limited by 
+    ijkRange.ijkMin=[posXmin,posYmin,posZmin] and
+    ijkRange.ijkMax=[posXmax,posYmax,posZmax]
+    
+    :param ijkRange: range for the search
+    :param dicPnt: dictionary of points
+    :param setName: name of the new set of points
+    '''
+    (imin,jmin,kmin)=tuple(ijkRange.ijkMin)
+    (imax,jmax,kmax)=tuple(ijkRange.ijkMax)
+    lstTagPnt=[elf.getTagPntGrid(indPnt=(i,j,k)) for i in range(imin,imax+1) for j in range(jmin,jmax+1) for k in range(kmin,kmax+1)] #list of point tags to include in the set
+    points= self.prep.getCad.getPoints
+    retval= self.prep.getSets.defSet(setName)
+    pntsSet=retval.getPoints
+    for tg in lstTagPnt:
+      pnt=points.get(tg)
+      pntsSet.append(pnt)
+    return retval
+ 
   def appendLoadInRangeToCurrentLoadPattern(self,ijkRange,dicQuadSurf,nmbrSet,loadVector):
     s= self.getSetInRange(ijkRange,dicQuadSurf,nmbrSet)
     sElem=s.getElements
