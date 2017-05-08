@@ -456,7 +456,9 @@ void XC::SetMeshComp::sel_elements_from_list(const ID &tags)
       }
   }
 
-//! @brief Selecciona las coacciones cuyos tags being passed as parameters.
+//! @brief Select the constraints identified by the tags.
+//!
+//! @param tags: identifiers of the constraints.
 void XC::SetMeshComp::sel_constraints_from_list(const ID &tags)
   {
     const size_t sz= tags.Size();

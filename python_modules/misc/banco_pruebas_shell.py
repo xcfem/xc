@@ -30,9 +30,9 @@ def nuevosZeroLengthShell(nmbS, tagElem, offset):
   nod3= nodos.newNodeIDZYZ(idNod3,0,idNod3,0)
   nod4= nodos.newNodeIDZYZ(idNod4,0,idNod3,0)
 
-  coacciones= preprocessor.getConstraintLoader  # Boundary conditions.
-  fijaNodo6GDL(coacciones,idNod1)
-  fijaNodo6GDL(coacciones,idNod3)
+  constraints= preprocessor.getConstraintLoader  # Boundary conditions.
+  fijaNodo6GDL(constraints,idNod1)
+  fijaNodo6GDL(constraints,idNod3)
 
   # Definimos elementos
   elems= preprocessor.getElementLoader

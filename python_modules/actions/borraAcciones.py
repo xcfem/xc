@@ -12,8 +12,8 @@ def resetAccionesConstantTS(preprocessor,tipoTimeSeries, nmbTimeSeries, fct):
   :param  fct: Factor
 
   '''
-  coacciones= preprocessor.getConstraintLoader
-  lps= coacciones.getActiveLoadPatterns
+  constraints= preprocessor.getConstraintLoader
+  lps= constraints.getActiveLoadPatterns
   lps.clearrAll()
   loads= preprocessor.getLoadLoader
   casos= loads.getLoadPatterns

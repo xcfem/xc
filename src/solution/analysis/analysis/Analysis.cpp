@@ -99,7 +99,7 @@ const XC::Domain *XC::Analysis::getDomainPtr(void) const
     return ps->getDomainPtr();
   }
 
-//! @brief Returns a pointer to the gestor de coacciones.
+//! @brief Returns a pointer to the constraint handler.
 XC::ConstraintHandler *XC::Analysis::getConstraintHandlerPtr(void)
   {
     if(metodo_solu)

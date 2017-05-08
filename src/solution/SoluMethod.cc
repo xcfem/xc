@@ -532,7 +532,7 @@ XC::Subdomain *XC::SoluMethod::getSubdomainPtr(void)
     return an->getSubdomain();
   }
 
-//! @brief Returns a pointer to the manejador de coacciones.
+//! @brief Returns a pointer to the constraint handler.
 XC::ConstraintHandler *XC::SoluMethod::getConstraintHandlerPtr(void)
   {
     if(base)
@@ -541,7 +541,7 @@ XC::ConstraintHandler *XC::SoluMethod::getConstraintHandlerPtr(void)
       return nullptr;
   }
 
-//! @brief Returns a pointer to the renumerador.
+//! @brief Returns a pointer to the numberer.
 XC::DOF_Numberer *XC::SoluMethod::getDOF_NumbererPtr(void) const
   {
     if(base)

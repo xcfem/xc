@@ -17,18 +17,17 @@ def getDiagMomentoCurvatura3d(preprocessor, nmbSecc, esfAxil, maxK, numIncr):
   nodes= preprocessor.getNodeLoader
 
   modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
-  nodes.newNodeIDXYZ(1001,1,0,0)
+  nod1= nodes.newNodeIDXYZ(1001,1,0,0)
 
-  nodes.newNodeIDXYZ(1002,1,0,0)
+  nod2= nodes.newNodeIDXYZ(1002,1,0,0)
   elementos= preprocessor.getElementLoader
   elementos.defaultMaterial= nmbSecc
   elementos.defaultTag= 2001 #Tag for the next element.
-  zls= elementos.newElement("zero_length_section",xc.ID([1001,1002]));
+  zls= elementos.newElement("zero_length_section",xc.ID([nod1.tag,nod2.tag]));
 
-  coacciones= preprocessor.getConstraintLoader
-  model_space.fixNode000_000(1001)
-  coacciones.newSPConstraint(1002,1,0.0)
-  coacciones.newSPConstraint(1002,2,0.0)
+  modelSpace.fixNode000_000(nod1.tag)
+  modelSpace.constraints.newSPConstraint(nod2.tag,1,0.0)
+  modelSpace.constraints.newSPConstraint(nod2.tag,2,0.0)
 
   cargas= preprocessor.getLoadLoader
   casos= cargas.getLoadPatterns
@@ -36,7 +35,7 @@ def getDiagMomentoCurvatura3d(preprocessor, nmbSecc, esfAxil, maxK, numIncr):
   ts= casos.newTimeSeries("constant_ts","ts")
   casos.currentTimeSeries= "ts"
   lp0= casos.newLoadPattern("default","0")
-  lp0.newNodalLoad(1002,xc.Vector([esfAxil,0,0,0,0,0]))
+  lp0.newNodalLoad(nod2.tag,xc.Vector([esfAxil,0,0,0,0,0]))
   #We add the load case to domain.
   casos.addToDomain("0")
 
@@ -44,7 +43,7 @@ def getDiagMomentoCurvatura3d(preprocessor, nmbSecc, esfAxil, maxK, numIncr):
   analOk= analisis.analyze(1)
 
   lp1= casos.newLoadPattern("default","1")
-  lp1.newNodalLoad(1002,xc.Vector([0,0,0,0,0,0,1]))
+  lp1.newNodalLoad(nod2.tag,xc.Vector([0,0,0,0,0,0,1]))
 
   # Calculamos el incremento de curvatura
   dK= maxK/numIncr

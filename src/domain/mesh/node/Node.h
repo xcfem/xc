@@ -129,9 +129,9 @@ class Node: public MeshComponent
 
     mutable std::set<ContinuaReprComponent *> connected; //!< Components (elements, contraints,...) that are connected with this node.
 
-    std::set<int> coacciones_freeze;//!< Tags of the constraints created by freeze() method.
-    const ID &get_id_coacciones(void) const;
-    void set_id_coacciones(const ID &);
+    std::set<int> freeze_constraints;//!< Tags of the constraints created by freeze() method.
+    const ID &get_id_constraints(void) const;
+    void set_id_constraints(const ID &);
 
     static DefaultTag defaultTag; //<! tag for next new node.
   protected:

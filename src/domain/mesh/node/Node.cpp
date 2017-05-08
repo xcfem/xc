@@ -226,7 +226,7 @@ XC::Node::Node(const Node &otherNode, bool copyMass)
    R(otherNode.R), unbalLoad(otherNode.unbalLoad),
    unbalLoadWithInertia(otherNode.unbalLoadWithInertia), reaction(otherNode.reaction),
    alphaM(otherNode.alphaM), tributaria(otherNode.tributaria), theEigenvectors(otherNode.theEigenvectors),
-   connected(otherNode.connected), coacciones_freeze(otherNode.coacciones_freeze)
+   connected(otherNode.connected), freeze_constraints(otherNode.freeze_constraints)
   {
     // AddingSensitivity:BEGIN /////////////////////////////////////////
     parameterID = 0;
@@ -305,28 +305,28 @@ void XC::Node::freeze_if_dead(NodeLocker *locker)
           {
             SFreedom_Constraint *sp= locker->addSFreedom_Constraint(nodeTag,id_gdl,0.0);
             if(sp)
-              coacciones_freeze.insert(sp->getTag());
+              freeze_constraints.insert(sp->getTag());
           }
       }
   }
 
 //! @brief Returns a vector with the constraints identifiers. 
-const XC::ID &XC::Node::get_id_coacciones(void) const
+const XC::ID &XC::Node::get_id_constraints(void) const
   {
     static ID retval;
     size_t cont= 0;
-    retval.resize(coacciones_freeze.size());
-    for(std::set<int>::const_iterator i= coacciones_freeze.begin();i!=coacciones_freeze.end();i++,cont++)
+    retval.resize(freeze_constraints.size());
+    for(std::set<int>::const_iterator i= freeze_constraints.begin();i!=freeze_constraints.end();i++,cont++)
       retval[cont]= *i;
     return retval;
   }
 
 //! @brief Sets the constraints identifiers. 
-void XC::Node::set_id_coacciones(const ID &coacciones)
+void XC::Node::set_id_constraints(const ID &constraints)
   {
-    const int sz= coacciones.Size();
+    const int sz= constraints.Size();
     for(int i= 0;i<sz;i++)
-      coacciones_freeze.insert(coacciones(i));
+      freeze_constraints.insert(constraints(i));
   }
 
 //! @brief Deletes the constraint over the node DOFs
@@ -335,11 +335,11 @@ void XC::Node::melt_if_alive(NodeLocker *locker)
   {
     if(isAlive())
       {
-        if(!coacciones_freeze.empty())
+        if(!freeze_constraints.empty())
           {
-            for(std::set<int>::const_iterator i= coacciones_freeze.begin();i!=coacciones_freeze.end();i++)
+            for(std::set<int>::const_iterator i= freeze_constraints.begin();i!=freeze_constraints.end();i++)
               locker->removeSFreedom_Constraint(*i);
-            coacciones_freeze.clear();
+            freeze_constraints.clear();
 	    reaction.Zero();
           }
       }
@@ -347,7 +347,7 @@ void XC::Node::melt_if_alive(NodeLocker *locker)
 
 //! @brief returns true if the node is frozen.
 const bool XC::Node::isFrozen(void) const
-  { return !coacciones_freeze.empty(); }
+  { return !freeze_constraints.empty(); }
 
 //! @brief returns true if the node has no constraints.
 const bool XC::Node::isFree(void) const
@@ -1343,7 +1343,7 @@ int XC::Node::sendData(CommParameters &cp)
     res+=cp.sendMovable(disp,getDbTagData(),CommMetaData(13));
     res+=cp.sendMovable(vel,getDbTagData(),CommMetaData(14));
     res+=cp.sendMovable(accel,getDbTagData(),CommMetaData(15));
-    res+= cp.sendID(get_id_coacciones(),getDbTagData(),CommMetaData(16));
+    res+= cp.sendID(get_id_constraints(),getDbTagData(),CommMetaData(16));
     return res;
   }
 
@@ -1366,7 +1366,7 @@ int XC::Node::recvData(const CommParameters &cp)
     res+= cp.receiveMovable(accel,getDbTagData(),CommMetaData(15));
     ID tmp;
     res+= cp.receiveID(tmp,getDbTagData(),CommMetaData(16));
-    set_id_coacciones(tmp);
+    set_id_constraints(tmp);
     setup_matrices(theMatrices,numberDOF);
     return res;
   }

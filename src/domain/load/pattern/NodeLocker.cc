@@ -171,14 +171,14 @@ bool XC::NodeLocker::addSFreedom_Constraint(SFreedom_Constraint *theSp)
     return result;
   }
 
-//! @brief Returns an iterator a las coacciones mononodales.
+//! @brief Returns an iterator to the single freedom constraints.
 XC::SFreedom_ConstraintIter &XC::NodeLocker::getSPs(void)
   {
     theSpIter->reset();
     return *theSpIter;
   }
 
-//! @brief Returns the número de coacciones monopunto.
+//! @brief Returns the number of single freedom constraints.
 int XC::NodeLocker::getNumSPs(void) const
   {
     int retval= 0;
@@ -197,17 +197,21 @@ void XC::NodeLocker::clearAll(void)
 XC::SFreedom_Constraint *XC::NodeLocker::newSPConstraint(const int &tag_nod,const int &id_gdl,const double &valor)
   { return addSFreedom_Constraint(tag_nod,id_gdl,valor); }
 
-//! @brief Elimina la coacción mononodal cuyo tag being passed as parameter.
+//! @brief Erases the single freedom constraint identified by the argument.
 bool XC::NodeLocker::removeSFreedom_Constraint(int tag)
   {
     const bool retval= theSPs->removeComponent(tag);
     if(!retval)
-      std::cerr << "NodeLocker::removeSFreedom_Constraint; no se pudo eliminar la coaccion: "
-                << tag << std::endl;
+      std::cerr << nombre_clase() << "::" << __FUNCTION__
+	        << "; constraint identified by: "
+                << tag << " not found." << std::endl;
     return retval;
   }
 
-//! @brief Aplica the load en el instante being passed as parameter.
+//! @brief Applies the single freedom constraints.
+//!
+//! @param pseudoTime: ignored (single freedom constraints doesn't depend on it).
+//! @param factor: factor that weights the prescribed values.
 void XC::NodeLocker::applyLoad(const double &pseudoTime,const double &factor)
   {
     SFreedom_Constraint *sp= nullptr;

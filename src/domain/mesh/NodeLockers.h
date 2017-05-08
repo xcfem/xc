@@ -43,7 +43,7 @@ class NodeLockers: public EntCmd, public MovableObject
     typedef std::map<std::string,NodeLocker *> map_node_lockers; //!< NodeLocker container.
     map_node_lockers node_lockers;
     int tag; //!< Default identifier.
-    std::string code; //!< Identificador del pattern para las nuevas coacciones.
+    std::string code; //!< Pattern identifier for the new constraints.
   protected:
     friend class Mesh;
     NodeLocker *busca_node_locker(const std::string &);

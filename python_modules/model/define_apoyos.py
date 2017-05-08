@@ -22,10 +22,10 @@ def defApoyoX(preprocessor,iNod, iElem, matKX):
   zl.setMaterial(0,matKX)
   # fin de la definición de elementos
   # Boundary conditions
-  coacciones= preprocessor.getConstraintLoader
+  constraints= preprocessor.getConstraintLoader
   numGdls= preprocessor.getNodeLoader.numGdls
   for i in range(0,numGdls):
-    spc= coacciones.newSPConstraint(retvalNodTag,i,0.0)
+    spc= constraints.newSPConstraint(retvalNodTag,i,0.0)
   return retvalNodTag
 
 def defApoyoXY(preprocessor,iNod, iElem, matKX, matKY):
@@ -49,10 +49,10 @@ def defApoyoXY(preprocessor,iNod, iElem, matKX, matKY):
   zl.setMaterial(1,matKY)
   # fin de la definición de elementos
   # Boundary conditions
-  coacciones= preprocessor.getConstraintLoader
+  constraints= preprocessor.getConstraintLoader
   numGdls= preprocessor.getNodeLoader.numGdls
   for i in range(0,numGdls):
-    spc= coacciones.newSPConstraint(retvalNodTag,i,0.0)
+    spc= constraints.newSPConstraint(retvalNodTag,i,0.0)
   return retvalNodTag
 
 def defApoyoXYZ(preprocessor,iNod, iElem, matKXName, matKYName, matKZName):
@@ -77,10 +77,10 @@ def defApoyoXYZ(preprocessor,iNod, iElem, matKXName, matKYName, matKZName):
   zl.setMaterial(2,matKZName)
   # fin de la definición de elementos
   # Boundary conditions
-  coacciones= preprocessor.getConstraintLoader
+  constraints= preprocessor.getConstraintLoader
   numGdls= preprocessor.getNodeLoader.numGdls
   for i in range(0,numGdls):
-    spc= coacciones.newSPConstraint(retvalNodTag,i,0.0)
+    spc= constraints.newSPConstraint(retvalNodTag,i,0.0)
   return retvalNodTag
 
 def defApoyoUniaxialProb2D(preprocessor, iNod, iElem, nmbMat, dir):
@@ -105,10 +105,10 @@ def defApoyoUniaxialProb2D(preprocessor, iNod, iElem, nmbMat, dir):
   zl.setMaterial(0,nmbMat)
   # fin de la definición de elementos
   # Boundary conditions
-  coacciones= preprocessor.getConstraintLoader
-  spc= coacciones.newSPConstraint(retvalNodTag,0,0.0)
-  spc= coacciones.newSPConstraint(retvalNodTag,1,0.0)
-  spc= coacciones.newSPConstraint(retvalNodTag,2,0.0)
+  constraints= preprocessor.getConstraintLoader
+  spc= constraints.newSPConstraint(retvalNodTag,0,0.0)
+  spc= constraints.newSPConstraint(retvalNodTag,1,0.0)
+  spc= constraints.newSPConstraint(retvalNodTag,2,0.0)
   return retvalNodTag
 
 # Coloca apoyos en todos los nodos de la lista (numera los elementos con el mismo índice de los nodos).
@@ -151,21 +151,21 @@ def defApoyoXYRigZ(preprocessor,iNod, iElem, matKX, matKY):
   zl.setMaterial(1,matKY)
   # fin de la definición de elementos
   # Boundary conditions
-  coacciones= preprocessor.getConstraintLoader
+  constraints= preprocessor.getConstraintLoader
   numGdls= preprocessor.getNodeLoader.numGdls
   for i in range(0,numGdls):
-    spc= coacciones.newSPConstraint(retvalNodTag,i,0.0)
-  eDofs= coacciones.newEqualDOF(retvalNodTag,iNod,xc.ID([2]))
+    spc= constraints.newSPConstraint(retvalNodTag,i,0.0)
+  eDofs= constraints.newEqualDOF(retvalNodTag,iNod,xc.ID([2]))
   #eDofs.dofs= xc.ID([2])
   return retvalNodTag
 
 
-'''
-Define un elemento entre los nodos cuyos tags se pasan como parámetros.
-   La rigidez del elemento viene definida por los nombres de materiales que
-   se pasan como parámetro.
-'''
 def colocaApoyoEntreNodos(preprocessor,iNodA, iNodB, iElem, matKX, matKY, matKZ, matKTHX, matKTHY, matKTHZ):
+  '''
+    Define un elemento entre los nodos cuyos tags se pasan como parámetros.
+      La rigidez del elemento viene definida por los nombres de materiales que
+      se pasan como parámetro.
+  '''
   # Definimos elementos
   elems= preprocessor.getElementLoader
   elems.dimElem= 3 # Tridimensional space.
@@ -180,12 +180,12 @@ def colocaApoyoEntreNodos(preprocessor,iNodA, iNodB, iElem, matKX, matKY, matKZ,
   zl.setMaterial(4,matKTHY)
   zl.setMaterial(5,matKTHZ)
 
-'''
-Define un elemento entre los nodos cuyos tags se pasan como parámetros.
-   La rigidez del elemento viene definida por los nombres de materiales que
-   se pasan como parámetro.
-'''
 def colocaApoyoXYEntreNodos(preprocessor,iNodA, iNodB, iElem, matKX, matKY):
+  '''
+    Define un elemento entre los nodos cuyos tags se pasan como parámetros.
+     La rigidez del elemento viene definida por los nombres de materiales que
+     se pasan como parámetro.
+  '''
   # Definimos elementos
   elems= preprocessor.getElementLoader
   elems.dimElem= 3 # Tridimensional space.
@@ -196,12 +196,12 @@ def colocaApoyoXYEntreNodos(preprocessor,iNodA, iNodB, iElem, matKX, matKY):
   zl.setMaterial(0,matKX)
   zl.setMaterial(1,matKY)
 
-'''
-Define un elemento entre los nodos cuyos tags se pasan como parámetros.
-   La rigidez del elemento viene definida por el nombre del material que
-   se pasa como parámetro.
-'''
 def colocaApoyoXEntreNodos(preprocessor,iNodA, iNodB, iElem, matKX):
+  '''
+  Define un elemento entre los nodos cuyos tags se pasan como parámetros.
+    La rigidez del elemento viene definida por el nombre del material que
+    se pasa como parámetro.
+  '''
   # Definimos elementos
   elems= preprocessor.getElementLoader
   elems.dimElem= 3 # Tridimensional space.
@@ -211,8 +211,8 @@ def colocaApoyoXEntreNodos(preprocessor,iNodA, iNodB, iElem, matKX):
   zl.clearMaterials()
   zl.setMaterial(0,matKX)
 
-# Define un elemento entre los nodos cuyos tags se pasan como parámetros.
 def colocaApoyoYEntreNodos(preprocessor,iNodA, iNodB, iElem, matKY):
+  '''Define un elemento entre los nodos cuyos tags se pasan como parámetros.'''
   # Definimos elementos
   elems= preprocessor.getElementLoader
   elems.dimElem= 3 # Tridimensional space.
@@ -222,8 +222,8 @@ def colocaApoyoYEntreNodos(preprocessor,iNodA, iNodB, iElem, matKY):
   zl.clearMaterials()
   zl.setMaterial(1,matKY)
 
-# Define un elemento entre los nodos pertenecientes a los puntos cuyos tags se pasan como parámetros.
 def colocaApoyoEntrePuntos(preprocessor,iPtA, iPtB, iElem, matKX, matKY, matKZ, matKTHX, matKTHY, matKTHZ):
+  '''Define un elemento entre los nodos pertenecientes a los puntos cuyos tags se pasan como parámetros.'''
   tgNodA= preprocessor.getCad.getPnt(iPtA).getTagNode()
   tgNodB= preprocessor.getCad.getPnt(iPtB).getTagNode()
   colocaApoyoNodos(tgNodA,tgNodB,iElem,matKX,matKY,matKZ,matKTHX,matKTHY,matKTHZ)
