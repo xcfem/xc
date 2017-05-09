@@ -951,7 +951,7 @@ class GridModel(object):
           self.lPatterns[nbrset]= grid.setEntLstSurf(self.getPreprocessor(),self.conjSup[cs].lstSup,nbrset)
     return self.dicQuadSurf #???
 
-  def displayMesh(self,partToDisplay,caption= '',viewNm='XYZPos'):
+  def displayMesh(self,partToDisplay,caption= '',viewNm='XYZPos',defFScale=0.0):
     ''':returns: a graphical representation of the mesh
 
     :param partToDisplay: XC set of elements to be displayed
@@ -959,12 +959,17 @@ class GridModel(object):
     :param viewNm:        name of the view to use
            predefined view names: 'XYZPos','XNeg','XPos','YNeg','YPos',
            'ZNeg','ZPos'  (defaults to 'XYZPos')
+    :param defFScale: factor to apply to current displacement of nodes 
+              so that the display position of each node equals to
+              the initial position plus its displacement multiplied
+              by this factor. (Defaults to 0.0, i.e. display of 
+              initial/undeformed shape)
     '''
     defDisplay= vtk_grafico_ef.RecordDefDisplayEF()
-    defDisplay.grafico_mef(partToDisplay,caption,viewNm)
+    defDisplay.grafico_mef(partToDisplay,caption,viewNm,defFScale)
     return defDisplay
 
-  def displayLocalAxes(self,setToDisplay=None,vectorScale=1.0,viewNm="XYZPos",hCamFct=1.0,caption= '',fileName=None):
+  def displayLocalAxes(self,setToDisplay=None,vectorScale=1.0,viewNm="XYZPos",hCamFct=1.0,caption= '',fileName=None,defFScale=0.0):
     '''vector field display of the loads applied to the chosen set of elements in the load case passed as parameter
     
     :param setToDisplay:   set of elements to be displayed (defaults to total set)
@@ -974,6 +979,11 @@ class GridModel(object):
                         change perspective of isometric views (defaults to 1). Usual values 0.1 to 10
     :param fileName:       full name of the graphic file to generate. Defaults to `None`, in this case it returns a console output graphic.
     :param caption:        text to display in the graphic 
+    :param defFScale: factor to apply to current displacement of nodes 
+              so that the display position of each node equals to
+              the initial position plus its displacement multiplied
+              by this factor. (Defaults to 0.0, i.e. display of 
+              initial/undeformed shape)
     '''
     if(setToDisplay == None):
       setToDisplay=self.getPreprocessor().getSets.getSet('total')
@@ -986,12 +996,12 @@ class GridModel(object):
     vField.dumpLocalAxes(setToDisplay)
     defDisplay.viewName= viewNm
     defDisplay.hCamFct=hCamFct
-    defDisplay.defineEscenaMalla(None) 
+    defDisplay.defineEscenaMalla(None,defFScale) 
     vField.addToDisplay(defDisplay)
     defDisplay.displayScene(caption,fileName)
     return defDisplay
 
-  def displayLoad(self,setToDisplay=None,loadCaseNm='',unitsScale=1.0,vectorScale=1.0,multByElemArea=False,viewNm="XYZPos",hCamFct=1.0,caption= '',fileName=None):
+  def displayLoad(self,setToDisplay=None,loadCaseNm='',unitsScale=1.0,vectorScale=1.0,multByElemArea=False,viewNm="XYZPos",hCamFct=1.0,caption= '',fileName=None,defFScale=0.0):
     '''vector field display of the loads applied to the chosen set of elements in the load case passed as parameter
     
     :param setToDisplay:   set of elements to be displayed (defaults to total set)
@@ -1005,6 +1015,11 @@ class GridModel(object):
                         change perspective of isometric views (defaults to 1). Usual values 0.1 to 10
     :param fileName:       full name of the graphic file to generate. Defaults to ` None`, in this case it returns a console output graphic.
     :param caption:        text to display in the graphic 
+    :param defFScale: factor to apply to current displacement of nodes 
+                  so that the display position of each node equals to
+                  the initial position plus its displacement multiplied
+                  by this factor. (Defaults to 0.0, i.e. display of 
+                  initial/undeformed shape)
     '''
     if(setToDisplay == None):
       setToDisplay=self.getPreprocessor().getSets.getSet('total')
@@ -1018,7 +1033,7 @@ class GridModel(object):
     vField.dumpLoads(self.getPreprocessor())
     defDisplay.viewName= viewNm
     defDisplay.hCamFct=hCamFct
-    defDisplay.defineEscenaMalla(None) 
+    defDisplay.defineEscenaMalla(None,defFScale) 
     vField.addToDisplay(defDisplay)
     defDisplay.displayScene(caption,fileName)
     return defDisplay
@@ -1039,7 +1054,7 @@ class QuickGraphics(qg.QuickGraphics):
     super(QuickGraphics,self).__init__(model.getFEProblem())
 
 
-def displayFieldDirs1and2(limitStateLabel,argument,setDisp,component,fUnitConv,fileName,captionTexts,deform=False):
+def displayFieldDirs1and2(limitStateLabel,argument,setDisp,component,fUnitConv,fileName,captionTexts,defFScale=0.0):
   '''Display a field defined over bi-dimensional elements in its two directions.
 
   :param limitStateLabel: label that identifies the limit state.
@@ -1049,7 +1064,10 @@ def displayFieldDirs1and2(limitStateLabel,argument,setDisp,component,fUnitConv,f
   :param fUnitConv: unit conversion factor (i.e N->kN => fUnitConv= 1e-3).
   :param fileName: file name to store the image. If none -> window on screen.
   :param captionTexts: dictionary of caption texts. 
-  :param deform: =True for display of current/deformed shape (defaults
-                   to False, i.e. display of initial/undeformed shape)
+  :param defFScale: factor to apply to current displacement of nodes 
+              so that the display position of each node equals to
+              the initial position plus its displacement multiplied
+              by this factor. (Defaults to 0.0, i.e. display of 
+              initial/undeformed shape)
   '''
-  vtk_display_limit_state.displayFieldDirs1and2Base(limitStateLabel,argument,setDisp.elSet,setDisp.genDescr,setDisp.sectDescr,component,fUnitConv,fileName,captionTexts,deform)
+  vtk_display_limit_state.displayFieldDirs1and2Base(limitStateLabel,argument,setDisp.elSet,setDisp.genDescr,setDisp.sectDescr,component,fUnitConv,fileName,captionTexts,defFScale)

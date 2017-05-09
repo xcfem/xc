@@ -55,15 +55,21 @@ class LoadVectorField(vf.VectorField):
       count+= 1
     return count
 
-  def dumpNodalLoads(self,preprocessor,lp):
-    ''' Iterate over loaded nodes dumping its loads into the graphic.'''
+  def dumpNodalLoads(self,preprocessor,lp,defFScale):
+    ''' Iterate over loaded nodes dumping its loads into the graphic.
+
+    :param defFScale: factor to apply to current displacement of nodes 
+              so that the display position of each node equals to
+              the initial position plus its displacement multiplied
+              by this factor.    
+    '''
     lIter= lp.getNodalLoadIter
     nl= lIter.next()
     count= 0 
     while(nl):
       nTag= nl.getNodeTag
       node= preprocessor.getNodeLoader.getNode(nTag)
-      p= node.getInitialPos3d
+      p= node.getCurrentPos3d(defFScale)
       vLoad= nl.getForce
       vx= vLoad[0]; vy= vLoad[1]; vz= vLoad[2]
       self.data.insertNextPair(p.x,p.y,p.z,vx,vy,vz,self.fUnitConv,self.showPushing)
@@ -71,7 +77,7 @@ class LoadVectorField(vf.VectorField):
       count+= 1
     return count
 
-  def dumpLoads(self, preprocessor):
+  def dumpLoads(self, preprocessor,defFScale):
     preprocessor.resetLoadCase()
     loadPatterns= preprocessor.getLoadLoader.getLoadPatterns
     loadPatterns.addToDomain(self.lpName)
@@ -80,7 +86,7 @@ class LoadVectorField(vf.VectorField):
       #Iterate over loaded elements.
       count= self.dumpElementalLoads(preprocessor,lp)
       #Iterate over loaded nodes.
-      count+= self.dumpNodalLoads(preprocessor,lp)
+      count+= self.dumpNodalLoads(preprocessor,lp,defFScale)
       if(count==0):
         lmsg.warning('LoadVectorField.dumpLoads: no loads defined.')
       loadPatterns.removeFromDomain(self.lpName)

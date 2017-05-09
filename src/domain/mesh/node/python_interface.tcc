@@ -43,7 +43,7 @@ class_<XC::Node, XC::Node *, bases<XC::MeshComponent>, boost::noncopyable >("Nod
   .add_property("getInitialPos2d", &XC::Node::getInitialPosition2d,"Returns 2D initial position of node.")
   .add_property("getInitialPos3d", &XC::Node::getInitialPosition3d,"Returns 3D initial position of node.")
   .def("getCurrentPos2d", &XC::Node::getCurrentPosition2d,"Returns 2D current position of node scaled by a factor: initialPos+factor*currentDisplacement.")
-  .def("getCurrentPos3d", &XC::Node::getCurrentPosition3d,"Returns 3D current position of node scaled by a factor: initialPos+factor*currentDisplacement.")
+  .def("getCurrentPos3d", &XC::Node::getCurrentPosition3d,"\n""getCurrentPos3d(factor) \n""Return 3D current position of node scaled by a factor: initialPos+factor*currentDisplacement.")
   .add_property("getReaction", make_function( &XC::Node::getReaction, return_internal_reference<>() ))
   .add_property("getDisp", make_function( &XC::Node::getDisp, return_internal_reference<>() ))
   .add_property("getDispXYZ", &XC::Node::getDispXYZ)

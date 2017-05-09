@@ -2,11 +2,12 @@
 
 '''Graphic representation of fields over the mesh.'''
 
-__author__= "Luis C. Pérez Tato (LCPT)"
-__copyright__= "Copyright 2015 LCPT"
+__author__= "Luis C. Pérez Tato (LCPT) , Ana Ortega (AO_O) "
+__copyright__= "Copyright 2016, LCPT, AO_O"
 __license__= "GPL"
 __version__= "3.0"
-__email__= "l.pereztato@gmail.com"
+__email__= "l.pereztato@ciccp.es, ana.ortega@ciccp.es "
+
 
 import vtk
 from miscUtils import LogMessages as lmsg
@@ -68,12 +69,12 @@ class ExtrapolatedScalarField(ScalarField):
     super(ExtrapolatedScalarField,self).__init__(name,functionName,component,fUnitConv)
     self.xcSet= xcSet
 
-  def display(self,defDisplay,fName= None,caption= '',deform=False):
-    defDisplay.displayMesh(self.xcSet,self,None,fName,caption,deform)
+  def display(self,defDisplay,fName= None,caption= '',defFScale=0.0):
+    defDisplay.displayMesh(self.xcSet,self,None,fName,caption,defFScale)
     
-  def plot(self,defDisplay,fName= None,caption= ''):
+  def plot(self,defDisplay,fName= None,caption= '',defFScale=0.0):
     lmsg.warning('ExtrapolatedScalarField.plot is DEPRECATED use display.')
-    self.display(defDisplay,fName,caption,deform)
+    self.display(defDisplay,fName,caption,defFScale)
 
 class ExtrapolatedProperty(ExtrapolatedScalarField):
   '''Scalar field defined as property value at nodes.'''
@@ -83,9 +84,9 @@ class ExtrapolatedProperty(ExtrapolatedScalarField):
   def extrapolate(self):
     extrapolate_elem_attr.extrapolate_elem_function_attr(self.xcSet.getElements,self.name,"getProp", self.name)
 
-  def display(self,defDisplay,fName= None,caption= '',deform=False):
+  def display(self,defDisplay,fName= None,caption= '',defFScale=0.0):
     self.extrapolate()
-    defDisplay.displayMesh(self.xcSet,self,None,fName,caption,deform)
+    defDisplay.displayMesh(self.xcSet,self,None,fName,caption,defFScale)
   def plot(self,defDisplay,fName= None,caption= ''):
     lmsg.warning('ExtrapolatedProperty.plot is DEPRECATED use display.')
     self.display(defDisplay,fName,caption)

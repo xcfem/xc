@@ -179,7 +179,7 @@ class ColoredDiagram(vtk_lut_field.LUTField):
     self.creaColorScaleBar()
     recordDisplay.renderer.AddActor2D(self.scalarBar)
 
-  def agregaDatosADiagrama(self, elem,indxDiagrama,v0,v1,deform=False):
+  def agregaDatosADiagrama(self, elem,indxDiagrama,v0,v1,defFScale=0.0):
     ''' Appends to the diagram the values being passed as parameter.
 
                    ___----* value2
@@ -192,15 +192,14 @@ class ColoredDiagram(vtk_lut_field.LUTField):
        :param indxDiagrama: index-counter for the values to insert.
        :param v0: value at the start node.
        :param v1: value at the end node.
-       :param deform: =True for display of current/deformed shape (defaults
-                       to False, i.e. display of initial/undeformed shape) 
+       :param defFScale: factor to apply to current displacement of nodes 
+                  so that the display position of each node equals to
+                  the initial position plus its displacement multiplied
+                  by this factor. (Defaults to 0.0, i.e. display of 
+                  initial/undeformed shape)
     '''
-    if deform==True:
-      posNodo0= elem.getNodes[0].getInitialPos3d
-      posNodo1= elem.getNodes[1].getInitialPos3d
-    else:
-      posNodo0= elem.getNodes[0].getCurrentPos3d(1.0)
-      posNodo1= elem.getNodes[1].getCurrentPos3d(1.0)
+    posNodo0= elem.getNodes[0].getCurrentPos3d(defFScale)
+    posNodo1= elem.getNodes[1].getCurrentPos3d(defFScale)
     return self.creaTramoDiagrama(indxDiagrama,posNodo0,v0,posNodo1,v1)
 
 
