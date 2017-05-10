@@ -121,7 +121,6 @@ class QuickGraphics(object):
       n.setProp('propToDisp',n.getDisp[vCompDisp])
     field= Fields.ScalarField('propToDisp',"getProp",None,fConvUnits)
     defDisplay= self.getDisplay(vwName=viewName,hCamF= hCamFct)
-    print 'aqui 0', defFScale
     defDisplay.displayMesh(xcSet=self.xcSet,field=field,diagrams= None, fName=fileName,caption=self.loadCaseName+' '+itemToDisp+' '+unitDescription+' '+self.xcSet.name,defFScale=defFScale)
 
   def displayIntForc(self,itemToDisp='',setToDisplay=None,fConvUnits=1.0,unitDescription= '',viewName='XYZPos',hCamFct=1.0,fileName=None,defFScale=0.0):
@@ -230,7 +229,7 @@ class QuickGraphics(object):
     loadPatterns= preprocessor.getLoadLoader.getLoadPatterns
     loadPatterns.addToDomain(loadCaseName)
     defDisplay= self.getDisplay(vwName=viewName,hCamF= hCamFct)
-    defDisplay.setupGrid(self.xcSet)
+    grid= defDisplay.setupGrid(self.xcSet)
     defDisplay.defineEscenaMalla(None,defFScale)
     orNodalLBar='H'  #default orientation of scale bar for nodal loads
     # element loads

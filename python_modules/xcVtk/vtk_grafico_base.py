@@ -18,18 +18,18 @@ from miscUtils import LogMessages as lmsg
 
 
 class RecordDefGrid(object):
-  '''Provides the variables involved in the VTK grid representation
+  '''Provide the variables involved in the VTK grid representation
   
   :ivar xcSet:     set to be represented
   :ivar entToLabel:  entities to be labeled (defaults to "nodos")
-  :ivar cellType:    specifies the type of data cells (defaults to "nil"). Data cells are simple 
-                 topological elements like points, lines, polygons and tetrahedra of which 
-                 visualization data sets are composed.
-  :ivar uGrid:       unstructure grid (defaults to None). An unstructure grid is a concrete 
-                 implementation of a vtk data set; represents any combination of any cell
-                 types. This includes 0D (e.g. points), 1D (e.g., lines, polylines), 
-                 2D (e.g., triangles, polygons), and 3D (e.g., hexahedron, tetrahedron, polyhedron, etc.).
-  :ivar dispScale:   (defaults to 0.0)
+  :ivar cellType:    specifies the type of data cells (defaults to "nil"). 
+        Data cells are simple topological elements like points, lines, 
+        polygons and tetrahedra of which visualization data sets are composed.
+  :ivar uGrid: unstructure grid (defaults to None). An unstructure grid is a 
+        concrete implementation of a vtk data set; represents any combination 
+        of any cell types. This includes 0D (e.g. points), 1D (e.g., lines, 
+        polylines), 2D (e.g., triangles, polygons), and 3D (e.g., hexahedron, 
+        tetrahedron, polyhedron, etc.).
 
   '''
   def __init__(self):
@@ -37,7 +37,6 @@ class RecordDefGrid(object):
     self.entToLabel= "nodos"
     self.cellType= "nil"
     self.uGrid= None
-    self.dispScale= 0.0
 
   def getBND(self):
     ''' Returns the grid boundary'''
@@ -49,23 +48,24 @@ class RecordDefDisplay(object):
   ''' Provides de variables to define the output device.
   
   :ivar renderer:    specification of renderer. A renderer is an object that
-                 controls the rendering process for objects. Rendering is the 
-                 process of converting geometry, a specification for lights, and
-                 a camera view into an image. (defaults to None)
-  :ivar renWin:      rendering window (defaults to None). A rendering window is a window in a
-                 graphical user interface where renderers draw their images. 
-  :ivar windowWidth: resolution expresed in pixels in the width direction of the window 
-                 (defaults to 800)
-  :ivar windowHeight: resolution expresed in pixels in the height direction of the window 
-                 (defaults to 600)
-  :ivar viewName:    name of the view that contains the renderer (defaults to "XYZPos")
+        controls the rendering process for objects. Rendering is the 
+        process of converting geometry, a specification for lights, and
+        a camera view into an image. (defaults to None)
+  :ivar renWin:  rendering window (defaults to None). A rendering window is a 
+        window in a graphical user interface where renderers draw their images. 
+  :ivar windowWidth: resolution expresed in pixels in the width direction of 
+        the window (defaults to 800)
+  :ivar windowHeight: resolution expresed in pixels in the height direction of 
+        the window (defaults to 600)
+  :ivar viewName:    name of the view that contains the renderer 
+        (defaults to "XYZPos")
   :ivar zoom:        (defaults to 1.0)
   :ivar bgRComp:     red component (defaults to 0.65)
   :ivar bgGComp:     green component (defaults to 0.65)
   :ivar bgBComp:     blue component (defaults to 0.65)
   :ivar hCamFct:     factor that applies to the height of the camera position 
-                     in order to change perspective of isometric views 
-                     (defaults to 1, usual values 0.1 to 10)
+        in order to change perspective of isometric views 
+        (defaults to 1, usual values 0.1 to 10)
   '''
   def __init__(self):
     self.renderer= None

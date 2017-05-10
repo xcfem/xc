@@ -47,7 +47,7 @@ class RecordDefDisplayEF(vtk_grafico_base.RecordDefDisplay):
     elif(tipoRepr=="surface"):
       elemActor.GetProperty().SetRepresentationToSurface()
     else:
-      print "Representation type: '", tipoRepr, "' unknown."
+      lmsg.error("Representation type: '"+ tipoRepr+ "' unknown.")
     self.renderer.AddActor(elemActor)
     if(field):
       field.creaColorScaleBar()
@@ -96,19 +96,9 @@ class RecordDefDisplayEF(vtk_grafico_base.RecordDefDisplay):
       field.creaLookUpTable()      
     # Cargamos los nodos en vtk
     setNodos= eSet.getNodes
-    if(self.gridRecord.dispScale==0.0):
-      for n in setNodos:
-        posInit= n.getInitialPos3d
-        print 'aquí 3 init', posInit.x,posInit.y,posInit.z
-        pos= n.getCurrentPos3d(defFScale)
-        print 'aquí 3 scaled', pos.x,pos.y,pos.z
-        self.nodos.InsertPoint(n.getIdx,pos.x,pos.y,pos.z)
-    else:
-      print 'aquí 4', defFScale
-      posNodo= xc.Vector([0,0,0])
-      for n in setNodos:
-        posNodo= n.get3dCoo+self.gridRecord.dispScale*n.getDispXYZ
-        self.nodos.insertPoint(n.getIdx,posNodo[0],posNodo[1],posNodo[2])
+    for n in setNodos:
+      pos= n.getCurrentPos3d(defFScale)
+      self.nodos.InsertPoint(n.getIdx,pos.x,pos.y,pos.z)
     # Cargamos los elementos en vtk
     setElems= eSet.getElements
     for e in setElems:
@@ -137,7 +127,6 @@ class RecordDefDisplayEF(vtk_grafico_base.RecordDefDisplay):
               by this factor. (Defaults to 0.0, i.e. display of 
               initial/undeformed shape)
     '''
-    print 'aqui 2', defFScale
     self.VtkCargaMallaElem(field,defFScale)
     self.renderer= vtk.vtkRenderer()
     self.renderer.SetBackground(self.bgRComp,self.bgGComp,self.bgBComp)
@@ -186,7 +175,6 @@ class RecordDefDisplayEF(vtk_grafico_base.RecordDefDisplay):
               initial/undeformed shape)
     '''
     self.setupGrid(xcSet)
-    print 'aquí 1', defFScale
     self.defineEscenaMalla(field,defFScale)
     if(diagrams):
       for d in diagrams:
@@ -256,7 +244,7 @@ class RecordDefDisplayEF(vtk_grafico_base.RecordDefDisplay):
     for tag in eleTags:
       ele= preprocessor.getElementLoader.getElement(tag)
       actorName+= "%04d".format(tag) # Tag elemento.
-      print "displayElementUniformLoad not implemented."
+      lmsg.error('displayElementUniformLoad not implemented.')
       # puntos= ele.getPoints(3,1,1,True)
       # i= 0
       # for capa in puntos:
@@ -269,7 +257,7 @@ class RecordDefDisplayEF(vtk_grafico_base.RecordDefDisplay):
     loadPattern.addToDomain()
     eleLoadIter= loadPattern.getElementalLoadIter
     eleLoad= eleLoadIter.next()
-    print "displayElementalLoads not implemented."
+    lmsg.error('displayElementalLoads not implemented.')
     # while not(eleLoad is None):
     #   force= eleLoad.getGlobalForces()
     #   categoria= eleLoad.category
