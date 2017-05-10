@@ -1005,10 +1005,11 @@ double XC::Domain::getNodeDisp(int nodeTag, int dof,int &errorFlag)
 int XC::Domain::setMass(const XC::Matrix &mass, int nodeTag)
   { return mesh.setMass(mass,nodeTag); }
 
-//! @brief Asigna la excepción para comprobación de reacciones (ver Domain::checkNodalReactions).
+//! @brief Sets the exception for node reactions checking (see Domain::checkNodalReactions).
 void XC::Domain::setNodeReactionException(const int &n)
   { mesh.setNodeReactionException(n); }
 
+//! @brief Check that al free nodes have zero reaction.
 void XC::Domain::checkNodalReactions(const double &tol)
   { mesh.checkNodalReactions(tol); }
 

@@ -431,7 +431,7 @@ int XC::Spring::addInertiaLoadToUnbalance(const XC::Vector &accel)
     return 0;
   }
 
-//! @brief Returns the reacción of the element.
+//! @brief Returns the reaction of the element.
 const XC::Vector &XC::Spring::getResistingForce(void) const
   {
     // R= Ku - Pext
@@ -453,18 +453,18 @@ const XC::Vector &XC::Spring::getResistingForce(void) const
     return *theVector;
   }
 
-//! @brief Returns the reacción of the element incluyendo fuerzas de inercia.
+//! @brief Returns the reaction of the element including inertia forces.
 const XC::Vector &XC::Spring::getResistingForceIncInertia(void) const
   {
     this->getResistingForce();
 
-    const double M= getRho(); //Aqui rho es la masa concentrada.
+    const double M= getRho(); // concentrated mass.
     // now include the mass portion
     if(M!=0.0)
       {
 
-        const XC::Vector &accel1= theNodes[0]->getTrialAccel();
-        const XC::Vector &accel2= theNodes[1]->getTrialAccel();
+        const Vector &accel1= theNodes[0]->getTrialAccel();
+        const Vector &accel2= theNodes[1]->getTrialAccel();
 
         int numDOF2= numDOF/2;
         for(int i= 0;i<getNumDIM();i++)
@@ -488,7 +488,7 @@ const XC::Vector &XC::Spring::getResistingForceIncInertia(void) const
     return *theVector;
   }
 
-
+//! @brief Print spring data.
 void XC::Spring::Print(std::ostream &s, int flag)
   {
     // compute the strain and axial force in the member

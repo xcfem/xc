@@ -1084,12 +1084,11 @@ int XC::Mesh::setMass(const XC::Matrix &mass, int nodeTag)
     return theNode->setMass(mass);
   }
 
-//! @brief Asigna la excepción para comprobación de reacciones (ver Mesh::checkNodalReactions).
+//! @brief Assign the exception for reaction checking (see Mesh::checkNodalReactions).
 void XC::Mesh::setNodeReactionException(const int &n)
   { tagNodeCheckReactionException= n; }
 
-//! @brief Comprueba que los valores de las reacciones en los nodos sean correctos,
-//! esto es, que todos los nodos libres tienen reacción nula.
+//! @brief Checks that all free nodes have zero reactions.
 void XC::Mesh::checkNodalReactions(const double &tol)
   {
     Node *theNode= nullptr;
