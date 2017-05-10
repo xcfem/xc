@@ -1,7 +1,16 @@
 # -*- coding: utf-8 -*-
 
+'''Particular geometry organization, linked to a framework of spaced points, 
+usually referenced by their indices (i,j,k) that point to the global 
+coordinates (x,y,z).
 
-'''ijkGrid.py: model generation based on a grid of 3D positions.'''
+Generally, an ijkGrid contains the grid of points itself and all the 
+geometric entities (lines, surfaces, ...) attached to it. Dictionaries with 
+those entities, identified by specific names, are created, in order to 
+facilitate and accelerate their creation, search, grouping in sets, ...
+
+Several grids can coexist in a FE problem.
+'''
 
 __author__= "Ana Ortega (AO_O) and Luis C. Pérez Tato (LCPT)"
 __copyright__= "Copyright 2015, AO_O and LCPT"
@@ -13,21 +22,25 @@ import xc_base
 import geom
 import xc
 
-def gridSurfName(pt1,pt2,pt3,pt4):
-  return 's'+'%04.0f' % pt1 +'%04.0f' % pt2 +'%04.0f' % pt3 +'%04.0f' % pt4
-
-def gridLinName(pt1,pt2):
-  return 'l'+'%04.0f' % pt1 +'%04.0f' % pt2
 
 class IJKRange(object):
-  '''Defines a range of indexes i,j,k in the grid to be used select the region bounded by the coordinates associated with those indexes.
+  '''Range of indexes (i,j,k) in the 3D-grid that defines a region 
+  bounded by the coordinates associated with those indexes.
   
-  :ivar ijkMin: list with minimum value of indexes [minIindex,minJindex,minKindex]
-  :ivar ijkMax: list with maximum value of indexes [maxIindex,maxJindex,maxKindex]
+  :ivar ijkMin: tuple (or list) with minimum value of indexes 
+        (minIindex,minJindex,minKindex) that point to (xmin,ymin,zmin)
+  :ivar ijkMax: tuple (or list) with maximum value of indexes 
+        (maxIindex,maxJindex,maxKindex) that point to (xmax,ymax,zmax)
   '''
   def __init__(self,ijkMin,ijkMax):
-    self.ijkMin= ijkMin
-    self.ijkMax= ijkMax
+    if type(ijkMin)==list:
+      self.ijkMin=tuple(ijkMin)
+    else:
+      self.ijkMin= ijkMin
+    if type(ijkMax)==list:
+      self.ijkMax=tuple(ijkMax)
+    else:
+      self.ijkMax= ijkMax
   def getIMin(self):
     ''':returns: the value of the index I minimum in the range '''
     return self.ijkMin[0]
@@ -86,7 +99,7 @@ class moveRange(object):
   '''Applies a displacement to a range of grid points
   
   :ivar range: range of indexes in the grid 
-           e.g.: grid.IJKRange([minI,minJ,minK],[maxI,maxJ,maxK])
+           e.g.: grid.IJKRange((minI,minJ,minK),(maxI,maxJ,maxK))
   :ivar vDisp: list of displacements in global X, Y, Z directions
            e.g. [dispX,dispY,dispZ]
   '''
@@ -95,7 +108,26 @@ class moveRange(object):
     self.vDisp= vDisp
 
 class ijkGrid(object):
-  ''' Possible (or allowed) X,Y,Z positions for the model''' 
+  '''Particular geometry organization, linked to a framework of spaced points, 
+  usually referenced by their indices (i,j,k) that point to the global 
+  coordinates (x,y,z).
+
+  Generally, an ijkGrid contains the grid of points itself and all the 
+  geometric entities (lines, surfaces, ...) attached to it. Dictionaries with 
+  those entities, identified by specific names, are created, in order to 
+  facilitate and accelerate their creation, search, grouping in sets, ...
+
+  Several grids can coexist in a FE problem.
+
+  :ivar prep: preprocessor
+  :ivar dicLin: dictionary with all the lines linked to the grid. 
+        Each key is the name of a line, the value associated is the line 
+        itself.
+  :ivar dicQuadSurf: dictionary with all the surfaces linked to the grid. 
+        Each key is the name of a surface, the value associated is the surface 
+        itself.
+
+  '''
   def __init__(self,prep,xList,yList,zList):
     self.gridCoo= list()
     self.gridCoo.append(xList)
@@ -107,7 +139,9 @@ class ijkGrid(object):
     self.indices.dim(len(self.gridCoo[0]),len(self.gridCoo[1]),len(self.gridCoo[2]))
     self.pointCounter= 1
     self.prep.getCad.getSurfaces.defaultTag= 1
-
+    self.dicQuadSurf=dict()
+    self.dicLin=dict()
+    
   def lastXIndex(self):
     return len(self.gridCoo[0])-1
   def lastYIndex(self):
@@ -115,6 +149,19 @@ class ijkGrid(object):
   def lastZIndex(self):
     return len(self.gridCoo[2])-1
 
+  def getTagPntGrid(self,indPnt):
+    '''return the tag of the point at indPnt=(i,j,k) index of the grid
+
+    :param indPnt: grid indices that point to the global (X, Y, Z)  coordinates    '''
+    tagPto= self.indices.getPnt(indPnt[0]+1,indPnt[1]+1,indPnt[2]+1).tag
+    return tagPto
+
+  def gridSurfName(self,pt1,pt2,pt3,pt4):
+    return 's'+'%04.0f' % pt1 +'%04.0f' % pt2 +'%04.0f' % pt3 +'%04.0f' % pt4
+
+  def gridLinName(self,pt1,pt2):
+    return 'l'+'%04.0f' % pt1 +'%04.0f' % pt2
+  
   def generatePoints(self):
     '''Point generation.'''
     points= self.prep.getCad.getPoints
@@ -141,13 +188,6 @@ class ijkGrid(object):
             pt.getPos.y+= vDisp[1]
             pt.getPos.z+= vDisp[2]
              
-  def getTagPntGrid(self,indPnt):
-    ''':returns: the tag of the point at indPnt=(i,j,k) index of the grid
-
-    :param indPnt: grid indices that point to the global (X, Y, Z)  coordinates    
-    '''
-    tagPto= self.indices.getPnt(indPnt[0]+1,indPnt[1]+1,indPnt[2]+1).tag
-    return tagPto
 
   def newQuadGridSurface(self,ind4Pnt):
     '''Generate the quadrangle surface defined by the 4 vertex whose indices 
@@ -159,7 +199,7 @@ class ijkGrid(object):
     (pto1,pto2,pto3,pto4)=tuple([self.getTagPntGrid(ind4Pnt[i]) for i in range(4)])
     surfaces= self.prep.getCad.getSurfaces
     qs= surfaces.newQuadSurfacePts(pto1,pto2,pto3,pto4)
-    qs.name= gridSurfName(pto1,pto2,pto3,pto4)
+    qs.name= self.gridSurfName(pto1,pto2,pto3,pto4)
     qs.nDivI=1 #initialization values of number of divisions
     qs.nDivJ=1 
     return qs
@@ -173,7 +213,7 @@ class ijkGrid(object):
     :returns: the quadrangle surface
     '''
     (pto1,pto2,pto3,pto4)=tuple([self.getTagPntGrid(ind4Pnt[i]) for i in range(4)])
-    nameSurf= gridSurfName(pto1,pto2,pto3,pto4)
+    nameSurf= self.gridSurfName(pto1,pto2,pto3,pto4)
     return nameSurf
 
   def newGridLine(self,ind2Pnt):
@@ -187,21 +227,21 @@ class ijkGrid(object):
     (pto1,pto2)=tuple([self.getTagPntGrid(ind2Pnt[i]) for i in range(2)])
     lines= self.prep.getCad.getLines
     ln= lines.newLine(pto1,pto2)
-    ln.name= gridLinName(pto1,pto2)
+    ln.name= self.gridLinName(pto1,pto2)
     ln.nDiv=1 #initialization value
     return ln
 
 
-  def generateSurfaces(self,ijkRange,dicQuadSurf):
+  def generateSurfaces(self,ijkRange):
     '''generate the surfaces limited by a rectangle defined by the coordinates
-    that correspond to the positions in the grid 
-    ijkRange.ijkMin=[posXmin,posYmin,posZmin] y
-    ijkRange.ijkMax=[posXmax,posYmax,posZmax]. 
+    that correspond to the indices in the grid 
+    ijkRange.ijkMin=(indXmin,indYmin,indZmin) and
+    ijkRange.ijkMax=(indXmax,indYmax,indZmax). 
     Add those surfaces to the dictionary dicQuadSurf.
     '''
     retval= list()
-    (imin,jmin,kmin)=tuple(ijkRange.ijkMin)
-    (imax,jmax,kmax)=tuple(ijkRange.ijkMax)
+    (imin,jmin,kmin)=ijkRange.ijkMin
+    (imax,jmax,kmax)=ijkRange.ijkMax
     (i,j,k)=(imin,jmin,kmin)  #initial values
     if kmax== kmin:
         'surfaces in XY plane'
@@ -210,7 +250,7 @@ class ijkGrid(object):
                 indPtsQs=((i,j,k),(i+1,j,k),(i+1,j+1,k),(i,j+1,k))
                 a= self.newQuadGridSurface(indPtsQs)
                 retval.append(a)
-                dicQuadSurf[a.name]= a
+                self.dicQuadSurf[a.name]= a
     elif jmax== jmin:
         'surfaces in XZ plane'
         for i in range(imin,imax):
@@ -218,7 +258,7 @@ class ijkGrid(object):
                 indPtsQs=((i,j,k),(i,j,k+1),(i+1,j,k+1),(i+1,j,k))
                 a= self.newQuadGridSurface(indPtsQs)
                 retval.append(a)
-                dicQuadSurf[a.name]= a
+                self.dicQuadSurf[a.name]= a
     elif imax== imin:
         'surfaces in YZ plane'
         for j in range(jmin,jmax):
@@ -226,20 +266,19 @@ class ijkGrid(object):
                 indPtsQs=((i,j,k),(i,j+1,k),(i,j+1,k+1),(i,j,k+1))
                 a= self.newQuadGridSurface(indPtsQs)
                 retval.append(a)
-                dicQuadSurf[a.name]= a
+                self.dicQuadSurf[a.name]= a
     return retval
 
-  def generateLines(self,ijkRange,dicLin): 
+  def generateLines(self,ijkRange): 
     '''generates the lines in an axis parallel to one of the global axes. The function also adds
     the generated lines to the dictionary `dicLin={line_id: xc_line, ...}`
 
     :param ijkRange: range where lines are included (only one coordinate varies)
-    :param dicLin: dictionary of lines `{line_id: xc_line, ...}`   
     '''
     retval= list()
     lines= self.prep.getCad.getLines
-    (imin,jmin,kmin)=tuple(ijkRange.ijkMin)
-    (imax,jmax,kmax)=tuple(ijkRange.ijkMax)
+    (imin,jmin,kmin)=ijkRange.ijkMin
+    (imax,jmax,kmax)=ijkRange.ijkMax
     (i,j,k)=(imin,jmin,kmin)  #initial values
     if jmax==jmin and kmax==kmin :
         'line parallel to X-axis'
@@ -247,31 +286,33 @@ class ijkGrid(object):
             indPntsLn=((i,j,k),(i+1,j,k))
             l=self.newGridLine(indPntsLn)
             retval.append(l)
-            dicLin[l.name]=l
+            self.dicLin[l.name]=l
     elif imax==imin and kmax==kmin :
         'line parallel to Y-axis'
         for j in range(jmin,jmax):
             indPntsLn=((i,j,k),(i,j+1,k))
             l=self.newGridLine(indPntsLn)
             retval.append(l)
-            dicLin[l.name]=l
+            self.dicLin[l.name]=l
     elif imax==imin and jmax==jmin :
         'line parallel to Z-axis'
         for k in range(kmin,kmax):
             indPntsLn=((i,j,k),(i,j,k+1))
             l=self.newGridLine(indPntsLn)
             retval.append(l)
-            dicLin[l.name]=l
+            self.dicLin[l.name]=l
     return retval
 
-  def getSetInRange(self,ijkRange,dicQuadSurf,nmbrSet):
-    'devuelve el set de entidades (surfaced and all entities related to them)'
-    'contenidas en un rectángulo comprendido entre las coordenadas'
-    'que corresponden a las posiciones en la rejilla ijkRange.ijkMin=[posXmin,posYmin,posZmin] y'
-    'ijkRange.ijkMax=[posXmax,posYmax,posZmax]'
+  def getSetInRange(self,ijkRange,nmbrSet):
+    '''return the set of entities (surfaces and all lines, points, elements, 
+    nodes, ... associated with them) in a region limited by the coordinates
+    that correspond to the indices in the grid 
+    ijkRange.ijkMin=(indXmin,indYmin,indZmin) and
+    ijkRange.ijkMax=(indXmax,indYmax,indZmax). 
+    '''
     retval= self.prep.getSets.defSet(nmbrSet)
-    (imin,jmin,kmin)=tuple(ijkRange.ijkMin)
-    (imax,jmax,kmax)=tuple(ijkRange.ijkMax)
+    (imin,jmin,kmin)=ijkRange.ijkMin
+    (imax,jmax,kmax)=ijkRange.ijkMax
     (i,j,k)=(imin,jmin,kmin)
     if kmax== kmin:
         'surfaces in XY plane'
@@ -279,24 +320,24 @@ class ijkGrid(object):
             for j in range(jmin,jmax):
                 indPtsQs=((i,j,k),(i+1,j,k),(i+1,j+1,k),(i,j+1,k))
                 nameSurf= self.getNameQuadGridSurface(indPtsQs)
-                if nameSurf in dicQuadSurf:
-                    retval.getSurfaces.append(dicQuadSurf[nameSurf])
+                if nameSurf in self.dicQuadSurf:
+                    retval.getSurfaces.append(self.dicQuadSurf[nameSurf])
     elif jmax== jmin:
         'surfaces in XZ plane'
         for i in range(imin,imax):
             for k in range(kmin,kmax):
                 indPtsQs=((i,j,k),(i,j,k+1),(i+1,j,k+1),(i+1,j,k))
                 nameSurf= self.getNameQuadGridSurface(indPtsQs)
-                if nameSurf in dicQuadSurf:
-                    retval.getSurfaces.append(dicQuadSurf[nameSurf])
+                if nameSurf in self.dicQuadSurf:
+                    retval.getSurfaces.append(self.dicQuadSurf[nameSurf])
     elif imax== imin:
         'surfaces in YZ plane'
         for j in range(jmin,jmax):
             for k in range(kmin,kmax):
                 indPtsQs=((i,j,k),(i,j+1,k),(i,j+1,k+1),(i,j,k+1))
                 nameSurf= self.getNameQuadGridSurface(indPtsQs)
-                if nameSurf in dicQuadSurf:
-                    retval.getSurfaces.append(dicQuadSurf[nameSurf])
+                if nameSurf in self.dicQuadSurf:
+                    retval.getSurfaces.append(self.dicQuadSurf[nameSurf])
     retval.fillDownwards()    
     return retval
 
@@ -310,8 +351,8 @@ class ijkGrid(object):
 
     retval=[]
     
-    (imin,jmin,kmin)=tuple(ijkRange.ijkMin)
-    (imax,jmax,kmax)=tuple(ijkRange.ijkMax)
+    (imin,jmin,kmin)=ijkRange.ijkMin
+    (imax,jmax,kmax)=ijkRange.ijkMax
 
     'Lines parallel to X axis'
     for k in range(kmin,kmax+1):
@@ -345,15 +386,15 @@ class ijkGrid(object):
 
   def getSetPntRange(self,ijkRange,setName):
     '''return the set of points in a 3D grid-region limited by 
-    ijkRange.ijkMin=[posXmin,posYmin,posZmin] and
-    ijkRange.ijkMax=[posXmax,posYmax,posZmax]
+    ijkRange.ijkMin=(indXmin,indYmin,indZmin) and
+    ijkRange.ijkMax=(indXmax,indYmax,indZmax)
     
     :param ijkRange: range for the search
     :param dicPnt: dictionary of points
     :param setName: name of the new set of points
     '''
-    (imin,jmin,kmin)=tuple(ijkRange.ijkMin)
-    (imax,jmax,kmax)=tuple(ijkRange.ijkMax)
+    (imin,jmin,kmin)=ijkRange.ijkMin
+    (imax,jmax,kmax)=ijkRange.ijkMax
     lstTagPnt=[elf.getTagPntGrid(indPnt=(i,j,k)) for i in range(imin,imax+1) for j in range(jmin,jmax+1) for k in range(kmin,kmax+1)] #list of point tags to include in the set
     points= self.prep.getCad.getPoints
     retval= self.prep.getSets.defSet(setName)
@@ -363,8 +404,8 @@ class ijkGrid(object):
       pntsSet.append(pnt)
     return retval
  
-  def appendLoadInRangeToCurrentLoadPattern(self,ijkRange,dicQuadSurf,nmbrSet,loadVector):
-    s= self.getSetInRange(ijkRange,dicQuadSurf,nmbrSet)
+  def appendLoadInRangeToCurrentLoadPattern(self,ijkRange,nmbrSet,loadVector):
+    s= self.getSetInRange(ijkRange,nmbrSet)
     sElem=s.getElements
     for e in sElem:
       #print e.tag
@@ -381,8 +422,8 @@ class ijkGrid(object):
           e.vector3dUniformLoadGlobal(loadVector)
         
 
-  def appendEarthPressureToCurrentLoadPattern(self,ijkRange,dicQuadSurf,nmbrSet,earthPressLoadressure):
-    s= self.getSetInRange(ijkRange,dicQuadSurf,nmbrSet)
+  def appendEarthPressureToCurrentLoadPattern(self,ijkRange,nmbrSet,earthPressLoadressure):
+    s= self.getSetInRange(ijkRange,nmbrSet)
     sElem=s.getElements
     for e in sElem:
       zElem=e.getCooCentroid(False)[2]
