@@ -135,7 +135,7 @@ const XC::Matrix &XC::Beam3dPointLoad::getLocalMoments(void) const
 const XC::Matrix &XC::Beam3dPointLoad::getAppliedSectionForces(const double &L,const XC::Matrix &xi,const double &loadFactor) const
   {
     const size_t nSections= xi.noCols();
-    static Matrix retval(5,nSections); //Sólo se ejecuta una vez.
+    static Matrix retval(5,nSections); //Executed once only.
     retval.resize(5,nSections);
     retval.Zero();
     const double Py= py()*loadFactor;
@@ -146,10 +146,10 @@ const XC::Matrix &XC::Beam3dPointLoad::getAppliedSectionForces(const double &L,c
     if(aOverL > 0.0 && aOverL < 1.0)
       {
         const double a= aOverL*L;
-        const double Vy2 = Py*aOverL; //Reacción y en extremo frontal.
-        const double Vy1 = Py-Vy2; //Reacción y en extremo dorsal.
-        const double Vz2 = Pz*aOverL; //Reacción z en extremo frontal.
-        const double Vz1 = Pz-Vz2; //Reacción z en extremo dorsal.
+        const double Vy2 = Py*aOverL; //Y reaction at front end.
+        const double Vy1 = Py-Vy2; //Y reaction at back end.
+        const double Vz2 = Pz*aOverL; //Z reaction at front end.
+        const double Vz1 = Pz-Vz2; //Z reaction at back end.
     
     
         // Accumulate applied section forces due to element loads
