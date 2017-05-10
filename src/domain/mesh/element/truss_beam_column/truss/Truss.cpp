@@ -253,30 +253,57 @@ void XC::Truss::setDomain(Domain *theDomain)
       ptrCableMaterial->setLength(L);
   }
 
-//! @brief Commits trusst state.
+//! @brief Commits truss state.
+//!
+//! Return the result of invoking commitState()
+//! on the base class and on it's associated
+//! UniaxialMaterial object.
 int XC::Truss::commitState()
   {
     int retVal = 0;
     // call element commitState to do any base class stuff
-    if((retVal = this->XC::TrussBase::commitState()) != 0)
-      { std::cerr << "XC::Truss::commitState () - failed in base class"; }
+    if((retVal = this->TrussBase::commitState()) != 0)
+      std::cerr << nombre_clase() << "::" << __FUNCTION__
+		<< "; failed in base class";
     retVal = theMaterial->commitState();
     return retVal;
   }
 
 //! @brief Returns to the last commited state.
+//!
+//! Return the result of invoking revertToLastCommit()
+//! on it's base class an on it's associated UniaxialMaterial object.
 int XC::Truss::revertToLastCommit()
-  { return theMaterial->revertToLastCommit(); }
+  {
+    int retVal= 0;
+    // DONT call element revertToLastCommit because is a pure virtual method.
+    // if((retVal = this->TrussBase::revertToLastCommit()) != 0)
+    //   std::cerr << nombre_clase() << "::" << __FUNCTION__
+    // 		<< "; failed in base class";
+    retVal = theMaterial->revertToLastCommit();
+    return retVal;
+  }
 
-//! @brief Returns the initial state.
+//! @brief Returns to the initial state.
+//!
+//! Return the result of invoking revertToStart()
+//! on it's base class an on it's associated UniaxialMaterial object.
 int XC::Truss::revertToStart()
-  { return theMaterial->revertToStart(); }
+  {
+    int retVal= 0;
+    // call element revertToLastCommit to do any base class stuff
+    if((retVal = this->TrussBase::revertToStart()) != 0)
+      std::cerr << nombre_clase() << "::" << __FUNCTION__
+		<< "; failed in base class";
+    retVal = theMaterial->revertToStart();
+    return retVal;
+  }
 
 //! @brief Computes current strain from the trial displacements of the nodes.
 int XC::Truss::update(void)
   {
-    double strain = this->computeCurrentStrain();
-    double rate = this->computeCurrentStrainRate();
+    const double strain= this->computeCurrentStrain();
+    const double rate= this->computeCurrentStrainRate();
     return theMaterial->setTrialStrain(strain, rate);
   }
 

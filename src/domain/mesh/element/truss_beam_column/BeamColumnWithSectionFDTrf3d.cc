@@ -164,8 +164,11 @@ double XC::BeamColumnWithSectionFDTrf3d::getWeakAxisAngle(const size_t &i) const
   }
 
 //! @brief Returns i-th cross section strong axis direction vector expressed in global coordinates.
-const XC::Vector &XC::BeamColumnWithSectionFDTrf3d::getVDirStrongAxisGlobalCoord(const size_t &i) const
+const XC::Vector &XC::BeamColumnWithSectionFDTrf3d::getVDirStrongAxisGlobalCoord(const size_t &i, bool initialGeometry) const
   {
+    if(!initialGeometry)
+      std::cerr << nombre_clase() << "::" << __FUNCTION__
+                << "; not implemented for deformed geometry." << std::endl;
     const CrdTransf *ct= checkCoordTransf();
     if(ct)
       {
@@ -180,8 +183,11 @@ const XC::Vector &XC::BeamColumnWithSectionFDTrf3d::getVDirStrongAxisGlobalCoord
   }
 
 //! @brief Returns i-th cross section weak axis direction vector expressed in global coordinates.
-const XC::Vector &XC::BeamColumnWithSectionFDTrf3d::getVDirWeakAxisGlobalCoord(const size_t &i) const
+const XC::Vector &XC::BeamColumnWithSectionFDTrf3d::getVDirWeakAxisGlobalCoord(const size_t &i, bool initialGeometry) const
   {
+    if(!initialGeometry)
+      std::cerr << nombre_clase() << "::" << __FUNCTION__
+                << "; not implemented for deformed geometry." << std::endl;
     const CrdTransf *ct= checkCoordTransf();
     if(ct)
       {

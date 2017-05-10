@@ -37,7 +37,8 @@ class InternalForceDiagram(cd.ColoredDiagram):
        :param elem: element to deal with.
        :param component: component to represent:
     '''
-    elemVDir= elem.getVDirWeakAxisGlobalCoord() # default values.
+    # default values.
+    elemVDir= elem.getVDirWeakAxisGlobalCoord(True) #initialGeometry= True
     value1= 0.0
     value2= 0.0
     if(self.component == 'N'):

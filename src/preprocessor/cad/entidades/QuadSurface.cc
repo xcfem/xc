@@ -371,6 +371,8 @@ MatrizPos3d XC::QuadSurface::get_posiciones(void) const
     return retval;
   }
 
+//! @brief Returns a vector int the direction of the local
+//! X axis.
 Vector3d XC::QuadSurface::getIVector(void) const
   {
     const Pos3d p1= GetVertice(1)->GetPos();
@@ -381,6 +383,8 @@ Vector3d XC::QuadSurface::getIVector(void) const
     return retval;
   }
 
+//! @brief Returns a vector int the direction of the local
+//! Y axis.
 Vector3d XC::QuadSurface::getJVector(void) const
   {
     const Pos3d p1= GetVertice(1)->GetPos();
@@ -391,6 +395,8 @@ Vector3d XC::QuadSurface::getJVector(void) const
     return retval;
   }
 
+//! @brief Returns a vector int the direction of the local
+//! Z axis.
 Vector3d XC::QuadSurface::getKVector(void) const
   {
     const Vector3d vI= getIVector();

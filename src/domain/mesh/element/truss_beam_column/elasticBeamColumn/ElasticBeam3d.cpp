@@ -576,8 +576,11 @@ const XC::Vector &XC::ElasticBeam3d::getResistingForce(void) const
 
 //! @brief Returns the direction vector of element strong axis
 //! expressed in the global coordinate system.
-const XC::Vector &XC::ElasticBeam3d::getVDirStrongAxisGlobalCoord(void) const
+const XC::Vector &XC::ElasticBeam3d::getVDirStrongAxisGlobalCoord(bool initialGeometry) const
   {
+    if(!initialGeometry)
+      std::cerr << nombre_clase() << "::" << __FUNCTION__
+                << "; not implemented for deformed geometry." << std::endl;
     if(theCoordTransf)
       {
         const Vector eF= getVDirStrongAxisLocalCoord();
@@ -585,7 +588,8 @@ const XC::Vector &XC::ElasticBeam3d::getVDirStrongAxisGlobalCoord(void) const
       }
     else
       {
-        std::cerr << "ElasticBeam3d::getVDirStrongAxisGlobalCoord; no se ha asignado una coordinate transformation."
+        std::cerr << nombre_clase() << "::" << __FUNCTION__
+		  << "; coordinate transformation not defined."
                   << std::endl;
         return P;
       }
@@ -593,8 +597,11 @@ const XC::Vector &XC::ElasticBeam3d::getVDirStrongAxisGlobalCoord(void) const
 
 //! @brief Returns the direction vector of element weak axis
 //! expressed in the global coordinate system.
-const XC::Vector &XC::ElasticBeam3d::getVDirWeakAxisGlobalCoord(void) const
+const XC::Vector &XC::ElasticBeam3d::getVDirWeakAxisGlobalCoord(bool initialGeometry) const
   {
+    if(!initialGeometry)
+      std::cerr << nombre_clase() << "::" << __FUNCTION__
+                << "; not implemented for deformed geometry." << std::endl;
     if(theCoordTransf)
       {
         const Vector eD= getVDirWeakAxisLocalCoord();
@@ -602,7 +609,8 @@ const XC::Vector &XC::ElasticBeam3d::getVDirWeakAxisGlobalCoord(void) const
       }
     else
       {
-        std::cerr << "ElasticBeam3d::getVDirWeakAxisGlobalCoord; no se ha asignado una coordinate transformation."
+        std::cerr << nombre_clase() << "::" << __FUNCTION__
+		  << "; coordinate transformation not defined."
                   << std::endl;
         return P;
       }

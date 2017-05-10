@@ -56,8 +56,8 @@ beam3d= elementos.newElement("elastic_beam_3d",xc.ID([1,2]));
 
 
 angSeccion= 0
-fuerte= beam3d.getVDirStrongAxisGlobalCoord()
-debil= beam3d.getVDirWeakAxisGlobalCoord()
+fuerte= beam3d.getVDirStrongAxisGlobalCoord(True) # initialGeometry= True
+debil= beam3d.getVDirWeakAxisGlobalCoord(True) # initialGeometry= True
 angSeccion= beam3d.getStrongAxisAngle()
 ratio1= ((debil[0])**2+(debil[2])**2)
 ratio2= ((fuerte[0])**2+(fuerte[1])**2)

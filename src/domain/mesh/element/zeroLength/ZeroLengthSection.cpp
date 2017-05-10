@@ -396,9 +396,9 @@ double XC::ZeroLengthSection::getWeakAxisAngle(void) const
 
 //! @brief Returns the direction vector of element strong axis
 //! expressed in the global coordinate system.
-const XC::Vector &XC::ZeroLengthSection::getVDirStrongAxisGlobalCoord(void) const
+const XC::Vector &XC::ZeroLengthSection::getVDirStrongAxisGlobalCoord(bool initialGeometry) const
   {
-    const SisCooRect3d3d sis_coo= getSisCoo();
+    const SisCooRect3d3d sis_coo= getSisCoo(initialGeometry);
     const Vector eF= getVDirStrongAxisLocalCoord();
     const Vector3d v= sis_coo.GetCooGlobales(Vector3d(eF[0],eF[1],eF[2]));
     static Vector retval(3);
@@ -408,9 +408,9 @@ const XC::Vector &XC::ZeroLengthSection::getVDirStrongAxisGlobalCoord(void) cons
 
 //! @brief Returns the direction vector of element weak axis
 //! expressed in the global coordinate system.
-const XC::Vector &XC::ZeroLengthSection::getVDirWeakAxisGlobalCoord(void) const
+const XC::Vector &XC::ZeroLengthSection::getVDirWeakAxisGlobalCoord(bool initialGeometry) const
   {
-    const SisCooRect3d3d sis_coo= getSisCoo();
+    const SisCooRect3d3d sis_coo= getSisCoo(initialGeometry);
     const Vector eD= getVDirWeakAxisLocalCoord();
     const Vector3d v= sis_coo.GetCooGlobales(Vector3d(eD[0],eD[1],eD[2]));
     static Vector retval(3);

@@ -86,8 +86,8 @@ class BeamColumnWithSectionFDTrf3d: public BeamColumnWithSectionFD
     Vector getVDirWeakAxisLocalCoord(const size_t &i) const;
     double getStrongAxisAngle(const size_t &i) const;
     double getWeakAxisAngle(const size_t &i) const;
-    const Vector &getVDirStrongAxisGlobalCoord(const size_t &i) const;
-    const Vector &getVDirWeakAxisGlobalCoord(const size_t &i) const;
+    const Vector &getVDirStrongAxisGlobalCoord(const size_t &i, bool initialGeometry) const;
+    const Vector &getVDirWeakAxisGlobalCoord(const size_t &i, bool initialGeometry) const;
   };
 } // end of XC namespace
 
