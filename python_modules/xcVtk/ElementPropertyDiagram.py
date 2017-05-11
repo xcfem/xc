@@ -45,22 +45,22 @@ class ElementPropertyDiagram(cd.ColoredDiagram):
     elems= eSet.getElements
     if(self.propertyName=='FCTNCP'):
       for e in elems:
-        self.vDir= e.getVDirWeakAxisGlobalCoord()
+        self.vDir= e.getVDirWeakAxisGlobalCoord(True) #initialGeometry= True
         values= e.getProp(self.propertyName) # [back node value, front node value]
         indxDiagrama= self.agregaDatosADiagrama(e,indxDiagrama,values[0],values[1],defFScale)      
     elif(self.propertyName=='FCVCP'):
       for e in elems:
-        self.vDir= e.getVDirWeakAxisGlobalCoord()
+        self.vDir= e.getVDirWeakAxisGlobalCoord(True) #initialGeometry= True
         values= e.getProp(self.propertyName) # [back node value, front node value]
         indxDiagrama= self.agregaDatosADiagrama(e,indxDiagrama,values[0],values[1],defFScale)      
     elif(self.propertyName=='N+'):
       for e in elems:
-        self.vDir= e.getVDirWeakAxisGlobalCoord()
+        self.vDir= e.getVDirWeakAxisGlobalCoord(True) #initialGeometry= True
         values= e.getProp(self.propertyName) # [back node value, front node value]
         indxDiagrama= self.agregaDatosADiagrama(e,indxDiagrama,values[0],values[1],defFScale)      
     elif(self.propertyName=='N-'):
       for e in elems:
-        self.vDir= e.getVDirWeakAxisGlobalCoord()
+        self.vDir= e.getVDirWeakAxisGlobalCoord(True) #initialGeometry= True
         values= e.getProp(self.propertyName) # [back node value, front node value]
         indxDiagrama= self.agregaDatosADiagrama(e,indxDiagrama,values[0],values[1],defFScale)      
     elif(self.propertyName=='My+'):
@@ -106,7 +106,7 @@ class ElementPropertyDiagram(cd.ColoredDiagram):
     else:
       extrapolate_elem_attr.extrapolate_elem_function_attr(elems,self.propertyName,"getProp", self.propertyName)
       for e in elems:
-        self.vDir= e.getVDirWeakAxisGlobalCoord()
+        self.vDir= e.getVDirWeakAxisGlobalCoord(true) #initialGeometry= True
         v0= e.getNodes[0].getProp(self.propertyName)
         v1= e.getNodes[1].getProp(self.propertyName)
         indxDiagrama= self.agregaDatosADiagrama(e,indxDiagrama,v0,v1,defFScale)
