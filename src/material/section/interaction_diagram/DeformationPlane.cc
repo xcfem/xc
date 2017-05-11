@@ -171,7 +171,7 @@ Recta2d XC::DeformationPlane::getFibraNeutra(void)const
   }
 
 
-//! @brief Returns (if possible) un punto en el que las tensiones son de tracción.
+//! @brief Returns (if possible) a pont in the tensioned side of the cross-section.
 Pos2d XC::DeformationPlane::getPuntoSemiplanoTracciones(void) const
   {
     Pos2d retval(0,0);

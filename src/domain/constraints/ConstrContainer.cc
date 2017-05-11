@@ -916,14 +916,15 @@ int XC::ConstrContainer::recvLPatternsTags(const int &posFlag,const int &posDbTa
                         if(verborrea>3)
                           {
                             const MapLoadPatterns &casos= loadLoader.getLoadPatterns();
-	                    std::cerr << "ConstrContainer::recvLPatternsTags; no se pudo agregar la acción: '"
+	                    std::cerr << nombre_clase() << "::" << __FUNCTION__
+			              << "; could not add load pattern: '"
                                       << casos.getNombreLoadPattern(load)
-                                      << "' de tag: " << load->getTag() << std::endl;
+                                      << "' with tag: " << load->getTag() << std::endl;
                           }
                       }
                   }
                 else
-	          std::cerr << "ConstrContainer::recvLPatternsTags;"
+	          std::cerr << nombre_clase() << "::" << __FUNCTION__
 		            << " load with tag: " << loadPatternsTags[i]
 			    << "not found." << std::endl;
               }

@@ -59,7 +59,8 @@ XC::SFreedom_Constraint *XC::ConstraintLoader::addSFreedom_Constraint(const int 
         getPreprocessor()->UpdateSets(sp);
       }
     else
-      std::cerr << "ConstraintLoader::addSFreedom_Constraint; se produjo un error al crear la coacción." << std::endl;
+      std::cerr << nombre_clase() << "::" << __FUNCTION__
+	        << "; could not create constraint." << std::endl;
     return sp;    
   }
 
@@ -74,7 +75,8 @@ XC::SFreedom_Constraint *XC::ConstraintLoader::addSFreedom_Constraint(const int 
         getPreprocessor()->UpdateSets(sp);
       }
     else
-      std::cerr << "ConstraintLoader::addSFreedom_Constraint; se produjo un error al crear la coacción." << std::endl;
+      std::cerr << nombre_clase() << "::" << __FUNCTION__
+	        << "; could not create constraint." << std::endl;
     return sp;    
   }
 
@@ -93,7 +95,8 @@ XC::MFreedom_Constraint *XC::ConstraintLoader::newMPConstraint(const int &master
         getPreprocessor()->UpdateSets(mp);
       }
     else
-      std::cerr << "ConstraintLoader::newMPConstraint; se produjo un error al crear la coacción." << std::endl;
+      std::cerr << nombre_clase() << "::" << __FUNCTION__
+	        << "; could not create constraint." << std::endl;
     return mp;
   }
 
@@ -113,7 +116,8 @@ XC::MFreedom_Constraint *XC::ConstraintLoader::newEqualDOF(const int &masterNode
         getPreprocessor()->UpdateSets(mp);
       }
     else
-      std::cerr << "ConstraintLoader::addMFreedom_Constraint; se produjo un error al crear la coacción." << std::endl;
+      std::cerr << nombre_clase() << "::" << __FUNCTION__
+	        << "; could not create constraint." << std::endl;
     return mp;
   }
 
@@ -128,7 +132,8 @@ XC::MFreedom_Constraint *XC::ConstraintLoader::newRigidBeam(const int &masterNod
         getPreprocessor()->UpdateSets(mp);
       }
     else
-      std::cerr << "ConstraintLoader::newRigidBeam; se produjo un error al crear la coacción." << std::endl;
+      std::cerr << nombre_clase() << "::" << __FUNCTION__
+	        << "; could not create constraint." << std::endl;
     return mp;
   }
 
@@ -143,7 +148,8 @@ XC::MFreedom_Constraint *XC::ConstraintLoader::newRigidRod(const int &masterNode
         getPreprocessor()->UpdateSets(mp);
       }
     else
-      std::cerr << "ConstraintLoader::newRigidRod; se produjo un error al crear la coacción." << std::endl;
+      std::cerr << nombre_clase() << "::" << __FUNCTION__
+	        << "; could not create constraint." << std::endl;
     return mp;
   }
 
@@ -158,7 +164,8 @@ XC::MRMFreedom_Constraint *XC::ConstraintLoader::newMRMPConstraint(const ID &ret
         getPreprocessor()->UpdateSets(mrmp);
       }
     else
-      std::cerr << "ConstraintLoader::newMPConstraint; se produjo un error al crear la coacción." << std::endl;
+      std::cerr << nombre_clase() << "::" << __FUNCTION__
+	        << "; could not create constraint." << std::endl;
     return mrmp;
   }
 
@@ -172,17 +179,19 @@ XC::MRMFreedom_Constraint *XC::ConstraintLoader::newGlueNodeToElement(const Node
         getPreprocessor()->UpdateSets(mrmp);
       }
     else
-      std::cerr << "ConstraintLoader::newGlueNodeToElement; se produjo un error al crear la coacción." << std::endl;
+      std::cerr << nombre_clase() << "::" << __FUNCTION__
+	        << "; could not create constraint." << std::endl;
     return mrmp;
   }
 
 
-//! @brief Elimina la coacción del domain.
+//! @brief Removes the constraint from domain.
 void XC::ConstraintLoader::removeSPConstraint(const int &tagC)
   {
     bool sp= getDomain()->removeSFreedom_Constraint(tagC);
     if(!sp)
-      std::cerr << "ConstraintLoader::removeSPConstraint; se produjo un error al borrar la coacción." << std::endl;
+      std::cerr << nombre_clase() << "::" << __FUNCTION__
+	        << "; could not remove constraint." << std::endl;
   }
 
 XC::ConstraintLoader::~ConstraintLoader(void)
