@@ -29,9 +29,9 @@ class_<XC::Information, boost::noncopyable >("Information", no_init);
 class_<XC::ParticlePos3d>("ParticlePos3d")
   .def(init<Pos2d>())
   .def(init<Pos3d>())
-  .add_property("r", make_function( &XC::ParticlePos3d::r_coordinate, return_value_policy<return_by_value>()), &XC::ParticlePos3d::set_r_coordinate, "Returns r coordinate.")
-  .add_property("s", make_function( &XC::ParticlePos3d::s_coordinate, return_value_policy<return_by_value>()), &XC::ParticlePos3d::set_s_coordinate, "Returns s coordinate.")
-  .add_property("t", make_function( &XC::ParticlePos3d::t_coordinate, return_value_policy<return_by_value>()), &XC::ParticlePos3d::set_t_coordinate, "Returns t coordinate.")
+  .add_property("r", make_function( &XC::ParticlePos3d::r_coordinate, return_value_policy<return_by_value>()), &XC::ParticlePos3d::set_r_coordinate, "Return r coordinate.")
+  .add_property("s", make_function( &XC::ParticlePos3d::s_coordinate, return_value_policy<return_by_value>()), &XC::ParticlePos3d::set_s_coordinate, "Return s coordinate.")
+  .add_property("t", make_function( &XC::ParticlePos3d::t_coordinate, return_value_policy<return_by_value>()), &XC::ParticlePos3d::set_t_coordinate, "Return t coordinate.")
   .def(self_ns::str(self_ns::self))
   ;
 
@@ -47,11 +47,11 @@ class_<vector_ptr_nodes, boost::noncopyable>("vector_ptr_nodes")
 
 XC::Node *(XC::NodePtrs::*getNearestNodePtr)(const Pos3d &,bool initialGeometry)= &XC::NodePtrs::getNearestNode;
 class_<XC::NodePtrs, bases<EntCmd,vector_ptr_nodes>, boost::noncopyable >("NodePtrs", no_init)
-  .def("getNearestNode",make_function(getNearestNodePtr, return_internal_reference<>() ),"Returns nearest node.")
+  .def("getNearestNode",make_function(getNearestNodePtr, return_internal_reference<>() ),"Return nearest node.")
   ;
 
 class_<XC::NodePtrsWithIDs, bases<XC::NodePtrs>, boost::noncopyable >("NodePtrsWithIDs", no_init)
-  .add_property("getExternalNodes",make_function(&XC::NodePtrsWithIDs::getExternalNodes, return_internal_reference<>() ),"Returns tags of external nodes.")
+  .add_property("getExternalNodes",make_function(&XC::NodePtrsWithIDs::getExternalNodes, return_internal_reference<>() ),"Return tags of external nodes.")
   ;
 
 XC::NodePtrsWithIDs &(XC::Element::*getNodePtrsRef)(void)= &XC::Element::getNodePtrs;
@@ -60,22 +60,22 @@ const XC::Matrix &(XC::Element::*getInitialStiffRef)(void) const= &XC::Element::
 const XC::Matrix &(XC::Element::*getTangentStiffRef)(void) const= &XC::Element::getTangentStiff;
 class_<XC::Element, XC::Element *,bases<XC::MeshComponent>, boost::noncopyable >("Element", no_init)
   .add_property("getNodes", make_function( getNodePtrsRef, return_internal_reference<>() ))
-  .add_property("getIdxNodes",&XC::Element::getIdxNodes)
-  .add_property("getDimension",&XC::Element::getDimension,"Returns element's dimension (point: 0, line: 1, surface: 2 or volume: 3).")
+  .add_property("getIdxNodes",&XC::Element::getIdxNodes,"Return the node indices for its use in VTK arrays.")
+  .add_property("getDimension",&XC::Element::getDimension,"Return element's dimension (point: 0, line: 1, surface: 2 or volume: 3).")
   .def("commitState", &XC::Element::commitState,"Commits element state.")
-  .def("revertToLastCommit", &XC::Element::revertToLastCommit,"Returns to the last commited state.")
-  .def("revertToStart", &XC::Element::revertToStart,"Returns the element to its initial state.")
-  .def("getNumDOF", &XC::Element::getNumDOF,"Returns the number of element DOFs.")
+  .def("revertToLastCommit", &XC::Element::revertToLastCommit,"Return to the last commited state.")
+  .def("revertToStart", &XC::Element::revertToStart,"Return the element to its initial state.")
+  .def("getNumDOF", &XC::Element::getNumDOF,"Return the number of element DOFs.")
   .def("getResistingForce",make_function(getResistingForceRef, return_internal_reference<>() ),"Calculates element's resisting force.")
-  .def("getTangentStiff",make_function(getTangentStiffRef, return_internal_reference<>() ),"Returns tangent stiffness matrix.")
-  .def("getInitialStiff",make_function(getInitialStiffRef, return_internal_reference<>() ),"Returns initial stiffness matrix.")
+  .def("getTangentStiff",make_function(getTangentStiffRef, return_internal_reference<>() ),"Return tangent stiffness matrix.")
+  .def("getInitialStiff",make_function(getInitialStiffRef, return_internal_reference<>() ),"Return initial stiffness matrix.")
   .def("setDeadSRF",XC::Element::setDeadSRF,"Assigns Stress Reduction Factor for element deactivation.")
-  .add_property("getVtkCellType",&XC::Element::getVtkCellType,"Returns cell type for Vtk graphics.")
-  .def("getMEDCellType",&XC::Element::getVtkCellType,"Returns cell type for MED file writing.")
-  .def("getPosCentroid",&XC::Element::getPosCdg,"Returns centroid's position.")
-  .def("getCooCentroid",&XC::Element::getCooCdg,"Returns centroid's coordinates.")
-  .def("getLocalAxes",&XC::Element::getLocalAxes,"Returns element local axes as matrix rows: [[x1,y1,z1],[x2,y2,z2],...·] .")
-  .def("getPoints",&XC::Element::getPuntos,"Returns a uniform grid of points over the element.")
+  .add_property("getVtkCellType",&XC::Element::getVtkCellType,"Return cell type for Vtk graphics.")
+  .def("getMEDCellType",&XC::Element::getVtkCellType,"Return cell type for MED file writing.")
+  .def("getPosCentroid",&XC::Element::getPosCdg,"Return centroid's position.")
+  .def("getCooCentroid",&XC::Element::getCooCdg,"Return centroid's coordinates.")
+  .def("getLocalAxes",&XC::Element::getLocalAxes,"Return element local axes as matrix rows: [[x1,y1,z1],[x2,y2,z2],...·] .")
+  .def("getPoints",&XC::Element::getPuntos,"Return a uniform grid of points over the element.")
   .def("resetTributaries",&XC::Element::resetTributaries)
   .def("dumpTributaries",&XC::Element::dumpTributaries)
   .def("computeTributaryLengths",&XC::Element::computeTributaryLengths)
@@ -89,10 +89,17 @@ class_<XC::Element, XC::Element *,bases<XC::MeshComponent>, boost::noncopyable >
   .def("getTributaryVolumeByTag",&XC::Element::getTributaryVolumeByTag)
   .def("getMaxCooNod",&XC::Element::MaxCooNod)
   .def("getMinCooNod",&XC::Element::MinCooNod)
+
+  //.def("getBaseVector",&XC::Element::getBaseVector,"Return a vector in the direction of the i-th local axis.")
+  .def("getBaseVector3d",&XC::Element::getBaseVector3d,"Return a 3D vector in the direction of the i-th local axis.")
+  .def("getIVector3d",&XC::Element::getIVector3d,"Return a 3D vector in the direction of the local axis 1.")
+  .def("getJVector3d",&XC::Element::getJVector3d,"Return a 3D vector in the direction of the local axis 2.")
+  .def("getKVector3d",&XC::Element::getKVector3d,"Return a 3D vector in the direction of the local axis 3.")
+  .def("getCoordinateSystem",&XC::Element::getSisCoo,"Return the element coordinate system.")
    ;
 
 class_<XC::ElementIter, boost::noncopyable >("ElementIter", no_init)
-  .def("next", &XC::ElementIter::operator(), return_internal_reference<>(),"Returns next node.")
+  .def("next", &XC::ElementIter::operator(), return_internal_reference<>(),"Return next node.")
    ;
 
 
@@ -110,13 +117,13 @@ class_<XC::ElementBase<27>, bases<XC::Element >, boost::noncopyable >("ElementBa
 
 class_<XC::Element0D , bases<XC::ElementBase<2>>, boost::noncopyable >("Element0D", no_init)
   .def("setupVectors",&XC::Element0D::setUpVectors)
-  .add_property("getNumDOF",&XC::Element0D::getNumDOF,"Returns element number of DOFs (6 or 12).")
-  .add_property("getDimension",&XC::Element0D::getDimension,"Returns element dimension.")
-  .add_property("getIVector",make_function(&XC::Element0D::getX, return_internal_reference<>() ),"Returns i vector.")
-  .add_property("getJVector",make_function(&XC::Element0D::getY, return_internal_reference<>() ),"Returns j vector.")
-  .add_property("getKVector",make_function(&XC::Element0D::getZ, return_internal_reference<>() ),"Returns k vector.")
-  .add_property("getSisCoo",&XC::Element0D::getSisCoo,"Returns element coordinate system.")
-  .add_property("getTransformation",make_function(&XC::Element0D::getTransformation, return_internal_reference<>() ),"Returns element transformation.")
+  .add_property("getNumDOF",&XC::Element0D::getNumDOF,"Return element number of DOFs (6 or 12).")
+  .add_property("getDimension",&XC::Element0D::getDimension,"Return element dimension.")
+  .add_property("getIVector",make_function(&XC::Element0D::getX, return_internal_reference<>() ),"Return i vector.")
+  .add_property("getJVector",make_function(&XC::Element0D::getY, return_internal_reference<>() ),"Return j vector.")
+  .add_property("getKVector",make_function(&XC::Element0D::getZ, return_internal_reference<>() ),"Return k vector.")
+  .add_property("getSisCoo",&XC::Element0D::getSisCoo,"Return element coordinate system.")
+  .add_property("getTransformation",make_function(&XC::Element0D::getTransformation, return_internal_reference<>() ),"Return element transformation.")
   ;
 
 
@@ -124,7 +131,7 @@ XC::CrdTransf *(XC::Element1D::*getCrdTransf)(void)= &XC::Element1D::getCoordTra
 class_<XC::Element1D, bases<XC::ElementBase<2> >, boost::noncopyable >("Element1D", no_init)
     .add_property("getCoordTransf", make_function( getCrdTransf, return_internal_reference<>() ))
     .def("getLineSegment", &XC::Element1D::getSegmento)
-    .def("getMEDCellType", &XC::Element1D::getMEDCellType,"Returns the cell type that corresponds to the element in a MED file.")
+    .def("getMEDCellType", &XC::Element1D::getMEDCellType,"Return the cell type that corresponds to the element in a MED file.")
     .def("vector2dUniformLoadGlobal", &XC::Element1D::vector2dUniformLoadGlobal,"Element's load.")
     .def("vector2dUniformLoadLocal", &XC::Element1D::vector2dUniformLoadLocal,"Element's load.")
     .def("vector2dPointByRelDistLoadGlobal", &XC::Element1D::vector2dPointByRelDistLoadGlobal,"Element's load.")

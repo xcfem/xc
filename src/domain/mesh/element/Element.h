@@ -72,6 +72,7 @@
 class TritrizPos3d;
 class Pos2d;
 class Pos3d;
+class SisCooRect3d3d;
 
 namespace XC {
 class Vector;
@@ -208,6 +209,12 @@ class Element: public MeshComponent
     double MinCooNod(int i) const;
     const Matrix &getCooNodos(void) const;
     virtual Matrix getLocalAxes(bool initialGeometry= true) const;
+    virtual Vector getBaseVector(size_t i,bool initialGeometry= true) const;
+    virtual Vector3d getBaseVector3d(size_t i,bool initialGeometry= true) const;
+    virtual Vector3d getIVector3d(bool initialGeometry= true) const;
+    virtual Vector3d getJVector3d(bool initialGeometry= true) const;
+    virtual Vector3d getKVector3d(bool initialGeometry= true) const;
+    virtual SisCooRect3d3d getSisCoo(bool) const;    
     Pos3d getPosNodo(const size_t &i,bool initialGeometry= true) const;
     std::list<Pos3d> getPosNodos(bool initialGeometry= true) const;
     virtual Pos3d getPosCdg(bool initialGeometry= true) const;

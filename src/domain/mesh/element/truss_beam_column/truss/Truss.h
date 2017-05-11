@@ -58,10 +58,7 @@
 // Created: 07/98
 // Revision: A
 //
-// Description: This file contains the class definition for Truss. A Truss object
-// provides the abstraction of the small deformation bar element. Each truss
-// object is assocaited with a material object. This Truss element will work
-// in 1d, 2d or 3d problems.
+// Description: This file contains the class definition for Truss. 
 //
 // What: "@(#) Truss.h, revA"
 
@@ -73,7 +70,11 @@ class UniaxialMaterial;
 
 //! \ingroup TrussElem
 //
-//! @brief Barra articulada.
+//! @brief Truss finite element.
+//!
+//! This elements can be defined in one, two or three-dimesional
+//! problems. Each element is associated with two Node objects
+//! and a UniaxialMaterial object.
 class Truss : public TrussBase
   {
   private:
@@ -82,7 +83,7 @@ class Truss : public TrussBase
     
     // private attributes - a copy for each object of the class
     UniaxialMaterial *theMaterial;  //!< pointer to a material
-    double A; //!< area of truss
+    double A; //!< Truss cross-section area
 
 // AddingSensitivity:BEGIN //////////////////////////////////////////
     int parameterID;

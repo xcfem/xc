@@ -76,6 +76,8 @@
 
 
 #include "xc_utils/src/geom/pos_vec/TritrizPos3d.h"
+#include "xc_utils/src/geom/pos_vec/Vector3d.h"
+#include "xc_utils/src/geom/sis_coo/SisCooRect3d3d.h"
 #include "material/Material.h"
 #include "utility/matrix/DqMatrices.h"
 #include "utility/matrix/DqVectors.h"
@@ -690,8 +692,8 @@ XC::ID XC::Element::getEdgesNodeByTag(const int &iN) const
 XC::ID XC::Element::getLocalIndexNodesEdge(const size_t &i) const
   {
     ID retval;
-    std::cerr << nombre_clase()
-              << "; no se ha definido getLocalIndexNodesEdge()."
+    std::cerr << nombre_clase() << "::" << __FUNCTION__
+              << "; not defined."
               << std::endl;
     return retval;
   }
@@ -770,10 +772,63 @@ std::list<Pos3d> XC::Element::getPosNodos(bool initialGeometry) const
 XC::Matrix XC::Element::getLocalAxes(bool initialGeometry) const
   {
     Matrix retval;
-    std::cerr << "Function getLocalAxes must be implemented in derived class:" 
-              << nombre_clase() << std::endl;
+    std::cerr << nombre_clase() << "::" << __FUNCTION__
+              << "must be implemented in derived classes." << std::endl;
     return retval;
   }
+
+//! @brief Returns a base vector in the direction of the local i-th axis
+//! from the i-th row of the matrix returned by getLocalAxes.
+XC::Vector XC::Element::getBaseVector(size_t i,bool initialGeometry) const
+  {
+    const Matrix localAxes= getLocalAxes(initialGeometry);
+    Vector retval(3,0.0);
+    const size_t nCols= localAxes.noCols();
+    for(size_t j= 0;j<nCols;i++)
+      retval(j)= localAxes(i,j);
+    return retval;
+  }    
+
+//! @brief Returns a base vector in the direction of the local i-th axis
+//! from the i-th row of the matrix returned by getLocalAxes.
+Vector3d XC::Element::getBaseVector3d(size_t i,bool initialGeometry) const
+  {
+    const Vector base= getBaseVector(i);
+    return Vector3d(base(0),base(1),base(2));
+  }    
+
+//! @brief Returns a vector in the direction of the local x axis
+//! from the first row of the matrix returned by getLocalAxes.
+Vector3d XC::Element::getIVector3d(bool initialGeometry) const
+  { return getBaseVector3d(0); }
+
+//! @brief Returns a vector in the direction of the local y axis
+//! from the second row of the matrix returned by getLocalAxes.
+Vector3d XC::Element::getJVector3d(bool initialGeometry) const
+  { return getBaseVector3d(1); }
+
+//! @brief Returns a vector in the direction of the local z axis
+//! from the third row of the matrix returned by getLocalAxes.
+Vector3d XC::Element::getKVector3d(bool initialGeometry) const
+  { return getBaseVector3d(2); }
+
+//! @brief Returns the element coordinate system from the
+//! matrix returned by getLocalAxes.
+SisCooRect3d3d XC::Element::getSisCoo(bool initialGeometry) const
+  {
+    const Matrix localAxes= getLocalAxes(initialGeometry);
+    Matrix trfMatrix(3,3);
+    trfMatrix.Zero();
+    const size_t nRows= localAxes.noRows();
+    const size_t nCols= localAxes.noCols();
+    for(size_t i= 0;i<nRows;i++)
+      for(size_t j= 0;j<nCols;i++)
+	trfMatrix(i,j)= localAxes(i,j);
+    const Vector3d x(trfMatrix(0,0), trfMatrix(0,1), trfMatrix(0,2));
+    const Vector3d y(trfMatrix(1,0), trfMatrix(1,1), trfMatrix(1,2));
+    const Vector3d z(trfMatrix(2,0), trfMatrix(2,1), trfMatrix(2,2));
+    return SisCooRect3d3d(x,y,z);
+  }    
 
 
 //! @brief Returns the position of the i-th node.

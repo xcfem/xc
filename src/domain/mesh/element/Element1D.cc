@@ -46,6 +46,7 @@
 #include "xc_utils/src/geom/pos_vec/MatrizPos3d.h"
 #include "xc_utils/src/geom/pos_vec/Vector3d.h"
 #include "xc_utils/src/geom/pos_vec/Pos2d.h"
+#include "xc_utils/src/geom/sis_coo/SisCooRect3d3d.h"
 #include "xc_utils/src/geom/d1/Segmento3d.h"
 #include "utility/actor/objectBroker/FEM_ObjectBroker.h"
 #include "med.h"
@@ -483,7 +484,27 @@ const XC::CrdTransf *XC::Element1D::checkCoordTransf(void) const
 //! [[x1,y1,z1],[x2,y2,z2],...·]
 XC::Matrix XC::Element1D::getLocalAxes(bool initialGeometry) const
   {
-    return getCoordTransf()->getLocalAxes(initialGeometry);
+    static Matrix retval;
+    const CrdTransf *crdTransf= getCoordTransf();
+    if(crdTransf)
+      retval= crdTransf->getLocalAxes(initialGeometry);
+    else
+      {
+	double factor= 0.0;
+	if(!initialGeometry)
+	  factor= 1.0;
+        const Pos3d p0= theNodes[0]->getCurrentPosition3d(factor);
+        const Pos3d p1= theNodes[1]->getCurrentPosition3d(factor);
+	const SisCooRect3d3d sc(p0,p1);
+	const Vector3d i= sc.GetI();
+	retval(0,0)= i.x(); retval(0,1)= i.y(); retval(0,2)= i.z();
+	const Vector3d j= sc.GetJ();
+	retval(1,0)= j.x(); retval(1,1)= j.y(); retval(1,2)= j.z();
+	const Vector3d k= sc.GetK();
+	retval(2,0)= k.x(); retval(2,1)= k.y(); retval(2,2)= k.z();
+      }
+    return retval;
+      
   }
 
 //! @brief Returns puntos distribuidos entre los nodos extremos.

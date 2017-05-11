@@ -142,8 +142,8 @@ class ZeroLengthSection: public Element0D
     Vector getVDirWeakAxisLocalCoord(void) const;
     double getStrongAxisAngle(void) const;
     double getWeakAxisAngle(void) const;
-    const Vector &getVDirStrongAxisGlobalCoord(void) const;
-    const Vector &getVDirWeakAxisGlobalCoord(void) const;
+    const Vector &getVDirStrongAxisGlobalCoord(bool initialGeometry) const;
+    const Vector &getVDirWeakAxisGlobalCoord(bool initialGeometry) const;
 
     inline SectionForceDeformation *getSection(void)
       { return theSection; }

@@ -151,14 +151,19 @@ const XC::Vector &XC::Element0D::getZ(void) const
 XC::Matrix XC::Element0D::getLocalAxes(bool initialGeometry) const
   {
     if(!initialGeometry)
-      std::cerr << "Element0D::getLocalAxes for deformed geometry not implemented."
+      std::cerr << nombre_clase() << "::" << __FUNCTION__
+	        << "not implemented for deformed geometry."
                 << std::endl;
     return transformation;
   }
 
 //! @brief Returns the element coordinate system.
-SisCooRect3d3d XC::Element0D::getSisCoo(void) const
+SisCooRect3d3d XC::Element0D::getSisCoo(bool initialGeometry) const
   {
+    if(!initialGeometry)
+      std::cerr << nombre_clase() << "::" << __FUNCTION__
+	        << "not implemented for deformed geometry."
+                << std::endl;
     const Vector3d x(transformation(0,0), transformation(0,1), transformation(0,2));
     const Vector3d y(transformation(1,0), transformation(1,1), transformation(1,2));
     const Vector3d z(transformation(2,0), transformation(2,1), transformation(2,2));
