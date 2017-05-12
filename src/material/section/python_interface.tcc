@@ -44,36 +44,36 @@ class_<XC::Bidirectional, bases<XC::SectionForceDeformation>, boost::noncopyable
 
 //class_<XC::Isolator2spring , bases<XC::SectionForceDeformation>, boost::noncopyable >("Isolator2spring", no_init);
 
-//Semiplano2d (XC::SeccionBarraPrismatica::*getSemiplanoTraccionesRecta)(const Recta2d &,bool &)= &XC::SeccionBarraPrismatica::getSemiplanoTracciones;
-//Semiplano2d (XC::SeccionBarraPrismatica::*getSemiplanoTracciones)(bool &)= &XC::SeccionBarraPrismatica::getSemiplanoTracciones;
-class_<XC::SeccionBarraPrismatica, XC::SeccionBarraPrismatica *, bases<XC::SectionForceDeformation>, boost::noncopyable >("SeccionBarraPrismatica", no_init)
-  .def("getCdgY",&XC::SeccionBarraPrismatica::getCdgY)
-  .def("getCdgZ",&XC::SeccionBarraPrismatica::getCdgZ)
-  .def("isSubjectedToAxialLoad",&XC::SeccionBarraPrismatica::hayAxil,"True if section is in compression (or in tension).")
-  .def("isSubjectedToBending",&XC::SeccionBarraPrismatica::hayMomento,"True if section is bended.")
-  .def("isSubjectedToShear",&XC::SeccionBarraPrismatica::hayCortante,"True if section is subjected to shear.")
-  .def("isSubjectedToTorsion",&XC::SeccionBarraPrismatica::hayTorsor,"True if section is subjected to torsion.")
-  .def("getN",&XC::SeccionBarraPrismatica::getN,"Returns internal axial force.")
-  .def("getMy",&XC::SeccionBarraPrismatica::getMy,"Returns internal bending moment around 'y' axis.")
-  .def("getMz",&XC::SeccionBarraPrismatica::getMz,"Returns internal bending moment around 'z' axis.")
-  .def("getCenterOfMass",&XC::SeccionBarraPrismatica::getCdg)
-  .def("getInternalForcesAxis",&XC::SeccionBarraPrismatica::getEjeEsfuerzos)
-  .def("getNeutralAxis",&XC::SeccionBarraPrismatica::getFibraNeutra,"Returns neutral axis.")
-  .def("getPuntoSemiplanoTracciones",&XC::SeccionBarraPrismatica::getPuntoSemiplanoTracciones)
-  .def("getPuntoSemiplanoCompresiones",&XC::SeccionBarraPrismatica::getPuntoSemiplanoCompresiones)
-  .def("setTrialDeformationPlane",&XC::SeccionBarraPrismatica::setTrialDeformationPlane,"trial deformations are calculated whith the deformation plane passed as argument.")
-  .def("getDeformationPlane",&XC::SeccionBarraPrismatica::getDeformationPlane,"returns section deformation plane.")
-  .def("setInitialDeformationPlane",&XC::SeccionBarraPrismatica::setInitialDeformationPlane,"initial deformations are calculated whith the deformation plane passed as argument.")
-  .def("getInitialDeformationPlane",&XC::SeccionBarraPrismatica::getInitialDeformationPlane,"returns section initial deformation plane.")
-  .add_property("deformationPlane", &XC::SeccionBarraPrismatica::getDeformationPlane, &XC::SeccionBarraPrismatica::setTrialDeformationPlane,"section deformation plane.")
-  .add_property("initialDeformationPlane", &XC::SeccionBarraPrismatica::getInitialDeformationPlane, &XC::SeccionBarraPrismatica::setInitialDeformationPlane,"initial section deformation plane.")
-//.def("getTractionHalfPlane",getSemiplanoTracciones)
-//  .def("getTractionHalfPlaneFromLine",getSemiplanoTraccionesRecta)
-//  .def("getSemiplanoCompresiones",&XC::SeccionBarraPrismatica::getSemiplanoCompresiones)
-//  .def("getSemiplanoCompresiones",&XC::SeccionBarraPrismatica::getSemiplanoCompresiones)
+//Semiplano2d (XC::PrismaticBarCrossSection::*getTensionedHalfPlaneRecta)(const Recta2d &,bool &)= &XC::PrismaticBarCrossSection::getTensionedHalfPlane;
+//Semiplano2d (XC::PrismaticBarCrossSection::*getTensionedHalfPlane)(bool &)= &XC::PrismaticBarCrossSection::getTensionedHalfPlane;
+class_<XC::PrismaticBarCrossSection, XC::PrismaticBarCrossSection *, bases<XC::SectionForceDeformation>, boost::noncopyable >("PrismaticBarCrossSection", no_init)
+  .def("getCdgY",&XC::PrismaticBarCrossSection::getCdgY)
+  .def("getCdgZ",&XC::PrismaticBarCrossSection::getCdgZ)
+  .def("isSubjectedToAxialLoad",&XC::PrismaticBarCrossSection::hayAxil,"True if section is in compression (or in tension).")
+  .def("isSubjectedToBending",&XC::PrismaticBarCrossSection::hayMomento,"True if section is bended.")
+  .def("isSubjectedToShear",&XC::PrismaticBarCrossSection::hayCortante,"True if section is subjected to shear.")
+  .def("isSubjectedToTorsion",&XC::PrismaticBarCrossSection::hayTorsor,"True if section is subjected to torsion.")
+  .def("getN",&XC::PrismaticBarCrossSection::getN,"Returns internal axial force.")
+  .def("getMy",&XC::PrismaticBarCrossSection::getMy,"Returns internal bending moment around 'y' axis.")
+  .def("getMz",&XC::PrismaticBarCrossSection::getMz,"Returns internal bending moment around 'z' axis.")
+  .def("getCenterOfMass",&XC::PrismaticBarCrossSection::getCdg)
+  .def("getInternalForcesAxis",&XC::PrismaticBarCrossSection::getEjeEsfuerzos)
+  .def("getNeutralAxis",&XC::PrismaticBarCrossSection::getFibraNeutra,"Returns neutral axis.")
+  .def("getPointOnTensionedHalfPlane",&XC::PrismaticBarCrossSection::getPointOnTensionedHalfPlane)
+  .def("getPointOnCompressedHalfPlane",&XC::PrismaticBarCrossSection::getPointOnCompressedHalfPlane)
+  .def("setTrialDeformationPlane",&XC::PrismaticBarCrossSection::setTrialDeformationPlane,"trial deformations are calculated whith the deformation plane passed as argument.")
+  .def("getDeformationPlane",&XC::PrismaticBarCrossSection::getDeformationPlane,"returns section deformation plane.")
+  .def("setInitialDeformationPlane",&XC::PrismaticBarCrossSection::setInitialDeformationPlane,"initial deformations are calculated whith the deformation plane passed as argument.")
+  .def("getInitialDeformationPlane",&XC::PrismaticBarCrossSection::getInitialDeformationPlane,"returns section initial deformation plane.")
+  .add_property("deformationPlane", &XC::PrismaticBarCrossSection::getDeformationPlane, &XC::PrismaticBarCrossSection::setTrialDeformationPlane,"section deformation plane.")
+  .add_property("initialDeformationPlane", &XC::PrismaticBarCrossSection::getInitialDeformationPlane, &XC::PrismaticBarCrossSection::setInitialDeformationPlane,"initial section deformation plane.")
+//.def("getTractionHalfPlane",getTensionedHalfPlane)
+//  .def("getTractionHalfPlaneFromLine",getTensionedHalfPlaneRecta)
+//  .def("getCompressedHalfPlane",&XC::PrismaticBarCrossSection::getCompressedHalfPlane)
+//  .def("getCompressedHalfPlane",&XC::PrismaticBarCrossSection::getCompressedHalfPlane)
   ;
 
-class_<XC::SectionAggregator , bases<XC::SeccionBarraPrismatica>, boost::noncopyable >("SectionAggregator", no_init)
+class_<XC::SectionAggregator , bases<XC::PrismaticBarCrossSection>, boost::noncopyable >("SectionAggregator", no_init)
   .def("getSection", make_function(&XC::SectionAggregator::getSection, return_internal_reference<>()))
   .def("setSection",&XC::SectionAggregator::setSection)
   .def("setAdditions",&XC::SectionAggregator::setAddtionsPyList)
@@ -82,16 +82,16 @@ class_<XC::SectionAggregator , bases<XC::SeccionBarraPrismatica>, boost::noncopy
 
 class_<XC::AggregatorAdditions, bases<XC::DqUniaxialMaterial>, boost::noncopyable >("AggregatorAdditions", no_init);
 
-class_<XC::GenericSection1d , bases<XC::SeccionBarraPrismatica>, boost::noncopyable >("GenericSection1d", no_init);
+class_<XC::GenericSection1d , bases<XC::PrismaticBarCrossSection>, boost::noncopyable >("GenericSection1d", no_init);
 
-typedef std::vector<XC::SeccionBarraPrismatica *> v_sections;
+typedef std::vector<XC::PrismaticBarCrossSection *> v_sections;
 class_<v_sections, boost::noncopyable>("v_sections")
   .def(vector_indexing_suite<v_sections>() )
   ;
 
-class_<XC::VectorSeccionesBarraPrismatica, bases<EntCmd,v_sections>, boost::noncopyable >("VectorSeccionesBarraPrismatica", no_init);
+class_<XC::PrismaticBarCrossSectionsVector, bases<EntCmd,v_sections>, boost::noncopyable >("PrismaticBarCrossSectionsVector", no_init);
 
-class_<XC::KRSeccion, bases<EntCmd>, boost::noncopyable >("KRSeccion", no_init);
+class_<XC::CrossSectionKR, bases<EntCmd>, boost::noncopyable >("CrossSectionKR", no_init);
 
 
 class_<XC::ResponseId, bases<XC::ID>, boost::noncopyable >("ResponseId", no_init);

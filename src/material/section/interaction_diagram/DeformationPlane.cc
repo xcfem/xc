@@ -172,7 +172,7 @@ Recta2d XC::DeformationPlane::getFibraNeutra(void)const
 
 
 //! @brief Returns (if possible) a pont in the tensioned side of the cross-section.
-Pos2d XC::DeformationPlane::getPuntoSemiplanoTracciones(void) const
+Pos2d XC::DeformationPlane::getPointOnTensionedHalfPlane(void) const
   {
     Pos2d retval(0,0);
     const Recta2d fn(getFibraNeutra());
@@ -193,7 +193,7 @@ Pos2d XC::DeformationPlane::getPuntoSemiplanoTracciones(void) const
   }
 
 //! @brief Returns (if possible) un punto en el que las tensiones son de compresion.
-Pos2d XC::DeformationPlane::getPuntoSemiplanoCompresiones(void) const
+Pos2d XC::DeformationPlane::getPointOnCompressedHalfPlane(void) const
   {
     Pos2d retval(0,0);
     const Recta2d fn(getFibraNeutra());
@@ -205,7 +205,7 @@ Pos2d XC::DeformationPlane::getPuntoSemiplanoCompresiones(void) const
         //const Vector2d v(RectaMaximaPendienteYZ().ProyeccionYZ2d().VDir());
         const Vector2d v= fn.VDir().Normal();
         retval= p0+1000*v;
-        if(Strain(retval)>0) //Lado tracciones.
+        if(Strain(retval)>0) //Tensioned side.
           retval= p0-1000*v;
       }
     else //Degenerated neutral axis.
@@ -215,9 +215,9 @@ Pos2d XC::DeformationPlane::getPuntoSemiplanoCompresiones(void) const
 
 //! @brief Returns the half plane which border is the line being passed
 //! as parameter and is contained in the half plane in traction.
-Semiplano2d XC::DeformationPlane::getSemiplanoTracciones(const Recta2d &r) const
+Semiplano2d XC::DeformationPlane::getTensionedHalfPlane(const Recta2d &r) const
   {
-    const Semiplano2d spt= getSemiplanoTracciones();
+    const Semiplano2d spt= getTensionedHalfPlane();
     assert(spt.exists());
     const Pos2d p0(r.Punto());
     const Vector2d v= r.VDir().Normal();
@@ -232,14 +232,15 @@ Semiplano2d XC::DeformationPlane::getSemiplanoTracciones(const Recta2d &r) const
         if(spt.In(p))
           retval= Semiplano2d(r,p);
         else
-	  std::cerr << "DeformationPlane::getSemiplanoTracciones; no se pudo encontrar"
-                    << " el half-plane traccionado cuyo borde es r= " << r << std::endl;
+	  std::cerr << nombre_clase() << "::" << __FUNCTION__
+	            << " couldn't find the tensioned half-plane"
+                    << " with the border r= " << r << std::endl;
       }
     return retval;
   }
 
 //! @brief Returns the tensioned half-plane.
-Semiplano2d XC::DeformationPlane::getSemiplanoTracciones(void) const
+Semiplano2d XC::DeformationPlane::getTensionedHalfPlane(void) const
   {
     const Recta2d fn= getFibraNeutra();
     bool exists= fn.exists();
@@ -263,7 +264,7 @@ Semiplano2d XC::DeformationPlane::getSemiplanoTracciones(void) const
   }
 
 //! @brief Returns the compressed half-plane.
-Semiplano2d XC::DeformationPlane::getSemiplanoCompresiones(const Recta2d &r) const
+Semiplano2d XC::DeformationPlane::getCompressedHalfPlane(const Recta2d &r) const
   {
     const Recta2d fn= getFibraNeutra();
     bool exists= fn.exists();
@@ -274,7 +275,7 @@ Semiplano2d XC::DeformationPlane::getSemiplanoCompresiones(const Recta2d &r) con
         const Pos2d p0(fn.Punto());
         const Vector2d v= fn.VDir().Normal();
         tmp= p0+1000*v;
-        if(Strain(tmp)>0) //Lado tracciones.
+        if(Strain(tmp)>0) //Tensioned side.
           tmp= p0-1000*v;
       }
     else //Degenerated neutral axis.
@@ -287,13 +288,13 @@ Semiplano2d XC::DeformationPlane::getSemiplanoCompresiones(const Recta2d &r) con
   }
 
 //! @brief Returns the compressed half plane.
-Semiplano2d XC::DeformationPlane::getSemiplanoCompresiones(void) const
+Semiplano2d XC::DeformationPlane::getCompressedHalfPlane(void) const
   {
     const Recta2d fn= getFibraNeutra();
     bool exists= fn.exists();
     Semiplano2d retval;
     if(exists)
-      retval= getSemiplanoCompresiones(fn);
+      retval= getCompressedHalfPlane(fn);
     return retval;
   }
 

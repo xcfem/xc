@@ -98,7 +98,7 @@ Journal of Structural Engineering, Approved for publication, February 2007.
 #include <domain/mesh/element/utils/coordTransformation/CrdTransf2d.h>
 #include <domain/mesh/node/Node.h>
 #include <domain/mesh/element/truss_beam_column/forceBeamColumn/beam_integration/BeamIntegration.h>
-#include <material/section/SeccionBarraPrismatica.h>
+#include <material/section/PrismaticBarCrossSection.h>
 
 
 #include "material/section/ResponseId.h"
@@ -156,7 +156,7 @@ XC::ForceBeamColumn2d::ForceBeamColumn2d(int tag,int numSec,const Material *m,co
 // and the node XC::ID's of it's nodal end points.
 // allocates the necessary space needed by each object
 XC::ForceBeamColumn2d::ForceBeamColumn2d (int tag, int nodeI, int nodeJ,
-                                          int numSec,const std::vector<SeccionBarraPrismatica *> &sec,
+                                          int numSec,const std::vector<PrismaticBarCrossSection *> &sec,
                                           BeamIntegration &bi,
                                           CrdTransf2d &coordTransf, double massDensPerUnitLength,
                                           int maxNumIters, double tolerance):
@@ -869,8 +869,8 @@ int XC::ForceBeamColumn2d::addInertiaLoadToUnbalance(const Vector &accel)
     return 0;
   }
 
-//! @brief Returns the acciones of the element sobre los nodos incluidas
-//! las de inercia.
+//! @brief Returns the actions of the element over the nodes including
+//! inertial ones.
 const XC::Vector &XC::ForceBeamColumn2d::getResistingForceIncInertia(void) const
   {
     // Compute the current resisting force
@@ -1489,7 +1489,7 @@ int XC::ForceBeamColumn2d::updateParameter (int parameterID, Information &info)
       }
   }
 
-void XC::ForceBeamColumn2d::setSectionPointers(const std::vector<SeccionBarraPrismatica *> &secPtrs)
+void XC::ForceBeamColumn2d::setSectionPointers(const std::vector<PrismaticBarCrossSection *> &secPtrs)
   {
     const size_t numSections= getNumSections();
     if(numSections > section_matrices.getMaxNumSections())

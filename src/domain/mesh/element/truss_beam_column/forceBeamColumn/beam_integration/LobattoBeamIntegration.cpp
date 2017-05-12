@@ -142,8 +142,9 @@ void XC::LobattoBeamIntegration::getSectionLocations(int numSections, double L, 
         xi[9] =  1.0;
         break;
       default:
-	std::cerr << "LobattoBeamIntegration::getSectionLocations; el número de secciones ha de estar comprendido"
-                  << " entre 2 y 10, se pasó: " << numSections << std::endl;
+	std::cerr << nombre_clase() << "::" << __FUNCTION__
+	          << "; number of sections must be between "
+                  << " 2 and 10, we get: " << numSections << std::endl;
 	break;
       }
     for(int i=0;i<numSections;i++)
@@ -236,8 +237,9 @@ void XC::LobattoBeamIntegration::getSectionWeights(int numSections, double L,dou
         wt[9] = 0.02222222222;
         break;
       default:
-	std::cerr << "LobattoBeamIntegration::getSectionWeights; el número de secciones ha de estar comprendido"
-                  << " entre 2 y 10, se pasó: " << numSections << std::endl;
+	std::cerr << nombre_clase() << "::" << __FUNCTION__
+	          << "; number of sections must be between "
+                  << " 2 and 10, we get: " << numSections << std::endl;
 	break;
       }
  

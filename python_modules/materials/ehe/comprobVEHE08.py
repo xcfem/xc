@@ -29,7 +29,7 @@ def getKEHE08(sgpcd,fcd):
     Devuelve el valor de K (coeficiente que depende del esfuerzo axil)
     según el artículo 44.2.3.1 de la EHE-08
     '''
-    s=-sgpcd/fcd #Positivo para compresiones
+    s=-sgpcd/fcd #Positive when compressed
     if s>1:
         print "getKEHE08; tensión excesiva en el hormigón: (",sgpcd,"<",-fcd,")\n"
     if s<=0:

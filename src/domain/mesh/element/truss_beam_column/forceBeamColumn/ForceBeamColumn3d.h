@@ -63,7 +63,7 @@ class BeamIntegration;
 
 //! \ingroup OneDimensionalElemF
 //
-//! @brief 3D force based beam column element with nonlinear SeccionBarraPrismatica type material.
+//! @brief 3D force based beam column element with nonlinear PrismaticBarCrossSection type material.
 class ForceBeamColumn3d: public NLForceBeamColumn3dBase
   {
   private:
@@ -83,7 +83,7 @@ class ForceBeamColumn3d: public NLForceBeamColumn3dBase
   
 
   protected:
-    void setSectionPointers(const std::vector<SeccionBarraPrismatica *> &secPtrs);
+    void setSectionPointers(const std::vector<PrismaticBarCrossSection *> &secPtrs);
     int getInitialFlexibility(Matrix &fe) const;
     int sendData(CommParameters &);
     int recvData(const CommParameters &);
@@ -92,7 +92,7 @@ class ForceBeamColumn3d: public NLForceBeamColumn3dBase
     ForceBeamColumn3d(const ForceBeamColumn3d &);
     ForceBeamColumn3d(int tag,int numSec,const Material *theSection,const CrdTransf *coordTransf,const BeamIntegration *integ);
     ForceBeamColumn3d(int tag, int nodeI, int nodeJ, 
-		    int numSections, const std::vector<SeccionBarraPrismatica *> &,
+		    int numSections, const std::vector<PrismaticBarCrossSection *> &,
 		    BeamIntegration &beamIntegr,
 		    CrdTransf3d &coordTransf, double rho = 0.0, 
 		    int maxNumIters = 10, double tolerance = 1.0e-12);

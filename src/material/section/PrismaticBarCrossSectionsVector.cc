@@ -24,10 +24,10 @@
 // along with this program.
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
-//VectorSeccionesBarraPrismatica.cc
+//PrismaticBarCrossSectionsVector.cc
 
-#include "VectorSeccionesBarraPrismatica.h"
-#include "SeccionBarraPrismatica.h"
+#include "PrismaticBarCrossSectionsVector.h"
+#include "PrismaticBarCrossSection.h"
 #include "utility/matrix/Vector.h"
 #include "utility/matrix/Matrix.h"
 #include "boost/any.hpp"
@@ -37,15 +37,15 @@
 #include "domain/load/beam_loads/BeamStrainLoad.h"
 #include "utility/actor/actor/MovableID.h"
 
-XC::SeccionBarraPrismatica *copia_seccion(const XC::SectionForceDeformation *theSec)
+XC::PrismaticBarCrossSection *copia_seccion(const XC::SectionForceDeformation *theSec)
   {
-    XC::SeccionBarraPrismatica *retval= nullptr;
+    XC::PrismaticBarCrossSection *retval= nullptr;
     if(theSec)
       {
 	XC::SectionForceDeformation *tmp= theSec->getCopy();
         if(tmp)
           {
-            retval= dynamic_cast<XC::SeccionBarraPrismatica *>(tmp);
+            retval= dynamic_cast<XC::PrismaticBarCrossSection *>(tmp);
             if(!retval)
               {
                 std::cerr << "copia_seccion; el material es inadecuado.\n";
@@ -60,13 +60,13 @@ XC::SeccionBarraPrismatica *copia_seccion(const XC::SectionForceDeformation *the
   }
 
 //! @brief Constructor.
-XC::VectorSeccionesBarraPrismatica::VectorSeccionesBarraPrismatica(const size_t &sz)
-  : std::vector<SeccionBarraPrismatica *>(sz,nullptr), MovableObject(0)
+XC::PrismaticBarCrossSectionsVector::PrismaticBarCrossSectionsVector(const size_t &sz)
+  : std::vector<PrismaticBarCrossSection *>(sz,nullptr), MovableObject(0)
   {}
 
 //! @brief Default constructor.
-XC::VectorSeccionesBarraPrismatica::VectorSeccionesBarraPrismatica(const size_t &sz,const SeccionBarraPrismatica *matModel)
-  : std::vector<SeccionBarraPrismatica *>(sz,nullptr), MovableObject(0)
+XC::PrismaticBarCrossSectionsVector::PrismaticBarCrossSectionsVector(const size_t &sz,const PrismaticBarCrossSection *matModel)
+  : std::vector<PrismaticBarCrossSection *>(sz,nullptr), MovableObject(0)
   {
     if(matModel)
       {
@@ -74,22 +74,22 @@ XC::VectorSeccionesBarraPrismatica::VectorSeccionesBarraPrismatica(const size_t 
           {
             (*i)= copia_seccion(matModel);
             if(!(*i))
-              std::cerr<<" VectorSeccionesBarraPrismatica -- failed allocate material model pointer\n";
+              std::cerr<<" PrismaticBarCrossSectionsVector -- failed allocate material model pointer\n";
           }
       }
   }
 
 //! @brief Constructor.
-XC::VectorSeccionesBarraPrismatica::VectorSeccionesBarraPrismatica(const size_t &sz,const Material *m)
-  : std::vector<SeccionBarraPrismatica *>(sz,nullptr), MovableObject(0)
+XC::PrismaticBarCrossSectionsVector::PrismaticBarCrossSectionsVector(const size_t &sz,const Material *m)
+  : std::vector<PrismaticBarCrossSection *>(sz,nullptr), MovableObject(0)
   {
     if(m)
       setupSection(m);
   }
 
 //! @brief Copy constructor.
-XC::VectorSeccionesBarraPrismatica::VectorSeccionesBarraPrismatica(const VectorSeccionesBarraPrismatica &otro)
-  : EntCmd(otro), std::vector<SeccionBarraPrismatica *>(otro.size(),nullptr), MovableObject(otro)
+XC::PrismaticBarCrossSectionsVector::PrismaticBarCrossSectionsVector(const PrismaticBarCrossSectionsVector &otro)
+  : EntCmd(otro), std::vector<PrismaticBarCrossSection *>(otro.size(),nullptr), MovableObject(otro)
   {
     const size_t sz= otro.size();
     for(size_t i= 0;i<sz;i++)
@@ -98,23 +98,23 @@ XC::VectorSeccionesBarraPrismatica::VectorSeccionesBarraPrismatica(const VectorS
           {
             (*this)[i]= copia_seccion(otro[i]);
             if(!(*this)[i])
-              std::cerr<<" VectorSeccionesBarraPrismatica -- failed allocate material model pointer\n";
+              std::cerr<<" PrismaticBarCrossSectionsVector -- failed allocate material model pointer\n";
           }
       }
   }
 
 //! @brief Assignment operator.
-XC::VectorSeccionesBarraPrismatica &XC::VectorSeccionesBarraPrismatica::operator=(const VectorSeccionesBarraPrismatica &)
+XC::PrismaticBarCrossSectionsVector &XC::PrismaticBarCrossSectionsVector::operator=(const PrismaticBarCrossSectionsVector &)
   {
-    std::cerr << "VectorSeccionesBarraPrismatica: No se debe llamar al operador de asignación."
+    std::cerr << "PrismaticBarCrossSectionsVector: No se debe llamar al operador de asignación."
               << std::endl;
     return *this;
   }
 
-XC::VectorSeccionesBarraPrismatica::~VectorSeccionesBarraPrismatica(void)
+XC::PrismaticBarCrossSectionsVector::~PrismaticBarCrossSectionsVector(void)
   { clearAll(); }
 
-void XC::VectorSeccionesBarraPrismatica::setSection(const SeccionBarraPrismatica *nueva_secc)
+void XC::PrismaticBarCrossSectionsVector::setSection(const PrismaticBarCrossSection *nueva_secc)
   {
     borra_secciones();
     if(nueva_secc)
@@ -123,35 +123,35 @@ void XC::VectorSeccionesBarraPrismatica::setSection(const SeccionBarraPrismatica
           {
             (*i)= copia_seccion(nueva_secc);
             if(!(*i))
-              std::cerr<<" VectorSeccionesBarraPrismatica -- failed allocate material model pointer\n";
+              std::cerr<<" PrismaticBarCrossSectionsVector -- failed allocate material model pointer\n";
           }
       }
   }
 
-void XC::VectorSeccionesBarraPrismatica::setupSection(const Material *sec)
+void XC::PrismaticBarCrossSectionsVector::setupSection(const Material *sec)
   {
     if(!sec)
-      std::cerr << "XC::VectorSeccionesBarraPrismatica::setupSection; material pointer is null." << std::endl;
+      std::cerr << "XC::PrismaticBarCrossSectionsVector::setupSection; material pointer is null." << std::endl;
     else
       {
-        const SeccionBarraPrismatica *ptr= dynamic_cast<const SeccionBarraPrismatica *>(sec);
+        const PrismaticBarCrossSection *ptr= dynamic_cast<const PrismaticBarCrossSection *>(sec);
         if(!ptr)
-          std::cerr << "XC::VectorSeccionesBarraPrismatica::setupSection; material type not valid." 
+          std::cerr << "XC::PrismaticBarCrossSectionsVector::setupSection; material type not valid." 
                     << std::endl;
         else
           setSection(ptr);
       }
   }
 
-void XC::VectorSeccionesBarraPrismatica::setSectionCopy(size_t i,SeccionBarraPrismatica *nueva_secc)
+void XC::PrismaticBarCrossSectionsVector::setSectionCopy(size_t i,PrismaticBarCrossSection *nueva_secc)
   {
     if((*this)[i]) delete (*this)[i];
     (*this)[i]= copia_seccion(nueva_secc);
     if(!(*this)[i])
-      std::cerr << "XC::VectorSeccionesBarraPrismatica::setSectionCopy -- failed to get copy of section.\n";
+      std::cerr << "XC::PrismaticBarCrossSectionsVector::setSectionCopy -- failed to get copy of section.\n";
   }
 
-void XC::VectorSeccionesBarraPrismatica::borra_secciones(void)
+void XC::PrismaticBarCrossSectionsVector::borra_secciones(void)
   {
     for(iterator i= begin();i!=end();i++)
       {
@@ -160,16 +160,16 @@ void XC::VectorSeccionesBarraPrismatica::borra_secciones(void)
       }
   }
 
-void XC::VectorSeccionesBarraPrismatica::clearAll(void)
+void XC::PrismaticBarCrossSectionsVector::clearAll(void)
   {
     borra_secciones();
-    std::vector<SeccionBarraPrismatica *>::clear();
+    std::vector<PrismaticBarCrossSection *>::clear();
     EntCmd::clearPyProps();
   }
 
 
 //! @brief Commits sections state.
-int XC::VectorSeccionesBarraPrismatica::commitState(void)
+int XC::PrismaticBarCrossSectionsVector::commitState(void)
   {
     int retVal= 0;
 
@@ -179,7 +179,7 @@ int XC::VectorSeccionesBarraPrismatica::commitState(void)
   }
 
 //! @brief Returns the sections to its last commited state.
-int XC::VectorSeccionesBarraPrismatica::revertToLastCommit(void)
+int XC::PrismaticBarCrossSectionsVector::revertToLastCommit(void)
   {
     int retVal= 0;
 
@@ -190,7 +190,7 @@ int XC::VectorSeccionesBarraPrismatica::revertToLastCommit(void)
 
 
 //! @brief Returns the sections to its initial state.
-int XC::VectorSeccionesBarraPrismatica::revertToStart(void)
+int XC::PrismaticBarCrossSectionsVector::revertToStart(void)
   {
     int retVal = 0;
 
@@ -200,7 +200,7 @@ int XC::VectorSeccionesBarraPrismatica::revertToStart(void)
   }
 
 //! @brief Returns true if the sections have torsional stiffness.
-bool XC::VectorSeccionesBarraPrismatica::isTorsion(void) const
+bool XC::PrismaticBarCrossSectionsVector::isTorsion(void) const
   {
     bool isTorsion= false;
     for(const_iterator i= begin();i!=end();i++)
@@ -216,12 +216,12 @@ bool XC::VectorSeccionesBarraPrismatica::isTorsion(void) const
     return isTorsion;
   }
 
-bool XC::VectorSeccionesBarraPrismatica::setSections(const std::vector<SeccionBarraPrismatica *> &sectionPtrs)
+bool XC::PrismaticBarCrossSectionsVector::setSections(const std::vector<PrismaticBarCrossSection *> &sectionPtrs)
   {
     bool isTorsion= false;
     // get copy of the sections
     if(sectionPtrs.size()<size())
-      std::cerr << "Error:  XC::VectorSeccionesBarraPrismatica::setSections; secciones insuficientes.";
+      std::cerr << "Error:  XC::PrismaticBarCrossSectionsVector::setSections; secciones insuficientes.";
     const size_t nSections= size();
     for(size_t i= 0;i<nSections;i++)
       {
@@ -248,7 +248,7 @@ bool XC::VectorSeccionesBarraPrismatica::setSections(const std::vector<SeccionBa
   }
 
 //! @brief Zeroes initial strains.
-void XC::VectorSeccionesBarraPrismatica::zeroInitialSectionDeformations(void)
+void XC::PrismaticBarCrossSectionsVector::zeroInitialSectionDeformations(void)
   {
     const size_t nSections= size();
     for(size_t i= 0;i<nSections;i++)
@@ -256,22 +256,22 @@ void XC::VectorSeccionesBarraPrismatica::zeroInitialSectionDeformations(void)
   }
 
 //! @brief Asigna valores a las initial strains.
-void XC::VectorSeccionesBarraPrismatica::setInitialSectionDeformations(const std::vector<Vector> &vs)
+void XC::PrismaticBarCrossSectionsVector::setInitialSectionDeformations(const std::vector<Vector> &vs)
   {
     const size_t nSections= std::min(size(),vs.size());
     if(vs.size()<nSections)
-      std::cerr << "Error en VectorSeccionesBarraPrismatica::setInitialSectionDeformations" << std::endl;
+      std::cerr << "Error en PrismaticBarCrossSectionsVector::setInitialSectionDeformations" << std::endl;
     for(size_t i= 0;i<nSections;i++)
       (*this)[i]->setInitialSectionDeformation(vs[i]);
   }
 
 //! @brief Asigna valores a las initial strains interpolando entre e1 y e2.
-void XC::VectorSeccionesBarraPrismatica::addInitialSectionDeformations(const BeamStrainLoad &strainLoad,const double &loadFactor,const Matrix &xi, const double &L)
+void XC::PrismaticBarCrossSectionsVector::addInitialSectionDeformations(const BeamStrainLoad &strainLoad,const double &loadFactor,const Matrix &xi, const double &L)
   {
     const size_t numAbcisas= xi.noRows();
     const size_t nSections= std::min(size(),numAbcisas);
     if(numAbcisas<nSections)
-      std::cerr << "Error en VectorSeccionesBarraPrismatica::setInitialSectionDeformations" << std::endl;
+      std::cerr << "Error en PrismaticBarCrossSectionsVector::setInitialSectionDeformations" << std::endl;
     if(nSections>0)
       {
         const Vector e1= (*this)[0]->getGeneralizedStrainVector(strainLoad.getDeformationPlane1())*loadFactor;
@@ -287,17 +287,17 @@ void XC::VectorSeccionesBarraPrismatica::addInitialSectionDeformations(const Bea
   }
 
 //! @brief Asigna valores a las trial strains.
-void XC::VectorSeccionesBarraPrismatica::setTrialSectionDeformations(const std::vector<Vector> &vs)
+void XC::PrismaticBarCrossSectionsVector::setTrialSectionDeformations(const std::vector<Vector> &vs)
   {
     const size_t nSections= std::min(size(),vs.size());
     if(vs.size()<nSections)
-      std::cerr << "Error en VectorSeccionesBarraPrismatica::setTrialSectionDeformations" << std::endl;
+      std::cerr << "Error en PrismaticBarCrossSectionsVector::setTrialSectionDeformations" << std::endl;
     for(size_t i= 0;i<nSections;i++)
       (*this)[i]->setTrialSectionDeformation(vs[i]);
   }
 
 //! @brief Send object members through the channel being passed as parameter.
-int XC::VectorSeccionesBarraPrismatica::sendData(CommParameters &cp)
+int XC::PrismaticBarCrossSectionsVector::sendData(CommParameters &cp)
   {
     const size_t sz= size();
     setDbTagDataPos(0,sz);
@@ -311,7 +311,7 @@ int XC::VectorSeccionesBarraPrismatica::sendData(CommParameters &cp)
   }
 
 //! @brief Receives object through the channel being passed as parameter.
-int XC::VectorSeccionesBarraPrismatica::recvData(const CommParameters &cp)
+int XC::PrismaticBarCrossSectionsVector::recvData(const CommParameters &cp)
   {
     const size_t sz= getDbTagDataPos(0);
     DbTagData cpMat(sz*2);
@@ -322,14 +322,14 @@ int XC::VectorSeccionesBarraPrismatica::recvData(const CommParameters &cp)
         // Receive the material
         (*this)[i]= cp.getBrokedMaterial((*this)[i],cpMat,BrokedPtrCommMetaData(i,0,i+sz));
         if(!(*this)[i])
-          std::cerr << "VectorSeccionesBarraPrismatica::recvData() - material "
+          std::cerr << "PrismaticBarCrossSectionsVector::recvData() - material "
                     << i << " failed to recv itself\n";
       }
     return res;
   }
 
 //! @brief Sends object through the channel being passed as parameter.
-int XC::VectorSeccionesBarraPrismatica::sendSelf(CommParameters &cp)
+int XC::PrismaticBarCrossSectionsVector::sendSelf(CommParameters &cp)
   {
     setDbTag(cp);
     const int dataTag= getDbTag();
@@ -343,7 +343,7 @@ int XC::VectorSeccionesBarraPrismatica::sendSelf(CommParameters &cp)
   }
 
 //! @brief Receives object through the channel being passed as parameter.
-int XC::VectorSeccionesBarraPrismatica::recvSelf(const CommParameters &cp)
+int XC::PrismaticBarCrossSectionsVector::recvSelf(const CommParameters &cp)
   {
     inicComm(2);
     const int dataTag= getDbTag();

@@ -80,7 +80,7 @@
 #include <domain/mesh/element/utils/coordTransformation/CrdTransf3d.h>
 #include <domain/mesh/node/Node.h>
 
-#include <material/section/SeccionBarraPrismatica.h>
+#include <material/section/PrismaticBarCrossSection.h>
 #include <domain/mesh/element/truss_beam_column/nonlinearBeamColumn/quadrule/GaussLobattoQuadRule1d01.h>
 #include "domain/load/beam_loads/BeamMecLoad.h"
 #include "domain/component/Parameter.h"
@@ -104,7 +104,7 @@ XC::NLBeamColumn3d::NLBeamColumn3d(int tag,int numSec,const Material *m,const Cr
 // and the node XC::ID's of it's nodal end points.
 // allocates the necessary space needed by each object
 XC::NLBeamColumn3d::NLBeamColumn3d(int tag, int nodeI, int nodeJ,
-                                int numSections,const std::vector<SeccionBarraPrismatica *> &sectionPtrs,
+                                int numSections,const std::vector<PrismaticBarCrossSection *> &sectionPtrs,
                                 CrdTransf3d &coordTransf, double massDensPerUnitLength,
                                 int maxNumIters, double tolerance)
   : NLForceBeamColumn3dBase(tag,ELE_TAG_NLBeamColumn3d,numSections,nullptr,&coordTransf)

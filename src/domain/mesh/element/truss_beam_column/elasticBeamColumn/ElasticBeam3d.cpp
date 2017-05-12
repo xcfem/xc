@@ -308,8 +308,8 @@ const XC::Matrix &XC::ElasticBeam3d::getTangentStiff(void) const
   {
     const Vector &v= getSectionDeformation();
 
-    //No considera secciones que tengan productos de
-    //inercia no nulos.
+    //Ignore sections with product moment
+    //of inertia not zero.
     const double eiyz= ctes_scc.EIyz();
     const double eimax= std::max(ctes_scc.EIz(),ctes_scc.EIy());
     if(std::abs(eiyz/eimax)>1e-5) //Producto de inercia no nulo.
@@ -359,8 +359,8 @@ const XC::Matrix &XC::ElasticBeam3d::getTangentStiff(void) const
 
 const XC::Matrix &XC::ElasticBeam3d::getInitialStiff(void) const
   {
-    //No considera secciones que tengan productos de
-    //inercia no nulos.
+    //Ignore sections with product moment
+    //of inertia not zero.
     const double eiyz= ctes_scc.EIyz();
     const double eimax= std::max(ctes_scc.EIz(),ctes_scc.EIy());
     if(std::abs(eiyz/eimax)>1e-5) //Producto de inercia no nulo.

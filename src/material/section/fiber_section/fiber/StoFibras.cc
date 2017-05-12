@@ -104,7 +104,7 @@ void XC::StoFibras::copia_fibras(const contenedor_fibras &fibers)
       }
   }
 
-void XC::StoFibras::setup(FiberSection2d &Section2d,const contenedor_fibras &fibers,KRSeccion &kr2)
+void XC::StoFibras::setup(FiberSection2d &Section2d,const contenedor_fibras &fibers,CrossSectionKR &kr2)
   {
     if(!fibers.empty())
       {
@@ -113,7 +113,7 @@ void XC::StoFibras::setup(FiberSection2d &Section2d,const contenedor_fibras &fib
       }
   }
 
-void XC::StoFibras::setup(FiberSection3d &Section3d,const contenedor_fibras &fibers,KRSeccion &kr3)
+void XC::StoFibras::setup(FiberSection3d &Section3d,const contenedor_fibras &fibers,CrossSectionKR &kr3)
   {
     if(!fibers.empty())
       {
@@ -122,7 +122,7 @@ void XC::StoFibras::setup(FiberSection3d &Section3d,const contenedor_fibras &fib
       }
   }
 
-void XC::StoFibras::setup(FiberSectionGJ &SectionGJ,const contenedor_fibras &fibers,KRSeccion &krGJ)
+void XC::StoFibras::setup(FiberSectionGJ &SectionGJ,const contenedor_fibras &fibers,CrossSectionKR &krGJ)
   {
     if(!fibers.empty())
       {

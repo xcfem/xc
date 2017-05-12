@@ -86,7 +86,7 @@ XC::CrossSectionProperties2d::CrossSectionProperties2d(double EA_in, double EI_i
   : EntCmd(), MovableObject(0), e(1), g(0.0), a(EA_in), i(EI_in), alpha(0)
   { check_values(); }
 
-//! @brief Constructor (seccciones 2d).
+//! @brief Constructor (2D cross sections).
 XC::CrossSectionProperties2d::CrossSectionProperties2d(double E_in, double A_in, double I_in, double G_in, double a)
   : EntCmd(), MovableObject(0), e(E_in), g(G_in), a(A_in), i(I_in), alpha(a)
   { check_values(); }

@@ -29,11 +29,11 @@
 #ifndef FiberSectionBase_h
 #define FiberSectionBase_h
 
-#include <material/section/SeccionBarraPrismatica.h>
+#include <material/section/PrismaticBarCrossSection.h>
 #include "material/section/fiber_section/fiber/StoFibras.h"
 #include "material/section/fiber_section/fiber/FiberSets.h"
 #include "xc_utils/src/geom/GeomObj.h"
-#include <material/section/KRSeccion.h>
+#include <material/section/CrossSectionKR.h>
 
 class Poligono2d;
 
@@ -54,7 +54,7 @@ class NMyMzPointCloud;
 //! @ingroup MATSCCModeloFibras
 //
 //! @brief Base class for fiber sections.
-class FiberSectionBase: public SeccionBarraPrismatica
+class FiberSectionBase: public PrismaticBarCrossSection
   {
   public:
     typedef FiberSets::iterator fiber_set_iterator;
@@ -64,7 +64,7 @@ class FiberSectionBase: public SeccionBarraPrismatica
     Vector eInic; //!< initial section deformations 
     Vector eCommit; //!< committed section deformations 
   protected:
-    KRSeccion kr; //!< Stiffness and internal forces resultant on the section.
+    CrossSectionKR kr; //!< Stiffness and internal forces resultant on the section.
     StoFibras fibras; //!< Pointers to fibers container.
     int tag_fibra; //!< Tag for next fiber.
     FiberSets sets_fibras;//!< Fibers sets.
@@ -111,11 +111,11 @@ class FiberSectionBase: public SeccionBarraPrismatica
     GeomSection *getGeomSection(void);
     const GeomSection *getGeomSection(void) const;
     Poligono2d getRegionsContour(void) const;
-    double getCantoMecanicoZonaComprimida(const Recta2d &) const;
-    double getCantoMecanicoZonaComprimida(void) const;
-    double getCantoMecanicoZonaTraccionada(const Recta2d &) const;
-    double getCantoMecanicoZonaTraccionada(void) const;
-    double getCantoMecanico(void) const;
+    double getCompressedZoneLeverArm(const Recta2d &) const;
+    double getCompressedZoneLeverArm(void) const;
+    double getTensionedZoneLeverArm(const Recta2d &) const;
+    double getTensionedZoneLeverArm(void) const;
+    double getLeverArm(void) const;
     double getNeutralAxisDepth(void) const;
     double getDistFibraNeutra(const double &y,const double &z) const;
     Vector getVectorBrazoMecanico(void) const;

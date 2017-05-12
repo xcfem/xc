@@ -65,14 +65,14 @@
 
 namespace XC {
 class Node;
-class SeccionBarraPrismatica;
+class PrismaticBarCrossSection;
 class CrdTransf2d;
 class Response;
 class GaussQuadRule1d01;
 
 //! \ingroup OneDimensionalElem
 //
-//! @brief displacement based 2D beam element with SeccionBarraPrismatica type material.
+//! @brief displacement based 2D beam element with PrismaticBarCrossSection type material.
 class DispBeamColumn2d : public BeamColumnWithSectionFDTrf2d
   {
   private:
@@ -100,7 +100,7 @@ class DispBeamColumn2d : public BeamColumnWithSectionFDTrf2d
     int recvData(const CommParameters &cp);
   public:
     DispBeamColumn2d(int tag, int nd1, int nd2,
-		     int numSections,const std::vector<SeccionBarraPrismatica *> &s,
+		     int numSections,const std::vector<PrismaticBarCrossSection *> &s,
 		     CrdTransf2d &coordTransf, double rho = 0.0);
     DispBeamColumn2d(int tag= 0);
     DispBeamColumn2d(int tag,int numSec,const Material *theSection,const CrdTransf *coordTransf);

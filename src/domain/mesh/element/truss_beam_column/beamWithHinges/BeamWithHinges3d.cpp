@@ -58,7 +58,7 @@
 #include <domain/mesh/element/truss_beam_column/nonlinearBeamColumn/matrixutil/MatrixUtil.h>
 #include <cstring>
 
-#include <material/section/SeccionBarraPrismatica.h>
+#include <material/section/PrismaticBarCrossSection.h>
 #include <domain/mesh/element/utils/coordTransformation/CrdTransf3d.h>
 
 #include <domain/mesh/element/utils/Information.h>
@@ -88,8 +88,8 @@ XC::BeamWithHinges3d::BeamWithHinges3d(int tag,const Material *mat,const CrdTran
 XC::BeamWithHinges3d::BeamWithHinges3d(int tag, int nodeI, int nodeJ,
                                    double e, double a, double iz,
                                    double iy, double g, double j,
-                                   SeccionBarraPrismatica &sectionRefI, double lpi,
-                                   SeccionBarraPrismatica &sectionRefJ, double lpj,
+                                   PrismaticBarCrossSection &sectionRefI, double lpi,
+                                   PrismaticBarCrossSection &sectionRefJ, double lpj,
                                    CrdTransf3d &coordTransf,
                                    double r, int max, double tol)
   :BeamColumnWithSectionFDTrf3d(tag, ELE_TAG_BeamWithHinges3d,2,nodeI,nodeJ,coordTransf),

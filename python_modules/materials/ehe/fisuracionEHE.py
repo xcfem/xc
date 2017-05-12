@@ -76,7 +76,7 @@ class CrackControl(cc.CrackControlBaseParameters):
       self.k1= (self.eps1+self.eps2)/8/self.eps1
       self.E0= concrFibers[0].getMaterial().getInitialTangent()
       self.areaHormigon= concrFibers.getSumaAreas(1)
-      self.depthMecanico= scc.getCantoMecanico()
+      self.depthMecanico= scc.getLeverArm()
       self.brazoMecanico= scc.getBrazoMecanico() # z
       self.widthMecanico= scc.getAnchoMecanico()
       self.razonAspecto= self.widthMecanico/self.depthMecanico

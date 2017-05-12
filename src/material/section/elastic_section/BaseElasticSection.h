@@ -29,7 +29,7 @@
 #ifndef BaseElasticSection_h
 #define BaseElasticSection_h
 
-#include <material/section/SeccionBarraPrismatica.h>
+#include <material/section/PrismaticBarCrossSection.h>
 #include <utility/matrix/Vector.h>
 
 namespace XC {
@@ -41,7 +41,7 @@ namespace XC {
 //! \ingroup MATSCCElastica
 //
 //! @brief Base class for cross sections with linear elastic material.
-class BaseElasticSection: public SeccionBarraPrismatica
+class BaseElasticSection: public PrismaticBarCrossSection
   {
   protected:
     Vector eTrial; //!< section trial deformations

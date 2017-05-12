@@ -48,9 +48,9 @@ class StoFibras : public DqFibras
     StoFibras(const StoFibras &otro);
     StoFibras &operator=(const StoFibras &otro);
     void allocFibers(int numFibras,const Fiber *muestra= nullptr);
-    void setup(FiberSection2d &,const contenedor_fibras &,KRSeccion &);
-    void setup(FiberSection3d &,const contenedor_fibras &,KRSeccion &);
-    void setup(FiberSectionGJ &,const contenedor_fibras &,KRSeccion &);
+    void setup(FiberSection2d &,const contenedor_fibras &,CrossSectionKR &);
+    void setup(FiberSection3d &,const contenedor_fibras &,CrossSectionKR &);
+    void setup(FiberSectionGJ &,const contenedor_fibras &,CrossSectionKR &);
     ~StoFibras(void);
   };
 } // end of XC namespace

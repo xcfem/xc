@@ -27,7 +27,7 @@
 //NLForceBeamColumn3dBase.cpp
 
 #include <domain/mesh/element/truss_beam_column/NLForceBeamColumn3dBase.h>
-#include <material/section/SeccionBarraPrismatica.h>
+#include <material/section/PrismaticBarCrossSection.h>
 
 #include "utility/actor/actor/MatrixCommMetaData.h"
 
@@ -84,7 +84,7 @@ XC::NLForceBeamColumn3dBase &XC::NLForceBeamColumn3dBase::operator=(const NLForc
     return *this;
   }
 
-void XC::NLForceBeamColumn3dBase::setSection(const SeccionBarraPrismatica *sccModel)
+void XC::NLForceBeamColumn3dBase::setSection(const PrismaticBarCrossSection *sccModel)
   {
     BeamColumnWithSectionFDTrf3d::setSection(sccModel);
     isTorsion= theSections.isTorsion();

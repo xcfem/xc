@@ -75,7 +75,7 @@ XC::ResponseId XC::GenericSection1d::c(1);
 
 //! @brief Constructor.
 XC::GenericSection1d::GenericSection1d(int tag, UniaxialMaterial &m, int type)
-  :SeccionBarraPrismatica(tag,SEC_TAG_Generic1d), code(type)
+  :PrismaticBarCrossSection(tag,SEC_TAG_Generic1d), code(type)
   {
     theModel = m.getCopy();
 
@@ -88,12 +88,12 @@ XC::GenericSection1d::GenericSection1d(int tag, UniaxialMaterial &m, int type)
 
 //! @brief Constructor.
 XC::GenericSection1d::GenericSection1d(int tag)
-:SeccionBarraPrismatica(0,SEC_TAG_Generic1d), theModel(0), code(0)
+:PrismaticBarCrossSection(0,SEC_TAG_Generic1d), theModel(0), code(0)
   {}
 
 //! @brief Constructor.
 XC::GenericSection1d::GenericSection1d()
-:SeccionBarraPrismatica(0,SEC_TAG_Generic1d), theModel(0), code(0)
+:PrismaticBarCrossSection(0,SEC_TAG_Generic1d), theModel(0), code(0)
   {}
 
 //! @brief Destructor.
@@ -200,7 +200,7 @@ XC::SectionForceDeformation *XC::GenericSection1d::getCopy(void) const
 //! @brief Send object members through the channel being passed as parameter.
 int XC::GenericSection1d::sendData(CommParameters &cp)
   {
-    int res= SeccionBarraPrismatica::sendData(cp);
+    int res= PrismaticBarCrossSection::sendData(cp);
     setDbTagDataPos(5,code);
     res+= cp.sendBrokedPtr(theModel,getDbTagData(),BrokedPtrCommMetaData(6,7,8));
     return res;
@@ -209,7 +209,7 @@ int XC::GenericSection1d::sendData(CommParameters &cp)
 //! @brief Receives object members through the channel being passed as parameter.
 int XC::GenericSection1d::recvData(const CommParameters &cp)
   {
-    int res= SeccionBarraPrismatica::recvData(cp);
+    int res= PrismaticBarCrossSection::recvData(cp);
     code= getDbTagDataPos(5);
     theModel= cp.getBrokedMaterial(theModel,getDbTagData(),BrokedPtrCommMetaData(6,7,8));
     return res;

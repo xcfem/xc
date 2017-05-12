@@ -59,14 +59,14 @@ namespace XC {
 class Response;
 class ElementalLoad;
 class BeamIntegration;
-class SeccionBarraPrismatica;
+class PrismaticBarCrossSection;
 
 //! \ingroup OneDimensionalElem
 //
 //! @defgroup OneDimensionalElemF Force based nonlinear beam-column element.
 //
 //! \ingroup OneDimensionalElemF
-//! @brief Force based 2D beam column element with SeccionBarraPrismatica type nonlinear material.
+//! @brief Force based 2D beam column element with PrismaticBarCrossSection type nonlinear material.
 class ForceBeamColumn2d: public NLForceBeamColumn2dBase
   {
   private:
@@ -88,7 +88,7 @@ class ForceBeamColumn2d: public NLForceBeamColumn2dBase
     ForceBeamColumn2d(const ForceBeamColumn2d &);
     ForceBeamColumn2d(int tag,int numSec,const Material *theSection,const CrdTransf *trf,const BeamIntegration *integ);
     ForceBeamColumn2d(int tag, int nodeI, int nodeJ, 
-	              int numSections,const std::vector<SeccionBarraPrismatica *> &,
+	              int numSections,const std::vector<PrismaticBarCrossSection *> &,
 		      BeamIntegration &beamIntegr,
 		      CrdTransf2d &coordTransf, double rho = 0.0, 
 		      int maxNumIters = 10, double tolerance = 1.0e-12);
@@ -126,7 +126,7 @@ class ForceBeamColumn2d: public NLForceBeamColumn2dBase
 
   
   protected:
-    void setSectionPointers(const std::vector<SeccionBarraPrismatica *> &);
+    void setSectionPointers(const std::vector<PrismaticBarCrossSection *> &);
     int getInitialFlexibility(Matrix &fe) const;
   
   private:

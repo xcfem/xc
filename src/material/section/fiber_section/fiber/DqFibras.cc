@@ -28,7 +28,7 @@
 
 #include "DqFibras.h"
 #include "utility/matrix/Vector.h"
-#include "material/section/KRSeccion.h"
+#include "material/section/CrossSectionKR.h"
 #include "material/section/fiber_section/fiber/Fiber.h"
 #include "material/section/fiber_section/FiberSection2d.h"
 #include "material/section/fiber_section/FiberSection3dBase.h"
@@ -1332,7 +1332,7 @@ double XC::DqFibras::calcAcEficazFibras(const std::list<Poligono2d> &contourAcEf
             }
       }
 
-    //Recortar intersecciones.
+    //Clip intersections.
     for(size_t i= 0;i<sz;i++)
       {
 	std::list<Poligono2d> &p1= dq_ac_eficaz[i];
@@ -1471,7 +1471,7 @@ int XC::DqFibras::updateCDG(void)
   }
 
 //! @brief Update the parameters CDG, stiffness and resultant.
-int XC::DqFibras::updateKRCDG(FiberSection2d &Section2d,KRSeccion &kr2)
+int XC::DqFibras::updateKRCDG(FiberSection2d &Section2d,CrossSectionKR &kr2)
   {
     kr2.zero();
     double Qz= 0.0;
@@ -1507,7 +1507,7 @@ int XC::DqFibras::updateKRCDG(FiberSection2d &Section2d,KRSeccion &kr2)
   }
 
 //! @brief Adds a fiber XXX Enhance parameter updating.
-XC::Fiber *XC::DqFibras::addFiber(FiberSection2d &Section2d,Fiber &newFiber,KRSeccion &kr2)
+XC::Fiber *XC::DqFibras::addFiber(FiberSection2d &Section2d,Fiber &newFiber,CrossSectionKR &kr2)
   {
     Fiber *retval= inserta(newFiber);
     updateKRCDG(Section2d,kr2);
@@ -1541,7 +1541,7 @@ int XC::DqFibras::setInitialSectionDeformation(const FiberSection2d &Section2d)
   }
 
 //! @brief Establece los valores de las trial strains.
-int XC::DqFibras::setTrialSectionDeformation(const FiberSection2d &Section2d,KRSeccion &kr2)
+int XC::DqFibras::setTrialSectionDeformation(const FiberSection2d &Section2d,CrossSectionKR &kr2)
   {
     int retval= 0;
     kr2.zero();
@@ -1572,7 +1572,7 @@ int XC::DqFibras::setTrialSectionDeformation(const FiberSection2d &Section2d,KRS
   }
 
 //! @brief Returns the estado de las fibras al del último commit.
-int XC::DqFibras::revertToLastCommit(FiberSection2d &Section2d,KRSeccion &kr2)
+int XC::DqFibras::revertToLastCommit(FiberSection2d &Section2d,CrossSectionKR &kr2)
   {
     int err= 0;
     kr2.zero();
@@ -1584,7 +1584,7 @@ int XC::DqFibras::revertToLastCommit(FiberSection2d &Section2d,KRSeccion &kr2)
   }
 
 //! @brief Returns the fibras a su estado inicial.
-int XC::DqFibras::revertToStart(FiberSection2d &Section2d,KRSeccion &kr2)
+int XC::DqFibras::revertToStart(FiberSection2d &Section2d,CrossSectionKR &kr2)
   {
     int err= 0;
     kr2.zero();
@@ -1615,7 +1615,7 @@ const XC::Matrix &XC::DqFibras::getInitialTangent(const FiberSection2d &Section2
         if(areaFibra!=0.0)
           {
             tangent= theMat->getInitialTangent();
-            KRSeccion::updateK2d(kInitial,areaFibra,y,tangent);
+            CrossSectionKR::updateK2d(kInitial,areaFibra,y,tangent);
           }
       }
 
@@ -1659,7 +1659,7 @@ int XC::DqFibras::commitSensitivity(const XC::Vector& defSens, int gradNumber, i
   }
 
 //! @brief Update the parameters CDG, stiffness matrix and resultant.
-int XC::DqFibras::updateKRCDG(FiberSection3d &Section3d,KRSeccion &kr3)
+int XC::DqFibras::updateKRCDG(FiberSection3d &Section3d,CrossSectionKR &kr3)
   {
     kr3.zero();
     double Qy= 0.0,Qz= 0.0;
@@ -1701,7 +1701,7 @@ int XC::DqFibras::updateKRCDG(FiberSection3d &Section3d,KRSeccion &kr3)
   }
 
 //! @brief Adds a fiber to the section XXX Enhance parameter updating.
-XC::Fiber *XC::DqFibras::addFiber(FiberSection3d &Section3d,Fiber &newFiber,KRSeccion &kr3)
+XC::Fiber *XC::DqFibras::addFiber(FiberSection3d &Section3d,Fiber &newFiber,CrossSectionKR &kr3)
   {
     Fiber *retval= inserta(newFiber);
     updateKRCDG(Section3d,kr3);
@@ -1727,7 +1727,7 @@ int XC::DqFibras::setInitialSectionDeformation(const FiberSection3d &Section3d)
   }
 
 //! @brief Establece los valores de las trial strains.
-int XC::DqFibras::setTrialSectionDeformation(FiberSection3d &Section3d,KRSeccion &kr3)
+int XC::DqFibras::setTrialSectionDeformation(FiberSection3d &Section3d,CrossSectionKR &kr3)
   {
     int retval= 0;
     kr3.zero();
@@ -1761,7 +1761,7 @@ int XC::DqFibras::setTrialSectionDeformation(FiberSection3d &Section3d,KRSeccion
   }
 
 //! @brief Returns to the last commited state.
-int XC::DqFibras::revertToLastCommit(FiberSection3d &Section3d,KRSeccion &kr3)
+int XC::DqFibras::revertToLastCommit(FiberSection3d &Section3d,CrossSectionKR &kr3)
   {
     int err= 0;
     kr3.zero();
@@ -1773,7 +1773,7 @@ int XC::DqFibras::revertToLastCommit(FiberSection3d &Section3d,KRSeccion &kr3)
   }
 
 //! @brief Returns to the initial state.
-int XC::DqFibras::revertToStart(FiberSection3d &Section3d,KRSeccion &kr3)
+int XC::DqFibras::revertToStart(FiberSection3d &Section3d,CrossSectionKR &kr3)
   {
     // revert the fibers to start
     int err= 0;
@@ -1808,7 +1808,7 @@ const XC::Matrix &XC::DqFibras::getInitialTangent(const FiberSection3d &Section3
         if(areaFibra!=0.0)
 	  {
             tangent= theMat->getInitialTangent();
-            KRSeccion::updateK3d(kInitialData,areaFibra,y,z,tangent);
+            CrossSectionKR::updateK3d(kInitialData,areaFibra,y,z,tangent);
           }
       }
     kInitialData[3]= kInitialData[1]; //Stiffness matrix symmetry.
@@ -1819,7 +1819,7 @@ const XC::Matrix &XC::DqFibras::getInitialTangent(const FiberSection3d &Section3
   }
 
 //! @brief Update the parameters CDG, stiffness and resultant.
-int XC::DqFibras::updateKRCDG(FiberSectionGJ &SectionGJ,KRSeccion &krGJ)
+int XC::DqFibras::updateKRCDG(FiberSectionGJ &SectionGJ,CrossSectionKR &krGJ)
   {
     krGJ.zero();
     double Qy= 0.0,Qz= 0.0;
@@ -1864,7 +1864,7 @@ int XC::DqFibras::updateKRCDG(FiberSectionGJ &SectionGJ,KRSeccion &krGJ)
   }
 
 //! @brief Adds a fiber to the container. XXX Enhance parameter updating.
-XC::Fiber *XC::DqFibras::addFiber(FiberSectionGJ &SectionGJ,Fiber &newFiber,KRSeccion &krGJ)
+XC::Fiber *XC::DqFibras::addFiber(FiberSectionGJ &SectionGJ,Fiber &newFiber,CrossSectionKR &krGJ)
   {
     Fiber *retval= inserta(newFiber);
     updateKRCDG(SectionGJ,krGJ);
@@ -1890,7 +1890,7 @@ int XC::DqFibras::setInitialSectionDeformation(const FiberSectionGJ &SectionGJ)
   }
 
 //! @brief Sets generalized trial strains values.
-int XC::DqFibras::setTrialSectionDeformation(FiberSectionGJ &SectionGJ,KRSeccion &krGJ)
+int XC::DqFibras::setTrialSectionDeformation(FiberSectionGJ &SectionGJ,CrossSectionKR &krGJ)
   {
     int retval= 0;
     krGJ.zero();
@@ -1927,7 +1927,7 @@ int XC::DqFibras::setTrialSectionDeformation(FiberSectionGJ &SectionGJ,KRSeccion
   }
 
 //! @brief Returns to the last commited state.
-int XC::DqFibras::revertToLastCommit(FiberSectionGJ &SectionGJ,KRSeccion &krGJ)
+int XC::DqFibras::revertToLastCommit(FiberSectionGJ &SectionGJ,CrossSectionKR &krGJ)
   {
     int err= 0;
     krGJ.zero();
@@ -1939,7 +1939,7 @@ int XC::DqFibras::revertToLastCommit(FiberSectionGJ &SectionGJ,KRSeccion &krGJ)
   }
 
 //! @brief Returns to the initial state.
-int XC::DqFibras::revertToStart(FiberSectionGJ &SectionGJ,KRSeccion &krGJ)
+int XC::DqFibras::revertToStart(FiberSectionGJ &SectionGJ,CrossSectionKR &krGJ)
   {
     // revert the fibers to start
     int err= 0;
@@ -1976,7 +1976,7 @@ const XC::Matrix &XC::DqFibras::getInitialTangent(const FiberSectionGJ &SectionG
           {
             tangent= theMat->getInitialTangent();
             //Updating stiffness matrix.
-            KRSeccion::updateKGJ(kInitialData,areaFibra,y,z,tangent);
+            CrossSectionKR::updateKGJ(kInitialData,areaFibra,y,z,tangent);
           }
       }
     kInitialData[4]= kInitialData[1]; //Simetría.

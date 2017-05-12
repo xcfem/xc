@@ -24,7 +24,7 @@
 #include "fiber/python_interface.tcc"
 
 XC::Fiber *(XC::FiberSectionBase::*addFiberAdHoc)(const std::string &,const double &,const XC::Vector &)= &XC::FiberSectionBase::addFiber; 
-class_<XC::FiberSectionBase, bases<XC::SeccionBarraPrismatica>, boost::noncopyable >("FiberSectionBase", no_init)
+class_<XC::FiberSectionBase, bases<XC::PrismaticBarCrossSection>, boost::noncopyable >("FiberSectionBase", no_init)
   .def("addFiber",make_function(addFiberAdHoc,return_internal_reference<>()),"Adds a fiber to the section.")
   .def("getFibers",make_function(&XC::FiberSectionBase::getFibers,return_internal_reference<>()))
   .def("getFiberSets",make_function(&XC::FiberSectionBase::getFiberSets,return_internal_reference<>()))
@@ -37,12 +37,12 @@ class_<XC::FiberSectionBase, bases<XC::SeccionBarraPrismatica>, boost::noncopyab
   .def("getFiberSectionRepr",make_function(&XC::FiberSectionBase::getFiberSectionRepr,return_internal_reference<>()))
   .def("setupFibers",&XC::FiberSectionBase::setupFibers)
   .def("getRegionsContour",&XC::FiberSectionBase::getRegionsContour)
-//.def("getCantoMecanicoZonaComprimida",&XC::FiberSectionBase::getCantoMecanicoZonaComprimida)
-//.def("getCantoMecanicoZonaComprimida",&XC::FiberSectionBase::getCantoMecanicoZonaComprimida)
-//.def("getCantoMecanicoZonaTraccionada",&XC::FiberSectionBase::getCantoMecanicoZonaTraccionada)
-//.def("getCantoMecanicoZonaTraccionada",&XC::FiberSectionBase::getCantoMecanicoZonaTraccionada)
+//.def("getCompressedZoneLeverArm",&XC::FiberSectionBase::getCompressedZoneLeverArm)
+//.def("getCompressedZoneLeverArm",&XC::FiberSectionBase::getCompressedZoneLeverArm)
+//.def("getTensionedZoneLeverArm",&XC::FiberSectionBase::getTensionedZoneLeverArm)
+//.def("getTensionedZoneLeverArm",&XC::FiberSectionBase::getTensionedZoneLeverArm)
   .def("getInternalForcesAxis",&XC::FiberSectionBase::getEjeEsfuerzos)
-  .def("getCantoMecanico",&XC::FiberSectionBase::getCantoMecanico)
+  .def("getLeverArm",&XC::FiberSectionBase::getLeverArm)
   .def("getNeutralAxisDepth",&XC::FiberSectionBase::getNeutralAxisDepth)
   .def("getDistFibraNeutra",&XC::FiberSectionBase::getDistFibraNeutra)
   .def("getVectorBrazoMecanico",&XC::FiberSectionBase::getVectorBrazoMecanico)

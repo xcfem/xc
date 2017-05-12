@@ -75,7 +75,7 @@
 #include <domain/mesh/element/truss_beam_column/NLForceBeamColumn2dBase.h>
 #include <utility/matrix/Matrix.h>
 #include <utility/matrix/Vector.h>
-#include <material/section/SeccionBarraPrismatica.h>
+#include <material/section/PrismaticBarCrossSection.h>
 #include <domain/mesh/element/truss_beam_column/nonlinearBeamColumn/quadrule/GaussLobattoQuadRule1d01.h>
 
 namespace XC {
@@ -110,7 +110,7 @@ class NLBeamColumn2d: public NLForceBeamColumn2dBase
     NLBeamColumn2d(int tag= 0);
     NLBeamColumn2d(int tag,int numSec,const Material *theSection,const CrdTransf *coordTransf);
     NLBeamColumn2d(int tag, int nodeI, int nodeJ, 
-		    int numSections,const std::vector<SeccionBarraPrismatica *> &, 
+		    int numSections,const std::vector<PrismaticBarCrossSection *> &, 
 		    CrdTransf2d &coordTransf, double massDensPerUnitLength = 0.0, 
 		    int maxNumIters = 10, double tolerance = 1e-12, int maxSub = 10);
     Element *getCopy(void) const;

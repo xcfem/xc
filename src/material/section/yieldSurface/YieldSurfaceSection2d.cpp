@@ -43,13 +43,13 @@ XC::Matrix  XC::YieldSurfaceSection2d::G(2,1);
 XC::Matrix  XC::YieldSurfaceSection2d::Ktp(2,2);
 
 XC::YieldSurfaceSection2d::YieldSurfaceSection2d(void)
-  :SeccionBarraPrismatica(0, SEC_TAG_YS2d),
+  :PrismaticBarCrossSection(0, SEC_TAG_YS2d),
    use_Kr_orig(true), ys(0), eTrial(2), eInic(2), eCommit(2), s(2), sCommit(2), ks(2,2),
    use_Kr(true), split_step(false)
   {}
 
 XC::YieldSurfaceSection2d::YieldSurfaceSection2d(int tag, int classtag, YieldSurface_BC *ptrys, bool use_kr)
-  :SeccionBarraPrismatica(tag, classtag), use_Kr_orig(use_kr), ys(0), eTrial(2), eInic(2), eCommit(2),s(2),
+  :PrismaticBarCrossSection(tag, classtag), use_Kr_orig(use_kr), ys(0), eTrial(2), eInic(2), eCommit(2),s(2),
     sCommit(2), ks(2,2), use_Kr(use_kr), split_step(false)
   {
     if(ptrys==0)

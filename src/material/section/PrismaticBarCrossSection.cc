@@ -24,9 +24,9 @@
 // along with this program.
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
-//SeccionBarraPrismatica.cpp
+//PrismaticBarCrossSection.cpp
 
-#include "SeccionBarraPrismatica.h"
+#include "PrismaticBarCrossSection.h"
 #include "material/section/interaction_diagram/DeformationPlane.h"
 #include <domain/mesh/element/utils/Information.h>
 #include <domain/mesh/element/truss_beam_column/nonlinearBeamColumn/matrixutil/MatrixUtil.h>
@@ -48,36 +48,36 @@
 #include "xc_basic/src/util/inercia.h"
 
 //! @brief Constructor.
-XC::SeccionBarraPrismatica::SeccionBarraPrismatica(int tag, int classTag,MaterialLoader *mat_ldr)
+XC::PrismaticBarCrossSection::PrismaticBarCrossSection(int tag, int classTag,MaterialLoader *mat_ldr)
   : SectionForceDeformation(tag,classTag,mat_ldr) {}
 
 //! @brief Copy constructor.
-XC::SeccionBarraPrismatica::SeccionBarraPrismatica(const SeccionBarraPrismatica &otro)
+XC::PrismaticBarCrossSection::PrismaticBarCrossSection(const PrismaticBarCrossSection &otro)
   : SectionForceDeformation(otro) {}
 
 //! @brief Assignment operator.
-XC::SeccionBarraPrismatica &XC::SeccionBarraPrismatica::operator=(const SeccionBarraPrismatica &otro)
+XC::PrismaticBarCrossSection &XC::PrismaticBarCrossSection::operator=(const PrismaticBarCrossSection &otro)
   {
     SectionForceDeformation::operator=(otro);
     return *this;
   }
 
 //! @brief Sets the deformation plane of the section.
-int XC::SeccionBarraPrismatica::setTrialDeformationPlane(const DeformationPlane &plano)
+int XC::PrismaticBarCrossSection::setTrialDeformationPlane(const DeformationPlane &plano)
   { return setTrialSectionDeformation(getGeneralizedStrainVector(plano)); }
 
 //! @brief Sets the plano de initial strains of the section.
-int XC::SeccionBarraPrismatica::setInitialDeformationPlane(const DeformationPlane &plano)
+int XC::PrismaticBarCrossSection::setInitialDeformationPlane(const DeformationPlane &plano)
   { return setInitialSectionDeformation(getGeneralizedStrainVector(plano)); }
 
 //! @brief Returns initial strain plane.
-XC::DeformationPlane XC::SeccionBarraPrismatica::getInitialDeformationPlane(void) const
+XC::DeformationPlane XC::PrismaticBarCrossSection::getInitialDeformationPlane(void) const
   { return DeformationPlane(getInitialSectionDeformation()); }
 
 
 //! @brief Returns the generalized strains vector que corresponde
 //! al deformation plane being passed as parameter.
-const XC::Vector &XC::SeccionBarraPrismatica::getGeneralizedStrainVector(const DeformationPlane &plano) const
+const XC::Vector &XC::PrismaticBarCrossSection::getGeneralizedStrainVector(const DeformationPlane &plano) const
   {
     const int order= getOrder();
     const ResponseId &code= getType();
@@ -85,14 +85,14 @@ const XC::Vector &XC::SeccionBarraPrismatica::getGeneralizedStrainVector(const D
   }
 
 //! @brief Returns the generalized strains vector of the cross-section.
-XC::DeformationPlane XC::SeccionBarraPrismatica::getDeformationPlane(void) const
+XC::DeformationPlane XC::PrismaticBarCrossSection::getDeformationPlane(void) const
   {
     DeformationPlane retval= DeformationPlane(getSectionDeformation());
     return retval;
   }
 
 //! @brief Returns strain at postion being passed as parameter.
-double XC::SeccionBarraPrismatica::getStrain(const double &y,const double &z) const
+double XC::PrismaticBarCrossSection::getStrain(const double &y,const double &z) const
   {
     std::cerr << "getStrain not implemented for class: "
               << nombre_clase() << std::endl;
@@ -100,19 +100,19 @@ double XC::SeccionBarraPrismatica::getStrain(const double &y,const double &z) co
   }
 
 //! @brief Returns the coordenada «y» del centro de gravedad of the cross-section.
-double XC::SeccionBarraPrismatica::getCdgY(void) const
+double XC::PrismaticBarCrossSection::getCdgY(void) const
   { return 0.0; }
 
 //! @brief Returns the coordenada «z» del centro de gravedad of the cross-section.
-double XC::SeccionBarraPrismatica::getCdgZ(void) const
+double XC::PrismaticBarCrossSection::getCdgZ(void) const
   { return 0.0; }
 
 //! @brief Returns the position of the cross-section centroid.
-Pos2d XC::SeccionBarraPrismatica::getCdg(void) const
+Pos2d XC::PrismaticBarCrossSection::getCdg(void) const
   { return Pos2d(getCdgY(),getCdgZ()); }
 
 //! @brief Returns true if the section is subjected to an axial force.
-bool XC::SeccionBarraPrismatica::hayAxil(const double &tol) const
+bool XC::PrismaticBarCrossSection::hayAxil(const double &tol) const
   {
     bool retval= false;
     const ResponseId &code= getType();
@@ -122,63 +122,63 @@ bool XC::SeccionBarraPrismatica::hayAxil(const double &tol) const
   }
 
 //! @brief Returns internal axial force.
-double XC::SeccionBarraPrismatica::getN(void) const
+double XC::PrismaticBarCrossSection::getN(void) const
   { return getStressResultant(SECTION_RESPONSE_P); }
 
 //! @brief Returns internal bending moment around y axis.
-double XC::SeccionBarraPrismatica::getMy(void) const
+double XC::PrismaticBarCrossSection::getMy(void) const
   { return getStressResultant(SECTION_RESPONSE_MY); }
 
 //! @brief Returns internal bending moment around z axis.
-double XC::SeccionBarraPrismatica::getMz(void) const
+double XC::PrismaticBarCrossSection::getMz(void) const
   { return getStressResultant(SECTION_RESPONSE_MZ); }
 
 //! @brief Returns the section axial stiffness.
-const double &XC::SeccionBarraPrismatica::EA(void) const
+const double &XC::PrismaticBarCrossSection::EA(void) const
   { return getSectionTangent()(0,0); }
 //! @brief Returns the bending stiffness of the cross-section en torno al eje z.
-const double &XC::SeccionBarraPrismatica::EIz(void) const
+const double &XC::PrismaticBarCrossSection::EIz(void) const
   { return getSectionTangent()(1,1); }
 //! @brief Returns the bending stiffness of the cross-section en torno al eje y.
-const double &XC::SeccionBarraPrismatica::EIy(void) const
+const double &XC::PrismaticBarCrossSection::EIy(void) const
   { return getSectionTangent()(2,2); }
 //! @brief Returns the producto de inercia multiplicado por el
 //! Young's modulus.
-const double &XC::SeccionBarraPrismatica::EIyz(void) const
+const double &XC::PrismaticBarCrossSection::EIyz(void) const
   { return getSectionTangent()(1,2); }
 
 //! @brief Returns the ángulo que define un eje principal de inercia.
-double XC::SeccionBarraPrismatica::getTheta(void) const
+double XC::PrismaticBarCrossSection::getTheta(void) const
   { return theta_inercia(EIy(),EIz(),EIyz()); }
 
 //! @brief Returns the bending stiffness en
 //! torno al eje de inercia principal mayor.
-double XC::SeccionBarraPrismatica::getEI1(void) const
+double XC::PrismaticBarCrossSection::getEI1(void) const
   { return I1_inercia(EIy(),EIz(),EIyz()); }
 
 //! @brief Returns the bending stiffness en
 //! torno al eje de inercia principal menor.
-double XC::SeccionBarraPrismatica::getEI2(void) const
+double XC::PrismaticBarCrossSection::getEI2(void) const
   { return I2_inercia(EIy(),EIz(),EIyz()); }
 
 //! @brief Returns the ejes principales de inercia of the cross-section.
-PrincipalAxesOfInertia2D XC::SeccionBarraPrismatica::getEjesInercia(void) const
+PrincipalAxesOfInertia2D XC::PrismaticBarCrossSection::getEjesInercia(void) const
   { return PrincipalAxesOfInertia2D(getCdg(),EIy(),EIz(),EIyz());  }
 //! @brief Returns the vector del eje principal I.
-Vector2d XC::SeccionBarraPrismatica::getVDirEje1(void) const
+Vector2d XC::PrismaticBarCrossSection::getVDirEje1(void) const
   { return getEjesInercia().getVDirEje1(); }
 //! @brief Returns the vector del eje principal I.
-Vector2d XC::SeccionBarraPrismatica::getVDirStrongAxis(void) const
+Vector2d XC::PrismaticBarCrossSection::getVDirStrongAxis(void) const
   { return getVDirEje1(); }
 //! @brief Returns the vector del eje principal II.
-Vector2d XC::SeccionBarraPrismatica::getVDirEje2(void) const
+Vector2d XC::PrismaticBarCrossSection::getVDirEje2(void) const
   { return getEjesInercia().getVDirEje2(); }
 //! @brief Returns the vector del eje principal II.
-Vector2d XC::SeccionBarraPrismatica::getVDirWeakAxis(void) const
+Vector2d XC::PrismaticBarCrossSection::getVDirWeakAxis(void) const
   { return getVDirEje2(); }
 
 //! @brief Returns true if the section is subjected to a bending moment.
-bool XC::SeccionBarraPrismatica::hayMomento(const double &tol) const
+bool XC::PrismaticBarCrossSection::hayMomento(const double &tol) const
   {
     bool retval= false;
     const ResponseId &code= getType();
@@ -190,7 +190,7 @@ bool XC::SeccionBarraPrismatica::hayMomento(const double &tol) const
   }
 
 //! @brief Returns true if the section is subjected to a shearing force.
-bool XC::SeccionBarraPrismatica::hayCortante(const double &tol) const
+bool XC::PrismaticBarCrossSection::hayCortante(const double &tol) const
   {
     bool retval= false;
     const ResponseId &code= getType();
@@ -202,7 +202,7 @@ bool XC::SeccionBarraPrismatica::hayCortante(const double &tol) const
   }
 
 //! @brief Returns true if the section is subjected to a torsional force.
-bool XC::SeccionBarraPrismatica::hayTorsor(const double &tol) const
+bool XC::PrismaticBarCrossSection::hayTorsor(const double &tol) const
   {
     bool retval= false;
     const ResponseId &code= getType();
@@ -212,12 +212,12 @@ bool XC::SeccionBarraPrismatica::hayTorsor(const double &tol) const
   }
 
 //! @brief Returns the neutral axis.
-Recta2d XC::SeccionBarraPrismatica::getFibraNeutra(void) const
+Recta2d XC::PrismaticBarCrossSection::getFibraNeutra(void) const
   { return getDeformationPlane().getFibraNeutra(); }
 
 //! @brief Returns the axis that is aligned with the
 //! cross-section internal forces.
-Recta2d XC::SeccionBarraPrismatica::getEjeEsfuerzos(void) const
+Recta2d XC::PrismaticBarCrossSection::getEjeEsfuerzos(void) const
   {
     Recta2d retval(getCdg(),Vector2d(1,0));
     const ResponseId &code= getType();
@@ -243,28 +243,28 @@ Recta2d XC::SeccionBarraPrismatica::getEjeEsfuerzos(void) const
   }
 
 //! @brief Returns (if possible) a point in the tensioned region.
-Pos2d XC::SeccionBarraPrismatica::getPuntoSemiplanoTracciones(void) const
-  { return getDeformationPlane().getPuntoSemiplanoTracciones(); }
+Pos2d XC::PrismaticBarCrossSection::getPointOnTensionedHalfPlane(void) const
+  { return getDeformationPlane().getPointOnTensionedHalfPlane(); }
 
 //! @brief Returns (if possible) a point in the compressed region.
-Pos2d XC::SeccionBarraPrismatica::getPuntoSemiplanoCompresiones(void) const
-  { return getDeformationPlane().getPuntoSemiplanoCompresiones(); }
+Pos2d XC::PrismaticBarCrossSection::getPointOnCompressedHalfPlane(void) const
+  { return getDeformationPlane().getPointOnCompressedHalfPlane(); }
 
 //! @brief Returns the tensioned half-plane defined by the edge
 //! being passed as parameter.
-Semiplano2d XC::SeccionBarraPrismatica::getSemiplanoTracciones(const Recta2d &r) const
-  { return getDeformationPlane().getSemiplanoTracciones(r); }
+Semiplano2d XC::PrismaticBarCrossSection::getTensionedHalfPlane(const Recta2d &r) const
+  { return getDeformationPlane().getTensionedHalfPlane(r); }
 
 //! @brief Returns the tensioned half-plane.
-Semiplano2d XC::SeccionBarraPrismatica::getSemiplanoTracciones(void) const
-  { return getDeformationPlane().getSemiplanoTracciones(); }
+Semiplano2d XC::PrismaticBarCrossSection::getTensionedHalfPlane(void) const
+  { return getDeformationPlane().getTensionedHalfPlane(); }
 
 //! @brief Returns the compressed half-plane defined by the edge
 //! being passed as parameter.
-Semiplano2d XC::SeccionBarraPrismatica::getSemiplanoCompresiones(const Recta2d &r) const
-  { return getDeformationPlane().getSemiplanoCompresiones(r); }
+Semiplano2d XC::PrismaticBarCrossSection::getCompressedHalfPlane(const Recta2d &r) const
+  { return getDeformationPlane().getCompressedHalfPlane(r); }
 
 //! @brief Returns the compressed half-plane.
-Semiplano2d XC::SeccionBarraPrismatica::getSemiplanoCompresiones(void) const
-  { return getDeformationPlane().getSemiplanoCompresiones(); }
+Semiplano2d XC::PrismaticBarCrossSection::getCompressedHalfPlane(void) const
+  { return getDeformationPlane().getCompressedHalfPlane(); }
 

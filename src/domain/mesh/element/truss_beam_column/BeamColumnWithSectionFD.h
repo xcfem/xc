@@ -30,7 +30,7 @@
 #define BeamColumnWithSectionFD_h
 
 #include <domain/mesh/element/Element1D.h>
-#include "material/section/VectorSeccionesBarraPrismatica.h"
+#include "material/section/PrismaticBarCrossSectionsVector.h"
 #include "SectionMatrices.h"
 
 
@@ -38,11 +38,11 @@ namespace XC {
 
 //! \ingroup OneDimensionalElem
 //
-//! @brief Beam-column element with SeccionBarraPrismatica material
+//! @brief Beam-column element with PrismaticBarCrossSection material
 class BeamColumnWithSectionFD : public Element1D
   {
   protected:
-    VectorSeccionesBarraPrismatica theSections; //!< pointers to the SeccionBarraPrismatica objects
+    PrismaticBarCrossSectionsVector theSections; //!< pointers to the PrismaticBarCrossSection objects
 
 
     SectionMatrices section_matrices;
@@ -52,22 +52,22 @@ class BeamColumnWithSectionFD : public Element1D
   public:
     BeamColumnWithSectionFD(int tag, int classTag,const size_t &numSecc= 1);
     BeamColumnWithSectionFD(int tag, int classTag,const size_t &numSecc,const Material *m);
-    BeamColumnWithSectionFD(int tag, int classTag,const size_t &numSecc,const SeccionBarraPrismatica *sccModel);
-    BeamColumnWithSectionFD(int tag, int classTag,const size_t &numSecc,const SeccionBarraPrismatica *sccModel,int Nd1,int Nd2);
+    BeamColumnWithSectionFD(int tag, int classTag,const size_t &numSecc,const PrismaticBarCrossSection *sccModel);
+    BeamColumnWithSectionFD(int tag, int classTag,const size_t &numSecc,const PrismaticBarCrossSection *sccModel,int Nd1,int Nd2);
 
-    const SeccionBarraPrismatica *getSectionPtr(const size_t &i) const;
+    const PrismaticBarCrossSection *getSectionPtr(const size_t &i) const;
 
     void setTrialSectionDeformations(const std::vector<Vector> &vs);
 
-    virtual void setSection(const SeccionBarraPrismatica *sccModel);
-    bool setSections(const std::vector<SeccionBarraPrismatica *> &sectionPtrs);
+    virtual void setSection(const PrismaticBarCrossSection *sccModel);
+    bool setSections(const std::vector<PrismaticBarCrossSection *> &sectionPtrs);
     inline size_t getNumSections(void) const
       { return theSections.size(); }
-    inline VectorSeccionesBarraPrismatica &getSections(void)
+    inline PrismaticBarCrossSectionsVector &getSections(void)
       { return theSections; }
  
-    Response *setSectionResponse(SeccionBarraPrismatica *,const std::vector<std::string> &,const size_t &,Information &);
-    int setSectionParameter(SeccionBarraPrismatica *,const std::vector<std::string> &,const size_t &, Parameter &);
+    Response *setSectionResponse(PrismaticBarCrossSection *,const std::vector<std::string> &,const size_t &,Information &);
+    int setSectionParameter(PrismaticBarCrossSection *,const std::vector<std::string> &,const size_t &, Parameter &);
 
     // public methods to set the state of the element
     int commitState(void);

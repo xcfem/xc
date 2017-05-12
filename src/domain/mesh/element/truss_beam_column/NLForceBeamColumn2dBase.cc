@@ -27,7 +27,7 @@
 //NLForceBeamColumn2dBase.cpp
 
 #include <domain/mesh/element/truss_beam_column/NLForceBeamColumn2dBase.h>
-#include <material/section/SeccionBarraPrismatica.h>
+#include <material/section/PrismaticBarCrossSection.h>
 
 #include "utility/actor/actor/MatrixCommMetaData.h"
 

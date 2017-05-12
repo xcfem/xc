@@ -95,7 +95,7 @@ class NLBeamColumn3d: public  NLForceBeamColumn3dBase
     NLBeamColumn3d(int tag= 0);
     NLBeamColumn3d(int tag,int numSec,const Material *theSection,const CrdTransf *coordTransf);
     NLBeamColumn3d(int tag, int nodeI, int nodeJ,  
-                    int numSections,const std::vector<SeccionBarraPrismatica *> &, 
+                    int numSections,const std::vector<PrismaticBarCrossSection *> &, 
                     CrdTransf3d &coordTransf, double massDensPerUnitLength = 0.0, 
 		    int maxNumIters = 10, double tolerance = 1e-12);
     Element *getCopy(void) const;
