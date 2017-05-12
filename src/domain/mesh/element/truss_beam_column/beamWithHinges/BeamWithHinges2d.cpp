@@ -59,7 +59,7 @@
 #include <domain/mesh/element/truss_beam_column/nonlinearBeamColumn/matrixutil/MatrixUtil.h>
 #include <cstring>
 
-#include <material/section/SeccionBarraPrismatica.h>
+#include <material/section/PrismaticBarCrossSection.h>
 #include <domain/mesh/element/utils/coordTransformation/CrdTransf2d.h>
 #include "domain/load/beam_loads/BeamMecLoad.h"
 
@@ -99,8 +99,8 @@ XC::BeamWithHinges2d::BeamWithHinges2d(int tag,const Material *mat,const CrdTran
 
 XC::BeamWithHinges2d::BeamWithHinges2d(int tag, int nodeI, int nodeJ,
                                        double e, double a, double i,
-                                       SeccionBarraPrismatica &sectionRefI, double lpi,
-                                       SeccionBarraPrismatica &sectionRefJ, double lpj,
+                                       PrismaticBarCrossSection &sectionRefI, double lpi,
+                                       PrismaticBarCrossSection &sectionRefJ, double lpj,
                                        CrdTransf2d &coordTransf,
                                        double r, int max, double tol)
   :BeamColumnWithSectionFDTrf2d(tag, ELE_TAG_BeamWithHinges2d,2,nodeI,nodeJ,coordTransf),

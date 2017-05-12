@@ -61,7 +61,7 @@ namespace XC {
 class Channel;
 class FEM_ObjectBroker;
 
-class SeccionBarraPrismatica;
+class PrismaticBarCrossSection;
 
 class CrdTransf2d;
 class Response;
@@ -111,8 +111,8 @@ class BeamWithHinges2d: public BeamColumnWithSectionFDTrf2d
   public:
     BeamWithHinges2d(int tag, int nodeI, int nodeJ,
 	  	   double E, double A, double I,
-		   SeccionBarraPrismatica &sectionRefI, double hingeIlen, 
-		   SeccionBarraPrismatica &sectionRefJ, double hingeJlen,
+		   PrismaticBarCrossSection &sectionRefI, double hingeIlen, 
+		   PrismaticBarCrossSection &sectionRefJ, double hingeJlen,
 		   CrdTransf2d &coordTrans, double massDensPerUnitLength = 0.0,
 		   int max = 1, double tol = 1.0e-16);
     BeamWithHinges2d(int tag= 0);

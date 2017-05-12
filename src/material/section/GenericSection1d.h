@@ -62,7 +62,7 @@
 //
 // What: "@(#) GenericSection1d.h, revA"
 
-#include <material/section/SeccionBarraPrismatica.h>
+#include <material/section/PrismaticBarCrossSection.h>
 #include <utility/matrix/Matrix.h>
 
 namespace XC {
@@ -72,7 +72,7 @@ class UniaxialMaterial;
 //! \ingroup MATSCC
 //
 //! @brief ??.
-class GenericSection1d : public SeccionBarraPrismatica
+class GenericSection1d : public PrismaticBarCrossSection
   {
     //XXX Add copy constructor and assignment operator.
   protected:

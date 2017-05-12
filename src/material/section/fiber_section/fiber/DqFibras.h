@@ -53,7 +53,7 @@ class Matrix;
 class Response;
 class Parameter;
 class Information;
-class KRSeccion;
+class CrossSectionKR;
 class GeomSection;
 class DeformationPlane;
 
@@ -166,30 +166,30 @@ class DqFibras : public EntCmd, public std::deque<Fiber *>
     double getDistMediaFibras(void) const;
     int updateCDG(void);
     
-    int updateKRCDG(FiberSection2d &,KRSeccion &);
-    Fiber *addFiber(FiberSection2d &,Fiber &,KRSeccion &);
+    int updateKRCDG(FiberSection2d &,CrossSectionKR &);
+    Fiber *addFiber(FiberSection2d &,Fiber &,CrossSectionKR &);
     int setInitialSectionDeformation(const FiberSection2d &);
-    int setTrialSectionDeformation(const FiberSection2d &,KRSeccion &);
-    int revertToLastCommit(FiberSection2d &,KRSeccion &);
-    int revertToStart(FiberSection2d &,KRSeccion &);
+    int setTrialSectionDeformation(const FiberSection2d &,CrossSectionKR &);
+    int revertToLastCommit(FiberSection2d &,CrossSectionKR &);
+    int revertToStart(FiberSection2d &,CrossSectionKR &);
     const Matrix &getInitialTangent(const FiberSection2d &) const;
     const Vector &getStressResultantSensitivity(int gradNumber, bool conditional);
     int commitSensitivity(const XC::Vector& defSens, int gradNumber, int numGrads);
 
-    int updateKRCDG(FiberSection3d &,KRSeccion &);
-    Fiber *addFiber(FiberSection3d &,Fiber &,KRSeccion &);
+    int updateKRCDG(FiberSection3d &,CrossSectionKR &);
+    Fiber *addFiber(FiberSection3d &,Fiber &,CrossSectionKR &);
     int setInitialSectionDeformation(const FiberSection3d &);
-    int setTrialSectionDeformation(FiberSection3d &,KRSeccion &);
-    int revertToLastCommit(FiberSection3d &,KRSeccion &);
-    int revertToStart(FiberSection3d &,KRSeccion &);
+    int setTrialSectionDeformation(FiberSection3d &,CrossSectionKR &);
+    int revertToLastCommit(FiberSection3d &,CrossSectionKR &);
+    int revertToStart(FiberSection3d &,CrossSectionKR &);
     const Matrix &getInitialTangent(const FiberSection3d &) const;
 
-    int updateKRCDG(FiberSectionGJ &,KRSeccion &);
-    Fiber *addFiber(FiberSectionGJ &,Fiber &,KRSeccion &);
+    int updateKRCDG(FiberSectionGJ &,CrossSectionKR &);
+    Fiber *addFiber(FiberSectionGJ &,Fiber &,CrossSectionKR &);
     int setInitialSectionDeformation(const FiberSectionGJ &);
-    int setTrialSectionDeformation(FiberSectionGJ &,KRSeccion &);
-    int revertToLastCommit(FiberSectionGJ &,KRSeccion &);
-    int revertToStart(FiberSectionGJ &,KRSeccion &);
+    int setTrialSectionDeformation(FiberSectionGJ &,CrossSectionKR &);
+    int revertToLastCommit(FiberSectionGJ &,CrossSectionKR &);
+    int revertToStart(FiberSectionGJ &,CrossSectionKR &);
     const Matrix &getInitialTangent(const FiberSectionGJ &) const;
 
     Response *setResponse(const std::vector<std::string> &argv, Information &sectInfo);

@@ -80,8 +80,7 @@ class SoluMethod;
 
 //! @ingroup Analysis
 //
-//! @defgroup AnalysisIntegrator Integration of physical
-//! properties over the domain to form the system stiffness matrix.
+//! @defgroup AnalysisIntegrator Integration of physical properties over the domain to form the system matrices.
 //
 //! @ingroup AnalysisIntegrator
 //

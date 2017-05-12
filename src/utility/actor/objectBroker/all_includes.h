@@ -68,7 +68,7 @@
 #include "material/section/elastic_section/ElasticShearSection2d.h"
 #include "material/section/elastic_section/ElasticShearSection3d.h"
 #include "material/section/GenericSection1d.h"
-#include "material/section/SeccionBarraPrismatica.h"
+#include "material/section/PrismaticBarCrossSection.h"
 #include "material/section/repres/CrossSectionProperties2d.h"
 #include "material/section/repres/CrossSectionProperties3d.h"
 #include "material/section/repres/geom_section/GeomSection.h"

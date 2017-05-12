@@ -57,7 +57,7 @@
 #include <domain/mesh/element/zeroLength/ZeroLengthSection.h>
 #include <domain/mesh/element/utils/Information.h>
 
-#include "material/section/SeccionBarraPrismatica.h"
+#include "material/section/PrismaticBarCrossSection.h"
 #include <domain/domain/Domain.h>
 #include <domain/mesh/node/Node.h>
 #include <utility/actor/objectBroker/FEM_ObjectBroker.h>
@@ -352,7 +352,7 @@ const XC::Vector &XC::ZeroLengthSection::getResistingForceIncInertia(void) const
 XC::Vector XC::ZeroLengthSection::getVDirStrongAxisLocalCoord(void) const
   {
     Vector retval(3);
-    const SeccionBarraPrismatica *sccBarra= dynamic_cast<const SeccionBarraPrismatica *>(theSection);
+    const PrismaticBarCrossSection *sccBarra= dynamic_cast<const PrismaticBarCrossSection *>(theSection);
     if(sccBarra)
       {
         const Vector2d sectionStrongAxis= sccBarra->getVDirStrongAxis();
@@ -368,7 +368,7 @@ XC::Vector XC::ZeroLengthSection::getVDirStrongAxisLocalCoord(void) const
 XC::Vector XC::ZeroLengthSection::getVDirWeakAxisLocalCoord(void) const
   {
     Vector retval(3);
-    const SeccionBarraPrismatica *sccBarra= dynamic_cast<const SeccionBarraPrismatica *>(theSection);
+    const PrismaticBarCrossSection *sccBarra= dynamic_cast<const PrismaticBarCrossSection *>(theSection);
     if(sccBarra)
       {
         const Vector2d sectionWeakAxis= sccBarra->getVDirWeakAxis();

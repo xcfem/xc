@@ -115,7 +115,7 @@ XC::NLBeamColumn2d::NLBeamColumn2d(int tag,int numSec, const Material *m,const C
 // and the node XC::ID's of it's nodal end points.
 // allocates the necessary space needed by each object
 XC::NLBeamColumn2d::NLBeamColumn2d (int tag, int nodeI, int nodeJ,
-                                int numSections,const std::vector<SeccionBarraPrismatica *> &sectionPtrs,
+                                int numSections,const std::vector<PrismaticBarCrossSection *> &sectionPtrs,
                                 CrdTransf2d &coordTransf, double massDensPerUnitLength,
                                 int maxNumIters, double tolerance, int maxSub)
   : NLForceBeamColumn2dBase(tag,ELE_TAG_NLBeamColumn2d,numSections),

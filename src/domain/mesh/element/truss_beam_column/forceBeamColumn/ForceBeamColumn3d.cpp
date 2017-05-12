@@ -59,7 +59,7 @@
 #include <domain/mesh/element/utils/coordTransformation/CrdTransf3d.h>
 #include <domain/mesh/node/Node.h>
 #include <domain/mesh/element/truss_beam_column/forceBeamColumn/beam_integration/BeamIntegration.h>
-#include <material/section/SeccionBarraPrismatica.h>
+#include <material/section/PrismaticBarCrossSection.h>
 
 #include <cfloat>
 #include "domain/load/beam_loads/BeamMecLoad.h"
@@ -121,7 +121,7 @@ XC::ForceBeamColumn3d::ForceBeamColumn3d(int tag, int numSec, const Material *m,
 // and the node XC::ID's of it's nodal end points.
 // allocates the necessary space needed by each object
 XC::ForceBeamColumn3d::ForceBeamColumn3d (int tag, int nodeI, int nodeJ,
-                                      int numSec,const std::vector<SeccionBarraPrismatica *> &sec,
+                                      int numSec,const std::vector<PrismaticBarCrossSection *> &sec,
                                       BeamIntegration &bi,
                                       CrdTransf3d &coordTransf, double massDensPerUnitLength,
                                       int maxNumIters, double tolerance):
@@ -1700,7 +1700,7 @@ int XC::ForceBeamColumn3d::updateParameter (int parameterID, Information &info)
   }
 }
 
-void XC::ForceBeamColumn3d::setSectionPointers(const std::vector<SeccionBarraPrismatica *> &secPtrs)
+void XC::ForceBeamColumn3d::setSectionPointers(const std::vector<PrismaticBarCrossSection *> &secPtrs)
   {
     const size_t numSections= getNumSections();
     if(numSections > section_matrices.getMaxNumSections())

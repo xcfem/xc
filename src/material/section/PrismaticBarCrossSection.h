@@ -24,11 +24,11 @@
 // along with this program.
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
-//SeccionBarraPrismatica.h
+//PrismaticBarCrossSection.h
                                                                         
                                                                         
-#ifndef SeccionBarraPrismatica_h
-#define SeccionBarraPrismatica_h
+#ifndef PrismaticBarCrossSection_h
+#define PrismaticBarCrossSection_h
 
 class PrincipalAxesOfInertia2D;
 
@@ -47,12 +47,12 @@ class DeformationPlane;
 //
 //! @brief Base class for beam-column cross sections.
 //! Constitutive equations of the section.
-class SeccionBarraPrismatica: public SectionForceDeformation
+class PrismaticBarCrossSection: public SectionForceDeformation
   {
   public:
-    SeccionBarraPrismatica(int tag,int classTag,MaterialLoader *mat_ldr= nullptr);
-    SeccionBarraPrismatica(const SeccionBarraPrismatica &otro);
-    SeccionBarraPrismatica &operator=(const SeccionBarraPrismatica &otro);
+    PrismaticBarCrossSection(int tag,int classTag,MaterialLoader *mat_ldr= nullptr);
+    PrismaticBarCrossSection(const PrismaticBarCrossSection &otro);
+    PrismaticBarCrossSection &operator=(const PrismaticBarCrossSection &otro);
 
     int setTrialDeformationPlane(const DeformationPlane &);
     int setInitialDeformationPlane(const DeformationPlane &);
@@ -70,12 +70,12 @@ class SeccionBarraPrismatica: public SectionForceDeformation
     Pos2d getCdg(void) const;
     Recta2d getFibraNeutra(void) const;
     Recta2d getEjeEsfuerzos(void) const;
-    Pos2d getPuntoSemiplanoTracciones(void) const;
-    Pos2d getPuntoSemiplanoCompresiones(void) const;
-    Semiplano2d getSemiplanoTracciones(void) const;
-    Semiplano2d getSemiplanoTracciones(const Recta2d &) const;
-    Semiplano2d getSemiplanoCompresiones(void) const;
-    Semiplano2d getSemiplanoCompresiones(const Recta2d &) const;
+    Pos2d getPointOnTensionedHalfPlane(void) const;
+    Pos2d getPointOnCompressedHalfPlane(void) const;
+    Semiplano2d getTensionedHalfPlane(void) const;
+    Semiplano2d getTensionedHalfPlane(const Recta2d &) const;
+    Semiplano2d getCompressedHalfPlane(void) const;
+    Semiplano2d getCompressedHalfPlane(const Recta2d &) const;
 
     const double &EA(void) const;
     const double &EIz(void) const;

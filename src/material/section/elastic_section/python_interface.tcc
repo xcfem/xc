@@ -21,7 +21,7 @@
 //----------------------------------------------------------------------------
 //python_interface.tcc
 
-class_<XC::BaseElasticSection, bases<XC::SeccionBarraPrismatica>, boost::noncopyable >("BaseElasticSection", no_init)
+class_<XC::BaseElasticSection, bases<XC::PrismaticBarCrossSection>, boost::noncopyable >("BaseElasticSection", no_init)
   .def("sectionGeometry",&XC::BaseElasticSection::sectionGeometry)
   ;
 

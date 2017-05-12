@@ -66,13 +66,13 @@
 
 namespace XC {
 class Node;
-class SeccionBarraPrismatica;
+class PrismaticBarCrossSection;
 class CrdTransf3d;
 class Response;
 
 //! \ingroup OneDimensionalElem
 //
-//! @brief 3D beam element with SeccionBarraPrismatica type material.
+//! @brief 3D beam element with PrismaticBarCrossSection type material.
 class DispBeamColumn3d : public BeamColumnWithSectionFDTrf3d
   {
   private:
@@ -99,7 +99,7 @@ class DispBeamColumn3d : public BeamColumnWithSectionFDTrf3d
     DispBeamColumn3d(int tag= 0);
     DispBeamColumn3d(int tag,int numSec,const Material *theSection,const CrdTransf *trf);
     DispBeamColumn3d(int tag, int nd1, int nd2,
-		     int numSections,const std::vector <SeccionBarraPrismatica *> &s, CrdTransf3d &coordTransf, double rho = 0.0);
+		     int numSections,const std::vector <PrismaticBarCrossSection *> &s, CrdTransf3d &coordTransf, double rho = 0.0);
     Element *getCopy(void) const;
 
     int getNumDOF(void) const;

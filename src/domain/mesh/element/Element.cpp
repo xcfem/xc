@@ -155,8 +155,8 @@ int XC::Element::setRayleighDampingFactors(const RayleighDampingFactors &rF) con
 //! @brief Returns the element dimension (0, 1, 3 or 3).
 size_t XC::Element::getDimension(void) const
   {
-    std::cerr << "Element::getDimension not implemented para '"
-              << nombre_clase() << "'\n";
+    std::cerr << nombre_clase() << "::" << __FUNCTION__
+              << "is not implemented.\n";
     return 0;
   }
 
@@ -459,14 +459,20 @@ const XC::Matrix &XC::Element::getDampSensitivity(int gradNumber)
     if(rayFactors.getBetaK() != 0.0)
       {
         theMatrix.addMatrix(1.0, this->getTangentStiff(), 0.0); // Don't use this and DDM
-        std::cerr << "Rayleigh damping with non-zero betaCurrentTangent is not compatible with DDM sensitivity analysis" << std::endl;
+        std::cerr << nombre_clase() << __FUNCTION__
+		  << "; Rayleigh damping with non-zero betaCurrentTangent"
+	          << " is not compatible with DDM sensitivity analysis"
+		  << std::endl;
       }
     if(rayFactors.getBetaK0() != 0.0)
       theMatrix.addMatrix(1.0, this->getInitialStiffSensitivity(gradNumber), rayFactors.getBetaK0());
     if(rayFactors.getBetaKc() != 0.0)
       {
         theMatrix.addMatrix(1.0, Kc, 0.0);      // Don't use this and DDM
-          std::cerr << "Rayleigh damping with non-zero betaCommittedTangent is not compatible with DDM sensitivity analysis" << std::endl;
+        std::cerr << nombre_clase() << __FUNCTION__
+                  << "Rayleigh damping with non-zero betaCommittedTangent"
+	          << " is not compatible with DDM sensitivity analysis"
+		  << std::endl;
       }
 
     // return the computed matrix
@@ -534,7 +540,8 @@ int XC::Element::addResistingForceToNodalReaction(bool inclInertia)
 
     if(nodeIndex == -1)
       {
-        std::cerr << "LOGIC ERROR Element::addResistingForceToNodalReaction() -HUH!\n";
+        std::cerr << nombre_clase() << "::" << __FUNCTION__
+	          << "; HUH!\n";
         return -1;
       }
 
@@ -573,7 +580,8 @@ int XC::Element::addResistingForceToNodalReaction(bool inclInertia)
 //! @brief Returns interpolattion factors for a material point.
 XC::Vector XC::Element::getInterpolationFactors(const ParticlePos3d &) const
   {
-    std::cerr << "getInterpolationFactors must be implemented in the subclass."
+    std::cerr << nombre_clase() << "::" << __FUNCTION__
+              << "; must be overloaded in derived classes."
               << std::endl;
     static const int numberNodes= getNumExternalNodes();
     return Vector(numberNodes);
@@ -582,7 +590,8 @@ XC::Vector XC::Element::getInterpolationFactors(const ParticlePos3d &) const
 //! @brief Returns interpolattion factors for a material point.
 XC::Vector XC::Element::getInterpolationFactors(const Pos3d &) const
   {
-    std::cerr << "getInterpolationFactors must be implemented in the subclass."
+    std::cerr << nombre_clase() << "::" << __FUNCTION__
+              << "; must be overloaded in derived classes."
               << std::endl;
     static const int numberNodes= getNumExternalNodes();
     return Vector(numberNodes);
@@ -591,21 +600,27 @@ XC::Vector XC::Element::getInterpolationFactors(const Pos3d &) const
 //! @brief Interfaz con VTK.
 int XC::Element::getVtkCellType(void) const
   {
-    std::cerr << "Element::getVtkCellType: function getVtkCellType must be overloaded in derived classes." << std::endl;
+    std::cerr << nombre_clase() << "::" << __FUNCTION__
+              << "; must be overloaded in derived classes."
+              << std::endl;
     return VTK_EMPTY_CELL;
   }
 
 //! @brief Interfaz con el formato MED de Salome.
 int XC::Element::getMEDCellType(void) const
   {
-    std::cerr << "Element::getMEDCellType: function getMEDCellType must be overloaded in derived classes." << std::endl;
+    std::cerr << nombre_clase() << "::" << __FUNCTION__
+              << "; must be overloaded in derived classes."
+              << std::endl;
     return ::MED_NONE;
   }
 
 //! @brief Returns the Gauss integration model of the element.
 const XC::GaussModel &XC::Element::getGaussModel(void) const
   {
-    std::cerr << "Function Element::getMEDCellType must be overloaded in derived classes." << std::endl;
+    std::cerr << nombre_clase() << "::" << __FUNCTION__
+              << "; must be overloaded in derived classes."
+              << std::endl;
     return gauss_model_empty;
   }
 
@@ -621,8 +636,8 @@ XC::MEDGaussModel XC::Element::getMEDGaussModel(void) const
 XC::Element::NodesEdge XC::Element::getNodesEdge(const size_t &) const
   {
     NodesEdge retval;
-    std::cerr << nombre_clase()
-              << "; no se ha definido getNodesEdge()."
+    std::cerr << nombre_clase() << "::" << __FUNCTION__
+              << "; is not defined."
               << std::endl;
     return retval;
   }
@@ -631,8 +646,8 @@ XC::Element::NodesEdge XC::Element::getNodesEdge(const size_t &) const
 //! que tiene por extremos los nodos being passed as parameters.
 int XC::Element::getEdgeNodes(const Node *,const Node *) const
   {
-    std::cerr << nombre_clase()
-              << "; no se ha definido getEdgeNodes()."
+    std::cerr << nombre_clase() << "::" << __FUNCTION__
+              << "; is not defined."
               << std::endl;
     return -1;
   }
@@ -652,8 +667,8 @@ int XC::Element::getEdgeNodes(const int &iN1,const int &iN2) const
 XC::ID XC::Element::getEdgesNode(const Node *) const
   {
     ID retval;
-    std::cerr << nombre_clase()
-              << "; no se ha definido getEdgesNode()."
+    std::cerr << nombre_clase() << "::" << __FUNCTION__
+              << "; is not defined."
               << std::endl;
     return retval;
   }
@@ -773,7 +788,7 @@ XC::Matrix XC::Element::getLocalAxes(bool initialGeometry) const
   {
     Matrix retval;
     std::cerr << nombre_clase() << "::" << __FUNCTION__
-              << "must be implemented in derived classes." << std::endl;
+              << " must be implemented in derived classes." << std::endl;
     return retval;
   }
 
@@ -784,7 +799,7 @@ XC::Vector XC::Element::getBaseVector(size_t i,bool initialGeometry) const
     const Matrix localAxes= getLocalAxes(initialGeometry);
     Vector retval(3,0.0);
     const size_t nCols= localAxes.noCols();
-    for(size_t j= 0;j<nCols;i++)
+    for(size_t j= 0;j<nCols;j++)
       retval(j)= localAxes(i,j);
     return retval;
   }    
@@ -841,7 +856,8 @@ Pos3d XC::Element::getPosNodo(const size_t &i,bool initialGeometry) const
 TritrizPos3d XC::Element::getPuntos(const size_t &ni,const size_t &nj,const size_t &nk,bool initialGeometry)
   {
     TritrizPos3d retval;
-    std::cerr << "Function getPuntos must be implemented in derived classes."
+    std::cerr << nombre_clase() << "::" << __FUNCTION__
+	      << "; must be implemented in derived classes."
               << std::endl;
     return retval;
   }
@@ -859,8 +875,8 @@ void XC::Element::dumpTributaries(const std::vector<double> &t) const
 //! node of the element
 void XC::Element::computeTributaryLengths(bool initialGeometry) const
   {
-    std::cerr << "Function computeTributaryLengths "
-              << "must be overloaded in derived classes."
+    std::cerr << nombre_clase() << "::" << __FUNCTION__
+              << " must be overloaded in derived classes."
               << std::endl;
   }
 
@@ -880,8 +896,8 @@ double XC::Element::getTributaryLengthByTag(const int &tag) const
 //! @brief Compute tributary areas for each element node.
 void XC::Element::computeTributaryAreas(bool initialGeometry) const
   {
-    std::cerr << "Function computeTributaryAreas "
-              << "must be overloaded in derived classes."
+    std::cerr << nombre_clase() << "::" << __FUNCTION__
+	      << "; must be implemented in derived classes."
               << std::endl;
   }
 
@@ -900,8 +916,8 @@ double XC::Element::getTributaryAreaByTag(const int &tag) const
 //! node of the element
 void XC::Element::computeTributaryVolumes(bool initialGeometry) const
   {
-    std::cerr << "Function computeTributaryVolumes "
-              << "must be overloaded in derived classes."
+    std::cerr << nombre_clase() << "::" << __FUNCTION__
+	      << "; must be implemented in derived classes."
               << std::endl;
   }
 
@@ -922,8 +938,8 @@ double XC::Element::getTributaryVolumeByTag(const int &tag) const
 //! being passed as parameter.
 double XC::Element::getDist2(const Pos2d &p,bool initialGeometry) const
   {
-    std::cerr << "Function getDist2(Pos2d) is not defined for element of type: '"
-              << nombre_clase() << "'" << std::endl;
+    std::cerr << nombre_clase() << "::" << __FUNCTION__
+              << " is not implemented." << std::endl;
     return 0.0;
   }
 
@@ -931,8 +947,8 @@ double XC::Element::getDist2(const Pos2d &p,bool initialGeometry) const
 //! being passed as parameter.
 double XC::Element::getDist(const Pos2d &p,bool initialGeometry) const
   {
-    std::cerr << "Function getDist(Pos2d) is not defined for element of type: '"
-              << nombre_clase() << "'" << std::endl;
+    std::cerr << nombre_clase() << "::" << __FUNCTION__
+              << " is not implemented." << std::endl;
     return 0.0;
   }
 
@@ -940,8 +956,8 @@ double XC::Element::getDist(const Pos2d &p,bool initialGeometry) const
 //! being passed as parameter.
 double XC::Element::getDist2(const Pos3d &p,bool initialGeometry) const
   {
-    std::cerr << "Function getDist2(Pos3d) is not defined for element of type: '"
-              << nombre_clase() << "'" << std::endl;
+    std::cerr << nombre_clase() << "::" << __FUNCTION__
+              << " is not implemented." << std::endl;
     return 0.0;
   }
 
@@ -949,16 +965,16 @@ double XC::Element::getDist2(const Pos3d &p,bool initialGeometry) const
 //! being passed as parameter.
 double XC::Element::getDist(const Pos3d &p,bool initialGeometry) const
   {
-    std::cerr << "Function getDist(Pos3d) is not defined for element of type: '"
-              << nombre_clase() << "'" << std::endl;
+    std::cerr << nombre_clase() << "::" << __FUNCTION__
+              << " is not implemented." << std::endl;
     return 0.0;
   }
 
 //! @brief Returns the coordinates del centro de gravedad of the element.
 Pos3d XC::Element::getPosCdg(bool initialGeometry) const
   {
-    std::cerr << __FUNCTION__ << " not implemented for type: "
-              << nombre_clase() << " elements." << std::endl;
+    std::cerr << nombre_clase() << "::" << __FUNCTION__
+              << " is not implemented." << std::endl;
     static Pos3d retval;
     return retval;
   }
@@ -977,13 +993,15 @@ XC::Vector XC::Element::getCooCdg(bool initialGeometry) const
 //! @brief Places the element on the mesh.
 XC::TritrizPtrElem XC::Element::put_on_mesh(const XC::TritrizPtrNod &,meshing_dir) const
   {
-    std::cerr << "Método put_on_mesh no implementado" << std::endl;
+    std::cerr << nombre_clase() << "::" << __FUNCTION__
+              << " is not implemented." << std::endl;
     return TritrizPtrElem();
   }
 
 XC::TritrizPtrElem XC::Element::cose(const SetEstruct &f1,const SetEstruct &f2) const
   {
-    std::cerr << "Método cose no implementado" << std::endl;
+    std::cerr << nombre_clase() << "::" << __FUNCTION__
+              << " is not implemented." << std::endl;
     return TritrizPtrElem();
   }
 

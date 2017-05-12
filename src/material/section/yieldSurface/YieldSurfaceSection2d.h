@@ -30,7 +30,7 @@
 #ifndef YieldSurfaceSection2d_h
 #define YieldSurfaceSection2d_h
 
-#include "material/section/SeccionBarraPrismatica.h"
+#include "material/section/PrismaticBarCrossSection.h"
 #include "utility/matrix/Matrix.h"
 #include "utility/matrix/Vector.h"
 
@@ -48,7 +48,7 @@ class YieldSurface_BC;
 //
 //! @brief Base class for cross sections with yield surface
 //! on a bi-dimensional space (three DOFs for each section).
-class YieldSurfaceSection2d: public SeccionBarraPrismatica
+class YieldSurfaceSection2d: public PrismaticBarCrossSection
   {
   protected:
     virtual void getSectionStiffness(Matrix &Ks)=0;

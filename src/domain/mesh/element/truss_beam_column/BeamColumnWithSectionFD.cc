@@ -31,7 +31,7 @@
 
 #include "utility/matrix/Vector.h"
 #include "utility/matrix/Matrix.h"
-#include <material/section/SeccionBarraPrismatica.h>
+#include <material/section/PrismaticBarCrossSection.h>
 #include <utility/recorder/response/ElementResponse.h>
 
 
@@ -43,11 +43,11 @@ XC::BeamColumnWithSectionFD::BeamColumnWithSectionFD(int tag, int classTag,const
   : Element1D(tag,classTag), theSections(numSecc,m)
   {}
 
-XC::BeamColumnWithSectionFD::BeamColumnWithSectionFD(int tag, int classTag,const size_t &numSecc,const SeccionBarraPrismatica *matModel)
+XC::BeamColumnWithSectionFD::BeamColumnWithSectionFD(int tag, int classTag,const size_t &numSecc,const PrismaticBarCrossSection *matModel)
   : Element1D(tag,classTag), theSections(numSecc,matModel)
   {}
 
-XC::BeamColumnWithSectionFD::BeamColumnWithSectionFD(int tag, int classTag,const size_t &numSecc,const SeccionBarraPrismatica *sccModel,int Nd1,int Nd2)
+XC::BeamColumnWithSectionFD::BeamColumnWithSectionFD(int tag, int classTag,const size_t &numSecc,const PrismaticBarCrossSection *sccModel,int Nd1,int Nd2)
   : Element1D(tag,classTag,Nd1,Nd2), theSections(numSecc,sccModel)
   {}
 
@@ -84,19 +84,19 @@ int XC::BeamColumnWithSectionFD::revertToStart(void)
     return retval;
   }
 
-void XC::BeamColumnWithSectionFD::setSection(const SeccionBarraPrismatica *matModel)
+void XC::BeamColumnWithSectionFD::setSection(const PrismaticBarCrossSection *matModel)
   { theSections.setSection(matModel); }
 
-bool XC::BeamColumnWithSectionFD::setSections(const std::vector<SeccionBarraPrismatica *> &sectionPtrs)
+bool XC::BeamColumnWithSectionFD::setSections(const std::vector<PrismaticBarCrossSection *> &sectionPtrs)
   { return theSections.setSections(sectionPtrs); }
 void XC::BeamColumnWithSectionFD::setTrialSectionDeformations(const std::vector<Vector> &vs)
   { return theSections.setTrialSectionDeformations(vs); }
 
 //! @brief Returns a pointer to the i-th section of the element.
-const XC::SeccionBarraPrismatica *XC::BeamColumnWithSectionFD::getSectionPtr(const size_t &i) const
+const XC::PrismaticBarCrossSection *XC::BeamColumnWithSectionFD::getSectionPtr(const size_t &i) const
   { return theSections[i]; }
 
-XC::Response* XC::BeamColumnWithSectionFD::setSectionResponse(SeccionBarraPrismatica *theSection,const std::vector<std::string> &argv,const size_t &offset, Information &info)
+XC::Response* XC::BeamColumnWithSectionFD::setSectionResponse(PrismaticBarCrossSection *theSection,const std::vector<std::string> &argv,const size_t &offset, Information &info)
   {
     Response *retval= nullptr;
     if(theSection)
@@ -108,7 +108,7 @@ XC::Response* XC::BeamColumnWithSectionFD::setSectionResponse(SeccionBarraPrisma
     return retval;
   }
 
-int XC::BeamColumnWithSectionFD::setSectionParameter(SeccionBarraPrismatica *theSection,const std::vector<std::string> &argv,const size_t &offset, Parameter &param)
+int XC::BeamColumnWithSectionFD::setSectionParameter(PrismaticBarCrossSection *theSection,const std::vector<std::string> &argv,const size_t &offset, Parameter &param)
   {
     int retval= -1;
     if(theSection)

@@ -76,12 +76,12 @@ class DeformationPlane: public Plano3d, public MovableObject
     void ConstantStrain(const double &);
 
     Recta2d getFibraNeutra(void) const;
-    Pos2d getPuntoSemiplanoTracciones(void) const;
-    Pos2d getPuntoSemiplanoCompresiones(void) const;
-    Semiplano2d getSemiplanoTracciones(void) const;
-    Semiplano2d getSemiplanoTracciones(const Recta2d &) const;
-    Semiplano2d getSemiplanoCompresiones(void) const;
-    Semiplano2d getSemiplanoCompresiones(const Recta2d &) const;
+    Pos2d getPointOnTensionedHalfPlane(void) const;
+    Pos2d getPointOnCompressedHalfPlane(void) const;
+    Semiplano2d getTensionedHalfPlane(void) const;
+    Semiplano2d getTensionedHalfPlane(const Recta2d &) const;
+    Semiplano2d getCompressedHalfPlane(void) const;
+    Semiplano2d getCompressedHalfPlane(const Recta2d &) const;
 
     int sendSelf(CommParameters &);
     int recvSelf(const CommParameters &);

@@ -124,9 +124,9 @@ class GeomSection: public SeccionInerte
     Poligono2d getCompressedZoneContour(const Semiplano2d &) const;
     double getLongCorte(const Recta2d &r) const;
     std::vector<double> getLongsCorte(const std::list<Recta2d> &lr) const;
-    double getCantoMecanicoZonaComprimida(const Semiplano2d &) const;
-    double getCantoMecanicoZonaTraccionada(const Semiplano2d &) const;
-    double getCantoMecanico(const Recta2d &) const;
+    double getCompressedZoneLeverArm(const Semiplano2d &) const;
+    double getTensionedZoneLeverArm(const Semiplano2d &) const;
+    double getLeverArm(const Recta2d &) const;
     double getAnchoMecanico(const Recta2d &) const;
     double getRecubrimiento(const Pos2d &) const;
     double getAnchoBielaComprimida(const Segmento2d &) const;

@@ -55,22 +55,22 @@
 
 //! @brief Constructor.
 XC::FiberSectionBase::FiberSectionBase(int tag,int num,int classTag,int dim,MaterialLoader *mat_ldr)
-  : SeccionBarraPrismatica(tag, classTag,mat_ldr), eTrial(dim), eInic(dim), eCommit(dim), kr(dim), fibras(num), tag_fibra(num+1), section_repres(nullptr)
+  : PrismaticBarCrossSection(tag, classTag,mat_ldr), eTrial(dim), eInic(dim), eCommit(dim), kr(dim), fibras(num), tag_fibra(num+1), section_repres(nullptr)
   {}
 
 //! @brief Constructor.
 XC::FiberSectionBase::FiberSectionBase(int tag, int classTag,int dim,MaterialLoader *mat_ldr)
-  : SeccionBarraPrismatica(tag, classTag,mat_ldr), eTrial(dim), eInic(dim), eCommit(dim), kr(dim), fibras(0), tag_fibra(0), section_repres(nullptr)
+  : PrismaticBarCrossSection(tag, classTag,mat_ldr), eTrial(dim), eInic(dim), eCommit(dim), kr(dim), fibras(0), tag_fibra(0), section_repres(nullptr)
   {}
 
 // constructor for blank object that recvSelf needs to be invoked upon
 XC::FiberSectionBase::FiberSectionBase(int classTag,int dim,MaterialLoader *mat_ldr)
-  : SeccionBarraPrismatica(0, classTag,mat_ldr), eTrial(dim), eInic(dim), eCommit(dim), kr(dim),fibras(0), tag_fibra(0), section_repres(nullptr)
+  : PrismaticBarCrossSection(0, classTag,mat_ldr), eTrial(dim), eInic(dim), eCommit(dim), kr(dim),fibras(0), tag_fibra(0), section_repres(nullptr)
   {}
 
 //! @brief Copy constructor.
 XC::FiberSectionBase::FiberSectionBase(const FiberSectionBase &otro)
-  : SeccionBarraPrismatica(otro), eTrial(otro.eTrial), eInic(otro.eInic), eCommit(otro.eCommit), kr(otro.kr), fibras(otro.fibras), tag_fibra(otro.tag_fibra), section_repres(nullptr)
+  : PrismaticBarCrossSection(otro), eTrial(otro.eTrial), eInic(otro.eInic), eCommit(otro.eCommit), kr(otro.kr), fibras(otro.fibras), tag_fibra(otro.tag_fibra), section_repres(nullptr)
   {
     if(otro.section_repres)
       section_repres= otro.section_repres->getCopy();
@@ -79,7 +79,7 @@ XC::FiberSectionBase::FiberSectionBase(const FiberSectionBase &otro)
 //! @brief Assignment operator.
 XC::FiberSectionBase &XC::FiberSectionBase::operator=(const FiberSectionBase &otro)
   {
-    SeccionBarraPrismatica::operator=(otro);
+    PrismaticBarCrossSection::operator=(otro);
     eTrial= otro.eTrial;
     eInic= otro.eInic;
     eCommit= otro.eCommit;
@@ -240,30 +240,31 @@ Poligono2d XC::FiberSectionBase::getRegionsContour(void) const
   }
 
 //! @brief Returns current section lever arm from the position of neutral axis.
-double XC::FiberSectionBase::getCantoMecanico(void) const
+double XC::FiberSectionBase::getLeverArm(void) const
   {
     double retval= 0.0;
     const GeomSection *geom= getGeomSection();
     if(geom)
-      retval= geom->getCantoMecanico(getTrazaPlanoFlexion());
+      retval= geom->getLeverArm(getTrazaPlanoFlexion());
     return retval;
   }
 
 //! @brief Returns section depth from the line being passed as parameter
 //! to the most compressed fiber.
-double XC::FiberSectionBase::getCantoMecanicoZonaComprimida(const Recta2d &r) const
+double XC::FiberSectionBase::getCompressedZoneLeverArm(const Recta2d &r) const
   {
     double retval= 0.0;
     const GeomSection *geom= getGeomSection();
     if(geom)
       {
-        const Semiplano2d comp= getSemiplanoCompresiones(r);
+        const Semiplano2d comp= getCompressedHalfPlane(r);
         if(comp.exists())
-          retval= geom->getCantoMecanicoZonaComprimida(comp);
+          retval= geom->getCompressedZoneLeverArm(comp);
         else
           {
             retval= NAN;
-	    std::cerr << "FiberSectionBase::getCantoMecanicoZonaComprimidaR; no se ha podido obtener el half-plane comprimido."
+	    std::cerr << nombre_clase() << "::" << __FUNCTION__
+	              << "; can't get the compressed half-plane."
                       << std::endl;
 	  }
       }
@@ -272,19 +273,20 @@ double XC::FiberSectionBase::getCantoMecanicoZonaComprimida(const Recta2d &r) co
 
 //! @brief Returns section depth from the neutral axis to the
 //! most compressed fiber.
-double XC::FiberSectionBase::getCantoMecanicoZonaComprimida(void) const
+double XC::FiberSectionBase::getCompressedZoneLeverArm(void) const
   {
     double retval= 0.0;
     const GeomSection *geom= getGeomSection();
     if(geom)
       {
-        const Semiplano2d comp= getSemiplanoCompresiones();
+        const Semiplano2d comp= getCompressedHalfPlane();
         if(comp.exists())
-          retval= geom->getCantoMecanicoZonaComprimida(comp);
+          retval= geom->getCompressedZoneLeverArm(comp);
         else
           {
             retval= NAN;
-            std::cerr << "FiberSectionBase::getCantoMecanicoZonaComprimida; no se ha podido obtener el half-plane comprimido."
+	    std::cerr << nombre_clase() << "::" << __FUNCTION__
+	              << "; can't get the compressed half-plane."
                       << std::endl;
           }
        }
@@ -293,36 +295,36 @@ double XC::FiberSectionBase::getCantoMecanicoZonaComprimida(void) const
 
 //! @brief Returns section depth from the neutral axis to the
 //! most tensioned fiber.
-double XC::FiberSectionBase::getCantoMecanicoZonaTraccionada(void) const
+double XC::FiberSectionBase::getTensionedZoneLeverArm(void) const
   {
     double retval= 0.0;
     const GeomSection *geom= getGeomSection();
     if(geom)
       {
-        const Semiplano2d comp= getSemiplanoCompresiones();
+        const Semiplano2d comp= getCompressedHalfPlane();
         if(comp.exists())
-          retval= geom->getCantoMecanicoZonaTraccionada(comp);
+          retval= geom->getTensionedZoneLeverArm(comp);
         else //Full section is in tension.
-          retval= geom->getCantoMecanico(getTrazaPlanoFlexion());
+          retval= geom->getLeverArm(getTrazaPlanoFlexion());
       }
     return retval;
   }
 
 //! @brief Returns section depth from the line being passed as parameter
 //! to the most tensioned fiber.
-double XC::FiberSectionBase::getCantoMecanicoZonaTraccionada(const Recta2d &r) const
+double XC::FiberSectionBase::getTensionedZoneLeverArm(const Recta2d &r) const
   {
     double retval= 0.0;
     const GeomSection *geom= getGeomSection();
     if(geom)
       {
-        const Semiplano2d comp= getSemiplanoCompresiones(r);
+        const Semiplano2d comp= getCompressedHalfPlane(r);
         if(comp.exists())
-          retval= geom->getCantoMecanicoZonaTraccionada(comp);
+          retval= geom->getTensionedZoneLeverArm(comp);
         else
           {
             retval= NAN;
-            std::cerr << "FiberSectionBase::getCantoMecanicoZonaTraccionada; no se ha podido obtener el half-plane comprimido."
+            std::cerr << "FiberSectionBase::getTensionedZoneLeverArm; no se ha podido obtener el half-plane comprimido."
                       << std::endl;
           }
       }
@@ -332,7 +334,7 @@ double XC::FiberSectionBase::getCantoMecanicoZonaTraccionada(const Recta2d &r) c
 //! @brief Returns neutral axis depth.
 double XC::FiberSectionBase::getNeutralAxisDepth(void) const
   {
-    return getCantoMecanicoZonaComprimida();
+    return getCompressedZoneLeverArm();
   }
 
 //! @brief Returns the distance from the neutral axis
@@ -358,13 +360,13 @@ Recta2d XC::FiberSectionBase::getRectaLimiteAcEficaz(const double &hEfMax) const
       fn= fibras.getFibraNeutra();
     if(fn.exists())
       {
-        const double hef= getCantoMecanicoZonaTraccionada();
+        const double hef= getTensionedZoneLeverArm();
         assert(!std::isnan(hef));
         if(hef<hEfMax)
           retval= fn;
         else
           {
-            const double d= -(hef-hEfMax); //Cambiamos el signo para desplazar hacia las tracciones.
+            const double d= -(hef-hEfMax); //Sign changet to move over tensioned zone.
             const Vector v= normalize(getVectorBrazoMecanico())*d;
             retval= fn.Offset(Vector2d(v[0],v[1]));
           }
@@ -392,9 +394,9 @@ std::list<Poligono2d> XC::FiberSectionBase::getContourAcEficazBruta(const double
             const Recta2d limite= getRectaLimiteAcEficaz(hEfMax);
             if(limite.exists())
               {
-                const Semiplano2d areaTracciones= getSemiplanoTracciones(limite);
-                assert(areaTracciones.exists());
-                retval= contour.Interseccion(areaTracciones);
+                const Semiplano2d tensionedArea= getTensionedHalfPlane(limite);
+                assert(tensionedArea.exists());
+                retval= contour.Interseccion(tensionedArea);
               }
             else
               retval.push_back(contour);
@@ -502,7 +504,7 @@ void XC::FiberSectionBase::calcSeparaciones(const std::string &nmbSetArmaduras) 
 double XC::FiberSectionBase::get_dist_to_neutral_axis(const double &y,const double &z) const
   {
     double retval= 0;
-    const Semiplano2d comp= getSemiplanoCompresiones();
+    const Semiplano2d comp= getCompressedHalfPlane();
     if(comp.exists())
       retval= comp.DistSigno(Pos2d(y,z));
     else
@@ -520,7 +522,7 @@ const XC::Vector &XC::FiberSectionBase::getStressResultant(void) const
 
 //! @brief Returns i-th component of the stress resultant.
 double XC::FiberSectionBase::getStressResultant(const int &i) const
-  { return SeccionBarraPrismatica::getStressResultant(i); }
+  { return PrismaticBarCrossSection::getStressResultant(i); }
 
 
 //! @brief Commits state.
@@ -796,7 +798,8 @@ Recta2d XC::FiberSectionBase::getTrazaPlanoTraccion(void) const
   {
     Recta2d retval= fibras.getTrazaPlanoTraccion();
     if(!retval.exists())
-      std::cerr << "Intercept of the tension plane not found." << std::endl;
+      std::cerr << nombre_clase() << "::" << __FUNCTION__
+		<< "; intercept of the tension plane not found." << std::endl;
     return retval;
   }
 

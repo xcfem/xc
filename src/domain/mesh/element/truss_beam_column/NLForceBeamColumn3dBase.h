@@ -40,7 +40,7 @@ namespace XC {
 
 //! \ingroup OneDimensionalElem
 //
-//! @brief Base clas for 3D force beam column elements with SeccionBarraPrismatica type material.
+//! @brief Base clas for 3D force beam column elements with PrismaticBarCrossSection type material.
 class NLForceBeamColumn3dBase: public BeamColumnWithSectionFDTrf3d
   {
     NLForceBeamColumn3dBase &operator=(const NLForceBeamColumn3dBase &);
@@ -91,7 +91,7 @@ class NLForceBeamColumn3dBase: public BeamColumnWithSectionFDTrf3d
     NLForceBeamColumn3dBase(int tag,int classTag,int numSec,const Material *theSection,const CrdTransf *coordTransf);
     NLForceBeamColumn3dBase(const NLForceBeamColumn3dBase &otro);
 
-    void setSection(const SeccionBarraPrismatica *sccModel);
+    void setSection(const PrismaticBarCrossSection *sccModel);
 
     int getNumDOF(void) const;
 

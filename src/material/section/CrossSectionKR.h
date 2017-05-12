@@ -24,10 +24,10 @@
 // along with this program.
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
-//KRSeccion.h
+//CrossSectionKR.h
 
-#ifndef KRSECCION_H
-#define KRSECCION_H
+#ifndef CROSS_SECTION_KR_H
+#define CROSS_SECTION_KR_H
 
 #include "utility/matrix/Vector.h"
 #include "utility/matrix/Matrix.h"
@@ -37,7 +37,7 @@ namespace XC {
 //! \ingroup MATSCC
 //
 //! @brief Stiffness matrix and resultant vector for a section.
-class KRSeccion: public EntCmd
+class CrossSectionKR: public EntCmd
   {
     friend class DqFibras;
     double rData[4]; //!< stress resultant vector data.
@@ -49,7 +49,7 @@ class KRSeccion: public EntCmd
   protected:
     void libera(void);
     void alloc(const size_t &dim);
-    void copia(const KRSeccion &otra);
+    void copia(const CrossSectionKR &otra);
     inline void updateNMz(const double &f,const double &y)
       {
         rData[0]+= f; //N.
@@ -109,10 +109,10 @@ class KRSeccion: public EntCmd
       { updateKGJ(kData,areaFibra,y,z,tangent); }
 
   public:
-    KRSeccion(const size_t &dim);
-    KRSeccion(const KRSeccion &otra);
-    KRSeccion &operator=(const KRSeccion &otro);
-    virtual ~KRSeccion(void);
+    CrossSectionKR(const size_t &dim);
+    CrossSectionKR(const CrossSectionKR &otra);
+    CrossSectionKR &operator=(const CrossSectionKR &otro);
+    virtual ~CrossSectionKR(void);
 
     void zero(void);
     inline size_t dim(void) const

@@ -62,7 +62,7 @@ class Node;
 class Channel;
 class FEM_ObjectBroker;
 
-class SeccionBarraPrismatica;
+class PrismaticBarCrossSection;
 
 class Response;
 class Renderer;
@@ -114,8 +114,8 @@ class BeamWithHinges3d: public BeamColumnWithSectionFDTrf3d
  public:
     BeamWithHinges3d(int tag, int nodeI, int nodeJ,
 		   double E, double A, double Iz, double Iy, double G, double J,
-		   SeccionBarraPrismatica &sectionRefI, double hingeIlen, 
-		   SeccionBarraPrismatica &sectionRefJ, double hingeJlen,
+		   PrismaticBarCrossSection &sectionRefI, double hingeIlen, 
+		   PrismaticBarCrossSection &sectionRefJ, double hingeJlen,
 		   CrdTransf3d &coordTrans, double massDensPerUnitLength = 0.0,
 		   int max = 1, double tol = 1.0e-16);
     BeamWithHinges3d(int tag= 0);

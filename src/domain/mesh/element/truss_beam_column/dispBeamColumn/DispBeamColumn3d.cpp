@@ -55,7 +55,7 @@
 
 #include <domain/mesh/element/truss_beam_column/dispBeamColumn/DispBeamColumn3d.h>
 #include <domain/mesh/node/Node.h>
-#include <material/section/SeccionBarraPrismatica.h>
+#include <material/section/PrismaticBarCrossSection.h>
 #include <domain/mesh/element/utils/coordTransformation/CrdTransf3d.h>
 #include <utility/matrix/Matrix.h>
 #include <utility/matrix/Vector.h>
@@ -74,7 +74,7 @@ double XC::DispBeamColumn3d::workArea[200];
 XC::GaussQuadRule1d01 XC::DispBeamColumn3d::quadRule;
 
 XC::DispBeamColumn3d::DispBeamColumn3d(int tag, int nd1, int nd2,
-				       int numSec,const std::vector<SeccionBarraPrismatica *> &s,
+				       int numSec,const std::vector<PrismaticBarCrossSection *> &s,
                                    CrdTransf3d &coordTransf, double r)
   :BeamColumnWithSectionFDTrf3d(tag, ELE_TAG_DispBeamColumn3d,numSec),
    q(6), q0(), p0(), rho(r)

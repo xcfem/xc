@@ -24,10 +24,10 @@
 // along with this program.
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
-//VectorSeccionesBarraPrismatica.h
+//PrismaticBarCrossSectionsVector.h
 
-#ifndef VectorSeccionesBarraPrismatica_h
-#define VectorSeccionesBarraPrismatica_h
+#ifndef PrismaticBarCrossSectionsVector_h
+#define PrismaticBarCrossSectionsVector_h
 
 #include "xc_utils/src/nucleo/EntCmd.h"
 #include "utility/actor/actor/MovableObject.h"
@@ -35,7 +35,7 @@
 
 namespace XC {
 
-class SeccionBarraPrismatica;
+class PrismaticBarCrossSection;
 class Vector;
 class Matrix;
 class Material;
@@ -43,35 +43,35 @@ class BeamStrainLoad;
 
 //! \ingroup MATSCC
 //
-//! @brief Vector of pointers to SeccionBarraPrismaticaes.
+//! @brief Vector of pointers to PrismaticBarCrossSectiones.
 //! used to store the sections for each integration point.
-class VectorSeccionesBarraPrismatica: public EntCmd, public std::vector<SeccionBarraPrismatica *>, public MovableObject
+class PrismaticBarCrossSectionsVector: public EntCmd, public std::vector<PrismaticBarCrossSection *>, public MovableObject
   {
   protected:
     void borra_secciones(void);
     void clearAll(void);
-    VectorSeccionesBarraPrismatica &operator=(const VectorSeccionesBarraPrismatica &);
+    PrismaticBarCrossSectionsVector &operator=(const PrismaticBarCrossSectionsVector &);
     int sendData(CommParameters &);  
     int recvData(const CommParameters &);
 
   public:
-    typedef std::vector<SeccionBarraPrismatica *> mat_vector;
+    typedef std::vector<PrismaticBarCrossSection *> mat_vector;
     typedef mat_vector::iterator iterator;
     typedef mat_vector::reference reference;
     typedef mat_vector::const_reference const_reference;
 
-    VectorSeccionesBarraPrismatica(const size_t &sz);
-    VectorSeccionesBarraPrismatica(const size_t &sz,const Material *m);
-    VectorSeccionesBarraPrismatica(const size_t &sz,const SeccionBarraPrismatica *matModel);
-    VectorSeccionesBarraPrismatica(const VectorSeccionesBarraPrismatica &);
-    ~VectorSeccionesBarraPrismatica(void);
+    PrismaticBarCrossSectionsVector(const size_t &sz);
+    PrismaticBarCrossSectionsVector(const size_t &sz,const Material *m);
+    PrismaticBarCrossSectionsVector(const size_t &sz,const PrismaticBarCrossSection *matModel);
+    PrismaticBarCrossSectionsVector(const PrismaticBarCrossSectionsVector &);
+    ~PrismaticBarCrossSectionsVector(void);
 
     bool isTorsion(void) const;
 
-    void setSection(const SeccionBarraPrismatica *nueva_secc);
-    void setSectionCopy(size_t i,SeccionBarraPrismatica *nueva_secc);
+    void setSection(const PrismaticBarCrossSection *nueva_secc);
+    void setSectionCopy(size_t i,PrismaticBarCrossSection *nueva_secc);
     void setupSection(const Material *sec);
-    bool setSections(const std::vector<SeccionBarraPrismatica *> &sectionPtrs);
+    bool setSections(const std::vector<PrismaticBarCrossSection *> &sectionPtrs);
     void zeroInitialSectionDeformations(void);
     void setInitialSectionDeformations(const std::vector<Vector> &vs);
     void addInitialSectionDeformations(const BeamStrainLoad &,const double &,const Matrix &, const double &L);

@@ -35,7 +35,7 @@
 
 
 XC::BaseElasticSection::BaseElasticSection(int tag, int classTag, const size_t &dim, MaterialLoader *mat_ldr)
-  : SeccionBarraPrismatica(tag, classTag,mat_ldr), eTrial(dim), eInic(dim), eCommit(dim) {}
+  : PrismaticBarCrossSection(tag, classTag,mat_ldr), eTrial(dim), eInic(dim), eCommit(dim) {}
 
 int XC::BaseElasticSection::commitState(void)
   {
@@ -78,7 +78,7 @@ const XC::Vector &XC::BaseElasticSection::getSectionDeformation(void) const
 //! @brief Send object members through the channel being passed as parameter.
 int XC::BaseElasticSection::sendData(CommParameters &cp)
   {
-    int res= SeccionBarraPrismatica::sendData(cp);
+    int res= PrismaticBarCrossSection::sendData(cp);
     res+= cp.sendVector(eTrial,getDbTagData(),CommMetaData(5));
     res+= cp.sendVector(eInic,getDbTagData(),CommMetaData(6));
     res+= cp.sendVector(eCommit,getDbTagData(),CommMetaData(7));
@@ -88,7 +88,7 @@ int XC::BaseElasticSection::sendData(CommParameters &cp)
 //! @brief Receives object members through the channel being passed as parameter.
 int XC::BaseElasticSection::recvData(const CommParameters &cp)
   {
-    int res= SeccionBarraPrismatica::recvData(cp);
+    int res= PrismaticBarCrossSection::recvData(cp);
     res+= cp.receiveVector(eTrial,getDbTagData(),CommMetaData(5));
     res+= cp.receiveVector(eInic,getDbTagData(),CommMetaData(6));
     res+= cp.receiveVector(eCommit,getDbTagData(),CommMetaData(7));

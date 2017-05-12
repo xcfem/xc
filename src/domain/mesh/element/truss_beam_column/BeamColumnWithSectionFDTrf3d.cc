@@ -28,7 +28,7 @@
 
 #include <domain/mesh/element/truss_beam_column/BeamColumnWithSectionFDTrf3d.h>
 #include <domain/mesh/element/utils/coordTransformation/CrdTransf3d.h>
-#include "material/section/SeccionBarraPrismatica.h"
+#include "material/section/PrismaticBarCrossSection.h"
 
 
 #include "xc_utils/src/geom/pos_vec/Vector2d.h"
@@ -111,7 +111,7 @@ XC::Vector XC::BeamColumnWithSectionFDTrf3d::getVDirStrongAxisLocalCoord(const s
   {
     Vector retval(3);
     retval(2)= 1;
-    const SeccionBarraPrismatica *tmp= dynamic_cast<const SeccionBarraPrismatica *>(theSections[i]);
+    const PrismaticBarCrossSection *tmp= dynamic_cast<const PrismaticBarCrossSection *>(theSections[i]);
     if(tmp)
       {
         const Vector2d sectionStrongAxis= tmp->getVDirStrongAxis();
@@ -131,7 +131,7 @@ XC::Vector XC::BeamColumnWithSectionFDTrf3d::getVDirWeakAxisLocalCoord(const siz
   {
     Vector retval(3);
     retval(2)= 1;
-    const SeccionBarraPrismatica *tmp= dynamic_cast<const SeccionBarraPrismatica *>(theSections[i]);
+    const PrismaticBarCrossSection *tmp= dynamic_cast<const PrismaticBarCrossSection *>(theSections[i]);
     if(tmp)
       {
         const Vector2d sectionWeakAxis= tmp->getVDirWeakAxis();

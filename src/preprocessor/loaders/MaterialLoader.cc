@@ -491,18 +491,18 @@ XC::Material *XC::MaterialLoader::newMaterial(const std::string &cmd,const std::
 XC::GeomSection *XC::MaterialLoader::newSectionGeometry(const std::string &cod)
   {
     XC::GeomSection *retval= nullptr;
-    if(geom_secciones.find(cod)!=geom_secciones.end()) //Section geometry already exists.
+    if(sections_geometry.find(cod)!=sections_geometry.end()) //Section geometry already exists.
       {
 	std::cerr << nombre_clase() << "::" << __FUNCTION__
 	          << "; warning! section: '"
                   << cod << "' already exists. "<< '.' << std::endl;
-        retval= geom_secciones[cod];
+        retval= sections_geometry[cod];
        }
     else
       {
         retval= new GeomSection(this);
         retval->set_owner(this);
-        geom_secciones[cod]= retval;
+        sections_geometry[cod]= retval;
       }
     return retval;
   }
@@ -511,16 +511,16 @@ XC::GeomSection *XC::MaterialLoader::newSectionGeometry(const std::string &cod)
 XC::InteractionDiagram *XC::MaterialLoader::newInteractionDiagram(const std::string &cod_diag)
   {
     InteractionDiagram *retval= nullptr;
-    if(diagramas_interaccion.find(cod_diag)!=diagramas_interaccion.end()) //El diagrama existe.
+    if(interaction_diagrams.find(cod_diag)!=interaction_diagrams.end()) //El diagrama existe.
       {
          std::clog << "MaterialLoader::newInteractionDiagram; ¡ojo! el interaction diagram de nombre: '"
                    << cod_diag << "' ya existe. " << std::endl;
-         retval= diagramas_interaccion[cod_diag];
+         retval= interaction_diagrams[cod_diag];
       }
     else
       {
         retval= new InteractionDiagram();
-        diagramas_interaccion[cod_diag]= retval;
+        interaction_diagrams[cod_diag]= retval;
       }
     return retval;
   }
@@ -529,16 +529,16 @@ XC::InteractionDiagram *XC::MaterialLoader::newInteractionDiagram(const std::str
 XC::InteractionDiagram2d *XC::MaterialLoader::new2DInteractionDiagram(const std::string &cod_diag)
   {
     InteractionDiagram2d *retval= nullptr;
-    if(diagramas_interaccion2d.find(cod_diag)!=diagramas_interaccion2d.end()) //El diagrama existe.
+    if(interaction_diagrams2D.find(cod_diag)!=interaction_diagrams2D.end()) //El diagrama existe.
       {
          std::clog << "MaterialLoader::new2DInteractionDiagram; ¡ojo! el interaction diagram de nombre: '"
                    << cod_diag << "' ya existe. " << std::endl;
-         retval= diagramas_interaccion2d[cod_diag];
+         retval= interaction_diagrams2D[cod_diag];
       }
     else
       {
         retval= new InteractionDiagram2d();
-        diagramas_interaccion2d[cod_diag]= retval;
+        interaction_diagrams2D[cod_diag]= retval;
       }
     return retval;
   }
@@ -554,16 +554,16 @@ XC::InteractionDiagram *XC::MaterialLoader::calcInteractionDiagram(const std::st
         if(tmp)
           {
             const std::string cod_diag= "diagInt"+cod_scc;
-            if(diagramas_interaccion.find(cod_diag)!=diagramas_interaccion.end()) //Diagram exists.
+            if(interaction_diagrams.find(cod_diag)!=interaction_diagrams.end()) //Diagram exists.
               {
 	        std::clog << "MaterialLoader::calcInteractionDiagram; ¡ojo! se redefine el interaction diagram de nombre: '"
                           << cod_diag << "'." << std::endl;
-                delete diagramas_interaccion[cod_diag];
+                delete interaction_diagrams[cod_diag];
               }
             else
               {
                 diagI= new InteractionDiagram(calc_interaction_diagram(*tmp,diag_data));
-                diagramas_interaccion[cod_diag]= diagI;
+                interaction_diagrams[cod_diag]= diagI;
               }
           }
         else
@@ -587,16 +587,17 @@ XC::InteractionDiagram2d *XC::MaterialLoader::calcInteractionDiagramNMy(const st
         if(tmp)
           {
             const std::string cod_diag= "diagIntNMy"+cod_scc;
-            if(diagramas_interaccion2d.find(cod_diag)!=diagramas_interaccion2d.end()) //Diagram exists.
+            if(interaction_diagrams2D.find(cod_diag)!=interaction_diagrams2D.end()) //Diagram exists.
               {
-	        std::clog << "MaterialLoader::calcInteractionDiagramNMy; ¡ojo! se redefine el interaction diagram de nombre: '"
-                          << cod_diag << "'." << std::endl;
-                delete diagramas_interaccion2d[cod_diag];
+	        std::clog << nombre_clase() << "::" << __FUNCTION__
+		          << "; ¡warning! interaction diagram: '"
+                          << cod_diag << "' redefined." << std::endl;
+                delete interaction_diagrams2D[cod_diag];
               }
             else
               {
                 diagI= new InteractionDiagram2d(calcNMyInteractionDiagram(*tmp,diag_data));
-                diagramas_interaccion2d[cod_diag]= diagI;
+                interaction_diagrams2D[cod_diag]= diagI;
               }
           }
         else
@@ -620,16 +621,16 @@ XC::InteractionDiagram2d *XC::MaterialLoader::calcInteractionDiagramNMz(const st
         if(tmp)
           {
             const std::string cod_diag= "diagIntNMz"+cod_scc;
-            if(diagramas_interaccion2d.find(cod_diag)!=diagramas_interaccion2d.end()) //Diagram exists.
+            if(interaction_diagrams2D.find(cod_diag)!=interaction_diagrams2D.end()) //Diagram exists.
               {
 	        std::clog << "MaterialLoader::calcInteractionDiagramNMz; ¡ojo! se redefine el interaction diagram de nombre: '"
                           << cod_diag << "'." << std::endl;
-                delete diagramas_interaccion2d[cod_diag];
+                delete interaction_diagrams2D[cod_diag];
               }
             else
               {
                 diagI= new InteractionDiagram2d(calcNMzInteractionDiagram(*tmp,diag_data));
-                diagramas_interaccion2d[cod_diag]= diagI;
+                interaction_diagrams2D[cod_diag]= diagI;
               }
           }
         else
@@ -647,9 +648,9 @@ void XC::MaterialLoader::clearAll(void)
     for(iterator i= begin();i!= end();i++)
       delete (*i).second;
     materials.erase(begin(),end());
-    for(geom_secc_iterator i= geom_secciones.begin();i!= geom_secciones.end();i++)
+    for(geom_secc_iterator i= sections_geometry.begin();i!= sections_geometry.end();i++)
       delete (*i).second;
-    geom_secciones.erase(geom_secciones.begin(),geom_secciones.end());
+    sections_geometry.erase(sections_geometry.begin(),sections_geometry.end());
     tag_mat= 0;
   }
 
@@ -751,8 +752,8 @@ std::string XC::MaterialLoader::getName(const int &tag) const
 //! otherwise it returns nullptr.
 XC::GeomSection *XC::MaterialLoader::find_ptr_geom_section(const std::string &nmb)
   {
-    geom_secc_iterator i= geom_secciones.find(nmb);
-    if(i!= geom_secciones.end())
+    geom_secc_iterator i= sections_geometry.find(nmb);
+    if(i!= sections_geometry.end())
       return (*i).second;
     else
       return nullptr; 
@@ -762,8 +763,8 @@ XC::GeomSection *XC::MaterialLoader::find_ptr_geom_section(const std::string &nm
 //! otherwise it returns nullptr.
 const XC::GeomSection *XC::MaterialLoader::find_ptr_geom_section(const std::string &nmb) const
   {
-    const_geom_secc_iterator i= geom_secciones.find(nmb);
-    if(i!= geom_secciones.end())
+    const_geom_secc_iterator i= sections_geometry.find(nmb);
+    if(i!= sections_geometry.end())
       return (*i).second;
     else
       return nullptr; 
@@ -773,8 +774,8 @@ const XC::GeomSection *XC::MaterialLoader::find_ptr_geom_section(const std::stri
 //! otherwise it returns nullptr.
 XC::InteractionDiagram *XC::MaterialLoader::find_ptr_interaction_diagram(const std::string &nmb)
   {
-    diag_interacc_iterator i= diagramas_interaccion.find(nmb);
-    if(i!= diagramas_interaccion.end())
+    diag_interacc_iterator i= interaction_diagrams.find(nmb);
+    if(i!= interaction_diagrams.end())
       return (*i).second;
     else
       return nullptr; 
@@ -784,8 +785,8 @@ XC::InteractionDiagram *XC::MaterialLoader::find_ptr_interaction_diagram(const s
 //! otherwise it returns nullptr.
 const XC::InteractionDiagram *XC::MaterialLoader::find_ptr_interaction_diagram(const std::string &nmb) const
   {
-    const_diag_interacc_iterator i= diagramas_interaccion.find(nmb);
-    if(i!= diagramas_interaccion.end())
+    const_diag_interacc_iterator i= interaction_diagrams.find(nmb);
+    if(i!= interaction_diagrams.end())
       return (*i).second;
     else
       return nullptr; 
@@ -795,8 +796,8 @@ const XC::InteractionDiagram *XC::MaterialLoader::find_ptr_interaction_diagram(c
 //! otherwise it returns nullptr.
 XC::InteractionDiagram2d *XC::MaterialLoader::find_ptr_interaction_diagram2d(const std::string &nmb)
   {
-    diag_interacc2d_iterator i= diagramas_interaccion2d.find(nmb);
-    if(i!= diagramas_interaccion2d.end())
+    diag_interacc2d_iterator i= interaction_diagrams2D.find(nmb);
+    if(i!= interaction_diagrams2D.end())
       return (*i).second;
     else
       return nullptr; 
@@ -806,8 +807,8 @@ XC::InteractionDiagram2d *XC::MaterialLoader::find_ptr_interaction_diagram2d(con
 //! otherwise it returns nullptr.
 const XC::InteractionDiagram2d *XC::MaterialLoader::find_ptr_interaction_diagram2d(const std::string &nmb) const
   {
-    const_diag_interacc2d_iterator i= diagramas_interaccion2d.find(nmb);
-    if(i!= diagramas_interaccion2d.end())
+    const_diag_interacc2d_iterator i= interaction_diagrams2D.find(nmb);
+    if(i!= interaction_diagrams2D.end())
       return (*i).second;
     else
       return nullptr;
@@ -847,15 +848,15 @@ bool XC::MaterialLoader::existeMaterial(const std::string &nmb) const
 //! @brief Returns true if the section geometry identified by
 //! the string being passed as parameter exists.
 bool XC::MaterialLoader::existeGeomSection(const std::string &nmb) const
-  { return (geom_secciones.find(nmb)!=geom_secciones.end()); }
+  { return (sections_geometry.find(nmb)!=sections_geometry.end()); }
 
 //! @brief Returns true if the 3D interaction diagram identified by
 //! the string being passed as parameter exists.
 bool XC::MaterialLoader::InteractionDiagramExists(const std::string &nmb) const
-  { return (diagramas_interaccion.find(nmb)!=diagramas_interaccion.end()); }
+  { return (interaction_diagrams.find(nmb)!=interaction_diagrams.end()); }
 
 //! @brief Returns true if the 2D interaction diagram identified by
 //! the string being passed as parameter exists.
 bool XC::MaterialLoader::InteractionDiagramExists2d(const std::string &nmb) const
-  { return (diagramas_interaccion2d.find(nmb)!=diagramas_interaccion2d.end()); }
+  { return (interaction_diagrams2D.find(nmb)!=interaction_diagrams2D.end()); }
 

@@ -44,7 +44,7 @@
 XC::LoadLoader::LoadLoader(Preprocessor *owr)
   : Loader(owr), lpatterns(this), tag_lp(0), combinations(this) {}
 
-//! @brief Adds the load patter to the domain.
+//! @brief Adds the load pattern to the domain.
 void XC::LoadLoader::addToDomain(const std::string &lp_code)
   {
     LoadPattern *lp= lpatterns.buscaLoadPattern(lp_code);
@@ -52,14 +52,15 @@ void XC::LoadLoader::addToDomain(const std::string &lp_code)
       {
         bool result= getDomain()->addLoadPattern(lp);
         if((!result) && (verborrea>3))
-          std::cerr << "LoadLoader::add_to_domain; no se pudo agregar la acción: '"
+          std::cerr << nombre_clase() << "::" << __FUNCTION__
+	            << "; can't add the load pattern: '"
                     << lp_code << "'\n";
       }
     else
       combinations.addToDomain(lp_code);
   }
 
-//! @brief Elimina el load pattern del domain.
+//! @brief Remove load pattern from domain.
 void XC::LoadLoader::removeFromDomain(const std::string &lp_code)
   {
     LoadPattern *lp= lpatterns.buscaLoadPattern(lp_code);

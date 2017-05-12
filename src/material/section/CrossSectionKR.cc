@@ -24,16 +24,16 @@
 // along with this program.
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
-//KRSeccion.cc
+//CrossSectionKR.cc
 
-#include "KRSeccion.h"
+#include "CrossSectionKR.h"
 
-double XC::KRSeccion::value= 0.0;
-double XC::KRSeccion::vas1= 0.0;
-double XC::KRSeccion::vas2= 0.0;
-double XC::KRSeccion::vas1as2= 0.0;
+double XC::CrossSectionKR::value= 0.0;
+double XC::CrossSectionKR::vas1= 0.0;
+double XC::CrossSectionKR::vas2= 0.0;
+double XC::CrossSectionKR::vas1as2= 0.0;
 
-void XC::KRSeccion::libera(void)
+void XC::CrossSectionKR::libera(void)
   {
     if(R)
       {
@@ -47,14 +47,14 @@ void XC::KRSeccion::libera(void)
       }
   }
 
-void XC::KRSeccion::alloc(const size_t &dim)
+void XC::CrossSectionKR::alloc(const size_t &dim)
   {
     libera();
     R= new Vector(rData,dim);
     K= new Matrix(kData,dim,dim);
   }
 
-void XC::KRSeccion::copia(const KRSeccion &otra)
+void XC::CrossSectionKR::copia(const CrossSectionKR &otra)
   {
     libera();
     rData[0]= otra.rData[0]; rData[1]= otra.rData[1];
@@ -68,7 +68,7 @@ void XC::KRSeccion::copia(const KRSeccion &otra)
     alloc(otra.dim());
   }
 
-void XC::KRSeccion::zero(void)
+void XC::CrossSectionKR::zero(void)
   {
     rData[0]= 0.0; rData[1]= 0.0;
     rData[2]= 0.0; rData[3]= 0.0;
@@ -80,7 +80,7 @@ void XC::KRSeccion::zero(void)
   }
 
 //! @brief Constructor.
-XC::KRSeccion::KRSeccion(const size_t &dim)
+XC::CrossSectionKR::CrossSectionKR(const size_t &dim)
   : R(nullptr), K(nullptr)
   {
     alloc(dim);
@@ -88,21 +88,21 @@ XC::KRSeccion::KRSeccion(const size_t &dim)
   }
 
 //! @brief Copy constructor.
-XC::KRSeccion::KRSeccion(const KRSeccion &otra)
+XC::CrossSectionKR::CrossSectionKR(const CrossSectionKR &otra)
   : R(nullptr), K(nullptr)
   {
     copia(otra);
   }
 
 //! @brief Assignment operator.
-XC::KRSeccion &XC::KRSeccion::operator=(const KRSeccion &otro)
+XC::CrossSectionKR &XC::CrossSectionKR::operator=(const CrossSectionKR &otro)
   {
     copia(otro);
     return *this;
   }
 
 //! @brief Destructor.
-XC::KRSeccion::~KRSeccion(void)
+XC::CrossSectionKR::~CrossSectionKR(void)
   {
     libera();
   }

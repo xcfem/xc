@@ -264,11 +264,11 @@ Poligono2d XC::GeomSection::getCompressedZoneContour(const Semiplano2d &sp_compr
     return retval;
   }
 
-//! @brief Returns the working cross-section depth from the position
+//! @brief Returns the working cross-section lever arm from the position
 //! of the half-plane being passed as parameter.
 //! @param trazaPF: Intersection of the bending plane with the plane that
 //! contains the cross section.
-double XC::GeomSection::getCantoMecanico(const Recta2d &trazaPF) const
+double XC::GeomSection::getLeverArm(const Recta2d &trazaPF) const
   {
     Poligono2d contour= getRegionsContour();
     Pos2d C= contour.Cdg();
@@ -288,7 +288,7 @@ double XC::GeomSection::getCantoMecanico(const Recta2d &trazaPF) const
 
 //! @brief Returns the section depth from the border of the half-plane
 //! being passed as parameter to the most compressed fiber.
-double XC::GeomSection::getCantoMecanicoZonaComprimida(const Semiplano2d &sp_compresiones) const
+double XC::GeomSection::getCompressedZoneLeverArm(const Semiplano2d &sp_compresiones) const
   {
     Poligono2d contour= getRegionsContour();
     const size_t num_vertices= contour.GetNumVertices();
@@ -304,7 +304,7 @@ double XC::GeomSection::getCantoMecanicoZonaComprimida(const Semiplano2d &sp_com
 
 //! @brief Returns the section depth from the border of the half-plane
 //! being passed as parameter to the most tensioned fiber.
-double XC::GeomSection::getCantoMecanicoZonaTraccionada(const Semiplano2d &sp_compresiones) const
+double XC::GeomSection::getTensionedZoneLeverArm(const Semiplano2d &sp_compresiones) const
   {
     Poligono2d contour= getRegionsContour();
     const size_t num_vertices= contour.GetNumVertices();

@@ -51,7 +51,7 @@ class ZeroLengthMaterials: public DqUniaxialMaterial
     void checkDirection(void);
     
     // Storage for uniaxial material models
-    std::deque<int> direcciones; //!< array of directions 0-5 for 1d materials
+    std::deque<int> directions; //!< array of directions 0-5 for 1d materials
 
   protected:
     MaterialLoader *get_material_loader(void);
@@ -67,9 +67,9 @@ class ZeroLengthMaterials: public DqUniaxialMaterial
     void push_front(const int &dir,const UniaxialMaterial *);
 
     inline const int &getDir(const size_t i) const
-      { return direcciones[i]; }
+      { return directions[i]; }
     inline int &getDir(const size_t i)
-      { return direcciones[i]; }
+      { return directions[i]; }
 
     int sendSelf(CommParameters &);
     int recvSelf(const CommParameters &);

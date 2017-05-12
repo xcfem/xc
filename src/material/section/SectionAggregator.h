@@ -65,7 +65,7 @@
 #ifndef SectionAggregator_h
 #define SectionAggregator_h
 
-#include <material/section/SeccionBarraPrismatica.h>
+#include <material/section/PrismaticBarCrossSection.h>
 #include <material/section/AggregatorAdditions.h>
 
 namespace XC {
@@ -74,10 +74,10 @@ namespace XC {
 //! @brief SectionAggregator decorates an MP
 //! section (couple bending and axial) with an uncoupled shear
 //! relation.
-class SectionAggregator : public SeccionBarraPrismatica
+class SectionAggregator : public PrismaticBarCrossSection
   {
   private:
-    SeccionBarraPrismatica *theSection;
+    PrismaticBarCrossSection *theSection;
     AggregatorAdditions theAdditions;
     
     Vector *def; //!< Storage for section deformations
@@ -102,14 +102,14 @@ class SectionAggregator : public SeccionBarraPrismatica
   public:
     SectionAggregator(MaterialLoader *mat_ldr= nullptr); 
     SectionAggregator(int tag,MaterialLoader *mat_ldr= nullptr);
-    SectionAggregator(int tag, SeccionBarraPrismatica &theSection,const AggregatorAdditions &theAdditions,MaterialLoader *mat_ldr= nullptr); 
+    SectionAggregator(int tag, PrismaticBarCrossSection &theSection,const AggregatorAdditions &theAdditions,MaterialLoader *mat_ldr= nullptr); 
     SectionAggregator(int tag, const AggregatorAdditions &theAdditions,MaterialLoader *mat_ldr= nullptr); 
-    SectionAggregator(int tag, SeccionBarraPrismatica &thesection,UniaxialMaterial &theAddition, int c,MaterialLoader *mat_ldr= nullptr);
+    SectionAggregator(int tag, PrismaticBarCrossSection &thesection,UniaxialMaterial &theAddition, int c,MaterialLoader *mat_ldr= nullptr);
     SectionAggregator(const SectionAggregator &otro);
     XC::SectionAggregator &operator=(const SectionAggregator &otro);
     ~SectionAggregator(void);
 
-   inline SeccionBarraPrismatica *getSection(void)
+   inline PrismaticBarCrossSection *getSection(void)
      { return theSection; }
    void setSection(const std::string &sectionName);
    inline AggregatorAdditions &getAdditions(void)

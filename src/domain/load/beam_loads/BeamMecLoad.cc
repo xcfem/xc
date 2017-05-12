@@ -71,12 +71,14 @@ void XC::BeamMecLoad::addFixedEndForcesInBasicSystem(const double &L,const doubl
 
 void XC::BeamMecLoad::addElasticDeformations(const double &L,const CrossSectionProperties2d &ctes_scc,const double &lpI,const double &lpJ,const double &loadFactor,FVector &v0)
   {
-    std::cerr << "addElasticDeformations no definida para secciones 2d." << std::endl;
+    std::cerr << nombre_clase() << "::" << __FUNCTION__
+              << " not defined for 2D sections." << std::endl;
   }
 
 void XC::BeamMecLoad::addElasticDeformations(const double &L,const CrossSectionProperties3d &ctes_scc,const double &lpI,const double &lpJ,const double &loadFactor,FVector &v0)
   {
-    std::cerr << "addElasticDeformations no definida para secciones 3d." << std::endl;
+    std::cerr << nombre_clase() << "::" << __FUNCTION__
+              << " not defined for 3D sections." << std::endl;
   }
 
 //! @brief Return the dimension del vector fuerza.

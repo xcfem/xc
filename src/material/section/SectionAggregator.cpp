@@ -167,7 +167,7 @@ void XC::SectionAggregator::copia_seccion(const SectionForceDeformation *theSec)
         SectionForceDeformation *tmp= theSec->getCopy();
         if(tmp)
           {
-            theSection= dynamic_cast<SeccionBarraPrismatica *>(tmp);
+            theSection= dynamic_cast<PrismaticBarCrossSection *>(tmp);
             if(!theSection)
               {
                 std::cerr << "SectionAggregator::copia_seccion; el material es inadecuado.\n";
@@ -181,8 +181,8 @@ void XC::SectionAggregator::copia_seccion(const SectionForceDeformation *theSec)
   }
 
 //! @brief Constructor.
-XC::SectionAggregator::SectionAggregator(int tag, SeccionBarraPrismatica &theSec,const AggregatorAdditions &theAdds,MaterialLoader *mat_ldr)
-  : SeccionBarraPrismatica(tag, SEC_TAG_Aggregator,mat_ldr), theSection(nullptr),
+XC::SectionAggregator::SectionAggregator(int tag, PrismaticBarCrossSection &theSec,const AggregatorAdditions &theAdds,MaterialLoader *mat_ldr)
+  : PrismaticBarCrossSection(tag, SEC_TAG_Aggregator,mat_ldr), theSection(nullptr),
     theAdditions(theAdds,this), def(nullptr), defzero(nullptr), s(nullptr), ks(nullptr), fs(nullptr), theCode(nullptr)
   {
     copia_seccion(&theSec);
@@ -191,7 +191,7 @@ XC::SectionAggregator::SectionAggregator(int tag, SeccionBarraPrismatica &theSec
 
 //! @brief Copy constructor.
 XC::SectionAggregator::SectionAggregator(const SectionAggregator &otro)
-  : SeccionBarraPrismatica(otro), theSection(nullptr), theAdditions(otro.theAdditions),
+  : PrismaticBarCrossSection(otro), theSection(nullptr), theAdditions(otro.theAdditions),
     def(nullptr), defzero(nullptr), s(nullptr), ks(nullptr), fs(nullptr), theCode(nullptr)
    {
      copia_seccion(otro.theSection);
@@ -200,12 +200,12 @@ XC::SectionAggregator::SectionAggregator(const SectionAggregator &otro)
 
 //! @brief Constructor.
 XC::SectionAggregator::SectionAggregator(int tag, const AggregatorAdditions &theAdds,MaterialLoader *mat_ldr)
-  : SeccionBarraPrismatica(tag, SEC_TAG_Aggregator,mat_ldr), theSection(nullptr), theAdditions(theAdds,this),
+  : PrismaticBarCrossSection(tag, SEC_TAG_Aggregator,mat_ldr), theSection(nullptr), theAdditions(theAdds,this),
     def(nullptr), defzero(nullptr), s(nullptr), ks(nullptr), fs(nullptr), theCode(nullptr)
   { alloc_storage_ptrs(); }
 
-XC::SectionAggregator::SectionAggregator(int tag, SeccionBarraPrismatica &theSec, UniaxialMaterial &theAddition, int c,MaterialLoader *mat_ldr)
-  : SeccionBarraPrismatica(tag, SEC_TAG_Aggregator,mat_ldr), theSection(nullptr), theAdditions(this,theAddition,c),
+XC::SectionAggregator::SectionAggregator(int tag, PrismaticBarCrossSection &theSec, UniaxialMaterial &theAddition, int c,MaterialLoader *mat_ldr)
+  : PrismaticBarCrossSection(tag, SEC_TAG_Aggregator,mat_ldr), theSection(nullptr), theAdditions(this,theAddition,c),
     def(nullptr), defzero(nullptr), s(nullptr), ks(nullptr), fs(nullptr), theCode(nullptr)
   {
     copia_seccion(&theSec);
@@ -213,19 +213,19 @@ XC::SectionAggregator::SectionAggregator(int tag, SeccionBarraPrismatica &theSec
   }
 
 XC::SectionAggregator::SectionAggregator(int tag,MaterialLoader *mat_ldr)
-  : SeccionBarraPrismatica(tag, SEC_TAG_Aggregator,mat_ldr), theSection(nullptr), theAdditions(this), 
+  : PrismaticBarCrossSection(tag, SEC_TAG_Aggregator,mat_ldr), theSection(nullptr), theAdditions(this), 
     def(nullptr), defzero(nullptr), s(nullptr), ks(nullptr), fs(nullptr), theCode(nullptr){}
 
 //! @brief Default constructor.
 XC::SectionAggregator::SectionAggregator(MaterialLoader *mat_ldr)
-  : SeccionBarraPrismatica(0, SEC_TAG_Aggregator,mat_ldr), theSection(nullptr), theAdditions(this),
+  : PrismaticBarCrossSection(0, SEC_TAG_Aggregator,mat_ldr), theSection(nullptr), theAdditions(this),
     def(nullptr), defzero(nullptr), s(nullptr), ks(nullptr), fs(nullptr), theCode(nullptr) {}
 
 //! @brief Assignment operator.
 XC::SectionAggregator &XC::SectionAggregator::operator=(const SectionAggregator &otro)
   {
     libera();
-    SeccionBarraPrismatica::operator=(otro);
+    PrismaticBarCrossSection::operator=(otro);
     copia_seccion(otro.theSection);
     theAdditions= otro.theAdditions;
     theAdditions.set_owner(this);
@@ -251,9 +251,9 @@ void XC::SectionAggregator::setSection(const std::string &sectionName)
     const Material *ptr_mat= material_loader->find_ptr(sectionName);
     if(ptr_mat)
       {
-        const SeccionBarraPrismatica *tmp= dynamic_cast<const SeccionBarraPrismatica *>(ptr_mat);
+        const PrismaticBarCrossSection *tmp= dynamic_cast<const PrismaticBarCrossSection *>(ptr_mat);
         if(tmp)
-          theSection= dynamic_cast<SeccionBarraPrismatica *>(tmp->getCopy());
+          theSection= dynamic_cast<PrismaticBarCrossSection *>(tmp->getCopy());
         else
           std::cerr << "XC::SectionAggregator::setSection" 
                     << "; material identified by: '" << sectionName
@@ -551,7 +551,7 @@ int XC::SectionAggregator::revertToStart(void)
 //! @brief Send object members through the channel being passed as parameter.
 int XC::SectionAggregator::sendData(CommParameters &cp)
   {
-    int res= SeccionBarraPrismatica::sendData(cp);
+    int res= PrismaticBarCrossSection::sendData(cp);
     res+= cp.sendBrokedPtr(theSection,getDbTagData(),BrokedPtrCommMetaData(5,6,7));
     res+= cp.sendMovable(theAdditions,getDbTagData(),CommMetaData(8));
     res+= cp.sendVectorPtr(def,getDbTagData(),ArrayCommMetaData(9,10,11));
@@ -566,7 +566,7 @@ int XC::SectionAggregator::sendData(CommParameters &cp)
 //! @brief Receives object members through the channel being passed as parameter.
 int XC::SectionAggregator::recvData(const CommParameters &cp)
   {
-    int res= SeccionBarraPrismatica::recvData(cp);
+    int res= PrismaticBarCrossSection::recvData(cp);
     theSection= cp.getBrokedMaterial(theSection,getDbTagData(),BrokedPtrCommMetaData(5,6,7));
     res+= cp.receiveMovable(theAdditions,getDbTagData(),CommMetaData(8));
     def= cp.receiveVectorPtr(def,getDbTagData(),ArrayCommMetaData(9,10,11));
@@ -633,7 +633,7 @@ void XC::SectionAggregator::Print(std::ostream &s, int flag) const
 XC::Response *XC::SectionAggregator::setResponse(const std::vector<std::string> &argv, Information &info)
   {
     // See if the response is one of the defaults
-    Response *res= XC::SeccionBarraPrismatica::setResponse(argv,info);
+    Response *res= XC::PrismaticBarCrossSection::setResponse(argv,info);
     if(res != 0)
       return res;
   
@@ -651,7 +651,7 @@ int XC::SectionAggregator::getResponse(int responseID, Information &info)
   {
     // Just call the base class method ... don't need to define
     // this function, but keeping it here just for clarity
-    return XC::SeccionBarraPrismatica::getResponse(responseID, info);
+    return XC::PrismaticBarCrossSection::getResponse(responseID, info);
   }
 
 //! @brief Returns the identificador de la variable cuyo nombre being passed as parameter.

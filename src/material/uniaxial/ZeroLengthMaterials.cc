@@ -37,28 +37,28 @@
 
 //!  Constructor:
 XC::ZeroLengthMaterials::ZeroLengthMaterials(ZeroLength *owner,UniaxialMaterial &theMat, int direction)
-  :DqUniaxialMaterial(owner,theMat,1), direcciones()
+  :DqUniaxialMaterial(owner,theMat,1), directions()
   {
-    direcciones.push_back(direction);
+    directions.push_back(direction);
     checkDirection();
   }
 
 //!  Constructor:
 XC::ZeroLengthMaterials::ZeroLengthMaterials(ZeroLength *owner,UniaxialMaterial *theMat, int direction)
-  :DqUniaxialMaterial(owner,theMat,1), direcciones()
+  :DqUniaxialMaterial(owner,theMat,1), directions()
   {
-    direcciones.push_back(direction);
+    directions.push_back(direction);
     checkDirection();
   }
 
 //! @brief  Construct container with multiple unidirectional materials
 XC::ZeroLengthMaterials::ZeroLengthMaterials(ZeroLength *owner,const DqUniaxialMaterial &theMat,const ID &direction)
-  :DqUniaxialMaterial(theMat), direcciones(theMat.size())
+  :DqUniaxialMaterial(theMat), directions(theMat.size())
   {
     set_owner(owner);
     // initialize uniaxial materials and directions and check for valid values
     for(size_t i= 0;i<theMat.size();i++)
-      direcciones[i]= direction(i);
+      directions[i]= direction(i);
     checkDirection();
   }
 
@@ -66,13 +66,13 @@ XC::ZeroLengthMaterials::ZeroLengthMaterials(ZeroLength *owner,const DqUniaxialM
 //   invoked by a FEM_ObjectBroker - blank object that recvSelf needs
 //   to be invoked upon
 XC::ZeroLengthMaterials::ZeroLengthMaterials(ZeroLength *owner)
-  :DqUniaxialMaterial(owner), direcciones() {}
+  :DqUniaxialMaterial(owner), directions() {}
 
 
 void XC::ZeroLengthMaterials::clear(void)
   {
     DqUniaxialMaterial::clear();
-    direcciones.clear();
+    directions.clear();
   }
 
 XC::MaterialLoader *XC::ZeroLengthMaterials::get_material_loader(void)
@@ -112,17 +112,19 @@ void XC::ZeroLengthMaterials::push_back(const int &dir,const UniaxialMaterial *t
         if(tmp)
           {
             DqUniaxialMaterial::push_back(tmp);
-            direcciones.push_back(dir);
+            directions.push_back(dir);
           }
         else
-          std::cerr << "DqUniaxialMaterial::push_back; can't create UniaxialMaterial" << std::endl;
+          std::cerr << nombre_clase() << "::" << __FUNCTION__
+	        << "; cant' create an UniaxialMaterial objet." << std::endl;
       }
   }
 
 void XC::ZeroLengthMaterials::push_front(const int &dir,const UniaxialMaterial *t)
   {
     if(!t)
-      std::cerr << "XC::DqUniaxialMaterial::push_front; se pasó a pointer a material nulo." << std::endl;
+      std::cerr << nombre_clase() << "::" << __FUNCTION__
+	        << "; pointer to material is null." << std::endl;
     else
       {
         UniaxialMaterial *tmp= nullptr;
@@ -130,10 +132,12 @@ void XC::ZeroLengthMaterials::push_front(const int &dir,const UniaxialMaterial *
         if(tmp)
           {
             DqUniaxialMaterial::push_front(tmp);
-            direcciones.push_front(dir);
+            directions.push_front(dir);
           }
         else
-          std::cerr << "DqUniaxialMaterial::push_front; no se pudo crear un objeto UniaxialMaterial" << std::endl;
+          std::cerr << nombre_clase() << "::" << __FUNCTION__
+	            << "; cant' create an UniaxialMaterial objet."
+		    << std::endl;
       }
   }
 
@@ -147,12 +151,13 @@ int XC::ZeroLengthMaterials::sendSelf(CommParameters &cp)
     int res= sendData(cp);
     ID direction(sz);
     for(size_t i= 0;i<sz;i++)
-      direction[i]= direcciones[i];
+      direction[i]= directions[i];
     res+= cp.sendID(direction,getDbTagData(),CommMetaData(2));
 
     res+= cp.sendIdData(getDbTagData(),dataTag);
     if(res<0)
-      std::cerr << "ZeroLengthMaterials::sendSelf -- failed to send.\n";
+      std::cerr << nombre_clase() << "::" << __FUNCTION__
+	        << "; failed to send.\n";
     return res;
   }
 
@@ -162,16 +167,17 @@ int XC::ZeroLengthMaterials::recvSelf(const CommParameters &cp)
     const int dataTag= getDbTag();
     int res= cp.receiveIdData(getDbTagData(),dataTag);
     if(res < 0)
-      std::cerr << "ZeroLengthMaterials::recvSelf -- failed to receive.\n";
+      std::cerr << nombre_clase() << "::" << __FUNCTION__
+	        << "; failed to receive.\n";
     else
       {
         res+= recvData(cp);
         ID direction;
         res+= cp.receiveID(direction,getDbTagData(),CommMetaData(2));
         const size_t sz= direction.Size();
-        direcciones.resize(sz);
+        directions.resize(sz);
         for(size_t i= 0;i<sz;i++)
-          direcciones[i]= direction(i);
+          directions[i]= direction(i);
       }
     return res;
   }
@@ -182,7 +188,7 @@ void XC::ZeroLengthMaterials::Print(std::ostream &s, int flag)
     for(size_t j = 0; j < size(); j++)
       {
         s << "\tMaterial1d, tag: " << (*this)[j]->getTag()
-          << ", dir: " << direcciones[j] << std::endl;
+          << ", dir: " << directions[j] << std::endl;
         s << *((*this)[j]);
       }
   }
@@ -193,10 +199,10 @@ void XC::ZeroLengthMaterials::Print(std::ostream &s, int flag)
 // Check that direction is in the range of 0 to 5
 void XC::ZeroLengthMaterials::checkDirection(void)
   {
-    for(size_t i=0; i<direcciones.size(); i++)
-      if(direcciones[i] < 0 || direcciones[i] > 5 )
+    for(size_t i=0; i<directions.size(); i++)
+      if(directions[i] < 0 || directions[i] > 5 )
         {
-          std::cerr << "WARNING XC::ZeroLengthMaterials::checkDirection - incorrect direction " << direcciones[i] << " is set to 0\n";
-          direcciones[i]= 0;
+          std::cerr << "WARNING XC::ZeroLengthMaterials::checkDirection - incorrect direction " << directions[i] << " is set to 0\n";
+          directions[i]= 0;
         }
   }
