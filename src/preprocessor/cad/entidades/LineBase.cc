@@ -24,9 +24,9 @@
 // along with this program.
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
-//LineaBase.cc
+//LineBase.cc
 
-#include "LineaBase.h"
+#include "LineBase.h"
 #include "preprocessor/Preprocessor.h"
 #include "Pnt.h"
 #include "xc_utils/src/geom/d3/BND3d.h"
@@ -38,22 +38,22 @@
 #include "med.h"
 
 //! @brief Constructor.
-XC::LineaBase::LineaBase(Preprocessor *m,const size_t &nd)
+XC::LineBase::LineBase(Preprocessor *m,const size_t &nd)
   : Edge(m,nd), p1(nullptr), p2(nullptr) {}
 
 //! @brief Constructor.
-XC::LineaBase::LineaBase(const std::string &nombre,Preprocessor *m,const size_t &nd)
+XC::LineBase::LineBase(const std::string &nombre,Preprocessor *m,const size_t &nd)
   : Edge(nombre,m,nd), p1(nullptr), p2(nullptr) {}
 
 //! @brief Returns a constant pointer to start point.
-const XC::Pnt *XC::LineaBase::P1(void) const
+const XC::Pnt *XC::LineBase::P1(void) const
   { return p1; }
 //! @brief Returns a constant pointer to end point.
-const XC::Pnt *XC::LineaBase::P2(void) const
+const XC::Pnt *XC::LineBase::P2(void) const
   { return p2; }
 
 //! @brief Returns the i-th vertex.
-const XC::Pnt *XC::LineaBase::GetVertice(const size_t &i) const
+const XC::Pnt *XC::LineBase::GetVertice(const size_t &i) const
   {
     if(i==1)
       return p1;
@@ -62,7 +62,7 @@ const XC::Pnt *XC::LineaBase::GetVertice(const size_t &i) const
   }
 
 //! @brief Checks that the points are defined.
-bool XC::LineaBase::check_points(void) const
+bool XC::LineBase::check_points(void) const
   {
     bool retval= false;
     if(p1 && p2)
@@ -75,7 +75,7 @@ bool XC::LineaBase::check_points(void) const
   }
 
 //! @brief Sets the i-th vertex.
-void XC::LineaBase::SetVertice(const size_t &i,Pnt *p)
+void XC::LineBase::SetVertice(const size_t &i,Pnt *p)
   {
     if((i==1) && (p1!=p))
       {
@@ -91,7 +91,7 @@ void XC::LineaBase::SetVertice(const size_t &i,Pnt *p)
   }
 
 //! @brief Sets the i-th vertex.
-void XC::LineaBase::SetVertice(const size_t &i,const size_t &id_punto)
+void XC::LineBase::SetVertice(const size_t &i,const size_t &id_punto)
   {
     SetVertice(i,BuscaPnt(id_punto));
     if(!GetVertice(i))
@@ -100,17 +100,17 @@ void XC::LineaBase::SetVertice(const size_t &i,const size_t &id_punto)
   }
 
 //! @brief Assigns line ends.
-void XC::LineaBase::SetVertices(Pnt *pA,Pnt *pB)
+void XC::LineBase::SetVertices(Pnt *pA,Pnt *pB)
   {
     if(pA==pB)
-      std::cerr << "¡Ojo!, LineaBase::SetVertices; "
-                << "se asigna el mismo punto a ambos extremos de la linea: '"
+      std::cerr << nombre_clase() << "::" << __FUNCTION__
+		<< " degenerated line (starts and end in the same point): '"
                 << GetNombre() << "'." << std::endl;
     SetVertice(1,pA);
     SetVertice(2,pB);
     if(p1==p2)
-      std::cerr << "LineaBase::SetVertices; ¡ojo!, la linea: '" << GetNombre()
-                << "' tiene ambos extremos en el mismo punto."
-                << std::endl; 
+      std::cerr << nombre_clase() << "::" << __FUNCTION__
+		<< " degenerated line (starts and end in the same point): '"
+                << GetNombre() << "'." << std::endl;
     actualiza_topologia();
   }

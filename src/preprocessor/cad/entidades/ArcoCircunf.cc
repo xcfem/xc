@@ -41,11 +41,11 @@
 
 //! @brief Constructor.
 XC::ArcoCircunf::ArcoCircunf(Preprocessor *m)
-  : LineaBase(m), p3(nullptr) {}
+  : LineBase(m), p3(nullptr) {}
 
 //! @brief Constructor.
 XC::ArcoCircunf::ArcoCircunf(const std::string &nombre,Preprocessor *m)
-  : LineaBase(nombre,m), p3(nullptr) {}
+  : LineBase(nombre,m), p3(nullptr) {}
 
 //! @brief Virtual constructor.
 XC::SetEstruct *XC::ArcoCircunf::getCopy(void) const
@@ -59,7 +59,7 @@ const XC::Pnt *XC::ArcoCircunf::P3(void) const
 const XC::Pnt *XC::ArcoCircunf::GetVertice(const size_t &i) const
   {
     if(i<3)
-      return LineaBase::GetVertice(i);
+      return LineBase::GetVertice(i);
     else
       return p3;
   }
@@ -69,7 +69,7 @@ const XC::Pnt *XC::ArcoCircunf::GetVertice(const size_t &i) const
 void XC::ArcoCircunf::SetVertice(const size_t &i,Pnt *p)
   {
     if(i<3)
-      LineaBase::SetVertice(i,p);
+      LineBase::SetVertice(i,p);
     else
       {
         if(p3) p3->borra_linea(this);
@@ -196,7 +196,7 @@ double XC::ArcoCircunf::getRadio(void) const
 
 void XC::ArcoCircunf::actualiza_topologia(void)
   {
-    LineaBase::actualiza_topologia();
+    LineBase::actualiza_topologia();
     if(P3()) P3()->inserta_linea(this);
   }
 

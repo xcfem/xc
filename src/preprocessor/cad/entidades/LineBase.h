@@ -24,10 +24,10 @@
 // along with this program.
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
-//LineaBase.h
+//LineBase.h
 
-#ifndef LINEABASE_H
-#define LINEABASE_H
+#ifndef LINEBASE_H
+#define LINEBASE_H
 
 #include "Edge.h"
 
@@ -37,20 +37,22 @@ namespace XC {
 //! \ingroup CadEnt
 //!
 //! @brief Base class for 1D entities.
-class LineaBase: public Edge
+class LineBase: public Edge
   {
   protected:
-    Pnt *p1; //!< Extremo dorsal.
-    Pnt *p2; //!< Extremo frontal.
+    Pnt *p1; //!< Back end.
+    Pnt *p2; //!< Front end.
 
+    //! @brief Return pointer to back end.
     inline Pnt *P1(void)
       { return p1; }
+    //! @brief Return pointer to front end.
     virtual Pnt *P2(void)
       { return p2; }
     virtual bool check_points(void) const;
   public:
-    LineaBase(Preprocessor *m,const size_t &ndiv= 4);
-    LineaBase(const std::string &nombre,Preprocessor *m,const size_t &ndiv= 4);
+    LineBase(Preprocessor *m,const size_t &ndiv= 4);
+    LineBase(const std::string &nombre,Preprocessor *m,const size_t &ndiv= 4);
     const Pnt *P1(void) const;
     const Pnt *P2(void) const;
 

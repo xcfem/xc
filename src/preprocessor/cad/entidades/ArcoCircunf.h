@@ -29,7 +29,7 @@
 #ifndef ARCOCIRCUNF_H
 #define ARCOCIRCUNF_H
 
-#include "LineaBase.h"
+#include "LineBase.h"
 
 
 class SectorCircular3d;
@@ -40,7 +40,7 @@ namespace XC {
 //!
 //! @brief Circumference arc.
   
-class ArcoCircunf: public LineaBase
+class ArcoCircunf: public LineBase
   {
     Pnt *p3; //!< Midpoint of the arc.
   protected:
