@@ -31,6 +31,7 @@ python tests/combinations/test_pescante_02.py
 
 echo "$BLEU" "Elements tests." "$NORMAL"
 echo "$BLEU" "  Truss tests." "$NORMAL"
+python tests/elements/truss_test0.py
 python tests/elements/truss_test1.py
 python tests/elements/truss_test2.py
 python tests/elements/truss_temperat.py
