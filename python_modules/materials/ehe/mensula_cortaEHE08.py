@@ -3,13 +3,13 @@ from __future__ import division
 
 #Armaduras de una ménsula corta según EHE-08.
 
-def getCotgAnguloBiela(tipoJunta):
-    '''getCotgAnguloBiela(tipoJunta)
+def getCotgStrutAngle(tipoJunta):
+    '''getCotgStrutAngle(tipoJunta)
     tipojunta: calidad de la junta de la ménsula con el pilar
     ("monolitica", "junta" o "junta_debil")
 
-    Devuelve la cotangente del ángulo que forma la biela de compresión
-    con la vertical según el apartado 64.1.2.1 de EHE-08.
+    Return the cotangent of the angle between the concrete
+    compressed strut an the vertical according to article 64.1.2.1 de EHE-08.
     '''
     if tipoJunta=="monolitica":
         retval=1.4
@@ -29,7 +29,7 @@ def getCantoUtilMinimo(tipoJunta, a):
     Devuelve el depth útil mínimo de la ménsula según
     el apartado 64.1.2.1 de EHE-08.
     '''
-    return a*getCotgAnguloBiela(tipoJunta)/0.85
+    return a*getCotgStrutAngle(tipoJunta)/0.85
 
 def getTraccionMainReinforcement(tipoJunta, Fv,Fh):
     '''getTraccionMainReinforcement(tipoJunta, Fv,Fh)
@@ -41,7 +41,7 @@ def getTraccionMainReinforcement(tipoJunta, Fv,Fh):
     Devuelve la tracción en la reinforcement principal de la ménsula según
     el apartado 64.1.2.1.1 de EHE-08.
     '''
-    return Fv/getCotgAnguloBiela(tipoJunta)+Fh
+    return Fv/getCotgStrutAngle(tipoJunta)+Fh
 
 def getAreaNecMainReinforcement(tipoJunta, Fv,Fh,fyd):
     '''getAreaNecMainReinforcement(tipoJunta, Fv,Fh,fyd)

@@ -31,7 +31,7 @@ def axialInitialResistanceConeFailure(k1, fck_cube, hEf):
   ''' Valor inicial de la resistencia de un perno a tracción por
    extracción de cono de hormigón según la expresión 5.3a del artículo 5.2.2.4 a) de EOTA TR029.
    :param k1: 7.2 para hormigón fisurado y 10.1 para hormigón no fisurado.
-   :param fck_cube: Resistencia característica del hormigón medida en probeta cúbica (Pa).
+   :param fck_cube: Concrete characteristic strength medida en probeta cúbica (Pa).
    :param hEf: Profundidad efectiva del anclaje (m).
    '''
   return k1*math.sqrt(fck_cube/1e6)*pow(hEf*1e3,1.5)

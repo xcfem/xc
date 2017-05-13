@@ -129,7 +129,7 @@ class GeomSection: public SectionMassProperties
     double getLeverArm(const Recta2d &) const;
     double getAnchoMecanico(const Recta2d &) const;
     double getRecubrimiento(const Pos2d &) const;
-    double getAnchoBielaComprimida(const Segmento2d &) const;
+    double getCompressedStrutWidth(const Segmento2d &) const;
 
     //Acceso contenedores.
     inline const ListRegiones &getRegiones(void) const

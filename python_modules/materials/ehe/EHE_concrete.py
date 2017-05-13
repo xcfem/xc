@@ -104,7 +104,7 @@ class EHEConcrete(concreteBase.Concrete):
             return 0.58e6*self.fckMPa()**(1/2)
 
     def fctkEHE08(self):
-        """Resistencia característica del hormigón a tracción  [Pa][+]
+        """Concrete characteristic tensile strength  [Pa][+]
         (según artículo 39.1 EHE-08)
         """
         return 0.7*self.fctMedEHE08()

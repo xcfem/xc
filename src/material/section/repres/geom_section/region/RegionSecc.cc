@@ -42,9 +42,10 @@ XC::RegionSecc::RegionSecc(Material *mat)
   : DiscretBase(mat) {}
 
 //! @brief Return the region contour.
-Poligono2d XC::RegionSecc::getPoligono(void) const
+Poligono2d XC::RegionSecc::getPolygon(void) const
   {
-    std::cerr << "RegionSecc::getPoligono not implemented." << std::endl;
+    std::cerr << nombre_clase() << "::" << __FUNCTION__
+              << "; not implemented." << std::endl;
     Poligono2d retval;
     return retval;
   }
@@ -54,7 +55,7 @@ Poligono2d XC::RegionSecc::getPoligono(void) const
 //! @param sp: Half-plane to intersect width.
 XC::RgSccPoligono XC::RegionSecc::Intersection(const Semiplano2d &sp) const
   {
-    std::list<Poligono2d> tmpList= getPoligono().Interseccion(sp);
+    std::list<Poligono2d> tmpList= getPolygon().Interseccion(sp);
     if(tmpList.size()>1)
       std::cerr << nombre_clase() << __FUNCTION__
 	        << "; not a simply connected region."
@@ -66,7 +67,7 @@ XC::RgSccPoligono XC::RegionSecc::Intersection(const Semiplano2d &sp) const
 //! @brief Return the centroid coordinates.
 const XC::Vector &XC::RegionSecc::Cdg(void) const
   {
-    const Pos2d p= getPoligono().Cdg();
+    const Pos2d p= getPolygon().Cdg();
     static Vector retval(2);
     retval[0]= p.x();
     retval[1]= p.y();
@@ -75,23 +76,23 @@ const XC::Vector &XC::RegionSecc::Cdg(void) const
 
 //! @brief Returns the region contour lenght.
 double XC::RegionSecc::Longitud(void) const
-  { return getPoligono().Longitud(); }
+  { return getPolygon().Longitud(); }
 
 //! @brief Returns the region area.
 double XC::RegionSecc::Area(void) const
-  { return getPoligono().Area(); }
+  { return getPolygon().Area(); }
 
 //! @brief Returns the moment of inertia with respect to the axis paralelo al y por el centroid.
 double XC::RegionSecc::Iy(void) const
-  { return getPoligono().Ix(); }
+  { return getPolygon().Ix(); }
 
 //! @brief Returns the moment of inertia with respect to the axis paralelo al z por el centroid.
 double XC::RegionSecc::Iz(void) const
-  { return getPoligono().Iy(); }
+  { return getPolygon().Iy(); }
 
 //! @brief Returns the producto de inercia respecto a los ejes paralelos por el centroid.
 double XC::RegionSecc::Pyz(void) const
-  { return getPoligono().Pxy(); }
+  { return getPolygon().Pxy(); }
 
 //! @brief Returns the moment of inertia polar with respect to centroid en ejes locales.
 double XC::RegionSecc::Ix(void) const
@@ -99,13 +100,13 @@ double XC::RegionSecc::Ix(void) const
 
 //! @brief Returns the ángulo que define un principal axis of inertia.
 double XC::RegionSecc::Theta_p(void) const
-  { return getPoligono().Theta_p(); }
+  { return getPolygon().Theta_p(); }
 
 //! @brief Return the direction of a principal axis of inertia
 //! (we don't know yet if it's the major one or the minor one).
 const XC::Vector &XC::RegionSecc::DirEjeI_a(void) const
   {
-    const Dir2d p= getPoligono().DirEjeI_a();
+    const Dir2d p= getPolygon().DirEjeI_a();
     static Vector retval(2);
     retval[0]= p.dx();
     retval[1]= p.dy();
@@ -117,7 +118,7 @@ const XC::Vector &XC::RegionSecc::DirEjeI_a(void) const
 //! one or the minor one).
 const XC::Vector &XC::RegionSecc::DirEjeI_b(void) const
   {
-    const Dir2d p= getPoligono().DirEjeI_b();
+    const Dir2d p= getPolygon().DirEjeI_b();
     static Vector retval(2);
     retval[0]= p.dx();
     retval[1]= p.dy();
@@ -135,22 +136,22 @@ const XC::Vector &XC::RegionSecc::DirEjeI_b(void) const
 
 //! @brief Returns the principal major axis of inertia.
 double XC::RegionSecc::getI1(void) const
-  { return getPoligono().I1(); }
+  { return getPolygon().I1(); }
 
 //! @brief Returns the principal minor axis of inertia.
 double XC::RegionSecc::getI2(void) const
-  { return getPoligono().I2(); }
+  { return getPolygon().I2(); }
 
 //     inline PrincipalAxesOfInertia2D Inercia(void)
 //       { return PrincipalAxesOfInertia2D(Cdg(),Iy(),Iz(),Pyz()); }
 
 //! @brief Return the i,j component of the tensor of inertia computed with respect to centroid.
 double XC::RegionSecc::getI(const unsigned short int &i,const unsigned short int &j) const
-  { return getPoligono().I(i+1,j+1); }
+  { return getPolygon().I(i+1,j+1); }
 
 //! @brief Returns the moment of inertia with respect to the axis that passes through O with the direction of e.
 double XC::RegionSecc::getI(const Pos2d &O,const Vector &e) const
-  { return getPoligono().I(O,Vector2d(e[0],e[1])); }
+  { return getPolygon().I(O,Vector2d(e[0],e[1])); }
 
 //     double I(const Recta2d &r) const;
 //       //Returns the moment of inertia respecto a la recta being passed
@@ -158,17 +159,17 @@ double XC::RegionSecc::getI(const Pos2d &O,const Vector &e) const
 
 //! @brief Return the i,j component of the tensor of inertia computed with respecto to the point "o".
 double XC::RegionSecc::getI(const unsigned short int i,const unsigned short int j,const Pos2d &o) const
-  { return getPoligono().I(i+1,j+1,o); }
+  { return getPolygon().I(i+1,j+1,o); }
 
 //! @brief Returns the momento polar de inercia with respect to the point o.
 double XC::RegionSecc::getIO(const Pos2d &o)
-  { return getPoligono().IO(o); }
+  { return getPolygon().IO(o); }
 
 //! @brief Returns the tensor of inertia computed with respect to the object centroid.
 XC::Matrix &XC::RegionSecc::getI(void) const
   {
     static Matrix i(2,2);
-    const Poligono2d &pol= getPoligono();
+    const Poligono2d &pol= getPolygon();
     i(0,0)= pol.Ix(); i(0,1)= -pol.Pxy();
     i(1,0)= i(0,1);   i(1,1)= pol.Iy();
     return i;
@@ -177,7 +178,7 @@ XC::Matrix &XC::RegionSecc::getI(void) const
 //! @brief Returns the tensor of inertia respector al punto o.
 XC::Matrix &XC::RegionSecc::getI(const Pos2d &o) const
   {
-    matriz_FT tmp= getPoligono().I(o);
+    matriz_FT tmp= getPolygon().I(o);
     static Matrix i(2,2);
     i(0,0)= tmp(1,1); i(0,1)= tmp(1,2);
     i(1,0)= tmp(1,2); i(1,1)= tmp(2,2);

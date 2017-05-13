@@ -374,7 +374,7 @@ double XC::GeomSection::getAnchoMecanico(const Recta2d &traza_plano_flexion) con
 
 //! @brief Returns the width «b0» of the compressed strut
 //! that corresponds to the arm lever represented by the segment being passed as parameter.
-double XC::GeomSection::getAnchoBielaComprimida(const Segmento2d &brazo_mecanico) const
+double XC::GeomSection::getCompressedStrutWidth(const Segmento2d &brazo_mecanico) const
   {
     const Poligono2d contour= agrega_puntos_medios(getRegionsContour());
     const size_t num_vertices= contour.GetNumVertices();

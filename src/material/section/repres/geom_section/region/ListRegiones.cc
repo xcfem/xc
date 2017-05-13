@@ -148,7 +148,7 @@ std::list<Poligono2d> XC::ListRegiones::getRegionsContours(void) const
   {
     std::list<Poligono2d> retval;
     for(const_iterator i= begin();i!=end();i++)
-      retval.push_back((*i)->getPoligono());
+      retval.push_back((*i)->getPolygon());
     return retval;
   }
 
@@ -165,10 +165,10 @@ BND2d XC::ListRegiones::getBnd(void) const
     if(!empty())
       {
         const_iterator i= begin();
-        retval= (*i)->getPoligono().Bnd();
+        retval= (*i)->getPolygon().Bnd();
         i++;
         for(;i!=end();i++)
-          retval+= (*i)->getPoligono().Bnd();
+          retval+= (*i)->getPolygon().Bnd();
       }
     else
       std::cerr << nombre_clase() << "::" << __FUNCTION__

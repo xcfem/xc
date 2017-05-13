@@ -71,7 +71,7 @@ class RegionSecc: public DiscretBase
     //! @brief Returns a copy of the region.
     virtual RegionSecc *getCopy(void) const= 0;
 
-    virtual Poligono2d getPoligono(void) const;
+    virtual Poligono2d getPolygon(void) const;
     RgSccPoligono Intersection(const Semiplano2d &sp) const;
     const Vector &Cdg(void) const;
     double Longitud(void) const;

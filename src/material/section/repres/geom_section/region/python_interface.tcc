@@ -23,7 +23,7 @@
 
 class_<XC::RegionSecc, XC::RegionSecc *, bases<XC::DiscretBase>, boost::noncopyable >("RegionSecc", no_init)
   .def("getNumCells",&XC::RegionSecc::getNumCells)
-  .def("getPoligono",&XC::RegionSecc::getPoligono)
+  .def("getPolygon",&XC::RegionSecc::getPolygon)
   .def("getArea",&XC::RegionSecc::Area)
   .def("getIy",&XC::RegionSecc::Iy)
   .def("getIz",&XC::RegionSecc::Iz)
@@ -61,7 +61,7 @@ class_<XC::RgSccQuad, bases<XC::RgQuadCell>, boost::noncopyable >("RgSccQuad", n
   .def("setTileSize",&XC::RgSccQuad::setTileSize,"Sets numbers of divisions to get tile sizes smaller than sizeIJ and sizeJK.")
   .def("swap",&XC::RgSccQuad::swap)
   .def("getQuad",&XC::RgSccQuad::getQuad)
-  .def("getPolygon",&XC::RgSccQuad::getPoligono)
+  .def("getPolygon",&XC::RgSccQuad::getPolygon)
   .def("setQuad",&XC::RgSccQuad::setQuad)
   ;
 

@@ -38,7 +38,7 @@ def plotGeomSeccion(geomSection, path):
   ctx.set_line_width(trf.scale/100000)
   ctx.set_source_rgb(0.0, 0.0, 0.0) # Black solid color
   for r in regiones:
-    trf.plotPolygon(r.getPoligono(),ctx)
+    trf.plotPolygon(r.getPolygon(),ctx)
   ctx.stroke()
   ctx.set_line_width(trf.scale/300000)
   reinforcement= geomSection.getReinfLayers

@@ -86,7 +86,7 @@ class RgSccQuad: public RgQuadCell
     Pos2d getLVertex(void) const;
     Cuadrilatero2d getQuad(void) const;
     void setQuad(const Cuadrilatero2d &);
-    Poligono2d getPoligono(void) const;
+    Poligono2d getPolygon(void) const;
     void swap(void);
 
 

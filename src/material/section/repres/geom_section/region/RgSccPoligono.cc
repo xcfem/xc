@@ -54,7 +54,7 @@ double XC::RgSccPoligono::getMinY(void) const
 double XC::RgSccPoligono::getMinZ(void) const
   { return plg.GetYMin(); }
 
-Poligono2d XC::RgSccPoligono::getPoligono(void) const
+Poligono2d XC::RgSccPoligono::getPolygon(void) const
   { return plg; }
 
 const Rejilla2d &XC::RgSccPoligono::getMesh(void) const

@@ -8,9 +8,10 @@ __email__= "l.pereztato@gmail.com"
 
 def getTracArmaduraInfEncepado(alpha,Nd):
     '''
-    Devuelve la traccion en la reinforcement inferior del encepado
-    alpha: Ángulo de la biela a compresión con la horizontal.
-    Nd: Axil de cálculo en el pilote.
+    Returns the tension in the inferior reinforcement of the pile cap.
+
+    :param alpha: Angle between the concrete compressed struts and the horizontal.
+    :param Nd: Axil de cálculo en el pilote.
     '''
     return Nd/math.tan(alpha)
   
@@ -18,7 +19,7 @@ def getTracArmaduraInfEncepado(alpha,Nd):
 def getAreaNecArmaduraInfEncepado(alpha,Nd,fyd):
     '''
     Devuelve el área necesaria para la reinforcement inferior del encepado
-    alpha: Ángulo de la biela a compresión con la horizontal.
+    :param alpha: Angle between the concrete compressed struts and the horizontal.
     Nd: Axil de cálculo en el pilote.
     '''
     return getTracArmaduraInfEncepado(alpha,Nd)/fyd
