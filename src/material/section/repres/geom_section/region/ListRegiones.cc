@@ -72,7 +72,7 @@ XC::ListRegiones::ListRegiones(const ListRegiones  &otro)
 //! @brief Assignment operator.
 XC::ListRegiones &XC::ListRegiones::operator=(const ListRegiones &otro)
   {
-    SeccionInerte::operator=(otro);
+    SectionMassProperties::operator=(otro);
     material_loader= otro.material_loader;
     copia(otro);
     return *this;

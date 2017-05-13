@@ -34,26 +34,26 @@
 #include "frictionModel/FrictionModel.h"
 #include "utility/actor/actor/CommMetaData.h"
 
-void XC::ElemFriccionBase::libera_friction_model(void)
+void XC::FrictionElementBase::libera_friction_model(void)
   {
     if(theFrnMdl)
       delete theFrnMdl;
     theFrnMdl= nullptr;
   }
 
-void XC::ElemFriccionBase::alloc_friction_model(const FrictionModel &thefrnmdl)
+void XC::FrictionElementBase::alloc_friction_model(const FrictionModel &thefrnmdl)
   {
     libera_friction_model();
     theFrnMdl = thefrnmdl.getCopy();
     if(!theFrnMdl)
       {
-	std::cerr << "ElemFriccionBase::ElemFriccionBase() - "
+	std::cerr << "FrictionElementBase::FrictionElementBase() - "
 		  << "failed to get copy of the friction model.\n";
 	exit(-1);
       }
   }
 
-XC::ElemFriccionBase::ElemFriccionBase(int tag, int classTag,int Nd1, int Nd2,const size_t &dim,
+XC::FrictionElementBase::FrictionElementBase(int tag, int classTag,int Nd1, int Nd2,const size_t &dim,
 					const FrictionModel &thefrnmdl, const UniaxialMatPhysicalProperties &physProp, const double &_uy,
 				       const Vector &_y, const Vector &_x, const double &m,const int &maxiter, const double &_tol)
   : Element0D(tag, classTag,Nd1,Nd2,2), theFrnMdl(nullptr), physicalProperties(physProp),
@@ -65,14 +65,14 @@ XC::ElemFriccionBase::ElemFriccionBase(int tag, int classTag,int Nd1, int Nd2,co
   }
 
 
-XC::ElemFriccionBase::ElemFriccionBase(int classTag,const size_t &dim)
+XC::FrictionElementBase::FrictionElementBase(int classTag,const size_t &dim)
   : Element0D(0,classTag,0,0,0), theFrnMdl(nullptr), physicalProperties(0,nullptr),
     uy(0.0), x(), y(), mass(0.0), maxIter(20), tol(1E-8),
     L(0.0), ub(dim), qb(dim), kb(dim,dim), ul(dim*2),
     Tgl(dim*2,dim*2), Tlb(dim,dim*2), kbInit(dim,dim)
   {}
 
-XC::ElemFriccionBase::ElemFriccionBase(const ElemFriccionBase &otro)
+XC::FrictionElementBase::FrictionElementBase(const FrictionElementBase &otro)
   :Element0D(otro), physicalProperties(otro.physicalProperties), uy(otro.uy), x(otro.x), y(otro.y), mass(otro.mass), maxIter(otro.maxIter), tol(otro.tol),
     L(otro.L), ub(otro.ub), qb(otro.qb), kb(otro.kb), ul(otro.ul),
     Tgl(otro.Tgl), Tlb(otro.Tlb), kbInit(otro.kbInit)
@@ -81,7 +81,7 @@ XC::ElemFriccionBase::ElemFriccionBase(const ElemFriccionBase &otro)
       alloc_friction_model(*otro.theFrnMdl);
   }
 
-XC::ElemFriccionBase &XC::ElemFriccionBase::operator=(const ElemFriccionBase &otro)
+XC::FrictionElementBase &XC::FrictionElementBase::operator=(const FrictionElementBase &otro)
   {
     Element0D::operator=(otro);
     physicalProperties= otro.physicalProperties;
@@ -103,17 +103,17 @@ XC::ElemFriccionBase &XC::ElemFriccionBase::operator=(const ElemFriccionBase &ot
       alloc_friction_model(*otro.theFrnMdl);
     return *this;
   }
-XC::ElemFriccionBase::~ElemFriccionBase()
+XC::FrictionElementBase::~FrictionElementBase()
   {
     libera_friction_model();
   }
 
 
 //! @brief Send members through the channel being passed as parameter.
-int XC::ElemFriccionBase::sendData(CommParameters &cp)
+int XC::FrictionElementBase::sendData(CommParameters &cp)
   {
     int res= Element0D::sendData(cp);
-    std::cerr<< "ElemFriccionBase::sendData incomplete (materials and friction model undefined)." << std::endl;
+    std::cerr<< "FrictionElementBase::sendData incomplete (materials and friction model undefined)." << std::endl;
     res+= cp.sendDoubles(uy,mass,tol,L,getDbTagData(),CommMetaData(9));
     res+= cp.sendVector(x,getDbTagData(),CommMetaData(10));
     res+= cp.sendVector(y,getDbTagData(),CommMetaData(11));
@@ -128,10 +128,10 @@ int XC::ElemFriccionBase::sendData(CommParameters &cp)
   }
 
 //! @brief Receives members through the channel being passed as parameter.
-int XC::ElemFriccionBase::recvData(const CommParameters &cp)
+int XC::FrictionElementBase::recvData(const CommParameters &cp)
   {
     int res= Element0D::recvData(cp);
-    std::cerr<< "ElemFriccionBase::recvData incomplete (materials and friction model undefined)." << std::endl;
+    std::cerr<< "FrictionElementBase::recvData incomplete (materials and friction model undefined)." << std::endl;
     res+= cp.receiveDoubles(uy,mass,tol,L,getDbTagData(),CommMetaData(9));
     res+= cp.receiveVector(x,getDbTagData(),CommMetaData(10));
     res+= cp.receiveVector(y,getDbTagData(),CommMetaData(11));

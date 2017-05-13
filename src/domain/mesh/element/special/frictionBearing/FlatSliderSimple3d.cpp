@@ -46,7 +46,7 @@ XC::Vector XC::FlatSliderSimple3d::theVector(12);
 
 
 XC::FlatSliderSimple3d::FlatSliderSimple3d(int tag, int Nd1, int Nd2,const FrictionModel &thefrnmdl, double _uy,const std::vector<UniaxialMaterial *> &materials, const Vector &_y, const Vector &_x,const double &m,const int &maxiter,const double &_tol)
-    : ElemFriccionBase(tag, ELE_TAG_FlatSliderSimple3d,Nd1,Nd2,6,thefrnmdl,materials,_uy,_x,_y,m,maxiter,tol),
+    : FrictionElementBase(tag, ELE_TAG_FlatSliderSimple3d,Nd1,Nd2,6,thefrnmdl,materials,_uy,_x,_y,m,maxiter,tol),
     ubPlastic(2), ubPlasticC(2)
   {
     load.reset(12);
@@ -65,20 +65,20 @@ XC::FlatSliderSimple3d::FlatSliderSimple3d(int tag, int Nd1, int Nd2,const Frict
     this->revertToStart();
   }
 
-
-XC::FlatSliderSimple3d::FlatSliderSimple3d()
-    :ElemFriccionBase(ELE_TAG_FlatSliderSimple3d,6),
+//! Default constructor.
+XC::FlatSliderSimple3d::FlatSliderSimple3d(void)
+    :FrictionElementBase(ELE_TAG_FlatSliderSimple3d,6),
     ubPlastic(2), ubPlasticC(2)
   {load.reset(12);}
 
-
+//! Return the number of degrees of freedom.
 int XC::FlatSliderSimple3d::getNumDOF() 
   { return 12; }
 
-
+//! Set the domain for the element.
 void XC::FlatSliderSimple3d::setDomain(Domain *theDomain)
   {
-    ElemFriccionBase::setDomain(theDomain);
+    FrictionElementBase::setDomain(theDomain);
 	
     // now determine the number of dof and the dimension    
     const int dofNd1 = theNodes[0]->getNumberDOF();
@@ -432,7 +432,7 @@ const XC::Vector& XC::FlatSliderSimple3d::getResistingForceIncInertia()
 //! @brief Send members through the channel being passed as parameter.
 int XC::FlatSliderSimple3d::sendData(CommParameters &cp)
   {
-    int res= ElemFriccionBase::sendData(cp);
+    int res= FrictionElementBase::sendData(cp);
     res+= cp.sendVector(ubPlastic,getDbTagData(),CommMetaData(19));
     res+= cp.sendVector(ubPlasticC,getDbTagData(),CommMetaData(20));
     return res;
@@ -441,7 +441,7 @@ int XC::FlatSliderSimple3d::sendData(CommParameters &cp)
 //! @brief Receives members through the channel being passed as parameter.
 int XC::FlatSliderSimple3d::recvData(const CommParameters &cp)
   {
-    int res= ElemFriccionBase::recvData(cp);
+    int res= FrictionElementBase::recvData(cp);
     res+= cp.receiveVector(ubPlastic,getDbTagData(),CommMetaData(19));
     res+= cp.receiveVector(ubPlasticC,getDbTagData(),CommMetaData(20));
     return res;

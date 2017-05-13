@@ -57,7 +57,7 @@ class ClosedTriangleMesh: public GeomObj3d, public MovableObject
     double rMax; //! Radius of the convex-hull circunscribed sphere.
     double rMin; //! Radius of the sphere that passes through the nearest vertex.
 
-    GeomObj::list_Pos3d get_interseccion(const Pos3d &p) const;
+    GeomObj::list_Pos3d get_intersection(const Pos3d &p) const;
   protected:
     void getMatrizPosiciones(Matrix &);
     virtual void setMatrizPosiciones(const Matrix &);

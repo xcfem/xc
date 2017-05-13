@@ -384,7 +384,9 @@ void XC::Set::CompletaHaciaArriba(void)
 //       }
   }
 
-//! @brief Selecciona los puntos cuyos tags being passed as parameters.
+//! @brief Select the points identified by the tags in the parameter.
+//!
+//! @param tags: identifiers of the points to select.
 void XC::Set::sel_points_lista(const ID &tags)
   {
     const size_t sz= tags.Size();
@@ -410,7 +412,9 @@ void XC::Set::sel_points_lista(const ID &tags)
       }
   }
 
-//! @brief Selecciona las lineas cuyos tags being passed as parameters.
+//! @brief Select the lines identified by the tags in the parameter.
+//!
+//! @param tags: identifiers of the points to select.
 void XC::Set::sel_lineas_lista(const ID &tags)
   {
     const size_t sz= tags.Size();

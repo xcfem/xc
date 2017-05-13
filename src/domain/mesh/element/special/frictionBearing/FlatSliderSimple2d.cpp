@@ -51,7 +51,7 @@ XC::Vector XC::FlatSliderSimple2d::theVector(6);
 XC::FlatSliderSimple2d::FlatSliderSimple2d(int tag, int Nd1, int Nd2,
 					   FrictionModel &thefrnmdl, double _uy,const std::vector<UniaxialMaterial *> &materials,
     const Vector _y, const Vector _x, double m, int maxiter, double _tol)
-  : ElemFriccionBase(tag, ELE_TAG_FlatSliderSimple2d,Nd1,Nd2,3,thefrnmdl,UniaxialMatPhysicalProperties(materials),_uy,_x,_y,m,maxiter,tol),
+  : FrictionElementBase(tag, ELE_TAG_FlatSliderSimple2d,Nd1,Nd2,3,thefrnmdl,UniaxialMatPhysicalProperties(materials),_uy,_x,_y,m,maxiter,tol),
     ubPlastic(0.0), ubPlasticC(0.0)
   {
     load.reset(6);
@@ -68,7 +68,7 @@ XC::FlatSliderSimple2d::FlatSliderSimple2d(int tag, int Nd1, int Nd2,
 
 
 XC::FlatSliderSimple2d::FlatSliderSimple2d()
-  : ElemFriccionBase(ELE_TAG_FlatSliderSimple2d,3),
+  : FrictionElementBase(ELE_TAG_FlatSliderSimple2d,3),
     ubPlastic(0.0), ubPlasticC(0.0)
   {load.reset(6);}
 
@@ -79,7 +79,7 @@ int XC::FlatSliderSimple2d::getNumDOF()
 
 void XC::FlatSliderSimple2d::setDomain(Domain *theDomain)
   {
-    ElemFriccionBase::setDomain(theDomain);
+    FrictionElementBase::setDomain(theDomain);
 	
     // now determine the number of dof and the dimension    
     const int dofNd1 = theNodes[0]->getNumberDOF();
@@ -398,7 +398,7 @@ const XC::Vector& XC::FlatSliderSimple2d::getResistingForceIncInertia()
 //! @brief Send members through the channel being passed as parameter.
 int XC::FlatSliderSimple2d::sendData(CommParameters &cp)
   {
-    int res= ElemFriccionBase::sendData(cp);
+    int res= FrictionElementBase::sendData(cp);
     res+= cp.sendDoubles(ubPlastic,ubPlasticC,getDbTagData(),CommMetaData(19));
     return res;
   }
@@ -406,7 +406,7 @@ int XC::FlatSliderSimple2d::sendData(CommParameters &cp)
 //! @brief Receives members through the channel being passed as parameter.
 int XC::FlatSliderSimple2d::recvData(const CommParameters &cp)
   {
-    int res= ElemFriccionBase::recvData(cp);
+    int res= FrictionElementBase::recvData(cp);
     res+= cp.receiveDoubles(ubPlastic,ubPlasticC,getDbTagData(),CommMetaData(19));
     return res;
   }

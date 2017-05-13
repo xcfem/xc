@@ -37,7 +37,7 @@
 #include "domain/load/beam_loads/BeamStrainLoad.h"
 #include "utility/actor/actor/MovableID.h"
 
-XC::PrismaticBarCrossSection *copia_seccion(const XC::SectionForceDeformation *theSec)
+XC::PrismaticBarCrossSection *copy_section(const XC::SectionForceDeformation *theSec)
   {
     XC::PrismaticBarCrossSection *retval= nullptr;
     if(theSec)
@@ -48,13 +48,15 @@ XC::PrismaticBarCrossSection *copia_seccion(const XC::SectionForceDeformation *t
             retval= dynamic_cast<XC::PrismaticBarCrossSection *>(tmp);
             if(!retval)
               {
-                std::cerr << "copia_seccion; el material es inadecuado.\n";
+                std::cerr << __FUNCTION__
+			  << "; not a suitable material.\n";
                 delete(tmp);
                 exit(-1);
               }
           }
         else
-          std::cerr << "copia_seccion -- failed to get copy of section.\n";
+          std::cerr << __FUNCTION__
+		    << "; failed to get copy of the section.\n";
       }
     return retval;
   }
@@ -72,7 +74,7 @@ XC::PrismaticBarCrossSectionsVector::PrismaticBarCrossSectionsVector(const size_
       {
         for(iterator i= begin();i!=end();i++)
           {
-            (*i)= copia_seccion(matModel);
+            (*i)= copy_section(matModel);
             if(!(*i))
               std::cerr<<" PrismaticBarCrossSectionsVector -- failed allocate material model pointer\n";
           }
@@ -96,7 +98,7 @@ XC::PrismaticBarCrossSectionsVector::PrismaticBarCrossSectionsVector(const Prism
       {
         if(otro[i])
           {
-            (*this)[i]= copia_seccion(otro[i]);
+            (*this)[i]= copy_section(otro[i]);
             if(!(*this)[i])
               std::cerr<<" PrismaticBarCrossSectionsVector -- failed allocate material model pointer\n";
           }
@@ -121,7 +123,7 @@ void XC::PrismaticBarCrossSectionsVector::setSection(const PrismaticBarCrossSect
       {
         for(iterator i= begin();i!=end();i++)
           {
-            (*i)= copia_seccion(nueva_secc);
+            (*i)= copy_section(nueva_secc);
             if(!(*i))
               std::cerr<<" PrismaticBarCrossSectionsVector -- failed allocate material model pointer\n";
           }
@@ -146,7 +148,7 @@ void XC::PrismaticBarCrossSectionsVector::setupSection(const Material *sec)
 void XC::PrismaticBarCrossSectionsVector::setSectionCopy(size_t i,PrismaticBarCrossSection *nueva_secc)
   {
     if((*this)[i]) delete (*this)[i];
-    (*this)[i]= copia_seccion(nueva_secc);
+    (*this)[i]= copy_section(nueva_secc);
     if(!(*this)[i])
       std::cerr << "XC::PrismaticBarCrossSectionsVector::setSectionCopy -- failed to get copy of section.\n";
   }
@@ -230,7 +232,7 @@ bool XC::PrismaticBarCrossSectionsVector::setSections(const std::vector<Prismati
             std::cerr << "Error: XC::NLBeamColumn3d::NLBeamColumn3d: section pointer " << i << std::endl;
             exit(-1);
           }  
-        (*this)[i]= copia_seccion(sectionPtrs[i]);
+        (*this)[i]= copy_section(sectionPtrs[i]);
         if(!(*this)[i])
           {
             std::cerr << "Error: XC::NLBeamColumn3d::NLBeamColumn3d: could not create copy of section " << i << std::endl;

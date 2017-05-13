@@ -86,7 +86,8 @@ void XC::SectionAggregator::check_ptrs(void) const
   {
     if(!theCode || !def || !defzero || !s || !ks || !fs )
       {
-        std::cerr << "SectionAggregator::SectionAggregator -- out of memory\n";
+        std::cerr << nombre_clase() << "::" << __FUNCTION__
+	          << "; out of memory.\n";
         exit(-1);
       }        
   }
@@ -97,7 +98,9 @@ void XC::SectionAggregator::alloc_storage_ptrs(void)
     const size_t order= getOrder();
     if(order > maxOrder)
       {
-        std::cerr << "SectionAggregator::alloc_storage_ptrs -- order too big, need to modify the maxOrder value in XC::SectionAggregator.cpp to %d\n";
+        std::cerr << nombre_clase() << "::" << __FUNCTION__
+		  << "; order too big, need to modify the maxOrder value"
+	          << " in SectionAggregator.cpp to: " << order << std::endl;
         exit(-1);
       }
     //theCode= new ResponseId(codeArea, order); Not sharing area anymore
@@ -155,7 +158,7 @@ void XC::SectionAggregator::libera(void)
     libera_storage_ptrs();
   }
 
-void XC::SectionAggregator::copia_seccion(const SectionForceDeformation *theSec)
+void XC::SectionAggregator::copy_section(const SectionForceDeformation *theSec)
   {
     if(theSection)
       {
@@ -170,13 +173,15 @@ void XC::SectionAggregator::copia_seccion(const SectionForceDeformation *theSec)
             theSection= dynamic_cast<PrismaticBarCrossSection *>(tmp);
             if(!theSection)
               {
-                std::cerr << "SectionAggregator::copia_seccion; el material es inadecuado.\n";
+                std::cerr << nombre_clase() << "::" << __FUNCTION__
+			  << "; not a suitable material.\n";
                 delete(tmp);
                 exit(-1);
               }
           }
         else
-          std::cerr << "SectionAggregator::copia_seccion -- failed to get copy of section.\n";
+          std::cerr << nombre_clase() << "::" << __FUNCTION__
+		    << "; failed to get copy of section.\n";
       }
   }
 
@@ -185,7 +190,7 @@ XC::SectionAggregator::SectionAggregator(int tag, PrismaticBarCrossSection &theS
   : PrismaticBarCrossSection(tag, SEC_TAG_Aggregator,mat_ldr), theSection(nullptr),
     theAdditions(theAdds,this), def(nullptr), defzero(nullptr), s(nullptr), ks(nullptr), fs(nullptr), theCode(nullptr)
   {
-    copia_seccion(&theSec);
+    copy_section(&theSec);
     alloc_storage_ptrs();
   }
 
@@ -194,7 +199,7 @@ XC::SectionAggregator::SectionAggregator(const SectionAggregator &otro)
   : PrismaticBarCrossSection(otro), theSection(nullptr), theAdditions(otro.theAdditions),
     def(nullptr), defzero(nullptr), s(nullptr), ks(nullptr), fs(nullptr), theCode(nullptr)
    {
-     copia_seccion(otro.theSection);
+     copy_section(otro.theSection);
      alloc_storage_ptrs();
    }
 
@@ -208,7 +213,7 @@ XC::SectionAggregator::SectionAggregator(int tag, PrismaticBarCrossSection &theS
   : PrismaticBarCrossSection(tag, SEC_TAG_Aggregator,mat_ldr), theSection(nullptr), theAdditions(this,theAddition,c),
     def(nullptr), defzero(nullptr), s(nullptr), ks(nullptr), fs(nullptr), theCode(nullptr)
   {
-    copia_seccion(&theSec);
+    copy_section(&theSec);
     alloc_storage_ptrs();
   }
 
@@ -226,7 +231,7 @@ XC::SectionAggregator &XC::SectionAggregator::operator=(const SectionAggregator 
   {
     libera();
     PrismaticBarCrossSection::operator=(otro);
-    copia_seccion(otro.theSection);
+    copy_section(otro.theSection);
     theAdditions= otro.theAdditions;
     theAdditions.set_owner(this);
     if(otro.theAdditions.check_ptrs())
@@ -240,7 +245,8 @@ XC::SectionAggregator &XC::SectionAggregator::operator=(const SectionAggregator 
         (*theCode)= (*otro.theCode);
       }
     else
-      std::cerr << "XC::SectionAggregator::operator=; null pointer en matCodes." << std::endl;
+      std::cerr << nombre_clase() << "::" << __FUNCTION__
+		<< "; null pointer en matCodes." << std::endl;
     return *this;
   }
 
@@ -255,7 +261,7 @@ void XC::SectionAggregator::setSection(const std::string &sectionName)
         if(tmp)
           theSection= dynamic_cast<PrismaticBarCrossSection *>(tmp->getCopy());
         else
-          std::cerr << "XC::SectionAggregator::setSection" 
+          std::cerr << nombre_clase() << "::" << __FUNCTION__
                     << "; material identified by: '" << sectionName
                     << "' is not a prismatic bar cross-section material.\n";
         alloc_storage_ptrs();
@@ -272,7 +278,8 @@ void XC::SectionAggregator::setAddtions(const std::vector<std::string> &response
     theAdditions.putMatCodes(codes);
     const size_t n= nmbMats.size();
     if(n!= responseCodes.size())
-      std::cerr << "Error in number of materials; index number: "
+      std::cerr << nombre_clase() << "::" << __FUNCTION__
+		<< "; error in number of materials: index number: "
 		<< responseCodes.size()
                 << " number of materials: " << n << std::endl;
     for(size_t i= 0;i<n;i++)
@@ -284,13 +291,13 @@ void XC::SectionAggregator::setAddtions(const std::vector<std::string> &response
             if(tmp)
               theAdditions.push_back(tmp);
             else
-              std::cerr << "SectionAggregator::setAddition; "
-                        << "material with code: '" << nmbMats[i]
+              std::cerr << nombre_clase() << "::" << __FUNCTION__
+                        << "; material with code: '" << nmbMats[i]
                         << "' is not an uniaxial material.\n";
           }
         else
-          std::cerr << "SectionAggregator::setAddition; "
-                    << "material: '" << nmbMats[i]
+          std::cerr << nombre_clase() << "::" << __FUNCTION__
+                    << "; material: '" << nmbMats[i]
                     << "' not found.\n";
       }
     alloc_storage_ptrs();
@@ -588,7 +595,8 @@ int XC::SectionAggregator::sendSelf(CommParameters &cp)
 
     res+= cp.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
-      std::cerr << nombre_clase() << "sendSelf() - failed to send data\n";
+      std::cerr << nombre_clase() << "::" << __FUNCTION__
+		<< "; failed to send data\n";
     return res;
   }
 
@@ -601,13 +609,15 @@ int XC::SectionAggregator::recvSelf(const CommParameters &cp)
     int res= cp.receiveIdData(getDbTagData(),dataTag);
 
     if(res<0)
-      std::cerr << nombre_clase() << "::recvSelf - failed to receive ids.\n";
+      std::cerr << nombre_clase() << "::" << __FUNCTION__
+		<< "; failed to receive ids.\n";
     else
       {
         setTag(getDbTagDataPos(0));
         res+= recvData(cp);
         if(res<0)
-          std::cerr << nombre_clase() << "::recvSelf - failed to receive data.\n";
+          std::cerr << nombre_clase() << "::" << __FUNCTION__
+		    << "; failed to receive data.\n";
       }
     return res;
   }

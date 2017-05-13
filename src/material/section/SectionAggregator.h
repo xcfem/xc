@@ -90,7 +90,7 @@ class SectionAggregator : public PrismaticBarCrossSection
     static double workArea[];
     //static int codeArea[];
 
-    void copia_seccion(const SectionForceDeformation *);
+    void copy_section(const SectionForceDeformation *);
     void check_ptrs(void) const;
     void alloc_storage_ptrs(void);
     void libera_storage_ptrs(void);

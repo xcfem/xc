@@ -173,7 +173,7 @@ const Triedro3d *XC::InteractionDiagram::BuscaPtrTriedro(const Pos3d &p) const
 
 //! @brief Return the intersection of the half-line thats links the
 //! origin (0,0,0) and p and the interaction diagram.
-GeomObj::list_Pos3d XC::InteractionDiagram::get_interseccion(const Pos3d &p) const
+GeomObj::list_Pos3d XC::InteractionDiagram::get_intersection(const Pos3d &p) const
   {
     GeomObj::list_Pos3d lst_intersec;
     const Pos3d O= Pos3d(0.0,0.0,0.0);
@@ -181,7 +181,7 @@ GeomObj::list_Pos3d XC::InteractionDiagram::get_interseccion(const Pos3d &p) con
     const Triedro3d *i= BuscaPtrTriedro(p);
     if(!i)
       {
-	std::cerr << "InteractionDiagram::get_interseccion: bounding trihedron for: "
+	std::cerr << "InteractionDiagram::get_intersection: bounding trihedron for: "
                   << p << " not found. Quadrant: " << p.Cuadrante() << std::endl;
       }
     else
@@ -237,7 +237,7 @@ GeomObj::list_Pos3d XC::InteractionDiagram::get_interseccion(const Pos3d &p) con
 Pos3d XC::InteractionDiagram::getIntersection(const Pos3d &esf_d) const
   {
     Pos3d retval;
-    const GeomObj::list_Pos3d lst_intersec= get_interseccion(esf_d);
+    const GeomObj::list_Pos3d lst_intersec= get_intersection(esf_d);
     if(!lst_intersec.empty())
       retval= *(lst_intersec.begin());
     else
@@ -264,7 +264,7 @@ double XC::InteractionDiagram::FactorCapacidad(const Pos3d &esf_d) const
         const double umbralMin= rMin/10.0;
         if(d<umbralMin) //Point is inside the diagram.
           retval= d/rMin;
-        const GeomObj::list_Pos3d lst_intersec= get_interseccion(esf_d);
+        const GeomObj::list_Pos3d lst_intersec= get_intersection(esf_d);
         if(!lst_intersec.empty())
           {
             const Pos3d C= *(lst_intersec.begin());

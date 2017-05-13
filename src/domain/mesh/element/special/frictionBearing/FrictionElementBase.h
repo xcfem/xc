@@ -24,10 +24,10 @@
 // along with this program.
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
-//ElemFriccionBase.h,v $
+//FrictionElementBase.h,v $
 
-#ifndef ElemFriccionBase_h
-#define ElemFriccionBase_h
+#ifndef FrictionElementBase_h
+#define FrictionElementBase_h
 
 #include "domain/mesh/element/Element0D.h"
 #include "domain/mesh/element/utils/physical_properties/UniaxialMatPhysicalProperties.h"
@@ -39,7 +39,7 @@ class FrictionModel;
 class UniaxialMaterial;
 class Response;
 
-class ElemFriccionBase: public Element0D
+class FrictionElementBase: public Element0D
   {
   protected:    
     FrictionModel *theFrnMdl; //!< pointer to friction model
@@ -73,13 +73,13 @@ class ElemFriccionBase: public Element0D
     int recvData(const CommParameters &);
   public:
     // constructors
-    ElemFriccionBase(int tag, int classTag, int Nd1, int Nd2,const size_t &dim,const FrictionModel &theFrnMdl, const UniaxialMatPhysicalProperties &, const double &uy= 0.0, const Vector &y= Vector(), const Vector &x= Vector(),const double &mass = 0.0,const int &maxIter= 20,const double &tol= 1E-8);
-    ElemFriccionBase(int classTag,const size_t &);
-    ElemFriccionBase(const ElemFriccionBase &);
-    ElemFriccionBase &operator=(const ElemFriccionBase &);
+    FrictionElementBase(int tag, int classTag, int Nd1, int Nd2,const size_t &dim,const FrictionModel &theFrnMdl, const UniaxialMatPhysicalProperties &, const double &uy= 0.0, const Vector &y= Vector(), const Vector &x= Vector(),const double &mass = 0.0,const int &maxIter= 20,const double &tol= 1E-8);
+    FrictionElementBase(int classTag,const size_t &);
+    FrictionElementBase(const FrictionElementBase &);
+    FrictionElementBase &operator=(const FrictionElementBase &);
     
     // destructor
-    ~ElemFriccionBase(void);
+    ~FrictionElementBase(void);
     
     // public methods to obtain information about dof & connectivity    
     int getNumDOF();

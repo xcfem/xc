@@ -23,12 +23,12 @@
 
 #include "frictionModel/python_interface.tcc"
 
-class_<XC::ElemFriccionBase, bases<XC::Element0D>, boost::noncopyable >("ElemFriccionBase", no_init);
+class_<XC::FrictionElementBase, bases<XC::Element0D>, boost::noncopyable >("FrictionElementBase", no_init);
 
-class_<XC::FlatSliderSimple2d, bases<XC::ElemFriccionBase>, boost::noncopyable >("FlatSliderSimple2d", no_init);
+class_<XC::FlatSliderSimple2d, bases<XC::FrictionElementBase>, boost::noncopyable >("FlatSliderSimple2d", no_init);
 
-class_<XC::FlatSliderSimple3d, bases<XC::ElemFriccionBase>, boost::noncopyable >("FlatSliderSimple3d", no_init);
+class_<XC::FlatSliderSimple3d, bases<XC::FrictionElementBase>, boost::noncopyable >("FlatSliderSimple3d", no_init);
 
-class_<XC::SingleFPSimple2d , bases<XC::ElemFriccionBase>, boost::noncopyable >("SingleFPSimple2d", no_init);
+class_<XC::SingleFPSimple2d , bases<XC::FrictionElementBase>, boost::noncopyable >("SingleFPSimple2d", no_init);
 
-class_<XC::SingleFPSimple3d , bases<XC::ElemFriccionBase>, boost::noncopyable >("SingleFPSimple3d", no_init);
+class_<XC::SingleFPSimple3d , bases<XC::FrictionElementBase>, boost::noncopyable >("SingleFPSimple3d", no_init);

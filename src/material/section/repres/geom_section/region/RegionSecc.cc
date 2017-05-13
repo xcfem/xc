@@ -37,9 +37,11 @@
 #include <utility/matrix/Matrix.h>
 #include "xc_utils/src/geom/matriz_FT.h"
 
+//! @brief Constructor.
 XC::RegionSecc::RegionSecc(Material *mat)
   : DiscretBase(mat) {}
 
+//! @brief Return the region contour.
 Poligono2d XC::RegionSecc::getPoligono(void) const
   {
     std::cerr << "RegionSecc::getPoligono not implemented." << std::endl;
@@ -47,6 +49,9 @@ Poligono2d XC::RegionSecc::getPoligono(void) const
     return retval;
   }
 
+//! @brief Returns the intersection of the region with the half-plane
+//!
+//! @param sp: Half-plane to intersect width.
 XC::RgSccPoligono XC::RegionSecc::Interseccion(const Semiplano2d &sp) const
   {
     std::list<Poligono2d> tmpList= getPoligono().Interseccion(sp);
@@ -58,7 +63,7 @@ XC::RgSccPoligono XC::RegionSecc::Interseccion(const Semiplano2d &sp) const
     return RgSccPoligono(getMaterialPtr(),1,1,tmp);
   }
 
-//! @brief Returns the coordenadas of the centro de gravedad
+//! @brief Return the centroid coordinates.
 const XC::Vector &XC::RegionSecc::Cdg(void) const
   {
     const Pos2d p= getPoligono().Cdg();

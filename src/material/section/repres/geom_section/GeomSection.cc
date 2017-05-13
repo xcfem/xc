@@ -54,7 +54,7 @@
 #include "boost/lexical_cast.hpp"
 
 XC::GeomSection::GeomSection(MaterialLoader *ml)
-  : SeccionInerte(),material_loader(ml), regiones(ml), capas_armado(this,ml), tag_sis_ref(0),tag_spot(0) {}
+  : SectionMassProperties(),material_loader(ml), regiones(ml), capas_armado(this,ml), tag_sis_ref(0),tag_spot(0) {}
 
 //! @brief Returns a geometry that contains only the regions
 //! defined in this object.
@@ -75,7 +75,7 @@ XC::GeomSection XC::GeomSection::getGMCapasArmado(void) const
   }
 
 //! @brief Return a section with only the compressed regions of the section.
-XC::GeomSection XC::GeomSection::getSeccionFisurada(const Semiplano2d &sp_compresiones) const
+XC::GeomSection XC::GeomSection::getCrackedSection(const Semiplano2d &sp_compresiones) const
   {
     GeomSection retval(getGMCapasArmado());
     retval.regiones= regiones.Interseccion(sp_compresiones);

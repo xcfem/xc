@@ -43,7 +43,7 @@ class InteractionDiagramData;
 class InteractionDiagram2d: public Poligono2d
   {
   protected:
-    Pos2d get_interseccion(const Pos2d &p) const;
+    Pos2d get_intersection(const Pos2d &p) const;
   public:
     InteractionDiagram2d(void);
     InteractionDiagram2d(const Poligono2d &);

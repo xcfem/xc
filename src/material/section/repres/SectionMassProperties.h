@@ -24,10 +24,10 @@
 // along with this program.
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
-//SeccionInerte.h
+//SectionMassProperties.h
 
-#ifndef SeccionInerte_h 
-#define SeccionInerte_h 
+#ifndef SectionMassProperties_h 
+#define SectionMassProperties_h 
 
 #include "xc_utils/src/nucleo/EntCmd.h"
 
@@ -46,10 +46,10 @@ class Matrix;
 //
 //! @brief Cross-section representation able to
 //! return mechanical propertis a area, moments of inertia,...
-class SeccionInerte: public EntCmd
+class SectionMassProperties: public EntCmd
   {
   public:
-    SeccionInerte(EntCmd *owr= nullptr);
+    SectionMassProperties(EntCmd *owr= nullptr);
 
     virtual double getAreaGrossSection(void) const= 0;
     virtual Vector getCdgGrossSection(void) const= 0;

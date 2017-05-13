@@ -59,7 +59,7 @@ void XC::ListReinfLayer::copia(const ListReinfLayer &otra)
 
 //! @brief Constructor.
 XC::ListReinfLayer::ListReinfLayer(GeomSection *owr,MaterialLoader *ml)
-  :  l_reg(), SeccionInerte(owr), material_loader(ml) {}
+  :  l_reg(), SectionMassProperties(owr), material_loader(ml) {}
 
 //! @brief Copy constructor.
 XC::ListReinfLayer::ListReinfLayer(const ListReinfLayer  &otro)
@@ -69,7 +69,7 @@ XC::ListReinfLayer::ListReinfLayer(const ListReinfLayer  &otro)
 //! @brief Assignment operator.
 XC::ListReinfLayer &XC::ListReinfLayer::operator=(const ListReinfLayer &otro)
   {
-    SeccionInerte::operator=(otro);
+    SectionMassProperties::operator=(otro);
     material_loader= otro.material_loader;
     copia(otro);
     return *this;
