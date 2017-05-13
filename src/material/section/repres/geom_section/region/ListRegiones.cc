@@ -171,15 +171,16 @@ BND2d XC::ListRegiones::getBnd(void) const
           retval+= (*i)->getPoligono().Bnd();
       }
     else
-      std::cerr << "region container is empty. Boundary has no sense." << std::endl;
+      std::cerr << nombre_clase() << "::" << __FUNCTION__
+	        << "; region container is empty. Boundary has no sense." << std::endl;
     return retval;
   }
 
-XC::ListRegiones XC::ListRegiones::Interseccion(const Semiplano2d &sp) const
+XC::ListRegiones XC::ListRegiones::Intersection(const Semiplano2d &sp) const
   {
     ListRegiones retval(material_loader);
     for(const_iterator i= begin();i!=end();i++)
-      retval.push_back((*i)->Interseccion(sp));
+      retval.push_back((*i)->Intersection(sp));
     return retval;
   }
 

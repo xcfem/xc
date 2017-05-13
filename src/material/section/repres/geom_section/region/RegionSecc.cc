@@ -52,7 +52,7 @@ Poligono2d XC::RegionSecc::getPoligono(void) const
 //! @brief Returns the intersection of the region with the half-plane
 //!
 //! @param sp: Half-plane to intersect width.
-XC::RgSccPoligono XC::RegionSecc::Interseccion(const Semiplano2d &sp) const
+XC::RgSccPoligono XC::RegionSecc::Intersection(const Semiplano2d &sp) const
   {
     std::list<Poligono2d> tmpList= getPoligono().Interseccion(sp);
     if(tmpList.size()>1)

@@ -78,7 +78,7 @@ XC::GeomSection XC::GeomSection::getGMCapasArmado(void) const
 XC::GeomSection XC::GeomSection::getCrackedSection(const Semiplano2d &sp_compresiones) const
   {
     GeomSection retval(getGMCapasArmado());
-    retval.regiones= regiones.Interseccion(sp_compresiones);
+    retval.regiones= regiones.Intersection(sp_compresiones);
     return retval;
   }
 
@@ -372,8 +372,8 @@ double XC::GeomSection::getAnchoMecanico(const Recta2d &traza_plano_flexion) con
     return dmax;
   }
 
-//! @brief Returns the ancho «b0» de la biela comprimida
-//! correspondiente al brazo mecánico being passed as parameter.
+//! @brief Returns the width «b0» of the compressed strut
+//! that corresponds to the arm lever represented by the segment being passed as parameter.
 double XC::GeomSection::getAnchoBielaComprimida(const Segmento2d &brazo_mecanico) const
   {
     const Poligono2d contour= agrega_puntos_medios(getRegionsContour());

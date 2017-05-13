@@ -72,7 +72,7 @@ class RegionSecc: public DiscretBase
     virtual RegionSecc *getCopy(void) const= 0;
 
     virtual Poligono2d getPoligono(void) const;
-    RgSccPoligono Interseccion(const Semiplano2d &sp) const;
+    RgSccPoligono Intersection(const Semiplano2d &sp) const;
     const Vector &Cdg(void) const;
     double Longitud(void) const;
     double Area(void) const;

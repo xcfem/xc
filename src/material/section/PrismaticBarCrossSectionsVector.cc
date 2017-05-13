@@ -100,7 +100,8 @@ XC::PrismaticBarCrossSectionsVector::PrismaticBarCrossSectionsVector(const Prism
           {
             (*this)[i]= copy_section(otro[i]);
             if(!(*this)[i])
-              std::cerr<<" PrismaticBarCrossSectionsVector -- failed allocate material model pointer\n";
+              std::cerr << nombre_clase() << "::" << __FUNCTION__
+		        << "; failed allocate material model pointer\n";
           }
       }
   }
@@ -118,7 +119,7 @@ XC::PrismaticBarCrossSectionsVector::~PrismaticBarCrossSectionsVector(void)
 
 void XC::PrismaticBarCrossSectionsVector::setSection(const PrismaticBarCrossSection *nueva_secc)
   {
-    borra_secciones();
+    clear_sections();
     if(nueva_secc)
       {
         for(iterator i= begin();i!=end();i++)
@@ -153,7 +154,7 @@ void XC::PrismaticBarCrossSectionsVector::setSectionCopy(size_t i,PrismaticBarCr
       std::cerr << "XC::PrismaticBarCrossSectionsVector::setSectionCopy -- failed to get copy of section.\n";
   }
 
-void XC::PrismaticBarCrossSectionsVector::borra_secciones(void)
+void XC::PrismaticBarCrossSectionsVector::clear_sections(void)
   {
     for(iterator i= begin();i!=end();i++)
       {
@@ -164,7 +165,7 @@ void XC::PrismaticBarCrossSectionsVector::borra_secciones(void)
 
 void XC::PrismaticBarCrossSectionsVector::clearAll(void)
   {
-    borra_secciones();
+    clear_sections();
     std::vector<PrismaticBarCrossSection *>::clear();
     EntCmd::clearPyProps();
   }
@@ -218,28 +219,34 @@ bool XC::PrismaticBarCrossSectionsVector::isTorsion(void) const
     return isTorsion;
   }
 
+//! @brief Set the sections of the vector.
 bool XC::PrismaticBarCrossSectionsVector::setSections(const std::vector<PrismaticBarCrossSection *> &sectionPtrs)
   {
     bool isTorsion= false;
     // get copy of the sections
-    if(sectionPtrs.size()<size())
-      std::cerr << "Error:  XC::PrismaticBarCrossSectionsVector::setSections; secciones insuficientes.";
+    const size_t ptrsSize= sectionPtrs.size();
     const size_t nSections= size();
+    if(ptrsSize<nSections)
+      std::cerr << nombre_clase() << "::" << __FUNCTION__
+	        << "; error: not enough sections (" << ptrsSize
+	        << "), " << nSections << " needed.";
     for(size_t i= 0;i<nSections;i++)
       {
         if(!sectionPtrs[i])
           {
-            std::cerr << "Error: XC::NLBeamColumn3d::NLBeamColumn3d: section pointer " << i << std::endl;
+            std::cerr << nombre_clase() << "::" << __FUNCTION__
+	              << "; null section pointer at " << i << std::endl;
             exit(-1);
           }  
         (*this)[i]= copy_section(sectionPtrs[i]);
         if(!(*this)[i])
           {
-            std::cerr << "Error: XC::NLBeamColumn3d::NLBeamColumn3d: could not create copy of section " << i << std::endl;
+            std::cerr << nombre_clase() << "::" << __FUNCTION__
+	              << "; could not create copy of section " << i << std::endl;
             exit(-1);
           }
         int order= (*this)[i]->getOrder();
-        const XC::ID &code= (*this)[i]->getType();
+        const ID &code= (*this)[i]->getType();
         for(int j= 0;j<order;j++)
           {
             if(code(j) == SECTION_RESPONSE_T)
