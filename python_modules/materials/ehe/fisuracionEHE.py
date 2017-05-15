@@ -46,7 +46,7 @@ class CrackControl(cc.CrackControlBaseParameters):
     print "Deformación mínima en la zona traccionada de hormigón; eps2= ",self.eps2*1e3," por mil.\n"
     print "Influencia del diagrama de tracciones; k1= ",self.k1,"\n"
     print "Canto mecánico; h= ",self.depthMecanico," m\n"
-    print "Brazo mecánico; h= ",self.brazoMecanico," m\n"
+    print "Lever arm; z= ",self.brazoMecanico," m\n"
     print "Ancho mecánico; b= ",self.widthMecanico," m\n"
     print "Razón aspecto; r= ",self.razonAspecto,"\n"
     print "Canto máximo para el área eficaz; hEfMax= ",self.hEfMax," m\n"
