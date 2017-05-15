@@ -28,7 +28,7 @@ class ShearControllerEHE(lsc.LimitStateControllerBase):
     self.gammaC= 0.0 #Coeficiente de minoración de la resistencia del hormigón.
     self.fydS= 0.0 #Valor de cálculo de la resistencia del acero de armar a tracción.
     self.depthUtil= 0.0 #Canto útil con el que está trabajando la sección.
-    self.brazoMecanico= 0.0 #Brazo mecánico con el que está trabajando la sección.
+    self.brazoMecanico= 0.0 #Lever arm con el que está trabajando la sección.
     self.strutWidth= 0.0 #Compressed strut width «b0».
     self.I= 0.0 #Momento de inercia de la sección respecto a la fibra neutra en régimen elástico.
     self.S= 0.0 #Momento estático de la sección por encima de la fibra neutra en régimen elástico.

@@ -4,13 +4,15 @@ import math
 import sys
 from materials.ehe import EHE_concrete
 
-#Comprobación de una sección de hormigón frente a cortante según la EHE-08.#
-
+'''Comprobación de una sección de hormigón frente a cortante según la EHE-08.#
+'''
 
 def getF1cdEHE08(fck,fcd):
     '''getF1cdEHE08(fck,fcd)
+
     :param fck: Valor característico de la resistencia a compresión simple del hormigón (N/m2).
     :param fcd: Valor de cálculo de la resistencia a compresión simple del hormigón (N/m2).
+
     Returns the value of f1cd (design value of the concrete strut strength)
     according to the article 44.2.3.1 of EHE-08.
     '''
@@ -67,6 +69,7 @@ def getVu1EHE08(fck,fcd,Ncd,Ac,b0,d,alpha,theta):
 
 def getVu2EHE08NoAtNoFis(fctd,I,S,b0,alphal,Ncd,Ac):
     '''getVu2EHE08NoAtNoFis(fctd,I,S,b0,alphal,Ncd,Ac) [uds: N, m, rad]
+
     :param fctd: Resistencia de cálculo del hormigón a tracción.
     :param I: Momento de inercia de la sección respecto a su CDG.
     :param S: Momento estático de la parte de la sección que queda por encima del CDG.
@@ -87,14 +90,15 @@ def getVu2EHE08NoAtNoFis(fctd,I,S,b0,alphal,Ncd,Ac):
 
 def getFcvEHE08(fact,fcv,gammaC,b0,d,chi,sgpcd,AsPas,AsAct):
     '''getFcvEHE08(fact,fcv,gammaC,b0,d,chi,sgpcd,AsPas,AsAct)  [uds: N, m, rad]
-    :param fact: Factor que toma el valor 0.18 para piezas SIN reinforcement de cortante y 0.15 para piezas CON
-    reinforcement de cortante.
+
+    :param fact: Factor que toma el valor 0.18 para piezas SIN reinforcement de cortante y 0.15 para piezas CON reinforcement de cortante.
+
     :param fcv: Resistencia efectiva del hormigón a cortante. En piezas sin reinforcement de cortante
     será fcv= min(fck,60MPa). En piezas con reinforcement de cortante fcv= min(fck,100MPa).
     En ambos casos, si el control del hormigón es indirecto fcv=15MPa.
     :param gammaC: Coeficiente de minoración de la resistencia del hormigón.
     b0: Anchura neta mínima del elemento a comprobar, definida de acuerdo con el artículo 40.3.5.
-    :param d: Canto útil expresado en metros.
+    :param d: Canto útil (meters).
     :param chi: Coeficiente que introduce el efecto de los áridos en el depth útil.
     :param sgpcd: Tensión axial media en el alma (compresión positiva).
     :param AsPas: Área de la de la reinforcement longitudinal pasiva traccionada anclada
@@ -112,11 +116,12 @@ def getFcvEHE08(fact,fcv,gammaC,b0,d,chi,sgpcd,AsPas,AsAct):
 
 def getFcvMinEHE08(fcv,gammaC,d,chi,sgpcd):
     '''getFcvMinEHE08(fcv,gammaC,d,chi,sgpcd)
+
     :param fcv: Resistencia efectiva del hormigón a cortante. En piezas sin reinforcement de cortante
     será fcv= min(fck,60MPa). En piezas con reinforcement de cortante fcv= min(fck,100MPa).
     En ambos casos, si el control del hormigón es indirecto fcv=15MPa.
     :param gammaC: Coeficiente de minoración de la resistencia del hormigón.
-    :param d: Canto útil expresado en metros.
+    :param d: Canto útil (meters).
     :param chi: Coeficiente que introduce el efecto de los áridos en el depth útil.
     :param sgpcd: Tensión axial media en el alma (compresión positiva).
 
@@ -129,6 +134,7 @@ def getFcvMinEHE08(fcv,gammaC,d,chi,sgpcd):
 
 def getVu2EHE08NoAtSiFis(fcv,fcd,gammaC,Ncd,Ac,b0,d,AsPas,AsAct):
     '''getVu2EHE08NoAtSiFis(fcv,fcd,gammaC,Ncd,Ac,b0,d,AsPas,AsAct) [uds: N, m]
+
     :param fcv: Resistencia efectiva del hormigón a cortante. En piezas sin reinforcement de cortante
     será fcv= min(fck,60MPa). En piezas con reinforcement de cortante fcv= min(fck,100MPa).
     En ambos casos, si el control del hormigón es indirecto fcv=15MPa.
@@ -137,7 +143,7 @@ def getVu2EHE08NoAtSiFis(fcv,fcd,gammaC,Ncd,Ac,b0,d,AsPas,AsAct):
     :param Ncd: Axil de cálculo resistido por el hormigón (positivo si es de tracción).
     :param Ac: Area total de la sección de hormigón.
     b0: Anchura neta mínima del elemento a comprobar, definida de acuerdo con el artículo 40.3.5.
-    :param d: Canto útil expresado en metros.
+    :param d: Canto útil (meters).
     :param AsPas: Área de la de la reinforcement longitudinal pasiva traccionada anclada
     a una distancia mayor que el depth útil de la sección en estudio.
     :param AsAct: Área de la de la reinforcement longitudinal activa traccionada anclada
@@ -154,6 +160,7 @@ def getVu2EHE08NoAtSiFis(fcv,fcd,gammaC,Ncd,Ac,b0,d,AsPas,AsAct):
 
 def getVu2EHE08NoAt(M,Mfis,fcv,fck,gammaC,I,S,alphaL,Ncd,Ac,b0,d,AsPas,AsAct):
     '''getVu2EHE08NoAt(M,Mfis,fcv,fck,gammaC,I,S,alphaL,Ncd,Ac,b0,d,AsPas,AsAct)   [uds: N, m, rad]
+
     :param M: Momento que actúa sobre la sección.
     :param Mfis: Momento de fisuración de la sección correspondiente al mismo plano y sentido
     flexión que M.
@@ -165,7 +172,7 @@ def getVu2EHE08NoAt(M,Mfis,fcv,fck,gammaC,I,S,alphaL,Ncd,Ac,b0,d,AsPas,AsAct):
     :param Ncd: Axil de cálculo resistido por el hormigón (positivo si es de tracción).
     :param Ac: Area total de la sección de hormigón.
     b0: Anchura neta mínima del elemento a comprobar, definida de acuerdo con el artículo 40.3.5.
-    :param d: Canto útil expresado en metros.
+    :param d: Canto útil (meters).
     :param AsPas: Área de la de la reinforcement longitudinal pasiva traccionada anclada
     a una distancia mayor que el depth útil de la sección en estudio.
     :param AsAct: Área de la de la reinforcement longitudinal activa traccionada anclada
@@ -187,7 +194,7 @@ def getVu2EHE08NoAt(M,Mfis,fcv,fck,gammaC,I,S,alphaL,Ncd,Ac,b0,d,AsPas,AsAct):
 def getVsuEHE08(z,alpha,theta,AsTrsv,fyd):
     '''getVsuEHE08(z,alpha,theta,AsTrsv,fyd)  [uds: N, m, rad]
 
-    :param z: Brazo mecánico.
+    :param z: Lever arm.
     :param alpha: Ángulo de la reinforcement transversal con el eje de la pieza.
     :param theta: Angle between the concrete compressed struts and the member axis (figure 44.2.3.1.a EHE).
     :param AsTrsv: Área de la reinforcement transversal cuya contribución se calcula.
@@ -204,11 +211,12 @@ def getVsuEHE08(z,alpha,theta,AsTrsv,fyd):
 
 def getEpsilonXEHE08(Nd,Md,Vd,Td,z,AsPas,AsAct,Es,Ep,Fp,Ae,ue):
     '''getEpsilonXEHE08(Nd,Md,Vd,Td,z,AsPas,AsAct,Es,Ep,Fp,Ae,ue) [uds: N, m, rad]
+
     :param Nd: Valor de cálculo del axil (aquí positivo si es de tracción)
     :param Md: Valor absoluto del momento de cálculo.
     :param Vd: Valor absoluto del cortante efectivo de cálculo (artículo 42.2.2).
     :param Td: Torsor de cálculo.
-    :param z: Brazo mecánico.
+    :param z: Lever arm.
     :param AsPas: Área de la de la reinforcement longitudinal pasiva traccionada anclada
     a una distancia mayor que el depth útil de la sección en estudio.
     :param AsAct: Área de la de la reinforcement longitudinal activa traccionada anclada
@@ -237,11 +245,12 @@ def getEpsilonXEHE08(Nd,Md,Vd,Td,z,AsPas,AsAct,Es,Ep,Fp,Ae,ue):
 
 def getAnguloInclinacionFisurasEHE08(Nd,Md,Vd,Td,z,AsPas,AsAct,Es,Ep,Fp,Ae,ue):
     '''getAnguloInclinacionFisurasEHE08(Nd,Md,Vd,Td,z,AsPas,AsAct,Es,Ep,Fp,Ae,ue) [uds: N, m, rad]
+
     :param Nd: Valor de cálculo del axil (aquí positivo si es de tracción)
     :param Md: Valor absoluto del momento de cálculo.
     :param Vd: Valor absoluto del cortante efectivo de cálculo (artículo 42.2.2).
     :param Td: Torsor de cálculo.
-    :param z: Brazo mecánico.
+    :param z: Lever arm.
     :param AsPas: Área de la de la reinforcement longitudinal pasiva traccionada anclada
     a una distancia mayor que el depth útil de la sección en estudio.
     :param AsAct: Área de la de la reinforcement longitudinal activa traccionada anclada
@@ -298,8 +307,8 @@ def getVcuEHE08(fcv,fcd,gammaC,Ncd,Ac,b0,d,z,AsPas,AsAct,theta,Nd,Md,Vd,Td,Es,Ep
     :param Ncd: Axil de cálculo resistido por el hormigón (positivo si es de tracción).
     :param Ac: Area total de la sección de hormigón.
     b0: Anchura neta mínima del elemento a comprobar, definida de acuerdo con el artículo 40.3.5.
-    :param d: Canto útil expresado en metros.
-    :param z: Brazo mecánico.
+    :param d: Canto útil (meters).
+    :param z: Lever arm.
     :param AsPas: Área de la de la reinforcement longitudinal pasiva traccionada anclada
     a una distancia mayor que el depth útil de la sección en estudio.
     :param AsAct: Área de la de la reinforcement longitudinal activa traccionada anclada
@@ -340,8 +349,8 @@ def getVu2EHE08SiAt(fcv,fcd,fyd,gammaC,Ncd,Ac,b0,d,z,AsPas,AsAct,AsTrsv, alpha, 
     :param Ncd: Axil de cálculo resistido por el hormigón (positivo si es de tracción).
     :param Ac: Area total de la sección de hormigón.
     b0: Anchura neta mínima del elemento a comprobar, definida de acuerdo con el artículo 40.3.5.
-    :param d: Canto útil expresado en metros.
-    :param z: Brazo mecánico.
+    :param d: Canto útil (meters).
+    :param z: Lever arm.
     :param AsPas: Área de la de la reinforcement longitudinal pasiva traccionada anclada
     a una distancia mayor que el depth útil de la sección en estudio.
     :param AsAct: Área de la de la reinforcement longitudinal activa traccionada anclada
@@ -379,8 +388,8 @@ def getVuEHE08SiAt(fck,fcv,fcd,fyd,gammaC,Ncd,Ac,b0,d,z,AsPas,AsAct,AsTrsv, alph
     :param Ncd: Axil de cálculo resistido por el hormigón (positivo si es de tracción).
     :param Ac: Area total de la sección de hormigón.
     b0: Anchura neta mínima del elemento a comprobar, definida de acuerdo con el artículo 40.3.5.
-    :param d: Canto útil expresado en metros.
-    :param z: Brazo mecánico.
+    :param d: Canto útil (meters).
+    :param z: Lever arm.
     :param AsPas: Área de la de la reinforcement longitudinal pasiva traccionada anclada
     a una distancia mayor que el depth útil de la sección en estudio.
     :param AsAct: Área de la de la reinforcement longitudinal activa traccionada anclada
