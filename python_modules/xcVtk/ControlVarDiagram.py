@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
-''' Representación de diagramas de esfuerzos (o de otras magnitudes)
-   sobre elementos lineales. '''
+''' Display of diagrams (forces, moments, ...) on linear elements'''
 
 __author__= "Luis C. Pérez Tato (LCPT) , Ana Ortega (AO_O) "
 __copyright__= "Copyright 2016, LCPT, AO_O"
@@ -47,7 +46,7 @@ class ControlVarDiagram(cd.ColoredDiagram):
                                
     '''
     # default values
-    elemVDir= elem.getVDirWeakAxisGlobalCoord(True) #initialGeometry= True
+    elemVDir= elem.getJVector3d(True) #initialGeometry= True
     if self.attributeName <> "intForce":
       attributeNameSect1= self.attributeName + 'Sect1' # Values in the start node.
       attributeNameSect2= self.attributeName + 'Sect2' # Values in the end node.
@@ -83,13 +82,13 @@ class ControlVarDiagram(cd.ColoredDiagram):
         value1=elem.getT1
         value2=elem.getT2
     if((self.component == 'Qy') or (self.component == 'Vy')):
-      elemVDir= elem.getCoordTransf.getJVector
+      elemVDir= elem.getJVector3d(True) # initialGeometry= True 
     elif((self.component == 'Qz') or (self.component == 'Vz')):
-      elemVDir= elem.getCoordTransf.getKVector
+      elemVDir= elem.getKVector3d(True) # initialGeometry= True 
     elif(self.component == 'My'):
-      elemVDir= elem.getCoordTransf.getKVector
+      elemVDir= elem.getKVector3d(True) # initialGeometry= True 
     elif(self.component == 'Mz'):
-      elemVDir= elem.getCoordTransf.getJVector
+      elemVDir= elem.getJVector3d(True) # initialGeometry= True 
     return [elemVDir,value1,value2]
     
 

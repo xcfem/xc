@@ -230,23 +230,32 @@ class QuickGraphics(object):
     loadPatterns.addToDomain(loadCaseName)
     defDisplay= self.getDisplay(vwName=viewName,hCamF= hCamFct)
     grid= defDisplay.setupGrid(self.xcSet)
+    print 'aqui 0'
     defDisplay.defineEscenaMalla(None,defFScale)
+    print 'aqui 1'
     orNodalLBar='H'  #default orientation of scale bar for nodal loads
     # element loads
+    print 'scale=',elLoadScaleF,'fUnitConv=',fUnitConv,'loadPatternName=',loadCaseName,'component=',elLoadComp
     diagram= lld.LinearLoadDiagram(scale=elLoadScaleF,fUnitConv=fUnitConv,loadPatternName=loadCaseName,component=elLoadComp)
+    print 'aqui 2'
     diagram.agregaDiagrama(preprocessor)
+    print 'aqui 3'
     if (diagram.valMax > -1e+99) or (diagram.valMin<1e+99):
       defDisplay.appendDiagram(diagram)
       orNodalLBar='V'
     # nodal loads
+    print 'aqui 4'
     vField=lvf.LoadVectorField(loadPatternName=loadCaseName,fUnitConv=fUnitConv,scaleFactor=nodLoadScaleF,showPushing= True)
+    print 'aqui 5'
 #    loadPatterns= preprocessor.getLoadLoader.getLoadPatterns
     count=vField.dumpNodalLoads(preprocessor,lp=loadPatterns[loadCaseName],defFScale=defFScale)
+    print 'aqui 1'
     if count >0:
       vField.setupActor()
       defDisplay.renderer.AddActor(vField.actor)
       vField.creaColorScaleBar(orientation=orNodalLBar)
       defDisplay.renderer.AddActor2D(vField.scalarBar)
+    print 'aqui 2'
     defDisplay.displayScene(caption=caption,fName=fileName)
 
   def displayNodeValueDiagram(self,itemToDisp='',setToDisplay=None,fConvUnits=1.0,scaleFactor=1.0,unitDescription= '',viewName='XYZPos',hCamFct=1.0,fileName=None,defFScale=0.0):

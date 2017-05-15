@@ -11,6 +11,7 @@ class LinearLoadDiagram(cd.ColoredDiagram):
   '''Draws a load over a linear element (qx,qy,qz,...)'''
   def __init__(self,scale,fUnitConv,loadPatternName,component):
     super(LinearLoadDiagram,self).__init__(scale,fUnitConv)
+    print loadPatternName
     self.lpName= loadPatternName
     self.component= component
 
@@ -23,23 +24,27 @@ class LinearLoadDiagram(cd.ColoredDiagram):
       for i in range(0,len(tags)):
         eTag= tags[i]
         elem= preprocessor.getElementLoader.getElement(eTag)
+        print 'aqui a'
         if(self.component=='axialComponent'):
+          print 'aqui b'
           self.vDir= elem.getJVector3d(True)
+          print 'aqui c'
           indxDiagram= self.agregaDatosADiagrama(elem,indxDiagram,el.axialComponent,el.axialComponent)
         elif(self.component=='transComponent'):
-          self.vDir= elem.getCoordTransf.getJVector 
+          self.vDir= elem.getJVector3d(True) # initialGeometry= True  
           indxDiagram= self.agregaDatosADiagrama(elem,indxDiagram,el.transComponent,el.transComponent)
         elif(self.component=='transYComponent'):
-          self.vDir= elem.getCoordTransf.getJVector 
+          self.vDir= elem.getJVector3d(True) # initialGeometry= True  
           indxDiagram= self.agregaDatosADiagrama(elem,indxDiagram,el.transYComponent,el.transYComponent)
         elif(self.component=='transZComponent'):
-          self.vDir= elem.getCoordTransf.getKVector 
+          self.vDir= elem.getKVector3d(True) # initialGeometry= True  
           indxDiagram= self.agregaDatosADiagrama(elem,indxDiagram,el.transZComponent,el.transZComponent)
         else:
           print "LinearLoadDiagram :'", self.component, "' unknown."        
       el= lIter.next()
 
   def dumpLoads(self, preprocessor, indxDiagram):
+    'aqui 2.2'
     preprocessor.resetLoadCase()
     loadPatterns= preprocessor.getLoadLoader.getLoadPatterns
     loadPatterns.addToDomain(self.lpName)
@@ -48,6 +53,7 @@ class LinearLoadDiagram(cd.ColoredDiagram):
     self.dumpElementalLoads(preprocessor,lp,indxDiagram)
 
   def agregaDiagrama(self,preprocessor):
+    'aqui 2.1'
     self.creaEstrucDatosDiagrama()
     self.creaLookUpTable()
     self.creaActorDiagrama()

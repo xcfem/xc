@@ -1,13 +1,12 @@
 # -*- coding: utf-8 -*-
 
-''' Representación de diagramas de esfuerzos (o de otras magnitudes)
-   sobre elementos lineales. '''
+''' Display of diagrams (forces, moments, ...) on linear elements'''
 
-__author__= "Ana Ortega (AOO) and Luis C. Pérez Tato (LCPT)"
-__copyright__= "Copyright 2015, AOO and LCPT"
+__author__= "Ana Ortega (AO_O) and Luis C. Pérez Tato (LCPT)"
+__copyright__= "Copyright 2015, AO_O and LCPT"
 __license__= "GPL"
 __version__= "3.0"
-__email__= " ana.Ortega.Ort@gmail.com, l.pereztato@gmail.com"
+__email__= " ana.Ortega@ciccp.es, l.pereztato@ciccp.es"
 
 import geom
 import vtk
@@ -38,29 +37,29 @@ class InternalForceDiagram(cd.ColoredDiagram):
        :param component: component to represent:
     '''
     # default values.
-    elemVDir= elem.getVDirWeakAxisGlobalCoord(True) #initialGeometry= True
+    elemVDir= elem.getJVector3d(True) #initialGeometry= True
     value1= 0.0
     value2= 0.0
     if(self.component == 'N'):
       value1= elem.getN1
       value2= elem.getN2
     elif(self.component == 'Qy'):
-      elemVDir= elem.getCoordTransf.getJVector
+      elemVDir= elem.elem.getJVector3d(True) # initialGeometry= True 
       value1= elem.getVy1
       value2= elem.getVy2
     elif(self.component == 'Qz'):
-      elemVDir= elem.getCoordTransf.getKVector
+      elemVDir= elem.elem.getKVector3d(True) # initialGeometry= True 
       value1= elem.getVz1
       value2= elem.getVz2
     elif(self.component == 'T'):
       value1= elem.getT1
       value2= elem.getT2
     elif(self.component == 'My'):
-      elemVDir= elem.getCoordTransf.getKVector
+      elemVDir= elem.elem.getKVector3d(True) # initialGeometry= True 
       value1= elem.getMy1
       value2= elem.getMy2
     elif(self.component == 'Mz'):
-      elemVDir= elem.getCoordTransf.getJVector
+      elemVDir= elem.elem.getJVector3d(True) # initialGeometry= True 
       value1= elem.getMz1
       value2= elem.getMz2
     else:
