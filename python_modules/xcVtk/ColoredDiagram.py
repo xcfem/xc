@@ -25,14 +25,6 @@ class ColoredDiagram(vtk_lut_field.LUTField):
     self.escalares= None
     self.cells= None
 
-  def getVDirAsVector3D(self):
-    retval= geom.Vector3d(0.0,0.0,1.0)
-    if(len(self.vDir)>2):
-      retval= geom.Vector3d(self.vDir[0],self.vDir[1],self.vDir[2])
-    else:
-      retval= geom.Vector3d(self.vDir[0],self.vDir[1],0.0)
-    return retval
-
   def creaEstrucDatosDiagrama(self):
     # Crea las estructuras de datos necesarias para crear el diagrama.
     self.initializeMinMax()
@@ -59,9 +51,8 @@ class ColoredDiagram(vtk_lut_field.LUTField):
 
     self.updateMinMax(valOrg)
     self.updateMinMax(valDest)
-    v3d= self.getVDirAsVector3D()
-    org2= org+(valOrg*self.escala)*v3d
-    dest2= dest+(valDest*self.escala)*v3d
+    org2= org+(valOrg*self.escala)*self.vDir
+    dest2= dest+(valDest*self.escala)*self.vDir
     self.points.InsertPoint(offset,org.x,org.y,org.z)
     self.points.InsertPoint(offset+1,org2.x,org2.y,org2.z)
     self.points.InsertPoint(offset+2,dest2.x,dest2.y,dest2.z)
@@ -107,9 +98,8 @@ class ColoredDiagram(vtk_lut_field.LUTField):
 
     self.updateMinMax(valOrg)
     self.updateMinMax(valDest)
-    v3d= self.getVDirAsVector3D()
-    org2= org+(valOrg*self.escala)*v3d
-    dest2= dest+(valDest*self.escala)*v3d
+    org2= org+(valOrg*self.escala)*self.vDir
+    dest2= dest+(valDest*self.escala)*self.vDir
     ptoRaiz= self.getRaizTramoDiagrama(org,valOrg,dest,valDest)
         
     self.points.InsertPoint(offset,org.x,org.y,org.z)
