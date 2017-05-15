@@ -24,9 +24,9 @@
 // along with this program.
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
-//SeccionInerte.cpp
+//SectionMassProperties.cpp
 
-#include "SeccionInerte.h"
+#include "SectionMassProperties.h"
 #include "xc_basic/src/util/inercia.h"
 #include "utility/matrix/Vector.h"
 #include "utility/matrix/Matrix.h"
@@ -38,23 +38,23 @@
 #include "xc_utils/src/geom/d1/Segmento2d.h"
 
 
-XC::SeccionInerte::SeccionInerte(EntCmd *owr)
+XC::SectionMassProperties::SectionMassProperties(EntCmd *owr)
   : EntCmd(owr) {}
 
 //! @brief Inertia of the homogenized section about an axis parallel to x through his center of gravity.
 //! @param E0: Elastic modulus used as reference.
-double XC::SeccionInerte::getIxHomogenizedSection(const double &E0) const
+double XC::SectionMassProperties::getIxHomogenizedSection(const double &E0) const
   { return getIyHomogenizedSection(E0)+getIzHomogenizedSection(E0); }
 
 
 
 //! @brief Agle of the principal axis of inertia of the homogenized section with respect of current axis.
-double XC::SeccionInerte::getTheta_pHomogenizedSection(void) const
+double XC::SectionMassProperties::getTheta_pHomogenizedSection(void) const
   { return theta_inercia(getIyHomogenizedSection(1.0),getIzHomogenizedSection(1.0),getPyzHomogenizedSection(1.0)); }
 
 //! @brief Direction of a principal axis of inertia of the homogenized section with respect of current axis.
 //! @param E0: Elastic modulus used as reference.
-XC::Vector XC::SeccionInerte::getDirEjeI_aHomogenizedSection(void) const
+XC::Vector XC::SectionMassProperties::getDirEjeI_aHomogenizedSection(void) const
   {
     const Dir2d p(getTheta_pHomogenizedSection());
     Vector retval(2);
@@ -65,7 +65,7 @@ XC::Vector XC::SeccionInerte::getDirEjeI_aHomogenizedSection(void) const
 
 //! @brief Direction of the other axis of inertia of the homogenized section with respect of current axis.
 //! @param E0: Elastic modulus used as reference.
-XC::Vector XC::SeccionInerte::getDirEjeI_bHomogenizedSection(void) const
+XC::Vector XC::SectionMassProperties::getDirEjeI_bHomogenizedSection(void) const
   {
     const Dir2d p= Dir2d(getTheta_pHomogenizedSection()).Perpendicular();
     Vector retval(2);
@@ -75,7 +75,7 @@ XC::Vector XC::SeccionInerte::getDirEjeI_bHomogenizedSection(void) const
   }
 
 //! @brief Major principal moment of inertia of the homogenized section.
-double XC::SeccionInerte::getI1HomogenizedSection(const double &E0) const
+double XC::SectionMassProperties::getI1HomogenizedSection(const double &E0) const
   { 
     const double iy= getIyHomogenizedSection(E0);
     const double iz= getIzHomogenizedSection(E0);
@@ -84,7 +84,7 @@ double XC::SeccionInerte::getI1HomogenizedSection(const double &E0) const
   }
 
 //! @brief Minor principal moment of inertia of the homogenized section.
-double XC::SeccionInerte::getI2HomogenizedSection(const double &E0) const
+double XC::SectionMassProperties::getI2HomogenizedSection(const double &E0) const
   {
     const double iy= getIyHomogenizedSection(E0);
     const double iz= getIzHomogenizedSection(E0);
@@ -93,27 +93,27 @@ double XC::SeccionInerte::getI2HomogenizedSection(const double &E0) const
   }
 
 //! @brief Principal axis of inertia of the homogenized section.
-PrincipalAxesOfInertia2D XC::SeccionInerte::getEjesInerciaHomogenizedSection(const double &E0) const
+PrincipalAxesOfInertia2D XC::SectionMassProperties::getEjesInerciaHomogenizedSection(const double &E0) const
   {
     const Vector v= getCdgHomogenizedSection(E0);
     const Pos2d cdg(v[0],v[1]);
     return PrincipalAxesOfInertia2D(cdg,getIyHomogenizedSection(E0),getIzHomogenizedSection(E0),getPyzHomogenizedSection(E0));
   }
 //! @brief Direction of the major principal axis of inertia of the homogenized section.
-Vector2d XC::SeccionInerte::getVDirEje1HomogenizedSection(const double &E0) const
+Vector2d XC::SectionMassProperties::getVDirEje1HomogenizedSection(const double &E0) const
   { return getEjesInerciaHomogenizedSection(E0).getVDirEje1(); }
 //! @brief Direction of the major principal axis of inertia of the homogenized section.
-Vector2d XC::SeccionInerte::getVDirStrongAxisHomogenizedSection(const double &E0) const
+Vector2d XC::SectionMassProperties::getVDirStrongAxisHomogenizedSection(const double &E0) const
   { return getEjesInerciaHomogenizedSection(E0).getVDirEje1(); }
 //! @brief Direction of the minor principal axis of inertia of the homogenized section.
-Vector2d XC::SeccionInerte::getVDirEje2HomogenizedSection(const double &E0) const
+Vector2d XC::SectionMassProperties::getVDirEje2HomogenizedSection(const double &E0) const
   { return getEjesInerciaHomogenizedSection(E0).getVDirEje2(); }
 //! @brief Direction of the minor principal axis of inertia of the homogenized section.
-Vector2d XC::SeccionInerte::getVDirWeakAxisHomogenizedSection(const double &E0) const
+Vector2d XC::SectionMassProperties::getVDirWeakAxisHomogenizedSection(const double &E0) const
   { return getEjesInerciaHomogenizedSection(E0).getVDirEje2(); }
 
 //! @brief tensor of inertia (i,j) component of the homogenized section.
-double XC::SeccionInerte::getIHomogenizedSection(const double &E0,const unsigned short int &i,const unsigned short int &j) const
+double XC::SectionMassProperties::getIHomogenizedSection(const double &E0,const unsigned short int &i,const unsigned short int &j) const
   {
     unsigned short int k= i + (j-1)*2;
     double retval= 0.0;
@@ -134,7 +134,7 @@ double XC::SeccionInerte::getIHomogenizedSection(const double &E0,const unsigned
   }
 
 //! @brief Returns the moment of inertia with respect to the axis that passes through O with the direction of e.
-double XC::SeccionInerte::getIHomogenizedSection(const double &E0,const Pos2d &O,const Vector &e) const
+double XC::SectionMassProperties::getIHomogenizedSection(const double &E0,const Pos2d &O,const Vector &e) const
   {
     const Matrix Io(getIHomogenizedSection(E0,O));
     return dot(e,Io*e)/e.Norm2();
@@ -142,11 +142,11 @@ double XC::SeccionInerte::getIHomogenizedSection(const double &E0,const Pos2d &O
 
 //! @brief Returns the moment of inertia respecto a la recta being passed
 //! as parameter.
-double XC::SeccionInerte::getIHomogenizedSection(const double &E0,const Recta2d &r) const
+double XC::SectionMassProperties::getIHomogenizedSection(const double &E0,const Recta2d &r) const
   { return getIHomogenizedSection(E0,r.Punto(),Vector(r.VDir()));  }
 
 //! @brief Return the i,j component of the tensor of inertia computed with respect to the point "o".
-double XC::SeccionInerte::getIHomogenizedSection(const double &E0,const unsigned short int &i,const unsigned short int &j,const Pos2d &o) const
+double XC::SectionMassProperties::getIHomogenizedSection(const double &E0,const unsigned short int &i,const unsigned short int &j,const Pos2d &o) const
   {
     const double Iij= getIHomogenizedSection(E0,i,j);
     const Vector cdg= getCdgHomogenizedSection(E0);
@@ -158,12 +158,12 @@ double XC::SeccionInerte::getIHomogenizedSection(const double &E0,const unsigned
   }
 
 //! @brief Returns the momento polar de inercia with respect to the point o.
-double XC::SeccionInerte::getIOHomogenizedSection(const double &E0,const Pos2d &o) const
+double XC::SectionMassProperties::getIOHomogenizedSection(const double &E0,const Pos2d &o) const
   { return (getIHomogenizedSection(E0,1,1,o)+getIHomogenizedSection(E0,2,2,o)+getIHomogenizedSection(E0,3,3,o))/2; }
 
 
 //! @brief Returns the tensor of inertia computed with respect to the object centroid.
-XC::Matrix XC::SeccionInerte::getIHomogenizedSection(const double &E0) const
+XC::Matrix XC::SectionMassProperties::getIHomogenizedSection(const double &E0) const
   {
     Matrix i(2,2);
     i(0,0)= getIyHomogenizedSection(E0); i(0,1)= -getPyzHomogenizedSection(E0);
@@ -172,7 +172,7 @@ XC::Matrix XC::SeccionInerte::getIHomogenizedSection(const double &E0) const
   }
 
 //! @brief Returns the tensor of inertia respector al punto o.
-XC::Matrix XC::SeccionInerte::getIHomogenizedSection(const double &E0,const Pos2d &o) const
+XC::Matrix XC::SectionMassProperties::getIHomogenizedSection(const double &E0,const Pos2d &o) const
   {
     Matrix retval(2,2);
     const Matrix Ig= getIHomogenizedSection(E0);
@@ -183,7 +183,7 @@ XC::Matrix XC::SeccionInerte::getIHomogenizedSection(const double &E0,const Pos2
     return retval;
   }
 
-XC::CrossSectionProperties3d XC::SeccionInerte::getCrossSectionProperties3d(const CrossSectionProperties3d &base) const
+XC::CrossSectionProperties3d XC::SectionMassProperties::getCrossSectionProperties3d(const CrossSectionProperties3d &base) const
   {
     CrossSectionProperties3d retval;
     retval= base; //Asignamos E, G y alpha.
@@ -194,7 +194,7 @@ XC::CrossSectionProperties3d XC::SeccionInerte::getCrossSectionProperties3d(cons
     return retval;
   }
 
-XC::CrossSectionProperties2d XC::SeccionInerte::getCrossSectionProperties2d(const CrossSectionProperties2d &base) const
+XC::CrossSectionProperties2d XC::SectionMassProperties::getCrossSectionProperties2d(const CrossSectionProperties2d &base) const
   {
     static CrossSectionProperties2d retval;
     retval= base; //Asignamos E, G y alpha.
@@ -204,15 +204,15 @@ XC::CrossSectionProperties2d XC::SeccionInerte::getCrossSectionProperties2d(cons
   }
 
 //! @brief Inertia of the gross section about an axis parallel to x through his center of gravity.
-double XC::SeccionInerte::getIxGrossSection(void) const
+double XC::SectionMassProperties::getIxGrossSection(void) const
   { return getIyGrossSection()+getIzGrossSection(); }
 
 //! @brief Agle of the principal axis of inertia of the gross section with respect of current axis.
-double XC::SeccionInerte::getTheta_pGrossSection(void) const
+double XC::SectionMassProperties::getTheta_pGrossSection(void) const
   { return theta_inercia(getIyGrossSection(),getIzGrossSection(),getPyzGrossSection()); }
 
 //! @brief Direction of a principal axis of inertia of the gross section with respect of current axis.
-XC::Vector XC::SeccionInerte::getDirEjeI_aGrossSection(void) const
+XC::Vector XC::SectionMassProperties::getDirEjeI_aGrossSection(void) const
   {
     const Dir2d p(getTheta_pGrossSection());
     Vector retval(2);
@@ -222,7 +222,7 @@ XC::Vector XC::SeccionInerte::getDirEjeI_aGrossSection(void) const
   }
 
 //! @brief Direction of the other principal axis of inertia of the gross section with respect of current axis.
-XC::Vector XC::SeccionInerte::getDirEjeI_bGrossSection(void) const
+XC::Vector XC::SectionMassProperties::getDirEjeI_bGrossSection(void) const
   {
     const Dir2d p= Dir2d(getTheta_pGrossSection()).Perpendicular();
     Vector retval(2);
@@ -232,7 +232,7 @@ XC::Vector XC::SeccionInerte::getDirEjeI_bGrossSection(void) const
   }
 
 //! @brief Major principal moment of inertia of the gross section.
-double XC::SeccionInerte::getI1GrossSection(void) const
+double XC::SectionMassProperties::getI1GrossSection(void) const
   {
     const double iy= getIyGrossSection();
     const double iz= getIzGrossSection();
@@ -241,7 +241,7 @@ double XC::SeccionInerte::getI1GrossSection(void) const
   }
 
 //! @brief Minor principal moment of inertia of the gross section.
-double XC::SeccionInerte::getI2GrossSection(void) const
+double XC::SectionMassProperties::getI2GrossSection(void) const
   {
     const double iy= getIyGrossSection();
     const double iz= getIzGrossSection();
@@ -250,27 +250,27 @@ double XC::SeccionInerte::getI2GrossSection(void) const
   }
 
 //! @brief Principal axis of inertia of the gross section.
-PrincipalAxesOfInertia2D XC::SeccionInerte::getEjesInerciaGrossSection(void) const
+PrincipalAxesOfInertia2D XC::SectionMassProperties::getEjesInerciaGrossSection(void) const
   {
     const Vector v= getCdgGrossSection();
     const Pos2d cdg(v[0],v[1]);
     return PrincipalAxesOfInertia2D(cdg,getIyGrossSection(),getIzGrossSection(),getPyzGrossSection());
   }
 //! @brief Direction of the major principal axis of inertia of the gross section.
-Vector2d XC::SeccionInerte::getVDirEje1GrossSection(void) const
+Vector2d XC::SectionMassProperties::getVDirEje1GrossSection(void) const
   { return getEjesInerciaGrossSection().getVDirEje1(); }
 //! @brief Direction of the major principal axis of inertia of the gross section.
-Vector2d XC::SeccionInerte::getVDirStrongAxisGrossSection(void) const
+Vector2d XC::SectionMassProperties::getVDirStrongAxisGrossSection(void) const
   { return getEjesInerciaGrossSection().getVDirEje1(); }
 //! @brief Direction of the minor principal axis of inertia of the gross section.
-Vector2d XC::SeccionInerte::getVDirEje2GrossSection(void) const
+Vector2d XC::SectionMassProperties::getVDirEje2GrossSection(void) const
   { return getEjesInerciaGrossSection().getVDirEje2(); }
 //! @brief Direction of the minor principal axis of inertia of the gross section.
-Vector2d XC::SeccionInerte::getVDirWeakAxisGrossSection(void) const
+Vector2d XC::SectionMassProperties::getVDirWeakAxisGrossSection(void) const
   { return getEjesInerciaGrossSection().getVDirEje2(); }
 
 //! @brief Return the i,j component of the tensor of inertia computed with respect to centroid.
-double XC::SeccionInerte::getIGrossSection(const unsigned short int &i,const unsigned short int &j) const
+double XC::SectionMassProperties::getIGrossSection(const unsigned short int &i,const unsigned short int &j) const
   {
     unsigned short int k= i + (j-1)*2;
     double retval= 0.0;
@@ -291,7 +291,7 @@ double XC::SeccionInerte::getIGrossSection(const unsigned short int &i,const uns
   }
 
 //! @brief Returns the moment of inertia with respect to the axis that passes through O with the direction of e.
-double XC::SeccionInerte::getIGrossSection(const Pos2d &O,const Vector &e) const
+double XC::SectionMassProperties::getIGrossSection(const Pos2d &O,const Vector &e) const
   {
     const Matrix Io(getIGrossSection(O));
     return dot(e,Io*e)/e.Norm2();
@@ -299,11 +299,11 @@ double XC::SeccionInerte::getIGrossSection(const Pos2d &O,const Vector &e) const
 
 //! @brief Returns the moment of inertia respecto a la recta being passed
 //! as parameter.
-double XC::SeccionInerte::getIGrossSection(const Recta2d &r) const
+double XC::SectionMassProperties::getIGrossSection(const Recta2d &r) const
   { return getIGrossSection(r.Punto(),Vector(r.VDir()));  }
 
 //! @brief Return the i,j component of the tensor of inertia computed with respect to the point "o".
-double XC::SeccionInerte::getIGrossSection(const unsigned short int &i,const unsigned short int &j,const Pos2d &o) const
+double XC::SectionMassProperties::getIGrossSection(const unsigned short int &i,const unsigned short int &j,const Pos2d &o) const
   {
     const double Iij= getIGrossSection(i,j);
     const Vector cdg= getCdgGrossSection();
@@ -315,12 +315,12 @@ double XC::SeccionInerte::getIGrossSection(const unsigned short int &i,const uns
   }
 
 //! @brief Returns the momento polar de inercia with respect to the point o.
-double XC::SeccionInerte::getIOGrossSection(const Pos2d &o) const
+double XC::SectionMassProperties::getIOGrossSection(const Pos2d &o) const
   { return (getIGrossSection(1,1,o)+getIGrossSection(2,2,o)+getIGrossSection(3,3,o))/2; }
 
 
 //! @brief Returns the tensor of inertia computed with respect to the object centroid.
-XC::Matrix XC::SeccionInerte::getIGrossSection(void) const
+XC::Matrix XC::SectionMassProperties::getIGrossSection(void) const
   {
     Matrix i(2,2);
     i(0,0)= getIyGrossSection(); i(0,1)= -getPyzGrossSection();
@@ -329,7 +329,7 @@ XC::Matrix XC::SeccionInerte::getIGrossSection(void) const
   }
 
 //! @brief Returns the tensor of inertia respector al punto o.
-XC::Matrix XC::SeccionInerte::getIGrossSection(const Pos2d &o) const
+XC::Matrix XC::SectionMassProperties::getIGrossSection(const Pos2d &o) const
   {
     Matrix retval(2,2);
     const Matrix Ig= getIGrossSection();

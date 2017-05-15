@@ -41,11 +41,11 @@
 
 //! @brief Constructor.
 XC::Linea::Linea(Preprocessor *m,const size_t &nd)
-  : LineaBase(m,nd) {}
+  : LineBase(m,nd) {}
 
 //! @brief Constructor.
 XC::Linea::Linea(const std::string &nombre,Preprocessor *m,const size_t &nd)
-  : LineaBase(nombre,m,nd) {}
+  : LineBase(nombre,m,nd) {}
 
 //! @brief Virtual constructor.
 XC::SetEstruct *XC::Linea::getCopy(void) const
@@ -124,7 +124,8 @@ XC::Edge *XC::Linea::splitAtPoint(Pnt *p)
       }
     else
       {
-        std::cerr << "error Linea::splitAtPoint: pointer to point is null."
+        std::cerr << nombre_clase() << "::" << __FUNCTION__
+	          << "; pointer to point is null."
                   << std::endl;
       }
     return retval;

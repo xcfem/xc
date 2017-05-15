@@ -45,7 +45,7 @@ XC::Vector XC::SingleFPSimple3d::theVector(12);
 
 
 XC::SingleFPSimple3d::SingleFPSimple3d(int tag, int Nd1, int Nd2,const FrictionModel &thefrnmdl,const double &r, const double &_h,const double &_uy,const std::vector<UniaxialMaterial *> &materials,const Vector &_y, const Vector &_x,const double &m, const int &maxiter, const double &_tol)
-  : ElemFriccionBase(tag, ELE_TAG_SingleFPSimple3d,Nd1,Nd2,6,thefrnmdl,materials,_uy,_x,_y,m,maxiter,tol),
+  : FrictionElementBase(tag, ELE_TAG_SingleFPSimple3d,Nd1,Nd2,6,thefrnmdl,materials,_uy,_x,_y,m,maxiter,tol),
     R(r), h(_h), Reff(0.0), ubPlastic(2), ubPlasticC(2)
   {
     load.reset(12);
@@ -66,7 +66,7 @@ XC::SingleFPSimple3d::SingleFPSimple3d(int tag, int Nd1, int Nd2,const FrictionM
 
 
 XC::SingleFPSimple3d::SingleFPSimple3d()
-    : ElemFriccionBase(ELE_TAG_SingleFPSimple3d,6),
+    : FrictionElementBase(ELE_TAG_SingleFPSimple3d,6),
     R(0.0), h(0.0), Reff(0.0), ubPlastic(2), ubPlasticC(2) {load.reset(12);}
 
 
@@ -76,7 +76,7 @@ int XC::SingleFPSimple3d::getNumDOF()
 
 void XC::SingleFPSimple3d::setDomain(Domain *theDomain)
   {
-    ElemFriccionBase::setDomain(theDomain);
+    FrictionElementBase::setDomain(theDomain);
 
     // now determine the number of dof and the dimension    
     const int dofNd1 = theNodes[0]->getNumberDOF();
@@ -442,7 +442,7 @@ const XC::Vector& XC::SingleFPSimple3d::getResistingForceIncInertia()
 //! @brief Send members through the channel being passed as parameter.
 int XC::SingleFPSimple3d::sendData(CommParameters &cp)
   {
-    int res= ElemFriccionBase::sendData(cp);
+    int res= FrictionElementBase::sendData(cp);
     res+= cp.sendVector(ubPlastic,getDbTagData(),CommMetaData(19));
     res+= cp.sendVector(ubPlasticC,getDbTagData(),CommMetaData(20));
     res+= cp.sendDoubles(R,h,Reff,getDbTagData(),CommMetaData(21));
@@ -452,7 +452,7 @@ int XC::SingleFPSimple3d::sendData(CommParameters &cp)
 //! @brief Receives members through the channel being passed as parameter.
 int XC::SingleFPSimple3d::recvData(const CommParameters &cp)
   {
-    int res= ElemFriccionBase::recvData(cp);
+    int res= FrictionElementBase::recvData(cp);
     res+= cp.receiveVector(ubPlastic,getDbTagData(),CommMetaData(19));
     res+= cp.receiveVector(ubPlasticC,getDbTagData(),CommMetaData(20));
     res+= cp.receiveDoubles(R,h,Reff,getDbTagData(),CommMetaData(21));

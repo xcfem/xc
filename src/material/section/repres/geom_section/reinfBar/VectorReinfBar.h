@@ -31,7 +31,7 @@
 
 #include <vector>
 #include <iostream>
-#include "material/section/repres/SeccionInerte.h"
+#include "material/section/repres/SectionMassProperties.h"
 
 class Pos2d;
 
@@ -44,7 +44,7 @@ class Matrix;
 //! @ingroup MATSCCArmaduras
 //
 //! @brief Vector de barras de armadura.
-class VectorReinfBar: public std::vector<ReinfBar *>, public SeccionInerte
+class VectorReinfBar: public std::vector<ReinfBar *>, public SectionMassProperties
   {
   public:
     typedef std::vector<ReinfBar *> v_rfBar;

@@ -63,7 +63,7 @@ XC::InteractionDiagram2d *XC::InteractionDiagram2d::clon(void) const
 
 //! @brief Return the intersection of the half-line that links
 //! the origin (0,0,0) with p an the interaction diagram.
-Pos2d XC::InteractionDiagram2d::get_interseccion(const Pos2d &p) const
+Pos2d XC::InteractionDiagram2d::get_intersection(const Pos2d &p) const
   {
     const Pos2d O= Pos2d(0.0,0.0);
     //Buscamos el triedro que contiene a p.
@@ -101,7 +101,7 @@ void XC::InteractionDiagram2d::Simplify(void)
 //! @brief Returns the intersection of the ray O->esf_d with the
 //! interaction diagram.
 Pos2d XC::InteractionDiagram2d::getIntersection(const Pos2d &esf_d) const
-  { return get_interseccion(esf_d); }
+  { return get_intersection(esf_d); }
 
 //! @brief Returns the capacity factor for the internal forces triplet being passed as parameters.
 double XC::InteractionDiagram2d::FactorCapacidad(const Pos2d &esf_d) const
@@ -113,7 +113,7 @@ double XC::InteractionDiagram2d::FactorCapacidad(const Pos2d &esf_d) const
       retval= 0.0;//Returns the maximum capactity factor.
     else
       {
-        const Pos2d C= get_interseccion(esf_d);
+        const Pos2d C= get_intersection(esf_d);
         const Segmento2d sOC(O,C);
         retval= d/sOC.Longitud();
       }

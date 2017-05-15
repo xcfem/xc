@@ -29,7 +29,7 @@
 #ifndef LINEA_H
 #define LINEA_H
 
-#include "LineaBase.h"
+#include "LineBase.h"
 
 class Segmento3d;
 
@@ -38,7 +38,7 @@ namespace XC {
 //! \ingroup CadEnt
 //!
 //! @brief Segmento de recta entre dos puntos.
-class Linea: public LineaBase
+class Linea: public LineBase
   {
   protected:
 

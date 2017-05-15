@@ -29,7 +29,7 @@ class ShearControllerEHE(lsc.LimitStateControllerBase):
     self.fydS= 0.0 #Valor de cálculo de la resistencia del acero de armar a tracción.
     self.depthUtil= 0.0 #Canto útil con el que está trabajando la sección.
     self.brazoMecanico= 0.0 #Brazo mecánico con el que está trabajando la sección.
-    self.widthBiela= 0.0 #Ancho «b0» de la biela comprimida.
+    self.strutWidth= 0.0 #Compressed strut width «b0».
     self.I= 0.0 #Momento de inercia de la sección respecto a la fibra neutra en régimen elástico.
     self.S= 0.0 #Momento estático de la sección por encima de la fibra neutra en régimen elástico.
     self.areaHormigon= 0.0 #Area de la sección de hormigón.
@@ -42,9 +42,9 @@ class ShearControllerEHE(lsc.LimitStateControllerBase):
     self.alphaL= 1.0 #Factor que depende de la transferencia de pretensado.
     self.AsTrsv= 0.0 #Área de la reinforcement de cortante.
     self.alpha= math.radians(90) #Ángulo de las reinforcement de cortante con el eje de la pieza (figura 44.2.3.1 EHE-08).
-    self.theta= math.radians(45) #Ángulo entre las bielas de compresión del hormigón y el eje de la pieza (figura 44.2.3.1 EHE-08).
-    self.thetaMin= math.atan(0.5) #Valor mínimo del angulo entre las bielas de compresión del hormigón y el eje de la pieza.
-    self.thetaMax= math.atan(2) #Valor mínimo del angulo entre las bielas de compresión del hormigón y el eje de la pieza.
+    self.theta= math.radians(45) #Angle between the concrete compressed struts and the member axis (figure 44.2.3.1.a EHE).
+    self.thetaMin= math.atan(0.5) #Minimal value of the theta angle.
+    self.thetaMax= math.atan(2) #Maximal value of the theta angle.
 
     self.thetaFisuras= 0.0 #Angulo de las fisuras con el eje de la pieza.
     self.Vcu= 0.0 # Contribución del hormigón a la resistencia al esfuerzo cortante.
@@ -85,18 +85,18 @@ class ShearControllerEHE(lsc.LimitStateControllerBase):
         self.eps1= rcSets.getMaxConcreteStrain()
         self.E0= rcSets.getConcreteInitialTangent()
         self.axilHormigon= rcSets.getConcreteCompression()
-        self.widthBiela= scc.getAnchoBielaComprimida() # b0
+        self.strutWidth= scc.getCompressedStrutWidth() # b0
         if((self.E0*self.eps1)<self.fctdH): # Sección no fisurada
           self.I= scc.getHomogenizedI(self.E0)
           self.S= scc.getSPosHomogeneizada(self.E0)
-          self.Vu2= comprobVEHE08.getVu2EHE08NoAtNoFis(self.fctdH,self.I,self.S,self.widthBiela,self.alphaL,self.axilHormigon,self.areaHormigon)
+          self.Vu2= comprobVEHE08.getVu2EHE08NoAtNoFis(self.fctdH,self.I,self.S,self.strutWidth,self.alphaL,self.axilHormigon,self.areaHormigon)
         else: # Sección fisurada
           self.depthUtil= scc.getCantoUtil() # d
           if(self.numBarrasTraccion>0):
             self.areaRebarTracc= reinforcementTraccion.getArea(1)
           else:
             self.areaRebarTracc= 0.0
-          self.Vu2= comprobVEHE08.getVu2EHE08NoAtSiFis(self.fckH,self.fcdH,self.gammaC,self.axilHormigon,self.areaHormigon,self.widthBiela,self.depthUtil,self.areaRebarTracc,0.0)
+          self.Vu2= comprobVEHE08.getVu2EHE08NoAtSiFis(self.fckH,self.fcdH,self.gammaC,self.axilHormigon,self.areaHormigon,self.strutWidth,self.depthUtil,self.areaRebarTracc,0.0)
         self.Vcu= self.Vu2
         self.Vsu= 0.0
         self.Vu1= -1.0
@@ -105,7 +105,7 @@ class ShearControllerEHE(lsc.LimitStateControllerBase):
         axis= scc.getInternalForcesAxis()
         self.I= scc.getFibers().getHomogenizedSectionIRelToLine(self.E0,axis)
         self.S= scc.getFibers().getSPosHomogenizedSection(self.E0,geom.HalfPlane2d(axis))
-        self.Vu2= comprobVEHE08.getVu2EHE08NoAtNoFis(self.fctdH,self.I,self.S,self.widthBiela,self.alphaL,self.axilHormigon,self.areaHormigon)
+        self.Vu2= comprobVEHE08.getVu2EHE08NoAtNoFis(self.fctdH,self.I,self.S,self.strutWidth,self.alphaL,self.axilHormigon,self.areaHormigon)
 
   def calcVuEHE08SiAt(self, preprocessor, scc, paramsTorsion, hormigon, aceroArmar, Nd, Md, Vd, Td):
     ''' Calcula el cortante último de la sección CON reinforcement de cortante.
@@ -145,7 +145,7 @@ class ShearControllerEHE(lsc.LimitStateControllerBase):
         self.E0= concrFibers[0].getMaterial().getInitialTangent()
         self.axilHormigon= concrFibers.ResultanteComp()
         self.modElastArmadura= reinfFibers[0].getMaterial().getInitialTangent()
-        self.widthBiela= scc.getAnchoBielaComprimida() # b0
+        self.strutWidth= scc.getCompressedStrutWidth() # b0
         self.depthUtil= scc.getCantoUtil() # d
         self.brazoMecanico= scc.getBrazoMecanico() # z
         if(self.numBarrasTraccion>0):
@@ -153,8 +153,8 @@ class ShearControllerEHE(lsc.LimitStateControllerBase):
         else:
           self.areaRebarTracc= 0.0
         self.thetaFisuras= comprobVEHE08.getAnguloInclinacionFisurasEHE08(Nd,Md,Vd,Td,self.brazoMecanico,self.areaRebarTracc,0.0,self.modElastArmadura,0.0,0.0,self.VuAe,self.Vuue)
-        self.Vcu= comprobVEHE08.getVcuEHE08(self.fckH,self.fcdH,self.gammaC,self.axilHormigon,self.areaHormigon,self.widthBiela,self.depthUtil,self.brazoMecanico,self.areaRebarTracc,0.0,self.theta,Nd,Md,Vd,Td,self.modElastArmadura,0.0,0.0,self.VuAe,self.Vuue)
-        self.Vu1= comprobVEHE08.getVu1EHE08(self.fckH,self.fcdH,self.axilHormigon,self.areaHormigon,self.widthBiela,self.depthUtil,self.alpha,self.theta)
+        self.Vcu= comprobVEHE08.getVcuEHE08(self.fckH,self.fcdH,self.gammaC,self.axilHormigon,self.areaHormigon,self.strutWidth,self.depthUtil,self.brazoMecanico,self.areaRebarTracc,0.0,self.theta,Nd,Md,Vd,Td,self.modElastArmadura,0.0,0.0,self.VuAe,self.Vuue)
+        self.Vu1= comprobVEHE08.getVu1EHE08(self.fckH,self.fcdH,self.axilHormigon,self.areaHormigon,self.strutWidth,self.depthUtil,self.alpha,self.theta)
         self.Vsu= comprobVEHE08.getVsuEHE08(self.brazoMecanico,self.alpha,self.theta,self.AsTrsv,self.fydS)
         self.Vu2= self.Vcu+self.Vsu
         self.Vu= min(self.Vu1,self.Vu2)

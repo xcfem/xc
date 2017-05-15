@@ -59,7 +59,7 @@ class QuadBase9N : public ElemPlano<9,PhysProp>
     Element::NodesEdge getNodesEdge(const size_t &i) const;
     ID getLocalIndexNodesEdge(const size_t &i) const;
     int getEdgeNodes(const Node *,const Node *) const;
-    Poligono3d getPoligono(bool initialGeometry= true) const;
+    Poligono3d getPolygon(bool initialGeometry= true) const;
     Segmento3d getLado(const size_t &i,bool initialGeometry= true) const;
 
     int getVtkCellType(void) const;
@@ -87,10 +87,10 @@ XC::TritrizPtrElem XC::QuadBase9N<PhysProp>::put_on_mesh(const TritrizPtrNod &no
 
 //! @brief Returns the element contour as a polygon.
 template <class PhysProp>
-Poligono3d XC::QuadBase9N<PhysProp>::getPoligono(bool initialGeometry) const
+Poligono3d XC::QuadBase9N<PhysProp>::getPolygon(bool initialGeometry) const
   {
     Poligono3d retval;
-    std::cerr << "QuadBase9N<PhysProp>::getPoligono not implemented." << std::endl;
+    std::cerr << "QuadBase9N<PhysProp>::getPolygon not implemented." << std::endl;
     return retval;
   }
 

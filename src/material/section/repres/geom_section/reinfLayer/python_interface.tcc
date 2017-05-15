@@ -60,7 +60,7 @@ class_<list_ptr_reinf_layer, boost::noncopyable>("list_ptr_reinf_layer")
   // REMOVE NOT ALLOWED .def("__delitem__", &std_item<list_ptr_reinf_layer>::del)
   ;
 
-class_<XC::ListReinfLayer, bases<XC::SeccionInerte,list_ptr_reinf_layer>, boost::noncopyable >("ListReinfLayer", no_init)
+class_<XC::ListReinfLayer, bases<XC::SectionMassProperties,list_ptr_reinf_layer>, boost::noncopyable >("ListReinfLayer", no_init)
   .def("newStraightReinfLayer",make_function(&XC::ListReinfLayer::newStraightReinfLayer,return_internal_reference<>()))
   .def("newCircReinfLayer",make_function(&XC::ListReinfLayer::newCircReinfLayer,return_internal_reference<>()))
   .def("newReinfBar",make_function(&XC::ListReinfLayer::newReinfBar,return_internal_reference<>()))

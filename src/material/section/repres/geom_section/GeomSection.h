@@ -34,7 +34,7 @@
 #include <list>
 #include "boost/lexical_cast.hpp"
 #include "Eje.h"
-#include "material/section/repres/SeccionInerte.h"
+#include "material/section/repres/SectionMassProperties.h"
 
 class Semiplano2d;
 class Segmento2d;
@@ -59,7 +59,7 @@ class CrossSectionProperties2d;
 //! @ingroup MATSCCRepresGeom
 //
 //! @brief Cross section geometry.
-class GeomSection: public SeccionInerte
+class GeomSection: public SectionMassProperties
   {
   public:
 
@@ -129,7 +129,7 @@ class GeomSection: public SeccionInerte
     double getLeverArm(const Recta2d &) const;
     double getAnchoMecanico(const Recta2d &) const;
     double getRecubrimiento(const Pos2d &) const;
-    double getAnchoBielaComprimida(const Segmento2d &) const;
+    double getCompressedStrutWidth(const Segmento2d &) const;
 
     //Acceso contenedores.
     inline const ListRegiones &getRegiones(void) const
@@ -142,7 +142,7 @@ class GeomSection: public SeccionInerte
       { return capas_armado; }
     GeomSection getGMRegiones(void) const;
     GeomSection getGMCapasArmado(void) const;
-    GeomSection getSeccionFisurada(const Semiplano2d &) const;
+    GeomSection getCrackedSection(const Semiplano2d &) const;
     size_t getNumFiberData(void) const;
 
     double getAreaGrossSection(void) const;

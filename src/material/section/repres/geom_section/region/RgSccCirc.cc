@@ -134,7 +134,7 @@ const XC::Vector &XC::RgSccCirc::getCenterPosition(void) const
   { return centerPosit; }
 
 //! @brief Returns a poligono inscrito en el sector del anillo circular.
-Poligono2d XC::RgSccCirc::getPoligono(void) const
+Poligono2d XC::RgSccCirc::getPolygon(void) const
   { return getSector().getPoligono2d(nDivCirc()); }
 
 SectorAnilloCircular2d &XC::RgSccCirc::getSector(void) const

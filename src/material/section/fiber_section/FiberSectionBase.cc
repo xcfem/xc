@@ -825,13 +825,13 @@ double XC::FiberSectionBase::getAnchoMecanico(void) const
     return retval;
   }
 
-//! @brief Returns the ancho de la biela comprimida (en cortante).
-double XC::FiberSectionBase::getAnchoBielaComprimida(void) const
+//! @brief Returns the compressed strut width (shear analysis).
+double XC::FiberSectionBase::getCompressedStrutWidth(void) const
   {
     double retval= 0.0;
     const GeomSection *geom= getGeomSection();
     if(geom)
-      retval= geom->getAnchoBielaComprimida(getSegmentoBrazoMecanico());
+      retval= geom->getCompressedStrutWidth(getSegmentoBrazoMecanico());
     return retval;
   }
 

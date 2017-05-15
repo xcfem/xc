@@ -128,7 +128,7 @@ class FiberSectionBase: public PrismaticBarCrossSection
     Recta2d getTrazaPlanoTraccion(void) const;
     Recta2d getTrazaPlanoCompresion(void) const;
     double getAnchoMecanico(void) const;
-    double getAnchoBielaComprimida(void) const;
+    double getCompressedStrutWidth(void) const;
     double getRecubrimiento(const Pos2d &) const;
     Recta2d getRectaLimiteAcEficaz(const double &) const;
     double getAcEficazBruta(const double &) const;

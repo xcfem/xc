@@ -48,7 +48,7 @@ class BeamStrainLoad;
 class PrismaticBarCrossSectionsVector: public EntCmd, public std::vector<PrismaticBarCrossSection *>, public MovableObject
   {
   protected:
-    void borra_secciones(void);
+    void clear_sections(void);
     void clearAll(void);
     PrismaticBarCrossSectionsVector &operator=(const PrismaticBarCrossSectionsVector &);
     int sendData(CommParameters &);  

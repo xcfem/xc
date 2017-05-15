@@ -658,7 +658,7 @@ int XC::ShellMITC4Base::addLoad(ElementalLoad *theLoad, double loadFactor)
                 << getTag() << std::endl;
     else
       {
-        const double area= getPoligono().Area();
+        const double area= getPolygon().Area();
 
         // Accumulate elastic deformations in basic system
         if(ShellMecLoad *shellMecLoad= dynamic_cast<ShellMecLoad *>(theLoad))

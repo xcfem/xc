@@ -34,7 +34,7 @@
 // two nodes. This simplified version uses small angle approximations and
 // accounts for the rotation of the sliding surface by shifting the shear force.
 
-#include "ElemFriccionBase.h"
+#include "FrictionElementBase.h"
 #include "utility/matrix/Vector.h"
 #include "utility/matrix/Matrix.h"
 
@@ -44,7 +44,7 @@ class FrictionModel;
 class UniaxialMaterial;
 class Response;
 
-class SingleFPSimple2d : public ElemFriccionBase
+class SingleFPSimple2d : public FrictionElementBase
   {
   private:
     // private methods

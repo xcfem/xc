@@ -30,7 +30,7 @@
 #define ListReinfLayer_h 
 
 #include <list>
-#include "material/section/repres/SeccionInerte.h"
+#include "material/section/repres/SectionMassProperties.h"
 
 class Pos2d;
 class Poligono2d;
@@ -50,7 +50,7 @@ class GeomSection;
 //! @ingroup MATSCCArmaduras
 //
 //! @brief Contenedor (lista) de capas de armadura.
-class ListReinfLayer: public std::list<ReinfLayer *>, public SeccionInerte
+class ListReinfLayer: public std::list<ReinfLayer *>, public SectionMassProperties
   {
   public:
     typedef std::list<ReinfLayer *> l_reg;

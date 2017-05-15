@@ -55,7 +55,7 @@ class_<XC::FiberSectionBase, bases<XC::PrismaticBarCrossSection>, boost::noncopy
   .def("getTrazaPlanoTraccion",&XC::FiberSectionBase::getTrazaPlanoTraccion)
   .def("getTrazaPlanoCompresion",&XC::FiberSectionBase::getTrazaPlanoCompresion)
   .def("getAnchoMecanico",&XC::FiberSectionBase::getAnchoMecanico)
-  .def("getAnchoBielaComprimida",&XC::FiberSectionBase::getAnchoBielaComprimida)
+  .def("getCompressedStrutWidth",&XC::FiberSectionBase::getCompressedStrutWidth)
   .def("getRecubrimiento",&XC::FiberSectionBase::getRecubrimiento)
   .def("getRectaLimiteAcEficaz",&XC::FiberSectionBase::getRectaLimiteAcEficaz)
   .def("getAcEficazBruta",&XC::FiberSectionBase::getAcEficazBruta)

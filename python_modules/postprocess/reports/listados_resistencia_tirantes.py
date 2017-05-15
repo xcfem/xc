@@ -32,7 +32,7 @@ def printCierreListadoTirante(archivo):
   archivo.write("\\end{footnotesize}\n")
   archivo.write("\\end{center}\n")
 
-def listaResistenciaTirantes(preprocessor,setName, fName, titulo):
+def listTieStrength(preprocessor,setName, fName, titulo):
   '''
   Imprime los resultados de la comprobación de tensiones normales en régimen
   elástico de un conjunto de elementos que representa un tirante.

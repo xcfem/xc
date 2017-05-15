@@ -34,7 +34,7 @@
 // simplified version uses small angle approximations and accounts for
 // rotations of the sliding surface by shifting the shear forces.
 
-#include "ElemFriccionBase.h"
+#include "FrictionElementBase.h"
 #include "utility/matrix/Vector.h"
 #include "utility/matrix/Matrix.h"
 
@@ -44,7 +44,7 @@ class FrictionModel;
 class UniaxialMaterial;
 class Response;
 
-class FlatSliderSimple3d: public ElemFriccionBase
+class FlatSliderSimple3d: public FrictionElementBase
   {
   private:
     

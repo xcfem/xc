@@ -187,7 +187,7 @@ void XC::RgSccQuad::setQuad(const Cuadrilatero2d &quad)
     vertCoord(L,Y)= vL.x(); vertCoord(L,Z)= vL.y();
   }
 
-Poligono2d XC::RgSccQuad::getPoligono(void) const
+Poligono2d XC::RgSccQuad::getPolygon(void) const
   { return getQuad(); }
 
 void XC::RgSccQuad::setVertCoords(const XC::Matrix &vertexCoords)

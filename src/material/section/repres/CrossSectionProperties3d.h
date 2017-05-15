@@ -35,7 +35,7 @@ namespace XC {
 
 //! @ingroup MATSCCRepres
 //
-//! @brief Mechanical properties of a section (area, moments of inertia,...)
+//! @brief Mechanical (E, G) and mass properties of a section (area, moments of inertia,...)
 //! in a three-dimensional problem (six degrees of freedom on each section).
 class CrossSectionProperties3d: public CrossSectionProperties2d
   {

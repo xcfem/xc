@@ -58,7 +58,7 @@ class RgSccPoligono: public RgQuadCell
     double getMaxZ(void) const;
     double getMinY(void) const;
     double getMinZ(void) const;
-    Poligono2d getPoligono(void) const;
+    Poligono2d getPolygon(void) const;
 
 
     void Print(std::ostream &s, int flag =0) const;   

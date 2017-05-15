@@ -54,7 +54,7 @@
 #include "boost/lexical_cast.hpp"
 
 XC::GeomSection::GeomSection(MaterialLoader *ml)
-  : SeccionInerte(),material_loader(ml), regiones(ml), capas_armado(this,ml), tag_sis_ref(0),tag_spot(0) {}
+  : SectionMassProperties(),material_loader(ml), regiones(ml), capas_armado(this,ml), tag_sis_ref(0),tag_spot(0) {}
 
 //! @brief Returns a geometry that contains only the regions
 //! defined in this object.
@@ -75,10 +75,10 @@ XC::GeomSection XC::GeomSection::getGMCapasArmado(void) const
   }
 
 //! @brief Return a section with only the compressed regions of the section.
-XC::GeomSection XC::GeomSection::getSeccionFisurada(const Semiplano2d &sp_compresiones) const
+XC::GeomSection XC::GeomSection::getCrackedSection(const Semiplano2d &sp_compresiones) const
   {
     GeomSection retval(getGMCapasArmado());
-    retval.regiones= regiones.Interseccion(sp_compresiones);
+    retval.regiones= regiones.Intersection(sp_compresiones);
     return retval;
   }
 
@@ -372,9 +372,9 @@ double XC::GeomSection::getAnchoMecanico(const Recta2d &traza_plano_flexion) con
     return dmax;
   }
 
-//! @brief Returns the ancho «b0» de la biela comprimida
-//! correspondiente al brazo mecánico being passed as parameter.
-double XC::GeomSection::getAnchoBielaComprimida(const Segmento2d &brazo_mecanico) const
+//! @brief Returns the width «b0» of the compressed strut
+//! that corresponds to the arm lever represented by the segment being passed as parameter.
+double XC::GeomSection::getCompressedStrutWidth(const Segmento2d &brazo_mecanico) const
   {
     const Poligono2d contour= agrega_puntos_medios(getRegionsContour());
     const size_t num_vertices= contour.GetNumVertices();

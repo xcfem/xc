@@ -102,7 +102,7 @@ class RgSccCirc: public RgQuadCell
     double getMinY(void) const;
     double getMinZ(void) const;
 
-    Poligono2d getPoligono(void) const;
+    Poligono2d getPolygon(void) const;
     SectorAnilloCircular2d &getSector(void) const;
 
 

@@ -38,11 +38,11 @@ class_<XC::Edge, bases<XC::EntMdlr>, boost::noncopyable >("Edge","Base class for
   .def("getTagsNodesReverse",&XC::Edge::GetTagsNodosInv,"Return node tags in reverse order.")
    ;
 
-class_<XC::LineaBase, bases<XC::Edge>, boost::noncopyable >("LineaBase", no_init)
-  .def("getLambda",&XC::LineaBase::getLambda,"Returns the parameter of the point in the line (distance to the line's first point measured over the line).")
+class_<XC::LineBase, bases<XC::Edge>, boost::noncopyable >("LineBase", no_init)
+  .def("getLambda",&XC::LineBase::getLambda,"Returns the parameter of the point in the line (distance to the line's first point measured over the line).")
    ;
 
-class_<XC::Linea, bases<XC::LineaBase>, boost::noncopyable >("Line", no_init)
+class_<XC::Linea, bases<XC::LineBase>, boost::noncopyable >("Line", no_init)
   .def("splitAtPoint", make_function(&XC::Linea::splitAtPoint, return_internal_reference<>()),"Breaks the line at the point.")
   .def("splitAtLambda", make_function(&XC::Linea::splitAtLambda, return_internal_reference<>()),"Breaks the line at the point defined by the paramenter (0.0->L).")
   .def("splitAtNaturalCoordinate", make_function(&XC::Linea::splitAtCooNatural, return_internal_reference<>()),"Breaks the line at the point defined by the natural coordinate (0.0->1.0).")
@@ -52,7 +52,7 @@ class_<XC::DividedLine, bases<XC::Linea>, boost::noncopyable >("DividedLine", "L
   .def("setLongs",&XC::DividedLine::setLongs,"Asigns length for each division.")
   ;
 
-class_<XC::ArcoCircunf, bases<XC::LineaBase>, boost::noncopyable >("CircleArc", "Circumference arc.",no_init)
+class_<XC::ArcoCircunf, bases<XC::LineBase>, boost::noncopyable >("CircleArc", "Circumference arc.",no_init)
   .def("getAngle", &XC::ArcoCircunf::getAnguloComprendido,"Return the angle subtended by the arc.")
   .def("getTheta1",&XC::ArcoCircunf::getTheta1,"Return the start angle.")
   .def("getTheta2",&XC::ArcoCircunf::getTheta2,"Return the end angle.")

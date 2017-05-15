@@ -44,7 +44,7 @@ XC::Vector XC::SingleFPSimple2d::theVector(6);
 
 
 XC::SingleFPSimple2d::SingleFPSimple2d(int tag, int Nd1, int Nd2,const FrictionModel &thefrnmdl,const double &r,const double &_h, const double &_uy,const std::vector<UniaxialMaterial *> &theMaterials,const Vector &_y,const Vector &_x,const double &m,const int &maxiter,const double &_tol)
-    : ElemFriccionBase(tag, ELE_TAG_SingleFPSimple2d,Nd1,Nd2,3,thefrnmdl,theMaterials,_uy,_x,_y,m,maxiter,tol),
+    : FrictionElementBase(tag, ELE_TAG_SingleFPSimple2d,Nd1,Nd2,3,thefrnmdl,theMaterials,_uy,_x,_y,m,maxiter,tol),
     R(r), h(_h), Reff(0.0), ubPlastic(0.0), ubPlasticC(0.0)
   {
     load.reset(6);
@@ -62,7 +62,7 @@ XC::SingleFPSimple2d::SingleFPSimple2d(int tag, int Nd1, int Nd2,const FrictionM
 
 
 XC::SingleFPSimple2d::SingleFPSimple2d()
-  : ElemFriccionBase(ELE_TAG_SingleFPSimple2d,3),
+  : FrictionElementBase(ELE_TAG_SingleFPSimple2d,3),
     R(0.0), h(0.0), Reff(0.0), ubPlastic(0.0), ubPlasticC(0.0) {load.reset(6);}
 
 
@@ -72,7 +72,7 @@ int XC::SingleFPSimple2d::getNumDOF()
 
 void XC::SingleFPSimple2d::setDomain(Domain *theDomain)
   {
-    ElemFriccionBase::setDomain(theDomain);
+    FrictionElementBase::setDomain(theDomain);
 
     // now determine the number of dof and the dimension    
     const int dofNd1 = theNodes[0]->getNumberDOF();
@@ -392,7 +392,7 @@ const XC::Vector& XC::SingleFPSimple2d::getResistingForceIncInertia()
 //! @brief Send members through the channel being passed as parameter.
 int XC::SingleFPSimple2d::sendData(CommParameters &cp)
   {
-    int res= ElemFriccionBase::sendData(cp);
+    int res= FrictionElementBase::sendData(cp);
     res+= cp.sendDoubles(ubPlastic,ubPlasticC,R,h,Reff,getDbTagData(),CommMetaData(19));
     return res;
   }
@@ -400,7 +400,7 @@ int XC::SingleFPSimple2d::sendData(CommParameters &cp)
 //! @brief Receives members through the channel being passed as parameter.
 int XC::SingleFPSimple2d::recvData(const CommParameters &cp)
   {
-    int res= ElemFriccionBase::recvData(cp);
+    int res= FrictionElementBase::recvData(cp);
     res+= cp.receiveDoubles(ubPlastic,ubPlasticC,R,h,Reff,getDbTagData(),CommMetaData(19));
     return res;
   }

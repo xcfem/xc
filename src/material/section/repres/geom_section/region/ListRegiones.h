@@ -30,7 +30,7 @@
 #define ListRegiones_h 
 
 #include <list>
-#include "material/section/repres/SeccionInerte.h"
+#include "material/section/repres/SectionMassProperties.h"
 
 class Pos2d;
 class BND2d;
@@ -48,8 +48,8 @@ class Matrix;
 
 //! @ingroup MATSCCRegiones
 //
-//! @brief Lista de regiones.
-class ListRegiones: protected std::list<RegionSecc *>, public SeccionInerte
+//! @brief Section composed of some regions.
+class ListRegiones: protected std::list<RegionSecc *>, public SectionMassProperties
   {
   public:
     typedef std::list<RegionSecc *> l_reg;
@@ -92,7 +92,7 @@ class ListRegiones: protected std::list<RegionSecc *>, public SeccionInerte
     std::list<Poligono2d> getRegionsContours(void) const;
     std::list<Poligono2d> getContours(void) const;
     BND2d getBnd(void) const;
-    ListRegiones Interseccion(const Semiplano2d &) const;
+    ListRegiones Intersection(const Semiplano2d &) const;
 
     //void Cumplen(const std::string &,ListRegiones &,bool );
 

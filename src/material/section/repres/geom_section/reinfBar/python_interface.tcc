@@ -50,4 +50,4 @@ class_<vector_ptr_reinf_bar, boost::noncopyable>("vector_ptr_reinf_bar")
   .def(vector_indexing_suite<vector_ptr_reinf_bar>() )
   ;
 
-class_<XC::VectorReinfBar, bases<XC::SeccionInerte,vector_ptr_reinf_bar>, boost::noncopyable >("VectorReinfBar", no_init);
+class_<XC::VectorReinfBar, bases<XC::SectionMassProperties,vector_ptr_reinf_bar>, boost::noncopyable >("VectorReinfBar", no_init);
