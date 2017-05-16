@@ -21,6 +21,7 @@ class PredefinedSpace(object):
     self.setPreprocessor(nodes.getPreprocessor)
     nodes.dimSpace= dimSpace
     nodes.numGdls= numGdls
+    
   def setPreprocessor(self,preprocessor):
     '''Sets suitable values for the members from the dimension of the space 
        and the number of DOFs for each node obtained from the argument.
@@ -29,7 +30,105 @@ class PredefinedSpace(object):
     '''
     self.preprocessor= preprocessor
     self.constraints= self.preprocessor.getConstraintLoader
-    
+
+
+  def setBearingBetweenNodes(self,iNodA,iNodB,iElem,bearingMaterials):
+    '''Modelize a bearing between the nodes
+
+        Args:
+            iNodA (int): first node identifier (tag).
+            iNodB (int): second node identifier (tag).
+            iElem (int): new zero length elem identifier (tag).
+            bearingMaterials (list): material names for the zero length
+               element.
+    '''
+    # Element definition
+    elems= self.preprocessor.getElementLoader
+    elems.dimElem= self.preprocessor.getNodeLoader.dimSpace # space dimension.
+    elems.defaultMaterial= next((item for item in bearingMaterials if item is not None), 'All are Nones')
+    elems.defaultTag= iElem #Next element number.
+    zl= elems.newElement("zero_length",xc.ID([iNodA,iNodB]))
+    zl.clearMaterials()
+    numMats= len(bearingMaterials)
+    for i in range(0,numMats):
+      material= bearingMaterials[i]
+      if(material!=None):
+        zl.setMaterial(i,material)
+
+  def setBearing(self,iNod,iElem,bearingMaterials):
+    '''Modelize a bearing on X, XY or XYZ directions.
+
+        Args:
+            iNod (int): node identifier (tag).
+            iElem (int): new zero length elem identifier (tag).
+            bearingMaterials (list): material names for the zero length
+               element.
+    '''
+    nodos= self.preprocessor.getNodeLoader
+    newNode= nodos.duplicateNode(iNod) # new node.
+
+    # Element definition
+    self.setBearingBetweenNodes(newNode.tag,iNod,iElem,bearingMaterials)
+    # Boundary conditions
+    constraints= self.preprocessor.getConstraintLoader
+    numGdls= self.preprocessor.getNodeLoader.numGdls
+    for i in range(0,numGdls):
+      spc= constraints.newSPConstraint(newNode.tag,i,0.0)
+    return newNode.tag
+
+
+  def setBearingOnX(self,iNod,iElem,bearingMaterial):
+    '''Modelize a bearing on X direction.
+
+        Args:
+            iNod (int): node identifier (tag).
+            iElem (int): new zero length elem identifier (tag).
+            bearingMaterial (string): material name for the zero length
+               element.
+    '''
+    return setBearing(iNod,iElem,[bearingMaterial])
+
+  def setBearingOnXYRigZ(self,iNod,iElem,bearingMaterials):
+    '''Modelize a non rigid on X and Y directions and rigid on Z bearing.
+
+        Args:
+            iNod (int): node identifier (tag).
+            iElem (int): new zero length elem identifier (tag).
+            bearingMaterial (string): material name for the zero length
+               element.
+    '''
+    newNodeTag= self.setBearing(iNod,iElem,bearingMaterials)
+    eDofs= self.constraints.newEqualDOF(newNodeTag,iNod,xc.ID([2]))
+    return newNodeTag
+
+  def setUniaxialBearing2D(self,iNod,iElem,bearingMaterial,direction):
+    '''Modelize an uniaxial bearing on the defined direction.
+
+        Args:
+            iNod (int): node identifier (tag).
+            iElem (int): new zero length elem identifier (tag).
+            bearingMaterial (str): material name for the zero length
+               element.
+    '''
+    nodos= self.preprocessor.getNodeLoader
+    newNode= nodos.duplicateNode(iNod) # new node.
+
+    # Element definition
+    elems= self.preprocessor.getElementLoader
+    elems.dimElem= self.preprocessor.getNodeLoader.dimSpace # space dimension.
+    if(elems.dimElem>2):
+      lmsg.warning("Not a bidimensional space.")
+    elems.defaultMaterial= bearingMaterial
+    elems.defaultTag= iElem #Next element number.
+    zl= elems.newElement("zero_length",xc.ID([newNode.tag,iNod]))
+    zl.setupVectors(xc.Vector([direction[0],direction[1],0]),xc.Vector([-direction[1],direction[0],0]))
+    zl.clearMaterials()
+    zl.setMaterial(0,bearingMaterial)
+    # Boundary conditions
+    numGdls= self.preprocessor.getNodeLoader.numGdls
+    for i in range(0,numGdls):
+      spc= self.constraints.newSPConstraint(newNode.tag,i,0.0)
+    return newNode.tag
 
 def getModelSpace(preprocessor):
     '''Return a PredefinedSpace from the dimension of the space 

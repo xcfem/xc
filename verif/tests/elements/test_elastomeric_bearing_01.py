@@ -18,10 +18,8 @@ import xc_base
 import geom
 import xc
 
-from materials import apoyosNeopreno
 from model import predefined_spaces
-from model import define_apoyos
-from model import apoyo_pot
+from materials import bridge_bearings
 from solution import predefined_solutions
 
 
@@ -37,7 +35,8 @@ e= 0.002 # Espesor neto del neopreno (sin chapas).
 prueba= xc.ProblemaEF()
 preprocessor=  prueba.getPreprocessor
 
-neop= apoyosNeopreno.defineMaterialesNeopreno(preprocessor, G,a,b,e,"neopX","neopY","neopZ","neopTHX","neopTHY","neopTHZ")
+neop= bridge_bearings.ElastomericBearing(G,a,b,e)
+neop.defineMaterials(preprocessor,"neopX","neopY","neopZ","neopTHX","neopTHY","neopTHZ")
 
 materiales= preprocessor.getMaterialLoader
 KX= materiales.getMaterial("neopX").E
@@ -51,12 +50,12 @@ nodes= preprocessor.getNodeLoader
 # Problem type
 modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
 nodes.defaultTag= 1 #First node number.
-nod= nodes.newNodeXYZ(1,1,1)
-nod= nodes.newNodeXYZ(1,1,1)
+nod1= nodes.newNodeXYZ(1,1,1)
+nod2= nodes.newNodeXYZ(1,1,1)
 
 
 
-define_apoyos.colocaApoyoEntreNodos(preprocessor, 1,2,1,"neopX","neopY","neopZ","neopTHX","neopTHY","neopTHZ")
+neop.putBetweenNodes(modelSpace, nod1.tag,nod2.tag,1)
 
 ''' Se definen nodos en los puntos de aplicación de
     la carga. Puesto que no se van a determinar tensiones
@@ -93,11 +92,9 @@ result= analisis.analyze(1)
 
 nodes.calculateNodalReactions(True)
 nodes= preprocessor.getNodeLoader
-nod2= nodes.getNode(2)
 deltax= nod2.getDisp[0]
 deltay= nod2.getDisp[1]
 deltaz= nod2.getDisp[2] 
-nod1= nodes.getNode(1)
 RX= nod1.getReaction[0]
 RY= nod1.getReaction[1]
 RZ= nod1.getReaction[2] 

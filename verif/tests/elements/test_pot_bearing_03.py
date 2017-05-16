@@ -18,11 +18,10 @@ import xc_base
 import geom
 import xc
 
-from materials import apoyosPot
 from model import predefined_spaces
-from model import define_apoyos
-from model import apoyo_pot
+from materials import bridge_bearings
 from solution import predefined_solutions
+
 
 
 diamPot= 993e-3
@@ -32,19 +31,21 @@ diamPot= 993e-3
 # Model definition
 prueba= xc.ProblemaEF()
 preprocessor=  prueba.getPreprocessor
-teflon= apoyosPot.defineMaterialTeflon(preprocessor, diamPot,"teflonK")
+pot= bridge_bearings.PTFEPotBearing(diamPot)
+pot.defineMaterials(preprocessor,None,"teflonK")
+teflon= pot.matY
 
 nodes= preprocessor.getNodeLoader
 modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
 nodes.defaultTag= 1 #First node number.
-nod= nodes.newNodeXYZ(1,1,1)
-nod= nodes.newNodeXYZ(1,1,1)
+nod1= nodes.newNodeXYZ(1,1,1)
+nod2= nodes.newNodeXYZ(1,1,1)
 
 
 
-apoyo_pot.colocaApoyoFicticioPotDeslizanteXNodos(preprocessor, 1,2,1,"teflonK")
+pot.putOnYBetweenNodes(modelSpace, nod1.tag,nod2.tag,1)
+
 # Constraints
-
 modelSpace.fixNode000_000(1)
 spc= modelSpace.constraints.newSPConstraint(2,3,0.0) # Nodo 2
 spc= modelSpace.constraints.newSPConstraint(2,4,0.0)
@@ -70,7 +71,7 @@ casos.addToDomain("0")
 analisis= predefined_solutions.simple_static_linear(prueba)
 result= analisis.analyze(1)
 
-R= apoyo_pot.getReacApoyoFicticioPotDeslizanteXNodos(preprocessor, 1)
+R= bridge_bearings.get_reaction_on_pot(preprocessor, 1)
 
 ratio1= abs(R[0]+FX)/FX
 ratio2= abs(R[1]+FY)/FY

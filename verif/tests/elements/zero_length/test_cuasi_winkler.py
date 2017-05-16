@@ -12,7 +12,6 @@ import xc
 from solution import predefined_solutions
 from model import predefined_spaces
 from materials import typical_materials
-from model import define_apoyos
 from model import line_utils
 import math
 
@@ -91,17 +90,17 @@ modelSpace.fixNode00F(pt3.getTagNode)
 # Apoyamos los interiores.
 l1InteriorNodes= line_utils.LineWrapper(l1).getInteriorNodes()
 for n in l1InteriorNodes:
-  idNodoFijo= define_apoyos.defApoyoUniaxialProb2D(preprocessor, n.tag,idElem,"kY",[0,1])
+  idNodoFijo= modelSpace.setUniaxialBearing2D(n.tag,idElem,"kY",[0,1])
   idElem+= 1
 
 l1LastNode= line_utils.LineWrapper(l1).getLastNode()
 idNodoCentral= l1LastNode.tag
-idNodoFijo= define_apoyos.defApoyoUniaxialProb2D(preprocessor, l1LastNode.tag,idElem,"kY",[0,1])
+idNodoFijo= modelSpace.setUniaxialBearing2D(l1LastNode.tag,idElem,"kY",[0,1])
 idElem+= 1
 
 l2InteriorNodes= line_utils.LineWrapper(l2).getInteriorNodes()
 for n in l2InteriorNodes:
-  idNodoFijo= define_apoyos.defApoyoUniaxialProb2D(preprocessor, n.tag,idElem,"kY",[0,1])
+  idNodoFijo= modelSpace.setUniaxialBearing2D(n.tag,idElem,"kY",[0,1])
   idElem+= 1
 
 

@@ -19,7 +19,6 @@ import geom
 import xc
 from solution import predefined_solutions
 from model import predefined_spaces
-from model import define_apoyos
 from materials import typical_materials
 
 # Model definition
@@ -41,7 +40,12 @@ kz= typical_materials.defElasticMaterial(preprocessor, "kz",KZ)
 nodosApoyados= [1]
 elementosApoyo= [7]
 
-nodosFijos= define_apoyos.defApoyoNodosListaXYZ(preprocessor, nodosApoyados,elementosApoyo,"kx","ky","kz")
+nodosFijos= list()
+sz= len(nodosApoyados)
+for i in range(0,sz):
+  nodeTag= nodosApoyados[i]
+  elemTag= elementosApoyo[i]
+  nodosFijos.append(modelSpace.setBearing(nodeTag,elemTag,["kx","ky","kz"]))
 tagNodoFijo= nodosFijos[0]
 
 # Constraints

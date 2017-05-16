@@ -4,8 +4,8 @@ from __future__ import division
 import xc_base
 import geom
 from materials import typical_materials
-from model import define_apoyos
 from xcVtk.malla_ef import Fields
+from solution import predefined_solutions
 
 '''Generation of springs for nodes at foundation.'''
 
@@ -41,6 +41,7 @@ class ElasticFoundation(object):
     self.foundationSet.computeTributaryAreas(False)
     sNod= self.foundationSet.getNodes
     preprocessor= self.foundationSet.getPreprocessor
+    modelSpace= predefined_spaces.getStructuralMechanics3DSpace(preprocessor)
     self.createMaterials(preprocessor,self.foundationSet.name)
     idElem= preprocessor.getElementLoader.defaultTag
     for n in sNod:
@@ -48,7 +49,7 @@ class ElasticFoundation(object):
       self.xSpring.E= self.cRoz*self.wModulus*arTribNod
       self.ySpring.E= self.cRoz*self.wModulus*arTribNod
       self.zSpring.E= self.wModulus*arTribNod
-      nn= define_apoyos.defApoyoXYZ(preprocessor,n.tag,idElem,self.xSpringName,self.ySpringName,self.zSpringName)
+      nn= modelSpace.setBearing(n.tag,idElem,[self.xSpringName,self.ySpringName,self.zSpringName])
       self.springs.append(preprocessor.getElementLoader.getElement(idElem))
       idElem+= 1
   def getCentroid(self):

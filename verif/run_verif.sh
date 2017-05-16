@@ -148,10 +148,10 @@ python tests/elements/volume/test_brick_01.py
 echo "$BLEU" "  Misc elements tests." "$NORMAL"
 python tests/elements/spring_test_01.py
 python tests/elements/spring_test_02.py
-python tests/elements/test_coloca_apoyo_elastico_01.py
-python tests/elements/test_coloca_apoyo_pot_01.py
-python tests/elements/test_coloca_apoyo_pot_02.py
-python tests/elements/test_coloca_apoyo_pot_03.py
+python tests/elements/test_elastomeric_bearing_01.py
+python tests/elements/test_pot_bearing_01.py
+python tests/elements/test_pot_bearing_02.py
+python tests/elements/test_pot_bearing_03.py
 python tests/elements/kill_elements_01.py
 python tests/elements/kill_elements_02.py
 
@@ -248,9 +248,9 @@ python tests/preprocessor/sets/test_get_contours_02.py
 echo "$BLEU" "Displacement constraints tests." "$NORMAL"
 python tests/constraints/remove_fix_01.py
 python tests/constraints/remove_fix_02.py
-python tests/constraints/test_apoyo_elastico_01.py
-python tests/constraints/test_apoyo_elastico_02.py
-python tests/constraints/test_apoyo_elastico_03.py
+python tests/constraints/test_elastic_bearing_01.py
+python tests/constraints/test_elastic_bearing_02.py
+python tests/constraints/test_elastic_bearing_03.py
 python tests/constraints/test_rigid_beam_01.py
 python tests/constraints/test_rigid_rod_01.py
 python tests/constraints/test_fulcrum_01.py
@@ -465,8 +465,8 @@ python tests/materials/test_material_elastic_plate_section_01.py
 python tests/materials/test_inercia_torsion_cajon.py
 
 echo "$BLEU" "  Other materials tests." "$NORMAL"
-python tests/materials/test_params_neoprenos.py
-python tests/materials/test_perno_anclaje01.py
+python tests/materials/test_elastomeric_bearing_stiffness.py
+python tests/materials/test_anchor_bolt01.py
 python tests/materials/ehe/test_fluencia_01.py
 python tests/materials/ehe/test_fluencia_02.py
 python tests/materials/ehe/test_fluencia_03.py

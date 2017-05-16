@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 # Home made test
-# Obtención de las rigideces de un apoyo de neopreno rectangular.
+# Computation of the stiffness of a rectangular elastomeric bearing.
 
-from materials import apoyosNeopreno
+from materials import bridge_bearings
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
 __copyright__= "Copyright 2015, LCPT and AOO"
@@ -10,24 +10,25 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
-G= 900e3 # Módulo de cortante del neopreno
-a= 0.3 # Dimensión paralela al eje del dintel.
-b= 0.3 # Dimensión normal al eje del dintel.
-e= 0.002 # Espesor neto del neopreno (sin chapas).
+G= 900e3 # Elastomeric bearing shear modulus.
+a= 0.3 # Width of the bearing (parallel to lintel axis).
+b= 0.3 # Length of the bearing (parallel to bridge axis).
+e= 0.002 # Net thickness of the bearing (without steel plates).
 
-E= apoyosNeopreno.getEneopreno(G,a,b,e)
-Kv= apoyosNeopreno.getKvert(G,a,b,e)
-Kh= apoyosNeopreno.getKhoriz(G,a,b,e)
-KgiroX= apoyosNeopreno.getKgiroEjeDintel(G,a,b,e)
-KgiroZ= apoyosNeopreno.getKgiroEjeDintel(G,a,b,e)
-KgiroY= apoyosNeopreno.getKgiroEjeVertical(G,a,b,e)
+neop= bridge_bearings.ElastomericBearing(G,a,b,e)
+E= neop.getEbearing()
+Kv= neop.getKvert()
+Kh= neop.getKhoriz()
+KrotationX= neop.getKrotationLintelAxis()
+KrotationZ= neop.getKrotationLintelAxis()
+KrotationY= neop.getKrotationVerticalAxis()
 
 ratio1= abs(8505000000.0-E)/8505000000.0
 ratio2= abs(382725000000.0-Kv)/382725000000.0
 ratio3= abs(40500000.0-Kh)/40500000.0
-ratio4= abs(956971000.0-KgiroX)/956971000.0
-ratio5= abs(956972000.0-KgiroZ)/956972000.0
-ratio6= abs(510192.0-KgiroY)/510192.0
+ratio4= abs(956971000.0-KrotationX)/956971000.0
+ratio5= abs(956972000.0-KrotationZ)/956972000.0
+ratio6= abs(510192.0-KrotationY)/510192.0
 
 ''' 
 print "E= ",E
@@ -36,11 +37,11 @@ print "Kv= ",Kv
 print "ratio2= ",ratio2
 print "Kh= ",Kh
 print "ratio3= ",ratio3
-print "KgiroX= ",KgiroX
+print "KrotationX= ",KrotationX
 print "ratio4= ",ratio4
-print "KgiroZ= ",KgiroZ
+print "KrotationZ= ",KrotationZ
 print "ratio5= ",ratio5
-print "KgiroY= ",KgiroY
+print "KrotationY= ",KrotationY
 print "ratio6= ",ratio6
   '''
 import os
