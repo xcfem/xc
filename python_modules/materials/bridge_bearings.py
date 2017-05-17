@@ -8,6 +8,7 @@ __version__= "3.0"
 __email__= " ana.Ortega.Ort@gmail.com, l.pereztato@gmail.com"
 
 import scipy.interpolate
+from itertools import count
 from materials import typical_materials
 from model import predefined_spaces
 import math
@@ -45,12 +46,24 @@ class Bearing(object):
     """Bearings base class.
 
     """
+    _ids = count(0) #Object counter.
     def __init__(self):
       self.materials= list()
-      
+      self.materialLoader= None
+      self.id= self._ids.next() #Object identifier.
+    def getMaterial(self,i):
+        ''' Returns the i-th material that models the bearing response.'''
+        return self.materialLoader.getMaterial(self.materials[i])
     
 class ElastomericBearing(Bearing):
     """Rectangular elastomeric bearing.
+
+    Attributes:
+           :G: (float) Elastomer shear modulus.
+           :a: (float) Width of the bearing (parallel to lintel axis).
+           :b: (float) Length of the bearing (parallel to bridge axis).
+           :e: (float) Net thickness of the bearing (without
+              steel plates).
 
     """
     v2table= scipy.interpolate.interp1d(x2,y2)
@@ -61,12 +74,6 @@ class ElastomericBearing(Bearing):
     def __init__(self,G,a,b,e):
         """Class constructor.
 
-        Args:
-            G (float): Elastomer shear modulus.
-            a (float): Width of the bearing (parallel to lintel axis).
-            b (float): Length of the bearing (parallel to bridge axis).
-            e (float): Net thickness of the bearing (without
-               steel plates).
 
         """
         super(ElastomericBearing,self).__init__()
@@ -111,39 +118,32 @@ class ElastomericBearing(Bearing):
     def getKrotationVerticalAxis(self):
         ''' Stiffness  with respect to the rotation around a vertical axis.'''
         return self.getBeta()*self.G*self.a*pow(self.b,3.0)/self.e
-    def defineMaterials(self,preprocessor,matKX, matKY, matKZ, matKTHX, matKTHY, matKTHZ):
+    def defineMaterials(self,preprocessor):
         '''Define the materials to modelize the elastomeric bearing.
 
         Args:
-            preprocessor (:obj:'Preprocessor'): preprocessor to use.
-            matKX (str): name for the uniaxial material in direction X.
-            matKY (str): name for the uniaxial material in direction Y.
-            matKZ (str): name for the uniaxial material in direction Z.
-            matKTHX (str): name for the uniaxial material in direction ThetaX.
-            matKTHY (str): name for the uniaxial material in direction ThetaY.
-            matKTHZ (str): name for the uniaxial material in direction ThetaZ.
+            :preprocessor: (:obj:'Preprocessor') preprocessor to use.
         '''
-        self.materials.extend([matKX, matKY, matKZ, matKTHX, matKTHY, matKTHZ])
-        if(matKX!=None):
-          self.matXName= matKX
-          self.matKX= typical_materials.defElasticMaterial(preprocessor, matKX, self.getKhoriz())
-        if(matKY!=None):
-          self.matYName= matKY
-          self.matKY= typical_materials.defElasticMaterial(preprocessor, matKY, self.getKhoriz())
-        if(matKZ!=None):
-          self.matZName= matKZ
-          self.matKZ= typical_materials.defElasticMaterial(preprocessor, matKZ, self.getKvert())
-        if(matKTHX!=None):
-          self.matTHXName= matKTHX
-          self.matKTHX= typical_materials.defElasticMaterial(preprocessor, matKTHX, self.getKrotationLintelAxis())
-        if(matKTHY!=None):
-          self.matTHYName= matKTHY
-          self.matKTHY= typical_materials.defElasticMaterial(preprocessor, matKTHY, self.getKrotationBridgeAxis())
-        if(matKTHZ!=None):
-          self.matTHZName= matKTHZ
-          self.matKTHZ= typical_materials.defElasticMaterial(preprocessor, matKTHZ, self.getKrotationVerticalAxis())
+        self.materialLoader= preprocessor.getMaterialLoader
+        # Material names.
+        nameRoot= 'neop'+str(self.id)
+        self.matXName= nameRoot+'X'
+        self.matYName= nameRoot+'Y'
+        self.matZName= nameRoot+'Z'
+        self.matTHXName= nameRoot+'THX'
+        self.matTHYName= nameRoot+'THY'
+        self.matTHZName= nameRoot+'THZ'
+        self.materials.extend([self.matXName, self.matYName, self.matZName])
+        self.materials.extend([self.matTHXName, self.matTHYName, self.matTHZName])
+        # Material objects.
+        self.matKX= typical_materials.defElasticMaterial(preprocessor, self.matXName, self.getKhoriz())
+        self.matKY= typical_materials.defElasticMaterial(preprocessor, self.matYName, self.getKhoriz())
+        self.matKZ= typical_materials.defElasticMaterial(preprocessor, self.matZName, self.getKvert())
+        self.matKTHX= typical_materials.defElasticMaterial(preprocessor, self.matTHXName, self.getKrotationLintelAxis())
+        self.matKTHY= typical_materials.defElasticMaterial(preprocessor, self.matTHYName, self.getKrotationBridgeAxis())
+        self.matKTHZ= typical_materials.defElasticMaterial(preprocessor, self.matTHZName, self.getKrotationVerticalAxis())
 
-    def putBetweenNodes(self,modelSpace,iNodA, iNodB, iElem):
+    def putBetweenNodes(self,modelSpace,iNodA, iNodB):
         ''' Puts the bearing between the nodes.
 
         Args:
@@ -151,9 +151,8 @@ class ElastomericBearing(Bearing):
                 of DOFs.
             iNodA (int): first node identifier (tag).
             iNodB (int): second node identifier (tag).
-            iElem (int): new zero length elem identifier (tag).
         '''
-        modelSpace.setBearingBetweenNodes(iNodA,iNodB,iElem,self.materials)
+        return modelSpace.setBearingBetweenNodes(iNodA,iNodB,self.materials)
 
 # Points that define the Teflon coefficient of friction of
 # from the mean compressive stress
@@ -167,14 +166,15 @@ yT= [0.08,0.06,0.04,0.03,0.025,0.024]
 class PTFEPotBearing(Bearing):
     """PTFE slide bearing.
 
+        Attibutes:
+            :d: (float) Pot diameter.
+
     """
     teflonMuTable= scipy.interpolate.interp1d(xT,yT)
 
     def __init__(self,d):
         """Class constructor.
 
-        Args:
-            d (float): Pot diameter.
 
         """
         super(PTFEPotBearing,self).__init__()
@@ -191,68 +191,70 @@ class PTFEPotBearing(Bearing):
         '''
         return self.teflonMuTable(35e6)*math.pi*(self.d/2.0)**2*35e6/20e-3
 
-    def defineMaterials(self,preprocessor,matKX,matKY):
+    def defineMaterials(self,preprocessor):
         '''Define the materials to modelize the pot (Teflon).
 
         Args:
-            preprocessor (:obj:'Preprocessor'): preprocessor to use.
-            matKX (str): name for the uniaxial material in direction X.
-            matKY (str): name for the uniaxial material in direction Y.
+            :preprocessor: (:obj:'Preprocessor') preprocessor to use.
+            :matKX: (str) name for the uniaxial material in direction X.
+            :matKY: (str) name for the uniaxial material in direction Y.
         '''
-        self.materials.extend([matKX, matKY])
-        if(matKX!=None):
-          self.matXName= matKX
-          self.matX= typical_materials.defElasticMaterial(preprocessor, self.matXName,self.getHorizontalStiffness())
-        if(matKY!=None):
-          self.matYName= matKY
-          self.matY= typical_materials.defElasticMaterial(preprocessor, self.matYName,self.getHorizontalStiffness())
+        self.materialLoader= preprocessor.getMaterialLoader
+        # Material names.
+        nameRoot= 'pot'+str(self.id)
+        self.matXName= nameRoot+'X'
+        self.matYName= nameRoot+'Y'
+        self.materials.extend([self.matXName, self.matYName])
+        # Material objects.
+        self.matKX= typical_materials.defElasticMaterial(preprocessor, self.matXName, self.getHorizontalStiffness())
+        self.matKY= typical_materials.defElasticMaterial(preprocessor, self.matYName, self.getHorizontalStiffness())
 
-    def putBetweenNodes(self,modelSpace,iNodA, iNodB, iElem):
+    def putBetweenNodes(self,modelSpace,iNodA, iNodB):
         ''' Puts the bearing between the nodes.
 
         Args:
-            modelSpace (:obj:'PredefinedSpace'): space dimension and number
+            :modelSpace: (:obj:'PredefinedSpace') space dimension and number
                 of DOFs.
-            iNodA (int): first node identifier (tag).
-            iNodB (int): second node identifier (tag).
-            iElem (int): new zero length elem identifier (tag).
+            :iNodA: (int) first node identifier (tag).
+            :iNodB: (int) second node identifier (tag).
         '''
-        modelSpace.setBearingBetweenNodes(iNodA,iNodB,iElem,self.materials)
+        newElement= modelSpace.setBearingBetweenNodes(iNodA,iNodB,self.materials)
         eDofs= modelSpace.constraints.newEqualDOF(iNodA,iNodB,xc.ID([2]))
+        return newElement
 
-    def putOnXBetweenNodes(self,modelSpace,iNodA, iNodB, iElem):
+    def putOnXBetweenNodes(self,modelSpace,iNodA, iNodB):
         ''' Puts the bearing between the nodes only in direction X.
 
         Args:
-            modelSpace (:obj:'PredefinedSpace'): space dimension and number
+            :modelSpace: (:obj:'PredefinedSpace') space dimension and number
                 of DOFs.
-            iNodA (int): first node identifier (tag).
-            iNodB (int): second node identifier (tag).
-            iElem (int): new zero length elem identifier (tag).
+            :iNodA: (int) first node identifier (tag).
+            :iNodB: (int) second node identifier (tag).
         '''
-        modelSpace.setBearingBetweenNodes(iNodA,iNodB,iElem,[self.matXName])
+        newElement= modelSpace.setBearingBetweenNodes(iNodA,iNodB,[self.matXName])
         eDofs= modelSpace.constraints.newEqualDOF(iNodA,iNodB,xc.ID([1,2]))
+        return newElement
 
-    def putOnYBetweenNodes(self,modelSpace,iNodA, iNodB, iElem):
+    def putOnYBetweenNodes(self,modelSpace,iNodA, iNodB):
         ''' Puts the bearing between the nodes only in direction Y.
 
         Args:
-            modelSpace (:obj:'PredefinedSpace'): space dimension and number
+            :modelSpace: (:obj:'PredefinedSpace') space dimension and number
                 of DOFs.
-            iNodA (int): first node identifier (tag).
-            iNodB (int): second node identifier (tag).
-            iElem (int): new zero length elem identifier (tag).
+            :iNodA: (int) first node identifier (tag).
+            :iNodB: (int) second node identifier (tag).
         '''
-        modelSpace.setBearingBetweenNodes(iNodA,iNodB,iElem,[None,self.matYName])
+        newElement= modelSpace.setBearingBetweenNodes(iNodA,iNodB,[None,self.matYName])
         eDofs= modelSpace.constraints.newEqualDOF(iNodA,iNodB,xc.ID([0,2]))
+        return newElement
 
 def get_reaction_on_pot(preprocessor,iElem,inclInertia= False):
     ''' Return the element reaction.
 
         Args:
-            preprocessor (:obj:'Preprocessor'): preprocessor to use.
-            iElem (int): new zero length elem identifier (tag).
-            inclInertia (bool): true if the reaction must include inertia forces.
+            :preprocessor: (:obj:'Preprocessor') preprocessor to use.
+            :iElem: (int) new zero length elem identifier (tag).
+            :inclInertia: (bool) true if the reaction must include inertia forces.
     '''
     nodos= preprocessor.getNodeLoader
     nodos.calculateNodalReactions(inclInertia)

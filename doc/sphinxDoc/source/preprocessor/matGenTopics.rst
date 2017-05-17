@@ -157,18 +157,10 @@ paramGenericSection
     :undoc-members:
     :show-inheritance:
 
-apoyosNeopreno
+Bridge bearings
 --------------
 
-.. automodule:: materials.apoyosNeopreno
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-apoyosPot
----------
-
-.. automodule:: materials.apoyosPot
+.. automodule:: materials.bridge_bearings
     :members:
     :undoc-members:
     :show-inheritance:

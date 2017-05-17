@@ -36,15 +36,15 @@ prueba= xc.ProblemaEF()
 preprocessor=  prueba.getPreprocessor
 
 neop= bridge_bearings.ElastomericBearing(G,a,b,e)
-neop.defineMaterials(preprocessor,"neopX","neopY","neopZ","neopTHX","neopTHY","neopTHZ")
+neop.defineMaterials(preprocessor)
 
 materiales= preprocessor.getMaterialLoader
-KX= materiales.getMaterial("neopX").E
-KY= materiales.getMaterial("neopY").E
-KZ= materiales.getMaterial("neopZ").E
-KTHX= materiales.getMaterial("neopTHX").E
-KTHY= materiales.getMaterial("neopTHY").E
-KTHZ= materiales.getMaterial("neopTHZ").E
+KX= neop.getMaterial(0).E
+KY= neop.getMaterial(1).E
+KZ= neop.getMaterial(2).E
+KTHX= neop.getMaterial(3).E
+KTHY= neop.getMaterial(4).E
+KTHZ= neop.getMaterial(5).E
 
 nodes= preprocessor.getNodeLoader
 # Problem type
@@ -55,7 +55,7 @@ nod2= nodes.newNodeXYZ(1,1,1)
 
 
 
-neop.putBetweenNodes(modelSpace, nod1.tag,nod2.tag,1)
+zl= neop.putBetweenNodes(modelSpace, nod1.tag,nod2.tag)
 
 ''' Se definen nodos en los puntos de aplicación de
     la carga. Puesto que no se van a determinar tensiones
@@ -64,12 +64,12 @@ neop.putBetweenNodes(modelSpace, nod1.tag,nod2.tag,1)
 # Constraints
 constraints= preprocessor.getConstraintLoader
 #
-spc= constraints.newSPConstraint(1,0,0.0) # Nodo 1
-spc= constraints.newSPConstraint(1,1,0.0)
-spc= constraints.newSPConstraint(1,2,0.0)
-spc= constraints.newSPConstraint(1,3,0.0) # Nodo 2
-spc= constraints.newSPConstraint(1,4,0.0)
-spc= constraints.newSPConstraint(1,5,0.0)
+spc= constraints.newSPConstraint(nod1.tag,0,0.0) # Nodo 1
+spc= constraints.newSPConstraint(nod1.tag,1,0.0)
+spc= constraints.newSPConstraint(nod1.tag,2,0.0)
+spc= constraints.newSPConstraint(nod1.tag,3,0.0)
+spc= constraints.newSPConstraint(nod1.tag,4,0.0)
+spc= constraints.newSPConstraint(nod1.tag,5,0.0)
 
 
 # Loads definition
@@ -80,7 +80,7 @@ ts= casos.newTimeSeries("constant_ts","ts")
 casos.currentTimeSeries= "ts"
 #Load case definition
 lp0= casos.newLoadPattern("default","0")
-lp0.newNodalLoad(2,xc.Vector([FX,FY,FZ,MX,MY,MZ]))
+lp0.newNodalLoad(nod2.tag,xc.Vector([FX,FY,FZ,MX,MY,MZ]))
 #We add the load case to domain.
 casos.addToDomain("0")
 
@@ -101,7 +101,6 @@ RZ= nod1.getReaction[2]
 
 
 elementos= preprocessor.getElementLoader
-zl= elementos.getElement(1)
 
 ''' 
 print "Tipo elemento: ",getTipoElemento

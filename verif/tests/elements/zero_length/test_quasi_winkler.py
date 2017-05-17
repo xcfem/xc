@@ -77,7 +77,6 @@ l2.genMesh(xc.meshDir.I)
 
 idNodoFijo= 0
 idNodoCentral= 0
-idElem= preprocessor.getElementLoader.defaultTag
 
 
 
@@ -90,18 +89,15 @@ modelSpace.fixNode00F(pt3.getTagNode)
 # Apoyamos los interiores.
 l1InteriorNodes= line_utils.LineWrapper(l1).getInteriorNodes()
 for n in l1InteriorNodes:
-  idNodoFijo= modelSpace.setUniaxialBearing2D(n.tag,idElem,"kY",[0,1])
-  idElem+= 1
+  idNodoFijo, idElem= modelSpace.setUniaxialBearing2D(n.tag,"kY",[0,1])
 
 l1LastNode= line_utils.LineWrapper(l1).getLastNode()
 idNodoCentral= l1LastNode.tag
-idNodoFijo= modelSpace.setUniaxialBearing2D(l1LastNode.tag,idElem,"kY",[0,1])
-idElem+= 1
+idNodoFijo, idElem= modelSpace.setUniaxialBearing2D(l1LastNode.tag,"kY",[0,1])
 
 l2InteriorNodes= line_utils.LineWrapper(l2).getInteriorNodes()
 for n in l2InteriorNodes:
-  idNodoFijo= modelSpace.setUniaxialBearing2D(n.tag,idElem,"kY",[0,1])
-  idElem+= 1
+  idNodoFijo, idElem= modelSpace.setUniaxialBearing2D(n.tag,"kY",[0,1])
 
 
 # Loads definition

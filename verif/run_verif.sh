@@ -99,7 +99,7 @@ python tests/elements/zero_length/test_signo_deformaciones02.py
 python tests/elements/zero_length/test_signo_deformaciones03.py
 python tests/elements/zero_length/test_signo_deformaciones04.py
 python tests/elements/zero_length/test_winkler.py
-python tests/elements/zero_length/test_cuasi_winkler.py
+python tests/elements/zero_length/test_quasi_winkler.py
 echo "$BLEU" "  Plane elasticity elements tests." "$NORMAL"
 python tests/elements/plane/test_tri31.py
 python tests/elements/plane/test_four_node_quad_01.py

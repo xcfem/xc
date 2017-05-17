@@ -33,7 +33,7 @@ ky= typical_materials.defElasticMaterial(preprocessor, "ky",KY)
 kz= typical_materials.defElasticMaterial(preprocessor, "kz",KZ)
 
 
-tagNodoFijo= modelSpace.setBearing(nod.tag,7,["kx","ky","kz"])
+tagNodoFijo, newElemenTag= modelSpace.setBearing(nod.tag,["kx","ky","kz"])
   
 # Constraints
 constraints= preprocessor.getConstraintLoader

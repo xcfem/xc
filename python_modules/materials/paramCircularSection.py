@@ -37,7 +37,7 @@ class CircularSection(sp.sectionProperties):
     return 2*self.Iy()
   def alphaY(self):
     ''':returns: distorsion coefficient with respect to local Y axis
-       (see Oñate, Cálculo de estructuras por el MEF pág. 122)
+       (see Oñate, Cálculo de estructuras por el MEF page 122)
      '''
     if self.Rint==0:
       alpha=6.0/7.0

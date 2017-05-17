@@ -68,28 +68,3 @@ class sccRectang(object):
     reg.pMax= geom.Pos2d(self.h/2.0,self.b/2.0)
     return reg
 
-#    '''
-# Graba en el archivo cuyo nombre se pasa como parámetro la
-#       ley de tensiones correspondiente al eje y de la sección
-# '''
-#    def leyTensY(nmbFile):
-#      {
-#        y1= -h/2
-#        y2= h/2
-#        incr= (y2-y1)/scc10x20.nDivJK 
-#        \nuevo_archivo_salida[ley]{nmbFile}
-#           for j in range(0,scc10x20.nDivJK+1):
-#            \bucle
-#              {
-#                y= y1+j*incr
-#                iFibra= INearest(y,0.0)
-#                \fibra[iFibra]
-#                  {
-#                    ley.write(y," ",material.stress,"\n")
-#                  }
-#              }
-#          }             
-#        \cierra_archivo_salida{ley}
-#      }
- 
-#  }

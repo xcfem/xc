@@ -38,15 +38,14 @@ kz= typical_materials.defElasticMaterial(preprocessor, "kz",KZ)
 
 
 nodosApoyados= [1]
-elementosApoyo= [7]
 
-nodosFijos= list()
+fixedNodes= list()
 sz= len(nodosApoyados)
 for i in range(0,sz):
   nodeTag= nodosApoyados[i]
-  elemTag= elementosApoyo[i]
-  nodosFijos.append(modelSpace.setBearing(nodeTag,elemTag,["kx","ky","kz"]))
-tagNodoFijo= nodosFijos[0]
+  fixedNodeTag, elemTag= modelSpace.setBearing(nodeTag,["kx","ky","kz"])
+  fixedNodes.append(fixedNodeTag)
+tagNodoFijo= fixedNodes[0]
 
 # Constraints
 constraints= preprocessor.getConstraintLoader

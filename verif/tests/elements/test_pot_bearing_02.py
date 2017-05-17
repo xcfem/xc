@@ -31,24 +31,23 @@ diamPot= 993e-3
 prueba= xc.ProblemaEF()
 preprocessor=  prueba.getPreprocessor
 pot= bridge_bearings.PTFEPotBearing(diamPot)
-pot.defineMaterials(preprocessor,"teflonK",None)
-teflon= pot.matX
+pot.defineMaterials(preprocessor)
 
 nodes= preprocessor.getNodeLoader
 modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
 nodes.defaultTag= 1 #First node number.
-nod= nodes.newNodeXYZ(1,1,1)
-nod= nodes.newNodeXYZ(1,1,1)
+nod1= nodes.newNodeXYZ(1,1,1)
+nod2= nodes.newNodeXYZ(1,1,1)
 
 
 
-pot.putOnXBetweenNodes(modelSpace, 1,2,1)
+newElement= pot.putOnXBetweenNodes(modelSpace, nod1.tag,nod2.tag)
 
 # Constraints
 modelSpace.fixNode000_000(1)
-spc= modelSpace.constraints.newSPConstraint(2,3,0.0) # Nodo 2
-spc= modelSpace.constraints.newSPConstraint(2,4,0.0)
-spc= modelSpace.constraints.newSPConstraint(2,5,0.0)
+spc= modelSpace.constraints.newSPConstraint(nod2.tag,3,0.0) # Nodo 2
+spc= modelSpace.constraints.newSPConstraint(nod2.tag,4,0.0)
+spc= modelSpace.constraints.newSPConstraint(nod2.tag,5,0.0)
 
 
 # Loads definition
@@ -61,7 +60,7 @@ ts= casos.newTimeSeries("constant_ts","ts")
 casos.currentTimeSeries= "ts"
 #Load case definition
 lp0= casos.newLoadPattern("default","0")
-lp0.newNodalLoad(2,xc.Vector([FX,FY,FZ,MX,MY,MZ]))
+lp0.newNodalLoad(nod2.tag,xc.Vector([FX,FY,FZ,MX,MY,MZ]))
 #We add the load case to domain.
 casos.addToDomain("0")
 
@@ -70,7 +69,7 @@ casos.addToDomain("0")
 analisis= predefined_solutions.simple_static_linear(prueba)
 result= analisis.analyze(1)
 
-R= bridge_bearings.get_reaction_on_pot(preprocessor, 1)
+R= bridge_bearings.get_reaction_on_pot(preprocessor, newElement.tag)
 
 ratio1= abs(R[0]+FX)/FX
 ratio2= abs(R[1]+FY)/FY
