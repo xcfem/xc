@@ -33,8 +33,8 @@ class_<XC::BidimMecLoad, bases<XC::BidimLoad>, boost::noncopyable >("BidimMecLoa
   ;
 
 class_<XC::ShellMecLoad, bases<XC::BidimMecLoad>, boost::noncopyable >("ShellMecLoad", no_init)
-  .add_property("getDimVectorFuerza", &XC::ShellMecLoad::getDimVectorFuerza)
-  .add_property("getDimVectorMomento", &XC::ShellMecLoad::getDimVectorMomento)
+  .add_property("getForceVectorDimension", &XC::ShellMecLoad::getForceVectorDimension)
+  .add_property("getMomentVectorDimension", &XC::ShellMecLoad::getMomentVectorDimension)
   .def("getLocalForce",&XC::ShellMecLoad::getLocalForce,"Returns local coordinates or force vector.")
   .def("getLocalMoment",&XC::ShellMecLoad::getLocalMoment,"Returns local coordinates of bending moment vector.")
   .def("getLocalForces",make_function(&XC::ShellMecLoad::getLocalForces, return_internal_reference<>() ))

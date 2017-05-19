@@ -55,40 +55,40 @@ class EsfBeamColumn3d: public Vector
     //! @brief Returns the axil.
     inline double &N(void)
       { return (*this)[0]; }
-    //! @brief Return the fuerza axil que se ejerce sobre la barra en el extremo dorsal.
+    //! @brief Return the axial force in the back end.
     inline double AN1(void) const
       { return -N(); }
-    //! @brief Return the fuerza axil que se ejerce sobre la barra en el extremo frontal.
+    //! @brief Return the axial force in the front end.
     inline double AN2(void) const
       { return N(); }
-    //! @brief Returns the momento z en el extremo dorsal.
+    //! @brief Returns the moment about z in the back end.
     inline const double &Mz1(void) const
       { return (*this)[1]; }
-    //! @brief Returns the momento z en el extremo dorsal.
+    //! @brief Returns the moment about z in the back end.
     inline double &Mz1(void)
       { return (*this)[1]; }
-    //! @brief Returns the momento z en el extremo frontal.
+    //! @brief Returns the moment about z in the front end.
     inline const double &Mz2(void) const
       { return (*this)[2]; }
-    //! @brief Returns the momento z en el extremo frontal.
+    //! @brief Returns the moment about z in the front end.
     inline double &Mz2(void)
       { return (*this)[2]; }
-    //! @brief Returns the cortante Vy.
+    //! @brief Returns shear along y axis.
     inline double Vy(const double &L) const
       { return (Mz1()+Mz2())/L; }
-    //! @brief Returns the momento y en el extremo dorsal.
+    //! @brief Returns the moment about y in the back end.
     inline const double &My1(void) const
       { return (*this)[3]; }
-    //! @brief Returns the momento y en el extremo dorsal.
+    //! @brief Returns the moment about y in the back end.
     inline double &My1(void)
       { return (*this)[3]; }
-    //! @brief Returns the momento y en el extremo frontal.
+    //! @brief Returns the moment about y in the front end.
     inline const double &My2(void) const
       { return (*this)[4]; }
-    //! @brief Returns the momento y en el extremo frontal.
+    //! @brief Returns the moment about y in the front end.
     inline double &My2(void)
       { return (*this)[4]; }
-    //! @brief Returns the cortante Vy.
+    //! @brief Returns the shear along z.
     inline double Vz(const double &L) const
       { return -((My1()+My2())/L); }
     //! @brief Returns the torsor.
@@ -97,10 +97,10 @@ class EsfBeamColumn3d: public Vector
     //! @brief Returns the torsor.
     inline double &T(void)
       { return (*this)[5]; }
-    //! @brief Returns the torsor en el extremo dorsal.
+    //! @brief Returns the torsor in the back end.
     inline double T1(void) const
       { return -T(); }
-    //! @brief Returns the torsor en el extremo frontal.
+    //! @brief Returns the torsor in the front end.
     inline double T2(void) const
       { return T(); }
   };

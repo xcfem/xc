@@ -186,7 +186,7 @@ class PTFEPotBearing(Bearing):
         the spring reaction equals the force of friction.
 
         sg_media= 35 MPa mean compressive stress.
-        mov= 20e-3 Desplazamiento para el que se alcanza la fuerza de rozamiento.
+        mov= 20e-3 Displacement when the friction force is reached.
 
         '''
         return self.teflonMuTable(35e6)*math.pi*(self.d/2.0)**2*35e6/20e-3

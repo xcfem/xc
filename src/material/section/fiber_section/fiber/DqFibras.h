@@ -115,7 +115,7 @@ class DqFibras : public EntCmd, public std::deque<Fiber *>
     double getMy(const double &z0= 0.0) const;
     double getExcentricidadMz(const double &y0= 0.0) const;
     double getExcentricidadMy(const double &z0= 0.0) const;
-    Vector2d getVectorMomento(const double &y0=0.0,const double &z0=0.0) const;
+    Vector2d getMomentVector(const double &y0=0.0,const double &z0=0.0) const;
     Pos2d getPosResultante(const double &y0=0.0,const double &z0=0.0) const;
     Recta2d getFibraNeutra(void) const;
 
@@ -216,7 +216,7 @@ class DqFibras : public EntCmd, public std::deque<Fiber *>
     double getSumaAreas(const double &factor= 1.0) const;
     double getAreaHomogenizedSection(const double &E0) const;
     const Vector &getCdgHomogenizedSection(const double &E0) const;
-    //Momento de inercia.
+    //Moments of inertia.
     double getIz(const double &factor= 1.0,const double &y0= 0.0) const;
     double getIy(const double &factor= 1.0,const double &z0= 0.0) const;
     double getPyz(const double &factor= 1.0,const double &y0= 0.0,const double &z0= 0.0) const;
@@ -241,7 +241,7 @@ class DqFibras : public EntCmd, public std::deque<Fiber *>
     double getSPosHomogenizedSection(const double &E0,const Semiplano2d &sp) const;
     double getSNegHomogenizedSection(const double &E0,const Semiplano2d &sp) const;
     
-    //! @brief Returns the momento de inercia polar respecto a G.
+    //! @brief Returns the polar moment of inertia with respecto to G.
     inline double getIpolar(const double &factor= 1.0) const
       { return getIz(factor,yCDG)+getIy(factor,zCDG); }
     //! @brief Returns the radio de giro respecto al eje paralelo al z que pasa por el CDG.

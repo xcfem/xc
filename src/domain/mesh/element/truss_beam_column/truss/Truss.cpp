@@ -473,8 +473,8 @@ int XC::Truss::addLoad(ElementalLoad *theLoad, double loadFactor)
     return 0;
   }
 
-//! @brief Adds las fuerzas de inercia.
-int XC::Truss::addInertiaLoadToUnbalance(const XC::Vector &accel)
+//! @brief Adds inertia forces.
+int XC::Truss::addInertiaLoadToUnbalance(const Vector &accel)
   {
     const double rho= getRho();
     // check for a quick return

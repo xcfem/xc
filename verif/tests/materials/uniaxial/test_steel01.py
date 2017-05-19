@@ -6,7 +6,7 @@ E= 2.1e6 # Young modulus of the steel.
 l= 1 # Distancia entre nodes
 epsy= fy/E # Deformación para la que se produce la cedencia
 D= 1.5*epsy # Displacement magnitude impuesto
-F= 1.05*E*epsy # Fuerza a aplicar.
+F= 1.05*E*epsy # Force to apply.
 Nsteps= 10 # number of analysis steps.
 
 import math

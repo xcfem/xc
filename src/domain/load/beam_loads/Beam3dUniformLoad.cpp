@@ -259,12 +259,12 @@ void  XC::Beam3dUniformLoad::Print(std::ostream &s, int flag)
     s << "  Elements acted on: " << getElementTags();
   }
 
-//! @brief Return the dimension del vector fuerza.
-size_t XC::Beam3dUniformLoad::getDimVectorFuerza(void) const
+//! @brief Return the dimension of the force vector.
+size_t XC::Beam3dUniformLoad::getForceVectorDimension(void) const
   { return 3; }
 
-//! @brief Return the dimension del vector momento.
-size_t XC::Beam3dUniformLoad::getDimVectorMomento(void) const
+//! @brief Return the dimension of the bending moment vector.
+size_t XC::Beam3dUniformLoad::getMomentVectorDimension(void) const
   { return 3; }
 
 //! @brief Returns force expressed in local coordinates.

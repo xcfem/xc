@@ -87,8 +87,8 @@ elem1.getResistingForce()
 ratio= (tInic*A-elem1.getN())/(tInic*A)
 
 '''
-# print{"fuerza= ",getN
-print "fuerza pretensado= ",(tInic*A)
+# print{"force= ",getN
+print "prestressinf force= ",(tInic*A)
 print "deformación= ",getStrain
 print "ratio= ",(ratio)}
 '''

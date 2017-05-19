@@ -8,9 +8,9 @@ def escribeCargasModo(preprocessor,fName, iModo, aceleraciones):
   nodos= preprocessor.getNodeLoader
   for n in nodos:
     if(n.tag>0):
-      fuerza_nodo= getEquivalentStaticLoad(iModo,aceleraciones[iModo-1])
+      node_force= getEquivalentStaticLoad(iModo,aceleraciones[iModo-1])
       fName.write("\\nodal_load{ \\nod{",tag,"}")
-      fName.write(" \\val{",fuerza_nodo,"} }\n")
+      fName.write(" \\val{",node_force,"} }\n")
 
   fName.write("\n\n\# Debidas a masas en elementos.)\n")
   elementos= preprocessor.getElementLoader
@@ -18,9 +18,9 @@ def escribeCargasModo(preprocessor,fName, iModo, aceleraciones):
     if(e.tag>0):
       numNodes= e.getNumExternalNodes
       tagsNodos= e.getTagsNodos
-      fuerzas= getEquivalentStaticNodalLoads(iModo,aceleraciones[iModo-1])
-      fuerza_nodo= 0
+      forces= getEquivalentStaticNodalLoads(iModo,aceleraciones[iModo-1])
+      node_force= 0
       for iNod in range(0,Nod<numNodes):
         fName.write("\\nodal_load{ \\nod{",tagsNodos[iNod],"}")
-        fuerza_nodo= getFila(fuerzas,iNod+1)
-        fName.write(" \\val{",fuerza_nodo,"} }\n")
+        node_force= getFila(forces,iNod+1)
+        fName.write(" \\val{",node_force,"} }\n")

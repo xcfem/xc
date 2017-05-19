@@ -35,11 +35,11 @@ namespace XC {
 //! @ingroup MatUnx
 //
 //! @brief Internal parameters for a p-y material.
-  class InternalParamsA: public MovableObject
+class InternalParamsA: public MovableObject
   {
   protected:
-    double v; //!< Desplazamiento.
-    double R; //!< Fuerza.
+    double v; //!< Displacement.
+    double R; //!< Force.
     double Tang; //!< Combined tangent
 
     int sendData(CommParameters &);

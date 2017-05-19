@@ -395,10 +395,10 @@ int XC::Spring::addLoad(ElementalLoad *theLoad, double loadFactor)
     return -1;
   }
 
-//! @brief Adds las fuerzas de inercia.
-int XC::Spring::addInertiaLoadToUnbalance(const XC::Vector &accel)
+//! @brief Adds inertia forces.
+int XC::Spring::addInertiaLoadToUnbalance(const Vector &accel)
   {
-    const double M= getRho(); //Aqui rho es la masa concentrada.
+    const double M= getRho(); //Here rho is the concentrated mass.
     // check for a quick return
     if(M==0.0) return 0;
 

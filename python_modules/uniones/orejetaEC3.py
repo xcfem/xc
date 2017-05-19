@@ -67,7 +67,7 @@ def getMSolicBulonEC3(F, b, a, c):
   Dimensionamiento de una orejeta según el apartado 3.13 del EC3 parte 1_8
    Esta función devuelve el momento máximo que solicita al bulón a partir de las
    dimensiones de la pieza en horquilla y la pieza en orejeta. (ver figura 3.11)
-   F: Valor de cálculo de la fuerza que solicita la unión.
+   F: Design value of the force that loads the joint.
    b: Espesor de la chapa de la orejeta.
    a: Espesor de las chapas de las horquillas.
    c: Huelgo entre cada lado de la horguilla y la orejeta.

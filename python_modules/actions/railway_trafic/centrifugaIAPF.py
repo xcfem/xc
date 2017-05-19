@@ -1,11 +1,16 @@
 # -*- coding: utf-8 -*-
 from __future__ import division
 
-# Macros para facilitar el cálculo de la fuerza centrífuga según la IAPF
+# Functions to compute centrifugal forces according to IAPF.
 
 
 def CoefReductorCentrifugaIAPF(v, Lf):
-  '''Devuelve el coeficiente f reductor de la fuerza centrífuga (según expr. 2.3. IAPF)'''
+  '''Returns the reduction factor of the centrifugal force
+     (according to expr. 2.3. IAPF)
+
+  :param v: speed (m/s).
+  :param Lf: 
+  '''
   vkmhIAPF= v*3.6
   coefFIAPF= 0.0
   if(vkmhIAPF<120):

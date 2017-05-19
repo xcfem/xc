@@ -53,15 +53,15 @@ std::string XC::ShellUniformLoad::Categoria(void) const
 int XC::ShellUniformLoad::getType(void)
   { return LOAD_TAG_ShellUniformLoad; }
 
-//! @brief Return the dimension del vector fuerza.
-size_t XC::ShellUniformLoad::getDimVectorFuerza(void) const
+//! @brief Return the dimension of the force vector.
+size_t XC::ShellUniformLoad::getForceVectorDimension(void) const
   { return 3; }
 
-//! @brief Return the dimension del vector momento.
-size_t XC::ShellUniformLoad::getDimVectorMomento(void) const
+//! @brief Return the dimension of the moment vector.
+size_t XC::ShellUniformLoad::getMomentVectorDimension(void) const
   { return 3; }
 
-//! @brief Returns the componentes de los vectores fuerza.
+//! @brief Returns the components of the force vectors.
 const XC::Matrix &XC::ShellUniformLoad::getLocalForces(void) const
   {
     static Matrix retval;
@@ -76,7 +76,7 @@ const XC::Matrix &XC::ShellUniformLoad::getLocalForces(void) const
     return retval;
   }
 
-//! @brief Returns the componentes de los vectores momento.
+//! @brief Returns the components of the moment vectors.
 const XC::Matrix &XC::ShellUniformLoad::getLocalMoments(void) const
   {
     static Matrix retval;

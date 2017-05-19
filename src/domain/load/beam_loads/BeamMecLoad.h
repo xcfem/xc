@@ -70,8 +70,8 @@ class BeamMecLoad : public BeamLoad
     void addElasticDeformations(const double &L,const CrossSectionProperties3d &ctes_scc,const double &lpI,const double &lpJ,const double &loadFactor,FVector &v0);
     void addElasticDeformations(const double &L,const CrossSectionProperties2d &ctes_scc,const double &lpI,const double &lpJ,const double &loadFactor,FVector &v0);
 
-    virtual size_t getDimVectorFuerza(void) const;
-    virtual size_t getDimVectorMomento(void) const;
+    virtual size_t getForceVectorDimension(void) const;
+    virtual size_t getMomentVectorDimension(void) const;
     virtual Vector getLocalForce(void) const;
     virtual Vector getLocalMoment(void) const;
     virtual const Matrix &getLocalForces(void) const;

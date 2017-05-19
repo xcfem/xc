@@ -101,7 +101,7 @@ const Triedro3d *XC::InteractionDiagram::BuscaPtrTriedro(const Pos3d &p) const
           retval= *i;
           break;
         }
-    if(!retval) //No lo encuentra, lo intentamos por fuerza bruta.
+    if(!retval) //Not found, so brute-force search.
       {
         for(XC::InteractionDiagram::const_iterator i= begin();i!=end();i++)
           {
@@ -253,7 +253,7 @@ double XC::InteractionDiagram::FactorCapacidad(const Pos3d &esf_d) const
     double retval= 1e6;
     assert(rMax>0.0);
     static const Pos3d O= Pos3d(0.0,0.0,0.0);
-    const double d= dist(O,esf_d); //Distancia desde la terna de esfuerzos al origen.
+    const double d= dist(O,esf_d); //Distance from the internal force triplet to origin.
     const double umbralMax= rMax*10.0;
     if(d<mchne_eps_dbl) //Point is almost at origin.
       retval= 0.0;//Return maximum possible capacity factor.

@@ -157,7 +157,7 @@ double XC::SectionMassProperties::getIHomogenizedSection(const double &E0,const 
     return Iij + getAreaHomogenizedSection(E0) * pos_local(i) * pos_local(j);
   }
 
-//! @brief Returns the momento polar de inercia with respect to the point o.
+//! @brief Returns the polar moment of inertia with respect to the point o.
 double XC::SectionMassProperties::getIOHomogenizedSection(const double &E0,const Pos2d &o) const
   { return (getIHomogenizedSection(E0,1,1,o)+getIHomogenizedSection(E0,2,2,o)+getIHomogenizedSection(E0,3,3,o))/2; }
 
@@ -314,7 +314,7 @@ double XC::SectionMassProperties::getIGrossSection(const unsigned short int &i,c
     return Iij + getAreaGrossSection() * pos_local(i) * pos_local(j);
   }
 
-//! @brief Returns the momento polar de inercia with respect to the point o.
+//! @brief Returns the polar moment of inertia with respect to the point o.
 double XC::SectionMassProperties::getIOGrossSection(const Pos2d &o) const
   { return (getIGrossSection(1,1,o)+getIGrossSection(2,2,o)+getIGrossSection(3,3,o))/2; }
 

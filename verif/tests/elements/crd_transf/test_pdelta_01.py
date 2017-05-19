@@ -31,9 +31,9 @@ H= 100 # Altura del pórtico expressed in inches
 Es= 29e6 # Young modulus (psi)
 area= 1 # Área de la sección expressed in in2
 Iz= 1/12.0 # Momento de inercia de la sección expressed in in4
-P= 1000 # Carga (pounds)-fuerza.
-nDivLineas= 8 # Carga (pounds)-fuerza.
-offset= 2*B # Carga (pounds)-fuerza.
+P= 1000 # Load (force-pounds).
+nDivLineas= 8 # Load (force-pounds).
+offset= 2*B # Load (force-pounds).
 
 import xc_base
 import geom

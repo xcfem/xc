@@ -161,7 +161,7 @@ double XC::RegionSecc::getI(const Pos2d &O,const Vector &e) const
 double XC::RegionSecc::getI(const unsigned short int i,const unsigned short int j,const Pos2d &o) const
   { return getPolygon().I(i+1,j+1,o); }
 
-//! @brief Returns the momento polar de inercia with respect to the point o.
+//! @brief Returns the polar moment of inertia with respect to the point o.
 double XC::RegionSecc::getIO(const Pos2d &o)
   { return getPolygon().IO(o); }
 

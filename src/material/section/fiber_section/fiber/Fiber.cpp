@@ -77,8 +77,8 @@ XC::Response *XC::Fiber::setResponse(const std::vector<std::string> &argv, Infor
 int XC::Fiber::getResponse(int responseID, Information &info)
   { return -1; }
 
-//! @brief Return the fuerza con la que actúa la fibra.
-double XC::Fiber::getFuerza(void) const
+//! @brief Return the force response of the fiber.
+double XC::Fiber::getForce(void) const
   { 
     double retval= 0.0;
     if(isAlive())

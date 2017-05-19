@@ -306,16 +306,16 @@ const XC::Vector &XC::Element::getNodeResistingForce(const size_t &iNod) const
     return getNodeResistingComponents(iNod,rf);
   }
 
-//! @brief Returns the fuerza generalizada (incluyendo fuerzas de inercia)
-//! of the element sobre el nodo which index is being passed as parameter.
+//! @brief Returns the generalized force (including inertia forces)
+//! of the element over the node identified by the argument.
 const XC::Vector &XC::Element::getNodeResistingForceIncInertia(const size_t &iNod) const
   {
     const Vector &rf= getResistingForceIncInertia();
     return getNodeResistingComponents(iNod,rf);
   }
 
-//! @brief Returns the fuerza generalizada of the element sobre el nodo pointed
-//! by the parameter.
+//! @brief Returns the generalized force (including inertia forces)
+//! of the element over the node identified by the argument.
 const XC::Vector &XC::Element::getNodeResistingForce(const Node *ptrNod) const
   {
     const int iNodo= getNodePtrs().getIndiceNodo(ptrNod);
@@ -323,8 +323,8 @@ const XC::Vector &XC::Element::getNodeResistingForce(const Node *ptrNod) const
     return getNodeResistingForce(iNodo);
   }
 
-//! @brief Returns the fuerza generalizada (incluyendo fuerzas de inercia) of the element 
-//! over the node pointed by the parameter.
+//! @brief Returns the generalized force (including inertia forces)
+//! of the element over the node identified by the argument.
 const XC::Vector &XC::Element::getNodeResistingForceIncInertia(const Node *ptrNod) const
   {
     const int iNodo= getNodePtrs().getIndiceNodo(ptrNod);

@@ -25,7 +25,7 @@ def getPerdidaTensionAcortElasticoTendonPreteso(sigma_cp, Ep, Ecj):
              las reinforcement activas, producida por el pretensado una
              vez descontadas la pérdida por penetración de cuñas
    Ep: Módulo de deformación longitudinal de la reinforcement activa (190e9).
-   Ecj: Módulo de deformación longitudinal del hoirmigón en el momento
+   Ecj: Módulo de deformación longitudinal del hormigón en el momento
         de la transferencia. 
   '''
   return sigma_cp*Ep/Ecj

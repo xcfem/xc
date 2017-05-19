@@ -20,7 +20,7 @@ h= .1 # Espesor.
 L= 1.0 # Lado.
 I= 1/12.0*L*h**3 # Cross section moment of inertia (m4)
 dens= 1.33 # Densidad kg/m2.
-F= 1000 # Fuerza
+F= 1000 # Force
 
 
 # Problem type

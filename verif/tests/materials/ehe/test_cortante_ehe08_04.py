@@ -32,7 +32,7 @@ AsPas=1/4 #de area la reinforcement longitudinal pasiva traccionada anclada a un
 AsAct=1/8 #de area la reinforcement longitudinal activa traccionada anclada a una distancia mayor que el depth útil de la sección en estudio.
 Es=1000 #Elastic modulus of the steel de la reinforcement pasiva (AQUI FICTICIO).
 Ep=2000 #Elastic modulus of the steel de la reinforcement activa (AQUI FICTICIO).
-Fp=0 #Fuerza producida por el pretensado en la sección (positiva si es de tracción).
+Fp=0 #Prestressing force in the cross-section (positive if in tension).
 Ae=0.01 #Área encerrada por la línea media de la sección hueca eficaz.
 ue=1 #Perímetro de la línea media de la sección hueca eficaz.
 

@@ -73,12 +73,12 @@ XC::Beam3dPointLoad::Beam3dPointLoad(int tag)
 XC::Beam3dPointLoad::Beam3dPointLoad(void)
   :BeamPointLoad(0,LOAD_TAG_Beam3dPointLoad),Pz(0.0) {}
 
-//! @brief Return the dimension del vector fuerza.
-size_t XC::Beam3dPointLoad::getDimVectorFuerza(void) const
+//! @brief Return the dimension of the force vector.
+size_t XC::Beam3dPointLoad::getForceVectorDimension(void) const
   { return 3; }
 
-//! @brief Return the dimension del vector momento.
-size_t XC::Beam3dPointLoad::getDimVectorMomento(void) const
+//! @brief Return the dimension of the moment vector.
+size_t XC::Beam3dPointLoad::getMomentVectorDimension(void) const
   { return 3; }
 
 //! @brief Returns force expressed in local coordinates.

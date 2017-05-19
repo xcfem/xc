@@ -131,9 +131,9 @@ elem1.getResistingForce()
 ratio= (tInic*A-elem1.getN())/(tInic*A)
 
 '''
-print{"fuerza= ",getN
-print "fuerza pretensado= ",(tInic*A)
-print "deformación= ",getStrain
+print{"force= ",getN
+print "prestressing force= ",(tInic*A)
+print "strain= ",getStrain
 print "ratio= ",ratio
 '''
 from miscUtils import LogMessages as lmsg

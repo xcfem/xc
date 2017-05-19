@@ -177,26 +177,26 @@ class ElasticBeam3d : public ProtoBeam3d
       }
     inline double getAMz1(void)
       { //¡Warning! call "calc_resisting_force" before calling this method.
-        return q.Mz1(); //Momento z que se ejerce sobre la barra en su extremo dorsal.
+        return q.Mz1(); //Moment about z axis that is applied over the bar in its back end.
       }
     inline double getAMz2(void)
       { //¡Warning! call "calc_resisting_force" before calling this method.
-        return q.Mz2(); //Momento z que se ejerce sobre la barra en su extremo frontal.
+        return q.Mz2(); //Moment about z axis that is applied over the bar in its front end.
       }
     //! @brief Internal bending moment at the back end.
     inline double getMz1(void)
       { //¡Warning! call "calc_resisting_force" before calling this method.
-        return -q.Mz1(); //Momento z en su extremo dorsal.
+        return -q.Mz1(); //Moment about z axis in its back end.
       }
     //! @brief Internal bending moment at the front end.
     inline double getMz2(void)
       { //¡Warning! call "calc_resisting_force" before calling this method.
-        return q.Mz2(); //Momento z en su extremo frontal.
+        return q.Mz2(); //Moment about z axis in its front end.
       }
     //! @brief Internal shear force in the middle of the element.
     inline double getVy(void)
       { //¡Warning! call "calc_resisting_force" before calling this method.
-        return q.Vy(theCoordTransf->getInitialLength()); //Cortante y.
+        return q.Vy(theCoordTransf->getInitialLength()); //Shear along y.
       }
     inline double getAVy1(void)
       { //¡Warning! call "calc_resisting_force" before calling this method.
@@ -242,27 +242,27 @@ class ElasticBeam3d : public ProtoBeam3d
     //! @brief Internal bending moment at the back end.   
     inline double getMy1(void)
       { //¡Warning! call "calc_resisting_force" before calling this method.
-        return -q.My1(); //Momento y en el extremo dorsal.
+        return -q.My1(); //Moment about y in its back end.
       }
     //! @brief Internal bending moment at the front end.   
     inline double getMy2(void)
       { //¡Warning! call "calc_resisting_force" before calling this method.
-        return q.My2(); //Momento y en el extremo frontal.
+        return q.My2(); //Moment about y in its front end.
       }
     //! @brief Internal torsional force in the middle of the element.   
-    inline double getT(void) //Torsor en la barra.
+    inline double getT(void) //Torque.
       { //¡Warning! call "calc_resisting_force" before calling this method.
         return q.T();
       }
     //! @brief Internal torsional force at the back end.   
     inline double getT1(void)
       { //¡Warning! call "calc_resisting_force" before calling this method.
-        return -q.T1(); //+p0[0]; //Torsor en el extremo dorsal.
+        return -q.T1(); //+p0[0]; //Torque in the back end.
       }
     //! @brief Internal torsional force at the front end.
     inline double getT2(void)
       { //¡Warning! call "calc_resisting_force" before calling this method.
-        return q.T2(); //Torsor en el extremo frontal.
+        return q.T2(); //Torque in the front end.
       }
 
     Response *setResponse(const std::vector<std::string> &argv, Information &info);

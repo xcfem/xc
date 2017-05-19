@@ -213,13 +213,13 @@ for hip in listaHipotesis:
     dom= preprocessor.getDomain
     dom.revertToStart()
 
-fuerzasEnGlobales= Ntot*vI+QyTot*vJ+QzTot*vK
-fuerzasEnGlobalesTeor= F*xc.Vector([1,2,3])
-momentosEnGlobales= MxTot*vI+MyTot*vJ+MzTot*vK
-momentosEnGlobalesTeor= F*xc.Vector([4,5,6])
+forcesInGlobalCoord= Ntot*vI+QyTot*vJ+QzTot*vK
+forcesInGlobalCoordTeor= F*xc.Vector([1,2,3])
+momentsInGlobalCoord= MxTot*vI+MyTot*vJ+MzTot*vK
+momentsInGlobalCoordTeor= F*xc.Vector([4,5,6])
 
-ratio1= (fuerzasEnGlobales-fuerzasEnGlobalesTeor).Norm()/fuerzasEnGlobalesTeor.Norm()
-ratio2= (momentosEnGlobales-momentosEnGlobalesTeor).Norm()/momentosEnGlobalesTeor.Norm()
+ratio1= (forcesInGlobalCoord-forcesInGlobalCoordTeor).Norm()/forcesInGlobalCoordTeor.Norm()
+ratio2= (momentsInGlobalCoord-momentsInGlobalCoordTeor).Norm()/momentsInGlobalCoordTeor.Norm()
 ratio3= abs((epsilonZPos-5*F/(E*Iy)))
 ratio4= abs((epsilonYPos+6*F/(E*Iz)))
 
@@ -242,9 +242,9 @@ print "epsilonZPos= ",epsilonZPos
 print "Mz= ",MzTot/1e3," kN m\n"
 print "epsMz= ",epsMz
 print "epsilonYPos= ",epsilonYPos
-print "fuerzasEnGlobales= ",fuerzasEnGlobales
-print "fuerzasEnGlobales= ",fuerzasEnGlobalesTeor
-print "momentosEnGlobales= ",momentosEnGlobales
+print "forcesInGlobalCoord= ",forcesInGlobalCoord
+print "forcesInGlobalCoord= ",forcesInGlobalCoordTeor
+print "momentsInGlobalCoord= ",momentsInGlobalCoord
 print "ratio1= ",ratio1
 print "ratio2= ",ratio2
 print "ratio3= ",ratio3

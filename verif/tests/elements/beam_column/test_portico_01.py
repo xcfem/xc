@@ -29,7 +29,7 @@ H= 100 # Altura del pórtico expressed in inches
 Es= 29e6 # Young modulus (psi)
 area= 1 # Área de la sección expressed in in2
 Iz= 1/12.0 # Momento de inercia de la sección expressed in in4
-P= 1000 # Carga (pounds)-fuerza.
+P= 1000 # Load (force-pounds).
 
 prueba= xc.ProblemaEF()
 preprocessor=  prueba.getPreprocessor

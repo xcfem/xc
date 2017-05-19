@@ -81,12 +81,12 @@ void XC::BeamMecLoad::addElasticDeformations(const double &L,const CrossSectionP
               << " not defined for 3D sections." << std::endl;
   }
 
-//! @brief Return the dimension del vector fuerza.
-size_t XC::BeamMecLoad::getDimVectorFuerza(void) const
+//! @brief Return the dimension of the force vector.
+size_t XC::BeamMecLoad::getForceVectorDimension(void) const
   { return 2; }
 
-//! @brief Return the dimension del vector momento.
-size_t XC::BeamMecLoad::getDimVectorMomento(void) const
+//! @brief Return the dimension of the moment vector.
+size_t XC::BeamMecLoad::getMomentVectorDimension(void) const
   { return 1; }
 
 //! @brief Returns force expressed in local coordinates.

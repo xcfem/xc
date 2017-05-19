@@ -74,12 +74,12 @@ XC::Beam2dPointLoad::Beam2dPointLoad(int tag)
 XC::Beam2dPointLoad::Beam2dPointLoad(void)
   :BeamPointLoad(0,LOAD_TAG_Beam2dPointLoad) {}
 
-//! @brief Return the dimension del vector fuerza.
-size_t XC::Beam2dPointLoad::getDimVectorFuerza(void) const
+//! @brief Return the dimension of the force vector.
+size_t XC::Beam2dPointLoad::getForceVectorDimension(void) const
   { return 2; }
 
-//! @brief Return the dimension del vector momento.
-size_t XC::Beam2dPointLoad::getDimVectorMomento(void) const
+//! @brief Return the dimension of the moment vector.
+size_t XC::Beam2dPointLoad::getMomentVectorDimension(void) const
   { return 1; }
 
 //! @brief Returns force expressed in local coordinates.

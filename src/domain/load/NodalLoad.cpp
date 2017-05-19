@@ -130,7 +130,7 @@ void  XC::NodalLoad::setDomain(Domain *newDomain)
 int XC::NodalLoad::getNodeTag(void) const
   { return myNode; }
 
-//! @brief Returns the componentes del vector fuerza.
+//! @brief Returns the componentes of the force vector.
 const XC::Vector &XC::NodalLoad::getForce(void) const
   {
     static Vector retval(3);
@@ -176,14 +176,16 @@ const XC::Vector &XC::NodalLoad::getForce(void) const
     else
       {
         if(load.Nulo())
-          std::cerr << "NodalLoad::getForce; load not defined." << std::endl;
+          std::cerr << nombre_clase() << "::" << __FUNCTION__
+	            << "; load not defined." << std::endl;
         if(!myNodePtr)
-          std::cerr << "NodalLoad::getForce; pointer to node is NULL." << std::endl;
+          std::cerr << nombre_clase() << "::" << __FUNCTION__
+		    << "; pointer to node is NULL." << std::endl;
       }
     return retval;
   }
 
-//! @brief Returns the componentes del vector fuerza.
+//! @brief Returns the components of the moment.
 const XC::Vector &XC::NodalLoad::getMoment(void) const
   {
     static Vector retval(3);

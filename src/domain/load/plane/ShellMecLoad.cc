@@ -60,12 +60,12 @@ void XC::ShellMecLoad::addFixedEndForcesInBasicSystem(const double &,const doubl
     std::cerr << "addFixedEndForcesInBasicSystem no definida." << std::endl;
   }
 
-//! @brief Return the dimension del vector fuerza.
-size_t XC::ShellMecLoad::getDimVectorFuerza(void) const
+//! @brief Return the dimension of the force vector.
+size_t XC::ShellMecLoad::getForceVectorDimension(void) const
   { return 3; }
 
-//! @brief Return the dimension del vector momento.
-size_t XC::ShellMecLoad::getDimVectorMomento(void) const
+//! @brief Return the dimension of the bending moment vector.
+size_t XC::ShellMecLoad::getMomentVectorDimension(void) const
   { return 3; }
 
 //! @brief Returns force expressed in local coordinates.
@@ -88,7 +88,7 @@ XC::Vector XC::ShellMecLoad::getLocalMoment(void) const
     return retval;
   }
 
-//! @brief Returns the componentes de los vectores fuerza.
+//! @brief Returns the componentes of the force vectors.
 const XC::Matrix &XC::ShellMecLoad::getLocalForces(void) const
   {
     static Matrix retval;
@@ -103,7 +103,7 @@ const XC::Matrix &XC::ShellMecLoad::getLocalForces(void) const
     return retval;
   }
 
-//! @brief Returns the componentes de los vectores momento.
+//! @brief Returns the components of the vector moments.
 const XC::Matrix &XC::ShellMecLoad::getLocalMoments(void) const
   {
     static Matrix retval;
@@ -159,10 +159,10 @@ const XC::Matrix &XC::ShellMecLoad::getGlobalVectors(const Matrix &localVectors)
     return retval;
   }
 
-//! @brief Return the fuerza expresada en coordenadas globales.
+//! @brief Return the force expressed in global coordinates.
 const XC::Matrix &XC::ShellMecLoad::getGlobalForces(void) const
   { return getGlobalVectors(getLocalForces()); }
 
-//! @brief Returns the momento expresado en coordenadas globales.
+//! @brief Returns the bending moment expressed in global coordinates.
 const XC::Matrix &XC::ShellMecLoad::getGlobalMoments(void) const
   { return getGlobalVectors(getLocalMoments()); }

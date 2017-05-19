@@ -384,7 +384,7 @@ int XC::FourNodeQuad::addInertiaLoadToUnbalance(const XC::Vector &accel)
     return 0;
   }
 
-//! @brief Return the fuerza de respuesta of the element.
+//! @brief Return the element resisting force.
 const XC::Vector &XC::FourNodeQuad::getResistingForce(void) const
   {
     P.Zero();
@@ -434,7 +434,8 @@ const XC::Vector &XC::FourNodeQuad::getResistingForce(void) const
     return P;
   }
 
-//! @brief Return the fuerza de respuesta of the element incluyendo la debida a la inercia.
+//! @brief Return the resisting force of the element including
+//! inertia.
 const XC::Vector &XC::FourNodeQuad::getResistingForceIncInertia(void) const
   {
     static Vector rhoi(4);

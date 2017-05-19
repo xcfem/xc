@@ -189,7 +189,7 @@ double XC::ReinfBar::getI(const unsigned short int i,const unsigned short int j,
     return Iij + getArea() * pos_local(i) * pos_local(j);
   }
 
-//! @brief Returns the momento polar de inercia with respect to the point o.
+//! @brief Returns the polar moment of inertia with respect to the point o.
 double XC::ReinfBar::getIO(const Pos2d &o) const
   { return (getI(1,1,o)+getI(2,2,o)+getI(3,3,o))/2; }
 

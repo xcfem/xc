@@ -80,8 +80,8 @@ class Beam2dPointLoad: public BeamPointLoad
     inline const double &pAxial(void) const
       { return Axial; }
 
-    size_t getDimVectorFuerza(void) const;
-    size_t getDimVectorMomento(void) const;
+    size_t getForceVectorDimension(void) const;
+    size_t getMomentVectorDimension(void) const;
     virtual Vector getLocalForce(void) const;
     virtual Vector getLocalMoment(void) const;
     const Matrix &getLocalForces(void) const;

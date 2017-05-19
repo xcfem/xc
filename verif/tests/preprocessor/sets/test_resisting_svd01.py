@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # home made test
-#    Prueba del funcionamiento del comando que calcula
-#    la resultante de fuerzas al cortar un subconjunto del modelo por un plano.
+#    Check of the function that computes the force resultant
+#    when cutting a subset of the model by a plane.
 
 __author__= "Luis C. Pérez Tato (LCPT)"
 __copyright__= "Copyright 2014, LCPT"
@@ -157,10 +157,10 @@ def procesResultVerif(comb):
   nmbComb= comb.getName
   setTotal= preprocessor.getSets.getSet("total")
   resultante= setTotal.getResistingSVD3d(plano,o,0.01,0)
-  global fuerza
-  fuerza= resultante.getResultante()
-  global momento
-  momento= resultante.getMomento()
+  global force
+  force= resultante.getResultante()
+  global moment
+  moment= resultante.getMomento()
   org= resultante.getOrg
 
 
@@ -172,12 +172,12 @@ for key in combs.getKeys():
   resuelveCombEstatLin(comb)
   procesResultVerif(comb)
 
-ratio1= (abs(fuerza.x-3*F)/3/F)
-ratio2= momento.getModulo()
+ratio1= (abs(force.x-3*F)/3/F)
+ratio2= moment.getModulo()
 
 ''' 
-print "fuerza= ",fuerza/1e3," kN\n"
-print "momento= ",momento/1e3," kN\n"
+print "force= ",force/1e3," kN\n"
+print "moment= ",moment/1e3," kN\n"
 print "org= ",Org," m\n"
 print "ratio1= ",ratio1
 print "ratio2= ",ratio2

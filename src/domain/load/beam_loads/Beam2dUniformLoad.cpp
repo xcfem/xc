@@ -77,12 +77,12 @@ XC::Beam2dUniformLoad::Beam2dUniformLoad(void)
 int XC::Beam2dUniformLoad::getType(void)
   { return LOAD_TAG_Beam2dUniformLoad; }
 
-//! @brief Return the dimension of the vector fuerza.
-size_t XC::Beam2dUniformLoad::getDimVectorFuerza(void) const
+//! @brief Return the dimension of the force vector.
+size_t XC::Beam2dUniformLoad::getForceVectorDimension(void) const
   { return 2; }
 
-//! @brief Return the dimension of the vector momento.
-size_t XC::Beam2dUniformLoad::getDimVectorMomento(void) const
+//! @brief Return the dimension of the vector moment.
+size_t XC::Beam2dUniformLoad::getMomentVectorDimension(void) const
   { return 1; }
 
 //! @brief Returns force expressed in local coordinates.

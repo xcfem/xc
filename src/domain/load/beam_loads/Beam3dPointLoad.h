@@ -88,8 +88,8 @@ class Beam3dPointLoad : public BeamPointLoad
     inline double getTransZComponent(void)
       { return Pz; }
 
-    size_t getDimVectorFuerza(void) const;
-    size_t getDimVectorMomento(void) const;
+    size_t getForceVectorDimension(void) const;
+    size_t getMomentVectorDimension(void) const;
     virtual Vector getLocalForce(void) const;
     virtual Vector getLocalMoment(void) const;
     const Matrix &getLocalForces(void) const;

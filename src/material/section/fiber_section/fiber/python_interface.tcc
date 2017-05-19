@@ -46,9 +46,8 @@ class_<XC::Fiber,XC::Fiber*, bases<XC::TaggedObject>, boost::noncopyable >("Fibe
 
   .def("getArea",&XC::Fiber::getArea,"Returns fiber area.")
   .def("getDeformacion",&XC::Fiber::getStrain,"DEPRECATED (change to getStrain); returns fiber strain.") //Change to getDeformation 
-  .def("getFuerza",&XC::Fiber::getFuerza,"DEPRECATED (change to getForce); returns fiber internal force.") //Change to getForce
   .def("getStrain",&XC::Fiber::getStrain,"Returns fiber strain.")
-  .def("getForce",&XC::Fiber::getFuerza,"Returns fiber internal force.")
+  .def("getForce",&XC::Fiber::getForce,"Returns fiber internal force.")
   .def("getMz",&XC::Fiber::getMz)
   .def("getMy",&XC::Fiber::getMy)
   ;
@@ -88,7 +87,7 @@ class_<XC::DqFibras, bases<EntCmd,dq_ptr_fibras>, boost::noncopyable >("DqFibras
   .def("getMy",&XC::DqFibras::getMy)
   .def("getExcentricidadMz",&XC::DqFibras::getExcentricidadMz)
   .def("getExcentricidadMy",&XC::DqFibras::getExcentricidadMy)
-  .def("getVectorMomento",&XC::DqFibras::getVectorMomento)
+  .def("getMomentVector",&XC::DqFibras::getMomentVector)
   .def("getPosResultante",&XC::DqFibras::getPosResultante)
   .def("getFibraNeutra",&XC::DqFibras::getFibraNeutra)
 

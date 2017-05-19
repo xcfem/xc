@@ -98,8 +98,8 @@ class Beam3dUniformLoad: public BeamUniformLoad
     inline double getTorsor(void)
       { return tx; }
 
-    size_t getDimVectorFuerza(void) const;
-    size_t getDimVectorMomento(void) const;
+    size_t getForceVectorDimension(void) const;
+    size_t getMomentVectorDimension(void) const;
     virtual Vector getLocalForce(void) const;
     virtual Vector getLocalMoment(void) const;
     const Matrix &getLocalForces(void) const;

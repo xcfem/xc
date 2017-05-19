@@ -581,11 +581,11 @@ double XC::DqFibras::getSNegHomogenizedSection(const double &E0,const Semiplano2
     return retval;
   }
 
-//! @brief Funcion auxiliar para calcular los momentos principales de inercia.
+//! @brief Funcion auxiliar para calcular los principal moments of inertia.
 inline double R(const double &Iy,const double &Iz,const double Pyz)
   { return sqrt(sqr((Iy-Iz)/2)+sqr(Pyz)); }
 
-//! @brief Returns the moment of inertia principal mayor.
+//! @brief Returns the major principal moment of inertia.
 double XC::DqFibras::getI1(const double &factor,const double &y0,const double &z0) const
   {
     const double iy= getIy(factor,z0);
@@ -658,12 +658,12 @@ double XC::DqFibras::Resultante(void) const
     register double retval= 0;
     register std::deque<Fiber *>::const_iterator i= begin();
     for(;i!= end();i++)
-      retval+= (*i)->getFuerza();
+      retval+= (*i)->getForce();
     return retval;
   }
 
-//! @brief Returns the momento de la fuerza ejercida por las fibras
-//! respecto al eje paralelo al «z» que pasa por y0
+//! @brief Returns the moment of the fibers forces
+//! with respect to the axis parallel to "z" that passes through (y0,0).
 double XC::DqFibras::getMz(const double &y0) const
   {
     double retval= 0.0;
@@ -673,8 +673,8 @@ double XC::DqFibras::getMz(const double &y0) const
     return retval;
   }
 
-//! @brief Returns the momento de la fuerza ejercida por las fibras
-//! respecto al eje  al eje paralelo al «y» que pasa por z0.
+//! @brief Returns the moment of the fibers forces
+//! with respect to the axis parallel to "y" that passes through (0,z0).
 double XC::DqFibras::getMy(const double &z0) const
   {
     double retval= 0.0;
@@ -684,25 +684,20 @@ double XC::DqFibras::getMy(const double &z0) const
     return retval;
   }
 
-//! @brief Returns the excentricidad correspondiente al momento
-//! de la fuerza ejercida por las fibras
-//! respecto al eje paralelo al «z» que pasa por y0
+//! @brief Returns the eccentricity of Mz (see getMz).
 double XC::DqFibras::getExcentricidadMz(const double &y0) const
   { return getMz(y0)/Resultante(); }
 
-//! @brief Returns the excentricidad correspondiente al momento
-//! de la fuerza ejercida por las fibras
-//! respecto al eje  al eje paralelo al «y» que pasa por z0.
+//! @brief Returns the eccentricity of My (see getMy).
 double XC::DqFibras::getExcentricidadMy(const double &z0) const
   { return getMy(z0)/Resultante(); }
 
-//! @brief Returns the vector momento de la fuerza ejercida por las fibras
-//! respecto a los ejes que pasan por (y0,z0).
-Vector2d XC::DqFibras::getVectorMomento(const double &y0,const double &z0) const
+//! @brief Returns the moment vector of the fibers forces
+//! with respect to the axis parallel to "y" and z that passes through (y0,z0).
+Vector2d XC::DqFibras::getMomentVector(const double &y0,const double &z0) const
   { return Vector2d(getMy(y0),getMz(y0)); }
 
-//! @brief Returns the vector momento de las excentricidades fuerza ejercida por las fibras
-//! respecto a los ejes que pasan por (y0,z0).
+//! @brief Returns the position of the fibers forces resultant.
 Pos2d XC::DqFibras::getPosResultante(const double &y0,const double &z0) const
   {
     const double R= Resultante();
@@ -740,7 +735,7 @@ double XC::DqFibras::ResultanteComp(void) const
     for(;i!= end();i++)
       if(*i)
         {
-          f= (*i)->getFuerza();
+          f= (*i)->getForce();
           if(f<0.0) retval+= f;
         }
       else
@@ -755,7 +750,7 @@ double XC::DqFibras::getMzComp(const double &y0) const
     double retval= 0.0;
     register std::deque<Fiber *>::const_iterator i= begin();
     for(;i!= end();i++)
-      if((*i)->getFuerza()<0.0) retval+= (*i)->getMz(y0);
+      if((*i)->getForce()<0.0) retval+= (*i)->getMz(y0);
     return retval;
   }
 
@@ -769,7 +764,7 @@ const XC::Vector &XC::DqFibras::baricentroCompresiones(void) const
     register std::deque<Fiber *>::const_iterator i= begin();
     for(;i!= end();i++)
       {
-        f= (*i)->getFuerza();
+        f= (*i)->getForce();
         if(f<0.0)
           {
             r+= f;
@@ -797,7 +792,7 @@ const XC::Vector &XC::DqFibras::baricentroDefMenores(const double &defRef) const
         def=  (*i)->getStrain();
         if(def<defRef)
           {
-            r+= (*i)->getFuerza();
+            r+= (*i)->getForce();
             retval[0]+= (*i)->getMz();
             retval[1]+= (*i)->getMy();
           }
@@ -816,7 +811,7 @@ double XC::DqFibras::getMyComp(const double &z0) const
     double retval= 0.0;
     register std::deque<Fiber *>::const_iterator i= begin();
     for(;i!= end();i++)
-      if((*i)->getFuerza()<0.0) retval+= (*i)->getMy(z0);
+      if((*i)->getForce()<0.0) retval+= (*i)->getMy(z0);
     return retval;
   }
 
@@ -829,7 +824,7 @@ double XC::DqFibras::ResultanteTracc(void) const
     for(;i!= end();i++)
       if(*i)
         {
-          f= (*i)->getFuerza();
+          f= (*i)->getForce();
           if(f>0.0) retval+= f;
         }
       else
@@ -844,7 +839,7 @@ double XC::DqFibras::getMzTracc(const double &y0) const
     double retval= 0.0;
     register std::deque<Fiber *>::const_iterator i= begin();
     for(;i!= end();i++)
-      if((*i)->getFuerza()>0.0) retval+= (*i)->getMz(y0);
+      if((*i)->getForce()>0.0) retval+= (*i)->getMz(y0);
     return retval;
   }
 
@@ -855,7 +850,7 @@ double XC::DqFibras::getMyTracc(const double &z0) const
     double retval= 0.0;
     register std::deque<Fiber *>::const_iterator i= begin();
     for(;i!= end();i++)
-      if((*i)->getFuerza()>0.0) retval+= (*i)->getMy(z0);
+      if((*i)->getForce()>0.0) retval+= (*i)->getMy(z0);
     return retval;
   }
 
@@ -869,7 +864,7 @@ const XC::Vector &XC::DqFibras::baricentroTracciones(void) const
     register std::deque<Fiber *>::const_iterator i= begin();
     for(;i!= end();i++)
       {
-        f= (*i)->getFuerza();
+        f= (*i)->getForce();
         if(f>0)
           {
             r+= f;
@@ -897,7 +892,7 @@ const XC::Vector &XC::DqFibras::baricentroDefMayores(const double &defRef) const
         def=  (*i)->getStrain();
         if(def>defRef)
           {
-            r+= (*i)->getFuerza();
+            r+= (*i)->getForce();
             retval[0]+= (*i)->getMz();
             retval[1]+= (*i)->getMy();
           }

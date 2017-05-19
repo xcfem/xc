@@ -130,20 +130,20 @@ class Fiber: public TaggedObject, public MovableObject
     virtual const UniaxialMaterial *getMaterial(void) const= 0;
     virtual double getArea(void) const=0;
     double getStrain(void) const;
-    double getFuerza(void) const;
+    double getForce(void) const;
     double getMz(const double &y0= 0.0) const;
     double getMy(const double &z0= 0.0) const;
   };
 
-//! @brief Returns the momento de la fuerza ejercida por la fibra
-//! respecto al eje paralelo al «z» que pasa por y0.
+//! @brief Returns the moment of the force of the fiber
+//! with respect to the axis parallel to "z" that passes through (y0,0).
 inline double Fiber::getMz(const double &y0) const
-  { return getFuerza()*(getLocY() - y0); }
+  { return getForce()*(getLocY() - y0); }
 
-//! @brief Returns the momento de la fuerza ejercida por la fibra
-//! respecto al eje paralelo al «y» que pasa por z0.
+//! @brief Returns the moment of the force of the fiber
+//! with respect to the axis parallel to "y" that passes through (0,z0).
 inline double Fiber::getMy(const double &z0) const
-  { return getFuerza()*(getLocZ() - z0); }
+  { return getForce()*(getLocZ() - z0); }
 
 } // end of XC namespace
 

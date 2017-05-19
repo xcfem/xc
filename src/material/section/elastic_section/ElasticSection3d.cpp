@@ -91,9 +91,9 @@ const XC::Vector &XC::ElasticSection3d::getStressResultant(void) const
   {
     const Vector &e= getSectionDeformation();
     s(0) = ctes_scc.EA()*e(0); //Esfuerzo axil.
-    s(1) = ctes_scc.EIz()*e(1); //Momento flector según z.
-    s(2) = ctes_scc.EIy()*e(2); //Momento flector según y.
-    s(3) = ctes_scc.GJ()*e(3); //Momento torsor.
+    s(1) = ctes_scc.EIz()*e(1); //Bending moment about z axis.
+    s(2) = ctes_scc.EIy()*e(2); //Bending moment about y axis.
+    s(3) = ctes_scc.GJ()*e(3); //Torque.
     return s;
   }
 

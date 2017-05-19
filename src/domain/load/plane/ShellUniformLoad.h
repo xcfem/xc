@@ -54,8 +54,8 @@ class ShellUniformLoad : public ShellMecLoad
     inline const double &Wz(void) const
       { return Trans; }
 
-    size_t getDimVectorFuerza(void) const;
-    size_t getDimVectorMomento(void) const;
+    size_t getForceVectorDimension(void) const;
+    size_t getMomentVectorDimension(void) const;
     const Matrix &getLocalForces(void) const;
     const Matrix &getLocalMoments(void) const;
 

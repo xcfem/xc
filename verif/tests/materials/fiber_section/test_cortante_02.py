@@ -39,10 +39,10 @@ width= 0.4  # Cross-section width [m]
 depth= 0.6  # Cross-section depth [m]
 cover= 0.05 # Cover [m]
 
-NDato= 0         # Axil para comprobar el cortante.
-MyDato= 1.9606e5 # Momento para comprobar el cortante su valor se fuerza para obtener Vcu aproximadamente igual a 82.607 kN.
-MzDato= 0        # Momento para comprobar el cortante.
-VDato= 125e3     # Momento para comprobar el cortante.
+NDato= 0         # Axial force when checking shear.
+MyDato= 1.9606e5 # Moment to check shear it's value is forced to obtain Vcu around 82.607 kN.
+MzDato= 0        # Moment value when checking shear.
+VDato= 125e3     # Shear value.
 
 # Armadura longitudinal
 areaBarra= areaBarrasEHE.Fi20
