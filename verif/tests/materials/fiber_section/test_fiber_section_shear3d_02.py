@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
-# Verification test of la sección de fibras con rigideces
-#    a cortante y torsion. Elaboración propia.
+
+''' Verification test of a fiber section with shear and torsion
+stiffnesses. Home made test.
+'''
 
 
-# Rectangular cross-section definition
-nmbSecc= "scc1x1"
-from materials import sccRectg
+from materials import paramRectangularSection
 from misc import banco_pruebas_scc3d
 import xc_base
 import geom
@@ -20,11 +20,12 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com ana.ortega.ort@gmal.com"
 
-scc1x1= sccRectg.sccRectang()
-scc1x1.b= 1 # Cross section width expressed in cm.
-scc1x1.h= 1 # Cross section depth expressed in cm.
-scc1x1.nDivIJ= 32
-scc1x1.nDivJK= 32
+# Rectangular cross-section definition
+b= 1 # Cross section width [cm]
+h= 1 # Cross section depth [cm]
+scc1x1= paramRectangularSection.RectangularSection('scc1x1',b,h)
+scc1x1.nDivIJ= 32 # number of cells in IJ direction  
+scc1x1.nDivJK= 32 # number of cells in JK direction
 
 import os
 pth= os.path.dirname(__file__)
@@ -48,7 +49,7 @@ respVz= typical_materials.defElasticMaterial(preprocessor, "respVz",1e6) # Respu
 # Section geometry
 #creation
 geomRectang= preprocessor.getMaterialLoader.newSectionGeometry("geomRectang")
-reg= scc1x1.discretization(geomRectang,"elast")
+reg= scc1x1.getRegion(geomRectang,"elast")
 sa= preprocessor.getMaterialLoader.newMaterial("fiberSectionShear3d","sa")
 fiberSectionRepr= sa.getFiberSectionRepr()
 fiberSectionRepr.setGeomNamed("geomRectang")

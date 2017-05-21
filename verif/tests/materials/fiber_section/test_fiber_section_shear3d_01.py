@@ -3,7 +3,7 @@
 #    elaborado a partir de Nociones de cálculo plástico. C. Benito Hernández.
 #    página 26 y siguientes.
 
-from materials import sccRectg
+from materials import paramRectangularSection
 from misc import banco_pruebas_scc3d
 from solution import predefined_solutions
 
@@ -26,11 +26,11 @@ __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
 # Rectangular cross-section definition
-scc10x20= sccRectg.sccRectang()
-scc10x20.b= 10 # Cross-section width(cm)
-scc10x20.h= 20 # cross-section depth (cm)
-scc10x20.nDivIJ= 32 #number of cells in IJ (width) direction
-scc10x20.nDivJK= 32 #number of cells in JK (height) direction
+b= 10 # Cross section width  [cm]
+h= 20 # Cross section depth [cm]
+scc10x20= paramRectangularSection.RectangularSection('scc10x20',b,h)
+scc10x20.nDivIJ= 32 # number of cells in IJ direction  
+scc10x20.nDivJK= 32 # number of cells in JK direction
 
 import os
 pth= os.path.dirname(__file__)
@@ -56,7 +56,7 @@ respVz= typical_materials.defElasticMaterial(preprocessor, "respVz",1e3) # Respu
 geomRectang= preprocessor.getMaterialLoader.newSectionGeometry("geomRectang")
 #generation of a quadrilateral region of the scc10x20 sizes and number of
 #divisions made of material nmbMat
-reg= scc10x20.discretization(gm=geomRectang,nmbMat="epp")
+reg= scc10x20.getRegion(gm=geomRectang,nmbMat="epp")
 sa= preprocessor.getMaterialLoader.newMaterial("fiberSectionShear3d","sa")
 fiberSectionRepr= sa.getFiberSectionRepr()
 fiberSectionRepr.setGeomNamed("geomRectang")
@@ -86,7 +86,7 @@ lp0= casos.newLoadPattern("default","0")
 loadVy= 2e4
 loadVz= 3e4
 loadMx= 1e3
-loadMz= 0.999*scc10x20.Mp1(fy)
+loadMz= 0.999*scc10x20.getPlasticMomentZ(fy)
 lp0.newNodalLoad(2,xc.Vector([0,loadVy,loadVz,loadMx,0,loadMz]))
 
 #We add the load case to domain.
@@ -122,17 +122,17 @@ esfMz= scc.getStressResultantComponent("Mz")
 
 yCdgTeor= 0.0
 zCdgTeor= 0.0
-ratio1= (sumAreas-scc10x20.area())/scc10x20.area()
+ratio1= (sumAreas-scc10x20.A())/scc10x20.A()
 ratio2= yCdg-yCdgTeor
 ratio3= zCdg-zCdgTeor
-ratio4= (I1-scc10x20.I1())/scc10x20.I1()
-ratio5= (I2-scc10x20.I2())/scc10x20.I2()
-ratio6= (i1-scc10x20.i1())/scc10x20.i1()
-ratio7= (i2-scc10x20.i2())/scc10x20.i2()
-ratio8= (Me1-scc10x20.Me1(fy))/scc10x20.Me1(fy)
-ratio9= (Me2-scc10x20.Me2(fy))/scc10x20.Me2(fy)
-ratio10= (SzPosG-scc10x20.S1PosG())/scc10x20.S1PosG()
-ratio11= (SyPosG-scc10x20.S2PosG())/scc10x20.S2PosG()
+ratio4= (I1-scc10x20.Iz())/scc10x20.Iz()
+ratio5= (I2-scc10x20.Iy())/scc10x20.Iy()
+ratio6= (i1-scc10x20.iz())/scc10x20.iz()
+ratio7= (i2-scc10x20.iy())/scc10x20.iy()
+ratio8= (Me1-scc10x20.getYieldMomentZ(fy))/scc10x20.getYieldMomentZ(fy)
+ratio9= (Me2-scc10x20.getYieldMomentY(fy))/scc10x20.getYieldMomentY(fy)
+ratio10= (SzPosG-scc10x20.getPlasticSectionModulusZ())/scc10x20.getPlasticSectionModulusZ()
+ratio11= (SyPosG-scc10x20.getPlasticSectionModulusY())/scc10x20.getPlasticSectionModulusY()
 ratio12= (RMz+loadMz)/loadMz
 ratio13= (esfMz-loadMz)/loadMz
 
