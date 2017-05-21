@@ -271,9 +271,9 @@ class ijkGrid(object):
     :returns: the line
     '''
     points= self.prep.getCad.getPoints
-    (tgPt1,tgPt2)=(int(surfName[1:5]),int(surfName[5:9]))
+    (tgPt1,tgPt2)=(int(linName[1:5]),int(linName[5:9]))
     lines= self.prep.getCad.getLines
-    ln= lines.newLin(tgPt1,tgPt2)
+    ln= lines.newLine(tgPt1,tgPt2)
     ln.name= linName
     ln.nDiv=1 #initialization value
     return ln
@@ -326,47 +326,17 @@ class ijkGrid(object):
     return setSurf
 
   def getLstLinRange(self,ijkRange):
-    ''':returns: a list of the lines inside a range of index 
-
-    
+    '''return a list of lines in a region limited by the coordinates
+    that correspond to the indices in the grid 
+    ijkRange.ijkMin=(indXmin,indYmin,indZmin) and
+    ijkRange.ijkMax=(indXmax,indYmax,indZmax). 
     '''
-    setLinBusq= self.prep.getSets["total"].getLines
-    lstLinBusq= setLinBusq
-
-    retval=[]
-    
-    (imin,jmin,kmin)=ijkRange.ijkMin
-    (imax,jmax,kmax)=ijkRange.ijkMax
-
-    'Lines parallel to X axis'
-    for k in range(kmin,kmax+1):
-        for j in range(jmin,jmax+1):
-            for i in range(imin,imax):
-                tagPto1= self.getTagPntGrid(i,j,k)
-                tagPto2= self.getTagPntGrid(i+1,j,k)
-                l= getLin2Pts(lstLinBusq,tagPto1,tagPto2)
-                if l<> None:
-                    retval.append(l)
-    'Lines parallel to Y axis'
-    for k in range(kmin,kmax+1):
-        for i in range(imin,imax+1):
-            for j in range(jmin,jmax):
-                tagPto1= self.getTagPntGrid(i,j,k)
-                tagPto2= self.getTagPntGrid(i,j+1,k)
-                l= getLin2Pts(lstLinBusq,tagPto1,tagPto2)
-                if l<> None:
-                    retval.append(l)
-    'Lines parallel to Z axis'
-    for j in range(jmin,jmax+1):
-        for i in range(imin,imax+1):
-            for k in range(kmin,kmax):
-                tagPto1= self.getTagPntGrid(i,j,k)
-                tagPto2= self.getTagPntGrid(i,j,k+1)
-                l= getLin2Pts(lstLinBusq,tagPto1,tagPto2)
-                if l<> None:
-                    retval.append(l)
+    nmLinInRang=self.getNmLinInRange(ijkRange)
+    for nameLin in nmLinInRang:
+      if nameLin in self.dicLin:
+        retval.append[dicLin[nameLin]]
     return retval
-
+    
 
   def getSetPntRange(self,ijkRange,setName):
     '''return the set of points in a 3D grid-region limited by 
