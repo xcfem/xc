@@ -7,7 +7,7 @@ import xc
 from solution import predefined_solutions
 from model import predefined_spaces
 from materials import typical_materials
-from materials import paramRectangularSection
+from materials import section_properties
 from materials import defSeccAggregation
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
@@ -24,7 +24,7 @@ prueba= xc.ProblemaEF()
 preprocessor=  prueba.getPreprocessor   
 nodes= preprocessor.getNodeLoader
 
-seccPrueba= paramRectangularSection.RectangularSection("prueba",b=.20,h=.30)
+seccPrueba= section_properties.RectangularSection("prueba",b=.20,h=.30)
 matSeccPrueba= typical_materials.MaterialData("matprueba",E=7E9,nu=0.3,rho=2500)
 
 
@@ -46,7 +46,7 @@ lin.xzVector= xc.Vector([0,0,1])
 # Elements definition
 elementos= preprocessor.getElementLoader
 elementos.defaultTransformation= "lin"
-elementos.defaultMaterial= seccPrueba.nmb
+elementos.defaultMaterial= seccPrueba.sectionName
 elementos.numSections= 3 # Número de secciones a lo largo del elemento.
 elementos.defaultTag= 1
 beam3d1= elementos.newElement("force_beam_column_3d",xc.ID([1,2]))

@@ -9,7 +9,7 @@ from solution import predefined_solutions
 from model import predefined_spaces
 from materials import typical_materials
 from materials.perfiles_metalicos.arcelor import perfiles_he_arcelor as HE_profiles
-from materials import paramMetallicProfile
+from materials import section_properties
 from materials import aceros_estructurales as steel
 from materials import steelProfile
 from materials import aceros_estructurales as steel
@@ -54,7 +54,7 @@ profil= HE400B.defSeccShElastica3d(preprocessor,matHE400B)
 # Elements definition
 elementos= preprocessor.getElementLoader
 elementos.defaultTransformation= "lin"
-elementos.defaultMaterial= HE400B.nmb
+elementos.defaultMaterial= HE400B.sectionName
 elem= elementos.newElement("elastic_beam_3d",xc.ID([1,2]))
 elem.rho= HE400B.get('P')
 dp.defParamsPerfilMetalicoRegElasticoElem(elem,HE400B)

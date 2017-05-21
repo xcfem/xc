@@ -2,7 +2,7 @@
 
 from __future__ import division
 from miscUtils import LogMessages as lmsg
-from materials import paramRectangularSection
+from materials import section_properties
 from postprocess import def_vars_control
 from postprocess import callback_controls
 from postprocess import prop_statistics as ps
@@ -10,7 +10,7 @@ from postprocess import prop_statistics as ps
 
 
 
-class EC3TimberRectCrossSection(paramRectangularSection.RectangularSection):
+class EC3TimberRectCrossSection(section_properties.RectangularSection):
   """IPE profile with Eurocode 3 verification routines."""
   def __init__(self,name,b,h,E,nu,fyd,taud):
     super(EC3TimberRectCrossSection,self).__init__(name,b,h,E,nu)

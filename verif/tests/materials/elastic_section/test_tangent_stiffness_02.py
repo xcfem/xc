@@ -8,7 +8,7 @@ import xc
 from solution import predefined_solutions
 from model import predefined_spaces
 from materials import typical_materials
-from materials import paramRectangularSection
+from materials import section_properties
 from materials import defSeccAggregation
 
 
@@ -20,7 +20,7 @@ prueba= xc.ProblemaEF()
 preprocessor=  prueba.getPreprocessor   
 nodes= preprocessor.getNodeLoader
 
-seccPrueba= paramRectangularSection.RectangularSection("prueba",b,h)
+seccPrueba= section_properties.RectangularSection("prueba",b,h)
 matseccPrueba=typical_materials.MaterialData(name='mt',E=E,nu=0.3,rho=2500)
 
 # Define materials

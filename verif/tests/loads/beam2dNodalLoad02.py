@@ -9,7 +9,7 @@ import xc
 from solution import predefined_solutions
 from model import predefined_spaces
 from materials import typical_materials
-from materials import paramRectangularSection
+from materials import section_properties
 from materials import defSeccAggregation
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
@@ -32,7 +32,7 @@ prueba= xc.ProblemaEF()
 preprocessor=  prueba.getPreprocessor   
 nodes= preprocessor.getNodeLoader
 
-sccPrueba= paramRectangularSection.RectangularSection("prueba",b,h)
+sccPrueba= section_properties.RectangularSection("prueba",b,h)
 matSccPrueba=typical_materials.MaterialData(name='matSec',E=E,nu=0.3,rho=2500)
 
 modelSpace= predefined_spaces.StructuralMechanics2D(nodes)
@@ -54,7 +54,7 @@ scc= typical_materials.defElasticSection2d(preprocessor, "scc",A,E,I)
 # Elements definition
 elementos= preprocessor.getElementLoader
 elementos.defaultTransformation= "lin"# Transformación de coordenadas para los nuevos elementos
-elementos.defaultMaterial= sccPrueba.nmb
+elementos.defaultMaterial= sccPrueba.sectionName
 elementos.defaultTag= 1 #Tag for next element.
 beam2d= elementos.newElement("force_beam_column_2d",xc.ID([1,2]))
     

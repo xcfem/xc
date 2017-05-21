@@ -5,7 +5,7 @@ from __future__ import division
 import math
 from miscUtils import LogMessages as lmsg
 from materials import typical_materials
-from materials import sectionProperties as sp
+from materials import section_properties as sp
 from postprocess import def_vars_control as vc
 
 #Alpha imperfection factor.
@@ -31,7 +31,7 @@ def alphaImperfectionFactor(bucklingCurve):
   return retval
 
 
-class SteelProfile(sp.sectionProperties):
+class SteelProfile(sp.SectionProperties):
   '''Properties of a section in structural steel
 
   :ivar steel:    steel object (e.g. S275JR)

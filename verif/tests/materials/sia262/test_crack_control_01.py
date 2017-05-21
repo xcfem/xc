@@ -10,7 +10,7 @@ from misc import banco_pruebas_scc3d
 from solution import predefined_solutions # Procedimiento de solución
 from materials.fiber_section import defSeccionHASimple
 from materials.ehe import areaBarrasEHE
-# from materials import paramRectangularSection
+# from materials import section_properties
 
 
 from materials.ehe import EHE_concrete
@@ -34,18 +34,18 @@ datosScc1LosC.sectionDescr= "Losa. Tramo Central. Sección normal al eje X."
 concr=EHE_concrete.HA30
 concr.alfacc=0.85 #f_maxd= 0.85*fcd
 datosScc1LosC.concrType= concr
-datosScc1LosC.depth= 0.35
-datosScc1LosC.width= 1.0
+datosScc1LosC.h= 0.35
+datosScc1LosC.b= 1.0
 datosScc1LosC.reinfSteelType= EHE_reinforcing_steel.B500S
 negRebRow=defSeccionHASimple.MainReinfLayer()
-negRebRow.setUp(nRebars=0,rebarsDiam=0.0,areaRebar=0.0,width=datosScc1LosC.width,cover=0.1)
+negRebRow.setUp(nRebars=0,rebarsDiam=0.0,areaRebar=0.0,width=datosScc1LosC.b,cover=0.1)
 datosScc1LosC.negatvRebarRows=[negRebRow]
 posRebRow=defSeccionHASimple.MainReinfLayer()
-posRebRow.setUp(nRebars=6,rebarsDiam=26e-3,areaRebar=(areaFi22+areaFi26)/2.0,width=datosScc1LosC.width,cover=0.05+0.026/2.0)
+posRebRow.setUp(nRebars=6,rebarsDiam=26e-3,areaRebar=(areaFi22+areaFi26)/2.0,width=datosScc1LosC.b,cover=0.05+0.026/2.0)
 datosScc1LosC.positvRebarRows=[posRebRow]
 
-#datosScc1LosC.negatvRebars.setUp(0,0.0,0.0,datosScc1LosC.width,0.1)
-#datosScc1LosC.positvRebars.setUp(6,26e-3,(areaFi22+areaFi26)/2.0,datosScc1LosC.width,0.05+0.026/2.0)
+#datosScc1LosC.negatvRebars.setUp(0,0.0,0.0,datosScc1LosC.b,0.1)
+#datosScc1LosC.positvRebars.setUp(6,26e-3,(areaFi22+areaFi26)/2.0,datosScc1LosC.b,0.05+0.026/2.0)
 
 
 

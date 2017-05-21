@@ -6,7 +6,7 @@ import geom
 import xc
 from model import predefined_spaces
 from materials import typical_materials
-from materials import paramRectangularSection
+from materials import section_properties
 from solution import predefined_solutions
 from misc import banco_pruebas_scc2d
 
@@ -22,13 +22,13 @@ preprocessor=  prueba.getPreprocessor
 
 
 # Rectangular cross-section definition
-scc10x20=  paramRectangularSection.RectangularSection(name="rectang",b=.10,h=.20)
+scc10x20=  section_properties.RectangularSection(name="rectang",b=.10,h=.20)
 matscc10x20=typical_materials.MaterialData(name='mtrectang',E=2.1e6,nu=0.3,rho=2500)
 
 
 # Materials definition
 matPoteau= scc10x20.defSeccShElastica2d(preprocessor,matscc10x20)
-elemZLS= banco_pruebas_scc2d.sectionModel(preprocessor, scc10x20.nmb)
+elemZLS= banco_pruebas_scc2d.sectionModel(preprocessor, scc10x20.sectionName)
 
 # Constraints
 modelSpace= predefined_spaces.getStructuralMechanics2DSpace(preprocessor)

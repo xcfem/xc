@@ -10,7 +10,7 @@ __email__= "l.pereztato@ciccp.es" "ana.Ortega@ciccp.es"
 import xc_base
 import geom
 import xc
-from materials import paramRectangularSection
+from materials import section_properties
 from materials import typical_materials
 import math
 from materials.ehe import areaBarrasEHE
@@ -103,7 +103,7 @@ class MainReinfLayer(object):
       self.reinfLayer.p2= p2
       return self.reinfLayer
 
-class BasicRecordRCSection(object):
+class BasicRecordRCSection(section_properties.RectangularSection):
   '''
   This class is used to define the basic variables that make up a reinforced 
   concrete section.
@@ -113,8 +113,6 @@ class BasicRecordRCSection(object):
   :ivar concrType:       type of concrete (e.g. hormigonesEHE.HA25)     
   :ivar concrDiagName:   name identifying the characteristic stress-strain 
                          diagram of the concrete material
-  :ivar depth:           cross-section depth
-  :ivar width:           cross-section width
   :ivar nDivIJ:          number of cells in IJ (width) direction
   :ivar nDivJK:          number of cells in JK  (height) direction
   :ivar fiberSectionRepr: fiber model of the section.
@@ -128,13 +126,11 @@ class BasicRecordRCSection(object):
                          defRCSimpleSection.RecordShearReinforcement()
                          defining the shear reinforcement in Y direction
   '''
-  def __init__(self,width=0.25,depth=0.25,concrType=None,reinfSteelType=None):
-    self.sectionName= "noName"
+  def __init__(self,name= 'noName', width=0.25,depth=0.25,concrType=None,reinfSteelType=None):
+    super(BasicRecordRCSection,self).__init__(name,width,depth)
     self.sectionDescr= "Text describing the position of the section in the structure."
     self.concrType= concrType
     self.concrDiagName= None
-    self.depth= depth
-    self.width= width
     self.nDivIJ= 10
     self.nDivJK= 10
     self.fiberSectionRepr= None
@@ -197,8 +193,8 @@ class BasicRecordRCSection(object):
     rg= regiones.newQuadRegion(self.concrDiagName) 
     rg.nDivIJ= self.nDivIJ
     rg.nDivJK= self.nDivJK
-    rg.pMin= geom.Pos2d(-self.width/2,-self.depth/2)
-    rg.pMax= geom.Pos2d(self.width/2,self.depth/2)
+    rg.pMin= geom.Pos2d(-self.b/2,-self.h/2)
+    rg.pMax= geom.Pos2d(self.b/2,self.h/2)
 
 
 class RecordRCSimpleSection(BasicRecordRCSection):
@@ -211,10 +207,6 @@ class RecordRCSimpleSection(BasicRecordRCSection):
   :ivar concrType:       type of concrete (e.g. hormigonesEHE.HA25)     
   :ivar concrDiagName:   name identifying the characteristic stress-strain 
                          diagram of the concrete material
-  :ivar depth:           cross-section depth
-  :ivar width:           cross-section width
-  :ivar nDivIJ:          number of cells in IJ (width) direction
-  :ivar nDivJK:          number of cells in JK  (height) direction
   :ivar fiberSectionRepr: fiber model of the section
   :ivar reinfSteelType:  type of reinforcement steel
   :ivar reinfDiagName:   name identifying the characteristic stress-strain 
@@ -232,8 +224,8 @@ class RecordRCSimpleSection(BasicRecordRCSection):
   :ivar positvRebarRows: layers of main rebars in the local positive face of 
                          the section
   '''
-  def __init__(self,width=0.25,depth=0.25,concrType=None,reinfSteelType=None):
-    super(RecordRCSimpleSection,self).__init__(width,depth,concrType,reinfSteelType)
+  def __init__(self,name= 'noName', width=0.25,depth=0.25,concrType=None,reinfSteelType=None):
+    super(RecordRCSimpleSection,self).__init__(name,width,depth,concrType,reinfSteelType)
 
     # Longitudinal reinforcement
     self.coverMin= 0.0 
@@ -274,7 +266,7 @@ class RecordRCSimpleSection(BasicRecordRCSection):
     '''returns the local Y coordinate of the center of gravity of the rebars
        in the positive face
     '''
-    return self.depth/2.0-self.getPosRowsCGcover()
+    return self.h/2.0-self.getPosRowsCGcover()
 
   def getAsNeg(self):
     '''returns the cross-sectional area of the rebars in the negative face'''
@@ -293,11 +285,11 @@ class RecordRCSimpleSection(BasicRecordRCSection):
     '''returns the local Y coordinate of the center of gravity of the rebars
        in the negative face
     '''
-    return -self.depth/2.0+self.getNegRowsCGcover()
+    return -self.h/2.0+self.getNegRowsCGcover()
 
   def getAc(self):
     '''returns the cross-sectional area of the section'''
-    return self.width*self.depth
+    return self.b*self.h
   def getRoughVcuEstimation(self):
     '''returns a minimal value (normally shear strength will be greater)
        of the shear strength of the concrete section Vcu expressed
@@ -306,17 +298,17 @@ class RecordRCSimpleSection(BasicRecordRCSection):
   def getI(self):
     '''returns the second moment of area about the middle axis parallel to 
     the width '''
-    return 1/12.0*self.width*self.depth**3
+    return 1/12.0*self.b*self.h**3
 
   def getIz_RClocalZax(self):
     '''returns the second moment of area about the middle axis parallel to 
     the width (RClocalZaxis)'''
-    return 1/12.0*self.width*self.depth**3
+    return 1/12.0*self.b*self.h**3
 
   def getIy_RClocalYax(self):
     '''returns the second moment of area about the middle axis parallel to 
     the depth (RClocalYaxis)'''
-    return 1/12.0*self.depth*self.width**3
+    return 1/12.0*self.h*self.b**3
 
   def getSPos(self):
     '''returns a list with the distance between bars for each row of bars in 
@@ -399,13 +391,13 @@ class RecordRCSimpleSection(BasicRecordRCSection):
   def centerRebarsPos(self):
     '''centers in the width of the section the rebars placed in the positive face''' 
     for rbRow in self.positvRebarRows:
-      rbRow.centerRebars(self.width)
+      rbRow.centerRebars(self.b)
 
   def centerRebarsNeg(self):
     '''centers in the width of the section the rebars placed in the negative 
     face''' 
     for rbRow in self.negatvRebarRows:
-      rbRow.centerRebars(self.width)
+      rbRow.centerRebars(self.b)
 
   def defSectionGeometry(self,preprocessor,matDiagType):
     '''
@@ -423,22 +415,19 @@ class RecordRCSimpleSection(BasicRecordRCSection):
 
     reinforcement= geomSection.getReinfLayers
     for rbRow in self.negatvRebarRows:
-      y= -self.depth/2.0+rbRow.cover
+      y= -self.h/2.0+rbRow.cover
       #print "y neg.= ", y, " m"
-      p1= geom.Pos2d(-self.width/2+rbRow.coverLat,y)
-      p2= geom.Pos2d(self.width/2-rbRow.coverLat,y)
+      p1= geom.Pos2d(-self.b/2+rbRow.coverLat,y)
+      p2= geom.Pos2d(self.b/2-rbRow.coverLat,y)
       self.negReinfLayers.append(rbRow.defReinfLayer(reinforcement,"neg",self.reinfDiagName,p1,p2))
 
     for rbRow in self.positvRebarRows:
-      y= self.depth/2.0-rbRow.cover
-      p1= geom.Pos2d(-self.width/2+rbRow.coverLat,y)
-      p2= geom.Pos2d(self.width/2-rbRow.coverLat,y)
+      y= self.h/2.0-rbRow.cover
+      p1= geom.Pos2d(-self.b/2+rbRow.coverLat,y)
+      p2= geom.Pos2d(self.b/2-rbRow.coverLat,y)
       self.posReinfLayers.append(rbRow.defReinfLayer(reinforcement,"pos",self.reinfDiagName,p1,p2))
 
     self.coverMin= min(min(self.getCoverPos()),min(self.getCoverNeg()),min(self.getLatCoverPos()),min(self.getLatCoverNeg()))
-
-  def getJTorsion(self):
-    return paramRectangularSection.getJTorsion(self.width,self.depth)
 
   def getRespT(self,preprocessor,JTorsion):
     '''Material for modeling torsional response of section'''
@@ -446,11 +435,11 @@ class RecordRCSimpleSection(BasicRecordRCSection):
 
   def getRespVy(self,preprocessor):
     '''Material for modeling Y shear response of section'''
-    return typical_materials.defElasticMaterial(preprocessor,self.respVyName(),5/6.0*self.width*self.depth*self.concrType.Gcm())
+    return typical_materials.defElasticMaterial(preprocessor,self.respVyName(),5/6.0*self.b*self.h*self.concrType.Gcm())
 
   def getRespVz(self,preprocessor):
     '''Material for modeling z shear response of section'''
-    return typical_materials.defElasticMaterial(preprocessor,self.respVzName(),5/6.0*self.width*self.depth*self.concrType.Gcm())
+    return typical_materials.defElasticMaterial(preprocessor,self.respVzName(),5/6.0*self.b*self.h*self.concrType.Gcm())
 
   def defFiberSection(self,preprocessor):
     self.fs= preprocessor.getMaterialLoader.newMaterial("fiberSectionShear3d",self.sectionName)
@@ -514,7 +503,7 @@ class RecordRCSimpleSection(BasicRecordRCSection):
   def getStressCalculator(self):
     Ec= self.concrType.Ecm()
     Es= self.reinfSteelType.Es
-    return sc.StressCalc(self.width,self.depth,self.getPosRowsCGcover(),self.getNegRowsCGcover(),self.getAsPos(),self.getAsNeg(),Ec,Es)
+    return sc.StressCalc(self.b,self.h,self.getPosRowsCGcover(),self.getNegRowsCGcover(),self.getAsPos(),self.getAsNeg(),Ec,Es)
 
 class setRCSections2SetElVerif(object):
   '''This class defines the set of reinforced concrete sections that are going 
@@ -664,8 +653,8 @@ class RecordRCSlabBeamSection(setRCSections2SetElVerif):
     sSect1.sectionName= name + "1"
     sSect1.sectionDescr= sectionDescr + ". 1 direction."
     sSect1.concrType= concrType
-    sSect1.depth= depth
-    sSect1.width= width
+    sSect1.h= depth
+    sSect1.b= width
     sSect1.reinfSteelType= reinfSteelType
     sSect1.positvRebarRows=[]
     sSect1.negatvRebarRows=[]
@@ -675,8 +664,8 @@ class RecordRCSlabBeamSection(setRCSections2SetElVerif):
     sSect2.sectionName= name + "2"
     sSect2.sectionDescr= sectionDescr + ". 2 direction."
     sSect2.concrType= concrType
-    sSect2.depth= depth
-    sSect2.width= width
+    sSect2.h= depth
+    sSect2.b= width
     sSect2.reinfSteelType= reinfSteelType
     sSect2.positvRebarRows=[]
     sSect2.negatvRebarRows=[]

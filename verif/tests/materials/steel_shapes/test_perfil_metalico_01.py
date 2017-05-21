@@ -50,7 +50,7 @@ profil= HE400B.defSeccShElastica3d(preprocessor,matHE400B)
 elements= preprocessor.getElementLoader
 elements.defaultTransformation= "lin"
 
-elements.defaultMaterial= HE400B.nmb
+elements.defaultMaterial= HE400B.sectionName
 elem= elements.newElement("elastic_beam_3d",xc.ID([1,2]))
 elem.rho= HE400B.get('P')
 dp.defParamsPerfilMetalicoRegElasticoElem(elem,HE400B)

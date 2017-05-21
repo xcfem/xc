@@ -15,9 +15,9 @@ ts= .56
 ti= .48
 td= 1
 
-from materials import parametrosSeccionCajonMonocelular
+from materials import section_properties
 
-J= parametrosSeccionCajonMonocelular.getInerciaTorsionCajonMonocelular(bs,bi,h,ts,ti,td)
+J= section_properties.getInerciaTorsionCajonMonocelular(bs,bi,h,ts,ti,td)
 ratio1= abs(J-656.6)/656.6
 
 ''' 
