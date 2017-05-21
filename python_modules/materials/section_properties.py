@@ -299,7 +299,6 @@ class CircularSection(SectionProperties):
       K=c/(1+c**2)
       alpha=6/(7+20*K**2)
     return alpha
-  
   def alphaZ(self):
     '''Return distorsion coefficient with respect to local Z axis'''
     return self.alphaY()
