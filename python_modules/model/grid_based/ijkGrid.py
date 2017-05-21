@@ -157,11 +157,41 @@ class ijkGrid(object):
     return tagPto
 
   def gridSurfName(self,pt1,pt2,pt3,pt4):
+    '''Name of the quadrangle surface defined by 4 points
+
+    :param pt1,pt2,pt3,pt4: tags of the points (in right order) that define the 
+           surface 
+    '''
     return 's'+'%04.0f' % pt1 +'%04.0f' % pt2 +'%04.0f' % pt3 +'%04.0f' % pt4
 
+
   def gridLinName(self,pt1,pt2):
+    '''Name of the line defined by 2 points
+
+    :param pt1,pt2: tags of the points (in right order) that define the 
+           surface 
+    '''
     return 'l'+'%04.0f' % pt1 +'%04.0f' % pt2
   
+  def getNmSurfInRange(self,ijkRange):
+    '''Return a list with the names of the surfaces limited by a rectangle 
+    defined by the coordinates that correspond to the indices in the grid 
+    ijkRange.ijkMin=(indXmin,indYmin,indZmin) and
+    ijkRange.ijkMax=(indXmax,indYmax,indZmax). 
+    '''
+    (imin,jmin,kmin)=ijkRange.ijkMin
+    (imax,jmax,kmax)=ijkRange.ijkMax
+    'surfaces in XY plane'
+    indPtSurfXY=[((i,j,k),(i+1,j,k),(i+1,j+1,k),(i,j+1,k)) for j in range(jmin,jmax) for i in range(imin,imax) for k in range (kmin,kmax+1)]
+    nmSurfXY=[self.getNameQuadGridSurface(indPtsQs) for indPtsQs in indPtSurfXY]
+    'surfaces in XZ plane'
+    indPtSurfXZ=[((i,j,k),(i,j,k+1),(i+1,j,k+1),(i+1,j,k)) for k in range(kmin,kmax) for i in range(imin,imax) for j in range(jmin,jmax+1)]
+    nmSurfXZ=[self.getNameQuadGridSurface(indPtsQs) for indPtsQs in indPtSurfXZ]
+    'surfaces in YZ plane'
+    indPtSurfYZ=[((i,j,k),(i,j+1,k),(i,j+1,k+1),(i,j,k+1)) for k in range(kmin,kmax) for j in range(jmin,jmax) for i in range(imin,imax+1)]
+    nmSurfYZ=[self.getNameQuadGridSurface(indPtsQs) for indPtsQs in indPtSurfYZ]
+    return (nmSurfXY+nmSurfXZ+nmSurfYZ)
+                
   def generatePoints(self):
     '''Point generation.'''
     points= self.prep.getCad.getPoints
@@ -189,17 +219,18 @@ class ijkGrid(object):
             pt.getPos.z+= vDisp[2]
              
 
-  def newQuadGridSurface(self,ind4Pnt):
-    '''Generate the quadrangle surface defined by the 4 vertex whose indices 
-    in the grid are passed as parameters. 
+  def newQuadGridSurface(self,surfName):
+    '''Generate the quadrangle surface defined by the 4 vertex whose tags
+    are implicit in the name of the surface.
 
-    :param ind4Pnt: tuple of ordered points defined by their grid indices (i,j,k)
+    :param surfName: name given to the grid surface
     :returns: the quadrangle surface
     '''
-    (pto1,pto2,pto3,pto4)=tuple([self.getTagPntGrid(ind4Pnt[i]) for i in range(4)])
+    points= self.prep.getCad.getPoints
+    (tgPt1,tgPt2,tgPt3,tgPt4)=(int(surfName[1:5]),int(surfName[5:9]),int(surfName[9:13]),int(surfName[13:17]))
     surfaces= self.prep.getCad.getSurfaces
-    qs= surfaces.newQuadSurfacePts(pto1,pto2,pto3,pto4)
-    qs.name= self.gridSurfName(pto1,pto2,pto3,pto4)
+    qs= surfaces.newQuadSurfacePts(tgPt1,tgPt2,tgPt3,tgPt4)
+    qs.name= surfName
     qs.nDivI=1 #initialization values of number of divisions
     qs.nDivJ=1 
     return qs
@@ -239,34 +270,12 @@ class ijkGrid(object):
     ijkRange.ijkMax=(indXmax,indYmax,indZmax). 
     Add those surfaces to the dictionary dicQuadSurf.
     '''
-    retval= list()
-    (imin,jmin,kmin)=ijkRange.ijkMin
-    (imax,jmax,kmax)=ijkRange.ijkMax
-    (i,j,k)=(imin,jmin,kmin)  #initial values
-    if kmax== kmin:
-        'surfaces in XY plane'
-        for i in range(imin,imax):
-            for j in range(jmin,jmax):
-                indPtsQs=((i,j,k),(i+1,j,k),(i+1,j+1,k),(i,j+1,k))
-                a= self.newQuadGridSurface(indPtsQs)
-                retval.append(a)
-                self.dicQuadSurf[a.name]= a
-    elif jmax== jmin:
-        'surfaces in XZ plane'
-        for i in range(imin,imax):
-            for k in range(kmin,kmax):
-                indPtsQs=((i,j,k),(i,j,k+1),(i+1,j,k+1),(i+1,j,k))
-                a= self.newQuadGridSurface(indPtsQs)
-                retval.append(a)
-                self.dicQuadSurf[a.name]= a
-    elif imax== imin:
-        'surfaces in YZ plane'
-        for j in range(jmin,jmax):
-            for k in range(kmin,kmax):
-                indPtsQs=((i,j,k),(i,j+1,k),(i,j+1,k+1),(i,j,k+1))
-                a= self.newQuadGridSurface(indPtsQs)
-                retval.append(a)
-                self.dicQuadSurf[a.name]= a
+    retval= list()   #*eliminate this variable
+    nmSurfinRang=self.getNmSurfInRange(ijkRange)
+    for nameSurf in nmSurfinRang:
+      s= self.newQuadGridSurface(nameSurf)
+      self.dicQuadSurf[nameSurf]=s
+      retval.append(s)
     return retval
 
   def generateLines(self,ijkRange): 
@@ -310,36 +319,13 @@ class ijkGrid(object):
     ijkRange.ijkMin=(indXmin,indYmin,indZmin) and
     ijkRange.ijkMax=(indXmax,indYmax,indZmax). 
     '''
-    retval= self.prep.getSets.defSet(nmbrSet)
-    (imin,jmin,kmin)=ijkRange.ijkMin
-    (imax,jmax,kmax)=ijkRange.ijkMax
-    (i,j,k)=(imin,jmin,kmin)
-    if kmax== kmin:
-        'surfaces in XY plane'
-        for i in range(imin,imax):
-            for j in range(jmin,jmax):
-                indPtsQs=((i,j,k),(i+1,j,k),(i+1,j+1,k),(i,j+1,k))
-                nameSurf= self.getNameQuadGridSurface(indPtsQs)
-                if nameSurf in self.dicQuadSurf:
-                    retval.getSurfaces.append(self.dicQuadSurf[nameSurf])
-    elif jmax== jmin:
-        'surfaces in XZ plane'
-        for i in range(imin,imax):
-            for k in range(kmin,kmax):
-                indPtsQs=((i,j,k),(i,j,k+1),(i+1,j,k+1),(i+1,j,k))
-                nameSurf= self.getNameQuadGridSurface(indPtsQs)
-                if nameSurf in self.dicQuadSurf:
-                    retval.getSurfaces.append(self.dicQuadSurf[nameSurf])
-    elif imax== imin:
-        'surfaces in YZ plane'
-        for j in range(jmin,jmax):
-            for k in range(kmin,kmax):
-                indPtsQs=((i,j,k),(i,j+1,k),(i,j+1,k+1),(i,j,k+1))
-                nameSurf= self.getNameQuadGridSurface(indPtsQs)
-                if nameSurf in self.dicQuadSurf:
-                    retval.getSurfaces.append(self.dicQuadSurf[nameSurf])
-    retval.fillDownwards()    
-    return retval
+    setSurf= self.prep.getSets.defSet(nmbrSet)
+    nmSurfinRang=self.getNmSurfInRange(ijkRange)
+    for nameSurf in nmSurfinRang:
+      if nameSurf in self.dicQuadSurf:
+        setSurf.getSurfaces.append(self.dicQuadSurf[nameSurf])
+    setSurf.fillDownwards()    
+    return setSurf
 
   def getLstLinRange(self,ijkRange):
     ''':returns: a list of the lines inside a range of index 

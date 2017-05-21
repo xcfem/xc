@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-'''earth_pressure.py: earth pressure over finite element models.'''
+'''earth_pressure.py: earth pressure on finite element models.'''
 
 __author__= "Ana Ortega (AOO) and Luis C. Pérez Tato (LCPT)"
 __copyright__= "Copyright 2015, AOO and LCPT"
@@ -18,7 +18,7 @@ class EarthPressure:
     :ivar zWater:    global Z coordinate of groundwater level 
                      (if zGroundwater<minimum z of model => there is no groundwater)
     :ivar gammaWater: weight density of water
-    :ivar vDir:    unit vector defining pressures direction
+    :ivar vDir:      unit vector defining pressures direction
   '''
   def __init__(self,K , zGround, gammaSoil, zWater, gammaWater, vDir):
     self.K= K
@@ -29,11 +29,12 @@ class EarthPressure:
     self.vDir= vDir
  
   def getPressure(self,z):
+    '''Return the earth pressure acting on the points at global coordinate z 
+    '''
     retval= 0.0
     if(z<self.zGround):
       if(z>self.zWater):
         retval=self.K*self.gammaSoil*(self.zGround-z)
       else:
         retval=self.K*self.gammaSoil*(self.zGround-self.zWater)+self.K*(self.gammaSoil-self.gammaWater)*(self.zWater-z)+self.gammaWater*(self.zWater-z)
-    #print K, self.zGround, self.zWater, self.gammaSoil, self.gammaWater,z, retval
     return retval

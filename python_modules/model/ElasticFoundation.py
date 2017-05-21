@@ -6,6 +6,7 @@ import geom
 from materials import typical_materials
 from xcVtk.malla_ef import Fields
 from solution import predefined_solutions
+from model import predefined_spaces
 
 '''Generation of springs for nodes at foundation.'''
 
@@ -49,7 +50,7 @@ class ElasticFoundation(object):
       self.xSpring.E= self.cRoz*self.wModulus*arTribNod
       self.ySpring.E= self.cRoz*self.wModulus*arTribNod
       self.zSpring.E= self.wModulus*arTribNod
-      nn= modelSpace.setBearing(n.tag,idElem,[self.xSpringName,self.ySpringName,self.zSpringName])
+      nn= modelSpace.setBearing(n.tag,[self.xSpringName,self.ySpringName,self.zSpringName])
       self.springs.append(preprocessor.getElementLoader.getElement(idElem))
       idElem+= 1
   def getCentroid(self):
