@@ -480,7 +480,9 @@
 /usr/local/lib/python2.7/dist-packages/materials/reinforcingSteelTest.pyc
 /usr/local/lib/python2.7/dist-packages/materials/sccRectg.py
 /usr/local/lib/python2.7/dist-packages/materials/sccRectg.pyc
+/usr/local/lib/python2.7/dist-packages/materials/section_properties.py
 /usr/local/lib/python2.7/dist-packages/materials/sectionProperties.py
+/usr/local/lib/python2.7/dist-packages/materials/section_properties.pyc
 /usr/local/lib/python2.7/dist-packages/materials/sectionProperties.pyc
 /usr/local/lib/python2.7/dist-packages/materials/ShellInternalForces.py
 /usr/local/lib/python2.7/dist-packages/materials/ShellInternalForces.pyc

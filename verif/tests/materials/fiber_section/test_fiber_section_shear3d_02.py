@@ -5,7 +5,7 @@ stiffnesses. Home made test.
 '''
 
 
-from materials import paramRectangularSection
+from materials import section_properties
 from misc import banco_pruebas_scc3d
 import xc_base
 import geom
@@ -23,7 +23,7 @@ __email__= "l.pereztato@gmail.com ana.ortega.ort@gmal.com"
 # Rectangular cross-section definition
 b= 1 # Cross section width [cm]
 h= 1 # Cross section depth [cm]
-scc1x1= paramRectangularSection.RectangularSection('scc1x1',b,h)
+scc1x1= section_properties.RectangularSection('scc1x1',b,h)
 scc1x1.nDivIJ= 32 # number of cells in IJ direction  
 scc1x1.nDivJK= 32 # number of cells in JK direction
 

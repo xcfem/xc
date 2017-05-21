@@ -13,7 +13,7 @@ import geom
 import xc
 from miscUtils import LogMessages as lmsg
 from materials import typical_materials
-from materials import paramRectangularSection
+from materials import section_properties
 from model import predefined_spaces
 from model import ElasticFoundation as ef
 from xcVtk import vtk_grafico_base

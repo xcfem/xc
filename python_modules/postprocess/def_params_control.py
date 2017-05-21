@@ -2,7 +2,7 @@
 import math
 
 def defParamsPerfilMetalicoRegElasticoElem(e,perfil):
-  e.setProp("nmbSecc",perfil.nmb)
+  e.setProp("nmbSecc",perfil.sectionName)
   e.setProp("Area",perfil.A())
   e.setProp("fyd",perfil.steelType.fyd())
   e.setProp("fydV",perfil.steelType.fydV())

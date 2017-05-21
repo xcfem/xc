@@ -42,8 +42,8 @@ sccData=defSeccionHASimple.RecordRCSimpleSection()
 sccData.sectionName= "sccData"
 sccData.sectionDescr= "Prueba."
 sccData.concrType= concrete
-sccData.depth= 0.5
-sccData.width= 1.0
+sccData.h= 0.5
+sccData.b= 1.0
 sccData.reinfSteelType= reinfSteel
 sccData.negatvRebarRows=[defSeccionHASimple.MainReinfLayer(rebarsDiam=40e-3,areaRebar= areaFi40,rebarsSpacing=0.15,width=1.0,nominalCover=0.25-0.19)]
 sccData.positvRebarRows=[defSeccionHASimple.MainReinfLayer(rebarsDiam=6e-3,areaRebar= areaFi6,rebarsSpacing=0.15,width=1.0,nominalCover=0.25-0.19)]
@@ -73,7 +73,9 @@ ratio2= abs(fcELU14-4.4411488676)
 
 '''
 print "fcELU13= ", fcELU13
+print "ratio1= ", ratio1
 print "fcELU14= ", fcELU14
+print "ratio2= ", ratio2
 '''
 
 

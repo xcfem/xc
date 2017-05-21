@@ -24,7 +24,7 @@ import geom
 import xc
 from model import predefined_spaces
 from materials import typical_materials
-from materials import paramRectangularSection
+from materials import section_properties
 from postprocess import ControlVars as cv
 from solution import predefined_solutions
 from miscUtils import LogMessages as lmsg
@@ -32,7 +32,7 @@ from materials import CrossSectionInternalForces as csif
 from collections import defaultdict
 
 # Fake section (elements must have a stiffness)
-sccFICT= paramRectangularSection.RectangularSection("rectang",b=.40,h=40)
+sccFICT= section_properties.RectangularSection("rectang",b=.40,h=40)
 matSccFICT= typical_materials.MaterialData("mrectang",E=2.1e6,nu=0.3,rho=2500)
 
 class PhantomModel(object):
@@ -129,7 +129,7 @@ class PhantomModel(object):
     elements.dimElem= 1
     self.tagsNodesToLoad= defaultdict(list)
     if(fakeSection):
-      elements.defaultMaterial= sccFICT.nmb
+      elements.defaultMaterial= sccFICT.sectionName
     for tagElem in self.elementTags:
       elementSectionNames= self.sectionsDistribution.getSectionNamesForElement(tagElem)
       elementSectionDefinitions= self.sectionsDistribution.getSectionDefinitionsForElement(tagElem)

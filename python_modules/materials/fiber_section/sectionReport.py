@@ -15,7 +15,7 @@ import os
 from latex import latexUtils
 from materials import materialGraphics as mg
 import plotGeomSeccion as pg
-from materials import paramRectangularSection as prmRect
+from materials import section_properties as prmRect
 from materials.fiber_section import  defSeccionHASimple as sHAs
 
 fmt3_1f= '{:3.1f}'
@@ -29,7 +29,7 @@ class RecordFamMainReinforcement(object):
   '''Parameters for each layer of main reinforcement
   '''
   def __init__(self,reinfLayer):
-    self.nmb= reinfLayer.nombre
+    self.name= reinfLayer.nombre
     self.nRebars= reinfLayer.numReinfBars # number of rebars
     self.rebarsDiam= reinfLayer.barDiameter # Rebars diameter
     self.areaRebar= reinfLayer.barArea # total area of reinforcement in the layer
@@ -37,7 +37,7 @@ class RecordFamMainReinforcement(object):
     self.barsCOG= reinfLayer.getCdg() # center of gravity of the bars
 
   def texWrite(self,archTex,areaHorm):
-    archTex.write(self.nmb+' & '+str(self.nRebars))
+    archTex.write(self.name+' & '+str(self.nRebars))
     archTex.write(' & '+str(round(self.rebarsDiam*1e3)))
     archTex.write(' & '+fmt5_2f.format(self.areaRebar*1e4))
     archTex.write(' & '+fmt4_2f.format(self.areaRebar/areaHorm*1e3))

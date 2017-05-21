@@ -10,7 +10,7 @@ __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
 # Rectangular cross-section definition
-from materials import paramRectangularSection
+from materials import section_properties
 from misc import banco_pruebas_scc3d
 import xc_base
 import geom
@@ -23,7 +23,7 @@ from solution import predefined_solutions
 # Rectangular cross-section definition
 b= 10 # Cross section width  [cm]
 h= 20 # Cross section depth [cm]
-scc10x20= paramRectangularSection.RectangularSection('scc10x20',b,h)
+scc10x20= section_properties.RectangularSection('scc10x20',b,h)
 scc10x20.nDivIJ= 32 # number of cells in IJ direction  
 scc10x20.nDivJK= 32 # number of cells in JK direction
 

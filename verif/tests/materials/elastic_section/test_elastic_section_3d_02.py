@@ -7,7 +7,7 @@ import xc
 from solution import predefined_solutions
 from model import predefined_spaces
 from materials import typical_materials
-from materials import paramRectangularSection
+from materials import section_properties
 from misc import banco_pruebas_scc3d
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
@@ -25,10 +25,10 @@ preprocessor=  prueba.getPreprocessor
 # TEST TENGA DEMASIADO SENTIDO. Cuando menos habría que 
 # crear una clase para este tipo de perfiles que sea coherente con
 # las ya definidas.
-SHS50x50x2_5=  paramRectangularSection.RectangularSection("SHS50x50x2_5",b=0.05,h=0.05)
+SHS50x50x2_5=  section_properties.RectangularSection("SHS50x50x2_5",b=0.05,h=0.05)
 matSHS50x50x2_5=  typical_materials.MaterialData(name='matSec',E=210000e6,nu=0.3e6,rho=2500)
 
-SHS50x50x2_5.nmb= "SHS50x50x2_5"
+SHS50x50x2_5.sectionName= "SHS50x50x2_5"
 SHS50x50x2_5.b= 0.05
 SHS50x50x2_5.h= 0.05
 SHS50x50x2_5.e= 2.5e-3
@@ -49,7 +49,7 @@ SHS50x50x2_5.alpha= 5/6 # XXX Corregir
 
 # Materials definition
 mat= SHS50x50x2_5.defSeccElastica3d(preprocessor,matSHS50x50x2_5)
-elemZLS= banco_pruebas_scc3d.sectionModel(preprocessor, SHS50x50x2_5.nmb)
+elemZLS= banco_pruebas_scc3d.sectionModel(preprocessor, SHS50x50x2_5.sectionName)
 
 # Constraints
 modelSpace= predefined_spaces.getStructuralMechanics3DSpace(preprocessor)
