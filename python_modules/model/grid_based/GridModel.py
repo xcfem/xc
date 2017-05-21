@@ -182,7 +182,7 @@ class MaterialSurface(MaterialBase):
   def generateSurfaces(self):
     self.lstSup= list()
     for ijkRange in self.ranges:
-      self.lstSup+= self.grid.generateSurfaces(ijkRange)
+       self.lstSup+= self.grid.generateSurfaces(ijkRange)
     for s in self.lstSup:
        s.setElemSizeIJ(self.elemSize,self.elemSize)
 
