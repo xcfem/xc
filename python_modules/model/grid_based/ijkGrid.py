@@ -79,21 +79,6 @@ class IJKRange(object):
     return 'IRange: ' + str(self.getIRange()) + ' JRange: ' + str(self.getJRange()) + ' KRange: ' + str(self.getKRange())
 
 
-def getLin2Pts(lstLinBusq,tPto1,tPto2):
-    ''':returns: the line that belongs to the set `lstLinBusq` and whose
-    starting and ending points are those of tags `tPto1` and `tPto2`
-    '''
-    broke_out= False
-    for l in lstLinBusq:
-        extr= l.getKPoints()
-        if (extr[0]== tPto1 and extr[1]== tPto2) or (extr[0]== tPto2 and extr[1]== tPto1):
-            broke_out= True
-            break
-    if not broke_out:
-#        print "Didn't find the line"
-        return
-    else:
-        return l
 
 class moveRange(object):
   '''Applies a displacement to a range of grid points
@@ -137,8 +122,8 @@ class ijkGrid(object):
     self.prep= prep
     self.indices= self.prep.getCad.get3DNets.new3DNet()
     self.indices.dim(len(self.gridCoo[0]),len(self.gridCoo[1]),len(self.gridCoo[2]))
-    self.pointCounter= 1
-    self.prep.getCad.getSurfaces.defaultTag= 1
+    self.pointCounter= prep.getCad.getPoints.defaultTag+1
+#    self.prep.getCad.getSurfaces.defaultTag= 1
     self.dicQuadSurf=dict()
     self.dicLin=dict()
     
@@ -168,13 +153,13 @@ class ijkGrid(object):
   def gridLinName(self,pt1,pt2):
     '''Name of the line defined by 2 points
 
-    :param pt1,pt2: tags of the points (in right order) that define the 
-           surface 
+    :param pt1,pt2: tags of the points (in right order) that define the line
+
     '''
     return 'l'+'%04.0f' % pt1 +'%04.0f' % pt2
   
   def getNmSurfInRange(self,ijkRange):
-    '''Return a list with the names of the surfaces limited by a rectangle 
+    '''Return a list with the names of the surfaces limited by a volume 
     defined by the coordinates that correspond to the indices in the grid 
     ijkRange.ijkMin=(indXmin,indYmin,indZmin) and
     ijkRange.ijkMax=(indXmax,indYmax,indZmax). 
@@ -192,6 +177,25 @@ class ijkGrid(object):
     nmSurfYZ=[self.getNameQuadGridSurface(indPtsQs) for indPtsQs in indPtSurfYZ]
     return (nmSurfXY+nmSurfXZ+nmSurfYZ)
                 
+  def getNmLinInRange(self,ijkRange):
+    '''Return a list with the names of the surfaces limited by a volume 
+    defined by the coordinates that correspond to the indices in the grid 
+    ijkRange.ijkMin=(indXmin,indYmin,indZmin) and
+    ijkRange.ijkMax=(indXmax,indYmax,indZmax). 
+    '''
+    (imin,jmin,kmin)=ijkRange.ijkMin
+    (imax,jmax,kmax)=ijkRange.ijkMax
+    'lines parallel to X-axis'
+    indPtLinX=[((i,j,k),(i+1,j,k)) for  i in range(imin,imax) for j in range(jmin,jmax+1) for k in range(kmin,kmax+1)]
+    nmLinX=[self.getNameGridLine(indPtsLn) for indPtsLn in indPtLinX]
+    'lines parallel to Y-axis'
+    indPtLinY=[((i,j,k),(i,j+1,k)) for j in range(jmin,jmax)  for  i in range(imin,imax+1) for k in range(kmin,kmax+1)]
+    nmLinY=[self.getNameGridLine(indPtsLn) for indPtsLn in indPtLinY]
+    'lines parallel to Z-axis'
+    indPtLinZ=[((i,j,k),(i,j,k+1)) for  k in range(kmin,kmax) for i in range(imin,imax+1) for j in range(jmin,jmax+1)]
+    nmLinZ=[self.getNameGridLine(indPtsLn) for indPtsLn in indPtLinZ]
+    return (nmLinX+nmLinY+nmLinZ)
+    
   def generatePoints(self):
     '''Point generation.'''
     points= self.prep.getCad.getPoints
@@ -247,24 +251,36 @@ class ijkGrid(object):
     nameSurf= self.gridSurfName(pto1,pto2,pto3,pto4)
     return nameSurf
 
-  def newGridLine(self,ind2Pnt):
-    '''Generate the line defined by the 2 end-points whose indices 
-    in the grid are passed as parameters. 
+  def getNameGridLine(self,ind2Pnt):
+    '''Return the name of the line defined by the 2 vertices 
+    whose indices in the grid are passed as parameters. 
 
     :param ind2Pnt: tuple of ordered points defined by their grid indices 
                     (i,j,k)
     :returns: the line
     '''
     (pto1,pto2)=tuple([self.getTagPntGrid(ind2Pnt[i]) for i in range(2)])
+    nameLin= self.gridLinName(pto1,pto2)
+    return nameLin
+
+  def newGridLine(self,linName):
+    '''Generate the line defined by the 2 end-points whose tags
+    are implicit in the name of the line.
+
+    :param linName: name given to the grid line
+    :returns: the line
+    '''
+    points= self.prep.getCad.getPoints
+    (tgPt1,tgPt2)=(int(surfName[1:5]),int(surfName[5:9]))
     lines= self.prep.getCad.getLines
-    ln= lines.newLine(pto1,pto2)
-    ln.name= self.gridLinName(pto1,pto2)
+    ln= lines.newLin(tgPt1,tgPt2)
+    ln.name= linName
     ln.nDiv=1 #initialization value
     return ln
 
 
   def generateSurfaces(self,ijkRange):
-    '''generate the surfaces limited by a rectangle defined by the coordinates
+    '''generate the surfaces limited by a volume defined by the coordinates
     that correspond to the indices in the grid 
     ijkRange.ijkMin=(indXmin,indYmin,indZmin) and
     ijkRange.ijkMax=(indXmax,indYmax,indZmax). 
@@ -279,37 +295,19 @@ class ijkGrid(object):
     return retval
 
   def generateLines(self,ijkRange): 
-    '''generates the lines in an axis parallel to one of the global axes. The function also adds
-    the generated lines to the dictionary `dicLin={line_id: xc_line, ...}`
-
-    :param ijkRange: range where lines are included (only one coordinate varies)
+    '''generate the lines limited by a volume defined by the coordinates
+    that correspond to the indices in the grid 
+    ijkRange.ijkMin=(indXmin,indYmin,indZmin) and
+    ijkRange.ijkMax=(indXmax,indYmax,indZmax). 
+    Add those lines to the dictionary dicLin.
     '''
-    retval= list()
-    lines= self.prep.getCad.getLines
-    (imin,jmin,kmin)=ijkRange.ijkMin
-    (imax,jmax,kmax)=ijkRange.ijkMax
-    (i,j,k)=(imin,jmin,kmin)  #initial values
-    if jmax==jmin and kmax==kmin :
-        'line parallel to X-axis'
-        for i in range(imin,imax):
-            indPntsLn=((i,j,k),(i+1,j,k))
-            l=self.newGridLine(indPntsLn)
-            retval.append(l)
-            self.dicLin[l.name]=l
-    elif imax==imin and kmax==kmin :
-        'line parallel to Y-axis'
-        for j in range(jmin,jmax):
-            indPntsLn=((i,j,k),(i,j+1,k))
-            l=self.newGridLine(indPntsLn)
-            retval.append(l)
-            self.dicLin[l.name]=l
-    elif imax==imin and jmax==jmin :
-        'line parallel to Z-axis'
-        for k in range(kmin,kmax):
-            indPntsLn=((i,j,k),(i,j,k+1))
-            l=self.newGridLine(indPntsLn)
-            retval.append(l)
-            self.dicLin[l.name]=l
+
+    retval= list()  #*eliminate this variable
+    nmLinInRang=self.getNmLinInRange(ijkRange)
+    for nameLin in nmLinInRang:
+      l=self.newGridLine(nameLin)
+      self.dicLin[nameLin]=l
+      retval.append(l)
     return retval
 
   def getSetInRange(self,ijkRange,nmbrSet):
@@ -499,3 +497,18 @@ def lstUnionSetsSurf(setSurf1,setSurf2):
     return retval
 
 
+def getLin2Pts(lstLinBusq,tPto1,tPto2):
+    ''':returns: the line that belongs to the set `lstLinBusq` and whose
+    starting and ending points are those of tags `tPto1` and `tPto2`
+    '''
+    broke_out= False
+    for l in lstLinBusq:
+        extr= l.getKPoints()
+        if (extr[0]== tPto1 and extr[1]== tPto2) or (extr[0]== tPto2 and extr[1]== tPto1):
+            broke_out= True
+            break
+    if not broke_out:
+#        print "Didn't find the line"
+        return
+    else:
+        return l
