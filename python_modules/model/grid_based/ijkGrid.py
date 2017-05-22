@@ -159,8 +159,7 @@ class ijkGrid(object):
     self.prep= prep
     self.indices= self.prep.getCad.get3DNets.new3DNet()
     self.indices.dim(len(self.gridCoo[0]),len(self.gridCoo[1]),len(self.gridCoo[2]))
-    self.pointCounter= prep.getCad.getPoints.defaultTag+1
-#    self.prep.getCad.getSurfaces.defaultTag= 1
+    self.pointCounter=0
     self.dicQuadSurf=dict()
     self.dicLin=dict()
     
@@ -236,12 +235,13 @@ class ijkGrid(object):
   def generatePoints(self):
     '''Point generation.'''
     points= self.prep.getCad.getPoints
+    inicTag=points.defaultTag
     lstPt=[(i+1,j+1,k+1,self.gridCoo[0][i],self.gridCoo[1][j],self.gridCoo[2][k]) for i in range(len(self.gridCoo[0])) for j in range(len(self.gridCoo[1])) for k in range(len(self.gridCoo[2])) ]
     for p in lstPt:
       (i,j,k,x,y,z)=p
-      pnt=points.newPntIDPos3d(self.pointCounter,geom.Pos3d(x,y,z))
-      self.indices.setPnt(i,j,k,pnt.tag)
       self.pointCounter+=1
+      pnt=points.newPntIDPos3d(self.pointCounter+inicTag,geom.Pos3d(x,y,z))
+      self.indices.setPnt(i,j,k,pnt.tag)
     for rm in self.rangesToMove:
       r= rm.range
       vDisp= rm.vDisp
@@ -311,8 +311,8 @@ class ijkGrid(object):
     return ln
 
 
-  def generateSurfaces(self,ijkRange):
-    '''generate the surfaces limited by a volume defined by the coordinates
+  def genSurfOneRegion(self,ijkRange):
+    '''generate the surfaces limited by a region defined by the coordinates
     that correspond to the indices in the grid 
     ijkRange.ijkMin=(indXmin,indYmin,indZmin) and
     ijkRange.ijkMax=(indXmax,indYmax,indZmax). 
@@ -326,8 +326,22 @@ class ijkGrid(object):
       retval.append(s)
     return retval
 
-  def generateLines(self,ijkRange): 
-    '''generate the lines limited by a volume defined by the coordinates
+  def genSurfMultiRegion(self,lstIJKRange):
+    '''generate the surfaces limited by all the regions included in the 
+    list of ijkRanges passed as parameter.
+    Each region defines a volume limited by the coordinates    
+    that correspond to the indices in the grid 
+    ijkRange.ijkMin=(indXmin,indYmin,indZmin) and
+    ijkRange.ijkMax=(indXmax,indYmax,indZmax). 
+    Add those surfaces to the dictionary dicQuadSurf.
+    '''
+    retval= list()   #*eliminate this variable
+    for rg in lstIJKRange:
+      retval.append(self.genSurfOneRegion(rg))
+    return retval
+
+  def genLinOneRegion(self,ijkRange): 
+    '''generate the lines limited by a region defined by the coordinates
     that correspond to the indices in the grid 
     ijkRange.ijkMin=(indXmin,indYmin,indZmin) and
     ijkRange.ijkMax=(indXmax,indYmax,indZmax). 
@@ -342,9 +356,23 @@ class ijkGrid(object):
       retval.append(l)
     return retval
 
-  def getSetInRange(self,ijkRange,nmbrSet):
-    '''return the set of entities (surfaces and all lines, points, elements, 
-    nodes, ... associated with them) in a region limited by the coordinates
+  def genLinMultiRegion(self,lstIJKRange):
+    '''generate the lines limited by all the regions included in the 
+    list of ijkRanges passed as parameter.
+    Each region defines a volume limited by the coordinates    
+    that correspond to the indices in the grid 
+    ijkRange.ijkMin=(indXmin,indYmin,indZmin) and
+    ijkRange.ijkMax=(indXmax,indYmax,indZmax). 
+    Add those lines to the dictionary dicLin.
+    '''
+    retval= list()   #*eliminate this variable
+    for rg in lstIJKRange:
+      retval.append(self.genLinOneRegion(rg))
+    return retval
+  
+  def getSetSurfOneRegion(self,ijkRange,nmbrSet):
+    '''return the set of surfaces and all the entities(lines, points, elements, 
+    nodes, ...) associated with them in a region limited by the coordinates
     that correspond to the indices in the grid 
     ijkRange.ijkMin=(indXmin,indYmin,indZmin) and
     ijkRange.ijkMax=(indXmax,indYmax,indZmax). 
@@ -357,6 +385,57 @@ class ijkGrid(object):
     setSurf.fillDownwards()    
     return setSurf
 
+  def getSetSurfMultiRegion(self,lstIJKRange,nmbrSet):
+    '''return the set of surfaces and all the entities(lines, points, elements, 
+    nodes, ...) associated with them in a all the regions  included in the 
+    list of ijkRanges passed as parameter.
+    Each region defines a volume limited by the coordinates    
+    that correspond to the indices in the grid 
+    ijkRange.ijkMin=(indXmin,indYmin,indZmin) and
+    ijkRange.ijkMax=(indXmax,indYmax,indZmax). 
+    '''
+    setSurf= self.prep.getSets.defSet(nmbrSet)
+    for rg in lstIJKRange:
+      nmSurfinRang=self.getNmSurfInRange(rg)
+      for nameSurf in nmSurfinRang:
+        if nameSurf in self.dicQuadSurf:
+          setSurf.getSurfaces.append(self.dicQuadSurf[nameSurf])
+    setSurf.fillDownwards()    
+    return setSurf
+
+  def getSetLinOneRegion(self,ijkRange,nmbrSet):
+    '''return the set of lines and all the entities(points, elements, 
+    nodes, ...) associated with them in a region limited by the coordinates
+    that correspond to the indices in the grid 
+    ijkRange.ijkMin=(indXmin,indYmin,indZmin) and
+    ijkRange.ijkMax=(indXmax,indYmax,indZmax). 
+    '''
+    setLin= self.prep.getSets.defSet(nmbrSet)
+    nmLininRang=self.getNmLinInRange(ijkRange)
+    for nameLin in nmLininRang:
+      if nameLin in self.dicLin:
+        setLin.getLines.append(self.dicLin[nameLin])
+    setLin.fillDownwards()    
+    return setLin
+
+  def getSetLinMultiRegion(self,lstIJKRange,nmbrSet):
+    '''return the set of lines and all the entities(points, elements, 
+    nodes, ...) associated with them in a all the regions  included in the 
+    list of ijkRanges passed as parameter.
+    Each region defines a volume limited by the coordinates    
+    that correspond to the indices in the grid 
+    ijkRange.ijkMin=(indXmin,indYmin,indZmin) and
+    ijkRange.ijkMax=(indXmax,indYmax,indZmax). 
+    '''
+    setLin= self.prep.getSets.defSet(nmbrSet)
+    for rg in lstIJKRange:
+      nmLininRang=self.getNmLinInRange(rg)
+      for nameLin in nmLininRang:
+        if nameLin in self.dicLin:
+          setLin.getLines.append(self.dicLin[nameLin])
+    setLin.fillDownwards()    
+    return setLin
+  
   def getLstLinRange(self,ijkRange):
     '''return a list of lines in a region limited by the coordinates
     that correspond to the indices in the grid 
@@ -391,7 +470,7 @@ class ijkGrid(object):
     return retval
  
   def appendLoadInRangeToCurrentLoadPattern(self,ijkRange,nmbrSet,loadVector):
-    s= self.getSetInRange(ijkRange,nmbrSet)
+    s= self.getSetSurfOneRegion(ijkRange,nmbrSet)
     sElem=s.getElements
     for e in sElem:
       e.vector3dUniformLoadGlobal(loadVector)
@@ -408,7 +487,7 @@ class ijkGrid(object):
         
 
   def appendEarthPressureToCurrentLoadPattern(self,ijkRange,nmbrSet,earthPressLoadressure):
-    s= self.getSetInRange(ijkRange,nmbrSet)
+    s= self.getSetSurfOneRegion(ijkRange,nmbrSet)
     sElem=s.getElements
     for e in sElem:
       zElem=e.getCooCentroid(False)[2]
