@@ -78,7 +78,44 @@ class IJKRange(object):
   def __str__(self):
     return 'IRange: ' + str(self.getIRange()) + ' JRange: ' + str(self.getJRange()) + ' KRange: ' + str(self.getKRange())
 
+  def extractIncludedIJranges(self,step=1):
+    '''return a list with all the sub-ranges included in the IJKRange 
+    for which the index K is a constant. Graphically it can be seen as
+    the set of planes 'parallel' to global XY included in the region defined
+    by the IJKRange 
 
+    :ivar step: K step to select the XY planes (defaults to 1)
+    '''
+    (imin,jmin,kmin)=self.ijkMin
+    (imax,jmax,kmax)=self.ijkMax
+    lstIJrang=[IJKRange((imin,jmin,k),(imax,jmax,k)) for k in range(kmin,kmax+1,step)]
+    return lstIJrang
+
+  def extractIncludedIKranges(self,step=1):
+    '''return a list with all the sub-ranges included in the IJKRange 
+    for which the index J is a constant. Graphically it can be seen as
+    the set of planes 'parallel' to global XZ included in the region defined
+    by the IJKRange 
+
+    :param step: J step to select the XZ planes (defaults to 1)
+    '''
+    (imin,jmin,kmin)=self.ijkMin
+    (imax,jmax,kmax)=self.ijkMax
+    lstIKrang=[IJKRange((imin,j,kmin),(imax,j,kmax)) for j in range(jmin,jmax+1,step)]
+    return lstIKrang
+
+  def extractIncludedJKranges(self,step=1):
+    '''return a list with all the sub-ranges included in the IJKRange 
+    for which the index I is a constant. Graphically it can be seen as
+    the set of planes 'parallel' to global YZ included in the region defined
+    by the IJKRange 
+
+    :param step: I step to select the XZ planes (defaults to 1)
+    '''
+    (imin,jmin,kmin)=self.ijkMin
+    (imax,jmax,kmax)=self.ijkMax
+    lstJKrang=[IJKRange((i,jmin,kmin),(i,jmax,kmax)) for i in range(imin,imax+1,step)]
+    return lstJKrang
 
 class moveRange(object):
   '''Applies a displacement to a range of grid points
@@ -135,14 +172,14 @@ class ijkGrid(object):
     return len(self.gridCoo[2])-1
 
   def getTagPntGrid(self,indPnt):
-    '''return the tag of the point at indPnt=(i,j,k) index of the grid
+    '''Return the tag of the point at indPnt=(i,j,k) index of the grid.
 
     :param indPnt: grid indices that point to the global (X, Y, Z)  coordinates    '''
     tagPto= self.indices.getPnt(indPnt[0]+1,indPnt[1]+1,indPnt[2]+1).tag
     return tagPto
 
   def gridSurfName(self,pt1,pt2,pt3,pt4):
-    '''Name of the quadrangle surface defined by 4 points
+    '''Return the name of the quadrangle surface defined by 4 points.
 
     :param pt1,pt2,pt3,pt4: tags of the points (in right order) that define the 
            surface 
@@ -151,7 +188,7 @@ class ijkGrid(object):
 
 
   def gridLinName(self,pt1,pt2):
-    '''Name of the line defined by 2 points
+    '''Return the name of the line defined by 2 points
 
     :param pt1,pt2: tags of the points (in right order) that define the line
 
@@ -199,17 +236,12 @@ class ijkGrid(object):
   def generatePoints(self):
     '''Point generation.'''
     points= self.prep.getCad.getPoints
-    k= 1;
-    for z in self.gridCoo[2]:
-      j= 1
-      for y in self.gridCoo[1]:
-        i= 1
-        for x in self.gridCoo[0]:
-          pt= points.newPntIDPos3d(self.pointCounter,geom.Pos3d(x,y,z))
-          self.indices.setPnt(i,j,k,pt.tag)
-          self.pointCounter+=1; i+=1
-        j+= 1
-      k+= 1
+    lstPt=[(i+1,j+1,k+1,self.gridCoo[0][i],self.gridCoo[1][j],self.gridCoo[2][k]) for i in range(len(self.gridCoo[0])) for j in range(len(self.gridCoo[1])) for k in range(len(self.gridCoo[2])) ]
+    for p in lstPt:
+      (i,j,k,x,y,z)=p
+      pnt=points.newPntIDPos3d(self.pointCounter,geom.Pos3d(x,y,z))
+      self.indices.setPnt(i,j,k,pnt.tag)
+      self.pointCounter+=1
     for rm in self.rangesToMove:
       r= rm.range
       vDisp= rm.vDisp
@@ -217,10 +249,10 @@ class ijkGrid(object):
         for j in r.getJRange():
           for k in r.getKRange():
             tagp= self.getTagPntGrid(indPnt=(i,j,k))
-            pt= points.get(tagp)
-            pt.getPos.x+= vDisp[0]
-            pt.getPos.y+= vDisp[1]
-            pt.getPos.z+= vDisp[2]
+            pnt= points.get(tagp)
+            pnt.getPos.x+= vDisp[0]
+            pnt.getPos.y+= vDisp[1]
+            pnt.getPos.z+= vDisp[2]
              
 
   def newQuadGridSurface(self,surfName):
@@ -362,7 +394,6 @@ class ijkGrid(object):
     s= self.getSetInRange(ijkRange,nmbrSet)
     sElem=s.getElements
     for e in sElem:
-      #print e.tag
       e.vector3dUniformLoadGlobal(loadVector)
 
   def appendLoadBeamsInRangeToCurrentLoadPattern(self,ijkRange,loadVector,refSystem):
