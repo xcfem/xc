@@ -61,50 +61,10 @@ LimitStateControllerBase
     :show-inheritance:
 
 
-materials.sccRectg
-------------------
-
-.. automodule:: materials.sccRectg
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-materials.sectionProperties
+materials.section_properties
 ---------------------------
 
-.. automodule:: materials.sectionProperties
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-parametrosSeccionCajonMonocelular
----------------------------------
-
-.. automodule:: materials.parametrosSeccionCajonMonocelular
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-paramCircularSection
---------------------
-
-.. automodule:: materials.paramCircularSection
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-paramIsection
--------------
-
-.. automodule:: materials.paramIsection
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-paramRectangularSection
------------------------
-
-.. automodule:: materials.paramRectangularSection
+.. automodule:: materials.section_properties
     :members:
     :undoc-members:
     :show-inheritance:
@@ -129,30 +89,6 @@ materials.regimenSeccion
 ------------------------
 
 .. automodule:: materials.regimenSeccion
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-paramMetallicProfile
---------------------
-
-.. automodule:: materials.paramMetallicProfile
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-paramMetallicProfile
---------------------
-
-.. automodule:: materials.paramMetallicProfile
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-paramGenericSection
--------------------
-
-.. automodule:: materials.paramGenericSection
     :members:
     :undoc-members:
     :show-inheritance:

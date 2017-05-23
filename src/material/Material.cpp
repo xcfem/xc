@@ -65,15 +65,21 @@
 #include "utility/matrix/ID.h"
 
 //! @brief Constructor.
+//!
+//! To construct a material whose unique identifier among materials in the
+//! domain is given by \p tag, and whose class identifier is given
+//! by \p classTag. These integers are passed to the TaggedObject and
+//! MovableObject class constructors.
 XC::Material::Material(int tag, int clasTag)
   :TaggedObject(tag), MovableObject(clasTag) {}
 
 //! @brief Returns (if possible) a pointer to the material handler (owner).
 const XC::MaterialLoader *XC::Material::GetMaterialLoader(void) const
   {
-    const XC::MaterialLoader *retval= dynamic_cast<const MaterialLoader *>(Owner());
+    const MaterialLoader *retval= dynamic_cast<const MaterialLoader *>(Owner());
     if(!retval)
-      std::cerr << "Material::GetMaterialLoader; material handler not defined." << std::endl;
+      std::cerr << "Material::" << __FUNCTION__
+	        << "; material handler not defined." << std::endl;
     return retval;
   }
 
@@ -82,7 +88,8 @@ XC::MaterialLoader *XC::Material::GetMaterialLoader(void)
   {
     XC::MaterialLoader *retval= dynamic_cast<MaterialLoader *>(Owner());
     if(!retval)
-      std::cerr << "Material::GetMaterialLoader; material handler not defined." << std::endl;
+      std::cerr << "Material::" << __FUNCTION__
+	        << "; material handler not defined." << std::endl;
     return retval;
   }
 
@@ -145,8 +152,8 @@ int XC::sendMaterialPtr(Material *ptr,DbTagData &dt,CommParameters &cp,const Bro
         res= cp.sendMovable(*ptr,dt,md);
       }
     if(res < 0)
-      std::cerr <<"WARNING sendMaterialPtr - "
-                << " failed to send material\n";
+      std::cerr << "Material::" << __FUNCTION__
+                << "; failed to send material\n";
     return res;
   }
 

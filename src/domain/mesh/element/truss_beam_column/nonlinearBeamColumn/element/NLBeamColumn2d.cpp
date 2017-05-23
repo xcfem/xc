@@ -407,376 +407,388 @@ int XC::NLBeamColumn2d::update()
     if(initialFlag == 2)
       this->revertToLastCommit();
 
-  // update the transformation
-  theCoordTransf->update();
+    // update the transformation
+    theCoordTransf->update();
 
-  // get basic displacements and increments
-  const Vector &v = theCoordTransf->getBasicTrialDisp();
-  static Vector dv(NEBD);
-  dv = theCoordTransf->getBasicIncrDeltaDisp();
+    // get basic displacements and increments
+    const Vector &v = theCoordTransf->getBasicTrialDisp();
+    static Vector dv(NEBD);
+    dv = theCoordTransf->getBasicIncrDeltaDisp();
 
-  static XC::Vector vin(NEBD);
-  vin = v;
-  vin -= dv;
+    static Vector vin(NEBD);
+    vin = v;
+    vin -= dv;
 
-  if(initialFlag != 0 && dv.Norm() <= DBL_EPSILON && sp.Nula())
-    return 0;
+    if(initialFlag != 0 && dv.Norm() <= DBL_EPSILON && sp.Nula())
+      return 0;
 
-   const size_t nSections= getNumSections();
-  const Matrix &xi_pt  = quadRule.getIntegrPointCoords(nSections);
-  const Vector &weight = quadRule.getIntegrPointWeights(nSections);
+    const size_t nSections= getNumSections();
+    const Matrix &xi_pt  = quadRule.getIntegrPointCoords(nSections);
+    const Vector &weight = quadRule.getIntegrPointWeights(nSections);
 
-  static Vector vr(NEBD);       // element residual displacements
-  static Matrix f(NEBD,NEBD);   // element flexibility matrix
+    static Vector vr(NEBD);       // element residual displacements
+    static Matrix f(NEBD,NEBD);   // element flexibility matrix
 
-  static Matrix I(NEBD,NEBD);   // an identity matrix for matrix inverse
-  double dW= 0.0;                   // section strain energy (work) norm
+    static Matrix I(NEBD,NEBD);   // an identity matrix for matrix inverse
+    double dW= 0.0;                   // section strain energy (work) norm
 
-  I.Zero();
-  for(size_t i=0; i<NEBD; i++)
-    I(i,i) = 1.0;
+    I.Zero();
+    for(size_t i=0; i<NEBD; i++)
+      I(i,i) = 1.0;
 
-  int numSubdivide = 1;
-  bool converged = false;
-  static Vector dSe(NEBD);
-  static Vector dvToDo(NEBD);
-  static Vector dvTrial(NEBD);
-  static Vector SeTrial(NEBD);
-  static Matrix kvTrial(NEBD, NEBD);
+    int numSubdivide = 1;
+    bool converged = false;
+    static Vector dSe(NEBD);
+    static Vector dvToDo(NEBD);
+    static Vector dvTrial(NEBD);
+    static Vector SeTrial(NEBD);
+    static Matrix kvTrial(NEBD, NEBD);
 
-  dvToDo = dv;
-  dvTrial = dvToDo;
+    dvToDo = dv;
+    dvTrial = dvToDo;
 
-  static double factor = 10;
-  double L = theCoordTransf->getInitialLength();
-  double oneOverL  = 1.0/L;
+    static double factor = 10;
+    const double L= theCoordTransf->getInitialLength();
+    const double oneOverL= 1.0/L;
 
-  maxSubdivisions = 10;
-
-
-  // fmk - modification to get compatable ele forces and deformations
-  //   for a change in deformation dV we try first a newton iteration, if
-  //   that fails we try an initial flexibility iteration on first iteration
-  //   and then regular newton, if that fails we use the initial flexiblity
-  //   for all iterations.
-  //
-  //   if they both fail we subdivide dV & try to get compatable forces
-  //   and deformations. if they work and we have subdivided we apply
-  //   the remaining dV.
+    maxSubdivisions = 10;
 
 
-  while (converged == false && numSubdivide <= maxSubdivisions) {
+    // fmk - modification to get compatable ele forces and deformations
+    //   for a change in deformation dV we try first a newton iteration, if
+    //   that fails we try an initial flexibility iteration on first iteration
+    //   and then regular newton, if that fails we use the initial flexiblity
+    //   for all iterations.
+    //
+    //   if they both fail we subdivide dV & try to get compatable forces
+    //   and deformations. if they work and we have subdivided we apply
+    //   the remaining dV.
 
-    // try regular newton (if l==0), or
-    // initial tangent on first iteration then regular newton (if l==1), or
-    // initial tangent iterations (if l==2)
+    while (converged == false && numSubdivide <= maxSubdivisions)
+      {
 
-    for(int l=0; l<3; l++) {
+	// try regular newton (if l==0), or
+	// initial tangent on first iteration then regular newton (if l==1), or
+	// initial tangent iterations (if l==2)
 
-      //      if(l == 1) l = 2;
-      SeTrial = Se;
-      kvTrial = kv;
-      for(size_t i=0; i<nSections; i++) {
-        section_matrices.getVsSubdivide()[i] = vs[i];
-        section_matrices.getFsSubdivide()[i] = fs[i];
-        section_matrices.getSsrSubdivide()[i] = Ssr[i];
+	for(int l=0; l<3; l++)
+	  {
+	    //      if(l == 1) l = 2;
+	    SeTrial = Se;
+	    kvTrial = kv;
+	    for(size_t i=0; i<nSections; i++)
+	      {
+		section_matrices.getVsSubdivide()[i] = vs[i];
+		section_matrices.getFsSubdivide()[i] = fs[i];
+		section_matrices.getSsrSubdivide()[i] = Ssr[i];
+	      }
+
+	    // calculate nodal force increments and update nodal forces
+	    // dSe = kv * dv;
+	    dSe.addMatrixVector(0.0, kvTrial, dvTrial, 1.0);
+	    SeTrial += dSe;
+
+	    if(initialFlag != 2)
+	      {
+		int numIters= maxIters;
+		if(l == 1)
+		  numIters*= 10; // allow 10 times more iterations for initial tangent
+
+	      for(int j=0;j<numIters;j++)
+		{
+		  // initialize f and vr for integration
+		  f.Zero();
+		  vr.Zero();
+
+		  for(size_t i=0; i<nSections; i++)
+		    {
+		      const int order= theSections[i]->getOrder();
+		      const ID &code = theSections[i]->getType();
+
+		      static Vector Ss;
+		      static Vector dSs;
+		      static Vector dvs;
+		      static Matrix fb;
+
+		      Ss.setData(workArea, order);
+		      dSs.setData(&workArea[order], order);
+		      dvs.setData(&workArea[2*order], order);
+		      fb.setData(&workArea[3*order], order, NEBD);
+
+		      const double xL= xi_pt(i,0);
+		      const double xL1= xL-1.0;
+
+		      // calculate total section forces
+		      // Ss = b*Se + bp*currDistrLoad;
+		      // Ss.addMatrixVector(0.0, b[i], Se, 1.0);
+		      for(int ii = 0; ii < order; ii++)
+			{
+			  switch(code(ii))
+			    {
+			    case SECTION_RESPONSE_P:
+			      Ss(ii) = SeTrial(0);
+			      break;
+			    case SECTION_RESPONSE_MZ:
+			      Ss(ii) =  xL1*SeTrial(1) + xL*SeTrial(2);
+			      break;
+			    case SECTION_RESPONSE_VY:
+			      Ss(ii) = oneOverL*(SeTrial(1)+SeTrial(2));
+			      break;
+			    default:
+			      Ss(ii)= 0.0;
+			      break;
+			    }
+			}
+
+		      // Add the effects of element loads, if present
+		      if(!sp.Nula())
+			{
+			  const Matrix &s_p= sp;
+			  for(int ii = 0; ii < order; ii++)
+			    {
+			      switch(code(ii))
+				{
+				case SECTION_RESPONSE_P:
+				  Ss(ii) += s_p(0,i);
+				  break;
+				case SECTION_RESPONSE_MZ:
+				  Ss(ii) += s_p(1,i);
+				  break;
+				case SECTION_RESPONSE_VY:
+				  Ss(ii) += s_p(2,i);
+				  break;
+				default:
+				  break;
+				}
+			    }
+			}
+		      // dSs = Ss - Ssr[i];
+		      dSs = Ss;
+		      dSs.addVector(1.0, section_matrices.getSsrSubdivide()[i], -1.0);
+
+
+		      // compute section deformation increments
+		      if(l == 0)
+			{
+			  //  regular newton
+			  //    vs += fs * dSs;
+			  dvs.addMatrixVector(0.0, section_matrices.getFsSubdivide()[i], dSs, 1.0);
+			}
+		      else if(l == 2)
+			{
+			  //  newton with initial tangent if first iteration
+			  //    vs += fs0 * dSs;
+			  //  otherwise regular newton
+			  //    vs += fs * dSs;
+
+			  if(j == 0)
+			    {
+			      const Matrix &fs0= theSections[i]->getInitialFlexibility();
+			      dvs.addMatrixVector(0.0, fs0, dSs, 1.0);
+			    }
+			  else
+			    dvs.addMatrixVector(0.0, section_matrices.getFsSubdivide()[i], dSs, 1.0);
+
+			}
+		      else
+			{
+			  //  newton with initial tangent
+			  //    vs += fs0 * dSs;
+
+			  const Matrix &fs0= theSections[i]->getInitialFlexibility();
+			  dvs.addMatrixVector(0.0, fs0, dSs, 1.0);
+			}
+
+		      // set section deformations
+		      if(initialFlag != 0)
+			section_matrices.getVsSubdivide()[i] += dvs;
+
+		      theSections[i]->setTrialSectionDeformation(section_matrices.getVsSubdivide()[i]);
+
+		      // get section resisting forces
+		      section_matrices.getSsrSubdivide()[i] = theSections[i]->getStressResultant();
+
+		      // get section flexibility matrix
+		      section_matrices.getFsSubdivide()[i] = theSections[i]->getSectionFlexibility();
+
+		      // calculate section residual deformations
+		      // dvs = fs * (Ss - Ssr);
+		      dSs = Ss;
+		      dSs.addVector(1.0, section_matrices.getSsrSubdivide()[i], -1.0);  // dSs = Ss - Ssr[i];
+
+		      dvs.addMatrixVector(0.0, section_matrices.getFsSubdivide()[i], dSs, 1.0);
+
+		      // integrate element flexibility matrix
+		      // f = f + (b^ fs * b) * weight(i);
+		      //f.addMatrixTripleProduct(1.0, b[i], fs[i], weight(i));
+		      const Matrix &fSec = section_matrices.getFsSubdivide()[i];
+		      fb.Zero();
+		      double tmp;
+		      for(int ii = 0; ii < order; ii++)
+			{
+			  switch(code(ii))
+			    {
+			    case SECTION_RESPONSE_P:
+			      for(int jj = 0; jj < order; jj++)
+				fb(jj,0) += fSec(jj,ii)*weight(i);
+			      break;
+			    case SECTION_RESPONSE_MZ:
+			      for(int jj = 0; jj < order; jj++)
+				{
+				  tmp= fSec(jj,ii)*weight(i);
+				  fb(jj,1)+= xL1*tmp;
+				  fb(jj,2) += xL*tmp;
+				}
+			      break;
+			    case SECTION_RESPONSE_VY:
+			      for(int jj = 0; jj < order; jj++)
+				{
+				  tmp= oneOverL*fSec(jj,ii)*weight(i);
+				  fb(jj,1)+= tmp;
+				  fb(jj,2)+= tmp;
+				}
+			      break;
+			    default:
+			      break;
+			    }
+			}
+		      for(int ii = 0; ii < order; ii++)
+			{
+			  switch (code(ii))
+			    {
+			    case SECTION_RESPONSE_P:
+			      for(int jj = 0; jj < 3; jj++)
+				f(0,jj) += fb(ii,jj);
+			      break;
+			    case SECTION_RESPONSE_MZ:
+			      for(int jj = 0; jj < 3; jj++)
+				{
+				  tmp= fb(ii,jj);
+				  f(1,jj)+= xL1*tmp;
+				  f(2,jj) += xL*tmp;
+				}
+			      break;
+			    case SECTION_RESPONSE_VY:
+			      for(int jj = 0; jj < 3; jj++)
+				{
+				  tmp= oneOverL*fb(ii,jj);
+				  f(1,jj)+= tmp;
+				  f(2,jj)+= tmp;
+				}
+			      break;
+			    default:
+			      break;
+			    }
+			}
+		      // integrate residual deformations
+		      // vr += (b^ (vs + dvs)) * weight(i);
+		      //vr.addMatrixTransposeVector(1.0, b[i], vs[i] + dvs, weight(i));
+		      dvs.addVector(1.0, section_matrices.getVsSubdivide()[i], 1.0);
+		      double dei;
+		      for(int ii = 0; ii < order; ii++)
+			{
+			  dei= dvs(ii)*weight(i);
+			  switch(code(ii))
+			    {
+			    case SECTION_RESPONSE_P:
+			      vr(0) += dei;
+			      break;
+			    case SECTION_RESPONSE_MZ:
+			      vr(1) += xL1*dei; vr(2) += xL*dei;
+			      break;
+			    case SECTION_RESPONSE_VY:
+			      tmp = oneOverL*dei;
+			      vr(1) += tmp; vr(2) += tmp;
+			      break;
+			    default:
+			      break;
+			    }
+			}
+		    }
+
+		  f  *= L;
+		  vr *= L;
+
+		  // calculate element stiffness matrix
+		  // invert3by3Matrix(f, kv);
+
+		  if(f.Solve(I, kvTrial) < 0)
+		    std::cerr << nombre_clase() << "::" << __FUNCTION__
+			      << "; could not invert flexibility\n";
+
+		  // dv = vin + dvTrial  - vr
+		  dv= vin;
+		  dv+= dvTrial;
+		  dv-= vr;
+
+		  //dv.addVector(1.0, vr, -1.0);
+
+		  // dSe = kv * dv;
+		  dSe.addMatrixVector(0.0, kvTrial, dv, 1.0);
+
+		  dW= dv ^ dSe;
+
+		  SeTrial += dSe;
+
+		  // check for convergence of this interval
+		  if(fabs(dW) < tol)
+		    {
+		      // set the target displacement
+		      dvToDo -= dvTrial;
+		      vin += dvTrial;
+
+		      // check if we have got to where we wanted
+		      if(dvToDo.Norm() <= DBL_EPSILON)
+			{ converged = true; }
+		      else
+			{  // we converged but we have more to do
+			   // reset variables for start of next subdivision
+			   dvTrial = dvToDo;
+			   numSubdivide = 1;  // NOTE setting subdivide to 1 again maybe too much
+			}
+
+		      // set kv, vs and Se values
+		      kv= kvTrial;
+		      Se= SeTrial;
+
+		      for(size_t k=0; k<nSections; k++)
+			{
+			  vs[k]= section_matrices.getVsSubdivide()[k];
+			  fs[k]= section_matrices.getFsSubdivide()[k];
+			  Ssr[k]= section_matrices.getSsrSubdivide()[k];
+			}
+
+		      // break out of j & l loops
+		      j= numIters+1;
+		      l= 4;
+		    }
+		  else
+		    { //  if(fabs(dW) < tol) {
+		      // if we have failed to convrege for all of our newton schemes
+		      // - reduce step size by the factor specified
+		      if(j == (numIters-1) && (l == 2))
+			{
+			  dvTrial/= factor;
+			  numSubdivide++;
+			}
+		    }
+
+		} // for(j=0; j<numIters; j++)
+	    } // if(initialFlag != 2)
+	  } // for(int l=0; l<2; l++)
+      } // while (converged == false)
+    // if fail to converge we return an error flag & print an error message
+    if(converged == false)
+      {
+        std::cerr << nombre_clase() << "::" << __FUNCTION__
+	          << "; WARNING - failed to get compatable "
+		  << "element forces & deformations for element: "
+		  << this->getTag() << "(dW: << " << dW << ")\n";
+                  return -1;
       }
-
-      // calculate nodal force increments and update nodal forces
-      // dSe = kv * dv;
-      dSe.addMatrixVector(0.0, kvTrial, dvTrial, 1.0);
-      SeTrial += dSe;
-
-      if(initialFlag != 2) {
-
-        int numIters = maxIters;
-        if(l == 1)
-          numIters = 10*maxIters; // allow 10 times more iterations for initial tangent
-
-        for(int j=0; j <numIters; j++) {
-
-          // initialize f and vr for integration
-          f.Zero();
-          vr.Zero();
-
-          for(size_t i=0; i<nSections; i++) {
-
-            int order      = theSections[i]->getOrder();
-            const XC::ID &code = theSections[i]->getType();
-
-            static XC::Vector Ss;
-            static XC::Vector dSs;
-            static XC::Vector dvs;
-            static XC::Matrix fb;
-
-            Ss.setData(workArea, order);
-            dSs.setData(&workArea[order], order);
-            dvs.setData(&workArea[2*order], order);
-            fb.setData(&workArea[3*order], order, NEBD);
-
-            double xL  = xi_pt(i,0);
-            double xL1 = xL-1.0;
-
-            // calculate total section forces
-            // Ss = b*Se + bp*currDistrLoad;
-            // Ss.addMatrixVector(0.0, b[i], Se, 1.0);
-            for(int ii = 0; ii < order; ii++) {
-              switch(code(ii)) {
-              case SECTION_RESPONSE_P:
-                Ss(ii) = SeTrial(0);
-                break;
-              case SECTION_RESPONSE_MZ:
-                Ss(ii) =  xL1*SeTrial(1) + xL*SeTrial(2);
-                break;
-              case SECTION_RESPONSE_VY:
-                Ss(ii) = oneOverL*(SeTrial(1)+SeTrial(2));
-                break;
-              default:
-                Ss(ii) = 0.0;
-                break;
-              }
-            }
-
-            // Add the effects of element loads, if present
-            if(!sp.Nula())
-              {
-                const Matrix &s_p= sp;
-                for(int ii = 0; ii < order; ii++)
-                  {
-                    switch(code(ii))
-                      {
-                      case SECTION_RESPONSE_P:
-                        Ss(ii) += s_p(0,i);
-                        break;
-                      case SECTION_RESPONSE_MZ:
-                        Ss(ii) += s_p(1,i);
-                        break;
-                      case SECTION_RESPONSE_VY:
-                        Ss(ii) += s_p(2,i);
-                        break;
-                      default:
-                        break;
-                      }
-                  }
-              }
-
-            // dSs = Ss - Ssr[i];
-            dSs = Ss;
-            dSs.addVector(1.0, section_matrices.getSsrSubdivide()[i], -1.0);
-
-
-            // compute section deformation increments
-            if(l == 0) {
-
-              //  regular newton
-              //    vs += fs * dSs;
-
-              dvs.addMatrixVector(0.0, section_matrices.getFsSubdivide()[i], dSs, 1.0);
-            } else if(l == 2) {
-
-              //  newton with initial tangent if first iteration
-              //    vs += fs0 * dSs;
-              //  otherwise regular newton
-              //    vs += fs * dSs;
-
-              if(j == 0) {
-                const XC::Matrix &fs0 = theSections[i]->getInitialFlexibility();
-
-                dvs.addMatrixVector(0.0, fs0, dSs, 1.0);
-              } else
-                dvs.addMatrixVector(0.0, section_matrices.getFsSubdivide()[i], dSs, 1.0);
-
-            } else {
-
-              //  newton with initial tangent
-              //    vs += fs0 * dSs;
-
-              const XC::Matrix &fs0 = theSections[i]->getInitialFlexibility();
-              dvs.addMatrixVector(0.0, fs0, dSs, 1.0);
-            }
-
-            // set section deformations
-            if(initialFlag != 0)
-              section_matrices.getVsSubdivide()[i] += dvs;
-
-            theSections[i]->setTrialSectionDeformation(section_matrices.getVsSubdivide()[i]);
-
-            // get section resisting forces
-            section_matrices.getSsrSubdivide()[i] = theSections[i]->getStressResultant();
-
-            // get section flexibility matrix
-            section_matrices.getFsSubdivide()[i] = theSections[i]->getSectionFlexibility();
-
-            // calculate section residual deformations
-            // dvs = fs * (Ss - Ssr);
-            dSs = Ss;
-            dSs.addVector(1.0, section_matrices.getSsrSubdivide()[i], -1.0);  // dSs = Ss - Ssr[i];
-
-            dvs.addMatrixVector(0.0, section_matrices.getFsSubdivide()[i], dSs, 1.0);
-
-            // integrate element flexibility matrix
-            // f = f + (b^ fs * b) * weight(i);
-            //f.addMatrixTripleProduct(1.0, b[i], fs[i], weight(i));
-            const XC::Matrix &fSec = section_matrices.getFsSubdivide()[i];
-            fb.Zero();
-            double tmp;
-            for(int ii = 0; ii < order; ii++) {
-              switch(code(ii)) {
-              case SECTION_RESPONSE_P:
-                for(int jj = 0; jj < order; jj++)
-                  fb(jj,0) += fSec(jj,ii)*weight(i);
-                break;
-              case SECTION_RESPONSE_MZ:
-                for(int jj = 0; jj < order; jj++) {
-                  tmp = fSec(jj,ii)*weight(i);
-                  fb(jj,1) += xL1*tmp;
-                  fb(jj,2) += xL*tmp;
-                }
-                break;
-              case SECTION_RESPONSE_VY:
-                for(int jj = 0; jj < order; jj++) {
-                  tmp = oneOverL*fSec(jj,ii)*weight(i);
-                  fb(jj,1) += tmp;
-                  fb(jj,2) += tmp;
-                }
-                break;
-              default:
-                break;
-              }
-            }
-
-            for(int ii = 0; ii < order; ii++) {
-              switch (code(ii)) {
-              case SECTION_RESPONSE_P:
-                for(int jj = 0; jj < 3; jj++)
-                  f(0,jj) += fb(ii,jj);
-                break;
-              case SECTION_RESPONSE_MZ:
-                for(int jj = 0; jj < 3; jj++) {
-                  tmp = fb(ii,jj);
-                  f(1,jj) += xL1*tmp;
-                  f(2,jj) += xL*tmp;
-                }
-                break;
-              case SECTION_RESPONSE_VY:
-                for(int jj = 0; jj < 3; jj++) {
-                  tmp = oneOverL*fb(ii,jj);
-                  f(1,jj) += tmp;
-                  f(2,jj) += tmp;
-                }
-                break;
-              default:
-                break;
-              }
-            }
-
-            // integrate residual deformations
-            // vr += (b^ (vs + dvs)) * weight(i);
-            //vr.addMatrixTransposeVector(1.0, b[i], vs[i] + dvs, weight(i));
-            dvs.addVector(1.0, section_matrices.getVsSubdivide()[i], 1.0);
-            double dei;
-            for(int ii = 0; ii < order; ii++) {
-              dei = dvs(ii)*weight(i);
-              switch(code(ii)) {
-              case SECTION_RESPONSE_P:
-                vr(0) += dei; break;
-              case SECTION_RESPONSE_MZ:
-                vr(1) += xL1*dei; vr(2) += xL*dei; break;
-              case SECTION_RESPONSE_VY:
-                tmp = oneOverL*dei;
-                vr(1) += tmp; vr(2) += tmp; break;
-              default:
-                break;
-              }
-            }
-          }
-
-          f  *= L;
-          vr *= L;
-
-          // calculate element stiffness matrix
-          // invert3by3Matrix(f, kv);
-
-          if(f.Solve(I, kvTrial) < 0)
-            std::cerr << "XC::NLBeamColumn2d::update() -- could not invert flexibility\n";
-
-
-          // dv = vin + dvTrial  - vr
-          dv = vin;
-          dv += dvTrial;
-          dv -= vr;
-
-          // dv.addVector(1.0, vr, -1.0);
-
-          // dSe = kv * dv;
-          dSe.addMatrixVector(0.0, kvTrial, dv, 1.0);
-
-          dW = dv ^ dSe;
-
-          SeTrial += dSe;
-
-          // check for convergence of this interval
-          if(fabs(dW) < tol) {
-
-            // set the target displacement
-            dvToDo -= dvTrial;
-            vin += dvTrial;
-
-            // check if we have got to where we wanted
-            if(dvToDo.Norm() <= DBL_EPSILON) {
-              converged = true;
-
-            } else {  // we convreged but we have more to do
-
-              // reset variables for start of next subdivision
-              dvTrial = dvToDo;
-              numSubdivide = 1;  // NOTE setting subdivide to 1 again maybe too much
-            }
-
-            // set kv, vs and Se values
-            kv = kvTrial;
-            Se = SeTrial;
-
-            for(size_t k=0; k<nSections; k++) {
-              vs[k] = section_matrices.getVsSubdivide()[k];
-              fs[k] = section_matrices.getFsSubdivide()[k];
-              Ssr[k] = section_matrices.getSsrSubdivide()[k];
-            }
-
-            // break out of j & l loops
-            j = numIters+1;
-            l = 4;
-
-          } else {   //  if(fabs(dW) < tol) {
-
-            // if we have failed to convrege for all of our newton schemes
-            // - reduce step size by the factor specified
-
-            if(j == (numIters-1) && (l == 2)) {
-              dvTrial /= factor;
-              numSubdivide++;
-            }
-          }
-
-        } // for(j=0; j<numIters; j++)
-      } // if(initialFlag != 2)
-    } // for(int l=0; l<2; l++)
-  } // while (converged == false)
-
-
-  // if fail to converge we return an error flag & print an error message
-
-  if(converged == false) {
-    std::cerr << "WARNING - XC::NLBeamColumn2d::update - failed to get compatable ";
-    std::cerr << "element forces & deformations for element: ";
-    std::cerr << this->getTag() << "(dW: << " << dW << ")\n";
-    return -1;
+    initialFlag = 1;
+    return 0;
   }
-
-  initialFlag = 1;
-
-  return 0;
-}
 
 
 void XC::NLBeamColumn2d::getGlobalDispls(Vector &dg) const

@@ -82,6 +82,12 @@ class ID;
 //! @ingroup Mat
 //
 //! @brief Base class for materials.
+//!
+//! This class provides the interface that all subclasses must provide
+//! when introducing new material types. A material object
+//! is responsible for keeping track of stress, strain and the
+//! state variables for a particular integration point (Gauss point,...)
+//! in the domain. 
 class Material: public TaggedObject, public MovableObject
   {
   public:
