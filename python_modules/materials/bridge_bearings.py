@@ -1,4 +1,37 @@
 # -*- coding: utf-8 -*-
+"""Classes for modelling bridge bearings.
+
+This module provides some classes that allow modelling elastomeric and pot type
+bridge bearings. For now they are modelized as linear joints that connect
+two nodes with springs that introduce translational and/or rotational stiffness
+that are approximately equal to those of the real bearing.
+
+Examples:
+    Examples of the use of these classes are given in the following verification
+    tests:
+        * ./verif/tests/elements/test_elastomeric_bearing_01.py
+        * ./verif/tests/elements/test_pot_bearing_01.py
+        * ./verif/tests/elements/test_pot_bearing_02.py
+        * ./verif/tests/elements/test_pot_bearing_03.py
+        * ./verif/tests/materials/test_elastomeric_bearing_stiffness.py
+
+Attributes:
+    :x2 (list): Abcissae of the points that define the values of V2 as a function of b/a.
+    :y2 (list): Ordinates of the points that define the values of V2 as a function of b/a.
+    :x3 (list): Abcissae of the points that define the values of V3 as a function of b/a.
+    :y3 (list): Ordinates of the points that define the values of V3 as a function of b/a.
+    :x4 (list): Abcissae of the points that define the values of V4 as a function of b/a.
+    :y4 (list): Ordinates of the points that define the values of V4 as a function of b/a.
+    :xBeta (list): Abcissae of the points that define the values of beta (alpha in the book)
+                  as a function of b/a.
+    :yBeta (list): Ordinates of the points that define the values of beta (alpha in the book)
+                  as a function of h/b.
+
+Todo:
+    * Extend the module to cover other bearing types.
+
+"""
+
 from __future__ import division
 
 __author__= "Ana Ortega (AO_O) and Luis C. Pérez Tato (LCPT)"
@@ -52,18 +85,26 @@ class Bearing(object):
       self.materialLoader= None
       self.id= self._ids.next() #Object identifier.
     def getMaterial(self,i):
-        ''' Returns the i-th material that models the bearing response.'''
+        ''' Returns the i-th uniaxial material that modelizes the response in the i-th direction.'''
         return self.materialLoader.getMaterial(self.materials[i])
     
 class ElastomericBearing(Bearing):
     """Rectangular elastomeric bearing.
 
+    Reference:
+        :"Puentes": book from Javier Manterola Armisén page 591 and 592.
+    Class-wide members:
+        :v2table: interpolation function for the V2 shape factor.
+        :v3table: interpolation function for the V3 shape factor.
+        :v4table: interpolation function for the V4 shape factor.
+        :betaTable: interpolation function for the beta shape factor.
+
     Attributes:
-           :G: (float) Elastomer shear modulus.
-           :a: (float) Width of the bearing (parallel to lintel axis).
-           :b: (float) Length of the bearing (parallel to bridge axis).
-           :e: (float) Net thickness of the bearing (without
-              steel plates).
+        :ivar G: (float) Elastomer shear modulus.
+        :ivar a: (float) Width of the bearing (parallel to lintel axis).
+        :ivar b: (float) Length of the bearing (parallel to bridge axis).
+        :ivar e: (float) Net thickness of the bearing (without
+                   steel plates).
 
     """
     v2table= scipy.interpolate.interp1d(x2,y2)
@@ -73,7 +114,6 @@ class ElastomericBearing(Bearing):
 
     def __init__(self,G,a,b,e):
         """Class constructor.
-
 
         """
         super(ElastomericBearing,self).__init__()
