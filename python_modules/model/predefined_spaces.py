@@ -252,10 +252,10 @@ def gdls_elasticidad3D(nodes):
 
 class StructuralMechanics3D(PredefinedSpace):
   def __init__(self,nodes):
-    '''Defines the dimension of the space: nodes by three coordinates (x,y,z) and 
-       six DOF for each node (Ux,Uy,Uz,thetaX,thetaY,thetaZ)
+    '''Define the dimension of the space: nodes by three coordinates (x,y,z) 
+    and six DOF for each node (Ux,Uy,Uz,thetaX,thetaY,thetaZ)
 
-       :param nodes: preprocessor nodes loader
+    :param nodes: preprocessor nodes loader
     '''
     super(StructuralMechanics3D,self).__init__(nodes,3,6)
     self.Ux= 0
@@ -366,7 +366,7 @@ class StructuralMechanics3D(PredefinedSpace):
     self.constraints.newSPConstraint(nodeTag,5,0.0)
 
   def LstNodes6DOFConstr(lstNodes,constrCond):
-    '''Constraints the nodes in the list passed as parameter 
+    '''Constraint the nodes in the list passed as parameter 
     according to given 6-values set of constraints conditions
 
     :param preprocessor: preprocessor
@@ -396,7 +396,7 @@ def getStructuralMechanics3DSpace(preprocessor):
     return StructuralMechanics3D(nodes)
 
 def gdls_resist_materiales3D(nodes):
-  '''Defines the dimension of the space: nodes by three coordinates (x,y,z) and six DOF for each node (Ux,Uy,Uz,thetaX,thetaY,thetaZ)
+  '''Define the dimension of the space: nodes by three coordinates (x,y,z) and six DOF for each node (Ux,Uy,Uz,thetaX,thetaY,thetaZ)
 
   :param nodes: preprocessor nodes loader
   '''
@@ -404,14 +404,14 @@ def gdls_resist_materiales3D(nodes):
   return StructuralMechanics3D(nodes)
 
 def ConstraintsForLineInteriorNodes(lineSet, constraint):
-  '''Aplying constraint on the interior nodes of a model line.'''
+  '''Apply constraint on the interior nodes of a model line.'''
 
   tags= lineSet.getNodeLayers.getLayer(0).getTagsInteriorNodes()
   for i in tags:
     constraint(i)
 
 def ConstraintsForLineExtremeNodes(lineSet, constraint):
-  '''Aplying constraint on the extreme nodes of a model line.'''
+  '''Apply constraint on the extreme nodes of a model line.'''
   fN= lineSet.firstNode.tag
   lN= lineSet.lastNode.tag
   constraint(fN)

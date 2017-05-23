@@ -602,6 +602,8 @@
 /usr/local/lib/python2.7/dist-packages/model/fix_node_6dof.pyc
 /usr/local/lib/python2.7/dist-packages/model/fix_nodes_lines.py
 /usr/local/lib/python2.7/dist-packages/model/fix_nodes_lines.pyc
+/usr/local/lib/python2.7/dist-packages/model/geometry/grid_model.py
+/usr/local/lib/python2.7/dist-packages/model/geometry/grid_model.pyc
 /usr/local/lib/python2.7/dist-packages/model/geometry/__init__.py
 /usr/local/lib/python2.7/dist-packages/model/geometry/__init__.pyc
 /usr/local/lib/python2.7/dist-packages/model/geometry/tensegrity.py
