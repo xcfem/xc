@@ -144,7 +144,7 @@ class IJKRangeList(object):
     retval= xcSets.defSet(setName)
     for r in self.ranges:
       tmpName= setName+'_tmp'
-      s= self.grid.getSetInRange(r,tmpName)
+      s= self.grid.getSetSurfOneRegion(r,tmpName)
       retval.append(s)
       xcSets.removeSet(tmpName)
     return retval
@@ -182,7 +182,7 @@ class MaterialSurface(MaterialBase):
   def generateSurfaces(self):
     self.lstSup= list()
     for ijkRange in self.ranges:
-       self.lstSup+= self.grid.generateSurfaces(ijkRange)
+       self.lstSup+= self.grid.genSurfOneRegion(ijkRange)
     for s in self.lstSup:
        s.setElemSizeIJ(self.elemSize,self.elemSize)
 
@@ -242,7 +242,7 @@ class MaterialLine(MaterialBase):
   def generateLines(self):
     self.lstLines= list()
     for ijkRange in self.ranges:
-      self.lstLines+= self.grid.generateLines(ijkRange)
+      self.lstLines+= self.grid.genLinOneRegion(ijkRange)
     for s in self.lstLines:
        s.setElemSize(self.elemSize)
 
