@@ -104,15 +104,18 @@ XC::NodeLocker *XC::NodeLockers::newNodeLocker(const std::string &nmb)
                 tag++;
               }
             else
-              std::cerr << "NodeLockers::newNodeLocker; no se pudo crear: '"
+              std::cerr << nombre_clase() << "::" << __FUNCTION__
+		        << "; can't create: '"
                         << nmb << "'\n";
           }
         else
-	  std::clog << "NodeLockers::newNodeLocker; ya existe: '"
-                    << nmb << "'\n";
+	  std::clog << nombre_clase() << "::" << __FUNCTION__
+		    << "; '"
+                    << nmb << "' already exists.\n";
       }
     else
-      std::cerr << "NodeLockers::newNodeLocker; se pasó un nombre vacío." << std::endl;
+      std::cerr << nombre_clase() << "::" << __FUNCTION__
+		<< "; name is empty." << std::endl;
     return retval;
   }
 

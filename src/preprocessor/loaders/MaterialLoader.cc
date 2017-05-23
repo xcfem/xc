@@ -475,9 +475,10 @@ XC::Material *XC::MaterialLoader::newMaterial(const std::string &cmd,const std::
     if(retval)
       {
         retval->set_owner(this);
-        if(materials.find(cod_mat)!=materials.end()) //El material existe.
+        if(materials.find(cod_mat)!=materials.end()) //Material exists.
           {
-	    std::clog << "MaterialLoader::new_material; ¡ojo! se redefine el material: '"
+	    std::clog << nombre_clase() << "::" << __FUNCTION__
+	              << "; ¡ojo! se redefine el material: '"
                       << cod_mat << "'." << std::endl;
             delete materials[cod_mat];
           }
@@ -511,10 +512,11 @@ XC::GeomSection *XC::MaterialLoader::newSectionGeometry(const std::string &cod)
 XC::InteractionDiagram *XC::MaterialLoader::newInteractionDiagram(const std::string &cod_diag)
   {
     InteractionDiagram *retval= nullptr;
-    if(interaction_diagrams.find(cod_diag)!=interaction_diagrams.end()) //El diagrama existe.
+    if(interaction_diagrams.find(cod_diag)!=interaction_diagrams.end()) //Diagrams exists.
       {
-         std::clog << "MaterialLoader::newInteractionDiagram; ¡ojo! el interaction diagram de nombre: '"
-                   << cod_diag << "' ya existe. " << std::endl;
+	std::clog << nombre_clase() << "::" << __FUNCTION__
+	          << "; WARNING the interaction diagram named: '"
+                   << cod_diag << "' already exists. " << std::endl;
          retval= interaction_diagrams[cod_diag];
       }
     else
@@ -529,10 +531,11 @@ XC::InteractionDiagram *XC::MaterialLoader::newInteractionDiagram(const std::str
 XC::InteractionDiagram2d *XC::MaterialLoader::new2DInteractionDiagram(const std::string &cod_diag)
   {
     InteractionDiagram2d *retval= nullptr;
-    if(interaction_diagrams2D.find(cod_diag)!=interaction_diagrams2D.end()) //El diagrama existe.
+    if(interaction_diagrams2D.find(cod_diag)!=interaction_diagrams2D.end()) //Diagram already exists.
       {
-         std::clog << "MaterialLoader::new2DInteractionDiagram; ¡ojo! el interaction diagram de nombre: '"
-                   << cod_diag << "' ya existe. " << std::endl;
+	std::clog << nombre_clase() << "::" << __FUNCTION__
+	          << "; WARNING interaction diagram named: '"
+                   << cod_diag << "' already exists. " << std::endl;
          retval= interaction_diagrams2D[cod_diag];
       }
     else

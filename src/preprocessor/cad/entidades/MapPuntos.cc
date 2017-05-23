@@ -180,12 +180,14 @@ XC::Pnt *XC::MapPuntos::Copia(const Pnt *p,const Vector3d &v= Vector3d())
     Pnt *retval= busca(getTag());
     if(!p)
       {
-        std::cerr << nombre_clase() << "::" << __FUNCTION__ << "; the pointer al punto original es nulo." << std::endl;
+        std::cerr << nombre_clase() << "::" << __FUNCTION__
+		  << "; the pointer to original point is null." << std::endl;
         return retval;
       }
     if(retval)
-      std::cerr << nombre_clase() << "::" << __FUNCTION__ << "; el punto con identificador: " 
-                << getTag() << " ya existe, no se hacen cambios." << std::endl;
+      std::cerr << nombre_clase() << "::" << __FUNCTION__
+		<< "; the point identified by: " 
+                << getTag() << " already exists, no changes made." << std::endl;
     else //The point is new.
       {
         retval= new Pnt(*p);
@@ -199,7 +201,8 @@ XC::Pnt *XC::MapPuntos::Copia(const Pnt *p,const Vector3d &v= Vector3d())
             tag++;
 	  }
         else
-	  std::cerr << nombre_clase() << "::" << __FUNCTION__ << "; memoria agotada." << std::endl; 
+	  std::cerr << nombre_clase() << "::" << __FUNCTION__
+		    << "; memoria agotada." << std::endl; 
       }
     return retval;
   }

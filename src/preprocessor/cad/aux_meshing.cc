@@ -120,7 +120,7 @@ void meshing_quad4N_bidimensional(const XC::Element &e,const XC::TritrizPtrNod &
           }
       }
     else  //There are null pointers.
-      std::cerr << "meshing_quad4N_bidimensional; existen pointers to node nulos." << std::endl;
+      std::cerr << "meshing_quad4N_bidimensional; one or more pointes to node are null." << std::endl;
   }
 
 //! @brief Place the elements on the mesh passed as parameter.

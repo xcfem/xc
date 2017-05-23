@@ -68,7 +68,6 @@ class MapSet: public PreprocessorContainer, public MovableObject
     Set *total; //!< Pointer to total set (Created in constructor).
     map_sets abiertos; //!< Opened sets (those for wich each new entity will be added to).
 
-    bool existe(const std::string &nmb) const;
     friend class EntMdlr;
 
     Set *create_set(const std::string &);
@@ -115,6 +114,7 @@ class MapSet: public PreprocessorContainer, public MovableObject
 
     EntMdlr *inserta_ent_mdlr(EntMdlr *ent_mdlr);
 
+    bool exists(const std::string &nmb) const;
     Set *get_set_total(void)
       { return total; }
     const Set *get_set_total(void) const

@@ -138,7 +138,7 @@ template <class TS>
 TimeSeries *XC::MapLoadPatterns::create_time_series(const std::string &cod_ts)
   {
     TimeSeries *ts= buscaTS(cod_ts);
-    if(!ts) //No existe.
+    if(!ts) //Doesn't exist.
       {
         TS *nts= new TS();
         assert(nts);
@@ -155,7 +155,7 @@ LoadPattern *XC::MapLoadPatterns::create_load_pattern(const std::string &cod_lp)
   {
     int &tag_lp= this->getTagLP();
     LoadPattern *lp= buscaLoadPattern(cod_lp);
-    if(!lp) //No existe.
+    if(!lp) //Doesn't exist.
       {
 	std::map<std::string,TimeSeries *>::const_iterator its= tseries.find(nmb_ts);
         if(its!= tseries.end())

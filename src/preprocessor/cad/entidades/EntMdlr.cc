@@ -261,11 +261,15 @@ void XC::EntMdlr::create_nodes(const TritrizPos3d &posiciones)
             for(register size_t k= 1;k<=cols;k++)
               create_node(posiciones(i,j,k),i,j,k);
         if(verborrea>5)
-	  std::cerr << "EntMdlr::create_nodes(); creados " << ttzNodes.NumPtrs() << " nodo(s)." << std::endl;
+	  std::cerr << nombre_clase() << "::" << __FUNCTION__
+		    << "; created " << ttzNodes.NumPtrs() << " node(s)."
+		    << std::endl;
       }
     else
       if(verborrea>2)
-        std::clog << "EntMdlr::create_nodes; los nodos de la entidad: '" << GetNombre() << "' ya existen." << std::endl;
+        std::clog << nombre_clase() << "::" << __FUNCTION__
+	          << "; nodes from entity: '" << GetNombre()
+		  << "' already exist." << std::endl;
   }
 
 //! @brief Creates elements on the nodes created

@@ -51,7 +51,7 @@ template <class T>
 
     T * busca(const Indice &);
     const T * busca(const Indice &) const;
-    bool existe(const Indice &) const;
+    bool exists(const Indice &) const;
     T * get(const Indice &);
     boost::python::list getKeys(void) const;
 
@@ -71,7 +71,7 @@ template <class T>
 T * MapCadMember<T>::busca(const Indice &id)
   {    T * retval= nullptr;
     iterator i= this->find(id);
-    if(i!= this->end()) //La entidad existe.
+    if(i!= this->end()) //Entity exists.
       retval= (*i).second;
     return retval;
   }
@@ -82,14 +82,14 @@ const T * MapCadMember<T>::busca(const Indice &id) const
   {
     const T * retval= nullptr;
     const_iterator i= this->find(id);
-    if(i!= this->end()) //La entidad existe.
+    if(i!= this->end()) //Entity exists.
       retval= (*i).second;
     return retval;
   }
 
 //! @brief Return true if the entity already exists.
 template <class T>
-bool MapCadMember<T>::existe(const Indice &id) const
+bool MapCadMember<T>::exists(const Indice &id) const
   { return (busca(id)!=nullptr); }
 
 

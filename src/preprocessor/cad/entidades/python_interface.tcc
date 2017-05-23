@@ -94,7 +94,7 @@ typedef XC::MapCadMember<XC::Pnt> map_cm_puntos;
 class_<map_cm_puntos, bases<XC::MapCadMemberBase>, boost::noncopyable >("MapCMPuntos", no_init)
 //.def("__iter__", boost::python::iterator<map_cm_puntos>())
   .add_property("size", &map_cm_puntos::size)
-  .def("exists", &map_cm_puntos::existe)
+  .def("exists", &map_cm_puntos::exists)
   .def("get", make_function(&map_cm_puntos::get,return_internal_reference<>()))
   .def("getKeys", &map_cm_puntos::getKeys)
    ;
@@ -119,7 +119,7 @@ typedef XC::MapCadMember<XC::Edge> map_cm_edges;
 class_<map_cm_edges, bases<XC::MapCadMemberBase>, boost::noncopyable >("MapCMEdges", no_init)
 //.def("__iter__", boost::python::iterator<map_cm_edges>())
   .add_property("size", &map_cm_edges::size)
-  .def("exists", &map_cm_edges::existe)
+  .def("exists", &map_cm_edges::exists)
   .def("get", make_function(&map_cm_edges::get,return_internal_reference<>()))
   .def("getKeys", &map_cm_edges::getKeys)
    ;
@@ -144,7 +144,7 @@ typedef XC::MapCadMember<XC::Face> map_cm_faces;
 class_<map_cm_faces, bases<XC::MapCadMemberBase>, boost::noncopyable >("MapCMFaces", no_init)
 //.def("__iter__", boost::python::iterator<map_cm_faces>())
   .add_property("size", &map_cm_faces::size)
-  .def("exists", &map_cm_faces::existe)
+  .def("exists", &map_cm_faces::exists)
   .def("get", make_function(&map_cm_faces::get,return_internal_reference<>()))
   .def("getKeys", &map_cm_faces::getKeys)
 //.def("__getitem__",getItemMapCMFaces, return_value_policy<copy_const_reference>())
@@ -167,7 +167,7 @@ typedef XC::MapCadMember<XC::Body> map_cm_bodies;
 class_<map_cm_bodies, bases<XC::MapCadMemberBase>, boost::noncopyable >("MapCMBodies", no_init)
 //.def("__iter__", boost::python::iterator<map_cm_bodies>())
   .add_property("size", &map_cm_bodies::size)
-  .def("exists", &map_cm_bodies::existe)
+  .def("exists", &map_cm_bodies::exists)
   .def("get", make_function(&map_cm_bodies::get,return_internal_reference<>()))
   .def("getKeys", &map_cm_bodies::getKeys)
    ;
@@ -183,7 +183,7 @@ typedef XC::MapCadMember<XC::Body> map_cm_ugrids;
 class_<map_cm_ugrids, bases<XC::MapCadMemberBase>, boost::noncopyable >("MapCMUgrids", no_init)
 //.def("__iter__", boost::python::iterator<map_cm_ugrids>())
   .add_property("size", &map_cm_ugrids::size)
-  .def("exists", &map_cm_ugrids::existe)
+  .def("exists", &map_cm_ugrids::exists)
   .def("get", make_function(&map_cm_ugrids::get,return_internal_reference<>()))
   .def("getKeys", &map_cm_ugrids::getKeys)
    ;
