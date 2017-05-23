@@ -34,8 +34,8 @@
 #include "domain/mesh/node/Node.h"
 
 
-//! @brief Returns true if the set existe.
-bool XC::MapFields::existe(const std::string &nmb) const
+//! @brief Returns true if the set exists.
+bool XC::MapFields::exists(const std::string &nmb) const
   {
     const_iterator i= buscaField(nmb);
     return (i!=end());

@@ -143,8 +143,8 @@ int XC::IncrementalIntegrator::getLastResponse(Vector &result, const XC::ID &id)
     LinearSOE *theSOE= getLinearSOEPtr();
     if(!theSOE)
       {
-	std::cerr << "WARNING XC::IncrementalIntegrator::getLastResponse() -";
-	std::cerr << "no LineaerSOE object associated with this object\n";	
+	std::cerr << nombre_clase() << "::" << __FUNCTION__
+	          << "; WARNING no LineaerSOE object associated with this object\n";	
 	return -1;
       }
 
@@ -156,12 +156,13 @@ int XC::IncrementalIntegrator::getLastResponse(Vector &result, const XC::ID &id)
 	int loc = id(i);
 	if(loc < 0 )
 	  result(i) = 0.0;
-	else if(loc <= size) //El GDL existe.
+	else if(loc <= size) //DOF exists.
           { result(i) = X(loc);	}
 	else
           {
-	    std::cerr << "WARNING XC::IncrementalIntegrator::getLastResponse() -";
-	    std::cerr << "location " << loc << "in XC::ID ouside bounds ";
+	    std::cerr << nombre_clase() << "::" << __FUNCTION__
+		      << "; WARNING location " << loc
+		      << "in ID ouside bounds ";
 	    std::cerr << size << "\n";	
 	    res = -2;
 	  }

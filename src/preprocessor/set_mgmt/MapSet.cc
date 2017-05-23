@@ -40,14 +40,14 @@
 XC::ID XC::MapSet::setsDbTags;
 std::deque<std::string> XC::MapSet::setsClassNames;
 
-//! @brief Returns true if the sets already exists.
-bool XC::MapSet::existe(const std::string &nmb) const
+//! @brief Return true if the sets already exists.
+bool XC::MapSet::exists(const std::string &nmb) const
   { return (sets.find(nmb)!=sets.end()); }
 
 //! @brief Returns a pointer to the set which name is being passed as parameter.
 XC::SetBase *XC::MapSet::busca_set(const std::string &nmb)
   {
-    if(existe(nmb))
+    if(exists(nmb))
       return sets[nmb];
     else if(entidades.find(nmb)!=entidades.end())
       return entidades[nmb];
@@ -77,7 +77,8 @@ XC::SetBase &XC::MapSet::getSet(const std::string &nmb)
     SetBase *retval= busca_set(nmb);
     if(!retval)
       {
-	std::cerr << "MapSet::getSet; set named '"
+	std::cerr << nombre_clase() << "::" << __FUNCTION__
+	          << "; set named '"
                   << nmb << "' not found. Total set returned." << std::endl;
         retval= total;
       }
@@ -101,7 +102,7 @@ XC::MapSet::iterator XC::MapSet::end(void)
 XC::Set *XC::MapSet::create_set(const std::string &nmb)
   {
     Set *tmp =nullptr;
-    if(!existe(nmb)) //Set is new.
+    if(!exists(nmb)) //Set is new.
       {
         tmp= new Set(nmb,getPreprocessor());
         sets[nmb]= tmp;
@@ -114,8 +115,9 @@ XC::Set *XC::MapSet::create_set(const std::string &nmb)
 void XC::MapSet::abre_set(const std::string &nmb)
   {
     SetBase *tmp =nullptr;
-    if(!existe(nmb)) //Set doesn't exists.
-      std::cerr << "MapSet::abre_set; the set: '"
+    if(!exists(nmb)) //Set doesn't exists.
+      std::cerr << nombre_clase() << "::" << __FUNCTION__
+		<< "; the set: '"
                 << nmb << "' doesn't exists.\n";
     else //The set exists
       {
@@ -126,8 +128,9 @@ void XC::MapSet::abre_set(const std::string &nmb)
   }
 void XC::MapSet::cierra_set(const std::string &nmb)
   {
-    if(!existe(nmb)) //Set doesn't exists.
-      std::cerr << "MapSet::cierra_set; the set: '"
+    if(!exists(nmb)) //Set doesn't exists.
+      std::cerr << nombre_clase() << "::" << __FUNCTION__
+		<< "; the set: '"
                 << nmb << "' doesn't exists.\n";
     else //The set exists
       {
@@ -136,7 +139,8 @@ void XC::MapSet::cierra_set(const std::string &nmb)
           abiertos.erase(i);
         else
           if(verborrea>1)
-	    std::cerr << "MapSet::cierra_set; the set: '"
+	    std::cerr << nombre_clase() << "::" << __FUNCTION__
+		      << "; the set: '"
                       << nmb << "' is already closed.\n";
       }
   }
@@ -145,9 +149,11 @@ void XC::MapSet::cierra_set(const std::string &nmb)
 XC::SetEstruct *XC::MapSet::create_set_estruct(const SetEstruct &set_estruct)
   {
     const std::string nmb= set_estruct.GetNombre();
-    if(existe(nmb)) //The set exists
+    if(exists(nmb)) //The set exists
       {
-	std::cerr << "the set: " << nmb << " already exists. Doing nothing." << std::endl;
+	std::cerr << nombre_clase() << "::" << __FUNCTION__
+		  << "; the set: " << nmb
+		  << " already exists. Doing nothing." << std::endl;
         return nullptr;
       }
     else //the set is new.
@@ -162,7 +168,7 @@ XC::SetEstruct *XC::MapSet::create_set_estruct(const SetEstruct &set_estruct)
 XC::SetBase *XC::MapSet::broke_set(const std::string &nmb,const std::string &nmb_clase)
   {
     SetBase *retval= nullptr;
-    if(existe(nmb)) //The set exists
+    if(exists(nmb)) //The set exists
       retval= busca_set(nmb);
     else //the set is new.
       {
@@ -183,9 +189,11 @@ XC::EntMdlr *XC::MapSet::inserta_ent_mdlr(EntMdlr *ent_mdlr)
   {
     assert(ent_mdlr);
     const std::string nmb= ent_mdlr->GetNombre();
-    if(existe(nmb)) //The set exists
+    if(exists(nmb)) //The set exists
       {
-	std::cerr << "the set: " << nmb << " already exists. New set not inserted." << std::endl;
+	std::cerr << nombre_clase() << "::" << __FUNCTION__
+		  << "the set: " << nmb
+		  << " already exists. New set not inserted." << std::endl;
         return nullptr;
       }
     else //the set is new.
@@ -246,7 +254,8 @@ void XC::MapSet::removeSet(const std::string &nmb)
         sets.erase(nmb);
       }
     else
-      std::cerr << "MapSet::removeSet; ERROR set named: "
+      std::cerr << nombre_clase() << "::" << __FUNCTION__
+		<< "; ERROR set named: "
                 << nmb << " not found." << std::endl;
   }
 
@@ -337,7 +346,8 @@ int XC::MapSet::sendSetsDbTags(int posDbTag,CommParameters &cp)
         res+= cp.sendID(setsDbTags,getDbTagData(),CommMetaData(posDbTag));
       }
     if(res<0)
-      std::cerr << "MapSet::sendDbTags - ch failed to send the IDs.\n";
+      std::cerr << nombre_clase() << "::" << __FUNCTION__
+		<< "; ch failed to send the IDs.\n";
     return res;
   }
 
@@ -352,7 +362,8 @@ int XC::MapSet::sendSetsClassNames(int posDbTag,CommParameters &cp)
         res+= cp.sendStrings(setsClassNames,getDbTagData(),CommMetaData(posDbTag));
       }
     if(res<0)
-      std::cerr << "MapSet::sendDbTags - ch failed to send the IDs.\n";
+      std::cerr << nombre_clase() << "::" << __FUNCTION__
+		<< "; ch failed to send the IDs.\n";
     return res;
   }
 
@@ -364,7 +375,8 @@ int XC::MapSet::receiveSetsDbTags(int posDbTag,int size,const CommParameters &cp
     if(size>0)
       res= cp.receiveID(setsDbTags,getDbTagData(),CommMetaData(posDbTag));
     if(res<0)
-      std::cerr << "MapSet::receiveDbTags - ch failed to receive the IDs.\n";
+      std::cerr << nombre_clase() << "::" << __FUNCTION__
+		<< "; ch failed to receive the IDs.\n";
     return res;
   }
 
@@ -376,7 +388,8 @@ int XC::MapSet::receiveSetsClassNames(int posDbTag,int size,const CommParameters
     if(size>0)
       res= cp.receiveStrings(setsClassNames,getDbTagData(),CommMetaData(posDbTag));
     if(res<0)
-      std::cerr << "MapSet::receiveSetsClassNames - ch failed to receive the IDs.\n";
+      std::cerr << nombre_clase() << "::" << __FUNCTION__
+		<< "; ch failed to receive the IDs.\n";
     return res;
   }
 
@@ -412,7 +425,8 @@ int XC::MapSet::receiveSets(int posDbTag1, int posDbTag2, int posDbTag3,const in
         if(tmp)
           cp.receiveMovable(*tmp,tags,CommMetaData(loc));
         else
-	  std::cerr << "Error al recibir the set: '" << *i << "'.\n";
+	  std::cerr << nombre_clase() << "::" << __FUNCTION__
+		    << "; error receiving set: '" << *i << "'.\n";
       }
     return res;
   }
@@ -483,7 +497,8 @@ int XC::MapSet::sendSelf(CommParameters &cp)
 
     res+= cp.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
-      std::cerr <<  nombre_clase() << "sendSelf() - failed to send data\n";
+      std::cerr << nombre_clase() << "::" << __FUNCTION__
+		<< "; failed to send data\n";
     return res;
   }
 
@@ -495,13 +510,15 @@ int XC::MapSet::recvSelf(const CommParameters &cp)
     int res= cp.receiveIdData(getDbTagData(),dataTag);
 
     if(res<0)
-      std::cerr <<  nombre_clase() << "recvSelf - failed to receive ids.\n";
+      std::cerr << nombre_clase() << "::" << __FUNCTION__
+		<< "; failed to receive ids.\n";
     else
       {
         //setTag(getDbTagDataPos(0));
         res+= recvData(cp);
         if(res<0)
-          std::cerr <<  nombre_clase() << "recvSelf - failed to receive data.\n";
+          std::cerr << nombre_clase() << "::" << __FUNCTION__
+		    << "; failed to receive data.\n";
       }
     return res;
   }

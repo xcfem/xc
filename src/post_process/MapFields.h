@@ -48,7 +48,7 @@ class MapFields: public PreprocessorContainer, public MovableObject, public std:
     typedef dq_fields::iterator iterator;
     typedef dq_fields::const_iterator const_iterator;
   private:
-    bool existe(const std::string &nmb) const;
+    bool exists(const std::string &nmb) const;
 
     friend class ProblemaEF;
     iterator buscaField(const std::string &nmb);

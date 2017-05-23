@@ -34,6 +34,7 @@ void export_preprocessor_main(void)
       .def("getSet", &XC::MapSet::getSet, return_internal_reference<>(),"Returns set by name.")
       .def("defSet", &XC::MapSet::defSet, return_internal_reference<>(),"Creates a new set with the name which is passed as a parameter.")
       .def("removeSet", &XC::MapSet::removeSet,"Delete the set and remove it from the sets map.")
+      .def("exists",&XC::MapSet::exists,"Return true if the sets already exists..")
       ;
 
 

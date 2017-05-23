@@ -240,18 +240,18 @@ int XC::CrdTransf3d::initialize(Node *nodeIPointer, Node *nodeJPointer)
     int error;
     set_node_ptrs(nodeIPointer,nodeJPointer);
 
-    // Chequea si existe algún desplazamiento inicial of the nodes.
+    // Checks if they are initial displacements of the nodes.
     if(initialDispChecked == false)
       {
         const Vector &nodeIDisp = nodeIPtr->getDisp();
         const Vector &nodeJDisp = nodeJPtr->getDisp();
         for(int i=0;i<6;i++)
-          if(nodeIDisp(i)!=0.0) //Existe desplazamiento del nodo I.
+          if(nodeIDisp(i)!=0.0) //Found displacement of node I.
             {
               nodeIInitialDisp.resize(6);
               for(int j=0;j<6;j++)
-                nodeIInitialDisp[j]= nodeIDisp(j); //Asignamos desplazamientos iniciales.
-              i= 6; //salimos.
+                nodeIInitialDisp[j]= nodeIDisp(j); //Setting initial displacements.
+              i= 6; //exit.
             }
 
         for(int j=0; j<6; j++)
