@@ -117,6 +117,49 @@ class IJKRange(object):
     lstJKrang=[IJKRange((i,jmin,kmin),(i,jmax,kmax)) for i in range(imin,imax+1,step)]
     return lstJKrang
 
+  def extractIncludedIranges(self,stepJ=1,stepK=1):
+    '''return a list with all the sub-ranges included in the IJKRange 
+    for which the indices J and K are a constant. Graphically it can be seen as
+    the set of lines 'parallel' to global X axis included in the region defined
+    by the IJKRange 
+
+    :param stepJ: step to select the lines in Y direction (defaults to 1)
+    :param stepK step to select the lines in Z direction (defaults to 1)
+    '''
+    (imin,jmin,kmin)=self.ijkMin
+    (imax,jmax,kmax)=self.ijkMax
+    lstIrang=[IJKRange((imin,j,k),(imax,j,k)) for j in range(jmin,jmax+1,stepJ) for k in range(kmin,kmax+1,stepK)]
+    return lstIrang
+
+  def extractIncludedJranges(self,stepI=1,stepK=1):
+    '''return a list with all the sub-ranges included in the IJKRange 
+    for which the indices I and K are a constant. Graphically it can be seen as
+    the set of lines 'parallel' to global Y axis included in the region defined
+    by the IJKRange 
+
+    :param stepI: step to select the lines in X direction (defaults to 1)
+    :param stepK step to select the lines in Z direction (defaults to 1)
+    '''
+    (imin,jmin,kmin)=self.ijkMin
+    (imax,jmax,kmax)=self.ijkMax
+    lstJrang=[IJKRange((i,jmin,k),(i,jmax,k)) for i in range(imin,imax+1,stepI) for k in range(kmin,kmax+1,stepK)]
+    return lstJrang
+
+  def extractIncludedKranges(self,stepI=1,stepJ=1):
+    '''return a list with all the sub-ranges included in the IJKRange 
+    for which the indices I and J are a constant. Graphically it can be seen as
+    the set of lines 'parallel' to global Z axis included in the region defined
+    by the IJKRange 
+
+    :param stepI: step to select the lines in X direction (defaults to 1)
+    :param stepJ step to select the lines in Y direction (defaults to 1)
+    '''
+    (imin,jmin,kmin)=self.ijkMin
+    (imax,jmax,kmax)=self.ijkMax
+    lstKrang=[IJKRange((i,j,kmin),(i,j,kmax)) for i in range(imin,imax+1,stepI) for j in range(jmin,jmax+1,stepJ) ]
+    return lstKrang
+
+
 class moveRange(object):
   '''Applies a displacement to a range of grid points
   
