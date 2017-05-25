@@ -43,22 +43,6 @@ model_inquiry
     :undoc-members:
     :show-inheritance:
 
-define_apoyos
--------------
-
-.. automodule:: model.define_apoyos
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-apoyo_elastico
---------------
-
-.. automodule:: model.apoyo_elastico
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
 ElasticFoundation
 -----------------
 
@@ -87,14 +71,6 @@ fix_node_6dof
 -------------
 
 .. automodule:: model.fix_node_6dof
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-apoyo_pot
----------
-
-.. automodule:: model.apoyo_pot
     :members:
     :undoc-members:
     :show-inheritance:
@@ -188,22 +164,6 @@ predefined_spaces
     :undoc-members:
     :show-inheritance:
 
-
-rigid_beam
-----------
-
-.. automodule:: model.rigid_beam
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-rigid_rod
----------
-
-.. automodule:: model.rigid_rod
-    :members:
-    :undoc-members:
-    :show-inheritance:
 
 setMgmtUtils
 ------------
