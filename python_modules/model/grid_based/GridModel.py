@@ -1,4 +1,7 @@
 # -*- coding: utf-8 -*-
+'''This module is on the way of being replaced by others
+'''
+
 
 '''GridModel.py: model generation based on a grid of 3D positions. Data structures.'''
 
