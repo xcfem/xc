@@ -32,7 +32,7 @@ class PredefinedSpace(object):
     self.constraints= self.preprocessor.getConstraintLoader
 
   def setRigidBeamBetweenNodes(self,nodeTagA, nodeTagB):
-    '''Create a rigid rod between the nodes being passed as parameters.
+    '''Create a rigid rod between the nodes passed as parameters.
 
     :param   nodeTagA: tag of the master node.
     :param   nodeTagB: tag of the slave node.
@@ -40,7 +40,7 @@ class PredefinedSpace(object):
     return self.constraints.newRigidBeam(nodeTagA,nodeTagB)
 
   def setRigidRodBetweenNodes(self,nodeTagA, nodeTagB):
-    '''Create a rigid rod between the nodes being passed as parameters.
+    '''Create a rigid rod between the nodes passed as parameters.
 
     :param   nodeTagA: tag of the master node.
     :param   nodeTagB: tag of the slave node.
@@ -48,7 +48,7 @@ class PredefinedSpace(object):
     return self.constraints.newRigidRod(nodeTagA,nodeTagB)
   
   def setFulcrumBetweenNodes(self,nodeTagA, pivotNode):
-    '''Create a fulcrum between the nodes being passed as parameters.
+    '''Create a fulcrum between the nodes passed as parameters.
 
     Creates a rigid link between the nodes.
     It's called fulcrumb because it's pinned on pivotNode.

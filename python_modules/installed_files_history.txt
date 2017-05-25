@@ -10,6 +10,8 @@
 /usr/local/lib/python2.7/dist-packages/actions/estadillo_cargas.pyc
 /usr/local/lib/python2.7/dist-packages/actions/__init__.py
 /usr/local/lib/python2.7/dist-packages/actions/__init__.pyc
+/usr/local/lib/python2.7/dist-packages/actions/loads_def.py
+/usr/local/lib/python2.7/dist-packages/actions/loads_def.pyc
 /usr/local/lib/python2.7/dist-packages/actions/quake/escribeCargasModo.py
 /usr/local/lib/python2.7/dist-packages/actions/quake/escribeCargasModo.pyc
 /usr/local/lib/python2.7/dist-packages/actions/quake/__init__.py
@@ -582,6 +584,10 @@
 /usr/local/lib/python2.7/dist-packages/model/apoyo_elastico.pyc
 /usr/local/lib/python2.7/dist-packages/model/apoyo_pot.py
 /usr/local/lib/python2.7/dist-packages/model/apoyo_pot.pyc
+/usr/local/lib/python2.7/dist-packages/model/boundary_cond/elastic_foundation.py
+/usr/local/lib/python2.7/dist-packages/model/boundary_cond/elastic_foundation.pyc
+/usr/local/lib/python2.7/dist-packages/model/boundary_cond/__init__.py
+/usr/local/lib/python2.7/dist-packages/model/boundary_cond/__init__.pyc
 /usr/local/lib/python2.7/dist-packages/model/cargas_elem.py
 /usr/local/lib/python2.7/dist-packages/model/cargas_elem.pyc
 /usr/local/lib/python2.7/dist-packages/model/cargas_nodo.py
