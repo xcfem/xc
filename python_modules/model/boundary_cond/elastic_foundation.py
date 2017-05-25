@@ -10,11 +10,12 @@ from model import predefined_spaces
 
 '''Generation of springs for nodes at foundation.'''
 
-__author__= "Luis C. Pérez Tato (LCPT)"
-__copyright__= "Copyright 2016 LCPT"
+__author__= "Luis C. Pérez Tato (LCPT) , Ana Ortega (AO_O) "
+__copyright__= "Copyright 2016, LCPT, AO_O"
 __license__= "GPL"
 __version__= "3.0"
-__email__= "l.pereztato@gmail.com"
+__email__= "l.pereztato@ciccp.es, ana.ortega@ciccp.es "
+
 
 class ElasticFoundation(object):
   '''Region resting on springs (Winkler elastic foundation)
