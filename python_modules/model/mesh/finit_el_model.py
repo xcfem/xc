@@ -13,7 +13,7 @@ import xc
 
 class LinSetToMesh(object):
     '''Define the parameters to mesh a set of lines. The method generateMesh
-    meshes those lines and adds to the set the nodes and elements created.
+    meshes those lines and adds the nodes and elements created to the set .
     
     :ivar linSet: set of lines.
     :ivar matSect: instance of the class BeamMaterialData that defines the 
@@ -48,12 +48,41 @@ class LinSetToMesh(object):
         self.linSet.fillDownwards()
 
    
+class SurfSetToMesh(object):
+    '''Define the parameters to mesh a set of surfaces. The method generateMesh
+    meshes those surfaces and adds the nodes and elements created to the set .
     
-class FEmesh(object):
+    :ivar surfSet: set of surfaces.
+    :ivar matSect: instance of the class DeckMaterialData that defines the 
+          material-section to be applied to the set of surfaces.
+    :ivar elemSize: mean size of the elements
+    :ivar elemType: type of element for the mesh (defaults to 'shell_mitc4')
     '''
+    def __init__(self,surfSet,matSect,elemSize,elemType='shell_mitc4'):
+        self.surfSet= surfSet
+        self.matSect= matSect
+        self.elemSize= elemSize
+        self.elemType= elemType
 
-    :ivar prepropcessor: preprocessor
+    def generateMesh(self, preprocessor):
+        for s in self.surfSet.getSurfaces:
+            s.setElemSizeIJ(self.elemSize,self.elemSize)
+        preprocessor.getCad.getSurfaces.conciliaNDivs()
+        seedElemLoader= preprocessor.getElementLoader.seedElemLoader
+#        seedElemLoader.defaultTag= firstElementTag
+        seedElemLoader.defaultMaterial= self.matSect.name
+        elem= seedElemLoader.newElement(self.elemType,xc.ID([0,0,0,0]))
+        for s in self.surfSet.getSurfaces:
+            s.genMesh(xc.meshDir.I)
+        self.surfSet.fillDownwards()
+
+
+def multi_mesh(preprocessor,lstMeshSets):
+    '''Mesh all the mesh-sets included in lstMeshSets
+
+    :param preprocessor: preprocessor
+    :param lstMeshSets: list of instances of classes LinSetToMesh or 
+           SurfSetToMesh to be meshed
     '''
-    def __init__(self,preprocessor):
-        self.preprocessor=preprocessor
-
+    for ms in lstMeshSets:
+        ms.generateMesh(preprocessor)
