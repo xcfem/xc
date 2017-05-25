@@ -31,6 +31,36 @@ class PredefinedSpace(object):
     self.preprocessor= preprocessor
     self.constraints= self.preprocessor.getConstraintLoader
 
+  def setRigidBeamBetweenNodes(self,nodeTagA, nodeTagB):
+    '''Create a rigid rod between the nodes being passed as parameters.
+
+    :param   nodeTagA: tag of the master node.
+    :param   nodeTagB: tag of the slave node.
+    '''
+    return self.constraints.newRigidBeam(nodeTagA,nodeTagB)
+
+  def setRigidRodBetweenNodes(self,nodeTagA, nodeTagB):
+    '''Create a rigid rod between the nodes being passed as parameters.
+
+    :param   nodeTagA: tag of the master node.
+    :param   nodeTagB: tag of the slave node.
+    '''
+    return self.constraints.newRigidRod(nodeTagA,nodeTagB)
+  
+  def setFulcrumBetweenNodes(self,nodeTagA, pivotNode):
+    '''Create a fulcrum between the nodes being passed as parameters.
+
+    Creates a rigid link between the nodes.
+    It's called fulcrumb because it's pinned on pivotNode.
+
+    :param   nodeTagA: tag of the master node.
+    :param   nodeTagB: tag of the pivot (slave node).
+    '''
+    nodos= self.preprocessor.getNodeLoader
+    coordNodoB= nodos.getNode(pivotNode).getCoo
+    fulcrumNode= nodos.newNodeFromVector(coordNodoB)
+    rb= self.constraints.newRigidBeam(nodeTagA,fulcrumNode.tag)
+    ed= self.constraints.newEqualDOF(fulcrumNode.tag,pivotNode,xc.ID(self.getDisplacementDOFs()))
 
   def setBearingBetweenNodes(self,iNodA,iNodB,bearingMaterials):
     '''Modelize a bearing between the nodes
@@ -152,6 +182,12 @@ class SolidMechanics2D(PredefinedSpace):
     super(SolidMechanics2D,self).__init__(nodes,2,2)
     self.Ux= 0
     self.Uy= 1
+  def getDisplacementDOFs(self):
+    ''' Return the indices of the displacement DOFs.'''
+    return [self.Ux,self.Uy]
+  def getRotationalDOFs(self):
+    ''' Return the indices of the rotational DOFs.'''
+    return []
 
 def gdls_elasticidad2D(nodes):
   '''Defines the dimension of the space: nodes by two coordinates (x,y) and two DOF for each node (Ux,Uy)
@@ -171,8 +207,13 @@ class StructuralMechanics2D(PredefinedSpace):
     super(StructuralMechanics2D,self).__init__(nodes,2,3)
     self.Ux= 0
     self.Uy= 1
-    self.Theta= 2
-    
+    self.Theta= 2    
+  def getDisplacementDOFs(self):
+    ''' Return the indices of the displacement DOFs.'''
+    return [self.Ux,self.Uy]
+  def getRotationalDOFs(self):
+    ''' Return the indices of the rotational DOFs.'''
+    return [self.Theta]
   def fixNode000(self, nodeTag):
     '''Restrain all three node DOFs (i. e. make them zero).'''
     self.constraints.newSPConstraint(nodeTag,0,0.0) # nodeTag, DOF, constrValue
@@ -233,7 +274,12 @@ class SolidMechanics3D(PredefinedSpace):
     self.Ux= 0
     self.Uy= 1
     self.Uz= 2
-
+  def getDisplacementDOFs(self):
+    ''' Return the indices of the displacement DOFs.'''
+    return [self.Ux,self.Uy,self.Uz]
+  def getRotationalDOFs(self):
+    ''' Return the indices of the rotational DOFs.'''
+    return []
   def fixNode000(self, nodeTag):
     '''Restrain all three node DOFs (i. e. make them zero).'''
     self.constraints.newSPConstraint(nodeTag,0,0.0) # nodeTag, DOF, constrValue
@@ -264,7 +310,12 @@ class StructuralMechanics3D(PredefinedSpace):
     self.ThetaX= 3
     self.ThetaY= 4
     self.ThetaZ= 5
-
+  def getDisplacementDOFs(self):
+    ''' Return the indices of the displacement DOFs.'''
+    return [self.Ux,self.Uy,self.Uz]
+  def getRotationalDOFs(self):
+    ''' Return the indices of the rotational DOFs.'''
+    return [self.ThetaX,self.ThetaY,self.ThetaZ]
   def fixNode000_000(self, nodeTag):
     '''Restrain all six node DOFs (i. e. make them zero).'''
     self.constraints.newSPConstraint(nodeTag,0,0.0) # nodeTag, DOF, constrValue
@@ -383,6 +434,36 @@ class StructuralMechanics3D(PredefinedSpace):
       for i in range(0,6):
         if(constrCond[i] <> 'free'):
           self.constraints.newSPConstraint(n.tag,i,constrCond[i]) 
+  def setHugeBarBetweenNodes(nodeTagA, nodeTagB, nmbTransf):
+    '''
+    Creates a very stiff bar between the two nodes being passed as parameters.
+    (it was a workaround to the problem with the reactions values in nodes when
+    using multipoint constraints. This problem has been be solved with the
+    implementation of MFreedom_ConstraintBase::addResistingForceToNodalReaction).
+
+    :param   nodeTagA: tag of bar's from node.
+    :param   nodeTagB: tag of bar's to node.
+    :param   nmbTransf: name of the coordinate transformation to use for the new bar.
+    '''
+    elementos= preprocessor.getElementLoader
+    elementos.defaultTransformation= nmbTransf
+    # Material definition
+    matName= 'bar' + str(nodeTagA) + str(nodeTagB) + nmbTransf
+    A= 10
+    E= 1e14
+    G= 1e12
+    Iz= 10
+    Iy= 10
+    J= 10
+    scc= typical_materials.defElasticSection3d(preprocessor,matName,A,E,G,Iz,Iy,J)
+    defMat= elementos.defaultMaterial
+    #print "defMat= ", defMat
+    elementos.defaultMaterial= matName
+    elem= elementos.newElement("elastic_beam_3d",xc.ID([nodeTagA,nodeTagB]))
+    elementos.defaultMaterial= defMat
+    scc= elem.sectionProperties
+    #print "A= ", elem.sectionProperties.A
+    return elem
 
 def getStructuralMechanics3DSpace(preprocessor):
     '''Return a PredefinedSpace from the dimension of the space 

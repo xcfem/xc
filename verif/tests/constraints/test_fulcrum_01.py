@@ -14,7 +14,6 @@ import xc
 from solution import predefined_solutions
 from model import predefined_spaces
 from materials import typical_materials
-from model import rigid_beam
 import math
 
 # Geometry
@@ -37,7 +36,7 @@ nod= nodes.newNodeXYZ(L,0.0,0.0)
 constraints= preprocessor.getConstraintLoader
 
 modelSpace.fixNode000(1)
-fulcrum= rigid_beam.creaFulcrumNodos3d(preprocessor, 1,2)
+fulcrum= modelSpace.setFulcrumBetweenNodes(1,2)
 
 # Loads definition
 cargas= preprocessor.getLoadLoader
