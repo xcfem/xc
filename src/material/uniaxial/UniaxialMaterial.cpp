@@ -70,8 +70,11 @@
 #include "utility/actor/actor/MovableVector.h"
 
 //! @brief Constructor.
-XC::UniaxialMaterial::UniaxialMaterial(int tag, int clasTag)
-  :Material(tag,clasTag), rho(0.0) {}
+//!
+//! @param tag: object identifier (unique among materials).
+//! @param classTag: class identifier (for persistence).
+XC::UniaxialMaterial::UniaxialMaterial(int tag, int classTag)
+  :Material(tag,classTag), rho(0.0) {}
 
 int XC::UniaxialMaterial::setTrial(double strain, double &stress, double &tangent, double strainRate)
   {

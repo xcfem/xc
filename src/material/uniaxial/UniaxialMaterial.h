@@ -85,6 +85,10 @@ class SectionForceDeformation;
 //! @ingroup MatUnx
 //
 //! @brief Base class for uniaxial materials.
+//!
+//! A UniaxialMaterial object is responsible for
+//! keeping track of stress, strain and the
+//! constitution for a particular point in the domain. 
 class UniaxialMaterial : public Material
   {
   private:
@@ -96,12 +100,17 @@ class UniaxialMaterial : public Material
     UniaxialMaterial(int tag, int classTag);
         
     virtual int setInitialStrain(double strain);
+    //! @brief Sets the value of the trial strain.
+    //!
+    //! Sets the value of the trial strain
+    //!return 0 if successful, a negative number if not.
     virtual int setTrialStrain(double strain, double strainRate = 0.0)= 0;
     virtual int setTrial(double strain, double &stress, double &tangent, double strainRate = 0.0);
 
     virtual double getInitialStrain(void) const;
     virtual double getStrain(void) const= 0;
     virtual double getStrainRate(void) const;
+    //! @brief Return the current value of stress.
     virtual double getStress(void) const= 0;
     const Vector &getGeneralizedStress(void) const;
     const Vector &getGeneralizedStrain(void) const;
@@ -109,6 +118,7 @@ class UniaxialMaterial : public Material
     virtual void setInitialGeneralizedStrain(const Vector &);
     const Vector &getInitialGeneralizedStrain(void) const;
 
+    //! @brief Return the current value of the tangent for the trial strain.
     virtual double getTangent(void) const= 0;
     virtual double getInitialTangent(void) const= 0;
     virtual double getDampTangent(void) const;
@@ -118,6 +128,7 @@ class UniaxialMaterial : public Material
     virtual double getRho(void) const;
     void setRho(const double &);
 
+    //! @brief Virtual constructor.
     virtual UniaxialMaterial *getCopy(void) const=0;
     virtual UniaxialMaterial *getCopy(SectionForceDeformation *s) const;
 	
