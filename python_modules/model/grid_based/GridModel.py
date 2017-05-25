@@ -18,7 +18,7 @@ from miscUtils import LogMessages as lmsg
 from materials import typical_materials
 from materials import section_properties
 from model import predefined_spaces
-from model import ElasticFoundation as ef
+from model.boundary_cond import elastic_foundation as ef
 from xcVtk import vtk_grafico_base
 from xcVtk.malla_ef import vtk_grafico_ef
 from xcVtk.malla_ef import Fields
