@@ -1,185 +1,185 @@
 %File: ~/OOP/system_of_eqn/linearSOE/FullGen/FullGenLinSOE.tex
 %What: "@(#) FullGenLinSOE.tex, revA"
 
-\noindent {\bf Files}   \\
-\indent \#include $<\tilde{ }$/system\_of\_eqn/linearSOE/fullGEN/FullGenLinSOE.h$>$  \\
+\noindent {\bf Files}
+\indent \#include \f$<\tilde{ }\f$/system\_of\_eqn/linearSOE/fullGEN/FullGenLinSOE.h\f$>\f$
 
-\noindent {\bf Class Declaration}  \\
-\indent class FullGenLinSOE: public LinearSOE \\
+\noindent {\bf Class Declaration}
+\indent class FullGenLinSOE: public LinearSOE
 
-\noindent {\bf Class Hierarchy} \\
-\indent MovableObject \\
-\indent\indent SystemOfEqn \\
-\indent\indent\indent LinearSOE \\
-\indent\indent\indent\indent {\bf FullGenLinSOE} \\
+\noindent {\bf Class Hierarchy}
+\indent MovableObject
+\indent\indent SystemOfEqn
+\indent\indent\indent LinearSOE
+\indent\indent\indent\indent {\bf FullGenLinSOE}
 
-\noindent {\bf Description}  \\
+\noindent {\bf Description}
 \indent FullGenLinSOE is class which is used to store a full general
-system. The $A$ matrix is stored in a 1d double array with $n*n$
-elements, where $n$ is the size of the system. $A_{i,j}$ is stored at
-location $(i + j*(n)$, where $i$ and $j$ range from $0$ to $n-1$,
-i.e. C notation. For example when $n=3$: 
+//! system. The \f$A\f$ matrix is stored in a 1d double array with \f$n*n\f$
+//! elements, where \f$n\f$ is the size of the system. \f$A_{i,j}\f$ is stored at
+//! location \f$(i + j*(n)\f$, where \f$i\f$ and \f$j\f$ range from \f$0\f$ to \f$n-1\f$,
+//! i.e. C notation. For example when \f$n=3\f$: 
 
-$$
+\f$\f$
 \left[
 \begin{array}{ccc}
-a_{0,0} & a_{0,1}  & a_{0,2}  \\
-a_{1,0} & a_{1,1} & a_{1,2}  \\
-a_{2,0} & a_{2,1} & a_{2,2} \\
+//! a_{0,0} & a_{0,1}  & a_{0,2}
+//! a_{1,0} & a_{1,1} & a_{1,2}
+//! a_{2,0} & a_{2,1} & a_{2,2}
 \end{array}
 \right] 
-$$
+\f$\f$
 
-is stored in:
+//! is stored in:
 
-$$
+\f$\f$
 \left[
 \begin{array}{cccccccccccccccccccc}
-a_{0,0} & a_{1,0}  & a_{2,0} & a_{0,1} & a_{1,1} & a_{2,1} &
-a_{0,2} & a_{1,2} & a_{2,2}  \\
+//! a_{0,0} & a_{1,0}  & a_{2,0} & a_{0,1} & a_{1,1} & a_{2,1} &
+//! a_{0,2} & a_{1,2} & a_{2,2}
 \end{array}
 \right] 
-$$
+\f$\f$
 
-The $x$ and $b$ vectors are stored in 1d double arrays of length
-$n$. To allow the solvers access to this data, the solvers that use
-this class are all declared as friend classes. \\
+//! The \f$x\f$ and \f$b\f$ vectors are stored in 1d double arrays of length
+\f$n\f$. To allow the solvers access to this data, the solvers that use
+//! this class are all declared as friend classes.
 
-\noindent {\bf Interface}  \\
-\indent\indent {// Constructors} \\
-\indent\indent {\em FullGenLinSOE(FullGenLinSolver \&theSolver);}  \\
-\indent\indent {\em FullGenLinSOE(int N, FullGenLinSolver \&theSolver); }\\\\
-\indent\indent {// Destructor} \\
-\indent\indent {\em  $\tilde{}$FullGenLinSOE();}\\ \\
-\indent\indent {// Public Methods }  \\
-\indent\indent {\em  int setFullGenSolver(FullGenLinSolver \&newSolver);}\\
-\indent\indent {\em int setSize(const Graph \&theGraph) =0; } \\
-\indent\indent {\em int getNumEqn(void) =0; } \\
+\noindent {\bf Interface}
+\indent\indent {// Constructors}
+\indent\indent {\em FullGenLinSOE(FullGenLinSolver \&theSolver);}
+\indent\indent {\em FullGenLinSOE(int N, FullGenLinSolver \&theSolver); }
+\indent\indent {// Destructor}
+\indent\indent {\em  \f$\tilde{}\f$FullGenLinSOE();}
+\indent\indent {// Public Methods }
+\indent\indent {\em  int setFullGenSolver(FullGenLinSolver \&newSolver);}
+\indent\indent {\em int setSize(const Graph \&theGraph) =0; }
+\indent\indent {\em int getNumEqn(void) =0; }
 \indent\indent {\em int addA(const Matrix \&theMatrix, const ID \& loc,
-doublefact = 1.0) =0;} \\
+//! doublefact = 1.0) =0;}
 \indent\indent {\em int addB(const Vector \& theVector, const ID \& loc,
-double fact = 1.0) =0;} \\
+//! double fact = 1.0) =0;}
 \indent\indent {\em int setB(const Vector \& theVector, 
-double fact = 1.0) =0;} \\
-\indent\indent {\em void zeroA(void) =0;} \\
-\indent\indent {\em void zeroB(void) =0;} \\
-\indent\indent {\em const Vector \&getX(void) = 0;} \\
-\indent\indent {\em const Vector \&getB(void) = 0;} \\
-\indent\indent {\em double normRHS(void) =0;} \\
-\indent\indent {\em void setX(int loc, double value) =0;}\\
-\indent\indent {\em int sendSelf(int commitTag, Channel \&theChannel);}\\ 
+//! double fact = 1.0) =0;}
+\indent\indent {\em void zeroA(void) =0;}
+\indent\indent {\em void zeroB(void) =0;}
+\indent\indent {\em const Vector \&getX(void) = 0;}
+\indent\indent {\em const Vector \&getB(void) = 0;}
+\indent\indent {\em double normRHS(void) =0;}
+\indent\indent {\em void setX(int loc, double value) =0;}
+\indent\indent {\em int sendSelf(int commitTag, Channel \&theChannel);} 
 \indent\indent {\em int recvSelf(int commitTag, Channel \&theChannel,
-FEM\_ObjectBroker \&theBroker);}\\ 
+//! FEM\_ObjectBroker \&theBroker);} 
 
 
 
-\noindent {\bf Constructors}  \\
-\indent {\em FullGenLinSOE(FullGenLinSolver \&solver);}  \\
-The \p solver and a unique class tag (defined in $<$classTags.h$>$)
-are passed to the LinearSOE constructor. The system size is set
-to $0$ and the matrix $A$ is marked as not having been factored. Invokes
+\noindent {\bf Constructors}
+\indent {\em FullGenLinSOE(FullGenLinSolver \&solver);}
+//! The \p solver and a unique class tag (defined in \f$<\f$classTags.h\f$>\f$)
+//! are passed to the LinearSOE constructor. The system size is set
+//! to \f$0\f$ and the matrix \f$A\f$ is marked as not having been factored. Invokes
 {\em setLinearSOE(*this)} on the \p solver. No memory is
-allocated for the 3 1d arrays. \\  
+//! allocated for the 3 1d arrays.  
 
 
-{\em FullGenLinSOE(int N, FullGenLinSolver \&solver); }\\
-The \p solver and a unique class tag (defined in $<$classTags.h$>$)
-are passed to the LinearSOE constructor. The system size is set
-to $N$ and the matrix $A$ is marked as not having been
-factored. Obtains memory from the heap for the 1d arrays storing the
-data for $A$, $x$ and $b$ and stores the size of these arrays. If not
-enough memory is available for these arrays a warning message is
-printed and the system size is set to $0$. Invokes {\em
-setLinearSOE(*this)} and setSize() on \p solver,
-printing a warning message if setSize() returns a negative
-number. Also creates Vector objects for $x$ and $b$ using the {\em
-(double *,int)} Vector constructor. \\
+{\em FullGenLinSOE(int N, FullGenLinSolver \&solver); }
+//! The \p solver and a unique class tag (defined in \f$<\f$classTags.h\f$>\f$)
+//! are passed to the LinearSOE constructor. The system size is set
+//! to \f$N\f$ and the matrix \f$A\f$ is marked as not having been
+//! factored. Obtains memory from the heap for the 1d arrays storing the
+//! data for \f$A\f$, \f$x\f$ and \f$b\f$ and stores the size of these arrays. If not
+//! enough memory is available for these arrays a warning message is
+//! printed and the system size is set to \f$0\f$. Invokes {\em
+//! setLinearSOE(*this)} and setSize() on \p solver,
+//! printing a warning message if setSize() returns a negative
+//! number. Also creates Vector objects for \f$x\f$ and \f$b\f$ using the {\em
+(double *,int)} Vector constructor.
 
-\noindent {\bf Destructor} \\
-\indent {\em  $\tilde{}$FullGenLinSOE();}\\ 
-Calls delete on any arrays created. \\
+\noindent {\bf Destructor}
+\indent {\em  \f$\tilde{}\f$FullGenLinSOE();} 
+//! Calls delete on any arrays created.
 
-\noindent {\bf Public Methods} \\
-\indent {\em  int setFullGEnSolver(FullGenLinSolver \&newSolver);}\\
-Invokes {\em setLinearSOE(*this)} on \p newSolver.
-If the system size is not equal to $0$, it also invokes setSize()
-on \p newSolver, printing a warning and returning $-1$ if this
-method returns a number less than $0$. Finally it returns the result
-of invoking the LinearSOE classes setSolver() method. \\
+\noindent {\bf Public Methods}
+\indent {\em  int setFullGEnSolver(FullGenLinSolver \&newSolver);}
+//! Invokes {\em setLinearSOE(*this)} on \p newSolver.
+//! If the system size is not equal to \f$0\f$, it also invokes setSize()
+//! on \p newSolver, printing a warning and returning \f$-1\f$ if this
+//! method returns a number less than \f$0\f$. Finally it returns the result
+//! of invoking the LinearSOE classes setSolver() method.
 
-\indent {\em int getNumEqn(void) =0; } \\
-A method which returns the current size of the system. \\
+\indent {\em int getNumEqn(void) =0; }
+//! A method which returns the current size of the system.
 
-\indent {\em  int setSize(const Graph \&theGraph); } \\ 
-The size of the system is determined by invoking getNumVertex()
-on \p theGraph. If the old space allocated for the 1d arrays is not
-big enough, it the old space is returned to the heap and new space is
-allocated from the heap. Prints a warning message, sets size to $0$
-and returns a $-1$, if not enough memory is available on the heap for the 
+\indent {\em  int setSize(const Graph \&theGraph); } 
+//! The size of the system is determined by invoking getNumVertex()
+//! on \p theGraph. If the old space allocated for the 1d arrays is not
+//! big enough, it the old space is returned to the heap and new space is
+//! allocated from the heap. Prints a warning message, sets size to \f$0\f$
+//! and returns a \f$-1\f$, if not enough memory is available on the heap for the 
 1d arrays. If memory is available, the components of the arrays are
-zeroed and $A$ is marked as being unfactored. If the system size has
-increased, new Vector objects for $x$ and $b$ using the {\em (double
+//! zeroed and \f$A\f$ is marked as being unfactored. If the system size has
+//! increased, new Vector objects for \f$x\f$ and \f$b\f$ using the {\em (double
 *,int)} Vector constructor are created. Finally, the result of
-invoking setSize() on the associated Solver object is returned. \\
+//! invoking setSize() on the associated Solver object is returned.
 
 
 \indent {\em int addA(const Matrix \&M, const ID \& loc,
-doublefact = 1.0) =0;} \\
-First tests that \p loc and \p M are of compatible sizes; if not
-a warning message is printed and a $-1$ is returned. The LinearSOE
-object then assembles \p fact times the Matrix {\em 
-M} into the matrix $A$. The Matrix is assembled into $A$ at the
-locations given by the ID object \p loc, i.e. $a_{loc(i),loc(j)} +=
-fact * M(i,j)$. If the location specified is outside the range,
-i.e. $(-1,-1)$ the corresponding entry in \p M is not added to
-$A$. If \p fact is equal to $0.0$ or $1.0$, more efficient steps
-are performed. Returns $0$.  \\
+//! doublefact = 1.0) =0;}
+//! First tests that \p loc and \p M are of compatible sizes; if not
+//! a warning message is printed and a \f$-1\f$ is returned. The LinearSOE
+//! object then assembles \p fact times the Matrix {\em 
+//! M} into the matrix \f$A\f$. The Matrix is assembled into \f$A\f$ at the
+//! locations given by the ID object \p loc, i.e. \f$a_{loc(i),loc(j)} +=
+//! fact * M(i,j)\f$. If the location specified is outside the range,
+//! i.e. \f$(-1,-1)\f$ the corresponding entry in \p M is not added to
+\f$A\f$. If \p fact is equal to \f$0.0\f$ or \f$1.0\f$, more efficient steps
+//! are performed. Returns \f$0\f$.
 
 
 {\em int addB(const Vector \& V, const ID \& loc,
-double fact = 1.0) =0;} \\
-First tests that \p loc and \p V are of compatible sizes; if not
-a warning message is printed and a $-1$ is returned. The LinearSOE
-object then assembles \p fact times the Vector \p V into
-the vector $b$. The Vector is assembled into $b$ at the locations
-given by the ID object \p loc, i.e. $b_{loc(i)} += fact * V(i)$. If a
-location specified is outside the range, e.g. $-1$, the corresponding
-entry in \p V is not added to $b$. If \p fact is equal to $0.0$,
-$1.0$ or $-1.0$, more efficient steps are performed. Returns $0$. \\
+//! double fact = 1.0) =0;}
+//! First tests that \p loc and \p V are of compatible sizes; if not
+//! a warning message is printed and a \f$-1\f$ is returned. The LinearSOE
+//! object then assembles \p fact times the Vector \p V into
+//! the vector \f$b\f$. The Vector is assembled into \f$b\f$ at the locations
+//! given by the ID object \p loc, i.e. \f$b_{loc(i)} += fact * V(i)\f$. If a
+//! location specified is outside the range, e.g. \f$-1\f$, the corresponding
+//! entry in \p V is not added to \f$b\f$. If \p fact is equal to \f$0.0\f$,
+\f$1.0\f$ or \f$-1.0\f$, more efficient steps are performed. Returns \f$0\f$.
 
 
-{\em int setB(const Vector \& V, double fact = 1.0) =0;} \\
-First tests that \p V and the size of the system are of compatible
-sizes; if not a warning message is printed and a $-1$ is returned. The
-LinearSOE object then sets the vector \p b to be \p fact times
-the Vector \p V. If \p fact is equal to $0.0$, $1.0$ or $-1.0$,
-more efficient steps are performed. Returns $0$. \\ 
+{\em int setB(const Vector \& V, double fact = 1.0) =0;}
+//! First tests that \p V and the size of the system are of compatible
+//! sizes; if not a warning message is printed and a \f$-1\f$ is returned. The
+//! LinearSOE object then sets the vector \p b to be \p fact times
+//! the Vector \p V. If \p fact is equal to \f$0.0\f$, \f$1.0\f$ or \f$-1.0\f$,
+//! more efficient steps are performed. Returns \f$0\f$. 
 
-{\em void zeroA(void) =0;} \\
-Zeros the entries in the 1d array for $A$ and marks the system as not
-having been factored. \\
+{\em void zeroA(void) =0;}
+//! Zeros the entries in the 1d array for \f$A\f$ and marks the system as not
+//! having been factored.
 
-{\em void zeroB(void) =0;} \\
-Zeros the entries in the 1d array for $b$. \\
+{\em void zeroB(void) =0;}
+//! Zeros the entries in the 1d array for \f$b\f$.
 
-{\em const Vector \&getX(void) = 0;} \\
-Returns the Vector object created for $x$. \\
+{\em const Vector \&getX(void) = 0;}
+//! Returns the Vector object created for \f$x\f$.
 
-{\em const Vector \&getB(void) = 0;} \\
-Returns the Vector object created for $b$. \\
+{\em const Vector \&getB(void) = 0;}
+//! Returns the Vector object created for \f$b\f$.
 
-{\em double normRHS(void) =0;} \\
-Returns the 2-norm of the vector $x$. \\
+{\em double normRHS(void) =0;}
+//! Returns the 2-norm of the vector \f$x\f$.
 
-{\em void setX(int loc, double value) =0;}\\
-If \p loc is within the range of $x$, sets $x(loc) = value$. \\
+{\em void setX(int loc, double value) =0;}
+//! If \p loc is within the range of \f$x\f$, sets \f$x(loc) = value\f$.
 
-\indent {\em int sendSelf(int commitTag, Channel \&theChannel);}\\ 
-Returns $0$. The object does not send any data or connectivity
-information as this is not needed in the finite element design. \\
+\indent {\em int sendSelf(int commitTag, Channel \&theChannel);} 
+//! Returns \f$0\f$. The object does not send any data or connectivity
+//! information as this is not needed in the finite element design.
 
 \indent {\em int recvSelf(int commitTag, Channel \&theChannel, FEM\_ObjectBroker
-\&theBroker);}\\ 
-Returns $0$. The object does not receive any data or connectivity
-information as this is not needed in the finite element design.
+\&theBroker);} 
+//! Returns \f$0\f$. The object does not receive any data or connectivity
+//! information as this is not needed in the finite element design.
 

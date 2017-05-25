@@ -2,92 +2,92 @@
 %What: "@(#) RCM.tex, revA"
 
 
-\noindent {\bf Files}   \\
-\indent \#include $<\tilde{ }$/graph/numberer/RCM.h$>$  \\
+\noindent {\bf Files}
+\indent \#include \f$<\tilde{ }\f$/graph/numberer/RCM.h\f$>\f$
 
-\noindent {\bf Class Declaration}  \\
-\indent class RCM: public GraphNumberer; \\
+\noindent {\bf Class Declaration}
+\indent class RCM: public GraphNumberer;
 
-\noindent {\bf Class Hierarchy} \\
-\indent MovableObject \\
-\indent\indent GraphNumberer \\
-\indent\indent\indent {\bf RCM} \\
+\noindent {\bf Class Hierarchy}
+\indent MovableObject
+\indent\indent GraphNumberer
+\indent\indent\indent {\bf RCM}
 
-\noindent {\bf Description}  \\
+\noindent {\bf Description}
 \indent RCM is a subclass of GraphNumberer which performs the
-numbering using the reverse Cuthill-McKee numbering algorithm. \\
+//! numbering using the reverse Cuthill-McKee numbering algorithm.
 
-\noindent {\bf Class Interface }  \\
-\indent\indent // Constructor  \\
-\indent\indent {\em RCM(bool GPS = true);}  \\ \\
-\indent\indent // Destructor  \\
-\indent\indent {\em ~$\tilde{}$RCM();}  \\ \\
-\indent\indent // Public Methods   \\
+\noindent {\bf Class Interface }
+\indent\indent // Constructor
+\indent\indent {\em RCM(bool GPS = true);}
+\indent\indent // Destructor
+\indent\indent {\em ~\f$\tilde{}\f$RCM();}
+\indent\indent // Public Methods
 \indent\indent {\em const ID \&number(Graph \&theGraph, int
-lastVertexTag = -1) =0;}\\
+//! lastVertexTag = -1) =0;}
 \indent\indent {\em const ID \&number(Graph \&theGraph, const ID
-\&startVertices) =0;}\\
+\&startVertices) =0;}
 \indent\indent {\em int sendSelf(int commitTag, Channel \&theChannel,
-FEM\_ObjectBroker \&theBroker);} \\
+//! FEM\_ObjectBroker \&theBroker);}
 \indent\indent {\em int recvSelf(int commitTag, Channel \&theChannel,
-FEM\_ObjectBroker \&theBroker); } \\
+//! FEM\_ObjectBroker \&theBroker); }
 
-\noindent {\bf Constructor}  \\
-\indent {\em RCM(bool GPS = true);}  \\
-The integer \p classTag is passed to the MovableObject classes
-constructor. The flag \p GPS is used to mark whether the
-Gibbs-Poole-Stodlmyer algorithm is used to determine a starting vertex
-when no starting vertex is given. \\
+\noindent {\bf Constructor}
+\indent {\em RCM(bool GPS = true);}
+//! The integer \p classTag is passed to the MovableObject classes
+//! constructor. The flag \p GPS is used to mark whether the
+//! Gibbs-Poole-Stodlmyer algorithm is used to determine a starting vertex
+//! when no starting vertex is given.
 
-\noindent {\bf Destructor}  \\
-\indent {\em virtual~$\tilde{}$RCM();}  \\
-Invokes the destructor on any ID object created when number() is
-invoked. \\
+\noindent {\bf Destructor}
+\indent {\em virtual~\f$\tilde{}\f$RCM();}
+//! Invokes the destructor on any ID object created when number() is
+//! invoked.
 
-\noindent {\bf Public Methods}  \\
+\noindent {\bf Public Methods}
 \indent {\em const ID \&number(Graph \&theGraph, int
-lastVertex = -1) =0;}\\
-If the present ID used for the result is not of size equal to the
-number of Vertices in \p theGraph, it deletes the old and
-constructs a new ID. Starts by iterating through the Vertices of the
-graph setting the \p tmp variable of each to $-1$. The Vertices are
-then numbered using a depth first sort of the Graph, with each
-unmarked Vertex in the Graph at a distance $d$ from starting Vertex
-being placed in the d'th level set. As this is RCM, the Vertices in
-level set $n$ are assigned a higher number than those in level set
-$n+1$ with the \p tmp variable of the starting Vertex being
-assigned \p numVertices $-1$. The \p tags of the Vertices are
-placed into the ID at location given by their \p tmp variable. These
-are replaced with the \p ref variable of each Vertex, which is
-returned on successful completion. 
+//! lastVertex = -1) =0;}
+//! If the present ID used for the result is not of size equal to the
+//! number of Vertices in \p theGraph, it deletes the old and
+//! constructs a new ID. Starts by iterating through the Vertices of the
+//! graph setting the \p tmp variable of each to \f$-1\f$. The Vertices are
+//! then numbered using a depth first sort of the Graph, with each
+//! unmarked Vertex in the Graph at a distance \f$d\f$ from starting Vertex
+//! being placed in the d'th level set. As this is RCM, the Vertices in
+//! level set \f$n\f$ are assigned a higher number than those in level set
+\f$n+1\f$ with the \p tmp variable of the starting Vertex being
+//! assigned \p numVertices \f$-1\f$. The \p tags of the Vertices are
+//! placed into the ID at location given by their \p tmp variable. These
+//! are replaced with the \p ref variable of each Vertex, which is
+//! returned on successful completion. 
 
 
-The Vertex chosen as the starting Vertex is the one whose tag is given
-by \p lastVertex. If this is $-1$ or the Vertex corresponding to
+//! The Vertex chosen as the starting Vertex is the one whose tag is given
+//! by \p lastVertex. If this is \f$-1\f$ or the Vertex corresponding to
 \p lastVertex does not exist then another Vertex is chosen. If the
 \p GPS flag in constructor is \p false the first Vertex from the
-Graphs VertexIter is used; if \p true a RCM numbering using the
-first Vertex from the VertexIter is performed and the Vertices in the
-last level set are then used to create an ID \p lastVertices with
-which {\em number(theGraph, lastVertices)} can be invoked to determine
-the numbering. \\
+//! Graphs VertexIter is used; if \p true a RCM numbering using the
+//! first Vertex from the VertexIter is performed and the Vertices in the
+//! last level set are then used to create an ID \p lastVertices with
+//! which {\em number(theGraph, lastVertices)} can be invoked to determine
+//! the numbering.
 
 
 \indent {\em const ID \&number(Graph \&theGraph, const ID
-\&startVertices) =0;}\\
-This method is invoked to determine the best starting Vertex for a RCM
-using a Vertex whose tag is in \p lastVertices. To do a RCM
-numbering is performed using each of the Vertices in {\em
-startVertices} as the Vertex in level set $0$. The Vertex which
-results in the numbering with the smallest profile is chosen as 
-the starting Vertex. The RCM algorithm outlined above is then called
-with this starting Vertex. \\
+\&startVertices) =0;}
+//! This method is invoked to determine the best starting Vertex for a RCM
+//! using a Vertex whose tag is in \p lastVertices. To do a RCM
+//! numbering is performed using each of the Vertices in {\em
+//! startVertices} as the Vertex in level set \f$0\f$. The Vertex which
+//! results in the numbering with the smallest profile is chosen as 
+//! the starting Vertex. The RCM algorithm outlined above is then called
+//! with this starting Vertex.
 
 {\em int sendSelf(Channel \&theChannel,
-FEM\_ObjectBroker \&theBroker);} \\
-Returns $0$. \\
+//! FEM\_ObjectBroker \&theBroker);}
+//! Returns \f$0\f$.
 
 {\em int recvSelf(Channel \&theChannel,
-FEM\_ObjectBroker \&theBroker); } \\
-Returns $0$.
+//! FEM\_ObjectBroker \&theBroker); }
+//! Returns \f$0\f$.
 

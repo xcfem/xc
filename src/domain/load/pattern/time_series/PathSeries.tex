@@ -1,93 +1,93 @@
 %File: ~/OOP/domain/load/pattern/PathSeries.tex
 %What: "@(#) PathSeries.tex, revA"
 
-\noindent {\bf Files}   \\
-\indent \#include $<\tilde{ }$domain/load/pattern/PathSeries.h$>$  \\
+\noindent {\bf Files}
+\indent \#include \f$<\tilde{ }\f$domain/load/pattern/PathSeries.h\f$>\f$
 
-\noindent {\bf Class Declaration}  \\
-\indent class PathSeries: public DomainComponent  \\
+\noindent {\bf Class Declaration}
+\indent class PathSeries: public DomainComponent
 
-\noindent {\bf Class Hierarchy} \\
-\indent MovableObject \\
-\indent\indent TimeSeries \\
-\indent\indent\indent {\bf PathSeries} \\
+\noindent {\bf Class Hierarchy}
+\indent MovableObject
+\indent\indent TimeSeries
+\indent\indent\indent {\bf PathSeries}
 
-\noindent {\bf Description} \\ 
+\noindent {\bf Description} 
 \indent The PathSeries class is a concrete subclass of TimeSeries.
-The relationship between the pseudo time and the load factor follows
-a user specified path. The path points are specified at constant time
-intervals. For a pseudo time not at a path point, linear interpolation
-is performed to determine the load factor. If the time specified is
-beyond the last path point a load factor of $0.0$ will be returned.\\
+//! The relationship between the pseudo time and the load factor follows
+//! a user specified path. The path points are specified at constant time
+//! intervals. For a pseudo time not at a path point, linear interpolation
+//! is performed to determine the load factor. If the time specified is
+//! beyond the last path point a load factor of \f$0.0\f$ will be returned.
 
-\noindent {\bf Class Interface} \\
-\indent // Constructors \\ 
-\indent {\em PathSeries(Vector \&thePath, double dT; double cFactor);}\\ 
-\indent {\em PathSeries(char *fileName, double dT; double cFactor);}\\ 
-\indent {\em PathSeries();}\\ \\
-\indent // Destructor \\ 
-\indent {\em virtual $\tilde{ }$PathSeries();}\\  \\
-\indent // Public Methods \\ 
-\indent {\em  virtual double getFactor(double pseudoTime);}\\
-\indent {\em  virtual int sendSelf(int commitTag, Channel \&theChannel);}\\
+\noindent {\bf Class Interface}
+\indent // Constructors 
+\indent {\em PathSeries(Vector \&thePath, double dT; double cFactor);} 
+\indent {\em PathSeries(char *fileName, double dT; double cFactor);} 
+\indent {\em PathSeries();}
+\indent // Destructor 
+\indent {\em virtual \f$\tilde{ }\f$PathSeries();}
+\indent // Public Methods 
+\indent {\em  virtual double getFactor(double pseudoTime);}
+\indent {\em  virtual int sendSelf(int commitTag, Channel \&theChannel);}
 \indent {\em  virtual int recvSelf(int commitTag, Channel \&theChannel,
-FEM\_ObjectBroker \&theBroker);}\\
-\indent {\em  virtual void Print(std::ostream \&s, int flag =0);}\\
+//! FEM\_ObjectBroker \&theBroker);}
+\indent {\em  virtual void Print(std::ostream \&s, int flag =0);}
 
-\noindent {\bf Constructor} \\ 
-\indent {\em PathSeries(Vector \&thePath, double dT; double cFactor);}\\ 
-Used to construct a PathSeries when the data points are specified in a
-Vector. The tag TSERIES\_TAG\_PathSeries is passed to the TimeSeries
-The tag TSERIES\_TAG\_PathSeries is passed to the TimeSeries
-constructor. Sets the constant factor used in the relation to {\em
-cFactor}. Constructs a new Vector equal to \p thePath containing the
-data points which are specified at \p dT time intervals. Prints a
-warning message if no space is available for the Vector.\\
+\noindent {\bf Constructor} 
+\indent {\em PathSeries(Vector \&thePath, double dT; double cFactor);} 
+//! Used to construct a PathSeries when the data points are specified in a
+//! Vector. The tag TSERIES\_TAG\_PathSeries is passed to the TimeSeries
+//! The tag TSERIES\_TAG\_PathSeries is passed to the TimeSeries
+//! constructor. Sets the constant factor used in the relation to {\em
+//! cFactor}. Constructs a new Vector equal to \p thePath containing the
+//! data points which are specified at \p dT time intervals. Prints a
+//! warning message if no space is available for the Vector.
 
-\indent {\em PathSeries(char *fileName, double dT; double cFactor);}\\ 
-Used to construct a PathSeries when the data points are specified in a
-file. The tag TSERIES\_TAG\_PathSeries is passed to the TimeSeries
-constructor. Sets the constant factor used in the relation to {\em
-cFactor}. Opens the file containing and reads in the data points into
-a new Vector which are specified at \p dT time intervals. Prints a
-warning message if no space is available for the Vector or if the file
-could not be found.\\
-
-
-\indent {\em PathSeries();}\\ 
-For a FEM\_ObjectBroker to instantiate an empty PathSeries, recvSelf()
-must be invoked on this object. The tag TSERIES\_TAG\_PathSeries is
-passed to the TimeSeries constructor. \\
+\indent {\em PathSeries(char *fileName, double dT; double cFactor);} 
+//! Used to construct a PathSeries when the data points are specified in a
+//! file. The tag TSERIES\_TAG\_PathSeries is passed to the TimeSeries
+//! constructor. Sets the constant factor used in the relation to {\em
+//! cFactor}. Opens the file containing and reads in the data points into
+//! a new Vector which are specified at \p dT time intervals. Prints a
+//! warning message if no space is available for the Vector or if the file
+//! could not be found.
 
 
-\noindent {\bf Destructor} \\
-\indent {\em virtual $\tilde{ }$PathSeries();}\\ 
-Invokes the destructor on the Vector created to hold the data
-points. \\
+\indent {\em PathSeries();} 
+//! For a FEM\_ObjectBroker to instantiate an empty PathSeries, recvSelf()
+//! must be invoked on this object. The tag TSERIES\_TAG\_PathSeries is
+//! passed to the TimeSeries constructor.
 
 
-\noindent {\bf Public Methods} \\
-\indent {\em  virtual double getFactor(double pseudoTime);}\\
-Determines the load factor based on the \p pseudoTime and the data
-points. Returns $0.0$ if \p pseudoTime is greater than time of last
-data point, otherwise returns a linear interpolation of the data
-points times the factor \p cFactor. \\
+\noindent {\bf Destructor}
+\indent {\em virtual \f$\tilde{ }\f$PathSeries();} 
+//! Invokes the destructor on the Vector created to hold the data
+//! points.
+
+
+\noindent {\bf Public Methods}
+\indent {\em  virtual double getFactor(double pseudoTime);}
+//! Determines the load factor based on the \p pseudoTime and the data
+//! points. Returns \f$0.0\f$ if \p pseudoTime is greater than time of last
+//! data point, otherwise returns a linear interpolation of the data
+//! points times the factor \p cFactor.
 
 \indent {\em  virtual int sendSelf(int commitTag, Channel
-\&theChannel);}\\
-Creates a vector of size 4 into which it places \p cFactor, {\em
-dT}, the size of \p thePath and another database tag for {\em
-thaPath} Vector.  Invokes sendVector() on the Channel with this
-newly created Vector object, and the sendVEctor() on {\em
-thePath}. \\
+\&theChannel);}
+//! Creates a vector of size 4 into which it places \p cFactor, {\em
+//! dT}, the size of \p thePath and another database tag for {\em
+//! thaPath} Vector.  Invokes sendVector() on the Channel with this
+//! newly created Vector object, and the sendVEctor() on {\em
+//! thePath}.
 
 \indent {\em  virtual int recvSelf(int commitTag, Channel \&theChannel,
-FEM\_ObjectBroker \&theBroker);}\\
-Does the mirror image of sendSelf(). \\
+//! FEM\_ObjectBroker \&theBroker);}
+//! Does the mirror image of sendSelf().
 
-\indent {\em  virtual void Print(std::ostream \&s, int flag =0) =0;}\\
-Prints the string 'PathSeries', the factor\p cFactor, and the time
-increment \p dT. If \p flag is equal to $1.0$ the load path
-Vector is also printed.
+\indent {\em  virtual void Print(std::ostream \&s, int flag =0) =0;}
+//! Prints the string 'PathSeries', the factor\p cFactor, and the time
+//! increment \p dT. If \p flag is equal to \f$1.0\f$ the load path
+//! Vector is also printed.
 
 

@@ -1,220 +1,220 @@
 %File: ~/OOP/material/section/ElasticSection3D.tex
 %What: "@(#) ElasticSection3D.tex, revA"
 
-\noindent {\bf Files}   \\
-\indent \#include $<\tilde{ }$/material/section/ElasticSection3D.h$>$  \\
+\noindent {\bf Files}
+\indent \#include \f$<\tilde{ }\f$/material/section/ElasticSection3D.h\f$>\f$
 
-\noindent {\bf Class Declaration}  \\
-\indent class ElasticSection3D : public SectionForceDeformation \\
+\noindent {\bf Class Declaration}
+\indent class ElasticSection3D : public SectionForceDeformation
 
-\noindent {\bf Class Hierarchy} \\
-\indent TaggedObject \\
-\indent MovableObject \\
-\indent\indent Material \\
-\indent\indent\indent SectionForceDeformation \\
-\indent\indent\indent\indent {\bf ElasticSection3D} \\
+\noindent {\bf Class Hierarchy}
+\indent TaggedObject
+\indent MovableObject
+\indent\indent Material
+\indent\indent\indent SectionForceDeformation
+\indent\indent\indent\indent {\bf ElasticSection3D}
 
-\noindent {\bf Description}  \\
+\noindent {\bf Description}
 \indent ElasticSection3D provides the implementation of a
-section which exhibits uncoupled elastic behavior in axial, moment,
-shear, and torsion response. \\
+//! section which exhibits uncoupled elastic behavior in axial, moment,
+//! shear, and torsion response.
 
-\noindent {\bf Class Interface} \\
-\indent // Constructor \\
+\noindent {\bf Class Interface}
+\indent // Constructor
 \indent {\em ElasticSection3D (int tag, double E, double Iz,
-double Iy, double J, double A, double G, double alpha = 5/6.0);} \\ 
-\indent {\em ElasticSection3D ();} \\ \\
-\indent // Destructor \\
-\indent {\em $\tilde{ }$ElasticSection3D ();} \\ \\
-\indent // Public Methods \\
-\indent {\em int setTrialSectionDeformation (const Vector \&def); } \\
-\indent {\em const Vector \&getSectionDeformation (void); } \\
-\indent {\em const Vector \&getStressResultant (void); } \\
-\indent {\em const Vector \&getPrevStressResultant (void); } \\
-\indent {\em const Matrix \&getSectionTangent (void); } \\
-\indent {\em const Matrix \&getPrevSectionTangent (void); } \\
-\indent {\em const Matrix \&getSectionFlexibility (void); } \\
-\indent {\em const Matrix \&getPrevSectionFlexibility (void); } \\
-\indent {\em int commitState (void); } \\
-\indent {\em int revertToLastCommit (void); } \\
-\indent {\em int revertToStart (void); } \\
-\indent {\em SectionForceDeformation *getCopy (void); } \\
-\indent {\em const ID \&getType (void); } \\
-\indent {\em int getOrder (void); } \\ \\
-\indent // Public Methods for Output\\
-\indent {\em int sendSelf (int commitTag, Channel \&theChannel); }\\
+//! double Iy, double J, double A, double G, double alpha = 5/6.0);} 
+\indent {\em ElasticSection3D ();}
+\indent // Destructor
+\indent {\em \f$\tilde{ }\f$ElasticSection3D ();}
+\indent // Public Methods
+\indent {\em int setTrialSectionDeformation (const Vector \&def); }
+\indent {\em const Vector \&getSectionDeformation (void); }
+\indent {\em const Vector \&getStressResultant (void); }
+\indent {\em const Vector \&getPrevStressResultant (void); }
+\indent {\em const Matrix \&getSectionTangent (void); }
+\indent {\em const Matrix \&getPrevSectionTangent (void); }
+\indent {\em const Matrix \&getSectionFlexibility (void); }
+\indent {\em const Matrix \&getPrevSectionFlexibility (void); }
+\indent {\em int commitState (void); }
+\indent {\em int revertToLastCommit (void); }
+\indent {\em int revertToStart (void); }
+\indent {\em SectionForceDeformation *getCopy (void); }
+\indent {\em const ID \&getType (void); }
+\indent {\em int getOrder (void); }
+\indent // Public Methods for Output
+\indent {\em int sendSelf (int commitTag, Channel \&theChannel); }
 \indent {\em int recvSelf (int commitTag, Channel \&theChannel, 
-FEM\_ObjectBroker \&theBroker); }\\
-\indent {\em void Print (OPS_Stream \&s, int flag = 0);} \\
+//! FEM\_ObjectBroker \&theBroker); }
+\indent {\em void Print (OPS_Stream \&s, int flag = 0);}
 
-\noindent {\bf Constructor}  \\
+\noindent {\bf Constructor}
 \indent {\em ElasticSection3D (int tag, double E, double Iz,
-double Iy, double J, double A, double G, double alpha = 5/6.0);} \\ 
-To construct an ElasticSection3D with an integer identifier {\em
-tag}, an elastic modulus of $E$, a second moment of area about the local
-z-axis, $I_z$, a second moment of area about the local y-axis, $I_y$, a polar
-moment of intertia of $J$, a section area of $A$, an elastic shear modulus of $G$, 
-and a shape factor of $\alpha$. The integers \p tag and MAT\_TAG\_ElasticSection3D,
-defined in $<$classTags.h$>$, are passed to the SectionForceDeformation
-class constructor. \\
+//! double Iy, double J, double A, double G, double alpha = 5/6.0);} 
+//! To construct an ElasticSection3D with an integer identifier {\em
+//! tag}, an elastic modulus of \f$E\f$, a second moment of area about the local
+//! z-axis, \f$I_z\f$, a second moment of area about the local y-axis, \f$I_y\f$, a polar
+//! moment of intertia of \f$J\f$, a section area of \f$A\f$, an elastic shear modulus of \f$G\f$, 
+//! and a shape factor of \f$\alpha\f$. The integers \p tag and MAT\_TAG\_ElasticSection3D,
+//! defined in \f$<\f$classTags.h\f$>\f$, are passed to the SectionForceDeformation
+//! class constructor.
 
-\indent {\em ElasticSection3D ();} \\
-Constructs a blank ElasticSection3D object. \\
+\indent {\em ElasticSection3D ();}
+//! Constructs a blank ElasticSection3D object.
 
-\noindent {\bf Destructor} \\
-\indent {\em $\tilde{}$ElasticSection3D ();} \\ 
-Does nothing. \\
+\noindent {\bf Destructor}
+\indent {\em \f$\tilde{}\f$ElasticSection3D ();} 
+//! Does nothing.
 
-\noindent {\bf Public Methods} \\
-\indent {\em int setTrialSectionDeformation (const Vector \&def); }  \\
-Sets the value of the section deformation vector, $\esec$ to be {\em
-def}. The section deformation vector, $\esec$, is defined by
+\noindent {\bf Public Methods}
+\indent {\em int setTrialSectionDeformation (const Vector \&def); }
+//! Sets the value of the section deformation vector, \f$\esec\f$ to be {\em
+//! def}. The section deformation vector, \f$\esec\f$, is defined by
 
 \begin{equation}
 \esec := \left[
    \begin{array}{c}
-       \epsilon_a \\
-       \kappa_z   \\
-       \kappa_y   \\
-       \gamma_y   \\
-       \gamma_z   \\
+       \epsilon_a
+       \kappa_z
+       \kappa_y
+       \gamma_y
+       \gamma_z
        \phi
    \end{array} 
  \right]
 \end{equation}
 
-where $\epsilon_a$ is the axial strain, $\kappa_z$ is the curvature about
-the local z-axis, $\kappa_z$ is the curvature about the local z-axis, 
-$\gamma_y$ is the shear strain along the local y-axis, $\gamma_z$
-is the shear strain along the local z-axis, and $\phi$ is the angle of
-twist. Returns $0$. \\
+//! where \f$\epsilon_a\f$ is the axial strain, \f$\kappa_z\f$ is the curvature about
+//! the local z-axis, \f$\kappa_z\f$ is the curvature about the local z-axis, 
+\f$\gamma_y\f$ is the shear strain along the local y-axis, \f$\gamma_z\f$
+//! is the shear strain along the local z-axis, and \f$\phi\f$ is the angle of
+//! twist. Returns \f$0\f$.
 
-\indent {\em const Vector \&getSectionDeformation (void); } \\
-Returns the current value of the section deformation vector, $\esec$. \\
+\indent {\em const Vector \&getSectionDeformation (void); }
+//! Returns the current value of the section deformation vector, \f$\esec\f$.
 
-\indent {\em const Vector \&getStressResultant (void); } \\
-Returns the section stress resultants, $\ssec$, the product of the 
-section stiffness matrix, $\ksec$, and the section deformation 
-vector, $\esec$,
+\indent {\em const Vector \&getStressResultant (void); }
+//! Returns the section stress resultants, \f$\ssec\f$, the product of the 
+//! section stiffness matrix, \f$\ksec\f$, and the section deformation 
+//! vector, \f$\esec\f$,
 
 \begin{equation}
 \ssec = \ksec \esec = \left[
    \begin{array}{c}
-       P     \\
-       M_z   \\
-       M_z   \\
-       V_y   \\
-       V_y   \\
+       P
+       M_z
+       M_z
+       V_y
+       V_y
        T
    \end{array} 
  \right]
 \end{equation}
 
-where $P$ is the axial force, $M_z$ is the bending moment about the
-local z-axis, $M_y$ is the bending moment about the local y-axis, 
-$V_y$ is the shear force along the local y-axis, $V_z$ is the shear force
-along the local z-axis, and $T$ is the torque. \\
+//! where \f$P\f$ is the axial force, \f$M_z\f$ is the bending moment about the
+//! local z-axis, \f$M_y\f$ is the bending moment about the local y-axis, 
+\f$V_y\f$ is the shear force along the local y-axis, \f$V_z\f$ is the shear force
+//! along the local z-axis, and \f$T\f$ is the torque.
 
-\indent {\em const Vector \&getPrevStressResultant (void); } \\
-Returns the value of $\ssec$ calculated at the previous state determination. \\
+\indent {\em const Vector \&getPrevStressResultant (void); }
+//! Returns the value of \f$\ssec\f$ calculated at the previous state determination.
 
-\indent {\em const Matrix \&getSectionTangent (void); } \\
-Returns the section stiffness matrix, $\ksec$, where 
+\indent {\em const Matrix \&getSectionTangent (void); }
+//! Returns the section stiffness matrix, \f$\ksec\f$, where 
 
 \begin{equation}
 \ksec = \left[
    \begin{array}{cccccc}
-       EA &  0 &  0 & 0 & 0 & 0  \\
-        0 & EI_z & 0 & 0 & 0 & 0 \\
-        0 & 0 & EI_y & 0 & 0 & 0 \\
-        0 & 0 & 0 & \alpha GA & 0 & 0 \\
-        0 & 0 & 0 & 0 & \alpha GA & 0 \\
+       EA &  0 &  0 & 0 & 0 & 0
+        0 & EI_z & 0 & 0 & 0 & 0
+        0 & 0 & EI_y & 0 & 0 & 0
+        0 & 0 & 0 & \alpha GA & 0 & 0
+        0 & 0 & 0 & 0 & \alpha GA & 0
         0 & 0 & 0 & 0 & 0 & GJ
    \end{array} 
  \right]
-\end{equation} \\
+\end{equation}
 
-\indent {\em const Matrix \&getPrevSectionTangent (void); } \\
-Returns the section stiffness matrix, $\ksec$. \\
+\indent {\em const Matrix \&getPrevSectionTangent (void); }
+//! Returns the section stiffness matrix, \f$\ksec\f$.
 
-\indent {\em const Matrix \&getSectionFlexibility (void); } \\
-Overrides the base class implementation and returns the section
-flexibility matrix, $\fsec$, where
+\indent {\em const Matrix \&getSectionFlexibility (void); }
+//! Overrides the base class implementation and returns the section
+//! flexibility matrix, \f$\fsec\f$, where
 
 \begin{equation}
 \fsec = \left[
    \begin{array}{cccccc}
-       \frac{1}{EA} & 0 & 0 & 0 & 0 & 0 \\
-       0 & \frac{1}{EI_z} & 0 & 0 & 0 & 0 \\
-       0 & 0 & \frac{1}{EI_y} & 0 & 0 & 0 \\
-       0 & 0 & 0 & \frac{1}{\alpha GA} & 0 & 0 \\ 
-       0 & 0 & 0 & 0 & \frac{1}{\alpha GA} & 0 \\
+       \frac{1}{EA} & 0 & 0 & 0 & 0 & 0
+       0 & \frac{1}{EI_z} & 0 & 0 & 0 & 0
+       0 & 0 & \frac{1}{EI_y} & 0 & 0 & 0
+       0 & 0 & 0 & \frac{1}{\alpha GA} & 0 & 0 
+       0 & 0 & 0 & 0 & \frac{1}{\alpha GA} & 0
        0 & 0 & 0 & 0 & 0 & \frac{1}{GJ}
    \end{array} 
  \right]
-\end{equation} \\
+\end{equation}
 
-\indent {\em const Matrix \&getPrevSectionFlexibility (void); } \\
-Overrides the base class implementation and returns the section
-flexibility matrix, $\fsec$. \\
+\indent {\em const Matrix \&getPrevSectionFlexibility (void); }
+//! Overrides the base class implementation and returns the section
+//! flexibility matrix, \f$\fsec\f$.
 
-\indent {\em int commitState (void); } \\
-Returns $0$. \\
+\indent {\em int commitState (void); }
+//! Returns \f$0\f$.
 
-\indent {\em int revertToLastCommit (void); } \\
-Returns $0$. \\
+\indent {\em int revertToLastCommit (void); }
+//! Returns \f$0\f$.
 
-\indent {\em int revertToStart (void); } \\
-Returns $0$. \\
+\indent {\em int revertToStart (void); }
+//! Returns \f$0\f$.
 
-\indent {\em SectionForceDeformation *getCopy (void); } \\
-Returns a pointer to a new ElasticSection3D object, constructed
-using the same values of \p tag, $E$, $A$, $I_z$, $I_y$, $J$, $G$, and $\alpha$.
-It is up to the caller to ensure that the destructor is invoked. \\
+\indent {\em SectionForceDeformation *getCopy (void); }
+//! Returns a pointer to a new ElasticSection3D object, constructed
+//! using the same values of \p tag, \f$E\f$, \f$A\f$, \f$I_z\f$, \f$I_y\f$, \f$J\f$, \f$G\f$, and \f$\alpha\f$.
+//! It is up to the caller to ensure that the destructor is invoked.
 
-\indent {\em const ID \&getType (void); } \\
-Returns the section ID code that indicates the ordering of
-section response quantities. For this section, axial response is the
-first quantity, bending about the local z-axis is the second, bending about
-the local y-axis is the third, shear along the local y-axis is the fourth,
-shear along the local z-axis is the fifth, and torsion is the sixth. \\
+\indent {\em const ID \&getType (void); }
+//! Returns the section ID code that indicates the ordering of
+//! section response quantities. For this section, axial response is the
+//! first quantity, bending about the local z-axis is the second, bending about
+//! the local y-axis is the third, shear along the local y-axis is the fourth,
+//! shear along the local z-axis is the fifth, and torsion is the sixth.
 
 \begin{equation}
-code := \left[
+//! code := \left[
    \begin{array}{c}
-       2 \\
-       1 \\
-       4 \\
-       3 \\
-       5 \\
+       2
+       1
+       4
+       3
+       5
        6
    \end{array} 
  \right]
-\end{equation} \\
+\end{equation}
 
-\indent {\em int getOrder (void); } \\
-Returns 6. \\
+\indent {\em int getOrder (void); }
+//! Returns 6.
 
-\indent {\em    int sendSelf(int commitTag, Channel \&theChannel); }\\
-Creates a Vector of size $8$ into which it places  \p tag,
-$E$, $A$, $I_z$, $I_y$, $J$, $G$, and $\alpha$. Invokes sendVector() on 
+\indent {\em    int sendSelf(int commitTag, Channel \&theChannel); }
+//! Creates a Vector of size \f$8\f$ into which it places  \p tag,
+\f$E\f$, \f$A\f$, \f$I_z\f$, \f$I_y\f$, \f$J\f$, \f$G\f$, and \f$\alpha\f$. Invokes sendVector() on 
 \p theChannel using the ElasticSection3D objects \p dbTag, the integer
-\p commitTag and the Vector as arguments. Returns $0$ if successful, a warning
-message and a negative number are returned if the Channel object fails to send
-the Vector. \\
+\p commitTag and the Vector as arguments. Returns \f$0\f$ if successful, a warning
+//! message and a negative number are returned if the Channel object fails to send
+//! the Vector.
 
 \indent {\em    int recvSelf(int commitTag, Channel \&theChannel, 
-		 FEM\_ObjectBroker \&theBroker); }\\
-Creates a Vector of size $8$. Invokes recvVector() on  {\em
-theChannel} using the ElasticSection3D objects \p dbTag, the integer
+		 FEM\_ObjectBroker \&theBroker); }
+//! Creates a Vector of size \f$8\f$. Invokes recvVector() on  {\em
+//! theChannel} using the ElasticSection3D objects \p dbTag, the integer
 \p commitTag and the Vector as arguments. Using the data in the
-Vector to set its \p tag, $E$, $A$, $I_z$, $I_y$, $J$, $G$, and $\alpha$.
-Returns $0$ if successful, a warning message is printed and a negative number
-is returned if the Channel object fails to receive the Vector. \\
+//! Vector to set its \p tag, \f$E\f$, \f$A\f$, \f$I_z\f$, \f$I_y\f$, \f$J\f$, \f$G\f$, and \f$\alpha\f$.
+//! Returns \f$0\f$ if successful, a warning message is printed and a negative number
+//! is returned if the Channel object fails to receive the Vector.
 
-\indent {\em    void Print(OPS_Stream \&s, int flag =0);} \\
-Prints to the stream \p s the object's \p tag, $E$, $A$, $I_z$, $I_y$, $J$, 
-$G$, and $\alpha$ values. \\
+\indent {\em    void Print(OPS_Stream \&s, int flag =0);}
+//! Prints to the stream \p s the object's \p tag, \f$E\f$, \f$A\f$, \f$I_z\f$, \f$I_y\f$, \f$J\f$, 
+\f$G\f$, and \f$\alpha\f$ values.
 
 
 

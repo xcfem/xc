@@ -1,57 +1,57 @@
 %File: ~/OOP/domain/load/pattern/LinearSeries.tex
 %What: "@(#) LinearSeries.tex, revA"
 
-\noindent {\bf Files}   \\
-\indent \#include $<\tilde{ }$domain/load/pattern/LinearSeries.h$>$  \\
+\noindent {\bf Files}
+\indent \#include \f$<\tilde{ }\f$domain/load/pattern/LinearSeries.h\f$>\f$
 
-\noindent {\bf Class Declaration}  \\
-\indent class LinearSeries: public DomainComponent  \\
+\noindent {\bf Class Declaration}
+\indent class LinearSeries: public DomainComponent
 
-\noindent {\bf Class Hierarchy} \\
-\indent MovableObject \\
-\indent\indent TimeSeries \\
-\indent\indent\indent {\bf LinearSeries} \\
+\noindent {\bf Class Hierarchy}
+\indent MovableObject
+\indent\indent TimeSeries
+\indent\indent\indent {\bf LinearSeries}
 
-\noindent {\bf Description} \\ 
+\noindent {\bf Description} 
 \indent The LinearSeries class is a concrete subclass of TimeSeries.
-The relationship between the pseudo time and the load factor is linear
-for objects of this class. \\
+//! The relationship between the pseudo time and the load factor is linear
+//! for objects of this class.
 
 
-\noindent {\bf Class Interface} \\
-\indent // Constructor \\ 
-\indent {\em LinearSeries(double factor = 1.0);}\\ \\
-\indent // Destructor \\ 
-\indent {\em virtual $\tilde{ }$LinearSeries();}\\  \\
-\indent // Public Methods \\ 
-\indent {\em  virtual double getFactor(double pseudoTime);}\\
-\indent {\em  virtual int sendSelf(int commitTag, Channel \&theChannel);}\\
+\noindent {\bf Class Interface}
+\indent // Constructor 
+\indent {\em LinearSeries(double factor = 1.0);}
+\indent // Destructor 
+\indent {\em virtual \f$\tilde{ }\f$LinearSeries();}
+\indent // Public Methods 
+\indent {\em  virtual double getFactor(double pseudoTime);}
+\indent {\em  virtual int sendSelf(int commitTag, Channel \&theChannel);}
 \indent {\em  virtual int recvSelf(int commitTag, Channel \&theChannel,
-FEM\_ObjectBroker \&theBroker);}\\
-\indent {\em  virtual void Print(std::ostream \&s, int flag =0);}\\
+//! FEM\_ObjectBroker \&theBroker);}
+\indent {\em  virtual void Print(std::ostream \&s, int flag =0);}
 
-\noindent {\bf Constructor} \\ 
-\indent {\em LinearSeries(double cFactor = 1.0);}\\ 
-The tag TSERIES\_TAG\_LinearSeries is passed to the TimeSeries
-constructor. Sets the constant factor used in the relation to {\em
-cFactor}. \\
+\noindent {\bf Constructor} 
+\indent {\em LinearSeries(double cFactor = 1.0);} 
+//! The tag TSERIES\_TAG\_LinearSeries is passed to the TimeSeries
+//! constructor. Sets the constant factor used in the relation to {\em
+//! cFactor}.
 
-\noindent {\bf Destructor} \\
-\indent {\em virtual $\tilde{ }$LinearSeries();}\\ 
-Does nothing. \\
+\noindent {\bf Destructor}
+\indent {\em virtual \f$\tilde{ }\f$LinearSeries();} 
+//! Does nothing.
 
-\noindent {\bf Public Methods} \\
-\indent {\em  virtual double getFactor(double pseudoTime);}\\
-Returns the product of \p cFactor and \p pseudoTime. \\
+\noindent {\bf Public Methods}
+\indent {\em  virtual double getFactor(double pseudoTime);}
+//! Returns the product of \p cFactor and \p pseudoTime.
 
 \indent {\em  virtual int sendSelf(int commitTag, Channel
-\&theChannel);}\\
-Creates a vector of size 1 into which it places \p cFactor and
-invokes sendVector() on the Channel object. \\
+\&theChannel);}
+//! Creates a vector of size 1 into which it places \p cFactor and
+//! invokes sendVector() on the Channel object.
 
 \indent {\em  virtual int recvSelf(int commitTag, Channel \&theChannel,
-FEM\_ObjectBroker \&theBroker);}\\
-Does the mirror image of sendSelf(). \\
+//! FEM\_ObjectBroker \&theBroker);}
+//! Does the mirror image of sendSelf().
 
-\indent {\em  virtual void Print(std::ostream \&s, int flag =0) =0;}\\
-Prints the string 'LinearSeries' and the factor\p cFactor.
+\indent {\em  virtual void Print(std::ostream \&s, int flag =0) =0;}
+//! Prints the string 'LinearSeries' and the factor\p cFactor.

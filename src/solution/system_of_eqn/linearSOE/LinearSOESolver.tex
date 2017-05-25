@@ -1,52 +1,52 @@
 %File: ~/OOP/system_of_eqn/linearSOE/LinearSOESolver.tex
 %What: "@(#) LinearSOESolver.tex, revA"
 
-\noindent {\bf Files}   \\
-\indent \#include $<\tilde{ }$/system\_of\_eqn/linearSOE/LinearSOESolver.h$>$  \\
+\noindent {\bf Files}
+\indent \#include \f$<\tilde{ }\f$/system\_of\_eqn/linearSOE/LinearSOESolver.h\f$>\f$
 
-\noindent {\bf Class Declaration}  \\
-\indent class LinearSOESolver: public Solver  \\
+\noindent {\bf Class Declaration}
+\indent class LinearSOESolver: public Solver
 
-\noindent {\bf Class Hierarchy} \\
-\indent MovableObject \\
-\indent\indent  Solver \\
-\indent\indent\indent {\bf LinearSOESolver} \\
+\noindent {\bf Class Hierarchy}
+\indent MovableObject
+\indent\indent  Solver
+\indent\indent\indent {\bf LinearSOESolver}
 
-\noindent {\bf Description}  \\
+\noindent {\bf Description}
 \indent LinearSOESolver is an abstract class. A LinearSOESolver object is
-responsible for solving the LinearSOE object that it is associated
-with. That is, to find $x$ such that the matrix equation $Ax=b$ is
-satisfied. \\
+//! responsible for solving the LinearSOE object that it is associated
+//! with. That is, to find \f$x\f$ such that the matrix equation \f$Ax=b\f$ is
+//! satisfied.
 
-\noindent {\bf Interface}  \\
-\indent\indent {// Constructor} \\
-\indent\indent {\em LinearSOESolver(int classTag);}  \\ \\
-\indent\indent {// Destructor} \\
-\indent\indent {\em virtual~ $\tilde{}$LinearSOESolver();}\\  \\
-\indent\indent {// Public Methods }  \\
-\indent\indent {\em virtual int solve(void) =0;} \\
-\indent\indent {\em virtual int setSize(void) =0;} \\
+\noindent {\bf Interface}
+\indent\indent {// Constructor}
+\indent\indent {\em LinearSOESolver(int classTag);}
+\indent\indent {// Destructor}
+\indent\indent {\em virtual~ \f$\tilde{}\f$LinearSOESolver();}
+\indent\indent {// Public Methods }
+\indent\indent {\em virtual int solve(void) =0;}
+\indent\indent {\em virtual int setSize(void) =0;}
 
-\noindent {\bf Constructor}  \\
-\indent {\em LinearSOESolver(int classTag);}  \\
-The integer \p classTag is passed to the Solver. \\
+\noindent {\bf Constructor}
+\indent {\em LinearSOESolver(int classTag);}
+//! The integer \p classTag is passed to the Solver.
 
-\noindent {\bf Destructor} \\
-\indent {\em virtual~ $\tilde{}$LinearSOESolver();}\\ 
-Does nothing. Provided so the subclasses destructor will be called. \\
+\noindent {\bf Destructor}
+\indent {\em virtual~ \f$\tilde{}\f$LinearSOESolver();} 
+//! Does nothing. Provided so the subclasses destructor will be called.
 
-\noindent {\bf Public Methods }  \\
-\indent {\em virtual int solve(void) =0;} \\
-Causes the LinearSOESolver to solve the system of equations $Ax=b$ for $x$.
-Returns $0$ if successful , negative number if not; the actual value depending on
-the type of LinearSOESolver. The result of the solve are to be stored
-in the $x$ vector of the LinearSOE by the object.\\
+\noindent {\bf Public Methods }
+\indent {\em virtual int solve(void) =0;}
+//! Causes the LinearSOESolver to solve the system of equations \f$Ax=b\f$ for \f$x\f$.
+//! Returns \f$0\f$ if successful , negative number if not; the actual value depending on
+//! the type of LinearSOESolver. The result of the solve are to be stored
+//! in the \f$x\f$ vector of the LinearSOE by the object.
 
-\indent {\em virtual int setSize(void) =0;} \\
-This is invoked by the \p LinearSOE object when setSize() has
-been invoked on it. Solvers may sometimes need to store additional
-data that needs to be updated if the size of the system of equation
-changes. \\
+\indent {\em virtual int setSize(void) =0;}
+//! This is invoked by the \p LinearSOE object when setSize() has
+//! been invoked on it. Solvers may sometimes need to store additional
+//! data that needs to be updated if the size of the system of equation
+//! changes.
 
 
 

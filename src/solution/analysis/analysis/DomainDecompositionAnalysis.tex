@@ -1,258 +1,258 @@
 %File: ~/OOP/analysis/analysis/DomainDecompositionAnalysis.tex
 %What: "@(#) DomainDecompositionAnalysis.tex, revA"
 
-UNDER CONSTRUCTION
+//! UNDER CONSTRUCTION
 
-\noindent {\bf Files}   \\
-\indent \#include $<\tilde{
-}$/analysis/analysis/DomainDecompositionAnalysis.h$>$  \\ 
+\noindent {\bf Files}
+\indent \#include \f$<\tilde{
+}\f$/analysis/analysis/DomainDecompositionAnalysis.h\f$>\f$ 
 
-\noindent {\bf Class Decleration}  \\
-\indent class DomainDecompositionAnalysis: public Analysis, public MovableObject;  \\
+\noindent {\bf Class Decleration}
+\indent class DomainDecompositionAnalysis: public Analysis, public MovableObject;
 
-\noindent {\bf Class Hierarchy} \\
-\indent Analysis \\
-\indent MovableObject \\
-\indent\indent {\bf DomainDecompositionAnalysis} \\
+\noindent {\bf Class Hierarchy}
+\indent Analysis
+\indent MovableObject
+\indent\indent {\bf DomainDecompositionAnalysis}
 
-\noindent {\bf Description} \\ 
+\noindent {\bf Description} 
 \indent DomainDecompositionAnalysis is a subclass of Analysis, 
-it is used when performing an analysis using the domain decomposition
-method to solve the equations. Its public member functions are all
-virtual to allow for the generalization of the 
-class. The following are the aggregates of such an analysis type:
+//! it is used when performing an analysis using the domain decomposition
+//! method to solve the equations. Its public member functions are all
+//! virtual to allow for the generalization of the 
+//! class. The following are the aggregates of such an analysis type:
 \begin{itemize}
 \item {\bf AnalysisModel} - a container class holding the FE\_Element
-and DOF\_Group objects created by the ConstraintHandler object. 
+//! and DOF\_Group objects created by the ConstraintHandler object. 
 \item {\bf ConstraintHandler} - a class which creates the DOF\_Group
-and FE\_Element objects, the type of objects created depending on how
-the specified constraints in the domain are to be handled. 
+//! and FE\_Element objects, the type of objects created depending on how
+//! the specified constraints in the domain are to be handled. 
 \item {\bf DOF\_Numberer} - a class responsible for providing equation
-numbers to the individual degrees of freedom in each DOF\_Group object.
+//! numbers to the individual degrees of freedom in each DOF\_Group object.
 \item {\bf LinearSOE} - a numeric class responsible for the creation
-and subsequent solution of large systems of linear equations of the
-form $Ax = b$, where A is a matrix, and x and b are vectors.
+//! and subsequent solution of large systems of linear equations of the
+//! form \f$Ax = b\f$, where A is a matrix, and x and b are vectors.
 \item {\bf IncrementalIntegrator} - an algorithmic class which provides
-methods which are invoked by the FE\_Element to determine their
-current tangent and residual matrices; that is this is the class that
-sets up the system of equations.  It also provides the {\em
-update()} method which is invoked to set up the appropriate dof
-response values once the solution algorithm has formed and solved the
-system of equations.
+//! methods which are invoked by the FE\_Element to determine their
+//! current tangent and residual matrices; that is this is the class that
+//! sets up the system of equations.  It also provides the {\em
+//! update()} method which is invoked to set up the appropriate dof
+//! response values once the solution algorithm has formed and solved the
+//! system of equations.
 \item {\bf DomainDecompositionAlgo} - an algorithmic class specifying the
-sequence of operations to be performed in determing the response
-for the external dof and placing these in the system of equations.
+//! sequence of operations to be performed in determing the response
+//! for the external dof and placing these in the system of equations.
 \item {\bf DomainSolver} - an algorithmic class specifying the
-sequence of operations to be performed in performing the numerical 
-operations.
+//! sequence of operations to be performed in performing the numerical 
+//! operations.
 \end{itemize}
 
 
-\noindent {\bf Class Interface} \\
-\indent {\bf Constructors} \\
-\indent {\em DomainDecompositionAnalysis(Subdomain \&theDomain, \\
+\noindent {\bf Class Interface}
+\indent {\bf Constructors}
+\indent {\em DomainDecompositionAnalysis(Subdomain \&theDomain,
 \indent\indent\indent\indent\indent\indent\indent ConstraintHandler
-\&theHandler, \\ 
-\indent\indent\indent\indent\indent\indent\indent DOF\_Numberer \&theNumberer, \\
-\indent\indent\indent\indent\indent\indent\indent AnalysisModel \&theModel,\\
-\indent\indent\indent\indent\indent\indent\indent DomainDecompAlgo \&theSolnAlgo,\\
-\indent\indent\indent\indent\indent\indent\indent IncrementalIntegrator \&theIntegrator,\\
-\indent\indent\indent\indent\indent\indent\indent LinearSOE \&theSOE, \\
-\indent\indent\indent\indent\indent\indent\indent DomainDecompositionSolver \&theSolver);} \\
-\indent {\em DomainDecompositionAnalysis(Subdomain \&theDomain);} \\
+\&theHandler, 
+\indent\indent\indent\indent\indent\indent\indent DOF\_Numberer \&theNumberer,
+\indent\indent\indent\indent\indent\indent\indent AnalysisModel \&theModel,
+\indent\indent\indent\indent\indent\indent\indent DomainDecompAlgo \&theSolnAlgo,
+\indent\indent\indent\indent\indent\indent\indent IncrementalIntegrator \&theIntegrator,
+\indent\indent\indent\indent\indent\indent\indent LinearSOE \&theSOE,
+\indent\indent\indent\indent\indent\indent\indent DomainDecompositionSolver \&theSolver);}
+\indent {\em DomainDecompositionAnalysis(Subdomain \&theDomain);}
 \indent {\em DomainDecompositionAnalysis(int classTag, Subdomain
-\&theDomain);}\\ \\
-\indent // Destructor \\
-\indent {\em virtual~ $\tilde{}$DomainDecompositionAnalysis();}\\ \\
-\indent // Public Methods \\
-\indent {\em virtual int analyze(void);} \\
-\indent {\em virtual void domainChanged(void);} \\
-\indent {\em int getNumExternalEqn(void);} \\
-\indent {\em     virtual int  computeInternalResponse(void);}\\
-\indent {\em     virtual int  formTangent(void);}\\
-\indent {\em     virtual int  formResidual(void);}\\
-\indent {\em int  formTangVectProduct(Vector \&u);}\\
-\indent {\em virtual Matrix \&getTangent();}\\
-\indent {\em virtual Vector \&getResidual();}\\
-\indent {\em const Vector \&getTangVectProduct();}\\
+\&theDomain);}
+\indent // Destructor
+\indent {\em virtual~ \f$\tilde{}\f$DomainDecompositionAnalysis();}
+\indent // Public Methods
+\indent {\em virtual int analyze(void);}
+\indent {\em virtual void domainChanged(void);}
+\indent {\em int getNumExternalEqn(void);}
+\indent {\em     virtual int  computeInternalResponse(void);}
+\indent {\em     virtual int  formTangent(void);}
+\indent {\em     virtual int  formResidual(void);}
+\indent {\em int  formTangVectProduct(Vector \&u);}
+\indent {\em virtual Matrix \&getTangent();}
+\indent {\em virtual Vector \&getResidual();}
+\indent {\em const Vector \&getTangVectProduct();}
 \indent {\em int sendSelf(Channel \&theChannel, FEM\_ObjectBroker
-\&theBroker);}\\ 
+\&theBroker);} 
 \indent {\em int recvSelf(Channel \&theChannel, FEM\_ObjectBroker
-\&theBroker);}\\\\ 
-\indent // Protected Member Functions  \\
-\indent {\em Subdomain  *getSubdomainPtr(void) const;} \\
-\indent {\em ConstraintHandler *getConstraintHandlerPtr(void) const;}\\
-\indent {\em DOF\_Numberer *getDOF\_NumbererPtr(void) const;}\\
-\indent {\em AnalysisModel  *getAnalysisModelPtr(void) const;}\\
-\indent {\em DomainDecompAlgo  *getDomainDecompAlgoPtr(void) const;}\\
-\indent {\em IncrementalIntegrator *getIncrementalIntegratorPtr(void) const;}\\
-\indent {\em LinearSOE *getLinSOEPtr(void) const;}\\
-\indent {\em DomainSolver *getDomainSolverPtr(void) const;} \\
+\&theBroker);} 
+\indent // Protected Member Functions
+\indent {\em Subdomain  *getSubdomainPtr(void) const;}
+\indent {\em ConstraintHandler *getConstraintHandlerPtr(void) const;}
+\indent {\em DOF\_Numberer *getDOF\_NumbererPtr(void) const;}
+\indent {\em AnalysisModel  *getAnalysisModelPtr(void) const;}
+\indent {\em DomainDecompAlgo  *getDomainDecompAlgoPtr(void) const;}
+\indent {\em IncrementalIntegrator *getIncrementalIntegratorPtr(void) const;}
+\indent {\em LinearSOE *getLinSOEPtr(void) const;}
+\indent {\em DomainSolver *getDomainSolverPtr(void) const;}
 
 
-\noindent {\bf Constructors} \\
-\indent {\em DomainDecompositionAnalysis(Subdomain \&theDomain, \\
+\noindent {\bf Constructors}
+\indent {\em DomainDecompositionAnalysis(Subdomain \&theDomain,
 \indent\indent\indent\indent\indent\indent\indent ConstraintHandler
-\&theHandler, \\ 
-\indent\indent\indent\indent\indent\indent\indent DOF\_Numberer \&theNumberer, \\
-\indent\indent\indent\indent\indent\indent\indent AnalysisModel \&theModel,\\
-\indent\indent\indent\indent\indent\indent\indent DomainDecompAlgo \&theSolnAlgo,\\
-\indent\indent\indent\indent\indent\indent\indent IncrementalIntegrator \&theIntegrator,\\
-\indent\indent\indent\indent\indent\indent\indent LinearSOE \&theSOE, \\
-\indent\indent\indent\indent\indent\indent\indent DomainDecompositionSolver \&theSolver);} \\
-The constructor sets all the links required by the objects in the aggregation. To
-do this it invokes {\em setLinks(theDomain)} on \p theModel,
+\&theHandler, 
+\indent\indent\indent\indent\indent\indent\indent DOF\_Numberer \&theNumberer,
+\indent\indent\indent\indent\indent\indent\indent AnalysisModel \&theModel,
+\indent\indent\indent\indent\indent\indent\indent DomainDecompAlgo \&theSolnAlgo,
+\indent\indent\indent\indent\indent\indent\indent IncrementalIntegrator \&theIntegrator,
+\indent\indent\indent\indent\indent\indent\indent LinearSOE \&theSOE,
+\indent\indent\indent\indent\indent\indent\indent DomainDecompositionSolver \&theSolver);}
+//! The constructor sets all the links required by the objects in the aggregation. To
+//! do this it invokes {\em setLinks(theDomain)} on \p theModel,
 {\em setLinks(theSubdomain,theModel,theIntegrator)} on \p theHandler, 
 {\em setLinks(theModel)} on \p theNumberer, it invokes {\em
-setLinks(theModel, theSOE)} on \p theIntegrator, and it invokes {\em
-setLinks(theModel,theIntegrator, theSOE,theSolver,theSubdomain)} on {\em
-theSolnAlgo}. Finally it invokes {\em setAnalysis(*this)} on \p theSubdomain. \\
+//! setLinks(theModel, theSOE)} on \p theIntegrator, and it invokes {\em
+//! setLinks(theModel,theIntegrator, theSOE,theSolver,theSubdomain)} on {\em
+//! theSolnAlgo}. Finally it invokes {\em setAnalysis(*this)} on \p theSubdomain.
 
-\indent {\em DomainDecompositionAnalysis(Subdomain \&theDomain);} \\
-A constructor that is used when creating a DomainDecompositionObject which
-is to receive itself afterwards. Sets the links to the Subdomain. It is
-essential that this object recvSelf() before DomainDecompositionAnalysis
-methods are invoked as their invocation will cause segmentation faults. 
-Invokes {\em setAnalysis(this)} on the Subdomain. \\
+\indent {\em DomainDecompositionAnalysis(Subdomain \&theDomain);}
+//! A constructor that is used when creating a DomainDecompositionObject which
+//! is to receive itself afterwards. Sets the links to the Subdomain. It is
+//! essential that this object recvSelf() before DomainDecompositionAnalysis
+//! methods are invoked as their invocation will cause segmentation faults. 
+//! Invokes {\em setAnalysis(this)} on the Subdomain.
 
-{\em DomainDecompositionAnalysis(int classTag, Subdomain \&theDomain);}\\
-Provided for subclasses to use. Invokes {\em setAnalysis(this)} on the
-Subdomain. \\ 
+{\em DomainDecompositionAnalysis(int classTag, Subdomain \&theDomain);}
+//! Provided for subclasses to use. Invokes {\em setAnalysis(this)} on the
+//! Subdomain. 
 
 
-\noindent {\bf Destructor} \\
-\indent {\em virtual~ $\tilde{}$DomainDecompositionAnalysis();}\\ 
+\noindent {\bf Destructor}
+\indent {\em virtual~ \f$\tilde{}\f$DomainDecompositionAnalysis();} 
 
-\noindent {\bf Public Methods}\\
-\indent {\em virtual int analyze(void);} \\
-Causes an error message to be output and returns $-1$. \\
+\noindent {\bf Public Methods}
+\indent {\em virtual int analyze(void);}
+//! Causes an error message to be output and returns \f$-1\f$.
 
-{\em virtual void domainChanged(void);} \\
-Method used to inform the object that the domain has changed. The
-DomainDecompositionAnalysis object then performs the following: \\ {\em
-\indent\indent theAnalysisModel-$>$clearAll(),
-theConstraintHandler-$>$clearAll();\\ 
+{\em virtual void domainChanged(void);}
+//! Method used to inform the object that the domain has changed. The
+//! DomainDecompositionAnalysis object then performs the following: {\em
+\indent\indent theAnalysisModel-\f$>\f$clearAll(),
+//! theConstraintHandler-\f$>\f$clearAll(); 
 \indent\indent numExtEqn =
-theConstraintHandler-$>$handle(theSubdomain-$>$getExternalNodes());\\ 
-\indent\indent theDOFnumberer-$>$number(theExternalDOFsDOFGrps);  \\
-\indent\indent theLinSysOfEqn-$>$setSize(theAnalysisModel-$>$getDOFGraph);  \\
-\indent\indent theIntegrator-$>$domainChanged(); \\
-\indent\indent theAlgorithm-$>$domainChanged(); \\ }
-Finally \p tangFormed is marked as \p false. \\
+//! theConstraintHandler-\f$>\f$handle(theSubdomain-\f$>\f$getExternalNodes()); 
+\indent\indent theDOFnumberer-\f$>\f$number(theExternalDOFsDOFGrps);
+\indent\indent theLinSysOfEqn-\f$>\f$setSize(theAnalysisModel-\f$>\f$getDOFGraph);
+\indent\indent theIntegrator-\f$>\f$domainChanged();
+\indent\indent theAlgorithm-\f$>\f$domainChanged(); }
+//! Finally \p tangFormed is marked as \p false.
 
-{\em int getNumExternalEqn(void);} \\
-A method to return the number of external degrees-of-freedom on the
-Subdomain interface, this information is returned when handle()
-is invoked on \p theConstraintHandler. \\
+{\em int getNumExternalEqn(void);}
+//! A method to return the number of external degrees-of-freedom on the
+//! Subdomain interface, this information is returned when handle()
+//! is invoked on \p theConstraintHandler.
 
-{\em     virtual int  computeInternalResponse(void);}\\
-A method which invokes solveCurrentStep() on \p theAlgorithm.  \\
+{\em     virtual int  computeInternalResponse(void);}
+//! A method which invokes solveCurrentStep() on \p theAlgorithm.
 
-{\em     virtual int  formTangent(void);}\\
-A method to form the condensed tangent matrix, given the current
-number of internal dof. It first checks to see if the Subdomain has
-changed, by  invoking hasDomainChanged() on the Subdomain; if it
-has invokeChangeOnAnalysis() is invoked on the {\em
-Subdomain}. It then checks to see if \p counter is equal to $-1$ or
-not; a $-1$ indicating the tangent has already been formed in order
-that the residual could be determined. If this is not the case {\em
-formTangent()} is invoked on \p theIntegrator, condenseA() is
-invoked on \p theSolver object, a flag is set to indicate that the
-tangent has been formed, and the \p counter is incremented. Returns
-a $0$ if successfull, if either the formTangent() or {\em
-condenseA()} method returns a negative number this number is
-returned. \\  
+{\em     virtual int  formTangent(void);}
+//! A method to form the condensed tangent matrix, given the current
+//! number of internal dof. It first checks to see if the Subdomain has
+//! changed, by  invoking hasDomainChanged() on the Subdomain; if it
+//! has invokeChangeOnAnalysis() is invoked on the {\em
+//! Subdomain}. It then checks to see if \p counter is equal to \f$-1\f$ or
+//! not; a \f$-1\f$ indicating the tangent has already been formed in order
+//! that the residual could be determined. If this is not the case {\em
+//! formTangent()} is invoked on \p theIntegrator, condenseA() is
+//! invoked on \p theSolver object, a flag is set to indicate that the
+//! tangent has been formed, and the \p counter is incremented. Returns
+//! a \f$0\f$ if successfull, if either the formTangent() or {\em
+//! condenseA()} method returns a negative number this number is
+//! returned.  
 
-{\em     virtual int  formResidual(void);}\\
-A method to form the condensed residual vector, given the current
-number of internal dof. A check to see if the Subdomain has changed is first made, 
-this is done by invoking hasDomainChanged() on the Subdomain; if it has 
-been modified invokeChangeOnAnalysis() 
-is invoked on the \p Subdomain. If the tangent has not yet been formed
-it invokes formTangent() on itself and sets the \p counter to $-1$.
-To form the residual formUnbalance() is invoked on \p theIntegrator and
-{\em condenseRHS(numInt)} is invoked on \p theSolver. Returns $0$ or the negative
-number that was returned if either formUnbalance()} or {\em condenseRHS() failed.\\
+{\em     virtual int  formResidual(void);}
+//! A method to form the condensed residual vector, given the current
+//! number of internal dof. A check to see if the Subdomain has changed is first made, 
+//! this is done by invoking hasDomainChanged() on the Subdomain; if it has 
+//! been modified invokeChangeOnAnalysis() 
+//! is invoked on the \p Subdomain. If the tangent has not yet been formed
+//! it invokes formTangent() on itself and sets the \p counter to \f$-1\f$.
+//! To form the residual formUnbalance() is invoked on \p theIntegrator and
+{\em condenseRHS(numInt)} is invoked on \p theSolver. Returns \f$0\f$ or the negative
+//! number that was returned if either formUnbalance()} or {\em condenseRHS() failed.
 
-{\em int  formTangVectProduct(Vector \&u);}\\
-A method to form the product of the condensed tangent matrix times the
-vector $u$. A check to see if the Subdomain has changed is first made, 
-this is done by invoking hasDomainChanged() on the Subdomain; if it has 
-been modified invokeChangeOnAnalysis() 
-is invoked on the \p Subdomain. If the tangent has not yet been formed
-it invokes formTangent() on itself and sets the \p counter to $-1$.
-Finally the result of invoking {\em computeCondensedMatVect(numInt, u)} on {\em
-theSolver} is returned. \\
-
-
-{\em virtual Matrix \&getTangent();}\\
-A method which returns the portion of A corresponding to internal
-equation numbers. A check to see if the Subdomain has changed is first made, 
-this is done by invoking hasDomainChanged() on the Subdomain; if it has 
-been modified invokeChangeOnAnalysis() is invoked on the \p Subdomain. 
-If the tangent has not yet been formed formTangent() is invoked. 
-The method returns the result of invoking getCondensedA()} on {\em theSolver(). \\
+{\em int  formTangVectProduct(Vector \&u);}
+//! A method to form the product of the condensed tangent matrix times the
+//! vector \f$u\f$. A check to see if the Subdomain has changed is first made, 
+//! this is done by invoking hasDomainChanged() on the Subdomain; if it has 
+//! been modified invokeChangeOnAnalysis() 
+//! is invoked on the \p Subdomain. If the tangent has not yet been formed
+//! it invokes formTangent() on itself and sets the \p counter to \f$-1\f$.
+//! Finally the result of invoking {\em computeCondensedMatVect(numInt, u)} on {\em
+//! theSolver} is returned.
 
 
-{\em virtual Vector \&getResidual();}\\
-A method which returns the portion of the $b$ corresponding
-to the external equation numbers. A check to see if the Subdomain has changed is first made, 
-this is done by invoking hasDomainChanged() on the Subdomain; if it has 
-been modified invokeChangeOnAnalysis() is invoked on the \p Subdomain
-and formResidual() is called.  The object returns the Vector obtained from 
-invoking getCondensedRHS() on the solver. \\ 
+{\em virtual Matrix \&getTangent();}
+//! A method which returns the portion of A corresponding to internal
+//! equation numbers. A check to see if the Subdomain has changed is first made, 
+//! this is done by invoking hasDomainChanged() on the Subdomain; if it has 
+//! been modified invokeChangeOnAnalysis() is invoked on the \p Subdomain. 
+//! If the tangent has not yet been formed formTangent() is invoked. 
+//! The method returns the result of invoking getCondensedA()} on {\em theSolver().
 
 
-{\em const Vector \&getTangVectProduct();}\\
-Returns the result of invoking getCondensedMatVect() on the
-solver. A check to see if the Subdomain has changed is first made, 
-this is done by invoking hasDomainChanged() on the Subdomain; if it has 
-been modified invokeChangeOnAnalysis() is invoked on the \p Subdomain. 
-The object returns the Vector obtained from invoking getCondensedMatVect() 
-on \p theSolver. \\
+{\em virtual Vector \&getResidual();}
+//! A method which returns the portion of the \f$b\f$ corresponding
+//! to the external equation numbers. A check to see if the Subdomain has changed is first made, 
+//! this is done by invoking hasDomainChanged() on the Subdomain; if it has 
+//! been modified invokeChangeOnAnalysis() is invoked on the \p Subdomain
+//! and formResidual() is called.  The object returns the Vector obtained from 
+//! invoking getCondensedRHS() on the solver. 
 
 
-{\em int sendSelf(Channel \&theChannel, FEM\_ObjectBroker \&theBroker);}\\
-Creates an ID and populates the ID with the class tags of the aggregates in
-the aggregation. This ID is sent and then {\em sendSelf(theChannel,theBroker)} is
-invoked on each of the aggregates. Returns 0.\\
-
-{\em int recvSelf(Channel \&theChannel, FEM\_ObjectBroker \&theBroker);}\\
-Creates an ID and receives data into it from \p theChannel. Based on the
-class tags in the ID \p theBroker is then asked to return pointers to
-new objects required in the aggregation.  {\em sendSelf(theChannel,theBroker)} is
-invoked on each of these new aggregate objects. Finally \p setLinks is
-invoked on each of these objects with the correct arguments and {\em setAnalysis(this)} 
-is invoked on the \p Subdomain.  Returns 0.\\
+{\em const Vector \&getTangVectProduct();}
+//! Returns the result of invoking getCondensedMatVect() on the
+//! solver. A check to see if the Subdomain has changed is first made, 
+//! this is done by invoking hasDomainChanged() on the Subdomain; if it has 
+//! been modified invokeChangeOnAnalysis() is invoked on the \p Subdomain. 
+//! The object returns the Vector obtained from invoking getCondensedMatVect() 
+//! on \p theSolver.
 
 
-\noindent {\bf Protected Methods}  \\
-\indent {\em Subdomain  *getSubdomainPtr(void) const;} \\
-A const member function which returns a pointer to \p theSubdomain. \\
+{\em int sendSelf(Channel \&theChannel, FEM\_ObjectBroker \&theBroker);}
+//! Creates an ID and populates the ID with the class tags of the aggregates in
+//! the aggregation. This ID is sent and then {\em sendSelf(theChannel,theBroker)} is
+//! invoked on each of the aggregates. Returns 0.
 
-{\em ConstraintHandler *getConstraintHandlerPtr(void) const;}\\
-A const member function which returns a pointer to \p theSubdomain.\\
+{\em int recvSelf(Channel \&theChannel, FEM\_ObjectBroker \&theBroker);}
+//! Creates an ID and receives data into it from \p theChannel. Based on the
+//! class tags in the ID \p theBroker is then asked to return pointers to
+//! new objects required in the aggregation.  {\em sendSelf(theChannel,theBroker)} is
+//! invoked on each of these new aggregate objects. Finally \p setLinks is
+//! invoked on each of these objects with the correct arguments and {\em setAnalysis(this)} 
+//! is invoked on the \p Subdomain.  Returns 0.
 
-{\em DOF\_Numberer *getDOF\_NumbererPtr(void) const;}\\
-A const member function which returns a pointer to {\em
-theNumberer}.\\
 
-{\em AnalysisModel  *getAnalysisModelPtr(void) const;}\\
-A const member function which returns a pointer to {\em
-theModel}.\\
+\noindent {\bf Protected Methods}
+\indent {\em Subdomain  *getSubdomainPtr(void) const;}
+//! A const member function which returns a pointer to \p theSubdomain.
 
-{\em DomainDecompAlgo  *getDomainDecompAlgoPtr(void) const;}\\
-A const member function which returns a pointer to {\em
-theAlgorithm}.\\
+{\em ConstraintHandler *getConstraintHandlerPtr(void) const;}
+//! A const member function which returns a pointer to \p theSubdomain.
 
-{\em IncrementalIntegrator *getIncrementalIntegratorPtr(void) const;}\\
-A const member function which returns a pointer to {\em
-theIntegrator}.\\
+{\em DOF\_Numberer *getDOF\_NumbererPtr(void) const;}
+//! A const member function which returns a pointer to {\em
+//! theNumberer}.
 
-{\em LinearSOE *getLinSOEPtr(void) const;}\\
-A const member function which returns a pointer to \p theSOE.\\
+{\em AnalysisModel  *getAnalysisModelPtr(void) const;}
+//! A const member function which returns a pointer to {\em
+//! theModel}.
 
-\indent {\em DomainSolver *getDomainSolverPtr(void) const;} \\
-A const member function which returns a pointer to \p theSolver.
-associated with the DomainDecompositionAnalysis object. \\
+{\em DomainDecompAlgo  *getDomainDecompAlgoPtr(void) const;}
+//! A const member function which returns a pointer to {\em
+//! theAlgorithm}.
+
+{\em IncrementalIntegrator *getIncrementalIntegratorPtr(void) const;}
+//! A const member function which returns a pointer to {\em
+//! theIntegrator}.
+
+{\em LinearSOE *getLinSOEPtr(void) const;}
+//! A const member function which returns a pointer to \p theSOE.
+
+\indent {\em DomainSolver *getDomainSolverPtr(void) const;}
+//! A const member function which returns a pointer to \p theSolver.
+//! associated with the DomainDecompositionAnalysis object.
 

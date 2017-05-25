@@ -69,6 +69,12 @@ namespace XC {
 //! @ingroup MatUnx
 //
 //! @brief Elastic perfectly plastic material.
+//!
+//! This class provides the abstraction of an elastic
+//! perfectly plastic uniaxial material, i.e. the stress-strain
+//! relationship is given by the linear equation \f$\sigma = E * \epsilon\f$
+//! while the material is elastic and \f$| \sigma = E * \epsilon_p |\f$  while
+//! the material is undergoing plastic deformation.
 class ElasticPPMaterial : public EPPBaseMaterial
   {
   private:

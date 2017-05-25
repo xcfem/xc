@@ -70,6 +70,9 @@ namespace XC{
 //! @ingroup MatUnx
 //
 //! @brief Parallel connected materials.
+//!
+//! This types of material area an aggregation of
+//! UniaxialMaterial objects all considered acting in parallel.
 class ParallelMaterial: public ConnectedMaterial
   {
   private:

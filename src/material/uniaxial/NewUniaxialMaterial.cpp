@@ -102,16 +102,15 @@ double XC::NewUniaxialMaterial::getInitialTangent(void) const
 double XC::NewUniaxialMaterial::getStrain(void) const
   { return Tstrain; }
 
-//! @brief Consuma los valores de las variables de material state.
+//! @brief Commits the material state.
 int XC::NewUniaxialMaterial::commitState(void)
   { return 0; }
 
-//! @brief Returns the material state al último consolidado.
+//! @brief Returns the material to its last commmited state.
 int XC::NewUniaxialMaterial::revertToLastCommit(void)
   { return 0; }
 
-//! @brief Returns the valores de las variables de material state al
-//! los del estado inicial.
+//! @brief Returns the material to its initial state.
 int XC::NewUniaxialMaterial::revertToStart(void)
   { return 0; }
 

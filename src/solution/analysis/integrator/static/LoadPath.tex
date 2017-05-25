@@ -1,32 +1,32 @@
 %File: ~/OOP/analysis/integrator/LoadPath.tex
 %What: "@(#) LoadPath.tex, revA"
 
-\noindent {\bf Files}   \\
-\indent \#include $<\tilde{ }$/analysis/integrator/LoadPath.h$>$  \\
+\noindent {\bf Files}
+\indent \#include \f$<\tilde{ }\f$/analysis/integrator/LoadPath.h\f$>\f$
 
-\noindent {\bf Class Declaration}  \\
-\indent class LoadPath: public StaticIntegrator  \\
+\noindent {\bf Class Declaration}
+\indent class LoadPath: public StaticIntegrator
 
-\noindent {\bf Class Hierarchy} \\
-\indent MovableObject \\
-\indent\indent Integrator \\
-\indent\indent\indent IncrementalIntegrator \\
-\indent\indent\indent\indent StaticIntegrator \\
-\indent\indent\indent\indent\indent {\bf LoadPath} \\
+\noindent {\bf Class Hierarchy}
+\indent MovableObject
+\indent\indent Integrator
+\indent\indent\indent IncrementalIntegrator
+\indent\indent\indent\indent StaticIntegrator
+\indent\indent\indent\indent\indent {\bf LoadPath}
 
-\noindent {\bf Description} \\ 
+\noindent {\bf Description} 
 \indent LoadPath is a subclass of StaticIntegrator, it is
-used to when performing a static analysis on the FE\_Model using a
-user specified load path. The load path is specified in a Vector, {\em
-path}, to the objects constructor and at each step in the analysis:
+//! used to when performing a static analysis on the FE\_Model using a
+//! user specified load path. The load path is specified in a Vector, {\em
+//! path}, to the objects constructor and at each step in the analysis:
 
 \[ 
 \lambda_n^{(i)} - \lambda_{n-1} = path(n) - path(n-1)
 \]
 
-Knowing $\lambda_n^{(i)} = path(n)$ prior to each iteration, the $N+1$
-unknowns in equation~\ref{staticFormTaylor}, is reduced to $N$ unknowns and
-results in the following equation:
+//! Knowing \f$\lambda_n^{(i)} = path(n)\f$ prior to each iteration, the \f$N+1\f$
+//! unknowns in equation~\ref{staticFormTaylor}, is reduced to \f$N\f$ unknowns and
+//! results in the following equation:
 
 \begin{equation} 
 \R(\U_{n}) = \lambda_n^{(i)} \P 
@@ -36,69 +36,69 @@ results in the following equation:
 \label{staticFormLoadPath}
 \end{equation} 
 
-\noindent {\bf Class Interface} \\
-\indent // Constructors \\
-\indent {\em LoadPath(Vector \&loadPath);}\\ 
-\indent {\em LoadPath();}\\ \\
-\indent // Destructor \\
-\indent {\em $\tilde{ }$LoadPath();}\\  \\
-\indent // Public Methods \\
-\indent {\em int newStep(void);} \\
-\indent {\em int update(const Vector \&$\Delta U$);} \\ \\
-\indent // Public Methods for Output\\
-\indent {\em int sendSelf(int commitTag, Channel \&theChannel);}\\ 
+\noindent {\bf Class Interface}
+\indent // Constructors
+\indent {\em LoadPath(Vector \&loadPath);} 
+\indent {\em LoadPath();}
+\indent // Destructor
+\indent {\em \f$\tilde{ }\f$LoadPath();}
+\indent // Public Methods
+\indent {\em int newStep(void);}
+\indent {\em int update(const Vector \&\f$\Delta U\f$);}
+\indent // Public Methods for Output
+\indent {\em int sendSelf(int commitTag, Channel \&theChannel);} 
 \indent {\em int recvSelf(int commitTag, Channel \&theChannel,
-FEM\_ObjectBroker \&theBroker);}\\ 
-\indent {\em int Print(OPS\_Stream \&s, int flag = 0);}\\
+//! FEM\_ObjectBroker \&theBroker);} 
+\indent {\em int Print(OPS\_Stream \&s, int flag = 0);}
 
-\noindent {\bf Constructors} \\
-\indent {\em LoadPath(Vector \&loadPath);}\\ 
-The integer INTEGRATOR\_TAGS\_LoadPath (defined in
-$<$classTags.h$>$) is passed to the StaticIntegrator classes
-constructor. A vector object \p path is created which is a copy of
-\p loadPath and an index into this vector is set to $0$.\\
+\noindent {\bf Constructors}
+\indent {\em LoadPath(Vector \&loadPath);} 
+//! The integer INTEGRATOR\_TAGS\_LoadPath (defined in
+\f$<\f$classTags.h\f$>\f$) is passed to the StaticIntegrator classes
+//! constructor. A vector object \p path is created which is a copy of
+\p loadPath and an index into this vector is set to \f$0\f$.
 
-\indent {\em LoadPath();}\\ 
-The integer INTEGRATOR\_TAGS\_LoadPath (defined in $<$classTags.h$>$) is
-passed to the StaticIntegrator classes constructor. No vector object
-is created. Provided for the FEM\_ObjectBroker to create a blank
-object, recvSelf() should be invoked on this object. \\
+\indent {\em LoadPath();} 
+//! The integer INTEGRATOR\_TAGS\_LoadPath (defined in \f$<\f$classTags.h\f$>\f$) is
+//! passed to the StaticIntegrator classes constructor. No vector object
+//! is created. Provided for the FEM\_ObjectBroker to create a blank
+//! object, recvSelf() should be invoked on this object.
 
-\noindent {\bf Destructor} \\
-\indent {\em $\tilde{ }$LoadPath();}\\ 
-Invokes the destructor on the vector \p path. \\
+\noindent {\bf Destructor}
+\indent {\em \f$\tilde{ }\f$LoadPath();} 
+//! Invokes the destructor on the vector \p path.
 
-\noindent {\bf Public Methods}\\
-\indent {\em int newStep(void);} \\
-The object obtains the current value of $\lambda$ from the \p path
-vector using the current index. The index is then incremented by
-$1$. If the index is greater than the size of \p path, $\lambda$ is
-set to $0$ and an error message is printed. It will then invoke
-{\em applyLoadDomain(0.0, $\lambda$)} on the AnalysisModel
-object. Returns $0$ if successful. A warning message is printed and a
-$-1$ is returned if no AnalysisModel is associated with the object. \\
+\noindent {\bf Public Methods}
+\indent {\em int newStep(void);}
+//! The object obtains the current value of \f$\lambda\f$ from the \p path
+//! vector using the current index. The index is then incremented by
+\f$1\f$. If the index is greater than the size of \p path, \f$\lambda\f$ is
+//! set to \f$0\f$ and an error message is printed. It will then invoke
+{\em applyLoadDomain(0.0, \f$\lambda\f$)} on the AnalysisModel
+//! object. Returns \f$0\f$ if successful. A warning message is printed and a
+\f$-1\f$ is returned if no AnalysisModel is associated with the object.
 
-{\em int update(const Vector \&$\Delta U$);} \\
-Invoked this causes the object to first increment the DOF\_Group
-displacements with $\Delta U$, by invoking {\em incrDisp($\Delta U)$}
-on the AnalysisModel, and then to update the domain, by invoking {\em
-updateDomain()} on the AnalysisModel. Returns $0$ if successful, a
-warning message and a $-1$ is returned if no AnalysisModel is
-associated with the object. \\
+{\em int update(const Vector \&\f$\Delta U\f$);}
+//! Invoked this causes the object to first increment the DOF\_Group
+//! displacements with \f$\Delta U\f$, by invoking {\em incrDisp(\f$\Delta U)\f$}
+//! on the AnalysisModel, and then to update the domain, by invoking {\em
+//! updateDomain()} on the AnalysisModel. Returns \f$0\f$ if successful, a
+//! warning message and a \f$-1\f$ is returned if no AnalysisModel is
+//! associated with the object.
 
 
-{\em int sendSelf(int commitTag, Channel \&theChannel); } \\ 
-Places the size if \p path and the index in an ID of size 2 and send this
-ID. Then sends the Vector \p path. Returns $0$ if successful, a
-warning message is printed and a $-1$ is returned if \p theChannel
-fails to send the ID or the Vector. \\ 
+{\em int sendSelf(int commitTag, Channel \&theChannel); } 
+//! Places the size if \p path and the index in an ID of size 2 and send this
+//! ID. Then sends the Vector \p path. Returns \f$0\f$ if successful, a
+//! warning message is printed and a \f$-1\f$ is returned if \p theChannel
+//! fails to send the ID or the Vector. 
 
 {\em int recvSelf(int commitTag, Channel \&theChannel, 
-FEM\_ObjectBroker \&theBroker); } \\ 
-Receives in a ID of size 2 the size of the vector and current index.
-Creates a new Vector and receives the Vector from the Channel. 
-Returns $0$ if successful, a warning message is printed and a $-1$ is
-returned if \p theChannel fails to receive the Vector or the ID.\\
+//! FEM\_ObjectBroker \&theBroker); } 
+//! Receives in a ID of size 2 the size of the vector and current index.
+//! Creates a new Vector and receives the Vector from the Channel. 
+//! Returns \f$0\f$ if successful, a warning message is printed and a \f$-1\f$ is
+//! returned if \p theChannel fails to receive the Vector or the ID.
 
-{\em int Print(OPS\_Stream \&s, int flag = 0);}\\
-The object sends to $s$ its type, the current value of $\lambda$.
+{\em int Print(OPS\_Stream \&s, int flag = 0);}
+//! The object sends to \f$s\f$ its type, the current value of \f$\lambda\f$.

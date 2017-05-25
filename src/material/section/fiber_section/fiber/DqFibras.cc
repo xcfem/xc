@@ -1384,7 +1384,7 @@ double XC::DqFibras::getAcEficazFibras(void) const
     return retval;
   }
 
-//! @brief Calcula los recubrimientos de las fibras.
+//! @brief Computes the cover of the fibers.
 void XC::DqFibras::calcRecubrimientos(const GeomSection &g) const
   {
     const GeomObj::list_Pos2d posiciones= getPosiciones();
@@ -1442,7 +1442,7 @@ double XC::DqFibras::getSigmaSRFibra(const size_t &i,const double &Ec,const doub
     return retval;
   }
 
-//! @brief Actualiza el CDG.
+//! @brief Updates the centroid position.
 int XC::DqFibras::updateCDG(void)
   {
     double Qy= 0.0,Qz= 0.0;
@@ -1518,7 +1518,7 @@ int XC::DqFibras::commitState(void)
     return err;
   }
 
-//! @brief Establece los valores de las initial strains.
+//! @brief Sets initial strains values.
 int XC::DqFibras::setInitialSectionDeformation(const FiberSection2d &Section2d)
   {
     int retval= 0;
@@ -1535,7 +1535,7 @@ int XC::DqFibras::setInitialSectionDeformation(const FiberSection2d &Section2d)
     return retval;
   }
 
-//! @brief Establece los valores de las trial strains.
+//! @brief Sets trial strains values.
 int XC::DqFibras::setTrialSectionDeformation(const FiberSection2d &Section2d,CrossSectionKR &kr2)
   {
     int retval= 0;
@@ -1566,7 +1566,7 @@ int XC::DqFibras::setTrialSectionDeformation(const FiberSection2d &Section2d,Cro
     return retval;
   }
 
-//! @brief Returns the estado de las fibras al del último commit.
+//! @brief Returns the fibers to its last commited state.
 int XC::DqFibras::revertToLastCommit(FiberSection2d &Section2d,CrossSectionKR &kr2)
   {
     int err= 0;
@@ -1578,7 +1578,7 @@ int XC::DqFibras::revertToLastCommit(FiberSection2d &Section2d,CrossSectionKR &k
     return err;
   }
 
-//! @brief Returns the fibras a su estado inicial.
+//! @brief Returns the fibers to its initial state.
 int XC::DqFibras::revertToStart(FiberSection2d &Section2d,CrossSectionKR &kr2)
   {
     int err= 0;

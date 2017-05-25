@@ -71,7 +71,12 @@ class UniaxialMaterial;
 
 //! \ingroup MATSCC
 //
-//! @brief ??.
+//! @brief Wrapper for an uniaxial material to behave like a section material.
+//!
+//! provides a wrapper around a UniaxialMaterial
+//! so that any UniaxialMaterial may be used to model section response. 
+//! The design of this class follows the Object Adapter pattern in 
+//! "Design Patterns" by Gamma et al.
 class GenericSection1d : public PrismaticBarCrossSection
   {
     //XXX Add copy constructor and assignment operator.

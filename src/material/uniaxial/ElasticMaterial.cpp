@@ -73,6 +73,9 @@ XC::ElasticMaterial::ElasticMaterial(int tag, double e, double et)
   {}
 
 //! @brief Constructor.
+//!
+//! To construct an elastic material object with an integer identifier \p
+//! tag and the class identifier \p classTag.
 XC::ElasticMaterial::ElasticMaterial(int tag, int classtag)
   :ElasticBaseMaterial(tag,classtag,0.0),  trialStrainRate(0.0), eta(0.0)
   {}
@@ -89,6 +92,8 @@ int XC::ElasticMaterial::setTrialStrain(double strain, double strainRate)
     return 0;
   }
 
+//! @brief Sets the value of the trial strain, \f$\epsilon\f$ to be {\em
+//! strain}. Returns 0.
 int XC::ElasticMaterial::setTrial(double strain, double &stress, double &tangent, double strainRate)
   {
     trialStrain     = strain;
@@ -100,6 +105,8 @@ int XC::ElasticMaterial::setTrial(double strain, double &stress, double &tangent
     return 0;
   }
 
+//! @brief Returns the product of \f$E * \epsilon\f$, where \f$\epsilon\f$ is
+//! the current trial strain.
 double XC::ElasticMaterial::getStress(void) const
   { return E*def_total() + eta*trialStrainRate; }
 
@@ -139,6 +146,12 @@ int XC::ElasticMaterial::recvData(const CommParameters &cp)
     return res;
   }
 
+//! @brief Send the object through the communicator.
+//! 
+//! Sends the object through the communicator. Returns 0 if successful, a
+//! warning message is printed, \p tag and \f$E\f$ are set to \f$0.0\f$, and a
+//! negative number is returned if the Channel object fails to receive
+//! the object.
 int XC::ElasticMaterial::sendSelf(CommParameters &cp)
   {
     setDbTag(cp);
@@ -147,26 +160,36 @@ int XC::ElasticMaterial::sendSelf(CommParameters &cp)
     int res= sendData(cp);
     res+= cp.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
-      std::cerr << "ElasticMaterial::sendSelf() - failed to send data\n";
+      std::cerr << nombre_clase() << "::" << __FUNCTION__
+	        << "; failed to send data\n";
     return res;
   }
 
+//! @brief Receive the object through the communicator.
+//! 
+//! Receives the object through the communicator. Returns 0 if successful, a
+//! warning message is printed, \p tag and \f$E\f$ are set to \f$0.0\f$, and a
+//! negative number is returned if the Channel object fails to receive
+//! the object.
 int XC::ElasticMaterial::recvSelf(const CommParameters &cp)
   {
     inicComm(4);
     const int dataTag= getDbTag();
     int res= cp.receiveIdData(getDbTagData(),dataTag);
     if(res<0)
-      std::cerr << "ElasticMaterial::recvSelf - failed to receive ids.\n";
+      std::cerr << nombre_clase() << "::" << __FUNCTION__
+		<< "; failed to receive ids.\n";
     else
       {
         res= recvData(cp);
         if(res < 0)
-          std::cerr << "ElasticMaterial::recvSelf() - failed to receive data\n";
+          std::cerr << nombre_clase() << "::" << __FUNCTION__
+	            << "; - failed to receive data\n";
       }
     return res;
   }
 
+//! Prints to the stream \p s the objects \p tag and \f$E\f$ values.
 void XC::ElasticMaterial::Print(std::ostream &s, int flag)
   {
     s << "Elastic tag: " << this->getTag() << std::endl;

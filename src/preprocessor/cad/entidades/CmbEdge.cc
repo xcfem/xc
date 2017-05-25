@@ -256,7 +256,7 @@ const XC::CmbEdge::Lado *XC::CmbEdge::primera_linea(void) const
     else
       return &(*lineas.begin());
   }
-//! @brief Returns a pointer to the último lado.
+//! @brief Returns a pointer to the last edge.
 XC::CmbEdge::Lado *XC::CmbEdge::ultima_linea(void)
   {
     if(lineas.empty())
@@ -264,7 +264,7 @@ XC::CmbEdge::Lado *XC::CmbEdge::ultima_linea(void)
     else
       return &(*lineas.rbegin());
   }
-//! @brief Returns a pointer to the último lado.
+//! @brief Returns a pointer to the last edge.
 const XC::CmbEdge::Lado *XC::CmbEdge::ultima_linea(void) const
   {
     if(lineas.empty())
@@ -283,7 +283,7 @@ const XC::Pnt *XC::CmbEdge::first_point(void) const
       return nullptr;
    }
 
-//! @brief Returns a pointer to the último punto.
+//! @brief Returns a pointer to the last point.
 const XC::Pnt *XC::CmbEdge::last_point(void) const
   {
     const Lado *ul= ultima_linea();
@@ -338,20 +338,22 @@ void XC::CmbEdge::SetNDiv(const size_t &nd)
       {
         const size_t resto= nd % nl;
         if(resto != 0)
-          std::clog << "XC::CmbEdge::SetNDiv; el number of divisions ("
-                    << nd << ") no es múltiplo del número de segmentos ("
+          std::clog << nombre_clase() << "::" << __FUNCTION__
+	            << "; the number of divisions ("
+                    << nd << ") is not a multiple of the number of segments ("
                     << nl << ")." << std::endl;
         const size_t q= nd/nl;
         for(std::deque<Lado>::iterator i=lineas.begin();i!=lineas.end();i++)
           (*i).SetNDiv(q);
       }
     else
-      std::cerr << "XC::CmbEdge::SetNDiv; no se han definidos segmentos." << std::endl;
+      std::cerr << nombre_clase() << "::" << __FUNCTION__
+		<< "; no segments defined." << std::endl;
   }
 
 MatrizPos3d XC::CmbEdge::get_posiciones(void) const
   {
-    const size_t npos= NDiv()+1; //Número de posiciones.
+    const size_t npos= NDiv()+1; //Number of positions.
     MatrizPos3d retval(npos);
     if(!lineas.empty())
       {
@@ -360,7 +362,7 @@ MatrizPos3d XC::CmbEdge::get_posiciones(void) const
           {
             const Edge *e= (*i).Borde();
             MatrizPos3d tmp= e->get_posiciones();
-            const size_t sz= tmp.size()-1; //La última no se agrega.
+            const size_t sz= tmp.size()-1; //The last one is not added.
             for(size_t i=1;i<sz;i++)
               {
                 retval(cont)= tmp(i);

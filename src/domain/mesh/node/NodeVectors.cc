@@ -206,6 +206,7 @@ int XC::NodeVectors::incrTrialData(const size_t &nDOF,const Vector &incrData)
     return 0;
   }
 
+//! @brief Commit state.
 int XC::NodeVectors::commitState(const size_t &nDOF)
   {
     // check data exists, if does set commit = trial, incr = 0.0
@@ -218,7 +219,7 @@ int XC::NodeVectors::commitState(const size_t &nDOF)
   }
 
 
-//! @brief Returns the vectores al estado correspondiente al último commit.
+//! @brief Returns the vectors its last commited value.
 int XC::NodeVectors::revertToLastCommit(const size_t &nDOF)
   {
     // check data exists, if does set trial = last commit, incr = 0

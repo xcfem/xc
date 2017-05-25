@@ -1,23 +1,23 @@
 %File ~/OOP/analysis/algorithm/Linear.tex
 %What: "@(#) Linear.tex, revA"
 
-\noindent {\bf Files}   \\
-\indent \#include $<\tilde{ }$/analysis/algorithm/equiSolnAlgo/Linear.h$>$  \\
+\noindent {\bf Files}
+\indent \#include \f$<\tilde{ }\f$/analysis/algorithm/equiSolnAlgo/Linear.h\f$>\f$
 
-\noindent {\bf Class Declaration}  \\
-\indent class Linear: public EquiSolnAlg;  \\
+\noindent {\bf Class Declaration}
+\indent class Linear: public EquiSolnAlg;
 
-\noindent {\bf Class Hierarchy} \\
-\indent MovableObject \\
-\indent\indent SolutionAlgorithm \\
-\indent\indent\indent EquiSolnAlgo \\
-\indent\indent\indent\indent {\bf Linear} \\
+\noindent {\bf Class Hierarchy}
+\indent MovableObject
+\indent\indent SolutionAlgorithm
+\indent\indent\indent EquiSolnAlgo
+\indent\indent\indent\indent {\bf Linear}
 
-\noindent {\bf Description} \\ 
+\noindent {\bf Description} 
 \indent The Linear class is an algorithmic class which uses the
-linear solution algorithm to solve the equations. This is based on
-a Taylor expansion of the linear system $\R(\U) = \zero$ about an
-approximate solution $\U_{a}$.
+//! linear solution algorithm to solve the equations. This is based on
+//! a Taylor expansion of the linear system \f$\R(\U) = \zero\f$ about an
+//! approximate solution \f$\U_{a}\f$.
 
 \begin{equation} 
 \R(\U) = 
@@ -29,64 +29,64 @@ approximate solution $\U_{a}$.
 \begin{equation} \
 \K_{a} \Delta \U = \R(\U_{a})
 \end{equation}
-which is solved for $\Delta \U$ to give the approximation 
-$\U = \U_{a} + \Delta \U$. \\
+//! which is solved for \f$\Delta \U\f$ to give the approximation 
+\f$\U = \U_{a} + \Delta \U\f$.
 
-To start the iteration $\U_a = \U_{trial}$, i.e. the current trial
-response quantities are chosen as approximate solution quantities. \\
+//! To start the iteration \f$\U_a = \U_{trial}\f$, i.e. the current trial
+//! response quantities are chosen as approximate solution quantities.
 
 
-\noindent {\bf Class Interface} \\ 
-\indent\indent // Constructor \\ 
-\indent\indent {\em Linear();}\\ \\
-\indent\indent // Destructor \\
-\indent\indent {\em ~ $\tilde{}$Linear();}\\  \\
-\indent\indent // Public Methods  \\
-\indent\indent {\em int solveCurrentStep(void);} \\ \\
-\indent\indent // Public Methods  for Output \\
-\indent\indent {\em int sendSelf(int commitTag, Channel \&theChannel);}\\
+\noindent {\bf Class Interface} 
+\indent\indent // Constructor 
+\indent\indent {\em Linear();}
+\indent\indent // Destructor
+\indent\indent {\em ~ \f$\tilde{}\f$Linear();}
+\indent\indent // Public Methods
+\indent\indent {\em int solveCurrentStep(void);}
+\indent\indent // Public Methods  for Output
+\indent\indent {\em int sendSelf(int commitTag, Channel \&theChannel);}
 \indent\indent {\em int recvSelf(int commitTag, Channel \&theChannel, 
-FEM\_ObjectBroker \&theBroker);}\\ 
-\indent\indent {\em int Print(OPS\_Stream \&s, int flag =0);} \\
+//! FEM\_ObjectBroker \&theBroker);} 
+\indent\indent {\em int Print(OPS\_Stream \&s, int flag =0);}
 
 
-\noindent {\bf Constructor} \\ 
-\indent {\em Linear();}\\ 
-The integer {\em EquiALGORITHM\_TAGS\_Linear} (defined in
-$<$classTags.h$>$) is passed to the EquiSolnAlgo classes
-constructor. \\
+\noindent {\bf Constructor} 
+\indent {\em Linear();} 
+//! The integer {\em EquiALGORITHM\_TAGS\_Linear} (defined in
+\f$<\f$classTags.h\f$>\f$) is passed to the EquiSolnAlgo classes
+//! constructor.
 
-\noindent {\bf Destructor} \\
-\indent {\em ~ $\tilde{}$Linear();}\\ 
+\noindent {\bf Destructor}
+\indent {\em ~ \f$\tilde{}\f$Linear();} 
 
-\noindent {\bf Public Methods}  \\
-\indent {\em int solveCurrentStep(void);} \\
-This method performs the linear solution algorithm:
+\noindent {\bf Public Methods}
+\indent {\em int solveCurrentStep(void);}
+//! This method performs the linear solution algorithm:
 \begin{tabbing}
-while \= \+ whilewhilewhilewhilewhilewhilewhilewhilewhile \= \kill
-theIntegrator-$>$formTangent() \+ // form $\K_{a}$ \- \\
-theIntegrator-$>$formUnbalance() // form $\R(\U_{a})$ \\
-theSOE-$>$solveX() // solve for $\Delta \U$ \\
-theIntegrator-$>$update(theSOE-$>$getX()) // set $\U = \U_{a} + \Delta \U$ \-  
+//! while \= \+ whilewhilewhilewhilewhilewhilewhilewhilewhile \= \kill
+//! theIntegrator-\f$>\f$formTangent() \+ // form \f$\K_{a}\f$ \-
+//! theIntegrator-\f$>\f$formUnbalance() // form \f$\R(\U_{a})\f$
+//! theSOE-\f$>\f$solveX() // solve for \f$\Delta \U\f$
+//! theIntegrator-\f$>\f$update(theSOE-\f$>\f$getX()) // set \f$\U = \U_{a} + \Delta \U\f$ \-  
 \end{tabbing}
 
-The method returns a 0 if successful, otherwise warning message is
-printed and a negative number is returned; a $-1$ if error during {\em
-formTangent()}, a $-2$ if error during formUnbalance(), a $-3$
-if error during solve(), a $-4$ if error during {\em
-update()}. If an error occurs in any of the above operations the
-method stops at that routine, none of the subsequent operations are
-invoked. A $-5$ is returned if any one of the links has not been
-setup. \\
+//! The method returns a 0 if successful, otherwise warning message is
+//! printed and a negative number is returned; a \f$-1\f$ if error during {\em
+//! formTangent()}, a \f$-2\f$ if error during formUnbalance(), a \f$-3\f$
+//! if error during solve(), a \f$-4\f$ if error during {\em
+//! update()}. If an error occurs in any of the above operations the
+//! method stops at that routine, none of the subsequent operations are
+//! invoked. A \f$-5\f$ is returned if any one of the links has not been
+//! setup.
 
 
-{\em int sendSelf(int commitTag, Channel \&theChannel);}\\
-Does  nothing. Returns 0. \\
+{\em int sendSelf(int commitTag, Channel \&theChannel);}
+//! Does  nothing. Returns 0.
 
 
 {\em int recvSelf(int commitTag, Channel \&theChannel, FEM\_ObjectBroker
-\&theBroker);}\\ 
-Does nothing. Returns 0. \\
+\&theBroker);} 
+//! Does nothing. Returns 0.
 
-{\em int Print(OPS\_Stream \&s, int flag =0);} \\
-Sends the string 'Linear Algorithm' to the stream.
+{\em int Print(OPS\_Stream \&s, int flag =0);}
+//! Sends the string 'Linear Algorithm' to the stream.

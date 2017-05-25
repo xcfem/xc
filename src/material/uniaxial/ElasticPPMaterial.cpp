@@ -122,7 +122,7 @@ XC::ElasticPPMaterial::ElasticPPMaterial(void)
 XC::ElasticPPMaterial::ElasticPPMaterial(int tag)
   :EPPBaseMaterial(tag,MAT_TAG_ElasticPPMaterial,0.0,0.0), fyp(0.0), fyn(0.0) {}
 
-//! Asigna el tensión de prueba value.
+//! @brief Sets trial strain.
 int XC::ElasticPPMaterial::setTrialStrain(double strain, double strainRate)
   {
   /*
@@ -155,6 +155,7 @@ int XC::ElasticPPMaterial::setTrialStrain(double strain, double strainRate)
     return 0;
   }
 
+//! @brief Commit material state.
 int XC::ElasticPPMaterial::commitState(void)
   {
 
@@ -175,12 +176,12 @@ int XC::ElasticPPMaterial::commitState(void)
     return 0;
   }        
 
-//! @brief Returns the material state al del último commit.
+//! @brief Returns the material state to its last commit.
 int XC::ElasticPPMaterial::revertToLastCommit(void)
   { return 0; }
 
 
-//! @brief Returns the material a su estado inicial.
+//! @brief Returns the material to its initial state.
 int XC::ElasticPPMaterial::revertToStart(void)
   {
     commitStrain= 0.0;

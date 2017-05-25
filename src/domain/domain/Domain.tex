@@ -2,7 +2,7 @@
 % What: "@(#) Domain.tex, revA"
 
 \noindent {\bf Files}   
-\indent \#include $<$/domain/domain/Domain.h$>$  
+\indent \#include \f$<\f$/domain/domain/Domain.h\f$>\f$  
 
 \noindent {\bf Class Declaration}  
 \indent class Domain  
@@ -42,7 +42,7 @@
 //! global ErrorHandler is invoked.    
 
 \noindent {\bf Destructor}  
-\indent {\em virtual~ $\tilde{}$Domain();}  
+\indent {\em virtual~ \f$\tilde{}\f$Domain();}  
 //! Invokes delete on all the storage objects. This means that, if the two
 //! latter constructors have been called, the container objects must have 
 //! been created using \p new and that at no other point in the program
@@ -136,7 +136,7 @@
 //! LoadPattern objects. Then the domain object invokes {\em
 //! clearAll()} on its container objects. In addition the destructor for
 //! each Recorder object that has been added to the domain is invoked. In
-//! addition the current time and load factor are set to $0$, and the box
+//! addition the current time and load factor are set to \f$0\f$, and the box
 //! bounding the domain is set to the box enclosing the origin. 
 
 
@@ -144,7 +144,7 @@
 //! To remove the element whose tag is given by \p tag from the
 //! domain. The domain achieves this by invoking {\em
 //! removeComponent(tag)} on the container for the elements. 
-//! Returns $0$ if no such element exists in the domain. Otherwise 
+//! Returns \f$0\f$ if no such element exists in the domain. Otherwise 
 //! the domain invokes {\em setDomain(0)} on the element (using a cast to
 //! go from a TaggedObject to an Element, which is safe as only an
 //! Element objects are added to this container) and {\em
@@ -154,7 +154,7 @@
 //! To remove the node whose tag is given by \p tag from the domain. 
 //! The domain achieves this by invoking {\em
 //! removeComponent(tag)} on the container for the nodes. 
-//! Returns $0$ if no such node exists in the domain. If the node is to be
+//! Returns \f$0\f$ if no such node exists in the domain. If the node is to be
 //! removed the domain invokes {\em setDomain(0)} on the node and {\em
 //! domainChange()} on itself before a pointer to the Node is returned. 
 
@@ -162,7 +162,7 @@
 //! To remove the SFreedom\_Constraint whose tag is given by \p tag from the
 //! domain. The domain achieves this by invoking {\em
 //! removeComponent(tag)} on the container for the single point
-//! constraints. Returns $0$ if the constraint was not in the domain,
+//! constraints. Returns \f$0\f$ if the constraint was not in the domain,
 //! otherwise the domain invokes {\em setDomain(0)} on the constraint and
 //! domainChange() on itself before a pointer to the constraint is
 //! returned. Note this will only remove SFreedom\_Constraints which have been
@@ -172,7 +172,7 @@
 //! To remove the MP\_Constraint whose tag is given by \p tag from the
 //! domain. The domain achieves this by invoking {\em
 //! removeComponent(tag)} on the container for the multi point
-//! constraints. Returns $0$ if the constraint was not in the domain,
+//! constraints. Returns \f$0\f$ if the constraint was not in the domain,
 //! otherwise the domain invokes {\em setDomain(0)} on the constraint and
 //! domainChange() on itself before a pointer to the constraint is
 //! returned.   
@@ -184,7 +184,7 @@
 //! If the LoadPattern exists, the domain then iterates through the loads
 //! and constraints of the LoadPattern invoking {\em setDomain(0)} on
 //! these objects. Returns
-$0$ if the load was not in the domain, otherwise returns a pointer to
+\f$0\f$ if the load was not in the domain, otherwise returns a pointer to
 //! the load that was removed. Invokes {\em setDomain(0)} on the load case
 //! before it is returned. 
 
@@ -214,33 +214,33 @@ $0$ if the load was not in the domain, otherwise returns a pointer to
 
 {\em virtual  Element *getElement(int tag);}
 //! To return a pointer to the element \p tag. If no such element
-//! exists $0$ is returned. It does this by invoking {em
+//! exists \f$0\f$ is returned. It does this by invoking {em
 //! getComponentPtr(tag)} on the element container and performing a cast
 //! to an element if the object exists. 
 
 {\em virtual  Node *getNode(int tag);}
 //! To return a pointer to the node whose tag is given by \p tag. If
-//! no such node exists $0$ is returned. It does this by invoking {em
+//! no such node exists \f$0\f$ is returned. It does this by invoking {em
 //! getComponentPtr(tag)} on the node container and performing a cast
 //! to a node if the object exists. 
 
 {\em virtual  SFreedom\_Constraint *getSFreedom\_ConstraintPtr(int tag);}
 //! To return a pointer to the SFreedom\_Constraint whose tag is given by \p tag. If
-//! no such SFreedom\_Constraint exists $0$ is returned. It does this by invoking {em
+//! no such SFreedom\_Constraint exists \f$0\f$ is returned. It does this by invoking {em
 //! getComponentPtr(tag)} on the single-point constraint container and
 //! performing a cast to an SFreedom\_Constraint if the object exists. 
 
 
 {\em virtual  MP\_Constraint *getMP\_ConstraintPtr(int tag);}
 //! To return a pointer to the MP\_Constraint whose tag is given by \p tag. If
-//! no such MP\_Constraint exists $0$ is returned. It does this by invoking {em
+//! no such MP\_Constraint exists \f$0\f$ is returned. It does this by invoking {em
 //! getComponentPtr(tag)} on the multi-point constraint container and
 //! performing a cast to an MP\_Constraint if the object exists. 
 
 
 {\em virtual  ElementalLoad *getLoadPattern(int tag);}
 //! To return a pointer to the LoadPattern whose tag is given by \p tag. If
-//! no such LoadPattern exists $0$ is returned. It does this by invoking {em
+//! no such LoadPattern exists \f$0\f$ is returned. It does this by invoking {em
 //! getComponentPtr(tag)} on the elemental load container and
 //! performing a cast to a LoadPattern if the object exists. 
 
@@ -275,7 +275,7 @@ $0$ if the load was not in the domain, otherwise returns a pointer to
 //! To return the bounding rectangle for the Domain. The information is
 //! contained in a Vector of size 6 containing in the following order
 \{xmin, ymin, zmin, xmax, ymax, zmax\}. This information is built up
-//! as nodes are added to the domain, initially all are set to $0$ in the
+//! as nodes are added to the domain, initially all are set to \f$0\f$ in the
 //! constructor. 
 
 {\em virtual Graph \&getElementGraph(void);} 
@@ -283,7 +283,7 @@ $0$ if the load was not in the domain, otherwise returns a pointer to
 //! in the domain). If the \p eleChangeFlag has been set
 //! to \p true the method will invoke {\em buildEleGraph(theEleGraph)}
 //! on itself before returning the graph. The vertices in the element
-//! graph are to be labeled $0$ through $numEle-1$. The Vertices references
+//! graph are to be labeled \f$0\f$ through \f$numEle-1\f$. The Vertices references
 //! contain the elemental tags.  
 
 {\em virtual Graph \&getNodeGraph(void);} 
@@ -291,7 +291,7 @@ $0$ if the load was not in the domain, otherwise returns a pointer to
 //! the domain). If the \p nodeChangeFlag has been set to \p true the
 //! will invoke {\em buildNodeGraph(theNodeGraph)} on itself before
 //! returning the graph. The vertices in the node graph are to be labeled
-$0$ through $numNode-1$. The Vertices references contain the nodal tags.  
+\f$0\f$ through \f$numNode-1\f$. The Vertices references contain the nodal tags.  
 
 
 %%%%%%%% Public Member Functions - UPDATE
@@ -331,7 +331,7 @@ $0$ through $numNode-1$. The Vertices references contain the nodal tags.
 //! commit()} on all elements of the domain. These are calls for the nodes
 //! and elements to set there committed state as given by their current
 //! state. The domain will then set its committed time variable to be
-//! equal to the current time and lastly increments its commit tag by $1$.  
+//! equal to the current time and lastly increments its commit tag by \f$1\f$.  
 
 
 {\em virtual int revertToLastCommit(void);} 
@@ -339,7 +339,7 @@ $0$ through $numNode-1$. The Vertices references contain the nodal tags.
 //! domain invokes revertToLastCommit() on all nodes and elements in
 //! the domain. The domain sets its current loadFactor and time
 //! stamp to be equal to the last committed values. The domain decrements
-//! the current commitTag by $1$. Finally it invokes applyLoad()
+//! the current commitTag by \f$1\f$. Finally it invokes applyLoad()
 //! on itself with the current time.
 
 {\em virtual void update(void);} 
@@ -354,7 +354,7 @@ $0$ through $numNode-1$. The Vertices references contain the nodal tags.
 \noindent {\bf Public Methods for the Analysis} 
 {\em virtual int hasDomainChanged(void);} 
 //! To return an integer stamp indicating the state of the
-//! domain. Initially $0$, this integer is incremented by $1$ if  {\em
+//! domain. Initially \f$0\f$, this integer is incremented by \f$1\f$ if  {\em
 //! domainChange()} has been invoked since the last invocation of the
 //! method. If the domain has changed it marks the element and node graph
 //! flags as not having been built.  
@@ -375,27 +375,27 @@ $0$ through $numNode-1$. The Vertices references contain the nodal tags.
 //! all it's container objects. 
 
 
-\indent {\em friend OPS_Stream \&operator$<<$(OPS_Stream \&s, Domain \&M); }  
+\indent {\em friend OPS_Stream \&operator\f$<<\f$(OPS_Stream \&s, Domain \&M); }  
 //! This function allows domain objects to be printed to streams. The
-//! function invokes $M.Print(s)$ before returning $s$. 
+//! function invokes \f$M.Print(s)\f$ before returning \f$s\f$. 
 
 \noindent {\bf Protected Methods}  
 \indent{\em virtual void domainChange(void) }
 //! Sets a flag indicating that the integer returned in the next call to 
-//! hasDomainChanged() must be incremented by $1$. This method is
+//! hasDomainChanged() must be incremented by \f$1\f$. This method is
 //! invoked whenever a Node, Element or Constraint object is added to the
 //! domain.  
 
 {\em virtual int buildEleGraph(Graph \&theEleGraph)} 
 //! A method which will cause the domain to discard the current element
 //! graph and build a new one based on the element connectivity. Returns
-$0$ if successful otherwise $-1$ is returned along with an error
+\f$0\f$ if successful otherwise \f$-1\f$ is returned along with an error
 //! message to opserr. 
 
 {\em virtual int buildNodeGraph(Graph \&theNodeGraph)} 
 //! A method which will cause the domain to discard the current node
 //! graph and build a new one based on the node connectivity. Returns
-$0$ if successful otherwise $-1$ is returned along with an error
+\f$0\f$ if successful otherwise \f$-1\f$ is returned along with an error
 //! message to opserr. 
 
 

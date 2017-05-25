@@ -74,6 +74,11 @@ XC::Matrix XC::GenericSection1d::ks(1,1);
 XC::ResponseId XC::GenericSection1d::c(1);
 
 //! @brief Constructor.
+//!
+//! Constructs a GenericSection1D whose unique integer tag among
+//! SectionForceDeformation objects in the domain is given by \p tag. Obtains
+//! a copy of the UniaxialMaterial \p m via a call to getCopy().
+//! The section code is set to be \p code.
 XC::GenericSection1d::GenericSection1d(int tag, UniaxialMaterial &m, int type)
   :PrismaticBarCrossSection(tag,SEC_TAG_Generic1d), code(type)
   {
@@ -81,7 +86,8 @@ XC::GenericSection1d::GenericSection1d(int tag, UniaxialMaterial &m, int type)
 
     if(!theModel)
       {
-        std::cerr << "XC::GenericSection1d::GenericSection1d  -- failed to get copy of material model\n";
+        std::cerr << nombre_clase() << "::" << __FUNCTION__
+		  << "; failed to get copy of material model.\n";
         exit(-1);
       }
   }
@@ -107,6 +113,9 @@ int XC::GenericSection1d::setInitialSectionDeformation(const Vector &def)
 
 //! @brief Sets the cross-section trial strain
 //! (generalized: axial and bending).
+//!
+//! Sets the trial section deformation vector, \f$\esec\f$, to be \p def,
+//! then invokes setTrialStrain() on the UniaxialMaterial.
 int XC::GenericSection1d::setTrialSectionDeformation(const Vector &def)
   { return theModel->setTrialStrain(def(0)); }
 
@@ -131,7 +140,10 @@ const XC::Vector &XC::GenericSection1d::getSectionDeformation(void) const
     return e;
   }
 
-//! @brief Return the stress resultant over the section.
+//! @brief Return the integration of stresses over the section.
+//!
+//! Gets the section resisting force, \f$\ssec\f$, to be the result of invoking 
+//! getStress() on the UniaxialMaterial, then returns \f$\ssec\f$.
 const XC::Vector &XC::GenericSection1d::getStressResultant(void) const
   {
     s(0) = theModel->getStress();
@@ -139,6 +151,9 @@ const XC::Vector &XC::GenericSection1d::getStressResultant(void) const
   }
 
 //! @brief Return the tangent stiffness matrix.
+//!
+//! Sets the section tangent stiffness matrix, \f$\ksec\f$, to be the result of
+//! invoking getTangent() on the UniaxialMaterial, then returns \f$\ksec\f$.
 const XC::Matrix &XC::GenericSection1d::getSectionTangent(void) const
   {
     ks(0,0) = theModel->getTangent();
@@ -152,7 +167,11 @@ const XC::Matrix &XC::GenericSection1d::getInitialTangent(void) const
     return ks;
   }
 
-//! @brief Return the matriz de flexibilidad.
+//! @brief Return the flexibility matrix.
+//!
+//! Gets the section flexibility matrix, \f$\fsec\f$, to be the inverse
+//! of the result of invoking getTangent() on the UniaxialMaterial, then
+//! returns \f$\fsec\f$.
 const XC::Matrix &XC::GenericSection1d::getSectionFlexibility(void) const
   {
     double tangent = theModel->getTangent();
@@ -163,7 +182,7 @@ const XC::Matrix &XC::GenericSection1d::getSectionFlexibility(void) const
     return ks;
   }
 
-//! @brief Returns the valor inicial la matriz de flexibilidad.
+//! @brief Returns the initial value of the flexibility matrix.
 const XC::Matrix &XC::GenericSection1d::getInitialFlexibility(void) const
   {
     double tangent = theModel->getInitialTangent();
@@ -171,19 +190,25 @@ const XC::Matrix &XC::GenericSection1d::getInitialFlexibility(void) const
     return ks;
   }
 
-//! @brief Returns the index of the commited state.
+//! @brief Invokes commitState() on the UniaxialMaterial and returns the
+//! result of that invocation.
 int XC::GenericSection1d::commitState(void)
   { return theModel->commitState(); }
 
-//! @brief Returns to the last commited state.
+//! @brief Invokes revertToLastCommit() on the UniaxialMaterial and returns the
+//! result of that invocation.
 int XC::GenericSection1d::revertToLastCommit ()
   { return theModel->revertToLastCommit(); }
 
-//! @brief Returns to the initial state.
+//! @brief Invokes revertToStart() on the UniaxialMaterial and returns the
+//! result of that invocation.
 int XC::GenericSection1d::revertToStart ()
   { return theModel->revertToStart(); }
 
-//! @brief Returns the tipo de respuesta.
+//! @brief Returns the response type.
+//!
+//! Returns the section ID code that indicates the type of response quantity 
+//! returned by this instance of GenericSection1D.
 const XC::ResponseId &XC::GenericSection1d::getType(void) const
   {
     c(0)= code;
@@ -248,9 +273,11 @@ int XC::GenericSection1d::recvSelf(const CommParameters &cp)
     return res;
   }
 
+//! @brief Prints to the stream \p s the object's \p tag, then invokes
+//! Print() on the UniaxialMaterial.
 void XC::GenericSection1d::Print (std::ostream &s, int flag)
-{
-    s << "GenericSection1d (Uniaxial), tag: " << this->getTag() << std::endl;
-    s << "\tResponse code: " << code << std::endl;
-    s << "\tUniaxialMaterial: " << theModel->getTag() << std::endl;
-}
+  {
+    s << "GenericSection1d (Uniaxial), tag: " << this->getTag() << std::endl
+      << "\tResponse code: " << code << std::endl
+      << "\tUniaxialMaterial: " << theModel->getTag() << std::endl;
+  }

@@ -1,115 +1,115 @@
 %File: ~/OOP/element/node/NodalLoad.tex
 %What: "@(#) NodalLoad.tex, revA"
 
-\noindent {\bf Files}   \\
-\indent \#include $<\tilde{ }$/domain/node/NodalLoad.h$>$  \\
+\noindent {\bf Files}
+\indent \#include \f$<\tilde{ }\f$/domain/node/NodalLoad.h\f$>\f$
 
-\noindent {\bf Class Declaration}  \\
-\indent class NodalLoad: public Load  \\
+\noindent {\bf Class Declaration}
+\indent class NodalLoad: public Load
 
-\noindent {\bf Class Hierarchy} \\
-\indent TaggedObject \\
-\indent MovableObject \\
-\indent\indent DomainComponent \\
-\indent\indent\indent Load \\
-\indent\indent\indent\indent {\bf NodalLoad} \\
+\noindent {\bf Class Hierarchy}
+\indent TaggedObject
+\indent MovableObject
+\indent\indent DomainComponent
+\indent\indent\indent Load
+\indent\indent\indent\indent {\bf NodalLoad}
 
-\noindent {\bf Description}  \\
+\noindent {\bf Description}
 \indent NodalLoads are loads acting on Nodes. The public methods are
-all declared as virtual to allow subclasses to be introduced for the
-provision of time varying loads. Each NodalLoad object is associated
-with a single Node object and has a Vector object corresponding to the
-load acting on this Node object as a result of the NodalLoad. \\
+//! all declared as virtual to allow subclasses to be introduced for the
+//! provision of time varying loads. Each NodalLoad object is associated
+//! with a single Node object and has a Vector object corresponding to the
+//! load acting on this Node object as a result of the NodalLoad.
 
-\noindent {\bf Class Interface}  \\
-\indent\indent // Constructors  \\
+\noindent {\bf Class Interface}
+\indent\indent // Constructors
 \indent\indent {\em NodalLoad(int tag, int node, const Vector \&load, bool
-isLoadConstant = false);}  \\ 
-\indent\indent {\em NodalLoad(int tag, int node, int classTag);}  \\
-\indent\indent {\em NodalLoad(int classTag);}  \\ \\
-\indent\indent // Destructor  \\
-\indent\indent {\em virtual $\tilde{ }$ NodalLoad();} \\ \\
-\indent\indent // Public Methods  \\
-\indent\indent {\em virtual void setDomain(Domain *newDomain);} \\
-\indent\indent {\em virtual int getNodeTag(void) const;} \\
-\indent\indent {\em virtual void applyLoad(double loadFactor);} \\ \\
-\indent\indent // Public Methods for Output \\
-\indent\indent {\em virtual int sendSelf(int commitTag, Channel \&theChannel); } \\
+//! isLoadConstant = false);} 
+\indent\indent {\em NodalLoad(int tag, int node, int classTag);}
+\indent\indent {\em NodalLoad(int classTag);}
+\indent\indent // Destructor
+\indent\indent {\em virtual \f$\tilde{ }\f$ NodalLoad();}
+\indent\indent // Public Methods
+\indent\indent {\em virtual void setDomain(Domain *newDomain);}
+\indent\indent {\em virtual int getNodeTag(void) const;}
+\indent\indent {\em virtual void applyLoad(double loadFactor);}
+\indent\indent // Public Methods for Output
+\indent\indent {\em virtual int sendSelf(int commitTag, Channel \&theChannel); }
 \indent\indent {\em virtual int recvSelf(int commitTag, Channel \&theChannel,
-FEM\_ObjectBroker \&theBroker); } \\
-\indent\indent {\em virtual void Print(std::stream \&s, int flag = 0);} \\
+//! FEM\_ObjectBroker \&theBroker); }
+\indent\indent {\em virtual void Print(std::stream \&s, int flag = 0);}
 
 
-\noindent {\bf Constructors}  \\
+\noindent {\bf Constructors}
 \indent {\em NodalLoad(int tag, int node, const Vector \&load, bool
-isLoadConstant = false);}  \\
-To create a NodalLoad object with tag \p tag acting on Node \p node with a
-reference load given by \p load. \p tag and {\em LOAD\_TAG\_NodalLoad} (defined in
-$<$classTags.h$>$)are passed to the Load constructor.  A new vector object is created using
-the vector \p load as the argument. (THIS MAY CHANGE - may associate
-the load Vector with \p load, allowing identical loads on diff
-nodes to be created without the need for each to have its own
-vector) If no enough memory is available an error message is printed
-and the program terminates. The boolean \p isLoadConstant is used
-to indicate whether the value of the load applies to the Node is
-independent of the load factor. \\ 
+//! isLoadConstant = false);}
+//! To create a NodalLoad object with tag \p tag acting on Node \p node with a
+//! reference load given by \p load. \p tag and {\em LOAD\_TAG\_NodalLoad} (defined in
+\f$<\f$classTags.h\f$>\f$)are passed to the Load constructor.  A new vector object is created using
+//! the vector \p load as the argument. (THIS MAY CHANGE - may associate
+//! the load Vector with \p load, allowing identical loads on diff
+//! nodes to be created without the need for each to have its own
+//! vector) If no enough memory is available an error message is printed
+//! and the program terminates. The boolean \p isLoadConstant is used
+//! to indicate whether the value of the load applies to the Node is
+//! independent of the load factor. 
 
-\indent {\em NodalLoad(int tag, int node, int classTag);}  \\
-Provided for subclasses, which may which to provide the abstraction of
-time varying nodal loads. The integers \p tag and \p classTag
-are passed to the Load constructor. \\
+\indent {\em NodalLoad(int tag, int node, int classTag);}
+//! Provided for subclasses, which may which to provide the abstraction of
+//! time varying nodal loads. The integers \p tag and \p classTag
+//! are passed to the Load constructor.
 
-\indent {\em NodalLoad(int classTag);}  \\
-Provided so that a FEM\_ObjectBroker can construct an object. $0$ and
+\indent {\em NodalLoad(int classTag);}
+//! Provided so that a FEM\_ObjectBroker can construct an object. \f$0\f$ and
 \p classTag are passed to the Load classes constructor. The data
-for the object is filled in when recvSelf() is invoked on the
-object.\\
+//! for the object is filled in when recvSelf() is invoked on the
+//! object.
 
-\noindent {\bf Destructor}  \\
-\indent {\em virtual $\tilde{ }$ NodalLoad();} \\ 
-If a Vector for the load was constructed, the destructor invokes
-delete on this Vector object. \\
+\noindent {\bf Destructor}
+\indent {\em virtual \f$\tilde{ }\f$ NodalLoad();} 
+//! If a Vector for the load was constructed, the destructor invokes
+//! delete on this Vector object.
 
 
-\noindent {\bf Public Methods}  \\
-\indent {\em virtual void setDomain(Domain *newDomain);} \\
-To set the associated Domain object. First checks to ensure that a
-Node object with the tag exists in the Domain. It sets the pointer for
-it's associated Node object to point to this object, and then 
-invokes the DomainComponent classes setDomain() method. If the
-Node does not exist in the Domain a warning message and {\em
-setDomain()} is not invoked. \\
+\noindent {\bf Public Methods}
+\indent {\em virtual void setDomain(Domain *newDomain);}
+//! To set the associated Domain object. First checks to ensure that a
+//! Node object with the tag exists in the Domain. It sets the pointer for
+//! it's associated Node object to point to this object, and then 
+//! invokes the DomainComponent classes setDomain() method. If the
+//! Node does not exist in the Domain a warning message and {\em
+//! setDomain()} is not invoked.
 
-\indent {\em virtual int getNodeTag(void) const;} \\
-Returns the integer \p node passed in the constructor. \\
+\indent {\em virtual int getNodeTag(void) const;}
+//! Returns the integer \p node passed in the constructor.
 
 \indent {\em virtual void applyLoad(double timeStep = 0.0, double
-loadFactor = 1.0);} \\
-To it's associated Node it invokes addUnbalancedLoad() with it's
-copy of the Vector object \p load and a factor of \p loadFactor
-if \p isLoadConstant was specified as \p false in the constructor or
-$1$ if it was specified as \p true. Warning
-messages are printed, if no Domain has been associated with the
-NodalLoad object or no Node with a tag \p node exists in the
-Domain. For efficiency reasons, the NodalLoad object keeps a pointer
-to it's associated Node object. The time \p timeStep has no
-influence on the load added. \\
+//! loadFactor = 1.0);}
+//! To it's associated Node it invokes addUnbalancedLoad() with it's
+//! copy of the Vector object \p load and a factor of \p loadFactor
+//! if \p isLoadConstant was specified as \p false in the constructor or
+\f$1\f$ if it was specified as \p true. Warning
+//! messages are printed, if no Domain has been associated with the
+//! NodalLoad object or no Node with a tag \p node exists in the
+//! Domain. For efficiency reasons, the NodalLoad object keeps a pointer
+//! to it's associated Node object. The time \p timeStep has no
+//! influence on the load added.
 
-\indent {\em virtual int sendSelf(int commitTag, Channel \&theChannel); } \\
-Determines its database tag. The object then sends it's tag, {\em
-node} and size of load Vector to the Channel in an ID object. Then, if
+\indent {\em virtual int sendSelf(int commitTag, Channel \&theChannel); }
+//! Determines its database tag. The object then sends it's tag, {\em
+//! node} and size of load Vector to the Channel in an ID object. Then, if
 \p load is not NULL, it sends it's copy of the \p load
-Vector. Returns $0$ if successful, a negative number if the Channel
-failed to send the data. \\  
+//! Vector. Returns \f$0\f$ if successful, a negative number if the Channel
+//! failed to send the data.  
 
 \indent {\em virtual int recvSelf(int commitTag, Channel \&theChannel,
-FEM\_ObjectBroker \&theBroker); } \\
-The object first determines its database tag. It then invokes receives
-an ID object from the Channel containing it's tag, \p node and size
-of load Vector. If size of \p load is not $0$ it then receives it's
-copy of the \p load Vector. Returns $0$ if successful, a negative 
-number if the Channel failed to receive the data. \\ 
+//! FEM\_ObjectBroker \&theBroker); }
+//! The object first determines its database tag. It then invokes receives
+//! an ID object from the Channel containing it's tag, \p node and size
+//! of load Vector. If size of \p load is not \f$0\f$ it then receives it's
+//! copy of the \p load Vector. Returns \f$0\f$ if successful, a negative 
+//! number if the Channel failed to receive the data. 
 
-\indent {\em virtual void Print(std::stream \&s, int flag = 0);} \\
-Prints it's \p node and then prints the load Vector. \\
+\indent {\em virtual void Print(std::stream \&s, int flag = 0);}
+//! Prints it's \p node and then prints the load Vector.
 

@@ -73,6 +73,10 @@ namespace XC {
 //! @ingroup MatUnx
 //
 //! @brief Linear elastic uniaxial material.
+//!
+//! This class provides the abstraction of an elastic
+//! uniaxial material, i.e. the stress-strain relationship is given by the
+//! linear equation \f$\sigma = E * \epsilon\f$.
 class ElasticMaterial : public ElasticBaseMaterial
   {
   private:

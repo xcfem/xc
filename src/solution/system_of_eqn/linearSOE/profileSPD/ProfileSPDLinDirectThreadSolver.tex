@@ -1,72 +1,72 @@
 %File: ~/OOP/system_of_eqn/linearSOE/profileSPD/ProfileSPDLinDirectThreadSolver.tex
 %What: "@(#) ProfileSPDLinDirectThreadSolver.tex, revA"
 
-UNDER CONSTRUCTION
+//! UNDER CONSTRUCTION
 
-\noindent {\bf Files}   \\
-\indent \#include $<\tilde{
-}$/system\_of\_eqn/linearSOE/profileSPD/ProfileSPDLinDirectThreadSolver.h$>$
-\\ 
+\noindent {\bf Files}
+\indent \#include \f$<\tilde{
+}\f$/system\_of\_eqn/linearSOE/profileSPD/ProfileSPDLinDirectThreadSolver.h\f$>\f$
+ 
 
-\noindent {\bf Class Decleration}  \\
-\indent class ProfileSPDLinDirectThreadSolver: public LinearSOESolver  \\
+\noindent {\bf Class Decleration}
+\indent class ProfileSPDLinDirectThreadSolver: public LinearSOESolver
 
-\noindent {\bf Class Hierarchy} \\
-\indent MovableObject \\
-\indent\indent  Solver \\
-\indent\indent\indent LinearSOESolver \\
-\indent\indent\indent\indent ProfileSPDLinSolver \\
-\indent\indent\indent\indent\indent {\bf ProfileSPDLinDirectThreadSolver} \\
+\noindent {\bf Class Hierarchy}
+\indent MovableObject
+\indent\indent  Solver
+\indent\indent\indent LinearSOESolver
+\indent\indent\indent\indent ProfileSPDLinSolver
+\indent\indent\indent\indent\indent {\bf ProfileSPDLinDirectThreadSolver}
 
-\noindent {\bf Description}  \\
+\noindent {\bf Description}
 \indent A ProfileSPDLinDirectThreadSolver object can be constructed to
-solve a ProfileSPDLinSOE object. It does this in parallel using
-threads by direct means, using the $LDL^t$ variation of the cholesky
-factorization. The matrx $A$ is factored one row block at a time using
-a left-looking approach. Within a row block the factorization is
-performed by $NP$ threads. No BLAS or LAPACK routines are called 
-for the factorization or subsequent substitution. \\
+//! solve a ProfileSPDLinSOE object. It does this in parallel using
+//! threads by direct means, using the \f$LDL^t\f$ variation of the cholesky
+//! factorization. The matrx \f$A\f$ is factored one row block at a time using
+//! a left-looking approach. Within a row block the factorization is
+//! performed by \f$NP\f$ threads. No BLAS or LAPACK routines are called 
+//! for the factorization or subsequent substitution.
 
-\noindent {\bf Interface}  \\
-\indent\indent Constructor \\
-\indent\indent {\em ProfileSPDLinDirectThreadSolver(int numThreads);}  \\ \\
-\indent\indent Destructor \\
-\indent\indent {\em $\tilde{ }$ProfileSPDLinDirectThreadySolver();}\\  \\
-\indent\indent Public Methods \\
-\indent\indent {\em int solve(void);} \\
-\indent\indent {\em  int setSize(void);} \\
+\noindent {\bf Interface}
+\indent\indent Constructor
+\indent\indent {\em ProfileSPDLinDirectThreadSolver(int numThreads);}
+\indent\indent Destructor
+\indent\indent {\em \f$\tilde{ }\f$ProfileSPDLinDirectThreadySolver();}
+\indent\indent Public Methods
+\indent\indent {\em int solve(void);}
+\indent\indent {\em  int setSize(void);}
 \indent\indent {\em  int sendSelf(Channel \&theChannel, FEM\_ObjectBroker
-\&theBroker);} \\ 
+\&theBroker);} 
 \indent\indent {\em  int recvSelf(Channel \&theChannel, FEM\_ObjectBroker
-\&theBroker);} \\ 
+\&theBroker);} 
 
 
-\noindent {\bf Constructor}  \\
-\indent {\em ProfileSPDLinDirectThreadSolver(int numThreads);}  \\
-A unique class tag (defined in $<$classTags.h$>$) is passed to the
-ProfileSPDLinSolver constructor. \\
+\noindent {\bf Constructor}
+\indent {\em ProfileSPDLinDirectThreadSolver(int numThreads);}
+//! A unique class tag (defined in \f$<\f$classTags.h\f$>\f$) is passed to the
+//! ProfileSPDLinSolver constructor.
 
 
-\noindent {\bf Destructor} \\
-\indent {\em $\tilde{ }$ProfileSPDLinDirectThreadSolver();}\\ 
-Does nothing. \\
+\noindent {\bf Destructor}
+\indent {\em \f$\tilde{ }\f$ProfileSPDLinDirectThreadSolver();} 
+//! Does nothing.
 
-\noindent {\bf Public Member Functions }  \\
-\indent {\em  int solve(void);} \\
-The solver first copies the B vector into X.
-FILL IN
-The solve process changes $A$ and $X$. \\   
+\noindent {\bf Public Member Functions }
+\indent {\em  int solve(void);}
+//! The solver first copies the B vector into X.
+//! FILL IN
+//! The solve process changes \f$A\f$ and \f$X\f$.   
 
-\indent {\em  int setSize(void);} \\
-Does nothing but return $0$. \\
+\indent {\em  int setSize(void);}
+//! Does nothing but return \f$0\f$.
 
 \indent {\em  int sendSelf(Channel \&theChannel, FEM\_ObjectBroker
-\&theBroker);} \\ 
-Does nothing but return $0$. \\
+\&theBroker);} 
+//! Does nothing but return \f$0\f$.
 
 \indent {\em  int recvSelf(Channel \&theChannel, FEM\_ObjectBroker
-\&theBroker);} \\ 
-Does nothing but return $0$. \\
+\&theBroker);} 
+//! Does nothing but return \f$0\f$.
 
 
 
