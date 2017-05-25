@@ -12,11 +12,11 @@ facilitate and accelerate their creation, search, grouping in sets, ...
 Several grids can coexist in a FE problem.
 '''
 
-__author__= "Ana Ortega (AO_O) and Luis C. Pérez Tato (LCPT)"
-__copyright__= "Copyright 2015, AO_O and LCPT"
+__author__= "Ana Ortega (AO_O)"
+__copyright__= "Copyright 2017, AO_O"
 __license__= "GPL"
 __version__= "3.0"
-__email__= "ana.Ortega@ciccp.es l.pereztato@ciccp.es" 
+__email__= "ana.Ortega@ciccp.es"
 
 import xc_base
 import geom

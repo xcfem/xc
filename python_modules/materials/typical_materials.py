@@ -412,3 +412,46 @@ class MaterialData(object):
     '''shear modulus'''
     return self.E/(2*(1+self.nu))
 
+class DeckMaterialData(MaterialData):
+  '''Isotropic elastic section-material appropiate for plate and shell analysis
+  
+  :ivar name:         name identifying the section
+  :ivar thickness:    overall depth of the section
+  :ivar material:     instance of a class that defines the elastic modulus, 
+                      shear modulus and mass density of the material
+  '''
+  def __init__(self,name,thickness,material):
+    super(DeckMaterialData,self).__init__(material.name,material.E,material.nu,material.rho)
+    self.name=name
+    self.thickness= thickness
+    self.material=material
+  def getAreaDensity(self):
+    ''':returns: the mass per unit area'''
+    return self.rho*self.thickness
+  def setupElasticSection(self,preprocessor):
+    '''create an elastic isotropic section appropiate for plate and shell analysis
+    '''
+    defElasticMembranePlateSection(preprocessor,self.name,self.E,self.nu,self.getAreaDensity(),self.thickness)
+
+class BeamMaterialData(MaterialData):
+  '''Elastic section appropiate for 3D beam analysis, including shear deformations.
+  
+  :ivar name:         name identifying the section
+  :ivar section:      instance of a class that defines the geometric and
+                      mechanical characteristiscs of a section
+                      e.g: RectangularSection, CircularSection, ISection, ...
+  :ivar material:     instance of a class that defines the elastic modulus, 
+                      shear modulus and mass density of the material
+  '''
+  def __init__(self,name,section,material):
+    super(BeamMaterialData,self).__init__(material.name,material.E,material.nu,material.rho)
+    self.name=name
+    self.section=section
+    self.material=material
+  def getLongitudinalDensity(self):
+    ''':returns: the mass per unit length'''
+    return self.rho*self.section.A()
+  def setupElasticShear3DSection(self,preprocessor):
+    ''':returns: the elastic section appropiate for 3D beam analysis
+    '''
+    defElasticShearSection3d(preprocessor,self.name,self.section.A(),self.material.E,self.material.G(),self.section.Iz(),self.section.Iy(),self.section.J(),self.section.alphaZ())
