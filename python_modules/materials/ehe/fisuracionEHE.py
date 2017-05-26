@@ -18,9 +18,9 @@ class CrackControl(cc.CrackControlBaseParameters):
   tensSRMediaBarrasTracc= 0.0 #Tensión media en las barras traccionadas en fisuración.
   iAreaMaxima= None #Barra traccionada de área máxima.
   diamMaxTracc= 0.0 #Diámetro de la reinforcement traccionada más gruesa.
-  EsBarrasTracc= 0.0 #Módulo de deformación longitudinal de las barras traccionadas.
-  eps1= 0.0 #Deformación máxima en el hormigón.
-  eps2= 0.0 #Deformación mínima en el hormigón.
+  EsBarrasTracc= 0.0 #Longitudinal deformation Modulus tensioned rebars.
+  eps1= 0.0 #Maximum strain in concrete.
+  eps2= 0.0 #Minimum strain in concrete.
   k1= 0.0 #Coeficiente que representa la influencia del diagrama de tracciones.
   k2= 0.5 #Coeficiente de valor 1.0 para carga instantánea no repetida y 0.5 para el resto de los casos.
   depthMecanico= 0.0 #Canto con el que está trabajando la sección.
@@ -59,7 +59,7 @@ class CrackControl(cc.CrackControlBaseParameters):
   # Calcula la apertura característica de fisura.
   def calcApertCaracFis(self, scc, matTagHormigon, matTagAceroArmar, fctm):
     if(self.rcSets == None):
-      self.rcSets= createFiberSets.fiberSectionSetupRC3Sets(scc,matTagHormigon,self.setNameFibrasHormigon,matTagAceroArmar,self.setNameFibrasArmadura)
+      self.rcSets= createFiberSets.fiberSectionSetupRC3Sets(scc,matTagHormigon,self.concreteFibersSetName,matTagAceroArmar,self.rebarFibersSetName)
     concrFibers= self.rcSets.concrFibers.fSet
     reinfFibers= self.rcSets.reinfFibers.fSet
     reinforcementTraccion= self.rcSets.tensionFibers
@@ -69,8 +69,8 @@ class CrackControl(cc.CrackControlBaseParameters):
     self.numBarrasTracc= self.rcSets.getNumTensionRebars()
     self.Wk= 0.0
     if(self.numBarrasTracc>0):
-      scc.calcRecubrimientos(self.setNameFibrasArmaduraTraccion)
-      scc.calcSeparaciones(self.setNameFibrasArmaduraTraccion)
+      scc.calcRecubrimientos(self.tensionedRebarsFiberSetName)
+      scc.calcSeparaciones(self.tensionedRebarsFiberSetName)
       self.eps1= concrFibers.getStrainMax()
       self.eps2= max(concrFibers.getStrainMin(),0.0)
       self.k1= (self.eps1+self.eps2)/8/self.eps1
@@ -84,9 +84,9 @@ class CrackControl(cc.CrackControlBaseParameters):
         self.hEfMax= self.depthMecanico/4.0 # Pieza tipo losa
       else:
         self.hEfMax= self.depthMecanico/2.0
-      self.AcEfNeta= scc.calcAcEficazFibras(self.hEfMax,self.setNameFibrasArmaduraTraccion,15)
+      self.AcEfNeta= scc.computeFibersEffectiveConcreteArea(self.hEfMax,self.tensionedRebarsFiberSetName,15)
 
-      self.rebarsSpacingTracc= reinforcementTraccion.getDistMediaFibras()
+      self.rebarsSpacingTracc= reinforcementTraccion.getAverageDistanceBetweenFibers()
       self.areaRebarTracc= reinforcementTraccion.getArea(1)
       self.yCDGBarrasTracc= reinforcementTraccion.getCdgY()
       self.zCDGBarrasTracc= reinforcementTraccion.getCdgZ()
@@ -114,13 +114,13 @@ class CrackControl(cc.CrackControlBaseParameters):
         yBarra= posBarra.x
         zBarra= posBarra.y
         sigmaBarra= barra.getMaterial().getStress()
-        coverBarra= reinforcementTraccion.getRecubrimientoFibra(i)
-        diamBarra= reinforcementTraccion.getDiamEqFibra(i)
-        sigmaSRBarra= reinforcementTraccion.getSigmaSRFibra(i,self.E0,self.EsBarrasTracc,self.fctmFis)
+        coverBarra= reinforcementTraccion.getFiberCover(i)
+        diamBarra= reinforcementTraccion.getEquivalentDiameterOfFiber(i)
+        sigmaSRBarra= reinforcementTraccion.getSigmaSRAtFiber(i,self.E0,self.EsBarrasTracc,self.fctmFis)
         tensSRMediaBarrasTracc+= AsBarra*sigmaSRBarra
 
-        AcEfBarra= reinforcementTraccion.getAcEficazFibra(i)
-        sepBarra= min(reinforcementTraccion.getSeparacionFibra(i),15*diamBarra)
+        AcEfBarra= reinforcementTraccion.getFiberEffectiveConcreteArea(i)
+        sepBarra= min(reinforcementTraccion.getFiberSpacing(i),15*diamBarra)
         smFisurasBarra= 2*coverBarra+0.2*sepBarra+0.4*self.k1*diamBarra*AcEfBarra/AsBarra
         alargMaxBarra= sigmaBarra/self.EsBarrasTracc
         alargMedioBarra= max(1.0-self.k2*(sigmaSRBarra/sigmaBarra)**2,0.4)*alargMaxBarra

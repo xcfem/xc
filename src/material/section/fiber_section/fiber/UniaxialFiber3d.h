@@ -75,7 +75,7 @@ namespace XC {
 class UniaxialMaterial;
 class Response;
 
-//! \ingroup MATSCCFibras
+//! \ingroup MATSCCFibers
 //
 //! @brief Uniaxial fiber on a three-dimensional space.
 class UniaxialFiber3d: public UniaxialFiber

@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
-# Verification test of una sección metálica rectangular de fibras de material elastoplástico.
-#    elaborado a partir de «Nociones de cálculo plástico». C. Benito Hernández.
-#    página 26 y siguientes.
+# Verification test of a rectangular fiber section with an
+# elasto plastic material model.
+#    written from "Nociones de cálculo plástico." C. Benito Hernández.
+#    page 26 and following.
 
 __author__= "Luis C. Pérez Tato (LCPT)"
 __copyright__= "Copyright 2014, LCPT"
@@ -57,7 +58,7 @@ rectang= preprocessor.getMaterialLoader.newMaterial("fiber_section_3d","rectang"
 fiberSectionRepr= rectang.getFiberSectionRepr()
 fiberSectionRepr.setGeomNamed("geomRectang")
 rectang.setupFibers()
-extraeParamSccFibras(rectang,scc10x20)
+extractFiberSectionProperties(rectang,scc10x20)
 
 banco_pruebas_scc3d.sectionModel(preprocessor, "rectang")
 # Constraints
@@ -119,8 +120,8 @@ ratio13= (esfMz-loadMz)/loadMz
 '''
 printRatios(scc10x20)
 print "analOk= ",analOk
-print "numFibras= ", nFibras
-print "numFibrasTeor= ", scc10x20.nDivIJ*scc10x20.nDivJK
+print "numFibers= ", nFibers
+print "numFibersTeor= ", scc10x20.nDivIJ*scc10x20.nDivJK
 print "RM= ",(RM)
 print "esfMz= ",(esfMz)
 print "loadMz= ",(loadMz)

@@ -55,22 +55,22 @@
 
 //! @brief Constructor.
 XC::FiberSectionBase::FiberSectionBase(int tag,int num,int classTag,int dim,MaterialLoader *mat_ldr)
-  : PrismaticBarCrossSection(tag, classTag,mat_ldr), eTrial(dim), eInic(dim), eCommit(dim), kr(dim), fibras(num), tag_fibra(num+1), section_repres(nullptr)
+  : PrismaticBarCrossSection(tag, classTag,mat_ldr), eTrial(dim), eInic(dim), eCommit(dim), kr(dim), fibers(num), fiberTag(num+1), section_repres(nullptr)
   {}
 
 //! @brief Constructor.
 XC::FiberSectionBase::FiberSectionBase(int tag, int classTag,int dim,MaterialLoader *mat_ldr)
-  : PrismaticBarCrossSection(tag, classTag,mat_ldr), eTrial(dim), eInic(dim), eCommit(dim), kr(dim), fibras(0), tag_fibra(0), section_repres(nullptr)
+  : PrismaticBarCrossSection(tag, classTag,mat_ldr), eTrial(dim), eInic(dim), eCommit(dim), kr(dim), fibers(0), fiberTag(0), section_repres(nullptr)
   {}
 
 // constructor for blank object that recvSelf needs to be invoked upon
 XC::FiberSectionBase::FiberSectionBase(int classTag,int dim,MaterialLoader *mat_ldr)
-  : PrismaticBarCrossSection(0, classTag,mat_ldr), eTrial(dim), eInic(dim), eCommit(dim), kr(dim),fibras(0), tag_fibra(0), section_repres(nullptr)
+  : PrismaticBarCrossSection(0, classTag,mat_ldr), eTrial(dim), eInic(dim), eCommit(dim), kr(dim),fibers(0), fiberTag(0), section_repres(nullptr)
   {}
 
 //! @brief Copy constructor.
 XC::FiberSectionBase::FiberSectionBase(const FiberSectionBase &otro)
-  : PrismaticBarCrossSection(otro), eTrial(otro.eTrial), eInic(otro.eInic), eCommit(otro.eCommit), kr(otro.kr), fibras(otro.fibras), tag_fibra(otro.tag_fibra), section_repres(nullptr)
+  : PrismaticBarCrossSection(otro), eTrial(otro.eTrial), eInic(otro.eInic), eCommit(otro.eCommit), kr(otro.kr), fibers(otro.fibers), fiberTag(otro.fiberTag), section_repres(nullptr)
   {
     if(otro.section_repres)
       section_repres= otro.section_repres->getCopy();
@@ -84,8 +84,8 @@ XC::FiberSectionBase &XC::FiberSectionBase::operator=(const FiberSectionBase &ot
     eInic= otro.eInic;
     eCommit= otro.eCommit;
     kr= otro.kr;
-    fibras= otro.fibras;
-    tag_fibra= otro.tag_fibra;
+    fibers= otro.fibers;
+    fiberTag= otro.fiberTag;
     if(otro.section_repres)
       section_repres= otro.section_repres->getCopy();
     else
@@ -115,11 +115,11 @@ XC::FiberSectionRepr *XC::FiberSectionBase::getFiberSectionRepr(void)
 
 //! @brief Creare a new fiber set.
 void XC::FiberSectionBase::create_fiber_set(const std::string &nmb)
-  { sets_fibras.create_fiber_set(nmb); }
+  { fiber_sets.create_fiber_set(nmb); }
 
 //! @brief Creates a fiber set which name is being passed as parameter.
 XC::FiberSectionBase::fiber_set_iterator XC::FiberSectionBase::get_fiber_set(const std::string &nmb_set)
-  { return sets_fibras.get_fiber_set(nmb_set); }
+  { return fiber_sets.get_fiber_set(nmb_set); }
 
 
 // //! @brief Creates a fiber set with those that fulfill the condition
@@ -127,19 +127,19 @@ XC::FiberSectionBase::fiber_set_iterator XC::FiberSectionBase::get_fiber_set(con
 // XC::FiberSectionBase::fiber_set_iterator XC::FiberSectionBase::sel(const std::string &nmb_set,const std::string &cond)
 //   {
 //     fiber_set_iterator i= get_fiber_set(nmb_set);
-//     fibras.Cumplen(cond,(*i).second);
+//     fibers.Cumplen(cond,(*i).second);
 //     return i;
 //   }
 
 // //! @brief Creates a fiber set that belongs to the set with the name nmb_set_org, and satisfy the contition being passed as parameter.
 // XC::FiberSectionBase::fiber_set_iterator XC::FiberSectionBase::resel(const std::string &nmb_set,const std::string &nmb_set_org,const std::string &cond)
 //   {
-//     fiber_set_iterator i= sets_fibras.end();
+//     fiber_set_iterator i= fiber_sets.end();
 //     if(nmb_set != nmb_set_org)
 //       {
 //         i= get_fiber_set(nmb_set);
-//         fiber_set_iterator j= sets_fibras.find(nmb_set_org);
-//         if(j == sets_fibras.end())
+//         fiber_set_iterator j= fiber_sets.find(nmb_set_org);
+//         if(j == fiber_sets.end())
 //           {
 //             std::clog << "Origin fibers set: '" << nmb_set_org
 //                       << "' doesn't exists; command ignored." << std::endl;
@@ -154,7 +154,7 @@ XC::FiberSectionBase::fiber_set_iterator XC::FiberSectionBase::get_fiber_set(con
 XC::FiberSectionBase::fiber_set_iterator XC::FiberSectionBase::sel_mat_tag(const std::string &nmb_set,const int &matTag)
   {
     fiber_set_iterator i= get_fiber_set(nmb_set);
-    fibras.SelMatTag(matTag,(*i).second);
+    fibers.SelMatTag(matTag,(*i).second);
     return i;
   }
 
@@ -163,7 +163,7 @@ XC::FiberSectionBase::fiber_set_iterator XC::FiberSectionBase::sel_mat_tag(const
 //! @param nmb_set_org: set that contains the fibers.
 //! @param matTag: material tag.
 XC::FiberSectionBase::fiber_set_iterator XC::FiberSectionBase::resel_mat_tag(const std::string &nmb_set,const std::string &nmb_set_org,const int &matTag)
-  { return sets_fibras.resel_mat_tag(nmb_set,nmb_set_org,matTag); }
+  { return fiber_sets.resel_mat_tag(nmb_set,nmb_set_org,matTag); }
  
 
 //! @brief Destructor:
@@ -178,8 +178,8 @@ XC::FiberSectionBase::~FiberSectionBase(void)
 //! @brief Add a fiber to the section.
 XC::Fiber *XC::FiberSectionBase::addFiber(const std::string &nmbMat,const double &area,const Vector &coo)
   {
-    tag_fibra++;
-    return addFiber(tag_fibra,*GetMaterialLoader(),nmbMat,area,coo);
+    fiberTag++;
+    return addFiber(fiberTag,*GetMaterialLoader(),nmbMat,area,coo);
   }
 
 
@@ -339,10 +339,10 @@ double XC::FiberSectionBase::getNeutralAxisDepth(void) const
 
 //! @brief Returns the distance from the neutral axis
 //! to the point whose coordinates are being passed as parameters.
-double XC::FiberSectionBase::getDistFibraNeutra(const double &y,const double &) const
+double XC::FiberSectionBase::getNeutralAxisDist(const double &y,const double &) const
   {
     double retval= 0.0;
-    const Recta2d fn= getFibraNeutra();
+    const Recta2d fn= getNeutralAxis();
     if(fn.exists())
       retval= fn.dist(Pos2d(y,0));
     return retval;
@@ -352,12 +352,12 @@ double XC::FiberSectionBase::getDistFibraNeutra(const double &y,const double &) 
 //! as in article 49.2.4 from EHE-08 (hatched area in figure 49.2.4b).
 //! See also figures 47.5 y 47.6 from volume II of the
 //! book: "Proyecto y cálculo de estructuras de hormigón" author: J. Calavera.
-Recta2d XC::FiberSectionBase::getRectaLimiteAcEficaz(const double &hEfMax) const
+Recta2d XC::FiberSectionBase::getEffectiveConcreteAreaLimitLine(const double &hEfMax) const
   {
     Recta2d retval;
-    Recta2d fn= getFibraNeutra();
+    Recta2d fn= getNeutralAxis();
     if(!fn.exists())
-      fn= fibras.getFibraNeutra();
+      fn= fibers.getNeutralAxis();
     if(fn.exists())
       {
         const double hef= getTensionedZoneLeverArm();
@@ -374,24 +374,24 @@ Recta2d XC::FiberSectionBase::getRectaLimiteAcEficaz(const double &hEfMax) const
     return retval;
   }
 
-//! @brief Returns the contours of the concrete efficient area $A_{c,ef}$
+//! @brief Returns the contours of the concrete effective area \f$A_{c,ef}\f$
 //! as in article 49.2.4 from EHE-08 (hatched area in figure 49.2.4b).
 //! See also figures 47.5 y 47.6 from volume II of the
 //! book: "Proyecto y cálculo de estructuras de hormigón" author: J. Calavera.
-std::list<Poligono2d> XC::FiberSectionBase::getContourAcEficazBruta(const double &hEfMax) const
+std::list<Poligono2d> XC::FiberSectionBase::getGrossEffectiveConcreteAreaContour(const double &hEfMax) const
   {
     std::list<Poligono2d> retval;
     Poligono2d contour= getRegionsContour();
 
-    const double epsMin= fibras.getStrainMin();
-    const double epsMax= fibras.getStrainMax();
+    const double epsMin= fibers.getStrainMin();
+    const double epsMax= fibers.getStrainMax();
     if(epsMin>0) //Full section is in tension.
       retval.push_back(contour);
     else if(epsMax>0) //Bending.
       {
         if(hEfMax>1e-6)
           {
-            const Recta2d limite= getRectaLimiteAcEficaz(hEfMax);
+            const Recta2d limite= getEffectiveConcreteAreaLimitLine(hEfMax);
             if(limite.exists())
               {
                 const Semiplano2d tensionedArea= getTensionedHalfPlane(limite);
@@ -407,30 +407,31 @@ std::list<Poligono2d> XC::FiberSectionBase::getContourAcEficazBruta(const double
       }
     if(retval.empty())
       {
-        std::cerr << "FiberSectionBase::getContourAcEficazBruta; no se pudo determinar el contour del área eficaz bruta."
+        std::cerr << nombre_clase() << "::" << __FUNCTION__
+	          << "; can't get contour of gross effective concrete area."
                   << std::endl;
       }
     return retval;
   }
 
-double XC::FiberSectionBase::getAcEficazBruta(const double &hEfMax) const
+double XC::FiberSectionBase::getGrossEffectiveConcreteArea(const double &hEfMax) const
   {
-    std::list<Poligono2d> tmp= getContourAcEficazBruta(hEfMax);
+    std::list<Poligono2d> tmp= getGrossEffectiveConcreteAreaContour(hEfMax);
     return area(tmp.begin(),tmp.end());
   }
 
 //! @brief Returns the sum of the efficient areas of rebars in tension.
-double XC::FiberSectionBase::getAcEficazNeta(const double &hEfMax,const std::string &nmbSetArmaduras,const double &factor) const
+double XC::FiberSectionBase::getNetEffectiveConcreteArea(const double &hEfMax,const std::string &nmbSetArmaduras,const double &factor) const
   {
     double retval= 0.0;
-    std::list<Poligono2d> contourAcEficazBruta= getContourAcEficazBruta(hEfMax);
-    if(!contourAcEficazBruta.empty())
+    std::list<Poligono2d> grossEffectiveConcreteAreaContour= getGrossEffectiveConcreteAreaContour(hEfMax);
+    if(!grossEffectiveConcreteAreaContour.empty())
       {
-        fiber_set_const_iterator i= sets_fibras.find(nmbSetArmaduras);
-        if(i!=sets_fibras.end())
+        fiber_set_const_iterator i= fiber_sets.find(nmbSetArmaduras);
+        if(i!=fiber_sets.end())
           {
-            const DqFibras &armaduras= (*i).second; //Armaduras.
-            retval= armaduras.calcAcEficazFibras(contourAcEficazBruta,factor);
+            const FiberDeque &armaduras= (*i).second; //Armaduras.
+            retval= armaduras.computeFibersEffectiveConcreteArea(grossEffectiveConcreteAreaContour,factor);
           }
         else
           std::cerr << nombre_clase() << "::" << __FUNCTION__
@@ -443,18 +444,18 @@ double XC::FiberSectionBase::getAcEficazNeta(const double &hEfMax,const std::str
     return retval;
   }
 
-//! @brief Computes crack effcient areas around the fibers.
-double XC::FiberSectionBase::calcAcEficazFibras(const double &hEfMax,const std::string &nmbSetArmaduras,const double &factor) const
+//! @brief Computes crack effective concrete areas around the fibers.
+double XC::FiberSectionBase::computeFibersEffectiveConcreteArea(const double &hEfMax,const std::string &nmbSetArmaduras,const double &factor) const
   {
     double retval= 0;
-    std::list<Poligono2d> contourAcEficazBruta= getContourAcEficazBruta(hEfMax);
-    if(!contourAcEficazBruta.empty())
+    std::list<Poligono2d> grossEffectiveConcreteAreaContour= getGrossEffectiveConcreteAreaContour(hEfMax);
+    if(!grossEffectiveConcreteAreaContour.empty())
       {
-        fiber_set_const_iterator i= sets_fibras.find(nmbSetArmaduras);
-        if(i!=sets_fibras.end())
+        fiber_set_const_iterator i= fiber_sets.find(nmbSetArmaduras);
+        if(i!=fiber_sets.end())
           {
-            const DqFibras &armaduras= (*i).second; //Armaduras.
-            retval= armaduras.calcAcEficazFibras(contourAcEficazBruta,factor);
+            const FiberDeque &armaduras= (*i).second; //Armaduras.
+            retval= armaduras.computeFibersEffectiveConcreteArea(grossEffectiveConcreteAreaContour,factor);
           }
         else
           std::cerr << nombre_clase() << "::" << __FUNCTION__
@@ -470,10 +471,10 @@ double XC::FiberSectionBase::calcAcEficazFibras(const double &hEfMax,const std::
 //! @brief Computes concrete cover of the fibers.
 void XC::FiberSectionBase::calcRecubrimientos(const std::string &nmbSetArmaduras) const
   {
-    fiber_set_const_iterator i= sets_fibras.find(nmbSetArmaduras);
-    if(i!=sets_fibras.end())
+    fiber_set_const_iterator i= fiber_sets.find(nmbSetArmaduras);
+    if(i!=fiber_sets.end())
       {
-        const DqFibras &armaduras= (*i).second; //Armaduras.
+        const FiberDeque &armaduras= (*i).second; //Armaduras.
         const GeomSection *geom= getGeomSection();
         if(geom)
           armaduras.calcRecubrimientos(*geom);
@@ -487,10 +488,10 @@ void XC::FiberSectionBase::calcRecubrimientos(const std::string &nmbSetArmaduras
 //! @brief Computes spacing of the fibers.
 void XC::FiberSectionBase::calcSeparaciones(const std::string &nmbSetArmaduras) const
   {
-    fiber_set_const_iterator i= sets_fibras.find(nmbSetArmaduras);
-    if(i!=sets_fibras.end())
+    fiber_set_const_iterator i= fiber_sets.find(nmbSetArmaduras);
+    if(i!=fiber_sets.end())
       {
-        const DqFibras &armaduras= (*i).second; //Armaduras.
+        const FiberDeque &armaduras= (*i).second; //Armaduras.
         armaduras.calcSeparaciones();
       }
     else
@@ -528,7 +529,7 @@ double XC::FiberSectionBase::getStressResultant(const int &i) const
 //! @brief Commits state.
 int XC::FiberSectionBase::commitState(void)
   {
-    int err= fibras.commitState();
+    int err= fibers.commitState();
     eCommit= eTrial;
     return err;
   }
@@ -568,10 +569,10 @@ Pos3d XC::FiberSectionBase::getNMyMz(const DeformationPlane &def)
 //    +------->y
 //
 //! @brief Returns the points that define the interaction diagram
-//! of the section for an angle $\theta$ with respect to the z axis.
-void XC::FiberSectionBase::getInteractionDiagramPointsForTheta(NMyMzPointCloud &lista_esfuerzos,const InteractionDiagramData &diag_data,const DqFibras &fsC,const DqFibras &fsS,const double &theta)
+//! of the section for an angle \f$\theta\f$ with respect to the z axis.
+void XC::FiberSectionBase::getInteractionDiagramPointsForTheta(NMyMzPointCloud &lista_esfuerzos,const InteractionDiagramData &diag_data,const FiberDeque &fsC,const FiberDeque &fsS,const double &theta)
   {
-    ComputePivots cp(diag_data.getDefsAgotPivots(),fibras,fsC,fsS,theta);
+    ComputePivots cp(diag_data.getDefsAgotPivots(),fibers,fsC,fsS,theta);
     Pivots pivots(cp);
     if(pivots.Ok())
       {
@@ -628,18 +629,18 @@ void XC::FiberSectionBase::getInteractionDiagramPointsForTheta(NMyMzPointCloud &
   }
 
 //! @brief Returns the points that define the interaction diagram
-//! on the plane defined by the $\theta$ angle being passed as parameter.
+//! on the plane defined by the \f$\theta\f$ angle being passed as parameter.
 const XC::NMPointCloud &XC::FiberSectionBase::getInteractionDiagramPointsForPlane(const InteractionDiagramData &diag_data, const double &theta)
   {
     static NMPointCloud retval;
     retval.clear();
     retval.setUmbral(diag_data.getUmbral());
-    const DqFibras &fsC= sel_mat_tag(diag_data.getNmbSetHormigon(),diag_data.getTagHormigon())->second;
+    const FiberDeque &fsC= sel_mat_tag(diag_data.getNmbSetHormigon(),diag_data.getTagHormigon())->second;
     if(fsC.empty())
       std::cerr << "Fibers for concrete material, identified by tag: "
 		<< diag_data.getTagHormigon()
                 << ", not found." << std::endl;
-    const DqFibras &fsS= sel_mat_tag(diag_data.getNmbSetArmadura(),diag_data.getTagArmadura())->second;
+    const FiberDeque &fsS= sel_mat_tag(diag_data.getNmbSetArmadura(),diag_data.getTagArmadura())->second;
     if(fsS.empty())
       std::cerr << "Fibers for steel material, identified by tag: " << diag_data.getTagArmadura()
                 << ", not found." << std::endl;
@@ -664,12 +665,12 @@ const XC::NMyMzPointCloud &XC::FiberSectionBase::getInteractionDiagramPoints(con
     static NMyMzPointCloud lista_esfuerzos;
     lista_esfuerzos.clear();
     lista_esfuerzos.setUmbral(diag_data.getUmbral());
-    const DqFibras &fsC= sel_mat_tag(diag_data.getNmbSetHormigon(),diag_data.getTagHormigon())->second;
+    const FiberDeque &fsC= sel_mat_tag(diag_data.getNmbSetHormigon(),diag_data.getTagHormigon())->second;
     if(fsC.empty())
       std::cerr << "Fibers for concrete material, identified by tag: "
 		<< diag_data.getTagHormigon()
                 << ", not found." << std::endl;
-    const DqFibras &fsS= sel_mat_tag(diag_data.getNmbSetArmadura(),diag_data.getTagArmadura())->second;
+    const FiberDeque &fsS= sel_mat_tag(diag_data.getNmbSetArmadura(),diag_data.getTagArmadura())->second;
     if(fsS.empty())
       std::cerr << "Fibers for steel material, identified by tag: " << diag_data.getTagArmadura()
                 << ", not found." << std::endl;
@@ -728,7 +729,7 @@ XC::InteractionDiagram2d XC::FiberSectionBase::GetNMzInteractionDiagram(const In
 
 //! @brief Returns a vector from the centroid of tensions to the centroid of compressions.
 XC::Vector XC::FiberSectionBase::getVectorBrazoMecanico(void) const
-  { return fibras.getVectorBrazoMecanico(); }
+  { return fibers.getVectorBrazoMecanico(); }
 
 //! @brief Returns a vector oriented from the centroid of the area in tension
 //! to the most compressed fiber.
@@ -747,7 +748,7 @@ XC::Vector XC::FiberSectionBase::getVectorCantoUtil(void) const
 //! to the centroid of the compressed area.
 Segmento2d XC::FiberSectionBase::getSegmentoBrazoMecanico(void) const
   {
-    Segmento2d retval= fibras.getSegmentoBrazoMecanico();
+    Segmento2d retval= fibers.getSegmentoBrazoMecanico();
     if(!retval.exists())
       {
         //Calculamos el brazo mecánico como 0.8 veces
@@ -781,7 +782,7 @@ Segmento2d XC::FiberSectionBase::getSegmentoCantoUtil(void) const
 //! plane that contains the cross section.
 Recta2d XC::FiberSectionBase::getTrazaPlanoFlexion(void) const
   {
-    Recta2d retval= fibras.getTrazaPlanoFlexion();
+    Recta2d retval= fibers.getTrazaPlanoFlexion();
     if(!retval.exists())
       {
         Recta2d eje= getEjeEsfuerzos();
@@ -796,7 +797,7 @@ Recta2d XC::FiberSectionBase::getTrazaPlanoFlexion(void) const
 //! plane that contains the cross section.
 Recta2d XC::FiberSectionBase::getTrazaPlanoTraccion(void) const
   {
-    Recta2d retval= fibras.getTrazaPlanoTraccion();
+    Recta2d retval= fibers.getTrazaPlanoTraccion();
     if(!retval.exists())
       std::cerr << nombre_clase() << "::" << __FUNCTION__
 		<< "; intercept of the tension plane not found." << std::endl;
@@ -808,7 +809,7 @@ Recta2d XC::FiberSectionBase::getTrazaPlanoTraccion(void) const
 //! plane that contains the cross section.
 Recta2d XC::FiberSectionBase::getTrazaPlanoCompresion(void) const
   {
-    Recta2d retval= fibras.getTrazaPlanoCompresion();
+    Recta2d retval= fibers.getTrazaPlanoCompresion();
     if(!retval.exists())
       std::cerr << "Intercept of the compression plane not found." << std::endl;
     return retval;
@@ -848,7 +849,7 @@ double XC::FiberSectionBase::getRecubrimiento(const Pos2d &p) const
 
 //! @brief Returns the lever arm of the section.
 double XC::FiberSectionBase::getBrazoMecanico(void) const
-  { return fibras.getBrazoMecanico(); }
+  { return fibers.getBrazoMecanico(); }
 
 //! @brief Returns the effective depth of the section.
 double XC::FiberSectionBase::getCantoUtil(void) const
@@ -856,7 +857,7 @@ double XC::FiberSectionBase::getCantoUtil(void) const
 
 //! @brief Returns the section area.
 double XC::FiberSectionBase::getArea(void) const
-  { return fibras.getSumaAreas(); }
+  { return fibers.getSumaAreas(); }
 
 //! @brief Moment of inertia relative to bending axis.
 double XC::FiberSectionBase::getHomogenizedI(const double &E0) const
@@ -864,7 +865,7 @@ double XC::FiberSectionBase::getHomogenizedI(const double &E0) const
     if(fabs(E0)<1e-6)
       std::clog << "homogenization reference modulus too small; E0= " << E0 << std::endl; 
     const Recta2d eje= getEjeEsfuerzos();
-    return fibras.getIHomogenizedSection(E0,eje);
+    return fibers.getIHomogenizedSection(E0,eje);
   }
 
 //! @brief Static moment relative to bending axis of area that rests over this axis.
@@ -873,9 +874,9 @@ double XC::FiberSectionBase::getSPosHomogeneizada(const double &E0) const
     if(fabs(E0)<1e-6)
       std::clog << "homogenization reference modulus too small; E0= " << E0 << std::endl; 
     const Recta2d eje= getEjeEsfuerzos();
-    return fibras.getSPosHomogenizedSection(E0,Semiplano2d(eje));
+    return fibers.getSPosHomogenizedSection(E0,Semiplano2d(eje));
   }
 
 std::string XC::FiberSectionBase::getStrClaseEsfuerzo(const double &tol) const
-  { return fibras.getStrClaseEsfuerzo(); }
+  { return fibers.getStrClaseEsfuerzo(); }
 

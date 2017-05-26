@@ -24,10 +24,10 @@
 // along with this program.
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
-//DqFibras.h
+//FiberDeque.h
 
-#ifndef DqFibras_h
-#define DqFibras_h
+#ifndef FiberDeque_h
+#define FiberDeque_h
 
 #include "xc_utils/src/nucleo/EntCmd.h"
 #include "xc_utils/src/geom/GeomObj.h"
@@ -60,25 +60,25 @@ class DeformationPlane;
 enum ClaseEsfuerzo {TRACCION_SIMPLE,TRACCION_COMPUESTA,FLEXION_SIMPLE,FLEXION_COMPUESTA,COMPRESION_SIMPLE,COMPRESION_COMPUESTA,ERROR};
 
 
-//! \ingroup MATSCCFibras
+//! \ingroup MATSCCFibers
 //
-//! @brief Contenedor de fibras.
-class DqFibras : public EntCmd, public std::deque<Fiber *>
+//! @brief Fiber double ended queue.
+class FiberDeque : public EntCmd, public std::deque<Fiber *>
   {
   public:
-    typedef std::deque<Fiber *> dq_ptr_fibras;
+    typedef std::deque<Fiber *> fiber_ptrs_dq;
   protected:
 
     double yCDG; //!< Y coordinate of the centroid.
     double zCDG; //!< Z coordinate of the centroid.
 
-    mutable std::deque<std::list<Poligono2d> > dq_ac_eficaz; //!< (Where appropriate) effective areas for each fiber.
+    mutable std::deque<std::list<Poligono2d> > dq_ac_effective; //!< (Where appropriate) effective concrete areas for each fiber.
     mutable std::deque<double> recubs; //! Cover for each fiber.
     mutable std::deque<double> seps; //! Spacing for each fiber.
 
     Fiber *inserta(const Fiber &f);
     inline void resize(const size_t &nf)
-      { dq_ptr_fibras::resize(nf,nullptr); }
+      { fiber_ptrs_dq::resize(nf,nullptr); }
 
 
 
@@ -86,16 +86,16 @@ class DqFibras : public EntCmd, public std::deque<Fiber *>
     friend class FiberSectionBase;
     
   public:
-    DqFibras(const size_t &num= 0);
-    DqFibras(const DqFibras &otro);
-    DqFibras &operator=(const DqFibras &otro);
+    FiberDeque(const size_t &num= 0);
+    FiberDeque(const FiberDeque &otro);
+    FiberDeque &operator=(const FiberDeque &otro);
 
     void push_back(Fiber *f);
      inline size_t getNumFibers(void) const
       { return size(); }
 
-    const Fiber *buscaFibra(const int &tag) const;
-    Fiber *buscaFibra(const int &tag);
+    const Fiber *findFiber(const int &tag) const;
+    Fiber *findFiber(const int &tag);
 
     inline const double &getYCdg(void) const
       { return yCDG; }
@@ -117,7 +117,7 @@ class DqFibras : public EntCmd, public std::deque<Fiber *>
     double getExcentricidadMy(const double &z0= 0.0) const;
     Vector2d getMomentVector(const double &y0=0.0,const double &z0=0.0) const;
     Pos2d getPosResultante(const double &y0=0.0,const double &z0=0.0) const;
-    Recta2d getFibraNeutra(void) const;
+    Recta2d getNeutralAxis(void) const;
 
     double ResultanteComp(void) const;
     double getMzComp(const double &y0= 0.0) const;
@@ -153,17 +153,17 @@ class DqFibras : public EntCmd, public std::deque<Fiber *>
     Recta2d getTrazaPlanoFlexion(void) const;
     Recta2d getTrazaPlanoTraccion(void) const;
     Recta2d getTrazaPlanoCompresion(void) const;
-    double calcAcEficazFibras(const std::list<Poligono2d> &,const double &factor= 15) const;
-    const std::list<Poligono2d> &getContourAcEficazFibra(const size_t &i) const;
-    double getAcEficazFibra(const size_t &i) const;
-    double getAcEficazFibras(void) const;
+    double computeFibersEffectiveConcreteArea(const std::list<Poligono2d> &,const double &factor= 15) const;
+    const std::list<Poligono2d> &getFiberEffectiveConcretAreaContour(const size_t &i) const;
+    double getFiberEffectiveConcreteArea(const size_t &i) const;
+    double getFibersEffectiveConcreteArea(void) const;
     void calcRecubrimientos(const GeomSection &) const;
     void calcSeparaciones(void) const;
-    const double &getRecubrimientoFibra(const size_t &i) const;
-    const double &getSeparacionFibra(const size_t &i) const;
-    double getDiamEqFibra(const size_t &i) const;
-    double getSigmaSRFibra(const size_t &,const double &,const double &,const double &) const;
-    double getDistMediaFibras(void) const;
+    const double &getFiberCover(const size_t &i) const;
+    const double &getFiberSpacing(const size_t &i) const;
+    double getEquivalentDiameterOfFiber(const size_t &i) const;
+    double getSigmaSRAtFiber(const size_t &,const double &,const double &,const double &) const;
+    double getAverageDistanceBetweenFibers(void) const;
     int updateCDG(void);
     
     int updateKRCDG(FiberSection2d &,CrossSectionKR &);
@@ -194,13 +194,13 @@ class DqFibras : public EntCmd, public std::deque<Fiber *>
 
     Response *setResponse(const std::vector<std::string> &argv, Information &sectInfo);
 
-    //void Cumplen(const std::string &cond,DqFibras &,bool clear= true);
-    void SelMatTag(const int &matTag,DqFibras &,bool clear= true);
+    //void Cumplen(const std::string &cond,FiberDeque &,bool clear= true);
+    void SelMatTag(const int &matTag,FiberDeque &,bool clear= true);
 
     //size_t IMaxProp(const std::string &nmb_prop) const;
     //size_t IMinProp(const std::string &nmb_prop) const;
-    size_t getFibraCooMax(const Ref3d3d &r,const size_t &iCoo) const;
-    size_t getFibraCooMin(const Ref3d3d &r,const size_t &iCoo) const;
+    size_t getFiberWithMaxCoord(const Ref3d3d &r,const size_t &iCoo) const;
+    size_t getFiberWithMinCoord(const Ref3d3d &r,const size_t &iCoo) const;
 
     int setParameter(const int &,const std::vector<std::string> &, Parameter &);
     int updateParameter(const int &,int parameterID, Information &info);

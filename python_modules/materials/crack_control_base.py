@@ -17,9 +17,9 @@ class CrackControlBaseParameters(lsc.LimitStateControllerBase):
   Basic parameters for crack control.'''
   def __init__(self,limitStateLabel):
     super(CrackControlBaseParameters,self).__init__(limitStateLabel)
-    self.setNameFibrasHormigon= "hormigon" #Nombre del conjunto de fibras de hormigón.
-    self.setNameFibrasArmadura= "reinforcement" #Nombre del conjunto de fibras de reinforcement.
-    self.setNameFibrasArmaduraTraccion= "reinforcementTraccion" #Nombre del conjunto de fibras de reinforcement sometida a tracción.
+    self.concreteFibersSetName= "hormigon" #Name of the concrete fibers set.
+    self.rebarFibersSetName= "reinforcement" #Name of the rebar fibers set.
+    self.tensionedRebarsFiberSetName= "reinforcementTraccion" #Name of the tensiones rebar fibers set.
     self.claseEsfuerzo= "" #Clase de esfuerzo al que está sometida la sección.
     self.rcSets= None
     self.numBarrasTracc= 0.0 #Número de barras sometidas a tracción.

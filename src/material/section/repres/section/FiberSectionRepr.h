@@ -59,7 +59,7 @@
 #define FiberSectionRepr_h 
 
 #include <material/section/repres/section/SectionRepres.h>
-#include <material/section/repres/section/contenedor_fibras.h>
+#include <material/section/repres/section/fiber_list.h>
 #include "utility/matrix/Vector.h"
 #include "utility/matrix/Matrix.h"
 #include <list>
@@ -79,11 +79,11 @@ class FiberSectionRepr: public SectionRepres
   {
   private:
     int sectID;
-    contenedor_fibras fibras; //!< Pointer to isolated fibers.
+    fiber_list fibers; //!< Pointer to isolated fibers.
 
   protected:
-    void vacia_fibras(void);
-    void copia_fibras(const FiberSectionRepr &otro);
+    void clear_fibers(void);
+    void copy_fibers(const FiberSectionRepr &otro);
   public:
     // constructor and destructor
     FiberSectionRepr(int sectionID,MaterialLoader *ml);
@@ -100,9 +100,9 @@ class FiberSectionRepr: public SectionRepres
       
     int getNumFibers(void) const;   
     FiberData getFiberData(void) const;
-    contenedor_fibras getFibras2d(void) const;
+    fiber_list get2DFibers(void) const;
     FiberSection2d getFiberSection2d(int secTag) const;
-    contenedor_fibras getFibras3d(void) const;
+    fiber_list get3DFibers(void) const;
     FiberSection3d getFiberSection3d(int secTag) const;
     FiberSectionGJ getFiberSectionGJ(int secTag,const double &GJ) const;
     

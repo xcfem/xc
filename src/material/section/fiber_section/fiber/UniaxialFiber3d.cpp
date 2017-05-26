@@ -102,7 +102,7 @@ XC::UniaxialFiber3d::UniaxialFiber3d(int tag,const MaterialLoader &ldr,const std
   : UniaxialFiber(tag, classTag,ldr,nmbMat,Area)
   { set_position(position); }
 
-//! @brief Asigna la trial strain para la fibra.
+//! @brief Sets the fiber trian strain.
 int XC::UniaxialFiber3d::setTrialFiberStrain(const Vector &vs)
   {
     //Sign of Y coordinate is changed.
@@ -111,12 +111,13 @@ int XC::UniaxialFiber3d::setTrialFiberStrain(const Vector &vs)
       return theMaterial->setTrialStrain(strain);
     else
       {
-        std::cerr << "UniaxialFiber3d::setTrialFiberStrain() - no material!\n";
+        std::cerr << nombre_clase() << "::" << __FUNCTION__
+	          << "; no material!\n";
         return -1; // in case fatal does not exit
       }
   }
 
-//! @brief Returns the resultante de tensiones de la fibra. 
+//! @brief Returns the stress resultant of the fiber. 
 XC::Vector &XC::UniaxialFiber3d::getFiberStressResultants(void)
   {
     if(isAlive())

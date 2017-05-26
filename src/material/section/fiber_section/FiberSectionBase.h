@@ -30,7 +30,7 @@
 #define FiberSectionBase_h
 
 #include <material/section/PrismaticBarCrossSection.h>
-#include "material/section/fiber_section/fiber/StoFibras.h"
+#include "material/section/fiber_section/fiber/FiberContainer.h"
 #include "material/section/fiber_section/fiber/FiberSets.h"
 #include "xc_utils/src/geom/GeomObj.h"
 #include <material/section/CrossSectionKR.h>
@@ -49,9 +49,9 @@ class NMyMzPointCloud;
 
 //! @ingroup MATSCC
 //
-//! @defgroup MATSCCModeloFibras Fiber model for cross-sections.
+//! @defgroup MATSCCFiberModel Fiber model for cross-sections.
 //
-//! @ingroup MATSCCModeloFibras
+//! @ingroup MATSCCFiberModel
 //
 //! @brief Base class for fiber sections.
 class FiberSectionBase: public PrismaticBarCrossSection
@@ -65,22 +65,22 @@ class FiberSectionBase: public PrismaticBarCrossSection
     Vector eCommit; //!< committed section deformations 
   protected:
     CrossSectionKR kr; //!< Stiffness and internal forces resultant on the section.
-    StoFibras fibras; //!< Pointers to fibers container.
-    int tag_fibra; //!< Tag for next fiber.
-    FiberSets sets_fibras;//!< Fibers sets.
-    friend class DqFibras;
-    friend class StoFibras;
+    FiberContainer fibers; //!< Pointers to fibers container.
+    int fiberTag; //!< Tag for next fiber.
+    FiberSets fiber_sets;//!< Fibers sets.
+    friend class FiberDeque;
+    friend class FiberContainer;
     FiberSectionRepr *section_repres; //! Section representation.
 
     void setup_repres(void);
-    inline void alloc_fibers(int numFibras,const Fiber *muestra= nullptr)
-      { fibras.allocFibers(numFibras,muestra); }
+    inline void alloc_fibers(int numOfFibers,const Fiber *muestra= nullptr)
+      { fibers.allocFibers(numOfFibers,muestra); }
     void create_fiber_set(const std::string &nombre);
     fiber_set_iterator get_fiber_set(const std::string &nmb_set);
     virtual double get_dist_to_neutral_axis(const double &,const double &) const;
     Pos3d Esf2Pos3d(void) const;
     Pos3d getNMyMz(const DeformationPlane &);
-    void getInteractionDiagramPointsForTheta(NMyMzPointCloud &lista_esfuerzos,const InteractionDiagramData &,const DqFibras &,const DqFibras &,const double &);
+    void getInteractionDiagramPointsForTheta(NMyMzPointCloud &lista_esfuerzos,const InteractionDiagramData &,const FiberDeque &,const FiberDeque &,const double &);
     const NMyMzPointCloud &getInteractionDiagramPoints(const InteractionDiagramData &);
     const NMPointCloud &getInteractionDiagramPointsForPlane(const InteractionDiagramData &, const double &);
   public:
@@ -93,9 +93,9 @@ class FiberSectionBase: public PrismaticBarCrossSection
 
     virtual void setupFibers(void) = 0;
     inline size_t getNumFibers(void) const
-      { return fibras.getNumFibers(); }
-    inline StoFibras &getFibers(void)
-      { return fibras; }
+      { return fibers.getNumFibers(); }
+    inline FiberContainer &getFibers(void)
+      { return fibers; }
     virtual Fiber *addFiber(Fiber &)= 0;
     virtual Fiber *addFiber(int tag,const MaterialLoader &,const std::string &nmbMat,const double &, const Vector &position)= 0;
     Fiber *addFiber(const std::string &nmbMat,const double &area,const Vector &coo);
@@ -117,7 +117,7 @@ class FiberSectionBase: public PrismaticBarCrossSection
     double getTensionedZoneLeverArm(void) const;
     double getLeverArm(void) const;
     double getNeutralAxisDepth(void) const;
-    double getDistFibraNeutra(const double &y,const double &z) const;
+    double getNeutralAxisDist(const double &y,const double &z) const;
     Vector getVectorBrazoMecanico(void) const;
     Vector getVectorCantoUtil(void) const;
     Segmento2d getSegmentoBrazoMecanico(void) const;
@@ -130,11 +130,11 @@ class FiberSectionBase: public PrismaticBarCrossSection
     double getAnchoMecanico(void) const;
     double getCompressedStrutWidth(void) const;
     double getRecubrimiento(const Pos2d &) const;
-    Recta2d getRectaLimiteAcEficaz(const double &) const;
-    double getAcEficazBruta(const double &) const;
-    double getAcEficazNeta(const double &,const std::string &,const double &factor= 15) const;
-    double calcAcEficazFibras(const double &hEfMax,const std::string &,const double &factor= 15) const;
-    std::list<Poligono2d> getContourAcEficazBruta(const double &) const;
+    Recta2d getEffectiveConcreteAreaLimitLine(const double &) const;
+    double getGrossEffectiveConcreteArea(const double &) const;
+    double getNetEffectiveConcreteArea(const double &,const std::string &,const double &factor= 15) const;
+    double computeFibersEffectiveConcreteArea(const double &hEfMax,const std::string &,const double &factor= 15) const;
+    std::list<Poligono2d> getGrossEffectiveConcreteAreaContour(const double &) const;
     void calcRecubrimientos(const std::string &) const;
     void calcSeparaciones(const std::string &) const;
     int updateCDG(void);
@@ -152,13 +152,13 @@ class FiberSectionBase: public PrismaticBarCrossSection
     std::string getStrClaseEsfuerzo(const double &tol= 1e-4) const;
     
     inline FiberSets &getFiberSets(void)
-      { return sets_fibras; }
+      { return fiber_sets; }
     //fiber_set_iterator sel(const std::string &nmb_set,const std::string &cond);
     fiber_set_iterator sel_mat_tag(const std::string &nmb_set,const int &matTag);
     //fiber_set_iterator resel(const std::string &nmb_set,const std::string &nmb_set_org,const std::string &cond);
     fiber_set_iterator resel_mat_tag(const std::string &nmb_set,const std::string &nmb_set_org,const int &matTag);
     inline virtual double getCdgY(void) const
-      { return fibras.getYCdg(); }
+      { return fibers.getYCdg(); }
     double getArea(void) const;
 
     InteractionDiagram GetInteractionDiagram(const InteractionDiagramData &);

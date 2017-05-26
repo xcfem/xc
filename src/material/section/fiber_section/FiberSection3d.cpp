@@ -68,14 +68,14 @@
 #include "material/section/ResponseId.h"
 #include "xc_utils/src/geom/d2/poligonos2d/Poligono2d.h"
 
-//! @brief Constructor (se usa en FiberSectionShear3d).
+//! @brief Constructor (it's used in FiberSectionShear3d).
 XC::FiberSection3d::FiberSection3d(int tag,int classTag,MaterialLoader *mat_ldr)
   : FiberSection3dBase(tag, classTag,3,mat_ldr) {}
 
 //! @brief Constructor.
-XC::FiberSection3d::FiberSection3d(int tag,const contenedor_fibras &fibers,XC::MaterialLoader *mat_ldr):
-  FiberSection3dBase(tag, SEC_TAG_FiberSection3d, 3,fibers,mat_ldr)
-  {fibras.setup(*this,fibers,kr);}
+XC::FiberSection3d::FiberSection3d(int tag,const fiber_list &fiberList,XC::MaterialLoader *mat_ldr):
+  FiberSection3dBase(tag, SEC_TAG_FiberSection3d, 3,fiberList,mat_ldr)
+  {fibers.setup(*this,fiberList,kr);}
 
 //! @brief Constructor.
 XC::FiberSection3d::FiberSection3d(int tag,MaterialLoader *mat_ldr)
@@ -88,33 +88,33 @@ XC::FiberSection3d::FiberSection3d(XC::MaterialLoader *mat_ldr)
 void XC::FiberSection3d::setupFibers(void)
   {
     if(section_repres)
-      fibras.setup(*this,section_repres->getFibras3d(),kr);
+      fibers.setup(*this,section_repres->get3DFibers(),kr);
     else
-      fibras.updateKRCDG(*this,kr);
+      fibers.updateKRCDG(*this,kr);
   }
 
 //! @brief Adds a fiber to the section.
 XC::Fiber *XC::FiberSection3d::addFiber(Fiber &newFiber)
-  { return fibras.addFiber(*this,newFiber,kr); }
+  { return fibers.addFiber(*this,newFiber,kr); }
 
 
 //! @brief Sets values for initial generalized strains.
 int XC::FiberSection3d::setInitialSectionDeformation(const Vector &deforms)
   {
     FiberSectionBase::setInitialSectionDeformation(deforms);
-    return fibras.setInitialSectionDeformation(*this);
+    return fibers.setInitialSectionDeformation(*this);
   }
 
 //! @brief Establece los valores de las trial strains.
 int XC::FiberSection3d::setTrialSectionDeformation(const Vector &deforms)
   {
     FiberSection3dBase::setTrialSectionDeformation(deforms);
-    return fibras.setTrialSectionDeformation(*this,kr);
+    return fibers.setTrialSectionDeformation(*this,kr);
   }
 
 //! @brief Return the tangent stiffness matrix inicial.
 const XC::Matrix &XC::FiberSection3d::getInitialTangent(void) const
-  { return fibras.getInitialTangent(*this); }
+  { return fibers.getInitialTangent(*this); }
 
 //! @brief Virtual constructor.
 XC::SectionForceDeformation *XC::FiberSection3d::getCopy(void) const
@@ -131,12 +131,12 @@ int XC::FiberSection3d::getOrder(void) const
 int XC::FiberSection3d::revertToLastCommit(void)
   {
     FiberSection3dBase::revertToLastCommit();
-    return fibras.revertToLastCommit(*this,kr);
+    return fibers.revertToLastCommit(*this,kr);
   }
 
 //! @brief Returns to the initial state.
 int XC::FiberSection3d::revertToStart(void)
-  { return fibras.revertToStart(*this,kr); }
+  { return fibers.revertToStart(*this,kr); }
 
 int XC::FiberSection3d::sendSelf(CommParameters &cp)
   {
@@ -155,14 +155,14 @@ int XC::FiberSection3d::recvSelf(const CommParameters &cp)
 void XC::FiberSection3d::Print(std::ostream &s, int flag)
   {
     if(flag == 2)
-      fibras.Print(s,flag);
+      fibers.Print(s,flag);
     else
       {
         s << "\nFiberSection3d, tag: " << getTag() << std::endl;
         s << "\tSection code: " << getType();
 
         if(flag == 1)
-          fibras.Print(s,flag);
+          fibers.Print(s,flag);
       }
   }
 

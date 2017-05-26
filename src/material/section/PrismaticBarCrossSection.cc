@@ -212,8 +212,8 @@ bool XC::PrismaticBarCrossSection::hayTorsor(const double &tol) const
   }
 
 //! @brief Returns the neutral axis.
-Recta2d XC::PrismaticBarCrossSection::getFibraNeutra(void) const
-  { return getDeformationPlane().getFibraNeutra(); }
+Recta2d XC::PrismaticBarCrossSection::getNeutralAxis(void) const
+  { return getDeformationPlane().getNeutralAxis(); }
 
 //! @brief Returns the axis that is aligned with the
 //! cross-section internal forces.

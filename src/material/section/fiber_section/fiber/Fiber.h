@@ -79,11 +79,11 @@ class UniaxialMaterial;
 class Information;
 class Response;
 
-//! @ingroup MATSCCModeloFibras
+//! @ingroup MATSCCFiberModel
 //
-//! @defgroup MATSCCFibras Classes for fiber section representation.
+//! @defgroup MATSCCFibers Classes for fiber section representation.
 //
-//! @ingroup MATSCCFibras
+//! @ingroup MATSCCFibers
 //
 //! @brief Section fiber.
 class Fiber: public TaggedObject, public MovableObject

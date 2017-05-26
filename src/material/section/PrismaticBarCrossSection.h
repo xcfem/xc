@@ -68,7 +68,7 @@ class PrismaticBarCrossSection: public SectionForceDeformation
     virtual double getCdgY(void) const;
     virtual double getCdgZ(void) const;
     Pos2d getCdg(void) const;
-    Recta2d getFibraNeutra(void) const;
+    Recta2d getNeutralAxis(void) const;
     Recta2d getEjeEsfuerzos(void) const;
     Pos2d getPointOnTensionedHalfPlane(void) const;
     Pos2d getPointOnCompressedHalfPlane(void) const;

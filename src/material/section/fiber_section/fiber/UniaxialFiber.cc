@@ -124,7 +124,7 @@ XC::UniaxialFiber &XC::UniaxialFiber::operator=(const UniaxialFiber &otra)
 XC::UniaxialFiber::~UniaxialFiber(void)
   { libera(); }
 
-//! @brief Asigna a la fibra el material being passed as parameter.
+//! @brief Set the fiber material.
 void XC::UniaxialFiber::setMaterial(const UniaxialMaterial *theMat)
   {
     if(theMat)
@@ -133,7 +133,7 @@ void XC::UniaxialFiber::setMaterial(const UniaxialMaterial *theMat)
       libera();
   }
 
-//! @brief Asigna a la fibra el material cuyo nombre being passed as parameter.
+//! @brief Sets the fiber material (identified by name).
 void XC::UniaxialFiber::setMaterial(const MaterialLoader &ldr,const std::string &nmbMat)
   {
     const UniaxialMaterial *theMat= dynamic_cast<const UniaxialMaterial *>(ldr.find_ptr(nmbMat));

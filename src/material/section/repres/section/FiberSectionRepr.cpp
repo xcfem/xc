@@ -65,16 +65,16 @@
 
 #include "xc_utils/src/geom/d2/poligonos2d/Poligono2d.h"
 
-void XC::FiberSectionRepr::vacia_fibras(void)
+void XC::FiberSectionRepr::clear_fibers(void)
   {
-    fibras.erase(fibras.begin(),fibras.end());// NOTE: don't delete fiber objects themselves
+    fibers.erase(fibers.begin(),fibers.end());// NOTE: don't delete fiber objects themselves
                                               // leave this to FiberSection destructor
   }
 
-void XC::FiberSectionRepr::copia_fibras(const FiberSectionRepr &otro)
+void XC::FiberSectionRepr::copy_fibers(const FiberSectionRepr &otro)
   {
-    vacia_fibras();
-    for(contenedor_fibras::const_iterator i= otro.fibras.begin();i!=otro.fibras.end();i++)
+    clear_fibers();
+    for(fiber_list::const_iterator i= otro.fibers.begin();i!=otro.fibers.end();i++)
       addFiber(*(*i)->getCopy());
   }
 
@@ -85,14 +85,14 @@ XC::FiberSectionRepr::FiberSectionRepr(int sectionID,MaterialLoader *ml)
 //! @brief Copy constructor.
 XC::FiberSectionRepr::FiberSectionRepr(const FiberSectionRepr &otro)
   :SectionRepres(otro), sectID(otro.sectID)
-  { copia_fibras(otro); }
+  { copy_fibers(otro); }
 
 //! @brief Assignment operator.
 XC::FiberSectionRepr &XC::FiberSectionRepr::operator=(const FiberSectionRepr &otro)
   {
     SectionRepres::operator=(otro);
     sectID= otro.sectID;
-    copia_fibras(otro);
+    copy_fibers(otro);
     return *this;
   }
 
@@ -101,7 +101,7 @@ XC::FiberSectionRepr *XC::FiberSectionRepr::getCopy(void) const
 
 
 XC::FiberSectionRepr::~FiberSectionRepr(void)
-  { vacia_fibras(); }
+  { clear_fibers(); }
 
 
 #define SEC_TAG_FiberSectionRepr 1
@@ -126,13 +126,13 @@ std::ostream &XC::operator<<(std::ostream &s, XC::FiberSectionRepr &fiberSection
 
 int XC::FiberSectionRepr::addFiber(Fiber &newFiber)
   {
-    fibras.push_back(&newFiber);
+    fibers.push_back(&newFiber);
     return 0;
   }
 
 //! @brief Returns the number of fibers of hte section.
 int XC::FiberSectionRepr::getNumFibers(void) const
-  { return fibras.size(); }
+  { return fibers.size(); }
 
 //! @brief Returns cells and rebars fiber data.
 XC::FiberData XC::FiberSectionRepr::getFiberData(void) const
@@ -141,44 +141,48 @@ XC::FiberData XC::FiberSectionRepr::getFiberData(void) const
     return FiberData(*gmSecc);
   }
 
-XC::contenedor_fibras XC::FiberSectionRepr::getFibras2d(void) const
+//! @brief Returns a fiber container populated with UniaxialFiber2d objects.
+XC::fiber_list XC::FiberSectionRepr::get2DFibers(void) const
   {
-    contenedor_fibras retval;
+    fiber_list retval;
     if(!material_loader)
       {
-        std::cerr << "XC::FiberSectionRepr::getFibras2d; material handler not defined.\n";
+        std::cerr << nombre_clase() << "::" << __FUNCTION__
+		  << "; material handler not defined.\n";
         return retval;
       }
-    for(contenedor_fibras::const_iterator i= fibras.begin();i!=fibras.end();i++)
+    for(fiber_list::const_iterator i= fibers.begin();i!=fibers.end();i++)
       retval.push_back(*i);
 
     FiberData fiberData= getFiberData();
-    fiberData.getFibras2d(retval);
+    fiberData.get2DFibers(retval);
     return retval;
   }
 
-XC::contenedor_fibras XC::FiberSectionRepr::getFibras3d(void) const
+//! @brief Returns a fiber container populated with UniaxialFiber3d objects.
+XC::fiber_list XC::FiberSectionRepr::get3DFibers(void) const
   {
-    contenedor_fibras retval;
+    fiber_list retval;
     if(!material_loader)
       {
-        std::cerr << "XC::FiberSectionRepr::getFibras2d; material handler not defined.\n";
+        std::cerr << nombre_clase() << "::" << __FUNCTION__
+	          << "; material handler not defined.\n";
         return retval;
       }
-    for(contenedor_fibras::const_iterator i= fibras.begin();i!=fibras.end();i++)
+    for(fiber_list::const_iterator i= fibers.begin();i!=fibers.end();i++)
       retval.push_back(*i);
 
     FiberData fiberData= getFiberData();
-    fiberData.getFibras3d(retval);
+    fiberData.get3DFibers(retval);
     return retval;
   }
 
 XC::FiberSection2d XC::FiberSectionRepr::getFiberSection2d(int secTag) const
-  { return FiberSection2d(secTag,fibras,material_loader); }
+  { return FiberSection2d(secTag,fibers,material_loader); }
 
 XC::FiberSection3d XC::FiberSectionRepr::getFiberSection3d(int secTag) const
-  { return FiberSection3d(secTag,fibras,material_loader); }
+  { return FiberSection3d(secTag,fibers,material_loader); }
 
 XC::FiberSectionGJ XC::FiberSectionRepr::getFiberSectionGJ(int secTag,const double &GJ) const
-  { return FiberSectionGJ(secTag,fibras,GJ,material_loader); }
+  { return FiberSectionGJ(secTag,fibers,GJ,material_loader); }
 

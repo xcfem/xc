@@ -19,7 +19,7 @@ class CrackControlSIA262(cc.CrackControlBaseParameters):
     tagHormigon= section.concrType.matTagK
     reinfMatTag= section.reinfSteelType.matTagK
     if(not scc.hasProp("rcSets")):
-      scc.setProp("rcSets", createFiberSets.fiberSectionSetupRC3Sets(scc,tagHormigon,self.setNameFibrasHormigon,reinfMatTag,self.setNameFibrasArmadura))
+      scc.setProp("rcSets", createFiberSets.fiberSectionSetupRC3Sets(scc,tagHormigon,self.concreteFibersSetName,reinfMatTag,self.rebarFibersSetName))
     rcSets= scc.getProp("rcSets")
     concrFibers= rcSets.concrFibers.fSet
     reinfFibers= rcSets.reinfFibers.fSet
@@ -28,11 +28,11 @@ class CrackControlSIA262(cc.CrackControlBaseParameters):
     self.claseEsfuerzo= scc.getStrClaseEsfuerzo(0.0)
     self.numBarrasTracc= rcSets.getNumTensionRebars()
     if(self.numBarrasTracc>0):
-      scc.calcRecubrimientos(self.setNameFibrasArmaduraTraccion)
-      scc.calcSeparaciones(self.setNameFibrasArmaduraTraccion)
+      scc.calcRecubrimientos(self.tensionedRebarsFiberSetName)
+      scc.calcSeparaciones(self.tensionedRebarsFiberSetName)
       self.eps1= concrFibers.getStrainMax()
       self.eps2= max(concrFibers.getStrainMin(),0.0)
-      self.rebarsSpacingTracc= reinforcementTraccion.getDistMediaFibras()
+      self.rebarsSpacingTracc= reinforcementTraccion.getAverageDistanceBetweenFibers()
       self.areaRebarTracc= reinforcementTraccion.getArea(1)
       self.yCDGBarrasTracc= reinforcementTraccion.getCdgY()
       self.zCDGBarrasTracc= reinforcementTraccion.getCdgZ()

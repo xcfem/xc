@@ -70,10 +70,10 @@
 #include "xc_utils/src/geom/d2/poligonos2d/Poligono2d.h"
 
 // constructors:
-XC::FiberSection2d::FiberSection2d(int tag,const contenedor_fibras &fibers,XC::MaterialLoader *mat_ldr)
+XC::FiberSection2d::FiberSection2d(int tag,const fiber_list &fiberList,XC::MaterialLoader *mat_ldr)
   : FiberSectionBase(tag, SEC_TAG_FiberSection2d,fibers.size(),mat_ldr)
   {
-    fibras.setup(*this,fibers,kr);
+    fibers.setup(*this,fiberList,kr);
 // AddingSensitivity:BEGIN ////////////////////////////////////
     parameterID= 0;
 // AddingSensitivity:END //////////////////////////////////////
@@ -99,12 +99,12 @@ XC::FiberSection2d::FiberSection2d(XC::MaterialLoader *mat_ldr)
 
 //! @brief Adds a fiber to the section.
 XC::Fiber *XC::FiberSection2d::addFiber(Fiber &newFiber)
-  { return fibras.addFiber(*this,newFiber,kr); }
+  { return fibers.addFiber(*this,newFiber,kr); }
 
 //! @brief Adds a fiber to the section.
 XC::Fiber *XC::FiberSection2d::addFiber(int tag,const MaterialLoader &ldr,const std::string &nmbMat,const double &Area, const Vector &position)
   {
-    Fiber *retval= fibras.buscaFibra(tag);
+    Fiber *retval= fibers.findFiber(tag);
     if(retval)
       std::cerr << "(FiberSection2d::addFiber; fiber with tag: " << tag << " already exists." << std::endl;
     else
@@ -120,9 +120,9 @@ XC::Fiber *XC::FiberSection2d::addFiber(int tag,const MaterialLoader &ldr,const 
 void XC::FiberSection2d::setupFibers(void)
   {
     if(section_repres)
-      fibras.setup(*this,section_repres->getFibras2d(),kr);
+      fibers.setup(*this,section_repres->get2DFibers(),kr);
     else
-      fibras.updateKRCDG(*this,kr);
+      fibers.updateKRCDG(*this,kr);
   }
 
 double XC::FiberSection2d::get_strain(const double &y) const
@@ -143,19 +143,19 @@ double XC::FiberSection2d::getStrain(const double &y,const double &) const
 int XC::FiberSection2d::setInitialSectionDeformation(const Vector &deforms)
   {
     FiberSectionBase::setInitialSectionDeformation(deforms);
-    return fibras.setInitialSectionDeformation(*this);
+    return fibers.setInitialSectionDeformation(*this);
   }
 
 //! @brief Sets values for trial strains.
 int XC::FiberSection2d::setTrialSectionDeformation(const Vector &deforms)
   {
     FiberSectionBase::setTrialSectionDeformation(deforms);
-    return fibras.setTrialSectionDeformation(*this,kr);
+    return fibers.setTrialSectionDeformation(*this,kr);
   }
 
 //! @brief Return the initial tangent stiffness matrix.
 const XC::Matrix &XC::FiberSection2d::getInitialTangent(void) const
-  { return fibras.getInitialTangent(*this); }
+  { return fibers.getInitialTangent(*this); }
 
 XC::SectionForceDeformation *XC::FiberSection2d::getCopy(void) const
   { return new FiberSection2d(*this); }
@@ -171,14 +171,14 @@ int XC::FiberSection2d::revertToLastCommit(void)
   {
     // Last committed section deformations
     FiberSectionBase::revertToLastCommit();
-    return fibras.revertToLastCommit(*this,kr);
+    return fibers.revertToLastCommit(*this,kr);
   }
 
 //! @brief Returns the section to its initial state.
 int XC::FiberSection2d::revertToStart(void)
   {
     FiberSectionBase::revertToStart();
-    return fibras.revertToStart(*this,kr);
+    return fibers.revertToStart(*this,kr);
   }
 
 int XC::FiberSection2d::sendSelf(CommParameters &cp)
@@ -200,7 +200,7 @@ void XC::FiberSection2d::Print(std::ostream &s, int flag)
     s << "\nFiberSection2d, tag: " << this->getTag() << std::endl;
     s << "\tSection code: " << getType();
     if(flag == 1)
-      fibras.Print(s,flag);
+      fibers.Print(s,flag);
   }
 
 int XC::FiberSection2d::getResponse(int responseID, Information &sectInfo)
@@ -225,7 +225,7 @@ int XC::FiberSection2d::setParameter(const std::vector<std::string> &argv, Param
         int materialTag= atoi(argv[1]);
         std::vector<std::string> argv2(argv);
         argv2.erase(argv2.begin(),argv2.begin()+2);
-        parameterID= fibras.setParameter(materialTag,argv2, param);
+        parameterID= fibers.setParameter(materialTag,argv2, param);
         // Check that the parameterID is valid
         if(parameterID < 0)
           {
@@ -253,7 +253,7 @@ int XC::FiberSection2d::updateParameter (int parameterID, Information &info)
         int materialTag= (int)( floor((double)parameterID) / (1000) );
         parameterID= parameterID - materialTag*1000;
 
-        int ok= fibras.updateParameter(materialTag,parameterID,info);
+        int ok= fibers.updateParameter(materialTag,parameterID,info);
         if(ok < 0)
           {
             std::cerr << "XC::FiberSection2d::updateParameter() - could not update parameter. " << std::endl;
@@ -275,7 +275,7 @@ int XC::FiberSection2d::activateParameter(int passedParameterID)
     // section level contains all information about section
     // and material tag number:
     parameterID= passedParameterID;
-    return fibras.activateParameter(passedParameterID);
+    return fibers.activateParameter(passedParameterID);
   }
 
 const XC::Vector &XC::FiberSection2d::getSectionDeformationSensitivity(int gradNumber)
@@ -285,7 +285,7 @@ const XC::Vector &XC::FiberSection2d::getSectionDeformationSensitivity(int gradN
   }
 
 const XC::Vector &XC::FiberSection2d::getStressResultantSensitivity(int gradNumber, bool conditional)
-  { return fibras.getStressResultantSensitivity(gradNumber,conditional); }
+  { return fibers.getStressResultantSensitivity(gradNumber,conditional); }
 
 const XC::Matrix &XC::FiberSection2d::getSectionTangentSensitivity(int gradNumber)
   {
@@ -296,7 +296,7 @@ const XC::Matrix &XC::FiberSection2d::getSectionTangentSensitivity(int gradNumbe
 
 int XC::FiberSection2d::commitSensitivity(const XC::Vector& defSens, int gradNumber, int numGrads)
   {
-    fibras.commitSensitivity(defSens,gradNumber,numGrads);
+    fibers.commitSensitivity(defSens,gradNumber,numGrads);
     return 0;
   }
 

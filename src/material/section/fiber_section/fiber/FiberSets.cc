@@ -31,14 +31,14 @@
 
 //! @brief Constructor.
 XC::FiberSets::FiberSets(void)
-  : std::map<std::string,DqFibras>()
+  : std::map<std::string,FiberDeque>()
   {}
 
 //! @brief Creates a new fiber set.
-XC::DqFibras &XC::FiberSets::create_fiber_set(const std::string &nmb)
+XC::FiberDeque &XC::FiberSets::create_fiber_set(const std::string &nmb)
   {
     if(find(nmb) == end()) //Set doesn't exists
-      (*this)[nmb]= DqFibras();
+      (*this)[nmb]= FiberDeque();
     else
       std::cerr << "Fiber set: '" << nmb
                 << "' already exists. Command ignored." << std::endl;
@@ -61,10 +61,10 @@ XC::FiberSets::iterator XC::FiberSets::get_fiber_set(const std::string &nmb_set)
   }
 
 //! @brief Creates a fiber set which material has the tag being passed as parameter.
-XC::FiberSets::iterator XC::FiberSets::sel_mat_tag(DqFibras &fibras, const std::string &nmb_set,const int &matTag)
+XC::FiberSets::iterator XC::FiberSets::sel_mat_tag(FiberDeque &fibers, const std::string &nmb_set,const int &matTag)
   {
     iterator i= get_fiber_set(nmb_set);
-    fibras.SelMatTag(matTag,(*i).second);
+    fibers.SelMatTag(matTag,(*i).second);
     return i;
   }
 

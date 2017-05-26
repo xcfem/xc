@@ -24,19 +24,35 @@
 // along with this program.
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
-//contenedor_fibras.h
-		    
-#ifndef contenedor_fibras_h 
-#define contenedor_fibras_h 
+//FiberContainer.h
 
-#include<list>
+#ifndef FiberContainer_h
+#define FiberContainer_h
 
+#include "FiberDeque.h"
+#include <material/section/repres/section/fiber_list.h>
 
 namespace XC {
-class Fiber;
-//! @ingroup MATSCCRepresGeom
+
+//! \ingroup MATSCCFibers
 //
-//! @brief Contenedor de fibras.
-typedef std::list<Fiber *> contenedor_fibras;
+//! @brief Contenedor de fibers.
+class FiberContainer : public FiberDeque
+  {
+    void libera(void);
+    void copy_fibers(const FiberContainer &otro);
+    void copy_fibers(const fiber_list &);
+
+  public:
+    FiberContainer(const size_t &num= 0); 
+    FiberContainer(const FiberContainer &otro);
+    FiberContainer &operator=(const FiberContainer &otro);
+    void allocFibers(int numOfFibers,const Fiber *muestra= nullptr);
+    void setup(FiberSection2d &,const fiber_list &,CrossSectionKR &);
+    void setup(FiberSection3d &,const fiber_list &,CrossSectionKR &);
+    void setup(FiberSectionGJ &,const fiber_list &,CrossSectionKR &);
+    ~FiberContainer(void);
+  };
 } // end of XC namespace
+
 #endif

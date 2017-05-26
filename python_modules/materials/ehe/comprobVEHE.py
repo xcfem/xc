@@ -220,12 +220,12 @@ class ParamsCortante(object):
     self.cortanteUltimo= 0.0
 
   # Calcula el valor del cortante último de la sección.
-  def calcCortanteUltimo(self, setFibrasHormigon, setFibrasArmadura,setFibrasArmaduraTraccion, fck, fcd, fyd, fpd, fydTrsv):
-    self.areaHormigon= setFibrasHormigon.getArea()
-    self.widthMin= setFibrasHormigon.getAnchoMecanico() # Mejorar (en secciones no convexas estará mal).
-    self.depthUtil= setFibrasHormigon.getCantoUtil()
-    self.brazoMecanico= setFibrasHormigon.getBrazoMecanico()
-    self.areaRebarTracc= setFibrasArmaduraTraccion.getArea
+  def calcCortanteUltimo(self, concreteFibersSet, rebarFibersSet,tensionedRebarsFiberSet, fck, fcd, fyd, fpd, fydTrsv):
+    self.areaHormigon= concreteFibersSet.getArea()
+    self.widthMin= concreteFibersSet.getAnchoMecanico() # Mejorar (en secciones no convexas estará mal).
+    self.depthUtil= concreteFibersSet.getCantoUtil()
+    self.brazoMecanico= concreteFibersSet.getBrazoMecanico()
+    self.areaRebarTracc= tensionedRebarsFiberSet.getArea
     # areaTendonesTracc= 
 
     self.sigmaXD= N/area+Mz/Iz*yCdg+My/Iy*zCdg

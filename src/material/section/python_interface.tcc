@@ -58,7 +58,7 @@ class_<XC::PrismaticBarCrossSection, XC::PrismaticBarCrossSection *, bases<XC::S
   .def("getMz",&XC::PrismaticBarCrossSection::getMz,"Returns internal bending moment around 'z' axis.")
   .def("getCenterOfMass",&XC::PrismaticBarCrossSection::getCdg)
   .def("getInternalForcesAxis",&XC::PrismaticBarCrossSection::getEjeEsfuerzos)
-  .def("getNeutralAxis",&XC::PrismaticBarCrossSection::getFibraNeutra,"Returns neutral axis.")
+  .def("getNeutralAxis",&XC::PrismaticBarCrossSection::getNeutralAxis,"Returns neutral axis.")
   .def("getPointOnTensionedHalfPlane",&XC::PrismaticBarCrossSection::getPointOnTensionedHalfPlane)
   .def("getPointOnCompressedHalfPlane",&XC::PrismaticBarCrossSection::getPointOnCompressedHalfPlane)
   .def("setTrialDeformationPlane",&XC::PrismaticBarCrossSection::setTrialDeformationPlane,"trial deformations are calculated whith the deformation plane passed as argument.")

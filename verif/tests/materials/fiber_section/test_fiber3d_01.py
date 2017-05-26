@@ -51,12 +51,12 @@ pth= os.path.dirname(__file__)
 #print "pth= ", pth
 if(not pth):
   pth= "."
-execfile(pth+"/geomCuadFibrasTN.py")
-cuadFibrasTN= preprocessor.getMaterialLoader.newMaterial("fiber_section_3d","cuadFibrasTN")
-fiberSectionRepr= cuadFibrasTN.getFiberSectionRepr()
-fiberSectionRepr.setGeomNamed("geomCuadFibrasTN")
-cuadFibrasTN.setupFibers()
-fibras= cuadFibrasTN.getFibers()
+execfile(pth+"/../../aux/testQuadRegion.py")
+quadFibers= preprocessor.getMaterialLoader.newMaterial("fiber_section_3d","quadFibers")
+fiberSectionRepr= quadFibers.getFiberSectionRepr()
+fiberSectionRepr.setGeomNamed("testQuadRegion")
+quadFibers.setupFibers()
+fibras= quadFibers.getFibers()
 
 nfibras= fibras.getNumFibers
 Iz= fibras.getIz
@@ -73,7 +73,7 @@ print "fibra: ",tag, " mat. tag:", getMaterial.tag
 
 # Elements definition
 elementos= preprocessor.getElementLoader
-elementos.defaultMaterial= "cuadFibrasTN"
+elementos.defaultMaterial= "quadFibers"
 elementos.dimElem= 1 # Dimension of element space
 elementos.defaultTag= 1
 zl= elementos.newElement("zero_length_section",xc.ID([1,2]))

@@ -51,18 +51,18 @@ pth= os.path.dirname(__file__)
 #print "pth= ", pth
 if(not pth):
   pth= "."
-execfile(pth+"/geomCuadFibrasTN.py") #Definition of section geometry (regions and rebars)
-# Definition of a new empty fiber section named 'cuadFibrasTN' and stored in a
+execfile(pth+"/../../aux/testQuadRegion.py") #Definition of section geometry (regions and rebars)
+# Definition of a new empty fiber section named 'quadFibers' and stored in a
 # Python variable of the same name (surprisingly enough).
-cuadFibrasTN= preprocessor.getMaterialLoader.newMaterial("fiber_section_3d","cuadFibrasTN")
-fiberSectionRepr= cuadFibrasTN.getFiberSectionRepr() #Fiber section representation
-                                                     # of 'cuadFibrasTN'
-fiberSectionRepr.setGeomNamed("geomCuadFibrasTN") #We assign the geometry (regions and rebars)
+quadFibers= preprocessor.getMaterialLoader.newMaterial("fiber_section_3d","quadFibers")
+fiberSectionRepr= quadFibers.getFiberSectionRepr() #Fiber section representation
+                                                     # of 'quadFibers'
+fiberSectionRepr.setGeomNamed("testQuadRegion") #We assign the geometry (regions and rebars)
                                                   #to the fiber section representation
-                                                  #of 'cuadFibrasTN'
-cuadFibrasTN.setupFibers() #Create the fibers from the information contained in th
+                                                  #of 'quadFibers'
+quadFibers.setupFibers() #Create the fibers from the information contained in th
                            #geometry.
-fibras= cuadFibrasTN.getFibers() #Get the fiber container from the object.
+fibras= quadFibers.getFibers() #Get the fiber container from the object.
 A= fibras.getSumaAreas(1.0) #Get the sum of the fiber areas.
 
 
@@ -70,7 +70,7 @@ A= fibras.getSumaAreas(1.0) #Get the sum of the fiber areas.
 # Elements definition
 elementos= preprocessor.getElementLoader
 elementos.defaultTransformation= "lin"
-elementos.defaultMaterial= "cuadFibrasTN" #Material name for the element (the fiber section).
+elementos.defaultMaterial= "quadFibers" #Material name for the element (the fiber section).
 beam3d= elementos.newElement("force_beam_column_3d",xc.ID([1,2]));
 
 # Constraints

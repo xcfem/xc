@@ -24,35 +24,19 @@
 // along with this program.
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
-//StoFibras.h
+//fiber_list.h
+		    
+#ifndef fiber_list_h 
+#define fiber_list_h 
 
-#ifndef StoFibras_h
-#define StoFibras_h
+#include<list>
 
-#include "DqFibras.h"
-#include <material/section/repres/section/contenedor_fibras.h>
 
 namespace XC {
-
-//! \ingroup MATSCCFibras
+class Fiber;
+//! @ingroup MATSCCRepresGeom
 //
-//! @brief Contenedor de fibras.
-class StoFibras : public DqFibras
-  {
-    void libera(void);
-    void copia_fibras(const StoFibras &otro);
-    void copia_fibras(const contenedor_fibras &);
-
-  public:
-    StoFibras(const size_t &num= 0); 
-    StoFibras(const StoFibras &otro);
-    StoFibras &operator=(const StoFibras &otro);
-    void allocFibers(int numFibras,const Fiber *muestra= nullptr);
-    void setup(FiberSection2d &,const contenedor_fibras &,CrossSectionKR &);
-    void setup(FiberSection3d &,const contenedor_fibras &,CrossSectionKR &);
-    void setup(FiberSectionGJ &,const contenedor_fibras &,CrossSectionKR &);
-    ~StoFibras(void);
-  };
+//! @brief fiber list.
+typedef std::list<Fiber *> fiber_list;
 } // end of XC namespace
-
 #endif

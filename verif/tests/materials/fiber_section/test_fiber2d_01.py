@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Verification test of the comando addFiber
+# Verification test of the addFiber function
 import xc_base
 import geom
 import xc
@@ -16,7 +16,7 @@ __email__= "l.pereztato@gmail.com"
 yF= 2.0
 F= 2100
 MomZ= F*yF
-MomZDqFibras= 0.0
+MomZFibersDq= 0.0
 Es= 2.1e6
 Area= 1.0
 eps= F/(Area*Es)
@@ -67,18 +67,18 @@ TEIy= tangent.at(2,2)
 
 R= prueba.getStressResultant()
 fibers= prueba.getFibers()
-MomZDqFibras= fibers.getMz(0.0)
+MomZFibersDq= fibers.getMz(0.0)
 
 ratio1= R[0]-F
 ratio2= R[1]-MomZ
-ratio3= R[1]-MomZDqFibras
+ratio3= R[1]-MomZFibersDq
 ratio4= yG-yF
 
 
 ''' 
 print "F= ",F
 print "MomZ= ",MomZ
-print "MomZDqFibras= ",MomZDqFibras
+print "MomZFibersDq= ",MomZFibersDq
 print "A= ",A
 print "eps= ",eps
 print "yF= ",yF

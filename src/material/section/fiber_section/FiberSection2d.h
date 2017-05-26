@@ -60,14 +60,14 @@
 #define FiberSection2d_h
 
 #include <material/section/fiber_section/FiberSectionBase.h>
-#include <material/section/repres/section/contenedor_fibras.h>
+#include <material/section/repres/section/fiber_list.h>
 #include <utility/matrix/Vector.h>
 #include <utility/matrix/Matrix.h>
 
 namespace XC {
 class FiberSectionRepr;
 
-//! \ingroup MATSCCModeloFibras
+//! \ingroup MATSCCFiberModel
 //
 //! @brief Fiber section model in a bi-dimensional space. Sections stiffness
 //! and internal forces are obtained by addition of the fibers contribution.
@@ -77,14 +77,14 @@ class FiberSection2d: public FiberSectionBase
 // AddingSensitivity:BEGIN //////////////////////////////////////////
     int parameterID;
 // AddingSensitivity:END ///////////////////////////////////////////
-    friend class DqFibras;
+    friend class FiberDeque;
     double get_strain(const double &y) const;
   protected:
 
   public:
     FiberSection2d(MaterialLoader *mat_ldr= nullptr); 
     FiberSection2d(int tag,MaterialLoader *mat_ldr= nullptr); 
-    FiberSection2d(int tag,const contenedor_fibras &fibers,MaterialLoader *mat_ldr= nullptr);
+    FiberSection2d(int tag,const fiber_list &fibers,MaterialLoader *mat_ldr= nullptr);
 
     int setInitialSectionDeformation(const Vector &deforms); 
     int setTrialSectionDeformation(const Vector &deforms); 

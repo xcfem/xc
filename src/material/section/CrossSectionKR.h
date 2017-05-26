@@ -39,7 +39,7 @@ namespace XC {
 //! @brief Stiffness matrix and resultant vector for a section.
 class CrossSectionKR: public EntCmd
   {
-    friend class DqFibras;
+    friend class FiberDeque;
     double rData[4]; //!< stress resultant vector data.
     Vector *R; //!< stress resultant vector.
     double kData[16]; //!< Stiffness matrix vector.
@@ -60,20 +60,20 @@ class CrossSectionKR: public EntCmd
         updateNMz(f,y);
         rData[2]+= f*z; //My.
       }
-    static inline void updateK2d(double k[],const double &areaFibra,const double &y,const double &tangent)
+    static inline void updateK2d(double k[],const double &fiberArea,const double &y,const double &tangent)
       {
-        value= tangent * areaFibra;
+        value= tangent*fiberArea;
         vas1= y*value;
 
         k[0]+= value; //Axial stiffness
         k[1]+= vas1;
         k[2]+= vas1 * y;
       }
-    inline void updateK2d(const double &areaFibra,const double &y,const double &tangent)
-      { updateK2d(kData,areaFibra,y,tangent); }
-    static inline void updateK3d(double k[],const double &areaFibra,const double &y,const double &z,const double &tangent)
+    inline void updateK2d(const double &fiberArea,const double &y,const double &tangent)
+      { updateK2d(kData,fiberArea,y,tangent); }
+    static inline void updateK3d(double k[],const double &fiberArea,const double &y,const double &z,const double &tangent)
       {
-        value= tangent * areaFibra;
+        value= tangent * fiberArea;
         vas1= y*value;
         vas2= z*value;
         vas1as2= vas1*z;
@@ -87,11 +87,11 @@ class CrossSectionKR: public EntCmd
 
         k[8]+= vas2 * z;        
       }
-    inline void updateK3d(const double &areaFibra,const double &y,const double &z,const double &tangent)
-      { updateK3d(kData,areaFibra,y,z,tangent); }
-    static inline void updateKGJ(double k[],const double &areaFibra,const double &y,const double &z,const double &tangent)
+    inline void updateK3d(const double &fiberArea,const double &y,const double &z,const double &tangent)
+      { updateK3d(kData,fiberArea,y,z,tangent); }
+    static inline void updateKGJ(double k[],const double &fiberArea,const double &y,const double &z,const double &tangent)
       {
-        value= tangent * areaFibra;
+        value= tangent * fiberArea;
         vas1= y*value;
         vas2= z*value;
         vas1as2= vas1*z;
@@ -105,8 +105,8 @@ class CrossSectionKR: public EntCmd
     
         k[10]+= vas2 * z; //(2,2)->10
       }
-    inline void updateKGJ(const double &areaFibra,const double &y,const double &z,const double &tangent)
-      { updateKGJ(kData,areaFibra,y,z,tangent); }
+    inline void updateKGJ(const double &fiberArea,const double &y,const double &z,const double &tangent)
+      { updateKGJ(kData,fiberArea,y,z,tangent); }
 
   public:
     CrossSectionKR(const size_t &dim);

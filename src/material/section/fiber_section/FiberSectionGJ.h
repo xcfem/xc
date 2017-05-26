@@ -66,7 +66,7 @@ namespace XC {
 class MaterialLoader;
 class FiberSectionRepr;
 
-//! \ingroup MATSCCModeloFibras
+//! \ingroup MATSCCFiberModel
 //
 //! @brief Fiber section with torsional stiffness.
 class FiberSectionGJ: public FiberSection3dBase
@@ -74,12 +74,12 @@ class FiberSectionGJ: public FiberSection3dBase
   private:
     double GJ;
   protected:
-    friend class DqFibras;
+    friend class FiberDeque;
  
   public:
     FiberSectionGJ(MaterialLoader *mat_ldr= nullptr);
     FiberSectionGJ(int tag,MaterialLoader *mat_ldr= nullptr);
-    FiberSectionGJ(int tag,const contenedor_fibras &fibers, double GJ = 1.0e10,MaterialLoader *mat_ldr= nullptr);
+    FiberSectionGJ(int tag,const fiber_list &, double GJ = 1.0e10,MaterialLoader *mat_ldr= nullptr);
 
     Fiber *addFiber(Fiber &theFiber);
 

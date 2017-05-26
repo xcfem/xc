@@ -59,26 +59,24 @@ pth= os.path.dirname(__file__)
 #print "pth= ", pth
 if(not pth):
   pth= "."
-execfile(pth+"/geomCuadFibrasTN.py")
+execfile(pth+"/../aux/testQuadRegion.py")
 
 materiales= preprocessor.getMaterialLoader
-cuadFibrasTN= materiales.newMaterial("fiber_section_3d","cuadFibrasTN")
-fiberSectionRepr= cuadFibrasTN.getFiberSectionRepr()
-fiberSectionRepr.setGeomNamed("geomCuadFibrasTN")
-cuadFibrasTN.setupFibers()
-A= cuadFibrasTN.getFibers().getSumaAreas
+quadFibers= materiales.newMaterial("fiber_section_3d","quadFibers")
+fiberSectionRepr= quadFibers.getFiberSectionRepr()
+fiberSectionRepr.setGeomNamed("testQuadRegion")
+quadFibers.setupFibers()
+A= quadFibers.getFibers().getSumaAreas
 
-agg= materiales.newMaterial("section_aggregator","cuadFibras")
-agg.setSection("cuadFibrasTN")
+agg= materiales.newMaterial("section_aggregator","agg")
+agg.setSection("quadFibers")
 agg.setAdditions(["T","Vy","Vz"],["respT","respVy","respVz"])
- # Respuestas a torsión y cortantes.
-
-
+# Shear and torsion responses.
 
 # Elements definition
 elementos= preprocessor.getElementLoader
 elementos.defaultTransformation= "lin"
-elementos.defaultMaterial= "cuadFibras"
+elementos.defaultMaterial= "agg"
 elementos.numSections= 3 # Número de secciones a lo largo del elemento.
 elementos.defaultTag= 1
 el= elementos.newElement("force_beam_column_3d",xc.ID([1,2]))

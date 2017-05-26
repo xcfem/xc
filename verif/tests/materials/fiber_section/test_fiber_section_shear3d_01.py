@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
-# Verification test of una sección metálica rectangular de fibras de elastoplástico.
-#    elaborado a partir de Nociones de cálculo plástico. C. Benito Hernández.
-#    página 26 y siguientes.
-
+''' Verification test of a rectangular fiber section with an
+    elasto plastic material model.
+    written from "Nociones de cálculo plástico." C. Benito Hernández.
+    page 26 and following.
+'''
 from materials import section_properties
 from misc import banco_pruebas_scc3d
 from solution import predefined_solutions
@@ -61,7 +62,7 @@ sa= preprocessor.getMaterialLoader.newMaterial("fiberSectionShear3d","sa")
 fiberSectionRepr= sa.getFiberSectionRepr()
 fiberSectionRepr.setGeomNamed("geomRectang")
 sa.setupFibers()
-extraeParamSccFibras(sa,scc10x20)
+extractFiberSectionProperties(sa,scc10x20)
 sa.setRespVyByName("respVy")
 sa.setRespVzByName("respVz")
 sa.setRespTByName("respT")

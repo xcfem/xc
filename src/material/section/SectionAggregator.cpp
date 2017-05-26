@@ -105,13 +105,19 @@ void XC::SectionAggregator::alloc_storage_ptrs(void)
       }
     //theCode= new ResponseId(codeArea, order); Not sharing area anymore
     //                                          LCPT 19/09/2016
-    theCode= new ResponseId(order);
-    def= new Vector(workArea, order);
-    defzero= new Vector(workArea, order);
-    s= new Vector(&workArea[maxOrder], order);
-    ks= new Matrix(&workArea[2*maxOrder], order, order);
-    fs= new Matrix(&workArea[maxOrder*(maxOrder+2)], order, order);
-    check_ptrs();
+    if(order>0)
+      {
+        theCode= new ResponseId(order);
+        def= new Vector(workArea, order);
+        defzero= new Vector(workArea, order);
+        s= new Vector(&workArea[maxOrder], order);
+        ks= new Matrix(&workArea[2*maxOrder], order, order);
+        fs= new Matrix(&workArea[maxOrder*(maxOrder+2)], order, order);
+        check_ptrs();
+      }
+    else
+      std::cerr << nombre_clase() << "::" << __FUNCTION__
+		<< "; 0 or negative order; order= " << order << std::endl;
   }
 
 void XC::SectionAggregator::libera_storage_ptrs(void)
@@ -259,7 +265,7 @@ void XC::SectionAggregator::setSection(const std::string &sectionName)
       {
         const PrismaticBarCrossSection *tmp= dynamic_cast<const PrismaticBarCrossSection *>(ptr_mat);
         if(tmp)
-          theSection= dynamic_cast<PrismaticBarCrossSection *>(tmp->getCopy());
+	  theSection= dynamic_cast<PrismaticBarCrossSection *>(tmp->getCopy());
         else
           std::cerr << nombre_clase() << "::" << __FUNCTION__
                     << "; material identified by: '" << sectionName

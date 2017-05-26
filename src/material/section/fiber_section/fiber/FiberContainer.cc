@@ -24,9 +24,9 @@
 // along with this program.
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
-//StoFibras.cc
+//FiberContainer.cc
 
-#include "StoFibras.h"
+#include "FiberContainer.h"
 #include "material/section/fiber_section/fiber/Fiber.h"
 #include "material/section/fiber_section/FiberSection2d.h"
 #include "material/section/fiber_section/FiberSection3d.h"
@@ -34,19 +34,19 @@
 
 //! @brief Allocates memory for each fiber material and for its data;
 //! two (yLoc,Area) for 2D sections (getOrder()= 2) and three (yLoc,zLoc,Area) for 3D sections (getOrder()= 3).
-void XC::StoFibras::allocFibers(int numFibras,const Fiber *muestra)
+void XC::FiberContainer::allocFibers(int numOfFibers,const Fiber *muestra)
   {
     libera();
-    if(numFibras)
+    if(numOfFibers)
       {
-        resize(numFibras);
+        resize(numOfFibers);
         if(muestra)
-          for(int i= 0;i<numFibras;i++)
+          for(int i= 0;i<numOfFibers;i++)
             (*this)[i]= muestra->getCopy();
       }
   }
 
-void XC::StoFibras::copia_fibras(const StoFibras &otro)
+void XC::FiberContainer::copy_fibers(const FiberContainer &otro)
   {
     libera();
     const size_t numFibers= otro.getNumFibers();
@@ -58,7 +58,7 @@ void XC::StoFibras::copia_fibras(const StoFibras &otro)
       }
   }
 
-void XC::StoFibras::libera(void)
+void XC::FiberContainer::libera(void)
   {
     const size_t numFibers= getNumFibers();
     for(register size_t i= 0;i<numFibers;i++)
@@ -71,66 +71,66 @@ void XC::StoFibras::libera(void)
   }
 
 //! @brief Default constructor.
-XC::StoFibras::StoFibras(const size_t &num)
-  : DqFibras(num) {}
+XC::FiberContainer::FiberContainer(const size_t &num)
+  : FiberDeque(num) {}
 
 //! @brief Copy constructor.
-XC::StoFibras::StoFibras(const StoFibras &otro)
-  : DqFibras()
-  { copia_fibras(otro); }
+XC::FiberContainer::FiberContainer(const FiberContainer &otro)
+  : FiberDeque()
+  { copy_fibers(otro); }
 
 //! @brief Assignment operator.
-XC::StoFibras &XC::StoFibras::operator=(const StoFibras &otro)
+XC::FiberContainer &XC::FiberContainer::operator=(const FiberContainer &otro)
   {
-    DqFibras::operator=(otro);
-    copia_fibras(otro);
+    FiberDeque::operator=(otro);
+    copy_fibers(otro);
     return *this;
   }
 
-//! @brief Copia las fibras del contenedor being passed as parameter.
-void XC::StoFibras::copia_fibras(const contenedor_fibras &fibers)
+//! @brief Copia las fibers del contenedor being passed as parameter.
+void XC::FiberContainer::copy_fibers(const fiber_list &fibers)
   {
     const size_t numFibers= fibers.size();
     allocFibers(numFibers);
     int i= 0;
-    for(contenedor_fibras::const_iterator ifib=fibers.begin();ifib!=fibers.end(); ifib++,i++)
+    for(fiber_list::const_iterator ifib=fibers.begin();ifib!=fibers.end(); ifib++,i++)
       {
         (*this)[i]= (*ifib)->getCopy();
         if(!(*this)[i])
           {
-            std::cerr << "XC::StoFibras::copia_fibras -- failed to get copy of a XC::Fiber\n";
+            std::cerr << "XC::FiberContainer::copy_fibers -- failed to get copy of a XC::Fiber\n";
             exit(-1);
           }
       }
   }
 
-void XC::StoFibras::setup(FiberSection2d &Section2d,const contenedor_fibras &fibers,CrossSectionKR &kr2)
+void XC::FiberContainer::setup(FiberSection2d &Section2d,const fiber_list &fibers,CrossSectionKR &kr2)
   {
     if(!fibers.empty())
       {
-        copia_fibras(fibers);
+        copy_fibers(fibers);
         updateKRCDG(Section2d,kr2);
       }
   }
 
-void XC::StoFibras::setup(FiberSection3d &Section3d,const contenedor_fibras &fibers,CrossSectionKR &kr3)
+void XC::FiberContainer::setup(FiberSection3d &Section3d,const fiber_list &fibers,CrossSectionKR &kr3)
   {
     if(!fibers.empty())
       {
-        copia_fibras(fibers);
+        copy_fibers(fibers);
         updateKRCDG(Section3d,kr3);
       }
   }
 
-void XC::StoFibras::setup(FiberSectionGJ &SectionGJ,const contenedor_fibras &fibers,CrossSectionKR &krGJ)
+void XC::FiberContainer::setup(FiberSectionGJ &SectionGJ,const fiber_list &fibers,CrossSectionKR &krGJ)
   {
     if(!fibers.empty())
       {
-        copia_fibras(fibers);
+        copy_fibers(fibers);
         updateKRCDG(SectionGJ,krGJ);
       }
   }
 
 //! @brief Destructor:
-XC::StoFibras::~StoFibras(void)
+XC::FiberContainer::~FiberContainer(void)
   { libera(); }

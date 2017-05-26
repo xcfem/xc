@@ -42,27 +42,27 @@ E= 210e9 # Young modulus of the steel.
 acero= typical_materials.defSteel01(preprocessor, "acero",E,fy,0.001)
 
 # Secciones
-geomCuadFibras= preprocessor.getMaterialLoader.newSectionGeometry("geomCuadFibras")
+quadFibersGeom= preprocessor.getMaterialLoader.newSectionGeometry("quadFibersGeom")
 y1= h/2.0
 z1= b/2.0
-regiones= geomCuadFibras.getRegions
+regiones= quadFibersGeom.getRegions
 acero= regiones.newQuadRegion("acero")
 acero.nDivIJ= nDivIJ
 acero.nDivJK= nDivJK
 acero.pMin= geom.Pos2d(y0-y1,z0-z1)
 acero.pMax= geom.Pos2d(y0+y1,z0+z1)
-cuadFibras= preprocessor.getMaterialLoader.newMaterial("fiber_section_3d","cuadFibras")
-fiberSectionRepr= cuadFibras.getFiberSectionRepr()
-fiberSectionRepr.setGeomNamed("geomCuadFibras")
-cuadFibras.setupFibers()
-fibras= cuadFibras.getFibers()
-A= fibras.getSumaAreas
+quadFibers= preprocessor.getMaterialLoader.newMaterial("fiber_section_3d","quadFibers")
+fiberSectionRepr= quadFibers.getFiberSectionRepr()
+fiberSectionRepr.setGeomNamed("quadFibersGeom")
+quadFibers.setupFibers()
+fibers= quadFibers.getFibers()
+A= fibers.getSumaAreas
 
 
 # Elements definition
 elementos= preprocessor.getElementLoader
 elementos.defaultTransformation= "lin"
-elementos.defaultMaterial= "cuadFibras"
+elementos.defaultMaterial= "quadFibers"
 beam3d= elementos.newElement("force_beam_column_3d",xc.ID([1,2]));
 
 

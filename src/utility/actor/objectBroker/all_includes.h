@@ -92,7 +92,7 @@
 #include "material/section/repres/section/FiberSectionRepr.h"
 #include "material/section/repres/cell/QuadCell.h"
 #include "material/section/repres/cell/TriangCell.h"
-#include "material/section/fiber_section/fiber/DqFibras.h"
+#include "material/section/fiber_section/fiber/FiberDeque.h"
 //#include "GenericSectionNd.h"
 #include "material/section/SectionAggregator.h"
 #include "material/section/fiber_section/FiberSection2d.h"

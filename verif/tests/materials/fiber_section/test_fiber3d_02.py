@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Verification test of the comando addFiber
+# Verification test of the addFiber function
 
 
 import xc_base
@@ -20,8 +20,8 @@ zF= 3.0
 F= 2100
 MomY= F*zF
 MomZ= F*yF
-MomYDqFibras= 0.0
-MomZDqFibras= 0.0
+MomYFibersDq= 0.0
+MomZFibersDq= 0.0
 Es= 2.1e6
 Area= 1.0
 eps= F/(Area*Es)
@@ -83,23 +83,23 @@ TK32=  tangentStiffness.at(3,2)
 TEIz=  tangentStiffness.at(3,3)
 
 R= prb.getStressResultant()
-fibras= prb.getFibers()
-MomYDqFibras= fibras.getMy(0.0)
-MomZDqFibras= fibras.getMz(0.0)
+fibers= prb.getFibers()
+MomYFibersDq= fibers.getMy(0.0)
+MomZFibersDq= fibers.getMz(0.0)
 
 
 ratio1= R[0]-F
 ratio2= R[1]-MomZ
 ratio3= R[2]-MomY
-ratio4= R[1]-MomZDqFibras
-ratio5= R[2]-MomYDqFibras
+ratio4= R[1]-MomZFibersDq
+ratio5= R[2]-MomYFibersDq
 
 '''
 print "F= ",F
 print "MomY= ",MomY
 print "MomZ= ",MomZ
-print "MomYDqFibras= ",MomYDqFibras
-print "MomZDqFibras= ",MomZDqFibras
+print "MomYFibersDq= ",MomYFibersDq
+print "MomZFibersDq= ",MomZFibersDq
 print "A= ",A
 print "eps= ",eps
 print "yG= ",yG

@@ -65,7 +65,7 @@ namespace XC {
 class MaterialLoader;
 class FiberSectionRepr;
 
-//! \ingroup MATSCCModeloFibras
+//! \ingroup MATSCCFiberModel
 //
 //! @brief Fiber section model in a three-dimensional space. Sections stiffness
 //! and internal forces are obtained by addition of the fibers contribution.
@@ -73,14 +73,14 @@ class FiberSection3d: public FiberSection3dBase
   {
   private:
 
-    friend class StoFibras;
+    friend class FiberContainer;
   protected:
 
     FiberSection3d(int tag, int classTag, MaterialLoader *mat_ldr= nullptr);
   public:
     FiberSection3d(MaterialLoader *mat_ldr= nullptr);
     FiberSection3d(int tag,MaterialLoader *mat_ldr= nullptr);
-    FiberSection3d(int tag,const contenedor_fibras &fibers,MaterialLoader *mat_ldr= nullptr);
+    FiberSection3d(int tag,const fiber_list &,MaterialLoader *mat_ldr= nullptr);
 
     virtual void setupFibers(void);
     Fiber *addFiber(Fiber &theFiber);

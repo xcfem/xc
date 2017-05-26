@@ -60,13 +60,13 @@
 #define FiberSection3dBase_h
 
 #include <material/section/fiber_section/FiberSectionBase.h>
-#include <material/section/repres/section/contenedor_fibras.h>
+#include <material/section/repres/section/fiber_list.h>
 #include <utility/matrix/Vector.h>
 
 namespace XC {
 class FiberSectionRepr;
 
-//! \ingroup MATSCCModeloFibras
+//! \ingroup MATSCCFiberModel
 //
 //! @brief Base class for fiber sections
 //! on three-dimensional problems.
@@ -74,13 +74,13 @@ class FiberSection3dBase : public FiberSectionBase
   {
   protected:
 
-    friend class DqFibras;
-    friend class StoFibras;
+    friend class FiberDeque;
+    friend class FiberContainer;
     double get_strain(const double &y,const double &z) const;
   public:
     FiberSection3dBase(int classTag, int dim,MaterialLoader *mat_ldr= nullptr);
     FiberSection3dBase(int tag, int classTag, int dim,MaterialLoader *mat_ldr= nullptr);
-    FiberSection3dBase(int tag, int classTag, int dim,const contenedor_fibras &fibers,MaterialLoader *mat_ldr= nullptr);
+    FiberSection3dBase(int tag, int classTag, int dim,const fiber_list &fibers,MaterialLoader *mat_ldr= nullptr);
     FiberSection3dBase(const FiberSection3dBase &otro);
     FiberSection3dBase &operator=(const FiberSection3dBase &otro);
 
@@ -92,7 +92,7 @@ class FiberSection3dBase : public FiberSectionBase
     int setParameter(const std::vector<std::string> &argv, Parameter &param);
     int updateParameter(int parameterID, Information &info);
     inline virtual double getCdgZ(void) const
-      { return fibras.getZCdg(); }
+      { return fibers.getZCdg(); }
 
 
   };

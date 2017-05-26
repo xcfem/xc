@@ -17,9 +17,9 @@ class ShearControllerEHE(lsc.LimitStateControllerBase):
   '''Parameters for shear control with EHE.'''
   def __init__(self,limitStateLabel):
     super(ShearControllerEHE,self).__init__(limitStateLabel)
-    self.setNameFibrasHormigon= "hormigon" #Nombre del conjunto de fibras de hormigón.
-    self.setNameFibrasArmadura= "reinforcement" #Nombre del conjunto de fibras de reinforcement.
-    self.setNameFibrasArmaduraTraccion= "reinforcementTraccion" #Nombre del conjunto de fibras de reinforcement sometida a tracción.
+    self.concreteFibersSetName= "hormigon" #Name of the concrete fibers set.
+    self.rebarFibersSetName= "reinforcement" #Name of the rebar fibers set.
+    self.tensionedRebarsFiberSetName= "reinforcementTraccion" #Name of the tensioned rebars set.
     self.hayMom= False #Verdadero si la sección está sometida a momento.
     self.fcvH= 0.0 #Resistencia efectiva del hormigón a cortante.
     self.fckH= 0.0 #Valor característico de la resistencia del hormigón a compresión.
@@ -30,12 +30,12 @@ class ShearControllerEHE(lsc.LimitStateControllerBase):
     self.depthUtil= 0.0 #Canto útil con el que está trabajando la sección.
     self.brazoMecanico= 0.0 #Lever arm con el que está trabajando la sección.
     self.strutWidth= 0.0 #Compressed strut width «b0».
-    self.I= 0.0 #Momento de inercia de la sección respecto a la fibra neutra en régimen elástico.
-    self.S= 0.0 #Momento estático de la sección por encima de la fibra neutra en régimen elástico.
+    self.I= 0.0 #Momento of inertia of the section with respect to the neutral axis in régimen elástico.
+    self.S= 0.0 #First moment of area of the section with respect to the neutral axis in régimen elástico.
     self.areaHormigon= 0.0 #Area de la sección de hormigón.
     self.numBarrasTraccion= 0 #Número de barras sometidas a tracción.
     self.areaRebarTracc= 0.0 #Area total de las barras traccionadas.
-    self.eps1= 0.0 #Deformación máxima en el hormigón.
+    self.eps1= 0.0 #Maximum strain in concrete.
     self.axilHormigon= 0.0 #Esfuerzo axil soportado por el hormigón.
     self.E0= 0.0 #Módulo de rigidez tangente del hormigón.
 
@@ -68,7 +68,7 @@ class ShearControllerEHE(lsc.LimitStateControllerBase):
     self.fydS= aceroArmar.fyd()
 
     if(not scc.hasProp("rcSets")):
-      scc.setProp("rcSets", createFiberSets.fiberSectionSetupRC3Sets(scc,self.matTagHormigon,self.setNameFibrasHormigon,self.matTagAceroArmar,self.setNameFibrasArmadura))
+      scc.setProp("rcSets", createFiberSets.fiberSectionSetupRC3Sets(scc,self.matTagHormigon,self.concreteFibersSetName,self.matTagAceroArmar,self.rebarFibersSetName))
     rcSets= scc.getProp("rcSets")
 
     concrFibers= rcSets.concrFibers.fSet
@@ -128,10 +128,10 @@ class ShearControllerEHE(lsc.LimitStateControllerBase):
     self.matTagAceroArmar= aceroArmar.matTagD
     self.fydS= aceroArmar.fyd()
 
-    createFiberSets.fiberSectionSetupRC3Sets(scc,self.matTagHormigon,self.setNameFibrasHormigon,self.matTagAceroArmar,self.setNameFibrasArmadura)
-    concrFibers= scc.getFiberSets()[self.setNameFibrasHormigon]
-    reinfFibers= scc.getFiberSets()[self.setNameFibrasArmadura]
-    reinforcementTraccion= scc.getFiberSets()[self.setNameFibrasArmaduraTraccion]
+    createFiberSets.fiberSectionSetupRC3Sets(scc,self.matTagHormigon,self.concreteFibersSetName,self.matTagAceroArmar,self.rebarFibersSetName)
+    concrFibers= scc.getFiberSets()[self.concreteFibersSetName]
+    reinfFibers= scc.getFiberSets()[self.rebarFibersSetName]
+    reinforcementTraccion= scc.getFiberSets()[self.tensionedRebarsFiberSetName]
 
     self.hayMom= scc.isSubjectedToBending(0.1)
     self.numBarrasTraccion= reinforcementTraccion.getNumFibers()
@@ -184,7 +184,7 @@ class ShearControllerEHE(lsc.LimitStateControllerBase):
     '''
     print "Postprocessing combination: ",nmbComb
     secHAParamsTorsion=  torsionEHE.TorsionParameters()
-    # XXX Ignoramos la deformación por torsión.
+    # XXX Ignore torsional deformation.
     secHAParamsTorsion.ue= 0
     secHAParamsTorsion.Ae= 1
     elementos= preprocessor.getSets.getSet("total").getElements

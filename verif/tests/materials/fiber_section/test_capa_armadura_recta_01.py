@@ -42,11 +42,11 @@ b=0.001    # strain-hardening ratio: ratio between post-yield tangent and initia
 acero= typical_materials.defSteel01(preprocessor=preprocessor,name="acero",E=E,fy=fy,b=b)
 
 
-geomCuadFibras= preprocessor.getMaterialLoader.newSectionGeometry("geomCuadFibras")
+quadFibersGeom= preprocessor.getMaterialLoader.newSectionGeometry("quadFibersGeom")
 y1= width/2.0
 z1= depth/2.0
 
-reinforcement= geomCuadFibras.getReinfLayers
+reinforcement= quadFibersGeom.getReinfLayers
 reinforcementA= reinforcement.newStraightReinfLayer("acero")
 reinforcementA.numReinfBars= 2
 reinforcementA.barArea= As
@@ -61,29 +61,29 @@ reinforcementB.p2= geom.Pos2d(y0+depth/2.0,z0+width/2.0)
 
 materiales= preprocessor.getMaterialLoader
 # Secciones
-cuadFibras= materiales.newMaterial("fiber_section_3d","cuadFibras")
-fiberSectionRepr= cuadFibras.getFiberSectionRepr()
-fiberSectionRepr.setGeomNamed("geomCuadFibras")
-cuadFibras.setupFibers()
-fibras= cuadFibras.getFibers()
+quadFibers= materiales.newMaterial("fiber_section_3d","quadFibers")
+fiberSectionRepr= quadFibers.getFiberSectionRepr()
+fiberSectionRepr.setGeomNamed("quadFibersGeom")
+quadFibers.setupFibers()
+fibers= quadFibers.getFibers()
 
-# nfibras= fibras.getNumFibers()
-# sumAreas= fibras.getSumaAreas(1)
-# Iz= fibras.getIz(1.0,y0)
-# Iy= fibras.getIy(1.0,z0)
-# zCdg= fibras.getCdgZ()
-# yCdg= fibras.getCdgY()
+# nfibers= fibers.getNumFibers()
+# sumAreas= fibers.getSumaAreas(1)
+# Iz= fibers.getIz(1.0,y0)
+# Iy= fibers.getIy(1.0,z0)
+# zCdg= fibers.getCdgZ()
+# yCdg= fibers.getCdgY()
 
 '''
 for_each_fiber
-  print "fibra: ",tag, " mat. tag:", getMaterial.tag
+  print "fiber: ",tag, " mat. tag:", getMaterial.tag
 '''
 
 
 
 # Elements definition
 elementos= preprocessor.getElementLoader
-elementos.defaultMaterial= "cuadFibras"
+elementos.defaultMaterial= "quadFibers"
 elementos.dimElem= 1 # Dimension of element space
 elementos.defaultTag= 1
 elem= elementos.newElement("zero_length_section",xc.ID([1,2]))
@@ -128,16 +128,16 @@ elem1.getResistingForce()
 scc= elem1.getSection()
 nfib= scc.getFibers().getNumFibers()
 avgStrain= 0.0
-fibras= scc.getFibers()
-sumAreas= fibras.getSumaAreas(1)
-Iz= fibras.getIz(1.0,y0)
-Iy= fibras.getIy(1.0,z0)
-zCdg= fibras.getCdgZ()
-yCdg= fibras.getCdgY()
+fibers= scc.getFibers()
+sumAreas= fibers.getSumaAreas(1)
+Iz= fibers.getIz(1.0,y0)
+Iy= fibers.getIy(1.0,z0)
+zCdg= fibers.getCdgZ()
+yCdg= fibers.getCdgY()
 
 avgStrain= 0.0
-for f in fibras:
-# print "fibra: ",tag, " deformación: ", getMaterial.strain
+for f in fibers:
+# print "fiber: ",tag, " strain: ", getMaterial.strain
    avgStrain+= f.getMaterial().getStrain()
 avgStrain/= nfib
 

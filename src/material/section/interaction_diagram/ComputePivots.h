@@ -36,8 +36,8 @@
 namespace XC {
 
 class PivotsUltimateStrains;
-class DqFibras;
-class StoFibras;
+class FiberDeque;
+class FiberContainer;
 class Fiber;
 
 //! @ingroup MATSCCDiagInt
@@ -47,11 +47,11 @@ class Fiber;
 class ComputePivots: public Ref3d3d
   {
     const PivotsUltimateStrains &agot_pivots; //!< Ultimate strains at pivots.
-    const StoFibras &fibras;//!< Section fibers.
-    const DqFibras &fibrasC; //!< Concrete fibers (or another material that works in compression).
-    const DqFibras &fibrasS; //!< Steel fibers (or another material that works in tension). 
+    const FiberContainer &fibers;//!< Section fibers.
+    const FiberDeque &CFibers; //!< Concrete fibers (or another material that works in compression).
+    const FiberDeque &SFibers; //!< Steel fibers (or another material that works in tension). 
   public:
-    ComputePivots(const PivotsUltimateStrains &ap,const StoFibras &fs,const DqFibras &fsC,const DqFibras &fsS,const double &theta);
+    ComputePivots(const PivotsUltimateStrains &ap,const FiberContainer &fs,const FiberDeque &fsC,const FiberDeque &fsS,const double &theta);
     const Fiber *getFiberCMinY(void) const;
     const Fiber *getFiberSMinY(void) const;
     const Fiber *getFiberCMaxY(void) const;

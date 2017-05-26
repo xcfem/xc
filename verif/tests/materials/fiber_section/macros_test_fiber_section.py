@@ -7,24 +7,24 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
-def extraeParamSccFibras(fiberSec,scc):
-  fibras= fiberSec.getFibers()
-  global nFibras; nFibras= fibras.getNumFibers()
-  global sumAreas; sumAreas= fibras.getSumaAreas(1)
-  global Iz; Iz= fibras.getIz
-  global Iy; Iy= fibras.getIy 
-  global Pyz; Pyz= fibras.getPyz
-  global zCdg; zCdg= fibras.getCdgZ()
-  global yCdg; yCdg= fibras.getCdgY()
-  global I1; I1= fibras.getI1(1,0,0)
-  global I2; I2= fibras.getI2(1,0,0)
+def extractFiberSectionProperties(fiberSec,scc):
+  fibers= fiberSec.getFibers()
+  global nFibers; nFibers= fibers.getNumFibers()
+  global sumAreas; sumAreas= fibers.getSumaAreas(1)
+  global Iz; Iz= fibers.getIz
+  global Iy; Iy= fibers.getIy 
+  global Pyz; Pyz= fibers.getPyz
+  global zCdg; zCdg= fibers.getCdgZ()
+  global yCdg; yCdg= fibers.getCdgY()
+  global I1; I1= fibers.getI1(1,0,0)
+  global I2; I2= fibers.getI2(1,0,0)
   global i1; i1= math.sqrt(I1/sumAreas)  # Radio de giro eje principal mayor
   global i2; i2= math.sqrt(I2/sumAreas); # Radio de giro eje principal menor
   # th1= th1; 
   global Me1; Me1= 2*fy/scc.h*I1; # Momento elástico de la sección en torno al eje principal mayor.
   global Me2; Me2= 2*fy/scc.b*I2; # Momento elástico de la sección en torno al eje principal menor.
-  global SzPosG; SzPosG= fibras.getSzPos(0,0,1)
-  global SyPosG; SyPosG= fibras.getSyPos(0,0,1) 
+  global SzPosG; SzPosG= fibers.getSzPos(0,0,1)
+  global SyPosG; SyPosG= fibers.getSyPos(0,0,1) 
 
 def printRatios(scc):
   print "areaTeor= ",(scc.area())

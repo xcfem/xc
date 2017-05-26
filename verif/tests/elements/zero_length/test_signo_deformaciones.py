@@ -60,18 +60,18 @@ respT= typical_materials.defElasticMaterial(preprocessor, "respT",E) # Respuesta
 respVy= typical_materials.defElasticMaterial(preprocessor, "respVy",E) # Respuesta de la sección a cortante según y.
 respVz= typical_materials.defElasticMaterial(preprocessor, "respVz",E) # Respuesta de la sección a cortante según y.
 # Secciones
-geomCuadFibrasTN= preprocessor.getMaterialLoader.newSectionGeometry("geomCuadFibrasTN")
+testQuadRegion= preprocessor.getMaterialLoader.newSectionGeometry("testQuadRegion")
 y1= widthOverZ/2.0
 z1= depthOverY/2.0
-regiones= geomCuadFibrasTN.getRegions
+regiones= testQuadRegion.getRegions
 elast= regiones.newQuadRegion("elast")
 elast.nDivIJ= nDivIJ
 elast.nDivJK= nDivJK
 elast.pMin= geom.Pos2d(y0-y1,z0-z1)
 elast.pMax= geom.Pos2d(y0+y1,z0+z1)
-rectang= preprocessor.getMaterialLoader.newMaterial("fiber_section_3d","cuadFibrasTN")
+rectang= preprocessor.getMaterialLoader.newMaterial("fiber_section_3d","quadFibers")
 fiberSectionRepr= rectang.getFiberSectionRepr()
-fiberSectionRepr.setGeomNamed("geomCuadFibrasTN")
+fiberSectionRepr.setGeomNamed("testQuadRegion")
 rectang.setupFibers()
 fibras= rectang.getFibers()
 
@@ -79,7 +79,7 @@ fibras= rectang.getFibers()
 # Respuestas a torsión y cortantes.
 materiales= preprocessor.getMaterialLoader
 agg= materiales.newMaterial("section_aggregator","sa")
-agg.setSection("cuadFibrasTN")
+agg.setSection("quadFibers")
 agg.setAdditions(["T","Vy","Vz"],["respT","respVy","respVz"])
 
 

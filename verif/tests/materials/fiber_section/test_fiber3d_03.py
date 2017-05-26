@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Verification test of the modelo de fibras.
+# Fiber model verification test.
 
 import xc_base
 import geom
@@ -15,13 +15,13 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
-yF= 2.0 # Fibra en el primer cuadrante.
+yF= 2.0 # Fiber on the first quadrant.
 zF= 3.0
 F= 2100
 MomY= F*zF
 MomZ= F*yF
-MomYDqFibras= 0.0
-MomZDqFibras= 0.0
+MomYFibersDq= 0.0
+MomZFibersDq= 0.0
 Es= 2.1e6
 Area= 1.0
 lado= math.sqrt(Area)
@@ -124,13 +124,13 @@ elem1.getResistingForce()
 scc= elem1.getSection()
 nfib= scc.getFibers().getNumFibers()
 avgStrain= 0.0
-fibras= scc.getFibers()
-for f in fibras:
-# print "fibra: ",tag, " deformación: ", getMaterial.strain
+fibers= scc.getFibers()
+for f in fibers:
+# print "fiber: ",tag, " strain: ", getMaterial.strain
    avgStrain+= f.getMaterial().getStrain()
 avgStrain/= nfib
-MomYDqFibras= fibras.getMy(0.0)
-MomZDqFibras= fibras.getMz(0.0)
+MomYFibersDq= fibers.getMy(0.0)
+MomZFibersDq= fibers.getMz(0.0)
 
 Resul= scc.getStressResultant()
 
@@ -143,8 +143,8 @@ ratio6= (Resul[1]+Reac[5])/Reac[5]
 ratio7= (Resul[2]+Reac[4])/Reac[4]
 ratio8= (Resul[1]-MomZ)/MomZ
 ratio9= (Resul[2]-MomY)/MomY
-ratio10= (Resul[1]-MomZDqFibras)/MomZDqFibras
-ratio11= (Resul[2]-MomYDqFibras)/MomYDqFibras
+ratio10= (Resul[1]-MomZFibersDq)/MomZFibersDq
+ratio11= (Resul[2]-MomYFibersDq)/MomYFibersDq
 
 ''' 
 print "F= ",F

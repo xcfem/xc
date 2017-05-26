@@ -58,7 +58,7 @@ class DeformationPlane: public Plano3d, public MovableObject
     int sendData(CommParameters &);
     int recvData(const CommParameters &);
     friend class SectionForceDeformation;
-    friend class DqFibras;
+    friend class FiberDeque;
     friend class FiberSectionBase; //Erase this line.
     const Vector &getDeformation(void) const;
   public:
@@ -75,7 +75,7 @@ class DeformationPlane: public Plano3d, public MovableObject
 
     void ConstantStrain(const double &);
 
-    Recta2d getFibraNeutra(void) const;
+    Recta2d getNeutralAxis(void) const;
     Pos2d getPointOnTensionedHalfPlane(void) const;
     Pos2d getPointOnCompressedHalfPlane(void) const;
     Semiplano2d getTensionedHalfPlane(void) const;

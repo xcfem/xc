@@ -46,8 +46,8 @@
 #include "xc_utils/src/geom/d2/poligonos2d/Poligono2d.h"
 
 //! @brief Constructor.
-XC::FiberSection3dBase::FiberSection3dBase(int tag, int classTag, int dim, const contenedor_fibras &fibers,XC::MaterialLoader *mat_ldr)
-  : FiberSectionBase(tag,classTag, fibers.size(),dim,mat_ldr)
+XC::FiberSection3dBase::FiberSection3dBase(int tag, int classTag, int dim, const fiber_list &fiberList,XC::MaterialLoader *mat_ldr)
+  : FiberSectionBase(tag,classTag, fiberList.size(),dim,mat_ldr)
   {}
 
 //! @brief Constructor.
@@ -79,7 +79,7 @@ double XC::FiberSection3dBase::get_strain(const double &y,const double &z) const
 //! @brief Adds a fiber to the section.
 XC::Fiber *XC::FiberSection3dBase::addFiber(int tag,const MaterialLoader &ldr,const std::string &nmbMat,const double &Area, const Vector &position)
   {
-    Fiber *retval= fibras.buscaFibra(tag);
+    Fiber *retval= fibers.findFiber(tag);
     if(retval)
       std::cerr << "(FiberSection3dBase::addFiber; fiber: " << tag << " already exists." << std::endl;
     else
@@ -105,7 +105,7 @@ int XC::FiberSection3dBase::setParameter(const std::vector<std::string> &argv, P
         // Loop over fibers to find the right material(s)
         std::vector<std::string> argv2(argv);
         argv2.erase(argv2.begin(),argv2.begin()+2);
-        ok= fibras.setParameter(paramMatTag,argv2, param);
+        ok= fibers.setParameter(paramMatTag,argv2, param);
         if(ok<0)
           {
             std::cerr << "FiberSection3dBase::setParameter() - could not set parameter. " << std::endl;
@@ -133,7 +133,7 @@ int XC::FiberSection3dBase::updateParameter(int parameterID, Information &info)
             paramIDPtr= info.theID;
             ID paramID= (*paramIDPtr);
             int paramMatrTag= paramID(1);
-            ok= fibras.updateParameter(paramMatrTag,parameterID-100,info);
+            ok= fibers.updateParameter(paramMatrTag,parameterID-100,info);
             if(ok<0)
               {
                 std::cerr << "XC::FiberSection3dBase::updateParameter() - could not update parameter. " << std::endl;

@@ -51,10 +51,10 @@ rectang= preprocessor.getMaterialLoader.newMaterial("fiber_section_3d","rectang"
 fiberSectionRepr= rectang.getFiberSectionRepr()
 fiberSectionRepr.setGeomNamed("geomRectang")
 rectang.setupFibers()
-fibras= rectang.getFibers()
+fibers= rectang.getFibers()
 
 
-extraeParamSccFibras(rectang,scc10x20)
+extractFiberSectionProperties(rectang,scc10x20)
 curvM= 0.005
 rectang.setTrialSectionDeformation(xc.Vector([0.0,curvM,0.0]))
 rectang.commitState()

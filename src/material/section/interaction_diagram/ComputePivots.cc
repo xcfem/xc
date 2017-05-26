@@ -27,7 +27,7 @@
 //ComputePivots.cc
 
 #include "ComputePivots.h"
-#include "material/section/fiber_section/fiber/StoFibras.h"
+#include "material/section/fiber_section/fiber/FiberContainer.h"
 #include "xc_utils/src/geom/d1/Segmento3d.h"
 #include "material/section/fiber_section/fiber/Fiber.h"
 #include "PivotsUltimateStrains.h"
@@ -38,36 +38,36 @@ inline Pos3d getPos3d(const XC::Fiber *t,const double &strain= 0.0)
   { return Pos3d(strain,t->getLocY(),t->getLocZ()); }
 
 //! @brief Center for the local reference system
-inline Pos3d getCDG(const XC::DqFibras &fs)
+inline Pos3d getCDG(const XC::FiberDeque &fs)
   { return Pos3d(0.0,fs.getYCdg(),fs.getZCdg()); }
 
 //! @brief Local reference system.
-Ref3d3d getRef3d(const XC::DqFibras &fs, const double &theta)
+Ref3d3d getRef3d(const XC::FiberDeque &fs, const double &theta)
   {
     const Pos3d g= getCDG(fs);
     return Ref3d3d(g,Vector3d(1,0,0),Vector3d(0,cos(theta),sin(theta)));
   }
 
 //! @brief Constructor.
-XC::ComputePivots::ComputePivots(const PivotsUltimateStrains &ap,const StoFibras &fs,const DqFibras &fsC,const DqFibras &fsS,const double &theta)
-  : Ref3d3d(getRef3d(fs, theta)), agot_pivots(ap), fibras(fs),fibrasC(fsC),fibrasS(fsS) {}
+XC::ComputePivots::ComputePivots(const PivotsUltimateStrains &ap,const FiberContainer &fs,const FiberDeque &fsC,const FiberDeque &fsS,const double &theta)
+  : Ref3d3d(getRef3d(fs, theta)), agot_pivots(ap), fibers(fs),CFibers(fsC),SFibers(fsS) {}
 
 const XC::Fiber *XC::ComputePivots::getFiberSMinY(void) const
   {
-    const size_t i= fibrasS.getFibraCooMin(*this,2);
-    return fibrasS[i];
+    const size_t i= SFibers.getFiberWithMinCoord(*this,2);
+    return SFibers[i];
   }
 
 const XC::Fiber *XC::ComputePivots::getFiberCMinY(void) const
   {
-    const size_t i= fibrasC.getFibraCooMin(*this,2);
-    return fibrasC[i];
+    const size_t i= CFibers.getFiberWithMinCoord(*this,2);
+    return CFibers[i];
   }
 
 const XC::Fiber *XC::ComputePivots::getFiberCMaxY(void) const
   {
-    const size_t i= fibrasC.getFibraCooMax(*this,2);
-    return fibrasC[i];
+    const size_t i= CFibers.getFiberWithMaxCoord(*this,2);
+    return CFibers[i];
   }
 
 
@@ -84,7 +84,7 @@ Pos3d XC::ComputePivots::GetPuntoD(void) const
 Pos3d XC::ComputePivots::calcPositionPivotA(void) const
   {
     Pos3d retval;
-    if(!fibrasS.empty()) //Hay armadura.
+    if(!SFibers.empty()) //Hay armadura.
       {
         const Fiber *t= getFiberSMinY();
         const Pos3d pos_t= getPos3d(t,agot_pivots.getDefAgotPivotA()); //Yield strain in A pivot.

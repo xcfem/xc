@@ -32,7 +32,7 @@
 #include <vector>
 #include <utility/matrix/Vector.h>
 #include <utility/matrix/Matrix.h>
-#include <material/section/repres/section/contenedor_fibras.h>
+#include <material/section/repres/section/fiber_list.h>
 
 namespace XC {
 
@@ -77,8 +77,8 @@ class FiberData
 
     size_t PutCells(const size_t &,const ListRegiones &);
     size_t PutCapasArmadura(const size_t &,const ListReinfLayer &);
-    void getFibras2d(contenedor_fibras &) const;
-    void getFibras3d(contenedor_fibras &) const;
+    void get2DFibers(fiber_list &) const;
+    void get3DFibers(fiber_list &) const;
   };
 
 } // end of XC namespace

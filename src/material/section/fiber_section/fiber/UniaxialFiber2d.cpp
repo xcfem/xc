@@ -100,7 +100,7 @@ int XC::UniaxialFiber2d::setTrialFiberStrain(const Vector &vs)
     return theMaterial->setTrialStrain(strain);
   }
 
-//! @brief Returns the resultante de tensiones en la fibra.
+//! @brief Returns the stres resultant of the fiber.
 XC::Vector &XC::UniaxialFiber2d::getFiberStressResultants(void) 
   {
     // Use the section kinematic matrix to get the fiber 

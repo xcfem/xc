@@ -54,7 +54,7 @@ sa= preprocessor.getMaterialLoader.newMaterial("fiberSectionShear3d","sa")
 fiberSectionRepr= sa.getFiberSectionRepr()
 fiberSectionRepr.setGeomNamed("geomRectang")
 sa.setupFibers()
-extraeParamSccFibras(sa,scc1x1)
+extractFiberSectionProperties(sa,scc1x1)
 sa.setRespVyByName("respVy")
 sa.setRespVzByName("respVz")
 sa.setRespTByName("respT")
@@ -129,12 +129,12 @@ defRespVy= respVy.getStrain()
 defRespVz= respVz.getStrain()
 defRespT= respT.getStrain()
 
-fibras= scc.getFibers()
+fibers= scc.getFibers()
 
-defFibras= fibras.getDeformation()
+fibersDef= fibers.getDeformation()
 
-esfSeccion= xc.Vector([fibras.getResultant(),esfRespVy,esfRespVz,esfRespT,fibras.getMy(0.0),fibras.getMz(0.0)])
-defSeccion= xc.Vector([defFibras[0],defRespVy,defRespVz,defRespT,defFibras[2],defFibras[1]])
+esfSeccion= xc.Vector([fibers.getResultant(),esfRespVy,esfRespVz,esfRespT,fibers.getMy(0.0),fibers.getMz(0.0)])
+defSeccion= xc.Vector([fibersDef[0],defRespVy,defRespVz,defRespT,fibersDef[2],fibersDef[1]])
 
 
 

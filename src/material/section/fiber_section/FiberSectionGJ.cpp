@@ -51,7 +51,7 @@
 // Written: fmk
 // Created: 04/04
 //
-// Description: This file contains the class implementation of XC::FiberSection2d.
+// Description: This file contains the class implementation of FiberSectionGJ.
 
 #include <cstdlib>
 
@@ -69,47 +69,47 @@
 #include "material/section/ResponseId.h"
 #include "xc_utils/src/geom/d2/poligonos2d/Poligono2d.h"
 
-// constructors:
-XC::FiberSectionGJ::FiberSectionGJ(int tag,const contenedor_fibras &fibers, double gj,XC::MaterialLoader *mat_ldr): 
-  FiberSection3dBase(tag, SEC_TAG_FiberSectionGJ,4,fibers,mat_ldr), GJ(gj)
-  {fibras.setup(*this,fibers,kr);}
+//! @brief Constructor.
+XC::FiberSectionGJ::FiberSectionGJ(int tag,const fiber_list &fiberList, double gj,XC::MaterialLoader *mat_ldr): 
+  FiberSection3dBase(tag, SEC_TAG_FiberSectionGJ,4,fiberList,mat_ldr), GJ(gj)
+  { fibers.setup(*this,fiberList,kr); }
 
 XC::FiberSectionGJ::FiberSectionGJ(int tag,MaterialLoader *mat_ldr): 
   FiberSection3dBase(tag, SEC_TAG_FiberSectionGJ,4,mat_ldr),GJ(1.0) {}
 
-// constructor for blank object that recvSelf needs to be invoked upon
+//! @brief Constructor for blank object that recvSelf needs to be invoked upon
 XC::FiberSectionGJ::FiberSectionGJ(MaterialLoader *mat_ldr):
   FiberSection3dBase(0,SEC_TAG_FiberSectionGJ,4,mat_ldr), GJ(1.0) {}
 
 void XC::FiberSectionGJ::setupFibers(void)
   {
     if(section_repres)
-      fibras.setup(*this,section_repres->getFibras3d(),kr);
+      fibers.setup(*this,section_repres->get3DFibers(),kr);
     else
-      fibras.updateKRCDG(*this,kr);
+      fibers.updateKRCDG(*this,kr);
   }
 
 //! @brief Adds a fiber to the section.
 XC::Fiber *XC::FiberSectionGJ::addFiber(Fiber &newFiber)
-  { return fibras.addFiber(*this,newFiber,kr); }
+  { return fibers.addFiber(*this,newFiber,kr); }
 
 //! @brief Establece los valores de las initial strains.
 int XC::FiberSectionGJ::setInitialSectionDeformation(const Vector &deforms)
   {
     FiberSection3dBase::setInitialSectionDeformation(deforms);
-    return fibras.setInitialSectionDeformation(*this);
+    return fibers.setInitialSectionDeformation(*this);
   }
 
 //! @brief Sets trial generalized strains values.
 int XC::FiberSectionGJ::setTrialSectionDeformation(const XC::Vector &deforms)
   {
     FiberSection3dBase::setTrialSectionDeformation(deforms);
-    return fibras.setTrialSectionDeformation(*this,kr);
+    return fibers.setTrialSectionDeformation(*this,kr);
   }
 
 //! @brief Return the initial tangent stiffness matrix.
 const XC::Matrix &XC::FiberSectionGJ::getInitialTangent(void) const
-  { return fibras.getInitialTangent(*this);  }
+  { return fibers.getInitialTangent(*this);  }
 
 XC::SectionForceDeformation *XC::FiberSectionGJ::getCopy(void) const
   { return new FiberSectionGJ(*this); }
@@ -124,12 +124,12 @@ int XC::FiberSectionGJ::getOrder(void) const
 int XC::FiberSectionGJ::revertToLastCommit(void)
   {
     FiberSection3dBase::revertToLastCommit();
-    return fibras.revertToLastCommit(*this,kr);
+    return fibers.revertToLastCommit(*this,kr);
   }
 
 //! @brief Return to the initial state.
 int XC::FiberSectionGJ::revertToStart(void)
-  { return fibras.revertToStart(*this,kr); }
+  { return fibers.revertToStart(*this,kr); }
 
 int XC::FiberSectionGJ::sendSelf(CommParameters &cp)
   {
@@ -150,7 +150,7 @@ void XC::FiberSectionGJ::Print(std::ostream &s, int flag)
     s << "\tTorsional Stiffness: " << GJ << std::endl;
 
     if(flag == 1)
-      fibras.Print(s,flag);
+      fibers.Print(s,flag);
   }
 
 XC::FiberSectionGJ XC::FiberSectionReprToFiberSectionGJ(const int &tag,const XC::FiberSectionRepr &fiberSectionRepr,const double &GJ)
