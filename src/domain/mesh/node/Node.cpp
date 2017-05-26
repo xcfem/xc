@@ -866,6 +866,37 @@ int XC::Node::incrTrialVel(const Vector &incrVel)
 int XC::Node::incrTrialAccel(const Vector &incrAccel)
   { return accel.incrTrialData(numberDOF,incrAccel); }
 
+//! @brief Create a new load on the node and put it in the current load pattern.
+const XC::NodalLoad *XC::Node::newLoad(const Vector &v)
+  {
+    NodalLoad *retval= nullptr;
+    Preprocessor *preprocessor= getPreprocessor();
+    if(preprocessor)
+      {
+        MapLoadPatterns &casos= preprocessor->getLoadLoader().getLoadPatterns();
+        const int nodeTag= getTag(); //Load over this node.
+
+        const size_t sz= v.Size();
+        if(sz>0)
+          {
+            LoadPattern *lp= casos.getCurrentLoadPatternPtr();
+            if(lp)
+              retval= lp->newNodalLoad(nodeTag,v);
+            else
+	      std::cerr << nombre_clase() << "::" << __FUNCTION__
+                        << "; there is no current load pattern."
+                        << " Nodal load ignored." << std::endl; 
+          }
+        else
+          std::cerr << nombre_clase() << "::" << __FUNCTION__
+                    << "; a vector of dimension greater than zero was expected." << std::endl;
+      }
+    else
+      std::cerr << nombre_clase() << "::" << __FUNCTION__
+	        << "; preprocessor not defined." << std::endl;
+    return retval;
+  }
+
 //! @brief Causes the node to zero out its unbalanced load vector.
 void XC::Node::zeroUnbalancedLoad(void)
   { unbalLoad.Zero(); }

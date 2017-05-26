@@ -236,7 +236,8 @@ class Node: public MeshComponent
     virtual int incrTrialDisp(const Vector &);    
     virtual int incrTrialVel(const Vector &);    
     virtual int incrTrialAccel(const Vector &);        
-    
+
+    const NodalLoad *newLoad(const Vector &v);
     // public methods for adding and obtaining load information
     virtual void zeroUnbalancedLoad(void);
     virtual int addUnbalancedLoad(const Vector &load, double fact = 1.0); 

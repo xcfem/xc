@@ -32,8 +32,8 @@ nodes= preprocessor.getNodeLoader
 modelSpace= predefined_spaces.StructuralMechanics2D(nodes)
 
 nodes.defaultTag= 1 #First node number.
-nod= nodes.newNodeXY(0,0)
-nod= nodes.newNodeXY(L,0.0)
+nod1= nodes.newNodeXY(0,0)
+nod2= nodes.newNodeXY(L,0.0)
 
 # Geometric transformation(s)
 trfs= preprocessor.getTransfCooLoader
@@ -50,12 +50,12 @@ elementos.defaultTransformation= "lin"
 elementos.defaultMaterial= "scc"
 #  sintaxis: beam2d_02[<tag>] 
 elementos.defaultTag= 1 #Tag for next element.
-beam2d= elementos.newElement("elastic_beam_2d",xc.ID([1,2]))
+beam2d= elementos.newElement("elastic_beam_2d",xc.ID([nod1.tag,nod2.tag]))
 beam2d.sectionProperties.h= h
     
 # Constraints
 constraints= preprocessor.getConstraintLoader
-modelSpace.fixNode000(1)
+modelSpace.fixNode000(nod1.tag)
 
 
 # Loads definition
@@ -66,7 +66,9 @@ ts= casos.newTimeSeries("constant_ts","ts")
 casos.currentTimeSeries= "ts"
 #Load case definition
 lp0= casos.newLoadPattern("default","0")
-lp0.newNodalLoad(2,xc.Vector([0,-P,0]))
+casos.currentLoadPattern= "0"
+#lp0.newNodalLoad(2,xc.Vector([0,-P,0]))
+nod2.newLoad(xc.Vector([0,-P,0]))
 #We add the load case to domain.
 casos.addToDomain("0")
 
@@ -74,7 +76,6 @@ casos.addToDomain("0")
 analisis= predefined_solutions.simple_static_linear(prueba)
 result= analisis.analyze(1)
 
-nod2= nodes.getNode(2)
 delta= nod2.getDisp[1] 
 
 deltaTeor= (-P*L**3/3/E/I)

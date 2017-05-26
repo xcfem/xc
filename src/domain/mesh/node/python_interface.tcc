@@ -96,6 +96,8 @@ class_<XC::Node, XC::Node *, bases<XC::MeshComponent>, boost::noncopyable >("Nod
   .def("getEffectiveModalMass",&XC::Node::getEffectiveModalMass)
   .add_property("getEffectiveModalMasses",&XC::Node::getEffectiveModalMasses)
 
+  .def("newLoad",make_function(&XC::Node::newLoad, return_internal_reference<>() ),"Create a new load on the node and put it on the current load pattern.")
+
   .def("getEquivalentStaticLoad",&XC::Node::getEquivalentStaticLoad)
 
   .def("getMaxModalDisplacement",getMaxModalDisplacement)
