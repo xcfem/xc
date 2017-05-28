@@ -6,6 +6,8 @@
 /usr/local/lib/python2.7/dist-packages/actions/earth_pressure/EarthPressure.pyc
 /usr/local/lib/python2.7/dist-packages/actions/earth_pressure/__init__.py
 /usr/local/lib/python2.7/dist-packages/actions/earth_pressure/__init__.pyc
+/usr/local/lib/python2.7/dist-packages/actions/earth_pressure/soil_properties.py
+/usr/local/lib/python2.7/dist-packages/actions/earth_pressure/soil_properties.pyc
 /usr/local/lib/python2.7/dist-packages/actions/estadillo_cargas.py
 /usr/local/lib/python2.7/dist-packages/actions/estadillo_cargas.pyc
 /usr/local/lib/python2.7/dist-packages/actions/__init__.py
@@ -662,6 +664,10 @@
 /usr/local/lib/python2.7/dist-packages/model/rigid_rod.pyc
 /usr/local/lib/python2.7/dist-packages/model/setMgmtUtils.py
 /usr/local/lib/python2.7/dist-packages/model/setMgmtUtils.pyc
+/usr/local/lib/python2.7/dist-packages/model/sets/__init__.py
+/usr/local/lib/python2.7/dist-packages/model/sets/__init__.pyc
+/usr/local/lib/python2.7/dist-packages/model/sets/sets_mng.py
+/usr/local/lib/python2.7/dist-packages/model/sets/sets_mng.pyc
 /usr/local/lib/python2.7/dist-packages/model/tensa_cables.py
 /usr/local/lib/python2.7/dist-packages/model/tensa_cables.pyc
 /usr/local/lib/python2.7/dist-packages/postprocess/analysis_results.py
