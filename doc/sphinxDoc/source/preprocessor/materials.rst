@@ -21,8 +21,8 @@ Steel
     materials.ec3
     materials.eae
     materials.sia263
-    materials.perfiles_metalicos
-    materials.pernos_anclaje
+    materials.structural_shapes
+    materials.anchor_bolts
 
 Timber
 ++++++
