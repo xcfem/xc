@@ -518,6 +518,8 @@
 /usr/local/lib/python2.7/dist-packages/materials/steelProfile.pyc
 /usr/local/lib/python2.7/dist-packages/materials/stressCalc.py
 /usr/local/lib/python2.7/dist-packages/materials/stressCalc.pyc
+/usr/local/lib/python2.7/dist-packages/materials/structural_steel.py
+/usr/local/lib/python2.7/dist-packages/materials/structural_steel.pyc
 /usr/local/lib/python2.7/dist-packages/materials/typical_materials.py
 /usr/local/lib/python2.7/dist-packages/materials/typical_materials.pyc
 /usr/local/lib/python2.7/dist-packages/materials/xBarra/calculo_comb.py

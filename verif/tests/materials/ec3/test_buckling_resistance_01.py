@@ -19,7 +19,7 @@ import xc
 import scipy.interpolate
 
 
-from materials import aceros_estructurales as steel
+from materials import structural_steel as steel
 from materials import steelProfile as sp
 from materials.perfiles_metalicos.arcelor import perfiles_he_arcelor as he
 

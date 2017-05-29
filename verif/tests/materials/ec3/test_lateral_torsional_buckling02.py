@@ -20,7 +20,7 @@ import scipy.interpolate
 
 
 from materials.ec3 import lateral_torsional_buckling as ltb
-from materials import aceros_estructurales as steel
+from materials import structural_steel as steel
 from materials.ec3 import EC3IPEProfile as EC3IPE
 
 S355JR= steel.S355JR

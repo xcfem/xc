@@ -10,7 +10,7 @@ from model import predefined_spaces
 from materials import typical_materials
 from materials.perfiles_metalicos.arcelor import perfiles_he_arcelor as HE_profiles
 from materials import steelProfile
-from materials import aceros_estructurales as steel
+from materials import structural_steel as steel
 from postprocess import def_params_control as dp
 from postprocess import def_vars_control as vc
 from postprocess import callback_controls as cc
