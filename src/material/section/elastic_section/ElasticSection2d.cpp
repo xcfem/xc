@@ -80,6 +80,9 @@ XC::ElasticSection2d::ElasticSection2d(void)
   : BaseElasticSection2d(0,SEC_TAG_Elastic2d,2) {}
 
 
+//! To construct an ElasticSection2D with an integer identifier {\em
+//! tag}, an elastic modulus of \f$E\f$, a second moment of area \f$I\f$,
+//! a section area of \f$A\f$.
 XC::ElasticSection2d::ElasticSection2d(int tag, double E, double A, double I)
   : BaseElasticSection2d(tag,SEC_TAG_Elastic2d,2,E,A,I,0.0,0.0)
   {}
@@ -119,12 +122,28 @@ XC::SectionForceDeformation *XC::ElasticSection2d::getCopy(void) const
   { return new XC::ElasticSection2d(*this); }
 
 //! @brief Section stiffness contribution response identifiers.
+//!
+//! Returns the section ID code that indicates the ordering of
+//! section response quantities. For this section, axial response is the
+//! first quantity, bending about the local z-axis is the second, and
+//! shear along the local y-axis is third.
+//! \f[
+//! code := \left[
+//!   \begin{array}{c}
+//!       2
+//!       1
+//!       3
+//!   \end{array} 
+//! \right]
+//! \f]
 const XC::ResponseId &XC::ElasticSection2d::getType(void) const
   { return RespElasticSection2d; }
 
+//! @brief Return 3.
 int XC::ElasticSection2d::getOrder(void) const
   { return 2; }
 
+//! @brief Sends object through the channel being passed as parameter.
 int XC::ElasticSection2d::sendSelf(CommParameters &cp)
   {
     setDbTag(cp);
@@ -134,10 +153,12 @@ int XC::ElasticSection2d::sendSelf(CommParameters &cp)
 
     res+= cp.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
-      std::cerr << nombre_clase() << "sendSelf() - failed to send data\n";
+      std::cerr << nombre_clase() << "::" << __FUNCTION__
+		    << "; failed to send data\n";
     return res;
   }
 
+//! @brief Receives object through the channel being passed as parameter.
 int XC::ElasticSection2d::recvSelf(const CommParameters &cp)
   {
     inicComm(3);
@@ -145,13 +166,15 @@ int XC::ElasticSection2d::recvSelf(const CommParameters &cp)
     int res= cp.receiveIdData(getDbTagData(),dataTag);
 
     if(res<0)
-      std::cerr << nombre_clase() << "::recvSelf - failed to receive ids.\n";
+      std::cerr << nombre_clase() << "::" << __FUNCTION__
+	        << "; failed to receive ids.\n";
     else
       {
         setTag(getDbTagDataPos(0));
         res+= recvData(cp);
         if(res<0)
-          std::cerr << nombre_clase() << "::recvSelf - failed to receive data.\n";
+          std::cerr << nombre_clase() << "::" << __FUNCTION__
+		    << "; failed to receive data.\n";
       }
     return res;
   }

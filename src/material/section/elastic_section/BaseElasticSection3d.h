@@ -39,6 +39,25 @@ namespace XC {
 //
 //! @brief Base class for cross sections with linear elastic material
 //! on a three-dimensional problem (6 DOFs on each section).
+//!
+//! The generalized deformation vector is:
+//! \f[
+//! \esec := \left[
+//!   \begin{array}{c}
+//!       \epsilon_a
+//!       \kappa_z
+//!       \kappa_y
+//!       \gamma_y
+//!       \gamma_z
+//!       \phi
+//!   \end{array} 
+//! \right]
+//! \f]
+//! where \f$\epsilon_a\f$ is the axial strain, \f$\kappa_z\f$ is
+//! the curvature about the local z-axis, \f$\kappa_z\f$ is the curvature
+//! about the local z-axis, \f$\gamma_y\f$ is the shear strain along the
+//! local y-axis, \f$\gamma_z\f$ is the shear strain along the local z-axis,
+//! and \f$\phi\f$ is the angle of twist.
 class BaseElasticSection3d: public BaseElasticSection
   {
   protected:

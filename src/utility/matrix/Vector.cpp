@@ -222,7 +222,7 @@ int XC::Vector::resize(int newSize)
       } 
     else if(newSize == 0)
       { libera(); } 
-    else // otherwise if newSize is gretaer than oldSize free old space and get new_ space
+    else // otherwise if newSize is greater than oldSize free old space and get new_ space
       if(newSize > sz)
         {
           alloc(newSize);

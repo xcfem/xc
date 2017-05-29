@@ -15,9 +15,7 @@
 \indent\indent\indent\indent {\bf ElasticSection2D}
 
 \noindent {\bf Description}
-\indent ElasticSection2D provides the implementation of a
-//! section which exhibits uncoupled elastic behavior in axial, moment,
-//! and shear response.
+\indent ElasticSection2D 
 
 \noindent {\bf Class Interface}
 \indent // Constructor
@@ -50,10 +48,7 @@
 \noindent {\bf Constructor}
 \indent {\em ElasticSection2D (int tag, double E, double I, double A,
 //! double G, double alpha);}
-//! To construct an ElasticSection2D with an integer identifier {\em
-//! tag}, an elastic modulus of \f$E\f$, a second moment of area \f$I\f$,
-//! a section area of \f$A\f$, an elastic shear modulus of \f$G\f$, and a shape factor
-//! of \f$alpha\f$. The integers \p tag and MAT\_TAG\_ElasticSection2D, defined in
+ The integers \p tag and MAT\_TAG\_ElasticSection2D, defined in
 \f$<\f$classTags.h\f$>\f$, are passed to the SectionForceDeformation
 //! class constructor.
 
@@ -155,41 +150,6 @@
 //! using the same values of \p tag, \f$E\f$, \f$A\f$, \f$I\f$, \f$G\f$, and \f$\alpha.  
 //! It is up to the caller to ensure that the destructor is invoked.
 
-\indent {\em const ID \&getType (void); }
-//! Returns the section ID code that indicates the ordering of
-//! section response quantities. For this section, axial response is the
-//! first quantity, bending about the local z-axis is the second, and
-//! shear along the local y-axis is third.
-
-\begin{equation}
-//! code := \left[
-   \begin{array}{c}
-       2
-       1
-       3 
-   \end{array} 
- \right]
-\end{equation}
-
-\indent {\em int getOrder (void); }
-//! Returns 3.
-
-\indent {\em    int sendSelf(int commitTag, Channel \&theChannel); }
-//! Creates a Vector of size \f$6\f$ into which it places  \p tag,
-\f$E\f$, \f$A\f$, \f$I\f$, \f$G\f$, and \f$\alpha\f$. Invokes sendVector() on  \p theChannel using the
-//! ElasticSection2D objects \p dbTag, the integer \p commitTag and
-//! the Vector as arguments. Returns \f$0\f$ if successful, a warning message
-//! and a negative number are returned if the Channel object fails to send
-//! the Vector.
-
-\indent {\em    int recvSelf(int commitTag, Channel \&theChannel, 
-		 FEM\_ObjectBroker \&theBroker); }
-//! Creates a Vector of size \f$6\f$. Invokes recvVector() on  {\em
-//! theChannel} using the ElasticSection2D objects \p dbTag, the integer
-\p commitTag and the Vector as arguments. Using the data in the
-//! Vector to set its \p tag, \f$E\f$, \f$A\f$, \f$I\f$, \f$G\f$, and \f$\alpha\f$. Returns \f$0\f$ if successful, a
-//! warning message is printed and a negative number is returned if the Channel 
-//! object fails to receive the Vector.
 
 \indent {\em    void Print(OPS_Stream \&s, int flag =0);}
 //! Prints to the stream \p s the objects \p tag, \f$E\f$, \f$A\f$, \f$I\f$, \f$G\f$, and

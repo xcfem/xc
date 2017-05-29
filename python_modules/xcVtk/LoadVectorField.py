@@ -33,7 +33,7 @@ class LoadVectorField(vf.VectorField):
 
   def dumpElementalLoads(self,preprocessor,lp):
     ''' Iterate over loaded elements dumping its loads into the graphic.'''
-    lIter= lp.getElementalLoadIter
+    lIter= lp.loads.getElementalLoadIter
     elementLoad= lIter.next()
     i= self.components[0]; j= self.components[1]; k= self.components[2]
     count= 0 
@@ -63,7 +63,7 @@ class LoadVectorField(vf.VectorField):
               the initial position plus its displacement multiplied
               by this factor.    
     '''
-    lIter= lp.getNodalLoadIter
+    lIter= lp.loads.getNodalLoadIter
     nl= lIter.next()
     count= 0 
     while(nl):

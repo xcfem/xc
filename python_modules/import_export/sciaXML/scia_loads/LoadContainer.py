@@ -68,7 +68,7 @@ class LoadContainer(LoadContainerBase):
   '''Container for loads over mesh nodes and elements.'''
   def dumpPointLoads(self, lp, destLoadCase):
     '''Dump loads over nodes.'''
-    lIter= lp.getNodalLoadIter
+    lIter= lp.loads.getNodalLoadIter
     nl= lIter.next()
     while nl:
       pLoad= nld.NodalLoadRecord(destLoadCase, self.pointLoadCounter,None,1.0)
@@ -81,7 +81,7 @@ class LoadContainer(LoadContainerBase):
       nl= lIter.next()
   def dumpSurfaceLoads(self, lp, destLoadCase):
     '''Dump loads over elements.'''
-    eLoadIter= lp.getElementalLoadIter
+    eLoadIter= lp.loads.getElementalLoadIter
     el= eLoadIter.next()
     while el:
       eLoad= nld.ElementLoadRecord(destLoadCase,self.surfaceLoadCounter,1.0)
@@ -109,7 +109,7 @@ class FreeLoadContainer(LoadContainerBase):
 
   def dumpPointLoads(self, lp, destLoadCase):
     '''Dump loads over nodes as free punctual loads.'''
-    lIter= lp.getNodalLoadIter
+    lIter= lp.loads.getNodalLoadIter
     nl= lIter.next()
     while nl:
       node= nl.getNode
@@ -126,7 +126,7 @@ class FreeLoadContainer(LoadContainerBase):
     '''Dump loads over surfaces as free surface loads.'''
     domain= lp.getDomain
     preprocessor= lp.getDomain.getPreprocessor
-    eLoadIter= lp.getElementalLoadIter
+    eLoadIter= lp.loads.getElementalLoadIter
     eLoad= eLoadIter.next()
     loadSets= []
     while eLoad:

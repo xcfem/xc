@@ -94,8 +94,8 @@ class ArrayOfTaggedObjects : public TaggedObjectStorage
     int positionLastNoFitEntry; //!< marker of place array filled up to
     bool fitFlag; //!< flag indicating if all components in nicely
 
-    tagged_vector theComponents; // the array
-    ArrayOfTaggedObjectsIter  myIter; // an iter for accessing the objects
+    tagged_vector theComponents; //!< the array
+    ArrayOfTaggedObjectsIter  myIter; //!< an iter for accessing the objects
   protected:
     iterator begin(void)
       { return theComponents.begin(); }

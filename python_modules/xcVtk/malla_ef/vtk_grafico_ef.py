@@ -213,7 +213,7 @@ class RecordDefDisplayEF(vtk_grafico_base.RecordDefDisplay):
   def displayNodalLoads(self, preprocessor, loadPattern, color, fScale):
     loadPattern.addToDomain()
     loadPatternName= loadPattern.getProp("dispName")
-    lIter= loadPattern.getNodalLoadIter
+    lIter= loadPattern.loads.getNodalLoadIter
     load= lIter.next()
     while not(load is None):
       actorName= "flecha"+loadPatternName+"%04d".format(load.tag) # Tag force.
@@ -255,7 +255,7 @@ class RecordDefDisplayEF(vtk_grafico_base.RecordDefDisplay):
 
   def displayElementalLoads(self, preprocessor,loadPattern, color, fScale):
     loadPattern.addToDomain()
-    eleLoadIter= loadPattern.getElementalLoadIter
+    eleLoadIter= loadPattern.loads.getElementalLoadIter
     eleLoad= eleLoadIter.next()
     lmsg.error('displayElementalLoads not implemented.')
     # while not(eleLoad is None):

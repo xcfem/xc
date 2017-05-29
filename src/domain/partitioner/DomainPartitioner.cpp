@@ -347,7 +347,7 @@ int XC::DomainPartitioner::partition(int numParts, bool usingMain, int mainParti
         // now remove any nodal loads that correspond to internal nodes in a subdomain
         // and add them to the appropriate loadpattern in the subdomain
 
-        NodalLoadIter theNodalLoads= theLoadPattern->second->getNodalLoads();
+        NodalLoadIter theNodalLoads= theLoadPattern->second->getLoads().getNodalLoads();
         NodalLoad *theNodalLoad;
         while((theNodalLoad = theNodalLoads()) != 0)
           {
@@ -356,8 +356,8 @@ int XC::DomainPartitioner::partition(int numParts, bool usingMain, int mainParti
             TaggedObject *theTaggedObject = theNodeLocations->getComponentPtr(nodeTag);
             if(theTaggedObject == 0)
               {
-                std::cerr << "XC::DomainPartitioner::partition(int numParts)";
-                std::cerr << " - failed to find NodeLocation in Map for XC::Node: "
+                std::cerr << "DomainPartitioner::" << __FUNCTION__
+			  << "; failed to find node location in Map for node: "
                           << nodeTag << " -- A BUG!!\n";
                 numPartitions = 0;
                 return -1;
@@ -375,7 +375,8 @@ int XC::DomainPartitioner::partition(int numParts, bool usingMain, int mainParti
                         Subdomain *theSubdomain = myDomain->getSubdomainPtr(partition);
                         theLoadPattern->second->removeNodalLoad(theNodalLoad->getTag());
                         if((theSubdomain->addNodalLoad(theNodalLoad, loadPatternTag)) != true)
-                          std::cerr << "XC::DomainPartitioner::partition() - failed to add Nodal XC::Load\n";
+                          std::cerr << "DomainPartitioner::" << __FUNCTION__
+				    << "; failed to add nodal load.\n";
                       }
                   }
               }
@@ -388,8 +389,8 @@ int XC::DomainPartitioner::partition(int numParts, bool usingMain, int mainParti
             TaggedObject *theTaggedObject = theNodeLocations->getComponentPtr(nodeTag);
             if(theTaggedObject == 0)
               {
-                std::cerr << "XC::DomainPartitioner::partition(int numParts)";
-                std::cerr << " - failed to find NodeLocation in Map for XC::Node: "
+                std::cerr << "DomainPartitioner::" << __FUNCTION__
+		          << "; failed to find NodeLocation in Map for node: "
                           << nodeTag << " -- A BUG!!\n";
                 numPartitions = 0;
                 return -1;
@@ -411,7 +412,7 @@ int XC::DomainPartitioner::partition(int numParts, bool usingMain, int mainParti
                   }
               }
           }
-        ElementalLoadIter &theLoads = theLoadPattern->second->getElementalLoads();
+        ElementalLoadIter &theLoads = theLoadPattern->second->getLoads().getElementalLoads();
         ElementalLoad *theLoad;
         while((theLoad = theLoads()) != 0)
           {

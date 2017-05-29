@@ -28,19 +28,27 @@ class_<XC::NodeLocker,XC::NodeLocker *, bases<XC::ForceReprComponent>, boost::no
   .def("clearAll",&XC::NodeLocker::clearAll)
   ;
 
+class_<XC::LoadContainer, bases<EntCmd>, boost::noncopyable >("LoadContainer", no_init)
+  .add_property("getNodalLoadIter", make_function( &XC::LoadContainer::getNodalLoads, return_internal_reference<>() ),"return an iterator over the nodal loads.")
+  .add_property("getElementalLoadIter", make_function( &XC::LoadContainer::getElementalLoads, return_internal_reference<>() ),"return an iterator over the elemental loads.")
+  .add_property("getNumNodalLoads",&XC::LoadContainer::getNumNodalLoads,"return the number of nodal loads.")
+    .add_property("getNumElementalLoads",&XC::LoadContainer::getNumElementalLoads,"return the number of elemental loads.")
+  .add_property("getNumLoads",&XC::LoadContainer::getNumLoads,"return the totalnumber of loads.")
+  ;
+
 double &(XC::LoadPattern::*getGammaFRef)(void)= &XC::LoadPattern::GammaF;
 XC::ElementalLoad *(XC::LoadPattern::*defElementalLoad)(const std::string &)= &XC::LoadPattern::newElementalLoad;
+XC::LoadContainer &(XC::LoadPattern::*getLoadsRef)(void)= &XC::LoadPattern::getLoads;
 class_<XC::LoadPattern, bases<XC::NodeLocker>, boost::noncopyable >("LoadPattern", no_init)
   .add_property("description", make_function( &XC::LoadPattern::getDescription, return_value_policy<return_by_value>() ), &XC::LoadPattern::setGammaF,"load case description.")
   .add_property("loadFactor", make_function( &XC::LoadPattern::getLoadFactor, return_value_policy<return_by_value>() ))
   .add_property("gammaF", make_function( getGammaFRef, return_value_policy<return_by_value>() ), &XC::LoadPattern::setGammaF)
-  .def("newNodalLoad", &XC::LoadPattern::newNodalLoad,return_internal_reference<>(),"Creates a nodal load.")
-  .add_property("getNumNodalLoads",&XC::LoadPattern::getNumNodalLoads)
-  .add_property("getNumElementalLoads",&XC::LoadPattern::getNumElementalLoads)
-  .add_property("getNumLoads",&XC::LoadPattern::getNumLoads)
-  .def("newElementalLoad", make_function(defElementalLoad,return_internal_reference<>()),"Crea una load over element.")
-  .add_property("getNodalLoadIter", make_function( &XC::LoadPattern::getNodalLoads, return_internal_reference<>() ))
-  .add_property("getElementalLoadIter", make_function( &XC::LoadPattern::getElementalLoads, return_internal_reference<>() ))
+  .def("newNodalLoad", &XC::LoadPattern::newNodalLoad,return_internal_reference<>(),"Create a nodal load.")
+  .add_property("getNumNodalLoads",&XC::LoadPattern::getNumNodalLoads,"return the number of nodal loads.")
+  .add_property("getNumElementalLoads",&XC::LoadPattern::getNumElementalLoads,"return the number of elemental loads.")
+  .add_property("getNumLoads",&XC::LoadPattern::getNumLoads,"return the totalnumber of loads.")
+  .def("newElementalLoad", make_function(defElementalLoad,return_internal_reference<>()),"Create a load over element.")
+.add_property("loads", make_function(getLoadsRef, return_internal_reference<>() ),"return a reference to the load container.")
   .def("removeNodalLoad",&XC::LoadPattern::removeNodalLoad,"removes the nodal load with the tag passed as parameter.")
   .def("removeElementalLoad",&XC::LoadPattern::removeElementalLoad,"removes the elemental load with the tag passed as parameter.")
   .def("clearLoads",&XC::LoadPattern::clearLoads,"Deletes the pattern loads.")

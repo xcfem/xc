@@ -51,9 +51,7 @@
 // Written: fmk 07/99
 // Revised:
 //
-// Purpose: This file contains the method definitions for class XC::LoadPattern.
-// LoadPattern is a container class.
-//
+// Purpose: This file contains the method definitions for class LoadPattern.
 
 
 #include "LoadPattern.h"
@@ -76,69 +74,9 @@
 
 #include "preprocessor/loaders/LoadLoader.h"
 
-void XC::LoadPattern::libera_contenedores(void)
-  {
-    if(theNodalLoads)
-      {
-        delete theNodalLoads;
-        theNodalLoads= nullptr;
-      }
-    
-    if(theElementalLoads)
-      {
-        delete theElementalLoads;
-        theElementalLoads= nullptr;
-      }
-  }
-
-void XC::LoadPattern::libera_iteradores(void)
-  {
-    if(theEleIter)
-      {
-        delete theEleIter;
-        theEleIter= nullptr;
-      }
-    if(theNodIter)
-      {
-        delete theNodIter;
-        theNodIter= nullptr;
-      }
-  }
-
-//! @brief Memory allocation.
-void XC::LoadPattern::alloc_contenedores(void)
-  {
-    libera_contenedores();
-    theNodalLoads = new ArrayOfTaggedObjects(this,32,"nodalLoad");
-    theElementalLoads = new ArrayOfTaggedObjects(this,32,"elementLoad");
-
-    if(!theNodalLoads || !theElementalLoads)
-      {
-        std::cerr << "LoadPattern::LoadPattern() - ran out of memory\n";
-        exit(-1);
-      }
-  }
-
-//! @brief Reserva memoria para almacenar los iteradores.
-void XC::LoadPattern::alloc_iteradores(void)
-  {
-    libera_iteradores();
-    theEleIter = new ElementalLoadIter(theElementalLoads);
-    theNodIter = new NodalLoadIter(theNodalLoads);
-
-    if(theEleIter == 0 || theNodIter == 0)
-      {
-        std::cerr << "LoadPattern::LoadPattern() - ran out of memory\n";
-        exit(-1);
-      }
-  }
-
-void XC::LoadPattern::libera(void)
+void XC::LoadPattern::free(void)
   {
     setTimeSeries(nullptr);
-
-    libera_contenedores();
-    libera_iteradores();
 
     // AddingSensitivity:BEGIN /////////////////////////////
     if(randomLoads)
@@ -150,48 +88,23 @@ void XC::LoadPattern::libera(void)
   }
 
 //! @brief Constructor
-XC::LoadPattern::LoadPattern(int tag, int clasTag)
-  :NodeLocker(tag,clasTag), loadFactor(0.0), gamma_f(1.0),
-   theSeries(nullptr), theNodalLoads(nullptr), theElementalLoads(nullptr), 
-   theNodIter(nullptr), theEleIter(nullptr), isConstant(1)
-  {
-    // constructor for subclass
-    alloc_contenedores();
-    alloc_iteradores();
-
-    // AddingSensitivity:BEGIN /////////////////////////////
-    randomLoads= nullptr;
-    // AddingSensitivity:END ///////////////////////////////
-  }
+XC::LoadPattern::LoadPattern(int tag, int classTag)
+  : NodeLocker(tag,classTag), loadFactor(0.0), gamma_f(1.0),
+    theSeries(nullptr), theLoads(this), randomLoads(nullptr), isConstant(1)
+  {}
 
 
 //! @brief Default constructor.
 XC::LoadPattern::LoadPattern(void)
   :NodeLocker(0,PATTERN_TAG_LoadPattern), loadFactor(0.0), gamma_f(1.0),
-   theSeries(nullptr), theNodalLoads(nullptr), theElementalLoads(nullptr),
-   theNodIter(nullptr), theEleIter(nullptr), isConstant(1)
-  {
-    alloc_contenedores();
-    alloc_iteradores();
-
-    // AddingSensitivity:BEGIN /////////////////////////////
-    randomLoads= nullptr;
-    // AddingSensitivity:END ///////////////////////////////
-  }
+   theSeries(nullptr), theLoads(this), randomLoads(nullptr), isConstant(1)
+  {}
 
 //! @brief Constructor.
 XC::LoadPattern::LoadPattern(int tag)
   :NodeLocker(tag,PATTERN_TAG_LoadPattern),loadFactor(0.0), gamma_f(1.0),
-   theSeries(nullptr), theNodalLoads(nullptr), theElementalLoads(nullptr),
-   theNodIter(nullptr), theEleIter(nullptr), isConstant(1)
-  {
-    alloc_contenedores();
-    alloc_iteradores();
-
-    // AddingSensitivity:BEGIN /////////////////////////////
-    randomLoads = nullptr;
-    // AddingSensitivity:END ///////////////////////////////
-  }
+   theSeries(nullptr), theLoads(this), randomLoads(nullptr), isConstant(1)
+  {}
 
 
 XC::LoadPattern *XC::LoadPattern::getCopy(void)
@@ -202,7 +115,7 @@ XC::LoadPattern *XC::LoadPattern::getCopy(void)
 
 //! @brief Destructor.
 XC::LoadPattern::~LoadPattern(void)
-  { libera(); }
+  { free(); }
 
 
 void XC::LoadPattern::setTimeSeries(TimeSeries *theTimeSeries)
@@ -225,22 +138,7 @@ void XC::LoadPattern::setTimeSeries(TimeSeries *theTimeSeries)
 void XC::LoadPattern::setDomain(Domain *theDomain)
   {
     NodeLocker::setDomain(theDomain);
-
-    // if subclass does not implement .. check for 0 pointer
-    if(theNodalLoads)
-      {
-        NodalLoad *nodLoad= nullptr;
-        NodalLoadIter &theNodalIter= getNodalLoads();
-        while((nodLoad = theNodalIter()) != 0)
-          nodLoad->setDomain(theDomain);
-      }
-    if(theElementalLoads)
-      {
-        ElementalLoad *eleLoad= nullptr;
-        ElementalLoadIter &theElementalIter= getElementalLoads();
-        while((eleLoad = theElementalIter()) != 0)
-          eleLoad->setDomain(theDomain);
-      }
+    theLoads.setDomain(theDomain);
   }
 
 //! @brief Apply load.
@@ -251,7 +149,8 @@ bool XC::LoadPattern::addToDomain(void)
     if(theDomain)
       retval= theDomain->addLoadPattern(this);
     else
-      std::cerr << "WARNING: LoadPattern::addToDomain() - null pointer to the domain\n";
+      std::cerr << nombre_clase() << "::" << __FUNCTION__
+	        << "; WARNING: null pointer to the domain\n";
     return retval;
   }
 
@@ -262,7 +161,8 @@ void XC::LoadPattern::removeFromDomain(void)
     if(theDomain)
       theDomain->removeLoadPattern(this);
     else
-      std::cerr << "WARNING: LoadPattern::removeFromDomain() - null pointer to the domain\n";
+      std::cerr << nombre_clase() << "::" << __FUNCTION__
+	        << "; WARNING: null pointer to the domain\n";
   }
 
 //! @brief Adds the nodal load being passed as parameter.
@@ -270,7 +170,7 @@ bool XC::LoadPattern::addNodalLoad(NodalLoad *load)
   {
     Domain *theDomain = this->getDomain();
 
-    bool result = theNodalLoads->addComponent(load);
+    bool result = theLoads.addNodalLoad(load);
     if(result == true)
       {
         if(theDomain)
@@ -280,7 +180,8 @@ bool XC::LoadPattern::addNodalLoad(NodalLoad *load)
         currentGeoTag++;
       }
     else
-      std::cerr << "WARNING: LoadPattern::addNodalLoad() - load could not be added\n";
+      std::cerr << nombre_clase() << "::" << __FUNCTION__
+	        << "; WARNING: load could not be added\n";
     return result;
   }
 
@@ -315,7 +216,7 @@ bool XC::LoadPattern::addElementalLoad(ElementalLoad *load)
   {
     Domain *theDomain= getDomain();
 
-    const bool result= theElementalLoads->addComponent(load);
+    const bool result= theLoads.addElementalLoad(load);
     if(result)
       {
         if(theDomain)
@@ -362,48 +263,10 @@ bool XC::LoadPattern::newElementalLoad(ElementalLoad *load)
 bool XC::LoadPattern::addSFreedom_Constraint(SFreedom_Constraint *theSp)
   { return NodeLocker::addSFreedom_Constraint(theSp); }
 
-//! @brief Returns an iterator a las nodal loads.
-XC::NodalLoadIter &XC::LoadPattern::getNodalLoads(void)
-  {
-    theNodIter->reset();
-    return *theNodIter;
-  }
-
-//! @brief Returns an iterator a las elemental loads.
-XC::ElementalLoadIter &XC::LoadPattern::getElementalLoads(void)
-  {
-    theEleIter->reset();
-    return *theEleIter;
-  }
-
-//! @brief Returns the número de nodal loadss.
-int XC::LoadPattern::getNumNodalLoads(void) const
-  {
-    int retval= 0;
-    if(theNodalLoads)
-      retval= theNodalLoads->getNumComponents();
-    return retval;
-  }
-
-//! @brief Returns the número de elemental loadss.
-int XC::LoadPattern::getNumElementalLoads(void) const
-  {
-    int retval= 0;
-    if(theElementalLoads)
-      retval= theElementalLoads->getNumComponents();
-    return retval;
-  }
-
-//! @brief Returns the total number of loads.
-int XC::LoadPattern::getNumLoads(void) const
-  { return getNumNodalLoads()+getNumElementalLoads(); }
-
-
 //! @brief Deletes all loads.
 void XC::LoadPattern::clearLoads(void)
   {
-    theElementalLoads->clearAll();
-    theNodalLoads->clearAll();
+    theLoads.clearAll();
   }
 
 //! @brief Deletes all loads, constraints AND pointer to time series.
@@ -417,7 +280,7 @@ void XC::LoadPattern::clearAll(void)
 //! @brief Elimina the load sobre nodo cuyo tag being passed as parameter.
 bool XC::LoadPattern::removeNodalLoad(int tag)
   {
-    bool result= theNodalLoads->removeComponent(tag);
+    bool result= theLoads.removeNodalLoad(tag);
     if(result) currentGeoTag++;
     return result;
   }
@@ -425,7 +288,7 @@ bool XC::LoadPattern::removeNodalLoad(int tag)
 //! @brief Elimina the load over element cuyo tag being passed as parameter.
 bool XC::LoadPattern::removeElementalLoad(int tag)
   {
-    bool result= theElementalLoads->removeComponent(tag);
+    bool result= theLoads.removeElementalLoad(tag);
     if(result) currentGeoTag++;
     return result;
   }
@@ -443,15 +306,7 @@ void XC::LoadPattern::applyLoad(double pseudoTime)
 	        << loadFactor << std::endl;
     const double factor= loadFactor*gamma_f; //Ponderación de la hipótesis.
 
-    NodalLoad *nodLoad= nullptr;
-    NodalLoadIter &theNodalIter= getNodalLoads();
-    while((nodLoad = theNodalIter()) != 0)
-      nodLoad->applyLoad(factor);
-
-    ElementalLoad *eleLoad= nullptr;
-    ElementalLoadIter &theElementalIter= getElementalLoads();
-    while((eleLoad = theElementalIter()) != 0)
-      eleLoad->applyLoad(factor);
+    theLoads.applyLoad(factor);
 
     NodeLocker::applyLoad(pseudoTime,factor);
   }
@@ -491,7 +346,7 @@ XC::LoadPattern &XC::LoadPattern::operator/=(const double &fact)
 //! de los miembros de la clase.
 XC::DbTagData &XC::LoadPattern::getDbTagData(void) const
   {
-    static DbTagData retval(16);
+    static DbTagData retval(15);
     return retval;
   }
 
@@ -501,11 +356,10 @@ int XC::LoadPattern::sendData(CommParameters &cp)
     int res= NodeLocker::sendData(cp);
     res+= cp.sendDoubles(loadFactor,gamma_f,getDbTagData(),CommMetaData(7));
     res+= sendTimeSeriesPtr(theSeries,8,9,getDbTagData(),cp);
-    res+= cp.sendMovable(*theNodalLoads,getDbTagData(),CommMetaData(10));
-    res+= cp.sendMovable(*theElementalLoads,getDbTagData(),CommMetaData(11));
+    res+= cp.sendMovable(theLoads,getDbTagData(),CommMetaData(10));
 
-    res+= cp.sendVectorPtr(randomLoads,getDbTagData(),ArrayCommMetaData(12,13,14));
-    res+= cp.sendBool(RVisRandomProcessDiscretizer,getDbTagData(),CommMetaData(15));
+    res+= cp.sendVectorPtr(randomLoads,getDbTagData(),ArrayCommMetaData(11,12,13));
+    res+= cp.sendBool(RVisRandomProcessDiscretizer,getDbTagData(),CommMetaData(14));
     return res;
   }
 
@@ -515,27 +369,22 @@ int XC::LoadPattern::recvData(const CommParameters &cp)
     int res= NodeLocker::recvData(cp);
     res+= cp.receiveDoubles(loadFactor,gamma_f,getDbTagData(),CommMetaData(7));
     theSeries= receiveTimeSeriesPtr(theSeries,8,9,getDbTagData(),cp);
-
-    theNodalLoads->clearAll();
-    res+= theNodalLoads->recibe<NodalLoad>(getDbTagDataPos(10),cp,&FEM_ObjectBroker::getNewNodalLoad);
-
-    theElementalLoads->clearAll();
-    res+= theElementalLoads->recibe<ElementalLoad>(getDbTagDataPos(11),cp,&FEM_ObjectBroker::getNewElementalLoad);
-
-    randomLoads= cp.receiveVectorPtr(randomLoads,getDbTagData(),ArrayCommMetaData(12,13,14));
-    res+= cp.receiveBool(RVisRandomProcessDiscretizer,getDbTagData(),CommMetaData(15));
+    res+= cp.receiveMovable(theLoads,getDbTagData(),CommMetaData(10));
+    randomLoads= cp.receiveVectorPtr(randomLoads,getDbTagData(),ArrayCommMetaData(11,12,13));
+    res+= cp.receiveBool(RVisRandomProcessDiscretizer,getDbTagData(),CommMetaData(14));
     return res;
   }
 
 //! @brief Sends object through the channel being passed as parameter.
 int XC::LoadPattern::sendSelf(CommParameters &cp)
   {
-    inicComm(16);
+    inicComm(15);
     int res= sendData(cp);
     const int dataTag= getDbTag(cp);
     res+= cp.sendIdData(getDbTagData(),dataTag);
     if(res<0)
-      std::cerr << "LoadPattern::sendSelf() - failed to send data.\n";    
+      std::cerr << nombre_clase() << "::" << __FUNCTION__
+	        << "; failed to send data.\n";    
     return res;
   }
 
@@ -543,11 +392,12 @@ int XC::LoadPattern::sendSelf(CommParameters &cp)
 //! @brief Receives object through the channel being passed as parameter.
 int XC::LoadPattern::recvSelf(const CommParameters &cp)
   {
-    inicComm(16);
+    inicComm(15);
     const int dataTag= getDbTag();
     int res= cp.receiveIdData(getDbTagData(),dataTag);
     if(res<0)
-      std::cerr << "LoadPattern::recvSelf() - data could not be received.\n" ;
+      std::cerr << nombre_clase() << "::" << __FUNCTION__
+	        << ";  data could not be received.\n" ;
     else
       res+= recvData(cp);
     return res;
@@ -561,10 +411,8 @@ void XC::LoadPattern::Print(std::ostream &s, int flag)
     s << "  gamma_f: " << gamma_f << "\n";
     if(theSeries)
       theSeries->Print(s,flag);
-    std::cerr << "  Nodal Loads: \n";
-    theNodalLoads->Print(s,flag);
-    std::cerr << "\n  Elemental Loads: \n";
-    theElementalLoads->Print(s, flag);
+    std::cerr << "  Loads: \n";
+    theLoads.Print(s,flag);
     NodeLocker::Print(s,flag);
   }
 
@@ -583,20 +431,11 @@ void XC::LoadPattern::applyLoadSensitivity(double pseudoTime)
     if(theSeries && isConstant != 0)
       loadFactor= theSeries->getFactorSensitivity(pseudoTime);
 
-    NodalLoad *nodLoad;
-    NodalLoadIter &theNodalIter = this->getNodalLoads();
     const double factor= loadFactor*gamma_f;
-    while((nodLoad = theNodalIter()) != 0)
-      nodLoad->applyLoad(factor);
+    theLoads.applyLoadSensitivity(factor);
 
-
-    // Don't inlude element loads and sp constraints for now
+    // Don't include sp constraints for now
     /*
-      ElementalLoad *eleLoad;
-      ElementalLoadIter &theElementalIter = this->getElementalLoads();
-      while((eleLoad = theElementalIter()) != 0)
-      eleLoad->applyLoad(factor);
-
       SFreedom_Constraint *sp;
       SFreedom_ConstraintIter &theIter = this->getSPs();
       while((sp = theIter()) != 0)
@@ -607,59 +446,12 @@ void XC::LoadPattern::applyLoadSensitivity(double pseudoTime)
 int XC::LoadPattern::setParameter(const std::vector<std::string> &argv, Parameter &param)
   {
     if(!theSeries)
-      { std::cerr << "set/update/activate parameter is illegaly called in LoadPattern " << std::endl; }
+      {
+	std::cerr << nombre_clase() << "::" << __FUNCTION__
+	          << "; set/update/activate parameter is illegaly called." << std::endl; }
 
     //const int argc= argv.size();
-    // Nodal load
-    if(strstr(argv[0].c_str(),"loadAtNode") != 0)
-      {
-        if(argv.size() < 3)
-          return -1;
-
-        RVisRandomProcessDiscretizer = false;
-
-        int nodeNumber = atoi(argv[1]);
-        NodalLoad *thePossibleNodalLoad;
-        NodalLoad *theNodalLoad = 0;
-        NodalLoadIter &theNodalIter = this->getNodalLoads();
-
-        while((thePossibleNodalLoad = theNodalIter()) != 0)
-          {
-            if( nodeNumber == thePossibleNodalLoad->getNodeTag() )
-              { theNodalLoad = thePossibleNodalLoad; }
-          }
-
-        if(theNodalLoad)
-          {
-	    std::vector<std::string> argv2(argv);
-            argv2.erase(argv2.begin(),argv2.begin()+2);
-            return theNodalLoad->setParameter(argv2, param);
-          }
-        else
-          return -1;
-    }
-
-    else if(strstr(argv[0].c_str(),"elementPointLoad") != 0)
-      {
-        if(argv.size() < 3)
-          return -1;
-        std::cerr << "elementPointLoad not implemented." << std::endl;
-//       RVisRandomProcessDiscretizer = false;
-
-//       int eleNumber = atoi(argv[1]);
-//       ElementalLoad *theEleLoad = 0;
-//       ElementalLoadIter &theEleLoadIter = this->getElementalLoads();
-//       while ((theEleLoad = theEleLoadIter()) != 0) {
-//         int eleTag = theEleLoad->getElementTag();
-//         if (eleNumber == eleTag) {
-//           return theEleLoad->setParameter(&argv[2], argc-2, param);
-//         }
-//       }
-
-      return -1;
-    }
-
-    else if(strstr(argv[0].c_str(),"randomProcessDiscretizer") != 0)
+    if(strstr(argv[0].c_str(),"randomProcessDiscretizer") != 0)
       {
         if(argv.size() < 2)
           return -1;
@@ -668,184 +460,65 @@ int XC::LoadPattern::setParameter(const std::vector<std::string> &argv, Paramete
         argv2.erase(argv2.begin(),argv2.begin()+1);
         return theSeries->setParameter(argv2, param);
       }
-
-    // Unknown parameter
-    else
+    else if(strstr(argv[0].c_str(),"loadAtNode") != 0) // Nodal load
+      {
+        RVisRandomProcessDiscretizer = false;
+        return theLoads.setParameter(argv,param);
+      }
+    else if(strstr(argv[0].c_str(),"elementPointLoad") != 0)
+      {
+        RVisRandomProcessDiscretizer = false;
+        return theLoads.setParameter(argv,param);
+      }
+    else // Unknown parameter
         return -1;
   }
 
 int XC::LoadPattern::updateParameter(int parameterID, Information &info)
   {
     if(!theSeries)
-      { std::cerr << "set/update/activate parameter is illegaly called in LoadPattern " << std::endl; }
-
-
+      {
+	std::cerr << nombre_clase() << "::" << __FUNCTION__
+	          << "set/update/activate parameter is illegaly called."
+		  << std::endl;
+      }
     if(RVisRandomProcessDiscretizer)
       { return theSeries->updateParameter(parameterID,info); }
     else
-      {
-        NodalLoad *thePossibleNodalLoad = 0;
-        NodalLoad *theNodalLoad = 0;
-        NodalLoadIter &theNodalIter = this->getNodalLoads();
-
-        switch (parameterID)
-          {
-          case 1: case -1:  // Not implemented.
-            return -1;
-          default:
-            if(parameterID > 1000  &&  parameterID < 2000)
-              {
-                int nodeNumber = parameterID-1000;
-                while((thePossibleNodalLoad = theNodalIter()) != 0)
-                  {
-                    if(nodeNumber == thePossibleNodalLoad->getNodeTag() )
-                      { theNodalLoad = thePossibleNodalLoad; }
-                  }
-                return theNodalLoad->updateParameter(1, info);
-              }
-            else if(parameterID > 2000  &&  parameterID < 3000)
-              {
-                int nodeNumber = parameterID-2000;
-                while((thePossibleNodalLoad = theNodalIter()) != 0)
-                  {
-                    if(nodeNumber == thePossibleNodalLoad->getNodeTag() )
-                      { theNodalLoad = thePossibleNodalLoad; }
-                  }
-                return theNodalLoad->updateParameter(2, info);
-              }
-            else if(parameterID > 3000  &&  parameterID < 4000)
-              {
-                int nodeNumber = parameterID-3000;
-                while((thePossibleNodalLoad = theNodalIter()) != 0)
-                  {
-                    if(nodeNumber == thePossibleNodalLoad->getNodeTag() )
-                      { theNodalLoad = thePossibleNodalLoad; }
-                  }
-                return theNodalLoad->updateParameter(3, info);
-              }
-            else
-              return -1;
-          }
-      }
+      { return theLoads.updateParameter(parameterID,info); }
   }
 
 
 int XC::LoadPattern::activateParameter(int parameterID)
   {
     if(!theSeries)
-      std::cerr << "set/update/activate parameter is illegaly called in LoadPattern " << std::endl;
+      {
+	std::cerr << nombre_clase() << "::" << __FUNCTION__
+	          << "set/update/activate parameter is illegaly called."
+		  << std::endl;
+      }
 
     if(RVisRandomProcessDiscretizer)
       { return theSeries->activateParameter(parameterID); }
     else
-      {
-        // Don't set flag here in the load pattern itself.
-        // (Assume there always may be random loads)
-
-        NodalLoad *theNodalLoad = 0;
-        NodalLoadIter &theNodalIter = this->getNodalLoads();
-
-        if(parameterID == 0)
-          {
-            // Go through all nodal loads and zero out gradientIdentifier
-            // (Remember: the identifier is only zero if we are in
-            // the process of zeroing out all sensitivity flags).
-            while((theNodalLoad = theNodalIter()) != 0)
-              { theNodalLoad->activateParameter(parameterID); }
-          }
-        else
-          {
-            // Find the right nodal load and set the flag
-            if(parameterID > 1000  &&  parameterID < 2000)
-              {
-                int nodeNumber = parameterID-1000;
-                while((theNodalLoad = theNodalIter()) != 0)
-                  {
-                    if(nodeNumber == theNodalLoad->getNodeTag() )
-                      { theNodalLoad->activateParameter(1); }
-                  }
-              }
-            else if(parameterID > 2000  &&  parameterID < 3000)
-              {
-                int nodeNumber = parameterID-2000;
-                while((theNodalLoad = theNodalIter()) != 0)
-                  {
-                    if(nodeNumber == theNodalLoad->getNodeTag() )
-                      { theNodalLoad->activateParameter(2); }
-                  }
-              }
-            else if(parameterID > 3000  &&  parameterID < 4000)
-              {
-                int nodeNumber = parameterID-3000;
-                while((theNodalLoad = theNodalIter()) != 0)
-                  {
-                    if(nodeNumber == theNodalLoad->getNodeTag() )
-                      { theNodalLoad->activateParameter(3); }
-                  }
-              }
-            else
-              { std::cerr << "XC::LoadPattern::gradient() -- error in identifier. " << std::endl; }
-          }
-      }
-    return 0;
+      { return theLoads.activateParameter(parameterID); }
   }
 
 const XC::Vector &XC::LoadPattern::getExternalForceSensitivity(int gradNumber)
   {
-
     // THIS METHOD IS CURRENTLY ONLY USED FOR THE STATIC CASE
     // IT SHOULD BE DELETED AND REPLACED BY THE DYNAMIC CASE
 
     // Initial declarations
-    Vector tempRandomLoads(1);
-    int sizeRandomLoads;
+    Vector tempRandomLoads= theLoads.getExternalForceSensitivity(gradNumber);
 
     // Start with a fresh return vector
     if(randomLoads == 0)
-      { randomLoads = new XC::Vector(1); }
+      { randomLoads = new Vector(tempRandomLoads); }
     else
       {
         delete randomLoads;
-        randomLoads = new XC::Vector(1);
-      }
-
-    // Prepare the vector identifying which loads are random.
-    NodalLoad *theNodalLoad = 0;
-    NodalLoadIter &theNodalIter = this->getNodalLoads();
-    int i;
-
-    // Loop through the nodal loads to pick up possible contributions
-    int nodeNumber;
-    int dofNumber;
-    while((theNodalLoad = theNodalIter()) != 0)
-      {
-        const XC::Vector &gradientVector = theNodalLoad->getExternalForceSensitivity(gradNumber);
-        if(gradientVector(0) != 0.0 )
-          {
-            // Found a random load! Get nodeNumber and dofNumber
-            nodeNumber = theNodalLoad->getNodeTag();
-            dofNumber = (int)gradientVector(0);
-
-            // Update the randomLoads vector
-            sizeRandomLoads = randomLoads->Size();
-            if(sizeRandomLoads == 1)
-              {
-                delete randomLoads;
-                randomLoads = new XC::Vector(2);
-                (*randomLoads)(0) = (double)nodeNumber;
-                (*randomLoads)(1) = (double)dofNumber;
-              }
-            else
-              {
-                tempRandomLoads = (*randomLoads);
-                delete randomLoads;
-                randomLoads = new XC::Vector(sizeRandomLoads+2);
-                for(i=0; i<sizeRandomLoads; i++)
-                  { (*randomLoads)(i) = tempRandomLoads(i); }
-                (*randomLoads)(sizeRandomLoads) = nodeNumber;
-                (*randomLoads)(sizeRandomLoads+1) = dofNumber;
-              }
-          }
+        randomLoads = new Vector(tempRandomLoads);
       }
     return (*randomLoads);
   }

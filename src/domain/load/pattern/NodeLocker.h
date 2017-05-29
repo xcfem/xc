@@ -94,8 +94,6 @@ class NodeLocker: public ForceReprComponent
 
     virtual void Print(std::ostream &s, int flag =0);
 
-
-
     std::deque<int> getTagsSPsNode(int theNode, int theDOF) const;
     std::deque<int> getTagsSPsNode(int theNode) const;
     bool nodeAffectedBySPs(int nodeTag) const;

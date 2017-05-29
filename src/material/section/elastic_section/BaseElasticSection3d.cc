@@ -37,9 +37,13 @@
 XC::BaseElasticSection3d::BaseElasticSection3d(int tag, int classTag, const size_t &dim, MaterialLoader *mat_ldr)
   : BaseElasticSection(tag, classTag,dim,mat_ldr), ctes_scc() {}
 
+//! Construct an elastic section for three-dimensional elements with an
+//! integer identifier \p tag, and the mass properties \p ctes.
 XC::BaseElasticSection3d::BaseElasticSection3d(int tag,int classTag,const size_t &dim,const CrossSectionProperties3d &ctes,MaterialLoader *mat_ldr)
   : BaseElasticSection(tag, classTag,dim,mat_ldr), ctes_scc(ctes) {}
 
+//! @brief Set the mass properties of the section from the section geometry
+//! identified by the argument.
 void XC::BaseElasticSection3d::sectionGeometry(const std::string &cod_geom)
   {
     const MaterialLoader *ldr= getMaterialLoader();
@@ -49,18 +53,22 @@ void XC::BaseElasticSection3d::sectionGeometry(const std::string &cod_geom)
         if(geom)
           {
             if(ctes_scc.E()==0.0)
-               std::cerr << "Reference elastic modulus must not be zero." << std::endl;
+	      std::cerr << nombre_clase()<< "::" << __FUNCTION__
+		        << "; reference elastic modulus must not be zero."
+			<< std::endl;
             ctes_scc= geom->getCrossSectionProperties3d(ctes_scc);
           }
         else
-          std::cerr << "Section geometry called: '"
-                        << cod_geom << "' not found." << std::endl;
+          std::cerr << nombre_clase()<< "::" << __FUNCTION__
+		    << "; section geometry called: '"
+                    << cod_geom << "' not found." << std::endl;
       }
     else
-      std::cerr << "Material handler not defined." << std::endl;
+      std::cerr << nombre_clase()<< "::" << __FUNCTION__
+		<< "; material handler not defined." << std::endl;
   }
 
-//! \brief Returns the mechanical properties of the section.
+//! \brief Returns the mass properties of the section.
 const XC::CrossSectionProperties3d &XC::BaseElasticSection3d::getCrossSectionProperties(void) const
   { return ctes_scc; }
 
@@ -71,6 +79,7 @@ double XC::BaseElasticSection3d::getStrain(const double &y,const double &z) cons
     return (def(0) + y*def(1) + z*def(2));
   }
 
+//! @brief Setst the mass properties of the section.
 void XC::BaseElasticSection3d::setCrossSectionProperties(const CrossSectionProperties3d &cs)  
   { ctes_scc= cs; }
 
