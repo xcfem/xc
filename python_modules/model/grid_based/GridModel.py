@@ -65,7 +65,8 @@ class BeamMaterialData(object):
   :ivar section:      instance of a class that defines the geometric and
                       mechanical characteristiscs of a section
                       e.g: RectangularSection, CircularSection, ISection, ...
-  :ivar material:     instance of a class that defines the elastic modulus, shear modulus
+  :ivar material:     instance of a class that defines the elastic modulus, 
+                      shear modulus
                       and mass density of the material
   '''
   def __init__(self,name,section,material):
