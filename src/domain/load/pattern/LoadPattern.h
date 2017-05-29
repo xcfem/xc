@@ -161,7 +161,8 @@ class LoadPattern: public NodeLocker
     const double &GammaF(void) const;
     double &GammaF(void);
     void setGammaF(const double &);
-       
+    LoadPattern &operator*=(const double &fact);
+    LoadPattern &operator/=(const double &fact); 
 
     // methods for o/p
     virtual int sendSelf(CommParameters &);

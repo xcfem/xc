@@ -475,6 +475,17 @@ double &XC::LoadPattern::GammaF(void)
 void XC::LoadPattern::setGammaF(const double &g)
   { gamma_f= g; }
 
+XC::LoadPattern &XC::LoadPattern::operator*=(const double &fact)
+  {
+    gamma_f*= fact;
+    return *this;
+  }
+
+XC::LoadPattern &XC::LoadPattern::operator/=(const double &fact)
+  {
+    gamma_f/= fact;
+    return *this;
+  }
 
 //! @brief Returns a vector para almacenar los dbTags
 //! de los miembros de la clase.
@@ -564,7 +575,7 @@ int XC::LoadPattern::addMotion(GroundMotion &theMotion, int tag)
   }
 
 XC::GroundMotion *XC::LoadPattern::getMotion(int tag)
-  { return 0; }
+  { return nullptr; }
 
 // AddingSensitivity:BEGIN ////////////////////////////////////
 void XC::LoadPattern::applyLoadSensitivity(double pseudoTime)
