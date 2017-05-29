@@ -21,7 +21,7 @@ import scipy.interpolate
 
 from materials import structural_steel as steel
 from materials import steelProfile as sp
-from materials.perfiles_metalicos.arcelor import perfiles_he_arcelor as he
+from materials.structural_shapes.arcelor import perfiles_he_arcelor as he
 
 S355JR= steel.S355JR
 gammaM0= 1.00

@@ -37,7 +37,7 @@ class SteelProfile(sp.SectionProperties):
   :ivar steel:    steel object (e.g. S275JR)
   :ivar table:    module containing a dictionary with mechanical characteristics
                   of a series of profiles 
-                  (e.g. materials.perfiles_metalicos.arcelor.perfiles_he_arcelor)
+                  (e.g. materials.structural_shapes.arcelor.perfiles_he_arcelor)
   :ivar name:     name identifying the section in the table
   '''
   def __init__(self,steel,name,table):
