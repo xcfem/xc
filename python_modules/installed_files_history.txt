@@ -12,6 +12,8 @@
 /usr/local/lib/python2.7/dist-packages/actions/estadillo_cargas.pyc
 /usr/local/lib/python2.7/dist-packages/actions/__init__.py
 /usr/local/lib/python2.7/dist-packages/actions/__init__.pyc
+/usr/local/lib/python2.7/dist-packages/actions/load_cases_def.py
+/usr/local/lib/python2.7/dist-packages/actions/load_cases_def.pyc
 /usr/local/lib/python2.7/dist-packages/actions/loads_def.py
 /usr/local/lib/python2.7/dist-packages/actions/loads_def.pyc
 /usr/local/lib/python2.7/dist-packages/actions/quake/escribeCargasModo.py

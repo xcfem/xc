@@ -12,7 +12,30 @@ import geom
 import xc
 from actions.earth_pressure import soil_properties as sp
 
-class InertialLoad(object):
+class BaseVectorLoad(object):
+    '''Base class for loads introduced using a load as an xcVector 
+
+    :ivar name:     name identifying the load
+    :ivar loadVector: load xc.Vector
+    '''
+    def __init__(self,name, loadVector):
+        self.name=name
+        self.loadVector= loadVector
+
+    def __mul__(self,factor):
+        '''Apply the factor to the load and append it to the current load pattern'''
+        self.loadVector=factor*self.loadVector
+        self.appendLoadToCurrentLoadPattern()
+            
+    def __rmul__(self,factor):
+        '''Apply the factor to the load and append it to the current load pattern'''
+        self.loadVector=factor*self.loadVector
+        self.appendLoadToCurrentLoadPattern()
+     
+
+        
+
+class InertialLoad(BaseVectorLoad):
     '''Inertial load (density*acceleration) applied to the elements in the list
     of mesh-sets
 
@@ -21,22 +44,21 @@ class InertialLoad(object):
     :ivar vAccel:   acceleration vector xc.Vector([ax,ay,az])
     '''
     def __init__(self,name, lstMeshSets, vAccel):
-        self.name=name
+        super(InertialLoad,self).__init__(name,vAccel)
         self.lstMeshSets=lstMeshSets
-        self.vAccel= vAccel
 
     def appendLoadToCurrentLoadPattern(self):
         for ms in self.lstMeshSets:
             if 'shell' in ms.elemType:
-                loadVector=ms.matSect.getAreaDensity()*self.vAccel
+                loadVector=ms.matSect.getAreaDensity()*self.loadVector
                 el_group=ms.surfSet.getElements
             elif 'beam' in ms.elemType:
-                loadVector=ms.matSect.getLongitudinalDensity()*self.vAccel
+                loadVector=ms.matSect.getLongitudinalDensity()*self.loadVector
                 el_group=ms.linSet.getElements
             for e in el_group:
                 e.vector3dUniformLoadGlobal(loadVector)
 
-class NodalLoad(object):
+class NodalLoad(BaseVectorLoad):
     '''Point load applied on a list of nodes
 
     :ivar name:   name identifying the load
@@ -45,15 +67,17 @@ class NodalLoad(object):
           load: xc.Vector([Fx,Fy,Fz,Mx,My,Mz]).
     '''
     def __init__(self,name, lstNod, loadVector):
+        super(NodalLoad,self).__init__(name,loadVector)
         self.name=name
         self.lstNod= lstNod
-        self.loadVector= loadVector
 
     def appendLoadToCurrentLoadPattern(self):
+        print 'aquí nodal load load=', self.loadVector.Norm()
         for n in self.lstNod:
             n.newLoad(self.loadVector)
-            
-class UniformLoadOnBeams(object):
+
+           
+class UniformLoadOnBeams(BaseVectorLoad):
     '''Uniform load applied on the beam elements generated from
     all the lines in the xcSet.
 
@@ -66,13 +90,13 @@ class UniformLoadOnBeams(object):
                    'Global': global coordinate system (defaults to 'Global)
     '''
     def __init__(self,name, xcSet, loadVector,refSystem='Global'):
-        self.name=name
+        super(UniformLoadOnBeams,self).__init__(name,loadVector)
         self.xcSet=xcSet
-        self.loadVector= loadVector
         self.refSystem= refSystem
 
     def appendLoadToCurrentLoadPattern(self):
         ''' Append load to the current load pattern.'''
+        print 'aquí UniformLoadOnBeams load=',self.loadVector.Norm()
         for l in self.xcSet.getLines:
             for e in l.getElements():
                 if self.refSystem=='Local':
@@ -81,7 +105,7 @@ class UniformLoadOnBeams(object):
                     e.vector3dUniformLoadGlobal(self.loadVector)
  
 
-class UniformLoadOnLines(object):
+class UniformLoadOnLines(BaseVectorLoad):
     '''Uniform load applied to all the lines (not necessarily defined as lines
     for latter generation of beam elements, they can be lines belonging to 
     surfaces for example) found in the xcSet
@@ -93,11 +117,11 @@ class UniformLoadOnLines(object):
                       xc.Vector([Fx,Fy,Fz,Mx,My,Mz]).
     '''                            
     def __init__(self,name,  xcSet, loadVector):
-        self.name=name
+        super(UniformLoadOnLines,self).__init__(name,loadVector)
         self.xcSet=xcSet
-        self.loadVector= loadVector
 
     def appendLoadToCurrentLoadPattern(self):
+        print 'aquí UniformLoadOnLines load=',self.loadVector.Norm()
         for l in self.xcSet.getLines:
             nod=[n for n in l.getNodes()]
             ndistOrig=[n.getCoo.Norm() for n in nod]
@@ -108,7 +132,7 @@ class UniformLoadOnLines(object):
         for i in range(len(sortNod)):
             sortNod[i].newLoad(lnInfl[i]*self.loadVector)
 
-class UniformLoadOnSurfaces(object):
+class UniformLoadOnSurfaces(BaseVectorLoad):
     '''Uniform load applied on the shell elements generated from
     all the surfaces in the xcSet.
 
@@ -121,13 +145,13 @@ class UniformLoadOnSurfaces(object):
                      'Global': global coordinate system (defaults to 'Global)
     '''
     def __init__(self,name, xcSet, loadVector,refSystem='Global'):
-        self.name=name
+        super(UniformLoadOnSurfaces,self).__init__(name,loadVector)
         self.xcSet=xcSet
-        self.loadVector= loadVector
         self.refSystem=refSystem
         
     def appendLoadToCurrentLoadPattern(self):
         ''' Append load to the current load pattern.'''
+        print 'aquí UniformLoadOnSurfaces load=',self.loadVector.Norm()
         for s in self.xcSet.getSurfaces:
             for e in s.getElements():
                 if self.refSystem=='Local':
@@ -135,7 +159,7 @@ class UniformLoadOnSurfaces(object):
                 else:
                     e.vector3dUniformLoadGlobal(self.loadVector)
 
-class EarthPressLoad(object):
+class EarthPressLoad(BaseVectorLoad):
     '''Earth pressure applied on the shell elements generated from
     all the surfaces in the xcSet. 
     
@@ -150,10 +174,9 @@ class EarthPressLoad(object):
     :ivar vDir:      unit xc vector defining pressures direction
     '''
     def __init__(self,name, xcSet,soilData, vDir):
-        self.name=name
+        super(EarthPressLoad,self).__init__(name,vDir)
         self.xcSet=xcSet
         self.soilData=soilData
-        self.vDir=vDir
 
     def appendLoadToCurrentLoadPattern(self):
         ''' Append load to the current load pattern.'''
@@ -161,7 +184,7 @@ class EarthPressLoad(object):
             for e in s.getElements():
                 presElem=self.soilData.getPressure(e.getCooCentroid(False)[2])
                 if(presElem!=0.0):
-                    e.vector3dUniformLoadGlobal(presElem*self.vDir)
+                    e.vector3dUniformLoadGlobal(presElem*self.loadVector)
  
 
 # TO DO: change the method in order to be able to append to current load pattern
