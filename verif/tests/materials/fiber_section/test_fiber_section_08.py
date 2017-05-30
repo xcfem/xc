@@ -24,7 +24,7 @@ from solution import predefined_solutions
 from materials.ehe import EHE_concrete
 from materials.ehe import EHE_reinforcing_steel
 from materials.fiber_section import createFiberSets
-from materials import regimenSeccion
+from materials import section_properties
 from model import predefined_spaces
 
 __author__= "Luis C. Pérez Tato (LCPT)"
@@ -148,10 +148,10 @@ YepsSMax= fMax.getPos().x # Coordenada y de la deformación mínima en el acero.
 ZepsSMax= fMax.getPos().y # Coordenada z de la deformación mínima en el acero.
 
 
-from materials import regimenSeccion
+from materials import section_properties
 from materials.ehe import comprobTnEHE
-tipoSolic= regimenSeccion.tipoSolicitacion(epsCMin,epsSMax)
-strTipoSolic= regimenSeccion.strTipoSolicitacion(tipoSolic)
+tipoSolic= section_properties.solicitationType(epsCMin,epsSMax)
+strTipoSolic= section_properties.solicitationTypeString(tipoSolic)
 cumpleFT= comprobTnEHE.cumpleFlexotraccion(epsCMin,epsSMax)
 aprovSecc= comprobTnEHE.aprovFlexotraccion(epsCMin,epsSMax)
 

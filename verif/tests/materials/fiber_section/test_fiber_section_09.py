@@ -102,10 +102,10 @@ epsSMax= fibraSEpsMax.getMaterial().getStrain() # Deformación máxima en el ace
 
 
 
-from materials import regimenSeccion
+from materials import section_properties
 from materials.ehe import comprobTnEHE
-tipoSolic= regimenSeccion.tipoSolicitacion(epsCMin,epsSMax)
-strTipoSolic= regimenSeccion.strTipoSolicitacion(tipoSolic)
+tipoSolic= section_properties.solicitationType(epsCMin,epsSMax)
+strTipoSolic= section_properties.solicitationTypeString(tipoSolic)
 cumpleFT= comprobTnEHE.cumpleCompresionCompuesta(epsCMin,epsCMax)
 aprovSecc= comprobTnEHE.aprovCompresionCompuesta(epsCMin,epsSMax)
 

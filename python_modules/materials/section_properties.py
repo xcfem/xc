@@ -478,7 +478,7 @@ class ISection(SectionProperties):
 
 def getInerciaTorsionCajonMonocelular(bs,bi,h,ts,ti,td):
     '''
-    Devuelve el valor de la inercia a torsión de un cajón monocelular
+    Return torsional section modulus of the section.
 
     :param bs: Ancho de la losa superior del cajón (esto es, descontando los voladizos)
     :param bi: Ancho de la losa inferior del cajón.
@@ -489,3 +489,40 @@ def getInerciaTorsionCajonMonocelular(bs,bi,h,ts,ti,td):
     '''
     longAlma=math.sqrt(h**2+((bs-bi)/2)**2)
     return (bs+bi)**2*h**2/(bs/ts+2*longAlma/td+bi/ti)
+
+def solicitationType(epsCMin, epsSMax):
+  ''' Solicitation type from maximum and minimum strain.
+
+  Return:
+    1: Pure or combined tension  (all fibers are tensioned).
+    2: Pure or combined bending (tensioned and compressed fibers).
+    3: Pure or combined compression (all fibers are compressed).
+
+    :param epsCMin: Minimal strain.
+    :param epsCMax: Maximal strain.
+  '''
+  if(epsCMin>0.0): # All material in tension.
+    return 1 
+  else: # Some material in compression
+    if(epsSMax>0): # Some material in tension.
+      return 2  # Pure or combined bending
+    else: # All material in compression.
+      return 3  # Pure or combined compression.
+
+def solicitationTypeString(tipoSol):
+  ''' Returns a string describing the solicitation type.
+
+    :param solType: number identifiying the solicitation type:
+      1: Pure or combined tension  (all fibers are tensioned).
+      2: Pure or combined bending (tensioned and compressed fibers).
+      3: Pure or combined compression (all fibers are compressed).
+
+  '''
+  if(tipoSol==1):
+    return "simple of combined tension"
+  elif(tipoSol==2): 
+    return "simple or combined bending" 
+  elif(tipoSol==3):
+    return "simple or combined compression"
+  else: 
+    return "error"

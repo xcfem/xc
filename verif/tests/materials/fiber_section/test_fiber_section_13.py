@@ -106,10 +106,10 @@ fibraSEpsMax= reinfFibers.getFiberWithMaxStrain()
 epsSMax= fibraSEpsMax.getMaterial().getStrain() # Deformación máxima en el acero
 yEpsCMax= fibraCEpsMax.getPos().x
 
-from materials import regimenSeccion
+from materials import section_properties
 from materials.ehe import comprobTnEHE
-tipoSolic= regimenSeccion.tipoSolicitacion(epsCMin,epsSMax)
-strTipoSolic= regimenSeccion.strTipoSolicitacion(tipoSolic)
+tipoSolic= section_properties.solicitationType(epsCMin,epsSMax)
+strTipoSolic= section_properties.solicitationTypeString(tipoSolic)
 cumpleFT= comprobTnEHE.cumpleFlexotraccion(epsCMin,epsSMax)
 aprovSecc= comprobTnEHE.aprovFlexotraccion(epsCMin,epsSMax)
 
