@@ -73,12 +73,12 @@ class Renderer;
 class Information;
 class Preprocessor;
 
-//! @brief Objeto que forma parte de un domain.
+//! @brief Base class for domain components (nodes, elements, loads,...).
 class DomainComponent: public TaggedObject, public MovableObject
   {
   private:    
-    Domain *theDomain; // a pointer to the enclosing Domain object
-    size_t idx; //!< @brief Index of the object (to be used in VTK arrays).
+    Domain *theDomain; //!< a pointer to the enclosing Domain object
+    size_t idx; //!< Index of the object (to be used in VTK arrays).
   protected:
     DomainComponent(int tag, int classTag);
     int sendData(CommParameters &);

@@ -70,6 +70,9 @@
 XC::Vector XC::ElasticSection3d::s(4);
 
 //! @brief Constructor.
+//!
+//! Construct an elastic section for three-dimensional elements with an
+//! integer identifier \p tag, and the mass properties \p ctes.
 XC::ElasticSection3d::ElasticSection3d(int tag, MaterialLoader *mat_ldr,const CrossSectionProperties3d &ctes)
   :BaseElasticSection3d(tag, SEC_TAG_Elastic3d,4,ctes,mat_ldr) {}
 
@@ -86,7 +89,28 @@ XC::ElasticSection3d::ElasticSection3d(int tag, double EA_in, double EIz_in, dou
   :BaseElasticSection3d(tag, SEC_TAG_Elastic3d,4,CrossSectionProperties3d(1,EA_in,EIz_in,EIy_in,1,GJ_in)) {}
 
 
-//! @brief Returns the valor de la resultante de tensiones.
+//! @brief Returns the stress resultant.
+//!
+//! Returns the section stress resultants, \f$\ssec\f$, the product of the 
+//! section stiffness matrix, \f$\ksec\f$, and the section deformation 
+//! vector, \f$\esec\f$,
+//! The component of the generalized stress vector are:
+//! \f[
+//!  \ssec = \ksec \esec = \left[
+//!   \begin{array}{c}
+//!       P
+//!       M_z
+//!       M_z
+//!       V_y
+//!       V_y
+//!       T
+//!   \end{array} 
+//! \right]
+//! \f]
+//! where \f$P\f$ is the axial force, \f$M_z\f$ is the bending moment about the
+//! local z-axis, \f$M_y\f$ is the bending moment about the local y-axis, 
+//! \f$V_y\f$ is the shear force along the local y-axis, \f$V_z\f$ is the
+//! shear force along the local z-axis, and \f$T\f$ is the torque.
 const XC::Vector &XC::ElasticSection3d::getStressResultant(void) const
   {
     const Vector &e= getSectionDeformation();
@@ -98,18 +122,46 @@ const XC::Vector &XC::ElasticSection3d::getStressResultant(void) const
   }
 
 //! @brief Returns the tangent stiffness matrix.
+//!
+//! Returns the section stiffness matrix, \f$\ksec\f$, where
+//! \f[
+//! \ksec = \left[
+//!    \begin{array}{cccccc}
+//!       EA &  0 &  0 & 0 & 0 & 0
+//!        0 & EI_z & 0 & 0 & 0 & 0
+//!        0 & 0 & EI_y & 0 & 0 & 0
+//!        0 & 0 & 0 & \alpha GA & 0 & 0
+//!        0 & 0 & 0 & 0 & \alpha GA & 0
+//!        0 & 0 & 0 & 0 & 0 & GJ
+//!   \end{array} 
+//! \right]
+//! \f]
 const XC::Matrix &XC::ElasticSection3d::getSectionTangent(void) const
   { return ctes_scc.getSectionTangent4x4(); }
 
-//! @brief Returns the tangent stiffness matrix en el estado inicial.
+//! @brief Returns the initial tangent stiffness matrix.
 const XC::Matrix &XC::ElasticSection3d::getInitialTangent(void) const
   { return ctes_scc.getInitialTangent4x4(); }
 
 //! @brief Returns the flexibility matrix.
+//! Overrides the base class implementation and returns the section
+//! flexibility matrix, \f$\fsec\f$, where
+//! \f[
+//!\fsec = \left[
+//!   \begin{array}{cccccc}
+//!       \frac{1}{EA} & 0 & 0 & 0 & 0 & 0
+//!       0 & \frac{1}{EI_z} & 0 & 0 & 0 & 0
+//!       0 & 0 & \frac{1}{EI_y} & 0 & 0 & 0
+//!       0 & 0 & 0 & \frac{1}{\alpha GA} & 0 & 0 
+//!       0 & 0 & 0 & 0 & \frac{1}{\alpha GA} & 0
+//!       0 & 0 & 0 & 0 & 0 & \frac{1}{GJ}
+//!   \end{array} 
+//! \right]
+//! \f]
 const XC::Matrix &XC::ElasticSection3d::getSectionFlexibility(void) const
   { return ctes_scc.getSectionFlexibility4x4(); }
 
-//! @brief Returns the flexibility matrix en el estado inicial.
+//! @brief Returns the initial flexibility matrix.
 const XC::Matrix &XC::ElasticSection3d::getInitialFlexibility(void) const
   { return ctes_scc.getInitialFlexibility4x4(); }
 
@@ -118,9 +170,28 @@ XC::SectionForceDeformation *XC::ElasticSection3d::getCopy(void) const
   { return new ElasticSection3d(*this); }
 
 //! @brief Response identifiers for section stiffness contribution.
+//!
+//! Returns the section ID code that indicates the ordering of
+//! section response quantities. For this section, axial response is the
+//! first quantity, bending about the local z-axis is the second, bending about
+//! the local y-axis is the third, shear along the local y-axis is the fourth,
+//! shear along the local z-axis is the fifth, and torsion is the sixth.
+//! \f[
+//! code := \left[
+//!   \begin{array}{c}
+//!       2
+//!       1
+//!       4
+//!       3
+//!       5
+//!       6
+//!   \end{array} 
+//! \right]
+//! \f]
 const XC::ResponseId &XC::ElasticSection3d::getType(void) const
   { return RespElasticSection3d; }
 
+//! @brief Return 6.
 int XC::ElasticSection3d::getOrder(void) const
   { return 4; }
 
@@ -134,7 +205,8 @@ int XC::ElasticSection3d::sendSelf(CommParameters &cp)
 
     res+= cp.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
-      std::cerr << nombre_clase() << "sendSelf() - failed to send data\n";
+      std::cerr << nombre_clase() << "::" << __FUNCTION__
+	        << "; failed to send data\n";
     return res;
   }
 
@@ -146,18 +218,20 @@ int XC::ElasticSection3d::recvSelf(const CommParameters &cp)
     int res= cp.receiveIdData(getDbTagData(),dataTag);
 
     if(res<0)
-      std::cerr << nombre_clase() << "::recvSelf - failed to receive ids.\n";
+      std::cerr << nombre_clase() << "::" << __FUNCTION__
+		<< "; failed to receive ids.\n";
     else
       {
         setTag(getDbTagDataPos(0));
         res+= recvData(cp);
         if(res<0)
-          std::cerr << nombre_clase() << "::recvSelf - failed to receive data.\n";
+          std::cerr << nombre_clase() << "::" << __FUNCTION__
+		    << "; failed to receive data.\n";
       }
     return res;
   }
 
-//! @brief Imprime.
+//! @brief Print stuff.
 void XC::ElasticSection3d::Print(std::ostream &s, int flag) const
   {
     if(flag == 2)

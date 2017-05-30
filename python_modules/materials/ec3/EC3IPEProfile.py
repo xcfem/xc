@@ -32,7 +32,7 @@ So:
 
 '''
 
-from materials.perfiles_metalicos.arcelor import perfiles_ipe_arcelor as ipe
+from materials.structural_shapes.arcelor import perfiles_ipe_arcelor as ipe
 import EC3Profile as EC3prof
 
 class EC3IPEProfile(EC3prof.EC3Profile,ipe.IPEProfile):

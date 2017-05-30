@@ -76,7 +76,7 @@ XC::DomainComponent::DomainComponent(int tag, int classTag)
 XC::DomainComponent::~DomainComponent(void)
   { setDomain(nullptr); }
 
-//! @brief Asigna a pointer al domain. 
+//! @brief Sets the pointer to the domain. 
 void XC::DomainComponent::setDomain(Domain *model)
   { theDomain = model; }
 

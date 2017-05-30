@@ -160,6 +160,7 @@
 #define DEG_TAG_STRENGTH_Section	6
 
 #define PATTERN_TAG_NodeLocker		  1 //Modificado LCPT.Added by LCPT.
+#define PATTERN_TAG_LoadContainer	  10 //Modificado LCPT.
 #define PATTERN_TAG_LoadPattern		  2 //Modificado LCPT.
 #define PATTERN_TAG_MultiSupportPattern	  4 //Modificado LCPT.
 #define PATTERN_TAG_UniformExcitation     3 //Modificado LCPT.

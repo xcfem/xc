@@ -222,7 +222,7 @@ int XC::Vector::resize(int newSize)
       } 
     else if(newSize == 0)
       { libera(); } 
-    else // otherwise if newSize is gretaer than oldSize free old space and get new_ space
+    else // otherwise if newSize is greater than oldSize free old space and get new_ space
       if(newSize > sz)
         {
           alloc(newSize);
@@ -933,9 +933,8 @@ XC::Vector  XC::Vector::operator-(double fact) const
 
 
 
-// Vector operator*(double fact):
-//! @brief The + operator returns a XC::Vector of the same size as current, whose components
-//! are return(i)= theData[i]*fact;
+//! @brief The + operator returns a vector of the same size as current,
+//! whose components are return(i)= theData[i]*fact;
 XC::Vector  XC::Vector::operator*(double fact) const
   {
     Vector result(*this);
@@ -947,8 +946,9 @@ XC::Vector  XC::Vector::operator*(double fact) const
 
 
 // Vector operator/(double fact):
-//! @brief The + operator returns a XC::Vector of the same size as current, whose components
-//! are return(i)= theData[i]/fact; Exits if divide-by-zero error.
+//! @brief The + operator returns a vector of the same size as current,
+//! whose components are return(i)= theData[i]/fact;
+//! Exits if divide-by-zero error.
 XC::Vector XC::Vector::operator/(double fact) const
   {
     if(fact == 0.0) 

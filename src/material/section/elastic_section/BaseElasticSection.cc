@@ -37,37 +37,42 @@
 XC::BaseElasticSection::BaseElasticSection(int tag, int classTag, const size_t &dim, MaterialLoader *mat_ldr)
   : PrismaticBarCrossSection(tag, classTag,mat_ldr), eTrial(dim), eInic(dim), eCommit(dim) {}
 
+//! @brief Commits the section state.
 int XC::BaseElasticSection::commitState(void)
   {
     eCommit = eTrial;
     return 0;
   }
 
+//! @brief Revert to the last commited state. 
 int XC::BaseElasticSection::revertToLastCommit(void)
   {
     eTrial= eCommit;
     return 0;
   }
 
+//! @brief Revert to the initial state. 
 int XC::BaseElasticSection::revertToStart(void)
   {
     eCommit.Zero();
     return 0;
   }
 
-int XC::BaseElasticSection::setInitialSectionDeformation(const XC::Vector &def)
+//! @brief Set the initial (generalized) deformation of the section.
+int XC::BaseElasticSection::setInitialSectionDeformation(const Vector &def)
   {
     eInic= def;
     return 0;
   }
 
-int XC::BaseElasticSection::setTrialSectionDeformation(const XC::Vector &def)
+//! @brief Set the trial (generalized) deformation of the section.
+int XC::BaseElasticSection::setTrialSectionDeformation(const Vector &def)
   {
     eTrial= def;
     return 0;
   }
 
-//! @brief Returns material's trial deformation.
+//! @brief Returns the current value of the (generalized) deformation.
 const XC::Vector &XC::BaseElasticSection::getSectionDeformation(void) const
   {
     static Vector retval;
@@ -95,6 +100,7 @@ int XC::BaseElasticSection::recvData(const CommParameters &cp)
     return res;
   }
 
+//! @brief Printing.
 void XC::BaseElasticSection::Print(std::ostream &s, int flag) const
   {
     s << "BaseElasticSection, tag: " << this->getTag() << std::endl;

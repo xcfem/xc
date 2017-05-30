@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Características mecánicas de distintos tipos de acero.
+''' Structural steel as specified in Eurocodes and ASTM standards.'''
 
 __author__= "Ana Ortega (AO_O) and Luis C. Pérez Tato (LCPT)"
 __copyright__= "Copyright 2015, AO_O and LCPT"
@@ -80,7 +80,7 @@ class EC3Steel(BasicSteel):
   def getDesignElasticPerfectlyPlasticMaterial(self,preprocessor,name):
     return typical_materials.defElasticPPMaterial(preprocessor, name,self.E,self.fyd(),-self.fyd())
 
-# Norma europea EN 10025-2:2004
+# European norm EN 10025-2:2004
 S235JR= EC3Steel(fy= 235e6, fy16= 235e6, fy40= 225e6, fy63= 215e6, fy80= 215e6, fy100= 215e6, fy125= 195e6,fu= 360e6,gammaM= 1.1)
 
 S275JR= EC3Steel(fy= 275e6, fy16= 275e6, fy40= 265e6, fy63= 255e6, fy80= 245e6, fy100= 235e6, fy125= 225e6,fu= 360e6,gammaM= 1.1)

@@ -44,68 +44,108 @@
 **                                                                    **
 ** ****************************************************************** */
                                                                         
-// $Revision: 1.6 $
-// $Date: 2003/02/14 23:01:33 $
-// $Source: /usr/local/cvs/OpenSees/SRC/material/section/fiber_section/ElasticSection2d.h,v $
+// $Revision: 1.12 $
+// $Date: 2005/11/22 19:44:22 $
+// $Source: /usr/local/cvs/OpenSees/SRC/domain/load/pattern/LoadContainer.h,v $
                                                                         
                                                                         
-///////////////////////////////////////////////////////
-// File:  ~/Src/element/hinge/ElasticSection2d.h
-//
-// Written by Matthew Peavy
-//
-// Written:  Feb 13, 2000
-// Debugged: Feb 14, 2000
-// Revised:  May 2000 -- MHS
-//
-//
-// Purpose:  This header file contains the prototype
-// for the ElasticSection2d class.
+#ifndef LoadContainer_h
+#define LoadContainer_h
 
-#ifndef ElasticSection2d_h
-#define ElasticSection2d_h
-
-#include <material/section/elastic_section/BaseElasticSection2d.h>
+#include "xc_utils/src/nucleo/EntCmd.h"
+#include "utility/actor/actor/MovableObject.h"
 
 namespace XC {
-class Channel;
-class FEM_ObjectBroker;
-class Information;
+class NodalLoad;
+class ElementalLoad;
+class NodalLoadIter;
+class ElementalLoadIter;
+class Vector;
+class TaggedObjectStorage;
+class Domain;
 
-//! \ingroup MATSCCElastica
-//
-//! @brief Cross section with linear elastic material
-//! for bi-dimensional problesm
-//! (3 degrees of freedom in each section).
+//! @ingroup BoundCond
 //!
-//! provides the implementation of a section which exhibits
-//! uncoupled elastic behavior in axial, moment, and shear response.
-class ElasticSection2d: public BaseElasticSection2d
+//!
+//! @defgroup LPatterns Load patterns.
+//
+//! @ingroup LPatterns
+//
+//! @brief A LoadContainer object is used to 
+//! to store loads on nodes and elements.
+class LoadContainer: public EntCmd, public MovableObject
   {
+    friend class LoadPattern;
   private:
-    static Vector s;
+    // storage objects for the loads.
+    TaggedObjectStorage  *theNodalLoads; //!< Nodal load container.
+    TaggedObjectStorage  *theElementalLoads; //!< Elemental load container.
+
+    // iterator objects for the objects added to the storage objects
+    NodalLoadIter       *theNodIter; //!< Iterator over nodal loads.
+    ElementalLoadIter   *theEleIter; //!< Iterator over elemental loads.
+
+    void free_containers(void);
+    void free_iterators(void);
+    void alloc_containers(void);
+    void alloc_iterators(void);
+    void free(void);
+  protected:
+    DbTagData &getDbTagData(void) const;
+    int sendData(CommParameters &cp);
+    int recvData(const CommParameters &cp);
+
+    // methods to add loads
+    virtual bool addNodalLoad(NodalLoad *);
+    virtual bool addElementalLoad(ElementalLoad *);
+
+    virtual bool removeNodalLoad(int tag);
+    virtual bool removeElementalLoad(int tag);
   public:
-    ElasticSection2d(int tag, double E, double A, double I);
-    ElasticSection2d(int tag, double EA, double EI);
-    ElasticSection2d(int tag,MaterialLoader *mat_ldr= nullptr);    
-    ElasticSection2d(void);    
+    LoadContainer(EntCmd *);
+    virtual ~LoadContainer(void);
 
-    const Vector &getStressResultant(void) const;
-    const Matrix &getSectionTangent(void) const;
-    const Matrix &getInitialTangent(void) const;
-    const Matrix &getSectionFlexibility(void) const;
-    const Matrix &getInitialFlexibility(void) const;
+    virtual void setDomain(Domain *theDomain);
 
-    SectionForceDeformation *getCopy(void) const;
-    const ResponseId &getType(void) const;
-    int getOrder(void) const;
-    
-    int sendSelf(CommParameters &);
-    int recvSelf(const CommParameters &);
-    
 
-    void Print(std::ostream &s, int flag =0) const;
+    virtual NodalLoadIter &getNodalLoads(void);
+    virtual ElementalLoadIter &getElementalLoads(void);
+    int getNumNodalLoads(void) const;
+    int getNumElementalLoads(void) const;
+    int getNumLoads(void) const;
+
+    // methods to remove things (loads, time_series,...)
+    virtual void clearAll(void);
+    virtual void clearLoads(void);
+
+    // methods to apply loads
+    virtual void applyLoad(const double &);
+
+
+    // methods for o/p
+    virtual int sendSelf(CommParameters &);
+    virtual int recvSelf(const CommParameters &);
+
+    virtual void Print(std::ostream &s, int flag =0);
+
+    virtual LoadContainer *getCopy(void);
+
+    // AddingSensitivity:BEGIN //////////////////////////////////////////
+    virtual void applyLoadSensitivity(const double &);
+    virtual int  setParameter(const std::vector<std::string> &, Parameter &);
+    virtual int  updateParameter(int parameterID, Information &);
+    virtual int  activateParameter(int parameterID);
+    Vector getExternalForceSensitivity(int gradNumber);
+    // AddingSensitivity:END ///////////////////////////////////////////
   };
+
 } // end of XC namespace
 
 #endif
+
+
+
+
+
+
+

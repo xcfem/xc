@@ -62,7 +62,7 @@
 // What: "@(#) LoadPattern.h, revA"
 
 #include "NodeLocker.h"
-
+#include "LoadContainer.h"
 
 namespace XC {
 class NodalLoad;
@@ -94,23 +94,14 @@ class LoadPattern: public NodeLocker
     TimeSeries *theSeries; //!< load variation in time.
 
     // storage objects for the loads.
-    TaggedObjectStorage  *theNodalLoads; //!< Nodal load container.
-    TaggedObjectStorage  *theElementalLoads; //!< Elemental load container.
-
-    // iterator objects for the objects added to the storage objects
-    NodalLoadIter       *theNodIter; //!< Iterator over nodal loads.
-    ElementalLoadIter   *theEleIter; //!< Iterator over elemental loads.
+    LoadContainer theLoads; //!< Load container.
 
     // AddingSensitivity:BEGIN //////////////////////////////////////
     Vector *randomLoads;
     bool RVisRandomProcessDiscretizer;
     // AddingSensitivity:END ////////////////////////////////////////
 
-    void libera_contenedores(void);
-    void libera_iteradores(void);
-    void alloc_contenedores(void);
-    void alloc_iteradores(void);
-    void libera(void);
+    void free(void);
   protected:
     int isConstant;     // to indicate whether setConstant has been called
     DbTagData &getDbTagData(void) const;
@@ -136,18 +127,24 @@ class LoadPattern: public NodeLocker
     ElementalLoad *newElementalLoad(const std::string &);
     virtual bool addSFreedom_Constraint(SFreedom_Constraint *theSp);
 
-    virtual NodalLoadIter &getNodalLoads(void);
-    virtual ElementalLoadIter &getElementalLoads(void);
-    int getNumNodalLoads(void) const;
-    int getNumElementalLoads(void) const;
-    int getNumLoads(void) const;
+    //! @brief Return the load container.
+    inline LoadContainer &getLoads(void)
+      { return theLoads; }
+    inline const LoadContainer &getLoads(void) const
+      { return theLoads; }
+    inline int getNumNodalLoads(void) const
+      { return theLoads.getNumNodalLoads(); }
+    inline int getNumElementalLoads(void) const
+      { return theLoads.getNumElementalLoads(); }
+    inline int getNumLoads(void) const
+      { return theLoads.getNumLoads(); }
 
     // methods to remove things (loads, time_series,...)
     virtual void clearAll(void);
     virtual void clearLoads(void);
     virtual bool removeNodalLoad(int tag);
     virtual bool removeElementalLoad(int tag);
-
+ 
     // methods to apply loads
     virtual void applyLoad(double pseudoTime = 0.0);
     virtual void setLoadConstant(void);
@@ -161,7 +158,8 @@ class LoadPattern: public NodeLocker
     const double &GammaF(void) const;
     double &GammaF(void);
     void setGammaF(const double &);
-       
+    LoadPattern &operator*=(const double &fact);
+    LoadPattern &operator/=(const double &fact); 
 
     // methods for o/p
     virtual int sendSelf(CommParameters &);

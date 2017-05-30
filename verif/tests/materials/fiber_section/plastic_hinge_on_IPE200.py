@@ -6,8 +6,8 @@ import xc_base
 import geom
 import xc
 
-from materials.perfiles_metalicos.arcelor import perfiles_ipe_arcelor as ipe
-from materials import aceros_estructurales as steel
+from materials.structural_shapes.arcelor import perfiles_ipe_arcelor as ipe
+from materials import structural_steel as steel
 
 __author__= "Luis C. Pérez Tato (LCPT)"
 __copyright__= "Copyright 2014, LCPT"

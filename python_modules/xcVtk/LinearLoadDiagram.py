@@ -17,7 +17,7 @@ class LinearLoadDiagram(cd.ColoredDiagram):
 
   def dumpElementalLoads(self,preprocessor,lp,indxDiagram):
     ''' Iterate over loaded elements dumping its loads into the graphic.'''
-    lIter= lp.getElementalLoadIter
+    lIter= lp.loads.getElementalLoadIter
     el= lIter.next()
     while(el):
       tags= el.elementTags
