@@ -12,6 +12,8 @@
 /usr/local/lib/python2.7/dist-packages/actions/estadillo_cargas.pyc
 /usr/local/lib/python2.7/dist-packages/actions/__init__.py
 /usr/local/lib/python2.7/dist-packages/actions/__init__.pyc
+/usr/local/lib/python2.7/dist-packages/actions/load_cases_def.py
+/usr/local/lib/python2.7/dist-packages/actions/load_cases_def.pyc
 /usr/local/lib/python2.7/dist-packages/actions/loads_def.py
 /usr/local/lib/python2.7/dist-packages/actions/loads_def.pyc
 /usr/local/lib/python2.7/dist-packages/actions/quake/escribeCargasModo.py
@@ -908,8 +910,8 @@
 /usr/local/lib/python2.7/dist-packages/xcVtk/malla_ef/Fields.pyc
 /usr/local/lib/python2.7/dist-packages/xcVtk/malla_ef/__init__.py
 /usr/local/lib/python2.7/dist-packages/xcVtk/malla_ef/__init__.pyc
-/usr/local/lib/python2.7/dist-packages/xcVtk/malla_ef/QuickGraphics.py
-/usr/local/lib/python2.7/dist-packages/xcVtk/malla_ef/QuickGraphics.pyc
+/usr/local/lib/python2.7/dist-packages/xcVtk/malla_ef/quick_graphics.py
+/usr/local/lib/python2.7/dist-packages/xcVtk/malla_ef/quick_graphics.pyc
 /usr/local/lib/python2.7/dist-packages/xcVtk/malla_ef/vtk_define_malla_cells_ef.py
 /usr/local/lib/python2.7/dist-packages/xcVtk/malla_ef/vtk_define_malla_cells_ef.pyc
 /usr/local/lib/python2.7/dist-packages/xcVtk/malla_ef/vtk_define_malla_elementos.py

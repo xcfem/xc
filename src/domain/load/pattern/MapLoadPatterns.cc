@@ -211,8 +211,8 @@ void XC::MapLoadPatterns::removeAllFromDomain(void)
       dom->removeLoadPattern((*i).second);
   }
 
-//! @brief Define un objeto TimeSeries con el tipo y el nombre being passed as parameters.
-//! Interpreta los siguientes tipos:
+//! @brief Define a TimeSeries object with the type and name passed as parameters.
+//! It Interprets the following types:
 //!
 //! - constant_ts: Defines a constant time series (ConstantSeries).
 //! - linear_ts: Defines a linear time series (LinearSeries).
@@ -300,15 +300,15 @@ XC::LoadPattern *XC::MapLoadPatterns::getCurrentLoadPatternPtr(void)
 const XC::LoadPattern *XC::MapLoadPatterns::getCurrentLoadPatternPtr(void) const
   { return buscaLoadPattern(lpcode); }
 
-//! @brief Returns a vector para almacenar los dbTags
-//! de los miembros de la clase.
+//! @brief Return a vector to store the dbTags
+//! of the class members.
 XC::DbTagData &XC::MapLoadPatterns::getDbTagData(void) const
   {
     static DbTagData retval(5);
     return retval;
   }
 
-//! @brief Send members through the channel being passed as parameter.
+//! @brief Send members through the channel passed as parameter.
 int XC::MapLoadPatterns::sendData(CommParameters &cp)
   {
     int res= sendMap(tseries,cp,getDbTagData(),CommMetaData(0));
@@ -319,7 +319,7 @@ int XC::MapLoadPatterns::sendData(CommParameters &cp)
     return res;
   }
 
-//! @brief Send members through the channel being passed as parameter.
+//! @brief Send members through the channel passed as parameter.
 int XC::MapLoadPatterns::recvData(const CommParameters &cp)
   {
     clear();
@@ -333,7 +333,7 @@ int XC::MapLoadPatterns::recvData(const CommParameters &cp)
     return res;
   }
 
-//! @brief Sends object through the channel being passed as parameter.
+//! @brief Sends object through the channel passed as parameter.
 int XC::MapLoadPatterns::sendSelf(CommParameters &cp)
   {
     inicComm(5);
@@ -345,7 +345,7 @@ int XC::MapLoadPatterns::sendSelf(CommParameters &cp)
     return res;
   }
 
-//! @brief Receives object through the channel being passed as parameter.
+//! @brief Receives object through the channel passed as parameter.
 int XC::MapLoadPatterns::recvSelf(const CommParameters &cp)
   {
     inicComm(5);
@@ -363,7 +363,7 @@ int XC::MapLoadPatterns::recvSelf(const CommParameters &cp)
     return res;
   }
 
-//! @brief Returns the nombres de los load patterns.
+//! @brief Return the names of the load patterns.
 std::deque<std::string> XC::MapLoadPatterns::getListaNombres(void) const
   {
     std::deque<std::string> retval;
@@ -372,7 +372,7 @@ std::deque<std::string> XC::MapLoadPatterns::getListaNombres(void) const
     return retval;
   }
 
-//! @brief Returns load case names.
+//! @brief Return load case names.
 boost::python::list XC::MapLoadPatterns::getKeys(void) const
   {
     boost::python::list retval;
