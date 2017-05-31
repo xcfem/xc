@@ -408,6 +408,8 @@
 /usr/local/lib/python2.7/dist-packages/materials/fiber_section/sectionReport.pyc
 /usr/local/lib/python2.7/dist-packages/materials/__init__.py
 /usr/local/lib/python2.7/dist-packages/materials/__init__.pyc
+/usr/local/lib/python2.7/dist-packages/materials/internal_forces.py
+/usr/local/lib/python2.7/dist-packages/materials/internal_forces.pyc
 /usr/local/lib/python2.7/dist-packages/materials/LimitStateControllerBase.py
 /usr/local/lib/python2.7/dist-packages/materials/LimitStateControllerBase.pyc
 /usr/local/lib/python2.7/dist-packages/materials/materialGraphics.py

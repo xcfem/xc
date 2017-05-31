@@ -25,8 +25,7 @@ import xc
 from solution import predefined_solutions
 from model import predefined_spaces
 from materials import typical_materials
-from materials import ShellInternalForces as sif
-from materials import CrossSectionInternalForces as csif
+from materials import internal_forces
 
 # Problem type
 prueba= xc.ProblemaEF()
@@ -110,7 +109,7 @@ export_internal_forces.exportInternalForces("prueba",setTotal.getElements,f)
 f.close()
 
 
-mean= [csif.CrossSectionInternalForces(),csif.CrossSectionInternalForces()]
+mean= [internal_forces.CrossSectionInternalForces(),internal_forces.CrossSectionInternalForces()]
 nCols= len(mean)
 nRows= 0
 import csv
@@ -118,13 +117,13 @@ cr = csv.reader(open(fName,"rb"))
 for row in cr:
   nRows+= 1
   sectionIndex= eval(row[2])
-  mean[sectionIndex]+= csif.CrossSectionInternalForces(eval(row[3]),eval(row[4]),eval(row[5]),eval(row[6]),eval(row[7]),eval(row[8]))
+  mean[sectionIndex]+= internal_forces.CrossSectionInternalForces(eval(row[3]),eval(row[4]),eval(row[5]),eval(row[6]),eval(row[7]),eval(row[8]))
 
 for m in mean:
   m*= 1.0/nRows
 
-meanRef= [csif.CrossSectionInternalForces(0.0, -1.4141789118e-08, 0.0, 0.0, -0.377847769601, 0.0),csif.CrossSectionInternalForces(0.0, 3.746624204e-08, 0.0, 0.0, -1.6862614343, 0.0)]
-#sif.ShellElementInternalForces(0.0,0.0,0.0,-0.755991356310675,-2.4972837939920614,-1.4220260169048315e-13, -3.033006243120112e-08).getWoodArmer()
+meanRef= [internal_forces.CrossSectionInternalForces(0.0, -1.4141789118e-08, 0.0, 0.0, -0.377847769601, 0.0),internal_forces.CrossSectionInternalForces(0.0, 3.746624204e-08, 0.0, 0.0, -1.6862614343, 0.0)]
+#internal_forces.ShellMaterialInternalForces(0.0,0.0,0.0,-0.755991356310675,-2.4972837939920614,-1.4220260169048315e-13, -3.033006243120112e-08).getWoodArmer()
 
 ratio1= 0.0
 for i in range(0,2):

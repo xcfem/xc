@@ -28,7 +28,7 @@ from materials import section_properties
 from postprocess import ControlVars as cv
 from solution import predefined_solutions
 from miscUtils import LogMessages as lmsg
-from materials import CrossSectionInternalForces as csif
+from materials import internal_forces
 from collections import defaultdict
 
 # Fake section (elements must have a stiffness)
@@ -70,7 +70,7 @@ class PhantomModel(object):
         tagElem= eval(lst[1])
         idSection= eval(lst[2])
         self.elementTags.add(tagElem)
-        crossSectionInternalForces= csif.CrossSectionInternalForces()
+        crossSectionInternalForces= internal_forces.CrossSectionInternalForces()
         crossSectionInternalForces.setFromCSVString(lst,3)
         crossSectionInternalForces.idComb= idComb
         crossSectionInternalForces.tagElem= tagElem
