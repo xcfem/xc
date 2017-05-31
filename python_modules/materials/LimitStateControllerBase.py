@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-#Basic parameters for limit state control.
+''' Basic parameters for limit state control.'''
 
 __author__= "Luis C. Pérez Tato (LCPT)"
 __copyright__= "Copyright 2015,LCPT"

@@ -1,4 +1,12 @@
+# -*- coding: utf-8 -*-
 from __future__ import division
+
+__author__= "Ana Ortega (AO_O)"
+__copyright__= "Copyright 2015, AO_O"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "ana.Ortega@ciccp.es"
+
 import scipy.optimize as opt
 import math
 
