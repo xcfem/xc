@@ -268,7 +268,7 @@ void XC::EntMdlr::create_nodes(const TritrizPos3d &posiciones)
     else
       if(verborrea>2)
         std::clog << nombre_clase() << "::" << __FUNCTION__
-	          << "; nodes from entity: '" << GetNombre()
+	          << "; nodes from entity: '" << getName()
 		  << "' already exist." << std::endl;
   }
 
@@ -290,7 +290,7 @@ bool XC::EntMdlr::create_elements(meshing_dir dm)
                 {
                   if(verborrea>4)
                     std::clog << "Creating elements of entity: '"
-			      << GetNombre() << "'...";   
+			      << getName() << "'...";   
                   const Element *smll= getPreprocessor()->getElementLoader().get_seed_element();
                   if(smll)
                     {
@@ -330,7 +330,7 @@ XC::Pnt *XC::EntMdlr::create_point(const Pos3d &pos)
 void XC::EntMdlr::create_points(const MatrizPos3d &posiciones)
   {
     if(verborrea>4)
-      std::clog << "Creando puntos linea: '" << GetNombre() << "'...";   
+      std::clog << "Creando puntos linea: '" << getName() << "'...";   
     const size_t filas= posiciones.getNumFilas();
     const size_t cols= posiciones.getNumCols();
 

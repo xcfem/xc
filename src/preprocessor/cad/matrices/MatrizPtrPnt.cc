@@ -53,7 +53,7 @@ void XC::MatrizPtrPnt::setPnt(const size_t &j,const size_t &k,const int &id_poin
           std::clog << "Warning!, position: (" 
                     << j << "," << k 
                     << ") is already assigned to point: "
-                    << tmp->GetNombre() << std::endl;
+                    << tmp->getName() << std::endl;
         at(j,k)= c->getPuntos().busca(id_point);
      }
    else

@@ -40,7 +40,7 @@ XC::MEDGroupInfo::MEDGroupInfo(MEDMeshing *mesh,const std::string &nmb)
 
 //! Constructor.
 XC::MEDGroupInfo::MEDGroupInfo(MEDMeshing *mesh,const Set &set)
-  : nombre(set.GetNombre()), med_group(nullptr)
+  : nombre(set.getName()), med_group(nullptr)
   { 
     set_owner(mesh);
     indices= mesh->getMapIndicesCeldas();

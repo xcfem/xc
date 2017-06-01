@@ -122,8 +122,8 @@ XC::Edge *XC::MapLineas::createLine(Pnt *pA,Pnt *pB)
         if(pA==pB)
 	  std::cerr << nombre_clase() << __FUNCTION__
 	            << "; ends of the line: ("
-                    << pA->GetNombre() << ","
-                    << pB->GetNombre() 
+                    << pA->getName() << ","
+                    << pB->getName() 
                     << "), are the same." << std::endl;
         tmp= busca_edge_ptr_extremos(*pA,*pB);
         if(!tmp)
@@ -137,8 +137,8 @@ XC::Edge *XC::MapLineas::createLine(Pnt *pA,Pnt *pB)
         if(!tmp)
 	  std::cerr << nombre_clase() << __FUNCTION__
 		    << "; can't get a line"
-                    << " between points: " << pA->GetNombre()
-                    << " and " << pB->GetNombre() << std::endl;
+                    << " between points: " << pA->getName()
+                    << " and " << pB->getName() << std::endl;
       }
     else
       std::cerr << nombre_clase() << __FUNCTION__
@@ -159,8 +159,8 @@ XC::Edge *XC::MapLineas::createDividedLine(Pnt *pA,Pnt *pB)
         if(pA==pB)
 	  std::cerr << nombre_clase() << __FUNCTION__
 	            << "; ends of the line: ("
-                    << pA->GetNombre() << ","
-                    << pB->GetNombre() 
+                    << pA->getName() << ","
+                    << pB->getName() 
                     << "), are the same." << std::endl;
         tmp= busca_edge_ptr_extremos(*pA,*pB);
         if(!tmp)
@@ -174,8 +174,8 @@ XC::Edge *XC::MapLineas::createDividedLine(Pnt *pA,Pnt *pB)
         if(!tmp)
 	  std::cerr << nombre_clase() << __FUNCTION__
 		    << "; can't get a line"
-                    << " between points: " << pA->GetNombre()
-                    << " and " << pB->GetNombre() << std::endl;
+                    << " between points: " << pA->getName()
+                    << " and " << pB->getName() << std::endl;
       }
     else
       std::cerr << nombre_clase() << __FUNCTION__
@@ -205,8 +205,8 @@ XC::Edge *XC::MapLineas::createArc(Pnt *pA,Pnt *pB,Pnt *pC)
 	  std::cerr << nombre_clase() << __FUNCTION__
 		    << "; can't get an arc"
                     << " between the points: "
-		    << pA->GetNombre() << ", " << pB->GetNombre()
-                    << " and " << pC->GetNombre() << std::endl;
+		    << pA->getName() << ", " << pB->getName()
+                    << " and " << pC->getName() << std::endl;
       }
     else
       std::cerr << nombre_clase() << __FUNCTION__
@@ -245,7 +245,7 @@ XC::Edge *XC::MapLineas::createCopy(const Edge *l)
         else
 	  std::cerr << nombre_clase() << __FUNCTION__
 	            << "; memory exhausted or the objet: '"
-                    << l->GetNombre() << "is not a line." << std::endl; 
+                    << l->getName() << "is not a line." << std::endl; 
       }
     return retval;
   }

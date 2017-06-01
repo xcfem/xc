@@ -102,7 +102,7 @@ void MEDTFieldInfo<T>::alloc(void) const
         campo= new MEDMEM::FIELD<T>(grupo,nc);
       }
     else
-      std::cerr << "El campo: '" << getXCFieldInfo().GetNombre() 
+      std::cerr << "El campo: '" << getXCFieldInfo().getName() 
                 << "' tiene 0 componentes; se ignora." << std::endl;
   }
 
@@ -217,7 +217,7 @@ template <class T>
 void MEDTFieldInfo<T>::to_med(void) const
   {
     alloc();
-    campo->setName(getXCFieldInfo().GetNombre());
+    campo->setName(getXCFieldInfo().getName());
     //Information about components.
     campo->setComponentsNames(getComponentNamesPtr());
     campo->setComponentsDescriptions(getComponentDescriptionsPtr());

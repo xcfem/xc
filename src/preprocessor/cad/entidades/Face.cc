@@ -97,15 +97,15 @@ int XC::Face::SentidoBorde(const XC::Edge *l,const XC::Face &otra) const
     const size_t ind_l_esta= IndiceEdge(l);
     if(ind_l_esta == 0)
       {
-        std::cerr << "Line :" << l->GetNombre() 
-                  << " is not an edge of the surface: " << GetNombre() << std::endl;
+        std::cerr << "Line :" << l->getName() 
+                  << " is not an edge of the surface: " << getName() << std::endl;
         return 0;
       }
     const size_t ind_l_otra= otra.IndiceEdge(l);
     if(ind_l_otra == 0)
       {
-        std::cerr << "Line :" << l->GetNombre() 
-                  << " is not an edge of the surface: " << otra.GetNombre() << std::endl;
+        std::cerr << "Line :" << l->getName() 
+                  << " is not an edge of the surface: " << otra.getName() << std::endl;
         return 0;
       }
     //Search the edges on each surface;

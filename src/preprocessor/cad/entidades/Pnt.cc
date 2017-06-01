@@ -104,9 +104,9 @@ const std::string &XC::Pnt::NombresEdgesTocan(void) const
     if(!lineas_pt.empty())
       {
         std::set<const Edge *>::const_iterator i= lineas_pt.begin();
-        retval+= (*i)->GetNombre();
+        retval+= (*i)->getName();
         for(;i!=lineas_pt.end();i++)
-          retval+= "," + (*i)->GetNombre();
+          retval+= "," + (*i)->getName();
       }
     return retval;
   }
@@ -177,7 +177,7 @@ int XC::Pnt::getTagNode(void) const
     if(nod)
       retval= nod->getTag();
     else
-      std::cerr << nombre_clase() << "::" << __FUNCTION__ << "; the point: '" << GetNombre()
+      std::cerr << nombre_clase() << "::" << __FUNCTION__ << "; the point: '" << getName()
                 << "' has not a node (is not meshed)." << std::endl;
     return retval;
   }
@@ -188,7 +188,7 @@ XC::Node *XC::Pnt::getNode(void)
   {
     Node *nod= GetNodo();
     if(!nod)
-      std::cerr << nombre_clase() << "::" << __FUNCTION__ << "; the point: '" << GetNombre()
+      std::cerr << nombre_clase() << "::" << __FUNCTION__ << "; the point: '" << getName()
                 << "' has not a node (is not meshed)." << std::endl;
     return nod;
   }

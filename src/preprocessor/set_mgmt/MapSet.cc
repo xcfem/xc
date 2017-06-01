@@ -148,7 +148,7 @@ void XC::MapSet::cierra_set(const std::string &nmb)
 //! @bref Creates a structured set copia del que se le being passed as parameter.
 XC::SetEstruct *XC::MapSet::create_set_estruct(const SetEstruct &set_estruct)
   {
-    const std::string nmb= set_estruct.GetNombre();
+    const std::string nmb= set_estruct.getName();
     if(exists(nmb)) //The set exists
       {
 	std::cerr << nombre_clase() << "::" << __FUNCTION__
@@ -188,7 +188,7 @@ XC::SetBase *XC::MapSet::broke_set(const std::string &nmb,const std::string &nmb
 XC::EntMdlr *XC::MapSet::inserta_ent_mdlr(EntMdlr *ent_mdlr)
   {
     assert(ent_mdlr);
-    const std::string nmb= ent_mdlr->GetNombre();
+    const std::string nmb= ent_mdlr->getName();
     if(exists(nmb)) //The set exists
       {
 	std::cerr << nombre_clase() << "::" << __FUNCTION__

@@ -18,7 +18,7 @@ def appendSets(setTo,sets):
   :param points: list of sets to be appended [set1,set2, ...]
   '''
   for s in sets:
-    setTo.append(s)
+    setTo.extend(s)
 
 def appendNodesFromLine(setTo,line):
   '''Appends the nodes in the specified line to a set of entities

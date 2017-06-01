@@ -68,7 +68,7 @@ class CmbEdge: public Edge
         const Pnt *P1(void) const;
         const Pnt *P2(void) const;
         bool ExtremosEn(const Pnt *,const Pnt *) const;
-        const std::string &GetNombre(void) const;
+        const std::string &getName(void) const;
         inline bool esDirecto(void) const
           { return directo; }
         inline void reverse(void)

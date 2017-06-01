@@ -86,7 +86,7 @@ XC::Spot *XC::EntGeomSection::BuscaSpot(const size_t &id_punto)
       }
     else
       std::cerr << "XC::EntGeomSection::BuscaSpot: el objeto: '"
-                << GetNombre() << "' no tiene asignado GeomSection."
+                << getName() << "' no tiene asignado GeomSection."
                 << std::endl;
     return retval;
   }
@@ -101,7 +101,7 @@ const XC::Spot *XC::EntGeomSection::BuscaSpot(const size_t &id_punto) const
       }
     else
       std::cerr << "XC::EntGeomSection::BuscaSpot: el objeto: '" 
-                << GetNombre() << "' no tiene asignado GeomSection."
+                << getName() << "' no tiene asignado GeomSection."
                 << std::endl;
     return retval;
   }
@@ -116,7 +116,7 @@ XC::Eje *XC::EntGeomSection::BuscaEje(const size_t &id_Eje)
       }
     else
       std::cerr << "XC::EntGeomSection::BuscaEje: el objeto: '"
-                << GetNombre() << "' no tiene asignado GeomSection."
+                << getName() << "' no tiene asignado GeomSection."
                 << std::endl;
     return retval;
   }
@@ -131,7 +131,7 @@ const XC::Eje *XC::EntGeomSection::BuscaEje(const size_t &id_Eje) const
       }
     else
       std::cerr << "XC::EntGeomSection::BuscaEje: el objeto: '" 
-                << GetNombre() << "' no tiene asignado GeomSection."
+                << getName() << "' no tiene asignado GeomSection."
                 << std::endl;
     return retval;
   }

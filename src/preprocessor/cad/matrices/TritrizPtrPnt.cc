@@ -64,7 +64,7 @@ void XC::TritrizPtrPnt::setPnt(const size_t &i,const size_t &j,const size_t &k,c
           std::clog << "Warning!, position: (" 
                     << i << "," << j << "," << k 
                     << ") is already assigned to point: "
-                    << tmp->GetNombre() << std::endl;
+                    << tmp->getName() << std::endl;
         TritrizPtrPnt::operator()(i,j,k)= c->getPuntos().busca(id_point);
       }
     else

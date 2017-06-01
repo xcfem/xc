@@ -966,7 +966,7 @@ XC::Vector XC::Vector::operator/(double fact) const
 // Vector &operator+=(const XC::Vector &V):
 //! @brief The += operator adds V's data to data, data[i]+=V(i). A check to see if
 //! vectors are of same size is performed if VECTOR_CHECK is defined.
-XC::Vector &XC::Vector::operator+=(const XC::Vector &other)
+XC::Vector &XC::Vector::operator+=(const Vector &other)
   {
 #ifdef _G3DEBUG
     if(sz != other.sz)

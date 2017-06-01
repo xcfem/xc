@@ -54,7 +54,7 @@ size_t calc_ndiv(const XC::Edge *edgeA,const XC::Edge *edgeB,const size_t &ndj)
           retval= ndA;
         else
 	  std::cerr << "calc_ndiv, los lados: "
-                    << edgeA->GetNombre() << " y " << edgeB->GetNombre() 
+                    << edgeA->getName() << " y " << edgeB->getName() 
                     << " are already meshed, and they have different number of divisions ("
                     << ndA << " y " << ndB << std::endl;
       }
@@ -63,7 +63,7 @@ size_t calc_ndiv(const XC::Edge *edgeA,const XC::Edge *edgeB,const size_t &ndj)
         if(ndA!=ndj)
           {
 	    std::clog << "calc_ndiv, el borde: "
-                      << edgeA->GetNombre()
+                      << edgeA->getName()
                       << " is already meshed, division number can't be changed."
                       << " to " << ndj << " keeping NDiv= " << ndA << std::endl;
             retval= ndA;
@@ -74,7 +74,7 @@ size_t calc_ndiv(const XC::Edge *edgeA,const XC::Edge *edgeB,const size_t &ndj)
         if(ndB!=ndj)
           {
 	    std::clog << "calc_ndiv, el borde: "
-                      << edgeB->GetNombre()
+                      << edgeB->getName()
                       << " is already meshed, division number can't be changed."
                       << " to " << ndj << " keeping NDiv= " << ndB << std::endl;
             retval= ndB;
@@ -104,8 +104,8 @@ const XC::Edge *XC::QuadSurface::get_lado_homologo(const Edge *l) const
           retval= lineas[1].Borde();
       }
     else //No la encuentra.
-      std::cerr << "Line :" << l->GetNombre() 
-                << " is not an edge of the surface: " << GetNombre() << std::endl;    
+      std::cerr << "Line :" << l->getName() 
+                << " is not an edge of the surface: " << getName() << std::endl;    
     return retval;
   }
 
@@ -170,9 +170,9 @@ bool XC::QuadSurface::checkNDivs(const size_t &i,const size_t &j) const
     if(ndivA!=ndivB)
       {
         std::cerr << "QuadSurface::checkNDivs, lines: "
-                  << lineas[i].Borde()->GetNombre() << " and "
-                  << lineas[j].Borde()->GetNombre() 
-                  << " of surface: " << GetNombre()
+                  << lineas[i].Borde()->getName() << " and "
+                  << lineas[j].Borde()->getName() 
+                  << " of surface: " << getName()
                   << " have different number of divisions ("
                   << ndivA << " y " << ndivB << ')' << std::endl;
         return false;
@@ -232,7 +232,7 @@ void XC::QuadSurface::setPuntos(const ID &indices_ptos)
         if(NumEdges()>0)
           std::cerr << nombre_clase() << __FUNCTION__
 	            << "; warning redefinition of surface: '"
-                    << GetNombre() << "'.\n";
+                    << getName() << "'.\n";
 
 	Face::addPoints(indices_ptos);
         cierra();
@@ -328,7 +328,7 @@ void XC::QuadSurface::setPuntos(const m_int &indices_ptos)
               else
 	        std::cerr << "QuadSurface::setPuntos; NULL pointer to point in position: ("
                           << i << ',' << j << ") in definition of surface: '"
-                          << GetNombre() << "'" << std::endl;
+                          << getName() << "'" << std::endl;
             }
         }
     setPuntos(puntos);
@@ -447,7 +447,7 @@ void XC::QuadSurface::create_nodes(void)
     else
       if(verborrea>2)
         std::clog << nombre_clase() << "::" << __FUNCTION__
-	          << "; nodes of entity: '" << GetNombre()
+	          << "; nodes of entity: '" << getName()
 		  << "' already exist." << std::endl;      
   }
 
@@ -455,14 +455,14 @@ void XC::QuadSurface::create_nodes(void)
 void XC::QuadSurface::genMesh(meshing_dir dm)
   {
     if(verborrea>3)
-      std::clog << "Meshing quadrilateral surface...(" << GetNombre() << ")...";
+      std::clog << "Meshing quadrilateral surface...(" << getName() << ")...";
     create_nodes();
     if(ttzElements.Null())
       create_elements(dm);
     else
       if(verborrea>2)
         std::clog << nombre_clase() << "::" << __FUNCTION__
-	          << "; elements for surface: '" << GetNombre()
+	          << "; elements for surface: '" << getName()
 		  << "' already exist." << std::endl;      
     if(verborrea>3)
       std::clog << "done." << std::endl;

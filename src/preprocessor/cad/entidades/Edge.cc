@@ -119,7 +119,7 @@ void XC::Edge::SetNDiv(const size_t &nd)
             const size_t ns= sups_linea.size();
             if(ns>1)
               {
-// 	        std::clog << "Edge::SetNDiv; " << GetNombre()
+// 	        std::clog << "Edge::SetNDiv; " << getName()
 //                           << " is an edge of the surfaces: "
 //                           << NombresSupsTocan()
 //                           << ". Number of divisions"
@@ -131,7 +131,7 @@ void XC::Edge::SetNDiv(const size_t &nd)
               ndiv= nd;
           }
         else
-          std::cerr << "Edge::SetNDiv; " << GetNombre()
+          std::cerr << "Edge::SetNDiv; " << getName()
                     << " edge is already meshed and keeps its number of divisions"
                     << " ndiv= " << ndiv << ".\n";
       }
@@ -285,10 +285,10 @@ const std::string &XC::Edge::NombresSupsTocan(void) const
     if(!sups_linea.empty())
       {
         std::set<const Face *>::const_iterator i= sups_linea.begin();
-        retval+= (*i)->GetNombre();
+        retval+= (*i)->getName();
         i++;
         for(;i!=sups_linea.end();i++)
-          retval+= "," + (*i)->GetNombre();
+          retval+= "," + (*i)->getName();
       }
     return retval;
   }
@@ -368,7 +368,7 @@ MatrizPos3d XC::Edge::get_pos_nodes(void) const
 void XC::Edge::create_nodes_en_extremos(void)
   {
     if(verborrea>4)
-      std::clog << "Creating nodes for '" << GetNombre() << "' edge ends...";   
+      std::clog << "Creating nodes for '" << getName() << "' edge ends...";   
     if(!P1())
       {
 	std::cerr << nombre_clase() << "::" << __FUNCTION__
@@ -406,7 +406,7 @@ void XC::Edge::create_nodes_en_extremos(void)
 void XC::Edge::create_nodes(void)
   {
     if(verborrea>4)
-      std::clog << "Creating nodes for edge: '" << GetNombre() << "'...";
+      std::clog << "Creating nodes for edge: '" << getName() << "'...";
 
  
     if(ttzNodes.Null())
@@ -444,7 +444,7 @@ void XC::Edge::create_nodes(void)
       {
         if(verborrea>2)
           std::clog << nombre_clase() << "::" << __FUNCTION__
-	            << "; nodes of the line: '" << GetNombre() << "' already exist." << std::endl;
+	            << "; nodes of the line: '" << getName() << "' already exist." << std::endl;
       }
     if(verborrea>4)
       std::clog << "created." << std::endl;
@@ -454,7 +454,7 @@ void XC::Edge::create_nodes(void)
 void XC::Edge::genMesh(meshing_dir dm)
   {
     if(verborrea>3)
-      std::clog << "Meshing edge...(" << GetNombre() << ")...";   
+      std::clog << "Meshing edge...(" << getName() << ")...";   
     create_nodes();
     create_elements(dm);
     if(verborrea>3)

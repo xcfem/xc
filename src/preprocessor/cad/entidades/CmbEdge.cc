@@ -89,8 +89,8 @@ bool XC::CmbEdge::Lado::ExtremosEn(const Pnt *p1,const Pnt *p2) const
   }
 
 //! @brief Returns the nombre of the line.
-const std::string &XC::CmbEdge::Lado::GetNombre(void) const
-  { return edge->GetNombre(); }
+const std::string &XC::CmbEdge::Lado::getName(void) const
+  { return edge->getName(); }
 
 //! @brief Return the longitud del lado.
 double XC::CmbEdge::Lado::getLongitud(void) const
@@ -393,7 +393,7 @@ void XC::CmbEdge::line_meshing(meshing_dir dm)
 void XC::CmbEdge::genMesh(meshing_dir dm)
   {
     if(verborrea>3)
-      std::clog << "Meshing CmbEdge...(" << GetNombre() << ")...";
+      std::clog << "Meshing CmbEdge...(" << getName() << ")...";
     line_meshing(dm);
     
     //pointers to nodes.
@@ -437,12 +437,12 @@ void XC::CmbEdge::addPoints(const ID &indices_ptos)
           if(!pA)
 	    std::cerr << "CmbEdge::addPoints; point: "
                       << indices_ptos(i-1) << " not found in definition of surface: '"
-                      << GetNombre() << "'" << std::endl;
+                      << getName() << "'" << std::endl;
           Pnt *pB= BuscaPnt(indices_ptos(i));
           if(!pB)
 	    std::cerr << "CmbEdge::addPoints; point: "
                       << indices_ptos(i) << " not found in definition of surface: '"
-                      << GetNombre() << "'" << std::endl;
+                      << getName() << "'" << std::endl;
           NuevaLinea(pA,pB);
         }
     else
@@ -486,9 +486,9 @@ XC::Edge *XC::CmbEdge::NuevaLinea(Pnt *pA,Pnt *pB)
       }    
     else
        std::cerr << "CmbEdge::NuevaLinea; line between points: "
-                 << pA->GetNombre()
-                 << " and " << pB->GetNombre() << " not found in definition of surface: '"
-                 << GetNombre() << "'" << std::endl;
+                 << pA->getName()
+                 << " and " << pB->getName() << " not found in definition of surface: '"
+                 << getName() << "'" << std::endl;
     return retval;
   }
 
@@ -504,10 +504,10 @@ XC::Edge *XC::CmbEdge::NuevaLinea(Pnt *pA,Pnt *pB,Pnt *pC)
     else
       std::cerr << nombre_clase() << "::" << __FUNCTION__
 	        << "; arc between points: "
-                << pA->GetNombre() << ", " << pB->GetNombre()
-                << " and " << pC->GetNombre()
+                << pA->getName() << ", " << pB->getName()
+                << " and " << pC->getName()
 		<< " not found in definition of surface: '"
-                << GetNombre() << "'" << std::endl;
+                << getName() << "'" << std::endl;
     return retval;
   }
 
@@ -542,12 +542,12 @@ void XC::CmbEdge::inserta(Edge *l)
             else if(l->P2()== P1()) //directo
               lineas.push_front(Lado(l,true));
             else
-              std::cerr << "CmbEdge::inserta; line: '" << l->GetNombre()
-			<< "' which ends are: '" << l->P1()->GetNombre() << "' y '"
-                        << l->P2()->GetNombre() 
+              std::cerr << "CmbEdge::inserta; line: '" << l->getName()
+			<< "' which ends are: '" << l->P1()->getName() << "' y '"
+                        << l->P2()->getName() 
                         << "' can't connect to the combination: " << Nombre() 
-			<< "' which ends are: '" << P1()->GetNombre() << "' y '"
-                        << P2()->GetNombre() 
+			<< "' which ends are: '" << P1()->getName() << "' y '"
+                        << P2()->getName() 
                         << " because they don't have shared ends." << std::endl;
           }
         actualiza_topologia();

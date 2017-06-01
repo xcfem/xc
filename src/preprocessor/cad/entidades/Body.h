@@ -77,7 +77,7 @@ class Body: public EntMdlr
         const Face *Surface(void) const;
         void SetSurf(Face *s);
 
-        const std::string &GetNombre(void) const;
+        const std::string &getName(void) const;
         bool Vacia(void) const;
         size_t NumLineas(void) const;
         size_t NumVertices(void) const;

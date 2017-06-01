@@ -121,7 +121,7 @@ double XC::Segment::getLong(void) const
     if(p1 && p2)
       retval= dist(p1->GetPos(),p2->GetPos());
     else
-      std::cerr << "Endpoint not defined in line: '" << GetNombre()
+      std::cerr << "Endpoint not defined in line: '" << getName()
                  << std::endl;
     return retval;
   }

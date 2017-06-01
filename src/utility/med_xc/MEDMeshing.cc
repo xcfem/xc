@@ -82,7 +82,7 @@ void XC::MEDMeshing::defineMEDGroups(void)
         const Set *set= dynamic_cast<const Set *>(i->second);
         if(set)
           {
-            const std::string nmb= set->GetNombre();
+            const std::string nmb= set->getName();
             const size_t numNodes= set->getNumberOfNodes();
             const size_t numElements= set->getNumberOfElements();
             if((numElements==0) && (numNodes==0))
@@ -121,9 +121,9 @@ XC::MEDGroupInfo *XC::MEDMeshing::getGroupInfo(const Set &set,const FieldInfo &f
     MEDGroupInfo *retval= nullptr;
     std::string nmb_grupo= "";
     if(field.isDefinedOnNodes())
-      nmb_grupo= set.GetNombre()+str_node_group;
+      nmb_grupo= set.getName()+str_node_group;
     else if(field.isDefinedOnElements())
-      nmb_grupo= set.GetNombre()+str_element_group;
+      nmb_grupo= set.getName()+str_element_group;
     retval= getGroupInfo(nmb_grupo);
     if(!retval)
       std::cerr << "MEDMeshing::getGroupInfo; no se encotró el grupo: "
@@ -203,7 +203,7 @@ void XC::MEDMeshing::defineMEDFields(void) const
         else
 	  std::cerr << "MEDMeshing::defineMEDFields; set: '" 
                     << fi.getSetName() << "' for the field : '"
-                    << fi.GetNombre() << "' not found." << std::endl;
+                    << fi.getName() << "' not found." << std::endl;
       }
   }
 

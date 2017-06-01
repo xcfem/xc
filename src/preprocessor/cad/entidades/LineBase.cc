@@ -69,7 +69,7 @@ bool XC::LineBase::check_points(void) const
       retval= true;
     else
       std::cerr << nombre_clase() << "::" << __FUNCTION__
-	        << "; entity: '" << GetNombre()
+	        << "; entity: '" << getName()
                 << " is not defined." << std::endl;
     return retval;
   }
@@ -105,12 +105,12 @@ void XC::LineBase::SetVertices(Pnt *pA,Pnt *pB)
     if(pA==pB)
       std::cerr << nombre_clase() << "::" << __FUNCTION__
 		<< " degenerated line (starts and end in the same point): '"
-                << GetNombre() << "'." << std::endl;
+                << getName() << "'." << std::endl;
     SetVertice(1,pA);
     SetVertice(2,pB);
     if(p1==p2)
       std::cerr << nombre_clase() << "::" << __FUNCTION__
 		<< " degenerated line (starts and end in the same point): '"
-                << GetNombre() << "'." << std::endl;
+                << getName() << "'." << std::endl;
     actualiza_topologia();
   }

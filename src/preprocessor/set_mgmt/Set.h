@@ -81,6 +81,7 @@ class Set: public SetMeshComp
     typedef DqPtrsNmb<UniformGrid> lst_ptr_uniform_grids; //!< Unifrom grid set.
 
   protected:
+    std::string description; //!< set description.
     lst_ptr_points puntos; //!< point set.
     lst_ptr_lineas lineas; //!< line set.
     lst_surface_ptrs surfaces; //!< surface set.
@@ -89,7 +90,6 @@ class Set: public SetMeshComp
 
     void clearAll(void);
     void copia_listas(const Set &);
-    //void extend_lists_cond(const Set &,const std::string &);
     void create_copy(const std::string &,const Vector3d &v);
 
     DbTagData &getDbTagData(void) const;
@@ -108,6 +108,11 @@ class Set: public SetMeshComp
     Set(const std::string &nmb="",Preprocessor *preprocessor= nullptr);
     Set(const Set &otro);
     Set &operator=(const Set &otro);
+
+    inline void setDescription(const std::string &d)
+      { description= d; }
+    const std::string &getDescription(void) const
+      { return description; }
 
     void clear(void);
 
@@ -167,6 +172,8 @@ class Set: public SetMeshComp
     virtual int sendSelf(CommParameters &);
     virtual int recvSelf(const CommParameters &);
 
+    Set &operator+=(const Set &);
+    Set operator+(const Set &) const;
 
     ~Set(void);
   };

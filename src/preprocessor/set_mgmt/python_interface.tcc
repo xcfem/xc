@@ -161,6 +161,7 @@ XC::Set::lst_ptr_lineas &(XC::Set::*GetLineas)(void)= &XC::Set::GetLineas;
 XC::Set::lst_surface_ptrs &(XC::Set::*getSurfaces)(void)= &XC::Set::getSurfaces;
 XC::Set::lst_ptr_cuerpos &(XC::Set::*GetCuerpos)(void)= &XC::Set::GetCuerpos;
 class_<XC::Set, bases<XC::SetMeshComp> >("Set")
+  .add_property("description", make_function( &XC::Set::getDescription, return_value_policy<copy_const_reference>() ), &XC::Set::setDescription,"Description (string) of the set.")
   .add_property("getPoints", make_function(GetPuntos, return_internal_reference<>() ))
   .add_property("getLines", make_function(GetLineas, return_internal_reference<>() ))
   .add_property("getSurfaces", make_function(getSurfaces, return_internal_reference<>() ))
@@ -171,6 +172,8 @@ class_<XC::Set, bases<XC::SetMeshComp> >("Set")
   .def("fillDownwards", &XC::Set::CompletaHaciaAbajo,"add entities downwards.")
   .def("numerate", &XC::Set::numera,"Numerate entities (VTK).")
   .def("clear",&XC::Set::clear,"Removes all items.")
+  .def(self += self)
+  .def(self + self)
    ;
 
 typedef XC::SetFila<XC::TritrizPtrNod::var_ref_fila_i,XC::TritrizPtrElem::var_ref_fila_i> set_fila_i;

@@ -52,7 +52,7 @@ XC::EntMdlrBase::EntMdlrBase(const std::string &nmb,Preprocessor *prep)
 //! @brief Return the object identifier in the model (tag).
 size_t XC::EntMdlrBase::GetTag(void) const
   {
-    const std::string tmp= GetNombre().substr(1);
+    const std::string tmp= getName().substr(1);
     return boost::lexical_cast<size_t>(tmp);
   }
 
@@ -65,7 +65,7 @@ bool XC::EntMdlrBase::check_preprocessor(void) const
       {
         std::cerr << nombre_clase() << "::" << __FUNCTION__
 	          << ": preprocessor not set for object: '"
-                  << GetNombre() << "'."
+                  << getName() << "'."
                   << std::endl;
         return false;
       }
@@ -191,7 +191,7 @@ int XC::EntMdlrBase::recvIdsEtiquetas(const int &posSize,const int &posDbTag,con
 //! @brief Send members through the channel being passed as parameter.
 int XC::EntMdlrBase::sendData(CommParameters &cp)
   {
-    int res= cp.sendString(GetNombre(),getDbTagData(),CommMetaData(0));
+    int res= cp.sendString(getName(),getDbTagData(),CommMetaData(0));
     res+= sendIdsEtiquetas(1,2,cp);
     return res;
   }

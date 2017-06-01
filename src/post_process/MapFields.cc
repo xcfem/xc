@@ -46,7 +46,7 @@ XC::MapFields::iterator XC::MapFields::buscaField(const std::string &nmb)
   {
     iterator i=begin();
     for(;i!=end();i++)
-      if(i->GetNombre()==nmb) break;
+      if(i->getName()==nmb) break;
     return i;
   }
 
@@ -55,7 +55,7 @@ XC::MapFields::const_iterator XC::MapFields::buscaField(const std::string &nmb) 
   {
     const_iterator i=begin();
     for(;i!=end();i++)
-      if(i->GetNombre()==nmb) break;
+      if(i->getName()==nmb) break;
     return i;
   }
 

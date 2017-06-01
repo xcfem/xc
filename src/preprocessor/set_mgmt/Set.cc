@@ -108,7 +108,30 @@ void XC::Set::extend_lists(const Set &otro)
 //     uniform_grids.extend_cond(otro.uniform_grids,cond);
 //   }
 
-//! @brief Vacía las listas of the set.
+//! @brief Addition assignment operator.
+//!
+//! Concatenates the name and description of the argument and
+//! extend the lists with the objects from the argument.
+XC::Set &XC::Set::operator+=(const Set &otro)
+  {
+    setName(getName()+"+"+otro.getName()); //Concatenate names.
+    description+= "+" + otro.description; //Concatenate descriptions.
+    extend_lists(otro); //Extend lists.
+    return *this;
+  }
+
+//! @brief Addition operator.
+//!
+//! Concatenates the name and description of the arguments and
+//! extend the lists of the first set with the objects from the argument.
+XC::Set XC::Set::operator+(const XC::Set &b) const
+  {
+    Set result(*this);
+    result+= b;
+    return result;
+  }
+
+//! @brief Clears the set.
 void XC::Set::clear(void)
   {
     SetMeshComp::clear();
@@ -185,7 +208,7 @@ void XC::Set::create_copy(const std::string &nombre,const Vector3d &v= Vector3d(
     std::map<std::string,std::string> new_points_names;
     for(lst_ptr_points::iterator i= puntos.begin();i!=puntos.end();i++)
       {
-        const std::string nombre_viejo= (*i)->GetNombre();
+        const std::string nombre_viejo= (*i)->getName();
         const std::string new_name= nombre+nombre_viejo;
         Pnt *new_point= getPreprocessor()->getCad().getPuntos().Copia(*i,v);
         new_point->BorraPtrNodElem();
@@ -196,7 +219,7 @@ void XC::Set::create_copy(const std::string &nombre,const Vector3d &v= Vector3d(
     std::map<std::string,std::string> new_lines_names;
     for(lst_ptr_lineas::iterator i= lineas.begin();i!=lineas.end();i++)
       {
-        const std::string nombre_viejo= (*i)->GetNombre();
+        const std::string nombre_viejo= (*i)->getName();
         const std::string new_name= nombre+nombre_viejo;
         Edge *new_edge= getPreprocessor()->getCad().getLineas().createCopy(*i);
         new_edge->BorraPtrNodElem();
@@ -206,7 +229,7 @@ void XC::Set::create_copy(const std::string &nombre,const Vector3d &v= Vector3d(
         for(size_t i= 0;i<nv;i++)
           {
             const Pnt *vertice_viejo= new_edge->GetVertice(i);
-            const std::string nombre_viejo= vertice_viejo->GetNombre();
+            const std::string nombre_viejo= vertice_viejo->getName();
             const std::string new_name= new_lines_names[nombre_viejo];
             Pnt *new_point= new_set->puntos.BuscaNmb(new_name);
             new_edge->SetVertice(i,new_point);
@@ -276,10 +299,10 @@ void XC::Set::genMesh(meshing_dir dm)
   {
     Preprocessor *mdl= getPreprocessor();
     assert(mdl);
-    mdl->get_sets().abre_set(GetNombre()); //To let nodes and elements enter this set.
+    mdl->get_sets().abre_set(getName()); //To let nodes and elements enter this set.
 
     if(verborrea>1)
-      std::clog << "Meshing set: " << GetNombre() << " ...";
+      std::clog << "Meshing set: " << getName() << " ...";
 
     //body_meshing(dm);
     surface_meshing(dm);
@@ -287,7 +310,7 @@ void XC::Set::genMesh(meshing_dir dm)
     point_meshing(dm);
     uniform_grid_meshing(dm);
 
-    mdl->get_sets().cierra_set(GetNombre()); //Cerramos.
+    mdl->get_sets().cierra_set(getName()); //Cerramos.
 
     if(verborrea>1)
       std::clog << "done." << std::endl;

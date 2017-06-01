@@ -73,8 +73,8 @@ const XC::Face *XC::Body::BodyFace::Surface(void) const
 void XC::Body::BodyFace::SetSurf(XC::Face *s)
   { surface= s; }
 //! @brief Return the name of the surface that limits the solid.
-const std::string &XC::Body::BodyFace::GetNombre(void) const
-  { return surface->GetNombre(); }
+const std::string &XC::Body::BodyFace::getName(void) const
+  { return surface->getName(); }
 //! @brief Return true if the surface doesn't exists.
 bool XC::Body::BodyFace::Vacia(void) const
   { return (surface==nullptr); }
