@@ -44,22 +44,22 @@ class InternalForceDiagram(cd.ColoredDiagram):
       value1= elem.getN1
       value2= elem.getN2
     elif(self.component == 'Qy'):
-      elemVDir= elem.elem.getJVector3d(True) # initialGeometry= True 
+      elemVDir= elem.getJVector3d(True) # initialGeometry= True 
       value1= elem.getVy1
       value2= elem.getVy2
     elif(self.component == 'Qz'):
-      elemVDir= elem.elem.getKVector3d(True) # initialGeometry= True 
+      elemVDir= elem.getKVector3d(True) # initialGeometry= True 
       value1= elem.getVz1
       value2= elem.getVz2
     elif(self.component == 'T'):
       value1= elem.getT1
       value2= elem.getT2
     elif(self.component == 'My'):
-      elemVDir= elem.elem.getKVector3d(True) # initialGeometry= True 
+      elemVDir= elem.getKVector3d(True) # initialGeometry= True 
       value1= elem.getMy1
       value2= elem.getMy2
     elif(self.component == 'Mz'):
-      elemVDir= elem.elem.getJVector3d(True) # initialGeometry= True 
+      elemVDir= elem.getJVector3d(True) # initialGeometry= True 
       value1= elem.getMz1
       value2= elem.getMz2
     else:

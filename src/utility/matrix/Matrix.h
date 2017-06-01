@@ -89,8 +89,6 @@ class Matrix: public EntCmd
     int numCols;
     Vector data;
 
-  protected:
-
   public:
     friend class Vector;    
     friend class Message;
@@ -177,6 +175,7 @@ class Matrix: public EntCmd
     Vector operator^(const Vector &V) const;    
 
     
+    Matrix operator-(void) const;
     // matrix-matrix operations
     Matrix operator+(const Matrix &M) const;
     Matrix operator-(const Matrix &M) const;

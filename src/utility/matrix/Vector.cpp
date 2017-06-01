@@ -96,11 +96,14 @@ void XC::Vector::alloc(const size_t &size)
           }
       }
     else
-      std::cerr << " Vector::alloc(size) - size specified: " << size << " <0\n";
+      std::cerr << nombre_clase() << "::" << __FUNCTION__
+		<< "; size specified: " << size << " <0\n";
 
     if(!theData && (size>0))
       {
-        std::cerr << "Vector::Vector(int) - out of memory creating vector of size " << size << std::endl;
+        std::cerr << nombre_clase() << "::" << __FUNCTION__
+		  << "; out of memory creating vector of size "
+		  << size << std::endl;
         sz= 0; // set this should fatal error handler not kill process!!
       }
   }
@@ -201,7 +204,8 @@ int XC::Vector::setData(double *newData, int size)
 
     if(sz <= 0)
       {
-        std::cerr << " Vector::Vector(double *, size) - size specified: " << size << " <= 0\n";
+        std::cerr << nombre_clase() << "::" << __FUNCTION__
+		  << "; size specified: " << size << " <= 0\n";
         sz= 0;
       }
     return 0;
@@ -212,12 +216,14 @@ int XC::Vector::setData(double *newData, int size)
 int XC::Vector::resize(int newSize)
   {
     if(fromFree!=0)
-      std::cerr << "Vector::resize con fromFree= " << fromFree << std::endl;
+      std::cerr << nombre_clase() << "::" << __FUNCTION__
+		<< "; with fromFree= " << fromFree << std::endl;
 
     // first check that newSize is valid
     if(newSize<0)
       {
-        std::cerr << "Vector::resize - size specified " << newSize << " <= 0\n";
+        std::cerr << nombre_clase() << "::" << __FUNCTION__
+		  << "; size specified " << newSize << " <= 0\n";
         return -1;
       } 
     else if(newSize == 0)
@@ -258,9 +264,13 @@ int XC::Vector::Assemble(const XC::Vector &V, const XC::ID &l, double fact )
           {
             result= -1;
             if(pos < sz)
-	      std::cerr << "XC::Vector::Assemble() " << pos << " out of range [1, " << sz-1 << "]\n";
+	      std::cerr << nombre_clase() << "::" << __FUNCTION__
+			<< "; " << pos << " out of range [1, "
+			<< sz-1 << "]\n";
             else
-	      std::cerr << "XC::Vector::Assemble() " << pos << " out of range [1, "<< V.Size()-1 << "]\n";
+	      std::cerr << nombre_clase() << "::" << __FUNCTION__
+			<< "; " << pos
+			<< " out of range [1, "<< V.Size()-1 << "]\n";
           }
       }
     return result;
@@ -333,7 +343,8 @@ int XC::Vector::addVector(double thisFact, const XC::Vector &other, double other
     if(sz != other.sz)
       {
         // else sizes are incompatable, do nothing but warning
-        std::cerr <<  "WARNING XC::Vector::addVector() - incompatable XC::Vector sizes\n";
+        std::cerr << nombre_clase() << "::" << __FUNCTION__
+		  << "; incompatable Vector sizes\n";
         return -1;
       }
 #endif
@@ -421,7 +432,8 @@ int XC::Vector::addMatrixVector(double thisFact, const Matrix &m, const XC::Vect
     if((sz != m.noRows()) && (m.noCols() != v.sz))
       {
         // otherwise incompatable sizes
-        std::cerr << "XC::Vector::addMatrixVector() - incompatable sizes\n";
+        std::cerr << nombre_clase() << "::" << __FUNCTION__
+		  << "; incompatable sizes\n";
         return -1;    
       }
 #endif
@@ -552,7 +564,8 @@ int XC::Vector::addMatrixTransposeVector(double thisFact, const XC::Matrix &m, c
     if((sz != m.noRows()) && (m.noRows() != v.sz))
       {
         // otherwise incompatable sizes
-        std::cerr << "Vector::addMatrixTransposeVector() - incompatable sizes\n";
+        std::cerr << nombre_clase() << "::" << __FUNCTION__
+		  << "; incompatable sizes\n";
         return -1;    
       }
 #endif
@@ -767,7 +780,7 @@ bool XC::Vector::CheckIndice0(const size_t &i) const
   {
     if(i<0 || i>=size_t(sz))
       {
-        std::cerr << nombre_clase() << __FUNCTION__
+        std::cerr << nombre_clase() << "::" << __FUNCTION__
 	          << "; index: " << i
 		  << " out of range: 0 - << " << sz-1 << std::endl;
         return false;
@@ -808,7 +821,8 @@ XC::Vector XC::Vector::operator()(const XC::ID &rows) const
     // check if obtained VEctor of correct size
     if(result.Size() != rows.Size())
       {
-        std::cerr << "XC::Vector::()(ID) - new_ XC::Vector could not be constructed\n";
+        std::cerr << nombre_clase() << "::" << __FUNCTION__
+		  << "; new_ XC::Vector could not be constructed\n";
         return result;
       }
 
@@ -819,7 +833,8 @@ XC::Vector XC::Vector::operator()(const XC::ID &rows) const
         pos= rows(i);
         if(pos <0 || pos >= sz)
           {
-            std::cerr << "XC::Vector::()(ID) - invalid location " 
+            std::cerr << nombre_clase() << "::" << __FUNCTION__
+		      << "; invalid location " 
                       << pos << " outside range [0, " << sz-1 << "]\n";
           }
         else
@@ -913,7 +928,8 @@ XC::Vector  XC::Vector::operator+(double fact) const
   {
     Vector result(*this);
     if(result.Size() != sz) 
-      std::cerr << "XC::Vector::operator+(double) - ran out of memory for new_ Vector\n";
+      std::cerr << nombre_clase() << "::" << __FUNCTION__
+		<< "; ran out of memory for new_ Vector\n";
     result+= fact;
     return result;
   }
@@ -926,7 +942,8 @@ XC::Vector  XC::Vector::operator-(double fact) const
   {
     Vector result(*this);
     if(result.Size() != sz) 
-      std::cerr << "XC::Vector::operator-(double) - ran out of memory for new_ Vector\n";
+      std::cerr << nombre_clase() << "::" << __FUNCTION__
+		<< "; ran out of memory for new_ Vector\n";
     result-= fact;
     return result;
   }
@@ -939,7 +956,8 @@ XC::Vector  XC::Vector::operator*(double fact) const
   {
     Vector result(*this);
     if(result.Size() != sz) 
-      std::cerr << "XC::Vector::operator*(double) - ran out of memory for new_ Vector\n";
+      std::cerr << nombre_clase() << "::" << __FUNCTION__
+		<< "; ran out of memory for new_ Vector\n";
     result*= fact;
     return result;
   }
@@ -952,17 +970,26 @@ XC::Vector  XC::Vector::operator*(double fact) const
 XC::Vector XC::Vector::operator/(double fact) const
   {
     if(fact == 0.0) 
-      std::cerr << "XC::Vector::operator/(double fact) - divide-by-zero error coming\n";
+      std::cerr << nombre_clase() << "::" << __FUNCTION__
+		<< "; divide-by-zero error coming\n";
 
     Vector result(*this);
     if(result.Size() != sz) 
-      std::cerr << "XC::Vector::operator/(double) - ran out of memory for new_ Vector\n";
+      std::cerr << nombre_clase() << "::" << __FUNCTION__
+		<< "; ran out of memory for new_ Vector\n";
     result/= fact;
     return result;
   }
 
-
-
+//! @brief Unary minus operator.
+XC::Vector XC::Vector::operator-(void) const
+  {
+    Vector retval(*this);
+    for(int i=0; i<sz; i++)
+      retval.theData[i]= -retval.theData[i];
+    return retval;
+  }
+  
 // Vector &operator+=(const XC::Vector &V):
 //! @brief The += operator adds V's data to data, data[i]+=V(i). A check to see if
 //! vectors are of same size is performed if VECTOR_CHECK is defined.
@@ -971,12 +998,14 @@ XC::Vector &XC::Vector::operator+=(const Vector &other)
 #ifdef _G3DEBUG
     if(sz != other.sz)
       {
-        std::cerr << "WARNING XC::Vector::operator+=(Vector):Vectors not of same sizes: " << sz << " != " << other.sz << std::endl;
+        std::cerr << nombre_clase() << "::" << __FUNCTION__
+		  << "; WARNING vectors not of same sizes: "
+		  << sz << " != " << other.sz << std::endl;
         return *this;
       }    
 #endif
     for(int i=0; i<sz; i++)
-      theData[i] += other.theData[i];
+      theData[i]+= other.theData[i];
     return *this;	    
   }
 
@@ -989,7 +1018,9 @@ XC::Vector &XC::Vector::operator-=(const XC::Vector &other)
   {
 #ifdef _G3DEBUG
   if(sz != other.sz) {
-    std::cerr << "WARNING XC::Vector::operator+=(Vector):Vectors not of same sizes: " << sz << " != " << other.sz << std::endl;
+    std::cerr << nombre_clase() << "::" << __FUNCTION__
+	      << "; WARNING vectors not of same sizes: "
+	      << sz << " != " << other.sz << std::endl;
     return *this;
   }
 #endif
@@ -1009,7 +1040,9 @@ XC::Vector  XC::Vector::operator+(const XC::Vector &b) const
 #ifdef _G3DEBUG
     if(sz != b.sz)
       {
-        std::cerr << "WARNING XC::Vector::operator+=(Vector):Vectors not of same sizes: " << sz << " != " << b.sz << std::endl;
+        std::cerr << nombre_clase() << "::" << __FUNCTION__
+		  << "; WARNING vectors not of same sizes: "
+		  << sz << " != " << b.sz << std::endl;
         return *this;
       }
 #endif
@@ -1019,7 +1052,8 @@ XC::Vector  XC::Vector::operator+(const XC::Vector &b) const
     // check new_ Vector of correct size
     if(result.Size() != sz)
       {
-        std::cerr << "XC::Vector::operator-(Vector): new_ Vector not of correct size \n";
+        std::cerr << nombre_clase() << "::" << __FUNCTION__
+		  << "; vector not of correct size \n";
         return result;
       }
     result+= b;
@@ -1035,7 +1069,9 @@ XC::Vector XC::Vector::operator-(const XC::Vector &b) const
 #ifdef _G3DEBUG
     if(sz!=b.sz)
       {
-        std::cerr << "WARNING XC::Vector::operator+=(Vector):Vectors not of same sizes: " << sz << " != " << b.sz << std::endl;
+        std::cerr << nombre_clase() << "::" << __FUNCTION__
+		  << "; WARNING vectors not of same sizes: "
+		  << sz << " != " << b.sz << std::endl;
         return *this;
       }
 #endif
@@ -1045,7 +1081,8 @@ XC::Vector XC::Vector::operator-(const XC::Vector &b) const
     // check new_ Vector of correct size
     if(result.Size() != sz)
       {
-        std::cerr << "XC::Vector::operator-(Vector): new_ XC::Vector not of correct size \n";
+        std::cerr << nombre_clase() << "::" << __FUNCTION__
+		  << "; vector not of correct size \n";
         return result;
       }
     result-= b;
@@ -1060,7 +1097,8 @@ double XC::Vector::operator^(const XC::Vector &V) const
 #ifdef _G3DEBUG
     if(sz != V.sz)
       {
-        std::cerr << "WARNING XC::Vector::operator+=(Vector):Vectors not of same sizes: " 
+        std::cerr << nombre_clase() << "::" << __FUNCTION__
+		  << "; WARNING vectors not of same sizes: " 
                   << sz << " != "  << V.sz << std::endl;
         return 0.0;
       }
@@ -1164,25 +1202,25 @@ XC::Vector XC::operator*(double a, const XC::Vector &V)
   { return V * a; }
 
 int XC::Vector::Assemble(const XC::Vector &V, int init_pos, double fact) 
-{
-  int res= 0;
-  int cur_pos  = init_pos;  
-  int final_pos= init_pos + V.sz - 1;
+  {
+    int res= 0;
+    int cur_pos  = init_pos;  
+    int final_pos= init_pos + V.sz - 1;
   
-  if((init_pos >= 0) && (final_pos < sz))
-  {
-     for(int j=0; j<V.sz; j++) 
-        (*this)(cur_pos++) += V(j)*fact;
+    if((init_pos >= 0) && (final_pos < sz))
+      {
+        for(int j=0; j<V.sz; j++) 
+          (*this)(cur_pos++) += V(j)*fact;
+      }
+    else 
+      {
+        std::cerr << nombre_clase() << "::" << __FUNCTION__
+	          << "; (const Vector &V, int init_pos, double fact): "
+                  << "position outside bounds \n";
+        res= -1;
+      }
+    return res;
   }
-  else 
-  {
-     std::cerr << "WARNING: XC::Vector::Assemble(const XC::Vector &V, int init_pos, double fact): ";
-     std::cerr << "position outside bounds \n";
-     res= -1;
-  }
-
-  return res;
-}
 
 int XC::Vector::Extract(const Vector &V, int init_pos, double fact) 
   {
@@ -1197,8 +1235,9 @@ int XC::Vector::Extract(const Vector &V, int init_pos, double fact)
       }
     else 
       {
-        std::cerr << "WARNING: Vector::Extract(const XC::Vector &V, int init_pos, double fact): ";
-        std::cerr << "position outside bounds \n";
+        std::cerr << nombre_clase() << "::" << __FUNCTION__
+	          << "; (const Vector &V, int init_pos, double fact): "
+                  << "position outside bounds \n";
         res= -1;
       }
     return res;
