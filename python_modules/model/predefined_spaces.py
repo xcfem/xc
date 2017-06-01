@@ -416,7 +416,7 @@ class StructuralMechanics3D(PredefinedSpace):
     self.constraints.newSPConstraint(nodeTag,4,0.0)
     self.constraints.newSPConstraint(nodeTag,5,0.0)
 
-  def LstNodes6DOFConstr(lstNodes,constrCond):
+  def LstNodes6DOFConstr(self,lstNodes,constrCond):
     '''Constraint the nodes in the list passed as parameter 
     according to given 6-values set of constraints conditions
 
@@ -434,7 +434,7 @@ class StructuralMechanics3D(PredefinedSpace):
       for i in range(0,6):
         if(constrCond[i] <> 'free'):
           self.constraints.newSPConstraint(n.tag,i,constrCond[i]) 
-  def setHugeBarBetweenNodes(nodeTagA, nodeTagB, nmbTransf):
+  def setHugeBarBetweenNodes(self,nodeTagA, nodeTagB, nmbTransf):
     '''
     Creates a very stiff bar between the two nodes being passed as parameters.
     (it was a workaround to the problem with the reactions values in nodes when

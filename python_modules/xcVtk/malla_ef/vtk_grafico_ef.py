@@ -21,7 +21,7 @@ from xcVtk.malla_ef import vtk_define_malla_cells_ef
 
 
 class RecordDefDisplayEF(vtk_grafico_base.RecordDefDisplay):
-  ''' Define the paramteters to configure the output device.
+  ''' Define the parameters to configure the output device.
   '''
 
   def __init__(self):

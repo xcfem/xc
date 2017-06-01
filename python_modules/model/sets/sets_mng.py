@@ -47,6 +47,17 @@ def get_lin_2Pts(lstLinBusq,tPto1,tPto2):
     else:
         return l
 
+def setAddOf(setA,setB):
+    '''return a new set that has all the entities in setA and setB
+    This function is going to be replaced by the overload of add operator
+    for sets.
+    '''
+    nSet=setA.getPreprocessor.getSets.defSet('nSet')
+    nSet.extend(setA)
+    nSet.extend(setB)
+    return nSet
+    
+
 def get_nodes_wire(setBusq,lstPtsWire):
     '''return the subset of nodes from the set `setBusq` that belong to 
     the line defined by the successive points in list `lstPts`
