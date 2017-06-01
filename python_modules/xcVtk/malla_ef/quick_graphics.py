@@ -18,6 +18,7 @@ from xcVtk import ControlVarDiagram as cvd
 from xcVtk import LinearLoadDiagram as lld
 from xcVtk import LoadVectorField as lvf
 from xcVtk import NodePropertyDiagram as npd
+from xcVtk import LocalAxesVectorField as lavf
 
 class QuickGraphics(object):
   '''This class is aimed at providing the user with a quick and easy way to 
@@ -287,3 +288,71 @@ class QuickGraphics(object):
     caption= self.loadCaseName+' '+itemToDisp+' '+unitDescription +' '+self.xcSet.name
     defDisplay.displayScene(caption=caption,fName=fileName)
  
+def displayLocalAxes(preprocessor,setToDisplay=None,vectorScale=1.0,viewNm="XYZPos",hCamFct=1.0,caption= '',fileName=None,defFScale=0.0):
+    '''vector field display of the loads applied to the chosen set of elements in the load case passed as parameter
+    
+    :param setToDisplay:   set of elements to be displayed (defaults to total set)
+    :param vectorScale:    factor to apply to the vectors length in the representation
+    :param viewNm:         name of the view  that contains the renderer (possible options: "XYZPos", "XPos", "XNeg","YPos", "YNeg", "ZPos", "ZNeg")
+    :param hCamFct:     factor that applies to the height of the camera position in order to
+                        change perspective of isometric views (defaults to 1). Usual values 0.1 to 10
+    :param fileName:       full name of the graphic file to generate. Defaults to `None`, in this case it returns a console output graphic.
+    :param caption:        text to display in the graphic 
+    :param defFScale: factor to apply to current displacement of nodes 
+              so that the display position of each node equals to
+              the initial position plus its displacement multiplied
+              by this factor. (Defaults to 0.0, i.e. display of 
+              initial/undeformed shape)
+    '''
+    if(setToDisplay == None):
+      setToDisplay=preprocessor.getSets.getSet('total')
+      setToDisplay.fillDownwards()
+      lmsg.warning('set to display not defined; using total set.')
+
+    defDisplay= vtk_grafico_ef.RecordDefDisplayEF()
+    defDisplay.setupGrid(setToDisplay)
+    vField=lavf.LocalAxesVectorField(setToDisplay.name+'_localAxes',vectorScale)
+    vField.dumpLocalAxes(setToDisplay)
+    defDisplay.viewName= viewNm
+    defDisplay.hCamFct=hCamFct
+    defDisplay.defineEscenaMalla(None,defFScale) 
+    vField.addToDisplay(defDisplay)
+    defDisplay.displayScene(caption,fileName)
+    return defDisplay
+
+def displayLoad(preprocessor,setToDisplay=None,loadCaseNm='',unitsScale=1.0,vectorScale=1.0,multByElemArea=False,viewNm="XYZPos",hCamFct=1.0,caption= '',fileName=None,defFScale=0.0):
+    '''vector field display of the loads applied to the chosen set of elements in the load case passed as parameter
+    
+    :param setToDisplay:   set of elements to be displayed (defaults to total set)
+    :param loadCaseNm:     name of the load case to be depicted
+    :param unitsScale:     factor to apply to the results if we want to change the units.
+    :param vectorScale:    factor to apply to the vectors length in the representation
+      
+    :param multByElemArea: boolean value that must be `True` if we want to represent the total load on each element (=load multiplied by element area) and `False` if we are going to depict the value of the uniform load per unit area
+    :param viewNm:         name of the view  that contains the renderer (possible options: `XYZPos`, `XYZNeg`,`XPos`, `XNeg`,`YPos`, `YNeg`, `ZPos`, `ZNeg`)
+    :param hCamFct:     factor that applies to the height of the camera position in order to
+                        change perspective of isometric views (defaults to 1). Usual values 0.1 to 10
+    :param fileName:       full name of the graphic file to generate. Defaults to ` None`, in this case it returns a console output graphic.
+    :param caption:        text to display in the graphic 
+    :param defFScale: factor to apply to current displacement of nodes 
+                  so that the display position of each node equals to
+                  the initial position plus its displacement multiplied
+                  by this factor. (Defaults to 0.0, i.e. display of 
+                  initial/undeformed shape)
+    '''
+    if(setToDisplay == None):
+      setToDisplay=preprocessor.getSets.getSet('total')
+      setToDisplay.fillDownwards()
+      lmsg.warning('set to display not defined; using total set.')
+
+    defDisplay= vtk_grafico_ef.RecordDefDisplayEF()
+    defDisplay.setupGrid(setToDisplay)
+    vField=lvf.LoadVectorField(loadCaseNm,unitsScale,vectorScale)
+    vField.multiplyByElementArea=multByElemArea
+    vField.dumpLoads(preprocessor,defFScale)
+    defDisplay.viewName= viewNm
+    defDisplay.hCamFct=hCamFct
+    defDisplay.defineEscenaMalla(None,defFScale) 
+    vField.addToDisplay(defDisplay)
+    defDisplay.displayScene(caption,fileName)
+    return defDisplay

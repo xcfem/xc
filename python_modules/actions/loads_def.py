@@ -72,7 +72,6 @@ class NodalLoad(BaseVectorLoad):
         self.lstNod= lstNod
 
     def appendLoadToCurrentLoadPattern(self):
-        print 'aquí nodal load load=', self.loadVector.Norm()
         for n in self.lstNod:
             n.newLoad(self.loadVector)
 
@@ -96,7 +95,6 @@ class UniformLoadOnBeams(BaseVectorLoad):
 
     def appendLoadToCurrentLoadPattern(self):
         ''' Append load to the current load pattern.'''
-        print 'aquí UniformLoadOnBeams load=',self.loadVector.Norm()
         for l in self.xcSet.getLines:
             for e in l.getElements():
                 if self.refSystem=='Local':
@@ -121,7 +119,6 @@ class UniformLoadOnLines(BaseVectorLoad):
         self.xcSet=xcSet
 
     def appendLoadToCurrentLoadPattern(self):
-        print 'aquí UniformLoadOnLines load=',self.loadVector.Norm()
         for l in self.xcSet.getLines:
             nod=[n for n in l.getNodes()]
             ndistOrig=[n.getCoo.Norm() for n in nod]
@@ -151,7 +148,6 @@ class UniformLoadOnSurfaces(BaseVectorLoad):
         
     def appendLoadToCurrentLoadPattern(self):
         ''' Append load to the current load pattern.'''
-        print 'aquí UniformLoadOnSurfaces load=',self.loadVector.Norm()
         for s in self.xcSet.getSurfaces:
             for e in s.getElements():
                 if self.refSystem=='Local':
