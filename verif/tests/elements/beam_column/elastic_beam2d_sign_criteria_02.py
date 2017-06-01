@@ -68,10 +68,10 @@ trfs= preprocessor.getTransfCooLoader
 lin= trfs.newLinearCrdTransf2d("lin")
 
 # Materials
-caracMecSeccion= xc.CrossSectionProperties2d()
-caracMecSeccion.A= A; caracMecSeccion.E= E; caracMecSeccion.G= G;
-caracMecSeccion.I= Iz; 
-seccion= typical_materials.defElasticSectionFromMechProp2d(preprocessor, "seccion",caracMecSeccion)
+sectionProperties= xc.CrossSectionProperties2d()
+sectionProperties.A= A; sectionProperties.E= E; sectionProperties.G= G;
+sectionProperties.I= Iz; 
+seccion= typical_materials.defElasticSectionFromMechProp2d(preprocessor, "seccion",sectionProperties)
 
 # Elements definition
 elementos= preprocessor.getElementLoader

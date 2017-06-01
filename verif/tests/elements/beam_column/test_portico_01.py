@@ -49,10 +49,10 @@ nod= nodes.newNodeXY(2*B+B,H)
 trfs= preprocessor.getTransfCooLoader
 lin= trfs.newLinearCrdTransf2d("lin")
 
-caracMecSeccion= xc.CrossSectionProperties2d()
-caracMecSeccion.A= area; caracMecSeccion.E= Es;
-caracMecSeccion.I= Iz;
-seccion= typical_materials.defElasticSectionFromMechProp2d(preprocessor, "seccion",caracMecSeccion)
+sectionProperties= xc.CrossSectionProperties2d()
+sectionProperties.A= area; sectionProperties.E= Es;
+sectionProperties.I= Iz;
+seccion= typical_materials.defElasticSectionFromMechProp2d(preprocessor, "seccion",sectionProperties)
 
 # Elements definition
 elementos= preprocessor.getElementLoader

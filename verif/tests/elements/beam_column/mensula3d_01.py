@@ -49,10 +49,10 @@ lin= trfs.newLinearCrdTransf3d("lin")
 lin.xzVector= xc.Vector([0,1,0])
 
 # Materials
-caracMecSeccion= xc.CrossSectionProperties3d()
-caracMecSeccion.A= A; caracMecSeccion.E= E; caracMecSeccion.G= G;
-caracMecSeccion.Iz= Iz; caracMecSeccion.Iy= Iy; caracMecSeccion.J= J
-seccion= typical_materials.defElasticSectionFromMechProp3d(preprocessor, "seccion",caracMecSeccion)
+sectionProperties= xc.CrossSectionProperties3d()
+sectionProperties.A= A; sectionProperties.E= E; sectionProperties.G= G;
+sectionProperties.Iz= Iz; sectionProperties.Iy= Iy; sectionProperties.J= J
+seccion= typical_materials.defElasticSectionFromMechProp3d(preprocessor, "seccion",sectionProperties)
 
 elementos= preprocessor.getElementLoader
 elementos.defaultTransformation= "lin"
