@@ -150,6 +150,7 @@ class Vector: public EntCmd
     Vector &operator*=(double fact);
     Vector &operator/=(double fact); 
 
+    Vector operator-(void) const;
     Vector operator+(double fact) const;
     Vector operator-(double fact) const;
     Vector operator*(double fact) const;

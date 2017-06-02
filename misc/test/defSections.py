@@ -6,7 +6,7 @@ import xc_base
 import geom
 import xc
 from materials.ehe import hormigonesEHE
-from materials.ehe import acerosEHE
+from materials.ehe import EHE_reinforcing_steel
 areaFi8 = 5e-05
 areaFi10 = 7.85e-05
 areaFi12 = 0.000113
@@ -27,12 +27,12 @@ def getDiagIntSection2(mdlr):
   hormigon.pMin = geom.Pos2d(-ancho / 2, -canto / 2)
   hormigon.pMax = geom.Pos2d(ancho / 2, canto / 2)
   armaduras = geomSecHA1.getReinfLayers
-  armaduraInf = armaduras.newStraightReinfLayer(acerosEHE.B500S.nmbDiagD)
+  armaduraInf = armaduras.newStraightReinfLayer(EHE_reinforcing_steel.B500S.nmbDiagD)
   armaduraInf.numReinfBars = 5
   armaduraInf.barArea = areaFi12
   armaduraInf.p1 = geom.Pos2d(-ancho / 2 + recneg, -canto / 2 + recneg)
   armaduraInf.p2 = geom.Pos2d(ancho / 2 - recneg, -canto / 2 + recneg)
-  armaduraSup = armaduras.newStraightReinfLayer(acerosEHE.B500S.nmbDiagD)
+  armaduraSup = armaduras.newStraightReinfLayer(EHE_reinforcing_steel.B500S.nmbDiagD)
   armaduraSup.numReinfBars = 5
   armaduraSup.barArea = areaFi12
   armaduraSup.p1 = geom.Pos2d(-ancho / 2 + recpos, canto / 2 - recpos)
@@ -44,7 +44,7 @@ def getDiagIntSection2(mdlr):
   secHA1.setupFibers()
   param = xc.InteractionDiagramParameters()
   param.tagHormigon = hormigonesEHE.HA30.tagDiagD
-  param.tagArmadura = acerosEHE.B500S.tagDiagD
+  param.tagArmadura = EHE_reinforcing_steel.B500S.tagDiagD
   diagIntSecHA1 = materiales.calcInteractionDiagram('secHA1', param)
   return diagIntSecHA1
 
@@ -62,12 +62,12 @@ def getDiagIntSection1(mdlr):
   hormigon.pMin = geom.Pos2d(-ancho / 2, -canto / 2)
   hormigon.pMax = geom.Pos2d(ancho / 2, canto / 2)
   armaduras = geomSecHA2.getReinfLayers
-  armaduraInf = armaduras.newStraightReinfLayer(acerosEHE.B500S.nmbDiagD)
+  armaduraInf = armaduras.newStraightReinfLayer(EHE_reinforcing_steel.B500S.nmbDiagD)
   armaduraInf.numReinfBars = 7
   armaduraInf.barArea = areaFi20
   armaduraInf.p1 = geom.Pos2d(-ancho / 2 + recneg, -canto / 2 + recneg)
   armaduraInf.p2 = geom.Pos2d(ancho / 2 - recneg, -canto / 2 + recneg)
-  armaduraSup = armaduras.newStraightReinfLayer(acerosEHE.B500S.nmbDiagD)
+  armaduraSup = armaduras.newStraightReinfLayer(EHE_reinforcing_steel.B500S.nmbDiagD)
   armaduraSup.numReinfBars = 7
   armaduraSup.barArea = areaFi20
   armaduraSup.p1 = geom.Pos2d(-ancho / 2 + recpos, canto / 2 - recpos)
@@ -79,7 +79,7 @@ def getDiagIntSection1(mdlr):
   secHA2.setupFibers()
   param = xc.InteractionDiagramParameters()
   param.tagHormigon = hormigonesEHE.HA30.tagDiagD
-  param.tagArmadura = acerosEHE.B500S.tagDiagD
+  param.tagArmadura = EHE_reinforcing_steel.B500S.tagDiagD
   diagIntSecHA2 = materiales.calcInteractionDiagram('secHA2', param)
   return diagIntSecHA2
 
