@@ -518,32 +518,3 @@ class GridModel(object):
       pntsSet.append(pnt)
     return retval
  
-  def appendLoadInRangeToCurrentLoadPattern(self,ijkRange,nameSet,loadVector):
-    s= self.getSetSurfOneRegion(ijkRange,nameSet)
-    sElem=s.getElements
-    for e in sElem:
-      e.vector3dUniformLoadGlobal(loadVector)
-
-  def appendLoadBeamsInRangeToCurrentLoadPattern(self,ijkRange,loadVector,refSystem):
-    lstLinRg=self.getLstLinRange(ijkRange)
-    for l in lstLinRg:
-      lElem=l.getElements()
-      for e in lElem:
-        if refSystem=='Local':
-          e.vector3dUniformLoadLocal(loadVector)
-        else:
-          e.vector3dUniformLoadGlobal(loadVector)
-        
-
-  def appendEarthPressureToCurrentLoadPattern(self,ijkRange,nameSet,earthPressLoadressure):
-    s= self.getSetSurfOneRegion(ijkRange,nameSet)
-    sElem=s.getElements
-    for e in sElem:
-      zElem=e.getCooCentroid(False)[2]
-      presElem= earthPressLoadressure.getPressure(zElem) 
-      if(presElem!=0.0):
-        #print K, zT, zA, gammaT, gammaA,zElem, presElem
-        vectorCarga=presElem*xc.Vector(earthPressLoadressure.vDir)
-        e.vector3dUniformLoadGlobal(vectorCarga)
-        
-
