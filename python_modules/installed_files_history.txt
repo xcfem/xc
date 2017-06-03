@@ -512,6 +512,10 @@
 /usr/local/lib/python2.7/dist-packages/materials/sia262/normalStressesSIA262.pyc
 /usr/local/lib/python2.7/dist-packages/materials/sia262/shearSIA262.py
 /usr/local/lib/python2.7/dist-packages/materials/sia262/shearSIA262.pyc
+/usr/local/lib/python2.7/dist-packages/materials/sia262/SIA262_concrete.py
+/usr/local/lib/python2.7/dist-packages/materials/sia262/SIA262_concrete.pyc
+/usr/local/lib/python2.7/dist-packages/materials/sia262/SIA262_reinforcing_steel.py
+/usr/local/lib/python2.7/dist-packages/materials/sia262/SIA262_reinforcing_steel.pyc
 /usr/local/lib/python2.7/dist-packages/materials/sia262/SIA_reinforcing_steel.py
 /usr/local/lib/python2.7/dist-packages/materials/sia262/SIA_reinforcing_steel.pyc
 /usr/local/lib/python2.7/dist-packages/materials/sia262/steelSIA262.py

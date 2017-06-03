@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Concrete according to EHE-08.
+''' Concrete material according to EHE-08.'''
 from __future__ import division
 
 __author__= "Ana Ortega (A_OO) and Luis C. Pérez Tato (LCPT)"

@@ -13,7 +13,7 @@ import xc
 from materials import section_properties
 from materials import typical_materials
 import math
-from materials.ehe import areaBarrasEHE
+from materials.ehe import EHE_reinforcing_steel
 from materials import stressCalc as sc
 import sys
 
@@ -59,7 +59,7 @@ class MainReinfLayer(object):
   Note: If we define the instance variable 'nRebars' that value overrides the 
   'rebarsSpacing'
   '''
-  def __init__(self,rebarsDiam=10e-3,areaRebar= areaBarrasEHE.Fi10,rebarsSpacing=0.2,width=1.0,nominalCover=0.03):
+  def __init__(self,rebarsDiam=10e-3,areaRebar= EHE_reinforcing_steel.Fi10,rebarsSpacing=0.2,width=1.0,nominalCover=0.03):
     self.rebarsDiam= rebarsDiam
     self.rebarsSpacing= rebarsSpacing
     nRebarsTeor= width/self.rebarsSpacing
@@ -67,7 +67,7 @@ class MainReinfLayer(object):
     self.areaRebar= areaRebar
     self.cover= nominalCover+self.rebarsDiam/2.0
     self.centerRebars(width)
-  def setUp(self,nRebars= 5, rebarsDiam=10e-3,areaRebar= areaBarrasEHE.Fi10,width=1.0,cover=0.03):
+  def setUp(self,nRebars= 5, rebarsDiam=10e-3,areaRebar= EHE_reinforcing_steel.Fi10,width=1.0,cover=0.03):
     self.nRebars= nRebars
     self.rebarsDiam= rebarsDiam
     if(self.nRebars!=0.0):

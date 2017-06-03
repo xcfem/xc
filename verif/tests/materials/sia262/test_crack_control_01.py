@@ -9,13 +9,13 @@ import xc
 from misc import banco_pruebas_scc3d
 from solution import predefined_solutions # Procedimiento de solución
 from materials.fiber_section import defSeccionHASimple
-from materials.ehe import areaBarrasEHE
+from materials.ehe import EHE_reinforcing_steel
 # from materials import section_properties
 
 
 from materials.ehe import EHE_concrete
 from materials.ehe import EHE_reinforcing_steel
-from materials.sia262 import steelSIA262
+from materials.sia262 import SIA262_reinforcing_steel
 from materials.sia262 import crackControlSIA262 as cc
 from model import predefined_spaces
 
@@ -25,8 +25,8 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
-areaFi22= steelSIA262.section_barres_courantes[22e-3]
-areaFi26= steelSIA262.section_barres_courantes[26e-3]
+areaFi22= SIA262_reinforcing_steel.section_barres_courantes[22e-3]
+areaFi26= SIA262_reinforcing_steel.section_barres_courantes[26e-3]
 
 datosScc1LosC= defSeccionHASimple.RecordRCSimpleSection()
 datosScc1LosC.sectionName= "secHA1LosC"

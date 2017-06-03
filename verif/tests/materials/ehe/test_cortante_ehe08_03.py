@@ -6,7 +6,7 @@
 
 import sys
 from materials.ehe import comprobVEHE08
-from materials.ehe import areaBarrasEHE
+from materials.ehe import EHE_reinforcing_steel
 import math
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
@@ -19,7 +19,7 @@ __email__= "l.pereztato@gmail.com"
 gammas= 1.15 #Coeficiente de minoración de la resistencia of the steel.
 
 numBarrasEstribo=4
-areaShReinfBranchsEstribo=numBarrasEstribo*areaBarrasEHE.Fi6
+areaShReinfBranchsEstribo=numBarrasEstribo*EHE_reinforcing_steel.Fi6
 sepEstribos=0.2
 AsTrsv=areaShReinfBranchsEstribo/sepEstribos
 z=0.9*0.55

@@ -4,8 +4,7 @@ import math
 import xc_base
 import geom
 
-from materials.sia262 import concreteSIA262
-from materials.sia262 import steelSIA262
+from materials.sia262 import SIA262_concrete
 from postprocess import ControlVars as cv
 from materials import LimitStateControllerBase as lsc
 

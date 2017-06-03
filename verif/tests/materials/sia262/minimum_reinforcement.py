@@ -3,8 +3,8 @@
 
 from __future__ import division
 import sys
-from materials.sia262 import concreteSIA262
-from materials.sia262 import steelSIA262
+from materials.sia262 import SIA262_concrete
+from materials.sia262 import SIA262_reinforcing_steel
 from materials.sia262 import minimal_reinforcement
 
 __author__= "Luis C. Pérez Tato (LCPT)"
@@ -13,30 +13,30 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
-fctm= concreteSIA262.c25_30.fctm()/1e6
+fctm= SIA262_concrete.c25_30.fctm()/1e6
 ratio1= abs(fctm-2.56496392002)/2.56496392002
 
 enrobage= 30e-3
 ecartement= 150e-3
 t= 0.30
-sgAdmA= steelSIA262.limitationContraintes("A",ecartement)
+sgAdmA= SIA262_reinforcing_steel.limitationContraintes("A",ecartement)
 ratio2= abs(sgAdmA-435e6)/435e6
-sgAdmB= steelSIA262.limitationContraintes("B",ecartement)
+sgAdmB= SIA262_reinforcing_steel.limitationContraintes("B",ecartement)
 ratio3= abs(sgAdmB-400e6)/400e6
-sgAdmC= steelSIA262.limitationContraintes("C",ecartement)
+sgAdmC= SIA262_reinforcing_steel.limitationContraintes("C",ecartement)
 ratio4= abs(sgAdmC-230e6)/230e6
-kt= concreteSIA262.reductionFactorKT(t)
-AsTractionA= minimal_reinforcement.AsMinTraction(concreteSIA262.c25_30,"A",ecartement,t)
+kt= SIA262_concrete.reductionFactorKT(t)
+AsTractionA= minimal_reinforcement.AsMinTraction(SIA262_concrete.c25_30,"A",ecartement,t)
 ratio5= abs(AsTractionA-1538.20924739e-6)/1538.20924739e-6
-AsTractionB= minimal_reinforcement.AsMinTraction(concreteSIA262.c25_30,"B",ecartement,t)
+AsTractionB= minimal_reinforcement.AsMinTraction(SIA262_concrete.c25_30,"B",ecartement,t)
 ratio6= abs(AsTractionB-1672.80255653e-6)/1672.80255653e-6
-AsTractionC= minimal_reinforcement.AsMinTraction(concreteSIA262.c25_30,"C",ecartement,t)
+AsTractionC= minimal_reinforcement.AsMinTraction(SIA262_concrete.c25_30,"C",ecartement,t)
 ratio7= abs(AsTractionC-2909.22183745e-6)/2909.22183745e-6
-AsFlexionA= minimal_reinforcement.AsMinFlexion(concreteSIA262.c25_30,enrobage,"A",ecartement,t)
+AsFlexionA= minimal_reinforcement.AsMinFlexion(SIA262_concrete.c25_30,enrobage,"A",ecartement,t)
 ratio8= abs(AsFlexionA-346.647194688e-6)/346.647194688e-6
-AsFlexionB= minimal_reinforcement.AsMinFlexion(concreteSIA262.c25_30,enrobage,"B",ecartement,t)
+AsFlexionB= minimal_reinforcement.AsMinFlexion(SIA262_concrete.c25_30,enrobage,"B",ecartement,t)
 ratio9= abs(AsFlexionB-376.978824223e-6)/376.978824223e-6
-AsFlexionC= minimal_reinforcement.AsMinFlexion(concreteSIA262.c25_30,enrobage,"C",ecartement,t)
+AsFlexionC= minimal_reinforcement.AsMinFlexion(SIA262_concrete.c25_30,enrobage,"C",ecartement,t)
 ratio10= abs(AsFlexionC-655.615346475e-6)/655.615346475e-6
 
 '''

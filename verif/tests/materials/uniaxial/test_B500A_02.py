@@ -5,7 +5,7 @@ import xc_base
 import geom
 import xc
 
-from materials.sia262 import SIA_reinforcing_steel
+from materials.sia262 import SIA262_reinforcing_steel
 from materials import reinforcingSteelTest
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
@@ -19,7 +19,7 @@ prueba= xc.ProblemaEF()
 prueba.logFileName= "/tmp/borrar.log" # Para no imprimir mensajes de advertencia
 preprocessor=  prueba.getPreprocessor
 # Define materials
-errMax= reinforcingSteelTest.testDiagDAceroArmar(preprocessor, SIA_reinforcing_steel.B500A)
+errMax= reinforcingSteelTest.testDiagDAceroArmar(preprocessor, SIA262_reinforcing_steel.B500A)
 
 
 # print "errMax= ",(errMax)

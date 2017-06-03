@@ -8,7 +8,7 @@ import xc
 from misc import banco_pruebas_scc3d
 from solution import predefined_solutions # Procedimiento de solución
 from materials.fiber_section import defSeccionHASimple
-from materials.ehe import areaBarrasEHE
+from materials.ehe import EHE_reinforcing_steel
 
 from materials.ehe import EHE_concrete
 from materials.ehe import EHE_reinforcing_steel
@@ -29,17 +29,17 @@ datosScc1LosC.depth= 0.25
 datosScc1LosC.width= 1.0
 datosScc1LosC.reinfSteelType= EHE_reinforcing_steel.B500S
 rebNeg=defSeccionHASimple.MainReinfLayer()
-rebNeg.setUp(nRebars= 5, areaRebar= areaBarrasEHE.Fi10,cover=0.025+0.010+0.010/2.0)
+rebNeg.setUp(nRebars= 5, areaRebar= EHE_reinforcing_steel.Fi10,cover=0.025+0.010+0.010/2.0)
 datosScc1LosC.negatvRebarRows=[rebNeg]
 rebPos=defSeccionHASimple.MainReinfLayer()
-rebNeg.setUp(nRebars= 5, areaRebar= areaBarrasEHE.Fi10,cover=0.025+0.010/2.0)
+rebNeg.setUp(nRebars= 5, areaRebar= EHE_reinforcing_steel.Fi10,cover=0.025+0.010/2.0)
 datosScc1LosC.positvRebarRows=[rebPos]
 
 # datosScc1LosC.nRebarsNeg= 5
-# datosScc1LosC.areaRebarNeg= areaBarrasEHE.Fi10
+# datosScc1LosC.areaRebarNeg= EHE_reinforcing_steel.Fi10
 # datosScc1LosC.coverNeg= 0.025+0.010+0.010/2.0
 # datosScc1LosC.nRebarsPos= 5
-# datosScc1LosC.areaRebarPos= areaBarrasEHE.Fi10
+# datosScc1LosC.areaRebarPos= EHE_reinforcing_steel.Fi10
 # datosScc1LosC.coverPos= 0.025+0.010/2.0
 
 

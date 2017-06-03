@@ -8,7 +8,6 @@ from __future__ import division
 import xc_base
 import geom
 import xc
-from materials.ehe import areaBarrasEHE
 from misc import banco_pruebas_scc3d
 from solution import predefined_solutions
 from model import predefined_spaces
@@ -18,7 +17,7 @@ from materials.ehe import EHE_reinforcing_steel
 from materials.ehe import comprobVEHE08
 from materials.ehe import cortanteEHE
 from materials.ehe import torsionEHE
-from materials.ehe import areaBarrasEHE
+from materials.ehe import EHE_reinforcing_steel
 from materials import typical_materials
 
 import math
@@ -45,7 +44,7 @@ MzDato= 0        # Moment value when checking shear.
 VDato= 125e3     # Shear value.
 
 # Armadura longitudinal
-areaBarra= areaBarrasEHE.Fi20
+areaBarra= EHE_reinforcing_steel.Fi20
 numBarras= 3
 
 # Armadura transversal
@@ -128,7 +127,7 @@ analOk= analisis.analyze(10)
 
 secHAParamsCortante= cortanteEHE.ShearControllerEHE('ULS_shear')
 
-secHAParamsCortante.AsTrsv= areaBarrasEHE.Fi6*numRamas/0.2 # reinforcement area transversal
+secHAParamsCortante.AsTrsv= EHE_reinforcing_steel.Fi6*numRamas/0.2 # reinforcement area transversal
 secHAParamsCortante.theta= math.radians(45)
 secHAParamsCortante.alpha= math.radians(90)
 

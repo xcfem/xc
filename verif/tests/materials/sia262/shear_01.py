@@ -3,8 +3,8 @@
 
 from __future__ import division
 import sys
-from materials.sia262 import concreteSIA262
-from materials.sia262 import steelSIA262
+from materials.sia262 import SIA262_concrete
+from materials.sia262 import SIA262_reinforcing_steel
 from materials.sia262 import minimal_reinforcement
 from materials.sia262 import shearSIA262
 from rough_calculations import ng_simple_bending_reinforcement
@@ -15,8 +15,8 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
-beton= concreteSIA262.c25_30
-acier= steelSIA262.B500A
+beton= SIA262_concrete.c25_30
+acier= SIA262_reinforcing_steel.B500A
 acier.gammaS= 1.15 #EC2 takes 500/435
 Dmax= 32e-3
 b= 1.0
