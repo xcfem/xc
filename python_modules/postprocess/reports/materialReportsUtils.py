@@ -6,10 +6,9 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "ana.ortega@ciccp.es "
 
-import materialReports
 import matplotlib.pyplot as plt
-from materials import materialGraphics
-from materials import materialReports
+from postprocess.reports import materialGraphics
+from postprocess.reports import materialReports
 
 #Utils for generating LaTeX reports concerning materials
 
@@ -20,7 +19,7 @@ def reportConcrete02(concrDiag,paramTensStiffening,grTitle,grFileName,texFileNam
         stress-strain graphic.
     :param concrDiag: concrete material of type concrete02
     :param paramTensStiffening: instance of the object 
-    concreteBase.paramTensStiffenes that defines the parameters 
+    concrete_base.paramTensStiffenes that defines the parameters 
     of tension stiffenes.
     :param grTitle: title for the graphic
     :param grFileName: name of the graphics file
@@ -30,7 +29,7 @@ def reportConcrete02(concrDiag,paramTensStiffening,grTitle,grFileName,texFileNam
     grph.setupGraphic(plt,concrDiag)
     grph.savefig(plt,grFileName+'.jpeg')
     grph.savefig(plt,grFileName+'.eps')
-    concrRep=materialReports.concreteReport(concrDiag)
+    concrRep= materialReports.concreteReport(concrDiag)
     grFileNameNoPath=grFileName.split('/')[grFileName.count('/')]
     f=open(texFileName,'w')
     f.write('\\documentclass{article} \n')

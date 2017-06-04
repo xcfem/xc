@@ -6,7 +6,7 @@ import xc_base
 import geom
 import xc
 from materials import typical_materials
-from materials import concreteBase
+from materials import concrete_base
 from materials.ehe import EHE_materials
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
@@ -20,7 +20,7 @@ prueba= xc.ProblemaEF()
 prueba.logFileName= "/tmp/borrar.log" # Para no imprimir mensajes de advertencia
 preprocessor=  prueba.getPreprocessor
 HP45= EHE_materials.HA45
-errMax= concreteBase.concreteDesignDiagramTest(preprocessor, HP45)
+errMax= concrete_base.concreteDesignDiagramTest(preprocessor, HP45)
 
 
 # print "errMax= ",(errMax)

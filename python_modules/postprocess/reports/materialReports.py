@@ -41,7 +41,7 @@ class concreteReport(object):
         ''':returns: a LaTeX table that depicts the concrete tension 
         stiffening properties (concrete of type concrete02).
         :param paramTensStiffeness: instance of the object 
-        concreteBase.paramTensStiffenes that defines the parameters 
+        concrete_base.paramTensStiffenes that defines the parameters 
         of tension stiffenes
         '''
         retval='\\multicolumn{2}{c}{Tension-stiffening} \\\\ \n '

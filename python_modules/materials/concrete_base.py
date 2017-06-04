@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
-# Concrete according to EC2 and EHE.
-
+''' Base classes for reinforced concrete materials.'''
 from __future__ import division
 
 __author__= "Ana Ortega (AO_O) and Luis C. Pérez Tato (LCPT)"
@@ -13,13 +12,14 @@ __email__= " ana.Ortega.Ort@gmail.com, l.pereztato@gmail.com"
 import math
 import scipy.interpolate
 from scipy import stats
-
 from materials import typical_materials
-from materials import materialGraphics
+from postprocess.reports import materialGraphics
 from materials import materialWithDKDiagrams as matWDKD
 import matplotlib.pyplot as plt
 import numpy as np
 import geom
+import xc_base
+
 
 class Concrete(matWDKD.MaterialWithDKDiagrams):
     """ Concrete model according to Eurocode 2 - Base class.
@@ -692,12 +692,138 @@ def concreteDesignTangentTest(preprocessor, concreteRecord):
       e=(e+incr)
     return errMax
 
+# Reinforcing steel.
+
+class ReinforcingSteel(matWDKD.MaterialWithDKDiagrams):
+  """Reinforcing steel parameters 
+  Attributes:
+    fyk:      Characteristic value of the yield strength.
+    emax:     maximum strain in tension
+    gammaS:   Partial factor for material.
+    k:        fmaxk/fyk ratio (Annex C of EC2: class A k>=1,05 , class B k>=1,08)
+  """
+  Es= 2e11 # Elastic modulus of the material.
+#  fmaxk= 0.0 # Characteristic ultimate stress
+  Esh= 0.0 # Slope of the line in the yielding region.
+  bsh= 0.0 # Ratio between post-yield tangent and initial elastic tangent
+  k=1.05   # fmaxk/fyk ratio (Annex C of EC2: class A k>=1,05 B , class B k>=1,08)
+  def __init__(self,nmbAcero, fyk, emax, gammaS,k=1.05):
+    super(ReinforcingSteel,self).__init__(nmbAcero)
+    self.fyk= fyk # Characteristic value of the yield strength
+    self.gammaS= gammaS
+    self.emax= emax # Ultimate strain (rupture strain)
+    self.k=k        # fmaxk/fyk ratio
+ 
+  def fmaxk(self):
+    """ Characteristic ultimate strength. """
+    return self.k*self.fyk
+  def fyd(self):
+    """ Design yield stress. """
+    return self.fyk/self.gammaS
+  def eyk(self):
+    """ Caracteristic strain at yield point. """
+    return self.fyk/self.Es
+  def eyd(self):
+    """ Design strain at yield point. """
+    return self.fyd()/self.Es
+  def Esh(self):
+    """ Slope of the curve in the yielding region. """
+    return (self.fmaxk()-self.fyk)/(self.emax-self.eyk())
+  def bsh(self):
+    """ Ratio between post-yield tangent and initial elastic tangent. """
+    return self.Esh()/self.Es
+  def defDiagK(self,preprocessor):
+    """ Returns XC uniaxial material (characteristic values). """
+    self.materialDiagramK= typical_materials.defSteel01(preprocessor,self.nmbDiagK,self.Es,self.fyk,self.bsh())
+    self.matTagK= self.materialDiagramK.tag
+    return self.materialDiagramK #30160925 was 'return self.matTagK'
+
+  def defDiagD(self,preprocessor):
+    """ Returns XC uniaxial material (design values). """
+    self.materialDiagramD= typical_materials.defSteel01(preprocessor,self.nmbDiagD,self.Es,self.fyd(),self.bsh())
+    self.matTagD= self.materialDiagramD.tag
+    return self.materialDiagramD #30160925 was 'return self.matTagD'
+
+  def plotDesignStressStrainDiagram(self,preprocessor,path=''):
+    '''Draws the steel design diagram.'''
+    if self.materialDiagramD== None:
+      self.defDiagD(preprocessor)
+    retval= mg.UniaxialMaterialDiagramGraphic(-0.016,0.016, self.materialName + ' design stress-strain diagram')
+    retval.setupGraphic(plt,self.materialDiagramD)
+    fileName= path+self.materialName+'_design_stress_strain_diagram'
+    retval.savefig(plt,fileName+'.jpeg')
+    retval.savefig(plt,fileName+'.eps')
+    return retval
+
+def defDiagKAcero(preprocessor, steelRecord):
+  '''Characteristic stress-strain diagram.'''
+  return steelRecord.defDiagK(preprocessor)
+
+def defDiagDAcero(preprocessor, steelRecord):
+  ''' Design stress-strain diagram. '''
+  return steelRecord.defDiagD(preprocessor)
+
+# Functions for reinforcing steel testing.
+
+def sigmas(eps, fy, ey, Es, Esh):
+  '''Stress-strain diagram of reinforcing steel, according to EC2 
+     (the same one is adopted by EHE and SIA).
+  '''
+  if(eps>0):
+    if(eps<ey):
+      return (Es*eps)
+    else:
+      return (fy+(eps-ey)*Esh)
+  else:
+    if(eps>-(ey)):
+      return (Es*eps)
+    else:
+      return (-fy+(eps-ey)*Esh) 
 
 
+def sigmaKAceroArmar(eps,matRecord):
+  ''' Characteristic stress-strain diagram for reinforcing steel, according to EC2.'''
+  return sigmas(eps,matRecord.fyk,matRecord.eyk(),matRecord.Es,matRecord.Esh())
 
+def sigmaDAceroArmar(eps,matRecord):
+  '''Design stress-strain diagram for reinforcing steel, according to EC2.'''
+  return sigmas(eps,matRecord.fyd(),matRecord.eyd(),matRecord.Es,matRecord.Esh())
 
-#SIA262 concretes.
-#same denomination of concretes that those in EC2
+def testDiagKAceroArmar(preprocessor, matRecord):
+  ''' Checking of characteristic stress-strain diagram.'''
+  diagAcero= defDiagKAcero(preprocessor, matRecord)
+  ##30160925 was:
+#  tag= defDiagKAcero(preprocessor, matRecord)
+#  diagAcero= preprocessor.getMaterialLoader.getMaterial(matRecord.nmbDiagK)
+  incr= matRecord.emax/20
+  errMax= 0.0
+  e= 0.1e-8
+  while(e < matRecord.emax+1):
+    diagAcero.setTrialStrain(e,0.0)
+    diagAcero.commitState()
+    sg= sigmaKAceroArmar(e,matRecord)
+    stress= diagAcero.getStress()
+    err= abs((sg-stress)/sg)
+    #print "e= ",e," strain= ",diagAcero.getStrain()," stress= ",stress," sg= ", sg," err= ", err,"\n"
+    errMax= max(err,errMax)
+    e= e+incr
+  return errMax
 
-
-
+def testDiagDAceroArmar(preprocessor, matRecord):
+  '''Checking of design stress-strain diagram.'''
+  diagAcero= defDiagDAcero(preprocessor, matRecord)
+  ##30160925 was:
+#  tag= defDiagDAcero(preprocessor, matRecord)
+#  diagAcero= preprocessor.getMaterialLoader.getMaterial(matRecord.nmbDiagD)
+  incr= matRecord.emax/20
+  errMax= 0.0
+  e= 0.1e-8
+  while(e < matRecord.emax+1):
+    diagAcero.setTrialStrain(e,0.0)
+    diagAcero.commitState()
+    sg= sigmaDAceroArmar(e,matRecord)
+    err= abs((sg-diagAcero.getStress())/sg)
+# print("e= ",(e)," stress= ",stress," sg= ", (sg)," err= ", (err),"\n")
+    errMax= max(err,errMax)
+    e= e+incr
+  return errMax

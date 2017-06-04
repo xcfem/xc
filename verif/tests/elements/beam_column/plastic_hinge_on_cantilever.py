@@ -14,14 +14,14 @@ import geom
 import xc
 
 from materials.structural_shapes.arcelor import perfiles_ipe_arcelor as ipe
-from materials import structural_steel as steel
+from materials.ec3 import EC3_materials
 from model import predefined_spaces
 from solution import predefined_solutions
 
 test= xc.ProblemaEF()
 preprocessor=  test.getPreprocessor
 
-S355JR= steel.S355JR
+S355JR= EC3_materials.S355JR
 S355JR.gammaM= 1.05
 epp= S355JR.getDesignElasticPerfectlyPlasticMaterial(preprocessor, "epp")
 IPE200= ipe.IPEProfile(S355JR,'IPE_200')

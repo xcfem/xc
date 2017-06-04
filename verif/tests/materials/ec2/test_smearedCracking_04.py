@@ -22,7 +22,7 @@ import math
 from solution import predefined_solutions
 from model import predefined_spaces
 from materials.ec2 import EC2_materials
-from materials import concreteBase
+from materials import concrete_base
 from materials import typical_materials
 from materials.fiber_section import createFiberSets
 from materials.fiber_section import sectionReport 
@@ -79,14 +79,14 @@ steelDiagram= rfSteel.defDiagK(preprocessor) #Definition of steel stress-strain 
 
 
 #Parameters for tension stiffening of concrete
-paramTS=concreteBase.paramTensStiffenes(concrMat=concrete,reinfMat=rfSteel,reinfRatio=ro_s_eff,diagType='K')
+paramTS=concrete_base.paramTensStiffenes(concrMat=concrete,reinfMat=rfSteel,reinfRatio=ro_s_eff,diagType='K')
 concrete.tensionStiffparam=paramTS           #parameters for tension stiffening are assigned to concrete
 concrDiagram=concrete.defDiagK(preprocessor) #Definition of concrete stress-strain diagram in XC.
 
 
 #report concrete material
 
-# from materials import materialReportsUtils
+# from postprocess.reports import materialReportsUtils
 
 # materialReportsUtils.reportConcrete02(concrDiag=concrDiagram,paramTensStiffening=paramTS,grTitle='Ex. 7.5 EC2W. Concrete $\sigma-\epsilon$ curve',grFileName='figures/material/ex7_5EC2W',texFileName='figures/material/ex7_5EC2W.tex')
 

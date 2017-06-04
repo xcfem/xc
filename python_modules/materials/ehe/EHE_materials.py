@@ -11,10 +11,9 @@ __email__= "ana.Ortega.Ort@gmail.com l.pereztato@gmail.com"
 
 import math
 import scipy.interpolate
-from materials import concreteBase
-from materials import reinforcingSteel
+from materials import concrete_base
 
-class EHEConcrete(concreteBase.Concrete):
+class EHEConcrete(concrete_base.Concrete):
     """ Concrete model according to EHE
     
     :ivar typeAggregate:types of aggregate= 
@@ -234,8 +233,8 @@ factorRTraccJDiasNormal= scipy.interpolate.interp1d(x,y)
 #   emax:     maximum strain in tension
 #   gammaS:   Partial factor for material.
 #   k:        fmaxk/fyk ratio
-B400S= reinforcingSteel.ReinforcingSteel(nmbAcero="B400S", fyk=400e6, emax=0.08,gammaS=1.15)
-B500S= reinforcingSteel.ReinforcingSteel(nmbAcero="B500S", fyk=500e6, emax=0.05,gammaS=1.15)
+B400S= concrete_base.ReinforcingSteel(nmbAcero="B400S", fyk=400e6, emax=0.08,gammaS=1.15)
+B500S= concrete_base.ReinforcingSteel(nmbAcero="B500S", fyk=500e6, emax=0.05,gammaS=1.15)
 
 # Bar areas in square meters.
 Fi6=0.28e-4

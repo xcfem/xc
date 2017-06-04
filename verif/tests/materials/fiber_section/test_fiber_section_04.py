@@ -10,7 +10,7 @@ import xc
 
 nmbHorm= "HA25"
 from materials.ehe import EHE_materials
-from materials import reinforcingSteelTest
+from materials import concrete_base
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (A_OO)"
 __copyright__= "Copyright 2015, LCPT and AO_O"
@@ -30,27 +30,27 @@ areaFi16= 2.01e-4 # Área de las barras expressed in square meters.
 
 e1= -10e-3 # Deformación axil de prueba 1.
 sgc1= EHE_materials.HA25.sigmac(e1)
-sgs1= reinforcingSteelTest.sigmaDAceroArmar(e1,EHE_materials.B500S)
+sgs1= concrete_base.sigmaDAceroArmar(e1,EHE_materials.B500S)
 
 e2= -3e-3 # Deformación axil de prueba 1.
 sgc2= EHE_materials.HA25.sigmac(e2)
-sgs2= reinforcingSteelTest.sigmaDAceroArmar(e2,EHE_materials.B500S)
+sgs2= concrete_base.sigmaDAceroArmar(e2,EHE_materials.B500S)
 
 e3= -1e-3 # Deformación axil de prueba 1.
 sgc3= EHE_materials.HA25.sigmac(e3)
-sgs3= reinforcingSteelTest.sigmaDAceroArmar(e3,EHE_materials.B500S)
+sgs3= concrete_base.sigmaDAceroArmar(e3,EHE_materials.B500S)
 
 e4= 1e-3 # Deformación axil de prueba 1.
 sgc4= EHE_materials.HA25.sigmac(e4)
-sgs4= reinforcingSteelTest.sigmaDAceroArmar(e4,EHE_materials.B500S)
+sgs4= concrete_base.sigmaDAceroArmar(e4,EHE_materials.B500S)
 
 e5= 3e-3 # Deformación axil de prueba 1.
 sgc5= EHE_materials.HA25.sigmac(e5)
-sgs5= reinforcingSteelTest.sigmaDAceroArmar(e5,EHE_materials.B500S)
+sgs5= concrete_base.sigmaDAceroArmar(e5,EHE_materials.B500S)
 
 e6= 10e-3 # Deformación axil de prueba 1.
 sgc6= EHE_materials.HA25.sigmac(e6)
-sgs6= reinforcingSteelTest.sigmaDAceroArmar(e6,EHE_materials.B500S)
+sgs6= concrete_base.sigmaDAceroArmar(e6,EHE_materials.B500S)
 
 prueba= xc.ProblemaEF()
 prueba.logFileName= "/tmp/borrar.log" # Don't print warnings.

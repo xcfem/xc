@@ -12,7 +12,7 @@ import xc_base
 import geom
 import xc
 from materials import typical_materials
-from materials import concreteBase
+from materials import concrete_base
 from materials.ehe import EHE_materials
 
 # Model definition
@@ -20,7 +20,7 @@ prueba= xc.ProblemaEF()
 prueba.logFileName= "/tmp/borrar.log" # Ignore warning messages
 preprocessor=  prueba.getPreprocessor
 HP45= EHE_materials.HA45
-errMax= concreteBase.concreteDesignTangentTest(preprocessor, HP45)
+errMax= concrete_base.concreteDesignTangentTest(preprocessor, HP45)
 
 #print "errMax= ",errMax
 import os

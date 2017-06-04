@@ -12,7 +12,7 @@ import math
 import xc_base
 import geom
 import xc
-from materials import concreteBase
+from materials import concrete_base
 from materials.ehe import EHE_materials
 
 
@@ -22,7 +22,7 @@ prueba.logFileName= "/tmp/borrar.log" # Ignore warning messages
 mdlr= prueba.getPreprocessor
 concr= EHE_materials.HA25
 concr.alfacc=0.85 #f_maxd= 0.85*fcd
-errMax= concreteBase.concreteDesignTangentTest(mdlr,concr)
+errMax= concrete_base.concreteDesignTangentTest(mdlr,concr)
 
 #print "errMax= ",errMax
 import os

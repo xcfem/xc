@@ -4,7 +4,7 @@
 import math
 import scipy.interpolate
 from materials.ec2 import EC2_materials as ec2
-from materials import reinforcingSteel
+from materials import concrete_base
 
 __author__= "Luis C. Pérez Tato (LCPT) Ana Ortega (A_OO)"
 __copyright__= "Copyright 2015, LCPT, A_OO"
@@ -64,12 +64,12 @@ def reductionFactorKT(t):
 #   emax:     maximum strain in tension
 #   gammaS:   Partial factor for material.
 #   k:        fmaxk/fyk ratio
-B500A= reinforcingSteel.ReinforcingSteel(nmbAcero="B500A", fyk=500e6, emax=0.02, gammaS=500/435, k=1.05)
-B500B= reinforcingSteel.ReinforcingSteel(nmbAcero="B500B", fyk=500e6, emax=0.045, gammaS=500/435, k=1.08)
-B500C= reinforcingSteel.ReinforcingSteel(nmbAcero="B500C", fyk=500e6, emax=0.065, gammaS=500/435, k=1.15)
-B700B= reinforcingSteel.ReinforcingSteel(nmbAcero="B700B", fyk=700e6, emax=0.045, gammaS=500/435, k=1.08)
+B500A= concrete_base.ReinforcingSteel(nmbAcero="B500A", fyk=500e6, emax=0.02, gammaS=500/435, k=1.05)
+B500B= concrete_base.ReinforcingSteel(nmbAcero="B500B", fyk=500e6, emax=0.045, gammaS=500/435, k=1.08)
+B500C= concrete_base.ReinforcingSteel(nmbAcero="B500C", fyk=500e6, emax=0.065, gammaS=500/435, k=1.15)
+B700B= concrete_base.ReinforcingSteel(nmbAcero="B700B", fyk=700e6, emax=0.045, gammaS=500/435, k=1.08)
 
-SpecialII1956SIA161= reinforcingSteel.ReinforcingSteel(nmbAcero="SpecialII", fyk=300e6, emax=0.045,gammaS=1.15,k=1.05)
+SpecialII1956SIA161= concrete_base.ReinforcingSteel(nmbAcero="SpecialII", fyk=300e6, emax=0.045,gammaS=1.15,k=1.05)
 
 x= [50e-3,100e-3,150e-3,200e-3,250e-3,300e-3]
 y= [435e6,435e6,435e6,435e6,435e6,435e6]
