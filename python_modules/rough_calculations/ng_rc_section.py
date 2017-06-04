@@ -7,7 +7,7 @@ __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
 from rough_calculations import ng_rebar_def
-from materials.sia262 import SIA262_concrete
+from materials.sia262 import SIA262_materials
 from materials.sia262 import minimal_reinforcement
 from postprocess.reports import common_formats as fmt
 from miscUtils import LogMessages as lmsg
@@ -15,7 +15,7 @@ from miscUtils import LogMessages as lmsg
 
 class RCSection(object):
   tensionRebars= None
-  beton= SIA262_concrete.c25_30
+  beton= SIA262_materials.c25_30
   b= 0.25
   h= 0.25
   def __init__(self,tensionRebars,beton,b,h):

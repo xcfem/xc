@@ -13,16 +13,16 @@ import xc_base
 import geom
 import xc
 from materials import concreteBase
-from materials.ehe import EHE_concrete
+from materials.ehe import EHE_materials
 
 
 # Model definition
 prueba= xc.ProblemaEF()
 prueba.logFileName= "/tmp/borrar.log" # Ignore warning messages
 mdlr= prueba.getPreprocessor
-concr=EHE_concrete.HA25
+concr= EHE_materials.HA25
 concr.alfacc=0.85 #f_maxd= 0.85*fcd
-errMax= concreteBase.testTangDHormigon(mdlr,concr)
+errMax= concreteBase.concreteDesignTangentTest(mdlr,concr)
 
 #print "errMax= ",errMax
 import os

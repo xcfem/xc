@@ -9,13 +9,11 @@ import xc
 from misc import banco_pruebas_scc3d
 from solution import predefined_solutions # Procedimiento de solución
 from materials.fiber_section import defSeccionHASimple
-from materials.ehe import EHE_reinforcing_steel
 # from materials import section_properties
 
 
-from materials.ehe import EHE_concrete
-from materials.ehe import EHE_reinforcing_steel
-from materials.sia262 import SIA262_reinforcing_steel
+from materials.ehe import EHE_materials
+from materials.sia262 import SIA262_materials
 from materials.sia262 import crackControlSIA262 as cc
 from model import predefined_spaces
 
@@ -25,18 +23,18 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
-areaFi22= SIA262_reinforcing_steel.section_barres_courantes[22e-3]
-areaFi26= SIA262_reinforcing_steel.section_barres_courantes[26e-3]
+areaFi22= SIA262_materials.section_barres_courantes[22e-3]
+areaFi26= SIA262_materials.section_barres_courantes[26e-3]
 
 datosScc1LosC= defSeccionHASimple.RecordRCSimpleSection()
 datosScc1LosC.sectionName= "secHA1LosC"
 datosScc1LosC.sectionDescr= "Losa. Tramo Central. Sección normal al eje X."
-concr=EHE_concrete.HA30
+concr= EHE_materials.HA30
 concr.alfacc=0.85 #f_maxd= 0.85*fcd
 datosScc1LosC.concrType= concr
 datosScc1LosC.h= 0.35
 datosScc1LosC.b= 1.0
-datosScc1LosC.reinfSteelType= EHE_reinforcing_steel.B500S
+datosScc1LosC.reinfSteelType= EHE_materials.B500S
 negRebRow=defSeccionHASimple.MainReinfLayer()
 negRebRow.setUp(nRebars=0,rebarsDiam=0.0,areaRebar=0.0,width=datosScc1LosC.b,cover=0.1)
 datosScc1LosC.negatvRebarRows=[negRebRow]
@@ -55,8 +53,8 @@ MyDato= 117e3 # Momento para comprobar fisuración.
 prueba= xc.ProblemaEF()
 preprocessor=  prueba.getPreprocessor
 # Materials definition
-# matTagHormigon= EHE_concrete.HA30.defDiagK(preprocessor)
-# matTagAceroArmar= EHE_reinforcing_steel.B500S.defDiagK(preprocessor)
+# concreteMatTag= EHE_materials.HA30.defDiagK(preprocessor)
+# matTagAceroArmar= EHE_materials.B500S.defDiagK(preprocessor)
 
 
 datosScc1LosC.defRCSimpleSection(preprocessor, "k")

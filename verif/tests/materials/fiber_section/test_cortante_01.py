@@ -8,8 +8,7 @@ from __future__ import division
 from misc import banco_pruebas_scc3d
 from solution import predefined_solutions
 
-from materials.ehe import EHE_concrete
-from materials.ehe import EHE_reinforcing_steel
+from materials.ehe import EHE_materials
 from materials.ehe import comprobVEHE08
 from materials.ehe import cortanteEHE
 import xc_base
@@ -50,28 +49,28 @@ preprocessor=  prueba.getPreprocessor
 # Materials definition
 materiales= preprocessor.getMaterialLoader
 
-concr=EHE_concrete.HA25
+concr= EHE_materials.HA25
 concr.alfacc=0.85    #f_maxd= 0.85*fcd coeficiente de fatiga del hormigón (generalmente alfacc=1)
 concrMatTag25= concr.defDiagD(preprocessor)
-tagB500S= EHE_reinforcing_steel.B500S.defDiagD(preprocessor)
+tagB500S= EHE_materials.B500S.defDiagD(preprocessor)
 
 respT= typical_materials.defElasticMaterial(preprocessor, "respT",1e10) # Respuesta de la sección a torsión.
 respVy= typical_materials.defElasticMaterial(preprocessor, "respVy",1e6) # Respuesta de la sección a cortante según y.
 respVz= typical_materials.defElasticMaterial(preprocessor, "respVz",1e3) # Respuesta de la sección a cortante según y.
 geomSecHA= preprocessor.getMaterialLoader.newSectionGeometry("geomSecHA")
 regiones= geomSecHA.getRegions
-rg= regiones.newQuadRegion(EHE_concrete.HA25.nmbDiagD)
+rg= regiones.newQuadRegion(EHE_materials.HA25.nmbDiagD)
 rg.nDivIJ= 10
 rg.nDivJK= 10
 rg.pMin= geom.Pos2d(-width/2.0,-depth/2.0)
 rg.pMax= geom.Pos2d(width/2.0,depth/2.0)
 reinforcement= geomSecHA.getReinfLayers
-reinforcementInf= reinforcement.newStraightReinfLayer(EHE_reinforcing_steel.B500S.nmbDiagD)
+reinforcementInf= reinforcement.newStraightReinfLayer(EHE_materials.B500S.nmbDiagD)
 reinforcementInf.numReinfBars= numBarras
 reinforcementInf.barArea= areaBarra
 reinforcementInf.p1= geom.Pos2d(cover-width/2.0,cover-depth/2.0) # Armadura inferior.
 reinforcementInf.p2= geom.Pos2d(width/2.0-cover,cover-depth/2.0)
-reinforcementSup= reinforcement.newStraightReinfLayer(EHE_reinforcing_steel.B500S.nmbDiagD)
+reinforcementSup= reinforcement.newStraightReinfLayer(EHE_materials.B500S.nmbDiagD)
 reinforcementSup.numReinfBars= numBarras
 reinforcementSup.barArea= areaBarra
 reinforcementSup.p1= geom.Pos2d(cover-width/2.0,depth/2.0-cover) # Armadura superior.
@@ -128,7 +127,7 @@ secHAParamsCortante= cortanteEHE.ShearControllerEHE('ULS_shear')
 elementos= preprocessor.getElementLoader
 ele1= elementos.getElement(1)
 scc= ele1.getSection()
-secHAParamsCortante.calcVuEHE08(preprocessor, scc,"",EHE_concrete.HA25,EHE_reinforcing_steel.B500S,NDato,math.sqrt(MyDato**2+MzDato**2),0,0)
+secHAParamsCortante.calcVuEHE08(preprocessor, scc,"",EHE_materials.HA25,EHE_materials.B500S,NDato,math.sqrt(MyDato**2+MzDato**2),0,0)
 
 
 Vu2A= secHAParamsCortante.Vu2
@@ -145,7 +144,7 @@ if(analOk!=0):
   exit()
 
 
-secHAParamsCortante.calcVuEHE08(preprocessor, scc,"",EHE_concrete.HA25,EHE_reinforcing_steel.B500S, 0,0,0,0)
+secHAParamsCortante.calcVuEHE08(preprocessor, scc,"",EHE_materials.HA25,EHE_materials.B500S, 0,0,0,0)
 
 Vu2B= secHAParamsCortante.Vu2
 
@@ -161,7 +160,7 @@ if(analOk!=0):
   exit()
 
 
-secHAParamsCortante.calcVuEHE08(preprocessor, scc,"",EHE_concrete.HA25,EHE_reinforcing_steel.B500S, 0,0,0,0)
+secHAParamsCortante.calcVuEHE08(preprocessor, scc,"",EHE_materials.HA25,EHE_materials.B500S, 0,0,0,0)
 
 Vu2C= secHAParamsCortante.Vu2
 

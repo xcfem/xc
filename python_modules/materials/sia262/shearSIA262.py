@@ -4,7 +4,6 @@ import math
 import xc_base
 import geom
 
-from materials.sia262 import SIA262_concrete
 from postprocess import ControlVars as cv
 from materials import LimitStateControllerBase as lsc
 
@@ -46,7 +45,7 @@ class ShearController(lsc.LimitStateControllerBase):
     super(ShearController,self).__init__(limitStateLabel)
 
   def setSection(self,rcSection):
-    self.hormigon= rcSection.concrType #Arreglar
+    self.concrete= rcSection.concrType #Arreglar
     self.acero= rcSection.reinfSteelType
     self.width= rcSection.width
     self.depthUtil= 0.9* rcSection.depth #Mejorar
@@ -58,7 +57,7 @@ class ShearController(lsc.LimitStateControllerBase):
 
   def calcVcu(self, Nd, Md, Mu):
     ''' Calcula el cortante último de la sección sin reinforcement de cortante.'''
-    self.Vcu= VuNoShearRebarsSIA262(self.hormigon,self.acero,Nd,abs(Md),abs(Mu),self.width,self.depthUtil)
+    self.Vcu= VuNoShearRebarsSIA262(self.concrete,self.acero,Nd,abs(Md),abs(Mu),self.width,self.depthUtil)
   def calcVsu(self):
     ''' Calcula el cortante último de la sección sin reinforcement de cortante pasamos
         s= 1.0 porque AsTrsv ya incorpora todas las ramas en un metro.'''
@@ -99,7 +98,7 @@ class ShearController(lsc.LimitStateControllerBase):
       idSection= e.getProp("idSection")
       section= scc.getProp("datosSecc")
       self.setSection(section)
-      #codHormigon= section.concrType
+      #concreteCode= section.concrType
       #codArmadura= section.reinfSteelType
       AsTrsv= section.shReinfY.getAs()
       alpha= section.shReinfY.angAlphaShReinf

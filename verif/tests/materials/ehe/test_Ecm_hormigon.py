@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # Problem type
 
-from materials.ehe import EHE_concrete
+from materials.ehe import EHE_materials
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (A_OO)"
 __copyright__= "Copyright 2015, LCPT and AO_O"
@@ -11,7 +11,7 @@ __email__= "l.pereztato@gmail.com ana.ortega.ort@gmal.com"
 
 fck= 25e6
 gammac=1.5
-concr=EHE_concrete.EHEConcrete('HA',-fck,gammac)
+concr= EHE_materials.EHEConcrete('HA',-fck,gammac)
 fcm= concr.getFcm()*(-1)
 ratio1= abs(fcm-33e6)/33e6
 Ecm= concr.getEcm()

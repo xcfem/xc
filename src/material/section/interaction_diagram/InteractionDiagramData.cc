@@ -31,7 +31,7 @@
 
 XC::InteractionDiagramData::InteractionDiagramData(void)
   : umbral(10), inc_eps(0.0), inc_t(M_PI/4), agot_pivots(),
-    nmb_set_hormigon("hormigon"), tag_hormigon(0),
+    concrete_set_name("concrete"), concrete_tag(0),
     nmb_set_armadura("armadura"), tag_armadura(0)
   {
     inc_eps= agot_pivots.getIncEpsAB(); //Strain increment.
@@ -41,5 +41,5 @@ XC::InteractionDiagramData::InteractionDiagramData(void)
 
 XC::InteractionDiagramData::InteractionDiagramData(const double &u,const double &inc_e,const double &inc_theta,const PivotsUltimateStrains &agot)
   : umbral(u), inc_eps(inc_e), inc_t(inc_theta), agot_pivots(agot),
-    nmb_set_hormigon("hormigon"), tag_hormigon(0),
+    concrete_set_name("concrete"), concrete_tag(0),
     nmb_set_armadura("armadura"), tag_armadura(0) {}

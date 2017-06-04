@@ -20,7 +20,7 @@ import geom
 import xc
 from materials import concreteBase
 from materials import typical_materials
-from materials.ehe import EHE_concrete
+from materials.ehe import EHE_materials
 from materials import reinforcingSteel
 import matplotlib.pyplot as plt
 import math
@@ -40,7 +40,7 @@ prueba= xc.ProblemaEF()
 preprocessor= prueba.getPreprocessor
 
 # Materials definition
-concrAux=EHE_concrete.HA25           #parameters only for the compression branche 
+concrAux= EHE_materials.HA25           #parameters only for the compression branche 
 
 #Reinforcing steel.
 rfSteel=reinforcingSteel.ReinforcingSteel(nmbAcero='rfSteel', fyk=fy_exp, emax=0.08, gammaS=1.15,k=1.05)

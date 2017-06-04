@@ -9,8 +9,7 @@ from misc import banco_pruebas_scc3d
 from solution import predefined_solutions
 
 
-from materials.ehe import EHE_concrete
-from materials.ehe import EHE_reinforcing_steel
+from materials.ehe import EHE_materials
 from materials.ehe import comprobVEHE08
 from materials.ehe import cortanteEHE
 import xc_base

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import division
-from materials.sia262 import SIA262_reinforcing_steel
+from materials.sia262 import SIA262_materials
 from materials.sia262 import minimal_reinforcement
 from materials.sia262 import shearSIA262
 from materials.sia262 import anchorage

@@ -7,7 +7,7 @@
 import sys
 
 from materials.ehe import comprobVEHE08
-from materials.ehe import EHE_concrete
+from materials.ehe import EHE_materials
 import math
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
@@ -18,7 +18,7 @@ __email__= "l.pereztato@gmail.com"
 
 fck=25e6
 gammac=1.5
-concr=EHE_concrete.EHEConcrete('HA',-fck,gammac)
+concr= EHE_materials.EHEConcrete('HA',-fck,gammac)
 fctd=concr.fctkEHE08()/gammac
 fcd=concr.fcd()*(-1)
 d=1.45

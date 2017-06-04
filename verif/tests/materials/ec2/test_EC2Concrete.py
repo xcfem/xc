@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from __future__ import division
-from materials.ec2 import EC2_concrete
+from materials.ec2 import EC2_materials
 
 __author__= "Ana Ortega (AO_O) "
 __copyright__= "Copyright 2015, AO_O"
@@ -26,7 +26,7 @@ Epscu3Calc=[]
 for i in range(len(fckDat)):
     name='C'+str(fckDat[i])
     fck=-1*fckDat[i]*1e6 #[Pa][-]
-    concr=EC2_concrete.EC2Concrete(name,fck,1.5)
+    concr= EC2_materials.EC2Concrete(name,fck,1.5)
     fcm=concr.getFcm()/(-1e6)
     fcmCalc.append(fcm)
     fctm=round(concr.getFctm()/1e6,1)

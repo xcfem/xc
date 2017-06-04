@@ -44,8 +44,8 @@ class InteractionDiagramData: public EntCmd
     double inc_eps; //!< Strain step size.
     double inc_t; //!< Angle step size.
     PivotsUltimateStrains agot_pivots; //!< Ultimate strains at pivots.
-    std::string nmb_set_hormigon; //!< Concrete fibers set name.
-    int tag_hormigon; //!< Concrete material tag.
+    std::string concrete_set_name; //!< Concrete fibers set name.
+    int concrete_tag; //!< Concrete material tag.
     std::string nmb_set_armadura; //!< Steel fibers set name. 
     int tag_armadura; //!< Steel material tag.
   public:
@@ -68,14 +68,14 @@ class InteractionDiagramData: public EntCmd
       { return agot_pivots; }
     inline void setDefsAgotPivots(const PivotsUltimateStrains &v)
       { agot_pivots= v; }
-    inline const std::string &getNmbSetHormigon(void) const
-      { return nmb_set_hormigon; }
-    inline void setNmbSetHormigon(const std::string &v)
-      { nmb_set_hormigon= v; }
-    inline const int &getTagHormigon(void) const
-      { return tag_hormigon; }
-    inline void setTagHormigon(const int &v)
-      { tag_hormigon= v; }
+    inline const std::string &getConcreteSetName(void) const
+      { return concrete_set_name; }
+    inline void setConcreteSetName(const std::string &v)
+      { concrete_set_name= v; }
+    inline const int &getConcreteTag(void) const
+      { return concrete_tag; }
+    inline void setConcreteTag(const int &v)
+      { concrete_tag= v; }
     inline const std::string &getNmbSetArmadura(void) const
       { return nmb_set_armadura; }
     inline void setNmbSetArmadura(const std::string &v)

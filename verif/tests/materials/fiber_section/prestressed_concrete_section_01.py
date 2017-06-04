@@ -12,7 +12,7 @@ cover= 0.05 # Concrete cover expressed in meters.
 areaCordones= 140e-6 # Área de los cordones expressed in square meters.
 
 def gmSecHP01(nmbGeomSecc,concrDiagName,nmbDiagAceroPret):
-  # Hormigón
+  # Concrete
   geomSecc= preprocessor.getMaterialLoader.newSectionGeometry(nmbGeomSecc)
   regiones= geomSecc.getRegions
   horm= regiones.newQuadRegion(concrDiagName)
@@ -35,5 +35,5 @@ def gmSecHP01(nmbGeomSecc,concrDiagName,nmbDiagAceroPret):
   reinforcementSup.p2= geom.Pos2d(depth/2.0-cover,width/2.0-cover)
   return geomSecc
 
-geomSecPret01= gmSecHP01("geomSecHormigonPret01",EHE_concrete.HP45.nmbDiagD,aceroPretEHE.Y1860S7.nmbDiagD)
+geomSecPret01= gmSecHP01("prestressedConcretSectionGeom01",EHE_materials.HP45.nmbDiagD,aceroPretEHE.Y1860S7.nmbDiagD)
 

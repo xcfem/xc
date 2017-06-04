@@ -217,7 +217,7 @@ class FreqLoadsDisplacementControlLimitStateData(LimitStateData):
      
       :param reinfConcreteSections: Reinforced concrete sections on each element.
     '''
-    print 'FreqLoadsDisplacementControlLimitStateData.check() not implemented.'
+    lmsg.error('FreqLoadsDisplacementControlLimitStateData.check() not implemented.')
 
 
 class FatigueResistanceRCLimitStateData(LimitStateData):

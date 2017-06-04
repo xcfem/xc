@@ -7,10 +7,9 @@ import xc_base
 import geom
 import xc
 
-from materials.ehe import EHE_concrete
-from materials.ehe import EHE_reinforcing_steel
+from materials.ehe import EHE_materials
 import math
-from materials.sia262 import SIA262_reinforcing_steel
+from materials.sia262 import SIA262_materials
 from materials.fiber_section import defSeccionHASimple
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
@@ -19,24 +18,24 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
-areaFi6= SIA262_reinforcing_steel.section_barres_courantes[6e-3]
-areaFi8= SIA262_reinforcing_steel.section_barres_courantes[8e-3]
-areaFi10= SIA262_reinforcing_steel.section_barres_courantes[10e-3]
-areaFi12= SIA262_reinforcing_steel.section_barres_courantes[12e-3]
-areaFi14= SIA262_reinforcing_steel.section_barres_courantes[14e-3]
-areaFi16= SIA262_reinforcing_steel.section_barres_courantes[16e-3]
-areaFi18= SIA262_reinforcing_steel.section_barres_courantes[18e-3]
-areaFi20= SIA262_reinforcing_steel.section_barres_courantes[20e-3]
-areaFi22= SIA262_reinforcing_steel.section_barres_courantes[22e-3]
-areaFi26= SIA262_reinforcing_steel.section_barres_courantes[26e-3]
-areaFi30= SIA262_reinforcing_steel.section_barres_courantes[30e-3]
-areaFi34= SIA262_reinforcing_steel.section_barres_courantes[34e-3]
-areaFi40= SIA262_reinforcing_steel.section_barres_courantes[40e-3]
+areaFi6= SIA262_materials.section_barres_courantes[6e-3]
+areaFi8= SIA262_materials.section_barres_courantes[8e-3]
+areaFi10= SIA262_materials.section_barres_courantes[10e-3]
+areaFi12= SIA262_materials.section_barres_courantes[12e-3]
+areaFi14= SIA262_materials.section_barres_courantes[14e-3]
+areaFi16= SIA262_materials.section_barres_courantes[16e-3]
+areaFi18= SIA262_materials.section_barres_courantes[18e-3]
+areaFi20= SIA262_materials.section_barres_courantes[20e-3]
+areaFi22= SIA262_materials.section_barres_courantes[22e-3]
+areaFi26= SIA262_materials.section_barres_courantes[26e-3]
+areaFi30= SIA262_materials.section_barres_courantes[30e-3]
+areaFi34= SIA262_materials.section_barres_courantes[34e-3]
+areaFi40= SIA262_materials.section_barres_courantes[40e-3]
 
-concrete= EHE_concrete.HA30
+concrete= EHE_materials.HA30
 concrete.alfacc=0.85    # f_maxd= 0.85*fcd coeficiente de fatiga del hormigón (generalmente alfacc=1)
 
-reinfSteel= EHE_reinforcing_steel.B500S
+reinfSteel= EHE_materials.B500S
 
 sccData=defSeccionHASimple.RecordRCSimpleSection()
 sccData.sectionName= "sccData"

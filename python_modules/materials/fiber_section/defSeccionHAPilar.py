@@ -11,7 +11,7 @@ Definition of the variables that make up a reinforced concrete section
 with reinforcement symmetric in both directions (as usual in columns)
 '''
 
-from materials.ehe import EHE_reinforcing_steel
+from materials.ehe import EHE_materials
 from materials.fiber_section import defSeccionHASimple
 
 class ColumnMainReinforcement(object):
@@ -28,10 +28,10 @@ class ColumnMainReinforcement(object):
   def __init__(self):
     self.cover= 0.030 
     self.nRebarsWidth= 5 
-    self.areaRebarWidth= EHE_reinforcing_steel.Fi12 
+    self.areaRebarWidth= EHE_materials.Fi12 
 
     self.nRebarsDepth= 2 
-    self.areaRebarDepth= EHE_reinforcing_steel.Fi10 
+    self.areaRebarDepth= EHE_materials.Fi10 
 
 
 class RecordRCColumnSection(defSeccionHASimple.BasicRecordRCSection):
@@ -40,7 +40,7 @@ class RecordRCColumnSection(defSeccionHASimple.BasicRecordRCSection):
   
   :ivar sectionName:     name identifying the section
   :ivar sectionDescr:    section description
-  :ivar concrType:       type of concrete (e.g. hormigonesEHE.HA25)     
+  :ivar concrType:       type of concrete (e.g. EHE_materials.HA25)     
   :ivar concrDiagName:   name identifying the characteristic stress-strain diagram of the concrete material
   :ivar depth:           cross-section depth
   :ivar width:           cross-section width

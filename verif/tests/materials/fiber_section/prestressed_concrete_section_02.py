@@ -9,7 +9,7 @@ __email__= "l.pereztato@gmail.com ana.ortega.ort@gmal.com"
 areaCordones= 140e-6 # Área de los cordones expressed in square meters.
 areaFiLong= 0.5e-4 # Fi8 área de la armadura longitudinal expressed in square meters.
 def gmSecHP02(nmbGeomSecc,concrDiagName,nmbDiagAceroArmar,nmbDiagAceroPret):
-  # Hormigón
+  # Concrete
   geomSecc= preprocessor.getMaterialLoader.newSectionGeometry(nmbGeomSecc)
   regiones= geomSecc.getRegions
 
@@ -95,5 +95,5 @@ def gmSecHP02(nmbGeomSecc,concrDiagName,nmbDiagAceroArmar,nmbDiagAceroPret):
   return geomSecc
 
 
-geomSecPret02= gmSecHP02("geomSecHormigonPret02",EHE_concrete.HP45.nmbDiagD,EHE_reinforcing_steel.B500S.nmbDiagD,aceroPretEHE.Y1860S7.nmbDiagD)
+geomSecPret02= gmSecHP02("prestressedConcretSectionGeom02",EHE_materials.HP45.nmbDiagD,EHE_materials.B500S.nmbDiagD,aceroPretEHE.Y1860S7.nmbDiagD)
 

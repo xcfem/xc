@@ -14,8 +14,7 @@ __version__= "3.0"
 __email__= "l.pereztato@gmail.com ana.ortega.ort@gmal.com"
 
 nmbHorm= "HA25"
-from materials.ehe import EHE_concrete
-from materials.ehe import EHE_reinforcing_steel
+from materials.ehe import EHE_materials
 
 # Data
 gammac= 1.5  # Concrete safety coefficient
@@ -31,12 +30,12 @@ areaFi20= 3.14e-4 # Rebars cross-section area [m2]
 prueba= xc.ProblemaEF()
 preprocessor=  prueba.getPreprocessor
 # Materials definition
-concr=EHE_concrete.HA25
+concr= EHE_materials.HA25
 concr.alfacc=0.85    #f_maxd= 0.85*fcd coeficiente de fatiga del hormigón (generalmente alfacc=1)
 concrMatTag25= concr.defDiagD(preprocessor)
 Ec= concr.getDiagD(preprocessor).getTangent
-tagB500S= EHE_reinforcing_steel.B500S.defDiagD(preprocessor)
-Es= EHE_reinforcing_steel.B500S.getDiagD(preprocessor).getTangent
+tagB500S= EHE_materials.B500S.defDiagD(preprocessor)
+Es= EHE_materials.B500S.getDiagD(preprocessor).getTangent
 
 # Section geometry
 # setting up
@@ -46,32 +45,32 @@ regiones= geomSecHA.getRegions
 
 #generation of a quadrilateral region with the specified sizes and number of
 #divisions for the cells (fibers) generation
-hormigon= regiones.newQuadRegion(EHE_concrete.HA25.nmbDiagD)  #name of the region: EHE_concrete.HA25.nmbDiagD
-hormigon.nDivIJ= 10
-hormigon.nDivJK= 10
-hormigon.pMin= geom.Pos2d(-depth/2.0,-width/2.0)
-hormigon.pMax= geom.Pos2d(depth/2.0,width/2.0)
+concrete= regiones.newQuadRegion(EHE_materials.HA25.nmbDiagD)  #name of the region: EHE_materials.HA25.nmbDiagD
+concrete.nDivIJ= 10
+concrete.nDivJK= 10
+concrete.pMin= geom.Pos2d(-depth/2.0,-width/2.0)
+concrete.pMax= geom.Pos2d(depth/2.0,width/2.0)
 
 #generation of reinforcement layers 
 reinforcement= geomSecHA.getReinfLayers
-reinforcementInf= reinforcement.newStraightReinfLayer(EHE_reinforcing_steel.B500S.nmbDiagD)
+reinforcementInf= reinforcement.newStraightReinfLayer(EHE_materials.B500S.nmbDiagD)
 reinforcementInf.numReinfBars= 6
 reinforcementInf.barArea= areaFi20
 reinforcementInf.p1= geom.Pos2d(cover-depth/2.0,width/2.0-cover) # Armadura inferior.
 reinforcementInf.p2= geom.Pos2d(cover-depth/2.0,cover-width/2.0)
-reinforcementPielInf= reinforcement.newStraightReinfLayer(EHE_reinforcing_steel.B500S.nmbDiagD)
+reinforcementPielInf= reinforcement.newStraightReinfLayer(EHE_materials.B500S.nmbDiagD)
 reinforcementPielInf.numReinfBars= 2
 reinforcementPielInf.barArea= areaFi20
 y= (depth-2*cover)/3.0/2.0
 reinforcementPielInf.p1= geom.Pos2d(-y,width/2-cover) # # Armadura piel inferior.
 reinforcementPielInf.p2= geom.Pos2d(-y,cover-width/2)
-reinforcementPielSup= reinforcement.newStraightReinfLayer(EHE_reinforcing_steel.B500S.nmbDiagD)
+reinforcementPielSup= reinforcement.newStraightReinfLayer(EHE_materials.B500S.nmbDiagD)
 reinforcementPielSup.numReinfBars= 2
 reinforcementPielSup.barArea= areaFi20
 y= (depth-2*cover)/3.0/2.0
 reinforcementPielSup.p1= geom.Pos2d(y,width/2-cover) # # Armadura piel superior.
 reinforcementPielSup.p2= geom.Pos2d(y,cover-width/2)
-reinforcementSup= reinforcement.newStraightReinfLayer(EHE_reinforcing_steel.B500S.nmbDiagD)
+reinforcementSup= reinforcement.newStraightReinfLayer(EHE_materials.B500S.nmbDiagD)
 reinforcementSup.numReinfBars= 6
 reinforcementSup.barArea= areaFi20
 reinforcementSup.p1= geom.Pos2d(depth/2.0-cover,width/2.0-cover) # Armadura superior.
@@ -85,8 +84,8 @@ secHA.setupFibers()
 fibras= secHA.getFibers()
 
 param= xc.InteractionDiagramParameters()
-param.tagHormigon= EHE_concrete.HA25.matTagD
-param.tagArmadura= EHE_reinforcing_steel.B500S.matTagD
+param.concreteTag= EHE_materials.HA25.matTagD
+param.tagArmadura= EHE_materials.B500S.matTagD
 diagIntsecHA= materiales.calcInteractionDiagram("secHA",param)
 
 diagIntsecHA.writeTo("/tmp/prueba_diag_interaccion02.dat")  # Se usa en test test_diag_interaccion04

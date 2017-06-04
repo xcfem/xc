@@ -7,7 +7,7 @@ import geom
 import xc
 from materials import typical_materials
 from materials import concreteBase
-from materials.ehe import EHE_concrete
+from materials.ehe import EHE_materials
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
 __copyright__= "Copyright 2015, LCPT and AOO"
@@ -19,8 +19,8 @@ __email__= "l.pereztato@gmail.com"
 prueba= xc.ProblemaEF()
 prueba.logFileName= "/tmp/borrar.log" # Para no imprimir mensajes de advertencia
 preprocessor=  prueba.getPreprocessor
-HP45= EHE_concrete.HA45
-errMax= concreteBase.testDiagDHormigon(preprocessor, HP45)
+HP45= EHE_materials.HA45
+errMax= concreteBase.concreteDesignDiagramTest(preprocessor, HP45)
 
 
 # print "errMax= ",(errMax)

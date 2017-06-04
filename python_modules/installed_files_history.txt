@@ -324,6 +324,8 @@
 /usr/local/lib/python2.7/dist-packages/materials/ec2/crack_control_utils.pyc
 /usr/local/lib/python2.7/dist-packages/materials/ec2/EC2_concrete.py
 /usr/local/lib/python2.7/dist-packages/materials/ec2/EC2_concrete.pyc
+/usr/local/lib/python2.7/dist-packages/materials/ec2/EC2_materials.py
+/usr/local/lib/python2.7/dist-packages/materials/ec2/EC2_materials.pyc
 /usr/local/lib/python2.7/dist-packages/materials/ec2/EC2_reinforcing_steel.py
 /usr/local/lib/python2.7/dist-packages/materials/ec2/EC2_reinforcing_steel.pyc
 /usr/local/lib/python2.7/dist-packages/materials/ec2/__init__.py
@@ -378,6 +380,8 @@
 /usr/local/lib/python2.7/dist-packages/materials/ehe/datos_calculo_seccion.pyc
 /usr/local/lib/python2.7/dist-packages/materials/ehe/EHE_concrete.py
 /usr/local/lib/python2.7/dist-packages/materials/ehe/EHE_concrete.pyc
+/usr/local/lib/python2.7/dist-packages/materials/ehe/EHE_materials.py
+/usr/local/lib/python2.7/dist-packages/materials/ehe/EHE_materials.pyc
 /usr/local/lib/python2.7/dist-packages/materials/ehe/EHE_reinforcing_steel.py
 /usr/local/lib/python2.7/dist-packages/materials/ehe/EHE_reinforcing_steel.pyc
 /usr/local/lib/python2.7/dist-packages/materials/ehe/fisuracionEHE.py
@@ -532,6 +536,8 @@
 /usr/local/lib/python2.7/dist-packages/materials/sia262/shearSIA262.pyc
 /usr/local/lib/python2.7/dist-packages/materials/sia262/SIA262_concrete.py
 /usr/local/lib/python2.7/dist-packages/materials/sia262/SIA262_concrete.pyc
+/usr/local/lib/python2.7/dist-packages/materials/sia262/SIA262_materials.py
+/usr/local/lib/python2.7/dist-packages/materials/sia262/SIA262_materials.pyc
 /usr/local/lib/python2.7/dist-packages/materials/sia262/SIA262_reinforcing_steel.py
 /usr/local/lib/python2.7/dist-packages/materials/sia262/SIA262_reinforcing_steel.pyc
 /usr/local/lib/python2.7/dist-packages/materials/sia262/SIA_reinforcing_steel.py

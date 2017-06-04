@@ -205,7 +205,7 @@ class ParamsCortante(object):
   '''Define las propiedades del registro que contiene los parámetros de cálculo
    a cortante.'''
   def __init__(self):
-    self.areaHormigon= 0.0 # Area total de la sección de hormigón.
+    self.concreteArea= 0.0 # Area total de la sección de hormigón.
     self.widthMin= 0.0 # Anchura neta mínima del elemento a comprobar, definida de acuerdo con el artículo 40.3.5.
     self.depthUtil= 0.0 # Canto útil (meters).
     self.brazoMecanico= 0.0 # Lever arm (meters).
@@ -221,7 +221,7 @@ class ParamsCortante(object):
 
   # Calcula el valor del cortante último de la sección.
   def calcCortanteUltimo(self, concreteFibersSet, rebarFibersSet,tensionedRebarsFiberSet, fck, fcd, fyd, fpd, fydTrsv):
-    self.areaHormigon= concreteFibersSet.getArea()
+    self.concreteArea= concreteFibersSet.getArea()
     self.widthMin= concreteFibersSet.getAnchoMecanico() # Mejorar (en secciones no convexas estará mal).
     self.depthUtil= concreteFibersSet.getCantoUtil()
     self.brazoMecanico= concreteFibersSet.getBrazoMecanico()
@@ -229,7 +229,7 @@ class ParamsCortante(object):
     # areaTendonesTracc= 
 
     self.sigmaXD= N/area+Mz/Iz*yCdg+My/Iy*zCdg
-    self.cortanteUltimo= getVu(fck,fcd,N,self.areaHormigon,self.widthMin,self.depthUtil,self.brazoMecanico,self.angAlpha,self.angTheta,self.areaRebarTracc,fyd,self.areaTendonesTracc,fpd,self.sigmaXD,self.sigmaYD,AsTrsv,self.areaShReinfBranchsTrsv,fydTrsv)
+    self.cortanteUltimo= getVu(fck,fcd,N,self.concreteArea,self.widthMin,self.depthUtil,self.brazoMecanico,self.angAlpha,self.angTheta,self.areaRebarTracc,fyd,self.areaTendonesTracc,fpd,self.sigmaXD,self.sigmaYD,AsTrsv,self.areaShReinfBranchsTrsv,fydTrsv)
 
   # Imprime los parámetros de cortante de la sección.
   def printParams(self):

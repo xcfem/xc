@@ -16,7 +16,7 @@ import xc
 from misc import banco_pruebas_scc3d
 
 
-from materials.ehe import EHE_concrete
+from materials.ehe import EHE_materials
 from materials.ehe import aceroPretEHE
 from materials.fiber_section import createFiberSets
 from model import predefined_spaces
@@ -29,17 +29,17 @@ prueba= xc.ProblemaEF()
 preprocessor=  prueba.getPreprocessor
 # Materials definition
 tag= aceroPretEHE.Y1860S7.defDiagD(preprocessor, aceroPretEHE.Y1860S7.tInic())
-tag= EHE_concrete.HP45.defDiagD(preprocessor)
+tag= EHE_materials.HP45.defDiagD(preprocessor)
 import os
 pth= os.path.dirname(__file__)
 if(not pth):
   pth= "."
 #print "pth= ", pth
-execfile(pth+"/secc_hormigon_pret_01.py")
+execfile(pth+"/prestressed_concrete_section_01.py")
 materiales= preprocessor.getMaterialLoader
 secHP= materiales.newMaterial("fiber_section_3d","secHP")
 fiberSectionRepr= secHP.getFiberSectionRepr()
-fiberSectionRepr.setGeomNamed("geomSecHormigonPret01")
+fiberSectionRepr.setGeomNamed("prestressedConcretSectionGeom01")
 secHP.setupFibers()
 
 elem= banco_pruebas_scc3d.sectionModel(preprocessor, "secHP")
@@ -85,7 +85,7 @@ esfMy= scc.getStressResultantComponent("My")
 esfMz= scc.getStressResultantComponent("Mz")
 defMz= scc.getSectionDeformationByName("defMz")
 defN= scc.getSectionDeformationByName("defN")
-concrFibers= createFiberSets.FiberSet(scc,"hormigon",EHE_concrete.HP45.matTagD)
+concrFibers= createFiberSets.FiberSet(scc,'concrete',EHE_materials.HP45.matTagD)
 fibraCEpsMin= concrFibers.getFiberWithMinStrain()
 epsCMin= fibraCEpsMin.getMaterial().getStrain() # Deformación mínima en el hormigón.
 fibraCEpsMax= concrFibers.getFiberWithMaxStrain()
