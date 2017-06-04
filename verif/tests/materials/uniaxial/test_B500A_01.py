@@ -5,7 +5,7 @@ import geom
 import xc
 
 from materials.sia262 import SIA262_materials
-from materials import reinforcingSteelTest
+from materials import concrete_base
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
 __copyright__= "Copyright 2015, LCPT and AOO"
@@ -18,7 +18,7 @@ prueba= xc.ProblemaEF()
 prueba.logFileName= "/tmp/borrar.log" # Para no imprimir mensajes de advertencia
 preprocessor=  prueba.getPreprocessor
 # Define materials
-errMax= reinforcingSteelTest.testDiagKAceroArmar(preprocessor, SIA262_materials.B500A)
+errMax= concrete_base.testDiagKAceroArmar(preprocessor, SIA262_materials.B500A)
 
 
 # print "errMax= ",(errMax)

@@ -8,7 +8,7 @@ import math
 import xc_base
 import geom
 import xc
-from materials import concreteBase
+from materials import concrete_base
 from materials.ehe import EHE_materials
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
@@ -23,7 +23,7 @@ prueba.logFileName= "/tmp/borrar.log" # Para no imprimir mensajes de advertencia
 mdlr= prueba.getPreprocessor
 concr= EHE_materials.HA25
 concr.alfacc=0.85 #f_maxd= 0.85*fcd
-errMax= concreteBase.concreteDesignDiagramTest(mdlr,concr)
+errMax= concrete_base.concreteDesignDiagramTest(mdlr,concr)
 
 
 #print "errMax= ",(errMax)

@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 ''' Reinforced concrete materials according to ACI 318. VERIFICATION TESTS REQUIRED!!!.'''
 
-from materials import concreteBase
+from materials import concrete_base
 from miscUtils import LogMessages as lmsg
-from materials import reinforcingSteel
+from materials import concrete_base
 
 __author__= "Ana Ortega (A_OO) and Luis C. Pérez Tato (LCPT)"
 __copyright__= "Copyright 2015, A_OO and LCPT"
@@ -11,7 +11,7 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "ana.Ortega.Ort@gmail.com l.pereztato@gmail.com"
 
-class ACIConcrete(concreteBase.Concrete):
+class ACIConcrete(concrete_base.Concrete):
     """ Concrete model according to ACI 318
 
     """
@@ -24,7 +24,7 @@ A36M= ACIConcrete(nmbConcrete="A36M",fck=-20e6,gammaC=1.5)
 
 # Reinforcing steel.
 
-A706G60= reinforcingSteel.ReinforcingSteel(nmbAcero="A706G60", fyk=420e6, emax=0.08,gammaS=1.15)
+A706G60= concrete_base.ReinforcingSteel(nmbAcero="A706G60", fyk=420e6, emax=0.08,gammaS=1.15)
 
 
 #Bar areas in square meters.

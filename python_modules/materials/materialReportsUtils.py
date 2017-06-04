@@ -20,7 +20,7 @@ def reportConcrete02(concrDiag,paramTensStiffening,grTitle,grFileName,texFileNam
         stress-strain graphic.
     :param concrDiag: concrete material of type concrete02
     :param paramTensStiffening: instance of the object 
-    concreteBase.paramTensStiffenes that defines the parameters 
+    concrete_base.paramTensStiffenes that defines the parameters 
     of tension stiffenes.
     :param grTitle: title for the graphic
     :param grFileName: name of the graphics file

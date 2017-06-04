@@ -24,8 +24,7 @@ import xc
 from solution import predefined_solutions
 from model import predefined_spaces
 from materials.ehe import EHE_materials
-from materials import concreteBase
-from materials import reinforcingSteel
+from materials import concrete_base
 from materials import typical_materials
 from materials.fiber_section import createFiberSets
 import matplotlib.pyplot as plt
@@ -66,13 +65,13 @@ nod= nodes.newNodeXY(1.0+l,0)
 concrAux= EHE_materials.HA25           #parameters only for the compression branche 
 
 #Reinforcing steel.
-rfSteel=reinforcingSteel.ReinforcingSteel(nmbAcero='rfSteel', fyk=fy_exp, emax=0.08, gammaS=1.15,k=1.05)
+rfSteel=concrete_base.ReinforcingSteel(nmbAcero='rfSteel', fyk=fy_exp, emax=0.08, gammaS=1.15,k=1.05)
 rfSteel.Es=Es_exp
 steelDiagram= rfSteel.defDiagK(preprocessor) #Definition of steel stress-strain diagram in XC. 
 
 
 #Parameters for tension stiffening of concrete
-paramTS=concreteBase.paramTensStiffenes(concrMat=concrAux,reinfMat=rfSteel,reinfRatio=ro_exp,diagType='K')
+paramTS=concrete_base.paramTensStiffenes(concrMat=concrAux,reinfMat=rfSteel,reinfRatio=ro_exp,diagType='K')
 paramTS.E_c=Ec_exp  #concrete elastic modulus
 paramTS.f_ct=fct_exp  #concrete tensile strength 
 paramTS.E_ct=Ec_exp #concrete elastic modulus in the tensile linear-elastic range

@@ -294,7 +294,9 @@
 /usr/local/lib/python2.7/dist-packages/materials/bridge_bearings.pyc
 /usr/local/lib/python2.7/dist-packages/materials/coefsDistorsion.py
 /usr/local/lib/python2.7/dist-packages/materials/coefsDistorsion.pyc
+/usr/local/lib/python2.7/dist-packages/materials/concrete_base.py
 /usr/local/lib/python2.7/dist-packages/materials/concreteBase.py
+/usr/local/lib/python2.7/dist-packages/materials/concrete_base.pyc
 /usr/local/lib/python2.7/dist-packages/materials/concreteBase.pyc
 /usr/local/lib/python2.7/dist-packages/materials/crack_control_base.py
 /usr/local/lib/python2.7/dist-packages/materials/crack_control_base.pyc

@@ -11,8 +11,7 @@ Ductility grades:
 
 import math
 import scipy.interpolate
-from materials import concreteBase
-from materials import reinforcingSteel
+from materials import concrete_base
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
 __copyright__= "Copyright 2015, LCPT and AOO"
@@ -23,7 +22,7 @@ __email__= "l.pereztato@gmail.com" "anaOrtegaOrt@gmail.com"
 # Concrete according to Eurocode 2.
 
 
-class EC2Concrete(concreteBase.Concrete):
+class EC2Concrete(concrete_base.Concrete):
     """Concrete model according to Eurocode 2
 
        :ivar typeAggregate: type of aggregate
@@ -167,25 +166,25 @@ C90= EC2Concrete("C90-105",-90e6,1.5)
 #   emax:     maximum strain in tension
 #   gammaS:   partial factor for material.
 #   k:        fmaxk/fyk ratio
-S400A= reinforcingSteel.ReinforcingSteel(nmbAcero="S400A", fyk=400e6, emax=0.025,gammaS=1.15,k=1.05)
-S400B= reinforcingSteel.ReinforcingSteel(nmbAcero="S400B", fyk=400e6, emax=0.05,gammaS=1.15,k=1.08)
-S400C= reinforcingSteel.ReinforcingSteel(nmbAcero="S400C", fyk=400e6, emax=0.075,gammaS=1.15,k=1.15)
+S400A= concrete_base.ReinforcingSteel(nmbAcero="S400A", fyk=400e6, emax=0.025,gammaS=1.15,k=1.05)
+S400B= concrete_base.ReinforcingSteel(nmbAcero="S400B", fyk=400e6, emax=0.05,gammaS=1.15,k=1.08)
+S400C= concrete_base.ReinforcingSteel(nmbAcero="S400C", fyk=400e6, emax=0.075,gammaS=1.15,k=1.15)
 
-S450A= reinforcingSteel.ReinforcingSteel(nmbAcero="S450A", fyk=450e6, emax=0.025,gammaS=1.15,k=1.05)
-S450B= reinforcingSteel.ReinforcingSteel(nmbAcero="S450B", fyk=450e6, emax=0.05,gammaS=1.15,k=1.08)
-S450C= reinforcingSteel.ReinforcingSteel(nmbAcero="S450C", fyk=450e6, emax=0.075,gammaS=1.15,k=1.15)
+S450A= concrete_base.ReinforcingSteel(nmbAcero="S450A", fyk=450e6, emax=0.025,gammaS=1.15,k=1.05)
+S450B= concrete_base.ReinforcingSteel(nmbAcero="S450B", fyk=450e6, emax=0.05,gammaS=1.15,k=1.08)
+S450C= concrete_base.ReinforcingSteel(nmbAcero="S450C", fyk=450e6, emax=0.075,gammaS=1.15,k=1.15)
 
-S500A= reinforcingSteel.ReinforcingSteel(nmbAcero="S500A", fyk=500e6, emax=0.025,gammaS=1.15,k=1.05)
-S500B= reinforcingSteel.ReinforcingSteel(nmbAcero="S500B", fyk=500e6, emax=0.05,gammaS=1.15,k=1.08)
-S500C= reinforcingSteel.ReinforcingSteel(nmbAcero="S500C", fyk=500e6, emax=0.075,gammaS=1.15,k=1.15)
+S500A= concrete_base.ReinforcingSteel(nmbAcero="S500A", fyk=500e6, emax=0.025,gammaS=1.15,k=1.05)
+S500B= concrete_base.ReinforcingSteel(nmbAcero="S500B", fyk=500e6, emax=0.05,gammaS=1.15,k=1.08)
+S500C= concrete_base.ReinforcingSteel(nmbAcero="S500C", fyk=500e6, emax=0.075,gammaS=1.15,k=1.15)
 
-S550A= reinforcingSteel.ReinforcingSteel(nmbAcero="S550A", fyk=550e6, emax=0.025,gammaS=1.15,k=1.05)
-S550B= reinforcingSteel.ReinforcingSteel(nmbAcero="S550B", fyk=550e6, emax=0.05,gammaS=1.15,k=1.08)
-S550C= reinforcingSteel.ReinforcingSteel(nmbAcero="S550C", fyk=550e6, emax=0.075,gammaS=1.15,k=1.15)
+S550A= concrete_base.ReinforcingSteel(nmbAcero="S550A", fyk=550e6, emax=0.025,gammaS=1.15,k=1.05)
+S550B= concrete_base.ReinforcingSteel(nmbAcero="S550B", fyk=550e6, emax=0.05,gammaS=1.15,k=1.08)
+S550C= concrete_base.ReinforcingSteel(nmbAcero="S550C", fyk=550e6, emax=0.075,gammaS=1.15,k=1.15)
 
-S600A= reinforcingSteel.ReinforcingSteel(nmbAcero="S600A", fyk=600e6, emax=0.025,gammaS=1.15,k=1.05)
-S600B= reinforcingSteel.ReinforcingSteel(nmbAcero="S600B", fyk=600e6, emax=0.05,gammaS=1.15,k=1.08)
-S600C= reinforcingSteel.ReinforcingSteel(nmbAcero="S600C", fyk=600e6, emax=0.075,gammaS=1.15,k=1.15)
+S600A= concrete_base.ReinforcingSteel(nmbAcero="S600A", fyk=600e6, emax=0.025,gammaS=1.15,k=1.05)
+S600B= concrete_base.ReinforcingSteel(nmbAcero="S600B", fyk=600e6, emax=0.05,gammaS=1.15,k=1.08)
+S600C= concrete_base.ReinforcingSteel(nmbAcero="S600C", fyk=600e6, emax=0.075,gammaS=1.15,k=1.15)
 
 # rebars as defined in Eurocode 2.
 rebarsEC2={}
