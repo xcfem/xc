@@ -16,13 +16,10 @@ import math
 import xc_base
 import geom
 import xc
-import scipy.interpolate
-
-
-from materials import structural_steel
+from materials.ec3 import EC3_materials
 from materials.structural_shapes.arcelor import perfiles_he_arcelor as he
 
-S355JR= structural_steel.S355JR
+S355JR= EC3_materials.S355JR
 gammaM0= 1.00
 S355JR.gammaM= gammaM0 
 HEB340= he.HEProfile(S355JR,'HE_340_B')

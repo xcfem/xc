@@ -282,6 +282,10 @@
 /usr/local/lib/python2.7/dist-packages/materials/aceros_armar.pyc
 /usr/local/lib/python2.7/dist-packages/materials/aceros_estructurales.py
 /usr/local/lib/python2.7/dist-packages/materials/aceros_estructurales.pyc
+/usr/local/lib/python2.7/dist-packages/materials/aci/ACI_materials.py
+/usr/local/lib/python2.7/dist-packages/materials/aci/ACI_materials.pyc
+/usr/local/lib/python2.7/dist-packages/materials/aci/__init__.py
+/usr/local/lib/python2.7/dist-packages/materials/aci/__init__.pyc
 /usr/local/lib/python2.7/dist-packages/materials/anchor_bolts/EOTA_TR029.py
 /usr/local/lib/python2.7/dist-packages/materials/anchor_bolts/EOTA_TR029.pyc
 /usr/local/lib/python2.7/dist-packages/materials/anchor_bolts/EOTA_TR029_tension.py
@@ -294,6 +298,10 @@
 /usr/local/lib/python2.7/dist-packages/materials/apoyosNeopreno.pyc
 /usr/local/lib/python2.7/dist-packages/materials/apoyosPot.py
 /usr/local/lib/python2.7/dist-packages/materials/apoyosPot.pyc
+/usr/local/lib/python2.7/dist-packages/materials/astm/ASTM_materials.py
+/usr/local/lib/python2.7/dist-packages/materials/astm/ASTM_materials.pyc
+/usr/local/lib/python2.7/dist-packages/materials/astm/__init__.py
+/usr/local/lib/python2.7/dist-packages/materials/astm/__init__.pyc
 /usr/local/lib/python2.7/dist-packages/materials/bridge_bearings.py
 /usr/local/lib/python2.7/dist-packages/materials/bridge_bearings.pyc
 /usr/local/lib/python2.7/dist-packages/materials/coefsDistorsion.py
@@ -346,6 +354,8 @@
 /usr/local/lib/python2.7/dist-packages/materials/ec3/EC3HEProfile.pyc
 /usr/local/lib/python2.7/dist-packages/materials/ec3/EC3IPEProfile.py
 /usr/local/lib/python2.7/dist-packages/materials/ec3/EC3IPEProfile.pyc
+/usr/local/lib/python2.7/dist-packages/materials/ec3/EC3_materials.py
+/usr/local/lib/python2.7/dist-packages/materials/ec3/EC3_materials.pyc
 /usr/local/lib/python2.7/dist-packages/materials/ec3/EC3Profile.py
 /usr/local/lib/python2.7/dist-packages/materials/ec3/EC3Profile.pyc
 /usr/local/lib/python2.7/dist-packages/materials/ec3/EC3steel.py

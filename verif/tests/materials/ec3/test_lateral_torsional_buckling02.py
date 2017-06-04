@@ -20,10 +20,10 @@ import scipy.interpolate
 
 
 from materials.ec3 import lateral_torsional_buckling as ltb
-from materials import structural_steel as steel
+from materials.ec3 import EC3_materials
 from materials.ec3 import EC3IPEProfile as EC3IPE
 
-S355JR= steel.S355JR
+S355JR= EC3_materials.S355JR
 gammaM0= 1.05
 S355JR.gammaM= gammaM0 
 IPE400= EC3IPE.EC3IPEProfile(S355JR,"IPE_400")

@@ -7,7 +7,7 @@ import geom
 import xc
 
 from materials.structural_shapes.arcelor import perfiles_ipe_arcelor as ipe
-from materials import structural_steel as steel
+from materials.ec3 import EC3_materials
 
 __author__= "Luis C. Pérez Tato (LCPT)"
 __copyright__= "Copyright 2014, LCPT"
@@ -18,7 +18,7 @@ __email__= "l.pereztato@gmail.com"
 test= xc.ProblemaEF()
 preprocessor=  test.getPreprocessor
 
-S275JR= steel.S275JR
+S275JR= EC3_materials.S275JR
 S275JR.gammaM= 1.05
 epp= S275JR.getDesignElasticPerfectlyPlasticMaterial(preprocessor, "epp")
 IPE200= ipe.IPEProfile(S275JR,'IPE_200')

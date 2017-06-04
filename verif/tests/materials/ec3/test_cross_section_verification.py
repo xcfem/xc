@@ -19,11 +19,11 @@ import xc
 import scipy.interpolate
 
 
-from materials import structural_steel as steel
+from materials.ec3 import EC3_materials
 from materials.ec3 import EC3IPEProfile as EC3IPE
 from rough_calculations import ng_simple_beam as sb
 
-S355JR= steel.S355JR
+S355JR= EC3_materials.S355JR
 gammaM0= 1.0
 S355JR.gammaM= gammaM0 
 IPE400= EC3IPE.EC3IPEProfile(S355JR,"IPE_400")

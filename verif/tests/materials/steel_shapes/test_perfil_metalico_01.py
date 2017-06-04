@@ -10,6 +10,7 @@ from model import predefined_spaces
 from materials import typical_materials
 from materials.structural_shapes.arcelor import perfiles_he_arcelor as HE_profiles
 from materials import structural_steel
+from materials.ec3 import EC3_materials
 from postprocess import def_params_control as dp
 from postprocess import def_vars_control as vc
 from postprocess import callback_controls as cc
@@ -38,7 +39,7 @@ nod= nodes.newNodeXYZ(L,0.0,0.0)
 trfs= preprocessor.getTransfCooLoader
 lin= trfs.newLinearCrdTransf3d("lin")
 lin.xzVector= xc.Vector([0,1,0])
-S275JR= structural_steel.S275JR
+S275JR= EC3_materials.S275JR
 gammaM0= 1.05
 S275JR.gammaM= gammaM0 
 HE400B= structural_steel.SteelProfile(S275JR,"HE_400_B",HE_profiles.perfilesHE)
