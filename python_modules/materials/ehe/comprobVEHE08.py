@@ -2,7 +2,7 @@
 from __future__ import division
 import math
 import sys
-from materials.ehe import EHE_concrete
+from materials.ehe import EHE_materials
 
 '''Comprobación de una sección de hormigón frente a cortante según la EHE-08.#
 '''
@@ -181,7 +181,7 @@ def getVu2EHE08NoAt(M,Mfis,fcv,fck,gammaC,I,S,alphaL,Ncd,Ac,b0,d,AsPas,AsAct):
     Devuelve el valor de Vu2 (cortante de agotamiento por tracción en el alma)
     para piezas SIN reinforcement de cortante, según los artículos 44.2.3.2.1.1 y 44.2.3.2.1.2 de EHE-08.
     '''
-    concrTmp=EHE_concrete.EHEConcrete("HA",fck,gammaC)
+    concrTmp= EHE_materials.EHEConcrete("HA",fck,gammaC)
     fctdTmp=concrTmp.fctkEHE08()/gammaC
     fcdTmp=fck/gammaC
     if M<=Mfis:

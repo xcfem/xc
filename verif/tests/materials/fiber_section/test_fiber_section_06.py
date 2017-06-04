@@ -16,8 +16,7 @@ import xc_base
 import geom
 import xc
 
-from materials.ehe import EHE_concrete
-from materials.ehe import EHE_reinforcing_steel
+from materials.ehe import EHE_materials
 
 # Coeficientes de seguridad.
 gammac= 1.5 # Coeficiente de minoración de la resistencia del hormigón.
@@ -33,22 +32,22 @@ prueba= xc.ProblemaEF()
 prueba.logFileName= "/tmp/borrar.log" # Ignore warning messages
 preprocessor=  prueba.getPreprocessor
 
-concr=EHE_concrete.HA25
+concr= EHE_materials.HA25
 concr.alfacc=0.85    #f_maxd= 0.85*fcd coeficiente de fatiga del hormigón (generalmente alfacc=1)
 
 tag= concr.defDiagD(preprocessor)
-tag= EHE_reinforcing_steel.B500S.defDiagD(preprocessor)
+tag= EHE_materials.B500S.defDiagD(preprocessor)
 # Define materials
 import os
 pth= os.path.dirname(__file__)
 if(not pth):
   pth= "."
 #print "pth= ", pth
-execfile(pth+"/secc_hormigon_01.py")
+execfile(pth+"/concrete_section_01.py")
 
 secHA= preprocessor.getMaterialLoader.newMaterial("fiber_section_3d","secHA")
 fiberSectionRepr= secHA.getFiberSectionRepr()
-fiberSectionRepr.setGeomNamed("geomSecHormigon01")
+fiberSectionRepr.setGeomNamed("concreteSectionGeom01")
 secHA.setupFibers()
 
 epsG1= CurvZ1*(defSec['depth']/2-x1)

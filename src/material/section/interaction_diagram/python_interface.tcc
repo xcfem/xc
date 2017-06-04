@@ -45,8 +45,8 @@ class_<XC::InteractionDiagramData, bases<EntCmd>>("InteractionDiagramParameters"
   .add_property("incEps",make_function(&XC::InteractionDiagramData::getIncEps,return_value_policy<copy_const_reference>()),&XC::InteractionDiagramData::setIncEps)
   .add_property("incTheta",make_function(&XC::InteractionDiagramData::getIncTheta,return_value_policy<copy_const_reference>()),&XC::InteractionDiagramData::setIncTheta)
   .add_property("defsAgotPivots",make_function(&XC::InteractionDiagramData::getDefsAgotPivots,return_internal_reference<>()),&XC::InteractionDiagramData::setDefsAgotPivots)
-  .add_property("nmbSetHormigon",make_function(&XC::InteractionDiagramData::getNmbSetHormigon,return_internal_reference<>()),&XC::InteractionDiagramData::setNmbSetHormigon)
-  .add_property("tagHormigon",make_function(&XC::InteractionDiagramData::getTagHormigon,return_value_policy<copy_const_reference>()),&XC::InteractionDiagramData::setTagHormigon)
+  .add_property("concreteSetName",make_function(&XC::InteractionDiagramData::getConcreteSetName,return_internal_reference<>()),&XC::InteractionDiagramData::setConcreteSetName)
+  .add_property("concreteTag",make_function(&XC::InteractionDiagramData::getConcreteTag,return_value_policy<copy_const_reference>()),&XC::InteractionDiagramData::setConcreteTag)
   .add_property("nmbSetArmadura",make_function(&XC::InteractionDiagramData::getNmbSetArmadura,return_internal_reference<>()),&XC::InteractionDiagramData::setNmbSetArmadura)
   .add_property("tagArmadura",make_function(&XC::InteractionDiagramData::getTagArmadura,return_value_policy<copy_const_reference>()),&XC::InteractionDiagramData::setTagArmadura)
   ;

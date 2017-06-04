@@ -4,8 +4,7 @@
 import xc_base
 import geom
 import xc
-from materials.ehe import EHE_concrete
-from materials.ehe import EHE_reinforcing_steel
+from materials.ehe import EHE_materials
 from materials.fiber_section import defSeccionHASimple
 from postprocess import RCMaterialDistribution
 from materials import RCsectionsContainer as sc
@@ -38,12 +37,12 @@ for eTag in elementTags:
   reinfConcreteSections.sectionDistribution[eTag]= ["deck2","deck1"]
 
 # deck.
-concrete= EHE_concrete.HA30
-concrete.alfacc=0.85  #f_maxd= 0.85*fcd coef. de fatiga del hormigón (en general alfacc=1)
-reinfSteel= EHE_reinforcing_steel.B500S
+concrete= EHE_materials.HA30
+concrete.alfacc= 0.85  #f_maxd= 0.85*fcd coef. de fatiga del hormigón (en general alfacc=1)
+reinfSteel= EHE_materials.B500S
 areaFi8= 0.50e-4 #XXX Área de las barras expressed in square meters.
-areaFi10=0.785e-4
-areaFi12=1.13e-4 
+areaFi10= 0.785e-4
+areaFi12= 1.13e-4 
 areaFi16= 2.01e-4
 areaFi20= 3.14e-4
 areaFi25= 4.608e-4

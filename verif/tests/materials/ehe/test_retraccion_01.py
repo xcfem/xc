@@ -11,14 +11,14 @@ __email__= "l.pereztato@gmail.com"
 import xc_base
 import geom
 import xc
-from materials.ehe import EHE_concrete
+from materials.ehe import EHE_materials
 import math
 
 tS= 7
 velCemento= "normal"
-concrHA30=EHE_concrete.HA30
+concrHA30= EHE_materials.HA30
 concrHA30.cemType='N'
-concrHA70=EHE_concrete.HA70
+concrHA70= EHE_materials.HA70
 concrHA70.cemType='N'
 
 # Comprobamos con los valores de la tabla 39.7.c de la norma.

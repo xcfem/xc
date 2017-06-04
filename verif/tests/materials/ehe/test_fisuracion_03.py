@@ -16,8 +16,7 @@ from misc import banco_pruebas_scc3d
 from solution import predefined_solutions # Procedimiento de solución
 
 
-from materials.ehe import EHE_concrete
-from materials.ehe import EHE_reinforcing_steel
+from materials.ehe import EHE_materials
 from materials.ehe import fisuracionEHE
 from model import predefined_spaces
 
@@ -33,24 +32,24 @@ MzDato= 0 # Momento para comprobar fisuración.
 prueba= xc.ProblemaEF()
 preprocessor=  prueba.getPreprocessor
 # Materials definition
-concr=EHE_concrete.HA25
+concr= EHE_materials.HA25
 concrMatTag25= concr.defDiagK(preprocessor)
-tagB500S= EHE_reinforcing_steel.B500S.defDiagK(preprocessor)
+tagB500S= EHE_materials.B500S.defDiagK(preprocessor)
 
 geomSecHA= preprocessor.getMaterialLoader.newSectionGeometry("geomSecHA")
 regiones= geomSecHA.getRegions
-hormigon= regiones.newQuadRegion(concr.nmbDiagK)
-hormigon.nDivIJ= 10
-hormigon.nDivJK= 10
-hormigon.pMin= geom.Pos2d(-width/2.0,-depth/2.0)
-hormigon.pMax= geom.Pos2d(width/2.0,depth/2.0)
+concrete= regiones.newQuadRegion(concr.nmbDiagK)
+concrete.nDivIJ= 10
+concrete.nDivJK= 10
+concrete.pMin= geom.Pos2d(-width/2.0,-depth/2.0)
+concrete.pMax= geom.Pos2d(width/2.0,depth/2.0)
 reinforcement= geomSecHA.getReinfLayers
-reinforcementInf= reinforcement.newStraightReinfLayer(EHE_reinforcing_steel.B500S.nmbDiagK)
+reinforcementInf= reinforcement.newStraightReinfLayer(EHE_materials.B500S.nmbDiagK)
 reinforcementInf.numReinfBars= 2
 reinforcementInf.barArea= areaFi25
 reinforcementInf.p1= geom.Pos2d(cover-width/2.0,cover-depth/2.0) # Armadura inferior.
 reinforcementInf.p2= geom.Pos2d(width/2.0-cover,cover-depth/2.0)
-reinforcementSup= reinforcement.newStraightReinfLayer(EHE_reinforcing_steel.B500S.nmbDiagK)
+reinforcementSup= reinforcement.newStraightReinfLayer(EHE_materials.B500S.nmbDiagK)
 reinforcementSup.numReinfBars= 2
 reinforcementSup.barArea= areaFi25
 reinforcementSup.p1= geom.Pos2d(cover-width/2.0,depth/2.0-cover) # Armadura superior.
@@ -96,7 +95,7 @@ secHAParamsFis= fisuracionEHE.CrackControl('SLS_crack')
 elementos= preprocessor.getElementLoader
 ele1= elementos.getElement(1)
 scc= ele1.getSection()
-secHAParamsFis.calcApertCaracFis(scc,concr.matTagK,EHE_reinforcing_steel.B500S.matTagK,concr.fctm())
+secHAParamsFis.calcApertCaracFis(scc,concr.matTagK,EHE_materials.B500S.matTagK,concr.fctm())
 
 #wkcomp changed from 0.550225e-3 to 0.55189e-3 after considering fmaxK=fck instead of 0.85fck
 

@@ -5,7 +5,7 @@ import xc_base
 import geom
 import xc
 
-from materials.ehe import EHE_reinforcing_steel
+from materials.ehe import EHE_materials
 from materials import reinforcingSteelTest
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
@@ -19,7 +19,7 @@ prueba= xc.ProblemaEF()
 prueba.logFileName= "/tmp/borrar.log" # Para no imprimir mensajes de advertencia
 preprocessor=  prueba.getPreprocessor
 # Define materials
-errMax= reinforcingSteelTest.testDiagDAceroArmar(preprocessor, EHE_reinforcing_steel.B500S)
+errMax= reinforcingSteelTest.testDiagDAceroArmar(preprocessor, EHE_materials.B500S)
 
 
 # print "errMax= ",(errMax)

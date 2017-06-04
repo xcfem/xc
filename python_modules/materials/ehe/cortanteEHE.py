@@ -17,7 +17,7 @@ class ShearControllerEHE(lsc.LimitStateControllerBase):
   '''Parameters for shear control with EHE.'''
   def __init__(self,limitStateLabel):
     super(ShearControllerEHE,self).__init__(limitStateLabel)
-    self.concreteFibersSetName= "hormigon" #Name of the concrete fibers set.
+    self.concreteFibersSetName= "concrete" #Name of the concrete fibers set.
     self.rebarFibersSetName= "reinforcement" #Name of the rebar fibers set.
     self.tensionedRebarsFiberSetName= "reinforcementTraccion" #Name of the tensioned rebars set.
     self.hayMom= False #Verdadero si la sección está sometida a momento.
@@ -32,11 +32,11 @@ class ShearControllerEHE(lsc.LimitStateControllerBase):
     self.strutWidth= 0.0 #Compressed strut width «b0».
     self.I= 0.0 #Momento of inertia of the section with respect to the neutral axis in régimen elástico.
     self.S= 0.0 #First moment of area of the section with respect to the neutral axis in régimen elástico.
-    self.areaHormigon= 0.0 #Area de la sección de hormigón.
+    self.concreteArea= 0.0 #Area de la sección de hormigón.
     self.numBarrasTraccion= 0 #Número de barras sometidas a tracción.
     self.areaRebarTracc= 0.0 #Area total de las barras traccionadas.
     self.eps1= 0.0 #Maximum strain in concrete.
-    self.axilHormigon= 0.0 #Esfuerzo axil soportado por el hormigón.
+    self.concreteAxialForce= 0.0 #Esfuerzo axil soportado por el hormigón.
     self.E0= 0.0 #Módulo de rigidez tangente del hormigón.
 
     self.alphaL= 1.0 #Factor que depende de la transferencia de pretensado.
@@ -53,28 +53,28 @@ class ShearControllerEHE(lsc.LimitStateControllerBase):
     self.Vu2= 0.0 #Agotamiento por tracción en el alma.
     self.Vu= 0.0 #Cortante último de la sección.
 
-  def calcVuEHE08NoAt(self, preprocessor, scc, hormigon, aceroArmar):
+  def calcVuEHE08NoAt(self, preprocessor, scc, concrete, aceroArmar):
     ''' Calcula el cortante último de la sección sin reinforcement de cortante.
      XXX Falta considerar la reinforcement activa.
      matTagAceroArmar: Identificador del material empleado para modelizar el acero de armar.
-     hormigon: Parámetros para modelizar el hormigón.
+     concrete: Parámetros para modelizar el hormigón.
      aceroArmar: Parámetros para modelizar el acero de armar.'''
-    self.matTagHormigon= hormigon.matTagD
-    self.fckH= abs(hormigon.fck)
-    self.fcdH= abs(hormigon.fcd())
-    self.fctdH= hormigon.fctd()
-    self.gammaC= hormigon.gmmC
+    self.concreteMatTag= concrete.matTagD
+    self.fckH= abs(concrete.fck)
+    self.fcdH= abs(concrete.fcd())
+    self.fctdH= concrete.fctd()
+    self.gammaC= concrete.gmmC
     self.matTagAceroArmar= aceroArmar.matTagD
     self.fydS= aceroArmar.fyd()
 
     if(not scc.hasProp("rcSets")):
-      scc.setProp("rcSets", createFiberSets.fiberSectionSetupRC3Sets(scc,self.matTagHormigon,self.concreteFibersSetName,self.matTagAceroArmar,self.rebarFibersSetName))
+      scc.setProp("rcSets", createFiberSets.fiberSectionSetupRC3Sets(scc,self.concreteMatTag,self.concreteFibersSetName,self.matTagAceroArmar,self.rebarFibersSetName))
     rcSets= scc.getProp("rcSets")
 
     concrFibers= rcSets.concrFibers.fSet
-    self.areaHormigon= rcSets.getConcreteArea(1)
-    if(self.areaHormigon<1e-6):
-      errMsg= "concrete area too smail; Ac= " + str(self.areaHormigon) + " m2\n"
+    self.concreteArea= rcSets.getConcreteArea(1)
+    if(self.concreteArea<1e-6):
+      errMsg= "concrete area too smail; Ac= " + str(self.concreteArea) + " m2\n"
       sys.stderr.write(errMsg)
     else:
       reinfFibers= rcSets.reinfFibers.fSet
@@ -84,19 +84,19 @@ class ShearControllerEHE(lsc.LimitStateControllerBase):
       if(self.hayMom):
         self.eps1= rcSets.getMaxConcreteStrain()
         self.E0= rcSets.getConcreteInitialTangent()
-        self.axilHormigon= rcSets.getConcreteCompression()
+        self.concreteAxialForce= rcSets.getConcreteCompression()
         self.strutWidth= scc.getCompressedStrutWidth() # b0
         if((self.E0*self.eps1)<self.fctdH): # Sección no fisurada
           self.I= scc.getHomogenizedI(self.E0)
           self.S= scc.getSPosHomogeneizada(self.E0)
-          self.Vu2= comprobVEHE08.getVu2EHE08NoAtNoFis(self.fctdH,self.I,self.S,self.strutWidth,self.alphaL,self.axilHormigon,self.areaHormigon)
+          self.Vu2= comprobVEHE08.getVu2EHE08NoAtNoFis(self.fctdH,self.I,self.S,self.strutWidth,self.alphaL,self.concreteAxialForce,self.concreteArea)
         else: # Sección fisurada
           self.depthUtil= scc.getCantoUtil() # d
           if(self.numBarrasTraccion>0):
             self.areaRebarTracc= reinforcementTraccion.getArea(1)
           else:
             self.areaRebarTracc= 0.0
-          self.Vu2= comprobVEHE08.getVu2EHE08NoAtSiFis(self.fckH,self.fcdH,self.gammaC,self.axilHormigon,self.areaHormigon,self.strutWidth,self.depthUtil,self.areaRebarTracc,0.0)
+          self.Vu2= comprobVEHE08.getVu2EHE08NoAtSiFis(self.fckH,self.fcdH,self.gammaC,self.concreteAxialForce,self.concreteArea,self.strutWidth,self.depthUtil,self.areaRebarTracc,0.0)
         self.Vcu= self.Vu2
         self.Vsu= 0.0
         self.Vu1= -1.0
@@ -105,13 +105,13 @@ class ShearControllerEHE(lsc.LimitStateControllerBase):
         axis= scc.getInternalForcesAxis()
         self.I= scc.getFibers().getHomogenizedSectionIRelToLine(self.E0,axis)
         self.S= scc.getFibers().getSPosHomogenizedSection(self.E0,geom.HalfPlane2d(axis))
-        self.Vu2= comprobVEHE08.getVu2EHE08NoAtNoFis(self.fctdH,self.I,self.S,self.strutWidth,self.alphaL,self.axilHormigon,self.areaHormigon)
+        self.Vu2= comprobVEHE08.getVu2EHE08NoAtNoFis(self.fctdH,self.I,self.S,self.strutWidth,self.alphaL,self.concreteAxialForce,self.concreteArea)
 
-  def calcVuEHE08SiAt(self, preprocessor, scc, paramsTorsion, hormigon, aceroArmar, Nd, Md, Vd, Td):
+  def calcVuEHE08SiAt(self, preprocessor, scc, paramsTorsion, concrete, aceroArmar, Nd, Md, Vd, Td):
     ''' Calcula el cortante último de la sección CON reinforcement de cortante.
      XXX Falta considerar la reinforcement activa.
      matTagAceroArmar: Identificador del material empleado para modelizar el acero de armar.
-     hormigon: Nombre del material empleado para modelizar el hormigón.
+     concrete: Nombre del material empleado para modelizar el hormigón.
      aceroArmar: Nombre del material empleado para modelizar el acero de armar.
      Nd: Valor de cálculo del axil (aquí positivo si es de tracción)
      Md: Valor absoluto del momento de cálculo.
@@ -120,30 +120,30 @@ class ShearControllerEHE(lsc.LimitStateControllerBase):
     self.VuAe= paramsTorsion.Ae()
     self.Vuue= paramsTorsion.ue()
 
-    self.matTagHormigon= hormigon.matTagD
-    self.fckH= abs(hormigon.fck)
-    self.fcdH= abs(hormigon.fcd())
-    self.fctdH= abs(hormigon.fctd())
-    self.gammaC= abs(hormigon.gmmC)
+    self.concreteMatTag= concrete.matTagD
+    self.fckH= abs(concrete.fck)
+    self.fcdH= abs(concrete.fcd())
+    self.fctdH= abs(concrete.fctd())
+    self.gammaC= abs(concrete.gmmC)
     self.matTagAceroArmar= aceroArmar.matTagD
     self.fydS= aceroArmar.fyd()
 
-    createFiberSets.fiberSectionSetupRC3Sets(scc,self.matTagHormigon,self.concreteFibersSetName,self.matTagAceroArmar,self.rebarFibersSetName)
+    createFiberSets.fiberSectionSetupRC3Sets(scc,self.concreteMatTag,self.concreteFibersSetName,self.matTagAceroArmar,self.rebarFibersSetName)
     concrFibers= scc.getFiberSets()[self.concreteFibersSetName]
     reinfFibers= scc.getFiberSets()[self.rebarFibersSetName]
     reinforcementTraccion= scc.getFiberSets()[self.tensionedRebarsFiberSetName]
 
     self.hayMom= scc.isSubjectedToBending(0.1)
     self.numBarrasTraccion= reinforcementTraccion.getNumFibers()
-    self.areaHormigon= concrFibers.getArea(1)
-    if(self.areaHormigon<1e-6):
-      errMsg= "concrete area too smail; Ac= " + str(self.areaHormigon) + " m2\n"
+    self.concreteArea= concrFibers.getArea(1)
+    if(self.concreteArea<1e-6):
+      errMsg= "concrete area too smail; Ac= " + str(self.concreteArea) + " m2\n"
       sys.stderr.write(errMsg)
     else:
       if(self.hayMom):
         self.eps1= concrFibers.getStrainMax()
         self.E0= concrFibers[0].getMaterial().getInitialTangent()
-        self.axilHormigon= concrFibers.ResultanteComp()
+        self.concreteAxialForce= concrFibers.ResultanteComp()
         self.modElastArmadura= reinfFibers[0].getMaterial().getInitialTangent()
         self.strutWidth= scc.getCompressedStrutWidth() # b0
         self.depthUtil= scc.getCantoUtil() # d
@@ -153,27 +153,27 @@ class ShearControllerEHE(lsc.LimitStateControllerBase):
         else:
           self.areaRebarTracc= 0.0
         self.thetaFisuras= comprobVEHE08.getAnguloInclinacionFisurasEHE08(Nd,Md,Vd,Td,self.brazoMecanico,self.areaRebarTracc,0.0,self.modElastArmadura,0.0,0.0,self.VuAe,self.Vuue)
-        self.Vcu= comprobVEHE08.getVcuEHE08(self.fckH,self.fcdH,self.gammaC,self.axilHormigon,self.areaHormigon,self.strutWidth,self.depthUtil,self.brazoMecanico,self.areaRebarTracc,0.0,self.theta,Nd,Md,Vd,Td,self.modElastArmadura,0.0,0.0,self.VuAe,self.Vuue)
-        self.Vu1= comprobVEHE08.getVu1EHE08(self.fckH,self.fcdH,self.axilHormigon,self.areaHormigon,self.strutWidth,self.depthUtil,self.alpha,self.theta)
+        self.Vcu= comprobVEHE08.getVcuEHE08(self.fckH,self.fcdH,self.gammaC,self.concreteAxialForce,self.concreteArea,self.strutWidth,self.depthUtil,self.brazoMecanico,self.areaRebarTracc,0.0,self.theta,Nd,Md,Vd,Td,self.modElastArmadura,0.0,0.0,self.VuAe,self.Vuue)
+        self.Vu1= comprobVEHE08.getVu1EHE08(self.fckH,self.fcdH,self.concreteAxialForce,self.concreteArea,self.strutWidth,self.depthUtil,self.alpha,self.theta)
         self.Vsu= comprobVEHE08.getVsuEHE08(self.brazoMecanico,self.alpha,self.theta,self.AsTrsv,self.fydS)
         self.Vu2= self.Vcu+self.Vsu
         self.Vu= min(self.Vu1,self.Vu2)
       else: # Sección no fisurada
         sys.stderr.write("La comprobación del cortante sin momento no está implementada.")
 
-  def calcVuEHE08(self, preprocessor, scc, nmbParamsTorsion, hormigon, aceroArmar, Nd, Md, Vd, Td):
+  def calcVuEHE08(self, preprocessor, scc, nmbParamsTorsion, concrete, aceroArmar, Nd, Md, Vd, Td):
     '''  Calcula el cortante último de la sección.
      XXX Falta considerar la reinforcement activa.
-     hormigon: parameters to model concrete.
+     concrete: parameters to model concrete.
      aceroArmar: parameters to model rebar's steel.
      Nd: Valor de cálculo del axil (aquí positivo si es de tracción)
      Md: Valor absoluto del momento de cálculo.
      Vd: Valor absoluto del cortante efectivo de cálculo (artículo 42.2.2).
      Td: Torsor de cálculo.'''
     if(self.AsTrsv==0):
-      self.calcVuEHE08NoAt(preprocessor,scc,hormigon,aceroArmar)
+      self.calcVuEHE08NoAt(preprocessor,scc,concrete,aceroArmar)
     else:
-      self.calcVuEHE08SiAt(preprocessor,scc,nmbParamsTorsion,hormigon,aceroArmar,Nd,Md,Vd,Td)
+      self.calcVuEHE08SiAt(preprocessor,scc,nmbParamsTorsion,concrete,aceroArmar,Nd,Md,Vd,Td)
 
 
   def check(self,elements,nmbComb):
@@ -192,7 +192,7 @@ class ShearControllerEHE(lsc.LimitStateControllerBase):
       scc= e.getSection()
       idSection= e.getProp("idSection")
       section= scc.getProp("datosSecc")
-      codHormigon= section.concrType
+      concreteCode= section.concrType
       codArmadura= section.reinfSteelType
       AsTrsv= section.shReinfY.getAs()
       alpha= section.shReinfY.angAlphaShReinf
@@ -205,20 +205,20 @@ class ShearControllerEHE(lsc.LimitStateControllerBase):
       VzTmp= scc.getStressResultantComponent("Vz")
       VTmp= math.sqrt((VyTmp)**2+(VzTmp)**2)
       TTmp= scc.getStressResultantComponent("Mx")
-      secHAParamsCortante.calcVuEHE08(preprocessor,scc,secHAParamsTorsion,codHormigon,codArmadura,NTmp,MTmp,VTmp,TTmp)
+      secHAParamsCortante.calcVuEHE08(preprocessor,scc,secHAParamsTorsion,concreteCode,codArmadura,NTmp,MTmp,VTmp,TTmp)
 
       if(secHAParamsCortante.Vu<VTmp):
         theta= max(secHAParamsCortante.thetaMin,min(secHAParamsCortante.thetaMax,secHAParamsCortante.thetaFisuras))
-        secHAParamsCortante.calcVuEHE08(preprocessor,scc,secHAParamsTorsion,codHormigon,codArmadura,NTmp,MTmp,VTmp,TTmp)
+        secHAParamsCortante.calcVuEHE08(preprocessor,scc,secHAParamsTorsion,concreteCode,codArmadura,NTmp,MTmp,VTmp,TTmp)
       if(secHAParamsCortante.Vu<VTmp):
         theta= (secHAParamsCortante.thetaMin+secHAParamsCortante.thetaMax)/2.0
-        secHAParamsCortante.calcVuEHE08(preprocessor,scc,secHAParamsTorsion,codHormigon,codArmadura,NTmp,MTmp,VTmp,TTmp)
+        secHAParamsCortante.calcVuEHE08(preprocessor,scc,secHAParamsTorsion,concreteCode,codArmadura,NTmp,MTmp,VTmp,TTmp)
       if(secHAParamsCortante.Vu<VTmp):
         theta= 0.95*secHAParamsCortante.thetaMax
-        secHAParamsCortante.calcVuEHE08(preprocessor,scc,secHAParamsTorsion,codHormigon,codArmadura,NTmp,MTmp,VTmp,TTmp)
+        secHAParamsCortante.calcVuEHE08(preprocessor,scc,secHAParamsTorsion,concreteCode,codArmadura,NTmp,MTmp,VTmp,TTmp)
       if(secHAParamsCortante.Vu<VTmp):
         theta= 1.05*secHAParamsCortante.thetaMin
-        secHAParamsCortante.calcVuEHE08(preprocessor,scc,secHAParamsTorsion,codHormigon,codArmadura,NTmp,MTmp,VTmp,TTmp)
+        secHAParamsCortante.calcVuEHE08(preprocessor,scc,secHAParamsTorsion,concreteCode,codArmadura,NTmp,MTmp,VTmp,TTmp)
       VuTmp= secHAParamsCortante.Vu
       if(VuTmp!=0.0):
         FCtmp= VTmp/VuTmp

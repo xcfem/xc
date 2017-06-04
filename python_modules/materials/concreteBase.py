@@ -647,8 +647,11 @@ def defDiagDConcrete(preprocessor, concreteRecord):
 
 
 
-# Calculates the differece between the stresses obtained from de Concrete01 uniaxial material (getStress() ) and the theoretical law defined in Python (see sigmac()).
-def testDiagDHormigon(preprocessor, concreteRecord):
+def concreteDesignDiagramTest(preprocessor, concreteRecord):
+    '''Calculates the differece between the stresses obtained from the
+       Concrete01 uniaxial material (getStress() ) and the 
+       theoretical law defined in Python (see sigmac()).
+    '''
     tag= concreteRecord.defDiagD(preprocessor)
     diagConcrete= preprocessor.getMaterialLoader.getMaterial(concreteRecord.nmbDiagD)
     incr= concreteRecord.epsilonU()/20
@@ -665,8 +668,11 @@ def testDiagDHormigon(preprocessor, concreteRecord):
       e=(e+incr)
     return errMax
 
-# Calculates the differece between the values of the tangent obtained from de Concrete01 uniaxial material (getTangent() ) and the theoretical law defined in Python (see tangc()).
-def testTangDHormigon(preprocessor, concreteRecord):
+def concreteDesignTangentTest(preprocessor, concreteRecord):
+    ''' Calculates the differece between the values of the tangent obtained
+     from de Concrete01 uniaxial material (getTangent() ) and the 
+     theoretical law defined in Python (see tangc()).
+    '''
     tag= concreteRecord.defDiagD(preprocessor)
     diagConcrete= preprocessor.getMaterialLoader.getMaterial(concreteRecord.nmbDiagD)
     incr= concreteRecord.epsilonU()/20

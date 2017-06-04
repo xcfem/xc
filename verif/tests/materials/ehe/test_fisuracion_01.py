@@ -10,8 +10,7 @@ from misc import banco_pruebas_scc3d
 from solution import predefined_solutions # Procedimiento de solución
 
 
-from materials.ehe import EHE_concrete
-from materials.ehe import EHE_reinforcing_steel
+from materials.ehe import EHE_materials
 from materials.ehe import fisuracionEHE
 from model import predefined_spaces
 
@@ -32,18 +31,18 @@ MyDato= 40e3 # Momento para comprobar fisuración.
 prueba= xc.ProblemaEF()
 preprocessor=  prueba.getPreprocessor
 # Materials definition
-concrMatTag25= EHE_concrete.HA25.defDiagK(preprocessor)
-tagB500S= EHE_reinforcing_steel.B500S.defDiagK(preprocessor)
+concrMatTag25= EHE_materials.HA25.defDiagK(preprocessor)
+tagB500S= EHE_materials.B500S.defDiagK(preprocessor)
 
 geomSecHA= preprocessor.getMaterialLoader.newSectionGeometry("geomSecHA")
 regiones= geomSecHA.getRegions
-hormigon= regiones.newQuadRegion(EHE_concrete.HA25.nmbDiagK)
-hormigon.nDivIJ= 10
-hormigon.nDivJK= 10
-hormigon.pMin= geom.Pos2d(-width/2.0,-depth/2.0)
-hormigon.pMax= geom.Pos2d(width/2.0,depth/2.0)
+concrete= regiones.newQuadRegion(EHE_materials.HA25.nmbDiagK)
+concrete.nDivIJ= 10
+concrete.nDivJK= 10
+concrete.pMin= geom.Pos2d(-width/2.0,-depth/2.0)
+concrete.pMax= geom.Pos2d(width/2.0,depth/2.0)
 reinforcement= geomSecHA.getReinfLayers
-reinforcementSup= reinforcement.newStraightReinfLayer(EHE_reinforcing_steel.B500S.nmbDiagK)
+reinforcementSup= reinforcement.newStraightReinfLayer(EHE_materials.B500S.nmbDiagK)
 reinforcementSup.numReinfBars= 7
 reinforcementSup.barArea= areaFi12
 reinforcementSup.p1= geom.Pos2d(cover-width/2.0,depth/2.0-cover) # Armadura superior (cara +).
@@ -92,7 +91,7 @@ secHAParamsFis= fisuracionEHE.CrackControl('SLS_crack')
 elementos= preprocessor.getElementLoader
 ele1= elementos.getElement(1)
 scc= ele1.getSection()
-secHAParamsFis.calcApertCaracFis(scc,EHE_concrete.HA25.matTagK,EHE_reinforcing_steel.B500S.matTagK,EHE_concrete.HA25.fctm())
+secHAParamsFis.calcApertCaracFis(scc,EHE_materials.HA25.matTagK,EHE_materials.B500S.matTagK,EHE_materials.HA25.fctm())
 
 ratio1= ((secHAParamsFis.Wk-0.21e-3)/0.21e-3)
 

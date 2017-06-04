@@ -21,8 +21,7 @@ import xc
 from misc import banco_pruebas_scc3d
 from solution import predefined_solutions
 
-from materials.ehe import EHE_concrete
-from materials.ehe import EHE_reinforcing_steel
+from materials.ehe import EHE_materials
 from materials.fiber_section import createFiberSets
 from materials import section_properties
 from model import predefined_spaces
@@ -45,21 +44,21 @@ NDato= 0.0
 prueba= xc.ProblemaEF()
 preprocessor=  prueba.getPreprocessor
 # Materials definition
-reinfMatTag= EHE_reinforcing_steel.B500S.defDiagD(preprocessor)
-dgDB500S= EHE_reinforcing_steel.B500S.getDiagD(preprocessor)
-concr=EHE_concrete.HA25
+reinfMatTag= EHE_materials.B500S.defDiagD(preprocessor)
+dgDB500S= EHE_materials.B500S.getDiagD(preprocessor)
+concr= EHE_materials.HA25
 concr.alfacc=0.85    #f_maxd= 0.85*fcd coeficiente de fatiga del hormigón (generalmente se toma alfacc=1)
-tagHormigon= concr.defDiagD(preprocessor)
+concreteTag= concr.defDiagD(preprocessor)
 
 import os
 pth= os.path.dirname(__file__)
 if(not pth):
   pth= "."
 #print "pth= ", pth
-execfile(pth+"/secc_hormigon_01.py")
+execfile(pth+"/concrete_section_01.py")
 secHA= preprocessor.getMaterialLoader.newMaterial("fiber_section_3d","secHA")
 fiberSectionRepr= secHA.getFiberSectionRepr()
-fiberSectionRepr.setGeomNamed("geomSecHormigon01")
+fiberSectionRepr.setGeomNamed("concreteSectionGeom01")
 secHA.setupFibers()
 
 banco_pruebas_scc3d.sectionModel(preprocessor, "secHA")
@@ -122,7 +121,7 @@ defN= scc.getSectionDeformationByName("defN")
 x= scc.getNeutralAxisDepth()
 Resul= scc.getStressResultant()
 Deform= scc.getSectionDeformation()
-setsRC= createFiberSets.fiberSectionSetupRCSets(scc,EHE_concrete.HA25.matTagD,"hormigon",EHE_reinforcing_steel.B500S.matTagD,"reinforcement")
+setsRC= createFiberSets.fiberSectionSetupRCSets(scc,EHE_materials.HA25.matTagD,'concrete',EHE_materials.B500S.matTagD,"reinforcement")
 
 
 fibraCEpsMin= -1

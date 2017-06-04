@@ -13,7 +13,7 @@ class CrackControl(cc.CrackControlBaseParameters):
   '''
   Define las propiedades del registro que contiene los parámetros de cálculo
      de la fisuración.'''
-  areaHormigon= 0.0 #Area de la sección de hormigón.
+  concreteArea= 0.0 #Area de la sección de hormigón.
   fctmFis= 0.0 #Resistencia media del hormigón a tracción.
   tensSRMediaBarrasTracc= 0.0 #Tensión media en las barras traccionadas en fisuración.
   iAreaMaxima= None #Barra traccionada de área máxima.
@@ -57,9 +57,9 @@ class CrackControl(cc.CrackControlBaseParameters):
 
 
   # Calcula la apertura característica de fisura.
-  def calcApertCaracFis(self, scc, matTagHormigon, matTagAceroArmar, fctm):
+  def calcApertCaracFis(self, scc, concreteMatTag, matTagAceroArmar, fctm):
     if(self.rcSets == None):
-      self.rcSets= createFiberSets.fiberSectionSetupRC3Sets(scc,matTagHormigon,self.concreteFibersSetName,matTagAceroArmar,self.rebarFibersSetName)
+      self.rcSets= createFiberSets.fiberSectionSetupRC3Sets(scc,concreteMatTag,self.concreteFibersSetName,matTagAceroArmar,self.rebarFibersSetName)
     concrFibers= self.rcSets.concrFibers.fSet
     reinfFibers= self.rcSets.reinfFibers.fSet
     reinforcementTraccion= self.rcSets.tensionFibers
@@ -75,7 +75,7 @@ class CrackControl(cc.CrackControlBaseParameters):
       self.eps2= max(concrFibers.getStrainMin(),0.0)
       self.k1= (self.eps1+self.eps2)/8/self.eps1
       self.E0= concrFibers[0].getMaterial().getInitialTangent()
-      self.areaHormigon= concrFibers.getSumaAreas(1)
+      self.concreteArea= concrFibers.getSumaAreas(1)
       self.depthMecanico= scc.getLeverArm()
       self.brazoMecanico= scc.getBrazoMecanico() # z
       self.widthMecanico= scc.getAnchoMecanico()
@@ -129,21 +129,21 @@ class CrackControl(cc.CrackControlBaseParameters):
         # \printParamFisBarra()
       self.tensSRMediaBarrasTracc= self.tensSRMediaBarrasTracc/self.areaRebarTracc
   def check(self,elements,nmbComb):
-    # Comprobación de las secciones de hormigón frente a fisuración.
+    ''' Crack control of concrete sections.'''
     print "Postprocessing combination: ",nmbComb,"\n"
 
     defParamsFisuracion("secHAParamsFisuracion")
     materiales= preprocessor.getMaterialLoader
-    hormigon= materiales.getMaterial(codHormigon)
-    tagHorm= hormigon.getProp("matTagK")
-    fctmHorm= hormigon.getProp("fctm")
+    concrete= materiales.getMaterial(concreteCode)
+    concrTag= concrete.getProp("matTagK")
+    concrFctm= concrete.getProp("fctm")
     reinforcement= materiales.getMaterial(codArmadura)
     for e in elements:
       scc= elements.getSeccion()
       Ntmp= scc.N
       MyTmp= scc.My
       MzTmp= scc.Mz
-      secHAParamsFisuracion= calcApertCaracFis(tagHorm,tagArmadura,fctmHorm)
+      secHAParamsFisuracion= calcApertCaracFis(concrTag,tagArmadura,concrFctm)
       Wk= secHAParamsFisuracion.Wk
       if(Wk>WkCP):
         WkCP= Wk # Caso pésimo

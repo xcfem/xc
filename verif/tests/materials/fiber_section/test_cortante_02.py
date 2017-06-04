@@ -12,12 +12,10 @@ from misc import banco_pruebas_scc3d
 from solution import predefined_solutions
 from model import predefined_spaces
 
-from materials.ehe import EHE_concrete
-from materials.ehe import EHE_reinforcing_steel
+from materials.ehe import EHE_materials
 from materials.ehe import comprobVEHE08
 from materials.ehe import cortanteEHE
 from materials.ehe import torsionEHE
-from materials.ehe import EHE_reinforcing_steel
 from materials import typical_materials
 
 import math
@@ -44,7 +42,7 @@ MzDato= 0        # Moment value when checking shear.
 VDato= 125e3     # Shear value.
 
 # Armadura longitudinal
-areaBarra= EHE_reinforcing_steel.Fi20
+areaBarra= EHE_materials.Fi20
 numBarras= 3
 
 # Armadura transversal
@@ -57,10 +55,10 @@ preprocessor=  prueba.getPreprocessor
 materiales= preprocessor.getMaterialLoader
 
 # Materials definition
-concr= EHE_concrete.HA30
+concr= EHE_materials.HA30
 concr.alfacc=0.85    # f_maxd= 0.85*fcd coeficiente de fatiga del hormigón (generalmente alfacc=1)
 concrMatTag30= concr.defDiagD(preprocessor)
-B500S= EHE_reinforcing_steel.B500S
+B500S= EHE_materials.B500S
 tagB500S= B500S.defDiagD(preprocessor)
 
 respT= typical_materials.defElasticMaterial(preprocessor, "respT",1e10) # Respuesta de la sección a torsión.
@@ -79,12 +77,12 @@ rg.nDivJK= 10
 rg.pMin= geom.Pos2d(-width/2.0,-depth/2.0)
 rg.pMax= geom.Pos2d(width/2.0,depth/2.0)
 reinforcement= geomSecHA.getReinfLayers
-reinforcementInf= reinforcement.newStraightReinfLayer(EHE_reinforcing_steel.B500S.nmbDiagD)
+reinforcementInf= reinforcement.newStraightReinfLayer(EHE_materials.B500S.nmbDiagD)
 reinforcementInf.numReinfBars= numBarras
 reinforcementInf.barArea= areaBarra
 reinforcementInf.p1= geom.Pos2d(cover-width/2.0,cover-depth/2.0) # Armadura inferior.
 reinforcementInf.p2= geom.Pos2d(width/2.0-cover,cover-depth/2.0)
-reinforcementSup= reinforcement.newStraightReinfLayer(EHE_reinforcing_steel.B500S.nmbDiagD)
+reinforcementSup= reinforcement.newStraightReinfLayer(EHE_materials.B500S.nmbDiagD)
 reinforcementSup.numReinfBars= numBarras
 reinforcementSup.barArea= areaBarra
 reinforcementSup.p1= geom.Pos2d(cover-width/2.0,depth/2.0-cover) # Armadura superior.
@@ -127,7 +125,7 @@ analOk= analisis.analyze(10)
 
 secHAParamsCortante= cortanteEHE.ShearControllerEHE('ULS_shear')
 
-secHAParamsCortante.AsTrsv= EHE_reinforcing_steel.Fi6*numRamas/0.2 # reinforcement area transversal
+secHAParamsCortante.AsTrsv= EHE_materials.Fi6*numRamas/0.2 # reinforcement area transversal
 secHAParamsCortante.theta= math.radians(45)
 secHAParamsCortante.alpha= math.radians(90)
 

@@ -21,13 +21,13 @@ lado= 1.0
 prueba= xc.ProblemaEF()
 preprocessor=  prueba.getPreprocessor
 
-hormigon= typical_materials.defElasticMaterial(preprocessor, "hormigon",Ec)
+concrete= typical_materials.defElasticMaterial(preprocessor, 'concrete',Ec)
 
 geomPrueba= preprocessor.getMaterialLoader.newSectionGeometry("geomPrueba")
 regiones= geomPrueba.getRegions
-hormigon= regiones.newQuadRegion("hormigon")
-hormigon.pMin= geom.Pos2d(0.0,0.0)
-hormigon.pMax= geom.Pos2d(1.0,1.0)
+concrete= regiones.newQuadRegion('concrete')
+concrete.pMin= geom.Pos2d(0.0,0.0)
+concrete.pMax= geom.Pos2d(1.0,1.0)
 
 area= geomPrueba.getAreaHomogenizedSection(Ec)
 G= geomPrueba.getCdgHomogenizedSection(Ec)

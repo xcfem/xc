@@ -13,7 +13,7 @@ import xc
 from materials import section_properties
 from materials import typical_materials
 import math
-from materials.ehe import EHE_reinforcing_steel
+from materials.ehe import EHE_materials
 from materials import stressCalc as sc
 import sys
 
@@ -59,7 +59,7 @@ class MainReinfLayer(object):
   Note: If we define the instance variable 'nRebars' that value overrides the 
   'rebarsSpacing'
   '''
-  def __init__(self,rebarsDiam=10e-3,areaRebar= EHE_reinforcing_steel.Fi10,rebarsSpacing=0.2,width=1.0,nominalCover=0.03):
+  def __init__(self,rebarsDiam=10e-3,areaRebar= EHE_materials.Fi10,rebarsSpacing=0.2,width=1.0,nominalCover=0.03):
     self.rebarsDiam= rebarsDiam
     self.rebarsSpacing= rebarsSpacing
     nRebarsTeor= width/self.rebarsSpacing
@@ -67,7 +67,7 @@ class MainReinfLayer(object):
     self.areaRebar= areaRebar
     self.cover= nominalCover+self.rebarsDiam/2.0
     self.centerRebars(width)
-  def setUp(self,nRebars= 5, rebarsDiam=10e-3,areaRebar= EHE_reinforcing_steel.Fi10,width=1.0,cover=0.03):
+  def setUp(self,nRebars= 5, rebarsDiam=10e-3,areaRebar= EHE_materials.Fi10,width=1.0,cover=0.03):
     self.nRebars= nRebars
     self.rebarsDiam= rebarsDiam
     if(self.nRebars!=0.0):
@@ -110,7 +110,7 @@ class BasicRecordRCSection(section_properties.RectangularSection):
   
   :ivar sectionName:     name identifying the section
   :ivar sectionDescr:    section description
-  :ivar concrType:       type of concrete (e.g. hormigonesEHE.HA25)     
+  :ivar concrType:       type of concrete (e.g. EHE_materials.HA25)     
   :ivar concrDiagName:   name identifying the characteristic stress-strain 
                          diagram of the concrete material
   :ivar nDivIJ:          number of cells in IJ (width) direction
@@ -175,14 +175,14 @@ class BasicRecordRCSection(section_properties.RectangularSection):
     self.diagType= matDiagType
     if(self.diagType=="d"):
       if(self.concrType.matTagD<0):
-        matTagHormigon= self.concrType.defDiagD(preprocessor)
+        concreteMatTag= self.concrType.defDiagD(preprocessor)
       if(self.reinfSteelType.matTagD<0):
         matTagAceroArmar= self.reinfSteelType.defDiagD(preprocessor)
       self.concrDiagName= self.concrType.nmbDiagD
       self.reinfDiagName= self.reinfSteelType.nmbDiagD
     elif(self.diagType=="k"):
       if(self.concrType.matTagK<0):
-        matTagHormigon= self.concrType.defDiagK(preprocessor)
+        concreteMatTag= self.concrType.defDiagK(preprocessor)
       if(self.reinfSteelType.matTagK<0):
         matTagAceroArmar= self.reinfSteelType.defDiagK(preprocessor)
       self.concrDiagName= self.concrType.nmbDiagK
@@ -204,7 +204,7 @@ class RecordRCSimpleSection(BasicRecordRCSection):
   
   :ivar sectionName:     name identifying the section
   :ivar sectionDescr:    section description
-  :ivar concrType:       type of concrete (e.g. hormigonesEHE.HA25)     
+  :ivar concrType:       type of concrete (e.g. EHE_materials.HA25)     
   :ivar concrDiagName:   name identifying the characteristic stress-strain 
                          diagram of the concrete material
   :ivar fiberSectionRepr: fiber model of the section
@@ -472,10 +472,10 @@ class RecordRCSimpleSection(BasicRecordRCSection):
     ''' parameters for interaction diagrams. '''
     self.param= xc.InteractionDiagramParameters()
     if(self.diagType=="d"):
-      self.param.tagHormigon= self.concrType.matTagD
+      self.param.concreteTag= self.concrType.matTagD
       self.param.tagArmadura= self.reinfSteelType.matTagD
     elif(self.diagType=="k"):
-      self.param.tagHormigon= self.concrType.matTagK
+      self.param.concreteTag= self.concrType.matTagK
       self.param.tagArmadura= self.reinfSteelType.matTagK
     return self.param
 
@@ -633,7 +633,7 @@ class RecordRCSlabBeamSection(setRCSections2SetElVerif):
   :ivar name:    basic name to form the RC sections in direction 1 (name+'1') 
              and direction 2(name+'1') 
   :ivar sectionDescr:    section description
-  :ivar concrType:       type of concrete (e.g. hormigonesEHE.HA25)     
+  :ivar concrType:       type of concrete (e.g. EHE_materials.HA25)     
   :ivar reinfSteelType:  type of reinforcement steel
   :ivar depth:           cross-section depth
   :ivar width:           cross-section width (defaults to 1.0)

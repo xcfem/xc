@@ -10,7 +10,7 @@ from solution import predefined_solutions
 from model import predefined_spaces
 from materials import typical_materials
 from materials import materialGraphics 
-from materials.ehe import EHE_concrete
+from materials.ehe import EHE_materials
 import matplotlib.pyplot as plt
 import numpy as np
 
@@ -32,7 +32,7 @@ nod= nodes.newNodeXY(1,0)
 nod= nodes.newNodeXY(1.0+l,0)
 
 # Materials definition
-concrAux=EHE_concrete.HA25
+concrAux= EHE_materials.HA25
 concr=typical_materials.defConcrete02(preprocessor=preprocessor,name='concr25',epsc0=concrAux.epsilon0(),fpc=concrAux.fmaxK(),fpcu=0.85*concrAux.fmaxK(),epscu=concrAux.epsilonU(),ratioSlope=0.1,ft=concrAux.fctk(),Ets=concrAux.E0()/19.0)
 
 

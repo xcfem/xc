@@ -15,8 +15,7 @@ __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
 
-from materials.ehe import EHE_concrete
-from materials.ehe import EHE_reinforcing_steel
+from materials.ehe import EHE_materials
 from materials.ehe import aceroPretEHE
 from materials.fiber_section import createFiberSets
 from model import predefined_spaces
@@ -30,19 +29,19 @@ prueba= xc.ProblemaEF()
 preprocessor=  prueba.getPreprocessor
 # Materials definition
 tag= aceroPretEHE.Y1860S7.defDiagD(preprocessor, aceroPretEHE.Y1860S7.tInic())
-tag= EHE_concrete.HP45.defDiagD(preprocessor)
-tag= EHE_reinforcing_steel.B500S.defDiagD(preprocessor)
+tag= EHE_materials.HP45.defDiagD(preprocessor)
+tag= EHE_materials.B500S.defDiagD(preprocessor)
 import os
 pth= os.path.dirname(__file__)
 if(not pth):
   pth= "."
 #print "pth= ", pth
-execfile(pth+"/secc_hormigon_pret_02.py")
+execfile(pth+"/prestressed_concrete_section_02.py")
 
 materiales= preprocessor.getMaterialLoader
 secHP= materiales.newMaterial("fiber_section_3d","secHP")
 fiberSectionRepr= secHP.getFiberSectionRepr()
-fiberSectionRepr.setGeomNamed("geomSecHormigonPret02")
+fiberSectionRepr.setGeomNamed("prestressedConcretSectionGeom02")
 secHP.setupFibers()
 
 elem= banco_pruebas_scc3d.sectionModel(preprocessor, "secHP")
@@ -95,13 +94,13 @@ esfMy= scc.getStressResultantComponent("My")
 esfMz= scc.getStressResultantComponent("Mz")
 defMz= scc.getSectionDeformationByName("defMz")
 defN= scc.getSectionDeformationByName("defN")
-concrFibers= createFiberSets.FiberSet(scc,"hormigon",EHE_concrete.HP45.matTagD)
+concrFibers= createFiberSets.FiberSet(scc,'concrete',EHE_materials.HP45.matTagD)
 fibraCEpsMin= concrFibers.getFiberWithMinStrain()
 epsCMin= fibraCEpsMin.getMaterial().getStrain() # Deformación mínima en el hormigón.
 yEpsCMin= fibraCEpsMin.getPos().x
 fibraCEpsMax= concrFibers.getFiberWithMaxStrain()
 epsCMax= fibraCEpsMax.getMaterial().getStrain() # Deformación máxima en el hormigón.
-reinfFibers= createFiberSets.FiberSet(scc,"reinforcement",EHE_reinforcing_steel.B500S.matTagD)
+reinfFibers= createFiberSets.FiberSet(scc,"reinforcement",EHE_materials.B500S.matTagD)
 fibraSEpsMax= reinfFibers.getFiberWithMaxStrain()
 epsSMax= fibraSEpsMax.getMaterial().getStrain() # Deformación máxima en el acero
 yEpsCMax= fibraCEpsMax.getPos().x

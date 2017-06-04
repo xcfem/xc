@@ -34,7 +34,7 @@ import csv
 
 from materials.fiber_section import defSeccionHASimple
 from postprocess import RCMaterialDistribution
-from materials.sia262 import SIA262_concrete as concrete
+from materials.sia262 import SIA262_concrete
 from materials.sia262 import SIA262_reinforcing_steel
 from model import predefined_spaces
 from materials import typical_materials
@@ -61,7 +61,7 @@ F=1e3
 areaFi10= SIA262_reinforcing_steel.section_barres_courantes[10e-3] 
 areaFi16= SIA262_reinforcing_steel.section_barres_courantes[16e-3]
 
-concrete= concrete.c30_37
+concrete= SIA262_concrete.c30_37
 reinfSteel= SIA262_reinforcing_steel.SpecialII1956SIA161
 
 # Define available sections for the elements (spatial distribution of RC sections).

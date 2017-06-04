@@ -8,10 +8,8 @@ import xc
 from misc import banco_pruebas_scc3d
 from solution import predefined_solutions # Procedimiento de solución
 from materials.fiber_section import defSeccionHASimple
-from materials.ehe import EHE_reinforcing_steel
 
-from materials.ehe import EHE_concrete
-from materials.ehe import EHE_reinforcing_steel
+from materials.ehe import EHE_materials
 from materials.ehe import fisuracionEHE
 from model import predefined_spaces
 
@@ -24,22 +22,22 @@ __email__= "l.pereztato@gmail.com"
 datosScc1LosC= defSeccionHASimple.RecordRCSimpleSection()
 datosScc1LosC.sectionName= "secHA1LosC"
 datosScc1LosC.sectionDescr= "Losa. Tramo Central. Sección normal al eje X."
-datosScc1LosC.concrType= EHE_concrete.HA25
+datosScc1LosC.concrType= EHE_materials.HA25
 datosScc1LosC.depth= 0.25
 datosScc1LosC.width= 1.0
-datosScc1LosC.reinfSteelType= EHE_reinforcing_steel.B500S
+datosScc1LosC.reinfSteelType= EHE_materials.B500S
 rebNeg=defSeccionHASimple.MainReinfLayer()
-rebNeg.setUp(nRebars= 5, areaRebar= EHE_reinforcing_steel.Fi10,cover=0.025+0.010+0.010/2.0)
+rebNeg.setUp(nRebars= 5, areaRebar= EHE_materials.Fi10,cover=0.025+0.010+0.010/2.0)
 datosScc1LosC.negatvRebarRows=[rebNeg]
 rebPos=defSeccionHASimple.MainReinfLayer()
-rebNeg.setUp(nRebars= 5, areaRebar= EHE_reinforcing_steel.Fi10,cover=0.025+0.010/2.0)
+rebNeg.setUp(nRebars= 5, areaRebar= EHE_materials.Fi10,cover=0.025+0.010/2.0)
 datosScc1LosC.positvRebarRows=[rebPos]
 
 # datosScc1LosC.nRebarsNeg= 5
-# datosScc1LosC.areaRebarNeg= EHE_reinforcing_steel.Fi10
+# datosScc1LosC.areaRebarNeg= EHE_materials.Fi10
 # datosScc1LosC.coverNeg= 0.025+0.010+0.010/2.0
 # datosScc1LosC.nRebarsPos= 5
-# datosScc1LosC.areaRebarPos= EHE_reinforcing_steel.Fi10
+# datosScc1LosC.areaRebarPos= EHE_materials.Fi10
 # datosScc1LosC.coverPos= 0.025+0.010/2.0
 
 
@@ -50,8 +48,8 @@ MyDato= 1000 # Momento para comprobar fisuración.
 prueba= xc.ProblemaEF()
 preprocessor=  prueba.getPreprocessor
 # Materials definition
-matTagHormigon= EHE_concrete.HA25.defDiagK(preprocessor)
-matTagAceroArmar= EHE_reinforcing_steel.B500S.defDiagK(preprocessor)
+concreteMatTag= EHE_materials.HA25.defDiagK(preprocessor)
+matTagAceroArmar= EHE_materials.B500S.defDiagK(preprocessor)
 
 
 datosScc1LosC.defRCSimpleSection(preprocessor, "k")
@@ -91,7 +89,7 @@ secHAParamsFis= fisuracionEHE.CrackControl('SLS_crack')
 elementos= preprocessor.getElementLoader
 ele1= elementos.getElement(1)
 scc= ele1.getSection()
-secHAParamsFis.calcApertCaracFis(scc,EHE_concrete.HA25.matTagK,EHE_reinforcing_steel.B500S.matTagK,EHE_concrete.HA25.fctm())
+secHAParamsFis.calcApertCaracFis(scc,EHE_materials.HA25.matTagK,EHE_materials.B500S.matTagK,EHE_materials.HA25.fctm())
 
 
 ratio1= secHAParamsFis.Wk

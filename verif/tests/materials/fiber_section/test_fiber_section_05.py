@@ -21,7 +21,7 @@ areaFi16= 2.01e-4 # Área de las barras expressed in square meters.
 brazo= 0.5 # Brazo de las barras respecto al eje de la sección.
 
 
-from materials.ehe import EHE_reinforcing_steel
+from materials.ehe import EHE_materials
 from model import predefined_spaces
 
 # Coeficientes de seguridad.
@@ -34,8 +34,8 @@ NDato= 0.0
 prueba= xc.ProblemaEF()
 preprocessor=  prueba.getPreprocessor
 # Materials definition
-tag= EHE_reinforcing_steel.B500S.defDiagD(preprocessor)
-dgDB500S= EHE_reinforcing_steel.B500S.getDiagD(preprocessor)
+tag= EHE_materials.B500S.defDiagD(preprocessor)
+dgDB500S= EHE_materials.B500S.getDiagD(preprocessor)
 
 import os
 pth= os.path.dirname(__file__)

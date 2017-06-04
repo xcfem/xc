@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from __future__ import division
-from materials.ehe import EHE_concrete
+from materials.ehe import EHE_materials
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
 __copyright__= "Copyright 2015, LCPT and AOO"
@@ -22,7 +22,7 @@ ExpNCalc=[]
 for i in range(len(fckDat)):
     name='H'+str(fckDat[i])
     fck=-1*fckDat[i]*1e6 #[Pa][-]
-    concr=EHE_concrete.EHEConcrete(name,fck,1.5)
+    concr= EHE_materials.EHEConcrete(name,fck,1.5)
     fcm=concr.getFcm()/(-1e6)
     fcmCalc.append(fcm)
     fctm=round(concr.getFctm()/1e6,1)

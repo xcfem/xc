@@ -27,15 +27,15 @@ areaBar= math.pi*(diamBar/2)**2 # Área de los redondos.
 
 prueba= xc.ProblemaEF()
 preprocessor=  prueba.getPreprocessor
-hormigon= typical_materials.defElasticMaterial(preprocessor, "hormigon",Ec)
+concrete= typical_materials.defElasticMaterial(preprocessor, 'concrete',Ec)
 acero= typical_materials.defElasticMaterial(preprocessor, "acero",Es)
 geomPrueba= preprocessor.getMaterialLoader.newSectionGeometry("geomPrueba")
 
 regiones= geomPrueba.getRegions
-ala= regiones.newQuadRegion("hormigon")# Ala
+ala= regiones.newQuadRegion('concrete')# Ala
 ala.pMin= geom.Pos2d(d-hf,0.0)
 ala.pMax= geom.Pos2d(d,b)
-nervio= regiones.newQuadRegion("hormigon")# Nervio
+nervio= regiones.newQuadRegion('concrete')# Nervio
 nervio.pMin= geom.Pos2d(0.0,b/2-bw/2)
 nervio.pMax= geom.Pos2d(d-hf,b/2+bw/2)
 

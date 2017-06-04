@@ -12,8 +12,7 @@ from postprocess.reports import listados_factor_capacidad
 import xc_base
 import geom
 import xc
-from materials.ehe import hormigonesEHE
-from materials.ehe import EHE_reinforcing_steel
+from materials.ehe import EHE_materials
 from materials.fiber_section import defSeccionHASimple
 from materials.xLamina import membranePlateRCSectionContainer as sc
 from solution import predefined_solutions
@@ -47,8 +46,8 @@ areaFi30= SIA262_reinforcing_steel.section_barres_courantes[30e-3]
 areaFi34= SIA262_reinforcing_steel.section_barres_courantes[34e-3]
 areaFi40= SIA262_reinforcing_steel.section_barres_courantes[40e-3]
 
-concrete= hormigonesEHE.HA30
-reinfSteel= EHE_reinforcing_steel.B500S
+concrete= EHE_materials.HA30
+reinfSteel= EHE_materials.B500S
 
 basicCover= 40e-3
 
@@ -57,8 +56,8 @@ mapSectionsForEveryElement= {}
 for eTag in elementTags:
   mapSectionsForEveryElement[eTag]= ["genericPiles1","genericPiles2"]
 
-concrete= hormigonesEHE.HA30
-reinfSteel= EHE_reinforcing_steel.B500S
+concrete= EHE_materials.HA30
+reinfSteel= EHE_materials.B500S
 
 datosGenericPiles= defSeccionHASimple.RecordSeccionHALosa('genericPiles',"pont Grande Eau.",0.5,concrete, reinfSteel,basicCover)
 datosGenericPiles.setMainReinf2neg(20e-3,areaFi20,0.15)

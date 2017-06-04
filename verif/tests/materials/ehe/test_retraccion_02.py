@@ -5,7 +5,7 @@
 import xc_base
 import geom
 import xc
-from materials.ehe import EHE_concrete
+from materials.ehe import EHE_materials
 
 __author__= "Luis C. Pérez Tato (LCPT)"
 __copyright__= "Copyright 2014, LCPT"
@@ -13,7 +13,7 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
-concrHA30=EHE_concrete.HA30
+concrHA30= EHE_materials.HA30
 concrHA30.cemType='N'
 fckHA30= 30e6 # Resistencia característica del hormigón HA-30.
 Hrel= 0.8 # Humedad relativa del aire.

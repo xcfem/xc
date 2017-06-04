@@ -14,8 +14,7 @@ import xc_base
 import geom
 import xc
 
-from materials.ehe import EHE_concrete
-from materials.ehe import EHE_reinforcing_steel
+from materials.ehe import EHE_materials
 import math
 
 # Coeficientes de seguridad.
@@ -31,30 +30,30 @@ areaFi20= math.pi*(diam/2.0)**2 # Área de las barras expressed in square meters
 prueba= xc.ProblemaEF()
 preprocessor=  prueba.getPreprocessor
 # Materials definition
-concr=EHE_concrete.HA30
+concr= EHE_materials.HA30
 concr.alfacc=0.85    #f_maxd= 0.85*fcd coeficiente de fatiga del hormigón (generalmente alfacc=1)
 concrMatTag30= concr.defDiagD(preprocessor)
 Ec= concr.getDiagD(preprocessor).getTangent
-tagB500S= EHE_reinforcing_steel.B500S.defDiagD(preprocessor)
-Es= EHE_reinforcing_steel.B500S.getDiagD(preprocessor).getTangent
+tagB500S= EHE_materials.B500S.defDiagD(preprocessor)
+Es= EHE_materials.B500S.getDiagD(preprocessor).getTangent
 
 pileGeometry= preprocessor.getMaterialLoader.newSectionGeometry("pileGeometry")
 regiones= pileGeometry.getRegions
-hormigon= regiones.newCircularRegion(EHE_concrete.HA30.nmbDiagD)
-hormigon.nDivCirc= 20
-hormigon.nDivRad= 5
-hormigon.extRad= radius
-hormigon.intRad= 0.0
-hormigon.initAngle= 0.0
-hormigon.finalAngle= 2*math.pi
+concrete= regiones.newCircularRegion(EHE_materials.HA30.nmbDiagD)
+concrete.nDivCirc= 20
+concrete.nDivRad= 5
+concrete.extRad= radius
+concrete.intRad= 0.0
+concrete.initAngle= 0.0
+concrete.finalAngle= 2*math.pi
 
 reinforcement= pileGeometry.getReinfLayers
-reinforcement= reinforcement.newCircReinfLayer(EHE_reinforcing_steel.B500S.nmbDiagD)
+reinforcement= reinforcement.newCircReinfLayer(EHE_materials.B500S.nmbDiagD)
 reinforcement.numReinfBars= 14
 reinforcement.barArea= areaFi20
 reinforcement.initAngle= 0.0
 reinforcement.finalAngle= 2*math.pi
-reinforcement.radius= hormigon.extRad-cover
+reinforcement.radius= concrete.extRad-cover
 
 materiales= preprocessor.getMaterialLoader
 secHA= materiales.newMaterial("fiber_section_3d","secHA")
@@ -64,8 +63,8 @@ secHA.setupFibers()
 fibras= secHA.getFibers()
 
 param= xc.InteractionDiagramParameters()
-param.tagHormigon= EHE_concrete.HA30.matTagD
-param.tagArmadura= EHE_reinforcing_steel.B500S.matTagD
+param.concreteTag= EHE_materials.HA30.matTagD
+param.tagArmadura= EHE_materials.B500S.matTagD
 diagIntsecHA= materiales.calcInteractionDiagram("secHA",param)
 
 fc1= diagIntsecHA.getCapacityFactor(geom.Pos3d(1850e3,0,0))

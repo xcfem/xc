@@ -635,10 +635,10 @@ const XC::NMPointCloud &XC::FiberSectionBase::getInteractionDiagramPointsForPlan
     static NMPointCloud retval;
     retval.clear();
     retval.setUmbral(diag_data.getUmbral());
-    const FiberDeque &fsC= sel_mat_tag(diag_data.getNmbSetHormigon(),diag_data.getTagHormigon())->second;
+    const FiberDeque &fsC= sel_mat_tag(diag_data.getConcreteSetName(),diag_data.getConcreteTag())->second;
     if(fsC.empty())
       std::cerr << "Fibers for concrete material, identified by tag: "
-		<< diag_data.getTagHormigon()
+		<< diag_data.getConcreteTag()
                 << ", not found." << std::endl;
     const FiberDeque &fsS= sel_mat_tag(diag_data.getNmbSetArmadura(),diag_data.getTagArmadura())->second;
     if(fsS.empty())
@@ -665,10 +665,10 @@ const XC::NMyMzPointCloud &XC::FiberSectionBase::getInteractionDiagramPoints(con
     static NMyMzPointCloud lista_esfuerzos;
     lista_esfuerzos.clear();
     lista_esfuerzos.setUmbral(diag_data.getUmbral());
-    const FiberDeque &fsC= sel_mat_tag(diag_data.getNmbSetHormigon(),diag_data.getTagHormigon())->second;
+    const FiberDeque &fsC= sel_mat_tag(diag_data.getConcreteSetName(),diag_data.getConcreteTag())->second;
     if(fsC.empty())
       std::cerr << "Fibers for concrete material, identified by tag: "
-		<< diag_data.getTagHormigon()
+		<< diag_data.getConcreteTag()
                 << ", not found." << std::endl;
     const FiberDeque &fsS= sel_mat_tag(diag_data.getNmbSetArmadura(),diag_data.getTagArmadura())->second;
     if(fsS.empty())

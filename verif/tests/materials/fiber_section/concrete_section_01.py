@@ -6,8 +6,7 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
-from materials.ehe import EHE_reinforcing_steel
-from materials.ehe import EHE_concrete
+from materials.ehe import EHE_materials
 
 defSec= dict(width= 0.2, # Section width expressed in meters.
 depth= 0.4, # Section depth expressed in meters.
@@ -21,12 +20,12 @@ areaBarra= 2.01e-4 # Área de las barras expressed in square meters.
 
 def gmSecHA01(nmbGeomSecc,defSec,concrDiagName,nmbDiagAceroArmar):
   geomSecc= preprocessor.getMaterialLoader.newSectionGeometry(nmbGeomSecc)
-  regiones= geomSecc.getRegions
-  horm= regiones.newQuadRegion(concrDiagName)
-  horm.nDivIJ= defSec['nIJ']
-  horm.nDivJK= defSec['nJK']
-  horm.pMin= geom.Pos2d(-(defSec['depth']/2.0),-(defSec['width']/2.0))
-  horm.pMax= geom.Pos2d(defSec['depth']/2.0,defSec['width']/2.0)
+  regions= geomSecc.getRegions
+  concrete= regions.newQuadRegion(concrDiagName)
+  concrete.nDivIJ= defSec['nIJ']
+  concrete.nDivJK= defSec['nJK']
+  concrete.pMin= geom.Pos2d(-(defSec['depth']/2.0),-(defSec['width']/2.0))
+  concrete.pMax= geom.Pos2d(defSec['depth']/2.0,defSec['width']/2.0)
   reinforcement= geomSecc.getReinfLayers
   reinforcementInf= reinforcement.newStraightReinfLayer(nmbDiagAceroArmar)
   reinforcementInf.numReinfBars= 2
@@ -43,4 +42,4 @@ def gmSecHA01(nmbGeomSecc,defSec,concrDiagName,nmbDiagAceroArmar):
   return geomSecc
 
 
-geomSecHormigon01= gmSecHA01(nmbGeomSecc="geomSecHormigon01",defSec=defSec,concrDiagName=EHE_concrete.HA25.nmbDiagD,nmbDiagAceroArmar=EHE_reinforcing_steel.B500S.nmbDiagD)
+concreteSectionGeom01= gmSecHA01(nmbGeomSecc="concreteSectionGeom01",defSec=defSec,concrDiagName= EHE_materials.HA25.nmbDiagD,nmbDiagAceroArmar= EHE_materials.B500S.nmbDiagD)

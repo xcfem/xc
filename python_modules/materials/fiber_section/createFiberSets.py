@@ -100,9 +100,9 @@ def fiberSectionSetupRCSets(scc,concrMatTag, concrSetName,reinfMatTag, reinfSetN
 
 
 def createRCFiberSets(preprocessor, setName, concrMatTag, reinfMatTag):
-  '''Constructs the sets of concrete fibers 'hormigon' and reinforcing steel fibers 'reinforcement' for all the elements included in a set of elements.
+  '''Constructs the sets of concrete fibers 'concrete' and reinforcing steel fibers 'reinforcement' for all the elements included in a set of elements.
   Returns the following two sets of fibers:
-    set named hormigon: include all the fibers of material concrMatTag from the set of elements setName
+    set named concrete: include all the fibers of material concrMatTag from the set of elements setName
     set named reinforcement: include all the fibers of material reinfMatTag from the set of elements setName
   
   :param preprocessor:     preprocessor name
@@ -114,7 +114,7 @@ def createRCFiberSets(preprocessor, setName, concrMatTag, reinfMatTag):
   elements= st.getElements
   for e in elements:
     scc= e.getSection()
-    sets= fiberSectionSetupRCSets(scc,concrMatTag,"hormigon",reinfMatTag,"reinforcement")
+    sets= fiberSectionSetupRCSets(scc,concrMatTag,"concrete",reinfMatTag,"reinforcement")
     scc.defProp("fiberSets",sets)
 
 def reselTensionFibers(scc,fiberSetName,tensionFibersSetName):

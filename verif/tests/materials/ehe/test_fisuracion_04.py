@@ -11,8 +11,7 @@ from misc import banco_pruebas_scc3d
 from solution import predefined_solutions # Procedimiento de solución
 
 
-from materials.ehe import EHE_concrete
-from materials.ehe import EHE_reinforcing_steel
+from materials.ehe import EHE_materials
 from materials.ehe import fisuracionEHE
 from model import predefined_spaces
 
@@ -46,28 +45,28 @@ print "offsetBarras= ",offsetBarras
 prueba= xc.ProblemaEF()
 preprocessor=  prueba.getPreprocessor
 # Materials definition
-concrMatTag25= EHE_concrete.HA25.defDiagK(preprocessor)
-tagB400S= EHE_reinforcing_steel.B400S.defDiagK(preprocessor)
+concrMatTag25= EHE_materials.HA25.defDiagK(preprocessor)
+tagB400S= EHE_materials.B400S.defDiagK(preprocessor)
 
 geomSecHA= preprocessor.getMaterialLoader.newSectionGeometry("geomSecHA")
 regiones= geomSecHA.getRegions
-hormigon= regiones.newQuadRegion(EHE_concrete.HA25.nmbDiagK)
-hormigon.nDivIJ= 10
-hormigon.nDivJK= 10
-hormigon.pMin= geom.Pos2d(-width/2.0,-depth/2.0)
-hormigon.pMax= geom.Pos2d(width/2.0,depth/2.0)
+concrete= regiones.newQuadRegion(EHE_materials.HA25.nmbDiagK)
+concrete.nDivIJ= 10
+concrete.nDivJK= 10
+concrete.pMin= geom.Pos2d(-width/2.0,-depth/2.0)
+concrete.pMax= geom.Pos2d(width/2.0,depth/2.0)
 reinforcement= geomSecHA.getReinfLayers
-reinforcementA= reinforcement.newStraightReinfLayer(EHE_reinforcing_steel.B400S.nmbDiagK)
+reinforcementA= reinforcement.newStraightReinfLayer(EHE_materials.B400S.nmbDiagK)
 reinforcementA.numReinfBars= numBarras/2
 reinforcementA.barArea= areaFi20
 reinforcementA.p1= geom.Pos2d(cover-width/2.0,cover-depth/2.0)
 reinforcementA.p2= geom.Pos2d(width/2.0-cover-rebarsSpacing,cover-depth/2.0)
-reinforcementB= reinforcement.newStraightReinfLayer(EHE_reinforcing_steel.B400S.nmbDiagK)
+reinforcementB= reinforcement.newStraightReinfLayer(EHE_materials.B400S.nmbDiagK)
 reinforcementB.numReinfBars= numBarras/2
 reinforcementB.barArea= areaFi32
 reinforcementB.p1= geom.Pos2d(cover+rebarsSpacing-width/2.0,cover-depth/2.0)
 reinforcementB.p2= geom.Pos2d(width/2.0-cover,cover-depth/2.0)
-reinforcementC= reinforcement.newStraightReinfLayer(EHE_reinforcing_steel.B400S.nmbDiagK)
+reinforcementC= reinforcement.newStraightReinfLayer(EHE_materials.B400S.nmbDiagK)
 reinforcementC.numReinfBars= 13
 reinforcementC.barArea= areaFi25
 reinforcementC.p1= geom.Pos2d(cover-width/2.0,depth/2.0-cover) # Armadura superior.
@@ -115,7 +114,7 @@ secHAParamsFis= fisuracionEHE.CrackControl('SLS_crack')
 elementos= preprocessor.getElementLoader
 ele1= elementos.getElement(1)
 scc= ele1.getSection()
-secHAParamsFis.calcApertCaracFis(scc,EHE_concrete.HA25.matTagK,EHE_reinforcing_steel.B400S.matTagK,EHE_concrete.HA25.fctm())
+secHAParamsFis.calcApertCaracFis(scc,EHE_materials.HA25.matTagK,EHE_materials.B400S.matTagK,EHE_materials.HA25.fctm())
 
 ratio1= ((secHAParamsFis.rebarsSpacingTracc-0.105)/0.105)
 ratio2= ((secHAParamsFis.Wk-0.3e-3)/0.3e-3)
