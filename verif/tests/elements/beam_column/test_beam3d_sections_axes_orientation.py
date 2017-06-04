@@ -39,7 +39,7 @@ from materials.sia262 import SIA262_reinforcing_steel
 from model import predefined_spaces
 from materials import typical_materials
 from solution import predefined_solutions
-from actions import CombContainer as combs
+from actions import combinations as combs
 from postprocess import LimitStateData as lsd
 from materials.sia262 import normalStressesSIA262 as ns
 from model import model_inquiry as minq

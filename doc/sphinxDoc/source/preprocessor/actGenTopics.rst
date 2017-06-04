@@ -2,35 +2,28 @@ General topics
 ==============
 
 
-CombContainer
+Loads
 -------------
 
-.. automodule:: actions.CombContainer
+.. automodule:: actions.loads
     :members:
     :undoc-members:
     :show-inheritance:
 
-borraAcciones
+Load cases
 -------------
 
-.. automodule:: actions.borraAcciones
+.. automodule:: actions.load_cases
     :members:
     :undoc-members:
     :show-inheritance:
 
-estadillo_cargas
-----------------
+Combinations
+-------------
 
-.. automodule:: actions.estadillo_cargas
+.. automodule:: actions.combinations
     :members:
     :undoc-members:
     :show-inheritance:
 
-utilsActions
-------------
-
-.. automodule:: actions.utilsActions
-    :members:
-    :undoc-members:
-    :show-inheritance:
 
