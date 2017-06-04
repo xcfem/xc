@@ -3,7 +3,7 @@ import xc_base
 import geom
 import xc
 
-# Vectores de elementos unidimensionales.
+# Direction Vectors for uni-dimensional elements.
 def getVectorIElem(preprocessor,idElem):
   '''return the vector in the I direction of the 1D element 
   '''

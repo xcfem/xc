@@ -10,7 +10,6 @@ from model import predefined_spaces
 from materials import typical_materials
 from model import movs_nodo_6gdl
 from model import nodalReactions
-from model import element_vectors
 from postprocess.reports import listados_cargas
 import math
 

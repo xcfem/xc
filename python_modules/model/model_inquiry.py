@@ -81,3 +81,15 @@ def get_attached_PhModElems(elemTag,setElPhMod):
   tmpSectList,retval=zip(*sorted(zip(tmpSectList,retval)))
   return retval
   
+def distance_2points(preprocessor,tagPt1,tagPt2):
+  '''return the distance between two 3D points
+
+  :param preprocessor:  preprocessor
+  :param tagPt1: tag that identifies the first point 
+  :param tagPt2: tag that identifies the second point 
+  '''
+  points= preprocessor.getCad.getPoints
+  pA= points.get(tagPt1).getPos
+  pB= points.get(tagPt2).getPos
+  return pA.distPos3d(pB)
+  

@@ -5,7 +5,6 @@ import geom
 import xc
 import math
 import os
-from model import puntos as points
 
 __author__= "Luis C. Pérez Tato (LCPT)"
 __copyright__= "Copyright 2014, LCPT"

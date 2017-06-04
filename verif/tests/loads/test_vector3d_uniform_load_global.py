@@ -1,12 +1,13 @@
 # -*- coding: utf-8 -*-
 
-import numpy
-
-__author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
-__copyright__= "Copyright 2015, LCPT and AOO"
+__author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AO_O)"
+__copyright__= "Copyright 2015, LCPT and AO_O"
 __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
+
+import numpy
+from model.mesh import element_vectors
 
 movN2= movs_nodo_6gdl.vectorMovUVW(preprocessor, 2) # Node 2 displacement
 vI= element_vectors.getVectorIElem(preprocessor, 1) # Vector I del elemento 1

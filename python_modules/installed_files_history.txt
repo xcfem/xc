@@ -688,6 +688,8 @@
 /usr/local/lib/python2.7/dist-packages/model/geometry/grid_model.pyc
 /usr/local/lib/python2.7/dist-packages/model/geometry/__init__.py
 /usr/local/lib/python2.7/dist-packages/model/geometry/__init__.pyc
+/usr/local/lib/python2.7/dist-packages/model/geometry/line_utils.py
+/usr/local/lib/python2.7/dist-packages/model/geometry/line_utils.pyc
 /usr/local/lib/python2.7/dist-packages/model/geometry/tensegrity.py
 /usr/local/lib/python2.7/dist-packages/model/geometry/tensegrity.pyc
 /usr/local/lib/python2.7/dist-packages/model/geometry/utils_geom.py
@@ -706,6 +708,8 @@
 /usr/local/lib/python2.7/dist-packages/model/line_utils.pyc
 /usr/local/lib/python2.7/dist-packages/model/LoadCaseManager.py
 /usr/local/lib/python2.7/dist-packages/model/LoadCaseManager.pyc
+/usr/local/lib/python2.7/dist-packages/model/mesh/element_vectors.py
+/usr/local/lib/python2.7/dist-packages/model/mesh/element_vectors.pyc
 /usr/local/lib/python2.7/dist-packages/model/mesh/finit_el_model.py
 /usr/local/lib/python2.7/dist-packages/model/mesh/finit_el_model.pyc
 /usr/local/lib/python2.7/dist-packages/model/mesh/__init__.py

@@ -5,7 +5,7 @@ import geom
 import xc
 import math
 import os
-from model import puntos as points
+from model import model_inquiry as mi
 
 __author__= "Luis C. Pérez Tato (LCPT)"
 __copyright__= "Copyright 2014, LCPT"
@@ -31,7 +31,7 @@ pt3= puntos.newPntIDPos3d(3, rot1.getTrfPos(geom.Pos3d(0.0, 0.0, 1.0)))
 pt4= puntos.newPntIDPos3d(4, geom.Pos3d(0.0, 1.0, 0.0))
 
 
-dist34= points.dist(preprocessor, 3,4)
+dist34= mi.distance_2points(preprocessor, 3,4)
 # print "dist(3,4)= ",dist34
 
 
