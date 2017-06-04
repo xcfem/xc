@@ -10,7 +10,6 @@ from model import predefined_spaces
 from materials import typical_materials
 from model import movs_nodo_6gdl
 from model import nodalReactions
-from model import element_vectors
 import math
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"

@@ -9,13 +9,6 @@ puntos
     :undoc-members:
     :show-inheritance:
 
-crea_lineas
------------
-
-.. automodule:: model.crea_lineas
-    :members:
-    :undoc-members:
-    :show-inheritance:
 
 element_vectors
 ---------------

@@ -11,7 +11,7 @@ import math
 import xc_base
 import geom
 import xc
-from model import line_utils as lu
+from model.geometry import line_utils as lu
 from materials.ec3 import EC3_callback_controls as EC3cc
 
 class EC3Beam(lu.LineWrapper):

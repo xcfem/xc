@@ -1,11 +1,12 @@
 # -*- coding: utf-8 -*-
 
-__author__= "Ana Ortega (AO_O)"
-__copyright__= "Copyright 2017, AO_O"
+__author__= "Ana Ortega (AO_O) Luis C. Pérez Tato"
+__copyright__= "Copyright 2017, AO_O LCPT"
 __license__= "GPL"
 __version__= "3.0"
-__email__= "ana.Ortega@ciccp.es"
+__email__= "ana.Ortega@ciccp.es l.pereztato@ciccp.es"
 
+from miscUtils import LogMessages as lmsg
 
 class LoadCase(object):
     '''Definition of a load case.
@@ -41,6 +42,38 @@ class LoadCase(object):
         for ld in lstLoads:
             ld.appendLoadToCurrentLoadPattern()
 
+class LoadCaseManager(object):
+    '''Manager for XC load cases.'''
+    def __init__(self,preprocessor):
+       self.prep= preprocessor
+       self.loadLoader= preprocessor.getLoadLoader
+       self.loadPatterns= self.loadLoader.getLoadPatterns
+       self.timeSeries= dict()
+       self.loadCases= dict()
+
+    def defineSimpleLoadCases(self,names):
+       '''Define load patterns with constant time series.'''
+       tsName= 'ts'
+       ts= self.loadPatterns.newTimeSeries('constant_ts',tsName)
+       self.timeSeries[tsName]= ts
+       self.loadPatterns.currentTimeSeries= tsName
+       for name in names:
+          self.loadCases[name]= self.loadPatterns.newLoadPattern('default',name)
+
+    def setCurrentLoadCase(self,name):
+       '''Sets current load case.'''
+       self.loadPatterns.currentLoadPattern= name
+       if(name not in self.loadCases):
+          lmsg.warning('Load case: \''+ name+ '\' doesn\'t exists.')
+       return self.getLoadCase(name)
+
+    def getCurrentLoadCase(self):
+       '''Returns current load case.'''
+       name= self.loadPatterns.currentLoadPattern
+       return self.getLoadCase(name)
+
+    def getLoadCase(self,name):
+       return self.loadCases[name]
 
 
 def resetAccionesConstantTS(preprocessor,tipoTimeSeries, nmbTimeSeries, fct):

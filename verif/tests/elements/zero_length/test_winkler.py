@@ -12,7 +12,7 @@ import xc
 from solution import predefined_solutions
 from model import predefined_spaces
 from materials import typical_materials
-from model import line_utils
+from model.geometry import line_utils
 import math
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"

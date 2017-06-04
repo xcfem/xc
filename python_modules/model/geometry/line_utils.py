@@ -34,7 +34,7 @@ class LineWrapper(object):
     return retval
 
   def getNodeAttrOrdinates(self,attributeName):
-    '''Returns a list with the values of attribute at each node.'''
+    '''Return a list with the values of attribute at each node.'''
     retval= list()
     nodes= self.getOrderedNodes()
     for n in nodes:
@@ -42,7 +42,7 @@ class LineWrapper(object):
     return retval
 
   def getElementFunctionOrdinates(self,factor0, funcName0, factor1, funcName1):
-    '''Returns a list with the values of attribute extrapolated at each node.'''
+    '''Return a list with the values of attribute extrapolated at each node.'''
     retval= list()
     indices= dict()
     nodes= self.getOrderedNodes()
@@ -76,7 +76,7 @@ class LineWrapper(object):
     return self.line.getNodeI(1)
 
   def getLastNode(self):
-    '''Returns line's last node.'''
+    '''Return line's last node.'''
     nNodes= self.line.getNumNodes
     return self.line.getNodeI(nNodes-1)
   

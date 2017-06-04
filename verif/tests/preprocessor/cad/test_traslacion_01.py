@@ -5,7 +5,7 @@ import geom
 import xc
 import math
 import os
-from model import puntos
+from model import model_inquiry as mi
 
 __author__= "Luis C. Pérez Tato (LCPT)"
 __copyright__= "Copyright 2014, LCPT"
@@ -36,9 +36,9 @@ for p in pts:
  ''' 
   
 
-dist110= puntos.dist(preprocessor, 1,10)
+dist110= mi.distance_2points(preprocessor, 1,10)
 # print "dist(1,10)= ",dist110
-dist211= puntos.dist(preprocessor, 2,11)
+dist211= mi.distance_2points(preprocessor, 2,11)
 # print "dist(2,11)= ",dist211
 
 
