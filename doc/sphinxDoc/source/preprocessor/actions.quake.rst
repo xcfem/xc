@@ -1,10 +1,10 @@
 Earthquake
 ==========
 
-escribeCargasModo
+write_loads_mode
 -----------------
 
-.. automodule:: actions.quake.escribeCargasModo
+.. automodule:: actions.quake.write_loads_mode
     :members:
     :undoc-members:
     :show-inheritance:

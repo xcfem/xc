@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
-''' Test para comprobar la combinación de modos
-tomado del ejemplo A87 del Solvia Verification Manual.
-Este ejemplo se basa a su vez en el ejemplo E26.8 del
-libro «Dynamics of Structures» de Clough, R. W., y Penzien, J. '''
+''' Test to verify the mode combinations
+taken from example A87 of Solvia Verification Manual.
+This exercise is based on example E26.8 of the 
+book «Dynamics of Structures» by Clough, R. W., and Penzien, J. '''
 import xc_base
 import geom
 import xc
@@ -11,7 +11,6 @@ from model import predefined_spaces
 from solution import predefined_solutions
 from materials import typical_materials
 import math
-from actions.quake import escribeCargasModo
 import numpy
 
 __author__= "Luis C. Pérez Tato (LCPT)"
