@@ -3,14 +3,16 @@ from postprocess import utils_display
 from postprocess import LimitStateData as lsd
 from postprocess import ControlVars as cv
 
-#Codenames and descriptions of common analysis and design results.
+#Code names and descriptions of common analysis and design results.
 
 class ResultDescription(object):
   def __init__(self,attributeName,argument,description,units= ''):
     '''Description of an analysis or design result to display
-    argument: name used to retrieve the property from de analysis object (node, element,...)
-    description: phrase describing the result to represent.
-    units: word describing the units (MPa, kN.m, kN,...)
+
+    :ivar attributeName: name of the attribute name to deal with
+    :ivar argument: name used to retrieve the property from de analysis object (node, element,...)
+    :ivar description: phrase describing the result to represent.
+    :ivar units: word describing the units (MPa, kN.m, kN,...)
     ''' 
     self.attributeName= attributeName
     self.argument= argument
@@ -24,12 +26,15 @@ class ResultDescription(object):
     return int(self.attributeName[-1]) #Sect[1] or Sect[2]
 
 class ResultsDescriptionContainer(dict):
-  ''' Results to display as figures... '''
-  def __init__(self,limitStateData,lst):
-    '''Results description container constructor
-       limitStateData; data defining limit state check label (something like "Fatigue" or "CrackControl") and the name of the file that contains the results to display.
-       lst: list of results descriptions.
+  ''' Results to display as figures... 
+
+      :ivar limitStateData: string defining limit state check label (something like "Fatigue" or 
+           "CrackControl") and the name of the file that contains the results to display.
+       :ivar lst: list of results descriptions.
     '''
+
+  def __init__(self,limitStateData,lst):
+
     self.limitStateData= limitStateData
     for l in lst:
       self.add(l)
