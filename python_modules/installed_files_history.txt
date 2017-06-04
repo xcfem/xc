@@ -1,3 +1,7 @@
+/usr/local/lib/python2.7/dist-packages/actions/basic_loads/__init__.py
+/usr/local/lib/python2.7/dist-packages/actions/basic_loads/__init__.pyc
+/usr/local/lib/python2.7/dist-packages/actions/basic_loads/nodal_loads.py
+/usr/local/lib/python2.7/dist-packages/actions/basic_loads/nodal_loads.pyc
 /usr/local/lib/python2.7/dist-packages/actions/borraAcciones.py
 /usr/local/lib/python2.7/dist-packages/actions/borraAcciones.pyc
 /usr/local/lib/python2.7/dist-packages/actions/CombContainer.py

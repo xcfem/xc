@@ -1,20 +1,20 @@
 # -*- coding: utf-8 -*-
-# Tomado del control número 1 que figura en el apartado 6.7 del libro
+# Test taken from section 6.7 (control 1) of the book
 # «Los forjados reticulares: diseño, análisis, construcción y patología»
-# de Florentino Regalado Tesoro.
+# by Florentino Regalado Tesoro.
 
-__author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
-__copyright__= "Copyright 2015, LCPT and AOO"
+__author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AO_O)"
+__copyright__= "Copyright 2015, LCPT and AO_O"
 __license__= "GPL"
 __version__= "3.0"
-__email__= "l.pereztato@gmail.com"
+__email__= "l.pereztato@ciccp.es ana.ortega@ciccp.es"
 
 import xc_base
 import geom
 import xc
 from solution import predefined_solutions
 from model import predefined_spaces
-from model import cargas_nodo
+from actions.basic_loads import nodal_loads
 from materials import typical_materials
 import math
 
@@ -89,7 +89,7 @@ casos.currentTimeSeries= "ts"
 lp0= casos.newLoadPattern("default","0") 
 #casos.currentLoadPattern= "0"
 
-cargas_nodo.CargaNodosInterioresCara(f1,lp0,[0,0,-nLoad,0,0,0])
+nodal_loads.load_on_nodes_in_face(f1,lp0,[0,0,-nLoad,0,0,0])
 f1= preprocessor.getSets.getSet("f1")
 
 tagElemCentro= f1.getNearestElement(geom.Pos3d(xMidP,yMidP,0.0)).tag

@@ -10,7 +10,6 @@ import geom
 import xc
 from solution import predefined_solutions
 from model import predefined_spaces
-from model import cargas_nodo
 from materials import typical_materials
 
 __author__= "Luis C. Pérez Tato (LCPT)"
