@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-'''CombContainer.py: container for load combinations.'''
+'''combinations.py: manages the container for load combinations.'''
 
 __author__= "Luis C. Pérez Tato (LCPT) Ana Ortega (A_OO) "
 __copyright__= "Copyright 2015,  LCPT A_OO "
@@ -18,10 +18,10 @@ class CombinationRecord(object):
     self.name= name
     self.expr= expr
   def createCombination(self,xcCombLoader):
-    '''Introduces the combination into the XC combination loader.'''
+    '''Create combination and insert it into the XC combination loader.'''
     xcCombLoader.newLoadCombination(self.name,self.expr)
   def getRecordLoadCaseDisp(self,setsToDispLoads,setsToDispDspRot,setsToDispIntForc):
-    '''Returns a suitable RecordLoadCaseDisp for the combination.
+    '''Return a suitable RecordLoadCaseDisp for the combination.
 
     :ivar setsToDispLoads: ordered list of sets of elements to display loads.
     :ivar setsToDispDspRot: ordered list of sets of elements to display 

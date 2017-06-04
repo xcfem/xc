@@ -99,7 +99,7 @@ class NormalStressesRCLimitStateData(LimitStateData):
 
     :param combContainer: container with the definition of the different
                           combination families (ULS, fatigue, SLS,...)
-                          see actions/CombContainer module.
+                          see actions/combinations module.
     :param loadCombinations: load combination handler inside the XC solver.
     '''
     loadCombinations.clear()
@@ -126,7 +126,7 @@ class ShearResistanceRCLimitStateData(LimitStateData):
 
     :param combContainer: container with the definition of the different
                           combination families (ULS, fatigue, SLS,...)
-                          see actions/CombContainer module.
+                          see actions/combinations module.
     :param loadCombinations: load combination handler inside the XC solver.
     '''
     loadCombinations.clear()
@@ -152,7 +152,7 @@ class FreqLoadsCrackControlRCLimitStateData(LimitStateData):
 
     :param combContainer: container with the definition of the different
                           combination families (ULS, fatigue, SLS,...)
-                          see actions/CombContainer module.
+                          see actions/combinations module.
     :param loadCombinations: load combination handler inside the XC solver.
     '''
     loadCombinations.clear()
@@ -178,7 +178,7 @@ class QPLoadsCrackControlRCLimitStateData(LimitStateData):
 
     :param combContainer: container with the definition of the different
                           combination families (ULS, fatigue, SLS,...)
-                          see actions/CombContainer module.
+                          see actions/combinations module.
     :param loadCombinations: load combination handler inside the XC solver.
     '''
     loadCombinations.clear()
@@ -205,7 +205,7 @@ class FreqLoadsDisplacementControlLimitStateData(LimitStateData):
 
     :param combContainer: container with the definition of the different
                           combination families (ULS, fatigue, SLS,...)
-                          see actions/CombContainer module.
+                          see actions/combinations module.
     :param loadCombinations: load combination handler inside the XC solver.
     '''
     loadCombinations.clear()
@@ -230,7 +230,7 @@ class FatigueResistanceRCLimitStateData(LimitStateData):
 
     :param combContainer: container with the definition of the different
                           combination families (ULS, fatigue, SLS,...)
-                          see actions/CombContainer module.
+                          see actions/combinations module.
     :param loadCombinations: load combination handler inside the XC solver.
     '''
     loadCombinations.clear()
