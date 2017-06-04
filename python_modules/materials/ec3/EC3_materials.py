@@ -51,6 +51,44 @@ class EC3Steel(structural_steel.BasicSteel):
   def getDesignElasticPerfectlyPlasticMaterial(self,preprocessor,name):
     return typical_materials.defElasticPPMaterial(preprocessor, name,self.E,self.fyd(),-self.fyd())
 
+def fyEC3(desig, t):
+  '''
+  Devuelve el límite elástico del acero en función de su designación
+   y del espesor de la pieza (ver tabla 3.1).
+  '''
+  retval= 0.0
+  if(t>0.1):
+    lmsg.error("Espesor de la pieza fuera de rango: ",t*1000," mm\n")
+
+  if(desig == 235):
+    retval= ifte(t<40e-3,235e6,215e6)
+  elif(desig == 275):
+    retval= ifte(t<40e-3,275e6,255e6)
+  elif(desig == 355):
+    retval= ifte(t<40e-3,355e6,335e6)
+  else:
+    lmsg.error("No se conoce la designación del acero: ",desig,"\n")
+  return retval
+
+def fuEC3(desig, t):
+  '''
+  Devuelve la resistencia última a tracción del acero en función de 
+  su designación y del espesor de la pieza (ver tabla 3.1).
+  '''
+  retval= 0.0
+  if(t>0.1):
+    lmsg.error("Espesor de la pieza fuera de rango: ",t*1000," mm\n")
+
+  if(desig == 235):
+    retval= ifte(t<40e-3,360e6,340e6)
+  elif(desig == 275):
+    retval= ifte(t<40e-3,430e6,410e6)
+  elif(desig == 355):
+    retval= ifte(t<40e-3,510e6,490e6)
+  else:
+    lmsg.error("No se conoce la designación del acero: ",desig,"\n")
+  return retval
+
 # European norm EN 10025-2:2004
 S235JR= EC3Steel(fy= 235e6, fy16= 235e6, fy40= 225e6, fy63= 215e6, fy80= 215e6, fy100= 215e6, fy125= 195e6,fu= 360e6,gammaM= 1.1)
 
