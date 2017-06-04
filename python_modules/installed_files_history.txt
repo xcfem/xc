@@ -320,6 +320,8 @@
 /usr/local/lib/python2.7/dist-packages/materials/ec2/crack_control_utils.pyc
 /usr/local/lib/python2.7/dist-packages/materials/ec2/EC2_concrete.py
 /usr/local/lib/python2.7/dist-packages/materials/ec2/EC2_concrete.pyc
+/usr/local/lib/python2.7/dist-packages/materials/ec2/EC2_materials.py
+/usr/local/lib/python2.7/dist-packages/materials/ec2/EC2_materials.pyc
 /usr/local/lib/python2.7/dist-packages/materials/ec2/EC2_reinforcing_steel.py
 /usr/local/lib/python2.7/dist-packages/materials/ec2/EC2_reinforcing_steel.pyc
 /usr/local/lib/python2.7/dist-packages/materials/ec2/__init__.py

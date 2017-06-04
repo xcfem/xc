@@ -21,9 +21,8 @@ import xc
 import math
 from solution import predefined_solutions
 from model import predefined_spaces
-from materials.ec2 import EC2_concrete
+from materials.ec2 import EC2_materials
 from materials import concreteBase
-from materials.ec2 import EC2_reinforcing_steel
 from materials import typical_materials
 from materials.fiber_section import createFiberSets
 from materials.fiber_section import sectionReport 
@@ -72,10 +71,10 @@ nod= nodes.newNodeXYZ(1.0,0,0)     #node 1 defined by its (x,y,z) global coordin
 nod= nodes.newNodeXYZ(1.0+l,0,0)   #node 2 defined by its (x,y,z) global coordinates
 
 # Materials definition
-concrete=EC2_concrete.EC2Concrete("C33",-33e6,1.5)          #concrete according to EC2 fck=33 MPa      
+concrete=EC2_materials.EC2Concrete("C33",-33e6,1.5) #concrete according to EC2 fck=33 MPa      
 
 #Reinforcing steel.
-rfSteel=EC2_reinforcing_steel.S450C          #reinforcing steel according to EC2 fyk=450 MPa
+rfSteel=EC2_materials.S450C #reinforcing steel according to EC2 fyk=450 MPa
 steelDiagram= rfSteel.defDiagK(preprocessor) #Definition of steel stress-strain diagram in XC. 
 
 

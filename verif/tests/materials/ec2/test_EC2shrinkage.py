@@ -11,12 +11,12 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
-from materials.ec2 import EC2_concrete
+from materials.ec2 import EC2_materials
 
 
 #Data
 #Type of concrete used in the deck slab
-concrDeck=EC2_concrete.EC2Concrete("C35/45",-35e6,1.5)
+concrDeck=EC2_materials.EC2Concrete("C35/45",-35e6,1.5)
 concrDeck.cemType='N'   #class N cement
 RH=80                   #ambient relative humidity(%)
 

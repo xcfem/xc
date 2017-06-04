@@ -3,7 +3,7 @@
 
 import math
 import scipy.interpolate
-from materials.ec2 import EC2_concrete as ec2
+from materials.ec2 import EC2_materials as ec2
 from materials import reinforcingSteel
 
 __author__= "Luis C. Pérez Tato (LCPT) Ana Ortega (A_OO)"
