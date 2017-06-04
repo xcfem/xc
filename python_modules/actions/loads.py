@@ -199,7 +199,7 @@ class StrainGradientLoadOnSurfaces(object):
         self.nabla=nabla
     
     def appendLoadToLoadPattern(self,loadPattern):
-        ''' Append load to the current load pattern.'''
+        ''' Append load to the load pattern passed as parameter.'''
         for s in self.xcSet.getSurfaces:
             for e in s.getElements():
                 eLoad= loadPattern.newElementalLoad("shell_strain_load")
@@ -208,3 +208,23 @@ class StrainGradientLoadOnSurfaces(object):
                 eLoad.setStrainComp(1,3,self.nabla)
                 eLoad.setStrainComp(2,3,self.nabla)
                 eLoad.setStrainComp(3,3,self.nabla)
+
+class StrainGradientLoadOnBeams(object):
+    '''Strain load applied on the beam elements generated from
+    all the lines in the xcSet. 
+    '''
+    def __init__(self,name, xcSet,strain):
+        self.name=name
+        self.xcSet=xcSet
+        self.strain=strain
+    
+    def appendLoadToLoadPattern(self,loadPattern):
+        ''' Append load to the load pattern passed as parameter.'''
+        pDef= xc.DeformationPlane(strain)
+        for l in self.xcSet.getLines:
+            for e in l.getElements():
+                eLoad= loadPattern.newElementalLoad("beam_strain_load")
+                eLoad.elementTags= xc.ID([e.tag])
+                eleLoad.backEndDeformationPlane= pDef
+                eleLoad.frontEndDeformationPlane= pDef
+    

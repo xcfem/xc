@@ -8,7 +8,7 @@ import xc
 from solution import predefined_solutions
 from model import predefined_spaces
 from materials import typical_materials
-from model import cargas_nodo
+from actions.basic_loads import nodal_loads
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
 __copyright__= "Copyright 2015, LCPT and AOO"
@@ -75,7 +75,7 @@ casos.currentTimeSeries= "ts"
 lPattern= "0"
 lp0= casos.newLoadPattern("default",lPattern)
 casos.currentLoadPattern= lPattern
-cargas_nodo.CargaNodosInterioresLinea(l1,lp0,xc.Vector([0,-F,0,0,0,0]))
+nodal_loads.load_on_nodes_in_line(l1,lp0,xc.Vector([0,-F,0,0,0,0]))
 casos.addToDomain(lPattern)
 
 
