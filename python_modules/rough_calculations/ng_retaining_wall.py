@@ -17,8 +17,7 @@ import scipy.interpolate
 import matplotlib
 #matplotlib.use('PS')
 import matplotlib.pyplot as plt
-from materials.sia262 import SIA262_concrete
-from materials.sia262 import SIA262_reinforcing_steel
+from materials.sia262 import SIA262_materials
 from rough_calculations import ng_rebar_def
 from rough_calculations import ng_rc_section
 import os
@@ -131,8 +130,8 @@ class RetainingWall(object):
     self.hCouronnement= hCouronnement
     self.hSemelle= hSemelle
     #Materials.
-    self.beton= SIA262_concrete.c25_30
-    self.acier= SIA262_reinforcing_steel.B500B
+    self.beton= SIA262_materials.c25_30
+    self.acier= SIA262_materials.B500B
     #Default reinforcement
     AdefA= ng_rebar_def.RebarFamily(self.acier,8e-3,0.15,enrobage)
     #AdefB= RebarFamily(self.acier,10e-3,0.30,enrobage)

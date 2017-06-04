@@ -13,7 +13,7 @@ from materials.fiber_section import defSeccionHASimple
 
 
 from materials.ehe import EHE_materials
-from materials.sia262 import SIA262_reinforcing_steel
+from materials.sia262 import SIA262_materials
 from materials.sia262 import crackControlSIA262 as cc
 from model import predefined_spaces
 
@@ -23,8 +23,8 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
-areaFi22= SIA262_reinforcing_steel.section_barres_courantes[22e-3]
-areaFi26= SIA262_reinforcing_steel.section_barres_courantes[26e-3]
+areaFi22= SIA262_materials.section_barres_courantes[22e-3]
+areaFi26= SIA262_materials.section_barres_courantes[26e-3]
 
 datosScc1LosC= defSeccionHASimple.RecordRCSimpleSection()
 datosScc1LosC.sectionName= "secHA1LosC"
