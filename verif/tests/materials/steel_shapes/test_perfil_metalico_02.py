@@ -10,8 +10,7 @@ from model import predefined_spaces
 from materials import typical_materials
 from materials.structural_shapes.arcelor import perfiles_he_arcelor as HE_profiles
 from materials import section_properties
-from materials import structural_steel as steel
-from materials import steelProfile
+from materials import structural_steel
 from postprocess import def_params_control as dp
 from postprocess import def_vars_control as vc
 from postprocess import callback_controls as cc
@@ -29,10 +28,10 @@ L= 10 # Bar length (m)
 F= 50e3 # Load magnitude (kN)
 
 # Perfil que forma la ménsula
-S275JR= steel.S275JR
+S275JR= structural_steel.S275JR
 gammaM0= 1.05
 S275JR.gammaM= gammaM0 
-HE400B= steelProfile.SteelProfile(S275JR,"HE_400_B",HE_profiles.perfilesHE)
+HE400B= structural_steel.SteelProfile(S275JR,"HE_400_B",HE_profiles.perfilesHE)
 matHE400B=typical_materials.MaterialData(name='S275JR',E=S275JR.E,nu=S275JR.nu,rho=7850)
 
 # Problem type

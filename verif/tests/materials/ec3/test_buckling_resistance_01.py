@@ -19,11 +19,10 @@ import xc
 import scipy.interpolate
 
 
-from materials import structural_steel as steel
-from materials import steelProfile as sp
+from materials import structural_steel
 from materials.structural_shapes.arcelor import perfiles_he_arcelor as he
 
-S355JR= steel.S355JR
+S355JR= structural_steel.S355JR
 gammaM0= 1.00
 S355JR.gammaM= gammaM0 
 HEB340= he.HEProfile(S355JR,'HE_340_B')

@@ -349,7 +349,7 @@ else:
 
 
 # #report concrete material
-# from materials import materialReportsUtils
+# from postprocess.reports import materialReportsUtils
 
 # materialReportsUtils.reportConcrete02(concrDiag=concrDiagram,paramTensStiffening=paramTS,grTitle='Ex. 7.3 EC2W. Concrete $\sigma-\epsilon$ curve',grFileName='figures/material/ex7_3EC2W',texFileName='figures/material/ex7_3EC2W.tex')
 

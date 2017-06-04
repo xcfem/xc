@@ -818,6 +818,12 @@
 /usr/local/lib/python2.7/dist-packages/postprocess/reports/listados_resistencia_tirantes.pyc
 /usr/local/lib/python2.7/dist-packages/postprocess/reports/listados_resultados.py
 /usr/local/lib/python2.7/dist-packages/postprocess/reports/listados_resultados.pyc
+/usr/local/lib/python2.7/dist-packages/postprocess/reports/materialGraphics.py
+/usr/local/lib/python2.7/dist-packages/postprocess/reports/materialGraphics.pyc
+/usr/local/lib/python2.7/dist-packages/postprocess/reports/materialReports.py
+/usr/local/lib/python2.7/dist-packages/postprocess/reports/materialReports.pyc
+/usr/local/lib/python2.7/dist-packages/postprocess/reports/materialReportsUtils.py
+/usr/local/lib/python2.7/dist-packages/postprocess/reports/materialReportsUtils.pyc
 /usr/local/lib/python2.7/dist-packages/postprocess/utils_display.py
 /usr/local/lib/python2.7/dist-packages/postprocess/utils_display.pyc
 /usr/local/lib/python2.7/dist-packages/rough_calculations/ArchBridgeRoughModelBase.py

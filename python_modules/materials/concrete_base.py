@@ -13,7 +13,7 @@ import math
 import scipy.interpolate
 from scipy import stats
 from materials import typical_materials
-from materials import materialGraphics
+from postprocess.reports import materialGraphics
 from materials import materialWithDKDiagrams as matWDKD
 import matplotlib.pyplot as plt
 import numpy as np

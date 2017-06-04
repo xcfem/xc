@@ -189,9 +189,9 @@ for item in perfilesHE:
 import math
 import xc_base
 import geom
-from materials import steelProfile as sp
+from materials import structural_steel
 
-class HEProfile(sp.SteelProfile):
+class HEProfile(structural_steel.SteelProfile):
   def __init__(self,steel,name):
     super(HEProfile,self).__init__(steel,name,perfilesHE)
     self.bHalf= self.get('b')/2.0 #Half flange width

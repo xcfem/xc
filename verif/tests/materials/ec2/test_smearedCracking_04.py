@@ -86,7 +86,7 @@ concrDiagram=concrete.defDiagK(preprocessor) #Definition of concrete stress-stra
 
 #report concrete material
 
-# from materials import materialReportsUtils
+# from postprocess.reports import materialReportsUtils
 
 # materialReportsUtils.reportConcrete02(concrDiag=concrDiagram,paramTensStiffening=paramTS,grTitle='Ex. 7.5 EC2W. Concrete $\sigma-\epsilon$ curve',grFileName='figures/material/ex7_5EC2W',texFileName='figures/material/ex7_5EC2W.tex')
 
