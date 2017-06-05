@@ -10,7 +10,7 @@ import xc
 from solution import predefined_solutions
 from postprocess import PhantomModel as phm
 from materials import RCsectionsContainer as sc
-from model import setMgmtUtils as sUtils
+from model.sets import sets_mng as sUtils
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AO_O)"
 __copyright__= "Copyright 2016, LCPT and AO_O"
@@ -63,7 +63,7 @@ class RCMaterialDistribution(object):
     sets= list()
     for name in self.elementSetNames:
       sets.append(preprocessor.getSets.getSet(name))
-    sUtils.appendSets(retval,sets)
+    sUtils.append_sets(retval,sets)
     return retval
 
   def getSectionNamesForElement(self,tagElem):

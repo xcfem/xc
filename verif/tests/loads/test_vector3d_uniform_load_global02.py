@@ -8,8 +8,6 @@ import xc
 from solution import predefined_solutions
 from model import predefined_spaces
 from materials import typical_materials
-from model import movs_nodo_6gdl
-from model import nodalReactions
 from postprocess.reports import listados_cargas
 import math
 

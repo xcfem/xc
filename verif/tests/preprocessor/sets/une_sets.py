@@ -4,7 +4,7 @@ import xc_base
 import geom
 import xc
 import math
-from model import setMgmtUtils as sUtils
+from model.sets import sets_mng as sUtils
 
 __author__= "Luis C. Pérez Tato (LCPT)"
 __copyright__= "Copyright 2014, LCPT"
@@ -21,13 +21,13 @@ pt2= puntos.newPntIDPos3d(2,geom.Pos3d(CooMax/2,CooMax/2,CooMax/2))
 pt3= puntos.newPntIDPos3d(3,geom.Pos3d(CooMax,CooMax,CooMax))
 
 s1= preprocessor.getSets.defSet("S1")
-sUtils.appendPoints(s1,[pt1,pt2])
+sUtils.append_points(s1,[pt1,pt2])
 
 s2= preprocessor.getSets.defSet("S2")
-sUtils.appendPoints(s2,[pt2,pt3])
+sUtils.append_points(s2,[pt2,pt3])
 
 s3= preprocessor.getSets.defSet("S3")
-sUtils.appendSets(s3,[s1,s2])
+sUtils.append_sets(s3,[s1,s2])
 sz= s3.getPoints.size
 
 #for p in pnts:
