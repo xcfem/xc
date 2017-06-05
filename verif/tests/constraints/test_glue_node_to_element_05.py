@@ -12,7 +12,7 @@ import xc
 from model import predefined_spaces
 from materials import typical_materials
 import math
-from model import nodalReactions
+from postprocess.quick_inquiry import nodal_reactions
 from solution import predefined_solutions
 
 prueba= xc.ProblemaEF()
@@ -86,10 +86,10 @@ nodes.calculateNodalReactions(False)
 
 reactionNode10= n10.getReaction
 ratio1= reactionNode10.Norm()
-svdReactionNodes= nodalReactions.getReactionFromNodes(nodes,"UVWRxRyRz",elem.getNodes.getExternalNodes)
+svdReactionNodes= nodal_reactions.getReactionFromNodes(nodes,"UVWRxRyRz",elem.getNodes.getExternalNodes)
 actionNode10= xc.Vector(loadOnDOFs)
 actionNode10Norm= actionNode10.Norm()
-svdAction= nodalReactions.getSVDfromVDesliz("UVWRxRyRz",n10.get3dCoo,actionNode10)
+svdAction= nodal_reactions.getSVDfromVDesliz("UVWRxRyRz",n10.get3dCoo,actionNode10)
 svdResid= svdReactionNodes+svdAction
 ratio2= svdResid.getResultante().getModulo()/actionNode10Norm
 ratio3= svdResid.getMomento().getModulo()/actionNode10Norm

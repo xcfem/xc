@@ -52,6 +52,12 @@
 /usr/local/lib/python2.7/dist-packages/actions/utilsAcciones.pyc
 /usr/local/lib/python2.7/dist-packages/actions/utilsActions.py
 /usr/local/lib/python2.7/dist-packages/actions/utilsActions.pyc
+/usr/local/lib/python2.7/dist-packages/actions/utils/__init__.py
+/usr/local/lib/python2.7/dist-packages/actions/utils/__init__.pyc
+/usr/local/lib/python2.7/dist-packages/actions/utils/load_tables.py
+/usr/local/lib/python2.7/dist-packages/actions/utils/load_tables.pyc
+/usr/local/lib/python2.7/dist-packages/actions/utils/staggered_patterns.py
+/usr/local/lib/python2.7/dist-packages/actions/utils/staggered_patterns.pyc
 /usr/local/lib/python2.7/dist-packages/actions/weight/CTE_peso_especifico_elementos_cobertura.py
 /usr/local/lib/python2.7/dist-packages/actions/weight/CTE_peso_especifico_elementos_cobertura.pyc
 /usr/local/lib/python2.7/dist-packages/actions/weight/CTE_peso_especifico_pavimentos.py
@@ -664,6 +670,8 @@
 /usr/local/lib/python2.7/dist-packages/model/boundary_cond/elastic_foundation.pyc
 /usr/local/lib/python2.7/dist-packages/model/boundary_cond/__init__.py
 /usr/local/lib/python2.7/dist-packages/model/boundary_cond/__init__.pyc
+/usr/local/lib/python2.7/dist-packages/model/boundary_cond/opensees_style.py
+/usr/local/lib/python2.7/dist-packages/model/boundary_cond/opensees_style.pyc
 /usr/local/lib/python2.7/dist-packages/model/cargas_elem.py
 /usr/local/lib/python2.7/dist-packages/model/cargas_elem.pyc
 /usr/local/lib/python2.7/dist-packages/model/cargas_nodo.py
@@ -786,6 +794,14 @@
 /usr/local/lib/python2.7/dist-packages/postprocess/PhantomModel.pyc
 /usr/local/lib/python2.7/dist-packages/postprocess/prop_statistics.py
 /usr/local/lib/python2.7/dist-packages/postprocess/prop_statistics.pyc
+/usr/local/lib/python2.7/dist-packages/postprocess/quick_inquiry/__init__.py
+/usr/local/lib/python2.7/dist-packages/postprocess/quick_inquiry/__init__.pyc
+/usr/local/lib/python2.7/dist-packages/postprocess/quick_inquiry/movs_nodo_3gdl.py
+/usr/local/lib/python2.7/dist-packages/postprocess/quick_inquiry/movs_nodo_3gdl.pyc
+/usr/local/lib/python2.7/dist-packages/postprocess/quick_inquiry/movs_nodo_6gdl.py
+/usr/local/lib/python2.7/dist-packages/postprocess/quick_inquiry/movs_nodo_6gdl.pyc
+/usr/local/lib/python2.7/dist-packages/postprocess/quick_inquiry/nodal_reactions.py
+/usr/local/lib/python2.7/dist-packages/postprocess/quick_inquiry/nodal_reactions.pyc
 /usr/local/lib/python2.7/dist-packages/postprocess/RCMaterialDistribution.py
 /usr/local/lib/python2.7/dist-packages/postprocess/RCMaterialDistribution.pyc
 /usr/local/lib/python2.7/dist-packages/postprocess/recorders.py

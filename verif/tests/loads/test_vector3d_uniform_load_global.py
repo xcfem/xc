@@ -8,6 +8,8 @@ __email__= "l.pereztato@gmail.com"
 
 import numpy
 from model.mesh import element_vectors
+from postprocess.quick_inquiry import movs_nodo_6gdl
+from postprocess.quick_inquiry import nodal_reactions
 
 movN2= movs_nodo_6gdl.vectorMovUVW(preprocessor, 2) # Node 2 displacement
 vI= element_vectors.getVectorIElem(preprocessor, 1) # Vector I del elemento 1
@@ -15,7 +17,7 @@ vProj= movN2.dot(vI)
 delta= abs(vProj)
 
 nodes.calculateNodalReactions(True)
-reacN1= nodalReactions.vectorReacUVW(preprocessor, 1) # Reacción del nodo 1
+reacN1= nodal_reactions.vectorReacUVW(preprocessor, 1) # Reacción del nodo 1
 vReacProj= reacN1.dot(vI)
 RN= abs(vReacProj)
 
