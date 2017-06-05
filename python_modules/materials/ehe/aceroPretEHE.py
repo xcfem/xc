@@ -9,7 +9,6 @@
   
 '''
 import xc_base
-import geom
 from materials import typical_materials
 from materials import materialWithDKDiagrams as matWDKD
 
