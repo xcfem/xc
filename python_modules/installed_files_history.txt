@@ -304,6 +304,10 @@
 /usr/local/lib/python2.7/dist-packages/materials/astm/__init__.pyc
 /usr/local/lib/python2.7/dist-packages/materials/bridge_bearings.py
 /usr/local/lib/python2.7/dist-packages/materials/bridge_bearings.pyc
+/usr/local/lib/python2.7/dist-packages/materials/ceb/CEB_materials.py
+/usr/local/lib/python2.7/dist-packages/materials/ceb/CEB_materials.pyc
+/usr/local/lib/python2.7/dist-packages/materials/ceb/__init__.py
+/usr/local/lib/python2.7/dist-packages/materials/ceb/__init__.pyc
 /usr/local/lib/python2.7/dist-packages/materials/coefsDistorsion.py
 /usr/local/lib/python2.7/dist-packages/materials/coefsDistorsion.pyc
 /usr/local/lib/python2.7/dist-packages/materials/concrete_base.py

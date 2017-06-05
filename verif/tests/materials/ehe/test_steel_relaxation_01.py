@@ -12,7 +12,8 @@ import xc_base
 import geom
 import xc
 
-from materials.ehe import relajacion_acero
+from materials.ehe import EHE_materials
+from materials.ceb import CEB_materials
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
 __copyright__= "Copyright 2015, LCPT and AOO"
@@ -20,14 +21,17 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
+prestressingSteelEHE= EHE_materials.EHEPrestressingSteel('prestressingSteelEHE',fpk= 1171e6,fmax= 1860e6, alpha= 0.7,steelRelaxationClass=2, tendonClass= 'wire')
+
+prestressingSteelCEB= CEB_materials.CEBPrestressingSteel('prestressingSteelCEB',fpk= 1171e6,fmax= 1860e6, alpha= 0.7,steelRelaxationClass=2, tendonClass= 'wire')
 
 alpha= 0.7
 sigmaInic= alpha*1860e6
-incSigma1= -relajacion_acero.getPerdidaTensionRelajacionFinalEHE("alambre","superestabilizado",alpha,sigmaInic)
+incSigma1= -prestressingSteelEHE.getRelaxationStressLossFinal(sigmaInic)
 sigmaRemanente1= sigmaInic+incSigma1
-incSigma2= -relajacion_acero.getPerdidaTensionRelajacionTEHE("alambre","superestabilizado",alpha,1e6/24,sigmaInic)
+incSigma2= -prestressingSteelEHE.getRelaxationStressLossT(1e6/24,sigmaInic)
 sigmaRemanente2= sigmaInic+incSigma2
-incSigma3= -relajacion_acero.getPerdidaTensionRelajacionTCEB("alambre","superestabilizado",alpha,1e6/24,sigmaInic)
+incSigma3= -prestressingSteelCEB.getRelaxationStressLossT(1e6/24,sigmaInic)
 sigmaRemanente3= sigmaInic+incSigma3
 ratio1= abs(incSigma1/sigmaInic+0.058)/0.058
 ratio2= abs(incSigma2/sigmaInic+0.058)/0.058

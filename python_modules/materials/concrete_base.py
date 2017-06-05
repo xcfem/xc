@@ -827,3 +827,54 @@ def testDiagDAceroArmar(preprocessor, matRecord):
     errMax= max(err,errMax)
     e= e+incr
   return errMax
+
+class PrestressingSteel(matWDKD.MaterialWithDKDiagrams):
+
+  # Points from the table 38.7.b of EHE-08 to determine
+  # relaxation at times shorter than 1000 hours.
+  ptsShortTermRelaxation= scipy.interpolate.interp1d([0, 1, 5, 20, 100, 200, 500, 1000],[0, 0.25, 0.45, 0.55, 0.7, 0.8, 0.9, 1])
+    
+  def __init__(self,steelName,fpk,fmax= 1860e6, alpha= 0.75, steelRelaxationClass=1, tendonClass= 'strand'):
+    ''' Prestressing steel base class.
+ 
+       :param fpk: Elastic limit.
+       :param fmax: Steel strength.
+       :param alpha: stress-to-strength ratio.
+       :param steelRelaxationClass: Relaxation class 1: normal, 2: improved, 
+                                    and 3: relaxation for bars.
+       :param tendonClass: Tendon class wire, strand or bar.
+    '''
+    super(PrestressingSteel,self).__init__(steelName)
+    self.gammaS= 1.15 # Minoración del material.
+    self.fpk= fpk # Elastic limit.
+    self.fmax= fmax
+    self.alpha= alpha
+    self.Es= 190e9 # Elastic modulus.
+    self.bsh= 0.001 # Relación entre pendientes (rama cedencia/rama elástica)
+    self.steelRelaxationClass= steelRelaxationClass
+    self.tendonClass= tendonClass
+  def getKRelaxation(self):
+    ''' Return the value of k factor for the relaxation expression
+       from the relaxation class. See Model Code 1990 paragraph 2.3.4.5.
+    '''
+    if(self.steelRelaxationClass==1):
+      return 0.12 
+    elif(self.steelRelaxationClass==2):
+      return 0.19 
+    else:
+      lmsg.error("Relaxation class : ",self.steelRelaxationClass," not implemented.\n")
+      return 0
+  def fpd(self):
+    return self.fpk/self.gammaS
+  def tInic(self):
+    return self.alpha**2*self.fmax # Pretensado final (incial al 75 por ciento y 25 por ciento de pérdidas totales).
+  def defDiagK(self,preprocessor,initialStress):
+    '''Characteristic stress-strain diagram.'''
+    acero= typical_materials.defSteel02(preprocessor,self.nmbDiagK,self.Es,self.fpk,self.bsh,initialStress)
+    self.matTagK= acero.tag
+    return acero 
+  def defDiagD(self,preprocessor,initialStress):
+    '''Design stress-strain diagram.'''
+    acero= typical_materials.defSteel02(preprocessor,self.nmbDiagD,self.Es,self.fpd(),self.bsh,initialStress)
+    self.matTagD= acero.tag
+    return acero

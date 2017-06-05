@@ -17,7 +17,6 @@ from misc import banco_pruebas_scc3d
 
 
 from materials.ehe import EHE_materials
-from materials.ehe import aceroPretEHE
 from materials.fiber_section import createFiberSets
 from model import predefined_spaces
 from solution import predefined_solutions
@@ -28,7 +27,7 @@ NDato= 0.0 # La única acción es el pretensado
 prueba= xc.ProblemaEF()
 preprocessor=  prueba.getPreprocessor
 # Materials definition
-tag= aceroPretEHE.Y1860S7.defDiagD(preprocessor, aceroPretEHE.Y1860S7.tInic())
+tag= EHE_materials.Y1860S7.defDiagD(preprocessor, EHE_materials.Y1860S7.tInic())
 tag= EHE_materials.HP45.defDiagD(preprocessor)
 import os
 pth= os.path.dirname(__file__)
@@ -90,7 +89,7 @@ fibraCEpsMin= concrFibers.getFiberWithMinStrain()
 epsCMin= fibraCEpsMin.getMaterial().getStrain() # Deformación mínima en el hormigón.
 fibraCEpsMax= concrFibers.getFiberWithMaxStrain()
 epsCMax= fibraCEpsMax.getMaterial().getStrain() # Deformación máxima en el hormigón.
-reinfFibers= createFiberSets.FiberSet(scc,"reinforcement",aceroPretEHE.Y1860S7.matTagD)
+reinfFibers= createFiberSets.FiberSet(scc,"reinforcement",EHE_materials.Y1860S7.matTagD)
 fibraSEpsMax= reinfFibers.getFiberWithMaxStrain()
 epsSMax= fibraSEpsMax.getMaterial().getStrain() # Deformación máxima en el acero
 
