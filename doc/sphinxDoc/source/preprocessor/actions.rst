@@ -11,6 +11,7 @@ Actions
     actions.snow
     actions.railway_trafic
     actions.quake
+    actions.prestress
     actions.utils
 
 

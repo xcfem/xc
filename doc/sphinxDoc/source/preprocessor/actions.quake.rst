@@ -1,8 +1,8 @@
 Earthquake
 ==========
 
-write_loads_mode
------------------
+Mode loads
+----------
 
 .. automodule:: actions.quake.write_loads_mode
     :members:
