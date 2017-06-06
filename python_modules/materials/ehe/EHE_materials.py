@@ -247,3 +247,106 @@ Fi20=3.14e-4
 Fi25=4.91e-4
 Fi32=8.04e-4
 Fi40=12.56e-4
+
+# ************* Prestressing steel. ********************
+
+# Relaxation of steel according to EHE-08 (Artº 38.9)
+# and Model Code CEB-FIP 1990.
+
+class EHEPrestressingSteel(concrete_base.PrestressingSteel):
+  # Points from the table 38.7.a of EHE-08 to determine the 
+  # relaxation at 1000 hours, used to estimate
+  # the relaxation at times greater than 1000 hours.
+
+  #For wires and strands:
+  ptsRO1000Wires= scipy.interpolate.interp1d([0,.5,.6,.7,.8],[0,0,1,2,5.5])
+  #For bars:
+  ptsRO1000Bars= scipy.interpolate.interp1d([0,.5,.6,.7,.8],[0,0,2,3,7])
+
+
+  def __init__(self,steelName,fpk,fmax= 1860e6, alpha= 0.75, steelRelaxationClass=1, tendonClass= 'strand'):
+    ''' Prestressing steel.
+ 
+       :param fpk: Elastic limit.
+       :param fmax: Steel strength.
+       :param alpha: stress-to-strength ratio.
+       :param steelRelaxationClass: Relaxation class 1: normal, 2: improved, 
+                                    and 3: relaxation for bars.
+       :param tendonClass: Tendon class wire, strand or bar.
+    '''
+    super(EHEPrestressingSteel,self).__init__(steelName,fpk,fmax,alpha,steelRelaxationClass, tendonClass)
+  
+  def getRO1000(self):
+    '''
+    Return the relaxation at 1000 hours after stressing (See table 38.9.a at EHE-08)
+    '''
+    if(self.tendonClass=="wire"):
+      return self.ptsRO1000Wires(self.alpha) 
+    elif(self.tendonClass=="strand"):
+      return self.ptsRO1000Wires(self.alpha)
+    elif(self.tendonClass=="bar"):
+      return self.ptsRO1000Bars(self.alpha)
+  def getRelaxationT(self, tDias):
+    ''' Return the relaxation at time tDias in days after stressing.
+
+       tDays: Time in days after prestressing
+              (to make easier to deal with shrinkage and creep at the same time).
+    '''
+    tHours= tDias*24
+    RO1000= self.getRO1000()
+    if(tHours<1000):
+      return RO1000*self.ptsShortTermRelaxation(tHours)
+    else:
+      return RO1000*pow(tHours/1000.0,self.getKRelaxation())
+  def getRelaxationStressLossT(self, tDays, initialStress):
+    '''
+    Return change in tendon stress due to relaxation at time t.
+
+       initialStress: Initial stress in tendon.
+       tDays: Time in days after prestressing
+              (to make easier to deal with shrinkage and creep at the same time).
+
+    '''
+    LGRO120= math.log10(self.getRelaxationT(120/24.0))
+    LGRO1000= math.log10(self.getRelaxationT(1000/24.0))
+    k2= (LGRO1000-LGRO120)/(3-math.log10(120))
+    k1= LGRO1000-3*k2
+    tHours= tDays*24
+    ROT= pow(10,k1+k2*math.log10(tHours))/100.0
+    return initialStress*ROT
+
+  def getRelaxationStressLossFinal(self, initialStress):
+    '''
+    Return final change in tendon stress due to relaxation.
+
+       initialStress: Initial stress in tendon.
+
+    '''
+    ROFINAL= 2.9e-2*self.getRelaxationT(1000/24.0)
+    return initialStress*ROFINAL
+
+Y1860S7= EHEPrestressingSteel(steelName= "Y1860S7",fpk= 1171e6,fmax= 1860e6)
+
+def getPerdidaTensionPenetracionCunaTendonRectoCorto(a, L, Ep):
+  '''
+  Pérdidas por penetración de cuñas en tendones rectos cortos postesos
+   o tendones pretesos según el apartado 20.2.2.1.2 de la EHE-08.
+
+   a: Penetración de la cuña (lo usual: 5 mm)
+   L: Longitud del tendón.
+   Ep: Módulo de deformación longitudinal de la reinforcement activa (190e9).
+  '''
+  return a/L*Ep
+
+def getPerdidaTensionAcortElasticoTendonPreteso(sigma_cp, Ep, Ecj):
+  '''
+  Pérdidas por acortamiento elástico del hormigón en tendones pretensados.
+
+   sigma_cp: Tensión de compresión en el hormigón, a nivel del centro de gravedad de
+             las reinforcement activas, producida por el pretensado una
+             vez descontadas la pérdida por penetración de cuñas
+   Ep: Módulo de deformación longitudinal de la reinforcement activa (190e9).
+   Ecj: Módulo de deformación longitudinal del hormigón en el momento
+        de la transferencia. 
+  '''
+  return sigma_cp*Ep/Ecj

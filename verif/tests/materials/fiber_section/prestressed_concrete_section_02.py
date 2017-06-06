@@ -95,5 +95,5 @@ def gmSecHP02(nmbGeomSecc,concrDiagName,nmbDiagAceroArmar,nmbDiagAceroPret):
   return geomSecc
 
 
-geomSecPret02= gmSecHP02("prestressedConcretSectionGeom02",EHE_materials.HP45.nmbDiagD,EHE_materials.B500S.nmbDiagD,aceroPretEHE.Y1860S7.nmbDiagD)
+geomSecPret02= gmSecHP02("prestressedConcretSectionGeom02",EHE_materials.HP45.nmbDiagD,EHE_materials.B500S.nmbDiagD,EHE_materials.Y1860S7.nmbDiagD)
 

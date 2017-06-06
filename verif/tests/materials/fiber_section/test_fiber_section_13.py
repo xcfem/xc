@@ -16,7 +16,6 @@ __email__= "l.pereztato@gmail.com"
 
 
 from materials.ehe import EHE_materials
-from materials.ehe import aceroPretEHE
 from materials.fiber_section import createFiberSets
 from model import predefined_spaces
 from solution import predefined_solutions
@@ -28,7 +27,7 @@ NDato= 0.0
 prueba= xc.ProblemaEF()
 preprocessor=  prueba.getPreprocessor
 # Materials definition
-tag= aceroPretEHE.Y1860S7.defDiagD(preprocessor, aceroPretEHE.Y1860S7.tInic())
+tag= EHE_materials.Y1860S7.defDiagD(preprocessor, EHE_materials.Y1860S7.tInic())
 tag= EHE_materials.HP45.defDiagD(preprocessor)
 tag= EHE_materials.B500S.defDiagD(preprocessor)
 import os

@@ -54,7 +54,7 @@ nod12= nodes.newNodeXYZ(3,2,0)
 
 hLosa= typical_materials.defElasticMembranePlateSection(preprocessor, "hLosa",Ec,nuC,densLosa,hLosa)
 
-typical_materials.defSteel02(preprocessor, "aceroPret",Ep,fy,0.001,tInic)
+typical_materials.defSteel02(preprocessor, "prestressingSteel",Ep,fy,0.001,tInic)
 
 elementos= preprocessor.getElementLoader
 # Losa de hormigón
@@ -69,7 +69,7 @@ elem= elementos.newElement("shell_mitc4",xc.ID([6,7,11,10]))
 elem= elementos.newElement("shell_mitc4",xc.ID([7,8,12,11]))
 
 # Armadura activa
-elementos.defaultMaterial= "aceroPret"
+elementos.defaultMaterial= "prestressingSteel"
 elementos.dimElem= 3 # Dimension of element space
 truss= elementos.newElement("truss",xc.ID([1,2]));
 truss.area= Ap
