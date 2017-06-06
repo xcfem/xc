@@ -94,13 +94,6 @@ ng_pinned_fixed_beam
     :undoc-members:
     :show-inheritance:
 
-ng_predim_pilotes
------------------
-
-.. automodule:: rough_calculations.ng_predim_pilotes
-    :members:
-    :undoc-members:
-    :show-inheritance:
 
 ng_prestressing_wire
 --------------------

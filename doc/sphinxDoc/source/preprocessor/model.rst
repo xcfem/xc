@@ -4,9 +4,12 @@ Model
 
 .. toctree::
 
-    modelGenTopics
     model.geometry
-    model.grid_based
+    model.mesh
+    modelGenTopics
+    model.boundary
+    model.sets
+
 
 
 

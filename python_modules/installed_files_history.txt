@@ -26,6 +26,10 @@
 /usr/local/lib/python2.7/dist-packages/actions/loads_def.pyc
 /usr/local/lib/python2.7/dist-packages/actions/loads.py
 /usr/local/lib/python2.7/dist-packages/actions/loads.pyc
+/usr/local/lib/python2.7/dist-packages/actions/prestress/__init__.py
+/usr/local/lib/python2.7/dist-packages/actions/prestress/__init__.pyc
+/usr/local/lib/python2.7/dist-packages/actions/prestress/prestress_cables.py
+/usr/local/lib/python2.7/dist-packages/actions/prestress/prestress_cables.pyc
 /usr/local/lib/python2.7/dist-packages/actions/quake/escribeCargasModo.py
 /usr/local/lib/python2.7/dist-packages/actions/quake/escribeCargasModo.pyc
 /usr/local/lib/python2.7/dist-packages/actions/quake/__init__.py
@@ -708,6 +712,8 @@
 /usr/local/lib/python2.7/dist-packages/model/geometry/__init__.pyc
 /usr/local/lib/python2.7/dist-packages/model/geometry/line_utils.py
 /usr/local/lib/python2.7/dist-packages/model/geometry/line_utils.pyc
+/usr/local/lib/python2.7/dist-packages/model/geometry/net_utils.py
+/usr/local/lib/python2.7/dist-packages/model/geometry/net_utils.pyc
 /usr/local/lib/python2.7/dist-packages/model/geometry/tensegrity.py
 /usr/local/lib/python2.7/dist-packages/model/geometry/tensegrity.pyc
 /usr/local/lib/python2.7/dist-packages/model/geometry/utils_geom.py

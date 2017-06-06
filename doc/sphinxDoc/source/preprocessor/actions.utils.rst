@@ -2,7 +2,7 @@ Utils
 =====
 
 
-staggered patterns
+Staggered patterns
 ------------------
 
 .. automodule:: actions.utils.staggered_patterns

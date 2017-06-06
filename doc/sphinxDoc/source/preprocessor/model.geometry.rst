@@ -1,16 +1,32 @@
-geometry
+Geometry
 ========
 
 
-utils_geom
+Grid model
 ----------
 
-.. automodule:: model.geometry.utils_geom
+.. automodule:: model.geometry.grid_model
     :members:
     :undoc-members:
     :show-inheritance:
 
-tensegrity
+Lines
+-----
+
+.. automodule:: model.geometry.line_utils
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+Nets
+----
+
+.. automodule:: model.geometry.net_utils
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+Tensegrity
 ----------
 
 .. automodule:: model.geometry.tensegrity

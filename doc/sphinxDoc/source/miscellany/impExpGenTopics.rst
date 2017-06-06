@@ -26,20 +26,4 @@ NeutralMeshDescription
     :undoc-members:
     :show-inheritance:
 
-scia_xml
---------
-
-.. automodule:: import_export.scia_xml
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-scia_xml_base
--------------
-
-.. automodule:: import_export.scia_xml_base
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
 
