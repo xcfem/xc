@@ -13,8 +13,7 @@ import math
 from materials.fiber_section import createFiberSets
 from materials.fiber_section import fiberUtils
 from materials.sia262 import shearSIA262
-from materials import crack_control_base as cc
-from materials import LimitStateControllerBase as lsc
+from materials import limit_state_controller_base as lsc
 from materials import stressCalc as sc
 from postprocess import ControlVars as cv
 import geom

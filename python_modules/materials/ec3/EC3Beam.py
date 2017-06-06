@@ -12,7 +12,7 @@ import xc_base
 import geom
 import xc
 from model.geometry import line_utils as lu
-from materials.ec3 import EC3_callback_controls as EC3cc
+from materials.ec3 import EC3_limit_state_controllers as EC3lsc
 
 class EC3Beam(lu.LineWrapper):
   def __init__(self,line,ec3Profile):
@@ -47,9 +47,9 @@ class EC3Beam(lu.LineWrapper):
     recorder.setElements(idEleTags)
     self.ec3Profile.setupULSControlVars(elems,sectionClass,chiLT)
     if(nodes.numGdls==3):
-      recorder.callbackRecord= EC3cc.controlULSCriterion2D()
+      recorder.callbackRecord= EC3lsc.controlULSCriterion2D()
     else:
-      recorder.callbackRecord= EC3cc.controlULSCriterion()
+      recorder.callbackRecord= EC3lsc.controlULSCriterion()
 
     recorder.callbackRestart= "print \"Restart method called.\""
     return recorder
