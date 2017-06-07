@@ -18,13 +18,6 @@ vtk_grafico_base
     :undoc-members:
     :show-inheritance:
 
-vtk_grafico_diagrama_esfuerzos
-------------------------------
-
-.. automodule:: xcVtk.vtk_grafico_diagrama_esfuerzos
-    :members:
-    :undoc-members:
-    :show-inheritance:
 
 ColoredDiagram
 --------------

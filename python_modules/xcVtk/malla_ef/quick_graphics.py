@@ -226,6 +226,11 @@ class QuickGraphics(object):
               by this factor. (Defaults to 0.0, i.e. display of 
               initial/undeformed shape)
     '''
+    if(setToDisplay):
+      self.xcSet= setToDisplay
+    else:
+      lmsg.warning('QuickGraphics::displayLoadCaseBeamEl; set to display not defined; using previously defined set (total if None).')
+    print 'xcSet', self.xcSet.name
     preprocessor= self.feProblem.getPreprocessor
     loadPatterns= preprocessor.getLoadLoader.getLoadPatterns
     loadPatterns.addToDomain(loadCaseName)

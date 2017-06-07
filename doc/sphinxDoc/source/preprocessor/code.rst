@@ -3,6 +3,10 @@
 C++ classes
 ===========
 
+.. module:: xc
+.. autoclass:: ModelWrapper
+    :members:
+    :show-inheritance:
 
 
 Geom

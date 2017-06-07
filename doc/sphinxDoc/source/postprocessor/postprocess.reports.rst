@@ -33,13 +33,6 @@ export_internal_forces
     :undoc-members:
     :show-inheritance:
 
-graphLoadCase
--------------
-
-.. automodule:: postprocess.reports.graphLoadCase
-    :members:
-    :undoc-members:
-    :show-inheritance:
 
 listados
 --------

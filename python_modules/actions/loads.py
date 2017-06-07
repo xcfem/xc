@@ -176,11 +176,10 @@ class EarthPressLoad(BaseVectorLoad):
 
     def appendLoadToCurrentLoadPattern(self):
         ''' Append load to the current load pattern.'''
-        for s in self.xcSet.getSurfaces:
-            for e in s.getElements():
-                presElem=self.soilData.getPressure(e.getCooCentroid(False)[2])
-                if(presElem!=0.0):
-                    e.vector3dUniformLoadGlobal(presElem*self.loadVector)
+        for e in self.xcSet.getElements:
+            presElem=self.soilData.getPressure(e.getCooCentroid(False)[2])
+            if(presElem!=0.0):
+                e.vector3dUniformLoadGlobal(presElem*self.loadVector)
  
 
 # TO DO: change the method in order to be able to append to current load pattern
