@@ -6,10 +6,10 @@ artículo 49.2.4 de la EHE-08.
 from __future__ import division
 from materials.fiber_section import createFiberSets
 from materials.fiber_section import fiberUtils
-from materials import crack_control_base as cc
+from materials import limit_state_checking_base as lscb
 import math
 
-class CrackControl(cc.CrackControlBaseParameters):
+class CrackControl(lscb.CrackControlBaseParameters):
   '''
   Define las propiedades del registro que contiene los parámetros de cálculo
      de la fisuración.'''

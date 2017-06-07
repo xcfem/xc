@@ -7,7 +7,7 @@ import xc_base
 import geom
 import xc
 import scipy.interpolate
-from materials.ec3 import lateral_torsional_buckling as ltb
+from materials.ec3 import EC3_limit_state_checking as EC3lsc
 
 __author__= "Luis C. Pérez Tato (LCPT)"
 __copyright__= "Copyright 2014, LCPT"
@@ -34,7 +34,7 @@ def caseASampleMoments(L,M,FF):
   return [x,M]
 
 
-supportCoefs= ltb.SupportCoefficients(k1= 1.0,k2= 1.0)
+supportCoefs= EC3lsc.SupportCoefficients(k1= 1.0,k2= 1.0)
 nDiv= 20
 step= 2/nDiv
 psi=list()
@@ -43,7 +43,7 @@ psii= -1.0
 C1i= 0.0
 for i in range(1,nDiv+2): 
   mD= caseASampleMoments(5.0,10.0,psii)
-  mgf= ltb.MomentGradientFactorC1(mD[0],mD[1])
+  mgf= EC3lsc.MomentGradientFactorC1(mD[0],mD[1])
   C1i= mgf.getC1(supportCoefs)
   psi.append(psii)
   c1.append(C1i)

@@ -348,6 +348,8 @@
 /usr/local/lib/python2.7/dist-packages/materials/ec2/crack_control_utils.pyc
 /usr/local/lib/python2.7/dist-packages/materials/ec2/EC2_concrete.py
 /usr/local/lib/python2.7/dist-packages/materials/ec2/EC2_concrete.pyc
+/usr/local/lib/python2.7/dist-packages/materials/ec2/EC2_limit_state_checking.py
+/usr/local/lib/python2.7/dist-packages/materials/ec2/EC2_limit_state_checking.pyc
 /usr/local/lib/python2.7/dist-packages/materials/ec2/EC2_materials.py
 /usr/local/lib/python2.7/dist-packages/materials/ec2/EC2_materials.pyc
 /usr/local/lib/python2.7/dist-packages/materials/ec2/EC2_reinforcing_steel.py
@@ -368,6 +370,10 @@
 /usr/local/lib/python2.7/dist-packages/materials/ec3/EC3HEProfile.pyc
 /usr/local/lib/python2.7/dist-packages/materials/ec3/EC3IPEProfile.py
 /usr/local/lib/python2.7/dist-packages/materials/ec3/EC3IPEProfile.pyc
+/usr/local/lib/python2.7/dist-packages/materials/ec3/EC3_limit_state_checking.py
+/usr/local/lib/python2.7/dist-packages/materials/ec3/EC3_limit_state_checking.pyc
+/usr/local/lib/python2.7/dist-packages/materials/ec3/EC3_limit_state_controllers.py
+/usr/local/lib/python2.7/dist-packages/materials/ec3/EC3_limit_state_controllers.pyc
 /usr/local/lib/python2.7/dist-packages/materials/ec3/EC3_materials.py
 /usr/local/lib/python2.7/dist-packages/materials/ec3/EC3_materials.pyc
 /usr/local/lib/python2.7/dist-packages/materials/ec3/EC3Profile.py
@@ -378,6 +384,8 @@
 /usr/local/lib/python2.7/dist-packages/materials/ec3/__init__.pyc
 /usr/local/lib/python2.7/dist-packages/materials/ec3/lateral_torsional_buckling.py
 /usr/local/lib/python2.7/dist-packages/materials/ec3/lateral_torsional_buckling.pyc
+/usr/local/lib/python2.7/dist-packages/materials/ec5/EC5_limit_state_checking.py
+/usr/local/lib/python2.7/dist-packages/materials/ec5/EC5_limit_state_checking.pyc
 /usr/local/lib/python2.7/dist-packages/materials/ec5/EC5TimberCrossSection.py
 /usr/local/lib/python2.7/dist-packages/materials/ec5/EC5TimberCrossSection.pyc
 /usr/local/lib/python2.7/dist-packages/materials/ec5/__init__.py
@@ -458,7 +466,11 @@
 /usr/local/lib/python2.7/dist-packages/materials/__init__.pyc
 /usr/local/lib/python2.7/dist-packages/materials/internal_forces.py
 /usr/local/lib/python2.7/dist-packages/materials/internal_forces.pyc
+/usr/local/lib/python2.7/dist-packages/materials/limit_state_checking_base.py
+/usr/local/lib/python2.7/dist-packages/materials/limit_state_checking_base.pyc
+/usr/local/lib/python2.7/dist-packages/materials/limit_state_controller_base.py
 /usr/local/lib/python2.7/dist-packages/materials/LimitStateControllerBase.py
+/usr/local/lib/python2.7/dist-packages/materials/limit_state_controller_base.pyc
 /usr/local/lib/python2.7/dist-packages/materials/LimitStateControllerBase.pyc
 /usr/local/lib/python2.7/dist-packages/materials/materialGraphics.py
 /usr/local/lib/python2.7/dist-packages/materials/materialGraphics.pyc
@@ -574,6 +586,10 @@
 /usr/local/lib/python2.7/dist-packages/materials/sia263/fatigueControlSIA263.pyc
 /usr/local/lib/python2.7/dist-packages/materials/sia263/__init__.py
 /usr/local/lib/python2.7/dist-packages/materials/sia263/__init__.pyc
+/usr/local/lib/python2.7/dist-packages/materials/sia263/SIA263_limit_state_checking.py
+/usr/local/lib/python2.7/dist-packages/materials/sia263/SIA263_limit_state_checking.pyc
+/usr/local/lib/python2.7/dist-packages/materials/sia263/SIA263_limit_state_controllers.py
+/usr/local/lib/python2.7/dist-packages/materials/sia263/SIA263_limit_state_controllers.pyc
 /usr/local/lib/python2.7/dist-packages/materials/steelProfile.py
 /usr/local/lib/python2.7/dist-packages/materials/steelProfile.pyc
 /usr/local/lib/python2.7/dist-packages/materials/stressCalc.py

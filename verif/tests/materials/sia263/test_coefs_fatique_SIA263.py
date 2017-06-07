@@ -9,7 +9,7 @@ __email__= "l.pereztato@gmail.com"
 
 # Obtención de las rigideces de un apoyo de neopreno rectangular.
 
-from materials.sia263 import fatigueControlSIA263 as fc
+from materials.sia263 import SIA263_limit_state_checking as fc
 
 lambdaMaxA= fc.lambdaMax(21)
 lambdaMaxB= fc.lambdaMax(5)

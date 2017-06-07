@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-''' Lateral torsional buckling of steel beams. '''
+''' Classes and functions for limit state checking according to Eurocode 3. '''
 from __future__ import division
 
 __author__= "Luis C. Pérez Tato (LCPT)"
@@ -12,6 +12,8 @@ import math
 from miscUtils import LogMessages as lmsg
 import scipy.interpolate
 import numpy
+
+# Lateral torsional buckling of steel beams.
 
 def getLateralTorsionalBucklingCurve(profile):
   ''' Returns the lateral torsional bukling curve name (a,b,c or d) depending of the type of section (rolled, welded,...). EC3 Table 6.4, 6.3.2.2(2).
@@ -271,3 +273,35 @@ class MomentGradientFactorC1(object):
     return (math.sqrt(B1)+(1-rootK)/2.0*A2)/A1
 
   
+# Routines to install in recorder  to execute in every commit to check
+# eurocode 3 criterions.
+
+def controlBiaxialBendingEfficiency():
+  '''Code to execute in every commit to check stress criterion (bars in 3D problems).'''
+  return '''nmbComb= recorder.getNombreCombActual
+self.getResistingForce()
+crossSection= self.getProp('crossSection')
+crossSection.checkBiaxialBendingForElement(self,nmbComb)'''
+
+def controlYShearEfficiency():
+  return '''nmbComb= recorder.getNombreCombActual
+self.getResistingForce()
+crossSection= self.getProp('crossSection')
+crossSection.checkYShearForElement(self,nmbComb)'''
+
+def controlULSCriterion():
+  return '''recorder= self.getProp('ULSControlRecorder')
+nmbComb= recorder.getNombreCombActual
+self.getResistingForce()
+crossSection= self.getProp('crossSection')
+crossSection.checkBiaxialBendingForElement(self,nmbComb)
+crossSection.checkYShearForElement(self,nmbComb)'''
+
+def controlULSCriterion2D():
+  return '''recorder= self.getProp('ULSControlRecorder')
+nmbComb= recorder.getNombreCombActual
+self.getResistingForce()
+crossSection= self.getProp('crossSection')
+crossSection.checkUniaxialBendingForElement(self,nmbComb)
+crossSection.checkYShearForElement(self,nmbComb)'''
+

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #Check normal stresses limit state.
 import geom
-from materials import LimitStateControllerBase as lsc
+from materials import limit_state_checking_base as lsc
 from postprocess import ControlVars as cv
 
 class BiaxialBendingNormalStressController(lsc.LimitStateControllerBase):

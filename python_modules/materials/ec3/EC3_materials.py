@@ -11,8 +11,7 @@ __email__= " ana.Ortega.Ort@gmail.com, l.pereztato@gmail.com"
 import math
 from materials import structural_steel
 from materials import typical_materials
-from materials.ec3 import lateral_torsional_buckling as ltb
-from materials.ec3 import EC3_callback_controls as EC3cc
+from materials.ec3 import EC3_limit_state_checking as EC3lsc
 from miscUtils import LogMessages as lmsg
 
 class EC3Steel(structural_steel.BasicSteel):
@@ -112,13 +111,13 @@ class EC3Profile(object):
     self.typo= typo
   def getLateralTorsionalBucklingCurve(self):
     ''' Returns the lateral torsional bukling curve name (a,b,c or d) depending of the type of section (rolled, welded,...). EC3 Table 6.4, 6.3.2.2(2).'''
-    return ltb.getLateralTorsionalBucklingCurve(self)
+    return EC3lsc.getLateralTorsionalBucklingCurve(self)
   def getAvy(self):
     '''Returns y direction (web direction) shear area'''
     return self.get('Avy')
   def shearBucklingVerificationNeeded(self):
     '''Returns true if shear buckling verification is needed EC3-1-5'''
-    return ltb.shearBucklingVerificationNeeded(self)
+    return EC3lsc.shearBucklingVerificationNeeded(self)
   def getVplRdy(self):
     '''Returns y direction (web direction) plastic shear resistance'''
     if(self.shearBucklingVerificationNeeded()):
@@ -130,7 +129,7 @@ class EC3Profile(object):
   def getBendingResistanceReductionCoefficient(self,Vd):
     '''Returns bending resistance reduction coefficient as in
        clause 6.2.8 of EC31-1'''
-    return ltb.getBendingResistanceReductionCoefficient(self,Vd)
+    return EC3lsc.getBendingResistanceReductionCoefficient(self,Vd)
   def getNcRd(self,sectionClass):
     '''Returns the axial compression resistance of the cross-section.'''
     return self.getAeff(sectionClass)*self.steelType.fy/self.steelType.gammaM0()
@@ -146,15 +145,15 @@ class EC3Profile(object):
 
       :param sectionClass: section classification (1,2,3 or 4)
     '''
-    return ltb.getMvRdz(self,sectionClass,Vd)
+    return EC3lsc.getMvRdz(self,sectionClass,Vd)
 
   def getLateralBucklingImperfectionFactor(self):
     ''' Returns lateral torsional imperfection factor depending of the type of section (rolled, welded,...).
 
     '''
-    return ltb.getLateralBucklingImperfectionFactor(self)
+    return EC3lsc.getLateralBucklingImperfectionFactor(self)
 
-  def getLateralBucklingIntermediateFactor(self,sectionClass,xi,Mi,supportCoefs= ltb.SupportCoefficients()):
+  def getLateralBucklingIntermediateFactor(self,sectionClass,xi,Mi,supportCoefs= EC3lsc.SupportCoefficients()):
     ''' Returns lateral torsional buckling intermediate factor value.
 
      :param sectionClass: section classification (1,2,3 or 4)
@@ -162,9 +161,9 @@ class EC3Profile(object):
      :param Mi: ordinate for the moment diagram
      :param supportCoefs: coefficients that represent support conditions.
     '''
-    return ltb.getLateralBucklingIntermediateFactor(self,sectionClass,xi,Mi,supportCoefs)
+    return EC3lsc.getLateralBucklingIntermediateFactor(self,sectionClass,xi,Mi,supportCoefs)
 
-  def getLateralBucklingReductionFactor(self,sectionClass,xi,Mi,supportCoefs= ltb.SupportCoefficients()):
+  def getLateralBucklingReductionFactor(self,sectionClass,xi,Mi,supportCoefs= EC3lsc.SupportCoefficients()):
     ''' Returns lateral torsional buckling reduction factor value.
 
       :param sectionClass: section classification (1,2,3 or 4)
@@ -172,9 +171,9 @@ class EC3Profile(object):
       :param Mi: ordinate for the moment diagram
       :param supportCoefs: coefficients that represent support conditions.
       '''  
-    return ltb.getLateralBucklingReductionFactor(self,sectionClass,xi,Mi,supportCoefs)
+    return EC3lsc.getLateralBucklingReductionFactor(self,sectionClass,xi,Mi,supportCoefs)
 
-  def getLateralTorsionalBucklingResistance(self,sectionClass,xi,Mi,supportCoefs= ltb.SupportCoefficients()):
+  def getLateralTorsionalBucklingResistance(self,sectionClass,xi,Mi,supportCoefs= EC3lsc.SupportCoefficients()):
     '''Returns lateral torsional buckling resistance of this cross-section.
        Calculation is made following the paper:
 
@@ -187,9 +186,9 @@ class EC3Profile(object):
      :param Mi: ordinate for the moment diagram
      :param supportCoefs: coefficients that represent support conditions.
     '''
-    return ltb.getLateralTorsionalBucklingResistance(self,sectionClass,xi,Mi,supportCoefs)
+    return EC3lsc.getLateralTorsionalBucklingResistance(self,sectionClass,xi,Mi,supportCoefs)
 
-  def getMcr(self,xi,Mi,supportCoefs= ltb.SupportCoefficients()):
+  def getMcr(self,xi,Mi,supportCoefs= EC3lsc.SupportCoefficients()):
     '''Returns elastic critical moment about minor axis: y
        Calculation is made following the paper:
 
@@ -202,9 +201,9 @@ class EC3Profile(object):
      :param Mi: ordinate for the moment diagram
      :param supportCoefs: coefficients that represent support conditions.
     '''
-    return ltb.getMcr(self,xi,Mi,supportCoefs)
+    return EC3lsc.getMcr(self,xi,Mi,supportCoefs)
 
-  def getLateralBucklingNonDimensionalBeamSlenderness(self,sectionClass,xi,Mi,supportCoefs= ltb.SupportCoefficients()):
+  def getLateralBucklingNonDimensionalBeamSlenderness(self,sectionClass,xi,Mi,supportCoefs= EC3lsc.SupportCoefficients()):
 
     '''Returns non dimensional beam slenderness
      for lateral torsional buckling
@@ -216,7 +215,7 @@ class EC3Profile(object):
      :param Mi: ordinate for the moment diagram
      :param supportCoefs: coefficients that represent support conditions.
     '''
-    return ltb.getLateralBucklingNonDimensionalBeamSlenderness(self,sectionClass,xi,Mi,supportCoefs)
+    return EC3lsc.getLateralBucklingNonDimensionalBeamSlenderness(self,sectionClass,xi,Mi,supportCoefs)
   
   def getYShearEfficiency(self,sectionClass,Vyd):
     '''Returns major axis shear efficiency'''
@@ -262,9 +261,9 @@ class EC3Profile(object):
       e.setProp('ULSControlRecorder',recorder)
     self.setupULSControlVars(elems,sectionClass,chiLT)
     if(nodes.numGdls==3):
-      recorder.callbackRecord= EC3cc.controlULSCriterion2D()
+      recorder.callbackRecord= EC3lsc.controlULSCriterion2D()
     else:
-      recorder.callbackRecord= EC3cc.controlULSCriterion()
+      recorder.callbackRecord= EC3lsc.controlULSCriterion()
 
     recorder.callbackRestart= "print \"Restart method called.\""
     return recorder

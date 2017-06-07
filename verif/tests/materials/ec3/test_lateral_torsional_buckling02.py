@@ -19,7 +19,7 @@ import xc
 import scipy.interpolate
 
 
-from materials.ec3 import lateral_torsional_buckling as ltb
+from materials.ec3 import EC3_limit_state_checking as EC3lsc
 from materials.ec3 import EC3_materials
 
 S355JR= EC3_materials.S355JR
@@ -34,7 +34,7 @@ k1= 1.0; k2= 1.0
 L= 6.0 # Bar length (m)
 x= [0.0,0.25*L,0.5*L,0.75*L,1.0*L]
 M= [-93.7,0,114.3,0,111.4]
-mgf= ltb.MomentGradientFactorC1(x,M)
+mgf= EC3lsc.MomentGradientFactorC1(x,M)
 Mcr1= IPE400.getMcr(x,M)
 Mcr1Teor= 164.7e3
 
@@ -48,7 +48,7 @@ ratio1= abs(Mcr1-Mcr1Teor)/Mcr1Teor
 L= 3 # Bar length (m)
 x= [0.0,0.25*L,0.5*L,0.75*L,1.0*L]
 M= [-93.7e3,-93.7e3/2.0,0.0,114.3e3/2.0,114.3e3]
-mgf= ltb.MomentGradientFactorC1(x,M)
+mgf= EC3lsc.MomentGradientFactorC1(x,M)
 Mcr2= IPE400.getMcr(x,M)
 Mcr2Teor= 1778e3
 
