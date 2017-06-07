@@ -11,7 +11,7 @@ import xc_base
 import geom
 import xc
 import scipy.interpolate
-from materials.ec3 import EC3_limit_state_controllers as EC3lsc
+from materials.ec3 import EC3_limit_state_checking as EC3lsc
 
 __author__= "Luis C. Pérez Tato (LCPT)"
 __copyright__= "Copyright 2014, LCPT"

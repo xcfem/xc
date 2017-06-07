@@ -11,7 +11,7 @@ __email__= " ana.Ortega.Ort@gmail.com, l.pereztato@gmail.com"
 import math
 from materials import structural_steel
 from materials import typical_materials
-from materials.ec3 import EC3_limit_state_controllers as EC3lsc
+from materials.ec3 import EC3_limit_state_checking as EC3lsc
 from miscUtils import LogMessages as lmsg
 
 class EC3Steel(structural_steel.BasicSteel):

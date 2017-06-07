@@ -11,7 +11,7 @@ from materials.ehe import torsionEHE
 import geom
 import sys
 from postprocess import ControlVars as cv
-from materials import limit_state_controller_base as lsc
+from materials import limit_state_checking_base as lsc
 
 class ShearControllerEHE(lsc.LimitStateControllerBase):
   '''Parameters for shear control with EHE.'''

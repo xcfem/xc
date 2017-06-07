@@ -6,7 +6,7 @@ artículo 49.2.4 de la EHE-08.
 from __future__ import division
 from materials.fiber_section import createFiberSets
 from materials.fiber_section import fiberUtils
-from materials import limit_state_controller_base as lscb
+from materials import limit_state_checking_base as lscb
 import math
 
 class CrackControl(lscb.CrackControlBaseParameters):

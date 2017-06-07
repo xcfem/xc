@@ -19,7 +19,7 @@ import xc
 import scipy.interpolate
 
 
-from materials.ec3 import EC3_limit_state_controllers as EC3lsc
+from materials.ec3 import EC3_limit_state_checking as EC3lsc
 from materials.ec3 import EC3_materials
 
 S355JR= EC3_materials.S355JR

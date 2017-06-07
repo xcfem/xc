@@ -28,7 +28,7 @@ from materials.fiber_section import createFiberSets
 from materials.fiber_section import sectionReport 
 import matplotlib.pyplot as plt
 import numpy as np
-from materials.ec2 import crack_control_utils
+from materials.ec2 import EC2_limit_state_checking
 
 #Data from the experiment
 width=0.4     #width (cross-section coordinate Y)
@@ -278,13 +278,13 @@ print "Z coordinate of the steel fiber with maximum strain: ",(ZepsSMax)
 #              *Crack width calculation*
 
 #depth of the effective area:
-hceff=crack_control_utils.h_c_eff(depth_tot=depth,depht_eff=depth-cover-0.024/2.0,depth_neutral_axis=abs(x))
+hceff=EC2_limit_state_checking.h_c_eff(depth_tot=depth,depht_eff=depth-cover-0.024/2.0,depth_neutral_axis=abs(x))
 # print 'depth of the effective area: ',hceff,' m'
 #effective reinforcement ratio
-roseff=crack_control_utils.ro_eff(A_s=A_s,width=width,h_c_eff=hceff)
+roseff=EC2_limit_state_checking.ro_eff(A_s=A_s,width=width,h_c_eff=hceff)
 # print 'effective reinforcement ratio: ',roseff
 #maximum crack spacing
-srmax=crack_control_utils.s_r_max(k1=0.8,k2=0.5,k3=3.4,k4=0.425,cover=cover,fiReinf=0.024,ro_eff=roseff)
+srmax=EC2_limit_state_checking.s_r_max(k1=0.8,k2=0.5,k3=3.4,k4=0.425,cover=cover,fiReinf=0.024,ro_eff=roseff)
 # print 'maximum crack spacing: ',srmax,' m'
 #mean strain in the concrete between cracks
 eps_cm=concrete.fctm()/concrete.E0()/2.0

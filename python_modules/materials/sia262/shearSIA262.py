@@ -5,7 +5,7 @@ import xc_base
 import geom
 
 from postprocess import ControlVars as cv
-from materials import limit_state_controller_base as lsc
+from materials import limit_state_checking_base as lsc
 
 def VuNoShearRebars(beton,acier,Nd,Md,AsTrac,b,d):
   # Section shear capacity without shear reinforcement.  

@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+''' Classes and functions for limit state checking according to Eurocode 2. '''
 
 __author__= "Ana Ortega (AO_O) "
 __copyright__= "Copyright 2016, AO_O"
