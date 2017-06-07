@@ -1,4 +1,11 @@
 # -*- coding: utf-8 -*-
+''' Classes and functions for limit state checking according to Eurocode 5. '''
+
+__author__= "Ana Ortega (AO_O) "
+__copyright__= "Copyright 2016, AO_O"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "ana.ortega@ciccp.es "
 
 from __future__ import division
 from miscUtils import LogMessages as lmsg
@@ -8,10 +15,8 @@ from postprocess import callback_controls
 from postprocess import prop_statistics as ps
 
 
-
-
-class EC3TimberRectCrossSection(section_properties.RectangularSection):
-  """IPE profile with Eurocode 3 verification routines."""
+class EC5TimberRectCrossSection(section_properties.RectangularSection):
+  """Timber section with Eurocode 5 verification routines."""
   def __init__(self,name,b,h,E,nu,fyd,taud):
     super(EC3TimberRectCrossSection,self).__init__(name,b,h,E,nu)
     self.fyd= fyd
