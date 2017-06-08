@@ -38,4 +38,5 @@ class SoilProp:
                 ret_press=self.K*self.gammaSoil*(self.zGround-z)
             else:
                 ret_press=self.K*self.gammaSoil*(self.zGround-self.zWater)+self.K*(self.gammaSoil-self.gammaWater)*(self.zWater-z)+self.gammaWater*(self.zWater-z)
+        print 'z,pres', z,',', ret_press
         return ret_press

@@ -197,16 +197,19 @@ class EarthPressLoad(BaseVectorLoad):
             if(presElem!=0.0):
                 e.vector3dUniformLoadGlobal(presElem*self.loadVector)
         for stripL in self.stripLoads:
+            print 'aquí stripL'
             for e in self.xcSet.getElements:
                 presElem=stripL.getPressure(e.getCooCentroid(False)[2])
                 if (presElem!=0.0):
                     e.vector3dUniformLoadGlobal(presElem*self.loadVector)
         for lineL in self.lineLoads:
+            print 'aquí lineL'
             for e in self.xcSet.getElements:
                 presElem=lineL.getPressure(e.getCooCentroid(False)[2])
                 if (presElem!=0.0):
                     e.vector3dUniformLoadGlobal(presElem*self.loadVector)
         for horzL in self.horzLoads:
+            print 'aquí horzL'
             horzL.setup()
             for e in self.xcSet.getElements:
                 presElem=horzL.getPressure(e.getCooCentroid(False)[2])
