@@ -203,7 +203,8 @@ int XC::BandArpackSolver::solve(void)
 
     if(ierr != 0)
       {
-        std::cerr << " XC::BandArpackSolver::Error in dgbtrf_ " << std::endl;
+        std::cerr << nombre_clase() << "::" << __FUNCTION__
+		  << "; error in dgbtrf_ " << std::endl;
         return -1;
       }
 
@@ -218,7 +219,8 @@ int XC::BandArpackSolver::solve(void)
             dgbtrs_(ene, &n, &kl, &ku, &nrhs, Aptr, &ldA, iPIV,&workd[ipntr[1] - 1], &ldB, &ierr);
             if(ierr != 0)
               {
-                std::cerr << "XC::BandArpackSolver::Error with dgbtrs_ 1" <<std::endl;
+                std::cerr << nombre_clase() << "::" << __FUNCTION__
+			  << "; error with dgbtrs_ 1" <<std::endl;
                 exit(0);
               }
             continue;

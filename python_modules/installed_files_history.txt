@@ -442,6 +442,10 @@
 /usr/local/lib/python2.7/dist-packages/materials/ehe/tablasResult.pyc
 /usr/local/lib/python2.7/dist-packages/materials/ehe/torsionEHE.py
 /usr/local/lib/python2.7/dist-packages/materials/ehe/torsionEHE.pyc
+/usr/local/lib/python2.7/dist-packages/materials/eota/EOTA_TR029_limit_state_checking.py
+/usr/local/lib/python2.7/dist-packages/materials/eota/EOTA_TR029_limit_state_checking.pyc
+/usr/local/lib/python2.7/dist-packages/materials/eota/__init__.py
+/usr/local/lib/python2.7/dist-packages/materials/eota/__init__.pyc
 /usr/local/lib/python2.7/dist-packages/materials/fiber_section/creaSetsFibras.py
 /usr/local/lib/python2.7/dist-packages/materials/fiber_section/creaSetsFibras.pyc
 /usr/local/lib/python2.7/dist-packages/materials/fiber_section/createFiberSets.py

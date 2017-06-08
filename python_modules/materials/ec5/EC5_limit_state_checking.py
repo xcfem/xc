@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import division
 ''' Classes and functions for limit state checking according to Eurocode 5. '''
 
 __author__= "Ana Ortega (AO_O) "
@@ -7,7 +8,6 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "ana.ortega@ciccp.es "
 
-from __future__ import division
 from miscUtils import LogMessages as lmsg
 from materials import section_properties
 from postprocess import def_vars_control

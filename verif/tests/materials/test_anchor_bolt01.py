@@ -3,8 +3,7 @@
 # results compared with those of the document
 # "Hilti HIT-HY 150 with rebar".
 
-from materials.anchor_bolts import EOTA_TR029
-from materials.anchor_bolts import EOTA_TR029_tension
+from materials.eota import EOTA_TR029_limit_state_checking
 import math
 import geom
 
@@ -38,53 +37,53 @@ tauRkUcr= 7.5e6 # Characteristic bond strength for non-cracked concrete.
 k1= 10.1 # 7.2 for cracked concrete and 10.1 for non-cracked concrete.
 fckCube= 25e6 # Caracteristic concrete compression strength measured on cubes with a side length of 150 mm.
 # Strength of the anchor itself.
-NRds= EOTA_TR029_tension.axialResistanceSteelFailure(areaBarra,fuk)/gammaMs
+NRds= EOTA_TR029_limit_state_checking.axialResistanceSteelFailure(areaBarra,fuk)/gammaMs
 
 
 # Influencia de la distancia al borde
-CcrN= EOTA_TR029_tension.getCcrNp(diamBarra,hef,tauRkUcr)
+CcrN= EOTA_TR029_limit_state_checking.getCcrNp(diamBarra,hef,tauRkUcr)
 C= contornoPiezaSoporte.getRecubrimiento(posAnc) 
 Cmin= 5*diamBarra+10e-3
 
 if (C<Cmin):
   print "Too little concrete cover for the anchor."
 
-f1N= EOTA_TR029_tension.getFactor1N(C,CcrN)
+f1N= EOTA_TR029_limit_state_checking.getFactor1N(C,CcrN)
 
 # Área bruta extracción
-plgA0pN= EOTA_TR029_tension.getA0pN(diamBarra,posAnc,hef,tauRkUcr)
+plgA0pN= EOTA_TR029_limit_state_checking.getA0pN(diamBarra,posAnc,hef,tauRkUcr)
 A0pN= plgA0pN.getArea()
 # Área neta pull-out
 plgApN= plgA0pN
 plgApN.recortaPorPoligono(contornoPiezaSoporte)
 ApN= plgApN.getArea()
-f2pN= EOTA_TR029_tension.getFactor2pN(A0pN,ApN)
-N0Rdp= EOTA_TR029_tension.axialInitialResistancePullOut(diamBarra,hef,tauRk)/gammaMc
+f2pN= EOTA_TR029_limit_state_checking.getFactor2pN(A0pN,ApN)
+N0Rdp= EOTA_TR029_limit_state_checking.axialInitialResistancePullOut(diamBarra,hef,tauRk)/gammaMc
 NRdp= N0Rdp*f1N*f2pN # Extracción
 
 # Área bruta desprendimiento de cono
-plgA0cN= EOTA_TR029_tension.getA0cN(posAnc,hef)
+plgA0cN= EOTA_TR029_limit_state_checking.getA0cN(posAnc,hef)
 A0cN= plgA0cN.getArea()
 # Área neta extracción de cono.
 plgAcN= plgA0cN
 plgAcN.recortaPorPoligono(contornoPiezaSoporte)
 AcN= plgAcN.getArea()
-f2cN= EOTA_TR029_tension.getFactor2cN(A0cN,AcN)
-N0Rdc= EOTA_TR029_tension.axialInitialResistanceConeFailure(k1,fckCube,hef)/gammaMc
+f2cN= EOTA_TR029_limit_state_checking.getFactor2cN(A0cN,AcN)
+N0Rdc= EOTA_TR029_limit_state_checking.axialInitialResistanceConeFailure(k1,fckCube,hef)/gammaMc
 NRdc= N0Rdc*f1N*f2cN # Desprendimiento de cono.
 
 # Splitting
-CcrSp= EOTA_TR029_tension.getCcrSpHiltiHY150(h,hef)
+CcrSp= EOTA_TR029_limit_state_checking.getCcrSpHiltiHY150(h,hef)
 ScrSp= 2*CcrSp
-f1Nsp= EOTA_TR029_tension.getFactor1N(C,CcrSp)
+f1Nsp= EOTA_TR029_limit_state_checking.getFactor1N(C,CcrSp)
 # Área bruta splitting
-plgA0spN= EOTA_TR029_tension.getA0spN(posAnc,CcrSp)
+plgA0spN= EOTA_TR029_limit_state_checking.getA0spN(posAnc,CcrSp)
 A0spN= plgA0spN.getArea()
 # Area neta splitting
 plgAspN= plgA0spN
 plgAspN.recortaPorPoligono(contornoPiezaSoporte)
 AspN= plgAspN.getArea()
-f2spN= EOTA_TR029_tension.getFactor2spN(A0spN,AspN)
+f2spN= EOTA_TR029_limit_state_checking.getFactor2spN(A0spN,AspN)
 N0RdSp= N0Rdc
 NRdSp= N0RdSp*f1Nsp*f2spN # Desprendimiento de cono.
 
@@ -101,7 +100,7 @@ ratio3= abs(N0Rdc-73.2e3)/73.2e3
 ratio4= abs(f1N-0.828571)/0.828571
 f2pNTeor= (sqr(2*CcrN)-(CcrN-C)*2*CcrN)/sqr(2*CcrN)
 ratio5= abs(f2pN-f2pNTeor)/f2pNTeor
-CcrNc= EOTA_TR029_tension.getScrN(hef)/2
+CcrNc= EOTA_TR029_limit_state_checking.getScrN(hef)/2
 f2cNTeor= (sqr(2*CcrNc)-(CcrNc-C)*2*CcrNc)/sqr(2*CcrNc)
 ratio6= abs(f2cN-f2cNTeor)/f2cNTeor
 ratio7= abs(NRd-34.8621e3)/34.8621e3
