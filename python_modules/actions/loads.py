@@ -7,9 +7,9 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "ana.Ortega@ciccp.es"
 
-import xc_base
-import geom
-import xc
+#import xc_base
+#import geom
+#import xc
 from actions.earth_pressure import soil_properties as sp
 
 class BaseVectorLoad(object):
@@ -156,23 +156,39 @@ class UniformLoadOnSurfaces(BaseVectorLoad):
                     e.vector3dUniformLoadGlobal(self.loadVector)
 
 class EarthPressLoad(BaseVectorLoad):
-    '''Earth pressure applied on the shell elements generated from
-    all the surfaces in the xcSet. 
+    '''Earth pressure applied on the elements (shell or beams)
+    included in the set xcSet. 
     
-    :ivar name:      name identifying the load
-    :ivar xcSet:     set that contains the surfaces
+    :ivar name: name identifying the load
+    :ivar xcSet: set that contains the surfaces
     :ivar soilProp:  instance of the class SoilProp that defines the 
-                     soil parameters required to calculate the earth pressure
-                     (K:coefficient of pressure, zGround: global Z coordinate 
-                     of ground level,gammaSoil: weight density of soil, 
-                     zWater: global Z coordinate of groundwater level, 
-                     gammaWater: weight density of water) 
-    :ivar vDir:      unit xc vector defining pressures direction
+          soil parameters required to calculate the earth pressure
+          (K:coefficient of pressure, zGround: global Z coordinate of
+          ground level,gammaSoil: weight density of soil, zWater: global Z
+          coordinate of groundwater level, gammaWater: weight density of
+          water) 
+    :ivar vDir:unit xc vector defining pressures direction
+    :ivar stripLoads: list of instances of the class
+          StripLoadOnBackfill to define (if any) strip surcharge loads on
+          the backfill (defaults to [], no loads)
+    :ivar lineLoads: list of instances of the class
+          LineVerticalLoadOnBackfill  to define (if any) line
+          surcharge loads acting in vertical direction on the backfill
+          (defaults to [], no loads)
+    :ivar horzLoads: list of instances of the class
+          HorizontalLoadOnBackfill to define (if any) surcharge loads
+          acting in horizontal direction on the backfill (defaults to
+          [], no loads)
+
+
     '''
     def __init__(self,name, xcSet,soilData, vDir):
         super(EarthPressLoad,self).__init__(name,vDir)
         self.xcSet=xcSet
         self.soilData=soilData
+        self.stripLoads=list()
+        self.lineLoads=list()
+        self.horzLoads=list()
 
     def appendLoadToCurrentLoadPattern(self):
         ''' Append load to the current load pattern.'''
@@ -180,6 +196,22 @@ class EarthPressLoad(BaseVectorLoad):
             presElem=self.soilData.getPressure(e.getCooCentroid(False)[2])
             if(presElem!=0.0):
                 e.vector3dUniformLoadGlobal(presElem*self.loadVector)
+        for stripL in self.stripLoads:
+            for e in self.xcSet.getElements:
+                presElem=stripL.getPressure(e.getCooCentroid(False)[2])
+                if (presElem!=0.0):
+                    e.vector3dUniformLoadGlobal(presElem*self.loadVector)
+        for lineL in self.lineLoads:
+            for e in self.xcSet.getElements:
+                presElem=lineL.getPressure(e.getCooCentroid(False)[2])
+                if (presElem!=0.0):
+                    e.vector3dUniformLoadGlobal(presElem*self.loadVector)
+        for horzL in self.horzLoads:
+            horzL.setup()
+            for e in self.xcSet.getElements:
+                presElem=horzL.getPressure(e.getCooCentroid(False)[2])
+                if (presElem!=0.0):
+                    e.vector3dUniformLoadGlobal(presElem*self.loadVector)
  
 
 # TO DO: change the method in order to be able to append to current load pattern
