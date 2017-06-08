@@ -84,7 +84,8 @@ int XC::BandArpackppSolver::solve(int nModes)
     int retval= 0;
     if(!theSOE)
       {
-        std::cerr << "BandArpackppSolver::solve(); aún no se ha asignado the problema (EigenSOE).\n";
+        std::cerr << nombre_clase() << "::" << __FUNCTION__
+	          << "; eigen SOE was not assigned yet.\n";
         retval= -1;
       }
     else
@@ -96,8 +97,9 @@ int XC::BandArpackppSolver::solve(int nModes)
         if((numModes <= 1) || (numModes>=(n-1)))
           {
             numModes= 0;
-	    std::cerr << "BandArpackppSolver::solve(); the número de modos ha de"
-                      << "estar comprendido entre: " << 2 << " y " << n-2 << ".\n";
+	    std::cerr << nombre_clase() << "::" << __FUNCTION__
+	              << "; the number of modes must be"
+                      << " between: " << 2 << " and " << n-2 << ".\n";
             retval= -2;
           }
         else
@@ -145,7 +147,9 @@ bool XC::BandArpackppSolver::setEigenSOE(EigenSOE *soe)
         retval= true;
       }
     else
-      std::cerr << nombre_clase() << "::setEigenSOE: the system of equations no es del tipo adecuado para este solver." << std::endl;
+      std::cerr << nombre_clase() << "::" << __FUNCTION__
+	        << "the system of equations has not a suitable type for this solver."
+		<< std::endl;
     return retval;
   }
 
@@ -158,7 +162,8 @@ const XC::Vector &XC::BandArpackppSolver::getEigenvector(int mode) const
     static Vector retval(1);
     if(mode < 1 || mode > numModes)
       {
-        std::cerr << "BandArpackppSolver::getEigenVector() -- mode " << mode << " is out of range (1 - "
+        std::cerr << nombre_clase() << "::" << __FUNCTION__
+		  << "; mode " << mode << " is out of range (1 - "
 	          << numModes << ")\n";
       }
     else
@@ -170,7 +175,8 @@ const double &XC::BandArpackppSolver::getEigenvalue(int mode) const
   {
     static double retval= 0.0;
     if(mode < 1 || mode > numModes)
-        std::cerr << "BandArpackppSolver::getEigenvalue() -- mode " 
+        std::cerr << nombre_clase() << "::" << __FUNCTION__
+		  << "; -- mode " 
                   << mode << " is out of range (1 - " << numModes << ")\n";
     else
       retval= eigenvalues[mode-1];
