@@ -1,10 +1,3 @@
-acc2hipShell
-------------
-
-.. automodule:: misc.acc2hipShell
-    :members:
-    :undoc-members:
-    :show-inheritance:
 
 ansysToEsfBarra
 ---------------
@@ -46,13 +39,6 @@ banco_pruebas_shell
     :undoc-members:
     :show-inheritance:
 
-calculaCombinaciones
---------------------
-
-.. automodule:: misc.calculaCombinaciones
-    :members:
-    :undoc-members:
-    :show-inheritance:
 
 cargasSecciones
 ---------------

@@ -10,13 +10,14 @@ Preprocessor
 .. toctree::
    :maxdepth: 1
 
-   preprocessor/code.rst
 
    preprocessor/model.rst
 
    preprocessor/materials.rst
 
    preprocessor/actions.rst 
+
+   preprocessor/code.rst
 
 --------
 Solution

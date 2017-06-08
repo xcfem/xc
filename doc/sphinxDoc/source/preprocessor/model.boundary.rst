@@ -5,7 +5,7 @@ Boundary conditions
 Elastic foundation
 ------------------
 
-.. automodule:: model.mesh.elastic_foundation
+.. automodule:: model.boundary_cond.elastic_foundation
     :members:
     :undoc-members:
     :show-inheritance:
@@ -13,7 +13,7 @@ Elastic foundation
 OpenSees style
 --------------
 
-.. automodule:: model.mesh.opensees_style
+.. automodule:: model.boundary_cond.opensees_style
     :members:
     :undoc-members:
     :show-inheritance:

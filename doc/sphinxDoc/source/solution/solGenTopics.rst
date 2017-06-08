@@ -14,11 +14,4 @@ predefined_solutions
     :undoc-members:
     :show-inheritance:
 
-resuelve_combinacion
---------------------
-
-.. automodule:: solution.resuelve_combinacion
-    :members:
-    :undoc-members:
-    :show-inheritance:
 

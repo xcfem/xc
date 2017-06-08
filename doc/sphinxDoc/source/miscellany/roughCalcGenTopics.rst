@@ -1,11 +1,3 @@
-masonry_bridge
-------------------------
-
-.. automodule:: rough_calculations.masonry_bridge
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
 ArchBridgeRoughModelBase
 ------------------------
 
@@ -18,6 +10,14 @@ arch_bridge_simple_model
 ------------------------
 
 .. automodule:: rough_calculations.arch_bridge_simple_model
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+masonryVault
+------------------------
+
+.. automodule:: rough_calculations.masonryVault
     :members:
     :undoc-members:
     :show-inheritance:
@@ -159,16 +159,9 @@ ng_tied_arch_simple_model
     :undoc-members:
     :show-inheritance:
 
-ng_zapata_aislada
------------------
-
-.. automodule:: rough_calculations.ng_zapata_aislada
-    :members:
-    :undoc-members:
-    :show-inheritance:
 
 ng_encepados
------------------
+------------
 
 .. automodule:: rough_calculations.ng_encepados
     :members:
@@ -184,7 +177,7 @@ suspension_bridge_simple_model
     :show-inheritance:
 
 ng_min_dim_of_abutment_support
---------------
+------------------------------
 
 .. automodule:: rough_calculations.ng_min_dim_of_abutment_support
     :members:
