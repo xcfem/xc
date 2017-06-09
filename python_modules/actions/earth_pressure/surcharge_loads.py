@@ -42,7 +42,6 @@ class StripLoadOnBackfill(object):
             beta=bet2-bet1
             omega=bet1+beta/2.
             ret_press=self.coef*self.qLoad/math.pi*(beta-math.sin(beta)*math.cos(2*omega))
-        print 'z,pres', z,',', ret_press
         return ret_press
 
     def appendLoadToCurrentLoadPattern(self,xcSet,vDir):
@@ -80,7 +79,6 @@ class LineVerticalLoadOnBackfill(object):
         if difZ>0:
             omega=math.atan(self.distWall/difZ)
             ret_press=self.qLoad/math.pi/difZ*(math.sin(2*omega))**2
-        print 'z,pres', z,',', ret_press
         return ret_press
 
     def appendLoadToCurrentLoadPattern(self,xcSet,vDir):
@@ -142,7 +140,6 @@ class HorizontalLoadOnBackfill(object):
         ret_press=0
         if z<=self.zpresmax and z>=self.zpresmin:
             ret_press=self.presmax/(self.zpresmax-self.zpresmin)*(z-self.zpresmin)
-        print 'z,pres', z,',', ret_press
         return ret_press
 
     def appendLoadToCurrentLoadPattern(self,xcSet,vDir):
