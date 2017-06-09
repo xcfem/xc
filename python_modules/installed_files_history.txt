@@ -14,6 +14,8 @@
 /usr/local/lib/python2.7/dist-packages/actions/earth_pressure/__init__.pyc
 /usr/local/lib/python2.7/dist-packages/actions/earth_pressure/soil_properties.py
 /usr/local/lib/python2.7/dist-packages/actions/earth_pressure/soil_properties.pyc
+/usr/local/lib/python2.7/dist-packages/actions/earth_pressure/surcharge_loads.py
+/usr/local/lib/python2.7/dist-packages/actions/earth_pressure/surcharge_loads.pyc
 /usr/local/lib/python2.7/dist-packages/actions/estadillo_cargas.py
 /usr/local/lib/python2.7/dist-packages/actions/estadillo_cargas.pyc
 /usr/local/lib/python2.7/dist-packages/actions/__init__.py
