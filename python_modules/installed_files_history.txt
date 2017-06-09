@@ -484,6 +484,8 @@
 /usr/local/lib/python2.7/dist-packages/materials/materialReportsUtils.pyc
 /usr/local/lib/python2.7/dist-packages/materials/materialWithDKDiagrams.py
 /usr/local/lib/python2.7/dist-packages/materials/materialWithDKDiagrams.pyc
+/usr/local/lib/python2.7/dist-packages/materials/momentCurvatureDiagram.py
+/usr/local/lib/python2.7/dist-packages/materials/momentCurvatureDiagram.pyc
 /usr/local/lib/python2.7/dist-packages/materials/paramCircularSection.py
 /usr/local/lib/python2.7/dist-packages/materials/paramCircularSection.pyc
 /usr/local/lib/python2.7/dist-packages/materials/parametrosPerfilMetalico.py

@@ -1,18 +1,24 @@
 # -*- coding: utf-8 -*-
-
+''' Moment curvature diagram for a section. '''
 import xc_base
 import geom
 import xc
 from solution import predefined_solutions
 from model import predefined_spaces
 
-def getDiagMomentoCurvatura3d(preprocessor, nmbSecc, esfAxil, maxK, numIncr):
-  ''' Función que devuelve los puntos del diagrama momento curvatura de una sección.
+__author__= "Ana Ortega (AO_O) and Luis C. Pérez Tato (LCPT)"
+__copyright__= "Copyright 2015, AO_O and LCPT"
+__license__= "GPL"
+__version__= "3.0"
+__email__= " ana.Ortega.Ort@gmail.com, l.pereztato@gmail.com"
 
-  :param nmbSecc: Nombre de la sección a analizar.
-  :param esfAxil: Esfuerzo axil que actúa sobre la sección.
-  :param maxK: Curvatura máxima alcanzada durante el análisis.
-  :param numIncr: Número de incrementos en que se divide el intervalo 0->maxK.
+def getMomentCurvatureDiagram3D(preprocessor, nmbSecc, esfAxil, maxK, numIncr):
+  ''' Return the points of the moment curvature diagram of the section.
+
+  :param nmbSecc: Section name.
+  :param esfAxil: Axial force over the section.
+  :param maxK: Maximum curvature to reach in the analysis.
+  :param numIncr: Number of increments.
   '''
   nodes= preprocessor.getNodeLoader
 
@@ -45,7 +51,7 @@ def getDiagMomentoCurvatura3d(preprocessor, nmbSecc, esfAxil, maxK, numIncr):
   lp1= casos.newLoadPattern("default","1")
   lp1.newNodalLoad(nod2.tag,xc.Vector([0,0,0,0,0,0,1]))
 
-  # Calculamos el incremento de curvatura
+  # Compute curvature increment.
   dK= maxK/numIncr
   soluMethods= prb.getSolProc.getSoluMethodContainer
   smt= getSoluMethod("smt")
