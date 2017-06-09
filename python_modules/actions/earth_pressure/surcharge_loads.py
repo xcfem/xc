@@ -45,6 +45,18 @@ class StripLoadOnBackfill(object):
         print 'z,pres', z,',', ret_press
         return ret_press
 
+    def appendLoadToCurrentLoadPattern(self,xcSet,vDir):
+        '''Append to the current load pattern the earth thrust on a set of 
+        elements due to the strip load.
+
+        :param xcSet: set that contains the elements (shells and/or beams)
+        :param vDir: unit xc vector defining pressures direction
+        '''
+        for e in xcSet.getElements:
+            presElem=self.getPressure(e.getCooCentroid(False)[2])
+            if (presElem!=0.0):
+                e.vector3dUniformLoadGlobal(presElem*vDir)
+ 
 
 class LineVerticalLoadOnBackfill(object):
     '''Lateral earth pressure on a retaining wall due to line surcharge 
@@ -70,6 +82,18 @@ class LineVerticalLoadOnBackfill(object):
             ret_press=self.qLoad/math.pi/difZ*(math.sin(2*omega))**2
         print 'z,pres', z,',', ret_press
         return ret_press
+
+    def appendLoadToCurrentLoadPattern(self,xcSet,vDir):
+        '''Append to the current load pattern the earth thrust on a set of 
+        elements due to the line load.
+
+        :param xcSet: set that contains the elements (shells and/or beams)
+        :param vDir: unit xc vector defining pressures direction
+        '''
+        for e in xcSet.getElements:
+            presElem=self.getPressure(e.getCooCentroid(False)[2])
+            if (presElem!=0.0):
+                e.vector3dUniformLoadGlobal(presElem*vDir)
 
 
 class HorizontalLoadOnBackfill(object):
@@ -121,6 +145,18 @@ class HorizontalLoadOnBackfill(object):
         print 'z,pres', z,',', ret_press
         return ret_press
 
+    def appendLoadToCurrentLoadPattern(self,xcSet,vDir):
+        '''Append to the current load pattern the earth thrust on a set of 
+        elements due to the horizontal load.
+
+        :param xcSet: set that contains the elements (shells and/or beams)
+        :param vDir: unit xc vector defining pressures direction
+        '''
+        self.setup()
+        for e in xcSet.getElements:
+            presElem=self.getPressure(e.getCooCentroid(False)[2])
+            if (presElem!=0.0):
+                e.vector3dUniformLoadGlobal(presElem*vDir)
 
                                                   
                                                   
