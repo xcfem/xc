@@ -25,7 +25,7 @@ Devuelve la tensión de comparación última del cordón a emplear en la comprob
    resistencia del mismo según la primera condición del artículo 59.8.2 de EAE (página 256)
     fu: Resistencia a tracción del acero de las piezas a soldar.
     fy: Límite elástico del acero a soldar (ver tabla 59.8.2) expresado en pascales.
-    gammaM2: Coeficiente parcial de seguridad de valor 1.25. 
+    gammaM2: Partial safety factor of value 1.25. 
 '''
 def getValorComparacionResistenciaCordon(fu, fy, gammaM2):
   return fu/tablaBetaW(fy)/gammaM2
@@ -41,7 +41,7 @@ Devuelve el factor de capacidad correspondiente a la primera de las
           sobre el plano de garganta del cordón (ver figura 59.8).
     fu: Resistencia a tracción del acero de las piezas a soldar.
     fy: Límite elástico del acero a soldar (ver tabla 59.8.2) expresado en pascales.
-    gammaM2: Coeficiente parcial de seguridad de valor 1.25. 
+    gammaM2: Partial safety factor of value 1.25.
 '''
 def getFCCondicion1CordonPG(sigmaN, tauN, tauPll, fu, fy, gammaM2):
   return getTensComparacionCordonAnguloPG(sigmaN,tauN,tauPll)/getValorComparacionResistenciaCordon(fu,fy,gammaM2)
@@ -51,7 +51,7 @@ Devuelve la tensión de comparación última del cordón a emplear en la comprob
    resistencia del mismo según la segunda condición del artículo 59.8.2 de EAE (página 256)
     fu: Resistencia a tracción del acero de las piezas a soldar.
     fy: Límite elástico del acero a soldar (ver tabla 59.8.2) expresado en pascales.
-    gammaM2: Coeficiente parcial de seguridad de valor 1.25. 
+    gammaM2: Partial safety factor of value 1.25.
 '''
 def getTensionNormalUltimaCordon(fu, gammaM2):
   return 0.9*fu/gammaM2
@@ -61,7 +61,7 @@ Devuelve el factor de capacidad correspondiente a la segunda de las
    condiciones del artículo 59.8.2 de EAE (página 256)
     sigmaN: Tensión normal sobre el plano de garganta del cordón (ver figura 59.8).
     fu: Resistencia a tracción del acero de las piezas a soldar.
-    gammaM2: Coeficiente parcial de seguridad de valor 1.25. 
+    gammaM2: Partial safety factor of value 1.25.
 '''
 def getFCCondicion2CordonPG(sigmaN, fu, gammaM2):
     return abs(sigmaN)/getTensionNormalUltimaCordon(fu,gammaM2)
@@ -71,7 +71,7 @@ Devuelve el mínimo de los factores de capacidad correspondientes a las
    condiciones del artículo 59.8.2 de EAE (página 256)
     sigmaN: Tensión normal sobre el plano de garganta del cordón (ver figura 59.8).
     fu: Resistencia a tracción del acero de las piezas a soldar.
-    gammaM2: Coeficiente parcial de seguridad de valor 1.25. 
+    gammaM2: Partial safety factor of value 1.25.
 '''
 def getFCCordonPG(sigmaN, tauN, tauPll, fu, fy, gammaM2):
   return min(getFCCondicion1CordonPG(sigmaN,tauN,tauPll,fu,fy,gammaM2),getFCCondicion2CordonPG(sigmaN,fu,gammaM2))
@@ -124,7 +124,7 @@ Devuelve el factor de capacidad correspondiente a la primera de las
           sobre el plano de garganta abatido.
     fu: Resistencia a tracción del acero de las piezas a soldar.
     fy: Límite elástico del acero a soldar (ver tabla 59.8.2) expresado en pascales.
-    gammaM2: Coeficiente parcial de seguridad de valor 1.25. 
+    gammaM2: Partial safety factor of value 1.25.
 '''
 def getFCCondicion1Cordon(n, tn, ta, fu, fy, gammaM2):
   return getTensComparacionCordonAngulo(n,tn,ta)/getValorComparacionResistenciaCordon(fu,fy,gammaM2)
@@ -134,7 +134,7 @@ Devuelve el factor de capacidad correspondiente a la segunda de las
    condiciones del artículo 59.8.2 de EAE (página 256)
     sigmaN: Tensión normal sobre el plano de garganta del cordón (ver figura 59.8).
     fu: Resistencia a tracción del acero de las piezas a soldar.
-    gammaM2: Coeficiente parcial de seguridad de valor 1.25. 
+    gammaM2: Partial safety factor of value 1.25.
 '''
 def getFCCondicion2Cordon(n, tn, fu, gammaM2):
   sgN= getSigmaNPlanoGarganta(n,tn) 

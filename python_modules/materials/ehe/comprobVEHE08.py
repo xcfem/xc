@@ -96,7 +96,7 @@ def getFcvEHE08(fact,fcv,gammaC,b0,d,chi,sgpcd,AsPas,AsAct):
     :param fcv: Resistencia efectiva del hormigón a cortante. En piezas sin reinforcement de cortante
     será fcv= min(fck,60MPa). En piezas con reinforcement de cortante fcv= min(fck,100MPa).
     En ambos casos, si el control del hormigón es indirecto fcv=15MPa.
-    :param gammaC: Coeficiente de minoración de la resistencia del hormigón.
+    :param gammaC: Partial safety factor for concrete.
     b0: Anchura neta mínima del elemento a comprobar, definida de acuerdo con el artículo 40.3.5.
     :param d: Canto útil (meters).
     :param chi: Coeficiente que introduce el efecto de los áridos en el depth útil.
@@ -120,7 +120,7 @@ def getFcvMinEHE08(fcv,gammaC,d,chi,sgpcd):
     :param fcv: Resistencia efectiva del hormigón a cortante. En piezas sin reinforcement de cortante
     será fcv= min(fck,60MPa). En piezas con reinforcement de cortante fcv= min(fck,100MPa).
     En ambos casos, si el control del hormigón es indirecto fcv=15MPa.
-    :param gammaC: Coeficiente de minoración de la resistencia del hormigón.
+    :param gammaC: Partial safety factor for concrete.
     :param d: Canto útil (meters).
     :param chi: Coeficiente que introduce el efecto de los áridos en el depth útil.
     :param sgpcd: Tensión axial media en el alma (compresión positiva).
@@ -139,7 +139,7 @@ def getVu2EHE08NoAtSiFis(fcv,fcd,gammaC,Ncd,Ac,b0,d,AsPas,AsAct):
     será fcv= min(fck,60MPa). En piezas con reinforcement de cortante fcv= min(fck,100MPa).
     En ambos casos, si el control del hormigón es indirecto fcv=15MPa.
     :param fcd: Resistencia de cálculo del hormigón a compresión.
-    :param gammaC: Coeficiente de minoración de la resistencia del hormigón.
+    :param gammaC: Partial safety factor for concrete.
     :param Ncd: Axil de cálculo resistido por el hormigón (positivo si es de tracción).
     :param Ac: Area total de la sección de hormigón.
     b0: Anchura neta mínima del elemento a comprobar, definida de acuerdo con el artículo 40.3.5.
@@ -168,7 +168,7 @@ def getVu2EHE08NoAt(M,Mfis,fcv,fck,gammaC,I,S,alphaL,Ncd,Ac,b0,d,AsPas,AsAct):
     será fcv= min(fck,60MPa). En piezas con reinforcement de cortante fcv= min(fck,100MPa).
     En ambos casos, si el control del hormigón es indirecto fcv=15MPa.
     :param fck: Valor característico de la resistencia del hormigón a compresión.
-    :param gammaC: Coeficiente de minoración de la resistencia del hormigón.
+    :param gammaC: Partial safety factor for concrete.
     :param Ncd: Axil de cálculo resistido por el hormigón (positivo si es de tracción).
     :param Ac: Area total de la sección de hormigón.
     b0: Anchura neta mínima del elemento a comprobar, definida de acuerdo con el artículo 40.3.5.
@@ -303,7 +303,7 @@ def getVcuEHE08(fcv,fcd,gammaC,Ncd,Ac,b0,d,z,AsPas,AsAct,theta,Nd,Md,Vd,Td,Es,Ep
     será fcv= min(fck,60MPa). En piezas con reinforcement de cortante fcv= min(fck,100MPa).
     En ambos casos, si el control del hormigón es indirecto fcv=15MPa.
     :param fcd: Valor de cálculo de la resistencia del hormigón a compresión.
-    :param gammaC: Coeficiente de minoración de la resistencia del hormigón.
+    :param gammaC: Partial safety factor for concrete.
     :param Ncd: Axil de cálculo resistido por el hormigón (positivo si es de tracción).
     :param Ac: Area total de la sección de hormigón.
     b0: Anchura neta mínima del elemento a comprobar, definida de acuerdo con el artículo 40.3.5.
@@ -345,7 +345,7 @@ def getVu2EHE08SiAt(fcv,fcd,fyd,gammaC,Ncd,Ac,b0,d,z,AsPas,AsAct,AsTrsv, alpha, 
     En ambos casos, si el control del hormigón es indirecto fcv=15MPa.
     :param fcd: Valor de cálculo de la resistencia del hormigón a compresión.
     :param fyd: Valor de cálculo de la resistencia de la reinforcement a cortante.
-    :param gammaC: Coeficiente de minoración de la resistencia del hormigón.
+    :param gammaC: Partial safety factor for concrete.
     :param Ncd: Axil de cálculo resistido por el hormigón (positivo si es de tracción).
     :param Ac: Area total de la sección de hormigón.
     b0: Anchura neta mínima del elemento a comprobar, definida de acuerdo con el artículo 40.3.5.
@@ -384,7 +384,7 @@ def getVuEHE08SiAt(fck,fcv,fcd,fyd,gammaC,Ncd,Ac,b0,d,z,AsPas,AsAct,AsTrsv, alph
     En ambos casos, si el control del hormigón es indirecto fcv=15MPa.
     :param fcd: Valor de cálculo de la resistencia del hormigón a compresión.
     :param fyd: Valor de cálculo de la resistencia de la reinforcement a cortante.
-    :param gammaC: Coeficiente de minoración de la resistencia del hormigón.
+    :param gammaC: Partial safety factor for concrete.
     :param Ncd: Axil de cálculo resistido por el hormigón (positivo si es de tracción).
     :param Ac: Area total de la sección de hormigón.
     b0: Anchura neta mínima del elemento a comprobar, definida de acuerdo con el artículo 40.3.5.

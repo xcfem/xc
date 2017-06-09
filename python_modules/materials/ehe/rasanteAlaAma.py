@@ -9,7 +9,7 @@ def rasanteAgotamiento(fck,gammac,hf,Asf,Sf,fyd):
     #el resultado está expresado en kN/m (ó N/mm)
     #Datos:
     #fck: resistencia característica a compresión del hormigón (N/mm2)
-    #gammac= coeficiente de minoración de la resistencia del hormigón
+    #gammac= Partial safety factor for concrete.
     #hf: espesor del ala (m)
     #Asf: reinforcement por unidad de longitud que atraviesa la sección (mm2)
     #Sf: separación entre las barras de armaura que atraviesa la sección (mm)

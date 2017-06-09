@@ -25,7 +25,7 @@ class ShearControllerEHE(lsc.LimitStateControllerBase):
     self.fckH= 0.0 #Valor característico de la resistencia del hormigón a compresión.
     self.fcdH= 0.0 #Valor de cálculo de la resistencia del hormigón a compresión.
     self.fctdH= 0.0 #Valor de cálculo de la resistencia del hormigón a tracción.
-    self.gammaC= 0.0 #Coeficiente de minoración de la resistencia del hormigón.
+    self.gammaC= 0.0 # Partial safety factor for concrete.
     self.fydS= 0.0 #Valor de cálculo de la resistencia del acero de armar a tracción.
     self.depthUtil= 0.0 #Canto útil con el que está trabajando la sección.
     self.brazoMecanico= 0.0 #Lever arm con el que está trabajando la sección.

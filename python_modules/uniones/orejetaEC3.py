@@ -12,7 +12,7 @@ def getAMinOrejetaEC3(F, gammaM0, t, d0, fy):
    Esta función devuelve el valor mínimo de "a" (anchura del acero frente al
    ojal, ver figura en EC3)
    F: Tracción en la orejeta.
-   gammaM0: Coeficiente de minoración del acero.
+   gammaM0: Partial safety factor for steel.
    t: Espesor de la orejeta.
    d0: Diámetro del agujero.
    fy: Límite elástico del acero
@@ -27,7 +27,7 @@ def getCMinOrejetaEC3(F, gammaM0, t, d0, fy):
    Esta función devuelve el valor mínimo de "c" (anchura del acero a los 
    lados del ojal, ver figura en EC3)
    F: Tracción en la orejeta.
-   gammaM0: Coeficiente de minoración del acero.
+   gammaM0: Partial safety factor for steel.
    t: Espesor de la orejeta.
    d0: Diámetro del agujero.
    fy: Límite elástico del acero
@@ -41,7 +41,7 @@ def getResistCortanteBulonEC3(A, gammaM2, fup):
   Dimensionamiento de una orejeta según el apartado 3.13 del EC3 parte 1_8
    Esta función devuelve el valor de la resistencia a cortante del bulón
    A: Área del bulón.
-   gammaM2: Coeficiente de minoración del acero.
+   gammaM2: Partial safety factor for steel.
    fup: Resistencia última a tracción del acero.
   
   '''
@@ -57,7 +57,7 @@ def getFAplastamientoOjalEC3(t, d, fy, gammaM0):
    t: Espesor de la chapa que tiene el ojal.
    d: Diámetro del taladro.
    fy: Límite elástico del material.
-   gammaM0: Coeficiente de minoración del acero.
+   gammaM0: Partial safety factor for steel.
   
   '''
   return 1.5*t*d*fy/gammaM0
@@ -82,7 +82,7 @@ def getMResistBulonEC3(W, fy, gammaM0):
    (ver tabla 3.10, tercer modo de fallo)
    W: Modulo resistente (elástico) de la sección.
    fy: Límite elástico del material.
-   gammaM0: Coeficiente de minoración del acero.
+   gammaM0: Partial safety factor for steel.
   
   '''
   return 1.5*W*fy/gammaM0

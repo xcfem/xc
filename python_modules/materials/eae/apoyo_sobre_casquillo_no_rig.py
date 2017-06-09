@@ -24,9 +24,9 @@ def cargaUlt2(b,a,fu,betaW,gammaM2):
     Devuelve la resistencia del cordón de soldadura
     b: Longitud del casquillo medida de dirección perpendicular a la viga.
     a: Espesor de garganta del cordón de soldadura.
-    fu: Resistencia a tracción del acero (tabla 59.8.2 pág 304 EAE).
+    fu: Resistencia a tracción del acero (table 59.8.2 page 304 EAE).
     betaW: Coeficiente de correlación (tabla 59.8.2 pág 304 EAE).
-    gammaM2: Coeficiente parcial de seguridad para el acero (artículo 15.3 página 34 EAE).
+    gammaM2: Partial safety factor for steel (article 15.3 page 34 EAE).
     '''
     return b*a*fu/betaW/math.sqrt(2.0)/gammaM2
   

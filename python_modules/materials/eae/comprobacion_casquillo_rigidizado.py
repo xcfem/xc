@@ -73,7 +73,7 @@ def cargaUltCord1(a1,l,H,fu,betaW,gammaM2):
     H: Longitud del cateto vertical del rigidizador.
     fu: Resistencia a tracción del acero (tabla 59.8.2 pág 304 EAE).
     betaW: Coeficiente de correlación (tabla 59.8.2 pág 304 EAE).
-    gammaM2: Coeficiente parcial de seguridad para el acero (artículo 15.3 página 34 EAE).
+    gammaM2: Partial safety factor for steel (article 15.3 page 34 EAE).
      '''
     theta=math.atan2(l,H)
     return (2.0*a1*l*fu)/(betaW*math.sqrt(2+3*math.tan(theta)**2)*gammaM2)
@@ -89,7 +89,7 @@ def cargaUltCord2(a2,l,H,fu,betaW,gammaM2):
     H: Longitud del cateto vertical del rigidizador.
     fu: Resistencia a tracción del acero (tabla 59.8.2 pág 304 EAE).
     betaW: Coeficiente de correlación (tabla 59.8.2 pág 304 EAE).
-    gammaM2: Coeficiente parcial de seguridad para el acero (artículo 15.3 página 34 EAE).
+    gammaM2: Partial safety factor for steel (article 15.3 page 34 EAE).
     '''
     theta=math.atan2(l,H)
     return (2.0*a2*H*fu)/(betaW*math.sqrt(3+2*math.tan(theta)**2)*gammaM2)
@@ -106,7 +106,7 @@ def cargaUltCord3(a3,b,l,H,fu,betaW,gammaM2):
     H: Longitud del cateto vertical del rigidizador.
     fu: Resistencia a tracción del acero (tabla 59.8.2 pág 304 EAE).
     betaW: Coeficiente de correlación (tabla 59.8.2 pág 304 EAE).
-    gammaM2: Coeficiente parcial de seguridad para el acero (artículo 15.3 página 34 EAE).
+    gammaM2: Partial safety factor for steel (article 15.3 page 34 EAE).
     '''
     theta=math.atan2(l,H)
     return (math.sqrt(2)*b*a3*fu)/(betaW*math.tan(theta)*gammaM2)
