@@ -197,7 +197,7 @@ class QuickGraphics(object):
     diagram.agregaDiagrama()
     defDisplay= self.getDisplay(vwName=viewName,hCamF= hCamFct)
     defDisplay.setupGrid(self.xcSet)
-    defDisplay.defineEscenaMalla(None,defFScale)
+    defDisplay.defineMeshScene(None,defFScale)
     defDisplay.appendDiagram(diagram) #Append diagram to the scene.
 
     caption= self.loadCaseName+' '+itemToDisp+' '+unitDescription +' '+self.xcSet.name
@@ -236,7 +236,7 @@ class QuickGraphics(object):
     loadPatterns.addToDomain(loadCaseName)
     defDisplay= self.getDisplay(vwName=viewName,hCamF= hCamFct)
     grid= defDisplay.setupGrid(self.xcSet)
-    defDisplay.defineEscenaMalla(None,defFScale)
+    defDisplay.defineMeshScene(None,defFScale)
     orNodalLBar='H'  #default orientation of scale bar for nodal loads
     # element loads
     print 'scale=',elLoadScaleF,'fUnitConv=',fUnitConv,'loadPatternName=',loadCaseName,'component=',elLoadComp
@@ -287,7 +287,7 @@ class QuickGraphics(object):
     diagram.agregaDiagrama()
     defDisplay= self.getDisplay(vwName=viewName,hCamF= hCamFct)
     defDisplay.setupGrid(self.xcSet)
-    defDisplay.defineEscenaMalla(None,defFScale)
+    defDisplay.defineMeshScene(None,defFScale)
     defDisplay.appendDiagram(diagram) #Append diagram to the scene.
 
     caption= self.loadCaseName+' '+itemToDisp+' '+unitDescription +' '+self.xcSet.name
@@ -320,7 +320,7 @@ def displayLocalAxes(preprocessor,setToDisplay=None,vectorScale=1.0,viewNm="XYZP
     vField.dumpLocalAxes(setToDisplay)
     defDisplay.viewName= viewNm
     defDisplay.hCamFct=hCamFct
-    defDisplay.defineEscenaMalla(None,defFScale) 
+    defDisplay.defineMeshScene(None,defFScale) 
     vField.addToDisplay(defDisplay)
     defDisplay.displayScene(caption,fileName)
     return defDisplay
@@ -357,7 +357,7 @@ def displayLoad(preprocessor,setToDisplay=None,loadCaseNm='',unitsScale=1.0,vect
     vField.dumpLoads(preprocessor,defFScale)
     defDisplay.viewName= viewNm
     defDisplay.hCamFct=hCamFct
-    defDisplay.defineEscenaMalla(None,defFScale) 
+    defDisplay.defineMeshScene(None,defFScale) 
     vField.addToDisplay(defDisplay)
     defDisplay.displayScene(caption,fileName)
     return defDisplay

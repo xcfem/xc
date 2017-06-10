@@ -970,7 +970,7 @@ class GridModel(object):
               initial/undeformed shape)
     '''
     defDisplay= vtk_grafico_ef.RecordDefDisplayEF()
-    defDisplay.grafico_mef(partToDisplay,caption,viewNm,defFScale)
+    defDisplay.FEmeshGraphic(partToDisplay,caption,viewNm,defFScale)
     return defDisplay
 
   def displayLocalAxes(self,setToDisplay=None,vectorScale=1.0,viewNm="XYZPos",hCamFct=1.0,caption= '',fileName=None,defFScale=0.0):
@@ -1000,7 +1000,7 @@ class GridModel(object):
     vField.dumpLocalAxes(setToDisplay)
     defDisplay.viewName= viewNm
     defDisplay.hCamFct=hCamFct
-    defDisplay.defineEscenaMalla(None,defFScale) 
+    defDisplay.defineMeshScene(None,defFScale) 
     vField.addToDisplay(defDisplay)
     defDisplay.displayScene(caption,fileName)
     return defDisplay
@@ -1037,7 +1037,7 @@ class GridModel(object):
     vField.dumpLoads(self.getPreprocessor(),defFScale)
     defDisplay.viewName= viewNm
     defDisplay.hCamFct=hCamFct
-    defDisplay.defineEscenaMalla(None,defFScale) 
+    defDisplay.defineMeshScene(None,defFScale) 
     vField.addToDisplay(defDisplay)
     defDisplay.displayScene(caption,fileName)
     return defDisplay

@@ -253,7 +253,7 @@ def checksReports(limitStateLabel,setsShEl,argsShEl,capTexts,pathGr,texReportFil
             diagram.agregaDiagrama()
             dfDisp.viewName= stV[1]
             dfDisp.setupGrid(stV[0].elSet)
-            dfDisp.defineEscenaMalla(None)
+            dfDisp.defineMeshScene(None)
             dfDisp.appendDiagram(diagram)
             capt= capTexts[limitStateLabel] + ', ' + capTexts[argS[0]] + '. '+ stV[0].genDescr.capitalize() + ', ' + stV[0].sectDescr[0]
             grFileNm=pathGr+stV[0].elSet.name+argS[0]

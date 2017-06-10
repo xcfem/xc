@@ -234,7 +234,7 @@ class RecordDefDisplay(object):
 
     :param caption: caption to display with the scene.
     '''
-    self.defineEscenaMalla(None)
+    self.defineMeshScene(None)
     self.displayScene(caption)
 
   def plot(self,fName):
