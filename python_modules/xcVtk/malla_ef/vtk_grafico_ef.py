@@ -286,4 +286,4 @@ class RecordDefDisplayEF(vtk_grafico_base.RecordDefDisplay):
         self.displayNodalLoads(preprocessor, loadPattern,clrVectores,fScaleVectores)
 
     def appendDiagram(self,diagram):
-        diagram.agregaDiagramaAEscena(self)
+        diagram.addDiagramToScene(self)

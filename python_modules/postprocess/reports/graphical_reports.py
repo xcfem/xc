@@ -250,7 +250,7 @@ def checksReports(limitStateLabel,setsShEl,argsShEl,capTexts,pathGr,texReportFil
     for stV in setsBmElView:
         for argS in argsBmElScale:
             diagram= cvd.ControlVarDiagram(scaleFactor=argS[1],fUnitConv=1,sets=[stV[0].elSet],attributeName= limitStateLabel,component= argS[0])
-            diagram.agregaDiagrama()
+            diagram.addDiagram()
             dfDisp.viewName= stV[1]
             dfDisp.setupGrid(stV[0].elSet)
             dfDisp.defineMeshScene(None)

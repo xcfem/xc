@@ -67,7 +67,7 @@ class InternalForceDiagram(cd.ColoredDiagram):
     return [elemVDir,value1,value2]
     
 
-  def agregaDiagrama(self):
+  def addDiagram(self):
     self.creaEstrucDatosDiagrama()
     self.creaLookUpTable()
     self.creaActorDiagrama()

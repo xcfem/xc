@@ -93,7 +93,7 @@ class SlideDefinition(FigureBase):
 
   def setupDiagrams(self):
     for d in self.diagrams:
-      d.agregaDiagrama()
+      d.addDiagram()
 
   def genGraphicFile(self,preprocessor,defDisplay, xcSet, nmbFichGraf):
     jpegName= nmbFichGraf+".jpeg"

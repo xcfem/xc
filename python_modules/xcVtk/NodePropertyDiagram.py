@@ -47,7 +47,7 @@ class NodePropertyDiagram(cd.ColoredDiagram):
       v1= self.getValueForNode(e.getNodes[1])
       indxDiagrama= self.agregaDatosADiagrama(e,indxDiagrama,v0,v1,defFScale)
 
-  def agregaDiagrama(self):
+  def addDiagram(self):
     self.creaEstrucDatosDiagrama()
     self.creaLookUpTable()
     self.creaActorDiagrama()

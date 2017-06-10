@@ -194,7 +194,7 @@ class QuickGraphics(object):
     else:
       lmsg.warning('QuickGraphics::displayIntForc; set to display not defined; using previously defined set (total if None).')
     diagram= cvd.ControlVarDiagram(scaleFactor= scaleFactor,fUnitConv= fConvUnits,sets=[self.xcSet],attributeName= "intForce",component= itemToDisp)
-    diagram.agregaDiagrama()
+    diagram.addDiagram()
     defDisplay= self.getDisplay(vwName=viewName,hCamF= hCamFct)
     defDisplay.setupGrid(self.xcSet)
     defDisplay.defineMeshScene(None,defFScale)
@@ -241,7 +241,7 @@ class QuickGraphics(object):
     # element loads
     print 'scale=',elLoadScaleF,'fUnitConv=',fUnitConv,'loadPatternName=',loadCaseName,'component=',elLoadComp
     diagram= lld.LinearLoadDiagram(scale=elLoadScaleF,fUnitConv=fUnitConv,loadPatternName=loadCaseName,component=elLoadComp)
-    diagram.agregaDiagrama(preprocessor)
+    diagram.addDiagram(preprocessor)
     if (diagram.valMax > -1e+99) or (diagram.valMin<1e+99):
       defDisplay.appendDiagram(diagram)
       orNodalLBar='V'
@@ -284,7 +284,7 @@ class QuickGraphics(object):
     else:
       lmsg.warning('QuickGraphics::displayNodeValueDiagram; set to display not defined; using previously defined set (total if None).')
     diagram= npd.NodePropertyDiagram(scaleFactor= scaleFactor,fUnitConv= fConvUnits,sets=[self.xcSet],attributeName= itemToDisp)
-    diagram.agregaDiagrama()
+    diagram.addDiagram()
     defDisplay= self.getDisplay(vwName=viewName,hCamF= hCamFct)
     defDisplay.setupGrid(self.xcSet)
     defDisplay.defineMeshScene(None,defFScale)
