@@ -8,8 +8,8 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "ana.Ortega@ciccp.es    l.pereztato@ciccp.es"
 
-from xcVtk.malla_ef import vtk_grafico_ef
-from xcVtk.malla_ef import Fields
+from postprocess.xcVtk.FE_model import vtk_FE_graphic
+from postprocess.xcVtk.FE_model import Fields
 
 def displayFieldDirs1and2Base(limitStateLabel,argument,elementSet,genDescr,sectDescr,component,fUnitConv,fileName,captionTexts,defFScale=0.0):
   '''Display a field defined over bi-dimensional elements in its two directions.
@@ -29,7 +29,7 @@ def displayFieldDirs1and2Base(limitStateLabel,argument,elementSet,genDescr,sectD
               by this factor. (Defaults to 0.0, i.e. display of 
               initial/undeformed shape)
   '''
-  defDisplay= vtk_grafico_ef.RecordDefDisplayEF()
+  defDisplay= vtk_FE_graphic.RecordDefDisplayEF()
   attributeName= limitStateLabel + 'Sect1'   #Normal stresses limit state direction 1.
   field= Fields.getScalarFieldFromControlVar(attributeName,argument,elementSet,component,fUnitConv)
   captionBaseText= captionTexts[limitStateLabel] + ', ' + captionTexts[argument] + '. '+ genDescr.capitalize()

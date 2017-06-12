@@ -25,7 +25,7 @@ import xc
 from model import predefined_spaces
 from materials import typical_materials
 from materials import section_properties
-from postprocess import ControlVars as cv
+from postprocess import control_vars as cv
 from solution import predefined_solutions
 from miscUtils import LogMessages as lmsg
 from materials import internal_forces

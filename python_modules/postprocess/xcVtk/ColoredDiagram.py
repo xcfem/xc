@@ -9,7 +9,7 @@ __email__= "l.pereztato@gmail.com"
 
 import geom
 import vtk
-from xcVtk import vtk_lut_field
+from postprocess.xcVtk import vtk_lut_field
 
 ''' Define las variables que se emplean para definir
    un diagrama de esfuerzos. '''
@@ -163,8 +163,8 @@ class ColoredDiagram(vtk_lut_field.LUTField):
     self.actor.SetMapper(self.mapper)
 
 
-  def agregaDiagramaAEscena(self, recordDisplay):
-    # Agrega el diagrama al display.
+  def addDiagramToScene(self, recordDisplay):
+    ''' Adds the diagram to de scene'''
     recordDisplay.renderer.AddActor(self.actor)
     self.creaColorScaleBar()
     recordDisplay.renderer.AddActor2D(self.scalarBar)

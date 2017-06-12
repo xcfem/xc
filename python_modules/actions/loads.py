@@ -160,13 +160,13 @@ class EarthPressLoad(BaseVectorLoad):
     included in the set xcSet. 
     
     :ivar name: name identifying the load
-    :ivar xcSet: set that contains the surfaces
+    :ivar xcSet: set that contains the elements (shells and/or beams)
     :ivar soilProp:  instance of the class SoilProp that defines the 
           soil parameters required to calculate the earth pressure
           (K:coefficient of pressure, zGround: global Z coordinate of
           ground level,gammaSoil: weight density of soil, zWater: global Z
           coordinate of groundwater level, gammaWater: weight density of
-          water) 
+          water) . soilProp==None if earth thrust is not considered.
     :ivar vDir:unit xc vector defining pressures direction
     :ivar stripLoads: list of instances of the class
           StripLoadOnBackfill to define (if any) strip surcharge loads on
@@ -192,29 +192,15 @@ class EarthPressLoad(BaseVectorLoad):
 
     def appendLoadToCurrentLoadPattern(self):
         ''' Append load to the current load pattern.'''
-        for e in self.xcSet.getElements:
-            presElem=self.soilData.getPressure(e.getCooCentroid(False)[2])
-            if(presElem!=0.0):
-                e.vector3dUniformLoadGlobal(presElem*self.loadVector)
+        if self.soilData<>None:
+            self.soilData.appendLoadToCurrentLoadPattern(self.xcSet,self.loadVector)
         for stripL in self.stripLoads:
-            print 'aquí stripL'
-            for e in self.xcSet.getElements:
-                presElem=stripL.getPressure(e.getCooCentroid(False)[2])
-                if (presElem!=0.0):
-                    e.vector3dUniformLoadGlobal(presElem*self.loadVector)
+            stripL.appendLoadToCurrentLoadPattern(self.xcSet,self.loadVector)
         for lineL in self.lineLoads:
-            print 'aquí lineL'
-            for e in self.xcSet.getElements:
-                presElem=lineL.getPressure(e.getCooCentroid(False)[2])
-                if (presElem!=0.0):
-                    e.vector3dUniformLoadGlobal(presElem*self.loadVector)
+            lineL.appendLoadToCurrentLoadPattern(self.xcSet,self.loadVector)
         for horzL in self.horzLoads:
-            print 'aquí horzL'
-            horzL.setup()
-            for e in self.xcSet.getElements:
-                presElem=horzL.getPressure(e.getCooCentroid(False)[2])
-                if (presElem!=0.0):
-                    e.vector3dUniformLoadGlobal(presElem*self.loadVector)
+            horzL.appendLoadToCurrentLoadPattern(self.xcSet,self.loadVector)
+
  
 
 # TO DO: change the method in order to be able to append to current load pattern

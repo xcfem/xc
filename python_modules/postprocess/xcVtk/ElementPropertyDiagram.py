@@ -11,7 +11,7 @@ __email__= "l.pereztato@ciccp.es, ana.ortega@ciccp.es "
 
 from miscUtils import LogMessages as lmsg
 import vtk
-from xcVtk import ColoredDiagram as cd
+from postprocess.xcVtk import ColoredDiagram as cd
 from postprocess import extrapolate_elem_attr
 
 
@@ -111,7 +111,7 @@ class ElementPropertyDiagram(cd.ColoredDiagram):
         v1= e.getNodes[1].getProp(self.propertyName)
         indxDiagrama= self.agregaDatosADiagrama(e,indxDiagrama,v0,v1,defFScale)
 
-  def agregaDiagrama(self):
+  def addDiagram(self):
     self.creaEstrucDatosDiagrama()
     self.creaLookUpTable()
     self.creaActorDiagrama()

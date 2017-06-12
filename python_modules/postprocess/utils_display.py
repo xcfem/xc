@@ -10,11 +10,11 @@ __email__= "l.pereztato@ciccp.es, ana.ortega@ciccp.es "
 import os
 from miscUtils import LogMessages as lmsg
 from miscUtils import string_utils as su
-from xcVtk import vtk_grafico_base
-from xcVtk.malla_ef import vtk_grafico_ef
-from xcVtk.malla_ef import Fields
-#from xcVtk import vtkInternalForceDiagram as ifd
-from postprocess.ControlVars import *
+from postprocess.xcVtk import vtk_grafico_base
+from postprocess.xcVtk.FE_model import vtk_FE_graphic
+from postprocess.xcVtk.FE_model import Fields
+#from postprocess.xcVtk import vtkInternalForceDiagram as ifd
+from postprocess.control_vars import *
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -93,7 +93,7 @@ class SlideDefinition(FigureBase):
 
   def setupDiagrams(self):
     for d in self.diagrams:
-      d.agregaDiagrama()
+      d.addDiagram()
 
   def genGraphicFile(self,preprocessor,defDisplay, xcSet, nmbFichGraf):
     jpegName= nmbFichGraf+".jpeg"
@@ -141,7 +141,7 @@ class TakePhotos(object):
   def __init__(self,xcSet):
     self.defDisplay= None
     self.xcSet= xcSet
-    self.defDisplay= vtk_grafico_ef.RecordDefDisplayEF()
+    self.defDisplay= vtk_FE_graphic.RecordDefDisplayEF()
     self.pthGraphOutput= '/tmp/'  #Directory to put the graphics in.
     self.pthTextOutput= '/tmp/'  #Directory to put the texts in.
     self.fichLatexFigs= None #Latex file to include figures.

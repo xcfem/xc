@@ -10,8 +10,8 @@ __email__= " ana.Ortega@ciccp.es, l.pereztato@ciccp.es"
 
 import geom
 import vtk
-from xcVtk import ColoredDiagram as cd
-from postprocess import ControlVars as cv
+from postprocess.xcVtk import ColoredDiagram as cd
+from postprocess import control_vars as cv
 from miscUtils import LogMessages as lmsg
 
 class InternalForceDiagram(cd.ColoredDiagram):
@@ -67,7 +67,7 @@ class InternalForceDiagram(cd.ColoredDiagram):
     return [elemVDir,value1,value2]
     
 
-  def agregaDiagrama(self):
+  def addDiagram(self):
     self.creaEstrucDatosDiagrama()
     self.creaLookUpTable()
     self.creaActorDiagrama()

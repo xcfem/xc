@@ -4,7 +4,7 @@
 
 import geom
 import vtk
-from xcVtk import ColoredDiagram as cd
+from postprocess.xcVtk import ColoredDiagram as cd
 
 
 class LinearLoadDiagram(cd.ColoredDiagram):
@@ -48,7 +48,7 @@ class LinearLoadDiagram(cd.ColoredDiagram):
     #Iterate over loaded elements.
     self.dumpElementalLoads(preprocessor,lp,indxDiagram)
 
-  def agregaDiagrama(self,preprocessor):
+  def addDiagram(self,preprocessor):
     self.creaEstrucDatosDiagrama()
     self.creaLookUpTable()
     self.creaActorDiagrama()

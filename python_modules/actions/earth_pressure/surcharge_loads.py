@@ -42,9 +42,20 @@ class StripLoadOnBackfill(object):
             beta=bet2-bet1
             omega=bet1+beta/2.
             ret_press=self.coef*self.qLoad/math.pi*(beta-math.sin(beta)*math.cos(2*omega))
-        print 'z,pres', z,',', ret_press
         return ret_press
 
+    def appendLoadToCurrentLoadPattern(self,xcSet,vDir):
+        '''Append to the current load pattern the earth thrust on a set of 
+        elements due to the strip load.
+
+        :param xcSet: set that contains the elements (shells and/or beams)
+        :param vDir: unit xc vector defining pressures direction
+        '''
+        for e in xcSet.getElements:
+            presElem=self.getPressure(e.getCooCentroid(False)[2])
+            if (presElem!=0.0):
+                e.vector3dUniformLoadGlobal(presElem*vDir)
+ 
 
 class LineVerticalLoadOnBackfill(object):
     '''Lateral earth pressure on a retaining wall due to line surcharge 
@@ -68,8 +79,19 @@ class LineVerticalLoadOnBackfill(object):
         if difZ>0:
             omega=math.atan(self.distWall/difZ)
             ret_press=self.qLoad/math.pi/difZ*(math.sin(2*omega))**2
-        print 'z,pres', z,',', ret_press
         return ret_press
+
+    def appendLoadToCurrentLoadPattern(self,xcSet,vDir):
+        '''Append to the current load pattern the earth thrust on a set of 
+        elements due to the line load.
+
+        :param xcSet: set that contains the elements (shells and/or beams)
+        :param vDir: unit xc vector defining pressures direction
+        '''
+        for e in xcSet.getElements:
+            presElem=self.getPressure(e.getCooCentroid(False)[2])
+            if (presElem!=0.0):
+                e.vector3dUniformLoadGlobal(presElem*vDir)
 
 
 class HorizontalLoadOnBackfill(object):
@@ -118,9 +140,20 @@ class HorizontalLoadOnBackfill(object):
         ret_press=0
         if z<=self.zpresmax and z>=self.zpresmin:
             ret_press=self.presmax/(self.zpresmax-self.zpresmin)*(z-self.zpresmin)
-        print 'z,pres', z,',', ret_press
         return ret_press
 
+    def appendLoadToCurrentLoadPattern(self,xcSet,vDir):
+        '''Append to the current load pattern the earth thrust on a set of 
+        elements due to the horizontal load.
+
+        :param xcSet: set that contains the elements (shells and/or beams)
+        :param vDir: unit xc vector defining pressures direction
+        '''
+        self.setup()
+        for e in xcSet.getElements:
+            presElem=self.getPressure(e.getCooCentroid(False)[2])
+            if (presElem!=0.0):
+                e.vector3dUniformLoadGlobal(presElem*vDir)
 
                                                   
                                                   

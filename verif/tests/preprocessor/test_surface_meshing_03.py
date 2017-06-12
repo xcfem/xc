@@ -98,7 +98,7 @@ execfile("vtk/malla_cad/vtk_define_malla_cad.xcm")
 execfile("vtk/malla_ef/vtk_define_malla_elementos.xcm")
 execfile("vtk/vtk_cargas.xcm")
 execfile("vtk/utilsVtk.lcmm")
-\VtkCargaMallaElem("uGridElem","total")
+\VtkLoadElemMesh("uGridElem","total")
 
 \vtk
 
@@ -107,7 +107,7 @@ execfile("vtk/utilsVtk.lcmm")
         \set_background{.95, .95, .95}
 
     \VtkDefineActorNodo("uGridElem","renderer",0.02)
-    \VtkDefineActorElementos("uGridElem","renderer","surface")
+    \VtkDefineElementsActor("uGridElem","renderer","surface")
 
 
     \renderer

@@ -9,12 +9,12 @@ __email__= " ana.Ortega@ciccp.es "
 import xc_base
 import geom
 import xc
-from xcVtk.malla_ef import vtk_grafico_ef
-from xcVtk.malla_ef import Fields
+from postprocess.xcVtk.FE_model import vtk_FE_graphic
+from postprocess.xcVtk.FE_model import Fields
 from postprocess import utils_display
 from model.grid_based import GridModel
-from xcVtk import ControlVarDiagram as cvd
-from xcVtk.malla_ef import QuickGraphics as QGrph
+from postprocess.xcVtk import control_var_diagram as cvd
+from postprocess.xcVtk.FE_model import quick_graphics as QGrph
 
 class RecordLoadCaseDisp(object):
   '''Generation of graphic files and adding to report-tex files for a load case
@@ -231,7 +231,7 @@ def checksReports(limitStateLabel,setsShEl,argsShEl,capTexts,pathGr,texReportFil
                        argument] to be included in the report for beam elements
     '''
     report=open(texReportFile,'w')    #report latex file
-    dfDisp= vtk_grafico_ef.RecordDefDisplayEF()
+    dfDisp= vtk_FE_graphic.RecordDefDisplayEF()
     for st in setsShEl:
         for arg in argsShEl:
             attributeName= limitStateLabel + 'Sect1'
@@ -250,10 +250,10 @@ def checksReports(limitStateLabel,setsShEl,argsShEl,capTexts,pathGr,texReportFil
     for stV in setsBmElView:
         for argS in argsBmElScale:
             diagram= cvd.ControlVarDiagram(scaleFactor=argS[1],fUnitConv=1,sets=[stV[0].elSet],attributeName= limitStateLabel,component= argS[0])
-            diagram.agregaDiagrama()
+            diagram.addDiagram()
             dfDisp.viewName= stV[1]
             dfDisp.setupGrid(stV[0].elSet)
-            dfDisp.defineEscenaMalla(None)
+            dfDisp.defineMeshScene(None)
             dfDisp.appendDiagram(diagram)
             capt= capTexts[limitStateLabel] + ', ' + capTexts[argS[0]] + '. '+ stV[0].genDescr.capitalize() + ', ' + stV[0].sectDescr[0]
             grFileNm=pathGr+stV[0].elSet.name+argS[0]

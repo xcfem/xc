@@ -11,9 +11,9 @@ __email__= "l.pereztato@ciccp.es, ana.ortega@ciccp.es "
 
 import vtk
 from miscUtils import LogMessages as lmsg
-from xcVtk import FieldBase as fb
+from postprocess.xcVtk import FieldBase as fb
 from postprocess import extrapolate_elem_attr
-from postprocess import ControlVars as cv
+from postprocess import control_vars as cv
 
 class ScalarField(fb.FieldBase):
   '''Scalar field defined at nodes.'''

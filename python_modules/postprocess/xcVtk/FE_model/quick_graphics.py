@@ -12,13 +12,13 @@ __email__= "ana.Ortega@ciccp.es    l.pereztato@ciccp.es"
 
 from miscUtils import LogMessages as lmsg
 from solution import predefined_solutions
-from xcVtk.malla_ef import vtk_grafico_ef
-from xcVtk.malla_ef import Fields
-from xcVtk import ControlVarDiagram as cvd
-from xcVtk import LinearLoadDiagram as lld
-from xcVtk import LoadVectorField as lvf
-from xcVtk import NodePropertyDiagram as npd
-from xcVtk import LocalAxesVectorField as lavf
+from postprocess.xcVtk.FE_model import vtk_FE_graphic
+from postprocess.xcVtk.FE_model import Fields
+from postprocess.xcVtk import control_var_diagram as cvd
+from postprocess.xcVtk import LinearLoadDiagram as lld
+from postprocess.xcVtk import LoadVectorField as lvf
+from postprocess.xcVtk import NodePropertyDiagram as npd
+from postprocess.xcVtk import LocalAxesVectorField as lavf
 
 class QuickGraphics(object):
   '''This class is aimed at providing the user with a quick and easy way to 
@@ -86,7 +86,7 @@ class QuickGraphics(object):
                         in order to change perspective of isometric views 
                         (defaults to 1, usual values 0.1 to 10)
     '''
-    defDisplay= vtk_grafico_ef.RecordDefDisplayEF()
+    defDisplay= vtk_FE_graphic.RecordDefDisplayEF()
     defDisplay.viewName=vwName
     defDisplay.hCamFct=hCamF
     return defDisplay
@@ -194,10 +194,10 @@ class QuickGraphics(object):
     else:
       lmsg.warning('QuickGraphics::displayIntForc; set to display not defined; using previously defined set (total if None).')
     diagram= cvd.ControlVarDiagram(scaleFactor= scaleFactor,fUnitConv= fConvUnits,sets=[self.xcSet],attributeName= "intForce",component= itemToDisp)
-    diagram.agregaDiagrama()
+    diagram.addDiagram()
     defDisplay= self.getDisplay(vwName=viewName,hCamF= hCamFct)
     defDisplay.setupGrid(self.xcSet)
-    defDisplay.defineEscenaMalla(None,defFScale)
+    defDisplay.defineMeshScene(None,defFScale)
     defDisplay.appendDiagram(diagram) #Append diagram to the scene.
 
     caption= self.loadCaseName+' '+itemToDisp+' '+unitDescription +' '+self.xcSet.name
@@ -236,12 +236,12 @@ class QuickGraphics(object):
     loadPatterns.addToDomain(loadCaseName)
     defDisplay= self.getDisplay(vwName=viewName,hCamF= hCamFct)
     grid= defDisplay.setupGrid(self.xcSet)
-    defDisplay.defineEscenaMalla(None,defFScale)
+    defDisplay.defineMeshScene(None,defFScale)
     orNodalLBar='H'  #default orientation of scale bar for nodal loads
     # element loads
     print 'scale=',elLoadScaleF,'fUnitConv=',fUnitConv,'loadPatternName=',loadCaseName,'component=',elLoadComp
     diagram= lld.LinearLoadDiagram(scale=elLoadScaleF,fUnitConv=fUnitConv,loadPatternName=loadCaseName,component=elLoadComp)
-    diagram.agregaDiagrama(preprocessor)
+    diagram.addDiagram(preprocessor)
     if (diagram.valMax > -1e+99) or (diagram.valMin<1e+99):
       defDisplay.appendDiagram(diagram)
       orNodalLBar='V'
@@ -284,10 +284,10 @@ class QuickGraphics(object):
     else:
       lmsg.warning('QuickGraphics::displayNodeValueDiagram; set to display not defined; using previously defined set (total if None).')
     diagram= npd.NodePropertyDiagram(scaleFactor= scaleFactor,fUnitConv= fConvUnits,sets=[self.xcSet],attributeName= itemToDisp)
-    diagram.agregaDiagrama()
+    diagram.addDiagram()
     defDisplay= self.getDisplay(vwName=viewName,hCamF= hCamFct)
     defDisplay.setupGrid(self.xcSet)
-    defDisplay.defineEscenaMalla(None,defFScale)
+    defDisplay.defineMeshScene(None,defFScale)
     defDisplay.appendDiagram(diagram) #Append diagram to the scene.
 
     caption= self.loadCaseName+' '+itemToDisp+' '+unitDescription +' '+self.xcSet.name
@@ -314,13 +314,13 @@ def displayLocalAxes(preprocessor,setToDisplay=None,vectorScale=1.0,viewNm="XYZP
       setToDisplay.fillDownwards()
       lmsg.warning('set to display not defined; using total set.')
 
-    defDisplay= vtk_grafico_ef.RecordDefDisplayEF()
+    defDisplay= vtk_FE_graphic.RecordDefDisplayEF()
     defDisplay.setupGrid(setToDisplay)
     vField=lavf.LocalAxesVectorField(setToDisplay.name+'_localAxes',vectorScale)
     vField.dumpLocalAxes(setToDisplay)
     defDisplay.viewName= viewNm
     defDisplay.hCamFct=hCamFct
-    defDisplay.defineEscenaMalla(None,defFScale) 
+    defDisplay.defineMeshScene(None,defFScale) 
     vField.addToDisplay(defDisplay)
     defDisplay.displayScene(caption,fileName)
     return defDisplay
@@ -350,14 +350,14 @@ def displayLoad(preprocessor,setToDisplay=None,loadCaseNm='',unitsScale=1.0,vect
       setToDisplay.fillDownwards()
       lmsg.warning('set to display not defined; using total set.')
 
-    defDisplay= vtk_grafico_ef.RecordDefDisplayEF()
+    defDisplay= vtk_FE_graphic.RecordDefDisplayEF()
     defDisplay.setupGrid(setToDisplay)
     vField=lvf.LoadVectorField(loadCaseNm,unitsScale,vectorScale)
     vField.multiplyByElementArea=multByElemArea
     vField.dumpLoads(preprocessor,defFScale)
     defDisplay.viewName= viewNm
     defDisplay.hCamFct=hCamFct
-    defDisplay.defineEscenaMalla(None,defFScale) 
+    defDisplay.defineMeshScene(None,defFScale) 
     vField.addToDisplay(defDisplay)
     defDisplay.displayScene(caption,fileName)
     return defDisplay

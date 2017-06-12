@@ -13,7 +13,7 @@ import sys
 import vtk
 import xc_base
 import geom
-from xcVtk import ScreenAnnotation as sa
+from postprocess.xcVtk import ScreenAnnotation as sa
 from miscUtils import LogMessages as lmsg
 
 
@@ -234,7 +234,7 @@ class RecordDefDisplay(object):
 
     :param caption: caption to display with the scene.
     '''
-    self.defineEscenaMalla(None)
+    self.defineMeshScene(None)
     self.displayScene(caption)
 
   def plot(self,fName):

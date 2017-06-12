@@ -19,16 +19,16 @@ from materials import typical_materials
 from materials import section_properties
 from model import predefined_spaces
 from model.boundary_cond import elastic_foundation as ef
-from xcVtk import vtk_grafico_base
-from xcVtk.malla_ef import vtk_grafico_ef
-from xcVtk.malla_ef import Fields
-from xcVtk import LoadVectorField as lvf
-from xcVtk import LocalAxesVectorField as lavf
-from xcVtk.malla_ef import QuickGraphics as qg
+from postprocess.xcVtk import vtk_grafico_base
+from postprocess.xcVtk.FE_model import vtk_FE_graphic
+from postprocess.xcVtk.FE_model import Fields
+from postprocess.xcVtk import LoadVectorField as lvf
+from postprocess.xcVtk import LocalAxesVectorField as lavf
+from postprocess.xcVtk.FE_model import quick_graphics as qg
 import ijkGrid as grid
 import math
 from postprocess import utils_display
-from xcVtk.malla_ef import vtk_display_limit_state
+from postprocess.xcVtk.FE_model import vtk_display_limit_state
 
 class NamedObjectsMap(dict):
   '''dictionary of objects which have a name.'''
@@ -969,8 +969,8 @@ class GridModel(object):
               by this factor. (Defaults to 0.0, i.e. display of 
               initial/undeformed shape)
     '''
-    defDisplay= vtk_grafico_ef.RecordDefDisplayEF()
-    defDisplay.grafico_mef(partToDisplay,caption,viewNm,defFScale)
+    defDisplay= vtk_FE_graphic.RecordDefDisplayEF()
+    defDisplay.FEmeshGraphic(partToDisplay,caption,viewNm,defFScale)
     return defDisplay
 
   def displayLocalAxes(self,setToDisplay=None,vectorScale=1.0,viewNm="XYZPos",hCamFct=1.0,caption= '',fileName=None,defFScale=0.0):
@@ -994,13 +994,13 @@ class GridModel(object):
       setToDisplay.fillDownwards()
       lmsg.warning('set to display not defined; using total set.')
 
-    defDisplay= vtk_grafico_ef.RecordDefDisplayEF()
+    defDisplay= vtk_FE_graphic.RecordDefDisplayEF()
     defDisplay.setupGrid(setToDisplay)
     vField=lavf.LocalAxesVectorField(setToDisplay.name+'_localAxes',vectorScale)
     vField.dumpLocalAxes(setToDisplay)
     defDisplay.viewName= viewNm
     defDisplay.hCamFct=hCamFct
-    defDisplay.defineEscenaMalla(None,defFScale) 
+    defDisplay.defineMeshScene(None,defFScale) 
     vField.addToDisplay(defDisplay)
     defDisplay.displayScene(caption,fileName)
     return defDisplay
@@ -1030,14 +1030,14 @@ class GridModel(object):
       setToDisplay.fillDownwards()
       lmsg.warning('set to display not defined; using total set.')
 
-    defDisplay= vtk_grafico_ef.RecordDefDisplayEF()
+    defDisplay= vtk_FE_graphic.RecordDefDisplayEF()
     defDisplay.setupGrid(setToDisplay)
     vField=lvf.LoadVectorField(loadCaseNm,unitsScale,vectorScale)
     vField.multiplyByElementArea=multByElemArea
     vField.dumpLoads(self.getPreprocessor(),defFScale)
     defDisplay.viewName= viewNm
     defDisplay.hCamFct=hCamFct
-    defDisplay.defineEscenaMalla(None,defFScale) 
+    defDisplay.defineMeshScene(None,defFScale) 
     vField.addToDisplay(defDisplay)
     defDisplay.displayScene(caption,fileName)
     return defDisplay

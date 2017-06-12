@@ -4,7 +4,7 @@ import math
 import xc_base
 import geom
 
-from postprocess import ControlVars as cv
+from postprocess import control_vars as cv
 from materials import limit_state_checking_base as lsc
 
 def VuNoShearRebars(beton,acier,Nd,Md,AsTrac,b,d):

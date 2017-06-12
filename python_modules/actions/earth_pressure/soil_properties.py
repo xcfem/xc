@@ -38,5 +38,17 @@ class SoilProp:
                 ret_press=self.K*self.gammaSoil*(self.zGround-z)
             else:
                 ret_press=self.K*self.gammaSoil*(self.zGround-self.zWater)+self.K*(self.gammaSoil-self.gammaWater)*(self.zWater-z)+self.gammaWater*(self.zWater-z)
-        print 'z,pres', z,',', ret_press
         return ret_press
+
+    def appendLoadToCurrentLoadPattern(self,xcSet,vDir):
+        '''Append earth thrust on a set of elements to the current
+        load pattern
+
+
+        :param xcSet: set that contains the elements (shells and/or beams)
+        :param vDir: unit xc vector defining pressures direction
+        '''
+        for e in xcSet.getElements:
+            presElem=self.getPressure(e.getCooCentroid(False)[2])
+            if(presElem!=0.0):
+                e.vector3dUniformLoadGlobal(presElem*vDir)

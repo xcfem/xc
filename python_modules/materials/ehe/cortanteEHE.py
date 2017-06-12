@@ -10,7 +10,7 @@ from materials.ehe import comprobVEHE08
 from materials.ehe import torsionEHE
 import geom
 import sys
-from postprocess import ControlVars as cv
+from postprocess import control_vars as cv
 from materials import limit_state_checking_base as lsc
 
 class ShearControllerEHE(lsc.LimitStateControllerBase):
