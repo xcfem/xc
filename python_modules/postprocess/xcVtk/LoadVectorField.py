@@ -11,7 +11,7 @@ __email__= "l.pereztato@gmail.com"
 import geom
 import vtk
 from miscUtils import LogMessages as lmsg
-from xcVtk import VectorField as vf
+from postprocess.xcVtk import VectorField as vf
 
 
 class LoadVectorField(vf.VectorField):

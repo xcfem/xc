@@ -12,7 +12,7 @@ import vtk
 from miscUtils import LogMessages as lmsg
 import xc_base
 from vtkUtils import utilsVtk
-from xcVtk import vtk_grafico_base
+from postprocess.xcVtk import vtk_grafico_base
 
 class RecordDefDisplayEF(vtk_grafico_base.RecordDefDisplay):
     ''' Define the parameters to configure the output device.
@@ -142,7 +142,7 @@ class RecordDefDisplayEF(vtk_grafico_base.RecordDefDisplay):
           # else:
           #   print "Entity: ", self.gridRecord.entToLabel, " unknown."
 
-    def grafico_mef(self,xcSet,caption= '',viewNm='XYZPos',defFScale=0.0):
+    def FEmeshGraphic(self,xcSet,caption= '',viewNm='XYZPos',defFScale=0.0):
           ''' Graphic of the FE mesh
 
           :param xcSet:   XC set of elements to be displayed

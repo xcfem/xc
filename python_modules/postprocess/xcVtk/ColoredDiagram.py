@@ -9,7 +9,7 @@ __email__= "l.pereztato@gmail.com"
 
 import geom
 import vtk
-from xcVtk import vtk_lut_field
+from postprocess.xcVtk import vtk_lut_field
 
 ''' Define las variables que se emplean para definir
    un diagrama de esfuerzos. '''

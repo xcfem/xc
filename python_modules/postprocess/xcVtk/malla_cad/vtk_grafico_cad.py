@@ -8,8 +8,8 @@ __version__= "3.0"
 __email__= "l.pereztato@ciccp.es, ana.ortega@ciccp.es "
 
 import vtk
-from xcVtk import cadMesh
-from xcVtk import vtk_grafico_base
+from postprocess.xcVtk import cadMesh
+from postprocess.xcVtk import vtk_grafico_base
 from miscUtils import LogMessages as lmsg
 
 class RecordDefDisplayCAD(vtk_grafico_base.RecordDefDisplay):

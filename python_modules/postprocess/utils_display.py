@@ -10,10 +10,10 @@ __email__= "l.pereztato@ciccp.es, ana.ortega@ciccp.es "
 import os
 from miscUtils import LogMessages as lmsg
 from miscUtils import string_utils as su
-from xcVtk import vtk_grafico_base
-from xcVtk.malla_ef import vtk_grafico_ef
-from xcVtk.malla_ef import Fields
-#from xcVtk import vtkInternalForceDiagram as ifd
+from postprocess.xcVtk import vtk_grafico_base
+from postprocess.xcVtk.malla_ef import vtk_grafico_ef
+from postprocess.xcVtk.malla_ef import Fields
+#from postprocess.xcVtk import vtkInternalForceDiagram as ifd
 from postprocess.ControlVars import *
 
 import matplotlib.pyplot as plt

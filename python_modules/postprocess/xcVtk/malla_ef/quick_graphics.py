@@ -12,13 +12,13 @@ __email__= "ana.Ortega@ciccp.es    l.pereztato@ciccp.es"
 
 from miscUtils import LogMessages as lmsg
 from solution import predefined_solutions
-from xcVtk.malla_ef import vtk_grafico_ef
-from xcVtk.malla_ef import Fields
-from xcVtk import ControlVarDiagram as cvd
-from xcVtk import LinearLoadDiagram as lld
-from xcVtk import LoadVectorField as lvf
-from xcVtk import NodePropertyDiagram as npd
-from xcVtk import LocalAxesVectorField as lavf
+from postprocess.xcVtk.malla_ef import vtk_grafico_ef
+from postprocess.xcVtk.malla_ef import Fields
+from postprocess.xcVtk import ControlVarDiagram as cvd
+from postprocess.xcVtk import LinearLoadDiagram as lld
+from postprocess.xcVtk import LoadVectorField as lvf
+from postprocess.xcVtk import NodePropertyDiagram as npd
+from postprocess.xcVtk import LocalAxesVectorField as lavf
 
 class QuickGraphics(object):
   '''This class is aimed at providing the user with a quick and easy way to 
