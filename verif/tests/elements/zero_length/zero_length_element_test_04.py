@@ -52,20 +52,6 @@ zl.setMaterial(0,"kx")
 zl.setMaterial(1,"ky")
 zl.setMaterial(2,"kz")
 
-''' 
-print "Tipo elemento: ",getTipoElemento
-print "Núm. materiales: ",getNumMateriales
-print "Vector x local: ",getVectorI
-print "Vector y local: ",getVectorJ
-print "Vector z local: ",getVectorK
-print "dimensión: ",getDim
-print "filas trf: ",getTrf.nrows
-print "cols. trf: ",getTrf.ncols
-print "trf[0]: ","getTrf[0,0]"," ","getTrf[0,1]"," ","getTrf[0,2]"
-print "trf[1]: ","getTrf[1,0]"," ","getTrf[1,1]"," ","getTrf[1,2]"
-print "trf[2]: ","getTrf[2,0]"," ","getTrf[2,1]"," ","getTrf[2,2]"
-   '''
-
     
 # Constraints
 constraints= preprocessor.getConstraintLoader

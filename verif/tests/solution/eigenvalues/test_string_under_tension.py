@@ -132,9 +132,9 @@ ratio4= abs((f2-149.42)/149.42)
 ratio5= abs((f3-224.12)/224.12)
 
 ''' 
-print "tensión= ",sigma
+print "stress= ",sigma
 print "ratio1= ",(ratio1)
-print "traccion= ",traccion
+print "tension= ",traccion
 print "ratio2= ",(ratio2)
 
 print "eig1= ",eig1

@@ -42,7 +42,7 @@ if(not pth):
 execfile(pth+"/macros_test_fiber_section.py")
 
 
-fy= 2600 # Tensión de cedencia of the material expressed in kp/cm2.
+fy= 2600 # Yield stress of the material expressed in kp/cm2.
 E= 2.1e6 # Young modulus of the material en kp/cm2.
 
 # Materials definition

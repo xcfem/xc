@@ -52,7 +52,7 @@ lin= trfs.newLinearCrdTransf2d("lin")
 
 
 # Materials definition
-fy= 275e6 # Tensión de cedencia of the steel.
+fy= 275e6 # Yield stress of the steel.
 acero= typical_materials.defSteel01(preprocessor, "acero",E,fy,0.001)
 respT= typical_materials.defElasticMaterial(preprocessor, "respT",G*J) # Respuesta de la sección a torsión.
 respVy= typical_materials.defElasticMaterial(preprocessor, "respVy",1e9) # Respuesta de la sección a cortante según y.

@@ -13,16 +13,16 @@ from materials.eae import resistencia_cordon_soldadura
 import math
 
 # Tensiones sobre el plano de garganta abatido sobre la cara del cordón
-tn= 72.07e6 # Tensión tangencial normal al eje del cordón.
-ta= -33.22e6 # Tensión tangencial paralela al eje del cordón.
-n= -252.4e6 # Tensión normal.
+tn= 72.07e6 # Tangential stress normal to weld axis.
+ta= -33.22e6 # Tangential stress parallel to weld axis.
+n= -252.4e6 # Normal stress.
 
-# Tensiones sobre la sección por el plano de garganta
+# Stresses applied to the throat area of the weld.
 sigmaN= resistencia_cordon_soldadura.getSigmaNPlanoGarganta(n,tn) 
 tauN= resistencia_cordon_soldadura.getTauNPlanoGarganta(n,tn)
 tauPll= ta 
 
-# Tension de comparación
+# Equivalent stress.
 sigmaCo= resistencia_cordon_soldadura.getTensComparacionCordonAngulo(n,tn,ta)
 sigmaUlt= resistencia_cordon_soldadura.getValorComparacionResistenciaCordon(430e6,275e6,1.25)
 fcCond1= resistencia_cordon_soldadura.getFCCondicion1Cordon(n,tn,ta,430e6,275e6,1.25)

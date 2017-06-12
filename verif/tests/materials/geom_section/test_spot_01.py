@@ -14,7 +14,7 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
-fy= 2600 # Tensión de cedencia of the material expressed in kp/cm2.
+fy= 2600 # Yield stress of the material expressed in kp/cm2.
 E= 2.1e6 # Young modulus of the material en kp/cm2.
 xA= 1/3.0
 yA= 3/4.0
