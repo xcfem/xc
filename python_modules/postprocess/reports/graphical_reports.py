@@ -13,7 +13,7 @@ from postprocess.xcVtk.malla_ef import vtk_grafico_ef
 from postprocess.xcVtk.malla_ef import Fields
 from postprocess import utils_display
 from model.grid_based import GridModel
-from postprocess.xcVtk import ControlVarDiagram as cvd
+from postprocess.xcVtk import control_var_diagram as cvd
 from postprocess.xcVtk.malla_ef import quick_graphics as QGrph
 
 class RecordLoadCaseDisp(object):

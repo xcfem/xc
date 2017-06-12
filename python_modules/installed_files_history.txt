@@ -896,7 +896,9 @@
 /usr/local/lib/python2.7/dist-packages/postprocess/xcVtk/cadMesh.pyc
 /usr/local/lib/python2.7/dist-packages/postprocess/xcVtk/ColoredDiagram.py
 /usr/local/lib/python2.7/dist-packages/postprocess/xcVtk/ColoredDiagram.pyc
+/usr/local/lib/python2.7/dist-packages/postprocess/xcVtk/control_var_diagram.py
 /usr/local/lib/python2.7/dist-packages/postprocess/xcVtk/ControlVarDiagram.py
+/usr/local/lib/python2.7/dist-packages/postprocess/xcVtk/control_var_diagram.pyc
 /usr/local/lib/python2.7/dist-packages/postprocess/xcVtk/ControlVarDiagram.pyc
 /usr/local/lib/python2.7/dist-packages/postprocess/xcVtk/creaArraySetData.py
 /usr/local/lib/python2.7/dist-packages/postprocess/xcVtk/creaArraySetData.pyc

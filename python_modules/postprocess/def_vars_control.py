@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 '''
    THIS PROPERTIES MUST BE REPLACED BY THE CLASSES 
-   DEFINED IN ControlVars.py 
+   DEFINED IN control_vars.py 
    THIS FILE MUST DISSAPEAR.'''
 
 __author__= "Luis C. Pérez Tato (LCPT)"

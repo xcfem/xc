@@ -14,7 +14,7 @@ from postprocess.xcVtk import vtk_grafico_base
 from postprocess.xcVtk.malla_ef import vtk_grafico_ef
 from postprocess.xcVtk.malla_ef import Fields
 #from postprocess.xcVtk import vtkInternalForceDiagram as ifd
-from postprocess.ControlVars import *
+from postprocess.control_vars import *
 
 import matplotlib.pyplot as plt
 import numpy as np

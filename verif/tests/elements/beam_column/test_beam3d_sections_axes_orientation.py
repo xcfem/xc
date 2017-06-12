@@ -43,7 +43,7 @@ from postprocess import LimitStateData as lsd
 from materials.sia262 import normalStressesSIA262 as ns
 from model import model_inquiry as minq
 from misc import matrixUtils
-from postprocess.ControlVars import *
+from postprocess.control_vars import *
 
 
 
