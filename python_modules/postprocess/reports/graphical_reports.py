@@ -9,7 +9,7 @@ __email__= " ana.Ortega@ciccp.es "
 import xc_base
 import geom
 import xc
-from postprocess.xcVtk.FE_model import vtk_grafico_ef
+from postprocess.xcVtk.FE_model import vtk_FE_graphic
 from postprocess.xcVtk.FE_model import Fields
 from postprocess import utils_display
 from model.grid_based import GridModel
@@ -231,7 +231,7 @@ def checksReports(limitStateLabel,setsShEl,argsShEl,capTexts,pathGr,texReportFil
                        argument] to be included in the report for beam elements
     '''
     report=open(texReportFile,'w')    #report latex file
-    dfDisp= vtk_grafico_ef.RecordDefDisplayEF()
+    dfDisp= vtk_FE_graphic.RecordDefDisplayEF()
     for st in setsShEl:
         for arg in argsShEl:
             attributeName= limitStateLabel + 'Sect1'

@@ -12,7 +12,7 @@ __email__= "ana.Ortega@ciccp.es    l.pereztato@ciccp.es"
 
 from miscUtils import LogMessages as lmsg
 from solution import predefined_solutions
-from postprocess.xcVtk.FE_model import vtk_grafico_ef
+from postprocess.xcVtk.FE_model import vtk_FE_graphic
 from postprocess.xcVtk.FE_model import Fields
 from postprocess.xcVtk import control_var_diagram as cvd
 from postprocess.xcVtk import LinearLoadDiagram as lld
@@ -86,7 +86,7 @@ class QuickGraphics(object):
                         in order to change perspective of isometric views 
                         (defaults to 1, usual values 0.1 to 10)
     '''
-    defDisplay= vtk_grafico_ef.RecordDefDisplayEF()
+    defDisplay= vtk_FE_graphic.RecordDefDisplayEF()
     defDisplay.viewName=vwName
     defDisplay.hCamFct=hCamF
     return defDisplay
@@ -314,7 +314,7 @@ def displayLocalAxes(preprocessor,setToDisplay=None,vectorScale=1.0,viewNm="XYZP
       setToDisplay.fillDownwards()
       lmsg.warning('set to display not defined; using total set.')
 
-    defDisplay= vtk_grafico_ef.RecordDefDisplayEF()
+    defDisplay= vtk_FE_graphic.RecordDefDisplayEF()
     defDisplay.setupGrid(setToDisplay)
     vField=lavf.LocalAxesVectorField(setToDisplay.name+'_localAxes',vectorScale)
     vField.dumpLocalAxes(setToDisplay)
@@ -350,7 +350,7 @@ def displayLoad(preprocessor,setToDisplay=None,loadCaseNm='',unitsScale=1.0,vect
       setToDisplay.fillDownwards()
       lmsg.warning('set to display not defined; using total set.')
 
-    defDisplay= vtk_grafico_ef.RecordDefDisplayEF()
+    defDisplay= vtk_FE_graphic.RecordDefDisplayEF()
     defDisplay.setupGrid(setToDisplay)
     vField=lvf.LoadVectorField(loadCaseNm,unitsScale,vectorScale)
     vField.multiplyByElementArea=multByElemArea

@@ -20,7 +20,7 @@ from materials import section_properties
 from model import predefined_spaces
 from model.boundary_cond import elastic_foundation as ef
 from postprocess.xcVtk import vtk_grafico_base
-from postprocess.xcVtk.FE_model import vtk_grafico_ef
+from postprocess.xcVtk.FE_model import vtk_FE_graphic
 from postprocess.xcVtk.FE_model import Fields
 from postprocess.xcVtk import LoadVectorField as lvf
 from postprocess.xcVtk import LocalAxesVectorField as lavf
@@ -969,7 +969,7 @@ class GridModel(object):
               by this factor. (Defaults to 0.0, i.e. display of 
               initial/undeformed shape)
     '''
-    defDisplay= vtk_grafico_ef.RecordDefDisplayEF()
+    defDisplay= vtk_FE_graphic.RecordDefDisplayEF()
     defDisplay.FEmeshGraphic(partToDisplay,caption,viewNm,defFScale)
     return defDisplay
 
@@ -994,7 +994,7 @@ class GridModel(object):
       setToDisplay.fillDownwards()
       lmsg.warning('set to display not defined; using total set.')
 
-    defDisplay= vtk_grafico_ef.RecordDefDisplayEF()
+    defDisplay= vtk_FE_graphic.RecordDefDisplayEF()
     defDisplay.setupGrid(setToDisplay)
     vField=lavf.LocalAxesVectorField(setToDisplay.name+'_localAxes',vectorScale)
     vField.dumpLocalAxes(setToDisplay)
@@ -1030,7 +1030,7 @@ class GridModel(object):
       setToDisplay.fillDownwards()
       lmsg.warning('set to display not defined; using total set.')
 
-    defDisplay= vtk_grafico_ef.RecordDefDisplayEF()
+    defDisplay= vtk_FE_graphic.RecordDefDisplayEF()
     defDisplay.setupGrid(setToDisplay)
     vField=lvf.LoadVectorField(loadCaseNm,unitsScale,vectorScale)
     vField.multiplyByElementArea=multByElemArea

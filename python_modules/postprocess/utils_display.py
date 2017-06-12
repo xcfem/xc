@@ -11,7 +11,7 @@ import os
 from miscUtils import LogMessages as lmsg
 from miscUtils import string_utils as su
 from postprocess.xcVtk import vtk_grafico_base
-from postprocess.xcVtk.FE_model import vtk_grafico_ef
+from postprocess.xcVtk.FE_model import vtk_FE_graphic
 from postprocess.xcVtk.FE_model import Fields
 #from postprocess.xcVtk import vtkInternalForceDiagram as ifd
 from postprocess.control_vars import *
@@ -141,7 +141,7 @@ class TakePhotos(object):
   def __init__(self,xcSet):
     self.defDisplay= None
     self.xcSet= xcSet
-    self.defDisplay= vtk_grafico_ef.RecordDefDisplayEF()
+    self.defDisplay= vtk_FE_graphic.RecordDefDisplayEF()
     self.pthGraphOutput= '/tmp/'  #Directory to put the graphics in.
     self.pthTextOutput= '/tmp/'  #Directory to put the texts in.
     self.fichLatexFigs= None #Latex file to include figures.

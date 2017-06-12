@@ -896,6 +896,8 @@
 /usr/local/lib/python2.7/dist-packages/postprocess/xcVtk/cadMesh.pyc
 /usr/local/lib/python2.7/dist-packages/postprocess/xcVtk/CAD_model/__init__.py
 /usr/local/lib/python2.7/dist-packages/postprocess/xcVtk/CAD_model/__init__.pyc
+/usr/local/lib/python2.7/dist-packages/postprocess/xcVtk/CAD_model/vtk_CAD_graphic.py
+/usr/local/lib/python2.7/dist-packages/postprocess/xcVtk/CAD_model/vtk_CAD_graphic.pyc
 /usr/local/lib/python2.7/dist-packages/postprocess/xcVtk/CAD_model/vtk_define_malla_cells_cad.py
 /usr/local/lib/python2.7/dist-packages/postprocess/xcVtk/CAD_model/vtk_define_malla_cells_cad.pyc
 /usr/local/lib/python2.7/dist-packages/postprocess/xcVtk/CAD_model/vtk_define_malla_kpts_cad.py
@@ -946,6 +948,8 @@
 /usr/local/lib/python2.7/dist-packages/postprocess/xcVtk/FE_model/vtk_dibuja_nodos.pyc
 /usr/local/lib/python2.7/dist-packages/postprocess/xcVtk/FE_model/vtk_display_limit_state.py
 /usr/local/lib/python2.7/dist-packages/postprocess/xcVtk/FE_model/vtk_display_limit_state.pyc
+/usr/local/lib/python2.7/dist-packages/postprocess/xcVtk/FE_model/vtk_FE_graphic.py
+/usr/local/lib/python2.7/dist-packages/postprocess/xcVtk/FE_model/vtk_FE_graphic.pyc
 /usr/local/lib/python2.7/dist-packages/postprocess/xcVtk/FE_model/vtk_grafico_ef.py
 /usr/local/lib/python2.7/dist-packages/postprocess/xcVtk/FE_model/vtk_grafico_ef.pyc
 /usr/local/lib/python2.7/dist-packages/postprocess/xcVtk/FE_model/vtk_load_elem.py
