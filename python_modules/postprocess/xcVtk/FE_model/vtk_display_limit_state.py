@@ -8,8 +8,8 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "ana.Ortega@ciccp.es    l.pereztato@ciccp.es"
 
-from postprocess.xcVtk.malla_ef import vtk_grafico_ef
-from postprocess.xcVtk.malla_ef import Fields
+from postprocess.xcVtk.FE_model import vtk_grafico_ef
+from postprocess.xcVtk.FE_model import Fields
 
 def displayFieldDirs1and2Base(limitStateLabel,argument,elementSet,genDescr,sectDescr,component,fUnitConv,fileName,captionTexts,defFScale=0.0):
   '''Display a field defined over bi-dimensional elements in its two directions.

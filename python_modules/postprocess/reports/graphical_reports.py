@@ -9,12 +9,12 @@ __email__= " ana.Ortega@ciccp.es "
 import xc_base
 import geom
 import xc
-from postprocess.xcVtk.malla_ef import vtk_grafico_ef
-from postprocess.xcVtk.malla_ef import Fields
+from postprocess.xcVtk.FE_model import vtk_grafico_ef
+from postprocess.xcVtk.FE_model import Fields
 from postprocess import utils_display
 from model.grid_based import GridModel
 from postprocess.xcVtk import control_var_diagram as cvd
-from postprocess.xcVtk.malla_ef import quick_graphics as QGrph
+from postprocess.xcVtk.FE_model import quick_graphics as QGrph
 
 class RecordLoadCaseDisp(object):
   '''Generation of graphic files and adding to report-tex files for a load case

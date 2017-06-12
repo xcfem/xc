@@ -11,8 +11,8 @@ import os
 from miscUtils import LogMessages as lmsg
 from miscUtils import string_utils as su
 from postprocess.xcVtk import vtk_grafico_base
-from postprocess.xcVtk.malla_ef import vtk_grafico_ef
-from postprocess.xcVtk.malla_ef import Fields
+from postprocess.xcVtk.FE_model import vtk_grafico_ef
+from postprocess.xcVtk.FE_model import Fields
 #from postprocess.xcVtk import vtkInternalForceDiagram as ifd
 from postprocess.control_vars import *
 

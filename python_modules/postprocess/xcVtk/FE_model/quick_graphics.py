@@ -12,8 +12,8 @@ __email__= "ana.Ortega@ciccp.es    l.pereztato@ciccp.es"
 
 from miscUtils import LogMessages as lmsg
 from solution import predefined_solutions
-from postprocess.xcVtk.malla_ef import vtk_grafico_ef
-from postprocess.xcVtk.malla_ef import Fields
+from postprocess.xcVtk.FE_model import vtk_grafico_ef
+from postprocess.xcVtk.FE_model import Fields
 from postprocess.xcVtk import control_var_diagram as cvd
 from postprocess.xcVtk import LinearLoadDiagram as lld
 from postprocess.xcVtk import LoadVectorField as lvf

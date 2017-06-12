@@ -35,7 +35,7 @@ if(not pth):
   pth= "."
 fNameB= pth+"/dibuja_edges.verif.tiff"
 
-from postprocess.xcVtk.malla_cad import vtk_grafico_cad
+from postprocess.xcVtk.CAD_model import vtk_grafico_cad
 defDisplay= vtk_grafico_cad.RecordDefDisplayCAD()
 defDisplay.plotCadModel(preprocessor, "total",None,fName)
 

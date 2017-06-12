@@ -20,15 +20,15 @@ from materials import section_properties
 from model import predefined_spaces
 from model.boundary_cond import elastic_foundation as ef
 from postprocess.xcVtk import vtk_grafico_base
-from postprocess.xcVtk.malla_ef import vtk_grafico_ef
-from postprocess.xcVtk.malla_ef import Fields
+from postprocess.xcVtk.FE_model import vtk_grafico_ef
+from postprocess.xcVtk.FE_model import Fields
 from postprocess.xcVtk import LoadVectorField as lvf
 from postprocess.xcVtk import LocalAxesVectorField as lavf
-from postprocess.xcVtk.malla_ef import quick_graphics as qg
+from postprocess.xcVtk.FE_model import quick_graphics as qg
 import ijkGrid as grid
 import math
 from postprocess import utils_display
-from postprocess.xcVtk.malla_ef import vtk_display_limit_state
+from postprocess.xcVtk.FE_model import vtk_display_limit_state
 
 class NamedObjectsMap(dict):
   '''dictionary of objects which have a name.'''

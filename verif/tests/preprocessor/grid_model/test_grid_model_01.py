@@ -103,7 +103,7 @@ else:
 
 
 #Plot
-# from postprocess.xcVtk.malla_cad import vtk_grafico_cad
+# from postprocess.xcVtk.CAD_model import vtk_grafico_cad
 
 # defDisplay= vtk_grafico_cad.RecordDefDisplayCAD()
 # totalSet= prep.getSets.getSet('total')

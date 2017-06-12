@@ -4,7 +4,7 @@ from __future__ import division
 import xc_base
 import geom
 from materials import typical_materials
-from postprocess.xcVtk.malla_ef import Fields
+from postprocess.xcVtk.FE_model import Fields
 from solution import predefined_solutions
 from model import predefined_spaces
 
