@@ -15,7 +15,7 @@ from materials.fiber_section import fiberUtils
 from materials.sia262 import shearSIA262
 from materials import limit_state_checking_base as lsc
 from materials import stressCalc as sc
-from postprocess import ControlVars as cv
+from postprocess import control_vars as cv
 import geom
 
 def estimateSteelStress(sccData, N, M, As, y):

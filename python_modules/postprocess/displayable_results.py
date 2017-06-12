@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from postprocess import utils_display
 from postprocess import LimitStateData as lsd
-from postprocess import ControlVars as cv
+from postprocess import control_vars as cv
 
 #Code names and descriptions of common analysis and design results.
 

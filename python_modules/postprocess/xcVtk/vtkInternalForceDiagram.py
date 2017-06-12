@@ -11,7 +11,7 @@ __email__= " ana.Ortega@ciccp.es, l.pereztato@ciccp.es"
 import geom
 import vtk
 from postprocess.xcVtk import ColoredDiagram as cd
-from postprocess import ControlVars as cv
+from postprocess import control_vars as cv
 from miscUtils import LogMessages as lmsg
 
 class InternalForceDiagram(cd.ColoredDiagram):

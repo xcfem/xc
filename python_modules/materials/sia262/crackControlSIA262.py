@@ -7,7 +7,7 @@ import math
 from materials.fiber_section import createFiberSets
 from materials.fiber_section import fiberUtils
 from materials import limit_state_checking_base as lscb
-from postprocess import ControlVars as cv
+from postprocess import control_vars as cv
 
 class CrackControlSIA262(lscb.CrackControlBaseParameters):
   def __init__(self,limitStateLabel,limitStress):
