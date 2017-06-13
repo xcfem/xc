@@ -32,9 +32,9 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
-# Coeficientes de seguridad.
-gammac= 1.5 # Coeficiente de minoración de la resistencia del hormigón.
-gammas= 1.15 # Coeficiente de minoración de la resistencia of the steel.
+# Partial safety factors.
+gammac= 1.5 # Partial safety factor for concrete.
+gammas= 1.15 # Partial safety factor for steel.
 
 CurvZ= 11.474e-3 # Curvatura de prueba 1.
 x1= 0.0997 # Profundidad de la fibra neutra 1.
@@ -127,24 +127,24 @@ setsRC= createFiberSets.fiberSectionSetupRCSets(scc,EHE_materials.HA25.matTagD,'
 fibraCEpsMin= -1
 fMin= setsRC.concrFibers.getFiberWithMinStrain()
 
-epsCMin= fMin.getMaterial().getStrain() # Deformación mínima en el hormigón.
-sgCMin= fMin.getMaterial().getStress() # Tensión mínima en el hormigón.
-YepsCMin= fMin.getPos().x # Coordenada y de la deformación mínima en el hormigón.
-ZepsCMin= fMin.getPos().y # Coordenada z de la deformación mínima en el hormigón.
+epsCMin= fMin.getMaterial().getStrain() # Minimal strain in concrete.
+sgCMin= fMin.getMaterial().getStress() # Minimal stress in concrete.
+YepsCMin= fMin.getPos().x # Coordenada y de la deformación mínima in concrete.
+ZepsCMin= fMin.getPos().y # Coordenada z de la deformación mínima in concrete.
 
 fMin= setsRC.reinfFibers.getFiberWithMinStrain()
 
-epsSMin= fMin.getMaterial().getStrain() # Deformación mínima en el acero.
-sgSMin= fMin.getMaterial().getStress() # Tensión mínima en el acero.
-YepsSMin= fMin.getPos().x # Coordenada y de la deformación mínima en el acero.
-ZepsSMin= fMin.getPos().y # Coordenada z de la deformación mínima en el acero.
+epsSMin= fMin.getMaterial().getStrain() # Minimal strain in steel.
+sgSMin= fMin.getMaterial().getStress() # Minimal stress in steel.
+YepsSMin= fMin.getPos().x # Coordenada y de la deformación mínima in steel.
+ZepsSMin= fMin.getPos().y # Coordenada z de la deformación mínima in steel.
 
 fMax= setsRC.reinfFibers.getFiberWithMaxStrain()
 
-epsSMax= fMax.getMaterial().getStrain() # Deformación máxima en el acero.
-sgSMax= fMax.getMaterial().getStress() # Tensión máxima en el acero.
-YepsSMax= fMax.getPos().x # Coordenada y de la deformación mínima en el acero.
-ZepsSMax= fMax.getPos().y # Coordenada z de la deformación mínima en el acero.
+epsSMax= fMax.getMaterial().getStrain() # Maximal strain in steel.
+sgSMax= fMax.getMaterial().getStress() # Maximal stress in steel.
+YepsSMax= fMax.getPos().x # Coordenada y de la deformación mínima in steel.
+ZepsSMax= fMax.getPos().y # Coordenada z de la deformación mínima in steel.
 
 
 from materials import section_properties
@@ -175,18 +175,18 @@ print "Profundidad de la fibra neutra= ",x," m"
 print "Resul= ",Resul*1e-3," kN"
 print "Deform= ",Deform*1e3,"E-3"
 
-print "\nDeformación mínima en el hormigón: ",(epsCMin*1E3),"E-3"
-print "Tensión mínima en el hormigón: ",(sgCMin/1e6),"E6"
-print "Coordenada y para deformación mínima en el hormigón: ",(YepsCMin)
-print "Coordenada z para deformación mínima en el hormigón: ",(ZepsCMin)
+print "\nMinimal strain in concrete: ",(epsCMin*1E3),"E-3"
+print "Minimal stress in concrete: ",(sgCMin/1e6),"E6"
+print "Coordenada y para deformación mínima in concrete: ",(YepsCMin)
+print "Coordenada z para deformación mínima in concrete: ",(ZepsCMin)
 
-print "\nDeformación mínima en la reinforcement: ",(epsSMin*1E3),"E-3"
-print "Tensión mínima en el acero: ",(sgSMin/1e6),"E6"
+print "\nMinimal strain en la reinforcement: ",(epsSMin*1E3),"E-3"
+print "Minimal stress in steel: ",(sgSMin/1e6),"E6"
 print "Coordenada y para deformación mínima en la reinforcement: ",(YepsSMin)
 print "Coordenada z para deformación mínima en la reinforcement: ",(ZepsSMin)
 
-print "\nDeformación máxima en la reinforcement: ",(epsSMax*1E3),"E-3"
-print "Tensión máxima en el acero: ",(sgSMax/1e6),"E6"
+print "\nMaximal strain en la reinforcement: ",(epsSMax*1E3),"E-3"
+print "Maximal stress in steel: ",(sgSMax/1e6),"E6"
 print "Coordenada y para deformación máxima en la reinforcement: ",(YepsSMax)
 print "Coordenada z para deformación máxima en la reinforcement: ",(ZepsSMax)
 print "\nTipo solicitación: ",strTipoSolic," (",(tipoSolic),") "

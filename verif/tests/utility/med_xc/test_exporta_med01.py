@@ -87,7 +87,7 @@ avgStress= fields.newField("avgStress")
 avgStress.setName= "total"
 avgStress.definedOnGaussPoints()
 avgStress.componentNames= ["avgStress"]
-avgStress.componentDescriptions= ["Tensión media"]
+avgStress.componentDescriptions= ["Average stress"]
 avgStress.componentUnits= ["lbs/in2"]
 avgStress.componentsProperty= "self.getPhysicalProperties.getCommittedStress"
 

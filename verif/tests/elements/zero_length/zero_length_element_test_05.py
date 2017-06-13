@@ -47,16 +47,6 @@ zl.setupVectors(xc.Vector([0,1,0]),xc.Vector([-1,0,0]))
 zl.setMaterial(0,"k")
 
 
-''' 
-print "Tipo elemento: ",getTipoElemento
-print "Núm. materiales: ",getNumMateriales
-print "Vector x local: ",getVectorI
-print "Vector y local: ",getVectorJ
-print "Vector z local: ",getVectorK
-print "dimensión: ",getDim
-print "filas trf: ",getTrf.nrows
-print "cols. trf: ",getTrf.ncols
-   '''
 
 # Constraints
 constraints= preprocessor.getConstraintLoader

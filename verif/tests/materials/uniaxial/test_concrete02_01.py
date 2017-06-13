@@ -43,16 +43,7 @@ elementos.dimElem= 1 # Dimension of element space
 elementos.defaultTag= 1
 elem1= elementos.newElement("zero_length",xc.ID([1,2]))
 
-''' 
-print "dimensión: ",getDim
-print "filas trf: ",getTrf.nrows
-print "cols. trf: ",getTrf.ncols
-print "trf[0]: ","getTrf[0,0]"," ","getTrf[0,1]"," ","getTrf[0,2]"
-print "trf[1]: ","getTrf[1,0]"," ","getTrf[1,1]"," ","getTrf[1,2]"
-print "trf[2]: ","getTrf[2,0]"," ","getTrf[2,1]"," ","getTrf[2,2]"
-   '''
-
-    
+   
 # Constraints
 constraints= preprocessor.getConstraintLoader
 spc= constraints.newSPConstraint(1,0,0.0) # Nodo 1

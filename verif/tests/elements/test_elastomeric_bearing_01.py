@@ -26,8 +26,8 @@ from solution import predefined_solutions
 
 # Materials definition
 G= 900e3 # Módulo de cortante del neopreno
-a= 0.3 # Dimensión paralela al eje del dintel.
-b= 0.3 # Dimensión normal al eje del dintel.
+a= 0.3 # Dimension parallel to deck axis.
+b= 0.3 # Dimension normal to deck axis.
 e= 0.002 # Espesor neto del neopreno (sin chapas).
 
 
@@ -102,19 +102,6 @@ RZ= nod1.getReaction[2]
 
 elementos= preprocessor.getElementLoader
 
-''' 
-print "Tipo elemento: ",getTipoElemento
-print "Núm. materiales: ",getNumMateriales
-print "dimensión: ",getDim
-print "Vector x local: ",getIVector
-print "Vector y local: ",getJVector
-print "Vector z local: ",getKVector
-print "filas trf: ",getTrf.nrows
-print "cols. trf: ",getTrf.ncols
-print "trf[0]: ","getTrf[0,0]"," ","getTrf[0,1]"," ","getTrf[0,2]"
-print "trf[1]: ","getTrf[1,0]"," ","getTrf[1,1]"," ","getTrf[1,2]"
-print "trf[2]: ","getTrf[2,0]"," ","getTrf[2,1]"," ","getTrf[2,2]"
-   '''
 
 VX= zl.getMaterials()[0].getStress()
 VY= zl.getMaterials()[1].getStress()
