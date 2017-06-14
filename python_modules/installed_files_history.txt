@@ -842,7 +842,9 @@
 /usr/local/lib/python2.7/dist-packages/postprocess/quick_inquiry/movs_nodo_6gdl.pyc
 /usr/local/lib/python2.7/dist-packages/postprocess/quick_inquiry/nodal_reactions.py
 /usr/local/lib/python2.7/dist-packages/postprocess/quick_inquiry/nodal_reactions.pyc
+/usr/local/lib/python2.7/dist-packages/postprocess/RC_material_distribution.py
 /usr/local/lib/python2.7/dist-packages/postprocess/RCMaterialDistribution.py
+/usr/local/lib/python2.7/dist-packages/postprocess/RC_material_distribution.pyc
 /usr/local/lib/python2.7/dist-packages/postprocess/RCMaterialDistribution.pyc
 /usr/local/lib/python2.7/dist-packages/postprocess/recorders.py
 /usr/local/lib/python2.7/dist-packages/postprocess/recorders.pyc
