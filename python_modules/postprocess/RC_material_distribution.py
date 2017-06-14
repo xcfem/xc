@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-import ElementSectionMap
+import element_section_map
 import pickle
 from miscUtils import LogMessages as lmsg
 import xc_base
@@ -8,7 +8,7 @@ import geom
 import xc
 # Macros
 from solution import predefined_solutions
-from postprocess import PhantomModel as phm
+from postprocess import phantom_model as phm
 from materials import RCsectionsContainer as sc
 from model.sets import sets_mng as sUtils
 
@@ -39,7 +39,7 @@ class RCMaterialDistribution(object):
     #                      for each element number. This way it defines
     #                      a spatial distribution of the sections over
     #                      the structure.
-    self.sectionDistribution= ElementSectionMap.ElementSectionMap()
+    self.sectionDistribution= element_section_map.ElementSectionMap()
     self.elementSetNames= list() #Elements sets with an assigned section.
 
   def assign(self,elemSet,setRCSects):

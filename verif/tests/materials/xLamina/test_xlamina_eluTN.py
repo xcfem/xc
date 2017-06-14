@@ -6,7 +6,7 @@ import geom
 import xc
 from materials.ehe import EHE_materials
 from materials.fiber_section import defSeccionHASimple
-from postprocess import RCMaterialDistribution
+from postprocess import RC_material_distribution
 from materials import RCsectionsContainer as sc
 from solution import predefined_solutions
 from materials.sia262 import normalStressesSIA262 as ns #Change SIA262->EHE
@@ -31,7 +31,7 @@ intForcCombFileName= pth+"/esf_test_xLamina.csv"
 
 elementTags= [2524,2527]
 #Reinforced concrete sections on each element.
-reinfConcreteSections= RCMaterialDistribution.RCMaterialDistribution()
+reinfConcreteSections= RC_material_distribution.RCMaterialDistribution()
 
 for eTag in elementTags:
   reinfConcreteSections.sectionDistribution[eTag]= ["deck2","deck1"]

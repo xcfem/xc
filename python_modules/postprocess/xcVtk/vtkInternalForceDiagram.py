@@ -10,7 +10,7 @@ __email__= " ana.Ortega@ciccp.es, l.pereztato@ciccp.es"
 
 import geom
 import vtk
-from postprocess.xcVtk import ColoredDiagram as cd
+from postprocess.xcVtk import colored_diagram as cd
 from postprocess import control_vars as cv
 from miscUtils import LogMessages as lmsg
 

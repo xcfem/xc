@@ -8,7 +8,7 @@ __version__= "3.0"
 __email__= "l.pereztato@ciccp.es, ana.ortega@ciccp.es "
 
 import vtk
-from postprocess.xcVtk import cadMesh
+from postprocess.xcVtk import cad_mesh
 from postprocess.xcVtk import vtk_grafico_base
 from miscUtils import LogMessages as lmsg
 
@@ -21,20 +21,20 @@ class RecordDefDisplayCAD(vtk_grafico_base.RecordDefDisplay):
         setToDraw= self.gridRecord.xcSet
         numKPts= setToDraw.getPoints.size
         if(numKPts>0):
-          cadMesh.VtkCargaMalla(self.gridRecord)
+          cad_mesh.VtkCargaMalla(self.gridRecord)
           self.renderer= vtk.vtkRenderer()
           self.renderer.SetBackground(self.bgRComp,self.bgGComp,self.bgBComp)
-          cadMesh.VtkDefineActorKPoint(self.gridRecord,self.renderer,0.02)
-          cadMesh.VtkDefineActorCells(self.gridRecord,self.renderer,"wireframe")
+          cad_mesh.VtkDefineActorKPoint(self.gridRecord,self.renderer,0.02)
+          cad_mesh.VtkDefineActorCells(self.gridRecord,self.renderer,"wireframe")
           self.renderer.ResetCamera()
         else:
           lmsg.warning("Error when drawing set: '"+setToDraw.name+"' it has not key points so I can't get set geometry (use fillDownwards?)")
 
         #Implementar dibujo de etiquetas.
         # if(entToLabel=="cells"):
-        #   xcVtk.cadMesh.VtkDibujaIdsCells(self.gridRecord,setToDraw,nmbTipoCeldas,renderer)
+        #   postprocess.xcVtk.cad_mesh.VtkDibujaIdsCells(self.gridRecord,setToDraw,nmbTipoCeldas,renderer)
         # elif(entToLabel=="points"):
-        #   xcVtk.cadMesh.VtkDibujaIdsKPts(self.gridRecord,setToDraw,renderer)
+        #   postprocess.xcVtk.cad_mesh.VtkDibujaIdsKPts(self.gridRecord,setToDraw,renderer)
 
 
     def grafico_cad(self,xcSet,caption= ''):

@@ -33,7 +33,7 @@ import numpy as np
 import csv
 
 from materials.fiber_section import defSeccionHASimple
-from postprocess import RCMaterialDistribution
+from postprocess import RC_material_distribution
 from materials.sia262 import SIA262_materials
 from model import predefined_spaces
 from materials import typical_materials
@@ -69,7 +69,7 @@ reinfSteel= SIA262_materials.SpecialII1956SIA161
 # main direction; in the case of beam elements the most common way is to define
 # RC sections in the front and back ends of the elements)
 
-reinfConcreteSectionDistribution= RCMaterialDistribution.RCMaterialDistribution()
+reinfConcreteSectionDistribution= RC_material_distribution.RCMaterialDistribution()
 sections= reinfConcreteSectionDistribution.sectionDefinition #creates an RC sections container
 
 #Generic layers (rows of rebars). Other instance variables that we can define
