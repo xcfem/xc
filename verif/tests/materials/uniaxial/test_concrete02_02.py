@@ -110,5 +110,5 @@ else:
 # plt.show()
 
 # #report concrete material
-# from postprocess.reports import materialReportsUtils
-# materialReportsUtils.reportConcrete02(concrDiag=concr,paramTensStiffening=paramTS,grTitle='concrete $\sigma-\epsilon$ curve',grFileName='conc2',texFileName='conc2.tex')
+# from postprocess.reports import report_material
+# report_material.report_concrete02(concrDiag=concr,paramTensStiffening=paramTS,grTitle='concrete $\sigma-\epsilon$ curve',grFileName='conc2',texFileName='conc2.tex')

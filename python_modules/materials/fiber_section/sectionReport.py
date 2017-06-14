@@ -13,7 +13,7 @@ import sys
 import math
 import os
 from latex import latexUtils
-from postprocess.reports import materialGraphics as mg
+from postprocess.reports import graph_material as mg
 import plotGeomSeccion as pg
 from materials import section_properties as prmRect
 from materials.fiber_section import  defSeccionHASimple as sHAs

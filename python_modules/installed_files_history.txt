@@ -856,6 +856,8 @@
 /usr/local/lib/python2.7/dist-packages/postprocess/reports/graphical_reports.pyc
 /usr/local/lib/python2.7/dist-packages/postprocess/reports/graphLoadCase.py
 /usr/local/lib/python2.7/dist-packages/postprocess/reports/graphLoadCase.pyc
+/usr/local/lib/python2.7/dist-packages/postprocess/reports/graph_material.py
+/usr/local/lib/python2.7/dist-packages/postprocess/reports/graph_material.pyc
 /usr/local/lib/python2.7/dist-packages/postprocess/reports/__init__.py
 /usr/local/lib/python2.7/dist-packages/postprocess/reports/__init__.pyc
 /usr/local/lib/python2.7/dist-packages/postprocess/reports/listados_cargas.py
@@ -914,6 +916,8 @@
 /usr/local/lib/python2.7/dist-packages/postprocess/reports/materialReports.pyc
 /usr/local/lib/python2.7/dist-packages/postprocess/reports/materialReportsUtils.py
 /usr/local/lib/python2.7/dist-packages/postprocess/reports/materialReportsUtils.pyc
+/usr/local/lib/python2.7/dist-packages/postprocess/reports/report_material.py
+/usr/local/lib/python2.7/dist-packages/postprocess/reports/report_material.pyc
 /usr/local/lib/python2.7/dist-packages/postprocess/utils_display.py
 /usr/local/lib/python2.7/dist-packages/postprocess/utils_display.pyc
 /usr/local/lib/python2.7/dist-packages/postprocess/xcVtk/cadMesh.py

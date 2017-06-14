@@ -13,7 +13,7 @@ import math
 import scipy.interpolate
 from scipy import stats
 from materials import typical_materials
-from postprocess.reports import materialGraphics
+from postprocess.reports import graph_material
 from materials import materialWithDKDiagrams as matWDKD
 import matplotlib.pyplot as plt
 import numpy as np
@@ -521,9 +521,9 @@ class Concrete(matWDKD.MaterialWithDKDiagrams):
         if self.materialDiagramD== None:
           self.defDiagD(preprocessor)
         if self.tensionStiffparam==None:
-            retval= materialGraphics.UniaxialMaterialDiagramGraphic(epsMin=self.epsilonU(),epsMax=0,title=self.materialName + ' design stress-strain diagram')
+            retval= graph_material.UniaxialMaterialDiagramGraphic(epsMin=self.epsilonU(),epsMax=0,title=self.materialName + ' design stress-strain diagram')
         else:
-            retval= materialGraphics.UniaxialMaterialDiagramGraphic(epsMin=self.epsilonU(),epsMax=20*self.fctd()/self.E0(),title=self.materialName + ' design stress-strain diagram')
+            retval= graph_material.UniaxialMaterialDiagramGraphic(epsMin=self.epsilonU(),epsMax=20*self.fctd()/self.E0(),title=self.materialName + ' design stress-strain diagram')
         retval.setupGraphic(plt,self.materialDiagramD)
         fileName= path+self.materialName+'_design_stress_strain_diagram'
         retval.savefig(plt,fileName+'.jpeg')
