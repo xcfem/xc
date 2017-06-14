@@ -6,7 +6,7 @@ import math
 import vtk
 from miscUtils import LogMessages as lmsg
 from postprocess.xcVtk import field_base as fb
-from postprocess.xcVtk import VectorFieldData as vfd
+from postprocess.xcVtk import vector_field_data as vfd
 
 class VectorField(fb.FieldBase):
   '''Vector field defined at points.'''

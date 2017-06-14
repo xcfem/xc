@@ -22,8 +22,8 @@ from model.boundary_cond import elastic_foundation as ef
 from postprocess.xcVtk import vtk_grafico_base
 from postprocess.xcVtk.FE_model import vtk_FE_graphic
 from postprocess.xcVtk.FE_model import Fields
-from postprocess.xcVtk import LoadVectorField as lvf
-from postprocess.xcVtk import LocalAxesVectorField as lavf
+from postprocess.xcVtk import load_vector_field as lvf
+from postprocess.xcVtk import local_axes_vector_field as lavf
 from postprocess.xcVtk.FE_model import quick_graphics as qg
 import ijkGrid as grid
 import math

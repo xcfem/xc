@@ -16,9 +16,9 @@ from postprocess.xcVtk.FE_model import vtk_FE_graphic
 from postprocess.xcVtk.FE_model import Fields
 from postprocess.xcVtk import control_var_diagram as cvd
 from postprocess.xcVtk import linear_load_diagram as lld
-from postprocess.xcVtk import LoadVectorField as lvf
-from postprocess.xcVtk import NodePropertyDiagram as npd
-from postprocess.xcVtk import LocalAxesVectorField as lavf
+from postprocess.xcVtk import load_vector_field as lvf
+from postprocess.xcVtk import node_property_diagram as npd
+from postprocess.xcVtk import local_axes_vector_field as lavf
 
 class QuickGraphics(object):
   '''This class is aimed at providing the user with a quick and easy way to 

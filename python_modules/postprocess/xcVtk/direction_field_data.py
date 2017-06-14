@@ -10,7 +10,7 @@ __email__= " ana.Ortega.Ort@gmail.com, l.pereztato@gmail.com"
 
 import vtk
 from miscUtils import LogMessages as lmsg
-from postprocess.xcVtk import VectorFieldData as vfd
+from postprocess.xcVtk import vector_field_data as vfd
 
 class DirectionFieldData(vfd.VectorFieldData):
   '''Directions (modulus doesn't matters) Vectors defined at points.'''

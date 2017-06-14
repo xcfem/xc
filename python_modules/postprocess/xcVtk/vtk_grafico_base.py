@@ -13,7 +13,7 @@ import sys
 import vtk
 import xc_base
 import geom
-from postprocess.xcVtk import ScreenAnnotation as sa
+from postprocess.xcVtk import screen_annotation as sa
 from miscUtils import LogMessages as lmsg
 
 
