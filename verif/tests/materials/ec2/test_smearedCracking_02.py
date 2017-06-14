@@ -205,9 +205,9 @@ else:
 
 ###  FIGURES & REPORTS
 # #report concrete material
-# from postprocess.reports import materialReportsUtils
+# from postprocess.reports import report_material
 
-# materialReportsUtils.reportConcrete02(concrDiag=concr,paramTensStiffening=paramTS,grTitle='Test #7. Concrete $\sigma-\epsilon$ curve',grFileName='figures/material/testEx7',texFileName='figures/material/testEx7.tex')
+# report_material.report_concrete02(concrDiag=concr,paramTensStiffening=paramTS,grTitle='Test #7. Concrete $\sigma-\epsilon$ curve',grFileName='figures/material/testEx7',texFileName='figures/material/testEx7.tex')
 
 # plt.plot(strain,stress)
 # plt.show()
