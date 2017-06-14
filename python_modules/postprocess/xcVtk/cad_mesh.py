@@ -3,7 +3,7 @@ import vtk
 import xc_base
 import xc
 from miscUtils import LogMessages as lmsg
-import creaArraySetData
+import create_array_set_data
 
 __author__= "Luis C. Pérez Tato (LCPT) Ana Ortega (AO_O)"
 __copyright__= "Copyright 2015, LCPT AO_O"
@@ -61,11 +61,11 @@ def VtkDefineActorCells(recordGrid, renderer, tipoRepr):
   renderer.AddActor(cellActor) # Actor para las celdas
 
 def VtkCargaIdsKPts(uGrid, setToDraw):
-  etiqKPt=  creaArraySetData.VtkCreaStrArraySetData(setToDraw,'pnts','nombre')
+  etiqKPt=  create_array_set_data.VtkCreaStrArraySetData(setToDraw,'pnts','nombre')
   uGrid.GetPointData().AddArray(etiqKPt)
 
 def VtkCargaIdsCells(uGrid, setToDraw, entTypeName):
-  etiqCells= creaArraySetData.VtkCreaStrArraySetData(setToDraw,entTypeName,'nombre')
+  etiqCells= create_array_set_data.VtkCreaStrArraySetData(setToDraw,entTypeName,'nombre')
   uGrid.GetCellData().AddArray(etiqCells)
 
 # Dibuja las etiquetas de los puntos

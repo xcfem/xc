@@ -15,7 +15,7 @@ from solution import predefined_solutions
 from postprocess.xcVtk.FE_model import vtk_FE_graphic
 from postprocess.xcVtk.FE_model import Fields
 from postprocess.xcVtk import control_var_diagram as cvd
-from postprocess.xcVtk import LinearLoadDiagram as lld
+from postprocess.xcVtk import linear_load_diagram as lld
 from postprocess.xcVtk import LoadVectorField as lvf
 from postprocess.xcVtk import NodePropertyDiagram as npd
 from postprocess.xcVtk import LocalAxesVectorField as lavf

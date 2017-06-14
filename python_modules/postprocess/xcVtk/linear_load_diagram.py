@@ -4,7 +4,7 @@
 
 import geom
 import vtk
-from postprocess.xcVtk import ColoredDiagram as cd
+from postprocess.xcVtk import colored_diagram as cd
 
 
 class LinearLoadDiagram(cd.ColoredDiagram):
