@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-#Verification test of the cálculo de la deformación en el alma
+#Verification test of the computation of strain in the web
 #según el artículo 44.2.3.2.2 de EHE. Lo único que se pretende
 #con el test es comprobar que la fórmula está bien escrita en la macro.
 

@@ -170,7 +170,7 @@ for F in Flist:
   analisis= predefined_solutions.simple_static_modified_newton(prueba)
   analOk= analisis.analyze(1)
   fConcrMin= setsRCEl1.concrFibers.getFiberWithMinStrain()
-  epsCMin= fConcrMin.getMaterial().getStrain() # minimal strain among concrete fibers
+  epsCMin= fConcrMin.getMaterial().getStrain() # minimum strain among concrete fibers
   strain.append(epsCMin*1E3)
   stress.append(F/areaSec/1e6)
   dom.revertToStart()

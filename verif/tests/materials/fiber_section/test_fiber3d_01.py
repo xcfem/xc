@@ -122,7 +122,7 @@ nfib= scc.getFibers().getNumFibers()
 avgStrain= 0.0
 fibras= scc.getFibers()
 for f in fibras:
-# print "fibra: ",tag, " deformación: ", getMaterial.strain
+# print "fiber tag: ",tag, " strain: ", getMaterial.strain
    avgStrain+= f.getMaterial().getStrain()
 avgStrain/= nfib
 
