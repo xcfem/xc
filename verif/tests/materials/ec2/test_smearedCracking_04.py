@@ -216,24 +216,24 @@ Deform= sccEl1.getSectionDeformation()
 
 fibraCEpsMin= -1
 fConcrMin= setsRCEl1.concrFibers.getFiberWithMinStrain()
-epsCMin= fConcrMin.getMaterial().getStrain() # minimal strain among concrete fibers
-sgCMin= fConcrMin.getMaterial().getStress()  # stress in the concrete fiber with minimal strain
-YepsCMin= fConcrMin.getPos().x # y coord. of the concrete fiber with minimal strain
-ZepsCMin= fConcrMin.getPos().y # z coord. of the concrete fiber with minimal strain
+epsCMin= fConcrMin.getMaterial().getStrain() # minimum strain among concrete fibers
+sgCMin= fConcrMin.getMaterial().getStress()  # stress in the concrete fiber with minimum strain
+YepsCMin= fConcrMin.getPos().x # y coord. of the concrete fiber with minimum strain
+ZepsCMin= fConcrMin.getPos().y # z coord. of the concrete fiber with minimum strain
 
 fConcrMax= setsRCEl1.concrFibers.getFiberWithMaxStrain()
-epsCMax= fConcrMax.getMaterial().getStrain() # maximal strain among concrete fibers
-sgCMax= fConcrMax.getMaterial().getStress()  # stress in the concrete fiber with maximal strain
-YepsCMax= fConcrMax.getPos().x # y coord. of the concrete fiber with maximal strain
-ZepsCMax= fConcrMax.getPos().y # z coord. of the concrete fiber with maximal strain
+epsCMax= fConcrMax.getMaterial().getStrain() # maximum strain among concrete fibers
+sgCMax= fConcrMax.getMaterial().getStress()  # stress in the concrete fiber with maximum strain
+YepsCMax= fConcrMax.getPos().x # y coord. of the concrete fiber with maximum strain
+ZepsCMax= fConcrMax.getPos().y # z coord. of the concrete fiber with maximum strain
 
 
 #Results for the steel fibers in section of element 1
 fReinfMax= setsRCEl1.reinfFibers.getFiberWithMaxStrain()
-epsSMax= fReinfMax.getMaterial().getStrain() # maximal strain among steel fibers
-sgSMax= fReinfMax.getMaterial().getStress() # stress in the steel fiber with maximal strain
-YepsSMax= fReinfMax.getPos().x # y coord. of the steel fiber with maximal strain
-ZepsSMax= fReinfMax.getPos().y # z coord. of the steel fiber with maximal strain
+epsSMax= fReinfMax.getMaterial().getStrain() # maximum strain among steel fibers
+sgSMax= fReinfMax.getMaterial().getStress() # stress in the steel fiber with maximum strain
+YepsSMax= fReinfMax.getPos().x # y coord. of the steel fiber with maximum strain
+ZepsSMax= fReinfMax.getPos().y # z coord. of the steel fiber with maximum strain
 
 
 '''

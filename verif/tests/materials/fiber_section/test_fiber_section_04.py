@@ -28,27 +28,27 @@ cover= 0.05 # Concrete cover expressed in meters.
 diam= 16e-3 # Diámetro de las barras expressed in meters.
 areaFi16= 2.01e-4 # Área de las barras expressed in square meters.
 
-e1= -10e-3 # Deformación axil de prueba 1.
+e1= -10e-3 # Axial trial strain 1.
 sgc1= EHE_materials.HA25.sigmac(e1)
 sgs1= concrete_base.sigmaDAceroArmar(e1,EHE_materials.B500S)
 
-e2= -3e-3 # Deformación axil de prueba 1.
+e2= -3e-3 # Axial trial strain 1.
 sgc2= EHE_materials.HA25.sigmac(e2)
 sgs2= concrete_base.sigmaDAceroArmar(e2,EHE_materials.B500S)
 
-e3= -1e-3 # Deformación axil de prueba 1.
+e3= -1e-3 # Axial trial strain 1.
 sgc3= EHE_materials.HA25.sigmac(e3)
 sgs3= concrete_base.sigmaDAceroArmar(e3,EHE_materials.B500S)
 
-e4= 1e-3 # Deformación axil de prueba 1.
+e4= 1e-3 # Axial trial strain 1.
 sgc4= EHE_materials.HA25.sigmac(e4)
 sgs4= concrete_base.sigmaDAceroArmar(e4,EHE_materials.B500S)
 
-e5= 3e-3 # Deformación axil de prueba 1.
+e5= 3e-3 # Axial trial strain 1.
 sgc5= EHE_materials.HA25.sigmac(e5)
 sgs5= concrete_base.sigmaDAceroArmar(e5,EHE_materials.B500S)
 
-e6= 10e-3 # Deformación axil de prueba 1.
+e6= 10e-3 # Axial trial strain 1.
 sgc6= EHE_materials.HA25.sigmac(e6)
 sgs6= concrete_base.sigmaDAceroArmar(e6,EHE_materials.B500S)
 

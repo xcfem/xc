@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-''' Verification test of the cálculo de la deformación por retraccion
-   según EHE-08. '''
+''' Verification test for the concrete shrinkage computation
+   according to EHE-08. '''
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
 __copyright__= "Copyright 2015, LCPT and AOO"

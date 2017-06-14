@@ -89,12 +89,12 @@ defMz= scc.getSectionDeformationByName("defMz")
 defN= scc.getSectionDeformationByName("defN")
 concrFibers= createFiberSets.FiberSet(scc,'concrete',EHE_materials.HA25.matTagD)
 fibraCEpsMin= concrFibers.getFiberWithMinStrain()
-epsCMin= fibraCEpsMin.getMaterial().getStrain() # Deformación mínima en el hormigón.
+epsCMin= fibraCEpsMin.getMaterial().getStrain() # Minumum concrete strain.
 fibraCEpsMax= concrFibers.getFiberWithMaxStrain()
-epsCMax= fibraCEpsMax.getMaterial().getStrain() # Deformación máxima en el hormigón.
+epsCMax= fibraCEpsMax.getMaterial().getStrain() # Maximum concrete strain.
 reinfFibers= createFiberSets.FiberSet(scc,"reinforcement",EHE_materials.B500S.matTagD)
 fibraSEpsMax= reinfFibers.getFiberWithMaxStrain()
-epsSMax= fibraSEpsMax.getMaterial().getStrain() # Deformación máxima en el acero
+epsSMax= fibraSEpsMax.getMaterial().getStrain() # Maximum steel strain
 
 from materials import section_properties
 from materials.ehe import comprobTnEHE
@@ -118,9 +118,9 @@ print "ratio4= ",(ratio4)
 print "ratio5= ",(ratio5)
 print "ratio6= ",(ratio6)
 
-print "Deformación mínima en el hormigón: ",(epsCMin)
-print "Deformación máxima en el hormigón: ",(epsCMax)
-print "Deformación máxima en la reinforcement: ",(epsSMax)
+print "Minumum concrete strain: ",(epsCMin)
+print "Maximum concrete strain: ",(epsCMax)
+print "Maximum rebar strain: ",(epsSMax)
 print "Tipo solicitación: ",strTipoSolic," (",(tipoSolic),") \n"
 print "Cumple a ",strTipoSolic,": ",(cumpleFT)
 print "Aprovechamiento a ",strTipoSolic,": ",(aprovSecc)

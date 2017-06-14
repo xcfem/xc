@@ -127,24 +127,24 @@ setsRC= createFiberSets.fiberSectionSetupRCSets(scc,EHE_materials.HA25.matTagD,'
 fibraCEpsMin= -1
 fMin= setsRC.concrFibers.getFiberWithMinStrain()
 
-epsCMin= fMin.getMaterial().getStrain() # Minimal strain in concrete.
-sgCMin= fMin.getMaterial().getStress() # Minimal stress in concrete.
-YepsCMin= fMin.getPos().x # Coordenada y de la deformación mínima in concrete.
-ZepsCMin= fMin.getPos().y # Coordenada z de la deformación mínima in concrete.
+epsCMin= fMin.getMaterial().getStrain() # Minimum strain in concrete.
+sgCMin= fMin.getMaterial().getStress() # Minimum stress in concrete.
+YepsCMin= fMin.getPos().x # Y Z coordinates for the minimum concrete strain.
+ZepsCMin= fMin.getPos().y
 
 fMin= setsRC.reinfFibers.getFiberWithMinStrain()
 
-epsSMin= fMin.getMaterial().getStrain() # Minimal strain in steel.
-sgSMin= fMin.getMaterial().getStress() # Minimal stress in steel.
-YepsSMin= fMin.getPos().x # Coordenada y de la deformación mínima in steel.
-ZepsSMin= fMin.getPos().y # Coordenada z de la deformación mínima in steel.
+epsSMin= fMin.getMaterial().getStrain() # Minimum strain in steel.
+sgSMin= fMin.getMaterial().getStress() # Minimum stress in steel.
+YepsSMin= fMin.getPos().x # Y Z coordinates for the minimum steel strain.
+ZepsSMin= fMin.getPos().y 
 
 fMax= setsRC.reinfFibers.getFiberWithMaxStrain()
 
-epsSMax= fMax.getMaterial().getStrain() # Maximal strain in steel.
-sgSMax= fMax.getMaterial().getStress() # Maximal stress in steel.
-YepsSMax= fMax.getPos().x # Coordenada y de la deformación mínima in steel.
-ZepsSMax= fMax.getPos().y # Coordenada z de la deformación mínima in steel.
+epsSMax= fMax.getMaterial().getStrain() # Maximum strain in steel.
+sgSMax= fMax.getMaterial().getStress() # Maximum stress in steel.
+YepsSMax= fMax.getPos().x # Y Z coordinates for the maximum steel strain.
+ZepsSMax= fMax.getPos().y
 
 
 from materials import section_properties
@@ -175,20 +175,20 @@ print "Profundidad de la fibra neutra= ",x," m"
 print "Resul= ",Resul*1e-3," kN"
 print "Deform= ",Deform*1e3,"E-3"
 
-print "\nMinimal strain in concrete: ",(epsCMin*1E3),"E-3"
-print "Minimal stress in concrete: ",(sgCMin/1e6),"E6"
-print "Coordenada y para deformación mínima in concrete: ",(YepsCMin)
-print "Coordenada z para deformación mínima in concrete: ",(ZepsCMin)
+print "\nMinimum strain in concrete: ",(epsCMin*1E3),"E-3"
+print "Minimum stress in concrete: ",(sgCMin/1e6),"E6"
+print "y coordinate for minimum concrete strain: ",(YepsCMin)
+print "z coordinate for minimum concrete strain: ",(ZepsCMin)
 
-print "\nMinimal strain en la reinforcement: ",(epsSMin*1E3),"E-3"
-print "Minimal stress in steel: ",(sgSMin/1e6),"E6"
-print "Coordenada y para deformación mínima en la reinforcement: ",(YepsSMin)
-print "Coordenada z para deformación mínima en la reinforcement: ",(ZepsSMin)
+print "\nMinimum strain en la reinforcement: ",(epsSMin*1E3),"E-3"
+print "Minimum stress in steel: ",(sgSMin/1e6),"E6"
+print "y coordinate for minimum rebar strain: ",(YepsSMin)
+print "z coordinate for minimum rebar strain: ",(ZepsSMin)
 
-print "\nMaximal strain en la reinforcement: ",(epsSMax*1E3),"E-3"
-print "Maximal stress in steel: ",(sgSMax/1e6),"E6"
-print "Coordenada y para deformación máxima en la reinforcement: ",(YepsSMax)
-print "Coordenada z para deformación máxima en la reinforcement: ",(ZepsSMax)
+print "\nMaximum strain en la reinforcement: ",(epsSMax*1E3),"E-3"
+print "Maximum stress in steel: ",(sgSMax/1e6),"E6"
+print "y coordinate for maximum rebar strain: ",(YepsSMax)
+print "z coordinate for maximum rebar strain: ",(ZepsSMax)
 print "\nTipo solicitación: ",strTipoSolic," (",(tipoSolic),") "
 print "Cumple a ",strTipoSolic,": ",(cumpleFT)
 print "Aprovechamiento a ",strTipoSolic,": ",(aprovSecc)

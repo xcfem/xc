@@ -88,8 +88,8 @@ ratio= (tInic*A-elem1.getN())/(tInic*A)
 
 '''
 # print{"force= ",getN
-print "prestressinf force= ",(tInic*A)
-print "deformación= ",getStrain
+print "prestressing force= ",(tInic*A)
+print "strain= ",getStrain
 print "ratio= ",(ratio)}
 '''
 import os

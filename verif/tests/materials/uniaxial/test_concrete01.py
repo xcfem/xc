@@ -17,9 +17,9 @@ from materials import typical_materials
 
 fc= -250 # Resistencia a compresión del hormigón.
 l= 1 # Distancia entre nodes
-epsc0= -2e-3 # Maximal compressive strain for section in compression.
+epsc0= -2e-3 # Maximum compressive strain for section in compression.
 fcu= fc/1.2 # Strain under concrete compressive stress.
-epsU= -3.5e-3 # Maximal compressive strain in concrete.
+epsU= -3.5e-3 # Maximum compressive strain in concrete.
 F= 1e2 # Force to apply.
 
 # Points of the stress-strain function
