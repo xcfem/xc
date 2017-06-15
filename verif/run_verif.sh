@@ -13,7 +13,14 @@ echo ""
 
 START=$(date +%s.%N)
 
-#Test de combinaciones.
+#Tests about actions.
+echo "$BLEU" "Actions tests." "$NORMAL"
+python tests/actions/test_snowSIA.py
+python tests/actions/test_windSIA.py
+python tests/actions/verif_precontrainte.py
+python tests/actions/test_peck_pressure_envelope.py
+
+#Combinations tests.
 echo "$BLEU" "Load combination tests." "$NORMAL"
 python tests/combinations/add_loads_01.py
 python tests/combinations/suma_hipotesis_02.py
@@ -158,7 +165,7 @@ python tests/elements/kill_elements_02.py
 echo "$BLEU" "Solver tests." "$NORMAL"
 python tests/solution/superlu_solver_test_01.py
 
-#Test de los manejadores de coacciones.
+#Constraint handlers tests.
 echo "$BLEU" "  Constraint handler tests." "$NORMAL"
 python tests/solution/constraint_handler/plain_handler_test_01.py
 python tests/solution/constraint_handler/transformation_handler_test_01.py
@@ -166,7 +173,7 @@ python tests/solution/constraint_handler/transformation_handler_test_02.py
 python tests/solution/constraint_handler/transformation_handler_test_03.py
 python tests/solution/constraint_handler/lagrange_handler_test_01.py
 
-#autovalores
+#Eigenvalues.
 echo "$BLEU" "  Eigenvalue solution tests." "$NORMAL"
 python tests/solution/eigenvalues/modos_propios_mensula_01.py
 python tests/solution/eigenvalues/modos_propios_mensula_02.py
@@ -245,7 +252,7 @@ python tests/preprocessor/sets/test_get_contours_02.py
 echo "$BLEU" "  Preprocessor grid model tests." "$NORMAL"
 python tests/preprocessor/grid_model/test_grid_model_01.py
 
-#Tests condiciones de contorno
+#Tests about constraints.
 echo "$BLEU" "Displacement constraints tests." "$NORMAL"
 python tests/constraints/remove_fix_01.py
 python tests/constraints/remove_fix_02.py
@@ -261,7 +268,7 @@ python tests/constraints/test_glue_node_to_element_03.py
 python tests/constraints/test_glue_node_to_element_04.py
 python tests/constraints/test_glue_node_to_element_05.py
 
-#Tests de cargas
+#Load tests
 echo "$BLEU" "Loads tests." "$NORMAL"
 python tests/loads/beam2dNodalLoad.py
 python tests/loads/beam2dNodalLoad02.py
@@ -302,8 +309,8 @@ python tests/loads/test_ground_motion_06.py
 python tests/loads/test_ground_motion_07.py
 python tests/loads/test_ground_motion_08.py
 
-#Tests de los materiales
-#Materiales uniaxiales.
+#Materials tests
+#Uniaxial materials.
 echo "$BLEU" "Materials tests." "$NORMAL"
 echo "$BLEU" "  Uniaxial materials tests." "$NORMAL"
 python tests/materials/uniaxial/test_elasticpp_material_01.py
@@ -336,14 +343,14 @@ python tests/materials/uniaxial/test_cable_material05.py
 python tests/materials/uniaxial/test_cable_material06.py
 python tests/materials/uniaxial/test_cable_material07.py
 python tests/materials/uniaxial/test_material_elast_no_traccion.py
-#Materiales nD
+#nD Materials
 echo "$BLEU" "  nD materials tests." "$NORMAL"
 python tests/materials/test_elastic_isotropic_plane_strain_2d_01.py
 python tests/materials/test_elastic_isotropic_plane_stress_2d_01.py
 python tests/materials/test_elastic_isotropic_3d_01.py
 
-#Secciones transversales.
-#Secciones transversales. Definición geométrica.
+#Cross sections.
+#Cross sections. Geometry.
 echo "$BLEU" "  Section geometry tests." "$NORMAL"
 python tests/materials/geom_section/test_spot_01.py
 python tests/materials/geom_section/test_segmento_01.py
@@ -363,7 +370,7 @@ python tests/materials/steel_shapes/test_perfiles_aisc_hss.py
 python tests/materials/steel_shapes/test_perfil_metalico_01.py
 python tests/materials/steel_shapes/test_perfil_metalico_02.py
 
-#Secciones transversales. Modelo de fibras.
+#Cross sections. Fiber model.
 echo "$BLEU" "  Elastic section tests." "$NORMAL"
 python tests/materials/elastic_section/test_elastic_section_2d_sign_convention_01.py
 python tests/materials/elastic_section/test_elastic_section_2d_01.py
@@ -480,7 +487,7 @@ python tests/materials/eae/verif_casquillo_rigidizado.py
 python tests/materials/eae/verif_apoyo_por_soldadura_alma.py
 python tests/materials/eae/verif_resistencia_cordon.py
 
-#Tests de database
+#Database tests
 echo "$BLEU" "Database tests (MySQL, Berkeley db, sqlite,...)." "$NORMAL"
 # XXX sqlitepp is toooooo slooooow. Seek another solution.
 # python tests/database/test_database_01.py

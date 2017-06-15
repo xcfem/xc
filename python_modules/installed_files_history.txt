@@ -8,7 +8,9 @@
 /usr/local/lib/python2.7/dist-packages/actions/CombContainer.pyc
 /usr/local/lib/python2.7/dist-packages/actions/combinations.py
 /usr/local/lib/python2.7/dist-packages/actions/combinations.pyc
+/usr/local/lib/python2.7/dist-packages/actions/earth_pressure/earth_pressure.py
 /usr/local/lib/python2.7/dist-packages/actions/earth_pressure/EarthPressure.py
+/usr/local/lib/python2.7/dist-packages/actions/earth_pressure/earth_pressure.pyc
 /usr/local/lib/python2.7/dist-packages/actions/earth_pressure/EarthPressure.pyc
 /usr/local/lib/python2.7/dist-packages/actions/earth_pressure/__init__.py
 /usr/local/lib/python2.7/dist-packages/actions/earth_pressure/__init__.pyc
