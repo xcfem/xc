@@ -2,38 +2,6 @@ General topics
 ==============
 
 
-ControlVars
------------
-
-.. automodule:: postprocess.ControlVars
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-ElementSectionMap
------------------
-
-.. automodule:: postprocess.ElementSectionMap
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-LimitStateData
---------------
-
-.. automodule:: postprocess.LimitStateData
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-PhantomModel
-------------
-
-.. automodule:: postprocess.PhantomModel
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
 callback_controls
 -----------------
 
@@ -42,8 +10,16 @@ callback_controls
     :undoc-members:
     :show-inheritance:
 
+control_vars
+------------
+
+.. automodule:: postprocess.control_vars
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 def_params_control
-------------------
+-------------------
 
 .. automodule:: postprocess.def_params_control
     :members:
@@ -51,12 +27,30 @@ def_params_control
     :show-inheritance:
 
 def_vars_control
-----------------
+------------------
 
 .. automodule:: postprocess.def_vars_control
     :members:
     :undoc-members:
     :show-inheritance:
+
+displayable_results
+-------------------
+
+.. automodule:: postprocess.displayable_results
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+
+
+element_section_map
+-------------------
+
+.. automodule:: postprocess.element_section_map
+    :members:
+    :undoc-members:
+   :show-inheritance:
 
 extrapolate_elem_attr
 ---------------------
@@ -64,7 +58,7 @@ extrapolate_elem_attr
 .. automodule:: postprocess.extrapolate_elem_attr
     :members:
     :undoc-members:
-    :show-inheritance:
+   :show-inheritance:
 
 figure_collection
 -----------------
@@ -72,12 +66,22 @@ figure_collection
 .. automodule:: postprocess.figure_collection
     :members:
     :undoc-members:
-    :show-inheritance:
+   :show-inheritance:
 
 get_reactions
 -------------
 
 .. automodule:: postprocess.get_reactions
+    :members:
+    :undoc-members:
+   :show-inheritance:
+
+       
+
+limit_state_data
+----------------
+
+.. automodule:: postprocess.limit_state_data
     :members:
     :undoc-members:
     :show-inheritance:
@@ -90,10 +94,27 @@ med_xc_vars
     :undoc-members:
     :show-inheritance:
 
-prop_statistics module
-----------------------------------
+phantom_model
+-------------
+
+.. automodule:: postprocess.phantom_model
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+prop_statistics
+---------------
 
 .. automodule:: postprocess.prop_statistics
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+
+RC_material_distribution
+------------------------
+
+.. automodule:: postprocess.RC_material_distribution
     :members:
     :undoc-members:
     :show-inheritance:

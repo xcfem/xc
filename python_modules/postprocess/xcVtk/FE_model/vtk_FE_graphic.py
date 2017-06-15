@@ -138,7 +138,7 @@ class RecordDefDisplayEF(vtk_grafico_base.RecordDefDisplay):
           # if(self.gridRecord.entToLabel=="elementos"):
           #   VtkDibujaIdsElementos(self.renderer)
           # elif(self.gridRecord.entToLabel=="nodos"):
-          #   vtk_define_malla_nodos.VtkDibujaIdsNodos(self.renderer)
+          #   vtk_define_mesh_nodes.VtkDibujaIdsNodos(self.renderer)
           # else:
           #   print "Entity: ", self.gridRecord.entToLabel, " unknown."
 

@@ -13,7 +13,6 @@ from miscUtils import string_utils as su
 from postprocess.xcVtk import vtk_grafico_base
 from postprocess.xcVtk.FE_model import vtk_FE_graphic
 from postprocess.xcVtk.FE_model import Fields
-#from postprocess.xcVtk import vtkInternalForceDiagram as ifd
 from postprocess.control_vars import *
 
 import matplotlib.pyplot as plt

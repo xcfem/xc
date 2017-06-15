@@ -828,7 +828,9 @@
 /usr/local/lib/python2.7/dist-packages/postprocess/get_reactions.pyc
 /usr/local/lib/python2.7/dist-packages/postprocess/__init__.py
 /usr/local/lib/python2.7/dist-packages/postprocess/__init__.pyc
+/usr/local/lib/python2.7/dist-packages/postprocess/limit_state_data.py
 /usr/local/lib/python2.7/dist-packages/postprocess/LimitStateData.py
+/usr/local/lib/python2.7/dist-packages/postprocess/limit_state_data.pyc
 /usr/local/lib/python2.7/dist-packages/postprocess/LimitStateData.pyc
 /usr/local/lib/python2.7/dist-packages/postprocess/med_xc_vars.py
 /usr/local/lib/python2.7/dist-packages/postprocess/med_xc_vars.pyc
@@ -1096,7 +1098,9 @@
 /usr/local/lib/python2.7/dist-packages/postprocess/xcVtk/vtk_dibuja_prop_points.pyc
 /usr/local/lib/python2.7/dist-packages/postprocess/xcVtk/vtk_grafico_base.py
 /usr/local/lib/python2.7/dist-packages/postprocess/xcVtk/vtk_grafico_base.pyc
+/usr/local/lib/python2.7/dist-packages/postprocess/xcVtk/vtk_internal_force_diagram.py
 /usr/local/lib/python2.7/dist-packages/postprocess/xcVtk/vtkInternalForceDiagram.py
+/usr/local/lib/python2.7/dist-packages/postprocess/xcVtk/vtk_internal_force_diagram.pyc
 /usr/local/lib/python2.7/dist-packages/postprocess/xcVtk/vtkInternalForceDiagram.pyc
 /usr/local/lib/python2.7/dist-packages/postprocess/xcVtk/vtk_load_cells.py
 /usr/local/lib/python2.7/dist-packages/postprocess/xcVtk/vtk_load_cells.pyc

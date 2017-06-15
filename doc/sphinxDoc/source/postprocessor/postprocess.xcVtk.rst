@@ -4,7 +4,7 @@ xcVtk
 .. toctree::
 
     xcVtkGenTopics
-    xcVtk.malla_cad
-    xcVtk.malla_ef
+    xcVtk.CAD_model
+    xcVtk.FE_model
 
 

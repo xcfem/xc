@@ -1,124 +1,104 @@
-General topics
-==============
 
-
-FieldBase
----------
-
-.. automodule:: xcVtk.FieldBase
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-vtk_grafico_base
-----------------
-
-.. automodule:: xcVtk.vtk_grafico_base
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-
-ColoredDiagram
---------------
-
-.. automodule:: xcVtk.ColoredDiagram
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-DirectionFieldData
-------------------
-
-.. automodule:: xcVtk.DirectionFieldData
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-ElementPropertyDiagram
-----------------------
-
-.. automodule:: xcVtk.ElementPropertyDiagram
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-LinearLoadDiagram
------------------
-
-.. automodule:: xcVtk.LinearLoadDiagram
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-LoadVectorField
+colored_diagram
 ---------------
 
-.. automodule:: xcVtk.LoadVectorField
+.. automodule:: postprocess.xcVtk.colored_diagram
     :members:
     :undoc-members:
     :show-inheritance:
 
-LocalAxesVectorField
---------------------
-
-.. automodule:: xcVtk.LocalAxesVectorField
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-NodePropertyDiagram
+control_var_diagram
 -------------------
 
-.. automodule:: xcVtk.NodePropertyDiagram
+.. automodule:: postprocess.xcVtk.control_var_diagram
     :members:
     :undoc-members:
     :show-inheritance:
 
-ScreenAnnotation
-----------------
+create_array_set_data
+---------------------
 
-.. automodule:: xcVtk.ScreenAnnotation
+.. automodule:: postprocess.xcVtk.create_array_set_data
     :members:
     :undoc-members:
     :show-inheritance:
 
-VectorField
------------
+direction_field_data
+--------------------
 
-.. automodule:: xcVtk.VectorField
+.. automodule:: postprocess.xcVtk.direction_field_data
     :members:
     :undoc-members:
     :show-inheritance:
 
-VectorFieldData
----------------
+element_property_diagram
+------------------------
 
-.. automodule:: xcVtk.VectorFieldData
+.. automodule:: postprocess.xcVtk.element_property_diagram
     :members:
     :undoc-members:
     :show-inheritance:
 
-cadMesh
--------
+field_base
+----------
 
-.. automodule:: xcVtk.cadMesh
+.. automodule:: postprocess.xcVtk.field_base
     :members:
     :undoc-members:
     :show-inheritance:
 
-creaArraySetData
-----------------
+linear_load_diagram
+-------------------
 
-.. automodule:: xcVtk.creaArraySetData
+.. automodule:: postprocess.xcVtk.linear_load_diagram
     :members:
     :undoc-members:
     :show-inheritance:
 
-graficos
---------
+load_vector_field
+-----------------
 
-.. automodule:: xcVtk.graficos
+.. automodule:: postprocess.xcVtk.load_vector_field
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+local_axes_vector_field
+-----------------------
+
+.. automodule:: postprocess.xcVtk.local_axes_vector_field
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+node_property_diagram
+---------------------
+
+.. automodule:: postprocess.xcVtk.node_property_diagram
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+screen_annotation
+-----------------
+
+.. automodule:: postprocess.xcVtk.screen_annotation
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+vector_field_data
+-----------------
+
+.. automodule:: postprocess.xcVtk.vector_field_data
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+vector_field
+------------
+
+.. automodule:: postprocess.xcVtk.vector_field
     :members:
     :undoc-members:
     :show-inheritance:
@@ -126,7 +106,7 @@ graficos
 vtk_crea_array_set_data
 -----------------------
 
-.. automodule:: xcVtk.vtk_crea_array_set_data
+.. automodule:: postprocess.xcVtk.vtk_crea_array_set_data
     :members:
     :undoc-members:
     :show-inheritance:
@@ -134,7 +114,7 @@ vtk_crea_array_set_data
 vtk_define_id_filter module
 ---------------------------------
 
-.. automodule:: xcVtk.vtk_define_id_filter
+.. automodule:: postprocess.xcVtk.vtk_define_id_filter
     :members:
     :undoc-members:
     :show-inheritance:
@@ -142,7 +122,7 @@ vtk_define_id_filter module
 vtk_dibuja_prop_cells
 ---------------------
 
-.. automodule:: xcVtk.vtk_dibuja_prop_cells
+.. automodule:: postprocess.xcVtk.vtk_dibuja_prop_cells
     :members:
     :undoc-members:
     :show-inheritance:
@@ -150,7 +130,23 @@ vtk_dibuja_prop_cells
 vtk_dibuja_prop_points
 ----------------------
 
-.. automodule:: xcVtk.vtk_dibuja_prop_points
+.. automodule:: postprocess.xcVtk.vtk_dibuja_prop_points
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+vtk_grafico_base
+----------------
+
+.. automodule:: postprocess.xcVtk.vtk_grafico_base
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+vtk_internal_force_diagram
+--------------------------
+
+.. automodule:: postprocess.xcVtk.vtk_internal_force_diagram
     :members:
     :undoc-members:
     :show-inheritance:
@@ -158,7 +154,7 @@ vtk_dibuja_prop_points
 vtk_load_cells
 --------------
 
-.. automodule:: xcVtk.vtk_load_cells
+.. automodule:: postprocess.xcVtk.vtk_load_cells
     :members:
     :undoc-members:
     :show-inheritance:
@@ -166,7 +162,7 @@ vtk_load_cells
 vtk_load_dblprop_cells
 ----------------------
 
-.. automodule:: xcVtk.vtk_load_dblprop_cells
+.. automodule:: postprocess.xcVtk.vtk_load_dblprop_cells
     :members:
     :undoc-members:
     :show-inheritance:
@@ -174,7 +170,7 @@ vtk_load_dblprop_cells
 vtk_load_strprop_cells
 ----------------------
 
-.. automodule:: xcVtk.vtk_load_strprop_cells
+.. automodule:: postprocess.xcVtk.vtk_load_strprop_cells
     :members:
     :undoc-members:
     :show-inheritance:
@@ -182,7 +178,7 @@ vtk_load_strprop_cells
 vtk_lut_field
 -------------
 
-.. automodule:: xcVtk.vtk_lut_field
+.. automodule:: postprocess.xcVtk.vtk_lut_field
     :members:
     :undoc-members:
     :show-inheritance:
