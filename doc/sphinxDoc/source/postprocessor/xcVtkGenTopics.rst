@@ -143,6 +143,14 @@ vtk_grafico_base
     :undoc-members:
     :show-inheritance:
 
+vtk_internal_force_diagram
+--------------------------
+
+.. automodule:: postprocess.xcVtk.vtk_internal_force_diagram
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 vtk_load_cells
 --------------
 
