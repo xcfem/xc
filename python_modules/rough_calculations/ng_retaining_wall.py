@@ -18,6 +18,7 @@ import matplotlib
 #matplotlib.use('PS')
 import matplotlib.pyplot as plt
 from materials.sia262 import SIA262_materials
+from model.geometry import retaining_wall_geometry
 from rough_calculations import ng_rebar_def
 from rough_calculations import ng_rc_section
 import os
@@ -50,7 +51,7 @@ class InternalForces(object):
   def __init__(self,y,mdMax,vdMax,MdSemelle,VdSemelle):
     self.y, self.mdMax, self.vdMax= filterRepeatedValues(y,mdMax,vdMax)
     self.interpolate()
-    self.hauteurVoile= self.y[-1]
+    self.stemHeight= self.y[-1]
     self.MdSemelle= MdSemelle
     self.VdSemelle= VdSemelle
   def interpolate(self):
@@ -75,11 +76,11 @@ class InternalForces(object):
     return self*f
   def MdEncastrement(self,footingThickness):
     '''Bending moment (envelope) at stem base.'''
-    yEncastrement= self.hauteurVoile-footingThickness/2.0
+    yEncastrement= self.stemHeight-footingThickness/2.0
     return self.Md(yEncastrement)
   def VdEncastrement(self,epaisseurEncastrement):
     '''Shear force (envelope) at stem base.'''
-    yV= self.hauteurVoile-epaisseurEncastrement
+    yV= self.stemHeight-epaisseurEncastrement
     return abs(self.vdMaxVoile(yV))
   def Vd(self, yCoupe):
     '''Shear (envelope) at height yCoupe.'''
@@ -88,13 +89,13 @@ class InternalForces(object):
     '''Bending moment (envelope) at height yCoupe.'''
     return abs(self.mdMaxVoile(yCoupe))
   def getYVoile(self,hCoupe):
-    return self.hauteurVoile-hCoupe
+    return self.stemHeight-hCoupe
   def writeGraphic(self,fileName):
     '''Draws a graphic of internal forces (envelopes) in
        the wall stem.'''
     z= []
     for yi in self.y:
-      z.append(self.hauteurVoile-yi)
+      z.append(self.stemHeight-yi)
     m= []
     for mi in self.mdMax:
       m.append(mi/1e3)
@@ -107,114 +108,96 @@ class InternalForces(object):
     plt.savefig(fileName)
     plt.close()
 
-
-#     Stem |-------- Earth fill
-#          |
-#          |    
-#          |
-#          |
-#     Toe  |    Heel
-#       -------------- Footing
-#
-#
-class RetainingWall(object):
-  '''Cantilever retaining wall.'''
-  #Geometry
-  b= 1.0
-
-  def __init__(self,name= 'prb',enrobage=40e-3,hEncastrement=0.25,hCouronnement=0.25,hSemelle= 0.25):
+class RetainingWallReinforcement(dict):
+  ''' Simplified reinforcement for a cantilever retaining wall.'''
+  def __init__(self,enrobage=40e-3, steel= SIA262_materials.B500B):
     '''Constructor '''
-    self.name= name
+    super(RetainingWallReinforcement, self).__init__()
     self.enrobage= enrobage
-    self.hEncastrement= hEncastrement
-    self.hCouronnement= hCouronnement
-    self.hSemelle= hSemelle
     #Materials.
-    self.beton= SIA262_materials.c25_30
-    self.acier= SIA262_materials.B500B
+    self.steel= steel
     #Default reinforcement
-    AdefA= ng_rebar_def.RebarFamily(self.acier,8e-3,0.15,enrobage)
-    #AdefB= RebarFamily(self.acier,10e-3,0.30,enrobage)
-    Adef= AdefA # DoubleRebarFamily(AdefA,AdefB)
-    self.armatures= {}
+    AdefA= ng_rebar_def.RebarFamily(self.steel,8e-3,0.15,enrobage)
+    Adef= AdefA
     for i in range(1,15):
-      self.armatures[i]= Adef
+      self[i]= Adef
     # #Armature de peau semelle
-    # R= self.hSemelle-2*self.enrobage-8e-3
+    # R= self.footingThickness-2*self.enrobage-8e-3
     # n= math.ceil(R/0.15)+1
     # ecart= R/(n-1)
-    # self.armatures[10]= FamNBars(self.acier,n,8e-3,ecart,enrobage)
+    # self[10]= FamNBars(self.steel,n,8e-3,ecart,enrobage)
     # #Armature couronnement.
-    # R= self.hCouronnement-2*self.enrobage-8e-3
+    # R= self.stemTopWidth-2*self.enrobage-8e-3
     # n= math.ceil(R/0.15)+1
     # ecart= R/(n-1)
-    # self.armatures[13]= FamNBars(self.acier,n,8e-3,ecart,enrobage)
+    # self[13]= FamNBars(self.steel,n,8e-3,ecart,enrobage)
     
-  def defaultDimensions(self,totalHeight):
-    self.hCouronnement= max(totalHeight/24.0,0.15)
-    self.hSemelle= totalHeight/12.0
-    self.hauteurVoile= totalHeight-self.hSemelle
-    self.hEncastrement= max(self.hSemelle,self.hCouronnement+0.02*self.hauteurVoile)
-    bFooting= 1.15*(0.2+0.45*totalHeight)
-    self.bToe= totalHeight/8.0
-    self.bHeel= bFooting-self.bToe-self.hEncastrement
-
-  def getFootingWidth(self):
-    return self.bToe+self.hEncastrement+self.bHeel
-
   def setArmature(self,index,armature):
     '''Assigns armature.'''
-    self.armatures[index]= armature
+    self[index]= armature
 
+  def getArmature(self,index):
+    '''Return armature at index.'''
+    return self[index]
+    
+
+class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
+  '''Cantilever retaining wall.'''
+  b= 1.0
+
+  def __init__(self,name= 'prb',enrobage=40e-3,stemBottomWidth=0.25,stemTopWidth=0.25,footingThickness= 0.25):
+    '''Constructor '''
+    super(RetainingWall,self).__init__(name,stemBottomWidth,stemTopWidth,footingThickness)
+    #Materials.
+    self.beton= SIA262_materials.c25_30
+    self.reinforcement= RetainingWallReinforcement(enrobage)
+    
   def getBasicAnchorageLength(self,index):
-    '''Returns basic anchorage length for the armatures at "index".''' 
-    return self.armatures[index].getBasicAnchorageLength(self.beton)
+    '''Returns basic anchorage length for the reinforcement at "index".''' 
+    return self.reinforcement.getArmature(index).getBasicAnchorageLength(self.beton)
 
-  def getDepth(self,y):
-    '''Return sections depth for height "y")'''
-    return (self.hEncastrement-self.hCouronnement)/self.hauteurVoile*y+self.hCouronnement
   def getSection1(self):
     '''Returns RC section for armature in position 1.'''
-    return ng_rc_section.RCSection(self.armatures[1],self.beton,self.b,self.hEncastrement)
+    return ng_rc_section.RCSection(self.reinforcement[1],self.beton,self.b,self.stemBottomWidth)
   def getSection2(self,y):
     '''Returns RC section for armature in position 2.'''
     c= self.getDepth(y)
-    return ng_rc_section.RCSection(self.armatures[2],self.beton,self.b,c)
+    return ng_rc_section.RCSection(self.reinforcement[2],self.beton,self.b,c)
   def getSection3(self):
     '''Returns RC section for armature in position 3.'''
-    return ng_rc_section.RCSection(self.armatures[3],self.beton,self.b,self.hSemelle)
+    return ng_rc_section.RCSection(self.reinforcement[3],self.beton,self.b,self.footingThickness)
   def getSection4(self):
     '''Returns RC section for armature in position 4.'''
-    return ng_rc_section.RCSection(self.armatures[4],self.beton,self.b,self.hEncastrement)
+    return ng_rc_section.RCSection(self.reinforcement[4],self.beton,self.b,self.stemBottomWidth)
   def getSection6(self):
     '''Returns RC section for armature in position 6.'''
-    return ng_rc_section.RCSection(self.armatures[6],self.beton,self.b,self.hCouronnement)
+    return ng_rc_section.RCSection(self.reinforcement[6],self.beton,self.b,self.stemTopWidth)
   def getSection7(self):
     '''Returns RC section for armature in position 7.'''
-    return ng_rc_section.RCSection(self.armatures[7],self.beton,self.b,self.hSemelle)
+    return ng_rc_section.RCSection(self.reinforcement[7],self.beton,self.b,self.footingThickness)
   def getSection8(self):
     '''Returns RC section for armature in position 8.'''
-    return ng_rc_section.RCSection(self.armatures[8],self.beton,self.b,self.hSemelle)
+    return ng_rc_section.RCSection(self.reinforcement[8],self.beton,self.b,self.footingThickness)
   def getSection11(self):
     '''Returns RC section for armature in position 11.'''
-    return ng_rc_section.RCSection(self.armatures[11],self.beton,self.b,(self.hCouronnement+self.hEncastrement)/2.0)
+    return ng_rc_section.RCSection(self.reinforcement[11],self.beton,self.b,(self.stemTopWidth+self.stemBottomWidth)/2.0)
 
   def setULSInternalForcesEnvelope(self,wallInternalForces):
     '''Assigns the ultimate limit state infernal forces envelope for the stem.'''
-    if(hasattr(self,'hauteurVoile')):
-      if(self.hauteurVoile!=wallInternalForces.hauteurVoile):
-        lmsg.warning('stem height (' + str(self.hauteurVoile) + ' m) different from length of internal forces envelope law('+ str(wallInternalForces.hauteurVoile)+ ' m') 
+    if(hasattr(self,'stemHeight')):
+      if(self.stemHeight!=wallInternalForces.stemHeight):
+        lmsg.warning('stem height (' + str(self.stemHeight) + ' m) different from length of internal forces envelope law('+ str(wallInternalForces.stemHeight)+ ' m') 
     else:
-      self.hauteurVoile= wallInternalForces.hauteurVoile
+      self.stemHeight= wallInternalForces.stemHeight
     self.internalForcesULS= wallInternalForces
 
   def setSLSInternalForcesEnvelope(self,wallInternalForces):
     '''Assigns the serviceability limit state infernal forces envelope for the stem.'''
-    if(hasattr(self,'hauteurVoile')):
-      if(self.hauteurVoile!=wallInternalForces.hauteurVoile):
-        lmsg.warning('stem height (' + str(self.hauteurVoile) + ' m) different from length of internal forces envelope law('+ str(wallInternalForces.hauteurVoile)+ ' m') 
+    if(hasattr(self,'stemHeight')):
+      if(self.stemHeight!=wallInternalForces.stemHeight):
+        lmsg.warning('stem height (' + str(self.stemHeight) + ' m) different from length of internal forces envelope law('+ str(wallInternalForces.stemHeight)+ ' m') 
     else:
-      self.hauteurVoile= wallInternalForces.hauteurVoile
+      self.stemHeight= wallInternalForces.stemHeight
     self.internalForcesSLS= wallInternalForces
     
   def writeDef(self,pth,outputFile):
@@ -237,25 +220,15 @@ class RetainingWall(object):
     outputFile.write("\\end{center}\n")
     outputFile.write("\\vspace{1pt}\n")
     outputFile.write("\\end{minipage} & \n")
-    outputFile.write("\\begin{tabular}{l}\n")
-    outputFile.write("\\textsc{Géométrie mur}\\\\\n")
-    outputFile.write("Épaisseur couronnement: \\\\\n")
-    outputFile.write("$b_{couronn}= "+fmt.Longs.format(self.hCouronnement)+"\\ m$\\\\\n")
-    outputFile.write("Hauteur voile: \\\\\n")
-    outputFile.write("$h_{voile}= "+fmt.Longs.format(self.hauteurVoile)+"\\ m$\\\\\n")
-    outputFile.write("Épaisseur encastrement: \\\\\n")
-    outputFile.write("$b_{encast.}= "+fmt.Longs.format(self.hEncastrement)+"\\ m$\\\\\n")
-    outputFile.write("Épaisseur semelle: \\\\\n")
-    outputFile.write("$b_{semelle.}= "+fmt.Longs.format(self.hSemelle)+"\\ m$\\\\\n")
-    outputFile.write("\\end{tabular} \\\\\n")
+    self.writeGeometry(outputFile)
     outputFile.write("\\end{tabular} \\\\\n")
 
     outputFile.write("\\hline\n")
     outputFile.write("\\begin{tabular}{llll}\n")
     outputFile.write("\\multicolumn{3}{c}{\\textsc{Matériels}}\\\\\n")
     outputFile.write("  Béton: " + self.beton.materialName +" & ")
-    outputFile.write("  Acier: " + self.acier.materialName +" & ")
-    outputFile.write("  Enrobage: "+ fmt.Diam.format(self.enrobage*1e3)+ " mm\\\\\n")
+    outputFile.write("  Acier: " + self.reinforcement.steel.materialName +" & ")
+    outputFile.write("  Enrobage: "+ fmt.Diam.format(self.reinforcement.enrobage*1e3)+ " mm\\\\\n")
     outputFile.write("\\end{tabular} \\\\\n")
     outputFile.write("\\hline\n")
     outputFile.write("\\end{tabular}\n")
@@ -279,12 +252,12 @@ class RetainingWall(object):
 
     #Coupe 1. Béton armé. Encastrement.
     C1= self.getSection1()
-    VdEncastrement= self.internalForcesULS.VdEncastrement(self.hEncastrement)
-    MdEncastrement= self.internalForcesULS.MdEncastrement(self.hSemelle)
+    VdEncastrement= self.internalForcesULS.VdEncastrement(self.stemBottomWidth)
+    MdEncastrement= self.internalForcesULS.MdEncastrement(self.footingThickness)
     outputFile.write("\\textbf{Armature 1 (armature extérieure en attente) :} \\\\\n")
     NdEncastrement= 0.0 #we neglect axial force
     C1.writeResultFlexion(outputFile,NdEncastrement, MdEncastrement,VdEncastrement)
-    C1.writeResultStress(outputFile,self.internalForcesSLS.MdEncastrement(self.hSemelle))
+    C1.writeResultStress(outputFile,self.internalForcesSLS.MdEncastrement(self.footingThickness))
 
     #Coupe 2. Béton armé. Voile
     yCoupe2= self.internalForcesULS.getYVoile(self.getBasicAnchorageLength(1))
@@ -341,7 +314,7 @@ class RetainingWall(object):
     #Armature 10. armature de peau semelle.
     outputFile.write("\\textbf{Armature 10 (armature de peau semelle):}\\\\\n")
     outputFile.write("  --\\\\\n")
-    #writeRebars(outputFile,self.beton,self.armatures[10],1e-5)
+    #writeRebars(outputFile,self.beton,self.reinforcement[10],1e-5)
 
     #Coupe 11. armature long. extérieure voile.
     outputFile.write("\\textbf{Armature 11 (armature long. extérieure voile):}\\\\\n")
@@ -354,7 +327,7 @@ class RetainingWall(object):
     #Armature 13. armature long. couronnement.
     outputFile.write("\\textbf{Armature 13 (armature long. couronnement):}\\\\\n")
     outputFile.write("  --\\\\\n")
-    #writeRebars(outputFile,self.beton,self.armatures[13],1e-5)
+    #writeRebars(outputFile,self.beton,self.reinforcement[13],1e-5)
     outputFile.write("\\hline\n")
     outputFile.write("\\end{supertabular}\n")
     outputFile.write("\\end{center}\n")

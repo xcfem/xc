@@ -732,6 +732,8 @@
 /usr/local/lib/python2.7/dist-packages/model/geometry/line_utils.pyc
 /usr/local/lib/python2.7/dist-packages/model/geometry/net_utils.py
 /usr/local/lib/python2.7/dist-packages/model/geometry/net_utils.pyc
+/usr/local/lib/python2.7/dist-packages/model/geometry/retaining_wall_geometry.py
+/usr/local/lib/python2.7/dist-packages/model/geometry/retaining_wall_geometry.pyc
 /usr/local/lib/python2.7/dist-packages/model/geometry/tensegrity.py
 /usr/local/lib/python2.7/dist-packages/model/geometry/tensegrity.pyc
 /usr/local/lib/python2.7/dist-packages/model/geometry/utils_geom.py
