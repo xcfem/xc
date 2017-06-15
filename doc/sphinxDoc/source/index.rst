@@ -34,8 +34,6 @@ Postprocessor
 .. toctree::
    :maxdepth: 1
 
-   postprocessor/xcVtk.rst
-
    postprocessor/postprocess.rst
 
 
