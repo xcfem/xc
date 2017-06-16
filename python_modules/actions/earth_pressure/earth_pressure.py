@@ -45,18 +45,25 @@ class SoilProp(object):
                 ret_press=self.K*(self.gammaSoil*(self.zGround-self.zWater) + (self.gammaSoil-self.gammaWater)*(self.zWater-z)) + self.gammaWater*(self.zWater-z)
         return ret_press
 
-    def appendLoadToCurrentLoadPattern(self,xcSet,vDir):
+    def appendLoadToCurrentLoadPattern(self,xcSet,vDir,iCoo= 2):
         '''Append earth thrust on a set of elements to the current
         load pattern
 
 
         :param xcSet: set that contains the elements (shells and/or beams)
         :param vDir: unit xc vector defining pressures direction
+        :param iCoo: index of the coordinate that represents depth.
         '''
-        for e in xcSet.getElements:
-            presElem=self.getPressure(e.getCooCentroid(False)[2])
-            if(presElem!=0.0):
-                e.vector3dUniformLoadGlobal(presElem*vDir)
+        if(len(vDir)==3): #3D load.
+          for e in xcSet.getElements:
+              presElem=self.getPressure(e.getCooCentroid(False)[iCoo])
+              if(presElem!=0.0):
+                  e.vector3dUniformLoadGlobal(presElem*vDir)
+        else: #2D load.
+          for e in xcSet.getElements:
+              presElem=self.getPressure(e.getCooCentroid(False)[iCoo])
+              if(presElem!=0.0):
+                  e.vector2dUniformLoadGlobal(presElem*vDir)
 
 class PeckPressureEnvelope(SoilProp):
     ''' Envelope of apparent lateral pressure diagrams for design 

@@ -40,8 +40,13 @@ class RecordDefGrid(object):
 
   def getBND(self):
     ''' Returns the grid boundary'''
-    bounds= self.uGrid.GetPoints().GetBounds()
-    retval= geom.BND3d(geom.Pos3d(bounds[0],bounds[2],bounds[4]),geom.Pos3d(bounds[1],bounds[3],bounds[5]))
+    retval= geom.BND3d()
+    points= self.uGrid.GetPoints()
+    if(points.GetNumberOfPoints()>0):
+      bounds= points.GetBounds()
+      retval= geom.BND3d(geom.Pos3d(bounds[0],bounds[2],bounds[4]),geom.Pos3d(bounds[1],bounds[3],bounds[5]))
+    else:
+      lmsg.error('ERROR; there are no points in the grid. Maybe you must call fillDownwards on the set to display.')
     return retval    
 
 class RecordDefDisplay(object):
@@ -150,6 +155,7 @@ class RecordDefDisplay(object):
     bnd= self.gridRecord.getBND()
     offsetVector= bnd.diagonal*0.1
     offset= offsetVector.getModulo()
+    print offsetVector
     axesPosition= bnd.pMin-offsetVector
     transform = vtk.vtkTransform()
     transform.Translate(axesPosition.x, axesPosition.y, axesPosition.z)
