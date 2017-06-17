@@ -36,12 +36,11 @@ def printCierreListadoFactorCapacidad(archivo):
   archivo.write("\\end{center}\n")
 
 
-'''
-Imprime los resultados de la comprobación de tensiones normales en régimen
-elástico de un conjunto de elementos cuyo material es un perfil
-metálico.
-'''
 def listaFactorCapacidad(preprocessor,setName, fName, titulo):
+  '''
+  Print results of normal stresses in elastic range checking for an
+  elment set whose material is a steel profile.
+  '''
   printCabeceraListadoFactorCapacidad(fName,titulo)
   st= preprocessor.getSetLoader.getSet(setName)
   elems= st.getElements()

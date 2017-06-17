@@ -42,7 +42,7 @@ lin.xzVector= xc.Vector([0,1,0])
 S275JR= EC3_materials.S275JR
 gammaM0= 1.05
 S275JR.gammaM= gammaM0 
-HE400B= structural_steel.SteelProfile(S275JR,"HE_400_B",HE_profiles.perfilesHE)
+HE400B= structural_steel.SteelProfile(S275JR,"HE_400_B",HE_profiles.HEprofiles)
 matHE400B=typical_materials.MaterialData(name='S275JR',E=S275JR.E,nu=S275JR.nu,rho=7850)
 profil= HE400B.defSeccShElastica3d(preprocessor,matHE400B)
 
@@ -53,7 +53,7 @@ elements.defaultTransformation= "lin"
 elements.defaultMaterial= HE400B.sectionName
 elem= elements.newElement("elastic_beam_3d",xc.ID([1,2]))
 elem.rho= HE400B.get('P')
-dp.defParamsPerfilMetalicoRegElasticoElem(elem,HE400B)
+dp.defSteelProfileElasticRangeElementParameters(elem,HE400B)
 vc.defVarsControlTensRegElastico3d([elem])
 
 

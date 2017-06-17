@@ -32,7 +32,7 @@ ratio15= 10
 ratio16= 10
 ratio17= 10
 
-wSection= aisc_metric_w_profiles.perfilesWAISC['W8X21']
+wSection= aisc_metric_w_profiles.WAISCprofiles['W8X21']
 meter= units.m
 meter2= units.m*units.m
 meter3= meter2*units.m

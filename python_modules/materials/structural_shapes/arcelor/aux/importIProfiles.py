@@ -3,7 +3,7 @@ import csv
 
 fNameIn= 'arcelor_ipe_profiles.csv'
 fNameOut= 'dict_arcelor_ipe_profiles.py'
-dictName= 'perfilesIPE'
+dictName= 'IPEprofiles'
 '''
 Ejes de la sección:
 

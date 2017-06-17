@@ -32,7 +32,7 @@ ratio15= 10
 ratio16= 10
 ratio17= 10
 
-hssSection= tubos_rectangulares_aisc_metric.perfilesHSSAISC['HSS7X7X_375']
+hssSection= tubos_rectangulares_aisc_metric.HSSAISCprofiles['HSS7X7X_375']
 
 meter= units.m
 meter2= units.m*units.m
