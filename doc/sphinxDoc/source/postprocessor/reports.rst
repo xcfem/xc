@@ -34,106 +34,123 @@ export_internal_forces
     :show-inheritance:
 
 
-listados
---------
+graphical_reports
+-----------------
 
-.. automodule:: postprocess.reports.listados
+.. automodule:: postprocess.reports.graphical_reports
     :members:
     :undoc-members:
     :show-inheritance:
 
-listados_cargas
----------------
-
-.. automodule:: postprocess.reports.listados_cargas
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-listados_comprob_cortante
--------------------------
-
-.. automodule:: postprocess.reports.listados_comprob_cortante
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-listados_datos
+graph_material
 --------------
 
-.. automodule:: postprocess.reports.listados_datos
+.. automodule:: postprocess.reports.graph_material
     :members:
     :undoc-members:
     :show-inheritance:
 
-listados_desplaz_extremos
--------------------------
 
-.. automodule:: postprocess.reports.listados_desplaz_extremos
+list_cable_capacity
+-------------------
+
+.. automodule:: postprocess.reports.list_cable_capacity
     :members:
     :undoc-members:
     :show-inheritance:
 
-listados_desplazamientos
-------------------------
+list_capacity_factor
+--------------------
 
-.. automodule:: postprocess.reports.listados_desplazamientos
+.. automodule:: postprocess.reports.list_capacity_factor
     :members:
     :undoc-members:
     :show-inheritance:
 
-listados_esfuerzos
+list_cracking
+-------------
+
+.. automodule:: postprocess.reports.list_cracking
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+list_data
+---------
+
+.. automodule:: postprocess.reports.list_data
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+list_displacements
 ------------------
 
-.. automodule:: postprocess.reports.listados_esfuerzos
+.. automodule:: postprocess.reports.list_displacements
     :members:
     :undoc-members:
     :show-inheritance:
 
-listados_factor_capacidad
--------------------------
+list_internal_forces
+--------------------
 
-.. automodule:: postprocess.reports.listados_factor_capacidad
+.. automodule:: postprocess.reports.list_internal_forces
     :members:
     :undoc-members:
     :show-inheritance:
 
-listados_fisuracion
--------------------
+list_loads
+----------
 
-.. automodule:: postprocess.reports.listados_fisuracion
+.. automodule:: postprocess.reports.list_loads
     :members:
     :undoc-members:
     :show-inheritance:
 
-listados_reacciones
--------------------
+list_max_min_displacements
+--------------------------
 
-.. automodule:: postprocess.reports.listados_reacciones
+.. automodule:: postprocess.reports.list_max_min_displacements
     :members:
     :undoc-members:
     :show-inheritance:
 
-listados_resistencia_perfiles_metalicos
----------------------------------------
+list_metal_profiles_capacity
+----------------------------
 
-.. automodule:: postprocess.reports.listados_resistencia_perfiles_metalicos
+.. automodule:: postprocess.reports.list_metal_profiles_capacity
     :members:
     :undoc-members:
     :show-inheritance:
 
-listados_resistencia_tirantes
------------------------------
+list_N_V_beams
+--------------
 
-.. automodule:: postprocess.reports.listados_resistencia_tirantes
+.. automodule:: postprocess.reports.list_N_V_beams
     :members:
     :undoc-members:
     :show-inheritance:
 
-listados_resultados
--------------------
+list_reactions
+--------------
 
-.. automodule:: postprocess.reports.listados_resultados
+.. automodule:: postprocess.reports.list_reactions
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+list_shear
+----------
+
+.. automodule:: postprocess.reports.list_shear
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+report_material
+---------------
+
+.. automodule:: postprocess.reports.report_material
     :members:
     :undoc-members:
     :show-inheritance:

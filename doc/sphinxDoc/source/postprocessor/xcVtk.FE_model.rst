@@ -1,67 +1,51 @@
-FE mesh
-=======
+Vtk - finite element mesh
+=========================
 
 
 Fields
 ------
 
-.. automodule:: xcVtk.malla_ef.Fields
+.. automodule:: postprocess.xcVtk.FE_model.Fields
     :members:
     :undoc-members:
     :show-inheritance:
 
-vtk_define_malla_cells_ef
--------------------------
-
-.. automodule:: xcVtk.malla_ef.vtk_define_malla_cells_ef
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-vtk_define_malla_elementos
---------------------------
-
-.. automodule:: xcVtk.malla_ef.vtk_define_malla_elementos
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-vtk_define_malla_nodos
-----------------------
-
-.. automodule:: xcVtk.malla_ef.vtk_define_malla_nodos
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-vtk_dibuja_elementos
---------------------
-
-.. automodule:: xcVtk.malla_ef.vtk_dibuja_elementos
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-vtk_dibuja_ids_elementos
-------------------------
-
-.. automodule:: xcVtk.malla_ef.vtk_dibuja_ids_elementos
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-vtk_dibuja_nodos
-----------------
-
-.. automodule:: xcVtk.malla_ef.vtk_dibuja_nodos
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-vtk_grafico_ef
+quick_graphics
 --------------
 
-.. automodule:: xcVtk.malla_ef.vtk_grafico_ef
+.. automodule:: postprocess.xcVtk.FE_model.quick_graphics
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+vtk_define_mesh_cells_fe
+------------------------
+
+.. automodule:: postprocess.xcVtk.FE_model.vtk_define_mesh_cells_fe
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+vtk_define_mesh_nodes
+---------------------
+
+.. automodule:: postprocess.xcVtk.FE_model.vtk_define_mesh_nodes
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+vtk_display_limit_state
+-----------------------
+
+.. automodule:: postprocess.xcVtk.FE_model.vtk_display_limit_state
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+vtk_FE_graphic
+--------------
+
+.. automodule:: postprocess.xcVtk.FE_model.vtk_FE_graphic
     :members:
     :undoc-members:
     :show-inheritance:
@@ -69,25 +53,40 @@ vtk_grafico_ef
 vtk_load_elem
 -------------
 
-.. automodule:: xcVtk.malla_ef.vtk_load_elem
+.. automodule:: postprocess.xcVtk.FE_model.vtk_load_elem
     :members:
     :undoc-members:
     :show-inheritance:
 
-vtk_load_nodos
+vtk_load_nodes
 --------------
 
-.. automodule:: xcVtk.malla_ef.vtk_load_nodos
+.. automodule:: postprocess.xcVtk.FE_model.vtk_load_nodes
     :members:
     :undoc-members:
     :show-inheritance:
 
-QuickGraphics
--------------
+vtk_plot_element_ids
+--------------------
 
-.. automodule:: xcVtk.malla_ef.QuickGraphics
+.. automodule:: postprocess.xcVtk.FE_model.vtk_plot_element_ids
     :members:
     :undoc-members:
     :show-inheritance:
 
+vtk_plot_elements
+-----------------
+
+.. automodule:: postprocess.xcVtk.FE_model.vtk_plot_elements
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+vtk_plot_nodes
+--------------
+
+.. automodule:: postprocess.xcVtk.FE_model.vtk_plot_nodes
+    :members:
+    :undoc-members:
+    :show-inheritance:
 

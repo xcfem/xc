@@ -10,45 +10,22 @@ vtk_CAD_graphic
     :undoc-members:
     :show-inheritance:
 
-vtk_define_malla_cells_cad
+vtk_define_cells_cad
 --------------------------
 
-.. automodule:: postprocess.xcVtk.CAD_model.vtk_define_malla_cells_cad
+.. automodule:: postprocess.xcVtk.CAD_model.vtk_define_cells_cad
     :members:
     :undoc-members:
     :show-inheritance:
 
-vtk_define_malla_kpts_cad
--------------------------
+vtk_define_kpoints_cad
+----------------------
 
-.. automodule:: postprocess.xcVtk.CAD_model.vtk_define_malla_kpts_cad
+.. automodule:: postprocess.xcVtk.CAD_model.vtk_define_kpoints_cad
     :members:
     :undoc-members:
     :show-inheritance:
 
-vtk_dibuja_kpoints
-------------------
-
-.. automodule:: postprocess.xcVtk.CAD_model.vtk_dibuja_kpoints
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-vtk_dibuja_lineas
------------------
-
-.. automodule:: postprocess.xcVtk.CAD_model.vtk_dibuja_lineas
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-vtk_grafico_cad module
---------------------------------------
-
-.. automodule:: postprocess.xcVtk.CAD_model.vtk_grafico_cad
-    :members:
-    :undoc-members:
-    :show-inheritance:
 
 vtk_load_kpoints
 ----------------
@@ -58,26 +35,42 @@ vtk_load_kpoints
     :undoc-members:
     :show-inheritance:
 
-vtk_load_lineas module
---------------------------------------
+vtk_load_lines
+--------------
 
-.. automodule:: postprocess.xcVtk.CAD_model.vtk_load_lineas
+.. automodule:: postprocess.xcVtk.CAD_model.vtk_load_lines
     :members:
     :undoc-members:
     :show-inheritance:
 
-vtk_load_strprop_kpts module
---------------------------------------------
+vtk_load_strprop_kpts
+---------------------
 
 .. automodule:: postprocess.xcVtk.CAD_model.vtk_load_strprop_kpts
     :members:
     :undoc-members:
     :show-inheritance:
 
-vtk_load_strprop_lineas
------------------------
+vtk_load_strprop_lines
+----------------------
 
-.. automodule:: postprocess.xcVtk.CAD_model.vtk_load_strprop_lineas
+.. automodule:: postprocess.xcVtk.CAD_model.vtk_load_strprop_lines
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+vtk_plot_kpoints
+----------------
+
+.. automodule:: postprocess.xcVtk.CAD_model.vtk_plot_kpoints
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+vtk_plot_lines
+--------------
+
+.. automodule:: postprocess.xcVtk.CAD_model.vtk_plot_lines
     :members:
     :undoc-members:
     :show-inheritance:

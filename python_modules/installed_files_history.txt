@@ -1,3 +1,6 @@
+=======
+>>>>>>> 163230677e15c9902d153e17b396315ab7570020
+<<<<<<< HEAD
 /usr/local/lib/python2.7/dist-packages/actions/basic_loads/__init__.py
 /usr/local/lib/python2.7/dist-packages/actions/basic_loads/__init__.pyc
 /usr/local/lib/python2.7/dist-packages/actions/basic_loads/nodal_loads.py
@@ -982,6 +985,8 @@
 /usr/local/lib/python2.7/dist-packages/postprocess/xcVtk/CAD_model/vtk_load_strprop_kpts.pyc
 /usr/local/lib/python2.7/dist-packages/postprocess/xcVtk/CAD_model/vtk_load_strprop_lineas.py
 /usr/local/lib/python2.7/dist-packages/postprocess/xcVtk/CAD_model/vtk_load_strprop_lineas.pyc
+/usr/local/lib/python2.7/dist-packages/postprocess/xcVtk/CAD_model/vtk_load_strprop_lines.py
+/usr/local/lib/python2.7/dist-packages/postprocess/xcVtk/CAD_model/vtk_load_strprop_lines.pyc
 /usr/local/lib/python2.7/dist-packages/postprocess/xcVtk/CAD_model/vtk_plot_kpoints.py
 /usr/local/lib/python2.7/dist-packages/postprocess/xcVtk/CAD_model/vtk_plot_kpoints.pyc
 /usr/local/lib/python2.7/dist-packages/postprocess/xcVtk/CAD_model/vtk_plot_lines.py
@@ -1036,6 +1041,8 @@
 /usr/local/lib/python2.7/dist-packages/postprocess/xcVtk/FE_model/vtk_grafico_ef.pyc
 /usr/local/lib/python2.7/dist-packages/postprocess/xcVtk/FE_model/vtk_load_elem.py
 /usr/local/lib/python2.7/dist-packages/postprocess/xcVtk/FE_model/vtk_load_elem.pyc
+/usr/local/lib/python2.7/dist-packages/postprocess/xcVtk/FE_model/vtk_load_nodes.py
+/usr/local/lib/python2.7/dist-packages/postprocess/xcVtk/FE_model/vtk_load_nodes.pyc
 /usr/local/lib/python2.7/dist-packages/postprocess/xcVtk/FE_model/vtk_load_nodos.py
 /usr/local/lib/python2.7/dist-packages/postprocess/xcVtk/FE_model/vtk_load_nodos.pyc
 /usr/local/lib/python2.7/dist-packages/postprocess/xcVtk/FE_model/vtk_plot_element_ids.py
