@@ -8,7 +8,7 @@ import xc
 from solution import predefined_solutions
 from model import predefined_spaces
 from materials import typical_materials
-from materials.structural_shapes.arcelor import perfiles_he_arcelor as HE_profiles
+from materials.structural_shapes.arcelor import arcelor_he_profiles as HE_profiles
 from materials import structural_steel
 from materials.ec3 import EC3_materials
 from postprocess import def_params_control as dp
