@@ -7,10 +7,7 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "ana.Ortega@ciccp.es"
 
-#import xc_base
-#import geom
-#import xc
-from actions.earth_pressure import soil_properties as sp
+from actions.earth_pressure import earth_pressure as ep
 
 class BaseVectorLoad(object):
     '''Base class for loads introduced using a load as an xcVector 

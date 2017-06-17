@@ -343,3 +343,16 @@ class HEProfile(EC3Profile,he.HEProfile):
     '''
     EC3Profile.__init__(self,'rolled')
     he.HEProfile.__init__(self,steel,name)
+
+from materials.structural_shapes.arcelor import arcelor_u_shaped_sheet_piles
+
+class AUProfile(EC3Profile,arcelor_u_shaped_sheet_piles.AUProfile):
+  """AU profile with Eurocode 3 verification routines."""
+  def __init__(self,steel,name):
+    ''' Constructor.
+
+    :param steel: steel material.
+    :param name: shape name (i.e. AU_23)
+    '''
+    EC3Profile.__init__(self,'rolled')
+    arcelor_u_shaped_sheet_piles.AUProfile.__init__(self,steel,name)
