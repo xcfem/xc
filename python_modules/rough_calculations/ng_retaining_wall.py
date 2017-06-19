@@ -149,38 +149,38 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
     '''Constructor '''
     super(RetainingWall,self).__init__(name,stemBottomWidth,stemTopWidth,footingThickness)
     #Materials.
-    self.beton= SIA262_materials.c25_30
+    self.concrete= SIA262_materials.c25_30
     self.reinforcement= RetainingWallReinforcement(enrobage)
     
   def getBasicAnchorageLength(self,index):
     '''Returns basic anchorage length for the reinforcement at "index".''' 
-    return self.reinforcement.getArmature(index).getBasicAnchorageLength(self.beton)
+    return self.reinforcement.getArmature(index).getBasicAnchorageLength(self.concrete)
 
   def getSection1(self):
     '''Returns RC section for armature in position 1.'''
-    return ng_rc_section.RCSection(self.reinforcement[1],self.beton,self.b,self.stemBottomWidth)
+    return ng_rc_section.RCSection(self.reinforcement[1],self.concrete,self.b,self.stemBottomWidth)
   def getSection2(self,y):
     '''Returns RC section for armature in position 2.'''
     c= self.getDepth(y)
-    return ng_rc_section.RCSection(self.reinforcement[2],self.beton,self.b,c)
+    return ng_rc_section.RCSection(self.reinforcement[2],self.concrete,self.b,c)
   def getSection3(self):
     '''Returns RC section for armature in position 3.'''
-    return ng_rc_section.RCSection(self.reinforcement[3],self.beton,self.b,self.footingThickness)
+    return ng_rc_section.RCSection(self.reinforcement[3],self.concrete,self.b,self.footingThickness)
   def getSection4(self):
     '''Returns RC section for armature in position 4.'''
-    return ng_rc_section.RCSection(self.reinforcement[4],self.beton,self.b,self.stemBottomWidth)
+    return ng_rc_section.RCSection(self.reinforcement[4],self.concrete,self.b,self.stemBottomWidth)
   def getSection6(self):
     '''Returns RC section for armature in position 6.'''
-    return ng_rc_section.RCSection(self.reinforcement[6],self.beton,self.b,self.stemTopWidth)
+    return ng_rc_section.RCSection(self.reinforcement[6],self.concrete,self.b,self.stemTopWidth)
   def getSection7(self):
     '''Returns RC section for armature in position 7.'''
-    return ng_rc_section.RCSection(self.reinforcement[7],self.beton,self.b,self.footingThickness)
+    return ng_rc_section.RCSection(self.reinforcement[7],self.concrete,self.b,self.footingThickness)
   def getSection8(self):
     '''Returns RC section for armature in position 8.'''
-    return ng_rc_section.RCSection(self.reinforcement[8],self.beton,self.b,self.footingThickness)
+    return ng_rc_section.RCSection(self.reinforcement[8],self.concrete,self.b,self.footingThickness)
   def getSection11(self):
     '''Returns RC section for armature in position 11.'''
-    return ng_rc_section.RCSection(self.reinforcement[11],self.beton,self.b,(self.stemTopWidth+self.stemBottomWidth)/2.0)
+    return ng_rc_section.RCSection(self.reinforcement[11],self.concrete,self.b,(self.stemTopWidth+self.stemBottomWidth)/2.0)
 
   def setULSInternalForcesEnvelope(self,wallInternalForces):
     '''Assigns the ultimate limit state infernal forces envelope for the stem.'''
@@ -226,7 +226,7 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
     outputFile.write("\\hline\n")
     outputFile.write("\\begin{tabular}{llll}\n")
     outputFile.write("\\multicolumn{3}{c}{\\textsc{Matériels}}\\\\\n")
-    outputFile.write("  Béton: " + self.beton.materialName +" & ")
+    outputFile.write("  Béton: " + self.concrete.materialName +" & ")
     outputFile.write("  Acier: " + self.reinforcement.steel.materialName +" & ")
     outputFile.write("  Enrobage: "+ fmt.Diam.format(self.reinforcement.enrobage*1e3)+ " mm\\\\\n")
     outputFile.write("\\end{tabular} \\\\\n")
@@ -314,7 +314,7 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
     #Armature 10. armature de peau semelle.
     outputFile.write("\\textbf{Armature 10 (armature de peau semelle):}\\\\\n")
     outputFile.write("  --\\\\\n")
-    #writeRebars(outputFile,self.beton,self.reinforcement[10],1e-5)
+    #writeRebars(outputFile,self.concrete,self.reinforcement[10],1e-5)
 
     #Coupe 11. armature long. extérieure voile.
     outputFile.write("\\textbf{Armature 11 (armature long. extérieure voile):}\\\\\n")
@@ -327,7 +327,7 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
     #Armature 13. armature long. couronnement.
     outputFile.write("\\textbf{Armature 13 (armature long. couronnement):}\\\\\n")
     outputFile.write("  --\\\\\n")
-    #writeRebars(outputFile,self.beton,self.reinforcement[13],1e-5)
+    #writeRebars(outputFile,self.concrete,self.reinforcement[13],1e-5)
     outputFile.write("\\hline\n")
     outputFile.write("\\end{supertabular}\n")
     outputFile.write("\\end{center}\n")

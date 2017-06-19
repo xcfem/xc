@@ -11,16 +11,16 @@ import math
 
 class RebarFamily(object):
   minDiams= 50
-  def __init__(self,acier,diam,ecartement,enrobage,exigenceFissuration= 'B'):
-    self.acier= acier
+  def __init__(self,steel,diam,ecartement,enrobage,exigenceFissuration= 'B'):
+    self.steel= steel
     self.diam= diam
     self.ecartement= ecartement
     self.enrobage= enrobage
     self.exigenceFissuration= exigenceFissuration
   def __repr__(self):
-    return self.acier.name + ", diam: " + str(int(self.diam*1e3)) + " mm, e= " + str(int(self.ecartement*1e3))
+    return self.steel.name + ", diam: " + str(int(self.diam*1e3)) + " mm, e= " + str(int(self.ecartement*1e3))
   def getCopy(self,exigenceFissuration):
-    return RebarFamily(self.acier,self.diam,self.ecartement,self.enrobage,exigenceFissuration)
+    return RebarFamily(self.steel,self.diam,self.ecartement,self.enrobage,exigenceFissuration)
   def getDiam(self):
     return self.diam
   def getBarArea(self):
@@ -29,26 +29,26 @@ class RebarFamily(object):
     return 1.0/self.ecartement
   def getAs(self):
     return self.getNumBarsPerMeter()*self.getBarArea()
-  def getBasicAnchorageLength(self,beton):
-    return max(anchorage.getBasicAnchorageLength(self.getDiam(),beton.fck,self.acier.fyd()),self.minDiams*self.diam)
+  def getBasicAnchorageLength(self,concrete):
+    return max(anchorage.getBasicAnchorageLength(self.getDiam(),concrete.fck,self.steel.fyd()),self.minDiams*self.diam)
   def getExigenceFissuration(self):
     return self.exigenceFissuration
-  def getAsMinFlexion(self,beton,epaisseur):
-    retval= minimal_reinforcement.AsMinFlexion(beton,self.getEnrobageMec(),self.exigenceFissuration,self.ecartement,epaisseur)
+  def getAsMinFlexion(self,concrete,epaisseur):
+    retval= minimal_reinforcement.AsMinFlexion(concrete,self.getEnrobageMec(),self.exigenceFissuration,self.ecartement,epaisseur)
     return retval
-  def getAsMinTraction(self,beton,epaisseur):
-    retval= minimal_reinforcement.AsMinTraction(beton,self.exigenceFissuration,self.ecartement,epaisseur)
+  def getAsMinTraction(self,concrete,epaisseur):
+    retval= minimal_reinforcement.AsMinTraction(concrete,self.exigenceFissuration,self.ecartement,epaisseur)
     return retval
-  def getMR(self,beton,b,epaisseur):
-    return ng_simple_bending_reinforcement.Mu(self.getAs(),beton.fcd(),self.acier.fyd(),b,epaisseur-self.getEnrobageMec())
+  def getMR(self,concrete,b,epaisseur):
+    return ng_simple_bending_reinforcement.Mu(self.getAs(),concrete.fcd(),self.steel.fyd(),b,epaisseur-self.getEnrobageMec())
   def getEnrobageMec(self):
     return self.enrobage+self.diam/2.0
   def d(self,epaisseur):
     return epaisseur-self.getEnrobageMec()
   def getT(self):
-    return self.getAs()*self.acier.fyd()
-  def getVR(self,beton,Nd,Md,b,epaisseur):
-    return shearSIA262.VuNoShearRebars(beton,self.acier,Nd,Md,self.getAs(),b,self.d(epaisseur))
+    return self.getAs()*self.steel.fyd()
+  def getVR(self,concrete,Nd,Md,b,epaisseur):
+    return shearSIA262.VuNoShearRebars(concrete,self.steel,Nd,Md,self.getAs(),b,self.d(epaisseur))
   def getDefStr(self):
     #return definition strings for drawSchema.
     return ("  $\\phi$ "+ fmt.Diam.format(self.getDiam()*1000) + " mm, e= "+ fmt.Diam.format(self.ecartement*1e2)+ " cm")
@@ -58,21 +58,21 @@ class RebarFamily(object):
     retval.append(self.getDefStr())
     retval.append(" - ")
     return retval
-  def writeDef(self,outputFile,beton):
+  def writeDef(self,outputFile,concrete):
     outputFile.write("  diam: "+ fmt.Diam.format(self.getDiam()*1000) + " mm, ecartement: "+ fmt.Diam.format(self.ecartement*1e3)+ " mm")
-    ancrage= self.getBasicAnchorageLength(beton)
+    ancrage= self.getBasicAnchorageLength(concrete)
     outputFile.write("  l. ancrage L="+ fmt.Longs.format(ancrage) + " m ("+ fmt.Diam.format(ancrage/self.getDiam())+ " diamètres).\\\\\n")
 
 class FamNBars(RebarFamily):
   n= 2 #Number of bars.
-  def __init__(self,acier,n,diam,ecartement,enrobage):
-    RebarFamily.__init__(self,acier,diam,ecartement,enrobage)
+  def __init__(self,steel,n,diam,ecartement,enrobage):
+    RebarFamily.__init__(self,steel,diam,ecartement,enrobage)
     self.n= int(n)
   def __repr__(self):
-    return str(n) + " x " + self.acier.name + ", diam: " + str(int(self.diam*1e3)) + " mm, e= " + str(int(self.ecartement*1e3))
-  def writeDef(self,outputFile,beton):
+    return str(n) + " x " + self.steel.name + ", diam: " + str(int(self.diam*1e3)) + " mm, e= " + str(int(self.ecartement*1e3))
+  def writeDef(self,outputFile,concrete):
     outputFile.write("  n= "+str(self.n)+" diam: "+ fmt.Diam.format(self.getDiam()*1000) + " mm, ecartement: "+ fmt.Diam.format(self.ecartement*1e3)+ " mm")
-    ancrage= self.getBasicAnchorageLength(beton)
+    ancrage= self.getBasicAnchorageLength(concrete)
     outputFile.write("  l. ancrage L="+ fmt.Longs.format(ancrage) + " m ("+ fmt.Diam.format(ancrage/self.getDiam())+ " diamètres).\\\\\n")
 
 
@@ -95,30 +95,30 @@ class DoubleRebarFamily(object):
     T2= self.f2.getT()
     T= T1+T2
     return (self.f1.getEnrobageMec()*T1+self.f2.getEnrobageMec()*T2)/T
-  def getBasicAnchorageLength(self,beton):
-    l1= self.f1.getBasicAnchorageLength(beton)
-    l2= self.f2.getBasicAnchorageLength(beton)
+  def getBasicAnchorageLength(self,concrete):
+    l1= self.f1.getBasicAnchorageLength(concrete)
+    l2= self.f2.getBasicAnchorageLength(concrete)
     return max(l1,l2)
-  def getAsMinFlexion(self,beton,epaisseur):
-    retval= minimal_reinforcement.AsMinFlexion(beton,self.getEnrobageMec(),self.f1.exigenceFissuration,self.getEcartement(),epaisseur)
+  def getAsMinFlexion(self,concrete,epaisseur):
+    retval= minimal_reinforcement.AsMinFlexion(concrete,self.getEnrobageMec(),self.f1.exigenceFissuration,self.getEcartement(),epaisseur)
     return retval
-  def getAsMinTraction(self,beton,epaisseur):
-    retval= minimal_reinforcement.AsMinTraction(beton,self.f1.exigenceFissuration,self.getEcartement(),epaisseur)
+  def getAsMinTraction(self,concrete,epaisseur):
+    retval= minimal_reinforcement.AsMinTraction(concrete,self.f1.exigenceFissuration,self.getEcartement(),epaisseur)
     return retval
   def getExigenceFissuration(self):
     retval= self.f1.exigenceFissuration
     if(retval!=self.f2.exigenceFissuration):
       cmsg.error("Different specifications for crack control.")
     return retval
-  def getMR(self,beton,b,epaisseur):
-    MR1= self.f1.getMR(beton,b,epaisseur)
-    MR2= self.f2.getMR(beton,b,epaisseur)
+  def getMR(self,concrete,b,epaisseur):
+    MR1= self.f1.getMR(concrete,b,epaisseur)
+    MR2= self.f2.getMR(concrete,b,epaisseur)
     return MR1+MR2
   def d(self,epaisseur):
     return epaisseur-self.getEnrobageMec()
-  def getVR(self,beton,Nd,Md,b,epaisseur):
-    assert self.f1.acier==self.f2.acier
-    return shearSIA262.VuNoShearRebars(beton,self.f1.acier,Nd,Md,self.getAs(),b,self.d(epaisseur))
+  def getVR(self,concrete,Nd,Md,b,epaisseur):
+    assert self.f1.steel==self.f2.steel
+    return shearSIA262.VuNoShearRebars(concrete,self.f1.steel,Nd,Md,self.getAs(),b,self.d(epaisseur))
   def getDefStrings(self):
     #return definition strings for drawSchema.
     retval= []
@@ -126,12 +126,12 @@ class DoubleRebarFamily(object):
     retval.append(self.f2.getDefStr())
     return retval
 
-  def writeDef(self,outputFile,beton):
-    self.f1.writeDef(outputFile,beton)
-    self.f2.writeDef(outputFile,beton)
+  def writeDef(self,outputFile,concrete):
+    self.f1.writeDef(outputFile,concrete)
+    self.f2.writeDef(outputFile,concrete)
 
-def writeRebars(outputFile,beton,famArm,AsMin):
-  famArm.writeDef(outputFile,beton)
+def writeRebars(outputFile,concrete,famArm,AsMin):
+  famArm.writeDef(outputFile,concrete)
   outputFile.write("  area: As= "+ fmt.Areas.format(famArm.getAs()*1e4) + " cm2/m areaMin("+famArm.getExigenceFissuration()+"): " + fmt.Areas.format(AsMin*1e4) + " cm2/m")
   writeF(outputFile,"  F(As)", famArm.getAs()/AsMin)
 

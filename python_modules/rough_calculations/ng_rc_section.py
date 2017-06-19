@@ -15,32 +15,32 @@ from miscUtils import LogMessages as lmsg
 
 class RCSection(object):
   tensionRebars= None
-  beton= SIA262_materials.c25_30
+  concrete= SIA262_materials.c25_30
   b= 0.25
   h= 0.25
-  def __init__(self,tensionRebars,beton,b,h):
+  def __init__(self,tensionRebars,concrete,b,h):
     self.tensionRebars= tensionRebars
-    self.beton= beton
+    self.concrete= concrete
     self.b= b
     self.h= h
     self.stressLimitUnderPermanentLoads= 230e6
   def setArmature(self,tensionRebars):
     self.tensionRebars= tensionRebars
   def getAsMinFlexion(self):
-    return self.tensionRebars.getAsMinFlexion(self.beton,self.h)
+    return self.tensionRebars.getAsMinFlexion(self.concrete,self.h)
   def getAsMinTraction(self):
-    return self.tensionRebars.getAsMinTraction(self.beton,self.h)
+    return self.tensionRebars.getAsMinTraction(self.concrete,self.h)
   def getMR(self):
-    return self.tensionRebars.getMR(self.beton,self.b,self.h)
+    return self.tensionRebars.getMR(self.concrete,self.b,self.h)
   def getVR(self,Nd,Md):
-    return self.tensionRebars.getVR(self.beton,Nd,Md,self.b,self.h)
+    return self.tensionRebars.getVR(self.concrete,Nd,Md,self.b,self.h)
   def writeResultFlexion(self,outputFile,Nd,Md,Vd):
     famArm= self.tensionRebars
-    beton= self.beton
+    concrete= self.concrete
     AsMin= self.getAsMinFlexion()
-    ancrage= famArm.getBasicAnchorageLength(beton)
+    ancrage= famArm.getBasicAnchorageLength(concrete)
     outputFile.write("  Dimensions coupe; b= "+ fmt.Longs.format(self.b)+ "m, h= "+ fmt.Longs.format(self.h)+ "m\\\\\n")
-    ng_rebar_def.writeRebars(outputFile,beton,famArm,AsMin)
+    ng_rebar_def.writeRebars(outputFile,concrete,famArm,AsMin)
     if(abs(Md)>0):
       MR= self.getMR()
       outputFile.write("  Verif. en flexion: Md= "+ fmt.Esf.format(Md/1e3)+ " kN m, MR= "+ fmt.Esf.format(MR/1e3)+ "kN m")
@@ -51,10 +51,10 @@ class RCSection(object):
       ng_rebar_def.writeF(outputFile,"  F(V)",VR/Vd)
   def writeResultTraction(self,outputFile,Nd):
     famArm= self.tensionRebars
-    beton= self.beton
+    concrete= self.concrete
     AsMin= self.getAsMinTraction()/2
-    ancrage= famArm.getBasicAnchorageLength(beton)
-    ng_rebar_def.writeRebars(outputFile,beton,famArm,AsMin)
+    ancrage= famArm.getBasicAnchorageLength(concrete)
+    ng_rebar_def.writeRebars(outputFile,concrete,famArm,AsMin)
     if(abs(Nd)>0):
       lmsg.error("ERROR; tension not implemented.")
   def writeResultCompression(self,outputFile,Nd,AsTrsv):
@@ -63,15 +63,15 @@ class RCSection(object):
     :param AsTrsv: Rebar area in transverse direction.
      '''
     famArm= self.tensionRebars #Even if they're not in tension...
-    beton= self.beton
+    concrete= self.concrete
     AsMin= 0.2*AsTrsv # 20% of the transversal area.
-    ng_rebar_def.writeRebars(outputFile,beton,famArm,AsMin)
+    ng_rebar_def.writeRebars(outputFile,concrete,famArm,AsMin)
     if(abs(Nd)!=0.0):
       lmsg.error("ERROR; not implemented.")
       
   def writeResultStress(self,outputFile,M):
     '''Cheking of stresses under permanent loads (SIA 262 fig. 31)'''
-    beton= self.beton
+    concrete= self.concrete
     if(abs(M)>0):
       stress= M/(0.9*self.h*self.tensionRebars.getAs())
       outputFile.write("  Verif. contraintes: M= "+ fmt.Esf.format(M/1e3)+ " kN m, $\sigma_s$= "+ fmt.Esf.format(stress/1e6)+ " MPa\\\\\n")
