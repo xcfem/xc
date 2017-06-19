@@ -377,32 +377,42 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
     self.trf= trfs.newLinearCrdTransf2d(transformationName)
     wallMatData= typical_materials.MaterialData(name=self.name+'Concrete',E=self.concrete.getEcm(),nu=0.2,rho=2500)
     foundationSection= section_properties.RectangularSection(self.name+"FoundationSection",self.b,self.footingThickness)
-    foundationMaterial= foundationSection.defSeccElastica2d(preprocessor,wallMatData) #Foundation elements material.
+    foundationMaterial= foundationSection.defSeccShElastica2d(preprocessor,wallMatData) #Foundation elements material.
     elementSize= 0.2
     seedElemLoader= preprocessor.getElementLoader.seedElemLoader
     seedElemLoader.defaultMaterial= foundationSection.sectionName
     seedElemLoader.defaultTransformation= transformationName
     seedElem= seedElemLoader.newElement("elastic_beam_2d",xc.ID([0,0]))
-    foundationSet= preprocessor.getSets.defSet("foundationSet")
+    self.wallSet= preprocessor.getSets.defSet("wallSet")
+    self.foundationSet= preprocessor.getSets.defSet("foundationSet")
     for lineName in ['heel','toe']:
       l= self.wireframeModelLines[lineName]
       l.setElemSize(elementSize)
       l.genMesh(xc.meshDir.I)
       for e in l.getElements():
-        foundationSet.getElements.append(e)
-    foundationSet.FillDownwards()
+        self.foundationSet.getElements.append(e)
+        self.wallSet.getElements.append(e)
+    self.foundationSet.fillDownwards()
     
     stemSection= section_properties.RectangularSection(self.name+"StemSection",self.b,(self.stemTopWidth+self.stemBottomWidth)/2.0)
+    stemMaterial= stemSection.defSeccShElastica2d(preprocessor,wallMatData) #Stem elements material.
+    self.stemSet= preprocessor.getSets.defSet("stemSet")
     for lineName in ['stem']:
       l= self.wireframeModelLines[lineName]
       l.setElemSize(elementSize)
       seedElemLoader.defaultMaterial= stemSection.sectionName
       l.genMesh(xc.meshDir.I)
-
+      for e in l.getElements():
+        y= -e.getPosCentroid(True).y
+        h= self.getDepth(y)
+        stemSection.h= h
+        e.sectionProperties= stemSection.getCrossSectionProperties2D(wallMatData)
+        self.stemSet.getElements.append(e)
+        self.wallSet.getElements.append(e)
     # Springs on nodes.
-    foundationSet.computeTributaryLengths(False)
+    self.foundationSet.computeTributaryLengths(False)
     self.fixedNodes= []
-    elasticBearingNodes= foundationSet.getNodes
+    elasticBearingNodes= self.foundationSet.getNodes
     kX= springMaterials[0] #Horizontal
     kSx= kX.E
     kY= springMaterials[1] #Vertical
@@ -415,6 +425,15 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
       #print "before k= ", kY.E
       kX.E= kSx*lT
       kY.E= kSy*lT
-      print 'kX.E= ', kX.E,'kY.E= ', kY.E
-      idNodoFijo, idElem= modelSpace.setBearing(n.tag,["kX","kY"])
+      idNodoFijo, idElem= self.modelSpace.setBearing(n.tag,["kX","kY"])
       self.fixedNodes.append(nodes.getNode(idNodoFijo))
+    self.stemSet.fillDownwards()
+    self.wallSet.fillDownwards()
+
+  def createSelfWeightLoads(self,rho= 2500, grav= 9.81):
+    '''Create the loads of the concrete weight.'''
+    for e in self.wallSet.getElements:
+      selfWeightLoad= grav*2500*e.sectionProperties.A
+      selfWeightLoadVector= xc.Vector([0.0, -selfWeightLoad])
+      e.vector2dUniformLoadGlobal(selfWeightLoadVector)
+    

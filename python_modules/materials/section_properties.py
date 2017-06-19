@@ -13,6 +13,7 @@ from materials import typical_materials
 from miscUtils import LogMessages as lmsg
 import scipy.interpolate
 import geom
+import xc
 
 
 class SectionProperties(object):
@@ -140,6 +141,15 @@ class SectionProperties(object):
     else:
       retval= typical_materials.defElasticShearSection2d(preprocessor,self.sectionName,self.A(),material.E,material.G(),self.Iz(),self.alphaY())
       return retval
+  def getCrossSectionProperties2D(self,material):
+    '''Return a CrossSectionProperties object with the 2D properties of the section.'''
+    retval= xc.CrossSectionProperties2d()
+    retval.E= material.E
+    retval.A= self.A()
+    retval.I= self.Iz()
+    retval.G= material.G()
+    retval.Alpha= self.alphaY()
+    return retval
 
 class RectangularSection(SectionProperties):
   '''Rectangular section geometric parameters
