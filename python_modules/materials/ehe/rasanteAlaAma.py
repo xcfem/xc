@@ -12,7 +12,7 @@ def rasanteAgotamiento(fck,gammac,hf,Asf,Sf,fyd):
     #gammac= Partial safety factor for concrete.
     #hf: espesor del ala (m)
     #Asf: reinforcement por unidad de longitud que atraviesa la sección (mm2)
-    #Sf: separación entre las barras de armaura que atraviesa la sección (mm)
+    #Sf: spacement of the rebars that cross the section (mm)
     #fyd: resistencia de cálculo de la reinforcement (N/mm2)
     hf=hf*1000     #espesor del ala en mm
     #Esfuerzo rasante de agotamiento por compresión oblicua en la sección

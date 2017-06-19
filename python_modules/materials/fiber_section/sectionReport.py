@@ -33,7 +33,7 @@ class RecordFamMainReinforcement(object):
     self.nRebars= reinfLayer.numReinfBars # number of rebars
     self.rebarsDiam= reinfLayer.barDiameter # Rebars diameter
     self.areaRebar= reinfLayer.barArea # total area of reinforcement in the layer
-    self.minEffCover= reinfLayer.getRecubrimiento() # Minimum value of effective cover
+    self.minEffCover= reinfLayer.getCover() # Minimum value of effective cover
     self.barsCOG= reinfLayer.getCdg() # center of gravity of the bars
 
   def texWrite(self,archTex,areaHorm):
@@ -119,7 +119,7 @@ class SectionInfo(object):
     self.reinforcement= self.geomSection.getReinfLayers  #ListReinfLayer
     self.tangSteel= self.rfStDiag.getTangent()
     self.areaMainReinforcement= self.reinforcement.getAreaGrossSection()
-    self.cover= self.reinforcement.getRecubrimiento
+    self.cover= self.reinforcement.getCover
     self.lista_fams_reinforcement= []
     for f in self.reinforcement:
       datosFam= RecordFamMainReinforcement(f)

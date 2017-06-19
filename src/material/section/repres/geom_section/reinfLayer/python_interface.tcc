@@ -26,9 +26,9 @@ class_<XC::ReinfLayer,XC::ReinfLayer *, bases<XC::DiscretBase>, boost::noncopyab
   .add_property("barDiameter",make_function(&XC::ReinfLayer::getReinfBarDiameter, return_value_policy<return_by_value>()),&XC::ReinfLayer::setReinfBarDiameter,"Diameter of bars.")
   .add_property("barArea",make_function(&XC::ReinfLayer::getReinfBarArea, return_value_policy<return_by_value>()),&XC::ReinfLayer::setReinfBarArea,"Area of bars.")
   .add_property("getReinfBars",make_function(getReinfBarsRef,return_internal_reference<>()),"Returns reinforcement bars.")
-  .def("getRecubrimiento",&XC::ReinfLayer::getRecubrimiento,"returns cover of bars.")
-  .def("getCdg",&XC::ReinfLayer::getCdg)
-  .def("getArea",&XC::ReinfLayer::getArea)
+  .def("getCover",&XC::ReinfLayer::getCover,"returns concrete cover of the bars.")
+  .def("getCdg",&XC::ReinfLayer::getCdg,"Return the position of the centroid.")
+  .def("getArea",&XC::ReinfLayer::getArea,"Return the reinforcement area.")
   ;
 
 class_<XC::SingleBar , bases<XC::ReinfLayer>, boost::noncopyable >("SingleBar", no_init);
@@ -43,6 +43,7 @@ class_<XC::CircReinfLayer , bases<XC::ReinfLayer>, boost::noncopyable >("CircRei
 class_<XC::StraightReinfLayer , bases<XC::ReinfLayer>, boost::noncopyable >("StraightReinfLayer", no_init)
   .add_property("p1",&XC::StraightReinfLayer::getInitialPos,&XC::StraightReinfLayer::setInitialPos,"Initial position.")
   .add_property("p2",&XC::StraightReinfLayer::getFinalPos,&XC::StraightReinfLayer::setFinalPos,"Final position.")
+  .def("getSpacement",&XC::StraightReinfLayer::getSpacement,"Returns the spacement of the bars.")
   ;
 
 typedef std::list<XC::ReinfLayer *> list_ptr_reinf_layer;
@@ -66,5 +67,5 @@ class_<XC::ListReinfLayer, bases<XC::SectionMassProperties,list_ptr_reinf_layer>
   .def("newReinfBar",make_function(&XC::ListReinfLayer::newReinfBar,return_internal_reference<>()))
   .add_property("getNumReinfBars",&XC::ListReinfLayer::getNumReinfBars,"Number of bars.")
   .add_property("getGeomSection",make_function(&XC::ListReinfLayer::getGeomSection,return_internal_reference<>()),"Returns the GeomSection object that owns this bars.")
-  .def("getRecubrimiento",&XC::ListReinfLayer::getRecubrimiento,"returns cover of bars.")
+  .def("getCover",&XC::ListReinfLayer::getCover,"returns concrete cover of the bars.")
   ;

@@ -1399,7 +1399,7 @@ double XC::FiberDeque::getFibersEffectiveConcreteArea(void) const
   }
 
 //! @brief Computes the cover of the fibers.
-void XC::FiberDeque::calcRecubrimientos(const GeomSection &g) const
+void XC::FiberDeque::computeCovers(const GeomSection &g) const
   {
     const GeomObj::list_Pos2d posiciones= getPosiciones();
     const Poligono2d contour= g.getRegionsContour();
@@ -1412,7 +1412,7 @@ void XC::FiberDeque::calcRecubrimientos(const GeomSection &g) const
   }
 
 //! @brief Computes the distance from each fiber to the nearest one.
-void XC::FiberDeque::calcSeparaciones(void) const
+void XC::FiberDeque::computeSpacement(void) const
   { seps= getPosiciones().GetSeparaciones(); }
 
 //! @brief Returns the value of concrete cover for the i-th fiber.

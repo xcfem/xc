@@ -11,16 +11,16 @@ import math
 
 class RebarFamily(object):
   minDiams= 50
-  def __init__(self,steel,diam,ecartement,enrobage,exigenceFissuration= 'B'):
+  def __init__(self,steel,diam,ecartement,concreteCover,exigenceFissuration= 'B'):
     self.steel= steel
     self.diam= diam
     self.ecartement= ecartement
-    self.enrobage= enrobage
+    self.concreteCover= concreteCover
     self.exigenceFissuration= exigenceFissuration
   def __repr__(self):
     return self.steel.name + ", diam: " + str(int(self.diam*1e3)) + " mm, e= " + str(int(self.ecartement*1e3))
   def getCopy(self,exigenceFissuration):
-    return RebarFamily(self.steel,self.diam,self.ecartement,self.enrobage,exigenceFissuration)
+    return RebarFamily(self.steel,self.diam,self.ecartement,self.concreteCover,exigenceFissuration)
   def getDiam(self):
     return self.diam
   def getBarArea(self):
@@ -34,17 +34,22 @@ class RebarFamily(object):
   def getExigenceFissuration(self):
     return self.exigenceFissuration
   def getAsMinFlexion(self,concrete,epaisseur):
-    retval= minimal_reinforcement.AsMinFlexion(concrete,self.getEnrobageMec(),self.exigenceFissuration,self.ecartement,epaisseur)
+    retval= minimal_reinforcement.AsMinFlexion(concrete,self.getEffectiveCover(),self.exigenceFissuration,self.ecartement,epaisseur)
     return retval
   def getAsMinTraction(self,concrete,epaisseur):
     retval= minimal_reinforcement.AsMinTraction(concrete,self.exigenceFissuration,self.ecartement,epaisseur)
     return retval
   def getMR(self,concrete,b,epaisseur):
-    return ng_simple_bending_reinforcement.Mu(self.getAs(),concrete.fcd(),self.steel.fyd(),b,epaisseur-self.getEnrobageMec())
-  def getEnrobageMec(self):
-    return self.enrobage+self.diam/2.0
+    return ng_simple_bending_reinforcement.Mu(self.getAs(),concrete.fcd(),self.steel.fyd(),b,epaisseur-self.getEffectiveCover())
+  def getEffectiveCover(self):
+    ''' returns the effective cover of the rebar family.
+
+    Returns the distance between the surface of the concrete and the 
+    centroid of the rebars family.
+    '''
+    return self.concreteCover+self.diam/2.0
   def d(self,epaisseur):
-    return epaisseur-self.getEnrobageMec()
+    return epaisseur-self.getEffectiveCover()
   def getT(self):
     return self.getAs()*self.steel.fyd()
   def getVR(self,concrete,Nd,Md,b,epaisseur):
@@ -65,8 +70,8 @@ class RebarFamily(object):
 
 class FamNBars(RebarFamily):
   n= 2 #Number of bars.
-  def __init__(self,steel,n,diam,ecartement,enrobage):
-    RebarFamily.__init__(self,steel,diam,ecartement,enrobage)
+  def __init__(self,steel,n,diam,ecartement,concreteCover):
+    RebarFamily.__init__(self,steel,diam,ecartement,concreteCover)
     self.n= int(n)
   def __repr__(self):
     return str(n) + " x " + self.steel.name + ", diam: " + str(int(self.diam*1e3)) + " mm, e= " + str(int(self.ecartement*1e3))
@@ -90,17 +95,22 @@ class DoubleRebarFamily(object):
     n1= self.f1.getAs()/self.f1.getBarArea()
     n2= self.f2.getAs()/self.f2.getBarArea()
     return 1/(n1+n2)
-  def getEnrobageMec(self):
+  def getEffectiveCover(self):
+    ''' returns the effective cover of the rebar family.
+
+    Returns the distance between the surface of the concrete and the 
+    centroid of the rebars family.
+    '''
     T1= self.f1.getT()
     T2= self.f2.getT()
     T= T1+T2
-    return (self.f1.getEnrobageMec()*T1+self.f2.getEnrobageMec()*T2)/T
+    return (self.f1.getEffectiveCover()*T1+self.f2.getEffectiveCover()*T2)/T
   def getBasicAnchorageLength(self,concrete):
     l1= self.f1.getBasicAnchorageLength(concrete)
     l2= self.f2.getBasicAnchorageLength(concrete)
     return max(l1,l2)
   def getAsMinFlexion(self,concrete,epaisseur):
-    retval= minimal_reinforcement.AsMinFlexion(concrete,self.getEnrobageMec(),self.f1.exigenceFissuration,self.getEcartement(),epaisseur)
+    retval= minimal_reinforcement.AsMinFlexion(concrete,self.getEffectiveCover(),self.f1.exigenceFissuration,self.getEcartement(),epaisseur)
     return retval
   def getAsMinTraction(self,concrete,epaisseur):
     retval= minimal_reinforcement.AsMinTraction(concrete,self.f1.exigenceFissuration,self.getEcartement(),epaisseur)
@@ -115,7 +125,7 @@ class DoubleRebarFamily(object):
     MR2= self.f2.getMR(concrete,b,epaisseur)
     return MR1+MR2
   def d(self,epaisseur):
-    return epaisseur-self.getEnrobageMec()
+    return epaisseur-self.getEffectiveCover()
   def getVR(self,concrete,Nd,Md,b,epaisseur):
     assert self.f1.steel==self.f2.steel
     return shearSIA262.VuNoShearRebars(concrete,self.f1.steel,Nd,Md,self.getAs(),b,self.d(epaisseur))

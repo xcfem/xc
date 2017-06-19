@@ -128,7 +128,7 @@ class GeomSection: public SectionMassProperties
     double getTensionedZoneLeverArm(const Semiplano2d &) const;
     double getLeverArm(const Recta2d &) const;
     double getAnchoMecanico(const Recta2d &) const;
-    double getRecubrimiento(const Pos2d &) const;
+    double getCover(const Pos2d &) const;
     double getCompressedStrutWidth(const Segmento2d &) const;
 
     //Acceso contenedores.

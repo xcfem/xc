@@ -36,7 +36,7 @@ class CrackControl(lscb.CrackControlBaseParameters):
   def printParams(self):
     # Imprime los parámetros de fisuración de la sección.
     print "Num. reinforcement a tracción: ",self.numBarrasTracc,"\n"
-    print "Separación entre reinforcement traccionadas; s= ",self.rebarsSpacingTracc," m\n"
+    print "Spacement of the tensioned bars; s= ",self.rebarsSpacingTracc," m\n"
     print "Area de las reinforcement traccionadas; As= ",self.areaRebarTracc*1e4," cm2\n"
     print "Area eficaz; AcEf= ",self.AcEfNeta*1e4," cm2\n"
     print "Centro de gravedad de las reinforcement traccionadas; CDG= (",self.yCDGBarrasTracc,",",self.zCDGBarrasTracc,") m\n"
@@ -69,8 +69,8 @@ class CrackControl(lscb.CrackControlBaseParameters):
     self.numBarrasTracc= self.rcSets.getNumTensionRebars()
     self.Wk= 0.0
     if(self.numBarrasTracc>0):
-      scc.calcRecubrimientos(self.tensionedRebarsFiberSetName)
-      scc.calcSeparaciones(self.tensionedRebarsFiberSetName)
+      scc.computeCovers(self.tensionedRebarsFiberSetName)
+      scc.computeSpacement(self.tensionedRebarsFiberSetName)
       self.eps1= concrFibers.getStrainMax()
       self.eps2= max(concrFibers.getStrainMin(),0.0)
       self.k1= (self.eps1+self.eps2)/8/self.eps1
@@ -160,11 +160,11 @@ def printParamFisBarra():
   print "Área eficaz Acef= ",AcEfBarra*1e4," cm2\n"
   print "Área barra As= ",AsBarra*1e4," cm2\n"
   print "Pos barra: (",yBarra,",",zBarra,")\n"
-  print "Recubrimiento c= ",coverBarra," m\n"
+  print "Cover c= ",coverBarra," m\n"
   print "diamBarra fi= ",diamBarra,"\n"
   print "sigmaBarra= ",sigmaBarra/1e6," MPa\n"
   print "sigmaSRBarra= ",sigmaSRBarra/1e6," MPa\n"
-  print "Separación s= ",sepBarra," m\n"
+  print "Bar spacement s= ",sepBarra," m\n"
   print "k1= ",k1,"\n"
   print "smFisurasBarra= ",smFisurasBarra," m\n"
   print "alargMaxBarra= ",alargMaxBarra*1e3," por mil.\n"

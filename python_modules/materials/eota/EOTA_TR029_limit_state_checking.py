@@ -271,7 +271,7 @@ def AcV2Pernos(h, c1, s2):
 
   :param c1: Distancia desde el centro de gravedad del grupo al borde situado frente al cortante.
   :param h: Espesor de la pieza de hormigón.
-  :param s2: Separación entre los pernos.
+  :param s2: Distance between the bolts.
   '''
   return (3*c1+min(s2,3*c1))*min(1.5*c1,h)
 
@@ -282,7 +282,7 @@ def AcV2PernosC2(h, c1, c2, s2):
   :param  c1: Distancia desde el centro de gravedad del grupo al borde situado frente al cortante.
   :param c2: Distancia desde el centro de gravedad del grupo al otro borde.
   :param h: Espesor de la pieza de hormigón.
-  :param s2: Separación entre los pernos.
+  :param s2: Distance between the bolts.
   '''
   return (1.5*c1+c2+min(s2,3*c1))*min(1.5*c1,h)
 

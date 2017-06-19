@@ -102,7 +102,7 @@ class ReinfLayer: public DiscretBase
     void getBarrasIn(const Semiplano2d &,ListReinfLayer &,bool );
     
     const GeomSection *getGeomSection(void) const;
-    double getRecubrimiento(void) const;
+    double getCover(void) const;
     Vector getCdg(void) const;
 
     inline double getArea(void) const

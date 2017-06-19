@@ -469,7 +469,7 @@ double XC::FiberSectionBase::computeFibersEffectiveConcreteArea(const double &hE
   }
 
 //! @brief Computes concrete cover of the fibers.
-void XC::FiberSectionBase::calcRecubrimientos(const std::string &nmbSetArmaduras) const
+void XC::FiberSectionBase::computeCovers(const std::string &nmbSetArmaduras) const
   {
     fiber_set_const_iterator i= fiber_sets.find(nmbSetArmaduras);
     if(i!=fiber_sets.end())
@@ -477,7 +477,7 @@ void XC::FiberSectionBase::calcRecubrimientos(const std::string &nmbSetArmaduras
         const FiberDeque &armaduras= (*i).second; //Armaduras.
         const GeomSection *geom= getGeomSection();
         if(geom)
-          armaduras.calcRecubrimientos(*geom);
+          armaduras.computeCovers(*geom);
       }
     else
       std::cerr << nombre_clase() << "::" << __FUNCTION__
@@ -486,13 +486,13 @@ void XC::FiberSectionBase::calcRecubrimientos(const std::string &nmbSetArmaduras
   }
 
 //! @brief Computes spacing of the fibers.
-void XC::FiberSectionBase::calcSeparaciones(const std::string &nmbSetArmaduras) const
+void XC::FiberSectionBase::computeSpacement(const std::string &nmbSetArmaduras) const
   {
     fiber_set_const_iterator i= fiber_sets.find(nmbSetArmaduras);
     if(i!=fiber_sets.end())
       {
         const FiberDeque &armaduras= (*i).second; //Armaduras.
-        armaduras.calcSeparaciones();
+        armaduras.computeSpacement();
       }
     else
       std::cerr << nombre_clase() << "::" << __FUNCTION__
@@ -838,12 +838,12 @@ double XC::FiberSectionBase::getCompressedStrutWidth(void) const
 
 //! @brief Returns the concrete cover for the position
 //! being passed as parameter.
-double XC::FiberSectionBase::getRecubrimiento(const Pos2d &p) const
+double XC::FiberSectionBase::getCover(const Pos2d &p) const
   {
     double retval= 0.0;
     const GeomSection *geom= getGeomSection();
     if(geom)
-      retval= geom->getRecubrimiento(p);
+      retval= geom->getCover(p);
     return retval;
   }
 

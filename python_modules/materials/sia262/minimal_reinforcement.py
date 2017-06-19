@@ -14,9 +14,9 @@ def AsMinTraction(concrete,exigence,ecartement,t):
   sgAdm= SIA262_materials.limitationContraintes(exigence,ecartement)
   return kt*fctm*t/sgAdm
 
-def AsMinFlexion(concrete,enrobage,exigence,ecartement,t):
+def AsMinFlexion(concrete,concreteCover,exigence,ecartement,t):
   fctd= concrete.fctm()*SIA262_materials.reductionFactorKT(t/3)
-  z= 0.9*(t-enrobage)
+  z= 0.9*(t-concreteCover)
   w= 1/6.0*t**2
   sgAdm= SIA262_materials.limitationContraintes(exigence,ecartement)
   return fctd*w/sgAdm/z

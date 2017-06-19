@@ -110,27 +110,27 @@ class InternalForces(object):
 
 class RetainingWallReinforcement(dict):
   ''' Simplified reinforcement for a cantilever retaining wall.'''
-  def __init__(self,enrobage=40e-3, steel= SIA262_materials.B500B):
+  def __init__(self,concreteCover=40e-3, steel= SIA262_materials.B500B):
     '''Constructor '''
     super(RetainingWallReinforcement, self).__init__()
-    self.enrobage= enrobage
+    self.concreteCover= concreteCover
     #Materials.
     self.steel= steel
     #Default reinforcement
-    AdefA= ng_rebar_def.RebarFamily(self.steel,8e-3,0.15,enrobage)
+    AdefA= ng_rebar_def.RebarFamily(self.steel,8e-3,0.15,concreteCover)
     Adef= AdefA
     for i in range(1,15):
       self[i]= Adef
     # #Armature de peau semelle
-    # R= self.footingThickness-2*self.enrobage-8e-3
+    # R= self.footingThickness-2*self.concreteCover-8e-3
     # n= math.ceil(R/0.15)+1
     # ecart= R/(n-1)
-    # self[10]= FamNBars(self.steel,n,8e-3,ecart,enrobage)
+    # self[10]= FamNBars(self.steel,n,8e-3,ecart,concreteCover)
     # #Armature couronnement.
-    # R= self.stemTopWidth-2*self.enrobage-8e-3
+    # R= self.stemTopWidth-2*self.concreteCover-8e-3
     # n= math.ceil(R/0.15)+1
     # ecart= R/(n-1)
-    # self[13]= FamNBars(self.steel,n,8e-3,ecart,enrobage)
+    # self[13]= FamNBars(self.steel,n,8e-3,ecart,concreteCover)
     
   def setArmature(self,index,armature):
     '''Assigns armature.'''
@@ -145,12 +145,12 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
   '''Cantilever retaining wall.'''
   b= 1.0
 
-  def __init__(self,name= 'prb',enrobage=40e-3,stemBottomWidth=0.25,stemTopWidth=0.25,footingThickness= 0.25):
+  def __init__(self,name= 'prb',concreteCover=40e-3,stemBottomWidth=0.25,stemTopWidth=0.25,footingThickness= 0.25):
     '''Constructor '''
     super(RetainingWall,self).__init__(name,stemBottomWidth,stemTopWidth,footingThickness)
     #Materials.
     self.concrete= SIA262_materials.c25_30
-    self.reinforcement= RetainingWallReinforcement(enrobage)
+    self.reinforcement= RetainingWallReinforcement(concreteCover)
     
   def getBasicAnchorageLength(self,index):
     '''Returns basic anchorage length for the reinforcement at "index".''' 
@@ -228,7 +228,7 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
     outputFile.write("\\multicolumn{3}{c}{\\textsc{Matériels}}\\\\\n")
     outputFile.write("  Béton: " + self.concrete.materialName +" & ")
     outputFile.write("  Acier: " + self.reinforcement.steel.materialName +" & ")
-    outputFile.write("  Enrobage: "+ fmt.Diam.format(self.reinforcement.enrobage*1e3)+ " mm\\\\\n")
+    outputFile.write("  ConcreteCover: "+ fmt.Diam.format(self.reinforcement.concreteCover*1e3)+ " mm\\\\\n")
     outputFile.write("\\end{tabular} \\\\\n")
     outputFile.write("\\hline\n")
     outputFile.write("\\end{tabular}\n")

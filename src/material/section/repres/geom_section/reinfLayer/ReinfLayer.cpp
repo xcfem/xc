@@ -97,7 +97,7 @@ const XC::GeomSection *XC::ReinfLayer::getGeomSection(void) const
   }
 
 //! @brief Returns the minimum value for rebar cover.
-double XC::ReinfLayer::getRecubrimiento(void) const
+double XC::ReinfLayer::getCover(void) const
   {
     const VectorReinfBar &barras= getReinfBars();
     double retval= 0;
@@ -107,10 +107,10 @@ double XC::ReinfLayer::getRecubrimiento(void) const
         if(geom)
           {
             VectorReinfBar::const_iterator i= barras.begin();
-            retval= geom->getRecubrimiento((*i)->getPos2d());
+            retval= geom->getCover((*i)->getPos2d());
             i++;
             for(;i!= barras.end();i++)
-              retval= std::min(retval,geom->getRecubrimiento((*i)->getPos2d()));
+              retval= std::min(retval,geom->getCover((*i)->getPos2d()));
           }
       }
     return retval;

@@ -15,7 +15,7 @@ __email__= "l.pereztato@gmail.com"
 fctm= SIA262_materials.c25_30.fctm()/1e6
 ratio1= abs(fctm-2.56496392002)/2.56496392002
 
-enrobage= 30e-3
+concreteCover= 30e-3
 ecartement= 150e-3
 t= 0.30
 sgAdmA= SIA262_materials.limitationContraintes("A",ecartement)
@@ -31,11 +31,11 @@ AsTractionB= minimal_reinforcement.AsMinTraction(SIA262_materials.c25_30,"B",eca
 ratio6= abs(AsTractionB-1672.80255653e-6)/1672.80255653e-6
 AsTractionC= minimal_reinforcement.AsMinTraction(SIA262_materials.c25_30,"C",ecartement,t)
 ratio7= abs(AsTractionC-2909.22183745e-6)/2909.22183745e-6
-AsFlexionA= minimal_reinforcement.AsMinFlexion(SIA262_materials.c25_30,enrobage,"A",ecartement,t)
+AsFlexionA= minimal_reinforcement.AsMinFlexion(SIA262_materials.c25_30,concreteCover,"A",ecartement,t)
 ratio8= abs(AsFlexionA-346.647194688e-6)/346.647194688e-6
-AsFlexionB= minimal_reinforcement.AsMinFlexion(SIA262_materials.c25_30,enrobage,"B",ecartement,t)
+AsFlexionB= minimal_reinforcement.AsMinFlexion(SIA262_materials.c25_30,concreteCover,"B",ecartement,t)
 ratio9= abs(AsFlexionB-376.978824223e-6)/376.978824223e-6
-AsFlexionC= minimal_reinforcement.AsMinFlexion(SIA262_materials.c25_30,enrobage,"C",ecartement,t)
+AsFlexionC= minimal_reinforcement.AsMinFlexion(SIA262_materials.c25_30,concreteCover,"C",ecartement,t)
 ratio10= abs(AsFlexionC-655.615346475e-6)/655.615346475e-6
 
 '''
