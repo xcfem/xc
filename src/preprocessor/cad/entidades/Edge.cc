@@ -367,7 +367,7 @@ MatrizPos3d XC::Edge::get_pos_nodes(void) const
 //! @brief Create the nodes for both end points of the edge.
 void XC::Edge::create_nodes_en_extremos(void)
   {
-    if(verborrea>4)
+    if(verbosity>4)
       std::clog << "Creating nodes for '" << getName() << "' edge ends...";   
     if(!P1())
       {
@@ -397,7 +397,7 @@ void XC::Edge::create_nodes_en_extremos(void)
     const size_t cols= ttzNodes.getNumCols();
     ttzNodes(1,filas,cols)= node_p2; //Node of end point.
 
-    if(verborrea>4)
+    if(verbosity>4)
       std::cerr << nombre_clase() << "::" << __FUNCTION__
 	        << "; creados." << std::endl;
   }
@@ -405,7 +405,7 @@ void XC::Edge::create_nodes_en_extremos(void)
 //! @brief Create nodes on objects.
 void XC::Edge::create_nodes(void)
   {
-    if(verborrea>4)
+    if(verbosity>4)
       std::clog << "Creating nodes for edge: '" << getName() << "'...";
 
  
@@ -435,29 +435,34 @@ void XC::Edge::create_nodes(void)
                     create_node(posiciones(j,k),1,j,k);
               }
           }
-        if(verborrea>4)
+        if(verbosity>4)
 	  std::clog << nombre_clase() << "::" << __FUNCTION__
-	            << "; creados " << ttzNodes.NumPtrs()
-		    << " nodo(s)." << std::endl;
+	            << "; created " << ttzNodes.NumPtrs()
+		    << " node(s)." << std::endl;
       }
     else
       {
-        if(verborrea>2)
+        if(verbosity>2)
           std::clog << nombre_clase() << "::" << __FUNCTION__
 	            << "; nodes of the line: '" << getName() << "' already exist." << std::endl;
       }
-    if(verborrea>4)
+    if(verbosity>4)
       std::clog << "created." << std::endl;
+    const size_t numNodes= ttzNodes.NumPtrs();
+    if(numNodes==0 && verbosity>0)
+      std::clog << nombre_clase() << "::" << __FUNCTION__
+	        << "; warning 0 nodes created for line: " << getName()
+	        << std::endl;
   }
 
 //! @brief Trigger mesh generation.
 void XC::Edge::genMesh(meshing_dir dm)
   {
-    if(verborrea>3)
+    if(verbosity>3)
       std::clog << "Meshing edge...(" << getName() << ")...";   
     create_nodes();
     create_elements(dm);
-    if(verborrea>3)
+    if(verbosity>3)
       std::clog << "done." << std::endl;
   }
 

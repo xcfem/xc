@@ -339,7 +339,7 @@ bool XC::Domain::addLoadPattern(LoadPattern *load)
       }
     else
       {
-        if(verborrea>3)
+        if(verbosity>3)
           std::cerr << nombre_clase() << "::" << __FUNCTION__
 	            << "; can't add load pattern identified by: "
                     << load->getTag() << "'\n";

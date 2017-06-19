@@ -64,8 +64,10 @@ Z2= preprocessor.getSets.defSet("Z2")
 Z2.getSurfaces.append(s2)
 Z2.fillDownwards()
 
+prueba.setVerbosityLevel(0) #Dont print warning messages about element seed.
 Z1.genMesh(xc.meshDir.I)
 Z2.genMesh(xc.meshDir.I)
+prueba.setVerbosityLevel(1) #Print warnings again 
 
 
 nNodes= preprocessor.getSets.getSet("total").getNodes.size

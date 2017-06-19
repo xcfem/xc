@@ -78,7 +78,10 @@ os.system("rm -r -f /tmp/test09.db")
 db= prueba.newDatabase("BerkeleyDB","/tmp/test09.db")
 db.save(100)
 prueba.clearAll()
+prueba.setVerbosityLevel(0) #Dont print warning messages
+                            #about pointers to material.
 db.restore(100)
+prueba.setVerbosityLevel(1) #Print warnings again 
 
 # Solution
 analisis= predefined_solutions.simple_static_linear(prueba)

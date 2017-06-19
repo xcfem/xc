@@ -392,7 +392,7 @@ void XC::CmbEdge::line_meshing(meshing_dir dm)
 //! @brief Creates the mesh.
 void XC::CmbEdge::genMesh(meshing_dir dm)
   {
-    if(verborrea>3)
+    if(verbosity>3)
       std::clog << "Meshing CmbEdge...(" << getName() << ")...";
     line_meshing(dm);
     
@@ -412,7 +412,7 @@ void XC::CmbEdge::genMesh(meshing_dir dm)
         ttzElements.PutCaja(0,offset_j,0,(*i).Borde()->getTtzElements());
         offset_j+= (*i).Borde()->getNumElementRows()-1;
       }
-    if(verborrea>3)
+    if(verbosity>3)
       std::clog << "done." << std::endl;
   }
 

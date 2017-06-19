@@ -51,7 +51,7 @@ XC::FiberSets::iterator XC::FiberSets::get_fiber_set(const std::string &nmb_set)
     iterator i= find(nmb_set);
     if(i == end())
       {
-        if(verborrea>1)
+        if(verbosity>1)
           std::clog << "Fiber set: '" << nmb_set
                     << "' doesn't exists; it is created." << std::endl;
         create_fiber_set(nmb_set);

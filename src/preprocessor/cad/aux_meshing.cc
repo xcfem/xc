@@ -133,7 +133,7 @@ XC::TritrizPtrElem XC::put_quad4N_on_mesh(const Element &e,const TritrizPtrNod &
 
 
     TritrizPtrElem retval;
-    if(mesh_dim<2 && (e.GetNivelVerborrea() > 4))
+    if(mesh_dim<2 && (e.getVerbosityLevel() > 4))
       std::cerr << __FUNCTION__
 	        << "; bidimensional mesh needed, can't create elements."
 		<< std::endl;
@@ -258,7 +258,7 @@ XC::TritrizPtrElem XC::put_quad9N_on_mesh(const Element &e,const TritrizPtrNod &
 
 
     TritrizPtrElem retval;
-    if(mesh_dim<2 && (e.GetNivelVerborrea() > 4))
+    if(mesh_dim<2 && (e.getVerbosityLevel() > 4))
       std::cerr <<  __FUNCTION__
 	        << "; bidimensional mesh needed, can't create elements."
 		<< std::endl;

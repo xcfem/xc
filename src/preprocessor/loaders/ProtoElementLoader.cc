@@ -109,7 +109,7 @@ const XC::Material *XC::ProtoElementLoader::get_ptr_material(void) const
     MaterialLoader::const_iterator imat= get_iter_material();
     if(imat!= get_material_loader().end())
       retval= imat->second;
-    else //if(verborrea>0)
+    else 
       std::cerr << "ProtoElementLoader - material: '" 
                 << nmb_mat << "' not found.\n";
     return retval;
@@ -132,7 +132,7 @@ const XC::BeamIntegration *XC::ProtoElementLoader::get_ptr_beam_integrator(void)
     if(iInteg!= get_beam_integrator_loader().end())
       retval= iInteg->second;
     else
-      if(verborrea>0)
+      if(verbosity>0)
         std::cerr << nombre_clase() << "::" << __FUNCTION__
 	          << "; integrator named: '" 
                   << nmb_integ << "' not found.\n";
@@ -155,7 +155,7 @@ const XC::CrdTransf *XC::ProtoElementLoader::get_ptr_transf_coo(void) const
     if(itrf!= this->get_transf_coo_loader().end())
       retval= itrf->second;
     else
-      if(verborrea>0)
+      if(verbosity>0)
         std::cerr << nombre_clase() << "::" << __FUNCTION__
 	          << "; coordinate transformation named: '" 
                   << nmb_transf << "' not found.\n";

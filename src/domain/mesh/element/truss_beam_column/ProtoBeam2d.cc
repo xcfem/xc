@@ -46,7 +46,7 @@ void XC::ProtoBeam2d::set_material(const Material *m)
           }
       }
     else
-      if(verborrea>0)
+      if(verbosity>0)
         std::cerr << "ProtoBeam2d::set_material; pointer to material is null." << std::endl;
   }
 

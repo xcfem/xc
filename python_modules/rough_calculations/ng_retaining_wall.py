@@ -17,12 +17,15 @@ import scipy.interpolate
 import matplotlib
 #matplotlib.use('PS')
 import matplotlib.pyplot as plt
+from materials import typical_materials
+from materials import section_properties
 from materials.sia262 import SIA262_materials
 from model.geometry import retaining_wall_geometry
 from rough_calculations import ng_rebar_def
 from rough_calculations import ng_rc_section
 import os
 from miscUtils import LogMessages as lmsg
+import xc
 
 def filterRepeatedValues(yList,mList,vList):
   sz= len(yList)
@@ -364,3 +367,54 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
     outputFile.write("\\end{center}\n")
     outputFile.write("\\caption{Schéma armatures mur "+ self.name +"} \\label{fg_"+self.name+"}\n")
     outputFile.write("\\end{figure}\n")
+    
+  def genMesh(self,nodes,springMaterials):
+    self.defineWireframeModel(nodes)
+    nodes.newSeedNode()
+    preprocessor= self.modelSpace.preprocessor    
+    trfs= preprocessor.getTransfCooLoader
+    transformationName= self.name+'LinearTrf'
+    self.trf= trfs.newLinearCrdTransf2d(transformationName)
+    wallMatData= typical_materials.MaterialData(name=self.name+'Concrete',E=self.concrete.getEcm(),nu=0.2,rho=2500)
+    foundationSection= section_properties.RectangularSection(self.name+"FoundationSection",self.b,self.footingThickness)
+    foundationMaterial= foundationSection.defSeccElastica2d(preprocessor,wallMatData) #Foundation elements material.
+    elementSize= 0.2
+    seedElemLoader= preprocessor.getElementLoader.seedElemLoader
+    seedElemLoader.defaultMaterial= foundationSection.sectionName
+    seedElemLoader.defaultTransformation= transformationName
+    seedElem= seedElemLoader.newElement("elastic_beam_2d",xc.ID([0,0]))
+    foundationSet= preprocessor.getSets.defSet("foundationSet")
+    for lineName in ['heel','toe']:
+      l= self.wireframeModelLines[lineName]
+      l.setElemSize(elementSize)
+      l.genMesh(xc.meshDir.I)
+      for e in l.getElements():
+        foundationSet.getElements.append(e)
+    foundationSet.FillDownwards()
+    
+    stemSection= section_properties.RectangularSection(self.name+"StemSection",self.b,(self.stemTopWidth+self.stemBottomWidth)/2.0)
+    for lineName in ['stem']:
+      l= self.wireframeModelLines[lineName]
+      l.setElemSize(elementSize)
+      seedElemLoader.defaultMaterial= stemSection.sectionName
+      l.genMesh(xc.meshDir.I)
+
+    # Springs on nodes.
+    foundationSet.computeTributaryLengths(False)
+    self.fixedNodes= []
+    elasticBearingNodes= foundationSet.getNodes
+    kX= springMaterials[0] #Horizontal
+    kSx= kX.E
+    kY= springMaterials[1] #Vertical
+    kSy= kY.E
+    lngTot= 0.0
+    for n in elasticBearingNodes:
+      lT= n.getTributaryLength()
+      lngTot+= lT
+      #print "tag= ", n.tag, " lT= ", lT
+      #print "before k= ", kY.E
+      kX.E= kSx*lT
+      kY.E= kSy*lT
+      print 'kX.E= ', kX.E,'kY.E= ', kY.E
+      idNodoFijo, idElem= modelSpace.setBearing(n.tag,["kX","kY"])
+      self.fixedNodes.append(nodes.getNode(idNodoFijo))

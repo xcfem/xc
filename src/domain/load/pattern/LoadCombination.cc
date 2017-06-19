@@ -189,7 +189,7 @@ bool XC::LoadCombination::addToDomain(void)
         if(lp)
           {
             bool result= dom->addLoadPattern(lp);
-            if((!result) && (verborrea>3))
+            if((!result) && (verbosity>3))
               {
                 const MapLoadPatterns &casos= loader->getLoadPatterns();
 	        std::cerr << "Can't add load case: '"

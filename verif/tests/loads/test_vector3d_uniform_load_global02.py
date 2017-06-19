@@ -112,10 +112,14 @@ cargas= preprocessor.getLoadLoader
 casos.addToDomain("0")
 # Procedimiento de solución
 analisis= predefined_solutions.simple_static_modified_newton(prueba)
+prueba.setVerbosityLevel(0) #Dont print warning messages
+                            #about loads over
+                            #elements with corotational formulation.
 result= analisis.analyze(10)
 
-
 execfile(pth+"/test_vector3d_uniform_load_global.py")
+prueba.setVerbosityLevel(1) #Print warnings again 
+
 
 ''' 
 print "delta: ",delta

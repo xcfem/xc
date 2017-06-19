@@ -44,7 +44,7 @@ void XC::ProtoBeam3d::set_material(const Material *m)
           std::cerr << "ProtoBeam3d::ProtoBeam3d -- material type is not valid.\n";
       }
     else
-      if(verborrea>0)
+      if(verbosity>0)
         std::cerr << "ProtoBeam3d::set_material; pointer to material is null." << std::endl;
   }
 

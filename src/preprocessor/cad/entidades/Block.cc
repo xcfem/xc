@@ -459,7 +459,7 @@ void XC::Block::create_nodes(void)
               create_node(pos_nodes(i,j,k),i,j,k);
       }
     else
-      if(verborrea>2)
+      if(verbosity>2)
         std::clog << nombre_clase() << "::" << __FUNCTION__
 	          << "; nodes of entity: '" << getName()
 		  << "' already exist." << std::endl;      
@@ -468,16 +468,16 @@ void XC::Block::create_nodes(void)
 //! @brief Trigger mesh generation.
 void XC::Block::genMesh(meshing_dir dm)
   {
-    if(verborrea>3)
+    if(verbosity>3)
       std::clog << "Meshing Block...(" << getName() << ")...";
     create_nodes();
     if(ttzElements.Null())
       create_elements(dm);
     else
-      if(verborrea>2)
+      if(verbosity>2)
         std::clog << nombre_clase() << "::" << __FUNCTION__
 	          << "; nodes of entity: '" << getName()
 		  << "' already exist." << std::endl;      
-    if(verborrea>3)
+    if(verbosity>3)
       std::clog << "done." << std::endl;
   }

@@ -138,7 +138,7 @@ void XC::MapSet::cierra_set(const std::string &nmb)
         if(i!= abiertos.end())
           abiertos.erase(i);
         else
-          if(verborrea>1)
+          if(verbosity>1)
 	    std::cerr << nombre_clase() << "::" << __FUNCTION__
 		      << "; the set: '"
                       << nmb << "' is already closed.\n";

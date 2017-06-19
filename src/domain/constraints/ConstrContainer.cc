@@ -225,7 +225,7 @@ bool XC::ConstrContainer::addLoadPattern(LoadPattern *load)
     MapCasosActivos<LoadPattern>::const_iterator i= activeLoadPatterns.find(tag);
     if(i!=activeLoadPatterns.end())
       {
-        if(verborrea>3)
+        if(verbosity>3)
           std::cerr << nombre_clase() << "::" << __FUNCTION__
 		    << " - cannot add as LoadPattern with tag "
                     << tag << " already exists in model\n";
@@ -913,7 +913,7 @@ int XC::ConstrContainer::recvLPatternsTags(const int &posFlag,const int &posDbTa
                       load->setDomain(dom);
                     else
                       {
-                        if(verborrea>3)
+                        if(verbosity>3)
                           {
                             const MapLoadPatterns &casos= loadLoader.getLoadPatterns();
 	                    std::cerr << nombre_clase() << "::" << __FUNCTION__

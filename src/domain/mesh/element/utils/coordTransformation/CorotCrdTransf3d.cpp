@@ -1101,7 +1101,7 @@ const XC::Vector &XC::CorotCrdTransf3d::getGlobalResistingForce(const Vector &pb
     // check distributed load is zero (not implemented yet)
     if(p0.Norm2()>1e-6)
       {
-        if(verborrea>0)
+        if(verbosity>0)
           std::cerr << "Loads over elements with corotational coordinate transformation is not implemented."
                     << " We use a workaround." << std::endl;
         const Vector &pl2= basic_to_local_element_force(p0);
