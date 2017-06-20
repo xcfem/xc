@@ -1,5 +1,5 @@
-Analysis
-,,,,,,,,
+Model wrapper
+;;;;;;;;;;;;;
 
 .. module:: xc
 	    
@@ -10,3 +10,4 @@ Analysis
 .. autoclass:: MapModelWrapper
     :members:
     :show-inheritance:
+

@@ -19,6 +19,12 @@ Preprocessor
 
    preprocessor/code.rst
 
+   cpp_classes/preprocessor/preprocessor_index.rst
+
+   cpp_classes/domain/domain_index.rst
+
+   cpp_classes/material/material_index.rst
+
 --------
 Solution
 --------
@@ -27,6 +33,8 @@ Solution
    :maxdepth: 1
 
    solution/solution.rst
+
+   cpp_classes/solution/solution_index.rst 
 
 -------------
 Postprocessor
@@ -37,7 +45,7 @@ Postprocessor
    postprocessor/xcVtk.rst
    postprocessor/reports.rst
    postprocessor/utils.rst
-
+   cpp_classes/post_process/post_process.rst
 
 ----------
 Miscellany
@@ -52,6 +60,7 @@ Miscellany
 
    miscellany/rough_calculations.rst
 
+   cpp_classes/utility/utility_index.rst
 
 Indices and tables
 ==================

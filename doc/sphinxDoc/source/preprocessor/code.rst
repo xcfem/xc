@@ -4,7 +4,7 @@ C++ classes
 ===========
 
 .. module:: xc
-.. autoclass:: ModelWrapper
+.. autoclass:: xc.ModelWrapper
     :members:
     :show-inheritance:
 

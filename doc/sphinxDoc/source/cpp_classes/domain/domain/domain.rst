@@ -3,7 +3,7 @@ Domain
 
 .. module:: xc
 	    
-.. autoclass:: Domain
+.. autoclass:: xc.Domain
     :members:
     :show-inheritance:
 

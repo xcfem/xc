@@ -1,5 +1,5 @@
-Solution
-========
+Python modules
+==============
 
 .. toctree::
 
