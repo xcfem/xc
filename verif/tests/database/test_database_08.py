@@ -59,7 +59,6 @@ beam3d= elementos.newElement("elastic_beam_3d",xc.ID([1,2]));
 
 
 
-
 modelSpace.fixNode000_000(1)
 
 cargas= preprocessor.getLoadLoader
@@ -84,7 +83,10 @@ os.system("rm -r -f /tmp/test08.db")
 db= prueba.newDatabase("BerkeleyDB","/tmp/test08.db")
 db.save(100)
 prueba.clearAll()
+prueba.setVerbosityLevel(0) #Dont print warning messages
+                            #about pointers to material.
 db.restore(100)
+prueba.setVerbosityLevel(1) #Print warnings again 
 
 
 nodes= preprocessor.getNodeLoader

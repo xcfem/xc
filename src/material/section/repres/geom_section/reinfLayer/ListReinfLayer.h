@@ -78,7 +78,7 @@ class ListReinfLayer: public std::list<ReinfLayer *>, public SectionMassProperti
     void clear(void);
 
     const GeomSection *getGeomSection(void) const;
-    double getRecubrimiento(void) const;
+    double getCover(void) const;
 
     StraightReinfLayer *newStraightReinfLayer(const std::string &);
     CircReinfLayer *newCircReinfLayer(const std::string &);

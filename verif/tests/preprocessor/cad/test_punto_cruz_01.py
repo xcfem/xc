@@ -61,12 +61,14 @@ scc= typical_materials.defElasticSection2d(preprocessor, "scc",A,E,I)
 setTotal= preprocessor.getSets.getSet("total")
 nodosTotal= setTotal.getNodes
 
+prueba.setVerbosityLevel(0) #Dont print warning messages about element seed.
 setL1= preprocessor.getSets.getSet("l1")
 setL1.genMesh(xc.meshDir.I)
 
 
 setL2= preprocessor.getSets.getSet("l2")
 setL2.genMesh(xc.meshDir.I)
+prueba.setVerbosityLevel(1) #Print warnings again 
 
 # for n in nodosTotal:
 #   print "node tag: ", n.tag

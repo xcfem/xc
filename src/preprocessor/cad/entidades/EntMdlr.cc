@@ -260,13 +260,13 @@ void XC::EntMdlr::create_nodes(const TritrizPos3d &posiciones)
           for(register size_t j= 1;j<=filas;j++)
             for(register size_t k= 1;k<=cols;k++)
               create_node(posiciones(i,j,k),i,j,k);
-        if(verborrea>5)
+        if(verbosity>5)
 	  std::cerr << nombre_clase() << "::" << __FUNCTION__
 		    << "; created " << ttzNodes.NumPtrs() << " node(s)."
 		    << std::endl;
       }
     else
-      if(verborrea>2)
+      if(verbosity>2)
         std::clog << nombre_clase() << "::" << __FUNCTION__
 	          << "; nodes from entity: '" << getName()
 		  << "' already exist." << std::endl;
@@ -288,7 +288,7 @@ bool XC::EntMdlr::create_elements(meshing_dir dm)
             {
               if(getPreprocessor())
                 {
-                  if(verborrea>4)
+                  if(verbosity>4)
                     std::clog << "Creating elements of entity: '"
 			      << getName() << "'...";   
                   const Element *smll= getPreprocessor()->getElementLoader().get_seed_element();
@@ -298,10 +298,10 @@ bool XC::EntMdlr::create_elements(meshing_dir dm)
                       add_elements(ttzElements);
                       retval= true;
                     }
-                  else if(verborrea>0)
+                  else if(verbosity>0)
                     std::clog << nombre_clase() << "::" << __FUNCTION__
 		              << "; seed element not set." << std::endl;
-                  if(verborrea>4)
+                  if(verbosity>4)
                     std::clog << "created." << std::endl;
                 }
               else
@@ -310,6 +310,11 @@ bool XC::EntMdlr::create_elements(meshing_dir dm)
       }
     else
       std::cerr << "EntMdlr::create_elements; there is no nodes for the elements." << std::endl;
+    const size_t numElements= ttzElements.NumPtrs();
+    if(numElements==0 && verbosity>0)
+      std::clog << nombre_clase() << "::" << __FUNCTION__
+	        << "; warning 0 elements created for line: " << getName()
+	        << std::endl;
 
     return retval;
   }
@@ -329,7 +334,7 @@ XC::Pnt *XC::EntMdlr::create_point(const Pos3d &pos)
 //! @brief Creates points at the positions being passed as parameters.
 void XC::EntMdlr::create_points(const MatrizPos3d &posiciones)
   {
-    if(verborrea>4)
+    if(verbosity>4)
       std::clog << "Creando puntos linea: '" << getName() << "'...";   
     const size_t filas= posiciones.getNumFilas();
     const size_t cols= posiciones.getNumCols();
@@ -347,7 +352,7 @@ void XC::EntMdlr::create_points(const MatrizPos3d &posiciones)
     else
       std::cerr << nombre_clase() << __FUNCTION__
 	        << "; preprocessor needed." << std::endl;
-    if(verborrea>4)
+    if(verbosity>4)
       std::clog << "creados." << std::endl;
   }
 

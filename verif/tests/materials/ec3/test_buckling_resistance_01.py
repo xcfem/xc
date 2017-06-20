@@ -17,7 +17,7 @@ import xc_base
 import geom
 import xc
 from materials.ec3 import EC3_materials
-from materials.structural_shapes.arcelor import perfiles_he_arcelor as he
+from materials.structural_shapes.arcelor import arcelor_he_profiles as he
 
 S355JR= EC3_materials.S355JR
 gammaM0= 1.00

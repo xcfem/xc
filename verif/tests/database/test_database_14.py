@@ -90,7 +90,10 @@ os.system("rm -r -f /tmp/test14.db")
 db= prueba.newDatabase("BerkeleyDB","/tmp/test14.db")
 db.save(100)
 prueba.clearAll()
+prueba.setVerbosityLevel(0) #Dont print warning messages
+                            #about pointers to material.
 db.restore(100)
+prueba.setVerbosityLevel(1) #Print warnings again 
 
 
 # Solution
@@ -122,7 +125,10 @@ result= analisis.analyze(1)
 
 db.save(105)
 prueba.clearAll()
+prueba.setVerbosityLevel(0) #Dont print warning messages
+                            #about pointers to material.
 db.restore(105)
+prueba.setVerbosityLevel(1) #Print warnings again 
 
 
 nodes.calculateNodalReactions(True)

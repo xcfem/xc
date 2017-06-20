@@ -51,7 +51,7 @@ void XC::LoadLoader::addToDomain(const std::string &lp_code)
     if(lp)
       {
         bool result= getDomain()->addLoadPattern(lp);
-        if((!result) && (verborrea>3))
+        if((!result) && (verbosity>3))
           std::cerr << nombre_clase() << "::" << __FUNCTION__
 	            << "; can't add the load pattern: '"
                     << lp_code << "'\n";

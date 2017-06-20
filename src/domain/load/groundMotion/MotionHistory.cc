@@ -120,7 +120,7 @@ XC::TimeSeries *XC::MotionHistory::integrate(TimeSeries *theSeries) const
     // check that an integrator & accel series exist
     if(!theIntegrator)
       {
-        if(verborrea>1)
+        if(verbosity>1)
           std::cerr << "WARNING: MotionHistory::integrate() - no XC::TimeSeriesIntegrator provided - will use Trapezoidal. \n";
         theIntegrator= new XC::TrapezoidalTimeSeriesIntegrator();
         if(!theIntegrator)

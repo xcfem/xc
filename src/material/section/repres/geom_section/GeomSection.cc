@@ -406,7 +406,7 @@ double XC::GeomSection::getCompressedStrutWidth(const Segmento2d &brazo_mecanico
   }
 
 //! @brief Returns the cover for the position being passed as parameter.
-double XC::GeomSection::getRecubrimiento(const Pos2d &p) const
+double XC::GeomSection::getCover(const Pos2d &p) const
   {
     const double retval= -getRegionsContour().DistSigno(p);
     if(retval<0)

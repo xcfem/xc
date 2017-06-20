@@ -129,14 +129,14 @@ class FiberSectionBase: public PrismaticBarCrossSection
     Recta2d getTrazaPlanoCompresion(void) const;
     double getAnchoMecanico(void) const;
     double getCompressedStrutWidth(void) const;
-    double getRecubrimiento(const Pos2d &) const;
+    double getCover(const Pos2d &) const;
     Recta2d getEffectiveConcreteAreaLimitLine(const double &) const;
     double getGrossEffectiveConcreteArea(const double &) const;
     double getNetEffectiveConcreteArea(const double &,const std::string &,const double &factor= 15) const;
     double computeFibersEffectiveConcreteArea(const double &hEfMax,const std::string &,const double &factor= 15) const;
     std::list<Poligono2d> getGrossEffectiveConcreteAreaContour(const double &) const;
-    void calcRecubrimientos(const std::string &) const;
-    void calcSeparaciones(const std::string &) const;
+    void computeCovers(const std::string &) const;
+    void computeSpacement(const std::string &) const;
     int updateCDG(void);
     double getHomogenizedI(const double &E0) const;
     double getSPosHomogeneizada(const double &E0) const;

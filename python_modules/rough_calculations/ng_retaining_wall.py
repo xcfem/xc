@@ -17,12 +17,15 @@ import scipy.interpolate
 import matplotlib
 #matplotlib.use('PS')
 import matplotlib.pyplot as plt
+from materials import typical_materials
+from materials import section_properties
 from materials.sia262 import SIA262_materials
 from model.geometry import retaining_wall_geometry
 from rough_calculations import ng_rebar_def
 from rough_calculations import ng_rc_section
 import os
 from miscUtils import LogMessages as lmsg
+import xc
 
 def filterRepeatedValues(yList,mList,vList):
   sz= len(yList)
@@ -110,27 +113,27 @@ class InternalForces(object):
 
 class RetainingWallReinforcement(dict):
   ''' Simplified reinforcement for a cantilever retaining wall.'''
-  def __init__(self,enrobage=40e-3, steel= SIA262_materials.B500B):
+  def __init__(self,concreteCover=40e-3, steel= SIA262_materials.B500B):
     '''Constructor '''
     super(RetainingWallReinforcement, self).__init__()
-    self.enrobage= enrobage
+    self.concreteCover= concreteCover
     #Materials.
     self.steel= steel
     #Default reinforcement
-    AdefA= ng_rebar_def.RebarFamily(self.steel,8e-3,0.15,enrobage)
+    AdefA= ng_rebar_def.RebarFamily(self.steel,8e-3,0.15,concreteCover)
     Adef= AdefA
     for i in range(1,15):
       self[i]= Adef
     # #Armature de peau semelle
-    # R= self.footingThickness-2*self.enrobage-8e-3
+    # R= self.footingThickness-2*self.concreteCover-8e-3
     # n= math.ceil(R/0.15)+1
     # ecart= R/(n-1)
-    # self[10]= FamNBars(self.steel,n,8e-3,ecart,enrobage)
+    # self[10]= FamNBars(self.steel,n,8e-3,ecart,concreteCover)
     # #Armature couronnement.
-    # R= self.stemTopWidth-2*self.enrobage-8e-3
+    # R= self.stemTopWidth-2*self.concreteCover-8e-3
     # n= math.ceil(R/0.15)+1
     # ecart= R/(n-1)
-    # self[13]= FamNBars(self.steel,n,8e-3,ecart,enrobage)
+    # self[13]= FamNBars(self.steel,n,8e-3,ecart,concreteCover)
     
   def setArmature(self,index,armature):
     '''Assigns armature.'''
@@ -145,42 +148,42 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
   '''Cantilever retaining wall.'''
   b= 1.0
 
-  def __init__(self,name= 'prb',enrobage=40e-3,stemBottomWidth=0.25,stemTopWidth=0.25,footingThickness= 0.25):
+  def __init__(self,name= 'prb',concreteCover=40e-3,stemBottomWidth=0.25,stemTopWidth=0.25,footingThickness= 0.25):
     '''Constructor '''
     super(RetainingWall,self).__init__(name,stemBottomWidth,stemTopWidth,footingThickness)
     #Materials.
-    self.beton= SIA262_materials.c25_30
-    self.reinforcement= RetainingWallReinforcement(enrobage)
+    self.concrete= SIA262_materials.c25_30
+    self.reinforcement= RetainingWallReinforcement(concreteCover)
     
   def getBasicAnchorageLength(self,index):
     '''Returns basic anchorage length for the reinforcement at "index".''' 
-    return self.reinforcement.getArmature(index).getBasicAnchorageLength(self.beton)
+    return self.reinforcement.getArmature(index).getBasicAnchorageLength(self.concrete)
 
   def getSection1(self):
     '''Returns RC section for armature in position 1.'''
-    return ng_rc_section.RCSection(self.reinforcement[1],self.beton,self.b,self.stemBottomWidth)
+    return ng_rc_section.RCSection(self.reinforcement[1],self.concrete,self.b,self.stemBottomWidth)
   def getSection2(self,y):
     '''Returns RC section for armature in position 2.'''
     c= self.getDepth(y)
-    return ng_rc_section.RCSection(self.reinforcement[2],self.beton,self.b,c)
+    return ng_rc_section.RCSection(self.reinforcement[2],self.concrete,self.b,c)
   def getSection3(self):
     '''Returns RC section for armature in position 3.'''
-    return ng_rc_section.RCSection(self.reinforcement[3],self.beton,self.b,self.footingThickness)
+    return ng_rc_section.RCSection(self.reinforcement[3],self.concrete,self.b,self.footingThickness)
   def getSection4(self):
     '''Returns RC section for armature in position 4.'''
-    return ng_rc_section.RCSection(self.reinforcement[4],self.beton,self.b,self.stemBottomWidth)
+    return ng_rc_section.RCSection(self.reinforcement[4],self.concrete,self.b,self.stemBottomWidth)
   def getSection6(self):
     '''Returns RC section for armature in position 6.'''
-    return ng_rc_section.RCSection(self.reinforcement[6],self.beton,self.b,self.stemTopWidth)
+    return ng_rc_section.RCSection(self.reinforcement[6],self.concrete,self.b,self.stemTopWidth)
   def getSection7(self):
     '''Returns RC section for armature in position 7.'''
-    return ng_rc_section.RCSection(self.reinforcement[7],self.beton,self.b,self.footingThickness)
+    return ng_rc_section.RCSection(self.reinforcement[7],self.concrete,self.b,self.footingThickness)
   def getSection8(self):
     '''Returns RC section for armature in position 8.'''
-    return ng_rc_section.RCSection(self.reinforcement[8],self.beton,self.b,self.footingThickness)
+    return ng_rc_section.RCSection(self.reinforcement[8],self.concrete,self.b,self.footingThickness)
   def getSection11(self):
     '''Returns RC section for armature in position 11.'''
-    return ng_rc_section.RCSection(self.reinforcement[11],self.beton,self.b,(self.stemTopWidth+self.stemBottomWidth)/2.0)
+    return ng_rc_section.RCSection(self.reinforcement[11],self.concrete,self.b,(self.stemTopWidth+self.stemBottomWidth)/2.0)
 
   def setULSInternalForcesEnvelope(self,wallInternalForces):
     '''Assigns the ultimate limit state infernal forces envelope for the stem.'''
@@ -226,9 +229,9 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
     outputFile.write("\\hline\n")
     outputFile.write("\\begin{tabular}{llll}\n")
     outputFile.write("\\multicolumn{3}{c}{\\textsc{Matériels}}\\\\\n")
-    outputFile.write("  Béton: " + self.beton.materialName +" & ")
+    outputFile.write("  Béton: " + self.concrete.materialName +" & ")
     outputFile.write("  Acier: " + self.reinforcement.steel.materialName +" & ")
-    outputFile.write("  Enrobage: "+ fmt.Diam.format(self.reinforcement.enrobage*1e3)+ " mm\\\\\n")
+    outputFile.write("  ConcreteCover: "+ fmt.Diam.format(self.reinforcement.concreteCover*1e3)+ " mm\\\\\n")
     outputFile.write("\\end{tabular} \\\\\n")
     outputFile.write("\\hline\n")
     outputFile.write("\\end{tabular}\n")
@@ -314,7 +317,7 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
     #Armature 10. armature de peau semelle.
     outputFile.write("\\textbf{Armature 10 (armature de peau semelle):}\\\\\n")
     outputFile.write("  --\\\\\n")
-    #writeRebars(outputFile,self.beton,self.reinforcement[10],1e-5)
+    #writeRebars(outputFile,self.concrete,self.reinforcement[10],1e-5)
 
     #Coupe 11. armature long. extérieure voile.
     outputFile.write("\\textbf{Armature 11 (armature long. extérieure voile):}\\\\\n")
@@ -327,7 +330,7 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
     #Armature 13. armature long. couronnement.
     outputFile.write("\\textbf{Armature 13 (armature long. couronnement):}\\\\\n")
     outputFile.write("  --\\\\\n")
-    #writeRebars(outputFile,self.beton,self.reinforcement[13],1e-5)
+    #writeRebars(outputFile,self.concrete,self.reinforcement[13],1e-5)
     outputFile.write("\\hline\n")
     outputFile.write("\\end{supertabular}\n")
     outputFile.write("\\end{center}\n")
@@ -364,3 +367,73 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
     outputFile.write("\\end{center}\n")
     outputFile.write("\\caption{Schéma armatures mur "+ self.name +"} \\label{fg_"+self.name+"}\n")
     outputFile.write("\\end{figure}\n")
+    
+  def genMesh(self,nodes,springMaterials):
+    self.defineWireframeModel(nodes)
+    nodes.newSeedNode()
+    preprocessor= self.modelSpace.preprocessor    
+    trfs= preprocessor.getTransfCooLoader
+    transformationName= self.name+'LinearTrf'
+    self.trf= trfs.newLinearCrdTransf2d(transformationName)
+    wallMatData= typical_materials.MaterialData(name=self.name+'Concrete',E=self.concrete.getEcm(),nu=0.2,rho=2500)
+    foundationSection= section_properties.RectangularSection(self.name+"FoundationSection",self.b,self.footingThickness)
+    foundationMaterial= foundationSection.defSeccShElastica2d(preprocessor,wallMatData) #Foundation elements material.
+    elementSize= 0.2
+    seedElemLoader= preprocessor.getElementLoader.seedElemLoader
+    seedElemLoader.defaultMaterial= foundationSection.sectionName
+    seedElemLoader.defaultTransformation= transformationName
+    seedElem= seedElemLoader.newElement("elastic_beam_2d",xc.ID([0,0]))
+    self.wallSet= preprocessor.getSets.defSet("wallSet")
+    self.foundationSet= preprocessor.getSets.defSet("foundationSet")
+    for lineName in ['heel','toe']:
+      l= self.wireframeModelLines[lineName]
+      l.setElemSize(elementSize)
+      l.genMesh(xc.meshDir.I)
+      for e in l.getElements():
+        self.foundationSet.getElements.append(e)
+        self.wallSet.getElements.append(e)
+    self.foundationSet.fillDownwards()
+    
+    stemSection= section_properties.RectangularSection(self.name+"StemSection",self.b,(self.stemTopWidth+self.stemBottomWidth)/2.0)
+    stemMaterial= stemSection.defSeccShElastica2d(preprocessor,wallMatData) #Stem elements material.
+    self.stemSet= preprocessor.getSets.defSet("stemSet")
+    for lineName in ['stem']:
+      l= self.wireframeModelLines[lineName]
+      l.setElemSize(elementSize)
+      seedElemLoader.defaultMaterial= stemSection.sectionName
+      l.genMesh(xc.meshDir.I)
+      for e in l.getElements():
+        y= -e.getPosCentroid(True).y
+        h= self.getDepth(y)
+        stemSection.h= h
+        e.sectionProperties= stemSection.getCrossSectionProperties2D(wallMatData)
+        self.stemSet.getElements.append(e)
+        self.wallSet.getElements.append(e)
+    # Springs on nodes.
+    self.foundationSet.computeTributaryLengths(False)
+    self.fixedNodes= []
+    elasticBearingNodes= self.foundationSet.getNodes
+    kX= springMaterials[0] #Horizontal
+    kSx= kX.E
+    kY= springMaterials[1] #Vertical
+    kSy= kY.E
+    lngTot= 0.0
+    for n in elasticBearingNodes:
+      lT= n.getTributaryLength()
+      lngTot+= lT
+      #print "tag= ", n.tag, " lT= ", lT
+      #print "before k= ", kY.E
+      kX.E= kSx*lT
+      kY.E= kSy*lT
+      idNodoFijo, idElem= self.modelSpace.setBearing(n.tag,["kX","kY"])
+      self.fixedNodes.append(nodes.getNode(idNodoFijo))
+    self.stemSet.fillDownwards()
+    self.wallSet.fillDownwards()
+
+  def createSelfWeightLoads(self,rho= 2500, grav= 9.81):
+    '''Create the loads of the concrete weight.'''
+    for e in self.wallSet.getElements:
+      selfWeightLoad= grav*2500*e.sectionProperties.A
+      selfWeightLoadVector= xc.Vector([0.0, -selfWeightLoad])
+      e.vector2dUniformLoadGlobal(selfWeightLoadVector)
+    

@@ -157,8 +157,8 @@ class FiberDeque : public EntCmd, public std::deque<Fiber *>
     const std::list<Poligono2d> &getFiberEffectiveConcretAreaContour(const size_t &i) const;
     double getFiberEffectiveConcreteArea(const size_t &i) const;
     double getFibersEffectiveConcreteArea(void) const;
-    void calcRecubrimientos(const GeomSection &) const;
-    void calcSeparaciones(void) const;
+    void computeCovers(const GeomSection &) const;
+    void computeSpacement(void) const;
     const double &getFiberCover(const size_t &i) const;
     const double &getFiberSpacing(const size_t &i) const;
     double getEquivalentDiameterOfFiber(const size_t &i) const;

@@ -74,7 +74,9 @@ divsOk= surfaces.conciliaNDivs()
 
 
 setTotal= preprocessor.getSets.getSet("total")
+prueba.setVerbosityLevel(0) #Dont print warning messages about element seed.
 setTotal.genMesh(xc.meshDir.I)
+prueba.setVerbosityLevel(1) #Print warnings again 
 
 
 numNodes= setTotal.getNodes.size

@@ -56,7 +56,7 @@ class_<XC::FiberSectionBase, bases<XC::PrismaticBarCrossSection>, boost::noncopy
   .def("getTrazaPlanoCompresion",&XC::FiberSectionBase::getTrazaPlanoCompresion)
   .def("getAnchoMecanico",&XC::FiberSectionBase::getAnchoMecanico)
   .def("getCompressedStrutWidth",&XC::FiberSectionBase::getCompressedStrutWidth)
-  .def("getRecubrimiento",&XC::FiberSectionBase::getRecubrimiento)
+  .def("getCover",&XC::FiberSectionBase::getCover)
   .def("getEffectiveConcreteAreaLimitLine",&XC::FiberSectionBase::getEffectiveConcreteAreaLimitLine)
   .def("getGrossEffectiveConcreteArea",&XC::FiberSectionBase::getGrossEffectiveConcreteArea)
   .def("getNetEffectiveConcreteArea",&XC::FiberSectionBase::getNetEffectiveConcreteArea)
@@ -64,8 +64,8 @@ class_<XC::FiberSectionBase, bases<XC::PrismaticBarCrossSection>, boost::noncopy
   .def("getGrossEffectiveConcreteAreaContour",&XC::FiberSectionBase::getGrossEffectiveConcreteAreaContour)
   .def("getHomogenizedI",&XC::FiberSectionBase::getHomogenizedI,"Moment of inertia relative to bending axis.")
   .def("getSPosHomogeneizada",&XC::FiberSectionBase::getSPosHomogeneizada,"Static moment relative to bending axis of area that rests over this axis.")
-  .def("calcRecubrimientos",&XC::FiberSectionBase::calcRecubrimientos)
-  .def("calcSeparaciones",&XC::FiberSectionBase::calcSeparaciones)
+  .def("computeCovers",&XC::FiberSectionBase::computeCovers)
+  .def("computeSpacement",&XC::FiberSectionBase::computeSpacement)
   .def("getStrClaseEsfuerzo",&XC::FiberSectionBase::getStrClaseEsfuerzo)
   ;
 

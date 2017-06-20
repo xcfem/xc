@@ -240,55 +240,55 @@ void XC::Set::create_copy(const std::string &nombre,const Vector3d &v= Vector3d(
 //! @brief Create nodes and, where appropriate, elements on set points.
 void XC::Set::point_meshing(meshing_dir dm)
   {
-    if(verborrea>2)
+    if(verbosity>2)
       std::clog << "Meshing points...";
     for(lst_ptr_points::iterator i= puntos.begin();i!=puntos.end();i++)
       (*i)->genMesh(dm);
-    if(verborrea>2)
+    if(verbosity>2)
       std::clog << "done." << std::endl;
   }
 
 //! @brief Create nodes and, where appropriate, elements on set lines.
 void XC::Set::line_meshing(meshing_dir dm)
   {
-    if(verborrea>2)
+    if(verbosity>2)
       std::clog << "Meshing lines...";
     for(lst_ptr_lineas::iterator i= lineas.begin();i!=lineas.end();i++)
       (*i)->genMesh(dm);
-    if(verborrea>2)
+    if(verbosity>2)
       std::clog << "done." << std::endl;
   }
 
 //! @brief Create nodes and, where appropriate, elements on surfaces.
 void XC::Set::surface_meshing(meshing_dir dm)
   {
-    if(verborrea>2)
+    if(verbosity>2)
       std::clog << "Meshing surfaces...";
     for(lst_surface_ptrs::iterator i= surfaces.begin();i!=surfaces.end();i++)
       (*i)->genMesh(dm);
-    if(verborrea>2)
+    if(verbosity>2)
       std::clog << "done." << std::endl;
   }
 
 //! @brief Create nodes and, where appropriate, elements on set bodies.
 void XC::Set::body_meshing(meshing_dir dm)
   {
-    if(verborrea>2)
+    if(verbosity>2)
       std::clog << "Meshing bodies...";
     for(lst_ptr_cuerpos::iterator i= cuerpos.begin();i!=cuerpos.end();i++)
       (*i)->genMesh(dm);
-    if(verborrea>2)
+    if(verbosity>2)
       std::clog << "done." << std::endl;
   }
 
 //! @brief Creates nodes and, eventually, elements on the points of the set.
 void XC::Set::uniform_grid_meshing(meshing_dir dm)
   {
-    if(verborrea>2)
+    if(verbosity>2)
       std::clog << "Meshing uniform grids...";
     for(lst_ptr_uniform_grids::iterator i= uniform_grids.begin();i!=uniform_grids.end();i++)
       (*i)->genMesh(dm);
-    if(verborrea>2)
+    if(verbosity>2)
       std::clog << "done." << std::endl;
   }
 
@@ -301,7 +301,7 @@ void XC::Set::genMesh(meshing_dir dm)
     assert(mdl);
     mdl->get_sets().abre_set(getName()); //To let nodes and elements enter this set.
 
-    if(verborrea>1)
+    if(verbosity>1)
       std::clog << "Meshing set: " << getName() << " ...";
 
     //body_meshing(dm);
@@ -312,7 +312,7 @@ void XC::Set::genMesh(meshing_dir dm)
 
     mdl->get_sets().cierra_set(getName()); //Cerramos.
 
-    if(verborrea>1)
+    if(verbosity>1)
       std::clog << "done." << std::endl;
   }
 

@@ -110,7 +110,7 @@ int XC::BandArpackppSolver::solve(int nModes)
             ARbdNonSymMatrix<double, double> am=  creaARbdNonSymMatrix(theSOE->M,vm);
             ARluNonSymGenEig<double> dprob= getEigenProblem(numModes, ak, am,theSOE->shift);
 
-            if(verborrea>5)
+            if(verbosity>5)
               dprob.Trace();
 
             // Finding eigenvalues and eigenvectors.

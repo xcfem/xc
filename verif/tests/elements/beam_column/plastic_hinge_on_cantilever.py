@@ -13,7 +13,7 @@ import xc_base
 import geom
 import xc
 
-from materials.structural_shapes.arcelor import perfiles_ipe_arcelor as ipe
+from materials.structural_shapes.arcelor import arcelor_ipe_profiles as ipe
 from materials.ec3 import EC3_materials
 from model import predefined_spaces
 from solution import predefined_solutions

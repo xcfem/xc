@@ -7,15 +7,24 @@ import geom
 from postprocess import control_vars as cv
 from materials import limit_state_checking_base as lsc
 
-def VuNoShearRebars(beton,acier,Nd,Md,AsTrac,b,d):
-  # Section shear capacity without shear reinforcement.  
-  Mu= ng_simple_bending_reinforcement.Mu(AsTrac,beton.fcd(),acier.fyd(),b,d) 
-  return VuNoShearRebarsSIA262(beton,acier,Nd,Md,Mu,b,d)
+def VuNoShearRebars(concrete,steel,Nd,Md,AsTrac,b,d):
+  '''Section shear capacity without shear reinforcement.
 
-def VuNoShearRebarsSIA262(beton,acier,Nd,Md,Mu,b,d):
-  # Section shear capacity without shear reinforcement. 
-  # Simplified method according to document: «Dalles sans étriers soumises
-  # à l'effort tranchant» par Aurelio Muttoni (file: beton-VD1V2.pdf)
+     :param concrete: concrete material.
+     :param steel: steel material of the tensioned reinforcement.
+     :param Nd: axial internal force on the section.
+     :param Md: bending moment on the section.
+     :param AsTrac: area of tensioned reinforcement.
+     :param b: section width.
+     :param d: section effective depth.
+  '''
+  Mu= ng_simple_bending_reinforcement.Mu(AsTrac,concrete.fcd(),steel.fyd(),b,d) 
+  return VuNoShearRebarsSIA262(concrete,Nd,Md,Mu,b,d)
+
+def VuNoShearRebarsSIA262(concrete,Nd,Md,Mu,b,d):
+  '''Section shear capacity without shear reinforcement. 
+     Simplified method according to document: «Dalles sans étriers soumises
+     à l'effort tranchant» par Aurelio Muttoni (file: beton-VD1V2.pdf).'''
   h=d/0.9   #mejorar
   if Nd<=0:
     mDd=-Nd*(h/2-d/3)
@@ -23,19 +32,19 @@ def VuNoShearRebarsSIA262(beton,acier,Nd,Md,Mu,b,d):
     mDd=-Nd*(h/2-(h-d))
   kv= 2.2*(Md-mDd)/(Mu-mDd)
   kd= 1/(1+kv*d)
-  taucd= beton.taucd()
+  taucd= concrete.taucd()
   return kd*taucd*b*d
 
-def VuShearRebars90SIA262(Asw,s,acier,z,alpha=math.radians(30)):
-  # Shear capacity of shear reinforcement.  
+def VuShearRebars90SIA262(Asw,s,steel,z,alpha=math.radians(30)):
+  '''Shear capacity of shear reinforcement.'''  
   cot_alpha= 1.0/math.tan(alpha)
-  retval= Asw/s*z*acier.fyd()*cot_alpha
+  retval= Asw/s*z*steel.fyd()*cot_alpha
   return retval
 
-def VuWithShearRebarsSIA262(beton,acier,Nd,Md,Mu,b,d,Asw,s,z,alpha=math.radians(30)):
-  # Section shear capacity without shear reinforcement.  
-  Vcu= VuNoShearRebarsSIA262(beton,acier,Nd,Md,Mu,b,d)
-  Vsu= VuShearRebars90SIA262(Asw,s,acier,z,alpha)
+def VuWithShearRebarsSIA262(concrete,steel,Nd,Md,Mu,b,d,Asw,s,z,alpha=math.radians(30)):
+  '''Section shear capacity with shear reinforcement.'''  
+  Vcu= VuNoShearRebarsSIA262(concrete,Nd,Md,Mu,b,d)
+  Vsu= VuShearRebars90SIA262(Asw,s,steel,z,alpha)
   return Vcu+Vsu
 
 class ShearController(lsc.LimitStateControllerBase):
@@ -52,15 +61,15 @@ class ShearController(lsc.LimitStateControllerBase):
     self.brazoMecanico= 0.9*self.depthUtil #Mejorar
     self.AsTrsv= rcSection.shReinfZ.getAs()
     self.s= rcSection.shReinfZ.shReinfSpacing
-    self.Vcu= 0.0 # Contribución del hormigón a la resistencia al esfuerzo cortante.
-    self.Vsu= 0.0 # Contribución de las aramaduras a cortante a la resistencia al esfuerzo cortante.
+    self.Vcu= 0.0 # Concrete contribution to the shear strength.
+    self.Vsu= 0.0 # Rebar contribution to the shear strength.
 
   def calcVcu(self, Nd, Md, Mu):
-    ''' Calcula el cortante último de la sección sin reinforcement de cortante.'''
+    ''' Computes the shear strength of the section without shear reinforcement.'''
     self.Vcu= VuNoShearRebarsSIA262(self.concrete,self.acero,Nd,abs(Md),abs(Mu),self.width,self.depthUtil)
   def calcVsu(self):
-    ''' Calcula el cortante último de la sección sin reinforcement de cortante pasamos
-        s= 1.0 porque AsTrsv ya incorpora todas las ramas en un metro.'''
+    ''' Computes the shear strength of the section without shear reinforcement.
+        s= 1.0 because AsTrsv ya incorpora todas las ramas en un metro.'''
     self.Vsu= VuShearRebars90SIA262(self.AsTrsv,1.0,self.acero,self.brazoMecanico)
 
   def calcVu(self, Nd, Md, Mu, Vd):

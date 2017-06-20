@@ -25,6 +25,7 @@
 
 class_<XC::ProtoBeam2d, bases<XC::Element1D>, boost::noncopyable >("ProtoBeam2d", no_init)
   .add_property("sectionProperties", &XC::ProtoBeam2d::getSectionProperties, &XC::ProtoBeam2d::setSectionProperties)
+  .def("setSectionProperties",&XC::ProtoBeam2d::setSectionProperties,"Set cross section properties.")
   .def("getVDirStrongAxisLocalCoord",&XC::ProtoBeam2d::getVDirStrongAxisLocalCoord,"Returns the direction vector of element strong axis expressed in the local coordinate system.")
   .def("getVDirWeakAxisLocalCoord",&XC::ProtoBeam2d::getVDirWeakAxisLocalCoord,"Returns the direction vector of element weak axis expressed in the local coordinate system.")
 .def("getStrongAxisAngle",&XC::ProtoBeam2d::getStrongAxisAngle,"Returns the angle between element strong axis and local XZ plane.")
@@ -33,6 +34,7 @@ class_<XC::ProtoBeam2d, bases<XC::Element1D>, boost::noncopyable >("ProtoBeam2d"
 
 class_<XC::ProtoBeam3d, bases<XC::Element1D>, boost::noncopyable >("ProtoBeam3d", no_init)
   .add_property("sectionProperties", &XC::ProtoBeam3d::getSectionProperties, &XC::ProtoBeam3d::setSectionProperties)
+  .def("setSectionProperties",&XC::ProtoBeam3d::setSectionProperties,"Set cross section properties.")
   .def("getVDirStrongAxisLocalCoord",&XC::ProtoBeam3d::getVDirStrongAxisLocalCoord,"Returns the direction vector of element strong axis expressed in the local coordinate system.")
   .def("getVDirWeakAxisLocalCoord",&XC::ProtoBeam3d::getVDirWeakAxisLocalCoord,"Returns the direction vector of element weak axis expressed in the local coordinate system.")
   .def("getStrongAxisAngle",&XC::ProtoBeam3d::getStrongAxisAngle,"Returns the angle between element strong axis and local XZ plane.")

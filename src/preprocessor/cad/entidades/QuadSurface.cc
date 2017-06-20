@@ -445,7 +445,7 @@ void XC::QuadSurface::create_nodes(void)
             create_node(pos_nodes(j,k),1,j,k);
       }
     else
-      if(verborrea>2)
+      if(verbosity>2)
         std::clog << nombre_clase() << "::" << __FUNCTION__
 	          << "; nodes of entity: '" << getName()
 		  << "' already exist." << std::endl;      
@@ -454,16 +454,16 @@ void XC::QuadSurface::create_nodes(void)
 //! @brief Triggers mesh creation.
 void XC::QuadSurface::genMesh(meshing_dir dm)
   {
-    if(verborrea>3)
+    if(verbosity>3)
       std::clog << "Meshing quadrilateral surface...(" << getName() << ")...";
     create_nodes();
     if(ttzElements.Null())
       create_elements(dm);
     else
-      if(verborrea>2)
+      if(verbosity>2)
         std::clog << nombre_clase() << "::" << __FUNCTION__
 	          << "; elements for surface: '" << getName()
 		  << "' already exist." << std::endl;      
-    if(verborrea>3)
+    if(verbosity>3)
       std::clog << "done." << std::endl;
   }

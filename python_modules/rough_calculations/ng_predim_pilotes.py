@@ -53,17 +53,17 @@ else:
   Asmmec=(Apil*fck/1.5/fyk*1.15*10000)
   print "$$Max.\ mec.\ A_s \\le\\cfrac{ 100\\% A_c f_{cd}}{f_{yd}}=", "%5.2f".format(Asmmec),"\ cm^2 $$"
 
-print "\\item{Recomendaciones de armado} \\\\"
+print "\\item{Reinforcement tips} \\\\"
 print "\\begin{tabular}{lr}"
-print "Diámetro mínimo de la reinforcement longitudinal & $\\Phi$12 mm     \\\\"
-print "Número mínimo de barras & 6   \\\\"
-print "Separación mínima entre redondos arm. long. & 20 cm  \\\\"
-print "Diámetro mínimo de la reinforcement transversal & $\\Phi_{transv.min} = 0,25\\Phi_{long}$   \\\\"
-print "Separación entre cercos & s<15$\\Phi_{long}$  \\\\"
+print "Minimal diameter for the longitudinal reinforcement & $\\Phi$12 mm     \\\\"
+print "Minimal number of rebars & 6   \\\\"
+print "Minimal spacement between rebars in longitudinal reinforcement. & 20 cm  \\\\"
+print "Minimal diameter of shear reinforcement rebars & $\\Phi_{transv.min} = 0,25\\Phi_{long}$   \\\\"
+print "Stirrups spacement & s<15$\\Phi_{long}$  \\\\"
 if(prefabricado=="si"):
-  print "Recubrimiento de la reinforcement & 4-5 cm  \\\\"
+  print "Cover of the reinforcement & 4-5 cm  \\\\"
 else:
-  print "Recubrimiento de la reinforcement & 7 cm  \\\\"
+  print "Cover of the reinforcement & 7 cm  \\\\"
 print "   \\\\"
 print "\\end{tabular}"
 print "\\end{itemize}"

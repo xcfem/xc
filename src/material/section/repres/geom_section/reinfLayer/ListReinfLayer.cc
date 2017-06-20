@@ -132,15 +132,15 @@ const XC::GeomSection *XC::ListReinfLayer::getGeomSection(void) const
     return retval;
   }
 
-//! @brief Returns the minimum value del recubrimiento de las barras.
-double XC::ListReinfLayer::getRecubrimiento(void) const
+//! @brief Returns the minimum value of the bars concrete cover.
+double XC::ListReinfLayer::getCover(void) const
   {
     double retval= 0;
     const_iterator i= begin();
-    retval= (*i)->getRecubrimiento();
+    retval= (*i)->getCover();
     i++;
     for(const_iterator i=begin();i!=end();i++)
-      retval= std::min(retval,(*i)->getRecubrimiento());
+      retval= std::min(retval,(*i)->getCover());
     return retval;
   }
 

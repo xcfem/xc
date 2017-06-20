@@ -789,7 +789,7 @@ int XC::ForceBeamColumn3d::update(void)
         std::cerr << "element forces & deformations for element: ";
         std::cerr << this->getTag() << " (dW: << " << dW << ", dW0: " << dW0 << ")\n";
 
-// 	if(verborrea>3)
+// 	if(verbosity>3)
 //           {
 //             std::cerr << "Section Tangent Condition Numbers:\n";
 //             for(size_t i=0; i<numSections; i++)

@@ -43,8 +43,8 @@ def calcParamsSeccionHuecaEficaz(geomSeccion, h0, c):
   gmSectionName: Identificador de la definición geométrica de la sección.
   nmbParamsTorsión: Identificador del registro que contiene los parámetros de cálculo
                 de la resistencia a torsión.
-  h0: Espesor real de la pared.
-  c: Recubrimiento de las reinforcement longitudinales.
+  h0: Real thickness of the section wall.
+  c: Cover of the longitudinal reinforcement.
   '''
   retval= TorsionParameters()
   retval.h0= h0

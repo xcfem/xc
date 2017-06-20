@@ -293,7 +293,7 @@ So:
 
 '''
 
-from materials.structural_shapes.arcelor import perfiles_ipe_arcelor as ipe
+from materials.structural_shapes.arcelor import arcelor_ipe_profiles as ipe
 
 class IPEProfile(EC3Profile,ipe.IPEProfile):
   """IPE profile with Eurocode 3 verification routines."""
@@ -331,7 +331,7 @@ So:
 
 '''
 
-from materials.structural_shapes.arcelor import perfiles_he_arcelor as he
+from materials.structural_shapes.arcelor import arcelor_he_profiles as he
 
 class HEProfile(EC3Profile,he.HEProfile):
   """HE profile with Eurocode 3 verification routines."""

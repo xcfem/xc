@@ -28,8 +28,8 @@ class CrackControlSIA262(lscb.CrackControlBaseParameters):
     self.claseEsfuerzo= scc.getStrClaseEsfuerzo(0.0)
     self.numBarrasTracc= rcSets.getNumTensionRebars()
     if(self.numBarrasTracc>0):
-      scc.calcRecubrimientos(self.tensionedRebarsFiberSetName)
-      scc.calcSeparaciones(self.tensionedRebarsFiberSetName)
+      scc.computeCovers(self.tensionedRebarsFiberSetName)
+      scc.computeSpacement(self.tensionedRebarsFiberSetName)
       self.eps1= concrFibers.getStrainMax()
       self.eps2= max(concrFibers.getStrainMin(),0.0)
       self.rebarsSpacingTracc= reinforcementTraccion.getAverageDistanceBetweenFibers()

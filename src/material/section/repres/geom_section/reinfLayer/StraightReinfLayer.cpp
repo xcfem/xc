@@ -170,7 +170,8 @@ Segmento2d XC::StraightReinfLayer::getSegmento(void) const
 double XC::StraightReinfLayer::getLongitud(void) const
   { return getSegmento().Longitud(); }
 
-double XC::StraightReinfLayer::getSeparacion(void) const
+//! @brier Returns spacement between rebars.
+double XC::StraightReinfLayer::getSpacement(void) const
   { return getLongitud()/getNumReinfBars(); }
 
 XC::ReinfLayer *XC::StraightReinfLayer::getCopy (void) const

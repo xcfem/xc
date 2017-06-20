@@ -1,21 +1,21 @@
 # -*- coding: utf-8 -*-
 import math
 
-def defParamsPerfilMetalicoRegElasticoElem(e,perfil):
-  e.setProp("nmbSecc",perfil.sectionName)
-  e.setProp("Area",perfil.A())
-  e.setProp("fyd",perfil.steelType.fyd())
-  e.setProp("fydV",perfil.steelType.fydV())
+def defSteelProfileElasticRangeElementParameters(e,profile):
+  e.setProp("nmbSecc",profile.sectionName)
+  e.setProp("Area",profile.A())
+  e.setProp("fyd",profile.steelType.fyd())
+  e.setProp("fydV",profile.steelType.fydV())
 
-  e.setProp("Wyel",perfil.get('Wyel'))
-  e.setProp("Wzel",perfil.get('Wzel'))
-  e.setProp("AreaQz",perfil.get('AreaQz'))
-  e.setProp("AreaQy",perfil.get('AreaQy'))
+  e.setProp("Wyel",profile.get('Wyel'))
+  e.setProp("Wzel",profile.get('Wzel'))
+  e.setProp("AreaQz",profile.get('AreaQz'))
+  e.setProp("AreaQy",profile.get('AreaQy'))
 
 
-def defParamsPerfilMetalicoRegElasticoSet(elems,perfil):
+def defSteelProfileElasticRangeParametersForSet(elems,profile):
   for e in elems:
-    defParamsPerfilMetalicoRegElasticoElem(e,perfil)
+    defSteelProfileElasticRangeElementParameters(e,profile)
 
 
 

@@ -55,7 +55,7 @@ class_<XC::GeomSection, XC::GeomSection *, bases<XC::SectionMassProperties>, boo
   .add_property("getReinfLayers",make_function(getReinfLayerContainer,return_internal_reference<>()))
   .def("getRegionsContour",&XC::GeomSection::getRegionsContour)
   .def("getCompressedZoneContour",&XC::GeomSection::getCompressedZoneContour)
-  .def("getRecubrimiento",&XC::GeomSection::getRecubrimiento)
+.def("getCover",&XC::GeomSection::getCover,"return the concrete cover of the reinforcement.")
   .add_property("tagSpot",&XC::GeomSection::getTagSpot,&XC::GeomSection::setTagSpot)
   .def("newSpot",make_function(&XC::GeomSection::newSpot,return_internal_reference<>()))
   .def("distSpots",&XC::GeomSection::DistSpots)

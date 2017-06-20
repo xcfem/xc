@@ -8,7 +8,7 @@ import xc
 from solution import predefined_solutions
 from model import predefined_spaces
 from materials import typical_materials
-from materials.structural_shapes.arcelor import perfiles_he_arcelor as HE_profiles
+from materials.structural_shapes.arcelor import arcelor_he_profiles as HE_profiles
 from materials import structural_steel
 from materials.ec3 import EC3_materials
 from postprocess import def_params_control as dp
@@ -27,11 +27,11 @@ L= 10 # Bar length (m)
 # Load
 F= 50e3 # Load magnitude (kN)
 
-# Perfil que forma la ménsula
+# Steel shape for the cantilever.
 S275JR= EC3_materials.S275JR
 gammaM0= 1.05
 S275JR.gammaM= gammaM0 
-HE400B= structural_steel.SteelProfile(S275JR,"HE_400_B",HE_profiles.perfilesHE)
+HE400B= structural_steel.SteelProfile(S275JR,"HE_400_B",HE_profiles.HEprofiles)
 matHE400B=typical_materials.MaterialData(name='S275JR',E=S275JR.E,nu=S275JR.nu,rho=7850)
 
 # Problem type
@@ -55,7 +55,7 @@ elementos.defaultTransformation= "lin"
 elementos.defaultMaterial= HE400B.sectionName
 elem= elementos.newElement("elastic_beam_3d",xc.ID([1,2]))
 elem.rho= HE400B.get('P')
-dp.defParamsPerfilMetalicoRegElasticoElem(elem,HE400B)
+dp.defSteelProfileElasticRangeElementParameters(elem,HE400B)
 vc.defVarsControlTensRegElastico3d([elem])
 
 recorder= prueba.getDomain.newRecorder("element_prop_recorder",None);

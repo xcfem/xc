@@ -5,7 +5,7 @@ import xc
 from solution import predefined_solutions
 from model import predefined_spaces
 from materials import typical_materials
-from materials.structural_shapes.aisc import perfiles_w_aisc_metric
+from materials.structural_shapes.aisc import aisc_metric_w_profiles
 from sympy.physics import units
 
 __author__= "Luis C. Pérez Tato (LCPT)"
@@ -32,7 +32,7 @@ ratio15= 10
 ratio16= 10
 ratio17= 10
 
-wSection= perfiles_w_aisc_metric.perfilesWAISC['W8X21']
+wSection= aisc_metric_w_profiles.WAISCprofiles['W8X21']
 meter= units.m
 meter2= units.m*units.m
 meter3= meter2*units.m

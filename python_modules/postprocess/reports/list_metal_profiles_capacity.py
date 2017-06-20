@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-# Imprime el encabezamiento para el listado de tensiones normales.
-def printCabeceraListadoTNPerfilMetalico(archivo, tit):
+
+def printTNListingHeaderSteelProfile(archivo, tit):
+  '''Open the normal stresses listing.'''
   archivo.write("\\begin{center}\n")
   archivo.write("\\begin{footnotesize}\n")
   archivo.write("\\tablefirsthead{%\n")
@@ -27,19 +28,19 @@ def printCabeceraListadoTNPerfilMetalico(archivo, tit):
   archivo.write("\\begin{supertabular}{|l|r|r|r|r|r|}\n")
 
 
-# Imprime el cierre del listado de de tensiones normales.
-def printCierreListadoTNPerfilMetalico(archivo):
+def printTNListingEndSteelProfile(archivo):
+  '''Closes the listing.'''
   archivo.write("\\end{supertabular}\n")
   archivo.write("\\end{footnotesize}\n")
   archivo.write("\\end{center}\n")
 
 
-def listaResistenciaPerfilesMetalicosTNRegElastico(setName, fName, titulo):
+def listSteelProfileTNStrengthElasticRange(setName, fName, titulo):
   '''
-  Imprime los resultados de la comprobación de tensiones normales en régimen
-  elástico de un conjunto de elementos cuyo material es un perfil
-  metálico.'''
-  printCabeceraListadoTNPerfilMetalico(fName,titulo) 
+  Print the results of normal stresses checking in an element set
+  whose material is a steel profile.
+  '''
+  printTNListingHeaderSteelProfile(fName,titulo) 
   st= preprocessor.getSetLoader.getSet(setName)
   elems= st.getElements()
   tagFCTNCPCP= 0
@@ -56,11 +57,12 @@ def listaResistenciaPerfilesMetalicosTNRegElastico(setName, fName, titulo):
   fName.write("\\hline\n")
   fName.write(tagFCTNCPCP," & ",HIPCPCPTN," &  &  &  & ",'{:3.2f}'.format(FCTNCPCP),"\\\\\n")
 
-  printCierreListadoTNPerfilMetalico(fName) 
+  printTNListingEndSteelProfile(fName) 
 
 
-# Imprime el encabezamiento para el listado de cortantes.
-def printCabeceraListadoVPerfilMetalico(archivo, tit):
+
+def printVListingHeaderSteelProfile(archivo, tit):
+  '''Open the shear listing.'''
   archivo.write("\\begin{center}\n")
   archivo.write("\\begin{footnotesize}\n")
   archivo.write("\\tablefirsthead{%\n")
@@ -86,12 +88,12 @@ def printCabeceraListadoVPerfilMetalico(archivo, tit):
   archivo.write("\\tablelasttail{\hline}\n")
   archivo.write("\\begin{supertabular}{|l|r|r|r|r|r|}\n")
 
-'''
-Imprime los resultados de la comprobación de tensiones cortantes
-de un conjunto de elementos cuyo material es un perfil metálico.
-'''
-def listaResistenciaPerfilesMetalicosV(setName, fName, titulo):
-  printCabeceraListadoVPerfilMetalico(fName,titulo) 
+def listSteelProfileVStrength(setName, fName, titulo):
+  '''
+  Print the results of shear stress checking in an element set
+  whose material is a steel profile.
+  '''
+  printVListingHeaderSteelProfile(fName,titulo) 
   st= preprocessor.getSetLoader.getSet(setName)
   elems= st.getElements()
   tagFCTNCPCP= 0
@@ -107,5 +109,5 @@ def listaResistenciaPerfilesMetalicosV(setName, fName, titulo):
   fName.write("\\multicolumn{5}{|c|}{Caso pésimo}\\\\\n")
   fName.write("\\hline\n")
   fName.write(tagFCVCPCP," & ",HIPCPCPV," &  &  & ",format(e.getProp("FCVCPCP"),'{:3.2f}'),"\\\\\n")
-  printCierreListadoTNPerfilMetalico(fName) 
+  printTNListingEndSteelProfile(fName) 
 

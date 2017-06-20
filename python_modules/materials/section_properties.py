@@ -13,6 +13,7 @@ from materials import typical_materials
 from miscUtils import LogMessages as lmsg
 import scipy.interpolate
 import geom
+import xc
 
 
 class SectionProperties(object):
@@ -140,6 +141,15 @@ class SectionProperties(object):
     else:
       retval= typical_materials.defElasticShearSection2d(preprocessor,self.sectionName,self.A(),material.E,material.G(),self.Iz(),self.alphaY())
       return retval
+  def getCrossSectionProperties2D(self,material):
+    '''Return a CrossSectionProperties object with the 2D properties of the section.'''
+    retval= xc.CrossSectionProperties2d()
+    retval.E= material.E
+    retval.A= self.A()
+    retval.I= self.Iz()
+    retval.G= material.G()
+    retval.Alpha= self.alphaY()
+    return retval
 
 class RectangularSection(SectionProperties):
   '''Rectangular section geometric parameters
@@ -434,7 +444,7 @@ class ISection(SectionProperties):
   def Wxel(self):
     ''' Return torsional section modulus of the section.
 
-    reference: article «Perfil doble T» of Wikipedia.
+    reference: article «I Beam» of Wikipedia.
     '''
     return self.J()/max(max(self.tTF,self.tBF),self.tW)
   def alphaY(self):
@@ -446,7 +456,7 @@ class ISection(SectionProperties):
   def getWarpingMoment(self):
     '''Return warping moment of a I-section
 
-    reference: article «Perfil doble T» of Wikipedia.
+    reference: article «I Beam» of Wikipedia.
     '''
     hPrf=self.hTotal()-self.tTF/2.0-self.tBF/2.0
     return (self.tTF+self.tBF)/2.0*hPrf**2/12*self.wTF**3*self.wBF**3/(self.wTF**3+self.wBF**3)
