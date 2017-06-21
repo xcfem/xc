@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import division
 
-#Macros para facilitar el cálculo de la acción del viento según la IAPF
+'''Functions to compute wind loads according to Spanish IAPF standard.'''
 
 import math
 

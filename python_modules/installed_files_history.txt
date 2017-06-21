@@ -95,6 +95,10 @@
 /usr/local/lib/python2.7/dist-packages/actions/wind/vientoMarquesinaCTE.pyc
 /usr/local/lib/python2.7/dist-packages/actions/wind/vientoParamVerticalesCTE.py
 /usr/local/lib/python2.7/dist-packages/actions/wind/vientoParamVerticalesCTE.pyc
+/usr/local/lib/python2.7/dist-packages/actions/wind/windCTE.py
+/usr/local/lib/python2.7/dist-packages/actions/wind/windCTE.pyc
+/usr/local/lib/python2.7/dist-packages/actions/wind/windIAPF.py
+/usr/local/lib/python2.7/dist-packages/actions/wind/windIAPF.pyc
 /usr/local/lib/python2.7/dist-packages/actions/wind/windSIA261.py
 /usr/local/lib/python2.7/dist-packages/actions/wind/windSIA261.pyc
 /usr/local/lib/python2.7/dist-packages/import_export/BasicEntities.py
