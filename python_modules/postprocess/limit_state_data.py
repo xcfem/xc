@@ -19,17 +19,20 @@ class LimitStateData(object):
   internal_forces_results_directory= './' #Path to esf_el* f
   def __init__(self,limitStateLabel,outputDataBaseFileName):
     '''Limit state data constructor
-       label; limit state check label; Something like "Fatigue" or "CrackControl"
-       outputDataBaseFileName: name (whithout extension) of the file that contains the results to display.
+    label; limit state check label; Something like "Fatigue" or "CrackControl"
+    outputDataBaseFileName: name (whithout extension) of the file that contains
+    the results to display.
     '''
     self.label= limitStateLabel
     self.outputDataBaseFileName= outputDataBaseFileName
     self.controller= None
   def getInternalForcesFileName(self):
-    '''Return the file name to read: combination name, element number and internal forces.'''
+    '''Return the file name to read: combination name, element number and 
+    internal forces.'''
     return self.internal_forces_results_directory+'intForce_'+ self.label +'.csv'
   def getDisplacementsFileName(self):
-    '''Return the file name to read: combination name, node number and displacements (ux,uy,uz,rotX,rotY,rotZ).'''
+    '''Return the file name to read: combination name, node number and 
+    displacements (ux,uy,uz,rotX,rotY,rotZ).'''
     return self.internal_forces_results_directory+'displ_'+ self.label +'.csv'
   def getOutputDataBaseFileName(self):
     '''Return the output file name without extension.'''
@@ -44,10 +47,10 @@ class LimitStateData(object):
   def saveAll(self,feProblem,combContainer,setCalc,fConvIntForc= 1.0):
     '''Write internal forces, displacements, .., for each combination
      
-      :param feProblem: XC finite element problem to deal with.
-      :param setCalc: set of entities for which the verification is 
+    :param feProblem: XC finite element problem to deal with.
+    :param setCalc: set of entities for which the verification is 
                       going to be performed
-      :param fConvIntForc: conversion factor between the unit of force 
+    :param fConvIntForc: conversion factor between the unit of force 
                            in which the calculation is performed and that 
                            one desired for the displaying of internal forces
                            (The use of this factor won't be allowed in
@@ -108,9 +111,9 @@ class NormalStressesRCLimitStateData(LimitStateData):
 
   def check(self,reinfConcreteSections):
     '''Checking of normal stresses in ultimate limit states
-       (see self.dumpCombinations).
+    (see self.dumpCombinations).
      
-      :param reinfConcreteSections: Reinforced concrete sections on each element.
+    :param reinfConcreteSections: Reinforced concrete sections on each element.
     '''
     intForcCombFileName= self.getInternalForcesFileName()
     outputFileName= self.getOutputDataBaseFileName()
@@ -134,9 +137,9 @@ class ShearResistanceRCLimitStateData(LimitStateData):
     return loadCombinations
   def check(self,reinfConcreteSections):
     '''Checking of shear resistance in ultimate limit states 
-       (see self.dumpCombinations).
+    (see self.dumpCombinations).
      
-      :param reinfConcreteSections: Reinforced concrete sections on each element.
+    :param reinfConcreteSections: Reinforced concrete sections on each element.
     '''
     intForcCombFileName= self.getInternalForcesFileName()
     outputFileName= self.getOutputDataBaseFileName()
@@ -162,7 +165,7 @@ class FreqLoadsCrackControlRCLimitStateData(LimitStateData):
     '''Checking of crack width under frequent loads in serviceability limit states 
        (see self.dumpCombinations).
      
-      :param reinfConcreteSections: Reinforced concrete sections on each element.
+    :param reinfConcreteSections: Reinforced concrete sections on each element.
     '''
     intForcCombFileName= self.getInternalForcesFileName()
     outputFileName= self.getOutputDataBaseFileName()
@@ -187,9 +190,9 @@ class QPLoadsCrackControlRCLimitStateData(LimitStateData):
   
   def check(self,reinfConcreteSections):
     '''Checking of crack width under quasi-permanent loads in
-       serviceability limit states (see self.dumpCombinations).
+    serviceability limit states (see self.dumpCombinations).
      
-      :param reinfConcreteSections: Reinforced concrete sections on each element.
+    :param reinfConcreteSections: Reinforced concrete sections on each element.
     '''
     intForcCombFileName= self.getInternalForcesFileName()
     outputFileName= self.getOutputDataBaseFileName()
@@ -213,9 +216,9 @@ class FreqLoadsDisplacementControlLimitStateData(LimitStateData):
     return loadCombinations
   def check(self,reinfConcreteSections):
     '''Checking of displacements under frequent loads in
-       serviceability limit states (see self.dumpCombinations).
+    serviceability limit states (see self.dumpCombinations).
      
-      :param reinfConcreteSections: Reinforced concrete sections on each element.
+    :param reinfConcreteSections: Reinforced concrete sections on each element.
     '''
     lmsg.error('FreqLoadsDisplacementControlLimitStateData.check() not implemented.')
 
@@ -238,9 +241,9 @@ class FatigueResistanceRCLimitStateData(LimitStateData):
     return loadCombinations
   def check(self,reinfConcreteSections):
     '''Checking of fatigue under fatigue combinations loads in
-       ultimate limit states (see self.dumpCombinations).
+    ultimate limit states (see self.dumpCombinations).
      
-      :param reinfConcreteSections: Reinforced concrete sections on each element.
+    :param reinfConcreteSections: Reinforced concrete sections on each element.
     '''
     intForcCombFileName= self.getInternalForcesFileName()
     outputFileName= self.getOutputDataBaseFileName()

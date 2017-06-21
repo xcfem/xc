@@ -5,11 +5,12 @@ from materials import concrete_base
 from miscUtils import LogMessages as lmsg
 from materials import concrete_base
 
-__author__= "Ana Ortega (A_OO) and Luis C. Pérez Tato (LCPT)"
-__copyright__= "Copyright 2015, A_OO and LCPT"
+__author__= "Luis C. Pérez Tato (LCPT) , Ana Ortega (AO_O) "
+__copyright__= "Copyright 2016, LCPT, AO_O"
 __license__= "GPL"
 __version__= "3.0"
-__email__= "ana.Ortega.Ort@gmail.com l.pereztato@gmail.com"
+__email__= "l.pereztato@ciccp.es, ana.ortega@ciccp.es "
+
 
 class ACIConcrete(concrete_base.Concrete):
     """ Concrete model according to ACI 318

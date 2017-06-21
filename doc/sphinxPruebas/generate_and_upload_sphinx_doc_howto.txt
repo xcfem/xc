@@ -1,0 +1,23 @@
+Make sure you have installed the python-sphinx package
+
+
+First we search for the sphinxDoc directory:
+
+cd .../xc/doc/sphinxDoc
+
+Then we create the html files:
+
+make html
+
+We change to our local XCmanual repository
+
+cd .../some_directory/XCmanual
+
+and update the newly created/updated files:
+
+sh update.sh
+
+finally we push this repository into GitHub as usual.
+
+The result can be seen here: https://lcpt.github.io/XCmanual/
+

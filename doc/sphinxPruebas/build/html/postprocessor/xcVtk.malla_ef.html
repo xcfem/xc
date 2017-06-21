@@ -1,0 +1,725 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>FE mesh &mdash; XC 3.0 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '3.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="XC 3.0 documentation" href="../index.html" />
+    <link rel="up" title="xcVtk" href="xcVtk.html" />
+    <link rel="next" title="Postprocessor" href="postprocess.html" />
+    <link rel="prev" title="CAD model" href="xcVtk.malla_cad.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="postprocess.html" title="Postprocessor"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="xcVtk.malla_cad.html" title="CAD model"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">XC 3.0 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="xcVtk.html" accesskey="U">xcVtk</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="fe-mesh">
+<h1>FE mesh<a class="headerlink" href="#fe-mesh" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="module-xcVtk.malla_ef.Fields">
+<span id="fields"></span><h2>Fields<a class="headerlink" href="#module-xcVtk.malla_ef.Fields" title="Permalink to this headline">¶</a></h2>
+<p>Graphic representation of fields over the mesh.</p>
+<dl class="class">
+<dt id="xcVtk.malla_ef.Fields.ExtrapolatedProperty">
+<em class="property">class </em><code class="descclassname">xcVtk.malla_ef.Fields.</code><code class="descname">ExtrapolatedProperty</code><span class="sig-paren">(</span><em>name</em>, <em>functionName</em>, <em>xcSet</em>, <em>component=None</em>, <em>fUnitConv=1.0</em><span class="sig-paren">)</span><a class="headerlink" href="#xcVtk.malla_ef.Fields.ExtrapolatedProperty" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#xcVtk.malla_ef.Fields.ExtrapolatedScalarField" title="xcVtk.malla_ef.Fields.ExtrapolatedScalarField"><code class="xref py py-class docutils literal"><span class="pre">xcVtk.malla_ef.Fields.ExtrapolatedScalarField</span></code></a></p>
+<p>Scalar field defined as property value at nodes.</p>
+<dl class="method">
+<dt id="xcVtk.malla_ef.Fields.ExtrapolatedProperty.display">
+<code class="descname">display</code><span class="sig-paren">(</span><em>defDisplay</em>, <em>fName=None</em>, <em>caption=''</em>, <em>defFScale=0.0</em><span class="sig-paren">)</span><a class="headerlink" href="#xcVtk.malla_ef.Fields.ExtrapolatedProperty.display" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="xcVtk.malla_ef.Fields.ExtrapolatedProperty.extrapolate">
+<code class="descname">extrapolate</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#xcVtk.malla_ef.Fields.ExtrapolatedProperty.extrapolate" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="xcVtk.malla_ef.Fields.ExtrapolatedProperty.plot">
+<code class="descname">plot</code><span class="sig-paren">(</span><em>defDisplay</em>, <em>fName=None</em>, <em>caption=''</em><span class="sig-paren">)</span><a class="headerlink" href="#xcVtk.malla_ef.Fields.ExtrapolatedProperty.plot" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="xcVtk.malla_ef.Fields.ExtrapolatedScalarField">
+<em class="property">class </em><code class="descclassname">xcVtk.malla_ef.Fields.</code><code class="descname">ExtrapolatedScalarField</code><span class="sig-paren">(</span><em>name</em>, <em>functionName</em>, <em>xcSet</em>, <em>component=None</em>, <em>fUnitConv=1.0</em><span class="sig-paren">)</span><a class="headerlink" href="#xcVtk.malla_ef.Fields.ExtrapolatedScalarField" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#xcVtk.malla_ef.Fields.ScalarField" title="xcVtk.malla_ef.Fields.ScalarField"><code class="xref py py-class docutils literal"><span class="pre">xcVtk.malla_ef.Fields.ScalarField</span></code></a></p>
+<p>Scalar field defined at nodes.</p>
+<dl class="method">
+<dt id="xcVtk.malla_ef.Fields.ExtrapolatedScalarField.display">
+<code class="descname">display</code><span class="sig-paren">(</span><em>defDisplay</em>, <em>fName=None</em>, <em>caption=''</em>, <em>defFScale=0.0</em><span class="sig-paren">)</span><a class="headerlink" href="#xcVtk.malla_ef.Fields.ExtrapolatedScalarField.display" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="xcVtk.malla_ef.Fields.ExtrapolatedScalarField.plot">
+<code class="descname">plot</code><span class="sig-paren">(</span><em>defDisplay</em>, <em>fName=None</em>, <em>caption=''</em>, <em>defFScale=0.0</em><span class="sig-paren">)</span><a class="headerlink" href="#xcVtk.malla_ef.Fields.ExtrapolatedScalarField.plot" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="xcVtk.malla_ef.Fields.ScalarField">
+<em class="property">class </em><code class="descclassname">xcVtk.malla_ef.Fields.</code><code class="descname">ScalarField</code><span class="sig-paren">(</span><em>name</em>, <em>functionName</em>, <em>component=None</em>, <em>fUnitConv=1.0</em><span class="sig-paren">)</span><a class="headerlink" href="#xcVtk.malla_ef.Fields.ScalarField" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="xcVtkGenTopics.html#xcVtk.FieldBase.FieldBase" title="xcVtk.FieldBase.FieldBase"><code class="xref py py-class docutils literal"><span class="pre">xcVtk.FieldBase.FieldBase</span></code></a></p>
+<p>Scalar field defined at nodes.</p>
+<dl class="method">
+<dt id="xcVtk.malla_ef.Fields.ScalarField.fillArray">
+<code class="descname">fillArray</code><span class="sig-paren">(</span><em>nodeSet</em><span class="sig-paren">)</span><a class="headerlink" href="#xcVtk.malla_ef.Fields.ScalarField.fillArray" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates an vtkDoubleArray filled with the proper values.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="xcVtk.malla_ef.Fields.ScalarField.setupOnGrid">
+<code class="descname">setupOnGrid</code><span class="sig-paren">(</span><em>uGrid</em><span class="sig-paren">)</span><a class="headerlink" href="#xcVtk.malla_ef.Fields.ScalarField.setupOnGrid" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="xcVtk.malla_ef.Fields.ScalarField.setupOnMapper">
+<code class="descname">setupOnMapper</code><span class="sig-paren">(</span><em>gridMapper</em><span class="sig-paren">)</span><a class="headerlink" href="#xcVtk.malla_ef.Fields.ScalarField.setupOnMapper" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="xcVtk.malla_ef.Fields.getScalarFieldFromControlVar">
+<code class="descclassname">xcVtk.malla_ef.Fields.</code><code class="descname">getScalarFieldFromControlVar</code><span class="sig-paren">(</span><em>attributeName</em>, <em>argument</em>, <em>xcSet</em>, <em>component</em>, <em>fUnitConv</em><span class="sig-paren">)</span><a class="headerlink" href="#xcVtk.malla_ef.Fields.getScalarFieldFromControlVar" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">an scalar field that represents the control var over the 
+elements in the set.</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>attributeName</strong> &#8211; name of the element&#8217;s property that has the 
+control var in it for example as in 
+elem.getProp(attributeName).eval(argument).</li>
+<li><strong>argument</strong> &#8211; name of the control var to represent.</li>
+<li><strong>xcSet</strong> &#8211; represent the field over those elements.</li>
+<li><strong>component</strong> &#8211; component of the control var to represent.</li>
+<li><strong>fUnitConv</strong> &#8211; unit conversion factor (i.e N-&gt;kN =&gt; fUnitConv= 1e-3).</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="module-xcVtk.malla_ef.vtk_define_malla_cells_ef">
+<span id="vtk-define-malla-cells-ef"></span><h2>vtk_define_malla_cells_ef<a class="headerlink" href="#module-xcVtk.malla_ef.vtk_define_malla_cells_ef" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="xcVtk.malla_ef.vtk_define_malla_cells_ef.VtkCargaIdsElem">
+<code class="descclassname">xcVtk.malla_ef.vtk_define_malla_cells_ef.</code><code class="descname">VtkCargaIdsElem</code><span class="sig-paren">(</span><em>nmbUGrid</em>, <em>setName</em><span class="sig-paren">)</span><a class="headerlink" href="#xcVtk.malla_ef.vtk_define_malla_cells_ef.VtkCargaIdsElem" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="xcVtk.malla_ef.vtk_define_malla_cells_ef.VtkDibujaIdsElementos">
+<code class="descclassname">xcVtk.malla_ef.vtk_define_malla_cells_ef.</code><code class="descname">VtkDibujaIdsElementos</code><span class="sig-paren">(</span><em>nmbUGrid</em>, <em>setName</em>, <em>renderer</em><span class="sig-paren">)</span><a class="headerlink" href="#xcVtk.malla_ef.vtk_define_malla_cells_ef.VtkDibujaIdsElementos" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-xcVtk.malla_ef.vtk_define_malla_elementos">
+<span id="vtk-define-malla-elementos"></span><h2>vtk_define_malla_elementos<a class="headerlink" href="#module-xcVtk.malla_ef.vtk_define_malla_elementos" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-xcVtk.malla_ef.vtk_define_malla_nodos">
+<span id="vtk-define-malla-nodos"></span><h2>vtk_define_malla_nodos<a class="headerlink" href="#module-xcVtk.malla_ef.vtk_define_malla_nodos" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="xcVtk.malla_ef.vtk_define_malla_nodos.VtkCargaIdsNodos">
+<code class="descclassname">xcVtk.malla_ef.vtk_define_malla_nodos.</code><code class="descname">VtkCargaIdsNodos</code><span class="sig-paren">(</span><em>recordGrid</em><span class="sig-paren">)</span><a class="headerlink" href="#xcVtk.malla_ef.vtk_define_malla_nodos.VtkCargaIdsNodos" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="xcVtk.malla_ef.vtk_define_malla_nodos.VtkDibujaIdsNodos">
+<code class="descclassname">xcVtk.malla_ef.vtk_define_malla_nodos.</code><code class="descname">VtkDibujaIdsNodos</code><span class="sig-paren">(</span><em>recordGrid</em>, <em>renderer</em><span class="sig-paren">)</span><a class="headerlink" href="#xcVtk.malla_ef.vtk_define_malla_nodos.VtkDibujaIdsNodos" title="Permalink to this definition">¶</a></dt>
+<dd><p>Display node labels</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-xcVtk.malla_ef.vtk_dibuja_elementos">
+<span id="vtk-dibuja-elementos"></span><h2>vtk_dibuja_elementos<a class="headerlink" href="#module-xcVtk.malla_ef.vtk_dibuja_elementos" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="xcVtk.malla_ef.vtk_dibuja_elementos.VtkDibujaElementos1D">
+<code class="descclassname">xcVtk.malla_ef.vtk_dibuja_elementos.</code><code class="descname">VtkDibujaElementos1D</code><span class="sig-paren">(</span><em>nmbActor</em><span class="sig-paren">)</span><a class="headerlink" href="#xcVtk.malla_ef.vtk_dibuja_elementos.VtkDibujaElementos1D" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-xcVtk.malla_ef.vtk_dibuja_ids_elementos">
+<span id="vtk-dibuja-ids-elementos"></span><h2>vtk_dibuja_ids_elementos<a class="headerlink" href="#module-xcVtk.malla_ef.vtk_dibuja_ids_elementos" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="xcVtk.malla_ef.vtk_dibuja_ids_elementos.VtkDibujaIdsElementos">
+<code class="descclassname">xcVtk.malla_ef.vtk_dibuja_ids_elementos.</code><code class="descname">VtkDibujaIdsElementos</code><span class="sig-paren">(</span><em>ids</em><span class="sig-paren">)</span><a class="headerlink" href="#xcVtk.malla_ef.vtk_dibuja_ids_elementos.VtkDibujaIdsElementos" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-xcVtk.malla_ef.vtk_dibuja_nodos">
+<span id="vtk-dibuja-nodos"></span><h2>vtk_dibuja_nodos<a class="headerlink" href="#module-xcVtk.malla_ef.vtk_dibuja_nodos" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="xcVtk.malla_ef.vtk_dibuja_nodos.VtkDibujaNodos">
+<code class="descclassname">xcVtk.malla_ef.vtk_dibuja_nodos.</code><code class="descname">VtkDibujaNodos</code><span class="sig-paren">(</span><em>nmbActor</em><span class="sig-paren">)</span><a class="headerlink" href="#xcVtk.malla_ef.vtk_dibuja_nodos.VtkDibujaNodos" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-xcVtk.malla_ef.vtk_grafico_ef">
+<span id="vtk-grafico-ef"></span><h2>vtk_grafico_ef<a class="headerlink" href="#module-xcVtk.malla_ef.vtk_grafico_ef" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="xcVtk.malla_ef.vtk_grafico_ef.RecordDefDisplayEF">
+<em class="property">class </em><code class="descclassname">xcVtk.malla_ef.vtk_grafico_ef.</code><code class="descname">RecordDefDisplayEF</code><a class="headerlink" href="#xcVtk.malla_ef.vtk_grafico_ef.RecordDefDisplayEF" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="xcVtkGenTopics.html#xcVtk.vtk_grafico_base.RecordDefDisplay" title="xcVtk.vtk_grafico_base.RecordDefDisplay"><code class="xref py py-class docutils literal"><span class="pre">xcVtk.vtk_grafico_base.RecordDefDisplay</span></code></a></p>
+<p>Define the parameters to configure the output device.</p>
+<dl class="method">
+<dt id="xcVtk.malla_ef.vtk_grafico_ef.RecordDefDisplayEF.VtkCargaMallaElem">
+<code class="descname">VtkCargaMallaElem</code><span class="sig-paren">(</span><em>field</em>, <em>defFScale=0.0</em><span class="sig-paren">)</span><a class="headerlink" href="#xcVtk.malla_ef.vtk_grafico_ef.RecordDefDisplayEF.VtkCargaMallaElem" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load the element mesh</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>field</strong> &#8211; scalar field to be represented</li>
+<li><strong>defFScale</strong> &#8211; factor to apply to current displacement of nodes 
+so that the display position of each node equals to
+the initial position plus its displacement multiplied
+by this factor. (Defaults to 0.0, i.e. display of 
+initial/undeformed shape)</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="xcVtk.malla_ef.vtk_grafico_ef.RecordDefDisplayEF.VtkDefineActorElementos">
+<code class="descname">VtkDefineActorElementos</code><span class="sig-paren">(</span><em>tipoRepr</em>, <em>field</em><span class="sig-paren">)</span><a class="headerlink" href="#xcVtk.malla_ef.vtk_grafico_ef.RecordDefDisplayEF.VtkDefineActorElementos" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="xcVtk.malla_ef.vtk_grafico_ef.RecordDefDisplayEF.appendDiagram">
+<code class="descname">appendDiagram</code><span class="sig-paren">(</span><em>diagram</em><span class="sig-paren">)</span><a class="headerlink" href="#xcVtk.malla_ef.vtk_grafico_ef.RecordDefDisplayEF.appendDiagram" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="xcVtk.malla_ef.vtk_grafico_ef.RecordDefDisplayEF.defineActorNode">
+<code class="descname">defineActorNode</code><span class="sig-paren">(</span><em>radius</em><span class="sig-paren">)</span><a class="headerlink" href="#xcVtk.malla_ef.vtk_grafico_ef.RecordDefDisplayEF.defineActorNode" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="xcVtk.malla_ef.vtk_grafico_ef.RecordDefDisplayEF.defineEscenaMalla">
+<code class="descname">defineEscenaMalla</code><span class="sig-paren">(</span><em>field</em>, <em>defFScale=0.0</em><span class="sig-paren">)</span><a class="headerlink" href="#xcVtk.malla_ef.vtk_grafico_ef.RecordDefDisplayEF.defineEscenaMalla" title="Permalink to this definition">¶</a></dt>
+<dd><p>Define the scene for the mesh</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>field</strong> &#8211; scalar field to be represented</li>
+<li><strong>defFScale</strong> &#8211; factor to apply to current displacement of nodes 
+so that the display position of each node equals to
+the initial position plus its displacement multiplied
+by this factor. (Defaults to 0.0, i.e. display of 
+initial/undeformed shape)</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="xcVtk.malla_ef.vtk_grafico_ef.RecordDefDisplayEF.displayElementPunctualLoad">
+<code class="descname">displayElementPunctualLoad</code><span class="sig-paren">(</span><em>preprocessor</em>, <em>pLoad</em>, <em>loadPattern</em>, <em>renderer</em>, <em>color</em>, <em>force</em>, <em>fScale</em><span class="sig-paren">)</span><a class="headerlink" href="#xcVtk.malla_ef.vtk_grafico_ef.RecordDefDisplayEF.displayElementPunctualLoad" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="xcVtk.malla_ef.vtk_grafico_ef.RecordDefDisplayEF.displayElementUniformLoad">
+<code class="descname">displayElementUniformLoad</code><span class="sig-paren">(</span><em>preprocessor</em>, <em>unifLoad</em>, <em>loadPattern</em>, <em>color</em>, <em>force</em>, <em>fScale</em><span class="sig-paren">)</span><a class="headerlink" href="#xcVtk.malla_ef.vtk_grafico_ef.RecordDefDisplayEF.displayElementUniformLoad" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="xcVtk.malla_ef.vtk_grafico_ef.RecordDefDisplayEF.displayElementalLoads">
+<code class="descname">displayElementalLoads</code><span class="sig-paren">(</span><em>preprocessor</em>, <em>loadPattern</em>, <em>color</em>, <em>fScale</em><span class="sig-paren">)</span><a class="headerlink" href="#xcVtk.malla_ef.vtk_grafico_ef.RecordDefDisplayEF.displayElementalLoads" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="xcVtk.malla_ef.vtk_grafico_ef.RecordDefDisplayEF.displayLoads">
+<code class="descname">displayLoads</code><span class="sig-paren">(</span><em>preprocessor</em>, <em>loadPattern</em><span class="sig-paren">)</span><a class="headerlink" href="#xcVtk.malla_ef.vtk_grafico_ef.RecordDefDisplayEF.displayLoads" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="xcVtk.malla_ef.vtk_grafico_ef.RecordDefDisplayEF.displayMesh">
+<code class="descname">displayMesh</code><span class="sig-paren">(</span><em>xcSet</em>, <em>field=None</em>, <em>diagrams=None</em>, <em>fName=None</em>, <em>caption=''</em>, <em>defFScale=0.0</em><span class="sig-paren">)</span><a class="headerlink" href="#xcVtk.malla_ef.vtk_grafico_ef.RecordDefDisplayEF.displayMesh" title="Permalink to this definition">¶</a></dt>
+<dd><p>Display the finite element mesh</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>xcSet</strong> &#8211; set to be displayed</li>
+<li><strong>field</strong> &#8211; scalar field to show (optional)</li>
+<li><strong>diagrams</strong> &#8211; diagrams to show (optional)</li>
+<li><strong>fName</strong> &#8211; name of the graphic file to create (if None -&gt; screen window).</li>
+<li><strong>caption</strong> &#8211; text to display in the graphic.</li>
+<li><strong>defFScale</strong> &#8211; factor to apply to current displacement of nodes 
+so that the display position of each node equals to
+the initial position plus its displacement multiplied
+by this factor. (Defaults to 0.0, i.e. display of 
+initial/undeformed shape)</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="xcVtk.malla_ef.vtk_grafico_ef.RecordDefDisplayEF.displayNodalLoad">
+<code class="descname">displayNodalLoad</code><span class="sig-paren">(</span><em>nod</em>, <em>color</em>, <em>force</em>, <em>moment</em>, <em>fScale</em>, <em>defFScale=0.0</em><span class="sig-paren">)</span><a class="headerlink" href="#xcVtk.malla_ef.vtk_grafico_ef.RecordDefDisplayEF.displayNodalLoad" title="Permalink to this definition">¶</a></dt>
+<dd><p>Display loads on nodes</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>nod</strong> &#8211; node instance</li>
+<li><strong>color</strong> &#8211; </li>
+<li><strong>force</strong> &#8211; force (displayed as a single arrow)</li>
+<li><strong>moment</strong> &#8211; moment (displayed as a double arrow)</li>
+<li><strong>fScale</strong> &#8211; scaling factor (forces and moments)</li>
+<li><strong>defFScale</strong> &#8211; factor to apply to current displacement of nodes 
+so that the display position of each node equals to
+the initial position plus its displacement multiplied
+by this factor. (Defaults to 0.0, i.e. display of 
+initial/undeformed shape)</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="xcVtk.malla_ef.vtk_grafico_ef.RecordDefDisplayEF.displayNodalLoads">
+<code class="descname">displayNodalLoads</code><span class="sig-paren">(</span><em>preprocessor</em>, <em>loadPattern</em>, <em>color</em>, <em>fScale</em><span class="sig-paren">)</span><a class="headerlink" href="#xcVtk.malla_ef.vtk_grafico_ef.RecordDefDisplayEF.displayNodalLoads" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="xcVtk.malla_ef.vtk_grafico_ef.RecordDefDisplayEF.displayScalarField">
+<code class="descname">displayScalarField</code><span class="sig-paren">(</span><em>preprocessor</em>, <em>xcSet</em>, <em>field</em>, <em>fName=None</em><span class="sig-paren">)</span><a class="headerlink" href="#xcVtk.malla_ef.vtk_grafico_ef.RecordDefDisplayEF.displayScalarField" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="xcVtk.malla_ef.vtk_grafico_ef.RecordDefDisplayEF.grafico_mef">
+<code class="descname">grafico_mef</code><span class="sig-paren">(</span><em>xcSet</em>, <em>caption=''</em>, <em>viewNm='XYZPos'</em>, <em>defFScale=0.0</em><span class="sig-paren">)</span><a class="headerlink" href="#xcVtk.malla_ef.vtk_grafico_ef.RecordDefDisplayEF.grafico_mef" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returs:</th><td class="field-body"><p class="first">a graphic of the FE mesh</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>xcSet</strong> &#8211; XC set of elements to be displayed</li>
+<li><strong>caption</strong> &#8211; text to write in the graphic</li>
+<li><strong>viewNm</strong> &#8211; name of the view to use for the representation
+predefined view names: &#8216;XYZPos&#8217;,&#8217;XNeg&#8217;,&#8217;XPos&#8217;,&#8217;YNeg&#8217;,&#8217;YPos&#8217;,
+&#8216;ZNeg&#8217;,&#8217;ZPos&#8217;  (defaults to &#8216;XYZPos&#8217;)</li>
+<li><strong>defFScale</strong> &#8211; factor to apply to current displacement of nodes 
+so that the display position of each node equals to
+the initial position plus its displacement multiplied
+by this factor. (Defaults to 0.0, i.e. display of 
+initial/undeformed shape)</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-xcVtk.malla_ef.vtk_load_elem">
+<span id="vtk-load-elem"></span><h2>vtk_load_elem<a class="headerlink" href="#module-xcVtk.malla_ef.vtk_load_elem" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="xcVtk.malla_ef.vtk_load_elem.VtkLoadElementos">
+<code class="descclassname">xcVtk.malla_ef.vtk_load_elem.</code><code class="descname">VtkLoadElementos</code><span class="sig-paren">(</span><em>setName</em><span class="sig-paren">)</span><a class="headerlink" href="#xcVtk.malla_ef.vtk_load_elem.VtkLoadElementos" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-xcVtk.malla_ef.vtk_load_nodos">
+<span id="vtk-load-nodos"></span><h2>vtk_load_nodos<a class="headerlink" href="#module-xcVtk.malla_ef.vtk_load_nodos" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="xcVtk.malla_ef.vtk_load_nodos.VtkLoadNodos">
+<code class="descclassname">xcVtk.malla_ef.vtk_load_nodos.</code><code class="descname">VtkLoadNodos</code><span class="sig-paren">(</span><em>setName</em>, <em>nmbContndr</em><span class="sig-paren">)</span><a class="headerlink" href="#xcVtk.malla_ef.vtk_load_nodos.VtkLoadNodos" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-xcVtk.malla_ef.QuickGraphics">
+<span id="quickgraphics"></span><h2>QuickGraphics<a class="headerlink" href="#module-xcVtk.malla_ef.QuickGraphics" title="Permalink to this headline">¶</a></h2>
+<p>Providing the user with a quick and easy way to 
+display results (internal forces, displacements) of an user-defined
+load case.</p>
+<dl class="class">
+<dt id="xcVtk.malla_ef.QuickGraphics.QuickGraphics">
+<em class="property">class </em><code class="descclassname">xcVtk.malla_ef.QuickGraphics.</code><code class="descname">QuickGraphics</code><span class="sig-paren">(</span><em>feProblem</em><span class="sig-paren">)</span><a class="headerlink" href="#xcVtk.malla_ef.QuickGraphics.QuickGraphics" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>This class is aimed at providing the user with a quick and easy way to 
+display results (internal forces, displacements) of an user-defined
+load case.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Variables:</th><td class="field-body"><ul class="first last simple">
+<li><strong>loadCaseName</strong> &#8211; name of the load case to be created</li>
+<li><strong>loadCaseExpr</strong> &#8211; expression that defines de load case as a
+combination of previously defined actions
+e.g. &#8216;1.0*GselfWeight+1.0*GearthPress&#8217;</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="xcVtk.malla_ef.QuickGraphics.QuickGraphics.dispLoadCaseBeamEl">
+<code class="descname">dispLoadCaseBeamEl</code><span class="sig-paren">(</span><em>loadCaseName=''</em>, <em>setToDisplay=None</em>, <em>fUnitConv=1.0</em>, <em>elLoadComp='transComponent'</em>, <em>elLoadScaleF=1.0</em>, <em>nodLoadScaleF=1.0</em>, <em>viewName='XYZPos'</em>, <em>hCamFct=1.0</em>, <em>caption=''</em>, <em>fileName=None</em>, <em>defFScale=0.0</em><span class="sig-paren">)</span><a class="headerlink" href="#xcVtk.malla_ef.QuickGraphics.QuickGraphics.dispLoadCaseBeamEl" title="Permalink to this definition">¶</a></dt>
+<dd><p>displays the loads applied on beam elements and nodes for a given load case
+:param setToDisplay:    set of beam elements to be represented
+:param fUnitConv:       factor of conversion to be applied to the results (defaults to 1)
+:param elLoadComp:      component of the loads on elements to be depicted</p>
+<blockquote>
+<div><dl class="docutils">
+<dt>[possible components: &#8216;axialComponent&#8217;, &#8216;transComponent&#8217;, &#8216;transYComponent&#8217;,</dt>
+<dd>&#8216;transZComponent&#8217;]</dd>
+</dl>
+</div></blockquote>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>elLoadScaleF</strong> &#8211; factor of scale to apply to the diagram display of element loads (defaults to 1)</li>
+<li><strong>nodLoadScaleF</strong> &#8211; factor of scale to apply to the vector display of nodal loads (defaults to 1)</li>
+<li><strong>viewName</strong> &#8211; name of the view  that contains the renderer (possible
+options: &#8220;XYZPos&#8221;, &#8220;XPos&#8221;, &#8220;XNeg&#8221;,&#8221;YPos&#8221;, &#8220;YNeg&#8221;,
+&#8220;ZPos&#8221;, &#8220;ZNeg&#8221;) (defaults to &#8220;XYZPos&#8221;)</li>
+<li><strong>hCamFct</strong> &#8211; factor that applies to the height of the camera position in order to
+change perspective of isometric views (defaults to 1). Usual values 0.1 to 10</li>
+<li><strong>caption</strong> &#8211; caption for the graphic</li>
+<li><strong>fileName</strong> &#8211; name of the file to plot the graphic. Defaults to None,
+in that case an screen display is generated</li>
+<li><strong>defFScale</strong> &#8211; factor to apply to current displacement of nodes 
+so that the display position of each node equals to
+the initial position plus its displacement multiplied
+by this factor. (Defaults to 0.0, i.e. display of 
+initial/undeformed shape)</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="xcVtk.malla_ef.QuickGraphics.QuickGraphics.displayDispRot">
+<code class="descname">displayDispRot</code><span class="sig-paren">(</span><em>itemToDisp=''</em>, <em>setToDisplay=None</em>, <em>fConvUnits=1.0</em>, <em>unitDescription=''</em>, <em>viewName='XYZPos'</em>, <em>hCamFct=1.0</em>, <em>fileName=None</em>, <em>defFScale=0.0</em><span class="sig-paren">)</span><a class="headerlink" href="#xcVtk.malla_ef.QuickGraphics.QuickGraphics.displayDispRot" title="Permalink to this definition">¶</a></dt>
+<dd><p>displays the component of the displacement or rotations in the 
+set of entities.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>itemToDisp</strong> &#8211; component of the displacement (&#8216;uX&#8217;, &#8216;uY&#8217; or &#8216;uZ&#8217;) 
+or the rotation (&#8216;rotX&#8217;, rotY&#8217;, &#8216;rotZ&#8217;) to be depicted</li>
+<li><strong>setToDisplay</strong> &#8211; set of entities to be represented (defaults to all 
+entities)</li>
+<li><strong>fConvUnits</strong> &#8211; factor of conversion to be applied to the results 
+(defaults to 1)</li>
+<li><strong>unitDescription</strong> &#8211; string describing units like &#8216;[mm] or [cm]&#8217;</li>
+<li><strong>fileName</strong> &#8211; name of the file to plot the graphic. Defaults to 
+None, in that case an screen display is generated</li>
+<li><strong>defFScale</strong> &#8211; factor to apply to current displacement of nodes 
+so that the display position of each node equals to
+the initial position plus its displacement multiplied
+by this factor. (Defaults to 0.0, i.e. display of 
+initial/undeformed shape)</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="xcVtk.malla_ef.QuickGraphics.QuickGraphics.displayIntForc">
+<code class="descname">displayIntForc</code><span class="sig-paren">(</span><em>itemToDisp=''</em>, <em>setToDisplay=None</em>, <em>fConvUnits=1.0</em>, <em>unitDescription=''</em>, <em>viewName='XYZPos'</em>, <em>hCamFct=1.0</em>, <em>fileName=None</em>, <em>defFScale=0.0</em><span class="sig-paren">)</span><a class="headerlink" href="#xcVtk.malla_ef.QuickGraphics.QuickGraphics.displayIntForc" title="Permalink to this definition">¶</a></dt>
+<dd><p>displays the component of internal forces in the 
+set of entities as a scalar field (i.e. appropiated for shell elements).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>itemToDisp</strong> &#8211; component of the internal forces (&#8216;N1&#8217;, &#8216;N2&#8217;, &#8216;N12&#8217;, 
+&#8216;M1&#8217;, &#8216;M2&#8217;, &#8216;M12&#8217;, &#8216;Q1&#8217;, &#8216;Q2&#8217;) to be depicted</li>
+<li><strong>setToDisplay</strong> &#8211; set of entities to be represented (default to all 
+entities)</li>
+<li><strong>fConvUnits</strong> &#8211; factor of conversion to be applied to the results 
+(defalts to 1)</li>
+<li><strong>unitDescription</strong> &#8211; string like &#8216;[kN/m] or [kN m/m]&#8217;</li>
+<li><strong>viewName</strong> &#8211; name of the view  that contains the renderer (possible
+options: &#8220;XYZPos&#8221;, &#8220;XPos&#8221;, &#8220;XNeg&#8221;,&#8221;YPos&#8221;, &#8220;YNeg&#8221;, &#8220;ZPos&#8221;, &#8220;ZNeg&#8221;) 
+(defaults to &#8220;XYZPos&#8221;)</li>
+<li><strong>hCamFct</strong> &#8211; factor that applies to the height of the camera position
+in order to change perspective of isometric views (defaults to 1, 
+usual values 0.1 to 10)</li>
+<li><strong>fileName</strong> &#8211; name of the file to plot the graphic. Defaults to None,
+in that case an screen display is generated</li>
+<li><strong>defFScale</strong> &#8211; factor to apply to current displacement of nodes 
+so that the display position of each node equals to
+the initial position plus its displacement multiplied
+by this factor. (Defaults to 0.0, i.e. display of 
+initial/undeformed shape)</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="xcVtk.malla_ef.QuickGraphics.QuickGraphics.displayIntForcDiag">
+<code class="descname">displayIntForcDiag</code><span class="sig-paren">(</span><em>itemToDisp=''</em>, <em>setToDisplay=None</em>, <em>fConvUnits=1.0</em>, <em>scaleFactor=1.0</em>, <em>unitDescription=''</em>, <em>viewName='XYZPos'</em>, <em>hCamFct=1.0</em>, <em>fileName=None</em>, <em>defFScale=0.0</em><span class="sig-paren">)</span><a class="headerlink" href="#xcVtk.malla_ef.QuickGraphics.QuickGraphics.displayIntForcDiag" title="Permalink to this definition">¶</a></dt>
+<dd><p>displays the component of internal forces in the 
+set of entities as a diagram over lines (i.e. appropiated for beam elements).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>itemToDisp</strong> &#8211; component of the internal forces (&#8216;N&#8217;, &#8216;Qy&#8217; (or &#8216;Vy&#8217;), &#8216;Qz&#8217; (or &#8216;Vz&#8217;), 
+&#8216;My&#8217;, &#8216;Mz&#8217;, &#8216;T&#8217;) to be depicted</li>
+<li><strong>setToDisplay</strong> &#8211; set of entities (elements of type beam) to be represented</li>
+<li><strong>fConvUnits</strong> &#8211; factor of conversion to be applied to the results (defalts to 1)</li>
+<li><strong>scaleFactor</strong> &#8211; factor of scale to apply to the diagram display of</li>
+<li><strong>unitDescription</strong> &#8211; string like &#8216;[kN/m] or [kN m/m]&#8217;</li>
+<li><strong>viewName</strong> &#8211; name of the view  that contains the renderer (possible
+options: &#8220;XYZPos&#8221;, &#8220;XPos&#8221;, &#8220;XNeg&#8221;,&#8221;YPos&#8221;, &#8220;YNeg&#8221;,
+&#8220;ZPos&#8221;, &#8220;ZNeg&#8221;) (defaults to &#8220;XYZPos&#8221;)</li>
+<li><strong>hCamFct</strong> &#8211; factor that applies to the height of the camera position
+in order to change perspective of isometric views 
+(defaults to 1, usual values 0.1 to 10)</li>
+<li><strong>fileName</strong> &#8211; name of the file to plot the graphic. Defaults to None,
+in that case an screen display is generated</li>
+<li><strong>defFScale</strong> &#8211; factor to apply to current displacement of nodes 
+so that the display position of each node equals to
+the initial position plus its displacement multiplied
+by this factor. (Defaults to 0.0, i.e. display of 
+initial/undeformed shape)</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="xcVtk.malla_ef.QuickGraphics.QuickGraphics.displayNodeValueDiagram">
+<code class="descname">displayNodeValueDiagram</code><span class="sig-paren">(</span><em>itemToDisp=''</em>, <em>setToDisplay=None</em>, <em>fConvUnits=1.0</em>, <em>scaleFactor=1.0</em>, <em>unitDescription=''</em>, <em>viewName='XYZPos'</em>, <em>hCamFct=1.0</em>, <em>fileName=None</em>, <em>defFScale=0.0</em><span class="sig-paren">)</span><a class="headerlink" href="#xcVtk.malla_ef.QuickGraphics.QuickGraphics.displayNodeValueDiagram" title="Permalink to this definition">¶</a></dt>
+<dd><p>displays the a displacement (uX,uY,...) or a property defined in nodes 
+as a diagram over lines (i.e. appropiated for beam elements).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>itemToDisp</strong> &#8211; item to display.</li>
+<li><strong>setToDisplay</strong> &#8211; set of entities (elements of type beam) to be represented</li>
+<li><strong>fConvUnits</strong> &#8211; factor of conversion to be applied to the results (defalts to 1)</li>
+<li><strong>scaleFactor</strong> &#8211; factor of scale to apply to the diagram display of</li>
+<li><strong>unitDescription</strong> &#8211; string like &#8216;[m]&#8217; or &#8216;[rad]&#8217; or &#8216;[m/s2]&#8217;</li>
+<li><strong>viewName</strong> &#8211; name of the view  that contains the renderer (possible
+options: &#8220;XYZPos&#8221;, &#8220;XPos&#8221;, &#8220;XNeg&#8221;,&#8221;YPos&#8221;, &#8220;YNeg&#8221;,
+&#8220;ZPos&#8221;, &#8220;ZNeg&#8221;) (defaults to &#8220;XYZPos&#8221;)</li>
+<li><strong>hCamFct</strong> &#8211; factor that applies to the height of the camera position
+in order to change perspective of isometric views 
+(defaults to 1, usual values 0.1 to 10)</li>
+<li><strong>fileName</strong> &#8211; name of the file to plot the graphic. Defaults to None,
+in that case an screen display is generated</li>
+<li><strong>defFScale</strong> &#8211; factor to apply to current displacement of nodes 
+so that the display position of each node equals to
+the initial position plus its displacement multiplied
+by this factor. (Defaults to 0.0, i.e. display of 
+initial/undeformed shape)</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="xcVtk.malla_ef.QuickGraphics.QuickGraphics.getDispComponentFromName">
+<code class="descname">getDispComponentFromName</code><span class="sig-paren">(</span><em>compName</em><span class="sig-paren">)</span><a class="headerlink" href="#xcVtk.malla_ef.QuickGraphics.QuickGraphics.getDispComponentFromName" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="xcVtk.malla_ef.QuickGraphics.QuickGraphics.getDisplay">
+<code class="descname">getDisplay</code><span class="sig-paren">(</span><em>vwName='XYZPos'</em>, <em>hCamF=1.0</em><span class="sig-paren">)</span><a class="headerlink" href="#xcVtk.malla_ef.QuickGraphics.QuickGraphics.getDisplay" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a suitable display to show the graphics.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>viewName</strong> &#8211; name of the view that contains the renderer (possible
+options: &#8220;XYZPos&#8221;, &#8220;XPos&#8221;, &#8220;XNeg&#8221;,&#8221;YPos&#8221;, &#8220;YNeg&#8221;,
+&#8220;ZPos&#8221;, &#8220;ZNeg&#8221;) (defaults to &#8220;XYZPos&#8221;)</li>
+<li><strong>hCamFct</strong> &#8211; factor that applies to the height of the camera position
+in order to change perspective of isometric views 
+(defaults to 1, usual values 0.1 to 10)</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="xcVtk.malla_ef.QuickGraphics.QuickGraphics.getIntForceComponentFromName">
+<code class="descname">getIntForceComponentFromName</code><span class="sig-paren">(</span><em>componentName</em><span class="sig-paren">)</span><a class="headerlink" href="#xcVtk.malla_ef.QuickGraphics.QuickGraphics.getIntForceComponentFromName" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="xcVtk.malla_ef.QuickGraphics.QuickGraphics.solve">
+<code class="descname">solve</code><span class="sig-paren">(</span><em>loadCaseName</em>, <em>loadCaseExpr=''</em><span class="sig-paren">)</span><a class="headerlink" href="#xcVtk.malla_ef.QuickGraphics.QuickGraphics.solve" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">FE mesh</a><ul>
+<li><a class="reference internal" href="#module-xcVtk.malla_ef.Fields">Fields</a></li>
+<li><a class="reference internal" href="#module-xcVtk.malla_ef.vtk_define_malla_cells_ef">vtk_define_malla_cells_ef</a></li>
+<li><a class="reference internal" href="#module-xcVtk.malla_ef.vtk_define_malla_elementos">vtk_define_malla_elementos</a></li>
+<li><a class="reference internal" href="#module-xcVtk.malla_ef.vtk_define_malla_nodos">vtk_define_malla_nodos</a></li>
+<li><a class="reference internal" href="#module-xcVtk.malla_ef.vtk_dibuja_elementos">vtk_dibuja_elementos</a></li>
+<li><a class="reference internal" href="#module-xcVtk.malla_ef.vtk_dibuja_ids_elementos">vtk_dibuja_ids_elementos</a></li>
+<li><a class="reference internal" href="#module-xcVtk.malla_ef.vtk_dibuja_nodos">vtk_dibuja_nodos</a></li>
+<li><a class="reference internal" href="#module-xcVtk.malla_ef.vtk_grafico_ef">vtk_grafico_ef</a></li>
+<li><a class="reference internal" href="#module-xcVtk.malla_ef.vtk_load_elem">vtk_load_elem</a></li>
+<li><a class="reference internal" href="#module-xcVtk.malla_ef.vtk_load_nodos">vtk_load_nodos</a></li>
+<li><a class="reference internal" href="#module-xcVtk.malla_ef.QuickGraphics">QuickGraphics</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="xcVtk.malla_cad.html"
+                        title="previous chapter">CAD model</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="postprocess.html"
+                        title="next chapter">Postprocessor</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/postprocessor/xcVtk.malla_ef.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="postprocess.html" title="Postprocessor"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="xcVtk.malla_cad.html" title="CAD model"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">XC 3.0 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="xcVtk.html" >xcVtk</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2016, Luis Pérez Tato (LCPT) &amp; Ana Ortega (AO_O).
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.6.
+    </div>
+  </body>
+</html>

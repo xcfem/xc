@@ -21,13 +21,15 @@ Ejes de la sección:
 The axis used in Arcelor documentation are different from those used in XC
 (strong axis parallel to z axis) in other words: values for Y and Z axis 
 are swapped with respect to those in the catalog.
-'''
-IPEprofiles= {}
 
-'''
 XXX Repasar coeficientes de distorsión
    alpha-> alphaZ,alphaY
+
+
 '''
+
+IPEprofiles= {}
+
 IPEprofiles['IPE_A_100']= {'nmb':'IPE_A_100', 'P':6.9, 'h':98e-3, 'b':55e-3, 'tw':3.6e-3, 'tf':4.7e-3, 'r':7e-3, 'A':8.78e-4, 'hi':88.6e-3, 'd':74.6e-3, 'FI':'-', 'Pmin':0e-3, 'Pmax':0e-3, 'AL':0.397, 'AG':57.57, 'Iz':141.2e-8, 'Wzel':28.81e-6, 'Wzpl':32.98e-6, 'iz':4.01e-2, 'Avy':4.44e-4, 'Iy':13.12e-8, 'Wyel':4.77e-6, 'Wypl':7.54e-6, 'iy':1.22e-2, 'Ss':21.2e-3, 'It':0.77e-8, 'E':2.1e+11, 'nu':0.3}
 IPEprofiles['IPE_100']= {'nmb':'IPE_100', 'P':8.1, 'h':100e-3, 'b':55e-3, 'tw':4.1e-3, 'tf':5.7e-3, 'r':7e-3, 'A':10.32e-4, 'hi':88.6e-3, 'd':74.6e-3, 'FI':'-', 'Pmin':0e-3, 'Pmax':0e-3, 'AL':0.4, 'AG':49.33, 'Iz':171e-8, 'Wzel':34.2e-6, 'Wzpl':39.41e-6, 'iz':4.07e-2, 'Avy':5.08e-4, 'Iy':15.92e-8, 'Wyel':5.79e-6, 'Wypl':9.15e-6, 'iy':1.24e-2, 'Ss':23.7e-3, 'It':1.2e-8, 'E':2.1e+11, 'nu':0.3}
 IPEprofiles['IPE_A_120']= {'nmb':'IPE_A_120', 'P':8.7, 'h':117.6e-3, 'b':64e-3, 'tw':3.8e-3, 'tf':5.1e-3, 'r':7e-3, 'A':11.03e-4, 'hi':107.4e-3, 'd':93.4e-3, 'FI':'-', 'Pmin':0e-3, 'Pmax':0e-3, 'AL':0.472, 'AG':54.47, 'Iz':257.4e-8, 'Wzel':43.77e-6, 'Wzpl':49.87e-6, 'iz':4.83e-2, 'Avy':5.41e-4, 'Iy':22.39e-8, 'Wyel':7e-6, 'Wypl':10.98e-6, 'iy':1.42e-2, 'Ss':22.2e-3, 'It':1.04e-8, 'E':2.1e+11, 'nu':0.3}

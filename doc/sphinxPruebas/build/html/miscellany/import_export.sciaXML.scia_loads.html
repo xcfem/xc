@@ -1,0 +1,686 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Import_export sciaXML. Loads &mdash; XC 3.0 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '3.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="XC 3.0 documentation" href="../index.html" />
+    <link rel="up" title="Import_Export" href="import_export.html" />
+    <link rel="next" title="Rough calculations" href="rough_calculations.html" />
+    <link rel="prev" title="Import_export sciaXML. XML basics" href="import_export.sciaXML.xml_basics.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="rough_calculations.html" title="Rough calculations"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="import_export.sciaXML.xml_basics.html" title="Import_export sciaXML. XML basics"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">XC 3.0 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="import_export.html" accesskey="U">Import_Export</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="import-export-sciaxml-loads">
+<h1>Import_export sciaXML. Loads<a class="headerlink" href="#import-export-sciaxml-loads" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="module-import_export.sciaXML.scia_loads.ElementLoadContainer">
+<span id="elementloadcontainer"></span><h2>ElementLoadContainer<a class="headerlink" href="#module-import_export.sciaXML.scia_loads.ElementLoadContainer" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="import_export.sciaXML.scia_loads.ElementLoadContainer.ElementLoadComponent">
+<em class="property">class </em><code class="descclassname">import_export.sciaXML.scia_loads.ElementLoadContainer.</code><code class="descname">ElementLoadComponent</code><span class="sig-paren">(</span><em>elementId</em>, <em>loadCaseId</em>, <em>loadCaseName</em>, <em>direction</em>, <em>value</em>, <em>globalCooSys</em><span class="sig-paren">)</span><a class="headerlink" href="#import_export.sciaXML.scia_loads.ElementLoadContainer.ElementLoadComponent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#import_export.sciaXML.scia_loads.LoadComponentBase.LoadComponentBase" title="import_export.sciaXML.scia_loads.LoadComponentBase.LoadComponentBase"><code class="xref py py-class docutils literal"><span class="pre">import_export.sciaXML.scia_loads.LoadComponentBase.LoadComponentBase</span></code></a></p>
+<p>Each of the components (X, Z or Z) of an elemental load</p>
+<dl class="attribute">
+<dt id="import_export.sciaXML.scia_loads.ElementLoadContainer.ElementLoadComponent.counter">
+<code class="descname">counter</code><em class="property"> = 0</em><a class="headerlink" href="#import_export.sciaXML.scia_loads.ElementLoadContainer.ElementLoadComponent.counter" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="import_export.sciaXML.scia_loads.ElementLoadContainer.ElementLoadComponent.getElementReferenceItem">
+<code class="descname">getElementReferenceItem</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#import_export.sciaXML.scia_loads.ElementLoadContainer.ElementLoadComponent.getElementReferenceItem" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="import_export.sciaXML.scia_loads.ElementLoadContainer.ElementLoadComponent.getObject">
+<code class="descname">getObject</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#import_export.sciaXML.scia_loads.ElementLoadContainer.ElementLoadComponent.getObject" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="import_export.sciaXML.scia_loads.ElementLoadContainer.ElementLoadComponent.memberType">
+<code class="descname">memberType</code><em class="property"> = '{8708ed31-8e66-11d4-ad94-f6f5de2be344}'</em><a class="headerlink" href="#import_export.sciaXML.scia_loads.ElementLoadContainer.ElementLoadComponent.memberType" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="import_export.sciaXML.scia_loads.ElementLoadContainer.ElementLoadComponent.memberTypeName">
+<code class="descname">memberTypeName</code><em class="property"> = 'EP_DSG_Elements.EP_Plane.1'</em><a class="headerlink" href="#import_export.sciaXML.scia_loads.ElementLoadContainer.ElementLoadComponent.memberTypeName" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="import_export.sciaXML.scia_loads.ElementLoadContainer.ElementLoadContainer">
+<em class="property">class </em><code class="descclassname">import_export.sciaXML.scia_loads.ElementLoadContainer.</code><code class="descname">ElementLoadContainer</code><span class="sig-paren">(</span><em>elementLoadsDict</em><span class="sig-paren">)</span><a class="headerlink" href="#import_export.sciaXML.scia_loads.ElementLoadContainer.ElementLoadContainer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="import_export.sciaXML.xml_basics.html#import_export.sciaXML.xml_basics.Container.Container" title="import_export.sciaXML.xml_basics.Container.Container"><code class="xref py py-class docutils literal"><span class="pre">import_export.sciaXML.xml_basics.Container.Container</span></code></a></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="import_export.sciaXML.scia_loads.ElementLoadContainer.getElementLoadComponents">
+<code class="descclassname">import_export.sciaXML.scia_loads.ElementLoadContainer.</code><code class="descname">getElementLoadComponents</code><span class="sig-paren">(</span><em>elementLoad</em><span class="sig-paren">)</span><a class="headerlink" href="#import_export.sciaXML.scia_loads.ElementLoadContainer.getElementLoadComponents" title="Permalink to this definition">¶</a></dt>
+<dd><p>get ElementLoadComponent objects from the 3D elementLoad argument.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="import_export.sciaXML.scia_loads.ElementLoadContainer.getElementLoadObjects">
+<code class="descclassname">import_export.sciaXML.scia_loads.ElementLoadContainer.</code><code class="descname">getElementLoadObjects</code><span class="sig-paren">(</span><em>nl</em><span class="sig-paren">)</span><a class="headerlink" href="#import_export.sciaXML.scia_loads.ElementLoadContainer.getElementLoadObjects" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-import_export.sciaXML.scia_loads.ElementLoadProperties">
+<span id="elementloadproperties"></span><h2>ElementLoadProperties<a class="headerlink" href="#module-import_export.sciaXML.scia_loads.ElementLoadProperties" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="import_export.sciaXML.scia_loads.ElementLoadProperties.ElementLoadProperties">
+<em class="property">class </em><code class="descclassname">import_export.sciaXML.scia_loads.ElementLoadProperties.</code><code class="descname">ElementLoadProperties</code><a class="headerlink" href="#import_export.sciaXML.scia_loads.ElementLoadProperties.ElementLoadProperties" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="import_export.sciaXML.xml_basics.html#import_export.sciaXML.xml_basics.PropertiesContainer.PropertiesContainer" title="import_export.sciaXML.xml_basics.PropertiesContainer.PropertiesContainer"><code class="xref py py-class docutils literal"><span class="pre">import_export.sciaXML.xml_basics.PropertiesContainer.PropertiesContainer</span></code></a></p>
+<dl class="method">
+<dt id="import_export.sciaXML.scia_loads.ElementLoadProperties.ElementLoadProperties.getXMLElement">
+<code class="descname">getXMLElement</code><span class="sig-paren">(</span><em>parent</em><span class="sig-paren">)</span><a class="headerlink" href="#import_export.sciaXML.scia_loads.ElementLoadProperties.ElementLoadProperties.getXMLElement" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the corresponding XML element for the property.
+Parameters:
+parent: owner of this object in the XML structure.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="import_export.sciaXML.scia_loads.ElementLoadProperties.ElementLoadProperties.tableProp">
+<code class="descname">tableProp</code><em class="property"> = None</em><a class="headerlink" href="#import_export.sciaXML.scia_loads.ElementLoadProperties.ElementLoadProperties.tableProp" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-import_export.sciaXML.scia_loads.LoadCaseContainer">
+<span id="loadcasecontainer"></span><h2>LoadCaseContainer<a class="headerlink" href="#module-import_export.sciaXML.scia_loads.LoadCaseContainer" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="import_export.sciaXML.scia_loads.LoadCaseContainer.LoadCaseContainer">
+<em class="property">class </em><code class="descclassname">import_export.sciaXML.scia_loads.LoadCaseContainer.</code><code class="descname">LoadCaseContainer</code><span class="sig-paren">(</span><em>loadCasesDict</em><span class="sig-paren">)</span><a class="headerlink" href="#import_export.sciaXML.scia_loads.LoadCaseContainer.LoadCaseContainer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="import_export.sciaXML.xml_basics.html#import_export.sciaXML.xml_basics.Container.Container" title="import_export.sciaXML.xml_basics.Container.Container"><code class="xref py py-class docutils literal"><span class="pre">import_export.sciaXML.xml_basics.Container.Container</span></code></a></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="import_export.sciaXML.scia_loads.LoadCaseContainer.getActionTypeCode">
+<code class="descclassname">import_export.sciaXML.scia_loads.LoadCaseContainer.</code><code class="descname">getActionTypeCode</code><span class="sig-paren">(</span><em>actionType</em><span class="sig-paren">)</span><a class="headerlink" href="#import_export.sciaXML.scia_loads.LoadCaseContainer.getActionTypeCode" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="import_export.sciaXML.scia_loads.LoadCaseContainer.getLoadCaseObject">
+<code class="descclassname">import_export.sciaXML.scia_loads.LoadCaseContainer.</code><code class="descname">getLoadCaseObject</code><span class="sig-paren">(</span><em>loadCase</em><span class="sig-paren">)</span><a class="headerlink" href="#import_export.sciaXML.scia_loads.LoadCaseContainer.getLoadCaseObject" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="import_export.sciaXML.scia_loads.LoadCaseContainer.getLoadTypeName">
+<code class="descclassname">import_export.sciaXML.scia_loads.LoadCaseContainer.</code><code class="descname">getLoadTypeName</code><span class="sig-paren">(</span><em>ltype</em><span class="sig-paren">)</span><a class="headerlink" href="#import_export.sciaXML.scia_loads.LoadCaseContainer.getLoadTypeName" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-import_export.sciaXML.scia_loads.LoadCaseProperties">
+<span id="loadcaseproperties"></span><h2>LoadCaseProperties<a class="headerlink" href="#module-import_export.sciaXML.scia_loads.LoadCaseProperties" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="import_export.sciaXML.scia_loads.LoadCaseProperties.LoadCaseProperties">
+<em class="property">class </em><code class="descclassname">import_export.sciaXML.scia_loads.LoadCaseProperties.</code><code class="descname">LoadCaseProperties</code><a class="headerlink" href="#import_export.sciaXML.scia_loads.LoadCaseProperties.LoadCaseProperties" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="import_export.sciaXML.xml_basics.html#import_export.sciaXML.xml_basics.PropertiesContainer.PropertiesContainer" title="import_export.sciaXML.xml_basics.PropertiesContainer.PropertiesContainer"><code class="xref py py-class docutils literal"><span class="pre">import_export.sciaXML.xml_basics.PropertiesContainer.PropertiesContainer</span></code></a></p>
+<dl class="method">
+<dt id="import_export.sciaXML.scia_loads.LoadCaseProperties.LoadCaseProperties.getXMLElement">
+<code class="descname">getXMLElement</code><span class="sig-paren">(</span><em>parent</em><span class="sig-paren">)</span><a class="headerlink" href="#import_export.sciaXML.scia_loads.LoadCaseProperties.LoadCaseProperties.getXMLElement" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the corresponding XML element for the load case properties.
+Parameters:
+parent: owner of this object in the XML structure.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-import_export.sciaXML.scia_loads.LoadCombContainer">
+<span id="loadcombcontainer"></span><h2>LoadCombContainer<a class="headerlink" href="#module-import_export.sciaXML.scia_loads.LoadCombContainer" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="import_export.sciaXML.scia_loads.LoadCombContainer.LoadCombContainer">
+<em class="property">class </em><code class="descclassname">import_export.sciaXML.scia_loads.LoadCombContainer.</code><code class="descname">LoadCombContainer</code><span class="sig-paren">(</span><em>loadCombsDict</em><span class="sig-paren">)</span><a class="headerlink" href="#import_export.sciaXML.scia_loads.LoadCombContainer.LoadCombContainer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="import_export.sciaXML.xml_basics.html#import_export.sciaXML.xml_basics.Container.Container" title="import_export.sciaXML.xml_basics.Container.Container"><code class="xref py py-class docutils literal"><span class="pre">import_export.sciaXML.xml_basics.Container.Container</span></code></a></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="import_export.sciaXML.scia_loads.LoadCombContainer.getDescompObject">
+<code class="descclassname">import_export.sciaXML.scia_loads.LoadCombContainer.</code><code class="descname">getDescompObject</code><span class="sig-paren">(</span><em>descomp</em><span class="sig-paren">)</span><a class="headerlink" href="#import_export.sciaXML.scia_loads.LoadCombContainer.getDescompObject" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="import_export.sciaXML.scia_loads.LoadCombContainer.getLoadCombComponentRow">
+<code class="descclassname">import_export.sciaXML.scia_loads.LoadCombContainer.</code><code class="descname">getLoadCombComponentRow</code><span class="sig-paren">(</span><em>combComp</em><span class="sig-paren">)</span><a class="headerlink" href="#import_export.sciaXML.scia_loads.LoadCombContainer.getLoadCombComponentRow" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="import_export.sciaXML.scia_loads.LoadCombContainer.getLoadCombObject">
+<code class="descclassname">import_export.sciaXML.scia_loads.LoadCombContainer.</code><code class="descname">getLoadCombObject</code><span class="sig-paren">(</span><em>loadComb</em><span class="sig-paren">)</span><a class="headerlink" href="#import_export.sciaXML.scia_loads.LoadCombContainer.getLoadCombObject" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="import_export.sciaXML.scia_loads.LoadCombContainer.getLoadCombType">
+<code class="descclassname">import_export.sciaXML.scia_loads.LoadCombContainer.</code><code class="descname">getLoadCombType</code><span class="sig-paren">(</span><em>typ</em><span class="sig-paren">)</span><a class="headerlink" href="#import_export.sciaXML.scia_loads.LoadCombContainer.getLoadCombType" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="import_export.sciaXML.scia_loads.LoadCombContainer.getLoadCombTypeName">
+<code class="descclassname">import_export.sciaXML.scia_loads.LoadCombContainer.</code><code class="descname">getLoadCombTypeName</code><span class="sig-paren">(</span><em>ltype</em><span class="sig-paren">)</span><a class="headerlink" href="#import_export.sciaXML.scia_loads.LoadCombContainer.getLoadCombTypeName" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-import_export.sciaXML.scia_loads.LoadCombProperties">
+<span id="loadcombproperties"></span><h2>LoadCombProperties<a class="headerlink" href="#module-import_export.sciaXML.scia_loads.LoadCombProperties" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="import_export.sciaXML.scia_loads.LoadCombProperties.LoadCombProperties">
+<em class="property">class </em><code class="descclassname">import_export.sciaXML.scia_loads.LoadCombProperties.</code><code class="descname">LoadCombProperties</code><a class="headerlink" href="#import_export.sciaXML.scia_loads.LoadCombProperties.LoadCombProperties" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="import_export.sciaXML.xml_basics.html#import_export.sciaXML.xml_basics.PropertiesContainer.PropertiesContainer" title="import_export.sciaXML.xml_basics.PropertiesContainer.PropertiesContainer"><code class="xref py py-class docutils literal"><span class="pre">import_export.sciaXML.xml_basics.PropertiesContainer.PropertiesContainer</span></code></a></p>
+<dl class="method">
+<dt id="import_export.sciaXML.scia_loads.LoadCombProperties.LoadCombProperties.getXMLElement">
+<code class="descname">getXMLElement</code><span class="sig-paren">(</span><em>parent</em><span class="sig-paren">)</span><a class="headerlink" href="#import_export.sciaXML.scia_loads.LoadCombProperties.LoadCombProperties.getXMLElement" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the corresponding XML element for the load combination properties.
+Parameters:
+parent: owner of this object in the XML structure.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="import_export.sciaXML.scia_loads.LoadCombProperties.LoadCombProperties.tableProp">
+<code class="descname">tableProp</code><em class="property"> = None</em><a class="headerlink" href="#import_export.sciaXML.scia_loads.LoadCombProperties.LoadCombProperties.tableProp" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-import_export.sciaXML.scia_loads.LoadComponentBase">
+<span id="loadcomponentbase"></span><h2>LoadComponentBase<a class="headerlink" href="#module-import_export.sciaXML.scia_loads.LoadComponentBase" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="import_export.sciaXML.scia_loads.LoadComponentBase.LoadComponentBase">
+<em class="property">class </em><code class="descclassname">import_export.sciaXML.scia_loads.LoadComponentBase.</code><code class="descname">LoadComponentBase</code><span class="sig-paren">(</span><em>loadCaseId</em>, <em>loadCaseName</em>, <em>direction</em>, <em>value</em>, <em>globalCooSys=True</em><span class="sig-paren">)</span><a class="headerlink" href="#import_export.sciaXML.scia_loads.LoadComponentBase.LoadComponentBase" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>Each of the load components (X, Z or Z).</p>
+<dl class="method">
+<dt id="import_export.sciaXML.scia_loads.LoadComponentBase.LoadComponentBase.getDirectionObjectItem">
+<code class="descname">getDirectionObjectItem</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#import_export.sciaXML.scia_loads.LoadComponentBase.LoadComponentBase.getDirectionObjectItem" title="Permalink to this definition">¶</a></dt>
+<dd><p>returns an item which represents load component direction.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="import_export.sciaXML.scia_loads.LoadComponentBase.LoadComponentBase.getDistributionObjectItem">
+<code class="descname">getDistributionObjectItem</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#import_export.sciaXML.scia_loads.LoadComponentBase.LoadComponentBase.getDistributionObjectItem" title="Permalink to this definition">¶</a></dt>
+<dd><p>returns an item which represents the surface
+load distribution: uniform, Dir X, Dir Y, 3 points.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="import_export.sciaXML.scia_loads.LoadComponentBase.LoadComponentBase.getLoadCaseName">
+<code class="descname">getLoadCaseName</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#import_export.sciaXML.scia_loads.LoadComponentBase.LoadComponentBase.getLoadCaseName" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns load case name.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="import_export.sciaXML.scia_loads.LoadComponentBase.LoadComponentBase.getLoadCaseReferenceItem">
+<code class="descname">getLoadCaseReferenceItem</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#import_export.sciaXML.scia_loads.LoadComponentBase.LoadComponentBase.getLoadCaseReferenceItem" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="import_export.sciaXML.scia_loads.LoadComponentBase.LoadComponentBase.getSystemItem">
+<code class="descname">getSystemItem</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#import_export.sciaXML.scia_loads.LoadComponentBase.LoadComponentBase.getSystemItem" title="Permalink to this definition">¶</a></dt>
+<dd><p>returns an ObjectItem which represents the reference system of the load component.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="import_export.sciaXML.scia_loads.LoadComponentBase.LoadComponentBase.getValueObjectItem">
+<code class="descname">getValueObjectItem</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#import_export.sciaXML.scia_loads.LoadComponentBase.LoadComponentBase.getValueObjectItem" title="Permalink to this definition">¶</a></dt>
+<dd><p>returns an ObjectItem which represents the value of the load component.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-import_export.sciaXML.scia_loads.LoadContainer">
+<span id="loadcontainer"></span><h2>LoadContainer<a class="headerlink" href="#module-import_export.sciaXML.scia_loads.LoadContainer" title="Permalink to this headline">¶</a></h2>
+<p>LoadContainer.py: extract loads from XC load patterns and put the in neutral data structure.</p>
+<dl class="class">
+<dt id="import_export.sciaXML.scia_loads.LoadContainer.FreeLoadContainer">
+<em class="property">class </em><code class="descclassname">import_export.sciaXML.scia_loads.LoadContainer.</code><code class="descname">FreeLoadContainer</code><a class="headerlink" href="#import_export.sciaXML.scia_loads.LoadContainer.FreeLoadContainer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#import_export.sciaXML.scia_loads.LoadContainer.LoadContainerBase" title="import_export.sciaXML.scia_loads.LoadContainer.LoadContainerBase"><code class="xref py py-class docutils literal"><span class="pre">import_export.sciaXML.scia_loads.LoadContainer.LoadContainerBase</span></code></a></p>
+<p>Container for free loads over mesh points and surfaces
+(used for export a block model (kPoints, lines and surfaces)
+into XML SCIA) .</p>
+<dl class="method">
+<dt id="import_export.sciaXML.scia_loads.LoadContainer.FreeLoadContainer.dumpPointLoads">
+<code class="descname">dumpPointLoads</code><span class="sig-paren">(</span><em>lp</em>, <em>destLoadCase</em><span class="sig-paren">)</span><a class="headerlink" href="#import_export.sciaXML.scia_loads.LoadContainer.FreeLoadContainer.dumpPointLoads" title="Permalink to this definition">¶</a></dt>
+<dd><p>Dump loads over nodes as free punctual loads.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="import_export.sciaXML.scia_loads.LoadContainer.FreeLoadContainer.dumpSurfaceLoads">
+<code class="descname">dumpSurfaceLoads</code><span class="sig-paren">(</span><em>lp</em>, <em>destLoadCase</em><span class="sig-paren">)</span><a class="headerlink" href="#import_export.sciaXML.scia_loads.LoadContainer.FreeLoadContainer.dumpSurfaceLoads" title="Permalink to this definition">¶</a></dt>
+<dd><p>Dump loads over surfaces as free surface loads.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="import_export.sciaXML.scia_loads.LoadContainer.LoadContainer">
+<em class="property">class </em><code class="descclassname">import_export.sciaXML.scia_loads.LoadContainer.</code><code class="descname">LoadContainer</code><a class="headerlink" href="#import_export.sciaXML.scia_loads.LoadContainer.LoadContainer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#import_export.sciaXML.scia_loads.LoadContainer.LoadContainerBase" title="import_export.sciaXML.scia_loads.LoadContainer.LoadContainerBase"><code class="xref py py-class docutils literal"><span class="pre">import_export.sciaXML.scia_loads.LoadContainer.LoadContainerBase</span></code></a></p>
+<p>Container for loads over mesh nodes and elements.</p>
+<dl class="method">
+<dt id="import_export.sciaXML.scia_loads.LoadContainer.LoadContainer.dumpPointLoads">
+<code class="descname">dumpPointLoads</code><span class="sig-paren">(</span><em>lp</em>, <em>destLoadCase</em><span class="sig-paren">)</span><a class="headerlink" href="#import_export.sciaXML.scia_loads.LoadContainer.LoadContainer.dumpPointLoads" title="Permalink to this definition">¶</a></dt>
+<dd><p>Dump loads over nodes.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="import_export.sciaXML.scia_loads.LoadContainer.LoadContainer.dumpSurfaceLoads">
+<code class="descname">dumpSurfaceLoads</code><span class="sig-paren">(</span><em>lp</em>, <em>destLoadCase</em><span class="sig-paren">)</span><a class="headerlink" href="#import_export.sciaXML.scia_loads.LoadContainer.LoadContainer.dumpSurfaceLoads" title="Permalink to this definition">¶</a></dt>
+<dd><p>Dump loads over elements.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="import_export.sciaXML.scia_loads.LoadContainer.LoadContainerBase">
+<em class="property">class </em><code class="descclassname">import_export.sciaXML.scia_loads.LoadContainer.</code><code class="descname">LoadContainerBase</code><a class="headerlink" href="#import_export.sciaXML.scia_loads.LoadContainer.LoadContainerBase" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>Base for XML SCIA load containers.</p>
+<dl class="method">
+<dt id="import_export.sciaXML.scia_loads.LoadContainer.LoadContainerBase.dumpLoadPattern">
+<code class="descname">dumpLoadPattern</code><span class="sig-paren">(</span><em>counter</em>, <em>lpName</em>, <em>loadPatterns</em>, <em>permanentLoadCaseNames</em><span class="sig-paren">)</span><a class="headerlink" href="#import_export.sciaXML.scia_loads.LoadContainer.LoadContainerBase.dumpLoadPattern" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="import_export.sciaXML.scia_loads.LoadContainer.LoadContainerBase.getLoadCombinationDict">
+<code class="descname">getLoadCombinationDict</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#import_export.sciaXML.scia_loads.LoadContainer.LoadContainerBase.getLoadCombinationDict" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="import_export.sciaXML.scia_loads.LoadContainer.LoadContainerBase.loads2Neutral">
+<code class="descname">loads2Neutral</code><span class="sig-paren">(</span><em>preprocessor</em>, <em>permanentLoadCaseNames</em><span class="sig-paren">)</span><a class="headerlink" href="#import_export.sciaXML.scia_loads.LoadContainer.LoadContainerBase.loads2Neutral" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="import_export.sciaXML.scia_loads.LoadContainer.LoadContainerBase.readFromXC">
+<code class="descname">readFromXC</code><span class="sig-paren">(</span><em>preprocessor</em>, <em>permanentLoadCaseNames</em>, <em>combContainer</em><span class="sig-paren">)</span><a class="headerlink" href="#import_export.sciaXML.scia_loads.LoadContainer.LoadContainerBase.readFromXC" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="import_export.sciaXML.scia_loads.LoadContainer.LoadContainerBase.readLoadCombsFromXC">
+<code class="descname">readLoadCombsFromXC</code><span class="sig-paren">(</span><em>combContainer</em><span class="sig-paren">)</span><a class="headerlink" href="#import_export.sciaXML.scia_loads.LoadContainer.LoadContainerBase.readLoadCombsFromXC" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="import_export.sciaXML.scia_loads.LoadContainer.LoadContainerBase.readLoadsFromXC">
+<code class="descname">readLoadsFromXC</code><span class="sig-paren">(</span><em>preprocessor</em>, <em>permanentLoadCaseNames</em><span class="sig-paren">)</span><a class="headerlink" href="#import_export.sciaXML.scia_loads.LoadContainer.LoadContainerBase.readLoadsFromXC" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-import_export.sciaXML.scia_loads.LoadGroupContainer">
+<span id="loadgroupcontainer"></span><h2>LoadGroupContainer<a class="headerlink" href="#module-import_export.sciaXML.scia_loads.LoadGroupContainer" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="import_export.sciaXML.scia_loads.LoadGroupContainer.LoadGroupContainer">
+<em class="property">class </em><code class="descclassname">import_export.sciaXML.scia_loads.LoadGroupContainer.</code><code class="descname">LoadGroupContainer</code><span class="sig-paren">(</span><em>loadGroupsDict</em><span class="sig-paren">)</span><a class="headerlink" href="#import_export.sciaXML.scia_loads.LoadGroupContainer.LoadGroupContainer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="import_export.sciaXML.xml_basics.html#import_export.sciaXML.xml_basics.Container.Container" title="import_export.sciaXML.xml_basics.Container.Container"><code class="xref py py-class docutils literal"><span class="pre">import_export.sciaXML.xml_basics.Container.Container</span></code></a></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="import_export.sciaXML.scia_loads.LoadGroupContainer.getLoadGroupObject">
+<code class="descclassname">import_export.sciaXML.scia_loads.LoadGroupContainer.</code><code class="descname">getLoadGroupObject</code><span class="sig-paren">(</span><em>loadGroup</em><span class="sig-paren">)</span><a class="headerlink" href="#import_export.sciaXML.scia_loads.LoadGroupContainer.getLoadGroupObject" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-import_export.sciaXML.scia_loads.LoadGroupProperties">
+<span id="loadgroupproperties"></span><h2>LoadGroupProperties<a class="headerlink" href="#module-import_export.sciaXML.scia_loads.LoadGroupProperties" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="import_export.sciaXML.scia_loads.LoadGroupProperties.LoadGroupProperties">
+<em class="property">class </em><code class="descclassname">import_export.sciaXML.scia_loads.LoadGroupProperties.</code><code class="descname">LoadGroupProperties</code><a class="headerlink" href="#import_export.sciaXML.scia_loads.LoadGroupProperties.LoadGroupProperties" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="import_export.sciaXML.xml_basics.html#import_export.sciaXML.xml_basics.PropertiesContainer.PropertiesContainer" title="import_export.sciaXML.xml_basics.PropertiesContainer.PropertiesContainer"><code class="xref py py-class docutils literal"><span class="pre">import_export.sciaXML.xml_basics.PropertiesContainer.PropertiesContainer</span></code></a></p>
+<dl class="method">
+<dt id="import_export.sciaXML.scia_loads.LoadGroupProperties.LoadGroupProperties.getXMLElement">
+<code class="descname">getXMLElement</code><span class="sig-paren">(</span><em>parent</em><span class="sig-paren">)</span><a class="headerlink" href="#import_export.sciaXML.scia_loads.LoadGroupProperties.LoadGroupProperties.getXMLElement" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the corresponding XML element for the load groups properties.
+Parameters:
+parent: owner of this object in the XML structure.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="import_export.sciaXML.scia_loads.LoadGroupProperties.LoadGroupProperties.tableProp">
+<code class="descname">tableProp</code><em class="property"> = None</em><a class="headerlink" href="#import_export.sciaXML.scia_loads.LoadGroupProperties.LoadGroupProperties.tableProp" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-import_export.sciaXML.scia_loads.NodeLoadContainer">
+<span id="nodeloadcontainer"></span><h2>NodeLoadContainer<a class="headerlink" href="#module-import_export.sciaXML.scia_loads.NodeLoadContainer" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="import_export.sciaXML.scia_loads.NodeLoadContainer.NodeLoadComponent">
+<em class="property">class </em><code class="descclassname">import_export.sciaXML.scia_loads.NodeLoadContainer.</code><code class="descname">NodeLoadComponent</code><span class="sig-paren">(</span><em>nodeId</em>, <em>loadCaseId</em>, <em>loadCaseName</em>, <em>direction</em>, <em>value</em><span class="sig-paren">)</span><a class="headerlink" href="#import_export.sciaXML.scia_loads.NodeLoadContainer.NodeLoadComponent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#import_export.sciaXML.scia_loads.LoadComponentBase.LoadComponentBase" title="import_export.sciaXML.scia_loads.LoadComponentBase.LoadComponentBase"><code class="xref py py-class docutils literal"><span class="pre">import_export.sciaXML.scia_loads.LoadComponentBase.LoadComponentBase</span></code></a></p>
+<p>Each of the components (X, Z or Z) of a punctual load</p>
+<dl class="attribute">
+<dt id="import_export.sciaXML.scia_loads.NodeLoadContainer.NodeLoadComponent.counter">
+<code class="descname">counter</code><em class="property"> = 0</em><a class="headerlink" href="#import_export.sciaXML.scia_loads.NodeLoadContainer.NodeLoadComponent.counter" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="import_export.sciaXML.scia_loads.NodeLoadContainer.NodeLoadComponent.getNodeReferenceItem">
+<code class="descname">getNodeReferenceItem</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#import_export.sciaXML.scia_loads.NodeLoadContainer.NodeLoadComponent.getNodeReferenceItem" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="import_export.sciaXML.scia_loads.NodeLoadContainer.NodeLoadComponent.getObject">
+<code class="descname">getObject</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#import_export.sciaXML.scia_loads.NodeLoadContainer.NodeLoadComponent.getObject" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="import_export.sciaXML.scia_loads.NodeLoadContainer.NodeLoadComponent.memberType">
+<code class="descname">memberType</code><em class="property"> = '{39A7F468-A0D4-4DFF-8E5C-5843E1807D13}'</em><a class="headerlink" href="#import_export.sciaXML.scia_loads.NodeLoadContainer.NodeLoadComponent.memberType" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="import_export.sciaXML.scia_loads.NodeLoadContainer.NodeLoadComponent.memberTypeName">
+<code class="descname">memberTypeName</code><em class="property"> = 'EP_DSG_Elements.EP_StructNode.1'</em><a class="headerlink" href="#import_export.sciaXML.scia_loads.NodeLoadContainer.NodeLoadComponent.memberTypeName" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="import_export.sciaXML.scia_loads.NodeLoadContainer.NodeLoadContainer">
+<em class="property">class </em><code class="descclassname">import_export.sciaXML.scia_loads.NodeLoadContainer.</code><code class="descname">NodeLoadContainer</code><span class="sig-paren">(</span><em>nodeLoadsDict</em><span class="sig-paren">)</span><a class="headerlink" href="#import_export.sciaXML.scia_loads.NodeLoadContainer.NodeLoadContainer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="import_export.sciaXML.xml_basics.html#import_export.sciaXML.xml_basics.Container.Container" title="import_export.sciaXML.xml_basics.Container.Container"><code class="xref py py-class docutils literal"><span class="pre">import_export.sciaXML.xml_basics.Container.Container</span></code></a></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="import_export.sciaXML.scia_loads.NodeLoadContainer.getNodeLoadComponents">
+<code class="descclassname">import_export.sciaXML.scia_loads.NodeLoadContainer.</code><code class="descname">getNodeLoadComponents</code><span class="sig-paren">(</span><em>nodeLoad</em><span class="sig-paren">)</span><a class="headerlink" href="#import_export.sciaXML.scia_loads.NodeLoadContainer.getNodeLoadComponents" title="Permalink to this definition">¶</a></dt>
+<dd><p>get NodeLoadComponent objects from the 3D nodeLoad argument.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="import_export.sciaXML.scia_loads.NodeLoadContainer.getNodeLoadObjects">
+<code class="descclassname">import_export.sciaXML.scia_loads.NodeLoadContainer.</code><code class="descname">getNodeLoadObjects</code><span class="sig-paren">(</span><em>nl</em><span class="sig-paren">)</span><a class="headerlink" href="#import_export.sciaXML.scia_loads.NodeLoadContainer.getNodeLoadObjects" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-import_export.sciaXML.scia_loads.NodeLoadProperties">
+<span id="nodeloadproperties"></span><h2>NodeLoadProperties<a class="headerlink" href="#module-import_export.sciaXML.scia_loads.NodeLoadProperties" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="import_export.sciaXML.scia_loads.NodeLoadProperties.NodeLoadProperties">
+<em class="property">class </em><code class="descclassname">import_export.sciaXML.scia_loads.NodeLoadProperties.</code><code class="descname">NodeLoadProperties</code><a class="headerlink" href="#import_export.sciaXML.scia_loads.NodeLoadProperties.NodeLoadProperties" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="import_export.sciaXML.xml_basics.html#import_export.sciaXML.xml_basics.PropertiesContainer.PropertiesContainer" title="import_export.sciaXML.xml_basics.PropertiesContainer.PropertiesContainer"><code class="xref py py-class docutils literal"><span class="pre">import_export.sciaXML.xml_basics.PropertiesContainer.PropertiesContainer</span></code></a></p>
+<dl class="method">
+<dt id="import_export.sciaXML.scia_loads.NodeLoadProperties.NodeLoadProperties.getXMLElement">
+<code class="descname">getXMLElement</code><span class="sig-paren">(</span><em>parent</em><span class="sig-paren">)</span><a class="headerlink" href="#import_export.sciaXML.scia_loads.NodeLoadProperties.NodeLoadProperties.getXMLElement" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the corresponding XML element for the node loads properties.
+Parameters:
+parent: owner of this object in the XML structure.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="import_export.sciaXML.scia_loads.NodeLoadProperties.NodeLoadProperties.tableProp">
+<code class="descname">tableProp</code><em class="property"> = None</em><a class="headerlink" href="#import_export.sciaXML.scia_loads.NodeLoadProperties.NodeLoadProperties.tableProp" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-import_export.sciaXML.scia_loads.PointForceFreeContainer">
+<span id="pointforcefreecontainer"></span><h2>PointForceFreeContainer<a class="headerlink" href="#module-import_export.sciaXML.scia_loads.PointForceFreeContainer" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="import_export.sciaXML.scia_loads.PointForceFreeContainer.PointForceFreeComponent">
+<em class="property">class </em><code class="descclassname">import_export.sciaXML.scia_loads.PointForceFreeContainer.</code><code class="descname">PointForceFreeComponent</code><span class="sig-paren">(</span><em>loadCaseId</em>, <em>loadCaseName</em>, <em>direction</em>, <em>value</em>, <em>x</em>, <em>y</em>, <em>z</em><span class="sig-paren">)</span><a class="headerlink" href="#import_export.sciaXML.scia_loads.PointForceFreeContainer.PointForceFreeComponent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#import_export.sciaXML.scia_loads.LoadComponentBase.LoadComponentBase" title="import_export.sciaXML.scia_loads.LoadComponentBase.LoadComponentBase"><code class="xref py py-class docutils literal"><span class="pre">import_export.sciaXML.scia_loads.LoadComponentBase.LoadComponentBase</span></code></a></p>
+<p>Each of the components (X, Z or Z) of a punctual load</p>
+<dl class="attribute">
+<dt id="import_export.sciaXML.scia_loads.PointForceFreeContainer.PointForceFreeComponent.counter">
+<code class="descname">counter</code><em class="property"> = 0</em><a class="headerlink" href="#import_export.sciaXML.scia_loads.PointForceFreeContainer.PointForceFreeComponent.counter" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="import_export.sciaXML.scia_loads.PointForceFreeContainer.PointForceFreeComponent.getObject">
+<code class="descname">getObject</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#import_export.sciaXML.scia_loads.PointForceFreeContainer.PointForceFreeComponent.getObject" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns an XML object for the point force component.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="import_export.sciaXML.scia_loads.PointForceFreeContainer.PointForceFreeContainer">
+<em class="property">class </em><code class="descclassname">import_export.sciaXML.scia_loads.PointForceFreeContainer.</code><code class="descname">PointForceFreeContainer</code><span class="sig-paren">(</span><em>pointForceFreesDict</em><span class="sig-paren">)</span><a class="headerlink" href="#import_export.sciaXML.scia_loads.PointForceFreeContainer.PointForceFreeContainer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="import_export.sciaXML.xml_basics.html#import_export.sciaXML.xml_basics.Container.Container" title="import_export.sciaXML.xml_basics.Container.Container"><code class="xref py py-class docutils literal"><span class="pre">import_export.sciaXML.xml_basics.Container.Container</span></code></a></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="import_export.sciaXML.scia_loads.PointForceFreeContainer.getPointForceFreeComponents">
+<code class="descclassname">import_export.sciaXML.scia_loads.PointForceFreeContainer.</code><code class="descname">getPointForceFreeComponents</code><span class="sig-paren">(</span><em>pointForceFree</em><span class="sig-paren">)</span><a class="headerlink" href="#import_export.sciaXML.scia_loads.PointForceFreeContainer.getPointForceFreeComponents" title="Permalink to this definition">¶</a></dt>
+<dd><p>get PointForceFreeComponent objects from the 3D pointForceFree argument.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="import_export.sciaXML.scia_loads.PointForceFreeContainer.getPointForceFreeObjects">
+<code class="descclassname">import_export.sciaXML.scia_loads.PointForceFreeContainer.</code><code class="descname">getPointForceFreeObjects</code><span class="sig-paren">(</span><em>nl</em><span class="sig-paren">)</span><a class="headerlink" href="#import_export.sciaXML.scia_loads.PointForceFreeContainer.getPointForceFreeObjects" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-import_export.sciaXML.scia_loads.PointForceFreeProperties">
+<span id="pointforcefreeproperties"></span><h2>PointForceFreeProperties<a class="headerlink" href="#module-import_export.sciaXML.scia_loads.PointForceFreeProperties" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="import_export.sciaXML.scia_loads.PointForceFreeProperties.PointForceFreeProperties">
+<em class="property">class </em><code class="descclassname">import_export.sciaXML.scia_loads.PointForceFreeProperties.</code><code class="descname">PointForceFreeProperties</code><a class="headerlink" href="#import_export.sciaXML.scia_loads.PointForceFreeProperties.PointForceFreeProperties" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="import_export.sciaXML.xml_basics.html#import_export.sciaXML.xml_basics.PropertiesContainer.PropertiesContainer" title="import_export.sciaXML.xml_basics.PropertiesContainer.PropertiesContainer"><code class="xref py py-class docutils literal"><span class="pre">import_export.sciaXML.xml_basics.PropertiesContainer.PropertiesContainer</span></code></a></p>
+<p>Free point force properties in SCIA XML file.</p>
+<dl class="method">
+<dt id="import_export.sciaXML.scia_loads.PointForceFreeProperties.PointForceFreeProperties.getXMLElement">
+<code class="descname">getXMLElement</code><span class="sig-paren">(</span><em>parent</em><span class="sig-paren">)</span><a class="headerlink" href="#import_export.sciaXML.scia_loads.PointForceFreeProperties.PointForceFreeProperties.getXMLElement" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the corresponding XML element..
+Parameters:
+parent: owner of this object in the XML structure.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-import_export.sciaXML.scia_loads.SurfacePressureFreeContainer">
+<span id="surfacepressurefreecontainer"></span><h2>SurfacePressureFreeContainer<a class="headerlink" href="#module-import_export.sciaXML.scia_loads.SurfacePressureFreeContainer" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="import_export.sciaXML.scia_loads.SurfacePressureFreeContainer.PolygonPointRow">
+<em class="property">class </em><code class="descclassname">import_export.sciaXML.scia_loads.SurfacePressureFreeContainer.</code><code class="descname">PolygonPointRow</code><span class="sig-paren">(</span><em>id</em>, <em>x</em>, <em>y</em>, <em>z</em><span class="sig-paren">)</span><a class="headerlink" href="#import_export.sciaXML.scia_loads.SurfacePressureFreeContainer.PolygonPointRow" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="import_export.sciaXML.xml_basics.html#import_export.sciaXML.xml_basics.Row.RowP0123" title="import_export.sciaXML.xml_basics.Row.RowP0123"><code class="xref py py-class docutils literal"><span class="pre">import_export.sciaXML.xml_basics.Row.RowP0123</span></code></a></p>
+<p>SCIA XML object for each of the points
+that define the polygon in which the load acts.</p>
+<dl class="method">
+<dt id="import_export.sciaXML.scia_loads.SurfacePressureFreeContainer.PolygonPointRow.getXMLElement">
+<code class="descname">getXMLElement</code><span class="sig-paren">(</span><em>parent</em><span class="sig-paren">)</span><a class="headerlink" href="#import_export.sciaXML.scia_loads.SurfacePressureFreeContainer.PolygonPointRow.getXMLElement" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="import_export.sciaXML.scia_loads.SurfacePressureFreeContainer.PolygonPointRow.populateXMLElement">
+<code class="descname">populateXMLElement</code><span class="sig-paren">(</span><em>xmlElement</em><span class="sig-paren">)</span><a class="headerlink" href="#import_export.sciaXML.scia_loads.SurfacePressureFreeContainer.PolygonPointRow.populateXMLElement" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="import_export.sciaXML.scia_loads.SurfacePressureFreeContainer.SurfacePressureFreeComponent">
+<em class="property">class </em><code class="descclassname">import_export.sciaXML.scia_loads.SurfacePressureFreeContainer.</code><code class="descname">SurfacePressureFreeComponent</code><span class="sig-paren">(</span><em>loadCaseId</em>, <em>loadCaseName</em>, <em>direction</em>, <em>distribution</em>, <em>value</em>, <em>polygon</em>, <em>globalCooSys</em><span class="sig-paren">)</span><a class="headerlink" href="#import_export.sciaXML.scia_loads.SurfacePressureFreeContainer.SurfacePressureFreeComponent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#import_export.sciaXML.scia_loads.LoadComponentBase.LoadComponentBase" title="import_export.sciaXML.scia_loads.LoadComponentBase.LoadComponentBase"><code class="xref py py-class docutils literal"><span class="pre">import_export.sciaXML.scia_loads.LoadComponentBase.LoadComponentBase</span></code></a></p>
+<p>Each of the components (X, Z or Z) of an surface pressure.</p>
+<dl class="attribute">
+<dt id="import_export.sciaXML.scia_loads.SurfacePressureFreeContainer.SurfacePressureFreeComponent.counter">
+<code class="descname">counter</code><em class="property"> = 0</em><a class="headerlink" href="#import_export.sciaXML.scia_loads.SurfacePressureFreeContainer.SurfacePressureFreeComponent.counter" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="import_export.sciaXML.scia_loads.SurfacePressureFreeContainer.SurfacePressureFreeComponent.getObject">
+<code class="descname">getObject</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#import_export.sciaXML.scia_loads.SurfacePressureFreeContainer.SurfacePressureFreeComponent.getObject" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="import_export.sciaXML.scia_loads.SurfacePressureFreeContainer.SurfacePressureFreeComponent.getPolygonRows">
+<code class="descname">getPolygonRows</code><span class="sig-paren">(</span><em>polygon</em><span class="sig-paren">)</span><a class="headerlink" href="#import_export.sciaXML.scia_loads.SurfacePressureFreeContainer.SurfacePressureFreeComponent.getPolygonRows" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="import_export.sciaXML.scia_loads.SurfacePressureFreeContainer.SurfacePressureFreeContainer">
+<em class="property">class </em><code class="descclassname">import_export.sciaXML.scia_loads.SurfacePressureFreeContainer.</code><code class="descname">SurfacePressureFreeContainer</code><span class="sig-paren">(</span><em>surfacePressureFreesDict</em><span class="sig-paren">)</span><a class="headerlink" href="#import_export.sciaXML.scia_loads.SurfacePressureFreeContainer.SurfacePressureFreeContainer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="import_export.sciaXML.xml_basics.html#import_export.sciaXML.xml_basics.Container.Container" title="import_export.sciaXML.xml_basics.Container.Container"><code class="xref py py-class docutils literal"><span class="pre">import_export.sciaXML.xml_basics.Container.Container</span></code></a></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="import_export.sciaXML.scia_loads.SurfacePressureFreeContainer.getSurfacePressureFreeComponents">
+<code class="descclassname">import_export.sciaXML.scia_loads.SurfacePressureFreeContainer.</code><code class="descname">getSurfacePressureFreeComponents</code><span class="sig-paren">(</span><em>surfacePressureFree</em><span class="sig-paren">)</span><a class="headerlink" href="#import_export.sciaXML.scia_loads.SurfacePressureFreeContainer.getSurfacePressureFreeComponents" title="Permalink to this definition">¶</a></dt>
+<dd><p>get SurfacePressureFreeComponent objects from the 3D surfacePressureFree argument.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="import_export.sciaXML.scia_loads.SurfacePressureFreeContainer.getSurfacePressureFreeObjects">
+<code class="descclassname">import_export.sciaXML.scia_loads.SurfacePressureFreeContainer.</code><code class="descname">getSurfacePressureFreeObjects</code><span class="sig-paren">(</span><em>nl</em><span class="sig-paren">)</span><a class="headerlink" href="#import_export.sciaXML.scia_loads.SurfacePressureFreeContainer.getSurfacePressureFreeObjects" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-import_export.sciaXML.scia_loads.SurfacePressureFreeProperties">
+<span id="surfacepressurefreeproperties"></span><h2>SurfacePressureFreeProperties<a class="headerlink" href="#module-import_export.sciaXML.scia_loads.SurfacePressureFreeProperties" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="import_export.sciaXML.scia_loads.SurfacePressureFreeProperties.SurfacePressureFreeProperties">
+<em class="property">class </em><code class="descclassname">import_export.sciaXML.scia_loads.SurfacePressureFreeProperties.</code><code class="descname">SurfacePressureFreeProperties</code><a class="headerlink" href="#import_export.sciaXML.scia_loads.SurfacePressureFreeProperties.SurfacePressureFreeProperties" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="import_export.sciaXML.xml_basics.html#import_export.sciaXML.xml_basics.PropertiesContainer.PropertiesContainer" title="import_export.sciaXML.xml_basics.PropertiesContainer.PropertiesContainer"><code class="xref py py-class docutils literal"><span class="pre">import_export.sciaXML.xml_basics.PropertiesContainer.PropertiesContainer</span></code></a></p>
+<p>Free point force properties in SCIA XML file.</p>
+<dl class="method">
+<dt id="import_export.sciaXML.scia_loads.SurfacePressureFreeProperties.SurfacePressureFreeProperties.getXMLElement">
+<code class="descname">getXMLElement</code><span class="sig-paren">(</span><em>parent</em><span class="sig-paren">)</span><a class="headerlink" href="#import_export.sciaXML.scia_loads.SurfacePressureFreeProperties.SurfacePressureFreeProperties.getXMLElement" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the corresponding XML element..
+Parameters:
+parent: owner of this object in the XML structure.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Import_export sciaXML. Loads</a><ul>
+<li><a class="reference internal" href="#module-import_export.sciaXML.scia_loads.ElementLoadContainer">ElementLoadContainer</a></li>
+<li><a class="reference internal" href="#module-import_export.sciaXML.scia_loads.ElementLoadProperties">ElementLoadProperties</a></li>
+<li><a class="reference internal" href="#module-import_export.sciaXML.scia_loads.LoadCaseContainer">LoadCaseContainer</a></li>
+<li><a class="reference internal" href="#module-import_export.sciaXML.scia_loads.LoadCaseProperties">LoadCaseProperties</a></li>
+<li><a class="reference internal" href="#module-import_export.sciaXML.scia_loads.LoadCombContainer">LoadCombContainer</a></li>
+<li><a class="reference internal" href="#module-import_export.sciaXML.scia_loads.LoadCombProperties">LoadCombProperties</a></li>
+<li><a class="reference internal" href="#module-import_export.sciaXML.scia_loads.LoadComponentBase">LoadComponentBase</a></li>
+<li><a class="reference internal" href="#module-import_export.sciaXML.scia_loads.LoadContainer">LoadContainer</a></li>
+<li><a class="reference internal" href="#module-import_export.sciaXML.scia_loads.LoadGroupContainer">LoadGroupContainer</a></li>
+<li><a class="reference internal" href="#module-import_export.sciaXML.scia_loads.LoadGroupProperties">LoadGroupProperties</a></li>
+<li><a class="reference internal" href="#module-import_export.sciaXML.scia_loads.NodeLoadContainer">NodeLoadContainer</a></li>
+<li><a class="reference internal" href="#module-import_export.sciaXML.scia_loads.NodeLoadProperties">NodeLoadProperties</a></li>
+<li><a class="reference internal" href="#module-import_export.sciaXML.scia_loads.PointForceFreeContainer">PointForceFreeContainer</a></li>
+<li><a class="reference internal" href="#module-import_export.sciaXML.scia_loads.PointForceFreeProperties">PointForceFreeProperties</a></li>
+<li><a class="reference internal" href="#module-import_export.sciaXML.scia_loads.SurfacePressureFreeContainer">SurfacePressureFreeContainer</a></li>
+<li><a class="reference internal" href="#module-import_export.sciaXML.scia_loads.SurfacePressureFreeProperties">SurfacePressureFreeProperties</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="import_export.sciaXML.xml_basics.html"
+                        title="previous chapter">Import_export sciaXML. XML basics</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="rough_calculations.html"
+                        title="next chapter">Rough calculations</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/miscellany/import_export.sciaXML.scia_loads.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="rough_calculations.html" title="Rough calculations"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="import_export.sciaXML.xml_basics.html" title="Import_export sciaXML. XML basics"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">XC 3.0 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="import_export.html" >Import_Export</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2016, Luis Pérez Tato (LCPT) &amp; Ana Ortega (AO_O).
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.6.
+    </div>
+  </body>
+</html>

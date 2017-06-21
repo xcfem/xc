@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+
 '''
 Cross section axis:
 
@@ -19,12 +20,16 @@ Cross section axis:
 The axis used in Arcelor documentation are different from those used in XC
 (strong axis parallel to z axis) in other words: values for Y and Z axis 
 are swapped with respect to those in the catalog.
-'''
-AU_profiles={}
+
+Warning: area in m2/m, inertia in m4/m, Wz in m3/m and so on
 
 '''
-Warning area in m2/m, inertia in m4/m, Wz in m3/m and so on
-'''
+
+
+AU_profiles={}
+
+
+
 AU_profiles['AU_14']= {'nmb':'AU_14', 'P':77.9, 'h':408e-3, 'b':750e-3, 's':8.3e-3, 't':10.0e-3, 'A':132.3e-4, 'Iz':28880e-8, 'Wzel':1405e-6, 'Wzpl':1663e-8, 'Szel':820e-6, 'E':2.1e+11, 'nu':0.3}
 AU_profiles['AU_16']= {'nmb':'AU_16', 'P':86.3, 'h':411e-3, 'b':750e-3, 's':9.3e-3, 't':11.5e-3, 'A':146.5e-4, 'Iz':32850e-8, 'Wzel':1600e-6, 'Wzpl':1891e-8, 'Szel':935e-6, 'E':2.1e+11, 'nu':0.3}
 AU_profiles['AU_18']= {'nmb':'AU_18', 'P':88.5, 'h':441e-3, 'b':750e-3, 's':9.1e-3, 't':10.5e-3, 'A':150.3e-4, 'Iz':39300e-8, 'Wzel':1780e-6, 'Wzpl':2082e-8, 'Szel':1030e-6, 'E':2.1e+11, 'nu':0.3}

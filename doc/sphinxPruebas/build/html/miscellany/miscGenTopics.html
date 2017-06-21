@@ -1,0 +1,301 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>ansysToEsfBarra &mdash; XC 3.0 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '3.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="XC 3.0 documentation" href="../index.html" />
+    <link rel="up" title="Utils" href="misc.html" />
+    <link rel="next" title="Import_Export" href="import_export.html" />
+    <link rel="prev" title="Utils" href="misc.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="import_export.html" title="Import_Export"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="misc.html" title="Utils"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">XC 3.0 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="misc.html" accesskey="U">Utils</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-misc.ansysToEsfBarra">
+<span id="ansystoesfbarra"></span><h1>ansysToEsfBarra<a class="headerlink" href="#module-misc.ansysToEsfBarra" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="misc.ansysToEsfBarra.ansysToEsfBarra">
+<code class="descclassname">misc.ansysToEsfBarra.</code><code class="descname">ansysToEsfBarra</code><span class="sig-paren">(</span><em>nmbArch</em>, <em>nmbDBase</em>, <em>nmbTabla</em><span class="sig-paren">)</span><a class="headerlink" href="#misc.ansysToEsfBarra.ansysToEsfBarra" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Importa el listado de esfuerzos en barras de ansys que se pasa como parámetro</dt>
+<dd>nmbArchivo: Nombre del archivo que contiene el listado.
+nmbDBase: Nombre de la base de datos donde se guardará la tabla.
+nmbTabla: Nombre de la tabla que contendrá los esfuerzos.</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="misc.ansysToEsfBarra.splitActionFiles">
+<code class="descclassname">misc.ansysToEsfBarra.</code><code class="descname">splitActionFiles</code><span class="sig-paren">(</span><em>nmbArch</em><span class="sig-paren">)</span><a class="headerlink" href="#misc.ansysToEsfBarra.splitActionFiles" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-misc.ansysToEsfShell">
+<span id="ansystoesfshell"></span><h1>ansysToEsfShell<a class="headerlink" href="#module-misc.ansysToEsfShell" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="misc.ansysToEsfShell.ansysToEsfShell">
+<code class="descclassname">misc.ansysToEsfShell.</code><code class="descname">ansysToEsfShell</code><span class="sig-paren">(</span><em>nmbArch</em>, <em>nmbDBase</em>, <em>nmbTabla</em><span class="sig-paren">)</span><a class="headerlink" href="#misc.ansysToEsfShell.ansysToEsfShell" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Importa el listado de esfuerzos en elementos shell de ansys que se pasa como parámetro</dt>
+<dd>nmbArchivo: Nombre del archivo que contiene el listado.
+nmbDBase: Nombre de la base de datos donde se guardará la tabla.
+nmbTabla: Nombre de la tabla que contendrá los esfuerzos.</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="module-misc.banco_pruebas_scc2d">
+<span id="banco-pruebas-scc2d"></span><h1>banco_pruebas_scc2d<a class="headerlink" href="#module-misc.banco_pruebas_scc2d" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="misc.banco_pruebas_scc2d.sectionModel">
+<code class="descclassname">misc.banco_pruebas_scc2d.</code><code class="descname">sectionModel</code><span class="sig-paren">(</span><em>preprocessor</em>, <em>sectionName</em><span class="sig-paren">)</span><a class="headerlink" href="#misc.banco_pruebas_scc2d.sectionModel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines a model to test a 2D fiber section.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-misc.banco_pruebas_scc3d">
+<span id="banco-pruebas-scc3d"></span><h1>banco_pruebas_scc3d<a class="headerlink" href="#module-misc.banco_pruebas_scc3d" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="misc.banco_pruebas_scc3d.sectionModel">
+<code class="descclassname">misc.banco_pruebas_scc3d.</code><code class="descname">sectionModel</code><span class="sig-paren">(</span><em>preprocessor</em>, <em>sectionName</em><span class="sig-paren">)</span><a class="headerlink" href="#misc.banco_pruebas_scc3d.sectionModel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines a model to test a 3D fiber section.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-misc.banco_pruebas_shell">
+<span id="banco-pruebas-shell"></span><h1>banco_pruebas_shell<a class="headerlink" href="#module-misc.banco_pruebas_shell" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="misc.banco_pruebas_shell.nuevosZeroLengthShell">
+<code class="descclassname">misc.banco_pruebas_shell.</code><code class="descname">nuevosZeroLengthShell</code><span class="sig-paren">(</span><em>nmbS</em>, <em>tagElem</em>, <em>offset</em><span class="sig-paren">)</span><a class="headerlink" href="#misc.banco_pruebas_shell.nuevosZeroLengthShell" title="Permalink to this definition">¶</a></dt>
+<dd><p>nmbS: Nombre del material.
+tagNodo: Identificador del nodo.
+tagElem: Identificador del elemento.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="misc.banco_pruebas_shell.simulaCargasSeccionesShell">
+<code class="descclassname">misc.banco_pruebas_shell.</code><code class="descname">simulaCargasSeccionesShell</code><span class="sig-paren">(</span><em>nmbDatabase</em>, <em>nmbTablaEsfuerzos</em>, <em>nmbQueryEsfuerzos</em>, <em>nmbTablaSecc</em>, <em>offset</em><span class="sig-paren">)</span><a class="headerlink" href="#misc.banco_pruebas_shell.simulaCargasSeccionesShell" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="misc.banco_pruebas_shell.simulaCargasXYFromTable">
+<code class="descclassname">misc.banco_pruebas_shell.</code><code class="descname">simulaCargasXYFromTable</code><span class="sig-paren">(</span><em>nmbQuery</em>, <em>nmbTbEsf</em>, <em>idElem</em>, <em>offset</em><span class="sig-paren">)</span><a class="headerlink" href="#misc.banco_pruebas_shell.simulaCargasXYFromTable" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Crea las cargas sobre cada uno de los elementos a partir de las tablas creadas anteriormente</dt>
+<dd>nmbQuery: Nombre de la consulta que se empleara para obtener las cargas.
+nmbTbEsf: Nombre de la tabla que contiene los índices de sección.
+idElem: Identificador del elemento shell.</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="misc.banco_pruebas_shell.simulaShellElemFromTable">
+<code class="descclassname">misc.banco_pruebas_shell.</code><code class="descname">simulaShellElemFromTable</code><span class="sig-paren">(</span><em>preprocessor</em>, <em>nmbDBase</em>, <em>nmbTablaElem</em>, <em>sectionName</em>, <em>offset</em><span class="sig-paren">)</span><a class="headerlink" href="#misc.banco_pruebas_shell.simulaShellElemFromTable" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Crea los elementos a partir de la tabla creada anteriormente</dt>
+<dd>nmbDBase: Nombre de la base de datos donde se guardará la tabla.
+nmbTableElem: Nombre de la tabla que contiene los índices de elemento.
+sectionName: Nombre de la sección que se asigna a cada elemento.</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="module-misc.cargasSecciones">
+<span id="cargassecciones"></span><h1>cargasSecciones<a class="headerlink" href="#module-misc.cargasSecciones" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="misc.cargasSecciones.creaCargasSecciones">
+<code class="descclassname">misc.cargasSecciones.</code><code class="descname">creaCargasSecciones</code><span class="sig-paren">(</span><em>preprocessor</em>, <em>nmbDatabase</em>, <em>nmbTablaEsfuerzos</em>, <em>nmbQueryEsfuerzos</em>, <em>nmbTablaSecc</em><span class="sig-paren">)</span><a class="headerlink" href="#misc.cargasSecciones.creaCargasSecciones" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-misc.matrixUtils">
+<span id="matrixutils"></span><h1>matrixUtils<a class="headerlink" href="#module-misc.matrixUtils" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="misc.matrixUtils.matrixToNumpyArray">
+<code class="descclassname">misc.matrixUtils.</code><code class="descname">matrixToNumpyArray</code><span class="sig-paren">(</span><em>m</em><span class="sig-paren">)</span><a class="headerlink" href="#misc.matrixUtils.matrixToNumpyArray" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="misc.matrixUtils.vectorToNumpyArray">
+<code class="descclassname">misc.matrixUtils.</code><code class="descname">vectorToNumpyArray</code><span class="sig-paren">(</span><em>v</em><span class="sig-paren">)</span><a class="headerlink" href="#misc.matrixUtils.vectorToNumpyArray" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-misc.metal3dToEsfBarra">
+<span id="metal3dtoesfbarra"></span><h1>metal3dToEsfBarra<a class="headerlink" href="#module-misc.metal3dToEsfBarra" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="misc.metal3dToEsfBarra.getCodEsf">
+<code class="descclassname">misc.metal3dToEsfBarra.</code><code class="descname">getCodEsf</code><span class="sig-paren">(</span><em>cod</em><span class="sig-paren">)</span><a class="headerlink" href="#misc.metal3dToEsfBarra.getCodEsf" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="misc.metal3dToEsfBarra.getNombreAccion">
+<code class="descclassname">misc.metal3dToEsfBarra.</code><code class="descname">getNombreAccion</code><span class="sig-paren">(</span><em>str</em><span class="sig-paren">)</span><a class="headerlink" href="#misc.metal3dToEsfBarra.getNombreAccion" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="misc.metal3dToEsfBarra.metal3DToEsfBarra">
+<code class="descclassname">misc.metal3dToEsfBarra.</code><code class="descname">metal3DToEsfBarra</code><span class="sig-paren">(</span><em>nmbArch</em>, <em>nmbDBase</em>, <em>nmbTabla</em><span class="sig-paren">)</span><a class="headerlink" href="#misc.metal3dToEsfBarra.metal3DToEsfBarra" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Importa el listado de esfuerzos en barras de metal 3D que se pasa como parámetro</dt>
+<dd>nmbArchivo: Nombre del archivo que contiene el listado.
+nmbDBase: Nombre de la base de datos donde se guardará la tabla.
+nmbTabla: Nombre de la tabla que contendrá los esfuerzos.</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="misc.metal3dToEsfBarra.metal3DcreaTablaEsfBarra">
+<code class="descclassname">misc.metal3dToEsfBarra.</code><code class="descname">metal3DcreaTablaEsfBarra</code><span class="sig-paren">(</span><em>nmbArch</em>, <em>nmbDBase</em>, <em>nmbTabla</em><span class="sig-paren">)</span><a class="headerlink" href="#misc.metal3dToEsfBarra.metal3DcreaTablaEsfBarra" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Importa el listado de esfuerzos en barras de metal 3D que se pasa como parámetro</dt>
+<dd>nmbArchivo: Nombre del archivo que contiene el listado.
+nmbDBase: Nombre de la base de datos donde se guardará la tabla.
+nmbTabla: Nombre de la tabla que contendrá los esfuerzos.</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="module-misc.tablaEsf">
+<span id="tablaesf"></span><h1>tablaEsf<a class="headerlink" href="#module-misc.tablaEsf" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="misc.tablaEsf.extractElemFromTable">
+<code class="descclassname">misc.tablaEsf.</code><code class="descname">extractElemFromTable</code><span class="sig-paren">(</span><em>nmbDBase</em>, <em>nmbTablaEsf</em>, <em>nmbTablaElem</em><span class="sig-paren">)</span><a class="headerlink" href="#misc.tablaEsf.extractElemFromTable" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Crea una tabla con los números de elemento contenidos en la tabla de esfuerzos</dt>
+<dd>nmbDBase: Nombre de la base de datos donde se guardará la tabla.
+nmbTablaEsf: Nombre de la tabla que contiene los esfuerzos.
+nmbTableElem: Nombre de la tabla que contendrá los índices de elemento.</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="misc.tablaEsf.extractSeccFromTable">
+<code class="descclassname">misc.tablaEsf.</code><code class="descname">extractSeccFromTable</code><span class="sig-paren">(</span><em>nmbDBase</em>, <em>nmbTablaEsf</em>, <em>nmbTablaSecc</em><span class="sig-paren">)</span><a class="headerlink" href="#misc.tablaEsf.extractSeccFromTable" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Crea una tabla con los números de sección contenidos en la tabla de esfuerzos</dt>
+<dd>nmbDBase: Nombre de la base de datos donde se guardará la tabla.
+nmbTablaEsf: Nombre de la tabla que contiene los esfuerzos.
+nmbTableSecc: Nombre de la tabla que contendrá los índices de elemento.</dd>
+</dl>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">ansysToEsfBarra</a></li>
+<li><a class="reference internal" href="#module-misc.ansysToEsfShell">ansysToEsfShell</a></li>
+<li><a class="reference internal" href="#module-misc.banco_pruebas_scc2d">banco_pruebas_scc2d</a></li>
+<li><a class="reference internal" href="#module-misc.banco_pruebas_scc3d">banco_pruebas_scc3d</a></li>
+<li><a class="reference internal" href="#module-misc.banco_pruebas_shell">banco_pruebas_shell</a></li>
+<li><a class="reference internal" href="#module-misc.cargasSecciones">cargasSecciones</a></li>
+<li><a class="reference internal" href="#module-misc.matrixUtils">matrixUtils</a></li>
+<li><a class="reference internal" href="#module-misc.metal3dToEsfBarra">metal3dToEsfBarra</a></li>
+<li><a class="reference internal" href="#module-misc.tablaEsf">tablaEsf</a></li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="misc.html"
+                        title="previous chapter">Utils</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="import_export.html"
+                        title="next chapter">Import_Export</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/miscellany/miscGenTopics.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="import_export.html" title="Import_Export"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="misc.html" title="Utils"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">XC 3.0 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="misc.html" >Utils</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2016, Luis Pérez Tato (LCPT) &amp; Ana Ortega (AO_O).
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.6.
+    </div>
+  </body>
+</html>

@@ -191,6 +191,7 @@ class ElastomericBearing(Bearing):
                 of DOFs.
             iNodA (int): first node identifier (tag).
             iNodB (int): second node identifier (tag).
+
         '''
         return modelSpace.setBearingBetweenNodes(iNodA,iNodB,self.materials)
 

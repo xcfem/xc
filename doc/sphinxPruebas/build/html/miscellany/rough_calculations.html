@@ -1,0 +1,145 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Rough calculations &mdash; XC 3.0 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '3.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="XC 3.0 documentation" href="../index.html" />
+    <link rel="next" title="ArchBridgeRoughModelBase" href="roughCalcGenTopics.html" />
+    <link rel="prev" title="Import_export sciaXML. Loads" href="import_export.sciaXML.scia_loads.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="roughCalcGenTopics.html" title="ArchBridgeRoughModelBase"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="import_export.sciaXML.scia_loads.html" title="Import_export sciaXML. Loads"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">XC 3.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="rough-calculations">
+<h1>Rough calculations<a class="headerlink" href="#rough-calculations" title="Permalink to this headline">¶</a></h1>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="roughCalcGenTopics.html">ArchBridgeRoughModelBase</a></li>
+<li class="toctree-l1"><a class="reference internal" href="roughCalcGenTopics.html#module-rough_calculations.arch_bridge_simple_model">arch_bridge_simple_model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="roughCalcGenTopics.html#module-rough_calculations.masonryVault">masonryVault</a></li>
+<li class="toctree-l1"><a class="reference internal" href="roughCalcGenTopics.html#module-rough_calculations.cable_stayed_bridge_simple_model">cable_stayed_bridge_simple_model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="roughCalcGenTopics.html#module-rough_calculations.T_beam_bridges_rough_calc">T_beam_bridges_rough_calc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="roughCalcGenTopics.html#module-rough_calculations.flechas_vigas">flechas_vigas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="roughCalcGenTopics.html#module-rough_calculations.nb_poussee_terres">nb_poussee_terres</a></li>
+<li class="toctree-l1"><a class="reference internal" href="roughCalcGenTopics.html#module-rough_calculations.ng_beam">ng_beam</a></li>
+<li class="toctree-l1"><a class="reference internal" href="roughCalcGenTopics.html#module-rough_calculations.ng_cantilever">ng_cantilever</a></li>
+<li class="toctree-l1"><a class="reference internal" href="roughCalcGenTopics.html#module-rough_calculations.ng_concrete_slab">ng_concrete_slab</a></li>
+<li class="toctree-l1"><a class="reference internal" href="roughCalcGenTopics.html#module-rough_calculations.ng_esf_pilares">ng_esf_pilares</a></li>
+<li class="toctree-l1"><a class="reference internal" href="roughCalcGenTopics.html#module-rough_calculations.ng_pinned_fixed_beam">ng_pinned_fixed_beam</a></li>
+<li class="toctree-l1"><a class="reference internal" href="roughCalcGenTopics.html#module-rough_calculations.ng_prestressing_wire">ng_prestressing_wire</a></li>
+<li class="toctree-l1"><a class="reference internal" href="roughCalcGenTopics.html#module-rough_calculations.ng_punzonamiento">ng_punzonamiento</a></li>
+<li class="toctree-l1"><a class="reference internal" href="roughCalcGenTopics.html#module-rough_calculations.ng_rc_section">ng_rc_section</a></li>
+<li class="toctree-l1"><a class="reference internal" href="roughCalcGenTopics.html#module-rough_calculations.ng_rebar_def">ng_rebar_def</a></li>
+<li class="toctree-l1"><a class="reference internal" href="roughCalcGenTopics.html#module-rough_calculations.ng_retaining_wall">ng_retaining_wall</a></li>
+<li class="toctree-l1"><a class="reference internal" href="roughCalcGenTopics.html#module-rough_calculations.ng_simple_beam">ng_simple_beam</a></li>
+<li class="toctree-l1"><a class="reference internal" href="roughCalcGenTopics.html#module-rough_calculations.ng_simple_bending_reinforcement">ng_simple_bending_reinforcement</a></li>
+<li class="toctree-l1"><a class="reference internal" href="roughCalcGenTopics.html#module-rough_calculations.ng_tied_arch_simple_model">ng_tied_arch_simple_model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="roughCalcGenTopics.html#module-rough_calculations.ng_encepados">ng_encepados</a></li>
+<li class="toctree-l1"><a class="reference internal" href="roughCalcGenTopics.html#module-rough_calculations.suspension_bridge_simple_model">suspension_bridge_simple_model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="roughCalcGenTopics.html#module-rough_calculations.ng_min_dim_of_abutment_support">ng_min_dim_of_abutment_support</a></li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="import_export.sciaXML.scia_loads.html"
+                        title="previous chapter">Import_export sciaXML. Loads</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="roughCalcGenTopics.html"
+                        title="next chapter">ArchBridgeRoughModelBase</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/miscellany/rough_calculations.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="roughCalcGenTopics.html" title="ArchBridgeRoughModelBase"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="import_export.sciaXML.scia_loads.html" title="Import_export sciaXML. Loads"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">XC 3.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2016, Luis Pérez Tato (LCPT) &amp; Ana Ortega (AO_O).
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.6.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,1067 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>colored_diagram &mdash; XC 3.0 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '3.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="XC 3.0 documentation" href="../index.html" />
+    <link rel="up" title="xcVtk" href="xcVtk.html" />
+    <link rel="next" title="vtk - CAD model" href="xcVtk.CAD_model.html" />
+    <link rel="prev" title="xcVtk" href="xcVtk.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="xcVtk.CAD_model.html" title="vtk - CAD model"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="xcVtk.html" title="xcVtk"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">XC 3.0 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="xcVtk.html" accesskey="U">xcVtk</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-postprocess.xcVtk.colored_diagram">
+<span id="colored-diagram"></span><h1>colored_diagram<a class="headerlink" href="#module-postprocess.xcVtk.colored_diagram" title="Permalink to this headline">¶</a></h1>
+<p>Colored diagram of a function over a linear domain (set of 1D elments for example).</p>
+<dl class="class">
+<dt id="postprocess.xcVtk.colored_diagram.ColoredDiagram">
+<em class="property">class </em><code class="descclassname">postprocess.xcVtk.colored_diagram.</code><code class="descname">ColoredDiagram</code><span class="sig-paren">(</span><em>scale</em>, <em>fUnitConv</em><span class="sig-paren">)</span><a class="headerlink" href="#postprocess.xcVtk.colored_diagram.ColoredDiagram" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#postprocess.xcVtk.vtk_lut_field.LUTField" title="postprocess.xcVtk.vtk_lut_field.LUTField"><code class="xref py py-class docutils literal"><span class="pre">postprocess.xcVtk.vtk_lut_field.LUTField</span></code></a></p>
+<p>Colored diagram of a function over a linear domain (set of 1D 
+elements for example).</p>
+<dl class="method">
+<dt id="postprocess.xcVtk.colored_diagram.ColoredDiagram.addDiagramToScene">
+<code class="descname">addDiagramToScene</code><span class="sig-paren">(</span><em>recordDisplay</em><span class="sig-paren">)</span><a class="headerlink" href="#postprocess.xcVtk.colored_diagram.ColoredDiagram.addDiagramToScene" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adds the diagram to de scene</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="postprocess.xcVtk.colored_diagram.ColoredDiagram.agregaDatosADiagrama">
+<code class="descname">agregaDatosADiagrama</code><span class="sig-paren">(</span><em>elem</em>, <em>indxDiagrama</em>, <em>v0</em>, <em>v1</em>, <em>defFScale=0.0</em><span class="sig-paren">)</span><a class="headerlink" href="#postprocess.xcVtk.colored_diagram.ColoredDiagram.agregaDatosADiagrama" title="Permalink to this definition">¶</a></dt>
+<dd><p>Appends to the diagram the values being passed as parameter.</p>
+<blockquote>
+<div>___&#8212;-* value2</div></blockquote>
+<dl class="docutils">
+<dt>value1  <a href="#id1"><span class="problematic" id="id2">*</span></a>&#8212;       |</dt>
+<dd><blockquote class="first">
+<div><div class="line-block">
+<div class="line"><a href="#id3"><span class="problematic" id="id4">|</span></a></div>
+<div class="line"><a href="#id5"><span class="problematic" id="id6">|</span></a></div>
+</div>
+</div></blockquote>
+<p class="last">1 +&#8212;&#8212;&#8212;-+ 2</p>
+</dd>
+</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>elem</strong> &#8211; element over which diagram is represented.</li>
+<li><strong>indxDiagrama</strong> &#8211; index-counter for the values to insert.</li>
+<li><strong>v0</strong> &#8211; value at the start node.</li>
+<li><strong>v1</strong> &#8211; value at the end node.</li>
+<li><strong>defFScale</strong> &#8211; factor to apply to current displacement of nodes 
+so that the display position of each node equals to
+the initial position plus its displacement multiplied
+by this factor. (Defaults to 0.0, i.e. display of 
+initial/undeformed shape)</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="postprocess.xcVtk.colored_diagram.ColoredDiagram.appendDataFromElementEnds">
+<code class="descname">appendDataFromElementEnds</code><span class="sig-paren">(</span><em>vDir</em>, <em>elem</em>, <em>indxDiagram</em>, <em>value1</em>, <em>value2</em><span class="sig-paren">)</span><a class="headerlink" href="#postprocess.xcVtk.colored_diagram.ColoredDiagram.appendDataFromElementEnds" title="Permalink to this definition">¶</a></dt>
+<dd><p>Append to the diagram the data from the element ends as follows:</p>
+<blockquote>
+<div>___&#8212;-* value2</div></blockquote>
+<dl class="docutils">
+<dt>value1  <a href="#id7"><span class="problematic" id="id8">*</span></a>&#8212;       |</dt>
+<dd><blockquote class="first">
+<div><div class="line-block">
+<div class="line"><a href="#id9"><span class="problematic" id="id10">|</span></a></div>
+<div class="line"><a href="#id11"><span class="problematic" id="id12">|</span></a></div>
+</div>
+</div></blockquote>
+<p class="last">1 +&#8212;&#8212;&#8212;-+ 2</p>
+</dd>
+</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>elem</strong> &#8211; element over which diagram is represented.</li>
+<li><strong>indxDiagrama</strong> &#8211; index-counter for the values to insert.</li>
+<li><strong>value1</strong> &#8211; value at the start node.</li>
+<li><strong>value2</strong> &#8211; value at the end node.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="postprocess.xcVtk.colored_diagram.ColoredDiagram.creaActorDiagrama">
+<code class="descname">creaActorDiagrama</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#postprocess.xcVtk.colored_diagram.ColoredDiagram.creaActorDiagrama" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="postprocess.xcVtk.colored_diagram.ColoredDiagram.creaEstrucDatosDiagrama">
+<code class="descname">creaEstrucDatosDiagrama</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#postprocess.xcVtk.colored_diagram.ColoredDiagram.creaEstrucDatosDiagrama" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="postprocess.xcVtk.colored_diagram.ColoredDiagram.creaTramoDiagrama">
+<code class="descname">creaTramoDiagrama</code><span class="sig-paren">(</span><em>offset</em>, <em>org</em>, <em>valOrg</em>, <em>dest</em>, <em>valDest</em><span class="sig-paren">)</span><a class="headerlink" href="#postprocess.xcVtk.colored_diagram.ColoredDiagram.creaTramoDiagrama" title="Permalink to this definition">¶</a></dt>
+<dd><p>Crea un tramo de diagrama.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>offset</strong> &#8211; index-counter for the values to insert.</li>
+<li><strong>org</strong> &#8211; Extremo dorsal del elemento lineal.</li>
+<li><strong>dest</strong> &#8211; Extremo frontal del elemento lineal.</li>
+<li><strong>valOrg</strong> &#8211; Valor del campo escalar en el extremo dorsal.</li>
+<li><strong>valDest</strong> &#8211; Valor del campo escalar en el extremo frontal.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="postprocess.xcVtk.colored_diagram.ColoredDiagram.creaTramoDiagramaCambioSigno">
+<code class="descname">creaTramoDiagramaCambioSigno</code><span class="sig-paren">(</span><em>offset</em>, <em>org</em>, <em>valOrg</em>, <em>dest</em>, <em>valDest</em><span class="sig-paren">)</span><a class="headerlink" href="#postprocess.xcVtk.colored_diagram.ColoredDiagram.creaTramoDiagramaCambioSigno" title="Permalink to this definition">¶</a></dt>
+<dd><p>Crea un tramo de diagrama en el que la función a representar
+cambia de signo.
+offset: Offset para el índice de los valores a insertar.
+org: Extremo dorsal del elemento lineal.
+dest: Extremo frontal del elemento lineal.
+valOrg: Valor del campo escalar en el extremo dorsal.
+valDest: Valor del campo escalar en el extremo frontal.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="postprocess.xcVtk.colored_diagram.ColoredDiagram.creaTramoDiagramaSignoCte">
+<code class="descname">creaTramoDiagramaSignoCte</code><span class="sig-paren">(</span><em>offset</em>, <em>org</em>, <em>valOrg</em>, <em>dest</em>, <em>valDest</em><span class="sig-paren">)</span><a class="headerlink" href="#postprocess.xcVtk.colored_diagram.ColoredDiagram.creaTramoDiagramaSignoCte" title="Permalink to this definition">¶</a></dt>
+<dd><p>Crea un tramo de diagrama en el que la función a representar
+no cambia de signo.
+offset: Offset para el índice de los valores a insertar.
+org: Extremo dorsal del elemento lineal.
+dest: Extremo frontal del elemento lineal.
+valOrg: Valor del campo escalar en el extremo dorsal.
+valDest: Valor del campo escalar en el extremo frontal.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="postprocess.xcVtk.colored_diagram.ColoredDiagram.getRaizTramoDiagrama">
+<code class="descname">getRaizTramoDiagrama</code><span class="sig-paren">(</span><em>org</em>, <em>valOrg</em>, <em>dest</em>, <em>valDest</em><span class="sig-paren">)</span><a class="headerlink" href="#postprocess.xcVtk.colored_diagram.ColoredDiagram.getRaizTramoDiagrama" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Calcula la posición de la raíz del diagrama que se define</dt>
+<dd><blockquote class="first">
+<div>mediante los siguientes parámetros:</div></blockquote>
+<p class="last">org: Extremo dorsal del elemento lineal.</p>
+</dd>
+</dl>
+<p>dest: Extremo frontal del elemento lineal.
+valOrg: Valor del campo escalar en el extremo dorsal.
+valDest: Valor del campo escalar en el extremo frontal.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="postprocess.xcVtk.colored_diagram.ColoredDiagram.resetEstrucDatosDiagrama">
+<code class="descname">resetEstrucDatosDiagrama</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#postprocess.xcVtk.colored_diagram.ColoredDiagram.resetEstrucDatosDiagrama" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-postprocess.xcVtk.control_var_diagram">
+<span id="control-var-diagram"></span><h1>control_var_diagram<a class="headerlink" href="#module-postprocess.xcVtk.control_var_diagram" title="Permalink to this headline">¶</a></h1>
+<p>Display of diagrams (forces, moments, ...) on linear elements</p>
+<dl class="class">
+<dt id="postprocess.xcVtk.control_var_diagram.ControlVarDiagram">
+<em class="property">class </em><code class="descclassname">postprocess.xcVtk.control_var_diagram.</code><code class="descname">ControlVarDiagram</code><span class="sig-paren">(</span><em>scaleFactor</em>, <em>fUnitConv</em>, <em>sets</em>, <em>attributeName</em>, <em>component</em><span class="sig-paren">)</span><a class="headerlink" href="#postprocess.xcVtk.control_var_diagram.ControlVarDiagram" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#postprocess.xcVtk.colored_diagram.ColoredDiagram" title="postprocess.xcVtk.colored_diagram.ColoredDiagram"><code class="xref py py-class docutils literal"><span class="pre">postprocess.xcVtk.colored_diagram.ColoredDiagram</span></code></a></p>
+<p>Diagram of control var values (capacity factor values, 
+internal forces values (N,My,Mz,T,Vy,Vz), crack width values,...</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Variables:</th><td class="field-body"><ul class="first simple">
+<li><strong>scaleFactor</strong> &#8211; scale factor for the diagram (can be negative  
+too).</li>
+<li><strong>fUnitConv</strong> &#8211; unit conversion factor (i.e N-&gt;kN =&gt; fUnitConv= 1e-3).</li>
+<li><strong>sets</strong> &#8211; list of element sets for which the diagram will be 
+displayed.</li>
+<li><strong>component</strong> &#8211; property to be displayed 
+(possible arguments: &#8216;CF&#8217;, &#8216;N&#8217;, &#8216;My&#8217;, &#8216;Mz&#8217;, &#8216;wk&#8217;,...)</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first last"><strong>attributeName</strong> &#8211; name of the element&#8217;s property that has the 
+control var in it for example as in 
+elem.getProp(attributeName).component.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="postprocess.xcVtk.control_var_diagram.ControlVarDiagram.addDiagram">
+<code class="descname">addDiagram</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#postprocess.xcVtk.control_var_diagram.ControlVarDiagram.addDiagram" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add diagram to the scene</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="postprocess.xcVtk.control_var_diagram.ControlVarDiagram.getElementComponentData">
+<code class="descname">getElementComponentData</code><span class="sig-paren">(</span><em>elem</em><span class="sig-paren">)</span><a class="headerlink" href="#postprocess.xcVtk.control_var_diagram.ControlVarDiagram.getElementComponentData" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the data to use to represent the diagram over the element</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>elem</strong> &#8211; element to deal with.</li>
+<li><strong>component</strong> &#8211; component to show. 
+Valid components are: &#8216;N&#8217;, &#8216;Qy&#8217;, &#8216;Vy&#8217;, &#8216;Qz&#8217;, &#8216;Vz&#8217;, &#8216;My&#8217;, &#8216;Mz&#8217;, 
+&#8216;T&#8217;</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-postprocess.xcVtk.create_array_set_data">
+<span id="create-array-set-data"></span><h1>create_array_set_data<a class="headerlink" href="#module-postprocess.xcVtk.create_array_set_data" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="postprocess.xcVtk.create_array_set_data.VtkCreaStrArraySetData">
+<code class="descclassname">postprocess.xcVtk.create_array_set_data.</code><code class="descname">VtkCreaStrArraySetData</code><span class="sig-paren">(</span><em>setToDraw</em>, <em>entTypeName</em>, <em>attr</em><span class="sig-paren">)</span><a class="headerlink" href="#postprocess.xcVtk.create_array_set_data.VtkCreaStrArraySetData" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates an array of strings with information associated 
+to the points and cells.
+Parameters:</p>
+<blockquote>
+<div><p>setToDraw:   set of entities to be displayed
+entTypeName: type of entities to be displayed</p>
+<blockquote>
+<div>(&#8220;pnts&#8221;, &#8220;lines&#8221;, &#8220;nodos&#8221;, &#8220;elementos&#8221;)</div></blockquote>
+<p>attr:        attribute to be stored in the array</p>
+</div></blockquote>
+</dd></dl>
+
+</div>
+<div class="section" id="module-postprocess.xcVtk.direction_field_data">
+<span id="direction-field-data"></span><h1>direction_field_data<a class="headerlink" href="#module-postprocess.xcVtk.direction_field_data" title="Permalink to this headline">¶</a></h1>
+<p>Data to represent directions (modulus doesn&#8217;t matters) field in VTK.</p>
+<dl class="class">
+<dt id="postprocess.xcVtk.direction_field_data.DirectionFieldData">
+<em class="property">class </em><code class="descclassname">postprocess.xcVtk.direction_field_data.</code><code class="descname">DirectionFieldData</code><span class="sig-paren">(</span><em>name</em>, <em>color</em>, <em>numberOfComponents=3</em>, <em>scaleFactor=1.0</em><span class="sig-paren">)</span><a class="headerlink" href="#postprocess.xcVtk.direction_field_data.DirectionFieldData" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#postprocess.xcVtk.vector_field_data.VectorFieldData" title="postprocess.xcVtk.vector_field_data.VectorFieldData"><code class="xref py py-class docutils literal"><span class="pre">postprocess.xcVtk.vector_field_data.VectorFieldData</span></code></a></p>
+<p>Directions (modulus doesn&#8217;t matters) Vectors defined at points.</p>
+<dl class="method">
+<dt id="postprocess.xcVtk.direction_field_data.DirectionFieldData.addToDisplay">
+<code class="descname">addToDisplay</code><span class="sig-paren">(</span><em>recordDisplay</em><span class="sig-paren">)</span><a class="headerlink" href="#postprocess.xcVtk.direction_field_data.DirectionFieldData.addToDisplay" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="postprocess.xcVtk.direction_field_data.DirectionFieldData.setupActor">
+<code class="descname">setupActor</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#postprocess.xcVtk.direction_field_data.DirectionFieldData.setupActor" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="postprocess.xcVtk.direction_field_data.DirectionFieldData.setupMapper">
+<code class="descname">setupMapper</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#postprocess.xcVtk.direction_field_data.DirectionFieldData.setupMapper" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-postprocess.xcVtk.element_property_diagram">
+<span id="element-property-diagram"></span><h1>element_property_diagram<a class="headerlink" href="#module-postprocess.xcVtk.element_property_diagram" title="Permalink to this headline">¶</a></h1>
+<p>Diagram display a property defined over linear elements.</p>
+<dl class="class">
+<dt id="postprocess.xcVtk.element_property_diagram.ElementPropertyDiagram">
+<em class="property">class </em><code class="descclassname">postprocess.xcVtk.element_property_diagram.</code><code class="descname">ElementPropertyDiagram</code><span class="sig-paren">(</span><em>scaleFactor</em>, <em>fUnitConv</em>, <em>sets</em>, <em>propertyName</em><span class="sig-paren">)</span><a class="headerlink" href="#postprocess.xcVtk.element_property_diagram.ElementPropertyDiagram" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#postprocess.xcVtk.colored_diagram.ColoredDiagram" title="postprocess.xcVtk.colored_diagram.ColoredDiagram"><code class="xref py py-class docutils literal"><span class="pre">postprocess.xcVtk.colored_diagram.ColoredDiagram</span></code></a></p>
+<p>Diagram of element properties</p>
+<dl class="method">
+<dt id="postprocess.xcVtk.element_property_diagram.ElementPropertyDiagram.addDiagram">
+<code class="descname">addDiagram</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#postprocess.xcVtk.element_property_diagram.ElementPropertyDiagram.addDiagram" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="postprocess.xcVtk.element_property_diagram.ElementPropertyDiagram.appendDataToDiagram">
+<code class="descname">appendDataToDiagram</code><span class="sig-paren">(</span><em>eSet</em>, <em>indxDiagrama</em>, <em>defFScale=0.0</em><span class="sig-paren">)</span><a class="headerlink" href="#postprocess.xcVtk.element_property_diagram.ElementPropertyDiagram.appendDataToDiagram" title="Permalink to this definition">¶</a></dt>
+<dd><p>Append property values to diagram .
+:param  eSet: Element set.
+:param defFScale: factor to apply to current displacement of nodes</p>
+<blockquote>
+<div>so that the display position of each node equals to
+the initial position plus its displacement multiplied
+by this factor. (Defaults to 0.0, i.e. display of 
+initial/undeformed shape)</div></blockquote>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="postprocess.xcVtk.element_property_diagram.ElementPropertyDiagram.envelopes">
+<code class="descname">envelopes</code><em class="property"> = set(['Vz+', 'N+', 'N-', 'Vz-', 'My+', 'T-', 'My-', 'T+', 'Vy+', 'Mz-', 'Vy-', 'Mz+'])</em><a class="headerlink" href="#postprocess.xcVtk.element_property_diagram.ElementPropertyDiagram.envelopes" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-postprocess.xcVtk.field_base">
+<span id="field-base"></span><h1>field_base<a class="headerlink" href="#module-postprocess.xcVtk.field_base" title="Permalink to this headline">¶</a></h1>
+<p>Graphic representation of fields. Base class</p>
+<dl class="class">
+<dt id="postprocess.xcVtk.field_base.FieldBase">
+<em class="property">class </em><code class="descclassname">postprocess.xcVtk.field_base.</code><code class="descname">FieldBase</code><span class="sig-paren">(</span><em>name</em>, <em>fUnitConv</em><span class="sig-paren">)</span><a class="headerlink" href="#postprocess.xcVtk.field_base.FieldBase" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#postprocess.xcVtk.vtk_lut_field.LUTField" title="postprocess.xcVtk.vtk_lut_field.LUTField"><code class="xref py py-class docutils literal"><span class="pre">postprocess.xcVtk.vtk_lut_field.LUTField</span></code></a></p>
+<p>Scalar field defined at nodes.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-postprocess.xcVtk.linear_load_diagram">
+<span id="linear-load-diagram"></span><h1>linear_load_diagram<a class="headerlink" href="#module-postprocess.xcVtk.linear_load_diagram" title="Permalink to this headline">¶</a></h1>
+<p>Representación de cargas sobre elementos lineales.</p>
+<dl class="class">
+<dt id="postprocess.xcVtk.linear_load_diagram.LinearLoadDiagram">
+<em class="property">class </em><code class="descclassname">postprocess.xcVtk.linear_load_diagram.</code><code class="descname">LinearLoadDiagram</code><span class="sig-paren">(</span><em>scale</em>, <em>fUnitConv</em>, <em>loadPatternName</em>, <em>component</em><span class="sig-paren">)</span><a class="headerlink" href="#postprocess.xcVtk.linear_load_diagram.LinearLoadDiagram" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#postprocess.xcVtk.colored_diagram.ColoredDiagram" title="postprocess.xcVtk.colored_diagram.ColoredDiagram"><code class="xref py py-class docutils literal"><span class="pre">postprocess.xcVtk.colored_diagram.ColoredDiagram</span></code></a></p>
+<p>Draws a load over a linear element (qx,qy,qz,...)</p>
+<dl class="method">
+<dt id="postprocess.xcVtk.linear_load_diagram.LinearLoadDiagram.addDiagram">
+<code class="descname">addDiagram</code><span class="sig-paren">(</span><em>preprocessor</em><span class="sig-paren">)</span><a class="headerlink" href="#postprocess.xcVtk.linear_load_diagram.LinearLoadDiagram.addDiagram" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="postprocess.xcVtk.linear_load_diagram.LinearLoadDiagram.dumpElementalLoads">
+<code class="descname">dumpElementalLoads</code><span class="sig-paren">(</span><em>preprocessor</em>, <em>lp</em>, <em>indxDiagram</em><span class="sig-paren">)</span><a class="headerlink" href="#postprocess.xcVtk.linear_load_diagram.LinearLoadDiagram.dumpElementalLoads" title="Permalink to this definition">¶</a></dt>
+<dd><p>Iterate over loaded elements dumping its loads into the graphic.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="postprocess.xcVtk.linear_load_diagram.LinearLoadDiagram.dumpLoads">
+<code class="descname">dumpLoads</code><span class="sig-paren">(</span><em>preprocessor</em>, <em>indxDiagram</em><span class="sig-paren">)</span><a class="headerlink" href="#postprocess.xcVtk.linear_load_diagram.LinearLoadDiagram.dumpLoads" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-postprocess.xcVtk.load_vector_field">
+<span id="load-vector-field"></span><h1>load_vector_field<a class="headerlink" href="#module-postprocess.xcVtk.load_vector_field" title="Permalink to this headline">¶</a></h1>
+<p>Loads represented as vectors.</p>
+<dl class="class">
+<dt id="postprocess.xcVtk.load_vector_field.LoadVectorField">
+<em class="property">class </em><code class="descclassname">postprocess.xcVtk.load_vector_field.</code><code class="descname">LoadVectorField</code><span class="sig-paren">(</span><em>loadPatternName, fUnitConv=0.001, scaleFactor=1.0, showPushing=True, components=[0, 1, 2], multiplyByElementArea=True</em><span class="sig-paren">)</span><a class="headerlink" href="#postprocess.xcVtk.load_vector_field.LoadVectorField" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#postprocess.xcVtk.vector_field.VectorField" title="postprocess.xcVtk.vector_field.VectorField"><code class="xref py py-class docutils literal"><span class="pre">postprocess.xcVtk.vector_field.VectorField</span></code></a></p>
+<p>Draws a load over a points on nodes and on elements.</p>
+<dl class="method">
+<dt id="postprocess.xcVtk.load_vector_field.LoadVectorField.dumpElementalLoads">
+<code class="descname">dumpElementalLoads</code><span class="sig-paren">(</span><em>preprocessor</em>, <em>lp</em><span class="sig-paren">)</span><a class="headerlink" href="#postprocess.xcVtk.load_vector_field.LoadVectorField.dumpElementalLoads" title="Permalink to this definition">¶</a></dt>
+<dd><p>Iterate over loaded elements dumping its loads into the graphic.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="postprocess.xcVtk.load_vector_field.LoadVectorField.dumpLoads">
+<code class="descname">dumpLoads</code><span class="sig-paren">(</span><em>preprocessor</em>, <em>defFScale</em><span class="sig-paren">)</span><a class="headerlink" href="#postprocess.xcVtk.load_vector_field.LoadVectorField.dumpLoads" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="postprocess.xcVtk.load_vector_field.LoadVectorField.dumpNodalLoads">
+<code class="descname">dumpNodalLoads</code><span class="sig-paren">(</span><em>preprocessor</em>, <em>lp</em>, <em>defFScale</em><span class="sig-paren">)</span><a class="headerlink" href="#postprocess.xcVtk.load_vector_field.LoadVectorField.dumpNodalLoads" title="Permalink to this definition">¶</a></dt>
+<dd><p>Iterate over loaded nodes dumping its loads into the graphic.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>defFScale</strong> &#8211; factor to apply to current displacement of nodes 
+so that the display position of each node equals to
+the initial position plus its displacement multiplied
+by this factor.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-postprocess.xcVtk.local_axes_vector_field">
+<span id="local-axes-vector-field"></span><h1>local_axes_vector_field<a class="headerlink" href="#module-postprocess.xcVtk.local_axes_vector_field" title="Permalink to this headline">¶</a></h1>
+<p>Loads represented as vectors.</p>
+<dl class="class">
+<dt id="postprocess.xcVtk.local_axes_vector_field.LocalAxesVectorField">
+<em class="property">class </em><code class="descclassname">postprocess.xcVtk.local_axes_vector_field.</code><code class="descname">LocalAxesVectorField</code><span class="sig-paren">(</span><em>name</em>, <em>scaleFactor=1.0</em><span class="sig-paren">)</span><a class="headerlink" href="#postprocess.xcVtk.local_axes_vector_field.LocalAxesVectorField" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>Draws a the local axes on elements.</p>
+<dl class="method">
+<dt id="postprocess.xcVtk.local_axes_vector_field.LocalAxesVectorField.addToDisplay">
+<code class="descname">addToDisplay</code><span class="sig-paren">(</span><em>recordDisplay</em><span class="sig-paren">)</span><a class="headerlink" href="#postprocess.xcVtk.local_axes_vector_field.LocalAxesVectorField.addToDisplay" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="postprocess.xcVtk.local_axes_vector_field.LocalAxesVectorField.dumpLocalAxes">
+<code class="descname">dumpLocalAxes</code><span class="sig-paren">(</span><em>xcSet</em><span class="sig-paren">)</span><a class="headerlink" href="#postprocess.xcVtk.local_axes_vector_field.LocalAxesVectorField.dumpLocalAxes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Iterate over loaded elements dumping its axes into the graphic.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="postprocess.xcVtk.local_axes_vector_field.LocalAxesVectorField.xColor">
+<code class="descname">xColor</code><em class="property"> = [1.0, 0.0, 0.0]</em><a class="headerlink" href="#postprocess.xcVtk.local_axes_vector_field.LocalAxesVectorField.xColor" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="postprocess.xcVtk.local_axes_vector_field.LocalAxesVectorField.yColor">
+<code class="descname">yColor</code><em class="property"> = [0.0, 1.0, 0.0]</em><a class="headerlink" href="#postprocess.xcVtk.local_axes_vector_field.LocalAxesVectorField.yColor" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="postprocess.xcVtk.local_axes_vector_field.LocalAxesVectorField.zColor">
+<code class="descname">zColor</code><em class="property"> = [0.0, 0.0, 1.0]</em><a class="headerlink" href="#postprocess.xcVtk.local_axes_vector_field.LocalAxesVectorField.zColor" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-postprocess.xcVtk.node_property_diagram">
+<span id="node-property-diagram"></span><h1>node_property_diagram<a class="headerlink" href="#module-postprocess.xcVtk.node_property_diagram" title="Permalink to this headline">¶</a></h1>
+<p>Diagram to display a property defined at nodes over linear elements.</p>
+<dl class="class">
+<dt id="postprocess.xcVtk.node_property_diagram.NodePropertyDiagram">
+<em class="property">class </em><code class="descclassname">postprocess.xcVtk.node_property_diagram.</code><code class="descname">NodePropertyDiagram</code><span class="sig-paren">(</span><em>scaleFactor</em>, <em>fUnitConv</em>, <em>sets</em>, <em>attributeName</em><span class="sig-paren">)</span><a class="headerlink" href="#postprocess.xcVtk.node_property_diagram.NodePropertyDiagram" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#postprocess.xcVtk.colored_diagram.ColoredDiagram" title="postprocess.xcVtk.colored_diagram.ColoredDiagram"><code class="xref py py-class docutils literal"><span class="pre">postprocess.xcVtk.colored_diagram.ColoredDiagram</span></code></a></p>
+<p>Diagram to display a property defined at nodes over linear elements.</p>
+<dl class="method">
+<dt id="postprocess.xcVtk.node_property_diagram.NodePropertyDiagram.addDiagram">
+<code class="descname">addDiagram</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#postprocess.xcVtk.node_property_diagram.NodePropertyDiagram.addDiagram" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="postprocess.xcVtk.node_property_diagram.NodePropertyDiagram.appendDataToDiagram">
+<code class="descname">appendDataToDiagram</code><span class="sig-paren">(</span><em>eSet</em>, <em>indxDiagrama</em>, <em>defFScale=0.0</em><span class="sig-paren">)</span><a class="headerlink" href="#postprocess.xcVtk.node_property_diagram.NodePropertyDiagram.appendDataToDiagram" title="Permalink to this definition">¶</a></dt>
+<dd><p>Append property values to diagram .
+:param eSet: Element set.
+:param defFScale: factor to apply to current displacement of nodes</p>
+<blockquote>
+<div>so that the display position of each node equals to
+the initial position plus its displacement multiplied
+by this factor. (Defaults to 0.0, i.e. display of 
+initial/undeformed shape)</div></blockquote>
+</dd></dl>
+
+<dl class="method">
+<dt id="postprocess.xcVtk.node_property_diagram.NodePropertyDiagram.getValueForNode">
+<code class="descname">getValueForNode</code><span class="sig-paren">(</span><em>node</em><span class="sig-paren">)</span><a class="headerlink" href="#postprocess.xcVtk.node_property_diagram.NodePropertyDiagram.getValueForNode" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-postprocess.xcVtk.screen_annotation">
+<span id="screen-annotation"></span><h1>screen_annotation<a class="headerlink" href="#module-postprocess.xcVtk.screen_annotation" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="postprocess.xcVtk.screen_annotation.ScreenAnnotation">
+<em class="property">class </em><code class="descclassname">postprocess.xcVtk.screen_annotation.</code><code class="descname">ScreenAnnotation</code><a class="headerlink" href="#postprocess.xcVtk.screen_annotation.ScreenAnnotation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<dl class="attribute">
+<dt id="postprocess.xcVtk.screen_annotation.ScreenAnnotation.captionWidth">
+<code class="descname">captionWidth</code><em class="property"> = 80</em><a class="headerlink" href="#postprocess.xcVtk.screen_annotation.ScreenAnnotation.captionWidth" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="postprocess.xcVtk.screen_annotation.ScreenAnnotation.getVtkCornerAnnotation">
+<code class="descname">getVtkCornerAnnotation</code><span class="sig-paren">(</span><em>caption=''</em><span class="sig-paren">)</span><a class="headerlink" href="#postprocess.xcVtk.screen_annotation.ScreenAnnotation.getVtkCornerAnnotation" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="postprocess.xcVtk.screen_annotation.ScreenAnnotation.lowerLeft">
+<code class="descname">lowerLeft</code><em class="property"> = 0</em><a class="headerlink" href="#postprocess.xcVtk.screen_annotation.ScreenAnnotation.lowerLeft" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="postprocess.xcVtk.screen_annotation.ScreenAnnotation.upperLeft">
+<code class="descname">upperLeft</code><em class="property"> = 2</em><a class="headerlink" href="#postprocess.xcVtk.screen_annotation.ScreenAnnotation.upperLeft" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="postprocess.xcVtk.screen_annotation.ScreenAnnotation.upperRight">
+<code class="descname">upperRight</code><em class="property"> = 3</em><a class="headerlink" href="#postprocess.xcVtk.screen_annotation.ScreenAnnotation.upperRight" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-postprocess.xcVtk.vector_field_data">
+<span id="vector-field-data"></span><h1>vector_field_data<a class="headerlink" href="#module-postprocess.xcVtk.vector_field_data" title="Permalink to this headline">¶</a></h1>
+<p>Data to represent field vector in VTK.</p>
+<dl class="class">
+<dt id="postprocess.xcVtk.vector_field_data.VectorFieldData">
+<em class="property">class </em><code class="descclassname">postprocess.xcVtk.vector_field_data.</code><code class="descname">VectorFieldData</code><span class="sig-paren">(</span><em>name</em>, <em>numberOfComponents=3</em>, <em>scaleFactor=1.0</em><span class="sig-paren">)</span><a class="headerlink" href="#postprocess.xcVtk.vector_field_data.VectorFieldData" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>Vectors defined at points.</p>
+<dl class="method">
+<dt id="postprocess.xcVtk.vector_field_data.VectorFieldData.calculateLengths">
+<code class="descname">calculateLengths</code><span class="sig-paren">(</span><em>fUnitConv=1.0</em><span class="sig-paren">)</span><a class="headerlink" href="#postprocess.xcVtk.vector_field_data.VectorFieldData.calculateLengths" title="Permalink to this definition">¶</a></dt>
+<dd><p>Lengths of the vectors.
+Parameters:</p>
+<blockquote>
+<div>fUnitConv: unit conversion scale factor i.e. kN -&gt; 1e-3.</div></blockquote>
+</dd></dl>
+
+<dl class="method">
+<dt id="postprocess.xcVtk.vector_field_data.VectorFieldData.getPolydata">
+<code class="descname">getPolydata</code><span class="sig-paren">(</span><em>fUnitConv=1.0</em><span class="sig-paren">)</span><a class="headerlink" href="#postprocess.xcVtk.vector_field_data.VectorFieldData.getPolydata" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="postprocess.xcVtk.vector_field_data.VectorFieldData.insertNextPair">
+<code class="descname">insertNextPair</code><span class="sig-paren">(</span><em>px</em>, <em>py</em>, <em>pz</em>, <em>vx</em>, <em>vy</em>, <em>vz</em>, <em>fUnitConv=1.0</em>, <em>pushing=False</em><span class="sig-paren">)</span><a class="headerlink" href="#postprocess.xcVtk.vector_field_data.VectorFieldData.insertNextPair" title="Permalink to this definition">¶</a></dt>
+<dd><p>Inserts a point in the collection.
+Parameters:</p>
+<blockquote>
+<div><p>px,py,pz: coordinates of the point.
+vx,vy,vz: coordinates of the vector.
+pushing: true: arrow ends in the point.</p>
+<blockquote>
+<div>false: arrow starts in the point.</div></blockquote>
+</div></blockquote>
+</dd></dl>
+
+<dl class="method">
+<dt id="postprocess.xcVtk.vector_field_data.VectorFieldData.setupGlyph">
+<code class="descname">setupGlyph</code><span class="sig-paren">(</span><em>fUnitConv=1.0</em><span class="sig-paren">)</span><a class="headerlink" href="#postprocess.xcVtk.vector_field_data.VectorFieldData.setupGlyph" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-postprocess.xcVtk.vector_field">
+<span id="vector-field"></span><h1>vector_field<a class="headerlink" href="#module-postprocess.xcVtk.vector_field" title="Permalink to this headline">¶</a></h1>
+<p>Field vector over points</p>
+<dl class="class">
+<dt id="postprocess.xcVtk.vector_field.VectorField">
+<em class="property">class </em><code class="descclassname">postprocess.xcVtk.vector_field.</code><code class="descname">VectorField</code><span class="sig-paren">(</span><em>name</em>, <em>fUnitConv</em>, <em>scaleFactor</em>, <em>showPushing=True</em><span class="sig-paren">)</span><a class="headerlink" href="#postprocess.xcVtk.vector_field.VectorField" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#postprocess.xcVtk.field_base.FieldBase" title="postprocess.xcVtk.field_base.FieldBase"><code class="xref py py-class docutils literal"><span class="pre">postprocess.xcVtk.field_base.FieldBase</span></code></a></p>
+<p>Vector field defined at points.</p>
+<dl class="method">
+<dt id="postprocess.xcVtk.vector_field.VectorField.addToDisplay">
+<code class="descname">addToDisplay</code><span class="sig-paren">(</span><em>recordDisplay</em><span class="sig-paren">)</span><a class="headerlink" href="#postprocess.xcVtk.vector_field.VectorField.addToDisplay" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="postprocess.xcVtk.vector_field.VectorField.setupActor">
+<code class="descname">setupActor</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#postprocess.xcVtk.vector_field.VectorField.setupActor" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="postprocess.xcVtk.vector_field.VectorField.setupMapper">
+<code class="descname">setupMapper</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#postprocess.xcVtk.vector_field.VectorField.setupMapper" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-postprocess.xcVtk.vtk_crea_array_set_data">
+<span id="vtk-crea-array-set-data"></span><h1>vtk_crea_array_set_data<a class="headerlink" href="#module-postprocess.xcVtk.vtk_crea_array_set_data" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="postprocess.xcVtk.vtk_crea_array_set_data.VtkCreaStrArraySetData">
+<code class="descclassname">postprocess.xcVtk.vtk_crea_array_set_data.</code><code class="descname">VtkCreaStrArraySetData</code><span class="sig-paren">(</span><em>preprocessor</em>, <em>setName</em>, <em>entTypeName</em>, <em>nmbArray</em>, <em>data</em><span class="sig-paren">)</span><a class="headerlink" href="#postprocess.xcVtk.vtk_crea_array_set_data.VtkCreaStrArraySetData" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-postprocess.xcVtk.vtk_define_id_filter">
+<span id="vtk-define-id-filter-module"></span><h1>vtk_define_id_filter module<a class="headerlink" href="#module-postprocess.xcVtk.vtk_define_id_filter" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="postprocess.xcVtk.vtk_define_id_filter.VtkDefineIdFilter">
+<code class="descclassname">postprocess.xcVtk.vtk_define_id_filter.</code><code class="descname">VtkDefineIdFilter</code><span class="sig-paren">(</span><em>nmbIdFilter</em><span class="sig-paren">)</span><a class="headerlink" href="#postprocess.xcVtk.vtk_define_id_filter.VtkDefineIdFilter" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-postprocess.xcVtk.vtk_dibuja_prop_cells">
+<span id="vtk-dibuja-prop-cells"></span><h1>vtk_dibuja_prop_cells<a class="headerlink" href="#module-postprocess.xcVtk.vtk_dibuja_prop_cells" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="postprocess.xcVtk.vtk_dibuja_prop_cells.VtkDibujaPropCells">
+<code class="descclassname">postprocess.xcVtk.vtk_dibuja_prop_cells.</code><code class="descname">VtkDibujaPropCells</code><span class="sig-paren">(</span><em>nmbFilter</em><span class="sig-paren">)</span><a class="headerlink" href="#postprocess.xcVtk.vtk_dibuja_prop_cells.VtkDibujaPropCells" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-postprocess.xcVtk.vtk_dibuja_prop_points">
+<span id="vtk-dibuja-prop-points"></span><h1>vtk_dibuja_prop_points<a class="headerlink" href="#module-postprocess.xcVtk.vtk_dibuja_prop_points" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="postprocess.xcVtk.vtk_dibuja_prop_points.VtkDibujaPropPoints">
+<code class="descclassname">postprocess.xcVtk.vtk_dibuja_prop_points.</code><code class="descname">VtkDibujaPropPoints</code><span class="sig-paren">(</span><em>nmbFilter</em><span class="sig-paren">)</span><a class="headerlink" href="#postprocess.xcVtk.vtk_dibuja_prop_points.VtkDibujaPropPoints" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-postprocess.xcVtk.vtk_grafico_base">
+<span id="vtk-grafico-base"></span><h1>vtk_grafico_base<a class="headerlink" href="#module-postprocess.xcVtk.vtk_grafico_base" title="Permalink to this headline">¶</a></h1>
+<p>Display nice images of the model.</p>
+<dl class="class">
+<dt id="postprocess.xcVtk.vtk_grafico_base.RecordDefDisplay">
+<em class="property">class </em><code class="descclassname">postprocess.xcVtk.vtk_grafico_base.</code><code class="descname">RecordDefDisplay</code><a class="headerlink" href="#postprocess.xcVtk.vtk_grafico_base.RecordDefDisplay" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>Provides de variables to define the output device.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Variables:</th><td class="field-body"><ul class="first last simple">
+<li><strong>renderer</strong> &#8211; specification of renderer. A renderer is an object that
+controls the rendering process for objects. Rendering is the 
+process of converting geometry, a specification for lights, and
+a camera view into an image. (defaults to None)</li>
+<li><strong>renWin</strong> &#8211; rendering window (defaults to None). A rendering window is a 
+window in a graphical user interface where renderers draw their images.</li>
+<li><strong>windowWidth</strong> &#8211; resolution expresed in pixels in the width direction of 
+the window (defaults to 800)</li>
+<li><strong>windowHeight</strong> &#8211; resolution expresed in pixels in the height direction of 
+the window (defaults to 600)</li>
+<li><strong>viewName</strong> &#8211; name of the view that contains the renderer 
+(defaults to &#8220;XYZPos&#8221;)</li>
+<li><strong>zoom</strong> &#8211; (defaults to 1.0)</li>
+<li><strong>bgRComp</strong> &#8211; red component (defaults to 0.65)</li>
+<li><strong>bgGComp</strong> &#8211; green component (defaults to 0.65)</li>
+<li><strong>bgBComp</strong> &#8211; blue component (defaults to 0.65)</li>
+<li><strong>hCamFct</strong> &#8211; factor that applies to the height of the camera position 
+in order to change perspective of isometric views 
+(defaults to 1, usual values 0.1 to 10)</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="postprocess.xcVtk.vtk_grafico_base.RecordDefDisplay.defineView">
+<code class="descname">defineView</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#postprocess.xcVtk.vtk_grafico_base.RecordDefDisplay.defineView" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the view for the following predefined viewNames:
+&#8220;ZPos&#8221;,&#8221;ZNeg&#8221;,&#8221;YPos&#8221;,&#8221;YNeg&#8221;,&#8221;XPos&#8221;,&#8221;XNeg&#8221;,&#8221;XYZPos&#8221;
+Zpos: View from positive Z axis (Z+)
+Zneg: View from negative Z axis (Z-)
+Ypos: View from positive Y axis (Y+)
+Yneg: View from negative Y axis (Y-)
+Xpos: View from positive X axis (X+)
+Xneg: View from negative X axis (X-)
+XYZPos or +X+Y+Z: View from point (1,1,1)
++X+Y-Z: View from point (1,1,-1)
++X-Y+Z: View from point (1,-1,1)
++X-Y-Z: View from point (1,-1,-1)
+-X+Y+Z: View from point (-1,1,1)
+-X+Y-Z: View from point (-1,1,-1)
+-X-Y+Z: View from point (-1,-1,1)
+XYZNeg or -X-Y-Z: View from point (-1,-1,-1)</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="postprocess.xcVtk.vtk_grafico_base.RecordDefDisplay.displayGrid">
+<code class="descname">displayGrid</code><span class="sig-paren">(</span><em>caption=''</em><span class="sig-paren">)</span><a class="headerlink" href="#postprocess.xcVtk.vtk_grafico_base.RecordDefDisplay.displayGrid" title="Permalink to this definition">¶</a></dt>
+<dd><p>Displays the grid in the output device</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>caption</strong> &#8211; caption to display with the scene.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="postprocess.xcVtk.vtk_grafico_base.RecordDefDisplay.displayScene">
+<code class="descname">displayScene</code><span class="sig-paren">(</span><em>caption=''</em>, <em>fName=None</em><span class="sig-paren">)</span><a class="headerlink" href="#postprocess.xcVtk.vtk_grafico_base.RecordDefDisplay.displayScene" title="Permalink to this definition">¶</a></dt>
+<dd><p>Displaying scene</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>caption</strong> &#8211; caption to display with the scene.</li>
+<li><strong>fName</strong> &#8211; name of the image file, in none -&gt; screen window.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="postprocess.xcVtk.vtk_grafico_base.RecordDefDisplay.muestraEscena">
+<code class="descname">muestraEscena</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#postprocess.xcVtk.vtk_grafico_base.RecordDefDisplay.muestraEscena" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="postprocess.xcVtk.vtk_grafico_base.RecordDefDisplay.plot">
+<code class="descname">plot</code><span class="sig-paren">(</span><em>fName</em><span class="sig-paren">)</span><a class="headerlink" href="#postprocess.xcVtk.vtk_grafico_base.RecordDefDisplay.plot" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plots window contents</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="postprocess.xcVtk.vtk_grafico_base.RecordDefDisplay.setView">
+<code class="descname">setView</code><span class="sig-paren">(</span><em>viewUpVc</em>, <em>posCVc</em><span class="sig-paren">)</span><a class="headerlink" href="#postprocess.xcVtk.vtk_grafico_base.RecordDefDisplay.setView" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the view</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>viewUpVc</strong> &#8211; vector defined as [x,y,z] to orient the view. This vector of the
+model is placed in vertical orientation in the display</li>
+<li><strong>posCVc</strong> &#8211; vector defined as [x,y,z] that points to the camera position</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="postprocess.xcVtk.vtk_grafico_base.RecordDefDisplay.setupAxes">
+<code class="descname">setupAxes</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#postprocess.xcVtk.vtk_grafico_base.RecordDefDisplay.setupAxes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add an vtkAxesActor to the renderer.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="postprocess.xcVtk.vtk_grafico_base.RecordDefDisplay.setupGrid">
+<code class="descname">setupGrid</code><span class="sig-paren">(</span><em>xcSet</em><span class="sig-paren">)</span><a class="headerlink" href="#postprocess.xcVtk.vtk_grafico_base.RecordDefDisplay.setupGrid" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parameters:
+xcSet:     set to be represented</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="postprocess.xcVtk.vtk_grafico_base.RecordDefDisplay.setupWindow">
+<code class="descname">setupWindow</code><span class="sig-paren">(</span><em>caption=''</em><span class="sig-paren">)</span><a class="headerlink" href="#postprocess.xcVtk.vtk_grafico_base.RecordDefDisplay.setupWindow" title="Permalink to this definition">¶</a></dt>
+<dd><p>sets the rendering window. A rendering window is a window in a
+graphical user interface where renderers draw their images.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="postprocess.xcVtk.vtk_grafico_base.RecordDefDisplay.setupWindowInteractor">
+<code class="descname">setupWindowInteractor</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#postprocess.xcVtk.vtk_grafico_base.RecordDefDisplay.setupWindowInteractor" title="Permalink to this definition">¶</a></dt>
+<dd><p>sets the window interactor, which provides a platform-independent
+interaction mechanism for mouse/key/time events.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="postprocess.xcVtk.vtk_grafico_base.RecordDefGrid">
+<em class="property">class </em><code class="descclassname">postprocess.xcVtk.vtk_grafico_base.</code><code class="descname">RecordDefGrid</code><a class="headerlink" href="#postprocess.xcVtk.vtk_grafico_base.RecordDefGrid" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>Provide the variables involved in the VTK grid representation</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Variables:</th><td class="field-body"><ul class="first last simple">
+<li><strong>xcSet</strong> &#8211; set to be represented</li>
+<li><strong>entToLabel</strong> &#8211; entities to be labeled (defaults to &#8220;nodos&#8221;)</li>
+<li><strong>cellType</strong> &#8211; specifies the type of data cells (defaults to &#8220;nil&#8221;). 
+Data cells are simple topological elements like points, lines, 
+polygons and tetrahedra of which visualization data sets are composed.</li>
+<li><strong>uGrid</strong> &#8211; unstructure grid (defaults to None). An unstructure grid is a 
+concrete implementation of a vtk data set; represents any combination 
+of any cell types. This includes 0D (e.g. points), 1D (e.g., lines, 
+polylines), 2D (e.g., triangles, polygons), and 3D (e.g., hexahedron, 
+tetrahedron, polyhedron, etc.).</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="postprocess.xcVtk.vtk_grafico_base.RecordDefGrid.getBND">
+<code class="descname">getBND</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#postprocess.xcVtk.vtk_grafico_base.RecordDefGrid.getBND" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the grid boundary</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-postprocess.xcVtk.vtk_internal_force_diagram">
+<span id="vtk-internal-force-diagram"></span><h1>vtk_internal_force_diagram<a class="headerlink" href="#module-postprocess.xcVtk.vtk_internal_force_diagram" title="Permalink to this headline">¶</a></h1>
+<p>Display of diagrams (forces, moments, ...) on linear elements</p>
+<dl class="class">
+<dt id="postprocess.xcVtk.vtk_internal_force_diagram.InternalForceDiagram">
+<em class="property">class </em><code class="descclassname">postprocess.xcVtk.vtk_internal_force_diagram.</code><code class="descname">InternalForceDiagram</code><span class="sig-paren">(</span><em>scale</em>, <em>fUnitConv</em>, <em>sets</em>, <em>component</em><span class="sig-paren">)</span><a class="headerlink" href="#postprocess.xcVtk.vtk_internal_force_diagram.InternalForceDiagram" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#postprocess.xcVtk.colored_diagram.ColoredDiagram" title="postprocess.xcVtk.colored_diagram.ColoredDiagram"><code class="xref py py-class docutils literal"><span class="pre">postprocess.xcVtk.colored_diagram.ColoredDiagram</span></code></a></p>
+<p>Diagram of internal forces (N,My,Mz,T,Vy,Vz)</p>
+<dl class="method">
+<dt id="postprocess.xcVtk.vtk_internal_force_diagram.InternalForceDiagram.addDiagram">
+<code class="descname">addDiagram</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#postprocess.xcVtk.vtk_internal_force_diagram.InternalForceDiagram.addDiagram" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="postprocess.xcVtk.vtk_internal_force_diagram.InternalForceDiagram.getElementComponentData">
+<code class="descname">getElementComponentData</code><span class="sig-paren">(</span><em>elem</em><span class="sig-paren">)</span><a class="headerlink" href="#postprocess.xcVtk.vtk_internal_force_diagram.InternalForceDiagram.getElementComponentData" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the data to use to represent the diagram over the element</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>elem</strong> &#8211; element to deal with.</li>
+<li><strong>component</strong> &#8211; component to represent:</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-postprocess.xcVtk.vtk_load_cells">
+<span id="vtk-load-cells"></span><h1>vtk_load_cells<a class="headerlink" href="#module-postprocess.xcVtk.vtk_load_cells" title="Permalink to this headline">¶</a></h1>
+</div>
+<div class="section" id="module-postprocess.xcVtk.vtk_load_dblprop_cells">
+<span id="vtk-load-dblprop-cells"></span><h1>vtk_load_dblprop_cells<a class="headerlink" href="#module-postprocess.xcVtk.vtk_load_dblprop_cells" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="postprocess.xcVtk.vtk_load_dblprop_cells.VtkLoadDblProp">
+<code class="descclassname">postprocess.xcVtk.vtk_load_dblprop_cells.</code><code class="descname">VtkLoadDblProp</code><span class="sig-paren">(</span><em>setName</em>, <em>nmbProp</em>, <em>nmbContndr</em><span class="sig-paren">)</span><a class="headerlink" href="#postprocess.xcVtk.vtk_load_dblprop_cells.VtkLoadDblProp" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-postprocess.xcVtk.vtk_load_strprop_cells">
+<span id="vtk-load-strprop-cells"></span><h1>vtk_load_strprop_cells<a class="headerlink" href="#module-postprocess.xcVtk.vtk_load_strprop_cells" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="postprocess.xcVtk.vtk_load_strprop_cells.VtkLoadStrPropCells">
+<code class="descclassname">postprocess.xcVtk.vtk_load_strprop_cells.</code><code class="descname">VtkLoadStrPropCells</code><span class="sig-paren">(</span><em>setName</em>, <em>nmbProp</em>, <em>nmbContndr</em><span class="sig-paren">)</span><a class="headerlink" href="#postprocess.xcVtk.vtk_load_strprop_cells.VtkLoadStrPropCells" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-postprocess.xcVtk.vtk_lut_field">
+<span id="vtk-lut-field"></span><h1>vtk_lut_field<a class="headerlink" href="#module-postprocess.xcVtk.vtk_lut_field" title="Permalink to this headline">¶</a></h1>
+<p>Drawing of diagrams showing a law of internal 
+forces (or any other input) on linear elements</p>
+<dl class="class">
+<dt id="postprocess.xcVtk.vtk_lut_field.LUTField">
+<em class="property">class </em><code class="descclassname">postprocess.xcVtk.vtk_lut_field.</code><code class="descname">LUTField</code><span class="sig-paren">(</span><em>fUnitConv</em><span class="sig-paren">)</span><a class="headerlink" href="#postprocess.xcVtk.vtk_lut_field.LUTField" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>Provides de variables involved in the drawing of a
+diagram showing a law of internal forces (or any other input)
+on linear elements</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Variables:</th><td class="field-body"><strong>fUnitConv</strong> &#8211; units conversion factor</td>
+</tr>
+</tbody>
+</table>
+<dl class="docutils">
+<dt>:ivar lookUpTable:object that is used by mapper objects to map scalar values</dt>
+<dd>into rga (red-green-blue-alpha transparency) color specification
+or rga into scalar values.</dd>
+</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Variables:</th><td class="field-body"><ul class="first last simple">
+<li><strong>scalarBar</strong> &#8211; legend that indicates to the viewer the correspondence between 
+color value and data value.</li>
+<li><strong>mapper</strong> &#8211; object that specifies the interface between data and graphic 
+primitives.</li>
+<li><strong>actor</strong> &#8211; used to represent an entity in a rendering scene. The actor has position, 
+orientation, scaling, a reference to the defining geometry, rendering 
+properties and possibly a texture map.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="postprocess.xcVtk.vtk_lut_field.LUTField.creaColorScaleBar">
+<code class="descname">creaColorScaleBar</code><span class="sig-paren">(</span><em>orientation='H'</em><span class="sig-paren">)</span><a class="headerlink" href="#postprocess.xcVtk.vtk_lut_field.LUTField.creaColorScaleBar" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates the scalar bar that indicates to the viewer the correspondence
+between color values and data values</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>orientation</strong> &#8211; &#8216;H&#8217; for horizontal bar, &#8216;V&#8217; for vertical bar (defaults to &#8216;H&#8217;)</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="postprocess.xcVtk.vtk_lut_field.LUTField.creaLookUpTable">
+<code class="descname">creaLookUpTable</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#postprocess.xcVtk.vtk_lut_field.LUTField.creaLookUpTable" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a  lookUpTable, that is an object used by mapper objects 
+to map scalar values into rga (red-green-blue-alpha transparency) color 
+specification or rga into scalar values.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="postprocess.xcVtk.vtk_lut_field.LUTField.creaVertColorScaleBar">
+<code class="descname">creaVertColorScaleBar</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#postprocess.xcVtk.vtk_lut_field.LUTField.creaVertColorScaleBar" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates the scalar bar that indicates to the viewer the correspondence
+between color values and data values</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="postprocess.xcVtk.vtk_lut_field.LUTField.initializeMinMax">
+<code class="descname">initializeMinMax</code><span class="sig-paren">(</span><em>value=1e+99</em><span class="sig-paren">)</span><a class="headerlink" href="#postprocess.xcVtk.vtk_lut_field.LUTField.initializeMinMax" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize minimum and maximum values that hopefully
+will be replaced by the real ones.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="postprocess.xcVtk.vtk_lut_field.LUTField.updateActorDiagrama">
+<code class="descname">updateActorDiagrama</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#postprocess.xcVtk.vtk_lut_field.LUTField.updateActorDiagrama" title="Permalink to this definition">¶</a></dt>
+<dd><p>Updates de actor</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="postprocess.xcVtk.vtk_lut_field.LUTField.updateLookUpTable">
+<code class="descname">updateLookUpTable</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#postprocess.xcVtk.vtk_lut_field.LUTField.updateLookUpTable" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the minimum and maximum scalar values for scalar mapping.
+Scalar values less than minimum and greater than maximum range values 
+are respectively clamped to those minimum and maximum range values</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="postprocess.xcVtk.vtk_lut_field.LUTField.updateMinMax">
+<code class="descname">updateMinMax</code><span class="sig-paren">(</span><em>value</em><span class="sig-paren">)</span><a class="headerlink" href="#postprocess.xcVtk.vtk_lut_field.LUTField.updateMinMax" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">colored_diagram</a></li>
+<li><a class="reference internal" href="#module-postprocess.xcVtk.control_var_diagram">control_var_diagram</a></li>
+<li><a class="reference internal" href="#module-postprocess.xcVtk.create_array_set_data">create_array_set_data</a></li>
+<li><a class="reference internal" href="#module-postprocess.xcVtk.direction_field_data">direction_field_data</a></li>
+<li><a class="reference internal" href="#module-postprocess.xcVtk.element_property_diagram">element_property_diagram</a></li>
+<li><a class="reference internal" href="#module-postprocess.xcVtk.field_base">field_base</a></li>
+<li><a class="reference internal" href="#module-postprocess.xcVtk.linear_load_diagram">linear_load_diagram</a></li>
+<li><a class="reference internal" href="#module-postprocess.xcVtk.load_vector_field">load_vector_field</a></li>
+<li><a class="reference internal" href="#module-postprocess.xcVtk.local_axes_vector_field">local_axes_vector_field</a></li>
+<li><a class="reference internal" href="#module-postprocess.xcVtk.node_property_diagram">node_property_diagram</a></li>
+<li><a class="reference internal" href="#module-postprocess.xcVtk.screen_annotation">screen_annotation</a></li>
+<li><a class="reference internal" href="#module-postprocess.xcVtk.vector_field_data">vector_field_data</a></li>
+<li><a class="reference internal" href="#module-postprocess.xcVtk.vector_field">vector_field</a></li>
+<li><a class="reference internal" href="#module-postprocess.xcVtk.vtk_crea_array_set_data">vtk_crea_array_set_data</a></li>
+<li><a class="reference internal" href="#module-postprocess.xcVtk.vtk_define_id_filter">vtk_define_id_filter module</a></li>
+<li><a class="reference internal" href="#module-postprocess.xcVtk.vtk_dibuja_prop_cells">vtk_dibuja_prop_cells</a></li>
+<li><a class="reference internal" href="#module-postprocess.xcVtk.vtk_dibuja_prop_points">vtk_dibuja_prop_points</a></li>
+<li><a class="reference internal" href="#module-postprocess.xcVtk.vtk_grafico_base">vtk_grafico_base</a></li>
+<li><a class="reference internal" href="#module-postprocess.xcVtk.vtk_internal_force_diagram">vtk_internal_force_diagram</a></li>
+<li><a class="reference internal" href="#module-postprocess.xcVtk.vtk_load_cells">vtk_load_cells</a></li>
+<li><a class="reference internal" href="#module-postprocess.xcVtk.vtk_load_dblprop_cells">vtk_load_dblprop_cells</a></li>
+<li><a class="reference internal" href="#module-postprocess.xcVtk.vtk_load_strprop_cells">vtk_load_strprop_cells</a></li>
+<li><a class="reference internal" href="#module-postprocess.xcVtk.vtk_lut_field">vtk_lut_field</a></li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="xcVtk.html"
+                        title="previous chapter">xcVtk</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="xcVtk.CAD_model.html"
+                        title="next chapter">vtk - CAD model</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/postprocessor/xcVtkGenTopics.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="xcVtk.CAD_model.html" title="vtk - CAD model"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="xcVtk.html" title="xcVtk"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">XC 3.0 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="xcVtk.html" >xcVtk</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2016, Luis Pérez Tato (LCPT) &amp; Ana Ortega (AO_O).
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.6.
+    </div>
+  </body>
+</html>

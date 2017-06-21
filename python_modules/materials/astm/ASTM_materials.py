@@ -2,15 +2,15 @@
 from __future__ import division
 ''' Structural steel as specified in ASTM standard.'''
 
-__author__= "Ana Ortega (AO_O) and Luis C. Pérez Tato (LCPT)"
-__copyright__= "Copyright 2015, AO_O and LCPT"
+__author__= "Luis C. Pérez Tato (LCPT) , Ana Ortega (AO_O) "
+__copyright__= "Copyright 2016, LCPT, AO_O"
 __license__= "GPL"
 __version__= "3.0"
-__email__= " ana.Ortega.Ort@gmail.com, l.pereztato@gmail.com"
+__email__= "l.pereztato@ciccp.es, ana.ortega@ciccp.es "
 
 from materials import structural_steel
 
-class ASTMSteel(structural_steeel.BasicSteel):
+class ASTMSteel(structural_steel.BasicSteel):
   '''ASTM structural steel.'''
 
   def __init__(self, fy= 250e6, fu= 400e6, gammaM= 1.0):

@@ -1,0 +1,174 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>xcVtk &mdash; XC 3.0 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '3.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="XC 3.0 documentation" href="../index.html" />
+    <link rel="up" title="Postprocessor" href="postprocess.html" />
+    <link rel="next" title="colored_diagram" href="xcVtkGenTopics.html" />
+    <link rel="prev" title="General topics" href="postprGenTopics.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="xcVtkGenTopics.html" title="colored_diagram"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="postprGenTopics.html" title="General topics"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">XC 3.0 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="postprocess.html" accesskey="U">Postprocessor</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="xcvtk">
+<h1>xcVtk<a class="headerlink" href="#xcvtk" title="Permalink to this headline">¶</a></h1>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="xcVtkGenTopics.html">colored_diagram</a></li>
+<li class="toctree-l1"><a class="reference internal" href="xcVtkGenTopics.html#module-postprocess.xcVtk.control_var_diagram">control_var_diagram</a></li>
+<li class="toctree-l1"><a class="reference internal" href="xcVtkGenTopics.html#module-postprocess.xcVtk.create_array_set_data">create_array_set_data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="xcVtkGenTopics.html#module-postprocess.xcVtk.direction_field_data">direction_field_data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="xcVtkGenTopics.html#module-postprocess.xcVtk.element_property_diagram">element_property_diagram</a></li>
+<li class="toctree-l1"><a class="reference internal" href="xcVtkGenTopics.html#module-postprocess.xcVtk.field_base">field_base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="xcVtkGenTopics.html#module-postprocess.xcVtk.linear_load_diagram">linear_load_diagram</a></li>
+<li class="toctree-l1"><a class="reference internal" href="xcVtkGenTopics.html#module-postprocess.xcVtk.load_vector_field">load_vector_field</a></li>
+<li class="toctree-l1"><a class="reference internal" href="xcVtkGenTopics.html#module-postprocess.xcVtk.local_axes_vector_field">local_axes_vector_field</a></li>
+<li class="toctree-l1"><a class="reference internal" href="xcVtkGenTopics.html#module-postprocess.xcVtk.node_property_diagram">node_property_diagram</a></li>
+<li class="toctree-l1"><a class="reference internal" href="xcVtkGenTopics.html#module-postprocess.xcVtk.screen_annotation">screen_annotation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="xcVtkGenTopics.html#module-postprocess.xcVtk.vector_field_data">vector_field_data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="xcVtkGenTopics.html#module-postprocess.xcVtk.vector_field">vector_field</a></li>
+<li class="toctree-l1"><a class="reference internal" href="xcVtkGenTopics.html#module-postprocess.xcVtk.vtk_crea_array_set_data">vtk_crea_array_set_data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="xcVtkGenTopics.html#module-postprocess.xcVtk.vtk_define_id_filter">vtk_define_id_filter module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="xcVtkGenTopics.html#module-postprocess.xcVtk.vtk_dibuja_prop_cells">vtk_dibuja_prop_cells</a></li>
+<li class="toctree-l1"><a class="reference internal" href="xcVtkGenTopics.html#module-postprocess.xcVtk.vtk_dibuja_prop_points">vtk_dibuja_prop_points</a></li>
+<li class="toctree-l1"><a class="reference internal" href="xcVtkGenTopics.html#module-postprocess.xcVtk.vtk_grafico_base">vtk_grafico_base</a></li>
+<li class="toctree-l1"><a class="reference internal" href="xcVtkGenTopics.html#module-postprocess.xcVtk.vtk_internal_force_diagram">vtk_internal_force_diagram</a></li>
+<li class="toctree-l1"><a class="reference internal" href="xcVtkGenTopics.html#module-postprocess.xcVtk.vtk_load_cells">vtk_load_cells</a></li>
+<li class="toctree-l1"><a class="reference internal" href="xcVtkGenTopics.html#module-postprocess.xcVtk.vtk_load_dblprop_cells">vtk_load_dblprop_cells</a></li>
+<li class="toctree-l1"><a class="reference internal" href="xcVtkGenTopics.html#module-postprocess.xcVtk.vtk_load_strprop_cells">vtk_load_strprop_cells</a></li>
+<li class="toctree-l1"><a class="reference internal" href="xcVtkGenTopics.html#module-postprocess.xcVtk.vtk_lut_field">vtk_lut_field</a></li>
+<li class="toctree-l1"><a class="reference internal" href="xcVtk.CAD_model.html">vtk - CAD model</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="xcVtk.CAD_model.html#module-postprocess.xcVtk.CAD_model.vtk_CAD_graphic">vtk_CAD_graphic</a></li>
+<li class="toctree-l2"><a class="reference internal" href="xcVtk.CAD_model.html#module-postprocess.xcVtk.CAD_model.vtk_define_cells_cad">vtk_define_cells_cad</a></li>
+<li class="toctree-l2"><a class="reference internal" href="xcVtk.CAD_model.html#module-postprocess.xcVtk.CAD_model.vtk_define_kpoints_cad">vtk_define_kpoints_cad</a></li>
+<li class="toctree-l2"><a class="reference internal" href="xcVtk.CAD_model.html#module-postprocess.xcVtk.CAD_model.vtk_load_kpoints">vtk_load_kpoints</a></li>
+<li class="toctree-l2"><a class="reference internal" href="xcVtk.CAD_model.html#module-postprocess.xcVtk.CAD_model.vtk_load_lines">vtk_load_lines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="xcVtk.CAD_model.html#module-postprocess.xcVtk.CAD_model.vtk_load_strprop_kpts">vtk_load_strprop_kpts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="xcVtk.CAD_model.html#module-postprocess.xcVtk.CAD_model.vtk_load_strprop_lines">vtk_load_strprop_lines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="xcVtk.CAD_model.html#module-postprocess.xcVtk.CAD_model.vtk_plot_kpoints">vtk_plot_kpoints</a></li>
+<li class="toctree-l2"><a class="reference internal" href="xcVtk.CAD_model.html#module-postprocess.xcVtk.CAD_model.vtk_plot_lines">vtk_plot_lines</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="xcVtk.FE_model.html">Vtk - finite element mesh</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="xcVtk.FE_model.html#module-postprocess.xcVtk.FE_model.Fields">Fields</a></li>
+<li class="toctree-l2"><a class="reference internal" href="xcVtk.FE_model.html#module-postprocess.xcVtk.FE_model.quick_graphics">quick_graphics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="xcVtk.FE_model.html#module-postprocess.xcVtk.FE_model.vtk_define_mesh_cells_fe">vtk_define_mesh_cells_fe</a></li>
+<li class="toctree-l2"><a class="reference internal" href="xcVtk.FE_model.html#module-postprocess.xcVtk.FE_model.vtk_define_mesh_nodes">vtk_define_mesh_nodes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="xcVtk.FE_model.html#module-postprocess.xcVtk.FE_model.vtk_display_limit_state">vtk_display_limit_state</a></li>
+<li class="toctree-l2"><a class="reference internal" href="xcVtk.FE_model.html#module-postprocess.xcVtk.FE_model.vtk_FE_graphic">vtk_FE_graphic</a></li>
+<li class="toctree-l2"><a class="reference internal" href="xcVtk.FE_model.html#module-postprocess.xcVtk.FE_model.vtk_load_elem">vtk_load_elem</a></li>
+<li class="toctree-l2"><a class="reference internal" href="xcVtk.FE_model.html#module-postprocess.xcVtk.FE_model.vtk_load_nodes">vtk_load_nodes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="xcVtk.FE_model.html#module-postprocess.xcVtk.FE_model.vtk_plot_element_ids">vtk_plot_element_ids</a></li>
+<li class="toctree-l2"><a class="reference internal" href="xcVtk.FE_model.html#module-postprocess.xcVtk.FE_model.vtk_plot_elements">vtk_plot_elements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="xcVtk.FE_model.html#module-postprocess.xcVtk.FE_model.vtk_plot_nodes">vtk_plot_nodes</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="postprGenTopics.html"
+                        title="previous chapter">General topics</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="xcVtkGenTopics.html"
+                        title="next chapter">colored_diagram</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/postprocessor/postprocess.xcVtk.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="xcVtkGenTopics.html" title="colored_diagram"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="postprGenTopics.html" title="General topics"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">XC 3.0 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="postprocess.html" >Postprocessor</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2016, Luis Pérez Tato (LCPT) &amp; Ana Ortega (AO_O).
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.6.
+    </div>
+  </body>
+</html>

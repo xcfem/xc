@@ -1,0 +1,710 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Wind &mdash; XC 3.0 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '3.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="XC 3.0 documentation" href="../index.html" />
+    <link rel="up" title="Actions" href="actions.html" />
+    <link rel="next" title="Snow" href="actions.snow.html" />
+    <link rel="prev" title="Earth pressure" href="actions.earth_pressure.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="actions.snow.html" title="Snow"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="actions.earth_pressure.html" title="Earth pressure"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">XC 3.0 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="actions.html" accesskey="U">Actions</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="wind">
+<h1>Wind<a class="headerlink" href="#wind" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="module-actions.wind.vientoCTE">
+<span id="vientocte"></span><h2>vientoCTE<a class="headerlink" href="#module-actions.wind.vientoCTE" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="actions.wind.vientoCTE.CoefExp">
+<code class="descclassname">actions.wind.vientoCTE.</code><code class="descname">CoefExp</code><span class="sig-paren">(</span><em>gae</em>, <em>z</em><span class="sig-paren">)</span><a class="headerlink" href="#actions.wind.vientoCTE.CoefExp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Coeficiente de exposición en función del grado de aspereza del entorno
+y de la cota del punto sobre el terreno según CTE (expresión D.2).</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="actions.wind.vientoCTE.ParamF">
+<code class="descclassname">actions.wind.vientoCTE.</code><code class="descname">ParamF</code><span class="sig-paren">(</span><em>gae</em>, <em>z</em><span class="sig-paren">)</span><a class="headerlink" href="#actions.wind.vientoCTE.ParamF" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parámetro F en función del grado de aspereza del entorno
+y de la cota del punto según CTE (expresión D.3).</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="actions.wind.vientoCTE.ParamK">
+<code class="descclassname">actions.wind.vientoCTE.</code><code class="descname">ParamK</code><span class="sig-paren">(</span><em>gae</em><span class="sig-paren">)</span><a class="headerlink" href="#actions.wind.vientoCTE.ParamK" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parámetro k en función del grado de aspereza del entorno
+según CTE (tabla D.2).</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="actions.wind.vientoCTE.ParamL">
+<code class="descclassname">actions.wind.vientoCTE.</code><code class="descname">ParamL</code><span class="sig-paren">(</span><em>gae</em><span class="sig-paren">)</span><a class="headerlink" href="#actions.wind.vientoCTE.ParamL" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parámetro L en función del grado de aspereza del entorno
+según CTE (tabla D.2).}</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="actions.wind.vientoCTE.ParamZ">
+<code class="descclassname">actions.wind.vientoCTE.</code><code class="descname">ParamZ</code><span class="sig-paren">(</span><em>gae</em><span class="sig-paren">)</span><a class="headerlink" href="#actions.wind.vientoCTE.ParamZ" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parámetro Z en función del grado de aspereza del entorno
+según CTE (tabla D.2).</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="actions.wind.vientoCTE.interpolaCoefsPresion">
+<code class="descclassname">actions.wind.vientoCTE.</code><code class="descname">interpolaCoefsPresion</code><span class="sig-paren">(</span><em>A</em>, <em>Cpe1</em>, <em>Cpe10</em><span class="sig-paren">)</span><a class="headerlink" href="#actions.wind.vientoCTE.interpolaCoefsPresion" title="Permalink to this definition">¶</a></dt>
+<dd><p>Función para interpolar coeficientes de presión 
+según la expresión D.4 del CTE (SE-AE-27).</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-actions.wind.vientoCubiertaDosAguasCTE">
+<span id="vientocubiertadosaguascte"></span><h2>vientoCubiertaDosAguasCTE<a class="headerlink" href="#module-actions.wind.vientoCubiertaDosAguasCTE" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="actions.wind.vientoCubiertaDosAguasCTE.cpDosAguasZonaFVLong">
+<code class="descclassname">actions.wind.vientoCubiertaDosAguasCTE.</code><code class="descname">cpDosAguasZonaFVLong</code><span class="sig-paren">(</span><em>A</em>, <em>alpha</em><span class="sig-paren">)</span><a class="headerlink" href="#actions.wind.vientoCubiertaDosAguasCTE.cpDosAguasZonaFVLong" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="data">
+<dt id="actions.wind.vientoCubiertaDosAguasCTE.cpDosAguasZonaFVLongAGrande">
+<code class="descclassname">actions.wind.vientoCubiertaDosAguasCTE.</code><code class="descname">cpDosAguasZonaFVLongAGrande</code><em class="property"> = &lt;scipy.interpolate.interpolate.interp1d object&gt;</em><a class="headerlink" href="#actions.wind.vientoCubiertaDosAguasCTE.cpDosAguasZonaFVLongAGrande" title="Permalink to this definition">¶</a></dt>
+<dd><p>Coeficiente de presión exterior (positiva hacia abajo) en zona F de la cubierta
+para viento sensiblemente longitudinal (45&lt;theta&lt;135) y
+área menor o igual a 1 metro cuadrado según la tabla D.6.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="actions.wind.vientoCubiertaDosAguasCTE.cpDosAguasZonaFVLongAPeq">
+<code class="descclassname">actions.wind.vientoCubiertaDosAguasCTE.</code><code class="descname">cpDosAguasZonaFVLongAPeq</code><em class="property"> = &lt;scipy.interpolate.interpolate.interp1d object&gt;</em><a class="headerlink" href="#actions.wind.vientoCubiertaDosAguasCTE.cpDosAguasZonaFVLongAPeq" title="Permalink to this definition">¶</a></dt>
+<dd><p>Coeficiente de presión exterior (positiva hacia abajo) en zona F de la cubierta
+para viento sensiblemente longitudinal (45&lt;theta&lt;135) según la tabla D.6.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="actions.wind.vientoCubiertaDosAguasCTE.cpDosAguasZonaFVTrsv">
+<code class="descclassname">actions.wind.vientoCubiertaDosAguasCTE.</code><code class="descname">cpDosAguasZonaFVTrsv</code><span class="sig-paren">(</span><em>A</em>, <em>alpha</em><span class="sig-paren">)</span><a class="headerlink" href="#actions.wind.vientoCubiertaDosAguasCTE.cpDosAguasZonaFVTrsv" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="data">
+<dt id="actions.wind.vientoCubiertaDosAguasCTE.cpDosAguasZonaFVTrsvAGrande">
+<code class="descclassname">actions.wind.vientoCubiertaDosAguasCTE.</code><code class="descname">cpDosAguasZonaFVTrsvAGrande</code><em class="property"> = &lt;scipy.interpolate.interpolate.interp1d object&gt;</em><a class="headerlink" href="#actions.wind.vientoCubiertaDosAguasCTE.cpDosAguasZonaFVTrsvAGrande" title="Permalink to this definition">¶</a></dt>
+<dd><p>Coeficiente de presión exterior (positiva hacia abajo) en zona F de la cubierta
+para viento sensiblemente transversal (-45&lt;theta&lt;45) y
+área menor o igual a 1 metro cuadrado según la tabla D.6.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="actions.wind.vientoCubiertaDosAguasCTE.cpDosAguasZonaGVLong">
+<code class="descclassname">actions.wind.vientoCubiertaDosAguasCTE.</code><code class="descname">cpDosAguasZonaGVLong</code><span class="sig-paren">(</span><em>A</em>, <em>alpha</em><span class="sig-paren">)</span><a class="headerlink" href="#actions.wind.vientoCubiertaDosAguasCTE.cpDosAguasZonaGVLong" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="data">
+<dt id="actions.wind.vientoCubiertaDosAguasCTE.cpDosAguasZonaGVLongAGrande">
+<code class="descclassname">actions.wind.vientoCubiertaDosAguasCTE.</code><code class="descname">cpDosAguasZonaGVLongAGrande</code><em class="property"> = &lt;scipy.interpolate.interpolate.interp1d object&gt;</em><a class="headerlink" href="#actions.wind.vientoCubiertaDosAguasCTE.cpDosAguasZonaGVLongAGrande" title="Permalink to this definition">¶</a></dt>
+<dd><p>Coeficiente de presión exterior (positiva hacia abajo) en zona G de la cubierta
+para viento sensiblemente longitudinal (45&lt;theta&lt;135) y
+área menor o igual a 1 metro cuadrado según la tabla D.6.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="actions.wind.vientoCubiertaDosAguasCTE.cpDosAguasZonaGVLongAPeq">
+<code class="descclassname">actions.wind.vientoCubiertaDosAguasCTE.</code><code class="descname">cpDosAguasZonaGVLongAPeq</code><em class="property"> = &lt;scipy.interpolate.interpolate.interp1d object&gt;</em><a class="headerlink" href="#actions.wind.vientoCubiertaDosAguasCTE.cpDosAguasZonaGVLongAPeq" title="Permalink to this definition">¶</a></dt>
+<dd><p>Coeficiente de presión exterior (positiva hacia abajo) en zona G de la cubierta
+para viento sensiblemente longitudinal (45&lt;theta&lt;135) según la tabla D.6.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="actions.wind.vientoCubiertaDosAguasCTE.cpDosAguasZonaGVTrsv">
+<code class="descclassname">actions.wind.vientoCubiertaDosAguasCTE.</code><code class="descname">cpDosAguasZonaGVTrsv</code><span class="sig-paren">(</span><em>A</em>, <em>alpha</em><span class="sig-paren">)</span><a class="headerlink" href="#actions.wind.vientoCubiertaDosAguasCTE.cpDosAguasZonaGVTrsv" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="data">
+<dt id="actions.wind.vientoCubiertaDosAguasCTE.cpDosAguasZonaGVTrsvAGrande">
+<code class="descclassname">actions.wind.vientoCubiertaDosAguasCTE.</code><code class="descname">cpDosAguasZonaGVTrsvAGrande</code><em class="property"> = &lt;scipy.interpolate.interpolate.interp1d object&gt;</em><a class="headerlink" href="#actions.wind.vientoCubiertaDosAguasCTE.cpDosAguasZonaGVTrsvAGrande" title="Permalink to this definition">¶</a></dt>
+<dd><p>Coeficiente de presión exterior (positiva hacia abajo) en zona G de la cubierta
+para viento sensiblemente transversal (-45&lt;theta&lt;45) y
+área menor o igual a 1 metro cuadrado según la tabla D.6.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="actions.wind.vientoCubiertaDosAguasCTE.cpDosAguasZonaGVTrsvAPeq">
+<code class="descclassname">actions.wind.vientoCubiertaDosAguasCTE.</code><code class="descname">cpDosAguasZonaGVTrsvAPeq</code><em class="property"> = &lt;scipy.interpolate.interpolate.interp1d object&gt;</em><a class="headerlink" href="#actions.wind.vientoCubiertaDosAguasCTE.cpDosAguasZonaGVTrsvAPeq" title="Permalink to this definition">¶</a></dt>
+<dd><p>Coeficiente de presión exterior (positiva hacia abajo) en zona G de la cubierta
+para viento sensiblemente transversal (-45&lt;theta&lt;45) según la tabla D.6.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="actions.wind.vientoCubiertaDosAguasCTE.cpDosAguasZonaHVLong">
+<code class="descclassname">actions.wind.vientoCubiertaDosAguasCTE.</code><code class="descname">cpDosAguasZonaHVLong</code><span class="sig-paren">(</span><em>A</em>, <em>alpha</em><span class="sig-paren">)</span><a class="headerlink" href="#actions.wind.vientoCubiertaDosAguasCTE.cpDosAguasZonaHVLong" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="data">
+<dt id="actions.wind.vientoCubiertaDosAguasCTE.cpDosAguasZonaHVLongAGrande">
+<code class="descclassname">actions.wind.vientoCubiertaDosAguasCTE.</code><code class="descname">cpDosAguasZonaHVLongAGrande</code><em class="property"> = &lt;scipy.interpolate.interpolate.interp1d object&gt;</em><a class="headerlink" href="#actions.wind.vientoCubiertaDosAguasCTE.cpDosAguasZonaHVLongAGrande" title="Permalink to this definition">¶</a></dt>
+<dd><p>Coeficiente de presión exterior (positiva hacia abajo) en zona H de la cubierta
+para viento sensiblemente longitudinal (45&lt;theta&lt;135) y
+área menor o igual a 1 metro cuadrado según la tabla D.6.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="actions.wind.vientoCubiertaDosAguasCTE.cpDosAguasZonaHVLongAPeq">
+<code class="descclassname">actions.wind.vientoCubiertaDosAguasCTE.</code><code class="descname">cpDosAguasZonaHVLongAPeq</code><em class="property"> = &lt;scipy.interpolate.interpolate.interp1d object&gt;</em><a class="headerlink" href="#actions.wind.vientoCubiertaDosAguasCTE.cpDosAguasZonaHVLongAPeq" title="Permalink to this definition">¶</a></dt>
+<dd><p>Coeficiente de presión exterior (positiva hacia abajo) en zona H de la cubierta
+para viento sensiblemente longitudinal (45&lt;theta&lt;135) según la tabla D.6.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="actions.wind.vientoCubiertaDosAguasCTE.cpDosAguasZonaHVTrsv">
+<code class="descclassname">actions.wind.vientoCubiertaDosAguasCTE.</code><code class="descname">cpDosAguasZonaHVTrsv</code><span class="sig-paren">(</span><em>A</em>, <em>alpha</em><span class="sig-paren">)</span><a class="headerlink" href="#actions.wind.vientoCubiertaDosAguasCTE.cpDosAguasZonaHVTrsv" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="data">
+<dt id="actions.wind.vientoCubiertaDosAguasCTE.cpDosAguasZonaHVTrsvAGrande">
+<code class="descclassname">actions.wind.vientoCubiertaDosAguasCTE.</code><code class="descname">cpDosAguasZonaHVTrsvAGrande</code><em class="property"> = &lt;scipy.interpolate.interpolate.interp1d object&gt;</em><a class="headerlink" href="#actions.wind.vientoCubiertaDosAguasCTE.cpDosAguasZonaHVTrsvAGrande" title="Permalink to this definition">¶</a></dt>
+<dd><p>Coeficiente de presión exterior (positiva hacia abajo) en zona H de la cubierta
+para viento sensiblemente transversal (-45&lt;theta&lt;45) y
+área menor o igual a 1 metro cuadrado según la tabla D.6.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="actions.wind.vientoCubiertaDosAguasCTE.cpDosAguasZonaHVTrsvAPeq">
+<code class="descclassname">actions.wind.vientoCubiertaDosAguasCTE.</code><code class="descname">cpDosAguasZonaHVTrsvAPeq</code><em class="property"> = &lt;scipy.interpolate.interpolate.interp1d object&gt;</em><a class="headerlink" href="#actions.wind.vientoCubiertaDosAguasCTE.cpDosAguasZonaHVTrsvAPeq" title="Permalink to this definition">¶</a></dt>
+<dd><p>Coeficiente de presión exterior (positiva hacia abajo) en zona H de la cubierta
+para viento sensiblemente transversal (-45&lt;theta&lt;45) según la tabla D.6.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="actions.wind.vientoCubiertaDosAguasCTE.cpDosAguasZonaIVLong">
+<code class="descclassname">actions.wind.vientoCubiertaDosAguasCTE.</code><code class="descname">cpDosAguasZonaIVLong</code><span class="sig-paren">(</span><em>A</em>, <em>alpha</em><span class="sig-paren">)</span><a class="headerlink" href="#actions.wind.vientoCubiertaDosAguasCTE.cpDosAguasZonaIVLong" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="data">
+<dt id="actions.wind.vientoCubiertaDosAguasCTE.cpDosAguasZonaIVLongAGrande">
+<code class="descclassname">actions.wind.vientoCubiertaDosAguasCTE.</code><code class="descname">cpDosAguasZonaIVLongAGrande</code><em class="property"> = &lt;scipy.interpolate.interpolate.interp1d object&gt;</em><a class="headerlink" href="#actions.wind.vientoCubiertaDosAguasCTE.cpDosAguasZonaIVLongAGrande" title="Permalink to this definition">¶</a></dt>
+<dd><p>Coeficiente de presión exterior (positiva hacia abajo) en zona I de la cubierta
+para viento sensiblemente longitudinal (45&lt;theta&lt;135) y
+área menor o igual a 1 metro cuadrado según la tabla D.6.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="actions.wind.vientoCubiertaDosAguasCTE.cpDosAguasZonaIVLongAPeq">
+<code class="descclassname">actions.wind.vientoCubiertaDosAguasCTE.</code><code class="descname">cpDosAguasZonaIVLongAPeq</code><em class="property"> = &lt;scipy.interpolate.interpolate.interp1d object&gt;</em><a class="headerlink" href="#actions.wind.vientoCubiertaDosAguasCTE.cpDosAguasZonaIVLongAPeq" title="Permalink to this definition">¶</a></dt>
+<dd><p>Coeficiente de presión exterior (positiva hacia abajo) en zona I de la cubierta
+para viento sensiblemente longitudinal (45&lt;theta&lt;135) según la tabla D.6.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="actions.wind.vientoCubiertaDosAguasCTE.cpDosAguasZonaIVTrsv">
+<code class="descclassname">actions.wind.vientoCubiertaDosAguasCTE.</code><code class="descname">cpDosAguasZonaIVTrsv</code><span class="sig-paren">(</span><em>A</em>, <em>alpha</em><span class="sig-paren">)</span><a class="headerlink" href="#actions.wind.vientoCubiertaDosAguasCTE.cpDosAguasZonaIVTrsv" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="data">
+<dt id="actions.wind.vientoCubiertaDosAguasCTE.cpDosAguasZonaIVTrsvAGrande">
+<code class="descclassname">actions.wind.vientoCubiertaDosAguasCTE.</code><code class="descname">cpDosAguasZonaIVTrsvAGrande</code><em class="property"> = &lt;scipy.interpolate.interpolate.interp1d object&gt;</em><a class="headerlink" href="#actions.wind.vientoCubiertaDosAguasCTE.cpDosAguasZonaIVTrsvAGrande" title="Permalink to this definition">¶</a></dt>
+<dd><p>Coeficiente de presión exterior (positiva hacia abajo) en zona I de la cubierta
+para viento sensiblemente transversal (-45&lt;theta&lt;45) y
+área menor o igual a 1 metro cuadrado según la tabla D.6.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="actions.wind.vientoCubiertaDosAguasCTE.cpDosAguasZonaIVTrsvAPeq">
+<code class="descclassname">actions.wind.vientoCubiertaDosAguasCTE.</code><code class="descname">cpDosAguasZonaIVTrsvAPeq</code><em class="property"> = &lt;scipy.interpolate.interpolate.interp1d object&gt;</em><a class="headerlink" href="#actions.wind.vientoCubiertaDosAguasCTE.cpDosAguasZonaIVTrsvAPeq" title="Permalink to this definition">¶</a></dt>
+<dd><p>Coeficiente de presión exterior (positiva hacia abajo) en zona I de la cubierta
+para viento sensiblemente transversal (-45&lt;theta&lt;45) según la tabla D.6.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="actions.wind.vientoCubiertaDosAguasCTE.cpDosAguasZonaJVTrsv">
+<code class="descclassname">actions.wind.vientoCubiertaDosAguasCTE.</code><code class="descname">cpDosAguasZonaJVTrsv</code><span class="sig-paren">(</span><em>A</em>, <em>alpha</em><span class="sig-paren">)</span><a class="headerlink" href="#actions.wind.vientoCubiertaDosAguasCTE.cpDosAguasZonaJVTrsv" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="data">
+<dt id="actions.wind.vientoCubiertaDosAguasCTE.cpDosAguasZonaJVTrsvAGrande">
+<code class="descclassname">actions.wind.vientoCubiertaDosAguasCTE.</code><code class="descname">cpDosAguasZonaJVTrsvAGrande</code><em class="property"> = &lt;scipy.interpolate.interpolate.interp1d object&gt;</em><a class="headerlink" href="#actions.wind.vientoCubiertaDosAguasCTE.cpDosAguasZonaJVTrsvAGrande" title="Permalink to this definition">¶</a></dt>
+<dd><p>Coeficiente de presión exterior (positiva hacia abajo) en zona J de la cubierta
+para viento sensiblemente transversal (-45&lt;theta&lt;45) y
+área menor o igual a 1 metro cuadrado según la tabla D.6.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="actions.wind.vientoCubiertaDosAguasCTE.cpDosAguasZonaJVTrsvAPeq">
+<code class="descclassname">actions.wind.vientoCubiertaDosAguasCTE.</code><code class="descname">cpDosAguasZonaJVTrsvAPeq</code><em class="property"> = &lt;scipy.interpolate.interpolate.interp1d object&gt;</em><a class="headerlink" href="#actions.wind.vientoCubiertaDosAguasCTE.cpDosAguasZonaJVTrsvAPeq" title="Permalink to this definition">¶</a></dt>
+<dd><p>Coeficiente de presión exterior (positiva hacia abajo) en zona J de la cubierta
+para viento sensiblemente transversal (-45&lt;theta&lt;45) según la tabla D.6.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="actions.wind.vientoCubiertaDosAguasCTE.ifte">
+<code class="descclassname">actions.wind.vientoCubiertaDosAguasCTE.</code><code class="descname">ifte</code><span class="sig-paren">(</span><em>cond</em>, <em>v1</em>, <em>v2</em><span class="sig-paren">)</span><a class="headerlink" href="#actions.wind.vientoCubiertaDosAguasCTE.ifte" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-actions.wind.vientoCubiertaPlanaCTE">
+<span id="vientocubiertaplanacte"></span><h2>vientoCubiertaPlanaCTE<a class="headerlink" href="#module-actions.wind.vientoCubiertaPlanaCTE" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="actions.wind.vientoCubiertaPlanaCTE.cpPlanaZonaFVLong">
+<code class="descclassname">actions.wind.vientoCubiertaPlanaCTE.</code><code class="descname">cpPlanaZonaFVLong</code><span class="sig-paren">(</span><em>A</em>, <em>hp</em>, <em>h</em><span class="sig-paren">)</span><a class="headerlink" href="#actions.wind.vientoCubiertaPlanaCTE.cpPlanaZonaFVLong" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="actions.wind.vientoCubiertaPlanaCTE.cpPlanaZonaFVTrsv">
+<code class="descclassname">actions.wind.vientoCubiertaPlanaCTE.</code><code class="descname">cpPlanaZonaFVTrsv</code><span class="sig-paren">(</span><em>A</em>, <em>hp</em>, <em>h</em><span class="sig-paren">)</span><a class="headerlink" href="#actions.wind.vientoCubiertaPlanaCTE.cpPlanaZonaFVTrsv" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="data">
+<dt id="actions.wind.vientoCubiertaPlanaCTE.cpPlanaZonaFVTrsvAGrande">
+<code class="descclassname">actions.wind.vientoCubiertaPlanaCTE.</code><code class="descname">cpPlanaZonaFVTrsvAGrande</code><em class="property"> = &lt;scipy.interpolate.interpolate.interp1d object&gt;</em><a class="headerlink" href="#actions.wind.vientoCubiertaPlanaCTE.cpPlanaZonaFVTrsvAGrande" title="Permalink to this definition">¶</a></dt>
+<dd><p>Coeficiente de presión exterior (positiva hacia abajo) en zona F de la cubierta
+para viento sensiblemente transversal (-45&lt;theta&lt;45) y
+área menor o igual a 1 metro cuadrado según la tabla D.4.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="actions.wind.vientoCubiertaPlanaCTE.cpPlanaZonaFVTrsvAPeq">
+<code class="descclassname">actions.wind.vientoCubiertaPlanaCTE.</code><code class="descname">cpPlanaZonaFVTrsvAPeq</code><em class="property"> = &lt;scipy.interpolate.interpolate.interp1d object&gt;</em><a class="headerlink" href="#actions.wind.vientoCubiertaPlanaCTE.cpPlanaZonaFVTrsvAPeq" title="Permalink to this definition">¶</a></dt>
+<dd><p>Coeficiente de presión exterior (positiva hacia abajo) en zona F de la cubierta
+para viento sensiblemente transversal (-45&lt;theta&lt;45) según la tabla D.4.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="actions.wind.vientoCubiertaPlanaCTE.cpPlanaZonaGVLong">
+<code class="descclassname">actions.wind.vientoCubiertaPlanaCTE.</code><code class="descname">cpPlanaZonaGVLong</code><span class="sig-paren">(</span><em>A</em>, <em>hp</em>, <em>h</em><span class="sig-paren">)</span><a class="headerlink" href="#actions.wind.vientoCubiertaPlanaCTE.cpPlanaZonaGVLong" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="actions.wind.vientoCubiertaPlanaCTE.cpPlanaZonaGVTrsv">
+<code class="descclassname">actions.wind.vientoCubiertaPlanaCTE.</code><code class="descname">cpPlanaZonaGVTrsv</code><span class="sig-paren">(</span><em>A</em>, <em>hp</em>, <em>h</em><span class="sig-paren">)</span><a class="headerlink" href="#actions.wind.vientoCubiertaPlanaCTE.cpPlanaZonaGVTrsv" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="data">
+<dt id="actions.wind.vientoCubiertaPlanaCTE.cpPlanaZonaGVTrsvAGrande">
+<code class="descclassname">actions.wind.vientoCubiertaPlanaCTE.</code><code class="descname">cpPlanaZonaGVTrsvAGrande</code><em class="property"> = &lt;scipy.interpolate.interpolate.interp1d object&gt;</em><a class="headerlink" href="#actions.wind.vientoCubiertaPlanaCTE.cpPlanaZonaGVTrsvAGrande" title="Permalink to this definition">¶</a></dt>
+<dd><p>Coeficiente de presión exterior (positiva hacia abajo) en zona G de la cubierta
+para viento sensiblemente transversal (-45&lt;theta&lt;45) y
+área menor o igual a 1 metro cuadrado según la tabla D.4.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="actions.wind.vientoCubiertaPlanaCTE.cpPlanaZonaGVTrsvAPeq">
+<code class="descclassname">actions.wind.vientoCubiertaPlanaCTE.</code><code class="descname">cpPlanaZonaGVTrsvAPeq</code><em class="property"> = &lt;scipy.interpolate.interpolate.interp1d object&gt;</em><a class="headerlink" href="#actions.wind.vientoCubiertaPlanaCTE.cpPlanaZonaGVTrsvAPeq" title="Permalink to this definition">¶</a></dt>
+<dd><p>Coeficiente de presión exterior (positiva hacia abajo) en zona G de la cubierta
+para viento sensiblemente transversal (-45&lt;theta&lt;45) según la tabla D.4.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="actions.wind.vientoCubiertaPlanaCTE.cpPlanaZonaHVLong">
+<code class="descclassname">actions.wind.vientoCubiertaPlanaCTE.</code><code class="descname">cpPlanaZonaHVLong</code><span class="sig-paren">(</span><em>A</em>, <em>hp</em>, <em>h</em><span class="sig-paren">)</span><a class="headerlink" href="#actions.wind.vientoCubiertaPlanaCTE.cpPlanaZonaHVLong" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="actions.wind.vientoCubiertaPlanaCTE.cpPlanaZonaHVTrsv">
+<code class="descclassname">actions.wind.vientoCubiertaPlanaCTE.</code><code class="descname">cpPlanaZonaHVTrsv</code><span class="sig-paren">(</span><em>A</em>, <em>hp</em>, <em>h</em><span class="sig-paren">)</span><a class="headerlink" href="#actions.wind.vientoCubiertaPlanaCTE.cpPlanaZonaHVTrsv" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="data">
+<dt id="actions.wind.vientoCubiertaPlanaCTE.cpPlanaZonaHVTrsvAGrande">
+<code class="descclassname">actions.wind.vientoCubiertaPlanaCTE.</code><code class="descname">cpPlanaZonaHVTrsvAGrande</code><em class="property"> = &lt;scipy.interpolate.interpolate.interp1d object&gt;</em><a class="headerlink" href="#actions.wind.vientoCubiertaPlanaCTE.cpPlanaZonaHVTrsvAGrande" title="Permalink to this definition">¶</a></dt>
+<dd><p>Coeficiente de presión exterior (positiva hacia abajo) en zona H de la cubierta
+para viento sensiblemente transversal (-45&lt;theta&lt;45) y
+área menor o igual a 1 metro cuadrado según la tabla D.4.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="actions.wind.vientoCubiertaPlanaCTE.cpPlanaZonaHVTrsvAPeq">
+<code class="descclassname">actions.wind.vientoCubiertaPlanaCTE.</code><code class="descname">cpPlanaZonaHVTrsvAPeq</code><em class="property"> = &lt;scipy.interpolate.interpolate.interp1d object&gt;</em><a class="headerlink" href="#actions.wind.vientoCubiertaPlanaCTE.cpPlanaZonaHVTrsvAPeq" title="Permalink to this definition">¶</a></dt>
+<dd><p>Coeficiente de presión exterior (positiva hacia abajo) en zona H de la cubierta
+para viento sensiblemente transversal (-45&lt;theta&lt;45) según la tabla D.4.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="actions.wind.vientoCubiertaPlanaCTE.cpPlanaZonaIVLong">
+<code class="descclassname">actions.wind.vientoCubiertaPlanaCTE.</code><code class="descname">cpPlanaZonaIVLong</code><span class="sig-paren">(</span><em>A</em>, <em>hp</em>, <em>h</em><span class="sig-paren">)</span><a class="headerlink" href="#actions.wind.vientoCubiertaPlanaCTE.cpPlanaZonaIVLong" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="actions.wind.vientoCubiertaPlanaCTE.cpPlanaZonaIVTrsv">
+<code class="descclassname">actions.wind.vientoCubiertaPlanaCTE.</code><code class="descname">cpPlanaZonaIVTrsv</code><span class="sig-paren">(</span><em>A</em>, <em>hp</em>, <em>h</em><span class="sig-paren">)</span><a class="headerlink" href="#actions.wind.vientoCubiertaPlanaCTE.cpPlanaZonaIVTrsv" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="data">
+<dt id="actions.wind.vientoCubiertaPlanaCTE.cpPlanaZonaIVTrsvAGrande">
+<code class="descclassname">actions.wind.vientoCubiertaPlanaCTE.</code><code class="descname">cpPlanaZonaIVTrsvAGrande</code><em class="property"> = &lt;scipy.interpolate.interpolate.interp1d object&gt;</em><a class="headerlink" href="#actions.wind.vientoCubiertaPlanaCTE.cpPlanaZonaIVTrsvAGrande" title="Permalink to this definition">¶</a></dt>
+<dd><p>Coeficiente de presión exterior (positiva hacia abajo) en zona I de la cubierta
+para viento sensiblemente transversal (-45&lt;theta&lt;45) y
+área menor o igual a 1 metro cuadrado según la tabla D.4.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="actions.wind.vientoCubiertaPlanaCTE.cpPlanaZonaIVTrsvAPeq">
+<code class="descclassname">actions.wind.vientoCubiertaPlanaCTE.</code><code class="descname">cpPlanaZonaIVTrsvAPeq</code><em class="property"> = &lt;scipy.interpolate.interpolate.interp1d object&gt;</em><a class="headerlink" href="#actions.wind.vientoCubiertaPlanaCTE.cpPlanaZonaIVTrsvAPeq" title="Permalink to this definition">¶</a></dt>
+<dd><p>Coeficiente de presión exterior (positiva hacia abajo) en zona I de la cubierta
+para viento sensiblemente transversal (-45&lt;theta&lt;45) según la tabla D.4.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-actions.wind.vientoMarquesinaCTE">
+<span id="vientomarquesinacte"></span><h2>vientoMarquesinaCTE<a class="headerlink" href="#module-actions.wind.vientoMarquesinaCTE" title="Permalink to this headline">¶</a></h2>
+<dl class="data">
+<dt id="actions.wind.vientoMarquesinaCTE.cpMarq1AguaAbajoZonaA">
+<code class="descclassname">actions.wind.vientoMarquesinaCTE.</code><code class="descname">cpMarq1AguaAbajoZonaA</code><em class="property"> = &lt;scipy.interpolate.interpolate.interp1d object&gt;</em><a class="headerlink" href="#actions.wind.vientoMarquesinaCTE.cpMarq1AguaAbajoZonaA" title="Permalink to this definition">¶</a></dt>
+<dd><p>Presión exterior hacia arriba en zona A de marquesina a 1 agua
+con factor de obstrucción nulo en función de la pendiente
+según la tabla D.10.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="actions.wind.vientoMarquesinaCTE.cpMarq1AguaArribaZonaA">
+<code class="descclassname">actions.wind.vientoMarquesinaCTE.</code><code class="descname">cpMarq1AguaArribaZonaA</code><span class="sig-paren">(</span><em>alpha</em>, <em>fi</em><span class="sig-paren">)</span><a class="headerlink" href="#actions.wind.vientoMarquesinaCTE.cpMarq1AguaArribaZonaA" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="data">
+<dt id="actions.wind.vientoMarquesinaCTE.cpMarq1AguaArribaZonaAFi0">
+<code class="descclassname">actions.wind.vientoMarquesinaCTE.</code><code class="descname">cpMarq1AguaArribaZonaAFi0</code><em class="property"> = &lt;scipy.interpolate.interpolate.interp1d object&gt;</em><a class="headerlink" href="#actions.wind.vientoMarquesinaCTE.cpMarq1AguaArribaZonaAFi0" title="Permalink to this definition">¶</a></dt>
+<dd><p>Presión exterior hacia arriba en zona A de marquesina a 1 agua
+con factor de obstrucción 1 en función de la pendiente
+según la tabla D.10.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="actions.wind.vientoMarquesinaCTE.cpMarq1AguaArribaZonaAFi1">
+<code class="descclassname">actions.wind.vientoMarquesinaCTE.</code><code class="descname">cpMarq1AguaArribaZonaAFi1</code><em class="property"> = &lt;scipy.interpolate.interpolate.interp1d object&gt;</em><a class="headerlink" href="#actions.wind.vientoMarquesinaCTE.cpMarq1AguaArribaZonaAFi1" title="Permalink to this definition">¶</a></dt>
+<dd><p>Presión exterior hacia arriba en zona A de marquesina a 1 agua
+con factor de obstrucción cualquiera en función de la pendiente
+según la tabla D.10.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-actions.wind.vientoParamVerticalesCTE">
+<span id="vientoparamverticalescte"></span><h2>vientoParamVerticalesCTE<a class="headerlink" href="#module-actions.wind.vientoParamVerticalesCTE" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="actions.wind.vientoParamVerticalesCTE.cpParamVertZonaAVTrsv">
+<code class="descclassname">actions.wind.vientoParamVerticalesCTE.</code><code class="descname">cpParamVertZonaAVTrsv</code><span class="sig-paren">(</span><em>A</em>, <em>h</em>, <em>d</em><span class="sig-paren">)</span><a class="headerlink" href="#actions.wind.vientoParamVerticalesCTE.cpParamVertZonaAVTrsv" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="data">
+<dt id="actions.wind.vientoParamVerticalesCTE.cpParamVertZonaAVTrsvAEQ2">
+<code class="descclassname">actions.wind.vientoParamVerticalesCTE.</code><code class="descname">cpParamVertZonaAVTrsvAEQ2</code><em class="property"> = &lt;scipy.interpolate.interpolate.interp1d object&gt;</em><a class="headerlink" href="#actions.wind.vientoParamVerticalesCTE.cpParamVertZonaAVTrsvAEQ2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Coeficiente de presión exterior (positiva hacia adentro) en zona A
+paramento vertical para viento sensiblemente transversal (-45&lt;theta&lt;45) y
+área menor o igual a 1 metro cuadrado en función de h/d según la tabla D.3.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="actions.wind.vientoParamVerticalesCTE.cpParamVertZonaAVTrsvAEQ5">
+<code class="descclassname">actions.wind.vientoParamVerticalesCTE.</code><code class="descname">cpParamVertZonaAVTrsvAEQ5</code><em class="property"> = &lt;scipy.interpolate.interpolate.interp1d object&gt;</em><a class="headerlink" href="#actions.wind.vientoParamVerticalesCTE.cpParamVertZonaAVTrsvAEQ5" title="Permalink to this definition">¶</a></dt>
+<dd><p>Coeficiente de presión exterior (positiva hacia adentro) en zona A
+paramento vertical para viento sensiblemente transversal (-45&lt;theta&lt;45) y
+área igual a 2 metros cuadrados en función de h/d según la tabla D.3.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="actions.wind.vientoParamVerticalesCTE.cpParamVertZonaAVTrsvAGE10">
+<code class="descclassname">actions.wind.vientoParamVerticalesCTE.</code><code class="descname">cpParamVertZonaAVTrsvAGE10</code><em class="property"> = &lt;scipy.interpolate.interpolate.interp1d object&gt;</em><a class="headerlink" href="#actions.wind.vientoParamVerticalesCTE.cpParamVertZonaAVTrsvAGE10" title="Permalink to this definition">¶</a></dt>
+<dd><p>Coeficiente de presión exterior (positiva hacia adentro) en zona A
+paramento vertical para viento sensiblemente transversal (-45&lt;theta&lt;45) y
+área igual a 5 metros cuadrados en función de h/d según la tabla D.3.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="actions.wind.vientoParamVerticalesCTE.cpParamVertZonaAVTrsvALE1">
+<code class="descclassname">actions.wind.vientoParamVerticalesCTE.</code><code class="descname">cpParamVertZonaAVTrsvALE1</code><em class="property"> = &lt;scipy.interpolate.interpolate.interp1d object&gt;</em><a class="headerlink" href="#actions.wind.vientoParamVerticalesCTE.cpParamVertZonaAVTrsvALE1" title="Permalink to this definition">¶</a></dt>
+<dd><p>Coeficiente de presión exterior (positiva hacia abajo) en
+paramento vertical zona A para viento sensiblemente
+transversal (-45&lt;theta&lt;45) según la tabla D.3.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="actions.wind.vientoParamVerticalesCTE.cpParamVertZonaBVTrsv">
+<code class="descclassname">actions.wind.vientoParamVerticalesCTE.</code><code class="descname">cpParamVertZonaBVTrsv</code><span class="sig-paren">(</span><em>A</em>, <em>h</em>, <em>d</em><span class="sig-paren">)</span><a class="headerlink" href="#actions.wind.vientoParamVerticalesCTE.cpParamVertZonaBVTrsv" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="data">
+<dt id="actions.wind.vientoParamVerticalesCTE.cpParamVertZonaBVTrsvAEQ2">
+<code class="descclassname">actions.wind.vientoParamVerticalesCTE.</code><code class="descname">cpParamVertZonaBVTrsvAEQ2</code><em class="property"> = &lt;scipy.interpolate.interpolate.interp1d object&gt;</em><a class="headerlink" href="#actions.wind.vientoParamVerticalesCTE.cpParamVertZonaBVTrsvAEQ2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Coeficiente de presión exterior (positiva hacia adentro) en zona B
+paramento vertical para viento sensiblemente transversal (-45&lt;theta&lt;45) y
+área menor o igual a 1 metro cuadrado en función de h/d según la tabla D.3.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="actions.wind.vientoParamVerticalesCTE.cpParamVertZonaBVTrsvAEQ5">
+<code class="descclassname">actions.wind.vientoParamVerticalesCTE.</code><code class="descname">cpParamVertZonaBVTrsvAEQ5</code><em class="property"> = &lt;scipy.interpolate.interpolate.interp1d object&gt;</em><a class="headerlink" href="#actions.wind.vientoParamVerticalesCTE.cpParamVertZonaBVTrsvAEQ5" title="Permalink to this definition">¶</a></dt>
+<dd><p>Coeficiente de presión exterior (positiva hacia adentro) en zona B
+paramento vertical para viento sensiblemente transversal (-45&lt;theta&lt;45) y
+área igual a 2 metros cuadrados en función de h/d según la tabla D.3.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="actions.wind.vientoParamVerticalesCTE.cpParamVertZonaBVTrsvAGE10">
+<code class="descclassname">actions.wind.vientoParamVerticalesCTE.</code><code class="descname">cpParamVertZonaBVTrsvAGE10</code><em class="property"> = &lt;scipy.interpolate.interpolate.interp1d object&gt;</em><a class="headerlink" href="#actions.wind.vientoParamVerticalesCTE.cpParamVertZonaBVTrsvAGE10" title="Permalink to this definition">¶</a></dt>
+<dd><p>Coeficiente de presión exterior (positiva hacia adentro) en zona B
+paramento vertical para viento sensiblemente transversal (-45&lt;theta&lt;45) y
+área igual a 5 metros cuadrados en función de h/d según la tabla D.3.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="actions.wind.vientoParamVerticalesCTE.cpParamVertZonaBVTrsvALE1">
+<code class="descclassname">actions.wind.vientoParamVerticalesCTE.</code><code class="descname">cpParamVertZonaBVTrsvALE1</code><em class="property"> = &lt;scipy.interpolate.interpolate.interp1d object&gt;</em><a class="headerlink" href="#actions.wind.vientoParamVerticalesCTE.cpParamVertZonaBVTrsvALE1" title="Permalink to this definition">¶</a></dt>
+<dd><p>Coeficiente de presión exterior (positiva hacia abajo) en
+paramento vertical zona B para viento sensiblemente
+transversal (-45&lt;theta&lt;45) según la tabla D.3.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="actions.wind.vientoParamVerticalesCTE.cpParamVertZonaCVTrsv">
+<code class="descclassname">actions.wind.vientoParamVerticalesCTE.</code><code class="descname">cpParamVertZonaCVTrsv</code><span class="sig-paren">(</span><em>A</em>, <em>h</em>, <em>d</em><span class="sig-paren">)</span><a class="headerlink" href="#actions.wind.vientoParamVerticalesCTE.cpParamVertZonaCVTrsv" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="data">
+<dt id="actions.wind.vientoParamVerticalesCTE.cpParamVertZonaCVTrsvAEQ2">
+<code class="descclassname">actions.wind.vientoParamVerticalesCTE.</code><code class="descname">cpParamVertZonaCVTrsvAEQ2</code><em class="property"> = &lt;scipy.interpolate.interpolate.interp1d object&gt;</em><a class="headerlink" href="#actions.wind.vientoParamVerticalesCTE.cpParamVertZonaCVTrsvAEQ2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Coeficiente de presión exterior (positiva hacia adentro) en zona C
+paramento vertical para viento sensiblemente transversal (-45&lt;theta&lt;45) y
+área menor o igual a 1 metro cuadrado en función de h/d según la tabla D.3.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="actions.wind.vientoParamVerticalesCTE.cpParamVertZonaCVTrsvAEQ5">
+<code class="descclassname">actions.wind.vientoParamVerticalesCTE.</code><code class="descname">cpParamVertZonaCVTrsvAEQ5</code><em class="property"> = &lt;scipy.interpolate.interpolate.interp1d object&gt;</em><a class="headerlink" href="#actions.wind.vientoParamVerticalesCTE.cpParamVertZonaCVTrsvAEQ5" title="Permalink to this definition">¶</a></dt>
+<dd><p>Coeficiente de presión exterior (positiva hacia adentro) en zona C
+paramento vertical para viento sensiblemente transversal (-45&lt;theta&lt;45) y
+área igual a 2 metros cuadrados en función de h/d según la tabla D.3.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="actions.wind.vientoParamVerticalesCTE.cpParamVertZonaCVTrsvAGE10">
+<code class="descclassname">actions.wind.vientoParamVerticalesCTE.</code><code class="descname">cpParamVertZonaCVTrsvAGE10</code><em class="property"> = &lt;scipy.interpolate.interpolate.interp1d object&gt;</em><a class="headerlink" href="#actions.wind.vientoParamVerticalesCTE.cpParamVertZonaCVTrsvAGE10" title="Permalink to this definition">¶</a></dt>
+<dd><p>Coeficiente de presión exterior (positiva hacia adentro) en zona C
+paramento vertical para viento sensiblemente transversal (-45&lt;theta&lt;45) y
+área igual a 5 metros cuadrados en función de h/d según la tabla D.3.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="actions.wind.vientoParamVerticalesCTE.cpParamVertZonaCVTrsvALE1">
+<code class="descclassname">actions.wind.vientoParamVerticalesCTE.</code><code class="descname">cpParamVertZonaCVTrsvALE1</code><em class="property"> = &lt;scipy.interpolate.interpolate.interp1d object&gt;</em><a class="headerlink" href="#actions.wind.vientoParamVerticalesCTE.cpParamVertZonaCVTrsvALE1" title="Permalink to this definition">¶</a></dt>
+<dd><p>Coeficiente de presión exterior (positiva hacia abajo) en
+paramento vertical zona C para viento sensiblemente
+transversal (-45&lt;theta&lt;45) según la tabla D.3.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="actions.wind.vientoParamVerticalesCTE.cpParamVertZonaDVTrsv">
+<code class="descclassname">actions.wind.vientoParamVerticalesCTE.</code><code class="descname">cpParamVertZonaDVTrsv</code><span class="sig-paren">(</span><em>A</em>, <em>h</em>, <em>d</em><span class="sig-paren">)</span><a class="headerlink" href="#actions.wind.vientoParamVerticalesCTE.cpParamVertZonaDVTrsv" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="data">
+<dt id="actions.wind.vientoParamVerticalesCTE.cpParamVertZonaDVTrsvAEQ2">
+<code class="descclassname">actions.wind.vientoParamVerticalesCTE.</code><code class="descname">cpParamVertZonaDVTrsvAEQ2</code><em class="property"> = &lt;scipy.interpolate.interpolate.interp1d object&gt;</em><a class="headerlink" href="#actions.wind.vientoParamVerticalesCTE.cpParamVertZonaDVTrsvAEQ2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Coeficiente de presión exterior (positiva hacia adentro) en zona D
+paramento vertical para viento sensiblemente transversal (-45&lt;theta&lt;45) y
+área menor o igual a 1 metro cuadrado en función de h/d según la tabla D.3.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="actions.wind.vientoParamVerticalesCTE.cpParamVertZonaDVTrsvAEQ5">
+<code class="descclassname">actions.wind.vientoParamVerticalesCTE.</code><code class="descname">cpParamVertZonaDVTrsvAEQ5</code><em class="property"> = &lt;scipy.interpolate.interpolate.interp1d object&gt;</em><a class="headerlink" href="#actions.wind.vientoParamVerticalesCTE.cpParamVertZonaDVTrsvAEQ5" title="Permalink to this definition">¶</a></dt>
+<dd><p>Coeficiente de presión exterior (positiva hacia adentro) en zona D
+paramento vertical para viento sensiblemente transversal (-45&lt;theta&lt;45) y
+área igual a 2 metros cuadrados en función de h/d según la tabla D.3.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="actions.wind.vientoParamVerticalesCTE.cpParamVertZonaDVTrsvAGE10">
+<code class="descclassname">actions.wind.vientoParamVerticalesCTE.</code><code class="descname">cpParamVertZonaDVTrsvAGE10</code><em class="property"> = &lt;scipy.interpolate.interpolate.interp1d object&gt;</em><a class="headerlink" href="#actions.wind.vientoParamVerticalesCTE.cpParamVertZonaDVTrsvAGE10" title="Permalink to this definition">¶</a></dt>
+<dd><p>Coeficiente de presión exterior (positiva hacia adentro) en zona D
+paramento vertical para viento sensiblemente transversal (-45&lt;theta&lt;45) y
+área igual a 5 metros cuadrados en función de h/d según la tabla D.3.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="actions.wind.vientoParamVerticalesCTE.cpParamVertZonaDVTrsvALE1">
+<code class="descclassname">actions.wind.vientoParamVerticalesCTE.</code><code class="descname">cpParamVertZonaDVTrsvALE1</code><em class="property"> = &lt;scipy.interpolate.interpolate.interp1d object&gt;</em><a class="headerlink" href="#actions.wind.vientoParamVerticalesCTE.cpParamVertZonaDVTrsvALE1" title="Permalink to this definition">¶</a></dt>
+<dd><p>Coeficiente de presión exterior (positiva hacia abajo) en
+paramento vertical zona D para viento sensiblemente
+transversal (-45&lt;theta&lt;45) según la tabla D.3.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="actions.wind.vientoParamVerticalesCTE.cpParamVertZonaEVTrsv">
+<code class="descclassname">actions.wind.vientoParamVerticalesCTE.</code><code class="descname">cpParamVertZonaEVTrsv</code><span class="sig-paren">(</span><em>A</em>, <em>h</em>, <em>d</em><span class="sig-paren">)</span><a class="headerlink" href="#actions.wind.vientoParamVerticalesCTE.cpParamVertZonaEVTrsv" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="data">
+<dt id="actions.wind.vientoParamVerticalesCTE.cpParamVertZonaEVTrsvAEQ2">
+<code class="descclassname">actions.wind.vientoParamVerticalesCTE.</code><code class="descname">cpParamVertZonaEVTrsvAEQ2</code><em class="property"> = &lt;scipy.interpolate.interpolate.interp1d object&gt;</em><a class="headerlink" href="#actions.wind.vientoParamVerticalesCTE.cpParamVertZonaEVTrsvAEQ2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Coeficiente de presión exterior (positiva hacia adentro) en zona E
+paramento vertical para viento sensiblemente transversal (-45&lt;theta&lt;45) y
+área menor o igual a 1 metro cuadrado en función de h/d según la tabla D.3.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="actions.wind.vientoParamVerticalesCTE.cpParamVertZonaEVTrsvAEQ5">
+<code class="descclassname">actions.wind.vientoParamVerticalesCTE.</code><code class="descname">cpParamVertZonaEVTrsvAEQ5</code><em class="property"> = &lt;scipy.interpolate.interpolate.interp1d object&gt;</em><a class="headerlink" href="#actions.wind.vientoParamVerticalesCTE.cpParamVertZonaEVTrsvAEQ5" title="Permalink to this definition">¶</a></dt>
+<dd><p>Coeficiente de presión exterior (positiva hacia adentro) en zona E
+paramento vertical para viento sensiblemente transversal (-45&lt;theta&lt;45) y
+área igual a 2 metros cuadrados en función de h/d según la tabla D.3.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="actions.wind.vientoParamVerticalesCTE.cpParamVertZonaEVTrsvAGE10">
+<code class="descclassname">actions.wind.vientoParamVerticalesCTE.</code><code class="descname">cpParamVertZonaEVTrsvAGE10</code><em class="property"> = &lt;scipy.interpolate.interpolate.interp1d object&gt;</em><a class="headerlink" href="#actions.wind.vientoParamVerticalesCTE.cpParamVertZonaEVTrsvAGE10" title="Permalink to this definition">¶</a></dt>
+<dd><p>Coeficiente de presión exterior (positiva hacia adentro) en zona E
+paramento vertical para viento sensiblemente transversal (-45&lt;theta&lt;45) y
+área igual a 5 metros cuadrados en función de h/d según la tabla D.3.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="actions.wind.vientoParamVerticalesCTE.cpParamVertZonaEVTrsvALE1">
+<code class="descclassname">actions.wind.vientoParamVerticalesCTE.</code><code class="descname">cpParamVertZonaEVTrsvALE1</code><em class="property"> = &lt;scipy.interpolate.interpolate.interp1d object&gt;</em><a class="headerlink" href="#actions.wind.vientoParamVerticalesCTE.cpParamVertZonaEVTrsvALE1" title="Permalink to this definition">¶</a></dt>
+<dd><p>Coeficiente de presión exterior (positiva hacia abajo) en
+paramento vertical zona E para viento sensiblemente
+transversal (-45&lt;theta&lt;45) según la tabla D.3.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-actions.wind.windSIA261">
+<span id="windsia261"></span><h2>windSIA261<a class="headerlink" href="#module-actions.wind.windSIA261" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="actions.wind.windSIA261.Ch">
+<code class="descclassname">actions.wind.windSIA261.</code><code class="descname">Ch</code><span class="sig-paren">(</span><em>z</em>, <em>catTerrain</em><span class="sig-paren">)</span><a class="headerlink" href="#actions.wind.windSIA261.Ch" title="Permalink to this definition">¶</a></dt>
+<dd><p>factor c_h as defined in expression 12 of SIA 261 6.2.1.2</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="actions.wind.windSIA261.Zg">
+<code class="descclassname">actions.wind.windSIA261.</code><code class="descname">Zg</code><span class="sig-paren">(</span><em>catTerrain</em><span class="sig-paren">)</span><a class="headerlink" href="#actions.wind.windSIA261.Zg" title="Permalink to this definition">¶</a></dt>
+<dd><p>value for Zg (expression 12 of SIA 261 6.2.1.2) as defined in table 4</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="actions.wind.windSIA261.alphaR">
+<code class="descclassname">actions.wind.windSIA261.</code><code class="descname">alphaR</code><span class="sig-paren">(</span><em>catTerrain</em><span class="sig-paren">)</span><a class="headerlink" href="#actions.wind.windSIA261.alphaR" title="Permalink to this definition">¶</a></dt>
+<dd><p>value for alpha_r (expression 12 of SIA 261 6.2.1.2) as defined in table 4</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="actions.wind.windSIA261.qp">
+<code class="descclassname">actions.wind.windSIA261.</code><code class="descname">qp</code><span class="sig-paren">(</span><em>qp0</em>, <em>z</em>, <em>catTerrain</em><span class="sig-paren">)</span><a class="headerlink" href="#actions.wind.windSIA261.qp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Dynamic wind pressure as defined in expression 11 of SIA 261 6.2.1.2</p>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Wind</a><ul>
+<li><a class="reference internal" href="#module-actions.wind.vientoCTE">vientoCTE</a></li>
+<li><a class="reference internal" href="#module-actions.wind.vientoCubiertaDosAguasCTE">vientoCubiertaDosAguasCTE</a></li>
+<li><a class="reference internal" href="#module-actions.wind.vientoCubiertaPlanaCTE">vientoCubiertaPlanaCTE</a></li>
+<li><a class="reference internal" href="#module-actions.wind.vientoMarquesinaCTE">vientoMarquesinaCTE</a></li>
+<li><a class="reference internal" href="#module-actions.wind.vientoParamVerticalesCTE">vientoParamVerticalesCTE</a></li>
+<li><a class="reference internal" href="#module-actions.wind.windSIA261">windSIA261</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="actions.earth_pressure.html"
+                        title="previous chapter">Earth pressure</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="actions.snow.html"
+                        title="next chapter">Snow</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/preprocessor/actions.wind.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="actions.snow.html" title="Snow"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="actions.earth_pressure.html" title="Earth pressure"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">XC 3.0 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="actions.html" >Actions</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2016, Luis Pérez Tato (LCPT) &amp; Ana Ortega (AO_O).
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.6.
+    </div>
+  </body>
+</html>

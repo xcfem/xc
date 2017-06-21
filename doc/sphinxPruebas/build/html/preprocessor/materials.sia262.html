@@ -1,0 +1,515 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Materials according to SIA-262 code &mdash; XC 3.0 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '3.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="XC 3.0 documentation" href="../index.html" />
+    <link rel="up" title="Materials" href="materials.html" />
+    <link rel="next" title="ASTM materials" href="materials.astm.html" />
+    <link rel="prev" title="Materials according to EHE code" href="materials.ehe.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="materials.astm.html" title="ASTM materials"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="materials.ehe.html" title="Materials according to EHE code"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">XC 3.0 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="materials.html" accesskey="U">Materials</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="materials-according-to-sia-262-code">
+<h1>Materials according to SIA-262 code<a class="headerlink" href="#materials-according-to-sia-262-code" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="module-materials.sia262.SIA262_materials">
+<span id="sia262-materials"></span><h2>SIA262_materials<a class="headerlink" href="#module-materials.sia262.SIA262_materials" title="Permalink to this headline">¶</a></h2>
+<p>Reinforce concrete materials according to SIA 262 standard (Switzerland).</p>
+<dl class="class">
+<dt id="materials.sia262.SIA262_materials.ConcreteSIA262">
+<em class="property">class </em><code class="descclassname">materials.sia262.SIA262_materials.</code><code class="descname">ConcreteSIA262</code><span class="sig-paren">(</span><em>nmbConcrete</em>, <em>fck</em>, <em>gammaC</em><span class="sig-paren">)</span><a class="headerlink" href="#materials.sia262.SIA262_materials.ConcreteSIA262" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="materials.ec2.html#materials.ec2.EC2_materials.EC2Concrete" title="materials.ec2.EC2_materials.EC2Concrete"><code class="xref py py-class docutils literal"><span class="pre">materials.ec2.EC2_materials.EC2Concrete</span></code></a></p>
+<dl class="method">
+<dt id="materials.sia262.SIA262_materials.ConcreteSIA262.fctd">
+<code class="descname">fctd</code><span class="sig-paren">(</span><em>t</em>, <em>favourable</em><span class="sig-paren">)</span><a class="headerlink" href="#materials.sia262.SIA262_materials.ConcreteSIA262.fctd" title="Permalink to this definition">¶</a></dt>
+<dd><p>SIA 262 sections 4.4.1.3 et 4.4.1.4</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="materials.sia262.SIA262_materials.ConcreteSIA262.fctk0_05">
+<code class="descname">fctk0_05</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#materials.sia262.SIA262_materials.ConcreteSIA262.fctk0_05" title="Permalink to this definition">¶</a></dt>
+<dd><p>SIA 262 sections 3.1.2.2.5 expr (7)</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="materials.sia262.SIA262_materials.ConcreteSIA262.fctk0_95">
+<code class="descname">fctk0_95</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#materials.sia262.SIA262_materials.ConcreteSIA262.fctk0_95" title="Permalink to this definition">¶</a></dt>
+<dd><p>SIA 262 sections 3.1.2.2.5 expr (8)</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="materials.sia262.SIA262_materials.ConcreteSIA262.kDmax">
+<code class="descname">kDmax</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#materials.sia262.SIA262_materials.ConcreteSIA262.kDmax" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="materials.sia262.SIA262_materials.ConcreteSIA262.nufc">
+<code class="descname">nufc</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#materials.sia262.SIA262_materials.ConcreteSIA262.nufc" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="materials.sia262.SIA262_materials.ConcreteSIA262.taucd">
+<code class="descname">taucd</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#materials.sia262.SIA262_materials.ConcreteSIA262.taucd" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="materials.sia262.SIA262_materials.limitationContraintes">
+<code class="descclassname">materials.sia262.SIA262_materials.</code><code class="descname">limitationContraintes</code><span class="sig-paren">(</span><em>exigence</em>, <em>s</em><span class="sig-paren">)</span><a class="headerlink" href="#materials.sia262.SIA262_materials.limitationContraintes" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="materials.sia262.SIA262_materials.numBars">
+<code class="descclassname">materials.sia262.SIA262_materials.</code><code class="descname">numBars</code><span class="sig-paren">(</span><em>AsNec</em><span class="sig-paren">)</span><a class="headerlink" href="#materials.sia262.SIA262_materials.numBars" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="materials.sia262.SIA262_materials.reductionFactorKT">
+<code class="descclassname">materials.sia262.SIA262_materials.</code><code class="descname">reductionFactorKT</code><span class="sig-paren">(</span><em>t</em><span class="sig-paren">)</span><a class="headerlink" href="#materials.sia262.SIA262_materials.reductionFactorKT" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-materials.sia262.normalStressesSIA262">
+<span id="normalstressessia262"></span><h2>normalStressesSIA262<a class="headerlink" href="#module-materials.sia262.normalStressesSIA262" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="materials.sia262.normalStressesSIA262.BiaxialBendingNormalStressController">
+<em class="property">class </em><code class="descclassname">materials.sia262.normalStressesSIA262.</code><code class="descname">BiaxialBendingNormalStressController</code><span class="sig-paren">(</span><em>limitStateLabel</em><span class="sig-paren">)</span><a class="headerlink" href="#materials.sia262.normalStressesSIA262.BiaxialBendingNormalStressController" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="matGenTopics.html#materials.limit_state_checking_base.LimitStateControllerBase" title="materials.limit_state_checking_base.LimitStateControllerBase"><code class="xref py py-class docutils literal"><span class="pre">materials.limit_state_checking_base.LimitStateControllerBase</span></code></a></p>
+<p>Object that controls normal stresses limit state.</p>
+<dl class="method">
+<dt id="materials.sia262.normalStressesSIA262.BiaxialBendingNormalStressController.check">
+<code class="descname">check</code><span class="sig-paren">(</span><em>elements</em>, <em>nmbComb</em><span class="sig-paren">)</span><a class="headerlink" href="#materials.sia262.normalStressesSIA262.BiaxialBendingNormalStressController.check" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Parameters:</dt>
+<dd>elements:    elements to check</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="materials.sia262.normalStressesSIA262.BiaxialBendingNormalStressController.initControlVars">
+<code class="descname">initControlVars</code><span class="sig-paren">(</span><em>elements</em><span class="sig-paren">)</span><a class="headerlink" href="#materials.sia262.normalStressesSIA262.BiaxialBendingNormalStressController.initControlVars" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize control variables over elements.
+Parameters:</p>
+<blockquote>
+<div>elements:    elements to define control variables in</div></blockquote>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="materials.sia262.normalStressesSIA262.UniaxialBendingNormalStressController">
+<em class="property">class </em><code class="descclassname">materials.sia262.normalStressesSIA262.</code><code class="descname">UniaxialBendingNormalStressController</code><span class="sig-paren">(</span><em>limitStateLabel</em><span class="sig-paren">)</span><a class="headerlink" href="#materials.sia262.normalStressesSIA262.UniaxialBendingNormalStressController" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="matGenTopics.html#materials.limit_state_checking_base.LimitStateControllerBase" title="materials.limit_state_checking_base.LimitStateControllerBase"><code class="xref py py-class docutils literal"><span class="pre">materials.limit_state_checking_base.LimitStateControllerBase</span></code></a></p>
+<p>Object that controls normal stresses limit state (uniaxial bending).</p>
+<dl class="method">
+<dt id="materials.sia262.normalStressesSIA262.UniaxialBendingNormalStressController.check">
+<code class="descname">check</code><span class="sig-paren">(</span><em>elements</em>, <em>nmbComb</em><span class="sig-paren">)</span><a class="headerlink" href="#materials.sia262.normalStressesSIA262.UniaxialBendingNormalStressController.check" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Parameters:</dt>
+<dd>elements:    elements to check</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="materials.sia262.normalStressesSIA262.UniaxialBendingNormalStressController.initControlVars">
+<code class="descname">initControlVars</code><span class="sig-paren">(</span><em>elements</em><span class="sig-paren">)</span><a class="headerlink" href="#materials.sia262.normalStressesSIA262.UniaxialBendingNormalStressController.initControlVars" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize control variables over elements.
+Parameters:</p>
+<blockquote>
+<div>elements:    elements to define control variables in</div></blockquote>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-materials.sia262.shearSIA262">
+<span id="shearsia262"></span><h2>shearSIA262<a class="headerlink" href="#module-materials.sia262.shearSIA262" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="materials.sia262.shearSIA262.ShearController">
+<em class="property">class </em><code class="descclassname">materials.sia262.shearSIA262.</code><code class="descname">ShearController</code><span class="sig-paren">(</span><em>limitStateLabel</em><span class="sig-paren">)</span><a class="headerlink" href="#materials.sia262.shearSIA262.ShearController" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="matGenTopics.html#materials.limit_state_checking_base.LimitStateControllerBase" title="materials.limit_state_checking_base.LimitStateControllerBase"><code class="xref py py-class docutils literal"><span class="pre">materials.limit_state_checking_base.LimitStateControllerBase</span></code></a></p>
+<p>Object that controls shear limit state with SIA 262.</p>
+<dl class="method">
+<dt id="materials.sia262.shearSIA262.ShearController.Vu">
+<code class="descname">Vu</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#materials.sia262.shearSIA262.ShearController.Vu" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="materials.sia262.shearSIA262.ShearController.calcVcu">
+<code class="descname">calcVcu</code><span class="sig-paren">(</span><em>Nd</em>, <em>Md</em>, <em>Mu</em><span class="sig-paren">)</span><a class="headerlink" href="#materials.sia262.shearSIA262.ShearController.calcVcu" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes the shear strength of the section without shear reinforcement.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="materials.sia262.shearSIA262.ShearController.calcVsu">
+<code class="descname">calcVsu</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#materials.sia262.shearSIA262.ShearController.calcVsu" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes the shear strength of the section without shear reinforcement.
+s= 1.0 because AsTrsv ya incorpora todas las ramas en un metro.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="materials.sia262.shearSIA262.ShearController.calcVu">
+<code class="descname">calcVu</code><span class="sig-paren">(</span><em>Nd</em>, <em>Md</em>, <em>Mu</em>, <em>Vd</em><span class="sig-paren">)</span><a class="headerlink" href="#materials.sia262.shearSIA262.ShearController.calcVu" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calcula el cortante último de la sección.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="materials.sia262.shearSIA262.ShearController.check">
+<code class="descname">check</code><span class="sig-paren">(</span><em>elements</em>, <em>nmbComb</em><span class="sig-paren">)</span><a class="headerlink" href="#materials.sia262.shearSIA262.ShearController.check" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Comprobación de las secciones de hormigón frente a cortante.</dt>
+<dd>XXX Falta tener en cuenta la dirección de las barras de refuerzo
+a cortante.</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="materials.sia262.shearSIA262.ShearController.initControlVars">
+<code class="descname">initControlVars</code><span class="sig-paren">(</span><em>elements</em><span class="sig-paren">)</span><a class="headerlink" href="#materials.sia262.shearSIA262.ShearController.initControlVars" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize control variables over elements.
+Parameters:</p>
+<blockquote>
+<div>elements:    elements to define control variables in</div></blockquote>
+</dd></dl>
+
+<dl class="method">
+<dt id="materials.sia262.shearSIA262.ShearController.setSection">
+<code class="descname">setSection</code><span class="sig-paren">(</span><em>rcSection</em><span class="sig-paren">)</span><a class="headerlink" href="#materials.sia262.shearSIA262.ShearController.setSection" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="materials.sia262.shearSIA262.VuNoShearRebars">
+<code class="descclassname">materials.sia262.shearSIA262.</code><code class="descname">VuNoShearRebars</code><span class="sig-paren">(</span><em>concrete</em>, <em>steel</em>, <em>Nd</em>, <em>Md</em>, <em>AsTrac</em>, <em>b</em>, <em>d</em><span class="sig-paren">)</span><a class="headerlink" href="#materials.sia262.shearSIA262.VuNoShearRebars" title="Permalink to this definition">¶</a></dt>
+<dd><p>Section shear capacity without shear reinforcement.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>concrete</strong> &#8211; concrete material.</li>
+<li><strong>steel</strong> &#8211; steel material of the tensioned reinforcement.</li>
+<li><strong>Nd</strong> &#8211; axial internal force on the section.</li>
+<li><strong>Md</strong> &#8211; bending moment on the section.</li>
+<li><strong>AsTrac</strong> &#8211; area of tensioned reinforcement.</li>
+<li><strong>b</strong> &#8211; section width.</li>
+<li><strong>d</strong> &#8211; section effective depth.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="materials.sia262.shearSIA262.VuNoShearRebarsSIA262">
+<code class="descclassname">materials.sia262.shearSIA262.</code><code class="descname">VuNoShearRebarsSIA262</code><span class="sig-paren">(</span><em>concrete</em>, <em>Nd</em>, <em>Md</em>, <em>Mu</em>, <em>b</em>, <em>d</em><span class="sig-paren">)</span><a class="headerlink" href="#materials.sia262.shearSIA262.VuNoShearRebarsSIA262" title="Permalink to this definition">¶</a></dt>
+<dd><p>Section shear capacity without shear reinforcement. 
+Simplified method according to document: «Dalles sans étriers soumises
+à l&#8217;effort tranchant» par Aurelio Muttoni (file: beton-VD1V2.pdf).</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="materials.sia262.shearSIA262.VuShearRebars90SIA262">
+<code class="descclassname">materials.sia262.shearSIA262.</code><code class="descname">VuShearRebars90SIA262</code><span class="sig-paren">(</span><em>Asw</em>, <em>s</em>, <em>steel</em>, <em>z</em>, <em>alpha=0.5235987755982988</em><span class="sig-paren">)</span><a class="headerlink" href="#materials.sia262.shearSIA262.VuShearRebars90SIA262" title="Permalink to this definition">¶</a></dt>
+<dd><p>Shear capacity of shear reinforcement.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="materials.sia262.shearSIA262.VuWithShearRebarsSIA262">
+<code class="descclassname">materials.sia262.shearSIA262.</code><code class="descname">VuWithShearRebarsSIA262</code><span class="sig-paren">(</span><em>concrete</em>, <em>steel</em>, <em>Nd</em>, <em>Md</em>, <em>Mu</em>, <em>b</em>, <em>d</em>, <em>Asw</em>, <em>s</em>, <em>z</em>, <em>alpha=0.5235987755982988</em><span class="sig-paren">)</span><a class="headerlink" href="#materials.sia262.shearSIA262.VuWithShearRebarsSIA262" title="Permalink to this definition">¶</a></dt>
+<dd><p>Section shear capacity with shear reinforcement.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-materials.sia262.crackControlSIA262">
+<span id="crackcontrolsia262"></span><h2>crackControlSIA262<a class="headerlink" href="#module-materials.sia262.crackControlSIA262" title="Permalink to this headline">¶</a></h2>
+<p>Funciones para comprobación de una sección a fisuración según el
+artículo 49.2.4 de la EHE-08.</p>
+<dl class="class">
+<dt id="materials.sia262.crackControlSIA262.CrackControlSIA262">
+<em class="property">class </em><code class="descclassname">materials.sia262.crackControlSIA262.</code><code class="descname">CrackControlSIA262</code><span class="sig-paren">(</span><em>limitStateLabel</em>, <em>limitStress</em><span class="sig-paren">)</span><a class="headerlink" href="#materials.sia262.crackControlSIA262.CrackControlSIA262" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="matGenTopics.html#materials.limit_state_checking_base.CrackControlBaseParameters" title="materials.limit_state_checking_base.CrackControlBaseParameters"><code class="xref py py-class docutils literal"><span class="pre">materials.limit_state_checking_base.CrackControlBaseParameters</span></code></a></p>
+<dl class="method">
+<dt id="materials.sia262.crackControlSIA262.CrackControlSIA262.calcRebarStress">
+<code class="descname">calcRebarStress</code><span class="sig-paren">(</span><em>scc</em><span class="sig-paren">)</span><a class="headerlink" href="#materials.sia262.crackControlSIA262.CrackControlSIA262.calcRebarStress" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns average stress in rebars.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="materials.sia262.crackControlSIA262.CrackControlSIA262.check">
+<code class="descname">check</code><span class="sig-paren">(</span><em>elements</em>, <em>nmbComb</em><span class="sig-paren">)</span><a class="headerlink" href="#materials.sia262.crackControlSIA262.CrackControlSIA262.check" title="Permalink to this definition">¶</a></dt>
+<dd><p>Crack control checking.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="materials.sia262.crackControlSIA262.CrackControlSIA262.initControlVars">
+<code class="descname">initControlVars</code><span class="sig-paren">(</span><em>elements</em><span class="sig-paren">)</span><a class="headerlink" href="#materials.sia262.crackControlSIA262.CrackControlSIA262.initControlVars" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize control variables over elements.
+Parameters:</p>
+<blockquote>
+<div>elements:    elements to define control variables in</div></blockquote>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="materials.sia262.crackControlSIA262.CrackControlSIA262PlanB">
+<em class="property">class </em><code class="descclassname">materials.sia262.crackControlSIA262.</code><code class="descname">CrackControlSIA262PlanB</code><span class="sig-paren">(</span><em>limitStateLabel</em>, <em>limitStress</em><span class="sig-paren">)</span><a class="headerlink" href="#materials.sia262.crackControlSIA262.CrackControlSIA262PlanB" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#materials.sia262.crackControlSIA262.CrackControlSIA262" title="materials.sia262.crackControlSIA262.CrackControlSIA262"><code class="xref py py-class docutils literal"><span class="pre">materials.sia262.crackControlSIA262.CrackControlSIA262</span></code></a></p>
+<dl class="method">
+<dt id="materials.sia262.crackControlSIA262.CrackControlSIA262PlanB.check">
+<code class="descname">check</code><span class="sig-paren">(</span><em>elements</em>, <em>nmbComb</em><span class="sig-paren">)</span><a class="headerlink" href="#materials.sia262.crackControlSIA262.CrackControlSIA262PlanB.check" title="Permalink to this definition">¶</a></dt>
+<dd><p>Crack control.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="materials.sia262.crackControlSIA262.procesResultVerifFISSIA262">
+<code class="descclassname">materials.sia262.crackControlSIA262.</code><code class="descname">procesResultVerifFISSIA262</code><span class="sig-paren">(</span><em>preprocessor</em>, <em>nmbComb</em>, <em>limitStress</em><span class="sig-paren">)</span><a class="headerlink" href="#materials.sia262.crackControlSIA262.procesResultVerifFISSIA262" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="materials.sia262.crackControlSIA262.procesResultVerifFISSIA262PlanB">
+<code class="descclassname">materials.sia262.crackControlSIA262.</code><code class="descname">procesResultVerifFISSIA262PlanB</code><span class="sig-paren">(</span><em>preprocessor</em>, <em>nmbComb</em>, <em>limitStress</em><span class="sig-paren">)</span><a class="headerlink" href="#materials.sia262.crackControlSIA262.procesResultVerifFISSIA262PlanB" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-materials.sia262.fatigueControlSIA262">
+<span id="fatiguecontrolsia262"></span><h2>fatigueControlSIA262<a class="headerlink" href="#module-materials.sia262.fatigueControlSIA262" title="Permalink to this headline">¶</a></h2>
+<p>Control of fatigue limit state according to SIA 262.</p>
+<dl class="class">
+<dt id="materials.sia262.fatigueControlSIA262.FatigueController">
+<em class="property">class </em><code class="descclassname">materials.sia262.fatigueControlSIA262.</code><code class="descname">FatigueController</code><span class="sig-paren">(</span><em>limitStateLabel</em><span class="sig-paren">)</span><a class="headerlink" href="#materials.sia262.fatigueControlSIA262.FatigueController" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="matGenTopics.html#materials.limit_state_checking_base.LimitStateControllerBase" title="materials.limit_state_checking_base.LimitStateControllerBase"><code class="xref py py-class docutils literal"><span class="pre">materials.limit_state_checking_base.LimitStateControllerBase</span></code></a></p>
+<p>Object that controls RC fatigue limit state.</p>
+<dl class="method">
+<dt id="materials.sia262.fatigueControlSIA262.FatigueController.check">
+<code class="descname">check</code><span class="sig-paren">(</span><em>elements</em>, <em>combNm</em><span class="sig-paren">)</span><a class="headerlink" href="#materials.sia262.fatigueControlSIA262.FatigueController.check" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checks the fatigue limit state for all the elements in the given set and
+for the  combination passed as a parameter. The verification is carried out
+following the procedure proposed in the standard SIA262 (art. 4.3.8)</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>elements</strong> &#8211; xc set of elements to be checked</li>
+<li><strong>combNm</strong> &#8211; <p>combination name e.g.:</p>
+<ul>
+<li>ELUF0: unloaded structure (permanent loads)</li>
+<li>ELUF1: fatigue load in position 1.</li>
+<li>ELUF2: fatigue load in position 2 (XXX not yet implemented!!!).</li>
+<li>ELUF3: fatigue load in position 3 (XXX not yet implemented!!!).</li>
+<li>...</li>
+</ul>
+</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="materials.sia262.fatigueControlSIA262.FatigueController.initControlVars">
+<code class="descname">initControlVars</code><span class="sig-paren">(</span><em>elements</em><span class="sig-paren">)</span><a class="headerlink" href="#materials.sia262.fatigueControlSIA262.FatigueController.initControlVars" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines limit state control variables for all the elements.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="materials.sia262.fatigueControlSIA262.estimateSigmaC">
+<code class="descclassname">materials.sia262.fatigueControlSIA262.</code><code class="descname">estimateSigmaC</code><span class="sig-paren">(</span><em>sccData</em>, <em>sigma_sPos</em>, <em>sigma_sNeg</em><span class="sig-paren">)</span><a class="headerlink" href="#materials.sia262.fatigueControlSIA262.estimateSigmaC" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="materials.sia262.fatigueControlSIA262.estimateSigmaCPlanB">
+<code class="descclassname">materials.sia262.fatigueControlSIA262.</code><code class="descname">estimateSigmaCPlanB</code><span class="sig-paren">(</span><em>sccData</em>, <em>N</em>, <em>M</em><span class="sig-paren">)</span><a class="headerlink" href="#materials.sia262.fatigueControlSIA262.estimateSigmaCPlanB" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="materials.sia262.fatigueControlSIA262.estimateSteelStress">
+<code class="descclassname">materials.sia262.fatigueControlSIA262.</code><code class="descname">estimateSteelStress</code><span class="sig-paren">(</span><em>sccData</em>, <em>N</em>, <em>M</em>, <em>As</em>, <em>y</em><span class="sig-paren">)</span><a class="headerlink" href="#materials.sia262.fatigueControlSIA262.estimateSteelStress" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="materials.sia262.fatigueControlSIA262.estimateSteelStressNeg">
+<code class="descclassname">materials.sia262.fatigueControlSIA262.</code><code class="descname">estimateSteelStressNeg</code><span class="sig-paren">(</span><em>sccData</em>, <em>N</em>, <em>M</em><span class="sig-paren">)</span><a class="headerlink" href="#materials.sia262.fatigueControlSIA262.estimateSteelStressNeg" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="materials.sia262.fatigueControlSIA262.estimateSteelStressPos">
+<code class="descclassname">materials.sia262.fatigueControlSIA262.</code><code class="descname">estimateSteelStressPos</code><span class="sig-paren">(</span><em>sccData</em>, <em>N</em>, <em>M</em><span class="sig-paren">)</span><a class="headerlink" href="#materials.sia262.fatigueControlSIA262.estimateSteelStressPos" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="materials.sia262.fatigueControlSIA262.getConcreteLimitStress">
+<code class="descclassname">materials.sia262.fatigueControlSIA262.</code><code class="descname">getConcreteLimitStress</code><span class="sig-paren">(</span><em>sccData</em>, <em>kc</em>, <em>controlVars</em><span class="sig-paren">)</span><a class="headerlink" href="#materials.sia262.fatigueControlSIA262.getConcreteLimitStress" title="Permalink to this definition">¶</a></dt>
+<dd><p>4.3.8.3.1 SIA 262 2013</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="materials.sia262.fatigueControlSIA262.getShearCF">
+<code class="descclassname">materials.sia262.fatigueControlSIA262.</code><code class="descname">getShearCF</code><span class="sig-paren">(</span><em>controlVars</em><span class="sig-paren">)</span><a class="headerlink" href="#materials.sia262.fatigueControlSIA262.getShearCF" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fatigue shear capacity factor.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="materials.sia262.fatigueControlSIA262.getShearLimit">
+<code class="descclassname">materials.sia262.fatigueControlSIA262.</code><code class="descname">getShearLimit</code><span class="sig-paren">(</span><em>sccData</em>, <em>controlVars</em>, <em>vu</em><span class="sig-paren">)</span><a class="headerlink" href="#materials.sia262.fatigueControlSIA262.getShearLimit" title="Permalink to this definition">¶</a></dt>
+<dd><p>4.3.8.3.2 SIA 262 2013</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-materials.sia262.minimal_reinforcement">
+<span id="minimal-reinforcement"></span><h2>minimal_reinforcement<a class="headerlink" href="#module-materials.sia262.minimal_reinforcement" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="materials.sia262.minimal_reinforcement.AsMinContrainteLimiteeTraction">
+<code class="descclassname">materials.sia262.minimal_reinforcement.</code><code class="descname">AsMinContrainteLimiteeTraction</code><span class="sig-paren">(</span><em>concrete</em>, <em>sgAdm</em>, <em>t</em><span class="sig-paren">)</span><a class="headerlink" href="#materials.sia262.minimal_reinforcement.AsMinContrainteLimiteeTraction" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="materials.sia262.minimal_reinforcement.AsMinFlexion">
+<code class="descclassname">materials.sia262.minimal_reinforcement.</code><code class="descname">AsMinFlexion</code><span class="sig-paren">(</span><em>concrete</em>, <em>concreteCover</em>, <em>exigence</em>, <em>ecartement</em>, <em>t</em><span class="sig-paren">)</span><a class="headerlink" href="#materials.sia262.minimal_reinforcement.AsMinFlexion" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="materials.sia262.minimal_reinforcement.AsMinTraction">
+<code class="descclassname">materials.sia262.minimal_reinforcement.</code><code class="descname">AsMinTraction</code><span class="sig-paren">(</span><em>concrete</em>, <em>exigence</em>, <em>ecartement</em>, <em>t</em><span class="sig-paren">)</span><a class="headerlink" href="#materials.sia262.minimal_reinforcement.AsMinTraction" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-materials.sia262.anchorage">
+<span id="anchorage"></span><h2>anchorage<a class="headerlink" href="#module-materials.sia262.anchorage" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="materials.sia262.anchorage.getBasicAnchorageLength">
+<code class="descclassname">materials.sia262.anchorage.</code><code class="descname">getBasicAnchorageLength</code><span class="sig-paren">(</span><em>phi</em>, <em>fck</em>, <em>fsd</em><span class="sig-paren">)</span><a class="headerlink" href="#materials.sia262.anchorage.getBasicAnchorageLength" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Materials according to SIA-262 code</a><ul>
+<li><a class="reference internal" href="#module-materials.sia262.SIA262_materials">SIA262_materials</a></li>
+<li><a class="reference internal" href="#module-materials.sia262.normalStressesSIA262">normalStressesSIA262</a></li>
+<li><a class="reference internal" href="#module-materials.sia262.shearSIA262">shearSIA262</a></li>
+<li><a class="reference internal" href="#module-materials.sia262.crackControlSIA262">crackControlSIA262</a></li>
+<li><a class="reference internal" href="#module-materials.sia262.fatigueControlSIA262">fatigueControlSIA262</a></li>
+<li><a class="reference internal" href="#module-materials.sia262.minimal_reinforcement">minimal_reinforcement</a></li>
+<li><a class="reference internal" href="#module-materials.sia262.anchorage">anchorage</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="materials.ehe.html"
+                        title="previous chapter">Materials according to EHE code</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="materials.astm.html"
+                        title="next chapter">ASTM materials</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/preprocessor/materials.sia262.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="materials.astm.html" title="ASTM materials"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="materials.ehe.html" title="Materials according to EHE code"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">XC 3.0 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="materials.html" >Materials</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2016, Luis Pérez Tato (LCPT) &amp; Ana Ortega (AO_O).
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.6.
+    </div>
+  </body>
+</html>
