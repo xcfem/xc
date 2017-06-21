@@ -1,0 +1,384 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Materials according to EAE code &mdash; XC 3.0 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '3.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="XC 3.0 documentation" href="../index.html" />
+    <link rel="up" title="Materials" href="materials.html" />
+    <link rel="next" title="Materials according to EOTA technical reports" href="materials.eota.html" />
+    <link rel="prev" title="Materials according to Eurocode-3 code" href="materials.ec3.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="materials.eota.html" title="Materials according to EOTA technical reports"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="materials.ec3.html" title="Materials according to Eurocode-3 code"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">XC 3.0 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="materials.html" accesskey="U">Materials</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="materials-according-to-eae-code">
+<h1>Materials according to EAE code<a class="headerlink" href="#materials-according-to-eae-code" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="module-materials.eae.apoyo_por_soldadura_alma">
+<span id="apoyo-por-soldadura-alma"></span><h2>apoyo_por_soldadura_alma<a class="headerlink" href="#module-materials.eae.apoyo_por_soldadura_alma" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="materials.eae.apoyo_por_soldadura_alma.LongMaxSoldAlma">
+<code class="descclassname">materials.eae.apoyo_por_soldadura_alma.</code><code class="descname">LongMaxSoldAlma</code><span class="sig-paren">(</span><em>tw</em><span class="sig-paren">)</span><a class="headerlink" href="#materials.eae.apoyo_por_soldadura_alma.LongMaxSoldAlma" title="Permalink to this definition">¶</a></dt>
+<dd><p>Longitud máxima de los los cordones según el artículo 61.4.1 de la instrucción EAE.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="materials.eae.apoyo_por_soldadura_alma.VdSoldAlma">
+<code class="descclassname">materials.eae.apoyo_por_soldadura_alma.</code><code class="descname">VdSoldAlma</code><span class="sig-paren">(</span><em>l</em>, <em>a</em>, <em>bw</em>, <em>gmw</em>, <em>fu</em><span class="sig-paren">)</span><a class="headerlink" href="#materials.eae.apoyo_por_soldadura_alma.VdSoldAlma" title="Permalink to this definition">¶</a></dt>
+<dd><p>Cortante último resistido por los cordones según el artículo 61.4.1
+de la instrucción EAE.}</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-materials.eae.apoyo_sobre_casquillo_no_rig">
+<span id="apoyo-sobre-casquillo-no-rig"></span><h2>apoyo_sobre_casquillo_no_rig<a class="headerlink" href="#module-materials.eae.apoyo_sobre_casquillo_no_rig" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="materials.eae.apoyo_sobre_casquillo_no_rig.cargaUlt">
+<code class="descclassname">materials.eae.apoyo_sobre_casquillo_no_rig.</code><code class="descname">cargaUlt</code><span class="sig-paren">(</span><em>tf</em>, <em>tw</em>, <em>r</em>, <em>b</em>, <em>a</em>, <em>fy</em>, <em>fu</em>, <em>betaW</em>, <em>gammaM2</em><span class="sig-paren">)</span><a class="headerlink" href="#materials.eae.apoyo_sobre_casquillo_no_rig.cargaUlt" title="Permalink to this definition">¶</a></dt>
+<dd><p>Devuelve la resistencia última del apoyo sobre casquillo de angular
+b: Longitud del casquillo medida de dirección perpendicular a la viga.
+t: Espesor del ala del angular.
+fy: Límite elástico del acero.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="materials.eae.apoyo_sobre_casquillo_no_rig.cargaUlt1">
+<code class="descclassname">materials.eae.apoyo_sobre_casquillo_no_rig.</code><code class="descname">cargaUlt1</code><span class="sig-paren">(</span><em>tf</em>, <em>r</em>, <em>tw</em>, <em>fy</em><span class="sig-paren">)</span><a class="headerlink" href="#materials.eae.apoyo_sobre_casquillo_no_rig.cargaUlt1" title="Permalink to this definition">¶</a></dt>
+<dd><p>Devuelve la resistencia de la viga a aplastamiento local
+tf: Espesor del ala de la viga.
+tw: Espesor del alma de la viga.
+r: Radio del acuerdo ala-alma.
+fy: Límite elástico del acero.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="materials.eae.apoyo_sobre_casquillo_no_rig.cargaUlt2">
+<code class="descclassname">materials.eae.apoyo_sobre_casquillo_no_rig.</code><code class="descname">cargaUlt2</code><span class="sig-paren">(</span><em>b</em>, <em>a</em>, <em>fu</em>, <em>betaW</em>, <em>gammaM2</em><span class="sig-paren">)</span><a class="headerlink" href="#materials.eae.apoyo_sobre_casquillo_no_rig.cargaUlt2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Devuelve la resistencia del cordón de soldadura
+b: Longitud del casquillo medida de dirección perpendicular a la viga.
+a: Espesor de garganta del cordón de soldadura.
+fu: Resistencia a tracción del acero (table 59.8.2 page 304 EAE).
+betaW: Coeficiente de correlación (tabla 59.8.2 pág 304 EAE).
+gammaM2: Partial safety factor for steel (article 15.3 page 34 EAE).</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="materials.eae.apoyo_sobre_casquillo_no_rig.cargaUlt3">
+<code class="descclassname">materials.eae.apoyo_sobre_casquillo_no_rig.</code><code class="descname">cargaUlt3</code><span class="sig-paren">(</span><em>b</em>, <em>t</em>, <em>fy</em><span class="sig-paren">)</span><a class="headerlink" href="#materials.eae.apoyo_sobre_casquillo_no_rig.cargaUlt3" title="Permalink to this definition">¶</a></dt>
+<dd><p>Devuelve la resistencia a cortante del ala del angular
+b: Longitud del casquillo medida de dirección perpendicular a la viga.
+t: Espesor del ala del angular.
+fy: Límite elástico del acero.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-materials.eae.comprobacion_casquillo_rigidizado">
+<span id="comprobacion-casquillo-rigidizado"></span><h2>comprobacion_casquillo_rigidizado<a class="headerlink" href="#module-materials.eae.comprobacion_casquillo_rigidizado" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="materials.eae.comprobacion_casquillo_rigidizado.cargaUltCord1">
+<code class="descclassname">materials.eae.comprobacion_casquillo_rigidizado.</code><code class="descname">cargaUltCord1</code><span class="sig-paren">(</span><em>a1</em>, <em>l</em>, <em>H</em>, <em>fu</em>, <em>betaW</em>, <em>gammaM2</em><span class="sig-paren">)</span><a class="headerlink" href="#materials.eae.comprobacion_casquillo_rigidizado.cargaUltCord1" title="Permalink to this definition">¶</a></dt>
+<dd><p>Devuelve la carga última del casquillo rigidizado debida al agotamiento de los cordones (1)
+(ver figura 61.1.5.b pág 325 EAE) que unen el rigidizador al ala del casquillo, siendo:
+a1: Espesor de garganta de los cordones (1).
+l: Longitud del cateto horizontal del rigidizador.
+H: Longitud del cateto vertical del rigidizador.
+fu: Resistencia a tracción del acero (tabla 59.8.2 pág 304 EAE).
+betaW: Coeficiente de correlación (tabla 59.8.2 pág 304 EAE).
+gammaM2: Partial safety factor for steel (article 15.3 page 34 EAE).</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="materials.eae.comprobacion_casquillo_rigidizado.cargaUltCord2">
+<code class="descclassname">materials.eae.comprobacion_casquillo_rigidizado.</code><code class="descname">cargaUltCord2</code><span class="sig-paren">(</span><em>a2</em>, <em>l</em>, <em>H</em>, <em>fu</em>, <em>betaW</em>, <em>gammaM2</em><span class="sig-paren">)</span><a class="headerlink" href="#materials.eae.comprobacion_casquillo_rigidizado.cargaUltCord2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Devuelve la carga última del casquillo rigidizado debida al colapso de los cordones (2)
+(ver figura 61.1.5.b pág 325 EAE) que unen el rigidizador al ala del casquillo, siendo:
+a2: Espesor de garganta de los cordones (2).
+l: Longitud del cateto horizontal del rigidizador.
+H: Longitud del cateto vertical del rigidizador.
+fu: Resistencia a tracción del acero (tabla 59.8.2 pág 304 EAE).
+betaW: Coeficiente de correlación (tabla 59.8.2 pág 304 EAE).
+gammaM2: Partial safety factor for steel (article 15.3 page 34 EAE).</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="materials.eae.comprobacion_casquillo_rigidizado.cargaUltCord3">
+<code class="descclassname">materials.eae.comprobacion_casquillo_rigidizado.</code><code class="descname">cargaUltCord3</code><span class="sig-paren">(</span><em>a3</em>, <em>b</em>, <em>l</em>, <em>H</em>, <em>fu</em>, <em>betaW</em>, <em>gammaM2</em><span class="sig-paren">)</span><a class="headerlink" href="#materials.eae.comprobacion_casquillo_rigidizado.cargaUltCord3" title="Permalink to this definition">¶</a></dt>
+<dd><p>Devuelve la carga última del casquillo rigidizado debida al colapso de los cordones (3)
+(ver figura 61.1.5.b pág 325 EAE) que unen el rigidizador al ala del casquillo, siendo:
+a3: Espesor de garganta de los cordones (3).
+b: Ancho del ala del casquillo (longitud de los cordones 3).
+l: Longitud del cateto horizontal del rigidizador.
+H: Longitud del cateto vertical del rigidizador.
+fu: Resistencia a tracción del acero (tabla 59.8.2 pág 304 EAE).
+betaW: Coeficiente de correlación (tabla 59.8.2 pág 304 EAE).
+gammaM2: Partial safety factor for steel (article 15.3 page 34 EAE).</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="materials.eae.comprobacion_casquillo_rigidizado.cargaUltRig">
+<code class="descclassname">materials.eae.comprobacion_casquillo_rigidizado.</code><code class="descname">cargaUltRig</code><span class="sig-paren">(</span><em>CE</em>, <em>d</em>, <em>MplRd</em><span class="sig-paren">)</span><a class="headerlink" href="#materials.eae.comprobacion_casquillo_rigidizado.cargaUltRig" title="Permalink to this definition">¶</a></dt>
+<dd><p>Devuelve la carga última del casquillo rigidizado debida al colapso del rigidizador, siendo:
+CE: Coeficiente de escuadra.
+d: Brazo de la carga.
+MplRd: Momento plástico de la sección del rigidizador de depth c.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="materials.eae.comprobacion_casquillo_rigidizado.coefEscuadra">
+<code class="descclassname">materials.eae.comprobacion_casquillo_rigidizado.</code><code class="descname">coefEscuadra</code><span class="sig-paren">(</span><em>coefLambda</em><span class="sig-paren">)</span><a class="headerlink" href="#materials.eae.comprobacion_casquillo_rigidizado.coefEscuadra" title="Permalink to this definition">¶</a></dt>
+<dd><p>Devuelve la el coeficiente de escuadra del rigidizador, siendo:
+coefLambda: Esbeltez adimensional del rigidizador.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="materials.eae.comprobacion_casquillo_rigidizado.esbeltezAdim">
+<code class="descclassname">materials.eae.comprobacion_casquillo_rigidizado.</code><code class="descname">esbeltezAdim</code><span class="sig-paren">(</span><em>c</em>, <em>tRig</em>, <em>fy</em>, <em>Es</em><span class="sig-paren">)</span><a class="headerlink" href="#materials.eae.comprobacion_casquillo_rigidizado.esbeltezAdim" title="Permalink to this definition">¶</a></dt>
+<dd><p>Devuelve la esbeltez adimensional del rigidizador, siendo:
+c: &#8220;width máximo&#8221; rigidizador.
+tRig: Espesor del rigidizador.
+fy: Límite elástico del acero.
+Es: Módulo elástico del acero.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="materials.eae.comprobacion_casquillo_rigidizado.momPlastRig">
+<code class="descclassname">materials.eae.comprobacion_casquillo_rigidizado.</code><code class="descname">momPlastRig</code><span class="sig-paren">(</span><em>tRig</em>, <em>c</em>, <em>fy</em><span class="sig-paren">)</span><a class="headerlink" href="#materials.eae.comprobacion_casquillo_rigidizado.momPlastRig" title="Permalink to this definition">¶</a></dt>
+<dd><p>Devuelve el momento plástico de la sección del rigidizador de depth c,
+siendo:
+tRig: Espesor del rigidizador.
+c: &#8220;width máximo&#8221; rigidizador.
+fy: Límite elástico del acero.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="materials.eae.comprobacion_casquillo_rigidizado.widthMax">
+<code class="descclassname">materials.eae.comprobacion_casquillo_rigidizado.</code><code class="descname">widthMax</code><span class="sig-paren">(</span><em>tChapa</em>, <em>l</em>, <em>H</em><span class="sig-paren">)</span><a class="headerlink" href="#materials.eae.comprobacion_casquillo_rigidizado.widthMax" title="Permalink to this definition">¶</a></dt>
+<dd><p>Devuelve el &#8220;width máximo&#8221; c del rigidizador (ver figura 61.1.5.b
+pág 325 EAE). Siendo:
+tChapa: Espesor de la chapa sobre la que apoya la carga.
+l: Longitud del cateto horizontal del rigidizador.
+H: Longitud del cateto vertical del rigidizador.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-materials.eae.garganta_min_max_EAE">
+<span id="garganta-min-max-eae"></span><h2>garganta_min_max_EAE<a class="headerlink" href="#module-materials.eae.garganta_min_max_EAE" title="Permalink to this headline">¶</a></h2>
+<dl class="docutils">
+<dt>Devuelve el espesor de garganta mínimo para un cordón en ángulo que une una chapa de espesor t</dt>
+<dd><dl class="first last docutils">
+<dt>según el artículo 59.3.2 de la EAE (página 296)</dt>
+<dd>t: Espesor de la chapa.</dd>
+</dl>
+</dd>
+</dl>
+<dl class="function">
+<dt id="materials.eae.garganta_min_max_EAE.aMaxAngulo">
+<code class="descclassname">materials.eae.garganta_min_max_EAE.</code><code class="descname">aMaxAngulo</code><span class="sig-paren">(</span><em>t</em><span class="sig-paren">)</span><a class="headerlink" href="#materials.eae.garganta_min_max_EAE.aMaxAngulo" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="materials.eae.garganta_min_max_EAE.aMaxAnguloChapas">
+<code class="descclassname">materials.eae.garganta_min_max_EAE.</code><code class="descname">aMaxAnguloChapas</code><span class="sig-paren">(</span><em>t1</em>, <em>t2</em><span class="sig-paren">)</span><a class="headerlink" href="#materials.eae.garganta_min_max_EAE.aMaxAnguloChapas" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="materials.eae.garganta_min_max_EAE.aMinAngulo">
+<code class="descclassname">materials.eae.garganta_min_max_EAE.</code><code class="descname">aMinAngulo</code><span class="sig-paren">(</span><em>t</em><span class="sig-paren">)</span><a class="headerlink" href="#materials.eae.garganta_min_max_EAE.aMinAngulo" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="materials.eae.garganta_min_max_EAE.aMinAnguloChapas">
+<code class="descclassname">materials.eae.garganta_min_max_EAE.</code><code class="descname">aMinAnguloChapas</code><span class="sig-paren">(</span><em>t1</em>, <em>t2</em><span class="sig-paren">)</span><a class="headerlink" href="#materials.eae.garganta_min_max_EAE.aMinAnguloChapas" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-materials.eae.resistencia_cordon_soldadura">
+<span id="resistencia-cordon-soldadura"></span><h2>resistencia_cordon_soldadura<a class="headerlink" href="#module-materials.eae.resistencia_cordon_soldadura" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="materials.eae.resistencia_cordon_soldadura.getFCCondicion1Cordon">
+<code class="descclassname">materials.eae.resistencia_cordon_soldadura.</code><code class="descname">getFCCondicion1Cordon</code><span class="sig-paren">(</span><em>n</em>, <em>tn</em>, <em>ta</em>, <em>fu</em>, <em>fy</em>, <em>gammaM2</em><span class="sig-paren">)</span><a class="headerlink" href="#materials.eae.resistencia_cordon_soldadura.getFCCondicion1Cordon" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="materials.eae.resistencia_cordon_soldadura.getFCCondicion1CordonPG">
+<code class="descclassname">materials.eae.resistencia_cordon_soldadura.</code><code class="descname">getFCCondicion1CordonPG</code><span class="sig-paren">(</span><em>sigmaN</em>, <em>tauN</em>, <em>tauPll</em>, <em>fu</em>, <em>fy</em>, <em>gammaM2</em><span class="sig-paren">)</span><a class="headerlink" href="#materials.eae.resistencia_cordon_soldadura.getFCCondicion1CordonPG" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="materials.eae.resistencia_cordon_soldadura.getFCCondicion2Cordon">
+<code class="descclassname">materials.eae.resistencia_cordon_soldadura.</code><code class="descname">getFCCondicion2Cordon</code><span class="sig-paren">(</span><em>n</em>, <em>tn</em>, <em>fu</em>, <em>gammaM2</em><span class="sig-paren">)</span><a class="headerlink" href="#materials.eae.resistencia_cordon_soldadura.getFCCondicion2Cordon" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="materials.eae.resistencia_cordon_soldadura.getFCCondicion2CordonPG">
+<code class="descclassname">materials.eae.resistencia_cordon_soldadura.</code><code class="descname">getFCCondicion2CordonPG</code><span class="sig-paren">(</span><em>sigmaN</em>, <em>fu</em>, <em>gammaM2</em><span class="sig-paren">)</span><a class="headerlink" href="#materials.eae.resistencia_cordon_soldadura.getFCCondicion2CordonPG" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="materials.eae.resistencia_cordon_soldadura.getFCCordonPG">
+<code class="descclassname">materials.eae.resistencia_cordon_soldadura.</code><code class="descname">getFCCordonPG</code><span class="sig-paren">(</span><em>sigmaN</em>, <em>tauN</em>, <em>tauPll</em>, <em>fu</em>, <em>fy</em>, <em>gammaM2</em><span class="sig-paren">)</span><a class="headerlink" href="#materials.eae.resistencia_cordon_soldadura.getFCCordonPG" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="materials.eae.resistencia_cordon_soldadura.getSigmaNPlanoGarganta">
+<code class="descclassname">materials.eae.resistencia_cordon_soldadura.</code><code class="descname">getSigmaNPlanoGarganta</code><span class="sig-paren">(</span><em>n</em>, <em>t</em><span class="sig-paren">)</span><a class="headerlink" href="#materials.eae.resistencia_cordon_soldadura.getSigmaNPlanoGarganta" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="materials.eae.resistencia_cordon_soldadura.getTauNPlanoGarganta">
+<code class="descclassname">materials.eae.resistencia_cordon_soldadura.</code><code class="descname">getTauNPlanoGarganta</code><span class="sig-paren">(</span><em>n</em>, <em>t</em><span class="sig-paren">)</span><a class="headerlink" href="#materials.eae.resistencia_cordon_soldadura.getTauNPlanoGarganta" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="materials.eae.resistencia_cordon_soldadura.getTensComparacionCordonAngulo">
+<code class="descclassname">materials.eae.resistencia_cordon_soldadura.</code><code class="descname">getTensComparacionCordonAngulo</code><span class="sig-paren">(</span><em>n</em>, <em>tn</em>, <em>ta</em><span class="sig-paren">)</span><a class="headerlink" href="#materials.eae.resistencia_cordon_soldadura.getTensComparacionCordonAngulo" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="materials.eae.resistencia_cordon_soldadura.getTensComparacionCordonAnguloPG">
+<code class="descclassname">materials.eae.resistencia_cordon_soldadura.</code><code class="descname">getTensComparacionCordonAnguloPG</code><span class="sig-paren">(</span><em>sigmaN</em>, <em>tauN</em>, <em>tauPll</em><span class="sig-paren">)</span><a class="headerlink" href="#materials.eae.resistencia_cordon_soldadura.getTensComparacionCordonAnguloPG" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="materials.eae.resistencia_cordon_soldadura.getTensionNormalUltimaCordon">
+<code class="descclassname">materials.eae.resistencia_cordon_soldadura.</code><code class="descname">getTensionNormalUltimaCordon</code><span class="sig-paren">(</span><em>fu</em>, <em>gammaM2</em><span class="sig-paren">)</span><a class="headerlink" href="#materials.eae.resistencia_cordon_soldadura.getTensionNormalUltimaCordon" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="materials.eae.resistencia_cordon_soldadura.getValorComparacionResistenciaCordon">
+<code class="descclassname">materials.eae.resistencia_cordon_soldadura.</code><code class="descname">getValorComparacionResistenciaCordon</code><span class="sig-paren">(</span><em>fu</em>, <em>fy</em>, <em>gammaM2</em><span class="sig-paren">)</span><a class="headerlink" href="#materials.eae.resistencia_cordon_soldadura.getValorComparacionResistenciaCordon" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="data">
+<dt id="materials.eae.resistencia_cordon_soldadura.tablaBetaW">
+<code class="descclassname">materials.eae.resistencia_cordon_soldadura.</code><code class="descname">tablaBetaW</code><em class="property"> = &lt;scipy.interpolate.interpolate.interp1d object&gt;</em><a class="headerlink" href="#materials.eae.resistencia_cordon_soldadura.tablaBetaW" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Devuelve la tensión de comparación última del cordón a emplear en la comprobación de</dt>
+<dd><dl class="first last docutils">
+<dt>resistencia del mismo según la primera condición del artículo 59.8.2 de EAE (página 256)</dt>
+<dd>fu: Resistencia a tracción del acero de las piezas a soldar.
+fy: Límite elástico del acero a soldar (ver tabla 59.8.2) expresado en pascales.
+gammaM2: Partial safety factor of value 1.25.</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Materials according to EAE code</a><ul>
+<li><a class="reference internal" href="#module-materials.eae.apoyo_por_soldadura_alma">apoyo_por_soldadura_alma</a></li>
+<li><a class="reference internal" href="#module-materials.eae.apoyo_sobre_casquillo_no_rig">apoyo_sobre_casquillo_no_rig</a></li>
+<li><a class="reference internal" href="#module-materials.eae.comprobacion_casquillo_rigidizado">comprobacion_casquillo_rigidizado</a></li>
+<li><a class="reference internal" href="#module-materials.eae.garganta_min_max_EAE">garganta_min_max_EAE</a></li>
+<li><a class="reference internal" href="#module-materials.eae.resistencia_cordon_soldadura">resistencia_cordon_soldadura</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="materials.ec3.html"
+                        title="previous chapter">Materials according to Eurocode-3 code</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="materials.eota.html"
+                        title="next chapter">Materials according to EOTA technical reports</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/preprocessor/materials.eae.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="materials.eota.html" title="Materials according to EOTA technical reports"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="materials.ec3.html" title="Materials according to Eurocode-3 code"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">XC 3.0 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="materials.html" >Materials</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2016, Luis Pérez Tato (LCPT) &amp; Ana Ortega (AO_O).
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.6.
+    </div>
+  </body>
+</html>

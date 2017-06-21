@@ -1,0 +1,261 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Earthquake &mdash; XC 3.0 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '3.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="XC 3.0 documentation" href="../index.html" />
+    <link rel="up" title="Actions" href="actions.html" />
+    <link rel="next" title="Prestress" href="actions.prestress.html" />
+    <link rel="prev" title="railway traffic" href="actions.railway_trafic.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="actions.prestress.html" title="Prestress"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="actions.railway_trafic.html" title="railway traffic"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">XC 3.0 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="actions.html" accesskey="U">Actions</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="earthquake">
+<h1>Earthquake<a class="headerlink" href="#earthquake" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="module-actions.quake.write_loads_mode">
+<span id="mode-loads"></span><h2>Mode loads<a class="headerlink" href="#module-actions.quake.write_loads_mode" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="actions.quake.write_loads_mode.write_loads_mode">
+<code class="descclassname">actions.quake.write_loads_mode.</code><code class="descname">write_loads_mode</code><span class="sig-paren">(</span><em>preprocessor</em>, <em>fName</em>, <em>iModo</em>, <em>aceleraciones</em><span class="sig-paren">)</span><a class="headerlink" href="#actions.quake.write_loads_mode.write_loads_mode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write the equivalent static loads oftained for each node in the mode 
+passed as parameter</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-actions.quake.seismeSIA">
+<span id="seismesia"></span><h2>seismeSIA<a class="headerlink" href="#module-actions.quake.seismeSIA" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="actions.quake.seismeSIA.S">
+<code class="descclassname">actions.quake.seismeSIA.</code><code class="descname">S</code><span class="sig-paren">(</span><em>soilClass</em><span class="sig-paren">)</span><a class="headerlink" href="#actions.quake.seismeSIA.S" title="Permalink to this definition">¶</a></dt>
+<dd><p>parameter to obtain the elastic response spectrum.
+according SIA 261 2014 (16.2 tableau 24).</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="actions.quake.seismeSIA.Tb">
+<code class="descclassname">actions.quake.seismeSIA.</code><code class="descname">Tb</code><span class="sig-paren">(</span><em>soilClass</em><span class="sig-paren">)</span><a class="headerlink" href="#actions.quake.seismeSIA.Tb" title="Permalink to this definition">¶</a></dt>
+<dd><p>wave pertiod Tb to obtain the elastic response spectrum.
+according SIA 261 2003 (16.2 tableau 25).</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="actions.quake.seismeSIA.Tc">
+<code class="descclassname">actions.quake.seismeSIA.</code><code class="descname">Tc</code><span class="sig-paren">(</span><em>soilClass</em><span class="sig-paren">)</span><a class="headerlink" href="#actions.quake.seismeSIA.Tc" title="Permalink to this definition">¶</a></dt>
+<dd><p>wave pertiod Tc to obtain the elastic response spectrum.
+according SIA 261 2003 (16.2 tableau 25).</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="actions.quake.seismeSIA.Td">
+<code class="descclassname">actions.quake.seismeSIA.</code><code class="descname">Td</code><span class="sig-paren">(</span><em>soilClass</em><span class="sig-paren">)</span><a class="headerlink" href="#actions.quake.seismeSIA.Td" title="Permalink to this definition">¶</a></dt>
+<dd><p>wave pertiod Td to obtain the elastic response spectrum.
+according SIA 261 2003 (16.2 tableau 25).</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="actions.quake.seismeSIA.alpha">
+<code class="descclassname">actions.quake.seismeSIA.</code><code class="descname">alpha</code><span class="sig-paren">(</span><em>soilClass</em><span class="sig-paren">)</span><a class="headerlink" href="#actions.quake.seismeSIA.alpha" title="Permalink to this definition">¶</a></dt>
+<dd><p>alpha correction factor
+according SIA 261 2003 (16.4.4).</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="actions.quake.seismeSIA.b1LowerLimitAppuiFixe">
+<code class="descclassname">actions.quake.seismeSIA.</code><code class="descname">b1LowerLimitAppuiFixe</code><span class="sig-paren">(</span><em>soilClass</em>, <em>accelTerrain</em>, <em>CO</em>, <em>a2</em>, <em>l</em><span class="sig-paren">)</span><a class="headerlink" href="#actions.quake.seismeSIA.b1LowerLimitAppuiFixe" title="Permalink to this definition">¶</a></dt>
+<dd><p>minimal dimension for b1 in bridge support
+according SIA 261 2003 (16.4.4 et Figure 15).</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="actions.quake.seismeSIA.b1UpperLimitAppuiFixe">
+<code class="descclassname">actions.quake.seismeSIA.</code><code class="descname">b1UpperLimitAppuiFixe</code><span class="sig-paren">(</span><em>soilClass</em>, <em>accelTerrain</em>, <em>CO</em>, <em>a2</em>, <em>l</em><span class="sig-paren">)</span><a class="headerlink" href="#actions.quake.seismeSIA.b1UpperLimitAppuiFixe" title="Permalink to this definition">¶</a></dt>
+<dd><p>maximal dimension for b1 in bridge support
+according SIA 261 2003 (16.4.4 et Figure 15).</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="actions.quake.seismeSIA.b2LowerLimitAppuiFixe">
+<code class="descclassname">actions.quake.seismeSIA.</code><code class="descname">b2LowerLimitAppuiFixe</code><span class="sig-paren">(</span><em>soilClass</em>, <em>accelTerrain</em>, <em>CO</em>, <em>a1</em>, <em>l</em><span class="sig-paren">)</span><a class="headerlink" href="#actions.quake.seismeSIA.b2LowerLimitAppuiFixe" title="Permalink to this definition">¶</a></dt>
+<dd><p>minimal dimension for b2 in bridge support
+according SIA 261 2003 (16.4.4 et Figure 15).</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="actions.quake.seismeSIA.b2LowerLimitPontFlottant">
+<code class="descclassname">actions.quake.seismeSIA.</code><code class="descname">b2LowerLimitPontFlottant</code><span class="sig-paren">(</span><em>soilClass</em>, <em>accelTerrain</em>, <em>CO</em>, <em>l</em><span class="sig-paren">)</span><a class="headerlink" href="#actions.quake.seismeSIA.b2LowerLimitPontFlottant" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="actions.quake.seismeSIA.b2UpperLimitAppuiFixe">
+<code class="descclassname">actions.quake.seismeSIA.</code><code class="descname">b2UpperLimitAppuiFixe</code><span class="sig-paren">(</span><em>soilClass</em>, <em>accelTerrain</em>, <em>CO</em>, <em>a1</em>, <em>l</em><span class="sig-paren">)</span><a class="headerlink" href="#actions.quake.seismeSIA.b2UpperLimitAppuiFixe" title="Permalink to this definition">¶</a></dt>
+<dd><p>maximal dimension for b2 in bridge support
+according SIA 261 2003 (16.4.4 et Figure 15).</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="actions.quake.seismeSIA.b2UpperLimitPontFlottant">
+<code class="descclassname">actions.quake.seismeSIA.</code><code class="descname">b2UpperLimitPontFlottant</code><span class="sig-paren">(</span><em>soilClass</em>, <em>accelTerrain</em>, <em>CO</em>, <em>l</em><span class="sig-paren">)</span><a class="headerlink" href="#actions.quake.seismeSIA.b2UpperLimitPontFlottant" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="actions.quake.seismeSIA.bLowerLimitAppuiFixe">
+<code class="descclassname">actions.quake.seismeSIA.</code><code class="descname">bLowerLimitAppuiFixe</code><span class="sig-paren">(</span><em>soilClass</em>, <em>accelTerrain</em>, <em>CO</em>, <em>a12</em>, <em>l</em><span class="sig-paren">)</span><a class="headerlink" href="#actions.quake.seismeSIA.bLowerLimitAppuiFixe" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="actions.quake.seismeSIA.bUpperLimitAppuiFixe">
+<code class="descclassname">actions.quake.seismeSIA.</code><code class="descname">bUpperLimitAppuiFixe</code><span class="sig-paren">(</span><em>soilClass</em>, <em>accelTerrain</em>, <em>CO</em>, <em>a12</em>, <em>l</em><span class="sig-paren">)</span><a class="headerlink" href="#actions.quake.seismeSIA.bUpperLimitAppuiFixe" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="actions.quake.seismeSIA.designSpectrum">
+<code class="descclassname">actions.quake.seismeSIA.</code><code class="descname">designSpectrum</code><span class="sig-paren">(</span><em>soilClass</em>, <em>accelTerrain</em>, <em>CO</em>, <em>T</em>, <em>q</em><span class="sig-paren">)</span><a class="headerlink" href="#actions.quake.seismeSIA.designSpectrum" title="Permalink to this definition">¶</a></dt>
+<dd><p>design spectrum for elastic response analysis
+according SIA 261 2014 (16.2.4.1).</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="actions.quake.seismeSIA.elasticReponseSpectrum">
+<code class="descclassname">actions.quake.seismeSIA.</code><code class="descname">elasticReponseSpectrum</code><span class="sig-paren">(</span><em>soilClass</em>, <em>viscousDamping</em>, <em>accelTerrain</em>, <em>T</em><span class="sig-paren">)</span><a class="headerlink" href="#actions.quake.seismeSIA.elasticReponseSpectrum" title="Permalink to this definition">¶</a></dt>
+<dd><p>spectra de réponse élastica
+according SIA 261 2003 (16.2.3.1).</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="actions.quake.seismeSIA.eta">
+<code class="descclassname">actions.quake.seismeSIA.</code><code class="descname">eta</code><span class="sig-paren">(</span><em>viscousDamping</em><span class="sig-paren">)</span><a class="headerlink" href="#actions.quake.seismeSIA.eta" title="Permalink to this definition">¶</a></dt>
+<dd><p>correction coefficient &#8220;eta&#8221; to obtain the elastic response spectrum.
+according SIA 261 2003 (16.2.3.1).</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="actions.quake.seismeSIA.gammaF">
+<code class="descclassname">actions.quake.seismeSIA.</code><code class="descname">gammaF</code><span class="sig-paren">(</span><em>CO</em><span class="sig-paren">)</span><a class="headerlink" href="#actions.quake.seismeSIA.gammaF" title="Permalink to this definition">¶</a></dt>
+<dd><p>importance factor for buildings and bridges
+according SIA 261 2003 (16.3.2 tableau 26).</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="actions.quake.seismeSIA.grounDisplacement">
+<code class="descclassname">actions.quake.seismeSIA.</code><code class="descname">grounDisplacement</code><span class="sig-paren">(</span><em>soilClass</em>, <em>accelTerrain</em>, <em>CO</em><span class="sig-paren">)</span><a class="headerlink" href="#actions.quake.seismeSIA.grounDisplacement" title="Permalink to this definition">¶</a></dt>
+<dd><p>design ground displacement.
+according SIA 261 2003 (16.2.4.3).</p>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Earthquake</a><ul>
+<li><a class="reference internal" href="#module-actions.quake.write_loads_mode">Mode loads</a></li>
+<li><a class="reference internal" href="#module-actions.quake.seismeSIA">seismeSIA</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="actions.railway_trafic.html"
+                        title="previous chapter">railway traffic</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="actions.prestress.html"
+                        title="next chapter">Prestress</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/preprocessor/actions.quake.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="actions.prestress.html" title="Prestress"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="actions.railway_trafic.html" title="railway traffic"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">XC 3.0 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="actions.html" >Actions</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2016, Luis Pérez Tato (LCPT) &amp; Ana Ortega (AO_O).
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.6.
+    </div>
+  </body>
+</html>

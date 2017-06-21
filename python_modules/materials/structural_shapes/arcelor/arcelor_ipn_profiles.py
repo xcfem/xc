@@ -1,27 +1,31 @@
 # -*- coding: utf-8 -*-
-# Section axis:
+
+'''
+Section axis:
 
 
-#    ARCELOR          XC
+   ARCELOR          XC
 
-#                     ^ Y                    
-#                     |
+                    ^ Y                    
+                    |
 
-#     -----         -----
-#       |             | 
-#       | -> Y        | -> Z
-#       |             |
-#     -----         -----
+    -----         -----
+      |             | 
+      | -> Y        | -> Z
+      |             |
+    -----         -----
 
-#       |
-#       v Z
+      |
+      v Z
 
-# The axis used in Arcelor documentation are different from those used in XC
-# (strong axis parallel to z axis) in other words: values for Y and Z axis 
-# are swapped with respect to those in the catalog.
+The axis used in Arcelor documentation are different from those used in XC
+(strong axis parallel to z axis) in other words: values for Y and Z axis 
+are swapped with respect to those in the catalog.
 
-# XXX Repasar coeficientes de distorsión
-#   alpha-> alphaY,alphaZ}
+XXX Repasar coeficientes de distorsión
+  alpha-> alphaY,alphaZ}
+
+'''
 
 IPNprofiles={}
 

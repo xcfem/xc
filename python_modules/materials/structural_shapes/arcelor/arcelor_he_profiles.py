@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+
 '''
 Ejes de la sección:
 
@@ -19,13 +20,15 @@ Ejes de la sección:
 The axis used in Arcelor documentation are different from those used in XC
 (strong axis parallel to z axis) in other words: values for Y and Z axis 
 are swapped with respect to those in the catalog.
-'''
-HEprofiles={}
 
-'''
 XXX Repasar coeficientes de distorsión
    alpha-> alphaY,alphaZ
 '''
+
+
+HEprofiles={}
+
+
 HEprofiles['HE_100_AAdot']= {'nmb':'HE_100_AAdot', 'P':12.2, 'h':91e-3, 'b':100e-3, 'tw':4.2e-3, 'tf':5.5e-3, 'r':12e-3, 'A':15.6e-4, 'hi':80e-3, 'd':56e-3, 'FI':'M 10', 'Pmin':54e-3, 'Pmax':58e-3, 'AL':0.553, 'AG':45.17, 'Iz':236.5e-8, 'Wzel':51.98e-6, 'Wzpl':58.36e-6, 'iz':3.89e-2, 'Avy':6.15e-4, 'Iy':92.06e-8, 'Wyel':18.41e-6, 'Wypl':28.44e-6, 'iy':2.43e-2, 'Ss':29.26e-3, 'It':2.51e-8, 'E':2.1e+11, 'nu':0.3}
 HEprofiles['HE_100_A']= {'nmb':'HE_100_A', 'P':16.7, 'h':96e-3, 'b':100e-3, 'tw':5e-3, 'tf':8e-3, 'r':12e-3, 'A':21.2e-4, 'hi':80e-3, 'd':56e-3, 'FI':'M 10', 'Pmin':54e-3, 'Pmax':58e-3, 'AL':0.561, 'AG':33.68, 'Iz':349.2e-8, 'Wzel':72.76e-6, 'Wzpl':83.01e-6, 'iz':4.06e-2, 'Avy':7.56e-4, 'Iy':133.8e-8, 'Wyel':26.76e-6, 'Wypl':41.14e-6, 'iy':2.51e-2, 'Ss':35.06e-3, 'It':5.24e-8, 'E':2.1e+11, 'nu':0.3}
 HEprofiles['HE_100_B']= {'nmb':'HE_100_B', 'P':20.4, 'h':100e-3, 'b':100e-3, 'tw':6e-3, 'tf':10e-3, 'r':12e-3, 'A':26e-4, 'hi':80e-3, 'd':56e-3, 'FI':'M 10', 'Pmin':56e-3, 'Pmax':58e-3, 'AL':0.567, 'AG':27.76, 'Iz':449.5e-8, 'Wzel':89.91e-6, 'Wzpl':104.2e-6, 'iz':4.16e-2, 'Avy':9.04e-4, 'Iy':167.3e-8, 'Wyel':33.45e-6, 'Wypl':51.42e-6, 'iy':2.53e-2, 'Ss':40.06e-3, 'It':9.25e-8, 'E':2.1e+11, 'nu':0.3}

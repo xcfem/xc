@@ -1,0 +1,765 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Materials according to Eurocode-3 code &mdash; XC 3.0 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '3.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="XC 3.0 documentation" href="../index.html" />
+    <link rel="up" title="Materials" href="materials.html" />
+    <link rel="next" title="Materials according to EAE code" href="materials.eae.html" />
+    <link rel="prev" title="ASTM materials" href="materials.astm.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="materials.eae.html" title="Materials according to EAE code"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="materials.astm.html" title="ASTM materials"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">XC 3.0 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="materials.html" accesskey="U">Materials</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="materials-according-to-eurocode-3-code">
+<h1>Materials according to Eurocode-3 code<a class="headerlink" href="#materials-according-to-eurocode-3-code" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="module-materials.ec3.EC3_materials">
+<span id="ec3-materials"></span><h2>EC3_materials<a class="headerlink" href="#module-materials.ec3.EC3_materials" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="materials.ec3.EC3_materials.AUProfile">
+<em class="property">class </em><code class="descclassname">materials.ec3.EC3_materials.</code><code class="descname">AUProfile</code><span class="sig-paren">(</span><em>steel</em>, <em>name</em><span class="sig-paren">)</span><a class="headerlink" href="#materials.ec3.EC3_materials.AUProfile" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#materials.ec3.EC3_materials.EC3Profile" title="materials.ec3.EC3_materials.EC3Profile"><code class="xref py py-class docutils literal"><span class="pre">materials.ec3.EC3_materials.EC3Profile</span></code></a>, <code class="xref py py-class docutils literal"><span class="pre">materials.structural_shapes.arcelor.arcelor_u_shaped_sheet_piles.AUProfile</span></code></p>
+<p>AU profile with Eurocode 3 verification routines.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="materials.ec3.EC3_materials.EC3Profile">
+<em class="property">class </em><code class="descclassname">materials.ec3.EC3_materials.</code><code class="descname">EC3Profile</code><span class="sig-paren">(</span><em>typo='rolled'</em><span class="sig-paren">)</span><a class="headerlink" href="#materials.ec3.EC3_materials.EC3Profile" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>Steel profile with Eurocode 3 verification routines.</p>
+<dl class="method">
+<dt id="materials.ec3.EC3_materials.EC3Profile.getAvy">
+<code class="descname">getAvy</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#materials.ec3.EC3_materials.EC3Profile.getAvy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns y direction (web direction) shear area</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="materials.ec3.EC3_materials.EC3Profile.getBendingResistanceReductionCoefficient">
+<code class="descname">getBendingResistanceReductionCoefficient</code><span class="sig-paren">(</span><em>Vd</em><span class="sig-paren">)</span><a class="headerlink" href="#materials.ec3.EC3_materials.EC3Profile.getBendingResistanceReductionCoefficient" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns bending resistance reduction coefficient as in
+clause 6.2.8 of EC31-1</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="materials.ec3.EC3_materials.EC3Profile.getBiaxialBendingEfficiency">
+<code class="descname">getBiaxialBendingEfficiency</code><span class="sig-paren">(</span><em>sectionClass</em>, <em>Nd</em>, <em>Myd</em>, <em>Mzd</em>, <em>Vyd=0.0</em>, <em>chiLT=1.0</em><span class="sig-paren">)</span><a class="headerlink" href="#materials.ec3.EC3_materials.EC3Profile.getBiaxialBendingEfficiency" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns biaxial bending efficiency (clause 6.2.9 of EC3.1.1)
+chiLT: lateral buckling reduction factor (default= 1.0).</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="materials.ec3.EC3_materials.EC3Profile.getLateralBucklingImperfectionFactor">
+<code class="descname">getLateralBucklingImperfectionFactor</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#materials.ec3.EC3_materials.EC3Profile.getLateralBucklingImperfectionFactor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns lateral torsional imperfection factor depending of the type of section (rolled, welded,...).</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="materials.ec3.EC3_materials.EC3Profile.getLateralBucklingIntermediateFactor">
+<code class="descname">getLateralBucklingIntermediateFactor</code><span class="sig-paren">(</span><em>sectionClass</em>, <em>xi</em>, <em>Mi</em>, <em>supportCoefs=&lt;materials.ec3.EC3_limit_state_checking.SupportCoefficients object&gt;</em><span class="sig-paren">)</span><a class="headerlink" href="#materials.ec3.EC3_materials.EC3Profile.getLateralBucklingIntermediateFactor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns lateral torsional buckling intermediate factor value.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>sectionClass</strong> &#8211; section classification (1,2,3 or 4)</li>
+<li><strong>xi</strong> &#8211; abcissae for the moment diagram</li>
+<li><strong>Mi</strong> &#8211; ordinate for the moment diagram</li>
+<li><strong>supportCoefs</strong> &#8211; coefficients that represent support conditions.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="materials.ec3.EC3_materials.EC3Profile.getLateralBucklingNonDimensionalBeamSlenderness">
+<code class="descname">getLateralBucklingNonDimensionalBeamSlenderness</code><span class="sig-paren">(</span><em>sectionClass</em>, <em>xi</em>, <em>Mi</em>, <em>supportCoefs=&lt;materials.ec3.EC3_limit_state_checking.SupportCoefficients object&gt;</em><span class="sig-paren">)</span><a class="headerlink" href="#materials.ec3.EC3_materials.EC3Profile.getLateralBucklingNonDimensionalBeamSlenderness" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns non dimensional beam slenderness
+for lateral torsional buckling
+see parameter definition on method getMcr.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>profile</strong> &#8211; cross section profile.</li>
+<li><strong>sectionClass</strong> &#8211; section classification (1,2,3 or 4)</li>
+<li><strong>xi</strong> &#8211; abcissae for the moment diagram</li>
+<li><strong>Mi</strong> &#8211; ordinate for the moment diagram</li>
+<li><strong>supportCoefs</strong> &#8211; coefficients that represent support conditions.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="materials.ec3.EC3_materials.EC3Profile.getLateralBucklingReductionFactor">
+<code class="descname">getLateralBucklingReductionFactor</code><span class="sig-paren">(</span><em>sectionClass</em>, <em>xi</em>, <em>Mi</em>, <em>supportCoefs=&lt;materials.ec3.EC3_limit_state_checking.SupportCoefficients object&gt;</em><span class="sig-paren">)</span><a class="headerlink" href="#materials.ec3.EC3_materials.EC3Profile.getLateralBucklingReductionFactor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns lateral torsional buckling reduction factor value.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>sectionClass</strong> &#8211; section classification (1,2,3 or 4)</li>
+<li><strong>xi</strong> &#8211; abcissae for the moment diagram</li>
+<li><strong>Mi</strong> &#8211; ordinate for the moment diagram</li>
+<li><strong>supportCoefs</strong> &#8211; coefficients that represent support conditions.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="materials.ec3.EC3_materials.EC3Profile.getLateralTorsionalBucklingCurve">
+<code class="descname">getLateralTorsionalBucklingCurve</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#materials.ec3.EC3_materials.EC3Profile.getLateralTorsionalBucklingCurve" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the lateral torsional bukling curve name (a,b,c or d) depending of the type of section (rolled, welded,...). EC3 Table 6.4, 6.3.2.2(2).</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="materials.ec3.EC3_materials.EC3Profile.getLateralTorsionalBucklingResistance">
+<code class="descname">getLateralTorsionalBucklingResistance</code><span class="sig-paren">(</span><em>sectionClass</em>, <em>xi</em>, <em>Mi</em>, <em>supportCoefs=&lt;materials.ec3.EC3_limit_state_checking.SupportCoefficients object&gt;</em><span class="sig-paren">)</span><a class="headerlink" href="#materials.ec3.EC3_materials.EC3Profile.getLateralTorsionalBucklingResistance" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Returns lateral torsional buckling resistance of this cross-section.</dt>
+<dd><p class="first">Calculation is made following the paper:</p>
+<p class="last">A. López, D. J. Yong, M. A. Serna,
+Lateral-torsional buckling of steel beams: a general expression for
+the moment gradient factor.
+(Lisbon, Portugal: Stability and ductility of steel structures, 2006).</p>
+</dd>
+</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>xi</strong> &#8211; abcissae for the moment diagram</li>
+<li><strong>Mi</strong> &#8211; ordinate for the moment diagram</li>
+<li><strong>supportCoefs</strong> &#8211; coefficients that represent support conditions.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="materials.ec3.EC3_materials.EC3Profile.getMcRdy">
+<code class="descname">getMcRdy</code><span class="sig-paren">(</span><em>sectionClass</em><span class="sig-paren">)</span><a class="headerlink" href="#materials.ec3.EC3_materials.EC3Profile.getMcRdy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the minor bending resistance of the cross-section.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="materials.ec3.EC3_materials.EC3Profile.getMcRdz">
+<code class="descname">getMcRdz</code><span class="sig-paren">(</span><em>sectionClass</em><span class="sig-paren">)</span><a class="headerlink" href="#materials.ec3.EC3_materials.EC3Profile.getMcRdz" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the major bending resistance of the cross-section.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="materials.ec3.EC3_materials.EC3Profile.getMcr">
+<code class="descname">getMcr</code><span class="sig-paren">(</span><em>xi</em>, <em>Mi</em>, <em>supportCoefs=&lt;materials.ec3.EC3_limit_state_checking.SupportCoefficients object&gt;</em><span class="sig-paren">)</span><a class="headerlink" href="#materials.ec3.EC3_materials.EC3Profile.getMcr" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Returns elastic critical moment about minor axis: y</dt>
+<dd><p class="first">Calculation is made following the paper:</p>
+<p class="last">A. López, D. J. Yong, M. A. Serna,
+Lateral-torsional buckling of steel beams: a general expression for
+the moment gradient factor.
+(Lisbon, Portugal: Stability and ductility of steel structures, 2006).</p>
+</dd>
+</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>xi</strong> &#8211; abcissae for the moment diagram</li>
+<li><strong>Mi</strong> &#8211; ordinate for the moment diagram</li>
+<li><strong>supportCoefs</strong> &#8211; coefficients that represent support conditions.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="materials.ec3.EC3_materials.EC3Profile.getMvRdz">
+<code class="descname">getMvRdz</code><span class="sig-paren">(</span><em>sectionClass</em>, <em>Vd</em><span class="sig-paren">)</span><a class="headerlink" href="#materials.ec3.EC3_materials.EC3Profile.getMvRdz" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Returns the major bending resistance of the cross-section under a</dt>
+<dd>shear force of Vd.</dd>
+</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>sectionClass</strong> &#8211; section classification (1,2,3 or 4)</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="materials.ec3.EC3_materials.EC3Profile.getNcRd">
+<code class="descname">getNcRd</code><span class="sig-paren">(</span><em>sectionClass</em><span class="sig-paren">)</span><a class="headerlink" href="#materials.ec3.EC3_materials.EC3Profile.getNcRd" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the axial compression resistance of the cross-section.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="materials.ec3.EC3_materials.EC3Profile.getVcRdy">
+<code class="descname">getVcRdy</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#materials.ec3.EC3_materials.EC3Profile.getVcRdy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns y direction (web direction) shear resistance</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="materials.ec3.EC3_materials.EC3Profile.getVplRdy">
+<code class="descname">getVplRdy</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#materials.ec3.EC3_materials.EC3Profile.getVplRdy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns y direction (web direction) plastic shear resistance</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="materials.ec3.EC3_materials.EC3Profile.getYShearEfficiency">
+<code class="descname">getYShearEfficiency</code><span class="sig-paren">(</span><em>sectionClass</em>, <em>Vyd</em><span class="sig-paren">)</span><a class="headerlink" href="#materials.ec3.EC3_materials.EC3Profile.getYShearEfficiency" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns major axis shear efficiency</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="materials.ec3.EC3_materials.EC3Profile.getZBendingEfficiency">
+<code class="descname">getZBendingEfficiency</code><span class="sig-paren">(</span><em>sectionClass</em>, <em>Mzd</em>, <em>Vyd=0.0</em>, <em>chiLT=1.0</em><span class="sig-paren">)</span><a class="headerlink" href="#materials.ec3.EC3_materials.EC3Profile.getZBendingEfficiency" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns major axis bending efficiency
+chiLT: lateral bucling reduction factor (default= 1.0).</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="materials.ec3.EC3_materials.EC3Profile.installULSControlRecorder">
+<code class="descname">installULSControlRecorder</code><span class="sig-paren">(</span><em>recorderType</em>, <em>elems</em>, <em>sectionClass=1</em>, <em>chiLT=1.0</em><span class="sig-paren">)</span><a class="headerlink" href="#materials.ec3.EC3_materials.EC3Profile.installULSControlRecorder" title="Permalink to this definition">¶</a></dt>
+<dd><p>Installs recorder for verification of ULS criterion. Preprocessor obtained from the set of elements.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="materials.ec3.EC3_materials.EC3Profile.setupULSControlVars">
+<code class="descname">setupULSControlVars</code><span class="sig-paren">(</span><em>elems</em>, <em>sectionClass=1</em>, <em>chiLT=1.0</em><span class="sig-paren">)</span><a class="headerlink" href="#materials.ec3.EC3_materials.EC3Profile.setupULSControlVars" title="Permalink to this definition">¶</a></dt>
+<dd><p>For each element creates the variables
+needed to check ultimate limit state criterion to satisfy.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="materials.ec3.EC3_materials.EC3Profile.shearBucklingVerificationNeeded">
+<code class="descname">shearBucklingVerificationNeeded</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#materials.ec3.EC3_materials.EC3Profile.shearBucklingVerificationNeeded" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns true if shear buckling verification is needed EC3-1-5</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="materials.ec3.EC3_materials.EC3Steel">
+<em class="property">class </em><code class="descclassname">materials.ec3.EC3_materials.</code><code class="descname">EC3Steel</code><span class="sig-paren">(</span><em>fy</em>, <em>fy16</em>, <em>fy40</em>, <em>fy63</em>, <em>fy80</em>, <em>fy100</em>, <em>fy125</em>, <em>fu</em>, <em>gammaM</em>, <em>gammaM1=1.0</em>, <em>gammaM2=1.1</em><span class="sig-paren">)</span><a class="headerlink" href="#materials.ec3.EC3_materials.EC3Steel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="matGenTopics.html#materials.structural_steel.BasicSteel" title="materials.structural_steel.BasicSteel"><code class="xref py py-class docutils literal"><span class="pre">materials.structural_steel.BasicSteel</span></code></a></p>
+<p>Eurocode 3 structural steel.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Variables:</th><td class="field-body"><ul class="first last simple">
+<li><strong>fy16</strong> &#8211; 0&lt;t&lt;16mm</li>
+<li><strong>fy40</strong> &#8211; 16&lt;t&lt;40mm</li>
+<li><strong>fy63</strong> &#8211; 40&lt;t&lt;63mm</li>
+<li><strong>fy80</strong> &#8211; 63&lt;t&lt;80mm</li>
+<li><strong>fy100</strong> &#8211; 80&lt;t&lt;100mm</li>
+<li><strong>fy125</strong> &#8211; 80&lt;t&lt;125mm</li>
+<li><strong>gammaM1</strong> &#8211; Partial factor for buckling resistance.</li>
+<li><strong>gammaM2</strong> &#8211; Partial factor for cross-sections in tension to fracture.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="materials.ec3.EC3_materials.EC3Steel.fyd">
+<code class="descname">fyd</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#materials.ec3.EC3_materials.EC3Steel.fyd" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="materials.ec3.EC3_materials.EC3Steel.fydV">
+<code class="descname">fydV</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#materials.ec3.EC3_materials.EC3Steel.fydV" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="materials.ec3.EC3_materials.EC3Steel.gammaM0">
+<code class="descname">gammaM0</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#materials.ec3.EC3_materials.EC3Steel.gammaM0" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="materials.ec3.EC3_materials.EC3Steel.getDesignElasticPerfectlyPlasticMaterial">
+<code class="descname">getDesignElasticPerfectlyPlasticMaterial</code><span class="sig-paren">(</span><em>preprocessor</em>, <em>name</em><span class="sig-paren">)</span><a class="headerlink" href="#materials.ec3.EC3_materials.EC3Steel.getDesignElasticPerfectlyPlasticMaterial" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="materials.ec3.EC3_materials.EC3Steel.getLambda1">
+<code class="descname">getLambda1</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#materials.ec3.EC3_materials.EC3Steel.getLambda1" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">lambda_1 value as specified in EC3 part 1 5.5.1.2</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="materials.ec3.EC3_materials.HEProfile">
+<em class="property">class </em><code class="descclassname">materials.ec3.EC3_materials.</code><code class="descname">HEProfile</code><span class="sig-paren">(</span><em>steel</em>, <em>name</em><span class="sig-paren">)</span><a class="headerlink" href="#materials.ec3.EC3_materials.HEProfile" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#materials.ec3.EC3_materials.EC3Profile" title="materials.ec3.EC3_materials.EC3Profile"><code class="xref py py-class docutils literal"><span class="pre">materials.ec3.EC3_materials.EC3Profile</span></code></a>, <a class="reference internal" href="materials.structural_shapes.arcelor.html#materials.structural_shapes.arcelor.perfiles_he_arcelor.HEProfile" title="materials.structural_shapes.arcelor.perfiles_he_arcelor.HEProfile"><code class="xref py py-class docutils literal"><span class="pre">materials.structural_shapes.arcelor.perfiles_he_arcelor.HEProfile</span></code></a></p>
+<p>HE profile with Eurocode 3 verification routines.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="materials.ec3.EC3_materials.IPEProfile">
+<em class="property">class </em><code class="descclassname">materials.ec3.EC3_materials.</code><code class="descname">IPEProfile</code><span class="sig-paren">(</span><em>steel</em>, <em>name</em><span class="sig-paren">)</span><a class="headerlink" href="#materials.ec3.EC3_materials.IPEProfile" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#materials.ec3.EC3_materials.EC3Profile" title="materials.ec3.EC3_materials.EC3Profile"><code class="xref py py-class docutils literal"><span class="pre">materials.ec3.EC3_materials.EC3Profile</span></code></a>, <a class="reference internal" href="materials.structural_shapes.arcelor.html#materials.structural_shapes.arcelor.perfiles_ipe_arcelor.IPEProfile" title="materials.structural_shapes.arcelor.perfiles_ipe_arcelor.IPEProfile"><code class="xref py py-class docutils literal"><span class="pre">materials.structural_shapes.arcelor.perfiles_ipe_arcelor.IPEProfile</span></code></a></p>
+<p>IPE profile with Eurocode 3 verification routines.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="materials.ec3.EC3_materials.fuEC3">
+<code class="descclassname">materials.ec3.EC3_materials.</code><code class="descname">fuEC3</code><span class="sig-paren">(</span><em>desig</em>, <em>t</em><span class="sig-paren">)</span><a class="headerlink" href="#materials.ec3.EC3_materials.fuEC3" title="Permalink to this definition">¶</a></dt>
+<dd><p>Devuelve la resistencia última a tracción del acero en función de 
+su designación y del espesor de la pieza (ver tabla 3.1).</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="materials.ec3.EC3_materials.fyEC3">
+<code class="descclassname">materials.ec3.EC3_materials.</code><code class="descname">fyEC3</code><span class="sig-paren">(</span><em>desig</em>, <em>t</em><span class="sig-paren">)</span><a class="headerlink" href="#materials.ec3.EC3_materials.fyEC3" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Devuelve el límite elástico del acero en función de su designación</dt>
+<dd>y del espesor de la pieza (ver tabla 3.1).</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="module-materials.ec3.EC3Beam">
+<span id="ec3beam"></span><h2>EC3Beam<a class="headerlink" href="#module-materials.ec3.EC3Beam" title="Permalink to this headline">¶</a></h2>
+<p>Eurocode 3 checks for a beam or column.</p>
+<dl class="class">
+<dt id="materials.ec3.EC3Beam.EC3Beam">
+<em class="property">class </em><code class="descclassname">materials.ec3.EC3Beam.</code><code class="descname">EC3Beam</code><span class="sig-paren">(</span><em>line</em>, <em>ec3Profile</em><span class="sig-paren">)</span><a class="headerlink" href="#materials.ec3.EC3Beam.EC3Beam" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="model.geometry.html#model.geometry.line_utils.LineWrapper" title="model.geometry.line_utils.LineWrapper"><code class="xref py py-class docutils literal"><span class="pre">model.geometry.line_utils.LineWrapper</span></code></a></p>
+<dl class="method">
+<dt id="materials.ec3.EC3Beam.EC3Beam.getLateralBucklingReductionFactor">
+<code class="descname">getLateralBucklingReductionFactor</code><span class="sig-paren">(</span><em>sectionClass</em>, <em>ky=1.0</em>, <em>kw=1.0</em>, <em>k1=1.0</em>, <em>k2=1.0</em>, <em>typo='rolled'</em><span class="sig-paren">)</span><a class="headerlink" href="#materials.ec3.EC3Beam.EC3Beam.getLateralBucklingReductionFactor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns lateral torsional buckling reduction factor value
+for the elements inside the line.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="materials.ec3.EC3Beam.EC3Beam.installULSControlRecorder">
+<code class="descname">installULSControlRecorder</code><span class="sig-paren">(</span><em>recorderType</em>, <em>sectionClass=1</em>, <em>chiLT=1.0</em><span class="sig-paren">)</span><a class="headerlink" href="#materials.ec3.EC3Beam.EC3Beam.installULSControlRecorder" title="Permalink to this definition">¶</a></dt>
+<dd><p>Installs recorder for verification of ULS criterion.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="materials.ec3.EC3Beam.EC3Beam.updateLateralBucklingReductionFactor">
+<code class="descname">updateLateralBucklingReductionFactor</code><span class="sig-paren">(</span><em>sectionClass</em>, <em>ky=1.0</em>, <em>kw=1.0</em>, <em>k1=1.0</em>, <em>k2=1.0</em>, <em>typo='rolled'</em><span class="sig-paren">)</span><a class="headerlink" href="#materials.ec3.EC3Beam.EC3Beam.updateLateralBucklingReductionFactor" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-materials.ec3.EC3_limit_state_checking">
+<span id="ec3-limit-state-checking"></span><h2>EC3_limit_state_checking<a class="headerlink" href="#module-materials.ec3.EC3_limit_state_checking" title="Permalink to this headline">¶</a></h2>
+<p>Classes and functions for limit state checking according to Eurocode 3.</p>
+<dl class="class">
+<dt id="materials.ec3.EC3_limit_state_checking.MomentGradientFactorC1">
+<em class="property">class </em><code class="descclassname">materials.ec3.EC3_limit_state_checking.</code><code class="descname">MomentGradientFactorC1</code><span class="sig-paren">(</span><em>xi</em>, <em>Mi</em><span class="sig-paren">)</span><a class="headerlink" href="#materials.ec3.EC3_limit_state_checking.MomentGradientFactorC1" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>Calculation of the C1 moment gradient factor as defined
+in: A. López, D. J. Yong, M. A. Serna,
+Lateral-torsional buckling of steel beams: a general expression for
+the moment gradient factor.
+(Lisbon, Portugal: Stability and ductility of steel structures, 2006).</p>
+<dl class="method">
+<dt id="materials.ec3.EC3_limit_state_checking.MomentGradientFactorC1.getA1">
+<code class="descname">getA1</code><span class="sig-paren">(</span><em>supportCoefs</em><span class="sig-paren">)</span><a class="headerlink" href="#materials.ec3.EC3_limit_state_checking.MomentGradientFactorC1.getA1" title="Permalink to this definition">¶</a></dt>
+<dd><p>return the value for the A1 coefficient. 
+k1: warping AND lateral bending coefficient at left end</p>
+<blockquote>
+<div>k1= 1.0 =&gt; free warping AND lateral bending
+k1= 0.5 =&gt; prevented warp. AND lateral bending</div></blockquote>
+<dl class="docutils">
+<dt>k2: warping AND lateral bending coefficient at right end</dt>
+<dd>k2= 1.0 =&gt; free warping AND lateral bending
+k2= 0.5 =&gt; prevented warp. AND lateral bending</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="materials.ec3.EC3_limit_state_checking.MomentGradientFactorC1.getA2">
+<code class="descname">getA2</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#materials.ec3.EC3_limit_state_checking.MomentGradientFactorC1.getA2" title="Permalink to this definition">¶</a></dt>
+<dd><p>return the value for the A2 coefficient.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="materials.ec3.EC3_limit_state_checking.MomentGradientFactorC1.getC1">
+<code class="descname">getC1</code><span class="sig-paren">(</span><em>supportCoefs</em><span class="sig-paren">)</span><a class="headerlink" href="#materials.ec3.EC3_limit_state_checking.MomentGradientFactorC1.getC1" title="Permalink to this definition">¶</a></dt>
+<dd><p>return the value for the C1 coefficient. 
+k1: warping AND lateral bending coefficient at left end</p>
+<blockquote>
+<div>k1= 1.0 =&gt; free warping AND lateral bending
+k1= 0.5 =&gt; prevented warp. AND lateral bending</div></blockquote>
+<dl class="docutils">
+<dt>k2: warping AND lateral bending coefficient at right end</dt>
+<dd>k2= 1.0 =&gt; free warping AND lateral bending
+k2= 0.5 =&gt; prevented warp. AND lateral bending</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="materials.ec3.EC3_limit_state_checking.MomentGradientFactorC1.getExtremeMoment">
+<code class="descname">getExtremeMoment</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#materials.ec3.EC3_limit_state_checking.MomentGradientFactorC1.getExtremeMoment" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the extreme of the bending moments (maximum or minimum).</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="materials.ec3.EC3_limit_state_checking.MomentGradientFactorC1.getL">
+<code class="descname">getL</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#materials.ec3.EC3_limit_state_checking.MomentGradientFactorC1.getL" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the length of the moment diagram.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="materials.ec3.EC3_limit_state_checking.MomentGradientFactorC1.getMi">
+<code class="descname">getMi</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#materials.ec3.EC3_limit_state_checking.MomentGradientFactorC1.getMi" title="Permalink to this definition">¶</a></dt>
+<dd><p>returns the five moment values that are needed for C1 calculation.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="materials.ec3.EC3_limit_state_checking.SupportCoefficients">
+<em class="property">class </em><code class="descclassname">materials.ec3.EC3_limit_state_checking.</code><code class="descname">SupportCoefficients</code><span class="sig-paren">(</span><em>ky=1.0</em>, <em>kw=1.0</em>, <em>k1=1.0</em>, <em>k2=1.0</em><span class="sig-paren">)</span><a class="headerlink" href="#materials.ec3.EC3_limit_state_checking.SupportCoefficients" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<dl class="method">
+<dt id="materials.ec3.EC3_limit_state_checking.SupportCoefficients.getAlphaI">
+<code class="descname">getAlphaI</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#materials.ec3.EC3_limit_state_checking.SupportCoefficients.getAlphaI" title="Permalink to this definition">¶</a></dt>
+<dd><p>returns the five alpha values that are needed for C1 calculation.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="materials.ec3.EC3_limit_state_checking.controlBiaxialBendingEfficiency">
+<code class="descclassname">materials.ec3.EC3_limit_state_checking.</code><code class="descname">controlBiaxialBendingEfficiency</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#materials.ec3.EC3_limit_state_checking.controlBiaxialBendingEfficiency" title="Permalink to this definition">¶</a></dt>
+<dd><p>Code to execute in every commit to check stress criterion (bars in 3D problems).</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="materials.ec3.EC3_limit_state_checking.controlULSCriterion">
+<code class="descclassname">materials.ec3.EC3_limit_state_checking.</code><code class="descname">controlULSCriterion</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#materials.ec3.EC3_limit_state_checking.controlULSCriterion" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="materials.ec3.EC3_limit_state_checking.controlULSCriterion2D">
+<code class="descclassname">materials.ec3.EC3_limit_state_checking.</code><code class="descname">controlULSCriterion2D</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#materials.ec3.EC3_limit_state_checking.controlULSCriterion2D" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="materials.ec3.EC3_limit_state_checking.controlYShearEfficiency">
+<code class="descclassname">materials.ec3.EC3_limit_state_checking.</code><code class="descname">controlYShearEfficiency</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#materials.ec3.EC3_limit_state_checking.controlYShearEfficiency" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="materials.ec3.EC3_limit_state_checking.getBendingResistanceReductionCoefficient">
+<code class="descclassname">materials.ec3.EC3_limit_state_checking.</code><code class="descname">getBendingResistanceReductionCoefficient</code><span class="sig-paren">(</span><em>profile</em>, <em>Vd</em><span class="sig-paren">)</span><a class="headerlink" href="#materials.ec3.EC3_limit_state_checking.getBendingResistanceReductionCoefficient" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Returns bending resistance reduction coefficient as in</dt>
+<dd>clause 6.2.8 of EC31-1</dd>
+</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>profile</strong> &#8211; cross section profile.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="materials.ec3.EC3_limit_state_checking.getLateralBucklingImperfectionFactor">
+<code class="descclassname">materials.ec3.EC3_limit_state_checking.</code><code class="descname">getLateralBucklingImperfectionFactor</code><span class="sig-paren">(</span><em>profile</em><span class="sig-paren">)</span><a class="headerlink" href="#materials.ec3.EC3_limit_state_checking.getLateralBucklingImperfectionFactor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns lateral torsional imperfection factor depending of the type of section (rolled, welded,...).
+:param profile: cross section profile.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="materials.ec3.EC3_limit_state_checking.getLateralBucklingIntermediateFactor">
+<code class="descclassname">materials.ec3.EC3_limit_state_checking.</code><code class="descname">getLateralBucklingIntermediateFactor</code><span class="sig-paren">(</span><em>profile</em>, <em>sectionClass</em>, <em>xi</em>, <em>Mi</em>, <em>supportCoefs=&lt;materials.ec3.EC3_limit_state_checking.SupportCoefficients object&gt;</em><span class="sig-paren">)</span><a class="headerlink" href="#materials.ec3.EC3_limit_state_checking.getLateralBucklingIntermediateFactor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns lateral torsional buckling intermediate factor value.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>profile</strong> &#8211; cross section profile.</li>
+<li><strong>xi</strong> &#8211; abcissae for the moment diagram</li>
+<li><strong>Mi</strong> &#8211; ordinate for the moment diagram</li>
+<li><strong>supportCoefs</strong> &#8211; coefficients that represent support conditions.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="materials.ec3.EC3_limit_state_checking.getLateralBucklingNonDimensionalBeamSlenderness">
+<code class="descclassname">materials.ec3.EC3_limit_state_checking.</code><code class="descname">getLateralBucklingNonDimensionalBeamSlenderness</code><span class="sig-paren">(</span><em>profile</em>, <em>sectionClass</em>, <em>xi</em>, <em>Mi</em>, <em>supportCoefs=&lt;materials.ec3.EC3_limit_state_checking.SupportCoefficients object&gt;</em><span class="sig-paren">)</span><a class="headerlink" href="#materials.ec3.EC3_limit_state_checking.getLateralBucklingNonDimensionalBeamSlenderness" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns non dimensional beam slenderness
+for lateral torsional buckling
+see parameter definition on method getMcr.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>profile</strong> &#8211; cross section profile.</li>
+<li><strong>sectionClass</strong> &#8211; section classification (1,2,3 or 4)</li>
+<li><strong>xi</strong> &#8211; abcissae for the moment diagram</li>
+<li><strong>Mi</strong> &#8211; ordinate for the moment diagram</li>
+<li><strong>supportCoefs</strong> &#8211; coefficients that represent support conditions.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="materials.ec3.EC3_limit_state_checking.getLateralBucklingReductionFactor">
+<code class="descclassname">materials.ec3.EC3_limit_state_checking.</code><code class="descname">getLateralBucklingReductionFactor</code><span class="sig-paren">(</span><em>profile</em>, <em>sectionClass</em>, <em>xi</em>, <em>Mi</em>, <em>supportCoefs=&lt;materials.ec3.EC3_limit_state_checking.SupportCoefficients object&gt;</em><span class="sig-paren">)</span><a class="headerlink" href="#materials.ec3.EC3_limit_state_checking.getLateralBucklingReductionFactor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns lateral torsional buckling reduction factor value.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>profile</strong> &#8211; cross section profile.</li>
+<li><strong>sectionClass</strong> &#8211; section classification (1,2,3 or 4)</li>
+<li><strong>xi</strong> &#8211; abcissae for the moment diagram</li>
+<li><strong>Mi</strong> &#8211; ordinate for the moment diagram</li>
+<li><strong>supportCoefs</strong> &#8211; coefficients that represent support conditions.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="materials.ec3.EC3_limit_state_checking.getLateralTorsionalBucklingCurve">
+<code class="descclassname">materials.ec3.EC3_limit_state_checking.</code><code class="descname">getLateralTorsionalBucklingCurve</code><span class="sig-paren">(</span><em>profile</em><span class="sig-paren">)</span><a class="headerlink" href="#materials.ec3.EC3_limit_state_checking.getLateralTorsionalBucklingCurve" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the lateral torsional bukling curve name (a,b,c or d) depending of the type of section (rolled, welded,...). EC3 Table 6.4, 6.3.2.2(2).
+:param profile: cross section profile.
+:param rypo: &#8216;rolled&#8217; or &#8216;welded&#8217; profile</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="materials.ec3.EC3_limit_state_checking.getLateralTorsionalBucklingResistance">
+<code class="descclassname">materials.ec3.EC3_limit_state_checking.</code><code class="descname">getLateralTorsionalBucklingResistance</code><span class="sig-paren">(</span><em>profile</em>, <em>sectionClass</em>, <em>xi</em>, <em>Mi</em>, <em>supportCoefs=&lt;materials.ec3.EC3_limit_state_checking.SupportCoefficients object&gt;</em><span class="sig-paren">)</span><a class="headerlink" href="#materials.ec3.EC3_limit_state_checking.getLateralTorsionalBucklingResistance" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns lateral torsional buckling resistance of this cross-section.
+Calculation is made following the paper:</p>
+<p>A. López, D. J. Yong, M. A. Serna,
+Lateral-torsional buckling of steel beams: a general expression for
+the moment gradient factor.
+(Lisbon, Portugal: Stability and ductility of steel structures, 2006).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>profile</strong> &#8211; cross section profile.</li>
+<li><strong>sectionClass</strong> &#8211; section classification (1,2,3 or 4)</li>
+<li><strong>xi</strong> &#8211; abcissae for the moment diagram</li>
+<li><strong>Mi</strong> &#8211; ordinate for the moment diagram</li>
+<li><strong>supportCoefs</strong> &#8211; coefficients that represent support conditions.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="materials.ec3.EC3_limit_state_checking.getMcr">
+<code class="descclassname">materials.ec3.EC3_limit_state_checking.</code><code class="descname">getMcr</code><span class="sig-paren">(</span><em>profile</em>, <em>xi</em>, <em>Mi</em>, <em>supportCoefs=&lt;materials.ec3.EC3_limit_state_checking.SupportCoefficients object&gt;</em><span class="sig-paren">)</span><a class="headerlink" href="#materials.ec3.EC3_limit_state_checking.getMcr" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns elastic critical moment about minor axis: y
+Calculation is made following the paper:</p>
+<p>A. López, D. J. Yong, M. A. Serna,
+Lateral-torsional buckling of steel beams: a general expression for
+the moment gradient factor.
+(Lisbon, Portugal: Stability and ductility of steel structures, 2006).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>profile</strong> &#8211; cross section profile.</li>
+<li><strong>xi</strong> &#8211; abcissae for the moment diagram</li>
+<li><strong>Mi</strong> &#8211; ordinate for the moment diagram</li>
+<li><strong>supportCoefs</strong> &#8211; coefficients that represent support conditions.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="materials.ec3.EC3_limit_state_checking.getMvRdz">
+<code class="descclassname">materials.ec3.EC3_limit_state_checking.</code><code class="descname">getMvRdz</code><span class="sig-paren">(</span><em>profile</em>, <em>sectionClass</em>, <em>Vd</em><span class="sig-paren">)</span><a class="headerlink" href="#materials.ec3.EC3_limit_state_checking.getMvRdz" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Returns the major bending resistance of the cross-section under a</dt>
+<dd>shear force of Vd.</dd>
+</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>profile</strong> &#8211; cross section profile.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="materials.ec3.EC3_limit_state_checking.shearBucklingVerificationNeeded">
+<code class="descclassname">materials.ec3.EC3_limit_state_checking.</code><code class="descname">shearBucklingVerificationNeeded</code><span class="sig-paren">(</span><em>profile</em><span class="sig-paren">)</span><a class="headerlink" href="#materials.ec3.EC3_limit_state_checking.shearBucklingVerificationNeeded" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns true if shear buckling verification is needed EC3-1-5
+:param profile: cross section profile.</p>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Materials according to Eurocode-3 code</a><ul>
+<li><a class="reference internal" href="#module-materials.ec3.EC3_materials">EC3_materials</a></li>
+<li><a class="reference internal" href="#module-materials.ec3.EC3Beam">EC3Beam</a></li>
+<li><a class="reference internal" href="#module-materials.ec3.EC3_limit_state_checking">EC3_limit_state_checking</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="materials.astm.html"
+                        title="previous chapter">ASTM materials</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="materials.eae.html"
+                        title="next chapter">Materials according to EAE code</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/preprocessor/materials.ec3.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="materials.eae.html" title="Materials according to EAE code"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="materials.astm.html" title="ASTM materials"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">XC 3.0 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="materials.html" >Materials</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2016, Luis Pérez Tato (LCPT) &amp; Ana Ortega (AO_O).
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.6.
+    </div>
+  </body>
+</html>

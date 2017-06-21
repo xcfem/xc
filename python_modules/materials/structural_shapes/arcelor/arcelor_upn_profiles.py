@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+
 '''
 Cross section axis:
 
@@ -19,7 +20,9 @@ Cross section axis:
 The axis used in Arcelor documentation are different from those used in XC
 (strong axis parallel to z axis) in other words: values for Y and Z axis 
 are swapped with respect to those in the catalog.
+
 '''
+
 UPNprofiles= {}
 
 UPNprofiles['UPN_80']= {'nmb':'UPN_80', 'P':8.65, 'h':80e-3, 'b':45e-3, 'tw':6e-3, 'tf':8e-3, 'r1':8e-3, 'r2':4e-3, 'A':11.02e-4, 'd':47e-3, 'FI':'-', 'Pmin': None, 'Pmax': None, 'AL':0.321, 'AG':37.1, 'Iz':106e-8, 'Wzel':26.6e-6, 'Wzpl':32.3e-6, 'iz':3.1e-2, 'Avy':4.9e-4, 'Iy':19.4e-8, 'Wyel':6.38e-6, 'Wypl':11.9e-6, 'iy':1.33e-2, 'Ss':19.4e-3, 'It':2.2e-8, 'Iw':0.18e-16, 'zs':1.42e-2, 'zm':2.65e-2, 'E':2.1e+11, 'nu':0.3}

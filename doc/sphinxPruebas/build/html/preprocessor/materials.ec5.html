@@ -1,0 +1,164 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Materials according to Eurocode-5 code &mdash; XC 3.0 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '3.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="XC 3.0 documentation" href="../index.html" />
+    <link rel="up" title="Materials" href="materials.html" />
+    <link rel="next" title="Actions" href="actions.html" />
+    <link rel="prev" title="ARCELOR metal profiles" href="materials.structural_shapes.arcelor.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="actions.html" title="Actions"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="materials.structural_shapes.arcelor.html" title="ARCELOR metal profiles"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">XC 3.0 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="materials.html" accesskey="U">Materials</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="materials-according-to-eurocode-5-code">
+<h1>Materials according to Eurocode-5 code<a class="headerlink" href="#materials-according-to-eurocode-5-code" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="module-materials.ec5.EC5_limit_state_checking">
+<span id="ec5-limit-state-checking"></span><h2>EC5_limit_state_checking<a class="headerlink" href="#module-materials.ec5.EC5_limit_state_checking" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="materials.ec5.EC5_limit_state_checking.EC5TimberRectCrossSection">
+<em class="property">class </em><code class="descclassname">materials.ec5.EC5_limit_state_checking.</code><code class="descname">EC5TimberRectCrossSection</code><span class="sig-paren">(</span><em>name</em>, <em>b</em>, <em>h</em>, <em>E</em>, <em>nu</em>, <em>fyd</em>, <em>taud</em><span class="sig-paren">)</span><a class="headerlink" href="#materials.ec5.EC5_limit_state_checking.EC5TimberRectCrossSection" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="matGenTopics.html#materials.section_properties.RectangularSection" title="materials.section_properties.RectangularSection"><code class="xref py py-class docutils literal"><span class="pre">materials.section_properties.RectangularSection</span></code></a></p>
+<p>Timber section with Eurocode 5 verification routines.</p>
+<dl class="method">
+<dt id="materials.ec5.EC5_limit_state_checking.EC5TimberRectCrossSection.installElementElasticStressesControlRecorder">
+<code class="descname">installElementElasticStressesControlRecorder</code><span class="sig-paren">(</span><em>recorderName</em>, <em>elemSet</em><span class="sig-paren">)</span><a class="headerlink" href="#materials.ec5.EC5_limit_state_checking.EC5TimberRectCrossSection.installElementElasticStressesControlRecorder" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="materials.ec5.EC5_limit_state_checking.EC5TimberRectCrossSection.setupULSControlVars2d">
+<code class="descname">setupULSControlVars2d</code><span class="sig-paren">(</span><em>elems</em><span class="sig-paren">)</span><a class="headerlink" href="#materials.ec5.EC5_limit_state_checking.EC5TimberRectCrossSection.setupULSControlVars2d" title="Permalink to this definition">¶</a></dt>
+<dd><p>For each element creates the variables
+needed to check ultimate limit state criterion to satisfy.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="materials.ec5.EC5_limit_state_checking.EC5TimberRectCrossSection.setupULSControlVars3d">
+<code class="descname">setupULSControlVars3d</code><span class="sig-paren">(</span><em>elems</em><span class="sig-paren">)</span><a class="headerlink" href="#materials.ec5.EC5_limit_state_checking.EC5TimberRectCrossSection.setupULSControlVars3d" title="Permalink to this definition">¶</a></dt>
+<dd><p>For each element creates the variables
+needed to check ultimate limit state criterion to satisfy.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="materials.ec5.EC5_limit_state_checking.printResultsELU">
+<code class="descclassname">materials.ec5.EC5_limit_state_checking.</code><code class="descname">printResultsELU</code><span class="sig-paren">(</span><em>elems</em>, <em>crossSection</em><span class="sig-paren">)</span><a class="headerlink" href="#materials.ec5.EC5_limit_state_checking.printResultsELU" title="Permalink to this definition">¶</a></dt>
+<dd><p>print ULS results.</p>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Materials according to Eurocode-5 code</a><ul>
+<li><a class="reference internal" href="#module-materials.ec5.EC5_limit_state_checking">EC5_limit_state_checking</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="materials.structural_shapes.arcelor.html"
+                        title="previous chapter">ARCELOR metal profiles</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="actions.html"
+                        title="next chapter">Actions</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/preprocessor/materials.ec5.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="actions.html" title="Actions"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="materials.structural_shapes.arcelor.html" title="ARCELOR metal profiles"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">XC 3.0 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="materials.html" >Materials</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2016, Luis Pérez Tato (LCPT) &amp; Ana Ortega (AO_O).
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.6.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,245 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Sets &mdash; XC 3.0 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '3.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="XC 3.0 documentation" href="../index.html" />
+    <link rel="up" title="Model" href="model.html" />
+    <link rel="next" title="Materials" href="materials.html" />
+    <link rel="prev" title="Boundary conditions" href="model.boundary.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="materials.html" title="Materials"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="model.boundary.html" title="Boundary conditions"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">XC 3.0 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="model.html" accesskey="U">Model</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="sets">
+<h1>Sets<a class="headerlink" href="#sets" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="module-model.sets.sets_mng">
+<span id="sets-manager"></span><h2>Sets manager<a class="headerlink" href="#module-model.sets.sets_mng" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="model.sets.sets_mng.append_nodes_from_line">
+<code class="descclassname">model.sets.sets_mng.</code><code class="descname">append_nodes_from_line</code><span class="sig-paren">(</span><em>setTo</em>, <em>line</em><span class="sig-paren">)</span><a class="headerlink" href="#model.sets.sets_mng.append_nodes_from_line" title="Permalink to this definition">¶</a></dt>
+<dd><p>Appends the nodes in the specified line to a set of entities</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>setTo</strong> &#8211; set of entities</li>
+<li><strong>line</strong> &#8211; line that contains the nodes</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="model.sets.sets_mng.append_points">
+<code class="descclassname">model.sets.sets_mng.</code><code class="descname">append_points</code><span class="sig-paren">(</span><em>setTo</em>, <em>points</em><span class="sig-paren">)</span><a class="headerlink" href="#model.sets.sets_mng.append_points" title="Permalink to this definition">¶</a></dt>
+<dd><p>Appends points to set of entities</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>setTo</strong> &#8211; set of entities</li>
+<li><strong>points</strong> &#8211; list of points [pt1,pt2, ...]</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="model.sets.sets_mng.append_sets">
+<code class="descclassname">model.sets.sets_mng.</code><code class="descname">append_sets</code><span class="sig-paren">(</span><em>setTo</em>, <em>sets</em><span class="sig-paren">)</span><a class="headerlink" href="#model.sets.sets_mng.append_sets" title="Permalink to this definition">¶</a></dt>
+<dd><p>Appends other sets to set of entities</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>setTo</strong> &#8211; base set of entities</li>
+<li><strong>points</strong> &#8211; list of sets to be appended [set1,set2, ...]</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="model.sets.sets_mng.get_lin_2Pts">
+<code class="descclassname">model.sets.sets_mng.</code><code class="descname">get_lin_2Pts</code><span class="sig-paren">(</span><em>lstLinBusq</em>, <em>tPto1</em>, <em>tPto2</em><span class="sig-paren">)</span><a class="headerlink" href="#model.sets.sets_mng.get_lin_2Pts" title="Permalink to this definition">¶</a></dt>
+<dd><p>return the line that belongs to the set <cite>lstLinBusq</cite> and whose
+starting and ending points are those of tags <cite>tPto1</cite> and <cite>tPto2</cite></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="model.sets.sets_mng.get_lstNod_from_lst3DPos">
+<code class="descclassname">model.sets.sets_mng.</code><code class="descname">get_lstNod_from_lst3DPos</code><span class="sig-paren">(</span><em>preprocessor</em>, <em>lst3DPos</em><span class="sig-paren">)</span><a class="headerlink" href="#model.sets.sets_mng.get_lstNod_from_lst3DPos" title="Permalink to this definition">¶</a></dt>
+<dd><p>return the set of the nearest nodes to the points passed as a list of
+points (expressed as geom.Pos3d(x,y,z))</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="model.sets.sets_mng.get_nodes_wire">
+<code class="descclassname">model.sets.sets_mng.</code><code class="descname">get_nodes_wire</code><span class="sig-paren">(</span><em>setBusq</em>, <em>lstPtsWire</em><span class="sig-paren">)</span><a class="headerlink" href="#model.sets.sets_mng.get_nodes_wire" title="Permalink to this definition">¶</a></dt>
+<dd><p>return the subset of nodes from the set <cite>setBusq</cite> that belong to 
+the line defined by the successive points in list <cite>lstPts</cite></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="model.sets.sets_mng.setAddOf">
+<code class="descclassname">model.sets.sets_mng.</code><code class="descname">setAddOf</code><span class="sig-paren">(</span><em>setA</em>, <em>setB</em><span class="sig-paren">)</span><a class="headerlink" href="#model.sets.sets_mng.setAddOf" title="Permalink to this definition">¶</a></dt>
+<dd><p>return a new set that has all the entities in setA and setB
+This function is going to be replaced by the overload of add operator
+for sets.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="model.sets.sets_mng.setElem_to_lst">
+<code class="descclassname">model.sets.sets_mng.</code><code class="descname">setElem_to_lst</code><span class="sig-paren">(</span><em>setElem</em><span class="sig-paren">)</span><a class="headerlink" href="#model.sets.sets_mng.setElem_to_lst" title="Permalink to this definition">¶</a></dt>
+<dd><p>return a list with the elements included in the set <cite>setElem</cite></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="model.sets.sets_mng.setLin_to_lst">
+<code class="descclassname">model.sets.sets_mng.</code><code class="descname">setLin_to_lst</code><span class="sig-paren">(</span><em>setLin</em><span class="sig-paren">)</span><a class="headerlink" href="#model.sets.sets_mng.setLin_to_lst" title="Permalink to this definition">¶</a></dt>
+<dd><p>return a list with the lines included in the set <cite>setLin</cite></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="model.sets.sets_mng.setNod_to_lst">
+<code class="descclassname">model.sets.sets_mng.</code><code class="descname">setNod_to_lst</code><span class="sig-paren">(</span><em>setNod</em><span class="sig-paren">)</span><a class="headerlink" href="#model.sets.sets_mng.setNod_to_lst" title="Permalink to this definition">¶</a></dt>
+<dd><p>return a list with the nodes included in the set <cite>setNod</cite></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="model.sets.sets_mng.setPnt_to_lst">
+<code class="descclassname">model.sets.sets_mng.</code><code class="descname">setPnt_to_lst</code><span class="sig-paren">(</span><em>setPnt</em><span class="sig-paren">)</span><a class="headerlink" href="#model.sets.sets_mng.setPnt_to_lst" title="Permalink to this definition">¶</a></dt>
+<dd><p>return  a list with the points included in set <cite>setPnt</cite></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="model.sets.sets_mng.setSurf_to_lst">
+<code class="descclassname">model.sets.sets_mng.</code><code class="descname">setSurf_to_lst</code><span class="sig-paren">(</span><em>setSurf</em><span class="sig-paren">)</span><a class="headerlink" href="#model.sets.sets_mng.setSurf_to_lst" title="Permalink to this definition">¶</a></dt>
+<dd><p>return a list with the surfaces included in the set <cite>setSurf</cite></p>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Sets</a><ul>
+<li><a class="reference internal" href="#module-model.sets.sets_mng">Sets manager</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="model.boundary.html"
+                        title="previous chapter">Boundary conditions</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="materials.html"
+                        title="next chapter">Materials</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/preprocessor/model.sets.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="materials.html" title="Materials"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="model.boundary.html" title="Boundary conditions"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">XC 3.0 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="model.html" >Model</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2016, Luis Pérez Tato (LCPT) &amp; Ana Ortega (AO_O).
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.6.
+    </div>
+  </body>
+</html>
