@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-''' Home made test a partir del ejemplo expuesto
-en la página C-17 del "Bridge Strudl Manual" de noviembre de 1973 '''
+''' Home made test from the example at page C-17 of the
+"Bridge Strudl Manual" november 1973 '''
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (A_OO)"
 __copyright__= "Copyright 2015, LCPT and AO_O"

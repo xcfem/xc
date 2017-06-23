@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
-'''Verificación de la obtención de la carga última de una ménsula corta a
-partir del ejercicio 24.4.5 de la página XXV-40 del libro de metálicas 
-de Vicente Cudós Samblancat.'''
+'''Verification of the computing of the ultimate load of an steel corbel
+from the exercise 24.4.5 at page XXV-40 of the book Estructuras Metálicas
+de Vicente Cudós Samblancat (url={https://books.google.ch/books?id=7UrJnQEACAAJ}).'''
 
 from materials.eae import comprobacion_casquillo_rigidizado
 import math
@@ -22,7 +22,7 @@ tRig= 8e-3 # Espesor del rigidizador.
 
 # Material properties
 fy= 2600*9.81/1e-4 # Acero A42b
-fyd= fy/1.0 # Minoración límite elástico
+fyd= fy/1.0 # Strength reduction factor
 Es= 2.1e6*9.81/1e-4 # Elastic modulus of the steel.
 
 # Resultados parciales.
@@ -32,10 +32,10 @@ CE= comprobacion_casquillo_rigidizado.coefEscuadra(lmbd)
 MplRd= comprobacion_casquillo_rigidizado.momPlastRig(tRig,c,fy)
 VRd2= comprobacion_casquillo_rigidizado.cargaUltRig(CE,d,MplRd)
 
-'''La diferencia entre este valor de cTeor y el que emplea este programa
-es que el programa SI considera el espesor del ala del casquillo para el
-cálculo de c tal y como se desprende de la figura de la EAE y del libro
-de la UNED.'''
+'''The difference between this value for cTeor and the one used here
+is that this program DO accounts for the web thickess to compute c
+as specified in the figure on the EAE standard and in the reference book
+(see at the top of this file).'''
  
 cTeor= (0.208*math.sqrt(2)/2)
 ratio1= ((c-cTeor)/cTeor)

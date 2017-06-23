@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Tomado de la página 114 of the article Development of Membrane, Plate and
+# Taken from page 114 of the article Development of Membrane, Plate and
 # Flat Shell Elements in Java
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"

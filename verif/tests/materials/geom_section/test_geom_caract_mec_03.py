@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
-# Ejemplo tomado de la página 258 del Jiménez Montoya (14a. edición)
-# Home made test
-
+''' Example taken from the page 258 of the book "Hormiǵon Armado. Jiménez Montoya (14a. edición) (url={https://books.google.ch/books?id=JWggPwAACAAJ}).
+'''
 import xc_base
 import geom
 import xc
@@ -22,8 +21,8 @@ b= 1.0 # Ancho eficaz de ala.
 bw= 0.25 # Ancho del nervio.
 hf= 0.08 # Canto del ala.
 d= 0.57 # Canto útil.
-diamBar= 22e-3 # Diámetro de los redondos.
-areaBar= math.pi*(diamBar/2)**2 # Área de los redondos.
+diamBar= 22e-3 # Rebar diameter.
+areaBar= math.pi*(diamBar/2)**2 # Rabar area.
 
 prueba= xc.ProblemaEF()
 preprocessor=  prueba.getPreprocessor

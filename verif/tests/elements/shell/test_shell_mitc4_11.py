@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
-# Tomado del example 2-005 del manual de verificación de SAP 2000
-# El error obtenido es próximo al 1.8% parece que el elemento funciona peor
-# cuando el "aspect ratio" está lejos del cuadrado ver comentarios página EXAMPLE 2-005 - 7
-# del manual de SAP 2000.
+''' Taken from example 2-005 of the SAP 2000 verification manual.'''
+# The obtained error is near 1.8% it can be the aspect ratio
+# of the element. See comments on page EXAMPLE 2-005 - 7
+# in the SAP 2000 manual.
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
 __copyright__= "Copyright 2015, LCPT and AOO"

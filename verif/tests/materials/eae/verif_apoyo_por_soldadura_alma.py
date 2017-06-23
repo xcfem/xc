@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
-'''Obtención de la longitud de cordón necesaria para apoyar el extremo
+'''Computation of the required length of a weld bead to apoyar el extremo
 de una viga mediante soldadura directa del alma, según el artículo 61.4.1
 de la instrucción EAE.'''
-# Comprobación mediante ejemplo página XXV-31 del libro de la UNE.
+# Verification by means of the example in the page XXV-31 of the book
+# Estructuras Metálicas de Vicente Cudós Samblancat
+# (url={https://books.google.ch/books?id=7UrJnQEACAAJ}).
 
 from materials.eae import apoyo_por_soldadura_alma
 import math
@@ -14,7 +16,7 @@ __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
 # Loads
-Vd= 8585*9.81 # Valor de cálculo de la carga
+Vd= 8585*9.81 # Design value of the load.
 
 # Geometry
 h= 270e-3 # Beam cross-section depth expressed in meters.
@@ -24,13 +26,13 @@ l= 5.15925e-2 # Longitud de los cordones.
 
 # Material properties
 fy= 275e6 # Acero S-275-JR
-fyd= fy/1.1 # Minoración límite elástico
-fu= 430e6 # Resistencia a tracción  of the steel de las piezas a soldar S-275-JR (tabla 59.8.2 pág 304 EAE).
+fyd= fy/1.1 # Strength reduction factor.
+fu= 430e6 # Steel strength of the pieces to be welded S-275-JR (table 59.8.2 page 304 EAE).
 Es= 2e11 # Elastic modulus of the steel.
 
-# DATOS seguridad
-betaW= 0.8 # Coeficiente de correlación para S-275 (tabla 59.8.2 pág 304 EAE).
-gammaMw= 1.0/math.sqrt(3) # Coeficiente de minoración of the steel para uniones (artículo 59.8.2 página 304 EAE).
+# Safety data
+betaW= 0.8 # Coeficiente de correlación para S-275 (table 59.8.2 page 304 EAE).
+gammaMw= 1.0/math.sqrt(3) # Coeficiente de minoración of the steel para uniones (artículo 59.8.2 page 304 EAE).
 
 
 
@@ -41,11 +43,11 @@ lMax= apoyo_por_soldadura_alma.LongMaxSoldAlma(tw)
 ratio1= abs(((VRd-Vd)/VRd))
 
 '''
-print "Longitud de los cordones l= ",l*1000,"mm \n"
-print "Longitud máxima de los cordones lMax= ",lMax*1000," mm\n"
-print "Espesor de garganta a= ",a*1000,"mm \n"
-print "Cortante que solicita la Vd= ",Vd/1000," kN\n"
-print "Cortante último de la unión VRd= ",VRd/1000," kN\n"
+print "Weld bead length l= ",l*1000,"mm \n"
+print "Maximum lenght of the weld beads lMax= ",lMax*1000," mm\n"
+print "Fillet weld throat a= ",a*1000,"mm \n"
+print "Shear force la Vd= ",Vd/1000," kN\n"
+print "Shear resistance of the joint VRd= ",VRd/1000," kN\n"
 print "VRd/Vd= ",VRd/Vd
 print "ratio1= ",ratio1
 '''

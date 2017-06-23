@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
-''' Tomado de la página 114 of the article Development of Membrane, Plate and
+''' Taken from page 114 of the article Development of Membrane, Plate and
  Flat Shell Elements in Java '''
-''' El error obtenido es próximo al 15% (muy alto) parece que el elemento funciona mal
-cuando el "aspect ratio" está lejos del cuadrado. '''
+# The obtained error is near 15% (quite high) it can be the aspect ratio
+# of the element.
 
 __author__= "Luis C. Pérez Tato (LCPT)"
 __copyright__= "Copyright 2014, LCPT"
