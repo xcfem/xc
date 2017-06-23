@@ -18,7 +18,7 @@ __email__= "l.pereztato@gmail.com ana.Ortega.Ort@gmail.com"
 import math
 from miscUtils import LogMessages as lmsg
 
-class SoilProp(object):
+class EarthPressureModel(object):
     '''Parameters to define a load of type earth pressure
 
       :ivar K:         coefficient of pressure
@@ -65,7 +65,7 @@ class SoilProp(object):
               if(presElem!=0.0):
                   e.vector2dUniformLoadGlobal(presElem*vDir)
 
-class PeckPressureEnvelope(SoilProp):
+class PeckPressureEnvelope(EarthPressureModel):
     ''' Envelope of apparent lateral pressure diagrams for design 
         of cuts in sand. See 10.2 in the book "Principles of Foundation
         Engineering" from Braja M. Das.
