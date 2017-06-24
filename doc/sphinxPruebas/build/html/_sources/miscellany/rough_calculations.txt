@@ -1,7 +1,0 @@
-Rough calculations
-==================
-
-
-.. toctree::
-
-    roughCalcGenTopics

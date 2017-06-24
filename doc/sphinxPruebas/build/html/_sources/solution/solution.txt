@@ -1,7 +1,0 @@
-Python modules
-==============
-
-.. toctree::
-
-    solGenTopics
-

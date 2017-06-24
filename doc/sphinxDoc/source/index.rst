@@ -17,8 +17,11 @@ Preprocessor
 
    preprocessor/actions.rst 
 
-   preprocessor/code.rst
+.. toctree::
+   :maxdepth: 2
 
+   preprocessor/cpp_classes/preprocessor_index.rst
+   
 
 --------
 Solution
@@ -28,7 +31,7 @@ Solution
    :maxdepth: 1
 
    solution/solution.rst
-
+   solution/cpp_classes/solution_index.rst
 
 -------------
 Postprocessor
@@ -40,6 +43,8 @@ Postprocessor
    postprocessor/xcVtk.rst
    postprocessor/reports.rst
    postprocessor/utils.rst
+   postprocessor/cpp_classes/postprocessor_index.rst
+	      
 
 ----------
 Miscellany
@@ -53,7 +58,8 @@ Miscellany
    miscellany/import_export.rst
 
    miscellany/rough_calculations.rst
-
+	      
+   miscellany/cpp_classes/miscellany_index.rst
 
 Indices and tables
 ==================
