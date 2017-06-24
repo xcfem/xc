@@ -1,7 +1,10 @@
 # -*- coding: utf-8 -*-
-''' Verification test of una sección metálica rectangular de fibras de material elastoplástico.
-   elaborado a partir de «Nociones de cálculo plástico». C. Benito Hernández.
-   página 26 y siguientes. '''
+''' Verification test of a steel rectangular section modelized with fibers with
+elasto-plastic material.
+   written from  «Nociones de cálculo plástico de vigas rectas y 
+   pórticos simples». C. Benito Hernández.
+   ({https://books.google.ch/books?id=v7bbMwEACAAJ})
+   page 26 ff. '''
 
 import xc_base
 import geom

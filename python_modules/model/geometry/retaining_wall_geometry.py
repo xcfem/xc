@@ -83,6 +83,31 @@ class CantileverRetainingWallGeometry(object):
     self.wireframeModelLines['toe']= lines.newLine(self.wireframeModelPoints['stemBottom'].tag,self.wireframeModelPoints['toeEnd'].tag)
     self.wireframeModelLines['heel']= lines.newLine(self.wireframeModelPoints['stemBottom'].tag,self.wireframeModelPoints['heelEnd'].tag)
 
+  def getToePosition(self):
+    ''' Returns the position of the toe (for overturning moment computation).'''
+    return self.getWFToeEndPosition()+geom.Vector2d(0.0,-self.footingThickness/2.0)
+
+  def getFoundationCenterPosition(self):
+    ''' Returns the position of the foundation center (for excentricity
+        computation).'''
+    toeEndPos= self.getWFToeEndPosition()
+    heelEndPos= self.getWFHeelEndPosition()
+    v= (heelEndPos-toeEndPos)*0.5+geom.Vector2d(0.0,-self.footingThickness/2.0)
+    return toeEndPos+v
+
+  def getFootingMidPlane(self):
+    ''' Returns the midplane of the footing.'''
+    toeEndPos= self.getWFToeEndPosition()
+    heelEndPos= self.getWFHeelEndPosition()
+    return geom.Recta2d(toeEndPos,heelEndPos)
+
+  def getFoundationPlane(self):
+    ''' Returns the foundation plane.'''
+    v= geom.Vector2d(0.0,-self.footingThickness/2.0)
+    toeEndPos= self.getWFToeEndPosition()+v
+    heelEndPos= self.getWFHeelEndPosition()+v
+    return geom.Recta2d(toeEndPos,heelEndPos)
+
   def writeGeometry(self,outputFile):
     '''Write wall geometry in LaTeX format.'''
     outputFile.write("\\begin{tabular}{l}\n")

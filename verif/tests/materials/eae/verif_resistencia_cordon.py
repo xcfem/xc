@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
-'''Verificación de la obtención de la resistencia de un cordón de
-soldadura a partir del ejemplo de la página 57 de la monografia
-«Estudio de los diferentes métodos de dimensionamiento para uniones atornilladas y soldadas de acuerdo con la normativa vigente» de Marc Masnou Malgosa.'''
+'''Computation of the strength of a weld bead from the example de la page 57
+of the monographie «Estudio de los diferentes métodos de dimensionamiento para uniones atornilladas y soldadas de acuerdo con la normativa vigente» de Marc 
+Masnou Malgosa.(http://hdl.handle.net/2099.1/6080)'''
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
 __copyright__= "Copyright 2015, LCPT and AOO"

@@ -384,6 +384,8 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
     seedElemLoader.defaultTransformation= transformationName
     seedElem= seedElemLoader.newElement("elastic_beam_2d",xc.ID([0,0]))
     self.wallSet= preprocessor.getSets.defSet("wallSet")
+    self.heelSet= preprocessor.getSets.defSet("heelSet")
+    self.toeSet= preprocessor.getSets.defSet("toeSet")
     self.foundationSet= preprocessor.getSets.defSet("foundationSet")
     for lineName in ['heel','toe']:
       l= self.wireframeModelLines[lineName]
@@ -392,6 +394,10 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
       for e in l.getElements():
         self.foundationSet.getElements.append(e)
         self.wallSet.getElements.append(e)
+        if(lineName=='heel'):
+          self.heelSet.getElements.append(e)
+        else:
+          self.toeSet.getElements.append(e)
     self.foundationSet.fillDownwards()
     
     stemSection= section_properties.RectangularSection(self.name+"StemSection",self.b,(self.stemTopWidth+self.stemBottomWidth)/2.0)
@@ -433,7 +439,35 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
   def createSelfWeightLoads(self,rho= 2500, grav= 9.81):
     '''Create the loads of the concrete weight.'''
     for e in self.wallSet.getElements:
-      selfWeightLoad= grav*2500*e.sectionProperties.A
-      selfWeightLoadVector= xc.Vector([0.0, -selfWeightLoad])
-      e.vector2dUniformLoadGlobal(selfWeightLoadVector)
+      selfWeightLoad= grav*rho*e.sectionProperties.A
+      e.vector2dUniformLoadGlobal(xc.Vector([0.0, -selfWeightLoad]))
+  def createDeadLoad(self,heelFillDepth,toeFillDepth,rho= 2000, grav= 9.81):
+    '''Create the loads of earth self weigth.'''
+    for e in self.heelSet.getElements:
+      heelFillLoad= grav*rho*heelFillDepth
+      e.vector2dUniformLoadGlobal(xc.Vector([0.0, -heelFillLoad]))
+    for e in self.toeSet.getElements:
+      toeFillLoad= grav*rho*toeFillDepth
+      e.vector2dUniformLoadGlobal(xc.Vector([0.0, -toeFillLoad]))
+  def createEarthPressureLoad(self,pressureModel):
+    '''Create the loads of the earth pressure over the stem.'''
+    pressureModel.appendLoadToCurrentLoadPattern(self.stemSet,xc.Vector([-1.0,0.0]),1)
+
+  def getOverturningSafetyFactor(self,R,gammaR):
+    '''Return the factor of safety against overturning.
+
+       :param R: resultant of the loads acting on the retaining wall.
+       :param gammaR: partial resistance reduction factor.
+    '''
+    foundationMidPlane= self.getFootingMidPlane()
+    zml= R.zeroMomentLine(1e-5).getXY2DProjection() #Resultant line of action.
+    p= foundationMidPlane.getIntersectionWithLine(zml)[0] # Intersection with
+                                                          # foundation midplane.
+    foundationCenterPos2D= self.getFoundationCenterPosition()
+    e= p.x-foundationCenterPos2D.x #eccentricity
+    b= self.getFootingWidth()
+    return b/(3*(-e)*gammaR) 
+
     
+  
+

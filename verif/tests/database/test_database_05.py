@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
-''' Tomado de la página 114 of the article Development of Membrane, Plate and
+''' Taken from page 114 of the article Development of Membrane, Plate and
  Flat Shell Elements in Java '''
-''' El error obtenido es próximo al 15% (muy alto) parece que el elemento funciona mal
-cuando el "aspect ratio" está lejos del cuadrado. '''
+# The obtained error is near 15% (quite high) it can be the aspect ratio
+# of the element.
 
 __author__= "Luis C. Pérez Tato (LCPT)"
 __copyright__= "Copyright 2014, LCPT"
@@ -10,7 +10,7 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
-L= 6.0 # Longitud de la viga expresada in inches.
+L= 6.0 # Beam length in inches.
 h= 0.8 # Beam cross-section depth expressed in inches.
 t= 1 # Beam cross-section width expressed in inches.
 E= 30000 # Young modulus of the material expressed in ksi.
