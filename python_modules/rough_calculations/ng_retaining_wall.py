@@ -452,5 +452,22 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
   def createEarthPressureLoad(self,pressureModel):
     '''Create the loads of the earth pressure over the stem.'''
     pressureModel.appendLoadToCurrentLoadPattern(self.stemSet,xc.Vector([-1.0,0.0]),1)
+
+  def getOverturningSafetyFactor(self,R,gammaR):
+    '''Return the factor of safety against overturning.
+
+       :param R: resultant of the loads acting on the retaining wall.
+       :param gammaR: partial resistance reduction factor.
+    '''
+    foundationMidPlane= self.getFootingMidPlane()
+    zml= R.zeroMomentLine(1e-5).getXY2DProjection() #Resultant line of action.
+    p= foundationMidPlane.getIntersectionWithLine(zml)[0] # Intersection with
+                                                          # foundation midplane.
+    foundationCenterPos2D= self.getFoundationCenterPosition()
+    e= p.x-foundationCenterPos2D.x #eccentricity
+    b= self.getFootingWidth()
+    return b/(3*(-e)*gammaR) 
+
+    
   
 
