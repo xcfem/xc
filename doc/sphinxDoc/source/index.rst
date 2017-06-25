@@ -11,17 +11,18 @@ Preprocessor
    :maxdepth: 1
 
 
-   preprocessor/model.rst
+   preprocessor/CAD_model
 
-   preprocessor/materials.rst
+   preprocessor/FE_model
 
-   preprocessor/actions.rst 
+   preprocessor/material
 
-.. toctree::
-   :maxdepth: 2
+   preprocessor/boundary_conditions
 
-   preprocessor/cpp_classes/preprocessor_index.rst
-   
+   preprocessor/actions
+
+   preprocessor/utils
+
 
 --------
 Solution
