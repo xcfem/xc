@@ -91,7 +91,7 @@ Plano3d XC::ShellCrdTransf3dBase::getPlane(void) const
 
 //! @brief Returns point's projection over element's plane.
 Pos3d XC::ShellCrdTransf3dBase::getProj(const Pos3d &p)
-  { return getPlane().Proyeccion(p); }
+  { return getPlane().Projection(p); }
 
 //! @brief Returs a matrix with the axes of the element as matrix rows
 //! [[x1,y1,z1],[x2,y2,z2],...·]
