@@ -26,6 +26,7 @@ from rough_calculations import ng_rebar_def
 from rough_calculations import ng_rc_section
 import os
 from miscUtils import LogMessages as lmsg
+import geom
 import xc
 
 def filterRepeatedValues(yList,mList,vList):
@@ -485,7 +486,7 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
     print 'bReduced= ', bReduced
     return b/(3*(-e)*gammaR)
 
-  def getSlidingSafetyFactor(self,R,gammaR,phi,gammaMPhi,c,gammaMc):
+  def getSlidingSafetyFactor(self,R,gammaR,phik,gammaMPhi,ck,gammaMc):
     '''Return the factor of safety against sliding.
 
         Args:
@@ -502,15 +503,15 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
     print 'alphaAngle= ', alphaAngle
     F= R.getResultante()
     F2D= geom.Vector2d(F.x,F.y)
-    Ftang= foundationPlane.Projection(F2D)
+    Ftang= foundationPlane.getVector2dProj(F2D)
     Fnormal= F2D-Ftang
     #Sliding strength
     e= self.getEccentricity(R) #eccentricity
     b= self.getFootingWidth()
     bReduced= 2*(b/2.0+e)
     print 'bReduced= ', bReduced
-    Rd= Fnormal*math.tan(phik)/gammaMPhi+ck/gammaMc*bReduced/math.cos(alphaAngle)
-    return Rd/Ftang/gammaR   
+    Rd= Fnormal.getModulo()*math.tan(phik)/gammaMPhi+ck/gammaMc*bReduced/math.cos(alphaAngle)
+    return Rd/Ftang.getModulo()/gammaR   
  
 
     
