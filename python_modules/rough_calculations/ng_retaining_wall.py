@@ -458,6 +458,19 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
     '''Return the reactions on the foundation.'''
     return get_reactions.Reactions(self.modelSpace.preprocessor,self.fixedNodes)
 
+  def getEccentricity(self,R):
+    '''Return the eccenctricity of the loads acting on the retaining wall.
+
+        Args:
+       :R: (SVD3d) resultant of the loads acting on the retaining wall.
+    '''
+    foundationPlane= self.getFoundationPlane()
+    zml= R.zeroMomentLine(1e-5).getXY2DProjection() #Resultant line of action.
+    p= foundationPlane.getIntersectionWithLine(zml)[0] # Intersection with
+                                                       # foundation plane.
+    foundationCenterPos2D= self.getFoundationCenterPosition()
+    return p.x-foundationCenterPos2D.x #eccentricity
+
   def getOverturningSafetyFactor(self,R,gammaR):
     '''Return the factor of safety against overturning.
 
@@ -465,32 +478,14 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
        :R: (SVD3d) resultant of the loads acting on the retaining wall.
        :gammaR: (float) partial resistance reduction factor.
     '''
-    foundationPlane= self.getFoundationPlane()
-    zml= R.zeroMomentLine(1e-5).getXY2DProjection() #Resultant line of action.
-    p= foundationPlane.getIntersectionWithLine(zml)[0] # Intersection with
-                                                       # foundation plane.
-    foundationCenterPos2D= self.getFoundationCenterPosition()
-    e= p.x-foundationCenterPos2D.x #eccentricity
+    e= self.getEccentricity(R) #eccentricity
+    print 'e= ', e
     b= self.getFootingWidth()
+    bReduced= 2*(b/2.0+e)
+    print 'bReduced= ', bReduced
     return b/(3*(-e)*gammaR)
 
-  def getReducedFootingWidth(self,reactions):
-    '''Return the reduced width of the foundation (the width of the compressed zone)
-
-        Args:
-            :reactions: (Reactions) reactions at the foundation.
-    '''
-    retval= self.getFootingWidth()
-    orderedSupports= dict()
-    for n in self.fixedNodes:
-      orderedSupports[n.getInitialPos3d.x]= n.tag
-    for key in sorted(orderedSupports):
-      tag= orderedSupports[key]
-      ry= reactions.forces[tag].y
-      print 'x= ', key, ' tag= ', tag, " ry: ", ry
-    return retval
-    
-  def getSlidingSafetyFactor(self,R,gammaR,phi,gammaMPhi,c,gammaMc,bReduced):
+  def getSlidingSafetyFactor(self,R,gammaR,phi,gammaMPhi,c,gammaMc):
     '''Return the factor of safety against sliding.
 
         Args:
@@ -503,13 +498,17 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
             :bReduced: (float) reduced footing width.
     '''
     foundationPlane= self.getFoundationPlane()
-    alphaAngle= math.atan(foundationPlane.getPendiente())
+    alphaAngle= math.atan(foundationPlane.getSlope())
     print 'alphaAngle= ', alphaAngle
-    F= R.getResultant()
+    F= R.getResultante()
     F2D= geom.Vector2d(F.x,F.y)
     Ftang= foundationPlane.Projection(F2D)
     Fnormal= F2D-Ftang
     #Sliding strength
+    e= self.getEccentricity(R) #eccentricity
+    b= self.getFootingWidth()
+    bReduced= 2*(b/2.0+e)
+    print 'bReduced= ', bReduced
     Rd= Fnormal*math.tan(phik)/gammaMPhi+ck/gammaMc*bReduced/math.cos(alphaAngle)
     return Rd/Ftang/gammaR   
  

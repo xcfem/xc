@@ -628,9 +628,8 @@ def cpDosAguasZonaIVLong(A, alpha):
 #***********************************************************************
 '''
 Coeficientes de presión exterior para una cubierta plana
-según la tabla D.4 del CTE. En esta norma se consideran
-cubiertas planas aquéllas que tienen una pendiente inferior
-al cinco por ciento.
+según la tabla D.4 del CTE. In this norm cover decks are
+considered flat when the slope is less than five per cent.
 '''
 #***********************************************************************
 
@@ -897,8 +896,8 @@ def cpPlanaZonaIVLong(A, hp, h):
 
 
 '''
-Presión exterior hacia abajo en zona A de marquesina a 1 agua 
-en función de la pendiente según la tabla D.10.
+Down external pressure in the A zone of a shed marquee
+as a function of the slope according to table tabla D.10.
 '''
 
 x= []
@@ -913,9 +912,9 @@ x.append(math.radians(30)); y.append(2.2)
 cpMarq1AguaAbajoZonaA= scipy.interpolate.interp1d(x,y)
 
 '''
-Presión exterior hacia arriba en zona A de marquesina a 1 agua
-con factor de obstrucción nulo en función de la pendiente
-según la tabla D.10.
+Up external pressure in the A zone of a shed marquee
+with zero obstruction factor as a function of the slope 
+according to table tabla D.10.
 '''
 
 x= []
@@ -930,9 +929,9 @@ x.append(math.radians(30)); y.append(-3.0)
 cpMarq1AguaArribaZonaAFi0= scipy.interpolate.interp1d(x,y)
 
 '''
-Presión exterior hacia arriba en zona A de marquesina a 1 agua
-con factor de obstrucción 1 en función de la pendiente
-según la tabla D.10.
+Up external pressure in the A zone of a shed marquee
+with obstruction factor equal 1 as a function of the slope 
+according to table tabla D.10.
 '''
 
 x= []
@@ -947,9 +946,9 @@ x.append(math.radians(30)); y.append(-1.5)
 cpMarq1AguaArribaZonaAFi1= scipy.interpolate.interp1d(x,y)
 
 '''
-Presión exterior hacia arriba en zona A de marquesina a 1 agua
-con factor de obstrucción cualquiera en función de la pendiente
-según la tabla D.10.
+Up external pressure in the A zone of a shed marquee
+as a function of the slope for any value of the obstruction
+factor according to table tabla D.10.
 '''
 def cpMarq1AguaArribaZonaA(alpha, fi):
     v0= cpMarq1AguaArribaZonaAFi0(alpha)

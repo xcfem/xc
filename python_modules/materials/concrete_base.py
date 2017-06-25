@@ -850,7 +850,7 @@ class PrestressingSteel(matWDKD.MaterialWithDKDiagrams):
     self.fmax= fmax
     self.alpha= alpha
     self.Es= 190e9 # Elastic modulus.
-    self.bsh= 0.001 # Relación entre pendientes (rama cedencia/rama elástica)
+    self.bsh= 0.001 # slope ration (yield branch/elastic branch)
     self.steelRelaxationClass= steelRelaxationClass
     self.tendonClass= tendonClass
   def getKRelaxation(self):

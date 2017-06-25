@@ -181,7 +181,7 @@ Pos2d XC::DeformationPlane::getPointOnTensionedHalfPlane(void) const
     if(exists && (a>mchne_eps_dbl)) //Neutral axis exists.
       {
         const Pos2d p0(fn.Punto());
-        //const Vector2d v(RectaMaximaPendienteYZ().YZ2DProjection().VDir());
+        //const Vector2d v(getMaximumSlopeLineYZ().YZ2DProjection().VDir());
         const Vector2d v= fn.VDir().Normal();
         retval= p0+1000*v;
         if(Strain(retval)<0) //Lado compresiones.
@@ -202,7 +202,7 @@ Pos2d XC::DeformationPlane::getPointOnCompressedHalfPlane(void) const
     if(exists && (a>mchne_eps_dbl)) //Neutral axis exists.
       {
         const Pos2d p0(fn.Punto());
-        //const Vector2d v(RectaMaximaPendienteYZ().YZ2DProjection().VDir());
+        //const Vector2d v(getMaximumSlopeLineYZ().YZ2DProjection().VDir());
         const Vector2d v= fn.VDir().Normal();
         retval= p0+1000*v;
         if(Strain(retval)>0) //Tensioned side.

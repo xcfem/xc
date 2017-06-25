@@ -170,11 +170,12 @@ const XC::Vector &XC::ConvergenceTest::getX(void) const
 double XC::ConvergenceTest::getNormX(void) const
   { return getLinearSOEPtr()->getX().pNorm(nType); }
 
-//! @brief Returns the vector de términos independientes.
+//! @brief Return the vector at the right hand side of the equation.
 const XC::Vector &XC::ConvergenceTest::getB(void) const
   { return getLinearSOEPtr()->getB(); }
 
-//! @brief Return the norma del vector de términos independientes.
+//! @brief Return the norm of the vector at the right hand side of
+//! the equation.
 double XC::ConvergenceTest::getNormB(void) const
  { return getLinearSOEPtr()->getB().pNorm(nType); }
 
