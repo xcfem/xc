@@ -23,10 +23,21 @@ from postprocess.reports import common_formats as fmt
 #
 #
 class CantileverRetainingWallGeometry(object):
-  '''Geometry of a cantilever retaining wall.'''
+  '''Geometry of a cantilever retaining wall.
+
+    Attributes:
+        :ivar name: (string) Identifier.
+        :ivar stemHeight: (float) Height of the stem.
+        :ivar stemBottomWidth: (float) Stem width at his contact with the footing.
+        :ivar stemTopWidth: (float) Stem width at his top.
+        :ivar footingThickness: (float) Thickness of the footing.
+        :ivar bToe: (float) Toe length.
+        :ivar bHeel: (float) Heel length.
+  '''
 
   def __init__(self,name= 'prb',stemBottomWidth=0.25,stemTopWidth=0.25,footingThickness= 0.25):
-    '''Constructor '''
+    '''Constructor 
+    '''
     self.name= name
     self.stemBottomWidth= stemBottomWidth
     self.stemTopWidth= stemTopWidth
