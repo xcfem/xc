@@ -12,6 +12,7 @@ __email__= "l.pereztato@gmail.com"
 import sys
 from postprocess.reports import common_formats as fmt
 from postprocess.reports import draw_schema_armature_mur as draw_schema
+from postprocess import get_reactions
 import math
 import scipy.interpolate
 import matplotlib
@@ -453,6 +454,10 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
     '''Create the loads of the earth pressure over the stem.'''
     pressureModel.appendLoadToCurrentLoadPattern(self.stemSet,xc.Vector([-1.0,0.0]),1)
 
+  def getReactions(self):
+    '''Return the reactions on the foundation.'''
+    return get_reactions.Reactions(self.modelSpace.preprocessor,self.fixedNodes)
+
   def getOverturningSafetyFactor(self,R,gammaR):
     '''Return the factor of safety against overturning.
 
@@ -467,9 +472,25 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
     foundationCenterPos2D= self.getFoundationCenterPosition()
     e= p.x-foundationCenterPos2D.x #eccentricity
     b= self.getFootingWidth()
-    return b/(3*(-e)*gammaR) 
+    return b/(3*(-e)*gammaR)
 
-  def getSlidingSafetyFactor(self,R,phi,gammaMPhi,c,gammaMc):
+  def getReducedFootingWidth(self,reactions):
+    '''Return the reduced width of the foundation (the width of the compressed zone)
+
+        Args:
+            :reactions: (Reactions) reactions at the foundation.
+    '''
+    retval= self.getFootingWidth()
+    orderedSupports= dict()
+    for n in self.fixedNodes:
+      orderedSupports[n.getInitialPos3d.x]= n.tag
+    for key in sorted(orderedSupports):
+      tag= orderedSupports[key]
+      ry= reactions.forces[tag].y
+      print 'x= ', key, ' tag= ', tag, " ry: ", ry
+    return retval
+    
+  def getSlidingSafetyFactor(self,R,gammaR,phi,gammaMPhi,c,gammaMc,bReduced):
     '''Return the factor of safety against sliding.
 
         Args:
@@ -478,7 +499,8 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
             :phik: (float) characteristic value of internal friction angle of the soil.
             :gammaMPhi: partial reduction factor for internal friction angle of the soil.
             :ck: (float) characteristic value of soil cohesion.
-            :gammaMc: partial reduction factor for soil cohesion.
+            :gammaMc: (float) partial reduction factor for soil cohesion.
+            :bReduced: (float) reduced footing width.
     '''
     foundationPlane= self.getFoundationPlane()
     alphaAngle= math.atan(foundationPlane.getPendiente())
@@ -488,15 +510,9 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
     Ftang= foundationPlane.Projection(F2D)
     Fnormal= F2D-Ftang
     #Sliding strength
-    b= self.getReducedFootingWidth()
-    Rd= Fnormal*math.tan(phik)/gammaMPhi+ck/gammaMc*b/math.cos(alphaAngle)
-    return Rd/Ftang/   
-    zml= R.zeroMomentLine(1e-5).getXY2DProjection() #Resultant line of action.
-    p= foundationPlane.getIntersectionWithLine(zml)[0] # Intersection with
-                                                       # foundation plane.
-    foundationCenterPos2D= self.getFoundationCenterPosition()
-    e= p.x-foundationCenterPos2D.x #eccentricity
-    return b/(3*(-e)*gammaR) 
+    Rd= Fnormal*math.tan(phik)/gammaMPhi+ck/gammaMc*bReduced/math.cos(alphaAngle)
+    return Rd/Ftang/gammaR   
+ 
 
     
   
