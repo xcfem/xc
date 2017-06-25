@@ -118,6 +118,13 @@ class CantileverRetainingWallGeometry(object):
     toeEndPos= self.getWFToeEndPosition()+v
     heelEndPos= self.getWFHeelEndPosition()+v
     return geom.Recta2d(toeEndPos,heelEndPos)
+  
+  def getFoundationDepth(self,toeFillDepth):
+    '''Return wall foundation depth.
+        Args:
+            :toeFillDepth: (float) depht of the soil filling overt the toe.
+    '''
+    return toeFillDepth+self.footingThickness
 
   def writeGeometry(self,outputFile):
     '''Write wall geometry in LaTeX format.'''

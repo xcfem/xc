@@ -472,6 +472,15 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
     foundationCenterPos2D= self.getFoundationCenterPosition()
     return p.x-foundationCenterPos2D.x #eccentricity
 
+  def getFoundationRotation(self):
+    '''Returns the rotation of the foundation.'''
+    n0= self.wireframeModelPoints['toeEnd'].getNode()
+    n1= self.wireframeModelPoints['heelEnd'].getNode()
+    b= self.getFootingWidth()
+    delta= n1.getDisp[1]-n0.getDisp[1]
+    return math.atan(delta/b)
+    
+    
   def getOverturningSafetyFactor(self,R,gammaR):
     '''Return the factor of safety against overturning.
 
@@ -480,27 +489,22 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
        :gammaR: (float) partial resistance reduction factor.
     '''
     e= self.getEccentricity(R) #eccentricity
-    print 'e= ', e
     b= self.getFootingWidth()
     bReduced= 2*(b/2.0+e)
-    print 'bReduced= ', bReduced
     return b/(3*(-e)*gammaR)
 
-  def getSlidingSafetyFactor(self,R,gammaR,phik,gammaMPhi,ck,gammaMc):
+  def getSlidingSafetyFactor(self,R,gammaR,foundationSoilModel):
     '''Return the factor of safety against sliding.
 
         Args:
             :R: (SVD3d) resultant of the loads acting on the retaining wall.
             :gammaR: partial resistance reduction factor.
-            :phik: (float) characteristic value of internal friction angle of the soil.
-            :gammaMPhi: partial reduction factor for internal friction angle of the soil.
-            :ck: (float) characteristic value of soil cohesion.
+            :foundationSoilModel: (FrictionalCohesionalSoil) soil model.
+            :gammaMPhi: (float) partial reduction factor for internal friction angle of the soil.
             :gammaMc: (float) partial reduction factor for soil cohesion.
-            :bReduced: (float) reduced footing width.
     '''
     foundationPlane= self.getFoundationPlane()
     alphaAngle= math.atan(foundationPlane.getSlope())
-    print 'alphaAngle= ', alphaAngle
     F= R.getResultante()
     F2D= geom.Vector2d(F.x,F.y)
     Ftang= foundationPlane.getVector2dProj(F2D)
@@ -509,11 +513,27 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
     e= self.getEccentricity(R) #eccentricity
     b= self.getFootingWidth()
     bReduced= 2*(b/2.0+e)
-    print 'bReduced= ', bReduced
-    Rd= Fnormal.getModulo()*math.tan(phik)/gammaMPhi+ck/gammaMc*bReduced/math.cos(alphaAngle)
+    Rd= Fnormal.getModulo()*math.tan(foundationSoilModel.getDesignPhi())+foundationSoilModel.getDesignC()*bReduced/math.cos(alphaAngle)
     return Rd/Ftang.getModulo()/gammaR   
- 
 
-    
+  def getBearingPressureSafetyFactor(self,R,foundationSoilModel,toeFillDepth,q= 0.0):
+    ''' Return the factor of safety against bearing capacity of the soil.
+
+        Args:
+            :toeFillDepth: (float) depht of the soil filling over the toe.
+            :q: (float) uniform load over the filling.
+    '''
+    D= self.getFoundationDepth(toeFillDepth)
+    Beff= self.b
+    e= self.getEccentricity(R) #eccentricity
+    b= self.getFootingWidth()
+    bReduced= 2*(b/2.0+e)
+    F= R.getResultante()
+    qu= foundationSoilModel.qu(q,D,self.b,bReduced,F.y,0.0,F.x)
+    sigma= F.y/bReduced
+    print 'qu= ', qu
+    print 'sigma= ', sigma
+    return qu/sigma
+  
   
 
