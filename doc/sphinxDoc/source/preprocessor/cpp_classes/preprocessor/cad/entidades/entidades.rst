@@ -1,5 +1,6 @@
-Entities
-;;;;;;;;
+C++ API entities
+;;;;;;;;;;;;;;;;
+
 .. module:: xc
 	    
 .. autoclass:: EntMdlr

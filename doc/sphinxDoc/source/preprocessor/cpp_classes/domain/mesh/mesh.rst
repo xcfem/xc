@@ -1,5 +1,5 @@
-Mesh
-,,,,
+Mesh management
+,,,,,,,,,,,,,,,
 
 .. module:: xc
 	    

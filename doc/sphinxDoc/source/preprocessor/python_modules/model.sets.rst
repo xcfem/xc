@@ -1,6 +1,3 @@
-Sets
-====
-
 
 Sets manager
 ------------

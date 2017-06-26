@@ -1,10 +1,8 @@
-C++ API
-===========
-
-
---------
 Analysis
---------
+========
+
+General topics
+--------------
 .. toctree::
 
    analysis/analysis.rst
@@ -53,13 +51,4 @@ Convergence test
 
    analysis/convergenceTest/convergenceTest.rst
    
-
--------------------
-System of equations
--------------------
-.. toctree::
-
-   system_of_eqn/system_of_eqn.rst
-   system_of_eqn/eigenSOE/eigenSOE.rst
-   system_of_eqn/linearSOE/linearSOE.rst
 

@@ -1,6 +1,3 @@
-Boundary conditions
-===================
-
 
 Elastic foundation
 ------------------

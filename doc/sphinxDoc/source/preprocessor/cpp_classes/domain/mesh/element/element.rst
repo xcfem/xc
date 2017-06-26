@@ -1,5 +1,5 @@
-Element
-;;;;;;;
+General topics
+;;;;;;;;;;;;;;
 
 
 .. module:: xc

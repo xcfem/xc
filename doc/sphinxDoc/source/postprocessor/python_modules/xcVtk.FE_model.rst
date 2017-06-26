@@ -1,6 +1,3 @@
-Vtk - finite element mesh
-=========================
-
 
 Fields
 ------

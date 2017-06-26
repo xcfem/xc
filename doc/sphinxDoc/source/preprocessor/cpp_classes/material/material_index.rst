@@ -1,5 +1,3 @@
-Material
-=========
 
 ----------------------
 Uniaxial material

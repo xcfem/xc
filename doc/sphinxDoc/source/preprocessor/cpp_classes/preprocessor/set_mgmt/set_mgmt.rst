@@ -1,4 +1,4 @@
-Set manager
+Base set
 ;;;;;;;;;;;
 
 .. module:: xc

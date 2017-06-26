@@ -1,15 +1,32 @@
 Material
 ========
 
-
-Fiber sections
+General topics
 ++++++++++++++
 .. toctree::
+   :maxdepth: 1
+
+   python_modules/matGenTopics
+
+Base material
+++++++++++++++
+.. toctree::
+   :maxdepth: 1
+
+   cpp_classes/material/material_index.rst
+
+Fiber section
+++++++++++++++
+.. toctree::
+   :maxdepth: 1
+
    python_modules/materials.fiber_section
 
 Reinforced and prestressed concrete
 ++++++++++++++++++++++++++++++++++++
 .. toctree::
+   :maxdepth: 1
+
    python_modules/materials.aci
    python_modules/materials.ceb
    python_modules/materials.ec2
@@ -20,6 +37,8 @@ Reinforced and prestressed concrete
 Steel
 +++++
 .. toctree::
+   :maxdepth: 1
+
    python_modules/materials.astm
    python_modules/materials.ec3
    python_modules/materials.eae
@@ -31,15 +50,9 @@ Steel
 Timber
 ++++++
 .. toctree::
+   :maxdepth: 1
+
    python_modules/materials.ec5
 
-General topics
-++++++++++++++
-.. toctree::
-   python_modules/matGenTopics
 
-C++ API
-+++++++
-.. toctree::
-   cpp_classes/material/material_index.rst
 
