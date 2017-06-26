@@ -1,5 +1,3 @@
-vtk - CAD model
-===============
 
 
 vtk_CAD_graphic

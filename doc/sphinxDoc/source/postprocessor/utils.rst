@@ -1,7 +1,5 @@
 Utils
 =====
-
 .. toctree::
-    postprGenTopics
-    postprocess.quick_inquiry
-
+   python_modules/utils
+   cpp_classes/post_process

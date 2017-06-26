@@ -1,7 +1,6 @@
 General topics
 ==============
 
-
 callback_controls
 -----------------
 

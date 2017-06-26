@@ -3,6 +3,7 @@
 Welcome to XC's documentation!
 ==============================
 
+
 ------------
 Preprocessor
 ------------
@@ -11,17 +12,18 @@ Preprocessor
    :maxdepth: 1
 
 
-   preprocessor/model.rst
+   preprocessor/CAD_model
 
-   preprocessor/materials.rst
+   preprocessor/FE_model
 
-   preprocessor/actions.rst 
+   preprocessor/material
 
-.. toctree::
-   :maxdepth: 2
+   preprocessor/boundary_conditions
 
-   preprocessor/cpp_classes/preprocessor_index.rst
-   
+   preprocessor/actions
+
+   preprocessor/utils
+
 
 --------
 Solution
@@ -30,8 +32,10 @@ Solution
 .. toctree::
    :maxdepth: 1
 
-   solution/solution.rst
-   solution/cpp_classes/solution_index.rst
+   solution/python_modules/predef_sol
+   solution/cpp_classes/analysis
+   solution/cpp_classes/system_equations
+   solution/python_modules/utils
 
 -------------
 Postprocessor
@@ -39,11 +43,12 @@ Postprocessor
 .. toctree::
    :maxdepth: 1
 
-   postprocessor/
-   postprocessor/xcVtk.rst
-   postprocessor/reports.rst
-   postprocessor/utils.rst
-   postprocessor/cpp_classes/postprocessor_index.rst
+   postprocessor/python_modules/postprGenTopics
+   postprocessor/python_modules/xcVtk
+   postprocessor/python_modules/reports
+   postprocessor/utils
+
+	      
 	      
 
 ----------
@@ -52,13 +57,10 @@ Miscellany
 
 .. toctree::
    :maxdepth: 1
-
-   miscellany/misc.rst
-
+	   
    miscellany/import_export.rst
-
    miscellany/rough_calculations.rst
-	      
+   miscellany/misc.rst
    miscellany/cpp_classes/miscellany_index.rst
 
 Indices and tables

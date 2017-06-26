@@ -25,6 +25,11 @@ sys.path.insert(0,os.path.abspath(pth_python))
 pth_cpplib= '../../lib'
 sys.path.insert(0,os.path.abspath(pth_cpplib))
 
+import xc_base
+import geom
+import xc
+
+
 #boost.python stuff
 #Copied from: http://bazaar.launchpad.net/~eudoxos/minieigen/trunk/view/head:/doc/source/conf.py
 def isBoostFunc(what,obj):

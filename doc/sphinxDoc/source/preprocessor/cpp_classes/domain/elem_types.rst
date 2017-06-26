@@ -1,37 +1,23 @@
-Domain
-======
---------------
-General topics
---------------
-.. toctree::
-   
-   domain/domain.rst
-
-----
-Mesh
-----
-.. toctree::
-   
-   mesh/mesh.rst
 
 
-Elements
---------
+Element types
+-------------
 .. toctree::
+   :maxdepth: 1
    
    mesh/element/element.rst
 
-Friction elements
-,,,,,,,,,,,,,,,,,
+Zero-length elements
+,,,,,,,,,,,,,,,,,,,,
 .. toctree::
+   :maxdepth: 1
    
-   mesh/element/special/frictionBearing/frictionModel/frictionModel.rst
+   mesh/element/zeroLength/zeroLength.rst
 
-   mesh/element/special/frictionBearing/frictionBearing.rst
-
-Trussm beam and column elements
+Truss, beam and column elements
 ,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
 .. toctree::
+   :maxdepth: 1
    
    mesh/element/truss_beam_column/truss_beam_column.rst
 
@@ -48,6 +34,7 @@ Trussm beam and column elements
 Plane elements
 ,,,,,,,,,,,,,,,
 .. toctree::
+   :maxdepth: 1
    
    mesh/element/plane/plane.rst
 
@@ -61,21 +48,20 @@ Plane elements
 
    mesh/element/utils/coordTransformation/coordTransformation.rst
 
-Utils
-,,,,,
+Friction elements
+,,,,,,,,,,,,,,,,,
 .. toctree::
+   :maxdepth: 1
    
-   mesh/element/utils/fvectors/fvectors.rst
+   mesh/element/special/frictionBearing/frictionModel/frictionModel.rst
 
-Zero-length elements
-,,,,,,,,,,,,,,,,,,,,
-.. toctree::
-   
-   mesh/element/zeroLength/zeroLength.rst
+   mesh/element/special/frictionBearing/frictionBearing.rst
+
 
 Volumen elements
 ,,,,,,,,,,,,,,,,
 .. toctree::
+   :maxdepth: 1
    
    mesh/element/volumen/volumen.rst
 
@@ -93,46 +79,13 @@ Volumen elements
 
    mesh/element/volumen/27nbrick/27nbrick.rst
 
-
-------
-Loads
-------
+Utils
+,,,,,
 .. toctree::
+   :maxdepth: 1
    
-   load/load.rst
+   mesh/element/utils/fvectors/fvectors.rst
 
-   load/plane/plane.rst
 
-   load/beam_loads/beam_loads.rst
-
-   load/volumen/volumen.rst
-
-   load/groundMotion/groundMotion.rst
-
-Pattern
---------
-.. toctree::
-   
-   load/pattern/pattern.rst
-
-   load/pattern/load_patterns/load_patterns.rst
-
-   load/pattern/time_series/time_series.rst
-
-   load/pattern/time_series_integrator/time_series_integrator.rst
-
------------
-Constraints
------------
-.. toctree::
-   
-   constraints/constraints.rst
-   
------------
-Component
------------
-.. toctree::
-   
-   component/component.rst
-
+  
 

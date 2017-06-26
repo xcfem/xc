@@ -1,5 +1,5 @@
-Postprocess
-,,,,,,,,,,,
+C++ API
+,,,,,,,
 
 .. module:: xc
 	    
