@@ -451,8 +451,11 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
     for e in self.toeSet.getElements:
       toeFillLoad= grav*rho*toeFillDepth
       e.vector2dUniformLoadGlobal(xc.Vector([0.0, -toeFillLoad]))
-  def createEarthPressureLoad(self,pressureModel):
-    '''Create the loads of the earth pressure over the stem.'''
+  def createEarthPressureLoadOnStem(self,pressureModel):
+    '''Create the loads of the earth pressure over the stem.
+        Args:
+       :pressureModel: (obj) earth pressure model.
+    '''
     pressureModel.appendLoadToCurrentLoadPattern(self.stemSet,xc.Vector([-1.0,0.0]),1)
 
   def getReactions(self):

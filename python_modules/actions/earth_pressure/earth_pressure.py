@@ -118,18 +118,52 @@ class StripLoadOnBackfill(object):
             ret_press=self.coef*self.qLoad/math.pi*(beta-math.sin(beta)*math.cos(2*omega))
         return ret_press
 
-    def appendLoadToCurrentLoadPattern(self,xcSet,vDir):
+    def appendLoadToCurrentLoadPattern(self,xcSet,vDir,iCoo= 2):
         '''Append to the current load pattern the earth thrust on a set of 
         elements due to the strip load.
 
         :param xcSet: set that contains the elements (shells and/or beams)
         :param vDir: unit xc vector defining pressures direction
         '''
+        methodToCall= None
+        if(len(vDir)==3): #3D load.
+            methodToCall= vector3dUniformLoadGlobal
+        else: #2D load.
+            methodToCall= vector2dUniformLoadGlobal
         for e in xcSet.getElements:
-            presElem=self.getPressure(e.getCooCentroid(False)[2])
+            presElem=self.getPressure(e.getCooCentroid(False)[iCoo])
             if (presElem!=0.0):
-                e.vector3dUniformLoadGlobal(presElem*vDir)
- 
+                e.methodToCall(presElem*vDir)
+
+    def appendVerticalLoadToCurrentLoadPattern(self,xcSet,vDir,iXCoo= 0,iZCoo= 2,alph= math.radians(30)):
+        '''Append to the current load pattern the vertical pressures on 
+           a set of elements due to the strip load. According to
+           11.3.4 in the book "Mecánica de suelos" of Llano, J.J.S.
+           isbn= 9788471461650 (https://books.google.ch/books?id=oQFZRKlix\_EC)
+
+        :param xcSet: set that contains the elements.
+        :param vDir: unit xc vector defining pressures direction
+        :param alph: angle of stress spreading.
+        '''
+        tanAlph= math.tan(alph)
+        avgZCoo= 0.0
+        lenght= 0.0
+        for e in xcSet.getElements:
+            z= e.getCooCentroid(False)[iZCoo]
+            l= e.getLineSegment(False).getLongitud()
+            avgZCoo+=z*l
+            length+= l
+        avgZCoo/= length
+        print 'avgZCoo= ', avgZCoo
+        xMin= self.distWall-self.stripWidth-(avgZCoo-zLoad)*tanAlph
+        xMax= self.distWall+self.stripWidth+(avgZCoo-zLoad)*tanAlph
+        L= xMax-xMin
+        sigma_v= qLoad*self.stripWidth/L
+        print 'sigma_v= ', sigma_v
+        for e in xcSet.getElements:
+            if (presElem!=0.0):
+                e.vector3dUniformLoadGlobal(sigma_v*vDir)
+
 
 class LineVerticalLoadOnBackfill(object):
     '''Lateral earth pressure on a retaining wall due to line surcharge 
@@ -155,7 +189,7 @@ class LineVerticalLoadOnBackfill(object):
             ret_press=self.qLoad/math.pi/difZ*(math.sin(2*omega))**2
         return ret_press
 
-    def appendLoadToCurrentLoadPattern(self,xcSet,vDir):
+    def appendLoadToCurrentLoadPattern(self,xcSet,vDir,iCoo= 2):
         '''Append to the current load pattern the earth thrust on a set of 
         elements due to the line load.
 
@@ -163,7 +197,7 @@ class LineVerticalLoadOnBackfill(object):
         :param vDir: unit xc vector defining pressures direction
         '''
         for e in xcSet.getElements:
-            presElem=self.getPressure(e.getCooCentroid(False)[2])
+            presElem=self.getPressure(e.getCooCentroid(False)[iCoo])
             if (presElem!=0.0):
                 e.vector3dUniformLoadGlobal(presElem*vDir)
 
@@ -216,7 +250,7 @@ class HorizontalLoadOnBackfill(object):
             ret_press=self.presmax/(self.zpresmax-self.zpresmin)*(z-self.zpresmin)
         return ret_press
 
-    def appendLoadToCurrentLoadPattern(self,xcSet,vDir):
+    def appendLoadToCurrentLoadPattern(self,xcSet,vDir,iCoo= 2):
         '''Append to the current load pattern the earth thrust on a set of 
         elements due to the horizontal load.
 
@@ -225,7 +259,7 @@ class HorizontalLoadOnBackfill(object):
         '''
         self.setup()
         for e in xcSet.getElements:
-            presElem=self.getPressure(e.getCooCentroid(False)[2])
+            presElem=self.getPressure(e.getCooCentroid(False)[iCoo])
             if (presElem!=0.0):
                 e.vector3dUniformLoadGlobal(presElem*vDir)
 
