@@ -453,11 +453,48 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
       e.vector2dUniformLoadGlobal(xc.Vector([0.0, -toeFillLoad]))
   def createEarthPressureLoadOnStem(self,pressureModel):
     '''Create the loads of the earth pressure over the stem.
+
         Args:
        :pressureModel: (obj) earth pressure model.
     '''
     pressureModel.appendLoadToCurrentLoadPattern(self.stemSet,xc.Vector([-1.0,0.0]),1)
+  def createVerticalLoadOnHeel(self,loadOnBackFill):
+    '''Create the loads over the heel dues to a load acting on the backfill.
 
+        Args:
+       :loadOnBackFill: (obj) load acting on the backfill.
+    '''
+    loadOnBackFill.appendVerticalLoadToCurrentLoadPattern(self.heelSet,xc.Vector([0.0,-1.0]),0,1)
+  def createPressuresFromLoadOnBackFill(self, loadOnBackFill):
+    '''Create the pressures on the stem and on the heel dues to 
+       a load acting on the backfill.
+
+        Args:
+       :loadOnBackFill: (obj) load acting on the backfill.
+    '''
+    self.createEarthPressureLoadOnStem(loadOnBackFill)
+    self.createVerticalLoadOnHeel(loadOnBackFill)
+  def createLoadOnTopOfStem(self,loadVector):
+    '''Create a loac acting on the node at the top of the stem.
+        Args:
+       :loadVector: (vector) vector defining the load.
+    '''
+    n= self.wireframeModelPoints['stemTop'].getNode()
+    n.newLoad(loadVector)
+  def getMononobeOkabeDryOverpressure(self,backFillModel,kv,kh,delta_ad= 0,beta= 0, Kas= None, g= 9.81):
+    ''' Return overpressure due to seismic action according to Mononobe-Okabe
+
+      Args:
+      :backFillModel: back fill terrain model
+      :kv: seismic coefficient of vertical acceleration.
+      :kh: seismic coefficient of horizontal acceleration.
+      :delta_ad: angle of friction soil - structure.
+      :beta: slope inclination of backfill.
+    '''
+    H= self.getTotalHeight()
+    psi= math.radians(90) #back face inclination of the structure (< PI/2)
+    return backFillModel.getMononobeOkabeDryOverpressure(H, kv, kh, psi, delta_ad, beta, Kas,g)/H
+    
   def getReactions(self):
     '''Return the reactions on the foundation.'''
     return get_reactions.Reactions(self.modelSpace.preprocessor,self.fixedNodes)

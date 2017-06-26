@@ -53,6 +53,10 @@ class CantileverRetainingWallGeometry(object):
     self.bToe= totalHeight/8.0
     self.bHeel= bFooting-self.bToe-self.stemBottomWidth
 
+  def getTotalHeight(self):
+    '''Return total height of the wall.'''
+    return self.stemHeight+self.footingThickness
+    
   def getFootingWidth(self):
     '''Return total width of the footing.'''
     return self.bToe+self.stemBottomWidth+self.bHeel
