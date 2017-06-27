@@ -85,12 +85,43 @@ class PeckPressureEnvelope(EarthPressureModel):
             if(z<self.zWater):
               lmsg.error('pressures under water table not implemented.''')
         return ret_press
+
+class UniformLoadOnStem(object):
+    '''Uniform lateral earth pressure on a retaining wall.
+
+    :ivar qLoad: surcharge load (force per unit area)
+    '''
+    def __init__(self,qLoad):
+        self.qLoad=qLoad
         
-class StripLoadOnBackfill(object):
+    def getPressure(self,z):
+        '''Return the earth pressure acting on the points at global coordinate z
+        '''
+        return self.qLoad
+
+    def appendLoadToCurrentLoadPattern(self,xcSet,vDir,iCoo= 2):
+        '''Append to the current load pattern the earth thrust on a set of 
+        elements due to the strip load.
+
+        :param xcSet: set that contains the elements (shells and/or beams)
+        :param vDir: unit xc vector defining pressures direction
+        '''
+        methodToCall= None
+        if(len(vDir)==3): #3D load.
+          for e in xcSet.getElements:
+              presElem=self.getPressure(e.getCooCentroid(False)[iCoo])
+              if (presElem!=0.0):
+                  e.vector3dUniformLoadGlobal(presElem*vDir)
+        else: #2D load.
+          for e in xcSet.getElements:
+              presElem=self.getPressure(e.getCooCentroid(False)[iCoo])
+              if (presElem!=0.0):
+                  e.vector2dUniformLoadGlobal(presElem*vDir)
+        
+class StripLoadOnBackfill(UniformLoadOnStem):
     '''Lateral earth pressure on a retaining wall due to a strip surcharge 
     load on the backfill. (J.Calavera, pg.40)
 
-    :ivar qLoad: surcharge load (force per unit area)
     :ivar zLoad: global Z coordinate where the surcharge load acts
     :ivar distWall: minimal horizontal distance between the wall and the 
                     surcharge load
@@ -99,7 +130,7 @@ class StripLoadOnBackfill(object):
                 walls. It can be redefined =2 for rigid walls
     '''
     def __init__(self,qLoad, zLoad,distWall, stripWidth):
-        self.qLoad=qLoad
+        super(StripLoadOnBackfill,self).__init__(qLoad)
         self.zLoad=zLoad
         self.distWall=abs(distWall)
         self.stripWidth=stripWidth
@@ -118,23 +149,6 @@ class StripLoadOnBackfill(object):
             ret_press=self.coef*self.qLoad/math.pi*(beta-math.sin(beta)*math.cos(2*omega))
         return ret_press
 
-    def appendLoadToCurrentLoadPattern(self,xcSet,vDir,iCoo= 2):
-        '''Append to the current load pattern the earth thrust on a set of 
-        elements due to the strip load.
-
-        :param xcSet: set that contains the elements (shells and/or beams)
-        :param vDir: unit xc vector defining pressures direction
-        '''
-        methodToCall= None
-        if(len(vDir)==3): #3D load.
-            methodToCall= vector3dUniformLoadGlobal
-        else: #2D load.
-            methodToCall= vector2dUniformLoadGlobal
-        for e in xcSet.getElements:
-            presElem=self.getPressure(e.getCooCentroid(False)[iCoo])
-            if (presElem!=0.0):
-                e.methodToCall(presElem*vDir)
-
     def appendVerticalLoadToCurrentLoadPattern(self,xcSet,vDir,iXCoo= 0,iZCoo= 2,alph= math.radians(30)):
         '''Append to the current load pattern the vertical pressures on 
            a set of elements due to the strip load. According to
@@ -147,22 +161,28 @@ class StripLoadOnBackfill(object):
         '''
         tanAlph= math.tan(alph)
         avgZCoo= 0.0
-        lenght= 0.0
+        length= 0.0
         for e in xcSet.getElements:
             z= e.getCooCentroid(False)[iZCoo]
             l= e.getLineSegment(False).getLongitud()
             avgZCoo+=z*l
             length+= l
         avgZCoo/= length
-        print 'avgZCoo= ', avgZCoo
-        xMin= self.distWall-self.stripWidth-(avgZCoo-zLoad)*tanAlph
-        xMax= self.distWall+self.stripWidth+(avgZCoo-zLoad)*tanAlph
+        H= self.zLoad-avgZCoo
+        xMin= self.distWall-self.stripWidth-H*tanAlph
+        xMax= self.distWall+self.stripWidth+H*tanAlph
         L= xMax-xMin
-        sigma_v= qLoad*self.stripWidth/L
-        print 'sigma_v= ', sigma_v
-        for e in xcSet.getElements:
-            if (presElem!=0.0):
-                e.vector3dUniformLoadGlobal(sigma_v*vDir)
+        sigma_v= self.qLoad*self.stripWidth/L
+        if(len(vDir)==3): #3D load.
+          for e in xcSet.getElements:
+              xElem= e.getCooCentroid(False)[iXCoo]
+              if (sigma_v!=0.0) and (xElem>xMin) and (xElem<xMax):
+                  e.vector3dUniformLoadGlobal(sigma_v*vDir)
+        else: #2D load.
+          for e in xcSet.getElements:
+              xElem= e.getCooCentroid(False)[iXCoo]
+              if (sigma_v!=0.0) and (xElem>xMin) and (xElem<xMax):
+                  e.vector2dUniformLoadGlobal(sigma_v*vDir)
 
 
 class LineVerticalLoadOnBackfill(object):
