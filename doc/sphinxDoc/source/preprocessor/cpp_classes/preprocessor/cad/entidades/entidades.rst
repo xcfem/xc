@@ -35,7 +35,7 @@ C++ API entities
     :members:
     :show-inheritance:
 	    
-.. autoclass:: map_cm_puntos
+.. autoclass:: MapCMPuntos
     :members:
     :show-inheritance:
 	    
@@ -47,7 +47,7 @@ C++ API entities
     :members:
     :show-inheritance:
 	    
-.. autoclass:: map_cm_edges
+.. autoclass:: MapCMEdges
     :members:
     :show-inheritance:
 	    
@@ -55,7 +55,7 @@ C++ API entities
     :members:
     :show-inheritance:
 	    
-.. autoclass:: map_cm_faces
+.. autoclass:: MapCMFaces
     :members:
     :show-inheritance:
 	    
@@ -67,15 +67,15 @@ C++ API entities
     :members:
     :show-inheritance:
 	    
-.. autoclass:: map_cm_bodie
+.. autoclass:: MapCMBodies
     :members:
     :show-inheritance:
 	    
-.. autoclass:: MapCuerpos
+.. autoclass:: MapBodies
     :members:
     :show-inheritance:
 	    
-.. autoclass:: map_cm_ugrids
+.. autoclass:: MapCMUgrids
     :members:
     :show-inheritance:
 	    

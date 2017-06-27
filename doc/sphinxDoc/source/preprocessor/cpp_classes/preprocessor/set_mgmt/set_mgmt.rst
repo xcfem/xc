@@ -35,7 +35,7 @@ Base set
     :members:
     :show-inheritance:
 	    
-.. autoclass:: lst_ptr_points
+.. autoclass:: lstPnts
     :members:
     :show-inheritance:
 	    
@@ -43,7 +43,7 @@ Base set
     :members:
     :show-inheritance:
 	    
-.. autoclass:: lst_ptr_lineas
+.. autoclass:: lstLines
     :members:
     :show-inheritance:
 	    
@@ -51,7 +51,7 @@ Base set
     :members:
     :show-inheritance:
 	    
-.. autoclass:: lst_surface_ptrs
+.. autoclass:: lstSurfaces
     :members:
     :show-inheritance:
 	    
@@ -59,7 +59,7 @@ Base set
     :members:
     :show-inheritance:
 	    
-.. autoclass:: lst_ptr_cuerpos
+.. autoclass:: lstBodies
     :members:
     :show-inheritance:
 	    

@@ -3,7 +3,7 @@ Steel
 
 .. module:: xc
 	    
-.. autoclass:: SteelBase
+.. autoclass:: SteelBaseMaterial
     :members:
     :show-inheritance:
 	    

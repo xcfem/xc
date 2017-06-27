@@ -48,14 +48,15 @@ Plane elements
 
    mesh/element/utils/coordTransformation/coordTransformation.rst
 
-Friction elements
-,,,,,,,,,,,,,,,,,
-.. toctree::
-   :maxdepth: 1
-   
-   mesh/element/special/frictionBearing/frictionModel/frictionModel.rst
+.. *** Classes' import failed
+   Friction elements
+   ,,,,,,,,,,,,,,,,,
+   .. toctree::
+      :maxdepth: 1
 
-   mesh/element/special/frictionBearing/frictionBearing.rst
+      mesh/element/special/frictionBearing/frictionModel/frictionModel.rst
+
+      mesh/element/special/frictionBearing/frictionBearing.rst
 
 
 Volumen elements
@@ -63,8 +64,6 @@ Volumen elements
 .. toctree::
    :maxdepth: 1
    
-   mesh/element/volumen/volumen.rst
-
    mesh/element/volumen/UP-ucsd/UP-ucsd.rst
 
    mesh/element/volumen/TotalLagrangianFD20NodeBrick/TotalLagrangianFD20NodeBrick.rst

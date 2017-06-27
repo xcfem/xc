@@ -3,7 +3,8 @@
 
 .. module:: xc
 	    
-.. autoclass:: EightNodeBrick
-    :members:
-    :show-inheritance:
+.. *** Classes' import failed
+   .. autoclass:: EightNodeBrick
+       :members:
+       :show-inheritance:
   
