@@ -7,6 +7,14 @@ General topics
 
    analysis/analysis.rst
 
+
+Analysis types
+---------------
+.. toctree::
+
+   analysis/analysis/analysis_types.rst
+
+
 Algorithm
 ----------
 .. toctree::

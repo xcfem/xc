@@ -7,7 +7,7 @@ C++ API
     :members:
     :show-inheritance:
 	    
-.. autoclass:: dq_fields
+.. autoclass:: dqFields
     :members:
     :show-inheritance:
 	    

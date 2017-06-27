@@ -1,5 +1,5 @@
-Analysis
-;;;;;;;;
+Analysis types
+;;;;;;;;;;;;;;
 
 .. module:: xc
 	    

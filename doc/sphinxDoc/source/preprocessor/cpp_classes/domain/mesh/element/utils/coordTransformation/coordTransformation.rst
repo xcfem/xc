@@ -15,7 +15,7 @@ Coordinate transformation
     :members:
     :show-inheritance:
 	    
-.. autoclass:: LinearCrdTransf2
+.. autoclass:: LinearCrdTransf2d
     :members:
     :show-inheritance:
 	    
