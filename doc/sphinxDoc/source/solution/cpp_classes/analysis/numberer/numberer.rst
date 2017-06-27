@@ -3,7 +3,7 @@ Numberer
 
 .. module:: xc
 	    
-.. autoclass:: DOF_Numberer
+.. autoclass:: DOFNumberer
     :members:
     :show-inheritance:
 	    
