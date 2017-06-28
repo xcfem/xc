@@ -169,11 +169,25 @@ class WallStabilityResults(object):
       if(Fbearing<self.Fbearing):
         self.Fbearing= Fbearing
         self.FbearingComb= comb
-  def writeOutput(self,outputFile):
+  def writeOutput(self,outputFile,name):
     '''Write results in LaTeX format.'''
-    outputFile.write("  Renversement:  & " + fmt.Factor.format(self.Foverturning) +" & 1.00 & "+self.FoverturningComb+'\\\\\n')
-    outputFile.write("  Glissement:  & " + fmt.Factor.format(self.Fsliding) +" & 1.00 & "+self.FslidingComb+'\\\\\n')
-    outputFile.write("  Poinçonnement:  & " + fmt.Factor.format(self.Fbearing) +" & 1.00 & "+self.FbearingComb+'\\\\\n')
+    outputFile.write("\\begin{center}\n")
+    outputFile.write("\\begin{tabular}[H]{|l|c|c|c|}\n")
+    outputFile.write("\\hline\n")
+    outputFile.write("\\multicolumn{4}{|c|}{\\textsc{Verification stabilité mur: "+name+"}}\\\\\n")
+    outputFile.write("\\hline\n")
+    outputFile.write("Vérification:  & $F_{disp}$ & $F_{req}$ & Combinaison\\\\\n")
+    outputFile.write("\\hline\n")
+    outputFile.write("Renversement:  & " + fmt.Factor.format(self.Foverturning) +" & 1.00 & "+self.FoverturningComb+'\\\\\n')
+    outputFile.write("Glissement:  & " + fmt.Factor.format(self.Fsliding) +" & 1.00 & "+self.FslidingComb+'\\\\\n')
+    outputFile.write("Poinçonnement:  & " + fmt.Factor.format(self.Fbearing) +" & 1.00 & "+self.FbearingComb+'\\\\\n')
+    outputFile.write("\\hline\n")
+    outputFile.write("\\multicolumn{4}{|l|}{$F_{disp}$: sécurité disponible.}\\\\\n")
+    outputFile.write("\\multicolumn{4}{|l|}{$F_{req}$: sécurité requise.}\\\\\n")
+    
+    outputFile.write("\\hline\n")
+    outputFile.write("\\end{tabular}\n")
+    outputFile.write("\\end{center}\n")
 
 class WallULSResults(object):
   def __init__(self,internalForces):
@@ -184,6 +198,23 @@ class WallSLSResults(WallULSResults):
     super(WallSLSResults,self).__init__(internalForces)
     self.rotation= rotation
     self.rotationComb= rotationComb
+  def writeOutput(self,outputFile,name):
+    '''Write results in LaTeX format.'''
+    outputFile.write("\\begin{center}\n")
+    outputFile.write("\\begin{tabular}[H]{|l|c|c|c|}\n")
+    outputFile.write("\\hline\n")
+    outputFile.write("\\multicolumn{3}{|c|}{\\textsc{Verification rotation mur: "+name+"}}\\\\\n")
+    outputFile.write("\\hline\n")
+    outputFile.write("$\\beta_{disp} (\\permil)$ & $\\beta_{req}(\\permil)$ & Combinaison\\\\\n")
+    outputFile.write("\\hline\n")
+    outputFile.write(fmt.Factor.format(self.rotation*1000) +" & 2.00 & "+self.rotationComb+'\\\\\n')
+    outputFile.write("\\hline\n")
+    outputFile.write("\\multicolumn{3}{|l|}{$\\beta_{disp}$: rotation maximale calculée du mur.}\\\\\n")
+    outputFile.write("\\multicolumn{3}{|l|}{$\\beta_{req}$: rotation maximale autorisée du mur.}\\\\\n")
+    
+    outputFile.write("\\hline\n")
+    outputFile.write("\\end{tabular}\n")
+    outputFile.write("\\end{center}\n")
     
 class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
   '''Cantilever retaining wall.'''
@@ -280,11 +311,12 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
     outputFile.write("\\end{center}\n")
     outputFile.write("\\end{table}\n")
 
-
   def writeResult(self,pth):
     '''Write reinforcement verification results in LaTeX format.'''
     outputFile= open(pth+self.name+".tex","w")
     self.writeDef(pth,outputFile)
+    self.stability_results.writeOutput(outputFile,self.name)
+    self.sls_results.writeOutput(outputFile,self.name)
     outputFile.write("\\bottomcaption{Calcul armatures mur "+ self.name +"} \\label{tb_"+self.name+"}\n")
     outputFile.write("\\tablefirsthead{\\hline\n\\multicolumn{1}{|c|}{\\textsc{Armatures mur "+self.name+"}}\\\\\\hline\n}\n")
     outputFile.write("\\tablehead{\\hline\n\\multicolumn{1}{|c|}{\\textsc{"+self.name+" (suite)}}\\\\\\hline\n}\n")
@@ -708,7 +740,8 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
     return reactions
   
   def performStabilityAnalysis(self,combinations,foundationSoilModel): 
-    return WallStabilityResults(self,combinations,foundationSoilModel)
+    self.stability_results= WallStabilityResults(self,combinations,foundationSoilModel)
+    return self.stability_results
 
   def getEnvelopeInternalForces(self,envelopeMd, envelopeVd, envelopeMdHeel, envelopeVdHeel):
     md, vd= self.getStemInternalForces()
@@ -737,7 +770,8 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
         rotation= rot
         rotationComb= comb
     internalForces= InternalForces(y,envelopeMd, envelopeVd, abs(envelopeMdHeel), abs(envelopeVdHeel))
-    return WallSLSResults(internalForces,rotation, rotationComb)
+    self.sls_results= WallSLSResults(internalForces,rotation, rotationComb)
+    return self.sls_results
 
   def performULSAnalysis(self,combinations):
     y= self.getStemYCoordinates()
@@ -749,4 +783,5 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
       reactions= self.resultComb(comb)
       envelopeMd, envelopeVd, envelopeMdHeel, envelopeVdHeel= self.getEnvelopeInternalForces(envelopeMd, envelopeVd, envelopeMdHeel, envelopeVdHeel)
     internalForces= InternalForces(y,envelopeMd, envelopeVd, abs(envelopeMdHeel), abs(envelopeVdHeel))
-    return WallULSResults(internalForces)
+    self.uls_results= WallULSResults(internalForces)
+    return self.uls_results
