@@ -16,9 +16,47 @@ __version__= "3.0"
 __email__= "l.pereztato@gmail.com ana.Ortega.Ort@gmail.com" 
 
 import math
+import xc_base
+import geom
+import xc
 from miscUtils import LogMessages as lmsg
 
-class EarthPressureModel(object):
+class PressureModelBase(object):
+    '''Basse class for objects defining earth pressures.'''
+    
+    def getPressure(self,z):
+        '''Return the earth pressure acting on the points at global coordinate z.'''
+        lsmg.error('Error: getPressure must be overloaded in derived classes.')
+        return 0.0
+
+    def appendLoadToCurrentLoadPattern(self,xcSet,vDir,iCoo= 2,delta= 0.0):
+        '''Append earth thrust on a set of elements to the current
+        load pattern.
+
+        :param xcSet: set that contains the elements (shells and/or beams)
+        :param vDir: unit xc vector defining pressures direction
+        :param iCoo: index of the coordinate that represents depth.
+        :param delta: soil-wall friction angle (usually: delta= 2/3*Phi).
+        '''
+        tanDelta= math.tan(delta)
+        tanVector= xc.Vector([-vDir[1],vDir[0]]) #iCoo= 1 => 2D
+        if(iCoo==2): #3D
+          tangVector= xc.Vector([vDir[2],vDir[1],-vDir[0]])
+        if(len(vDir)==3): #3D load.
+          for e in xcSet.getElements:
+              presElem=self.getPressure(e.getCooCentroid(False)[iCoo])
+              loadVector= presElem*(vDir+tanDelta*tanVector)
+              if(presElem!=0.0):
+                  e.vector3dUniformLoadGlobal(loadVector)
+        else: #2D load.
+          for e in xcSet.getElements:
+              presElem=self.getPressure(e.getCooCentroid(False)[iCoo])
+              loadVector= presElem*(vDir+tanDelta*tanVector)
+              if(presElem!=0.0):
+                  e.vector2dUniformLoadGlobal(loadVector)
+
+
+class EarthPressureModel(PressureModelBase):
     '''Parameters to define a load of type earth pressure
 
       :ivar K:         coefficient of pressure
@@ -29,6 +67,7 @@ class EarthPressureModel(object):
       :ivar gammaWater: weight density of water
     '''
     def __init__(self,K , zGround, gammaSoil, zWater, gammaWater):
+        super(EarthPressureModel,self).__init__()
         self.K= K
         self.zGround= zGround
         self.gammaSoil= gammaSoil
@@ -44,26 +83,6 @@ class EarthPressureModel(object):
             else:
                 ret_press=self.K*(self.gammaSoil*(self.zGround-self.zWater) + (self.gammaSoil-self.gammaWater)*(self.zWater-z)) + self.gammaWater*(self.zWater-z)
         return ret_press
-
-    def appendLoadToCurrentLoadPattern(self,xcSet,vDir,iCoo= 2):
-        '''Append earth thrust on a set of elements to the current
-        load pattern
-
-
-        :param xcSet: set that contains the elements (shells and/or beams)
-        :param vDir: unit xc vector defining pressures direction
-        :param iCoo: index of the coordinate that represents depth.
-        '''
-        if(len(vDir)==3): #3D load.
-          for e in xcSet.getElements:
-              presElem=self.getPressure(e.getCooCentroid(False)[iCoo])
-              if(presElem!=0.0):
-                  e.vector3dUniformLoadGlobal(presElem*vDir)
-        else: #2D load.
-          for e in xcSet.getElements:
-              presElem=self.getPressure(e.getCooCentroid(False)[iCoo])
-              if(presElem!=0.0):
-                  e.vector2dUniformLoadGlobal(presElem*vDir)
 
 class PeckPressureEnvelope(EarthPressureModel):
     ''' Envelope of apparent lateral pressure diagrams for design 
@@ -86,38 +105,19 @@ class PeckPressureEnvelope(EarthPressureModel):
               lmsg.error('pressures under water table not implemented.''')
         return ret_press
 
-class UniformLoadOnStem(object):
+class UniformLoadOnStem(PressureModelBase):
     '''Uniform lateral earth pressure on a retaining wall.
 
     :ivar qLoad: surcharge load (force per unit area)
     '''
     def __init__(self,qLoad):
+        super(UniformLoadOnStem,self).__init__()
         self.qLoad=qLoad
         
     def getPressure(self,z):
-        '''Return the earth pressure acting on the points at global coordinate z
-        '''
+        '''Return the earth pressure acting on the points at global coordinate z.'''
         return self.qLoad
 
-    def appendLoadToCurrentLoadPattern(self,xcSet,vDir,iCoo= 2):
-        '''Append to the current load pattern the earth thrust on a set of 
-        elements due to the strip load.
-
-        :param xcSet: set that contains the elements (shells and/or beams)
-        :param vDir: unit xc vector defining pressures direction
-        '''
-        methodToCall= None
-        if(len(vDir)==3): #3D load.
-          for e in xcSet.getElements:
-              presElem=self.getPressure(e.getCooCentroid(False)[iCoo])
-              if (presElem!=0.0):
-                  e.vector3dUniformLoadGlobal(presElem*vDir)
-        else: #2D load.
-          for e in xcSet.getElements:
-              presElem=self.getPressure(e.getCooCentroid(False)[iCoo])
-              if (presElem!=0.0):
-                  e.vector2dUniformLoadGlobal(presElem*vDir)
-        
 class StripLoadOnBackfill(UniformLoadOnStem):
     '''Lateral earth pressure on a retaining wall due to a strip surcharge 
     load on the backfill. (J.Calavera, pg.40)
@@ -185,7 +185,7 @@ class StripLoadOnBackfill(UniformLoadOnStem):
                   e.vector2dUniformLoadGlobal(sigma_v*vDir)
 
 
-class LineVerticalLoadOnBackfill(object):
+class LineVerticalLoadOnBackfill(PressureModelBase):
     '''Lateral earth pressure on a retaining wall due to line surcharge 
     load acting in vertical direction on the backfill. (J.Calavera, pg.41)
 
@@ -195,6 +195,7 @@ class LineVerticalLoadOnBackfill(object):
                     surcharge load
     '''
     def __init__(self,qLoad, zLoad,distWall):
+        super(LineVerticalLoadOnBackfill,self).__init__()
         self.qLoad=qLoad
         self.zLoad=zLoad
         self.distWall=abs(distWall)
@@ -209,20 +210,7 @@ class LineVerticalLoadOnBackfill(object):
             ret_press=self.qLoad/math.pi/difZ*(math.sin(2*omega))**2
         return ret_press
 
-    def appendLoadToCurrentLoadPattern(self,xcSet,vDir,iCoo= 2):
-        '''Append to the current load pattern the earth thrust on a set of 
-        elements due to the line load.
-
-        :param xcSet: set that contains the elements (shells and/or beams)
-        :param vDir: unit xc vector defining pressures direction
-        '''
-        for e in xcSet.getElements:
-            presElem=self.getPressure(e.getCooCentroid(False)[iCoo])
-            if (presElem!=0.0):
-                e.vector3dUniformLoadGlobal(presElem*vDir)
-
-
-class HorizontalLoadOnBackfill(object):
+class HorizontalLoadOnBackfill(PressureModelBase):
     '''Lateral earth pressure on a retaining wall due to a surcharge 
     load acting in horizontal direction on the backfill. 
 
@@ -243,6 +231,7 @@ class HorizontalLoadOnBackfill(object):
 
     '''
     def __init__(self,soilIntFi, qLoad, zLoad,distWall,widthLoadArea,lengthLoadArea=1,horDistrAngle=0):
+        super(HorizontalLoadOnBackfill,self).__init__()
         self.soilIntFi=soilIntFi
         self.qLoad=qLoad
         self.zLoad=zLoad
@@ -270,7 +259,7 @@ class HorizontalLoadOnBackfill(object):
             ret_press=self.presmax/(self.zpresmax-self.zpresmin)*(z-self.zpresmin)
         return ret_press
 
-    def appendLoadToCurrentLoadPattern(self,xcSet,vDir,iCoo= 2):
+    def appendLoadToCurrentLoadPattern(self,xcSet,vDir,iCoo= 2, delta= 0.0):
         '''Append to the current load pattern the earth thrust on a set of 
         elements due to the horizontal load.
 
@@ -278,10 +267,7 @@ class HorizontalLoadOnBackfill(object):
         :param vDir: unit xc vector defining pressures direction
         '''
         self.setup()
-        for e in xcSet.getElements:
-            presElem=self.getPressure(e.getCooCentroid(False)[iCoo])
-            if (presElem!=0.0):
-                e.vector3dUniformLoadGlobal(presElem*vDir)
+        super(HorizontalLoadOnBackfill,self).appendLoadToCurrentLoadPattern(xcSet,vDir,iCoo,delta)
 
                                                   
                                                   

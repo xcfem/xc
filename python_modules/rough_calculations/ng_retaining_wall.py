@@ -451,13 +451,60 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
     for e in self.toeSet.getElements:
       toeFillLoad= grav*rho*toeFillDepth
       e.vector2dUniformLoadGlobal(xc.Vector([0.0, -toeFillLoad]))
-  def createEarthPressureLoadOnStem(self,pressureModel):
+
+  def createEarthPressureLoadOnStem(self,pressureModel,vDir= xc.Vector([-1.0,0.0]),Delta= 0.0):
     '''Create the loads of the earth pressure over the stem.
 
         Args:
        :pressureModel: (obj) earth pressure model.
+       :vDir: (xc.Vector) direction for the pressures.
     '''
-    pressureModel.appendLoadToCurrentLoadPattern(self.stemSet,xc.Vector([-1.0,0.0]),1)
+    pressureModel.appendLoadToCurrentLoadPattern(self.stemSet,vDir,iCoo= 1,delta= Delta)
+    
+  def createEarthPressureLoadOnHeelEnd(self,pressureModel):
+    '''Create the loads of the earth pressure over the vertical face
+       at the end of the heel.
+
+        Args:
+       :pressureModel: (obj) earth pressure model.
+    '''
+    n= self.wireframeModelPoints['heelEnd'].getNode()
+    z= n.getInitialPos2d.y
+    force= pressureModel.getPressure(z)*self.footingThickness
+    loadVector= force*xc.Vector([-1.0,0.0,0.0])
+    n.newLoad(loadVector)
+    
+  def createEarthPressureLoadOnToeEnd(self,pressureModel):
+    '''Create the loads of the earth pressure over the vertical face
+       at the end of the toe.
+
+        Args:
+       :pressureModel: (obj) earth pressure model.
+    '''
+    n= self.wireframeModelPoints['toeEnd'].getNode()
+    z= n.getInitialPos2d.y
+    force= pressureModel.getPressure(z)*self.footingThickness
+    loadVector= force*xc.Vector([1.0,0.0,0.0])
+    n.newLoad(loadVector)
+
+  def createBackFillPressures(self,pressureModel,Delta= 0.0):
+    '''Create backfill earth pressures over the wall.
+
+        Args:
+       :pressureModel: (obj) earth pressure model for the backfill.
+    '''
+    self.createEarthPressureLoadOnStem(pressureModel,Delta= Delta)
+    self.createEarthPressureLoadOnHeelEnd(pressureModel)
+    
+  def createFrontFillPressures(self,pressureModel,Delta= 0.0):
+    '''Create front fill earth pressures over the wall.
+
+        Args:
+       :pressureModel: (obj) earth pressure model for the backfill.
+    '''
+    self.createEarthPressureLoadOnStem(pressureModel,xc.Vector([1.0,0.0]),Delta= Delta)
+    self.createEarthPressureLoadOnToeEnd(pressureModel)
+    
   def createVerticalLoadOnHeel(self,loadOnBackFill):
     '''Create the loads over the heel dues to a load acting on the backfill.
 
@@ -465,15 +512,18 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
        :loadOnBackFill: (obj) load acting on the backfill.
     '''
     loadOnBackFill.appendVerticalLoadToCurrentLoadPattern(self.heelSet,xc.Vector([0.0,-1.0]),0,1)
-  def createPressuresFromLoadOnBackFill(self, loadOnBackFill):
+
+  def createPressuresFromLoadOnBackFill(self, loadOnBackFill,Delta= 0.0):
     '''Create the pressures on the stem and on the heel dues to 
        a load acting on the backfill.
 
         Args:
        :loadOnBackFill: (obj) load acting on the backfill.
     '''
-    self.createEarthPressureLoadOnStem(loadOnBackFill)
-    self.createVerticalLoadOnHeel(loadOnBackFill)
+    self.createEarthPressureLoadOnStem(loadOnBackFill,Delta= Delta) #Pressures on stem.
+    self.createEarthPressureLoadOnHeelEnd(loadOnBackFill) #Force on heel end.
+    self.createVerticalLoadOnHeel(loadOnBackFill) #Vertical load on heel.
+    
   def createLoadOnTopOfStem(self,loadVector):
     '''Create a loac acting on the node at the top of the stem.
         Args:
@@ -571,8 +621,6 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
     F= R.getResultante()
     qu= foundationSoilModel.qu(q,D,self.b,bReduced,F.y,0.0,F.x)
     sigma= F.y/bReduced
-    print 'qu= ', qu
-    print 'sigma= ', sigma
     return qu/sigma
   
   
