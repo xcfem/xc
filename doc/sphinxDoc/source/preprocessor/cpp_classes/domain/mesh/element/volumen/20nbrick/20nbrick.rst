@@ -1,13 +1,14 @@
 20-nodes brick
 ::::::::::::::
 
-.. module:: xc
-	    
-.. autoclass:: TwentyNodeBrick
-    :members:
-    :show-inheritance:
-	    
-.. autoclass:: Twenty_Node_Brick
-    :members:
-    :show-inheritance:
-  
+.. *** Classes' import failed
+   .. module:: xc
+
+   .. autoclass:: TwentyNodeBrick
+       :members:
+       :show-inheritance:
+
+   .. autoclass:: Twenty_Node_Brick
+       :members:
+       :show-inheritance:
+

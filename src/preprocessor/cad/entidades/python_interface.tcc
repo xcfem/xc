@@ -193,7 +193,8 @@ class_<map_ugrids, bases<map_cm_ugrids>, boost::noncopyable >("map_ugrids", no_i
    ;
 
 XC::UniformGrid *(XC::MapUniformGrids::*newUniformGrid)(void)= &XC::MapUniformGrids::Nueva;
-class_<XC::MapUniformGrids, bases<map_ugrids>, boost::noncopyable >("MapUniformgrids", no_init)
+
+class_<XC::MapUniformGrids, bases<map_ugrids>, boost::noncopyable >("MapUniformGrids", no_init)
    .def("newUniformGrid", newUniformGrid, return_internal_reference<>(),"Creates a uniform grid.")
    ;
 

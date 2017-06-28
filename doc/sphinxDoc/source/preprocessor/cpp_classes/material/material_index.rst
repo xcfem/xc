@@ -29,8 +29,6 @@ N-dimensional material
  
    nD/FiniteDeformation/FiniteDeformation.rst
  
-   nD/FiniteDeformation/fdEvolution/fdEvolution.rst
- 
    nD/FiniteDeformation/WEnergy/WEnergy.rst
  
    nD/soil/soil.rst

@@ -18,12 +18,13 @@ NeutralLoadDescription
     :undoc-members:
     :show-inheritance:
 
-NeutralMeshDescription
-----------------------
+.. *** Module import failed
+   NeutralMeshDescription
+   ----------------------
 
-.. automodule:: import_export.NeutralMeshDescription
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   .. automodule:: import_export.NeutralMeshDescription
+       :members:
+       :undoc-members:
+       :show-inheritance:
 
 

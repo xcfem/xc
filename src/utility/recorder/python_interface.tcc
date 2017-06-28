@@ -49,7 +49,7 @@ class_<XC::NodePropRecorder, bases<XC::PropRecorder>, boost::noncopyable >("Node
   .def("setNodes",&XC::NodePropRecorder::setNodes,"Assigns nodes to the recorder.")
   ;
 
-class_<XC::ElementPropRecorder, bases<XC::PropRecorder>, boost::noncopyable >("PropRecorder", no_init)
+class_<XC::ElementPropRecorder, bases<XC::PropRecorder>, boost::noncopyable >("ElementPropRecorder", no_init)
   .def("setElements",&XC::ElementPropRecorder::setElements,"Assigns elements to the recorder.")
   ;
 

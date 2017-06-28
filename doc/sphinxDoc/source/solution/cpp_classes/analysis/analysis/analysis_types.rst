@@ -1,5 +1,5 @@
-Analysis
-;;;;;;;;
+Analysis types
+;;;;;;;;;;;;;;
 
 .. module:: xc
 	    
@@ -39,16 +39,17 @@ Analysis
     :members:
     :show-inheritance:
 	    
-.. autoclass:: DomainDecompositionAnalysis
-    :members:
-    :show-inheritance:
-	    
-.. autoclass:: StaticDomainDecompositionAnalysis
-    :members:
-    :show-inheritance:
-	    
-.. autoclass:: TransientDomainDecompositionAnalysis
-    :members:
-    :show-inheritance:
+.. *** Classes' import failed
+   .. autoclass:: DomainDecompositionAnalysis
+       :members:
+       :show-inheritance:
+
+   .. autoclass:: StaticDomainDecompositionAnalysis
+       :members:
+       :show-inheritance:
+
+   .. autoclass:: TransientDomainDecompositionAnalysis
+       :members:
+       :show-inheritance:
 	    
 

@@ -48,7 +48,7 @@ class_<ElemPlano3N_Mech2D, bases<ElemWithMaterial3N_Mech2D>, boost::noncopyable 
   .def("getArea", &ElemPlano3N_Mech2D::getArea, "Returns element's area.")
    ;
 
-class_<TriBase3N_Mech2D, bases<ElemPlano3N_Mech2D>, boost::noncopyable >("QuadBase3N_Mech2D", no_init)
+class_<TriBase3N_Mech2D, bases<ElemPlano3N_Mech2D>, boost::noncopyable >("TriBase3N_Mech2D", no_init)
    ;
 
 #include "triangle/python_interface.tcc"

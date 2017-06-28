@@ -21,7 +21,7 @@
 //----------------------------------------------------------------------------
 //python_interface.tcc
 
-class_<XC::TrussStrainLoad, bases<XC::ElementBodyLoad>, boost::noncopyable >("TrusStrainLoad", no_init)
+class_<XC::TrussStrainLoad, bases<XC::ElementBodyLoad>, boost::noncopyable >("TrussStrainLoad", no_init)
   .add_property("eps1", make_function( &XC::TrussStrainLoad::E1, return_value_policy<return_by_value>() ),&XC::TrussStrainLoad::setE1)
   .add_property("eps2", make_function( &XC::TrussStrainLoad::E2, return_value_policy<return_by_value>() ),&XC::TrussStrainLoad::setE2)
   ;

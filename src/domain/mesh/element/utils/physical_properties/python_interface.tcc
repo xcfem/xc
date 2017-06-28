@@ -47,7 +47,7 @@ class_<XC::NDMaterialPhysicalProperties, bases<PhysicalProperties_NDMat>, boost:
   .def("getCommittedAvgStressComponent",getCommittedAvgStressDouble,"Returns i-component  of average stress values vector for gauss points.")
    ;
 
-class_<XC::SolidMech2D, bases<XC::NDMaterialPhysicalProperties>, boost::noncopyable  >("NDMaterialPhysicalProperties", no_init)
+class_<XC::SolidMech2D, bases<XC::NDMaterialPhysicalProperties>, boost::noncopyable  >("SolidMech2D", no_init)
    ;
 
 

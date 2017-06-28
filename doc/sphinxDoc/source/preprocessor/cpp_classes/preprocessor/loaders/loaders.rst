@@ -23,7 +23,7 @@ Loaders
     :members:
     :show-inheritance:
 	    
-.. autoclass:: SeedElemLoader
+.. autoclass:: SeedElement
     :members:
     :show-inheritance:
 	    

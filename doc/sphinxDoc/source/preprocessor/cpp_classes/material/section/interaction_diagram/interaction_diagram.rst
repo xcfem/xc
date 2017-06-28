@@ -15,7 +15,7 @@ Interaction diagram
     :members:
     :show-inheritance:
 	    
-.. autoclass:: InteractionDiagramData
+.. autoclass:: InteractionDiagramParameters
     :members:
     :show-inheritance:
 	    

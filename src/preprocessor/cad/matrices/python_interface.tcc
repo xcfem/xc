@@ -60,7 +60,7 @@ class_<tritriz_puntos, bases<vector_mp_puntos,EntCmd>, boost::noncopyable >("tri
 
 XC::Pnt *(XC::TritrizPtrPnt::*getNearestPntTritrizPtrPnt)(const Pos3d &)= &XC::TritrizPtrPnt::getNearestPnt;
 XC::Pnt *(XC::TritrizPtrPnt::*getPntWithTagTritrizPtrPnt)(const int &)= &XC::TritrizPtrPnt::buscaPunto;
-class_<XC::TritrizPtrPnt, bases<tritriz_puntos>, boost::noncopyable >("TrtrizPtrPnt", no_init)
+class_<XC::TritrizPtrPnt, bases<tritriz_puntos>, boost::noncopyable >("TritrizPtrPnt", no_init)
   .def("getNearestPnt",make_function(getNearestPntTritrizPtrPnt, return_internal_reference<>() ),"Returns nearest point.")
   .def("getPntWithTag",make_function(getPntWithTagTritrizPtrPnt, return_internal_reference<>() ),"Returns point by tag.")
   .def("setPnt", &XC::TritrizPtrPnt::setPnt)
@@ -107,7 +107,7 @@ class_<tritriz_nodes, bases<vector_mp_nodes,EntCmd>, boost::noncopyable >("tritr
 
 XC::Node *(XC::TritrizPtrNod::*getNearestNodeTritrizPtrNod)(const Pos3d &)= &XC::TritrizPtrNod::getNearestNode;
 XC::Node *(XC::TritrizPtrNod::*getNodeWithTagTritrizPtrNod)(const int &)= &XC::TritrizPtrNod::buscaNodo;
-class_<XC::TritrizPtrNod, bases<tritriz_nodes>, boost::noncopyable >("TrtrizPtrNod", no_init)
+class_<XC::TritrizPtrNod, bases<tritriz_nodes>, boost::noncopyable >("TritrizPtrNod", no_init)
   .def("getNearestNode",make_function(getNearestNodeTritrizPtrNod, return_internal_reference<>() ),"Returns nearest node.")
   .def("getNodeWithTag",make_function(getNodeWithTagTritrizPtrNod, return_internal_reference<>() ),"Returns node by tag.")
   ;
@@ -149,7 +149,7 @@ class_<tritriz_elements, bases<vector_mp_elements,EntCmd>, boost::noncopyable >(
 
 XC::Element *(XC::TritrizPtrElem::*getNearestElementTritrizPtrElem)(const Pos3d &)= &XC::TritrizPtrElem::getNearestElement;
 XC::Element *(XC::TritrizPtrElem::*getElementWithTagTritrizPtrElem)(const int &)= &XC::TritrizPtrElem::findElement;
-class_<XC::TritrizPtrElem, bases<tritriz_elements>, boost::noncopyable >("TrtrizPtrElem", no_init)
+class_<XC::TritrizPtrElem, bases<tritriz_elements>, boost::noncopyable >("TritrizPtrElem", no_init)
   .def("getNearestElement",make_function(getNearestElementTritrizPtrElem, return_internal_reference<>() ),"Returns nearest element.")
   .def("getElementWithTag",make_function(getElementWithTagTritrizPtrElem, return_internal_reference<>() ),"Returns element by tag.")
   ;
@@ -167,6 +167,6 @@ class_<XC::MapEsquemas2d, bases<map_cm_m_puntos>, boost::noncopyable >("MapEsque
 typedef XC::MapCadMember<XC::TritrizPtrPnt> map_cm_t_puntos;
 class_<map_cm_t_puntos, bases<XC::MapCadMemberBase>, boost::noncopyable >("map_cm_t_puntos", no_init);
 
-class_<XC::MapEsquemas3d, bases<map_cm_t_puntos>, boost::noncopyable >("MapEsquemas2d", no_init)
+class_<XC::MapEsquemas3d, bases<map_cm_t_puntos>, boost::noncopyable >("MapEsquemas3d", no_init)
   .def("new3DNet",make_function(&XC::MapEsquemas3d::makeNew, return_internal_reference<>() ),"Creates a 3D net.")
    ;
