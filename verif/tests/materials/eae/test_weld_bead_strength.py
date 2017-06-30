@@ -55,7 +55,11 @@ print "ratio5= ",ratio5
 print "ratio6= ",ratio5
 '''
 
+import os
+from miscUtils import LogMessages as lmsg
+fname= os.path.basename(__file__)
 if (abs(ratio1)<0.001) & (abs(ratio2)<0.001) & (abs(ratio3)<0.001) & (abs(ratio4)<0.001) & (abs(ratio5)<0.001) & (abs(ratio6)<0.001):
-  print "test verif_resistencia_cordon: ok."
+  print "test ",fname,": ok."
 else:
-  print "test verif_resistencia_cordon: ERROR."
+  lmsg.error(fname+' ERROR.')
+

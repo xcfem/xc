@@ -414,31 +414,31 @@ python tests/materials/fiber_section/test_tangent_stiffness_01.py
 python tests/materials/fiber_section/test_section_aggregator_01.py
 python tests/materials/fiber_section/test_fiber_section_shear3d_01.py
 python tests/materials/fiber_section/test_fiber_section_shear3d_02.py
-python tests/materials/fiber_section/test_diag_interaccion01.py
-python tests/materials/fiber_section/test_diag_interaccion02.py
-python tests/materials/fiber_section/test_diag_interaccion03.py
-python tests/materials/fiber_section/test_diag_interaccion04.py
-python tests/materials/fiber_section/test_diag_interaccion05.py
-python tests/materials/fiber_section/test_diag_interaccion06.py
-python tests/materials/fiber_section/test_cortante_01.py
-python tests/materials/fiber_section/test_cortante_02.py
+python tests/materials/fiber_section/test_interaction_diagram01.py
+python tests/materials/fiber_section/test_interaction_diagram02.py
+python tests/materials/fiber_section/test_interaction_diagram03.py
+python tests/materials/fiber_section/test_interaction_diagram04.py
+python tests/materials/fiber_section/test_interaction_diagram05.py
+python tests/materials/fiber_section/test_interaction_diagram06.py
+python tests/materials/fiber_section/test_shear_01.py
+python tests/materials/fiber_section/test_shear_02.py
 python tests/materials/fiber_section/plastic_hinge_on_IPE200.py
 echo "$BLEU" "  RC sections test." "$NORMAL"
-python tests/materials/ehe/test_Ecm_hormigon.py
+python tests/materials/ehe/test_Ecm_concrete.py
 python tests/materials/ehe/test_EHEconcrete.py
 echo "$BLEU" "    Crack amplitude determination tests (EHE-08)." "$NORMAL"
-python tests/materials/ehe/test_fisuracion_01.py
-python tests/materials/ehe/test_fisuracion_02.py
-python tests/materials/ehe/test_fisuracion_03.py
-python tests/materials/ehe/test_fisuracion_04.py
-python tests/materials/ehe/test_fisuracion_05.py
-python tests/materials/ehe/test_fisuracion_06.py
+python tests/materials/ehe/test_crack_control_01.py
+python tests/materials/ehe/test_crack_control_02.py
+python tests/materials/ehe/test_crack_control_03.py
+python tests/materials/ehe/test_crack_control_04.py
+python tests/materials/ehe/test_crack_control_05.py
+python tests/materials/ehe/test_crack_control_06.py
 echo "$BLEU" "    Shear resistance determination tests (EHE-08)." "$NORMAL"
-python tests/materials/ehe/test_cortante_ehe08_01.py
-python tests/materials/ehe/test_cortante_ehe08_02.py
-python tests/materials/ehe/test_cortante_ehe08_03.py
-python tests/materials/ehe/test_cortante_ehe08_04.py
-python tests/materials/ehe/test_cortante_ehe08_05.py
+python tests/materials/ehe/test_shear_ehe08_01.py
+python tests/materials/ehe/test_shear_ehe08_02.py
+python tests/materials/ehe/test_shear_ehe08_03.py
+python tests/materials/ehe/test_shear_ehe08_04.py
+python tests/materials/ehe/test_shear_ehe08_05.py
 echo "$BLEU" "    Misd. (EHE-08)." "$NORMAL"
 python tests/materials/ehe/test_mensula_corta_ehe.py
 echo "$BLEU" "   EC2 tests." "$NORMAL"
@@ -475,17 +475,17 @@ python tests/materials/test_inercia_torsion_cajon.py
 echo "$BLEU" "  Other materials tests." "$NORMAL"
 python tests/materials/test_elastomeric_bearing_stiffness.py
 python tests/materials/test_anchor_bolt01.py
-python tests/materials/ehe/test_fluencia_01.py
-python tests/materials/ehe/test_fluencia_02.py
-python tests/materials/ehe/test_fluencia_03.py
+python tests/materials/ehe/test_creep_01.py
+python tests/materials/ehe/test_creep_02.py
+python tests/materials/ehe/test_creep_03.py
 python tests/materials/ehe/test_retraccion_01.py
 #python tests/materials/ehe/test_retraccion_02.py
 python tests/materials/ehe/test_steel_relaxation_01.py
 
 echo "$BLEU" "  Steel design verifications (EAE)." "$NORMAL"
-python tests/materials/eae/verif_casquillo_rigidizado.py
-python tests/materials/eae/verif_apoyo_por_soldadura_alma.py
-python tests/materials/eae/verif_resistencia_cordon.py
+python tests/materials/eae/test_steel_corbel_weld.py
+python tests/materials/eae/test_simple_shear_welded_web.py
+python tests/materials/eae/test_weld_bead_strength.py
 
 #Database tests
 echo "$BLEU" "Database tests (MySQL, Berkeley db, sqlite,...)." "$NORMAL"
