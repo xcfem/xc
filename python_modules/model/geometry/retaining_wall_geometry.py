@@ -63,12 +63,15 @@ class CantileverRetainingWallGeometry(object):
   def getDepth(self,y):
     '''Return stem section depth for height "y").'''
     return (self.stemBottomWidth-self.stemTopWidth)/self.stemHeight*y+self.stemTopWidth
+  def getWFStemHeigth(self):
+    ''' Return the height of the stem in the wireframe model.'''
+    return self.stemHeight+self.footingThickness/2.0
   def getWFStemTopPosition(self):
     ''' Returns the position of the stem top in the wireframe model.'''
     return self.stemTopPosition
   def getWFStemBottomPosition(self):
     ''' Returns the position of the stem bottom in the wireframe model.'''
-    return geom.Pos2d(self.stemTopPosition.x,self.stemTopPosition.y-self.stemHeight-self.footingThickness/2.0)
+    return geom.Pos2d(self.stemTopPosition.x,self.stemTopPosition.y-self.getWFStemHeigth())
   def getWFToeEndPosition(self):
     ''' Returns the position of the toe end in the wireframe model.'''
     stemBottomPos= self.getWFStemBottomPosition()

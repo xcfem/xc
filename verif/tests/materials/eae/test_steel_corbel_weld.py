@@ -59,9 +59,11 @@ print "ratio2= ",ratio2
 print "ratio3= ",ratio3
 print "ratio4= ",ratio4
 print "ratio5= ",ratio5'''
-
+import os
+from miscUtils import LogMessages as lmsg
+fname= os.path.basename(__file__)
 if (abs(ratio1)<0.1) & (abs(ratio2)<0.1) & (abs(ratio3)<0.1)& (abs(ratio4)<0.1) & (abs(ratio5)<0.1):
-  print "test comprobacion_casquillo: ok."
+   print "test ",fname,": ok."
 else:
-  print "test comprobacion_casquillo: ERROR."
+  lmsg.error(fname+' ERROR.')
 

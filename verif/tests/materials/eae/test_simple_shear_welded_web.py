@@ -52,7 +52,11 @@ print "VRd/Vd= ",VRd/Vd
 print "ratio1= ",ratio1
 '''
 
+import os
+from miscUtils import LogMessages as lmsg
+fname= os.path.basename(__file__)
 if (abs(ratio1)<0.1):
-  print "test verif_apoyo_por_soldadura_alma: ok.\n"
+  print "test ",fname,": ok."
 else:
-  print "test verif_apoyo_por_soldadura_alma: ERROR.\n"
+  lmsg.error(fname+' ERROR.')
+

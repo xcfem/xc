@@ -28,6 +28,7 @@ import os
 from miscUtils import LogMessages as lmsg
 import geom
 import xc
+from solution import predefined_solutions
 
 def filterRepeatedValues(yList,mList,vList):
   sz= len(yList)
@@ -51,12 +52,12 @@ def filterRepeatedValues(yList,mList,vList):
   return retY, retM, retV
 
 class InternalForces(object):
-  '''Internal forces for a retaining wall obtained from
-     Laryx (Cubus suite) software.'''
+  '''Internal forces for a retaining wall obtained.'''
   def __init__(self,y,mdMax,vdMax,MdSemelle,VdSemelle):
     self.y, self.mdMax, self.vdMax= filterRepeatedValues(y,mdMax,vdMax)
     self.interpolate()
     self.stemHeight= self.y[-1]
+    print 'stemHeight= ', self.stemHeight
     self.MdSemelle= MdSemelle
     self.VdSemelle= VdSemelle
   def interpolate(self):
@@ -145,7 +146,76 @@ class RetainingWallReinforcement(dict):
     '''Return armature at index.'''
     return self[index]
     
+class WallStabilityResults(object):
+  def __init__(self,wall,combinations,foundationSoilModel,gammaR= 1):
+    self.Foverturning= 1e15
+    self.FoverturningComb= ''
+    self.Fsliding= 1e15
+    self.FslidingComb= ''
+    self.Fbearing= 1e15
+    self.FbearingComb= ''
+    for comb in combinations:
+      reactions= wall.resultComb(comb)
+      R= reactions.getResultant()
+      Foverturning= wall.getOverturningSafetyFactor(R,gammaR)
+      if(Foverturning<self.Foverturning):
+        self.Foverturning= Foverturning
+        self.FoverturningComb= comb
+      Fsliding= wall.getSlidingSafetyFactor(R,gammaR,foundationSoilModel)
+      if(Fsliding<self.Fsliding):
+        self.Fsliding= Fsliding
+        self.FslidingComb= comb
+      Fbearing= wall.getBearingPressureSafetyFactor(R,foundationSoilModel,1.0)
+      if(Fbearing<self.Fbearing):
+        self.Fbearing= Fbearing
+        self.FbearingComb= comb
+  def writeOutput(self,outputFile,name):
+    '''Write results in LaTeX format.'''
+    outputFile.write("\\begin{center}\n")
+    outputFile.write("\\begin{tabular}[H]{|l|c|c|c|}\n")
+    outputFile.write("\\hline\n")
+    outputFile.write("\\multicolumn{4}{|c|}{\\textsc{Verification stabilité mur: "+name+"}}\\\\\n")
+    outputFile.write("\\hline\n")
+    outputFile.write("Vérification:  & $F_{disp}$ & $F_{req}$ & Combinaison\\\\\n")
+    outputFile.write("\\hline\n")
+    outputFile.write("Renversement:  & " + fmt.Factor.format(self.Foverturning) +" & 1.00 & "+self.FoverturningComb+'\\\\\n')
+    outputFile.write("Glissement:  & " + fmt.Factor.format(self.Fsliding) +" & 1.00 & "+self.FslidingComb+'\\\\\n')
+    outputFile.write("Poinçonnement:  & " + fmt.Factor.format(self.Fbearing) +" & 1.00 & "+self.FbearingComb+'\\\\\n')
+    outputFile.write("\\hline\n")
+    outputFile.write("\\multicolumn{4}{|l|}{$F_{disp}$: sécurité disponible.}\\\\\n")
+    outputFile.write("\\multicolumn{4}{|l|}{$F_{req}$: sécurité requise.}\\\\\n")
+    
+    outputFile.write("\\hline\n")
+    outputFile.write("\\end{tabular}\n")
+    outputFile.write("\\end{center}\n")
 
+class WallULSResults(object):
+  def __init__(self,internalForces):
+    self.internalForces= internalForces
+
+class WallSLSResults(WallULSResults):
+  def __init__(self,internalForces,rotation, rotationComb):
+    super(WallSLSResults,self).__init__(internalForces)
+    self.rotation= rotation
+    self.rotationComb= rotationComb
+  def writeOutput(self,outputFile,name):
+    '''Write results in LaTeX format.'''
+    outputFile.write("\\begin{center}\n")
+    outputFile.write("\\begin{tabular}[H]{|l|c|c|c|}\n")
+    outputFile.write("\\hline\n")
+    outputFile.write("\\multicolumn{3}{|c|}{\\textsc{Verification rotation mur: "+name+"}}\\\\\n")
+    outputFile.write("\\hline\n")
+    outputFile.write("$\\beta_{disp} (\\permil)$ & $\\beta_{req}(\\permil)$ & Combinaison\\\\\n")
+    outputFile.write("\\hline\n")
+    outputFile.write(fmt.Factor.format(self.rotation*1000) +" & 2.00 & "+self.rotationComb+'\\\\\n')
+    outputFile.write("\\hline\n")
+    outputFile.write("\\multicolumn{3}{|l|}{$\\beta_{disp}$: rotation maximale calculée du mur.}\\\\\n")
+    outputFile.write("\\multicolumn{3}{|l|}{$\\beta_{req}$: rotation maximale autorisée du mur.}\\\\\n")
+    
+    outputFile.write("\\hline\n")
+    outputFile.write("\\end{tabular}\n")
+    outputFile.write("\\end{center}\n")
+    
 class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
   '''Cantilever retaining wall.'''
   b= 1.0
@@ -190,16 +260,16 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
   def setULSInternalForcesEnvelope(self,wallInternalForces):
     '''Assigns the ultimate limit state infernal forces envelope for the stem.'''
     if(hasattr(self,'stemHeight')):
-      if(self.stemHeight!=wallInternalForces.stemHeight):
+      if(self.getWFStemHeigth()!=wallInternalForces.stemHeight):
         lmsg.warning('stem height (' + str(self.stemHeight) + ' m) different from length of internal forces envelope law('+ str(wallInternalForces.stemHeight)+ ' m') 
     else:
-      self.stemHeight= wallInternalForces.stemHeight
+      self.stemHeight= wallInternalForces.stemHeight-self.footingThickness/2.0
     self.internalForcesULS= wallInternalForces
 
   def setSLSInternalForcesEnvelope(self,wallInternalForces):
     '''Assigns the serviceability limit state infernal forces envelope for the stem.'''
     if(hasattr(self,'stemHeight')):
-      if(self.stemHeight!=wallInternalForces.stemHeight):
+      if(self.getWFStemHeigth()!=wallInternalForces.stemHeight):
         lmsg.warning('stem height (' + str(self.stemHeight) + ' m) different from length of internal forces envelope law('+ str(wallInternalForces.stemHeight)+ ' m') 
     else:
       self.stemHeight= wallInternalForces.stemHeight
@@ -241,11 +311,12 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
     outputFile.write("\\end{center}\n")
     outputFile.write("\\end{table}\n")
 
-
   def writeResult(self,pth):
     '''Write reinforcement verification results in LaTeX format.'''
     outputFile= open(pth+self.name+".tex","w")
     self.writeDef(pth,outputFile)
+    self.stability_results.writeOutput(outputFile,self.name)
+    self.sls_results.writeOutput(outputFile,self.name)
     outputFile.write("\\bottomcaption{Calcul armatures mur "+ self.name +"} \\label{tb_"+self.name+"}\n")
     outputFile.write("\\tablefirsthead{\\hline\n\\multicolumn{1}{|c|}{\\textsc{Armatures mur "+self.name+"}}\\\\\\hline\n}\n")
     outputFile.write("\\tablehead{\\hline\n\\multicolumn{1}{|c|}{\\textsc{"+self.name+" (suite)}}\\\\\\hline\n}\n")
@@ -370,6 +441,11 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
     outputFile.write("\\caption{Schéma armatures mur "+ self.name +"} \\label{fg_"+self.name+"}\n")
     outputFile.write("\\end{figure}\n")
     
+  def createFEProblem(self, title):
+    self.FEModel= xc.ProblemaEF()
+    self.FEModel.title= 'Retaining wall A'
+    return self.FEModel
+    
   def genMesh(self,nodes,springMaterials):
     self.defineWireframeModel(nodes)
     nodes.newSeedNode()
@@ -451,13 +527,60 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
     for e in self.toeSet.getElements:
       toeFillLoad= grav*rho*toeFillDepth
       e.vector2dUniformLoadGlobal(xc.Vector([0.0, -toeFillLoad]))
-  def createEarthPressureLoadOnStem(self,pressureModel):
+
+  def createEarthPressureLoadOnStem(self,pressureModel,vDir= xc.Vector([-1.0,0.0]),Delta= 0.0):
     '''Create the loads of the earth pressure over the stem.
 
         Args:
        :pressureModel: (obj) earth pressure model.
+       :vDir: (xc.Vector) direction for the pressures.
     '''
-    pressureModel.appendLoadToCurrentLoadPattern(self.stemSet,xc.Vector([-1.0,0.0]),1)
+    pressureModel.appendLoadToCurrentLoadPattern(self.stemSet,vDir,iCoo= 1,delta= Delta)
+    
+  def createEarthPressureLoadOnHeelEnd(self,pressureModel):
+    '''Create the loads of the earth pressure over the vertical face
+       at the end of the heel.
+
+        Args:
+       :pressureModel: (obj) earth pressure model.
+    '''
+    n= self.wireframeModelPoints['heelEnd'].getNode()
+    z= n.getInitialPos2d.y
+    force= pressureModel.getPressure(z)*self.footingThickness
+    loadVector= force*xc.Vector([-1.0,0.0,0.0])
+    n.newLoad(loadVector)
+    
+  def createEarthPressureLoadOnToeEnd(self,pressureModel):
+    '''Create the loads of the earth pressure over the vertical face
+       at the end of the toe.
+
+        Args:
+       :pressureModel: (obj) earth pressure model.
+    '''
+    n= self.wireframeModelPoints['toeEnd'].getNode()
+    z= n.getInitialPos2d.y
+    force= pressureModel.getPressure(z)*self.footingThickness
+    loadVector= force*xc.Vector([1.0,0.0,0.0])
+    n.newLoad(loadVector)
+
+  def createBackFillPressures(self,pressureModel,Delta= 0.0):
+    '''Create backfill earth pressures over the wall.
+
+        Args:
+       :pressureModel: (obj) earth pressure model for the backfill.
+    '''
+    self.createEarthPressureLoadOnStem(pressureModel,Delta= Delta)
+    self.createEarthPressureLoadOnHeelEnd(pressureModel)
+    
+  def createFrontFillPressures(self,pressureModel,Delta= 0.0):
+    '''Create front fill earth pressures over the wall.
+
+        Args:
+       :pressureModel: (obj) earth pressure model for the backfill.
+    '''
+    self.createEarthPressureLoadOnStem(pressureModel,xc.Vector([1.0,0.0]),Delta= Delta)
+    self.createEarthPressureLoadOnToeEnd(pressureModel)
+    
   def createVerticalLoadOnHeel(self,loadOnBackFill):
     '''Create the loads over the heel dues to a load acting on the backfill.
 
@@ -465,15 +588,18 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
        :loadOnBackFill: (obj) load acting on the backfill.
     '''
     loadOnBackFill.appendVerticalLoadToCurrentLoadPattern(self.heelSet,xc.Vector([0.0,-1.0]),0,1)
-  def createPressuresFromLoadOnBackFill(self, loadOnBackFill):
+
+  def createPressuresFromLoadOnBackFill(self, loadOnBackFill,Delta= 0.0):
     '''Create the pressures on the stem and on the heel dues to 
        a load acting on the backfill.
 
         Args:
        :loadOnBackFill: (obj) load acting on the backfill.
     '''
-    self.createEarthPressureLoadOnStem(loadOnBackFill)
-    self.createVerticalLoadOnHeel(loadOnBackFill)
+    self.createEarthPressureLoadOnStem(loadOnBackFill,Delta= Delta) #Pressures on stem.
+    self.createEarthPressureLoadOnHeelEnd(loadOnBackFill) #Force on heel end.
+    self.createVerticalLoadOnHeel(loadOnBackFill) #Vertical load on heel.
+    
   def createLoadOnTopOfStem(self,loadVector):
     '''Create a loac acting on the node at the top of the stem.
         Args:
@@ -571,9 +697,91 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
     F= R.getResultante()
     qu= foundationSoilModel.qu(q,D,self.b,bReduced,F.y,0.0,F.x)
     sigma= F.y/bReduced
-    print 'qu= ', qu
-    print 'sigma= ', sigma
     return qu/sigma
-  
-  
 
+  def getStemYCoordinates(self):
+    y= list()
+    for e in self.stemSet.getElements:
+      n1= e.getNodes[0]
+      y.append(n1.getInitialPos2d.y)
+    n2= e.getNodes[1]
+    y.append(n2.getInitialPos2d.y)
+    return y
+
+  def getStemInternalForces(self):
+    md= list()
+    vd= list()
+    for e in self.stemSet.getElements:
+      md.append(e.getMz1)
+      vd.append(e.getVy1)
+    md.append(e.getMz2)
+    vd.append(e.getVy2)
+    return md, vd
+
+  def getHeelInternalForces(self):
+    md= 1.0e15
+    vd= 1.0e15
+    for e in self.heelSet.getElements:
+      md= min(md,e.getMz1)
+      vd= min(vd,e.getVy1)
+    return md, vd
+  
+  def resultComb(self,nmbComb):
+    '''Solution and result retrieval routine.'''
+    preprocessor= self.FEModel.getPreprocessor   
+    preprocessor.resetLoadCase()
+    preprocessor.getLoadLoader.getLoadCombinations.addToDomain(nmbComb)
+    #Solution
+    solution= predefined_solutions.SolutionProcedure()
+    analysis= solution.simpleStaticLinear(self.FEModel)
+    result= analysis.analyze(1)
+    reactions= self.getReactions()
+    preprocessor.getLoadLoader.getLoadCombinations.removeFromDomain(nmbComb)
+    return reactions
+  
+  def performStabilityAnalysis(self,combinations,foundationSoilModel): 
+    self.stability_results= WallStabilityResults(self,combinations,foundationSoilModel)
+    return self.stability_results
+
+  def getEnvelopeInternalForces(self,envelopeMd, envelopeVd, envelopeMdHeel, envelopeVdHeel):
+    md, vd= self.getStemInternalForces()
+    tmpMd= [max(l1, l2) for l1, l2 in zip(envelopeMd, md)]
+    envelopeMd= tmpMd
+    tmpVd= [max(l1, l2) for l1, l2 in zip(envelopeVd, vd)]
+    envelopeVd= tmpVd
+    mdHeel, vdHeel= self.getHeelInternalForces()
+    envelopeMdHeel= min(mdHeel,envelopeMdHeel)
+    envelopeVdHeel= min(vdHeel,envelopeVdHeel)
+    return envelopeMd, envelopeVd, envelopeMdHeel, envelopeVdHeel 
+
+  def performSLSAnalysis(self,combinations):
+    rotation= 1e15
+    rotationComb= ''
+    y= self.getStemYCoordinates()
+    envelopeMd= [0]*len(y)
+    envelopeVd= [0]*len(y)
+    envelopeMdHeel= 1.0e15
+    envelopeVdHeel= 1.0e15
+    for comb in combinations:
+      reactions= self.resultComb(comb)
+      envelopeMd, envelopeVd, envelopeMdHeel, envelopeVdHeel= self.getEnvelopeInternalForces(envelopeMd, envelopeVd, envelopeMdHeel, envelopeVdHeel)
+      rot= self.getFoundationRotation()
+      if(rot<rotation):
+        rotation= rot
+        rotationComb= comb
+    internalForces= InternalForces(y,envelopeMd, envelopeVd, abs(envelopeMdHeel), abs(envelopeVdHeel))
+    self.sls_results= WallSLSResults(internalForces,rotation, rotationComb)
+    return self.sls_results
+
+  def performULSAnalysis(self,combinations):
+    y= self.getStemYCoordinates()
+    envelopeMd= [0]*len(y)
+    envelopeVd= [0]*len(y)
+    envelopeMdHeel= 1.0e15
+    envelopeVdHeel= 1.0e15
+    for comb in combinations:
+      reactions= self.resultComb(comb)
+      envelopeMd, envelopeVd, envelopeMdHeel, envelopeVdHeel= self.getEnvelopeInternalForces(envelopeMd, envelopeVd, envelopeMdHeel, envelopeVdHeel)
+    internalForces= InternalForces(y,envelopeMd, envelopeVd, abs(envelopeMdHeel), abs(envelopeVdHeel))
+    self.uls_results= WallULSResults(internalForces)
+    return self.uls_results
