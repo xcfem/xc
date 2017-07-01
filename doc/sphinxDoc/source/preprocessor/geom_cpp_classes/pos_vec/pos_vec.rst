@@ -15,7 +15,7 @@ Vectors and positions
     :members:
     :show-inheritance:
 	    
-.. autoclass:: MatrizPos2d
+.. autoclass:: MatrixPos2d
     :members:
     :show-inheritance:
 	    
