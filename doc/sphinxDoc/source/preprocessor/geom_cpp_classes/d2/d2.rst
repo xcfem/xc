@@ -1,0 +1,55 @@
+Two-dimensional entities
+========================
+
+.. module:: geom
+
+	    
+.. autoclass:: Surface2d
+    :members:
+    :show-inheritance:
+	    
+.. autoclass:: HalfPlane2d
+    :members:
+    :show-inheritance:
+	    
+.. autoclass:: BND2d
+    :members:
+    :show-inheritance:
+	    
+.. autoclass:: Circle2d
+    :members:
+    :show-inheritance:
+	    
+.. autoclass:: Surface3d
+    :members:
+    :show-inheritance:
+	    
+.. autoclass:: D2to3d
+    :members:
+    :show-inheritance:
+	    
+.. autoclass:: GeneralEquationOfPlane
+    :members:
+    :show-inheritance:
+
+	    
+.. autoclass:: Plane3d
+    :members:
+    :show-inheritance:
+	    
+.. autoclass:: Polygon3d
+    :members:
+    :show-inheritance:
+	    
+	    
+.. autoclass:: Triangle3d
+    :members:
+    :show-inheritance:
+      
+.. autoclass:: Grid2d
+    :members:
+    :show-inheritance:
+	    
+.. toctree::
+	  
+    poligonos2d/poligonos2d.rst
