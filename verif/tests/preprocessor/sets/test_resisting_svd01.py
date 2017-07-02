@@ -150,7 +150,7 @@ def resuelveCombEstatLin(comb):
 o= geom.Pos3d(2,1,0) 
 p1= geom.Pos3d(2,2,0)
 p2= geom.Pos3d(2,1,1)
-plano= geom.Plano3d(o,p1,p2)
+plano= geom.Plane3d(o,p1,p2)
 
 def procesResultVerif(comb):
   tabComb= comb.tag

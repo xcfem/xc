@@ -1,0 +1,14 @@
+Three-dimensional entities
+==========================
+
+.. module:: geom
+
+	    
+.. autoclass:: SemiSpace3d
+    :members:
+    :show-inheritance:
+	    
+.. autoclass:: BND3d
+    :members:
+    :show-inheritance:
+	    

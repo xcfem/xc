@@ -11,6 +11,7 @@ Preprocessor
 .. toctree::
    :maxdepth: 1
 
+   preprocessor/basic_geometry
 
    preprocessor/CAD_model
 

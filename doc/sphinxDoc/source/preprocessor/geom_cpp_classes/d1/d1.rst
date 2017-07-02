@@ -1,0 +1,52 @@
+One-dimensional entities
+========================
+
+.. module:: geom
+	    
+.. autoclass:: Linea2d
+    :members:
+    :show-inheritance:
+	    
+.. autoclass:: SemiRecta2d
+    :members:
+    :show-inheritance:
+	    
+.. autoclass:: Recta2d
+    :members:
+    :show-inheritance:
+	    
+.. autoclass:: Linea3d
+    :members:
+    :show-inheritance:
+	    
+.. autoclass:: Ray3d
+    :members:
+    :show-inheritance:
+	    
+.. autoclass:: LineSegment3d
+    :members:
+    :show-inheritance:
+	    
+.. autoclass:: Recta3d
+    :members:
+    :show-inheritance:
+	       
+	    
+.. autoclass:: Polilinea2d
+    :members:
+    :show-inheritance:
+	    
+.. autoclass:: Segmento2d
+    :members:
+    :show-inheritance:
+	    
+.. autoclass:: Polilinea3d
+    :members:
+    :show-inheritance:
+	    
+.. autoclass:: dq_polyline3D
+    :members:
+    :show-inheritance:
+		      
+.. toctree::
+   func_por_puntos/func_por_puntos.rst

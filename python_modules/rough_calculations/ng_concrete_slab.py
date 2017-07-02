@@ -8,11 +8,9 @@ class ConcreteSlab(object):
   def __init__(self,l,L,thickness):
     ''' Constructor
 
-    Parameters
-    ----------
-    l: short side of the slab.
-    L: long side of the slab.
-    thickness: thickness of the slab.
+    :param l: short side of the slab.
+    :param L: long side of the slab.
+    :param thickness: thickness of the slab.
     '''
     self.L= max(L,l)
     self.l= min(L,l)
@@ -27,13 +25,9 @@ class FourSidesPinnedConcreteSlab(ConcreteSlab):
   def getMMax(self,p):
     ''' Returns maximum bending moment under the load p
 
-    Parameters
-    ----------
-    p: Total load over the slab.
+    :param p: Total load over the slab.
 
-    References
-    ----------
-    Formulas from Yvon Lescouarc'h ingénieur.
+    .. note:: Formulas from Yvon Lescouarc'h ingénieur.
     '''
     a= 8.0
     if(self.l/self.L>=0.4):
@@ -46,12 +40,8 @@ class FourSidesPinnedConcreteSlab(ConcreteSlab):
   def predimThickness(self,p):
     ''' Returns thickness for a four side supported slab
 
-    Parameters
-    ----------
-    p: Total load over the slab (N/m2).
+    :param p: Total load over the slab (N/m2).
 
-    References
-    ----------
-    Formulas from Yvon Lescouarc'h ingénieur.
+    .. note:: Formulas from Yvon Lescouarc'h ingénieur.
     '''
     return math.sqrt(self.getMMax(p)/100.0)/100.0
