@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # home made test
-# Comprobación pretensado en material de tipo steel02
+# steel02 material presstressing.
 
 L= 1.0 # Bar length (m)
 E= 190e9 # Elastic modulus expressed in MPa

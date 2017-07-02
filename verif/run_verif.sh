@@ -17,23 +17,23 @@ START=$(date +%s.%N)
 echo "$BLEU" "Actions tests." "$NORMAL"
 python tests/actions/test_snowSIA.py
 python tests/actions/test_windSIA.py
-python tests/actions/verif_precontrainte.py
+python tests/actions/test_prestressing.py
 python tests/actions/test_peck_pressure_envelope.py
 
 #Combinations tests.
 echo "$BLEU" "Load combination tests." "$NORMAL"
 python tests/combinations/add_loads_01.py
-python tests/combinations/suma_hipotesis_02.py
-python tests/combinations/combinacion_01.py
-python tests/combinations/combinacion_02.py
-python tests/combinations/combinacion_03.py
+python tests/combinations/test_add_load_cases.py
+python tests/combinations/test_combination01.py
+python tests/combinations/test_combination02.py
+python tests/combinations/test_combination03.py
 #XXX sqlitepp extremely slow. Seek for another solution.
-# python tests/combinations/combinacion_04.py
-python tests/combinations/combinacion_05.py
-python tests/combinations/combinacion_06.py
-python tests/combinations/combinacion_07.py
-python tests/combinations/test_pescante_01.py
-python tests/combinations/test_pescante_02.py
+# python tests/combinations/test_combination04.py
+python tests/combinations/test_combination05.py
+python tests/combinations/test_combination06.py
+python tests/combinations/test_combination07.py
+python tests/combinations/test_davit_01.py
+python tests/combinations/test_davit_02.py
 
 
 echo "$BLEU" "Elements tests." "$NORMAL"
@@ -61,16 +61,16 @@ python tests/elements/crd_transf/test_pdelta_01.py
 python tests/elements/crd_transf/test_pdelta_02.py
 echo "$BLEU" "  Beam column tests." "$NORMAL"
 python tests/elements/beam_column/beam_test1.py
-python tests/elements/beam_column/mensula3d_01.py
-python tests/elements/beam_column/mensula3d_02.py
-python tests/elements/beam_column/mensula3d_03.py
-python tests/elements/beam_column/mensula3d_04.py
-python tests/elements/beam_column/mensula3d_05.py
-python tests/elements/beam_column/mensula3d_06.py
-python tests/elements/beam_column/mensula3d_07.py
-python tests/elements/beam_column/mensula3d_08.py
-python tests/elements/beam_column/mensula3d_09.py
-python tests/elements/beam_column/mensula3d_10.py
+python tests/elements/beam_column/cantilever3d_01.py
+python tests/elements/beam_column/cantilever3d_02.py
+python tests/elements/beam_column/cantilever3d_03.py
+python tests/elements/beam_column/cantilever3d_04.py
+python tests/elements/beam_column/cantilever3d_05.py
+python tests/elements/beam_column/cantilever3d_06.py
+python tests/elements/beam_column/cantilever3d_07.py
+python tests/elements/beam_column/cantilever3d_08.py
+python tests/elements/beam_column/cantilever3d_09.py
+python tests/elements/beam_column/cantilever3d_10.py
 python tests/elements/beam_column/elastic_beam2d_sign_criteria_01.py
 python tests/elements/beam_column/elastic_beam2d_sign_criteria_02.py
 python tests/elements/beam_column/elastic_beam2d_sign_criteria_03.py
@@ -88,10 +88,10 @@ python tests/elements/beam_column/test_force_beam_column_3d_04.py
 python tests/elements/beam_column/test_force_beam_column_3d_05.py
 python tests/elements/beam_column/test_force_beam_column_3d_06.py
 python tests/elements/beam_column/plastic_hinge_on_cantilever.py
-python tests/elements/beam_column/test_giro_crdTransf_01.py
-python tests/elements/beam_column/test_portico_01.py
+python tests/elements/beam_column/test_crdTransf_rotation_01.py
+python tests/elements/beam_column/test_frame_01.py
 python tests/elements/beam_column/test_integration_options_01.py
-python tests/elements/beam_column/test_signo_deformaciones01.py
+python tests/elements/beam_column/test_strains_sign_01.py
 echo "$BLEU" "  Zero length elements tests." "$NORMAL"
 python tests/elements/zero_length/zero_length_element_test_01.py
 python tests/elements/zero_length/zero_length_element_test_02.py
@@ -99,12 +99,12 @@ python tests/elements/zero_length/zero_length_element_test_03.py
 python tests/elements/zero_length/zero_length_element_test_04.py
 python tests/elements/zero_length/zero_length_element_test_05.py
 python tests/elements/zero_length/zero_length_element_test_06.py
-python tests/elements/zero_length/criterio_signos_zero_length_section.py
-python tests/elements/zero_length/test_signo_deformaciones.py
-python tests/elements/zero_length/test_signo_deformaciones01.py
-python tests/elements/zero_length/test_signo_deformaciones02.py
-python tests/elements/zero_length/test_signo_deformaciones03.py
-python tests/elements/zero_length/test_signo_deformaciones04.py
+python tests/elements/zero_length/test_zero_length_section_sign_criteria.py
+python tests/elements/zero_length/test_strains_sign00.py
+python tests/elements/zero_length/test_strains_sign01.py
+python tests/elements/zero_length/test_strains_sign02.py
+python tests/elements/zero_length/test_strains_sign03.py
+python tests/elements/zero_length/test_strains_sign04.py
 python tests/elements/zero_length/test_winkler.py
 python tests/elements/zero_length/test_quasi_winkler.py
 echo "$BLEU" "  Plane elasticity elements tests." "$NORMAL"
@@ -175,12 +175,12 @@ python tests/solution/constraint_handler/lagrange_handler_test_01.py
 
 #Eigenvalues.
 echo "$BLEU" "  Eigenvalue solution tests." "$NORMAL"
-python tests/solution/eigenvalues/modos_propios_mensula_01.py
-python tests/solution/eigenvalues/modos_propios_mensula_02.py
-python tests/solution/eigenvalues/modos_propios_mensula_03.py
-python tests/solution/eigenvalues/modos_propios_mensula_04.py
-python tests/solution/eigenvalues/modos_propios_mensula_05.py
-python tests/solution/eigenvalues/modos_propios_mensula_06.py
+python tests/solution/eigenvalues/cantilever_eigenmodes_01.py
+python tests/solution/eigenvalues/cantilever_eigenmodes_02.py
+python tests/solution/eigenvalues/cantilever_eigenmodes_03.py
+python tests/solution/eigenvalues/cantilever_eigenmodes_04.py
+python tests/solution/eigenvalues/cantilever_eigenmodes_05.py
+python tests/solution/eigenvalues/cantilever_eigenmodes_06.py
 python tests/solution/eigenvalues/linear_buckling_column01.py
 python tests/solution/eigenvalues/linear_buckling_column02.py
 python tests/solution/eigenvalues/linear_buckling_column03.py
@@ -316,7 +316,7 @@ echo "$BLEU" "  Uniaxial materials tests." "$NORMAL"
 python tests/materials/uniaxial/test_elasticpp_material_01.py
 python tests/materials/uniaxial/test_steel01.py
 python tests/materials/uniaxial/test_steel02.py
-python tests/materials/uniaxial/test_pretensado_steel02.py
+python tests/materials/uniaxial/test_steel02_prestressing.py
 python tests/materials/uniaxial/test_concrete01.py
 python tests/materials/uniaxial/test_concrete02_01.py
 python tests/materials/uniaxial/test_concrete02_02.py
@@ -353,22 +353,22 @@ python tests/materials/test_elastic_isotropic_3d_01.py
 #Cross sections. Geometry.
 echo "$BLEU" "  Section geometry tests." "$NORMAL"
 python tests/materials/geom_section/test_spot_01.py
-python tests/materials/geom_section/test_segmento_01.py
-python tests/materials/geom_section/test_reg_circ_01.py
-python tests/materials/geom_section/test_rg_cuadrilatera_01.py
-python tests/materials/geom_section/test_rg_cuadrilatera_02.py
+python tests/materials/geom_section/test_segment_01.py
+python tests/materials/geom_section/test_circular_region_01.py
+python tests/materials/geom_section/test_quad_region_01.py
+python tests/materials/geom_section/test_quad_region_02.py
 python tests/materials/geom_section/test_rg_arco_corona_circular_01.py
 python tests/materials/geom_section/test_rg_arco_corona_circular_02.py
-python tests/materials/geom_section/test_geom_caract_mec_01.py
-python tests/materials/geom_section/test_geom_caract_mec_02.py
-python tests/materials/geom_section/test_geom_caract_mec_03.py
-python tests/materials/geom_section/test_geom_caract_mec_04.py
+python tests/materials/geom_section/test_mass_properties_01.py
+python tests/materials/geom_section/test_mass_properties_02.py
+python tests/materials/geom_section/test_mass_properties_03.py
+python tests/materials/geom_section/test_mass_properties_04.py
 python tests/materials/geom_section/test_geom_params_torsion_ehe_01.py
 echo "$BLEU" "  Steel sections tests." "$NORMAL"
-python tests/materials/steel_shapes/test_perfiles_aisc_w.py
-python tests/materials/steel_shapes/test_perfiles_aisc_hss.py
-python tests/materials/steel_shapes/test_perfil_metalico_01.py
-python tests/materials/steel_shapes/test_perfil_metalico_02.py
+python tests/materials/steel_shapes/test_aisc_w_shapes.py
+python tests/materials/steel_shapes/test_aisc_hss_shapes.py
+python tests/materials/steel_shapes/test_steel_shape_01.py
+python tests/materials/steel_shapes/test_steel_shape_02.py
 
 #Cross sections. Fiber model.
 echo "$BLEU" "  Elastic section tests." "$NORMAL"
@@ -379,10 +379,10 @@ python tests/materials/elastic_section/test_elastic_section_3d_01.py
 python tests/materials/elastic_section/test_elastic_section_3d_02.py
 python tests/materials/elastic_section/test_elastic_shear_section_3d_01.py
 python tests/materials/elastic_section/test_tangent_stiffness_02.py
-python tests/materials/elastic_section/test_giro_seccion_3d_01.py
-python tests/materials/elastic_section/test_giro_seccion_3d_02.py
-python tests/materials/elastic_section/test_giro_seccion_3d_03.py
-python tests/materials/elastic_section/test_giro_seccion_3d_04.py
+python tests/materials/elastic_section/test_section_rotation_3d_01.py
+python tests/materials/elastic_section/test_section_rotation_3d_02.py
+python tests/materials/elastic_section/test_section_rotation_3d_03.py
+python tests/materials/elastic_section/test_section_rotation_3d_04.py
 echo "$BLEU" "  Fiber section tests." "$NORMAL"
 python tests/materials/fiber_section/test_reg_cuad_01.py
 python tests/materials/fiber_section/test_capa_armadura_recta_01.py
@@ -440,7 +440,7 @@ python tests/materials/ehe/test_shear_ehe08_03.py
 python tests/materials/ehe/test_shear_ehe08_04.py
 python tests/materials/ehe/test_shear_ehe08_05.py
 echo "$BLEU" "    Misd. (EHE-08)." "$NORMAL"
-python tests/materials/ehe/test_mensula_corta_ehe.py
+python tests/materials/ehe/test_concrete_corbel_ehe.py
 echo "$BLEU" "   EC2 tests." "$NORMAL"
 python tests/materials/ec2/test_EC2Concrete.py
 python tests/materials/ec2/test_EC2creep.py
@@ -479,8 +479,8 @@ python tests/materials/test_anchor_bolt01.py
 python tests/materials/ehe/test_creep_01.py
 python tests/materials/ehe/test_creep_02.py
 python tests/materials/ehe/test_creep_03.py
-python tests/materials/ehe/test_retraccion_01.py
-#python tests/materials/ehe/test_retraccion_02.py
+python tests/materials/ehe/test_shrinkage_01.py
+#python tests/materials/ehe/test_shrinkage_02.py
 python tests/materials/ehe/test_steel_relaxation_01.py
 
 echo "$BLEU" "  Steel design verifications (EAE)." "$NORMAL"
@@ -507,10 +507,10 @@ python tests/database/test_database_12.py
 python tests/database/test_database_13.py
 python tests/database/test_database_14.py
 python tests/database/test_database_15.py
-python tests/database/prueba_sqlite_01.py
-python tests/database/prueba_sqlite_02.py
-python tests/database/prueba_sqlite_03.py
-python tests/database/prueba_readln_05.py
+python tests/database/sqlite_test_01.py
+python tests/database/sqlite_test_02.py
+python tests/database/sqlite_test_03.py
+python tests/database/readln_test_01.py
 
 echo "$BLEU" "Verifiyng import/export routines (Salome, Code_Aster,...)." "$NORMAL"
 echo "$ROSE" "  MED tests are in quarantine (some debugging pending)." "$NORMAL"

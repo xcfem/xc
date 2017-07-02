@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-#Comprobación del cálculo de una ménsula corta según EHE.
+#Design of concrete corbel according to EHE.
 #Home made test.
 
 from __future__ import division
@@ -14,13 +14,13 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
-Fvd=1000e3 #Carga vertical en la ménsula, positiva hacia abajo (N).
-Fhd=100e3 #Carga horizontal en la ménsula, positiva hacia afuera (N).
-tipoJunta="monolitica" #Tipo de junta de acuerdo con el apartado 64.1.2.1.
-a=0.6 #Distancia (m) entre el eje de la carga aplicada y la sección de empotramiento de la ménsula (ver figura 64.1.2 de EHE-08).
+Fvd=1000e3 #Vertical load on the corbel, positive downwards (N).
+Fhd=100e3 #Horizontal load on the corbel, positive outwards (N).
+tipoJunta="monolitica" #Joint type according to 64.1.2.1.
+a=0.6 #Distance (m) from the applied load axis and the plane of the corbel fixation (see figure 64.1.2 on EHE-08).
 
-fck=35E6 #Resistencia característica del hormigón (Pa).
-fyk=500E6 #Resistencia característica del acerp (Pa).
+fck=35E6 #Characteristic value of concrete strength (Pa).
+fyk=500E6 #Characteristic value of steel strength (Pa).
 
 #Resultados
 dmin=mensula_cortaEHE08.getCantoUtilMinimo(tipoJunta,a)
@@ -52,8 +52,12 @@ ratio5=abs(Aplaca-AplacaTeor)/AplacaTeor
 ##print "ratio5= ",ratio5
   
 
+import os
+from miscUtils import LogMessages as lmsg
+fname= os.path.basename(__file__)
 if (ratio1<1e-12) and (ratio2<1e-7) and (ratio3<1e-7) and (ratio4<1e-15) and (ratio5<1e-15):
-    print "test ménsula corta EHE-08: ok."
+  print "test ",fname,": ok."
 else:
-    print "test ménsula corta EHE-08: ERROR."
+  lmsg.error(fname+' ERROR.')
+
   
