@@ -16,6 +16,13 @@ __email__= "l.pereztato@gmail.com ana.Ortega.Ort@gmail.com"
 class ConcreteSIA262(ec2.EC2Concrete):
   def nufc(self):
     return min(math.pow(30e6/-self.fck,1/3.0),1.0)
+  def eta_fc(self):
+    ''' Factor that reduces concrete design strength (SIA 262:2013 4.2.1.2.'''
+    return min(pow((-30e6/self.fck),(1.0/3.0)),1.0)
+  def fcd(self):
+    '''concrete design strength [Pa][-]
+    '''
+    return self.eta_fc()*super(ConcreteSIA262,self).fcd()
   def fctd(self,t,favourable):
     '''SIA 262 sections 4.4.1.3 et 4.4.1.4'''
     kt= 1.0/(1.0+0.5*t) #(99)

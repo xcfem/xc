@@ -59,7 +59,7 @@ class Concrete(matWDKD.MaterialWithDKDiagrams):
         self.gmmC= gammaC #** Partial safety factor for concrete 
 
     def fcd(self):
-        '''design strength of the concrete [Pa][-]
+        '''concrete design strength [Pa][-]
         '''
         return self.alfacc*self.fck/self.gmmC 
 
