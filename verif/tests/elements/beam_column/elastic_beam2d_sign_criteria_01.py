@@ -20,11 +20,13 @@ from materials import typical_materials
 
 def getInternalForcesBeginNode(elemTag):
   ''':return: internal forces on the element's first node.''' 
-  return (elementos.getElement(elemTag).getN1,elementos.getElement(elemTag).getV1,elementos.getElement(elemTag).getM1)
+  elem= elements.getElement(elemTag)
+  return (elem.getN1,elem.getV1,elem.getM1)
 
 def getInternalForcesEndNode(elemTag):
   ''':return: internal forces on the element's last node.''' 
-  return (elementos.getElement(elemTag).getN2,elementos.getElement(elemTag).getV2,elementos.getElement(elemTag).getM2)
+  elem= elements.getElement(elemTag)
+  return (elem.getN2,elem.getV2,elem.getM2)
 
 def printResults(N1,V1,M1,N2,V2,M2,phaseRatios,phase):
   ratioMsg= 'ratio'+str(phase)
@@ -71,11 +73,11 @@ sectionProperties.I= Iz;
 seccion= typical_materials.defElasticSectionFromMechProp2d(preprocessor, "seccion",sectionProperties)
 
 # Elements definition
-elementos= preprocessor.getElementLoader
-elementos.defaultTransformation= "lin"
-elementos.defaultMaterial= "seccion"
-elementos.defaultTag= 1 #Tag for the next element.
-beam2d= elementos.newElement("elastic_beam_2d",xc.ID([1,2]));
+elements= preprocessor.getElementLoader
+elements.defaultTransformation= "lin"
+elements.defaultMaterial= "seccion"
+elements.defaultTag= 1 #Tag for the next element.
+beam2d= elements.newElement("elastic_beam_2d",xc.ID([1,2]));
 
 
 
@@ -96,7 +98,7 @@ casos.addToDomain("0")
 analisis= predefined_solutions.simple_static_linear(prueba)
 result= analisis.analyze(1)
 
-RF= elementos.getElement(1).getResistingForce()
+RF= elements.getElement(1).getResistingForce()
 (N1,V1,M1)= getInternalForcesBeginNode(1)
 NTeor= F
 (N2,V2,M2)= getInternalForcesEndNode(1)
@@ -122,7 +124,7 @@ casos.addToDomain("1")
 analisis= predefined_solutions.simple_static_linear(prueba)
 result= analisis.analyze(1)
 
-RF= elementos.getElement(1).getResistingForce()
+RF= elements.getElement(1).getResistingForce()
 (N1,V1,M1)= getInternalForcesBeginNode(1)
 M1Teor= F*L
 (N2,V2,M2)= getInternalForcesEndNode(1)
@@ -147,7 +149,7 @@ casos.addToDomain("2")
 analisis= predefined_solutions.simple_static_linear(prueba)
 result= analisis.analyze(1)
 
-RF= elementos.getElement(1).getResistingForce()
+RF= elements.getElement(1).getResistingForce()
 (N1,V1,M1)= getInternalForcesBeginNode(1)
 (N2,V2,M2)= getInternalForcesEndNode(1)
 

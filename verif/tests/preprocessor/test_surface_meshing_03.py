@@ -92,48 +92,6 @@ while not(elem is None):
   areaTotal+= elem.getArea(True)
   elem= eIter.next()
 
-''' 
-\path{"/usr/local/lib/macros_lcmd"
-execfile("vtk/vtk_crea_array_set_data.xcm")
-execfile("vtk/displayVtk.lcmm")
-execfile("vtk/malla_cad/vtk_define_malla_cad.xcm")
-execfile("vtk/malla_ef/vtk_define_malla_elementos.xcm")
-execfile("vtk/vtk_cargas.xcm")
-execfile("vtk/utilsVtk.lcmm")
-\VtkLoadElemMesh("uGridElem","total")
-
-\vtk
-
-    \define["vtkRenderer","renderer"]
-
-        \set_background{.95, .95, .95}
-
-    \VtkDefineActorNodo("uGridElem","renderer",0.02)
-    \VtkDefineElementsActor("uGridElem","renderer","surface")
-
-
-    \renderer
-      { \reset_camera{} }
-
-\VtkDibujaIdsNodos("uGridElem","total","renderer")
-execfile("vtk/vtk_vista_yneg.lcmm")
-execfile("vtk/vtk_muestra_ventana.lcmm")
-\VtkMuestraVentana("renderer",800,600)
-
-\preprocessor.
-
-    \for_each_edge
-      {print "linea: ",nombre," p1: ",getTagP1," p2: ",getTagP2, " ndiv: ",ndiv}
-    \for_each_face
-      {print "cara: ",nombre," ndivI: ",ndivI," ndivJ: ",ndivJ}
-  }}
-
-print "Area total: ",areaTotal
-print "Número de nodos: ",numNodes
-print "Número de elementos: ",numElem
-'''
-
-
 ratio1= abs(numNodes-40)
 ratio2= abs(numElem-32)
 ratio3= abs(areaTotal-4)

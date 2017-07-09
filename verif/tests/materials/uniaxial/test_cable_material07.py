@@ -44,12 +44,12 @@ la carga. Puesto que no se van a determinar tensiones
 se emplea una sección arbitraria de área unidad '''
 
 # Elements definition
-elementos= preprocessor.getElementLoader
-elementos.defaultMaterial= "cable"
-elementos.dimElem= 2 # Dimension of element space
+elements= preprocessor.getElementLoader
+elements.defaultMaterial= "cable"
+elements.dimElem= 2 # Dimension of element space
 #  sintaxis: truss[<tag>] 
-elementos.defaultTag= 1 #Tag for the next element.
-truss= elementos.newElement("truss",xc.ID([1,2]));
+elements.defaultTag= 1 #Tag for the next element.
+truss= elements.newElement("truss",xc.ID([1,2]));
 truss.area= area
     
 # Constraints
@@ -79,8 +79,8 @@ R2A= nodes.getNode(1).getReaction[0]
 ratio1A= ((R1A-fPretA)/fPretA)
 ratio2A= ((R2A+fPretA)/fPretA)
 
-elementos= preprocessor.getElementLoader
-elem1= elementos.getElement(1)
+elements= preprocessor.getElementLoader
+elem1= elements.getElement(1)
 elem1.getMaterial().prestress= sigmaPret
 #            \material{\prestress{sigmaPret}}
 

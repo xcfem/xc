@@ -7,8 +7,8 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
-L= 2.0 # Lado del elemento.
-t= 0.2 # Canto del elemento.
+L= 2.0 # Size of the element edge.
+t= 0.2 # Element thickness.
 E= 2.1e6 # Young modulus of the steel.
 nu= 0.3 # Poisson's ratio.
 # Load
@@ -36,10 +36,10 @@ nod= nodes.newNodeXYZ(0,L,0)
 # Materials definition
 nmb1= typical_materials.defElasticMembranePlateSection(preprocessor, "memb1",E,nu,0.0,t)
 
-elementos= preprocessor.getElementLoader
-elementos.defaultMaterial= "memb1"
-elementos.defaultTag= 1
-elem= elementos.newElement("shell_mitc4",xc.ID([1,2,3,4]))
+elements= preprocessor.getElementLoader
+elements.defaultMaterial= "memb1"
+elements.defaultTag= 1
+elem= elements.newElement("shell_mitc4",xc.ID([1,2,3,4]))
 
 
 # Constraints
@@ -74,7 +74,7 @@ result= analisis.analyze(1)
 n1MedioElem= 0.0
 n2MedioElem= 0.0
 n12MedioElem= 0.0
-#elementos= preprocessor.getElementLoader
+#elements= preprocessor.getElementLoader
 elem.getResistingForce()
 mats= elem.getPhysicalProperties.getVectorMaterials #Materials at gauss points.
 #Gauss points iterator

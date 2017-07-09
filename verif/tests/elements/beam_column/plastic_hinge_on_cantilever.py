@@ -39,10 +39,10 @@ trfs= preprocessor.getTransfCooLoader
 lin= trfs.newLinearCrdTransf2d("lin")
 
 # Elements definition
-elementos= preprocessor.getElementLoader
-elementos.defaultTransformation= "lin" # Transformación de coordenadas para los nuevos elementos
-elementos.defaultMaterial= IPE200.fiberSection3dName
-beam2d= elementos.newElement("force_beam_column_2d",xc.ID([nod1.tag,nod2.tag]));
+elements= preprocessor.getElementLoader
+elements.defaultTransformation= "lin" # Coordinate transformation for the new elements
+elements.defaultMaterial= IPE200.fiberSection3dName
+beam2d= elements.newElement("force_beam_column_2d",xc.ID([nod1.tag,nod2.tag]));
 
 # Constraints
 constraints= preprocessor.getConstraintLoader
@@ -67,7 +67,7 @@ casos.addToDomain("0")
 analisis= predefined_solutions.simple_static_modified_newton(test)
 result= analisis.analyze(10)
 
-elem1= elementos.getElement(0)
+elem1= elements.getElement(0)
 elem1.getResistingForce()
 scc= elem1.getSections()[0]
 M0= scc.getStressResultantComponent("Mz")

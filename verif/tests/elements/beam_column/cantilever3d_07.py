@@ -54,12 +54,12 @@ sectionProperties.Iz= Iz; sectionProperties.Iy= Iy; sectionProperties.J= J
 seccion= typical_materials.defElasticSectionFromMechProp3d(preprocessor, "seccion",sectionProperties)
 
 # Elements definition
-elementos= preprocessor.getElementLoader
-elementos.defaultTransformation= "lin"
-elementos.defaultMaterial= "seccion"
-elementos.defaultTag= 1 #Tag for next element.
-beam3d= elementos.newElement("elastic_beam_3d",xc.ID([1,2]));
-# fin de la definición de elementos
+elements= preprocessor.getElementLoader
+elements.defaultTransformation= "lin"
+elements.defaultMaterial= "seccion"
+elements.defaultTag= 1 #Tag for next element.
+beam3d= elements.newElement("elastic_beam_3d",xc.ID([1,2]));
+# end of element definition
 
 # Constraints
 modelSpace.fixNode000_000(1)
@@ -87,8 +87,8 @@ nodes= preprocessor.getNodeLoader
 nod2= nodes.getNode(2)
 delta= nod2.getDisp[0]  # Node 2 xAxis displacement
 
-elementos= preprocessor.getElementLoader
-elem1= elementos.getElement(1)
+elements= preprocessor.getElementLoader
+elem1= elements.getElement(1)
 elem1.getResistingForce()
 N1= elem1.getN1 # Axil en el extremo dorsal de la barra
 N2= elem1.getN2 # Axil en el extremo frontal de la barra

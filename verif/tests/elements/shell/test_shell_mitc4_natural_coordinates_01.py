@@ -40,9 +40,9 @@ nodes.newNodeIDXYZ(4,p4.x,p4.y,p4.z)
 # Materials definition
 memb1= typical_materials.defElasticMembranePlateSection(preprocessor, "memb1",E,nu,dens,h)
 
-elementos= preprocessor.getElementLoader
-elementos.defaultMaterial= "memb1"
-elem= elementos.newElement("shell_mitc4",xc.ID([1,2,3,4]))
+elements= preprocessor.getElementLoader
+elements.defaultMaterial= "memb1"
+elem= elements.newElement("shell_mitc4",xc.ID([1,2,3,4]))
 
 c= elem.getCoordTransf.getVPosCentroide
 O= geom.Pos3d(c[0],c[1],c[2])

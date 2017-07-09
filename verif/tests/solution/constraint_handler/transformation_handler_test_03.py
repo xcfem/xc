@@ -56,11 +56,11 @@ trfs= preprocessor.getTransfCooLoader
 lin= trfs.newLinearCrdTransf3d("lin")
 lin.xzVector= xc.Vector([0,1,0])
 
-elementos= preprocessor.getElementLoader
-elementos.defaultTransformation= "lin"
-elementos.defaultMaterial= "seccion"
-elementos.defaultTag= 1 #Tag for next element.
-beam3d= elementos.newElement("elastic_beam_3d",xc.ID([nod1.tag,nod2.tag]));
+elements= preprocessor.getElementLoader
+elements.defaultTransformation= "lin"
+elements.defaultMaterial= "seccion"
+elements.defaultTag= 1 #Tag for next element.
+beam3d= elements.newElement("elastic_beam_3d",xc.ID([nod1.tag,nod2.tag]));
 
 # Constraints
 
@@ -92,8 +92,8 @@ if(not pth):
 execfile(pth+"/../../aux/solu_transf_handler2.py")
 
 delta= nodes.getNode(nod3.tag).getDisp[0] #x displacement of node 3.
-elementos.getElement(1).getResistingForce()
-N1= elementos.getElement(nod1.tag).getN1
+elements.getElement(1).getResistingForce()
+N1= elements.getElement(nod1.tag).getN1
 
 deltateor= (F*0.5*L/(E*A))
 ratio1= (delta-deltateor)/deltateor

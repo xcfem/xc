@@ -31,11 +31,11 @@ lin= preprocessor.getTransfCooLoader.newCorotCrdTransf2d("lin")
 seccion= typical_materials.defElasticSection2d(preprocessor, "seccion",1,1,1)
     
 # Elements definition
-elementos= preprocessor.getElementLoader
-elementos.defaultTransformation= "lin" # Transformación de coordenadas para los nuevos elementos
-elementos.defaultMaterial= "seccion"
-elementos.defaultTag= 1 #Tag for next element.
-beam2d= elementos.newElement("elastic_beam_2d",xc.ID([1,2]))
+elements= preprocessor.getElementLoader
+elements.defaultTransformation= "lin" # Coordinate transformation for the new elements
+elements.defaultMaterial= "seccion"
+elements.defaultTag= 1 #Tag for next element.
+beam2d= elements.newElement("elastic_beam_2d",xc.ID([1,2]))
 
 crdTransf= beam2d.getCoordTransf
 # print "vector I:",getIVector

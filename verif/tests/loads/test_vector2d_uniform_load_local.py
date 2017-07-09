@@ -79,12 +79,12 @@ agg.setAdditions(["T","Vy","Vz"],["respT","respVy","respVz"]) # Respuestas a tor
 
 
 # Elements definition
-elementos= preprocessor.getElementLoader
-elementos.defaultTransformation= "lin" # Transformación de coordenadas para los nuevos elementos
-elementos.defaultMaterial= "agg"
-elementos.numSections= 3 # Número de secciones a lo largo del elemento.
-elementos.defaultTag= 1
-el= elementos.newElement("force_beam_column_2d",xc.ID([1,2]))
+elements= preprocessor.getElementLoader
+elements.defaultTransformation= "lin" # Coordinate transformation for the new elements
+elements.defaultMaterial= "agg"
+elements.numSections= 3 # Number of sections along the element.
+elements.defaultTag= 1
+el= elements.newElement("force_beam_column_2d",xc.ID([1,2]))
 
 
 
@@ -120,9 +120,9 @@ RN= nod1.getReaction[0]
 nod2= nodes.getNode(2)
 RN2= nod2.getReaction[0] 
 
-elementos= preprocessor.getElementLoader
+elements= preprocessor.getElementLoader
 
-elem1= elementos.getElement(1)
+elem1= elements.getElement(1)
 elem1.getResistingForce()
 scc= elem1.getSections()[0]
 N0= scc.getStressResultantComponent("N")

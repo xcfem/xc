@@ -59,8 +59,8 @@ nodes= preprocessor.getNodeLoader
 nodes.calculateNodalReactions(True)
 RM= nodes.getNode(1).getReaction[2] 
 
-elementos= preprocessor.getElementLoader
-ele1= elementos.getElement(1)
+elements= preprocessor.getElementLoader
+ele1= elements.getElement(1)
 ele1.getResistingForce()
 scc0= ele1.getSection()
 

@@ -88,10 +88,6 @@ ratio1= (nnodteor/nnodes)
 ratio2= (y5-x3)**2+(y3-x5)**2
 
 ''' 
-    \listaKPts("total","out")
-    \listaLineas("total","out")
-    \listaNodos("total","out")
-    \listaElementos("total","out")
 print "ratio1= ",(ratio1)
 print "theta1= ",(rad2deg(th1))
 print "theta2= ",(rad2deg(th2))

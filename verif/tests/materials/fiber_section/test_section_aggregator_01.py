@@ -119,8 +119,8 @@ RVz= nodes.getNode(1).getReaction[2]
 RMx= nodes.getNode(1).getReaction[3] 
 RMz= nodes.getNode(1).getReaction[5] 
 
-elementos= preprocessor.getElementLoader
-ele1= elementos.getElement(1)
+elements= preprocessor.getElementLoader
+ele1= elements.getElement(1)
 scc= ele1.getSection()
 esfVy= scc.getStressResultantComponent("Vy")
 esfVz= scc.getStressResultantComponent("Vz")

@@ -33,11 +33,11 @@ nod= nodes.newNodeXY(1.0+l,0)
 elast= typical_materials.defElasticMaterial(preprocessor, "elast",K)
 
 # Elements definition
-elementos= preprocessor.getElementLoader
-elementos.defaultMaterial= "elast"
-elementos.dimElem= 1 #Element dimension.
-elementos.defaultTag= 1
-zl= elementos.newElement("zero_length",xc.ID([1,2]))
+elements= preprocessor.getElementLoader
+elements.defaultMaterial= "elast"
+elements.dimElem= 1 #Element dimension.
+elements.defaultTag= 1
+zl= elements.newElement("zero_length",xc.ID([1,2]))
 
 # Constraints
 constraints= preprocessor.getConstraintLoader
@@ -70,9 +70,9 @@ deltax= nod2.getDisp[0]
 nod1= nodes.getNode(1)
 R= nod1.getReaction[0] 
 
-elementos= preprocessor.getElementLoader
+elements= preprocessor.getElementLoader
 
-elem1= elementos.getElement(1)
+elem1= elements.getElement(1)
 elem1.getResistingForce()
 
 

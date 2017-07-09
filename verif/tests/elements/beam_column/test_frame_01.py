@@ -55,16 +55,16 @@ sectionProperties.I= Iz;
 seccion= typical_materials.defElasticSectionFromMechProp2d(preprocessor, "seccion",sectionProperties)
 
 # Elements definition
-elementos= preprocessor.getElementLoader
-elementos.defaultTransformation= "lin"
-elementos.defaultMaterial= "seccion"
-elementos.defaultTag= 1 #Tag for next element.
-beam2d= elementos.newElement("elastic_beam_2d",xc.ID([1,2]))
-beam2d= elementos.newElement("elastic_beam_2d",xc.ID([2,4]))
-beam2d= elementos.newElement("elastic_beam_2d",xc.ID([4,3]))
-beam2d= elementos.newElement("elastic_beam_2d",xc.ID([5,6]))
-beam2d= elementos.newElement("elastic_beam_2d",xc.ID([6,8]))
-beam2d= elementos.newElement("elastic_beam_2d",xc.ID([8,7]))
+elements= preprocessor.getElementLoader
+elements.defaultTransformation= "lin"
+elements.defaultMaterial= "seccion"
+elements.defaultTag= 1 #Tag for next element.
+beam2d= elements.newElement("elastic_beam_2d",xc.ID([1,2]))
+beam2d= elements.newElement("elastic_beam_2d",xc.ID([2,4]))
+beam2d= elements.newElement("elastic_beam_2d",xc.ID([4,3]))
+beam2d= elements.newElement("elastic_beam_2d",xc.ID([5,6]))
+beam2d= elements.newElement("elastic_beam_2d",xc.ID([6,8]))
+beam2d= elements.newElement("elastic_beam_2d",xc.ID([8,7]))
 
 # Constraints
 constraints= preprocessor.getConstraintLoader
@@ -97,41 +97,46 @@ casos.addToDomain("0")
 analisis= predefined_solutions.simple_static_linear(prueba)
 result= analisis.analyze(1)
 
-theta2= 0.0 # Giro del nodo 2
-theta2Teor= -0.08620 # Valor teórico del giro del nodo 2
+theta2= 0.0 # Rotation of the node 2
+theta2Teor= -0.08620 # Theorethical value of the rotation of the node 2
 ratioTheta2= 0.0
-M12= 0.0 # Flector en arranque de elemento 1
-M12Teor= 4166.7 # Valor teórico del flector en arranque de elemento 1
+M12= 0.0 # Bending moment acting on element 1 front end.
+M12Teor= 4166.7 # Theorethical value of the bending moment
+                # acting on on element 1 front end.
 ratioM12= 0.0
-M21= 0.0 # Momento dorsal en elemento 2
-M21Teor= -8333.3 # Valor teórico del momento dorsal en elemento 2
-ratioM21= 0.0
-Q= 0.0 # Cortante en elemento 1
-QTeor= 125 # Valor teórico del cortante en elemento 1
+M21= 0.0 # Bending moment acting on element 2 back end.
+M21Teor= -8333.3 # Theorethical value of the bending moment
+                 # acting on element 2 back end.
+ratioM21= 0.0 #Rotation of the node
+Q= 0.0 # Shear on element 1
+QTeor= 125 # Theorethical value of the shear on element 1
 ratioQ= 0.0
-delta6= 0.0 # Desplazamiento horizontal del nodo 6
-delta6Teor= 1.385 # Valor teórico del desplazamiento horizontal del nodo 6
+delta6= 0.0 # Displacement of node 6
+delta6Teor= 1.385 # Theoretical value of desplazamiento horizontal of the node 6
 ratioDelta6= 0.0
-theta6= 0.0 # Giro del nodo 6
-theta6Teor= -0.0924 # Valor teórico del giro del nodo 6
+theta6= 0.0 # Rotation of the node 6
+theta6Teor= -0.0924 # Theorethical value of the rotation of the node 6
 ratioTheta6= 0.0
-theta8= 0.0 # Giro del nodo 6
-theta8Teor= 0.0369 # Valor teórico del giro del nodo 6
+theta8= 0.0 # Rotation of the node 6
+theta8Teor= 0.0369 # Theorethical value of the rotation of the node 6
 ratioTheta8= 0.0
-M61= 0.0 # Flector en arranque de elemento 4
-M61Teor= 2455.4 # Valor teórico del flector en arranque de elemento 4
+M61= 0.0 # Bending moment acting on element 4 back end.
+M61Teor= 2455.4 # Theoretical value of bending moment
+                # acting on element 4 back end.
 ratioM61= 0.0
-Q4= 0.0 # Cortante en elemento 1
-Q4Teor= 93.75 # Valor teórico del cortante en elemento 1
+Q4= 0.0 # Shear on element 1
+Q4Teor= 93.75 # Theoretical value of shear on element 1
 ratioQ4= 0.0
-M51= 0.0 # Momento dorsal en elemento 5
-M51Teor= -6919.6 # Valor teórico del momento dorsal en elemento 5
+M51= 0.0 # bending moment acting on back end of the element 5
+M51Teor= -6919.6 # Theoretical value of bending moment acting on back end of the element 5
 ratioM51= 0.0
-M71= 0.0 # Flector en arranque de elemento 6
-M71Teor= 3794.6 # Valor teórico del flector en arranque de elemento 6
+M71= 0.0 # Bending moment acting on element 6 back end.
+M71Teor= 3794.6 # Theoretical value of bending moment
+                # acting on element 6 back end.
 ratioM71= 0.0
-M52= 0.0 # Momento dorsal en elemento 5
-M52Teor= -5580.4 # Valor teórico del momento frontal en elemento 5
+M52= 0.0 # bending moment acting on back end of the element 5
+M52Teor= -5580.4 # Theoretical value of bending moment acting
+                 # on back end of the element 5
 ratioM52= 0.0
 
 
@@ -145,28 +150,28 @@ theta6= nod6.getDisp[2]
 nod8= nodes.getNode(8)
 theta8= nod8.getDisp[2]
 
-elementos= preprocessor.getElementLoader
+elements= preprocessor.getElementLoader
 
-elem1= elementos.getElement(1)
+elem1= elements.getElement(1)
 elem1.getResistingForce()
 Q= elem1.getV1
 M12= elem1.getM1
 
-elem2= elementos.getElement(2)
+elem2= elements.getElement(2)
 elem2.getResistingForce()
 M21= elem2.getM1
 
-elem4= elementos.getElement(4)
+elem4= elements.getElement(4)
 elem4.getResistingForce()
 Q4= elem4.getV1
 M61= elem4.getM1
 
-elem5= elementos.getElement(5)
+elem5= elements.getElement(5)
 elem5.getResistingForce()
 M51= elem5.getM1
 M52= elem5.getM2
 
-elem6= elementos.getElement(6)
+elem6= elements.getElement(6)
 elem6.getResistingForce()
 M71= elem6.getM2
 

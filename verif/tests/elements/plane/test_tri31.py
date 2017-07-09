@@ -1,10 +1,11 @@
 # -*- coding: utf-8 -*-
-''' Test tomado del libro:
-    Introdución al estudio del elemento finito en Ingeniería. Segunda edición.
-    Tirupathi R. Chandrupatla
-    Ashok D. Belegundu.
-    Prentice Hall, México 1999
-    Ejemplo 7.2 '''
+''' Test made from the example 7.2 of the book: 
+    Introducción Al Estudio Del Elemento Finito en Ingeniería. 
+    Segunda Edición. Tirupathi R. Chandrupatla, Ashok D. Belegundu. 
+    Pearson Educación, 1999
+    isbn={9789701702604},
+    url={https://books.google.ch/books?id=auQwAAAACAAJ},
+'''
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
 __copyright__= "Copyright 2015, LCPT and AOO"
@@ -41,11 +42,11 @@ n4= nodes.newNodeIDXY(4,0,1)
 
 elast2d= typical_materials.defElasticIsotropicPlaneStress(preprocessor, "elast2d",E,nu,rho)
 # Elements definition
-elementos= preprocessor.getElementLoader
-elementos.defaultMaterial= "elast2d"
-tri31= elementos.newElement("tri31",xc.ID([1,2,3]))
+elements= preprocessor.getElementLoader
+elements.defaultMaterial= "elast2d"
+tri31= elements.newElement("tri31",xc.ID([1,2,3]))
 tri31.thickness= t
-tri31= elementos.newElement("tri31",xc.ID([3,4,1]))
+tri31= elements.newElement("tri31",xc.ID([3,4,1]))
 tri31.thickness= t
 
 # Constraints

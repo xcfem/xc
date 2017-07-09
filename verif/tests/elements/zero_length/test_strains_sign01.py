@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # home made test
 
-# Criterio de signos elementos ZeroLengthSection.
+# ZeroLengthSection elements sign criteria.
 
 #     El axil y los cortantes tienen la misma direccion y sentido que los ejes locales.
 #     El torsor Mx y el flector My tienen las direcciones y sentido de los ejes X e Y locales.
@@ -58,10 +58,10 @@ nod= nodes.newNodeXYZ(0.0,0.0,0.0)
 nod= nodes.newNodeXYZ(0.0,0.0,0.0)
 
 # Elements definition
-elementos= preprocessor.getElementLoader
-elementos.defaultMaterial= "fourFibersSection"
-elementos.dimElem= 1 # Dimension of element space
-zl= elementos.newElement("zero_length_section",xc.ID([1,2]))
+elements= preprocessor.getElementLoader
+elements.defaultMaterial= "fourFibersSection"
+elements.dimElem= 1 # Dimension of element space
+zl= elements.newElement("zero_length_section",xc.ID([1,2]))
 
 # Constraints
 modelSpace.fixNode000_000(1)

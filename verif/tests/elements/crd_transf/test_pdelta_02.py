@@ -130,41 +130,46 @@ analisis= predefined_solutions.simple_static_linear(prueba)
 result= analisis.analyze(1)
 result= analisis.analyze(1)
 
-theta2= 0.0 # Giro del nodo 2
-theta2Teor= -0.09192 # Valor teórico del giro del nodo 2
+theta2= 0.0 # Rotation of the node 2
+theta2Teor= -0.09192 # Theorethical value of the rotation of the node 2
 ratioTheta2= 0.0
-M12= 0.0 # Flector en arranque de elemento 1
-M12Teor= 4606.6 # Valor teórico del flector en arranque de elemento 1
+M12= 0.0 # Bending moment acting on element 1 front end.
+M12Teor= 4606.6 # Theoretical value of bending moment
+                # acting on element 1 front end.
 ratioM12= 0.0
-M21= 0.0 # Momento dorsal en elemento 2
-M21Teor= -8254.0 # Valor teórico del momento dorsal en elemento 2
+M21= 0.0 # bending moment acting on back end of the element 2
+M21Teor= -8254.0 # Theoretical value of bending moment acting on back end of the element 2
 ratioM21= 0.0
-Q= 0.0 # Cortante en elemento 1
-QTeor= 128.6 # Valor teórico del cortante en elemento 1
+Q= 0.0 # Shear on element 1
+QTeor= 128.6 # Theoretical value of shear on element 1
 ratioQ= 0.0
-delta6= 0.0 # Desplazamiento horizontal del nodo 6
-delta6Teor= 1.893 # Valor teórico del desplazamiento horizontal del nodo 6
+delta6= 0.0 # Desplazamiento horizontal of the node 6
+delta6Teor= 1.893 # Theoretical value of desplazamiento horizontal of the node 6
 ratioDelta6= 0.0
-theta6= 0.0 # Giro del nodo 6
-theta6Teor= -0.1013 # Valor teórico del giro del nodo 6
+theta6= 0.0 # Rotation of the node 6
+theta6Teor= -0.1013 # Theorethical value of the rotation of the node 6
 ratioTheta6= 0.0
-theta8= 0.0 # Giro del nodo 6
-theta8Teor= 0.0367 # Valor teórico del giro del nodo 6
+theta8= 0.0 # Rotation of the node 6
+theta8Teor= 0.0367 # Theorethical value of the rotation of the node 6
 ratioTheta8= 0.0
-M61= 0.0 # Flector en arranque de elemento 4
-M61Teor= 2544.9 # Valor teórico del flector en arranque de elemento 4
+M61= 0.0 # Bending moment acting on back end of element 4
+M61Teor= 2544.9 # Theoretical value of bending moment acting
+                # on back end of element 4.
 ratioM61= 0.0
-Q4= 0.0 # Cortante en elemento 1
-Q4Teor= 101.4 # Valor teórico del cortante en elemento 1
+Q4= 0.0 # Shear on element 1
+Q4Teor= 101.4 # Theoretical value of shear on element 1
 ratioQ4= 0.0
-M51= 0.0 # Momento dorsal en elemento 5
-M51Teor= -6088.6 # Valor teórico del momento dorsal en elemento 5
+M51= 0.0 # bending moment acting on back end of element 5
+M51Teor= -6088.6 # Theoretical value of bending moment
+                 # acting on back end of the element 5
 ratioM51= 0.0
-M71= 0.0 # Flector en arranque de elemento 6
-M71Teor= 4456.9 # Valor teórico del flector en arranque de elemento 6
+M71= 0.0 # Bending moment acting on back end of element 6
+M71Teor= 4456.9 # Theoretical value of bending moment
+                # acting on back end of element 6
 ratioM71= 0.0
-M52= 0.0 # Momento dorsal en elemento 5
-M52Teor= -6153.0 # Valor teórico del momento frontal en elemento 5
+M52= 0.0 # bending moment acting on front end of the element 5
+M52Teor= -6153.0 # Theoretical value of bending moment
+                 # acting on front end of the element 5.
 ratioM52= 0.0
 
 
@@ -177,30 +182,30 @@ theta6= nodT6.getDisp[2]
 nodT8= nodes.getNode(tagNodo8)
 theta8= nodT8.getDisp[2]
 
-elementos= preprocessor.getElementLoader
-eletagElem1= elementos.getElement(tagElem1)
+elements= preprocessor.getElementLoader
+eletagElem1= elements.getElement(tagElem1)
 eletagElem1.getResistingForce()
 Q= eletagElem1.getV1
 M12= eletagElem1.getM1
 
-eletagElem2= elementos.getElement(tagElem2)
+eletagElem2= elements.getElement(tagElem2)
 eletagElem2.getResistingForce()
 M21= eletagElem2.getM1
 
-eletagElem4= elementos.getElement(tagElem4)
+eletagElem4= elements.getElement(tagElem4)
 eletagElem4.getResistingForce()
 Q4= eletagElem4.getV1
 M61= eletagElem4.getM1
 
-eletagElem5D= elementos.getElement(tagElem5D)
+eletagElem5D= elements.getElement(tagElem5D)
 eletagElem5D.getResistingForce()
 M51= eletagElem5D.getM1
 
-eletagElem5F= elementos.getElement(tagElem5F)
+eletagElem5F= elements.getElement(tagElem5F)
 eletagElem5F.getResistingForce()
 M52= eletagElem5F.getM2
 
-eletagElem6= elementos.getElement(tagElem6)
+eletagElem6= elements.getElement(tagElem6)
 eletagElem6.getResistingForce()
 M71= eletagElem6.getM2
 

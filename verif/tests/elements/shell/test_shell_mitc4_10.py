@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 # Tomado del example 2-005 del manual de verificación de SAP 2000
-# El error obtenido es próximo al 18% (muy alto) parece que el elemento funciona mal
-# cuando el "aspect ratio" está lejos del cuadrado.
+# The error is close to 18% (quite high) it seems that the element
+# doesn't works very well with "skinny" elements (aspect ratio
+# very different of 1:1).
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
 __copyright__= "Copyright 2015, LCPT and AOO"

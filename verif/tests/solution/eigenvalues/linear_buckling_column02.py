@@ -3,9 +3,8 @@
 
 ''' NO SE PORQUÉ, NO DA MUY BUENOS RESULTADOS
 
-   Probablemente el problema esté relacionado con la incapacidad de los elementos
-   de simular el efecto que su flexión produce en la orientación de los esfuerzos
-   que trasmite a sus nodos (ver ejemplo test_pdelta_01.xc).
+   The problem is probably related with the fact that the elements are unable
+   to reproduce the little delta effect (see example test_pdelta_01.xc).
  '''
 import xc_base
 import geom
@@ -47,7 +46,7 @@ nodes.newSeedNode()
 trfs= preprocessor.getTransfCooLoader
 corot= trfs.newCorotCrdTransf2d("corot")
 
-# Definimos elemento semilla
+# Seed element definition
 seedElemLoader= preprocessor.getElementLoader.seedElemLoader
 seedElemLoader.defaultMaterial= "scc"
 seedElemLoader.defaultTransformation= "corot"

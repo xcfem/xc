@@ -68,11 +68,11 @@ print "TunloadSlope= ",TunloadSlope
     se emplea una sección arbitraria de área unidad '''
     
 # Elements definition
-elementos= preprocessor.getElementLoader
-elementos.defaultMaterial= "horm"
-elementos.dimElem= 2 # Dimension of element space
+elements= preprocessor.getElementLoader
+elements.defaultMaterial= "horm"
+elements.dimElem= 2 # Dimension of element space
 #  sintaxis: spring[<tag>] 
-spring= elementos.newElement("spring",xc.ID([1,2]));
+spring= elements.newElement("spring",xc.ID([1,2]));
     
 # Constraints
 constraints= preprocessor.getConstraintLoader

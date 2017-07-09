@@ -41,12 +41,12 @@ lin= trfs.newLinearCrdTransf3d("lin")
 lin.xzVector= xc.Vector([0,-1,0])
     
 # Elements definition
-elementos= preprocessor.getElementLoader
+elements= preprocessor.getElementLoader
 
-elementos.defaultTransformation= "lin"
-elementos.defaultMaterial= "seccion"
-elementos.defaultTag= 1 #Tag for next element.
-beam3d= elementos.newElement("elastic_beam_3d",xc.ID([1,2]));
+elements.defaultTransformation= "lin"
+elements.defaultMaterial= "seccion"
+elements.defaultTag= 1 #Tag for next element.
+beam3d= elements.newElement("elastic_beam_3d",xc.ID([1,2]));
 
 centroideG= beam3d.getCoordTransf.getPointGlobalCoordFromBasic(0.5)
 posCentroideG= geom.Pos3d(centroideG[0],centroideG[1],centroideG[2])

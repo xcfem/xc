@@ -59,8 +59,8 @@ nodes= preprocessor.getNodeLoader
 nodes.calculateNodalReactions(True)
 RM= nodes.getNode(1).getReaction[5] 
 
-elementos= preprocessor.getElementLoader
-ele1= elementos.getElement(1)
+elements= preprocessor.getElementLoader
+ele1= elements.getElement(1)
 scc0= ele1.getSection()
 esfMz= scc0.getStressResultantComponent("Mz")
 

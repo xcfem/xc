@@ -55,11 +55,11 @@ lin.rotate(math.radians(90))
 scc= typical_materials.defElasticSection3d(preprocessor, "scc",A,E,G,Iz,Iy,J)
 
 # Elements definition
-elementos= preprocessor.getElementLoader
-elementos.defaultTransformation= "lin"
-elementos.defaultMaterial= "scc"
-elementos.defaultTag= 1 #Tag for next element.
-beam3d= elementos.newElement("elastic_beam_3d",xc.ID([1,2]));
+elements= preprocessor.getElementLoader
+elements.defaultTransformation= "lin"
+elements.defaultMaterial= "scc"
+elements.defaultTag= 1 #Tag for next element.
+beam3d= elements.newElement("elastic_beam_3d",xc.ID([1,2]));
 
 # Constraints
 modelSpace.fixNode000_000(1)
@@ -84,8 +84,8 @@ nodes= preprocessor.getNodeLoader
 nod2= nodes.getNode(2)
 delta= nod2.getDisp[2]  # Node 2 displacement según z
 
-elementos= preprocessor.getElementLoader
-elem1= elementos.getElement(1)
+elements= preprocessor.getElementLoader
+elem1= elements.getElement(1)
 elem1.getResistingForce()
 M= elem1.getMy1
 MTeor= F*L

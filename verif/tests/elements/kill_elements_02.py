@@ -45,10 +45,10 @@ nod= nodes.newNodeXYZ(0,L,L)
 memb1= typical_materials.defElasticMembranePlateSection(preprocessor, "memb1",E,nu,dens,h)
 
 # Elements definition
-elementos= preprocessor.getElementLoader
-elementos.defaultMaterial= "memb1"
-elem= elementos.newElement("shell_mitc4",xc.ID([1,2,3,4]))
-elem= elementos.newElement("shell_mitc4",xc.ID([5,6,7,8]))
+elements= preprocessor.getElementLoader
+elements.defaultMaterial= "memb1"
+elem= elements.newElement("shell_mitc4",xc.ID([1,2,3,4]))
+elem= elements.newElement("shell_mitc4",xc.ID([5,6,7,8]))
     
 # Constraints
 modelSpace.fixNode000_000(1)
@@ -58,7 +58,7 @@ modelSpace.fixNode000_000(8)
 
 
 setTotal= preprocessor.getSets.getSet("total")
-setTotal.killElements() # Desactivamos los elementos.
+setTotal.killElements() # deactivate the elements
 
 mesh= prueba.getDomain.getMesh
 mesh.setDeadSRF(0.0)

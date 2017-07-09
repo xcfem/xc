@@ -54,11 +54,11 @@ sectionProperties.A= A; sectionProperties.E= E; sectionProperties.G= G;
 sectionProperties.Iz= Iz; sectionProperties.Iy= Iy; sectionProperties.J= J
 seccion= typical_materials.defElasticSectionFromMechProp3d(preprocessor, "seccion",sectionProperties)
 
-elementos= preprocessor.getElementLoader
-elementos.defaultTransformation= "lin"
-elementos.defaultMaterial= "seccion"
-elementos.defaultTag= 1 #Tag for next element.
-beam3d= elementos.newElement("elastic_beam_3d",xc.ID([1,2]));
+elements= preprocessor.getElementLoader
+elements.defaultTransformation= "lin"
+elements.defaultMaterial= "seccion"
+elements.defaultTag= 1 #Tag for next element.
+beam3d= elements.newElement("elastic_beam_3d",xc.ID([1,2]));
 
 modelSpace.fixNode000_000(1)
 
@@ -78,8 +78,8 @@ analisis= predefined_solutions.simple_static_linear(prueba)
 result= analisis.analyze(1)
 
 delta= nodes.getNode(2).getDisp[0] #x displacement of node 2.
-elementos.getElement(1).getResistingForce()
-N1= elementos.getElement(1).getN1
+elements.getElement(1).getResistingForce()
+N1= elements.getElement(1).getN1
 
 deltateor= (F*L/(E*A))
 ratio1= (delta-deltateor)/deltateor

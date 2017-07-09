@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 ''' Taken from page 114 of the article Development of Membrane, Plate and
  Flat Shell Elements in Java '''
-''' El error obtenido es próximo al 15% (muy alto) parece que el elemento funciona mal
-cuando el "aspect ratio" está lejos del cuadrado. '''
+''' The error is about 15% (quite high) it seems that the element formulation
+    doesn't works very well with "skinny" elements. '''
 
 __author__= "Luis C. Pérez Tato (LCPT)"
 __copyright__= "Copyright 2014, LCPT"
@@ -42,13 +42,13 @@ nodes.newNodeIDXYZ(8,L,h,0)
 # Materials definition
 nmb1= typical_materials.defElasticMembranePlateSection(preprocessor, "memb1",E,nu,0.0,h)
 
-elementos= preprocessor.getElementLoader
-elementos.defaultMaterial= "memb1"
-elementos.defaultTag= 1
-elem= elementos.newElement("shell_mitc4",xc.ID([1,2,6,5]))
+elements= preprocessor.getElementLoader
+elements.defaultMaterial= "memb1"
+elements.defaultTag= 1
+elem= elements.newElement("shell_mitc4",xc.ID([1,2,6,5]))
 
-elem= elementos.newElement("shell_mitc4",xc.ID([2,3,7,6]))
-elem= elementos.newElement("shell_mitc4",xc.ID([3,4,8,7]))
+elem= elements.newElement("shell_mitc4",xc.ID([2,3,7,6]))
+elem= elements.newElement("shell_mitc4",xc.ID([3,4,8,7]))
 
 # Constraints
 constraints= preprocessor.getConstraintLoader
@@ -78,7 +78,7 @@ casos.addToDomain("0")
 
 
 
-ele1= elementos.getElement(1)
+ele1= elements.getElement(1)
 mat= ele1.getPhysicalProperties.getVectorMaterials[0]
 K11A= mat.getTangentStiffness().at(1,1)
 import os
@@ -92,8 +92,8 @@ db.restore(2120)
 analisis= predefined_solutions.simple_static_linear(prueba)
 result= analisis.analyze(1)
 
-elementos= preprocessor.getElementLoader
-ele1= elementos.getElement(1)
+elements= preprocessor.getElementLoader
+ele1= elements.getElement(1)
 mat= ele1.getVectorMaterials[0]
 K11D= mat.getTangentStiffness().at(1,1)
 

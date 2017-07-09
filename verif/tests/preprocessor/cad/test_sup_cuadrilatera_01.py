@@ -68,7 +68,7 @@ nelemCuadr= f1.getNumElements
 mesh= prueba.getDomain.getMesh
 nnodDom= mesh.getNumNodes()
 
-# print "núm. nodos: ",nnod
+# print "number of nodes: ",nnod
 # nIter= mesh.getNodeIter
 # nod= nIter.next()
 # while not(nod is None):
@@ -77,7 +77,7 @@ nnodDom= mesh.getNumNodes()
 
 nelemDom= mesh.getNumElements()
 
-# print "núm. elementos: ", mesh.getNumElem()
+# print "number of elements: ", mesh.getNumElem()
 perim= 0.0
 
 eIter= mesh.getElementIter

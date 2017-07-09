@@ -2,10 +2,8 @@
 # Tomado del Ejemplo B46 del SOLVIA Verification Manual
 ''' NO SE PORQUÉ, NO DA MUY BUENOS RESULTADOS NI CON ESTA FORMULACIÓN NI CON LA COROTACIONAL
 
-   Probablemente el problema esté relacionado con la incapacidad de los elementos
-   de simular el efecto que su flexión produce en la orientación de los esfuerzos
-   que trasmite a sus nodos (ver ejemplo test_pdelta_01.xc).
-
+   The problem is probably related with the fact that the elements are unable
+   to reproduce the little delta effect (see example test_pdelta_01.xc).
   '''
 from __future__ import division
 import xc_base
@@ -49,7 +47,7 @@ trfs= preprocessor.getTransfCooLoader
 lin= trfs.newPDeltaCrdTransf2d("lin")
 
 
-# Definimos elemento semilla
+# Seed element definition
 seedElemLoader= preprocessor.getElementLoader.seedElemLoader
 seedElemLoader.defaultMaterial= "scc"
 seedElemLoader.defaultTransformation= "lin"

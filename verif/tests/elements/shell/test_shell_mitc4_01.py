@@ -36,9 +36,9 @@ nodes.newNodeIDXYZ(4,0,1,1)
 # Materials definition
 memb1= typical_materials.defElasticMembranePlateSection(preprocessor, "memb1",E,nu,dens,h)
 
-elementos= preprocessor.getElementLoader
-elementos.defaultMaterial= "memb1"
-elem= elementos.newElement("shell_mitc4",xc.ID([1,2,3,4]))
+elements= preprocessor.getElementLoader
+elements.defaultMaterial= "memb1"
+elem= elements.newElement("shell_mitc4",xc.ID([1,2,3,4]))
 
 
 ratio1= (elem.getCoordTransf.getG2Vector-v1).Norm()

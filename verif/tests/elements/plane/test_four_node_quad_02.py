@@ -43,13 +43,13 @@ nodes.defaultTag= 8; nodes.newNodeXY(L,h)
 # Materials definition
 elast2d= typical_materials.defElasticIsotropicPlaneStress(preprocessor, "elast2d",E,nu,0.0)
 
-elementos= preprocessor.getElementLoader
-elementos.defaultMaterial= "elast2d"
-quad1= elementos.newElement("quad4n",xc.ID([1,2,6,5]))
+elements= preprocessor.getElementLoader
+elements.defaultMaterial= "elast2d"
+quad1= elements.newElement("quad4n",xc.ID([1,2,6,5]))
 quad1.thickness= t
-quad2= elementos.newElement("quad4n",xc.ID([2,3,7,6]))
+quad2= elements.newElement("quad4n",xc.ID([2,3,7,6]))
 quad2.thickness= t
-quad3= elementos.newElement("quad4n",xc.ID([3,4,8,7]))
+quad3= elements.newElement("quad4n",xc.ID([3,4,8,7]))
 quad3.thickness= t
 
 # Constraints

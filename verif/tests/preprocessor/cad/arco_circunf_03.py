@@ -62,8 +62,8 @@ l1.genMesh(xc.meshDir.I)
 
 nnodes= l1.getNumNodes
 
-elementos= preprocessor.getElementLoader
-ele2= elementos.getElement(2)
+elements= preprocessor.getElementLoader
+ele2= elements.getElement(2)
 puntos= ele2.getCooPuntos(2) #Two divisions-> Three points.
 cooCentroElem= puntos.getRow(1)
 

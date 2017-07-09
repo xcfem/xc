@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 ''' home made test
-   Prueba del funcionamiento de la base de datos
-   con elementos Shell. '''
+   Test database functions with shell elements.'''
 
 import xc_base
 import geom
@@ -40,9 +39,9 @@ nodes.newNodeIDXYZ(4,0,1,1)
 
 memb1= typical_materials.defElasticMembranePlateSection(preprocessor, "memb1",E,nu,dens,h)
 
-elementos= preprocessor.getElementLoader
-elementos.defaultMaterial= "memb1"
-elem= elementos.newElement("shell_mitc4",xc.ID([1,2,3,4]))
+elements= preprocessor.getElementLoader
+elements.defaultMaterial= "memb1"
+elem= elements.newElement("shell_mitc4",xc.ID([1,2,3,4]))
 
 
 import os
@@ -52,7 +51,7 @@ db.save(100)
 prueba.clearAll()
 db.restore(100)
 
-elem= elementos.getElement(0)
+elem= elements.getElement(0)
 ratio1= (elem.getCoordTransf.getG2Vector-v1).Norm()
 ratio2= (elem.getCoordTransf.getG3Vector-v2).Norm()
 #ratio1= abs((abs(getCoordTransf.getG2Vector-v1)))

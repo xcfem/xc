@@ -91,8 +91,8 @@ analOk= analisis.analyze(10)
 secHAParamsFis= cc.CrackControlSIA262('SLS_crack',400e6)
 
 
-elementos= preprocessor.getElementLoader
-ele1= elementos.getElement(1)
+elements= preprocessor.getElementLoader
+ele1= elements.getElement(1)
 scc= ele1.getSection()
 sigma_s= secHAParamsFis.calcRebarStress(scc)
 

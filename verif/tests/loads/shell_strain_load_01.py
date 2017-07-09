@@ -1,6 +1,12 @@
 # -*- coding: utf-8 -*-
-# home made test
-# Reference:  Cálculo de estructuras por el método de los elementos finitos. E. Oñate, pg. 165, ejemplo 5.3
+''' home made test
+    Reference:  Cálculo de estructuras por el método de los elemen-
+    tos finitos. 1991. E. Oñate, page 165, example 5.3
+
+    isbn={9788487867002}
+    url={https://books.google.ch/books?id=lV1GSQAACAAJ}
+
+'''
 
 import xc_base
 import geom
@@ -15,7 +21,7 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
-L= 1.0 # Lado del elemento expressed in meters
+L= 1.0 # Size of element edge (m)
 E= 2.1e6*9.81/1e-4 # Elastic modulus
 alpha= 1.2e-5 # Coeficiente de dilatación of the steel
 h= 2e-2
@@ -39,10 +45,10 @@ nod4= nodes.newNodeXYZ(0,h,0.0)
 memb1= typical_materials.defElasticMembranePlateSection(preprocessor, "memb1",E,0.3,0.0,h)
 
 # Elements definition
-elementos= preprocessor.getElementLoader
-elementos.defaultMaterial= "memb1"
-elementos.defaultTag= 1
-elem1= elementos.newElement("shell_mitc4",xc.ID([nod1.tag,nod2.tag,nod3.tag,nod4.tag]))
+elements= preprocessor.getElementLoader
+elements.defaultMaterial= "memb1"
+elements.defaultTag= 1
+elem1= elements.newElement("shell_mitc4",xc.ID([nod1.tag,nod2.tag,nod3.tag,nod4.tag]))
 
 
 # Constraints
@@ -83,7 +89,7 @@ result= analisis.analyze(1)
 
 
 
-elem1= elementos.getElement(1)
+elem1= elements.getElement(1)
 elem1.getResistingForce()
 n1Medio= elem1.getMeanInternalForce("n1")
 n2Medio= elem1.getMeanInternalForce("n2")

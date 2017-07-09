@@ -38,8 +38,8 @@ nodes.newSeedNode()
 trfs= preprocessor.getTransfCooLoader
 lin= trfs.newLinearCrdTransf2d("lin")
 
-elementos= preprocessor.getElementLoader
-elementos.defaultTransformation= "lin"
+elements= preprocessor.getElementLoader
+elements.defaultTransformation= "lin"
  
 
 puntos= preprocessor.getCad.getPoints
@@ -73,12 +73,12 @@ prueba.setVerbosityLevel(1) #Print warnings again
 # for n in nodosTotal:
 #   print "node tag: ", n.tag
 
-elementos.defaultMaterial= "scc"
+elements.defaultMaterial= "scc"
 for i in range(1,NumDiv+2):
   n1= l1.getNodeI(i)
   n2= l2.getNodeI(i)
   #print "i= ", i, "n1= ", n1.tag, "n2= ", n2.tag
-  beam2d= elementos.newElement("elastic_beam_2d",xc.ID([n1.tag,n2.tag]))
+  beam2d= elements.newElement("elastic_beam_2d",xc.ID([n1.tag,n2.tag]))
   beam2d.h= h
 
 
@@ -135,12 +135,12 @@ errDisp= math.sqrt(errDisp)
 constraints= preprocessor.getConstraintLoader
 numSPs= constraints.getNumSPs
 nNodes= setTotal.getNumNodes
-elementos= setTotal.getElements
-nElem= elementos.size
+elements= setTotal.getElements
+nElem= elements.size
 cumple= 1
 vteor2= (CooMax/NumDiv)**2
 lteor= math.sqrt(3*vteor2)
-for e in elementos:
+for e in elements:
   # print "  elem: ",tag," nod. I: ",nod(0).tag," nod. J: ",nod(1).tag," L= ",length
   # print "lteor: ",(lteor)
   ratio1= (lteor/e.getCoordTransf.getInitialLength)

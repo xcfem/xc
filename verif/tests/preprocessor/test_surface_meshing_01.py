@@ -83,8 +83,8 @@ numElem= total.getElements.size
 
 
 ''' 
-print "Número de nodos: ",numNodes
-print "Número de elementos: ",numElem
+print "Number of nodes: ",numNodes
+print "Number of elements: ",numElem
    '''
 
 ratio1= abs(numNodes-8)

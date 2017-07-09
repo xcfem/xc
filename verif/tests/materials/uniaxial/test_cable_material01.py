@@ -41,12 +41,12 @@ la carga. Puesto que no se van a determinar tensiones
 se emplea una sección arbitraria de área unidad '''
 
 # Elements definition
-elementos= preprocessor.getElementLoader
-elementos.defaultMaterial= "cable"
-elementos.dimElem= 2 # Dimension of element space
+elements= preprocessor.getElementLoader
+elements.defaultMaterial= "cable"
+elements.dimElem= 2 # Dimension of element space
 #  sintaxis: truss[<tag>] 
-elementos.defaultTag= 1 #Tag for the next element.
-truss= elementos.newElement("truss",xc.ID([1,2]));
+elements.defaultTag= 1 #Tag for the next element.
+truss= elements.newElement("truss",xc.ID([1,2]));
 truss.area= area
     
 # Constraints

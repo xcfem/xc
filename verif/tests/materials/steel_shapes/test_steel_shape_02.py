@@ -50,10 +50,10 @@ lin.xzVector= xc.Vector([0,0,1])
 profil= HE400B.defSeccShElastica3d(preprocessor,matHE400B)
 
 # Elements definition
-elementos= preprocessor.getElementLoader
-elementos.defaultTransformation= "lin"
-elementos.defaultMaterial= HE400B.sectionName
-elem= elementos.newElement("elastic_beam_3d",xc.ID([1,2]))
+elements= preprocessor.getElementLoader
+elements.defaultTransformation= "lin"
+elements.defaultMaterial= HE400B.sectionName
+elem= elements.newElement("elastic_beam_3d",xc.ID([1,2]))
 elem.rho= HE400B.get('P')
 dp.defSteelProfileElasticRangeElementParameters(elem,HE400B)
 vc.defVarsControlTensRegElastico3d([elem])
@@ -86,9 +86,9 @@ nodes= preprocessor.getNodeLoader
 nod2= nodes.getNode(2)
 delta= nod2.getDisp[2]  # Node 2 yAxis displacement
 
-elementos= preprocessor.getElementLoader
+elements= preprocessor.getElementLoader
 
-elem0= elementos.getElement(0)
+elem0= elements.getElement(0)
 elem0.getResistingForce()
 M= elem0.getMy1
 V= elem0.getVz

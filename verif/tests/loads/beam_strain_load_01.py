@@ -1,7 +1,12 @@
 # -*- coding: utf-8 -*-
-# home made test
-# Reference:  Cálculo de estructuras por el método de los elementos finitos. E. Oñate, pg. 165, ejemplo 5.3
+''' home made test
+    Reference:  Cálculo de estructuras por el método de los elemen-
+    tos finitos. 1991. E. Oñate, page 165, example 5.3
 
+    isbn={9788487867002}
+    url={https://books.google.ch/books?id=lV1GSQAACAAJ}
+
+'''
 import xc_base
 import geom
 import xc
@@ -42,12 +47,12 @@ lin= trfs.newLinearCrdTransf2d("lin")
 scc= typical_materials.defElasticSection2d(preprocessor, "scc",A,E,I)
 
 # Elements definition
-elementos= preprocessor.getElementLoader
-elementos.defaultTransformation= "lin"
-elementos.defaultMaterial= "scc"
-elementos.dimElem= 2 # Dimension of element space
-elementos.defaultTag= 1 #Tag for next element.
-beam2d= elementos.newElement("elastic_beam_2d",xc.ID([1,2]))
+elements= preprocessor.getElementLoader
+elements.defaultTransformation= "lin"
+elements.defaultMaterial= "scc"
+elements.dimElem= 2 # Dimension of element space
+elements.defaultTag= 1 #Tag for next element.
+beam2d= elements.newElement("elastic_beam_2d",xc.ID([1,2]))
     
 # Constraints
 constraints= preprocessor.getConstraintLoader
@@ -80,9 +85,9 @@ casos.addToDomain("0")
 analisis= predefined_solutions.simple_static_linear(prueba)
 result= analisis.analyze(1)
 
-elementos.getElement(1).getResistingForce()
-axil1= elementos.getElement(1).getN1
-axil2= elementos.getElement(1).getN2
+elements.getElement(1).getResistingForce()
+axil1= elements.getElement(1).getN1
+axil2= elements.getElement(1).getN2
 
 N= (-E*A*alpha*AT)
 ratio= ((axil2-N)/N)

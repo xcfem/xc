@@ -44,8 +44,8 @@ trfs= preprocessor.getTransfCooLoader
 lin= trfs.newLinearCrdTransf2d("lin")
 
 
-elementos= preprocessor.getElementLoader
-# Definimos elemento semilla
+elements= preprocessor.getElementLoader
+# Seed element definition
 seedElemLoader= preprocessor.getElementLoader.seedElemLoader
 seedElemLoader.defaultTransformation= "lin"
 seedElemLoader.defaultMaterial= "scc"

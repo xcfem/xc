@@ -68,10 +68,10 @@ A= fibras.getSumaAreas(1.0) #Get the sum of the fiber areas.
 
 
 # Elements definition
-elementos= preprocessor.getElementLoader
-elementos.defaultTransformation= "lin"
-elementos.defaultMaterial= "quadFibers" #Material name for the element (the fiber section).
-beam3d= elementos.newElement("force_beam_column_3d",xc.ID([1,2]));
+elements= preprocessor.getElementLoader
+elements.defaultTransformation= "lin"
+elements.defaultMaterial= "quadFibers" #Material name for the element (the fiber section).
+beam3d= elements.newElement("force_beam_column_3d",xc.ID([1,2]));
 
 # Constraints
 modelSpace.fixNode000_000(1)
@@ -95,9 +95,9 @@ nodes= preprocessor.getNodeLoader
 nod2= nodes.getNode(2)
 delta= nod2.getDisp[0]  # Node 2 xAxis displacement
 
-elementos= preprocessor.getElementLoader
+elements= preprocessor.getElementLoader
 
-elem1= elementos.getElement(0)
+elem1= elements.getElement(0)
 elem1.getResistingForce()
 scc= elem1.getSections()[0]
 

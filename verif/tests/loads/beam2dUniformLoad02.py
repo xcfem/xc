@@ -45,13 +45,13 @@ lin= trfs.newLinearCrdTransf2d("lin")
 scc= typical_materials.defElasticSection2d(preprocessor, "scc",seccPrueba.A(),matSeccPrueba.E,seccPrueba.Iz())
 
 # Elements definition
-elementos= preprocessor.getElementLoader
-elementos.defaultTransformation= "lin"
-elementos.defaultMaterial= "scc" 
-elementos.defaultMaterial= seccPrueba.sectionName
-elementos.numSections= 3 # Número de secciones a lo largo del elemento.
-elementos.defaultTag= 1
-beam2d= elementos.newElement("force_beam_column_2d",xc.ID([1,2]))
+elements= preprocessor.getElementLoader
+elements.defaultTransformation= "lin"
+elements.defaultMaterial= "scc" 
+elements.defaultMaterial= seccPrueba.sectionName
+elements.numSections= 3 # Number of sections along the element.
+elements.defaultTag= 1
+beam2d= elements.newElement("force_beam_column_2d",xc.ID([1,2]))
     
 # Constraints
 constraints= preprocessor.getConstraintLoader
@@ -87,7 +87,7 @@ RN= nod1.getReaction[0]
 nod2= nodes.getNode(2)
 RN2= nod2.getReaction[0] 
 
-elem1= elementos.getElement(1)
+elem1= elements.getElement(1)
 elem1.getResistingForce()
 scc0= elem1.getSections()[0]
 

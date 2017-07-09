@@ -56,9 +56,9 @@ for i in surfaces.getKeys():
   surfaces.get(i).genMesh(xc.meshDir.I)
 
 setTotal= preprocessor.getSets.getSet("total")
-elementos= setTotal.getElements
+elements= setTotal.getElements
 area= 0.0
-for e in elementos:
+for e in elements:
   area+= e.getArea(True)
 
 

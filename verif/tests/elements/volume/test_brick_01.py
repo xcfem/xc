@@ -1,5 +1,11 @@
 # -*- coding: utf-8 -*-
-# Test tomado del ejemplo 9-1 del libro: Introducción Al Estudio Del Elemento Finito en Ingeniería. Segunda Edición. Tirupathi R. Chandrupatla, Ashok D. Belegundu. Pearson Educación, 1999
+''' Test made from the example 9-1 of the book: 
+    Introducción Al Estudio Del Elemento Finito en Ingeniería. 
+    Segunda Edición. Tirupathi R. Chandrupatla, Ashok D. Belegundu. 
+    Pearson Educación, 1999
+    isbn={9789701702604},
+    url={https://books.google.ch/books?id=auQwAAAACAAJ},
+'''
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
 __copyright__= "Copyright 2015, LCPT and AOO"
@@ -46,14 +52,14 @@ nod18= nodes.newNodeXYZ(100,300,0)
 nod19= nodes.newNodeXYZ(0,300,0)
 nod20= nodes.newNodeXYZ(0,200,0)
 
-elementos= preprocessor.getElementLoader
-elementos.defaultMaterial= "elast3d"
-elementos.defaultTag= 1 #Tag for the next element.
+elements= preprocessor.getElementLoader
+elements.defaultMaterial= "elast3d"
+elements.defaultTag= 1 #Tag for the next element.
 
-brick1= elementos.newElement("brick",xc.ID([1,2,3,4,5,6,7,8]))
-brick2= elementos.newElement("brick",xc.ID([5,6,7,8,9,10,11,12]))
-brick3= elementos.newElement("brick",xc.ID([9,10,11,12,13,14,15,16]))
-brick4= elementos.newElement("brick",xc.ID([9,10,14,13,17,20,19,18]))
+brick1= elements.newElement("brick",xc.ID([1,2,3,4,5,6,7,8]))
+brick2= elements.newElement("brick",xc.ID([5,6,7,8,9,10,11,12]))
+brick3= elements.newElement("brick",xc.ID([9,10,11,12,13,14,15,16]))
+brick4= elements.newElement("brick",xc.ID([9,10,14,13,17,20,19,18]))
 
 nod17.fix(xc.ID([0,1,2]),xc.Vector([0,0,0]))
 nod18.fix(xc.ID([0,1,2]),xc.Vector([0,0,0]))

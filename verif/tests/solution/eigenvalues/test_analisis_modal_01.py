@@ -85,23 +85,23 @@ lin= trfs.newLinearCrdTransf2d("lin")
 
 
 # Elements definition
-elementos= preprocessor.getElementLoader
-elementos.defaultTransformation= "lin"
-elementos.defaultMaterial= "sccPlBaja"
-elementos.defaultTag= 1 #Tag for next element.
-beam2d= elementos.newElement("elastic_beam_2d",xc.ID([0,1]))
+elements= preprocessor.getElementLoader
+elements.defaultTransformation= "lin"
+elements.defaultMaterial= "sccPlBaja"
+elements.defaultTag= 1 #Tag for next element.
+beam2d= elements.newElement("elastic_beam_2d",xc.ID([0,1]))
 beam2d.h= Bbaja
-elementos.defaultMaterial= "sccPl1a" 
-beam2d= elementos.newElement("elastic_beam_2d",xc.ID([1,2]))
+elements.defaultMaterial= "sccPl1a" 
+beam2d= elements.newElement("elastic_beam_2d",xc.ID([1,2]))
 beam2d.h= B1a
-elementos.defaultMaterial= "sccPl2a" 
-beam2d= elementos.newElement("elastic_beam_2d",xc.ID([2,3]))
+elements.defaultMaterial= "sccPl2a" 
+beam2d= elements.newElement("elastic_beam_2d",xc.ID([2,3]))
 beam2d.h= B1a
-elementos.defaultMaterial= "sccPl3a" 
-beam2d= elementos.newElement("elastic_beam_2d",xc.ID([3,4]))
+elements.defaultMaterial= "sccPl3a" 
+beam2d= elements.newElement("elastic_beam_2d",xc.ID([3,4]))
 beam2d.h= B3a
-elementos.defaultMaterial= "sccPl4a" 
-beam2d= elementos.newElement("elastic_beam_2d",xc.ID([4,5]))
+elements.defaultMaterial= "sccPl4a" 
+beam2d= elements.newElement("elastic_beam_2d",xc.ID([4,5]))
 beam2d.h= B3a
 
 

@@ -20,12 +20,14 @@ from model import predefined_spaces
 from materials import typical_materials
 
 def getInternalForcesBeginNode(elemTag):
-  ''':return: internal forces on the element's first node.''' 
-  return (elementos.getElement(elemTag).getN1,elementos.getElement(elemTag).getVy1,elementos.getElement(elemTag).getVz1,elementos.getElement(elemTag).getT1,elementos.getElement(elemTag).getMy1,elementos.getElement(elemTag).getMz1)
+  ''':return: internal forces on the element's first node.'''
+  elem= elements.getElement(elemTag)
+  return (elem.getN1,elem.getVy1,elem.getVz1,elem.getT1,elem.getMy1,elem.getMz1)
 
 def getInternalForcesEndNode(elemTag):
   ''':return: internal forces on the element's last node.''' 
-  return (elementos.getElement(elemTag).getN2,elementos.getElement(elemTag).getVy2,elementos.getElement(elemTag).getVz2,elementos.getElement(elemTag).getT2,elementos.getElement(elemTag).getMy2,elementos.getElement(elemTag).getMz2)
+  elem= elements.getElement(elemTag)
+  return (elem.getN2,elem.getVy2,elem.getVz2,elem.getT2,elem.getMy2,elem.getMz2)
 
 def printResults(N1,Vy1,Vz1,T1,My1,Mz1,N2,Vy2,Vz2,T2,My2,Mz2,phaseRatios,phase):
   ratioMsg= 'ratio'+str(phase)
@@ -81,11 +83,11 @@ sectionProperties.Iz= Iz; sectionProperties.Iy= Iy; sectionProperties.J= J
 seccion= typical_materials.defElasticSectionFromMechProp3d(preprocessor, "seccion",sectionProperties)
 
 # Elements definition
-elementos= preprocessor.getElementLoader
-elementos.defaultTransformation= "lin"
-elementos.defaultMaterial= "seccion"
-elementos.defaultTag= 1 #Tag for the next element.
-beam3d= elementos.newElement("elastic_beam_3d",xc.ID([1,2]));
+elements= preprocessor.getElementLoader
+elements.defaultTransformation= "lin"
+elements.defaultMaterial= "seccion"
+elements.defaultTag= 1 #Tag for the next element.
+beam3d= elements.newElement("elastic_beam_3d",xc.ID([1,2]));
 
 
 modelSpace.fixNode000_000(1)
@@ -107,7 +109,7 @@ casos.addToDomain("0")
 analisis= predefined_solutions.simple_static_linear(prueba)
 result= analisis.analyze(1)
 
-RF= elementos.getElement(1).getResistingForce()
+RF= elements.getElement(1).getResistingForce()
 (N1,Vy1,Vz1,T1,My1,Mz1)= getInternalForcesBeginNode(1)
 NTeor= F
 (N2,Vy2,Vz2,T2,My2,Mz2)= getInternalForcesEndNode(1)
@@ -135,7 +137,7 @@ casos.addToDomain("1")
 analisis= predefined_solutions.simple_static_linear(prueba)
 result= analisis.analyze(1)
 
-RF= elementos.getElement(1).getResistingForce()
+RF= elements.getElement(1).getResistingForce()
 (N1,Vy1,Vz1,T1,My1,Mz1)= getInternalForcesBeginNode(1)
 Vy1Teor=F
 Mz1Teor= F*L/2.0
@@ -166,7 +168,7 @@ casos.addToDomain("2")
 analisis= predefined_solutions.simple_static_linear(prueba)
 result= analisis.analyze(1)
 
-RF= elementos.getElement(1).getResistingForce()
+RF= elements.getElement(1).getResistingForce()
 (N1,Vy1,Vz1,T1,My1,Mz1)= getInternalForcesBeginNode(1)
 Vz1Teor=F
 My1Teor= -F*L/2.0
@@ -196,7 +198,7 @@ casos.addToDomain("3")
 analisis= predefined_solutions.simple_static_linear(prueba)
 result= analisis.analyze(1)
 
-RF= elementos.getElement(1).getResistingForce()
+RF= elements.getElement(1).getResistingForce()
 (N1,Vy1,Vz1,T1,My1,Mz1)= getInternalForcesBeginNode(1)
 Vz1Teor=F*L
 My1Teor=-F*L*L/2.0

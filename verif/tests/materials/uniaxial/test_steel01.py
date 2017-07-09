@@ -49,11 +49,11 @@ acero= typical_materials.defSteel01(preprocessor, "acero",E,fy,0.001)
     se emplea una sección arbitraria de área unidad '''
     
 # Elements definition
-elementos= preprocessor.getElementLoader
-elementos.defaultMaterial= "acero"
-elementos.dimElem= 2 # Dimension of element space
-elementos.defaultTag= 1 #Tag for the next element.
-spring= elementos.newElement("spring",xc.ID([1,2]));
+elements= preprocessor.getElementLoader
+elements.defaultMaterial= "acero"
+elements.dimElem= 2 # Dimension of element space
+elements.defaultTag= 1 #Tag for the next element.
+spring= elements.newElement("spring",xc.ID([1,2]));
 
 # Constraints
 constraints= preprocessor.getConstraintLoader
@@ -140,9 +140,9 @@ deltay= nod2.getDisp[1]
 nod1= nodes.getNode(1)
 R= nod1.getReaction[0] 
 
-elementos= preprocessor.getElementLoader
+elements= preprocessor.getElementLoader
 
-elem1= elementos.getElement(1)
+elem1= elements.getElement(1)
 elem1.getResistingForce()
 Ax= elem1.getMaterial().getStrain() # Spring elongation
 

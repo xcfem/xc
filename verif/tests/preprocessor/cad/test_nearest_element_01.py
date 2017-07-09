@@ -14,7 +14,7 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
-numElementos= 1000
+numElements= 1000
 tg= 0
 lapso= 0
 i= 1
@@ -28,12 +28,12 @@ for i in range(1,1001):
 # Materials definition
 elast= typical_materials.defElasticMaterial(preprocessor, "elast",2.1e6)
 
-elementos= preprocessor.getElementLoader
-elementos.defaultMaterial= "elast"
-elementos.dimElem= 2 # Dimension of element space
-elementos.defaultTag= 1 #Tag for the next element.
-for i in range(1,numElementos):
-  truss= elementos.newElement("truss",xc.ID([i,i+1]));
+elements= preprocessor.getElementLoader
+elements.defaultMaterial= "elast"
+elements.dimElem= 2 # Dimension of element space
+elements.defaultTag= 1 #Tag for the next element.
+for i in range(1,numElements):
+  truss= elements.newElement("truss",xc.ID([i,i+1]));
   truss.area= 1
 
 mesh= prueba.getDomain.getMesh
@@ -44,8 +44,8 @@ lapso= time.time()-start_time
 
 
 ''' 
-print "tag elemento: ",tg
-print "lapso: ",lapso
+print "element tag: ",tg
+print "lapse: ",lapse
    '''
 
 import os

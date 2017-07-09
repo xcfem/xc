@@ -56,11 +56,11 @@ scc.sectionProperties.rotate(math.radians(90))
 
 
 # Elements definition
-elementos= preprocessor.getElementLoader
-elementos.defaultTransformation= "lin"
-elementos.defaultMaterial= "scc"
-elementos.defaultTag= 1
-beam= elementos.newElement("force_beam_column_3d",xc.ID([1,2]))
+elements= preprocessor.getElementLoader
+elements.defaultTransformation= "lin"
+elements.defaultMaterial= "scc"
+elements.defaultTag= 1
+beam= elements.newElement("force_beam_column_3d",xc.ID([1,2]))
 
 # Constraints
 modelSpace.fixNode000_000(1)
@@ -85,9 +85,9 @@ nodes= preprocessor.getNodeLoader
 nod2= nodes.getNode(2)
 delta= nod2.getDisp[2]  # Node 2 displacement según z
 
-elementos= preprocessor.getElementLoader
+elements= preprocessor.getElementLoader
 
-elem1= elementos.getElement(1)
+elem1= elements.getElement(1)
 elem1.getResistingForce()
 scc0= elem1.getSections()[0]
 

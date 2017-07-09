@@ -44,8 +44,8 @@ for r in rows:
 e1= macros_sqlite.SQLTexisteTabla(dbName,tbName)
 
 
-ratio1= abs(i-6)/6 # 6 acciones
-ratio2= abs(j/6-144) # 144 elementos
+ratio1= abs(i-6)/6 # 6 actions
+ratio2= abs(j/6-144) # 144 elements
 
 ''' 
 print "i= ",i

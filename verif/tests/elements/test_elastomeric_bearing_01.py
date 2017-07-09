@@ -100,7 +100,7 @@ RY= nod1.getReaction[1]
 RZ= nod1.getReaction[2] 
 
 
-elementos= preprocessor.getElementLoader
+elements= preprocessor.getElementLoader
 
 
 VX= zl.getMaterials()[0].getStress()

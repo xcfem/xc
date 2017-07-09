@@ -77,12 +77,12 @@ agg.setAdditions(["T","Vy","Vz"],["respT","respVy","respVz"])
 
 
 # Elements definition
-elementos= preprocessor.getElementLoader
-elementos.defaultTransformation= "lin"
-elementos.defaultMaterial= "agg"
-elementos.numSections= 2 # Número de secciones a lo largo del elemento.
-elementos.defaultTag= 1
-el= elementos.newElement("force_beam_column_3d",xc.ID([1,2]))
+elements= preprocessor.getElementLoader
+elements.defaultTransformation= "lin"
+elements.defaultMaterial= "agg"
+elements.numSections= 2 # Number of sections along the element.
+elements.defaultTag= 1
+el= elements.newElement("force_beam_column_3d",xc.ID([1,2]))
 
 
 
@@ -112,9 +112,9 @@ delta= nod2.getDisp[3]  # Node 2 displacement según z
 nod1= nodes.getNode(1)
 RMT= nod1.getReaction[3] 
 
-elementos= preprocessor.getElementLoader
+elements= preprocessor.getElementLoader
 
-elem1= elementos.getElement(1)
+elem1= elements.getElement(1)
 elem1.getResistingForce()
 scc= elem1.getSections()[0]
 
