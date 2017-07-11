@@ -33,6 +33,7 @@ def defElasticMaterial(preprocessor,name,E):
   materiales= preprocessor.getMaterialLoader
   materiales.newMaterial("elastic_material",name)
   retval= materiales.getMaterial(name)
+  retval.name= name
   retval.E= E
   return retval
 
@@ -64,6 +65,7 @@ def defElastNoTensMaterial(preprocessor,name,E):
   materiales= preprocessor.getMaterialLoader
   materiales.newMaterial("elast_no_trac_material",name)
   retval= materiales.getMaterial(name)
+  retval.name= name
   retval.E= E
   return retval
 
@@ -83,6 +85,7 @@ def defCableMaterial(preprocessor,name,E,prestress,rho):
   materiales= preprocessor.getMaterialLoader
   materiales.newMaterial("cable_material",name)
   retval= materiales.getMaterial(name)
+  retval.name= name
   retval.E= E
   retval.prestress= prestress
   retval.rho= rho
@@ -103,6 +106,7 @@ def defSteel01(preprocessor,name,E,fy,b):
   materiales= preprocessor.getMaterialLoader
   materiales.newMaterial("steel01",name)
   retval= materiales.getMaterial(name)
+  retval.name= name
   retval.E= E
   retval.fy= fy
   retval.b= b
@@ -124,6 +128,7 @@ def defSteel02(preprocessor,name,E,fy,b,initialStress):
   materiales= preprocessor.getMaterialLoader
   materiales.newMaterial("steel02",name)
   retval= materiales.getMaterial(name)
+  retval.name= name
   retval.E= E
   retval.fy= fy
   retval.b= b
@@ -147,6 +152,7 @@ def defConcrete01(preprocessor,name,epsc0,fpc,fpcu,epscu):
   materiales= preprocessor.getMaterialLoader
   materiales.newMaterial("concrete01_material",name)
   retval= materiales.getMaterial(name)
+  retval.name= name
   retval.epsc0= epsc0
   retval.fpc= fpc
   retval.fpcu= fpcu
@@ -174,6 +180,7 @@ def defConcrete02(preprocessor,name,epsc0,fpc,fpcu,epscu,ratioSlope,ft,Ets):
   materiales= preprocessor.getMaterialLoader
   materiales.newMaterial("concrete02_material",name)
   retval= materiales.getMaterial(name)
+  retval.name= name
   retval.epsc0= epsc0
   retval.fpc= fpc
   retval.fpcu= fpcu
@@ -198,6 +205,7 @@ def defElasticSection2d(preprocessor,name,A,E,I):
   materiales= preprocessor.getMaterialLoader
   materiales.newMaterial("elastic_section_2d",name)
   retval= materiales.getMaterial(name)
+  retval.name= name
   retval.sectionProperties.A= A
   retval.sectionProperties.E= E
   retval.sectionProperties.I= I
@@ -219,6 +227,7 @@ def defElasticShearSection2d(preprocessor,name,A,E,G,I,alpha):
   materiales= preprocessor.getMaterialLoader
   materiales.newMaterial("elasticShearSection2d",name)
   retval= materiales.getMaterial(name)
+  retval.name= name
   retval.sectionProperties.A= A
   retval.sectionProperties.E= E
   retval.sectionProperties.G= G
@@ -254,6 +263,7 @@ def defElasticSection3d(preprocessor,name,A,E,G,Iz,Iy,J):
   materiales= preprocessor.getMaterialLoader
   materiales.newMaterial("elastic_section_3d",name)
   retval= materiales.getMaterial(name)
+  retval.name= name
   retval.sectionProperties.A= A
   retval.sectionProperties.E= E
   retval.sectionProperties.G= G
@@ -291,6 +301,7 @@ def defElasticShearSection3d(preprocessor,name,A,E,G,Iz,Iy,J,alpha):
   materiales= preprocessor.getMaterialLoader
   materiales.newMaterial("elasticShearSection3d",name)
   retval= materiales.getMaterial(name)
+  retval.name= name
   retval.sectionProperties.A= A
   retval.sectionProperties.E= E
   retval.sectionProperties.G= G
@@ -314,6 +325,7 @@ def defElasticIsotropicPlaneStrain(preprocessor,name,E,nu,rho):
   materiales= preprocessor.getMaterialLoader
   materiales.newMaterial("elastic_isotropic_plane_strain_2d",name)
   retval= materiales.getMaterial(name)
+  retval.name= name
   retval.E= E
   retval.nu= nu
   retval.rho= rho
@@ -332,6 +344,7 @@ def defElasticIsotropicPlaneStress(preprocessor,name,E,nu,rho):
   materiales= preprocessor.getMaterialLoader
   materiales.newMaterial("elastic_isotropic_plane_stress_2d",name)
   retval= materiales.getMaterial(name)
+  retval.name= name
   retval.E= E
   retval.nu= nu
   retval.rho= rho
@@ -350,6 +363,7 @@ def defElasticIsotropic3d(preprocessor,name,E,nu,rho):
   materiales= preprocessor.getMaterialLoader
   materiales.newMaterial("elastic_isotropic_3d",name)
   retval= materiales.getMaterial(name)
+  retval.name= name
   retval.E= E
   retval.nu= nu
   retval.rho= rho
@@ -369,6 +383,7 @@ def defElasticPlateSection(preprocessor,name,E,nu,rho,h):
   materiales= preprocessor.getMaterialLoader
   materiales.newMaterial("elastic_membrane_plate_section",name)
   retval= materiales.getMaterial(name)
+  retval.name= name
   retval.E= E
   retval.nu= nu
   retval.rho= rho
@@ -389,6 +404,7 @@ def defElasticMembranePlateSection(preprocessor,name,E,nu,rho,h):
   materiales= preprocessor.getMaterialLoader
   materiales.newMaterial("elastic_membrane_plate_section",name)
   retval= materiales.getMaterial(name)
+  retval.name= name
   retval.E= E
   retval.nu= nu
   retval.rho= rho

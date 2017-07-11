@@ -225,6 +225,11 @@ class StructuralMechanics2D(PredefinedSpace):
     self.constraints.newSPConstraint(nodeTag,0,0.0) # nodeTag, DOF, constrValue
     self.constraints.newSPConstraint(nodeTag,1,0.0)
 
+  def fixNode0F0(self, nodeTag):
+    '''Restrain all three node DOFs (i. e. make them zero).'''
+    self.constraints.newSPConstraint(nodeTag,0,0.0) # nodeTag, DOF, constrValue
+    self.constraints.newSPConstraint(nodeTag,2,0.0)
+
   def fixNode0FF(self, nodeTag):
     '''Restrain only X displacement DOF (i. e. Ux= 0).'''
     self.preprocessor.getConstraintLoader.newSPConstraint(nodeTag,0,0.0) 
@@ -416,6 +421,11 @@ class StructuralMechanics3D(PredefinedSpace):
     self.constraints.newSPConstraint(nodeTag,4,0.0)
     self.constraints.newSPConstraint(nodeTag,5,0.0)
 
+  def fixNode0F0_FFF(self, nodeTag):
+    '''Restrain only displacement DOFs (i. e. Ux= 0 and Uz= 0).'''
+    self.constraints.newSPConstraint(nodeTag,0,0.0) # nodeTag, DOF, constrValue
+    self.constraints.newSPConstraint(nodeTag,2,0.0)
+ 
   def LstNodes6DOFConstr(self,lstNodes,constrCond):
     '''Constraint the nodes in the list passed as parameter 
     according to given 6-values set of constraints conditions
