@@ -72,11 +72,11 @@ print "fibra: ",tag, " mat. tag:", getMaterial.tag
 
 
 # Elements definition
-elementos= preprocessor.getElementLoader
-elementos.defaultMaterial= "quadFibers"
-elementos.dimElem= 1 # Dimension of element space
-elementos.defaultTag= 1
-zl= elementos.newElement("zero_length_section",xc.ID([1,2]))
+elements= preprocessor.getElementLoader
+elements.defaultMaterial= "quadFibers"
+elements.dimElem= 1 # Dimension of element space
+elements.defaultTag= 1
+zl= elements.newElement("zero_length_section",xc.ID([1,2]))
 
 # Constraints
 constraints= preprocessor.getConstraintLoader
@@ -112,9 +112,9 @@ deltax= nod2.getDisp[0]
 nod1= nodes.getNode(1)
 R= nod1.getReaction[0] 
 
-elementos= preprocessor.getElementLoader
+elements= preprocessor.getElementLoader
 
-elem1= elementos.getElement(1)
+elem1= elements.getElement(1)
 elem1.getResistingForce()
 scc= elem1.getSection()
 

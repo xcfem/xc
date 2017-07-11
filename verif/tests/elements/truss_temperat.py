@@ -1,6 +1,12 @@
 # -*- coding: utf-8 -*-
-# home made test
-# Reference:  Cálculo de estructuras por el método de los elementos finitos. E. Oñate, pg. 165, ejemplo 5.3
+''' home made test
+    Reference:  Cálculo de estructuras por el método de los elemen-
+    tos finitos. 1991. E. Oñate, page 165, example 5.3
+
+    isbn={9788487867002}
+    url={https://books.google.ch/books?id=lV1GSQAACAAJ}
+
+'''
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
 __copyright__= "Copyright 2015, LCPT and AOO"
@@ -36,11 +42,11 @@ nod= nodes.newNodeXY(L,0.0)
 elast= typical_materials.defElasticMaterial(preprocessor, "elast",E)
     
 # Elements definition
-elementos= preprocessor.getElementLoader
-elementos.defaultMaterial= "elast"
-elementos.dimElem= 2 # Dimension of element space
-elementos.defaultTag= 1 #Tag for the next element.
-truss= elementos.newElement("truss",xc.ID([1,2]));
+elements= preprocessor.getElementLoader
+elements.defaultMaterial= "elast"
+elements.dimElem= 2 # Dimension of element space
+elements.defaultTag= 1 #Tag for the next element.
+truss= elements.newElement("truss",xc.ID([1,2]));
 truss.area= A
  
     
@@ -74,9 +80,9 @@ analisis= predefined_solutions.simple_static_linear(prueba)
 result= analisis.analyze(1)
 
 
-elementos= preprocessor.getElementLoader
+elements= preprocessor.getElementLoader
 
-elem1= elementos.getElement(1)
+elem1= elements.getElement(1)
 elem1.getResistingForce()
 N= (-E*A*alpha*AT)
 ratio= ((elem1.getN()-N)/N)

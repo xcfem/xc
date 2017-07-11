@@ -42,11 +42,11 @@ ky= typical_materials.defElasticMaterial(preprocessor, "ky",KY)
     se emplea una sección arbitraria de área unidad '''
     
 # Elements definition
-elementos= preprocessor.getElementLoader
-elementos.defaultMaterial= "kx"
-elementos.dimElem= 2 # Dimension of element space
-elementos.defaultTag= 1
-elem= elementos.newElement("zero_length",xc.ID([1,2]))
+elements= preprocessor.getElementLoader
+elements.defaultMaterial= "kx"
+elements.dimElem= 2 # Dimension of element space
+elements.defaultTag= 1
+elem= elements.newElement("zero_length",xc.ID([1,2]))
 elem.clearMaterials()
 elem.setMaterial(0,"kx")
 elem.setMaterial(1,"ky")
@@ -86,9 +86,9 @@ nod1= nodes.getNode(1)
 RX= nod1.getReaction[0]
 RY= nod1.getReaction[1] 
 
-elementos= preprocessor.getElementLoader
+elements= preprocessor.getElementLoader
 
-elem1= elementos.getElement(1)
+elem1= elements.getElement(1)
 elem1.getResistingForce()
 
 ratio1= -RX/FX

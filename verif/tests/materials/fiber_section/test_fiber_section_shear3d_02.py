@@ -100,8 +100,8 @@ nodes= preprocessor.getNodeLoader
 n1= nodes.getNode(1)
 reacN1= n1.getReaction
 
-elementos= preprocessor.getElementLoader
-ele1= elementos.getElement(1)
+elements= preprocessor.getElementLoader
+ele1= elements.getElement(1)
 scc= ele1.getSection()
 N= scc.getStressResultantComponent("N")
 Vy= scc.getStressResultantComponent("Vy")

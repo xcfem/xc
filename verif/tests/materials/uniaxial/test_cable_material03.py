@@ -45,13 +45,13 @@ la carga. Puesto que no se van a determinar tensiones
 se emplea una sección arbitraria de área unidad '''
     
 # Elements definition
-elementos= preprocessor.getElementLoader
-elementos.defaultMaterial= "cable"
-elementos.dimElem= 2 # Dimension of element space
-elementos.defaultTag= 1 #First node number.
-truss1= elementos.newElement("corot_truss",xc.ID([1,2]));
+elements= preprocessor.getElementLoader
+elements.defaultMaterial= "cable"
+elements.dimElem= 2 # Dimension of element space
+elements.defaultTag= 1 #First node number.
+truss1= elements.newElement("corot_truss",xc.ID([1,2]));
 truss1.area= area
-truss2= elementos.newElement("corot_truss",xc.ID([2,3]));
+truss2= elements.newElement("corot_truss",xc.ID([2,3]));
 truss2.area= area
     
 # Constraints
@@ -91,7 +91,7 @@ nod2= nodes.getNode(2)
 deltaX= nod2.getDisp[0]
 deltaY= nod2.getDisp[1]  
 
-ele1= elementos.getElement(1)
+ele1= elements.getElement(1)
 tension= ele1.getN()
 
 

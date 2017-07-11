@@ -37,9 +37,9 @@ n10= nodes.newNodeXYZ(p10.x,p10.y,p10.z)
 
 # Materials definition
 memb1= typical_materials.defElasticMembranePlateSection(preprocessor, "memb1",E,nu,dens,h)
-elementos= preprocessor.getElementLoader
-elementos.defaultMaterial= "memb1"
-elem= elementos.newElement("shell_mitc4",xc.ID([n1.tag,n2.tag,n3.tag,n4.tag]))
+elements= preprocessor.getElementLoader
+elements.defaultMaterial= "memb1"
+elem= elements.newElement("shell_mitc4",xc.ID([n1.tag,n2.tag,n3.tag,n4.tag]))
 
 # Constraints
 constraints= preprocessor.getConstraintLoader

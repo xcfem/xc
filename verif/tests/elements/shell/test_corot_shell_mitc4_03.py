@@ -33,10 +33,10 @@ nodes.newNodeIDXYZ(4,0,1,1)
 
 # Materials definition
 memb1= typical_materials.defElasticMembranePlateSection(preprocessor, "memb1",E,nu,dens,h)
-elementos= preprocessor.getElementLoader
+elements= preprocessor.getElementLoader
 
-elementos.defaultMaterial= "memb1"
-elem= elementos.newElement("corot_shell_mitc4",xc.ID([1,2,3,4]))
+elements.defaultMaterial= "memb1"
+elem= elements.newElement("corot_shell_mitc4",xc.ID([1,2,3,4]))
 
 nodes= preprocessor.getSets.getSet("total").getNodes
 for n in nodes:
@@ -47,8 +47,8 @@ movLocalN2= None
 movLocalN3= None
 movLocalN4= None
 
-elementos= preprocessor.getSets.getSet("total").getElements
-for e in elementos:
+elements= preprocessor.getSets.getSet("total").getElements
+for e in elements:
   crdT= e.getCoordTransf
   crdT.update()
   R0= crdT.getR0

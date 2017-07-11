@@ -53,11 +53,11 @@ lin= trfs.newLinearCrdTransf3d("lin")
 lin.xzVector= xc.Vector([0,-1,0])
 
 # Elements definition
-elementos= preprocessor.getElementLoader
-elementos.defaultTransformation= "lin"
-elementos.defaultMaterial= "seccion"
-elementos.defaultTag= 1 #Tag for the next element.
-beam3d= elementos.newElement("elastic_beam_3d",xc.ID([1,2]));
+elements= preprocessor.getElementLoader
+elements.defaultTransformation= "lin"
+elements.defaultMaterial= "seccion"
+elements.defaultTag= 1 #Tag for the next element.
+beam3d= elements.newElement("elastic_beam_3d",xc.ID([1,2]));
 
 
 
@@ -88,9 +88,9 @@ nodes= preprocessor.getNodeLoader
 nod2= nodes.getNode(2)
 delta= nod2.getDisp[1]  # Node 2 yAxis displacement global
 
-elementos= preprocessor.getElementLoader
+elements= preprocessor.getElementLoader
 
-elem1= elementos.getElement(1)
+elem1= elements.getElement(1)
 elem1.getResistingForce()
 My1= elem1.getMy1 # Momento en el extremo dorsal de la barra
 My2= elem1.getMy2 # Momento en el extremo frontal de la barra

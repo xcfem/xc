@@ -1,10 +1,11 @@
 # -*- coding: utf-8 -*-
-''' Test tomado del libro:
-    Introdución al estudio del elemento finito en Ingeniería. Segunda edición.
-    Tirupathi R. Chandrupatla
-    Ashok D. Belegundu.
-    Prentice Hall, México 1999 '''
-
+''' Test made from the the book: 
+    Introducción Al Estudio Del Elemento Finito en Ingeniería. 
+    Segunda Edición. Tirupathi R. Chandrupatla, Ashok D. Belegundu. 
+    Pearson Educación, 1999
+    isbn={9789701702604},
+    url={https://books.google.ch/books?id=auQwAAAACAAJ},
+'''
 E= 2.1e6 # Young modulus of the steel en kg/cm2.
 nu= 0.3 # Poisson's ratio.
 h= 0.1 # Espesor.
@@ -36,8 +37,8 @@ nombresTiposCelda= None
 numeroCeldasTipo= None
 numNodesCeldaTipo= None
 conectividad= None
-numGruposNodes= None
-numGruposElementos= None
+numNodeGroups= None
+numElementGroups= None
 
 prueba= xc.ProblemaEF()
 prueba.logFileName= "/tmp/borrar.log" # Ignore warning messages
@@ -56,10 +57,10 @@ nodes.newNodeIDXYZ(6,3,1,0)
 # Materials definition
 memb1= typical_materials.defElasticMembranePlateSection(preprocessor, "memb1",E,nu,dens,h)
 # Elements definition
-elementos= preprocessor.getElementLoader
-elementos.defaultMaterial= "memb1"
-elem= elementos.newElement("shell_mitc4",xc.ID([1,2,3,4]))
-elem= elementos.newElement("shell_mitc4",xc.ID([2,5,6,3]))
+elements= preprocessor.getElementLoader
+elements.defaultMaterial= "memb1"
+elem= elements.newElement("shell_mitc4",xc.ID([1,2,3,4]))
+elem= elements.newElement("shell_mitc4",xc.ID([2,5,6,3]))
 
 
 
@@ -93,8 +94,8 @@ nombresTiposCelda= med_import.getCellTypeNames
 numeroCeldasTipo= med_import.getNumCellsOfType(tiposCelda[0])
 numNodesCeldaTipo= tiposCelda[0]%100
 conectividad= med_import.getConnectivityCellsOfType(tiposCelda[0])
-numGruposNodes= med_import.getNumberOfGroups(xc.MED_NODE)
-numGruposElementos= med_import.getNumberOfGroups(xc.MED_CELL)
+numNodeGroups= med_import.getNumberOfGroups(xc.MED_NODE)
+numElementGroups= med_import.getNumberOfGroups(xc.MED_CELL)
 
 
 import os
@@ -113,8 +114,8 @@ print "nombresTiposCelda= ",nombresTiposCelda
 print "numeroCeldasTipo(",tiposCelda[0],")= ",numeroCeldasTipo
 print "numeroNodosCeldaTipo(",tiposCelda[0],")= ",numNodesCeldaTipo
 print "conectividad= ",conectividad
-print "numGruposNodes= ",numGruposNodos
-print "numGruposElementos= ",numGruposElementos
+print "numNodeGroups= ",numNodeGroups
+print "numElementGroups= ",numElementGroups
    '''
 
 ratio1= spaceDim-3

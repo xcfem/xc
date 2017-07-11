@@ -40,11 +40,11 @@ nod= nodes.newNodeXY(L,0.0)
 mat= typical_materials.defSteel02(preprocessor, "prestressingSteel",E,fy,0.001,tInic)
     
 # Elements definition
-elementos= preprocessor.getElementLoader
-elementos.defaultMaterial= "prestressingSteel"
-elementos.dimElem= 2 # Dimension of element space
-elementos.defaultTag= 1 #Tag for the next element.
-truss= elementos.newElement("truss",xc.ID([1,2]));
+elements= preprocessor.getElementLoader
+elements.defaultMaterial= "prestressingSteel"
+elements.dimElem= 2 # Dimension of element space
+elements.defaultTag= 1 #Tag for the next element.
+truss= elements.newElement("truss",xc.ID([1,2]));
 truss.area= A
 
     
@@ -124,9 +124,9 @@ analysis= solu.newAnalysis("static_analysis","smt","")
 result= analysis.analyze(1)
 
 
-elementos= preprocessor.getElementLoader
+elements= preprocessor.getElementLoader
 
-elem1= elementos.getElement(1)
+elem1= elements.getElement(1)
 elem1.getResistingForce()
 ratio= (tInic*A-elem1.getN())/(tInic*A)
 

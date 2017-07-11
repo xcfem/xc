@@ -72,38 +72,38 @@ hLosa= typical_materials.defElasticMembranePlateSection(preprocessor, "hLosa",Ec
 
 prestressingSteel= typical_materials.defSteel02(preprocessor, "prestressingSteel",Ep,fy,0.001,tInic)
 
-elementos= preprocessor.getElementLoader
+elements= preprocessor.getElementLoader
 # Losa de hormigón
-elementos.defaultMaterial= "hLosa"
-elementos.defaultTag= 1
-elem= elementos.newElement("shell_mitc4",xc.ID([1,2,6,5]))
+elements.defaultMaterial= "hLosa"
+elements.defaultTag= 1
+elem= elements.newElement("shell_mitc4",xc.ID([1,2,6,5]))
 
-elem= elementos.newElement("shell_mitc4",xc.ID([2,3,7,6]))
-elem= elementos.newElement("shell_mitc4",xc.ID([3,4,8,7]))
-elem= elementos.newElement("shell_mitc4",xc.ID([5,6,10,9]))
-elem= elementos.newElement("shell_mitc4",xc.ID([6,7,11,10]))
-elem= elementos.newElement("shell_mitc4",xc.ID([7,8,12,11]))
+elem= elements.newElement("shell_mitc4",xc.ID([2,3,7,6]))
+elem= elements.newElement("shell_mitc4",xc.ID([3,4,8,7]))
+elem= elements.newElement("shell_mitc4",xc.ID([5,6,10,9]))
+elem= elements.newElement("shell_mitc4",xc.ID([6,7,11,10]))
+elem= elements.newElement("shell_mitc4",xc.ID([7,8,12,11]))
 
 # Armadura activa
-elementos.defaultMaterial= "prestressingSteel"
-elementos.dimElem= 3 # Dimension of element space
-truss= elementos.newElement("truss",xc.ID([1,2]));
+elements.defaultMaterial= "prestressingSteel"
+elements.dimElem= 3 # Dimension of element space
+truss= elements.newElement("truss",xc.ID([1,2]));
 truss.area= Ap
-truss= elementos.newElement("truss",xc.ID([2,3]));
+truss= elements.newElement("truss",xc.ID([2,3]));
 truss.area= Ap
-truss= elementos.newElement("truss",xc.ID([3,4]));
+truss= elements.newElement("truss",xc.ID([3,4]));
 truss.area= Ap
-truss= elementos.newElement("truss",xc.ID([5,6]));
+truss= elements.newElement("truss",xc.ID([5,6]));
 truss.area= Ap
-truss= elementos.newElement("truss",xc.ID([6,7]));
+truss= elements.newElement("truss",xc.ID([6,7]));
 truss.area= Ap
-truss= elementos.newElement("truss",xc.ID([7,8]));
+truss= elements.newElement("truss",xc.ID([7,8]));
 truss.area= Ap
-truss= elementos.newElement("truss",xc.ID([9,10]));
+truss= elements.newElement("truss",xc.ID([9,10]));
 truss.area= Ap
-truss= elementos.newElement("truss",xc.ID([10,11]));
+truss= elements.newElement("truss",xc.ID([10,11]));
 truss.area= Ap
-truss= elementos.newElement("truss",xc.ID([11,12]));
+truss= elements.newElement("truss",xc.ID([11,12]));
 truss.area= Ap
 
 # Constraints

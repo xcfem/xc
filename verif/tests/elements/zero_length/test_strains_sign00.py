@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # home made test
 
-# Criterio de signos elementos ZeroLengthSection.
+# ZeroLengthSection elements sign criteria.
 
 #     El axil y los cortantes tienen la misma direccion y sentido que los ejes locales.
 #     El torsor Mx y el flector My tienen las direcciones y sentido de los ejes X e Y locales.
@@ -85,10 +85,10 @@ agg.setAdditions(["T","Vy","Vz"],["respT","respVy","respVz"])
 
 
 # Elements definition
-elementos= preprocessor.getElementLoader
-elementos.defaultMaterial= "sa"
-elementos.dimElem= 1 # Dimension of element space
-zl= elementos.newElement("zero_length_section",xc.ID([1,2]))
+elements= preprocessor.getElementLoader
+elements.defaultMaterial= "sa"
+elements.dimElem= 1 # Dimension of element space
+zl= elements.newElement("zero_length_section",xc.ID([1,2]))
 
 # Constraints
 modelSpace.fixNode000_000(1)
@@ -164,7 +164,7 @@ for key in casos.getKeys():
   casos.addToDomain(key)
   ok= solve()
   if(ok==0):
-    ele1= elementos.getElement(0)
+    ele1= elements.getElement(0)
     ele1.getResistingForce()
     scc= ele1.getSection()
     My= scc.getStressResultantComponent("My")

@@ -47,10 +47,10 @@ lin= trfs.newLinearCrdTransf2d("lin")
 seccion= typical_materials.defElasticShearSection2d(preprocessor, "seccion",A,E,G,I,1.0)
 
 # Elements definition
-elementos= preprocessor.getElementLoader
-elementos.defaultTransformation= "lin" # Transformación de coordenadas para los nuevos elementos
-elementos.defaultMaterial= "seccion"
-beam2d= elementos.newElement("force_beam_column_2d",xc.ID([1,2]));
+elements= preprocessor.getElementLoader
+elements.defaultTransformation= "lin" # Coordinate transformation for the new elements
+elements.defaultMaterial= "seccion"
+beam2d= elements.newElement("force_beam_column_2d",xc.ID([1,2]));
 
 # Constraints
 constraints= preprocessor.getConstraintLoader
@@ -79,9 +79,9 @@ nod1= nodes.getNode(1)
 Ry= nod1.getReaction[1] 
 RMz= nod1.getReaction[2] 
 
-elementos= preprocessor.getElementLoader
+elements= preprocessor.getElementLoader
 
-elem1= elementos.getElement(0)
+elem1= elements.getElement(0)
 elem1.getResistingForce()
 scc= elem1.getSections()[0]
 

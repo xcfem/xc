@@ -33,12 +33,12 @@ lin.xzVector= xc.Vector([0,1,0])
 seccion= typical_materials.defElasticSection3d(preprocessor, "seccion",1,1,1,1,1,1)
    
 # Elements definition
-elementos= preprocessor.getElementLoader
+elements= preprocessor.getElementLoader
 
-elementos.defaultTransformation= "lin" # Transformación de coordenadas para los nuevos elementos
-elementos.defaultTag= 1 #Tag for the next element.
-elementos.defaultMaterial= "seccion"
-beam3d= elementos.newElement("elastic_beam_3d",xc.ID([1,2]))
+elements.defaultTransformation= "lin" # Coordinate transformation for the new elements
+elements.defaultTag= 1 #Tag for the next element.
+elements.defaultMaterial= "seccion"
+beam3d= elements.newElement("elastic_beam_3d",xc.ID([1,2]))
 
 crdTransf= beam3d.getCoordTransf
 

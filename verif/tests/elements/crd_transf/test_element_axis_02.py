@@ -60,10 +60,10 @@ A= fibers.getSumaAreas
 
 
 # Elements definition
-elementos= preprocessor.getElementLoader
-elementos.defaultTransformation= "lin"
-elementos.defaultMaterial= "quadFibers"
-beam3d= elementos.newElement("force_beam_column_3d",xc.ID([1,2]));
+elements= preprocessor.getElementLoader
+elements.defaultTransformation= "lin"
+elements.defaultMaterial= "quadFibers"
+beam3d= elements.newElement("force_beam_column_3d",xc.ID([1,2]));
 
 
 

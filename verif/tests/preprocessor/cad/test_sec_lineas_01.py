@@ -52,20 +52,20 @@ nnodPline= l1.getNumNodes
 nelemPline= l1.getNumElements
 
 ''' 
-print "núm. nodos: ",nnod
+print "number of nodes: ",nnod
 nodes= preprocessor.getNodeLoader
 
 for_each
   print "  nodo: ",tag," x= ",coord[0],", y= ",coord[1],", z= ",coord[2]
 
-print "núm. elementos: ",nelem
+print "number of elements: ",nelem
 '''
 
-elementos= setTotal.getElements
+elements= setTotal.getElements
 ratio1= 0.0
 vteor2= (CooMax/NumDiv)**2
 lteor= math.sqrt(3*vteor2)
-for e in elementos:
+for e in elements:
   #print "  elem: ",tag," nod. I: ",nod[0].tag," nod. J: ",nod[1].tag," L= ",e.getL()
   ratio1+= (e.getL()-lteor)/lteor
 

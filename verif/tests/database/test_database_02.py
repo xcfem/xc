@@ -50,12 +50,12 @@ lin.xzVector= xc.Vector([0,1,0])
 scc= typical_materials.defElasticSection3d(preprocessor, "scc",A,E,G,Iz,Iy,J)
 
 
-elementos= preprocessor.getElementLoader
-elementos.defaultTransformation= "lin"
-elementos.defaultMaterial= "scc"
+elements= preprocessor.getElementLoader
+elements.defaultTransformation= "lin"
+elements.defaultMaterial= "scc"
 #  sintaxis: elastic_beam_3d[<tag>] 
-elementos.defaultTag= 1 #Tag for next element.
-beam3d= elementos.newElement("elastic_beam_3d",xc.ID([1,2]));
+elements.defaultTag= 1 #Tag for next element.
+beam3d= elements.newElement("elastic_beam_3d",xc.ID([1,2]));
 
 
 modelSpace.fixNode000_000(1)
@@ -91,7 +91,7 @@ nodes= preprocessor.getNodeLoader
 nod2= nodes.getNode(2)
 delta= nod2.getDisp[0] # Node 2 xAxis displacement
 
-elem1= elementos.getElement(1)
+elem1= elements.getElement(1)
 elem1.getResistingForce()
 N1= elem1.getN1
 

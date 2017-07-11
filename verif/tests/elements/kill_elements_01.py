@@ -42,15 +42,15 @@ scc= typical_materials.defElasticSection2d(preprocessor, "scc",A,E,I)
 
 
 # Elements definition
-elementos= preprocessor.getElementLoader
-elementos.defaultTransformation= "lin"
-elementos.defaultMaterial= "scc"
+elements= preprocessor.getElementLoader
+elements.defaultTransformation= "lin"
+elements.defaultMaterial= "scc"
 #  sintaxis: beam2d_02[<tag>] 
-elementos.defaultTag= 1 #Tag for next element.
-beam2d= elementos.newElement("elastic_beam_2d",xc.ID([1,2]))
+elements.defaultTag= 1 #Tag for next element.
+beam2d= elements.newElement("elastic_beam_2d",xc.ID([1,2]))
 beam2d.h= h
         
-beam2d= elementos.newElement("elastic_beam_2d",xc.ID([3,4]))
+beam2d= elements.newElement("elastic_beam_2d",xc.ID([3,4]))
 beam2d.h= h
     
 # Constraints
@@ -65,7 +65,7 @@ spc= constraints.newSPConstraint(4,2,0.0)
 
 
 setTotal= preprocessor.getSets.getSet("total")
-setTotal.killElements() # Desactivamos los elementos.
+setTotal.killElements() # deactivate the elements
 
 mesh= prueba.getDomain.getMesh
 mesh.setDeadSRF(0.0)

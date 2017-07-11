@@ -51,10 +51,10 @@ python tests/elements/crd_transf/test_linear_crd_transf_3d_02.py
 python tests/elements/crd_transf/test_pdelta_crd_transf_3d_01.py
 python tests/elements/crd_transf/test_corot_crd_transf_3d_01.py
 python tests/elements/crd_transf/test_corot_crd_transf_3d_02.py
-python tests/elements/crd_transf/test_ejes_elemento_01.py
-python tests/elements/crd_transf/test_ejes_elemento_02.py
-python tests/elements/crd_transf/test_ejes_elemento_03.py
-python tests/elements/crd_transf/test_punto_elemento_01.py
+python tests/elements/crd_transf/test_element_axis_01.py
+python tests/elements/crd_transf/test_element_axis_02.py
+python tests/elements/crd_transf/test_element_axis_03.py
+python tests/elements/crd_transf/test_element_point_01.py
 python tests/elements/crd_transf/test_crd_transf2d_01.py
 python tests/elements/crd_transf/test_crd_transf3d_01.py
 python tests/elements/crd_transf/test_pdelta_01.py

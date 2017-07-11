@@ -43,14 +43,14 @@ typical_materials.defCableMaterial(preprocessor, "cable",E,sigmaPret,Mass)
     la carga. Puesto que no se van a determinar tensiones
     se emplea una sección arbitraria de área unidad '''
     
-# Definimos elemento semilla
+# Seed element definition
 seedElemLoader= preprocessor.getElementLoader.seedElemLoader
 seedElemLoader.defaultMaterial= "cable"
 seedElemLoader.dimElem= 2 # Dimension of element space
 seedElemLoader.defaultTag= 1 #Tag for the next element.
 truss= seedElemLoader.newElement("corot_truss",xc.ID([0,0]))
 truss.area= area
-# fin de la definición del elemento semilla
+# seed element definition ends
 
 puntos= preprocessor.getCad.getPoints
 pt= puntos.newPntIDPos3d(1,geom.Pos3d(0.0,0.0,0.0))
@@ -90,8 +90,8 @@ solver= soe.newSolver("band_gen_lin_lapack_solver")
 analysis= solu.newAnalysis("static_analysis","smt","")
 result= analysis.analyze(Nstep)
 
-elementos= preprocessor.getElementLoader
-ele1= elementos.getElement(1)
+elements= preprocessor.getElementLoader
+ele1= elements.getElement(1)
 traccion= ele1.getN()
 sigma= ele1.getMaterial().getStress()
 

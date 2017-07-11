@@ -44,13 +44,13 @@ lin= trfs.newLinearCrdTransf3d("lin")
 lin.xzVector= xc.Vector([0,0,1])
     
 # Elements definition
-elementos= preprocessor.getElementLoader
-elementos.defaultTransformation= "lin"
-elementos.defaultMaterial= seccPrueba.sectionName
-elementos.numSections= 3 # Número de secciones a lo largo del elemento.
-elementos.defaultTag= 1
-beam3d1= elementos.newElement("force_beam_column_3d",xc.ID([1,2]))
-beam3d2= elementos.newElement("force_beam_column_3d",xc.ID([2,3]))
+elements= preprocessor.getElementLoader
+elements.defaultTransformation= "lin"
+elements.defaultMaterial= seccPrueba.sectionName
+elements.numSections= 3 # Number of sections along the element.
+elements.defaultTag= 1
+beam3d1= elements.newElement("force_beam_column_3d",xc.ID([1,2]))
+beam3d2= elements.newElement("force_beam_column_3d",xc.ID([2,3]))
     
 # Constraints
 modelSpace.fixNode000_000(1)
@@ -88,7 +88,7 @@ RN2= nod3.getReaction[0]
 
 
 
-elem1= elementos.getElement(1)
+elem1= elements.getElement(1)
 elem1.getResistingForce()
 scc0= elem1.getSections()[0]
 

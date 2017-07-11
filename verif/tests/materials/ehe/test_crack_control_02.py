@@ -90,8 +90,8 @@ analOk= analisis.analyze(10)
 secHAParamsFis= fisuracionEHE.CrackControl('SLS_crack')
 
 
-elementos= preprocessor.getElementLoader
-ele1= elementos.getElement(1)
+elements= preprocessor.getElementLoader
+ele1= elements.getElement(1)
 scc= ele1.getSection()
 secHAParamsFis.calcApertCaracFis(scc,EHE_materials.HA25.matTagK,EHE_materials.B500S.matTagK,EHE_materials.HA25.fctm())
 

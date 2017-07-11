@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-''' home made test. Verifica el buen comportamiento del
- elemento «ZeroLength» cuando no está alineado con los ejes globales. '''
+''' home made test. Verifies that the "ZeroLength" element gives right
+ results when not aligned with global axes.'''
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
 __copyright__= "Copyright 2015, LCPT and AOO"
@@ -39,15 +39,15 @@ k= typical_materials.defElasticMaterial(preprocessor, "k",K)
     se emplea una sección arbitraria de área unidad '''
     
 # Elements definition
-elementos= preprocessor.getElementLoader
-elementos.defaultMaterial= "k"
-elementos.dimElem= 3 # Dimension of element space
-elementos.deraultTag= 1
-zl1= elementos.newElement("zero_length",xc.ID([1,2]))
+elements= preprocessor.getElementLoader
+elements.defaultMaterial= "k"
+elements.dimElem= 3 # Dimension of element space
+elements.deraultTag= 1
+zl1= elements.newElement("zero_length",xc.ID([1,2]))
 zl1.setupVectors(xc.Vector([1,1,0]),xc.Vector([-1,1,0]))
 zl1.clearMaterials()
 zl1.setMaterial(0,"k")
-zl2= elementos.newElement("zero_length",xc.ID([1,2]))
+zl2= elements.newElement("zero_length",xc.ID([1,2]))
 zl2.setupVectors(xc.Vector([-1,1,0]),xc.Vector([-1,-1,0]))
 zl2.setMaterial(0,"k")
 

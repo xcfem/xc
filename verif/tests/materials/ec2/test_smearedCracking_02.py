@@ -119,11 +119,11 @@ fiberSectionRepr.setGeomNamed("geomSectFibers")
 sctFibers.setupFibers()
 
 # Elements definition
-elementos= preprocessor.getElementLoader
-elementos.defaultMaterial='sctFibers'
-elementos.dimElem= 1 # Dimension of element space
-elementos.defaultTag= 1
-elem= elementos.newElement("zero_length_section",xc.ID([1,2]))
+elements= preprocessor.getElementLoader
+elements.defaultMaterial='sctFibers'
+elements.dimElem= 1 # Dimension of element space
+elements.defaultTag= 1
+elem= elements.newElement("zero_length_section",xc.ID([1,2]))
 
 # Constraints
 constraints= preprocessor.getConstraintLoader
@@ -141,15 +141,15 @@ cargas= preprocessor.getLoadLoader   #loads container
 casos= cargas.getLoadPatterns
 
 
-elementos= preprocessor.getElementLoader
-ele1= elementos.getElement(1)
+elements= preprocessor.getElementLoader
+ele1= elements.getElement(1)
 #section of element 1: it's the copy of the material section 'sctFibers' assigned
 #to element 1 and specific of this element. It has the tensional state of the element
 sccEl1= ele1.getSection()         
 fibersSccEl1= sccEl1.getFibers()
 
-elementos= preprocessor.getElementLoader
-ele1= elementos.getElement(1)
+elements= preprocessor.getElementLoader
+ele1= elements.getElement(1)
 #section of element 1: it's the copy of the material section 'sctFibers' assigned
 #to element 1 and specific of this element. It has the tensional state of the element
 sccEl1= ele1.getSection()         

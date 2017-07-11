@@ -33,12 +33,12 @@ lin= trfs.newCorotCrdTransf3d("lin")
 lin.xzVector= xc.Vector([0,1,0])
     
 # Elements definition
-elementos= preprocessor.getElementLoader
+elements= preprocessor.getElementLoader
 
-elementos.defaultTransformation= "lin" # Transformación de coordenadas para los nuevos elementos
-elementos.defaultMaterial= "seccion"
-elementos.defaultTag= 1 #Tag for the next element.
-beam3d= elementos.newElement("elastic_beam_3d",xc.ID([1,2]));
+elements.defaultTransformation= "lin" # Coordinate transformation for the new elements
+elements.defaultMaterial= "seccion"
+elements.defaultTag= 1 #Tag for the next element.
+beam3d= elements.newElement("elastic_beam_3d",xc.ID([1,2]));
 
 crdTransf= beam3d.getCoordTransf
 

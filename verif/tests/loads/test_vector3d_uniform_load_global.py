@@ -12,16 +12,16 @@ from postprocess.quick_inquiry import movs_nodo_6gdl
 from postprocess.quick_inquiry import nodal_reactions
 
 movN2= movs_nodo_6gdl.vectorMovUVW(preprocessor, 2) # Node 2 displacement
-vI= element_vectors.getVectorIElem(preprocessor, 1) # Vector I del elemento 1
+vI= element_vectors.getVectorIElem(preprocessor, 1) # Vector I of element 1
 vProj= movN2.dot(vI)
 delta= abs(vProj)
 
 nodes.calculateNodalReactions(True)
-reacN1= nodal_reactions.vectorReacUVW(preprocessor, 1) # Reacción del nodo 1
+reacN1= nodal_reactions.vectorReacUVW(preprocessor, 1) # Reacción of the node 1
 vReacProj= reacN1.dot(vI)
 RN= abs(vReacProj)
 
-elem1= elementos.getElement(1)
+elem1= elements.getElement(1)
 elem1.getResistingForce()
 scc0= elem1.getSections()[0]
 N0= scc0.getStressResultantComponent("N")

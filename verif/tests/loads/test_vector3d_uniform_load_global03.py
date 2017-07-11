@@ -80,12 +80,12 @@ agg.setAdditions(["T","Vy","Vz"],["respT","respVy","respVz"])
 
 
 # Elements definition
-elementos= preprocessor.getElementLoader
-elementos.defaultTransformation= "lin"
-elementos.defaultMaterial= "quadFibers"
-elementos.numSections= 2 # Number of sections along the element.
-elementos.defaultTag= 1
-el= elementos.newElement("force_beam_column_3d",xc.ID([1,2]))
+elements= preprocessor.getElementLoader
+elements.defaultTransformation= "lin"
+elements.defaultMaterial= "quadFibers"
+elements.numSections= 2 # Number of sections along the element.
+elements.defaultTag= 1
+el= elements.newElement("force_beam_column_3d",xc.ID([1,2]))
 
 
 

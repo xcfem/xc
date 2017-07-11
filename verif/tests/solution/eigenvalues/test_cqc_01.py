@@ -63,13 +63,13 @@ linY= preprocessor.getTransfCooLoader.newLinearCrdTransf3d("linY")
 linY.xzVector= xc.Vector([0,1,0])
 
 # Elements definition
-elementos= preprocessor.getElementLoader
-elementos.defaultTransformation= "linX"
-elementos.defaultMaterial= "scc"
-beam3d= elementos.newElement("elastic_beam_3d",xc.ID([0,1]))
-beam3d= elementos.newElement("elastic_beam_3d",xc.ID([1,2]))
-elementos.defaultTransformation= "linY"
-beam3d= elementos.newElement("elastic_beam_3d",xc.ID([2,3]))
+elements= preprocessor.getElementLoader
+elements.defaultTransformation= "linX"
+elements.defaultMaterial= "scc"
+beam3d= elements.newElement("elastic_beam_3d",xc.ID([0,1]))
+beam3d= elements.newElement("elastic_beam_3d",xc.ID([1,2]))
+elements.defaultTransformation= "linY"
+beam3d= elements.newElement("elastic_beam_3d",xc.ID([2,3]))
 
 
 # Procedimiento de solución

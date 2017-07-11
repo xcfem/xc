@@ -74,12 +74,12 @@ agg.setAdditions(["T","Vy","Vz"],["respT","respVy","respVz"])
 # Shear and torsion responses.
 
 # Elements definition
-elementos= preprocessor.getElementLoader
-elementos.defaultTransformation= "lin"
-elementos.defaultMaterial= "agg"
-elementos.numSections= 3 # Número de secciones a lo largo del elemento.
-elementos.defaultTag= 1
-el= elementos.newElement("force_beam_column_3d",xc.ID([1,2]))
+elements= preprocessor.getElementLoader
+elements.defaultTransformation= "lin"
+elements.defaultMaterial= "agg"
+elements.numSections= 3 # Number of sections along the element.
+elements.defaultTag= 1
+el= elements.newElement("force_beam_column_3d",xc.ID([1,2]))
 
 
 
@@ -124,7 +124,7 @@ nod1= nodes.getNode(1)
 Ry= nod1.getReaction[1] 
 RMz= nod1.getReaction[5] 
 
-elem1= elementos.getElement(1)
+elem1= elements.getElement(1)
 elem1.getResistingForce()
 scc0= elem1.getSections()[0]
 

@@ -45,21 +45,21 @@ scc= typical_materials.defElasticSection2d(preprocessor, "scc",A,E,I)
 
 
 # Elements definition
-elementos= preprocessor.getElementLoader
-elementos.defaultTransformation= "lin"
-elementos.defaultMaterial= "scc"
+elements= preprocessor.getElementLoader
+elements.defaultTransformation= "lin"
+elements.defaultMaterial= "scc"
 #  sintaxis: beam2d_02[<tag>] 
-elementos.defaultTag= 1 #Tag for next element.
-beam2d= elementos.newElement("elastic_beam_2d",xc.ID([1,2]))
+elements.defaultTag= 1 #Tag for next element.
+beam2d= elements.newElement("elastic_beam_2d",xc.ID([1,2]))
 beam2d.h= h
         
-beam2d= elementos.newElement("elastic_beam_2d",xc.ID([2,3]))
+beam2d= elements.newElement("elastic_beam_2d",xc.ID([2,3]))
 beam2d.h= h
         
-beam2d= elementos.newElement("elastic_beam_2d",xc.ID([3,4]))
+beam2d= elements.newElement("elastic_beam_2d",xc.ID([3,4]))
 beam2d.h= h
         
-beam2d= elementos.newElement("elastic_beam_2d",xc.ID([4,5]))
+beam2d= elements.newElement("elastic_beam_2d",xc.ID([4,5]))
 beam2d.h= h
     
 # Constraints
@@ -98,7 +98,7 @@ execfile(pth+"/../../aux/solu_transf_handler2.py")
 nod3= nodes.getNode(3)
 delta= nod3.getDisp[1] 
 
-elem2= elementos.getElement(2)
+elem2= elements.getElement(2)
 elem2.getResistingForce()
 sigma= elem2.getN2/A+elem2.getM2/I*h/2.0
 

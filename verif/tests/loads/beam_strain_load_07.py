@@ -1,7 +1,12 @@
 # -*- coding: utf-8 -*-
-# home made test
-# Reference:  Cálculo de estructuras por el método de los elementos finitos. E. Oñate, pg. 165, ejemplo 5.3
+''' home made test
+    Reference:  Cálculo de estructuras por el método de los elemen-
+    tos finitos. 1991. E. Oñate, page 165, example 5.3
 
+    isbn={9788487867002}
+    url={https://books.google.ch/books?id=lV1GSQAACAAJ}
+
+'''
 import xc_base
 import geom
 import xc
@@ -44,12 +49,12 @@ lin.xzVector= xc.Vector([0,1,0])
 seccion= typical_materials.defElasticShearSection3d(preprocessor, "seccion",A,E,G,Iz,Iy,J,1.0)
 
 # Elements definition
-elementos= preprocessor.getElementLoader
-elementos.defaultTransformation= "lin"
-elementos.defaultMaterial= "seccion"
-elementos.defaultTag= 1
-beam1= elementos.newElement("force_beam_column_3d",xc.ID([1,2]));
-beam2= elementos.newElement("force_beam_column_3d",xc.ID([2,3]));
+elements= preprocessor.getElementLoader
+elements.defaultTransformation= "lin"
+elements.defaultMaterial= "seccion"
+elements.defaultTag= 1
+beam1= elements.newElement("force_beam_column_3d",xc.ID([1,2]));
+beam2= elements.newElement("force_beam_column_3d",xc.ID([2,3]));
 
     
 # Constraints
@@ -90,7 +95,7 @@ dX= nod2.getDisp[0]
 dY= nod2.getDisp[1] 
 dZ= nod2.getDisp[2] 
 
-elem1= elementos.getElement(1)
+elem1= elements.getElement(1)
 elem1.getResistingForce()
 scc0= elem1.getSections()[0]
 

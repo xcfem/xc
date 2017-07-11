@@ -30,8 +30,8 @@ nombresTiposCelda= None
 numeroCeldasTipo= None
 numNodesCeldaTipo= None
 conectividad= None
-numGruposNodes= None
-numGruposElementos= None
+numNodeGroups= None
+numElementGroups= None
 
 prueba= xc.ProblemaEF()
 prueba.logFileName= "/tmp/borrar.log" # Para no imprimir mensajes de advertencia
@@ -54,12 +54,12 @@ nod4= nodes.newNodeXY(0,1)
 
 elast2d= typical_materials.defElasticIsotropicPlaneStress(preprocessor, "elast2d",E,nu,rho)
 # Elements definition
-elementos= preprocessor.getElementLoader
-elementos.defaultMaterial= "elast2d"
-quad4n= elementos.newElement("quad4n",xc.ID([101,102,103,104]))
+elements= preprocessor.getElementLoader
+elements.defaultMaterial= "elast2d"
+quad4n= elements.newElement("quad4n",xc.ID([101,102,103,104]))
 quad4n.commitState()
 
-ele0= elementos.getElement(0)
+ele0= elements.getElement(0)
 detJ= ele0.detJ(0.0,0.0)
 sgMed1= ele0.getPhysicalProperties.getCommittedAvgStress[0]
 sgMed2= ele0.getPhysicalProperties.getCommittedAvgStress[1]
@@ -79,7 +79,7 @@ areas= fields.newField("areas")
 areas.setName= "total"
 areas.definedOnElements()
 areas.componentNames= ["A"]
-areas.componentDescriptions= ["Area elemento"]
+areas.componentDescriptions= ["Element area"]
 areas.componentUnits= ["in2"]
 areas.componentsProperty= "self.getArea(True)"
 
@@ -112,8 +112,8 @@ nombresTiposCelda= med_import.getCellTypeNames
 numeroCeldasTipo= med_import.getNumCellsOfType(tiposCelda[0])
 numNodesCeldaTipo= tiposCelda[0]%100
 conectividad= med_import.getConnectivityCellsOfType(tiposCelda[0])
-numGruposNodes= med_import.getNumberOfGroups(xc.MED_NODE)
-numGruposElementos= med_import.getNumberOfGroups(xc.MED_CELL)
+numNodeGroups= med_import.getNumberOfGroups(xc.MED_NODE)
+numElementGroups= med_import.getNumberOfGroups(xc.MED_CELL)
 
 
 
@@ -129,8 +129,8 @@ print "nombresTiposCelda= ",nombresTiposCelda
 print "numeroCeldasTipo(",tiposCelda[0],")= ",numeroCeldasTipo
 print "numeroNodosCeldaTipo(",tiposCelda[0],")= ",numNodesCeldaTipo
 print "conectividad= ",conectividad
-print "numGruposNodes= ",numGruposNodos
-print "numGruposElementos= ",numGruposElementos
+print "numNodeGroups= ",numNodeGroups
+print "numElementGroups= ",numElementGroups
    '''
 
 ratio1= spaceDim-3

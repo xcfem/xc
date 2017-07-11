@@ -133,8 +133,8 @@ secHAParamsCortante.alpha= math.radians(90)
 secHAParamsTorsion= torsionEHE.calcParamsSeccionHuecaEficaz(geomSecHA,depth/2.0,cover)
 
 
-elementos= preprocessor.getElementLoader
-ele1= elementos.getElement(1)
+elements= preprocessor.getElementLoader
+ele1= elements.getElement(1)
 scc= ele1.getSection()
 N= scc.getStressResultantComponent("N")
 My= scc.getStressResultantComponent("My")

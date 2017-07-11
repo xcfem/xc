@@ -99,7 +99,7 @@ mesh= prueba.getDomain.getMesh
 nnodDom= mesh.getNumNodes()
 
 ''' 
-print "núm. nodos: ",nnod
+print "number of nodes: ",nnod
 nodes= preprocessor.getNodeLoader
 
 for_each
@@ -107,7 +107,7 @@ for_each
 
 '''
 nelemDom= mesh.getNumElements()
-#print "núm. elementos: ",nelem
+#print "number of elements: ",nelem
 perim= 0.0
 
 eIter= mesh.getElementIter

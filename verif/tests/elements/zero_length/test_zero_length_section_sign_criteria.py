@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # home made test
 
-# Criterio de signos elementos ZeroLengthSection.
+# ZeroLengthSection elements sign criteria.
 # El axil y los cortantes tienen la misma direccion y sentido que los ejes locales.
 #     El torsor Mx y el flector My tienen las direcciones y sentido de los ejes X e Y locales.
 #     El flector Mz tiene la misma dirección y sentido CONTRARIO al del eje Z local.
@@ -78,12 +78,12 @@ sa.setSection("quadFibers")
 sa.setAdditions(["T","Vy","Vz"],["respT","respVy","respVz"])
 
 # Elements definition
-elementos= preprocessor.getElementLoader
-elementos.defaultMaterial= "sa"
-elementos.dimElem= 1 # Dimension of element space
-elementos.defaultTag= 1
+elements= preprocessor.getElementLoader
+elements.defaultMaterial= "sa"
+elements.dimElem= 1 # Dimension of element space
+elements.defaultTag= 1
 #  sintaxis: zero_length[<tag>] 
-zl= elementos.newElement("zero_length_section",xc.ID([1,2]))
+zl= elements.newElement("zero_length_section",xc.ID([1,2]))
 
 # Constraints
 modelSpace.fixNode000_000(1)
@@ -176,7 +176,7 @@ for hip in listaHipotesis:
   cargas.addToDomain(hip)
   ok= solve()
   if(ok==0):
-    ele1= elementos.getElement(1)
+    ele1= elements.getElement(1)
     vI= ele1.getIVector
     vJ= ele1.getJVector
     vK= ele1.getKVector

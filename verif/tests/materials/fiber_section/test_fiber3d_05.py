@@ -82,11 +82,11 @@ TEIz= prb.getTangentStiffness().at(3,3)
 
 
 # Elements definition
-elementos= preprocessor.getElementLoader
-elementos.defaultMaterial= "prb"
+elements= preprocessor.getElementLoader
+elements.defaultMaterial= "prb"
 #  sintaxis: zero_length[<tag>] 
-elementos.defaultTag= 1
-zl= elementos.newElement("zero_length_section",xc.ID([1,2]))
+elements.defaultTag= 1
+zl= elements.newElement("zero_length_section",xc.ID([1,2]))
 
 # Constraints
 constraints= preprocessor.getConstraintLoader
@@ -127,9 +127,9 @@ deltax= nod2.getDisp[0]
 nod1= nodes.getNode(1)
 Reac= nod1.getReaction 
 
-elementos= preprocessor.getElementLoader
+elements= preprocessor.getElementLoader
 
-elem1= elementos.getElement(1)
+elem1= elements.getElement(1)
 elem1.getResistingForce()
 scc= elem1.getSection()
 nfib= scc.getFibers().getNumFibers()

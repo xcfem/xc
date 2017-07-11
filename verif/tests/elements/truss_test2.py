@@ -44,13 +44,13 @@ elast.E= E
 
 
 # Element definition.
-elementos= preprocessor.getElementLoader
-elementos.dimElem= 2 #Bidimensional space.
-elementos.defaultMaterial= "elast"
-elementos.defaultTag= 1 #Next element number.
-truss= elementos.newElement("truss",xc.ID([1,2]));
+elements= preprocessor.getElementLoader
+elements.dimElem= 2 #Bidimensional space.
+elements.defaultMaterial= "elast"
+elements.defaultTag= 1 #Next element number.
+truss= elements.newElement("truss",xc.ID([1,2]));
 truss.area= A
-truss= elementos.newElement("truss",xc.ID([2,3]))
+truss= elements.newElement("truss",xc.ID([2,3]))
 truss.area= A
 
 constraints= preprocessor.getConstraintLoader
@@ -78,7 +78,7 @@ analisis= predefined_solutions.simple_static_linear(prb)
 result= analisis.analyze(1)
 
 delta= nodes.getNode(2).getDisp[1]
-stress= elementos.getElement(1).getMaterial().getStress()
+stress= elements.getElement(1).getMaterial().getStress()
 
 ratio1= delta/(-0.12)
 ratio2= stress/10000

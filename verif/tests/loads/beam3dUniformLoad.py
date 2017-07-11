@@ -49,11 +49,11 @@ lin.xzVector= xc.Vector([0,0,1])
 scc= typical_materials.defElasticSection3d(preprocessor, "scc",A,E,G,Iz,Iy,J)
     
 # Elements definition
-elementos= preprocessor.getElementLoader
-elementos.defaultTransformation= "lin"
-elementos.defaultMaterial= "scc"
-elementos.defaultTag= 1 #Tag for next element.
-beam3d= elementos.newElement("elastic_beam_3d",xc.ID([1,2]));
+elements= preprocessor.getElementLoader
+elements.defaultTransformation= "lin"
+elements.defaultMaterial= "scc"
+elements.defaultTag= 1 #Tag for next element.
+beam3d= elements.newElement("elastic_beam_3d",xc.ID([1,2]));
 
 # Constraints
 modelSpace.fixNode000_000(1)

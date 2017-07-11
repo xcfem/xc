@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # home made test
 
-# Criterio de signos elementos ForceBeamColumn3d.
+# ForceBeamColum3d element sign criteria.
 
 #     El axil y los cortantes tienen la misma direccion y sentido que los ejes locales.
 #     El torsor Mx y el flector My tienen las direcciones y sentido de los ejes X e Y locales.
@@ -98,10 +98,10 @@ lin= trfs.newLinearCrdTransf3d("lin")
 lin.xzVector= xc.Vector([0,1,0])
 
 # Elements definition
-elementos= preprocessor.getElementLoader
-elementos.defaultTransformation= "lin"
-elementos.defaultMaterial= "fourFibersSection"
-zl= elementos.newElement("force_beam_column_3d",xc.ID([1,2]))
+elements= preprocessor.getElementLoader
+elements.defaultTransformation= "lin"
+elements.defaultMaterial= "fourFibersSection"
+zl= elements.newElement("force_beam_column_3d",xc.ID([1,2]))
 
 # Constraints
 modelSpace.fixNode000_000(1)

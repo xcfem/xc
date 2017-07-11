@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # home made test
-# Seleccion de elementos a partir de nodos de un conjunto.
+# Element selection from a node set.
 import xc_base
 import geom
 import xc
@@ -37,23 +37,23 @@ lin.xzVector= xc.Vector([0,1,1])
 # Materials
 seccion= typical_materials.defElasticSection3d(preprocessor, "seccion",1,1,1,1,1,1)
 
-elementos= preprocessor.getElementLoader
-elementos.defaultTransformation= "lin" # Coord. transformation.
-elementos.defaultMaterial= "seccion"
-elementos.defaultTag= 1 #Tag for next element.
-beam3d= elementos.newElement("elastic_beam_3d",xc.ID([1,2]));
-beam3d= elementos.newElement("elastic_beam_3d",xc.ID([2,3]))
-beam3d= elementos.newElement("elastic_beam_3d",xc.ID([3,4]))
-beam3d= elementos.newElement("elastic_beam_3d",xc.ID([4,1]))
-beam3d= elementos.newElement("elastic_beam_3d",xc.ID([1,3]))
-beam3d= elementos.newElement("elastic_beam_3d",xc.ID([2,4]))
+elements= preprocessor.getElementLoader
+elements.defaultTransformation= "lin" # Coord. transformation.
+elements.defaultMaterial= "seccion"
+elements.defaultTag= 1 #Tag for next element.
+beam3d= elements.newElement("elastic_beam_3d",xc.ID([1,2]));
+beam3d= elements.newElement("elastic_beam_3d",xc.ID([2,3]))
+beam3d= elements.newElement("elastic_beam_3d",xc.ID([3,4]))
+beam3d= elements.newElement("elastic_beam_3d",xc.ID([4,1]))
+beam3d= elements.newElement("elastic_beam_3d",xc.ID([1,3]))
+beam3d= elements.newElement("elastic_beam_3d",xc.ID([2,4]))
 
-beam3d= elementos.newElement("elastic_beam_3d",xc.ID([5,6]))
-beam3d= elementos.newElement("elastic_beam_3d",xc.ID([6,7]))
-beam3d= elementos.newElement("elastic_beam_3d",xc.ID([7,8]))
-beam3d= elementos.newElement("elastic_beam_3d",xc.ID([8,5]))
-beam3d= elementos.newElement("elastic_beam_3d",xc.ID([5,7]))
-beam3d= elementos.newElement("elastic_beam_3d",xc.ID([6,8]))
+beam3d= elements.newElement("elastic_beam_3d",xc.ID([5,6]))
+beam3d= elements.newElement("elastic_beam_3d",xc.ID([6,7]))
+beam3d= elements.newElement("elastic_beam_3d",xc.ID([7,8]))
+beam3d= elements.newElement("elastic_beam_3d",xc.ID([8,5]))
+beam3d= elements.newElement("elastic_beam_3d",xc.ID([5,7]))
+beam3d= elements.newElement("elastic_beam_3d",xc.ID([6,8]))
 
 # Definimos el conjunto de prueba
 prb1= preprocessor.getSets.defSet("prb1")
@@ -72,13 +72,13 @@ for n in nodes:
   coord= n.getCoord
   print "  nodo: ",n.tag," x= ",coord[0],", y= ",coord[1],", z= ",coord[2]
 '''
-elementos= preprocessor.getSets.getSet("total").getElements
-for e in elementos:
+elements= preprocessor.getSets.getSet("total").getElements
+for e in elements:
   if((abs(e.getMaxCooNod(1)-0.0)<1e-2) & (abs(e.getMinCooNod(1)-0.0)<1e-2)):
     prb1.getElements.append(e)
 
 ''' 
-elementos= prb1.getElements
+elements= prb1.getElements
 for e in elements:
   print "tag= ",e.tag," nodo I:",e.nod[0].tag," nodo J:",e.nod[1].tag
 '''

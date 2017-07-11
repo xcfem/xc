@@ -43,10 +43,10 @@ kz= typical_materials.defElasticMaterial(preprocessor, "kz",KZ)
     se emplea una sección arbitraria de área unidad '''
     
 # Elements definition
-elementos= preprocessor.getElementLoader
-elementos.defaultMaterial= "kx"
-elementos.dimElem= 3 # Dimension of element space
-zl= elementos.newElement("zero_length",xc.ID([1,2]))
+elements= preprocessor.getElementLoader
+elements.defaultMaterial= "kx"
+elements.dimElem= 3 # Dimension of element space
+zl= elements.newElement("zero_length",xc.ID([1,2]))
 zl.clearMaterials()
 zl.setMaterial(0,"kx")
 zl.setMaterial(1,"ky")

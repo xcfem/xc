@@ -47,18 +47,18 @@ setTotal= preprocessor.getSets.getSet("total")
 setTotal.genMesh(xc.meshDir.I)
 
 ''' 
-print "núm. nodos: ",nnod
+print "number of nodes: ",nnod
 nodes= preprocessor.getNodeLoader
 for_each
   print "  nodo: ",tag," x= ",coord[0],", y= ",coord[1],", z= ",coord[2]
 
-print "núm. elementos: ",nelem
+print "number of elements: ",nelem
 '''
-elementos= setTotal.getElements
+elements= setTotal.getElements
 cumple= 1
 vteor2= (CooMax/NumDiv)**2
 lteor= math.sqrt(3*vteor2)
-for e in elementos:
+for e in elements:
   # print "  elem: ",tag," nod. I: ",nod[0].tag," nod. J: ",nod[1].tag," L= ",length
   # print "lteor: ",(lteor)
   ratio1= (lteor/e.getL())

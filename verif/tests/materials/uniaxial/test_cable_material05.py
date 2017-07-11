@@ -43,14 +43,14 @@ typical_materials.defCableMaterial(preprocessor, "cable",E,sigmaPret,0.0)
     la carga. Puesto que no se van a determinar tensiones
     se emplea una sección arbitraria de área unidad '''
     
-# Definimos elemento semilla
+# Seed element definition
 seedElemLoader= preprocessor.getElementLoader.seedElemLoader
 seedElemLoader.defaultMaterial= "cable"
 seedElemLoader.dimElem= 3 # Dimension of element space
 seedElemLoader.defaultTag= 1 #Number for the next element will be 1.
 truss= seedElemLoader.newElement("corot_truss",xc.ID([1,2]))
 truss.area= area
-# fin de la definición del elemento semilla
+# seed element definition ends
 
 puntos= preprocessor.getCad.getPoints
 pt= puntos.newPntIDPos3d(1,geom.Pos3d(0.0,0.0,0.0))

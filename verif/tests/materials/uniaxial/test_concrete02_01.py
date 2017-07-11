@@ -37,11 +37,11 @@ concr=typical_materials.defConcrete02(preprocessor=preprocessor,name='concr25',e
 
 
 # Elements definition
-elementos= preprocessor.getElementLoader
-elementos.defaultMaterial='concr25'
-elementos.dimElem= 1 # Dimension of element space
-elementos.defaultTag= 1
-elem1= elementos.newElement("zero_length",xc.ID([1,2]))
+elements= preprocessor.getElementLoader
+elements.defaultMaterial='concr25'
+elements.dimElem= 1 # Dimension of element space
+elements.defaultTag= 1
+elem1= elements.newElement("zero_length",xc.ID([1,2]))
 
    
 # Constraints

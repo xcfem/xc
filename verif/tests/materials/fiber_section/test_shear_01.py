@@ -124,8 +124,8 @@ secHAParamsCortante= cortanteEHE.ShearControllerEHE('ULS_shear')
 
 
 
-elementos= preprocessor.getElementLoader
-ele1= elementos.getElement(1)
+elements= preprocessor.getElementLoader
+ele1= elements.getElement(1)
 scc= ele1.getSection()
 secHAParamsCortante.calcVuEHE08(preprocessor, scc,"",EHE_materials.HA25,EHE_materials.B500S,NDato,math.sqrt(MyDato**2+MzDato**2),0,0)
 

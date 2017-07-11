@@ -71,8 +71,8 @@ while not(elem is None):
   cumple= cumple and (ratio1<1e-12)
   elem= eIter.next()
 
-#print "núm. nodos: ",nnod
-#print "núm. elementos: ",nelem
+#print "number of nodes: ",nnod
+#print "number of elements: ",nelem
 
 import os
 from miscUtils import LogMessages as lmsg

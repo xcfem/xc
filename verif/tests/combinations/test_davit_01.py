@@ -55,16 +55,16 @@ scc= typical_materials.defElasticSection3d(preprocessor, "scc",A,E,G,Iz,Iy,J)
 
 
 # Elements definition
-elementos= preprocessor.getElementLoader
-elementos.defaultTransformation= "lin"
-elementos.defaultMaterial= "scc"
-elementos.defaultTag= 1
+elements= preprocessor.getElementLoader
+elements.defaultTransformation= "lin"
+elements.defaultMaterial= "scc"
+elements.defaultTag= 1
 #  sintaxis: elastic_beam_3d[<tag>]
-beam1= elementos.newElement("elastic_beam_3d",xc.ID([1,2]))
+beam1= elements.newElement("elastic_beam_3d",xc.ID([1,2]))
 beam1.rho= densHorm*A
-beam2= elementos.newElement("elastic_beam_3d",xc.ID([3,2])) 
+beam2= elements.newElement("elastic_beam_3d",xc.ID([3,2])) 
 beam2.rho= densHorm*A
-beam3= elementos.newElement("elastic_beam_3d",xc.ID([2,4])) 
+beam3= elements.newElement("elastic_beam_3d",xc.ID([2,4])) 
 beam3.rho= densHorm*A
 
 # Constraints
@@ -90,8 +90,8 @@ lpVT= casos.newLoadPattern("default","VT")
 lpNV= casos.newLoadPattern("default","NV") 
 
 casos.currentLoadPattern= "G"
-elementos= preprocessor.getSets.getSet("total").getElements
-for e in elementos:
+elements= preprocessor.getSets.getSet("total").getElements
+for e in elements:
   pesoElem= (e.rho*(-10))
   e.vector3dUniformLoadGlobal(xc.Vector([0.0,0.0,pesoElem]))
 
@@ -122,8 +122,8 @@ NMin1= 6.023e23
 NMin2= 6.023e23
 
 def procesResultVerif(nmbComb):
-  elementos= preprocessor.getElementLoader
-  elem1= elementos.getElement(1)
+  elements= preprocessor.getElementLoader
+  elem1= elements.getElement(1)
   elem1.getResistingForce()
   N1= elem1.getN1
   global NMin1
