@@ -85,31 +85,32 @@ XC::Material &XC::ProtoTruss::getMaterialRef(void)
 //! @brief Set the number of dof for element and set matrix and vector pointers.
 void XC::ProtoTruss::setup_matrix_vector_ptrs(int dofNd1)
   {
-    if(getNumDIM() == 1 && dofNd1 == 1)
+    const int numDim= getNumDIM();
+    if(numDim == 1 && dofNd1 == 1)
       {
         numDOF = 2;
         theMatrix = &trussM2;
         theVector = &trussV2;
       }
-    else if(getNumDIM() == 2 && dofNd1 == 2)
+    else if(numDim == 2 && dofNd1 == 2)
       {
         numDOF = 4;
         theMatrix = &trussM4;
         theVector = &trussV4;
       }
-    else if(getNumDIM() == 2 && dofNd1 == 3)
+    else if(numDim == 2 && dofNd1 == 3)
       {
         numDOF = 6;
         theMatrix = &trussM6;
         theVector = &trussV6;
       }
-    else if(getNumDIM() == 3 && dofNd1 == 3)
+    else if(numDim == 3 && dofNd1 == 3)
       {
         numDOF = 6;
         theMatrix = &trussM6;
         theVector = &trussV6;
       }
-    else if(getNumDIM() == 3 && dofNd1 == 6)
+    else if(numDim == 3 && dofNd1 == 6)
       {
         numDOF = 12;
         theMatrix = &trussM12;
@@ -117,8 +118,15 @@ void XC::ProtoTruss::setup_matrix_vector_ptrs(int dofNd1)
       }
     else
       {
-        std::cerr <<"WARNING XC::ProtoTruss::setup_matrix_vector_ptrs cannot handle " << getNumDIM() << " dofs at nodes in " << 
-	  dofNd1  << " problem\n";
+	if(numDim==0)
+           std::cerr << nombre_clase() << "::" << __FUNCTION__
+                     << "; WARNING dimension of the element space is " << numDim
+	             << ". Have you set the dimElem property of the element?\n";
+	else
+	   std::cerr << nombre_clase() << "::" << __FUNCTION__
+	             << "; WARNING dimension of the element space is " << numDim
+	             << " which is not compatible with a "
+		     << dofNd1  << " DOFs problem.\n";
 
         // fill this in so don't segment fault later
         numDOF = 6;
