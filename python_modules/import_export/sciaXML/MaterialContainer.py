@@ -22,7 +22,8 @@ idMaterialContainer= mp.containerId
 tMaterialContainer= mp.containerProgId
 
 class MaterialTable(tb.TableXMLNodes):
-  '''Material XML table
+  '''Material XML table.
+
   Attributes:
     tableId:      Table identifier.
     tableProgId:  Another identifier (redundant?).
@@ -37,7 +38,8 @@ class MaterialTable(tb.TableXMLNodes):
     
 
 class MaterialContainer(ctr.Container):
-  '''Material container
+  '''Material container.
+
   Attributes:
     tableGeneric:      Table containing generic materials.
     tableSteelSIA:     Table containing steel material as defined in SIA code.

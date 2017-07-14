@@ -1,31 +1,30 @@
 # -*- coding: utf-8 -*-
-'''
-Cross section axis:
+''' Arcelor square hollow tubes.'''
+# Cross section axis:
 
-   ARCELOR          XC
+#    ARCELOR          XC
 
-                    ^ Y                    
-                    |
+#                     ^ Y                    
+#                     |
 
-    -----         -----
-      |             | 
-      | -> Y        | -> Z
-      |             |
-    -----         -----
+#     -----         -----
+#       |             | 
+#       | -> Y        | -> Z
+#       |             |
+#     -----         -----
 
-      |
-      v Z
+#       |
+#       v Z
 
 
-The axis used in Arcelor documentation are different from those used in XC
-(strong axis parallel to z axis) in other words: values for Y and Z axis 
-are swapped with respect to those in the catalog.
+# The axis used in Arcelor documentation are different from those used in XC
+# (strong axis parallel to z axis) in other words: values for Y and Z axis 
+# are swapped with respect to those in the catalog.
 
-En este caso al ser secciones con tensor de inercia esférico en su 
-plano los valores en
-ambos ejes son iguales y no es necesario intercambiarlos.
-  
-'''
+# En este caso al ser secciones con tensor de inercia esférico en su 
+# plano los valores en
+# ambos ejes son iguales y no es necesario intercambiarlos.
+
 
 SHSprofiles={}
 
