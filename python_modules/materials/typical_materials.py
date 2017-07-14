@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AO_O)"
-__copyright__= "Copyright 2015, LCPT and AOO"
+__copyright__= "Copyright 2015, LCPT and AO_O"
 __license__= "GPL"
 __version__= "3.0"
-__email__= "l.pereztato@gmail.com" "ana.Ortega.Ort@gmail.com"
+__email__= "l.pereztato@ciccp.es" "ana.Ortega@ciccp.es"
 
 import xc_base
 import geom

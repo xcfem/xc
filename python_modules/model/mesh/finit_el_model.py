@@ -26,13 +26,15 @@ class LinSetToMesh(object):
           local axis of the RC section is parallel to the dimension
           defined as width of the rectangle)
     :ivar elemType: type of element for the mesh (defaults to 'elastic_beam_3d')
+    :ivar dimElemSpace: dimension of the element space (defaults to 3)
     '''
-    def __init__(self,linSet,matSect,elemSize,vDirLAxZ,elemType='elastic_beam_3d'):
+    def __init__(self,linSet,matSect,elemSize,vDirLAxZ,elemType='elastic_beam_3d',dimElemSpace=3):
         self.linSet= linSet
         self.matSect= matSect
         self.elemSize= elemSize
         self.vDirLAxZ= vDirLAxZ
         self.elemType= elemType
+        self.dimElemSpace=dimElemSpace
 
     def generateMesh(self, preprocessor):
         trfs= preprocessor.getTransfCooLoader
@@ -40,6 +42,7 @@ class LinSetToMesh(object):
         trYGlobal.xzVector=self.vDirLAxZ
         seedElemLoader= preprocessor.getElementLoader.seedElemLoader
         seedElemLoader.defaultMaterial= self.matSect.name
+        seedElemLoader.dimElem= self.dimElemSpace
         seedElemLoader.defaultTransformation= 'trYGlobal'
         elem= seedElemLoader.newElement(self.elemType,xc.ID([0,0]))
         for l in self.linSet.getLines:
