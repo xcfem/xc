@@ -88,21 +88,6 @@ ratio3= (abs((RN3)))
 ratio4= (abs((RN4)))
 
 
-''' 
-elements= preprocessor.getElementLoader
-        \for_each
-
-            print "G3= ",vectorG3
-
-
-
-nodes= preprocessor.getNodeLoader
-
-             \nodo[1]{print "reac= ",reac} 
-             \nodo[2]{print "reac= ",reac} 
-             \nodo[3]{print "reac= ",reac} 
-             \nodo[4]{print "reac= ",reac} 
-'''
 
 '''
 print "ratio1= ",ratio1

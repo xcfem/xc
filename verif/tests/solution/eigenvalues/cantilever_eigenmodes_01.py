@@ -66,9 +66,9 @@ l.nDiv= NumDiv
 constraints= preprocessor.getConstraintLoader
 
 #
-spc= constraints.newSPConstraint(1,0,0.0) # Nodo 2,gdl 0
-spc= constraints.newSPConstraint(1,1,0.0) # Nodo 2,gdl 1
-spc= constraints.newSPConstraint(1,2,0.0) # Nodo 2,gdl 2
+spc= constraints.newSPConstraint(1,0,0.0) # Node 2,gdl 0
+spc= constraints.newSPConstraint(1,1,0.0) # Node 2,gdl 1
+spc= constraints.newSPConstraint(1,2,0.0) # Node 2,gdl 2
 
 
 setTotal= preprocessor.getSets.getSet("total")

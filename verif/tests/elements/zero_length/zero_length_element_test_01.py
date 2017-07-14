@@ -41,7 +41,7 @@ zl= elements.newElement("zero_length",xc.ID([1,2]))
 
 # Constraints
 constraints= preprocessor.getConstraintLoader
-spc= constraints.newSPConstraint(1,0,0.0) # Nodo 1
+spc= constraints.newSPConstraint(1,0,0.0) # Node 1
 
 
 # Loads definition

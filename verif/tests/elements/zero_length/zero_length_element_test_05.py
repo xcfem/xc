@@ -33,10 +33,10 @@ nod= nodes.newNodeXY(1,1)
 k= typical_materials.defElasticMaterial(preprocessor, "k",K)
 
 
-''' Se definen nodos en los puntos de aplicación de
-    la carga. Puesto que no se van a determinar tensiones
-    se emplea una sección arbitraria de área unidad '''
-    
+''' We define nodes at the points where loads will be applied.
+    We will not compute stresses so we can use an arbitrary
+    cross section of unit area.'''
+
 # Elements definition
 elements= preprocessor.getElementLoader
 elements.defaultMaterial= "k"
@@ -50,11 +50,11 @@ zl.setMaterial(0,"k")
 
 # Constraints
 constraints= preprocessor.getConstraintLoader
-spc= constraints.newSPConstraint(1,0,0.0) # Nodo 1
+spc= constraints.newSPConstraint(1,0,0.0) # Node 1
 spc= constraints.newSPConstraint(1,1,0.0)
 spc= constraints.newSPConstraint(1,2,0.0)
-spc= constraints.newSPConstraint(2,0,0.0) # Nodo 2
-spc= constraints.newSPConstraint(2,2,0.0) # Nodo 2
+spc= constraints.newSPConstraint(2,0,0.0) # Node 2
+spc= constraints.newSPConstraint(2,2,0.0) # Node 2
 
 
 # Loads definition

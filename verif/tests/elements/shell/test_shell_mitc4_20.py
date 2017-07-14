@@ -27,11 +27,11 @@ yMidL= CooMaxY
 NumDivI= int(math.ceil(CooMaxX/0.25))
 NumDivJ= int(math.ceil(CooMaxY/0.25))
 E= 2.1e10 # Elastic modulus en N/m2
-nu= 0.0 # Coeficiente de Poison
+nu= 0.0 # Poisson's ratio
 G= E/2/(1+nu)
 thickness= 0.2 # Cross section depth expressed in meters.
-unifLoad= 20e3 # Carga uniforme en N/m2.
-nLoad= unifLoad*CooMaxX*CooMaxY/NumDivI/NumDivJ # Carga tributaria para cada nodo
+unifLoad= 20e3 # Uniform load in N/m2.
+nLoad= unifLoad*CooMaxX*CooMaxY/NumDivI/NumDivJ # Tributary load on each node
 
 tagElemCentro= 0
 tagElemLado= 0
@@ -113,12 +113,12 @@ f1= preprocessor.getSets.getSet("f1")
 
 nodes= preprocessor.getNodeLoader
 
-nodo= f1.getNodeIJK(1,NumDivI/2+1,NumDivJ/2+1)
+node= f1.getNodeIJK(1,NumDivI/2+1,NumDivJ/2+1)
 
-# \print{"Nodo central: ",tag
-# print "Coordenadas nodo central: ",coord
-# print "Movs. nodo central: ",nodo.getDisp
-UZ= nodo.getDisp[2]
+# \print{"Central node: ",tag
+# print "Central node coordinates: ",coord
+# print "Central node displacements: ", node.getDisp
+UZ= node.getDisp[2]
 
 
 elemCentro= preprocessor.getElementLoader.getElement(tagElemCentro)
@@ -140,8 +140,8 @@ print "tagElemLado= ",tagElemLado
 print "UZ= ",UZ
 print "m1Centro= ",m1Centro/1e3," kN \n"
 print "m2CentroLado= ",m2CentroLado/1e3," kN \n"
-print "Num. nodos: ",nNodes
-print "Num. elem: ",nElems
+print "Number of nodes: ",nNodes
+print "Number of elements: ",nElems
 print "ratio1: ",ratio1
 print "ratio2: ",ratio2
 print "ratio3: ",ratio3

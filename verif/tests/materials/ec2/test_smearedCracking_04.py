@@ -158,28 +158,27 @@ analOk= analisis.analyze(1)
 
 
 #printing results
-nodos= preprocessor.getNodeLoader
-nodos.calculateNodalReactions(True)
-nodos= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeLoader
+nodes.calculateNodalReactions(True)
 
 '''
-RN1= nodos.getNode(1).getReaction[0]   #Axial FX reaction (constrained DOF: ux) at node 1
-RQY1= nodos.getNode(1).getReaction[1]   #Vertical FY reaction (constrained DOF: uY) at node 1
-RQZ1= nodos.getNode(1).getReaction[2]   #Vertical FY reaction (constrained DOF: uZ) at node 1
-RMX1= nodos.getNode(1).getReaction[3]   #Bending moment Mx reaction at node 1
-RMY1= nodos.getNode(1).getReaction[4]   #Bending moment My reaction at node 1
-RMZ1= nodos.getNode(1).getReaction[5]   #Bending moment Mz reaction at node 1
+RN1= nodes.getNode(1).getReaction[0]   #Axial FX reaction (constrained DOF: ux) at node 1
+RQY1= nodes.getNode(1).getReaction[1]   #Vertical FY reaction (constrained DOF: uY) at node 1
+RQZ1= nodes.getNode(1).getReaction[2]   #Vertical FY reaction (constrained DOF: uZ) at node 1
+RMX1= nodes.getNode(1).getReaction[3]   #Bending moment Mx reaction at node 1
+RMY1= nodes.getNode(1).getReaction[4]   #Bending moment My reaction at node 1
+RMZ1= nodes.getNode(1).getReaction[5]   #Bending moment Mz reaction at node 1
 
 
-RN2= nodos.getNode(2).getReaction[0]   #Axial FX reaction (constrained DOF: ux) at node 2
-RQY2= nodos.getNode(2).getReaction[1]   #Vertical FY reaction (constrained DOF: uY) at node 2
-RQZ2= nodos.getNode(2).getReaction[2]   #Vertical FY reaction (constrained DOF: uZ) at node 2
-RMX2= nodos.getNode(2).getReaction[3]   #Bending moment Mx reaction at node 2
-RMY2= nodos.getNode(2).getReaction[4]   #Bending moment My reaction at node 2
-RMZ2= nodos.getNode(2).getReaction[5]   #Bending moment Mz reaction at node 2
+RN2= nodes.getNode(2).getReaction[0]   #Axial FX reaction (constrained DOF: ux) at node 2
+RQY2= nodes.getNode(2).getReaction[1]   #Vertical FY reaction (constrained DOF: uY) at node 2
+RQZ2= nodes.getNode(2).getReaction[2]   #Vertical FY reaction (constrained DOF: uZ) at node 2
+RMX2= nodes.getNode(2).getReaction[3]   #Bending moment Mx reaction at node 2
+RMY2= nodes.getNode(2).getReaction[4]   #Bending moment My reaction at node 2
+RMZ2= nodes.getNode(2).getReaction[5]   #Bending moment Mz reaction at node 2
 
-print 'Rnode1= (',nodos.getNode(1).getReaction[0],',',nodos.getNode(1).getReaction[1],',',nodos.getNode(1).getReaction[2],',',nodos.getNode(1).getReaction[3],',',nodos.getNode(1).getReaction[4],',',nodos.getNode(1).getReaction[5],')'
-print 'Rnode2= (',nodos.getNode(2).getReaction[0],',',nodos.getNode(2).getReaction[1],',',nodos.getNode(2).getReaction[2],',',nodos.getNode(2).getReaction[3],',',nodos.getNode(2).getReaction[4],',',nodos.getNode(2).getReaction[5],')'
+print 'Rnode1= (',nodes.getNode(1).getReaction[0],',',nodes.getNode(1).getReaction[1],',',nodes.getNode(1).getReaction[2],',',nodes.getNode(1).getReaction[3],',',nodes.getNode(1).getReaction[4],',',nodes.getNode(1).getReaction[5],')'
+print 'Rnode2= (',nodes.getNode(2).getReaction[0],',',nodes.getNode(2).getReaction[1],',',nodes.getNode(2).getReaction[2],',',nodes.getNode(2).getReaction[3],',',nodes.getNode(2).getReaction[4],',',nodes.getNode(2).getReaction[5],')'
 '''
 elements= preprocessor.getElementLoader
 ele1= elements.getElement(1)

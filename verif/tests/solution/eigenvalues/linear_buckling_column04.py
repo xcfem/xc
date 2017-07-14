@@ -71,9 +71,9 @@ setTotal.genMesh(xc.meshDir.I)
 constraints= preprocessor.getConstraintLoader
 
 #
-spc= constraints.newSPConstraint(1,0,0.0) # Nodo 2,gdl 0 # Nodo dorsal.
-spc= constraints.newSPConstraint(1,1,0.0) # Nodo 2,gdl 1
-spc= constraints.newSPConstraint(2,0,0.0) # Nodo 2,gdl 0 # Nodo frontal.
+spc= constraints.newSPConstraint(1,0,0.0) # Node 2,gdl 0 # Back end node.
+spc= constraints.newSPConstraint(1,1,0.0) # Node 2,gdl 1
+spc= constraints.newSPConstraint(2,0,0.0) # Node 2,gdl 0 # Front end node.
 
 # Loads definition
 cargas= preprocessor.getLoadLoader

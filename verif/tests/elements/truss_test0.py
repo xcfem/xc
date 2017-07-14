@@ -29,9 +29,10 @@ n2= nodes.newNodeXYZ(0,l,0)
 
 elast= typical_materials.defElasticMaterial(preprocessor, "elast",E)
 
-# Se definen nodos en los puntos de aplicación de
-# la carga. Puesto que no se van a determinar tensiones
-# se emplea una sección arbitraria de área unidad
+''' We define nodes at the points where loads will be applied.
+    We will not compute stresses so we can use an arbitrary
+    cross section of unit area.'''
+
 elements= preprocessor.getElementLoader
 elements.dimElem= 2 #Bars defined ina a two dimensional space.
 elements.defaultMaterial= "elast"

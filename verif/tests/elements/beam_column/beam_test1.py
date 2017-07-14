@@ -68,9 +68,9 @@ beam2d.h= h
 # Constraints
 constraints= preprocessor.getConstraintLoader
 #
-spc= constraints.newSPConstraint(2,0,0.0) # Nodo 2
+spc= constraints.newSPConstraint(2,0,0.0) # Node 2
 spc= constraints.newSPConstraint(2,1,0.0)
-spc= constraints.newSPConstraint(4,1,0.0) # Nodo 4
+spc= constraints.newSPConstraint(4,1,0.0) # Node 4
 
 
 # Loads definition

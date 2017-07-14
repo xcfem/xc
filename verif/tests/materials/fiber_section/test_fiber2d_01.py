@@ -28,7 +28,7 @@ preprocessor=  prueba.getPreprocessor
 nodes= preprocessor.getNodeLoader
 modelSpace= predefined_spaces.StructuralMechanics2D(nodes)
 
-# Definimos nodos
+# Defining nodes
 nodes.defaultTag= 1 #First node number.
 nod= nodes.newNodeXY(1,0)
 nod= nodes.newNodeXY(1,0)

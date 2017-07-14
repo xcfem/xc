@@ -57,14 +57,14 @@ nod2= nodes.newNodeXYZ(1,1,1)
 
 zl= neop.putBetweenNodes(modelSpace, nod1.tag,nod2.tag)
 
-''' Se definen nodos en los puntos de aplicación de
-    la carga. Puesto que no se van a determinar tensiones
-    se emplea una sección arbitraria de área unidad '''
+''' We define nodes at the points where loads will be applied.
+    We will not compute stresses so we can use an arbitrary
+    cross section of unit area.'''
     
 # Constraints
 constraints= preprocessor.getConstraintLoader
 #
-spc= constraints.newSPConstraint(nod1.tag,0,0.0) # Nodo 1
+spc= constraints.newSPConstraint(nod1.tag,0,0.0) # Node 1
 spc= constraints.newSPConstraint(nod1.tag,1,0.0)
 spc= constraints.newSPConstraint(nod1.tag,2,0.0)
 spc= constraints.newSPConstraint(nod1.tag,3,0.0)

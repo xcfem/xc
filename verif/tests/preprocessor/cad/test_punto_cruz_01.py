@@ -59,7 +59,6 @@ l2.nDiv= NumDiv
 scc= typical_materials.defElasticSection2d(preprocessor, "scc",A,E,I)
 
 setTotal= preprocessor.getSets.getSet("total")
-nodosTotal= setTotal.getNodes
 
 prueba.setVerbosityLevel(0) #Dont print warning messages about element seed.
 setL1= preprocessor.getSets.getSet("l1")
@@ -70,7 +69,8 @@ setL2= preprocessor.getSets.getSet("l2")
 setL2.genMesh(xc.meshDir.I)
 prueba.setVerbosityLevel(1) #Print warnings again 
 
-# for n in nodosTotal:
+# totalSetNodes= setTotal.getNodes
+# for n in totalSetNodes:
 #   print "node tag: ", n.tag
 
 elements.defaultMaterial= "scc"
@@ -102,10 +102,10 @@ l2= preprocessor.getSets.getSet("l2")
 nNodes= l2.getNumNodes
 for i in range(1,nNodes+1):
   n= l2.getNodeI(i)
-  tagNodo= n.tag
+  nodeTag= n.tag
   xNod= n.getCoo[0]
   F= (100*xNod+10)
-  lp0.newNodalLoad(tagNodo,xc.Vector([0,F,0]))
+  lp0.newNodalLoad(nodeTag,xc.Vector([0,F,0]))
 
 casos.addToDomain("0")
 nCargasNod= lp0.getNumNodalLoads
@@ -113,7 +113,7 @@ nCargasNod= lp0.getNumNodalLoads
 ''' 
 nodalLoads= lp0.getNodalLoads
 for nl in nodalLoads:
-  print "nodo: ",numNod
+  print "node: ",numNod
 '''
 
 

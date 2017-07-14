@@ -20,7 +20,7 @@ __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
 masaExtremo= 1e-2 # Masa en kg.
-matrizMasasNodo= xc.Matrix([[masaExtremo,0,0,0,0,0],
+nodeMassMatrix= xc.Matrix([[masaExtremo,0,0,0,0,0],
                                          [0,masaExtremo,0,0,0,0],
                                          [0,0,masaExtremo,0,0,0],
                                          [0,0,0,0,0,0],
@@ -48,7 +48,7 @@ nod0= nodes.newNodeIDXYZ(0,0,0,0)
 nod1= nodes.newNodeXYZ(0,-Ly,0)
 nod2= nodes.newNodeXYZ(0,-Ly,-Lz)
 nod3= nodes.newNodeXYZ(Lx,-Ly,-Lz)
-nod3.mass= matrizMasasNodo
+nod3.mass= nodeMassMatrix
 
 constraints= preprocessor.getConstraintLoader
 nod0.fix(xc.ID([0,1,2,3,4,5]),xc.Vector([0,0,0,0,0,0]))

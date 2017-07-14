@@ -37,21 +37,21 @@ ky= typical_materials.defElasticMaterial(preprocessor, "ky",KY)
 kz= typical_materials.defElasticMaterial(preprocessor, "kz",KZ)
 
 
-nodosApoyados= [1]
+pinnedNodes= [1]
 
 fixedNodes= list()
-sz= len(nodosApoyados)
+sz= len(pinnedNodes)
 for i in range(0,sz):
-  nodeTag= nodosApoyados[i]
+  nodeTag= pinnedNodes[i]
   fixedNodeTag, elemTag= modelSpace.setBearing(nodeTag,["kx","ky","kz"])
   fixedNodes.append(fixedNodeTag)
-tagNodoFijo= fixedNodes[0]
+fixedNodeTag= fixedNodes[0]
 
 # Constraints
 constraints= preprocessor.getConstraintLoader
 
 #
-spc= constraints.newSPConstraint(1,3,0.0) # Nodo 1
+spc= constraints.newSPConstraint(1,3,0.0) # Node 1
 spc= constraints.newSPConstraint(1,4,0.0)
 spc= constraints.newSPConstraint(1,5,0.0)
 
@@ -82,9 +82,9 @@ nod1= nodes.getNode(1)
 deltax= nod1.getDisp[0]
 deltay= nod1.getDisp[1]
 deltaz= nod1.getDisp[2]
-RX= nodes.getNode(tagNodoFijo).getReaction[0]
-RY= nodes.getNode(tagNodoFijo).getReaction[1]
-RZ= nodes.getNode(tagNodoFijo).getReaction[2] 
+RX= nodes.getNode(fixedNodeTag).getReaction[0]
+RY= nodes.getNode(fixedNodeTag).getReaction[1]
+RZ= nodes.getNode(fixedNodeTag).getReaction[2] 
 
 
 ratio1= -RX/FX

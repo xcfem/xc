@@ -18,7 +18,7 @@ __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
 masaPorPlanta= 134.4e3
-matrizMasasNodo= xc.Matrix([[masaPorPlanta,0,0],[0,masaPorPlanta,0],[0,0,0]])
+nodeMassMatrix= xc.Matrix([[masaPorPlanta,0,0],[0,masaPorPlanta,0],[0,0,0]])
 Ehorm= 200000*1e5 # Elastic modulus del hormigón.
 
 Bbaja= 0.45 # Escuadría de los pilares.
@@ -46,22 +46,22 @@ modelSpace= predefined_spaces.StructuralMechanics2D(nodes)
 nodes= preprocessor.getNodeLoader
 nodes.defaultTag= 0; 
 nod0= nodes.newNodeXY(0,0) 
-nod0.mass= matrizMasasNodo
+nod0.mass= nodeMassMatrix
 nod0.setProp("gdlsCoartados",xc.ID([0,1,2]))
 nod1= nodes.newNodeXY(0,4)
-nod1.mass= matrizMasasNodo
+nod1.mass= nodeMassMatrix
 nod1.setProp("gdlsCoartados",xc.ID([1,2]))
 nod2= nodes.newNodeXY(0,4+3)
-nod2.mass= matrizMasasNodo
+nod2.mass= nodeMassMatrix
 nod2.setProp("gdlsCoartados",xc.ID([1,2]))
 nod3= nodes.newNodeXY(0,4+3+3)
-nod3.mass= matrizMasasNodo
+nod3.mass= nodeMassMatrix
 nod3.setProp("gdlsCoartados",xc.ID([1,2]))
 nod4= nodes.newNodeXY(0,4+3+3+3)
-nod4.mass= matrizMasasNodo
+nod4.mass= nodeMassMatrix
 nod4.setProp("gdlsCoartados",xc.ID([1,2]))
 nod5= nodes.newNodeXY(0,4+3+3+3+3)
-nod5.mass= matrizMasasNodo
+nod5.mass= nodeMassMatrix
 nod5.setProp("gdlsCoartados",xc.ID([1,2]))
 setTotal= preprocessor.getSets.getSet("total")
 nodes= setTotal.getNodes

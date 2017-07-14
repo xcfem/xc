@@ -92,11 +92,11 @@ pt3.getNode().fix(xc.ID([0,1,2]),xc.Vector([0.0,0.0,0.0]))
 pt5.getNode().fix(xc.ID([0,1,2]),xc.Vector([0.0,0.0,0.0]))
 pt7.getNode().fix(xc.ID([0,1,2]),xc.Vector([0.0,0.0,0.0]))
 
-tagNodo2= 0.0
-tagNodo6= 0.0
-tagNodo8= 0.0
-tagNodoCargaCentral= 0.0
-tagNodoCargaLateral= 0.0
+nodeTag2= 0.0
+nodeTag6= 0.0
+nodeTag8= 0.0
+nodeTagCentralLoad= 0.0
+nodeTagLateralLoad= 0.0
 tagElem1= 0.0
 tagElem2= 0.0
 tagElem4= 0.0
@@ -106,13 +106,13 @@ tagElem6= 0.0
 
 
 
-tagNodo2= pt2.getTagNode
-tagNodo6= pt6.getTagNode
-tagNodo8= pt8.getTagNode
+nodeTag2= pt2.getTagNode
+nodeTag6= pt6.getTagNode
+nodeTag8= pt8.getTagNode
 
 mesh= prueba.getDomain.getMesh
-tagNodoCargaCentral= mesh.getNearestNode(geom.Pos3d(B/2,H,0.0)).tag
-tagNodoCargaLateral= mesh.getNearestNode(geom.Pos3d(offset+B/4,H,0.0)).tag
+nodeTagCentralLoad= mesh.getNearestNode(geom.Pos3d(B/2,H,0.0)).tag
+nodeTagLateralLoad= mesh.getNearestNode(geom.Pos3d(offset+B/4,H,0.0)).tag
 tagElem1= mesh.getNearestElement(geom.Pos3d(0,H/(10*nDivLineas),0.0)).tag
 tagElem2= mesh.getNearestElement(geom.Pos3d(B/(10*nDivLineas),H,0.0)).tag
 tagElem4= mesh.getNearestElement(geom.Pos3d(offset,H/(10*nDivLineas),0.0)).tag
@@ -130,8 +130,8 @@ casos.currentTimeSeries= "ts"
 #Load case definition
 lp0= casos.newLoadPattern("default","0")
 #casos.currentLoadPattern= "0"
-lp0.newNodalLoad(tagNodoCargaCentral,xc.Vector([0,-P,0]))
-lp0.newNodalLoad(tagNodoCargaLateral,xc.Vector([0,-P,0]))
+lp0.newNodalLoad(nodeTagCentralLoad,xc.Vector([0,-P,0]))
+lp0.newNodalLoad(nodeTagLateralLoad,xc.Vector([0,-P,0]))
 #We add the load case to domain.
 casos.addToDomain("0")
 
@@ -185,10 +185,10 @@ ratioM52= 0.0
 
 nodes= preprocessor.getNodeLoader
 
-theta2= nodes.getNode(tagNodo2).getDisp[2]
-delta6= nodes.getNode(tagNodo6).getDisp[0]
-theta6= nodes.getNode(tagNodo6).getDisp[2]
-theta8= nodes.getNode(tagNodo8).getDisp[2]
+theta2= nodes.getNode(nodeTag2).getDisp[2]
+delta6= nodes.getNode(nodeTag6).getDisp[0]
+theta6= nodes.getNode(nodeTag6).getDisp[2]
+theta8= nodes.getNode(nodeTag8).getDisp[2]
 
 elements= preprocessor.getElementLoader
 eletagElem1= elements.getElement(tagElem1)

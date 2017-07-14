@@ -44,9 +44,9 @@ nod= nodes.newNodeXY(l,0.0)
 # Materials definition
 mat= typical_materials.defSteel02(preprocessor, "acero",E,fy,0.001,0.0)
   
-''' Se definen nodes en los puntos de aplicación de
-la carga. Puesto que no se van a determinar tensiones
-se emplea una sección arbitraria de área unidad '''
+''' We define nodes at the points where loads will be applied.
+    We will not compute stresses so we can use an arbitrary
+    cross section of unit area.'''
     
 # Elements definition
 elements= preprocessor.getElementLoader

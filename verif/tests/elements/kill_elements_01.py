@@ -56,10 +56,10 @@ beam2d.h= h
 # Constraints
 constraints= preprocessor.getConstraintLoader
 #
-spc= constraints.newSPConstraint(1,0,0.0) # Nodo 1
+spc= constraints.newSPConstraint(1,0,0.0) # Node 1
 spc= constraints.newSPConstraint(1,1,0.0)
 spc= constraints.newSPConstraint(1,2,0.0)
-spc= constraints.newSPConstraint(4,0,0.0) # Nodo 4
+spc= constraints.newSPConstraint(4,0,0.0) # Node 4
 spc= constraints.newSPConstraint(4,1,0.0)
 spc= constraints.newSPConstraint(4,2,0.0)
 
@@ -106,7 +106,7 @@ R2= nod2.getReaction[0]
 
 
 setTotal.aliveElements()
-mesh.meltAliveNodes("congela") # Reactiva nodos inactivos.
+mesh.meltAliveNodes("congela") # Reactivate inactive nodes.
 
 # Solution
 analisis= predefined_solutions.simple_static_linear(prueba)

@@ -9,7 +9,7 @@ __email__= "l.pereztato@gmail.com"
 
 KX= 1000 # Spring constant
 KY= 2000 # Spring constant
-l= 1e-7 # Distancia entre nodos
+l= 1e-7 # Distance between nodes
 FX= 1 # Force magnitude
 FY= 2 # Force magnitude
 
@@ -37,9 +37,9 @@ kx= typical_materials.defElasticMaterial(preprocessor, "kx",KX)
 ky= typical_materials.defElasticMaterial(preprocessor, "ky",KY)
 
 
-''' Se definen nodos en los puntos de aplicación de
-    la carga. Puesto que no se van a determinar tensiones
-    se emplea una sección arbitraria de área unidad '''
+''' We define nodes at the points where loads will be applied.
+    We will not compute stresses so we can use an arbitrary
+    cross section of unit area.'''
     
 # Elements definition
 elements= preprocessor.getElementLoader
@@ -55,7 +55,7 @@ elem.setMaterial(1,"ky")
 # Constraints
 constraints= preprocessor.getConstraintLoader
 #
-spc= constraints.newSPConstraint(1,0,0.0) # Nodo 1
+spc= constraints.newSPConstraint(1,0,0.0) # Node 1
 spc= constraints.newSPConstraint(1,1,0.0)
 
 

@@ -81,11 +81,11 @@ analOk= analisis.analyze(1)
 nodes.calculateNodalReactions(True)
 nodes= preprocessor.getNodeLoader
  
-# print "reac nodo 1: ",reac
+# print "reac node 1: ",reac
 R1x= n1.getReaction[0]
 R1y= n1.getReaction[1]
 
-# print "reac nodo 5: ",reac
+# print "reac node 5: ",reac
 R4x= n4.getReaction[0]
 R4y= n4.getReaction[1]
 

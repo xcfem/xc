@@ -73,10 +73,10 @@ print "vPosN4= ",vPosN4
 print "movN4= ",movN4
 print "matriz R0= ",R0
 print "matriz R= ",R
-print "mov. local nodo 1: ",movLocalN1
-print "mov. local nodo 2: ",movLocalN2
-print "mov. local nodo 3: ",movLocalN3
-print "mov. local nodo 4: ",movLocalN4
+print "displacement of node 1 in local coordinate system: ",movLocalN1
+print "displacement of node 2 in local coordinate system: ",movLocalN2
+print "displacement of node 3 in local coordinate system: ",movLocalN3
+print "displacement of node 4 in local coordinate system: ",movLocalN4
 print "ratio1: ",ratio1
 print "ratio2: ",ratio2
    '''

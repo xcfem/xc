@@ -46,7 +46,7 @@ newElement= pot.putBetweenNodes(modelSpace, nod1.tag,nod2.tag)
 
 # Constraints
 modelSpace.fixNode000_000(nod1.tag)
-spc= modelSpace.constraints.newSPConstraint(nod2.tag,3,0.0) # Nodo 2
+spc= modelSpace.constraints.newSPConstraint(nod2.tag,3,0.0) # Node 2
 spc= modelSpace.constraints.newSPConstraint(nod2.tag,4,0.0)
 spc= modelSpace.constraints.newSPConstraint(nod2.tag,5,0.0)
 

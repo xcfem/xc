@@ -23,8 +23,8 @@ l= 15*12 #Bar length (15 pies) expresada in inches}
 theta= math.radians(30) #angle between bars
 F= 5000 #Force magnitude (pounds)}
 A= 0.5 #Área in inches cuadradas}
-a= 2*l*math.cos(theta) #Distancia entre nodos extremos}
-b= l*math.sin(theta) #Distancia entre nodos extremos}
+a= 2*l*math.cos(theta) #Distance between nodes extremos}
+b= l*math.sin(theta) #Distance between nodes extremos}
 
 prb= xc.ProblemaEF()
 preprocessor=  prb.getPreprocessor

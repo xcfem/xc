@@ -60,11 +60,11 @@ l1.genMesh(xc.meshDir.I)
 
 nnodes= l1.getNumNodes
 '''
-print "núm. nodos: ", nnod
+print "number of nodes: ", nnod
 nodes= preprocessor.getNodeLoader
 
 for_each
-  print "  nodo: ",tag," x= ",coord[0],", y= ",coord[1],", z= ",coord[2]
+  print "  node: ",tag," x= ",coord[0],", y= ",coord[1],", z= ",coord[2]
 
 '''
 

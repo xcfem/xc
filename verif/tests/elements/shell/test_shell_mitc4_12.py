@@ -13,12 +13,12 @@ NumDivJ= 8
 CooMaxX= 2
 CooMaxY= 2
 E= 17472000 # Elastic modulus en lb/in2
-nu= 0.3 # Coeficiente de Poison
+nu= 0.3 # Poisson's ratio
 G= 6720000
 thickness= 0.0001 # Cross section depth expressed in inches.
-unifLoad= 0.0001 # Carga uniforme en lb/in2.
-ptLoad= 0.0004 # Carga puntual en lb.
-nLoad= unifLoad*CooMaxX*CooMaxY/NumDivI/NumDivJ # Carga tributaria para cada nodo
+unifLoad= 0.0001 # Uniform load in lb/in2.
+ptLoad= 0.0004 # Punctual load in lb.
+nLoad= unifLoad*CooMaxX*CooMaxY/NumDivI/NumDivJ # Tributary load on each node
 
 import xc_base
 import geom
@@ -87,9 +87,8 @@ nf= capa1.nRow
 nc= capa1.nCol
 for i in range(2,nf):
   for j in range(2,nc):
-    nodo= capa1.getNode(i,j)
-    tagNod= nodo.tag
-    lp0.newNodalLoad(tagNod,xc.Vector([0,0,-nLoad,0,0,0])) # Carga concentrada
+    node= capa1.getNode(i,j)
+    lp0.newNodalLoad(node.tag,xc.Vector([0,0,-nLoad,0,0,0])) # Carga concentrada
 
 nElems= f1.getNumElements
 #We add the load case to domain.
@@ -102,11 +101,11 @@ analOk= analisis.analyze(1)
 
 f1= preprocessor.getSets.getSet("f1")
 
-nodo= f1.getNodeIJK(1,NumDivI/2+1,NumDivJ/2+1)
-# print "Nodo central: ",nodo.tag
-# print "Coordenadas nodo central: ",nodo.getCoo
-# print "Movs. nodo central: ",nodo.getDisp
-UZ= nodo.getDisp[2]
+node= f1.getNodeIJK(1,NumDivI/2+1,NumDivJ/2+1)
+# print "Central node: ", node.tag
+# print "Central node coordinates: ", node.getCoo
+# print "Central node displacements: ", node.getDisp
+UZ= node.getDisp[2]
 
 
 UZTeor= -4.06
@@ -116,8 +115,8 @@ ratio2= abs((nElems-64)/64)
 ''' 
 print "UZTeor= ",UZTeor
 print "UZ= ",UZ
-print "Num. nodos: ",nNodes
-print "Num. elem: ",nElems
+print "Number of nodes: ",nNodes
+print "Number of elements: ",nElems
 print "ratio1: ",ratio1
 print "ratio2: ",ratio2
 '''

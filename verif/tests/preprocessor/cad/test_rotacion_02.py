@@ -15,7 +15,7 @@ __email__= "l.pereztato@gmail.com"
 
 prueba= xc.ProblemaEF()
 preprocessor=  prueba.getPreprocessor
-# Definimos nodos
+# Defining nodes
 
 
 puntos= preprocessor.getCad.getPoints

@@ -60,7 +60,7 @@ setTotal.killElements()
 
 mesh= preprocessor.getDomain.getMesh
 mesh.setDeadSRF(0.0)
-mesh.freezeDeadNodes("bloquea") # Coacciona nodos inactivos.
+mesh.freezeDeadNodes("bloquea") # Constraint inactive nodes.
 
 
 # Loads definition
@@ -116,7 +116,7 @@ R2= nod2.getReaction[0]
 setTotal= preprocessor.getSets.getSet("total")
 setTotal.aliveElements()
 mesh= preprocessor.getDomain.getMesh
-mesh.meltAliveNodes("bloquea") # Reactiva nodos inactivos.
+mesh.meltAliveNodes("bloquea") # Reactivate inactive nodes.
 
 
 db.save(105)

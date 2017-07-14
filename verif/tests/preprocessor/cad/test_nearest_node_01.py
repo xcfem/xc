@@ -33,7 +33,7 @@ tg= n.tag
 
 
 ''' 
-print "tag nodo: ",tg
+print "tag node: ",tg
 print "lapso: ",lapso
    '''
 

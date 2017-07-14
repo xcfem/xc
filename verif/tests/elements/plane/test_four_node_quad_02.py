@@ -87,7 +87,7 @@ nodes= preprocessor.getNodeLoader
 nod1= nodes.getNode(1)
 
 
-# print "reac nodo 1: ",reac
+# print "reac node 1: ",reac
 Fx= nod1.getReaction[0]
 Fy= nod1.getReaction[1]
 # \print{"Fx= ",Fx
@@ -102,7 +102,7 @@ UY3= disp[1] # Node 3 yAxis displacement
 nod5= nodes.getNode(5)
 
 
-# print "reac nodo 5: ",reac
+# print "reac node 5: ",reac
 Fx= (Fx+nod5.getReaction[0])
 Fy= (Fy+nod5.getReaction[1])
 # \print{"Fx= ",Fx

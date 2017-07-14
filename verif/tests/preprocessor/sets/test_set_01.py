@@ -70,7 +70,7 @@ for n in nodes:
 nodes= prb1.getNodes
 for n in nodes:
   coord= n.getCoord
-  print "  nodo: ",n.tag," x= ",coord[0],", y= ",coord[1],", z= ",coord[2]
+  print "  node: ",n.tag," x= ",coord[0],", y= ",coord[1],", z= ",coord[2]
 '''
 elements= preprocessor.getSets.getSet("total").getElements
 for e in elements:
@@ -80,7 +80,7 @@ for e in elements:
 ''' 
 elements= prb1.getElements
 for e in elements:
-  print "tag= ",e.tag," nodo I:",e.nod[0].tag," nodo J:",e.nod[1].tag
+  print "tag= ",e.tag," node I:",e.nod[0].tag," node J:",e.nod[1].tag
 '''
 import os
 from miscUtils import LogMessages as lmsg

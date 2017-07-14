@@ -75,13 +75,13 @@ l2.nDiv= int(numDiv/2)
 l1.genMesh(xc.meshDir.I)
 l2.genMesh(xc.meshDir.I)
 
-idNodoFijo= 0
-idNodoCentral= 0
+fixedNodeId= 0
+idCentralNode= 0
 
 
 
 
-# Fijamos los nodos extremos.
+# Fix end nodes.
 constraints= preprocessor.getConstraintLoader
 modelSpace.fixNode00F(pt1.getTagNode)
 modelSpace.fixNode00F(pt3.getTagNode)
@@ -89,15 +89,15 @@ modelSpace.fixNode00F(pt3.getTagNode)
 # Apoyamos los interiores.
 l1InteriorNodes= line_utils.LineWrapper(l1).getInteriorNodes()
 for n in l1InteriorNodes:
-  idNodoFijo, idElem= modelSpace.setUniaxialBearing2D(n.tag,"kY",[0,1])
+  fixedNodeId, idElem= modelSpace.setUniaxialBearing2D(n.tag,"kY",[0,1])
 
 l1LastNode= line_utils.LineWrapper(l1).getLastNode()
-idNodoCentral= l1LastNode.tag
-idNodoFijo, idElem= modelSpace.setUniaxialBearing2D(l1LastNode.tag,"kY",[0,1])
+idCentralNode= l1LastNode.tag
+fixedNodeId, idElem= modelSpace.setUniaxialBearing2D(l1LastNode.tag,"kY",[0,1])
 
 l2InteriorNodes= line_utils.LineWrapper(l2).getInteriorNodes()
 for n in l2InteriorNodes:
-  idNodoFijo, idElem= modelSpace.setUniaxialBearing2D(n.tag,"kY",[0,1])
+  fixedNodeId, idElem= modelSpace.setUniaxialBearing2D(n.tag,"kY",[0,1])
 
 
 # Loads definition
@@ -109,7 +109,7 @@ casos.currentTimeSeries= "ts"
 #Load case definition
 lp0= casos.newLoadPattern("default","0")
 #casos.currentLoadPattern= "0"
-lp0.newNodalLoad(idNodoCentral,xc.Vector([0,-F,0]))
+lp0.newNodalLoad(idCentralNode,xc.Vector([0,-F,0]))
 
 #We add the load case to domain.
 casos.addToDomain("0")
@@ -131,7 +131,7 @@ yAdimMaxima= -1e6
 for n in l2.getNodes():
   yAdimMaxima= max(yAdimMaxima,n.getDisp[1]/EIbeta3)
   ''' 
-  print "  nodo: ",n.tag," x= ",(n.get3dCoo[0]-Lmedios)/L
+  print "  node: ",n.tag," x= ",(n.get3dCoo[0]-Lmedios)/L
   print " dy= ",n.getDisp[1]/EIbeta3
   '''
 

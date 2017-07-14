@@ -62,7 +62,7 @@ setTotal.killElements() # deactivate the elements
 
 mesh= prueba.getDomain.getMesh
 mesh.setDeadSRF(0.0)
-mesh.freezeDeadNodes("bloquea") # Coacciona nodos inactivos.
+mesh.freezeDeadNodes("bloquea") # Constraint inactive nodes.
 
 
 # Loads definition
@@ -110,7 +110,7 @@ R2= nod2.getReaction[0]
 
 # print "Revive.\n"
 setTotal.aliveElements()
-mesh.meltAliveNodes("bloquea") # Reactiva nodos inactivos.
+mesh.meltAliveNodes("bloquea") # Reactivate inactive nodes.
 
 # Solution
 analisis= predefined_solutions.simple_static_linear(prueba)

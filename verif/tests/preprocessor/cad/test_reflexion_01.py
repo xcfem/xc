@@ -14,7 +14,7 @@ __email__= "l.pereztato@gmail.com"
 
 prueba= xc.ProblemaEF()
 preprocessor=  prueba.getPreprocessor
-# Definimos nodos
+# Defining nodes
 
 puntos= preprocessor.getCad.getPoints
 pt1= puntos.newPntIDPos3d(1, geom.Pos3d(1.0, 0.0, 0.0) )

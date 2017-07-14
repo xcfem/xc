@@ -185,9 +185,16 @@ class SolidMechanics2D(PredefinedSpace):
   def getDisplacementDOFs(self):
     ''' Return the indices of the displacement DOFs.'''
     return [self.Ux,self.Uy]
+
   def getRotationalDOFs(self):
     ''' Return the indices of the rotational DOFs.'''
     return []
+
+  def getDisplacementVector(self,nodeTag):
+    ''' Return a vector with the displacement components of the node motion.'''
+    nod= self.preprocessor.getNodeLoader.getNode(nodeTag)
+    disp= nod.getDisp
+    return xc.Vector([disp[self.Ux],disp[self.Uy]])
 
 def gdls_elasticidad2D(nodes):
   '''Defines the dimension of the space: nodes by two coordinates (x,y) and two DOF for each node (Ux,Uy)
@@ -211,9 +218,17 @@ class StructuralMechanics2D(PredefinedSpace):
   def getDisplacementDOFs(self):
     ''' Return the indices of the displacement DOFs.'''
     return [self.Ux,self.Uy]
+
   def getRotationalDOFs(self):
     ''' Return the indices of the rotational DOFs.'''
     return [self.Theta]
+
+  def getDisplacementVector(self,nodeTag):
+    ''' Return a vector with the displacement components of the node motion.'''
+    nod= self.preprocessor.getNodeLoader.getNode(nodeTag)
+    disp= nod.getDisp
+    return xc.Vector([disp[self.Ux],disp[self.Uy]])
+
   def fixNode000(self, nodeTag):
     '''Restrain all three node DOFs (i. e. make them zero).'''
     self.constraints.newSPConstraint(nodeTag,0,0.0) # nodeTag, DOF, constrValue
@@ -279,12 +294,21 @@ class SolidMechanics3D(PredefinedSpace):
     self.Ux= 0
     self.Uy= 1
     self.Uz= 2
+    
   def getDisplacementDOFs(self):
     ''' Return the indices of the displacement DOFs.'''
     return [self.Ux,self.Uy,self.Uz]
+  
   def getRotationalDOFs(self):
     ''' Return the indices of the rotational DOFs.'''
     return []
+  
+  def getDisplacementVector(self,nodeTag):
+    ''' Return a vector with the displacement components of the node motion.'''
+    nod= self.preprocessor.getNodeLoader.getNode(nodeTag)
+    disp= nod.getDisp
+    return xc.Vector([disp[self.Ux],disp[self.Uy],disp[self.Uz]])
+
   def fixNode000(self, nodeTag):
     '''Restrain all three node DOFs (i. e. make them zero).'''
     self.constraints.newSPConstraint(nodeTag,0,0.0) # nodeTag, DOF, constrValue
@@ -318,9 +342,17 @@ class StructuralMechanics3D(PredefinedSpace):
   def getDisplacementDOFs(self):
     ''' Return the indices of the displacement DOFs.'''
     return [self.Ux,self.Uy,self.Uz]
+
   def getRotationalDOFs(self):
     ''' Return the indices of the rotational DOFs.'''
     return [self.ThetaX,self.ThetaY,self.ThetaZ]
+                     
+  def getDisplacementVector(self,nodeTag):
+    ''' Return a vector with the displacement components of the node motion.'''
+    nod= self.preprocessor.getNodeLoader.getNode(nodeTag)
+    disp= nod.getDisp
+    return xc.Vector([disp[self.Ux],disp[self.Uy],disp[self.Uz]])
+
   def fixNode000_000(self, nodeTag):
     '''Restrain all six node DOFs (i. e. make them zero).'''
     self.constraints.newSPConstraint(nodeTag,0,0.0) # nodeTag, DOF, constrValue

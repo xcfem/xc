@@ -160,7 +160,7 @@ beam3dZ= elements.newElement("elastic_beam_3d",xc.ID([0,3]))
 # Constraints
 constraints= preprocessor.getConstraintLoader
 #
-spc= constraints.newSPConstraint(0,0,0.0) # Nodo 0
+spc= constraints.newSPConstraint(0,0,0.0) # Node 0
 spc= constraints.newSPConstraint(0,1,0.0)
 spc= constraints.newSPConstraint(0,2,0.0)
 spc= constraints.newSPConstraint(0,3,0.0)

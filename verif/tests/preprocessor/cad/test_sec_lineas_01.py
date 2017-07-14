@@ -56,7 +56,7 @@ print "number of nodes: ",nnod
 nodes= preprocessor.getNodeLoader
 
 for_each
-  print "  nodo: ",tag," x= ",coord[0],", y= ",coord[1],", z= ",coord[2]
+  print "  node: ",tag," x= ",coord[0],", y= ",coord[1],", z= ",coord[2]
 
 print "number of elements: ",nelem
 '''

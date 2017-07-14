@@ -37,9 +37,9 @@ nodes.newSeedNode()
 # Define materials
 typical_materials.defCableMaterial(preprocessor, "cable",E,sigmaPret,0.0)
     
-''' Se definen nodos en los puntos de aplicación de
-    la carga. Puesto que no se van a determinar tensiones
-    se emplea una sección arbitraria de área unidad '''
+''' We define nodes at the points where loads will be applied.
+    We will not compute stresses so we can use an arbitrary
+    cross section of unit area.'''
     
 # Seed element definition
 seedElemLoader= preprocessor.getElementLoader.seedElemLoader

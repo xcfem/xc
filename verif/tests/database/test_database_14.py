@@ -58,10 +58,10 @@ beam2d.h= h
 # Constraints
 constraints= preprocessor.getConstraintLoader
 #
-spc= constraints.newSPConstraint(1,0,0.0) # Nodo 1
+spc= constraints.newSPConstraint(1,0,0.0) # Node 1
 spc= constraints.newSPConstraint(1,1,0.0)
 spc= constraints.newSPConstraint(1,2,0.0)
-spc= constraints.newSPConstraint(4,0,0.0) # Nodo 4
+spc= constraints.newSPConstraint(4,0,0.0) # Node 4
 spc= constraints.newSPConstraint(4,1,0.0)
 spc= constraints.newSPConstraint(4,2,0.0)
 
@@ -71,7 +71,7 @@ setTotal.killElements() # deactivate the elements
 
 mesh= preprocessor.getDomain.getMesh
 mesh.setDeadSRF(0.0)
-mesh.freezeDeadNodes("congela") # Coacciona nodos inactivos.
+mesh.freezeDeadNodes("congela") # Constraint inactive nodes.
 
 # Loads definition
 cargas= preprocessor.getLoadLoader
@@ -116,7 +116,7 @@ R2= nod2.getReaction[0]
 setTotal= preprocessor.getSets.getSet("total")
 setTotal.aliveElements()
 mesh= preprocessor.getDomain.getMesh
-mesh.meltAliveNodes("congela") # Reactiva nodos inactivos.
+mesh.meltAliveNodes("congela") # Reactivate inactive nodes.
 
 
 # Solution

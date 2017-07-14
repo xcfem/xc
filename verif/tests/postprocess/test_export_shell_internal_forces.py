@@ -83,11 +83,10 @@ lp0= casos.newLoadPattern("default","0")
 f1= preprocessor.getSets.getSet("f1")
 nNodes= f1.getNumNodes
  
-nodo= f1.getNodeIJK(1,NumDivI/2+1,NumDivJ/2+1)
-# print "Nodo central: ",nodo.tag
-# print "Coordenadas nodo central: ",nodo.getCoo
-tagNod= nodo.tag
-lp0.newNodalLoad(tagNod,xc.Vector([0,0,-ptLoad,0,0,0])) # Carga concentrada
+node= f1.getNodeIJK(1,NumDivI/2+1,NumDivJ/2+1)
+# print "Central node: ", node.tag
+# print "Central node coordinates: ", node.getCoo
+lp0.newNodalLoad(node.tag,xc.Vector([0,0,-ptLoad,0,0,0])) # Carga concentrada
 
 
 nElems= f1.getNumElements
