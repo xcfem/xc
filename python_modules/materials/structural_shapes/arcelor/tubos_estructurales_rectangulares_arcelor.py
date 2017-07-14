@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+''' Arcelor rectangular hollow tubes.'''
 
 RHSprofiles={}
 

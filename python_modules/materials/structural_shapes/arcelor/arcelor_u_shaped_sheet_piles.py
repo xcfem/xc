@@ -1,29 +1,29 @@
 # -*- coding: utf-8 -*-
+''' Arcelor U shaped sheet pile.'''
 
-'''
-Cross section axis:
+# Cross section axis:
 
-   ARCELOR                   XC
+#    ARCELOR                   XC
 
-                             ^ Y                    
-                             |
+#                              ^ Y                    
+#                              |
 
-      -----                -----
-     /     \              /     \
-    /       \ -> Y       /       \ | -> Z
-   /         \          /         \
----           ---    ---           ---
+#       -----                -----
+#      /     \              /     \
+#     /       \ -> Y       /       \ | -> Z
+#    /         \          /         \
+# ---           ---    ---           ---
 
-        |
-        v Z
+#         |
+#         v Z
 
-The axis used in Arcelor documentation are different from those used in XC
-(strong axis parallel to z axis) in other words: values for Y and Z axis 
-are swapped with respect to those in the catalog.
+# The axis used in Arcelor documentation are different from those used in XC
+# (strong axis parallel to z axis) in other words: values for Y and Z axis 
+# are swapped with respect to those in the catalog.
 
-Warning: area in m2/m, inertia in m4/m, Wz in m3/m and so on
+# Warning: area in m2/m, inertia in m4/m, Wz in m3/m and so on
 
-'''
+
 
 
 AU_profiles={}

@@ -1,32 +1,30 @@
 # -*- coding: utf-8 -*-
-'''
-European I beams
+''' Arcelor IPE steel shapes.'''
 
-Ejes de la sección:
+# European I beams
 
-   ARCELOR          XC
+# Ejes de la sección:
 
-                    ^ Y                    
-                    |
+#    ARCELOR          XC
 
-    -----         -----
-      |             | 
-      | -> Y        | -> Z
-      |             |
-    -----         -----
+#                     ^ Y                    
+#                     |
 
-      |
-      v Z
+#     -----         -----
+#       |             | 
+#       | -> Y        | -> Z
+#       |             |
+#     -----         -----
 
-The axis used in Arcelor documentation are different from those used in XC
-(strong axis parallel to z axis) in other words: values for Y and Z axis 
-are swapped with respect to those in the catalog.
+#       |
+#       v Z
 
-XXX Repasar coeficientes de distorsión
-   alpha-> alphaZ,alphaY
+# The axis used in Arcelor documentation are different from those used in XC
+# (strong axis parallel to z axis) in other words: values for Y and Z axis 
+# are swapped with respect to those in the catalog.
 
-
-'''
+# XXX Repasar coeficientes de distorsión
+#    alpha-> alphaZ,alphaY
 
 IPEprofiles= {}
 

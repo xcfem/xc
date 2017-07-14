@@ -1,27 +1,27 @@
 # -*- coding: utf-8 -*-
 
-'''
-Cross section axis:
+''' Arcelor UPN steel shapes.'''
 
-   ARCELOR          XC
+# Cross section axis:
 
-                    ^ Y                    
-                    |
+#    ARCELOR          XC
 
-      ---           ---
-      |             | 
-      | -> Y        | -> Z
-      |             |
-      ---           ---
+#                     ^ Y                    
+#                     |
 
-      |
-      v Z
+#       ---           ---
+#       |             | 
+#       | -> Y        | -> Z
+#       |             |
+#       ---           ---
 
-The axis used in Arcelor documentation are different from those used in XC
-(strong axis parallel to z axis) in other words: values for Y and Z axis 
-are swapped with respect to those in the catalog.
+#       |
+#       v Z
 
-'''
+# The axis used in Arcelor documentation are different from those used in XC
+# (strong axis parallel to z axis) in other words: values for Y and Z axis 
+# are swapped with respect to those in the catalog.
+
 
 UPNprofiles= {}
 
