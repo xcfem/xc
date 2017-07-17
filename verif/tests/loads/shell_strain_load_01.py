@@ -27,7 +27,7 @@ alpha= 1.2e-5 # Coeficiente de dilatación of the steel
 h= 2e-2
 A= h*h # bar area expressed in square meters
 I= (h)**4/12 # Cross section moment of inertia (m4)
-AT= 10.0 # Incremento de temperatura expressed in grados centígrados
+AT= 10.0 # Temperature increment (Celsius degrees)
 
 prueba= xc.ProblemaEF()
 preprocessor=  prueba.getPreprocessor
