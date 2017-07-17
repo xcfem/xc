@@ -501,6 +501,7 @@ class GridModel(object):
         ijkRange.ijkMin=(indXmin,indYmin,indZmin) and
         ijkRange.ijkMax=(indXmax,indYmax,indZmax). 
         '''
+        retval=list()
         nmLinInRang=self.getNmLinInRange(ijkRange)
         for nameLin in nmLinInRang:
             if nameLin in self.dicLin:
@@ -514,7 +515,6 @@ class GridModel(object):
         ijkRange.ijkMax=(indXmax,indYmax,indZmax)
 
         :param ijkRange: range for the search
-        :param dicPnt: dictionary of points
         :param setName: name of the new set of points
         '''
         (imin,jmin,kmin)=ijkRange.ijkMin
