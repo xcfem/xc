@@ -110,7 +110,7 @@ el.vector2dUniformLoadGlobal(vCarga)
 
 
 cargas= preprocessor.getLoadLoader
-cargas.addToDomain("0") # Añadimos la hipótesis to the domain
+cargas.addToDomain("0") # Append load pattern to domain.
 
 # Procedimiento de solución
 analisis= predefined_solutions.simple_newton_raphson(prueba)

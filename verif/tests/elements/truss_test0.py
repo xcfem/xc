@@ -34,7 +34,7 @@ elast= typical_materials.defElasticMaterial(preprocessor, "elast",E)
     cross section of unit area.'''
 
 elements= preprocessor.getElementLoader
-elements.dimElem= 2 #Bars defined ina a two dimensional space.
+elements.dimElem= 2 #Bars defined in a two dimensional space.
 elements.defaultMaterial= "elast"
 elements.defaultTag= 1 #Tag for the next element.
 truss= elements.newElement("truss",xc.ID([n1.tag,n2.tag]));

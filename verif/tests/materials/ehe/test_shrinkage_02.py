@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # home made test
-#    Prueba del funcionamiento de una hipótesis de retracción.
+#    Shrinking load pattern test.
 
 import xc_base
 import geom

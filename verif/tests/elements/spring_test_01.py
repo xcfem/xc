@@ -65,7 +65,7 @@ lp0= casos.newLoadPattern("default",lPattern)
 # de paso comprobamos que las cargas se acumulan
 lp0.newNodalLoad(2,xc.Vector([F/2.0,0]))
 lp0.newNodalLoad(2,xc.Vector([F/2.0,0]))
-casos.addToDomain(lPattern) # Añadimos la hipótesis to the domain
+casos.addToDomain(lPattern) # Append load pattern to domain.
 # Solution
 analisis= predefined_solutions.simple_static_linear(prueba)
 result= analisis.analyze(1)

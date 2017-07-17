@@ -68,7 +68,7 @@ lPattern= "0"
 lp0= casos.newLoadPattern("default",lPattern)
 #casos.currentLoadPattern= lPattern
 lp0.newNodalLoad(2,xc.Vector([0,-F,0,0,0,0]))
-casos.addToDomain(lPattern) # Añadimos la hipótesis to the domain
+casos.addToDomain(lPattern) # Append load pattern to domain.
 
 # Procedimiento de solución
 analisis= predefined_solutions.simple_newton_raphson(prueba)
