@@ -88,7 +88,7 @@ modelSpace.fixNodesLine(line= l1)
 
 # Casos de carga
 cargas= preprocessor.getLoadLoader
-#Contenedor de hipótesis de carga:
+#Load pattern container:
 casos= cargas.getLoadPatterns
 #Load modulation.
 ts= casos.newTimeSeries("constant_ts","ts")

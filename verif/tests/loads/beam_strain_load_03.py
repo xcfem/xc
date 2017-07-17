@@ -27,7 +27,7 @@ G= E/(2.0*(1+nu)) # Shear modulus
 alpha= 1.2e-5 # Coeficiente de dilatación of the steel
 A= 4e-4 # bar area expressed in square meters
 I= (2e-2)**4/12.0 # Cross section moment of inertia (m4)
-AT= 10 # Incremento de temperatura expressed in grados centígrados
+AT= 10 # Temperature increment (Celsius degrees)
 
 
 # Problem type

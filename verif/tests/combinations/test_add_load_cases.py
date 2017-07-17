@@ -31,8 +31,8 @@ L= 1.5 # Bar length (m)
 
 # Load
 f= 1.5e3 # Load magnitude (kN/m)
-Gf1= 1.33 # Coeficiente de ponderación de la hipótesis.
-Gf2= 1.5 # Coeficiente de ponderación de la hipótesis.
+Gf1= 1.33 # Load factor.
+Gf2= 1.5 # Load factor.
 
 prueba= xc.ProblemaEF()
 preprocessor=  prueba.getPreprocessor   

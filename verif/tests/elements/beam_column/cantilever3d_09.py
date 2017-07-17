@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # home made test
-# Ménsula sometida a carga uniforme horizontal según el eje z local.
+'''Cantilever under uniform horizontal load in local z direction.'''
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
 __copyright__= "Copyright 2015, LCPT and AOO"

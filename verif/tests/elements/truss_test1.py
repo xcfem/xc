@@ -64,7 +64,7 @@ spc= constraints.newSPConstraint(2,0,0.0)
 spc= constraints.newSPConstraint(3,0,0.0)
 
 cargas= preprocessor.getLoadLoader
-#Contenedor de hipótesis de carga:
+#Load pattern container:
 casos= cargas.getLoadPatterns
 #time series for the load pattern:
 ts= casos.newTimeSeries("constant_ts","ts")

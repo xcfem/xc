@@ -26,7 +26,7 @@ L= 1.0 # Bar length (m)
 E= 2.1e6*9.81/1e-4 # Elastic modulus
 alpha= 1.2e-5 # Coeficiente de dilatación of the steel
 A= 4e-4 # bar area expressed in square meters
-AT= 10 # Incremento de temperatura expressed in grados centígrados
+AT= 10 # Temperature increment (Celsius degrees)
 
 # Problem type
 prueba= xc.ProblemaEF()

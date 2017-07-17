@@ -56,9 +56,9 @@ nod= nodes.newNodeXYZ(0.0+L,0.0,0.0)
 
 # Materials definition
 elast= typical_materials.defElasticMaterial(preprocessor, "elast",E)
-respT= typical_materials.defElasticMaterial(preprocessor, "respT",E) # Respuesta de la sección a torsión.
-respVy= typical_materials.defElasticMaterial(preprocessor, "respVy",E) # Respuesta de la sección a cortante según y.
-respVz= typical_materials.defElasticMaterial(preprocessor, "respVz",E) # Respuesta de la sección a cortante según y.
+respT= typical_materials.defElasticMaterial(preprocessor, "respT",E) # Torsion response.
+respVy= typical_materials.defElasticMaterial(preprocessor, "respVy",E) # Shear response in y direction.
+respVz= typical_materials.defElasticMaterial(preprocessor, "respVz",E) # Shear response in y direction.
 # Secciones
 testQuadRegion= preprocessor.getMaterialLoader.newSectionGeometry("testQuadRegion")
 y1= widthOverZ/2.0

@@ -30,7 +30,7 @@ A= 4e-4 # bar area expressed in square meters
 Iy= 80.1e-8 # Cross section moment of inertia (m4)
 Iz= 8.49e-8 # Cross section moment of inertia (m4)
 J= 0.721e-8 # Cross section torsion constant (m4)
-AT= 10 # Incremento de temperatura expressed in grados centígrados
+AT= 10 # Temperature increment (Celsius degrees)
 gammaF= 1.5
 
 # Problem type

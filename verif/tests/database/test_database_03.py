@@ -102,7 +102,7 @@ result= analisis.analyze(1)
 nodes= preprocessor.getNodeLoader
  
 nod2= nodes.getNode(2)
-delta= nod2.getDisp[0]  # Desplazamiento of the node 2 según x
+delta= nod2.getDisp[0]  # Desplazamiento x displacement of node 2
 
 elem1= elements.getElement(1)
 elem1.getResistingForce()

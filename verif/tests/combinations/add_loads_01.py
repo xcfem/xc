@@ -31,9 +31,9 @@ L= 1.5 # Bar length (m)
 
 # Load
 F= 1.5e3 # Load magnitude (kN)
-GF= 1.33 # Coeficiente de ponderación de la hipótesis.
+GF= 1.33 # Load factor.
 M= 1.5e3 # Moment magnitude (kN m)
-GM= 1.5 # Coeficiente de ponderación de la hipótesis.
+GM= 1.5 # Load factor.
 
 # Problem type
 prueba= xc.ProblemaEF()

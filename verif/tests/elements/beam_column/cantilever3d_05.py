@@ -85,9 +85,9 @@ result= analisis.analyze(1)
 
 nodes= preprocessor.getNodeLoader
 nod2= nodes.getNode(2)
-delta= nod2.getDisp[2]  # Node 2 displacement según z
+delta= nod2.getDisp[2]  # z displacement of node 2
 nod2= nodes.getNode(2)
-theta= nod2.getDisp[4]  # Rotation of the node según y
+theta= nod2.getDisp[4]  # y rotation of the node
 
 elements= preprocessor.getElementLoader
 

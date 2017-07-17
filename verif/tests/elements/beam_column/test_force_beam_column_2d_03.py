@@ -75,8 +75,8 @@ result= analisis.analyze(10)
 
 nodes.calculateNodalReactions(True) 
 nod2= nodes.getNode(2)
-delta= nod2.getDisp[1]  # Node 2 displacement según z
-theta= nod2.getDisp[2]  # Rotation of the node según z
+delta= nod2.getDisp[1]  # z displacement of node 2
+theta= nod2.getDisp[2]  # z rotation of the node
 nod1= nodes.getNode(1)
 RM= nod1.getReaction[2] 
 

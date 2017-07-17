@@ -84,7 +84,7 @@ result= analisis.analyze(1)
 
 nodes= preprocessor.getNodeLoader 
 nod2= nodes.getNode(2)
-theta= nod2.getDisp[3] # Rotation of the node según x
+theta= nod2.getDisp[3] # x rotation of the node
 
 elements= preprocessor.getElementLoader
 elem1= elements.getElement(1)

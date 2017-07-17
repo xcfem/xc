@@ -42,9 +42,9 @@ prueba.logFileName= "/tmp/borrar.log" # Ignore warning messages
 preprocessor=  prueba.getPreprocessor
 # Materials definition
 elast= typical_materials.defElasticMaterial(preprocessor, "elast",E)
-respT= typical_materials.defElasticMaterial(preprocessor, "respT",1e6) # Respuesta de la sección a torsión.
-respVy= typical_materials.defElasticMaterial(preprocessor, "respVy",1e6) # Respuesta de la sección a cortante según y.
-respVz= typical_materials.defElasticMaterial(preprocessor, "respVz",1e6) # Respuesta de la sección a cortante según y.
+respT= typical_materials.defElasticMaterial(preprocessor, "respT",1e6) # Torsion response.
+respVy= typical_materials.defElasticMaterial(preprocessor, "respVy",1e6) # Shear response in y direction.
+respVz= typical_materials.defElasticMaterial(preprocessor, "respVz",1e6) # Shear response in y direction.
 
 # Section geometry
 #creation

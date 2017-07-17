@@ -54,9 +54,9 @@ concr.alfacc=0.85    #f_maxd= 0.85*fcd coeficiente de fatiga del hormigón (gene
 concrMatTag25= concr.defDiagD(preprocessor)
 tagB500S= EHE_materials.B500S.defDiagD(preprocessor)
 
-respT= typical_materials.defElasticMaterial(preprocessor, "respT",1e10) # Respuesta de la sección a torsión.
-respVy= typical_materials.defElasticMaterial(preprocessor, "respVy",1e6) # Respuesta de la sección a cortante según y.
-respVz= typical_materials.defElasticMaterial(preprocessor, "respVz",1e3) # Respuesta de la sección a cortante según y.
+respT= typical_materials.defElasticMaterial(preprocessor, "respT",1e10) # Torsion response.
+respVy= typical_materials.defElasticMaterial(preprocessor, "respVy",1e6) # Shear response in y direction.
+respVz= typical_materials.defElasticMaterial(preprocessor, "respVz",1e3) # Shear response in y direction.
 geomSecHA= preprocessor.getMaterialLoader.newSectionGeometry("geomSecHA")
 regiones= geomSecHA.getRegions
 rg= regiones.newQuadRegion(EHE_materials.HA25.nmbDiagD)
