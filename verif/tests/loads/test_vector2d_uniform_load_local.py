@@ -54,9 +54,9 @@ lin= trfs.newLinearCrdTransf2d("lin")
 fy= 275e6 # Yield stress of the steel.
 acero= typical_materials.defSteel01(preprocessor, "acero",E,fy,0.001)
 
-respT= typical_materials.defElasticMaterial(preprocessor, "respT",G*J) # Respuesta de la sección a torsión.
-respVy= typical_materials.defElasticMaterial(preprocessor, "respVy",1e9) # Respuesta de la sección a cortante según y.
-respVz= typical_materials.defElasticMaterial(preprocessor, "respVz",1e9) # Respuesta de la sección a cortante según z.
+respT= typical_materials.defElasticMaterial(preprocessor, "respT",G*J) # Torsion response.
+respVy= typical_materials.defElasticMaterial(preprocessor, "respVy",1e9) # Shear response in y direction.
+respVz= typical_materials.defElasticMaterial(preprocessor, "respVz",1e9) # Shear response in z direction.
 # Secciones
 import os
 pth= os.path.dirname(__file__)

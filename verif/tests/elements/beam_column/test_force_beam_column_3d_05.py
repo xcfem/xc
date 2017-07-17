@@ -51,9 +51,9 @@ lin.xzVector= xc.Vector([0,1,0])
 fy= 275e6 # Yield stress of the steel.
 acero= typical_materials.defSteel01(preprocessor, "acero",E,fy,0.001)
 
-respT= typical_materials.defElasticMaterial(preprocessor, "respT",G*J) # Respuesta de la sección a torsión.
-respVy= typical_materials.defElasticMaterial(preprocessor, "respVy",1e9) # Respuesta de la sección a cortante según y.
-respVz= typical_materials.defElasticMaterial(preprocessor, "respVz",1e9) # Respuesta de la sección a cortante según z.
+respT= typical_materials.defElasticMaterial(preprocessor, "respT",G*J) # Torsion response.
+respVy= typical_materials.defElasticMaterial(preprocessor, "respVy",1e9) # Shear response in y direction.
+respVz= typical_materials.defElasticMaterial(preprocessor, "respVz",1e9) # Shear response in z direction.
 # Secciones
 # Secciones
 import os
@@ -107,8 +107,8 @@ result= analisis.analyze(10)
 
 nodes.calculateNodalReactions(True) 
 nod2= nodes.getNode(2)
-delta= nod2.getDisp[2]  # Node 2 displacement según z
-theta= nod2.getDisp[4]  # Rotation of the node según y
+delta= nod2.getDisp[2]  # z displacement of node 2
+theta= nod2.getDisp[4]  # y rotation of the node
 nod1= nodes.getNode(1)
 RM= nod1.getReaction[4] 
 

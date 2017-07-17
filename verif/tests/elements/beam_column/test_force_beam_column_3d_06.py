@@ -52,9 +52,9 @@ lin.xzVector= xc.Vector([0,1,0])
 fy= 275e6 # Yield stress of the steel.
 acero= typical_materials.defSteel01(preprocessor, "acero",E,fy,0.001)
 
-respT= typical_materials.defElasticMaterial(preprocessor, "respT",G*J) # Respuesta de la sección a torsión.
-respVy= typical_materials.defElasticMaterial(preprocessor, "respVy",1e9) # Respuesta de la sección a cortante según y.
-respVz= typical_materials.defElasticMaterial(preprocessor, "respVz",1e9) # Respuesta de la sección a cortante según z.
+respT= typical_materials.defElasticMaterial(preprocessor, "respT",G*J) # Torsion response.
+respVy= typical_materials.defElasticMaterial(preprocessor, "respVy",1e9) # Shear response in y direction.
+respVz= typical_materials.defElasticMaterial(preprocessor, "respVz",1e9) # Shear response in z direction.
 # Secciones
 import os
 pth= os.path.dirname(__file__)
@@ -81,7 +81,7 @@ agg.setAdditions(["T","Vy","Vz"],["respT","respVy","respVz"])
 elements= preprocessor.getElementLoader
 elements.defaultTransformation= "lin"
 elements.defaultMaterial= "agg"
-elements.numSections= 2 # Número de sections along the element.
+elements.numSections= 2 # Number of sections along the element.
 elements.defaultTag= 1
 el= elements.newElement("force_beam_column_3d",xc.ID([1,2]))
 
@@ -108,8 +108,8 @@ result= analisis.analyze(10)
 
 nodes.calculateNodalReactions(True) 
 nod2= nodes.getNode(2)
-delta= nod2.getDisp[1]  # Node 2 displacement según z
-theta= nod2.getDisp[5]  # Rotation of the node según y
+delta= nod2.getDisp[1]  # z displacement of node 2
+theta= nod2.getDisp[5]  # y rotation of the node
 nod1= nodes.getNode(1)
 RM= nod1.getReaction[5] 
 

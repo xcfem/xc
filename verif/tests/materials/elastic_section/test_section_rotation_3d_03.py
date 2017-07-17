@@ -83,7 +83,7 @@ result= analisis.analyze(1)
 
 nodes= preprocessor.getNodeLoader 
 nod2= nodes.getNode(2)
-delta= nod2.getDisp[2]  # Node 2 displacement según z
+delta= nod2.getDisp[2]  # z displacement of node 2
 
 elements= preprocessor.getElementLoader
 

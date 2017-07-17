@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # home made test
-# Ménsula sometida a carga uniforme vertical según el eje y local.
+# Cantilever under uniform vertical load in local y axis.
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
 __copyright__= "Copyright 2015, LCPT and AOO"
@@ -87,7 +87,7 @@ result= analisis.analyze(1)
 
 nodes= preprocessor.getNodeLoader 
 nod2= nodes.getNode(2)
-delta= nod2.getDisp[2]  # Node 2 displacement según z global
+delta= nod2.getDisp[2]  # z displacement of node 2 global
 
 elements= preprocessor.getElementLoader
 

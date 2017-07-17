@@ -7,7 +7,7 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
-# Ménsula sometida carga uniforme horizontal según el eje x local.
+'''Cantilever under horizontal uniform load in local x direction.'''
 
 import xc_base
 import geom

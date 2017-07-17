@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # home made test
-# Ménsula horizontal sometida a carga vertical en su extremo.
+''' Horizontal cantilever under vertical load at his front end.'''
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
 __copyright__= "Copyright 2015, LCPT and AOO"
@@ -47,9 +47,9 @@ fy= 275e6 # Yield stress of the steel.
 E= 210e9 # Young modulus of the steel.
 acero= typical_materials.defSteel01(preprocessor, "acero",E,fy,0.001)
 
-respT= typical_materials.defElasticMaterial(preprocessor, "respT",1e10) # Respuesta de la sección a torsión.
-respVy= typical_materials.defElasticMaterial(preprocessor, "respVy",1e9) # Respuesta de la sección a cortante según y.
-respVz= typical_materials.defElasticMaterial(preprocessor, "respVz",1e9) # Respuesta de la sección a cortante según z.
+respT= typical_materials.defElasticMaterial(preprocessor, "respT",1e10) # Torsion response.
+respVy= typical_materials.defElasticMaterial(preprocessor, "respVy",1e9) # Shear response in y direction.
+respVz= typical_materials.defElasticMaterial(preprocessor, "respVz",1e9) # Shear response in z direction.
 # Secciones
 import os
 pth= os.path.dirname(__file__)
