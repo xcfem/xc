@@ -31,6 +31,32 @@ def setElem_to_lst(setElem):
     '''return a list with the elements included in the set `setElem` '''
     return [e for e in setElem.getElements]
    
+def lstNod_to_set(preprocessor,lstNod,setName):
+    '''add the nodes in list `lstNod` to the set named setName.
+    If the set doesn't exist, the function creates it.
+    '''
+    setsMng=preprocessor.getSets
+    if setsMng.exists(setName):
+        s=setsMng.getSet(setName)
+    else:
+        s=setsMng.defSet(setName)
+    for n in lstNod:
+        s.getNodes.append(n)
+    return s   
+
+def lstElem_to_set(preprocessor,lstElem,setName):
+    '''add the elements in list `lstElem` to the set named setName.
+    If the set doesn't exist, the function creates it.
+    '''
+    setsMng=preprocessor.getSets
+    if setsMng.exists(setName):
+        s=setsMng.getSet(setName)
+    else:
+        s=setsMng.defSet(setName)
+    for e in lstElem:
+        s.getElements.append(e)
+    return s   
+
 def get_lin_2Pts(lstLinBusq,tPto1,tPto2):
     '''return the line that belongs to the set `lstLinBusq` and whose
     starting and ending points are those of tags `tPto1` and `tPto2`
