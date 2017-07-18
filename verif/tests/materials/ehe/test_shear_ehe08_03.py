@@ -34,8 +34,11 @@ ratio1=abs(Vsu-111.966e3)/111.966e3
 ##print "ratio1= ",ratio1," kN"
   
 
+import os
+from miscUtils import LogMessages as lmsg
+fname= os.path.basename(__file__)
 if ratio1<0.01:
-    print "test cortante EHE-08 03: ok."
+  print "test ",fname,": ok."
 else:
-    print "test cortante EHE-08 03: ERROR."
+  lmsg.error(fname+' ERROR.')
   

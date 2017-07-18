@@ -68,7 +68,7 @@ fields=  prueba.getFields
 disp= fields.newField("disp")
 disp.setName= "total"
 disp.componentNames= ["UX","UY","UZ","RX","RY","RZ"]
-disp.componentDescriptions= ["Mov. según x","Mov. según y","Mov. según z","Giro según x","Giro según y","Giro según z"]
+disp.componentDescriptions= ["x disp.","y disp.","z disp.","x rot.","y rot.","z rot."]
 disp.componentUnits= ["in","in","in","rad","rad","rad"]
 disp.componentsProperty= "self.getDisp"
 

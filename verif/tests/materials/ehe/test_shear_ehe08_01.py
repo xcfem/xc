@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
-
-
-#Verification test of the cálculo del cortante de agotamiento por compresión oblicua del alma (Vu1) según el artículo 44.2.3.1 de EHE-08.
+'''Computation of the ultimate shear force failure due to diagonal compression in the web (Vu1) according to the article 44.2.3.1 of EHE-08.'''
 import sys
 
 from materials.ehe import comprobVEHE08
@@ -31,8 +29,11 @@ print "Vu1= ",Vu1/1e3," kN"
 print "ratio1= ",ratio1
 '''
 
+import os
+from miscUtils import LogMessages as lmsg
+fname= os.path.basename(__file__)
 if ratio1<1e-12:
-    print "test cortante EHE-08 01: ok."
+  print "test ",fname,": ok."
 else:
-    print "test cortante EHE-08 01: ERROR.\n"
+  lmsg.error(fname+' ERROR.')
   
