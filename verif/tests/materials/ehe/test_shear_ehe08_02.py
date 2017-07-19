@@ -1,8 +1,7 @@
 # -*- coding: utf-8 -*-
-#Verification test of the cálculo del cortante de agotamiento por
-#resistencia a tracción del hormigón (Vu2) en una sección
-#SIN reinforcement de cortante según los artículos 44.2.3.2.1.1
-#y  44.2.3.2.1.2 de EHE-08.
+'''Computation of the shear strength of members due to concrete tensile 
+strength (Vu2) of sections without shear reinforcement according to articles
+artículos 44.2.3.2.1.1 and 44.2.3.2.1.2 of EHE-08.'''
 
 import sys
 
@@ -54,9 +53,11 @@ ratio5= abs((Vu2B-Vu2SiFis)/Vu2SiFis)
 # print "ratio4= ",ratio4
 # print "ratio5= ",ratio5
 
-
+import os
+from miscUtils import LogMessages as lmsg
+fname= os.path.basename(__file__)
 if (ratio1<1e-5) and (ratio2<1e-5) and (ratio3<1e-5) and (ratio4<1e-5) and (ratio5<1e-5):
-    print "test cortante EHE-08 02: ok."
+  print "test ",fname,": ok."
 else:
-    print "test cortante EHE-08 02: ERROR."
+  lmsg.error(fname+' ERROR.')
   

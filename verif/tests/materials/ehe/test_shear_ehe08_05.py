@@ -65,8 +65,12 @@ ratio4=abs(Vsu-111.966e3)/111.966e3
 ##print "ratio4= ",ratio4
   
 
+import os
+from miscUtils import LogMessages as lmsg
+fname= os.path.basename(__file__)
 if (ratio1<0.002) and (ratio2<0.0002) and (ratio3<1e-15) and (ratio4<1e-5):
-    print "test cortante EHE-08 05: ok."
+  print "test ",fname,": ok."
 else:
-    print "test cortante EHE-08 05: ERROR."
+  lmsg.error(fname+' ERROR.')
+
   

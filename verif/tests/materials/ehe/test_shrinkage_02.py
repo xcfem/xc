@@ -213,7 +213,7 @@ dXMax=-1e9
 def procesResultVerif(tagComb, nmbComb):
   nodes= preprocessor.getNodeLoader
   nod8= nodes.getNode(8)
-  deltaX= nod8.getDisp[0] # Desplazamiento del node 2 según z
+  deltaX= nod8.getDisp[0] # x displacement of node 8
   global dXMin; dXMin= min(dXMin,deltaX)
   global dXMax; dXMax= max(dXMax,deltaX)
   ''' 

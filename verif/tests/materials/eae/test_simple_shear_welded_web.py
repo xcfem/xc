@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
-'''Computation of the required length of a weld bead to apoyar el extremo
-de una viga mediante soldadura directa del alma, según el artículo 61.4.1
-de la instrucción EAE.'''
+'''Beam simple joint by direct web welding: computation of the required length of a weld bead, according to the article 61.4.1 of EAE.'''
 # Verification by means of the example in the page XXV-31 of the book
 # Estructuras Metálicas de Vicente Cudós Samblancat
 # (url={https://books.google.ch/books?id=7UrJnQEACAAJ}).

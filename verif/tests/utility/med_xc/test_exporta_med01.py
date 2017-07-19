@@ -70,7 +70,7 @@ fields=  prueba.getFields
 disp= fields.newField("disp")
 disp.setName= "total"
 disp.componentNames= ["UX","UY"]
-disp.componentDescriptions= ["Mov. según x","Mov. según y"]
+disp.componentDescriptions= ["x disp.","y disp"]
 disp.componentUnits= ["in","in"]
 disp.componentsProperty= "self.getDisp"
 

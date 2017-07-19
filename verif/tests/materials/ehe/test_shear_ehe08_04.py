@@ -1,9 +1,8 @@
 # -*- coding: utf-8 -*-
 
-#Verification test of the computation of strain in the web
-#según el artículo 44.2.3.2.2 de EHE. Lo único que se pretende
-#con el test es comprobar que la fórmula está bien escrita en la macro.
-
+'''Verification test of the computation of strain in the web
+according to article 44.2.3.2.2 of EHE. The point is to verify that
+the expression is correctly written in Python.'''
 from __future__ import division
 
 import sys
@@ -74,8 +73,12 @@ print "epsilonX06= ",epsilonX06*1000," por mil"
 print "ratio6= ",ratio6
 '''
 
+import os
+from miscUtils import LogMessages as lmsg
+fname= os.path.basename(__file__)
 if (ratio1<1e-5) and (ratio2<1e-5) and (ratio3<1e-5) and (ratio4<1e-5) and (ratio5<1e-5) and (ratio6<1e-5):
-    print "test cortante EHE-08 04: ok."
+  print "test ",fname,": ok."
 else:
-    print "test cortante EHE-08 04: ERROR."
+  lmsg.error(fname+' ERROR.')
+
   

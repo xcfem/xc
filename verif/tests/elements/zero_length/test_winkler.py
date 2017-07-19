@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-# Validación del funcionamiento del modelo de Winkler
-#    según el artículo de Gabriel E. Barrientos
+# Verification of Winkler model according to the
+#    article of Gabriel E. Barrientos
 #    «Vigas sobre fundaciones bi-paramétricas del tipo Cuasi-Winker»
 #    Departamento de Ingeniería Mecánica. Universidad del Bío-Bío.
 #    Casilla 5-C. Concepción. Chile.

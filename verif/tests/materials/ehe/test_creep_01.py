@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
-''' Verification test of the cálculo del coeficiente de fluencia
-   según EHE-08. '''
+''' Computing of the creep factor according to EHE-08. '''
 
 from materials.ehe import EHE_materials
 import math
