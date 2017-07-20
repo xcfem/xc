@@ -123,8 +123,8 @@ class UniformLoadOnLines(BaseVectorLoad):
             lnInfl=[(sortNod[i-1].getInitialPos3d).distPos3d(sortNod[i+1].getInitialPos3d)/2 for i in range(1,len(sortNod)-1)]
             lnInfl.insert(0,(sortNod[0].getInitialPos3d).distPos3d(sortNod[1].getInitialPos3d)/2.0)
             lnInfl.append((sortNod[len(sortNod)-2].getInitialPos3d).distPos3d(sortNod[len(sortNod)-1].getInitialPos3d)/2.0)
-        for i in range(len(sortNod)):
-            sortNod[i].newLoad(lnInfl[i]*self.loadVector)
+            for i in range(len(sortNod)):
+                sortNod[i].newLoad(lnInfl[i]*self.loadVector)
 
 class UniformLoadOnSurfaces(BaseVectorLoad):
     '''Uniform load applied on the shell elements generated from
