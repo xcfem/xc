@@ -19,12 +19,12 @@ n= 7.365
 Ec= Es/n
 nuc= 0.3
 Gc= Ec/(2*(1+nuc))
-b= 1.0 # Ancho eficaz de ala.
-bw= 0.25 # Ancho del nervio.
-hf= 0.08 # Canto del ala.
-d= 0.57 # Canto útil.
+b= 1.0 # Effective width of flange.
+bw= 0.25 # Width of the web.
+hf= 0.08 # Flange thickness.
+d= 0.57 # Effective depth.
 diamBar= 22e-3 # Rebar diameter.
-areaBar= math.pi*(diamBar/2)**2 # Área de los redondos.
+areaBar= math.pi*(diamBar/2)**2 # Rebars area.
 
 prueba= xc.ProblemaEF()
 preprocessor=  prueba.getPreprocessor
@@ -33,12 +33,12 @@ acero= typical_materials.defElasticMaterial(preprocessor, "acero",Es)
 geomPrueba= preprocessor.getMaterialLoader.newSectionGeometry("geomPrueba")
 regiones= geomPrueba.getRegions
 
-ala= regiones.newQuadRegion('concrete')# Ala
-ala.pMin= geom.Pos2d(d-hf,0.0)
-ala.pMax= geom.Pos2d(d,b)
-nervio= regiones.newQuadRegion('concrete')# Nervio
-nervio.pMin= geom.Pos2d(0.0,b/2-bw/2)
-nervio.pMax= geom.Pos2d(d-hf,b/2+bw/2)
+flange= regiones.newQuadRegion('concrete')# Flange
+flange.pMin= geom.Pos2d(d-hf,0.0)
+flange.pMax= geom.Pos2d(d,b)
+web= regiones.newQuadRegion('concrete')# Web
+web.pMin= geom.Pos2d(0.0,b/2-bw/2)
+web.pMax= geom.Pos2d(d-hf,b/2+bw/2)
 
 reinforcement= geomPrueba.getReinfLayers
 reinforcementA= reinforcement.newStraightReinfLayer("acero")

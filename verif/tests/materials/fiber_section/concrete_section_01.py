@@ -11,8 +11,8 @@ from materials.ehe import EHE_materials
 defSec= dict(width= 0.2, # Section width expressed in meters.
 depth= 0.4, # Section depth expressed in meters.
 cover= 0.05, # Concrete cover expressed in meters.
-nIJ= 11, # Número de divisiones en la dirección IJ.
-nJK= 11, # Número de divisiones en la dirección JK.
+nIJ= 11, # Number of division in the IJ direction.
+nJK= 11, # Number of division in the JK direction.
 areaCordones= 140e-6, # Área de los cordones expressed in square meters.
 diamBarra= 16e-3, # Diámetro de las barras expressed in meters.
 areaBarra= 2.01e-4 # Área de las barras expressed in square meters.

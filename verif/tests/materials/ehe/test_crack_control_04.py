@@ -1,7 +1,10 @@
 # -*- coding: utf-8 -*-
-''' Verification test of la comprobación a fisuración de una sección de hormigón armado.
-   Los resultados se comparan con los obtenidos del problema 9 del
-   libro «El hormigón armado en problemas. Según la norma EHE». '''
+''' Crack control checking of a reinforced concrete section. according 
+    to EHE-08. The results are compared with those of the problem 9 
+    of the book "El hormigón armado en problemas según la EHE." 
+    isbn: 9788438001592 
+    Alejandro Castillo Linares and Angel Vallecillo Capilla.
+'''
 
 import xc_base
 import geom
@@ -24,9 +27,9 @@ __email__= "l.pereztato@gmail.com ana.ortega.ort@gmal.com"
 width= 1.70 # Section width expressed in meters.
 depth= 1.10 # Section depth expressed in meters.
 cover= 0.05 # Concrete cover expressed in meters.
-areaFi20=3.14e-4
-areaFi25=4.91e-4
-areaFi32=8.04e-4
+areaFi20= 3.14e-4
+areaFi25= 4.91e-4
+areaFi32= 8.04e-4
 
 NDato= 0 # Axil para comprobar fisuración.
 MyDato= -195.3*9810 # Momento para comprobar fisuración.

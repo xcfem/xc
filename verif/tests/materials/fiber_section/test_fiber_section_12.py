@@ -22,7 +22,7 @@ from model import predefined_spaces
 from solution import predefined_solutions
 
 MzDato= 0.0
-NDato= 0.0 # La única acción es el pretensado
+NDato= 0.0 # Presstressing is the only load
 
 prueba= xc.ProblemaEF()
 preprocessor=  prueba.getPreprocessor

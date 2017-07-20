@@ -22,7 +22,7 @@ nuC= 0.2 # Poisson's ratio del hormigón EHE-08.
 hLosa= 0.2 # Espesor.
 densLosa= 2500*hLosa # Densidad de la losa kg/m2.
 t0= 28 # Edad de puesta en carga del hormigón
-tFin= 10000 # Vida útil.
+tFin= 10000 # Service life.
 arido= "cuarcita"
 
 

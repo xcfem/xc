@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
-#Verification test of the cálculo de Vsu.
-#El resultado se compara con el obtenidos del ejercicio ER-CA-02 de
-#www.areadecalculo.com. Según la norma EHE-08».
+''' Computation of Vsu value. The results are compared with those obtained
+from the exercise ER-CA-02 from www.areadecalculo.com. According to EHE-08.
+'''
 
 from __future__ import division
 import sys
@@ -20,7 +20,7 @@ Nd=1224e3 #Design axial internal force.
 Md=0 #Momento de cálculo.
 Vd=125e3 #Cortante efectivo de cálculo (artículo 42.2.2).
 Td=0 #Torsor de cálculo.
-d=0.55 #Canto útil.
+d=0.55 #Effective depth.
 z=0.9*d #Brazo mecánico.
 Asl=9.425e-4
 AsAct=0 #reinforcement area activa

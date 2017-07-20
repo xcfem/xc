@@ -27,13 +27,13 @@ Md=0 #Valor absoluto del momento de cálculo.
 Vd=0 #Valor absoluto del cortante efectivo de cálculo (artículo 42.2.2).
 Td=0 #Torsor de cálculo.
 z=10 #Brazo mecánico.
-AsPas=1/4 #de area la reinforcement longitudinal pasiva traccionada anclada a una distancia mayor que el depth útil de la sección en estudio.
-AsAct=1/8 #de area la reinforcement longitudinal activa traccionada anclada a una distancia mayor que el depth útil de la sección en estudio.
+AsPas=1/4 #Area of passive longitudinal reinforcement anchored at a distance greater than the effective depth of the section.
+AsAct=1/8 #Area of active (prestressed) longitudinal reinforcement anchored at a distance greater than the effective depth of the section.
 Es=1000 #Elastic modulus of the steel de la reinforcement pasiva (AQUI FICTICIO).
 Ep=2000 #Elastic modulus of the steel de la reinforcement activa (AQUI FICTICIO).
 Fp=0 #Prestressing force in the cross-section (positive if in tension).
-Ae=0.01 #Área encerrada por la línea media de la sección hueca eficaz.
-ue=1 #Perímetro de la línea media de la sección hueca eficaz.
+Ae=0.01 #Area enclosed by the mid-line of the effective hollow area.
+ue=1 #Perimeter of the mid-line of the effective hollow area.
 
 Md= 10
 epsilonX01=comprobVEHE08.getEpsilonXEHE08(Nd,Md,Vd,Td,z,AsPas,AsAct,Es,Ep,Fp,Ae,ue)

@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
-# Verification test of la comprobación a cortante de una sección de hormigón armado.
-#    Algunos resultados se comparan con los obtenidos del ejercicio ER-CS-01 de
-#    www.areadecalculo.com. Según la norma EHE-08».
+''' Shear checking of a reinforced concrete section.
+    Some results are compared with those of the exercise ER-CS-01 from
+    www.areadecalculo.com. According to EHE-08».
+'''
 from __future__ import division
 
 

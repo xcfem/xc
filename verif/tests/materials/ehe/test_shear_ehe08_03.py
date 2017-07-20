@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
-#Verification test of the cálculo de Vsu.
-#El resultado se compara con el obtenidos del ejercicio ER-CA-02 de
-#www.areadecalculo.com. Según la norma EHE-08».
+''' Computation of Vsu value. The result is compared to that obtained
+from the exercise ER-CA-02 from www.areadecalculo.com. According to EHE-08.
+'''
 
 import sys
 from materials.ehe import comprobVEHE08
