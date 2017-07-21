@@ -155,7 +155,6 @@ class RecordDefDisplay(object):
     bnd= self.gridRecord.getBND()
     offsetVector= bnd.diagonal*0.1
     offset= offsetVector.getModulo()
-    print offsetVector
     axesPosition= bnd.pMin-offsetVector
     transform = vtk.vtkTransform()
     transform.Translate(axesPosition.x, axesPosition.y, axesPosition.z)

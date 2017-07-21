@@ -145,12 +145,17 @@ class UniformLoadOnSurfaces(BaseVectorLoad):
         
     def appendLoadToCurrentLoadPattern(self):
         ''' Append load to the current load pattern.'''
-        for s in self.xcSet.getSurfaces:
-            for e in s.getElements():
-                if self.refSystem=='Local':
-                    e.vector3dUniformLoadLocal(self.loadVector)
-                else:
-                    e.vector3dUniformLoadGlobal(self.loadVector)
+        for e in self.xcSet.getElements:
+            if self.refSystem=='Local':
+                e.vector3dUniformLoadLocal(self.loadVector)
+            else:
+                e.vector3dUniformLoadGlobal(self.loadVector)
+        # for s in self.xcSet.getSurfaces:
+        #     for e in s.getElements():
+        #         if self.refSystem=='Local':
+        #             e.vector3dUniformLoadLocal(self.loadVector)
+        #         else:
+        #             e.vector3dUniformLoadGlobal(self.loadVector)
 
 class EarthPressLoad(BaseVectorLoad):
     '''Earth pressure applied on the elements (shell or beams)
