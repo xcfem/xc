@@ -88,11 +88,11 @@ namespace XC {
 class CableMaterial : public ElasticBaseMaterial
   {
   private:
-    double Ps;
+    double Ps; //!< Material prestress.
     double Mue;
-    double L;
-    double trialStress;      // current trial stress
-    double trialTangent;     // current trial tangent
+    double L; //!< cable length.
+    double trialStress;      //!< current trial stress
+    double trialTangent;     //!< current trial tangent
     
     double evalStress(double stress);
   protected:
@@ -101,7 +101,7 @@ class CableMaterial : public ElasticBaseMaterial
     int recvData(const CommParameters &);
 
   public:
-    CableMaterial(int tag, double Prestress, double E, double unitWeightEff, double L_Element);    
+    CableMaterial(int tag, double Prestress, double E, double unitWeightEff, double L_Element);
     CableMaterial(int tag= 0);    
 
     void setLength(const double &);
@@ -117,8 +117,10 @@ class CableMaterial : public ElasticBaseMaterial
     inline double getInitialTangent(void) const
       {return 1.0e-8;}; 
 
+    //! @brief Set value of cable prestress.
     inline void setPrestress(const double &d)
       { Ps= d; }
+    //! @brief Return value of cable prestress.
     double getPrestress(void) const
       { return Ps; }
 

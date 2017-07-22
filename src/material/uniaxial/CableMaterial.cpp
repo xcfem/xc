@@ -234,7 +234,8 @@ int XC::CableMaterial::sendSelf(CommParameters &cp)
 
     res+= cp.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
-      std::cerr << "CableMaterial::sendSelf - failed to send data.\n";
+      std::cerr << nombre_clase() << "::" << __FUNCTION__
+		<< "; failed to send data.\n";
     return res;
   }
 
@@ -246,12 +247,14 @@ int XC::CableMaterial::recvSelf(const CommParameters &cp)
     int res= cp.receiveIdData(getDbTagData(),dataTag);
 
     if(res<0)
-      std::cerr << "CableMaterial::recvSelf - failed to receive ids.\n";
+      std::cerr << nombre_clase() << "::" << __FUNCTION__
+		<< "; failed to receive ids.\n";
     else
       {
         res+= recvData(cp);
         if(res<0)
-          std::cerr << "CableMaterial::recvSelf - failed to receive data.\n";
+          std::cerr << nombre_clase() << "::" << __FUNCTION__
+		    << "; failed to receive data.\n";
       }
     return res;
   }
