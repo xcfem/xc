@@ -123,8 +123,8 @@ class UniformLoadOnLines(BaseVectorLoad):
             lnInfl=[(sortNod[i-1].getInitialPos3d).distPos3d(sortNod[i+1].getInitialPos3d)/2 for i in range(1,len(sortNod)-1)]
             lnInfl.insert(0,(sortNod[0].getInitialPos3d).distPos3d(sortNod[1].getInitialPos3d)/2.0)
             lnInfl.append((sortNod[len(sortNod)-2].getInitialPos3d).distPos3d(sortNod[len(sortNod)-1].getInitialPos3d)/2.0)
-        for i in range(len(sortNod)):
-            sortNod[i].newLoad(lnInfl[i]*self.loadVector)
+            for i in range(len(sortNod)):
+                sortNod[i].newLoad(lnInfl[i]*self.loadVector)
 
 class UniformLoadOnSurfaces(BaseVectorLoad):
     '''Uniform load applied on the shell elements generated from
@@ -145,12 +145,17 @@ class UniformLoadOnSurfaces(BaseVectorLoad):
         
     def appendLoadToCurrentLoadPattern(self):
         ''' Append load to the current load pattern.'''
-        for s in self.xcSet.getSurfaces:
-            for e in s.getElements():
-                if self.refSystem=='Local':
-                    e.vector3dUniformLoadLocal(self.loadVector)
-                else:
-                    e.vector3dUniformLoadGlobal(self.loadVector)
+        for e in self.xcSet.getElements:
+            if self.refSystem=='Local':
+                e.vector3dUniformLoadLocal(self.loadVector)
+            else:
+                e.vector3dUniformLoadGlobal(self.loadVector)
+        # for s in self.xcSet.getSurfaces:
+        #     for e in s.getElements():
+        #         if self.refSystem=='Local':
+        #             e.vector3dUniformLoadLocal(self.loadVector)
+        #         else:
+        #             e.vector3dUniformLoadGlobal(self.loadVector)
 
 class EarthPressLoad(BaseVectorLoad):
     '''Earth pressure applied on the elements (shell or beams)

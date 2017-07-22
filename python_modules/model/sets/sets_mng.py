@@ -8,6 +8,8 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "ana.Ortega@ciccp.es"
 
+import geom
+from miscUtils import LogMessages as lmsg
 
 
 
@@ -44,6 +46,49 @@ def lstNod_to_set(preprocessor,lstNod,setName):
         s.getNodes.append(n)
     return s   
 
+def lstLin_to_set(preprocessor,lstLin,setName):
+    '''add the lines in list `lstNod` to the set named setName.
+    If the set doesn't exist, the function creates it.
+    '''
+    setsMng=preprocessor.getSets
+    if setsMng.exists(setName):
+        s=setsMng.getSet(setName)
+    else:
+        s=setsMng.defSet(setName)
+    for l in lstLin:
+        s.getLines.append(l)
+    return s   
+
+def set_included_in_orthoPrism(preprocessor,setInit,prismBase,prismAxis,setName):
+    '''reselect from set setInit those elements included in a orthogonal prism
+    defined by a 2D polygon and the direction of its axis. 
+
+    :param preprocessor: preprocessor
+    :param setInit:      set of elements to which restrict the search
+    :param prismBase:    2D polygon that defines the n-sided base of the prism.
+                         The vertices of the polygon are defined in global 
+                         coordinates in the following way:
+                         - for X-axis-prism: (y,z)
+                         - for Y-axis-prism: (x,z)
+                         - for Z-axis-prism: (x,y)
+    
+    :param prismAxis:    axis of the prism (can be equal to 'X', 'Y', 'Z')
+    :param setName:      name of the set to be generated                   
+    '''
+    sElIni=setInit.getElements
+    if prismAxis in ['X','x']:
+        elem_inside_prism=[e for e in sElIni if prismBase.In(geom.Pos2d(e.getPosCentroid(True).y,e.getPosCentroid(True).z),0)]
+    elif prismAxis in ['Y','y']:
+        elem_inside_prism=[e for e in sElIni if prismBase.In(geom.Pos2d(e.getPosCentroid(True).x,e.getPosCentroid(True).z),0)]
+    elif prismAxis in ['Z','z']:
+        elem_inside_prism=[e for e in sElIni if prismBase.In(geom.Pos2d(e.getPosCentroid(True).x,e.getPosCentroid(True).y),0)]
+    else:
+        lmsg.error("Wrong prisma axis. Available values: 'X', 'Y', 'Z' \n")
+    s=lstElem_to_set(preprocessor,elem_inside_prism,setName)
+    s.fillDownwards()
+    return s
+    
+
 def lstElem_to_set(preprocessor,lstElem,setName):
     '''add the elements in list `lstElem` to the set named setName.
     If the set doesn't exist, the function creates it.
@@ -55,7 +100,7 @@ def lstElem_to_set(preprocessor,lstElem,setName):
         s=setsMng.defSet(setName)
     for e in lstElem:
         s.getElements.append(e)
-    return s   
+    return s  
 
 def get_lin_2Pts(lstLinBusq,tPto1,tPto2):
     '''return the line that belongs to the set `lstLinBusq` and whose
@@ -72,6 +117,31 @@ def get_lin_2Pts(lstLinBusq,tPto1,tPto2):
         return
     else:
         return l
+
+def get_lines_on_points(setPoints,setLinName,onlyIncluded=True):
+    '''return a set of lines (and all the entities of lower rank associated) 
+    from a given set of points.
+
+    :param setPoints:    set of points
+    :param setLinName  : name of the returned set of lines
+    :param onlyIncluded: True to select only lines whose both ends are in the 
+                         set of points
+                         False to select all lines that 'touch' the set of 
+                         points
+                         (defaults to True)
+                         
+    '''
+    prep=setPoints.getPreprocessor
+    allLines=prep.getSets.getSet('total').getLines
+    lstTagsPnt=[p.tag for p in setPoints.getPoints]
+    if onlyIncluded==True:
+        lstLin=[l for l in allLines if (l.getKPoints()[0] in lstTagsPnt and l.getKPoints()[1] in lstTagsPnt)]
+    else:
+        lstLin=[l for l in allLines if (l.getKPoints()[0]   in lstTagsPnt or l.getKPoints()[1] in lstTagsPnt)]
+    s=lstLin_to_set(prep,lstLin,setLinName)
+    s.fillDownwards()
+    return s
+    
 
 def setAddOf(setA,setB):
     '''return a new set that has all the entities in setA and setB

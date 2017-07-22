@@ -56,4 +56,5 @@ def displayFieldDirs1and2(limitStateLabel,argument,elementSet,component,fUnitCon
               initial/undeformed shape)
 
   '''
-  displayFieldDirs1and2Base(limitStateLabel,argument,elementSet,elementSet.genDescr,elementSet.sectDescr,component,fUnitConv,fileName,captionTexts,defFScale=defFScale )
+#  displayFieldDirs1and2Base(limitStateLabel,argument,elementSet,elementSet.description,elementSet.sectDescr,component,fUnitConv,fileName,captionTexts,defFScale=defFScale )  #21/07/2017 needs revision
+  displayFieldDirs1and2Base(limitStateLabel,argument,elementSet,elementSet.description,['dir. 1', 'dir. 2'],component,fUnitConv,fileName,captionTexts,defFScale=defFScale )

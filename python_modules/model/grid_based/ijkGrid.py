@@ -500,7 +500,6 @@ class ijkGrid(object):
     ijkRange.ijkMax=(indXmax,indYmax,indZmax)
     
     :param ijkRange: range for the search
-    :param dicPnt: dictionary of points
     :param setName: name of the new set of points
     '''
     (imin,jmin,kmin)=ijkRange.ijkMin
