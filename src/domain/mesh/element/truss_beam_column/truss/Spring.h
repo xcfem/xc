@@ -119,7 +119,7 @@ class Spring : public ProtoTruss
     int addLoad(ElementalLoad *theLoad, double loadFactor);
     int addInertiaLoadToUnbalance(const Vector &accel);
 
-    double getAxil(void) const;
+    double getAxialForce(void) const;
     const Vector &getResistingForce(void) const;
     const Vector &getResistingForceIncInertia(void) const;            
 

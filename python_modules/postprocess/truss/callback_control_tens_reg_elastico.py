@@ -10,7 +10,7 @@ def controTNHA():
     FCTN= abs(SgMax)/fyd
     if(FCTN>FCTNCP): 
       FCTNCP= FCTN}
-      NCP=getAxil  
+      NCP=getN  
       HIPCPTN= getNombreCombActual
 
   if(Sg<SgMin):
@@ -18,5 +18,5 @@ def controTNHA():
     FCTN= abs(SgMin)/fyd
     if(FCTN>FCTNCP):
       FCTNCP= FCTN
-      NCP=getAxil  
+      NCP=getN  
       HIPCPTN= getNombreCombActual"""

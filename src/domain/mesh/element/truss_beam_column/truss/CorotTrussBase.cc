@@ -36,6 +36,7 @@
 XC::CorotTrussBase::CorotTrussBase(int tag, int classTag, int dim,int Nd1, int Nd2)
   :ProtoTruss(tag,classTag,Nd1,Nd2,0,dim), Lo(0.0), Ln(0.0), R(3,3)
   {}
+
 //! @brief Constructor.
 XC::CorotTrussBase::CorotTrussBase(int tag, int classTag,int dimension)
   :ProtoTruss(tag,classTag,0,0,0,dimension), Lo(0.0), Ln(0.0), R(3,3)
@@ -55,7 +56,6 @@ XC::CorotTrussBase &XC::CorotTrussBase::operator=(const CorotTrussBase &otro)
     R= otro.R;
     return *this;
   }
-
 
 //! @brief Return the longitud inicial of the element.
 const double &XC::CorotTrussBase::getLo(void) const

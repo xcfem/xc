@@ -755,7 +755,7 @@ void XC::Truss::Print(std::ostream &s, int flag)
        }
   }
 
-double XC::Truss::getAxil(void) const
+double XC::Truss::getAxialForce(void) const
   { return A*theMaterial->getStress(); }
 
 double XC::Truss::computeCurrentStrain(void) const

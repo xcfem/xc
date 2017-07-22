@@ -74,7 +74,7 @@ class CorotTruss: public CorotTrussBase
   private:
     UniaxialMaterial *theMaterial; //!< pointer to a material
 
-    double A;//!< area of CorotTruss
+    double A;//!< area of CorotTruss element.
   protected:
     int sendData(CommParameters &cp);
     int recvData(const CommParameters &cp);
@@ -114,7 +114,7 @@ class CorotTruss: public CorotTrussBase
     int addLoad(ElementalLoad *theLoad, double loadFactor);
     int addInertiaLoadToUnbalance(const Vector &accel);
 
-    double getAxil(void) const;
+    double getAxialForce(void) const;
     const Vector &getResistingForce(void) const;
     const Vector &getResistingForceIncInertia(void) const;            
 

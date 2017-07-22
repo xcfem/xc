@@ -33,24 +33,24 @@ class_<XC::TrussBase, bases<XC::ProtoTruss>, boost::noncopyable >("TrussBase", n
 class_<XC::TrussSection , bases<XC::TrussBase>, boost::noncopyable >("TrussSection", no_init);
 
 class_<XC::Spring , bases<XC::ProtoTruss>, boost::noncopyable >("Spring", no_init)
-  .def("getN", &XC::Spring::getAxil,"Returns axial (N) internal force.")
+  .def("getN", &XC::Spring::getAxialForce,"Returns axial (N) internal force.")
   ;
 
 
 class_<XC::Truss, bases<XC::TrussBase>, boost::noncopyable >("Truss")
   .add_property("area", make_function( &XC::Truss::getArea, return_value_policy<copy_const_reference>() ), &XC::Truss::setArea)
-  .def("getN", &XC::Truss::getAxil,"Returns axial (N) internal force.")
-  .add_property("getN1", &XC::Truss::getAxil,"Returns axial (N) internal force at node 1.")
-  .add_property("getN2", &XC::Truss::getAxil,"Returns axial (N) internal force at node 2.")
+  .def("getN", &XC::Truss::getAxialForce,"Returns axial (N) internal force.")
+  .add_property("getN1", &XC::Truss::getAxialForce,"Returns axial (N) internal force at node 1.")
+  .add_property("getN2", &XC::Truss::getAxialForce,"Returns axial (N) internal force at node 2.")
    ;
 
 class_<XC::CorotTrussBase, bases<XC::ProtoTruss>, boost::noncopyable >("CorotTrussBase", no_init);
 
 class_<XC::CorotTruss, bases<XC::CorotTrussBase>, boost::noncopyable >("CorotTruss", no_init)
   .add_property("area", make_function( &XC::CorotTruss::getArea, return_value_policy<copy_const_reference>() ), &XC::CorotTruss::setArea)
-  .def("getN", &XC::CorotTruss::getAxil,"Returns N internal force.")
-  .add_property("getN1", &XC::CorotTruss::getAxil,"Returns axial (N) internal force at node 1.")
-  .add_property("getN2", &XC::CorotTruss::getAxil,"Returns axial (N) internal force at node 2.")
+  .def("getN", &XC::CorotTruss::getAxialForce,"Returns N internal force.")
+  .add_property("getN1", &XC::CorotTruss::getAxialForce,"Returns axial (N) internal force at node 1.")
+  .add_property("getN2", &XC::CorotTruss::getAxialForce,"Returns axial (N) internal force at node 2.")
   ;
 
 class_<XC::CorotTrussSection , bases<XC::CorotTrussBase>, boost::noncopyable >("CorotTrussSection", no_init)

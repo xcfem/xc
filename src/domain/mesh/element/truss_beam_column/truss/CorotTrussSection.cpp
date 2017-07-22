@@ -76,10 +76,12 @@ XC::CorotTrussSection::CorotTrussSection(int tag, int dim,int Nd1, int Nd2, Sect
   {
     // get a copy of the material and check we obtained a valid copy
     theSection = theSec.getCopy();
-    if(theSection == 0)
+    if(!theSection)
       {
-        std::cerr << "FATAL XC::CorotTrussSection::CorotTrussSection - " << tag <<
-          "failed to get a copy of material with tag " << theSec.getTag() << std::endl;
+        std::cerr << nombre_clase() << "::" << __FUNCTION__
+		  << "FATAL element " << tag
+		  << " failed to get a copy of material with tag "
+		  << theSec.getTag() << std::endl;
         exit(-1);
       }
   }
@@ -172,8 +174,8 @@ void XC::CorotTrussSection::setDomain(Domain *theDomain)
 
    // now determine the length, cosines and fill in the transformation
         // NOTE t = -t(every one else uses for residual calc)
-        const XC::Vector &end1Crd = theNodes[0]->getCrds();
-        const XC::Vector &end2Crd = theNodes[1]->getCrds();
+        const Vector &end1Crd = theNodes[0]->getCrds();
+        const Vector &end2Crd = theNodes[1]->getCrds();
 
         // Determine global offsets
     double cosX[3];
@@ -233,34 +235,40 @@ void XC::CorotTrussSection::setDomain(Domain *theDomain)
         }
 }
 
+//! @brief Commit element state.
 int XC::CorotTrussSection::commitState()
-{
-  int retVal = 0;
-  // call element commitState to do any base class stuff
-  if((retVal = this->XC::Element::commitState()) != 0) {
-    std::cerr << "XC::CorotTrussSection::commitState () - failed in base class";
+  {
+    int retVal = 0;
+    // call element commitState to do any base class stuff
+    if((retVal = this->XC::Element::commitState()) != 0)
+      {
+        std::cerr << nombre_clase() << "::" << __FUNCTION__
+	          << "; failed in base class." << std::endl;
+      }
+    retVal = theSection->commitState();
+    return retVal;
   }
-  retVal = theSection->commitState();
-  return retVal;
-}
 
+//! @brief Revert the element to its last commited state.
 int XC::CorotTrussSection::revertToLastCommit()
-{
-        // Revert the material
-        return theSection->revertToLastCommit();
-}
+  {
+    // Revert the material
+    return theSection->revertToLastCommit();
+  }
 
+//! @brief Revert the element to its initial state.
 int XC::CorotTrussSection::revertToStart()
-{
-        // Revert the material to start
-        return theSection->revertToStart();
-}
+  {
+    // Revert the material to start
+    return theSection->revertToStart();
+  }
 
+//! @brief Update element state.
 int XC::CorotTrussSection::update(void)
-{
-        // Nodal displacements
-        const XC::Vector &end1Disp = theNodes[0]->getTrialDisp();
-        const XC::Vector &end2Disp = theNodes[1]->getTrialDisp();
+  {
+    // Nodal displacements
+    const Vector &end1Disp = theNodes[0]->getTrialDisp();
+    const Vector &end2Disp = theNodes[1]->getTrialDisp();
 
     // Initial offsets
         d21[0] = Lo;
@@ -299,20 +307,20 @@ int XC::CorotTrussSection::update(void)
 }
 
 const XC::Matrix &XC::CorotTrussSection::getTangentStiff(void) const
-{
-    static XC::Matrix kl(3,3);
+  {
+    static Matrix kl(3,3);
 
     // Material stiffness
     //
     // Get material tangent
-        int order = theSection->getOrder();
-        const XC::ID &code = theSection->getType();
+    int order = theSection->getOrder();
+    const ID &code = theSection->getType();
 
-        const XC::Matrix &ks = theSection->getSectionTangent();
-        const XC::Vector &s  = theSection->getStressResultant();
+    const Matrix &ks = theSection->getSectionTangent();
+    const Vector &s  = theSection->getStressResultant();
 
-        double EA = 0.0;
-        double q = 0.0;
+    double EA = 0.0;
+    double q = 0.0;
 
         int i,j;
         for(i = 0; i < order; i++) {
@@ -363,16 +371,16 @@ const XC::Matrix &XC::CorotTrussSection::getTangentStiff(void) const
   }
 
 const XC::Matrix &XC::CorotTrussSection::getInitialStiff(void) const
-{
-    static XC::Matrix kl(3,3);
+  {
+    static Matrix kl(3,3);
 
     // Material stiffness
     //
     // Get material tangent
     int order = theSection->getOrder();
-    const XC::ID &code = theSection->getType();
+    const ID &code = theSection->getType();
 
-    const XC::Matrix &ks = theSection->getInitialTangent();
+    const Matrix &ks = theSection->getInitialTangent();
 
     double EA = 0.0;
 
@@ -386,7 +394,7 @@ const XC::Matrix &XC::CorotTrussSection::getInitialStiff(void) const
     kl(0,0) = EA / Lo;
 
     // Compute R'*kl*R
-    static XC::Matrix kg(3,3);
+    static Matrix kg(3,3);
     kg.addMatrixTripleProduct(0.0, R, kl, 1.0);
 
     Matrix &K = *theMatrix;

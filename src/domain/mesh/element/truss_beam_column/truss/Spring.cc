@@ -523,7 +523,7 @@ void XC::Spring::Print(std::ostream &s, int flag)
        }
   }
 
-double XC::Spring::getAxil(void) const
+double XC::Spring::getAxialForce(void) const
   { return theMaterial->getStress(); }
 
 double XC::Spring::computeCurrentStrain(void) const

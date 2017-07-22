@@ -38,7 +38,7 @@ namespace XC {
 class ElasticBaseMaterial: public UniaxialMaterial
   {
   protected:
-    double trialStrain;
+    double trialStrain; //! Material trial strain.
     double E; //!< Elastic modulus.
     double ezero; //!< Initial deformation.
   protected:

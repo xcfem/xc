@@ -68,7 +68,7 @@
 
 // constructor:
 //  responsible for allocating the necessary space needed by each object
-//  and storing the tags of the XC::CorotTruss end nodes.
+//  and storing the tags of the CorotTruss end nodes.
 XC::CorotTruss::CorotTruss(int tag, int dim,int Nd1, int Nd2, UniaxialMaterial &theMat,double a)
   :CorotTrussBase(tag,ELE_TAG_CorotTruss,dim,Nd1,Nd2), theMaterial(nullptr), A(a)
   {
@@ -76,12 +76,15 @@ XC::CorotTruss::CorotTruss(int tag, int dim,int Nd1, int Nd2, UniaxialMaterial &
     theMaterial = theMat.getCopy();
     if(theMaterial == 0)
       {
-        std::cerr << "FATAL XC::CorotTruss::CorotTruss - " <<  tag <<
-          "failed to get a copy of material with tag " << theMat.getTag() << std::endl;
+        std::cerr << nombre_clase() << "::" << __FUNCTION__
+		  << "; FATAL error in element: " <<  tag
+		  << "failed to get a copy of material with tag "
+		  << theMat.getTag() << std::endl;
         exit(-1);
       }
   }
 
+//! @brief Constructor.
 XC::CorotTruss::CorotTruss(int tag,int dim,const Material *ptr_mat)
   :CorotTrussBase(tag,ELE_TAG_CorotTruss,dim,0,0), theMaterial(nullptr),A(0.0)
   { theMaterial= cast_material<UniaxialMaterial>(ptr_mat); }
@@ -151,8 +154,11 @@ void XC::CorotTruss::setDomain(Domain *theDomain)
     // if differing dof at the ends - print a warning message
     if(dofNd1 != dofNd2)
       {
-        std::cerr << "WARNING XC::CorotTruss::setDomain(): nodes " << theNodes[0]->getTag() <<
-        " and " << theNodes[1]->getTag() << "have differing dof at ends for XC::CorotTruss " << this->getTag() << std::endl;
+        std::cerr << nombre_clase() << "::" << __FUNCTION__
+		  << "WARNING; nodes " << theNodes[0]->getTag()
+		  << " and " << theNodes[1]->getTag()
+		  << "have differing dof at ends for CorotTruss element: "
+		  << this->getTag() << std::endl;
         // fill this in so don't segment fault later
         numDOF = 6;
         return;
@@ -228,40 +234,43 @@ void XC::CorotTruss::setDomain(Domain *theDomain)
       }
   }
 
+//! @brief Commit element state.
 int XC::CorotTruss::commitState(void)
   {
     int retVal = 0;
     // call element commitState to do any base class stuff
     if((retVal = this->CorotTrussBase::commitState()) != 0)
       {
-        std::cerr << "XC::CorotTruss::commitState () - failed in base class\n";
+        std::cerr << nombre_clase() << "::" << __FUNCTION__
+		  << "; failed in base class.\n";
       }
     retVal = theMaterial->commitState();
     return retVal;
   }
 
+//! @brief Revert to the last commited state.
 int XC::CorotTruss::revertToLastCommit()
   {
-        // Revert the material
-        return theMaterial->revertToLastCommit();
+    return theMaterial->revertToLastCommit();
   }
 
+//! @brief Revert the element to its initial state.
 int XC::CorotTruss::revertToStart()
   {
-        // Revert the material to start
-        return theMaterial->revertToStart();
+    return theMaterial->revertToStart();
   }
 
+//! @brief Update element state.
 int XC::CorotTruss::update(void)
   {
     // Nodal displacements
-    const XC::Vector &end1Disp = theNodes[0]->getTrialDisp();
-    const XC::Vector &end2Disp = theNodes[1]->getTrialDisp();
+    const Vector &end1Disp = theNodes[0]->getTrialDisp();
+    const Vector &end2Disp = theNodes[1]->getTrialDisp();
 
     // Initial offsets
-    d21[0] = Lo;
-    d21[1] = 0.0;
-    d21[2] = 0.0;
+    d21[0]= Lo;
+    d21[1]= 0.0;
+    d21[2]= 0.0;
 
     // Update offsets in basic system due to nodal displacements
     for(int i = 0; i < getNumDIM(); i++)
@@ -286,6 +295,7 @@ int XC::CorotTruss::update(void)
     return theMaterial->setTrialStrain(strain);
   }
 
+//! @brief Return tangent stiffness matrix.
 const XC::Matrix &XC::CorotTruss::getTangentStiff(void) const
   {
     static Matrix kl(3,3);
@@ -293,25 +303,28 @@ const XC::Matrix &XC::CorotTruss::getTangentStiff(void) const
     // Material stiffness
     //
     // Get material tangent
+    if(A<1e-8)
+      std::clog << nombre_clase() << "::" << __FUNCTION__
+	        << "; WARNING area of element: " << getTag()
+	        << " is extremely small: " << A << std::endl;
     double EA = A*theMaterial->getTangent();
-    EA /= (Ln * Ln * Lo);
+    EA/= (Ln * Ln * Lo);
 
-    int i,j;
-    for(i = 0; i < 3; i++)
-      for(j = 0; j < 3; j++)
+    for(int i = 0; i < 3; i++)
+      for(int j = 0; j < 3; j++)
         kl(i,j) = EA*d21[i]*d21[j];
 
     // Geometric stiffness
     //
     // Get material stress
-    double q = A*theMaterial->getStress();
-    double SA = q/(Ln*Ln*Ln);
-    double SL = q/Ln;
+    const double q = A*theMaterial->getStress();
+    const double SA = q/(Ln*Ln*Ln);
+    const double SL = q/Ln;
 
-    for(i = 0; i < 3; i++)
+    for(int i = 0; i < 3; i++)
       {
         kl(i,i) += SL;
-        for(j = 0; j < 3; j++)
+        for(int j = 0; j < 3; j++)
           kl(i,j) -= SA*d21[i]*d21[j];
       }
 
@@ -324,9 +337,9 @@ const XC::Matrix &XC::CorotTruss::getTangentStiff(void) const
 
     // Copy stiffness into appropriate blocks in element stiffness
     int numDOF2 = numDOF/2;
-    for(i = 0; i < getNumDIM(); i++)
+    for(int i = 0; i < getNumDIM(); i++)
       {
-        for(j = 0; j < getNumDIM(); j++)
+        for(int j = 0; j < getNumDIM(); j++)
           {
             K(i,j)                 =  kg(i,j);
             K(i,j+numDOF2)         = -kg(i,j);
@@ -339,16 +352,21 @@ const XC::Matrix &XC::CorotTruss::getTangentStiff(void) const
     return *theMatrix;
   }
 
+//! @brief Return initial stiffness matrix.
 const XC::Matrix &XC::CorotTruss::getInitialStiff(void) const
   {
-    static XC::Matrix kl(3,3);
+    static Matrix kl(3,3);
 
+    if(A<1e-8)
+      std::clog << nombre_clase() << "::" << __FUNCTION__
+	        << "; WARNING area of element: " << getTag()
+	        << " is extremely small: " << A << std::endl;
     // Material stiffness
     kl.Zero();
     kl(0,0)= A*theMaterial->getInitialTangent() / Lo;
 
     // Compute R'*kl*R
-    static XC::Matrix kg(3,3);
+    static Matrix kg(3,3);
     kg.addMatrixTripleProduct(0.0, R, kl, 1.0);
 
     Matrix &K = *theMatrix;
@@ -356,15 +374,16 @@ const XC::Matrix &XC::CorotTruss::getInitialStiff(void) const
 
     // Copy stiffness into appropriate blocks in element stiffness
     int numDOF2 = numDOF/2;
-    for(int i = 0; i < getNumDIM(); i++) {
-        for(int j = 0; j < getNumDIM(); j++) {
+    for(int i = 0; i < getNumDIM(); i++)
+      {
+        for(int j = 0; j < getNumDIM(); j++)
+	  {
             K(i,j)                 =  kg(i,j);
             K(i,j+numDOF2)         = -kg(i,j);
             K(i+numDOF2,j)         = -kg(i,j);
             K(i+numDOF2,j+numDOF2) =  kg(i,j);
-        }
-    }
-
+          }
+      }
     if(isDead())
       (*theMatrix)*=dead_srf;
     return *theMatrix;
@@ -411,7 +430,7 @@ void XC::CorotTruss::zeroLoad(void)
 int XC::CorotTruss::addLoad(ElementalLoad *theLoad, double loadFactor)
   {
     if(isDead())
-      std::cerr << nombre_clase() 
+      std::cerr << nombre_clase() << "::" << __FUNCTION__
                 << "; load over inactive element: "
                 << getTag() << std::endl;
     else
@@ -426,7 +445,9 @@ int XC::CorotTruss::addLoad(ElementalLoad *theLoad, double loadFactor)
           }
         else
           {
-            std::cerr <<"CorotTruss::addLoad - load type unknown for truss with tag: " << this->getTag() << std::endl;
+            std::cerr << nombre_clase() << "::" << __FUNCTION__
+		      <<"; load type unknown for truss with tag: "
+		      << this->getTag() << std::endl;
             return -1;
           }
       }
@@ -438,22 +459,22 @@ int XC::CorotTruss::addLoad(ElementalLoad *theLoad, double loadFactor)
 int XC::CorotTruss::addInertiaLoadToUnbalance(const XC::Vector &accel)
   { return 0; }
 
-double XC::CorotTruss::getAxil(void) const
+double XC::CorotTruss::getAxialForce(void) const
   { return A*theMaterial->getStress(); }
 
 const XC::Vector &XC::CorotTruss::getResistingForce(void) const
   {
     // Get material stress
-    double SA= getAxil();
+    double SA= getAxialForce();
     SA /= Ln;
 
-    static XC::Vector ql(3);
+    static Vector ql(3);
 
     ql(0) = d21[0]*SA;
     ql(1) = d21[1]*SA;
     ql(2) = d21[2]*SA;
 
-    static XC::Vector qg(3);
+    static Vector qg(3);
     qg.addMatrixTransposeVector(0.0, R, ql, 1.0);
 
     Vector &P = *theVector;
@@ -514,7 +535,7 @@ void XC::CorotTruss::Print(std::ostream &s, int flag)
 
     if(theMaterial)
       {
-        s << "\tAxial Force: " << getAxil() << std::endl;
+        s << "\tAxial Force: " << getAxialForce() << std::endl;
         s << "\tUniaxialMaterial, tag: " << theMaterial->getTag() << std::endl;
         theMaterial->Print(s,flag);
       }
@@ -543,7 +564,7 @@ int XC::CorotTruss::getResponse(int responseID, Information &eleInfo)
     switch (responseID)
       {
       case 1:
-        return eleInfo.setDouble(getAxil());
+        return eleInfo.setDouble(getAxialForce());
       case 2:
         return eleInfo.setDouble(Lo * theMaterial->getStrain());
       default:
@@ -578,7 +599,8 @@ int XC::CorotTruss::sendSelf(CommParameters &cp)
     const int dataTag= getDbTag(cp);
     res+= cp.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
-      std::cerr << "CorotTruss::sendSelf -- failed to send ID data\n";
+      std::cerr << nombre_clase() << "::" << __FUNCTION__
+		<< "; failed to send ID data\n";
     return res;
   }
 
@@ -590,7 +612,8 @@ int XC::CorotTruss::recvSelf(const CommParameters &cp)
     const int dataTag= getDbTag();
     int res= cp.receiveIdData(getDbTagData(),dataTag);
     if(res<0)
-      std::cerr << "CorotTruss::recvSelf() - failed to recv ID data";
+      std::cerr << nombre_clase() << "::" << __FUNCTION__
+		<< "; failed to recv ID data";
     else
       res+= recvData(cp);
     return res;

@@ -75,7 +75,7 @@ def listaDatosEsfuerzosTrussSet(nmbComb, setName, fmt, fName):
   s= preprocessor.getSetLoader.getSet(setName)
   elems= s.getElements()
   for e in elements:
-    fName.write(nmbComb," & ",e.tag," & ",fmt.format(e.getStrain()*1e2)," & ",fmt.format(e.getStress()/1e6)," & ",fmt.format(e.getAxil()/1e3),"\\\\\n")
+    fName.write(nmbComb," & ",e.tag," & ",fmt.format(e.getStrain()*1e2)," & ",fmt.format(e.getStress()/1e6)," & ",fmt.format(e.getN()/1e3),"\\\\\n")
 
 # Imprime los esfuerzos de los elementos contenidos en las lineas del conjunto que se pasa como parámetro.
 def listaEsfuerzosTrussSet(nmbComb, setName, fmt, fName, encab, tit):
