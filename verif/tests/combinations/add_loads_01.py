@@ -97,8 +97,8 @@ thetateor= (GM*M*L/(G*J))
 ratio3= (M1/M/GM)
 ratio4= (theta-thetateor)/thetateor
 
-# print "delta calculado= ",delta
-# print "delta teórico= ",deltateor
+# print "computed delta= ",delta
+# print "theoretical delta= ",deltateor
 # print "theta prog.= ", theta
 # print "theta teor.= ", thetateor
 # print "ratio1= ",ratio1

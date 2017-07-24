@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # home made test
-# Verificación del funcionamiento de la función «getPointLocalCoordFromGlobal».
+'''«getPointLocalCoordFromGlobal» function verification.'''
 
 from __future__ import division
 import xc_base

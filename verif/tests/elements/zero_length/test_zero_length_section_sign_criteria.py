@@ -113,7 +113,7 @@ listaHipotesis= []
 for key in casos.getKeys():
   listaHipotesis.append(key)
 
-# Procedimiento de solución
+# Solution procedure
 solu= prueba.getSoluProc
 solCtrl= solu.getSoluControl
 

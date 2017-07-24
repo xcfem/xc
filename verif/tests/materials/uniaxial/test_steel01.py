@@ -102,7 +102,7 @@ print (d*1000)
 
 
 '''
-# Procedimiento de solución
+# Solution procedure
 solu= prueba.getSoluProc
 solCtrl= solu.getSoluControl
 solModels= solCtrl.getModelWrapperContainer

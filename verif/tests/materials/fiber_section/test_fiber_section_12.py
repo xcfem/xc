@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Verification test of una sección de hormigón pretensado.
+'''Prestressed concrete section verification test.'''
 from __future__ import division
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
@@ -64,7 +64,7 @@ lp0.newNodalLoad(2,xc.Vector([NDato,0,0,0,0,MzDato]))
 casos.addToDomain("0")
 
 
-# Procedimiento de solución
+# Solution procedure
 analisis= predefined_solutions.simple_newton_raphson(prueba)
 analOk= analisis.analyze(10)
 

@@ -116,7 +116,7 @@ casos.addToDomain("0")
 
 
 
-# Procedimiento de solución
+# Solution procedure
 solution= predefined_solutions.SolutionProcedure()
 solution.convergenceTestTol= 1.0e-2
 analysis= solution.simpleNewtonRaphsonBandGen(prueba)

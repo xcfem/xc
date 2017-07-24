@@ -100,7 +100,7 @@ casos.addToDomain("0")
 
 
 
-# Procedimiento de solución
+# Solution procedure
 analisis= predefined_solutions.simple_static_linear(prueba)
 analOk= analisis.analyze(1)
 

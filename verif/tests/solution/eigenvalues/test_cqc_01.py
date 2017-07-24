@@ -72,7 +72,7 @@ elements.defaultTransformation= "linY"
 beam3d= elements.newElement("elastic_beam_3d",xc.ID([2,3]))
 
 
-# Procedimiento de solución
+# Solution procedure
 solu= prueba.getSoluProc
 solCtrl= solu.getSoluControl
 

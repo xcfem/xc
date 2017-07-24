@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-''' Verification test of una sección de hormigón armado.
-   los resultados se comparan con los obtenidos del prontuario.
+''' Reinforced concrete section verification test.
+   results are compared with those of the prontuario.
    informático del hormigón estructural (Cátedra de hormigón de la ETSICCP-IECA
    UPM). '''
 
@@ -17,7 +17,7 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
-areaFi16= 2.01e-4 # Área de las barras expressed in square meters.
+areaFi16= 2.01e-4 # Rebar area expressed in square meters.
 brazo= 0.5 # Brazo de las barras respecto al eje de la sección.
 
 
@@ -25,7 +25,7 @@ from materials.ehe import EHE_materials
 from model import predefined_spaces
 
 # Coeficientes de seguridad.
-gammas= 1.15 # Coeficiente de minoración de la resistencia of the steel.
+gammas= 1.15 # Partial safety factor for steel.
 
 
 MzDato= 10e3
@@ -72,7 +72,7 @@ lp0.newNodalLoad(2,xc.Vector([0,0,0,0,0,MzDato]))
 casos.addToDomain("0")
 
 
-# Procedimiento de solución
+# Solution procedure
 analisis= predefined_solutions.simple_newton_raphson(prueba)
 analOk= analisis.analyze(1)
 

@@ -76,7 +76,7 @@ rectang.setupFibers()
 fibras= rectang.getFibers()
 
 
-# Respuestas a torsión y cortantes.
+# Torsion and shear responses.
 materiales= preprocessor.getMaterialLoader
 agg= materiales.newMaterial("section_aggregator","sa")
 agg.setSection("quadFibers")
@@ -114,7 +114,7 @@ lp4.newNodalLoad(2,xc.Vector([0,0,0,0,5*F,0]))
 lp5.newNodalLoad(2,xc.Vector([0,0,0,0,0,6*F]))
 
 
-# Procedimiento de solución
+# Solution procedure
 solu= prueba.getSoluProc
 solCtrl= solu.getSoluControl
 solModels= solCtrl.getModelWrapperContainer

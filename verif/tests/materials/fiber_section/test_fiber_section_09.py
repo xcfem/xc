@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-''' Verification test of una sección de hormigón armado.
-   los resultados se comparan con los obtenidos del prontuario.
+''' Reinforced concrete section verification test.
+   results are compared with those of the prontuario.
    informático del hormigón estructural (Cátedra de hormigón de la ETSICCP-IECA
    UPM). '''
 
@@ -22,8 +22,8 @@ __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
 # Coeficientes de seguridad.
-gammac= 1.5 # Coeficiente de minoración de la resistencia del hormigón.
-gammas= 1.15 # Coeficiente de minoración de la resistencia of the steel.
+gammac= 1.5 # Partial safety factor for concrete.
+gammas= 1.15 # Partial safety factor for steel.
 
 MzDato= 20e3
 NDato= -1345e3
@@ -32,7 +32,7 @@ preprocessor=  prueba.getPreprocessor
 # Materials definition
 tag= EHE_materials.B500S.defDiagD(preprocessor)
 concr= EHE_materials.HA25
-concr.alfacc=0.85    #f_maxd= 0.85*fcd coeficiente de fatiga del hormigón (generalmente se toma alfacc=1)
+concr.alfacc=0.85    #f_maxd= 0.85*fcd concrete long term compressive strength factor (normally alfacc=1)
 tag= concr.defDiagD(preprocessor)
 
 import os
@@ -70,7 +70,7 @@ lp0.newNodalLoad(2,xc.Vector([NDato,0,0,0,0,MzDato]))
 casos.addToDomain("0")
 
 
-# Procedimiento de solución
+# Solution procedure
 analisis= predefined_solutions.simple_newton_raphson(prueba)
 analOk= analisis.analyze(10)
 

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # home made test
-# Verificación del funcionamiento del comando vector2d_uniform_load_global.
+'''vector2d_uniform_load_global function verification.'''
 
 import xc_base
 import geom
@@ -75,7 +75,7 @@ A= quadFibers.getFibers().getSumaAreas(1.0)
 agg= materiales.newMaterial("section_aggregator","agg")
 agg.setSection("quadFibers")
 agg.setAdditions(["T","Vy","Vz"],["respT","respVy","respVz"])
- # Respuestas a torsión y cortantes.
+# Torsion and shear responses.
 
 
 
@@ -112,7 +112,7 @@ el.vector2dUniformLoadGlobal(vCarga)
 cargas= preprocessor.getLoadLoader
 cargas.addToDomain("0") # Append load pattern to domain.
 
-# Procedimiento de solución
+# Solution procedure
 analisis= predefined_solutions.simple_newton_raphson(prueba)
 result= analisis.analyze(1)
 

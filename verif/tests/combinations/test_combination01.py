@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # home made test
-# Combinación de acciones sobre ménsula.
+'''Cantilever load combination.'''
 
 import xc_base
 import geom

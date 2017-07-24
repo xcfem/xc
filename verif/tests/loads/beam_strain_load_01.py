@@ -22,7 +22,7 @@ __email__= "l.pereztato@gmail.com"
 
 L= 1.0 # Bar length (m)
 E= 2.1e6*9.81/1e-4 # Elastic modulus
-alpha= 1.2e-5 # Coeficiente de dilatación of the steel
+alpha= 1.2e-5 # Thermal expansion coefficient of the steel
 A= 4e-4 # bar area expressed in square meters
 I= (2e-2)**4/12 # Cross section moment of inertia (m4)
 AT= 10 # Temperature increment (Celsius degrees)

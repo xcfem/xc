@@ -79,7 +79,7 @@ lp0.newNodalLoad(3,xc.Vector([0,-F1]))
 #We add the load case to domain.
 casos.addToDomain("0")
 
-# Procedimiento de solución
+# Solution procedure
 import os
 pth= os.path.dirname(__file__)
 #print "pth= ", pth

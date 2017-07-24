@@ -96,7 +96,7 @@ traccion= ele1.getN()
 sigma= ele1.getMaterial().getStress()
 
 
-# Procedimiento de solución
+# Solution procedure
 
 #solu.clearAll()
 solCtrl= solu.getSoluControl

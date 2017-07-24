@@ -63,7 +63,7 @@ lp0.newNodalLoad(nod2.tag,xc.Vector([0,F,0]))
 #We add the load case to domain.
 casos.addToDomain("0")
 
-# Procedimiento de solución
+# Solution procedure
 analisis= predefined_solutions.simple_static_modified_newton(test)
 result= analisis.analyze(10)
 

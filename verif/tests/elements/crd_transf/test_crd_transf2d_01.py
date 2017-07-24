@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # home made test
-# Verificación del funcionamiento de la función «getPointLocalCoordFromGlobal».
+'''«getPointLocalCoordFromGlobal» function verification.'''
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
 __copyright__= "Copyright 2015, LCPT and AOO"

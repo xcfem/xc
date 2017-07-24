@@ -70,7 +70,7 @@ lNodes= ln.getNodes()
 for n in lNodes:
   n.fix(xc.ID([0,1,2,3,4,5]),xc.Vector([0,0,0,0,0,0])) # UX,UY,UZ,RX,RY,RZ
 
-# Procedimiento de solución
+# Solution procedure
 solu= prueba.getSoluProc
 solCtrl= solu.getSoluControl
 

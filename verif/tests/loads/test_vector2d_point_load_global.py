@@ -39,7 +39,7 @@ vDisp= [0,0]
 vReac1= [0,0]
 vReac2= [0,0]
 
-ptoAplic=  geom.Pos2d(1+x*L*math.sqrt(2)/2,2+x*L*math.sqrt(2)/2) # Punto de aplicación de la carga.
+ptoAplic=  geom.Pos2d(1+x*L*math.sqrt(2)/2,2+x*L*math.sqrt(2)/2) # Load application point.
 
 
 nodes.defaultTag= 1 #First node number.

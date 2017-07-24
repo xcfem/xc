@@ -24,14 +24,14 @@ gammas= 1.15 # reinforcement steel safety coefficient
 radius= 0.75/2.0 # Radio de la sección expressed in meters.
 diam= 20e-3 # Diámetro de las barras expressed in meters.
 cover= 0.06+12e-3+diam/2.0 # Concrete cover expressed in meters.
-areaFi20= math.pi*(diam/2.0)**2 # Área de las barras expressed in square meters.
+areaFi20= math.pi*(diam/2.0)**2 # Rebar area expressed in square meters.
 
 
 prueba= xc.ProblemaEF()
 preprocessor=  prueba.getPreprocessor
 # Materials definition
 concr= EHE_materials.HA30
-concr.alfacc=0.85    #f_maxd= 0.85*fcd coeficiente de fatiga del hormigón (generalmente alfacc=1)
+concr.alfacc=0.85    #f_maxd= 0.85*fcd concrete long term compressive strength factor (normally alfacc=1)
 concrMatTag30= concr.defDiagD(preprocessor)
 Ec= concr.getDiagD(preprocessor).getTangent
 tagB500S= EHE_materials.B500S.defDiagD(preprocessor)

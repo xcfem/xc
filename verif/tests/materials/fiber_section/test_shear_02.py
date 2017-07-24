@@ -56,7 +56,7 @@ materiales= preprocessor.getMaterialLoader
 
 # Materials definition
 concr= EHE_materials.HA30
-concr.alfacc=0.85    # f_maxd= 0.85*fcd coeficiente de fatiga del hormigón (generalmente alfacc=1)
+concr.alfacc=0.85    # f_maxd= 0.85*fcd concrete long term compressive strength factor (normally alfacc=1)
 concrMatTag30= concr.defDiagD(preprocessor)
 B500S= EHE_materials.B500S
 tagB500S= B500S.defDiagD(preprocessor)
@@ -118,7 +118,7 @@ lp0.newNodalLoad(2,xc.Vector([NDato,0,VDato,0,MyDato,MzDato]))
 casos.addToDomain("0")
 
 
-# Procedimiento de solución
+# Solution procedure
 analisis= predefined_solutions.simple_newton_raphson(prueba)
 analOk= analisis.analyze(10)
 

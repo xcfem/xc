@@ -99,7 +99,7 @@ lp0= casos.newLoadPattern("default","0")
 lp0.newNodalLoad(2,xc.Vector([0,-F,0,0,0,0]))
 #We add the load case to domain.
 casos.addToDomain("0")
-# Procedimiento de solución
+# Solution procedure
 analisis= predefined_solutions.simple_static_modified_newton(prueba)
 result= analisis.analyze(10)
 
@@ -112,7 +112,7 @@ delta0= nod2.getDisp[1]  # Node 2 yAxis displacement
 
 modelSpace.constraints.removeSPConstraint(spcTag)
 
-# Procedimiento de solución
+# Solution procedure
 analisis= predefined_solutions.simple_static_linear(prueba)
 result= analisis.analyze(1)
 

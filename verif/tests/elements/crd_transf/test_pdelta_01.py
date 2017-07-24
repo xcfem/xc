@@ -135,7 +135,7 @@ lp0.newNodalLoad(nodeTagLateralLoad,xc.Vector([0,-P,0]))
 #We add the load case to domain.
 casos.addToDomain("0")
 
-# Procedimiento de solución
+# Solution procedure
 
 analisis= predefined_solutions.simple_static_linear(prueba)
 result= analisis.analyze(1)

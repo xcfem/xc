@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 # home made test
-# Ménsula sometida horizontal de tracción en su extremo.
+#  Horizontal cantilever under tension load at its end.
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
 __copyright__= "Copyright 2015, LCPT and AOO"

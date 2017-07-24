@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # home made test
-# Ménsula horizontal sometida a carga de tracción en su extremo.
+# Horizontal cantilever under tension load at its end.
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
 __copyright__= "Copyright 2015, LCPT and AOO"
@@ -87,7 +87,7 @@ lp0= casos.newLoadPattern("default","0")
 lp0.newNodalLoad(2,xc.Vector([F,0,0,0,0,0]))
 #We add the load case to domain.
 casos.addToDomain("0")
-# Procedimiento de solución
+# Solution procedure
 analisis= predefined_solutions.simple_static_modified_newton(prueba)
 result= analisis.analyze(10)
 

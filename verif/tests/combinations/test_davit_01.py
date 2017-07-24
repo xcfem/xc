@@ -6,13 +6,13 @@ from __future__ import division
 b= 0.4
 h= 0.8
 A= b*h
-E= 200000*9.81/1e-4 # Elastic modulus aproximado del hormigón.
+E= 200000*9.81/1e-4 # Estimated concrete elastic modulus.
 nu= 0.3 # Poisson's ratio
 G= E/(2.0*(1+nu)) # Shear modulus
 Iy= (1/12.0*h*b**3) # Cross section moment of inertia (m4)
 Iz= (1/12.0*b*h**3) # Cross section moment of inertia (m4)
 J= 0.721e-8 # Cross section torsion constant (m4)
-densHorm= 2500 # Densidad del hormigón armado.
+densHorm= 2500 # Reinforced concrete density.
 
 import xc_base
 import geom

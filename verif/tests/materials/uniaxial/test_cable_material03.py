@@ -74,7 +74,7 @@ lp0= casos.newLoadPattern("default",lPattern)
 lp0.newNodalLoad(2,xc.Vector([0,-F]))
 casos.addToDomain(lPattern)
 
-# Procedimiento de solución
+# Solution procedure
 analisis= predefined_solutions.simple_newton_raphson(prueba)
 result= analisis.analyze(10)
 

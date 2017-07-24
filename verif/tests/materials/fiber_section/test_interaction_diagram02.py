@@ -31,7 +31,7 @@ prueba= xc.ProblemaEF()
 preprocessor=  prueba.getPreprocessor
 # Materials definition
 concr= EHE_materials.HA25
-concr.alfacc=0.85    #f_maxd= 0.85*fcd coeficiente de fatiga del hormigón (generalmente alfacc=1)
+concr.alfacc=0.85    #f_maxd= 0.85*fcd concrete long term compressive strength factor (normally alfacc=1)
 concrMatTag25= concr.defDiagD(preprocessor)
 Ec= concr.getDiagD(preprocessor).getTangent
 tagB500S= EHE_materials.B500S.defDiagD(preprocessor)

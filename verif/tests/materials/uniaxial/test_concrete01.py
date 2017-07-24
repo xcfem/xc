@@ -15,8 +15,8 @@ from solution import predefined_solutions
 from model import predefined_spaces
 from materials import typical_materials
 
-fc= -250 # Resistencia a compresión del hormigón.
-l= 1 # Distancia entre nodes
+fc= -250 # Concrete compressive strength.
+l= 1 # Distance between nodes
 epsc0= -2e-3 # Maximum compressive strain for section in compression.
 fcu= fc/1.2 # Strain under concrete compressive stress.
 epsU= -3.5e-3 # Maximum compressive strain in concrete.
@@ -117,7 +117,7 @@ d= .getDisp[0]
             \callback_restart{print("Se llamó al método restart."}
 '''
 
-# Procedimiento de solución
+# Solution procedure
 solu= prueba.getSoluProc
 solCtrl= solu.getSoluControl
 solModels= solCtrl.getModelWrapperContainer

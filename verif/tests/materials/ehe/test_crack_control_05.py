@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
-''' Verification test of la comprobación a fisuración de una sección de hormigón armado.'''
+''' Reinforced concrete section. Crack control verification test.'''
 
 import xc_base
 import geom
 import xc
 
 from misc import banco_pruebas_scc3d
-from solution import predefined_solutions # Procedimiento de solución
+from solution import predefined_solutions # Solution procedure
 
 
 from materials.ehe import EHE_materials
@@ -26,9 +26,9 @@ cover= 0.03 # Concrete cover expressed in meters.
 areaFi10=0.79e-4
 areaFi25=4.91e-4
 
-NDato= 0 # Axil para comprobar fisuración.
-MyDato= -67*9810*width # Momento para comprobar fisuración.
-MzDato= 0 # Momento para comprobar fisuración.
+NDato= 0 # Axial force for crack control checking.
+MyDato= -67*9810*width # Bending moment force for crack control checking.
+MzDato= 0 # Bending moment force for crack control checking.
 
 rebarsSpacing= 0.15
 numBarras= int(math.floor(width/rebarsSpacing))
@@ -95,7 +95,7 @@ casos.addToDomain("0")
 
 
 
-# Procedimiento de solución
+# Solution procedure
 analisis= predefined_solutions.simple_newton_raphson(prueba)
 analOk= analisis.analyze(10)
 

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # Home made test
-# Obtención de combinación «previa» y resta de combinaciones.
+'''Obtaining «previous» combination and combination difference.'''
 
 import xc_base
 import geom

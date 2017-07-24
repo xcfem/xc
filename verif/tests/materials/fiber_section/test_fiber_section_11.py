@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-''' Verification test of una sección de hormigón armado.
-   los resultados se comparan con los obtenidos del prontuario.
+''' Reinforced concrete section verification test.
+   results are compared with those of the prontuario.
    informático del hormigón estructural (Cátedra de hormigón de la ETSICCP-IECA
    UPM). '''
 
@@ -30,7 +30,7 @@ preprocessor=  prueba.getPreprocessor
 # Materials definition
 tag= EHE_materials.B500S.defDiagD(preprocessor)
 concr= EHE_materials.HA25
-concr.alfacc=0.85    #f_maxd= 0.85*fcd coeficiente de fatiga del hormigón (generalmente alfacc=1)
+concr.alfacc=0.85    #f_maxd= 0.85*fcd concrete long term compressive strength factor (normally alfacc=1)
 tag= concr.defDiagD(preprocessor)
 import os
 pth= os.path.dirname(__file__)
@@ -67,7 +67,7 @@ lp0.newNodalLoad(2,xc.Vector([NDato,0,0,0,0,MzDato]))
 casos.addToDomain("0")
 
 
-# Procedimiento de solución
+# Solution procedure
 analisis= predefined_solutions.simple_newton_raphson(prueba)
 analOk= analisis.analyze(10)
 

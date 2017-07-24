@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # home made test
-# Verificación del funcionamiento del comando «rotate» para una sección elástica en 3d.
+# «rotate» method verification for a 3D elastic section.
 #    Ménsula sometida a carga vertical en su extremo con la sección y la carga inclinadas
 #    45 grados.
 

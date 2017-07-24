@@ -76,7 +76,7 @@ spc= constraints.newSPConstraint(1,2,0.0) # Node 2,gdl 2
 setTotal= preprocessor.getSets.getSet("total")
 setTotal.genMesh(xc.meshDir.I)
 
-# Procedimiento de solución
+# Solution procedure
 import os
 pth= os.path.dirname(__file__)
 #print "pth= ", pth

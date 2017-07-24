@@ -9,8 +9,8 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
-Ec= 2e5*9.81/1e-4 # Young modulus del hormigón en Pa.
-nuC= 0.2 # Poisson's ratio del hormigón EHE-08.
+Ec= 2e5*9.81/1e-4 # Concrete Young modulus (Pa).
+nuC= 0.2 # Concrete Poisson's ratio EHE-08.
 hLosa= 0.2 # Espesor.
 densLosa= 2500*hLosa # Densidad de la losa kg/m2.
 # Load
@@ -57,7 +57,7 @@ hLosa= typical_materials.defElasticMembranePlateSection(preprocessor, "hLosa",Ec
 typical_materials.defSteel02(preprocessor, "prestressingSteel",Ep,fy,0.001,tInic)
 
 elements= preprocessor.getElementLoader
-# Losa de hormigón
+# Reinforced concrete deck
 elements.defaultMaterial= "hLosa"
 elements.defaultTag= 1
 elem= elements.newElement("shell_mitc4",xc.ID([1,2,6,5]))

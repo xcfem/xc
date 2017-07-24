@@ -68,7 +68,7 @@ A= quadFibers.getFibers().getSumaAreas
 agg= materiales.newMaterial("section_aggregator","agg")
 agg.setSection("quadFibers")
 agg.setAdditions(["T","Vy","Vz"],["respT","respVy","respVz"])
- # Respuestas a torsión y cortantes.
+ # Torsion and shear responses.
 
 
 
@@ -96,7 +96,7 @@ lp0= casos.newLoadPattern("default","0")
 lp0.newNodalLoad(2,xc.Vector([0,-F,0,0,0,0]))
 #We add the load case to domain.
 casos.addToDomain("0")
-# Procedimiento de solución
+# Solution procedure
 analisis= predefined_solutions.simple_static_modified_newton(prueba)
 result= analisis.analyze(10)
 

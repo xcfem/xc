@@ -16,21 +16,21 @@ __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
 # Coeficientes de seguridad.
-gammac= 1.5 # Coeficiente de minoración de la resistencia del hormigón.
-gammas= 1.15 # Coeficiente de minoración de la resistencia of the steel.
+gammac= 1.5 # Partial safety factor for concrete.
+gammas= 1.15 # Partial safety factor for steel.
 
 width= 0.2 # Section width expressed in meters.
 depth= 0.4 # Section width expressed in meters.
 cover= 0.05 # Concrete cover expressed in meters.
 diam= 16e-3 # Diámetro de las barras expressed in meters.
-areaFi16= 2.01e-4 # Área de las barras expressed in square meters.
+areaFi16= 2.01e-4 # Rebar area expressed in square meters.
 
 
 prueba= xc.ProblemaEF()
 preprocessor=  prueba.getPreprocessor
 # Define materials
 concr= EHE_materials.HA25
-concr.alfacc=0.85    #f_maxd= 0.85*fcd coeficiente de fatiga del hormigón (generalmente alfacc=1)
+concr.alfacc=0.85    #f_maxd= 0.85*fcd concrete long term compressive strength factor (normally alfacc=1)
 concrMatTag25= concr.defDiagD(preprocessor)
 Ec= concr.getDiagD(preprocessor).getTangent
 tagB500S= EHE_materials.B500S.defDiagD(preprocessor)

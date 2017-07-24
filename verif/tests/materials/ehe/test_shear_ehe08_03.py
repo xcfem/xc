@@ -16,7 +16,7 @@ __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
 #Coeficientes de seguridad.
-gammas= 1.15 #Coeficiente de minoración de la resistencia of the steel.
+gammas= 1.15 #Partial safety factor for steel.
 
 numBarrasEstribo=4
 areaShReinfBranchsEstribo=numBarrasEstribo*EHE_materials.Fi6

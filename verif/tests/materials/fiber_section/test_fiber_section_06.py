@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-''' Verification test of una sección de hormigón armado.
-   los resultados se comparan con los obtenidos del prontuario.
+''' Reinforced concrete section verification test.
+   results are compared with those of the prontuario.
    informático del hormigón estructural (Cátedra de hormigón de la ETSICCP-IECA
    UPM). '''
 
@@ -19,8 +19,8 @@ import xc
 from materials.ehe import EHE_materials
 
 # Coeficientes de seguridad.
-gammac= 1.5 # Coeficiente de minoración de la resistencia del hormigón.
-gammas= 1.15 # Coeficiente de minoración de la resistencia of the steel.
+gammac= 1.5 # Partial safety factor for concrete.
+gammas= 1.15 # Partial safety factor for steel.
 
 
 CurvZ1= 11.474e-3 # Curvatura de prueba 1.
@@ -33,7 +33,7 @@ prueba.logFileName= "/tmp/borrar.log" # Ignore warning messages
 preprocessor=  prueba.getPreprocessor
 
 concr= EHE_materials.HA25
-concr.alfacc=0.85    #f_maxd= 0.85*fcd coeficiente de fatiga del hormigón (generalmente alfacc=1)
+concr.alfacc=0.85    #f_maxd= 0.85*fcd concrete long term compressive strength factor (normally alfacc=1)
 
 tag= concr.defDiagD(preprocessor)
 tag= EHE_materials.B500S.defDiagD(preprocessor)
@@ -72,13 +72,13 @@ ratio2= (Mz2-Mz2Dato)/Mz2Dato
 
 
 ''' 
-print "Axil calculado; N1= ",(N1/1e3)," kN \n"
-print "Momento z calculado; Mz1= ",(Mz1/1e3)," kN m\n"
+print "computed Axil; N1= ",(N1/1e3)," kN \n"
+print "computed Momento z; Mz1= ",(Mz1/1e3)," kN m\n"
 print "Momento z dato; Mz1Dato= ",(Mz1Dato/1e3)," kN \n"
 print "ratio1= ",(ratio1)
 
-print "Axil calculado; N2= ",(N2/1e3)," kN \n"
-print "Momento z calculado; Mz2= ",(Mz2/1e3)," kN m\n"
+print "computed Axil; N2= ",(N2/1e3)," kN \n"
+print "computed Momento z; Mz2= ",(Mz2/1e3)," kN m\n"
 print "Momento z dato; Mz2Dato= ",(Mz2Dato/1e3)," kN \n"
 print "ratio2= ",(ratio2)
  '''

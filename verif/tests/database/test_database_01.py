@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # home made test
-# Comprobación de los comandos save y restore.
+'''Save and restore methods verification.'''
 
 import xc_base
 import geom

@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Verification test of una sección de hormigón pretensado.
+# Prestressed concrete section verification test.
 from __future__ import division
 
 import xc_base
@@ -66,7 +66,7 @@ lp0.newNodalLoad(2,xc.Vector([NDato,0,0,0,0,-MzDato]))
 casos.addToDomain("0")
 
 
-# Procedimiento de solución
+# Solution procedure
 solution= predefined_solutions.SolutionProcedure()
 analysis= solution.simpleNewtonRaphson(prueba)
 solution.ctest.tol= 1e-8

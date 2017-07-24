@@ -73,7 +73,7 @@ eleLoad.axialComponent= n
 #We add the load case to domain.
 casos.addToDomain("0")
 
-# Procedimiento de solución
+# Solution procedure
 analisis= predefined_solutions.simple_static_modified_newton(prueba)
 result= analisis.analyze(1)
 

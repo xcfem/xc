@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
-''' Verification test of la comprobación a fisuración de una sección de hormigón armado.
-   Los resultados se comparan con los obtenidos del «Prontuario informático del hormigón armado». '''
+''' Reinforced concrete section. Crack control verification test.
+   results are compared with those of the «Prontuario informático del hormigón armado». '''
 import xc_base
 import geom
 import xc
 
 from misc import banco_pruebas_scc3d
-from solution import predefined_solutions # Procedimiento de solución
+from solution import predefined_solutions # Solution procedure
 from materials.fiber_section import defSeccionHASimple
 
 from materials.ehe import EHE_materials
@@ -42,8 +42,8 @@ datosScc1LosC.positvRebarRows=[rebPos]
 
 
 
-NDato= 0 # Axil para comprobar fisuración.
-MyDato= 1000 # Momento para comprobar fisuración.
+NDato= 0 # Axial force for crack control checking.
+MyDato= 1000 # Bending moment force for crack control checking.
 
 prueba= xc.ProblemaEF()
 preprocessor=  prueba.getPreprocessor
@@ -78,7 +78,7 @@ casos.addToDomain("0")
 
 
 
-# Procedimiento de solución
+# Solution procedure
 analisis= predefined_solutions.simple_newton_raphson(prueba)
 analOk= analisis.analyze(10)
 

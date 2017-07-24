@@ -131,7 +131,7 @@ ratio5= (abs(pMed-pMedTeor))
 
 ''' 
 print "perim medio: ",pMed
-print "perim medio teórico: ",pMedTeor
+print "theoretical perim medio: ",pMedTeor
 print "ratio1= ",ratio1
 print "ratio2= ",ratio2
 print "ratio3= ",ratio3

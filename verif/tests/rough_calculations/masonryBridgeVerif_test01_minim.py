@@ -13,9 +13,8 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
-#Obtención de los coeficientes del polinomio a partir de 4 puntos del arco 
-#(los 4 puntos que tomamos son los obtenidos como coordenadas de las rótulas 
-#en el ejemplo de la tesis)
+#Compute polynomial coefficients from four points that lie in the arc.
+#(we take the 4 points obtained as rotules in the thesis example).
 xA= 3.156
 xC= 6.175
 xD= 10.996

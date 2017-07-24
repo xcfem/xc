@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # home made test
-# Combinación de acciones sobre ménsula.
+'''Cantilever load combination.'''
 
 import xc_base
 import geom
@@ -82,9 +82,9 @@ eleLoad.transComponent= -f
 combs= cargas.getLoadCombinations
 comb= combs.newLoadCombination("COMB","1.33*A+1.5*B")
 
-# Procedimiento de solución
+# Solution procedure
 # Resolvemos para el caso A
-cargas.addToDomain("A") # Añadimos la combinación to the domain
+cargas.addToDomain("A") # Append the combination to the domain
 analisis= predefined_solutions.simple_static_linear(prueba)
 result= analisis.analyze(1)
 
@@ -118,7 +118,7 @@ ratio3= (abs(N2)<1e-3)
 cumpleA= (abs(ratio1)<1e-5) & (abs(ratio2)<1e-5) & (abs(ratio3-1.0)<1e-5)
 
 
-# Resolvemos para la combinación COMB
+# Solve for combination COMB
 cargas.addToDomain("COMB")
 
 analisis= predefined_solutions.simple_static_linear(prueba)

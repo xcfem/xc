@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # home made test
-# Verificación del funcionamiento del comando vector2d_uniform_load_local.
+'''vector2d_uniform_load_local function verification.'''
 
 import xc_base
 import geom
@@ -74,7 +74,7 @@ A= quadFibers.getFibers().getSumaAreas(1.0)
 
 agg= materiales.newMaterial("section_aggregator","agg")
 agg.setSection("quadFibers")
-agg.setAdditions(["T","Vy","Vz"],["respT","respVy","respVz"]) # Respuestas a torsión y cortantes.
+agg.setAdditions(["T","Vy","Vz"],["respT","respVy","respVz"]) # Torsion and shear responses.
 
 
 
@@ -106,7 +106,7 @@ el.vector2dUniformLoadLocal(xc.Vector([f,-p]))
 
 #We add the load case to domain.
 casos.addToDomain("0")
-# Procedimiento de solución
+# Solution procedure
 analisis= predefined_solutions.simple_newton_raphson(prueba)
 result= analisis.analyze(1)
 

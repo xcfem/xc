@@ -97,7 +97,7 @@ lp0.newNodalLoad(2,xc.Vector([0,0,P,0,0,0]))
 casos.addToDomain("0")
 
 
-# Procedimiento de solución
+# Solution procedure
 #analisis= predefined_solutions.simple_static_linear(prueba)
 #result= analisis.analyze(1)
 import os

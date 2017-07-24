@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-''' Verification test of la comprobación a fisuración de una sección de hormigón armado.
-   Los resultados se comparan con los obtenidos del «Prontuario informático del hormigón armado». '''
+''' Reinforced concrete section. Crack control verification test.
+   results are compared with those of the «Prontuario informático del hormigón armado». '''
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
 __copyright__= "Copyright 2015, LCPT and AOO"
@@ -13,7 +13,7 @@ import xc_base
 import geom
 import xc
 from misc import banco_pruebas_scc3d
-from solution import predefined_solutions # Procedimiento de solución
+from solution import predefined_solutions # Solution procedure
 
 
 from materials.ehe import EHE_materials
@@ -25,8 +25,8 @@ depth= 0.25 # Section depth expressed in meters.
 cover= 0.025 # Concrete cover expressed in meters.
 areaFi12=1.13e-4
 
-NDato= -100.0 # Axil para comprobar fisuración.
-MyDato= 0.0 # Momento para comprobar fisuración.
+NDato= -100.0 # Axial force for crack control checking.
+MyDato= 0.0 # Bending moment force for crack control checking.
 
 prueba= xc.ProblemaEF()
 preprocessor=  prueba.getPreprocessor
@@ -83,7 +83,7 @@ casos.addToDomain("0")
 
 
 
-# Procedimiento de solución
+# Solution procedure
 analisis= predefined_solutions.simple_newton_raphson(prueba)
 analOk= analisis.analyze(10)
 

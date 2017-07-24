@@ -7,7 +7,7 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
-# Ménsula horizontal sometida a carga de tracción en su extremo.
+# Horizontal cantilever under tension load at its end.
 
 import xc_base
 import geom
@@ -73,7 +73,7 @@ A= quadFibers.getFibers().getSumaAreas
 agg= materiales.newMaterial("section_aggregator","agg")
 agg.setSection("quadFibers")
 agg.setAdditions(["T","Vy","Vz"],["respT","respVy","respVz"])
- # Respuestas a torsión y cortantes.
+ # Torsion and shear responses.
 
 
 
@@ -101,7 +101,7 @@ lp0= casos.newLoadPattern("default","0")
 lp0.newNodalLoad(2,xc.Vector([0,0,0,0,0,M]))
 #We add the load case to domain.
 casos.addToDomain("0")
-# Procedimiento de solución
+# Solution procedure
 analisis= predefined_solutions.simple_static_modified_newton(prueba)
 result= analisis.analyze(10)
 

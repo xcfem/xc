@@ -20,7 +20,7 @@ __email__= "l.pereztato@gmail.com"
 
 masaPorPlanta= 134.4e3
 nodeMassMatrix= xc.Matrix([[masaPorPlanta,0,0],[0,0,0],[0,0,0]])
-Ehorm= 200000*1e5 # Elastic modulus del hormigón.
+Ehorm= 200000*1e5 # Concrete elastic modulus.
 
 Bbaja= 0.45 # Escuadría de los pilares.
 Ibaja= 1/12.0*Bbaja**4 # Cross section moment of inertia.
@@ -107,7 +107,7 @@ beam2d.h= B3a
 beta= 0.29 # Ductilidad alta.
 Ki= [1.0,1.33,1.88]
 
-# Procedimiento de solución
+# Solution procedure
 solu= prueba.getSoluProc
 solCtrl= solu.getSoluControl
 

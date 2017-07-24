@@ -27,17 +27,17 @@ __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
 # Coeficientes de seguridad.
-gammac= 1.5 # Coeficiente de minoración de la resistencia del hormigón.
-gammas= 1.15 # Coeficiente de minoración de la resistencia of the steel.
+gammac= 1.5 # Partial safety factor for concrete.
+gammas= 1.15 # Partial safety factor for steel.
 
 width= 0.3 # Section width expressed in meters.
 depth= 0.4 # Section depth expressed in meters.
 cover= 0.05 # Concrete cover expressed in meters.
 areaBarra=4e-4
 
-NDato= -400e3 # Axil para comprobar el cortante.
-MyDato= 1e5 # Momento para comprobar el cortante.
-MzDato= 1e3 # Momento para comprobar el cortante.
+NDato= -400e3 # Axial force for shear checking.
+MyDato= 1e5 # Bending moment force for shear checking.
+MzDato= 1e3 # Bending moment force for shear checking.
 
 numBarras= 3
 
@@ -51,7 +51,7 @@ preprocessor=  prueba.getPreprocessor
 materiales= preprocessor.getMaterialLoader
 
 concr= EHE_materials.HA25
-concr.alfacc=0.85    #f_maxd= 0.85*fcd coeficiente de fatiga del hormigón (generalmente alfacc=1)
+concr.alfacc=0.85    #f_maxd= 0.85*fcd concrete long term compressive strength factor (normally alfacc=1)
 concrMatTag25= concr.defDiagD(preprocessor)
 tagB500S= EHE_materials.B500S.defDiagD(preprocessor)
 
@@ -112,7 +112,7 @@ lp2.newNodalLoad(2,xc.Vector([NDato,0,0,0,0,0]))
 casos.addToDomain("0")
 
 
-# Procedimiento de solución
+# Solution procedure
 analisis= predefined_solutions.simple_newton_raphson(prueba)
 analOk= analisis.analyze(10)
 if(analOk!=0):

@@ -11,7 +11,7 @@ import geom
 import xc
 
 from misc import banco_pruebas_scc3d
-from solution import predefined_solutions # Procedimiento de solución
+from solution import predefined_solutions # Solution procedure
 
 
 from materials.ehe import EHE_materials
@@ -31,9 +31,9 @@ areaFi20= 3.14e-4
 areaFi25= 4.91e-4
 areaFi32= 8.04e-4
 
-NDato= 0 # Axil para comprobar fisuración.
-MyDato= -195.3*9810 # Momento para comprobar fisuración.
-MzDato= 0 # Momento para comprobar fisuración.
+NDato= 0 # Axial force for crack control checking.
+MyDato= -195.3*9810 # Bending moment force for crack control checking.
+MzDato= 0 # Bending moment force for crack control checking.
 
 numBarras= 16
 rebarsSpacing= ((width-2*cover)/(numBarras-1))
@@ -105,7 +105,7 @@ casos.addToDomain("0")
 
 
 
-# Procedimiento de solución
+# Solution procedure
 analisis= predefined_solutions.simple_newton_raphson(prueba)
 analOk= analisis.analyze(10)
 

@@ -15,13 +15,13 @@ __email__= "l.pereztato@gmail.com"
 
 concrHA30= EHE_materials.HA30
 concrHA30.cemType='N'
-fckHA30= 30e6 # Resistencia característica del hormigón HA-30.
+fckHA30= 30e6 # Concrete characteristic compressive strength HA-30.
 Hrel= 0.8 # Humedad relativa del aire.
-Ec= 2e5*9.81/1e-4 # Young modulus del hormigón en Pa.
-nuC= 0.2 # Poisson's ratio del hormigón EHE-08.
+Ec= 2e5*9.81/1e-4 # Concrete Young modulus (Pa).
+nuC= 0.2 # Concrete Poisson's ratio EHE-08.
 hLosa= 0.2 # Espesor.
 densLosa= 2500*hLosa # Densidad de la losa kg/m2.
-t0= 28 # Edad de puesta en carga del hormigón
+t0= 28 # Concrete age at loading
 tFin= 10000 # Service life.
 arido= "cuarcita"
 
@@ -29,7 +29,7 @@ arido= "cuarcita"
 # Load
 F= 5.5e4 # Load magnitude en N
 
-# Retracción del hormigón
+# Concrete shrinkage
 tS= 7 # Inicio del secado.
 
 # Armadura activa
@@ -73,7 +73,7 @@ hLosa= typical_materials.defElasticMembranePlateSection(preprocessor, "hLosa",Ec
 prestressingSteel= typical_materials.defSteel02(preprocessor, "prestressingSteel",Ep,fy,0.001,tInic)
 
 elements= preprocessor.getElementLoader
-# Losa de hormigón
+# Reinforced concrete deck
 elements.defaultMaterial= "hLosa"
 elements.defaultTag= 1
 elem= elements.newElement("shell_mitc4",xc.ID([1,2,6,5]))

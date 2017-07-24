@@ -7,9 +7,8 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
-''' Verificación del funcionamiento del comando «rotate» para una sección elástica en 3d.
-   Ménsula sometida a carga vertical en su extremo con la sección y la carga inclinadas
-   45 grados. '''
+''' «rotate» method verification for a 3D elastic section.
+   Cantilever under vertical load at its end with de load and the section inclined 45 degrees. '''
 
 import xc_base
 import geom

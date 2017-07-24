@@ -81,7 +81,7 @@ spc= constraints.newSPConstraint(tagN1,4,0.0) # gdl 1
 spc= constraints.newSPConstraint(tagN1,5,0.0) # gdl 2
 
 
-# Procedimiento de solución
+# Solution procedure
 import os
 pth= os.path.dirname(__file__)
 if(not pth):

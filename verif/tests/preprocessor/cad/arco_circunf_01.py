@@ -44,7 +44,7 @@ lteor= 2*math.pi*R/4.0
 ratio2= (lteor/long)
 
 # print "Ángulo comprendido: ",math.degrees(angc)
-# print "Ángulo teórico: ",math.degrees(angteor)
+# print "theoretical Ángulo: ",math.degrees(angteor)
 # print "Longitud del arco: ",long
 # print "Longitud teórica: ",lteor
 

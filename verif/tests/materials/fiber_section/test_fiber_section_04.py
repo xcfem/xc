@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-''' Verification test of una sección de hormigón armado.
-   Elaboración propia. '''
+''' Reinforced concrete section verification test.
+   Home made test. '''
 
 
 import math
@@ -19,14 +19,14 @@ __version__= "3.0"
 __email__= "l.pereztato@gmail.com ana.ortega.ort@gmal.com"
 
 # Coeficientes de seguridad.
-gammac= 1.5 # Coeficiente de minoración de la resistencia del hormigón.
-gammas= 1.15 # Coeficiente de minoración de la resistencia of the steel.
+gammac= 1.5 # Partial safety factor for concrete.
+gammas= 1.15 # Partial safety factor for steel.
 
 width= 0.2 # Section width expressed in meters.
 depth= 0.4 # Section width expressed in meters.
 cover= 0.05 # Concrete cover expressed in meters.
 diam= 16e-3 # Diámetro de las barras expressed in meters.
-areaFi16= 2.01e-4 # Área de las barras expressed in square meters.
+areaFi16= 2.01e-4 # Rebar area expressed in square meters.
 
 e1= -10e-3 # Axial trial strain 1.
 sgc1= EHE_materials.HA25.sigmac(e1)
@@ -145,38 +145,38 @@ ratio6= (P6-P6teor)/P6teor
 ''' 
 print "sgc1= ",(sgc1/1e6),"MPa \n"
 print "sgs1= ",(sgs1/1e6),"MPa \n"
-print "Axil teórico; P1teor= ",(P1teor/1e3)," kN \n"
-print "Axil calculado; P1= ",(P1/1e3)," kN \n"
+print "theoretical axial force; P1teor= ",(P1teor/1e3)," kN \n"
+print "computed axial force; P1= ",(P1/1e3)," kN \n"
 print "ratio1= ",(ratio1)
 
 print "sgc2= ",(sgc2/1e6),"MPa \n"
 print "sgs2= ",(sgs2/1e6),"MPa \n"
-print "Axil teórico; P2teor= ",(P2teor/1e3)," kN \n"
-print "Axil calculado; P2= ",(P2/1e3)," kN \n"
+print "theoretical axial force; P2teor= ",(P2teor/1e3)," kN \n"
+print "computed axial force; P2= ",(P2/1e3)," kN \n"
 print "ratio2= ",(ratio2)
 
 print "sgc3= ",(sgc3/1e6),"MPa \n"
 print "sgs3= ",(sgs3/1e6),"MPa \n"
-print "Axil teórico; P3teor= ",(P3teor/1e3)," kN \n"
-print "Axil calculado; P3= ",(P3/1e3)," kN \n"
+print "theoretical axial force; P3teor= ",(P3teor/1e3)," kN \n"
+print "computed axial force; P3= ",(P3/1e3)," kN \n"
 print "ratio3= ",(ratio3)
 
 print "sgc4= ",(sgc4/1e6),"MPa \n"
 print "sgs4= ",(sgs4/1e6),"MPa \n"
-print "Axil teórico; P4teor= ",(P4teor/1e3)," kN \n"
-print "Axil calculado; P4= ",(P4/1e3)," kN \n"
+print "theoretical axial force; P4teor= ",(P4teor/1e3)," kN \n"
+print "computed axial force; P4= ",(P4/1e3)," kN \n"
 print "ratio4= ",(ratio4)
 
 print "sgc5= ",(sgc5/1e6),"MPa \n"
 print "sgs5= ",(sgs5/1e6),"MPa \n"
-print "Axil teórico; P5teor= ",(P5teor/1e3)," kN \n"
-print "Axil calculado; P5= ",(P5/1e3)," kN \n"
+print "theoretical axial force; P5teor= ",(P5teor/1e3)," kN \n"
+print "computed axial force; P5= ",(P5/1e3)," kN \n"
 print "ratio5= ",(ratio5)
 
 print "sgc6= ",(sgc6/1e6),"MPa \n"
 print "sgs6= ",(sgs6/1e6),"MPa \n"
-print "Axil teórico; P6teor= ",(P6teor/1e3)," kN \n"
-print "Axil calculado; P6= ",(P6/1e3)," kN \n"
+print "theoretical axial force; P6teor= ",(P6teor/1e3)," kN \n"
+print "computed axial force; P6= ",(P6/1e3)," kN \n"
 print "ratio6= ",(ratio6)
  '''
 
