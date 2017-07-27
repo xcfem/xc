@@ -217,7 +217,7 @@ void XC::Set::create_copy(const std::string &nombre,const Vector3d &v= Vector3d(
       }
     //Copy lines.
     std::map<std::string,std::string> new_lines_names;
-    for(lst_ptr_lineas::iterator i= lineas.begin();i!=lineas.end();i++)
+    for(lst_line_pointers::iterator i= lineas.begin();i!=lineas.end();i++)
       {
         const std::string nombre_viejo= (*i)->getName();
         const std::string new_name= nombre+nombre_viejo;
@@ -253,7 +253,7 @@ void XC::Set::line_meshing(meshing_dir dm)
   {
     if(verbosity>2)
       std::clog << "Meshing lines...";
-    for(lst_ptr_lineas::iterator i= lineas.begin();i!=lineas.end();i++)
+    for(lst_line_pointers::iterator i= lineas.begin();i!=lineas.end();i++)
       (*i)->genMesh(dm);
     if(verbosity>2)
       std::clog << "done." << std::endl;
@@ -349,7 +349,7 @@ void XC::Set::CompletaHaciaAbajo(void)
     for(sup_iterator i=surfaces.begin();i!=surfaces.end();i++)
       {
         //Lineas.
-        lst_ptr_lineas ll((*i)->GetEdges());
+        lst_line_pointers ll((*i)->GetEdges());
         lineas.insert(lineas.end(),ll.begin(),ll.end());
 
         //Elements.

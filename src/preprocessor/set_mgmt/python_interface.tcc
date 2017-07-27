@@ -27,6 +27,7 @@ class_<dq_ptrs_node, bases<EntCmd>, boost::noncopyable >("dq_ptrs_node",no_init)
   .add_property("size", &dq_ptrs_node::size, "Returns list size.")
   .def("__len__",&dq_ptrs_node::size, "Returns list size.")
   .def("at",make_function(&dq_ptrs_node::get, return_internal_reference<>() ), "Access specified node with bounds checking.")
+  .def("__getitem__",make_function(&dq_ptrs_node::get, return_internal_reference<>() ), "Access specified node with bounds checking.")
   .def("getTags",make_function(&dq_ptrs_node::getTags, return_internal_reference<>() ),"Returns node identifiers.")
   .def("clear",&dq_ptrs_node::clear,"Removes all items.")
   ;
@@ -46,6 +47,7 @@ class_<dq_ptrs_element, bases<EntCmd>, boost::noncopyable >("dq_ptrs_element",no
   .add_property("size", &dq_ptrs_element::size, "Returns list size.")
   .def("__len__",&dq_ptrs_element::size, "Returns list size.")
   .def("at",make_function(&dq_ptrs_element::get, return_internal_reference<>() ), "Access specified element with bounds checking.")
+  .def("__getitem__",make_function(&dq_ptrs_element::get, return_internal_reference<>() ), "Access specified element with bounds checking.")
   .def("getTags",make_function(&dq_ptrs_element::getTags, return_internal_reference<>() ),"Returns element identifiers.")
   .def("clear",&dq_ptrs_element::clear,"Removes all items.")
   ;
@@ -66,6 +68,7 @@ class_<dq_ptrs_constraint, bases<EntCmd>, boost::noncopyable >("dq_ptrs_constrai
   .add_property("size", &dq_ptrs_constraint::size, "Returns list size.")
   .def("__len__",&dq_ptrs_constraint::size, "Returns list size.")
   .def("at",make_function(&dq_ptrs_constraint::get, return_internal_reference<>() ), "Access specified constraint with bounds checking.")
+  .def("__getitem__",make_function(&dq_ptrs_constraint::get, return_internal_reference<>() ), "Access specified constraint with bounds checking.")
   .def("getTags",make_function(&dq_ptrs_constraint::getTags, return_internal_reference<>() ),"Returns constraint identifiers.")
   .def("clear",&dq_ptrs_constraint::clear,"Removes all items.")
   ;
@@ -103,6 +106,7 @@ typedef XC::DqPtrs<XC::Pnt> dq_ptrs_pnt;
 class_<dq_ptrs_pnt, bases<EntCmd>, boost::noncopyable >("dq_ptrs_pnt",no_init)
   .def("__iter__", range<return_internal_reference<> >(&dq_ptrs_pnt::indBegin, &dq_ptrs_pnt::indEnd))
   .def("at",make_function(&dq_ptrs_pnt::get, return_internal_reference<>() ), "Access specified point with bounds checking.")
+  .def("__getitem__",make_function(&dq_ptrs_pnt::get, return_internal_reference<>() ), "Access specified point with bounds checking.")
   .def("clear",&dq_ptrs_pnt::clear,"Removes all items.")
    ;
 
@@ -113,24 +117,27 @@ class_<XC::Set::lst_ptr_points, bases<dq_ptrs_pnt>, boost::noncopyable >("lstPnt
   .def("__len__",&XC::Set::lst_ptr_points::size, "Returns list size.")
    ;
 
-typedef XC::DqPtrs<XC::Edge> dq_ptrs_lineas;
-class_<dq_ptrs_lineas, bases<EntCmd>, boost::noncopyable >("dq_ptrs_lineas",no_init)
-  .def("__iter__", range<return_internal_reference<> >(&dq_ptrs_lineas::indBegin, &dq_ptrs_lineas::indEnd))
-  .def("at",make_function(&dq_ptrs_lineas::get, return_internal_reference<>() ), "Access specified line with bounds checking.")
-  .def("clear",&dq_ptrs_lineas::clear,"Removes all items.")
+typedef XC::DqPtrs<XC::Edge> dq_line_ptrs;
+class_<dq_line_ptrs, bases<EntCmd>, boost::noncopyable >("dq_line_ptrs",no_init)
+//.def(vector_indexing_suite<dq_line_ptrs>())  Doesn't work with pointer containers.
+  .def("__iter__", range<return_internal_reference<> >(&dq_line_ptrs::indBegin, &dq_line_ptrs::indEnd))
+  .add_property("size", &dq_line_ptrs::size, "Return container size.")
+  .def("__len__",&dq_line_ptrs::size, "Return container size.")
+  .def("at",make_function(&dq_line_ptrs::get, return_internal_reference<>() ), "Access specified line with bounds checking.")
+  .def("__getitem__",make_function(&dq_line_ptrs::get, return_internal_reference<>() ), "Access specified line with bounds checking.")
+  .def("clear",&dq_line_ptrs::clear,"Removes all items.")
    ;
 
-class_<XC::Set::lst_ptr_lineas, bases<dq_ptrs_lineas>, boost::noncopyable >("lstLines",no_init)
-  .def("append", &XC::Set::lst_ptr_lineas::push_back,"Appends line at the end of the list.")
-  .def("pushFront", &XC::Set::lst_ptr_lineas::push_front,"Push line at the beginning of the list.")
-  .add_property("size", &XC::Set::lst_ptr_lineas::size, "Returns list size.")
-  .def("__len__",&XC::Set::lst_ptr_lineas::size, "Returns list size.")
+class_<XC::Set::lst_line_pointers, bases<dq_line_ptrs>, boost::noncopyable >("lstLines",no_init)
+  .def("append", &XC::Set::lst_line_pointers::push_back,"Appends line at the end of the list.")
+  .def("pushFront", &XC::Set::lst_line_pointers::push_front,"Push line at the beginning of the list.")
    ;
 
 typedef XC::DqPtrs<XC::Face> dq_ptrs_surfaces;
 class_<dq_ptrs_surfaces, bases<EntCmd>, boost::noncopyable >("dq_ptrs_surfaces",no_init)
   .def("__iter__", range<return_internal_reference<> >(&dq_ptrs_surfaces::indBegin, &dq_ptrs_surfaces::indEnd))
   .def("at",make_function(&dq_ptrs_surfaces::get, return_internal_reference<>() ), "Access specified surface with bounds checking.")
+  .def("__getitem__",make_function(&dq_ptrs_surfaces::get, return_internal_reference<>() ), "Access specified surface with bounds checking.")
   .def("clear",&dq_ptrs_surfaces::clear,"Removes all items.")
    ;
 
@@ -145,6 +152,7 @@ typedef XC::DqPtrs<XC::Body> dq_ptrs_cuerpos;
 class_<dq_ptrs_cuerpos, bases<EntCmd>, boost::noncopyable >("dq_ptrs_cuerpos",no_init)
   .def("__iter__", range<return_internal_reference<> >(&dq_ptrs_cuerpos::indBegin, &dq_ptrs_cuerpos::indEnd))
   .def("at",make_function(&dq_ptrs_cuerpos::get, return_internal_reference<>() ), "Access specified body with bounds checking.")
+  .def("__getitem__",make_function(&dq_ptrs_cuerpos::get, return_internal_reference<>() ), "Access specified body with bounds checking.")
   .def("clear",&dq_ptrs_cuerpos::clear,"Removes all items.")
    ;
 
@@ -157,7 +165,7 @@ class_<XC::Set::lst_ptr_cuerpos, bases<dq_ptrs_cuerpos>, boost::noncopyable >("l
 
 
 XC::Set::lst_ptr_points &(XC::Set::*GetPuntos)(void)= &XC::Set::GetPuntos;
-XC::Set::lst_ptr_lineas &(XC::Set::*GetLineas)(void)= &XC::Set::GetLineas;
+XC::Set::lst_line_pointers &(XC::Set::*GetLineas)(void)= &XC::Set::GetLineas;
 XC::Set::lst_surface_ptrs &(XC::Set::*getSurfaces)(void)= &XC::Set::getSurfaces;
 XC::Set::lst_ptr_cuerpos &(XC::Set::*GetCuerpos)(void)= &XC::Set::GetCuerpos;
 class_<XC::Set, bases<XC::SetMeshComp> >("Set")

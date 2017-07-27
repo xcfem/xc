@@ -68,9 +68,9 @@ class Set: public SetMeshComp
     typedef lst_ptr_points::iterator pnt_iterator; //!< point set iterator.
     typedef lst_ptr_points::const_iterator pnt_const_iterator; //!< point set const iterator.
 
-    typedef DqPtrsNmb<Edge> lst_ptr_lineas; //!< Line set.
-    typedef lst_ptr_lineas::iterator lin_iterator; //!< Line set iterator.
-    typedef lst_ptr_lineas::const_iterator lin_const_iterator; //!< Line set const iterator.
+    typedef DqPtrsNmb<Edge> lst_line_pointers; //!< Line set.
+    typedef lst_line_pointers::iterator lin_iterator; //!< Line set iterator.
+    typedef lst_line_pointers::const_iterator lin_const_iterator; //!< Line set const iterator.
 
     typedef DqPtrsNmb<Face> lst_surface_ptrs; //!< surface set.
     typedef lst_surface_ptrs::iterator sup_iterator; //!< surface set iterator.
@@ -83,7 +83,7 @@ class Set: public SetMeshComp
   protected:
     std::string description; //!< set description.
     lst_ptr_points puntos; //!< point set.
-    lst_ptr_lineas lineas; //!< line set.
+    lst_line_pointers lineas; //!< line set.
     lst_surface_ptrs surfaces; //!< surface set.
     lst_ptr_cuerpos cuerpos; //!< body set.
     lst_ptr_uniform_grids uniform_grids; //! Uniform mesh set.
@@ -126,10 +126,10 @@ class Set: public SetMeshComp
     bool In(const Pnt *) const;
 
     //! @brief Return a const reference to the line container.
-    virtual const lst_ptr_lineas &GetLineas(void) const
+    virtual const lst_line_pointers &GetLineas(void) const
       { return lineas; }
     //! @brief Return a reference to the line container.
-    virtual lst_ptr_lineas &GetLineas(void)
+    virtual lst_line_pointers &GetLineas(void)
       { return lineas; }
     void sel_lineas_lista(const ID &);
     bool In(const Edge *) const;
