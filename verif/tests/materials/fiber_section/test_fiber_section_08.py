@@ -189,7 +189,7 @@ print "\nMaximum strain en la reinforcement: ",(epsSMax*1E3),"E-3"
 print "Maximum stress in steel: ",(sgSMax/1e6),"E6"
 print "y coordinate for maximum rebar strain: ",(YepsSMax)
 print "z coordinate for maximum rebar strain: ",(ZepsSMax)
-print "\nTipo solicitación: ",strTipoSolic," (",(tipoSolic),") "
+print "\nSolicitation type: ",strTipoSolic," (",(tipoSolic),") "
 print "Cumple a ",strTipoSolic,": ",(cumpleFT)
 print "Aprovechamiento a ",strTipoSolic,": ",(aprovSecc)
 print "RN= ",(RN/1e3)

@@ -29,8 +29,8 @@ fu= 430e6 # Steel strength of the pieces to be welded S-275-JR (table 59.8.2 pag
 Es= 2e11 # Elastic modulus of the steel.
 
 # Safety data
-betaW= 0.8 # Coeficiente de correlación para S-275 (table 59.8.2 page 304 EAE).
-gammaMw= 1.0/math.sqrt(3) # Coeficiente de minoración of the steel para uniones (artículo 59.8.2 page 304 EAE).
+betaW= 0.8 # Correlation factor for S-275 steel (table 59.8.2 page 304 EAE).
+gammaMw= 1.0/math.sqrt(3) # Steel partial safety factor para uniones (artículo 59.8.2 page 304 EAE).
 
 
 

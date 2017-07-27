@@ -21,8 +21,8 @@ def extractFiberSectionProperties(fiberSec,scc):
   global i1; i1= math.sqrt(I1/sumAreas)  # Radio de giro eje principal mayor
   global i2; i2= math.sqrt(I2/sumAreas); # Radio de giro eje principal menor
   # th1= th1; 
-  global Me1; Me1= 2*fy/scc.h*I1; # Momento elástico de la sección en torno al eje principal mayor.
-  global Me2; Me2= 2*fy/scc.b*I2; # Momento elástico de la sección en torno al eje principal menor.
+  global Me1; Me1= 2*fy/scc.h*I1; # Elastic moment of the section around its principal major axis.
+  global Me2; Me2= 2*fy/scc.b*I2; # Elastic moment of the section around its principal minor axis.
   global SzPosG; SzPosG= fibers.getSzPos(0,0,1)
   global SyPosG; SyPosG= fibers.getSyPos(0,0,1) 
 

@@ -137,7 +137,7 @@ NMin1= 1e9
 NMin2= 1e9
 numSteps= 1
 
-# Lanzamos la obtención de soluciones.
+# Solve.
 analysis= predefined_solutions.simple_static_linear(prueba)
 
 for key in combs.getKeys():

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 ''' Lateral torsional buckling of steel beams.
-   Elaboración propia. '''
+   Home made. '''
 from __future__ import division
 import math
 import xc_base

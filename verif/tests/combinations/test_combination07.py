@@ -236,7 +236,7 @@ comb.addToDomain()
 analOk= analysis.analyze(1)
 comb.removeFromDomain()
 
-combs.remove("FASE0") # Eliminamos la combinación (ya no hace falta).
+combs.remove("FASE0") # We withdraw the combination (is no longer useful).
 db.save(tagSaveFase0)
 
 

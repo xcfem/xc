@@ -38,7 +38,7 @@ tagElemLado= 0
 
 prueba= xc.ProblemaEF()
 preprocessor=  prueba.getPreprocessor
-prueba.logFileName= "/tmp/borrar.log" # Para no imprimir mensajes de advertencia
+prueba.logFileName= "/tmp/borrar.log" # Don't pring warnings
 nodes= preprocessor.getNodeLoader
 
 modelSpace= predefined_spaces.StructuralMechanics3D(nodes)

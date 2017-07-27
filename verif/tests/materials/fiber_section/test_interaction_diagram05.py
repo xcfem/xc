@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-''' Verification test of the cálculo del diagrama de interacción.
-   Elaboración propia. '''
+''' Checks the computation of the interaction diagram.
+   Home made. '''
 from __future__ import division
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
@@ -21,8 +21,8 @@ import math
 gammac= 1.5  # concrete safety coefficient
 gammas= 1.15 # reinforcement steel safety coefficient
 
-radius= 0.75/2.0 # Radio de la sección expressed in meters.
-diam= 20e-3 # Diámetro de las barras expressed in meters.
+radius= 0.75/2.0 # Cross-section radius expressed in meters.
+diam= 20e-3 # Bar diameter expressed in meters.
 cover= 0.06+12e-3+diam/2.0 # Concrete cover expressed in meters.
 areaFi20= math.pi*(diam/2.0)**2 # Rebar area expressed in square meters.
 

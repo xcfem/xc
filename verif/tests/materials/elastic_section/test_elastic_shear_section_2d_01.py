@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Verification test of una sección elástica en 2d
+''' Elastic 2D section verification test.'''
 
 import xc_base
 import geom

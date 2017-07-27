@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
-# Tomado del example 2-005 del manual de verificación de SAP 2000
+'''Verification test taken from example 2-005 of 
+   the SAP 2000 verification manual.'''
 # The error is close to 18% (quite high) it seems that the element
 # doesn't works very well with "skinny" elements (aspect ratio
 # very different of 1:1).

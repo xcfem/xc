@@ -26,7 +26,7 @@ rho= 0.0 # Densidad
 
 # Problem type
 prueba= xc.ProblemaEF()
-prueba.logFileName= "/tmp/borrar.log" # Para no imprimir mensajes de advertencia
+prueba.logFileName= "/tmp/borrar.log" # Don't pring warnings
 preprocessor=  prueba.getPreprocessor
 nodes= preprocessor.getNodeLoader
 modelSpace= predefined_spaces.SolidMechanics2D(nodes)

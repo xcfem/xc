@@ -23,7 +23,7 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
-MzDato= 55.949e3 #El prontuario informático sólo llega hasta ~54.4 kN m al considerar el diagrama simplificado of the steel.
+MzDato= 55.949e3 #The "prontuario informático" reachs only ~54.4 kN m because it uses s simplified diagram for the steel.
 NDato= 0.0 
 prueba= xc.ProblemaEF()
 preprocessor=  prueba.getPreprocessor
@@ -120,7 +120,7 @@ print "ratio6= ",(ratio6)
 print "Minumum concrete strain: ",(epsCMin)
 print "Maximum concrete strain: ",(epsCMax)
 print "Maximum rebar strain: ",(epsSMax)
-print "Tipo solicitación: ",strTipoSolic," (",(tipoSolic),") \n"
+print "Solicitation type: ",strTipoSolic," (",(tipoSolic),") \n"
 print "Cumple a ",strTipoSolic,": ",(cumpleFT)
 print "Aprovechamiento a ",strTipoSolic,": ",(aprovSecc)
 print "RN= ",(RN/1e3)," kN\n"

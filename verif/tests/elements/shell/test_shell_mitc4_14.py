@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
-# Tomado del example 2-005 del manual de verificación de SAP 2000
+'''Verification test taken from example 2-005 of 
+   the SAP 2000 verification manual.'''
+
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
 __copyright__= "Copyright 2015, LCPT and AOO"

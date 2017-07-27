@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-''' Test basado en el denominado VM53 del manual de verificación de Ansys
+''' Test basado en el denominado VM53 of the Ansys verification manual
    Reference: Thomson, Ref 9: Vibration Theory and Applications, pg. 264, article 8.2.
    '''
 from __future__ import division
@@ -22,7 +22,7 @@ NumDiv= 13
 E= 30e6 # Young modulus (psi)
 l= 100.0 # Longitud de la cuerda in inches
 sigmaPret= E*0.00543228 # Prestressing force (pounds)
-area= 0.00306796 # Area de la sección in inches cuadradas
+area= 0.00306796 # Section area in inches cuadradas
 Mass= 0.00073*area # Masa por unidad de longitud.
 MassNod= Mass*(l/NumDiv) # Masa por unidad de longitud.
 fPret= sigmaPret*area # Prestressing force (pounds)

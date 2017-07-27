@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Verification test of the comando «rotate» para una sección elástica en 3d.
+'''Verification of the rotate method for an 3D elastic section.'''
 
 import xc_base
 import geom

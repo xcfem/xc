@@ -227,8 +227,8 @@ import os
 os.system("rm -r -f /tmp/test_retraccion_02.db")
 db= prueba.newDatabase("BerkeleyDB","/tmp/test_retraccion_02.db")
 
-# Fase 0: pretensado, retracción
-# Fase 1: pretensado, retracción y fluencia
+# Fase 0: pretensado, shrinking
+# Fase 1: pretensado, shrinking and creep
 
 # Shrinkage strains.
 sets= preprocessor.getSets
@@ -275,7 +275,7 @@ comb= combs.newLoadCombination("FASE0","1.00*RETRACC")
 tagSaveFase0= comb.tag*100
 comb.addToDomain()
 result= analysis.analyze(1)
-combs.remove("FASE0")  # Para que no siga añadiendo retracción en cada cálculo.
+combs.remove("FASE0")  # Avoid adding shrinking on each computation.
 db.save(tagSaveFase0)
 
 

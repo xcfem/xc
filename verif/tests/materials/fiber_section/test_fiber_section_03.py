@@ -80,7 +80,7 @@ lp0.newNodalLoad(2,xc.Vector([0,0,0,0,loadMy,0]))
 casos.addToDomain("0")
 
 
-# Obtención de la solución
+# Solve
 analisis= predefined_solutions.simple_newton_raphson(prueba)
 analOk= analisis.analyze(1)
 

@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
-# Análisis de un pórtico.
-# Tomado del ejemplo «PDelta-3 del manual de verificación de Ansys.
-
+''' Frame analysis taken from example «PDelta-3» of the Ansys verification manual.'''
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
 __copyright__= "Copyright 2015, LCPT and AOO"
 __license__= "GPL"
@@ -23,12 +21,12 @@ from solution import predefined_solutions
 from model import predefined_spaces
 from materials import typical_materials
 
-B= 100 # Ancho del pórtico expressed in inches
-H= 100 # Altura del pórtico expressed in inches
-# Propiedades de la sección (IPE-80)
+B= 100 # Frame width expressed in inches
+H= 100 # Frame height expressed in inches
+# Section mass properties (IPE-80)
 Es= 29e6 # Young modulus (psi)
-area= 1 # Área de la sección expressed in in2
-Iz= 1/12.0 # Momento de inercia de la sección expressed in in4
+area= 1 # Section area expressed in in2
+Iz= 1/12.0 # Cross-section moment of inertia expressed in in4
 P= 1000 # Load (force-pounds).
 
 prueba= xc.ProblemaEF()
@@ -36,11 +34,11 @@ preprocessor=  prueba.getPreprocessor
 nodes= preprocessor.getNodeLoader
 modelSpace= predefined_spaces.StructuralMechanics2D(nodes)
 nodes.defaultTag= 1
-nodes.newNodeXY(0,0) # Primer pórtico.
+nodes.newNodeXY(0,0) # First frame
 nod= nodes.newNodeXY(0,H)
 nod= nodes.newNodeXY(B,0)
 nod= nodes.newNodeXY(B,H)
-nod= nodes.newNodeXY(2*B,0) # Segundo pórtico.
+nod= nodes.newNodeXY(2*B,0) # Second frame.
 nod= nodes.newNodeXY(2*B,H)
 nod= nodes.newNodeXY(2*B+B,0)
 nod= nodes.newNodeXY(2*B+B,H)

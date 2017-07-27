@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-''' Verification test of the cálculo del diagrama de interacción.
-   Elaboración propia. Carga el diagrama de interacción obtenido en test_diag_interaccion01. '''
+''' Verification test of the cálculo del interaction diagram.
+   Home made. Carga el interaction diagram obtenido en test_diag_interaccion01. '''
 from __future__ import division
 
 import xc_base
@@ -36,7 +36,7 @@ print "ratio3= ",(ratio3)
 print "ratio4= ",(ratio4)
  '''
 
-''' Como el método con el que se graba el diagrama de interacción no es exacto
+''' Como el método con el que se graba el interaction diagram no es exacto
    (las coordenadas de los vértices son «calculadas») se pierde precisión por lo
    que ha habido que aumentar la toleracia en el ratio3 respecto al test 01
    (test_diag_interaccion01) '''

@@ -46,7 +46,7 @@ ratio2= (lteor/long)
 # print "Ángulo comprendido: ",math.degrees(angc)
 # print "theoretical Ángulo: ",math.degrees(angteor)
 # print "Longitud del arco: ",long
-# print "Longitud teórica: ",lteor
+# print "Theorethical length: ",lteor
 
 from miscUtils import LogMessages as lmsg
 fname= os.path.basename(__file__)

@@ -240,12 +240,12 @@ db= prueba.newDatabase("BerkeleyDB","/tmp/test_fluencia_03.db")
 
 helper= dbHelper.DatabaseHelperSolve(db)
 
-# Fase 0: pretensado, retracción
+# Fase 0: prestressing, shrinking
 tagSaveFase0= -1
 
 
 
-# Deformaciones de retracción.
+# Shrinking strains
 setTotal= preprocessor.getSets["total"]
 setShells= preprocessor.getSets.defSet("shells")
 for e in setTotal.getElements:
@@ -286,7 +286,7 @@ tagSaveFase0= comb.tag*100
 comb.addToDomain()
 result= analysis.analyze(1)
 #comb.removeFromDomain()
-combs.remove("FASE0")  # Para que no siga añadiendo retracción en cada cálculo.
+combs.remove("FASE0")  # Avoid adding shrinking on each computation.
 db.save(tagSaveFase0)
 
 
@@ -323,7 +323,7 @@ comb.tagSaveFase0= comb.tag*100
 comb.addToDomain()
 result= analysis.analyze(1)
 #comb.removeFromDomain()
-combs.remove("FASE0")  # Para que no siga añadiendo retracción en cada cálculo.
+combs.remove("FASE0")  # Avoid adding shrinking on each computation.
 db.save(tagSaveFase0)
 
 

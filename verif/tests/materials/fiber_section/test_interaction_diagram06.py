@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-''' Verification test of the cálculo del diagrama de interacción.
-   Elaboración propia. '''
+''' Verification test of the cálculo del interaction diagram.
+   Home made. '''
 from __future__ import division
 
 import xc_base

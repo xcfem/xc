@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-''' Verifica la formación de la matriz de rigidez tangente de la sección.
-   Elaboración propia. '''
+''' Verifies the assembly of cross-section tangent stiffness matrix.
+   Home made test.'''
 
 import xc_base
 import geom

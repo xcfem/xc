@@ -30,10 +30,10 @@ EMat= 1 # Elastic modulus.
 nuMat= 0 # Poisson's ratio.
 GMat= EMat/(2.0*(1+nuMat)) # Shear modulus.
 
-Iyy= 1 # Inercia a flexión eje y.
-Izz= 1 # Inercia a flexión eje z.
+Iyy= 1 # Flexural inertia on y axis.
+Izz= 1 # Flexural inertia on z axis.
 Ir= 4/3.0 # Inercia a torsion.
-area= 1e7 # Area de la sección.
+area= 1e7 # Section area.
 Lx= 1
 Ly= 1
 Lz= 1
@@ -120,7 +120,7 @@ A3= matrixUtils.vectorToNumpyArray(nod3.getMaxModalDisplacementForGdls(3,acelera
 maxDispMod3= A3[0:3] #getCaja(A3,1,1,3,1)
 
 
-# Los valores teóricos estan tomados deel ejemplo E26.8 del libro: Clough, R. W., and Penzien, J., Dynamics of Structures
+# Theorethical values taken from the exampleE26.8 of the book: Clough, R. W., and Penzien, J., Dynamics of Structures
 angularFrequenciesTeor= xc.Vector([4.59,4.83,14.56])
 periodosTeor= xc.Vector([2*math.pi/4.59,2*math.pi/4.83,2*math.pi/14.56])
 ratio0= (angularFrequencies-angularFrequenciesTeor).Norm()

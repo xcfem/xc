@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 ''' Test made from the example 9-1 of the book: 
     Introducción Al Estudio Del Elemento Finito en Ingeniería. 
-    Segunda Edición. Tirupathi R. Chandrupatla, Ashok D. Belegundu. 
+    Segunda Edició!n. Tirupathi R. Chandrupatla, Ashok D. Belegundu. 
     Pearson Educación, 1999
     isbn={9789701702604},
     url={https://books.google.ch/books?id=auQwAAAACAAJ},

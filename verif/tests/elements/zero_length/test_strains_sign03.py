@@ -3,9 +3,11 @@
 
 # ZeroLengthSection element sign criteria.
 
-#     El axil y los cortantes tienen la misma direccion y sentido que los ejes locales.
-#     El torsor Mx y el flector My tienen las direcciones y sentido de los ejes X e Y locales.
-#     El flector Mz tiene la misma dirección y sentido CONTRARIO al del eje Z local.
+#     Axial and shear forces have the same direction and sense that
+#     the local axes.
+#     Mx torque and My bending moment have the same direction and sense
+#     that the local axes.
+#     Bending moment Mz has the same direction and its sense is the OPPOSITE to local Z axis.
 #     Section's y axis is element z axis.
 
 from __future__ import division

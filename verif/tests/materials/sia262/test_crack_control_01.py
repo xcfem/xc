@@ -28,7 +28,7 @@ areaFi26= SIA262_materials.section_barres_courantes[26e-3]
 
 datosScc1LosC= defSeccionHASimple.RecordRCSimpleSection()
 datosScc1LosC.sectionName= "secHA1LosC"
-datosScc1LosC.sectionDescr= "Losa. Tramo Central. Sección normal al eje X."
+datosScc1LosC.sectionDescr= "Deck. Central portion. Section normal to X axis."
 concr= EHE_materials.HA30
 concr.alfacc=0.85 #f_maxd= 0.85*fcd
 datosScc1LosC.concrType= concr

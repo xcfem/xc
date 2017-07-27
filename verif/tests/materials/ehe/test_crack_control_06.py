@@ -21,7 +21,7 @@ __email__= "l.pereztato@gmail.com"
 
 datosScc1LosC= defSeccionHASimple.RecordRCSimpleSection()
 datosScc1LosC.sectionName= "secHA1LosC"
-datosScc1LosC.sectionDescr= "Losa. Tramo Central. Sección normal al eje X."
+datosScc1LosC.sectionDescr= "Losa. Central portion. Section normal to X axis."
 datosScc1LosC.concrType= EHE_materials.HA25
 datosScc1LosC.depth= 0.25
 datosScc1LosC.width= 1.0

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-''' Verifica la formación de la matriz de rigidez tangente de la sección.
-   Elaboración propia. '''
+''' Checks the assembling of the tangent stiffness matrix of the section.
+   Home made. '''
 import xc_base
 import geom
 import xc

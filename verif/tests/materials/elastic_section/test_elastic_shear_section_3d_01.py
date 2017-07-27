@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Verification test of una sección elástica en 3d
+'''Elastic 3D section verification.'''
 
 import xc_base
 import geom
@@ -17,7 +17,7 @@ __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
 prueba= xc.ProblemaEF()
-prueba.logFileName= "/tmp/borrar.log" # Para no imprimir mensajes de advertencia
+prueba.logFileName= "/tmp/borrar.log" # Don't pring warnings
 preprocessor=  prueba.getPreprocessor
 
 # Rectangular cross-section definition

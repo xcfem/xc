@@ -16,7 +16,7 @@ __version__= "3.0"
 __email__= "l.pereztato@gmail.com ana.ortega.ort@gmal.com"
 
 areaFi16= 2.01e-4 # Rebar area expressed in square meters.
-brazo= 0.5 # Brazo de las barras respecto al eje de la sección.
+brazo= 0.5 # Rebar lever arm with respect to section axis.
 
 
 from materials.ehe import EHE_materials

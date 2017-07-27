@@ -7,20 +7,20 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
-# Análisis del efecto P-Delta en un pórtico.
-# Tomado del ejemplo «PDelta-3» del manual de verificación de Ansys.
+# Analysis of PDelta effect in a frame.
+# Taken from example «PDelta-3» of the Ansys verification manual.
 
 # Este ejemplo es completamente análogo a "test_pdelta_01.xc" salvo
 # que en lugar de emplear análisis no lineal usa dos análisis lineales
 # consecutivos: es decir un análisis de segundo orden.
 
 
-B= 100 # Ancho del pórtico expressed in inches
-H= 100 # Altura del pórtico expressed in inches
-# Propiedades de la sección (IPE-80)
+B= 100 # Frame width expressed in inches
+H= 100 # Frame height expressed in inches
+# Section mass properties (IPE-80)
 Es= 29e6 # Young modulus (psi)
-area= 1 # Área de la sección expressed in in2
-Iz= 1/12 # Momento de inercia de la sección expressed in in4
+area= 1 # Section area expressed in in2
+Iz= 1/12 # Cross-section moment of inertia expressed in in4
 P= 1000 # Load (force-pounds).
 nDivLineas= 8 # Load (force-pounds).
 offset= 2*B # Load (force-pounds).

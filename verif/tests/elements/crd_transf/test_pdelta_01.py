@@ -25,12 +25,12 @@ __email__= "l.pereztato@gmail.com"
 #     1|      |3      5|       |7
 
 
-B= 100 # Ancho del pórtico expressed in inches
-H= 100 # Altura del pórtico expressed in inches
-# Propiedades de la sección (IPE-80)
+B= 100 # Frame width expressed in inches
+H= 100 # Frame height expressed in inches
+# Section mass properties (IPE-80)
 Es= 29e6 # Young modulus (psi)
-area= 1 # Área de la sección expressed in in2
-Iz= 1/12.0 # Momento de inercia de la sección expressed in in4
+area= 1 # Section area expressed in in2
+Iz= 1/12.0 # Cross-section moment of inertia expressed in in4
 P= 1000 # Load (force-pounds).
 nDivLineas= 8 # Load (force-pounds).
 offset= 2*B # Load (force-pounds).

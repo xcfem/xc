@@ -24,7 +24,7 @@ from materials.fiber_section import createFiberSets
 from model import predefined_spaces
 
 MzDato= 8e3
-NDato= 299.54e3 # El prontuario informático sólo llega hasta ~285 kN al considerar el diagrama simplificado of the steel. '''
+NDato= 299.54e3 # The "prontuario informático" reachs only ~285 kN because of the steel simplified diagram.
 prueba= xc.ProblemaEF()
 preprocessor=  prueba.getPreprocessor
 # Materials definition
@@ -121,7 +121,7 @@ print "ratio6= ",(ratio6)
 print "Minumum concrete strain: ",(epsCMin)
 print "Maximum concrete strain: ",(epsCMax)
 print "Maximum rebar strain: ",(epsSMax)
-print "Tipo solicitación: ",strTipoSolic," (",(tipoSolic),") \n"
+print "Solicitation type: ",strTipoSolic," (",(tipoSolic),") \n"
 print "Cumple a ",strTipoSolic,": ",(cumpleFT)
 print "Aprovechamiento a ",strTipoSolic,": ",(aprovSecc)
 print "RN= ",(RN/1e3)

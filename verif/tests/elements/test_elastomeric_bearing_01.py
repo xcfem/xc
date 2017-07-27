@@ -25,7 +25,7 @@ from solution import predefined_solutions
 
 
 # Materials definition
-G= 900e3 # Módulo de cortante del neopreno
+G= 900e3 # Elastomer shear modulus
 a= 0.3 # Dimension parallel to deck axis.
 b= 0.3 # Dimension normal to deck axis.
 e= 0.002 # Espesor neto del neopreno (sin chapas).

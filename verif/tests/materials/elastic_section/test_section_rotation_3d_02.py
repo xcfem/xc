@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
 # home made test
-# «rotate» method verification for a 3D elastic section.
-#    Ménsula sometida a carga vertical en su extremo con la sección y la carga inclinadas
-#    45 grados.
+'''«rotate» method verification for a 3D elastic section.'''
 
 import xc_base
 import geom

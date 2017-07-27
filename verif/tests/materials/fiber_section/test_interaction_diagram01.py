@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-''' Verification test of the cálculo del diagrama de interacción.
-   Elaboración propia. '''
+''' Verification test of the cálculo del interaction diagram.
+   Home made. '''
 from __future__ import division
 
 import xc_base
@@ -22,7 +22,7 @@ gammas= 1.15 # Partial safety factor for steel.
 width= 0.2 # Section width expressed in meters.
 depth= 0.4 # Section width expressed in meters.
 cover= 0.05 # Concrete cover expressed in meters.
-diam= 16e-3 # Diámetro de las barras expressed in meters.
+diam= 16e-3 # Bar diameter expressed in meters.
 areaFi16= 2.01e-4 # Rebar area expressed in square meters.
 
 

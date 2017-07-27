@@ -116,7 +116,7 @@ print "ratio5= ",(ratio5)
 print "Minimum strain in concrete: ",(epsCMin)
 print "Maximum strain in concrete: ",(epsCMax)
 print "Maximum strain in rebars: ",(epsSMax)
-print "Tipo solicitación: ",strTipoSolic," (",(tipoSolic),") \n"
+print "Solicitation type: ",strTipoSolic," (",(tipoSolic),") \n"
 print "Cumple a ",strTipoSolic,": ",(cumpleFT)
 print "Aprovechamiento a ",strTipoSolic,": ",(aprovSecc)
 print "RN= ",(RN/1e3),"kN \n"

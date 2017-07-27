@@ -5,7 +5,7 @@ import xc
 from materials import typical_materials
 import math
 
-# Verification test of the comando «rotate» para una sección elástica en 3d.
+# Verification test of the «rotate» method of an 3D elastic section.
 Iz= 2
 Iy= 3
 

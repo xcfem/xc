@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-'''  Comprueba el funcionamiento del comando ground_motion_record
-    mediante la integración de las aceleraciones dadas por:
+'''  Checks ground_motion_record function
+    by integrating the accelerations calculated as follows:
     x= 9*t**3+10*t**2
     xdot= 27*t**2+20*t
     xdotdot= 54*t+20  '''
