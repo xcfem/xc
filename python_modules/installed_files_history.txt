@@ -719,6 +719,8 @@
 /usr/local/lib/python2.7/dist-packages/misc/matrixUtils.pyc
 /usr/local/lib/python2.7/dist-packages/misc/metal3dToEsfBarra.py
 /usr/local/lib/python2.7/dist-packages/misc/metal3dToEsfBarra.pyc
+/usr/local/lib/python2.7/dist-packages/misc/project_directories.py
+/usr/local/lib/python2.7/dist-packages/misc/project_directories.pyc
 /usr/local/lib/python2.7/dist-packages/misc/tablaEsf.py
 /usr/local/lib/python2.7/dist-packages/misc/tablaEsf.pyc
 /usr/local/lib/python2.7/dist-packages/model/apoyo_elastico.py
