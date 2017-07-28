@@ -129,17 +129,17 @@ class RecordLoadCaseDisp(object):
     '''
     labl=self.loadCaseName
     for st in self.setsToDispLoads:
-      grfname=pathGr+self.loadCaseName+st.elSet.name
-      capt=self.loadCaseDescr + ', ' + st.genDescr + ', '  + self.unitsLoads
-      gridmodl.displayLoad(setToDisplay=st.elSet,loadCaseNm=self.loadCaseName,unitsScale=self.unitsScaleLoads,vectorScale=self.vectorScaleLoads, multByElemArea=self.multByElemAreaLoads,viewNm=self.viewName,hCamFct=self.hCamFct,caption= capt,fileName=grfname+'.jpg')
-      gridmodl.displayLoad(setToDisplay=st.elSet,loadCaseNm=self.loadCaseName,unitsScale=self.unitsScaleLoads,vectorScale=self.vectorScaleLoads, multByElemArea=self.multByElemAreaLoads,viewNm=self.viewName,hCamFct=self.hCamFct,caption= capt,fileName=grfname+'.eps')
+      grfname=pathGr+self.loadCaseName+st.name
+      capt=self.loadCaseDescr + ', ' + st.description + ', '  + self.unitsLoads
+      gridmodl.displayLoad(setToDisplay=st,loadCaseNm=self.loadCaseName,unitsScale=self.unitsScaleLoads,vectorScale=self.vectorScaleLoads, multByElemArea=self.multByElemAreaLoads,viewNm=self.viewName,hCamFct=self.hCamFct,caption= capt,fileName=grfname+'.jpg')
+      gridmodl.displayLoad(setToDisplay=st,loadCaseNm=self.loadCaseName,unitsScale=self.unitsScaleLoads,vectorScale=self.vectorScaleLoads, multByElemArea=self.multByElemAreaLoads,viewNm=self.viewName,hCamFct=self.hCamFct,caption= capt,fileName=grfname+'.eps')
       insertGrInTex(texFile=texFile,grFileNm=grfname,grWdt=grWdt,capText=capt,labl=labl) 
     for st in self.setsToDispBeamLoads:
-      grfname=pathGr+self.loadCaseName+st.elSet.name
-      capt=self.loadCaseDescr + ', ' + st.genDescr + ', '  + self.unitsLoads
+      grfname=pathGr+self.loadCaseName+st.name
+      capt=self.loadCaseDescr + ', ' + st.description + ', '  + self.unitsLoads
       lcs=GridModel.QuickGraphics(gridmodl)
-      lcs.dispLoadCaseBeamEl(loadCaseName=self.loadCaseName,setToDisplay=st.elSet,fUnitConv=self.unitsScaleLoads,elLoadComp=self.compElLoad,elLoadScaleF=self.vectorScaleLoads,nodLoadScaleF=self.vectorScalePointLoads,viewName=self.viewName,hCamFct=self.hCamFct,caption= capt,fileName=grfname+'.jpg')
-      lcs.dispLoadCaseBeamEl(loadCaseName=self.loadCaseName,setToDisplay=st.elSet,fUnitConv=self.unitsScaleLoads,elLoadComp=self.compElLoad,elLoadScaleF=self.vectorScaleLoads,nodLoadScaleF=self.vectorScalePointLoads,viewName=self.viewName,hCamFct=self.hCamFct,caption= capt,fileName=grfname+'.eps')
+      lcs.dispLoadCaseBeamEl(loadCaseName=self.loadCaseName,setToDisplay=st,fUnitConv=self.unitsScaleLoads,elLoadComp=self.compElLoad,elLoadScaleF=self.vectorScaleLoads,nodLoadScaleF=self.vectorScalePointLoads,viewName=self.viewName,hCamFct=self.hCamFct,caption= capt,fileName=grfname+'.jpg')
+      lcs.dispLoadCaseBeamEl(loadCaseName=self.loadCaseName,setToDisplay=st,fUnitConv=self.unitsScaleLoads,elLoadComp=self.compElLoad,elLoadScaleF=self.vectorScaleLoads,nodLoadScaleF=self.vectorScalePointLoads,viewName=self.viewName,hCamFct=self.hCamFct,caption= capt,fileName=grfname+'.eps')
       insertGrInTex(texFile=texFile,grFileNm=grfname,grWdt=grWdt,capText=capt,labl=labl) 
     return
 
@@ -166,10 +166,10 @@ class RecordLoadCaseDisp(object):
             else:
                 fcUn=1.0
                 unDesc=''
-            grfname=pathGr+self.loadCaseName+st.elSet.name+arg
-            lcs.displayDispRot(itemToDisp=arg,setToDisplay=st.elSet,fConvUnits=fcUn,unitDescription=unDesc,viewName=self.viewName,hCamFct=self.hCamFct,fileName=grfname+'.jpg')
-            lcs.displayDispRot(itemToDisp=arg,setToDisplay=st.elSet,fConvUnits=fcUn,unitDescription=unDesc,viewName=self.viewName,hCamFct=self.hCamFct,fileName=grfname+'.eps')
-            capt=self.loadCaseDescr + '. ' + st.genDescr.capitalize() + ', ' + capStdTexts[arg] + ' ' + unDesc
+            grfname=pathGr+self.loadCaseName+st.name+arg
+            lcs.displayDispRot(itemToDisp=arg,setToDisplay=st,fConvUnits=fcUn,unitDescription=unDesc,viewName=self.viewName,hCamFct=self.hCamFct,fileName=grfname+'.jpg')
+            lcs.displayDispRot(itemToDisp=arg,setToDisplay=st,fConvUnits=fcUn,unitDescription=unDesc,viewName=self.viewName,hCamFct=self.hCamFct,fileName=grfname+'.eps')
+            capt=self.loadCaseDescr + '. ' + st.description.capitalize() + ', ' + capStdTexts[arg] + ' ' + unDesc
             insertGrInTex(texFile=texFile,grFileNm=grfname,grWdt=grWdt,capText=capt)
     #Internal forces displays on sets of «shell» elements
     for st in self.setsToDispIntForc:
@@ -180,10 +180,10 @@ class RecordLoadCaseDisp(object):
             else:
                 fcUn=self.unitsScaleForc
                 unDesc=self.unitsForc
-            grfname=pathGr+self.loadCaseName+st.elSet.name+arg
-            lcs.displayIntForc(itemToDisp=arg,setToDisplay=st.elSet,fConvUnits= fcUn,unitDescription=unDesc,viewName=self.viewName,hCamFct=self.hCamFct,fileName=grfname+'.jpg')
-            lcs.displayIntForc(itemToDisp=arg,setToDisplay=st.elSet,fConvUnits= fcUn,unitDescription=unDesc,viewName=self.viewName,hCamFct=self.hCamFct,fileName=grfname+'.eps')
-            capt=self.loadCaseDescr + '. ' + st.genDescr.capitalize() + ', ' + capStdTexts[arg] + ' ' + unDesc
+            grfname=pathGr+self.loadCaseName+st.name+arg
+            lcs.displayIntForc(itemToDisp=arg,setToDisplay=st,fConvUnits= fcUn,unitDescription=unDesc,viewName=self.viewName,hCamFct=self.hCamFct,fileName=grfname+'.jpg')
+            lcs.displayIntForc(itemToDisp=arg,setToDisplay=st,fConvUnits= fcUn,unitDescription=unDesc,viewName=self.viewName,hCamFct=self.hCamFct,fileName=grfname+'.eps')
+            capt=self.loadCaseDescr + '. ' + st.description.capitalize() + ', ' + capStdTexts[arg] + ' ' + unDesc
             insertGrInTex(texFile=texFile,grFileNm=grfname,grWdt=grWdt,capText=capt)
     #Internal forces displays on sets of «beam» elements
     for st in self.setsToDispBeamIntForc:
@@ -199,10 +199,10 @@ class RecordLoadCaseDisp(object):
                   scaleFact=self.scaleDispBeamIntForc[0]
                 else:
                   scaleFact=self.scaleDispBeamIntForc[1]
-            grfname=pathGr+self.loadCaseName+st.elSet.name+arg
-            lcs.displayIntForcDiag(itemToDisp=arg,setToDisplay=st.elSet,fConvUnits= fcUn,scaleFactor=scaleFact,unitDescription=unDesc,viewName=self.viewNameBeams,hCamFct=self.hCamFctBeams,fileName=grfname+'.jpg')
-            lcs.displayIntForcDiag(itemToDisp=arg,setToDisplay=st.elSet,fConvUnits= fcUn,scaleFactor=scaleFact,unitDescription=unDesc,viewName=self.viewNameBeams,hCamFct=self.hCamFctBeams,fileName=grfname+'.eps')
-            capt=self.loadCaseDescr + '. ' + st.genDescr.capitalize() + ', ' + capStdTexts[arg] + ' ' + unDesc
+            grfname=pathGr+self.loadCaseName+st.name+arg
+            lcs.displayIntForcDiag(itemToDisp=arg,setToDisplay=st,fConvUnits= fcUn,scaleFactor=scaleFact,unitDescription=unDesc,viewName=self.viewNameBeams,hCamFct=self.hCamFctBeams,fileName=grfname+'.jpg')
+            lcs.displayIntForcDiag(itemToDisp=arg,setToDisplay=st,fConvUnits= fcUn,scaleFactor=scaleFact,unitDescription=unDesc,viewName=self.viewNameBeams,hCamFct=self.hCamFctBeams,fileName=grfname+'.eps')
+            capt=self.loadCaseDescr + '. ' + st.description.capitalize() + ', ' + capStdTexts[arg] + ' ' + unDesc
             insertGrInTex(texFile=texFile,grFileNm=grfname,grWdt=grWdt,capText=capt)
     texFile.write('\\clearpage\n')
     return
@@ -235,28 +235,28 @@ def checksReports(limitStateLabel,setsShEl,argsShEl,capTexts,pathGr,texReportFil
     for st in setsShEl:
         for arg in argsShEl:
             attributeName= limitStateLabel + 'Sect1'
-            field= Fields.getScalarFieldFromControlVar(attributeName,arg,st.elSet,None,1.0)
-            capt=capTexts[limitStateLabel] + ', ' + capTexts[arg] + '. '+ st.genDescr.capitalize() + ', ' + st.sectDescr[0]
-            grFileNm=pathGr+st.elSet.name+arg+'Sect1'
+            field= Fields.getScalarFieldFromControlVar(attributeName,arg,st,None,1.0)
+            capt=capTexts[limitStateLabel] + ', ' + capTexts[arg] + '. '+ st.description.capitalize() + ', ' + 'section 1'
+            grFileNm=pathGr+st.name+arg+'Sect1'
             field.display(defDisplay=dfDisp,caption=capt,fName=grFileNm+'.jpg')
             insertGrInTex(texFile=report,grFileNm=grFileNm,grWdt=grWdt,capText=capt)
 
             attributeName= limitStateLabel + 'Sect2'
-            field= Fields.getScalarFieldFromControlVar(attributeName,arg,st.elSet,None,1.0)
-            capt=capTexts[limitStateLabel] + ', ' + capTexts[arg] + '. '+ st.genDescr.capitalize() + ', ' + st.sectDescr[1]
-            grFileNm=pathGr+st.elSet.name+arg+'Sect2'
+            field= Fields.getScalarFieldFromControlVar(attributeName,arg,st,None,1.0)
+            capt=capTexts[limitStateLabel] + ', ' + capTexts[arg] + '. '+ st.description.capitalize() + ', ' + 'section 2'
+            grFileNm=pathGr+st.name+arg+'Sect2'
             field.display(defDisplay=dfDisp,caption=capt,fName=grFileNm+'.jpg')
             insertGrInTex(texFile=report,grFileNm=grFileNm,grWdt=grWdt,capText=capt)
     for stV in setsBmElView:
         for argS in argsBmElScale:
-            diagram= cvd.ControlVarDiagram(scaleFactor=argS[1],fUnitConv=1,sets=[stV[0].elSet],attributeName= limitStateLabel,component= argS[0])
+            diagram= cvd.ControlVarDiagram(scaleFactor=argS[1],fUnitConv=1,sets=[stV[0]],attributeName= limitStateLabel,component= argS[0])
             diagram.addDiagram()
             dfDisp.viewName= stV[1]
-            dfDisp.setupGrid(stV[0].elSet)
+            dfDisp.setupGrid(stV[0])
             dfDisp.defineMeshScene(None)
             dfDisp.appendDiagram(diagram)
-            capt= capTexts[limitStateLabel] + ', ' + capTexts[argS[0]] + '. '+ stV[0].genDescr.capitalize() + ', ' + stV[0].sectDescr[0]
-            grFileNm=pathGr+stV[0].elSet.name+argS[0]
+            capt= capTexts[limitStateLabel] + ', ' + capTexts[argS[0]] + '. '+ stV[0].description.capitalize() + ', ' + 'section 1'
+            grFileNm=pathGr+stV[0].name+argS[0]
             dfDisp.displayScene(caption=capt,fName=grFileNm+'.jpg')
             insertGrInTex(texFile=report,grFileNm=grFileNm,grWdt=grWdt,capText=capt)
     report.close()
