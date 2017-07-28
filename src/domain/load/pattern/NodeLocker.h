@@ -43,8 +43,8 @@ class TaggedObjectStorage;
 //! that make part of a load pattern.
 class NodeLocker: public ForceReprComponent
   {
-    void alloc_contenedores(void);
-    void alloc_iteradores(void);
+    void alloc_containers(void);
+    void alloc_iterators(void);
     NodeLocker(const NodeLocker &otro);
     NodeLocker &operator=(const NodeLocker &otro);
   protected:

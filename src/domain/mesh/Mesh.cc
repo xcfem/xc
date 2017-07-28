@@ -76,15 +76,15 @@ void XC::Mesh::libera(void)
     theNodes= nullptr;
   }
 
-//! @brief Reserva memoria para los contenedores.
-void XC::Mesh::alloc_contenedores(void)
+//! @brief Allocates memory for containers.
+void XC::Mesh::alloc_containers(void)
   {
     // init the arrays for storing the mesh components
     theNodes= new MapOfTaggedObjects(this,"node");
     theElements= new MapOfTaggedObjects(this,"element");
   }
 
-//! @brief Reserva memoria para los iteradores.
+//! @brief Allocates memory for iterators.
 void XC::Mesh::alloc_iters(void)
   {
     // init the iters
@@ -114,7 +114,7 @@ XC::Mesh::Mesh(EntCmd *owr)
   :MeshComponentContainer(owr,DOMAIN_TAG_Mesh), eleGraphBuiltFlag(false), nodeGraphBuiltFlag(false),
    theBounds(6), lockers(this)
   {
-    alloc_contenedores();
+    alloc_containers();
     alloc_iters();
     check_contenedores();
     init_bounds();

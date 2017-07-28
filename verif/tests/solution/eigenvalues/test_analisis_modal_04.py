@@ -147,9 +147,10 @@ resta_modos= (modos-modosEjemplo)
 ratio2= resta_modos.rowNorm()
 
 ratio3= abs(masaTotal-masaTotalTeor)/masaTotalTeor
-''' Los valores de los 3 primeros factores de distribución (3 primeras columnas)
-   se tomaron del ejemplo de referencia. El cuarto (que no se da en el
-   ejemplo) es el que se obtiene del programa. ''' 
+''' The values of the first three distribution factors values (fist 3 columns)
+   were taken from the reference example. The two others (which are not given
+in the example) are those obtained from the program (they can always get
+wrong because of some error). ''' 
 factoresDistribEjemplo= xc.Matrix([[0.419,0.295,0.148,0.0966714],
                                    [0.676,0.363,0.059,-0.0270432],
                                    [0.889,0.27,-0.105,-0.0978747],

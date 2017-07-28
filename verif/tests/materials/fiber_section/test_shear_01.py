@@ -166,10 +166,10 @@ secHAParamsCortante.calcVuEHE08(preprocessor, scc,"",EHE_materials.HA25,EHE_mate
 Vu2C= secHAParamsCortante.Vu2
 
 
-''' En lugar de tomar Vu2= 127.638 kN como indica en el documento
-que sirve de base, tomamos 117.052 kN, el motivo es que aquí si
-se tiene en cuenta el axil que toman las reinforcement por lo que
-el valor de la tensión media en el alma que se obtiene es inferior. '''
+''' Instead of taking Vu2= 127.638 kN as stated in the reference
+document, we take 117.052 kN, that's because here we take into account
+the axial force in the reinforcement so average stress in the web
+is smaller. '''
 Vu2ATeor= 117.052e3
 ratio1= ((Vu2A-Vu2ATeor)/Vu2ATeor)
 Vu2BTeor= 90906.4

@@ -42,7 +42,7 @@
 #include <iostream>
 #include <utility/matrix/ID.h>
 
-//! @brief Libera la memoria reservada.
+//! @brief Frees allocated memory.
 void XC::PySimple1Gen::libera(void)
   {
     if(PyEleNum)

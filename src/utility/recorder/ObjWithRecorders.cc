@@ -220,14 +220,14 @@ void XC::ObjWithRecorders::SetOutputHandlers(DataOutputHandler::map_output_handl
 
 int XC::ObjWithRecorders::sendData(CommParameters &cp)
   {
-    //Reservamos las posiciones 0 y 1 de data para los miembros
-    //de esta clase.
+    //Position 1 and 2 are reserved for members of
+    //this class.
     return 0;
   }
 
 int XC::ObjWithRecorders::recvData(const CommParameters &cp)
   {
-    //Reservamos las posiciones 0 y 1 de data para los miembros
-    //de esta clase.
+    //Position 1 and 2 are reserved for members of
+    //this class.
     return 0;
   }

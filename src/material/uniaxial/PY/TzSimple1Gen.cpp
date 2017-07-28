@@ -46,7 +46,7 @@
 #include <cmath>
 #include <utility/matrix/ID.h> 
 
-//! @brief Libera la memoria reservada.
+//! @brief Free allocated memory
 void XC::TzSimple1Gen::libera(void)
   {
     if(TzEleNum)

@@ -84,7 +84,7 @@ void XC::ConstrContainer::libera(void)
   }
 
 //! @brief Allocates memory for constraint containers.
-void XC::ConstrContainer::alloc_contenedores(void)
+void XC::ConstrContainer::alloc_containers(void)
   {
     // init the arrays for storing the constraints components
     theSPs= new MapOfTaggedObjects(this,"SPs");
@@ -123,7 +123,7 @@ XC::ConstrContainer::ConstrContainer(Domain *owr)
   :MeshComponentContainer(owr,DOMAIN_TAG_ConstrContainer), activeNodeLockers(this), activeLoadPatterns(this)
   {
     // init the arrays for storing the domain components
-    alloc_contenedores();
+    alloc_containers();
     alloc_iters();
     if(!check_contenedores())
       { exit(-1); }

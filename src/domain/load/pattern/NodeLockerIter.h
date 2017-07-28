@@ -36,7 +36,7 @@ class TaggedObjectIter;
 
 //! @ingroup LPatterns
 //
-//! @brief Iterador sobre los objetos de tipo NodeLocker.
+//! @brief Iterator over NodeLocker objects.
 class NodeLockerIter
   {
   private:

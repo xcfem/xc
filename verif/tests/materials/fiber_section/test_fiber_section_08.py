@@ -4,12 +4,11 @@
    informático del hormigón estructural (Cátedra de hormigón de la ETSICCP-IECA
    UPM).
 
-Los resultados obtenidos son aceptables teniendo en cuenta que:
+The results obtained are acceptable considering that:
 
-- El prontuario no tiene en cuenta que el valor máximo de la resistencia de 1.05 veces el de
-  la resistencia característica.
-- Este programa no descuenta los huecos en el hormigón ocupados por la reinforcement.
-- La discretización de la sección empleada en el modelo de fibras introduce un error.
+- The "prontuario" does not take into account that the maximum value of resistance is 1.05 times that of the characteristic resistance.
+- This program does not discount the holes in the concrete occupied by the reinforcement.
+- Fiber model discretization introduces an error.
  '''
 
 # prueba.logFileName= "/tmp/borrar.log"  #Ignore warning messages
@@ -38,7 +37,7 @@ gammas= 1.15 # Partial safety factor for steel.
 
 CurvZ= 11.474e-3 # Curvatura de prueba 1.
 x1= 0.0997 # Profundidad de la fibra neutra 1.
-MzDato= 55.949206e3 # Momento que agota la reinforcement a tracción.
+MzDato= 55.949206e3 # Bendign moment that makes tension reinforcement to yield.
 NDato= 0.0
 
 prueba= xc.ProblemaEF()

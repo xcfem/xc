@@ -70,19 +70,18 @@ class FE_Graph;
 
 //! @ingroup Graph
 //
-//! @brief Iterador over the vertices of the graph.
+//! @brief Iterator over the vertices of the graph.
 class FE_VertexIter: public VertexIter
   {
   private:
-    FE_Graph &myGraph;
-    int currIndex;
-    int numDone;
+    FE_Graph &myGraph; //!< Graph object.
+    int currIndex; //!< Current index.
+    int numDone; //!< Number of already visited vertices.
   protected:
     FE_VertexIter(FE_Graph &theFE_Graph);
   public:
     virtual void reset(void);
     virtual Vertex *operator()(void);
-    
   };
 } // end of XC namespace
 

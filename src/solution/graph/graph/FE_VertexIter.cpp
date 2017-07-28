@@ -67,38 +67,40 @@
 // FE_VertexIter(FE_Graph &theGraph):
 //	constructor that takes the graph, just the basic iter
 
+//! @brief Constructor.
 XC::FE_VertexIter::FE_VertexIter(FE_Graph &theGraph)
   :myGraph(theGraph), currIndex(0), numDone(0)
-{
-}
+  {}
 
-
+//! @brief Resets the iterator.
 void XC::FE_VertexIter::reset(void)
-{
+  {
     currIndex = 0;
     numDone = 0;
-}
+  }
 
- XC::Vertex *XC::FE_VertexIter::operator()(void)
-{
-  // check if we still have vertices in the XC::Graph
-  // if not return 0, indicating we are done
-  if (numDone >= myGraph.numVertex)
-    return 0;
+//! @brief Returns next vertex to visit.
+XC::Vertex *XC::FE_VertexIter::operator()(void)
+  {
+    // check if we still have vertices in the Graph
+    // if not return 0, indicating we are done
+    if(numDone >= myGraph.numVertex)
+      return 0;
 
-  // search through domains ele list till we find the next element
-  while ((currIndex < myGraph.sizeVertices) 
-	 && (myGraph.theVertices[currIndex] == 0))
+    // search through domains ele list till we find the next element
+    while ((currIndex < myGraph.sizeVertices) 
+  	 && (myGraph.theVertices[currIndex] == 0))
       currIndex++;
 
-  // if not at the end of the list return the element
-  if (currIndex < myGraph.sizeVertices) {
-      Vertex *result = myGraph.theVertices[currIndex];
-      numDone++; currIndex++;
-      return(result);
+    // if not at the end of the list return the element
+    if(currIndex < myGraph.sizeVertices)
+      {
+        Vertex *result = myGraph.theVertices[currIndex];
+        numDone++; currIndex++;
+        return(result);
+      }
+    return (0);
   }
-  return (0);
-}
 
     
     

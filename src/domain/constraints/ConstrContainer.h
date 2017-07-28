@@ -72,7 +72,7 @@ class ConstrContainer: public MeshComponentContainer
     SingleDomMRMFreedom_Iter *theMRMFreedom_Iter;
     SingleDomAllSFreedom_Iter *allSFreedom_Iter;
 
-    void alloc_contenedores(void);
+    void alloc_containers(void);
     void alloc_iters(void);
     bool check_contenedores(void) const;
   protected:

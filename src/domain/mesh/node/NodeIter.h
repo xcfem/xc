@@ -69,7 +69,7 @@ class Node;
 
 //! \ingroup Nod
 //
-//! @brief Iterador sobre el conteedor de nodos.
+//! @brief Iterator over the nodes.
 class NodeIter
   {
   public:

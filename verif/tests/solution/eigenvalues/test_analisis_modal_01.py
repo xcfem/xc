@@ -137,9 +137,10 @@ modosEjemplo= xc.Matrix([[0.323,-0.764,0.946,0.897,-0.623],[0.521,-0.941,0.378,-
 resta= (modos-modosEjemplo)
 ratio2= resta.Norm()
 ratio3= abs(masaTotal-5*masaPorPlanta)/5/masaPorPlanta
-''' Los valores de los 3 primeros factores de distribución (3 primeras columnas)
-   se tomaron del ejemplo de referencia. Los otros dos (que no se dan en el
-   ejemplo) son los que se obtienen del programa. ''' 
+''' The values of the first three distribution factors values (fist 3 columns)
+   were taken from the reference example. The two others (which are not given
+in the example) are those obtained from the program (they can always get
+wrong because of some error). ''' 
 factoresDistribEjemplo= xc.Matrix([[0.419,0.295,0.148,0.0966714,0.0429946],
                          [0.676,0.363,0.059,-0.0270432,-0.0689994],
                          [0.889,0.27,-0.105,-0.0978747,0.0453662],

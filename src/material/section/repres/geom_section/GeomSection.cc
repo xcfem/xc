@@ -89,7 +89,7 @@ size_t XC::GeomSection::getNumFiberData(void) const
 XC::SisRefScc *XC::GeomSection::get_reference_system(const size_t &id)
   {
     SisRefScc *retval= nullptr;
-    if(id>0) //El 0 se reserva para el sistema de coordenadas universal.
+    if(id>0) //0 is reserved for the universal coordinate system.
       {
         lst_sis_ref::iterator i= reference_systems.find(id);
         if(i!= reference_systems.end()) //Reference system exists.
@@ -102,7 +102,7 @@ XC::SisRefScc *XC::GeomSection::get_reference_system(const size_t &id)
 const XC::SisRefScc *XC::GeomSection::get_reference_system(const size_t &id) const
   {
     SisRefScc *retval= nullptr;
-    if(id>0) //El 0 se reserva para el sistema de coordenadas universal.
+    if(id>0) //0 is reserved for the universal coordinate system.
       {
         lst_sis_ref::const_iterator i= reference_systems.find(id);
         if(i!= reference_systems.end()) //Reference system exists.

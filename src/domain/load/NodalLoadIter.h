@@ -70,7 +70,7 @@ class TaggedObjectIter;
 
 //! @ingroup LPatterns
 //
-//! @brief Iterador sobre las nodal loads.
+//! @brief Nodal loads iterator.
 class NodalLoadIter
   {
   private:

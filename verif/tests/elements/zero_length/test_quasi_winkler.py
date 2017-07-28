@@ -136,9 +136,10 @@ for n in l2.getNodes():
   '''
 
 
-''' Los valores adimensionales de la flecha mínima en el centro del vano
-y la máxima próxima al apoyo se midieron en la figura 2 of the article
-«Beams on quasi-Winkler foundations» de M. N. Pavlovic y S. Tsikkos. '''
+''' Adimensional values for the minimum deflection/span ratio at midspan
+and the maximum one near the support was measured on the figure 2 of the
+article «Beams on quasi-Winkler foundations» of M. N. Pavlovic 
+y S. Tsikkos. '''
 yAdimCentroVanoTeor= -0.1254
 yAdimMaximaTeor= 0.0229
 ratio1= beta*L-3*math.pi

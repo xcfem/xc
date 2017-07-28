@@ -71,8 +71,8 @@ XC::BaseNumberer::BaseNumberer(int classTag)
  :GraphNumberer(classTag), theRefResult() {}
 
 
-//! @brief Reserva espacio suficiente para el vector theRefResult.
-//! Returns true if the number of vertices es distinto de cero.
+//! @brief Allocates space enough for the theRefResult vector.
+//! Returns true if the number of vertices is not zero.
 bool XC::BaseNumberer::checkSize(const Graph &theGraph)
   {
     // first check our size, if not same make new

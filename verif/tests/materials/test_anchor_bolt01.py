@@ -50,7 +50,7 @@ if (C<Cmin):
 
 f1N= EOTA_TR029_limit_state_checking.getFactor1N(C,CcrN)
 
-# Área bruta extracción
+# Extraction gross area.
 plgA0pN= EOTA_TR029_limit_state_checking.getA0pN(diamBarra,posAnc,hef,tauRkUcr)
 A0pN= plgA0pN.getArea()
 # Área neta pull-out
@@ -59,12 +59,12 @@ plgApN.recortaPorPoligono(contornoPiezaSoporte)
 ApN= plgApN.getArea()
 f2pN= EOTA_TR029_limit_state_checking.getFactor2pN(A0pN,ApN)
 N0Rdp= EOTA_TR029_limit_state_checking.axialInitialResistancePullOut(diamBarra,hef,tauRk)/gammaMc
-NRdp= N0Rdp*f1N*f2pN # Extracción
+NRdp= N0Rdp*f1N*f2pN # Extraction
 
 # Área bruta desprendimiento de cono
 plgA0cN= EOTA_TR029_limit_state_checking.getA0cN(posAnc,hef)
 A0cN= plgA0cN.getArea()
-# Área neta extracción de cono.
+# Cone extraction effective area.
 plgAcN= plgA0cN
 plgAcN.recortaPorPoligono(contornoPiezaSoporte)
 AcN= plgAcN.getArea()
@@ -89,9 +89,8 @@ NRdSp= N0RdSp*f1Nsp*f2spN # Desprendimiento de cono.
 
 # Resultados
 
-''' Resistencia a tracción del perno aislado sin
-   tener en cuenta el efecto favorable de la presencia
-   de reinforcement. '''
+''' Tensile strength of the anchor itself without considering
+the favourable effect of the reinforcement. '''
 NRd= min(min(min(NRdSp,NRdc),NRdp),NRds)
 
 ratio1= abs(NRds-192900)/192900
@@ -110,12 +109,12 @@ print "A_s= ",areaBarra*1e6," mm2\n"
 print "C_{cr,N}= ",CcrN," m\n"
 print "C= ",C," m\n"
 print "C/C_{cr,N}= ",C/CcrN
-print "Área bruta extracción A0pN= ",A0pN," m\n"
-print "Área neta extracción ApN= ",ApN," m\n"
-print "Área bruta extracción cono A0cN= ",A0cN," m\n"
-print "Área neta extracción cono AcN= ",AcN," m\n"
-print "Área bruta splitting A0spN= ",A0spN," m\n"
-print "Área neta splitting AcN= ",AspN," m\n"
+print "Extraction gross area A0pN= ",A0pN," m\n"
+print "Extraction effective area ApN= ",ApN," m\n"
+print "Extraction gross area cono A0cN= ",A0cN," m\n"
+print "Extraction effective area cono AcN= ",AcN," m\n"
+print "Splitting gross area A0spN= ",A0spN," m\n"
+print "Splitting effective area AcN= ",AspN," m\n"
 print "f1N= ",f1N
 print "f2pNTeor= ",f2pNTeor
 print "f2pN= ",f2pN

@@ -32,7 +32,7 @@
 #include <iostream>
 #include <utility/matrix/ID.h>
 
-//! @brief Libera la memoria reservada.
+//! @brief Free allocated memory
 void XC::Simple1GenBase::libera(void)
   {
     if(Nodex)

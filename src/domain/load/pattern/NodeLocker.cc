@@ -68,25 +68,27 @@
 
 
 //! @brief Allocates memory.
-void XC::NodeLocker::alloc_contenedores(void)
+void XC::NodeLocker::alloc_containers(void)
   {
     theSPs= new ArrayOfTaggedObjects(this,32,"SPs");
 
     if(!theSPs)
       {
-        std::cerr << " XC::NodeLocker::NodeLocker() - ran out of memory\n";
+        std::cerr << nombre_clase() << "::" << __FUNCTION__
+	          << "; ran out of memory\n";
         exit(-1);
       }
   }
 
-//! @brief Reserva memoria para almacenar los iteradores.
-void XC::NodeLocker::alloc_iteradores(void)
+//! @brief Allocates memory for iterators.
+void XC::NodeLocker::alloc_iterators(void)
   {
     theSpIter= new SingleDomSFreedom_Iter(theSPs);
 
     if(theSpIter == 0)
       {
-        std::cerr << " XC::NodeLocker::NodeLocker() - ran out of memory\n";
+        std::cerr << nombre_clase() << "::" << __FUNCTION__
+	          << "; ran out of memory\n";
         exit(-1);
       }
   }
@@ -97,8 +99,8 @@ XC::NodeLocker::NodeLocker(int tag, int clasTag)
    theSPs(nullptr), theSpIter(nullptr)
   {
     // constructor for subclass
-    alloc_contenedores();
-    alloc_iteradores();
+    alloc_containers();
+    alloc_iterators();
   }
 
 
@@ -107,8 +109,8 @@ XC::NodeLocker::NodeLocker(void)
   :ForceReprComponent(0,PATTERN_TAG_NodeLocker), nextTag(0),currentGeoTag(0), lastGeoSendTag(-1),
    theSPs(nullptr), theSpIter(nullptr)
   {
-    alloc_contenedores();
-    alloc_iteradores();
+    alloc_containers();
+    alloc_iterators();
   }
 
 //! @brief Constructor.
@@ -116,8 +118,8 @@ XC::NodeLocker::NodeLocker(int tag)
   :ForceReprComponent(tag,PATTERN_TAG_NodeLocker),nextTag(0),
    currentGeoTag(0), lastGeoSendTag(-1), theSPs(nullptr), theSpIter(nullptr)
   {
-    alloc_contenedores();
-    alloc_iteradores();
+    alloc_containers();
+    alloc_iterators();
   }
 
 //! @brief Destructor.

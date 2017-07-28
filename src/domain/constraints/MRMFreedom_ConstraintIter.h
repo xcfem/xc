@@ -69,7 +69,7 @@ class MRMFreedom_Constraint;
 
 //! @ingroup CContMP
 //
-//! @brief Iterador over multiple retained nodal constraints.
+//! @brief Iterator over multiple retained nodal constraints.
 class MRMFreedom_ConstraintIter
   {
   public:

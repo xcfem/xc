@@ -70,8 +70,8 @@ class Mesh: public MeshComponentContainer
     Graph theNodeGraph;
     Graph theElementGraph;
 
-    TaggedObjectStorage *theNodes; //!< Contenedor de nodos.
-    SingleDomNodIter *theNodIter; //!< Iterador sobre nodos.
+    TaggedObjectStorage *theNodes; //!< Node container.
+    SingleDomNodIter *theNodIter; //!< Node iterator.
     KDTreeNodes kdtreeNodos; //!< space-partitioning data structure for organizing nodes.
     std::vector<std::string> nombresCoordenadas; //!< Coordinate names ("X","Y","Z",...).
     std::string nombreUnidades; //!< Units names ("cm","m","in",...).
@@ -85,7 +85,7 @@ class Mesh: public MeshComponentContainer
 
     NodeLockers lockers; //!< To block deactivated (dead) nodes.
 
-    void alloc_contenedores(void);
+    void alloc_containers(void);
     void alloc_iters(void);
     bool check_contenedores(void) const;
     void init_bounds(void);

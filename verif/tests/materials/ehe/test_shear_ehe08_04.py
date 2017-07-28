@@ -19,8 +19,8 @@ __email__= "l.pereztato@gmail.com"
 #Coeficientes de seguridad.
 gammaC= 1.5
 
-#Todos los valores son FICTICIOS, sólo se emplean para comprobar
-#   que la fórmula está bien escrita en la macro.
+#All values are fictional, they are used only to check
+#   that the expression is written correctly.
 
 Nd=0
 Md=0 #Valor absoluto del momento de cálculo.

@@ -12,7 +12,7 @@ __email__= "l.pereztato@gmail.com"
 from materials.eae import resistencia_cordon_soldadura
 import math
 
-# Tensiones sobre el plano de garganta abatido sobre la cara del cordón
+# Stresses on the throat plane revolved over the bead face.
 tn= 72.07e6 # Tangential stress normal to weld axis.
 ta= -33.22e6 # Tangential stress parallel to weld axis.
 n= -252.4e6 # Normal stress.
