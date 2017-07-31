@@ -23,8 +23,8 @@ gammaC= 1.5
 #   that the expression is written correctly.
 
 Nd=0
-Md=0 #Valor absoluto del momento de cálculo.
-Vd=0 #Valor absoluto del cortante efectivo de cálculo (artículo 42.2.2).
+Md=0 #Absolute value of the design bending moment.
+Vd=0 #Absolute value of effective design shear (article 42.2.2).
 Td=0 #Torsor de cálculo.
 z=10 #Brazo mecánico.
 AsPas=1/4 #Area of passive longitudinal reinforcement anchored at a distance greater than the effective depth of the section.

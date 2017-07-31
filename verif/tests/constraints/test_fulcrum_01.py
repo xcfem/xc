@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
-# Home made test
-# Barra rígida entre dos nodes.
+'''Rigid beam between two nodes. Home made test'''
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
 __copyright__= "Copyright 2015, LCPT and AOO"

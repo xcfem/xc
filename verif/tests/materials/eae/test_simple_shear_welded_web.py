@@ -30,7 +30,7 @@ Es= 2e11 # Elastic modulus of the steel.
 
 # Safety data
 betaW= 0.8 # Correlation factor for S-275 steel (table 59.8.2 page 304 EAE).
-gammaMw= 1.0/math.sqrt(3) # Steel partial safety factor para uniones (artículo 59.8.2 page 304 EAE).
+gammaMw= 1.0/math.sqrt(3) # Steel partial safety factor for joints (article 59.8.2 page 304 EAE).
 
 
 

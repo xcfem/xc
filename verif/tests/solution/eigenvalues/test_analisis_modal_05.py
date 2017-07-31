@@ -24,13 +24,13 @@ masaPorPlanta= 134.4e3
 nodeMassMatrix= xc.Matrix([[masaPorPlanta,0,0],[0,masaPorPlanta,0],[0,0,0]])
 Ehorm= 200000*1e5 # Concrete elastic modulus.
 
-Bbaja= 0.45 # Escuadría de los pilares.
+Bbaja= 0.45 # Columns size.
 Ibaja= 1/12.0*Bbaja**4 # Cross section moment of inertia.
 Hbaja= 4 # Altura de la planta baja.
-B1a= 0.40 # Escuadría de los pilares.
+B1a= 0.40 # Columns size.
 I1a= 1/12.0*B1a**4 # Cross section moment of inertia.
 H= 3 # Altura del resto de plantas.
-B3a= 0.35 # Escuadría de los pilares.
+B3a= 0.35 # Columns size.
 I3a= 1/12.0*B3a**4 # Cross section moment of inertia.
 
 

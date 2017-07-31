@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
-# Home made test
-# Barra rígida entre dos nodes.
+'''Rigid beam between two nodes. Home made test'''
 
 import xc_base
 import geom

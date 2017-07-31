@@ -18,7 +18,7 @@ __email__= "l.pereztato@gmail.com"
 
 Nd=1224e3 #Design axial internal force.
 Md=0 #Momento de cálculo.
-Vd=125e3 #Cortante efectivo de cálculo (artículo 42.2.2).
+Vd=125e3 #Effective design shear (article 42.2.2).
 Td=0 #Torsor de cálculo.
 d=0.55 #Effective depth.
 z=0.9*d #Brazo mecánico.

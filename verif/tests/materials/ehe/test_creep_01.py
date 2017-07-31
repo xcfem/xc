@@ -13,7 +13,7 @@ __email__= "l.pereztato@gmail.com"
 def sqr(a):
   return a*a
 
-# 30 MPa, 1 día.
+# 30 MPa, 1 day.
 fi1= EHE_materials.HA30.getCreepFitt0(10e3,1,50,50)
 err2= sqr(fi1-5.6)
 fi2= EHE_materials.HA30.getCreepFitt0(10e3,1,50,600)
@@ -27,7 +27,7 @@ err2= err2+sqr(fi5-3.1)
 fi6= EHE_materials.HA30.getCreepFitt0(10e3,1,90,600)
 err2= err2+sqr(fi6-2.7)
 
-# 30 MPa, 28 días.
+# 30 MPa, 28 days.
 fiB1= EHE_materials.HA30.getCreepFitt0(10e3,28,50,50)
 err2= err2+sqr(fiB1-3)
 fiB2= EHE_materials.HA30.getCreepFitt0(10e3,28,50,600)
@@ -41,7 +41,7 @@ err2= err2+sqr(fiB5-1.6)
 fiB6= EHE_materials.HA30.getCreepFitt0(10e3,28,90,600)
 err2= err2+sqr(fiB6-1.5)
 
-# 30 MPa, 1800 días.
+# 30 MPa, 1800 days.
 fiC1= EHE_materials.HA30.getCreepFitt0(10e3,1800,50,50)
 err2= err2+sqr(fiC1-1.3)
 fiC2= EHE_materials.HA30.getCreepFitt0(10e3,1800,50,600)
@@ -56,7 +56,7 @@ fiC6= EHE_materials.HA30.getCreepFitt0(10e3,1800,90,600)
 err2= err2+sqr(fiC6-0.7)
 
 
-# 70 MPa, 1 día.
+# 70 MPa, 1 day.
 fi71= EHE_materials.HA70.getCreepFitt0(10e3,1,50,50)
 err2= err2+sqr(fi71-2.6)
 fi72= EHE_materials.HA70.getCreepFitt0(10e3,1,50,600)
@@ -71,7 +71,7 @@ fi76= EHE_materials.HA70.getCreepFitt0(10e3,1,90,600)
 err2= err2+sqr(fi76-1.6)
 
 
-# 70 MPa, 28 días.
+# 70 MPa, 28 days.
 fi7B1= EHE_materials.HA70.getCreepFitt0(10e3,28,50,50)
 err2= err2+sqr(fi7B1-1.4)
 fi7B2= EHE_materials.HA70.getCreepFitt0(10e3,28,50,600)
@@ -85,7 +85,7 @@ err2= err2+sqr(fi7B5-0.9)
 fi7B6= EHE_materials.HA70.getCreepFitt0(10e3,28,90,600)
 err2= err2+sqr(fi7B6-0.8)
 
-# 70 MPa, 1800 días.
+# 70 MPa, 1800 days.
 fi7C1= EHE_materials.HA70.getCreepFitt0(10e3,1800,50,50)
 err2= err2+sqr(fi7C1-0.6)
 fi7C2= EHE_materials.HA70.getCreepFitt0(10e3,1800,50,600)

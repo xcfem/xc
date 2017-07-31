@@ -115,7 +115,7 @@ UX3SP2K= -0.014285
 UY3SP2K= -0.084652
 
 
-# Diferencias respecto a los resultados que, en dicho artículo, atribuyen a SAP-2000
+# Differences from the results attributed to SAP-2000 in that article.
 ratio1= abs(((UX8-UX8SP2K)/UX8SP2K))
 ratio2= abs(((UY8-UY8SP2K)/UY8SP2K))
 ratio3= abs(((UX3-UX3SP2K)/UX3SP2K))
