@@ -21,9 +21,9 @@ L= 20 # Bar length.
 
 # Problem type
 
-centroideG= None # Centroide en globales.
-centroideL= None # Centroide en locales.
-centroideB= None # Centroide en básicas.
+centroidG= None # Global coordinates of the centroid.
+centroidL= None # Local coordinates of the centroid.
+centroidB= None # Basic coordinates of the centroid.
 
 prueba= xc.ProblemaEF()
 preprocessor=  prueba.getPreprocessor   
@@ -48,25 +48,25 @@ elements.defaultMaterial= "seccion"
 elements.defaultTag= 1 #Tag for next element.
 beam3d= elements.newElement("elastic_beam_3d",xc.ID([1,2]));
 
-centroideG= beam3d.getCoordTransf.getPointGlobalCoordFromBasic(0.5)
-posCentroideG= geom.Pos3d(centroideG[0],centroideG[1],centroideG[2])
-centroideL= beam3d.getCoordTransf.getPointLocalCoordFromGlobal(centroideG)
-posCentroideL= geom.Pos2d(centroideL[0],centroideL[1])
-centroideB= beam3d.getCoordTransf.getPointBasicCoordFromGlobal(centroideG)
+centroidG= beam3d.getCoordTransf.getPointGlobalCoordFromBasic(0.5)
+posCentroidG= geom.Pos3d(centroidG[0],centroidG[1],centroidG[2])
+centroidL= beam3d.getCoordTransf.getPointLocalCoordFromGlobal(centroidG)
+posCentroidL= geom.Pos2d(centroidL[0],centroidL[1])
+centroidB= beam3d.getCoordTransf.getPointBasicCoordFromGlobal(centroidG)
 
-centroideGTeor= geom.Pos3d(L*math.sqrt(3)/6,L*math.sqrt(3)/6,L*math.sqrt(3)/6) # Centroide en globales.
-ratio1= posCentroideG.distPos3d(centroideGTeor)
-centroideLTeor= geom.Pos2d(10,0) # Centroide en locales.
-ratio2= posCentroideL.distPos2d(centroideLTeor)
-centroideBTeor= 0.5 # Centroide en básicas.
-ratio3= abs(centroideB-centroideBTeor)
+centroidGTeor= geom.Pos3d(L*math.sqrt(3)/6,L*math.sqrt(3)/6,L*math.sqrt(3)/6) # Centroid en globales.
+ratio1= posCentroidG.distPos3d(centroidGTeor)
+centroidLTeor= geom.Pos2d(10,0) # Local coordinates of the centroid.
+ratio2= posCentroidL.distPos2d(centroidLTeor)
+centroidBTeor= 0.5 # Basic coordinates of the centroid.
+ratio3= abs(centroidB-centroidBTeor)
 
 ''' 
-print "centroide en globales: ",centroideG
+print "global coordinates of the centroid: ",centroidG
 print "ratio1: ",ratio1
-print "centroide en locales: ",centroideL
+print "local coordinates of the centroid: ",centroidL
 print "ratio2: ",ratio2
-print "centroide en básicas: ",centroideB
+print "basic coordinates of the centroid: ",centroidB
 print "ratio3: ",ratio3
    '''
 

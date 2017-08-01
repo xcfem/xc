@@ -6,8 +6,8 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com ana.ortega.ort@gmal.com"
 
-areaCordones= 140e-6 # Área de los cordones expressed in square meters.
-areaFiLong= 0.5e-4 # Fi8 área de la armadura longitudinal expressed in square meters.
+areaCordones= 140e-6 # Strands area expressed in square meters.
+areaFiLong= 0.5e-4 # Fi8 longitudinal reinforcement area expressed in square meters.
 def gmSecHP02(nmbGeomSecc,concrDiagName,nmbDiagAceroArmar,nmbDiagAceroPret):
   # Concrete
   geomSecc= preprocessor.getMaterialLoader.newSectionGeometry(nmbGeomSecc)

@@ -25,7 +25,7 @@ gammas= 1.15 # Partial safety factor for steel.
 width= 0.2 # Section width expressed in meters.
 depth= 0.4 # Section width expressed in meters.
 cover= 0.05 # Concrete cover expressed in meters.
-diam= 16e-3 # Diámetro de las barras expressed in meters.
+diam= 16e-3 # Diameter of the bars expressed in meters.
 areaFi16= 2.01e-4 # Rebar area expressed in square meters.
 
 e1= -10e-3 # Axial trial strain 1.

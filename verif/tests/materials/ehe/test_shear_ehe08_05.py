@@ -17,11 +17,11 @@ __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
 Nd=1224e3 #Design axial internal force.
-Md=0 #Momento de cálculo.
+Md=0 #Bending moment design value
 Vd=125e3 #Effective design shear (article 42.2.2).
-Td=0 #Torsor de cálculo.
+Td=0 #Torque design value.
 d=0.55 #Effective depth.
-z=0.9*d #Brazo mecánico.
+z=0.9*d #Lever arm.
 Asl=9.425e-4
 AsAct=0 #reinforcement area activa
 AsTrsv=math.pi*(6e-3/2)**2*4/0.2 #reinforcement area transversal

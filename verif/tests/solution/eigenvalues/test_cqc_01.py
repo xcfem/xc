@@ -134,7 +134,7 @@ modosTeor= numpy.matrix([[-0.731,0.271,-1],
 # modo3Teor= getCol(modosTeor,3)
 resta= (modos-modosTeor)
 ratio2= numpy.linalg.norm(resta)
-# Estos coeficientes del CQC están tomados del manual de Solvia
+# This CQC coefficientes are taken from Solvia manual
 crossCQCCoefficientsTeor= xc.Matrix([[1,0.79280,0.005705],[0.79280,1,0.006383],[0.005705,0.006383,1]])
 ratio3= (crossCQCCoefficients-crossCQCCoefficientsTeor).Norm()
 factoresParticipacionModalXTeor= xc.Vector([-.731/1.588,.271/1.075,-1/1.678])
@@ -147,7 +147,7 @@ maxDispMod1Teor= [0.119,-0.038,0.162]*0.3048
 maxDispMod2Teor= [0.039,0.143,0.005]*0.3048
 maxDispMod3Teor= [0.064,-0.016,-0.055]*0.3048
    '''
-# Estos coeficientes del desplazamiento están tomados del manual de Solvia
+# This displacements coefficients are taken from the Solvia manual.
 maxDispMod1Teor= numpy.matrix([[36.202e-3],[-11.549e-3],[49.548e-3]])
 maxDispMod2Teor= numpy.matrix([[7.123e-3],[26.38e-3],[0.945e-3]])
 maxDispMod3Teor= numpy.matrix([[19.625e-3],[-4.746e-3],[-15.445e-3]])
@@ -197,14 +197,14 @@ print "ratio3= ",ratio3
 print "factoresParticipacionModalX: ",factoresParticipacionModalX
 print "factoresParticipacionModalXTeor: ",factoresParticipacionModalXTeor
 print "ratio4= ",ratio4
-print "********** desplazamiento máximo mode 1: ",maxDispMod1*1000
-print "********** desplazamiento máximo mode 1 (ejemplo): ",maxDispMod1Teor*1000
+print "********** maximum displacement mode 1: ",maxDispMod1*1000
+print "********** maximum displacement mode 1 (ejemplo): ",maxDispMod1Teor*1000
 print "ratioM1= ",ratioM1
-print "********** desplazamiento máximo mode 2: ",maxDispMod2*1000
-print "********** desplazamiento máximo mode 2 (ejemplo): ",maxDispMod2Teor*1000
+print "********** maximum displacement mode 2: ",maxDispMod2*1000
+print "********** maximum displacement mode 2 (ejemplo): ",maxDispMod2Teor*1000
 print "ratioM2= ",ratioM2
-print "********** desplazamiento máximo mode 3: ",maxDispMod3*1000
-print "********** desplazamiento máximo mode 3 (ejemplo): ",maxDispMod3Teor*1000
+print "********** maximum displacement mode 3: ",maxDispMod3*1000
+print "********** maximum displacement mode 3 (ejemplo): ",maxDispMod3Teor*1000
 print "ratioM3= ",ratioM3
 #print "maxDispCQC= ",maxDispCQC*1e3
 #print "maxDispCQCTeor= ",maxDispCQCTeor*1e3

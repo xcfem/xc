@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
 # home made test
-''' Reference:  Expresiones de la flecha el el Prontuario de
-Estructuras Metálicas del CEDEX. Apartado 3.3 Carga puntual sobre ménsula. '''
+# Reference:  Expresiones de la flecha el el Prontuario de
+# Estructuras Metálicas del CEDEX. Apartado 3.3 Carga puntual sobre ménsula.
+# ISBN: 84-7790-336-0
+# url={https://books.google.ch/books?id=j88yAAAACAAJ},
 
 import xc_base
 import geom
@@ -23,9 +25,9 @@ L= 20 # Bar length.
 h= 0.30 # Beam cross-section depth.
 b= 0.2 # Beam cross-section width.
 A= b*h # Cross section area.
-I= b*h**3/12 # Inercia de la viga in inches a la cuarta
-x= 0.5 # Abcisa relativa en la que se aplica la carga puntual.
-P= 1e3 # Carga puntual.
+I= b*h**3/12 # Beam inertia inches^4.
+x= 0.5 # Relative abscissae where the punctual load is applied.
+P= 1e3 # punctual load.
 
 # Problem type
 prueba= xc.ProblemaEF()

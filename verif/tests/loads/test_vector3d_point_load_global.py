@@ -1,9 +1,11 @@
 # -*- coding: utf-8 -*-
 from __future__ import division
-# home made test
 # Reference:  Expresiones de la flecha el el Prontuario de
 # Estructuras Metálicas del CEDEX. Apartado 3.3 Carga puntual sobre ménsula.
-# Comprobamos el funcionamient del comando vector3d_point_load_local.
+# ISBN: 84-7790-336-0
+# url={https://books.google.ch/books?id=j88yAAAACAAJ},
+
+'''vector3d_point_load_local verification test. Home made test.'''
 
 import xc_base
 import geom
@@ -30,9 +32,9 @@ A= b*h # Cross section area.
 Iz= b*h**3/12.0 # Cross section moment of inertia
 Iy= h*b**3/12.0 # Cross section moment of inertia
 J= 1e-8 # Cross section torsion constant
-x= 0.5 # Abcisa relativa en la que se aplica la carga puntual.
-P= 1e3 # Carga puntual transversal.
-n= 1e6 # Carga puntual axial.
+x= 0.5 # Relative abscissae where the punctual load is applied.
+P= 1e3 # punctual load transversal.
+n= 1e6 # punctual load axial.
 
 ptoAplic= xc.Vector([1+x*L*math.sqrt(2)/2.0,3+x*L*math.sqrt(2)/2.0,0])
 

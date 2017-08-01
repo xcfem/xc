@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
-# home made test
 # Reference:  Expresiones de la flecha el el Prontuario de
 # Estructuras Metálicas del CEDEX. Apartado 3.3 Carga puntual sobre ménsula.
-#  Se comprueba el funcionamiento del comando vector2d_point_load_global.
+# ISBN: 84-7790-336-0
+# url={https://books.google.ch/books?id=j88yAAAACAAJ},
+
+'''vector2d_point_load_global verification test. Home made test.'''
 
 import xc_base
 import geom
@@ -24,9 +26,9 @@ h= 0.30 # Beam cross-section depth.
 b= 0.2 # Beam cross-section width.
 A= b*h # Cross section area.
 I= b*h**3/12 # Inercia de la viga in inches a la cuarta
-x= 0.5 # Abcisa relativa en la que se aplica la carga puntual.
-P= 1e3 # Carga transversal.
-n= 1e6 # Carga axial.
+x= 0.5 # Relative abscissae where the punctual load is applied.
+P= 1e3 # Transverse load.
+n= 1e6 # Axial load.
 
 prueba= xc.ProblemaEF()
 preprocessor=  prueba.getPreprocessor   

@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
-''' Verification test of the cálculo del interaction diagram.
-   Home made. '''
+''' Interaction diagram computation. Home made test. '''
 
 
 import xc_base

@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
-''' Verification test of the cálculo del interaction diagram.
-   Home made. Carga el interaction diagram obtenido en test_diag_interaccion01. '''
+''' Iteractio diagram computation. Home made test. Reads the interaction diagram obtained in test_diag_interaccion01. '''
 from __future__ import division
 
 import xc_base
