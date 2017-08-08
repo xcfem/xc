@@ -7,12 +7,12 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
-# Analysis of PDelta effect in a frame.
+'''Analysis of PDelta effect in a frame.'''
 # Taken from example «PDelta-3» of the Ansys verification manual.
 
-# Este ejemplo es completamente análogo a "test_pdelta_01.xc" salvo
-# que en lugar de emplear análisis no lineal usa dos análisis lineales
-# consecutivos: es decir un análisis de segundo orden.
+# This example is very similar to the example in "test_pdelta_01.xc" but
+# here we use two consecutive linear analysis (so a second order analysis)
+# instead a non-linear analysis.
 
 
 B= 100 # Frame width expressed in inches

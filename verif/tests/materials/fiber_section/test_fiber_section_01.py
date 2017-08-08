@@ -2,7 +2,7 @@
 ''' Verification test of a steel rectangular section modelized with fibers with
 elasto-plastic material.
    written from  «Nociones de cálculo plástico de vigas rectas y 
-   pórticos simples». C. Benito Hernández.
+   pórticos simples». Carlos Benito Hernández.
    ({https://books.google.ch/books?id=v7bbMwEACAAJ})
    page 26 ff. '''
 

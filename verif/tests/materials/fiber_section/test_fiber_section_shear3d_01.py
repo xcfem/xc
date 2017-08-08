@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
 ''' Verification test of a rectangular fiber section with an
     elasto plastic material model.
-    written from "Nociones de cálculo plástico." C. Benito Hernández.
+    written from "Nociones de cálculo plástico." Carlos Benito Hernández.
     page 26 and following.
+    url={https://books.google.es/books?id=v7bbMwEACAAJ},
 '''
 from materials import section_properties
 from misc import banco_pruebas_scc3d

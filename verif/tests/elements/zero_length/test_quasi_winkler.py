@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+'''Verification of the quasi-Winkler model.'''
 # Verification of the quasi-Winkler model according to
 #    the article of Gabriel E. Barrientos
 #    «Vigas sobre fundaciones bi-paramétricas del tipo Cuasi-Winker»

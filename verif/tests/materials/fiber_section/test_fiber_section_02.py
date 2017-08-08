@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
-# Verification test of a rectangular fiber section with an
-# elasto plastic material model.
-#    written from "Nociones de cálculo plástico." C. Benito Hernández.
+'''Verification test of a rectangular fiber section with an
+ elasto plastic material model.'''
+#    written from "Nociones de cálculo plástico." Carlos Benito Hernández.
 #    page 26 and following.
+#  url={https://books.google.es/books?id=v7bbMwEACAAJ},
 
 __author__= "Luis C. Pérez Tato (LCPT)"
 __copyright__= "Copyright 2014, LCPT"

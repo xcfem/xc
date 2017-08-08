@@ -85,7 +85,7 @@ ratio6= (Iy-iyTeor)/iyTeor
 print "num. fibras: ",(nfibras)
 print "ratio1= ",(ratio1)
 
-print "suma áreas: ",(sumAreas)
+print "sum of areas: ",(sumAreas)
 print "theorethical area: ",(areaTeor)
 print "ratio2= ",(ratio2)
 

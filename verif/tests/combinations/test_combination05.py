@@ -1,7 +1,11 @@
 # -*- coding: utf-8 -*-
-# home made test
-#    Prueba del funcionamiento de la base de datos
-#    como almacén de combinaciones para acelerar el cálculo.
+'''Using the database as combination results storage to accelerate computation. Home made test.'''
+
+__author__= "Luis C. Pérez Tato (LCPT)"
+__copyright__= "Copyright 2014, LCPT"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com"
 
 Ec= 2e5*9.81/1e-4 # Concrete Young modulus (Pa).
 nuC= 0.2 # Concrete Poisson's ratio EHE-08.

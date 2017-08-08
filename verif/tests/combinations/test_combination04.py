@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-# home made test
-'''Cantilever load combination.'''
+
+'''Cantilever load combination. Home made test.'''
 
 import xc_base
 import geom

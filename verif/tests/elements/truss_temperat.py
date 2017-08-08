@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-''' home made test
+''' Home made test
     Reference:  Cálculo de estructuras por el método de los elemen-
     tos finitos. 1991. E. Oñate, page 165, example 5.3
 

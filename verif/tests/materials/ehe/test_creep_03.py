@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
-# home made test
-#    Prueba del funcionamiento de la base de datos
-#    como almacén de combinaciones para acelerar el cálculo.
 from __future__ import division
+
+'''Testing the database as combination results storage to accelerate computation. Home made test.'''
+
 from materials.ehe import EHE_materials
 
 __author__= "Luis C. Pérez Tato (LCPT)"
@@ -32,7 +32,7 @@ tS= 7 # Inicio del secado.
 # Armadura activa
 Ep= 190e9 # Elastic modulus expressed in MPa
 Ap= 140e-6 # bar area expressed in square meters
-fMax= 1860e6 # Load unitaria máxima of the material expressed in MPa.
+fMax= 1860e6 # Maximum unit load of the material expressed in MPa.
 fy= 1171e6 # Yield stress of the material expressed in Pa.
 tInic= 0.75**2*fMax # Effective prestress (0.75*P0 y 25% prestress losses).
 
