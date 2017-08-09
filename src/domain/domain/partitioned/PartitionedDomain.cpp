@@ -113,8 +113,8 @@ void XC::PartitionedDomain::alloc(void)
         theEleIter == 0 || mainEleIter == 0)
       {
 
-        std::cerr << "FATAL: XC::PartitionedDomain::PartitionedDomain ";
-        std::cerr << "  - ran out of memory\n";
+        std::cerr << nombre_clase() << "::" << __FUNCTION__
+		  << "; FATAL, ran out of memory.\n";
         exit(-1);
       }
   }
@@ -174,8 +174,9 @@ bool XC::PartitionedDomain::addElement(Element *elePtr)
         // check ele Tag >= 0
         if(eleTag < 0)
           {
-            std::cerr << "XC::PartitionedDomain::addElement - Element " << eleTag;
-            std::cerr << " tag must be >= 0\n";
+            std::cerr << nombre_clase() << "::" << __FUNCTION__
+		      << "; element " << eleTag
+		      << " tag must be >= 0\n";
             return false;
           }
 
@@ -190,8 +191,10 @@ bool XC::PartitionedDomain::addElement(Element *elePtr)
             Node *nodePtr= this->getNode(nodeTag);
             if(nodePtr == 0)
               {
-                std::cerr << "XC::PartitionedDomain::addElement - In element " << eleTag;
-                std::cerr << " no node " << nodeTag << " exists in the domain\n";
+                std::cerr << nombre_clase() << "::" << __FUNCTION__
+			  << "; in element " << eleTag
+			  << " no node with tag: " << nodeTag
+			  << " exists in the domain.\n";
                 return false;
               }
           }
@@ -251,8 +254,9 @@ bool XC::PartitionedDomain::addSFreedom_Constraint(SFreedom_Constraint *load)
 
 
     // if no subdomain .. node not in model .. error message and return failure
-    std::cerr << "XC::PartitionedDomain::addSFreedom_Constraint - cannot add as node with tag" <<
-      nodeTag << "does not exist in model\n";
+    std::cerr << nombre_clase() << "::" << __FUNCTION__
+	      << "; cannot add as node with tag: "
+	      << nodeTag << " does not exist in model.\n";
     return false;
   }
 
@@ -278,8 +282,9 @@ bool XC::PartitionedDomain::addSFreedom_Constraint(SFreedom_Constraint *load, in
       }
 
     // if no subdomain .. node not in model .. error message and return failure
-    std::cerr << "XC::PartitionedDomain::addSFreedom_Constraint - cannot add as node with tag" <<
-                 nodeTag << "does not exist in model\n";
+    std::cerr << nombre_clase() << "::" << __FUNCTION__
+	      << "; cannot add as node with tag: "
+	      << nodeTag << " does not exist in model\n";
     return false;
   }
 
@@ -290,8 +295,9 @@ bool XC::PartitionedDomain::addLoadPattern(LoadPattern *loadPattern)
     int tag= loadPattern->getTag();
     if(this->getConstraints().getLoadPattern(tag) != 0)
       {
-        std::cerr << "XC::PartitionedDomain::addLoadPattern - cannot add as XC::LoadPattern with tag" <<
-        tag << "already exists in model\n";
+        std::cerr << nombre_clase() << "::" << __FUNCTION__
+		  << "; cannot add as LoadPattern with tag"
+		  << tag << "already exists in model.\n";
         return false;
       }
 
@@ -302,8 +308,9 @@ bool XC::PartitionedDomain::addLoadPattern(LoadPattern *loadPattern)
         bool res= theSub->addLoadPattern(loadPattern);
         if(res != true)
           {
-            std::cerr << "XC::PartitionedDomain::addLoadPattern - cannot add as XC::LoadPattern with tag: " <<
-            tag << " to subdomain\n";
+            std::cerr << nombre_clase() << "::" << __FUNCTION__
+		      << "; cannot add as LoadPattern with tag: "
+		      << tag << " to subdomain.\n";
             result= res;
           }
       }
@@ -332,20 +339,22 @@ bool XC::PartitionedDomain::addNodalLoad(NodalLoad *load, int pattern)
         bool res= theSub->hasNode(nodeTag);
         if(res)
          {
-          // std::cerr << "XC::PartitionedDomain::addLoadPattern(LoadPattern *loadPattern) SUB " << theSub->getTag() << *load;
+          // std::cerr << nombre_clase() << "::" << __FUNCTION__ << "(LoadPattern *loadPattern) SUB " << theSub->getTag() << *load;
           return theSub->addNodalLoad(load, pattern);
          }
       }
     // if no subdomain .. node not in model
-    std::cerr << "XC::PartitionedDomain::addNodalLoad - cannot add as node with tag"
-              << nodeTag << "does not exist in model\n";
+    std::cerr << nombre_clase() << "::" << __FUNCTION__
+	      << "; cannot add as node with tag: "
+              << nodeTag << " does not exist in model.\n";
     return false;
   }
 
 
 bool XC::PartitionedDomain::addElementalLoad(ElementalLoad *load, int pattern)
   {
-    std::cerr << "PartitionedDomain::addElementalLoad - not yet implemented\n";
+    std::cerr << nombre_clase() << "::" << __FUNCTION__
+	      << "; not yet implemented\n";
     return false;
   }
 
@@ -599,7 +608,8 @@ int XC::PartitionedDomain::update(void)
   {
     const int res= this->XC::Domain::update();
     if(res != 0)
-      std::cerr << "XC::PartitionedDomain::update - domain failed in update\n";
+      std::cerr << nombre_clase() << "::" << __FUNCTION__
+		<< "; domain failed in update\n";
 
     // do the same for all the subdomains
     if(theSubdomains != 0)
@@ -654,7 +664,8 @@ int XC::PartitionedDomain::update(double newTime, double dT)
     this->applyLoad(newTime);
     const int res= this->XC::Domain::update();
     if(res != 0)
-      std::cerr << "XC::PartitionedDomain::update(newTime,dT) - domain failed in update\n";
+      std::cerr << nombre_clase() << "::" << __FUNCTION__
+		<< "(newTime,dT) - domain failed in update\n";
 
     // do the same for all the subdomains
     if(theSubdomains != 0)
@@ -690,7 +701,9 @@ int XC::PartitionedDomain::newStep(double dT)
             Subdomain *theSub= dynamic_cast<Subdomain *>(theObject);
             res += theSub->newStep(dT);
             if(res != 0)
-              std::cerr << "XC::PartitionedDomain::step - subdomain " << theSub->getTag() << " failed in step\n";
+              std::cerr << nombre_clase() << "::" << __FUNCTION__
+			<< "; subdomain " << theSub->getTag()
+			<< " failed in step\n";
           }
       }
     return res;
@@ -703,7 +716,8 @@ int XC::PartitionedDomain::commit(void)
 {
   int result= this->XC::Domain::commit();
   if(result < 0) {
-    std::cerr << "XC::PartitionedDomain::commit(void) - failed in XC::Domain::commit()\n";
+    std::cerr << nombre_clase() << "::" << __FUNCTION__
+	      << "; failed in Domain::commit().\n";
     return result;
   }
 
@@ -715,8 +729,8 @@ int XC::PartitionedDomain::commit(void)
       Subdomain *theSub= dynamic_cast<Subdomain *>(theObject);
       int res= theSub->commit();
       if(res < 0) {
-        std::cerr << "XC::PartitionedDomain::commit(void)";
-        std::cerr << " - failed in XC::Subdomain::commit()\n";
+        std::cerr << nombre_clase() << "::" << __FUNCTION__
+		  << "(void); failed in Subdomain::commit().\n";
         return res;
       }
     }
@@ -737,48 +751,59 @@ int
 XC::PartitionedDomain::revertToLastCommit(void)
 {
     int result= this->XC::Domain::revertToLastCommit();
-    if(result < 0) {
-        std::cerr << "XC::PartitionedDomain::revertToLastCommit(void) - failed in XC::Domain::revertToLastCommit()\n";
+    if(result < 0)
+      {
+        std::cerr << nombre_clase() << "::" << __FUNCTION__
+		  << "(void); failed in Domain::revertToLastCommit().\n";
         return result;
-    }
+      }
 
     // do the same for all the subdomains
-    if(theSubdomains != 0) {
+    if(theSubdomains != 0)
+      {
         ArrayOfTaggedObjectsIter theSubsIter(*theSubdomains);
         TaggedObject *theObject;
-        while((theObject= theSubsIter()) != 0) {
+        while((theObject= theSubsIter()) != 0)
+	  {
             Subdomain *theSub= dynamic_cast<Subdomain *>(theObject);
             int res= theSub->revertToLastCommit();
-            if(res < 0) {
-                std::cerr << "XC::PartitionedDomain::revertToLastCommit(void)";
-                std::cerr << " - failed in XC::Subdomain::revertToLastCommit()\n";
+            if(res < 0)
+	      {
+                std::cerr << nombre_clase() << "::" << __FUNCTION__
+			  << "(void); "
+		          << "failed in Subdomain::revertToLastCommit().\n";
                 return res;
-            }
-        }
-    }
+              }
+          }
+      }
 
     return 0;
-}
+  }
 
-int
-XC::PartitionedDomain::revertToStart(void)
-{
+int XC::PartitionedDomain::revertToStart(void)
+  {
     int result= this->XC::Domain::revertToStart();
-    if(result < 0) {
-        std::cerr << "XC::PartitionedDomain::revertToLastCommit(void) - failed in XC::Domain::revertToLastCommit()\n";
+    if(result < 0)
+      {
+        std::cerr << nombre_clase() << "::" << __FUNCTION__
+		  << "(void) - failed in Domain::revertToLastCommit().\n";
         return result;
-    }
+      }
 
     // do the same for all the subdomains
-    if(theSubdomains != 0) {
+    if(theSubdomains != 0)
+      {
         ArrayOfTaggedObjectsIter theSubsIter(*theSubdomains);
         TaggedObject *theObject;
-        while((theObject= theSubsIter()) != 0) {
+        while((theObject= theSubsIter()) != 0)
+	  {
             Subdomain *theSub= dynamic_cast<Subdomain *>(theObject);
             int res= theSub->revertToStart();
-            if(res < 0) {
-                std::cerr << "XC::PartitionedDomain::revertToLastCommit(void)";
-                std::cerr << " - failed in XC::Subdomain::revertToLastCommit()\n";
+            if(res < 0)
+	      {
+                std::cerr << nombre_clase() << "::" << __FUNCTION__
+			  << "(void); "
+			  << "failed in Subdomain::revertToLastCommit().\n";
                 return res;
             }
         }
@@ -804,8 +829,9 @@ int XC::PartitionedDomain::addRecorder(Recorder &theRecorder)
             int res= theSub->addRecorder(theRecorder);
             if(res < 0)
               {
-                std::cerr << "XC::PartitionedDomain::revertToLastCommit(void)";
-                std::cerr << " - failed in XC::Subdomain::revertToLastCommit()\n";
+                std::cerr << nombre_clase() << "::" << __FUNCTION__
+			  << "(void); "
+			  << "failed in Subdomain::revertToLastCommit().\n";
                 return res;
               }
           }
@@ -818,22 +844,26 @@ int XC::PartitionedDomain::removeRecorders(void)
     if(this->XC::Domain::removeRecorders() < 0)
       return -1;
 
-  // do the same for all the subdomains
-  if(theSubdomains != 0) {
-    ArrayOfTaggedObjectsIter theSubsIter(*theSubdomains);
-    TaggedObject *theObject;
-    while((theObject= theSubsIter()) != 0) {
-      Subdomain *theSub= dynamic_cast<Subdomain *>(theObject);
-      int res= theSub->removeRecorders();
-      if(res < 0) {
-        std::cerr << "XC::PartitionedDomain::revertToLastCommit(void)";
-        std::cerr << " - failed in XC::Subdomain::revertToLastCommit()\n";
-        return res;
+    // do the same for all the subdomains
+    if(theSubdomains != 0)
+      {
+        ArrayOfTaggedObjectsIter theSubsIter(*theSubdomains);
+        TaggedObject *theObject;
+        while((theObject= theSubsIter()) != 0)
+	  {
+            Subdomain *theSub= dynamic_cast<Subdomain *>(theObject);
+            const int res= theSub->removeRecorders();
+            if(res < 0)
+	      {
+                std::cerr << nombre_clase() << "::" << __FUNCTION__
+			  << "(void); "
+			  << "failed in Subdomain::revertToLastCommit().\n";
+                return res;
+              }
+          }
       }
-    }
+    return 0;
   }
-  return 0;
-}
 
 void XC::PartitionedDomain::Print(std::ostream &s, int flag)
   {
@@ -877,7 +907,8 @@ int XC::PartitionedDomain::partition(int numPartitions, bool usingMain, int main
       }
     else
       {
-        std::cerr << "XC::PartitionedDomain::partition(int numPartitions) - no associated partitioner\n";
+        std::cerr << nombre_clase() << "::" << __FUNCTION__
+		  << "(int numPartitions); no associated partitioner.\n";
         return -1;
       }
 
@@ -899,8 +930,9 @@ int XC::PartitionedDomain::partition(int numPartitions, bool usingMain, int main
                 int res= theSub->addRecorder(**irec);
                 if(res != 0)
                   {
-                    std::cerr << "XC::PartitionedDomain::revertToLastCommit(void)";
-                    std::cerr << " - failed in XC::Subdomain::revertToLastCommit()\n";
+                    std::cerr << nombre_clase() << "::" << __FUNCTION__
+			      << "(void); "
+			      << "failed in Subdomain::revertToLastCommit().\n";
                     return res;
                   }
               }
@@ -911,42 +943,39 @@ int XC::PartitionedDomain::partition(int numPartitions, bool usingMain, int main
 
 
 bool XC::PartitionedDomain::addSubdomain(Subdomain *theSubdomain)
-{
+  {
     int eleTag= theSubdomain->getTag();
     TaggedObject *other= theSubdomains->getComponentPtr(eleTag);
     if(other != 0)
         return false;
 
     bool result= theSubdomains->addComponent(theSubdomain);
-    if(result == true) {
+    if(result == true)
+      {
         theSubdomain->setDomain(this);
         this->domainChange();
-    }
+      }
+    return result;
+  }
 
-  return result;
-
-}
-
-int
-XC::PartitionedDomain::getNumSubdomains(void)
-{
+int XC::PartitionedDomain::getNumSubdomains(void)
+  {
     return theSubdomains->getNumComponents();
-}
+  }
 
- XC::Subdomain *XC::PartitionedDomain::getSubdomainPtr(int tag)
-{
+XC::Subdomain *XC::PartitionedDomain::getSubdomainPtr(int tag)
+  {
     TaggedObject *mc= theSubdomains->getComponentPtr(tag);
     if(mc == 0) return 0;
     Subdomain *result= dynamic_cast<Subdomain *>(mc);
     return result;
-}
+  }
 
 XC::SubdomainIter &XC::PartitionedDomain::getSubdomains(void)
-{
+  {
     theSubdomainIter->reset();
     return *theSubdomainIter;
-}
-
+  }
 
 
 XC::DomainPartitioner *XC::PartitionedDomain::getPartitioner(void) const
@@ -959,7 +988,7 @@ int XC::PartitionedDomain::buildEleGraph(Graph &theEleGraph)
   {
     const int numVertex= elements->getNumComponents();
 
-    // see if XC::quick return
+    // see if quick return
 
     if(numVertex == 0)
       return 0;

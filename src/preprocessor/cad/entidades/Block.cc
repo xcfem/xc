@@ -205,7 +205,7 @@ size_t XC::Block::indice(Face *s) const
     else //Base is already set.
       {
         const Face *base= sups[0].Surface();
-        size_t primero= base->BordeComun(*s); //Linea comun de "s" con la base.
+        size_t primero= base->CommonEdge(*s); //Linea comun de "s" con la base.
         if(primero)
           retval= primero; //Is a side face.
         else
@@ -222,9 +222,9 @@ void XC::Block::coloca(const size_t &i,Face *s)
     if( (i>0) && (i<5)) //Is a side face.
       {
         const Face *base= sups[0].Surface();
-        primero= s->BordeComun(*base); //Index of the line in common with the base.
-        const Edge *linea= base->GetLado(i)->Borde();
-        sentido= base->SentidoBorde(linea,*s);
+        primero= s->CommonEdge(*base); //Index of the line in common with the base.
+        const Edge *linea= base->GetLado(i)->getEdge();
+        sentido= base->SenseOfEdge(linea,*s);
       }
     if(i == 5) //Is the top face
       {
@@ -235,19 +235,24 @@ void XC::Block::coloca(const size_t &i,Face *s)
         if(!cara) { icara=3; cara= sups[icara].Surface(); }
         if(!cara) { icara=4; cara= sups[icara].Surface(); }
         if(!cara)
-          std::cerr << "Error: Block; before introducing face 5 you must introduceeither the 1 , 2 , 3 or 4 faces." << std::endl;
+          std::cerr << nombre_clase() << "::" << __FUNCTION__
+		    << "; error before introducing face 5 you must introduce"
+	            << " either the 1 , 2 , 3 or 4 faces." << std::endl;
         else
           {
-            primero= cara->BordeComun(*s); //Index of the line in common of s with the face.
+            primero= cara->CommonEdge(*s); //Index of the line in common of s with the face.
             if(primero) //They have a common edge.
               {
-                const Edge *linea= cara->GetLado(primero)->Borde();
-                sentido= -cara->SentidoBorde(linea,*s);
+                const Edge *linea= cara->GetLado(primero)->getEdge();
+                sentido= -cara->SenseOfEdge(linea,*s);
               }
             else //They don't share a common edge.
               {
-                std::cerr << "Error: Block(" << getName() << "); the face " << s->getName() 
-                          << " does not share a common edge with face " << cara->getName() << '.' << std::endl;
+                std::cerr << nombre_clase() << "::" << __FUNCTION__
+			  << "; error: Block(" << getName() << "); the face "
+			  << s->getName() 
+                          << " does not share a common edge with face "
+			  << cara->getName() << '.' << std::endl;
               }
           }
       }
@@ -258,7 +263,9 @@ void XC::Block::coloca(const size_t &i,Face *s)
       if(sentido==-1)
         directo= false;
       else
-        std::cerr << "The surfaces do not share a common edge." << std::endl;
+        std::cerr << nombre_clase() << "::" << __FUNCTION__
+		  << "; the surfaces do not share a common edge."
+		  << std::endl;
     sups[i]= BodyFace(s,primero,directo);
   }
 
@@ -270,7 +277,8 @@ void XC::Block::inserta(const size_t &i)
     if(s)
       coloca(indice(s),s);
     else
-      std::cerr << "Block::inserta; surface: " << i
+      std::cerr << nombre_clase() << "::" << __FUNCTION__
+		<< "; surface: " << i
 		<< " not found." << std::endl;
   }
 

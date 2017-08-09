@@ -90,35 +90,39 @@ template <class PhysProp>
 Poligono3d XC::QuadBase9N<PhysProp>::getPolygon(bool initialGeometry) const
   {
     Poligono3d retval;
-    std::cerr << "QuadBase9N<PhysProp>::getPolygon not implemented." << std::endl;
+    std::cerr << this->nombre_clase() << "::" << __FUNCTION__
+	      << "; not implemented." << std::endl;
     return retval;
   }
 
-//! @brief Returns a lado of the element.
+//! @brief Returns the element edge.
 template <class PhysProp>
 Segmento3d XC::QuadBase9N<PhysProp>::getLado(const size_t &i,bool initialGeometry) const
   {
     Segmento3d retval;
-    std::cerr << "QuadBase9N<PhysProp>::getLado not implemented." << std::endl;
+    std::cerr << this->nombre_clase() << "::" << __FUNCTION__
+	      << "; not implemented." << std::endl;
     return retval;
   }
 
-//! @brief Returns the nodos de un lado of the element.
+//! @brief Returns the nodes of the element edge.
 template <class PhysProp>
 XC::Element::NodesEdge XC::QuadBase9N<PhysProp>::getNodesEdge(const size_t &i) const
   {
     Element::NodesEdge retval(3,static_cast<Node *>(nullptr));
-    std::cerr << "QuadBase9N<PhysProp>::getNodesEdge not implemented." << std::endl;
+    std::cerr << this->nombre_clase() << "::" << __FUNCTION__
+	      << "; not implemented." << std::endl;
     return retval;    
   }
 
-//! @brief Returns the borde of the element
-//! que tiene por extremos los nodos being passed as parameters.
+//! @brief Returns the edge of the element that ends 
+//! in the nodes being passed as parameters.
 template <class PhysProp>
 int XC::QuadBase9N<PhysProp>::getEdgeNodes(const Node *n1,const Node *n2) const
   {
     int retval= -1;
-    std::cerr << "QuadBase9N<PhysProp>::getEdgeNodes not implemented." << std::endl;
+    std::cerr << this->nombre_clase() << "::" << __FUNCTION__
+              << "; not implemented." << std::endl;
     return retval;
   }
 
@@ -127,7 +131,8 @@ template <class PhysProp>
 ID XC::QuadBase9N<PhysProp>::getLocalIndexNodesEdge(const size_t &i) const
   {
     ID retval(2);
-    std::cerr << "QuadBase9N<PhysProp>::getEdgeNodes not implemented." << std::endl;
+    std::cerr << this->nombre_clase() << "::" << __FUNCTION__
+	      << "; not implemented." << std::endl;
     return retval;
   }
 
@@ -160,7 +165,8 @@ int XC::QuadBase9N<PhysProp>::addLoad(ElementalLoad *theLoad, double loadFactor)
           }
         else
           {
-            std::cerr << "QuadBase9N::addLoad -- load type unknown for element with tag: " <<
+            std::cerr << this->nombre_clase() << "::" << __FUNCTION__
+		      << "; load type unknown for element with tag: " <<
             this->getTag() << std::endl;
             return -1;
           }

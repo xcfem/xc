@@ -631,8 +631,7 @@ XC::MEDGaussModel XC::Element::getMEDGaussModel(void) const
     return retval;
   }
 
-//! @brief Returns the nodos del borde (o arista) of the element
-//!which index is being passed as parameter.
+//! @brief Returns the nodes of the edge (o arista) of the element.
 XC::Element::NodesEdge XC::Element::getNodesEdge(const size_t &) const
   {
     NodesEdge retval;
@@ -642,8 +641,8 @@ XC::Element::NodesEdge XC::Element::getNodesEdge(const size_t &) const
     return retval;
   }
 
-//! @brief Returns the borde (o arista) of the element
-//! que tiene por extremos los nodos being passed as parameters.
+//! @brief Returns the edge of the element
+//! that ends in the nodes being passed as parameters.
 int XC::Element::getEdgeNodes(const Node *,const Node *) const
   {
     std::cerr << nombre_clase() << "::" << __FUNCTION__
@@ -652,8 +651,8 @@ int XC::Element::getEdgeNodes(const Node *,const Node *) const
     return -1;
   }
 
-//! @brief Returns the borde of the element
-//! que tiene por extremos los nodos being passed as parameters.
+//! @brief Returns the edge of the element
+//! that ends in the nodes with the tags being passed as parameters.
 int XC::Element::getEdgeNodes(const int &iN1,const int &iN2) const
   {
     const Domain *dom= this->getDomain();
@@ -662,8 +661,8 @@ int XC::Element::getEdgeNodes(const int &iN1,const int &iN2) const
     return getEdgeNodes(n1,n2);
   }
  
-//! @brief Returns the bordes of the element
-//! que tienen por extremo el nodo being passed as parameter.
+//! @brief Returns the edges of the element
+//! that ends in the node being passed as parameter.
 XC::ID XC::Element::getEdgesNode(const Node *) const
   {
     ID retval;
@@ -673,8 +672,8 @@ XC::ID XC::Element::getEdgesNode(const Node *) const
     return retval;
   }
 
-//! @brief Returns the bordes of the element que tienen ambos extremos
-//! en el node set being passed as parameter.
+//! @brief Returns the element edges that have both ends
+//! in the node set being passed as parameter.
 std::set<int> XC::Element::getEdgesNodes(const NodePtrSet &nodos) const
   {
     std::set<int> retval;
@@ -693,8 +692,8 @@ std::set<int> XC::Element::getEdgesNodes(const NodePtrSet &nodos) const
     return retval;
   }
 
-//! @brief Returns the bordes of the element
-//! que tienen por extremo el nodo cuyo tag is being passed as parameter.
+//! @brief Returns the edges of the element
+//! that have an en in the node with the tag being passed as parameter.
 XC::ID XC::Element::getEdgesNodeByTag(const int &iN) const
   {
     const Domain *dom= this->getDomain();

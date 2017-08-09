@@ -63,7 +63,7 @@ class_<XC::ArcoCircunf, bases<XC::LineBase>, boost::noncopyable >("CircleArc", "
   .def("getRadio",&XC::ArcoCircunf::getRadio,"Return the radius of the circumference.")
    ;
 
-XC::Edge *(XC::CmbEdge::Lado::*getEdge)(void)= &XC::CmbEdge::Lado::Borde;
+XC::Edge *(XC::CmbEdge::Lado::*getEdge)(void)= &XC::CmbEdge::Lado::getEdge;
 class_<XC::CmbEdge::Lado,bases<EntCmd> >("Lado", no_init)
   .add_property("isDirect", &XC::CmbEdge::Lado::esDirecto)
   .add_property("getEdge", make_function(getEdge, return_internal_reference<>()))

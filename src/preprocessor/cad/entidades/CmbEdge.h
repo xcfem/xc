@@ -62,8 +62,8 @@ class CmbEdge: public Edge
     
       public:
         Lado(Edge *ptr= nullptr,const bool &s=true);
-        Edge *Borde(void);
-        const Edge *Borde(void) const;
+        Edge *getEdge(void);
+        const Edge *getEdge(void) const;
         void SetEdge(Edge *l);
         const Pnt *P1(void) const;
         const Pnt *P2(void) const;

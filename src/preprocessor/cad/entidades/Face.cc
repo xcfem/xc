@@ -70,18 +70,18 @@ void XC::Face::inserta_body(Body *b)
 void XC::Face::actualiza_topologia(void)
   {
     for(std::deque<Lado>::iterator i=lineas.begin();i!=lineas.end();i++)
-      (*i).Borde()->inserta_surf(this);
+      (*i).getEdge()->inserta_surf(this);
   }
 
 //! @brief Returns the index of the edge in common with the surface
 //! being passed as parameter (if it exists).
-size_t XC::Face::BordeComun(const XC::Face &otra) const
+size_t XC::Face::CommonEdge(const XC::Face &otra) const
   {
     size_t cont= 1;
     if(this == &otra) return cont; //Son la misma todos los bordes son comunes.
     for(std::deque<Lado>::const_iterator i=lineas.begin();i!=lineas.end();i++,cont++)
       {
-        if((*i).Borde()->Toca(otra))
+        if((*i).getEdge()->Toca(otra))
           return cont;
       }
     return 0;
@@ -91,20 +91,23 @@ size_t XC::Face::BordeComun(const XC::Face &otra) const
 //! - 1 if the line belongs to both surfaces and the orientation is the same.
 //! - -1 if the line belongs to both surfaces and the orientation is the opposite.
 //! - 0 line doesn't belongs to both surfaces.
-int XC::Face::SentidoBorde(const XC::Edge *l,const XC::Face &otra) const
+int XC::Face::SenseOfEdge(const XC::Edge *l,const XC::Face &otra) const
   {
     //Buscamos los indices de las lineas en una 
     const size_t ind_l_esta= IndiceEdge(l);
     if(ind_l_esta == 0)
       {
-        std::cerr << "Line :" << l->getName() 
-                  << " is not an edge of the surface: " << getName() << std::endl;
+        std::cerr << nombre_clase() << "::" << __FUNCTION__
+		  << "; line :" << l->getName() 
+                  << " is not an edge of the surface: "
+		  << getName() << std::endl;
         return 0;
       }
     const size_t ind_l_otra= otra.IndiceEdge(l);
     if(ind_l_otra == 0)
       {
-        std::cerr << "Line :" << l->getName() 
+        std::cerr << nombre_clase() << "::" << __FUNCTION__
+		  << "; line :" << l->getName() 
                   << " is not an edge of the surface: " << otra.getName() << std::endl;
         return 0;
       }

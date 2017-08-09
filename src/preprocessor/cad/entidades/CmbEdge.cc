@@ -44,10 +44,10 @@ XC::CmbEdge::Lado::Lado(Edge *ptr,const bool &s)
   : edge(ptr), directo(s) {}
 
 //! @brief Returns a pointer to the la linea.
-XC::Edge *XC::CmbEdge::Lado::Borde(void)
+XC::Edge *XC::CmbEdge::Lado::getEdge(void)
   { return edge; }
 //! @brief Returns a pointer constante a la linea.
-const XC::Edge *XC::CmbEdge::Lado::Borde(void) const
+const XC::Edge *XC::CmbEdge::Lado::getEdge(void) const
   { return edge; }
 //! @brief Assigns the line.
 void XC::CmbEdge::Lado::SetEdge(Edge *l)
@@ -360,7 +360,7 @@ MatrizPos3d XC::CmbEdge::get_posiciones(void) const
         size_t cont= 1;
         for(std::deque<Lado>::const_iterator i=lineas.begin();i!=lineas.end();i++)
           {
-            const Edge *e= (*i).Borde();
+            const Edge *e= (*i).getEdge();
             MatrizPos3d tmp= e->get_posiciones();
             const size_t sz= tmp.size()-1; //The last one is not added.
             for(size_t i=1;i<sz;i++)
@@ -379,7 +379,7 @@ MatrizPos3d XC::CmbEdge::get_posiciones(void) const
 void XC::CmbEdge::create_nodes_lineas(void)
   {
     for(std::deque<Lado>::iterator i=lineas.begin();i!=lineas.end();i++)
-      (*i).Borde()->create_nodes();
+      (*i).getEdge()->create_nodes();
   }
 
 //! @brief Triggers meshing of lines.
@@ -401,16 +401,16 @@ void XC::CmbEdge::genMesh(meshing_dir dm)
     size_t offset_j= 0;// Columna inicial.
     for(std::deque<Lado>::const_iterator i=lineas.begin();i!=lineas.end();i++)
       {
-        ttzNodes.PutCaja(0,offset_j,0,(*i).Borde()->getTtzNodes());
-        offset_j+= (*i).Borde()->getNumNodeRows()-1;
+        ttzNodes.PutCaja(0,offset_j,0,(*i).getEdge()->getTtzNodes());
+        offset_j+= (*i).getEdge()->getNumNodeRows()-1;
       }
     //pointers to elements.
     ttzElements= TritrizPtrElem(1,NDiv(),1);
     offset_j= 0;// Columna inicial.
     for(std::deque<Lado>::const_iterator i=lineas.begin();i!=lineas.end();i++)
       {
-        ttzElements.PutCaja(0,offset_j,0,(*i).Borde()->getTtzElements());
-        offset_j+= (*i).Borde()->getNumElementRows()-1;
+        ttzElements.PutCaja(0,offset_j,0,(*i).getEdge()->getTtzElements());
+        offset_j+= (*i).getEdge()->getNumElementRows()-1;
       }
     if(verbosity>3)
       std::clog << "done." << std::endl;
@@ -435,18 +435,21 @@ void XC::CmbEdge::addPoints(const ID &indices_ptos)
         {
           Pnt *pA= BuscaPnt(indices_ptos(i-1));
           if(!pA)
-	    std::cerr << "CmbEdge::addPoints; point: "
-                      << indices_ptos(i-1) << " not found in definition of surface: '"
+	    std::cerr << nombre_clase() << "::" << __FUNCTION__
+	              << "; point: " << indices_ptos(i-1)
+		      << " not found in definition of surface: '"
                       << getName() << "'" << std::endl;
           Pnt *pB= BuscaPnt(indices_ptos(i));
           if(!pB)
-	    std::cerr << "CmbEdge::addPoints; point: "
-                      << indices_ptos(i) << " not found in definition of surface: '"
+	    std::cerr << nombre_clase() << "::" << __FUNCTION__
+		      << "; point: " << indices_ptos(i)
+		      << " not found in definition of surface: '"
                       << getName() << "'" << std::endl;
           NuevaLinea(pA,pB);
         }
     else
-      std::cerr << "CmbEdge::puntos; error se necesitan al menos dos puntos." << std::endl;
+      std::cerr << nombre_clase() << "::" << __FUNCTION__
+		<< "; at least two points are needed." << std::endl;
   }
 
 //! @brief Closes the line.
@@ -485,9 +488,10 @@ XC::Edge *XC::CmbEdge::NuevaLinea(Pnt *pA,Pnt *pB)
           }
       }    
     else
-       std::cerr << "CmbEdge::NuevaLinea; line between points: "
-                 << pA->getName()
-                 << " and " << pB->getName() << " not found in definition of surface: '"
+       std::cerr << nombre_clase() << "::" << __FUNCTION__
+		 << "; line between points: "
+                 << pA->getName() << " and " << pB->getName()
+		 << " not found in definition of surface: '"
                  << getName() << "'" << std::endl;
     return retval;
   }
@@ -516,8 +520,9 @@ void XC::CmbEdge::inserta(const size_t &i)
   {
     Edge *tmp= BuscaEdge(i);
     if(!tmp)
-      std::cerr << "CmdEdge; line identified by: '" 
-                    << i << "' not found.\n";
+      std::cerr << nombre_clase() << "::" << __FUNCTION__
+		<< "; line identified by: '" 
+                << i << "' not found.\n";
     else
       inserta(tmp);
   }
@@ -526,7 +531,8 @@ void XC::CmbEdge::inserta(const size_t &i)
 void XC::CmbEdge::inserta(Edge *l)
   {
     if(IndiceEdge(l)!= 0) //Line already belongs to the set.
-      std::cerr << "CmdEdge; Line already belongs to the set, insertion ignored.\n";
+      std::cerr << nombre_clase() << "::" << __FUNCTION__
+		<< "; line already belongs to the set, insertion ignored.\n";
     else
       {
         if(lineas.empty())
@@ -542,7 +548,8 @@ void XC::CmbEdge::inserta(Edge *l)
             else if(l->P2()== P1()) //directo
               lineas.push_front(Lado(l,true));
             else
-              std::cerr << "CmbEdge::inserta; line: '" << l->getName()
+              std::cerr << nombre_clase() << "::" << __FUNCTION__
+			<< "; line: '" << l->getName()
 			<< "' which ends are: '" << l->P1()->getName() << "' y '"
                         << l->P2()->getName() 
                         << "' can't connect to the combination: " << Nombre() 
@@ -560,7 +567,7 @@ size_t XC::CmbEdge::IndiceEdge(const Edge *l) const
     size_t retval= 1;
     for(std::deque<Lado>::const_iterator i=lineas.begin();i!=lineas.end();i++)
       {
-        if((*i).Borde() == l)
+        if((*i).getEdge() == l)
           return retval;
         else
           retval++;
@@ -627,7 +634,7 @@ std::deque<XC::Edge *> XC::CmbEdge::GetEdges(void)
   {
     std::deque<XC::Edge *> retval;
     for(std::deque<Lado>::iterator i=lineas.begin();i!=lineas.end();i++)
-      retval.push_back((*i).Borde());
+      retval.push_back((*i).getEdge());
     return retval;
   }
 
@@ -644,7 +651,8 @@ const XC::Pnt *XC::CmbEdge::GetVertice(const size_t &i) const
 //! @brief Sets the i-th vertex.
 void XC::CmbEdge::SetVertice(const size_t &,Pnt *)
   {
-    std::cerr << "Function XC::CmbEdge::SetVertice not implemented." << std::endl;
+    std::cerr << nombre_clase() << "::" << __FUNCTION__
+	      << "; not implemented." << std::endl;
   }
 
 //! @brief Returns object k-points.

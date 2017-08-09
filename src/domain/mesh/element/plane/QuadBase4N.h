@@ -106,8 +106,8 @@ XC::Element::NodesEdge XC::QuadBase4N<PhysProp>::getNodesEdge(const size_t &i) c
     return retval;    
   }
 
-//! @brief Returns the borde of the element
-//! que tiene por extremos los nodos being passed as parameters.
+//! @brief Returns the edge of the element
+//! that ends in the nodes being passed as parameters.
 template <class PhysProp>
 int XC::QuadBase4N<PhysProp>::getEdgeNodes(const Node *n1,const Node *n2) const
   {

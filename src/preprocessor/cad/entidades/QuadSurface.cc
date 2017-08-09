@@ -53,7 +53,7 @@ size_t calc_ndiv(const XC::Edge *edgeA,const XC::Edge *edgeB,const size_t &ndj)
         if(ndA==ndB)
           retval= ndA;
         else
-	  std::cerr << "calc_ndiv, los lados: "
+	  std::cerr << __FUNCTION__ << "; sides: "
                     << edgeA->getName() << " y " << edgeB->getName() 
                     << " are already meshed, and they have different number of divisions ("
                     << ndA << " y " << ndB << std::endl;
@@ -62,7 +62,7 @@ size_t calc_ndiv(const XC::Edge *edgeA,const XC::Edge *edgeB,const size_t &ndj)
       {
         if(ndA!=ndj)
           {
-	    std::clog << "calc_ndiv, el borde: "
+	    std::clog << __FUNCTION__ << "; edge: "
                       << edgeA->getName()
                       << " is already meshed, division number can't be changed."
                       << " to " << ndj << " keeping NDiv= " << ndA << std::endl;
@@ -73,7 +73,7 @@ size_t calc_ndiv(const XC::Edge *edgeA,const XC::Edge *edgeB,const size_t &ndj)
       {
         if(ndB!=ndj)
           {
-	    std::clog << "calc_ndiv, el borde: "
+	    std::clog << __FUNCTION__ << "; edge: "
                       << edgeB->getName()
                       << " is already meshed, division number can't be changed."
                       << " to " << ndj << " keeping NDiv= " << ndB << std::endl;
@@ -95,17 +95,19 @@ const XC::Edge *XC::QuadSurface::get_lado_homologo(const Edge *l) const
         const size_t ind0= indice-1;
         assert(ind0<4);
         if(ind0==0)
-          retval= lineas[2].Borde();
+          retval= lineas[2].getEdge();
         else if(ind0==2)
-          retval= lineas[0].Borde();
+          retval= lineas[0].getEdge();
         else if(ind0==1)
-          retval= lineas[3].Borde();
+          retval= lineas[3].getEdge();
         else if(ind0==3)
-          retval= lineas[1].Borde();
+          retval= lineas[1].getEdge();
       }
     else //No la encuentra.
-      std::cerr << "Line :" << l->getName() 
-                << " is not an edge of the surface: " << getName() << std::endl;    
+      std::cerr << nombre_clase() << "::" << __FUNCTION__
+		<< "; line :" << l->getName() 
+                << " is not an edge of the surface: "
+		<< getName() << std::endl;    
     return retval;
   }
 
@@ -114,12 +116,13 @@ const XC::Edge *XC::QuadSurface::get_lado_homologo(const Edge *l) const
 void XC::QuadSurface::SetNDivI(const size_t &ndi)
   {
     if(lineas.size()<4)
-      std::cerr << "XC::QuadSurface::SetNDivI, surface is not a quadrilateral, it has " 
+      std::cerr << nombre_clase() << "::" << __FUNCTION__
+		<< "; not a quadrilateral surface, it has " 
                 << lineas.size() << " sides." << std::endl;
     else
       {
-        Edge *edge0= lineas[0].Borde();
-        Edge *edge2= lineas[2].Borde();
+        Edge *edge0= lineas[0].getEdge();
+        Edge *edge2= lineas[2].getEdge();
         const size_t ndc= calc_ndiv(edge0,edge2,ndi);
         if(ndc>0)
           {
@@ -138,8 +141,8 @@ void XC::QuadSurface::SetNDivJ(const size_t &ndj)
                 << lineas.size() << " sides." << std::endl;
     else
       {
-        Edge *edge1= lineas[1].Borde();
-        Edge *edge3= lineas[3].Borde();
+        Edge *edge1= lineas[1].getEdge();
+        Edge *edge3= lineas[3].getEdge();
         const size_t ndc= calc_ndiv(edge1,edge3,ndj);
         if(ndc>0)
           {
@@ -156,8 +159,8 @@ void XC::QuadSurface::ConciliaNDivIJ(void)
   {
     if(checkNDivs())
       {
-	Face::SetNDivI(lineas[0].Borde()->NDiv());
-	Face::SetNDivJ(lineas[1].Borde()->NDiv());
+	Face::SetNDivI(lineas[0].getEdge()->NDiv());
+	Face::SetNDivJ(lineas[1].getEdge()->NDiv());
       }
   }
 
@@ -165,13 +168,14 @@ void XC::QuadSurface::ConciliaNDivIJ(void)
 //! compatible.
 bool XC::QuadSurface::checkNDivs(const size_t &i,const size_t &j) const
   {
-    const size_t ndivA= lineas[i].Borde()->NDiv();
-    const size_t ndivB= lineas[j].Borde()->NDiv();
+    const size_t ndivA= lineas[i].getEdge()->NDiv();
+    const size_t ndivB= lineas[j].getEdge()->NDiv();
     if(ndivA!=ndivB)
       {
-        std::cerr << "QuadSurface::checkNDivs, lines: "
-                  << lineas[i].Borde()->getName() << " and "
-                  << lineas[j].Borde()->getName() 
+        std::cerr << nombre_clase() << "::" << __FUNCTION__
+		  << "; lines: "
+                  << lineas[i].getEdge()->getName() << " and "
+                  << lineas[j].getEdge()->getName() 
                   << " of surface: " << getName()
                   << " have different number of divisions ("
                   << ndivA << " y " << ndivB << ')' << std::endl;
@@ -239,7 +243,8 @@ void XC::QuadSurface::setPuntos(const ID &indices_ptos)
       }
     int tagV1= GetVertice(1)->GetTag();
     if(tagV1!=indices_ptos(0))
-      std::cerr << "Surface: " << GetTag()
+      std::cerr << nombre_clase() << "::" << __FUNCTION__
+		<< "; surface: " << GetTag()
                 << "is inverted." << std::endl;
   }
 
@@ -249,13 +254,15 @@ void XC::QuadSurface::setPuntos(const MatrizPtrPnt &pntPtrs)
     const size_t nf= pntPtrs.getNumFilas(); //No. de filas de puntos.
     if(nf<2)
       {
-        std::cerr << "QuadSurface::setPuntos; la matriz de pointers debe tener al menos dos filas." << std::endl;
+        std::cerr << nombre_clase() << "::" << __FUNCTION__
+		  << "; pointer matrix must have at least two rows." << std::endl;
         return;
       }
     const size_t nc= pntPtrs.getNumCols(); //No. de columnas de puntos.
     if(nc<2)
       {
-        std::cerr << "QuadSurface::setPuntos; la matriz de pointers debe tener al menos dos columnas." << std::endl;
+        std::cerr << nombre_clase() << "::" << __FUNCTION__
+		  << "; pointer matrix must have at least two columns." << std::endl;
         return;
       }
     if(nf==2)
@@ -326,7 +333,8 @@ void XC::QuadSurface::setPuntos(const m_int &indices_ptos)
               if(p)
                 puntos(i,j)= p;
               else
-	        std::cerr << "QuadSurface::setPuntos; NULL pointer to point in position: ("
+	        std::cerr << nombre_clase() << "::" << __FUNCTION__
+			  << "; NULL pointer to point in position: ("
                           << i << ',' << j << ") in definition of surface: '"
                           << getName() << "'" << std::endl;
             }
@@ -357,7 +365,8 @@ MatrizPos3d XC::QuadSurface::get_posiciones(void) const
     const int numEdges= NumEdges();
     if(numEdges!=4)
       {
-        std::cerr << "Can't mesh surfaces with: "
+        std::cerr << nombre_clase() << "::" << __FUNCTION__
+		  << "; can't mesh surfaces with: "
 	          << numEdges << " edges." << std::endl;
         return retval;
       }
@@ -455,7 +464,8 @@ void XC::QuadSurface::create_nodes(void)
 void XC::QuadSurface::genMesh(meshing_dir dm)
   {
     if(verbosity>3)
-      std::clog << "Meshing quadrilateral surface...(" << getName() << ")...";
+      std::clog << "Meshing quadrilateral surface...("
+		<< getName() << ")...";
     create_nodes();
     if(ttzElements.Null())
       create_elements(dm);

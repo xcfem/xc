@@ -74,8 +74,8 @@ class Face: public CmbEdge
     //! @brief Return the bodies that touch this surface (neighbors).
     const std::set<const Body *> &CuerposTocan(void) const
       { return cuerpos_sup; }
-    size_t BordeComun(const Face &otra) const;
-    int SentidoBorde(const Edge *l,const Face &otra) const;
+    size_t CommonEdge(const Face &otra) const;
+    int SenseOfEdge(const Edge *l,const Face &otra) const;
     bool Toca(const Body &b) const;
     virtual bool checkNDivs(void) const= 0;
 
