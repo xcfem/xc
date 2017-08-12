@@ -103,17 +103,17 @@ class_<XC::ElementIter, boost::noncopyable >("ElementIter", no_init)
    ;
 
 
-class_<XC::ElementBase<2>, bases<XC::Element >, boost::noncopyable >("ElementBase2N", no_init);
+class_<XC::ElementBase<2>, bases<XC::Element >, boost::noncopyable >("ElementBase2N","Base class for 2 node elements.", no_init);
 
-class_<XC::ElementBase<3>, bases<XC::Element >, boost::noncopyable >("ElementBase3N", no_init);
+class_<XC::ElementBase<3>, bases<XC::Element >, boost::noncopyable >("ElementBase3N","Base class for 3 node elements.", no_init);
 
-class_<XC::ElementBase<4>, bases<XC::Element >, boost::noncopyable >("ElementBase4N", no_init);
+class_<XC::ElementBase<4>, bases<XC::Element >, boost::noncopyable >("ElementBase4N","Base class for 4 node elements.", no_init);
 
-class_<XC::ElementBase<8>, bases<XC::Element >, boost::noncopyable >("ElementBase8N", no_init);
+class_<XC::ElementBase<8>, bases<XC::Element >, boost::noncopyable >("ElementBase8N","Base class for 8 node elements.", no_init);
 
-class_<XC::ElementBase<20>, bases<XC::Element >, boost::noncopyable >("ElementBase20N", no_init);
+class_<XC::ElementBase<20>, bases<XC::Element >, boost::noncopyable >("ElementBase20N","Base class for 20 node elements.", no_init);
 
-class_<XC::ElementBase<27>, bases<XC::Element >, boost::noncopyable >("ElementBase27N", no_init);
+class_<XC::ElementBase<27>, bases<XC::Element >, boost::noncopyable >("ElementBase27N","Base class for 27 node elements.", no_init);
 
 class_<XC::Element0D , bases<XC::ElementBase<2>>, boost::noncopyable >("Element0D", no_init)
   .def("setupVectors",&XC::Element0D::setUpVectors)

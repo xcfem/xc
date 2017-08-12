@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
-''' Test para comprobar el response spectrum modal analysis
-tomado de la publicación de Andrés Sáez Pérez: «Estructuras III»
- E.T.S. de Arquitectura de Sevilla (España). En este test empleamos
-la biblioteca Arpack. '''
+''' Response spectrum modal analysis test
+taken from the publication from Andrés Sáez Pérez: «Estructuras III»
+ E.T.S. de Arquitectura de Sevilla (España). Eigenvalue problem is solved
+by means of the Arpack library. '''
 from __future__ import division
 import xc_base
 import geom

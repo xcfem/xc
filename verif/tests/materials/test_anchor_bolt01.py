@@ -40,7 +40,7 @@ fckCube= 25e6 # Caracteristic concrete compression strength measured on cubes wi
 NRds= EOTA_TR029_limit_state_checking.axialResistanceSteelFailure(areaBarra,fuk)/gammaMs
 
 
-# Influencia de la distancia al borde
+# Edge distance influence
 CcrN= EOTA_TR029_limit_state_checking.getCcrNp(diamBarra,hef,tauRkUcr)
 C= contornoPiezaSoporte.getRecubrimiento(posAnc) 
 Cmin= 5*diamBarra+10e-3
@@ -61,7 +61,7 @@ f2pN= EOTA_TR029_limit_state_checking.getFactor2pN(A0pN,ApN)
 N0Rdp= EOTA_TR029_limit_state_checking.axialInitialResistancePullOut(diamBarra,hef,tauRk)/gammaMc
 NRdp= N0Rdp*f1N*f2pN # Extraction
 
-# Área bruta desprendimiento de cono
+# Cone extraction gross area.
 plgA0cN= EOTA_TR029_limit_state_checking.getA0cN(posAnc,hef)
 A0cN= plgA0cN.getArea()
 # Cone extraction effective area.
@@ -70,22 +70,22 @@ plgAcN.recortaPorPoligono(contornoPiezaSoporte)
 AcN= plgAcN.getArea()
 f2cN= EOTA_TR029_limit_state_checking.getFactor2cN(A0cN,AcN)
 N0Rdc= EOTA_TR029_limit_state_checking.axialInitialResistanceConeFailure(k1,fckCube,hef)/gammaMc
-NRdc= N0Rdc*f1N*f2cN # Desprendimiento de cono.
+NRdc= N0Rdc*f1N*f2cN # Cone extraction.
 
 # Splitting
 CcrSp= EOTA_TR029_limit_state_checking.getCcrSpHiltiHY150(h,hef)
 ScrSp= 2*CcrSp
 f1Nsp= EOTA_TR029_limit_state_checking.getFactor1N(C,CcrSp)
-# Área bruta splitting
+# Splitting gross area.
 plgA0spN= EOTA_TR029_limit_state_checking.getA0spN(posAnc,CcrSp)
 A0spN= plgA0spN.getArea()
-# Area neta splitting
+# Splitting effective area.
 plgAspN= plgA0spN
 plgAspN.recortaPorPoligono(contornoPiezaSoporte)
 AspN= plgAspN.getArea()
 f2spN= EOTA_TR029_limit_state_checking.getFactor2spN(A0spN,AspN)
 N0RdSp= N0Rdc
-NRdSp= N0RdSp*f1Nsp*f2spN # Desprendimiento de cono.
+NRdSp= N0RdSp*f1Nsp*f2spN # Splitting.
 
 # Resultados
 

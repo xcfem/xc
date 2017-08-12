@@ -24,27 +24,27 @@ General topics
     :members:
     :show-inheritance:
 	    
-.. autoclass:: ElementBase<2>
+.. autoclass:: ElementBase2N
     :members:
     :show-inheritance:
 	    
-.. autoclass:: ElementBase<3>
+.. autoclass:: ElementBase3N
     :members:
     :show-inheritance:
 	    
-.. autoclass:: ElementBase<4>
+.. autoclass:: ElementBase4N
     :members:
     :show-inheritance:
 	    
-.. autoclass:: ElementBase<8>
+.. autoclass:: ElementBase8N
     :members:
     :show-inheritance:
 	    
-.. autoclass:: ElementBase<20>
+.. autoclass:: ElementBase20N
     :members:
     :show-inheritance:
 	    
-.. autoclass:: ElementBase<27>
+.. autoclass:: ElementBase27N
     :members:
     :show-inheritance:
 	    
