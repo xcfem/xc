@@ -28,7 +28,7 @@ def getAreaNecArmaduraInfEncepado(alpha,Nd,fyd):
 def getTracArmaduraInfEncepado2Pilotes(v,d,Nd):
     '''
     Devuelve la traccion en la reinforcement inferior de un encepado
-    de DOS pilotes (ver números gordos HC.9 página 32).
+    de DOS pilotes (ver números gordos HC.9 page 32).
     v: Distancia entre la pila y el pilote.
     d: Canto útil del encepado.
     Nd: Axil de cálculo en la pila.
@@ -60,7 +60,7 @@ def getAreaArmaduraCercosVertEncepado2Pilotes(b,h,L):
     '''
     Devuelve el área de reinforcement necesaria para los cercos
     verticales de un encepado de DOS pilotes (ver números gordos
-    HC.9 página 33).
+    HC.9 page 33).
     b: Ancho del encepado.
     h: Canto del encepado.
     L: Longitud del encepado.
@@ -72,7 +72,7 @@ def getAreaArmaduraCercosHorizEncepado2Pilotes(b,h):
     '''
     Devuelve el área de reinforcement necesaria para los cercos
     horizontales de un encepado de DOS pilotes (ver números gordos
-    HC.9 página 33).
+    HC.9 page 33).
     b: Ancho del encepado.
     L: Longitud del encepado.
     '''

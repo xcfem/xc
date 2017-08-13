@@ -199,7 +199,7 @@ class ElastomericBearing(Bearing):
 # from the mean compressive stress
 # See the book «Aparatos de apoyo en puentes» from AIPCR page 46
 
-# Tabla 59.8.2 del artículo 59.8.2 de EAE (página 256)
+# Tabla 59.8.2 del artículo 59.8.2 de EAE (page 256)
 xT= [5e6,10e6,20e6,30e6,45e6,1000e6]
 yT= [0.08,0.06,0.04,0.03,0.025,0.024]
 

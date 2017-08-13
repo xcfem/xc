@@ -355,6 +355,8 @@
 /usr/local/lib/python2.7/dist-packages/materials/eae/__init__.pyc
 /usr/local/lib/python2.7/dist-packages/materials/eae/resistencia_cordon_soldadura.py
 /usr/local/lib/python2.7/dist-packages/materials/eae/resistencia_cordon_soldadura.pyc
+/usr/local/lib/python2.7/dist-packages/materials/eae/weld_bead_strength.py
+/usr/local/lib/python2.7/dist-packages/materials/eae/weld_bead_strength.pyc
 /usr/local/lib/python2.7/dist-packages/materials/ec2/crack_control_utils.py
 /usr/local/lib/python2.7/dist-packages/materials/ec2/crack_control_utils.pyc
 /usr/local/lib/python2.7/dist-packages/materials/ec2/EC2_concrete.py

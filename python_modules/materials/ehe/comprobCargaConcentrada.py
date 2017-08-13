@@ -10,14 +10,14 @@ def getF3cd(Ac, Ac1, fcd):
 
 '''
 Devuelve el valor último de la carga que puede soportar una pieza
-de seccion Ac siendo el área cargada Ac1 (ver figura 61.1.a página 302 EHE-08)
+de seccion Ac siendo el área cargada Ac1 (ver figura 61.1.a page 302 EHE-08)
 '''
 def getNuCargaConcentrada(Ac, Ac1, fcd):
   return Ac1*getF3cd(Ac,Ac1,fcd)
 
 '''
 Devuelve la capacidad mecánica necesaria para la reinforcement paralela al
-lado a (ver figura 61.1.a página 302 EHE-08)
+lado a (ver figura 61.1.a page 302 EHE-08)
   a: Dimensión de la sección.
   a1: Dimensión del área cargada paralela a a.
   Nd: Carga concentrada.
@@ -28,7 +28,7 @@ def getUad(a, a1, Nd):
 
 '''
 Devuelve el área necesaria para la reinforcement paralela al
-lado a (ver figura 61.1.a página 302 EHE-08)
+lado a (ver figura 61.1.a page 302 EHE-08)
   a: Dimensión de la sección.
   a1: Dimensión del área cargada paralela a a.
   Nd: Carga concentrada.
@@ -41,7 +41,7 @@ def getAreaArmadAd(a, a1, Nd, fyd):
 
 '''
 Devuelve la capacidad mecánica necesaria para la reinforcement paralela al
-lado b (ver figura 61.1.a página 302 EHE-08)
+lado b (ver figura 61.1.a page 302 EHE-08)
   b: Dimensión de la sección.
   b1: Dimensión del área cargada paralela a b.
   Nd: Carga concentrada.
@@ -52,7 +52,7 @@ def getUbd(b, b1, Nd):
 
 '''
 Devuelve el área necesaria para la reinforcement paralela al
-lado b (ver figura 61.1.a página 302 EHE-08)
+lado b (ver figura 61.1.a page 302 EHE-08)
   b: Dimensión de la sección.
   b1: Dimensión del área cargada paralela a a.
   Nd: Carga concentrada.

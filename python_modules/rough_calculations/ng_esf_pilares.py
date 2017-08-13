@@ -28,7 +28,7 @@ __email__= "l.pereztato@gmail.com"
 def getAreaInfluenciaPilar(L1,L2,L3,L4):
     '''
     Área de influencia de un pilar a partir de las luces de los vanos anejos
-    ver «Números gordos en el proyecto de estructuras» página 44
+    ver «Números gordos en el proyecto de estructuras» page 44
     '''
     return (L1+L2)/2*(L3+L4)/2
   

@@ -463,7 +463,7 @@ class ISection(SectionProperties):
 
 ##   Devuelve el valor de la inercia a torsión de un cajón
 ##   monocelular según el libro Puentes (apuntes para su diseño
-##   y construcción) de Javier Manterola Armisén (apartado 5.2.3 página 251)
+##   y construcción) de Javier Manterola Armisén (apartado 5.2.3 page 251)
 ##
 ##                        bs
 ##             |----------------------|

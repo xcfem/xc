@@ -9,7 +9,7 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
-from materials.eae import resistencia_cordon_soldadura
+from materials.eae import weld_bead_strength
 import math
 
 # Stresses on the throat plane revolved over the bead face.
@@ -18,16 +18,16 @@ ta= -33.22e6 # Tangential stress parallel to weld axis.
 n= -252.4e6 # Normal stress.
 
 # Stresses applied to the throat area of the weld.
-sigmaN= resistencia_cordon_soldadura.getSigmaNPlanoGarganta(n,tn) 
-tauN= resistencia_cordon_soldadura.getTauNPlanoGarganta(n,tn)
+sigmaN= weld_bead_strength.getSigmaNPlanoGarganta(n,tn) 
+tauN= weld_bead_strength.getTauNPlanoGarganta(n,tn)
 tauPll= ta 
 
 # Equivalent stress.
-sigmaCo= resistencia_cordon_soldadura.getTensComparacionCordonAngulo(n,tn,ta)
-sigmaUlt= resistencia_cordon_soldadura.getValorComparacionResistenciaCordon(430e6,275e6,1.25)
-fcCond1= resistencia_cordon_soldadura.getFCCondicion1Cordon(n,tn,ta,430e6,275e6,1.25)
-sigmaNUlt= resistencia_cordon_soldadura.getTensionNormalUltimaCordon(430e6,1.25)
-fcCond2= resistencia_cordon_soldadura.getFCCondicion2Cordon(n,tn,430e6,1.25)
+sigmaCo= weld_bead_strength.getTensComparacionCordonAngulo(n,tn,ta)
+sigmaUlt= weld_bead_strength.getValorComparacionResistenciaCordon(430e6,275e6,1.25)
+fcCond1= weld_bead_strength.getFCCondicion1Cordon(n,tn,ta,430e6,275e6,1.25)
+sigmaNUlt= weld_bead_strength.getTensionNormalUltimaCordon(430e6,1.25)
+fcCond2= weld_bead_strength.getFCCondicion2Cordon(n,tn,430e6,1.25)
 
 ratio1= ((sigmaN+229.44e6)/229.44e6)
 ratio2= ((tauN+127.54e6)/127.54e6)

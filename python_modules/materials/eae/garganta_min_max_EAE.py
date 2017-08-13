@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 '''
 Devuelve el espesor de garganta mínimo para un cordón en ángulo que une una chapa de espesor t
-   según el artículo 59.3.2 de la EAE (página 296)
+   según el artículo 59.3.2 de la EAE (page 296)
     t: Espesor de la chapa.
   
 '''
@@ -16,7 +16,7 @@ def aMinAngulo(t):
 
 '''
 Devuelve el espesor de garganta máximo para un cordón en ángulo que une una chapa de espesor t
-   según el artículo 59.3.2 de la EAE (página 296)
+   según el artículo 59.3.2 de la EAE (page 296)
     t: Espesor de la chapa.
   
 '''
@@ -25,7 +25,7 @@ def aMaxAngulo(t):
 
 '''
 Devuelve el espesor de garganta mínimo para unir dos chapas
- según el artículo 59.3.2 de la EAE (página 296)
+ según el artículo 59.3.2 de la EAE (page 296)
   t1: Espesor de la chapa 1.
   t2: Espesor de la chapa 2.
   
@@ -37,7 +37,7 @@ def aMinAnguloChapas(t1, t2):
 
 '''
 Devuelve el espesor de garganta máximo para unir dos chapas
-   según el artículo 59.3.2 de la EAE (página 296)
+   según el artículo 59.3.2 de la EAE (page 296)
     t1: Espesor de la chapa 1.
     t2: Espesor de la chapa 2.
   

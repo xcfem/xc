@@ -69,7 +69,7 @@ def estimateSigmaCPlanB(sccData, N, M):
   sg1= N/Ac+M/Ic*sccData.depth/2.0
   sg2= N/Ac-M/Ic*sccData.depth/2.0
   sgc= min(min(sg1,sg2),0.0)
-  return 2.0*sgc #Ver Jiménez Montoya 12.3 (página 244)
+  return 2.0*sgc #Ver Jiménez Montoya 12.3 (page 244)
 
 def getConcreteLimitStress(sccData,kc,controlVars):
   '''4.3.8.3.1 SIA 262 2013'''

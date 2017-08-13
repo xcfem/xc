@@ -130,7 +130,7 @@ def getCcrSpHiltiHY150(h, hEf):
   '''
   Semi-lado del área de influencia (distancia crítica al borde)
      de un anclaje individual según el artículo
-     la tabla 7 de la ETA-05/0051 (página 19).
+     la tabla 7 de la ETA-05/0051 (page 19).
 
    :param h: Profundidad de la pieza (m).
    :param hEf: Profundidad efectiva del anclaje (m).
