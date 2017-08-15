@@ -20,9 +20,9 @@ zOrg= 3
 prueba= xc.ProblemaEF()
 preprocessor=  prueba.getPreprocessor
 
-puntos= preprocessor.getCad.getPoints
-pt= puntos.newPntIDPos3d(1,geom.Pos3d(0.0,0.0,0.0))
-pt= puntos.newPntIDPos3d(2,geom.Pos3d(CooMax,CooMax,CooMax))
+points= preprocessor.getCad.getPoints
+pt= points.newPntIDPos3d(1,geom.Pos3d(0.0,0.0,0.0))
+pt= points.newPntIDPos3d(2,geom.Pos3d(CooMax,CooMax,CooMax))
 rsMap= preprocessor.getCad.getReferenceSystems
 
 rs= rsMap.newReferenceSystem("cartesianas")

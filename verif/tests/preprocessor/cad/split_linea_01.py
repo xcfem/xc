@@ -34,19 +34,19 @@ seedElemLoader.defaultTag= 1 #Tag for the next element.
 truss= seedElemLoader.newElement("truss",xc.ID([0,0]));
 truss.area= 10.0
 
-puntos= preprocessor.getCad.getPoints
-pt= puntos.newPntIDPos3d(1,geom.Pos3d(0.0,0.0,0.0))
-pt= puntos.newPntIDPos3d(2,geom.Pos3d(CooMax,CooMax,CooMax))
-pt= puntos.newPntIDPos3d(3,geom.Pos3d(CooMax/2,CooMax/2,CooMax/2))
+points= preprocessor.getCad.getPoints
+pt= points.newPntIDPos3d(1,geom.Pos3d(0.0,0.0,0.0))
+pt= points.newPntIDPos3d(2,geom.Pos3d(CooMax,CooMax,CooMax))
+pt= points.newPntIDPos3d(3,geom.Pos3d(CooMax/2,CooMax/2,CooMax/2))
 
-lineas= preprocessor.getCad.getLines
-lineas.defaultTag= 1
-l1= lineas.newLine(1,2)
+lines= preprocessor.getCad.getLines
+lines.defaultTag= 1
+l1= lines.newLine(1,2)
 l1.nDiv= NumDiv
 
-l1.splitAtPoint(puntos.get(3))
+l1.splitAtPoint(points.get(3))
 kpoints1= l1.getKPoints()
-l2= lineas.get(2)
+l2= lines.get(2)
 kpoints2= l2.getKPoints()
 
 ratio1= (kpoints1[0]-1)+(kpoints1[1]-3)

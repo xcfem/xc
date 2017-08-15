@@ -17,7 +17,7 @@ numPorticos= len(abcisas)
 prueba= xc.ProblemaEF()
 preprocessor=  prueba.getPreprocessor
 
-puntos= preprocessor.getCad.getPoints
+points= preprocessor.getCad.getPoints
 nets= preprocessor.getCad.get3DNets
 porticoLateral= nets.new3DNet()
 porticoLateral.dim(1,2,numPorticos)
@@ -25,9 +25,9 @@ ordenada= 8.2
 centroideTeor= geom.Pos3d(abcisas[numPorticos-1]/2.0, 0, ordenada/2.0)
 i= 1
 for x in abcisas:
-  pntA= puntos.newPntFromPos3d(geom.Pos3d(x,0.0,0.0))
+  pntA= points.newPntFromPos3d(geom.Pos3d(x,0.0,0.0))
   porticoLateral.setPnt(1,1,i,pntA.tag)
-  pntB= puntos.newPntFromPos3d(geom.Pos3d(x,0.0,ordenada))
+  pntB= points.newPntFromPos3d(geom.Pos3d(x,0.0,ordenada))
   porticoLateral.setPnt(1,2,i,pntB.tag)
   i+= 1
 

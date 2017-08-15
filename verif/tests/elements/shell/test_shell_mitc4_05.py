@@ -50,11 +50,11 @@ elem= seedElemLoader.newElement("shell_mitc4",xc.ID([0,0,0,0]))
 
 
 
-puntos= preprocessor.getCad.getPoints
-pt= puntos.newPntIDPos3d(1,geom.Pos3d(0.0,0.0,0.0))
-pt= puntos.newPntIDPos3d(2,geom.Pos3d(CooMaxX,0.0,0.0))
-pt= puntos.newPntIDPos3d(3,geom.Pos3d(CooMaxX,CooMaxY,0.0))
-pt= puntos.newPntIDPos3d(4,geom.Pos3d(0.0,CooMaxY,0.0))
+points= preprocessor.getCad.getPoints
+pt= points.newPntIDPos3d(1,geom.Pos3d(0.0,0.0,0.0))
+pt= points.newPntIDPos3d(2,geom.Pos3d(CooMaxX,0.0,0.0))
+pt= points.newPntIDPos3d(3,geom.Pos3d(CooMaxX,CooMaxY,0.0))
+pt= points.newPntIDPos3d(4,geom.Pos3d(0.0,CooMaxY,0.0))
 surfaces= preprocessor.getCad.getSurfaces
 surfaces.defaultTag= 1
 s= surfaces.newQuadSurfacePts(1,2,3,4)

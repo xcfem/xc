@@ -345,7 +345,7 @@ const XC::Matrix &XC::NodePtrs::getCoordinates(void) const
   }
 
 //! @brief Return the position of the i-th node.
-Pos3d XC::NodePtrs::getPosNodo(const size_t &i,bool initialGeometry) const
+Pos3d XC::NodePtrs::getPosNode(const size_t &i,bool initialGeometry) const
   {
     if(initialGeometry)
       return (*this)[i]->getInitialPosition3d();
@@ -359,7 +359,7 @@ std::list<Pos3d> XC::NodePtrs::getPosiciones(bool initialGeometry) const
     std::list<Pos3d> retval;
     const size_t sz= size();
     for(size_t i=0;i<sz;i++)
-      retval.push_back(getPosNodo(i,initialGeometry));
+      retval.push_back(getPosNode(i,initialGeometry));
     return retval;
   }
 
@@ -370,9 +370,9 @@ Pos3d XC::NodePtrs::getPosCdg(bool initialGeometry) const
     const size_t sz= size();
     if(sz>0)
       {
-        Vector3d tmp= getPosNodo(0,initialGeometry).VectorPos();;
+        Vector3d tmp= getPosNode(0,initialGeometry).VectorPos();;
         for(size_t i=1;i<sz;i++)
-          tmp+= getPosNodo(i,initialGeometry).VectorPos();
+          tmp+= getPosNode(i,initialGeometry).VectorPos();
         tmp= tmp * 1.0/sz;
         retval= Pos3d()+tmp;
       }

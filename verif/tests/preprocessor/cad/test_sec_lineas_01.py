@@ -35,10 +35,10 @@ seedElemLoader.defaultTag= 1 #Number for the next element will be 1.
 truss= seedElemLoader.newElement("truss",xc.ID([0,0]))
 truss.area= 10
 
-puntos= preprocessor.getCad.getPoints
-pt= puntos.newPntIDPos3d(1,geom.Pos3d(0.0,0.0,0.0))
-pt= puntos.newPntIDPos3d(2,geom.Pos3d(CooMax/2.0,CooMax/2.0,CooMax/2.0))
-pt= puntos.newPntIDPos3d(3,geom.Pos3d(CooMax,CooMax,CooMax))
+points= preprocessor.getCad.getPoints
+pt= points.newPntIDPos3d(1,geom.Pos3d(0.0,0.0,0.0))
+pt= points.newPntIDPos3d(2,geom.Pos3d(CooMax/2.0,CooMax/2.0,CooMax/2.0))
+pt= points.newPntIDPos3d(3,geom.Pos3d(CooMax,CooMax,CooMax))
 
 lines= preprocessor.getCad.getLines
 lines.defaultTag= 1

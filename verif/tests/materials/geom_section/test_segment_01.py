@@ -36,19 +36,6 @@ nl1= spot1.numLines
 nl2= spot2.numLines
 nl3= spot3.numLines
 
-'''
-             \for_each_spot
-
-                 print codigo,",",pos.x,",",pos.y,", nlineas:",nlineas
-
-             \for_each_eje
-
-                 print codigo,",",p1.codigo,",",p2.codigo,",",long
-
-'''
-
-
-
 
 ratio1= ((xA-x1)/xA)
 ratio2= ((yA-y1)/yA)

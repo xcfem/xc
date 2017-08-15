@@ -57,9 +57,9 @@ class_<XC::CrdTransf, bases<XC::TaggedObject,XC::MovableObject >, boost::noncopy
   .def("getPointsGlobalCoordFromBasic",&XC::CrdTransf::getPointsGlobalCoordFromBasic, return_value_policy<copy_const_reference>())
   .def("getPointGlobalDisplFromBasic",&XC::CrdTransf::getPointGlobalDisplFromBasic, return_value_policy<copy_const_reference>())
 
-  .def("getCooNodos",&XC::CrdTransf::getCooNodos, return_value_policy<copy_const_reference>())
-  .def("getCooPuntos",&XC::CrdTransf::getCooPuntos, return_value_policy<copy_const_reference>())
-  .def("getCooPunto",&XC::CrdTransf::getCooPunto, return_value_policy<copy_const_reference>())
+  .def("getCooNodes",&XC::CrdTransf::getCooNodes, return_value_policy<copy_const_reference>(),"Return the coordinates of the nodes as rows of the returned matrix.")
+  .def("getCooPoints",&XC::CrdTransf::getCooPoints, return_value_policy<copy_const_reference>(),"Return points distributed between the nodes as a matrix with the coordinates as rows.")
+  .def("getCooPoint",&XC::CrdTransf::getCooPoint, return_value_policy<copy_const_reference>(),"Return the point that correspond to the relative coordinate 0<=xrel<=1.")
 
   ;
 

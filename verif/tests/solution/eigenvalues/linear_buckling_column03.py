@@ -23,11 +23,11 @@ __email__= "l.pereztato@gmail.com"
    to reproduce the little delta effect (see example test_pdelta_01.xc).
  '''
 
-L= 10 # Longitud de la columna en meters
-b= 0.2 # Cross section width en meters
-h= 0.2 # Cross section depth en meters
+L= 10 # Column length in meters
+b= 0.2 # Cross section width in meters
+h= 0.2 # Cross section depth in meters
 A= b*h # Cross section area en m2
-I= 1/12.0*b*h**3 # Momento de inercia en m4
+I= 1/12.0*b*h**3 # Moment of inertia in m4
 E=1e4/I # Elastic modulus en N/m2
 P= -100 # Carga vertical sobre la columna.
 
@@ -58,9 +58,9 @@ beam2d= seedElemLoader.newElement("elastic_beam_2d",xc.ID([0,0]))
 beam2d.h= h
 beam2d.rho= 0.0
 
-puntos= preprocessor.getCad.getPoints
-pt= puntos.newPntIDPos3d(1,geom.Pos3d(0.0,0.0,0.0))
-pt= puntos.newPntIDPos3d(2,geom.Pos3d(0.0,L,0.0))
+points= preprocessor.getCad.getPoints
+pt= points.newPntIDPos3d(1,geom.Pos3d(0.0,0.0,0.0))
+pt= points.newPntIDPos3d(2,geom.Pos3d(0.0,L,0.0))
 lines= preprocessor.getCad.getLines
 lines.defaultTag= 1
 l= lines.newLine(1,2)

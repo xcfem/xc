@@ -534,13 +534,13 @@ XC::Matrix XC::Element1D::getLocalAxes(bool initialGeometry) const
     return retval;
   }
 
-//! @brief Returns puntos distribuidos entre los nodos extremos.
-const XC::Matrix &XC::Element1D::getCooPuntos(const size_t &ndiv) const
+//! @brief Return points distributed between the nodes as a matrix with the coordinates as rows.
+const XC::Matrix &XC::Element1D::getCooPoints(const size_t &ndiv) const
   {
     static Matrix retval;
     const CrdTransf *tmp= getCoordTransf();
     if(tmp)
-      retval= tmp->getCooPuntos(ndiv);
+      retval= tmp->getCooPoints(ndiv);
     else
       {
         const Pos3d p0= theNodes[0]->getInitialPosition3d();
@@ -559,13 +559,13 @@ const XC::Matrix &XC::Element1D::getCooPuntos(const size_t &ndiv) const
     return retval;
   }
 
-//! @brief Returns the punto correspondiente a la coordenada 0<=xrel<=1.
-const XC::Vector &XC::Element1D::getCooPunto(const double &xrel) const
+//! @brief Return the point that correspond to the relative coordinate 0<=xrel<=1.
+const XC::Vector &XC::Element1D::getCooPoint(const double &xrel) const
   {
     static Vector retval;
     const CrdTransf *tmp= getCoordTransf();
     if(tmp)
-      retval= tmp->getCooPunto(xrel);
+      retval= tmp->getCooPoint(xrel);
     else
       {
         const Pos3d p0= theNodes[0]->getInitialPosition3d();

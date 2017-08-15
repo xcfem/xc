@@ -15,11 +15,11 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
-L= 1 # Longitud de la ménsula en meters
-b= 0.05 # Cross section width en meters
-h= 0.10 # Cross section depth en meters
+L= 1 # Cantilever length in meters
+b= 0.05 # Cross section width in meters
+h= 0.10 # Cross section depth in meters
 A= b*h # Cross section area en m2
-I= 1/12.0*b*h**3 # Momento de inercia en m4
+I= 1/12.0*b*h**3 # Moment of inertia in m4
 theta= math.radians(30)
 E=2.0E11 # Elastic modulus en N/m2
 dens= 7800 # Densidad of the steel en kg/m3
@@ -55,9 +55,9 @@ beam2d.h= h
 beam2d.rho= m
 
 
-puntos= preprocessor.getCad.getPoints
-pt= puntos.newPntIDPos3d(1,geom.Pos3d(0.0,0.0,0.0))
-pt= puntos.newPntIDPos3d(2,geom.Pos3d(L*math.cos(theta),L*math.sin(theta),0.0))
+points= preprocessor.getCad.getPoints
+pt= points.newPntIDPos3d(1,geom.Pos3d(0.0,0.0,0.0))
+pt= points.newPntIDPos3d(2,geom.Pos3d(L*math.cos(theta),L*math.sin(theta),0.0))
 lines= preprocessor.getCad.getLines
 lines.defaultTag= 1
 l= lines.newLine(1,2)

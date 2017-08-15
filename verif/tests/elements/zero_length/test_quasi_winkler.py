@@ -56,19 +56,19 @@ beam2d= seedElemLoader.newElement("elastic_beam_2d",xc.ID([0,0]))
 beam2d.h= h
 
 
-puntos= preprocessor.getCad.getPoints
-pt1= puntos.newPntIDPos3d(1,geom.Pos3d(0.0,0.0,0.0))
-pt2= puntos.newPntIDPos3d(2,geom.Pos3d(L/2,0.0,0.0))
-pt3= puntos.newPntIDPos3d(3,geom.Pos3d(L,0.0,0.0))
+points= preprocessor.getCad.getPoints
+pt1= points.newPntIDPos3d(1,geom.Pos3d(0.0,0.0,0.0))
+pt2= points.newPntIDPos3d(2,geom.Pos3d(L/2,0.0,0.0))
+pt3= points.newPntIDPos3d(3,geom.Pos3d(L,0.0,0.0))
 
-lineas= preprocessor.getCad.getLines
-lineas.defaultTag= 1
-l1= lineas.newLine(1,2)
+lines= preprocessor.getCad.getLines
+lines.defaultTag= 1
+l1= lines.newLine(1,2)
 l1.nDiv= int(numDiv/2)
 
 
-lineas.defaultTag= 2
-l2= lineas.newLine(2,3)
+lines.defaultTag= 2
+l2= lines.newLine(2,3)
 l2.nDiv= int(numDiv/2)
 
 

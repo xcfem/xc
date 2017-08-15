@@ -20,14 +20,14 @@ CooMax= NumDiv
 prueba= xc.ProblemaEF()
 preprocessor=  prueba.getPreprocessor
 
-puntos= preprocessor.getCad.getPoints
-pt= puntos.newPntIDPos3d(1,geom.Pos3d(0.0,0.0,0.0))
-pt= puntos.newPntIDPos3d(2,geom.Pos3d(CooMax,CooMax,CooMax))
-puntos.defaultTag= 100
+points= preprocessor.getCad.getPoints
+pt= points.newPntIDPos3d(1,geom.Pos3d(0.0,0.0,0.0))
+pt= points.newPntIDPos3d(2,geom.Pos3d(CooMax,CooMax,CooMax))
+points.defaultTag= 100
 
-lineas= preprocessor.getCad.getLines
-lineas.defaultTag= 1
-l1= lineas.newLine(1,2)
+lines= preprocessor.getCad.getLines
+lines.defaultTag= 1
+l1= lines.newLine(1,2)
 l1.nDiv= NumDiv
 l1.divide()
 
@@ -49,25 +49,25 @@ for_each
 
 
 cumple= True
-pnt101= puntos.get(101)
+pnt101= points.get(101)
 pos= pnt101.getPos
 cumple= (abs(pos.x-(1.0+dx))<1e-5) & (cumple) 
 cumple= (abs(pos.y-(1.0+dy))<1e-5) & (cumple) 
 cumple= (abs(pos.z-(1.0+dz))<1e-5) & (cumple) 
 
-pnt102= puntos.get(102)
+pnt102= points.get(102)
 pos= pnt102.getPos
 cumple= (abs(pos.x-(2.0+dx))<1e-5) & (cumple) 
 cumple= (abs(pos.y-(2.0+dy))<1e-5) & (cumple) 
 cumple= (abs(pos.z-(2.0+dz))<1e-5) & (cumple) 
 
-pnt103= puntos.get(103)
+pnt103= points.get(103)
 pos= pnt103.getPos
 cumple= (abs(pos.x-(3.0+dx))<1e-5) & (cumple) 
 cumple= (abs(pos.y-(3.0+dy))<1e-5) & (cumple) 
 cumple= (abs(pos.z-(3.0+dz))<1e-5) & (cumple) 
 
-pnt104= puntos.get(104)
+pnt104= points.get(104)
 pos= pnt104.getPos
 cumple= (abs(pos.x-(4.0+dx))<1e-5) & (cumple) 
 cumple= (abs(pos.y-(4.0+dy))<1e-5) & (cumple) 

@@ -34,30 +34,30 @@ seedElemLoader.defaultTag= 1 #Tag for the next element.
 truss= seedElemLoader.newElement("truss",xc.ID([0,0]));
 truss.area= 10.0
 
-puntos= preprocessor.getCad.getPoints
-pt= puntos.newPntIDPos3d(1,geom.Pos3d(0.0,0.0,0.0))
-pt= puntos.newPntIDPos3d(2,geom.Pos3d(CooMax,CooMax,CooMax))
+points= preprocessor.getCad.getPoints
+pt= points.newPntIDPos3d(1,geom.Pos3d(0.0,0.0,0.0))
+pt= points.newPntIDPos3d(2,geom.Pos3d(CooMax,CooMax,CooMax))
 
-lineas= preprocessor.getCad.getLines
-lineas.defaultTag= 1
-l1= lineas.newLine(1,2)
+lines= preprocessor.getCad.getLines
+lines.defaultTag= 1
+l1= lines.newLine(1,2)
 l1.nDiv= NumDiv
 
-longitud= l1.getLong()
+length= l1.getLong()
 l1.splitAtLambda(0.5)
 
-longitud1= l1.getLong()
-l2= lineas.get(2)
-longitud2= l2.getLong()
+length1= l1.getLong()
+l2= lines.get(2)
+length2= l2.getLong()
 
 
-ratio1= abs(longitud1-longitud/2.0)
-ratio2= abs(longitud2-longitud/2.0)
+ratio1= abs(length1-length/2.0)
+ratio2= abs(length2-length/2.0)
 
 ''' 
-print "longitud: ",longitud
-print "longitud1: ",longitud1
-print "longitud2: ",longitud2
+print "length: ",length
+print "length1: ",length1
+print "length2: ",length2
 print "ratio1= ",ratio1
 print "ratio2= ",ratio2
    '''

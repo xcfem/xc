@@ -207,7 +207,7 @@ class Element: public MeshComponent
 
     double MaxCooNod(int i) const;
     double MinCooNod(int i) const;
-    const Matrix &getCooNodos(void) const;
+    const Matrix &getCooNodes(void) const;
     virtual Matrix getLocalAxes(bool initialGeometry= true) const;
     virtual Vector getBaseVector(size_t i,bool initialGeometry= true) const;
     virtual Vector3d getBaseVector3d(size_t i,bool initialGeometry= true) const;
@@ -215,8 +215,8 @@ class Element: public MeshComponent
     virtual Vector3d getJVector3d(bool initialGeometry= true) const;
     virtual Vector3d getKVector3d(bool initialGeometry= true) const;
     virtual SisCooRect3d3d getSisCoo(bool) const;    
-    Pos3d getPosNodo(const size_t &i,bool initialGeometry= true) const;
-    std::list<Pos3d> getPosNodos(bool initialGeometry= true) const;
+    Pos3d getPosNode(const size_t &i,bool initialGeometry= true) const;
+    std::list<Pos3d> getPosNodes(bool initialGeometry= true) const;
     virtual Pos3d getPosCdg(bool initialGeometry= true) const;
     Vector getCooCdg(bool initialGeometry= true) const;
     TritrizPos3d getPuntos(const size_t &ni,const size_t &nj,const size_t &nk,bool initialGeometry= true);

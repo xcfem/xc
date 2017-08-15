@@ -40,16 +40,16 @@ seedElemLoader.dimElem= 3 # Dimension of element space
 seedElemLoader.defaultTag= 1 #Tag for the next element.
 truss= seedElemLoader.newElement("truss",xc.ID([0,0]));
 truss.area= 10.0
-puntos= preprocessor.getCad.getPoints
-pt= puntos.newPntIDPos3d(1,geom.Pos3d(R,0.0,0.0))
-pt= puntos.newPntIDPos3d(2,geom.Pos3d(R*cos225,R*sin225,0.0))
-pt= puntos.newPntIDPos3d(3,geom.Pos3d((R*cos45),(R*sin45),0.0))
-pt= puntos.newPntIDPos3d(4,geom.Pos3d((R*cos675),(R*sin675),0.0))
-pt= puntos.newPntIDPos3d(5,geom.Pos3d(0.0,R,0.0))
+points= preprocessor.getCad.getPoints
+pt= points.newPntIDPos3d(1,geom.Pos3d(R,0.0,0.0))
+pt= points.newPntIDPos3d(2,geom.Pos3d(R*cos225,R*sin225,0.0))
+pt= points.newPntIDPos3d(3,geom.Pos3d((R*cos45),(R*sin45),0.0))
+pt= points.newPntIDPos3d(4,geom.Pos3d((R*cos675),(R*sin675),0.0))
+pt= points.newPntIDPos3d(5,geom.Pos3d(0.0,R,0.0))
 
-lineas= preprocessor.getCad.getLines
-lineas.defaultTag= 1
-l1= lineas.newCircleArc(1,2,3)
+lines= preprocessor.getCad.getLines
+lines.defaultTag= 1
+l1= lines.newCircleArc(1,2,3)
 l1.nDiv= NumDiv
 th1= l1.getTheta1()
 th2= l1.getTheta2()
@@ -62,7 +62,7 @@ yi= l1.getPInic().y
 zi= l1.getPInic().z
 r= l1.getRadio()
 
-l2= lineas.newCircleArc(3,4,5)
+l2= lines.newCircleArc(3,4,5)
 l2.nDiv= NumDiv
 
 

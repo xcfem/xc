@@ -72,8 +72,8 @@ class Element1D : public ElementBase<2>
     virtual const CrdTransf *getCoordTransf(void) const;
     virtual CrdTransf *checkCoordTransf(void);
     virtual const CrdTransf *checkCoordTransf(void) const;
-    virtual const Matrix &getCooPuntos(const size_t &ndiv) const;
-    virtual const Vector &getCooPunto(const double &xrel) const;
+    virtual const Matrix &getCooPoints(const size_t &ndiv) const;
+    virtual const Vector &getCooPoint(const double &xrel) const;
     Segmento3d getSegmento(bool initialGeometry= true) const;
     double getDist2(const Pos2d &p,bool initialGeometry= true) const;
     double getDist(const Pos2d &p,bool initialGeometry= true) const;

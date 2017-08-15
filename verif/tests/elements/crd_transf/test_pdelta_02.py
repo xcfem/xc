@@ -22,7 +22,7 @@ Es= 29e6 # Young modulus (psi)
 area= 1 # Section area expressed in in2
 Iz= 1/12 # Cross-section moment of inertia expressed in in4
 P= 1000 # Load (force-pounds).
-nDivLineas= 8 # Load (force-pounds).
+nDivLines= 8 # Load (force-pounds).
 offset= 2*B # Load (force-pounds).
 
 import xc_base
@@ -50,29 +50,29 @@ seedElemLoader.defaultTransformation= "pd"
 seedElemLoader.defaultTag= 1 #Tag for next element.
 beam2d= seedElemLoader.newElement("elastic_beam_2d",xc.ID([1,2]))
 
-puntos= preprocessor.getCad.getPoints
-pt1= puntos.newPntIDPos3d(1, geom.Pos3d(0.0,0.0,0))
-pt2= puntos.newPntIDPos3d(2, geom.Pos3d(0.0,H,0))
-pt3= puntos.newPntIDPos3d(3, geom.Pos3d(B,0.0,0))
-pt4= puntos.newPntIDPos3d(4, geom.Pos3d(B,H,0))
-pt5= puntos.newPntIDPos3d(5, geom.Pos3d(offset,0.0,0))
-pt6= puntos.newPntIDPos3d(6, geom.Pos3d(offset,H,0))
-pt7= puntos.newPntIDPos3d(7, geom.Pos3d(offset+B,0.0,0))
-pt8= puntos.newPntIDPos3d(8, geom.Pos3d(offset+B,H,0))
+points= preprocessor.getCad.getPoints
+pt1= points.newPntIDPos3d(1, geom.Pos3d(0.0,0.0,0))
+pt2= points.newPntIDPos3d(2, geom.Pos3d(0.0,H,0))
+pt3= points.newPntIDPos3d(3, geom.Pos3d(B,0.0,0))
+pt4= points.newPntIDPos3d(4, geom.Pos3d(B,H,0))
+pt5= points.newPntIDPos3d(5, geom.Pos3d(offset,0.0,0))
+pt6= points.newPntIDPos3d(6, geom.Pos3d(offset,H,0))
+pt7= points.newPntIDPos3d(7, geom.Pos3d(offset+B,0.0,0))
+pt8= points.newPntIDPos3d(8, geom.Pos3d(offset+B,H,0))
 
-lineas= preprocessor.getCad.getLines
-l= lineas.newLine(1,2)
-l.nDiv= nDivLineas
-l= lineas.newLine(2,4)
-l.nDiv= nDivLineas*2
-l= lineas.newLine(4,3)
-l.nDiv= nDivLineas
-l= lineas.newLine(5,6)
-l.nDiv= nDivLineas
-l= lineas.newLine(6,8)
-l.nDiv= nDivLineas*2
-l= lineas.newLine(8,7)
-l.nDiv= nDivLineas
+lines= preprocessor.getCad.getLines
+l= lines.newLine(1,2)
+l.nDiv= nDivLines
+l= lines.newLine(2,4)
+l.nDiv= nDivLines*2
+l= lines.newLine(4,3)
+l.nDiv= nDivLines
+l= lines.newLine(5,6)
+l.nDiv= nDivLines
+l= lines.newLine(6,8)
+l.nDiv= nDivLines*2
+l= lines.newLine(8,7)
+l.nDiv= nDivLines
 
 setTotal= preprocessor.getSets.getSet("total")
 setTotal.genMesh(xc.meshDir.I)
@@ -102,12 +102,12 @@ nodeTag8= pt8.getTagNode
 mesh= prueba.getDomain.getMesh
 nodeTagCentralLoad= mesh.getNearestNode(geom.Pos3d(B/2,H,0.0)).tag
 nodeTagLateralLoad= mesh.getNearestNode(geom.Pos3d(offset+B/4,H,0.0)).tag
-tagElem1= mesh.getNearestElement(geom.Pos3d(0,H/(10*nDivLineas),0.0)).tag
-tagElem2= mesh.getNearestElement(geom.Pos3d(B/(10*nDivLineas),H,0.0)).tag
-tagElem4= mesh.getNearestElement(geom.Pos3d(offset,H/(10*nDivLineas),0.0)).tag
-tagElem5D= mesh.getNearestElement(geom.Pos3d(offset+B/(10*nDivLineas),H,0.0)).tag
-tagElem5F= mesh.getNearestElement(geom.Pos3d(offset+B-B/(10*nDivLineas),H,0.0)).tag
-tagElem6= mesh.getNearestElement(geom.Pos3d(offset+B,H/(10*nDivLineas),0.0)).tag
+tagElem1= mesh.getNearestElement(geom.Pos3d(0,H/(10*nDivLines),0.0)).tag
+tagElem2= mesh.getNearestElement(geom.Pos3d(B/(10*nDivLines),H,0.0)).tag
+tagElem4= mesh.getNearestElement(geom.Pos3d(offset,H/(10*nDivLines),0.0)).tag
+tagElem5D= mesh.getNearestElement(geom.Pos3d(offset+B/(10*nDivLines),H,0.0)).tag
+tagElem5F= mesh.getNearestElement(geom.Pos3d(offset+B-B/(10*nDivLines),H,0.0)).tag
+tagElem6= mesh.getNearestElement(geom.Pos3d(offset+B,H/(10*nDivLines),0.0)).tag
 
 
 # Loads definition

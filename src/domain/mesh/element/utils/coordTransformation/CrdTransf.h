@@ -151,9 +151,9 @@ class CrdTransf: public TaggedObject, public MovableObject
     virtual const Matrix &getVectorGlobalCoordFromLocal(const Matrix &localCoords) const= 0;
     virtual const Vector &getVectorLocalCoordFromGlobal(const Vector &globalCoords) const= 0;
 
-    virtual const Matrix &getCooNodos(void) const= 0;
-    virtual const Matrix &getCooPuntos(const size_t &ndiv) const= 0;
-    virtual const Vector &getCooPunto(const double &xrel) const= 0;
+    virtual const Matrix &getCooNodes(void) const= 0;
+    virtual const Matrix &getCooPoints(const size_t &ndiv) const= 0;
+    virtual const Vector &getCooPoint(const double &xrel) const= 0;
 
   };
 } // end of XC namespace

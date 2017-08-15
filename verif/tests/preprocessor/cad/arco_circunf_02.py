@@ -35,14 +35,14 @@ seedElemLoader.defaultTag= 1 #Tag for the next element.
 truss= seedElemLoader.newElement("truss",xc.ID([0,0]));
 truss.area= 10.0
 
-puntos= preprocessor.getCad.getPoints
-pt= puntos.newPntIDPos3d(1,geom.Pos3d(R,0.0,0.0))
-puntos.newPntFromPos3d(geom.Pos3d((R*cos45),(R*sin45),0.0))
-puntos.newPntFromPos3d(geom.Pos3d(0.0,R,0.0))
+points= preprocessor.getCad.getPoints
+pt= points.newPntIDPos3d(1,geom.Pos3d(R,0.0,0.0))
+points.newPntFromPos3d(geom.Pos3d((R*cos45),(R*sin45),0.0))
+points.newPntFromPos3d(geom.Pos3d(0.0,R,0.0))
 
-lineas= preprocessor.getCad.getLines
-lineas.defaultTag= 1
-l= lineas.newCircleArc(1,2,3)
+lines= preprocessor.getCad.getLines
+lines.defaultTag= 1
+l= lines.newCircleArc(1,2,3)
 l.nDiv= NumDiv
 th1= l.getTheta1()
 th2= l.getTheta2()

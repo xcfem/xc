@@ -155,7 +155,7 @@ double XC::ElemPlano<NNODOS, PhysProp>::getTributaryArea(const Node *nod) const
 template <int NNODOS,class PhysProp>
 Poligono3d XC::ElemPlano<NNODOS, PhysProp>::getPolygon(bool initialGeometry) const
   {
-    const std::list<Pos3d> posiciones= this->getPosNodos(initialGeometry);
+    const std::list<Pos3d> posiciones= this->getPosNodes(initialGeometry);
     return Poligono3d(posiciones.begin(),posiciones.end());
   }
 
@@ -169,11 +169,11 @@ Segmento3d XC::ElemPlano<NNODOS, PhysProp>::getLado(const size_t &i,bool initial
     const size_t sz= nodos.size();
     if(i<sz)
       {
-        const Pos3d p1= nodos.getPosNodo(i,initialGeometry);
+        const Pos3d p1= nodos.getPosNode(i,initialGeometry);
         if(i<(sz-1))
-          retval= Segmento3d(p1,nodos.getPosNodo(i+1,initialGeometry));
+          retval= Segmento3d(p1,nodos.getPosNode(i+1,initialGeometry));
         else
-          retval= Segmento3d(p1,nodos.getPosNodo(0,initialGeometry));
+          retval= Segmento3d(p1,nodos.getPosNode(0,initialGeometry));
       }
     return retval;
   }

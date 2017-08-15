@@ -122,9 +122,9 @@ class CrdTransf3d: public CrdTransf
     const Matrix &getVectorGlobalCoordFromLocal(const Matrix &localCoords) const;
     const Vector &getVectorLocalCoordFromGlobal(const Vector &globalCoords) const;
 
-    const Matrix &getCooNodos(void) const;
-    const Matrix &getCooPuntos(const size_t &ndiv) const;
-    const Vector &getCooPunto(const double &xrel) const;
+    const Matrix &getCooNodes(void) const;
+    const Matrix &getCooPoints(const size_t &ndiv) const;
+    const Vector &getCooPoint(const double &xrel) const;
 
     void gira(const double &);
   };

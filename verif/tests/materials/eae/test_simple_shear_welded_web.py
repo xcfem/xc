@@ -20,7 +20,7 @@ Vd= 8585*9.81 # Design value of the load.
 h= 270e-3 # Beam cross-section depth expressed in meters.
 tw= 6.6e-3 # Espesor del alma expressed in meters.
 a= 4e-3 # Espesor de garganta expressed in meters.
-l= 5.15925e-2 # Longitud de los cordones.
+l= 5.15925e-2 # Weld beads length.
 
 # Material properties
 fy= 275e6 # Acero S-275-JR

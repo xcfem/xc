@@ -41,11 +41,11 @@ MyDato= 1.9606e5 # Moment to check shear it's value is forced to obtain Vcu arou
 MzDato= 0        # Moment value when checking shear.
 VDato= 125e3     # Shear value.
 
-# Armadura longitudinal
+# Longitudinal reinforcement
 areaBarra= EHE_materials.Fi20
 numBarras= 3
 
-# Armadura transversal
+# Transverse reinforcement
 diamATrsv= 6e-3
 numRamas= 4
 

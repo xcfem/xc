@@ -436,7 +436,7 @@ const XC::Vector &XC::CrdTransf3d::getVectorLocalCoordFromGlobal(const Vector &g
   }
 
 //! @brief Returns the coordinates of the nodes.
-const XC::Matrix &XC::CrdTransf3d::getCooNodos(void) const
+const XC::Matrix &XC::CrdTransf3d::getCooNodes(void) const
   {
     static Matrix retval;
     retval= Matrix(2,3);
@@ -452,8 +452,8 @@ const XC::Matrix &XC::CrdTransf3d::getCooNodos(void) const
     return retval;
   }
 
-//! @brief Returns puntos distribuidos entre los nodos extremos.
-const XC::Matrix &XC::CrdTransf3d::getCooPuntos(const size_t &ndiv) const
+//! @brief Return points distributed between the nodes as a matrix with the coordinates as rows.
+const XC::Matrix &XC::CrdTransf3d::getCooPoints(const size_t &ndiv) const
   {
     const Pos3d p0= nodeIPtr->getInitialPosition3d();
     const Pos3d p1= nodeJPtr->getInitialPosition3d();
@@ -471,8 +471,8 @@ const XC::Matrix &XC::CrdTransf3d::getCooPuntos(const size_t &ndiv) const
     return retval;
   }
 
-//! @brief Returns the punto correspondiente a la coordenada 0<=xrel<=1.
-const XC::Vector &XC::CrdTransf3d::getCooPunto(const double &xrel) const
+//! @brief Return the point that correspond to the relative coordinate 0<=xrel<=1.
+const XC::Vector &XC::CrdTransf3d::getCooPoint(const double &xrel) const
   {
     const Pos3d p0= nodeIPtr->getInitialPosition3d();
     const Pos3d p1= nodeJPtr->getInitialPosition3d();

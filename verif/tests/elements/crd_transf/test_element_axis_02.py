@@ -21,7 +21,7 @@ nDivIJ= 2
 nDivJK= 2
 y0= 0
 z0= 0
-L= 1 # Longitud del elmento expressed in meters.
+L= 1 # Element length expressed in meters.
 
 # Problem type
 prueba= xc.ProblemaEF()

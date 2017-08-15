@@ -21,13 +21,13 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
-L= 10 # Longitud de la columna en meters
-b= 0.2 # Cross section width en meters
-h= 0.2 # Cross section depth en meters
+L= 10 # Column length in meters
+b= 0.2 # Cross section width in meters
+h= 0.2 # Cross section depth in meters
 A= b*h # Cross section area en m2
-Iz= 1/12.0*b*h**3 # Momento de inercia en m4
-Iy= Iz # Momento de inercia en m4
-E=1e4/Iz # Elastic modulus en N/m2
+Iz= 1/12.0*b*h**3 # Moment of inertia in m4
+Iy= Iz # Moment of inertia in m4
+E=1e4/Iz # Elastic modulus in N/m2
 nu= 0.3 # Poisson's ratio
 G= E/(2*(1+nu)) # Shear modulus
 J= 0.001 # Cross section torsion constant (m4) (ES IRRELEVANTE)
@@ -59,9 +59,9 @@ beam3d= seedElemLoader.newElement("elastic_beam_3d",xc.ID([0,0]))
 beam3d.rho= 0.0
 
 
-puntos= preprocessor.getCad.getPoints
-pt= puntos.newPntIDPos3d(1,geom.Pos3d(0.0,0.0,0.0))
-pt= puntos.newPntIDPos3d(2,geom.Pos3d(0.0,0.0,L))
+points= preprocessor.getCad.getPoints
+pt= points.newPntIDPos3d(1,geom.Pos3d(0.0,0.0,0.0))
+pt= points.newPntIDPos3d(2,geom.Pos3d(0.0,0.0,L))
 lines= preprocessor.getCad.getLines
 lines.defaultTag= 1
 l= lines.newLine(1,2)

@@ -8,7 +8,7 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
-L= 6.0 # Longitud de la viga expresada in inches.
+L= 6.0 # Beam length expressed in inches.
 h= 0.8 # Beam cross-section depth expressed in inches.
 t= 1 # Beam cross-section width expressed in inches. In the article t= 0.2 was written by mistake.
 E= 30000 # Young modulus of the material expressed in ksi.

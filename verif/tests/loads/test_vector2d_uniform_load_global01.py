@@ -32,8 +32,8 @@ G= E/(2*(1+nu)) # Shear modulus
 J= .2e-1 # Cross section torsion constant (m4)
 
 # Load
-f= 1.5e3 # Carga uniforme longitudinal.
-p= 1000 # Carga uniforme transversal.
+f= 1.5e3 # Longitudinal uniform load.
+p= 1000 # Transverse uniform load.
 
 prueba= xc.ProblemaEF()
 preprocessor=  prueba.getPreprocessor

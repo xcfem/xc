@@ -20,11 +20,11 @@ __email__= "l.pereztato@gmail.com"
 
 NumDiv= 13
 E= 30e6 # Young modulus (psi)
-l= 100.0 # Longitud de la cuerda in inches
+l= 100.0 # String length in inches
 sigmaPret= E*0.00543228 # Prestressing force (pounds)
 area= 0.00306796 # Section area in inches cuadradas
-Mass= 0.00073*area # Masa por unidad de longitud.
-MassNod= Mass*(l/NumDiv) # Masa por unidad de longitud.
+Mass= 0.00073*area # Mass per unit length.
+MassNod= Mass*(l/NumDiv) # Mass per unit length.
 fPret= sigmaPret*area # Prestressing force (pounds)
 
 
@@ -52,9 +52,9 @@ truss= seedElemLoader.newElement("corot_truss",xc.ID([0,0]))
 truss.area= area
 # seed element definition ends
 
-puntos= preprocessor.getCad.getPoints
-pt= puntos.newPntIDPos3d(1,geom.Pos3d(0.0,0.0,0.0))
-pt= puntos.newPntIDPos3d(2,geom.Pos3d(l,0.0,0.0))
+points= preprocessor.getCad.getPoints
+pt= points.newPntIDPos3d(1,geom.Pos3d(0.0,0.0,0.0))
+pt= points.newPntIDPos3d(2,geom.Pos3d(l,0.0,0.0))
 lines= preprocessor.getCad.getLines
 lines.defaultTag= 1
 l= lines.newLine(1,2)

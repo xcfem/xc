@@ -10,11 +10,11 @@ __email__= "l.pereztato@gmail.com"
 
 E= 30e6 # Young modulus (psi)
 l= 20*12 # Bar length in inches
-a= 10*12 # Longitud del voladizo
+a= 10*12 # Cantilever length
 h= 30 # Beam cross-section depth in inches.
 A= 50.65 # viga area in inches cuadradas
 I= 7892 # Inercia de la viga in inches a la cuarta
-w= 10000/12 # Load por unidad de longitud (pounds)/pulgada.
+w= 10000/12 # Load per unit length (pounds)/pulgada.
 
 import xc_base
 import geom

@@ -774,11 +774,11 @@ double XC::Element::MinCooNod(int icoo) const
   { return getNodePtrs().MinCooNod(icoo); }
 
 //! @brief Returns the coordinates of the nodes.
-const XC::Matrix &XC::Element::getCooNodos(void) const
+const XC::Matrix &XC::Element::getCooNodes(void) const
   { return getNodePtrs().getCoordinates(); }
 
 //! @brief Returns the coordinates of the nodes.
-std::list<Pos3d> XC::Element::getPosNodos(bool initialGeometry) const
+std::list<Pos3d> XC::Element::getPosNodes(bool initialGeometry) const
   { return getNodePtrs().getPosiciones(initialGeometry); }
 
 //! @brief Returs a matrix with the axes of the element as matrix rows
@@ -848,8 +848,8 @@ SisCooRect3d3d XC::Element::getSisCoo(bool initialGeometry) const
 //! @brief Returns the position of the i-th node.
 //! @param i: index of the node in the element.
 //! @param initialGeometry: if true initial position of the node is returned.
-Pos3d XC::Element::getPosNodo(const size_t &i,bool initialGeometry) const
-  { return getNodePtrs().getPosNodo(i,initialGeometry); }
+Pos3d XC::Element::getPosNode(const size_t &i,bool initialGeometry) const
+  { return getNodePtrs().getPosNode(i,initialGeometry); }
 
 //! @brief Returns a grid of points distributed along the line.
 TritrizPos3d XC::Element::getPuntos(const size_t &ni,const size_t &nj,const size_t &nk,bool initialGeometry)

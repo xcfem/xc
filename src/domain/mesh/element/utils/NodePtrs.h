@@ -92,7 +92,7 @@ class NodePtrs: public EntCmd, public std::vector<Node *>
     bool checkDimension(const size_t &dim) const;
     size_t getDimension(void) const;
     const Matrix &getCoordinates(void) const;
-    Pos3d getPosNodo(const size_t &i,bool initialGeometry= true) const;
+    Pos3d getPosNode(const size_t &i,bool initialGeometry= true) const;
     std::list<Pos3d> getPosiciones(bool initialGeometry= true) const;
     Pos3d getPosCdg(bool initialGeometry= true) const;
     Node *getNearestNode(const Pos3d &p,bool initialGeometry= true);

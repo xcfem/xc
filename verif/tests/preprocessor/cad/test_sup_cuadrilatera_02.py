@@ -41,11 +41,11 @@ seedElemLoader.defaultMaterial= "elast2d"
 elem= seedElemLoader.newElement("quad4n",xc.ID([0,0,0,0]))
 
 
-puntos= preprocessor.getCad.getPoints
-pt= puntos.newPntIDPos3d(1,geom.Pos3d(0.0,0.0,0.0))
-pt= puntos.newPntIDPos3d(2,geom.Pos3d(CooMax,0.0,0.0))
-pt= puntos.newPntIDPos3d(3,geom.Pos3d(CooMax,CooMax,0.0))
-pt= puntos.newPntIDPos3d(4,geom.Pos3d(0.0,CooMax,0.0))
+points= preprocessor.getCad.getPoints
+pt= points.newPntIDPos3d(1,geom.Pos3d(0.0,0.0,0.0))
+pt= points.newPntIDPos3d(2,geom.Pos3d(CooMax,0.0,0.0))
+pt= points.newPntIDPos3d(3,geom.Pos3d(CooMax,CooMax,0.0))
+pt= points.newPntIDPos3d(4,geom.Pos3d(0.0,CooMax,0.0))
 
 #             l2
 #  4 +--------------------+ 3
@@ -55,15 +55,15 @@ pt= puntos.newPntIDPos3d(4,geom.Pos3d(0.0,CooMax,0.0))
 #  1 +--------------------+ 2
 #
 
-lineas= preprocessor.getCad.getLines
-lineas.defaultTag= 3
-l3= lineas.newLine(1,2)
-lineas.defaultTag= 2
-l2= lineas.newLine(4,3)
-lineas.defaultTag= 1
-l1= lineas.newLine(2,3)
-lineas.defaultTag= 4
-l1= lineas.newLine(4,1)
+lines= preprocessor.getCad.getLines
+lines.defaultTag= 3
+l3= lines.newLine(1,2)
+lines.defaultTag= 2
+l2= lines.newLine(4,3)
+lines.defaultTag= 1
+l1= lines.newLine(2,3)
+lines.defaultTag= 4
+l1= lines.newLine(4,1)
 
 surfaces= preprocessor.getCad.getSurfaces
 surfaces.defaultTag= 1

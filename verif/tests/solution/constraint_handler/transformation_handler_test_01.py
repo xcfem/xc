@@ -10,8 +10,8 @@ __email__= "l.pereztato@gmail.com"
 
 E= 30e6 # Young modulus (psi)
 l= 10 # Bar length in inches
-a= 0.3*l # Longitud del tramo a
-b= 0.3*l # Longitud del tramo b
+a= 0.3*l # Length of tranche a
+b= 0.3*l # Length of tranche b
 F1= 1000 # Force magnitude 1 (pounds)
 F2= 1000/2 # Force magnitude 2 (pounds)
 

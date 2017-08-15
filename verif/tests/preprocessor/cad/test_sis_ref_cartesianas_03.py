@@ -16,10 +16,10 @@ prueba= xc.ProblemaEF()
 prueba.logFileName= "/tmp/borrar.log" # Ignore warning messages
 preprocessor=  prueba.getPreprocessor
 
-puntos= preprocessor.getCad.getPoints
-pt1= puntos.newPntIDPos3d(1,geom.Pos3d(1.0,1.0,0.0))
-pt2= puntos.newPntIDPos3d(2,geom.Pos3d(2,2,0))
-pt3= puntos.newPntIDPos3d(3,geom.Pos3d(0,1,0))
+points= preprocessor.getCad.getPoints
+pt1= points.newPntIDPos3d(1,geom.Pos3d(1.0,1.0,0.0))
+pt2= points.newPntIDPos3d(2,geom.Pos3d(2,2,0))
+pt3= points.newPntIDPos3d(3,geom.Pos3d(0,1,0))
 
 rs= geom.Ref3d3d(pt1.getPos,pt2.getPos,pt3.getPos)
 

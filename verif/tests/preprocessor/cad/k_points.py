@@ -18,11 +18,11 @@ __email__= "l.pereztato@gmail.com"
 prueba= xc.ProblemaEF()
 preprocessor=  prueba.getPreprocessor
 
-puntos= preprocessor.getCad.getPoints
-puntos.defaultTag= 1
-pt= puntos.newPntFromPos3d(geom.Pos3d(0,0,0))
-pt= puntos.newPntFromPos3d(geom.Pos3d(1,1,1))
-pt= puntos.newPntFromPos3d(geom.Pos3d(2,2,2))
+points= preprocessor.getCad.getPoints
+points.defaultTag= 1
+pt= points.newPntFromPos3d(geom.Pos3d(0,0,0))
+pt= points.newPntFromPos3d(geom.Pos3d(1,1,1))
+pt= points.newPntFromPos3d(geom.Pos3d(2,2,2))
 
 setTotal= preprocessor.getSets.getSet("total")
 ptsSet= setTotal.getPoints

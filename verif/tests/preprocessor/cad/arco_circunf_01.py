@@ -19,14 +19,14 @@ sin45= cos45
 prueba= xc.ProblemaEF()
 preprocessor=  prueba.getPreprocessor
 
-puntos= preprocessor.getCad.getPoints
-pt= puntos.newPntIDPos3d(1,geom.Pos3d(R,0.0,0.0))
-puntos.newPntFromPos3d(geom.Pos3d((R*cos45),(R*sin45),0.0))
-puntos.newPntFromPos3d(geom.Pos3d(0.0,R,0.0))
+points= preprocessor.getCad.getPoints
+pt= points.newPntIDPos3d(1,geom.Pos3d(R,0.0,0.0))
+points.newPntFromPos3d(geom.Pos3d((R*cos45),(R*sin45),0.0))
+points.newPntFromPos3d(geom.Pos3d(0.0,R,0.0))
 
-lineas= preprocessor.getCad.getLines
-lineas.defaultTag= 1
-l= lineas.newCircleArc(1,2,3)
+lines= preprocessor.getCad.getLines
+lines.defaultTag= 1
+l= lines.newCircleArc(1,2,3)
 angc= l.getAngle()
 long= l.getLong()
 
@@ -45,7 +45,7 @@ ratio2= (lteor/long)
 
 # print "Ángulo comprendido: ",math.degrees(angc)
 # print "theoretical Ángulo: ",math.degrees(angteor)
-# print "Longitud del arco: ",long
+# print "Arc length: ",long
 # print "Theorethical length: ",lteor
 
 from miscUtils import LogMessages as lmsg

@@ -37,14 +37,14 @@ seedElemLoader.defaultTag= 1 #Tag for the next element.
 truss= seedElemLoader.newElement("truss",xc.ID([0,0]));
 truss.area= 10.0
 
-puntos= preprocessor.getCad.getPoints
-pt1= puntos.newPntIDPos3d(1,geom.Pos3d(R,0.0,0.0))
-pt2= puntos.newPntFromPos3d(geom.Pos3d((R*cos45),(R*sin45),0.0))
-pt3= puntos.newPntFromPos3d(geom.Pos3d(0.0,R,0.0))
+points= preprocessor.getCad.getPoints
+pt1= points.newPntIDPos3d(1,geom.Pos3d(R,0.0,0.0))
+pt2= points.newPntFromPos3d(geom.Pos3d((R*cos45),(R*sin45),0.0))
+pt3= points.newPntFromPos3d(geom.Pos3d(0.0,R,0.0))
 
-lineas= preprocessor.getCad.getLines
-lineas.defaultTag= 1
-l= lineas.newCircleArc(1,2,3)
+lines= preprocessor.getCad.getLines
+lines.defaultTag= 1
+l= lines.newCircleArc(1,2,3)
 l.nDiv= NumDiv
 th1= l.getTheta1()
 th2= l.getTheta2()
@@ -64,8 +64,8 @@ nnodes= l1.getNumNodes
 
 elements= preprocessor.getElementLoader
 ele2= elements.getElement(2)
-puntos= ele2.getCooPuntos(2) #Two divisions-> Three points.
-cooCentroElem= puntos.getRow(1)
+points= ele2.getCooPoints(2) #Two divisions-> Three points.
+cooCentroElem= points.getRow(1)
 
 
 
@@ -86,7 +86,7 @@ print "xi= ",(xi)
 print "yi= ",(yi)
 print "zi= ",(zi)
 print "radius= ",(r)
-print "puntos= ",puntos
+print "points= ",points
 print "cooCentroElem= ",cooCentroElem
 print "cooCentroElemTeor= ",cooCentroElemTeor
 print "ratio2= ",(ratio2)

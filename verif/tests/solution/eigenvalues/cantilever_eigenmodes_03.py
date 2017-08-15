@@ -15,15 +15,15 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
-L= 1 # Longitud de la mensula en meters
-b= 0.05 # Cross section width en meters
-h= 0.1 # Cross section depth en meters
+L= 1 # Cantilever length in meters
+b= 0.05 # Cross section width in meters
+h= 0.1 # Cross section depth in meters
 nuMat= 0.3 # Poisson's ratio.
 EMat= 2.0E11 # Young modulus en N/m2.
 espChapa= h # Espesor en m.
 area= b*espChapa # Cross section area en m2
-inercia1= 1/12.0*espChapa*b**3 # Momento de inercia en m4
-inercia2= 1/12.0*b*espChapa**3 # Momento de inercia en m4
+inercia1= 1/12.0*espChapa*b**3 # Moment of inertia in m4
+inercia2= 1/12.0*b*espChapa**3 # Moment of inertia in m4
 dens= 7800 # Densidad of the steel en kg/m3
 m= b*h*dens
 
@@ -38,11 +38,11 @@ modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
 # Define materials
 elast= typical_materials.defElasticMembranePlateSection(preprocessor, "elast",EMat,nuMat,espChapa*dens,espChapa)
 
-puntos= preprocessor.getCad.getPoints
-pt1= puntos.newPntIDPos3d(1, geom.Pos3d(0.0,0.0,0) )
-pt2= puntos.newPntIDPos3d(2, geom.Pos3d(b,0.0,0) )
-pt3= puntos.newPntIDPos3d(3, geom.Pos3d(b,L,0) )
-pt4= puntos.newPntIDPos3d(4, geom.Pos3d(0,L,0) )
+points= preprocessor.getCad.getPoints
+pt1= points.newPntIDPos3d(1, geom.Pos3d(0.0,0.0,0) )
+pt2= points.newPntIDPos3d(2, geom.Pos3d(b,0.0,0) )
+pt3= points.newPntIDPos3d(3, geom.Pos3d(b,L,0) )
+pt4= points.newPntIDPos3d(4, geom.Pos3d(0,L,0) )
 surfaces= preprocessor.getCad.getSurfaces
 surfaces.defaultTag= 1
 s= surfaces.newQuadSurfacePts(1,2,3,4)

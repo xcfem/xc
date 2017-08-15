@@ -15,7 +15,7 @@ from solution import predefined_solutions
 from model import predefined_spaces
 from materials import typical_materials
 
-L= 6.0 # Longitud de la viga expresada in inches.
+L= 6.0 # Beam length expressed in inches.
 h= 0.8 # Beam cross-section depth expressed in inches.
 t= 1 # Beam cross-section width expressed in inches.
 E= 30000 # Young modulus of the material expressed in ksi.
