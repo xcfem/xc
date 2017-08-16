@@ -349,6 +349,8 @@
 /usr/local/lib/python2.7/dist-packages/materials/eae/apoyo_sobre_casquillo_no_rig.pyc
 /usr/local/lib/python2.7/dist-packages/materials/eae/comprobacion_casquillo_rigidizado.py
 /usr/local/lib/python2.7/dist-packages/materials/eae/comprobacion_casquillo_rigidizado.pyc
+/usr/local/lib/python2.7/dist-packages/materials/eae/EAE_limit_state_checking.py
+/usr/local/lib/python2.7/dist-packages/materials/eae/EAE_limit_state_checking.pyc
 /usr/local/lib/python2.7/dist-packages/materials/eae/garganta_min_max_EAE.py
 /usr/local/lib/python2.7/dist-packages/materials/eae/garganta_min_max_EAE.pyc
 /usr/local/lib/python2.7/dist-packages/materials/eae/__init__.py

@@ -4,7 +4,7 @@
 from the exercise 24.4.5 at page XXV-40 of the book Estructuras Metálicas
 de Vicente Cudós Samblancat (url={https://books.google.ch/books?id=7UrJnQEACAAJ}).'''
 
-from materials.eae import comprobacion_casquillo_rigidizado
+from materials.eae import EAE_limit_state_checking
 import math
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
@@ -26,11 +26,11 @@ fyd= fy/1.0 # Strength reduction factor
 Es= 2.1e6*9.81/1e-4 # Elastic modulus of the steel.
 
 # Resultados parciales.
-c= comprobacion_casquillo_rigidizado.widthMax(tChapa,l,H)
-lmbd= comprobacion_casquillo_rigidizado.esbeltezAdim(c,tChapa,fy,Es)
-CE= comprobacion_casquillo_rigidizado.coefEscuadra(lmbd)
-MplRd= comprobacion_casquillo_rigidizado.momPlastRig(tRig,c,fy)
-VRd2= comprobacion_casquillo_rigidizado.cargaUltRig(CE,d,MplRd)
+c= EAE_limit_state_checking.widthMax(tChapa,l,H)
+lmbd= EAE_limit_state_checking.esbeltezAdim(c,tChapa,fy,Es)
+CE= EAE_limit_state_checking.coefEscuadra(lmbd)
+MplRd= EAE_limit_state_checking.momPlastRig(tRig,c,fy)
+VRd2= EAE_limit_state_checking.cargaUltRig(CE,d,MplRd)
 
 '''The difference between this value for cTeor and the one used here
 is that this program DO accounts for the web thickess to compute c

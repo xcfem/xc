@@ -4,7 +4,7 @@
 # "Estructuras Metálicas" de Vicente Cudós Samblancat
 # (url={https://books.google.ch/books?id=7UrJnQEACAAJ}).
 
-from materials.eae import apoyo_por_soldadura_alma
+from materials.eae import EAE_limit_state_checking
 import math
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
@@ -35,8 +35,8 @@ gammaMw= 1.0/math.sqrt(3) # Steel partial safety factor for joints (article 59.8
 
 
 # Resultados parciales.
-VRd= apoyo_por_soldadura_alma.VdSoldAlma(l,a,betaW,gammaMw,2600*9.81/1e-4)
-lMax= apoyo_por_soldadura_alma.LongMaxSoldAlma(tw)
+VRd= EAE_limit_state_checking.VdSoldAlma(l,a,betaW,gammaMw,2600*9.81/1e-4)
+lMax= EAE_limit_state_checking.LongMaxSoldAlma(tw)
 
 ratio1= abs(((VRd-Vd)/VRd))
 
