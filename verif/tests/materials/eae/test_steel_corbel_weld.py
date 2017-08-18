@@ -30,7 +30,7 @@ c= EAE_limit_state_checking.widthMax(tChapa,l,H)
 lmbd= EAE_limit_state_checking.esbeltezAdim(c,tChapa,fy,Es)
 CE= EAE_limit_state_checking.coefEscuadra(lmbd)
 MplRd= EAE_limit_state_checking.momPlastRig(tRig,c,fy)
-VRd2= EAE_limit_state_checking.cargaUltRig(CE,d,MplRd)
+VRd2= EAE_limit_state_checking.ultimateLoadRig(CE,d,MplRd)
 
 '''The difference between this value for cTeor and the one used here
 is that this program DO accounts for the web thickess to compute c

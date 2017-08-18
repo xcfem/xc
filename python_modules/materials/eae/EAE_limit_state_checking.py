@@ -23,10 +23,10 @@ def LongMaxSoldAlma(tw):
     '''
     return 14*tw
 
-def getTensComparacionCordonAnguloPG(sigmaN, tauN, tauPll):
+def getFilletWeldThroatPlaneYieldCriteriaLHS(sigmaN, tauN, tauPll):
   '''
-  Returns the stress to use in weld bead strength checking according to article
-   59.8.2 of EAE (page 256).
+  Returns the stress combination to use in the left hand side of the
+  yield criterion checking according to article 59.8.2 of EAE (page 256).
 
     :param sigmaN: Normal stress in weld bead throat plane (see figure 59.8).
     :param tauN: Tangential stress normal to weld bead axis
@@ -36,12 +36,12 @@ def getTensComparacionCordonAnguloPG(sigmaN, tauN, tauPll):
   '''
   return math.sqrt((sigmaN)**2+3*((tauN)**2+(tauPll)**2))
 
-# Table 59.8.2 in articl 59.8.2 of EAE (page 256)
+# Table 59.8.2 in article 59.8.2 of EAE (page 256)
 x= [235e6,275e6,355e6,420e6,460e6]
 y= [0.8,0.85,0.90,1.0,1.0]
 tablaBetaW= scipy.interpolate.interp1d(x,y)
 
-def getValorComparacionResistenciaCordon(fu, fy, gammaM2):
+def getFilletWeldYieldCriteriaRHSValue(fu, fy, gammaM2):
   '''
   Return weld bead ultimate stress to be used for strength checking 
    according to first condition in article 59.8.2 of EAE (page 256).
@@ -54,7 +54,7 @@ def getValorComparacionResistenciaCordon(fu, fy, gammaM2):
   return fu/tablaBetaW(fy)/gammaM2
 
 
-def getFCCondicion1CordonPG(sigmaN, tauN, tauPll, fu, fy, gammaM2):
+def getFilletWeldThroatPlaneCondition1CapacityFactor(sigmaN, tauN, tauPll, fu, fy, gammaM2):
   '''
   Return the capacity factor for the first condition of the article
    59.8.2 de EAE (page 256).
@@ -70,9 +70,9 @@ def getFCCondicion1CordonPG(sigmaN, tauN, tauPll, fu, fy, gammaM2):
         expressed in pascals.
     :param gammaM2: Partial safety factor of value 1.25. 
   '''
-  return getTensComparacionCordonAnguloPG(sigmaN,tauN,tauPll)/getValorComparacionResistenciaCordon(fu,fy,gammaM2)
+  return getFilletWeldThroatPlaneYieldCriteriaLHS(sigmaN,tauN,tauPll)/getFilletWeldYieldCriteriaRHSValue(fu,fy,gammaM2)
 
-def getTensionNormalUltimaCordon(fu, gammaM2):
+def getFilletWeldUltimateNormalStress(fu, gammaM2):
   '''
   Return the ultimate stress of the weld bead to be used for checking the
   second condition in the article 59.8.2 of EAE (page 256).
@@ -84,7 +84,7 @@ def getTensionNormalUltimaCordon(fu, gammaM2):
   '''
   return 0.9*fu/gammaM2
 
-def getFCCondicion2CordonPG(sigmaN, fu, gammaM2):
+def getFilletWeldThroatPlaneCondition2CapacityFactor(sigmaN, fu, gammaM2):
   '''
   Return the capacity factor that correspond to the second condition of
   the article 59.8.2 of EAE (page 256).
@@ -93,9 +93,9 @@ def getFCCondicion2CordonPG(sigmaN, fu, gammaM2):
     :param fu: Steel ultimate strength (table 59.8.2 page 304 EAE).
     :param gammaM2: Partial safety factor of value 1.25. 
   '''
-  return abs(sigmaN)/getTensionNormalUltimaCordon(fu,gammaM2)
+  return abs(sigmaN)/getFilletWeldUltimateNormalStress(fu,gammaM2)
 
-def getFCCordonPG(sigmaN, tauN, tauPll, fu, fy, gammaM2):
+def getFilletWeldThroatPlaneCapacityFactor(sigmaN, tauN, tauPll, fu, fy, gammaM2):
   '''
   Return the minimum of the capacity factors that correspond to the
   conditions of the article 59.8.2 of EAE (page 256).
@@ -104,10 +104,10 @@ def getFCCordonPG(sigmaN, tauN, tauPll, fu, fy, gammaM2):
   :param fu: Steel ultimate strength (table 59.8.2 page 304 EAE).
   :param gammaM2: Partial safety factor of value 1.25.
   '''
-  return min(getFCCondicion1CordonPG(sigmaN,tauN,tauPll,fu,fy,gammaM2),getFCCondicion2CordonPG(sigmaN,fu,gammaM2))
+  return min(getFilletWeldThroatPlaneCondition1CapacityFactor(sigmaN,tauN,tauPll,fu,fy,gammaM2),getFilletWeldThroatPlaneCondition2CapacityFactor(sigmaN,fu,gammaM2))
 
 
-def getSigmaNPlanoGarganta(n, t):
+def getSigmaNThroatPlane(n, t):
   '''
   Return the normal stress in the throat plane from the stress values
   in the section rotated onto one of the weld legs.
@@ -123,7 +123,7 @@ def getSigmaNPlanoGarganta(n, t):
   '''
   return (n-t)/math.sqrt(2)
 
-def getTauNPlanoGarganta(n, t):
+def getTauNThroatPlane(n, t):
   '''
   Return the tangential stress normal to the weld axis on the throat plane
   from the values of the stress in the section rotated onto one of the weld
@@ -140,10 +140,10 @@ def getTauNPlanoGarganta(n, t):
 '''
   return (n+t)/math.sqrt(2)
 
-def getTensComparacionCordonAngulo(n, tn, ta):
+def getFilletWeldYieldCriteriaLHS(n, tn, ta):
   '''
-  Return the stress to use in weld bead strength checking according to 
-     the article 59.8.2 of EAE (page 256)
+  Return the stress value to use in the right hand side of the yield criterion
+  according to the article 59.8.2 of EAE (page 256)
 
   :param  n: Normal stress over the rotated plane (see figure 24.1 
              on the book from UNED).
@@ -151,13 +151,13 @@ def getTensComparacionCordonAngulo(n, tn, ta):
   :param  ta: Tangential stress over the rotated plane parallel to 
               the weld axis.
   '''
-  sgN= getSigmaNPlanoGarganta(n,tn) 
-  tN= getTauNPlanoGarganta(n,tn)
-  return getTensComparacionCordonAnguloPG(sgN,tN,ta)
+  sgN= getSigmaNThroatPlane(n,tn) 
+  tN= getTauNThroatPlane(n,tn)
+  return getFilletWeldThroatPlaneYieldCriteriaLHS(sgN,tN,ta)
 
-def getFCCondicion1Cordon(n, tn, ta, fu, fy, gammaM2):
+def getFilletWeldCondition1CapacityFactor(n, tn, ta, fu, fy, gammaM2):
   '''
-  Return the capacity factor that correspond to the conditions
+  Return the capacity factor that correspond to the first condition
    of the article 59.8.2 of EAE (page 256)
 
   :param  n: Normal stress over the rotated plane (see figure 24.1 
@@ -170,9 +170,9 @@ def getFCCondicion1Cordon(n, tn, ta, fu, fy, gammaM2):
         expressed in pascals.
   :param gammaM2: Partial safety factor of value 1.25.
   '''
-  return getTensComparacionCordonAngulo(n,tn,ta)/getValorComparacionResistenciaCordon(fu,fy,gammaM2)
+  return getFilletWeldYieldCriteriaLHS(n,tn,ta)/getFilletWeldYieldCriteriaRHSValue(fu,fy,gammaM2)
 
-def getFCCondicion2Cordon(n, tn, fu, gammaM2):
+def getFilletWeldCondition2CapacityFactor(n, tn, fu, gammaM2):
   '''
   Return the capacity factor that correspond to the second condition of those
   in the article 59.8.2 of EAE (page 256)
@@ -181,12 +181,12 @@ def getFCCondicion2Cordon(n, tn, fu, gammaM2):
   :param fu: Steel ultimate strength (table 59.8.2 page 304 EAE).
   :param gammaM2: Partial safety factor of value 1.25.
   '''
-  sgN= getSigmaNPlanoGarganta(n,tn) 
-  return abs(sgN)/getTensionNormalUltimaCordon(fu,gammaM2)
+  sgN= getSigmaNThroatPlane(n,tn) 
+  return abs(sgN)/getFilletWeldUltimateNormalStress(fu,gammaM2)
 
-def aMinAngulo(t):
+def getFilletWeldMinimumThroatDepth(t):
   '''
-  Return the minimum throat thickness for a fillet bead that welds a sheet 
+  Return the minimum throat depth for a fillet bead that welds a sheet 
   of thickness t according to the article 59.3.2 of EAE (page 296).
 
     :param t: Sheet thickness.
@@ -199,7 +199,7 @@ def aMinAngulo(t):
     else:
       return 5.6e-3
 
-def aMaxAngulo(t):
+def getFilletWeldMaximumThroatDepth(t):
   '''
   Return the maximum throat thickness for a fillet bead that welds a sheet 
   of thickness t according to article 59.3.2 of EAE (page 296).
@@ -208,7 +208,7 @@ def aMaxAngulo(t):
   '''
   return 0.7*t
 
-def aMinAnguloChapas(t1, t2):
+def getFilletWeldMinimumThroatDepthSheets(t1, t2):
   '''
   Return the minimum throat thickness which can be used to weld two sheets
   according to articla 59.3.2 of EAE (page 296).
@@ -216,11 +216,11 @@ def aMinAnguloChapas(t1, t2):
     :param t1: Thickness of sheet 1.
     :param t2: Thickness of sheet 2.
   '''
-  amin1= aMinAngulo(t1)
-  amin2= aMinAngulo(t2)
+  amin1= getFilletWeldMinimumThroatDepth(t1)
+  amin2= getFilletWeldMinimumThroatDepth(t2)
   return max(amin1,amin2)
 
-def aMaxAnguloChapas(t1, t2):
+def getFilletWeldMaximumThroatDepthSheets(t1, t2):
   '''
   Return the maximum throat thickness which can be used to weld two sheets
   according to articla 59.3.2 of EAE (page 296).
@@ -228,8 +228,8 @@ def aMaxAnguloChapas(t1, t2):
     :param t1: Thickness of sheet 1.
     :param t2: Thickness of sheet 2.
   '''
-  amax1= aMaxAngulo(t1)
-  amax2= aMaxAngulo(t2)
+  amax1= getFilletWeldMaximumThroatDepth(t1)
+  amax2= getFilletWeldMaximumThroatDepth(t2)
   return min(amax1,amax2)
 
 # Maximum value of the force to bear by means of an
@@ -239,7 +239,7 @@ def aMaxAnguloChapas(t1, t2):
 # (url={https://books.google.es/books?id=X9JIRAAACAAJ}, isbn={9788486957087}) 
 # of Vicente Cudós Samblancat from Escuela de la Edificación.
 
-def cargaUlt1(tf,r,tw,fy):
+def ultimateLoad1(tf,r,tw,fy):
     '''
     Return the local crushing strength of the beam web.
 
@@ -251,7 +251,7 @@ def cargaUlt1(tf,r,tw,fy):
     return 2.5*(tf+r)*tw*fy
   
 
-def cargaUlt2(b,a,fu,betaW,gammaM2):
+def ultimateLoad2(b,a,fu,betaW,gammaM2):
     '''
     Return the weld bead strength.
 
@@ -264,7 +264,7 @@ def cargaUlt2(b,a,fu,betaW,gammaM2):
     return b*a*fu/betaW/math.sqrt(2.0)/gammaM2
   
 
-def cargaUlt3(b,t,fy):
+def ultimateLoad3(b,t,fy):
     '''
     Return angle leg shear strength.
 
@@ -276,7 +276,7 @@ def cargaUlt3(b,t,fy):
     return b*t*fy/math.sqrt(3.0)
   
 
-def cargaUlt(tf,tw,r,b,a,fy,fu,betaW,gammaM2):
+def ultimateLoad(tf,tw,r,b,a,fy,fu,betaW,gammaM2):
     '''
     Return the bearing capacity of the angle support.
 
@@ -290,7 +290,7 @@ def cargaUlt(tf,tw,r,b,a,fy,fu,betaW,gammaM2):
     :param betaW: Correlation coefficient (table 59.8.2 page 304 EAE).
     :param gammaM2: Partial safety factor for steel (article 15.3 page 34 EAE).
     '''
-    return min(cargaUlt1(tf,r,tw,fy),min(cargaUlt2(b,a,fu,betaW,gammaM2),cargaUlt3(b,t,fy)))
+    return min(ultimateLoad1(tf,r,tw,fy),min(ultimateLoad2(b,a,fu,betaW,gammaM2),ultimateLoad3(b,t,fy)))
   
 # Maximum value of the force to bear by means of an
 # angle support with stiffeners. According to EAE, article 
@@ -345,7 +345,7 @@ def momPlastRig(tRig,c,fy):
     '''
     return tRig*c**2*fy/4 
 
-def cargaUltRig(CE,d,MplRd):
+def ultimateLoadRig(CE,d,MplRd):
     '''
     Return the angle support strength due to the collapse of the stiffener.
 
@@ -358,7 +358,7 @@ def cargaUltRig(CE,d,MplRd):
 #Soldaduras
 
  
-def cargaUltCord1(a1,l,H,fu,betaW,gammaM2):
+def ultimateLoadBead1(a1,l,H,fu,betaW,gammaM2):
     '''
     Return the angle support strength due to the collapse of weld beads (1)
     (see figure 61.1.5.b page 325 EAE) that connect the stiffener to the
@@ -376,7 +376,7 @@ def cargaUltCord1(a1,l,H,fu,betaW,gammaM2):
   
 
   
-def cargaUltCord2(a2,l,H,fu,betaW,gammaM2):
+def ultimateLoadBead2(a2,l,H,fu,betaW,gammaM2):
     '''
     Return the angle support strength due to the collapse of weld beads (2)
     (see figure 61.1.5.b page 325 EAE) that connect the stiffener to the
@@ -394,7 +394,7 @@ def cargaUltCord2(a2,l,H,fu,betaW,gammaM2):
   
 
   
-def cargaUltCord3(a3,b,l,H,fu,betaW,gammaM2):
+def ultimateLoadBead3(a3,b,l,H,fu,betaW,gammaM2):
     '''
     Return the angle support strength due to the collapse of weld beads (3)
     (see figure 61.1.5.b page 325 EAE) that connect the stiffener to the

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-'''Computation of the strength of a weld bead from the example de la page 57
-of the monographie «Estudio de los diferentes métodos de dimensionamiento para uniones atornilladas y soldadas de acuerdo con la normativa vigente» de Marc 
+'''Computation of the strength of a weld bead from the example on page 57
+of the monograph «Estudio de los diferentes métodos de dimensionamiento para uniones atornilladas y soldadas de acuerdo con la normativa vigente» de Marc 
 Masnou Malgosa.(http://hdl.handle.net/2099.1/6080)'''
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
@@ -18,16 +18,16 @@ ta= -33.22e6 # Tangential stress parallel to weld axis.
 n= -252.4e6 # Normal stress.
 
 # Stresses applied to the throat area of the weld.
-sigmaN= EAE_limit_state_checking.getSigmaNPlanoGarganta(n,tn) 
-tauN= EAE_limit_state_checking.getTauNPlanoGarganta(n,tn)
+sigmaN= EAE_limit_state_checking.getSigmaNThroatPlane(n,tn) 
+tauN= EAE_limit_state_checking.getTauNThroatPlane(n,tn)
 tauPll= ta 
 
 # Equivalent stress.
-sigmaCo= EAE_limit_state_checking.getTensComparacionCordonAngulo(n,tn,ta)
-sigmaUlt= EAE_limit_state_checking.getValorComparacionResistenciaCordon(430e6,275e6,1.25)
-fcCond1= EAE_limit_state_checking.getFCCondicion1Cordon(n,tn,ta,430e6,275e6,1.25)
-sigmaNUlt= EAE_limit_state_checking.getTensionNormalUltimaCordon(430e6,1.25)
-fcCond2= EAE_limit_state_checking.getFCCondicion2Cordon(n,tn,430e6,1.25)
+sigmaCo= EAE_limit_state_checking.getFilletWeldYieldCriteriaLHS(n,tn,ta)
+sigmaUlt= EAE_limit_state_checking.getFilletWeldYieldCriteriaRHSValue(430e6,275e6,1.25)
+fcCond1= EAE_limit_state_checking.getFilletWeldCondition1CapacityFactor(n,tn,ta,430e6,275e6,1.25)
+sigmaNUlt= EAE_limit_state_checking.getFilletWeldUltimateNormalStress(430e6,1.25)
+fcCond2= EAE_limit_state_checking.getFilletWeldCondition2CapacityFactor(n,tn,430e6,1.25)
 
 ratio1= ((sigmaN+229.44e6)/229.44e6)
 ratio2= ((tauN+127.54e6)/127.54e6)
