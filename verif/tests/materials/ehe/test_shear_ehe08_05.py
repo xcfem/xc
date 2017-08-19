@@ -18,7 +18,7 @@ __email__= "l.pereztato@gmail.com"
 
 Nd=1224e3 #Design axial internal force.
 Md=0 #Bending moment design value
-Vd=125e3 #Effective design shear (article 42.2.2).
+Vd=125e3 #Effective design shear (clause 42.2.2).
 Td=0 #Torque design value.
 d=0.55 #Effective depth.
 z=0.9*d #Lever arm.

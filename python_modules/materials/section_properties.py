@@ -481,9 +481,9 @@ class ISection(SectionProperties):
 ##   siendo:
 ##     -bs: Ancho de la losa superior del cajón (esto es, descontando los voladizos)
 ##     -bi: Ancho de la losa inferior del cajón.
-##     -ts: Espesor de la losa superior del cajón.
-##     -ti: Espesor de la losa inferior del cajón.
-##     -td: Espesor de las almas.
+##     -ts: Upper deck thickness.
+##     -ti: Lower deck thickness.
+##     -td: Webs thickness.
 ##     -h: Canto del cajón (entre planos medios).
 
 def getInerciaTorsionCajonMonocelular(bs,bi,h,ts,ti,td):
@@ -492,9 +492,9 @@ def getInerciaTorsionCajonMonocelular(bs,bi,h,ts,ti,td):
 
     :param bs: Ancho de la losa superior del cajón (esto es, descontando los voladizos)
     :param bi: Ancho de la losa inferior del cajón.
-    :param ts: Espesor de la losa superior del cajón.
-    :param ti: Espesor de la losa inferior del cajón.
-    :param td: Espesor de las almas.
+    :param ts: Upper deck thickness.
+    :param ti: Lower deck thickness.
+    :param td: Thickness of the webs.
     :param h: Canto del cajón (entre planos medios).
     '''
     longAlma=math.sqrt(h**2+((bs-bi)/2)**2)

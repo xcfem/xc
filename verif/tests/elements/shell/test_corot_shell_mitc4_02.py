@@ -17,8 +17,8 @@ import math
 
 E= 2.1e6 # Young modulus of the steel en kg/cm2.
 nu= 0.3 # Poisson's ratio.
-h= 0.1 # Espesor.
-dens= 1.33 # Densidad kg/m2.
+h= 0.1 # Thickness.
+dens= 1.33 # Density kg/m2.
 
 angRotacion= math.radians(10)
 rotacion= xc.Matrix([[1,0,0],[0,math.cos(angRotacion),math.sin(angRotacion)],[0,-math.sin(angRotacion),math.cos(angRotacion)]])

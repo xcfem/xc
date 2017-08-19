@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 '''Verification test of the computation of strain in the web
-according to article 44.2.3.2.2 of EHE. The point is to verify that
+according to clause 44.2.3.2.2 of EHE. The point is to verify that
 the expression is correctly written in Python.'''
 from __future__ import division
 
@@ -24,7 +24,7 @@ gammaC= 1.5
 
 Nd=0
 Md=0 #Absolute value of the design bending moment.
-Vd=0 #Absolute value of effective design shear (article 42.2.2).
+Vd=0 #Absolute value of effective design shear (clause 42.2.2).
 Td=0 #Torque design value.
 z=10 #Lever arm.
 AsPas=1/4 #Area of passive longitudinal reinforcement anchored at a distance greater than the effective depth of the section.

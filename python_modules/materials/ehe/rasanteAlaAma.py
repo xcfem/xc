@@ -10,11 +10,11 @@ def rasanteAgotamiento(fck,gammac,hf,Asf,Sf,fyd):
     #Datos:
     #fck: resistencia característica a compresión del hormigón (N/mm2)
     #gammac= Partial safety factor for concrete.
-    #hf: espesor del ala (m)
+    #hf: flange thickness (m)
     #Asf: reinforcement por unidad de longitud que atraviesa la sección (mm2)
     #Sf: spacement of the rebars that cross the section (mm)
     #fyd: resistencia de cálculo de la reinforcement (N/mm2)
-    hf=hf*1000     #espesor del ala en mm
+    hf=hf*1000     #Flange thickness in mm
     #Esfuerzo rasante de agotamiento por compresión oblicua en la sección
     fcd=fck/gammac
     VRd2=0.2*fcd*hf

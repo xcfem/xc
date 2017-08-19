@@ -20,11 +20,11 @@ b= 0.05 # Cross section width in meters
 h= 0.1 # Cross section depth in meters
 nuMat= 0.3 # Poisson's ratio.
 EMat= 2.0E11 # Young modulus en N/m2.
-espChapa= h # Espesor en m.
+espChapa= h # Thickness (m).
 area= b*espChapa # Cross section area en m2
 inercia1= 1/12.0*espChapa*b**3 # Moment of inertia in m4
 inercia2= 1/12.0*b*espChapa**3 # Moment of inertia in m4
-dens= 7800 # Densidad of the steel en kg/m3
+dens= 7800 # Density of the steel en kg/m3
 m= b*h*dens
 
 NumDiv= 10

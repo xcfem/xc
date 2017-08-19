@@ -8,7 +8,7 @@ txtMyCP1= "Efforts de flexion (contraintes normales) déterminants."
 txtMyCP2= "Efforts de flexion (contraintes normales) déterminants."
 
 #Shear
-txtFCshearStresses= "Facteur de capacité vis-à-vis de l'effort tranchant (article 4.3.3 SIA 262)"
+txtFCshearStresses= "Facteur de capacité vis-à-vis de l'effort tranchant (clause 4.3.3 SIA 262)"
 txtVyCP1= "Valeurs de calcul de l'effort tranchant."
 txtVyCP2= "Valeurs de calcul de l'effort tranchant."
 

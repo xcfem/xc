@@ -9,7 +9,7 @@ def getCotgStrutAngle(tipoJunta):
     ("monolitica", "junta" o "junta_debil")
 
     Return the cotangent of the angle between the concrete
-    compressed strut an the vertical according to article 64.1.2.1 de EHE-08.
+    compressed strut an the vertical according to clause 64.1.2.1 de EHE-08.
     '''
     if tipoJunta=="monolitica":
         retval=1.4

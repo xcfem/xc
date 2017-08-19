@@ -20,11 +20,11 @@ b= 4 # Cantilever width in inches.
 h= 1 # Cantilever depth in inches.
 nuMat= 0 # Poisson's ratio.
 EMat= 30E6 # Young modulus en psi.
-espChapa= h # Espesor en m.
+espChapa= h # Thickness en m.
 area= b*espChapa # Cross section area en m2
 inercia1= 1/12.0*espChapa*b**3 # Moment of inertia in m4
 inercia2= 1/12.0*b*espChapa**3 # Moment of inertia in m4
-dens= 0.000728 # Densidad of the material en lb-sec2/in4
+dens= 0.000728 # Density of the material en lb-sec2/in4
 m= b*h*dens
 
 NumDiv= 10

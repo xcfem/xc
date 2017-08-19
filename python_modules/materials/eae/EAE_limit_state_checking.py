@@ -11,14 +11,14 @@ __email__= "l.pereztato@gmail.com"
 
 def VdSoldAlma(l,a,bw,gmw,fu):
     '''
-    Shear strength of the weld beads according to the article 61.4.1
+    Shear strength of the weld beads according to clause 61.4.1
     of EAE.
     '''
     return l*2*a*bw*gmw*math.sqrt(3.0)*fu  #Check 30/11/2011
 
 def LongMaxSoldAlma(tw):
     '''
-    Maximum length of the weld beads according to the article 61.4.1 
+    Maximum length of the weld beads according to clause 61.4.1 
     of EAE.
     '''
     return 14*tw
@@ -26,7 +26,7 @@ def LongMaxSoldAlma(tw):
 def getFilletWeldThroatPlaneYieldCriteriaLHS(sigmaN, tauN, tauPll):
   '''
   Returns the stress combination to use in the left hand side of the
-  yield criterion checking according to article 59.8.2 of EAE (page 256).
+  yield criterion checking according to clause 59.8.2 of EAE (page 256).
 
     :param sigmaN: Normal stress in weld bead throat plane (see figure 59.8).
     :param tauN: Tangential stress normal to weld bead axis
@@ -36,7 +36,7 @@ def getFilletWeldThroatPlaneYieldCriteriaLHS(sigmaN, tauN, tauPll):
   '''
   return math.sqrt((sigmaN)**2+3*((tauN)**2+(tauPll)**2))
 
-# Table 59.8.2 in article 59.8.2 of EAE (page 256)
+# Table 59.8.2 in clause 59.8.2 of EAE (page 256)
 x= [235e6,275e6,355e6,420e6,460e6]
 y= [0.8,0.85,0.90,1.0,1.0]
 tablaBetaW= scipy.interpolate.interp1d(x,y)
@@ -44,7 +44,7 @@ tablaBetaW= scipy.interpolate.interp1d(x,y)
 def getFilletWeldYieldCriteriaRHSValue(fu, fy, gammaM2):
   '''
   Return weld bead ultimate stress to be used for strength checking 
-   according to first condition in article 59.8.2 of EAE (page 256).
+   according to first condition in clause 59.8.2 of EAE (page 256).
 
     :param fu: Steel ultimate strength (table 59.8.2 page 304 EAE).
     :param fy: limit of elasticity of the welding steel (see table 59.8.2) 
@@ -56,7 +56,7 @@ def getFilletWeldYieldCriteriaRHSValue(fu, fy, gammaM2):
 
 def getFilletWeldThroatPlaneCondition1CapacityFactor(sigmaN, tauN, tauPll, fu, fy, gammaM2):
   '''
-  Return the capacity factor for the first condition of the article
+  Return the capacity factor for the first condition of clause
    59.8.2 de EAE (page 256).
 
     :param sigmaN: Normal stress in weld bead throat plane (see figure 59.8).
@@ -75,7 +75,7 @@ def getFilletWeldThroatPlaneCondition1CapacityFactor(sigmaN, tauN, tauPll, fu, f
 def getFilletWeldUltimateNormalStress(fu, gammaM2):
   '''
   Return the ultimate stress of the weld bead to be used for checking the
-  second condition in the article 59.8.2 of EAE (page 256).
+  second condition in clause 59.8.2 of EAE (page 256).
 
     :param fu: Steel ultimate strength (table 59.8.2 page 304 EAE).
     :param fy: limit of elasticity of the welding steel (see table 59.8.2) 
@@ -87,7 +87,7 @@ def getFilletWeldUltimateNormalStress(fu, gammaM2):
 def getFilletWeldThroatPlaneCondition2CapacityFactor(sigmaN, fu, gammaM2):
   '''
   Return the capacity factor that correspond to the second condition of
-  the article 59.8.2 of EAE (page 256).
+  clause 59.8.2 of EAE (page 256).
 
     :param sigmaN: Normal stress in weld bead throat plane (see figure 59.8).
     :param fu: Steel ultimate strength (table 59.8.2 page 304 EAE).
@@ -98,7 +98,7 @@ def getFilletWeldThroatPlaneCondition2CapacityFactor(sigmaN, fu, gammaM2):
 def getFilletWeldThroatPlaneCapacityFactor(sigmaN, tauN, tauPll, fu, fy, gammaM2):
   '''
   Return the minimum of the capacity factors that correspond to the
-  conditions of the article 59.8.2 of EAE (page 256).
+  conditions of clause 59.8.2 of EAE (page 256).
 
   :param sigmaN: Tensión normal sobre el plano de garganta del cordón (ver figure 59.8).
   :param fu: Steel ultimate strength (table 59.8.2 page 304 EAE).
@@ -143,7 +143,7 @@ def getTauNThroatPlane(n, t):
 def getFilletWeldYieldCriteriaLHS(n, tn, ta):
   '''
   Return the stress value to use in the right hand side of the yield criterion
-  according to the article 59.8.2 of EAE (page 256)
+  according to clause 59.8.2 of EAE (page 256)
 
   :param  n: Normal stress over the rotated plane (see figure 24.1 
              on the book from UNED).
@@ -158,7 +158,7 @@ def getFilletWeldYieldCriteriaLHS(n, tn, ta):
 def getFilletWeldCondition1CapacityFactor(n, tn, ta, fu, fy, gammaM2):
   '''
   Return the capacity factor that correspond to the first condition
-   of the article 59.8.2 of EAE (page 256)
+   of clause 59.8.2 of EAE (page 256)
 
   :param  n: Normal stress over the rotated plane (see figure 24.1 
              on the book from UNED).
@@ -175,7 +175,7 @@ def getFilletWeldCondition1CapacityFactor(n, tn, ta, fu, fy, gammaM2):
 def getFilletWeldCondition2CapacityFactor(n, tn, fu, gammaM2):
   '''
   Return the capacity factor that correspond to the second condition of those
-  in the article 59.8.2 of EAE (page 256)
+  in clause 59.8.2 of EAE (page 256)
 
   :param sigmaN: Normal stress in weld bead throat plane (see figure 59.8).
   :param fu: Steel ultimate strength (table 59.8.2 page 304 EAE).
@@ -187,7 +187,7 @@ def getFilletWeldCondition2CapacityFactor(n, tn, fu, gammaM2):
 def getFilletWeldMinimumThroatDepth(t):
   '''
   Return the minimum throat depth for a fillet bead that welds a sheet 
-  of thickness t according to the article 59.3.2 of EAE (page 296).
+  of thickness t according to clause 59.3.2 of EAE (page 296).
 
     :param t: Sheet thickness.
   '''
@@ -202,7 +202,7 @@ def getFilletWeldMinimumThroatDepth(t):
 def getFilletWeldMaximumThroatDepth(t):
   '''
   Return the maximum throat thickness for a fillet bead that welds a sheet 
-  of thickness t according to article 59.3.2 of EAE (page 296).
+  of thickness t according to clause 59.3.2 of EAE (page 296).
 
     :param t: Sheet thickness.
   '''
@@ -233,7 +233,7 @@ def getFilletWeldMaximumThroatDepthSheets(t1, t2):
   return min(amax1,amax2)
 
 # Maximum value of the force to bear by means of an
-# simple angle support (without stiffeners). According to EAE, article 
+# simple angle support (without stiffeners). According to EAE, clause 
 # 61.5, page 322. See also 25.2.2 on the book
 # "Estructuras. Estructuras metálicas. U.D.2, Uniones"
 # (url={https://books.google.es/books?id=X9JIRAAACAAJ}, isbn={9788486957087}) 
@@ -259,7 +259,7 @@ def ultimateLoad2(b,a,fu,betaW,gammaM2):
     :param a: Weld bead throat thickness.
     :param fu: Steel ultimate strength (table 59.8.2 page 304 EAE).
     :param betaW: Correlation coefficient (table 59.8.2 page 304 EAE).
-    :param gammaM2: Partial safety factor for steel (article 15.3 page 34 EAE).
+    :param gammaM2: Partial safety factor for steel (clause 15.3 page 34 EAE).
     '''
     return b*a*fu/betaW/math.sqrt(2.0)/gammaM2
   
@@ -288,12 +288,12 @@ def ultimateLoad(tf,tw,r,b,a,fy,fu,betaW,gammaM2):
     :param fy: Steel yield strength.
     :param fu: Steel ultimate strength (table 59.8.2 page 304 EAE).
     :param betaW: Correlation coefficient (table 59.8.2 page 304 EAE).
-    :param gammaM2: Partial safety factor for steel (article 15.3 page 34 EAE).
+    :param gammaM2: Partial safety factor for steel (clause 15.3 page 34 EAE).
     '''
     return min(ultimateLoad1(tf,r,tw,fy),min(ultimateLoad2(b,a,fu,betaW,gammaM2),ultimateLoad3(b,t,fy)))
   
 # Maximum value of the force to bear by means of an
-# angle support with stiffeners. According to EAE, article 
+# angle support with stiffeners. According to EAE, clause 
 # 61.5.1, page 324. See also 25.3.3 on the book
 # "Estructuras. Estructuras metálicas. U.D.2, Uniones"
 # (url={https://books.google.es/books?id=X9JIRAAACAAJ}, isbn={9788486957087}) 
@@ -369,7 +369,7 @@ def ultimateLoadBead1(a1,l,H,fu,betaW,gammaM2):
     :param H: Length of the vertical cathetus of the stiffener.
     :param fu: Steel ultimate strength (table 59.8.2 page 304 EAE).
     :param betaW: Correlation coefficient (table 59.8.2 page 304 EAE).
-    :param gammaM2: Partial safety factor for steel (article 15.3 page 34 EAE).
+    :param gammaM2: Partial safety factor for steel (clause 15.3 page 34 EAE).
      '''
     theta=math.atan2(l,H)
     return (2.0*a1*l*fu)/(betaW*math.sqrt(2+3*math.tan(theta)**2)*gammaM2)
@@ -387,7 +387,7 @@ def ultimateLoadBead2(a2,l,H,fu,betaW,gammaM2):
     :param H: Length of the vertical cathetus of the stiffener.
     :param fu: Steel ultimate strength (table 59.8.2 page 304 EAE).
     :param betaW: Correlation coefficient (table 59.8.2 page 304 EAE).
-    :param gammaM2: Partial safety factor for steel (article 15.3 page 34 EAE).
+    :param gammaM2: Partial safety factor for steel (clause 15.3 page 34 EAE).
     '''
     theta=math.atan2(l,H)
     return (2.0*a2*H*fu)/(betaW*math.sqrt(3+2*math.tan(theta)**2)*gammaM2)
@@ -406,7 +406,7 @@ def ultimateLoadBead3(a3,b,l,H,fu,betaW,gammaM2):
     :param H: Length of the vertical cathetus of the stiffener.
     :param fu: Steel ultimate strength (table 59.8.2 page 304 EAE).
     :param betaW: Correlation coefficient (table 59.8.2 page 304 EAE).
-    :param gammaM2: Partial safety factor for steel (article 15.3 page 34 EAE).
+    :param gammaM2: Partial safety factor for steel (clause 15.3 page 34 EAE).
     '''
     theta=math.atan2(l,H)
     return (math.sqrt(2)*b*a3*fu)/(betaW*math.tan(theta)*gammaM2)

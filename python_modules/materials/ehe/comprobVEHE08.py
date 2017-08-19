@@ -14,7 +14,7 @@ def getF1cdEHE08(fck,fcd):
     :param fcd: Valor de cálculo de la resistencia a compresión simple del hormigón (N/m2).
 
     Returns the value of f1cd (design value of the concrete strut strength)
-    according to the article 44.2.3.1 of EHE-08.
+    according to clause 44.2.3.1 of EHE-08.
     '''
     retval=0.6
     if fck>60e6:
@@ -29,7 +29,7 @@ def getKEHE08(sgpcd,fcd):
     :param sgpcd: Tensión axil efectiva en el hormigón Ncd/Ac.
     :param fcd: Valor de cálculo de la resistencia a compresión simple del hormigón (N/m2).
     Devuelve el valor de K (coeficiente que depende del esfuerzo axil)
-    according to the article 44.2.3.1 de la EHE-08
+    according to clause 44.2.3.1 de la EHE-08
     '''
     s=-sgpcd/fcd #Positive when compressed
     if s>1:
@@ -59,7 +59,7 @@ def getVu1EHE08(fck,fcd,Ncd,Ac,b0,d,alpha,theta):
     :param theta: Angle between the concrete compressed struts and the member axis (figure 44.2.3.1.a EHE).
 
     Devuelve el valor de Vu1 (cortante de agotamiento por compresión oblicua del alma)
-    according to the article 44.2.3.1 de EHE-08.
+    according to clause 44.2.3.1 de EHE-08.
     '''
     f1cd=getF1cdEHE08(fck,fcd)
     sgpcd=min(Ncd/Ac,0)
@@ -78,7 +78,7 @@ def getVu2EHE08NoAtNoFis(fctd,I,S,b0,alphal,Ncd,Ac):
     :param Ncd: Axil de cálculo resistido por el hormigón (positivo si es de tracción).
     :param Ac: Area total de la sección de hormigón.
     Devuelve el valor de Vu2 (cortante de agotamiento por tracción en el alma)
-    according to the article 44.2.3.2.1.1 de EHE-08.
+    according to clause 44.2.3.2.1.1 de EHE-08.
     '''
     tmp= fctd
     if alphal!=1.0:
@@ -150,7 +150,7 @@ def getVu2EHE08NoAtSiFis(fcv,fcd,gammaC,Ncd,Ac,b0,d,AsPas,AsAct):
     a una distancia mayor que el depth útil de la sección en estudio.
 
     Devuelve el valor de Vu2 (cortante de agotamiento por tracción en el alma)
-    para piezas SIN reinforcement de cortante en regiones fisuradas, according to the article 44.2.3.2.1.2 de EHE-08.
+    para piezas SIN reinforcement de cortante en regiones fisuradas, according to clause 44.2.3.2.1.2 de EHE-08.
     '''
     chi=min(2,1+math.sqrt(200/(d*1000.))) #HA DE EXPRESARSE EN METROS.
     sgpcd=max(max(Ncd/Ac,-0.3*fcd),-12e6)
@@ -202,7 +202,7 @@ def getVsuEHE08(z,alpha,theta,AsTrsv,fyd):
 
     Devuelve el valor de Vsu (contribución de la reinforcement transversal de alma
     a la resistencia al esfuerzo cortante) para piezas CON reinforcement de cortante,
-    according to the article 44.2.3.2.2 de EHE-08.
+    according to clause 44.2.3.2.2 de EHE-08.
     '''
     fyalphad=min(fyd,400e6)
     return z*math.sin(alpha)*(1/math.tan(alpha)+1/math.tan(theta))*AsTrsv*fyalphad
@@ -277,7 +277,7 @@ def getBetaVcuEHE08(theta,thetaE):
     :param theta: Angle between the concrete compressed struts and the member axis (figure 44.2.3.1.a EHE).
     
     Return the value of «beta» for the expression
-    of Vcu according to the article 44.2.3.2.2 of EHE-08.
+    of Vcu according to clause 44.2.3.2.2 of EHE-08.
     '''
     cotgTheta=1/math.tan(theta)
     cotgThetaE=1/math.tan(thetaE)
@@ -325,7 +325,7 @@ def getVcuEHE08(fcv,fcd,gammaC,Ncd,Ac,b0,d,z,AsPas,AsAct,theta,Nd,Md,Vd,Td,Es,Ep
     :param ue: Perímetro de la línea media de la sección hueca eficaz.
 
     Devuelve el valor de Vcu (contribución del hormigón a la resistencia al esfuerzo cortante)
-    para piezas CON reinforcement de cortante, according to the article 44.2.3.2.2 de EHE-08.
+    para piezas CON reinforcement de cortante, according to clause 44.2.3.2.2 de EHE-08.
     '''
   
     chi=min(2,1+math.sqrt(200/(d*1000.)))   #HA DE EXPRESARSE EN METROS.
@@ -369,7 +369,7 @@ def getVu2EHE08SiAt(fcv,fcd,fyd,gammaC,Ncd,Ac,b0,d,z,AsPas,AsAct,AsTrsv, alpha, 
     :param ue: Perímetro de la línea media de la sección hueca eficaz.
 
     Devuelve el valor de Vu2 (esfuerzo cortante de agotamiento por tracción en el alma)
-    para piezas CON reinforcement de cortante, according to the article 44.2.3.2.2 de EHE-08.
+    para piezas CON reinforcement de cortante, according to clause 44.2.3.2.2 de EHE-08.
     '''
     return getVcuEHE08(fcv,fcd,gammaC,Ncd,Ac,b0,d,AsPas,AsAct,theta,Nd,Md,Vd,Td,Es,Ep,Fp,Ae,ue)+getVsuEHE08(z,alpha,theta,AsTrsv,fyd)
   
@@ -408,7 +408,7 @@ def getVuEHE08SiAt(fck,fcv,fcd,fyd,gammaC,Ncd,Ac,b0,d,z,AsPas,AsAct,AsTrsv, alph
     :param ue: Perímetro de la línea media de la sección hueca eficaz.
     
     Devuelve el valor de Vu (cortante de agotamiento de la sección)
-    para piezas CON reinforcement de cortante, according to the article 44.2.3.2.2 de EHE-08.
+    para piezas CON reinforcement de cortante, according to clause 44.2.3.2.2 de EHE-08.
     '''
     return  min(getVu2EHE08(fcv,fcd,fyd,gammaC,Ncd,Ac,b0,d,z,AsPas,AsAct,AsTrsv,alpha,theta,Nd,Md,Vd,Td,Es,Ep,Fp,Ae,ue),getVu1EHE08(fck,fcd,Ncd,Ac,b0,d,alpha,theta))
   

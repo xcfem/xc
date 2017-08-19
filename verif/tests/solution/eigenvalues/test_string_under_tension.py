@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 ''' Test basado en el denominado VM53 of the Ansys verification manual
-   Reference: Thomson, Ref 9: Vibration Theory and Applications, pg. 264, article 8.2.
+   Reference: Thomson, Ref 9: Vibration Theory and Applications, pg. 264, clause 8.2.
    '''
 from __future__ import division
 import xc_base

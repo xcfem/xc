@@ -11,8 +11,8 @@ __email__= "l.pereztato@gmail.com"
 
 Ec= 2e5*9.81/1e-4 # Concrete Young modulus (Pa).
 nuC= 0.2 # Concrete Poisson's ratio EHE-08.
-hLosa= 0.2 # Espesor.
-densLosa= 2500*hLosa # Densidad de la losa kg/m2.
+hLosa= 0.2 # Thickness.
+densLosa= 2500*hLosa # Deck density kg/m2.
 # Load
 F= 5.5e4 # Load magnitude en N
 

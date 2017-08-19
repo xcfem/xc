@@ -17,8 +17,8 @@ fckHA30= 30e6 # Concrete characteristic compressive strength HA-30.
 Hrel= 0.8 # Humedad relativa del aire.
 Ec= 2e5*9.81/1e-4 # Concrete Young modulus (Pa).
 nuC= 0.2 # Concrete Poisson's ratio EHE-08.
-hLosa= 0.2 # Espesor.
-densLosa= 2500*hLosa # Densidad de la losa kg/m2.
+hLosa= 0.2 # Thickness.
+densLosa= 2500*hLosa # Deck density kg/m2.
 t0= 28.0 # Concrete age at loading
 tFin= 10000.0 # Service life.
 

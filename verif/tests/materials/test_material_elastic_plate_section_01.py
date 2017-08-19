@@ -9,7 +9,7 @@ __email__= "l.pereztato@gmail.com"
 
 E= 2.1e6 # Young modulus of the steel.
 nu= 0.3 # Poisson's ratio.
-h= 0.1 # Espesor.
+h= 0.1 # Thickness.
 
 import xc_base
 import geom

@@ -18,8 +18,8 @@ Es= 2.1e11
 nu= 0.3
 Gs= 0.01*Es/(2*(1+nu))
 radius= 1.2/2.0
-espesor= 10.3e-3
-RExt= radius+espesor
+thickness= 10.3e-3
+RExt= radius+thickness
 
 prueba= xc.ProblemaEF()
 preprocessor=  prueba.getPreprocessor
@@ -30,7 +30,7 @@ acero= regiones.newCircularRegion("acero")
 
 acero.nDivCirc= 1000
 acero.centro= geom.Pos2d(0.0,0.0)
-acero.extRad= radius+espesor
+acero.extRad= radius+thickness
 acero.intRad= radius
 acero.initAngle= 0.0
 acero.finalAngle= 2*math.pi

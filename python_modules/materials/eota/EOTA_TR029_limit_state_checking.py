@@ -241,8 +241,12 @@ def psiAlphaVFactor(alphaV):
 
 def psiHVFactor(h, c1):
   '''
-  Coeficiente que sirve para introducir en el cálculo la falta de proporcionalidad entre la disminución de la resistencia a cortante y la disminución del espesor de la pieza tal y como se asume en el cociente Ac,v/Ac,v0. ver expresión 5.8f del artículo 5.2.3.4 de EOTA TR029.
-  :param h: Espesor de la pieza de hormigón.
+  Coefficient that is used to introduce in the calculation the lack of 
+  proportionality between the reduction of shear strength and the decrease 
+  of the part thickness as is assumed in the quotient Ac,v/Ac,v0. See 
+  expression 5.8f of the clause 5.2.3.4 of EOTA TR029.
+
+  :param h: Concrete part thickness.
   :param c1: Distancia desde el centro de gravedad del grupo al borde situado frente al cortante.
   '''
   return max(sqrt(1.5*c1/h),1.0)
@@ -260,7 +264,7 @@ def areaAcV0(h, c1):
   '''
   Area del cono de anclaje a cortante para un perno. Ver figura 5.6 y expresión 5.8d de EOTA TR029.
 
-  :param h: Espesor de la pieza de hormigón.
+  :param h: Concrete part thickness.
   :param c1: Distancia desde el centro de gravedad del grupo al borde situado frente al cortante.
   '''
   return 3*c1*min(1.5*c1,h)
@@ -270,7 +274,7 @@ def AcV2Pernos(h, c1, s2):
   Area del cono de anclaje para dos pernos. Ver figura 5.7 b de EOTA TR029.
 
   :param c1: Distancia desde el centro de gravedad del grupo al borde situado frente al cortante.
-  :param h: Espesor de la pieza de hormigón.
+  :param h: Concrete part thickness.
   :param s2: Distance between the bolts.
   '''
   return (3*c1+min(s2,3*c1))*min(1.5*c1,h)
@@ -281,7 +285,7 @@ def AcV2PernosC2(h, c1, c2, s2):
 
   :param  c1: Distancia desde el centro de gravedad del grupo al borde situado frente al cortante.
   :param c2: Distancia desde el centro de gravedad del grupo al otro borde.
-  :param h: Espesor de la pieza de hormigón.
+  :param h: Concrete part thickness.
   :param s2: Distance between the bolts.
   '''
   return (1.5*c1+c2+min(s2,3*c1))*min(1.5*c1,h)

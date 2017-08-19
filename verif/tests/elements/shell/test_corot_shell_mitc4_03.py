@@ -15,8 +15,8 @@ from materials import typical_materials
 
 E= 2.1e6 # Young modulus of the steel en kg/cm2.
 nu= 0.3 # Poisson's ratio.
-h= 0.1 # Espesor.
-dens= 1.33 # Densidad kg/m2.
+h= 0.1 # Thickness.
+dens= 1.33 # Density kg/m2.
 
 mov= xc.Vector([1,1,1,0,0,0])
 

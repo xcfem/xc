@@ -47,12 +47,12 @@ def s_r_max(k1,k2,k3,k4,cover,fiReinf,ro_eff):
 
                - =0.5 for bending
                - =1.0 for pure tension
-               - for cases of eccentric tension or for local areas, intermediate values of k2 should be used (see article 7.3.4 EC2)
+               - for cases of eccentric tension or for local areas, intermediate values of k2 should be used (see clause 7.3.4 EC2)
     :param k3: recommended k3=3.4
     :param k4: recommended k4=0.425 
     :param cover: cover of the longitudinal reinforcement
     :param fiReinf: bar diameter. Where a mixture of bar diameters is used in a
-                    section, an equivalent diameter is used (see article 7.3.4 EC2)
+                    section, an equivalent diameter is used (see clause 7.3.4 EC2)
     :param ro_eff: effective reinforcement ratio
     '''
     retval=k3*cover+k1*k2*k4*fiReinf/ro_eff

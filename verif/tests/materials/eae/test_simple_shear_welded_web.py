@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-'''Beam simple joint by direct web welding: computation of the required length of a weld bead, according to the article 61.4.1 of EAE.'''
+'''Beam simple joint by direct web welding: computation of the required length of a weld bead, according to the clause 61.4.1 of EAE.'''
 # Verification by means of the example in the page XXV-31 of the book
 # "Estructuras Metálicas" de Vicente Cudós Samblancat
 # (url={https://books.google.ch/books?id=7UrJnQEACAAJ}).
@@ -18,8 +18,8 @@ Vd= 8585*9.81 # Design value of the load.
 
 # Geometry
 h= 270e-3 # Beam cross-section depth expressed in meters.
-tw= 6.6e-3 # Espesor del alma expressed in meters.
-a= 4e-3 # Espesor de garganta expressed in meters.
+tw= 6.6e-3 # Web thickness expressed in meters.
+a= 4e-3 # Throat depth expressed in meters.
 l= 5.15925e-2 # Weld beads length.
 
 # Material properties
@@ -30,7 +30,7 @@ Es= 2e11 # Elastic modulus of the steel.
 
 # Safety data
 betaW= 0.8 # Correlation factor for S-275 steel (table 59.8.2 page 304 EAE).
-gammaMw= 1.0/math.sqrt(3) # Steel partial safety factor for joints (article 59.8.2 page 304 EAE).
+gammaMw= 1.0/math.sqrt(3) # Steel partial safety factor for joints (clause 59.8.2 page 304 EAE).
 
 
 

@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-'''Computation of the ultimate shear force failure due to diagonal compression in the web (Vu1) according to the article 44.2.3.1 of EHE-08.'''
+'''Computation of the ultimate shear force failure due to diagonal compression in the web (Vu1) according to the clause 44.2.3.1 of EHE-08.'''
 import sys
 
 from materials.ehe import comprobVEHE08

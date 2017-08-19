@@ -55,12 +55,12 @@ class EC3Steel(structural_steel.BasicSteel):
 
 def fyEC3(desig, t):
   '''
-  Devuelve el límite elástico del acero en función de su designación
-   y del espesor de la pieza (ver tabla 3.1).
+  Return steel yield strength from its name and the part thickness 
+  (see table 3.1).
   '''
   retval= 0.0
   if(t>0.1):
-    lmsg.error("Espesor de la pieza fuera de rango: ",t*1000," mm\n")
+    lmsg.error("Part thickness out of range: ",t*1000," mm\n")
 
   if(desig == 235):
     retval= ifte(t<40e-3,235e6,215e6)
@@ -69,17 +69,17 @@ def fyEC3(desig, t):
   elif(desig == 355):
     retval= ifte(t<40e-3,355e6,335e6)
   else:
-    lmsg.error("No se conoce la designación del acero: ",desig,"\n")
+    lmsg.error("Unknown steel designation: ",desig,"\n")
   return retval
 
 def fuEC3(desig, t):
   '''
-  Devuelve la resistencia última a tracción del acero en función de 
-  su designación y del espesor de la pieza (ver tabla 3.1).
+  Return steel ultimate strength from its name and the part thickness 
+  (see table 3.1).
   '''
   retval= 0.0
   if(t>0.1):
-    lmsg.error("Espesor de la pieza fuera de rango: ",t*1000," mm\n")
+    lmsg.error("Part thickness out of range: ",t*1000," mm\n")
 
   if(desig == 235):
     retval= ifte(t<40e-3,360e6,340e6)
@@ -88,7 +88,7 @@ def fuEC3(desig, t):
   elif(desig == 355):
     retval= ifte(t<40e-3,510e6,490e6)
   else:
-    lmsg.error("No se conoce la designación del acero: ",desig,"\n")
+    lmsg.error("Unknown steel designation: ",desig,"\n")
   return retval
 
 # European norm EN 10025-2:2004

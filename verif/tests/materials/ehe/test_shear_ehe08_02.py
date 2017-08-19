@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 '''Computation of the shear strength of members due to concrete tensile 
-strength (Vu2) of sections without shear reinforcement according to articles
+strength (Vu2) of sections without shear reinforcement according to clauses
 44.2.3.2.1.1 and 44.2.3.2.1.2 of EHE-08.'''
 
 import sys

@@ -17,8 +17,8 @@ __email__= "l.pereztato@gmail.com"
 H= 0.2
 l= 0.2
 d= 0.2
-tChapa= 8e-3 # Espesor de la chapa sobre la que apoya la carga.
-tRig= 8e-3 # Espesor del rigidizador.
+tChapa= 8e-3 # Thickness of the plate thas supports the load.
+tRig= 8e-3 # Stiffener thickness.
 
 # Material properties
 fy= 2600*9.81/1e-4 # Acero A42b
