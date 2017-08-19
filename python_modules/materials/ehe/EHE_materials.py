@@ -228,13 +228,13 @@ factorRTraccJDiasNormal= scipy.interpolate.interp1d(x,y)
 
 # Deformación máxima (0.08 para B400S y 0.05 para B500S)
 #
-#   nmbAcero: Name identifying the material.
+#   steelName: Name identifying the material.
 #   fyk:      Characteristic value of the yield strength.
 #   emax:     maximum strain in tension
 #   gammaS:   Partial factor for material.
 #   k:        fmaxk/fyk ratio
-B400S= concrete_base.ReinforcingSteel(nmbAcero="B400S", fyk=400e6, emax=0.08,gammaS=1.15)
-B500S= concrete_base.ReinforcingSteel(nmbAcero="B500S", fyk=500e6, emax=0.05,gammaS=1.15)
+B400S= concrete_base.ReinforcingSteel(steelName="B400S", fyk=400e6, emax=0.08,gammaS=1.15)
+B500S= concrete_base.ReinforcingSteel(steelName="B500S", fyk=500e6, emax=0.05,gammaS=1.15)
 
 # Bar areas in square meters.
 Fi6=0.28e-4

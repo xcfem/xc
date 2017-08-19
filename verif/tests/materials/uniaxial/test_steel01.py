@@ -42,7 +42,7 @@ nod= nodes.newNodeXY(0,0)
 nod= nodes.newNodeXY(l,0.0)
 
 # Materials definition
-acero= typical_materials.defSteel01(preprocessor, "acero",E,fy,0.001)
+steel= typical_materials.defSteel01(preprocessor, "steel",E,fy,0.001)
     
 ''' We define nodes at the points where loads will be applied.
     We will not compute stresses so we can use an arbitrary
@@ -50,7 +50,7 @@ acero= typical_materials.defSteel01(preprocessor, "acero",E,fy,0.001)
     
 # Elements definition
 elements= preprocessor.getElementLoader
-elements.defaultMaterial= "acero"
+elements.defaultMaterial= "steel"
 elements.dimElem= 2 # Dimension of element space
 elements.defaultTag= 1 #Tag for the next element.
 spring= elements.newElement("spring",xc.ID([1,2]));

@@ -39,7 +39,7 @@ nod= nodes.newNodeXY(1,0)
 fy= 2600   # yield strength
 E= 2.1e6   # initial elastic tangent
 b=0.001    # strain-hardening ratio: ratio between post-yield tangent and initial elastic tangent
-acero= typical_materials.defSteel01(preprocessor=preprocessor,name="acero",E=E,fy=fy,b=b)
+steel= typical_materials.defSteel01(preprocessor=preprocessor,name="steel",E=E,fy=fy,b=b)
 
 
 quadFibersGeom= preprocessor.getMaterialLoader.newSectionGeometry("quadFibersGeom")
@@ -47,13 +47,13 @@ y1= width/2.0
 z1= depth/2.0
 
 reinforcement= quadFibersGeom.getReinfLayers
-reinforcementA= reinforcement.newStraightReinfLayer("acero")
+reinforcementA= reinforcement.newStraightReinfLayer("steel")
 reinforcementA.numReinfBars= 2
 reinforcementA.barArea= As
 reinforcementA.p1= geom.Pos2d(y0-depth/2.0,z0-width/2.0)
 reinforcementA.p2= geom.Pos2d(y0+depth/2.0,z0-width/2.0)
 
-reinforcementB= reinforcement.newStraightReinfLayer("acero")
+reinforcementB= reinforcement.newStraightReinfLayer("steel")
 reinforcementB.numReinfBars= 2
 reinforcementB.barArea= As
 reinforcementB.p1= geom.Pos2d(y0-depth/2.0,z0+width/2.0)

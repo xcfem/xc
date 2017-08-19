@@ -161,30 +161,30 @@ C90= EC2Concrete("C90-105",-90e6,1.5)
 # EC2 reinforcing steel.
 
 #
-#   nmbAcero: Name identifying the material.
+#   steelName: Name identifying the material.
 #   fyk:      characteristic value of the yield strength.
 #   emax:     maximum strain in tension
 #   gammaS:   partial factor for material.
 #   k:        fmaxk/fyk ratio
-S400A= concrete_base.ReinforcingSteel(nmbAcero="S400A", fyk=400e6, emax=0.025,gammaS=1.15,k=1.05)
-S400B= concrete_base.ReinforcingSteel(nmbAcero="S400B", fyk=400e6, emax=0.05,gammaS=1.15,k=1.08)
-S400C= concrete_base.ReinforcingSteel(nmbAcero="S400C", fyk=400e6, emax=0.075,gammaS=1.15,k=1.15)
+S400A= concrete_base.ReinforcingSteel(steelName="S400A", fyk=400e6, emax=0.025,gammaS=1.15,k=1.05)
+S400B= concrete_base.ReinforcingSteel(steelName="S400B", fyk=400e6, emax=0.05,gammaS=1.15,k=1.08)
+S400C= concrete_base.ReinforcingSteel(steelName="S400C", fyk=400e6, emax=0.075,gammaS=1.15,k=1.15)
 
-S450A= concrete_base.ReinforcingSteel(nmbAcero="S450A", fyk=450e6, emax=0.025,gammaS=1.15,k=1.05)
-S450B= concrete_base.ReinforcingSteel(nmbAcero="S450B", fyk=450e6, emax=0.05,gammaS=1.15,k=1.08)
-S450C= concrete_base.ReinforcingSteel(nmbAcero="S450C", fyk=450e6, emax=0.075,gammaS=1.15,k=1.15)
+S450A= concrete_base.ReinforcingSteel(steelName="S450A", fyk=450e6, emax=0.025,gammaS=1.15,k=1.05)
+S450B= concrete_base.ReinforcingSteel(steelName="S450B", fyk=450e6, emax=0.05,gammaS=1.15,k=1.08)
+S450C= concrete_base.ReinforcingSteel(steelName="S450C", fyk=450e6, emax=0.075,gammaS=1.15,k=1.15)
 
-S500A= concrete_base.ReinforcingSteel(nmbAcero="S500A", fyk=500e6, emax=0.025,gammaS=1.15,k=1.05)
-S500B= concrete_base.ReinforcingSteel(nmbAcero="S500B", fyk=500e6, emax=0.05,gammaS=1.15,k=1.08)
-S500C= concrete_base.ReinforcingSteel(nmbAcero="S500C", fyk=500e6, emax=0.075,gammaS=1.15,k=1.15)
+S500A= concrete_base.ReinforcingSteel(steelName="S500A", fyk=500e6, emax=0.025,gammaS=1.15,k=1.05)
+S500B= concrete_base.ReinforcingSteel(steelName="S500B", fyk=500e6, emax=0.05,gammaS=1.15,k=1.08)
+S500C= concrete_base.ReinforcingSteel(steelName="S500C", fyk=500e6, emax=0.075,gammaS=1.15,k=1.15)
 
-S550A= concrete_base.ReinforcingSteel(nmbAcero="S550A", fyk=550e6, emax=0.025,gammaS=1.15,k=1.05)
-S550B= concrete_base.ReinforcingSteel(nmbAcero="S550B", fyk=550e6, emax=0.05,gammaS=1.15,k=1.08)
-S550C= concrete_base.ReinforcingSteel(nmbAcero="S550C", fyk=550e6, emax=0.075,gammaS=1.15,k=1.15)
+S550A= concrete_base.ReinforcingSteel(steelName="S550A", fyk=550e6, emax=0.025,gammaS=1.15,k=1.05)
+S550B= concrete_base.ReinforcingSteel(steelName="S550B", fyk=550e6, emax=0.05,gammaS=1.15,k=1.08)
+S550C= concrete_base.ReinforcingSteel(steelName="S550C", fyk=550e6, emax=0.075,gammaS=1.15,k=1.15)
 
-S600A= concrete_base.ReinforcingSteel(nmbAcero="S600A", fyk=600e6, emax=0.025,gammaS=1.15,k=1.05)
-S600B= concrete_base.ReinforcingSteel(nmbAcero="S600B", fyk=600e6, emax=0.05,gammaS=1.15,k=1.08)
-S600C= concrete_base.ReinforcingSteel(nmbAcero="S600C", fyk=600e6, emax=0.075,gammaS=1.15,k=1.15)
+S600A= concrete_base.ReinforcingSteel(steelName="S600A", fyk=600e6, emax=0.025,gammaS=1.15,k=1.05)
+S600B= concrete_base.ReinforcingSteel(steelName="S600B", fyk=600e6, emax=0.05,gammaS=1.15,k=1.08)
+S600C= concrete_base.ReinforcingSteel(steelName="S600C", fyk=600e6, emax=0.075,gammaS=1.15,k=1.15)
 
 # rebars as defined in Eurocode 2.
 rebarsEC2={}

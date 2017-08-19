@@ -221,8 +221,8 @@ def getEpsilonXEHE08(Nd,Md,Vd,Td,z,AsPas,AsAct,Es,Ep,Fp,Ae,ue):
     a una distancia mayor que el depth útil de la sección en estudio.
     :param AsAct: Área de la de la reinforcement longitudinal activa traccionada anclada
     a una distancia mayor que el depth útil de la sección en estudio.
-    :param Es: Módulo elástico del acero de la reinforcement pasiva.
-    :param Ep: Módulo elástico del acero de la reinforcement activa.
+    :param Es: reinforcing steel elastic modulus.
+    :param Ep: prestressing steel elastic modulus.
     :param Fp: Prestressing force on the section (positive if in tension).
     :param Ae: Área encerrada por la línea media de la sección hueca eficaz.
     :param ue: Perímetro de la línea media de la sección hueca eficaz.
@@ -255,8 +255,8 @@ def getAnguloInclinacionFisurasEHE08(Nd,Md,Vd,Td,z,AsPas,AsAct,Es,Ep,Fp,Ae,ue):
     a una distancia mayor que el depth útil de la sección en estudio.
     :param AsAct: Área de la de la reinforcement longitudinal activa traccionada anclada
     a una distancia mayor que el depth útil de la sección en estudio.
-    :param Es: Módulo elástico del acero de la reinforcement pasiva.
-    :param Ep: Módulo elástico del acero de la reinforcement activa.
+    :param Es: reinforcing steel elastic modulus.
+    :param Ep: prestressing steel elastic modulus.
     :param Fp: Prestressing force on the section (positive if in tension).
     :param Ae: Área encerrada por la línea media de la sección hueca eficaz.
     :param ue: Perímetro de la línea media de la sección hueca eficaz.
@@ -318,8 +318,8 @@ def getVcuEHE08(fcv,fcd,gammaC,Ncd,Ac,b0,d,z,AsPas,AsAct,theta,Nd,Md,Vd,Td,Es,Ep
     :param Md: Valor absoluto del momento de cálculo.
     :param Vd: Valor absoluto del cortante efectivo de cálculo (artículo 42.2.2).
     :param Td: Torsor de cálculo.
-    :param Es: Módulo elástico del acero de la reinforcement pasiva.
-    :param Ep: Módulo elástico del acero de la reinforcement activa.
+    :param Es: reinforcing steel elastic modulus.
+    :param Ep: prestressing steel elastic modulus.
     :param Fp: Prestressing force on the section (positive if in tension).
     :param Ae: Área encerrada por la línea media de la sección hueca eficaz.
     :param ue: Perímetro de la línea media de la sección hueca eficaz.
@@ -362,8 +362,8 @@ def getVu2EHE08SiAt(fcv,fcd,fyd,gammaC,Ncd,Ac,b0,d,z,AsPas,AsAct,AsTrsv, alpha, 
     :param Md: Valor absoluto del momento de cálculo.
     :param Vd: Valor absoluto del cortante efectivo de cálculo (artículo 42.2.2).
     :param Td: Torsor de cálculo.
-    :param Es: Módulo elástico del acero de la reinforcement pasiva.
-    :param Ep: Módulo elástico del acero de la reinforcement activa.
+    :param Es: reinforcing steel elastic modulus.
+    :param Ep: prestressing steel elastic modulus.
     :param Fp: Prestressing force on the section (positive if in tension).
     :param Ae: Área encerrada por la línea media de la sección hueca eficaz.
     :param ue: Perímetro de la línea media de la sección hueca eficaz.
@@ -401,8 +401,8 @@ def getVuEHE08SiAt(fck,fcv,fcd,fyd,gammaC,Ncd,Ac,b0,d,z,AsPas,AsAct,AsTrsv, alph
     :param Md: Valor absoluto del momento de cálculo.
     :param Vd: Valor absoluto del cortante efectivo de cálculo (artículo 42.2.2).
     :param Td: Torsor de cálculo.
-    :param Es: Módulo elástico del acero de la reinforcement pasiva.
-    :param Ep: Módulo elástico del acero de la reinforcement activa.
+    :param Es: reinforcing steel elastic modulus.
+    :param Ep: prestressing steel elastic modulus.
     :param Fp: Prestressing force on the section (positive if in tension).
     :param Ae: Área encerrada por la línea media de la sección hueca eficaz.
     :param ue: Perímetro de la línea media de la sección hueca eficaz.

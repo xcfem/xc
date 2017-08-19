@@ -13,7 +13,7 @@ Spil= 4000 # Tensión de servicio del pilote (kN/m2)
            #                      Pilotes prefabricados: 7000 - 10000
            #                       Pilotes in situ:       3000 -  5000
 fck= 30    # Concrete characteristic strength (N/mm2)
-fyk= 500   # Resistencia característica del acero de armar (N/mm2)
+fyk= 500   # Characteristic value of reinforcing steel yield strength (N/mm2)
 prefabricado= "si" # Si los pilotes son prefabricados "si"
 print "\\textsc{Predimensionamiento de pilotes} \\\\ \\\\"
 print "Datos"
@@ -22,7 +22,7 @@ print "\\item Axil característico del pilar N$_k$ = ", "%5.2f".format(Nk), " kN
 print "\\item Área del pilote A$_c$ = ", "%5.2f".format(Apil)," m$^2$"
 print "\\item Tensión de servicio del pilote $\\sigma$ = ", "%10.0f".format(Spil), " kN/m$^2$" 
 print "\\item Concrete characteristic strength of the pile f$_{ck}$ =", "%3.0f".format(fck), " N/mm$^2$"
-print "\\item Resistencia característica del acero del pilote f$_{ck}$ =", "%4.0f".format(fyk), " N/mm$^2$"
+print "\\item Characteristic value of pile steel yield strength f$_{ck}$ =", "%4.0f".format(fyk), " N/mm$^2$"
 print "\\end{itemize}"
 
 

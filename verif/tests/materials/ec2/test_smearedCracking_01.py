@@ -64,7 +64,7 @@ nod= nodes.newNodeXY(1.0+l,0)
 concrAux= EHE_materials.HA25           #parameters only for the compression branche 
 
 #Reinforcing steel.
-rfSteel=concrete_base.ReinforcingSteel(nmbAcero='rfSteel', fyk=fy_exp, emax=0.08, gammaS=1.15,k=1.05)
+rfSteel=concrete_base.ReinforcingSteel(steelName='rfSteel', fyk=fy_exp, emax=0.08, gammaS=1.15,k=1.05)
 rfSteel.Es=Es_exp
 steelDiagram= rfSteel.defDiagK(preprocessor) #Definition of steel stress-strain diagram in XC. 
 

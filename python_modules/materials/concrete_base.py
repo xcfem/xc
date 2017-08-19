@@ -707,8 +707,8 @@ class ReinforcingSteel(matWDKD.MaterialWithDKDiagrams):
   Esh= 0.0 # Slope of the line in the yielding region.
   bsh= 0.0 # Ratio between post-yield tangent and initial elastic tangent
   k=1.05   # fmaxk/fyk ratio (Annex C of EC2: class A k>=1,05 B , class B k>=1,08)
-  def __init__(self,nmbAcero, fyk, emax, gammaS,k=1.05):
-    super(ReinforcingSteel,self).__init__(nmbAcero)
+  def __init__(self,steelName, fyk, emax, gammaS,k=1.05):
+    super(ReinforcingSteel,self).__init__(steelName)
     self.fyk= fyk # Characteristic value of the yield strength
     self.gammaS= gammaS
     self.emax= emax # Ultimate strain (rupture strain)
@@ -755,11 +755,11 @@ class ReinforcingSteel(matWDKD.MaterialWithDKDiagrams):
     retval.savefig(plt,fileName+'.eps')
     return retval
 
-def defDiagKAcero(preprocessor, steelRecord):
+def defReinfSteelCharacteristicDiagram(preprocessor, steelRecord):
   '''Characteristic stress-strain diagram.'''
   return steelRecord.defDiagK(preprocessor)
 
-def defDiagDAcero(preprocessor, steelRecord):
+def defReinfSteelDesignDiagram(preprocessor, steelRecord):
   ''' Design stress-strain diagram. '''
   return steelRecord.defDiagD(preprocessor)
 
@@ -781,48 +781,48 @@ def sigmas(eps, fy, ey, Es, Esh):
       return (-fy+(eps-ey)*Esh) 
 
 
-def sigmaKAceroArmar(eps,matRecord):
+def sigmaKReinfSteel(eps,matRecord):
   ''' Characteristic stress-strain diagram for reinforcing steel, according to EC2.'''
   return sigmas(eps,matRecord.fyk,matRecord.eyk(),matRecord.Es,matRecord.Esh())
 
-def sigmaDAceroArmar(eps,matRecord):
+def sigmaDReinfSteel(eps,matRecord):
   '''Design stress-strain diagram for reinforcing steel, according to EC2.'''
   return sigmas(eps,matRecord.fyd(),matRecord.eyd(),matRecord.Es,matRecord.Esh())
 
-def testDiagKAceroArmar(preprocessor, matRecord):
+def testReinfSteelCharacteristicDiagram(preprocessor, matRecord):
   ''' Checking of characteristic stress-strain diagram.'''
-  diagAcero= defDiagKAcero(preprocessor, matRecord)
+  steelDiagram= defReinfSteelCharacteristicDiagram(preprocessor, matRecord)
   ##30160925 was:
-#  tag= defDiagKAcero(preprocessor, matRecord)
-#  diagAcero= preprocessor.getMaterialLoader.getMaterial(matRecord.nmbDiagK)
+#  tag= defReinfSteelCharacteristicDiagram(preprocessor, matRecord)
+#  steelDiagram= preprocessor.getMaterialLoader.getMaterial(matRecord.nmbDiagK)
   incr= matRecord.emax/20
   errMax= 0.0
   e= 0.1e-8
   while(e < matRecord.emax+1):
-    diagAcero.setTrialStrain(e,0.0)
-    diagAcero.commitState()
-    sg= sigmaKAceroArmar(e,matRecord)
-    stress= diagAcero.getStress()
+    steelDiagram.setTrialStrain(e,0.0)
+    steelDiagram.commitState()
+    sg= sigmaKReinfSteel(e,matRecord)
+    stress= steelDiagram.getStress()
     err= abs((sg-stress)/sg)
-    #print "e= ",e," strain= ",diagAcero.getStrain()," stress= ",stress," sg= ", sg," err= ", err,"\n"
+    #print "e= ",e," strain= ",steelDiagram.getStrain()," stress= ",stress," sg= ", sg," err= ", err,"\n"
     errMax= max(err,errMax)
     e= e+incr
   return errMax
 
-def testDiagDAceroArmar(preprocessor, matRecord):
+def testReinfSteelDesignDiagram(preprocessor, matRecord):
   '''Checking of design stress-strain diagram.'''
-  diagAcero= defDiagDAcero(preprocessor, matRecord)
+  steelDiagram= defReinfSteelDesignDiagram(preprocessor, matRecord)
   ##30160925 was:
-#  tag= defDiagDAcero(preprocessor, matRecord)
-#  diagAcero= preprocessor.getMaterialLoader.getMaterial(matRecord.nmbDiagD)
+#  tag= defReinfSteelDesignDiagram(preprocessor, matRecord)
+#  steelDiagram= preprocessor.getMaterialLoader.getMaterial(matRecord.nmbDiagD)
   incr= matRecord.emax/20
   errMax= 0.0
   e= 0.1e-8
   while(e < matRecord.emax+1):
-    diagAcero.setTrialStrain(e,0.0)
-    diagAcero.commitState()
-    sg= sigmaDAceroArmar(e,matRecord)
-    err= abs((sg-diagAcero.getStress())/sg)
+    steelDiagram.setTrialStrain(e,0.0)
+    steelDiagram.commitState()
+    sg= sigmaDReinfSteel(e,matRecord)
+    err= abs((sg-steelDiagram.getStress())/sg)
 # print("e= ",(e)," stress= ",stress," sg= ", (sg)," err= ", (err),"\n")
     errMax= max(err,errMax)
     e= e+incr
@@ -870,11 +870,11 @@ class PrestressingSteel(matWDKD.MaterialWithDKDiagrams):
     return self.alpha**2*self.fmax # Pretensado final (incial al 75 por ciento y 25 por ciento de pérdidas totales).
   def defDiagK(self,preprocessor,initialStress):
     '''Characteristic stress-strain diagram.'''
-    acero= typical_materials.defSteel02(preprocessor,self.nmbDiagK,self.Es,self.fpk,self.bsh,initialStress)
-    self.matTagK= acero.tag
-    return acero 
+    steel= typical_materials.defSteel02(preprocessor,self.nmbDiagK,self.Es,self.fpk,self.bsh,initialStress)
+    self.matTagK= steel.tag
+    return steel 
   def defDiagD(self,preprocessor,initialStress):
     '''Design stress-strain diagram.'''
-    acero= typical_materials.defSteel02(preprocessor,self.nmbDiagD,self.Es,self.fpd(),self.bsh,initialStress)
-    self.matTagD= acero.tag
-    return acero
+    steel= typical_materials.defSteel02(preprocessor,self.nmbDiagD,self.Es,self.fpd(),self.bsh,initialStress)
+    self.matTagD= steel.tag
+    return steel

@@ -66,7 +66,7 @@ def getTraccionCercos(Fv):
 def getAreaNecCercos(Fv,fyd):
     '''getAreaNecCercos(Fv,fyd)
     Fv: Carga vertical en la ménsula, positiva hacia abajo (N).
-    fyd: Valor de cálculo de la resistencia del acero (Pa).
+    fyd: Design value of reinforcement steel strength (Pa).
 
     Devuelve el área necesaria para los cercos de la ménsula según
     el apartado 64.1.2.1.1 de EHE-08.

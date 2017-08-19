@@ -32,7 +32,7 @@ preprocessor=  prueba.getPreprocessor
 fy= 50.0   # yield strength
 E= 30000.0 # initial elastic tangent
 b=0.001    # strain-hardening ratio: ratio between post-yield tangent and initial elastic tangent
-acero= typical_materials.defSteel01(preprocessor=preprocessor,name="acero",E=E,fy=fy,b=b)
+steel= typical_materials.defSteel01(preprocessor=preprocessor,name="steel",E=E,fy=fy,b=b)
 
 # Section geometry
 # creation
@@ -43,11 +43,11 @@ z1= depth/2.0
 regiones= geomRectang.getRegions
 #generation of a quadrilateral region of the specified sizes and number of
 #divisions for the cells (fibers) generation
-acero= regiones.newQuadRegion("acero")   
-acero.nDivIJ= nDivIJ
-acero.nDivJK= nDivJK
-acero.pMin= geom.Pos2d(y0-y1,z0-z1)
-acero.pMax= geom.Pos2d(y0+y1,z0+z1)
+steelRegion= regiones.newQuadRegion("steel")   
+steelRegion.nDivIJ= nDivIJ
+steelRegion.nDivJK= nDivJK
+steelRegion.pMin= geom.Pos2d(y0-y1,z0-z1)
+steelRegion.pMax= geom.Pos2d(y0+y1,z0+z1)
 
 '''
 print "num. regiones: ",numRegiones

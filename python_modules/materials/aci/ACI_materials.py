@@ -25,7 +25,7 @@ A36M= ACIConcrete(nmbConcrete="A36M",fck=-20e6,gammaC=1.5)
 
 # Reinforcing steel.
 
-A706G60= concrete_base.ReinforcingSteel(nmbAcero="A706G60", fyk=420e6, emax=0.08,gammaS=1.15)
+A706G60= concrete_base.ReinforcingSteel(steelName="A706G60", fyk=420e6, emax=0.08,gammaS=1.15)
 
 
 #Bar areas in square meters.

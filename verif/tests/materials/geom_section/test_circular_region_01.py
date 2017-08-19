@@ -23,22 +23,22 @@ RExt= radius+thickness
 
 prueba= xc.ProblemaEF()
 preprocessor=  prueba.getPreprocessor
-acero= typical_materials.defElasticMaterial(preprocessor, "acero",Es)
+steel= typical_materials.defElasticMaterial(preprocessor, "steel",Es)
 geomTuberia= preprocessor.getMaterialLoader.newSectionGeometry("geomTuberia")
 regiones= geomTuberia.getRegions
-acero= regiones.newCircularRegion("acero")
+steelRegion= regiones.newCircularRegion("steel")
 
-acero.nDivCirc= 1000
-acero.centro= geom.Pos2d(0.0,0.0)
-acero.extRad= radius+thickness
-acero.intRad= radius
-acero.initAngle= 0.0
-acero.finalAngle= 2*math.pi
+steelRegion.nDivCirc= 1000
+steelRegion.centro= geom.Pos2d(0.0,0.0)
+steelRegion.extRad= radius+thickness
+steelRegion.intRad= radius
+steelRegion.initAngle= 0.0
+steelRegion.finalAngle= 2*math.pi
 
-area= acero.getArea()
-Iy= acero.getIy()
-Iz= acero.getIz()
-Pyz= acero.getPyz()
+area= steelRegion.getArea()
+Iy= steelRegion.getIy()
+Iz= steelRegion.getIz()
+Pyz= steelRegion.getPyz()
 
 
 G= geomTuberia.getCdgHomogenizedSection(Es)

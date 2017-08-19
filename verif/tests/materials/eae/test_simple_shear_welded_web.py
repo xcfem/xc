@@ -23,7 +23,7 @@ a= 4e-3 # Throat depth expressed in meters.
 l= 5.15925e-2 # Weld beads length.
 
 # Material properties
-fy= 275e6 # Acero S-275-JR
+fy= 275e6 # S-275-JR steel
 fyd= fy/1.1 # Strength reduction factor.
 fu= 430e6 # Steel strength of the pieces to be welded S-275-JR (table 59.8.2 page 304 EAE).
 Es= 2e11 # Elastic modulus of the steel.

@@ -177,14 +177,14 @@ class BasicRecordRCSection(section_properties.RectangularSection):
       if(self.concrType.matTagD<0):
         concreteMatTag= self.concrType.defDiagD(preprocessor)
       if(self.reinfSteelType.matTagD<0):
-        matTagAceroArmar= self.reinfSteelType.defDiagD(preprocessor)
+        reinfSteelMaterialTag= self.reinfSteelType.defDiagD(preprocessor)
       self.concrDiagName= self.concrType.nmbDiagD
       self.reinfDiagName= self.reinfSteelType.nmbDiagD
     elif(self.diagType=="k"):
       if(self.concrType.matTagK<0):
         concreteMatTag= self.concrType.defDiagK(preprocessor)
       if(self.reinfSteelType.matTagK<0):
-        matTagAceroArmar= self.reinfSteelType.defDiagK(preprocessor)
+        reinfSteelMaterialTag= self.reinfSteelType.defDiagK(preprocessor)
       self.concrDiagName= self.concrType.nmbDiagK
       self.reinfDiagName= self.reinfSteelType.nmbDiagK
 

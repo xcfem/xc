@@ -54,7 +54,7 @@ prueba= xc.ProblemaEF()
 preprocessor=  prueba.getPreprocessor
 # Materials definition
 # concreteMatTag= EHE_materials.HA30.defDiagK(preprocessor)
-# matTagAceroArmar= EHE_materials.B500S.defDiagK(preprocessor)
+# reinfSteelMaterialTag= EHE_materials.B500S.defDiagK(preprocessor)
 
 
 datosScc1LosC.defRCSimpleSection(preprocessor, "k")

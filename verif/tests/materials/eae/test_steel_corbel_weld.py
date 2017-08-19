@@ -21,7 +21,7 @@ tChapa= 8e-3 # Thickness of the plate thas supports the load.
 tRig= 8e-3 # Stiffener thickness.
 
 # Material properties
-fy= 2600*9.81/1e-4 # Acero A42b
+fy= 2600*9.81/1e-4 # A42b steel
 fyd= fy/1.0 # Strength reduction factor
 Es= 2.1e6*9.81/1e-4 # Elastic modulus of the steel.
 

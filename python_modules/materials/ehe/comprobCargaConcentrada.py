@@ -32,7 +32,7 @@ lado a (ver figura 61.1.a page 302 EHE-08)
   a: Dimensión de la sección.
   a1: Dimensión del área cargada paralela a a.
   Nd: Carga concentrada.
-  fyd: Límite elástico del acero.
+  fyd: steel yield strength.
   
 '''
 def getAreaArmadAd(a, a1, Nd, fyd):
@@ -56,7 +56,7 @@ lado b (ver figura 61.1.a page 302 EHE-08)
   b: Dimensión de la sección.
   b1: Dimensión del área cargada paralela a a.
   Nd: Carga concentrada.
-  fyd: Límite elástico del acero.
+  fyd: steel yield strength.
   
 '''
 def getAreaArmadBd(b, b1, Nd, fyd):

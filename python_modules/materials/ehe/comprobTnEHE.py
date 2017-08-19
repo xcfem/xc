@@ -4,8 +4,8 @@
 # Comprobación en flexotracción
 def cumpleFlexotraccion(epsCMin, epsSMax):
   retval= False
-  if(epsCMin>=-3.5e-3): # Si cumple deformación mínima del hormigón.
-    if(epsSMax<=10e-3): # Si cumple deformación máxima del acero.
+  if(epsCMin>=-3.5e-3): # Minimum concrete strain OK.
+    if(epsSMax<=10e-3): # Maximum reinforcing steel strain OK.
       retval= True
   return retval
 
@@ -29,7 +29,7 @@ def aprovCompresionCompuesta(epsCMin,epsCMax):
 # Comprobación en tracción simple o compuesta
 def cumpleTraccionCompuesta(epsSMax):
   retval= False
-  if(epsSMax<=10e-3): # Si cumple deformación máxima del acero.
+  if(epsSMax<=10e-3): # Maximum reinforcing steel strain OK.
     retval= True
   return retval
 

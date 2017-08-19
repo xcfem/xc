@@ -43,7 +43,7 @@ nod2= nodes.newNodeXY(1,0)
 fy= 2600 # Yield stress.
 E= 2.1e6 # Young modulus.
 b=0.001    # strain-hardening ratio: ratio between post-yield tangent and initial elastic tangent
-acero= typical_materials.defSteel01(preprocessor=preprocessor,name="acero",E=E,fy=fy,b=b)
+steel= typical_materials.defSteel01(preprocessor=preprocessor,name="steel",E=E,fy=fy,b=b)
 
 # Secciones
 import os

@@ -26,7 +26,7 @@ class ShearControllerEHE(lsc.LimitStateControllerBase):
     self.fcdH= 0.0 #Valor de cálculo de la resistencia del hormigón a compresión.
     self.fctdH= 0.0 #Valor de cálculo de la resistencia del hormigón a tracción.
     self.gammaC= 0.0 # Partial safety factor for concrete.
-    self.fydS= 0.0 #Valor de cálculo de la resistencia del acero de armar a tracción.
+    self.fydS= 0.0 #Design value of reinforcement steel strength.
     self.depthUtil= 0.0 #Canto útil con el que está trabajando la sección.
     self.brazoMecanico= 0.0 #Lever arm con el que está trabajando la sección.
     self.strutWidth= 0.0 #Compressed strut width «b0».
@@ -53,22 +53,24 @@ class ShearControllerEHE(lsc.LimitStateControllerBase):
     self.Vu2= 0.0 #Agotamiento por tracción en el alma.
     self.Vu= 0.0 #Cortante último de la sección.
 
-  def calcVuEHE08NoAt(self, preprocessor, scc, concrete, aceroArmar):
+  def calcVuEHE08NoAt(self, preprocessor, scc, concrete, reinfSteel):
     ''' Calcula el cortante último de la sección sin reinforcement de cortante.
      XXX Falta considerar la reinforcement activa.
-     matTagAceroArmar: Identificador del material empleado para modelizar el acero de armar.
+
+     reinfSteelMaterialTag: reinforcement steel material identifier.
      concrete: Parámetros para modelizar el hormigón.
-     aceroArmar: Parámetros para modelizar el acero de armar.'''
+     reinfSteel: parameters to modelize reinforcement steel.
+    '''
     self.concreteMatTag= concrete.matTagD
     self.fckH= abs(concrete.fck)
     self.fcdH= abs(concrete.fcd())
     self.fctdH= concrete.fctd()
     self.gammaC= concrete.gmmC
-    self.matTagAceroArmar= aceroArmar.matTagD
-    self.fydS= aceroArmar.fyd()
+    self.reinfSteelMaterialTag= reinfSteel.matTagD
+    self.fydS= reinfSteel.fyd()
 
     if(not scc.hasProp("rcSets")):
-      scc.setProp("rcSets", createFiberSets.fiberSectionSetupRC3Sets(scc,self.concreteMatTag,self.concreteFibersSetName,self.matTagAceroArmar,self.rebarFibersSetName))
+      scc.setProp("rcSets", createFiberSets.fiberSectionSetupRC3Sets(scc,self.concreteMatTag,self.concreteFibersSetName,self.reinfSteelMaterialTag,self.rebarFibersSetName))
     rcSets= scc.getProp("rcSets")
 
     concrFibers= rcSets.concrFibers.fSet
@@ -107,12 +109,12 @@ class ShearControllerEHE(lsc.LimitStateControllerBase):
         self.S= scc.getFibers().getSPosHomogenizedSection(self.E0,geom.HalfPlane2d(axis))
         self.Vu2= comprobVEHE08.getVu2EHE08NoAtNoFis(self.fctdH,self.I,self.S,self.strutWidth,self.alphaL,self.concreteAxialForce,self.concreteArea)
 
-  def calcVuEHE08SiAt(self, preprocessor, scc, paramsTorsion, concrete, aceroArmar, Nd, Md, Vd, Td):
+  def calcVuEHE08SiAt(self, preprocessor, scc, paramsTorsion, concrete, reinfSteel, Nd, Md, Vd, Td):
     ''' Calcula el cortante último de la sección CON reinforcement de cortante.
      XXX Falta considerar la reinforcement activa.
-     matTagAceroArmar: Identificador del material empleado para modelizar el acero de armar.
+     reinfSteelMaterialTag: reinforcement steel material identifier.
      concrete: Nombre del material empleado para modelizar el hormigón.
-     aceroArmar: Nombre del material empleado para modelizar el acero de armar.
+     reinfSteel: reinforcement steel material name.
      Nd: Valor de cálculo del axil (aquí positivo si es de tracción)
      Md: Valor absoluto del momento de cálculo.
      Vd: Valor absoluto del cortante efectivo de cálculo (artículo 42.2.2).
@@ -125,10 +127,10 @@ class ShearControllerEHE(lsc.LimitStateControllerBase):
     self.fcdH= abs(concrete.fcd())
     self.fctdH= abs(concrete.fctd())
     self.gammaC= abs(concrete.gmmC)
-    self.matTagAceroArmar= aceroArmar.matTagD
-    self.fydS= aceroArmar.fyd()
+    self.reinfSteelMaterialTag= reinfSteel.matTagD
+    self.fydS= reinfSteel.fyd()
 
-    createFiberSets.fiberSectionSetupRC3Sets(scc,self.concreteMatTag,self.concreteFibersSetName,self.matTagAceroArmar,self.rebarFibersSetName)
+    createFiberSets.fiberSectionSetupRC3Sets(scc,self.concreteMatTag,self.concreteFibersSetName,self.reinfSteelMaterialTag,self.rebarFibersSetName)
     concrFibers= scc.getFiberSets()[self.concreteFibersSetName]
     reinfFibers= scc.getFiberSets()[self.rebarFibersSetName]
     reinforcementTraccion= scc.getFiberSets()[self.tensionedRebarsFiberSetName]
@@ -161,19 +163,19 @@ class ShearControllerEHE(lsc.LimitStateControllerBase):
       else: # Sección no fisurada
         sys.stderr.write("La comprobación del cortante sin momento no está implementada.")
 
-  def calcVuEHE08(self, preprocessor, scc, nmbParamsTorsion, concrete, aceroArmar, Nd, Md, Vd, Td):
+  def calcVuEHE08(self, preprocessor, scc, nmbParamsTorsion, concrete, reinfSteel, Nd, Md, Vd, Td):
     '''  Calcula el cortante último de la sección.
      XXX Falta considerar la reinforcement activa.
      concrete: parameters to model concrete.
-     aceroArmar: parameters to model rebar's steel.
+     reinfSteel: parameters to model rebar's steel.
      Nd: Valor de cálculo del axil (aquí positivo si es de tracción)
      Md: Valor absoluto del momento de cálculo.
      Vd: Valor absoluto del cortante efectivo de cálculo (artículo 42.2.2).
      Td: Torsor de cálculo.'''
     if(self.AsTrsv==0):
-      self.calcVuEHE08NoAt(preprocessor,scc,concrete,aceroArmar)
+      self.calcVuEHE08NoAt(preprocessor,scc,concrete,reinfSteel)
     else:
-      self.calcVuEHE08SiAt(preprocessor,scc,nmbParamsTorsion,concrete,aceroArmar,Nd,Md,Vd,Td)
+      self.calcVuEHE08SiAt(preprocessor,scc,nmbParamsTorsion,concrete,reinfSteel,Nd,Md,Vd,Td)
 
 
   def check(self,elements,nmbComb):

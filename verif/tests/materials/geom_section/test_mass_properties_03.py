@@ -27,7 +27,7 @@ areaBar= math.pi*(diamBar/2)**2 # Rebars area.
 prueba= xc.ProblemaEF()
 preprocessor=  prueba.getPreprocessor
 concrete= typical_materials.defElasticMaterial(preprocessor, 'concrete',Ec)
-acero= typical_materials.defElasticMaterial(preprocessor, "acero",Es)
+steel= typical_materials.defElasticMaterial(preprocessor, "steel",Es)
 geomPrueba= preprocessor.getMaterialLoader.newSectionGeometry("geomPrueba")
 
 regiones= geomPrueba.getRegions
@@ -39,7 +39,7 @@ web.pMin= geom.Pos2d(0.0,b/2-bw/2)
 web.pMax= geom.Pos2d(d-hf,b/2+bw/2)
 
 reinforcement= geomPrueba.getReinfLayers
-reinforcementA= reinforcement.newStraightReinfLayer("acero")
+reinforcementA= reinforcement.newStraightReinfLayer("steel")
 reinforcementA.numReinfBars= 5
 reinforcementA.barArea= areaBar
 reinforcementA.p1= geom.Pos2d(0.0,b/2-bw/2+0.05)

@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 # home made test
 
-E= 2.1e6 # Módulo de Young del acero en kg/cm2.
-nu= 0.3 # Coeficiente de Poisson.
+E= 2.1e6 # Steel Young modulus in kg/cm2.
+nu= 0.3 # Poisson's coefficient.
 h= 0.1 # Espesor.
 dens= 1.33 # Densidad kg/m2.
 

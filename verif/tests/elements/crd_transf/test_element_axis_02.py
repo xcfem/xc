@@ -39,18 +39,18 @@ lin.xzVector= xc.Vector([0,1,0])
 # Materials definition
 fy= 275e6 # Yield stress of the steel.
 E= 210e9 # Young modulus of the steel.
-acero= typical_materials.defSteel01(preprocessor, "acero",E,fy,0.001)
+steel= typical_materials.defSteel01(preprocessor, "steel",E,fy,0.001)
 
 # Secciones
 quadFibersGeom= preprocessor.getMaterialLoader.newSectionGeometry("quadFibersGeom")
 y1= h/2.0
 z1= b/2.0
 regiones= quadFibersGeom.getRegions
-acero= regiones.newQuadRegion("acero")
-acero.nDivIJ= nDivIJ
-acero.nDivJK= nDivJK
-acero.pMin= geom.Pos2d(y0-y1,z0-z1)
-acero.pMax= geom.Pos2d(y0+y1,z0+z1)
+steel= regiones.newQuadRegion("steel")
+steel.nDivIJ= nDivIJ
+steel.nDivJK= nDivJK
+steel.pMin= geom.Pos2d(y0-y1,z0-z1)
+steel.pMax= geom.Pos2d(y0+y1,z0+z1)
 quadFibers= preprocessor.getMaterialLoader.newMaterial("fiber_section_3d","quadFibers")
 fiberSectionRepr= quadFibers.getFiberSectionRepr()
 fiberSectionRepr.setGeomNamed("quadFibersGeom")

@@ -34,7 +34,7 @@ def reinforcementPunz(Vd,fck,d,a,b,h,fyd):
     #situada a d/2 del perímetro del pilar (HL.3 números gordos)
     #Vd: esfuerzo de cálculo de punzomiento (N)
     #fck: resistencia característica del hormigón (N/m2)
-    #fyd: límite elástico de cálculo del acero de armas (N/m2)
+    #fyd: design value of reinforcement steel yield strength (Pa).
     #d: depth útil del forjado (m)
     #h: depth del forjado (m)
     #a,b: escuadría del pilar (m)

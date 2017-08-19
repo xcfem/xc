@@ -19,7 +19,7 @@ prueba= xc.ProblemaEF()
 prueba.logFileName= "/tmp/borrar.log" # Para no imprimir mensajes de advertencia
 preprocessor=  prueba.getPreprocessor
 # Define materials
-errMax= concrete_base.testDiagDAceroArmar(preprocessor, SIA262_materials.B500A)
+errMax= concrete_base.testReinfSteelDesignDiagram(preprocessor, SIA262_materials.B500A)
 
 
 # print "errMax= ",(errMax)

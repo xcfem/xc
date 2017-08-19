@@ -66,17 +66,17 @@ def reductionFactorKT(t):
 #  acier B500B: fsk=500MPa,, k=ftk/fsk>=1,08,, epsuk>=5,0%
 #               fsd=435MPa,, ks=1,08,, epsud=4,5%
 #
-#   nmbAcero: Name identifying the material.
+#   steelName: Name identifying the material.
 #   fyk:      Characteristic value of the yield strength.
 #   emax:     maximum strain in tension
 #   gammaS:   Partial factor for material.
 #   k:        fmaxk/fyk ratio
-B500A= concrete_base.ReinforcingSteel(nmbAcero="B500A", fyk=500e6, emax=0.02, gammaS=500/435, k=1.05)
-B500B= concrete_base.ReinforcingSteel(nmbAcero="B500B", fyk=500e6, emax=0.045, gammaS=500/435, k=1.08)
-B500C= concrete_base.ReinforcingSteel(nmbAcero="B500C", fyk=500e6, emax=0.065, gammaS=500/435, k=1.15)
-B700B= concrete_base.ReinforcingSteel(nmbAcero="B700B", fyk=700e6, emax=0.045, gammaS=500/435, k=1.08)
+B500A= concrete_base.ReinforcingSteel(steelName="B500A", fyk=500e6, emax=0.02, gammaS=500/435, k=1.05)
+B500B= concrete_base.ReinforcingSteel(steelName="B500B", fyk=500e6, emax=0.045, gammaS=500/435, k=1.08)
+B500C= concrete_base.ReinforcingSteel(steelName="B500C", fyk=500e6, emax=0.065, gammaS=500/435, k=1.15)
+B700B= concrete_base.ReinforcingSteel(steelName="B700B", fyk=700e6, emax=0.045, gammaS=500/435, k=1.08)
 
-SpecialII1956SIA161= concrete_base.ReinforcingSteel(nmbAcero="SpecialII", fyk=300e6, emax=0.045,gammaS=1.15,k=1.05)
+SpecialII1956SIA161= concrete_base.ReinforcingSteel(steelName="SpecialII", fyk=300e6, emax=0.045,gammaS=1.15,k=1.05)
 
 x= [50e-3,100e-3,150e-3,200e-3,250e-3,300e-3]
 y= [435e6,435e6,435e6,435e6,435e6,435e6]

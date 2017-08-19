@@ -45,7 +45,7 @@ lin.xzVector= xc.Vector([0,1,0])
 # Materials definition
 fy= 275e6 # Yield stress of the steel.
 E= 210e9 # Young modulus of the steel.
-acero= typical_materials.defSteel01(preprocessor, "acero",E,fy,0.001)
+steel= typical_materials.defSteel01(preprocessor, "steel",E,fy,0.001)
 
 respT= typical_materials.defElasticMaterial(preprocessor, "respT",1e10) # Torsion response.
 respVy= typical_materials.defElasticMaterial(preprocessor, "respVy",1e9) # Shear response in y direction.

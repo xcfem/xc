@@ -57,9 +57,9 @@ class CrackControl(lscb.CrackControlBaseParameters):
 
 
   # Calcula la apertura característica de fisura.
-  def calcApertCaracFis(self, scc, concreteMatTag, matTagAceroArmar, fctm):
+  def calcApertCaracFis(self, scc, concreteMatTag, reinfSteelMaterialTag, fctm):
     if(self.rcSets == None):
-      self.rcSets= createFiberSets.fiberSectionSetupRC3Sets(scc,concreteMatTag,self.concreteFibersSetName,matTagAceroArmar,self.rebarFibersSetName)
+      self.rcSets= createFiberSets.fiberSectionSetupRC3Sets(scc,concreteMatTag,self.concreteFibersSetName,reinfSteelMaterialTag,self.rebarFibersSetName)
     concrFibers= self.rcSets.concrFibers.fSet
     reinfFibers= self.rcSets.reinfFibers.fSet
     reinforcementTraccion= self.rcSets.tensionFibers

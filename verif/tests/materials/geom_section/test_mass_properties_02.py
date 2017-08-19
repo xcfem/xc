@@ -16,17 +16,17 @@ areaFi16= 2.01e-4
 prueba= xc.ProblemaEF()
 preprocessor=  prueba.getPreprocessor
 
-acero= typical_materials.defElasticMaterial(preprocessor, "acero",Es)
+steel= typical_materials.defElasticMaterial(preprocessor, "steel",Es)
 
 geomPrueba= preprocessor.getMaterialLoader.newSectionGeometry("geomPrueba")
 reinforcement= geomPrueba.getReinfLayers
-reinforcementA= reinforcement.newStraightReinfLayer("acero")
+reinforcementA= reinforcement.newStraightReinfLayer("steel")
 reinforcementA.numReinfBars= 2
 reinforcementA.barDiam= 16e-3
 reinforcementA.barArea= areaFi16
 reinforcementA.p1= geom.Pos2d(0.05,0.95) # Armadura inferior.
 reinforcementA.p2= geom.Pos2d(0.05,0.05)
-reinforcementB= reinforcement.newStraightReinfLayer("acero")
+reinforcementB= reinforcement.newStraightReinfLayer("steel")
 reinforcementB.numReinfBars= 2
 reinforcementB.barDiam= 16e-3
 reinforcementB.barArea= areaFi16

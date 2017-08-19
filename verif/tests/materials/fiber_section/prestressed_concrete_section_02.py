@@ -8,7 +8,7 @@ __email__= "l.pereztato@gmail.com ana.ortega.ort@gmal.com"
 
 areaCordones= 140e-6 # Strands area expressed in square meters.
 areaFiLong= 0.5e-4 # Fi8 longitudinal reinforcement area expressed in square meters.
-def gmSecHP02(nmbGeomSecc,concrDiagName,nmbDiagAceroArmar,nmbDiagAceroPret):
+def gmSecHP02(nmbGeomSecc,concrDiagName,reinfSteelDiagramName,prestressingSteelDiagramName):
   # Concrete
   geomSecc= preprocessor.getMaterialLoader.newSectionGeometry(nmbGeomSecc)
   regiones= geomSecc.getRegions
@@ -55,38 +55,38 @@ def gmSecHP02(nmbGeomSecc,concrDiagName,nmbDiagAceroArmar,nmbDiagAceroPret):
   reinforcement= geomSecc.getReinfLayers
 
   # Armadura activa
-  armadura= reinforcement.newStraightReinfLayer(nmbDiagAceroPret)
+  armadura= reinforcement.newStraightReinfLayer(prestressingSteelDiagramName)
   armadura.numReinfBars= 13 # Armadura activa inferior ala inferior.
   armadura.barArea= areaCordones
   armadura.p1= geom.Pos2d(-0.773,-0.31) 
   armadura.p2= geom.Pos2d(-0.773,0.31)
 
-  armadura= reinforcement.newStraightReinfLayer(nmbDiagAceroPret)
+  armadura= reinforcement.newStraightReinfLayer(prestressingSteelDiagramName)
   armadura.numReinfBars= 13 # Armadura activa intermedia ala inferior.
   armadura.barArea= areaCordones
   armadura.p1= geom.Pos2d(-0.713,-0.31) 
   armadura.p2= geom.Pos2d(-0.713,0.31)
 
-  armadura= reinforcement.newStraightReinfLayer(nmbDiagAceroPret)
+  armadura= reinforcement.newStraightReinfLayer(prestressingSteelDiagramName)
   armadura.numReinfBars= 7
   armadura.barArea= areaCordones
   armadura.p1= geom.Pos2d(-0.653,-0.155) # Armadura activa superior ala inferior.
   armadura.p2= geom.Pos2d(-0.653,0.155)
 
-  armadura= reinforcement.newStraightReinfLayer(nmbDiagAceroPret)
+  armadura= reinforcement.newStraightReinfLayer(prestressingSteelDiagramName)
   armadura.numReinfBars= 3
   armadura.barArea= areaCordones
   armadura.p1= geom.Pos2d(0.797,-0.478) # Armadura activa ala superior.
   armadura.p2= geom.Pos2d(0.797,0.478)
 
   # Armadura pasiva
-  armadura= reinforcement.newStraightReinfLayer(nmbDiagAceroArmar)
+  armadura= reinforcement.newStraightReinfLayer(reinfSteelDiagramName)
   armadura.numReinfBars= 5
   armadura.barArea= areaFiLong
   armadura.p1= geom.Pos2d(-0.413,-0.031)
   armadura.p2= geom.Pos2d(0.587,-0.031)
 
-  armadura= reinforcement.newStraightReinfLayer(nmbDiagAceroArmar)
+  armadura= reinforcement.newStraightReinfLayer(reinfSteelDiagramName)
   armadura.numReinfBars= 5
   armadura.barArea= areaFiLong
   armadura.p1= geom.Pos2d(-0.413,0.031)

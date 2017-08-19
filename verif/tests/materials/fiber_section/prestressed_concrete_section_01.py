@@ -11,7 +11,7 @@ depth= 0.4 # Section width expressed in meters.
 cover= 0.05 # Concrete cover expressed in meters.
 areaCordones= 140e-6 # Área de los cordones expressed in square meters.
 
-def gmSecHP01(nmbGeomSecc,concrDiagName,nmbDiagAceroPret):
+def gmSecHP01(nmbGeomSecc,concrDiagName,prestressingSteelDiagramName):
   # Concrete
   geomSecc= preprocessor.getMaterialLoader.newSectionGeometry(nmbGeomSecc)
   regiones= geomSecc.getRegions
@@ -22,12 +22,12 @@ def gmSecHP01(nmbGeomSecc,concrDiagName,nmbDiagAceroPret):
   horm.pMax= geom.Pos2d(depth/2.0,width/2.0)
   # Armadura
   reinforcement= geomSecc.getReinfLayers
-  reinforcementInf= reinforcement.newStraightReinfLayer(nmbDiagAceroPret)
+  reinforcementInf= reinforcement.newStraightReinfLayer(prestressingSteelDiagramName)
   reinforcementInf.numReinfBars= 2
   reinforcementInf.barArea= areaCordones
   reinforcementInf.p1= geom.Pos2d(cover-depth/2.0,cover-width/2.0)
   reinforcementInf.p2= geom.Pos2d(cover-depth/2.0,width/2.0-cover)
-  reinforcementSup= reinforcement.newStraightReinfLayer(nmbDiagAceroPret)
+  reinforcementSup= reinforcement.newStraightReinfLayer(prestressingSteelDiagramName)
   reinforcementSup.numReinfBars= 2
   reinforcementSup.barDiam= 16e-3
   reinforcementSup.barArea= areaCordones

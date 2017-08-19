@@ -30,27 +30,27 @@ areaFi16= 2.01e-4 # Rebar area expressed in square meters.
 
 e1= -10e-3 # Axial trial strain 1.
 sgc1= EHE_materials.HA25.sigmac(e1)
-sgs1= concrete_base.sigmaDAceroArmar(e1,EHE_materials.B500S)
+sgs1= concrete_base.sigmaDReinfSteel(e1,EHE_materials.B500S)
 
 e2= -3e-3 # Axial trial strain 1.
 sgc2= EHE_materials.HA25.sigmac(e2)
-sgs2= concrete_base.sigmaDAceroArmar(e2,EHE_materials.B500S)
+sgs2= concrete_base.sigmaDReinfSteel(e2,EHE_materials.B500S)
 
 e3= -1e-3 # Axial trial strain 1.
 sgc3= EHE_materials.HA25.sigmac(e3)
-sgs3= concrete_base.sigmaDAceroArmar(e3,EHE_materials.B500S)
+sgs3= concrete_base.sigmaDReinfSteel(e3,EHE_materials.B500S)
 
 e4= 1e-3 # Axial trial strain 1.
 sgc4= EHE_materials.HA25.sigmac(e4)
-sgs4= concrete_base.sigmaDAceroArmar(e4,EHE_materials.B500S)
+sgs4= concrete_base.sigmaDReinfSteel(e4,EHE_materials.B500S)
 
 e5= 3e-3 # Axial trial strain 1.
 sgc5= EHE_materials.HA25.sigmac(e5)
-sgs5= concrete_base.sigmaDAceroArmar(e5,EHE_materials.B500S)
+sgs5= concrete_base.sigmaDReinfSteel(e5,EHE_materials.B500S)
 
 e6= 10e-3 # Axial trial strain 1.
 sgc6= EHE_materials.HA25.sigmac(e6)
-sgs6= concrete_base.sigmaDAceroArmar(e6,EHE_materials.B500S)
+sgs6= concrete_base.sigmaDReinfSteel(e6,EHE_materials.B500S)
 
 prueba= xc.ProblemaEF()
 prueba.logFileName= "/tmp/borrar.log" # Don't print warnings.
