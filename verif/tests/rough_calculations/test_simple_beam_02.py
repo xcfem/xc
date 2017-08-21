@@ -14,7 +14,7 @@ __email__= "l.pereztato@gmail.com"
 beam= sb.SimpleBeam()
 beam.l= 100 #ft
 
-q= 3.0+2.0 #k/ft
+q= -(3.0+2.0) #k/ft; see sign convention on file ng_simple_beam.py
 
 #Loads
 M= 0.0

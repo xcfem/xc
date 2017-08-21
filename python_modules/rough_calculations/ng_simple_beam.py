@@ -1,18 +1,27 @@
 # -*- coding: utf-8 -*-
-# Simple beam formulas
+'''Simple beam formulas.'''
 
 from __future__ import division
 import math
 import ng_beam as bm
 
-class SimpleBeam(bm.Beam):
+#Sign convention.
 
+# - Loads: negative when the force (as usual) goes down.
+# - Shear force: label a positive shear force one that spins an element
+#                clockwise (up on the left, and down on the right).
+# - Bending moment: convention for a positive bending moment is to warp the
+#                   element in a "u" shape manner (Clockwise on the left,
+#                   and counterclockwise on the right). 
+
+class SimpleBeam(bm.Beam):
+  '''Beam pinned in both ends.'''
   def getShearUnderUniformLoad(self,q,x):
     return -q*(self.l/2.0-x)
   def getReactionUnderUniformLoad(self,q):
     return self.getShearUnderUniformLoad(self,q,0.0)
   def getBendingMomentUnderUniformLoad(self,q,x):
-    return q*x/2.0*(self.l-x)
+    return q*x/2.0*(x-self.l)
   def getDeflectionUnderUniformLoad(self,q,x):
     return q*x/(24.0*self.E*self.I)*(self.l**3-2*self.l*x**2+x**3)
 
@@ -68,17 +77,17 @@ class SimpleBeam(bm.Beam):
     return -P*a/self.l
 
   def getShearUnderConcentratedLoad(self,P,a,x):
-    R1= getReaction1UnderConcentratedLoad(self,P,a)
+    R1= self.getReaction1UnderConcentratedLoad(P,a)
     retval= R1
     if(x>a):
-      retval= getReaction2UnderConcentratedLoad(self,P,a)
+      retval= -self.getReaction2UnderConcentratedLoad(P,a)
     return retval
 
   def getBendingMomentUnderConcentratedLoad(self,P,a,x):
-    R1= getReaction1UnderConcentratedLoad(self,P,a)
+    R1= self.getReaction1UnderConcentratedLoad(P,a)
     retval= R1*x
     if(x>a):
-      retval= getReaction2UnderConcentratedLoad(self,P,a)*(l-x)
+      retval= self.getReaction2UnderConcentratedLoad(P,a)*(self.l-x)
     return retval
 
   def getDeflectionUnderConcentratedLoad(self,P,a,x):

@@ -524,6 +524,7 @@ python tests/rough_calculations/test_min_dim_abut_support.py
 python tests/rough_calculations/test_cantilever01.py
 python tests/rough_calculations/test_simple_beam_01.py
 python tests/rough_calculations/test_simple_beam_02.py
+python tests/rough_calculations/test_simple_beam_03.py
 python tests/rough_calculations/test_earth_pressure_kray.py
 python tests/rough_calculations/test_suspension_bridge_simple_model.py
 python tests/rough_calculations/test_cable_stayed_bridge_simple_model.py
