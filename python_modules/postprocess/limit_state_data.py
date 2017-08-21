@@ -13,6 +13,11 @@ from postprocess.reports import export_internal_forces as eif
 from postprocess.reports import export_displacements as edisp
 from miscUtils import LogMessages as lmsg
 
+def defaultAnalysis(feProb,steps= 1):
+  '''Default analysis procedure for saveAll method.'''
+  analisis= predefined_solutions.simple_static_linear(feProb)
+  result= analisis.analyze(steps) #Same with the number of steps.
+  return result
 
 class LimitStateData(object):
   check_results_directory= './' #Path to verifRsl* files.
@@ -44,7 +49,7 @@ class LimitStateData(object):
     '''Read a Python object from a pickle file.'''
     with open(name + '.pkl', 'r') as f:
       return pickle.load(f)
-  def saveAll(self,feProblem,combContainer,setCalc,fConvIntForc= 1.0):
+  def saveAll(self,feProblem,combContainer,setCalc,fConvIntForc= 1.0,analysisToPerform= defaultAnalysis):
     '''Write internal forces, displacements, .., for each combination
      
     :param feProblem: XC finite element problem to deal with.
@@ -79,9 +84,7 @@ class LimitStateData(object):
       feProblem.getPreprocessor.resetLoadCase()
       comb.addToDomain() #Combination to analyze.
       #Solution
-      # XXX use always a simple static linear analysis is not a good idea.     
-      analisis= predefined_solutions.simple_static_linear(feProblem)
-      result= analisis.analyze(1) #Same with the number of steps.
+      result= analysisToPerform(feProblem)
       #Writing results.
       fIntF= open(fNameInfForc,"a")
       fDisp= open(fNameDispl,"a")

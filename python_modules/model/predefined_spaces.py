@@ -141,14 +141,14 @@ class PredefinedSpace(object):
         Returns:
             :rtype: (int, int) new node tag, new element tag.
     '''
-    nodos= self.preprocessor.getNodeLoader
-    newNode= nodos.duplicateNode(iNod) # new node.
+    nodes= self.preprocessor.getNodeLoader
+    newNode= nodes.duplicateNode(iNod) # new node.
 
     # Element definition
     elems= self.preprocessor.getElementLoader
     elems.dimElem= self.preprocessor.getNodeLoader.dimSpace # space dimension.
     if(elems.dimElem>2):
-      lmsg.warning("Not a bidimensional space.")
+      lmsg.warning("Not a bi-dimensional space.")
     elems.defaultMaterial= bearingMaterial
     zl= elems.newElement("zero_length",xc.ID([newNode.tag,iNod]))
     zl.setupVectors(xc.Vector([direction[0],direction[1],0]),xc.Vector([-direction[1],direction[0],0]))

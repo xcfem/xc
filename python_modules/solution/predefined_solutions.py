@@ -46,19 +46,21 @@ class SolutionProcedure(object):
   :ivar convergenceTestTol: convergence tolerance (defaults to 1e-9)
   :ivar maxNumIter: maximum number of iterations (defauts to 10)
   '''
-  solu= None
-  solCtrl= None
-  sm= None
-  numberer= None
-  cHandler= None
-  smt= None
-  solAlgo= None
-  integ= None
-  soe= None
-  solver= None
-  analysis= None
-  convergenceTestTol= 1e-9
-  maxNumIter= 10
+  def __init__(self):
+    self.solu= None
+    self.solCtrl= None
+    self.sm= None
+    self.numberer= None
+    self.cHandler= None
+    self.smt= None
+    self.solAlgo= None
+    self.integ= None
+    self.soe= None
+    self.solver= None
+    self.analysis= None
+    self.convergenceTestTol= 1e-9
+    self.maxNumIter= 10
+    self.printFlag= 0
   def simpleStaticLinear(self,prb):
     self.solu= prb.getSoluProc
     self.solCtrl= self.solu.getSoluControl
@@ -182,7 +184,8 @@ class SolutionProcedure(object):
     self.solAlgo= self.smt.newSolutionAlgorithm("newton_raphson_soln_algo")
     self.ctest= self.smt.newConvergenceTest("norm_unbalance_conv_test")
     self.ctest.tol= 1.0e-4
-    self.ctest.maxNumIter= 10
+    self.ctest.maxNumIter= self.maxNumIter
+    self.ctest.printFlag= self.printFlag
     self.integ= self.smt.newIntegrator("load_control_integrator",xc.Vector([]))
     self.soe= self.smt.newSystemOfEqn("band_gen_lin_soe")
     self.solver= self.soe.newSolver("band_gen_lin_lapack_solver")
@@ -204,8 +207,8 @@ class SolutionProcedure(object):
     self.solAlgo= self.smt.newSolutionAlgorithm("newton_raphson_soln_algo")
     self.ctest= self.smt.newConvergenceTest("norm_disp_incr_conv_test")
     self.ctest.tol= 1.0e-3
-    self.ctest.maxNumIter= 35
-    self.ctest.printFlag= 1
+    self.ctest.maxNumIter= self.maxNumIter
+    self.ctest.printFlag= self.printFlag
     self.integ= self.smt.newIntegrator("newmark_integrator",xc.Vector([]))
     self.soe= self.smt.newSystemOfEqn("profile_spd_lin_soe")
     self.solver= self.soe.newSolver("profile_spd_lin_lapack_solver")
