@@ -11,6 +11,8 @@ import ng_beam as bm
 #  |--------------------
 #
 
+#Sign convention: see ng_simple_beam.py
+
 class Cantilever(bm.Beam):
 
   def getShearUnderUniformLoad(self,q,x):
@@ -18,7 +20,7 @@ class Cantilever(bm.Beam):
   def getReactionUnderUniformLoad(self,q):
     return self.getShearUnderUniformLoad(self,q,0.0)
   def getBendingMomentUnderUniformLoad(self,q,x):
-    return -q/2.0*(self.l-x)^2
+    return q/2.0*(self.l-x)**2
 # WRITE CODE PENDING.
 #   def getDeflectionUnderUniformLoad(self,q,x):
 #     return q*x/(24.0*self.E*self.I)*(self.l**3-2*self.l*x**2+x**3)
@@ -66,14 +68,14 @@ class Cantilever(bm.Beam):
     return -P
 
   def getShearUnderConcentratedLoad(self,P,a,x):
-    retval= getReactionUnderConcentratedLoad(self,P,a)
+    retval= self.getReactionUnderConcentratedLoad(P,a)
     if(x>a):
       retval= 0.0
     return retval
 
   def getBendingMomentUnderConcentratedLoad(self,P,a,x):
-    R1= getReactionUnderConcentratedLoad(self,P,a)
-    retval= R1*x
+    R1= self.getReactionUnderConcentratedLoad(P,a)
+    retval= R1*(x-a)
     if(x>a):
       retval= 0.0
     return retval
