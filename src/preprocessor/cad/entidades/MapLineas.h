@@ -45,7 +45,7 @@ class ArcoCircunf;
 
 //! @ingroup Cad
 //
-//! @brief Contenedor de puntos del modelo.
+//! @brief Line container.
 class MapLineas: public MapEnt<Edge>
   {
   private:
