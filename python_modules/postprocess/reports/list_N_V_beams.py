@@ -2,8 +2,8 @@
 
 import sqlite3 as sqlite
 
-# Lista resultados de tensiones normales en barras para incluír en un archivo de LaTex.
 def listaTNBarrasLatex(nmbDBase, nmbTabla, nmbArchivoListadoTex):
+  '''Result of normal stresses in linear elements to include in a LaTeX file.'''
   archTex= open(nmbArchivoListadoTex)
   con= sqlite.connect(nmbDBase)
   con.row_factory= sqlite.Row
@@ -35,8 +35,8 @@ def listaTNBarrasLatex(nmbDBase, nmbTabla, nmbArchivoListadoTex):
     archTex.write(int(idSecc)," & ",int(idElem)," & ",idComb," & ",format(axil/1e3,'{:6.3f}')," & ",format(m1/1e3,'{:6.3f}')," & ",format(m2/1e3,'{:6.3f}')," & ",format(epsCMin*100,'{:3.2f}')," & ",format(epsCMax*100,'{:3.2f}')," & ",format(epsSMax*100,'{:3.2f}'),"\\\\\n")
   archTex.close()
 
-# Lista resultados de cortante en barras para incluír en un archivo de LaTex.
 def listaVBarrasLatex(nmbDBase, nmbTabla, nmbArchivoListadoTex):
+  '''Shear check results in linear elements to include in a LaTeX file.'''
   archTex= open(nmbArchivoListadoTex)
   con= sqlite.connect(nmbDBase)
   con.row_factory= sqlite.Row

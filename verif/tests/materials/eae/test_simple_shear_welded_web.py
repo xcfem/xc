@@ -34,7 +34,7 @@ gammaMw= 1.0/math.sqrt(3) # Steel partial safety factor for joints (clause 59.8.
 
 
 
-# Resultados parciales.
+# Partial results.
 VRd= EAE_limit_state_checking.VdSoldAlma(l,a,betaW,gammaMw,2600*9.81/1e-4)
 lMax= EAE_limit_state_checking.LongMaxSoldAlma(tw)
 

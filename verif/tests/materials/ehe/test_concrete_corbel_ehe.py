@@ -22,7 +22,7 @@ a=0.6 #Distance (m) from the applied load axis and the plane of the corbel fixat
 fck=35E6 #Characteristic value of concrete strength (Pa).
 fyk=500E6 #Characteristic value of steel strength (Pa).
 
-#Resultados
+# Results
 dmin=mensula_cortaEHE08.getCantoUtilMinimo(tipoJunta,a)
 dminTeor=0.988235294118
 ratio1=abs(dmin-dminTeor)/dminTeor

@@ -194,7 +194,7 @@ issFatigueFrench= ResultsDescriptionContainer(fr,[ResultDescription("sg_sPos01",
     ResultDescription("Mu2","Valeur ultime du moment de flexion", 'kN m/m'),
     ResultDescription("Vu2","Valeur ultime de l'Effort tranchant", ' kN/m')])
 
-# #Resultados bajo cargas quasi-permanentes (fisuración)
+# #Results under quasi-permanent loads (crack control)
 # issQPfisEsp= ResultsDescriptionContainer(lsd.quasiPermanentLoadsCrackControl,[ResultDescription("sg_sPos1","Envolvente de tensiones máximas bajo cargas quasi-permanentes, cara positiva", 'MPa'),
 #     ResultDescription("NCPPos1","Axil asociado a la envolvente de tensiones máximas bajo cargas quasi-permanentes, cara positiva", 'kN/m'),
 #     ResultDescription("MyCPPos1","Momento flector asociado a la envolvente de tensiones máximas bajo cargas quasi-permanentes, cara positiva", 'm.kN/m'),
@@ -208,7 +208,7 @@ issFatigueFrench= ResultsDescriptionContainer(fr,[ResultDescription("sg_sPos01",
 #     ResultDescription("NCPNeg2","Axil asociado a la envolvente de tensiones máximas bajo cargas quasi-permanentes, cara negativa", 'kN/m'),
 #     ResultDescription("MyCPNeg2","Momento flector asociado a la envolvente de tensiones máximas bajo cargas quasi-permanentes, cara negativa", 'm.kN/m')])
 
-# #Resultados bajo cargas frecuentes (fissuration)
+# #Results under frequent loads (crack control)
 # issFQfisEsp= ResultsDescriptionContainer(lsd.freqLoadsCrackControl, [ResultDescription("sg_sPos1","Envolvente de tensiones máximas bajo cargas frecuentes, cara positiva", 'MPa'),
 #     ResultDescription("NCPPos1","Axil asociado a la envolvente de tensiones máximas bajo cargas frecuentes, cara positiva", 'kN/m'),
 #     ResultDescription("MyCPPos1","Momento flector asociado a la envolvente de tensiones máximas bajo cargas frecuentes, cara positiva", 'm.kN/m'),
@@ -222,7 +222,7 @@ issFatigueFrench= ResultsDescriptionContainer(fr,[ResultDescription("sg_sPos01",
 #     ResultDescription("NCPNeg2","Axil asociado a la envolvente de tensiones máximas bajo cargas frecuentes, cara negativa", 'kN/m'),
 #     ResultDescription("MyCPNeg2","Momento flector asociado a la envolvente de tensiones máximas charges frecuentes, cara negativa", 'm.kN/m')])
  
-# #Resultados bajo cargas durables - tensiones normales
+# #Results under permanent loads (normal stresses).
 # issDRnormEsp= ResultsDescriptionContainer(lsd.normalStressesResistance,[ResultDescription("FCCP1","Factor de capacidad (tensiones normales) de los elementos bajo cargas durables (ELUT2*)"),
 #     ResultDescription("NCP1","Axil asociado al factor de capacidad (tensiones normales) bajo cargas durables", 'kN/m'),
 #     ResultDescription("MyCP1","Momento flector asociado al factor de capacidad (tensiones normales) bajo cargas durables", 'm.kN/m'),
@@ -230,7 +230,7 @@ issFatigueFrench= ResultsDescriptionContainer(fr,[ResultDescription("sg_sPos01",
 #     ResultDescription("NCP2","Axil asociado al factor de capacidad (tensiones normales) bajo cargas durables", 'kN/m'),
 #     ResultDescription("MyCP2","Momento flector asociado al factor de capacidad (tensiones normales) bajo cargas durables", 'm.kN/m')])
  
-# #Resultados bajo cargas durables - tensiones tangenciales
+# #Results under permanent loads (shear).
 # issDRcisEsp= ResultsDescriptionContainer(lsd.shearResistance,[ResultDescription("FCCP1","Factor de capacidad (tensiones tangenciales) de los elementos bajo cargas durables (ELUT2*)"),
 #     ResultDescription("NCP1","Axil asociado al factor de capacidad (tensiones tangenciales) bajo cargas durables", 'kN/m'),
 #     ResultDescription("VuCP1","Esfuerzo cortante asociado al factor de capacidad (tensiones tangenciales) bajo cargas durables", 'kN/m'),
@@ -238,7 +238,7 @@ issFatigueFrench= ResultsDescriptionContainer(fr,[ResultDescription("sg_sPos01",
 #     ResultDescription("NCP2","Axil asociado al factor de capacidad (tensiones tangenciales) bajo cargas durables", 'kN/m'),
 #     ResultDescription("VuCP2","Esfuerzo cortante asociado al factor de capacidad (tensiones tangenciales) bajo cargas durables", 'kN/m')])
 
-# #Fatiga
+# #Fatigue
 # issFatigueEsp= ResultsDescriptionContainer(lsd.fatigueResistance,[ResultDescription("sg_sPos01","Tensiones en el acero bajo cargas permanentes, cara positiva", 'MPa'),
 #     ResultDescription("sg_sPos11","Tensiones en el acero bajo el modelo de carga de fatiga, cara positiva", 'MPa'),
 #     ResultDescription("inc_sg_sPos1","Incremento de tensiones en el acero bajo el modelo de carga de fatiga, cara positiva", 'MPa'),

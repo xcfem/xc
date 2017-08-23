@@ -87,7 +87,7 @@ f2spN= EOTA_TR029_limit_state_checking.getFactor2spN(A0spN,AspN)
 N0RdSp= N0Rdc
 NRdSp= N0RdSp*f1Nsp*f2spN # Splitting.
 
-# Resultados
+# Results
 
 ''' Tensile strength of the anchor itself without considering
 the favourable effect of the reinforcement. '''

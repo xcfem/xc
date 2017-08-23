@@ -34,8 +34,8 @@ def printCierreListadoTirante(archivo):
 
 def listTieStrength(preprocessor,setName, fName, titulo):
   '''
-  Imprime los resultados de la comprobación de tensiones normales en régimen
-  elástico de un conjunto de elementos que representa un tirante.
+  Prints the normal stresses check results in elastic domain for
+  a set of elements that represent a tie.
   '''
   printCabeceraListadoTirante(fName,titulo)
   st= preprocessor.getSetLoader.getSet(setName)

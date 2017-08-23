@@ -154,9 +154,11 @@ class TakePhotos(object):
       self.fichLatexFigs.write('\\clearpage\n' )
 
   def displayFigures(self,figDefinitionList,LatexFigsFilename,LatexListFilename):
-    '''Creates graphics files from figure definition list.'''
-    #nmbLstIss: nombre de la lista donde se definen los resultados a representar
-    #LatexFilename: nombre del fichero de látex donde montar los gráficos
+    '''Creates graphics files from figure definition list.
+
+       :param nmbLstIss: name of the lists that contains the results to display.
+       :param LatexFilename: name of the LaTeX file to write the graphics on.
+    '''
     conta= 0
     self.fichLatexFigs= open(self.pthTextOutput+LatexFigsFilename,'w')
     self.fichLatexList= open(self.pthTextOutput+LatexListFilename,'w')

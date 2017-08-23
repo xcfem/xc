@@ -591,7 +591,7 @@ def writeControlVarsFromElements(controlVarName,preprocessor,outputFileName):
   retval= [scipy.mean(fcs1),scipy.mean(fcs2)]
   return retval
 
-# Imprime los resultados de la comprobación frente a tensiones normales
+# Print normal stresses verification results.
 def writeControlVarsFromElementsForAnsys(controlVarName,preprocessor,outputFileName, sectionName1, sectionName2):
   '''
   :param   preprocessor:    preprocessor name
