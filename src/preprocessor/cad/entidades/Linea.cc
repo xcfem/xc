@@ -60,17 +60,26 @@ double XC::Linea::getLongitud(void) const
     return retval;
   }
 
+//! @brief Return the centroid of the line.
+Pos3d XC::Linea::getCentroid(void) const
+  {
+    Pos3d retval(0.0,0.0,0.0);
+    if(check_points())
+      retval= getLineSegment().Cdg();
+    return retval;
+  }
+
 //! @brief Returns the parameter of the point in the line (distance to the line's first point measured over the line)
 double XC::Linea::getLambda(const Pos3d &p) const
   {
     double retval= 0;
     if(check_points())
-      retval= getSegmento().getLambda(p);
+      retval= getLineSegment().getLambda(p);
     return retval;
   }
 
 //! @brief Returns the segment than links the line ends.
-Segmento3d XC::Linea::getSegmento(void) const
+Segmento3d XC::Linea::getLineSegment(void) const
   {
     Segmento3d retval;
     if(check_points())
@@ -81,7 +90,7 @@ Segmento3d XC::Linea::getSegmento(void) const
 //! @brief Returns the squared distance to the
 //! position being passed as parameter.
 double XC::Linea::DistanciaA2(const Pos3d &pt) const
-  { return getSegmento().dist2(pt); }
+  { return getLineSegment().dist2(pt); }
 
 //! @brief Divides the line by the point being passed as parameter.
 XC::Edge *XC::Linea::split_at(Pnt *p,const double &lambda,const double &longitud)
@@ -117,7 +126,7 @@ XC::Edge *XC::Linea::splitAtPoint(Pnt *p)
     if(p)
       {
         const Pos3d pN= p->GetPos();
-        const Segmento3d s= getSegmento();
+        const Segmento3d s= getLineSegment();
         const double lambda= s.getLambda(pN);
         const double l= s.Longitud();
         retval= split_at(p,lambda,l);
@@ -135,7 +144,7 @@ XC::Edge *XC::Linea::splitAtPoint(Pnt *p)
 XC::Edge *XC::Linea::splitAtLambda(const double &lambda)
   {
     Edge *retval= nullptr;
-    const Segmento3d s= getSegmento();
+    const Segmento3d s= getLineSegment();
     const Pos3d pN= s.PtoParametricas(lambda);
     Pnt *p= create_point(pN);
     const double l= s.Longitud();
@@ -147,7 +156,7 @@ XC::Edge *XC::Linea::splitAtLambda(const double &lambda)
 XC::Edge *XC::Linea::splitAtCooNatural(const double &chi)
   {
     Edge *retval= nullptr;
-    const Segmento3d s= getSegmento();
+    const Segmento3d s= getLineSegment();
     const Pos3d pN= s.PtoCooNatural(chi);
     Pnt *p= create_point(pN);
     retval= split_at(p,s.getParamCooNatural(chi),s.Longitud());

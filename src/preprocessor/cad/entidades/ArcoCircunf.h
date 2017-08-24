@@ -57,6 +57,7 @@ class ArcoCircunf: public LineBase
     void actualiza_topologia(void);
 
     double getLongitud(void) const;
+    Pos3d getCentroid(void) const;
     double getAnguloComprendido(void) const;
     double getTheta1(void) const;
     double getTheta2(void) const;

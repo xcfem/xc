@@ -32,6 +32,7 @@
 #include "ArcoCircunf.h"
 #include "preprocessor/Preprocessor.h"
 #include "xc_utils/src/geom/d3/BND3d.h"
+#include "xc_utils/src/geom/d1/Segmento3d.h"
 #include "xc_utils/src/geom/d1/Polilinea3d.h"
 
 #include "xc_utils/src/geom/pos_vec/MatrizPos3d.h"
@@ -43,16 +44,16 @@
 XC::CmbEdge::Lado::Lado(Edge *ptr,const bool &s)
   : edge(ptr), directo(s) {}
 
-//! @brief Returns a pointer to the la linea.
+//! @brief Returns a pointer to the edge.
 XC::Edge *XC::CmbEdge::Lado::getEdge(void)
   { return edge; }
-//! @brief Returns a pointer constante a la linea.
+//! @brief Returns a constant pointer to the edge.
 const XC::Edge *XC::CmbEdge::Lado::getEdge(void) const
   { return edge; }
 //! @brief Assigns the line.
 void XC::CmbEdge::Lado::SetEdge(Edge *l)
   { edge= l; }
-//! @brief Returns a constant pointer to point origen of the line.
+//! @brief Returns a constant pointer to the back end of the edge.
 const XC::Pnt *XC::CmbEdge::Lado::P1(void) const
   {
     if(!edge) return nullptr;
@@ -61,7 +62,7 @@ const XC::Pnt *XC::CmbEdge::Lado::P1(void) const
     else
       return edge->P2();
   }
-//! @brief Returns a constant pointer to point destino of the line.
+//! @brief Returns a constant pointer to the front end of the edge.
 const XC::Pnt *XC::CmbEdge::Lado::P2(void) const
   {
     if(!edge) return nullptr;
@@ -95,6 +96,10 @@ const std::string &XC::CmbEdge::Lado::getName(void) const
 //! @brief Return the longitud del lado.
 double XC::CmbEdge::Lado::getLongitud(void) const
   { return edge->getLongitud(); }
+
+//! @brief Returns the segment than links both ends.
+Pos3d XC::CmbEdge::Lado::getCentroid(void) const
+  { return edge->getCentroid(); }
 
 //! @brief Returns a vector tangente al lado en el punto s
 const XC::Vector &XC::CmbEdge::Lado::getTang(const double &s) const
@@ -311,7 +316,7 @@ void XC::CmbEdge::reverse(void)
       (*i).reverse();
   }
 
-//! @brief Return the longitud of the line.
+//! @brief Return the length of the line.
 double XC::CmbEdge::getLongitud(void) const
   {
     double retval= 0;
@@ -320,7 +325,23 @@ double XC::CmbEdge::getLongitud(void) const
     return retval;
   }
 
-//! @brief Returns the number of divisions total.
+//! @brief Return the centroid of the line.
+Pos3d XC::CmbEdge::getCentroid(void) const
+  {
+    Pos3d retval(0.0,0.0,0.0);
+    Vector3d v(0.0,0.0,0.0);
+    double totalLength= 0.0;
+    for(std::deque<Lado>::const_iterator i=lineas.begin();i!=lineas.end();i++)
+      {
+	const double l= (*i).getLongitud();
+	v+= l*(*i).getCentroid().VectorPos();
+        totalLength+= l;
+      }
+    retval+= v*1.0/totalLength;
+    return retval;
+  }
+
+//! @brief Returns the number of divisions for the whole object.
 size_t XC::CmbEdge::NDiv(void) const
   {
     size_t &nd= const_cast<size_t &>(ndiv);
@@ -330,7 +351,7 @@ size_t XC::CmbEdge::NDiv(void) const
     return ndiv;
   }
 
-//! @brief Establece el number of divisions total.
+//! @brief Sets the number of divisions for the whole object.
 void XC::CmbEdge::SetNDiv(const size_t &nd)
   {
     const size_t nl= NumEdges();
@@ -351,6 +372,7 @@ void XC::CmbEdge::SetNDiv(const size_t &nd)
 		<< "; no segments defined." << std::endl;
   }
 
+//! @brief Return positions along the object.
 MatrizPos3d XC::CmbEdge::get_posiciones(void) const
   {
     const size_t npos= NDiv()+1; //Number of positions.
@@ -620,7 +642,7 @@ const XC::CmbEdge::Lado *XC::CmbEdge::GetLadoPorPuntos(const size_t &idP1,const 
     return GetLadoPorPuntos(p1,p2);
   }
 
-//! @brief Returns the lado que tiene por extremos los puntos
+//! @brief Returns the edge that has its vertices at the points
 //! being passed as parameters.
 XC::CmbEdge::Lado *XC::CmbEdge::GetLadoPorPuntos(const size_t &idP1,const size_t &idP2)
   {
@@ -665,6 +687,7 @@ XC::ID XC::CmbEdge::getKPoints(void) const
     return retval;
   }
 
+//! @brief Returns a polyline representation of the object.
 Polilinea3d XC::CmbEdge::getPolyline(void) const
   {
     Polilinea3d retval;

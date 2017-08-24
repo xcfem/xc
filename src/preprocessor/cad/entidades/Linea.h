@@ -50,6 +50,7 @@ class Linea: public LineBase
     virtual SetEstruct *getCopy(void) const;
 
     double getLongitud(void) const;
+    Pos3d getCentroid(void) const;
     Edge *splitAtPoint(Pnt *p);
     Edge *splitAtLambda(const double &);
     Edge *splitAtCooNatural(const double &);
@@ -63,7 +64,7 @@ class Linea: public LineBase
     double DistanciaA2(const Pos3d &pt) const;
 
     const Vector &getVector(void) const;
-    Segmento3d getSegmento(void) const;
+    Segmento3d getLineSegment(void) const;
     virtual const Vector &getTang(const double &) const;
     int getVtkCellType(void) const;
     int getMEDCellType(void) const;

@@ -82,6 +82,7 @@ class CmbEdge: public Edge
         MatrizPos3d GetPosNodosDir(void) const;
         MatrizPos3d GetPosNodosInv(void) const;
         double getLongitud(void) const;
+        Pos3d getCentroid(void) const;	
         const Vector &getTang(const double &) const;
         Node *GetNodoDir(const size_t &i);
         Node *GetNodoInv(const size_t &i);
@@ -133,6 +134,7 @@ class CmbEdge: public Edge
     void reverse(void);
 
     double getLongitud(void) const;
+    Pos3d getCentroid(void) const;	
 
     //! @brief Return the number of vertices.
     virtual size_t NumVertices(void) const

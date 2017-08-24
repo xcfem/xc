@@ -31,6 +31,7 @@ class_<XC::Edge, bases<XC::EntMdlr>, boost::noncopyable >("Edge","Base class for
   .add_property("firstNode",make_function(getFirstNodePtr, return_internal_reference<>()),"Return the first node of the edge")
   .add_property("lastNode",make_function(getLastNodePtr, return_internal_reference<>()),"Return the last node of the edge")
   .def("getLong", &XC::Edge::getLongitud,"Return the length of the edge.")
+  .def("getCentroid", &XC::Edge::getCentroid,"Return the centroid of the edge.")
   .def("getTang", &XC::Edge::getTang, return_internal_reference<>(),"Return a vector tangent to the edge.")
   .def("divide",&XC::Edge::divide,"Create points along the line.")
   .def("getKPoints",&XC::Edge::getKPoints,"Return the end points of the edge.")
@@ -68,6 +69,7 @@ class_<XC::CmbEdge::Lado,bases<EntCmd> >("Lado", no_init)
   .add_property("isDirect", &XC::CmbEdge::Lado::esDirecto)
   .add_property("getEdge", make_function(getEdge, return_internal_reference<>()))
   .def("getLong", &XC::CmbEdge::Lado::getLongitud,"Return edge's length.")
+  .def("getCentroid", &XC::CmbEdge::Lado::getCentroid,"Return edge's centroid.")
   .def("getTang", &XC::CmbEdge::Lado::getTang, return_internal_reference<>(),"Return a vector tangent to the edge.")
   ;
 
