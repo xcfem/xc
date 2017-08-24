@@ -470,6 +470,6 @@ class BeamMaterialData(MaterialData):
     ''':returns: the mass per unit length'''
     return self.rho*self.section.A()
   def setupElasticShear3DSection(self,preprocessor):
-    ''':returns: the elastic section appropiate for 3D beam analysis
+    '''Return an elastic section appropiate for 3D beam analysis
     '''
-    defElasticShearSection3d(preprocessor,self.name,self.section.A(),self.material.E,self.material.G(),self.section.Iz(),self.section.Iy(),self.section.J(),self.section.alphaZ())
+    return defElasticShearSection3d(preprocessor,self.name,self.section.A(),self.material.E,self.material.G(),self.section.Iz(),self.section.Iy(),self.section.J(),self.section.alphaZ())
