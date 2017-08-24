@@ -58,6 +58,13 @@ class Concrete(matWDKD.MaterialWithDKDiagrams):
         self.fck= fck #** characteristic (5%) cylinder strength of the concrete [Pa]
         self.gmmC= gammaC #** Partial safety factor for concrete 
 
+    def density(self,reinforced= True):
+        '''Return concrete density in kg/m3.'''
+        if(reinforced):
+            return 2500
+        else:
+            return 2400
+        
     def fcd(self):
         '''concrete design strength [Pa][-]
         '''
@@ -529,6 +536,26 @@ class Concrete(matWDKD.MaterialWithDKDiagrams):
         retval.savefig(plt,fileName+'.jpeg')
         retval.savefig(plt,fileName+'.eps')
         return retval
+    
+    def defElasticPlateSection(self, preprocessor,name,thickness):
+      '''Constructs an elastic isotropic section material appropiate 
+         for plate analysis.
+
+      :param  preprocessor: preprocessor name
+      :param  name:         name identifying the section
+      :param  thickness:    section thickness.
+      '''
+      return typical_materials.defElasticPlateSection(preprocessor,name,E= self.getEcm(), nu=self.nuc ,rho= self.density(),h= thickness)
+
+    def defElasticMembranePlateSection(self, preprocessor,name,thickness):
+      '''Constructs an elastic isotropic section material appropiate 
+         for plate and shell analysis
+
+      :param  preprocessor: preprocessor name
+      :param  name:         name identifying the section
+      :param  thickness:    section thickness.
+      '''
+      return typical_materials.defElasticMembranePlateSection(preprocessor,name,E= self.getEcm(), nu=self.nuc ,rho= self.density(),h= thickness)
 
 
 class paramTensStiffenes(object):
@@ -633,6 +660,7 @@ class paramTensStiffenes(object):
         x = x[:,np.newaxis]
         slope, _, _, _ = np.linalg.lstsq(x, y)
         return slope[0]
+    
 
 def defDiagKConcrete(preprocessor, concreteRecord):
   print 'defDiagKConcrete deprecated; use concreteRecord.defDiagK(preproccesor)'

@@ -102,7 +102,7 @@ class StraightReinfLayer : public ReinfLayer
     double getMaxZ(void) const;
     double getMinY(void) const;
     double getMinZ(void) const;
-    Segmento2d getSegmento(void) const;
+    Segmento2d getLineSegment(void) const;
     double getLongitud(void) const;
     double getSpacement(void) const;
 

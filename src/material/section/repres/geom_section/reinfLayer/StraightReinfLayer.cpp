@@ -164,11 +164,11 @@ const XC::Vector &XC::StraightReinfLayer::getFinalPosition(void) const
   { return finalPosit; }
 
 //! @brief Returns the segmento que une los extremos.
-Segmento2d XC::StraightReinfLayer::getSegmento(void) const
+Segmento2d XC::StraightReinfLayer::getLineSegment(void) const
   { return Segmento2d(Pos2d(initPosit(0),initPosit(1)),Pos2d(finalPosit(0),finalPosit(1))); }
 
 double XC::StraightReinfLayer::getLongitud(void) const
-  { return getSegmento().Longitud(); }
+  { return getLineSegment().Longitud(); }
 
 //! @brier Returns spacement between rebars.
 double XC::StraightReinfLayer::getSpacement(void) const

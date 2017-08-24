@@ -371,7 +371,8 @@ def defElasticIsotropic3d(preprocessor,name,E,nu,rho):
 
 #Elastic plate section.
 def defElasticPlateSection(preprocessor,name,E,nu,rho,h):
-  '''Constructs an elastic isotropic section appropiate for plate analysis
+  '''Constructs an elastic isotropic section material appropiate 
+     for plate analysis.
 
   :param  preprocessor: preprocessor name
   :param  name:         name identifying the section
@@ -392,7 +393,8 @@ def defElasticPlateSection(preprocessor,name,E,nu,rho,h):
 
 #Elastic membrane plate section.
 def defElasticMembranePlateSection(preprocessor,name,E,nu,rho,h):
-  '''Constructs an elastic isotropic section appropiate for plate and shell analysis
+  '''Constructs an elastic isotropic section material appropiate 
+     for plate and shell analysis.
 
   :param  preprocessor: preprocessor name
   :param  name:         name identifying the section

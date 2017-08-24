@@ -113,6 +113,15 @@ double XC::ArcoCircunf::getLongitud(void) const
     return retval;
   }
 
+//! @brief Return the centroid of the arc.
+Pos3d XC::ArcoCircunf::getCentroid(void) const
+  {
+    Pos3d retval(0.0,0.0,0.0);
+    if(check_points())
+      retval= get_sector_circular3d().Cdg();
+    return retval;
+  }
+
 //! @brief Return the angle subtended by the arc.
 double XC::ArcoCircunf::getAnguloComprendido(void) const
   {

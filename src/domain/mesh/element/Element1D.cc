@@ -581,7 +581,7 @@ const XC::Vector &XC::Element1D::getCooPoint(const double &xrel) const
   }
 
 //! @brief Returns the segment defined by the element.
-Segmento3d XC::Element1D::getSegmento(bool initialGeometry) const
+Segmento3d XC::Element1D::getLineSegment(bool initialGeometry) const
   {
     if(initialGeometry)
       return Segmento3d(theNodes[0]->getInitialPosition3d(),theNodes[1]->getInitialPosition3d());
@@ -603,7 +603,7 @@ double XC::Element1D::getDist(const Pos2d &p,bool initialGeometry) const
 //! is being passed as parameter.
 double XC::Element1D::getDist2(const Pos3d &p,bool initialGeometry) const
   {
-    const Segmento3d sg(getSegmento(initialGeometry));
+    const Segmento3d sg(getLineSegment(initialGeometry));
     return sg.dist2(p);
   }
 
@@ -611,7 +611,7 @@ double XC::Element1D::getDist2(const Pos3d &p,bool initialGeometry) const
 //! is being passed as parameter.
 double XC::Element1D::getDist(const Pos3d &p,bool initialGeometry) const
   {
-    const Segmento3d sg(getSegmento(initialGeometry));
+    const Segmento3d sg(getLineSegment(initialGeometry));
     return sg.dist(p);
   }
 
@@ -711,7 +711,7 @@ int XC::Element1D::getMEDCellType(void) const
 //! nodo of the element
 void XC::Element1D::computeTributaryLengths(bool initialGeometry) const
   {
-    const double lt= getSegmento(initialGeometry).Longitud()/2.0;
+    const double lt= getLineSegment(initialGeometry).Longitud()/2.0;
     tributaryLengths[0]= lt;
     tributaryLengths[1]= lt;
     dumpTributaries(tributaryLengths);
