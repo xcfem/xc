@@ -369,7 +369,7 @@ def defElasticIsotropic3d(preprocessor,name,E,nu,rho):
   retval.rho= rho
   return retval
 
-#Elastic membrane plate section.
+#Elastic plate section.
 def defElasticPlateSection(preprocessor,name,E,nu,rho,h):
   '''Constructs an elastic isotropic section appropiate for plate analysis
 
@@ -381,7 +381,7 @@ def defElasticPlateSection(preprocessor,name,E,nu,rho,h):
   :param  h:            overall depth of the section
   '''
   materiales= preprocessor.getMaterialLoader
-  materiales.newMaterial("elastic_membrane_plate_section",name)
+  materiales.newMaterial("elastic_plate_section",name)
   retval= materiales.getMaterial(name)
   retval.name= name
   retval.E= E
