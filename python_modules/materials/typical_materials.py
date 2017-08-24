@@ -431,7 +431,7 @@ class MaterialData(object):
     return self.E/(2*(1+self.nu))
 
 class DeckMaterialData(MaterialData):
-  '''Isotropic elastic section-material appropiate for plate and shell analysis
+  '''Material for Isotropic elastic sections
   
   :ivar name:         name identifying the section
   :ivar thickness:    overall depth of the section
@@ -439,7 +439,7 @@ class DeckMaterialData(MaterialData):
                       shear modulus and mass density of the material
   '''
   def __init__(self,name,thickness,material):
-    super(DeckMaterialData,self).__init__(material.name,material.E,material.nu,material.rho)
+    super(DeckMaterialData,self).__init__(name,material.E,material.nu,material.rho)
     self.name=name
     self.thickness= thickness
     self.material=material
@@ -462,10 +462,10 @@ class BeamMaterialData(MaterialData):
                       shear modulus and mass density of the material
   '''
   def __init__(self,name,section,material):
-    super(BeamMaterialData,self).__init__(material.name,material.E,material.nu,material.rho)
-    self.name=name
-    self.section=section
-    self.material=material
+    super(BeamMaterialData,self).__init__(name,material.E,material.nu,material.rho)
+    self.name= name
+    self.section= section
+    self.material= material
   def getLongitudinalDensity(self):
     ''':returns: the mass per unit length'''
     return self.rho*self.section.A()

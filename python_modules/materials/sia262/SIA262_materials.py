@@ -53,6 +53,7 @@ c40_50= ConcreteSIA262("C40-50",-40e6,1.5)
 c45_55= ConcreteSIA262("C45-55",-45e6,1.5)
 c50_60= ConcreteSIA262("C50-60",-50e6,1.5)
 c55_67= ConcreteSIA262("C55-67",-55e6,1.5)
+c60_75= ConcreteSIA262("C60-75",-60e6,1.5)
 
 def reductionFactorKT(t):
   return 1/(1+0.5*t)
