@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-#Creep verification test. 
+'''Creep verification test.''' 
 #Data for comparison from the JRC technical report: 
 #"Bridge design to Eurocodes. Worked examples"
 from __future__ import division

@@ -429,6 +429,8 @@
 /usr/local/lib/python2.7/dist-packages/materials/ehe/datos_calculo_seccion.pyc
 /usr/local/lib/python2.7/dist-packages/materials/ehe/EHE_concrete.py
 /usr/local/lib/python2.7/dist-packages/materials/ehe/EHE_concrete.pyc
+/usr/local/lib/python2.7/dist-packages/materials/ehe/EHE_limit_state_checking.py
+/usr/local/lib/python2.7/dist-packages/materials/ehe/EHE_limit_state_checking.pyc
 /usr/local/lib/python2.7/dist-packages/materials/ehe/EHE_materials.py
 /usr/local/lib/python2.7/dist-packages/materials/ehe/EHE_materials.pyc
 /usr/local/lib/python2.7/dist-packages/materials/ehe/EHE_reinforcing_steel.py
