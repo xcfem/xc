@@ -46,7 +46,7 @@ class SectionProperties(object):
     '''
     return math.sqrt(self.Iz()/self.A())
   def J(self):
-    '''torsional moment of inertia of the section (abstract method)'''
+    '''torsional constant of the section (abstract method)'''
     raise "Abstract method, please override"
     return 0.0    
   def Wyel(self):
@@ -183,7 +183,7 @@ class RectangularSection(SectionProperties):
     '''Return second moment of area about the local z-axis'''
     return 1/12.0*self.b*self.h**3
   def J(self):
-    '''Return torsional moment of inertia of the section'''
+    '''Return torsional constant of the section'''
     return self.getJTorsion()
   def Wyel(self):
     '''Return section modulus with respect to local y-axis'''
@@ -248,7 +248,7 @@ class RectangularSection(SectionProperties):
       retval= self.betaTable(self.b/self.h)
     return retval
   def getJTorsion(self):
-    '''Return torsional moment of inertia of the section.
+    '''Return torsional constant of the section.
 
     Reference: concrete book Jiménez Montoya 14a. edition page 405
     '''
@@ -296,7 +296,7 @@ class CircularSection(SectionProperties):
     '''Return second moment of area about the local z-axis'''
     return self.Iy()
   def J(self):
-    '''Return torsional moment of inertia of the section'''
+    '''Return torsional constant of the section'''
     return 2*self.Iy()
   def alphaY(self):
     '''Return distorsion coefficient with respect to local Y axis
@@ -319,7 +319,7 @@ class GenericSection(SectionProperties):
   :ivar area:         cross-sectional area
   :ivar Iy:           second moment of area about the local y-axis
   :ivar Iz:           second moment of area about the local z-axis
-  :ivar Jtors:        torsional moment of inertia of the section
+  :ivar Jtors:        torsional constant of the section
   :ivar Wy:           section modulus with respect to local y-axis
   :ivar Wz:           section modulus with respect to local z-axis
   :ivar alphY:        shear shape factor with respect to local y-axis
@@ -345,7 +345,7 @@ class GenericSection(SectionProperties):
     '''Return second moment of area about the local z-axis'''
     return self.I_z
   def J(self):
-    '''Return torsional moment of inertia of the section'''
+    '''Return torsional constant of the section'''
     return self.Jtors
   def Wyel(self):
     '''Return section modulus with respect to local y-axis'''
@@ -429,7 +429,7 @@ class ISection(SectionProperties):
     retval=retval1+IW+AW*(self.tBF+self.hW/2-self.hCOG())**2+IBF+ABF*(self.tBF/2.0-self.hCOG())**2
     return retval
   def J(self):
-    '''Return torsional moment of inertia of the section'''
+    '''Return torsional constant of the section'''
     hPrf=self.hTotal()-self.tTF/2.0-self.tBF/2.0
     retval=(self.wTF*self.tTF**3+self.wBF*self.tBF**3+hPrf*self.tW**3)/3.0
     return retval
@@ -460,6 +460,52 @@ class ISection(SectionProperties):
     '''
     hPrf=self.hTotal()-self.tTF/2.0-self.tBF/2.0
     return (self.tTF+self.tBF)/2.0*hPrf**2/12*self.wTF**3*self.wBF**3/(self.wTF**3+self.wBF**3)
+
+class PolygonalSection(SectionProperties):
+  '''Polygonal section geometric parameters
+
+  :ivar plg:  contour of the section.
+
+  '''
+  def __init__(self,name,plg):
+    super(PolygonalSection,self).__init__(name)
+    self.plg= plg
+  def hTotal(self):
+    '''Return total height (parallel to local y axis) of the section
+    '''
+    return self.plg.getBnd().height
+  def A(self):
+    '''Return cross-sectional area of the section'''
+    return self.plg.getArea()
+  def Iy(self):
+    '''Return second moment of area about the local y-axis
+    '''
+    return self.plg.getIy()
+  def Iz(self):
+    '''Return second moment of area about the local z-axis
+    '''
+    return self.plg.getIx()
+  def J(self):
+    '''Return torsional constant of the section'''
+    msg= 'Torsional constant not implemented for section:'
+    msg+= self.sectionName
+    msg+= '. Zero returned'
+    lmsg.warning(msg)
+    return 0.0
+  def alphaY(self):
+    '''Return shear shape factor with respect to local y-axis'''
+    msg= 'alphaY: shear shape factor not implemented for section: '
+    msg+= self.sectionName
+    msg+= '. 5/6 returned'
+    lmsg.warning(msg)
+    return 5.0/6.0
+  def alphaZ(self):
+    '''Return shear shape factor with respect to local z-axis'''
+    msg= 'alphaZ: shear shape factor not implemented for section: '
+    msg+= self.sectionName
+    msg+= '. 5/6 returned'
+    lmsg.warning(msg)
+    return 5.0/6.0
 
 ##   Devuelve el valor de la inercia a torsión de un cajón
 ##   monocelular según el libro Puentes (apuntes para su diseño
