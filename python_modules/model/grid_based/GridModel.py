@@ -997,7 +997,7 @@ class GridModel(object):
     defDisplay= vtk_FE_graphic.RecordDefDisplayEF()
     defDisplay.setupGrid(setToDisplay)
     vField=lavf.LocalAxesVectorField(setToDisplay.name+'_localAxes',vectorScale)
-    vField.dumpLocalAxes(setToDisplay)
+    vField.dumpVectors(setToDisplay)
     defDisplay.viewName= viewNm
     defDisplay.hCamFct=hCamFct
     defDisplay.defineMeshScene(None,defFScale) 
