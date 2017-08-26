@@ -11,47 +11,73 @@ import xc_base
 import geom
 import xc
 
-class LinSetToMesh(object):
+class SetToMesh(object):
+    '''Base for classes that mesh a primitive set.
+    
+    :ivar primitiveSet: set of lines/surfaces/blocks.
+    :ivar elemSize: mean size of the elements
+    :ivar elemType: type of element for the mesh.
+    '''
+    def __init__(self,primitiveSet,elemSize,elemType):
+        '''Constructor.'''
+        self.primitiveSet= primitiveSet
+        self.elemSize= elemSize
+        self.elemType= elemType
+
+def getDefaultCoodinateTransformation(self,coordTransfName,vDir):
+    '''Creates a default coordinate transformation.''' 
+    trfs= preprocessor.getTransfCooLoader
+    trYGlobal=trfs.newPDeltaCrdTransf3d(coordTransfName) #XXX PDelta???
+    trYGlobal.xzVector= vDir
+    
+
+class LinSetToMesh(SetToMesh):
     '''Define the parameters to mesh a set of lines. The method generateMesh
     meshes those lines and adds the nodes and elements created to the set .
     
-    :ivar linSet: set of lines.
     :ivar matSect: instance of the class BeamMaterialData that defines the 
           material-section to be applied to the set of lines.
-    :ivar elemSize: mean size of the elements
     :ivar vDirLAxZ: direction vector for the element local axis Z 
           defined as xc.Vector([x,y,z]). This is the direction in which
           the Z local axis of the reinforced concrete sections will be
           oriented (i.e. in the case of rectangular sections this Z 
           local axis of the RC section is parallel to the dimension
           defined as width of the rectangle)
-    :ivar elemType: type of element for the mesh (defaults to 'elastic_beam_3d')
     :ivar dimElemSpace: dimension of the element space (defaults to 3)
     '''
     def __init__(self,linSet,matSect,elemSize,vDirLAxZ,elemType='elastic_beam_3d',dimElemSpace=3):
-        self.linSet= linSet
+        super(LinSetToMesh,self).__init__(linSet,elemSize,elemType)
         self.matSect= matSect
-        self.elemSize= elemSize
         self.vDirLAxZ= vDirLAxZ
-        self.elemType= elemType
         self.dimElemSpace=dimElemSpace
 
-    def generateMesh(self, preprocessor):
-        trfs= preprocessor.getTransfCooLoader
-        trYGlobal=trfs.newPDeltaCrdTransf3d('trYGlobal')
-        trYGlobal.xzVector=self.vDirLAxZ
+    def getSeedElement(self, preprocessor,coordTransf):
+        '''Return the element that will be use to mesh the set.
+
+          :param coordTransf: element coordinate transformation object.
+        '''
         seedElemLoader= preprocessor.getElementLoader.seedElemLoader
         seedElemLoader.defaultMaterial= self.matSect.name
         seedElemLoader.dimElem= self.dimElemSpace
-        seedElemLoader.defaultTransformation= 'trYGlobal'
-        elem= seedElemLoader.newElement(self.elemType,xc.ID([0,0]))
-        for l in self.linSet.getLines:
+        seedElemLoader.defaultTransformation= coordTransfName
+        return seedElemLoader.newElement(self.elemType,xc.ID([0,0]))
+
+    def generateMesh(self, preprocessor,coordTransf= None):
+        '''Generate the mesh for the line set.
+
+          :param coordTransf: element coordinate transformation object.
+        '''
+        cTrf= coordTransf
+        if(cTrf==None):
+            cTrf= getDefaultCoordinateTransformation('trYGlobal',self.vDirLAxZ)
+        elem= self.getSeedElement(cTrf.getName())
+        for l in self.primitiveSet.getLines:
             l.setElemSize(self.elemSize)
             l.genMesh(xc.meshDir.I)
-        self.linSet.fillDownwards()
+        self.primitiveSet.fillDownwards()
 
    
-class SurfSetToMesh(object):
+class SurfSetToMesh(SetToMesh):
     '''Define the parameters to mesh a set of surfaces. The method generateMesh
     meshes those surfaces and adds the nodes and elements created to the set .
     
@@ -62,22 +88,24 @@ class SurfSetToMesh(object):
     :ivar elemType: type of element for the mesh (defaults to 'shell_mitc4')
     '''
     def __init__(self,surfSet,matSect,elemSize,elemType='shell_mitc4'):
-        self.surfSet= surfSet
+        super(SurfSetToMesh,self).__init__(surfSet,elemSize,elemType)
         self.matSect= matSect
-        self.elemSize= elemSize
-        self.elemType= elemType
+
+    def getSeedElement(self, preprocessor):
+        '''Return the element that will be use to mesh the set.'''
+        seedElemLoader= preprocessor.getElementLoader.seedElemLoader
+        seedElemLoader.defaultMaterial= self.matSect.name
+        return seedElemLoader.newElement(self.elemType,xc.ID([0,0,0,0]))
 
     def generateMesh(self, preprocessor):
-        for s in self.surfSet.getSurfaces:
+        '''Generate the mesh for the surface set.'''
+        for s in self.primitiveSet.getSurfaces:
             s.setElemSizeIJ(self.elemSize,self.elemSize)
         preprocessor.getCad.getSurfaces.conciliaNDivs()
-        seedElemLoader= preprocessor.getElementLoader.seedElemLoader
-#        seedElemLoader.defaultTag= firstElementTag
-        seedElemLoader.defaultMaterial= self.matSect.name
-        elem= seedElemLoader.newElement(self.elemType,xc.ID([0,0,0,0]))
-        for s in self.surfSet.getSurfaces:
+        elem= self.getSeedElement(preprocessor)
+        for s in self.primitiveSet.getSurfaces:
             s.genMesh(xc.meshDir.I)
-        self.surfSet.fillDownwards()
+        self.primitiveSet.fillDownwards()
 
 
 def multi_mesh(preprocessor,lstMeshSets):

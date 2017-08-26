@@ -101,7 +101,7 @@ XC::TransfCooLoader *XC::CrdTransf::GetTransfCooLoader(void)
     return retval;
   }
 
-//! @brief Returns the name of the material.
+//! @brief Returns the name of the coordinate transformation.
 std::string XC::CrdTransf::getName(void) const
   {
     const TransfCooLoader *ctloader= GetTransfCooLoader();
