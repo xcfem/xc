@@ -292,8 +292,34 @@ class QuickGraphics(object):
 
     caption= self.loadCaseName+' '+itemToDisp+' '+unitDescription +' '+self.xcSet.name
     defDisplay.displayScene(caption=caption,fName=fileName)
- 
-def displayLocalAxes(preprocessor,setToDisplay=None,vectorScale=1.0,viewNm="XYZPos",hCamFct=1.0,caption= '',fileName=None,defFScale=0.0):
+
+def displayAxes(vectorField, preprocessor, setToDisplay=None,vectorScale=1.0,viewNm="XYZPos",hCamFct=1.0,caption= '',fileName=None,defFScale=0.0):
+    '''vector field display of the loads applied to the chosen set of elements in the load case passed as parameter
+    
+    :param vectorField: function that generates the vector field.
+    :param setToDisplay:   set of elements to be displayed (defaults to total set)
+    :param vectorScale:    factor to apply to the vectors length in the representation
+    :param viewNm:         name of the view  that contains the renderer (possible options: "XYZPos", "XPos", "XNeg","YPos", "YNeg", "ZPos", "ZNeg")
+    :param hCamFct:     factor that applies to the height of the camera position in order to
+                        change perspective of isometric views (defaults to 1). Usual values 0.1 to 10
+    :param fileName:       full name of the graphic file to generate. Defaults to `None`, in this case it returns a console output graphic.
+    :param caption:        text to display in the graphic 
+    :param defFScale: factor to apply to current displacement of nodes 
+              so that the display position of each node equals to
+              the initial position plus its displacement multiplied
+              by this factor. (Defaults to 0.0, i.e. display of 
+              initial/undeformed shape)
+    '''
+    defDisplay= vtk_FE_graphic.RecordDefDisplayEF()
+    defDisplay.setupGrid(setToDisplay)
+    defDisplay.viewName= viewNm
+    defDisplay.hCamFct=hCamFct
+    defDisplay.defineMeshScene(None,defFScale) 
+    vectorField.addToDisplay(defDisplay)
+    defDisplay.displayScene(caption,fileName)
+    return defDisplay
+    
+def displayLocalAxes(prep,setToDisplay=None,vectorScale=1.0,viewNm="XYZPos",hCamFct=1.0,caption= '',fileName=None,defFScale=0.0):
     '''vector field display of the loads applied to the chosen set of elements in the load case passed as parameter
     
     :param setToDisplay:   set of elements to be displayed (defaults to total set)
@@ -313,17 +339,35 @@ def displayLocalAxes(preprocessor,setToDisplay=None,vectorScale=1.0,viewNm="XYZP
       setToDisplay=preprocessor.getSets.getSet('total')
       setToDisplay.fillDownwards()
       lmsg.warning('set to display not defined; using total set.')
-
-    defDisplay= vtk_FE_graphic.RecordDefDisplayEF()
-    defDisplay.setupGrid(setToDisplay)
     vField=lavf.LocalAxesVectorField(setToDisplay.name+'_localAxes',vectorScale)
-    vField.dumpLocalAxes(setToDisplay)
-    defDisplay.viewName= viewNm
-    defDisplay.hCamFct=hCamFct
-    defDisplay.defineMeshScene(None,defFScale) 
-    vField.addToDisplay(defDisplay)
-    defDisplay.displayScene(caption,fileName)
-    return defDisplay
+    vField.dumpVectors(setToDisplay)
+    return displayAxes(vField, prep,setToDisplay,vectorScale,viewNm,hCamFct,caption,fileName,defFScale)
+
+
+def displayStrongWeakAxis(preprocessor,setToDisplay=None,vectorScale=1.0,viewNm="XYZPos",hCamFct=1.0,caption= '',fileName=None,defFScale=0.0):
+    '''vector field display of the loads applied to the chosen set of elements in the load case passed as parameter
+    
+    :param setToDisplay:   set of elements to be displayed (defaults to total set)
+    :param vectorScale:    factor to apply to the vectors length in the representation
+    :param viewNm:         name of the view  that contains the renderer (possible options: "XYZPos", "XPos", "XNeg","YPos", "YNeg", "ZPos", "ZNeg")
+    :param hCamFct:     factor that applies to the height of the camera position in order to
+                        change perspective of isometric views (defaults to 1). Usual values 0.1 to 10
+    :param fileName:       full name of the graphic file to generate. Defaults to `None`, in this case it returns a console output graphic.
+    :param caption:        text to display in the graphic 
+    :param defFScale: factor to apply to current displacement of nodes 
+              so that the display position of each node equals to
+              the initial position plus its displacement multiplied
+              by this factor. (Defaults to 0.0, i.e. display of 
+              initial/undeformed shape)
+    '''
+    if(setToDisplay == None):
+      setToDisplay=preprocessor.getSets.getSet('total')
+      setToDisplay.fillDownwards()
+      lmsg.warning('set to display not defined; using total set.')
+    vField=lavf.StrongWeakAxisVectorField(setToDisplay.name+'_strongWeakAxis',vectorScale)
+    vField.dumpVectors(setToDisplay)
+    return displayAxes(vField,preprocessor,setToDisplay,vectorScale,viewNm,hCamFct,caption,fileName,defFScale)
+
 
 def displayLoad(preprocessor,setToDisplay=None,loadCaseNm='',unitsScale=1.0,vectorScale=1.0,multByElemArea=False,viewNm="XYZPos",hCamFct=1.0,caption= '',fileName=None,defFScale=0.0):
     '''vector field display of the loads applied to the chosen set of elements in the load case passed as parameter
