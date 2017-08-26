@@ -43,8 +43,7 @@ scc= typical_materials.defElasticSection2d(preprocessor, "scc",A,E,I)
 
 nodes.newSeedNode()
 # Geometric transformation(s)
-trfs= preprocessor.getTransfCooLoader
-corot= trfs.newCorotCrdTransf2d("corot")
+corot= modelSpace.newCorotCrdTransf("corot")
 
 # Seed element definition
 seedElemLoader= preprocessor.getElementLoader.seedElemLoader

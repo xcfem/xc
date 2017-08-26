@@ -49,9 +49,7 @@ nod= nodes.newNodeXY(1,2)
 nod= nodes.newNodeXY(1+L*math.sqrt(2)/2,2+L*math.sqrt(2)/2)
     
 # Geometric transformation(s)
-trfs= preprocessor.getTransfCooLoader
-lin= trfs.newLinearCrdTransf2d("lin")
-
+lin= modelSpace.newLinearCrdTransf("lin")
     
 # Materials definition
 scc= typical_materials.defElasticSection2d(preprocessor, "scc",A,E,I)

@@ -45,10 +45,7 @@ nod= nodes.newNodeXYZ(L*math.sqrt(2)/2,L*math.sqrt(2)/2,0.0)
 
 
 # Geometric transformation(s)
-trfs= preprocessor.getTransfCooLoader
-lin= trfs.newCorotCrdTransf3d("lin")
-lin.xzVector= xc.Vector([0,1,0])
-
+lin= modelSpace.newCorotCrdTransf("lin",xc.Vector([0,1,0]))
 # Materials definition
 fy= 275e6 # Yield stress of the steel.
 steel= typical_materials.defSteel01(preprocessor, "steel",E,fy,0.001)

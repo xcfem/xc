@@ -28,10 +28,7 @@ nod= nodes.newNodeXYZ(5,5,5)
 seccion= typical_materials.defElasticSection3d(preprocessor, "seccion",1,1,1,1,1,1)
 
 # Geometric transformations
-trfs= preprocessor.getTransfCooLoader
-lin= trfs.newCorotCrdTransf3d("lin")
-lin.xzVector= xc.Vector([0,1,0])
-    
+lin= modelSpace.newCorotCrdTransf("lin",xc.Vector([0,1,0]))    
 # Elements definition
 elements= preprocessor.getElementLoader
 

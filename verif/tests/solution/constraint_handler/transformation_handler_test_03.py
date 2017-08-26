@@ -52,9 +52,7 @@ nod1= nodes.newNodeXYZ(0,0.0,0.0)
 nod2= nodes.newNodeXYZ(L/2.0,0.0,0.0)
 nod3= nodes.newNodeXYZ(L,0.0,0.0)
 
-trfs= preprocessor.getTransfCooLoader
-lin= trfs.newLinearCrdTransf3d("lin")
-lin.xzVector= xc.Vector([0,1,0])
+lin= modelSpace.newLinearCrdTransf("lin",xc.Vector([0,1,0]))
 
 elements= preprocessor.getElementLoader
 elements.defaultTransformation= "lin"

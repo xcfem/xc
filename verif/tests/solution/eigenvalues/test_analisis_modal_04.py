@@ -78,9 +78,7 @@ sccPl3a= typical_materials.defElasticSection2d(preprocessor, "sccPl3a",20*B3a*B3
 sccPl4a= typical_materials.defElasticSection2d(preprocessor, "sccPl4a",20*B3a*B3a,Ehorm,20*I3a)
 
 # Geometric transformation(s)
-trfs= preprocessor.getTransfCooLoader
-lin= trfs.newLinearCrdTransf2d("lin")
-
+lin= modelSpace.newLinearCrdTransf("lin")
 
 # Elements definition
 elements= preprocessor.getElementLoader

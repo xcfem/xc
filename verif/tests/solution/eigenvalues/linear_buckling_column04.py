@@ -44,8 +44,7 @@ scc= typical_materials.defElasticShearSection2d(preprocessor, "scc",A,E,G,I,1.0)
 
 nodes.newSeedNode()
 # Geometric transformation(s)
-trfs= preprocessor.getTransfCooLoader
-lin= trfs.newPDeltaCrdTransf2d("lin")
+lin= modelSpace.newPDeltaCrdTransf("lin")
 
 # Seed element definition
 seedElemLoader= preprocessor.getElementLoader.seedElemLoader

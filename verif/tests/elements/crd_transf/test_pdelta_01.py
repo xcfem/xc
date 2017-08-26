@@ -51,7 +51,7 @@ nodes.newSeedNode()
 # Materials definition
 scc= typical_materials.defElasticSection2d(preprocessor, "scc",area,Es,Iz)
 
-pd= preprocessor.getTransfCooLoader.newPDeltaCrdTransf2d("pd")
+pd= modelSpace.newPDeltaCrdTransf("pd")
 
 seedElemLoader= preprocessor.getElementLoader.seedElemLoader
 seedElemLoader.defaultTransformation= "pd"

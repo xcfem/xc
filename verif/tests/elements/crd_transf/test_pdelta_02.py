@@ -38,8 +38,7 @@ nodes= preprocessor.getNodeLoader
 modelSpace= predefined_spaces.StructuralMechanics2D(nodes)
 nodes.newSeedNode()
 
-trfs= preprocessor.getTransfCooLoader
-pd= trfs.newPDeltaCrdTransf2d("pd")
+pd= modelSpace.newPDeltaCrdTransf("pd")
 
 # Materials definition
 scc= typical_materials.defElasticSection2d(preprocessor, "scc",area,Es,Iz)

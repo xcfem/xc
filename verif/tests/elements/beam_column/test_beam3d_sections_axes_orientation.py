@@ -109,20 +109,21 @@ nod= nodes.newNodeXYZ(0.0,0.0,Lbeam)
 # Geometric transformations
 trfs= preprocessor.getTransfCooLoader
 # Coord. trasformation for beam in global X direction
-ltXbeam= trfs.newLinearCrdTransf3d("ltXbeam")
-ltXbeam.xzVector= xc.Vector([0,-1,0]) #local Z axis of the element
-                           # parallel to global -Y (it matches
-                           # the direction of the local Z axis of the reinforced
-                           # concrete sections (parallel to the width)
+#local Z axis of the element
+# parallel to global -Y (it matches
+# the direction of the local Z axis of the reinforced
+# concrete sections (parallel to the width)
+ltXbeam= modelSpace.newLinearCrdTransf("ltXbeam", xc.Vector([0,-1,0])) 
 
-# Coord. trasformation for beam in global Y direction 
-ltYbeam= trfs.newLinearCrdTransf3d("ltYbeam")
-ltYbeam.xzVector= xc.Vector([0,0,-1]) # local Z axis of the element
-                           # (parallel to global -Z)
-# Coord. trasformation for beam in global Z direction 
-ltZbeam= trfs.newLinearCrdTransf3d("ltZbeam")
-ltZbeam.xzVector= xc.Vector([1/math.sqrt(2),1/math.sqrt(2),0,1]) # local Z axis
-                           # of the element (45º with global +X)
+# Coord. trasformation for beam in global Y direction
+# local Z axis of the element
+# (parallel to global -Z)
+ltYbeam= modelSpace.newLinearCrdTransf("ltYbeam",xc.Vector([0,0,-1]))
+
+# Coord. trasformation for beam in global Z direction
+# local Z axis
+# of the element (45º with global +X)
+ltZbeam= modelSpace.newLinearCrdTransf("ltZbeam",xc.Vector([1/math.sqrt(2),1/math.sqrt(2),0,1]))
 
 
 # The local Z axis of the elements matches the direction of the local Z axis

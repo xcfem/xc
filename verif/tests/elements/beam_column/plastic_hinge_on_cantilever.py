@@ -35,9 +35,7 @@ nod1= nodes.newNodeXY(0,0.0)
 nod2= nodes.newNodeXY(L,0.0)
 
 # Geometric transformations
-trfs= preprocessor.getTransfCooLoader
-lin= trfs.newLinearCrdTransf2d("lin")
-
+lin= modelSpace.newLinearCrdTransf("lin")
 # Elements definition
 elements= preprocessor.getElementLoader
 elements.defaultTransformation= "lin" # Coordinate transformation for the new elements

@@ -44,9 +44,7 @@ nod= nodes.newNodeXYZ(0,0.0,0.0)
 nod= nodes.newNodeXYZ(L,0.0,0.0)
 
 # Geometric transformations
-trfs= preprocessor.getTransfCooLoader
-lin= trfs.newLinearCrdTransf3d("lin")
-lin.xzVector= xc.Vector([0,0,1])
+lin= modelSpace.newLinearCrdTransf("lin",xc.Vector([0,0,1]))
 profil= HE400B.defSeccShElastica3d(preprocessor,matHE400B)
 
 # Elements definition

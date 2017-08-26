@@ -35,9 +35,7 @@ modelSpace= predefined_spaces.StructuralMechanics2D(nodes)
 nodes.defaultTag= 1
 nodes.newSeedNode()
 # Geometric transformation(s)
-trfs= preprocessor.getTransfCooLoader
-lin= trfs.newLinearCrdTransf2d("lin")
-
+lin= modelSpace.newLinearCrdTransf("lin")
 elements= preprocessor.getElementLoader
 elements.defaultTransformation= "lin"
  

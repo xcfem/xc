@@ -44,10 +44,7 @@ nodes.newNodeXYZ(0,0,0)
 nodes.newNodeXYZ(L,0,0)
     
 # Geometric transformation(s)
-trfs= preprocessor.getTransfCooLoader
-lin= trfs.newLinearCrdTransf3d("lin")
-lin.xzVector= xc.Vector([0,0,1])
-    
+lin= modelSpace.newLinearCrdTransf("lin",xc.Vector([0,0,1]))    
 # Materials definition
 scc= typical_materials.defElasticSection3d(preprocessor, "scc",A,E,G,Iz,Iy,J)
 

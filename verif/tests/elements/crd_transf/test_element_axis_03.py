@@ -42,9 +42,7 @@ sectionProperties.Iz= Iz; sectionProperties.Iy= Iy; sectionProperties.J= J
 sectionProperties.rotate(math.radians(90))
 seccion= typical_materials.defElasticSectionFromMechProp3d(preprocessor, "seccion",sectionProperties)
 
-trfs= preprocessor.getTransfCooLoader
-lin= trfs.newLinearCrdTransf3d("lin")
-lin.xzVector= xc.Vector([0,1,0])
+lin= modelSpace.newLinearCrdTransf("lin",xc.Vector([0,1,0]))
 
 # Elements definition
 elements= preprocessor.getElementLoader

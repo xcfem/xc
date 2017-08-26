@@ -46,10 +46,7 @@ scc= typical_materials.defElasticShearSection3d(preprocessor, "scc",A,E,G,Iz,Iy,
 
 nodes.newSeedNode()
 # Geometric transformation(s)
-trfs= preprocessor.getTransfCooLoader
-lin= trfs.newPDeltaCrdTransf3d("lin")
-lin.xzVector= xc.Vector([0,1,0])
-
+lin= modelSpace.newPDeltaCrdTransf("lin",xc.Vector([0,1,0]))
 # Seed element definition
 seedElemLoader= preprocessor.getElementLoader.seedElemLoader
 seedElemLoader.defaultMaterial= "scc"

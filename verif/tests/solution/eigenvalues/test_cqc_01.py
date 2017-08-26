@@ -57,10 +57,8 @@ nod0.fix(xc.ID([0,1,2,3,4,5]),xc.Vector([0,0,0,0,0,0]))
 scc= typical_materials.defElasticSection3d(preprocessor, "scc",area,EMat,GMat,Izz,Iyy,Ir)
 
 # Geometric transformation(s)
-linX= preprocessor.getTransfCooLoader.newLinearCrdTransf3d("linX")
-linX.xzVector= xc.Vector([1,0,0])
-linY= preprocessor.getTransfCooLoader.newLinearCrdTransf3d("linY")
-linY.xzVector= xc.Vector([0,1,0])
+linX= modelSpace.newLinearCrdTransf("linX",xc.Vector([1,0,0]))
+linY= modelSpace.newLinearCrdTransf("linY",xc.Vector([0,1,0]))
 
 # Elements definition
 elements= preprocessor.getElementLoader

@@ -72,10 +72,7 @@ nodes.defaultTag= 1 #First node number.
 nodes.newNodeXYZ(0,0.0,0.0)
 nodes.newNodeXYZ(L,0.0,0.0)
 
-trfs= preprocessor.getTransfCooLoader
-lin= trfs.newLinearCrdTransf3d("lin")
-lin.xzVector= xc.Vector([0,0,1])
-
+lin= modelSpace.newLinearCrdTransf("lin",xc.Vector([0,0,1]))
 # Materials
 sectionProperties= xc.CrossSectionProperties3d()
 sectionProperties.A= A; sectionProperties.E= E; sectionProperties.G= G;

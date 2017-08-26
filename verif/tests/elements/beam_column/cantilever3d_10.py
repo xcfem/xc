@@ -47,10 +47,7 @@ nod= nodes.newNodeXYZ(L,0.0,0.0)
 
 
 # Geometric transformation(s)
-trfs= preprocessor.getTransfCooLoader
-lin= trfs.newLinearCrdTransf3d("lin")
-lin.xzVector= xc.Vector([0,-1,0])
-
+lin= modelSpace.newLinearCrdTransf("lin",xc.Vector([0,-1,0]))
 # Materials
 sectionProperties= xc.CrossSectionProperties3d()
 sectionProperties.A= A; sectionProperties.E= E; sectionProperties.G= G;

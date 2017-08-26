@@ -229,6 +229,33 @@ class StructuralMechanics2D(PredefinedSpace):
     disp= nod.getDisp
     return xc.Vector([disp[self.Ux],disp[self.Uy]])
 
+  def newLinearCrdTransf(self, trfName):
+    ''' Creates a new 2D linear transformation.
+
+        :param trfName: name for the new transformation.
+    '''
+    trfs= self.preprocessor.getTransfCooLoader
+    retval= trfs.newLinearCrdTransf2d(trfName)
+    return retval
+
+  def newPDeltaCrdTransf(self, trfName):
+    ''' Creates a new 2D PDelta transformation.
+
+        :param trfName: name for the new transformation.
+    '''
+    trfs= self.preprocessor.getTransfCooLoader
+    retval= trfs.newPDeltaCrdTransf2d(trfName)
+    return retval
+
+  def newCorotCrdTransf(self, trfName):
+    ''' Creates a new 2D corotational transformation.
+
+        :param trfName: name for the new transformation.
+    '''
+    trfs= self.preprocessor.getTransfCooLoader
+    retval= trfs.newCorotCrdTransf2d(trfName)
+    return retval
+
   def fixNode000(self, nodeTag):
     '''Restrain all three node DOFs (i. e. make them zero).'''
     self.constraints.newSPConstraint(nodeTag,0,0.0) # nodeTag, DOF, constrValue
@@ -352,6 +379,39 @@ class StructuralMechanics3D(PredefinedSpace):
     nod= self.preprocessor.getNodeLoader.getNode(nodeTag)
     disp= nod.getDisp
     return xc.Vector([disp[self.Ux],disp[self.Uy],disp[self.Uz]])
+
+  def newLinearCrdTransf(self, trfName,xzVector):
+    ''' Creates a new 3D linear transformation.
+
+        :param trfName: name for the new transformation.
+        :param xzVector: vector defining transformation XZ plane.
+    '''
+    trfs= self.preprocessor.getTransfCooLoader
+    retval= trfs.newLinearCrdTransf3d(trfName)
+    retval.xzVector= xzVector
+    return retval
+
+  def newPDeltaCrdTransf(self, trfName,xzVector):
+    ''' Creates a new 3D PDelta transformation.
+
+        :param trfName: name for the new transformation.
+        :param xzVector: vector defining transformation XZ plane.
+    '''
+    trfs= self.preprocessor.getTransfCooLoader
+    retval= trfs.newPDeltaCrdTransf3d(trfName)
+    retval.xzVector= xzVector
+    return retval
+
+  def newCorotCrdTransf(self, trfName,xzVector):
+    ''' Creates a new 3D corotational transformation.
+
+        :param trfName: name for the new transformation.
+        :param xzVector: vector defining transformation XZ plane.
+    '''
+    trfs= self.preprocessor.getTransfCooLoader
+    retval= trfs.newCorotCrdTransf3d(trfName)
+    retval.xzVector= xzVector
+    return retval
 
   def fixNode000_000(self, nodeTag):
     '''Restrain all six node DOFs (i. e. make them zero).'''

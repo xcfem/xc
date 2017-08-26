@@ -44,9 +44,7 @@ nod= nodes.newNodeXY(2*B+B,0)
 nod= nodes.newNodeXY(2*B+B,H)
 
 
-trfs= preprocessor.getTransfCooLoader
-lin= trfs.newLinearCrdTransf2d("lin")
-
+lin= modelSpace.newLinearCrdTransf("lin")
 sectionProperties= xc.CrossSectionProperties2d()
 sectionProperties.A= area; sectionProperties.E= Es;
 sectionProperties.I= Iz;

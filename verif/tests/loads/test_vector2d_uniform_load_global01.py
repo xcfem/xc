@@ -47,9 +47,7 @@ nod= nodes.newNodeXY(0,0.0)
 nod= nodes.newNodeXY(L*math.sqrt(2)/2,L*math.sqrt(2)/2)
 
 # Geometric transformation(s)
-trfs= preprocessor.getTransfCooLoader
-lin= trfs.newLinearCrdTransf2d("lin")
-
+lin= modelSpace.newLinearCrdTransf("lin")
 
 # Materials definition
 fy= 275e6 # Yield stress of the steel.
