@@ -46,7 +46,10 @@ class RecordDefGrid(object):
       bounds= points.GetBounds()
       retval= geom.BND3d(geom.Pos3d(bounds[0],bounds[2],bounds[4]),geom.Pos3d(bounds[1],bounds[3],bounds[5]))
     else:
-      lmsg.error('ERROR; there are no points in the grid. Maybe you must call fillDownwards on the set to display.')
+      warnMsg= 'there are no points in the grid: '
+      warnMsg+= self.uGrid.name
+      warnMsg+= '. Maybe you must call fillDownwards on the set to display.'
+      lmsg.warning('Warning; '+warnMsg)
     return retval    
 
 class RecordDefDisplay(object):

@@ -19,6 +19,7 @@ class RecordDefDisplayCAD(vtk_grafico_base.RecordDefDisplay):
         self.gridRecord.uGrid= vtk.vtkUnstructuredGrid()
         self.gridRecord.cellType= "lines"
         setToDraw= self.gridRecord.xcSet
+        self.gridRecord.uGrid.name= setToDraw.name+'_grid'
         numKPts= setToDraw.getPoints.size
         if(numKPts>0):
           cad_mesh.VtkCargaMalla(self.gridRecord)

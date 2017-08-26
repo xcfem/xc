@@ -90,6 +90,7 @@ class RecordDefDisplayEF(vtk_grafico_base.RecordDefDisplay):
         self.gridRecord.uGrid.SetPoints(self.nodos)
         eSet= self.gridRecord.xcSet
         eSet.numerate()
+        self.gridRecord.uGrid.name= eSet.name+'_grid'
         # Scalar values.
         nodeSet= eSet.getNodes
         if(field):
