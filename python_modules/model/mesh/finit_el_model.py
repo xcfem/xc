@@ -15,7 +15,8 @@ class SetToMesh(object):
     '''Base for classes that mesh a primitive set.
     
     :ivar primitiveSet: set of lines/surfaces/blocks.
-    :ivar elemSize: mean size of the elements
+    :ivar elemSize: mean size of the elements (in elemSize= None don't 
+                    change number of divisions).
     :ivar elemType: type of element for the mesh.
     '''
     def __init__(self,primitiveSet,elemSize,elemType):
@@ -24,6 +25,38 @@ class SetToMesh(object):
         self.elemSize= elemSize
         self.elemType= elemType
 
+class RawLineSetToMesh(SetToMesh):
+    '''Define the parameters to mesh a set of lines. The method generateMesh
+    meshes those lines and adds the nodes and elements created to the set .
+    
+    :ivar matSect: instance of the class BeamMaterialData that defines the 
+          material-section to be applied to the set of lines.
+    :ivar coordTransf: coordinate transformation for the elements.
+    :ivar dimElemSpace: dimension of the element space (defaults to 3)
+    '''
+    def __init__(self,linSet,matSect,elemSize,coordTransf, elemType='elastic_beam_3d',dimElemSpace=3):
+        super(RawLineSetToMesh,self).__init__(linSet,elemSize,elemType)
+        self.matSect= matSect
+        self.coordinateTransformation= coordTransf
+        self.dimElemSpace=dimElemSpace
+
+    def getSeedElement(self, preprocessor):
+        '''Return the element that will be use to mesh the set.'''
+        seedElemLoader= preprocessor.getElementLoader.seedElemLoader
+        seedElemLoader.defaultMaterial= self.matSect.name
+        seedElemLoader.dimElem= self.dimElemSpace
+        seedElemLoader.defaultTransformation= self.coordinateTransformation.getName()
+        return seedElemLoader.newElement(self.elemType,xc.ID([0,0]))
+
+    def generateMesh(self, preprocessor):
+        '''Generate the mesh for the line set. '''
+        elem= self.getSeedElement(preprocessor)
+        for l in self.primitiveSet.getLines:
+            if(self.elemSize): #If elemSize==None don't touch the number of divisions.
+                l.setElemSize(self.elemSize)
+            l.genMesh(xc.meshDir.I)
+        self.primitiveSet.fillDownwards()
+
 def getDefaultCoodinateTransformation(self,coordTransfName,vDir):
     '''Creates a default coordinate transformation.''' 
     trfs= preprocessor.getTransfCooLoader
@@ -31,7 +64,7 @@ def getDefaultCoodinateTransformation(self,coordTransfName,vDir):
     trYGlobal.xzVector= vDir
     
 
-class LinSetToMesh(SetToMesh):
+class LinSetToMesh(RawLineSetToMesh):
     '''Define the parameters to mesh a set of lines. The method generateMesh
     meshes those lines and adds the nodes and elements created to the set .
     
@@ -45,36 +78,10 @@ class LinSetToMesh(SetToMesh):
           defined as width of the rectangle)
     :ivar dimElemSpace: dimension of the element space (defaults to 3)
     '''
-    def __init__(self,linSet,matSect,elemSize,vDirLAxZ,elemType='elastic_beam_3d',dimElemSpace=3):
-        super(LinSetToMesh,self).__init__(linSet,elemSize,elemType)
-        self.matSect= matSect
+    def __init__(self,linSet,matSect,elemSize,vDirLAxZ, elemType='elastic_beam_3d',dimElemSpace=3):
         self.vDirLAxZ= vDirLAxZ
-        self.dimElemSpace=dimElemSpace
-
-    def getSeedElement(self, preprocessor,coordTransf):
-        '''Return the element that will be use to mesh the set.
-
-          :param coordTransf: element coordinate transformation object.
-        '''
-        seedElemLoader= preprocessor.getElementLoader.seedElemLoader
-        seedElemLoader.defaultMaterial= self.matSect.name
-        seedElemLoader.dimElem= self.dimElemSpace
-        seedElemLoader.defaultTransformation= coordTransfName
-        return seedElemLoader.newElement(self.elemType,xc.ID([0,0]))
-
-    def generateMesh(self, preprocessor,coordTransf= None):
-        '''Generate the mesh for the line set.
-
-          :param coordTransf: element coordinate transformation object.
-        '''
-        cTrf= coordTransf
-        if(cTrf==None):
-            cTrf= getDefaultCoordinateTransformation('trYGlobal',self.vDirLAxZ)
-        elem= self.getSeedElement(cTrf.getName())
-        for l in self.primitiveSet.getLines:
-            l.setElemSize(self.elemSize)
-            l.genMesh(xc.meshDir.I)
-        self.primitiveSet.fillDownwards()
+        cTrf= getDefaultCoordinateTransformation('trYGlobal',self.vDirLAxZ)
+        super(LinSetToMesh,self).__init__(linSet,matSect,elemSize,cTrf,elemType,dimElemSpace)
 
    
 class SurfSetToMesh(SetToMesh):
@@ -84,7 +91,6 @@ class SurfSetToMesh(SetToMesh):
     :ivar surfSet: set of surfaces.
     :ivar matSect: instance of the class DeckMaterialData that defines the 
           material-section to be applied to the set of surfaces.
-    :ivar elemSize: mean size of the elements
     :ivar elemType: type of element for the mesh (defaults to 'shell_mitc4')
     '''
     def __init__(self,surfSet,matSect,elemSize,elemType='shell_mitc4'):
@@ -100,7 +106,8 @@ class SurfSetToMesh(SetToMesh):
     def generateMesh(self, preprocessor):
         '''Generate the mesh for the surface set.'''
         for s in self.primitiveSet.getSurfaces:
-            s.setElemSizeIJ(self.elemSize,self.elemSize)
+            if(self.elemSize): #If elemSize= None don't touch the number of divisions.
+                s.setElemSizeIJ(self.elemSize,self.elemSize)
         preprocessor.getCad.getSurfaces.conciliaNDivs()
         elem= self.getSeedElement(preprocessor)
         for s in self.primitiveSet.getSurfaces:
