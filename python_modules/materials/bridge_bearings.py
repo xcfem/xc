@@ -47,33 +47,6 @@ from model import predefined_spaces
 import math
 import xc
 
-# Points that define the values of V2 as a function of b/a
-#   see "Puentes" book from Javier Manterola Armisén page 591
-x2= [1,1.5,2,3,4,6,8,10,10000]
-y2= [0.208,0.231,0.246,0.267,0.282,0.299,0.307,0.313,1/3.0]
-
-# Points that define the values of V3 as a function of b/a
-#   see "Puentes" book from Javier Manterola Armisén page 591
-x3= [1,1.5,2,3,4,6,8,10,10000]
-y3= [0.14,0.196,0.229,0.263,0.281,0.299,0.307,0.313,1/3.0]
-
-# Points that define the values of V4 as a function of b/a
-#   see "Puentes" book from Javier Manterola Armisén page 592
-x4= [1,2,4,8,10000]
-y4= [85.7,71.4,64.5,61.2,60]
-
-# Points that define the values of beta as a function of h/b
-#   see ALPHA in "Hormigón" book from Jiménez Montoya et al.
-#   14a. edición page 405
-xBeta= [1,1.25,1.5,2,3,4,6,10,10000]
-yBeta= [0.14,0.171,0.196,0.229,0.263,0.281,0.299,0.313,1/3.0]
-
-# From HP-28s calculator ;-)
-def ifte(a,b,c):
-    if(a):
-      return b
-    else:
-      return c
 
 class Bearing(object):
     """Bearings base class.
@@ -107,9 +80,29 @@ class ElastomericBearing(Bearing):
                    steel plates).
 
     """
+    # Points that define the values of V2 as a function of b/a
+    #   see "Puentes" book from Javier Manterola Armisén page 591
+    x2= [1,1.5,2,3,4,6,8,10,10000]
+    y2= [0.208,0.231,0.246,0.267,0.282,0.299,0.307,0.313,1/3.0]
     v2table= scipy.interpolate.interp1d(x2,y2)
+    
+    # Points that define the values of V3 as a function of b/a
+    #   see "Puentes" book from Javier Manterola Armisén page 591
+    x3= [1,1.5,2,3,4,6,8,10,10000]
+    y3= [0.14,0.196,0.229,0.263,0.281,0.299,0.307,0.313,1/3.0]
     v3table=  scipy.interpolate.interp1d(x3,y3)
+
+    # Points that define the values of V4 as a function of b/a
+    #   see "Puentes" book from Javier Manterola Armisén page 592
+    x4= [1,2,4,8,10000]
+    y4= [85.7,71.4,64.5,61.2,60]
     v4table= scipy.interpolate.interp1d(x4,y4)
+
+    # Points that define the values of beta as a function of h/b
+    #   see ALPHA in "Hormigón" book from Jiménez Montoya et al.
+    #   14a. edición page 405
+    xBeta= [1.0,1.25,1.5,2.0,3.0,4.0,6.0,10.0,10000]
+    yBeta= [0.14,0.171,0.196,0.229,0.263,0.281,0.299,0.313,1/3.0]
     betaTable= scipy.interpolate.interp1d(xBeta,yBeta)
 
     def __init__(self,G,a,b,e):
@@ -154,7 +147,12 @@ class ElastomericBearing(Bearing):
         return self.G*self.b*pow(self.a,5.0)/(self.getV4()*pow(self.e,3.0))
     def getBeta(self):
         ''' Return the value of the beta factor.'''
-        return ifte(self.a<self.b,self.betaTable(self.b/self.a),self.betaTable(self.a/self.b))
+        retval= 0.0
+        if(self.a<self.b):
+            retval= self.betaTable(self.b/self.a)
+        else:
+            retval= self.betaTable(self.a/self.b)
+        return retval
     def getKrotationVerticalAxis(self):
         ''' Stiffness  with respect to the rotation around a vertical axis.'''
         return self.getBeta()*self.G*self.a*pow(self.b,3.0)/self.e
