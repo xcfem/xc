@@ -31,6 +31,21 @@ class PredefinedSpace(object):
     self.preprocessor= preprocessor
     self.constraints= self.preprocessor.getConstraintLoader
 
+  def setPrescribedDisplacements(self,nodeTag,prescDisplacements):
+    '''Prescribe displacement for node DOFs.
+
+    :param nodeTag: tag of the node.
+    :param prescDisplacements: (list) values of the displacements.
+    '''
+
+    numDOFs= self.preprocessor.getNodeLoader.numGdls
+    numDisp= len(prescDisplacements)
+    if(numDisp<numDOFs):
+      lmsg.warning('prescribed '+str(numDisp)+' displacements, nDOFS= '+str(numDOFs))
+    sz= min(numDOFs,numDisp)
+    for i in range(0,sz):
+      spc= self.constraints.newSPConstraint(nodeTag,i,prescDisplacements[i])
+    
   def setRigidBeamBetweenNodes(self,nodeTagA, nodeTagB):
     '''Create a rigid rod between the nodes passed as parameters.
 
@@ -111,8 +126,8 @@ class PredefinedSpace(object):
     newElement= self.setBearingBetweenNodes(newNode.tag,iNod,bearingMaterials,orientation)
     # Boundary conditions
     constraints= self.preprocessor.getConstraintLoader
-    numGdls= self.preprocessor.getNodeLoader.numGdls
-    for i in range(0,numGdls):
+    numDOFs= self.preprocessor.getNodeLoader.numGdls
+    for i in range(0,numDOFs):
       spc= constraints.newSPConstraint(newNode.tag,i,0.0)
     return newNode, newElement
 
@@ -163,8 +178,8 @@ class PredefinedSpace(object):
     zl.clearMaterials()
     zl.setMaterial(0,bearingMaterial)
     # Boundary conditions
-    numGdls= self.preprocessor.getNodeLoader.numGdls
-    for i in range(0,numGdls):
+    numDOFs= self.preprocessor.getNodeLoader.numGdls
+    for i in range(0,numDOFs):
       spc= self.constraints.newSPConstraint(newNode.tag,i,0.0)
     return newNode.tag, zl.tag
 
@@ -176,8 +191,8 @@ def getModelSpace(preprocessor):
     '''
     nodes= preprocessor.getNodeLoader
     dimSpace= nodes.dimSpace
-    numGdls= nodes.numGdls
-    return PredefinedSpace(nodes,dimSpace,numGdls)
+    numDOFs= nodes.numGdls
+    return PredefinedSpace(nodes,dimSpace,numDOFs)
   
 
 class SolidMechanics2D(PredefinedSpace):
