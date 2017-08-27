@@ -12,7 +12,6 @@ import xc
 from postprocess.xcVtk.FE_model import vtk_FE_graphic
 from postprocess.xcVtk.FE_model import Fields
 from postprocess import utils_display
-from model.grid_based import GridModel
 from postprocess.xcVtk import control_var_diagram as cvd
 from postprocess.xcVtk.FE_model import quick_graphics as QGrph
 
@@ -117,27 +116,28 @@ class RecordLoadCaseDisp(object):
     self.viewNameBeams="XYZPos"
     self.hCamFctBeams=1.0
     
-  def loadReports(self,gridmodl,pathGr,texFile,grWdt):
+  def loadReports(self,FEcase,pathGr,texFile,grWdt):
     '''Creates the graphics files of loads for the load case and insert them in
     a LaTex file
     
-    :param gridmodl:   object of type GridModel
+    :param FEcase:     finite element case 
     :param pathGr:     directory to place figures (ex: 'text/graphics/loads/')
     :param texFile:    laTex file where to include the graphics 
                        (e.g.:'text/report_loads.tex')
     :param grWdt:      width to be applied to graphics
     '''
+    preprocessor=FEcase.getPreprocessor
     labl=self.loadCaseName
     for st in self.setsToDispLoads:
       grfname=pathGr+self.loadCaseName+st.name
       capt=self.loadCaseDescr + ', ' + st.description + ', '  + self.unitsLoads
-      gridmodl.displayLoad(setToDisplay=st,loadCaseNm=self.loadCaseName,unitsScale=self.unitsScaleLoads,vectorScale=self.vectorScaleLoads, multByElemArea=self.multByElemAreaLoads,viewNm=self.viewName,hCamFct=self.hCamFct,caption= capt,fileName=grfname+'.jpg')
-      gridmodl.displayLoad(setToDisplay=st,loadCaseNm=self.loadCaseName,unitsScale=self.unitsScaleLoads,vectorScale=self.vectorScaleLoads, multByElemArea=self.multByElemAreaLoads,viewNm=self.viewName,hCamFct=self.hCamFct,caption= capt,fileName=grfname+'.eps')
+      QGrph.displayLoad(preprocessor=preprocessor,setToDisplay=st,loadCaseNm=self.loadCaseName,unitsScale=self.unitsScaleLoads,vectorScale=self.vectorScaleLoads, multByElemArea=self.multByElemAreaLoads,viewNm=self.viewName,hCamFct=self.hCamFct,caption= capt,fileName=grfname+'.jpg')
+      QGrph.displayLoad(preprocessor=preprocessor,setToDisplay=st,loadCaseNm=self.loadCaseName,unitsScale=self.unitsScaleLoads,vectorScale=self.vectorScaleLoads, multByElemArea=self.multByElemAreaLoads,viewNm=self.viewName,hCamFct=self.hCamFct,caption= capt,fileName=grfname+'.eps')
       insertGrInTex(texFile=texFile,grFileNm=grfname,grWdt=grWdt,capText=capt,labl=labl) 
     for st in self.setsToDispBeamLoads:
       grfname=pathGr+self.loadCaseName+st.name
       capt=self.loadCaseDescr + ', ' + st.description + ', '  + self.unitsLoads
-      lcs=GridModel.QuickGraphics(gridmodl)
+      lcs=QGrph.QuickGraphics(FEcase)
       lcs.dispLoadCaseBeamEl(loadCaseName=self.loadCaseName,setToDisplay=st,fUnitConv=self.unitsScaleLoads,elLoadComp=self.compElLoad,elLoadScaleF=self.vectorScaleLoads,nodLoadScaleF=self.vectorScalePointLoads,viewName=self.viewName,hCamFct=self.hCamFct,caption= capt,fileName=grfname+'.jpg')
       lcs.dispLoadCaseBeamEl(loadCaseName=self.loadCaseName,setToDisplay=st,fUnitConv=self.unitsScaleLoads,elLoadComp=self.compElLoad,elLoadScaleF=self.vectorScaleLoads,nodLoadScaleF=self.vectorScalePointLoads,viewName=self.viewName,hCamFct=self.hCamFct,caption= capt,fileName=grfname+'.eps')
       insertGrInTex(texFile=texFile,grFileNm=grfname,grWdt=grWdt,capText=capt,labl=labl) 

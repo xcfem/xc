@@ -6,7 +6,7 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= " ana.Ortega.Ort@gmail.com l.pereztato@gmail.com"
 
-from model.grid_based import ijkGrid
+from model.grid_based_oldStyle_deprecated import ijkGrid
 
 def listaNombresLoadPatterns(preprocessor):
   ''':returns: list of load pattern names
