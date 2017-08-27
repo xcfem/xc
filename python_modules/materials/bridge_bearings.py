@@ -207,7 +207,7 @@ class ElastomericBearing(Bearing):
         self.matKTHY= typical_materials.defElasticMaterial(preprocessor, self.matTHYName, self.getKrotationBridgeAxis())
         self.matKTHZ= typical_materials.defElasticMaterial(preprocessor, self.matTHZName, self.getKrotationVerticalAxis())
 
-    def putBetweenNodes(self,modelSpace,iNodA, iNodB):
+    def putBetweenNodes(self,modelSpace,iNodA, iNodB, orientation= None):
         ''' Puts the bearing between the nodes.
 
         Args:
@@ -217,7 +217,7 @@ class ElastomericBearing(Bearing):
             iNodB (int): second node identifier (tag).
 
         '''
-        return modelSpace.setBearingBetweenNodes(iNodA,iNodB,self.materials)
+        return modelSpace.setBearingBetweenNodes(iNodA,iNodB,self.materials, orientation)
 
 # Points that define the Teflon coefficient of friction of
 # from the mean compressive stress
