@@ -60,6 +60,32 @@ class Bearing(object):
     def getMaterial(self,i):
         ''' Returns the i-th uniaxial material that modelizes the response in the i-th direction.'''
         return self.materialLoader.getMaterial(self.materials[i])
+    def getMaterialNames(self):
+        '''Return material names for each DOF in a list.'''
+        return self.materials
+    def setBearingBetweenNodes(self,predefinedSpace, iNodA,iNodB, orientation= None):
+      '''Modelize a bearing between the nodes
+
+          Args:
+              :param predefinedSpace: model space (object).
+              :param iNodA: (int) first node identifier (tag).
+              :param iNodB: (int) second node identifier (tag).
+          :return: newly created zero length element that represents the bearing.
+            
+      '''
+      return predefinedSpace.setBearingBetweenNodes(iNodA,iNodB,self.materials, orientation)
+    def setBearing(self,predefinedSpace, iNodA, orientation= None):
+      '''Modelize a bearing on X, XY or XYZ directions.
+
+        Args:
+             predefinedSpace: model space (object).
+             iNod: (int) node identifier (tag).
+             bearingMaterials (list): material names for the zero length
+               element.
+        Returns:
+            :rtype: (int, int) new node tag, new element tag.
+      '''
+      return predefinedSpace.setBearing(iNodA,self.materials, orientation)
     
 class ElastomericBearing(Bearing):
     """Rectangular elastomeric bearing.

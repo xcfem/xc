@@ -33,7 +33,7 @@ ky= typical_materials.defElasticMaterial(preprocessor, "ky",KY)
 kz= typical_materials.defElasticMaterial(preprocessor, "kz",KZ)
 
 
-fixedNodeTag, newElemenTag= modelSpace.setBearing(nod.tag,["kx","ky","kz"])
+fixedNode, newElemen= modelSpace.setBearing(nod.tag,["kx","ky","kz"])
   
 # Constraints
 constraints= preprocessor.getConstraintLoader
@@ -73,10 +73,9 @@ deltax= nod1.getDisp[0]
 deltay= nod1.getDisp[1]
 deltaz= nod1.getDisp[2] 
 
-nodFijo= nodes.getNode(fixedNodeTag)
-RX= nodFijo.getReaction[0]
-RY= nodFijo.getReaction[1]
-RZ= nodFijo.getReaction[2] 
+RX= fixedNode.getReaction[0]
+RY= fixedNode.getReaction[1]
+RZ= fixedNode.getReaction[2] 
 
 
 ratio1= -RX/FX

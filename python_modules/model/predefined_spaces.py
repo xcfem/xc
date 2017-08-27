@@ -62,7 +62,7 @@ class PredefinedSpace(object):
     rb= self.constraints.newRigidBeam(nodeTagA,fulcrumNode.tag)
     ed= self.constraints.newEqualDOF(fulcrumNode.tag,pivotNode,xc.ID(self.getDisplacementDOFs()))
 
-  def setBearingBetweenNodes(self,iNodA,iNodB,bearingMaterials):
+  def setBearingBetweenNodes(self,iNodA,iNodB,bearingMaterials,orientation= None):
     '''Modelize a bearing between the nodes
 
         Args:
@@ -70,6 +70,9 @@ class PredefinedSpace(object):
             :param iNodB: (int) second node identifier (tag).
             :param bearingMaterials: (list) material names for the zero length
                element.
+            :param orientation: (list) vectors used to orient the zero length
+               element; (x,yp) x: axis of the element, yp: vector that lies 
+               on the xy plane of the element.
         :return: newly created zero length element that represents the bearing.
             
     '''
@@ -79,6 +82,8 @@ class PredefinedSpace(object):
     elems.defaultMaterial= next((item for item in bearingMaterials if item is not None), 'All are Nones')
     zl= elems.newElement("zero_length",xc.ID([iNodA,iNodB]))
     zl.clearMaterials()
+    if(orientation): #Orient element.
+      zl.setupVectors(orientation[0],orientation[1])
     numMats= len(bearingMaterials)
     for i in range(0,numMats):
       material= bearingMaterials[i]
@@ -86,13 +91,16 @@ class PredefinedSpace(object):
         zl.setMaterial(i,material)
     return zl
 
-  def setBearing(self,iNod,bearingMaterials):
+  def setBearing(self,iNod,bearingMaterials, orientation= None):
     '''Modelize a bearing on X, XY or XYZ directions.
 
         Args:
-            iNod: (int) node identifier (tag).
-            bearingMaterials (list): material names for the zero length
+            :param iNod: (int) node identifier (tag).
+            :param bearingMaterials (list): material names for the zero length
                element.
+            :param orientation: (list) vectors used to orient the zero length
+               element; (x,yp) x: axis of the element, yp: vector that lies 
+               on the xy plane of the element.
         Returns:
             :rtype: (int, int) new node tag, new element tag.
     '''
@@ -100,13 +108,13 @@ class PredefinedSpace(object):
     newNode= nodos.duplicateNode(iNod) # new node.
 
     # Element definition
-    newElement= self.setBearingBetweenNodes(newNode.tag,iNod,bearingMaterials)
+    newElement= self.setBearingBetweenNodes(newNode.tag,iNod,bearingMaterials,orientation)
     # Boundary conditions
     constraints= self.preprocessor.getConstraintLoader
     numGdls= self.preprocessor.getNodeLoader.numGdls
     for i in range(0,numGdls):
       spc= constraints.newSPConstraint(newNode.tag,i,0.0)
-    return newNode.tag, newElement.tag
+    return newNode, newElement
 
 
   def setBearingOnX(self,iNod,bearingMaterial):
@@ -127,9 +135,9 @@ class PredefinedSpace(object):
             bearingMaterial (string): material name for the zero length
                element.
     '''
-    newNodeTag, newElementTag= self.setBearing(iNod,bearingMaterials)
-    eDofs= self.constraints.newEqualDOF(newNodeTag,iNod,xc.ID([2]))
-    return newNodeTag, newElementTag
+    newNode, newElement= self.setBearing(iNod,bearingMaterials)
+    eDofs= self.constraints.newEqualDOF(newNode.tag,iNod,xc.ID([2]))
+    return newNode, newElement
 
   def setUniaxialBearing2D(self,iNod,bearingMaterial,direction):
     '''Modelize an uniaxial bearing on the defined direction.

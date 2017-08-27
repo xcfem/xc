@@ -509,8 +509,8 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
       #print "before k= ", kY.E
       kX.E= kSx*lT
       kY.E= kSy*lT
-      idNodoFijo, idElem= self.modelSpace.setBearing(n.tag,["kX","kY"])
-      self.fixedNodes.append(nodes.getNode(idNodoFijo))
+      fixedNode, newElem= self.modelSpace.setBearing(n.tag,["kX","kY"])
+      self.fixedNodes.append(fixedNode)
     self.stemSet.fillDownwards()
     self.wallSet.fillDownwards()
 

@@ -43,8 +43,8 @@ fixedNodes= list()
 sz= len(pinnedNodes)
 for i in range(0,sz):
   nodeTag= pinnedNodes[i]
-  fixedNodeTag, elemTag= modelSpace.setBearing(nodeTag,["kx","ky","kz"])
-  fixedNodes.append(fixedNodeTag)
+  fixedNode, elem= modelSpace.setBearing(nodeTag,["kx","ky","kz"])
+  fixedNodes.append(fixedNode.tag)
 fixedNodeTag= fixedNodes[0]
 
 # Constraints
@@ -82,9 +82,9 @@ nod1= nodes.getNode(1)
 deltax= nod1.getDisp[0]
 deltay= nod1.getDisp[1]
 deltaz= nod1.getDisp[2]
-RX= nodes.getNode(fixedNodeTag).getReaction[0]
-RY= nodes.getNode(fixedNodeTag).getReaction[1]
-RZ= nodes.getNode(fixedNodeTag).getReaction[2] 
+RX= fixedNode.getReaction[0]
+RY= fixedNode.getReaction[1]
+RZ= fixedNode.getReaction[2] 
 
 
 ratio1= -RX/FX

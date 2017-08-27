@@ -116,7 +116,7 @@ class_<XC::ElementBase<20>, bases<XC::Element >, boost::noncopyable >("ElementBa
 class_<XC::ElementBase<27>, bases<XC::Element >, boost::noncopyable >("ElementBase27N","Base class for 27 node elements.", no_init);
 
 class_<XC::Element0D , bases<XC::ElementBase<2>>, boost::noncopyable >("Element0D", no_init)
-  .def("setupVectors",&XC::Element0D::setUpVectors)
+  .def("setupVectors",&XC::Element0D::setUpVectors,"setupVectors(x,yp); set element orientation; x: axis of the element, yp: vector that lies on the xy plane of the element.")
   .add_property("getNumDOF",&XC::Element0D::getNumDOF,"Return element number of DOFs (6 or 12).")
   .add_property("getDimension",&XC::Element0D::getDimension,"Return element dimension.")
   .add_property("getIVector",make_function(&XC::Element0D::getX, return_internal_reference<>() ),"Return i vector.")
