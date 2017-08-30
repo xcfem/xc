@@ -102,11 +102,11 @@ epsSMax= fibraSEpsMax.getMaterial().getStrain() # Maximum steel strain.
 
 
 from materials import section_properties
-from materials.ehe import comprobTnEHE
+from materials.ehe import EHE_limit_state_checking
 tipoSolic= section_properties.solicitationType(epsCMin,epsSMax)
 strTipoSolic= section_properties.solicitationTypeString(tipoSolic)
-cumpleFT= comprobTnEHE.cumpleCompresionCompuesta(epsCMin,epsCMax)
-aprovSecc= comprobTnEHE.aprovCompresionCompuesta(epsCMin,epsSMax)
+cumpleFT= EHE_limit_state_checking.cumpleCompresionCompuesta(epsCMin,epsCMax)
+aprovSecc= EHE_limit_state_checking.aprovCompresionCompuesta(epsCMin,epsSMax)
 
 ratio1= (RM+MzDato)/MzDato
 ratio2= (esfMz-MzDato)/MzDato

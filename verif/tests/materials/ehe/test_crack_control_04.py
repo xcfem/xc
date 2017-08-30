@@ -15,7 +15,7 @@ from solution import predefined_solutions # Solution procedure
 
 
 from materials.ehe import EHE_materials
-from materials.ehe import fisuracionEHE
+from materials.ehe import EHE_limit_state_checking
 from model import predefined_spaces
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (A_OO)"
@@ -110,7 +110,7 @@ analisis= predefined_solutions.simple_newton_raphson(prueba)
 analOk= analisis.analyze(10)
 
 
-secHAParamsFis= fisuracionEHE.CrackControl('SLS_crack')
+secHAParamsFis= EHE_limit_state_checking.CrackControl('SLS_crack')
 
 
 

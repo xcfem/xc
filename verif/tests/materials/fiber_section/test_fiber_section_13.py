@@ -105,11 +105,11 @@ epsSMax= fibraSEpsMax.getMaterial().getStrain() # Maximum steel strain
 yEpsCMax= fibraCEpsMax.getPos().x
 
 from materials import section_properties
-from materials.ehe import comprobTnEHE
+from materials.ehe import EHE_limit_state_checking
 tipoSolic= section_properties.solicitationType(epsCMin,epsSMax)
 strTipoSolic= section_properties.solicitationTypeString(tipoSolic)
-cumpleFT= comprobTnEHE.cumpleFlexotraccion(epsCMin,epsSMax)
-aprovSecc= comprobTnEHE.aprovFlexotraccion(epsCMin,epsSMax)
+cumpleFT= EHE_limit_state_checking.cumpleFlexotraccion(epsCMin,epsSMax)
+aprovSecc= EHE_limit_state_checking.aprovFlexotraccion(epsCMin,epsSMax)
 
 ratio1= (RM-MzDato)/MzDato
 ratio2= (esfMz+MzDato)/MzDato

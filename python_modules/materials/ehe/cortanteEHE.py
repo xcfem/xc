@@ -7,7 +7,7 @@ from __future__ import division
 import math
 from materials.fiber_section import createFiberSets
 from materials.ehe import comprobVEHE08
-from materials.ehe import torsionEHE
+from materials.ehe import EHE_limit_state_checking
 import geom
 import sys
 from postprocess import control_vars as cv
@@ -185,7 +185,7 @@ class ShearControllerEHE(lsc.LimitStateControllerBase):
        a cortante.
     '''
     print "Postprocessing combination: ",nmbComb
-    secHAParamsTorsion=  torsionEHE.TorsionParameters()
+    secHAParamsTorsion=  EHE_limit_state_checking.TorsionParameters()
     # XXX Ignore torsional deformation.
     secHAParamsTorsion.ue= 0
     secHAParamsTorsion.Ae= 1

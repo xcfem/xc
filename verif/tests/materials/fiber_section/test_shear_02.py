@@ -15,7 +15,7 @@ from model import predefined_spaces
 from materials.ehe import EHE_materials
 from materials.ehe import comprobVEHE08
 from materials.ehe import cortanteEHE
-from materials.ehe import torsionEHE
+from materials.ehe import EHE_limit_state_checking
 from materials import typical_materials
 
 import math
@@ -130,7 +130,7 @@ secHAParamsCortante.theta= math.radians(45)
 secHAParamsCortante.alpha= math.radians(90)
 
 
-secHAParamsTorsion= torsionEHE.calcParamsSeccionHuecaEficaz(geomSecHA,depth/2.0,cover)
+secHAParamsTorsion= EHE_limit_state_checking.calcParamsSeccionHuecaEficaz(geomSecHA,depth/2.0,cover)
 
 
 elements= preprocessor.getElementLoader
