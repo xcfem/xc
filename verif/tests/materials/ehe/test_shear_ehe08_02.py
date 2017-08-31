@@ -5,7 +5,7 @@ strength (Vu2) of sections without shear reinforcement according to clauses
 
 import sys
 
-from materials.ehe import comprobVEHE08
+from materials.ehe import EHE_limit_state_checking
 from materials.ehe import EHE_materials
 import math
 
@@ -15,26 +15,26 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
-fck=25e6
-gammac=1.5
+fck= 25e6
+gammac= 1.5
 concr= EHE_materials.EHEConcrete('HA',-fck,gammac)
-fctd=concr.fctkEHE08()/gammac
-fcd=concr.fcd()*(-1)
-d=1.45
-b0=0.6
-I=0.76
-S=0.619
-alphaL=1.0
-NCd=0
-Ac=2.3
-AsPas=32*3.14e-4
-Vu2NoFis=comprobVEHE08.getVu2EHE08NoAtNoFis(fctd,I,S,b0,alphaL,NCd,Ac)
-Vu2SiFis=comprobVEHE08.getVu2EHE08NoAtSiFis(fck,fcd,1.5,NCd,Ac,b0,d,AsPas,0.0)
-vChi=min(2,1+math.sqrt(200/(d*1000)))
-Sgpcd=min(min(NCd/Ac,0.3*fcd),12e6)
-Vu2Min=comprobVEHE08.getFcvMinEHE08(fck,1.5,d,vChi,Sgpcd)*b0*d
-Vu2A=comprobVEHE08.getVu2EHE08NoAt(1,2,fck,fck,1.5,I,S,alphaL,NCd,Ac,b0,d,AsPas,0.0)
-Vu2B=comprobVEHE08.getVu2EHE08NoAt(2,1,fck,fck,1.5,I,S,alphaL,NCd,Ac,b0,d,AsPas,0.0)
+fctd= concr.fctkEHE08()/gammac
+fcd= concr.fcd()*(-1)
+d= 1.45
+b0= 0.6
+I= 0.76
+S= 0.619
+alphaL= 1.0
+NCd= 0
+Ac= 2.3
+AsPas= 32*3.14e-4
+Vu2NoFis= EHE_limit_state_checking.getVu2EHE08NoAtNoFis(fctd,I,S,b0,alphaL,NCd,Ac)
+Vu2SiFis= EHE_limit_state_checking.getVu2EHE08NoAtSiFis(fck,fcd,1.5,NCd,Ac,b0,d,AsPas,0.0)
+vChi= min(2,1+math.sqrt(200/(d*1000)))
+Sgpcd= min(min(NCd/Ac,0.3*fcd),12e6)
+Vu2Min= EHE_limit_state_checking.getFcvMinEHE08(fck,1.5,d,vChi,Sgpcd)*b0*d
+Vu2A= EHE_limit_state_checking.getVu2EHE08NoAt(1,2,fck,fck,1.5,I,S,alphaL,NCd,Ac,b0,d,AsPas,0.0)
+Vu2B= EHE_limit_state_checking.getVu2EHE08NoAt(2,1,fck,fck,1.5,I,S,alphaL,NCd,Ac,b0,d,AsPas,0.0)
 
 ratio1= abs((Vu2NoFis-881.781712e3)/881.781712e3)
 ratio2= abs((Vu2SiFis-439233)/439233)

@@ -13,8 +13,6 @@ from solution import predefined_solutions
 from model import predefined_spaces
 
 from materials.ehe import EHE_materials
-from materials.ehe import comprobVEHE08
-from materials.ehe import cortanteEHE
 from materials.ehe import EHE_limit_state_checking
 from materials import typical_materials
 
@@ -123,7 +121,7 @@ analisis= predefined_solutions.simple_newton_raphson(prueba)
 analOk= analisis.analyze(10)
 
 
-secHAParamsCortante= cortanteEHE.ShearControllerEHE('ULS_shear')
+secHAParamsCortante= EHE_limit_state_checking.ShearControllerEHE('ULS_shear')
 
 secHAParamsCortante.AsTrsv= EHE_materials.Fi6*numRamas/0.2 # reinforcement area transversal
 secHAParamsCortante.theta= math.radians(45)

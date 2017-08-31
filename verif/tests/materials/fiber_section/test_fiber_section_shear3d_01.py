@@ -11,8 +11,7 @@ from solution import predefined_solutions
 
 
 from materials.ehe import EHE_materials
-from materials.ehe import comprobVEHE08
-from materials.ehe import cortanteEHE
+from materials.ehe import EHE_limit_state_checking
 import xc_base
 import geom
 import xc

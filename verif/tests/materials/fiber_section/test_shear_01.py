@@ -10,8 +10,7 @@ from misc import banco_pruebas_scc3d
 from solution import predefined_solutions
 
 from materials.ehe import EHE_materials
-from materials.ehe import comprobVEHE08
-from materials.ehe import cortanteEHE
+from materials.ehe import EHE_limit_state_checking
 import xc_base
 import geom
 import xc
@@ -121,7 +120,7 @@ if(analOk!=0):
 
 
 
-secHAParamsCortante= cortanteEHE.ShearControllerEHE('ULS_shear')
+secHAParamsCortante= EHE_limit_state_checking.ShearControllerEHE('ULS_shear')
 
 
 

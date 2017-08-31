@@ -5,7 +5,7 @@ from the exercise ER-CA-02 from www.areadecalculo.com. According to EHE-08.
 '''
 
 import sys
-from materials.ehe import comprobVEHE08
+from materials.ehe import EHE_limit_state_checking
 from materials.ehe import EHE_materials
 import math
 
@@ -18,16 +18,16 @@ __email__= "l.pereztato@gmail.com"
 #Coeficientes de seguridad.
 gammas= 1.15 #Partial safety factor for steel.
 
-numBarrasEstribo=4
-areaShReinfBranchsEstribo=numBarrasEstribo*EHE_materials.Fi6
-sepEstribos=0.2
-AsTrsv=areaShReinfBranchsEstribo/sepEstribos
-z=0.9*0.55
-alpha=math.pi/2
-theta=math.pi/4
-fyd=500e6/gammas
-Vsu=comprobVEHE08.getVsuEHE08(z,alpha,theta,AsTrsv,fyd)
-ratio1=abs(Vsu-111.966e3)/111.966e3
+numBarrasEstribo= 4
+areaShReinfBranchsEstribo= numBarrasEstribo*EHE_materials.Fi6
+sepEstribos= 0.2
+AsTrsv= areaShReinfBranchsEstribo/sepEstribos
+z= 0.9*0.55
+alpha= math.pi/2
+theta= math.pi/4
+fyd= 500e6/gammas
+Vsu= EHE_limit_state_checking.getVsuEHE08(z,alpha,theta,AsTrsv,fyd)
+ratio1= abs(Vsu-111.966e3)/111.966e3
 
 ##print "areaShReinfBranchsEstribo= ",AsTrsv*1e4," cm2"
 ##print "Vsu= ",Vsu/1e3," kN"
