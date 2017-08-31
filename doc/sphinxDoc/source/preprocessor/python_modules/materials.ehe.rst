@@ -18,28 +18,3 @@ EHE_limit_state_checking
     :undoc-members:
     :show-inheritance:
 
-comprobVEHE08
--------------
-
-.. automodule:: materials.ehe.comprobVEHE08
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-comprobVEHE
------------
-
-.. automodule:: materials.ehe.comprobVEHE
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-cortanteEHE
------------
-
-.. automodule:: materials.ehe.cortanteEHE
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-
