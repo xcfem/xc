@@ -45,6 +45,7 @@ class RawLineSetToMesh(SetToMesh):
         seedElemLoader= preprocessor.getElementLoader.seedElemLoader
         seedElemLoader.defaultMaterial= self.matSect.name
         seedElemLoader.dimElem= self.dimElemSpace
+        #print 'name= ', self.coordinateTransformation.getName()
         seedElemLoader.defaultTransformation= self.coordinateTransformation.getName()
         return seedElemLoader.newElement(self.elemType,xc.ID([0,0]))
 
@@ -57,12 +58,12 @@ class RawLineSetToMesh(SetToMesh):
             l.genMesh(xc.meshDir.I)
         self.primitiveSet.fillDownwards()
 
-def getDefaultCoodinateTransformation(self,coordTransfName,vDir):
+def getDefaultCoordinateTransformation(preprocessor,coordTransfName,vDir):
     '''Creates a default coordinate transformation.''' 
     trfs= preprocessor.getTransfCooLoader
     trYGlobal=trfs.newPDeltaCrdTransf3d(coordTransfName) #XXX PDelta???
     trYGlobal.xzVector= vDir
-    
+    return trYGlobal
 
 class LinSetToMesh(RawLineSetToMesh):
     '''Define the parameters to mesh a set of lines. The method generateMesh
@@ -80,7 +81,7 @@ class LinSetToMesh(RawLineSetToMesh):
     '''
     def __init__(self,linSet,matSect,elemSize,vDirLAxZ, elemType='elastic_beam_3d',dimElemSpace=3):
         self.vDirLAxZ= vDirLAxZ
-        cTrf= getDefaultCoordinateTransformation('trYGlobal',self.vDirLAxZ)
+        cTrf= getDefaultCoordinateTransformation(linSet.owner,'trYGlobal',self.vDirLAxZ)
         super(LinSetToMesh,self).__init__(linSet,matSect,elemSize,cTrf,elemType,dimElemSpace)
 
    
