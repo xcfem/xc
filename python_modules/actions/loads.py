@@ -48,10 +48,10 @@ class InertialLoad(BaseVectorLoad):
         for ms in self.lstMeshSets:
             if 'shell' in ms.elemType:
                 loadVector=ms.matSect.getAreaDensity()*self.loadVector
-                el_group=ms.surfSet.getElements
+                el_group=ms.primitiveSet.getElements
             elif 'beam' in ms.elemType:
                 loadVector=ms.matSect.getLongitudinalDensity()*self.loadVector
-                el_group=ms.linSet.getElements
+                el_group=ms.primitiveSet.getElements
             for e in el_group:
                 e.vector3dUniformLoadGlobal(loadVector)
 

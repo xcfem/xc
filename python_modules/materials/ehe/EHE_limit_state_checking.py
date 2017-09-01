@@ -10,6 +10,7 @@ from materials.fiber_section import createFiberSets
 from materials.fiber_section import fiberUtils
 from materials import limit_state_checking_base as lscb
 from postprocess import control_vars as cv
+from miscUtils import LogMessages as lmsg
 
 # Reinforced concrete section shear checking.
 
