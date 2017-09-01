@@ -109,8 +109,9 @@ int XC::SmallDispCrdTransf3d::calculaEjesLocales(void) const
     
     if(ynorm == 0)
       {
-        std::cerr << "SmallDispCrdTransf3d::getLocalAxes";
-        std::cerr << "\nvector v that defines plane xz is parallel to x axis\n";
+        std::cerr << nombre_clase() << "::" << __FUNCTION__
+	          << "; in coordinate transformation: '" << getName()
+	          << "' vector v that defines plane xz is parallel to x axis\n";
         return -3;
       }
     
@@ -473,7 +474,8 @@ int XC::SmallDispCrdTransf3d::sendSelf(CommParameters &cp)
 
     res+= cp.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
-      std::cerr << nombre_clase() << "sendSelf() - failed to send data\n";
+      std::cerr << nombre_clase() << "::" << __FUNCTION__
+		<< "; failed to send data\n";
     return res;
   }
 
@@ -486,13 +488,15 @@ int XC::SmallDispCrdTransf3d::recvSelf(const CommParameters &cp)
     int res= cp.receiveIdData(getDbTagData(),dataTag);
 
     if(res<0)
-      std::cerr << nombre_clase() << "::recvSelf - failed to receive ids.\n";
+      std::cerr << nombre_clase() << "::" << __FUNCTION__
+		<< "; failed to receive ids.\n";
     else
       {
         setTag(getDbTagDataPos(0));
         res+= recvData(cp);
         if(res<0)
-          std::cerr << nombre_clase() << "::recvSelf - failed to receive data.\n";
+          std::cerr << nombre_clase() << __FUNCTION__
+		    << "; failed to receive data.\n";
       }
     return res;
   }

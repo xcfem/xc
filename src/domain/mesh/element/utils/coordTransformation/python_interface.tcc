@@ -25,7 +25,7 @@
 
 const XC::Vector &(XC::CrdTransf::*getVectorGlobalFromLocal)(const XC::Vector &) const= &XC::CrdTransf::getVectorGlobalCoordFromLocal;
 const XC::Vector &(XC::CrdTransf::*getVectorLocalFromGlobal)(const XC::Vector &) const= &XC::CrdTransf::getVectorLocalCoordFromGlobal;
-class_<XC::CrdTransf, bases<XC::TaggedObject,XC::MovableObject >, boost::noncopyable >("CrdTransf", no_init)
+class_<XC::CrdTransf, XC::CrdTransf*, bases<XC::TaggedObject,XC::MovableObject >, boost::noncopyable >("CrdTransf", no_init)
   .def("getName",&XC::CrdTransf::getName,"Returns the name of the coordinate transformation.")
   .add_property("getInitialLength", &XC::CrdTransf::getInitialLength)
   .add_property("getDeformedLength", &XC::CrdTransf::getDeformedLength)
@@ -63,13 +63,13 @@ class_<XC::CrdTransf, bases<XC::TaggedObject,XC::MovableObject >, boost::noncopy
 
   ;
 
-class_<XC::CrdTransf2d, bases<XC::CrdTransf >, boost::noncopyable >("CrdTransf2d", no_init)
+class_<XC::CrdTransf2d, XC::CrdTransf2d*, bases<XC::CrdTransf >, boost::noncopyable >("CrdTransf2d", no_init)
   ;
 
-class_<XC::SmallDispCrdTransf2d, bases<XC::CrdTransf2d >, boost::noncopyable >("SmallDispCrdTransf2d", no_init)
+class_<XC::SmallDispCrdTransf2d, XC::SmallDispCrdTransf2d*, bases<XC::CrdTransf2d >, boost::noncopyable >("SmallDispCrdTransf2d", no_init)
   ;
 
-class_<XC::LinearCrdTransf2d, bases<XC::SmallDispCrdTransf2d >, boost::noncopyable >("LinearCrdTransf2d", no_init)
+class_<XC::LinearCrdTransf2d, XC::LinearCrdTransf2d*, bases<XC::SmallDispCrdTransf2d >, boost::noncopyable >("LinearCrdTransf2d", no_init)
   ;
 
 class_<XC::CrdTransf3d, bases<XC::CrdTransf >, boost::noncopyable >("CrdTransf3d", no_init)
@@ -78,18 +78,18 @@ class_<XC::CrdTransf3d, bases<XC::CrdTransf >, boost::noncopyable >("CrdTransf3d
   .def("rotate",&XC::CrdTransf3d::gira,"rotates local system around x axis.")
   ;
 
-class_<XC::SmallDispCrdTransf3d, bases<XC::CrdTransf3d >, boost::noncopyable >("SmallDispCrdTransf3d", no_init)
+class_<XC::SmallDispCrdTransf3d, XC::SmallDispCrdTransf3d*, bases<XC::CrdTransf3d >, boost::noncopyable >("SmallDispCrdTransf3d", no_init)
   ;
 
-class_<XC::LinearCrdTransf3d, bases<XC::SmallDispCrdTransf3d >, boost::noncopyable >("LinearCrdTransf3d", no_init)
+class_<XC::LinearCrdTransf3d, XC::LinearCrdTransf3d*, bases<XC::SmallDispCrdTransf3d >, boost::noncopyable >("LinearCrdTransf3d", no_init)
   ;
 
-class_<XC::CorotCrdTransf2d, bases<XC::CrdTransf2d>, boost::noncopyable >("CorotCrdTransf2d", no_init);
+class_<XC::CorotCrdTransf2d, XC::CorotCrdTransf2d *, bases<XC::CrdTransf2d>, boost::noncopyable >("CorotCrdTransf2d", no_init);
 
-class_<XC::CorotCrdTransf3d, bases<XC::CrdTransf3d>, boost::noncopyable >("CorotCrdTransf3d", no_init);
+class_<XC::CorotCrdTransf3d, XC::CorotCrdTransf3d*, bases<XC::CrdTransf3d>, boost::noncopyable >("CorotCrdTransf3d", no_init);
 
-class_<XC::PDeltaCrdTransf2d, bases<XC::SmallDispCrdTransf2d>, boost::noncopyable >("PDeltaCrdTransf2d", no_init);
+class_<XC::PDeltaCrdTransf2d, XC::PDeltaCrdTransf2d*, bases<XC::SmallDispCrdTransf2d>, boost::noncopyable >("PDeltaCrdTransf2d", no_init);
 
-class_<XC::PDeltaCrdTransf3d, bases<XC::SmallDispCrdTransf3d>, boost::noncopyable >("PDeltaCrdTransf3d", no_init);
+class_<XC::PDeltaCrdTransf3d, XC::PDeltaCrdTransf3d*, bases<XC::SmallDispCrdTransf3d>, boost::noncopyable >("PDeltaCrdTransf3d", no_init);
 
 
