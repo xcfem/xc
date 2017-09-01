@@ -163,17 +163,6 @@ class IJKRange(object):
         return lstKrang
 
 
-# class moveRange(object):
-#   '''Applies a displacement to a range of grid points
-  
-#   :ivar range: range of indexes in the grid 
-#            e.g.: grid.IJKRange((minI,minJ,minK),(maxI,maxJ,maxK))
-#   :ivar vDisp: list of displacements in global X, Y, Z directions
-#            e.g. [dispX,dispY,dispZ]
-#   '''
-#   def __init__(self,range,vDisp):
-#     self.range= range
-#     self.vDisp= vDisp
 
 class GridModel(object):
     '''Particular geometry organization, linked to a framework of spaced points, 
@@ -306,6 +295,27 @@ class GridModel(object):
           p.getPos.y+= vDisp[1]
           p.getPos.z+= vDisp[2]
         sPtMove.clear()
+
+    def slopePointsRange(self,ijkRange,slopeX=0,xZeroSlope=0,slopeY=0,yZeroSlope=0):
+        '''Applies one or two slopes (in X and Y directions) 
+        to points in a 3D grid-region limited by 
+        ijkRange.ijkMin=(indXmin,indYmin,indZmin) and
+        ijkRange.ijkMax=(indXmax,indYmax,indZmax). Only Z coordinate
+        of points is modified.
+
+        :param ijkRange: range for the search.
+        :param slopeX: slope in X direction, expressed as deltaZ/deltaX 
+                       (defaults to 0 = no slope applied)
+        :param xZeroSlope: coordinate X of the "rotation axis".
+        :param slopeY: slope in Y direction, expressed as deltaZ/deltaY)
+                       (defaults to 0 = no slope applied)
+        :param yZeroSlope: coordinate Y of the "rotation axis".
+        '''
+        sPtMove=self.getSetPntRange(ijkRange,'sPtMove')
+        for p in sPtMove.getPoints:
+          p.getPos.z+= slopeX*(p.getPos.x-xZeroSlope)+slopeY*(p.getPos.y-yZeroSlope)
+        sPtMove.clear()
+
 
     def newQuadGridSurface(self,surfName):
         '''Generate the quadrangle surface defined by the 4 vertex whose tags
