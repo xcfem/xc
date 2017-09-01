@@ -113,12 +113,14 @@ class_<XC::LoadLoader, bases<XC::Loader>, boost::noncopyable >("LoadLoader", no_
   .def("removeAllFromDomain", &XC::LoadLoader::removeAllFromDomain,return_internal_reference<>(),"Eliminates all loads cases from domain.")
     ;
 
+XC::CrdTransf *(XC::TransfCooLoader::*getCoordTransf)(const std::string &)= &XC::TransfCooLoader::find_ptr;
 class_<XC::TransfCooLoader, bases<XC::Loader>, boost::noncopyable >("TransfCooLoader", no_init)
   .def("newLinearCrdTransf2d", &XC::TransfCooLoader::newLinearCrdTransf2d,return_internal_reference<>(),"New linear 2d coordinate transformation.")
   .def("newLinearCrdTransf3d", &XC::TransfCooLoader::newLinearCrdTransf3d,return_internal_reference<>(),"New linear 3d coordinate transformation.")
   .def("newPDeltaCrdTransf2d", &XC::TransfCooLoader::newPDeltaCrdTransf2d,return_internal_reference<>(),"New P-Delta 2d coordinate transformation.")
   .def("newPDeltaCrdTransf3d", &XC::TransfCooLoader::newPDeltaCrdTransf3d,return_internal_reference<>(),"New P-Delta 3d coordinate transformation.")
-  .def("newCorotCrdTransf2d", &XC::TransfCooLoader::newCorotCrdTransf2d,return_internal_reference<>(),"New P-Delta 2d coordinate transformation.")
-  .def("newCorotCrdTransf3d", &XC::TransfCooLoader::newCorotCrdTransf3d,return_internal_reference<>(),"New P-Delta 3d coordinate transformation.")
+  .def("newCorotCrdTransf2d", &XC::TransfCooLoader::newCorotCrdTransf2d,return_internal_reference<>(),"New corotational 2d coordinate transformation.")
+  .def("newCorotCrdTransf3d", &XC::TransfCooLoader::newCorotCrdTransf3d,return_internal_reference<>(),"New corotational 3d coordinate transformation.")
   .def("getName",&XC::TransfCooLoader::getName,"Returns the name thats corresponds to the identifier.")
+  .def("getCoordTransf", make_function(getCoordTransf, return_internal_reference<>() ),"Return the coordinate transformation from its name.")
   ;

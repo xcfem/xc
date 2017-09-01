@@ -63,6 +63,8 @@ class TransfCooLoader: public Loader
     TransfCooLoader(Preprocessor *owr);
     const map_transfcoo &Map(void) const;
 
+    template<class T>
+    T *newCrdTransf(const std::string &);
     LinearCrdTransf2d *newLinearCrdTransf2d(const std::string &);
     LinearCrdTransf3d *newLinearCrdTransf3d(const std::string &);
     PDeltaCrdTransf2d *newPDeltaCrdTransf2d(const std::string &);
@@ -78,6 +80,7 @@ class TransfCooLoader: public Loader
     iterator find(const std::string &str);
     CrdTransf *find_ptr(const std::string &str);
     CrdTransf *find_ptr(const int &tag);
+    const CrdTransf *find_ptr(const std::string &str) const;
     const CrdTransf *find_ptr(const int &tag) const;
     std::string getName(const int &tag) const;
     
@@ -86,6 +89,27 @@ class TransfCooLoader: public Loader
     void clearAll(void);
   };
 
+template<class T>
+T *TransfCooLoader::newCrdTransf(const std::string &trfName)
+  {
+    T *retval= nullptr;
+    CrdTransf *ptr= find_ptr(trfName);
+    if(ptr)
+      {
+	std::cerr << nombre_clase() << "::" << __FUNCTION__
+	          << "transformation: '" << trfName
+	          << "' aready exists. I do nothing." << std::endl;
+	retval= dynamic_cast<T *>(ptr);
+      }
+    else
+      {
+        retval= new T(tag_trf++);
+        assert(retval);
+        retval->set_owner(this);
+        transfcoo[trfName]= retval;
+      }
+    return retval;    
+  }
 } // end of XC namespace
 
 #endif

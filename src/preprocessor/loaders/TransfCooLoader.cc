@@ -64,59 +64,29 @@ XC::TransfCooLoader &XC::TransfCooLoader::operator=(const TransfCooLoader &otro)
 XC::TransfCooLoader::~TransfCooLoader(void)
   { libera(); }
 
-XC::LinearCrdTransf2d *XC::TransfCooLoader::newLinearCrdTransf2d(const std::string &cod_trf)
-  {
-    LinearCrdTransf2d *retval= new LinearCrdTransf2d(tag_trf++);
-    assert(retval);
-    retval->set_owner(this);
-    transfcoo[cod_trf]= retval;
-    return retval;    
-  } 
+//! @brief Creates a new linear 2D coordinate transformation.
+XC::LinearCrdTransf2d *XC::TransfCooLoader::newLinearCrdTransf2d(const std::string &trfName)
+  { return newCrdTransf<LinearCrdTransf2d>(trfName); }
 
-XC::LinearCrdTransf3d *XC::TransfCooLoader::newLinearCrdTransf3d(const std::string &cod_trf)
-  { 
-    LinearCrdTransf3d *retval= new LinearCrdTransf3d(tag_trf++);
-    assert(retval);
-    retval->set_owner(this);
-    transfcoo[cod_trf]= retval;
-    return retval;    
-  } 
+//! @brief Creates a new linear 3D coordinate transformation.
+XC::LinearCrdTransf3d *XC::TransfCooLoader::newLinearCrdTransf3d(const std::string &trfName)
+  { return newCrdTransf<LinearCrdTransf3d>(trfName); }
 
-XC::PDeltaCrdTransf2d *XC::TransfCooLoader::newPDeltaCrdTransf2d(const std::string &cod_trf)
-  {
-    PDeltaCrdTransf2d *retval= new PDeltaCrdTransf2d(tag_trf++);
-    assert(retval);
-    retval->set_owner(this);
-    transfcoo[cod_trf]= retval;
-    return retval;
-  } 
+//! @brief Creates a new pdelta 2D coordinate transformation.
+XC::PDeltaCrdTransf2d *XC::TransfCooLoader::newPDeltaCrdTransf2d(const std::string &trfName)
+  { return newCrdTransf<PDeltaCrdTransf2d>(trfName); }
 
-XC::PDeltaCrdTransf3d *XC::TransfCooLoader::newPDeltaCrdTransf3d(const std::string &cod_trf)
-  {
-    PDeltaCrdTransf3d *retval= new PDeltaCrdTransf3d(tag_trf++);
-    assert(retval);
-    retval->set_owner(this);
-    transfcoo[cod_trf]= retval;
-    return retval;
-  }
+//! @brief Creates a new pdelta 3D coordinate transformation.
+XC::PDeltaCrdTransf3d *XC::TransfCooLoader::newPDeltaCrdTransf3d(const std::string &trfName)
+  { return newCrdTransf<PDeltaCrdTransf3d>(trfName); }
 
-XC::CorotCrdTransf2d *XC::TransfCooLoader::newCorotCrdTransf2d(const std::string &cod_trf)
-  {
-    CorotCrdTransf2d *retval= new CorotCrdTransf2d(tag_trf++);
-    assert(retval);
-    retval->set_owner(this);
-    transfcoo[cod_trf]= retval;
-    return retval;
-  } 
+//! @brief Creates a new corotationa 2D coordinate transformation.
+XC::CorotCrdTransf2d *XC::TransfCooLoader::newCorotCrdTransf2d(const std::string &trfName)
+  { return newCrdTransf<CorotCrdTransf2d>(trfName); }
 
-XC::CorotCrdTransf3d *XC::TransfCooLoader::newCorotCrdTransf3d(const std::string &cod_trf)
-  {
-    CorotCrdTransf3d *retval= new CorotCrdTransf3d(tag_trf++);
-    assert(retval);
-    retval->set_owner(this);
-    transfcoo[cod_trf]= retval;
-    return retval;
-  }
+//! @brief Creates a new corotationa 3D coordinate transformation.
+XC::CorotCrdTransf3d *XC::TransfCooLoader::newCorotCrdTransf3d(const std::string &trfName)
+  { return newCrdTransf<CorotCrdTransf3d>(trfName); }
 
 //! @brief Returns a reference to the coordinate transformation map (container).
 const XC::TransfCooLoader::map_transfcoo &XC::TransfCooLoader::Map(void) const
@@ -151,6 +121,16 @@ XC::CrdTransf *XC::TransfCooLoader::find_ptr(const std::string &nmb)
       return (*i).second;
     else
       return nullptr; 
+  }
+
+//! @brief Returns a const pointer to the transformation with the name being passed as parameter (returns nullptr if not found).
+const XC::CrdTransf *XC::TransfCooLoader::find_ptr(const std::string &nmb) const
+  {
+    XC::TransfCooLoader::const_iterator i= find(nmb);
+    if(i!= transfcoo.end())
+      return (*i).second;
+    else
+      return nullptr;
   }
 
 //! @brief Returns a pointer to the coordinate transformation with
