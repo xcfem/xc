@@ -20,6 +20,91 @@ import numpy as np
 import geom
 import xc_base
 
+class ReinforcedConcreteLimitStrains(object):
+    def __init__(self,EpsCU= -3.5e-3,EpsC0= -2.0e-3,SMaxStrain= 10e-3):
+      ''' Constructor.
+
+      :param EpsC0: Average of the initial minimum compressive strain in the concrete (see figure 42.1.3 in EHE-08).
+      :param EpsCU: Ultimate bending strain in the concrete (see figure 42.1.3 in EHE-08).
+      :param SMaxStrain: maximum allowable strain for passive reinforcement.
+      '''  
+      self.EpsCU= EpsCU
+      self.EpsC0= EpsC0
+      self.SMaxStrain= SMaxStrain
+        
+    def bendingOK(self, epsCMin, epsSMax):
+      '''Check for flexural.
+
+      :param epsCMin: minimum strain for concrete.
+      :param epsSMax: maximum strain for reinforcing steel.
+      '''
+      retval= False
+      if(epsCMin>=self.EpsCU): # Minimum concrete strain OK.
+        if(epsSMax<=self.SMaxStrain): # Maximum reinforcing steel strain OK.
+          retval= True
+      return retval
+
+    def getBendingEfficiency(self, epsCMin,epsSMax):
+      '''Return efficiency in flexural bending.
+
+      :param epsCMin: minimum strain for concrete.
+      :param epsSMax: maximum strain for reinforcing steel.
+      '''
+      return (max(epsCMin/self.EpsCU,epsSMax/self.SMaxStrain))
+
+    def compressiveBendingOK(self, epsCMin,epsCMax):
+      '''Check for compressive or flexural compressive strength.
+
+      :param epsCMin: minimum strain for concrete.
+      :param epsCMax: maximum strain for concrete.
+      '''
+      retval= False
+      if(epsCMin>=(self.EpsCU - 3/4.0*epsCMax)): # Concrete minimum strain OK.
+        if(epsCMax>=self.EpsC0): # Concrete maximum strain OK.
+          retval= True
+      return retval
+
+    def getCompressiveBendingEfficiency(self, epsCMin,epsCMax):
+      '''Return efficiency for compressive or flexural compressive strength..
+
+      :param epsCMin: minimum strain for concrete.
+      :param epsCMax: maximum strain for concrete.
+      '''
+      return (max(epsCMin/(self.EpsCU - 3/4.0*epsCMax),epsCMax/self.EpsC0))
+
+
+    def tensileBendingOK(self, epsSMax):
+      '''Check for tensile or flexural tensile stress.
+
+      :param epsSMax: maximum strain for reinforcing steel.
+      '''
+      retval= False
+      if(epsSMax<=self.SMaxStrain): # Maximum reinforcing steel strain OK.
+        retval= True
+      return retval
+
+    def getTensileBendingEfficiency(self, epsSMax):
+      '''Return efficiency for tensile or flexural tensile stress.
+
+      :param epsSMax: maximum strain for reinforcing steel.
+      '''
+      return (epsSMax/self.SMaxStrain)
+
+    def getNormalStressesEfficiency(self, tipoSol, epsCMin, epsCMax, epsSMax):
+      ''' Return efficiency under normal stresses.'''
+      retval= 0.0
+      if(tipoSol==1): # Tensile or flexural tensile.
+        retval= getTensileBendingEfficiency(epsSMax)
+      else:
+        if(tipoSol==2): # Bending.
+          retval= getBendingEfficiency(epsCMin,epsSMax)
+        else:
+          if(tipoSol==3): # Compressive or flexural compressive.
+            retval= getCompressiveBendingEfficiency(epsCMin,epsCMax)
+          else:
+            retval= -100.0
+      return retval
+
 
 class Concrete(matWDKD.MaterialWithDKDiagrams):
     """ Concrete model according to Eurocode 2 - Base class.

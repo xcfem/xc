@@ -97,8 +97,8 @@ from materials import section_properties
 from materials.ehe import EHE_limit_state_checking
 tipoSolic= section_properties.solicitationType(epsCMin,epsSMax)
 strTipoSolic= section_properties.solicitationTypeString(tipoSolic)
-cumpleFT= EHE_limit_state_checking.cumpleFlexotraccion(epsCMin,epsSMax)
-aprovSecc= EHE_limit_state_checking.aprovFlexotraccion(epsCMin,epsSMax)
+cumpleFT= EHE_materials.ReinforcedConcreteLimitStrainsEHE08.bendingOK(epsCMin,epsSMax)
+aprovSecc= EHE_materials.ReinforcedConcreteLimitStrainsEHE08.getBendingEfficiency(epsCMin,epsSMax)
 
 ratio1= RM
 ratio2= esfMz

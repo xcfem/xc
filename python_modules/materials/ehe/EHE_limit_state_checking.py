@@ -11,58 +11,6 @@ from materials.fiber_section import fiberUtils
 from materials import limit_state_checking_base as lscb
 from postprocess import control_vars as cv
 
-# Checking normal stresses of a reinforced concrete section.
-
-def cumpleFlexotraccion(epsCMin, epsSMax):
-  '''Comprobación en flexotracción.'''
-  retval= False
-  if(epsCMin>=-3.5e-3): # Minimum concrete strain OK.
-    if(epsSMax<=10e-3): # Maximum reinforcing steel strain OK.
-      retval= True
-  return retval
-
-def aprovFlexotraccion(epsCMin,epsSMax):
-  '''Aprovechamiento sección en flexotracción.'''
-  return (max(epsCMin/-3.5e-3,epsSMax/10e-3))
-
-def cumpleCompresionCompuesta(epsCMin,epsCMax):
-  '''Comprobación en compresión simple o compuesta.'''
-  retval= False
-  if(epsCMin>=(-3.5e-3 - 3/4*epsCMax)): # Concrete minimum strain OK.
-    if(epsCMax>=-2e-3): # Concrete maximum strain OK.
-      retval= True
-  return retval
-
-def aprovCompresionCompuesta(epsCMin,epsCMax):
-  '''Aprovechamiento sección en compresión simple o compuesta.'''
-  return (max(epsCMin/(-3.5e-3 - 3/4*epsCMax),epsCMax/-2e-3))
-
-
-def cumpleTraccionCompuesta(epsSMax):
-  '''Comprobación en tracción simple o compuesta.'''
-  retval= False
-  if(epsSMax<=10e-3): # Maximum reinforcing steel strain OK.
-    retval= True
-  return retval
-
-def aprovTraccionCompuesta(epsSMax):
-  '''Aprovechamiento sección en tracción simple o compuesta.'''
-  return (epsSMax/10e-3)
-
-def aprovTN(tipoSol, epsCMin, epsCMax, epsSMax):
-  retval= 0.0
-  if(tipoSol==1): # Tracción simple o compuesta.
-    retval= aprovTraccionCompuesta(epsSMax)
-  else:
-    if(tipoSol==2): # Flexotracción.
-      retval= aprovFlexotraccion(epsCMin,epsSMax)
-    else:
-      if(tipoSol==3): # Compresión simple o compuesta.
-        retval= aprovCompresionCompuesta(epsCMin,epsCMax)
-      else:
-        retval= -100
-  return retval
-
 # Reinforced concrete section shear checking.
 
 def getFcvEH91(fcd):

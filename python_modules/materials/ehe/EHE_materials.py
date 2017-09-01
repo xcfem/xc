@@ -13,6 +13,9 @@ import math
 import scipy.interpolate
 from materials import concrete_base
 
+ReinforcedConcreteLimitStrainsEHE08= concrete_base.ReinforcedConcreteLimitStrains(EpsCU= -3.5e-3,EpsC0= -2.0e-3,SMaxStrain= 10e-3)
+
+
 class EHEConcrete(concrete_base.Concrete):
     """ Concrete model according to EHE
     
