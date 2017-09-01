@@ -28,8 +28,8 @@ def aprovFlexotraccion(epsCMin,epsSMax):
 def cumpleCompresionCompuesta(epsCMin,epsCMax):
   '''Comprobación en compresión simple o compuesta.'''
   retval= False
-  if(epsCMin>=(-3.5e-3 - 3/4*epsCMax)): # Si cumple deformación mínima del hormigón.
-    if(epsCMax>=-2e-3): # Si cumple deformación máxima del hormigón.
+  if(epsCMin>=(-3.5e-3 - 3/4*epsCMax)): # Concrete minimum strain OK.
+    if(epsCMax>=-2e-3): # Concrete maximum strain OK.
       retval= True
   return retval
 
@@ -67,12 +67,12 @@ def aprovTN(tipoSol, epsCMin, epsCMax, epsSMax):
 
 def getFcvEH91(fcd):
   '''
-  Devuelve el valor de fcv (resistencia virtual a cortante del hormigón)
-   según la antigua EH-91.
+  Return fcv (concrete virtual shear strength)
+   according to EH-91.
 
-  :param fcd: Design compressive strength of concrete.
-  :param b: Anchura neta mínima del elemento a comprobar, definida de acuerdo con el clause 40.3.5.
-  :param d: Canto útil (meters).
+  :param fcd: design compressive strength of concrete.
+  :param b: net width of the element according to clause 40.3.5.
+  :param d: effective depth (meters).
   
   '''
   fcdKpcm2= fcd*9.81/1e6
@@ -81,16 +81,16 @@ def getFcvEH91(fcd):
 
 def getVu1(fcd, Nd, Ac, b0, d, alpha, theta):
   '''
-  Devuelve el valor de Vu1 (cortante de agotamiento por compresión oblicua del alma)
+  Return value of Vu1 (shear strength por compresión oblicua del alma)
    según el clause 44.2.3.1 de EHE.
 
   :param fcd: Design compressive strength of concrete.
-  :param Nd: Axil de cálculo (positivo si es de tracción).
-  :param Ac: Area total de la sección de hormigón.
-  :param b0: Anchura neta mínima del elemento a comprobar, definida de acuerdo con el clause 40.3.5.
-  :param d: Canto útil.
-  :param alpha: Angle between the shear rebars and the member axis (figure 44.2.3.1.a EHE).
-  :param theta: Angle between the concrete compressed struts and the member axis (figure 44.2.3.1.a EHE).
+  :param Nd: axial force design value (positive if in tension).
+  :param Ac: concrete section total area.
+  :param b0: net width of the element according to clause 40.3.5.
+  :param d: effective depth.
+  :param alpha: angle between the shear rebars and the member axis (figure 44.2.3.1.a EHE).
+  :param theta: angle between the concrete compressed struts and the member axis (figure 44.2.3.1.a EHE).
   
   '''
   f1cd= 0.6*fcd
@@ -101,43 +101,43 @@ def getVu1(fcd, Nd, Ac, b0, d, alpha, theta):
 
 def getFcv(fact, fck, Nd, Ac, b0, d, AsPas, fyd, AsAct, fpd):
   '''
-  Devuelve el valor de fcv (resistencia virtual a cortante del hormigón)
-     para piezas CON Ó SIN reinforcement de cortante, según el clauses 44.2.3.2.1 y  44.2.3.2.2 de EHE.
+  Return the value of fcv (concrete virtual shear strength)
+     for parts WITH or WITHOUT shear reinforcement, según el clauses 44.2.3.2.1 y  44.2.3.2.2 de EHE.
   
-  :param fact: Factor que toma el valor 0.12 para piezas SIN reinforcement de cortante y 0.10 para piezas CON
-  reinforcement de cortante.
-  :param fck: Concrete characteristic compressive strength.
-  :param Nd: Axil de cálculo (positivo si es de tracción).
-  :param Ac: Area total de la sección de hormigón.
-  :param b0: Anchura neta mínima del elemento a comprobar, definida de acuerdo con el clause 40.3.5.
-  :param d: Canto útil (meters).
+  :param fact: factor equal to 0.12 for parts WITHOUT shear reinforcement y 0.10 for parts WITH
+  shear reinforcement.
+  :param fck: concrete characteristic compressive strength.
+  :param Nd: axial force design value (positive if in tension).
+  :param Ac: concrete section total area.
+  :param b0: net width of the element according to clause 40.3.5.
+  :param d: effective depth (meters).
   :param AsPas: Área de la de la reinforcement longitudinal pasiva traccionada anclada
   a una distancia mayor que el depth útil de la sección en estudio.
-  :param fyd: Resistencia de cálculo de las reinforcement pasivas (clause 38.3 EHE).
+  :param fyd: reinforcing steel design yield strength (clause 38.3 EHE).
   :param AsAct: Área de la de la reinforcement longitudinal activa traccionada anclada
   a una distancia mayor que el depth útil de la sección en estudio.
   :param fpd: design value of prestressing steel strength (clause 38.6 EHE).
     
   '''
   sgpcd= Nd/Ac
-  chi= 1+sqrt(200/(d*1000)) # d HA DE EXPRESARSE EN METROS.
+  chi= 1+sqrt(200/(d*1000)) # d MUST BE EXPRESSED IN METERS.
   rol= min((AsPas+AsAct*fpd/fyd)/(b0*d),0.02)
   return fact*chi*(rol*fck/1e4)^(1/3)*1e6-0.15*sgpcd
 
 
 def getVu2SIN(fck, Nd, Ac, b0, d, AsPas, fyd, AsAct, fpd):
   '''
-  Devuelve el valor de Vu2 (cortante de agotamiento por tracción en el alma)
-     para piezas SIN reinforcement de cortante, según el clause 44.2.3.2.1 de EHE.
+  Return the value of Vu2 (shear strength por tracción en el alma)
+     for parts WITHOUT shear reinforcement, según el clause 44.2.3.2.1 de EHE.
   
-  :param fck: Concrete characteristic compressive strength.
-  :param Nd: Axil de cálculo (positivo si es de tracción).
-  :param Ac: Area total de la sección de hormigón.
-  :param b0: Anchura neta mínima del elemento a comprobar, definida de acuerdo con el clause 40.3.5.
-  :param d: Canto útil (meters).
+  :param fck: concrete characteristic compressive strength.
+  :param Nd: axial force design value (positive if in tension).
+  :param Ac: concrete section total area.
+  :param b0: net width of the element according to clause 40.3.5.
+  :param d: effective depth (meters).
   :param AsPas: Área de la de la reinforcement longitudinal pasiva traccionada anclada
   a una distancia mayor que el depth útil de la sección en estudio.
-  :param fyd: Resistencia de cálculo de las reinforcement pasivas (clause 38.3 EHE).
+  :param fyd: reinforcing steel design yield strength (clause 38.3 EHE).
   :param AsAct: Área de la de la reinforcement longitudinal activa traccionada anclada
   a una distancia mayor que el depth útil de la sección en estudio.
   :param fpd: design value of prestressing steel strength (clause 38.6 EHE).
@@ -147,17 +147,17 @@ def getVu2SIN(fck, Nd, Ac, b0, d, AsPas, fyd, AsAct, fpd):
 
 def getVcu(fck, Nd, Ac, b0, d, theta, AsPas, fyd, AsAct, fpd, sgxd, sgyd):
   '''
-  Devuelve el valor de Vcu (contribución del hormigón a la resistencia a cortante) para piezas CON reinforcement de cortante, según el clause 44.2.3.2.2 de EHE.
+  Return the value of Vcu (contribución del hormigón a la resistencia a cortante) for parts WITH shear reinforcement, según el clause 44.2.3.2.2 de EHE.
 
-  :param fck: Concrete characteristic compressive strength.
-  :param Nd: Axil de cálculo (positivo si es de tracción).
-  :param Ac: Area total de la sección de hormigón.
-  :param b0: Anchura neta mínima del elemento a comprobar, definida de acuerdo con el clause 40.3.5.
-  :param d: Canto útil (meters).
-  :param theta: Angle between the concrete compressed struts and the member axis (figure 44.2.3.1.a EHE).
+  :param fck: concrete characteristic compressive strength.
+  :param Nd: axial force design value (positive if in tension).
+  :param Ac: concrete section total area.
+  :param b0: net width of the element according to clause 40.3.5.
+  :param d: effective depth (meters).
+  :param theta: angle between the concrete compressed struts and the member axis (figure 44.2.3.1.a EHE).
   :param AsPas: Área de la de la reinforcement longitudinal pasiva traccionada anclada
   a una distancia mayor que el depth útil de la sección en estudio.
-  :param fyd: Resistencia de cálculo de las reinforcement pasivas (clause 38.3 EHE).
+  :param fyd: reinforcing steel design yield strength (clause 38.3 EHE).
   :param AsAct: Área de la de la reinforcement longitudinal activa traccionada anclada
   a una distancia mayor que el depth útil de la sección en estudio.
   :param fpd: design value of prestressing steel strength (clause 38.6 EHE).
@@ -177,12 +177,13 @@ def getVcu(fck, Nd, Ac, b0, d, theta, AsPas, fyd, AsAct, fpd, sgxd, sgyd):
 
 def getVsu(z, alpha, theta, AsTrsv, fyd):
   '''
-  Devuelve el valor de Vsu (contribución de la reinforcement transversal de alma a la resistencia a cortante)
-   para piezas CON reinforcement de cortante, según el clause 44.2.3.2.2 de EHE.
+  Return the value of Vsu (contribución de la reinforcement transversal de alma a la resistencia a cortante)
+   for parts WITH shear reinforcement, según el clause 44.2.3.2.2 de EHE.
+
   :param z: Lever arm.
-  :param alpha: Ángulo de las reinforcement de cortante con el eje de la pieza (figura 44.2.3.1.a EHE).
-  :param theta: Angle between the concrete compressed struts and the member axis (figure 44.2.3.1.a EHE).
-  :param AsTrsv: Área de la reinforcement transversal.
+  :param alpha: angle of the shear reinforcement with the part axis (figure 44.2.3.1.a EHE).
+  :param theta: angle between the concrete compressed struts and the member axis (figure 44.2.3.1.a EHE).
+  :param AsTrsv: transverse reinforcement area.
   :param fyd: Resistencia de cálculo de la reinforcement transversal.
   
   '''
@@ -193,25 +194,25 @@ def getVsu(z, alpha, theta, AsTrsv, fyd):
 
 def getVu2(fck, Nd, Ac, b0, d, z, alpha, theta, AsPas, fyd, AsAct, fpd, sgxd, sgyd, AsTrsv, fydTrsv):
   '''
-  Devuelve el valor de Vu2 para piezas CON o SIN reinforcement de cortante, según el clause 44.2.3.2.2 de EHE.
+  Return the value of Vu2 for parts WITH or WITHOUT shear reinforcement, según el clause 44.2.3.2.2 de EHE.
 
-  :param fck: Concrete characteristic compressive strength.
-  :param Nd: Axil de cálculo (positivo si es de tracción).
-  :param Ac: Area total de la sección de hormigón.
-  :param b0: Anchura neta mínima del elemento a comprobar, definida de acuerdo con el clause 40.3.5.
-  :param d: Canto útil (meters).
+  :param fck: concrete characteristic compressive strength.
+  :param Nd: axial force design value (positive if in tension).
+  :param Ac: concrete section total area.
+  :param b0: net width of the element according to clause 40.3.5.
+  :param d: effective depth (meters).
   :param z: Lever arm.
-  :param alpha: Ángulo de las reinforcement de cortante con el eje de la pieza (figura 44.2.3.1.a EHE).
-  :param theta: Angle between the concrete compressed struts and the member axis (figure 44.2.3.1.a EHE).
+  :param alpha: angle of the shear reinforcement with the part axis (figure 44.2.3.1.a EHE).
+  :param theta: angle between the concrete compressed struts and the member axis (figure 44.2.3.1.a EHE).
   :param AsPas: Área de la de la reinforcement longitudinal pasiva traccionada anclada
   a una distancia mayor que el depth útil de la sección en estudio.
-  :param fyd: Resistencia de cálculo de las reinforcement pasivas (clause 38.3 EHE).
+  :param fyd: reinforcing steel design yield strength (clause 38.3 EHE).
   :param AsAct: Área de la de la reinforcement longitudinal activa traccionada anclada
   a una distancia mayor que el depth útil de la sección en estudio.
   :param fpd: design value of prestressing steel strength (clause 38.6 EHE).
   :param sgxd: Tensión normal de cálculo en el centro de gravedad de la sección paralela a la directriz de la pieza considerando el hormigón NO FISURADO (art. 44.2.3.2).
   :param sgyd: Tensión normal de cálculo en el centro de gravedad de la sección paralela al esfuerzo cortante.
-  :param AsTrsv: Área de la reinforcement transversal.
+  :param AsTrsv: transverse reinforcement area.
   :param fyd: Resistencia de cálculo de la reinforcement transversal.
   '''
   vcu= 0.0
@@ -226,24 +227,24 @@ def getVu2(fck, Nd, Ac, b0, d, z, alpha, theta, AsPas, fyd, AsAct, fpd, sgxd, sg
 
 def getVu(fck, fcd, Nd, Ac, b0, d, z, alpha, theta, AsPas, fyd, AsAct, fpd, sgxd, sgyd, AsTrsv, fydTrsv):
   '''
-  Devuelve el valor de Vu= max(Vu1,Vu2) para piezas CON o SIN reinforcement de cortante, según el clause 44.2.3.2.2 de EHE.
-  :param fck: Concrete characteristic compressive strength.
-  :param Nd: Axil de cálculo (positivo si es de tracción).
-  :param Ac: Area total de la sección de hormigón.
-  :param b0: Anchura neta mínima del elemento a comprobar, definida de acuerdo con el clause 40.3.5.
-  :param d: Canto útil (meters).
+  Return the value of Vu= max(Vu1,Vu2) for parts WITH or WITHOUT shear reinforcement, según el clause 44.2.3.2.2 de EHE.
+  :param fck: concrete characteristic compressive strength.
+  :param Nd: axial force design value (positive if in tension).
+  :param Ac: concrete section total area.
+  :param b0: net width of the element according to clause 40.3.5.
+  :param d: effective depth (meters).
   :param z: Lever arm.
-  :param alpha: Ángulo de las reinforcement de cortante con el eje de la pieza (figura 44.2.3.1.a EHE).
-  :param theta: Angle between the concrete compressed struts and the member axis (figure 44.2.3.1.a EHE).
+  :param alpha: angle of the shear reinforcement with the part axis (figure 44.2.3.1.a EHE).
+  :param theta: angle between the concrete compressed struts and the member axis (figure 44.2.3.1.a EHE).
   :param AsPas: Área de la de la reinforcement longitudinal pasiva traccionada anclada
   a una distancia mayor que el depth útil de la sección en estudio.
-  :param fyd: Resistencia de cálculo de las reinforcement pasivas (clause 38.3 EHE).
+  :param fyd: reinforcing steel design yield strength (clause 38.3 EHE).
   :param AsAct: Área de la de la reinforcement longitudinal activa traccionada anclada
   a una distancia mayor que el depth útil de la sección en estudio.
   :param fpd: design value of prestressing steel strength (clause 38.6 EHE).
   :param sgxd: Tensión normal de cálculo en el centro de gravedad de la sección paralela a la directriz de la pieza considerando el hormigón NO FISURADO (art. 44.2.3.2).
   :param sgyd: Tensión normal de cálculo en el centro de gravedad de la sección paralela al esfuerzo cortante.
-  :param AsTrsv: Área de la reinforcement transversal.
+  :param AsTrsv: transverse reinforcement area.
   :param fyd: Resistencia de cálculo de la reinforcement transversal.
   '''
   vu1= getVu1(fcd,Nd,Ac,b0,d,alpha,theta)
@@ -267,17 +268,17 @@ class ParamsCortante(object):
   '''Define las propiedades del registro que contiene los parámetros de cálculo
    a cortante.'''
   def __init__(self):
-    self.concreteArea= 0.0 # Area total de la sección de hormigón.
-    self.widthMin= 0.0 # Anchura neta mínima del elemento a comprobar, definida de acuerdo con el clause 40.3.5.
-    self.depthUtil= 0.0 # Canto útil (meters).
+    self.concreteArea= 0.0 # Concrete section total area.
+    self.widthMin= 0.0 # net width of the element according to clause 40.3.5.
+    self.depthUtil= 0.0 # effective depth (meters).
     self.brazoMecanico= 0.0 # Lever arm (meters).
     self.areaRebarTracc= 0.0 # Área de la reinforcement longitudinal pasiva traccionada anclada a una distancia mayor que el depth útil de la sección en estudio.
     self.areaTendonesTracc= 0.0 # Área de la reinforcement activa longitudinal pasiva traccionada anclada a una distancia mayor que el depth útil de la sección en estudio.
-    self.areaShReinfBranchsTrsv= 0.0 # Área de la reinforcement transversal.
+    self.areaShReinfBranchsTrsv= 0.0 # transverse reinforcement area.
     self.sigmaXD= 0.0 # Tensión normal de cálculo en el centro de gravedad de la sección paralela a la directriz de la pieza considerando el hormigón NO FISURADO (art. 44.2.3.2).
     self.sigmaYD= 0.0 # Tensión normal de cálculo en el centro de gravedad de la sección paralela al esfuerzo cortante.
 
-    self.angAlpha= math.pi/2 # Ángulo de las reinforcement de cortante con el eje de la pieza (figura 44.2.3.1.a EHE).
+    self.angAlpha= math.pi/2 # angle of the shear reinforcement with the part axis (figure 44.2.3.1.a EHE).
     self.angTheta= math.pi/6 # Angle between the concrete compressed struts and the member axis (figure 44.2.3.1.a EHE).
     self.cortanteUltimo= 0.0
 
@@ -296,9 +297,9 @@ class ParamsCortante(object):
   def printParams(self):
     '''Print shear checking values.'''
     print "Area de las reinforcement traccionadas; As= ",self.areaRebarTracc*1e4," cm2"
-    print "Área de la reinforcement transversal; AsTrsv= ",self.areaShReinfBranchsTrsv*1e4," cm2"
+    print "transverse reinforcement area; AsTrsv= ",self.areaShReinfBranchsTrsv*1e4," cm2"
     print "Tensión normal de cálculo = sigmaXD",self.sigmaXD/1e6," MPa"
-    print "Canto útil; d= ",self.depthUtil," m"
+    print "effective depth; d= ",self.depthUtil," m"
     print "Ancho mínimo; b0= ",self.widthMin," m"
     print "Lever arm; z= ",self.brazoMecanico," m"
     print "cortanteUltimo; Vu= ",self.cortanteUltimo/1e3," kN"
@@ -324,7 +325,7 @@ def getKEHE08(sgpcd,fcd):
     '''getKEHE08(sgpcd,fcd)
     :param sgpcd: Tensión axil efectiva en el hormigón Ncd/Ac.
     :param fcd: Valor de cálculo de la resistencia a compresión simple del hormigón (N/m2).
-    Devuelve el valor de K (coeficiente que depende del esfuerzo axil)
+    Return the value of K (coeficiente que depende del esfuerzo axil)
     according to clause 44.2.3.1 de la EHE-08
     '''
     s=-sgpcd/fcd #Positive when compressed
@@ -345,16 +346,16 @@ def getKEHE08(sgpcd,fcd):
 def getVu1EHE08(fck,fcd,Ncd,Ac,b0,d,alpha,theta):
     '''getVu1EHE08(fck,fcd,Ncd,Ac,b0,d,alpha,theta) [uds: N, m, rad]
 
-    :param fck: Concrete characteristic compressive strength.
+    :param fck: concrete characteristic compressive strength.
     :param fcd: Resistencia de cálculo del hormigón a compresión.
-    :param Ncd: Axil de cálculo resistido por el hormigón (positivo si es de tracción).
-    :param Ac: Area total de la sección de hormigón.
-    :param b0: Anchura neta mínima del elemento a comprobar, definida de acuerdo con el artículo 40.3.5.
-    :param d: Canto útil.
-    :param alpha: Ángulo de las reinforcement de cortante con el eje de la pieza (figura 44.2.3.1 EHE-08).
-    :param theta: Angle between the concrete compressed struts and the member axis (figure 44.2.3.1.a EHE).
+    :param Ncd: axil de cálculo resistido por el hormigón (positivo si es de tracción).
+    :param Ac: concrete section total area.
+    :param b0: net width of the element according to clause 40.3.5.
+    :param d: effective depth.
+    :param alpha: angle of the shear reinforcement with the part axis (figure 44.2.3.1 EHE-08).
+    :param theta: angle between the concrete compressed struts and the member axis (figure 44.2.3.1.a EHE).
 
-    Devuelve el valor de Vu1 (cortante de agotamiento por compresión oblicua del alma)
+    Return the value of Vu1 (shear strength por compresión oblicua del alma)
     according to clause 44.2.3.1 de EHE-08.
     '''
     f1cd=getF1cdEHE08(fck,fcd)
@@ -369,11 +370,11 @@ def getVu2EHE08NoAtNoFis(fctd,I,S,b0,alphal,Ncd,Ac):
     :param fctd: Resistencia de cálculo del hormigón a tracción.
     :param I: Moment of inertia of the section with respect of its centroid.
     :param S: Momento estático de la parte de la sección que queda por encima del CDG.
-    b0: Anchura neta mínima del elemento a comprobar, definida de acuerdo con el artículo 40.3.5.
-    :param alphal: Coeficiente que, en su caso, introduce el efecto de la transferencia.
-    :param Ncd: Axil de cálculo resistido por el hormigón (positivo si es de tracción).
-    :param Ac: Area total de la sección de hormigón.
-    Devuelve el valor de Vu2 (cortante de agotamiento por tracción en el alma)
+    b0: net width of the element according to clause 40.3.5.
+    :param alphal: coeficiente que, en su caso, introduce el efecto de la transferencia.
+    :param Ncd: axil de cálculo resistido por el hormigón (positivo si es de tracción).
+    :param Ac: concrete section total area.
+    Return the value of Vu2 (shear strength por tracción en el alma)
     according to clause 44.2.3.2.1.1 de EHE-08.
     '''
     tmp= fctd
@@ -386,25 +387,24 @@ def getVu2EHE08NoAtNoFis(fctd,I,S,b0,alphal,Ncd,Ac):
 
 def getFcvEHE08(fact,fcv,gammaC,b0,d,chi,sgpcd,AsPas,AsAct):
     '''getFcvEHE08(fact,fcv,gammaC,b0,d,chi,sgpcd,AsPas,AsAct)  [uds: N, m, rad]
+    Return the value of fcv (concrete virtual shear strength)
+    for parts WITH or WITHOUT shear reinforcement in cracked regions, según los
+    artículos 44.2.3.2.1.2 y  44.2.3.2.2 de EHE-08.
 
-    :param fact: Factor que toma el valor 0.18 para piezas SIN reinforcement de cortante y 0.15 para piezas CON reinforcement de cortante.
-
-    :param fcv: Resistencia efectiva del hormigón a cortante. En piezas sin reinforcement de cortante
-    será fcv= min(fck,60MPa). En piezas con reinforcement de cortante fcv= min(fck,100MPa).
+    :param fact: Factor que toma el valor 0.18 for parts WITHOUT shear reinforcement y 0.15 for parts WITH shear reinforcement.
+    :param fcv: Resistencia efectiva del hormigón a cortante. En piezas sin shear reinforcement
+    será fcv= min(fck,60MPa). En piezas con shear reinforcement fcv= min(fck,100MPa).
     En ambos casos, si el control del hormigón es indirecto fcv=15MPa.
     :param gammaC: Partial safety factor for concrete.
-    b0: Anchura neta mínima del elemento a comprobar, definida de acuerdo con el artículo 40.3.5.
-    :param d: Canto útil (meters).
-    :param chi: Coeficiente que introduce el efecto de los áridos en el depth útil.
+    b0: net width of the element according to clause 40.3.5.
+    :param d: effective depth (meters).
+    :param chi: coeficiente que introduce el efecto de los áridos en el depth útil.
     :param sgpcd: Tensión axial media en el alma (compresión positiva).
     :param AsPas: Área de la de la reinforcement longitudinal pasiva traccionada anclada
     a una distancia mayor que el depth útil de la sección en estudio.
     :param AsAct: Área de la de la reinforcement longitudinal activa traccionada anclada
     a una distancia mayor que el depth útil de la sección en estudio.
 
-    Devuelve el valor de fcv (resistencia virtual a cortante del hormigón)
-    para piezas CON Ó SIN reinforcement de cortante en regiones fisuradas, según los
-    artículos 44.2.3.2.1.2 y  44.2.3.2.2 de EHE-08.
     '''
     rol=min((AsPas+AsAct)/(b0*d),0.02)
     return fact/gammaC*chi*(rol*fcv/1e4)**(1/3)*1e6-0.15*sgpcd
@@ -412,18 +412,18 @@ def getFcvEHE08(fact,fcv,gammaC,b0,d,chi,sgpcd,AsPas,AsAct):
 
 def getFcvMinEHE08(fcv,gammaC,d,chi,sgpcd):
     '''getFcvMinEHE08(fcv,gammaC,d,chi,sgpcd)
+    Devuelve el valor mínimo de fcv (concrete virtual shear strength)
+    for parts WITHOUT shear reinforcement in cracked regions, según el
+    artículo 44.2.3.2.1.2 de EHE-08.
 
-    :param fcv: Resistencia efectiva del hormigón a cortante. En piezas sin reinforcement de cortante
-    será fcv= min(fck,60MPa). En piezas con reinforcement de cortante fcv= min(fck,100MPa).
+    :param fcv: Resistencia efectiva del hormigón a cortante. En piezas sin shear reinforcement
+    será fcv= min(fck,60MPa). En piezas con shear reinforcement fcv= min(fck,100MPa).
     En ambos casos, si el control del hormigón es indirecto fcv=15MPa.
     :param gammaC: Partial safety factor for concrete.
-    :param d: Canto útil (meters).
-    :param chi: Coeficiente que introduce el efecto de los áridos en el depth útil.
+    :param d: effective depth (meters).
+    :param chi: coeficiente que introduce el efecto de los áridos en el depth útil.
     :param sgpcd: Tensión axial media en el alma (compresión positiva).
 
-    Devuelve el valor mínimo de fcv (resistencia virtual a cortante del hormigón)
-    para piezas SIN reinforcement de cortante en regiones fisuradas, según el
-    artículo 44.2.3.2.1.2 de EHE-08.
     '''
     return 0.075/gammaC*math.pow(chi,1.5)*math.sqrt(fcv)*1e3-0.15*sgpcd
 
@@ -431,22 +431,22 @@ def getFcvMinEHE08(fcv,gammaC,d,chi,sgpcd):
 def getVu2EHE08NoAtSiFis(fcv,fcd,gammaC,Ncd,Ac,b0,d,AsPas,AsAct):
     '''getVu2EHE08NoAtSiFis(fcv,fcd,gammaC,Ncd,Ac,b0,d,AsPas,AsAct) [uds: N, m]
 
-    :param fcv: Resistencia efectiva del hormigón a cortante. En piezas sin reinforcement de cortante
-    será fcv= min(fck,60MPa). En piezas con reinforcement de cortante fcv= min(fck,100MPa).
+    :param fcv: Resistencia efectiva del hormigón a cortante. En piezas sin shear reinforcement
+    será fcv= min(fck,60MPa). En piezas con shear reinforcement fcv= min(fck,100MPa).
     En ambos casos, si el control del hormigón es indirecto fcv=15MPa.
     :param fcd: Resistencia de cálculo del hormigón a compresión.
     :param gammaC: Partial safety factor for concrete.
-    :param Ncd: Axil de cálculo resistido por el hormigón (positivo si es de tracción).
-    :param Ac: Area total de la sección de hormigón.
-    b0: Anchura neta mínima del elemento a comprobar, definida de acuerdo con el artículo 40.3.5.
-    :param d: Canto útil (meters).
+    :param Ncd: axil de cálculo resistido por el hormigón (positivo si es de tracción).
+    :param Ac: concrete section total area.
+    b0: net width of the element according to clause 40.3.5.
+    :param d: effective depth (meters).
     :param AsPas: Área de la de la reinforcement longitudinal pasiva traccionada anclada
     a una distancia mayor que el depth útil de la sección en estudio.
     :param AsAct: Área de la de la reinforcement longitudinal activa traccionada anclada
     a una distancia mayor que el depth útil de la sección en estudio.
 
-    Devuelve el valor de Vu2 (cortante de agotamiento por tracción en el alma)
-    para piezas SIN reinforcement de cortante en regiones fisuradas, according to clause 44.2.3.2.1.2 de EHE-08.
+    Return the value of Vu2 (shear strength por tracción en el alma)
+    for parts WITHOUT shear reinforcement in cracked regions, according to clause 44.2.3.2.1.2 de EHE-08.
     '''
     chi=min(2,1+math.sqrt(200/(d*1000.))) #HA DE EXPRESARSE EN METROS.
     sgpcd=max(max(Ncd/Ac,-0.3*fcd),-12e6)
@@ -456,26 +456,25 @@ def getVu2EHE08NoAtSiFis(fcv,fcd,gammaC,Ncd,Ac,b0,d,AsPas,AsAct):
 
 def getVu2EHE08NoAt(M,Mfis,fcv,fck,gammaC,I,S,alphaL,Ncd,Ac,b0,d,AsPas,AsAct):
     '''getVu2EHE08NoAt(M,Mfis,fcv,fck,gammaC,I,S,alphaL,Ncd,Ac,b0,d,AsPas,AsAct)   [uds: N, m, rad]
+    Return the value of Vu2 (shear strength por tracción en el alma)
+    for parts WITHOUT shear reinforcement, según los artículos 44.2.3.2.1.1 y 44.2.3.2.1.2 de EHE-08.
 
     :param M: Momento que actúa sobre la sección.
     :param Mfis: Momento de fisuración de la sección correspondiente al mismo plano y sentido
     flexión que M.
-    :param fcv: Resistencia efectiva del hormigón a cortante. En piezas sin reinforcement de cortante
-    será fcv= min(fck,60MPa). En piezas con reinforcement de cortante fcv= min(fck,100MPa).
+    :param fcv: Resistencia efectiva del hormigón a cortante. En piezas sin shear reinforcement
+    será fcv= min(fck,60MPa). En piezas con shear reinforcement fcv= min(fck,100MPa).
     En ambos casos, si el control del hormigón es indirecto fcv=15MPa.
     :param fck: Valor característico de la resistencia del hormigón a compresión.
     :param gammaC: Partial safety factor for concrete.
-    :param Ncd: Axil de cálculo resistido por el hormigón (positivo si es de tracción).
-    :param Ac: Area total de la sección de hormigón.
-    b0: Anchura neta mínima del elemento a comprobar, definida de acuerdo con el artículo 40.3.5.
-    :param d: Canto útil (meters).
+    :param Ncd: axil de cálculo resistido por el hormigón (positivo si es de tracción).
+    :param Ac: concrete section total area.
+    b0: net width of the element according to clause 40.3.5.
+    :param d: effective depth (meters).
     :param AsPas: Área de la de la reinforcement longitudinal pasiva traccionada anclada
     a una distancia mayor que el depth útil de la sección en estudio.
     :param AsAct: Área de la de la reinforcement longitudinal activa traccionada anclada
-    a una distancia mayor que el depth útil de la sección en estudio.
- 
-    Devuelve el valor de Vu2 (cortante de agotamiento por tracción en el alma)
-    para piezas SIN reinforcement de cortante, según los artículos 44.2.3.2.1.1 y 44.2.3.2.1.2 de EHE-08.
+    a una distancia mayor que el depth útil de la sección en estudio. 
     '''
     concrTmp= EHE_materials.EHEConcrete("HA",fck,gammaC)
     fctdTmp=concrTmp.fctkEHE08()/gammaC
@@ -489,16 +488,15 @@ def getVu2EHE08NoAt(M,Mfis,fcv,fck,gammaC,I,S,alphaL,Ncd,Ac,b0,d,AsPas,AsAct):
 
 def getVsuEHE08(z,alpha,theta,AsTrsv,fyd):
     '''getVsuEHE08(z,alpha,theta,AsTrsv,fyd)  [uds: N, m, rad]
+    Return the value of Vsu (contribución de la reinforcement transversal de alma
+    a la resistencia al esfuerzo cortante) for parts WITH shear reinforcement,
+    according to clause 44.2.3.2.2 de EHE-08.
 
     :param z: Lever arm.
-    :param alpha: Ángulo de la reinforcement transversal con el eje de la pieza.
-    :param theta: Angle between the concrete compressed struts and the member axis (figure 44.2.3.1.a EHE).
-    :param AsTrsv: Área de la reinforcement transversal cuya contribución se calcula.
+    :param alpha: angle of the transverse reinforcement with the axis of the part.
+    :param theta: angle between the concrete compressed struts and the member axis (figure 44.2.3.1.a EHE).
+    :param AsTrsv: transverse reinforcement area cuya contribución se calcula.
     :param fyd: Valor de cálculo de la resistencia de la reinforcement a cortante.
-
-    Devuelve el valor de Vsu (contribución de la reinforcement transversal de alma
-    a la resistencia al esfuerzo cortante) para piezas CON reinforcement de cortante,
-    according to clause 44.2.3.2.2 de EHE-08.
     '''
     fyalphad=min(fyd,400e6)
     return z*math.sin(alpha)*(1/math.tan(alpha)+1/math.tan(theta))*AsTrsv*fyalphad
@@ -507,6 +505,8 @@ def getVsuEHE08(z,alpha,theta,AsTrsv,fyd):
 
 def getEpsilonXEHE08(Nd,Md,Vd,Td,z,AsPas,AsAct,Es,Ep,Fp,Ae,ue):
     '''getEpsilonXEHE08(Nd,Md,Vd,Td,z,AsPas,AsAct,Es,Ep,Fp,Ae,ue) [uds: N, m, rad]
+    Devuelve la deformación de longitudinal en el alma según la
+    expresión que figura en los comentarios al artículo 44.2.3.2.2 de EHE-08.
 
     :param Nd: Valor de cálculo del axil (aquí positivo si es de tracción)
     :param Md: Valor absoluto del momento de cálculo.
@@ -522,9 +522,6 @@ def getEpsilonXEHE08(Nd,Md,Vd,Td,z,AsPas,AsAct,Es,Ep,Fp,Ae,ue):
     :param Fp: Prestressing force on the section (positive if in tension).
     :param Ae: Área encerrada por la línea media de la sección hueca eficaz.
     :param ue: Perímetro de la línea media de la sección hueca eficaz.
-
-    Devuelve la deformación de longitudinal en el alma según la
-    expresión que figura en los comentarios al artículo 44.2.3.2.2 de EHE-08.
     '''
     denomEpsilonX=2*(Es*AsPas+Ep*AsAct) 
     Md= max(Md,Vd*z)
@@ -539,8 +536,11 @@ def getEpsilonXEHE08(Nd,Md,Vd,Td,z,AsPas,AsAct,Es,Ep,Fp,Ae,ue):
   
 
 
-def getAnguloInclinacionFisurasEHE08(Nd,Md,Vd,Td,z,AsPas,AsAct,Es,Ep,Fp,Ae,ue):
-    '''getAnguloInclinacionFisurasEHE08(Nd,Md,Vd,Td,z,AsPas,AsAct,Es,Ep,Fp,Ae,ue) [uds: N, m, rad]
+def getCrackAngleEHE08(Nd,Md,Vd,Td,z,AsPas,AsAct,Es,Ep,Fp,Ae,ue):
+    '''getCrackAngleEHE08(Nd,Md,Vd,Td,z,AsPas,AsAct,Es,Ep,Fp,Ae,ue) [uds: N, m, rad]
+    Return the reference angle of inclination of cracks from
+    la deformación longitudinal en el alma de la sección
+    expresado en radianes. See clause 44.2.3.2.2 de EHE-08.
 
     :param Nd: Valor de cálculo del axil (aquí positivo si es de tracción)
     :param Md: Valor absoluto del momento de cálculo.
@@ -557,9 +557,6 @@ def getAnguloInclinacionFisurasEHE08(Nd,Md,Vd,Td,z,AsPas,AsAct,Es,Ep,Fp,Ae,ue):
     :param Ae: Área encerrada por la línea media de la sección hueca eficaz.
     :param ue: Perímetro de la línea media de la sección hueca eficaz.
 
-    Returns the reference angle of inclination of cracks from
-    la deformación longitudinal en el alma de la sección
-    expresado en radianes. Ver el artículo 44.2.3.2.2 de EHE-08.
     '''
     return math.radians(getEpsilonXEHE08(Nd,Md,Vd,Td,z,AsPas,AsAct,Es,Ep,Fp,Ae,ue)*7000+29) 
 
@@ -568,18 +565,17 @@ def getAnguloInclinacionFisurasEHE08(Nd,Md,Vd,Td,z,AsPas,AsAct,Es,Ep,Fp,Ae,ue):
   
 def getBetaVcuEHE08(theta,thetaE):
     '''getBetaVcuEHE08(theta,thetaE) [uds: N, m, rad]
-
-    :param thetaE: Reference angle of inclination of cracks.
-    :param theta: Angle between the concrete compressed struts and the member axis (figure 44.2.3.1.a EHE).
-    
     Return the value of «beta» for the expression
     of Vcu according to clause 44.2.3.2.2 of EHE-08.
+
+    :param thetaE: Reference angle of inclination of cracks.
+    :param theta: angle between the concrete compressed struts and the member axis (figure 44.2.3.1.a EHE).    
     '''
     cotgTheta=1/math.tan(theta)
     cotgThetaE=1/math.tan(thetaE)
     retval=0.0
     if cotgTheta<0.5:
-        print"getAnguloInclinacionFisurasEHE08; angle theta is too small."
+        print "getBetaVcuEHE08; theta angle is too small."
     else:
         if(cotgTheta<cotgThetaE):
             retval= (2*cotgTheta-1)/(2*cotgThetaE-1)
@@ -587,29 +583,31 @@ def getBetaVcuEHE08(theta,thetaE):
             if cotgTheta<=2.0:
                 retval= (cotgTheta-2)/(cotgThetaE-2)
             else:
-                print"getAnguloInclinacionFisurasEHE08; el ángulo theta es demasiado grande."
+                print"getBetaVcuEHE08; theta angle is too big."
     return retval
   
 
  
 def getVcuEHE08(fcv,fcd,gammaC,Ncd,Ac,b0,d,z,AsPas,AsAct,theta,Nd,Md,Vd,Td,Es,Ep,Fp,Ae,ue):
     '''getVcuEHE08(fcv,fcd,gammaC,Ncd,Ac,b0,d,z,AsPas,AsAct,theta,Nd,Md,Vd,Td,Es,Ep,Fp,Ae,ue) [uds: N, m, rad]
+    Return the value of Vcu (contribución del hormigón a la resistencia al esfuerzo cortante)
+    for parts WITH shear reinforcement, according to clause 44.2.3.2.2 de EHE-08.
 
-    :param fcv: Resistencia efectiva del hormigón a cortante. En piezas sin reinforcement de cortante
-    será fcv= min(fck,60MPa). En piezas con reinforcement de cortante fcv= min(fck,100MPa).
+    :param fcv: effective concrete shear strength. En piezas sin shear reinforcement
+    será fcv= min(fck,60MPa). En piezas con shear reinforcement fcv= min(fck,100MPa).
     En ambos casos, si el control del hormigón es indirecto fcv=15MPa.
     :param fcd: Valor de cálculo de la resistencia del hormigón a compresión.
     :param gammaC: Partial safety factor for concrete.
-    :param Ncd: Axil de cálculo resistido por el hormigón (positivo si es de tracción).
-    :param Ac: Area total de la sección de hormigón.
-    b0: Anchura neta mínima del elemento a comprobar, definida de acuerdo con el artículo 40.3.5.
-    :param d: Canto útil (meters).
+    :param Ncd: axil de cálculo resistido por el hormigón (positivo si es de tracción).
+    :param Ac: concrete section total area.
+    b0: net width of the element according to clause 40.3.5.
+    :param d: effective depth (meters).
     :param z: Lever arm.
     :param AsPas: Área de la de la reinforcement longitudinal pasiva traccionada anclada
     a una distancia mayor que el depth útil de la sección en estudio.
     :param AsAct: Área de la de la reinforcement longitudinal activa traccionada anclada
     a una distancia mayor que el depth útil de la sección en estudio.
-    :param theta: Angle between the concrete compressed struts and the member axis (figure 44.2.3.1.a EHE)
+    :param theta: angle between the concrete compressed struts and the member axis (figure 44.2.3.1.a EHE)
     :param Nd: Valor de cálculo del axil (positivo si es de tracción)
     :param Md: Valor absoluto del momento de cálculo.
     :param Vd: Valor absoluto del cortante efectivo de cálculo (artículo 42.2.2).
@@ -620,14 +618,12 @@ def getVcuEHE08(fcv,fcd,gammaC,Ncd,Ac,b0,d,z,AsPas,AsAct,theta,Nd,Md,Vd,Td,Es,Ep
     :param Ae: Área encerrada por la línea media de la sección hueca eficaz.
     :param ue: Perímetro de la línea media de la sección hueca eficaz.
 
-    Devuelve el valor de Vcu (contribución del hormigón a la resistencia al esfuerzo cortante)
-    para piezas CON reinforcement de cortante, according to clause 44.2.3.2.2 de EHE-08.
     '''
   
     chi=min(2,1+math.sqrt(200/(d*1000.)))   #HA DE EXPRESARSE EN METROS.
     sgpcd=max(max(Ncd/Ac,-0.3*fcd),-12e6)
     FcvVcu=getFcvEHE08(0.15,fcv,gammaC,b0,d,chi,sgpcd,AsPas,AsAct)
-    thetaEVcu=getAnguloInclinacionFisurasEHE08(Nd,Md,Vd,Td,z,AsPas,AsAct,Es,Ep,Fp,Ae,ue)
+    thetaEVcu=getCrackAngleEHE08(Nd,Md,Vd,Td,z,AsPas,AsAct,Es,Ep,Fp,Ae,ue)
     betaVcu=getBetaVcuEHE08(theta,thetaEVcu)
     return FcvVcu*betaVcu*b0*d
   
@@ -635,27 +631,27 @@ def getVcuEHE08(fcv,fcd,gammaC,Ncd,Ac,b0,d,z,AsPas,AsAct,theta,Nd,Md,Vd,Td,Es,Ep
 
   
 def getVu2EHE08SiAt(fcv,fcd,fyd,gammaC,Ncd,Ac,b0,d,z,AsPas,AsAct,AsTrsv, alpha, theta,Nd,Md,Vd,Td,Es,Ep,Fp,Ae,ue):
-    '''getVu2EHE08SiAt(fcv,fcd,fyd,gammaC,Ncd,Ac,b0,d,z,AsPas,AsAct,AsTrsv, alpha, theta,Nd,Md,Vd,Td,Es,Ep,Fp,Ae,ue) [uds: N, m, rad]. Devuelve el valor de Vu2 (esfuerzo cortante de agotamiento por tracción en el alma)
-    para piezas CON reinforcement de cortante, according to clause 44.2.3.2.2 of EHE-08.
+    '''getVu2EHE08SiAt(fcv,fcd,fyd,gammaC,Ncd,Ac,b0,d,z,AsPas,AsAct,AsTrsv, alpha, theta,Nd,Md,Vd,Td,Es,Ep,Fp,Ae,ue) [uds: N, m, rad]. Return the value of Vu2 (esfuerzo shear strength por tracción en el alma)
+    for parts WITH shear reinforcement, according to clause 44.2.3.2.2 of EHE-08.
 
-    :param fcv: Resistencia efectiva del hormigón a cortante. En piezas sin reinforcement de cortante
-    será fcv= min(fck,60MPa). En piezas con reinforcement de cortante fcv= min(fck,100MPa).
+    :param fcv: effective concrete shear strength. En piezas sin shear reinforcement
+    será fcv= min(fck,60MPa). En piezas con shear reinforcement fcv= min(fck,100MPa).
     En ambos casos, si el control del hormigón es indirecto fcv=15MPa.
     :param fcd: Valor de cálculo de la resistencia del hormigón a compresión.
     :param fyd: Valor de cálculo de la resistencia de la reinforcement a cortante.
     :param gammaC: Partial safety factor for concrete.
-    :param Ncd: Axil de cálculo resistido por el hormigón (positivo si es de tracción).
-    :param Ac: Area total de la sección de hormigón.
-    b0: Anchura neta mínima del elemento a comprobar, definida de acuerdo con el artículo 40.3.5.
-    :param d: Canto útil (meters).
+    :param Ncd: axil de cálculo resistido por el hormigón (positivo si es de tracción).
+    :param Ac: concrete section total area.
+    b0: net width of the element according to clause 40.3.5.
+    :param d: effective depth (meters).
     :param z: Lever arm.
     :param AsPas: Área de la de la reinforcement longitudinal pasiva traccionada anclada
     a una distancia mayor que el depth útil de la sección en estudio.
     :param AsAct: Área de la de la reinforcement longitudinal activa traccionada anclada
     a una distancia mayor que el depth útil de la sección en estudio.
-    :param AsTrsv: Área de la reinforcement transversal.
-    :param alpha: Ángulo de la reinforcement transversal con el eje de la pieza.
-    :param theta: Angle between the concrete compressed struts and the member axis (figure 44.2.3.1.a EHE).
+    :param AsTrsv: transverse reinforcement area.
+    :param alpha: angle of the transverse reinforcement with the axis of the part.
+    :param theta: angle between the concrete compressed struts and the member axis (figure 44.2.3.1.a EHE).
     :param Nd: Valor de cálculo del axil (positivo si es de tracción)
     :param Md: Valor absoluto del momento de cálculo.
     :param Vd: Valor absoluto del cortante efectivo de cálculo (artículo 42.2.2).
@@ -672,25 +668,28 @@ def getVu2EHE08SiAt(fcv,fcd,fyd,gammaC,Ncd,Ac,b0,d,z,AsPas,AsAct,AsTrsv, alpha, 
   
 def getVuEHE08SiAt(fck,fcv,fcd,fyd,gammaC,Ncd,Ac,b0,d,z,AsPas,AsAct,AsTrsv, alpha, theta,Nd,Md,Vd,Td,Es,Ep,Fp,Ae,ue):
     '''def getVuEHE08SiAt(fck,fcv,fcd,fyd,gammaC,Ncd,Ac,b0,d,z,AsPas,AsAct,AsTrsv, alpha, theta,Nd,Md,Vd,Td,Es,Ep,Fp,Ae,ue) [uds: N, m, rad]
-    :param fck: Concrete characteristic compressive strength.
-    :param fcv: Resistencia efectiva del hormigón a cortante. En piezas sin reinforcement de cortante
-    será fcv= min(fck,60MPa). En piezas con reinforcement de cortante fcv= min(fck,100MPa).
+    Return the value of Vu (section shear strength)
+    for parts WITH shear reinforcement, according to clause 44.2.3.2.2 de EHE-08.
+
+    :param fck: concrete characteristic compressive strength.
+    :param fcv: effective concrete shear strength. En piezas sin shear reinforcement
+    será fcv= min(fck,60MPa). En piezas con shear reinforcement fcv= min(fck,100MPa).
     En ambos casos, si el control del hormigón es indirecto fcv=15MPa.
     :param fcd: Valor de cálculo de la resistencia del hormigón a compresión.
     :param fyd: Valor de cálculo de la resistencia de la reinforcement a cortante.
     :param gammaC: Partial safety factor for concrete.
-    :param Ncd: Axil de cálculo resistido por el hormigón (positivo si es de tracción).
-    :param Ac: Area total de la sección de hormigón.
-    b0: Anchura neta mínima del elemento a comprobar, definida de acuerdo con el artículo 40.3.5.
-    :param d: Canto útil (meters).
+    :param Ncd: axil de cálculo resistido por el hormigón (positivo si es de tracción).
+    :param Ac: concrete section total area.
+    b0: net width of the element according to clause 40.3.5.
+    :param d: effective depth (meters).
     :param z: Lever arm.
     :param AsPas: Área de la de la reinforcement longitudinal pasiva traccionada anclada
     a una distancia mayor que el depth útil de la sección en estudio.
     :param AsAct: Área de la de la reinforcement longitudinal activa traccionada anclada
     a una distancia mayor que el depth útil de la sección en estudio.
-    :param AsTrsv: Área de la reinforcement transversal.
-    :param alpha: Ángulo de la reinforcement transversal con el eje de la pieza.
-    :param theta: Angle between the concrete compressed struts and the member axis (figure 44.2.3.1.a EHE).
+    :param AsTrsv: transverse reinforcement area.
+    :param alpha: angle of the transverse reinforcement with the axis of the part.
+    :param theta: angle between the concrete compressed struts and the member axis (figure 44.2.3.1.a EHE).
     :param Nd: Valor de cálculo del axil (positivo si es de tracción)
     :param Md: Valor absoluto del momento de cálculo.
     :param Vd: Valor absoluto del cortante efectivo de cálculo (artículo 42.2.2).
@@ -699,10 +698,7 @@ def getVuEHE08SiAt(fck,fcv,fcd,fyd,gammaC,Ncd,Ac,b0,d,z,AsPas,AsAct,AsTrsv, alph
     :param Ep: prestressing steel elastic modulus.
     :param Fp: Prestressing force on the section (positive if in tension).
     :param Ae: Área encerrada por la línea media de la sección hueca eficaz.
-    :param ue: Perímetro de la línea media de la sección hueca eficaz.
-    
-    Devuelve el valor de Vu (cortante de agotamiento de la sección)
-    para piezas CON reinforcement de cortante, according to clause 44.2.3.2.2 de EHE-08.
+    :param ue: Perímetro de la línea media de la sección hueca eficaz.    
     '''
     return  min(getVu2EHE08(fcv,fcd,fyd,gammaC,Ncd,Ac,b0,d,z,AsPas,AsAct,AsTrsv,alpha,theta,Nd,Md,Vd,Td,Es,Ep,Fp,Ae,ue),getVu1EHE08(fck,fcd,Ncd,Ac,b0,d,alpha,theta))
   
@@ -714,14 +710,14 @@ class ShearControllerEHE(lscb.LimitStateControllerBase):
     self.concreteFibersSetName= "concrete" #Name of the concrete fibers set.
     self.rebarFibersSetName= "reinforcement" #Name of the rebar fibers set.
     self.tensionedRebarsFiberSetName= "reinforcementTraccion" #Name of the tensioned rebars set.
-    self.hayMom= False #Verdadero si la sección está sometida a momento.
-    self.fcvH= 0.0 #Resistencia efectiva del hormigón a cortante.
+    self.hayMom= False # Verdadero si la sección está sometida a momento.
+    self.fcvH= 0.0 # effective concrete shear strength.
     self.fckH= 0.0 #Valor característico de la resistencia del hormigón a compresión.
     self.fcdH= 0.0 #Valor de cálculo de la resistencia del hormigón a compresión.
     self.fctdH= 0.0 #Valor de cálculo de la resistencia del hormigón a tracción.
     self.gammaC= 0.0 # Partial safety factor for concrete.
     self.fydS= 0.0 #Design value of reinforcement steel strength.
-    self.depthUtil= 0.0 #Canto útil con el que está trabajando la sección.
+    self.depthUtil= 0.0 #current effective depth
     self.brazoMecanico= 0.0 #Lever arm con el que está trabajando la sección.
     self.strutWidth= 0.0 #Compressed strut width «b0».
     self.I= 0.0 #Momento of inertia of the section with respect to the neutral axis in régimen elástico.
@@ -734,13 +730,13 @@ class ShearControllerEHE(lscb.LimitStateControllerBase):
     self.E0= 0.0 #Módulo de rigidez tangente del hormigón.
 
     self.alphaL= 1.0 #Factor que depende de la transferencia de pretensado.
-    self.AsTrsv= 0.0 #Área de la reinforcement de cortante.
-    self.alpha= math.radians(90) #Ángulo de las reinforcement de cortante con el eje de la pieza (figura 44.2.3.1 EHE-08).
+    self.AsTrsv= 0.0 #Área de la shear reinforcement.
+    self.alpha= math.radians(90) # angle of the shear reinforcement with the part axis (figure 44.2.3.1 EHE-08).
     self.theta= math.radians(45) #Angle between the concrete compressed struts and the member axis (figure 44.2.3.1.a EHE).
     self.thetaMin= math.atan(0.5) #Minimal value of the theta angle.
     self.thetaMax= math.atan(2) #Maximal value of the theta angle.
 
-    self.thetaFisuras= 0.0 #Angulo de las fisuras con el eje de la pieza.
+    self.thetaFisuras= 0.0 # angle of the cracks with the part axis.
     self.Vcu= 0.0 # Contribución del hormigón a la resistencia al esfuerzo cortante.
     self.Vsu= 0.0 # Contribución de las reinforcement a cortante a la resistencia al esfuerzo cortante.
     self.Vu1= 0.0 #Agotamiento por compresión oblicua del alma.
@@ -748,7 +744,7 @@ class ShearControllerEHE(lscb.LimitStateControllerBase):
     self.Vu= 0.0 #Cortante último de la sección.
 
   def calcVuEHE08NoAt(self, preprocessor, scc, concrete, reinfSteel):
-    ''' Calcula el cortante último de la sección sin reinforcement de cortante.
+    ''' Calcula el cortante último de la sección sin shear reinforcement.
      XXX Falta considerar la reinforcement activa.
 
      reinfSteelMaterialTag: reinforcement steel material identifier.
@@ -804,7 +800,7 @@ class ShearControllerEHE(lscb.LimitStateControllerBase):
         self.Vu2= getVu2EHE08NoAtNoFis(self.fctdH,self.I,self.S,self.strutWidth,self.alphaL,self.concreteAxialForce,self.concreteArea)
 
   def calcVuEHE08SiAt(self, preprocessor, scc, paramsTorsion, concrete, reinfSteel, Nd, Md, Vd, Td):
-    ''' Calcula el cortante último de la sección CON reinforcement de cortante.
+    ''' Calcula el cortante último de la sección WITH shear reinforcement.
      XXX Falta considerar la reinforcement activa.
      reinfSteelMaterialTag: reinforcement steel material identifier.
      concrete: Nombre del material empleado para modelizar el hormigón.
@@ -848,7 +844,7 @@ class ShearControllerEHE(lscb.LimitStateControllerBase):
           self.areaRebarTracc= reinforcementTraccion.getArea(1)
         else:
           self.areaRebarTracc= 0.0
-        self.thetaFisuras= getAnguloInclinacionFisurasEHE08(Nd,Md,Vd,Td,self.brazoMecanico,self.areaRebarTracc,0.0,self.modElastArmadura,0.0,0.0,self.VuAe,self.Vuue)
+        self.thetaFisuras= getCrackAngleEHE08(Nd,Md,Vd,Td,self.brazoMecanico,self.areaRebarTracc,0.0,self.modElastArmadura,0.0,0.0,self.VuAe,self.Vuue)
         self.Vcu= getVcuEHE08(self.fckH,self.fcdH,self.gammaC,self.concreteAxialForce,self.concreteArea,self.strutWidth,self.depthUtil,self.brazoMecanico,self.areaRebarTracc,0.0,self.theta,Nd,Md,Vd,Td,self.modElastArmadura,0.0,0.0,self.VuAe,self.Vuue)
         self.Vu1= getVu1EHE08(self.fckH,self.fcdH,self.concreteAxialForce,self.concreteArea,self.strutWidth,self.depthUtil,self.alpha,self.theta)
         self.Vsu= getVsuEHE08(self.brazoMecanico,self.alpha,self.theta,self.AsTrsv,self.fydS)
@@ -1120,7 +1116,7 @@ def calcParamsSeccionHuecaEficaz(geomSeccion, h0, c):
   nmbParamsTorsión: Identificador del registro que contiene los parámetros de cálculo
                 de la resistencia a torsión.
   h0: Real thickness of the section wall.
-  c: Cover of the longitudinal reinforcement.
+  c: cover of the longitudinal reinforcement.
   '''
   retval= TorsionParameters()
   retval.h0= h0
@@ -1194,7 +1190,7 @@ class ConcreteCorbel(object):
         '''getCantoUtilMinimo(self, a)
 
         :param a: Distancia (m) entre el eje de la carga aplicada y la sección
-        de empotramiento de la ménsula (ver figura 64.1.2 de EHE-08).
+        de empotramiento de la ménsula (see figure 64.1.2 de EHE-08).
 
         Devuelve el depth útil mínimo de la ménsula según
         el apartado 64.1.2.1 de EHE-08.
@@ -1284,24 +1280,24 @@ def rasanteAgotamiento(fck,gammac,hf,Asf,Sf,fyd):
 # 61 de la EHE-08
 
 
-# Devuelve el valor de f3cd
 def getF3cd(Ac, Ac1, fcd):
+  '''Return the value of f3cd.'''
   return min(sqrt(Ac/Ac1),3.3)*fcd
 
 def getNuCargaConcentrada(Ac, Ac1, fcd):
   '''
   Devuelve el valor último de la carga que puede soportar una pieza
-  de seccion Ac siendo el área cargada Ac1 (ver figura 61.1.a page 302 EHE-08)
+  de seccion Ac siendo el área cargada Ac1 (see figure 61.1.a page 302 EHE-08)
   '''
   return Ac1*getF3cd(Ac,Ac1,fcd)
 
 def getUad(a, a1, Nd):
     '''
     Devuelve la capacidad mecánica necesaria para la reinforcement paralela al
-    lado a (ver figura 61.1.a page 302 EHE-08)
+    lado a (see figure 61.1.a page 302 EHE-08)
       a: Dimensión de la sección.
       a1: Dimensión del área cargada paralela a a.
-      Nd: Carga concentrada.
+      Nd: carga concentrada.
 
     '''
     return 0.25*((a-a1)/a)*Nd
@@ -1309,10 +1305,10 @@ def getUad(a, a1, Nd):
 def getAreaArmadAd(a, a1, Nd, fyd):
     '''
     Devuelve el área necesaria para la reinforcement paralela al
-    lado a (ver figura 61.1.a page 302 EHE-08)
+    lado a (see figure 61.1.a page 302 EHE-08)
       a: Dimensión de la sección.
       a1: Dimensión del área cargada paralela a a.
-      Nd: Carga concentrada.
+      Nd: carga concentrada.
       fyd: steel yield strength.
 
     '''
@@ -1322,10 +1318,10 @@ def getAreaArmadAd(a, a1, Nd, fyd):
 def getUbd(b, b1, Nd):
     '''
     Devuelve la capacidad mecánica necesaria para la reinforcement paralela al
-    lado b (ver figura 61.1.a page 302 EHE-08)
+    lado b (see figure 61.1.a page 302 EHE-08)
       b: Dimensión de la sección.
       b1: Dimensión del área cargada paralela a b.
-      Nd: Carga concentrada.
+      Nd: carga concentrada.
 
     '''
     return 0.25*((b-b1)/b)*Nd
@@ -1333,10 +1329,10 @@ def getUbd(b, b1, Nd):
 def getAreaArmadBd(b, b1, Nd, fyd):
     '''
     Devuelve el área necesaria para la reinforcement paralela al
-    lado b (ver figura 61.1.a page 302 EHE-08)
+    lado b (see figure 61.1.a page 302 EHE-08)
       b: Dimensión de la sección.
       b1: Dimensión del área cargada paralela a a.
-      Nd: Carga concentrada.
+      Nd: carga concentrada.
       fyd: steel yield strength.
 
     '''
