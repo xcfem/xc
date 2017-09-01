@@ -18,9 +18,10 @@ def getTracArmaduraInfEncepado(alpha,Nd):
 
 def getAreaNecArmaduraInfEncepado(alpha,Nd,fyd):
     '''
-    Devuelve el área necesaria para la reinforcement inferior del encepado
+    Devuelve el área necesaria para la reinforcement inferior del encepado.
+
     :param alpha: Angle between the concrete compressed struts and the horizontal.
-    Nd: Axil de cálculo en el pilote.
+    :param Nd: Axil de cálculo en el pilote.
     '''
     return getTracArmaduraInfEncepado(alpha,Nd)/fyd
   
@@ -29,26 +30,29 @@ def getTracArmaduraInfEncepado2Pilotes(v,d,Nd):
     '''
     Devuelve la traccion en la reinforcement inferior de un encepado
     de DOS pilotes (ver números gordos HC.9 page 32).
-    v: Distancia entre la pila y el pilote.
-    d: Canto útil del encepado.
-    Nd: Axil de cálculo en la pila.
+
+    :param v: Distancia entre la pila y el pilote.
+    :param d: pile cap effective depth.
+    :param Nd: Axil de cálculo en la pila.
     '''
     return Nd*v/2/d
   
 
 def getCantoMinimoEncepado(diam,D):
     '''
-    Devuelve el depth mínimo del encepado
-    diam: Diámetro de la reinforcement del pilar o del pilote (la que sea mayor).
-    D: Diámetro del pilote.
+    Devuelve el depth mínimo del encepado.
+
+    :param diam: Diámetro de la reinforcement del pilar o del pilote (la que sea mayor).
+    :param D: Diámetro del pilote.
     '''
     return max((15*diam*diam)*100,max(D,0.4))
   
 
 def getDistMinEjesPilotes(D):
     '''
-    Devuelve la distancia mínima entre ejes de pilotes
-    D: Diámetro del pilote.
+    Devuelve la distancia mínima entre ejes de pilotes.
+
+    :param D: Diámetro del pilote.
     '''
     if D<0.5:
         return 2*D
@@ -61,9 +65,10 @@ def getAreaArmaduraCercosVertEncepado2Pilotes(b,h,L):
     Devuelve el área de reinforcement necesaria para los cercos
     verticales de un encepado de DOS pilotes (ver números gordos
     HC.9 page 33).
-    b: Ancho del encepado.
-    h: Canto del encepado.
-    L: Longitud del encepado.
+
+    :param b: Ancho del encepado.
+    :param h: Canto del encepado.
+    :param L: Longitud del encepado.
     '''
     return 4*min(b,h/2)*L/1000
   
@@ -73,8 +78,9 @@ def getAreaArmaduraCercosHorizEncepado2Pilotes(b,h):
     Devuelve el área de reinforcement necesaria para los cercos
     horizontales de un encepado de DOS pilotes (ver números gordos
     HC.9 page 33).
-    b: Ancho del encepado.
-    L: Longitud del encepado.
+
+    :param b: Ancho del encepado.
+    :param L: Longitud del encepado.
     '''
     return 4*h*min(b,h/2)/1000
   

@@ -17,7 +17,7 @@ from solution import predefined_solutions # Solution procedure
 
 
 from materials.ehe import EHE_materials
-from materials.ehe import fisuracionEHE
+from materials.ehe import EHE_limit_state_checking
 from model import predefined_spaces
 
 width= 0.25 # Section width expressed in meters.
@@ -87,7 +87,7 @@ casos.addToDomain("0")
 analisis= predefined_solutions.simple_newton_raphson(prueba)
 analOk= analisis.analyze(10)
 
-secHAParamsFis= fisuracionEHE.CrackControl('SLS_crack')
+secHAParamsFis= EHE_limit_state_checking.CrackControl('SLS_crack')
 
 
 elements= preprocessor.getElementLoader

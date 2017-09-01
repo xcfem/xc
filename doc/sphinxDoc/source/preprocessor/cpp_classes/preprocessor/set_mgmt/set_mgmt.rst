@@ -39,7 +39,7 @@ Base set
     :members:
     :show-inheritance:
 	    
-.. autoclass:: dq_ptrs_lineas
+.. autoclass:: dq_line_ptrs
     :members:
     :show-inheritance:
 	    

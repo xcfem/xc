@@ -234,7 +234,7 @@ def psiEcVFactor(ev, c1):
 
 def psiAlphaVFactor(alphaV):
   '''
-  Coeficiente que introduce la influencia del ángulo entre la carga aplicada y la perpendicular al borde libre de la pieza de hormigón (menor de 90 grados) ver figura 4.7c y expresión 5.8g del apartado f) del clause 5.2.3.4 of EOTA TR029.
+  Coeficiente que introduce la influencia del ángulo entre la carga aplicada y la perpendicular al borde libre de la pieza de hormigón (menor de 90 grados) see figure 4.7c y expresión 5.8g del apartado f) del clause 5.2.3.4 of EOTA TR029.
 
   :param alphaV: Ángulo entre la carga aplicada y la perpendicular al borde libre de la pieza de hormigón.
   '''
@@ -263,7 +263,7 @@ def psiSVFactor(c1, c2):
 
 def areaAcV0(h, c1):
   '''
-  Area del cono de anclaje a cortante para un perno. Ver figura 5.6 y expresión 5.8d of EOTA TR029.
+  Area del cono de anclaje a cortante para un perno. see figure 5.6 y expresión 5.8d of EOTA TR029.
 
   :param h: Concrete part thickness.
   :param c1: Distancia desde el centro de gravedad del grupo al borde situado frente al cortante.
@@ -272,7 +272,7 @@ def areaAcV0(h, c1):
 
 def AcV2Pernos(h, c1, s2):
   '''
-  Area del cono de anclaje para dos pernos. Ver figura 5.7 b of EOTA TR029.
+  Area del cono de anclaje para dos pernos. see figure 5.7 b of EOTA TR029.
 
   :param c1: Distancia desde el centro de gravedad del grupo al borde situado frente al cortante.
   :param h: Concrete part thickness.
@@ -282,7 +282,7 @@ def AcV2Pernos(h, c1, s2):
 
 def AcV2PernosC2(h, c1, c2, s2):
   '''
-  Area del cono de anclaje para dos pernos junto a un borde libre. Ver figura 5.7 b y c of EOTA TR029.
+  Area del cono de anclaje para dos pernos junto a un borde libre. see figure 5.7 b y c of EOTA TR029.
 
   :param  c1: Distancia desde el centro de gravedad del grupo al borde situado frente al cortante.
   :param c2: Distancia desde el centro de gravedad del grupo al otro borde.

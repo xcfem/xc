@@ -6,7 +6,7 @@ import geom
 import xc
 from model import predefined_spaces
 from materials import typical_materials
-from materials.ehe import torsionEHE
+from materials.ehe import EHE_limit_state_checking
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
 __copyright__= "Copyright 2015, LCPT and AOO"
@@ -29,7 +29,7 @@ concrete= regiones.newQuadRegion('concrete')
 concrete.pMin= geom.Pos2d(0.0,0.0)
 concrete.pMax= geom.Pos2d(1.0,1.0)
 
-pt= torsionEHE.calcParamsSeccionHuecaEficaz(geomPrueba,0.5,0.03)
+pt= EHE_limit_state_checking.calcParamsSeccionHuecaEficaz(geomPrueba,0.5,0.03)
 
 
 ratio1= (pt.A()-1)
