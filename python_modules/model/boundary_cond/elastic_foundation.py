@@ -5,7 +5,6 @@ import xc_base
 import geom
 from materials import typical_materials
 from postprocess.xcVtk.FE_model import Fields
-from solution import predefined_solutions
 from model import predefined_spaces
 
 '''Generation of springs for nodes at foundation.'''
