@@ -89,15 +89,15 @@ XC::LagrangeMFreedom_FE::LagrangeMFreedom_FE(int tag, Domain &theDomain, MFreedo
 
     if(theRetainedNode == 0)
       {
-	std::cerr << "WARNING XC::LagrangeMFreedom_FE::LagrangeMFreedom_FE()";
-	std::cerr << "- no asscoiated Retained node\n";
+	std::cerr << nombre_clase() << "::" << __FUNCTION__
+		  << "; no associated retained node\n";
 	exit(-1);
       }
     
     if(theConstrainedNode == 0)
       {
-	std::cerr << "WARNING XC::LagrangeMFreedom_FE::LagrangeMFreedom_FE()";
-	std::cerr << "- no asscoiated constrained nNode\n";
+	std::cerr << nombre_clase() << "::" << __FUNCTION__
+		  << "; no asscoiated constrained node\n";
 	exit(-1);
       }
     
@@ -110,8 +110,7 @@ XC::LagrangeMFreedom_FE::LagrangeMFreedom_FE(int tag, Domain &theDomain, MFreedo
     myDOF_Groups(2) = getLagrangeDOFGroup()->getTag();
   }
 
-// void setID(int index, int value);
-//	Method to set the corresponding index of the ID to value.
+//! @brief  method to set the corresponding index of the ID to value.
 int XC::LagrangeMFreedom_FE::setID(void)
   {
     int offset = 0;
@@ -149,28 +148,32 @@ const XC::Vector &XC::LagrangeMFreedom_FE::getResidual(Integrator *theNewIntegra
 
 const XC::Vector &XC::LagrangeMFreedom_FE::getTangForce(const Vector &disp, double fact)
   {
-    std::cerr << "WARNING LagrangeMFreedom_FE::getTangForce() - not yet implemented\n";
+    std::cerr << nombre_clase() << "::" << __FUNCTION__
+	      << "; not yet implemented\n";
     resid.Zero(); //Added by LCPT.
     return  resid;
   }
 
 const XC::Vector &XC::LagrangeMFreedom_FE::getK_Force(const Vector &disp, double fact)
   {
-    std::cerr << "WARNING LagrangeMFreedom_FE::getK_Force() - not yet implemented\n";
+    std::cerr << nombre_clase() << "::" << __FUNCTION__
+	      << "; not yet implemented\n";
     resid.Zero(); //Added by LCPT.
     return resid;
   }
 
 const XC::Vector &XC::LagrangeMFreedom_FE::getC_Force(const Vector &disp, double fact)
   {
-    std::cerr << "WARNING LagrangeMFreedom_FE::getC_Force() - not yet implemented\n";
+    std::cerr << nombre_clase() << "::" << __FUNCTION__
+	      << "; not yet implemented\n";
     resid.Zero(); //Added by LCPT.
     return resid;
   }
 
 const XC::Vector &XC::LagrangeMFreedom_FE::getM_Force(const XC::Vector &disp, double fact)
   {
-    std::cerr << "WARNING LagrangeMFreedom_FE::getM_Force() - not yet implemented\n";
+    std::cerr << nombre_clase() << "::" << __FUNCTION__
+	      << "; not yet implemented\n";
     resid.Zero(); //Added by LCPT.
     return resid;
   }

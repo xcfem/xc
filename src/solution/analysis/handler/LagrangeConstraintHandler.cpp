@@ -156,7 +156,7 @@ int XC::LagrangeConstraintHandler::handle(const ID *nodesLast)
     // create the LagrangeMFreedom_FE for the MFreedom_Constraints and
     // add to the AnalysisModel
     MFreedom_ConstraintIter &theMPs = theDomain->getConstraints().getMPs();
-    MFreedom_Constraint *mpPtr;
+    MFreedom_Constraint *mpPtr= nullptr;
     while((mpPtr = theMPs()) != nullptr)
       {
         dofPtr= theModel->createLagrangeDOF_Group(numDofGrp++, mpPtr);
@@ -168,7 +168,7 @@ int XC::LagrangeConstraintHandler::handle(const ID *nodesLast)
     // create the LagrangeMRMFreedom_FE for the MRMFreedom_Constraints and
     // add to the AnalysisModel
     MRMFreedom_ConstraintIter &theMRMPs = theDomain->getConstraints().getMRMPs();
-    MRMFreedom_Constraint *mrmpPtr;
+    MRMFreedom_Constraint *mrmpPtr= nullptr;
     while((mrmpPtr = theMRMPs()) != nullptr)
       {
         dofPtr= theModel->createLagrangeDOF_Group(numDofGrp++, mrmpPtr);

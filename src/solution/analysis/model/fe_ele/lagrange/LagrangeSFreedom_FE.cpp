@@ -74,18 +74,33 @@
 #include <domain/constraints/SFreedom_Constraint.h>
 #include <solution/analysis/model/dof_grp/DOF_Group.h>
 
+//! Construct a LagrangeSFreedom\_FE element to enforce the constraint.
+//!
+//! Construct a LagrangeSFreedom\_FE element to enforce the constraint
+//! specified by the SFreedom\_Constraint \p theSP using a value for
+//! \f$\alpha\f$ of \p alpha (which, if none is specified, defaults to
+//! \f$1.0\f$). The FE\_Element class constructor is called with 
+//! the integers \f$2\f$ and \f$2\f$. A Matrix and a Vector object of order \f$2\f$
+//! are created to return the tangent and residual contributions, with the
+//! tangent entries (0,1) and (1,0) set at \f$\alpha\f$. A link to the Node in the Domain
+//! corresponding to the SFreedom\_Constraint is also set. A warning message is
+//! printed and program terminates if there is not enough memory or no
+//! Node associated with the SFreedom\_Constraint exists in the Domain, or
+//! DOF\_Group is associated with the Node.
 XC::LagrangeSFreedom_FE::LagrangeSFreedom_FE(int tag, Domain &theDomain, SFreedom_Constraint &TheSP,DOF_Group &theGroup, double Alpha)
   :SFreedom_FE(tag,2,TheSP,Alpha), Lagrange_FE(theGroup)
   {
-    // zero the XC::Matrix and XC::Vector
+    // zero the Matrix and Vector
     resid.Zero();
     tang.Zero();
 
-    theNode= theDomain.getNode(theSP->getNodeTag());    
-    if(theNode == 0)
+    const int nodeTag= theSP->getNodeTag();
+    theNode= theDomain.getNode(nodeTag);    
+    if(!theNode)
       {
-	std::cerr << "WARNING XC::LagrangeSFreedom_FE::LagrangeSFreedom_FE()";
-	std::cerr << "- no asscoiated XC::Node\n";
+	std::cerr << nombre_clase() << "::" << __FUNCTION__
+	          << "; WARNING node: " << nodeTag
+	          << " not found." << std::endl;
 	exit(-1);
       }
 
@@ -95,41 +110,58 @@ XC::LagrangeSFreedom_FE::LagrangeSFreedom_FE(int tag, Domain &theDomain, SFreedo
     
     // set the myDOF_Groups tags indicating the attached id's of the
     // DOF_Group objects
-    DOF_Group *theNodesDOFs = theNode->getDOF_GroupPtr();
-    if(theNodesDOFs == 0)
+    DOF_Group *theNodesDOFs= theNode->getDOF_GroupPtr();
+    if(!theNodesDOFs)
       {
-	std::cerr << "WARNING XC::LagrangeSFreedom_FE::LagrangeSFreedom_FE()";
-	std::cerr << " - no XC::DOF_Group with Constrained XC::Node\n";
-	exit(-1);	
+	std::cerr << nombre_clase() << "::" << __FUNCTION__
+	          << "; WARNING no DOF_Group found for constrained node: "
+		  << nodeTag << std::endl;
+	exit(-1);
       }    
 
     myDOF_Groups(0) = theNodesDOFs->getTag();
     myDOF_Groups(1) = getLagrangeDOFGroup()->getTag();
   }
 
-//! @brief Method to set the correSPonding index of the XC::ID to value.
+//! @brief Method to set the correSPonding index of the ID to value.
+//!
+//! Causes the LagrangeSFreedom_FE to determine the mapping between it's equation
+//! numbers and the degrees-of-freedom. From the Node object link, created
+//! in the constructor, the DOF_group corresponding to the Node
+//! associated with the constraint is determined. From this {\em
+//! DOF\_Group} object the mapping for the constrained degree of freedom
+//! is determined and the myID(0) in the base class is set. The myID(1) is
+//! determined from the Lagrange DOF\_Group \p theGroup passed in the
+//! constructor. Returns \f$0\f$ if 
+//! successful. Prints a warning message and returns a negative number if
+//! an error occurs: \f$-2\f$ if the
+//! Node has no associated DOF\_Group, \f$-3\f$ if the constrained DOF
+//! specified is invalid for this Node and \f$-4\f$ if the ID in the
+//! DOF\_Group is too small for the Node. 
 int XC::LagrangeSFreedom_FE::setID(void)
   {
     int result = 0;
 
     // first determine the IDs in myID for those DOFs marked
-    // as constrained DOFs, this is obtained from the XC::DOF_Group
+    // as constrained DOFs, this is obtained from the DOF_Group
     // associated with the constrained node
     DOF_Group *theNodesDOFs = theNode->getDOF_GroupPtr();
-    if(theNodesDOFs == 0)
+    if(!theNodesDOFs)
       {
-	std::cerr << "WARNING XC::LagrangeSFreedom_FE::setID(void)";
-	std::cerr << " - no XC::DOF_Group with Constrained XC::Node\n";
+	std::cerr << nombre_clase() << "::" << __FUNCTION__
+	          << "; WARNING no DOF_Group found for constrained node: "
+		  << theNode->getTag() << std::endl;
 	return -1;
       }
 
-    int restrainedDOF = theSP->getDOF_Number();
-    const XC::ID &theNodesID = theNodesDOFs->getID();
+    const int restrainedDOF = theSP->getDOF_Number();
+    const ID &theNodesID = theNodesDOFs->getID();
     
     if(restrainedDOF < 0 || restrainedDOF >= theNodesID.Size())
       {
-	std::cerr << "WARNING XC::LagrangeSFreedom_FE::setID(void)";
-	std::cerr << " - restrained DOF invalid\n";
+	std::cerr << nombre_clase() << "::" << __FUNCTION__
+	          << "; WARNING restrained DOF: " << restrainedDOF
+	          << " is invalid.\n";
 	return -2;
       }
     
@@ -139,19 +171,30 @@ int XC::LagrangeSFreedom_FE::setID(void)
     return result;
   }
 
+//! brief Returns the tangent Matrix created in the constructor.
 const XC::Matrix &XC::LagrangeSFreedom_FE::getTangent(Integrator *theIntegrator)
   { return tang; }
 
+//! @brief Sets the FE_Elements contribution to the residual:
+//!
+//! Sets the FE_Elements contribution to the residual:
+//! \[ \left\{ \begin{array}{c} 0 \alpha(u_s - u_t) \end{array} \right\} \]
+//! where \f$U_s\f$ is the specified value of the
+//! constraint and \f$U_t\f$ the current trial displacement at the node
+//! corresponding to constrained degree-of-freedom. Prints a warning
+//! message and sets this contribution to \f$0\f$ if the specified constrained
+//! degree-of-freedom is invalid. Returns this residual Vector.
 const XC::Vector &XC::LagrangeSFreedom_FE::getResidual(Integrator *theNewIntegrator)
   {
-    double constraint = theSP->getValue();
-    int constrainedDOF = theSP->getDOF_Number();
-    const XC::Vector &nodeDisp = theNode->getTrialDisp();
+    const double constraint = theSP->getValue();
+    const int constrainedDOF = theSP->getDOF_Number();
+    const Vector &nodeDisp = theNode->getTrialDisp();
 
     if(constrainedDOF < 0 || constrainedDOF >= nodeDisp.Size())
       {
-	std::cerr << "LagrangeSFreedom_FE::formResidual() -";
-	std::cerr << " constrained DOF " << constrainedDOF << " ouside range\n";
+	std::cerr << nombre_clase() << "::" << __FUNCTION__
+	          << " constrained DOF " << constrainedDOF
+		  << " ouside range.\n";
 	resid(1)= 0;
       }
     
@@ -161,15 +204,24 @@ const XC::Vector &XC::LagrangeSFreedom_FE::getResidual(Integrator *theNewIntegra
 
 
 
-
+//! @brief  Sets the FE_Elements contribution to the residual:
+//! 
+//! Sets the FE_Elements contribution to the residual:
+//! \[ \left\{ \begin{array}{c} 0 \alpha(u_s - u_t) \end{array} \right\} \]
+//! where \f$U_s\f$ is the specified value of the
+//! constraint and \f$U_t\f$ the current trial displacement in \p disp
+//! corresponding to constrained degree-of-freedom. Prints a warning
+//! message and sets this contribution to \f$0\f$ if the specified constrained
+//! degree-of-freedom is invalid. 
 const XC::Vector &XC::LagrangeSFreedom_FE::getTangForce(const XC::Vector &disp, double fact)
   {
-    double constraint = theSP->getValue();
-    int constrainedID = myID(1);
+    const double constraint = theSP->getValue();
+    const int constrainedID = myID(1);
     if(constrainedID < 0 || constrainedID >= disp.Size())
       {
-	std::cerr << "WARNING XC::LagrangeSFreedom_FE::getTangForce() - ";	
-	std::cerr << " constrained DOF " << constrainedID << " outside disp\n";
+	std::cerr << nombre_clase() << "::" << __FUNCTION__
+	          << " constrained ID " << constrainedID
+		  << " outside disp.\n";
 	resid(1)= constraint*alpha;
 	return resid;
       }
@@ -179,21 +231,24 @@ const XC::Vector &XC::LagrangeSFreedom_FE::getTangForce(const XC::Vector &disp, 
 
 const XC::Vector &XC::LagrangeSFreedom_FE::getK_Force(const XC::Vector &disp, double fact)
   {
-    std::cerr << "WARNING LagrangeSFreedom_FE::getK_Force() - not yet implemented\n";
+    std::cerr << nombre_clase() << "::" << __FUNCTION__
+	      << "; WARNING not yet implemented\n";
     resid.Zero(); //Added by LCPT.
     return resid;
   }
 
 const XC::Vector &XC::LagrangeSFreedom_FE::getC_Force(const XC::Vector &disp, double fact)
   {
-    std::cerr << "WARNING LagrangeSFreedom_FE::getC_Force() - not yet implemented\n";
+    std::cerr << nombre_clase() << "::" << __FUNCTION__
+	      << "; WARNING not yet implemented\n";
     resid.Zero(); //Added by LCPT.
     return resid;
   }
 
 const XC::Vector &XC::LagrangeSFreedom_FE::getM_Force(const XC::Vector &disp, double fact)
   {
-    std::cerr << "WARNING LagrangeSFreedom_FE::getM_Force() - not yet implemented\n";
+    std::cerr << nombre_clase() << "::" << __FUNCTION__
+	      << "; WARNING not yet implemented\n";
     resid.Zero(); //Added by LCPT.
     return resid;
   }

@@ -57,8 +57,8 @@
 // Revision: A
 //
 // Description: This file contains the class definition for LagrangeSFreedom_FE.
-// LagrangeSFreedom_FE is a subclass of SFreedom_FE which handles SFreedom_Constraints
-// using the Lagrange method.
+// LagrangeSFreedom_FE is a subclass of SFreedom_FE which handles
+// SFreedom_Constraints using the Lagrange method.
 //
 // What: "@(#) LagrangeSFreedom_FE.h, revA"
 
@@ -76,7 +76,21 @@ class DOF_Group;
 //
 //! @brief LagrangeSFreedom_FE is a subclass of SFreedom_FE
 //! which handles SFreedom_Constraints using the Lagrange method.
- class LagrangeSFreedom_FE: public SFreedom_FE, public Lagrange_FE
+//!
+//! LagrangeSFreedom\_FE is a subclass of FE\_Element used to enforce a
+//! single point constraint. It does this by adding to the tangent and the
+//! residual:
+//! \[ \left[ \begin{array}{cc} 0 & \alpha \alpha & 0 \end{array}
+//! \right] ,
+//! \left\{ \begin{array}{c} 0 \alpha(u_s - u_t) \end{array} \right\} \]
+//! at the locations
+//! corresponding to the constrained degree-of-freedom specified by the
+//! SFreedom\_Constraint and the lagrange multiplier degree-of-freedom
+//! introduced by the LagrangeConstraintHandler for this constraint, where
+//! \f$U_s\f$ is the specified value of the constraint 
+//! and \f$U_t\f$ the current trial displacement at the node corresponding to
+//! the constraint.
+class LagrangeSFreedom_FE: public SFreedom_FE, public Lagrange_FE
   {
   private:
 
