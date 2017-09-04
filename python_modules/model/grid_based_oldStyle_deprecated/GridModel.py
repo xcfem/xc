@@ -18,7 +18,7 @@ from miscUtils import LogMessages as lmsg
 from materials import typical_materials
 from materials import section_properties
 from model import predefined_spaces
-from model.boundary_cond import elastic_foundation as ef
+from model.boundary_cond import spring_bound_cond as ef
 from postprocess.xcVtk import vtk_grafico_base
 from postprocess.xcVtk.FE_model import vtk_FE_graphic
 from postprocess.xcVtk.FE_model import Fields
