@@ -177,6 +177,14 @@ def get_lstNod_from_lst3DPos(preprocessor,lst3DPos):
     msNod=preprocessor.getNodeLoader.getDomain.getMesh
     return[msNod.getNearestNode(pnt) for pnt in lst3DPos]
     
+
+def get_lstNod_on_points_fromSet(setFrom):
+    '''return the list of nearest nodes to all the points included in  
+    the set of entities 'setFrom'
+    '''
+    pts=setFrom.getPoints
+    return [p.getNode() for p in pts]
+
 def append_points(setTo,points):
   '''Appends points to set of entities
 

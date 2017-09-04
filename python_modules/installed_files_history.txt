@@ -739,6 +739,8 @@
 /usr/local/lib/python2.7/dist-packages/model/boundary_cond/__init__.pyc
 /usr/local/lib/python2.7/dist-packages/model/boundary_cond/opensees_style.py
 /usr/local/lib/python2.7/dist-packages/model/boundary_cond/opensees_style.pyc
+/usr/local/lib/python2.7/dist-packages/model/boundary_cond/spring_bound_cond.py
+/usr/local/lib/python2.7/dist-packages/model/boundary_cond/spring_bound_cond.pyc
 /usr/local/lib/python2.7/dist-packages/model/cargas_elem.py
 /usr/local/lib/python2.7/dist-packages/model/cargas_elem.pyc
 /usr/local/lib/python2.7/dist-packages/model/cargas_nodo.py
