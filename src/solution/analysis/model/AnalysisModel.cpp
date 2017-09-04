@@ -189,21 +189,21 @@ XC::FE_Element *XC::AnalysisModel::createFE_Element(const int &tag, Element *ele
     if(retval)
       addFE_Element(retval);
     else
-      std::cerr << "WARNING AnalysisModel::createFE_Element() "
-                << "- ran out of memory"
+      std::cerr << nombre_clase() << "::" << __FUNCTION__
+                << "; ran out of memory"
                 << " creating FE_Element: " << tag << std::endl;
     return retval;
   }
 
-//! @brief Método para crear un objeto LagrangeSFreedom_FE y agregarlo al modelo.
+//! @brief Create an LagrangeSFreedom_FE object and append it to the model.
 XC::LagrangeSFreedom_FE *XC::AnalysisModel::createLagrangeSFreedom_FE(const int &tag, SFreedom_Constraint &theSP, DOF_Group &theDofGrp,const double &alpha)
   {
-    LagrangeSFreedom_FE *retval=new LagrangeSFreedom_FE(tag,*getDomainPtr(),theSP,theDofGrp,alpha);
+    LagrangeSFreedom_FE *retval= new LagrangeSFreedom_FE(tag,*getDomainPtr(),theSP,theDofGrp,alpha);
     if(retval)
       addFE_Element(retval);
     else
-      std::cerr << "WARNING AnalysisModel::createFE_Element() "
-                << "- ran out of memory"
+      std::cerr << nombre_clase() << "::" << __FUNCTION__
+                << "; ran out of memory"
                 << " creating LagrangeFE_Element: " << tag << std::endl;
     return retval;    
   }
@@ -211,12 +211,12 @@ XC::LagrangeSFreedom_FE *XC::AnalysisModel::createLagrangeSFreedom_FE(const int 
 //! @brief Método para crear un objeto LagrangeMFreedom_FE y agregarlo al modelo.
 XC::LagrangeMFreedom_FE *XC::AnalysisModel::createLagrangeMFreedom_FE(const int &tag,MFreedom_Constraint &theMP,DOF_Group &theDofGrp,const double &alpha)
   {
-    LagrangeMFreedom_FE *retval=new LagrangeMFreedom_FE(tag,*getDomainPtr(),theMP,theDofGrp,alpha);
+    LagrangeMFreedom_FE *retval= new LagrangeMFreedom_FE(tag,*getDomainPtr(),theMP,theDofGrp,alpha);
     if(retval)
       addFE_Element(retval);
     else
-      std::cerr << "WARNING AnalysisModel::createFE_Element() "
-                << "- ran out of memory"
+      std::cerr << nombre_clase() << "::" << __FUNCTION__
+                << "; ran out of memory"
                 << " creating LagrangeFE_Element: " << tag << std::endl;
     return retval;    
   }
@@ -224,12 +224,12 @@ XC::LagrangeMFreedom_FE *XC::AnalysisModel::createLagrangeMFreedom_FE(const int 
 //! @brief Método para crear un objeto LagrangeMRMFreedom_FE y agregarlo al modelo.
 XC::LagrangeMRMFreedom_FE *XC::AnalysisModel::createLagrangeMRMFreedom_FE(const int &tag,MRMFreedom_Constraint &theMRMP,DOF_Group &theDofGrp,const double &alpha)
   {
-    LagrangeMRMFreedom_FE *retval=new LagrangeMRMFreedom_FE(tag,*getDomainPtr(),theMRMP,theDofGrp,alpha);
+    LagrangeMRMFreedom_FE *retval= new LagrangeMRMFreedom_FE(tag,*getDomainPtr(),theMRMP,theDofGrp,alpha);
     if(retval)
       addFE_Element(retval);
     else
-      std::cerr << "WARNING AnalysisModel::createFE_Element() "
-                << "- ran out of memory"
+      std::cerr << nombre_clase() << "::" << __FUNCTION__
+                << "; ran out of memory"
                 << " creating LagrangeFE_Element: " << tag << std::endl;
     return retval;
   }
@@ -241,8 +241,8 @@ XC::PenaltySFreedom_FE *XC::AnalysisModel::createPenaltySFreedom_FE(const int &t
     if(retval)
       addFE_Element(retval);
     else
-      std::cerr << "WARNING AnalysisModel::createFE_Element() "
-                << "- ran out of memory"
+      std::cerr << nombre_clase() << "::" << __FUNCTION__
+                << "; ran out of memory"
                 << " creating PenaltyFE_Element: " << tag << std::endl;
     return retval;    
   }
@@ -254,8 +254,8 @@ XC::PenaltyMFreedom_FE *XC::AnalysisModel::createPenaltyMFreedom_FE(const int &t
     if(retval)
       addFE_Element(retval);
     else
-      std::cerr << "WARNING AnalysisModel::createFE_Element() "
-                << "- ran out of memory"
+      std::cerr << nombre_clase() << "::" << __FUNCTION__
+                << "; ran out of memory"
                 << " creating PenaltyFE_Element: " << tag << std::endl;
     return retval;    
   }
@@ -267,8 +267,8 @@ XC::PenaltyMRMFreedom_FE *XC::AnalysisModel::createPenaltyMRMFreedom_FE(const in
     if(retval)
       addFE_Element(retval);
     else
-      std::cerr << "WARNING AnalysisModel::createFE_Element() "
-                << "- ran out of memory"
+      std::cerr << nombre_clase() << "::" << __FUNCTION__
+                << "; ran out of memory"
                 << " creating PenaltyFE_Element: " << tag << std::endl;
     return retval;    
   }
@@ -287,10 +287,10 @@ XC::FE_Element *XC::AnalysisModel::createTransformationFE(const int &tag, Elemen
         if(theSub->doesIndependentAnalysis() == false)
           {
             if(!transformado)
-              { retval=new FE_Element(tag, elePtr); }
+              { retval= new FE_Element(tag, elePtr); }
             else
               {
-                retval=new TransformationFE(tag, elePtr);
+                retval= new TransformationFE(tag, elePtr);
                 theFEset.insert(retval);
               }
             if(retval) theSub->setFE_ElementPtr(retval);
@@ -309,7 +309,7 @@ XC::FE_Element *XC::AnalysisModel::createTransformationFE(const int &tag, Elemen
       addFE_Element(retval);
     else
       std::cerr << "WARNING AnalysisModel::createFE_Element() "
-                << "- ran out of memory"
+                << "; ran out of memory"
                 << " creating FE_Element: " << tag << std::endl;
     return retval;
   }
@@ -328,7 +328,9 @@ bool XC::AnalysisModel::addDOF_Group(DOF_Group *theGroup)
     TaggedObject *other= theDOFGroups.getComponentPtr(tag);
     if(other)
       {
-        std::cerr << "XC::AnalysisModel::addDOF_Group - group with tag " << tag << " already exists in model\n"; 
+        std::cerr << nombre_clase() << "::" << __FUNCTION__
+		  << "; group with tag " << tag
+		  << " already exists in model\n"; 
         return false;
       }
 
@@ -354,8 +356,8 @@ XC::DOF_Group *XC::AnalysisModel::createDOF_Group(const int &tag, Node *myNode)
         addDOF_Group(dofPtr);
       }
     else
-      std::cerr << "WARNING AnalysisModel::createDOF_Group() "
-                << "- ran out of memory"
+      std::cerr << nombre_clase() << "::" << __FUNCTION__
+                << "; ran out of memory"
                 << " creating DOF_Group " << tag << std::endl;
 
     return dofPtr;
@@ -375,8 +377,8 @@ XC::LagrangeDOF_Group *XC::AnalysisModel::createLagrangeDOF_Group(const int &tag
         addDOF_Group(dofPtr);
       }
     else
-      std::cerr << "WARNING AnalysisModel::createLagrangeDOF_Group() "
-                << "- ran out of memory"
+      std::cerr << nombre_clase() << "::" << __FUNCTION__
+                << "; ran out of memory"
                 << " creating DOF_Group " << tag << std::endl;
     return dofPtr;
   }
@@ -395,8 +397,8 @@ XC::LagrangeDOF_Group *XC::AnalysisModel::createLagrangeDOF_Group(const int &tag
         addDOF_Group(dofPtr);
       }
     else
-      std::cerr << "WARNING AnalysisModel::createLagrangeDOF_Group() "
-                << "- ran out of memory"
+      std::cerr << nombre_clase() << "::" << __FUNCTION__
+                << "; ran out of memory"
                 << " creating DOF_Group " << tag << std::endl;
     return dofPtr;
   }
@@ -416,8 +418,8 @@ XC::LagrangeDOF_Group *XC::AnalysisModel::createLagrangeDOF_Group(const int &tag
         addDOF_Group(dofPtr);
       }
     else
-      std::cerr << "WARNING AnalysisModel::createLagrangeDOF_Group() "
-                << "- ran out of memory"
+      std::cerr << nombre_clase() << "::" << __FUNCTION__
+                << "; ran out of memory"
                 << " creating DOF_Group " << tag << std::endl;
     return dofPtr;
   }
@@ -666,7 +668,8 @@ void XC::AnalysisModel::applyLoadDomain(double pseudoTime)
         getHandlerPtr()->applyLoad();
       }
     else
-      std::cerr << "WARNING: AnalysisModel::applyLoadDomain. No domain linked.\n";
+      std::cerr << nombre_clase() << "::" << __FUNCTION__
+		<< "; WARNING no domain linked.\n";
   }
 
 
@@ -676,7 +679,8 @@ int XC::AnalysisModel::updateDomain(void)
     int res= 0;
     Domain *dom= getDomainPtr();
     if(!dom)
-      std::cerr << "WARNING: XC::AnalysisModel::updateDomain. No XC::Domain linked.\n";
+      std::cerr << nombre_clase() << "::" << __FUNCTION__
+		<< "; WARNING no domain linked.\n";
     else
       {
         // invoke the method
@@ -694,7 +698,8 @@ int XC::AnalysisModel::updateDomain(double newTime, double dT)
     int res= 0;
     Domain *dom= getDomainPtr();
     if(!dom)
-      std::cerr << "WARNING: XC::AnalysisModel::updateDomain. No XC::Domain linked.\n";
+      std::cerr << nombre_clase() << "::" << __FUNCTION__
+		<< "; WARNING: no domain linked.\n";
     else
       {
         // invoke the method
@@ -715,7 +720,8 @@ int XC::AnalysisModel::newStepDomain(double dT)
     int retval= -1;
     Domain *dom= getDomainPtr();
     if(!dom)
-      std::cerr << "WARNING: AnalysisModel::newStep. No domain linked."
+      std::cerr << nombre_clase() << "::" << __FUNCTION__
+		<< "; no domain linked."
                 << std::endl;
     else
       retval= dom->newStep(dT); // invoke the domain method
@@ -730,7 +736,9 @@ int XC::AnalysisModel::commitDomain(void)
     int retval= -1;
     Domain *dom= getDomainPtr();
     if(!dom)
-      std::cerr << "WARNING: AnalysisModel::commitDomain. No domain linked.\n";
+      std::cerr << nombre_clase() << "::" << __FUNCTION__
+		<< "; no domain linked."
+                << std::endl;
     else
       {
         retval= dom->commit();
@@ -750,11 +758,13 @@ int XC::AnalysisModel::revertDomainToLastCommit(void)
     int retval= -1;
     Domain *dom= getDomainPtr();
     if(!dom)
-      std::cerr << "WARNING: XC::AnalysisModel::revertDomainToLastCommit. No domain linked.\n";
+      std::cerr << nombre_clase() << "::" << __FUNCTION__
+		<< "; no domain linked."
+                << std::endl;
     else if(dom->revertToLastCommit()<0)
       {
-        std::cerr << "WARNING: AnalysisModel::revertDomainToLastCommit.";
-        std::cerr << " Domain::revertToLastCommit() failed.\n";
+        std::cerr << nombre_clase() << "::" << __FUNCTION__
+		  << "; failed." << std::endl;
         retval= -2;
       }        
     return retval;
@@ -766,10 +776,9 @@ double XC::AnalysisModel::getCurrentDomainTime(void)
     double retval= 0.0;
     Domain *dom= getDomainPtr();
     if(!dom)
-      {
-        std::cerr << "WARNING: AnalysisModel::getCurrentDomainTime.";
-        std::cerr << " No Domain linked.\n";
-      }
+      std::cerr << nombre_clase() << "::" << __FUNCTION__
+		<< "; no domain linked."
+                << std::endl;
     else
       retval= dom->getTimeTracker().getCurrentTime();
     return retval;
@@ -780,10 +789,9 @@ void XC::AnalysisModel::setCurrentDomainTime(double newTime)
   {
     Domain *dom= getDomainPtr();
     if(!dom)
-      {
-        std::cerr << "WARNING: AnalysisModel::setCurrentDomainTime.";
-        std::cerr << " No Domain linked.\n";
-      }
+      std::cerr << nombre_clase() << "::" << __FUNCTION__
+		<< "; no domain linked."
+                << std::endl;
     else
       dom->setCurrentTime(newTime);
   }
@@ -794,10 +802,9 @@ void XC::AnalysisModel::setRayleighDampingFactors(const RayleighDampingFactors &
   {
     Domain *dom= getDomainPtr();
     if(!dom)
-      {
-        std::cerr << "WARNING: AnalysisModel::setRayleighDampingFactors.";
-        std::cerr << " No Domain linked.\n";
-      }
+      std::cerr << nombre_clase() << "::" << __FUNCTION__
+		<< "; no domain linked."
+                << std::endl;
     else
       dom->setRayleighDampingFactors(rF); // invoke the method
   }

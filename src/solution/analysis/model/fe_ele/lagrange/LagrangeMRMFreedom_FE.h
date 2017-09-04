@@ -63,7 +63,7 @@ class LagrangeMRMFreedom_FE: public MRMFreedom_FE, public Lagrange_FE
     void determineTangent(void);
     
     friend class AnalysisModel;
-    LagrangeMRMFreedom_FE(int tag, Domain &theDomain, MRMFreedom_Constraint &,DOF_Group &, double alpha = 1.0);
+    LagrangeMRMFreedom_FE(int tag, Domain &theDomain, MRMFreedom_Constraint &, DOF_Group &, double alpha = 1.0);
   public:
 
     // public methods
