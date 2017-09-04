@@ -259,6 +259,7 @@ python tests/constraints/remove_fix_02.py
 python tests/constraints/test_elastic_bearing_01.py
 python tests/constraints/test_elastic_bearing_02.py
 python tests/constraints/test_elastic_bearing_03.py
+python tests/constraints/test_elastic_bearing_04.py
 python tests/constraints/test_rigid_beam_01.py
 python tests/constraints/test_rigid_rod_01.py
 python tests/constraints/test_fulcrum_01.py
