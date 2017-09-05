@@ -34,8 +34,9 @@ XC::Vector (XC::Node::*getMaxModalAcceleration)(int,const double &) const= &XC::
 XC::Vector (XC::Node::*getMaxModalDisplacementForGdls)(int,const double &,const boost::python::list &) const= &XC::Node::getMaxModalDisplacementForGdls;
 XC::Vector (XC::Node::*getMaxModalVelocityForGdls)(int,const double &,const boost::python::list &) const= &XC::Node::getMaxModalVelocityForGdls;
 XC::Vector (XC::Node::*getMaxModalAccelerationForGdls)(int,const double &,const boost::python::list &) const= &XC::Node::getMaxModalAccelerationForGdls;
-
 void (XC::Node::*fixGdls)(const XC::ID &, const XC::Vector &)= &XC::Node::fix;
+bool (XC::Node::*In3D)(const GeomObj3d &,const double &,const double &) const= &XC::Node::In;
+bool (XC::Node::*Out3D)(const GeomObj3d &,const double &,const double &) const= &XC::Node::Out;
 class_<XC::Node, XC::Node *, bases<XC::MeshComponent>, boost::noncopyable >("Node", no_init)
   .add_property("getCoo", make_function( getCooRef, return_internal_reference<>() ))
   .add_property("mass",make_function(&XC::Node::getMass, return_internal_reference<>()) ,&XC::Node::setMass)
@@ -44,6 +45,8 @@ class_<XC::Node, XC::Node *, bases<XC::MeshComponent>, boost::noncopyable >("Nod
   .add_property("getInitialPos3d", &XC::Node::getInitialPosition3d,"Returns 3D initial position of node.")
   .def("getCurrentPos2d", &XC::Node::getCurrentPosition2d,"Returns 2D current position of node scaled by a factor: initialPos+factor*currentDisplacement.")
   .def("getCurrentPos3d", &XC::Node::getCurrentPosition3d,"\n""getCurrentPos3d(factor) \n""Return 3D current position of node scaled by a factor: initialPos+factor*currentDisplacement.")
+  .def("In", In3D,"\n""In(geomObject,factor,tolerance) \n""Return true if current position of node scaled by a factor: initialPos+factor*currentDisplacement lies inside the geometric object.")
+  .def("Out", Out3D,"\n""Out(geomObject,factor,tolerance) \n""Return true if current position of node scaled by a factor: initialPos+factor*currentDisplacement lies outside the geometric object.")
   .add_property("getReaction", make_function( &XC::Node::getReaction, return_internal_reference<>() ))
   .add_property("getDisp", make_function( &XC::Node::getDisp, return_internal_reference<>() ))
   .add_property("getDispXYZ", &XC::Node::getDispXYZ)

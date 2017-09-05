@@ -97,6 +97,16 @@ const std::string &XC::CmbEdge::Lado::getName(void) const
 double XC::CmbEdge::Lado::getLongitud(void) const
   { return edge->getLongitud(); }
 
+//! @brief Returns true if this object lies inside the
+//! geometric object.
+bool XC::CmbEdge::Lado::In(const GeomObj3d &geomObj, const double &tol) const
+  { return edge->In(geomObj,tol); }
+
+//! @brief Returns true if this object lies outside the
+//! geometric object.
+bool XC::CmbEdge::Lado::Out(const GeomObj3d &geomObj, const double &tol) const
+  { return !In(geomObj,tol); }
+
 //! @brief Returns the segment than links both ends.
 Pos3d XC::CmbEdge::Lado::getCentroid(void) const
   { return edge->getCentroid(); }
@@ -340,6 +350,22 @@ Pos3d XC::CmbEdge::getCentroid(void) const
     retval+= v*1.0/totalLength;
     return retval;
   }
+
+//! @brief Returns true if this object lies inside the
+//! geometric object.
+bool XC::CmbEdge::In(const GeomObj3d &geomObj, const double &tol) const
+  {
+    bool retval= true;
+    for(std::deque<Lado>::const_iterator i=lineas.begin();i!=lineas.end();i++)
+      if(!(*i).In(geomObj,tol))
+        { retval= false; break; }
+    return retval;
+  }
+
+//! @brief Returns true if this object lies outside the
+//! geometric object.
+bool XC::CmbEdge::Out(const GeomObj3d &geomObj, const double &tol) const
+  { return !In(geomObj,tol); }
 
 //! @brief Returns the number of divisions for the whole object.
 size_t XC::CmbEdge::NDiv(void) const

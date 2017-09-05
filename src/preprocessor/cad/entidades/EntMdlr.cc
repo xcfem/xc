@@ -79,15 +79,39 @@ void XC::EntMdlr::set_indice(const size_t &i)
 //! @brief Interfaz con VTK.
 int XC::EntMdlr::getVtkCellType(void) const
   {
-    std::cerr << "EntMdlr::getVtkCellType: function getVtkCellType must be overloaded in derived classes." << std::endl;
+    std::cerr << nombre_clase() << "::" << __FUNCTION__
+              << "; must be overloaded in derived classes."
+	      << std::endl;
     return VTK_EMPTY_CELL;
   }
 
 //! @brief Interfaz con el formato MED de Salome.
 int XC::EntMdlr::getMEDCellType(void) const
   {
-    std::cerr << "EntMdlr::getMEDCellType: function getMEDCellType must be overloaded in derived classes." << std::endl;
+    std::cerr << nombre_clase() << "::" << __FUNCTION__
+	      << "; must be overloaded in derived classes."
+	      << std::endl;
     return MED_NONE;
+  }
+
+//! @brief Returns true if the object lies inside the
+//! geometric object.
+bool XC::EntMdlr::In(const GeomObj3d &geomObj, const double &tol) const
+  {
+    std::cerr << nombre_clase() << "::" << __FUNCTION__
+	      << "; not implemented yet."
+	      << std::endl;
+    return false;
+  }
+
+//! @brief Returns true if the object lies outside the
+//! geometric object.
+bool XC::EntMdlr::Out(const GeomObj3d &geomObj, const double &tol) const
+  {
+    std::cerr << nombre_clase() << "::" << __FUNCTION__
+	      << "; not implemented yet."
+	      << std::endl;
+    return false;
   }
 
 //! @brief Clears object contents.

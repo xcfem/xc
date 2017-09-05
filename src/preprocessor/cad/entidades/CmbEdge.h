@@ -83,6 +83,8 @@ class CmbEdge: public Edge
         MatrizPos3d GetPosNodosInv(void) const;
         double getLongitud(void) const;
         Pos3d getCentroid(void) const;	
+        bool In(const GeomObj3d &, const double &tol= 0.0) const;
+        bool Out(const GeomObj3d &, const double &tol= 0.0) const;
         const Vector &getTang(const double &) const;
         Node *GetNodoDir(const size_t &i);
         Node *GetNodoInv(const size_t &i);
@@ -132,6 +134,8 @@ class CmbEdge: public Edge
     inline std::deque<Lado> &getLados(void)
       { return lineas; }
     void reverse(void);
+    bool In(const GeomObj3d &, const double &tol= 0.0) const;
+    bool Out(const GeomObj3d &, const double &tol= 0.0) const;
 
     double getLongitud(void) const;
     Pos3d getCentroid(void) const;	

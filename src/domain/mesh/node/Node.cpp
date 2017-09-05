@@ -76,6 +76,8 @@
 #include "xc_utils/src/geom/pos_vec/Pos3d.h"
 #include "xc_utils/src/geom/pos_vec/Vector3d.h"
 #include "xc_utils/src/geom/pos_vec/SVD3d.h"
+#include "xc_utils/src/geom/d2/GeomObj2d.h"
+#include "xc_utils/src/geom/d3/GeomObj3d.h"
 #include "preprocessor/cad/trf/TrfGeom.h"
 #include "preprocessor/Preprocessor.h"
 #include "preprocessor/loaders/LoadLoader.h"
@@ -592,6 +594,42 @@ Pos3d XC::Node::getCurrentPosition3d(const double &factor) const
           retval= Pos3d(Crd[0]+fd[0],Crd[1]+fd[1],Crd[2]+fd[2]);
       }
     return retval;
+  }
+
+//! @brief Returns true if the current position of the node scaled by
+//! factor: return initPos+ factor * nodDisplacement lies inside the
+//! geometric object.
+bool XC::Node::In(const GeomObj3d &geomObj,const double &factor, const double &tol) const
+  {
+    const Pos3d pos= getCurrentPosition3d(factor);
+    return geomObj.In(pos,tol);
+  }
+
+//! @brief Returns true if the current position of the node scaled by
+//! factor: return initPos+ factor * nodDisplacement lies inside the
+//! geometric object.
+bool XC::Node::In(const GeomObj2d &geomObj,const double &factor, const double &tol) const
+  {
+    const Pos2d pos= getCurrentPosition2d(factor);
+    return geomObj.In(pos,tol);
+  }
+
+//! @brief Returns true if the current position of the node scaled by
+//! factor: return initPos+ factor * nodDisplacement lies outside the
+//! geometric object.
+bool XC::Node::Out(const GeomObj3d &geomObj,const double &factor, const double &tol) const
+  {
+    const Pos3d pos= getCurrentPosition3d(factor);
+    return !geomObj.In(pos,tol);
+  }
+
+//! @brief Returns true if the current position of the node scaled by
+//! factor: return initPos+ factor * nodDisplacement lies outside the
+//! geometric object.
+bool XC::Node::Out(const GeomObj2d &geomObj,const double &factor, const double &tol) const
+  {
+    const Pos2d pos= getCurrentPosition2d(factor);
+    return geomObj.Out(pos,tol);
   }
 
 //! @brief Extracts translational components from d vector.

@@ -79,6 +79,9 @@ class Pnt: public EntMdlr
     //! @brief Sets the object position.
     void setPos(const Pos3d &pos)
       { p= pos; }
+    bool In(const GeomObj3d &, const double &tol= 0.0) const;
+    bool Out(const GeomObj3d &, const double &tol= 0.0) const;
+
     Vector3d VectorPos(void) const;
 
     void inserta_linea(Edge *l) const;

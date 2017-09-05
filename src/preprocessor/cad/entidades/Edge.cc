@@ -109,6 +109,46 @@ bool XC::Edge::ExtremosEn(const Pnt *p1,const Pnt *p2) const
     return retval;
   }
 
+//! @brief Returns true if the line lies inside the
+//! geometric object.
+bool XC::Edge::In(const GeomObj3d &geomObj, const double &tol) const
+  {
+    bool retval= false;
+    const Pnt *p1= P1();
+    const Pnt *p2= P2();
+    if(p1)
+      retval= p1->In(geomObj,tol);
+    else
+      std::cerr << nombre_clase() << "::" << __FUNCTION__
+	        << "; p1 not defined." << std::endl;
+    if(p2)
+      retval= retval && p2->In(geomObj,tol);
+    else
+      std::cerr << nombre_clase() << "::" << __FUNCTION__
+	        << "; p2 not defined." << std::endl;
+    return retval;
+  }
+
+//! @brief Returns true if the line lies outside the
+//! geometric object.
+bool XC::Edge::Out(const GeomObj3d &geomObj, const double &tol) const
+  {
+    bool retval= false;
+    const Pnt *p1= P1();
+    const Pnt *p2= P2();
+    if(p1)
+      retval= p1->Out(geomObj,tol);
+    else
+      std::cerr << nombre_clase() << "::" << __FUNCTION__
+	        << "; p1 not defined." << std::endl;
+    if(p2)
+      retval= retval && p2->Out(geomObj,tol);
+    else
+      std::cerr << nombre_clase() << "::" << __FUNCTION__
+	        << "; p2 not defined." << std::endl;
+    return retval;
+  }
+
 //! @brief Assigns the number of of divisions.
 void XC::Edge::SetNDiv(const size_t &nd)
   {

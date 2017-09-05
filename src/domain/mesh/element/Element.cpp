@@ -781,6 +781,16 @@ const XC::Matrix &XC::Element::getCooNodes(void) const
 std::list<Pos3d> XC::Element::getPosNodes(bool initialGeometry) const
   { return getNodePtrs().getPosiciones(initialGeometry); }
 
+bool XC::Element::In(const GeomObj3d &obj,const double &factor, const double &tol) const
+  { return getNodePtrs().In(obj,factor,tol); }
+bool XC::Element::Out(const GeomObj3d &obj,const double &factor, const double &tol) const
+  { return getNodePtrs().Out(obj,factor,tol); }
+bool XC::Element::In(const GeomObj2d &obj,const double &factor, const double &tol) const
+  { return getNodePtrs().In(obj,factor,tol); }
+bool XC::Element::Out(const GeomObj2d &obj,const double &factor, const double &tol) const
+  { return getNodePtrs().Out(obj,factor,tol); }
+
+
 //! @brief Returs a matrix with the axes of the element as matrix rows
 //! [[x1,y1,z1],[x2,y2,z2],...·]
 XC::Matrix XC::Element::getLocalAxes(bool initialGeometry) const

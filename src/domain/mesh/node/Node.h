@@ -74,6 +74,8 @@
 class Pos2d;
 class Pos3d;
 class SVD3d;
+class GeomObj2d;
+class GeomObj3d;
 
 namespace XC {
 class ContinuaReprComponent;
@@ -201,6 +203,10 @@ class Node: public MeshComponent
     Pos3d getInitialPosition3d(void) const;
     Pos2d getCurrentPosition2d(const double &factor= 1.0) const;
     Pos3d getCurrentPosition3d(const double &factor= 1.0) const;
+    bool In(const GeomObj3d &,const double &factor= 1.0, const double &tol= 0.0) const;
+    bool In(const GeomObj2d &,const double &factor= 1.0, const double &tol= 0.0) const;
+    bool Out(const GeomObj3d &,const double &factor= 1.0, const double &tol= 0.0) const;
+    bool Out(const GeomObj2d &,const double &factor= 1.0, const double &tol= 0.0) const;
     void setPos(const Pos3d &);
     void Mueve(const Vector3d &desplaz);  
     void Transforma(const TrfGeom &trf);

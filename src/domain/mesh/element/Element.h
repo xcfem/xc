@@ -73,6 +73,8 @@ class TritrizPos3d;
 class Pos2d;
 class Pos3d;
 class SisCooRect3d3d;
+class GeomObj2d;
+class GeomObj3d;
 
 namespace XC {
 class Vector;
@@ -220,6 +222,10 @@ class Element: public MeshComponent
     virtual Pos3d getPosCdg(bool initialGeometry= true) const;
     Vector getCooCdg(bool initialGeometry= true) const;
     TritrizPos3d getPuntos(const size_t &ni,const size_t &nj,const size_t &nk,bool initialGeometry= true);
+    bool In(const GeomObj3d &,const double &factor= 1.0, const double &tol= 0.0) const;
+    bool Out(const GeomObj3d &,const double &factor= 1.0, const double &tol= 0.0) const;
+    bool In(const GeomObj2d &,const double &factor= 1.0, const double &tol= 0.0) const;
+    bool Out(const GeomObj2d &,const double &factor= 1.0, const double &tol= 0.0) const;
     virtual double getDist2(const Pos2d &p,bool initialGeometry= true) const;
     virtual double getDist(const Pos2d &p,bool initialGeometry= true) const;
     virtual double getDist2(const Pos3d &p,bool initialGeometry= true) const;

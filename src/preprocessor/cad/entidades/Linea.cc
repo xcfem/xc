@@ -163,6 +163,7 @@ XC::Edge *XC::Linea::splitAtCooNatural(const double &chi)
     return retval;
   }
 
+
 BND3d XC::Linea::Bnd(void) const
   {
     BND3d retval;

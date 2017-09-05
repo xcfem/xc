@@ -189,8 +189,8 @@ void XC::Body::BodyFace::create_nodes(void)
     if(surface)
       surface->create_nodes();
     else
-      std::cerr << ":Body::BodyFace::create_nodes; pointer "
-                << "to surface is null." << std::endl;
+      std::cerr << "BodyFace::" << __FUNCTION__
+	        << "; pointer to surface is null." << std::endl;
   }
 
 //! @brief Constructor.
@@ -204,12 +204,14 @@ BND3d XC::Body::Bnd(void) const
     const size_t nv= NumVertices();
     if(nv<1) //the set is empty.
       {
-	std::cerr << "Body::Bnd(); polyline is empty." << std::endl;
+	std::cerr << nombre_clase() << "::" << __FUNCTION__
+		  << "; body is empty." << std::endl;
         return retval;
       }
     if(nv<2)
       {
-	std::cerr << "Body::Bnd(); polyline has only one point." << std::endl;
+	std::cerr << nombre_clase() << "::" << __FUNCTION__
+		  << "; body has only one point." << std::endl;
         retval= BND3d(GetVertice(1)->GetPos(),GetVertice(1)->GetPos());
         return retval;
       }
@@ -218,6 +220,38 @@ BND3d XC::Body::Bnd(void) const
       retval+= GetVertice(i)->GetPos();
     return retval;
   }
+
+//! @brief Returns true if this object lies inside the
+//! geometric object.
+bool XC::Body::In(const GeomObj3d &geomObj, const double &tol) const
+  {
+    bool retval= false;
+    const size_t nv= NumVertices();
+    if(nv<1) //the set is empty.
+      {
+	std::cerr << nombre_clase() << "::" << __FUNCTION__
+		  << "; body is empty." << std::endl;
+      }
+    else if(nv<2)
+      {
+	std::cerr << nombre_clase() << "::" << __FUNCTION__
+		  << "; body has only one point." << std::endl;
+	retval= geomObj.In(GetVertice(1)->GetPos(),tol);
+      }
+    else
+      for(size_t i=1;i<=nv;i++)
+	{
+	  Pos3d pos(GetVertice(i)->GetPos());
+          if(!geomObj.In(pos,tol))
+            { retval= false; break; }
+	}
+    return retval;
+  }
+
+//! @brief Returns true if this object lies outside the
+//! geometric object.
+bool XC::Body::Out(const GeomObj3d &geomObj, const double &tol) const
+  { return !In(geomObj,tol); }
 
 //! @brief Return the bodies that touch the surface
 //! passed as parameter (neighbors).

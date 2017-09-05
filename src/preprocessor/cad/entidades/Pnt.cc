@@ -143,6 +143,16 @@ bool XC::Pnt::Toca(const Body &b) const
 double XC::Pnt::DistanciaA2(const Pos3d &pt) const
   { return dist2(p,pt);  }
 
+//! @brief Returns true if the point lies inside the
+//! geometric object.
+bool XC::Pnt::In(const GeomObj3d &geomObj, const double &tol) const
+  { return geomObj.In(GetPos(),tol); }
+
+//! @brief Returns true if the point lies outside the
+//! geometric object.
+bool XC::Pnt::Out(const GeomObj3d &geomObj, const double &tol) const
+  { return !geomObj.In(GetPos(),tol); }
+
 //! @brief Creates nodes.
 void XC::Pnt::create_nodes(void)
   {

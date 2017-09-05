@@ -66,6 +66,8 @@ class Edge: public EntMdlr
 
     virtual const Pnt *P1(void) const;
     virtual const Pnt *P2(void) const;
+    bool In(const GeomObj3d &, const double &tol= 0.0) const;
+    bool Out(const GeomObj3d &, const double &tol= 0.0) const;
     bool ExtremosEn(const Pnt *,const Pnt *) const;
     //! @brief Return the number of vertices.
     virtual size_t NumVertices(void) const= 0;

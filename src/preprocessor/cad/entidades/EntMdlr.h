@@ -41,6 +41,7 @@ class MatrizPos3d;
 class TritrizPos3d;
 class RangoIndice;
 class RangoTritriz;
+class GeomObj3d;
 
 namespace XC {
 class SetFilaI;
@@ -80,6 +81,9 @@ class EntMdlr: public SetEstruct
     //! @brief Returns the index of the object for it use in VTK arrays.
     inline size_t getIdx(void) const
       { return idx; }
+
+    virtual bool In(const GeomObj3d &, const double &tol= 0.0) const;
+    virtual bool Out(const GeomObj3d &, const double &tol= 0.0) const;
 
     inline bool TieneNodos(void) const
       { return !ttzNodes.empty(); }

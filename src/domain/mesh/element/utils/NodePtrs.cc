@@ -379,30 +379,53 @@ Pos3d XC::NodePtrs::getPosCdg(bool initialGeometry) const
     return retval;
   }
 
-//! @brief Returns true if the node are in the halfspace.
-bool XC::NodePtrs::In(const SemiEspacio3d &semiEsp,const double &tol,bool initialGeometry) const
+//! @brief Returns true if all the nodes are inside the object.
+bool XC::NodePtrs::In(const GeomObj3d &obj,const double &factor,const double &tol) const
   {
     bool retval= true;
-    std::list<Pos3d> posiciones= getPosiciones(initialGeometry);
-    for(std::list<Pos3d>::const_iterator i= posiciones.begin();i!=posiciones.end();i++)
-      if(!semiEsp.In(*i))
-        { retval= false; break; }
+    for(const_iterator i= begin();i!= end();i++)
+      {
+        const Node *tmp= *i;
+        if(tmp)
+          if(!tmp->In(obj,factor,tol))
+            { retval= false; break; }
+      }
     return retval;
   }
 
-//! @brief Returns true if the node are outside the halfspace.
-bool XC::NodePtrs::Out(const SemiEspacio3d &semiEsp,const double &tol,bool initialGeometry) const
+//! @brief Returns true if the node are outside the object.
+bool XC::NodePtrs::Out(const GeomObj3d &obj,const double &factor,const double &tol) const
+  { return !In(obj,factor,tol); }
+
+//! @brief Returns true if all the nodes are inside the object.
+bool XC::NodePtrs::In(const GeomObj2d &obj,const double &factor,const double &tol) const
   {
-    SemiEspacio3d complementario(semiEsp);
-    complementario.Swap();
-    return In(complementario,tol,initialGeometry);
+    bool retval= true;
+    for(const_iterator i= begin();i!= end();i++)
+      {
+        const Node *tmp= *i;
+        if(tmp)
+          if(!tmp->In(obj,factor,tol))
+            { retval= false; break; }
+      }
+    return retval;
   }
+
+//! @brief Returns true if the node are outside the object.
+bool XC::NodePtrs::Out(const GeomObj2d &obj,const double &factor,const double &tol) const
+  { return !In(obj,factor,tol); }
 
 //! @brief Returns true if there are nodes in both sides of the plane.
 bool XC::NodePtrs::Corta(const Plano3d &plano,bool initialGeometry) const
   {
-    bool in= In(plano,0.0,initialGeometry);
-    bool out= Out(plano,0.0,initialGeometry);
+    double factor= 1.0;
+    if(initialGeometry)
+      factor= 0.0;
+    SemiEspacio3d halfSpace(plano);
+    bool in= In(halfSpace,factor,0.0);
+    SemiEspacio3d complementario(halfSpace);
+    complementario.Swap();
+    bool out= In(complementario,factor,0.0);
     return (!in && !out);
   }
 

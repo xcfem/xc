@@ -111,6 +111,8 @@ class Body: public EntMdlr
     virtual const Pnt *GetVertice(const size_t &i) const= 0;
     std::vector<int> getIndicesVertices(void) const;
     virtual BND3d Bnd(void) const;
+    bool In(const GeomObj3d &, const double &tol= 0.0) const;
+    bool Out(const GeomObj3d &, const double &tol= 0.0) const;
 
     virtual bool checkNDivs(void) const= 0;
 

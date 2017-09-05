@@ -35,6 +35,9 @@
 class Pos3d;
 class SemiEspacio3d;
 class Plano3d;
+class GeomObj2d;
+class GeomObj3d;
+
 
 namespace XC {
 class Element;
@@ -97,8 +100,10 @@ class NodePtrs: public EntCmd, public std::vector<Node *>
     Pos3d getPosCdg(bool initialGeometry= true) const;
     Node *getNearestNode(const Pos3d &p,bool initialGeometry= true);
     const Node *getNearestNode(const Pos3d &p,bool initialGeometry= true) const;
-    bool In(const SemiEspacio3d &semiEsp,const double &tol= 0.0,bool initialGeometry= true) const;
-    bool Out(const SemiEspacio3d &semiEsp,const double &tol= 0.0,bool initialGeometry= true) const;
+    bool In(const GeomObj3d &,const double &factor= 1.0, const double &tol= 0.0) const;
+    bool Out(const GeomObj3d &,const double &factor= 1.0, const double &tol= 0.0) const;
+    bool In(const GeomObj2d &,const double &factor= 1.0, const double &tol= 0.0) const;
+    bool Out(const GeomObj2d &,const double &factor= 1.0, const double &tol= 0.0) const;
     bool Corta(const Plano3d &,bool initialGeometry= true) const;
 
     void resetTributaries(void) const;
