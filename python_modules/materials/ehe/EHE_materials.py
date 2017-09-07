@@ -330,26 +330,27 @@ class EHEPrestressingSteel(concrete_base.PrestressingSteel):
 
 Y1860S7= EHEPrestressingSteel(steelName= "Y1860S7",fpk= 1171e6,fmax= 1860e6)
 
-def getPerdidaTensionPenetracionCunaTendonRectoCorto(a, L, Ep):
-  '''
-  Pérdidas por penetración de cuñas en tendones rectos cortos postesos
-   o tendones pretesos según el apartado 20.2.2.1.2 de la EHE-08.
+def get_losses_wedge_penetration_short_straight_tendon(a, L, Ep):
+    '''Losses due to wedge penetration in post-tensioned straight
+    tendons of short length (according to section 20.2.2.1.2 of EHE-08)
 
-   a: Penetración de la cuña (lo usual: 5 mm)
-   L: Longitud del tendón.
-   Ep: Módulo de deformación longitudinal de la reinforcement activa (190e9).
-  '''
-  return a/L*Ep
+    :param a: wedge penetration (usually: 5 mm)
+    :param L: total length of the straight tendon
+    :param Ep: longitudinal strain modulus of an active reinforcement (190e9).
+    '''
+    return a/L*Ep
 
-def getPerdidaTensionAcortElasticoTendonPreteso(sigma_cp, Ep, Ecj):
-  '''
-  Pérdidas por acortamiento elástico del hormigón en tendones pretensados.
+def get_losses_elastic_shortening_concrete_in_tendons(sigma_cp, Ep, Ecj):
+    '''Losses due to elastic shortening of the concrete in prestressed tendons
 
-   sigma_cp: Tensión de compresión en el hormigón, a nivel del centro de gravedad de
-             las reinforcement activas, producida por el pretensado una
-             vez descontadas la pérdida por penetración de cuñas
-   Ep: Módulo de deformación longitudinal de la reinforcement activa (190e9).
-   Ecj: Módulo de deformación longitudinal del hormigón en el momento
-        de la transferencia. 
-  '''
+    :param sigma_cp: compressive stress in the concrete in the level of the 
+                     center of gravity of the active reinforcement, due to 
+                     prestressing after deducting the losses due to wedge 
+                     penetration
+    :param Ep: modulus of longitudinal elasticity of the active reinforcements
+                (190e9).
+    :param Ecj: modulus of longitudinal elasticity of the concrete for the age
+                 j corresponding to the moment of applying the load to the 
+                 active reinforcements.
+    '''
   return sigma_cp*Ep/Ecj
