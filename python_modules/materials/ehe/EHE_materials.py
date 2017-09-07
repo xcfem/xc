@@ -353,4 +353,4 @@ def get_losses_elastic_shortening_concrete_in_tendons(sigma_cp, Ep, Ecj):
                  j corresponding to the moment of applying the load to the 
                  active reinforcements.
     '''
-  return sigma_cp*Ep/Ecj
+    return sigma_cp*Ep/Ecj
