@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
-# home made test
-# Element selection from a node set.
+'''Element selection from a node set. Home made test.'''
 import xc_base
 import geom
 import xc

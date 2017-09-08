@@ -280,7 +280,7 @@ void XC::Body::add_to_sets(std::set<SetBase *> &sets)
     for(std::set<SetBase *>::iterator i= sets.begin();i!= sets.end();i++)
       {
         Set *s= dynamic_cast<Set *>(*i);
-        if(s) s->GetCuerpos().push_back(this);
+        if(s) s->getBodies().push_back(this);
       }
   }
 

@@ -47,8 +47,8 @@
 
 //! @brief Constructor.
 XC::Set::Set(const std::string &nmb,Preprocessor *md)
-  : SetMeshComp(nmb,md), puntos(this), lineas(this), surfaces(this),
-    cuerpos(this), uniform_grids(this) {}
+  : SetMeshComp(nmb,md), points(this), lines(this), surfaces(this),
+    bodies(this), uniform_grids(this) {}
 
 //! @brief Copy constructor.
 XC::Set::Set(const Set &otro)
@@ -72,14 +72,14 @@ XC::Set &XC::Set::operator=(const Set &otro)
 void XC::Set::copia_listas(const Set &otro)
   {
     SetMeshComp::copia_listas(otro);
-    puntos= otro.puntos;
-    puntos.set_owner(this);
-    lineas= otro.lineas;
-    lineas.set_owner(this);
+    points= otro.points;
+    points.set_owner(this);
+    lines= otro.lines;
+    lines.set_owner(this);
     surfaces= otro.surfaces;
     surfaces.set_owner(this);
-    cuerpos= otro.cuerpos;
-    cuerpos.set_owner(this);
+    bodies= otro.bodies;
+    bodies.set_owner(this);
     uniform_grids= otro.uniform_grids;
     uniform_grids.set_owner(this);
   }
@@ -89,10 +89,10 @@ void XC::Set::copia_listas(const Set &otro)
 void XC::Set::extend_lists(const Set &otro)
   {
     SetMeshComp::extend_lists(otro);
-    puntos.extend(otro.puntos);
-    lineas.extend(otro.lineas);
+    points.extend(otro.points);
+    lines.extend(otro.lines);
     surfaces.extend(otro.surfaces);
-    cuerpos.extend(otro.cuerpos);
+    bodies.extend(otro.bodies);
     uniform_grids.extend(otro.uniform_grids);
   }
 
@@ -101,10 +101,10 @@ void XC::Set::extend_lists(const Set &otro)
 // void XC::Set::extend_lists_cond(const Set &otro,const std::string &cond)
 //   {
 //     SetMeshComp::extend_lists_cond(otro,cond);
-//     puntos.extend_cond(otro.puntos,cond);
-//     lineas.extend_cond(otro.lineas,cond);
+//     points.extend_cond(otro.points,cond);
+//     lines.extend_cond(otro.lines,cond);
 //     surfaces.extend_cond(otro.surfaces,cond);
-//     cuerpos.extend_cond(otro.cuerpos,cond);
+//     bodies.extend_cond(otro.bodies,cond);
 //     uniform_grids.extend_cond(otro.uniform_grids,cond);
 //   }
 
@@ -135,10 +135,10 @@ XC::Set XC::Set::operator+(const XC::Set &b) const
 void XC::Set::clear(void)
   {
     SetMeshComp::clear();
-    puntos.clear();
-    lineas.clear();
+    points.clear();
+    lines.clear();
     surfaces.clear();
-    cuerpos.clear();
+    bodies.clear();
     uniform_grids.clear();
   }
 
@@ -146,10 +146,10 @@ void XC::Set::clear(void)
 void XC::Set::clearAll(void)
   {
     SetMeshComp::clearAll();
-    puntos.clearAll();
-    lineas.clearAll();
+    points.clearAll();
+    lines.clearAll();
     surfaces.clearAll();
-    cuerpos.clearAll();
+    bodies.clearAll();
     uniform_grids.clearAll();
   }
 
@@ -157,16 +157,16 @@ void XC::Set::clearAll(void)
 void XC::Set::numera(void)
   {
     SetMeshComp::numera();
-    SetMeshComp::numera_lista(puntos);
-    SetMeshComp::numera_lista(lineas);
+    SetMeshComp::numera_lista(points);
+    SetMeshComp::numera_lista(lines);
     SetMeshComp::numera_lista(surfaces);
-//     numera_lista(cuerpos);
+//     numera_lista(bodies);
   }
 
 //! @brief Moves the objects of the set.
 void XC::Set::mueve(const Vector3d &desplaz)
   {
-    for(lst_ptr_points::iterator i= puntos.begin();i!=puntos.end();i++)
+    for(lst_ptr_points::iterator i= points.begin();i!=points.end();i++)
       (*i)->Mueve(desplaz);
     SetMeshComp::mueve(desplaz);
   }
@@ -174,7 +174,7 @@ void XC::Set::mueve(const Vector3d &desplaz)
 //! @brief Applies the transformation to the elements of the set.
 void XC::Set::Transforma(const TrfGeom &trf)
   {
-    for(lst_ptr_points::iterator i= puntos.begin();i!=puntos.end();i++)
+    for(lst_ptr_points::iterator i= points.begin();i!=points.end();i++)
       (*i)->Transforma(trf);
     SetMeshComp::Transforma(trf);
   }
@@ -204,26 +204,26 @@ void XC::Set::create_copy(const std::string &nombre,const Vector3d &v= Vector3d(
     std::clog << nombre_clase() << "::" << __FUNCTION__
               << "; warning! copy of nodes and elements"
               << " not implemented." << std::endl;
-    //Copiamos los puntos.
+    //Copying points.
     std::map<std::string,std::string> new_points_names;
-    for(lst_ptr_points::iterator i= puntos.begin();i!=puntos.end();i++)
+    for(lst_ptr_points::iterator i= points.begin();i!=points.end();i++)
       {
         const std::string nombre_viejo= (*i)->getName();
         const std::string new_name= nombre+nombre_viejo;
         Pnt *new_point= getPreprocessor()->getCad().getPuntos().Copia(*i,v);
         new_point->BorraPtrNodElem();
-        new_set->puntos.push_back(new_point);
+        new_set->points.push_back(new_point);
         new_points_names[nombre_viejo]= new_name;
       }
     //Copy lines.
     std::map<std::string,std::string> new_lines_names;
-    for(lst_line_pointers::iterator i= lineas.begin();i!=lineas.end();i++)
+    for(lst_line_pointers::iterator i= lines.begin();i!=lines.end();i++)
       {
         const std::string nombre_viejo= (*i)->getName();
         const std::string new_name= nombre+nombre_viejo;
         Edge *new_edge= getPreprocessor()->getCad().getLineas().createCopy(*i);
         new_edge->BorraPtrNodElem();
-        new_set->lineas.push_back(new_edge);
+        new_set->lines.push_back(new_edge);
         new_lines_names[nombre_viejo]= new_name;
         const size_t nv= new_edge->NumVertices();
         for(size_t i= 0;i<nv;i++)
@@ -231,7 +231,7 @@ void XC::Set::create_copy(const std::string &nombre,const Vector3d &v= Vector3d(
             const Pnt *vertice_viejo= new_edge->GetVertice(i);
             const std::string nombre_viejo= vertice_viejo->getName();
             const std::string new_name= new_lines_names[nombre_viejo];
-            Pnt *new_point= new_set->puntos.BuscaNmb(new_name);
+            Pnt *new_point= new_set->points.BuscaNmb(new_name);
             new_edge->SetVertice(i,new_point);
 	  }
       }
@@ -242,7 +242,7 @@ void XC::Set::point_meshing(meshing_dir dm)
   {
     if(verbosity>2)
       std::clog << "Meshing points...";
-    for(lst_ptr_points::iterator i= puntos.begin();i!=puntos.end();i++)
+    for(lst_ptr_points::iterator i= points.begin();i!=points.end();i++)
       (*i)->genMesh(dm);
     if(verbosity>2)
       std::clog << "done." << std::endl;
@@ -253,7 +253,7 @@ void XC::Set::line_meshing(meshing_dir dm)
   {
     if(verbosity>2)
       std::clog << "Meshing lines...";
-    for(lst_line_pointers::iterator i= lineas.begin();i!=lineas.end();i++)
+    for(lst_line_pointers::iterator i= lines.begin();i!=lines.end();i++)
       (*i)->genMesh(dm);
     if(verbosity>2)
       std::clog << "done." << std::endl;
@@ -275,7 +275,7 @@ void XC::Set::body_meshing(meshing_dir dm)
   {
     if(verbosity>2)
       std::clog << "Meshing bodies...";
-    for(lst_ptr_cuerpos::iterator i= cuerpos.begin();i!=cuerpos.end();i++)
+    for(lst_ptr_cuerpos::iterator i= bodies.begin();i!=bodies.end();i++)
       (*i)->genMesh(dm);
     if(verbosity>2)
       std::clog << "done." << std::endl;
@@ -318,19 +318,71 @@ void XC::Set::genMesh(meshing_dir dm)
 
 //! @brief Returns true if the point belongs to the set.
 bool XC::Set::In(const Pnt *p) const
-  { return puntos.in(p); }
+  { return points.in(p); }
+
+//! @brief Return a new set that contains the points that lie inside the
+//! geometric object.
+//!
+//! @param newSetName: name for the new set.
+//! @param geomObj: geometric object that must contain the nodes.
+//! @param tol: tolerance for "In" function.
+XC::Set XC::Set::pickPointsInside(const std::string &newSetName, const GeomObj3d &geomObj, const double &tol)
+  {
+    Set retval(newSetName);
+    retval.points= points.pickEntitiesInside(geomObj,tol);
+    return retval;
+  }
 
 //! @brief Returns true if the edge belongs to the set.
 bool XC::Set::In(const Edge *e) const
-  { return lineas.in(e); }
+  { return lines.in(e); }
+
+//! @brief Return a new set that contains the lines that lie inside the
+//! geometric object.
+//!
+//! @param newSetName: name for the new set.
+//! @param geomObj: geometric object that must contain the nodes.
+//! @param tol: tolerance for "In" function.
+XC::Set XC::Set::pickLinesInside(const std::string &newSetName, const GeomObj3d &geomObj, const double &tol)
+  {
+    Set retval(newSetName);
+    retval.lines= lines.pickEntitiesInside(geomObj,tol);
+    return retval;
+  }
 
 //! @brief Returns true if the surface belongs to the set.
 bool XC::Set::In(const Face *f) const
   { return surfaces.in(f); }
 
+//! @brief Return a new set that contains the surfaces that lie inside the
+//! geometric object.
+//!
+//! @param newSetName: name for the new set.
+//! @param geomObj: geometric object that must contain the nodes.
+//! @param tol: tolerance for "In" function.
+XC::Set XC::Set::pickSurfacesInside(const std::string &newSetName, const GeomObj3d &geomObj, const double &tol)
+  {
+    Set retval(newSetName);
+    retval.surfaces= surfaces.pickEntitiesInside(geomObj,tol);
+    return retval;
+  }
+
 //! @brief Returns true if the body belongs to the set.
 bool XC::Set::In(const Body *b) const
-  { return cuerpos.in(b); }
+  { return bodies.in(b); }
+
+//! @brief Return a new set that contains the bodies that lie inside the
+//! geometric object.
+//!
+//! @param newSetName: name for the new set.
+//! @param geomObj: geometric object that must contain the nodes.
+//! @param tol: tolerance for "In" function.
+XC::Set XC::Set::pickBodiesInside(const std::string &newSetName, const GeomObj3d &geomObj, const double &tol)
+  {
+    Set retval(newSetName);
+    retval.bodies= bodies.pickEntitiesInside(geomObj,tol);
+    return retval;
+  }
 
 //! @brief Returns true if the «uniform grid» belongs to the set.
 bool XC::Set::In(const UniformGrid *ug) const
@@ -341,16 +393,16 @@ bool XC::Set::In(const UniformGrid *ug) const
 //! of those entities that are already in the set.
 void XC::Set::CompletaHaciaAbajo(void)
   {
-//     for(lst_cuerpos::iterator i=cuerpos.begin();i!=cuerpos.end();i++)
+//     for(lst_cuerpos::iterator i=bodies.begin();i!=bodies.end();i++)
 //       {
 //         lst_surfaces ss= (*i)->getSurfaces();
 //         surfaces.insert(surfaces.end(),ss.begin(),ss.end());
 //       }
     for(sup_iterator i=surfaces.begin();i!=surfaces.end();i++)
       {
-        //Lineas.
+        //Lines.
         lst_line_pointers ll((*i)->GetEdges());
-        lineas.insert(lineas.end(),ll.begin(),ll.end());
+        lines.insert(lines.end(),ll.begin(),ll.end());
 
         //Elements.
         TritrizPtrElem &ttz_elements= (*i)->getTtzElements();
@@ -363,12 +415,12 @@ void XC::Set::CompletaHaciaAbajo(void)
               addElement(ttz_elements(i,j,k));
 
       }
-    for(lin_iterator i=lineas.begin();i!=lineas.end();i++)
+    for(lin_iterator i=lines.begin();i!=lines.end();i++)
       {
-        //Puntos.
+        //Points.
         const size_t nv= (*i)->NumVertices();
         for(register size_t j=1;j<=nv;j++)
-          puntos.push_back(const_cast<Pnt *>((*i)->GetVertice(j)));
+          points.push_back(const_cast<Pnt *>((*i)->GetVertice(j)));
 
         //Elements.
         TritrizPtrElem &ttz_elements= (*i)->getTtzElements();
@@ -389,13 +441,13 @@ void XC::Set::CompletaHaciaArriba(void)
   {
     SetMeshComp::CompletaHaciaArriba();
     std::cerr << "Set::CompletaHaciaArriba() work in progress." << std::endl;
-    for(pnt_iterator i=puntos.begin();i!=puntos.end();i++)
+    for(pnt_iterator i=points.begin();i!=points.end();i++)
       {
         std::set<const Edge *> ll= GetLineasTocan(**i);
         for(std::set<const Edge *>::const_iterator j= ll.begin();j!=ll.end();j++)
-          lineas.push_back(const_cast<Edge *>(*j));
+          lines.push_back(const_cast<Edge *>(*j));
       }
-    for(lin_iterator i=lineas.begin();i!=lineas.end();i++)
+    for(lin_iterator i=lines.begin();i!=lines.end();i++)
       {
         lst_surface_ptrs ss(GetSupsTocan(**i));
         surfaces.insert(surfaces.end(),ss.begin(),ss.end());
@@ -403,7 +455,7 @@ void XC::Set::CompletaHaciaArriba(void)
 //     for(lst_surfaces::iterator i=surfaces.begin();i!=surfaces.end();i++)
 //       {
 //         lst_cuerpos bb= GetCuerposTocan(**i);
-//         cuerpos.insert(cuerpos.end(),bb.begin(),bb.end());
+//         bodies.insert(bodies.end(),bb.begin(),bb.end());
 //       }
   }
 
@@ -423,7 +475,7 @@ void XC::Set::sel_points_lista(const ID &tags)
               {
 	        Pnt *ipt= cad.getPuntos().busca(tags(i)); 
                 if(ipt)
-                  puntos.push_back(ipt);
+                  points.push_back(ipt);
                 else
 		  std::cerr << "Point identified by tag: "
 			    << tags(i) << " not found." << std::endl;
@@ -451,7 +503,7 @@ void XC::Set::sel_lineas_lista(const ID &tags)
               {
 	        Edge *iedge= cad.getLineas().busca(tags(i)); 
                 if(iedge)
-                  lineas.push_back(iedge);
+                  lines.push_back(iedge);
                 else
 		  std::cerr << "Line identified by tag: "
 			    << tags(i) << " not found." << std::endl;
@@ -500,10 +552,10 @@ XC::DbTagData &XC::Set::getDbTagData(void) const
 int XC::Set::sendData(CommParameters &cp)
   {
     int res= SetMeshComp::sendData(cp);
-//     res+= puntos.sendTags(9,10,getDbTagData(),cp);
-//     res+= lineas.sendTags(11,12,getDbTagData(),cp);
+//     res+= points.sendTags(9,10,getDbTagData(),cp);
+//     res+= lines.sendTags(11,12,getDbTagData(),cp);
 //     res+= surfaces.sendTags(13,14,getDbTagData(),cp);
-//     res+= cuerpos.sendTags(15,16,getDbTagData(),cp);
+//     res+= bodies.sendTags(15,16,getDbTagData(),cp);
 //     res+= uniform_grids.sendTags(17,18,getDbTagData(),cp);
     return res;
   }
@@ -513,13 +565,13 @@ int XC::Set::recvData(const CommParameters &cp)
   {
     ID tmp;
     int res= SetMeshComp::recvData(cp);
-//     tmp= puntos.receiveTags(9,10,getDbTagData(),cp);
+//     tmp= points.receiveTags(9,10,getDbTagData(),cp);
 //     sel_points_lista(tmp);
-//     tmp= lineas.receiveTags(11,12,getDbTagData(),cp);
+//     tmp= lines.receiveTags(11,12,getDbTagData(),cp);
 //     sel_lineas_lista(tmp);
 //     tmp= surfaces.receiveTags(13,14,getDbTagData(),cp);
 //     sel_surfaces_lst(tmp);
-//     tmp= cuerpos.receiveTags(15,16,getDbTagData(),cp);
+//     tmp= bodies.receiveTags(15,16,getDbTagData(),cp);
 //     sel_cuerpos_lista(tmp);
 //     tmp= uniform_grids.receiveTags(17,18,getDbTagData(),cp);
     return res;

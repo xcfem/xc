@@ -225,7 +225,7 @@ void XC::Pnt::add_to_sets(std::set<SetBase *> &sets)
     for(std::set<SetBase *>::iterator i= sets.begin();i!= sets.end();i++)
       {
         Set *s= dynamic_cast<Set *>(*i);
-        if(s) s->GetPuntos().push_back(this);
+        if(s) s->getPoints().push_back(this);
       }
   }
 

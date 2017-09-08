@@ -82,10 +82,10 @@ class Set: public SetMeshComp
 
   protected:
     std::string description; //!< set description.
-    lst_ptr_points puntos; //!< point set.
-    lst_line_pointers lineas; //!< line set.
+    lst_ptr_points points; //!< point set.
+    lst_line_pointers lines; //!< line set.
     lst_surface_ptrs surfaces; //!< surface set.
-    lst_ptr_cuerpos cuerpos; //!< body set.
+    lst_ptr_cuerpos bodies; //!< body set.
     lst_ptr_uniform_grids uniform_grids; //! Uniform mesh set.
 
     void clearAll(void);
@@ -117,22 +117,30 @@ class Set: public SetMeshComp
     void clear(void);
 
     //! @brief Returns a const reference to the point container.
-    virtual const lst_ptr_points &GetPuntos(void) const
-      { return puntos; }
+    virtual const lst_ptr_points &getPoints(void) const
+      { return points; }
     //! @brief Return a reference to the the point container.
-    virtual lst_ptr_points &GetPuntos(void)
-      { return puntos; }
+    virtual lst_ptr_points &getPoints(void)
+      { return points; }
+    //! @brief Assigns the points set.
+    void setPoints(const lst_ptr_points &pts)
+      { points= pts; }
     void sel_points_lista(const ID &);
     bool In(const Pnt *) const;
+    Set pickPointsInside(const std::string &, const GeomObj3d &, const double &tol= 0.0);
 
     //! @brief Return a const reference to the line container.
-    virtual const lst_line_pointers &GetLineas(void) const
-      { return lineas; }
+    virtual const lst_line_pointers &getLines(void) const
+      { return lines; }
     //! @brief Return a reference to the line container.
-    virtual lst_line_pointers &GetLineas(void)
-      { return lineas; }
+    virtual lst_line_pointers &getLines(void)
+      { return lines; }
+    //! @brief Assigns the edge set.
+    void setLines(const lst_line_pointers &lns)
+      { lines= lns; }
     void sel_lineas_lista(const ID &);
     bool In(const Edge *) const;
+    Set pickLinesInside(const std::string &, const GeomObj3d &, const double &tol= 0.0);
 
     //! @brief Returns a const reference to the surface container.
     virtual const lst_surface_ptrs &getSurfaces(void) const
@@ -140,16 +148,24 @@ class Set: public SetMeshComp
     //! @brief Returns a reference to the surface container.
     virtual lst_surface_ptrs &getSurfaces(void)
       { return surfaces; }
+    //! @brief Assigns the surface set.
+    void setSurfaces(const lst_surface_ptrs &sfs)
+      { surfaces= sfs; }
     void sel_surfaces_lst(const ID &);
     bool In(const Face *) const;
+    Set pickSurfacesInside(const std::string &, const GeomObj3d &, const double &tol= 0.0);
 
     //! @brief Return a const reference to the body container.
-    virtual const lst_ptr_cuerpos &GetCuerpos(void) const
-      { return cuerpos; }
+    virtual const lst_ptr_cuerpos &getBodies(void) const
+      { return bodies; }
     //! @brief Return a reference to the body container.
-    virtual lst_ptr_cuerpos &GetCuerpos(void)
-      { return cuerpos; }
+    virtual lst_ptr_cuerpos &getBodies(void)
+      { return bodies; }
+    //! @brief Assigns the bodies set.
+    void setBodies(const lst_ptr_cuerpos &bds)
+      { bodies= bds; }
     bool In(const Body *) const;
+    Set pickBodiesInside(const std::string &, const GeomObj3d &, const double &tol= 0.0);
 
     //! @brief Return a const reference to the UniformGrids container.
     virtual const lst_ptr_uniform_grids &GetUniformGrids(void) const

@@ -36,6 +36,7 @@
 
 namespace XC {
 
+//! @brief Container for preprocessor entities (points, lines, surfaces,...)
 template <class T>
 class DqPtrsNmb: public DqPtrs<T>
   {
@@ -56,10 +57,10 @@ class DqPtrsNmb: public DqPtrs<T>
     T *BuscaNmb(const std::string &nmb);
     T *getNearest(const Pos3d &p);
     const T *getNearest(const Pos3d &p) const;
-
+    DqPtrsNmb<T> pickEntitiesInside(const GeomObj3d &, const double &tol= 0.0);
   };
 
-//! @brief Returns a pointer to the objeto identified by the name.
+//! @brief Returns a pointer to the objet identified by the name.
 template <class T>
 T *DqPtrsNmb<T>::BuscaNmb(const std::string &nmb)
   {
@@ -116,6 +117,25 @@ const T *DqPtrsNmb<T>::getNearest(const Pos3d &p) const
     return retval;
   }
 
+//! @brief Return a container with the entities that lie inside the
+//! geometric object.
+//!
+//! @param geomObj: geometric object that must contain the nodes.
+//! @param tol: tolerance for "In" function.
+template <class T>
+DqPtrsNmb<T> DqPtrsNmb<T>::pickEntitiesInside(const GeomObj3d &geomObj, const double &tol)
+  {
+    DqPtrsNmb<T> retval;
+    for(iterator i= this->begin();i!= this->end();i++)
+      {
+        T *t= (*i);
+        assert(t);
+	if(t->In(geomObj,tol))
+	  retval.push_back(t);
+      }
+    return retval;
+  }
+ 
 } //end of XC namespace
 
 #endif
