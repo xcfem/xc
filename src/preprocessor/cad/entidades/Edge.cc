@@ -536,7 +536,7 @@ void XC::Edge::add_to_sets(std::set<SetBase *> &sets)
     for(std::set<SetBase *>::iterator i= sets.begin();i!= sets.end();i++)
       {
         Set *s= dynamic_cast<Set *>(*i);
-        if(s) s->GetLineas().push_back(this);
+        if(s) s->getLines().push_back(this);
       }
   }
 

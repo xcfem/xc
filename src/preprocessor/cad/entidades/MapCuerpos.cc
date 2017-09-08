@@ -48,14 +48,14 @@ XC::MapCuerpos::MapCuerpos(Cad *cad)
 void XC::MapCuerpos::UpdateSets(Body *newBody) const
   {
     Preprocessor *preprocessor= const_cast<Preprocessor *>(getPreprocessor());
-    preprocessor->get_sets().get_set_total()->GetCuerpos().push_back(newBody);
+    preprocessor->get_sets().get_set_total()->getBodies().push_back(newBody);
     preprocessor->get_sets().inserta_ent_mdlr(newBody);
     MapSet::map_sets &abiertos= preprocessor->get_sets().get_sets_abiertos();
     for(MapSet::map_sets::iterator i= abiertos.begin();i!= abiertos.end();i++)
       {
         Set *ptr_set= dynamic_cast<Set *>((*i).second);
         assert(ptr_set);
-        ptr_set->GetCuerpos().push_back(newBody);
+        ptr_set->getBodies().push_back(newBody);
       }
   }
 

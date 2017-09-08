@@ -33,12 +33,13 @@ class_<dq_ptrs_node, bases<EntCmd>, boost::noncopyable >("dq_ptrs_node",no_init)
   ;
 
 XC::Node *(XC::DqPtrsNode::*getNearestNodeDqPtrs)(const Pos3d &)= &XC::DqPtrsNode::getNearestNode;
-class_<XC::DqPtrsNode, bases<dq_ptrs_node>, boost::noncopyable >("DqPtrsNode",no_init)
+class_<XC::DqPtrsNode, bases<dq_ptrs_node> >("DqPtrsNode",no_init)
   .def("append", &XC::DqPtrsNode::push_back,"Appends node at the end of the list.")
   .def("pushFront", &XC::DqPtrsNode::push_front,"Push node at the beginning of the list.")
   .add_property("getNumLiveNodes", &XC::DqPtrsNode::getNumLiveNodes)
   .add_property("getNumDeadNodes", &XC::DqPtrsNode::getNumDeadNodes)
   .def("getNearestNode",make_function(getNearestNodeDqPtrs, return_internal_reference<>() ),"Returns nearest node.")
+  .def("pickNodesInside",&XC::DqPtrsNode::pickNodesInside,"pickNodesInside(geomObj,tol) return the nodes inside the geometric object.") 
    ;
 
 typedef XC::DqPtrs<XC::Element> dq_ptrs_element;
@@ -53,13 +54,14 @@ class_<dq_ptrs_element, bases<EntCmd>, boost::noncopyable >("dq_ptrs_element",no
   ;
 
 XC::Element *(XC::DqPtrsElem::*getNearestElementDqPtrs)(const Pos3d &)= &XC::DqPtrsElem::getNearestElement;
-class_<XC::DqPtrsElem, bases<dq_ptrs_element>, boost::noncopyable >("DqPtrsElem",no_init)
+class_<XC::DqPtrsElem, bases<dq_ptrs_element> >("DqPtrsElem",no_init)
   .def("append", &XC::DqPtrsElem::push_back,"Appends element at the end of the list.")
   .def("pushFront", &XC::DqPtrsElem::push_front,"Push element at the beginning of the list.")
   .add_property("getNumLiveElements", &XC::DqPtrsElem::getNumLiveElements)
   .add_property("getNumDeadElements", &XC::DqPtrsElem::getNumDeadElements)
   .def("getNearestElement",make_function(getNearestElementDqPtrs, return_internal_reference<>() ),"Returns nearest element.")
   .def("getContours",&XC::DqPtrsElem::getContours,"Returns contour(s) from the element set in the form of closed 3D polylines.")
+  .def("pickElemsInside",&XC::DqPtrsElem::pickElemsInside,"pickElemsInside(geomObj,tol) return the elements inside the geometric object.") 
    ;
 
 typedef XC::DqPtrs<XC::Constraint> dq_ptrs_constraint;
@@ -85,9 +87,12 @@ XC::Node *(XC::SetMeshComp::*getNearestNodeSetMeshComp)(const Pos3d &)= &XC::Set
 XC::Element *(XC::SetMeshComp::*getNearestElementSetMeshComp)(const Pos3d &)= &XC::SetMeshComp::getNearestElement;
 void (XC::SetMeshComp::*transforms)(const XC::TrfGeom &)= &XC::SetMeshComp::Transforma;
 class_<XC::SetMeshComp, bases<XC::SetBase>, boost::noncopyable >("SetMeshComp",no_init)
-  .add_property("getNodes", make_function(GetNodosRef, return_internal_reference<>() ))
-  .add_property("getElements", make_function(getElementsRef, return_internal_reference<>() ))
-  .add_property("getConstraints", make_function(GetConstraintsRef, return_internal_reference<>() ))
+  .add_property("getNodes", make_function(GetNodosRef, return_internal_reference<>() ),"return the nodes of the set.")
+  .add_property("getElements", make_function(getElementsRef, return_internal_reference<>() ),"return the elements of the set.")
+  .add_property("getConstraints", make_function(GetConstraintsRef, return_internal_reference<>() ),"return the constraints of the set.")
+  .add_property("nodes", make_function(GetNodosRef, return_internal_reference<>() ),&XC::SetMeshComp::setNodes,"nodes of the set.")
+  .add_property("elements", make_function(getElementsRef, return_internal_reference<>() ),&XC::SetMeshComp::setElements,"elements of the set.")
+  .add_property("constraints", make_function(GetConstraintsRef, return_internal_reference<>() ),&XC::SetMeshComp::setConstraints,"constraints of the set.")
   .def("getNearestNode",make_function(getNearestNodeSetMeshComp, return_internal_reference<>() ),"Returns nearest node.")
   .def("getNearestElement",make_function(getNearestElementSetMeshComp, return_internal_reference<>() ),"Returns nearest element.")
   .def("killElements",&XC::SetMeshComp::kill_elements,"Deactivates set's elements.")
@@ -100,6 +105,8 @@ class_<XC::SetMeshComp, bases<XC::SetBase>, boost::noncopyable >("SetMeshComp",n
   .def("getResistingSVD3d",&XC::SetMeshComp::getResistingSVD3d)
   .def("appendFromGeomEntity", &XC::SetMeshComp::appendFromGeomEntity,"Extend this set with the nodes and elements of the geometric entity being passed as parameter.")
   .def("clear",&XC::SetMeshComp::clear,"Removes all items.")
+  .def("pickNodesInside",&XC::SetMeshComp::pickNodesInside,"pickNodesInside(newSetName, geomObj, tol) return a set with the nodes inside the geometric object.") 
+  .def("pickElemsInside",&XC::SetMeshComp::pickElemsInside,"pickElemsInside(newSetName, geomObj, tol) return a set with the elements inside the geometric object.") 
    ;
 
 typedef XC::DqPtrs<XC::Pnt> dq_ptrs_pnt;
@@ -110,11 +117,12 @@ class_<dq_ptrs_pnt, bases<EntCmd>, boost::noncopyable >("dq_ptrs_pnt",no_init)
   .def("clear",&dq_ptrs_pnt::clear,"Removes all items.")
    ;
 
-class_<XC::Set::lst_ptr_points, bases<dq_ptrs_pnt>, boost::noncopyable >("lstPnts",no_init)
+class_<XC::Set::lst_ptr_points, bases<dq_ptrs_pnt>>("lstPnts",no_init)
   .def("append", &XC::Set::lst_ptr_points::push_back,"Appends a point at the end of the list.")
   .def("pushFront", &XC::Set::lst_ptr_points::push_front,"Push point at the beginning of the list.")
   .add_property("size", &XC::Set::lst_ptr_points::size, "Returns list size.")
   .def("__len__",&XC::Set::lst_ptr_points::size, "Returns list size.")
+  .def("pickPointsInside",&XC::Set::lst_ptr_points::pickEntitiesInside,"pickPointsInside(geomObj,tol) return the nodes inside the geometric object.") 
    ;
 
 typedef XC::DqPtrs<XC::Edge> dq_line_ptrs;
@@ -128,9 +136,10 @@ class_<dq_line_ptrs, bases<EntCmd>, boost::noncopyable >("dq_line_ptrs",no_init)
   .def("clear",&dq_line_ptrs::clear,"Removes all items.")
    ;
 
-class_<XC::Set::lst_line_pointers, bases<dq_line_ptrs>, boost::noncopyable >("lstLines",no_init)
+class_<XC::Set::lst_line_pointers, bases<dq_line_ptrs>>("lstLines",no_init)
   .def("append", &XC::Set::lst_line_pointers::push_back,"Appends line at the end of the list.")
   .def("pushFront", &XC::Set::lst_line_pointers::push_front,"Push line at the beginning of the list.")
+  .def("pickLinesInside",&XC::Set::lst_line_pointers::pickEntitiesInside,"pickLinesInside(geomObj,tol) return the nodes inside the geometric object.") 
    ;
 
 typedef XC::DqPtrs<XC::Face> dq_ptrs_surfaces;
@@ -141,11 +150,12 @@ class_<dq_ptrs_surfaces, bases<EntCmd>, boost::noncopyable >("dq_ptrs_surfaces",
   .def("clear",&dq_ptrs_surfaces::clear,"Removes all items.")
    ;
 
-class_<XC::Set::lst_surface_ptrs, bases<dq_ptrs_surfaces>, boost::noncopyable >("lstSurfaces",no_init)
+class_<XC::Set::lst_surface_ptrs, bases<dq_ptrs_surfaces> >("lstSurfaces",no_init)
   .def("append", &XC::Set::lst_surface_ptrs::push_back,"Appends surface at the end of the list.")
   .def("pushFront", &XC::Set::lst_surface_ptrs::push_front,"Push surface at the beginning of the list.")
   .add_property("size", &XC::Set::lst_surface_ptrs::size, "Returns list size.")
   .def("__len__",&XC::Set::lst_surface_ptrs::size, "Returns list size.")
+  .def("pickSurfacesInside",&XC::Set::lst_surface_ptrs::pickEntitiesInside,"pickSurfacesInside(geomObj,tol) return the nodes inside the geometric object.") 
    ;
 
 typedef XC::DqPtrs<XC::Body> dq_ptrs_cuerpos;
@@ -156,24 +166,29 @@ class_<dq_ptrs_cuerpos, bases<EntCmd>, boost::noncopyable >("dq_ptrs_cuerpos",no
   .def("clear",&dq_ptrs_cuerpos::clear,"Removes all items.")
    ;
 
-class_<XC::Set::lst_ptr_cuerpos, bases<dq_ptrs_cuerpos>, boost::noncopyable >("lstBodies",no_init)
+class_<XC::Set::lst_ptr_cuerpos, bases<dq_ptrs_cuerpos> >("lstBodies",no_init)
   .def("append", &XC::Set::lst_ptr_cuerpos::push_back,"Appends body at the end of the list.")
   .def("pushFront", &XC::Set::lst_ptr_cuerpos::push_front,"Push body at the beginning of the list.")
   .add_property("size", &XC::Set::lst_ptr_cuerpos::size, "Returns list size.")
   .def("__len__",&XC::Set::lst_ptr_cuerpos::size, "Returns list size.")
+  .def("pickBodiesInside",&XC::Set::lst_ptr_cuerpos::pickEntitiesInside,"pickBodiesInside(geomObj,tol) return the nodes inside the geometric object.") 
    ;
 
 
-XC::Set::lst_ptr_points &(XC::Set::*GetPuntos)(void)= &XC::Set::GetPuntos;
-XC::Set::lst_line_pointers &(XC::Set::*GetLineas)(void)= &XC::Set::GetLineas;
+XC::Set::lst_ptr_points &(XC::Set::*getPoints)(void)= &XC::Set::getPoints;
+XC::Set::lst_line_pointers &(XC::Set::*getLines)(void)= &XC::Set::getLines;
 XC::Set::lst_surface_ptrs &(XC::Set::*getSurfaces)(void)= &XC::Set::getSurfaces;
-XC::Set::lst_ptr_cuerpos &(XC::Set::*GetCuerpos)(void)= &XC::Set::GetCuerpos;
+XC::Set::lst_ptr_cuerpos &(XC::Set::*getBodies)(void)= &XC::Set::getBodies;
 class_<XC::Set, bases<XC::SetMeshComp> >("Set")
   .add_property("description", make_function( &XC::Set::getDescription, return_value_policy<copy_const_reference>() ), &XC::Set::setDescription,"Description (string) of the set.")
-  .add_property("getPoints", make_function(GetPuntos, return_internal_reference<>() ))
-  .add_property("getLines", make_function(GetLineas, return_internal_reference<>() ))
-  .add_property("getSurfaces", make_function(getSurfaces, return_internal_reference<>() ))
-  .add_property("getBodies", make_function(GetCuerpos, return_internal_reference<>() ))
+  .add_property("getPoints", make_function(getPoints, return_internal_reference<>() ),"return the points of the set.")
+  .add_property("getLines", make_function(getLines, return_internal_reference<>() ),"return the lines of the set.")
+  .add_property("getSurfaces", make_function(getSurfaces, return_internal_reference<>() ),"return the surfaces of the set.")
+  .add_property("getBodies", make_function(getBodies, return_internal_reference<>() ),"return the bodies of the set.")
+  .add_property("points", make_function(getPoints, return_internal_reference<>() ),&XC::Set::setPoints,"points of the set.")
+  .add_property("lines", make_function(getLines, return_internal_reference<>() ),&XC::Set::setLines,"lines of the set.")
+  .add_property("surfaces", make_function(getSurfaces, return_internal_reference<>() ),&XC::Set::setSurfaces,"surfaces of the set.")
+  .add_property("bodies", make_function(getBodies, return_internal_reference<>() ),&XC::Set::setBodies,"bodies of the set.")
   .def("append", &XC::Set::extend_lists,"DEPRECATED use extend; extend the components whith those of the argument.")
   .def("extend", &XC::Set::extend_lists,"Extend the components whith those of the argument.")
   .def("fillUpwards", &XC::Set::CompletaHaciaArriba,"add entities upwards.")

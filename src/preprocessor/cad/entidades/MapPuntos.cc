@@ -49,14 +49,14 @@ void XC::MapPuntos::UpdateSets(Pnt *new_point) const
   {
     Cad *cad= const_cast<Cad *>(dynamic_cast<const Cad *>(Owner()));
     Preprocessor *preprocessor= cad->getPreprocessor();
-    preprocessor->get_sets().get_set_total()->GetPuntos().push_back(new_point);
+    preprocessor->get_sets().get_set_total()->getPoints().push_back(new_point);
     preprocessor->get_sets().inserta_ent_mdlr(new_point);
     MapSet::map_sets &abiertos= preprocessor->get_sets().get_sets_abiertos();
     for(MapSet::map_sets::iterator i= abiertos.begin();i!= abiertos.end();i++)
       {
         Set *ptr_set= dynamic_cast<Set *>((*i).second);
         assert(ptr_set);
-        ptr_set->GetPuntos().push_back(new_point);
+        ptr_set->getPoints().push_back(new_point);
       }
   }
 

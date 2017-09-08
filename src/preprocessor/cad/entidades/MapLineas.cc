@@ -99,14 +99,14 @@ void XC::MapLineas::UpdateSets(Edge *nueva_linea) const
   {
     Cad *cad= const_cast<Cad *>(dynamic_cast<const Cad *>(Owner()));
     Preprocessor *preprocessor= cad->getPreprocessor();
-    preprocessor->get_sets().get_set_total()->GetLineas().push_back(nueva_linea);
+    preprocessor->get_sets().get_set_total()->getLines().push_back(nueva_linea);
     preprocessor->get_sets().inserta_ent_mdlr(nueva_linea);
     MapSet::map_sets &abiertos= preprocessor->get_sets().get_sets_abiertos();
     for(MapSet::map_sets::iterator i= abiertos.begin();i!= abiertos.end();i++)
       {
         Set *ptr_set= dynamic_cast<Set *>((*i).second);
         assert(ptr_set);
-        ptr_set->GetLineas().push_back(nueva_linea);
+        ptr_set->getLines().push_back(nueva_linea);
       }
   }
 

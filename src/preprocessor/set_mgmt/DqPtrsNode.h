@@ -36,6 +36,7 @@
 
 class Vector3d;
 class ExprAlgebra;
+class GeomObj3d;
 
 namespace XC {
 class TrfGeom;
@@ -83,6 +84,7 @@ class DqPtrsNode: public DqPtrs<Node>
     bool InNodeTag(const int ) const;
     bool InNodeTags(const ID &) const;
     std::set<int> getTags(void) const;
+    DqPtrsNode pickNodesInside(const GeomObj3d &, const double &tol= 0.0);
 
     Node *buscaNodo(const int &tag);
     const Node *buscaNodo(const int &tag) const;

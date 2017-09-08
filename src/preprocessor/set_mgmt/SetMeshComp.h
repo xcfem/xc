@@ -109,11 +109,15 @@ class SetMeshComp: public SetBase
     //! @brief Return the nodes container.
     virtual DqPtrsNode &GetNodos(void)
       { return nodes; }
+    //! @brief Sets the nodes.
+    void setNodes(const DqPtrsNode &nds)
+      { nodes= nds; }
     //! @brief Clears out the nodes.
     void clearNodos(void)
       { nodes.clearAll(); }
     void sel_nodes_from_list(const ID &);
     bool In(const Node *) const;
+    SetMeshComp pickNodesInside(const std::string &, const GeomObj3d &, const double &tol= 0.0);
 
     //! @brief Returns the number of elements.
     size_t getNumberOfElements(void) const
@@ -126,11 +130,15 @@ class SetMeshComp: public SetBase
     //! @brief Returns the elements container.
     virtual DqPtrsElem &getElements(void)
       { return elements; }
+    //! @brief Sets the elements.
+    void setElements(const DqPtrsElem &els)
+      { elements= els; }
     //! @brief Clears out the elements.
     void clearElements(void)
       { elements.clearAll(); }
     void sel_elements_from_list(const ID &tags);
     bool In(const Element *) const;
+    SetMeshComp pickElemsInside(const std::string &, const GeomObj3d &, const double &tol= 0.0);
 
     //! @brief Return the constraints container.
     virtual const DqPtrsConstraint &GetConstraints(void) const
@@ -138,6 +146,9 @@ class SetMeshComp: public SetBase
     //! @brief Return the constraints container.
     virtual DqPtrsConstraint &GetConstraints(void)
       { return constraints; }
+    //! @brief Sets the constraints.
+    void setConstraints(const DqPtrsConstraint &cts)
+      { constraints= cts; }
     //! @brief Clears out the constraints.
     void clearConstraints(void)
       { constraints.clearAll(); }

@@ -249,6 +249,7 @@ python tests/preprocessor/sets/une_sets.py
 python tests/preprocessor/sets/test_resisting_svd01.py
 python tests/preprocessor/sets/test_get_contours_01.py
 python tests/preprocessor/sets/test_get_contours_02.py
+python tests/preprocessor/sets/test_pick_entities.py
 echo "$BLEU" "  Preprocessor grid model tests." "$NORMAL"
 python tests/preprocessor/grid_model/test_grid_model_01.py
 

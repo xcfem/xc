@@ -22,7 +22,7 @@ def punzMaximo(fck,d,a,b):
     #  Mejorar la resistencia del hormigón
     #Datos:
     #fck: resistencia característica del hormigón (N/m2)
-    #d: depth útil del forjado (m)
+    #d: effective depth of the floor deck (m)
     #a,b: escuadría del pilar (m)
     #El resultado se expresa en N
     fcd=fck*10/1.5/1e6  #resistencia de cálculo del hormigón (kp/cm2)
@@ -35,7 +35,7 @@ def reinforcementPunz(Vd,fck,d,a,b,h,fyd):
     #Vd: esfuerzo de cálculo de punzomiento (N)
     #fck: resistencia característica del hormigón (N/m2)
     #fyd: design value of reinforcement steel yield strength (Pa).
-    #d: depth útil del forjado (m)
+    #d: effective depth of the floor deck (m)
     #h: depth del forjado (m)
     #a,b: escuadría del pilar (m)
     #El resultado de la reinforcement se expresa en m2/m

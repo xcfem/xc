@@ -60,11 +60,11 @@ def getFcv(fact, fck, Nd, Ac, b0, d, AsPas, fyd, AsAct, fpd):
   :param Ac: concrete section total area.
   :param b0: net width of the element according to clause 40.3.5.
   :param d: effective depth (meters).
-  :param AsPas: Área de la de la reinforcement longitudinal pasiva traccionada anclada
-  a una distancia mayor que el depth útil de la sección en estudio.
+  :param AsPas: Area of tensioned longitudinal steel rebars anchored
+  at a distance greater than the effective depth of the section.
   :param fyd: reinforcing steel design yield strength (clause 38.3 EHE).
-  :param AsAct: Área de la de la reinforcement longitudinal activa traccionada anclada
-  a una distancia mayor que el depth útil de la sección en estudio.
+  :param AsAct: Area of tensioned longitudinal prestressed steel anchored
+  at a distance greater than the effective depth of the section.
   :param fpd: design value of prestressing steel strength (clause 38.6 EHE).
     
   '''
@@ -84,11 +84,11 @@ def getVu2SIN(fck, Nd, Ac, b0, d, AsPas, fyd, AsAct, fpd):
   :param Ac: concrete section total area.
   :param b0: net width of the element according to clause 40.3.5.
   :param d: effective depth (meters).
-  :param AsPas: Área de la de la reinforcement longitudinal pasiva traccionada anclada
-  a una distancia mayor que el depth útil de la sección en estudio.
+  :param AsPas: Area of tensioned longitudinal steel rebars anchored
+  at a distance greater than the effective depth of the section.
   :param fyd: reinforcing steel design yield strength (clause 38.3 EHE).
-  :param AsAct: Área de la de la reinforcement longitudinal activa traccionada anclada
-  a una distancia mayor que el depth útil de la sección en estudio.
+  :param AsAct: Area of tensioned longitudinal prestressed steel anchored
+  at a distance greater than the effective depth of the section.
   :param fpd: design value of prestressing steel strength (clause 38.6 EHE).
    
   '''
@@ -104,11 +104,11 @@ def getVcu(fck, Nd, Ac, b0, d, theta, AsPas, fyd, AsAct, fpd, sgxd, sgyd):
   :param b0: net width of the element according to clause 40.3.5.
   :param d: effective depth (meters).
   :param theta: angle between the concrete compressed struts and the member axis (figure 44.2.3.1.a EHE).
-  :param AsPas: Área de la de la reinforcement longitudinal pasiva traccionada anclada
-  a una distancia mayor que el depth útil de la sección en estudio.
+  :param AsPas: Area of tensioned longitudinal steel rebars anchored
+  at a distance greater than the effective depth of the section.
   :param fyd: reinforcing steel design yield strength (clause 38.3 EHE).
-  :param AsAct: Área de la de la reinforcement longitudinal activa traccionada anclada
-  a una distancia mayor que el depth útil de la sección en estudio.
+  :param AsAct: Area of tensioned longitudinal prestressed steel anchored
+  at a distance greater than the effective depth of the section.
   :param fpd: design value of prestressing steel strength (clause 38.6 EHE).
   :param sgxd: Tensión normal de cálculo en el centro de gravedad de la sección paralela a la directriz de la pieza considerando el hormigón NO FISURADO (art. 44.2.3.2).
   :param sgyd: Tensión normal de cálculo en el centro de gravedad de la sección paralela al esfuerzo cortante.    
@@ -153,11 +153,11 @@ def getVu2(fck, Nd, Ac, b0, d, z, alpha, theta, AsPas, fyd, AsAct, fpd, sgxd, sg
   :param z: Lever arm.
   :param alpha: angle of the shear reinforcement with the part axis (figure 44.2.3.1.a EHE).
   :param theta: angle between the concrete compressed struts and the member axis (figure 44.2.3.1.a EHE).
-  :param AsPas: Área de la de la reinforcement longitudinal pasiva traccionada anclada
-  a una distancia mayor que el depth útil de la sección en estudio.
+  :param AsPas: Area of tensioned longitudinal steel rebars anchored
+  at a distance greater than the effective depth of the section.
   :param fyd: reinforcing steel design yield strength (clause 38.3 EHE).
-  :param AsAct: Área de la de la reinforcement longitudinal activa traccionada anclada
-  a una distancia mayor que el depth útil de la sección en estudio.
+  :param AsAct: Area of tensioned longitudinal prestressed steel anchored
+  at a distance greater than the effective depth of the section.
   :param fpd: design value of prestressing steel strength (clause 38.6 EHE).
   :param sgxd: Tensión normal de cálculo en el centro de gravedad de la sección paralela a la directriz de la pieza considerando el hormigón NO FISURADO (art. 44.2.3.2).
   :param sgyd: Tensión normal de cálculo en el centro de gravedad de la sección paralela al esfuerzo cortante.
@@ -185,11 +185,11 @@ def getVu(fck, fcd, Nd, Ac, b0, d, z, alpha, theta, AsPas, fyd, AsAct, fpd, sgxd
   :param z: Lever arm.
   :param alpha: angle of the shear reinforcement with the part axis (figure 44.2.3.1.a EHE).
   :param theta: angle between the concrete compressed struts and the member axis (figure 44.2.3.1.a EHE).
-  :param AsPas: Área de la de la reinforcement longitudinal pasiva traccionada anclada
-  a una distancia mayor que el depth útil de la sección en estudio.
+  :param AsPas: Area of tensioned longitudinal steel rebars anchored
+  at a distance greater than the effective depth of the section.
   :param fyd: reinforcing steel design yield strength (clause 38.3 EHE).
-  :param AsAct: Área de la de la reinforcement longitudinal activa traccionada anclada
-  a una distancia mayor que el depth útil de la sección en estudio.
+  :param AsAct: Area of tensioned longitudinal prestressed steel anchored
+  at a distance greater than the effective depth of the section.
   :param fpd: design value of prestressing steel strength (clause 38.6 EHE).
   :param sgxd: Tensión normal de cálculo en el centro de gravedad de la sección paralela a la directriz de la pieza considerando el hormigón NO FISURADO (art. 44.2.3.2).
   :param sgyd: Tensión normal de cálculo en el centro de gravedad de la sección paralela al esfuerzo cortante.
@@ -221,8 +221,8 @@ class ParamsCortante(object):
     self.widthMin= 0.0 # net width of the element according to clause 40.3.5.
     self.depthUtil= 0.0 # effective depth (meters).
     self.brazoMecanico= 0.0 # Lever arm (meters).
-    self.areaRebarTracc= 0.0 # Área de la reinforcement longitudinal pasiva traccionada anclada a una distancia mayor que el depth útil de la sección en estudio.
-    self.areaTendonesTracc= 0.0 # Área de la reinforcement activa longitudinal pasiva traccionada anclada a una distancia mayor que el depth útil de la sección en estudio.
+    self.areaRebarTracc= 0.0 # Area of tensioned longitudinal steel rebars anchored at a distance greater than the effective depth of the section.
+    self.areaTendonesTracc= 0.0 # Area of tensioned longitudinal prestressed steel anchored at a distance greater than the effective depth of the section.
     self.areaShReinfBranchsTrsv= 0.0 # transverse reinforcement area.
     self.sigmaXD= 0.0 # Tensión normal de cálculo en el centro de gravedad de la sección paralela a la directriz de la pieza considerando el hormigón NO FISURADO (art. 44.2.3.2).
     self.sigmaYD= 0.0 # Tensión normal de cálculo en el centro de gravedad de la sección paralela al esfuerzo cortante.
@@ -347,13 +347,13 @@ def getFcvEHE08(fact,fcv,gammaC,b0,d,chi,sgpcd,AsPas,AsAct):
     :param gammaC: Partial safety factor for concrete.
     b0: net width of the element according to clause 40.3.5.
     :param d: effective depth (meters).
-    :param chi: coeficiente que introduce el efecto de los áridos en el depth útil.
+    :param chi: coefficient that takes into account the aggregate effect
+     inside the effective depth.
     :param sgpcd: Tensión axial media en el alma (compresión positiva).
-    :param AsPas: Área de la de la reinforcement longitudinal pasiva traccionada anclada
-    a una distancia mayor que el depth útil de la sección en estudio.
-    :param AsAct: Área de la de la reinforcement longitudinal activa traccionada anclada
-    a una distancia mayor que el depth útil de la sección en estudio.
-
+    :param AsPas: Area of tensioned longitudinal steel rebars anchored
+     at a distance greater than the effective depth of the section.
+    :param AsAct: Area of tensioned longitudinal prestressed steel anchored
+    at a distance greater than the effective depth of the section.
     '''
     rol=min((AsPas+AsAct)/(b0*d),0.02)
     return fact/gammaC*chi*(rol*fcv/1e4)**(1/3)*1e6-0.15*sgpcd
@@ -370,7 +370,8 @@ def getFcvMinEHE08(fcv,gammaC,d,chi,sgpcd):
     En ambos casos, si el control del hormigón es indirecto fcv=15MPa.
     :param gammaC: Partial safety factor for concrete.
     :param d: effective depth (meters).
-    :param chi: coeficiente que introduce el efecto de los áridos en el depth útil.
+    :param chi: coefficient that takes into account the aggregate effect
+     inside the effective depth.
     :param sgpcd: Tensión axial media en el alma (compresión positiva).
 
     '''
@@ -389,10 +390,10 @@ def getVu2EHE08NoAtSiFis(fcv,fcd,gammaC,Ncd,Ac,b0,d,AsPas,AsAct):
     :param Ac: concrete section total area.
     b0: net width of the element according to clause 40.3.5.
     :param d: effective depth (meters).
-    :param AsPas: Área de la de la reinforcement longitudinal pasiva traccionada anclada
-    a una distancia mayor que el depth útil de la sección en estudio.
-    :param AsAct: Área de la de la reinforcement longitudinal activa traccionada anclada
-    a una distancia mayor que el depth útil de la sección en estudio.
+    :param AsPas: Area of tensioned longitudinal steel rebars anchored
+     at a distance greater than the effective depth of the section.
+    :param AsAct: Area of tensioned longitudinal prestressed steel anchored
+    at a distance greater than the effective depth of the section.
 
     Return the value of Vu2 (shear strength por tracción en el alma)
     for parts WITHOUT shear reinforcement in cracked regions, according to clause 44.2.3.2.1.2 de EHE-08.
@@ -420,10 +421,10 @@ def getVu2EHE08NoAt(M,Mfis,fcv,fck,gammaC,I,S,alphaL,Ncd,Ac,b0,d,AsPas,AsAct):
     :param Ac: concrete section total area.
     b0: net width of the element according to clause 40.3.5.
     :param d: effective depth (meters).
-    :param AsPas: Área de la de la reinforcement longitudinal pasiva traccionada anclada
-    a una distancia mayor que el depth útil de la sección en estudio.
-    :param AsAct: Área de la de la reinforcement longitudinal activa traccionada anclada
-    a una distancia mayor que el depth útil de la sección en estudio. 
+    :param AsPas: Area of tensioned longitudinal steel rebars anchored
+     at a distance greater than the effective depth of the section.
+    :param AsAct: Area of tensioned longitudinal prestressed steel anchored
+    at a distance greater than the effective depth of the section.
     '''
     concrTmp= EHE_materials.EHEConcrete("HA",fck,gammaC)
     fctdTmp=concrTmp.fctkEHE08()/gammaC
@@ -462,10 +463,10 @@ def getEpsilonXEHE08(Nd,Md,Vd,Td,z,AsPas,AsAct,Es,Ep,Fp,Ae,ue):
     :param Vd: Valor absoluto del cortante efectivo de cálculo (artículo 42.2.2).
     :param Td: Torsor de cálculo.
     :param z: Lever arm.
-    :param AsPas: Área de la de la reinforcement longitudinal pasiva traccionada anclada
-    a una distancia mayor que el depth útil de la sección en estudio.
-    :param AsAct: Área de la de la reinforcement longitudinal activa traccionada anclada
-    a una distancia mayor que el depth útil de la sección en estudio.
+    :param AsPas: Area of tensioned longitudinal steel rebars anchored
+     at a distance greater than the effective depth of the section.
+    :param AsAct: Area of tensioned longitudinal prestressed steel anchored
+    at a distance greater than the effective depth of the section.
     :param Es: reinforcing steel elastic modulus.
     :param Ep: prestressing steel elastic modulus.
     :param Fp: Prestressing force on the section (positive if in tension).
@@ -496,10 +497,10 @@ def getCrackAngleEHE08(Nd,Md,Vd,Td,z,AsPas,AsAct,Es,Ep,Fp,Ae,ue):
     :param Vd: Valor absoluto del cortante efectivo de cálculo (artículo 42.2.2).
     :param Td: Torsor de cálculo.
     :param z: Lever arm.
-    :param AsPas: Área de la de la reinforcement longitudinal pasiva traccionada anclada
-    a una distancia mayor que el depth útil de la sección en estudio.
-    :param AsAct: Área de la de la reinforcement longitudinal activa traccionada anclada
-    a una distancia mayor que el depth útil de la sección en estudio.
+    :param AsPas: Area of tensioned longitudinal steel rebars anchored
+     at a distance greater than the effective depth of the section.
+    :param AsAct: Area of tensioned longitudinal prestressed steel anchored
+    at a distance greater than the effective depth of the section.
     :param Es: reinforcing steel elastic modulus.
     :param Ep: prestressing steel elastic modulus.
     :param Fp: Prestressing force on the section (positive if in tension).
@@ -552,10 +553,10 @@ def getVcuEHE08(fcv,fcd,gammaC,Ncd,Ac,b0,d,z,AsPas,AsAct,theta,Nd,Md,Vd,Td,Es,Ep
     b0: net width of the element according to clause 40.3.5.
     :param d: effective depth (meters).
     :param z: Lever arm.
-    :param AsPas: Área de la de la reinforcement longitudinal pasiva traccionada anclada
-    a una distancia mayor que el depth útil de la sección en estudio.
-    :param AsAct: Área de la de la reinforcement longitudinal activa traccionada anclada
-    a una distancia mayor que el depth útil de la sección en estudio.
+    :param AsPas: Area of tensioned longitudinal steel rebars anchored
+     at a distance greater than the effective depth of the section.
+    :param AsAct: Area of tensioned longitudinal prestressed steel anchored
+    at a distance greater than the effective depth of the section.
     :param theta: angle between the concrete compressed struts and the member axis (figure 44.2.3.1.a EHE)
     :param Nd: Valor de cálculo del axil (positivo si es de tracción)
     :param Md: Valor absoluto del momento de cálculo.
@@ -594,10 +595,10 @@ def getVu2EHE08SiAt(fcv,fcd,fyd,gammaC,Ncd,Ac,b0,d,z,AsPas,AsAct,AsTrsv, alpha, 
     b0: net width of the element according to clause 40.3.5.
     :param d: effective depth (meters).
     :param z: Lever arm.
-    :param AsPas: Área de la de la reinforcement longitudinal pasiva traccionada anclada
-    a una distancia mayor que el depth útil de la sección en estudio.
-    :param AsAct: Área de la de la reinforcement longitudinal activa traccionada anclada
-    a una distancia mayor que el depth útil de la sección en estudio.
+    :param AsPas: Area of tensioned longitudinal steel rebars anchored
+     at a distance greater than the effective depth of the section.
+    :param AsAct: Area of tensioned longitudinal prestressed steel anchored
+    at a distance greater than the effective depth of the section.
     :param AsTrsv: transverse reinforcement area.
     :param alpha: angle of the transverse reinforcement with the axis of the part.
     :param theta: angle between the concrete compressed struts and the member axis (figure 44.2.3.1.a EHE).
@@ -632,10 +633,10 @@ def getVuEHE08SiAt(fck,fcv,fcd,fyd,gammaC,Ncd,Ac,b0,d,z,AsPas,AsAct,AsTrsv, alph
     b0: net width of the element according to clause 40.3.5.
     :param d: effective depth (meters).
     :param z: Lever arm.
-    :param AsPas: Área de la de la reinforcement longitudinal pasiva traccionada anclada
-    a una distancia mayor que el depth útil de la sección en estudio.
-    :param AsAct: Área de la de la reinforcement longitudinal activa traccionada anclada
-    a una distancia mayor que el depth útil de la sección en estudio.
+    :param AsPas: Area of tensioned longitudinal steel rebars anchored
+     at a distance greater than the effective depth of the section.
+    :param AsAct: Area of tensioned longitudinal prestressed steel anchored
+    at a distance greater than the effective depth of the section.
     :param AsTrsv: transverse reinforcement area.
     :param alpha: angle of the transverse reinforcement with the axis of the part.
     :param theta: angle between the concrete compressed struts and the member axis (figure 44.2.3.1.a EHE).
@@ -1136,13 +1137,11 @@ class ConcreteCorbel(object):
         return retval
 
     def getCantoUtilMinimo(self, a):
-        '''getCantoUtilMinimo(self, a)
+        '''getCantoUtilMinimo(self, a) return the minimal effective depth of
+        the corbel according to clause 64.1.2.1 of EHE-08.
 
         :param a: Distancia (m) entre el eje de la carga aplicada y la sección
         de empotramiento de la ménsula (see figure 64.1.2 de EHE-08).
-
-        Devuelve el depth útil mínimo de la ménsula según
-        el apartado 64.1.2.1 de EHE-08.
         '''
         return a*self.getCotgStrutAngle()/0.85
 
