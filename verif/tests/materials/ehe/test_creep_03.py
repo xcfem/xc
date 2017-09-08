@@ -296,8 +296,8 @@ for e in setShells.getElements:
   tension1Media= e.getMeanInternalForce("n1")/Ac
   tension2Media= e.getMeanInternalForce("n2")/Ac
 #  fi1= retraccion_fluencia.getPhiFluencia(fckHA30,tFin,t0,Hrel,u,Ac)
-  epsFluencia1=concrHA30.getDeformacionFluencia(tFin,t0,Hrel*100,espMedio*1000,tension1Media)
-  epsFluencia2=concrHA30.getDeformacionFluencia(tFin,t0,Hrel*100,espMedio*1000,tension2Media)
+  epsFluencia1=concrHA30.getCreepDeformation(tFin,t0,Hrel*100,espMedio*1000,tension1Media)
+  epsFluencia2=concrHA30.getCreepDeformation(tFin,t0,Hrel*100,espMedio*1000,tension2Media)
 
 
 cargas= preprocessor.getLoadLoader

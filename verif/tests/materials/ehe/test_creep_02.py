@@ -21,7 +21,7 @@ Ec28= EHE_materials.HA30.getEcm()
 
 fi1= EHE_materials.HA30.getCreepFitt0(t,t0,RH,2*A/u)
 epsElastica= sigma/Ec28
-epsFluencia= EHE_materials.HA30.getDeformacionFluencia(t,t0,RH,h0mm,sigma)
+epsFluencia= EHE_materials.HA30.getCreepDeformation(t,t0,RH,h0mm,sigma)
 
 # Comparing value of epsFluencia is changed from 9.31793e-04 to 9.319563e-04
 # after detecting an error in the formula used to obtain betaH
