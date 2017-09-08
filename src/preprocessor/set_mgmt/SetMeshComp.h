@@ -109,6 +109,9 @@ class SetMeshComp: public SetBase
     //! @brief Return the nodes container.
     virtual DqPtrsNode &GetNodos(void)
       { return nodes; }
+    //! @brief Sets the nodes.
+    void setNodes(const DqPtrsNode &nds)
+      { nodes= nds; }
     //! @brief Clears out the nodes.
     void clearNodos(void)
       { nodes.clearAll(); }
@@ -127,6 +130,9 @@ class SetMeshComp: public SetBase
     //! @brief Returns the elements container.
     virtual DqPtrsElem &getElements(void)
       { return elements; }
+    //! @brief Sets the elements.
+    void setElements(const DqPtrsElem &els)
+      { elements= els; }
     //! @brief Clears out the elements.
     void clearElements(void)
       { elements.clearAll(); }
@@ -140,6 +146,9 @@ class SetMeshComp: public SetBase
     //! @brief Return the constraints container.
     virtual DqPtrsConstraint &GetConstraints(void)
       { return constraints; }
+    //! @brief Sets the constraints.
+    void setConstraints(const DqPtrsConstraint &cts)
+      { constraints= cts; }
     //! @brief Clears out the constraints.
     void clearConstraints(void)
       { constraints.clearAll(); }
