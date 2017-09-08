@@ -259,6 +259,15 @@ Fi40=12.56e-4
 # and Model Code CEB-FIP 1990.
 
 class EHEPrestressingSteel(concrete_base.PrestressingSteel):
+    ''' Prestressing steel model according to EHE-08.
+
+       :param fpk: Elastic limit.
+       :param fmax: Steel strength.
+       :param alpha: stress-to-strength ratio.
+       :param steelRelaxationClass: Relaxation class 1: normal, 2: improved, 
+                                    and 3: relaxation for bars.
+       :param tendonClass: Tendon class wire, strand or bar.
+    '''
     # Points from the table 38.7.a of EHE-08 to determine the 
     # relaxation at 1000 hours, used to estimate
     # the relaxation at times greater than 1000 hours.
@@ -270,15 +279,6 @@ class EHEPrestressingSteel(concrete_base.PrestressingSteel):
 
 
     def __init__(self,steelName,fpk,fmax= 1860e6, alpha= 0.75, steelRelaxationClass=1, tendonClass= 'strand'):
-        ''' Prestressing steel.
-
-           :param fpk: Elastic limit.
-           :param fmax: Steel strength.
-           :param alpha: stress-to-strength ratio.
-           :param steelRelaxationClass: Relaxation class 1: normal, 2: improved, 
-                                        and 3: relaxation for bars.
-           :param tendonClass: Tendon class wire, strand or bar.
-        '''
         super(EHEPrestressingSteel,self).__init__(steelName,fpk,fmax,alpha,steelRelaxationClass, tendonClass)
 
     def getRO1000(self):
@@ -295,7 +295,7 @@ class EHEPrestressingSteel(concrete_base.PrestressingSteel):
     def getRelaxationT(self, tDias):
         ''' Return the relaxation at time tDias in days after stressing.
 
-           tDays: Time in days after prestressing
+        :param tDays: Time in days after prestressing
                   (to make easier to deal with shrinkage and creep at the same time).
         '''
         tHours= tDias*24
@@ -309,8 +309,8 @@ class EHEPrestressingSteel(concrete_base.PrestressingSteel):
         '''
         Return change in tendon stress due to relaxation at time t.
 
-           initialStress: Initial stress in tendon.
-           tDays: Time in days after prestressing
+        :param initialStress: Initial stress in tendon.
+        :param tDays: Time in days after prestressing
                   (to make easier to deal with shrinkage and creep at the same time).
 
         '''
@@ -326,7 +326,7 @@ class EHEPrestressingSteel(concrete_base.PrestressingSteel):
         '''
         Return final change in tendon stress due to relaxation.
 
-           initialStress: Initial stress in tendon.
+        :param initialStress: Initial stress in tendon.
 
         '''
         ROFINAL= 2.9e-2*self.getRelaxationT(1000/24.0)
