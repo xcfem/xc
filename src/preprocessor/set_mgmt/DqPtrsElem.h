@@ -34,6 +34,7 @@
 #include "domain/mesh/element/utils/KDTreeElements.h"
 
 class Polilinea3d;
+class GeomObj3d;
 
 namespace XC {
 class TrfGeom;
@@ -45,10 +46,6 @@ class TrfGeom;
 class DqPtrsElem: public DqPtrs<Element>
   {
     KDTreeElements kdtreeElements; //!< space-partitioning data structure for organizing elements (element centroids).
-    inline iterator begin(void)
-      { return DqPtrs<Element>::begin(); }
-    inline iterator end(void)
-      { return DqPtrs<Element>::end(); }
   protected:
     void create_arbol(void);
   public:
@@ -72,6 +69,10 @@ class DqPtrsElem: public DqPtrs<Element>
       { return DqPtrs<Element>::begin(); }
     inline const_iterator end(void) const
       { return DqPtrs<Element>::end(); }
+    inline iterator begin(void)
+      { return DqPtrs<Element>::begin(); }
+    inline iterator end(void)
+      { return DqPtrs<Element>::end(); }
 
     size_t getNumLiveElements(void) const;
     size_t getNumDeadElements(void) const;
@@ -87,6 +88,7 @@ class DqPtrsElem: public DqPtrs<Element>
     Element *getNearestElement(const Pos3d &);
     const Element *getNearestElement(const Pos3d &) const;
     std::deque<Polilinea3d> getContours(const double &factor= 0.0) const;
+    DqPtrsElem pickElemsInside(const GeomObj3d &, const double &tol= 0.0);
 
     void numera(void);
   };

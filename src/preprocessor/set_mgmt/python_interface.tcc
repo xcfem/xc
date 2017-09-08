@@ -39,6 +39,7 @@ class_<XC::DqPtrsNode, bases<dq_ptrs_node>, boost::noncopyable >("DqPtrsNode",no
   .add_property("getNumLiveNodes", &XC::DqPtrsNode::getNumLiveNodes)
   .add_property("getNumDeadNodes", &XC::DqPtrsNode::getNumDeadNodes)
   .def("getNearestNode",make_function(getNearestNodeDqPtrs, return_internal_reference<>() ),"Returns nearest node.")
+  .def("pickNodesInside",&XC::DqPtrsNode::pickNodesInside,"pickNodesInside(geomObj,tol) get the nodes inside the geometric object.") 
    ;
 
 typedef XC::DqPtrs<XC::Element> dq_ptrs_element;
@@ -60,6 +61,7 @@ class_<XC::DqPtrsElem, bases<dq_ptrs_element>, boost::noncopyable >("DqPtrsElem"
   .add_property("getNumDeadElements", &XC::DqPtrsElem::getNumDeadElements)
   .def("getNearestElement",make_function(getNearestElementDqPtrs, return_internal_reference<>() ),"Returns nearest element.")
   .def("getContours",&XC::DqPtrsElem::getContours,"Returns contour(s) from the element set in the form of closed 3D polylines.")
+  .def("pickElemsInside",&XC::DqPtrsElem::pickElemsInside,"pickElemsInside(geomObj,tol) get the elements inside the geometric object.") 
    ;
 
 typedef XC::DqPtrs<XC::Constraint> dq_ptrs_constraint;

@@ -256,3 +256,21 @@ std::set<int> XC::DqPtrsNode::getTags(void) const
       retval.insert((*i)->getTag());
     return retval;
   }
+
+//! @brief Return a container with the nodes that lie inside the
+//! geometric object.
+//!
+//! @param geomObj: geometric object that must contain the nodes.
+//! @param tol: tolerance for "In" function.
+XC::DqPtrsNode XC::DqPtrsNode::pickNodesInside(const GeomObj3d &geomObj, const double &tol)
+  {
+    DqPtrsNode retval;
+    for(iterator i= begin();i!=end();i++)
+      {
+        Node *n= (*i);
+        assert(n);
+	if(n->In(geomObj,tol))
+	  retval.push_back(n);
+      }
+    return retval;    
+  }

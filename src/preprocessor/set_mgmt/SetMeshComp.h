@@ -114,6 +114,7 @@ class SetMeshComp: public SetBase
       { nodes.clearAll(); }
     void sel_nodes_from_list(const ID &);
     bool In(const Node *) const;
+    SetMeshComp pickNodesInside(const std::string &, const GeomObj3d &, const double &tol= 0.0);
 
     //! @brief Returns the number of elements.
     size_t getNumberOfElements(void) const
@@ -131,6 +132,7 @@ class SetMeshComp: public SetBase
       { elements.clearAll(); }
     void sel_elements_from_list(const ID &tags);
     bool In(const Element *) const;
+    SetMeshComp pickElemsInside(const std::string &, const GeomObj3d &, const double &tol= 0.0);
 
     //! @brief Return the constraints container.
     virtual const DqPtrsConstraint &GetConstraints(void) const

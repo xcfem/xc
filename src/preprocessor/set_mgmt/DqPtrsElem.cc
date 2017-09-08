@@ -280,3 +280,21 @@ std::deque<Polilinea3d> XC::DqPtrsElem::getContours(const double &factor) const
       }
     return edgesContour.getContours(factor);
   }
+
+//! @brief Return a container with the elements that lie inside the
+//! geometric object.
+//!
+//! @param geomObj: geometric object that must contain the elements.
+//! @param tol: tolerance for "In" function.
+XC::DqPtrsElem XC::DqPtrsElem::pickElemsInside(const GeomObj3d &geomObj, const double &tol)
+  {
+    DqPtrsElem retval;
+    for(iterator i= begin();i!=end();i++)
+      {
+        Element *e= (*i);
+        assert(n);
+	if(e->In(geomObj,tol))
+	  retval.push_back(e);
+      }
+    return retval;    
+  }

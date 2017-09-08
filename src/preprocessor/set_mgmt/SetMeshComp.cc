@@ -440,6 +440,19 @@ void XC::SetMeshComp::sel_nodes_from_list(const ID &tags)
       }
   }
 
+//! @brief Return a new set that contains the nodes that lie inside the
+//! geometric object.
+//!
+//! @param newSetName: name for the new set.
+//! @param geomObj: geometric object that must contain the nodes.
+//! @param tol: tolerance for "In" function.
+XC::SetMeshComp XC::SetMeshComp::pickNodesInside(const std::string &newSetName, const GeomObj3d &geomObj, const double &tol)
+  {
+    SetMeshComp retval(newSetName);
+    retval.nodes= nodes.pickNodesInside(geomObj,tol);
+    return retval;    
+  }
+
 //! @brief Selects the elements identified by the tags being passed as parameters.
 void XC::SetMeshComp::sel_elements_from_list(const ID &tags)
   {
@@ -454,6 +467,19 @@ void XC::SetMeshComp::sel_elements_from_list(const ID &tags)
           std::cerr << nombre_clase() << __FUNCTION__
 	            << "; preprocessor needed." << std::endl;
       }
+  }
+
+//! @brief Return a new set that contains the elements that lie inside the
+//! geometric object.
+//!
+//! @param newSetName: name for the new set.
+//! @param geomObj: geometric object that must contain the elements.
+//! @param tol: tolerance for "In" function.
+XC::SetMeshComp XC::SetMeshComp::pickElemsInside(const std::string &newSetName, const GeomObj3d &geomObj, const double &tol)
+  {
+    SetMeshComp retval(newSetName);
+    retval.elements= elements.pickElemsInside(geomObj, tol);
+    return retval;
   }
 
 //! @brief Select the constraints identified by the tags.
