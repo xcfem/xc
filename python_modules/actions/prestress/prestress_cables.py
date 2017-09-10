@@ -14,7 +14,7 @@ def pre_stress_elem_line(preprocessor,tag_line, tension):
     e.getMaterial().prestress(tension)
 
 def post_stress_elem_line(preprocessor,tag_line, tension):
-  '''Introduces a prestressing tension on the elements in a line
+  '''Introduces a post-tension on the elements in a line
 
   :param preprocessor: preprocessor
   :param tag_line: line number

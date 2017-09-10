@@ -2,11 +2,11 @@
 ''' Reinforced concrete materials according to EHE-08.'''
 from __future__ import division
 
-__author__= "Ana Ortega (A_OO) and Luis C. Pérez Tato (LCPT)"
-__copyright__= "Copyright 2015, A_OO and LCPT"
+__author__= "Ana Ortega (AO_O) and Luis C. Pérez Tato (LCPT)"
+__copyright__= "Copyright 2015, AO_O and LCPT"
 __license__= "GPL"
 __version__= "3.0"
-__email__= "ana.Ortega.Ort@gmail.com l.pereztato@gmail.com"
+__email__= "ana.Ortega@ciccp.es l.pereztato@ciccp.es"
 
 
 import math
@@ -19,21 +19,23 @@ ReinforcedConcreteLimitStrainsEHE08= concrete_base.ReinforcedConcreteLimitStrain
 class EHEConcrete(concrete_base.Concrete):
     """ Concrete model according to EHE
     
-    :ivar typeAggregate:types of aggregate= 
+    :ivar nmbConcrete: name of the concrete
+    :ivar fck: characteristic strength [Pa]
+    :ivar gammaC: concrete partial safety factor
+    :ivar typeAggregate: types of aggregate= 
             "cuarcita", "arenisca", "caliza normal", 
             "caliza densa", "volcanica porosa", 
-            "volcanica normal", "granito", "diabasa"
+            "volcanica normal", "granito", "diabasa" 
+            (defaults to 'cuarcita')
 
     """
-    typeAggregate='cuarcita'
 
-    def __init__(self,nmbConcrete, fck, gammaC):
+    def __init__(self,nmbConcrete, fck, gammaC,typeAggregate='cuarcita'):
         super(EHEConcrete,self).__init__(nmbConcrete,fck, gammaC)
-
+        self.typeAggregate=typeAggregate
     def getAlphaEcm(self):
-        '''Coeficiente corrector del módulo de deformación
-        longitudinal del hormigón en función de la naturaleza
-        del árido.
+        '''Correction coefficient to the longitudinal modulus of deformation 
+        taking into account the type of aggregate.
         '''
         if self.typeAggregate=="cuarcita":
             return 1
@@ -52,26 +54,26 @@ class EHEConcrete(concrete_base.Concrete):
         elif self.typeAggregate=="diabasa":
             return 1.3
         else:
-            print "Error en tipo de árido."
+            print 'Error in type of aggregate (Possible choices: "cuarcita", "arenisca", "caliza normal", "caliza densa", "volcanica porosa", "volcanica normal", "granito", "diabasa").'
             return 0.0
 
     def getEcm(self):
-        """Módulo de deformación longitudinal secante a 28 días expresado
-        en [Pa] [+] de acuerdo con el artículo 39.6 de EHE-08."""
+        """Longitudinal secant modulus of deformation at 28 days expressed
+        in [Pa] [+] according to article 39.6 of EHE-08."""
         fcmMPa=abs(self.getFcm())*1e-6
         return 8500*(fcmMPa**(1/3))*1e6
 
     def getEc0(self):
-        '''Módulo de deformación longitudinal inicial a 28 días expresado
-        en [Pa] [+] de acuerdo con el artículo 39.6 de EHE-08.
+        '''Initial modulus of longitudinal deformation at 28 days expressed 
+        in [Pa] [+] according to article 39.6 of EHE-08.
         '''
         return self.getAlphaEcm()*self.getEcm()
 
     def getEcmT(self,t):
-        '''Módulo de deformación longitudinal secante a t días expresado
-        en [Pa] [+] de acuerdo con los comentarios al artículo 39.6 de EHE-08.
+        '''Longitudinal concrete modulus of deformation at t days expressed 
+        in [Pa] [+] according to comments to article 39.6 of EHE-08.
         
-        :param t: Edad del hormigón expresada en días.
+        :param t: Age of concrete, expressed in days.
         '''
         return math.pow(self.getBetaCC(t),0.3)*self.getEcm()
 
@@ -85,20 +87,20 @@ class EHEConcrete(concrete_base.Concrete):
             return 0.58*(self.fckMPa()**(1.0/2.0))*1e6
 
     def fctkInf(self):
-        """Resistencia característica inferior del hormigón a tracción [Pa][+]
-        (según artículo 39.1 EHE)
+        """Characteristic tensile strength (lower value) [Pa][+]
+        (according to article 39.1 EHE)
         """
         return 0.21e6*(self.fckMPa())**(2.0/3.0)
 
     def fctkSup(self):
-        """Resistencia característica superior del hormigón a tracción [Pa][+]
-        (según artículo 39.1 EHE)
+        """Characteristic tensile strength (higher value) [Pa][+]
+        (according to article 39.1 EHE)
         """
         return 0.39e6*(self.fckMPa())**(2.0/3.0)
 
     def fctMedEHE08(self):
-        """Resistencia media del hormigón a tracción  [Pa][+]
-        (según artículo 39.1 EHE-08)
+        """Mean tensile strength [Pa][+]
+        (according to article 39.1 EHE-08)
         """
         if self.fckMPa()<50:
             return 0.30e6*self.fckMPa()**(2/3)
@@ -107,13 +109,13 @@ class EHEConcrete(concrete_base.Concrete):
 
     def fctkEHE08(self):
         """Concrete characteristic tensile strength  [Pa][+]
-        (según artículo 39.1 EHE-08)
+        (according to article 39.1 EHE-08)
         """
         return 0.7*self.fctMedEHE08()
 
     def getEpsc2(self):
         """
-        :returns: strain [-] at peak stress at parabola-rectangle diagram 
+        :return: strain [-] at peak stress at parabola-rectangle diagram 
         (art. 39.5 EHE, figure 39.5.a EHE)
         """
         if self.fckMPa()<=50:
@@ -123,7 +125,7 @@ class EHEConcrete(concrete_base.Concrete):
 
     def getExpN(self):
         """
-        :returns: exponent n for the parabola-rectangle diagram 
+        :return: exponent n for the parabola-rectangle diagram 
         (art. 39.5 EHE, figure 39.5.a EHE)
         """
         if self.fckMPa()<=50:
@@ -133,7 +135,7 @@ class EHEConcrete(concrete_base.Concrete):
 
     def getEpscu2(self):
         """
-        :returns:: nominal ultimate strain [-] at parabola-rectangle diagram 
+        :return: nominal ultimate strain [-] at parabola-rectangle diagram 
         (art. 39.5 EHE, figure 39.5.a EHE)
         """
         if self.fckMPa()<=50:
@@ -167,9 +169,9 @@ class EHEConcrete(concrete_base.Concrete):
     #         return 0.0
     #     else:
     #       return 0.0 
-    def getDeformacionFluencia(self, t,t0,RH,h0mm, sigmaT0):
+    def getCreepDeformation(self, t,t0,RH,h0mm, sigmaT0):
         '''
-        :Returns: the creep deformation between t0 and t
+        :Return: the creep deformation between t0 and t
         
         :param t:     age of concrete in days at the moment considered
         :param t0:    age of concrete in days at loading
@@ -257,19 +259,8 @@ Fi40=12.56e-4
 # and Model Code CEB-FIP 1990.
 
 class EHEPrestressingSteel(concrete_base.PrestressingSteel):
-  # Points from the table 38.7.a of EHE-08 to determine the 
-  # relaxation at 1000 hours, used to estimate
-  # the relaxation at times greater than 1000 hours.
+    ''' Prestressing steel model according to EHE-08.
 
-  #For wires and strands:
-  ptsRO1000Wires= scipy.interpolate.interp1d([0,.5,.6,.7,.8],[0,0,1,2,5.5])
-  #For bars:
-  ptsRO1000Bars= scipy.interpolate.interp1d([0,.5,.6,.7,.8],[0,0,2,3,7])
-
-
-  def __init__(self,steelName,fpk,fmax= 1860e6, alpha= 0.75, steelRelaxationClass=1, tendonClass= 'strand'):
-    ''' Prestressing steel.
- 
        :param fpk: Elastic limit.
        :param fmax: Steel strength.
        :param alpha: stress-to-strength ratio.
@@ -277,56 +268,69 @@ class EHEPrestressingSteel(concrete_base.PrestressingSteel):
                                     and 3: relaxation for bars.
        :param tendonClass: Tendon class wire, strand or bar.
     '''
-    super(EHEPrestressingSteel,self).__init__(steelName,fpk,fmax,alpha,steelRelaxationClass, tendonClass)
-  
-  def getRO1000(self):
-    '''
-    Return the relaxation at 1000 hours after stressing (See table 38.9.a at EHE-08)
-    '''
-    if(self.tendonClass=="wire"):
-      return self.ptsRO1000Wires(self.alpha) 
-    elif(self.tendonClass=="strand"):
-      return self.ptsRO1000Wires(self.alpha)
-    elif(self.tendonClass=="bar"):
-      return self.ptsRO1000Bars(self.alpha)
-  def getRelaxationT(self, tDias):
-    ''' Return the relaxation at time tDias in days after stressing.
+    # Points from the table 38.7.a of EHE-08 to determine the 
+    # relaxation at 1000 hours, used to estimate
+    # the relaxation at times greater than 1000 hours.
 
-       tDays: Time in days after prestressing
-              (to make easier to deal with shrinkage and creep at the same time).
-    '''
-    tHours= tDias*24
-    RO1000= self.getRO1000()
-    if(tHours<1000):
-      return RO1000*self.ptsShortTermRelaxation(tHours)
-    else:
-      return RO1000*pow(tHours/1000.0,self.getKRelaxation())
-  def getRelaxationStressLossT(self, tDays, initialStress):
-    '''
-    Return change in tendon stress due to relaxation at time t.
+    #For wires and strands:
+    ptsRO1000Wires= scipy.interpolate.interp1d([0,.5,.6,.7,.8],[0,0,1,2,5.5])
+    #For bars:
+    ptsRO1000Bars= scipy.interpolate.interp1d([0,.5,.6,.7,.8],[0,0,2,3,7])
 
-       initialStress: Initial stress in tendon.
-       tDays: Time in days after prestressing
-              (to make easier to deal with shrinkage and creep at the same time).
 
-    '''
-    LGRO120= math.log10(self.getRelaxationT(120/24.0))
-    LGRO1000= math.log10(self.getRelaxationT(1000/24.0))
-    k2= (LGRO1000-LGRO120)/(3-math.log10(120))
-    k1= LGRO1000-3*k2
-    tHours= tDays*24
-    ROT= pow(10,k1+k2*math.log10(tHours))/100.0
-    return initialStress*ROT
+    def __init__(self,steelName,fpk,fmax= 1860e6, alpha= 0.75, steelRelaxationClass=1, tendonClass= 'strand'):
+        super(EHEPrestressingSteel,self).__init__(steelName,fpk,fmax,alpha,steelRelaxationClass, tendonClass)
 
-  def getRelaxationStressLossFinal(self, initialStress):
-    '''
-    Return final change in tendon stress due to relaxation.
+    def getRO1000(self):
+        '''
+        Return the relaxation at 1000 hours after stressing (See table 38.9.a at EHE-08)
+        '''
+        if(self.tendonClass=="wire"):
+            return self.ptsRO1000Wires(self.alpha) 
+        elif(self.tendonClass=="strand"):
+            return self.ptsRO1000Wires(self.alpha)
+        elif(self.tendonClass=="bar"):
+            return self.ptsRO1000Bars(self.alpha)
 
-       initialStress: Initial stress in tendon.
+    def getRelaxationT(self, tDias):
+        ''' Return the relaxation at time tDias in days after stressing.
 
-    '''
-    ROFINAL= 2.9e-2*self.getRelaxationT(1000/24.0)
-    return initialStress*ROFINAL
+        :param tDays: Time in days after prestressing
+                  (to make easier to deal with shrinkage and creep at the same time).
+        '''
+        tHours= tDias*24
+        RO1000= self.getRO1000()
+        if(tHours<1000):
+            return RO1000*self.ptsShortTermRelaxation(tHours)
+        else:
+            return RO1000*pow(tHours/1000.0,self.getKRelaxation())
+    
+    def getRelaxationStressLossT(self, tDays, initialStress):
+        '''
+        Return change in tendon stress due to relaxation at time t.
+
+        :param initialStress: Initial stress in tendon.
+        :param tDays: Time in days after prestressing
+                  (to make easier to deal with shrinkage and creep at the same time).
+
+        '''
+        LGRO120= math.log10(self.getRelaxationT(120/24.0))
+        LGRO1000= math.log10(self.getRelaxationT(1000/24.0))
+        k2= (LGRO1000-LGRO120)/(3-math.log10(120))
+        k1= LGRO1000-3*k2
+        tHours= tDays*24
+        ROT= pow(10,k1+k2*math.log10(tHours))/100.0
+        return initialStress*ROT
+
+    def getRelaxationStressLossFinal(self, initialStress):
+        '''
+        Return final change in tendon stress due to relaxation.
+
+        :param initialStress: Initial stress in tendon.
+
+        '''
+        ROFINAL= 2.9e-2*self.getRelaxationT(1000/24.0)
+        return initialStress*ROFINAL
 
 Y1860S7= EHEPrestressingSteel(steelName= "Y1860S7",fpk= 1171e6,fmax= 1860e6)
 
