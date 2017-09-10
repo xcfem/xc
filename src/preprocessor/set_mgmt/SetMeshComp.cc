@@ -64,6 +64,34 @@ XC::SetMeshComp &XC::SetMeshComp::operator=(const SetMeshComp &otro)
     return *this;
   }
 
+//! @brief += operator.
+XC::SetMeshComp &XC::SetMeshComp::operator+=(const SetMeshComp &otro)
+  {
+    SetBase::operator+=(otro);
+    extend_lists(otro);
+    return *this;
+  }
+
+//! @brief -= operator.
+XC::SetMeshComp &XC::SetMeshComp::operator-=(const SetMeshComp &otro)
+  {
+    SetBase::operator-=(otro);
+    nodes= nodes-otro.nodes;
+    elements= elements-otro.elements;
+    constraints= constraints-otro.constraints;
+    return *this;
+  }
+
+//! @brief *= operator (intersection).
+XC::SetMeshComp &XC::SetMeshComp::operator*=(const SetMeshComp &otro)
+  {
+    SetBase::operator*=(otro);
+    nodes= nodes*otro.nodes;
+    elements= elements*otro.elements;
+    constraints= constraints*otro.constraints;
+    return *this;
+  }
+
 //! @brief Copy (into this set) the lists from the set being passed as parameter.
 void XC::SetMeshComp::copia_listas(const SetMeshComp &otro)
   {
@@ -366,7 +394,7 @@ std::set<int> XC::SetMeshComp::getNodeTags(void) const
 
 //! @brief Returns the node closest to the point being passed as parameter.
 XC::Node *XC::SetMeshComp::getNearestNode(const Pos3d &p)
-  { return nodes.getNearestNode(p); }
+  { return nodes.getNearest(p); }
 
 //! @brief Returns the node closest to the point being passed as parameter.
 const XC::Node *XC::SetMeshComp::getNearestNode(const Pos3d &p) const
@@ -382,7 +410,7 @@ std::set<int> XC::SetMeshComp::getElementTags(void) const
 
 //! @brief Returns the element closest to the point being passed as parameter.
 XC::Element *XC::SetMeshComp::getNearestElement(const Pos3d &p)
-  { return elements.getNearestElement(p); }
+  { return elements.getNearest(p); }
 
 //! @brief Returns the element closest to the point being passed as parameter.
 const XC::Element *XC::SetMeshComp::getNearestElement(const Pos3d &p) const
@@ -578,4 +606,28 @@ int XC::SetMeshComp::recvSelf(const CommParameters &cp)
           std::cerr << nombre_clase() << "::recvSelf - failed to receive data.\n";
       }
     return res;
+  }
+
+//! @brief Return the union of both objects.
+XC::SetMeshComp XC::operator+(const XC::SetMeshComp &a,const XC::SetMeshComp &b)
+  {
+    XC::SetMeshComp retval(a);
+    retval+=b;
+    return retval;
+  }
+
+//! @brief Return the difference.
+XC::SetMeshComp XC::operator-(const XC::SetMeshComp &a,const XC::SetMeshComp &b)
+  {
+    XC::SetMeshComp retval(a);
+    retval-=b;
+    return retval;
+  }
+
+//! @brief Return the intersection.
+XC::SetMeshComp XC::operator*(const XC::SetMeshComp &a,const XC::SetMeshComp &b)
+  {
+    XC::SetMeshComp retval(a);
+    retval*=b;
+    return retval;
   }

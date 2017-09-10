@@ -95,8 +95,11 @@ class SetMeshComp: public SetBase
     void mueve(const Vector3d &);
   public:
     SetMeshComp(const std::string &nmb="",Preprocessor *preprocessor= nullptr);
-    SetMeshComp(const SetMeshComp &otro);
-    SetMeshComp &operator=(const SetMeshComp &otro);
+    SetMeshComp(const SetMeshComp &);
+    SetMeshComp &operator=(const SetMeshComp &);
+    SetMeshComp &operator+=(const SetMeshComp &);
+    SetMeshComp &operator-=(const SetMeshComp &);
+    SetMeshComp &operator*=(const SetMeshComp &);
 
     //! @brief Returns the number of nodes.
     size_t getNumberOfNodes(void) const
@@ -212,6 +215,10 @@ class SetMeshComp: public SetBase
 
     ~SetMeshComp(void);
   };
+
+SetMeshComp operator+(const SetMeshComp &,const SetMeshComp &);
+SetMeshComp operator-(const SetMeshComp &,const SetMeshComp &);
+SetMeshComp operator*(const SetMeshComp &,const SetMeshComp &);
 
 //!  @brief Set indices to the object to allow its use in VTK.
 template <class L>

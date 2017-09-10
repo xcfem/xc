@@ -24,43 +24,5 @@
 // along with this program.
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
-//DqPtrsConstraint.h
-//constraint pointers deque.
 
-
-#ifndef DQPTRSCONSTRAINT_H
-#define DQPTRSCONSTRAINT_H
-
-#include "DqPtrs.h"
-
-class ExprAlgebra;
-
-namespace XC {
-class Constraint;
-
-//!  \ingroup Set
-//! 
-//!  \brief Constraint pointers deque.
-//! 
-class DqPtrsConstraint: public DqPtrs<Constraint>
-  {
-  public:
-    DqPtrsConstraint(EntCmd *owr= nullptr);
-    explicit DqPtrsConstraint(const std::deque<Constraint *> &ts);
-    explicit DqPtrsConstraint(const std::set<const Constraint *> &ts);
-
-    std::set<int> getTags(void) const;
-
-    Constraint *buscaConstrainto(const int &tag);
-    const Constraint *buscaConstrainto(const int &tag) const;
-
-    void numera(void);
-  };
-
-DqPtrsConstraint operator+(const DqPtrsConstraint &,const DqPtrsConstraint &);
-DqPtrsConstraint operator-(const DqPtrsConstraint &,const DqPtrsConstraint &);
-DqPtrsConstraint operator*(const DqPtrsConstraint &,const DqPtrsConstraint &);
-
-} //end of XC namespace
-#endif
-
+#include "DqPtrsKDTree.h"

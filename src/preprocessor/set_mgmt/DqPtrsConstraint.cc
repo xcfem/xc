@@ -110,3 +110,39 @@ std::set<int> XC::DqPtrsConstraint::getTags(void) const
       retval.insert((*i)->getTag());
     return retval;
   }
+
+//! @brief Return the union of both containers.
+XC::DqPtrsConstraint XC::operator+(const DqPtrsConstraint &a,const DqPtrsConstraint &b)
+  {
+    DqPtrsConstraint retval(a);
+    retval+=b;
+    return retval;
+  }
+
+//! @brief Return the nodes in a that are not in b.
+XC::DqPtrsConstraint XC::operator-(const DqPtrsConstraint &a,const DqPtrsConstraint &b)
+  {
+    DqPtrsConstraint retval;
+    for(DqPtrsConstraint::const_iterator i= a.begin();i!=a.end();i++)
+      {
+        Constraint *n= (*i);
+        assert(n);
+	if(!b.in(n)) //If not in b.
+	  retval.push_back(n);
+      }
+    return retval;
+  }
+
+//! @brief Return the nodes in a that are also in b.
+XC::DqPtrsConstraint XC::operator*(const DqPtrsConstraint &a,const DqPtrsConstraint &b)
+  {
+    DqPtrsConstraint retval;
+    for(DqPtrsConstraint::const_iterator i= a.begin();i!=a.end();i++)
+      {
+        Constraint *n= (*i);
+        assert(n);
+	if(b.in(n)) //If also in b.
+	  retval.push_back(n);
+      }
+    return retval;    
+  }

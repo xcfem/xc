@@ -30,105 +30,37 @@
 #include "preprocessor/cad/trf/TrfGeom.h"
 #include "xc_basic/src/funciones/algebra/ExprAlgebra.h"
 
-void XC::DqPtrsNode::create_arbol(void)
-  {
-    kdtreeNodos.clear();
-    for(iterator i= begin();i!=end();i++)
-      {
-        Node *nPtr= *i;
-        assert(nPtr);
-        kdtreeNodos.insert(*nPtr);
-      }
-  }
-
 //! @brief Constructor.
 XC::DqPtrsNode::DqPtrsNode(EntCmd *owr)
-  : DqPtrs<Node>(owr) {}
+  : DqPtrsKDTree<Node,KDTreeNodes>(owr) {}
 
 //! @brief Copy constructor.
 XC::DqPtrsNode::DqPtrsNode(const DqPtrsNode &otro)
-  : DqPtrs<Node>(otro)
-  { create_arbol(); }
+  : DqPtrsKDTree<Node,KDTreeNodes>(otro)
+  { }
 
 //! @brief Copy constructor.
 XC::DqPtrsNode::DqPtrsNode(const std::deque<Node *> &ts)
-  : DqPtrs<Node>(ts)
-  { create_arbol(); }
+  : DqPtrsKDTree<Node,KDTreeNodes>(ts)
+  { }
 
 //! @brief Copy constructor.
 XC::DqPtrsNode::DqPtrsNode(const std::set<const Node *> &st)
-  : DqPtrs<Node>()
-  {
-    std::set<const Node *>::const_iterator k;
-    k= st.begin();
-    for(;k!=st.end();k++)
-      push_back(const_cast<Node *>(*k));
-  }
+  : DqPtrsKDTree<Node,KDTreeNodes>(st)
+  {}
 
 //! @brief Assignment operator.
 XC::DqPtrsNode &XC::DqPtrsNode::operator=(const DqPtrsNode &otro)
   {
-    DqPtrs<Node>::operator=(otro);
-    kdtreeNodos= otro.kdtreeNodos;
+    DqPtrsKDTree<Node,KDTreeNodes>::operator=(otro);
     return *this;
   }
 
-//! @brief Extend this container with the elements of
-//! the container being passed as parameter.
-void XC::DqPtrsNode::extend(const DqPtrsNode &otro)
+//! @brief += operator.
+XC::DqPtrsNode &XC::DqPtrsNode::operator+=(const DqPtrsNode &otro)
   {
-    for(register const_iterator i= otro.begin();i!=otro.end();i++)
-      push_back(*i);
-  }
-
-// //! @brief Extend this container with the elements of
-// //! the container being passed as parameterr, that fulfill the condition.
-// void XC::DqPtrsNode::extend_cond(const DqPtrsNode &otro,const std::string &cond)
-//   {
-//     bool result= false;
-//     for(register const_iterator i= otro.begin();i!=otro.end();i++)
-//       {
-//         result= (*i)->interpretaBool(cond);
-//         if(result)
-// 	  push_back(*i);
-//       }
-//   }
-
-//! @brief Clears out the list of pointers and erases the properties of the object (if any).
-void XC::DqPtrsNode::clearAll(void)
-  {
-    DqPtrs<Node>::clear();
-    kdtreeNodos.clear();
-  }
-
-bool XC::DqPtrsNode::push_back(Node *n)
-  {
-    bool retval= DqPtrs<Node>::push_back(n);
-    if(retval)
-      kdtreeNodos.insert(*n);
-    return retval;
-  }
-
-bool XC::DqPtrsNode::push_front(Node *n)
-  {
-    bool retval= DqPtrs<Node>::push_front(n);
-    if(retval)
-      kdtreeNodos.insert(*n);
-    return retval;
-  }
-
-//! @brief Returns the node closest to the point being passed as parameter.
-XC::Node *XC::DqPtrsNode::getNearestNode(const Pos3d &p)
-  {
-    Node *retval= const_cast<Node *>(kdtreeNodos.getNearestNode(p));
-    return retval;
-  }
-
-//! @brief Returns the node closest to the point being passed as parameter.
-const XC::Node *XC::DqPtrsNode::getNearestNode(const Pos3d &p) const
-  {
-    DqPtrsNode *this_no_const= const_cast<DqPtrsNode *>(this);
-    return this_no_const->getNearestNode(p);
+    extend(otro);
+    return *this;
   }
 
 //! @brief Desplaza los nodes of the set.
@@ -136,7 +68,7 @@ void XC::DqPtrsNode::mueve(const Vector3d &desplaz)
   {
     for(iterator i= begin();i!=end();i++)
       (*i)->Mueve(desplaz);
-    create_arbol();
+    create_tree();
   }
 
 //! @brief Applies the transformation to the elements of the set.
@@ -145,7 +77,7 @@ void XC::DqPtrsNode::transforma(const TrfGeom &trf)
     //Transforma 
     for(iterator i= begin();i!=end();i++)
       (*i)->Transforma(trf);
-    create_arbol();
+    create_tree();
   }
 
 //! @brief Returns (if it exists) a pointer to the node
@@ -270,6 +202,42 @@ XC::DqPtrsNode XC::DqPtrsNode::pickNodesInside(const GeomObj3d &geomObj, const d
         Node *n= (*i);
         assert(n);
 	if(n->In(geomObj,tol))
+	  retval.push_back(n);
+      }
+    return retval;    
+  }
+
+//! @brief Return the union of both containers.
+XC::DqPtrsNode XC::operator+(const DqPtrsNode &a,const DqPtrsNode &b)
+  {
+    DqPtrsNode retval(a);
+    retval+=b;
+    return retval;
+  }
+
+//! @brief Return the nodes in a that are not in b.
+XC::DqPtrsNode XC::operator-(const DqPtrsNode &a,const DqPtrsNode &b)
+  {
+    DqPtrsNode retval;
+    for(DqPtrsNode::const_iterator i= a.begin();i!=a.end();i++)
+      {
+        Node *n= (*i);
+        assert(n);
+	if(!b.in(n)) //If not in b.
+	  retval.push_back(n);
+      }
+    return retval;
+  }
+
+//! @brief Return the nodes in a that are also in b.
+XC::DqPtrsNode XC::operator*(const DqPtrsNode &a,const DqPtrsNode &b)
+  {
+    DqPtrsNode retval;
+    for(DqPtrsNode::const_iterator i= a.begin();i!=a.end();i++)
+      {
+        Node *n= (*i);
+        assert(n);
+	if(b.in(n)) //If also in b.
 	  retval.push_back(n);
       }
     return retval;    

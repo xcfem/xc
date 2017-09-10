@@ -30,7 +30,7 @@
 #ifndef DQPTRSELEM_H
 #define DQPTRSELEM_H
 
-#include "DqPtrs.h"
+#include "DqPtrsKDTree.h"
 #include "domain/mesh/element/utils/KDTreeElements.h"
 
 class Polilinea3d;
@@ -43,36 +43,15 @@ class TrfGeom;
 //! 
 //!  \brief Pointer to element container.
 //! 
-class DqPtrsElem: public DqPtrs<Element>
+class DqPtrsElem: public DqPtrsKDTree<Element,KDTreeElements>
   {
     KDTreeElements kdtreeElements; //!< space-partitioning data structure for organizing elements (element centroids).
-  protected:
-    void create_arbol(void);
   public:
-    typedef DqPtrs<Element>::const_iterator const_iterator;
-    typedef DqPtrs<Element>::iterator iterator;
-    typedef DqPtrs<Element>::reference reference;
-    typedef DqPtrs<Element>::const_reference const_reference;
-    typedef DqPtrs<Element>::size_type size_type;
-
     DqPtrsElem(EntCmd *owr= nullptr);
     DqPtrsElem(const DqPtrsElem &otro);
     explicit DqPtrsElem(const std::deque<Element *> &ts);
     explicit DqPtrsElem(const std::set<const Element *> &ts);
     DqPtrsElem &operator=(const DqPtrsElem &);
-    void extend(const DqPtrsElem &);
-    //void extend_cond(const DqPtrsElem &otro,const std::string &cond);
-    bool push_back(Element *);
-    bool push_front(Element *);
-    void clearAll(void);
-    inline const_iterator begin(void) const
-      { return DqPtrs<Element>::begin(); }
-    inline const_iterator end(void) const
-      { return DqPtrs<Element>::end(); }
-    inline iterator begin(void)
-      { return DqPtrs<Element>::begin(); }
-    inline iterator end(void)
-      { return DqPtrs<Element>::end(); }
 
     size_t getNumLiveElements(void) const;
     size_t getNumDeadElements(void) const;
@@ -85,13 +64,15 @@ class DqPtrsElem: public DqPtrs<Element>
 
     Element *findElement(const int &);
     const Element *findElement(const int &) const;
-    Element *getNearestElement(const Pos3d &);
-    const Element *getNearestElement(const Pos3d &) const;
     std::deque<Polilinea3d> getContours(const double &factor= 0.0) const;
     DqPtrsElem pickElemsInside(const GeomObj3d &, const double &tol= 0.0);
 
     void numera(void);
   };
+
+DqPtrsElem operator+(const DqPtrsElem &a,const DqPtrsElem &b);
+DqPtrsElem operator-(const DqPtrsElem &a,const DqPtrsElem &b);
+DqPtrsElem operator*(const DqPtrsElem &a,const DqPtrsElem &b);
 
 } //end of XC namespace
 #endif

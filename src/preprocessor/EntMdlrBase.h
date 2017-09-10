@@ -54,6 +54,9 @@ class EntMdlrBase: public EntConNmb, public MovableObject
     int recvData(const CommParameters &);
   public:
     EntMdlrBase(const std::string &nmb="",Preprocessor *preprocessor= nullptr);
+    EntMdlrBase &operator+=(const EntMdlrBase &);
+    EntMdlrBase &operator-=(const EntMdlrBase &);
+    EntMdlrBase &operator*=(const EntMdlrBase &);
     const Preprocessor *getPreprocessor(void) const;
     Preprocessor *getPreprocessor(void);
 
@@ -68,6 +71,10 @@ class EntMdlrBase: public EntConNmb, public MovableObject
     virtual int sendSelf(CommParameters &);
     virtual int recvSelf(const CommParameters &);
   };
+
+EntMdlrBase operator+(const EntMdlrBase &,const EntMdlrBase &);
+EntMdlrBase operator-(const EntMdlrBase &,const EntMdlrBase &);
+EntMdlrBase operator*(const EntMdlrBase &,const EntMdlrBase &);
 
 } //end of XC namespace
 #endif

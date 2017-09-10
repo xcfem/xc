@@ -63,7 +63,7 @@ void XC::KDTreeElements::clear(void)
   { tree_type::clear(); }
 
 //! @brief Returns the node closest to the position being passed as parameter.
-const XC::Element *XC::KDTreeElements::getNearestElement(const Pos3d &pos) const
+const XC::Element *XC::KDTreeElements::getNearest(const Pos3d &pos) const
   {
     const Element *retval= nullptr;
     ElemPos target(pos);
@@ -75,7 +75,7 @@ const XC::Element *XC::KDTreeElements::getNearestElement(const Pos3d &pos) const
 
 //! @brief Returns the element closest to the position
 //! being passed as parameter.
-const XC::Element *XC::KDTreeElements::getNearestElement(const Pos3d &pos, const double &r) const
+const XC::Element *XC::KDTreeElements::getNearest(const Pos3d &pos, const double &r) const
   {
     const Element *retval= nullptr;
     ElemPos target(pos);

@@ -66,8 +66,8 @@ class KDTreeNodes: protected kd_tree::KDTree<3, NodePos, std::pointer_to_binary_
     void erase(const Node &);
     void clear(void);
 
-    const Node *getNearestNode(const Pos3d &pos) const;
-    const Node *getNearestNode(const Pos3d &pos, const double &r) const;
+    const Node *getNearest(const Pos3d &pos) const;
+    const Node *getNearest(const Pos3d &pos, const double &r) const;
   };
 
 } // end of XC namespace 

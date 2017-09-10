@@ -32,105 +32,31 @@
 #include "domain/mesh/node/Node.h"
 #include "domain/mesh/MeshEdges.h"
 
-void XC::DqPtrsElem::create_arbol(void)
-  {
-    kdtreeElements.clear();
-    for(iterator i= begin();i!=end();i++)
-      {
-        Element *nPtr= *i;
-        assert(nPtr);
-        kdtreeElements.insert(*nPtr);
-      }
-  }
-
 //! @brief Constructor.
 XC::DqPtrsElem::DqPtrsElem(EntCmd *owr)
-  : DqPtrs<Element>(owr) {}
+  : DqPtrsKDTree<Element,KDTreeElements>(owr) {}
 
 //! @brief Copy constructor.
 XC::DqPtrsElem::DqPtrsElem(const DqPtrsElem &otro)
-  : DqPtrs<Element>(otro)
-  { create_arbol(); }
+  : DqPtrsKDTree<Element,KDTreeElements>(otro)
+  {}
 
 //! @brief Copy constructor.
 XC::DqPtrsElem::DqPtrsElem(const std::deque<Element *> &ts)
-  : DqPtrs<Element>(ts)
-  { create_arbol(); }
+  : DqPtrsKDTree<Element,KDTreeElements>(ts)
+  {}
 
 //! @brief Copy constructor.
 XC::DqPtrsElem::DqPtrsElem(const std::set<const Element *> &st)
-  : DqPtrs<Element>()
-  {
-    std::set<const Element *>::const_iterator k;
-    k= st.begin();
-    for(;k!=st.end();k++)
-      push_back(const_cast<Element *>(*k));
-  }
+  : DqPtrsKDTree<Element,KDTreeElements>(st)
+  {}
 
 //! @brief Assignment operator.
 XC::DqPtrsElem &XC::DqPtrsElem::operator=(const DqPtrsElem &otro)
   {
-    DqPtrs<Element>::operator=(otro);
+    DqPtrsKDTree<Element,KDTreeElements>::operator=(otro);
     kdtreeElements= otro.kdtreeElements;
     return *this;
-  }
-
-//! @brief Extend this list with the elements of the container
-//! being passed as parameter.
-void XC::DqPtrsElem::extend(const DqPtrsElem &otro)
-  {
-    for(register const_iterator i= otro.begin();i!=otro.end();i++)
-      push_back(*i);
-  }
-
-// //! @brief Extend this list with the elements of the container
-// //! being passed as parameter that fulfill the condition.
-// void XC::DqPtrsElem::extend_cond(const DqPtrsElem &otro,const std::string &cond)
-//   {
-//     bool result= false;
-//     for(register const_iterator i= otro.begin();i!=otro.end();i++)
-//       {
-//         result= (*i)->interpretaBool(cond);
-//         if(result)
-// 	  push_back(*i);
-//       }
-//   }
-
-//! @brief Clears out the list of pointers and erases the properties of the object (if any).
-void XC::DqPtrsElem::clearAll(void)
-  {
-    DqPtrs<Element>::clear();
-    kdtreeElements.clear();
-  }
-
-bool XC::DqPtrsElem::push_back(Element *e)
-  {
-    bool retval= DqPtrs<Element>::push_back(e);
-    if(retval)
-      kdtreeElements.insert(*e);
-    return retval;
-  }
-
-bool XC::DqPtrsElem::push_front(Element *e)
-  {
-    bool retval= DqPtrs<Element>::push_front(e);
-    if(retval)
-      kdtreeElements.insert(*e);
-    return retval;
-  }
-
-//! @brief Returns the element closest to the point being passed as parameter.
-XC::Element *XC::DqPtrsElem::getNearestElement(const Pos3d &p)
-  {
-    Element *retval= const_cast<Element *>(kdtreeElements.getNearestElement(p));
-    return retval;
-  }
-
-//! @brief Returns the element closest to the point being passed as parameter.
-const XC::Element *XC::DqPtrsElem::getNearestElement(const Pos3d &p) const
-  {
-    DqPtrsElem *this_no_const= const_cast<DqPtrsElem *>(this);
-    return this_no_const->getNearestElement(p);
   }
 
 //! @brief Returns (if it exists) a pointer to the element
@@ -295,6 +221,42 @@ XC::DqPtrsElem XC::DqPtrsElem::pickElemsInside(const GeomObj3d &geomObj, const d
         assert(n);
 	if(e->In(geomObj,tol))
 	  retval.push_back(e);
+      }
+    return retval;    
+  }
+
+//! @brief Return the union of both containers.
+XC::DqPtrsElem XC::operator+(const DqPtrsElem &a,const DqPtrsElem &b)
+  {
+    DqPtrsElem retval(a);
+    retval+=b;
+    return retval;
+  }
+
+//! @brief Return the nodes in a that are not in b.
+XC::DqPtrsElem XC::operator-(const DqPtrsElem &a,const DqPtrsElem &b)
+  {
+    DqPtrsElem retval;
+    for(DqPtrsElem::const_iterator i= a.begin();i!=a.end();i++)
+      {
+        Element *n= (*i);
+        assert(n);
+	if(!b.in(n)) //If not in b.
+	  retval.push_back(n);
+      }
+    return retval;
+  }
+
+//! @brief Return the nodes in a that are also in b.
+XC::DqPtrsElem XC::operator*(const DqPtrsElem &a,const DqPtrsElem &b)
+  {
+    DqPtrsElem retval;
+    for(DqPtrsElem::const_iterator i= a.begin();i!=a.end();i++)
+      {
+        Element *n= (*i);
+        assert(n);
+	if(b.in(n)) //If also in b.
+	  retval.push_back(n);
       }
     return retval;    
   }

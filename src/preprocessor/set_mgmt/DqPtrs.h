@@ -52,7 +52,7 @@ namespace XC {
 //!  - Point.
 //!  - Line.
 //!  - Suprface.
-//!  - Bodiy.
+//!  - Body.
 template <class T>
 class DqPtrs: public EntCmd, protected std::deque<T *>
   {
@@ -70,6 +70,7 @@ class DqPtrs: public EntCmd, protected std::deque<T *>
     explicit DqPtrs(const std::deque<T *> &ts);
     explicit DqPtrs(const std::set<const T *> &ts);
     DqPtrs &operator=(const DqPtrs &);
+    DqPtrs &operator+=(const DqPtrs &);
     void extend(const DqPtrs &);
     //void extend_cond(const DqPtrs &otro,const std::string &cond);
     bool push_back(T *);
@@ -143,6 +144,15 @@ DqPtrs<T> &DqPtrs<T>::operator=(const DqPtrs &otro)
     lst_ptr::operator=(otro);
     return *this;
   }
+
+//! @brief += operator.
+template <class T>
+DqPtrs<T> &DqPtrs<T>::operator+=(const DqPtrs &otro)
+  {
+    extend(otro);
+    return *this;
+  }
+
 
 //! @brief Extend this container with the pointers from the container
 //! being passed as parameter.

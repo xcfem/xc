@@ -32,14 +32,18 @@ class_<dq_ptrs_node, bases<EntCmd>, boost::noncopyable >("dq_ptrs_node",no_init)
   .def("clear",&dq_ptrs_node::clear,"Removes all items.")
   ;
 
-XC::Node *(XC::DqPtrsNode::*getNearestNodeDqPtrs)(const Pos3d &)= &XC::DqPtrsNode::getNearestNode;
+XC::Node *(XC::DqPtrsNode::*getNearestNodeDqPtrs)(const Pos3d &)= &XC::DqPtrsNode::getNearest;
 class_<XC::DqPtrsNode, bases<dq_ptrs_node> >("DqPtrsNode",no_init)
   .def("append", &XC::DqPtrsNode::push_back,"Appends node at the end of the list.")
   .def("pushFront", &XC::DqPtrsNode::push_front,"Push node at the beginning of the list.")
   .add_property("getNumLiveNodes", &XC::DqPtrsNode::getNumLiveNodes)
   .add_property("getNumDeadNodes", &XC::DqPtrsNode::getNumDeadNodes)
   .def("getNearestNode",make_function(getNearestNodeDqPtrs, return_internal_reference<>() ),"Returns nearest node.")
-  .def("pickNodesInside",&XC::DqPtrsNode::pickNodesInside,"pickNodesInside(geomObj,tol) return the nodes inside the geometric object.") 
+  .def("pickNodesInside",&XC::DqPtrsNode::pickNodesInside,"pickNodesInside(geomObj,tol) return the nodes inside the geometric object.")
+   .def(self += self)
+   .def(self + self)
+   .def(self - self)
+   .def(self * self)
    ;
 
 typedef XC::DqPtrs<XC::Element> dq_ptrs_element;
@@ -53,7 +57,7 @@ class_<dq_ptrs_element, bases<EntCmd>, boost::noncopyable >("dq_ptrs_element",no
   .def("clear",&dq_ptrs_element::clear,"Removes all items.")
   ;
 
-XC::Element *(XC::DqPtrsElem::*getNearestElementDqPtrs)(const Pos3d &)= &XC::DqPtrsElem::getNearestElement;
+XC::Element *(XC::DqPtrsElem::*getNearestElementDqPtrs)(const Pos3d &)= &XC::DqPtrsElem::getNearest;
 class_<XC::DqPtrsElem, bases<dq_ptrs_element> >("DqPtrsElem",no_init)
   .def("append", &XC::DqPtrsElem::push_back,"Appends element at the end of the list.")
   .def("pushFront", &XC::DqPtrsElem::push_front,"Push element at the beginning of the list.")
@@ -62,6 +66,10 @@ class_<XC::DqPtrsElem, bases<dq_ptrs_element> >("DqPtrsElem",no_init)
   .def("getNearestElement",make_function(getNearestElementDqPtrs, return_internal_reference<>() ),"Returns nearest element.")
   .def("getContours",&XC::DqPtrsElem::getContours,"Returns contour(s) from the element set in the form of closed 3D polylines.")
   .def("pickElemsInside",&XC::DqPtrsElem::pickElemsInside,"pickElemsInside(geomObj,tol) return the elements inside the geometric object.") 
+   .def(self += self)
+   .def(self + self)
+   .def(self - self)
+   .def(self * self)
    ;
 
 typedef XC::DqPtrs<XC::Constraint> dq_ptrs_constraint;
@@ -78,6 +86,10 @@ class_<dq_ptrs_constraint, bases<EntCmd>, boost::noncopyable >("dq_ptrs_constrai
 class_<XC::DqPtrsConstraint, bases<dq_ptrs_constraint>, boost::noncopyable >("DqPtrsConstraint",no_init)
   .def("append", &XC::DqPtrsConstraint::push_back,"Appends constraint at the end of the list.")
   .def("pushFront", &XC::DqPtrsConstraint::push_front,"Push constraint at the beginning of the list.")
+   .def(self += self)
+   .def(self + self)
+   .def(self - self)
+   .def(self * self)
    ;
 
 XC::DqPtrsNode &(XC::SetMeshComp::*GetNodosRef)(void)= &XC::SetMeshComp::GetNodos;
@@ -107,6 +119,12 @@ class_<XC::SetMeshComp, bases<XC::SetBase>, boost::noncopyable >("SetMeshComp",n
   .def("clear",&XC::SetMeshComp::clear,"Removes all items.")
   .def("pickNodesInside",&XC::SetMeshComp::pickNodesInside,"pickNodesInside(newSetName, geomObj, tol) return a set with the nodes inside the geometric object.") 
   .def("pickElemsInside",&XC::SetMeshComp::pickElemsInside,"pickElemsInside(newSetName, geomObj, tol) return a set with the elements inside the geometric object.") 
+   .def(self += self)
+   .def(self -= self)
+   .def(self *= self)
+   .def(self + self)
+   .def(self - self)
+   .def(self * self)
    ;
 
 typedef XC::DqPtrs<XC::Pnt> dq_ptrs_pnt;

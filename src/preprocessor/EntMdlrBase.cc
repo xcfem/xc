@@ -49,6 +49,30 @@ XC::Preprocessor *XC::EntMdlrBase::getPreprocessor(void)
 XC::EntMdlrBase::EntMdlrBase(const std::string &nmb,Preprocessor *prep)
   : EntConNmb(nmb,prep), MovableObject(0) {}
 
+//! @brief += operator.
+XC::EntMdlrBase &XC::EntMdlrBase::operator+=(const EntMdlrBase &otro)
+  {
+    Nombre()+= '+' + otro.getName();
+    labels+= otro.labels;
+    return *this;
+  }
+
+//! @brief -= operator.
+XC::EntMdlrBase &XC::EntMdlrBase::operator-=(const EntMdlrBase &otro)
+  {
+    Nombre()+= '-' + otro.getName();
+    labels-= otro.labels;
+    return *this;
+  }
+
+//! @brief *= operator (intersection).
+XC::EntMdlrBase &XC::EntMdlrBase::operator*=(const EntMdlrBase &otro)
+  {
+    Nombre()+= '*' + otro.getName();
+    labels*= otro.labels;
+    return *this;
+  }
+
 //! @brief Return the object identifier in the model (tag).
 size_t XC::EntMdlrBase::GetTag(void) const
   {
@@ -239,3 +263,26 @@ int XC::EntMdlrBase::recvSelf(const CommParameters &cp)
     return res;
   }
 
+//! @brief Return the union of both objects.
+XC::EntMdlrBase XC::operator+(const XC::EntMdlrBase &a,const XC::EntMdlrBase &b)
+  {
+    XC::EntMdlrBase retval(a);
+    retval+=b;
+    return retval;
+  }
+
+//! @brief Return the labels in a that are not in b.
+XC::EntMdlrBase XC::operator-(const XC::EntMdlrBase &a,const XC::EntMdlrBase &b)
+  {
+    XC::EntMdlrBase retval(a);
+    retval-= b;
+    return retval;
+  }
+
+//! @brief Return the labels in a that are also in b.
+XC::EntMdlrBase XC::operator*(const XC::EntMdlrBase &a,const XC::EntMdlrBase &b)
+  {
+    XC::EntMdlrBase retval(a);
+    retval*= b;
+    return retval;    
+  }

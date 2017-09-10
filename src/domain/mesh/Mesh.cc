@@ -435,7 +435,7 @@ const XC::Element *XC::Mesh::getElement(int tag) const
 //! @brief Returns a pointer to the nearest element to the point being passed as parameter.
 XC::Element *XC::Mesh::getNearestElement(const Pos3d &p)
   {
-    Element *retval= const_cast<Element *>(kdtreeElements.getNearestElement(p));
+    Element *retval= const_cast<Element *>(kdtreeElements.getNearest(p));
     return retval;
   }
 
@@ -475,7 +475,7 @@ const XC::Node *XC::Mesh::getNode(int tag) const
 //! @brief Returns the nodo closest to the point being passed as parameter.
 XC::Node *XC::Mesh::getNearestNode(const Pos3d &p)
   {
-    Node *retval= const_cast<Node *>(kdtreeNodos.getNearestNode(p));
+    Node *retval= const_cast<Node *>(kdtreeNodos.getNearest(p));
     return retval;
   }
 

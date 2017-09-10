@@ -31,7 +31,7 @@
 #ifndef DQPTRSNODE_H
 #define DQPTRSNODE_H
 
-#include "DqPtrs.h"
+#include "DqPtrsKDTree.h"
 #include "domain/mesh/node/KDTreeNodes.h"
 
 class Vector3d;
@@ -45,36 +45,15 @@ class TrfGeom;
 //! 
 //!  \brief Contenedor de pointers to nodes.
 //! 
-class DqPtrsNode: public DqPtrs<Node>
+class DqPtrsNode: public DqPtrsKDTree<Node,KDTreeNodes>
   {
-    KDTreeNodes kdtreeNodos; //!< space-partitioning data structure for organizing nodes.
-  protected:
-    void create_arbol(void);
   public:
-    typedef DqPtrs<Node>::const_iterator const_iterator;
-    typedef DqPtrs<Node>::iterator iterator;
-    typedef DqPtrs<Node>::reference reference;
-    typedef DqPtrs<Node>::const_reference const_reference;
-    typedef DqPtrs<Node>::size_type size_type;
-
     DqPtrsNode(EntCmd *owr= nullptr);
-    DqPtrsNode(const DqPtrsNode &otro);
-    explicit DqPtrsNode(const std::deque<Node *> &ts);
-    explicit DqPtrsNode(const std::set<const Node *> &ts);
-    DqPtrsNode &operator=(const DqPtrsNode &otro);
-    void extend(const DqPtrsNode &otro);
-    //void extend_cond(const DqPtrsNode &otro,const std::string &cond);
-    bool push_back(Node *);
-    bool push_front(Node *);
-    void clearAll(void);
-    inline iterator begin(void)
-      { return DqPtrs<Node>::begin(); }
-    inline iterator end(void)
-      { return DqPtrs<Node>::end(); }
-    inline const_iterator begin(void) const
-      { return DqPtrs<Node>::begin(); }
-    inline const_iterator end(void) const
-      { return DqPtrs<Node>::end(); }
+    DqPtrsNode(const DqPtrsNode &);
+    explicit DqPtrsNode(const std::deque<Node *> &);
+    explicit DqPtrsNode(const std::set<const Node *> &);
+    DqPtrsNode &operator=(const DqPtrsNode &);
+    DqPtrsNode &operator+=(const DqPtrsNode &);
     void mueve(const Vector3d &);
     void transforma(const TrfGeom &trf);
 
@@ -88,11 +67,12 @@ class DqPtrsNode: public DqPtrs<Node>
 
     Node *buscaNodo(const int &tag);
     const Node *buscaNodo(const int &tag) const;
-    Node *getNearestNode(const Pos3d &p);
-    const Node *getNearestNode(const Pos3d &p) const;
-
     void numera(void);
   };
+
+DqPtrsNode operator+(const DqPtrsNode &a,const DqPtrsNode &b);
+DqPtrsNode operator-(const DqPtrsNode &a,const DqPtrsNode &b);
+DqPtrsNode operator*(const DqPtrsNode &a,const DqPtrsNode &b);
 
 } //end of XC namespace
 #endif

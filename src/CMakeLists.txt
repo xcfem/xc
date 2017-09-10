@@ -335,7 +335,7 @@ SET(preprocessor_cad preprocessor/cad/MapCadMemberBase preprocessor/cad/SisRef p
 
 SET(preprocessor_loaders preprocessor/PreprocessorContainer preprocessor/loaders/Loader preprocessor/loaders/NodeLoader preprocessor/loaders/ElementLoader preprocessor/loaders/ProtoElementLoader preprocessor/loaders/MaterialLoader preprocessor/loaders/BeamIntegratorLoader preprocessor/loaders/TransfCooLoader preprocessor/loaders/LoadLoaderMember preprocessor/loaders/LoadLoader preprocessor/loaders/ConstraintLoader)
 
-SET(preprocessor_set_mgmt preprocessor/set_mgmt/DqPtrsNode preprocessor/set_mgmt/DqPtrsElem preprocessor/set_mgmt/DqPtrsConstraint preprocessor/set_mgmt/SetMeshComp preprocessor/set_mgmt/SetBase preprocessor/set_mgmt/SetEstruct preprocessor/set_mgmt/Set preprocessor/set_mgmt/SetFilaI preprocessor/set_mgmt/SetFilaJ preprocessor/set_mgmt/SetFilaK preprocessor/set_mgmt/MapSet)
+SET(preprocessor_set_mgmt  preprocessor/set_mgmt/DqPtrsKDTree preprocessor/set_mgmt/DqPtrsNode preprocessor/set_mgmt/DqPtrsElem preprocessor/set_mgmt/DqPtrsConstraint preprocessor/set_mgmt/SetMeshComp preprocessor/set_mgmt/SetBase preprocessor/set_mgmt/SetEstruct preprocessor/set_mgmt/Set preprocessor/set_mgmt/SetFilaI preprocessor/set_mgmt/SetFilaJ preprocessor/set_mgmt/SetFilaK preprocessor/set_mgmt/MapSet)
 
 SET(preprocessor preprocessor/EntMdlrBase preprocessor/MeshingParams ${preprocessor_cad} ${preprocessor_set_mgmt} ${preprocessor_loaders} preprocessor/Preprocessor)
 
