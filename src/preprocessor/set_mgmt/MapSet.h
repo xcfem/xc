@@ -82,6 +82,7 @@ class MapSet: public PreprocessorContainer, public MovableObject
     void reset(void);
     friend class Cad;
     friend class SetMeshComp;
+    friend class SetEntities;
     friend class Set;
     void abre_set(const std::string &nmb);
     void cierra_set(const std::string &nmb);

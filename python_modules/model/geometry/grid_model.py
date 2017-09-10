@@ -401,7 +401,7 @@ class GridModel(object):
         '''
         setSurf= self.prep.getSets.defSet(nameSet)
         for rg in lstIJKRange:
-            setSurf.extend(self.genSurfOneRegion(rg,'tmpSet'))
+            setSurf+=(self.genSurfOneRegion(rg,'tmpSet'))
             self.prep.getSets.removeSet('tmpSet')
         return setSurf
 
@@ -434,7 +434,7 @@ class GridModel(object):
         '''
         setLin= self.prep.getSets.defSet(nameSet)
         for rg in lstIJKRange:
-            setLin.extend(self.genLinOneRegion(rg,'tmpSet'))
+            setLin+=(self.genLinOneRegion(rg,'tmpSet'))
             self.prep.getSets.removeSet('tmpSet')
         return setLin
 

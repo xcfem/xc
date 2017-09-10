@@ -30,18 +30,11 @@
 #define SET_H
 
 #include "preprocessor/set_mgmt/SetMeshComp.h"
-#include "DqPtrsNmb.h"
-#include <set>
+#include "preprocessor/set_mgmt/SetEntities.h"
 
 class Pos3d;
 
 namespace XC {
-class Pnt;
-class Edge;
-class Face;
-class Body;
-class UniformGrid;
-class TrfGeom;
 class SFreedom_Constraint;
 class ID;
 class Element;
@@ -64,50 +57,22 @@ class Set: public SetMeshComp
   {
   public:
     void numera(void);
-    typedef DqPtrsNmb<Pnt> lst_ptr_points; //!< Point set.
-    typedef lst_ptr_points::iterator pnt_iterator; //!< point set iterator.
-    typedef lst_ptr_points::const_iterator pnt_const_iterator; //!< point set const iterator.
-
-    typedef DqPtrsNmb<Edge> lst_line_pointers; //!< Line set.
-    typedef lst_line_pointers::iterator lin_iterator; //!< Line set iterator.
-    typedef lst_line_pointers::const_iterator lin_const_iterator; //!< Line set const iterator.
-
-    typedef DqPtrsNmb<Face> lst_surface_ptrs; //!< surface set.
-    typedef lst_surface_ptrs::iterator sup_iterator; //!< surface set iterator.
-    typedef lst_surface_ptrs::const_iterator sup_const_iterator; //!< surface set const iterator.
-
-    typedef DqPtrsNmb<Body> lst_ptr_cuerpos; //!< body set.
-
-    typedef DqPtrsNmb<UniformGrid> lst_ptr_uniform_grids; //!< Unifrom grid set.
 
   protected:
     std::string description; //!< set description.
-    lst_ptr_points points; //!< point set.
-    lst_line_pointers lines; //!< line set.
-    lst_surface_ptrs surfaces; //!< surface set.
-    lst_ptr_cuerpos bodies; //!< body set.
-    lst_ptr_uniform_grids uniform_grids; //! Uniform mesh set.
+    SetEntities entities; //!< points, lines, surfaces, bodies, ...
 
     void clearAll(void);
-    void copia_listas(const Set &);
     void create_copy(const std::string &,const Vector3d &v);
 
     DbTagData &getDbTagData(void) const;
     int sendData(CommParameters &);
     int recvData(const CommParameters &);
 
-    //Mesh generation.
-    void point_meshing(meshing_dir dm);
-    void line_meshing(meshing_dir dm);
-    void surface_meshing(meshing_dir dm);
-    void body_meshing(meshing_dir dm);
-    void uniform_grid_meshing(meshing_dir dm);
 
     void mueve(const Vector3d &);
   public:
     Set(const std::string &nmb="",Preprocessor *preprocessor= nullptr);
-    Set(const Set &otro);
-    Set &operator=(const Set &otro);
 
     inline void setDescription(const std::string &d)
       { description= d; }
@@ -116,71 +81,70 @@ class Set: public SetMeshComp
 
     void clear(void);
 
-    //! @brief Returns a const reference to the point container.
-    virtual const lst_ptr_points &getPoints(void) const
-      { return points; }
+    //! @brief Returns a const reference to the entities container.
+    virtual const SetEntities::lst_ptr_points &getPoints(void) const
+      { return entities.getPoints(); }
     //! @brief Return a reference to the the point container.
-    virtual lst_ptr_points &getPoints(void)
-      { return points; }
+    virtual SetEntities::lst_ptr_points &getPoints(void)
+      { return entities.getPoints(); }
     //! @brief Assigns the points set.
-    void setPoints(const lst_ptr_points &pts)
-      { points= pts; }
+    void setPoints(const SetEntities::lst_ptr_points &pts)
+      { entities.setPoints(pts); }
     void sel_points_lista(const ID &);
     bool In(const Pnt *) const;
     Set pickPointsInside(const std::string &, const GeomObj3d &, const double &tol= 0.0);
 
     //! @brief Return a const reference to the line container.
-    virtual const lst_line_pointers &getLines(void) const
-      { return lines; }
+    virtual const SetEntities::lst_line_pointers &getLines(void) const
+      { return entities.getLines(); }
     //! @brief Return a reference to the line container.
-    virtual lst_line_pointers &getLines(void)
-      { return lines; }
+    virtual SetEntities::lst_line_pointers &getLines(void)
+      { return entities.getLines(); }
     //! @brief Assigns the edge set.
-    void setLines(const lst_line_pointers &lns)
-      { lines= lns; }
+    void setLines(const SetEntities::lst_line_pointers &lns)
+      { entities.setLines(lns); }
     void sel_lineas_lista(const ID &);
     bool In(const Edge *) const;
     Set pickLinesInside(const std::string &, const GeomObj3d &, const double &tol= 0.0);
 
     //! @brief Returns a const reference to the surface container.
-    virtual const lst_surface_ptrs &getSurfaces(void) const
-      { return surfaces; }
+    virtual const SetEntities::lst_surface_ptrs &getSurfaces(void) const
+      { return entities.getSurfaces(); }
     //! @brief Returns a reference to the surface container.
-    virtual lst_surface_ptrs &getSurfaces(void)
-      { return surfaces; }
+    virtual SetEntities::lst_surface_ptrs &getSurfaces(void)
+      { return entities.getSurfaces(); }
     //! @brief Assigns the surface set.
-    void setSurfaces(const lst_surface_ptrs &sfs)
-      { surfaces= sfs; }
+    void setSurfaces(const SetEntities::lst_surface_ptrs &sfs)
+      { entities.setSurfaces(sfs); }
     void sel_surfaces_lst(const ID &);
     bool In(const Face *) const;
     Set pickSurfacesInside(const std::string &, const GeomObj3d &, const double &tol= 0.0);
 
     //! @brief Return a const reference to the body container.
-    virtual const lst_ptr_cuerpos &getBodies(void) const
-      { return bodies; }
+    virtual const SetEntities::lst_ptr_cuerpos &getBodies(void) const
+      { return entities.getBodies(); }
     //! @brief Return a reference to the body container.
-    virtual lst_ptr_cuerpos &getBodies(void)
-      { return bodies; }
+    virtual SetEntities::lst_ptr_cuerpos &getBodies(void)
+      { return entities.getBodies(); }
     //! @brief Assigns the bodies set.
-    void setBodies(const lst_ptr_cuerpos &bds)
-      { bodies= bds; }
+    void setBodies(const SetEntities::lst_ptr_cuerpos &bds)
+      { entities.setBodies(bds); }
     bool In(const Body *) const;
     Set pickBodiesInside(const std::string &, const GeomObj3d &, const double &tol= 0.0);
 
     //! @brief Return a const reference to the UniformGrids container.
-    virtual const lst_ptr_uniform_grids &GetUniformGrids(void) const
-      { return uniform_grids; }
+    virtual const SetEntities::lst_ptr_uniform_grids &getUniformGrids(void) const
+      { return entities.getUniformGrids(); }
     //! @brief Return a reference to the UniformGrids container.
-    virtual lst_ptr_uniform_grids &GetUniformGrids(void)
-      { return uniform_grids; }
+    virtual SetEntities::lst_ptr_uniform_grids &getUniformGrids(void)
+      { return entities.getUniformGrids(); }
     bool In(const UniformGrid *) const;
 
     void genMesh(meshing_dir dm);
 
-    void extend_lists(const Set &);
 
-    void CompletaHaciaArriba(void);
-    void CompletaHaciaAbajo(void);
+    void fillUpwards(void);
+    void fillDownwards(void);
 
     void Transforma(const TrfGeom &trf);
     void Transforma(const size_t &indice_trf);
@@ -189,7 +153,12 @@ class Set: public SetMeshComp
     virtual int recvSelf(const CommParameters &);
 
     Set &operator+=(const Set &);
+    Set &operator-=(const Set &);
+    Set &operator*=(const Set &);
+    
     Set operator+(const Set &) const;
+    Set operator-(const Set &) const;
+    Set operator*(const Set &) const;
 
     ~Set(void);
   };

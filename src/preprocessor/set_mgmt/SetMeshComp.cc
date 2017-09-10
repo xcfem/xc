@@ -52,66 +52,79 @@ XC::SetMeshComp::SetMeshComp(const std::string &nmb,Preprocessor *md)
   : SetBase(nmb,md), nodes(this), elements(this), constraints(this) {}
 
 //! @brief Copy constructor.
-XC::SetMeshComp::SetMeshComp(const SetMeshComp &otro)
-  : SetBase(otro)
-  { copia_listas(otro); }
+XC::SetMeshComp::SetMeshComp(const SetMeshComp &other)
+  : SetBase(other)
+  { copy_lists(other); }
 
 //! @brief Assignment operator.
-XC::SetMeshComp &XC::SetMeshComp::operator=(const SetMeshComp &otro)
+XC::SetMeshComp &XC::SetMeshComp::operator=(const SetMeshComp &other)
   {
-    SetBase::operator=(otro);
-    copia_listas(otro);
+    SetBase::operator=(other);
+    copy_lists(other);
     return *this;
   }
 
 //! @brief += operator.
-XC::SetMeshComp &XC::SetMeshComp::operator+=(const SetMeshComp &otro)
+XC::SetMeshComp &XC::SetMeshComp::operator+=(const SetMeshComp &other)
   {
-    SetBase::operator+=(otro);
-    extend_lists(otro);
+    SetBase::operator+=(other);
+    extend_lists(other);
     return *this;
   }
 
 //! @brief -= operator.
-XC::SetMeshComp &XC::SetMeshComp::operator-=(const SetMeshComp &otro)
+XC::SetMeshComp &XC::SetMeshComp::operator-=(const SetMeshComp &other)
   {
-    SetBase::operator-=(otro);
-    nodes= nodes-otro.nodes;
-    elements= elements-otro.elements;
-    constraints= constraints-otro.constraints;
+    SetBase::operator-=(other);
+    substract_lists(other);
     return *this;
   }
 
 //! @brief *= operator (intersection).
-XC::SetMeshComp &XC::SetMeshComp::operator*=(const SetMeshComp &otro)
+XC::SetMeshComp &XC::SetMeshComp::operator*=(const SetMeshComp &other)
   {
-    SetBase::operator*=(otro);
-    nodes= nodes*otro.nodes;
-    elements= elements*otro.elements;
-    constraints= constraints*otro.constraints;
+    SetBase::operator*=(other);
+    intersect_lists(other);
     return *this;
   }
 
 //! @brief Copy (into this set) the lists from the set being passed as parameter.
-void XC::SetMeshComp::copia_listas(const SetMeshComp &otro)
+void XC::SetMeshComp::copy_lists(const SetMeshComp &other)
   {
-    nodes= otro.nodes;
+    nodes= other.nodes;
     nodes.set_owner(this);
-    elements= otro.elements;
+    elements= other.elements;
     elements.set_owner(this);
-    constraints= otro.constraints;
+    constraints= other.constraints;
     constraints.set_owner(this);
   }
 
 //! @brief Appends to this set the objects from the set
 //! being passed as parameter.
-void XC::SetMeshComp::extend_lists(const SetMeshComp &otro)
+void XC::SetMeshComp::extend_lists(const SetMeshComp &other)
   {
-    nodes.extend(otro.nodes);
-    elements.extend(otro.elements);
-    constraints.extend(otro.constraints);
+    nodes.extend(other.nodes);
+    elements.extend(other.elements);
+    constraints.extend(other.constraints);
   }
 
+//! @brief Remove the objects of the argument.
+void XC::SetMeshComp::substract_lists(const SetMeshComp &other)
+  {
+    nodes= nodes-other.nodes;
+    elements= elements-other.elements;
+    constraints= constraints-other.constraints;
+  }
+
+//! @brief Remove the objects that doesn't also belong to the argument.
+void XC::SetMeshComp::intersect_lists(const SetMeshComp &other)
+  {
+    nodes= nodes*other.nodes;
+    elements= elements*other.elements;
+    constraints= constraints*other.constraints;
+  }
+	
+	
 //! @brief Appends to this set the objects the nodes and elements from the set
 //! being passed as parameter.
 void XC::SetMeshComp::appendFromGeomEntity(const SetBase &s)
@@ -125,15 +138,6 @@ void XC::SetMeshComp::appendFromGeomEntity(const SetBase &s)
     for(std::set<int>::const_iterator i= nodeTags.begin();i!=nodeTags.end();i++)
       nodes.push_back(dom->getNode(*i));
   }
-
-// ///! @brief Appends to this set the objects from the set
-// //! being passed as parameter that satisfy the condition.
-// void XC::SetMeshComp::extend_lists_cond(const SetMeshComp &otro,const std::string &cond)
-//   {
-//     nodes.extend_cond(otro.nodes,cond);
-//     elements.extend_cond(otro.elements,cond);
-//     constraints.extend_cond(otro.constraints,cond);
-//   }
 
 //!  @brief Clears all the objectsof the lists.
 void XC::SetMeshComp::clear(void)
@@ -431,7 +435,7 @@ std::set<int> XC::SetMeshComp::getConstraintTags(void) const
 
 //! @brief Appends to the set being passed as parameter
 //! the nodes that touch any of the elements of the set.
-void XC::SetMeshComp::CompletaHaciaAbajo(void)
+void XC::SetMeshComp::fillDownwards(void)
   {
     const DqPtrsElem &elems= elements;
     for(elem_const_iterator i= elems.begin();i!=elems.end();i++)
@@ -446,7 +450,7 @@ void XC::SetMeshComp::CompletaHaciaAbajo(void)
 
 //! @brief Appends to this set the objects that make reference to one
 //! or more of the objects that already are in the set.
-void XC::SetMeshComp::CompletaHaciaArriba(void)
+void XC::SetMeshComp::fillUpwards(void)
   {
     std::cerr << nombre_clase() << "::" << __FUNCTION__
               << "; implementation pending." << std::endl;

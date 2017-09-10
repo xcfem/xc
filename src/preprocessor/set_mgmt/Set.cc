@@ -46,88 +46,67 @@
 
 
 //! @brief Constructor.
-XC::Set::Set(const std::string &nmb,Preprocessor *md)
-  : SetMeshComp(nmb,md), points(this), lines(this), surfaces(this),
-    bodies(this), uniform_grids(this) {}
-
-//! @brief Copy constructor.
-XC::Set::Set(const Set &otro)
-  : SetMeshComp(otro)
-  {
-    copia_listas(otro);
-  }
-
-//! @brief Assignment operator.
-XC::Set &XC::Set::operator=(const Set &otro)
-  {
-    SetMeshComp::operator=(otro);
-    copia_listas(otro);
-    return *this;
-  }
-
-//! @brief Copia las listas de objetos of the set s.
-//!
-//! Copia en ESTE objeto las listas de objetos of the set
-//! being passed as parameter.
-void XC::Set::copia_listas(const Set &otro)
-  {
-    SetMeshComp::copia_listas(otro);
-    points= otro.points;
-    points.set_owner(this);
-    lines= otro.lines;
-    lines.set_owner(this);
-    surfaces= otro.surfaces;
-    surfaces.set_owner(this);
-    bodies= otro.bodies;
-    bodies.set_owner(this);
-    uniform_grids= otro.uniform_grids;
-    uniform_grids.set_owner(this);
-  }
-
-//! @brief Extend this set with the objects of the set
-//! being passed as parameter.
-void XC::Set::extend_lists(const Set &otro)
-  {
-    SetMeshComp::extend_lists(otro);
-    points.extend(otro.points);
-    lines.extend(otro.lines);
-    surfaces.extend(otro.surfaces);
-    bodies.extend(otro.bodies);
-    uniform_grids.extend(otro.uniform_grids);
-  }
-
-// //! @brief Extend this set with the objects from the set
-// //! being passed as parameter that fulfill the condition.
-// void XC::Set::extend_lists_cond(const Set &otro,const std::string &cond)
-//   {
-//     SetMeshComp::extend_lists_cond(otro,cond);
-//     points.extend_cond(otro.points,cond);
-//     lines.extend_cond(otro.lines,cond);
-//     surfaces.extend_cond(otro.surfaces,cond);
-//     bodies.extend_cond(otro.bodies,cond);
-//     uniform_grids.extend_cond(otro.uniform_grids,cond);
-//   }
+XC::Set::Set(const std::string &nmb,Preprocessor *prep)
+  : SetMeshComp(nmb,prep), entities(prep) {}
 
 //! @brief Addition assignment operator.
 //!
 //! Concatenates the name and description of the argument and
 //! extend the lists with the objects from the argument.
-XC::Set &XC::Set::operator+=(const Set &otro)
+XC::Set &XC::Set::operator+=(const Set &other)
   {
-    setName(getName()+"+"+otro.getName()); //Concatenate names.
-    description+= "+" + otro.description; //Concatenate descriptions.
-    extend_lists(otro); //Extend lists.
+    SetMeshComp::operator+=(other);
+    description+= "+" + other.description; //Concatenate descriptions.
+    entities+= other.entities;
     return *this;
   }
 
-//! @brief Addition operator.
+//! @brief -= operator.
+XC::Set &XC::Set::operator-=(const Set &other)
+  {
+    SetMeshComp::operator-=(other);
+    description+= "-" + other.description; //Concatenate descriptions.
+    entities-= other.entities;
+    return *this;
+  }
+
+//! @brief *= operator (intersection).
+XC::Set &XC::Set::operator*=(const Set &other)
+  {
+    SetMeshComp::operator*=(other);
+    description+= "*" + other.description; //Concatenate descriptions.
+    entities*= other.entities;
+    return *this;
+  }
+
+//! @brief Addition (union) operator.
 //!
 //! Concatenates the name and description of the arguments and
 //! extend the lists of the first set with the objects from the argument.
-XC::Set XC::Set::operator+(const XC::Set &b) const
+XC::Set XC::Set::operator+(const Set &b) const
   {
     Set result(*this);
     result+= b;
+    return result;
+  }
+
+//! @brief Difference operator.
+//!
+//! Removes the objects that belong also to the argument.
+XC::Set XC::Set::operator-(const Set &b) const
+  {
+    Set result(*this);
+    result-= b;
+    return result;
+  }
+
+//! @brief Intersection operator.
+//!
+//! Return the set intersection.
+XC::Set XC::Set::operator*(const Set &b) const
+  {
+    Set result(*this);
+    result*= b;
     return result;
   }
 
@@ -135,47 +114,37 @@ XC::Set XC::Set::operator+(const XC::Set &b) const
 void XC::Set::clear(void)
   {
     SetMeshComp::clear();
-    points.clear();
-    lines.clear();
-    surfaces.clear();
-    bodies.clear();
-    uniform_grids.clear();
+    entities.clear();
   }
 
 //!  @brief Clears all the objects of the set.
 void XC::Set::clearAll(void)
   {
     SetMeshComp::clearAll();
-    points.clearAll();
-    lines.clearAll();
-    surfaces.clearAll();
-    bodies.clearAll();
-    uniform_grids.clearAll();
+    entities.clearAll();
   }
 
 //! @brief Set indices for the set objects (nodes,elements,points...) to its use in VTK.
 void XC::Set::numera(void)
   {
     SetMeshComp::numera();
-    SetMeshComp::numera_lista(points);
-    SetMeshComp::numera_lista(lines);
-    SetMeshComp::numera_lista(surfaces);
-//     numera_lista(bodies);
+    SetMeshComp::numera_lista(entities.getPoints());
+    SetMeshComp::numera_lista(entities.getLines());
+    SetMeshComp::numera_lista(entities.getSurfaces());
+    //numera_lista(entities.getBodies());
   }
 
 //! @brief Moves the objects of the set.
 void XC::Set::mueve(const Vector3d &desplaz)
   {
-    for(lst_ptr_points::iterator i= points.begin();i!=points.end();i++)
-      (*i)->Mueve(desplaz);
+    entities.mueve(desplaz);
     SetMeshComp::mueve(desplaz);
   }
 
 //! @brief Applies the transformation to the elements of the set.
 void XC::Set::Transforma(const TrfGeom &trf)
   {
-    for(lst_ptr_points::iterator i= points.begin();i!=points.end();i++)
-      (*i)->Transforma(trf);
+    entities.Transforma(trf);
     SetMeshComp::Transforma(trf);
   }
 
@@ -191,7 +160,7 @@ void XC::Set::Transforma(const size_t &indice_trf)
 //! set with the name is being passed as parameter. The coordinates of the new
 //! points will be obtained by adding to the original coordinates those
 //! of the vector being passed as parameter.
-void XC::Set::create_copy(const std::string &nombre,const Vector3d &v= Vector3d())
+void XC::Set::create_copy(const std::string &name,const Vector3d &v= Vector3d())
   {
     Preprocessor *preprocessor= getPreprocessor();
     if(!preprocessor)
@@ -200,125 +169,24 @@ void XC::Set::create_copy(const std::string &nombre,const Vector3d &v= Vector3d(
 	          << "; preprocessor not assigned." << std::endl;
 	return;
       }
-    Set *new_set= getPreprocessor()->get_sets().create_set(nombre);
+    Set *new_set= getPreprocessor()->get_sets().create_set(name);
     std::clog << nombre_clase() << "::" << __FUNCTION__
               << "; warning! copy of nodes and elements"
               << " not implemented." << std::endl;
-    //Copying points.
-    std::map<std::string,std::string> new_points_names;
-    for(lst_ptr_points::iterator i= points.begin();i!=points.end();i++)
-      {
-        const std::string nombre_viejo= (*i)->getName();
-        const std::string new_name= nombre+nombre_viejo;
-        Pnt *new_point= getPreprocessor()->getCad().getPuntos().Copia(*i,v);
-        new_point->BorraPtrNodElem();
-        new_set->points.push_back(new_point);
-        new_points_names[nombre_viejo]= new_name;
-      }
-    //Copy lines.
-    std::map<std::string,std::string> new_lines_names;
-    for(lst_line_pointers::iterator i= lines.begin();i!=lines.end();i++)
-      {
-        const std::string nombre_viejo= (*i)->getName();
-        const std::string new_name= nombre+nombre_viejo;
-        Edge *new_edge= getPreprocessor()->getCad().getLineas().createCopy(*i);
-        new_edge->BorraPtrNodElem();
-        new_set->lines.push_back(new_edge);
-        new_lines_names[nombre_viejo]= new_name;
-        const size_t nv= new_edge->NumVertices();
-        for(size_t i= 0;i<nv;i++)
-          {
-            const Pnt *vertice_viejo= new_edge->GetVertice(i);
-            const std::string nombre_viejo= vertice_viejo->getName();
-            const std::string new_name= new_lines_names[nombre_viejo];
-            Pnt *new_point= new_set->points.BuscaNmb(new_name);
-            new_edge->SetVertice(i,new_point);
-	  }
-      }
+    //Copying entities.
+    new_set->entities= entities.create_copy(name,v);
   }
 
-//! @brief Create nodes and, where appropriate, elements on set points.
-void XC::Set::point_meshing(meshing_dir dm)
-  {
-    if(verbosity>2)
-      std::clog << "Meshing points...";
-    for(lst_ptr_points::iterator i= points.begin();i!=points.end();i++)
-      (*i)->genMesh(dm);
-    if(verbosity>2)
-      std::clog << "done." << std::endl;
-  }
-
-//! @brief Create nodes and, where appropriate, elements on set lines.
-void XC::Set::line_meshing(meshing_dir dm)
-  {
-    if(verbosity>2)
-      std::clog << "Meshing lines...";
-    for(lst_line_pointers::iterator i= lines.begin();i!=lines.end();i++)
-      (*i)->genMesh(dm);
-    if(verbosity>2)
-      std::clog << "done." << std::endl;
-  }
-
-//! @brief Create nodes and, where appropriate, elements on surfaces.
-void XC::Set::surface_meshing(meshing_dir dm)
-  {
-    if(verbosity>2)
-      std::clog << "Meshing surfaces...";
-    for(lst_surface_ptrs::iterator i= surfaces.begin();i!=surfaces.end();i++)
-      (*i)->genMesh(dm);
-    if(verbosity>2)
-      std::clog << "done." << std::endl;
-  }
-
-//! @brief Create nodes and, where appropriate, elements on set bodies.
-void XC::Set::body_meshing(meshing_dir dm)
-  {
-    if(verbosity>2)
-      std::clog << "Meshing bodies...";
-    for(lst_ptr_cuerpos::iterator i= bodies.begin();i!=bodies.end();i++)
-      (*i)->genMesh(dm);
-    if(verbosity>2)
-      std::clog << "done." << std::endl;
-  }
-
-//! @brief Creates nodes and, eventually, elements on the points of the set.
-void XC::Set::uniform_grid_meshing(meshing_dir dm)
-  {
-    if(verbosity>2)
-      std::clog << "Meshing uniform grids...";
-    for(lst_ptr_uniform_grids::iterator i= uniform_grids.begin();i!=uniform_grids.end();i++)
-      (*i)->genMesh(dm);
-    if(verbosity>2)
-      std::clog << "done." << std::endl;
-  }
 
 //!  @brief Triggers mesh generation from set components.
 //!
 //! @param dm: Meshing direction.
 void XC::Set::genMesh(meshing_dir dm)
-  {
-    Preprocessor *mdl= getPreprocessor();
-    assert(mdl);
-    mdl->get_sets().abre_set(getName()); //To let nodes and elements enter this set.
-
-    if(verbosity>1)
-      std::clog << "Meshing set: " << getName() << " ...";
-
-    //body_meshing(dm);
-    surface_meshing(dm);
-    line_meshing(dm);
-    point_meshing(dm);
-    uniform_grid_meshing(dm);
-
-    mdl->get_sets().cierra_set(getName()); //Cerramos.
-
-    if(verbosity>1)
-      std::clog << "done." << std::endl;
-  }
+  { entities.genMesh(getName(), dm); }
 
 //! @brief Returns true if the point belongs to the set.
 bool XC::Set::In(const Pnt *p) const
-  { return points.in(p); }
+  { return entities.In(p); }
 
 //! @brief Return a new set that contains the points that lie inside the
 //! geometric object.
@@ -328,14 +196,14 @@ bool XC::Set::In(const Pnt *p) const
 //! @param tol: tolerance for "In" function.
 XC::Set XC::Set::pickPointsInside(const std::string &newSetName, const GeomObj3d &geomObj, const double &tol)
   {
-    Set retval(newSetName);
-    retval.points= points.pickEntitiesInside(geomObj,tol);
+    Set retval(newSetName,getPreprocessor());
+    retval.setPoints(entities.getPoints().pickEntitiesInside(geomObj,tol));
     return retval;
   }
 
 //! @brief Returns true if the edge belongs to the set.
 bool XC::Set::In(const Edge *e) const
-  { return lines.in(e); }
+  { return entities.In(e); }
 
 //! @brief Return a new set that contains the lines that lie inside the
 //! geometric object.
@@ -345,14 +213,14 @@ bool XC::Set::In(const Edge *e) const
 //! @param tol: tolerance for "In" function.
 XC::Set XC::Set::pickLinesInside(const std::string &newSetName, const GeomObj3d &geomObj, const double &tol)
   {
-    Set retval(newSetName);
-    retval.lines= lines.pickEntitiesInside(geomObj,tol);
+    Set retval(newSetName,getPreprocessor());
+    retval.setLines(entities.getLines().pickEntitiesInside(geomObj,tol));
     return retval;
   }
 
 //! @brief Returns true if the surface belongs to the set.
 bool XC::Set::In(const Face *f) const
-  { return surfaces.in(f); }
+  { return entities.In(f); }
 
 //! @brief Return a new set that contains the surfaces that lie inside the
 //! geometric object.
@@ -362,14 +230,14 @@ bool XC::Set::In(const Face *f) const
 //! @param tol: tolerance for "In" function.
 XC::Set XC::Set::pickSurfacesInside(const std::string &newSetName, const GeomObj3d &geomObj, const double &tol)
   {
-    Set retval(newSetName);
-    retval.surfaces= surfaces.pickEntitiesInside(geomObj,tol);
+    Set retval(newSetName,getPreprocessor());
+    retval.setSurfaces(entities.getSurfaces().pickEntitiesInside(geomObj,tol));
     return retval;
   }
 
 //! @brief Returns true if the body belongs to the set.
 bool XC::Set::In(const Body *b) const
-  { return bodies.in(b); }
+  { return entities.In(b); }
 
 //! @brief Return a new set that contains the bodies that lie inside the
 //! geometric object.
@@ -379,166 +247,47 @@ bool XC::Set::In(const Body *b) const
 //! @param tol: tolerance for "In" function.
 XC::Set XC::Set::pickBodiesInside(const std::string &newSetName, const GeomObj3d &geomObj, const double &tol)
   {
-    Set retval(newSetName);
-    retval.bodies= bodies.pickEntitiesInside(geomObj,tol);
+    Set retval(newSetName,getPreprocessor());
+    retval.setBodies(entities.getBodies().pickEntitiesInside(geomObj,tol));
     return retval;
   }
 
 //! @brief Returns true if the «uniform grid» belongs to the set.
 bool XC::Set::In(const UniformGrid *ug) const
-  { return uniform_grids.in(ug); }
+  { return entities.In(ug); }
 
 //! @brief Appends to the set being passed as parameter
 //! the elements that intervene on the definition
 //! of those entities that are already in the set.
-void XC::Set::CompletaHaciaAbajo(void)
+void XC::Set::fillDownwards(void)
   {
-//     for(lst_cuerpos::iterator i=bodies.begin();i!=bodies.end();i++)
-//       {
-//         lst_surfaces ss= (*i)->getSurfaces();
-//         surfaces.insert(surfaces.end(),ss.begin(),ss.end());
-//       }
-    for(sup_iterator i=surfaces.begin();i!=surfaces.end();i++)
-      {
-        //Lines.
-        lst_line_pointers ll((*i)->GetEdges());
-        lines.insert(lines.end(),ll.begin(),ll.end());
-
-        //Elements.
-        TritrizPtrElem &ttz_elements= (*i)->getTtzElements();
-        const size_t ncapas= ttz_elements.GetCapas();
-        const size_t nfilas= ttz_elements.getNumFilas();
-        const size_t ncols= ttz_elements.getNumCols();
-        for(size_t i=1;i<=ncapas;i++)
-          for(size_t j=1;j<=nfilas;j++)
-            for(size_t k=1;k<=ncols;k++)
-              addElement(ttz_elements(i,j,k));
-
-      }
-    for(lin_iterator i=lines.begin();i!=lines.end();i++)
-      {
-        //Points.
-        const size_t nv= (*i)->NumVertices();
-        for(register size_t j=1;j<=nv;j++)
-          points.push_back(const_cast<Pnt *>((*i)->GetVertice(j)));
-
-        //Elements.
-        TritrizPtrElem &ttz_elements= (*i)->getTtzElements();
-        const size_t ncapas= ttz_elements.GetCapas();
-        const size_t nfilas= ttz_elements.getNumFilas();
-        const size_t ncols= ttz_elements.getNumCols();
-        for(size_t i=1;i<=ncapas;i++)
-          for(size_t j=1;j<=nfilas;j++)
-            for(size_t k=1;k<=ncols;k++)
-              addElement(ttz_elements(i,j,k));
-      }
-    SetMeshComp::CompletaHaciaAbajo();
+    entities.fillDownwards(*this);
+    SetMeshComp::fillDownwards();
   }
 
 //! @brief  Appends to this set the objects that make reference
 //! to one or more of the objects that already make part of the set.
-void XC::Set::CompletaHaciaArriba(void)
+void XC::Set::fillUpwards(void)
   {
-    SetMeshComp::CompletaHaciaArriba();
-    std::cerr << "Set::CompletaHaciaArriba() work in progress." << std::endl;
-    for(pnt_iterator i=points.begin();i!=points.end();i++)
-      {
-        std::set<const Edge *> ll= GetLineasTocan(**i);
-        for(std::set<const Edge *>::const_iterator j= ll.begin();j!=ll.end();j++)
-          lines.push_back(const_cast<Edge *>(*j));
-      }
-    for(lin_iterator i=lines.begin();i!=lines.end();i++)
-      {
-        lst_surface_ptrs ss(GetSupsTocan(**i));
-        surfaces.insert(surfaces.end(),ss.begin(),ss.end());
-      }
-//     for(lst_surfaces::iterator i=surfaces.begin();i!=surfaces.end();i++)
-//       {
-//         lst_cuerpos bb= GetCuerposTocan(**i);
-//         bodies.insert(bodies.end(),bb.begin(),bb.end());
-//       }
+    SetMeshComp::fillUpwards();
+    entities.fillUpwards(*this);
   }
 
 //! @brief Select the points identified by the tags in the parameter.
 //!
 //! @param tags: identifiers of the points to select.
 void XC::Set::sel_points_lista(const ID &tags)
-  {
-    const size_t sz= tags.Size();
-    if(sz>0)
-      {
-        Preprocessor *preprocessor= getPreprocessor();
-        if(preprocessor)
-          {
-            Cad &cad= getPreprocessor()->getCad();
-            for(size_t i= 0;i<sz;i++)
-              {
-	        Pnt *ipt= cad.getPuntos().busca(tags(i)); 
-                if(ipt)
-                  points.push_back(ipt);
-                else
-		  std::cerr << "Point identified by tag: "
-			    << tags(i) << " not found." << std::endl;
-              }
-          }
-        else
-          std::cerr << nombre_clase() << __FUNCTION__
-	            << "; preprocessor needed." << std::endl;
-      }
-  }
+  { entities.sel_points_lista(tags); }
 
 //! @brief Select the lines identified by the tags in the parameter.
 //!
 //! @param tags: identifiers of the points to select.
 void XC::Set::sel_lineas_lista(const ID &tags)
-  {
-    const size_t sz= tags.Size();
-    if(sz>0)
-      {
-        Preprocessor *preprocessor= getPreprocessor();
-        if(preprocessor)
-          {
-            Cad &cad= getPreprocessor()->getCad();
-            for(size_t i= 0;i<sz;i++)
-              {
-	        Edge *iedge= cad.getLineas().busca(tags(i)); 
-                if(iedge)
-                  lines.push_back(iedge);
-                else
-		  std::cerr << "Line identified by tag: "
-			    << tags(i) << " not found." << std::endl;
-              }
-          }
-        else
-          std::cerr << nombre_clase() << __FUNCTION__
-	            << "; preprocessor needed." << std::endl;
-      }
-  }
+  { entities.sel_lineas_lista(tags); }
 
 //! @brief Selects the surfaces with the identifiers being passed as parameter.
 void XC::Set::sel_surfaces_lst(const ID &tags)
-  {
-    const size_t sz= tags.Size();
-    if(sz>0)
-      {
-        Preprocessor *preprocessor= getPreprocessor();
-        if(preprocessor)
-          {
-            Cad &cad= getPreprocessor()->getCad();
-            for(size_t i= 0;i<sz;i++)
-              {
-	        Face *iface= cad.getSurfaces().busca(tags(i)); 
-                if(iface)
-                  surfaces.push_back(iface);
-                else
-		  std::cerr << "Surface with tag: " << tags(i) << " not found." << std::endl;
-              }
-          }
-        else
-          std::cerr << nombre_clase() << __FUNCTION__
-	            << "; preprocessor needed." << std::endl;
-      }
-  }
+  { entities.sel_surfaces_lst(tags); }
 
 //! @brief Returns a vector para almacenar los dbTags
 //! de los miembros de la clase.
@@ -552,11 +301,7 @@ XC::DbTagData &XC::Set::getDbTagData(void) const
 int XC::Set::sendData(CommParameters &cp)
   {
     int res= SetMeshComp::sendData(cp);
-//     res+= points.sendTags(9,10,getDbTagData(),cp);
-//     res+= lines.sendTags(11,12,getDbTagData(),cp);
-//     res+= surfaces.sendTags(13,14,getDbTagData(),cp);
-//     res+= bodies.sendTags(15,16,getDbTagData(),cp);
-//     res+= uniform_grids.sendTags(17,18,getDbTagData(),cp);
+    //res+= entities.sendData(cp);
     return res;
   }
 
@@ -565,15 +310,7 @@ int XC::Set::recvData(const CommParameters &cp)
   {
     ID tmp;
     int res= SetMeshComp::recvData(cp);
-//     tmp= points.receiveTags(9,10,getDbTagData(),cp);
-//     sel_points_lista(tmp);
-//     tmp= lines.receiveTags(11,12,getDbTagData(),cp);
-//     sel_lineas_lista(tmp);
-//     tmp= surfaces.receiveTags(13,14,getDbTagData(),cp);
-//     sel_surfaces_lst(tmp);
-//     tmp= bodies.receiveTags(15,16,getDbTagData(),cp);
-//     sel_cuerpos_lista(tmp);
-//     tmp= uniform_grids.receiveTags(17,18,getDbTagData(),cp);
+    //res+= entities.recvData(cp);
     return res;
   }
 

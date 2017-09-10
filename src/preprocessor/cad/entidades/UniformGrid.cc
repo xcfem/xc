@@ -100,7 +100,7 @@ void XC::UniformGrid::add_to_sets(std::set<SetBase *> &sets)
     for(std::set<SetBase *>::iterator i= sets.begin();i!= sets.end();i++)
       {
         Set *s= dynamic_cast<Set *>(*i);
-        if(s) s->GetUniformGrids().push_back(this);
+        if(s) s->getUniformGrids().push_back(this);
       }
   }
 

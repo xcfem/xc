@@ -79,11 +79,13 @@ class SetMeshComp: public SetBase
     DqPtrsNode nodes; //!< node set.
     DqPtrsElem elements; //!< element set.
     lst_ptr_constraints constraints; //!< constraints set.
+    void extend_lists(const SetMeshComp &);
+    void substract_lists(const SetMeshComp &);
+    void intersect_lists(const SetMeshComp &);
+    void copy_lists(const SetMeshComp &);
+
   protected:
     void clearAll(void);
-    void copia_listas(const SetMeshComp &);
-    void extend_lists(const SetMeshComp &);
-    void extend_lists_cond(const SetMeshComp &,const std::string &);
 
     DbTagData &getDbTagData(void) const;
     int sendData(CommParameters &);
@@ -201,8 +203,8 @@ class SetMeshComp: public SetBase
     Constraint *buscaConstraint(const int &tag);
     const Constraint *buscaConstraint(const int &tag) const;
 
-    void CompletaHaciaArriba(void);
-    void CompletaHaciaAbajo(void);
+    void fillUpwards(void);
+    void fillDownwards(void);
 
     virtual void Transforma(const TrfGeom &trf);
     virtual void Transforma(const size_t &indice_trf);

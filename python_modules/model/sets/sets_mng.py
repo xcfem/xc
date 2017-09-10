@@ -149,8 +149,8 @@ def setAddOf(setA,setB):
     for sets.
     '''
     nSet=setA.getPreprocessor.getSets.defSet('nSet')
-    nSet.extend(setA)
-    nSet.extend(setB)
+    nSet+=(setA)
+    nSet+=(setB)
     return nSet
     
 
@@ -202,7 +202,7 @@ def append_sets(setTo,sets):
   :param points: list of sets to be appended [set1,set2, ...]
   '''
   for s in sets:
-    setTo.extend(s)
+    setTo+=(s)
 
 def append_nodes_from_line(setTo,line):
   '''Appends the nodes in the specified line to a set of entities

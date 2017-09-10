@@ -145,7 +145,7 @@ DqPtrs<T> &DqPtrs<T>::operator=(const DqPtrs &otro)
     return *this;
   }
 
-//! @brief += operator.
+//! @brief += (union) operator.
 template <class T>
 DqPtrs<T> &DqPtrs<T>::operator+=(const DqPtrs &otro)
   {
