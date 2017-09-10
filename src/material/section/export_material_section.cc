@@ -46,6 +46,7 @@ class_<material_vector_SectionFDMat,bases<vectorSectionForceDeformation,EntCmd>,
 //.def("getMeanGeneralizedStrain", &material_vector_SectionFDMat::getMeanGeneralizedStrain)
   .def("getMeanGeneralizedStressByName", &material_vector_SectionFDMat::getMeanGeneralizedStressByName)
   .def("getMeanGeneralizedStrainByName", &material_vector_SectionFDMat::getMeanGeneralizedStrainByName)
+  .def("getNames",&material_vector_SectionFDMat::getNamesPy,"Returns the names of the materials.")
   ;
 
 

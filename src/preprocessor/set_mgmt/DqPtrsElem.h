@@ -66,7 +66,12 @@ class DqPtrsElem: public DqPtrsKDTree<Element,KDTreeElements>
     const Element *findElement(const int &) const;
     std::deque<Polilinea3d> getContours(const double &factor= 0.0) const;
     DqPtrsElem pickElemsInside(const GeomObj3d &, const double &tol= 0.0);
-
+    std::set<std::string> getMaterialNames(void) const;
+    boost::python::list getMaterialNamesPy(void) const;
+    std::set<std::string> getTypes(void) const;
+    boost::python::list getTypesPy(void) const;
+    DqPtrsElem pickElemsOfType(const std::string &);
+    DqPtrsElem pickElemsOfMaterial(const std::string &);
     void numera(void);
   };
 

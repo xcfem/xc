@@ -70,6 +70,10 @@ class PhysicalProperties: public EntCmd, public MovableObject
       { return theMaterial; }
     inline const material_vector &getMaterialsVector(void) const
       { return theMaterial; }
+    inline std::set<std::string> getMaterialNames(void) const
+      { return theMaterial.getNames(); }
+    inline boost::python::list getMaterialNamesPy(void) const
+      { return theMaterial.getNamesPy(); }
 
     inline MAT *operator[](const size_t &i)
       { return theMaterial[i]; }

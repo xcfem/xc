@@ -257,6 +257,11 @@ class Element: public MeshComponent
     std::set<int> getEdgesNodes(const NodePtrSet &) const;
     ID getEdgesNodeByTag(const int &) const;
     virtual ID getLocalIndexNodesEdge(const size_t &i) const;
+    
+    virtual std::set<std::string> getMaterialNames(void) const;
+    boost::python::list getMaterialNamesPy(void) const;
+
+    
 
     std::set<SetBase *> get_sets(void) const;
     void add_to_sets(std::set<SetBase *> &);

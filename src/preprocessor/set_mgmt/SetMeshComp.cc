@@ -514,6 +514,30 @@ XC::SetMeshComp XC::SetMeshComp::pickElemsInside(const std::string &newSetName, 
     return retval;
   }
 
+//! @brief Return a new set that contains the elements that match the
+//! type.
+//!
+//! @param newSetName: name for the new set.
+//! @param typeName: string that must be contained in the class name.
+XC::SetMeshComp XC::SetMeshComp::pickElemsOfType(const std::string &newSetName, const std::string &typeName)
+  {
+    SetMeshComp retval(newSetName);
+    retval.elements= elements.pickElemsOfType(typeName);
+    return retval;
+  }
+
+//! @brief Return a new set that contains the elements who have the material
+//! being passed as parameter.
+//!
+//! @param newSetName: name for the new set.
+//! @param targetName: name of the target material.
+XC::SetMeshComp XC::SetMeshComp::pickElemsOfMaterial(const std::string &newSetName, const std::string &targetName)
+  {
+    SetMeshComp retval(newSetName);
+    retval.elements= elements.pickElemsOfMaterial(targetName);
+    return retval;
+  }
+
 //! @brief Select the constraints identified by the tags.
 //!
 //! @param tags: identifiers of the constraints.

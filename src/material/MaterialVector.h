@@ -57,6 +57,7 @@ class MaterialVector: public std::vector<MAT *>, public EntCmd, public MovableOb
   public:
     typedef typename std::vector<MAT *> mat_vector;
     typedef typename mat_vector::iterator iterator;
+    typedef typename mat_vector::const_iterator const_iterator;
     typedef typename mat_vector::reference reference;
     typedef typename mat_vector::const_reference const_reference;
 
@@ -90,6 +91,9 @@ class MaterialVector: public std::vector<MAT *>, public EntCmd, public MovableOb
     double getMeanGeneralizedStressByName(const std::string &) const;
     m_double getGeneralizedStrain(const int &defID) const;
     m_double getGeneralizedStress(const int &defID) const;
+
+    std::set<std::string> getNames(void) const;
+    boost::python::list getNamesPy(void) const;
 
     int sendSelf(CommParameters &);
     int recvSelf(const CommParameters &);
@@ -528,6 +532,27 @@ int MaterialVector<MAT>::recvData(const CommParameters &cp)
       }
     return res;
   }
+
+//! @brief Return the names of the materials.
+template <class MAT>
+std::set<std::string> MaterialVector<MAT>::getNames(void) const
+  {
+    std::set<std::string> retval;
+    for(const_iterator i= mat_vector::begin();i!=mat_vector::end();i++)
+      retval.insert((*i)->getName());
+    return retval;
+  }
+
+//! @brief Return the names of the materials in a python list.
+template <class MAT>
+boost::python::list MaterialVector<MAT>::getNamesPy(void) const
+  {
+    boost::python::list retval;
+    std::set<std::string> tmp= getNames();
+    for(std::set<std::string>::const_iterator i= tmp.begin();i!=tmp.end();i++)
+        retval.append(*i);
+    return retval;
+  }  
 
 //! @brief Sends object through the channel being passed as parameter.
 template <class MAT>

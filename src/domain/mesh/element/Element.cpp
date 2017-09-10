@@ -1014,6 +1014,25 @@ XC::TritrizPtrElem XC::Element::cose(const SetEstruct &f1,const SetEstruct &f2) 
     return TritrizPtrElem();
   }
 
+//! @brief Return the names of the material(s) of the element.
+std::set<std::string> XC::Element::getMaterialNames(void) const
+  {
+    std::set<std::string> retval;    
+    std::cerr << nombre_clase() << "::" << __FUNCTION__
+              << "; not implemented yet." << std::endl;
+    return retval;
+  }
+  
+//! @brief Return the names of the material(s) of the element in a Python list.
+boost::python::list XC::Element::getMaterialNamesPy(void) const
+  {
+    boost::python::list retval;
+    std::set<std::string> tmp= getMaterialNames();
+    for(std::set<std::string>::const_iterator i= tmp.begin();i!=tmp.end();i++)
+        retval.append(*i);
+    return retval;
+  }
+
 //! @brief Sends object members through the channel being passed as parameter.
 int XC::Element::sendData(CommParameters &cp)
   {

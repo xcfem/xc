@@ -31,6 +31,7 @@
 #include "xc_utils/src/geom/d1/Polilinea3d.h"
 #include "domain/mesh/node/Node.h"
 #include "domain/mesh/MeshEdges.h"
+#include <boost/algorithm/string/find.hpp>
 
 //! @brief Constructor.
 XC::DqPtrsElem::DqPtrsElem(EntCmd *owr)
@@ -218,11 +219,92 @@ XC::DqPtrsElem XC::DqPtrsElem::pickElemsInside(const GeomObj3d &geomObj, const d
     for(iterator i= begin();i!=end();i++)
       {
         Element *e= (*i);
-        assert(n);
+        assert(e);
 	if(e->In(geomObj,tol))
 	  retval.push_back(e);
       }
     return retval;    
+  }
+
+//! @brief Return the names of the materials.
+std::set<std::string> XC::DqPtrsElem::getMaterialNames(void) const
+  {
+    std::set<std::string> retval;
+    for(const_iterator i= begin();i!=end();i++)
+      {
+	std::set<std::string> names= (*i)->getMaterialNames();
+        retval.insert(names.begin(),names.end());
+      }
+    return retval;    
+  }
+  
+//! @brief Return a container with the elements whose material(s) name(s)
+//! contains the string.
+//!
+//! @param targetName: name of the target material.
+XC::DqPtrsElem XC::DqPtrsElem::pickElemsOfMaterial(const std::string &targetName)
+  {
+    DqPtrsElem retval;
+    for(iterator i= begin();i!=end();i++)
+      {
+        Element *e= (*i);
+        assert(e);
+        const std::set<std::string> materialNames= e->getMaterialNames();
+	if(materialNames.find(targetName)!=materialNames.end())
+          retval.push_back(e);
+      }
+    return retval;
+  }
+
+//! @brief Return the names of the materials in a python list.
+boost::python::list XC::DqPtrsElem::getMaterialNamesPy(void) const
+  {
+    boost::python::list retval;
+    std::set<std::string> tmp= getMaterialNames();
+    for(std::set<std::string>::const_iterator i= tmp.begin();i!=tmp.end();i++)
+        retval.append(*i);
+    return retval;
+  }
+
+//! @brief Return the types (class names) of the elements.
+std::set<std::string> XC::DqPtrsElem::getTypes(void) const
+  {
+    std::set<std::string> retval;
+    for(const_iterator i= begin();i!=end();i++)
+      {
+        const std::string className= (*i)->nombre_clase();
+	if(retval.find(className)==retval.end())
+	  retval.insert(className);
+      }
+    return retval;    
+  }
+
+//! @brief Return the types (class names) of the elements.
+boost::python::list XC::DqPtrsElem::getTypesPy(void) const
+  {
+    boost::python::list retval;
+    std::set<std::string> tmp= getTypes();
+    for(std::set<std::string>::const_iterator i= tmp.begin();i!=tmp.end();i++)
+        retval.append(*i);
+    return retval;
+  }
+
+//! @brief Return a container with the elements whose class name
+//! contains the string.
+//!
+//! @param typeName: string that must be contained in the class name.
+XC::DqPtrsElem XC::DqPtrsElem::pickElemsOfType(const std::string &typeName)
+  {
+    DqPtrsElem retval;
+    for(iterator i= begin();i!=end();i++)
+      {
+        Element *e= (*i);
+        assert(e);
+        const std::string className= e->nombre_clase();
+	if(boost::algorithm::ifind_first(className,typeName))
+	  retval.push_back(e);
+      }
+    return retval;
   }
 
 //! @brief Return the union of both containers.

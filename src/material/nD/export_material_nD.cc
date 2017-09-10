@@ -39,6 +39,7 @@ class_<material_vector_NDMat,bases<vectorNDMaterial,EntCmd>,boost::noncopyable>(
   .def("commitState", &material_vector_NDMat::commitState,"Commits materials state.")
   .def("revertToLastCommit", &material_vector_NDMat::revertToLastCommit,"Returns the material to its last commited state.")
   .def("revertToStart", &material_vector_NDMat::revertToStart,"Returns the material to its initial state.")
+  .def("getNames",&material_vector_NDMat::getNamesPy,"Returns the names of the materials.")
   ;
 
   }

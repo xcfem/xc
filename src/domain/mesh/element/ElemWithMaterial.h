@@ -61,6 +61,8 @@ class ElemWithMaterial : public ElementBase<NNODOS>
     inline const PhysProp &getPhysicalProperties(void) const
       { return physicalProperties; }
     void setPhysicalProperties(const PhysProp &);
+    inline virtual std::set<std::string> getMaterialNames(void) const
+      { return physicalProperties.getMaterialNames(); }
   };
 
 template <int NNODOS,class PhysProp>

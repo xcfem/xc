@@ -39,6 +39,7 @@ class_<material_vector_UMat,bases<vectorUniaxialMaterial,EntCmd>,boost::noncopya
         .def("commitState", &material_vector_UMat::commitState,"Commits materials state.")
         .def("revertToLastCommit", &material_vector_UMat::revertToLastCommit,"Returns the material to its last commited state.")
         .def("revertToStart", &material_vector_UMat::revertToStart,"Returns the material to its initial state.")
+        .def("getNames",&material_vector_UMat::getNamesPy,"Returns the names of the materials.")
       ;
 
   }
