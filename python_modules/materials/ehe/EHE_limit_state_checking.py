@@ -11,6 +11,7 @@ from materials.fiber_section import fiberUtils
 from materials import limit_state_checking_base as lscb
 from postprocess import control_vars as cv
 from miscUtils import LogMessages as lmsg
+import scipy.interpolate
 
 # Reinforced concrete section shear checking.
 
@@ -256,7 +257,7 @@ class ParamsCortante(object):
 def getF1cdEHE08(fck,fcd):
     '''getF1cdEHE08(fck,fcd)
 
-    :param fck: Valor característico de la resistencia a compresión simple del hormigón (N/m2).
+    :param fck: concrete characteristic compressive strength (Pa).
     :param fcd: Valor de cálculo de la resistencia a compresión simple del hormigón (N/m2).
 
     Returns the value of f1cd (design value of the concrete strut strength)
@@ -415,7 +416,7 @@ def getVu2EHE08NoAt(M,Mfis,fcv,fck,gammaC,I,S,alphaL,Ncd,Ac,b0,d,AsPas,AsAct):
     :param fcv: Resistencia efectiva del hormigón a cortante. En piezas sin shear reinforcement
     será fcv= min(fck,60MPa). En piezas con shear reinforcement fcv= min(fck,100MPa).
     En ambos casos, si el control del hormigón es indirecto fcv=15MPa.
-    :param fck: Valor característico de la resistencia del hormigón a compresión.
+    :param fck: concrete characteristic compressive strength.
     :param gammaC: Partial safety factor for concrete.
     :param Ncd: axil de cálculo resistido por el hormigón (positivo si es de tracción).
     :param Ac: concrete section total area.
@@ -1197,31 +1198,34 @@ class ConcreteCorbel(object):
         '''
         return Fv/0.7/-self.concrete.fcd()
 
+EC2table48_x= [12.0e6,16.0e6,20.0e6,25.0e6,30.0e6,35.0e6,40.0e6,45.0e6,50.0e6]
+EC2table48_y= [0.18,0.22,0.26,0.30,0.34,0.37,0.41,0.44,0.48]
+EC2table48= scipy.interpolate.interp1d(EC2table48_x,EC2table48_y)
 
 
-def rasanteAgotamiento(fck,gammac,hf,Asf,Sf,fyd):
-    #Cálculo del rasante medio por unidad de longitud que agota la sección
-    #del ala de la viga, según el artículo 4.3.2.5 del Eurocódigo 2
-    #el resultado está expresado en kN/m (ó N/mm)
-    #Datos:
-    #fck: resistencia característica a compresión del hormigón (N/mm2)
-    #gammac= Partial safety factor for concrete.
-    #hf: flange thickness (m)
-    #Asf: reinforcement por unidad de longitud que atraviesa la sección (mm2)
-    #Sf: spacement of the rebars that cross the section (mm)
-    #fyd: resistencia de cálculo de la reinforcement (N/mm2)
+def shearBetweenWebAndFlangesStrength(fck,gammac,hf,Asf,Sf,fyd):
+    ''' Return the shear strength (kN/m) in the flage web contact by unit length
+    according to clause 4.3.2.5 of Eurocode 2
+
+    Parameters:
+    :param fck: concrete characteristic compressive strength (Pa).
+    :param gammac: Partial safety factor for concrete.
+    :param hf: flange thickness (m)
+    :param Asf: reinforcement that cross the section by unit length (m2)
+    :param Sf: spacement of the rebars that cross the section (m)
+    :param fyd: design value of steel strength (Pa)
+    '''
     hf=hf*1000     #Flange thickness in mm
-    #Esfuerzo rasante de agotamiento por compresión oblicua en la sección
+    #Oblique compression strength.
     fcd=fck/gammac
     VRd2=0.2*fcd*hf
-    #Esfuerzo rasante de agotamiento por tracción en la sección
-    tabla48EC2={12:0.18,16:0.22,20:0.26,25:0.30,30:0.34,35:0.37,40:0.41,45:0.44,50:0.48}
-    taoRd=tabla48EC2[fck]
+    #Section tensile strength
+    taoRd= EC2table48(fck)
     VRd3=2.5*taoRd*hf+Asf/Sf*fyd
     return min(VRd2,VRd3)
 
-#Ejemplo:
-#  esfRasMax=rasanteAgotamiento(25,1.5,300,565,200,500)
+#Example:
+#  esfRasMax= shearBetweenWebAndFlangesStrength(25e6,1.5,0.3,565e-6,0.2,500e6)
 
 
 # Comprobación de cargas concentradas sobre macizos, según el artículo

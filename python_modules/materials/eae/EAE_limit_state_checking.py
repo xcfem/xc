@@ -39,7 +39,7 @@ def getFilletWeldThroatPlaneYieldCriteriaLHS(sigmaN, tauN, tauPll):
 # Table 59.8.2 in clause 59.8.2 of EAE (page 256)
 x= [235e6,275e6,355e6,420e6,460e6]
 y= [0.8,0.85,0.90,1.0,1.0]
-tablaBetaW= scipy.interpolate.interp1d(x,y)
+BetaWtable= scipy.interpolate.interp1d(x,y)
 
 def getFilletWeldYieldCriteriaRHSValue(fu, fy, gammaM2):
   '''
@@ -51,7 +51,7 @@ def getFilletWeldYieldCriteriaRHSValue(fu, fy, gammaM2):
         expressed in pascals.
     :param gammaM2: Partial safety factor of value 1.25. 
   '''
-  return fu/tablaBetaW(fy)/gammaM2
+  return fu/BetaWtable(fy)/gammaM2
 
 
 def getFilletWeldThroatPlaneCondition1CapacityFactor(sigmaN, tauN, tauPll, fu, fy, gammaM2):

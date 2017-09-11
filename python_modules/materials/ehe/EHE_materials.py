@@ -59,19 +59,19 @@ class EHEConcrete(concrete_base.Concrete):
 
     def getEcm(self):
         """Longitudinal secant modulus of deformation at 28 days expressed
-        in [Pa] [+] according to article 39.6 of EHE-08."""
+        in [Pa] [+] according to clause 39.6 of EHE-08."""
         fcmMPa=abs(self.getFcm())*1e-6
         return 8500*(fcmMPa**(1/3))*1e6
 
     def getEc0(self):
         '''Initial modulus of longitudinal deformation at 28 days expressed 
-        in [Pa] [+] according to article 39.6 of EHE-08.
+        in [Pa] [+] according to clause 39.6 of EHE-08.
         '''
         return self.getAlphaEcm()*self.getEcm()
 
     def getEcmT(self,t):
         '''Longitudinal concrete modulus of deformation at t days expressed 
-        in [Pa] [+] according to comments to article 39.6 of EHE-08.
+        in [Pa] [+] according to comments to clause 39.6 of EHE-08.
         
         :param t: Age of concrete, expressed in days.
         '''
@@ -88,19 +88,19 @@ class EHEConcrete(concrete_base.Concrete):
 
     def fctkInf(self):
         """Characteristic tensile strength (lower value) [Pa][+]
-        (according to article 39.1 EHE)
+        (according to clause 39.1 EHE)
         """
         return 0.21e6*(self.fckMPa())**(2.0/3.0)
 
     def fctkSup(self):
         """Characteristic tensile strength (higher value) [Pa][+]
-        (according to article 39.1 EHE)
+        (according to clause 39.1 EHE)
         """
         return 0.39e6*(self.fckMPa())**(2.0/3.0)
 
     def fctMedEHE08(self):
         """Mean tensile strength [Pa][+]
-        (according to article 39.1 EHE-08)
+        (according to clause 39.1 EHE-08)
         """
         if self.fckMPa()<50:
             return 0.30e6*self.fckMPa()**(2/3)
@@ -109,7 +109,7 @@ class EHEConcrete(concrete_base.Concrete):
 
     def fctkEHE08(self):
         """Concrete characteristic tensile strength  [Pa][+]
-        (according to article 39.1 EHE-08)
+        (according to clause 39.1 EHE-08)
         """
         return 0.7*self.fctMedEHE08()
 
@@ -206,24 +206,21 @@ HP50= EHEConcrete(nmbConcrete="HP50",fck=-50e6,gammaC=1.5)
 
 
 '''
-Factor a aplicar a la resistencia característica del hormigón a compresión en función de su edad en días.
-   para hormigones de endurecimiento normal (tabla 30.4.b EHE)
+Factor that multiplies the characteristic value of concrete compressive strength from its age in days for normal hardening concrete (table 30.4.b EHE)
 '''
 x= [-1.0,0.0,3.0,7.0,28.0,90,360,361]
 y= [0.0,0.0,0.4,0.65,1.0,1.2,1.35,1.35]
 factorRCompJDiasNormal= scipy.interpolate.interp1d(x,y)
 
 '''
-Factor a aplicar a la resistencia característica del hormigón a compresión en función de su edad en días.
-   para hormigones de endurecimiento rápido (tabla 30.4.b EHE)
+Factor that multiplies the characteristic value of concrete compressive strength from its age in days for fast hardening concrete (table 30.4.b EHE)
 '''
 x= [-1.0,0.0,3.0,7.0,28.0,90,360,361]
 y= [0.0,0.0,0.55,0.75,1.0,1.15,1.20,1.20]
 factorRCompJDiasRapido=  scipy.interpolate.interp1d(x,y)
 
 '''
-Factor a aplicar a la resistencia característica del hormigón a tracción en función de su edad en días.
-   para hormigones de endurecimiento normal(tabla 30.4.c EHE)
+Factor that multiplies the characteristic value of concrete tensile strength from its age in days for normal hardening concrete (table 30.4.c EHE)
 '''
 x= [-1.0,0.0,3.0,7.0,28.0,90,360,361]
 y= [0.0,0.0,0.4,0.7,1.0,1.05,1.10,1.10]
@@ -231,7 +228,7 @@ factorRTraccJDiasNormal= scipy.interpolate.interp1d(x,y)
 
 # ************* Reinforcing steel. ********************
 
-# Deformación máxima (0.08 para B400S y 0.05 para B500S)
+# Maximum strain (0.08 para B400S y 0.05 para B500S)
 #
 #   steelName: Name identifying the material.
 #   fyk:      Characteristic value of the yield strength.
