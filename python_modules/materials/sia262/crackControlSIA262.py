@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 '''
-Funciones para comprobación de una sección a fisuración según el
-artículo 49.2.4 de la EHE-08.
+Crack control checking of a reinforced concrete section according to
+SIA 262.
 '''
 import math
 from materials.fiber_section import createFiberSets

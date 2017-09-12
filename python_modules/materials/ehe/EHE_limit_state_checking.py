@@ -32,7 +32,7 @@ def getFcvEH91(fcd):
 def getVu1(fcd, Nd, Ac, b0, d, alpha, theta):
   '''
   Return value of Vu1 (shear strength por compresión oblicua del alma)
-   según el clause 44.2.3.1 de EHE.
+   according to clause 44.2.3.1 of EHE.
 
   :param fcd: Design compressive strength of concrete.
   :param Nd: axial force design value (positive if in tension).

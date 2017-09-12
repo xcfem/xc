@@ -507,9 +507,9 @@ class PolygonalSection(SectionProperties):
     lmsg.warning(msg)
     return 5.0/6.0
 
-##   Devuelve el valor de la inercia a torsión de un cajón
-##   monocelular según el libro Puentes (apuntes para su diseño
-##   y construcción) de Javier Manterola Armisén (apartado 5.2.3 page 251)
+##   Return the torsion constant of a box 
+##   according to the book "Puentes (apuntes para su diseño
+##   y construcción)" by Javier Manterola Armisén (section 5.2.3 page 251)
 ##
 ##                        bs
 ##             |----------------------|
@@ -524,24 +524,17 @@ class PolygonalSection(SectionProperties):
 ##                        bi
 ##                 |--------------|
 ##
-##   siendo:
-##     -bs: Ancho de la losa superior del cajón (esto es, descontando los voladizos)
-##     -bi: Ancho de la losa inferior del cajón.
-##     -ts: Upper deck thickness.
-##     -ti: Lower deck thickness.
-##     -td: Webs thickness.
-##     -h: Canto del cajón (entre planos medios).
 
 def getInerciaTorsionCajonMonocelular(bs,bi,h,ts,ti,td):
     '''
     Return torsional section modulus of the section.
 
-    :param bs: Ancho de la losa superior del cajón (esto es, descontando los voladizos)
-    :param bi: Ancho de la losa inferior del cajón.
+    :param bs: Upper deck width (without the overhangs)
+    :param bi: Lower deck width.
     :param ts: Upper deck thickness.
     :param ti: Lower deck thickness.
     :param td: Thickness of the webs.
-    :param h: Canto del cajón (entre planos medios).
+    :param h: Box depth (between mid-planes).
     '''
     longAlma=math.sqrt(h**2+((bs-bi)/2)**2)
     return (bs+bi)**2*h**2/(bs/ts+2*longAlma/td+bi/ti)
