@@ -13,6 +13,47 @@ from miscUtils import LogMessages as lmsg
 
 
 
+def getSubsetInside(geomObj,fromSet,toSetName,tol=0.0):
+    '''return a subset of fromSet composed by the entities inside the 
+    3D geometric figure geomObj.
+
+    :param geomObj: geom object that delimits the subset
+    :param fromSet: set from which to extract the subset
+    :param toSetName: string to name the created subset
+    :param tol: geometric tolerance for the search (defaults to 0.0)
+    '''
+    newSet=fromSet.getPreprocessor.getSets.defSet(toSetName)
+    newSet.surfaces=fromSet.surfaces.pickSurfacesInside(geomObj,tol)
+    newSet.lines=fromSet.lines.pickLinesInside(geomObj,tol)
+    newSet.points=fromSet.points.pickPointsInside(geomObj,tol)
+    newSet.elements=fromSet.elements.pickElemsInside(geomObj,tol)
+    newSet.nodes=fromSet.nodes.pickNodesInside(geomObj,tol)
+    return newSet
+
+def getSubsetElemOfType(elemType,fromSet,toSetName):
+    '''return a subset of fromSet composed by the elements of type
+    elemType
+
+    :param elemType: name of the type of target elements (string)
+    :param fromSet: set from which to extract the subset
+    :param toSetName: string to name the created subset
+    '''
+    newSet=fromSet.getPreprocessor.getSets.defSet(toSetName)
+    newSet.elements=fromSet.elements.pickElemsOfType(elemType)
+    return newSet
+
+def getSubsetElemOfMat(matType,fromSet,toSetName):
+    '''return a subset of fromSet composed by the elements of material 
+    matType
+
+    :param matType: name of the material of target elements (string)
+    :param fromSet: set from which to extract the subset
+    :param toSetName: string to name the created subset
+    '''
+    newSet=fromSet.getPreprocessor.getSets.defSet(toSetName)
+    newSet.elements=fromSet.elements.pickElemsOfMaterial(matType)
+    return newSet
+
 def setLin_to_lst(setLin):
     '''return a list with the lines included in the set `setLin` '''
     return [l for l in setLin.getLines]
