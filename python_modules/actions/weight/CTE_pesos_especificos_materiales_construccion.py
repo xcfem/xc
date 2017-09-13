@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 
-#Pesos específicos materiales de construcción en N/m3 según tabla C.1 del CTE
+'''Construction materials specific weights in N/m3 according to table tabla C.1
+of CTE.'''
+
 #Albañilería
 pesoEspCTEArenisca=27.0e3
 pesoEspCTEBasalto=31.0e3

@@ -144,7 +144,7 @@ class EHEConcrete(concrete_base.Concrete):
             return (2.6+14.4*((100-self.fckMPa())/100)**4)*(-1e-3)
 
 #    def tangDConcrete(self,eps):
-#        """Diagrama característico tensión deformación del hormigón según EHE."""
+#        """Diagrama característico tensión deformación del hormigón according to EHE."""
 #        return tangc(eps,self.fcd())
 
 #Parabola-rectangle diagrams for concrete under compression 

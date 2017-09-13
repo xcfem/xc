@@ -21,7 +21,7 @@ def axialResistanceSteelFailure(As, fuk):
   return As*fuk
 
 def axialInitialResistancePullOut(d, hEf, tauRk):
-    ''' Valor inicial de la resistencia de un perno a tracción por fallo combinado de arrancamiento y extracción de cono de hormigón según la expresión 5.2a del clause 5.2.2.3 a) of EOTA TR029.
+    ''' Valor inicial de la resistencia de un perno a tracción por fallo combinado de arrancamiento y extracción de cono de hormigón according to expression 5.2a in clause 5.2.2.3 a) of EOTA TR029.
 
     :param d: Anchor diameter (m).
     :param hEf: Profundidad efectiva del anclaje (m).
@@ -31,7 +31,7 @@ def axialInitialResistancePullOut(d, hEf, tauRk):
 
 def axialInitialResistanceConeFailure(k1, fck_cube, hEf):
   ''' Valor inicial de la resistencia de un perno a tracción por
-   extracción de cono de hormigón según la expresión 5.3a del clause 5.2.2.4 a) of EOTA TR029.
+   extracción de cono de hormigón according to expression 5.3a in clause 5.2.2.4 a) of EOTA TR029.
    :param k1: 7.2 para hormigón fisurado y 10.1 para hormigón no fisurado.
    :param fck_cube: Concrete characteristic strength medida en probeta cúbica (Pa).
    :param hEf: Profundidad efectiva del anclaje (m).
@@ -84,7 +84,7 @@ def getFactor2pN(A0pN, ApN):
 
 def getFactor1N(C, CcrN):
     '''
-    Factor que introduce en el cálculo la influencia en la distribución de tensiones de la distancia al borde de la pieza soporte, según la expresión 5.2e del clause 5.2.2.3 c).
+    Factor que introduce en el cálculo la influencia en la distribución de tensiones de la distancia al borde de la pieza soporte, according to expression 5.2e of clause 5.2.2.3 c).
 
      :param C: Distancia al borde del perno.
      :param CcrN: Semi-lado del área de influencia (distancia crítica al borde).
@@ -193,7 +193,7 @@ def shearResistanceGroupWithoutLeverArm(As, fuk, nr):
 def shearResistanceConcretePryOut(NRkp, NRkc, hEf):
     '''
     Resistencia de un perno a cortante por desprendimiento de cuña de hormigón
-     según las expresiones 5.7 y 5.7a del clause 5.2.3.3 of EOTA TR029.
+     according to expressions 5.7 y 5.7a of clause 5.2.3.3 of EOTA TR029.
 
      :param NRkp: Characteristic resistance of combined pull-out and
                   concrete cone failure (5.2.2.3 of EOTA TR029).
@@ -214,7 +214,7 @@ def shearResistanceConcretePryOut(NRkp, NRkc, hEf):
 
 def psiReVFactor(descr):
   '''
-  Coeficiente que introduce la influencia del tipo de refuerzo empleado en cracked concrete  en la expresión 5.8 of EOTA TR029, calculado according to apartado g) del clause 5.2.3.4 of EOTA TR029.
+  Coeficiente que introduce la influencia del tipo de refuerzo empleado en cracked concrete  en la expresión 5.8 of EOTA TR029, calculado according to apartado g) of clause 5.2.3.4 of EOTA TR029.
 
   :param descr: Descriptor que puede tomar los valores:
     1: Anclaje en cracked concrete o no fisurado sin reinforcement de refuerzo en el borde.
@@ -225,7 +225,7 @@ def psiReVFactor(descr):
 
 def psiEcVFactor(ev, c1):
   '''
-  Coeficiente que introduce la influencia de la variación de los cortantes en los distintos pernos de un grupo, calculado según la expresión 5.8h del apartado f) del clause 5.2.3.4 of EOTA TR029.
+  Coeficiente que introduce la influencia de la variación de los cortantes en los distintos pernos de un grupo, calculado according to expression 5.8h del apartado f) of clause 5.2.3.4 of EOTA TR029.
 
    :param ev: Excentricidad de la resultante de esfuerzos cortantes respecto al centro de gravedad del grupo.
    :param c1: Distancia desde el centro de gravedad del grupo al borde situado frente al cortante.
@@ -234,7 +234,7 @@ def psiEcVFactor(ev, c1):
 
 def psiAlphaVFactor(alphaV):
   '''
-  Coeficiente que introduce la influencia del ángulo entre la carga aplicada y la perpendicular al borde libre de la pieza de hormigón (menor de 90 grados) see figure 4.7c y expresión 5.8g del apartado f) del clause 5.2.3.4 of EOTA TR029.
+  Coeficiente que introduce la influencia del ángulo entre la carga aplicada y la perpendicular al borde libre de la pieza de hormigón (menor de 90 grados) see figure 4.7c y expresión 5.8g del apartado f) of clause 5.2.3.4 of EOTA TR029.
 
   :param alphaV: Ángulo entre la carga aplicada y la perpendicular al borde libre de la pieza de hormigón.
   '''
@@ -254,7 +254,7 @@ def psiHVFactor(h, c1):
 
 def psiSVFactor(c1, c2):
   '''
-  Coeficiente que sirve para introducir en el cálculo la perturbación en la distribución de tensiones en el hormigón que produce la presencia de un segundo borde libre próximo al anclaje. Ver expresión 5.8e del clause 5.2.3.4 of EOTA TR029.
+  Coeficiente que sirve para introducir en el cálculo la perturbación en la distribución de tensiones en el hormigón que produce la presencia de un segundo borde libre próximo al anclaje. Ver expresión 5.8e of clause 5.2.3.4 of EOTA TR029.
 
   :param c1: Distancia desde el centro de gravedad del grupo al borde situado frente al cortante.
   :param c2: Distancia desde el centro de gravedad del grupo al otro borde libre.
@@ -303,7 +303,7 @@ def k1Expr58A(descr):
 
 def VRkC0Expr58(k1, d, hEf, fckCube, c1):
   '''
-  Valor inicial de la resistencia característica of the anchor a cortante por fallo del borde según la expresión 5.8a del apartado a del clause 5.2.3.4 of EOTA TR029.
+  Valor inicial de la resistencia característica of the anchor a cortante por fallo del borde according to expression 5.8a of clause 5.2.3.4 (a) of EOTA TR029.
 
   :param c1: Distancia desde el centro de gravedad del grupo al borde situado frente al cortante.
   :param d: Diámetro del perno.
