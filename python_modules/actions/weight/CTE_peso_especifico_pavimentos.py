@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-#Peso de pavimentos en N/m2 según tabla C.3 del CTE
+#Pavement weights in N/m2 according to table C.3 of CTE
 pesoEspCTEPavimBaldosaHidraulica3cm=0.5e3
 pesoEspCTEPavimBaldosaHidraulica5cm=0.8e3
 pesoEspCTEPavimBaldosaHidraulica7cm=1.1e3

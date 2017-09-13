@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-#Peso de pavimentos en N/m2 según tabla C.3 del CTE
+'''Pavement weights in N/m2 according to table tabla C.3 of CTE.'''
 pesoEspCTETableroRasilla1Hoja=0.4e3
 pesoEspCTETejasCurvasLigeras=0.4e3
 pesoEspCTETejasCurvasCorrientes=0.5e3

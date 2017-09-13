@@ -8,7 +8,7 @@ import math
 def ParamKIAPF(gae):
     '''ParamKIAPF(gae)
     Parámetro k en función del grado de aspereza del entorno
-    según IAPF (cuadro 2.4).
+    according to IAPF standard (cuadro 2.4).
     '''
     if gae==0:
           return 0.16
@@ -27,7 +27,7 @@ def ParamKIAPF(gae):
 def ZminIAPF(gae):
     '''ZminIAPF(gae)
     Altura mínima z_min en función del grado de aspereza del entorno
-    según IAPF (cuadro 2.4).}
+    according to IAPF (cuadro 2.4).}
     '''
     if gae==0:
           return 1
@@ -46,7 +46,7 @@ def ZminIAPF(gae):
 def Z0IAPF(gae):
     '''Z0IAPF(gae)
     Longitud de la rugosidad z_0 en función del grado de aspereza del entorno
-    según IAPF (cuadro 2.4).
+    according to IAPF (cuadro 2.4).
     '''
     if gae==0:
           return 0.003
@@ -65,7 +65,7 @@ def Z0IAPF(gae):
 def alphaIAPF(gae):
     '''alphaIAPF(gae)
     Valor del alpha en función del grado de aspereza del entorno
-    según IAPF (cuadro 2.4).}
+    according to IAPF (cuadro 2.4).}
     '''
     if gae==0:
           return 0.38
@@ -83,7 +83,7 @@ def alphaIAPF(gae):
 
 def CzIAPF(gae,z):
     '''
-    Factor de altura según apartado 2.3.7.2 IAPF.
+    Heigth factor according to clause 2.3.7.2 of IAPF.
     '''
     kzCzIAPF=ParamKIAPF(gae)
     z0CzIAPF=Z0IAPF(gae)
@@ -97,7 +97,7 @@ def CzIAPF(gae,z):
 
 def CgIAPF(kz,Cz,Ct):
     '''
-    Factor de ráfaga según apartado 2.3.7.2 IAPF.
+    Factor de ráfaga according to clause 2.3.7.2 IAPF.
     '''
     return math.sqrt(1+(7*kz/Cz/Ct))
   
@@ -105,7 +105,7 @@ def CgIAPF(kz,Cz,Ct):
 def CdTableroAlmaLlenaIAPF(B,h,angAlma):
     '''CdTableroAlmaLlenaIAPF(B,h,angAlma)
     Coeficiente de arrastre para empuje horizontal sobre tableros
-    de alma llena según apartado 2.3.7.5.1 IAPF.
+    de alma llena according to clause 2.3.7.5.1 IAPF.
     '''
     coefRedCdIAPF=max(0.7,1-(5/1000*math.degrees(angAlma)))
     tmpCdIAPF=2.5-0.3*B/h
@@ -117,7 +117,7 @@ def CdTableroAlmaLlenaIAPF(B,h,angAlma):
 def FHkPorMetroIAPF(Cd,h,Vc):
     '''FHkPorMetroIAPF(Cd,h,Vc)
     Empuje horizontal por unidad de longitud sobre el tablero
-    de alma llena según apartado 2.3.7.3 IAPF.
+    de alma llena according to clause 2.3.7.3 IAPF.
     '''
     rhoAire=1.25
     return Cd*h*0.5*rhoAire*Vc**2
@@ -125,7 +125,7 @@ def FHkPorMetroIAPF(Cd,h,Vc):
 def FVkPorMetroIAPF(b,Vc):
   '''FVkPorMetroIAPF(b,Vc)
   Empuje vertical por unidad de longitud sobre el tablero
-  de alma llena según apartado 2.3.7.5.2 IAPF.
+  de alma llena according to clause 2.3.7.5.2 IAPF.
   '''
   rhoAire= 1.25
   return 0.5*b*0.5*rhoAire*Vc**2

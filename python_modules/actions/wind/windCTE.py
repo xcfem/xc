@@ -8,7 +8,7 @@ import math
 def ParamK(gae):
     '''
     Parámetro k en función del grado de aspereza del entorno
-    según CTE (tabla D.2).
+    according to CTE (table D.2).
     '''
     if gae==1:
           return 0.15
@@ -27,7 +27,7 @@ def ParamK(gae):
 def ParamL(gae):
     '''
     Parámetro L en función del grado de aspereza del entorno
-    según CTE (tabla D.2).}
+    according to CTE (table D.2).}
     '''
     if gae==1:
           return 0.003
@@ -46,7 +46,7 @@ def ParamL(gae):
 def ParamZ(gae):
     '''
     Parámetro Z en función del grado de aspereza del entorno
-    según CTE (tabla D.2).
+    according to CTE (table D.2).
     '''
     if gae==1:
           return 1
@@ -66,7 +66,7 @@ def ParamZ(gae):
 def ParamF(gae,z):
     '''
     Parámetro F en función del grado de aspereza del entorno
-    y de la cota del punto según CTE (expresión D.3).
+    y de la cota del punto according to CTE (expresión D.3).
     '''
     k= ParamK(gae)
     L= ParamL(gae)
@@ -81,7 +81,7 @@ def ParamF(gae,z):
 def CoefExp(gae,z):
     '''
     Coeficiente de exposición en función del grado de aspereza del entorno
-    y de la cota del punto sobre el terreno según CTE (expresión D.2).
+    y de la cota del punto sobre el terreno according to CTE (expresión D.2).
     '''
     if z>200:
         print "Expresión no válida para cotas sobre el terreno superiores a 200 m."
@@ -92,13 +92,13 @@ def CoefExp(gae,z):
 def interpolaCoefsPresion(A,Cpe1,Cpe10):
     '''
     Función para interpolar coeficientes de presión 
-    según la expresión D.4 del CTE (SE-AE-27).
+    according to expression D.4 of CTE (SE-AE-27).
     '''
     return Cpe1+(Cpe10-Cpe1)*math.log10(A)
   
 '''
 Coeficientes de presión exterior para una cubierta a dos aguas
-según la tabla D.6 del CTE.
+according to table D.6 del CTE.
 '''
 
 #  FFFFFFF
@@ -112,7 +112,7 @@ según la tabla D.6 del CTE.
 '''
 Coeficiente de presión exterior (positiva hacia abajo) en zona F de la cubierta 
 para viento sensiblemente transversal (-45<theta<45) y
-área mayor o igual a 10 metros cuadrados según la tabla D.6.
+área mayor o igual a 10 metros cuadrados according to table D.6.
 '''
 x= []
 y= []
@@ -133,7 +133,7 @@ cpDosAguasZonaFVTrsvAGrande= scipy.interpolate.interp1d(x,y)
 '''
 Coeficiente de presión exterior (positiva hacia abajo) en zona F de la cubierta 
 para viento sensiblemente transversal (-45<theta<45) y
-área menor o igual a 1 metro cuadrado según la tabla D.6.
+área menor o igual a 1 metro cuadrado according to table D.6.
 '''
 
 x= []
@@ -158,7 +158,7 @@ def ifte(cond,v1,v2):
 
 '''
 Coeficiente de presión exterior (positiva hacia abajo) en zona F de la cubierta 
-para viento sensiblemente transversal (-45<theta<45) según la tabla D.6.
+para viento sensiblemente transversal (-45<theta<45) according to table D.6.
 '''
 def cpDosAguasZonaFVTrsv(A, alpha):
     cpPeq= cpDosAguasZonaFVTrsvAPeq(alpha)
@@ -176,7 +176,7 @@ def cpDosAguasZonaFVTrsv(A, alpha):
 '''
 Coeficiente de presión exterior (positiva hacia abajo) en zona G de la cubierta 
 para viento sensiblemente transversal (-45<theta<45) y
-área mayor o igual a 10 metros cuadrados según la tabla D.6.
+área mayor o igual a 10 metros cuadrados according to table D.6.
 '''
 
 x= []
@@ -196,7 +196,7 @@ cpDosAguasZonaGVTrsvAGrande= scipy.interpolate.interp1d(x,y)
 '''
 Coeficiente de presión exterior (positiva hacia abajo) en zona G de la cubierta 
 para viento sensiblemente transversal (-45<theta<45) y
-área menor o igual a 1 metro cuadrado según la tabla D.6.
+área menor o igual a 1 metro cuadrado according to table D.6.
 '''
 
 x= []
@@ -215,7 +215,7 @@ cpDosAguasZonaGVTrsvAPeq= scipy.interpolate.interp1d(x,y)
 
 '''
 Coeficiente de presión exterior (positiva hacia abajo) en zona G de la cubierta 
-para viento sensiblemente transversal (-45<theta<45) según la tabla D.6.
+para viento sensiblemente transversal (-45<theta<45) according to table D.6.
 '''
 def cpDosAguasZonaGVTrsv(A, alpha):
     cpPeq= cpDosAguasZonaGVTrsvAPeq(alpha)
@@ -233,7 +233,7 @@ def cpDosAguasZonaGVTrsv(A, alpha):
 '''
 Coeficiente de presión exterior (positiva hacia abajo) en zona H de la cubierta 
 para viento sensiblemente transversal (-45<theta<45) y
-área mayor o igual a 10 metros cuadrados según la tabla D.6.
+área mayor o igual a 10 metros cuadrados according to table D.6.
 '''
 
 x= []
@@ -253,7 +253,7 @@ cpDosAguasZonaHVTrsvAGrande= scipy.interpolate.interp1d(x,y)
 '''
 Coeficiente de presión exterior (positiva hacia abajo) en zona H de la cubierta 
 para viento sensiblemente transversal (-45<theta<45) y
-área menor o igual a 1 metro cuadrado según la tabla D.6.
+área menor o igual a 1 metro cuadrado according to table D.6.
 '''
 
 x= []
@@ -272,7 +272,7 @@ cpDosAguasZonaHVTrsvAPeq= scipy.interpolate.interp1d(x,y)
 
 '''
 Coeficiente de presión exterior (positiva hacia abajo) en zona H de la cubierta 
-para viento sensiblemente transversal (-45<theta<45) según la tabla D.6.
+para viento sensiblemente transversal (-45<theta<45) according to table D.6.
 '''
 def cpDosAguasZonaHVTrsv(A, alpha):
     cpPeq= cpDosAguasZonaHVTrsvAPeq(alpha)
@@ -290,7 +290,7 @@ def cpDosAguasZonaHVTrsv(A, alpha):
 '''
 Coeficiente de presión exterior (positiva hacia abajo) en zona I de la cubierta 
 para viento sensiblemente transversal (-45<theta<45) y
-área mayor o igual a 10 metros cuadrados según la tabla D.6.
+área mayor o igual a 10 metros cuadrados according to table D.6.
 '''
 
 x= []
@@ -310,7 +310,7 @@ cpDosAguasZonaIVTrsvAGrande= scipy.interpolate.interp1d(x,y)
 '''
 Coeficiente de presión exterior (positiva hacia abajo) en zona I de la cubierta 
 para viento sensiblemente transversal (-45<theta<45) y
-área menor o igual a 1 metro cuadrado según la tabla D.6.
+área menor o igual a 1 metro cuadrado according to table D.6.
 '''
 
 x= []
@@ -329,7 +329,7 @@ cpDosAguasZonaIVTrsvAPeq= scipy.interpolate.interp1d(x,y)
 
 '''
 Coeficiente de presión exterior (positiva hacia abajo) en zona I de la cubierta 
-para viento sensiblemente transversal (-45<theta<45) según la tabla D.6.
+para viento sensiblemente transversal (-45<theta<45) according to table D.6.
 '''
 def cpDosAguasZonaIVTrsv(A, alpha):
     cpPeq= cpDosAguasZonaIVTrsvAPeq(alpha)
@@ -348,7 +348,7 @@ def cpDosAguasZonaIVTrsv(A, alpha):
 '''
 Coeficiente de presión exterior (positiva hacia abajo) en zona J de la cubierta 
 para viento sensiblemente transversal (-45<theta<45) y
-área mayor o igual a 10 metros cuadrados según la tabla D.6.
+área mayor o igual a 10 metros cuadrados according to table D.6.
 '''
 
 x= []
@@ -368,7 +368,7 @@ cpDosAguasZonaJVTrsvAGrande= scipy.interpolate.interp1d(x,y)
 '''
 Coeficiente de presión exterior (positiva hacia abajo) en zona J de la cubierta 
 para viento sensiblemente transversal (-45<theta<45) y
-área menor o igual a 1 metro cuadrado según la tabla D.6.
+área menor o igual a 1 metro cuadrado according to table D.6.
 '''
 
 x= []
@@ -387,7 +387,7 @@ cpDosAguasZonaJVTrsvAPeq= scipy.interpolate.interp1d(x,y)
 
 '''
 Coeficiente de presión exterior (positiva hacia abajo) en zona J de la cubierta 
-para viento sensiblemente transversal (-45<theta<45) según la tabla D.6.
+para viento sensiblemente transversal (-45<theta<45) according to table D.6.
 '''
 def cpDosAguasZonaJVTrsv(A, alpha):
     cpPeq= cpDosAguasZonaJVTrsvAPeq(alpha)
@@ -406,7 +406,7 @@ def cpDosAguasZonaJVTrsv(A, alpha):
 '''
 Coeficiente de presión exterior (positiva hacia abajo) en zona F de la cubierta 
 para viento sensiblemente longitudinal (45<theta<135) y
-área mayor o igual a 10 metros cuadrados según la tabla D.6.
+área mayor o igual a 10 metros cuadrados according to table D.6.
 '''
 
 x= []
@@ -427,7 +427,7 @@ cpDosAguasZonaFVLongAGrande= scipy.interpolate.interp1d(x,y)
 '''
 Coeficiente de presión exterior (positiva hacia abajo) en zona F de la cubierta 
 para viento sensiblemente longitudinal (45<theta<135) y
-área menor o igual a 1 metro cuadrado según la tabla D.6.
+área menor o igual a 1 metro cuadrado according to table D.6.
 '''
 
 x= []
@@ -446,7 +446,7 @@ cpDosAguasZonaFVLongAPeq= scipy.interpolate.interp1d(x,y)
 
 '''
 Coeficiente de presión exterior (positiva hacia abajo) en zona F de la cubierta 
-para viento sensiblemente longitudinal (45<theta<135) según la tabla D.6.
+para viento sensiblemente longitudinal (45<theta<135) according to table D.6.
 '''
 def cpDosAguasZonaFVLong(A, alpha):
     cpPeq= cpDosAguasZonaFVLongAPeq(alpha)
@@ -464,7 +464,7 @@ def cpDosAguasZonaFVLong(A, alpha):
 '''
 Coeficiente de presión exterior (positiva hacia abajo) en zona G de la cubierta 
 para viento sensiblemente longitudinal (45<theta<135) y
-área mayor o igual a 10 metros cuadrados según la tabla D.6.
+área mayor o igual a 10 metros cuadrados according to table D.6.
 '''
 
 x= []
@@ -484,7 +484,7 @@ cpDosAguasZonaGVLongAGrande= scipy.interpolate.interp1d(x,y)
 '''
 Coeficiente de presión exterior (positiva hacia abajo) en zona G de la cubierta 
 para viento sensiblemente longitudinal (45<theta<135) y
-área menor o igual a 1 metro cuadrado según la tabla D.6.
+área menor o igual a 1 metro cuadrado according to table D.6.
 '''
 
 x= []
@@ -503,7 +503,7 @@ cpDosAguasZonaGVLongAPeq= scipy.interpolate.interp1d(x,y)
 
 '''
 Coeficiente de presión exterior (positiva hacia abajo) en zona G de la cubierta 
-para viento sensiblemente longitudinal (45<theta<135) según la tabla D.6.
+para viento sensiblemente longitudinal (45<theta<135) according to table D.6.
 '''
 def cpDosAguasZonaGVLong(A, alpha):
     cpPeq= cpDosAguasZonaGVLongAPeq(alpha)
@@ -521,7 +521,7 @@ def cpDosAguasZonaGVLong(A, alpha):
 '''
 Coeficiente de presión exterior (positiva hacia abajo) en zona H de la cubierta 
 para viento sensiblemente longitudinal (45<theta<135) y
-área mayor o igual a 10 metros cuadrados según la tabla D.6.
+área mayor o igual a 10 metros cuadrados according to table D.6.
 '''
 
 x= []
@@ -541,7 +541,7 @@ cpDosAguasZonaHVLongAGrande= scipy.interpolate.interp1d(x,y)
 '''
 Coeficiente de presión exterior (positiva hacia abajo) en zona H de la cubierta 
 para viento sensiblemente longitudinal (45<theta<135) y
-área menor o igual a 1 metro cuadrado según la tabla D.6.
+área menor o igual a 1 metro cuadrado according to table D.6.
 '''
 
 x= []
@@ -560,7 +560,7 @@ cpDosAguasZonaHVLongAPeq= scipy.interpolate.interp1d(x,y)
 
 '''
 Coeficiente de presión exterior (positiva hacia abajo) en zona H de la cubierta 
-para viento sensiblemente longitudinal (45<theta<135) según la tabla D.6.
+para viento sensiblemente longitudinal (45<theta<135) according to table D.6.
 '''
 def cpDosAguasZonaHVLong(A, alpha):
     cpPeq= cpDosAguasZonaHVLongAPeq(alpha)
@@ -578,7 +578,7 @@ def cpDosAguasZonaHVLong(A, alpha):
 '''
 Coeficiente de presión exterior (positiva hacia abajo) en zona I de la cubierta 
 para viento sensiblemente longitudinal (45<theta<135) y
-área mayor o igual a 10 metros cuadrados según la tabla D.6.
+área mayor o igual a 10 metros cuadrados according to table D.6.
 '''
 
 x= []
@@ -598,7 +598,7 @@ cpDosAguasZonaIVLongAGrande= scipy.interpolate.interp1d(x,y)
 '''
 Coeficiente de presión exterior (positiva hacia abajo) en zona I de la cubierta 
 para viento sensiblemente longitudinal (45<theta<135) y
-área menor o igual a 1 metro cuadrado según la tabla D.6.
+área menor o igual a 1 metro cuadrado according to table D.6.
 '''
 
 x= []
@@ -617,7 +617,7 @@ cpDosAguasZonaIVLongAPeq= scipy.interpolate.interp1d(x,y)
 
 '''
 Coeficiente de presión exterior (positiva hacia abajo) en zona I de la cubierta 
-para viento sensiblemente longitudinal (45<theta<135) según la tabla D.6.
+para viento sensiblemente longitudinal (45<theta<135) according to table D.6.
 '''
 def cpDosAguasZonaIVLong(A, alpha):
     cpPeq= cpDosAguasZonaIVLongAPeq(alpha)
@@ -628,7 +628,7 @@ def cpDosAguasZonaIVLong(A, alpha):
 #***********************************************************************
 '''
 Coeficientes de presión exterior para una cubierta plana
-según la tabla D.4 del CTE. In this norm cover decks are
+according to table D.4 del CTE. In this norm cover decks are
 considered flat when the slope is less than five per cent.
 '''
 #***********************************************************************
@@ -644,7 +644,7 @@ considered flat when the slope is less than five per cent.
 '''
 Coeficiente de presión exterior (positiva hacia abajo) en zona F de la cubierta 
 para viento sensiblemente transversal (-45<theta<45) y
-área mayor o igual a 10 metros cuadrados según la tabla D.4.
+área mayor o igual a 10 metros cuadrados according to table D.4.
 '''
 
 x= []
@@ -659,7 +659,7 @@ cpPlanaZonaFVTrsvAGrande= scipy.interpolate.interp1d(x,y)
 '''
 Coeficiente de presión exterior (positiva hacia abajo) en zona F de la cubierta 
 para viento sensiblemente transversal (-45<theta<45) y
-área menor o igual a 1 metro cuadrado según la tabla D.4.
+área menor o igual a 1 metro cuadrado according to table D.4.
 '''
 
 x= []
@@ -672,7 +672,7 @@ cpPlanaZonaFVTrsvAPeq= scipy.interpolate.interp1d(x,y)
 
 '''
 Coeficiente de presión exterior (positiva hacia abajo) en zona F de la cubierta 
-para viento sensiblemente transversal (-45<theta<45) según la tabla D.4.
+para viento sensiblemente transversal (-45<theta<45) according to table D.4.
 '''
 def cpPlanaZonaFVTrsv(A, hp, h):
     cpPeq= cpPlanaZonaFVTrsvAPeq(hp/h)
@@ -690,7 +690,7 @@ def cpPlanaZonaFVTrsv(A, hp, h):
 '''
 Coeficiente de presión exterior (positiva hacia abajo) en zona G de la cubierta 
 para viento sensiblemente transversal (-45<theta<45) y
-área mayor o igual a 10 metros cuadrados según la tabla D.4.
+área mayor o igual a 10 metros cuadrados according to table D.4.
 '''
 
 x= []
@@ -704,7 +704,7 @@ cpPlanaZonaGVTrsvAGrande= scipy.interpolate.interp1d(x,y)
 '''
 Coeficiente de presión exterior (positiva hacia abajo) en zona G de la cubierta 
 para viento sensiblemente transversal (-45<theta<45) y
-área menor o igual a 1 metro cuadrado según la tabla D.4.
+área menor o igual a 1 metro cuadrado according to table D.4.
 '''
 
 x= []
@@ -717,7 +717,7 @@ cpPlanaZonaGVTrsvAPeq= scipy.interpolate.interp1d(x,y)
 
 '''
 Coeficiente de presión exterior (positiva hacia abajo) en zona G de la cubierta 
-para viento sensiblemente transversal (-45<theta<45) según la tabla D.4.
+para viento sensiblemente transversal (-45<theta<45) according to table D.4.
 '''
 def cpPlanaZonaGVTrsv(A, hp, h):
     cpPeq= cpPlanaZonaGVTrsvAPeq(hp/h)
@@ -735,7 +735,7 @@ def cpPlanaZonaGVTrsv(A, hp, h):
 '''
 Coeficiente de presión exterior (positiva hacia abajo) en zona H de la cubierta 
 para viento sensiblemente transversal (-45<theta<45) y
-área mayor o igual a 10 metros cuadrados según la tabla D.4.
+área mayor o igual a 10 metros cuadrados according to table D.4.
 '''
 
 x= []
@@ -749,7 +749,7 @@ cpPlanaZonaHVTrsvAGrande= scipy.interpolate.interp1d(x,y)
 '''
 Coeficiente de presión exterior (positiva hacia abajo) en zona H de la cubierta 
 para viento sensiblemente transversal (-45<theta<45) y
-área menor o igual a 1 metro cuadrado según la tabla D.4.
+área menor o igual a 1 metro cuadrado according to table D.4.
 '''
 
 x= []
@@ -762,7 +762,7 @@ cpPlanaZonaHVTrsvAPeq= scipy.interpolate.interp1d(x,y)
 
 '''
 Coeficiente de presión exterior (positiva hacia abajo) en zona H de la cubierta 
-para viento sensiblemente transversal (-45<theta<45) según la tabla D.4.
+para viento sensiblemente transversal (-45<theta<45) according to table D.4.
 '''
 def cpPlanaZonaHVTrsv(A, hp, h):
     cpPeq= cpPlanaZonaHVTrsvAPeq(hp/h)
@@ -780,7 +780,7 @@ def cpPlanaZonaHVTrsv(A, hp, h):
 '''
 Coeficiente de presión exterior (positiva hacia abajo) en zona I de la cubierta 
 para viento sensiblemente transversal (-45<theta<45) y
-área mayor o igual a 10 metros cuadrados según la tabla D.4.
+área mayor o igual a 10 metros cuadrados according to table D.4.
 '''
 
 x= []
@@ -794,7 +794,7 @@ cpPlanaZonaIVTrsvAGrande= scipy.interpolate.interp1d(x,y)
 '''
 Coeficiente de presión exterior (positiva hacia abajo) en zona I de la cubierta 
 para viento sensiblemente transversal (-45<theta<45) y
-área menor o igual a 1 metro cuadrado según la tabla D.4.
+área menor o igual a 1 metro cuadrado according to table D.4.
 '''
 
 x= []
@@ -807,7 +807,7 @@ cpPlanaZonaIVTrsvAPeq= scipy.interpolate.interp1d(x,y)
 
 '''
 Coeficiente de presión exterior (positiva hacia abajo) en zona I de la cubierta 
-para viento sensiblemente transversal (-45<theta<45) según la tabla D.4.
+para viento sensiblemente transversal (-45<theta<45) according to table D.4.
 '''
 def cpPlanaZonaIVTrsv(A, hp, h):
     cpPeq= cpPlanaZonaIVTrsvAPeq(hp/h)
@@ -827,7 +827,7 @@ def cpPlanaZonaIVTrsv(A, hp, h):
 
 '''
 Coeficiente de presión exterior (positiva hacia abajo) en zona F de la cubierta 
-para viento sensiblemente longitudinal (45<theta<135) según la tabla D.4.
+para viento sensiblemente longitudinal (45<theta<135) according to table D.4.
 '''
 def cpPlanaZonaFVLong(A, hp, h):
     cpPeq= cpPlanaZonaFVTrsvAPeq(hp/h)
@@ -845,7 +845,7 @@ def cpPlanaZonaFVLong(A, hp, h):
 
 '''
 Coeficiente de presión exterior (positiva hacia abajo) en zona G de la cubierta 
-para viento sensiblemente longitudinal (45<theta<135) según la tabla D.4.
+para viento sensiblemente longitudinal (45<theta<135) according to table D.4.
 '''
 def cpPlanaZonaGVLong(A, hp, h):
     cpPeq= cpPlanaZonaGVTrsvAPeq(hp/h)
@@ -864,7 +864,7 @@ def cpPlanaZonaGVLong(A, hp, h):
 
 '''
 Coeficiente de presión exterior (positiva hacia abajo) en zona H de la cubierta 
-para viento sensiblemente longitudinal (45<theta<135) según la tabla D.4.
+para viento sensiblemente longitudinal (45<theta<135) according to table D.4.
 '''
 def cpPlanaZonaHVLong(A, hp, h):
     cpPeq= cpPlanaZonaHVTrsvAPeq(hp/h)
@@ -883,7 +883,7 @@ def cpPlanaZonaHVLong(A, hp, h):
 
 '''
 Coeficiente de presión exterior (positiva hacia abajo) en zona I de la cubierta 
-para viento sensiblemente longitudinal (45<theta<135) según la tabla D.4.
+para viento sensiblemente longitudinal (45<theta<135) according to table D.4.
 '''
 def cpPlanaZonaIVLong(A, hp, h):
     cpPeq= cpPlanaZonaIVTrsvAPeq(hp/h)
@@ -891,13 +891,13 @@ def cpPlanaZonaIVLong(A, hp, h):
     return ifte(A<1,cpPeq,ifte(A>10,cpGrande,interpolaCoefsPresion(A,cpPeq,cpGrande)))
 
 #***********************************************************************
-# Coeficientes de presión exterior para una marquesina a un agua según la tabla D.10 del CTE.
+# Coeficientes de presión exterior para una marquesina a un agua according to table D.10 del CTE.
 #***********************************************************************
 
 
 '''
 Down external pressure in the A zone of a shed marquee
-as a function of the slope according to table tabla D.10.
+as a function of the slope according to table table D.10.
 '''
 
 x= []
@@ -914,7 +914,7 @@ cpMarq1AguaAbajoZonaA= scipy.interpolate.interp1d(x,y)
 '''
 Up external pressure in the A zone of a shed marquee
 with zero obstruction factor as a function of the slope 
-according to table tabla D.10.
+according to table table D.10.
 '''
 
 x= []
@@ -931,7 +931,7 @@ cpMarq1AguaArribaZonaAFi0= scipy.interpolate.interp1d(x,y)
 '''
 Up external pressure in the A zone of a shed marquee
 with obstruction factor equal 1 as a function of the slope 
-according to table tabla D.10.
+according to table table D.10.
 '''
 
 x= []
@@ -948,7 +948,7 @@ cpMarq1AguaArribaZonaAFi1= scipy.interpolate.interp1d(x,y)
 '''
 Up external pressure in the A zone of a shed marquee
 as a function of the slope for any value of the obstruction
-factor according to table tabla D.10.
+factor according to table table D.10.
 '''
 def cpMarq1AguaArribaZonaA(alpha, fi):
     v0= cpMarq1AguaArribaZonaAFi0(alpha)
@@ -957,7 +957,7 @@ def cpMarq1AguaArribaZonaA(alpha, fi):
 
 
 #***********************************************************************
-# Coeficientes de presión exterior en paramentos verticales según la tabla D.3 del CTE.
+# Coeficientes de presión exterior en paramentos verticales according to table D.3 del CTE.
 #***********************************************************************
 
 #    AA
@@ -971,7 +971,7 @@ def cpMarq1AguaArribaZonaA(alpha, fi):
 '''
 Coeficiente de presión exterior (positiva hacia adentro) en zona A
 paramento vertical para viento sensiblemente transversal (-45<theta<45) y
-área mayor o igual a 10 metros cuadrados en función de h/d según la tabla D.3.
+área mayor o igual a 10 metros cuadrados en función de h/d according to table D.3.
 '''
 
 x= []
@@ -984,7 +984,7 @@ cpParamVertZonaAVTrsvAGE10= scipy.interpolate.interp1d(x,y)
 '''
 Coeficiente de presión exterior (positiva hacia adentro) en zona A
 paramento vertical para viento sensiblemente transversal (-45<theta<45) y
-área igual a 5 metros cuadrados en función de h/d según la tabla D.3.
+área igual a 5 metros cuadrados en función de h/d according to table D.3.
 '''
 
 x= []
@@ -997,7 +997,7 @@ cpParamVertZonaAVTrsvAEQ5= scipy.interpolate.interp1d(x,y)
 '''
 Coeficiente de presión exterior (positiva hacia adentro) en zona A
 paramento vertical para viento sensiblemente transversal (-45<theta<45) y
-área igual a 2 metros cuadrados en función de h/d según la tabla D.3.
+área igual a 2 metros cuadrados en función de h/d according to table D.3.
 '''
 
 x= []
@@ -1011,7 +1011,7 @@ cpParamVertZonaAVTrsvAEQ2= scipy.interpolate.interp1d(x,y)
 '''
 Coeficiente de presión exterior (positiva hacia adentro) en zona A
 paramento vertical para viento sensiblemente transversal (-45<theta<45) y
-área menor o igual a 1 metro cuadrado en función de h/d según la tabla D.3.
+área menor o igual a 1 metro cuadrado en función de h/d according to table D.3.
 '''
 
 x= []
@@ -1026,7 +1026,7 @@ cpParamVertZonaAVTrsvALE1= scipy.interpolate.interp1d(x,y)
 '''
 Coeficiente de presión exterior (positiva hacia abajo) en 
 paramento vertical zona A para viento sensiblemente 
-transversal (-45<theta<45) según la tabla D.3.
+transversal (-45<theta<45) according to table D.3.
 '''
 def cpParamVertZonaAVTrsv(A, h, d):
     ratio= h/d
@@ -1058,7 +1058,7 @@ def cpParamVertZonaAVTrsv(A, h, d):
 '''
 Coeficiente de presión exterior (positiva hacia adentro) en zona B
 paramento vertical para viento sensiblemente transversal (-45<theta<45) y
-área mayor o igual a 10 metros cuadrados en función de h/d según la tabla D.3.
+área mayor o igual a 10 metros cuadrados en función de h/d according to table D.3.
 '''
 
 x= []
@@ -1071,7 +1071,7 @@ cpParamVertZonaBVTrsvAGE10= scipy.interpolate.interp1d(x,y)
 '''
 Coeficiente de presión exterior (positiva hacia adentro) en zona B
 paramento vertical para viento sensiblemente transversal (-45<theta<45) y
-área igual a 5 metros cuadrados en función de h/d según la tabla D.3.
+área igual a 5 metros cuadrados en función de h/d according to table D.3.
 '''
 
 x= []
@@ -1084,7 +1084,7 @@ cpParamVertZonaBVTrsvAEQ5= scipy.interpolate.interp1d(x,y)
 '''
 Coeficiente de presión exterior (positiva hacia adentro) en zona B
 paramento vertical para viento sensiblemente transversal (-45<theta<45) y
-área igual a 2 metros cuadrados en función de h/d según la tabla D.3.
+área igual a 2 metros cuadrados en función de h/d according to table D.3.
 '''
 
 x= []
@@ -1097,7 +1097,7 @@ cpParamVertZonaBVTrsvAEQ2= scipy.interpolate.interp1d(x,y)
 '''
 Coeficiente de presión exterior (positiva hacia adentro) en zona B
 paramento vertical para viento sensiblemente transversal (-45<theta<45) y
-área menor o igual a 1 metro cuadrado en función de h/d según la tabla D.3.
+área menor o igual a 1 metro cuadrado en función de h/d according to table D.3.
 '''
 
 x= []
@@ -1110,7 +1110,7 @@ cpParamVertZonaBVTrsvALE1= scipy.interpolate.interp1d(x,y)
 '''
 Coeficiente de presión exterior (positiva hacia abajo) en 
 paramento vertical zona B para viento sensiblemente 
-transversal (-45<theta<45) según la tabla D.3.
+transversal (-45<theta<45) according to table D.3.
 '''
 def cpParamVertZonaBVTrsv(A, h, d):
     ratio= h/d
@@ -1141,7 +1141,7 @@ def cpParamVertZonaBVTrsv(A, h, d):
 '''
 Coeficiente de presión exterior (positiva hacia adentro) en zona C
 paramento vertical para viento sensiblemente transversal (-45<theta<45) y
-área mayor o igual a 10 metros cuadrados en función de h/d según la tabla D.3.
+área mayor o igual a 10 metros cuadrados en función de h/d according to table D.3.
 '''
 
 x= []
@@ -1154,7 +1154,7 @@ cpParamVertZonaCVTrsvAGE10= scipy.interpolate.interp1d(x,y)
 '''
 Coeficiente de presión exterior (positiva hacia adentro) en zona C
 paramento vertical para viento sensiblemente transversal (-45<theta<45) y
-área igual a 5 metros cuadrados en función de h/d según la tabla D.3.
+área igual a 5 metros cuadrados en función de h/d according to table D.3.
 '''
 
 x= []
@@ -1167,7 +1167,7 @@ cpParamVertZonaCVTrsvAEQ5= scipy.interpolate.interp1d(x,y)
 '''
 Coeficiente de presión exterior (positiva hacia adentro) en zona C
 paramento vertical para viento sensiblemente transversal (-45<theta<45) y
-área igual a 2 metros cuadrados en función de h/d según la tabla D.3.
+área igual a 2 metros cuadrados en función de h/d according to table D.3.
 '''
 
 x= []
@@ -1180,7 +1180,7 @@ cpParamVertZonaCVTrsvAEQ2= scipy.interpolate.interp1d(x,y)
 '''
 Coeficiente de presión exterior (positiva hacia adentro) en zona C
 paramento vertical para viento sensiblemente transversal (-45<theta<45) y
-área menor o igual a 1 metro cuadrado en función de h/d según la tabla D.3.
+área menor o igual a 1 metro cuadrado en función de h/d according to table D.3.
 '''
 
 x= []
@@ -1193,7 +1193,7 @@ cpParamVertZonaCVTrsvALE1= scipy.interpolate.interp1d(x,y)
 '''
 Coeficiente de presión exterior (positiva hacia abajo) en 
 paramento vertical zona C para viento sensiblemente 
-transversal (-45<theta<45) según la tabla D.3.
+transversal (-45<theta<45) according to table D.3.
 '''
 def cpParamVertZonaCVTrsv(A, h, d):
     ratio= h/d
@@ -1226,7 +1226,7 @@ def cpParamVertZonaCVTrsv(A, h, d):
 '''
 Coeficiente de presión exterior (positiva hacia adentro) en zona D
 paramento vertical para viento sensiblemente transversal (-45<theta<45) y
-área mayor o igual a 10 metros cuadrados en función de h/d según la tabla D.3.
+área mayor o igual a 10 metros cuadrados en función de h/d according to table D.3.
 '''
 
 x= []
@@ -1240,7 +1240,7 @@ cpParamVertZonaDVTrsvAGE10= scipy.interpolate.interp1d(x,y)
 '''
 Coeficiente de presión exterior (positiva hacia adentro) en zona D
 paramento vertical para viento sensiblemente transversal (-45<theta<45) y
-área igual a 5 metros cuadrados en función de h/d según la tabla D.3.
+área igual a 5 metros cuadrados en función de h/d according to table D.3.
 '''
 
 x= []
@@ -1254,7 +1254,7 @@ cpParamVertZonaDVTrsvAEQ5= scipy.interpolate.interp1d(x,y)
 '''
 Coeficiente de presión exterior (positiva hacia adentro) en zona D
 paramento vertical para viento sensiblemente transversal (-45<theta<45) y
-área igual a 2 metros cuadrados en función de h/d según la tabla D.3.
+área igual a 2 metros cuadrados en función de h/d according to table D.3.
 '''
 
 x= []
@@ -1268,7 +1268,7 @@ cpParamVertZonaDVTrsvAEQ2= scipy.interpolate.interp1d(x,y)
 '''
 Coeficiente de presión exterior (positiva hacia adentro) en zona D
 paramento vertical para viento sensiblemente transversal (-45<theta<45) y
-área menor o igual a 1 metro cuadrado en función de h/d según la tabla D.3.
+área menor o igual a 1 metro cuadrado en función de h/d according to table D.3.
 '''
 
 x= []
@@ -1281,7 +1281,7 @@ cpParamVertZonaDVTrsvALE1= scipy.interpolate.interp1d(x,y)
 '''
 Coeficiente de presión exterior (positiva hacia abajo) en 
 paramento vertical zona D para viento sensiblemente 
-transversal (-45<theta<45) según la tabla D.3.
+transversal (-45<theta<45) according to table D.3.
 '''
 def cpParamVertZonaDVTrsv(A, h, d):
     ratio= h/d
@@ -1314,7 +1314,7 @@ def cpParamVertZonaDVTrsv(A, h, d):
 '''
 Coeficiente de presión exterior (positiva hacia adentro) en zona E
 paramento vertical para viento sensiblemente transversal (-45<theta<45) y
-área mayor o igual a 10 metros cuadrados en función de h/d según la tabla D.3.
+área mayor o igual a 10 metros cuadrados en función de h/d according to table D.3.
 '''
 
 x= []
@@ -1328,7 +1328,7 @@ cpParamVertZonaEVTrsvAGE10= scipy.interpolate.interp1d(x,y)
 '''
 Coeficiente de presión exterior (positiva hacia adentro) en zona E
 paramento vertical para viento sensiblemente transversal (-45<theta<45) y
-área igual a 5 metros cuadrados en función de h/d según la tabla D.3.
+área igual a 5 metros cuadrados en función de h/d according to table D.3.
 '''
 
 x= []
@@ -1341,7 +1341,7 @@ cpParamVertZonaEVTrsvAEQ5= scipy.interpolate.interp1d(x,y)
 
 '''Coeficiente de presión exterior (positiva hacia adentro) en zona E
 paramento vertical para viento sensiblemente transversal (-45<theta<45) y
-área igual a 2 metros cuadrados en función de h/d según la tabla D.3.
+área igual a 2 metros cuadrados en función de h/d according to table D.3.
 '''
 
 x= []
@@ -1355,7 +1355,7 @@ cpParamVertZonaEVTrsvAEQ2= scipy.interpolate.interp1d(x,y)
 '''
 Coeficiente de presión exterior (positiva hacia adentro) en zona E
 paramento vertical para viento sensiblemente transversal (-45<theta<45) y
-área menor o igual a 1 metro cuadrado en función de h/d según la tabla D.3.
+área menor o igual a 1 metro cuadrado en función de h/d according to table D.3.
 '''
 
 x= []
@@ -1369,7 +1369,7 @@ cpParamVertZonaEVTrsvALE1= scipy.interpolate.interp1d(x,y)
 '''
 Coeficiente de presión exterior (positiva hacia abajo) en 
 paramento vertical zona E para viento sensiblemente 
-transversal (-45<theta<45) según la tabla D.3.
+transversal (-45<theta<45) according to table D.3.
 '''
 def cpParamVertZonaEVTrsv(A, h, d):
     ratio= h/d

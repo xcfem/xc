@@ -3,14 +3,24 @@ import xc_base
 import geom
 import xc
 
-def vectorReacUVW(preprocessor,idNodo):
-  # Reacciones según los ejes XYZ del nodo cuyo código se pasa como parámetro.
-  nod= preprocessor.getNodeLoader.getNode(idNodo)
+def vectorReacUVW(preprocessor,idNode):
+  '''X, Y and Z components of the reaction in the node.
+
+  Parameters:
+  :param idNode: node tag.
+  '''
+  nod= preprocessor.getNodeLoader.getNode(idNode)
   reac= nod.getReaction
   return xc.Vector([reac[0],reac[1],reac[2]])
 
 def getSVDfromVDesliz(DOFs,coo,v):
-  # Returns a SVD which represents vector.
+  '''Returns a sliding vector system that represents the vector.
+
+  Parameters:
+  :param DOFs: degrees of freedom.
+  :param coo: coordinates of a point in the vector line of action.
+  :param v: vector.
+  '''
   if(DOFs=="UV"):
     return geom.SVD2d(geom.Pos2d(coo[0],coo[1]),geom.Vector2d(v[0],v[1]))
   elif(DOFs=="UVR"):
