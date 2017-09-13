@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-#Test sets and grid model. Generation/selection of geometric and FE entities using grid model, boolean operations with the created sets.
+'''Test sets and grid model. Generation/selection of geometric and FE entities using grid model, boolean operations with the created sets.'''
 
 __author__= "Ana Ortega (AO_O)"
 __copyright__= "Copyright 2017, AO_O"
@@ -85,6 +85,7 @@ geomSectColumns=sectpr.RectangularSection(name='geomSectColumns',b=0.25,h=0.25)
 columns_mat= tm.BeamMaterialData(name= 'columns_mat', section=geomSectColumns, material=mat_cols)
 columns_mat.setupElasticShear3DSection(preprocessor=prep)
 
+
 #                         ***FE model - MESH***
 eSize=1
 floor1_mesh=fem.SurfSetToMesh(surfSet=floor1,matSect=deck_mat,elemSize=eSize,elemType='shell_mitc4')
@@ -93,7 +94,6 @@ wall_mesh=fem.SurfSetToMesh(surfSet=wall,matSect=wall_mat,elemSize=eSize,elemTyp
 columns_mesh=fem.LinSetToMesh(linSet=columns,matSect=columns_mat,elemSize=eSize,vDirLAxZ=xc.Vector([1,0,0]),elemType='elastic_beam_3d')
 
 fem.multi_mesh(preprocessor=prep,lstMeshSets=[columns_mesh,floor1_mesh,floor2_mesh,wall_mesh])     #mesh these sets
-
 
 #      *** SETS ***
 wall_nel=wall.getNumElements
