@@ -59,9 +59,17 @@ class RawLineSetToMesh(SetToMesh):
             l.genMesh(xc.meshDir.I)
         self.primitiveSet.fillDownwards()
 
-def getDefaultCoordinateTransformation(preprocessor,coordTransfName,vDir):
+def getDefaultCoordinateTransformation(preprocessor,coordTransfName,coordTransfType,vDir):
     '''Creates a default coordinate transformation.''' 
     trfs= preprocessor.getTransfCooLoader
+    if coordTransfType.lower()=='pdelta':
+        retval= trfs.newPDeltaCrdTransf3d(coordTransfName)
+    elif coordTransfType.lower()=='corot':
+        retval= trfs.newCorotCrdTransf3d(coordTransfName)
+    else:
+        retval= trfs.newLinearCrdTransf3d(coordTransfName)
+    retval.xzVector= vDir
+    '''   13.11.2017 
     retval= trfs.getCoordTransf(coordTransfName)
     if(retval==None):
       msg= "getDefaultCoordinateTransformation creates a PDelta"
@@ -70,6 +78,7 @@ def getDefaultCoordinateTransformation(preprocessor,coordTransfName,vDir):
       lmsg.warning(msg)
       retval= trfs.newPDeltaCrdTransf3d(coordTransfName) #XXX PDelta???
       retval.xzVector= vDir
+    '''
     return retval
 
 
@@ -86,11 +95,14 @@ class LinSetToMesh(RawLineSetToMesh):
           local axis of the section is parallel to the dimension
           defined as width of the rectangle)
     :ivar dimElemSpace: dimension of the element space (defaults to 3)
+    :ivar coordTransfType: type of coordinate transformation. Available 
+                       types: 'linear', 'PDelta' and 'corot' (defaults to 
+                       'linear') 
     '''
-    def __init__(self,linSet,matSect,elemSize,vDirLAxZ, elemType='elastic_beam_3d',dimElemSpace=3):
+    def __init__(self,linSet,matSect,elemSize,vDirLAxZ, elemType='elastic_beam_3d',dimElemSpace=3,coordTransfType='linear'):
         self.vDirLAxZ= vDirLAxZ
         trfName= linSet.name+'trYGlobal'
-        cTrf= getDefaultCoordinateTransformation(linSet.owner,trfName,self.vDirLAxZ)
+        cTrf= getDefaultCoordinateTransformation(linSet.owner,trfName,coordTransfType,self.vDirLAxZ)
         super(LinSetToMesh,self).__init__(linSet,matSect,elemSize,cTrf,elemType,dimElemSpace)
 
    
