@@ -331,7 +331,7 @@ def getVu2EHE08NoAtNoFis(fctd,I,S,b0,alphal,Ncd,Ac):
     :param fctd: Resistencia de cálculo del hormigón a tracción.
     :param I: Moment of inertia of the section with respect of its centroid.
     :param S: Momento estático de la parte de la sección que queda por encima del CDG.
-    b0: net width of the element according to clause 40.3.5.
+    :param b0: net width of the element according to clause 40.3.5.
     :param alphal: coeficiente que, en su caso, introduce el efecto de la transferencia.
     :param Ncd: axil de cálculo resistido por el hormigón (positivo si es de tracción).
     :param Ac: concrete section total area.
@@ -357,7 +357,7 @@ def getFcvEHE08(fact,fcv,gammaC,b0,d,chi,sgpcd,AsPas,AsAct):
     será fcv= min(fck,60MPa). En piezas con shear reinforcement fcv= min(fck,100MPa).
     En ambos casos, si el control del hormigón es indirecto fcv=15MPa.
     :param gammaC: Partial safety factor for concrete.
-    b0: net width of the element according to clause 40.3.5.
+    :param b0: net width of the element according to clause 40.3.5.
     :param d: effective depth (meters).
     :param chi: coefficient that takes into account the aggregate effect
      inside the effective depth.
@@ -400,7 +400,7 @@ def getVu2EHE08NoAtSiFis(fcv,fcd,gammaC,Ncd,Ac,b0,d,AsPas,AsAct):
     :param gammaC: Partial safety factor for concrete.
     :param Ncd: axil de cálculo resistido por el hormigón (positivo si es de tracción).
     :param Ac: concrete section total area.
-    b0: net width of the element according to clause 40.3.5.
+    :param b0: net width of the element according to clause 40.3.5.
     :param d: effective depth (meters).
     :param AsPas: Area of tensioned longitudinal steel rebars anchored
      at a distance greater than the effective depth of the section.
@@ -432,7 +432,7 @@ def getVu2EHE08NoAt(M,Mfis,fcv,fck,gammaC,I,S,alphaL,Ncd,Ac,b0,d,AsPas,AsAct):
     :param gammaC: Partial safety factor for concrete.
     :param Ncd: axil de cálculo resistido por el hormigón (positivo si es de tracción).
     :param Ac: concrete section total area.
-    b0: net width of the element according to clause 40.3.5.
+    :param b0: net width of the element according to clause 40.3.5.
     :param d: effective depth (meters).
     :param AsPas: Area of tensioned longitudinal steel rebars anchored
      at a distance greater than the effective depth of the section.
@@ -563,7 +563,7 @@ def getVcuEHE08(fcv,fcd,gammaC,Ncd,Ac,b0,d,z,AsPas,AsAct,theta,Nd,Md,Vd,Td,Es,Ep
     :param gammaC: Partial safety factor for concrete.
     :param Ncd: axil de cálculo resistido por el hormigón (positivo si es de tracción).
     :param Ac: concrete section total area.
-    b0: net width of the element according to clause 40.3.5.
+    :param b0: net width of the element according to clause 40.3.5.
     :param d: effective depth (meters).
     :param z: Lever arm.
     :param AsPas: Area of tensioned longitudinal steel rebars anchored
@@ -605,7 +605,7 @@ def getVu2EHE08SiAt(fcv,fcd,fyd,gammaC,Ncd,Ac,b0,d,z,AsPas,AsAct,AsTrsv, alpha, 
     :param gammaC: Partial safety factor for concrete.
     :param Ncd: axil de cálculo resistido por el hormigón (positivo si es de tracción).
     :param Ac: concrete section total area.
-    b0: net width of the element according to clause 40.3.5.
+    :param b0: net width of the element according to clause 40.3.5.
     :param d: effective depth (meters).
     :param z: Lever arm.
     :param AsPas: Area of tensioned longitudinal steel rebars anchored
@@ -643,7 +643,7 @@ def getVuEHE08SiAt(fck,fcv,fcd,fyd,gammaC,Ncd,Ac,b0,d,z,AsPas,AsAct,AsTrsv, alph
     :param gammaC: Partial safety factor for concrete.
     :param Ncd: axil de cálculo resistido por el hormigón (positivo si es de tracción).
     :param Ac: concrete section total area.
-    b0: net width of the element according to clause 40.3.5.
+    :param b0: net width of the element according to clause 40.3.5.
     :param d: effective depth (meters).
     :param z: Lever arm.
     :param AsPas: Area of tensioned longitudinal steel rebars anchored
@@ -710,9 +710,9 @@ class ShearControllerEHE(lscb.LimitStateControllerBase):
     ''' Calcula el cortante último de la sección sin shear reinforcement.
      XXX Falta considerar la reinforcement activa.
 
-     reinfSteelMaterialTag: reinforcement steel material identifier.
-     concrete: Parámetros para modelizar el hormigón.
-     reinfSteel: parameters to modelize reinforcement steel.
+     :param reinfSteelMaterialTag: reinforcement steel material identifier.
+     :param concrete: Parámetros para modelizar el hormigón.
+     :param reinfSteel: parameters to modelize reinforcement steel.
     '''
     self.concreteMatTag= concrete.matTagD
     self.fckH= abs(concrete.fck)
@@ -765,13 +765,13 @@ class ShearControllerEHE(lscb.LimitStateControllerBase):
   def calcVuEHE08SiAt(self, preprocessor, scc, paramsTorsion, concrete, reinfSteel, Nd, Md, Vd, Td):
     ''' Calcula el cortante último de la sección WITH shear reinforcement.
      XXX Falta considerar la reinforcement activa.
-     reinfSteelMaterialTag: reinforcement steel material identifier.
-     concrete: Nombre del material empleado para modelizar el hormigón.
-     reinfSteel: reinforcement steel material name.
-     Nd: Design value of axial force (aquí positivo si es de tracción)
-     Md: Absolute value of design value of bending moment.
-     Vd: Absolute value of cortante efectivo de cálculo (clause 42.2.2).
-     Td: Torsor de cálculo. '''
+     :param reinfSteelMaterialTag: reinforcement steel material identifier.
+     :param concrete: Nombre del material empleado para modelizar el hormigón.
+     :param reinfSteel: reinforcement steel material name.
+     :param Nd: Design value of axial force (aquí positivo si es de tracción)
+     :param Md: Absolute value of design value of bending moment.
+     :param Vd: Absolute value of cortante efectivo de cálculo (clause 42.2.2).
+     :param Td: Torsor de cálculo. '''
     self.VuAe= paramsTorsion.Ae()
     self.Vuue= paramsTorsion.ue()
 
@@ -819,12 +819,12 @@ class ShearControllerEHE(lscb.LimitStateControllerBase):
   def calcVuEHE08(self, preprocessor, scc, nmbParamsTorsion, concrete, reinfSteel, Nd, Md, Vd, Td):
     '''  Calcula el cortante último de la sección.
      XXX Falta considerar la reinforcement activa.
-     concrete: parameters to model concrete.
-     reinfSteel: parameters to model rebar's steel.
-     Nd: Design value of axial force (aquí positivo si es de tracción)
-     Md: Absolute value of design value of bending moment.
-     Vd: Absolute value of cortante efectivo de cálculo (clause 42.2.2).
-     Td: Torsor de cálculo.'''
+     :param concrete: parameters to model concrete.
+     :param reinfSteel: parameters to model rebar's steel.
+     :param Nd: Design value of axial force (aquí positivo si es de tracción)
+     :param Md: Absolute value of design value of bending moment.
+     :param Vd: Absolute value of cortante efectivo de cálculo (clause 42.2.2).
+     :param Td: Torsor de cálculo.'''
     if(self.AsTrsv==0):
       self.calcVuEHE08NoAt(preprocessor,scc,concrete,reinfSteel)
     else:
@@ -1075,11 +1075,11 @@ def calcParamsSeccionHuecaEficaz(geomSeccion, h0, c):
   '''
   Calcula los parámetros de torsión que se deducen
    de la sección hueca eficaz. No es válido si la sección no es convexa.
-  gmSectionName: Identificador de la definición geométrica de la sección.
+  :param gmSectionName: Identificador de la definición geométrica de la sección.
   nmbParamsTorsión: Identificador del registro que contiene los parámetros de cálculo
                 de la resistencia a torsión.
-  h0: Real thickness of the section wall.
-  c: cover of the longitudinal reinforcement.
+  :param h0: Real thickness of the section wall.
+  :param c: cover of the longitudinal reinforcement.
   '''
   retval= TorsionParameters()
   retval.h0= h0
@@ -1240,64 +1240,79 @@ def shearBetweenWebAndFlangesStrength(fck,gammac,hf,Asf,Sf,fyd):
 #  esfRasMax= shearBetweenWebAndFlangesStrength(25e6,1.5,0.3,565e-6,0.2,500e6)
 
 
-# Comprobación de cargas concentradas sobre macizos, according to clause
+# Checking of solid block members under concentrated loads, according to clause
 # 61 of EHE-08
 
 
-def getF3cd(Ac, Ac1, fcd):
-  '''Return the value of f3cd.'''
-  return min(sqrt(Ac/Ac1),3.3)*fcd
-
-def getNuCargaConcentrada(Ac, Ac1, fcd):
-  '''
-  Devuelve el valor último de la carga que puede soportar una pieza
-  de seccion Ac siendo el área cargada Ac1 (see figure 61.1.a page 302 EHE-08)
-  '''
-  return Ac1*getF3cd(Ac,Ac1,fcd)
-
-def getUad(a, a1, Nd):
+class BlockMember(object):
+  def __init__(self,a,b,a1,b1):
     '''
-    Devuelve la capacidad mecánica necesaria para la reinforcement paralela al
-    lado a (see figure 61.1.a page 302 EHE-08)
-      a: Dimensión de la sección.
-      a1: Dimensión del área cargada paralela a a.
-      Nd: carga concentrada.
+    Constructor.
 
+    Parameters:
+      :param a: side length.
+      :param a1: lenght of the side of the loaded area parallel to a.
+      :param b: side length.
+      :param b1: lenght of the side of the loaded area parallel to b.
     '''
-    return 0.25*((a-a1)/a)*Nd
-
-def getAreaArmadAd(a, a1, Nd, fyd):
+    self.a= a
+    self.a1= a1
+    self.b= b
+    self.b1= b1
+  def getAc(self):
+    '''Return area of the block member.'''
+    return self.a*self.b
+  def getAc1(self):
+    '''Return block member loaded area.'''
+    return self.a1*self.b1
+  def getF3cd(self, fcd):
+    '''Return the value of f3cd.'''
+    return min(sqrt(self.getAc()/self.Ac1()),3.3)*fcd
+  def getNuConcentratedLoad(self, fcd):
     '''
-    Devuelve el área necesaria para la reinforcement paralela al
-    lado a (see figure 61.1.a page 302 EHE-08)
-      a: Dimensión de la sección.
-      a1: Dimensión del área cargada paralela a a.
-      Nd: carga concentrada.
-      fyd: steel yield strength.
+    Return the the maximum compressive force that can be obtained in the
+    Ultimate Limit State of on a restricted surface (see figure 61.1.a on
+    page 302 of EHE-08), of area Ac1 , concentrically and homothetically 
+    situated on another area, Ac.
 
+    Parameters:
+    :param fcd: design compressive strength of concrete.
     '''
-    return getUad(a,a1,Nd)/min(fyd,400e6)
+    return self.getAc1()*self.getF3cd(fcd)
+  def getUad(self, Nd):
+      '''
+      Return the design tension for the transverse reinforcement in
+      a direction parallel to side a (see figure 61.1.a page 302 EHE-08).
 
+      Parameters:
+        :param Nd: concentrated load.
+      '''
+      return 0.25*((self.a-self.a1)/self.a)*Nd
+  def getReinforcementAreaAd(self, Nd, fyd):
+      '''
+      Return the area of the reinforcement parallel to side a
+      (see figure 61.1.a page 302 EHE-08)
 
-def getUbd(b, b1, Nd):
-    '''
-    Devuelve la capacidad mecánica necesaria para la reinforcement paralela al
-    lado b (see figure 61.1.a page 302 EHE-08)
-      b: Dimensión de la sección.
-      b1: Dimensión del área cargada paralela a b.
-      Nd: carga concentrada.
+        :param Nd: concentrated load.
+        :param fyd: steel yield strength.
+      '''
+      return self.getUad(Nd)/min(fyd,400e6)
+  def getUbd(self, Nd):
+      '''
+      Return the design tension for the transverse reinforcement in
+      a direction parallel to side b (see figure 61.1.a page 302 EHE-08).
 
-    '''
-    return 0.25*((b-b1)/b)*Nd
+        :param Nd: concentrated load.
 
-def getAreaArmadBd(b, b1, Nd, fyd):
-    '''
-    Devuelve el área necesaria para la reinforcement paralela al
-    lado b (see figure 61.1.a page 302 EHE-08)
-      b: Dimensión de la sección.
-      b1: Dimensión del área cargada paralela a a.
-      Nd: carga concentrada.
-      fyd: steel yield strength.
+      '''
+      return 0.25*((self.b-self.b1)/self.b)*Nd
+  def getReinforcementAreaBd(Nd, fyd):
+      '''
+      Return the area of the reinforcement parallel to side b
+      (see figure 61.1.a page 302 EHE-08)
 
-    '''
-    return getUad(b,b1,Nd)/min(fyd,400e6)
+        :param Nd: concentrated load.
+        :param fyd: steel yield strength.
+
+      '''
+      return self.getUbd(Nd)/min(fyd,400e6)
