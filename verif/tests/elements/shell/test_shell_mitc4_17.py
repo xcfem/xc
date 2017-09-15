@@ -91,7 +91,7 @@ nc= capa1.nCol
 for i in range(2,nf):
   for j in range(2,nc):
     node= capa1.getNode(i,j)
-    lp0.newNodalLoad(node.tag,xc.Vector([0,0,-nLoad,0,0,0])) # Carga concentrada
+    lp0.newNodalLoad(node.tag,xc.Vector([0,0,-nLoad,0,0,0])) # Concentrated load
 
 
 

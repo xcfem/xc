@@ -91,7 +91,7 @@ nNodes= s.getNumNodes
 node= s.getNodeIJK(1,NumDivI/2+1,NumDivJ/2+1)
 # print "Central node: ", node.tag
 # print "Central node coordinates: ", node.getCoo
-lp0.newNodalLoad(node.tag,xc.Vector([0,0,-ptLoad,0,0,0])) # Carga concentrada
+lp0.newNodalLoad(node.tag,xc.Vector([0,0,-ptLoad,0,0,0])) # Concentrated load
 
 
 nElems= s.getNumElements

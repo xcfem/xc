@@ -94,7 +94,7 @@ for i in range(2,nf):
   for j in range(2,nc):
     node= capa1.getNode(i,j)
     areaTributaria= node.getTributaryArea()
-    lp0.newNodalLoad(node.tag,xc.Vector([0,0,-unifLoad*areaTributaria,0,0,0])) # Carga concentrada
+    lp0.newNodalLoad(node.tag,xc.Vector([0,0,-unifLoad*areaTributaria,0,0,0])) # Concentrated load
 
 nElems= f1.getNumElements
 #We add the load case to domain.
