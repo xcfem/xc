@@ -149,7 +149,7 @@ class FiberDeque : public EntCmd, public std::deque<Fiber *>
     double getNeutralAxisDepth(const FiberSectionBase &) const;
     Vector getVectorBrazoMecanico(void) const;
     Segmento2d getSegmentoBrazoMecanico(void) const;
-    double getBrazoMecanico(void) const;
+    double getMechanicLeverArm(void) const;
     Recta2d getTrazaPlanoFlexion(void) const;
     Recta2d getTrazaPlanoTraccion(void) const;
     Recta2d getTrazaPlanoCompresion(void) const;

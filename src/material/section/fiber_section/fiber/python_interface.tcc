@@ -121,7 +121,7 @@ class_<XC::FiberDeque, bases<EntCmd,fiber_ptrs_dq>, boost::noncopyable >("FiberD
   .def("getNeutralAxixDepth",&XC::FiberDeque::getNeutralAxisDepth)
   .def("getVectorBrazoMecanico",&XC::FiberDeque::getVectorBrazoMecanico)
   .def("getSegmentoBrazoMecanico",&XC::FiberDeque::getSegmentoBrazoMecanico)
-  .def("getBrazoMecanico",&XC::FiberDeque::getBrazoMecanico)
+  .def("getMechanicLeverArm",&XC::FiberDeque::getMechanicLeverArm)
   .def("getTrazaPlanoFlexion",&XC::FiberDeque::getTrazaPlanoFlexion)
   .def("getTrazaPlanoTraccion",&XC::FiberDeque::getTrazaPlanoTraccion)
   .def("getTrazaPlanoCompresion",&XC::FiberDeque::getTrazaPlanoCompresion)

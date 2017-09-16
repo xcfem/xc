@@ -848,11 +848,11 @@ double XC::FiberSectionBase::getCover(const Pos2d &p) const
   }
 
 //! @brief Returns the lever arm of the section.
-double XC::FiberSectionBase::getBrazoMecanico(void) const
-  { return fibers.getBrazoMecanico(); }
+double XC::FiberSectionBase::getMechanicLeverArm(void) const
+  { return fibers.getMechanicLeverArm(); }
 
 //! @brief Returns the effective depth of the section.
-double XC::FiberSectionBase::getCantoUtil(void) const
+double XC::FiberSectionBase::getEffectiveDepth(void) const
   { return getVectorCantoUtil().Norm(); }
 
 //! @brief Returns the section area.

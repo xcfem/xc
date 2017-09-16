@@ -1287,7 +1287,7 @@ Recta2d XC::FiberDeque::getTrazaPlanoCompresion(void) const
   }
 
 //! @brief Returns the lever arm of forces in the section.
-double XC::FiberDeque::getBrazoMecanico(void) const
+double XC::FiberDeque::getMechanicLeverArm(void) const
   { return getVectorBrazoMecanico().Norm(); }
 
 //! @brief Returns the distancia media entre fibers.

@@ -24,7 +24,7 @@ fck=35E6 #Characteristic value of concrete strength (Pa).
 fyk=500E6 #Characteristic value of steel strength (Pa).
 
 # Results
-dmin= concreteCorbel.getCantoUtilMinimo(a)
+dmin= concreteCorbel.getMinimumEffectiveDepth(a)
 dminTeor= 0.988235294118
 ratio1= abs(dmin-dminTeor)/dminTeor
 T1d= concreteCorbel.getTraccionMainReinforcement(Fvd,Fhd)

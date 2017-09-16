@@ -122,8 +122,8 @@ class FiberSectionBase: public PrismaticBarCrossSection
     Vector getVectorCantoUtil(void) const;
     Segmento2d getSegmentoBrazoMecanico(void) const;
     Segmento2d getSegmentoCantoUtil(void) const;
-    double getBrazoMecanico(void) const;
-    double getCantoUtil(void) const;
+    double getMechanicLeverArm(void) const;
+    double getEffectiveDepth(void) const;
     Recta2d getTrazaPlanoFlexion(void) const;
     Recta2d getTrazaPlanoTraccion(void) const;
     Recta2d getTrazaPlanoCompresion(void) const;

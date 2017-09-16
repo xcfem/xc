@@ -58,7 +58,7 @@ class ShearController(lsc.LimitStateControllerBase):
     self.steel= rcSection.reinfSteelType
     self.width= rcSection.b
     self.depthUtil= 0.9* rcSection.h
-    self.brazoMecanico= 0.9*self.depthUtil #Mejorar
+    self.mechanicLeverArm= 0.9*self.depthUtil #Mejorar
     self.AsTrsv= rcSection.shReinfZ.getAs()
     self.s= rcSection.shReinfZ.shReinfSpacing
     self.Vcu= 0.0 # Concrete contribution to the shear strength.
@@ -71,7 +71,7 @@ class ShearController(lsc.LimitStateControllerBase):
   def calcVsu(self):
     ''' Computes the shear strength of the section without shear reinforcement.
         s= 1.0 because AsTrsv ya incorpora todas las ramas en un metro.'''
-    self.Vsu= VuShearRebars90SIA262(self.AsTrsv,1.0,self.steel,self.brazoMecanico)
+    self.Vsu= VuShearRebars90SIA262(self.AsTrsv,1.0,self.steel,self.mechanicLeverArm)
 
   def calcVu(self, Nd, Md, Mu, Vd):
     '''  Calcula el cortante último de la sección.'''
