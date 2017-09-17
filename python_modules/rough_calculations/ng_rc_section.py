@@ -8,7 +8,6 @@ __email__= "l.pereztato@gmail.com"
 
 from rough_calculations import ng_rebar_def
 from materials.sia262 import SIA262_materials
-from materials.sia262 import minimal_reinforcement
 from postprocess.reports import common_formats as fmt
 from miscUtils import LogMessages as lmsg
 

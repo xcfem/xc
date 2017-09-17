@@ -9,7 +9,7 @@ from materials.fiber_section import defSeccionHASimple
 from postprocess import RC_material_distribution
 from materials import RCsectionsContainer as sc
 from solution import predefined_solutions
-from materials.sia262 import normalStressesSIA262 as ns #Change SIA262->EHE
+from materials.sia262 import SIA262_limit_state_checking #Change SIA262->EHE
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
 __copyright__= "Copyright 2015, LCPT and AOO"
@@ -63,7 +63,7 @@ sections.append(deckSections)
 
 
 
-controller= ns.BiaxialBendingNormalStressController('ULS_normalStress')
+controller= SIA262_limit_state_checking.BiaxialBendingNormalStressController('ULS_normalStress')
 meanFCs= reinfConcreteSections.internalForcesVerification3D(intForcCombFileName,"/tmp/ppTN", "d",controller)
 
 

@@ -4,7 +4,7 @@
 from __future__ import division
 import sys
 from materials.sia262 import SIA262_materials
-from materials.sia262 import minimal_reinforcement
+from materials.sia262 import SIA262_limit_state_checking
 
 __author__= "Luis C. Pérez Tato (LCPT)"
 __copyright__= "Copyright 2014, LCPT"
@@ -25,17 +25,17 @@ ratio3= abs(sgAdmB-400e6)/400e6
 sgAdmC= SIA262_materials.limitationContraintes("C",ecartement)
 ratio4= abs(sgAdmC-230e6)/230e6
 kt= SIA262_materials.reductionFactorKT(t)
-AsTractionA= minimal_reinforcement.AsMinTraction(SIA262_materials.c25_30,"A",ecartement,t)
+AsTractionA= SIA262_limit_state_checking.AsMinTraction(SIA262_materials.c25_30,"A",ecartement,t)
 ratio5= abs(AsTractionA-1538.20924739e-6)/1538.20924739e-6
-AsTractionB= minimal_reinforcement.AsMinTraction(SIA262_materials.c25_30,"B",ecartement,t)
+AsTractionB= SIA262_limit_state_checking.AsMinTraction(SIA262_materials.c25_30,"B",ecartement,t)
 ratio6= abs(AsTractionB-1672.80255653e-6)/1672.80255653e-6
-AsTractionC= minimal_reinforcement.AsMinTraction(SIA262_materials.c25_30,"C",ecartement,t)
+AsTractionC= SIA262_limit_state_checking.AsMinTraction(SIA262_materials.c25_30,"C",ecartement,t)
 ratio7= abs(AsTractionC-2909.22183745e-6)/2909.22183745e-6
-AsFlexionA= minimal_reinforcement.AsMinFlexion(SIA262_materials.c25_30,concreteCover,"A",ecartement,t)
+AsFlexionA= SIA262_limit_state_checking.AsMinFlexion(SIA262_materials.c25_30,concreteCover,"A",ecartement,t)
 ratio8= abs(AsFlexionA-346.647194688e-6)/346.647194688e-6
-AsFlexionB= minimal_reinforcement.AsMinFlexion(SIA262_materials.c25_30,concreteCover,"B",ecartement,t)
+AsFlexionB= SIA262_limit_state_checking.AsMinFlexion(SIA262_materials.c25_30,concreteCover,"B",ecartement,t)
 ratio9= abs(AsFlexionB-376.978824223e-6)/376.978824223e-6
-AsFlexionC= minimal_reinforcement.AsMinFlexion(SIA262_materials.c25_30,concreteCover,"C",ecartement,t)
+AsFlexionC= SIA262_limit_state_checking.AsMinFlexion(SIA262_materials.c25_30,concreteCover,"C",ecartement,t)
 ratio10= abs(AsFlexionC-655.615346475e-6)/655.615346475e-6
 
 '''

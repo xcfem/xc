@@ -40,7 +40,7 @@ from materials import typical_materials
 from solution import predefined_solutions
 from actions import combinations as combs
 from postprocess import limit_state_data as lsd
-from materials.sia262 import normalStressesSIA262 as ns
+from materials.sia262 import SIA262_limit_state_checking
 from model import model_inquiry as minq
 from misc import matrixUtils
 from postprocess.control_vars import *
@@ -209,7 +209,7 @@ reinfConcreteSectionDistribution.assign(elemSet=totalSet.getElements,setRCSects=
 
 #Checking normal stresses.
 limitStateLabel= lsd.normalStressesResistance.label
-lsd.normalStressesResistance.controller= ns.BiaxialBendingNormalStressController(limitStateLabel)
+lsd.normalStressesResistance.controller= SIA262_limit_state_checking.BiaxialBendingNormalStressController(limitStateLabel)
 
 intForcFile=lsd.LimitStateData.internal_forces_results_directory+'intForce_ULS_normalStressesResistance.csv'
 

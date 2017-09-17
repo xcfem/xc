@@ -4,8 +4,7 @@
 from __future__ import division
 import sys
 from materials.sia262 import SIA262_materials
-from materials.sia262 import minimal_reinforcement
-from materials.sia262 import shearSIA262
+from materials.sia262 import SIA262_limit_state_checking
 from rough_calculations import ng_simple_bending_reinforcement
 
 __author__= "Luis C. Pérez Tato (LCPT)"
@@ -27,7 +26,7 @@ Nd=0
 
 rho= 0.33e-2
 As= rho*h
-VRd= shearSIA262.VuNoShearRebars(beton,acier,Nd,Md,As,b,d)
+VRd= SIA262_limit_state_checking.VuNoShearRebars(beton,acier,Nd,Md,As,b,d)
 ratio1= abs(VRd-340.143003064e3)/340.143003064e3
 
 '''

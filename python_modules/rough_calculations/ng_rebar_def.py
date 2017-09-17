@@ -1,9 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import division
 from materials.sia262 import SIA262_materials
-from materials.sia262 import minimal_reinforcement
-from materials.sia262 import shearSIA262
-from materials.sia262 import anchorage
+from materials.sia262 import SIA262_limit_state_checking
 from rough_calculations import ng_simple_bending_reinforcement
 from postprocess.reports import common_formats as fmt
 import math
@@ -30,14 +28,14 @@ class RebarFamily(object):
   def getAs(self):
     return self.getNumBarsPerMeter()*self.getBarArea()
   def getBasicAnchorageLength(self,concrete):
-    return max(anchorage.getBasicAnchorageLength(self.getDiam(),concrete.fck,self.steel.fyd()),self.minDiams*self.diam)
+    return max(SIA262_limit_state_checking.getBasicAnchorageLength(self.getDiam(),concrete.fck,self.steel.fyd()),self.minDiams*self.diam)
   def getExigenceFissuration(self):
     return self.exigenceFissuration
   def getAsMinFlexion(self,concrete,epaisseur):
-    retval= minimal_reinforcement.AsMinFlexion(concrete,self.getEffectiveCover(),self.exigenceFissuration,self.ecartement,epaisseur)
+    retval= SIA262_limit_state_checking.AsMinFlexion(concrete,self.getEffectiveCover(),self.exigenceFissuration,self.ecartement,epaisseur)
     return retval
   def getAsMinTraction(self,concrete,epaisseur):
-    retval= minimal_reinforcement.AsMinTraction(concrete,self.exigenceFissuration,self.ecartement,epaisseur)
+    retval= SIA262_limit_state_checking.AsMinTraction(concrete,self.exigenceFissuration,self.ecartement,epaisseur)
     return retval
   def getMR(self,concrete,b,epaisseur):
     return ng_simple_bending_reinforcement.Mu(self.getAs(),concrete.fcd(),self.steel.fyd(),b,epaisseur-self.getEffectiveCover())
@@ -53,7 +51,7 @@ class RebarFamily(object):
   def getT(self):
     return self.getAs()*self.steel.fyd()
   def getVR(self,concrete,Nd,Md,b,epaisseur):
-    return shearSIA262.VuNoShearRebars(concrete,self.steel,Nd,Md,self.getAs(),b,self.d(epaisseur))
+    return SIA262_limit_state_checking.VuNoShearRebars(concrete,self.steel,Nd,Md,self.getAs(),b,self.d(epaisseur))
   def getDefStr(self):
     #return definition strings for drawSchema.
     return ("  $\\phi$ "+ fmt.Diam.format(self.getDiam()*1000) + " mm, e= "+ fmt.Diam.format(self.ecartement*1e2)+ " cm")
@@ -110,10 +108,10 @@ class DoubleRebarFamily(object):
     l2= self.f2.getBasicAnchorageLength(concrete)
     return max(l1,l2)
   def getAsMinFlexion(self,concrete,epaisseur):
-    retval= minimal_reinforcement.AsMinFlexion(concrete,self.getEffectiveCover(),self.f1.exigenceFissuration,self.getEcartement(),epaisseur)
+    retval= SIA262_limit_state_checking.AsMinFlexion(concrete,self.getEffectiveCover(),self.f1.exigenceFissuration,self.getEcartement(),epaisseur)
     return retval
   def getAsMinTraction(self,concrete,epaisseur):
-    retval= minimal_reinforcement.AsMinTraction(concrete,self.f1.exigenceFissuration,self.getEcartement(),epaisseur)
+    retval= SIA262_limit_state_checking.AsMinTraction(concrete,self.f1.exigenceFissuration,self.getEcartement(),epaisseur)
     return retval
   def getExigenceFissuration(self):
     retval= self.f1.exigenceFissuration
@@ -128,7 +126,7 @@ class DoubleRebarFamily(object):
     return epaisseur-self.getEffectiveCover()
   def getVR(self,concrete,Nd,Md,b,epaisseur):
     assert self.f1.steel==self.f2.steel
-    return shearSIA262.VuNoShearRebars(concrete,self.f1.steel,Nd,Md,self.getAs(),b,self.d(epaisseur))
+    return SIA262_limit_state_checking.VuNoShearRebars(concrete,self.f1.steel,Nd,Md,self.getAs(),b,self.d(epaisseur))
   def getDefStrings(self):
     #return definition strings for drawSchema.
     retval= []

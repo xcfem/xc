@@ -597,6 +597,8 @@
 /usr/local/lib/python2.7/dist-packages/materials/sia262/shearSIA262.pyc
 /usr/local/lib/python2.7/dist-packages/materials/sia262/SIA262_concrete.py
 /usr/local/lib/python2.7/dist-packages/materials/sia262/SIA262_concrete.pyc
+/usr/local/lib/python2.7/dist-packages/materials/sia262/SIA262_limit_state_checking.py
+/usr/local/lib/python2.7/dist-packages/materials/sia262/SIA262_limit_state_checking.pyc
 /usr/local/lib/python2.7/dist-packages/materials/sia262/SIA262_materials.py
 /usr/local/lib/python2.7/dist-packages/materials/sia262/SIA262_materials.pyc
 /usr/local/lib/python2.7/dist-packages/materials/sia262/SIA262_reinforcing_steel.py

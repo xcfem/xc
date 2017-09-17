@@ -14,7 +14,7 @@ from materials.fiber_section import defSeccionHASimple
 
 from materials.ehe import EHE_materials
 from materials.sia262 import SIA262_materials
-from materials.sia262 import crackControlSIA262 as cc
+from materials.sia262 import SIA262_limit_state_checking
 from model import predefined_spaces
 
 __author__= "Luis C. Pérez Tato (LCPT)"
@@ -88,7 +88,7 @@ analisis= predefined_solutions.simple_newton_raphson(prueba)
 analOk= analisis.analyze(10)
 
 
-secHAParamsFis= cc.CrackControlSIA262('SLS_crack',400e6)
+secHAParamsFis= SIA262_limit_state_checking.CrackControlSIA262('SLS_crack',400e6)
 
 
 elements= preprocessor.getElementLoader

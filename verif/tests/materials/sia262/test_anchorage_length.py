@@ -4,7 +4,7 @@
 
 from __future__ import division
 import sys
-import materials.sia262.anchorage
+import materials.sia262.SIA262_limit_state_checking
 
 __author__= "Luis C. Pérez Tato (LCPT)"
 __copyright__= "Copyright 2014, LCPT"
@@ -15,18 +15,18 @@ __email__= "l.pereztato@gmail.com"
 phi= 12e-3
 fsd= 435e6
 fck= 16e6
-fbdA= materials.sia262.anchorage.adherenceStress(fck)
-lbdA= materials.sia262.anchorage.getBasicAnchorageLength(phi,fck,fsd)
+fbdA= materials.sia262.SIA262_limit_state_checking.adherenceStress(fck)
+lbdA= materials.sia262.SIA262_limit_state_checking.getBasicAnchorageLength(phi,fck,fsd)
 ratioA= (lbdA/phi-60.4166666667)/60.4166666667
 
 fck= 20e6
-fbdB= materials.sia262.anchorage.adherenceStress(fck)
-lbdB= materials.sia262.anchorage.getBasicAnchorageLength(phi,fck,fsd)
+fbdB= materials.sia262.SIA262_limit_state_checking.adherenceStress(fck)
+lbdB= materials.sia262.SIA262_limit_state_checking.getBasicAnchorageLength(phi,fck,fsd)
 ratioB= (lbdB/phi-51.7857142857)/51.7857142857
 
 fck= 30e6
-fbdC= materials.sia262.anchorage.adherenceStress(fck)
-lbdC= materials.sia262.anchorage.getBasicAnchorageLength(phi,fck,fsd)
+fbdC= materials.sia262.SIA262_limit_state_checking.adherenceStress(fck)
+lbdC= materials.sia262.SIA262_limit_state_checking.getBasicAnchorageLength(phi,fck,fsd)
 ratioC= (lbdC/phi-40.2777777778)/40.2777777778
 
 # print "lbdA= ",lbdA, " m"
