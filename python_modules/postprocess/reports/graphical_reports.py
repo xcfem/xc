@@ -81,9 +81,8 @@ class RecordLoadCaseDisp(object):
                    in order to change perspective of isometric views 
                    (defaults to 1, usual values 0.1 to 10)
   :ivar viewNameBeams: name of the view  for beam elements displays (defaults to v"XYZPos")
-  :ivar hCamFctBeams:  factor that applies to the height of the camera position for
-                 beam displays (defaults to 1)
-
+  :ivar hCamFctBeams:  factor that applies to the height of the camera 
+                       position for beam displays (defaults to 1)
   '''
 
   def __init__(self,loadCaseName,loadCaseDescr,loadCaseExpr,setsToDispLoads,setsToDispDspRot,setsToDispIntForc):
@@ -145,14 +144,14 @@ class RecordLoadCaseDisp(object):
 
   def simplLCReports(self,FEproblem,pathGr,texFile,grWdt,capStdTexts):
     '''Creates the graphics files of displacements and internal forces 
-    calculated for a simple load case and insert them in a LaTex file
+     calculated for a simple load case and insert them in a LaTex file
     
     :param FEproblem:  finite element problem
     :param pathGr:     directory to place figures (ex: 'text/graphics/loads/')
     :param texFile:    laTex file where to include the graphics 
                        (e.g.:'text/report_loads.tex')
     :param grWdt:      width to be applied to graphics
-    :param capStdTexts:dictionary with the standard captions
+    :param capStdTexts: dictionary with the standard captions.
     '''
     lcs=QGrph.QuickGraphics(FEproblem)
     #solve for load case
@@ -208,18 +207,18 @@ class RecordLoadCaseDisp(object):
     return
 
 def checksReports(limitStateLabel,setsShEl,argsShEl,capTexts,pathGr,texReportFile,grWdt,setsBmElView=[],argsBmElScale=[]):
-    '''Create a LaTeX report including the desired graphical results obtained in
-    the verification of a limit state.
+    '''Create a LaTeX report including the desired graphical results obtained
+     in the verification of a limit state.
 
-    :param limitStateLabel:limit state
+    :param limitStateLabel: limit state
     :param setsShEl:   Ordered list of sets of shell elements (defined in 
                        model_data.py as instances of utils_display.setToDisplay)
                        to be included in the report
     :param argsShEl:   Ordered list of arguments to be included in the report   
                        for shell elements
-     :param capTexts:  dictionary from wich to read the texts for captions
+    :param capTexts:  dictionary from wich to read the texts for captions
     :param pathGr:     width to be applied to graphics 
-    :param texReportFile:laTex file where to include the graphics
+    :param texReportFile: laTex file where to include the graphics
     :param grWdt:      width of the graphics for the tex file
     :param setsBmView: Ordered list of lists [set of beam elements, view to 
                        represent this set] to be included in the report. 
@@ -263,9 +262,10 @@ def checksReports(limitStateLabel,setsShEl,argsShEl,capTexts,pathGr,texReportFil
     return
 
 def insertGrInTex(texFile,grFileNm,grWdt,capText,labl=''):
-    '''Include a graphic in a LaTeX file
+    '''Include a graphic in a LaTeX file.
+
     :param texFile:    laTex file where to include the graphics 
-                       (e.g.:'text/report_loads.tex')
+                       (e.g.\:'text/report_loads.tex')
     :param grFileNm:   name of the graphic file with path and without extension
     :param grWdt:      width to be applied to graphics
     :param capText:    text for the caption

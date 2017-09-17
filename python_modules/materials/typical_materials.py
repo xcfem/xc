@@ -123,7 +123,7 @@ def defSteel02(preprocessor,name,E,fy,b,initialStress):
   :param fy:           yield strength 
   :param b:            strain-hardening ratio: ratio between post-yield tangent
                   and initial elastic tangent
-    initialStress:initial stress
+  :param initialStress: initial stress
   '''
   materiales= preprocessor.getMaterialLoader
   materiales.newMaterial("steel02",name)
@@ -416,12 +416,19 @@ def defElasticMembranePlateSection(preprocessor,name,E,nu,rho,h):
 class MaterialData(object):
   '''Base class to construct some material definition classes
   
-  :ivar name:         name identifying the material
-  :ivar E:            Young’s modulus of the material
-  :ivar nu:           Poisson’s ratio
-  :ivar rho:          mass density
+  # :ivar name:         name identifying the material
+  # :ivar E:            Young’s modulus of the material
+  # :ivar nu:           Poisson’s ratio
+  # :ivar rho:          mass density
   '''
   def __init__(self,name,E,nu,rho):
+    '''Base class to construct some material definition classes
+  
+     :param name:         name identifying the material
+     :param E:            Young’s modulus of the material
+     :param nu:           Poisson’s ratio
+     :param rho:          mass density
+    '''
     self.name= name
     self.E= E
     self.nu= nu
@@ -444,7 +451,7 @@ class DeckMaterialData(MaterialData):
     self.thickness= thickness
     self.material=material
   def getAreaDensity(self):
-    ''':returns: the mass per unit area'''
+    '''return the mass per unit area'''
     return self.rho*self.thickness
   def setupElasticSection(self,preprocessor):
     '''create an elastic isotropic section appropiate for plate and shell analysis
@@ -467,7 +474,7 @@ class BeamMaterialData(MaterialData):
     self.section= section
     self.material= material
   def getLongitudinalDensity(self):
-    ''':returns: the mass per unit length'''
+    '''return the mass per unit length'''
     return self.rho*self.section.A()
   def setupElasticShear3DSection(self,preprocessor):
     '''Return an elastic section appropiate for 3D beam analysis

@@ -128,7 +128,7 @@ secHAParamsCortante.theta= math.radians(45)
 secHAParamsCortante.alpha= math.radians(90)
 
 
-secHAParamsTorsion= EHE_limit_state_checking.calcParamsSeccionHuecaEficaz(geomSecHA,depth/2.0,cover)
+secHAParamsTorsion= EHE_limit_state_checking.computeEffectiveHollowSectionParameters(geomSecHA,depth/2.0,cover)
 
 
 elements= preprocessor.getElementLoader

@@ -124,7 +124,7 @@ class Concrete(matWDKD.MaterialWithDKDiagrams):
     :ivar tensionStiffparam: variable to determine the behaviour of concrete under tension. 
 
       - If tensionStiffparam==None (default value) no tensile strength is considered; the stress strain relationship corresponds to a concrete01 material (zero tensile strength).
-      - If tensionStiffparam is an instance of the class paramTensStiffenes, tension stiffeness of concrete is considered in the constitutive model to take into account the tensile capacity of the intact concrete between cracks. The stress strain relationship corresponds to a concrete02 material (linear tension softening),  based on the tension-stiffening constitutive model proposed by Stramandinoli & La Rovere (ref. article: Engineering Structures 30 (2008) 2069-2080).
+      - If tensionStiffparam is an instance of the class paramTensStiffness, tension stiffness of concrete is considered in the constitutive model to take into account the tensile capacity of the intact concrete between cracks. The stress strain relationship corresponds to a concrete02 material (linear tension softening),  based on the tension-stiffening constitutive model proposed by Stramandinoli & La Rovere (ref. article: Engineering Structures 30 (2008) 2069-2080).
     """
     nuc= 0.2 #** Poisson coefficient
     cemType='N'     #type of cement:
@@ -233,7 +233,7 @@ class Concrete(matWDKD.MaterialWithDKDiagrams):
         ''' Defines a uniaxial material to represent the characteristic stress-strain diagram
 
           - If tensionStiffparam== None (default value) no tensile strength is considered; the stress strain relationship corresponds to a concrete01 material (zero tensile strength).
-          - If tensionStiffparam is an instance of the class paramTensStiffenes, tension stiffeness of concrete is considered in the constitutive model to take into account the tensile capacity of the intact concrete between cracks. The stress strain relationship corresponds to a concrete02 material (linear tension softening),  based on the tension-stiffening constitutive model proposed by Stramandinoli & La Rovere (ref. article: Engineering Structures 30 (2008) 2069-2080).
+          - If tensionStiffparam is an instance of the class paramTensStiffness, tension stiffness of concrete is considered in the constitutive model to take into account the tensile capacity of the intact concrete between cracks. The stress strain relationship corresponds to a concrete02 material (linear tension softening),  based on the tension-stiffening constitutive model proposed by Stramandinoli & La Rovere (ref. article: Engineering Structures 30 (2008) 2069-2080).
         '''
         if self.tensionStiffparam==None:
             self.materialDiagramK= typical_materials.defConcrete01(preprocessor=preprocessor,name=self.nmbDiagK,epsc0=self.epsilon0(),fpc=self.fmaxK(),fpcu=self.fmaxK(),epscu=self.epsilonU())
@@ -263,7 +263,7 @@ class Concrete(matWDKD.MaterialWithDKDiagrams):
         ''' Defines a uniaxial material to represent the design stress-strain diagram
 
           - If tensionStiffparam==None (default value) no tensile strength is considered; the stress strain relationship corresponds to a concrete01 material (zero tensile strength).
-          - If tensionStiffparam is an instance of the class paramTensStiffenes, tension stiffeness of concrete is considered in the constitutive model to take into account the tensile capacity of the intact concrete between cracks. The stress strain relationship corresponds to a concrete02 material (linear tension softening),  based on the tension-stiffening constitutive model proposed by Stramandinoli & La Rovere (ref. article: Engineering Structures 30 (2008) 2069-2080).
+          - If tensionStiffparam is an instance of the class paramTensStiffness, tension stiffness of concrete is considered in the constitutive model to take into account the tensile capacity of the intact concrete between cracks. The stress strain relationship corresponds to a concrete02 material (linear tension softening),  based on the tension-stiffening constitutive model proposed by Stramandinoli & La Rovere (ref. article: Engineering Structures 30 (2008) 2069-2080).
         '''
         if self.tensionStiffparam==None:
             self.materialDiagramD= typical_materials.defConcrete01(preprocessor=preprocessor,name=self.nmbDiagD,epsc0=self.epsilon0(),fpc=self.fmaxD(),fpcu=self.fmaxD(),epscu=self.epsilonU())
@@ -643,26 +643,30 @@ class Concrete(matWDKD.MaterialWithDKDiagrams):
       return typical_materials.defElasticMembranePlateSection(preprocessor,name,E= self.getEcm(), nu=self.nuc ,rho= self.density(),h= thickness)
 
 
-class paramTensStiffenes(object):
-    '''Parameters to generate a concrete02 material based on the tension-stiffening constitutive model of concrete proposed by Stramandinoli & La Rovere (ref. article: Engineering Structures 30 (2008) 2069-2080).
+class paramTensStiffness(object):
+    '''Parameters to generate a concrete02 material based on the tension-stiffening constitutive 
+       model of concrete proposed by Stramandinoli & La Rovere 
+       (ref. article: Engineering Structures 30 (2008) 2069-2080).
 
     :ivar concrMat: concrete material of the RC section
     :ivar reinfMat: reinforcing steel material of the RC section 
-    :ivar reinfRatio: section reinforcement ratio, obtained as:
-
+    :ivar reinfRatio: section reinforcement ratio, obtained as\:
         -ro=As/Ac for members subjected to direct tension.
         -roef=As/Acef for members under bending, where Acef is the effective
-         area, that corresponds to the tensile zone in the member section. 
-         Aef can be obtained as (see CEB-FIP MC-90) Aef = 2.5b(h-d) < b(h-x)/3, where x is the neutral axis depth.
-         Aef can be estimated as Aef~=bh/4 
-    :ivar nPoints: number of (strain,stress) pairs of values to approximate the exponential decay curve adopted 
-    for the post-cracking range (defaults to 50)
-    :ivar diagType: type of diagram: 'K' or 'k' for characteristic, 'D' or 'd' for design (defaults to characteristic)
+        area, that corresponds to the tensile zone in the member section.
+        Aef can be obtained as (see CEB-FIP MC-90) Aef = 2.5b(h-d) < b(h-x)/3, where x is 
+        the neutral axis depth. Aef can be estimated as Aef~=bh/4 
+    :ivar nPoints: number of (strain,stress) pairs of values to approximate the exponential
+      decay curve adopted for the post-cracking range (defaults to 50)
+    :ivar diagType: type of diagram\: 'K' or 'k' for characteristic, 'D' or 'd' for design
+      (defaults to characteristic)
     :ivar E_c: concrete elastic modulus [Pa] [+] (defaults to concrMat.Ecm())
     :ivar f_ct: concrete tensile strength [Pa][+] (defaults to concrMat.fctd() or concrMat.fctk())
-    :ivar E_ct: concrete elastic modulus [Pa] [+] in the tensile linear-elastic range (defaults to concrMat.Ect())
+    :ivar E_ct: concrete elastic modulus [Pa] [+] in the tensile linear-elastic 
+      range (defaults to concrMat.Ect())
     :ivar E_s: steel elastic modulus [Pa] [+] (defaults to reinfMat.Es)
-    :ivar eps_y: reinforcing steel strain at yield point  [Pa][+] (defaults to reinfMat.eyd() or reinfMat.eyk())
+    :ivar eps_y: reinforcing steel strain at yield point [Pa][+]
+      (defaults to reinfMat.eyd() or reinfMat.eyk())
     '''
 
     def __init__(self,concrMat,reinfMat,reinfRatio,diagType):
@@ -685,20 +689,20 @@ class paramTensStiffenes(object):
             self.eps_y=self.reinfMat.eyk()
 
     def nu(self):
-        ''':returns: steel-to-concrete elastic modulus ratio nu = Es/Ec
+        '''return steel-to-concrete elastic modulus ratio nu = Es/Ec
         '''
         retval=self.E_s/self.E_c
         return retval
 
     def alfa(self):
-        ''':returns: the parameter for the exponential decay curve adopted for the post-cracking range, 
+        '''returns the parameter for the exponential decay curve adopted for the post-cracking range, 
         until yielding of reinforcement takes place
         '''
         retval=0.017+0.255*self.nu()*self.ro-0.106*(self.nu()*self.ro)**2+0.016*(self.nu()*self.ro)**3
         return retval
 
     def ptosExpCurvPostCracking(self):
-        ''':returns: a list of strains and the list of their corresponding stresses in exponential 
+        '''return a list of strains and the list of their corresponding stresses in exponential 
         decay curve adopted for the post-cracking range, until yielding of reinforcement takes place
 
         '''
@@ -712,7 +716,7 @@ class paramTensStiffenes(object):
         return {'strainPts':strainPts , 'stressPts':stressPts }
 
     def regresLine(self):
-        ''':returns: the slope [a] and interceptY [b]  (the value of y when x=0) of the regression line y=ax+b 
+        '''return the slope [a] and interceptY [b]  (the value of y when x=0) of the regression line y=ax+b 
         that approaches the exponential decay curve adopted for the post-cracking range. It also returns interceptX
         (the value of x when y=0)
  
@@ -723,7 +727,7 @@ class paramTensStiffenes(object):
         return {'slope': rline.slope, 'interceptY':rline.intercept, 'interceptX': -rline.intercept/rline.slope}
 
     def pointOnsetCracking(self):
-        ''':returns: the calculated (strain,stress) point of the concrete diagram where cracking starts. It's obtained as 
+        '''return the calculated (strain,stress) point of the concrete diagram where cracking starts. It's obtained as 
         the intersection of the straight line thas reproduces the linear-elastic range in tension (before cracking) with
         the regression line  that approaches the exponential decay curve adopted for the post-cracking range
         '''
@@ -734,7 +738,7 @@ class paramTensStiffenes(object):
         return {'eps_ct':pInt.x, 'ft':pInt.y}
 
     def slopeRegresLineFixedPoint(self):
-        ''':returns: the slope of the regression line that approaches the exponential decay curve adopted for the 
+        '''return the slope of the regression line that approaches the exponential decay curve adopted for the 
         post-cracking range, passings through the point (eps_ct,f_ct) [point of concrete onset cracking]
  
         '''
@@ -809,11 +813,12 @@ def concreteDesignTangentTest(preprocessor, concreteRecord):
 
 class ReinforcingSteel(matWDKD.MaterialWithDKDiagrams):
   """Reinforcing steel parameters 
-  Attributes:
-    fyk:      Characteristic value of the yield strength.
-    emax:     maximum strain in tension
-    gammaS:   Partial factor for material.
-    k:        fmaxk/fyk ratio (Annex C of EC2: class A k>=1,05 , class B k>=1,08)
+
+    :ivar fyk:      Characteristic value of the yield strength.
+    :ivar emax:     maximum strain in tension
+    :ivar gammaS:   Partial factor for material.
+    :ivar k:        fmaxk/fyk ratio (Annex C of EC2: class A k>=1,05,
+     class B k>=1,08)
   """
   Es= 2e11 # Elastic modulus of the material.
 #  fmaxk= 0.0 # Characteristic ultimate stress

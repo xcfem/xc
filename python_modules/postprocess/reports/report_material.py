@@ -19,8 +19,8 @@ class ConcreteReport(object):
         self.concr=concrDiag
 
     def tableCompress(self):
-        ''':returns: a LaTeX table that depicts the concrete compressive 
-        properties.
+        ''' returns a LaTeX table that depicts the concrete compressive 
+         properties.
         '''
         retval='\\multicolumn{2}{c}{Compressive properties} \\\\ \n '
         retval+='\\hline \n '
@@ -32,29 +32,30 @@ class ConcreteReport(object):
         return retval
     
     def tableTens(self):
-        ''':returns: a LaTeX table that depicts the concrete tensile 
-        properties.
+        ''' returns a LaTeX table that depicts the concrete tensile 
+         properties.
         '''
         retval='\\multicolumn{2}{c}{Tensile properties} \\\\ \n '
         retval+='\\hline \n '
         retval+='$f_{ct}$ & ' + str(round(self.concr.ft*1e-6,2)) + ' MPa \\\\ \n '
         return retval
 
-    def tableTensStiff(self,paramTensStiffeness):
-        ''':returns: a LaTeX table that depicts the concrete tension 
-        stiffening properties (concrete of type concrete02).
-        :param paramTensStiffeness: instance of the object 
-        concrete_base.paramTensStiffenes that defines the parameters 
-        of tension stiffenes
+    def tableTensStiff(self,paramTensStiffness):
+        '''returns a LaTeX table that depicts the concrete tension 
+         stiffening properties (concrete of type concrete02).
+
+        :param paramTensStiffness: instance of the object 
+         concrete_base.paramTensStiffness that defines the parameters 
+         of tension stiffness
         '''
         retval='\\multicolumn{2}{c}{Tension-stiffening} \\\\ \n '
         retval+='\\hline \n '
-        retval+='$\\nu$ & ' + str(paramTensStiffeness.nu())+'  \\\\ \n '
-        retval+='$\\rho_{eff}$ & ' + str(paramTensStiffeness.ro*1e2) +'\%  \\\\ \n '
-        retval+='\\multicolumn{2}{l}{exponential curve $\\alpha$=' + str(round(paramTensStiffeness.alfa(),3)) +'} \\\\ \n '
-        retval+='\\multicolumn{2}{l}{slope regression line:' + str(round(paramTensStiffeness.regresLine()['slope']*1e-9,2)) +' } \\\\ \n '
+        retval+='$\\nu$ & ' + str(paramTensStiffness.nu())+'  \\\\ \n '
+        retval+='$\\rho_{eff}$ & ' + str(paramTensStiffness.ro*1e2) +'\%  \\\\ \n '
+        retval+='\\multicolumn{2}{l}{exponential curve $\\alpha$=' + str(round(paramTensStiffness.alfa(),3)) +'} \\\\ \n '
+        retval+='\\multicolumn{2}{l}{slope regression line:' + str(round(paramTensStiffness.regresLine()['slope']*1e-9,2)) +' } \\\\ \n '
         retval+='\\multicolumn{2}{l}{inters. point (onset carcking):} \\\\ \n '
-        retval+='\\multicolumn{2}{c}{($\\epsilon$='+str(round(paramTensStiffeness.pointOnsetCracking()['eps_ct']*1e2,2)) +'\\%, $\\sigma$='+ str(round(paramTensStiffeness.pointOnsetCracking()['ft']*1e-6,2)) + 'MPa)} \\\\ \n '
+        retval+='\\multicolumn{2}{c}{($\\epsilon$='+str(round(paramTensStiffness.pointOnsetCracking()['eps_ct']*1e2,2)) +'\\%, $\\sigma$='+ str(round(paramTensStiffness.pointOnsetCracking()['ft']*1e-6,2)) + 'MPa)} \\\\ \n '
         return retval
         
 
@@ -65,8 +66,8 @@ def report_concrete02(concrDiag,paramTensStiffening,grTitle,grFileName,texFileNa
 
     :param concrDiag: concrete material of type concrete02
     :param paramTensStiffening: instance of the object 
-    concrete_base.paramTensStiffenes that defines the parameters 
-    of tension stiffenes.
+     concrete_base.paramTensStiffness that defines the parameters 
+     of tension stiffness.
     :param grTitle: title for the graphic
     :param grFileName: name of the graphics file
     :param texFileName: name of the LaTeX file

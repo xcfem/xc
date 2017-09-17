@@ -10,7 +10,7 @@ __email__= "l.pereztato@gmail.com ana.Ortega.Ort@gmail.com"
 
 class MaterialWithDKDiagrams(object):
   """Base class for materials with characteristic (K) and design (D) diagrams 
-  Attributes:
+
     :ivar materialName: name of material
     :ivar nmbDiagK: name of the characteristic diagram
     :ivar matTagK:  tag of the uni-axial material in the characteristic diagram

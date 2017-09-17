@@ -44,37 +44,37 @@ class IJKRange(object):
     else:
       self.ijkMax= ijkMax
   def getIMin(self):
-    ''':returns: the value of the index I minimum in the range '''
+    '''return the value of the index I minimum in the range '''
     return self.ijkMin[0]
   def getIMax(self):
-    ''':returns: the value of the index I maximum in the range '''
+    '''return the value of the index I maximum in the range '''
     return self.ijkMax[0]
   def getJMin(self):
-    ''':returns: the value of the index J minimum in the range '''
+    '''return the value of the index J minimum in the range '''
     return self.ijkMin[1]
   def getJMax(self):
-    ''':returns: the value of the index J maximum in the range '''
+    '''return the value of the index J maximum in the range '''
     return self.ijkMax[1]
   def getKMin(self):
-    ''':returns: the value of the index K minimum in the range '''
+    '''return the value of the index K minimum in the range '''
     return self.ijkMin[2]
   def getKMax(self):
-    ''':returns: the value of the index K maximum in the range '''
+    '''return the value of the index K maximum in the range '''
     return self.ijkMax[2]
   def getRange(self,index):
-    ''':returns: a list with the range of indexes between minIindex and maxIindex '''
+    '''return a list with the range of indexes between minIindex and maxIindex '''
     mn= self.ijkMin[index]
     mx= self.ijkMax[index]+1 #Last index included
     return range(mn,mx)
   def getIRange(self):
-    ''':returns: a list with the range of indexes between minIindex and maxIindex '''
+    '''return a list with the range of indexes between minIindex and maxIindex '''
     return self.getRange(0)
   def getJRange(self):
-    ''':returns: a list with the range of index between minJindex and maxJindex '''
+    '''return a list with the range of index between minJindex and maxJindex '''
     return self.getRange(1)
 
   def getKRange(self):
-    ''':returns: a list with the range of indexes between minKindex and maxKindex '''
+    '''return a list with the range of indexes between minKindex and maxKindex '''
     return self.getRange(2)
 
   def __str__(self):
@@ -305,7 +305,7 @@ class ijkGrid(object):
     are implicit in the name of the surface.
 
     :param surfName: name given to the grid surface
-    :returns: the quadrangle surface
+    return the quadrangle surface
     '''
     points= self.prep.getCad.getPoints
     (tgPt1,tgPt2,tgPt3,tgPt4)=(int(surfName[1:5]),int(surfName[5:9]),int(surfName[9:13]),int(surfName[13:17]))
@@ -322,7 +322,7 @@ class ijkGrid(object):
 
     :param ind4Pnt: tuple of ordered points defined by their grid indices 
                     (i,j,k)
-    :returns: the quadrangle surface
+    return the quadrangle surface
     '''
     (pto1,pto2,pto3,pto4)=tuple([self.getTagPntGrid(ind4Pnt[i]) for i in range(4)])
     nameSurf= self.gridSurfName(pto1,pto2,pto3,pto4)
@@ -334,7 +334,7 @@ class ijkGrid(object):
 
     :param ind2Pnt: tuple of ordered points defined by their grid indices 
                     (i,j,k)
-    :returns: the line
+    return the line
     '''
     (pto1,pto2)=tuple([self.getTagPntGrid(ind2Pnt[i]) for i in range(2)])
     nameLin= self.gridLinName(pto1,pto2)
@@ -345,7 +345,7 @@ class ijkGrid(object):
     are implicit in the name of the line.
 
     :param linName: name given to the grid line
-    :returns: the line
+    return the line
     '''
     points= self.prep.getCad.getPoints
     (tgPt1,tgPt2)=(int(linName[1:5]),int(linName[5:9]))
@@ -543,7 +543,7 @@ class ijkGrid(object):
         
 
 def setEntLstSurf(preprocessor,lstSurf,nmbrSet):
-  ''':returns: the set of entities associated with the surfaces in the list `lstSurf`
+  '''return the set of entities associated with the surfaces in the list `lstSurf`
   '''
   retval= preprocessor.getSets.defSet(nmbrSet)
   for s in lstSurf:
@@ -556,7 +556,7 @@ def setEntLstSurf(preprocessor,lstSurf,nmbrSet):
 #Funciones geométricas simples
 
 def lstNodesPLine(setBusq,lstPtsPLine):
-    ''':returns: the subset of nodes from the set `setBusq` that belong to the line defined by the successive points in list `lstPts`
+    '''return the subset of nodes from the set `setBusq` that belong to the line defined by the successive points in list `lstPts`
     '''
     nodAux= setBusq.getNodes
     retval= list() 
@@ -571,7 +571,7 @@ def lstNodesPLine(setBusq,lstPtsPLine):
     return retval
 
 def setLin2lstLin(setLin):
-    ''':returns: a list with the lines included in the set `setLin` '''
+    '''return a list with the lines included in the set `setLin` '''
     retval= list()
     linAux= setLin.getLines
     for l in linAux:
@@ -579,7 +579,7 @@ def setLin2lstLin(setLin):
     return retval
     
 def setPnt2lstPnt(setPnt):
-    ''':returns: a list with the points included in set `setPto` '''
+    '''return a list with the points included in set `setPto` '''
     retval= list()
     pntAux= setPnt.getPoints
     for p in pntAux:
@@ -587,7 +587,7 @@ def setPnt2lstPnt(setPnt):
     return retval
  
 def setSurf2lstSurf(setSurf):
-    ''':returns: a list with the surfaces included in the set `setSurf`'''
+    '''return a list with the surfaces included in the set `setSurf`'''
     retval= list()
     surfAux= setSurf.getSurfaces
     for s in surfAux:
@@ -595,7 +595,7 @@ def setSurf2lstSurf(setSurf):
     return retval
 
 def setNod2lstNod(setNod):
-    ''':returns: a list with the nodes included in the set `setNod` '''
+    '''return a list with the nodes included in the set `setNod` '''
     retval= list()
     nodAux= setNod.getNodes
     for n in nodAux:
@@ -603,7 +603,7 @@ def setNod2lstNod(setNod):
     return retval
 
 def setElem2lstElem(setElem):
-    ''':returns: a list with the elements included in the set `setElem` '''
+    '''return a list with the elements included in the set `setElem` '''
     retval= list()
     elemAux= setElem.getElements
     for n in elemAux:
@@ -611,7 +611,7 @@ def setElem2lstElem(setElem):
     return retval
    
 def lstUnionSetsSurf(setSurf1,setSurf2):
-    ''':returns: a list with the tags of the surfaces inlcuded in the union of sets `setSurf1` and `setSurf2` '''
+    '''return a list with the tags of the surfaces inlcuded in the union of sets `setSurf1` and `setSurf2` '''
     retval= list()
     for s in setSurf1.getSufaces:
         retval.append(s.tag)
@@ -622,7 +622,7 @@ def lstUnionSetsSurf(setSurf1,setSurf2):
 
 
 def getLin2Pts(lstLinBusq,tPto1,tPto2):
-    ''':returns: the line that belongs to the set `lstLinBusq` and whose
+    '''return the line that belongs to the set `lstLinBusq` and whose
     starting and ending points are those of tags `tPto1` and `tPto2`
     '''
     broke_out= False

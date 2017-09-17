@@ -93,7 +93,7 @@ secHAParamsFis= EHE_limit_state_checking.CrackControl('SLS_crack')
 elements= preprocessor.getElementLoader
 ele1= elements.getElement(1)
 scc= ele1.getSection()
-secHAParamsFis.calcApertCaracFis(scc,EHE_materials.HA25.matTagK,EHE_materials.B500S.matTagK,EHE_materials.HA25.fctm())
+secHAParamsFis.computeWk(scc,EHE_materials.HA25.matTagK,EHE_materials.B500S.matTagK,EHE_materials.HA25.fctm())
 
 ratio1= secHAParamsFis.Wk
 

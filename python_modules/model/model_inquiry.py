@@ -36,7 +36,7 @@ def getTagsElementosSet(preprocessor,setName):
   return retvalTagsElementosSet
 
 def getNodesInCoordinateRegion(xmin,xmax,ymin,ymax,zmin,zmax,xcSet):
-  ''':returns: a list with the the nodes in a cubic region defined by 2 points
+  '''return a list with the the nodes in a cubic region defined by 2 points
   with coordinates (xmin,ymin,zmin) and (xmax,ymax,zmax)
 
   :param xmin,ymin,zmin,xmax,ymax,zmax: coordinates delimiting the region

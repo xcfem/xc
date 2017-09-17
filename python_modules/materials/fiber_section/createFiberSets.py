@@ -131,7 +131,7 @@ def reselTensionFibers(scc,fiberSetName,tensionFibersSetName):
   return tensionFibers
 
 def fiberSectionSetupRC3Sets(scc,concrMatTag, concrSetName,reinfMatTag, reinfSetName):
-  '''returns a set of tensioned fibers `reinforcementTraccion` of a fiber section of reinforced concrete.
+  '''returns a set of tensioned fibers `tensionedReinforcement` of a fiber section of reinforced concrete.
   
   :param scc:         name identifying the fiber section
   :param concrMatTag:     tag of the uniaxial material that makes up the concrete fibers
@@ -140,6 +140,6 @@ def fiberSectionSetupRC3Sets(scc,concrMatTag, concrSetName,reinfMatTag, reinfSet
   :param reinfSetName:    name of the set of fibers of reinforcing steel to be generated
   '''
   sets= fiberSectionSetupRCSets(scc,concrMatTag,concrSetName,reinfMatTag,reinfSetName)
-  sets.reselTensionFibers(scc,"reinforcementTraccion")
+  sets.reselTensionFibers(scc,"tensionedReinforcement")
   return sets
   

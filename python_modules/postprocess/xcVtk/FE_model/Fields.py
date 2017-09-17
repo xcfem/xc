@@ -92,7 +92,7 @@ class ExtrapolatedProperty(ExtrapolatedScalarField):
     self.display(defDisplay,fName,caption)
 
 def getScalarFieldFromControlVar(attributeName,argument,xcSet,component,fUnitConv):
-  ''':returns: an scalar field that represents the control var over the 
+  '''return an scalar field that represents the control var over the 
                elements in the set.
 
      :param attributeName: name of the element's property that has the 

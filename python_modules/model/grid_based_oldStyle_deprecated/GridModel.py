@@ -51,10 +51,10 @@ class DeckMaterialData(object):
     self.thickness= thickness
     self.material=material
   def getAreaDensity(self):
-    ''':returns: the mass per unit area'''
+    '''return the mass per unit area'''
     return self.material.rho*self.thickness
   def setup(self,preprocessor):
-    ''':returns: the elastic isotropic section appropiate for plate and shell analysis
+    '''return the elastic isotropic section appropiate for plate and shell analysis
     '''
     typical_materials.defElasticMembranePlateSection(preprocessor,self.name,self.material.E,self.material.nu,self.getAreaDensity(),self.thickness)
 
@@ -74,10 +74,10 @@ class BeamMaterialData(object):
     self.section=section
     self.material=material
   def getLongitudinalDensity(self):
-    ''':returns: the mass per unit length'''
+    '''return the mass per unit length'''
     return self.material.rho*self.section.A()
   def setup(self,preprocessor):
-    ''':returns: the elastic section appropiate for 3D beam analysis
+    '''return the elastic section appropiate for 3D beam analysis
     '''
     typical_materials.defElasticShearSection3d(preprocessor,self.name,self.section.A(),self.material.E,self.material.G(),self.section.Iz(),self.section.Iy(),self.section.J(),self.section.alphaZ())
 
@@ -142,7 +142,7 @@ class IJKRangeList(object):
     return i
 
   def getSet(self):
-    ''':Returns: an XC set with all the elements in the range list.'''
+    '''return an XC set with all the elements in the range list.'''
     setName= self.name + '_xcSet'
     xcSets= self.getPreprocessor().getSets
     retval= xcSets.defSet(setName)
@@ -159,7 +159,7 @@ def getIJKRangeListFromSurfaces(surfaces):
   a parameter
 
   :param surfaces:  list of objects of type  ``MaterialSurface`` 
-  :returns: object of type ``IJKRangeList``
+  return object of type ``IJKRangeList``
   '''
   retval= None
   if(surfaces):
@@ -257,7 +257,7 @@ class MaterialLine(MaterialBase):
       l.genMesh(xc.meshDir.I)
 
   def getElements(self):
-    ''':returns: a list of the elements of the material line.'''
+    '''return a list of the elements of the material line.'''
     retval= []
     for lin in self.lstLines:
       elLin= lin.getElements()
@@ -368,7 +368,7 @@ class ElasticFoundationRanges(IJKRangeList):
     self.elasticFoundation.generateSprings(s)
 
   def getCDG(self):
-    ''':Returns: the geometric baricenter of the springs.'''
+    '''return the geometric baricenter of the springs.'''
     return self.elasticFoundation.getCentroid()
 
   def calcPressures(self):
@@ -762,14 +762,14 @@ class GridModel(object):
 #    self.dicLin= dict() #Lines dictionary.
     
   def getFEProblem(self):
-    ''':returns: the FE problem linked with the grid model'''
+    '''return the FE problem linked with the grid model'''
     return self.FEProblem
   def getPreprocessor(self):
-    ''':returns: the preprocessor'''
+    '''return the preprocessor'''
     return self.FEProblem.getPreprocessor
 
   def newMaterialSurface(self,name,material,elemType,elemSize):
-    ''':returns: a type of surface to be discretized from the defined 
+    '''return a type of surface to be discretized from the defined 
     material, type of element and size of the elements.
     
     :param name:     name to identify the type of surface
@@ -780,7 +780,7 @@ class GridModel(object):
     return MaterialSurface(name, self.grid, material,elemType,elemSize)
 
   def newMaterialLine(self,name,material,elemType,elemSize,vDirLAxZ):
-    ''':returns: a type of line to be discretized from the defined 
+    '''return a type of line to be discretized from the defined 
     material, type of element and size of the elements.
     
     :param name:     name to identify the line
@@ -797,25 +797,25 @@ class GridModel(object):
     return MaterialLine(name, self.grid, material,elemType,elemSize,vDirLAxZ)
 
   def setMaterials(self,materialDataList):
-    ''':returns: the dictionary of materials contained in the list given as a parameter
+    '''return the dictionary of materials contained in the list given as a parameter
     '''
     self.materialData= MaterialDataMap(materialDataList)
     return self.materialData
 
   def setMaterialSurfacesMap(self,materialSurfaceList):
-    ''':returns: the dictionary of the material-surfaces contained in the list given as a parameter
+    '''return the dictionary of the material-surfaces contained in the list given as a parameter
     '''
     self.conjSup= MaterialSurfacesMap(materialSurfaceList)
     return self.conjSup
 
   def setMaterialLinesMap(self,materialLineList):
-    ''':returns: the dictionary of the material-lines contained in the list given as a parameter
+    '''return the dictionary of the material-lines contained in the list given as a parameter
     '''
     self.conjLin= MaterialLinesMap(materialLineList) 
     return self.conjLin
 
   def getElements(self, nombreConj):
-    ''':returns: a list of the elements of the material surfaces or lines
+    '''return a list of the elements of the material surfaces or lines
 
     :param nombreConj:  key included in conjSup.keys() or conjLin.keys()
     '''
@@ -866,7 +866,7 @@ class GridModel(object):
                                       
 
   def setGrid(self,xList,yList,zList):
-    ''':Returns: the grid of coordinates in the three axes
+    '''return the grid of coordinates in the three axes
     
     :param xList: list of coordinates in global X axis
     :param yList: list of coordinates in global Y axis  
@@ -876,7 +876,7 @@ class GridModel(object):
     return self.grid
 
   def getSurfacesFromListOfRanges(self,listOfRanges):
-    ''':Returns: surfaces (IJKRangeList object) created from the list of ranges.'''
+    '''return surfaces (IJKRangeList object) created from the list of ranges.'''
     sf= list()
     for r in listOfRanges:
       sf.append(grid.IJKRange(r[0],r[1]))
@@ -902,7 +902,7 @@ class GridModel(object):
     return self.constrainedRanges
 
   def newElasticFoundationRanges(self,name, wModulus, cRoz):
-    ''':Returns: a region resting on springs (Winkler elastic foundation)
+    '''return a region resting on springs (Winkler elastic foundation)
     
     :param name:     name to identify the region
     :param wModulus: Winkler modulus of the foundation (springs in Z direction)
@@ -912,7 +912,7 @@ class GridModel(object):
     return ElasticFoundationRanges(name, self.grid, wModulus, cRoz)
 
   def setElasticFoundationRangesMap(self,elasticFoundationRangesList):
-    ''':Returns: a dictionary with the list of Winkler elastic foundations
+    '''return a dictionary with the list of Winkler elastic foundations
     given as a parameter
     '''
     self.elasticFoundationRanges= ElasticFoundationRangesMap(elasticFoundationRangesList)
@@ -945,7 +945,7 @@ class GridModel(object):
 
   def generateLoads(self):
     '''Append the loads for each load state into corresponding load patterns and 
-    :returns: a dictionary with identifiers and the geometric entities (lines and surfaces) generated. #????
+    return a dictionary with identifiers and the geometric entities (lines and surfaces) generated. #????
     '''
     if(hasattr(self,'loadStates')):
       self.lPatterns= self.loadStates.generateLoadPatterns(self.getPreprocessor(),self.grid.dicQuadSurf)
@@ -956,7 +956,7 @@ class GridModel(object):
     return self.grid.dicQuadSurf #???
 
   def displayMesh(self,partToDisplay,caption= '',viewNm='XYZPos',defFScale=0.0):
-    ''':returns: a graphical representation of the mesh
+    '''return a graphical representation of the mesh
 
     :param partToDisplay: XC set of elements to be displayed
     :param caption:       text to write in the graphic

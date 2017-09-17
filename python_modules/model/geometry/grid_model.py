@@ -322,7 +322,7 @@ class GridModel(object):
         are implicit in the name of the surface.
 
         :param surfName: name given to the grid surface
-        :returns: the quadrangle surface
+        return the quadrangle surface
         '''
         points= self.prep.getCad.getPoints
         (tgPt1,tgPt2,tgPt3,tgPt4)=(int(surfName[1:5]),int(surfName[5:9]),int(surfName[9:13]),int(surfName[13:17]))
@@ -339,7 +339,7 @@ class GridModel(object):
 
         :param ind4Pnt: tuple of ordered points defined by their grid indices 
                         (i,j,k)
-        :returns: the quadrangle surface
+        return the quadrangle surface
         '''
         (pto1,pto2,pto3,pto4)=tuple([self.getTagPntGrid(ind4Pnt[i]) for i in range(4)])
         nameSurf= self.gridSurfName(pto1,pto2,pto3,pto4)
@@ -351,7 +351,7 @@ class GridModel(object):
 
         :param ind2Pnt: tuple of ordered points defined by their grid indices 
                         (i,j,k)
-        :returns: the line
+        return the line
         '''
         (pto1,pto2)=tuple([self.getTagPntGrid(ind2Pnt[i]) for i in range(2)])
         nameLin= self.gridLinName(pto1,pto2)
@@ -362,7 +362,7 @@ class GridModel(object):
         are implicit in the name of the line.
 
         :param linName: name given to the grid line
-        :returns: the line
+        return the line
         '''
         points= self.prep.getCad.getPoints
         (tgPt1,tgPt2)=(int(linName[1:5]),int(linName[5:9]))

@@ -23,28 +23,22 @@ class CrackControlSIA262(lscb.CrackControlBaseParameters):
     rcSets= scc.getProp("rcSets")
     concrFibers= rcSets.concrFibers.fSet
     reinfFibers= rcSets.reinfFibers.fSet
-    reinforcementTraccion= rcSets.tensionFibers
+    tensionedReinforcement= rcSets.tensionFibers
 
     self.claseEsfuerzo= scc.getStrClaseEsfuerzo(0.0)
-    self.numBarrasTracc= rcSets.getNumTensionRebars()
-    if(self.numBarrasTracc>0):
+    self.tensionedRebars.number= rcSets.getNumTensionRebars()
+    if(self.tensionedRebars.number>0):
       scc.computeCovers(self.tensionedRebarsFiberSetName)
       scc.computeSpacement(self.tensionedRebarsFiberSetName)
       self.eps1= concrFibers.getStrainMax()
       self.eps2= max(concrFibers.getStrainMin(),0.0)
-      self.rebarsSpacingTracc= reinforcementTraccion.getAverageDistanceBetweenFibers()
-      self.areaRebarTracc= reinforcementTraccion.getArea(1)
-      self.yCDGBarrasTracc= reinforcementTraccion.getCdgY()
-      self.zCDGBarrasTracc= reinforcementTraccion.getCdgZ()
-      self.tensMediaBarrasTracc= reinforcementTraccion.getStressMed()
-      self.iAreaMaxima=  fiberUtils.getIMaxPropFiber(reinforcementTraccion,"getArea")
-    return self.tensMediaBarrasTracc
+      self.tensionedRebars.setup(tensionedReinforcement)
+    return self.tensionedRebars.averageStress
 
   def initControlVars(self,elements):
-    '''
-    Initialize control variables over elements.
-    Parameters:
-      elements:    elements to define control variables in
+    ''' Initialize control variables over elements.
+
+      :param elements: elements to define control variables in
     '''
     for e in elements:
       e.setProp(self.limitStateLabel,cv.CrackControlVars(idSection= e.getProp('idSection')))

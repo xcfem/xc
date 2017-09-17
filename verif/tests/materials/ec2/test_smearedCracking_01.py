@@ -70,7 +70,7 @@ steelDiagram= rfSteel.defDiagK(preprocessor) #Definition of steel stress-strain 
 
 
 #Parameters for tension stiffening of concrete
-paramTS=concrete_base.paramTensStiffenes(concrMat=concrAux,reinfMat=rfSteel,reinfRatio=ro_exp,diagType='K')
+paramTS=concrete_base.paramTensStiffness(concrMat=concrAux,reinfMat=rfSteel,reinfRatio=ro_exp,diagType='K')
 paramTS.E_c=Ec_exp  #concrete elastic modulus
 paramTS.f_ct=fct_exp  #concrete tensile strength 
 paramTS.E_ct=Ec_exp #concrete elastic modulus in the tensile linear-elastic range

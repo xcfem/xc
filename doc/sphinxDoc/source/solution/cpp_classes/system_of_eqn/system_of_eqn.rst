@@ -10,3 +10,10 @@ System of equations
 .. autoclass:: Solver
     :members:
     :show-inheritance:
+
+Linear system of equations
+--------------------------
+
+.. toctree::
+
+   linearSOE/linearSOE.rst

@@ -47,7 +47,7 @@ class EC3Steel(structural_steel.BasicSteel):
     return self.fyd()/math.sqrt(3)
   def getLambda1(self):
     '''
-       :returns: lambda_1 value as specified in EC3 part 1 5.5.1.2
+       return lambda_1 value as specified in EC3 part 1 5.5.1.2
     '''
     return math.pi*math.sqrt(self.E/self.fy)
   def getDesignElasticPerfectlyPlasticMaterial(self,preprocessor,name):
@@ -223,7 +223,7 @@ class EC3Profile(object):
 
   def getZBendingEfficiency(self,sectionClass,Mzd,Vyd= 0.0, chiLT= 1.0):
     '''Returns major axis bending efficiency
-       chiLT: lateral bucling reduction factor (default= 1.0).
+       chiLT: lateral buckling reduction factor (default= 1.0).
     '''
     MvRdz= self.getMvRdz(sectionClass,Vyd)
     MbRdz= chiLT*MvRdz #Lateral buckling reduction.

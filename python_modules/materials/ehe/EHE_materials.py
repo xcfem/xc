@@ -115,7 +115,7 @@ class EHEConcrete(concrete_base.Concrete):
 
     def getEpsc2(self):
         """
-        :return: strain [-] at peak stress at parabola-rectangle diagram 
+        return strain (<0) at peak stress at parabola-rectangle diagram 
         (art. 39.5 EHE, figure 39.5.a EHE)
         """
         if self.fckMPa()<=50:
@@ -125,7 +125,7 @@ class EHEConcrete(concrete_base.Concrete):
 
     def getExpN(self):
         """
-        :return: exponent n for the parabola-rectangle diagram 
+        return exponent n for the parabola-rectangle diagram 
         (art. 39.5 EHE, figure 39.5.a EHE)
         """
         if self.fckMPa()<=50:
@@ -135,7 +135,7 @@ class EHEConcrete(concrete_base.Concrete):
 
     def getEpscu2(self):
         """
-        :return: nominal ultimate strain [-] at parabola-rectangle diagram 
+        return nominal ultimate strain [-] at parabola-rectangle diagram 
         (art. 39.5 EHE, figure 39.5.a EHE)
         """
         if self.fckMPa()<=50:
@@ -171,7 +171,7 @@ class EHEConcrete(concrete_base.Concrete):
     #       return 0.0 
     def getCreepDeformation(self, t,t0,RH,h0mm, sigmaT0):
         '''
-        :Return: the creep deformation between t0 and t
+        return the creep deformation between t0 and t
         
         :param t:     age of concrete in days at the moment considered
         :param t0:    age of concrete in days at loading

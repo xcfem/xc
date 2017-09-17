@@ -6,25 +6,23 @@ bridge bearings. For now they are modelized as linear joints that connect
 two nodes with springs that introduce translational and/or rotational stiffness
 that are approximately equal to those of the real bearing.
 
-Examples:
-    Examples of the use of these classes are given in the following verification
-    tests:
+Examples\:
+    Examples of the use of these classes are given in the following verification tests\:
         * ./verif/tests/elements/test_elastomeric_bearing_01.py
         * ./verif/tests/elements/test_pot_bearing_01.py
         * ./verif/tests/elements/test_pot_bearing_02.py
         * ./verif/tests/elements/test_pot_bearing_03.py
         * ./verif/tests/materials/test_elastomeric_bearing_stiffness.py
 
-Attributes:
-    :x2 (list): Abcissae of the points that define the values of V2 as a function of b/a.
-    :y2 (list): Ordinates of the points that define the values of V2 as a function of b/a.
-    :x3 (list): Abcissae of the points that define the values of V3 as a function of b/a.
-    :y3 (list): Ordinates of the points that define the values of V3 as a function of b/a.
-    :x4 (list): Abcissae of the points that define the values of V4 as a function of b/a.
-    :y4 (list): Ordinates of the points that define the values of V4 as a function of b/a.
-    :xBeta (list): Abcissae of the points that define the values of beta (alpha in the book)
+    :param x2 (list): Abcissae of the points that define the values of V2 as a function of b/a.
+    :param y2 (list): Ordinates of the points that define the values of V2 as a function of b/a.
+    :param x3 (list): Abcissae of the points that define the values of V3 as a function of b/a.
+    :param y3 (list): Ordinates of the points that define the values of V3 as a function of b/a.
+    :param x4 (list): Abcissae of the points that define the values of V4 as a function of b/a.
+    :param y4 (list): Ordinates of the points that define the values of V4 as a function of b/a.
+    :param xBeta (list): Abcissae of the points that define the values of beta (alpha in the book)
                   as a function of b/a.
-    :yBeta (list): Ordinates of the points that define the values of beta (alpha in the book)
+    :param yBeta (list): Ordinates of the points that define the values of beta (alpha in the book)
                   as a function of h/b.
 
 Todo:
@@ -64,14 +62,12 @@ class Bearing(object):
         '''Return material names for each DOF in a list.'''
         return self.materials
     def setBearingBetweenNodes(self,predefinedSpace, iNodA,iNodB, orientation= None):
-      '''Modelize a bearing between the nodes
+      '''Modelize a bearing between the nodes and return newly created zero 
+       length element that represents the bearing.
 
-          Args:
-              :param predefinedSpace: model space (object).
-              :param iNodA: (int) first node identifier (tag).
-              :param iNodB: (int) second node identifier (tag).
-          :return: newly created zero length element that represents the bearing.
-            
+       :param predefinedSpace: model space (object).
+       :param iNodA: (int) first node identifier (tag).
+       :param iNodB: (int) second node identifier (tag).
       '''
       return predefinedSpace.setBearingBetweenNodes(iNodA,iNodB,self.materials, orientation)
     def setBearing(self,predefinedSpace, iNodA, orientation= None):
@@ -80,8 +76,7 @@ class Bearing(object):
         Args:
              predefinedSpace: model space (object).
              iNod: (int) node identifier (tag).
-             bearingMaterials (list): material names for the zero length
-               element.
+             bearingMaterials (list): material names for the zero length element.
         Returns:
             :rtype: (int, int) new node tag, new element tag.
       '''
@@ -211,8 +206,7 @@ class ElastomericBearing(Bearing):
         ''' Puts the bearing between the nodes.
 
         Args:
-            modelSpace (:obj:'PredefinedSpace'): space dimension and number
-                of DOFs.
+            modelSpace (:obj:'PredefinedSpace'): space dimension and number of DOFs.
             iNodA (int): first node identifier (tag).
             iNodB (int): second node identifier (tag).
 

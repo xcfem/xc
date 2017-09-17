@@ -46,7 +46,7 @@ class tensegrityPrism(object):
 
 
     def genJointsCoor(self):
-        ''':returns: the cart. coord. of the joinst of a rotationally symetric  
+        '''return the cart. coord. of the joinst of a rotationally symetric  
         tensegrity prism with n-polygons on two parallel planes, twisted over angle 
         alfa with respect to each other. The twist angle is obtained by the 
         theorem of Tobie and Kenner as: alfa=pi/2-pi/n.

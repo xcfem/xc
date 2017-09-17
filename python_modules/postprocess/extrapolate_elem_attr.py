@@ -39,7 +39,7 @@ def create_attribute_at_nodes(xcSet,attributeName,initialValue):
     :param xcSet: nodes that will receive the attribute.
     :param attributeName: name of the attribute to define.
     :param initialValue: initial value to assign to the attribute.
-    :returns: tags of the affected nodes.
+    return tags of the affected nodes.
     '''
     nodeTags= {}
     for e in xcSet:

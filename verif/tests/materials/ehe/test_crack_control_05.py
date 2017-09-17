@@ -106,10 +106,10 @@ secHAParamsFis= EHE_limit_state_checking.CrackControl('SLS_crack')
 elements= preprocessor.getElementLoader
 ele1= elements.getElement(1)
 scc= ele1.getSection()
-secHAParamsFis.calcApertCaracFis(scc,EHE_materials.HA25.matTagK,EHE_materials.B400S.matTagK,EHE_materials.HA25.fctm())
+secHAParamsFis.computeWk(scc,EHE_materials.HA25.matTagK,EHE_materials.B400S.matTagK,EHE_materials.HA25.fctm())
 
 
-ratio1= ((secHAParamsFis.rebarsSpacingTracc-0.15)/0.15)
+ratio1= ((secHAParamsFis.tensionedRebars.spacing-0.15)/0.15)
 WkTeor= 0.26e-3
 ratio2= ((secHAParamsFis.Wk-WkTeor)/WkTeor)
 

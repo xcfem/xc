@@ -9,7 +9,7 @@ __email__= " ana.Ortega.Ort@gmail.com l.pereztato@gmail.com"
 from model.grid_based_oldStyle_deprecated import ijkGrid
 
 def listaNombresLoadPatterns(preprocessor):
-  ''':returns: list of load pattern names
+  '''return list of load pattern names
 
   :param preprocessor: preprocessor name
   '''
@@ -17,7 +17,7 @@ def listaNombresLoadPatterns(preprocessor):
 
 
 def staggeredPatternType1(lIndX,lIndY,indZ):
-    ''':returns: a list of grid ranges that delimit a set of staggered 
+    '''return a list of grid ranges that delimit a set of staggered 
     patterned surfaces, i.e. in a floor of a building, from the following parameters:
 
     :parameter lIndX: list of X-index that point to the X-coordinates of the strips edges.
@@ -37,7 +37,7 @@ def staggeredPatternType1(lIndX,lIndY,indZ):
             indSupPatt.append(inds)
     return indSupPatt
 def staggeredPatternType2(lIndX,lIndY,indZ):
-    ''':returns: a list of grid ranges that delimit a set of staggered 
+    '''return a list of grid ranges that delimit a set of staggered 
     patterned surfaces, i.e. in a floor of a buildin from the following parameters:
 
     :parameter lIndX: list of X-index that point to the X-coordinates of the strips edges.

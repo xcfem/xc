@@ -531,9 +531,8 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
   def createEarthPressureLoadOnStem(self,pressureModel,vDir= xc.Vector([-1.0,0.0]),Delta= 0.0):
     '''Create the loads of the earth pressure over the stem.
 
-        Args:
-       :pressureModel: (obj) earth pressure model.
-       :vDir: (xc.Vector) direction for the pressures.
+       :param pressureModel: (obj) earth pressure model.
+       :param vDir: (xc.Vector) direction for the pressures.
     '''
     pressureModel.appendLoadToCurrentLoadPattern(self.stemSet,vDir,iCoo= 1,delta= Delta)
     
@@ -541,8 +540,7 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
     '''Create the loads of the earth pressure over the vertical face
        at the end of the heel.
 
-        Args:
-       :pressureModel: (obj) earth pressure model.
+       :param pressureModel: (obj) earth pressure model.
     '''
     n= self.wireframeModelPoints['heelEnd'].getNode()
     z= n.getInitialPos2d.y
@@ -554,8 +552,7 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
     '''Create the loads of the earth pressure over the vertical face
        at the end of the toe.
 
-        Args:
-       :pressureModel: (obj) earth pressure model.
+       :param pressureModel: (obj) earth pressure model.
     '''
     n= self.wireframeModelPoints['toeEnd'].getNode()
     z= n.getInitialPos2d.y
@@ -566,8 +563,7 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
   def createBackFillPressures(self,pressureModel,Delta= 0.0):
     '''Create backfill earth pressures over the wall.
 
-        Args:
-       :pressureModel: (obj) earth pressure model for the backfill.
+       :param pressureModel: (obj) earth pressure model for the backfill.
     '''
     self.createEarthPressureLoadOnStem(pressureModel,Delta= Delta)
     self.createEarthPressureLoadOnHeelEnd(pressureModel)
@@ -575,8 +571,7 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
   def createFrontFillPressures(self,pressureModel,Delta= 0.0):
     '''Create front fill earth pressures over the wall.
 
-        Args:
-       :pressureModel: (obj) earth pressure model for the backfill.
+       :param pressureModel: (obj) earth pressure model for the backfill.
     '''
     self.createEarthPressureLoadOnStem(pressureModel,xc.Vector([1.0,0.0]),Delta= Delta)
     self.createEarthPressureLoadOnToeEnd(pressureModel)
@@ -584,8 +579,7 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
   def createVerticalLoadOnHeel(self,loadOnBackFill):
     '''Create the loads over the heel dues to a load acting on the backfill.
 
-        Args:
-       :loadOnBackFill: (obj) load acting on the backfill.
+       :param loadOnBackFill: (obj) load acting on the backfill.
     '''
     loadOnBackFill.appendVerticalLoadToCurrentLoadPattern(self.heelSet,xc.Vector([0.0,-1.0]),0,1)
 
@@ -593,8 +587,7 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
     '''Create the pressures on the stem and on the heel dues to 
        a load acting on the backfill.
 
-        Args:
-       :loadOnBackFill: (obj) load acting on the backfill.
+       :param loadOnBackFill: (obj) load acting on the backfill.
     '''
     self.createEarthPressureLoadOnStem(loadOnBackFill,Delta= Delta) #Pressures on stem.
     self.createEarthPressureLoadOnHeelEnd(loadOnBackFill) #Force on heel end.
@@ -602,20 +595,19 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
     
   def createLoadOnTopOfStem(self,loadVector):
     '''Create a loac acting on the node at the top of the stem.
-        Args:
-       :loadVector: (vector) vector defining the load.
+
+       :param loadVector: (vector) vector defining the load.
     '''
     n= self.wireframeModelPoints['stemTop'].getNode()
     n.newLoad(loadVector)
   def getMononobeOkabeDryOverpressure(self,backFillModel,kv,kh,delta_ad= 0,beta= 0, Kas= None, g= 9.81):
     ''' Return overpressure due to seismic action according to Mononobe-Okabe
 
-      Args:
-      :backFillModel: back fill terrain model
-      :kv: seismic coefficient of vertical acceleration.
-      :kh: seismic coefficient of horizontal acceleration.
-      :delta_ad: angle of friction soil - structure.
-      :beta: slope inclination of backfill.
+      :param backFillModel: back fill terrain model
+      :param kv: seismic coefficient of vertical acceleration.
+      :param kh: seismic coefficient of horizontal acceleration.
+      :param delta_ad: angle of friction soil - structure.
+      :param beta: slope inclination of backfill.
     '''
     H= self.getTotalHeight()
     psi= math.radians(90) #back face inclination of the structure (< PI/2)
@@ -628,8 +620,7 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
   def getEccentricity(self,R):
     '''Return the eccenctricity of the loads acting on the retaining wall.
 
-        Args:
-       :R: (SVD3d) resultant of the loads acting on the retaining wall.
+     :param R: (SVD3d) resultant of the loads acting on the retaining wall.
     '''
     foundationPlane= self.getFoundationPlane()
     zml= R.zeroMomentLine(1e-5).getXY2DProjection() #Resultant line of action.
@@ -650,9 +641,8 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
   def getOverturningSafetyFactor(self,R,gammaR):
     '''Return the factor of safety against overturning.
 
-        Args:
-       :R: (SVD3d) resultant of the loads acting on the retaining wall.
-       :gammaR: (float) partial resistance reduction factor.
+     :param R: (SVD3d) resultant of the loads acting on the retaining wall.
+     :param gammaR: (float) partial resistance reduction factor.
     '''
     e= self.getEccentricity(R) #eccentricity
     b= self.getFootingWidth()
@@ -662,12 +652,11 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
   def getSlidingSafetyFactor(self,R,gammaR,foundationSoilModel):
     '''Return the factor of safety against sliding.
 
-        Args:
-            :R: (SVD3d) resultant of the loads acting on the retaining wall.
-            :gammaR: partial resistance reduction factor.
-            :foundationSoilModel: (FrictionalCohesionalSoil) soil model.
-            :gammaMPhi: (float) partial reduction factor for internal friction angle of the soil.
-            :gammaMc: (float) partial reduction factor for soil cohesion.
+     :param R: (SVD3d) resultant of the loads acting on the retaining wall.
+     :param gammaR: partial resistance reduction factor.
+     :param foundationSoilModel: (FrictionalCohesionalSoil) soil model.
+     :param gammaMPhi: (float) partial reduction factor for internal friction angle of the soil.
+     :param gammaMc: (float) partial reduction factor for soil cohesion.
     '''
     foundationPlane= self.getFoundationPlane()
     alphaAngle= math.atan(foundationPlane.getSlope())
@@ -685,9 +674,8 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
   def getBearingPressureSafetyFactor(self,R,foundationSoilModel,toeFillDepth,q= 0.0):
     ''' Return the factor of safety against bearing capacity of the soil.
 
-        Args:
-            :toeFillDepth: (float) depht of the soil filling over the toe.
-            :q: (float) uniform load over the filling.
+     :param toeFillDepth: (float) depht of the soil filling over the toe.
+     :param q: (float) uniform load over the filling.
     '''
     D= self.getFoundationDepth(toeFillDepth)
     Beff= self.b

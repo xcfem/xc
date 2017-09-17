@@ -79,7 +79,7 @@ steelDiagram= rfSteel.defDiagK(preprocessor) #Definition of steel stress-strain 
 
 
 #Parameters for tension stiffening of concrete
-paramTS=concrete_base.paramTensStiffenes(concrMat=concrete,reinfMat=rfSteel,reinfRatio=ro_s_eff,diagType='K')
+paramTS=concrete_base.paramTensStiffness(concrMat=concrete,reinfMat=rfSteel,reinfRatio=ro_s_eff,diagType='K')
 concrete.tensionStiffparam=paramTS           #parameters for tension stiffening are assigned to concrete
 concrDiagram=concrete.defDiagK(preprocessor) #Definition of concrete stress-strain diagram in XC.
 

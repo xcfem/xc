@@ -20,7 +20,7 @@ def loadDistrCourbon(P,e,distGirdAx):
     :param n: number of longitudinal girders
     :param distGirdAx: list with the distances (+ or -)of all the girders from the axis of the bridge
 
-    :returns: list of reactions for each of the longitudinal girders
+    return list of reactions for each of the longitudinal girders
     '''
     retval=[]
     n=len(distGirdAx)

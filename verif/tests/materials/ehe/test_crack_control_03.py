@@ -95,7 +95,7 @@ secHAParamsFis= EHE_limit_state_checking.CrackControl('SLS_crack')
 elements= preprocessor.getElementLoader
 ele1= elements.getElement(1)
 scc= ele1.getSection()
-secHAParamsFis.calcApertCaracFis(scc,concr.matTagK,EHE_materials.B500S.matTagK,concr.fctm())
+secHAParamsFis.computeWk(scc,concr.matTagK,EHE_materials.B500S.matTagK,concr.fctm())
 
 #wkcomp changed from 0.550225e-3 to 0.55189e-3 after considering fmaxK=fck instead of 0.85fck
 

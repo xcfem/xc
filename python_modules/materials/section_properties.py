@@ -363,28 +363,27 @@ class GenericSection(SectionProperties):
 class ISection(SectionProperties):
   '''I section geometric parameters
 
-  :ivar wdTopFlange:  width of the top flange (parallel to local z-axis)
-  :ivar thTopFlange:  thickness of the top flange (parallel to local y-axis)
-  :ivar thWeb:        thickness of the web (parallel to local z-axis)
-  :ivar hgWeb:        height of the web (parallel to local y-axis)
-  :ivar wdBotFlange:  width of the bottom flange (parallel to local z-axis)
-  :ivar thBotFlange:  thickness of the bottom flange (parallel to local y-axis)
- 
-         wdTopFlange
-    --------------------- thTopFlange
-              |
-              |
-              |<-thWeb
-              |
-              |          hgWeb
-              |
-              |
-              |
-              |
-         ----------- thBotFlange 
-         wdBotFlange
+   :ivar wdTopFlange:  width of the top flange (parallel to local z-axis)
+   :ivar thTopFlange:  thickness of the top flange (parallel to local y-axis)
+   :ivar thWeb:        thickness of the web (parallel to local z-axis)
+   :ivar hgWeb:        height of the web (parallel to local y-axis)
+   :ivar wdBotFlange:  width of the bottom flange (parallel to local z-axis)
+   :ivar thBotFlange:  thickness of the bottom flange (parallel to local y-axis)
+ ''' 
+    #      wdTopFlange
+    # --------------------- thTopFlange
+    #           |
+    #           |
+    #           |<-thWeb
+    #           |
+    #           |          hgWeb
+    #           |
+    #           |
+    #           |
+    #           |
+    #      ----------- thBotFlange 
+    #      wdBotFlange
 
-  '''
   def __init__(self,name,wdTopFlange,thTopFlange,thWeb,hgWeb,wdBotFlange,thBotFlange):
     super(ISection,self).__init__(name)
     self.wTF= wdTopFlange
