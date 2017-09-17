@@ -7,7 +7,6 @@ import xc_base
 import geom
 from materials.ehe import EHE_materials
 from materials.fiber_section import createFiberSets
-from materials.fiber_section import fiberUtils
 from materials import limit_state_checking_base as lscb
 from postprocess import control_vars as cv
 from miscUtils import LogMessages as lmsg
@@ -53,7 +52,7 @@ def getFcv(fact, fck, Nd, Ac, b0, d, AsPas, fyd, AsAct, fpd):
   '''
   Return the value of fcv (concrete virtual shear strength)
   for parts WITH or WITHOUT shear reinforcement, according to clauses 
-  44.2.3.2.1 y  44.2.3.2.2 de EHE.
+  44.2.3.2.1 y  44.2.3.2.2 of EHE.
   
   :param fact: factor equal to 0.12 for parts WITHOUT shear reinforcement 
    and 0.10 for parts WITH shear reinforcement.
@@ -77,9 +76,9 @@ def getFcv(fact, fck, Nd, Ac, b0, d, AsPas, fyd, AsAct, fpd):
 
 def getVu2SIN(fck, Nd, Ac, b0, d, AsPas, fyd, AsAct, fpd):
   '''
-  Return the value of Vu2 (shear strength por tracción en el alma)
+  Return the value of Vu2 (shear strength at failure due to tensile force in the web)
    for parts WITHOUT shear reinforcement, according to 
-   clause 44.2.3.2.1 de EHE.
+   clause 44.2.3.2.1 of EHE.
   
   :param fck: concrete characteristic compressive strength.
   :param Nd: axial force design value (positive if in tension).
@@ -99,7 +98,7 @@ def getVu2SIN(fck, Nd, Ac, b0, d, AsPas, fyd, AsAct, fpd):
 def getVcu(fck, Nd, Ac, b0, d, theta, AsPas, fyd, AsAct, fpd, sgxd, sgyd):
   '''
   Return the value of Vcu (contribution of the concrete to shear strength) 
-  for parts WITH shear reinforcement, according to clause 44.2.3.2.2 de EHE.
+  for parts WITH shear reinforcement, according to clause 44.2.3.2.2 of EHE.
 
   :param fck: concrete characteristic compressive strength.
   :param Nd: axial force design value (positive if in tension).
@@ -107,7 +106,7 @@ def getVcu(fck, Nd, Ac, b0, d, theta, AsPas, fyd, AsAct, fpd, sgxd, sgyd):
   :param b0: net width of the element according to clause 40.3.5.
   :param d: effective depth (meters).
   :param theta: angle between the concrete compressed struts and the member axis (figure 44.2.3.1.a EHE).
-  :param AsPas: Area of tensioned longitudinal steel rebars anchored
+  :param AsPas: area of tensioned longitudinal steel rebars anchored
    at a distance greater than the effective depth of the section.
   :param fyd: reinforcing steel design yield strength (clause 38.3 EHE).
   :param AsAct: Area of tensioned longitudinal prestressed steel anchored
@@ -135,7 +134,7 @@ def getVsu(z, alpha, theta, AsTrsv, fyd):
   '''
   Return the value of Vsu (contribution of the web’s transverse reinforcement 
   to shear strength) for parts WITH shear reinforcement, according to 
-  clause 44.2.3.2.2 de EHE.
+  clause 44.2.3.2.2 of EHE.
 
   :param z: Mechanic lever arm.
   :param alpha: angle of the shear reinforcement with the member axis (see figure 44.2.3.1.a EHE).
@@ -153,7 +152,7 @@ def getVu2(fck, Nd, Ac, b0, d, z, alpha, theta, AsPas, fyd, AsAct, fpd, sgxd, sg
   '''
   Return the value of Vu2 (ultimate shear force failure due to tensile force 
   in the web) for parts WITH or WITHOUT shear reinforcement, according to 
-  clause 44.2.3.2.2 de EHE.
+  clause 44.2.3.2.2 of EHE.
 
   :param fck: concrete characteristic compressive strength.
   :param Nd: axial force design value (positive if in tension).
@@ -193,7 +192,7 @@ def getVu2(fck, Nd, Ac, b0, d, z, alpha, theta, AsPas, fyd, AsAct, fpd, sgxd, sg
 def getVu(fck, fcd, Nd, Ac, b0, d, z, alpha, theta, AsPas, fyd, AsAct, fpd, sgxd, sgyd, AsTrsv, fydTrsv):
   '''
   Return the value of Vu= max(Vu1,Vu2) for parts WITH or WITHOUT shear 
-  reinforcement, according to clause 44.2.3.2.2 de EHE.
+   reinforcement, according to clause 44.2.3.2.2 of EHE.
 
   :param fck: concrete characteristic compressive strength.
   :param Nd: axial force design value (positive if in tension).
@@ -202,9 +201,10 @@ def getVu(fck, fcd, Nd, Ac, b0, d, z, alpha, theta, AsPas, fyd, AsAct, fpd, sgxd
   :param d: effective depth (meters).
   :param z: mechanic lever arm.
   :param alpha: angle of the shear reinforcement with the part axis (figure 44.2.3.1.a EHE).
-  :param theta: angle between the concrete compressed struts and the member axis (figure 44.2.3.1.a EHE).
+  :param theta: angle between the concrete compressed struts and the 
+   member axis (figure 44.2.3.1.a EHE).
   :param AsPas: Area of tensioned longitudinal steel rebars anchored
-  at a distance greater than the effective depth of the section.
+   at a distance greater than the effective depth of the section.
   :param fyd: reinforcing steel design yield strength (clause 38.3 EHE).
   :param AsAct: Area of tensioned longitudinal prestressed steel anchored
    at a distance greater than the effective depth of the section.
@@ -242,8 +242,8 @@ class ParamsCortante(object):
     self.widthMin= 0.0 # net width of the element according to clause 40.3.5.
     self.depthUtil= 0.0 # effective depth (meters).
     self.mechanicLeverArm= 0.0 # mechanic lever arm (meters).
-    self.areaRebarTracc= 0.0 # Area of tensioned longitudinal steel rebars anchored at a distance greater than the effective depth of the section.
-    self.areaTendonesTracc= 0.0 # Area of tensioned longitudinal prestressed steel anchored at a distance greater than the effective depth of the section.
+    self.tensionedRebarsArea= 0.0 # Area of tensioned longitudinal steel rebars anchored at a distance greater than the effective depth of the section.
+    self.tensionedStrandsArea= 0.0 # Area of tensioned longitudinal prestressed steel anchored at a distance greater than the effective depth of the section.
     self.areaShReinfBranchsTrsv= 0.0 # transverse reinforcement area.
     self.sigmaXD= 0.0 # design value of normal stress at the centre of gravity of the section parallel to the main axis of the member. Calculated assuming NON CRACKED concrete (clause 44.2.3.2).
     self.sigmaYD= 0.0 # design value of normal stress at the centre of gravity of the section parallel to shear force Vd. Calculated assuming NON CRACKED concrete (clause 44.2.3.2).
@@ -251,21 +251,21 @@ class ParamsCortante(object):
     self.angTheta= math.pi/6 # Angle between the concrete compressed struts and the member axis (figure 44.2.3.1.a EHE).
     self.cortanteUltimo= 0.0
 
-  def calcCortanteUltimo(self, concreteFibersSet, rebarFibersSet,tensionedRebarsFiberSet, fck, fcd, fyd, fpd, fydTrsv):
+  def calcCortanteUltimo(self, concreteFibersSet, rebarFibersSet, tensionedRebarsFiberSet, fck, fcd, fyd, fpd, fydTrsv):
     '''Compute section shear strength.'''
     self.concreteArea= concreteFibersSet.getArea()
     self.widthMin= concreteFibersSet.getAnchoMecanico() # Enhance (not valid with non-convex sections).
     self.depthUtil= concreteFibersSet.getEffectiveDepth()
     self.mechanicLeverArm= concreteFibersSet.getMechanicLeverArm()
-    self.areaRebarTracc= tensionedRebarsFiberSet.getArea
-    # areaTendonesTracc= 
+    self.tensionedRebarsArea= tensionedRebarsFiberSet.getArea
+    # self.tensionedStrandsArea= 
 
     self.sigmaXD= N/area+Mz/Iz*yCdg+My/Iy*zCdg
-    self.cortanteUltimo= getVu(fck,fcd,N,self.concreteArea,self.widthMin,self.depthUtil,self.mechanicLeverArm,self.angAlpha,self.angTheta,self.areaRebarTracc,fyd,self.areaTendonesTracc,fpd,self.sigmaXD,self.sigmaYD,AsTrsv,self.areaShReinfBranchsTrsv,fydTrsv)
+    self.cortanteUltimo= getVu(fck,fcd,N,self.concreteArea,self.widthMin,self.depthUtil,self.mechanicLeverArm,self.angAlpha,self.angTheta,self.tensionedRebarsArea,fyd,self.tensionedStrandsArea,fpd,self.sigmaXD,self.sigmaYD,AsTrsv,self.areaShReinfBranchsTrsv,fydTrsv)
 
   def printParams(self):
     '''Print shear checking values.'''
-    print "Area de las reinforcement traccionadas; As= ",self.areaRebarTracc*1e4," cm2"
+    print "Area of tensioned rebars; As= ",self.tensionedRebarsArea*1e4," cm2"
     print "transverse reinforcement area; AsTrsv= ",self.areaShReinfBranchsTrsv*1e4," cm2"
     print "design value of normal stress; sigmaXD= ",self.sigmaXD/1e6," MPa"
     print "effective depth; d= ",self.depthUtil," m"
@@ -292,7 +292,7 @@ def getF1cdEHE08(fck,fcd):
 
 def getKEHE08(sgpcd,fcd):
     '''getKEHE08(sgpcd,fcd)
-    :param sgpcd: Tensión axil efectiva en el hormigón Ncd/Ac.
+    :param sgpcd: effective normal stress in concrete Ncd/Ac.
     :param fcd: design value of concrete compressive strength (N/m2).
 
     Return the value of K (coeficiente que depende del esfuerzo axil)
@@ -300,7 +300,7 @@ def getKEHE08(sgpcd,fcd):
     '''
     s=-sgpcd/fcd #Positive when compressed
     if s>1:
-        print "getKEHE08; tensión excesiva en el hormigón: (",sgpcd,"<",-fcd,")\n"
+        print "getKEHE08; too much compression in concrete: (",sgpcd,"<",-fcd,")\n"
     if s<=0:
         retval=1.0
     elif s<=0.25:
@@ -318,7 +318,7 @@ def getVu1EHE08(fck,fcd,Ncd,Ac,b0,d,alpha,theta):
 
     :param fck: concrete characteristic compressive strength.
     :param fcd: design value of concrete compressive strength (N/m2).
-    :param Ncd: axil de cálculo resistido por el hormigón (positivo si es de tracción).
+    :param Ncd: design value of axial force in concrete (positive if in tension).
     :param Ac: concrete section total area.
     :param b0: net width of the element according to clause 40.3.5.
     :param d: effective depth.
@@ -326,7 +326,7 @@ def getVu1EHE08(fck,fcd,Ncd,Ac,b0,d,alpha,theta):
     :param theta: angle between the concrete compressed struts and the member axis (figure 44.2.3.1.a EHE).
 
     Return the value of Vu1 (shear strength at failure due to diagonal 
-    compression in the web) according to clause 44.2.3.1 de EHE-08.
+    compression in the web) according to clause 44.2.3.1 of EHE-08.
     '''
     f1cd=getF1cdEHE08(fck,fcd)
     sgpcd=min(Ncd/Ac,0)
@@ -337,15 +337,16 @@ def getVu1EHE08(fck,fcd,Ncd,Ac,b0,d,alpha,theta):
 def getVu2EHE08NoAtNoFis(fctd,I,S,b0,alphal,Ncd,Ac):
     '''getVu2EHE08NoAtNoFis(fctd,I,S,b0,alphal,Ncd,Ac) [uds: N, m, rad]
 
-    :param fctd: Resistencia de cálculo del hormigón a tracción.
+    :param fctd: design tensile strength of the concrete.
     :param I: Moment of inertia of the section with respect of its centroid.
-    :param S: Momento estático de la parte de la sección que queda por encima del CDG.
+    :param S: First moment of the section above the center of gravity.
     :param b0: net width of the element according to clause 40.3.5.
     :param alphal: coeficiente que, en su caso, introduce el efecto de la transferencia.
-    :param Ncd: axil de cálculo resistido por el hormigón (positivo si es de tracción).
+    :param Ncd: design value of axial force in concrete (positive if in tension).
     :param Ac: concrete section total area.
-    Return the value of Vu2 (shear strength por tracción en el alma)
-    according to clause 44.2.3.2.1.1 de EHE-08.
+
+    Return the value of Vu2 (shear strength at failure due to tensile force in the web)
+    according to clause 44.2.3.2.1.1 of EHE-08.
     '''
     tmp= fctd
     if alphal!=1.0:
@@ -356,25 +357,26 @@ def getVu2EHE08NoAtNoFis(fctd,I,S,b0,alphal,Ncd,Ac):
 
 
 def getFcvEHE08(fact,fcv,gammaC,b0,d,chi,sgpcd,AsPas,AsAct):
-    '''getFcvEHE08(fact,fcv,gammaC,b0,d,chi,sgpcd,AsPas,AsAct)  [uds: N, m, rad]
-    Return the value of fcv (concrete virtual shear strength)
-    for parts WITH or WITHOUT shear reinforcement in cracked regions, according
-    to clauses 44.2.3.2.1.2 y  44.2.3.2.2 de EHE-08.
+    '''getFcvEHE08(fact,fcv,gammaC,b0,d,chi,sgpcd,AsPas,AsAct) [uds: N, m, rad]
+     Return the value of fcv (concrete virtual shear strength)
+     for parts WITH or WITHOUT shear reinforcement in cracked regions, according
+     to clauses 44.2.3.2.1.2 and 44.2.3.2.2 of EHE-08.
 
-    :param fact: Factor que toma el valor 0.18 for parts WITHOUT shear reinforcement y 0.15 for parts WITH shear reinforcement.
-    :param fcv: Resistencia efectiva del hormigón a cortante. En piezas sin shear reinforcement
-    será fcv= min(fck,60MPa). En piezas con shear reinforcement fcv= min(fck,100MPa).
-    En ambos casos, si el control del hormigón es indirecto fcv=15MPa.
+    :param fact: Factor que toma el valor 0.18 for parts WITHOUT shear 
+     reinforcement y 0.15 for parts WITH shear reinforcement.
+    :param fcv: effective concrete shear strength. For members without shear reinforcement
+     fcv= min(fck,60MPa). For members with shear reinforcement fcv= min(fck,100MPa).
+     In both cases, if concrete quality control is not direct fcv= 15 MPa.
     :param gammaC: Partial safety factor for concrete.
     :param b0: net width of the element according to clause 40.3.5.
     :param d: effective depth (meters).
     :param chi: coefficient that takes into account the aggregate effect
      inside the effective depth.
-    :param sgpcd: Tensión axial media en el alma (compresión positiva).
+    :param sgpcd: average axial stress in the web (positive if in compression).
     :param AsPas: Area of tensioned longitudinal steel rebars anchored
      at a distance greater than the effective depth of the section.
     :param AsAct: Area of tensioned longitudinal prestressed steel anchored
-    at a distance greater than the effective depth of the section.
+     at a distance greater than the effective depth of the section.
     '''
     rol=min((AsPas+AsAct)/(b0*d),0.02)
     return fact/gammaC*chi*(rol*fcv/1e4)**(1/3)*1e6-0.15*sgpcd
@@ -382,42 +384,42 @@ def getFcvEHE08(fact,fcv,gammaC,b0,d,chi,sgpcd,AsPas,AsAct):
 
 def getFcvMinEHE08(fcv,gammaC,d,chi,sgpcd):
     '''getFcvMinEHE08(fcv,gammaC,d,chi,sgpcd)
-    Devuelve el valor mínimo de fcv (concrete virtual shear strength)
-    for parts WITHOUT shear reinforcement in cracked regions, according to
-    clause 44.2.3.2.1.2 de EHE-08.
+     Return the minimum value of fcv (concrete virtual shear strength)
+     for members WITHOUT shear reinforcement in cracked regions, according to
+     clause 44.2.3.2.1.2 of EHE-08.
 
-    :param fcv: Resistencia efectiva del hormigón a cortante. En piezas sin shear reinforcement
-    será fcv= min(fck,60MPa). En piezas con shear reinforcement fcv= min(fck,100MPa).
-    En ambos casos, si el control del hormigón es indirecto fcv=15MPa.
+    :param fcv: effective concrete shear strength. For members without shear reinforcement
+     fcv= min(fck,60MPa). For members with shear reinforcement fcv= min(fck,100MPa).
+     In both cases, if concrete quality control is not direct fcv= 15 MPa.
     :param gammaC: Partial safety factor for concrete.
     :param d: effective depth (meters).
     :param chi: coefficient that takes into account the aggregate effect
      inside the effective depth.
-    :param sgpcd: Tensión axial media en el alma (compresión positiva).
-
+    :param sgpcd: average axial stress in the web (positive if in compression).
     '''
     return 0.075/gammaC*math.pow(chi,1.5)*math.sqrt(fcv)*1e3-0.15*sgpcd
 
 
 def getVu2EHE08NoAtSiFis(fcv,fcd,gammaC,Ncd,Ac,b0,d,AsPas,AsAct):
     '''getVu2EHE08NoAtSiFis(fcv,fcd,gammaC,Ncd,Ac,b0,d,AsPas,AsAct) [uds: N, m]
+     Return the value of Vu2 (shear strength at failure due to tensile force in the web)
+     for parts WITHOUT shear reinforcement in cracked regions, according to 
+     clause 44.2.3.2.1.2 of EHE-08.
 
-    :param fcv: Resistencia efectiva del hormigón a cortante. En piezas sin shear reinforcement
-    será fcv= min(fck,60MPa). En piezas con shear reinforcement fcv= min(fck,100MPa).
-    En ambos casos, si el control del hormigón es indirecto fcv=15MPa.
+    :param fcv: effective concrete shear strength. For members without shear reinforcement
+     fcv= min(fck,60MPa). For members with shear reinforcement fcv= min(fck,100MPa).
+     In both cases, if concrete quality control is not direct fcv= 15 MPa.
     :param fcd: design value of concrete compressive strength).
     :param gammaC: Partial safety factor for concrete.
-    :param Ncd: axil de cálculo resistido por el hormigón (positivo si es de tracción).
+    :param Ncd: design value of axial force in concrete (positive if in tension).
     :param Ac: concrete section total area.
     :param b0: net width of the element according to clause 40.3.5.
     :param d: effective depth (meters).
     :param AsPas: Area of tensioned longitudinal steel rebars anchored
      at a distance greater than the effective depth of the section.
     :param AsAct: Area of tensioned longitudinal prestressed steel anchored
-    at a distance greater than the effective depth of the section.
+     at a distance greater than the effective depth of the section.
 
-    Return the value of Vu2 (shear strength por tracción en el alma)
-    for parts WITHOUT shear reinforcement in cracked regions, according to clause 44.2.3.2.1.2 de EHE-08.
     '''
     chi=min(2,1+math.sqrt(200/(d*1000.))) #HA DE EXPRESARSE EN METROS.
     sgpcd=max(max(Ncd/Ac,-0.3*fcd),-12e6)
@@ -427,26 +429,26 @@ def getVu2EHE08NoAtSiFis(fcv,fcd,gammaC,Ncd,Ac,b0,d,AsPas,AsAct):
 
 def getVu2EHE08NoAt(M,Mfis,fcv,fck,gammaC,I,S,alphaL,Ncd,Ac,b0,d,AsPas,AsAct):
     '''getVu2EHE08NoAt(M,Mfis,fcv,fck,gammaC,I,S,alphaL,Ncd,Ac,b0,d,AsPas,AsAct)   [uds: N, m, rad]
-    Return the value of Vu2 (shear strength por tracción en el alma)
-    for parts WITHOUT shear reinforcement, according to clauses 
-    44.2.3.2.1.1 y 44.2.3.2.1.2 of EHE-08.
+     Return the value of Vu2 (shear strength at failure due to tensile force in the web)
+     for members WITHOUT shear reinforcement, according to clauses 
+     44.2.3.2.1.1 y 44.2.3.2.1.2 of EHE-08.
 
-    :param M: Momento que actúa sobre la sección.
-    :param Mfis: Momento de fisuración de la sección correspondiente al mismo plano y sentido
-    flexión que M.
-    :param fcv: Resistencia efectiva del hormigón a cortante. En piezas sin shear reinforcement
-    será fcv= min(fck,60MPa). En piezas con shear reinforcement fcv= min(fck,100MPa).
-    En ambos casos, si el control del hormigón es indirecto fcv=15MPa.
+    :param M: Bending moment in the section.
+    :param Mfis: Cracking moment of the section calculated using fct,d = fct,k/gammaC in
+     the same plane that M.
+    :param fcv: effective concrete shear strength. For members without shear reinforcement
+     fcv= min(fck,60MPa). For members with shear reinforcement fcv= min(fck,100MPa).
+     In both cases, if concrete quality control is not direct fcv= 15 MPa.
     :param fck: concrete characteristic compressive strength.
     :param gammaC: Partial safety factor for concrete.
-    :param Ncd: axil de cálculo resistido por el hormigón (positivo si es de tracción).
+    :param Ncd: design value of axial force in concrete (positive if in tension).
     :param Ac: concrete section total area.
     :param b0: net width of the element according to clause 40.3.5.
     :param d: effective depth (meters).
     :param AsPas: Area of tensioned longitudinal steel rebars anchored
      at a distance greater than the effective depth of the section.
     :param AsAct: Area of tensioned longitudinal prestressed steel anchored
-    at a distance greater than the effective depth of the section.
+     at a distance greater than the effective depth of the section.
     '''
     concrTmp= EHE_materials.EHEConcrete("HA",fck,gammaC)
     fctdTmp=concrTmp.fctkEHE08()/gammaC
@@ -462,12 +464,13 @@ def getVsuEHE08(z,alpha,theta,AsTrsv,fyd):
     '''getVsuEHE08(z,alpha,theta,AsTrsv,fyd)  [uds: N, m, rad]
     Return the value of Vsu (contribution of the web’s transverse 
     reinforcement to shear strength) for parts WITH shear reinforcement,
-    according to clause 44.2.3.2.2 de EHE-08.
+    according to clause 44.2.3.2.2 of EHE-08.
 
     :param z: mechanic lever arm.
     :param alpha: angle of the transverse reinforcement with the member axis.
-    :param theta: angle between the concrete compressed struts and the member axis (figure 44.2.3.1.a EHE).
-    :param AsTrsv: transverse reinforcement area cuya contribución se calcula.
+    :param theta: angle between the concrete compressed struts and the 
+     member axis (figure 44.2.3.1.a EHE).
+    :param AsTrsv: transverse reinforcement area which contribution will be computed.
     :param fyd: design yield strength of the transverse reinforcement.
     '''
     fyalphad=min(fyd,400e6)
@@ -477,23 +480,23 @@ def getVsuEHE08(z,alpha,theta,AsTrsv,fyd):
 
 def getEpsilonXEHE08(Nd,Md,Vd,Td,z,AsPas,AsAct,Es,Ep,Fp,Ae,ue):
     '''getEpsilonXEHE08(Nd,Md,Vd,Td,z,AsPas,AsAct,Es,Ep,Fp,Ae,ue) [uds: N, m, rad]
-    Devuelve la deformación de longitudinal en el alma according to
-    expresión que figura en los comentarios al clause 44.2.3.2.2 de EHE-08.
+    Return the longitudinal strain in the web according to
+    expression in commments to the clause 44.2.3.2.2 of EHE-08.
 
-    :param Nd: Design value of axial force (aquí positivo si es de tracción)
+    :param Nd: Design value of axial force (here positive if in tension)
     :param Md: Absolute value of design value of bending moment.
-    :param Vd: Absolute value of cortante efectivo de cálculo (clause 42.2.2).
-    :param Td: Torsor de cálculo.
+    :param Vd: Absolute value of effective design shear (clause 42.2.2).
+    :param Td: design value of torsional moment.
     :param z: Lever arm.
     :param AsPas: Area of tensioned longitudinal steel rebars anchored
      at a distance greater than the effective depth of the section.
     :param AsAct: Area of tensioned longitudinal prestressed steel anchored
-    at a distance greater than the effective depth of the section.
+     at a distance greater than the effective depth of the section.
     :param Es: reinforcing steel elastic modulus.
     :param Ep: prestressing steel elastic modulus.
     :param Fp: Prestressing force on the section (positive if in tension).
-    :param Ae: Área encerrada por la línea media de la sección hueca eficaz.
-    :param ue: Perímetro de la línea media de la sección hueca eficaz.
+    :param Ae: Area enclosed by the middle line of the effective hollow section.
+    :param ue: Perimeter of the middle line of the effective hollow section.
     '''
     denomEpsilonX=2*(Es*AsPas+Ep*AsAct) 
     Md= max(Md,Vd*z)
@@ -510,24 +513,24 @@ def getEpsilonXEHE08(Nd,Md,Vd,Td,z,AsPas,AsAct,Es,Ep,Fp,Ae,ue):
 
 def getCrackAngleEHE08(Nd,Md,Vd,Td,z,AsPas,AsAct,Es,Ep,Fp,Ae,ue):
     '''getCrackAngleEHE08(Nd,Md,Vd,Td,z,AsPas,AsAct,Es,Ep,Fp,Ae,ue) [uds: N, m, rad]
-    Return the reference angle of inclination of cracks from
-    la deformación longitudinal en el alma de la sección
-    expresado en radianes. See clause 44.2.3.2.2 de EHE-08.
+     Return the reference angle of inclination of cracks (in radians) from
+     the longitudinal strain in the web. See general method in clause 
+     44.2.3.2.2 of EHE-08.
 
-    :param Nd: Design value of axial force (aquí positivo si es de tracción)
+    :param Nd: Design value of axial force (here positive if in tension)
     :param Md: Absolute value of design value of bending moment.
-    :param Vd: Absolute value of cortante efectivo de cálculo (clause 42.2.2).
-    :param Td: Torsor de cálculo.
+    :param Vd: Absolute value of effective design shear (clause 42.2.2).
+    :param Td: design value of torsional moment.
     :param z: Lever arm.
     :param AsPas: Area of tensioned longitudinal steel rebars anchored
      at a distance greater than the effective depth of the section.
     :param AsAct: Area of tensioned longitudinal prestressed steel anchored
-    at a distance greater than the effective depth of the section.
+     at a distance greater than the effective depth of the section.
     :param Es: reinforcing steel elastic modulus.
     :param Ep: prestressing steel elastic modulus.
     :param Fp: Prestressing force on the section (positive if in tension).
-    :param Ae: Área encerrada por la línea media de la sección hueca eficaz.
-    :param ue: Perímetro de la línea media de la sección hueca eficaz.
+    :param Ae: Area enclosed by the middle line of the effective hollow section.
+    :param ue: Perimeter of the middle line of the effective hollow section.
 
     '''
     return math.radians(getEpsilonXEHE08(Nd,Md,Vd,Td,z,AsPas,AsAct,Es,Ep,Fp,Ae,ue)*7000+29) 
@@ -537,8 +540,8 @@ def getCrackAngleEHE08(Nd,Md,Vd,Td,z,AsPas,AsAct,Es,Ep,Fp,Ae,ue):
   
 def getBetaVcuEHE08(theta,thetaE):
     '''getBetaVcuEHE08(theta,thetaE) [uds: N, m, rad]
-    Return the value of «beta» for the expression
-    of Vcu according to clause 44.2.3.2.2 of EHE-08.
+     Return the value of «beta» for the expression
+     of Vcu according to clause 44.2.3.2.2 of EHE-08.
 
     :param thetaE: Reference angle of inclination of cracks.
     :param theta: angle between the concrete compressed struts and the member axis (figure 44.2.3.1.a EHE).    
@@ -561,16 +564,17 @@ def getBetaVcuEHE08(theta,thetaE):
 
  
 def getVcuEHE08(fcv,fcd,gammaC,Ncd,Ac,b0,d,z,AsPas,AsAct,theta,Nd,Md,Vd,Td,Es,Ep,Fp,Ae,ue):
-    '''getVcuEHE08(fcv,fcd,gammaC,Ncd,Ac,b0,d,z,AsPas,AsAct,theta,Nd,Md,Vd,Td,Es,Ep,Fp,Ae,ue) [uds: N, m, rad]
-    Return the value of Vcu (contribución del hormigón a la resistencia al esfuerzo cortante)
-    for parts WITH shear reinforcement, according to clause 44.2.3.2.2 de EHE-08.
+    '''getVcuEHE08(fcv,fcd,gammaC,Ncd,Ac,b0,d,z,AsPas,AsAct,theta,Nd,Md,Vd,Td,Es,Ep,Fp,Ae,ue) 
+     [uds: N, m, rad]
+     Return the value of Vcu (contribution of the concrete to shear strength)
+     for parts WITH shear reinforcement, according to clause 44.2.3.2.2 of EHE-08.
 
-    :param fcv: effective concrete shear strength. En piezas sin shear reinforcement
-    será fcv= min(fck,60MPa). En piezas con shear reinforcement fcv= min(fck,100MPa).
-    En ambos casos, si el control del hormigón es indirecto fcv=15MPa.
+    :param fcv: effective concrete shear strength. For members without shear reinforcement
+     fcv= min(fck,60MPa). For members with shear reinforcement fcv= min(fck,100MPa).
+     In both cases, if concrete quality control is not direct fcv= 15 MPa.
     :param fcd: design value of concrete compressive strength).
     :param gammaC: Partial safety factor for concrete.
-    :param Ncd: axil de cálculo resistido por el hormigón (positivo si es de tracción).
+    :param Ncd: design value of axial force in concrete (positive if in tension).
     :param Ac: concrete section total area.
     :param b0: net width of the element according to clause 40.3.5.
     :param d: effective depth (meters).
@@ -578,18 +582,18 @@ def getVcuEHE08(fcv,fcd,gammaC,Ncd,Ac,b0,d,z,AsPas,AsAct,theta,Nd,Md,Vd,Td,Es,Ep
     :param AsPas: Area of tensioned longitudinal steel rebars anchored
      at a distance greater than the effective depth of the section.
     :param AsAct: Area of tensioned longitudinal prestressed steel anchored
-    at a distance greater than the effective depth of the section.
-    :param theta: angle between the concrete compressed struts and the member axis (figure 44.2.3.1.a EHE)
-    :param Nd: Design value of axial force (positivo si es de tracción)
+     at a distance greater than the effective depth of the section.
+    :param theta: angle between the concrete compressed struts and the member 
+     axis (figure 44.2.3.1.a EHE)
+    :param Nd: Design value of axial force (positive if in tension)
     :param Md: Absolute value of design value of bending moment.
-    :param Vd: Absolute value of cortante efectivo de cálculo (clause 42.2.2).
-    :param Td: Torsor de cálculo.
+    :param Vd: Absolute value of effective design shear (clause 42.2.2).
+    :param Td: design value of torsional moment.
     :param Es: reinforcing steel elastic modulus.
     :param Ep: prestressing steel elastic modulus.
     :param Fp: Prestressing force on the section (positive if in tension).
-    :param Ae: Área encerrada por la línea media de la sección hueca eficaz.
-    :param ue: Perímetro de la línea media de la sección hueca eficaz.
-
+    :param Ae: Area enclosed by the middle line of the effective hollow section.
+    :param ue: Perimeter of the middle line of the effective hollow section.
     '''
   
     chi=min(2,1+math.sqrt(200/(d*1000.)))   #HA DE EXPRESARSE EN METROS.
@@ -603,16 +607,17 @@ def getVcuEHE08(fcv,fcd,gammaC,Ncd,Ac,b0,d,z,AsPas,AsAct,theta,Nd,Md,Vd,Td,Es,Ep
 
   
 def getVu2EHE08SiAt(fcv,fcd,fyd,gammaC,Ncd,Ac,b0,d,z,AsPas,AsAct,AsTrsv, alpha, theta,Nd,Md,Vd,Td,Es,Ep,Fp,Ae,ue):
-    '''getVu2EHE08SiAt(fcv,fcd,fyd,gammaC,Ncd,Ac,b0,d,z,AsPas,AsAct,AsTrsv, alpha, theta,Nd,Md,Vd,Td,Es,Ep,Fp,Ae,ue) [uds: N, m, rad]. Return the value of Vu2 (esfuerzo shear strength por tracción en el alma)
-    for parts WITH shear reinforcement, according to clause 44.2.3.2.2 of EHE-08.
+    '''getVu2EHE08SiAt(fcv,fcd,fyd,gammaC,Ncd,Ac,b0,d,z,AsPas,AsAct,AsTrsv, alpha, theta,Nd,Md,Vd,Td,Es,Ep,Fp,Ae,ue) [uds: N, m, rad]. 
+     Return the value of Vu2 (shear strength at failure due to tensile force in the web)
+     for parts WITH shear reinforcement, according to clause 44.2.3.2.2 of EHE-08.
 
-    :param fcv: effective concrete shear strength. En piezas sin shear reinforcement
-    será fcv= min(fck,60MPa). En piezas con shear reinforcement fcv= min(fck,100MPa).
-    En ambos casos, si el control del hormigón es indirecto fcv=15MPa.
+    :param fcv: effective concrete shear strength. For members without shear reinforcement
+     fcv= min(fck,60MPa). For members with shear reinforcement fcv= min(fck,100MPa).
+     In both cases, if concrete quality control is not direct fcv= 15 MPa.
     :param fcd: design value of concrete compressive strength).
     :param fyd: design yield strength of the transverse reinforcement.
     :param gammaC: Partial safety factor for concrete.
-    :param Ncd: axil de cálculo resistido por el hormigón (positivo si es de tracción).
+    :param Ncd: design value of axial force in concrete (positive if in tension).
     :param Ac: concrete section total area.
     :param b0: net width of the element according to clause 40.3.5.
     :param d: effective depth (meters).
@@ -620,19 +625,19 @@ def getVu2EHE08SiAt(fcv,fcd,fyd,gammaC,Ncd,Ac,b0,d,z,AsPas,AsAct,AsTrsv, alpha, 
     :param AsPas: Area of tensioned longitudinal steel rebars anchored
      at a distance greater than the effective depth of the section.
     :param AsAct: Area of tensioned longitudinal prestressed steel anchored
-    at a distance greater than the effective depth of the section.
+     at a distance greater than the effective depth of the section.
     :param AsTrsv: transverse reinforcement area.
     :param alpha: angle of the transverse reinforcement with the axis of the part.
     :param theta: angle between the concrete compressed struts and the member axis (figure 44.2.3.1.a EHE).
-    :param Nd: Design value of axial force (positivo si es de tracción)
+    :param Nd: Design value of axial force (positive if in tension)
     :param Md: Absolute value of design value of bending moment.
-    :param Vd: Absolute value of cortante efectivo de cálculo (clause 42.2.2).
-    :param Td: Torsor de cálculo.
+    :param Vd: Absolute value of effective design shear (clause 42.2.2).
+    :param Td: design value of torsional moment.
     :param Es: reinforcing steel elastic modulus.
     :param Ep: prestressing steel elastic modulus.
     :param Fp: Prestressing force on the section (positive if in tension).
-    :param Ae: Área encerrada por la línea media de la sección hueca eficaz.
-    :param ue: Perímetro de la línea media de la sección hueca eficaz.
+    :param Ae: Area enclosed by the middle line of the effective hollow section.
+    :param ue: Perimeter of the middle line of the effective hollow section.
 
     '''
     return getVcuEHE08(fcv,fcd,gammaC,Ncd,Ac,b0,d,AsPas,AsAct,theta,Nd,Md,Vd,Td,Es,Ep,Fp,Ae,ue)+getVsuEHE08(z,alpha,theta,AsTrsv,fyd)
@@ -641,16 +646,16 @@ def getVu2EHE08SiAt(fcv,fcd,fyd,gammaC,Ncd,Ac,b0,d,z,AsPas,AsAct,AsTrsv, alpha, 
 def getVuEHE08SiAt(fck,fcv,fcd,fyd,gammaC,Ncd,Ac,b0,d,z,AsPas,AsAct,AsTrsv, alpha, theta,Nd,Md,Vd,Td,Es,Ep,Fp,Ae,ue):
     '''def getVuEHE08SiAt(fck,fcv,fcd,fyd,gammaC,Ncd,Ac,b0,d,z,AsPas,AsAct,AsTrsv, alpha, theta,Nd,Md,Vd,Td,Es,Ep,Fp,Ae,ue) [uds: N, m, rad]
     Return the value of Vu (section shear strength)
-    for parts WITH shear reinforcement, according to clause 44.2.3.2.2 de EHE-08.
+    for parts WITH shear reinforcement, according to clause 44.2.3.2.2 of EHE-08.
 
-    :param fck: concrete characteristic compressive strength.
-    :param fcv: effective concrete shear strength. En piezas sin shear reinforcement
-    será fcv= min(fck,60MPa). En piezas con shear reinforcement fcv= min(fck,100MPa).
-    En ambos casos, si el control del hormigón es indirecto fcv=15MPa.
-    :param fcd: design value of concrete compressive strength).
+    :param fck: characteristic value of concrete compressive strength.
+    :param fcv: effective concrete shear strength. For members without shear reinforcement
+     fcv= min(fck,60MPa). For members with shear reinforcement fcv= min(fck,100MPa).
+     In both cases, if concrete quality control is not direct fcv= 15 MPa.
+    :param fcd: design value of concrete compressive strength.
     :param fyd: design yield strength of the transverse reinforcement.
     :param gammaC: Partial safety factor for concrete.
-    :param Ncd: axil de cálculo resistido por el hormigón (positivo si es de tracción).
+    :param Ncd: design value of axial force in concrete (positive if in tension).
     :param Ac: concrete section total area.
     :param b0: net width of the element according to clause 40.3.5.
     :param d: effective depth (meters).
@@ -658,19 +663,19 @@ def getVuEHE08SiAt(fck,fcv,fcd,fyd,gammaC,Ncd,Ac,b0,d,z,AsPas,AsAct,AsTrsv, alph
     :param AsPas: Area of tensioned longitudinal steel rebars anchored
      at a distance greater than the effective depth of the section.
     :param AsAct: Area of tensioned longitudinal prestressed steel anchored
-    at a distance greater than the effective depth of the section.
+     at a distance greater than the effective depth of the section.
     :param AsTrsv: transverse reinforcement area.
     :param alpha: angle of the transverse reinforcement with the axis of the part.
     :param theta: angle between the concrete compressed struts and the member axis (figure 44.2.3.1.a EHE).
-    :param Nd: Design value of axial force (positivo si es de tracción)
+    :param Nd: Design value of axial force (positive if in tension)
     :param Md: Absolute value of design value of bending moment.
-    :param Vd: Absolute value of cortante efectivo de cálculo (clause 42.2.2).
-    :param Td: Torsor de cálculo.
+    :param Vd: Absolute value of effective design shear (clause 42.2.2).
+    :param Td: design value of torsional moment.
     :param Es: reinforcing steel elastic modulus.
     :param Ep: prestressing steel elastic modulus.
     :param Fp: Prestressing force on the section (positive if in tension).
-    :param Ae: Área encerrada por la línea media de la sección hueca eficaz.
-    :param ue: Perímetro de la línea media de la sección hueca eficaz.    
+    :param Ae: Area enclosed by the middle line of the effective hollow section.
+    :param ue: Perimeter of the middle line of the effective hollow section.
     '''
     return  min(getVu2EHE08(fcv,fcd,fyd,gammaC,Ncd,Ac,b0,d,z,AsPas,AsAct,AsTrsv,alpha,theta,Nd,Md,Vd,Td,Es,Ep,Fp,Ae,ue),getVu1EHE08(fck,fcd,Ncd,Ac,b0,d,alpha,theta))
   
@@ -681,22 +686,20 @@ class ShearControllerEHE(lscb.LimitStateControllerBase):
     super(ShearControllerEHE,self).__init__(limitStateLabel)
     self.concreteFibersSetName= "concrete" #Name of the concrete fibers set.
     self.rebarFibersSetName= "reinforcement" #Name of the rebar fibers set.
-    self.tensionedRebarsFiberSetName= "reinforcementTraccion" #Name of the tensioned rebars set.
-    self.hayMom= False # Verdadero si la sección está sometida a momento.
+    self.isBending= False # True if there is ar bending moment.
     self.fcvH= 0.0 # effective concrete shear strength.
-    self.fckH= 0.0 #Valor característico de la resistencia del hormigón a compresión.
-    self.fcdH= 0.0 #Valor de cálculo de la resistencia del hormigón a compresión.
-    self.fctdH= 0.0 #Valor de cálculo de la resistencia del hormigón a tracción.
-    self.gammaC= 0.0 # Partial safety factor for concrete.
-    self.fydS= 0.0 #Design value of reinforcement steel strength.
-    self.depthUtil= 0.0 #current effective depth
-    self.mechanicLeverArm= 0.0 #Lever arm con el que está trabajando la sección.
-    self.strutWidth= 0.0 #Compressed strut width «b0».
-    self.I= 0.0 #Momento of inertia of the section with respect to the neutral axis in elastic range.
-    self.S= 0.0 #First moment of area of the section with respect to the neutral axis in elastic range.
+    self.fckH= 0.0 # characteristic value of concrete compressive strength.
+    self.fcdH= 0.0 # design value of concrete compressive strength.
+    self.fctdH= 0.0 # design tensile strength of the concrete.
+    self.gammaC= 0.0 # partial safety factor for concrete.
+    self.fydS= 0.0 # design value of reinforcement steel strength.
+    self.depthUtil= 0.0 # current effective depth
+    self.mechanicLeverArm= 0.0 # current value of mechanic lever arm.
+    self.strutWidth= 0.0 # compressed strut width «b0».
+    self.I= 0.0 # moment of inertia of the section with respect to the neutral axis in elastic range.
+    self.S= 0.0 # first moment of area of the section with respect to the neutral axis in elastic range.
     self.concreteArea= 0.0 #Concrete area of the section.
-    self.numBarrasTraccion= 0 # Number of tensioned bars.
-    self.areaRebarTracc= 0.0 # Tensioned bars total area.
+    self.tensionedRebars= lscb.TensionedRebarsBasicProperties()
     self.eps1= 0.0 #Maximum strain in concrete.
     self.concreteAxialForce= 0.0 # Axial force in concrete.
     self.E0= 0.0 #Concrete tangent stiffness.
@@ -709,18 +712,18 @@ class ShearControllerEHE(lscb.LimitStateControllerBase):
     self.thetaMax= math.atan(2) #Maximal value of the theta angle.
 
     self.thetaFisuras= 0.0 # angle of the cracks with the part axis.
-    self.Vcu= 0.0 # Contribución del hormigón a la resistencia al esfuerzo cortante.
-    self.Vsu= 0.0 # Contribución de las reinforcement a cortante a la resistencia al esfuerzo cortante.
-    self.Vu1= 0.0 #shear strength at failure due to diagonal compression in the web.
-    self.Vu2= 0.0 #Agotamiento por tracción en el alma.
-    self.Vu= 0.0 #Cortante último de la sección.
+    self.Vcu= 0.0 # contribution of the concrete to shear strength.
+    self.Vsu= 0.0 # contribution of the web’s transverse reinforcement to shear strength.
+    self.Vu1= 0.0 # Shear strength at failure due to diagonal compression in the web.
+    self.Vu2= 0.0 # Shear strength at failure due to tensile force in the web
+    self.Vu= 0.0 # Shear strength at failure.
 
   def calcVuEHE08NoAt(self, preprocessor, scc, concrete, reinfSteel):
-    ''' Calcula el cortante último de la sección sin shear reinforcement.
-     XXX Falta considerar la reinforcement activa.
+    ''' Compute the shear strength at failure without shear reinforcement.
+     XXX Presstressing contribution not implemented yet.
 
      :param reinfSteelMaterialTag: reinforcement steel material identifier.
-     :param concrete: Parámetros para modelizar el hormigón.
+     :param concrete: parameters to modelize concrete.
      :param reinfSteel: parameters to modelize reinforcement steel.
     '''
     self.concreteMatTag= concrete.matTagD
@@ -742,45 +745,46 @@ class ShearControllerEHE(lscb.LimitStateControllerBase):
       lmsg.error(errMsg)
     else:
       reinfFibers= rcSets.reinfFibers.fSet
-      reinforcementTraccion= rcSets.tensionFibers
-      self.hayMom= scc.isSubjectedToBending(0.1)
-      self.numBarrasTraccion= rcSets.getNumTensionRebars()
-      if(self.hayMom):
+      tensionedReinforcement= rcSets.tensionFibers
+      self.isBending= scc.isSubjectedToBending(0.1)
+      self.tensionedRebars.number= rcSets.getNumTensionRebars()
+      if(self.isBending):
         self.eps1= rcSets.getMaxConcreteStrain()
         self.E0= rcSets.getConcreteInitialTangent()
         self.concreteAxialForce= rcSets.getConcreteCompression()
         self.strutWidth= scc.getCompressedStrutWidth() # b0
-        if((self.E0*self.eps1)<self.fctdH): # Sección no fisurada
+        if((self.E0*self.eps1)<self.fctdH): # Non cracked section
           self.I= scc.getHomogenizedI(self.E0)
           self.S= scc.getSPosHomogeneizada(self.E0)
           self.Vu2= getVu2EHE08NoAtNoFis(self.fctdH,self.I,self.S,self.strutWidth,self.alphaL,self.concreteAxialForce,self.concreteArea)
-        else: # Sección fisurada
+        else: # Cracked section
           self.depthUtil= scc.getEffectiveDepth() # d
-          if(self.numBarrasTraccion>0):
-            self.areaRebarTracc= reinforcementTraccion.getArea(1)
+          if(self.tensionedRebars.number>0):
+            self.tensionedRebarsArea= tensionedReinforcement.getArea(1)
           else:
-            self.areaRebarTracc= 0.0
-          self.Vu2= getVu2EHE08NoAtSiFis(self.fckH,self.fcdH,self.gammaC,self.concreteAxialForce,self.concreteArea,self.strutWidth,self.depthUtil,self.areaRebarTracc,0.0)
+            self.tensionedRebarsArea= 0.0
+          self.Vu2= getVu2EHE08NoAtSiFis(self.fckH,self.fcdH,self.gammaC,self.concreteAxialForce,self.concreteArea,self.strutWidth,self.depthUtil,self.tensionedRebarsArea,0.0)
         self.Vcu= self.Vu2
         self.Vsu= 0.0
         self.Vu1= -1.0
         self.Vu= self.Vu2
-      else: # Sección no fisurada
+      else: # Uncracked section
         axis= scc.getInternalForcesAxis()
         self.I= scc.getFibers().getHomogenizedSectionIRelToLine(self.E0,axis)
         self.S= scc.getFibers().getSPosHomogenizedSection(self.E0,geom.HalfPlane2d(axis))
         self.Vu2= getVu2EHE08NoAtNoFis(self.fctdH,self.I,self.S,self.strutWidth,self.alphaL,self.concreteAxialForce,self.concreteArea)
 
   def calcVuEHE08SiAt(self, preprocessor, scc, paramsTorsion, concrete, reinfSteel, Nd, Md, Vd, Td):
-    ''' Calcula el cortante último de la sección WITH shear reinforcement.
-     XXX Falta considerar la reinforcement activa.
+    ''' Compute the shear strength at failure WITH shear reinforcement.
+     XXX Presstressing contribution not implemented yet.
+
      :param reinfSteelMaterialTag: reinforcement steel material identifier.
-     :param concrete: Nombre del material empleado para modelizar el hormigón.
-     :param reinfSteel: reinforcement steel material name.
-     :param Nd: Design value of axial force (aquí positivo si es de tracción)
+     :param concrete: concrete material.
+     :param reinfSteel: reinforcement steel.
+     :param Nd: Design value of axial force (here positive if in tension)
      :param Md: Absolute value of design value of bending moment.
-     :param Vd: Absolute value of cortante efectivo de cálculo (clause 42.2.2).
-     :param Td: Torsor de cálculo. '''
+     :param Vd: Absolute value of effective design shear (clause 42.2.2).
+     :param Td: design value of torsional moment. '''
     self.VuAe= paramsTorsion.Ae()
     self.Vuue= paramsTorsion.ue()
 
@@ -795,16 +799,16 @@ class ShearControllerEHE(lscb.LimitStateControllerBase):
     createFiberSets.fiberSectionSetupRC3Sets(scc,self.concreteMatTag,self.concreteFibersSetName,self.reinfSteelMaterialTag,self.rebarFibersSetName)
     concrFibers= scc.getFiberSets()[self.concreteFibersSetName]
     reinfFibers= scc.getFiberSets()[self.rebarFibersSetName]
-    reinforcementTraccion= scc.getFiberSets()[self.tensionedRebarsFiberSetName]
+    tensionedReinforcement= scc.getFiberSets()[self.tensionedRebarsFiberSetName]
 
-    self.hayMom= scc.isSubjectedToBending(0.1)
-    self.numBarrasTraccion= reinforcementTraccion.getNumFibers()
+    self.isBending= scc.isSubjectedToBending(0.1)
+    self.tensionedRebars.number= tensionedReinforcement.getNumFibers()
     self.concreteArea= concrFibers.getArea(1)
     if(self.concreteArea<1e-6):
       errMsg= "concrete area too smail; Ac= " + str(self.concreteArea) + " m2\n"
       lmsg.error(errMsg)
     else:
-      if(self.hayMom):
+      if(self.isBending):
         self.eps1= concrFibers.getStrainMax()
         self.E0= concrFibers[0].getMaterial().getInitialTangent()
         self.concreteAxialForce= concrFibers.ResultanteComp()
@@ -812,28 +816,29 @@ class ShearControllerEHE(lscb.LimitStateControllerBase):
         self.strutWidth= scc.getCompressedStrutWidth() # b0
         self.depthUtil= scc.getEffectiveDepth() # d
         self.mechanicLeverArm= scc.getMechanicLeverArm() # z
-        if(self.numBarrasTraccion>0):
-          self.areaRebarTracc= reinforcementTraccion.getArea(1)
+        if(self.tensionedRebars.number>0):
+          self.tensionedRebars.area= tensionedReinforcement.getArea(1)
         else:
-          self.areaRebarTracc= 0.0
-        self.thetaFisuras= getCrackAngleEHE08(Nd,Md,Vd,Td,self.mechanicLeverArm,self.areaRebarTracc,0.0,self.modElastArmadura,0.0,0.0,self.VuAe,self.Vuue)
-        self.Vcu= getVcuEHE08(self.fckH,self.fcdH,self.gammaC,self.concreteAxialForce,self.concreteArea,self.strutWidth,self.depthUtil,self.mechanicLeverArm,self.areaRebarTracc,0.0,self.theta,Nd,Md,Vd,Td,self.modElastArmadura,0.0,0.0,self.VuAe,self.Vuue)
+          self.tensionedRebars.area= 0.0
+        self.thetaFisuras= getCrackAngleEHE08(Nd,Md,Vd,Td,self.mechanicLeverArm,self.tensionedRebars.area,0.0,self.modElastArmadura,0.0,0.0,self.VuAe,self.Vuue)
+        self.Vcu= getVcuEHE08(self.fckH,self.fcdH,self.gammaC,self.concreteAxialForce,self.concreteArea,self.strutWidth,self.depthUtil,self.mechanicLeverArm,self.tensionedRebars.area,0.0,self.theta,Nd,Md,Vd,Td,self.modElastArmadura,0.0,0.0,self.VuAe,self.Vuue)
         self.Vu1= getVu1EHE08(self.fckH,self.fcdH,self.concreteAxialForce,self.concreteArea,self.strutWidth,self.depthUtil,self.alpha,self.theta)
         self.Vsu= getVsuEHE08(self.mechanicLeverArm,self.alpha,self.theta,self.AsTrsv,self.fydS)
         self.Vu2= self.Vcu+self.Vsu
         self.Vu= min(self.Vu1,self.Vu2)
-      else: # Sección no fisurada
-        lmsg.error("La comprobación del cortante sin momento no está implementada.")
+      else: # Uncracked section
+        lmsg.error("Checking of shear strength without bending is not implemented.")
 
   def calcVuEHE08(self, preprocessor, scc, nmbParamsTorsion, concrete, reinfSteel, Nd, Md, Vd, Td):
-    '''  Calcula el cortante último de la sección.
-     XXX Falta considerar la reinforcement activa.
+    '''  Compute the shear strength at failure.
+     XXX Presstressing contribution not implemented yet.
+
      :param concrete: parameters to model concrete.
      :param reinfSteel: parameters to model rebar's steel.
-     :param Nd: Design value of axial force (aquí positivo si es de tracción)
+     :param Nd: Design value of axial force (positive if in tension)
      :param Md: Absolute value of design value of bending moment.
-     :param Vd: Absolute value of cortante efectivo de cálculo (clause 42.2.2).
-     :param Td: Torsor de cálculo.'''
+     :param Vd: Absolute value of effective design shear (clause 42.2.2).
+     :param Td: design value of torsional moment.'''
     if(self.AsTrsv==0):
       self.calcVuEHE08NoAt(preprocessor,scc,concrete,reinfSteel)
     else:
@@ -841,10 +846,8 @@ class ShearControllerEHE(lscb.LimitStateControllerBase):
 
 
   def check(self,elements,nmbComb):
-    '''
-    Comprobación de las secciones de hormigón frente a cortante.
-       XXX Falta tener en cuenta la dirección de las barras de refuerzo
-       a cortante.
+    ''' Check section shear strength.
+       XXX Rebar orientation not taken into account yet.
     '''
     print "Postprocessing combination: ",nmbComb
     secHAParamsTorsion=  EHE_limit_state_checking.TorsionParameters()
@@ -899,62 +902,90 @@ class CrackControl(lscb.CrackControlBaseParameters):
 
   def __init__(self,limitStateLabel):
     super(CrackControl,self).__init__(limitStateLabel)
-    self.concreteArea= 0.0 #Concrete section area.
-    self.fctmFis= 0.0 #Resistencia media del hormigón a tracción.
-    self.tensSRMediaBarrasTracc= 0.0 #Tensión media en las barras traccionadas en fisuración.
-    self.iAreaMaxima= None #Barra traccionada de área máxima.
-    self.diamMaxTracc= 0.0 #Diámetro de la reinforcement traccionada más gruesa.
-    self.EsBarrasTracc= 0.0 #Longitudinal deformation Modulus tensioned rebars.
-    self.eps1= 0.0 #Maximum strain in concrete.
-    self.eps2= 0.0 #Minimum strain in concrete.
-    self.k1= 0.0 #Coeficiente que representa la influencia del diagrama de tracciones.
-    self.k2= 0.5 #Coeficiente de valor 1.0 para carga instantánea no repetida y 0.5 para el resto de los casos.
-    self.depthMecanico= 0.0 #Canto con el que está trabajando la sección.
-    self.widthMecanico= 0.0 #Ancho con el que está trabajando la sección.
-    self.razonAspecto= 0.0 #Cociente entre width y depth.
-    self.hEfMax= 0.0 #Canto máximo del área eficaz.
-    self.AcEfBruta= 0.0 #Área eficaz bruta.
-    self.AcEfNeta= 0.0 #Área eficaz neta.
-    self.E0= 0.0 #Módulo de rigidez tangente del hormigón.
-    self.beta= 1.7 #Coeficiente que relaciona el valor característico de la apertura de fisura con el valor medio y que vale 1.3 para fisuración producida exclusivamente por acciones indirectas y 1.7 en el resto de los casos.
-    self.Wk= 0.0 #Apertura característica de fisuras.
+    self.concreteArea= 0.0 # Concrete section area.
+    self.fctmFis= 0.0 # Average tensile strength of the concrete.
+    self.tensionedRebars= lscb.TensionedRebarsProperties()
+    self.eps1= 0.0 # Maximum strain in concrete.
+    self.eps2= 0.0 # Minimum strain in concrete.
+    self.k1= 0.0 # Coefficient representing the effect of the tension diagram in the section.
+    self.k2= 0.5 # Coefficient of value 1.0 in the case of non-repeating
+                 # temporary load and 0.5 otherwise.
+    self.depthMecanico= 0.0 # mechanic section depth.
+    self.widthMecanico= 0.0 # mechanic section width.
+    self.aspectRatio= 0.0 #aspect ratio width/depth.
+    self.hEfMax= 0.0 # maximum depth of effective area.
+    self.grossEffectiveArea= 0.0 # gross effective area.
+    self.netEffectiveArea= 0.0 # net effective area.
+    self.E0= 0.0 # Concrete tangent stiffness.
+    self.beta= 1.7 # Coefficient which relates the mean crack opening to the
+                   # characteristic value and is equal to 1.3 in the case of
+                   # cracking caused by indirect actions only, and 1.7 otherwise.
+    self.Wk= 0.0 # Characteristic crack opening.
     
   def printParams(self):
-    # Imprime los parámetros de fisuración de la sección.
-    print "Num. reinforcement a tracción: ",self.numBarrasTracc,"\n"
-    print "Spacement of the tensioned bars; s= ",self.rebarsSpacingTracc," m\n"
-    print "Area de las reinforcement traccionadas; As= ",self.areaRebarTracc*1e4," cm2\n"
-    print "Area eficaz; AcEf= ",self.AcEfNeta*1e4," cm2\n"
-    print "Centro de gravedad de las reinforcement traccionadas; CDG= (",self.yCDGBarrasTracc,",",self.zCDGBarrasTracc,") m\n"
-    print "Tensión media en barras traccionadas= ",self.tensMediaBarrasTracc/1e6," MPa\n"
-    print "Tensión media en fisuración en barras traccionadas= ",self.tensSRMediaBarrasTracc/1e6," MPa\n"
-    print "Deformación máxima en la zona traccionada de hormigón; eps1= ",self.eps1*1e3," por mil.\n"
-    print "Deformación mínima en la zona traccionada de hormigón; eps2= ",self.eps2*1e3," por mil.\n"
-    print "Influencia del diagrama de tracciones; k1= ",self.k1,"\n"
-    print "Canto mecánico; h= ",self.depthMecanico," m\n"
+    ''' Prints crack control parameters.'''
+    self.tensionedRebars.printParams()    
+    print "Maximum concrete strain in the cracked section inside the tensioned zone; eps1= ",self.eps1*1e3," per mil.\n"
+    print "Minimum concrete strain in the cracked section inside the tensioned zone; eps2= ",self.eps2*1e3," per mil.\n"
+    print "Effect of the tension diagram; k1= ",self.k1,"\n"
+    print "Mechanic depth; h= ",self.depthMecanico," m\n"
     print "Lever arm; z= ",self.mechanicLeverArm," m\n"
-    print "Ancho mecánico; b= ",self.widthMecanico," m\n"
-    print "Razón aspecto; r= ",self.razonAspecto,"\n"
-    print "Canto máximo para el área eficaz; hEfMax= ",self.hEfMax," m\n"
-    print "Resistencia media a tracción; fctm= ",self.fctmFis/1e6," MPa\n"
-    print "Modulo de deformación longitudinal tangente; E0= ",self.E0/1e9," GPa\n"
-    print "Apertura característica de fisuras; Wk= ",self.Wk*1e3," mm\n"
+    print "Mechanical width; b= ",self.widthMecanico," m\n"
+    print "Aspect ratio; r= ",self.aspectRatio,"\n"
+    print "Maximum depth for effective area; hEfMax= ",self.hEfMax," m\n"
+    print "Average tensile strength of the concrete; fctm= ",self.fctmFis/1e6," MPa\n"
+    print "Concrete tangent stiffness; E0= ",self.E0/1e9," GPa\n"
+    print "Characteristic crack opening; Wk= ",self.Wk*1e3," mm\n"
 
+  def computeWkOnBars(self,tensionedReinforcement):
+    '''Compute the characteristic crack opening on each bar and return
+       the maximum.
 
+     :param tensionedReinforcement: 
+    '''
+    retval= 0.0
+    sz= len(tensionedReinforcement)
+    for i in range(0,sz):
+      barra= tensionedReinforcement[i]
+      AsBarra= barra.getArea()
+      posBarra= barra.getPos()
+      yBarra= posBarra.x
+      zBarra= posBarra.y
+      sigmaBarra= barra.getMaterial().getStress()
+      coverBarra= tensionedReinforcement.getFiberCover(i)
+      diamBarra= tensionedReinforcement.getEquivalentDiameterOfFiber(i)
+      sigmaSRBarra= tensionedReinforcement.getSigmaSRAtFiber(i,self.E0,self.tensionedRebars.E,self.fctmFis)
+      self.tensionedRebars.averageStress+= AsBarra*sigmaSRBarra
 
-  # Calcula la apertura característica de fisura.
-  def calcApertCaracFis(self, scc, concreteMatTag, reinfSteelMaterialTag, fctm):
+      AcEfBarra= tensionedReinforcement.getFiberEffectiveConcreteArea(i)
+      sepBarra= min(tensionedReinforcement.getFiberSpacing(i),15*diamBarra)
+      smFisurasBarra= 2*coverBarra+0.2*sepBarra+0.4*self.k1*diamBarra*AcEfBarra/AsBarra
+      maxBarElongation= sigmaBarra/self.tensionedRebars.E
+      averageBarElongation= max(1.0-self.k2*(sigmaSRBarra/sigmaBarra)**2,0.4)*maxBarElongation
+      WkBarra=  self.beta*smFisurasBarra*averageBarElongation
+      retval= max(retval,WkBarra)
+    self.tensionedRebars.averageStress/= self.tensionedRebars.area
+    return retval
+
+  def computeWk(self, scc, concreteMatTag, reinfSteelMaterialTag, fctm):
+    '''Computes the characteristic value of the crack width.
+
+     :param scc: section.
+     :param reinfSteelMaterialTag: identifier of the concrete material.
+     :param reinfSteelMaterialTag: identifier of the reinforcing steel material.
+     :param fctm: average tensile strength of the concrete.
+    '''
     if(self.rcSets == None):
       self.rcSets= createFiberSets.fiberSectionSetupRC3Sets(scc,concreteMatTag,self.concreteFibersSetName,reinfSteelMaterialTag,self.rebarFibersSetName)
     concrFibers= self.rcSets.concrFibers.fSet
     reinfFibers= self.rcSets.reinfFibers.fSet
-    reinforcementTraccion= self.rcSets.tensionFibers
+    tensionedReinforcement= self.rcSets.tensionFibers
 
     self.fctmFis= fctm
     self.claseEsfuerzo= scc.getStrClaseEsfuerzo(0.0)
-    self.numBarrasTracc= self.rcSets.getNumTensionRebars()
+    self.tensionedRebars.number= self.rcSets.getNumTensionRebars()
     self.Wk= 0.0
-    if(self.numBarrasTracc>0):
+    if(self.tensionedRebars.number>0):
       scc.computeCovers(self.tensionedRebarsFiberSetName)
       scc.computeSpacement(self.tensionedRebarsFiberSetName)
       self.eps1= concrFibers.getStrainMax()
@@ -965,55 +996,16 @@ class CrackControl(lscb.CrackControlBaseParameters):
       self.depthMecanico= scc.getLeverArm()
       self.mechanicLeverArm= scc.getMechanicLeverArm() # z
       self.widthMecanico= scc.getAnchoMecanico()
-      self.razonAspecto= self.widthMecanico/self.depthMecanico
-      if(self.razonAspecto>1):
+      self.aspectRatio= self.widthMecanico/self.depthMecanico
+      if(self.aspectRatio>1):
         self.hEfMax= self.depthMecanico/4.0 # Pieza tipo losa
       else:
         self.hEfMax= self.depthMecanico/2.0
-      self.AcEfNeta= scc.computeFibersEffectiveConcreteArea(self.hEfMax,self.tensionedRebarsFiberSetName,15)
+      self.netEffectiveArea= scc.computeFibersEffectiveConcreteArea(self.hEfMax,self.tensionedRebarsFiberSetName,15)
 
-      self.rebarsSpacingTracc= reinforcementTraccion.getAverageDistanceBetweenFibers()
-      self.areaRebarTracc= reinforcementTraccion.getArea(1)
-      self.yCDGBarrasTracc= reinforcementTraccion.getCdgY()
-      self.zCDGBarrasTracc= reinforcementTraccion.getCdgZ()
-      self.tensMediaBarrasTracc= reinforcementTraccion.getStressMed()
-      self.iAreaMaxima=  fiberUtils.getIMaxPropFiber(reinforcementTraccion,"getArea")
-      self.diamMaxTracc= 2*math.sqrt(reinforcementTraccion[self.iAreaMaxima].getArea()/math.pi) 
+      self.tensionedRebars.setup(tensionedReinforcement)
+      self.Wk= self.computeWkOnBars(tensionedReinforcement)
 
-      self.EsBarrasTracc= reinforcementTraccion[0].getMaterial().getInitialTangent()
-      AsBarra= 0.0
-      coverBarra= 0.0
-      sepBarra= 0.0
-      diamBarra= 0.0
-      sigmaBarra= 0.0
-      sigmaSRBarra= 0.0
-      smFisurasBarra= 0.0
-      alargMaxBarra= 0.0
-      alargMedioBarra= 0.0
-      tensSRMediaBarrasTracc= 0.0
-      WkBarra= 0.0
-      sz= len(reinforcementTraccion)
-      for i in range(0,sz):
-        barra= reinforcementTraccion[i]
-        AsBarra= barra.getArea()
-        posBarra= barra.getPos()
-        yBarra= posBarra.x
-        zBarra= posBarra.y
-        sigmaBarra= barra.getMaterial().getStress()
-        coverBarra= reinforcementTraccion.getFiberCover(i)
-        diamBarra= reinforcementTraccion.getEquivalentDiameterOfFiber(i)
-        sigmaSRBarra= reinforcementTraccion.getSigmaSRAtFiber(i,self.E0,self.EsBarrasTracc,self.fctmFis)
-        tensSRMediaBarrasTracc+= AsBarra*sigmaSRBarra
-
-        AcEfBarra= reinforcementTraccion.getFiberEffectiveConcreteArea(i)
-        sepBarra= min(reinforcementTraccion.getFiberSpacing(i),15*diamBarra)
-        smFisurasBarra= 2*coverBarra+0.2*sepBarra+0.4*self.k1*diamBarra*AcEfBarra/AsBarra
-        alargMaxBarra= sigmaBarra/self.EsBarrasTracc
-        alargMedioBarra= max(1.0-self.k2*(sigmaSRBarra/sigmaBarra)**2,0.4)*alargMaxBarra
-        WkBarra=  self.beta*smFisurasBarra*alargMedioBarra
-        self.Wk= max(self.Wk,WkBarra)
-        # \printParamFisBarra()
-      self.tensSRMediaBarrasTracc= self.tensSRMediaBarrasTracc/self.areaRebarTracc
   def check(self,elements,nmbComb):
     ''' Crack control of concrete sections.'''
     print "Postprocessing combination: ",nmbComb,"\n"
@@ -1029,7 +1021,7 @@ class CrackControl(lscb.CrackControlBaseParameters):
       Ntmp= scc.N
       MyTmp= scc.My
       MzTmp= scc.Mz
-      secHAParamsFisuracion= calcApertCaracFis(concrTag,tagArmadura,concrFctm)
+      secHAParamsFisuracion= computeWk(concrTag,tagArmadura,concrFctm)
       Wk= secHAParamsFisuracion.Wk
       if(Wk>WkCP):
         WkCP= Wk # Worst case
@@ -1043,19 +1035,19 @@ class CrackControl(lscb.CrackControlBaseParameters):
 def printParamFisBarra():
   '''Prints crack control parameters of a bar.'''
   print "\niBarra= ",iBarra,"\n"
-  print "Área eficaz Acef= ",AcEfBarra*1e4," cm2\n"
-  print "Área barra As= ",AsBarra*1e4," cm2\n"
-  print "Pos barra: (",yBarra,",",zBarra,")\n"
-  print "Cover c= ",coverBarra," m\n"
-  print "diamBarra fi= ",diamBarra,"\n"
-  print "sigmaBarra= ",sigmaBarra/1e6," MPa\n"
-  print "sigmaSRBarra= ",sigmaSRBarra/1e6," MPa\n"
+  print "Effective area Acef= ",AcEfBarra*1e4," cm2\n"
+  print "Bar area As= ",AsBarra*1e4," cm2\n"
+  print "Bar position: (",yBarra,",",zBarra,")\n"
+  print "Bar cover c= ",coverBarra," m\n"
+  print "Bar diameter fi= ",diamBarra,"\n"
+  print "Bar stress= ",sigmaBarra/1e6," MPa\n"
+  print "Bar stress_SR= ",sigmaSRBarra/1e6," MPa\n"
   print "Bar spacement s= ",sepBarra," m\n"
   print "k1= ",k1,"\n"
   print "smFisurasBarra= ",smFisurasBarra," m\n"
-  print "alargMaxBarra= ",alargMaxBarra*1e3," por mil.\n"
-  print "alargMedioBarra= ",alargMedioBarra*1e3," por mil.\n"
-  print "WkBarra= ",WkBarra*1e3," mm\n\n"
+  print "Maximum bar elongation: ",maxBarElongation*1e3," por mil.\n"
+  print "Average bar elongation: ",averageBarElongation*1e3," por mil.\n"
+  print "Characteristic crack width= ",WkBarra*1e3," mm\n\n"
 
 
 class TorsionParameters(object):
@@ -1068,7 +1060,7 @@ class TorsionParameters(object):
     self.crossSectionContour= geom.Poligono2d()  # Cross section contour.
     self.lineaMedia=  geom.Poligono2d() # Polygon defined by the midline of the effective hollow section.
     self.lineaInt=  geom.Poligono2d() # Polygon defined by the interior contour of the effective hollow section.
-    self.seccionHuecaEficaz= geom.PoligonoConAgujeros2d() # Effective hollow section contour
+    self.effectiveHollowSection= geom.PoligonoConAgujeros2d() # Effective hollow section contour
   def A(self):
     return self.crossSectionContour.getArea()
   def u(self):
@@ -1080,25 +1072,23 @@ class TorsionParameters(object):
   def ue(self):
     return self.lineaMedia.getPerimetro()
 
-def calcParamsSeccionHuecaEficaz(geomSeccion, h0, c):
-  '''
-  Calcula los parámetros de torsión que se deducen
-   de la sección hueca eficaz. No es válido si la sección no es convexa.
-  :param gmSectionName: Identificador de la definición geométrica de la sección.
-  nmbParamsTorsión: Identificador del registro que contiene los parámetros de cálculo
-                de la resistencia a torsión.
-  :param h0: Real thickness of the section wall.
+def computeEffectiveHollowSectionParameters(sectionGeometry, h0, c):
+  '''Computes the parameter for torsion analysis of an
+   effective hollow section. Not valid if for non-convex sections.
+
+  :param sectionGeometry: section geometry.
+  :param h0: real thickness of the section wall.
   :param c: cover of the longitudinal reinforcement.
   '''
   retval= TorsionParameters()
   retval.h0= h0
   retval.c= c
-  retval.crossSectionContour= geomSeccion.getRegionsContour()
+  retval.crossSectionContour= sectionGeometry.getRegionsContour()
   he= retval.he()
   retval.lineaMedia= retval.crossSectionContour.offset(-he/2)
   retval.lineaInt= retval.crossSectionContour.offset(-he)
-  retval.seccionHuecaEficaz.contour(retval.crossSectionContour)
-  retval.seccionHuecaEficaz.addHole(retval.lineaInt)
+  retval.effectiveHollowSection.contour(retval.crossSectionContour)
+  retval.effectiveHollowSection.addHole(retval.lineaInt)
   return retval
 
 class ColumnReinforcementRatios(object):
@@ -1150,7 +1140,7 @@ class ConcreteCorbel(object):
         :param concrete: concrete material for corbel.
         :param concrete: steel material for corbel reinforcement.
         :param jointType: corbel to column joint quality
-        ("monolitica", "junta" o "junta_debil").
+          ("monolitica", "junta" o "junta_debil").
         '''
         self.concrete= concrete
         self.steel= steel
@@ -1161,7 +1151,7 @@ class ConcreteCorbel(object):
  
           Return the cotangent of the angle between the concrete
           compressed strut an the vertical according to 
-          clause 64.1.2.1 de EHE-08.
+          clause 64.1.2.1 of EHE-08.
         '''
         if self.jointType=="monolitica":
             retval=1.4
@@ -1172,63 +1162,55 @@ class ConcreteCorbel(object):
         return retval
 
     def getMinimumEffectiveDepth(self, a):
-        '''getMinimumEffectiveDepth(self, a) return the minimal effective depth of
-        the corbel according to clause 64.1.2.1 of EHE-08.
+        '''getMinimumEffectiveDepth(self, a) return the minimal effective 
+        depth of the corbel according to clause 64.1.2.1 of EHE-08.
 
         :param a: Distance (m) between the axis of the applied load and
-        the corbel fixed section (see figure 64.1.2 de EHE-08).
+                  the corbel fixed section (see figure 64.1.2 of EHE-08).
+
         '''
         return a*self.getCotgStrutAngle()/0.85
 
-    def getTraccionMainReinforcement(self, Fv,Fh):
-        '''getTraccionMainReinforcement(self, Fv,Fh)
+    def getMainReinforcementTension(self, Fv,Fh):
+        '''getMainReinforcementTension(self, Fv,Fh). Return the tension
+         in the main reinforcement according to clause 64.1.2.1.1 of EHE-08.
 
         :param Fv: Vertical load on the corbel, positive downwards (N).
-        :param Fh: Horizontal load on the corbel, positive outwards (N).
-
-        Return the tension in the main reinforcement according
-        to clause 64.1.2.1.1 of EHE-08.
+        :param Fh: Horizontal load on the corbel, positive outwards (N).        
         '''
         return Fv/self.getCotgStrutAngle()+Fh
 
     def getAreaNecMainReinforcement(self, Fv,Fh):
-        '''getAreaNecMainReinforcement(self, Fv,Fh)
+        '''getAreaNecMainReinforcement(self, Fv,Fh): return the area needed
+         for the main reinforcement according to clause 64.1.2.1.1 of EHE-08.
 
         :param Fv: Vertical load on the corbel, positive downwards (N).
         :param Fh: Horizontal load on the corbel, positive outwards (N).
-
-        Return the area needed for the main reinforcement according 
-        to clause 64.1.2.1.1 de EHE-08.
         '''
-        return self.getTraccionMainReinforcement(Fv,Fh)/min(self.steel.fyd(),400e6)
+        return self.getMainReinforcementTension(Fv,Fh)/min(self.steel.fyd(),400e6)
     @staticmethod
-    def getTraccionCercos(Fv):
-        ''' getTraccionCercos(Fv)
+    def getStirrupsTension(Fv):
+        ''' getStirrupsTension(Fv): return the tension in the stirrups
+         to clause 64.1.2.1.1 of EHE-08.
 
         :param Fv: Vertical load on the corbel, positive downwards (N).
-
-        Return the tension in the stirrups to clause 64.1.2.1.1 
-        de EHE-08.
         '''
         return 0.2*Fv
 
     def getAreaNecCercos(self,Fv):
-        '''getAreaNecCercos(self,Fv)
+        '''getAreaNecCercos(self,Fv): return the area needed for the 
+         stirrup reinforcements bars in the corbel according to 
+         clause 64.1.2.1.1 of EHE-08.
 
         :param Fv: Vertical load on the corbel, positive downwards (N).
-
-        Return the area needed for the stirrup reinforcements bars in
-        the corbel according to clause 64.1.2.1.1 de EHE-08.
         '''
-        return self.getTraccionCercos(Fv)/min(self.steel.fyd(),400e6)
+        return self.getStirrupsTension(Fv)/min(self.steel.fyd(),400e6)
 
     def getAreaNecApoyo(self,Fv):
-        '''getAreaNecApoyo(self,Fv)
+        '''getAreaNecApoyo(self,Fv): return the area needed for the
+         support according to clause 64.1.2.1.2 of EHE-08.
 
         :param Fv: Vertical load on the corbel, positive downwards (N).
-
-        Return the area needed for the support according
-        to clause 64.1.2.1.2 de EHE-08.
         '''
         return Fv/0.7/-self.concrete.fcd()
 
@@ -1325,7 +1307,6 @@ class BlockMember(object):
       a direction parallel to side b (see figure 61.1.a page 302 EHE-08).
 
         :param Nd: concentrated load.
-
       '''
       return 0.25*((self.b-self.b1)/self.b)*Nd
   def getReinforcementAreaBd(Nd, fyd):
@@ -1335,6 +1316,5 @@ class BlockMember(object):
 
         :param Nd: concentrated load.
         :param fyd: steel yield strength.
-
       '''
       return self.getUbd(Nd)/min(fyd,400e6)
