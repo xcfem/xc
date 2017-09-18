@@ -41,7 +41,7 @@ memb1= typical_materials.defElasticMembranePlateSection(preprocessor, "memb1",E,
 
 elements= preprocessor.getElementLoader
 elements.defaultMaterial= "memb1"
-elem= elements.newElement("shell_mitc4",xc.ID([1,2,3,4]))
+elem= elements.newElement("ShellMITC4",xc.ID([1,2,3,4]))
 
 import os
 os.system("rm -f /tmp/test04.db")

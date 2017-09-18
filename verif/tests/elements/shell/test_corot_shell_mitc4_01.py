@@ -42,7 +42,7 @@ memb1= typical_materials.defElasticMembranePlateSection(preprocessor, "memb1",E,
 
 elements= preprocessor.getElementLoader
 elements.defaultMaterial= "memb1"
-elem= elements.newElement("corot_shell_mitc4",xc.ID([1,2,3,4]))
+elem= elements.newElement("CorotShellMITC4",xc.ID([1,2,3,4]))
 
 ratio1= (elem.getCoordTransf.getG2Vector-v1).Norm()
 ratio2= (elem.getCoordTransf.getG3Vector-v2).Norm()

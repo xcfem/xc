@@ -36,7 +36,7 @@ memb1= typical_materials.defElasticMembranePlateSection(preprocessor, "memb1",E,
 elements= preprocessor.getElementLoader
 
 elements.defaultMaterial= "memb1"
-elem= elements.newElement("corot_shell_mitc4",xc.ID([1,2,3,4]))
+elem= elements.newElement("CorotShellMITC4",xc.ID([1,2,3,4]))
 
 nodes= preprocessor.getSets.getSet("total").getNodes
 for n in nodes:

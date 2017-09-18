@@ -88,9 +88,9 @@ columns_mat.setupElasticShear3DSection(preprocessor=prep)
 
 #                         ***FE model - MESH***
 eSize=1
-floor1_mesh=fem.SurfSetToMesh(surfSet=floor1,matSect=deck_mat,elemSize=eSize,elemType='shell_mitc4')
-floor2_mesh=fem.SurfSetToMesh(surfSet=floor2,matSect=deck_mat,elemSize=eSize,elemType='shell_mitc4')
-wall_mesh=fem.SurfSetToMesh(surfSet=wall,matSect=wall_mat,elemSize=eSize,elemType='shell_mitc4')
+floor1_mesh=fem.SurfSetToMesh(surfSet=floor1,matSect=deck_mat,elemSize=eSize,elemType='ShellMITC4')
+floor2_mesh=fem.SurfSetToMesh(surfSet=floor2,matSect=deck_mat,elemSize=eSize,elemType='ShellMITC4')
+wall_mesh=fem.SurfSetToMesh(surfSet=wall,matSect=wall_mat,elemSize=eSize,elemType='ShellMITC4')
 columns_mesh=fem.LinSetToMesh(linSet=columns,matSect=columns_mat,elemSize=eSize,vDirLAxZ=xc.Vector([1,0,0]),elemType='elastic_beam_3d',dimElemSpace=3,coordTransfType='linear')
 
 fem.multi_mesh(preprocessor=prep,lstMeshSets=[columns_mesh,floor1_mesh,floor2_mesh,wall_mesh])     #mesh these sets
@@ -151,7 +151,7 @@ ratio9=overallInHex.surfaces.size-wallInHex.surfaces.size-floor1InHex.surfaces.s
 
 '''
 # ***** this doesn't work for the moment TAKE A LOOK!!!
-shells=sets.getSubsetElemOfType(elemType='shell_mitc4',fromSet=overallSet,toSetName='shells')
+shells=sets.getSubsetElemOfType(elemType='ShellMITC4',fromSet=overallSet,toSetName='shells')
 
 beams=sets.getSubsetElemOfType(elemType='elastic_beam_3d',fromSet=overallSet,toSetName='beams')
 

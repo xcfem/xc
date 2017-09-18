@@ -113,9 +113,9 @@ class SurfSetToMesh(SetToMesh):
     :ivar surfSet: set of surfaces.
     :ivar matSect: instance of the class DeckMaterialData that defines the 
           material-section to be applied to the set of surfaces.
-    :ivar elemType: type of element for the mesh (defaults to 'shell_mitc4')
+    :ivar elemType: type of element for the mesh (defaults to 'ShellMITC4')
     '''
-    def __init__(self,surfSet,matSect,elemSize,elemType='shell_mitc4'):
+    def __init__(self,surfSet,matSect,elemSize,elemType='ShellMITC4'):
         super(SurfSetToMesh,self).__init__(surfSet,elemSize,elemType)
         self.matSect= matSect
 

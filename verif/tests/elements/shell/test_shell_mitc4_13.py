@@ -47,7 +47,7 @@ nmb1= typical_materials.defElasticMembranePlateSection(preprocessor, "memb1",E,n
 seedElemLoader= preprocessor.getElementLoader.seedElemLoader
 seedElemLoader.defaultMaterial= "memb1"
 seedElemLoader.defaultTag= 1
-elem= seedElemLoader.newElement("shell_mitc4",xc.ID([0,0,0,0]))
+elem= seedElemLoader.newElement("ShellMITC4",xc.ID([0,0,0,0]))
 
 points= preprocessor.getCad.getPoints
 pt= points.newPntIDPos3d(1,geom.Pos3d(0.0,0.0,0.0))

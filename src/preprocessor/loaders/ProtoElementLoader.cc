@@ -248,15 +248,25 @@ XC::Element *XC::ProtoElementLoader::create_element(const std::string &cmd,int t
       retval= new_element<ZeroLengthContact3D>(tag_elem);
     else if(cmd == "zero_length_section")
       retval= new_element_dim_gen_mat<ZeroLengthSection>(tag_elem, dim_elem, get_ptr_material());
-    else if(cmd == "shell_mitc4")
+    else if((cmd == "shell_mitc4")||(cmd == "ShellMITC4"))
       {
+	if(cmd=="shell_mitc4")
+	  std::clog << nombre_clase() << "::" << __FUNCTION__
+		    << "; type name: '" << cmd
+		    << "' is deprecated use 'ShellMITC4' instead."
+		    << std::endl;
         retval= new_element_mat<ShellMITC4,SectionForceDeformation>(tag_elem, get_ptr_material());
         if(!retval)
           std::cerr << "Error in " << nombre_clase() << "::" << __FUNCTION__ << "; material: '"
                     << nmb_mat << "' has not a suitable type." << std::endl;
       }
-    else if(cmd == "corot_shell_mitc4")
+    else if((cmd == "corot_shell_mitc4")||(cmd == "CorotShellMITC4"))
       {
+	if(cmd=="corot_shell_mitc4")
+	  std::clog << nombre_clase() << "::" << __FUNCTION__
+		    << "; type name: '" << cmd
+		    << "' is deprecated use 'CorotShellMITC4' instead."
+		    << std::endl;
         retval= new_element_mat<CorotShellMITC4,SectionForceDeformation>(tag_elem, get_ptr_material());
         if(!retval)
           std::cerr << "Error in " << nombre_clase() << "::" << __FUNCTION__

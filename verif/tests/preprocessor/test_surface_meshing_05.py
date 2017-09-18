@@ -33,7 +33,7 @@ nodes.newSeedNode()
 seedElemLoader= preprocessor.getElementLoader.seedElemLoader
 seedElemLoader.defaultMaterial= "prueba"
 seedElemLoader.defaultTag= 1
-elem= seedElemLoader.newElement("shell_mitc4",xc.ID([0,0,0,0]))
+elem= seedElemLoader.newElement("ShellMITC4",xc.ID([0,0,0,0]))
 
 points= preprocessor.getCad.getPoints
 pt= points.newPntIDPos3d(1,geom.Pos3d(R,0.0,0.0))

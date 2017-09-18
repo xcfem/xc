@@ -74,13 +74,13 @@ elements= preprocessor.getElementLoader
 # Reinforced concrete deck
 elements.defaultMaterial= "hLosa"
 elements.defaultTag= 1
-elem= elements.newElement("shell_mitc4",xc.ID([1,2,6,5]))
+elem= elements.newElement("ShellMITC4",xc.ID([1,2,6,5]))
 
-elem= elements.newElement("shell_mitc4",xc.ID([2,3,7,6]))
-elem= elements.newElement("shell_mitc4",xc.ID([3,4,8,7]))
-elem= elements.newElement("shell_mitc4",xc.ID([5,6,10,9]))
-elem= elements.newElement("shell_mitc4",xc.ID([6,7,11,10]))
-elem= elements.newElement("shell_mitc4",xc.ID([7,8,12,11]))
+elem= elements.newElement("ShellMITC4",xc.ID([2,3,7,6]))
+elem= elements.newElement("ShellMITC4",xc.ID([3,4,8,7]))
+elem= elements.newElement("ShellMITC4",xc.ID([5,6,10,9]))
+elem= elements.newElement("ShellMITC4",xc.ID([6,7,11,10]))
+elem= elements.newElement("ShellMITC4",xc.ID([7,8,12,11]))
 
 # Armadura activa
 elements.defaultMaterial= "prestressingSteel"

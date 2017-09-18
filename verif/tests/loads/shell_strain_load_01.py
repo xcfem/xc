@@ -48,7 +48,7 @@ memb1= typical_materials.defElasticMembranePlateSection(preprocessor, "memb1",E,
 elements= preprocessor.getElementLoader
 elements.defaultMaterial= "memb1"
 elements.defaultTag= 1
-elem1= elements.newElement("shell_mitc4",xc.ID([nod1.tag,nod2.tag,nod3.tag,nod4.tag]))
+elem1= elements.newElement("ShellMITC4",xc.ID([nod1.tag,nod2.tag,nod3.tag,nod4.tag]))
 
 
 # Constraints

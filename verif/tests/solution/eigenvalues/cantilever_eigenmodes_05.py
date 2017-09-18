@@ -56,7 +56,7 @@ nodes.newSeedNode()
 seedElemLoader= preprocessor.getElementLoader.seedElemLoader
 seedElemLoader.defaultMaterial= "elast"
 seedElemLoader.defaultTag= 1
-elem= seedElemLoader.newElement("shell_mitc4",xc.ID([0,0,0,0]))
+elem= seedElemLoader.newElement("ShellMITC4",xc.ID([0,0,0,0]))
 
 
 f1= preprocessor.getSets.getSet("f1")

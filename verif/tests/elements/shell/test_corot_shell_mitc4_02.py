@@ -46,7 +46,7 @@ movN4= rotacion*vPosN4-vPosN4
 memb1= typical_materials.defElasticMembranePlateSection(preprocessor, "memb1",E,nu,dens,h)
 elements= preprocessor.getElementLoader
 elements.defaultMaterial= "memb1"
-elem= elements.newElement("corot_shell_mitc4",xc.ID([1,2,3,4]))
+elem= elements.newElement("CorotShellMITC4",xc.ID([1,2,3,4]))
 
 nod3.setTrialDisp(xc.Vector([movN3[0],movN3[1],movN3[2],0,0,0]))
 nod4.setTrialDisp(xc.Vector([movN4[0],movN4[1],movN4[2],0,0,0]))
