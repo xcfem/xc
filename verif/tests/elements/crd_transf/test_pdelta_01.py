@@ -57,7 +57,7 @@ seedElemLoader= preprocessor.getElementLoader.seedElemLoader
 seedElemLoader.defaultTransformation= "pd"
 seedElemLoader.defaultMaterial= "scc"
 seedElemLoader.defaultTag= 1 #Tag for next element.
-beam2d= seedElemLoader.newElement("elastic_beam_2d",xc.ID([0,0]))
+beam2d= seedElemLoader.newElement("ElasticBeam2d",xc.ID([0,0]))
 
 points= preprocessor.getCad.getPoints
 pt1= points.newPntIDPos3d(1, geom.Pos3d(0.0,0.0,0) )

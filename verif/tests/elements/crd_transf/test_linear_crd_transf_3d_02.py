@@ -36,7 +36,7 @@ elements= preprocessor.getElementLoader
 elements.defaultTransformation= "lin" # Coordinate transformation for the new elements
 elements.defaultMaterial= "seccion"
 elements.defaultTag= 1 #Tag for the next element.
-beam3d= elements.newElement("elastic_beam_3d",xc.ID([1,2]));
+beam3d= elements.newElement("ElasticBeam3d",xc.ID([1,2]));
 
 crdTransf= beam3d.getCoordTransf
  

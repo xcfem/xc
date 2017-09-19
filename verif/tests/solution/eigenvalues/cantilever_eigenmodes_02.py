@@ -48,7 +48,7 @@ seedElemLoader= preprocessor.getElementLoader.seedElemLoader
 seedElemLoader.defaultMaterial= "scc"
 seedElemLoader.defaultTransformation= "lin"
 seedElemLoader.defaultTag= 1 #Tag for the next element.
-beam3d= seedElemLoader.newElement("elastic_beam_3d",xc.ID([0,0]))
+beam3d= seedElemLoader.newElement("ElasticBeam3d",xc.ID([0,0]))
 beam3d.rho= m
 
 

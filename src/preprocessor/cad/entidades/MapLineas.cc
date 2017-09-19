@@ -86,7 +86,7 @@ XC::ArcoCircunf *XC::MapLineas::newCircleArc(const size_t &id_p1, const size_t &
   }
 
 
-//! @brief Circle arc.
+//! @brief Line sequence.
 XC::CmbEdge *XC::MapLineas::newLineSequence(void)
   {
     CmbEdge *retval= dynamic_cast<CmbEdge *>(createLineSequence());

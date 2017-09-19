@@ -38,19 +38,19 @@ elements= preprocessor.getElementLoader
 elements.defaultTransformation= "lin" # Coord. transformation.
 elements.defaultMaterial= "seccion"
 elements.defaultTag= 1 #Tag for next element.
-beam3d= elements.newElement("elastic_beam_3d",xc.ID([1,2]));
-beam3d= elements.newElement("elastic_beam_3d",xc.ID([2,3]))
-beam3d= elements.newElement("elastic_beam_3d",xc.ID([3,4]))
-beam3d= elements.newElement("elastic_beam_3d",xc.ID([4,1]))
-beam3d= elements.newElement("elastic_beam_3d",xc.ID([1,3]))
-beam3d= elements.newElement("elastic_beam_3d",xc.ID([2,4]))
+beam3d= elements.newElement("ElasticBeam3d",xc.ID([1,2]));
+beam3d= elements.newElement("ElasticBeam3d",xc.ID([2,3]))
+beam3d= elements.newElement("ElasticBeam3d",xc.ID([3,4]))
+beam3d= elements.newElement("ElasticBeam3d",xc.ID([4,1]))
+beam3d= elements.newElement("ElasticBeam3d",xc.ID([1,3]))
+beam3d= elements.newElement("ElasticBeam3d",xc.ID([2,4]))
 
-beam3d= elements.newElement("elastic_beam_3d",xc.ID([5,6]))
-beam3d= elements.newElement("elastic_beam_3d",xc.ID([6,7]))
-beam3d= elements.newElement("elastic_beam_3d",xc.ID([7,8]))
-beam3d= elements.newElement("elastic_beam_3d",xc.ID([8,5]))
-beam3d= elements.newElement("elastic_beam_3d",xc.ID([5,7]))
-beam3d= elements.newElement("elastic_beam_3d",xc.ID([6,8]))
+beam3d= elements.newElement("ElasticBeam3d",xc.ID([5,6]))
+beam3d= elements.newElement("ElasticBeam3d",xc.ID([6,7]))
+beam3d= elements.newElement("ElasticBeam3d",xc.ID([7,8]))
+beam3d= elements.newElement("ElasticBeam3d",xc.ID([8,5]))
+beam3d= elements.newElement("ElasticBeam3d",xc.ID([5,7]))
+beam3d= elements.newElement("ElasticBeam3d",xc.ID([6,8]))
 
 # Definimos el conjunto de prueba
 prb1= preprocessor.getSets.defSet("prb1")

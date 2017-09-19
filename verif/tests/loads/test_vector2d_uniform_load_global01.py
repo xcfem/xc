@@ -83,7 +83,7 @@ elements.defaultTransformation= "lin" # Coordinate transformation for the new el
 elements.defaultMaterial= "agg"
 elements.numSections= 3 # Number of sections along the element.
 elements.defaultTag= 1
-el= elements.newElement("force_beam_column_2d",xc.ID([1,2]))
+el= elements.newElement("ForceBeamColumn2d",xc.ID([1,2]))
 
 
 

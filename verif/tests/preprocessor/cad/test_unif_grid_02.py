@@ -32,7 +32,7 @@ seedElemLoader= preprocessor.getElementLoader.seedElemLoader
 seedElemLoader.defaultMaterial= "elast2d"
 seedElemLoader.dimElem= 3 # Dimension of element space
 seedElemLoader.defaultTag= 1 #Tag for the next element.
-quad4n= seedElemLoader.newElement("quad4n",xc.ID([0,0,0,0]));
+quad4n= seedElemLoader.newElement("FourNodeQuad",xc.ID([0,0,0,0]));
 
 unifGrids= preprocessor.getCad.getUniformGrids
 uGrid= unifGrids.newUniformGrid()

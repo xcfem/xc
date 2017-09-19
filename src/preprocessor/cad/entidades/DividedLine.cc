@@ -42,7 +42,8 @@ XC::DividedLine::DividedLine(Preprocessor *m,const size_t &nd)
 XC::SetEstruct *XC::DividedLine::getCopy(void) const
   { return new DividedLine(*this); }
 
-void XC::DividedLine::setLongs(const XC::Vector &ls)
+//! @brief assigns lengths.
+void XC::DividedLine::setLongs(const Vector &ls)
   {
     longs= vector_to_std_vector(ls);
     SetNDiv(longs.size());

@@ -39,9 +39,9 @@ def nuevosZeroLengthShell(nmbS, tagElem, offset):
   elems.dimElem= 3 # Tridimensional space.
   elems.defaultMaterial= nmbS
   elems.defaultTag= idSecc1 #Next element number.
-  zls1= elems.newElement("zero_lenght_section",xc.ID([idNod1,iNod2]))
+  zls1= elems.newElement("ZeroLengthSection",xc.ID([idNod1,iNod2]))
   elems.defaultTag= idSecc2 #Next element number.
-  zls2= elems.newElement("zero_lenght_section",xc.ID([idNod3,iNod4]))
+  zls2= elems.newElement("ZeroLengthSection",xc.ID([idNod3,iNod4]))
 
 
 def simulaShellElemFromTable(preprocessor,nmbDBase, nmbTablaElem, sectionName, offset):

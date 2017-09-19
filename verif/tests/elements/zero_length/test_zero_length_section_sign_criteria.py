@@ -85,7 +85,7 @@ elements.defaultMaterial= "sa"
 elements.dimElem= 1 # Dimension of element space
 elements.defaultTag= 1
 #  sintaxis: zero_length[<tag>] 
-zl= elements.newElement("zero_length_section",xc.ID([1,2]))
+zl= elements.newElement("ZeroLengthSection",xc.ID([1,2]))
 
 # Constraints
 modelSpace.fixNode000_000(1)

@@ -42,7 +42,7 @@ elements= preprocessor.getElementLoader
 elements.defaultMaterial= "prestressingSteel"
 elements.dimElem= 2 # Dimension of element space
 elements.defaultTag= 1 #Tag for the next element.
-truss= elements.newElement("truss",xc.ID([1,2]));
+truss= elements.newElement("Truss",xc.ID([1,2]));
 truss.area= A
 
     

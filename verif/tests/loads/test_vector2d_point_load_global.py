@@ -60,7 +60,7 @@ elements= preprocessor.getElementLoader
 elements.defaultTransformation= "lin"
 elements.defaultMaterial= "scc"
 elements.defaultTag= 1 #Tag for next element.
-beam2d= elements.newElement("elastic_beam_2d",xc.ID([1,2]))
+beam2d= elements.newElement("ElasticBeam2d",xc.ID([1,2]))
 beam2d.h= h
     
 # Constraints

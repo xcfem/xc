@@ -41,7 +41,7 @@ k= typical_materials.defElasticMaterial(preprocessor, "k",K)
 elements= preprocessor.getElementLoader
 elements.defaultMaterial= "k"
 elements.dimElem= 3 # Dimension of element space
-zl= elements.newElement("zero_length",xc.ID([1,2]))
+zl= elements.newElement("ZeroLength",xc.ID([1,2]))
 zl.clearMaterials()
 zl.setupVectors(xc.Vector([0,1,0]),xc.Vector([-1,0,0]))
 zl.setMaterial(0,"k")

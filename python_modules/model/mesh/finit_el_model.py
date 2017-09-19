@@ -35,7 +35,7 @@ class RawLineSetToMesh(SetToMesh):
     :ivar coordTransf: coordinate transformation for the elements.
     :ivar dimElemSpace: dimension of the element space (defaults to 3)
     '''
-    def __init__(self,linSet,matSect,elemSize,coordTransf, elemType='elastic_beam_3d',dimElemSpace=3):
+    def __init__(self,linSet,matSect,elemSize,coordTransf, elemType='ElasticBeam3d',dimElemSpace=3):
         super(RawLineSetToMesh,self).__init__(linSet,elemSize,elemType)
         self.matSect= matSect
         self.coordinateTransformation= coordTransf
@@ -99,7 +99,7 @@ class LinSetToMesh(RawLineSetToMesh):
                        types: 'linear', 'PDelta' and 'corot' (defaults to 
                        'linear') 
     '''
-    def __init__(self,linSet,matSect,elemSize,vDirLAxZ, elemType='elastic_beam_3d',dimElemSpace=3,coordTransfType='linear'):
+    def __init__(self,linSet,matSect,elemSize,vDirLAxZ, elemType='ElasticBeam3d',dimElemSpace=3,coordTransfType='linear'):
         self.vDirLAxZ= vDirLAxZ
         trfName= linSet.name+'trYGlobal'
         cTrf= getDefaultCoordinateTransformation(linSet.owner,trfName,coordTransfType,self.vDirLAxZ)

@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Model made of zero_lenght_section elements that is used only
+# Model made of ZeroLengthSection elements that is used only
 # for checking limit states i.e. for reinforced concrete sections.
 #
 # This kind of phantom model is needed when the model that we use
@@ -96,7 +96,7 @@ class PhantomModel(object):
     self.modelSpace.fixNode000_000(nA.tag)
     if(not fakeSection):
       elements.defaultMaterial= sectionName
-    phantomElement= self.preprocessor.getElementLoader.newElement("zero_length_section",xc.ID([nA.tag,nB.tag]))
+    phantomElement= self.preprocessor.getElementLoader.newElement("ZeroLengthSection",xc.ID([nA.tag,nB.tag]))
     phantomElement.setProp("idElem", idElem) #Element to check
     phantomElement.setProp("idSection", sectionName) #Section to check
     phantomElement.setProp("dir",sectionIndex) #Section index in the element.

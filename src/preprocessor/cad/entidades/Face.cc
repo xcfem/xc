@@ -43,21 +43,25 @@ XC::Face::Face(void)
   : CmbEdge(nullptr,0), ndivj(0) {}
 
 //! @brief Constructor.
+//!
+//! @param ndivI: number of divisions for direction I.
+//! @param ndivJ: number of divisions for direction J.
 XC::Face::Face(Preprocessor *m,const size_t &ndivI, const size_t &ndivJ)
   : CmbEdge(m,ndivI), ndivj(ndivJ) {}
 
 //! @brief Constructor.
 //! @param nombre: Object identifier.
 //! @param m: Pointer to preprocessor.
-//! @param nd: number of divisions.
+//! @param ndivI: number of divisions for direction I.
+//! @param ndivJ: number of divisions for direction J.
 XC::Face::Face(const std::string &nombre,Preprocessor *m,const size_t &ndivI, const size_t &ndivJ)
   : CmbEdge(nombre,m,ndivI), ndivj(ndivJ) {}
 
-//! @brief Asigna el number of divisions en el eje i.
+//! @brief Sets the number of divisions for direction I.
 void XC::Face::SetNDivI(const size_t &ndi)
   { CmbEdge::ndiv= ndi; }
 
-//! @brief Asigna el number of divisions en el eje j.
+//! @brief Sets the number of divisions for direction J.
 void XC::Face::SetNDivJ(const size_t &ndj)
   { ndivj= ndj; }
 
@@ -75,7 +79,7 @@ void XC::Face::actualiza_topologia(void)
 
 //! @brief Returns the index of the edge in common with the surface
 //! being passed as parameter (if it exists).
-size_t XC::Face::CommonEdge(const XC::Face &otra) const
+size_t XC::Face::CommonEdge(const Face &otra) const
   {
     size_t cont= 1;
     if(this == &otra) return cont; //Son la misma todos los bordes son comunes.
@@ -91,9 +95,9 @@ size_t XC::Face::CommonEdge(const XC::Face &otra) const
 //! - 1 if the line belongs to both surfaces and the orientation is the same.
 //! - -1 if the line belongs to both surfaces and the orientation is the opposite.
 //! - 0 line doesn't belongs to both surfaces.
-int XC::Face::SenseOfEdge(const XC::Edge *l,const XC::Face &otra) const
+int XC::Face::SenseOfEdge(const Edge *l,const Face &otra) const
   {
-    //Buscamos los indices de las lineas en una 
+    //Searching for the line indices in this face 
     const size_t ind_l_esta= IndiceEdge(l);
     if(ind_l_esta == 0)
       {
@@ -108,7 +112,8 @@ int XC::Face::SenseOfEdge(const XC::Edge *l,const XC::Face &otra) const
       {
         std::cerr << nombre_clase() << "::" << __FUNCTION__
 		  << "; line :" << l->getName() 
-                  << " is not an edge of the surface: " << otra.getName() << std::endl;
+                  << " is not an edge of the surface: "
+		  << otra.getName() << std::endl;
         return 0;
       }
     //Search the edges on each surface;
@@ -166,10 +171,18 @@ void XC::Face::add_to_sets(std::set<SetBase *> &sets)
   }
 
 //! @brief Returns a pointer to node which indices are being passed as parameters.
+//!
+//! @param i: index of the layer.
+//! @param j: index of the row.
+//! @param k: index of the column.
 XC::Node *XC::Face::GetNodo(const size_t &i,const size_t &j,const size_t &k)
   { return CmbEdge::GetNodo(i,j,k); }
 
 //! @brief Returns a pointer to node which indices are being passed as parameters.
+//!
+//! @param i: index of the layer.
+//! @param j: index of the row.
+//! @param k: index of the column.
 const XC::Node *XC::Face::GetNodo(const size_t &i,const size_t &j,const size_t &k) const
   { return CmbEdge::GetNodo(i,j,k); }
 

@@ -61,7 +61,7 @@ A= fibers.getSumaAreas
 elements= preprocessor.getElementLoader
 elements.defaultTransformation= "lin"
 elements.defaultMaterial= "quadFibers"
-beam3d= elements.newElement("force_beam_column_3d",xc.ID([1,2]));
+beam3d= elements.newElement("ForceBeamColumn3d",xc.ID([1,2]));
 
 
 

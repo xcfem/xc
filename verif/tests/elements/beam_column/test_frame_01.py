@@ -55,12 +55,12 @@ elements= preprocessor.getElementLoader
 elements.defaultTransformation= "lin"
 elements.defaultMaterial= "seccion"
 elements.defaultTag= 1 #Tag for next element.
-beam2d= elements.newElement("elastic_beam_2d",xc.ID([1,2]))
-beam2d= elements.newElement("elastic_beam_2d",xc.ID([2,4]))
-beam2d= elements.newElement("elastic_beam_2d",xc.ID([4,3]))
-beam2d= elements.newElement("elastic_beam_2d",xc.ID([5,6]))
-beam2d= elements.newElement("elastic_beam_2d",xc.ID([6,8]))
-beam2d= elements.newElement("elastic_beam_2d",xc.ID([8,7]))
+beam2d= elements.newElement("ElasticBeam2d",xc.ID([1,2]))
+beam2d= elements.newElement("ElasticBeam2d",xc.ID([2,4]))
+beam2d= elements.newElement("ElasticBeam2d",xc.ID([4,3]))
+beam2d= elements.newElement("ElasticBeam2d",xc.ID([5,6]))
+beam2d= elements.newElement("ElasticBeam2d",xc.ID([6,8]))
+beam2d= elements.newElement("ElasticBeam2d",xc.ID([8,7]))
 
 # Constraints
 constraints= preprocessor.getConstraintLoader

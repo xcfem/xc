@@ -40,7 +40,7 @@ lin= modelSpace.newLinearCrdTransf("lin")
 elements= preprocessor.getElementLoader
 elements.defaultTransformation= "lin" # Coordinate transformation for the new elements
 elements.defaultMaterial= IPE200.fiberSection3dName
-beam2d= elements.newElement("force_beam_column_2d",xc.ID([nod1.tag,nod2.tag]));
+beam2d= elements.newElement("ForceBeamColumn2d",xc.ID([nod1.tag,nod2.tag]));
 
 # Constraints
 constraints= preprocessor.getConstraintLoader

@@ -58,7 +58,7 @@ elements= preprocessor.getElementLoader
 elements.defaultTransformation= "lin"
 elements.defaultMaterial= "seccion"
 elements.defaultTag= 1 #Tag for next element.
-beam3d= elements.newElement("elastic_beam_3d",xc.ID([nod1.tag,nod2.tag]));
+beam3d= elements.newElement("ElasticBeam3d",xc.ID([nod1.tag,nod2.tag]));
 
 # Constraints
 

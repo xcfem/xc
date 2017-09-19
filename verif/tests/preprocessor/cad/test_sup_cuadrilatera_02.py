@@ -38,7 +38,7 @@ nodes.newSeedNode()
 
 seedElemLoader= preprocessor.getElementLoader.seedElemLoader
 seedElemLoader.defaultMaterial= "elast2d"
-elem= seedElemLoader.newElement("quad4n",xc.ID([0,0,0,0]))
+elem= seedElemLoader.newElement("FourNodeQuad",xc.ID([0,0,0,0]))
 
 
 points= preprocessor.getCad.getPoints

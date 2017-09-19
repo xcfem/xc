@@ -49,9 +49,9 @@ elements= preprocessor.getElementLoader
 elements.defaultMaterial= "cable"
 elements.dimElem= 2 # Dimension of element space
 elements.defaultTag= 1 #First node number.
-truss1= elements.newElement("corot_truss",xc.ID([1,2]));
+truss1= elements.newElement("CorotTruss",xc.ID([1,2]));
 truss1.area= area
-truss2= elements.newElement("corot_truss",xc.ID([2,3]));
+truss2= elements.newElement("CorotTruss",xc.ID([2,3]));
 truss2.area= area
     
 # Constraints

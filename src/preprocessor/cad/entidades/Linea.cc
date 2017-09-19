@@ -163,7 +163,7 @@ XC::Edge *XC::Linea::splitAtCooNatural(const double &chi)
     return retval;
   }
 
-
+//! @brief Returns the line boundary.
 BND3d XC::Linea::Bnd(void) const
   {
     BND3d retval;
@@ -201,11 +201,11 @@ const XC::Vector &XC::Linea::getTang(const double &s) const
     return retval;
   }
 
-//! @brief Interfaz con VTK.
+//! @brief VTK interface.
 int XC::Linea::getVtkCellType(void) const
   { return VTK_LINE; }
 
 
-//! @brief Interfaz con el formato MED de Salome.
+//! @brief Salome MED interface.
 int XC::Linea::getMEDCellType(void) const
   { return MED_SEG2; }

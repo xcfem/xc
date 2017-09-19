@@ -62,7 +62,7 @@ nod= nodes.newNodeXYZ(0.0,0.0,0.0)
 elements= preprocessor.getElementLoader
 elements.defaultMaterial= "fourFibersSection"
 elements.dimElem= 1 # Dimension of element space
-zl= elements.newElement("zero_length_section",xc.ID([1,2]))
+zl= elements.newElement("ZeroLengthSection",xc.ID([1,2]))
 
 # Constraints
 modelSpace.fixNode000_000(1)

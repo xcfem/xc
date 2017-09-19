@@ -42,17 +42,19 @@
 #include "domain/mesh/element/Element.h"
 
 //! @brief Constructor.
+//! @param nd: Number of divisions.
 XC::Edge::Edge(Preprocessor *m,const size_t &nd)
   : EntMdlr(m), ndiv(nd) {}
 
 //! @brief Constructor.
-//! @param nombre: Object identifier.
-//! @param m: Pointer to preprocessor.
-//! @param nd: Number of divisions.
+//! @param nombre: object identifier.
+//! @param m: pointer to preprocessor.
+//! @param nd: number of divisions.
 XC::Edge::Edge(const std::string &nombre,Preprocessor *m,const size_t &nd)
   : EntMdlr(nombre,0,m), ndiv(nd) {}
 
 //! @brief Insert a surface in contact with the line (neighbour).
+//! @param s: surface to insert.
 void XC::Edge::inserta_surf(Face *s)
   { sups_linea.insert(s); }
 
@@ -66,7 +68,8 @@ void XC::Edge::actualiza_topologia(void)
 //! @brief Return a pointer to the edge's start point.
 XC::Pnt *XC::Edge::P1(void)
   {
-    std::cerr << "Edge::P1; this function must be redefined on"
+    std::cerr << nombre_clase() << "::" << __FUNCTION__
+              << "; this function must be redefined on"
               << " derived classes, nullptr returned;" << std::endl;
     return nullptr;
   }
@@ -74,7 +77,8 @@ XC::Pnt *XC::Edge::P1(void)
 //! @brief Return a constant pointer to the edge's start point.
 const XC::Pnt *XC::Edge::P1(void) const
   {
-    std::cerr << "Edge::P1; this function must be redefined on"
+    std::cerr << nombre_clase() << "::" << __FUNCTION__
+	      << "; this function must be redefined on"
               << " derived classes, nullptr returned;" << std::endl;
     return nullptr;
   }
@@ -82,7 +86,8 @@ const XC::Pnt *XC::Edge::P1(void) const
 //! @brief Return a pointer to the edge's start point.
 XC::Pnt *XC::Edge::P2(void)
   {
-    std::cerr << "Edge::P2; this function must be redefined on"
+    std::cerr << nombre_clase() << "::" << __FUNCTION__
+              << "; this function must be redefined on"
               << " derived classes, nullptr returned;" << std::endl;
     return nullptr;
   }
@@ -90,13 +95,17 @@ XC::Pnt *XC::Edge::P2(void)
 //! @brief Return a constant pointer to the edge's end point.
 const XC::Pnt *XC::Edge::P2(void) const
   {
-    std::cerr << "Edge::P2; this function must be redefined on"
+    std::cerr << nombre_clase() << "::" << __FUNCTION__
+	      << "; this function must be redefined on"
               << " derived classes, nullptr returned;" << std::endl;
     return nullptr;
   }
 
 //! @brief Returns true if the points passed as parameters
 //! are the ends of the edge.
+//!
+//! @param p1: first point.
+//! @param p2: second point.
 bool XC::Edge::ExtremosEn(const Pnt *p1,const Pnt *p2) const
   {
     bool retval= false;
@@ -111,6 +120,9 @@ bool XC::Edge::ExtremosEn(const Pnt *p1,const Pnt *p2) const
 
 //! @brief Returns true if the line lies inside the
 //! geometric object.
+//!
+//! @param geomObj: object to be contained in.
+//! @param tol: tolerance.
 bool XC::Edge::In(const GeomObj3d &geomObj, const double &tol) const
   {
     bool retval= false;
@@ -131,6 +143,9 @@ bool XC::Edge::In(const GeomObj3d &geomObj, const double &tol) const
 
 //! @brief Returns true if the line lies outside the
 //! geometric object.
+//!
+//! @param geomObj: object to be contained in.
+//! @param tol: tolerance.
 bool XC::Edge::Out(const GeomObj3d &geomObj, const double &tol) const
   {
     bool retval= false;
@@ -150,6 +165,8 @@ bool XC::Edge::Out(const GeomObj3d &geomObj, const double &tol) const
   }
 
 //! @brief Assigns the number of of divisions.
+//!
+//! @param nd: number of divisions.
 void XC::Edge::SetNDiv(const size_t &nd)
   {
     if(ndiv!=nd) //If number of divisions changes
@@ -159,7 +176,8 @@ void XC::Edge::SetNDiv(const size_t &nd)
             const size_t ns= sups_linea.size();
             if(ns>1)
               {
-// 	        std::clog << "Edge::SetNDiv; " << getName()
+// 	        std::clog << nombre_clase() << "::" << __FUNCTION__
+//		          << "; " << getName()
 //                           << " is an edge of the surfaces: "
 //                           << NombresSupsTocan()
 //                           << ". Number of divisions"
@@ -171,14 +189,18 @@ void XC::Edge::SetNDiv(const size_t &nd)
               ndiv= nd;
           }
         else
-          std::cerr << "Edge::SetNDiv; " << getName()
-                    << " edge is already meshed and keeps its number of divisions"
+          std::cerr << nombre_clase() << "::" << __FUNCTION__
+	            << "; " << getName()
+                    << " edge is already meshed"
+	            << " and keeps its number of divisions"
                     << " ndiv= " << ndiv << ".\n";
       }
   }
 
 //! @brief Compute the number of divisions necessary to 
 //! get the element size passed as parameter.
+//!
+//! @param sz: size of the element.
 void XC::Edge::SetElemSize(const double &sz)
   {
     const double l= getLongitud();
@@ -194,34 +216,56 @@ void XC::Edge::divide(void)
   }
 
 //! @brief Return a pointer to node whose indices are passed as parameters.
+//!
+//! @param i: index of the layer.
+//! @param j: index of the row.
+//! @param k: index of the column.
 XC::Node *XC::Edge::GetNodo(const size_t &i,const size_t &j,const size_t &k)
   { return EntMdlr::GetNodo(i,j,k); }
 
 //! @brief Return a pointer to node whose indices are passed as parameters.
+//!
+//! @param i: index of the layer.
+//! @param j: index of the row.
+//! @param k: index of the column.
 const XC::Node *XC::Edge::GetNodo(const size_t &i,const size_t &j,const size_t &k) const
   { return EntMdlr::GetNodo(i,j,k); }
 
 //! @brief Return a pointer to node whose index is passed as parameter.
+//!
+//! @param i: index of the layer.
 XC::Node *XC::Edge::GetNodo(const size_t &i)
   {  return const_cast<Node *>(static_cast<const Edge &>(*this).GetNodo(i)); }
 
 //! @brief Return a pointer to node whose index is passed as parameter.
+//!
+//! @param i: index of the layer.
 const XC::Node *XC::Edge::GetNodo(const size_t &i) const
   { return ttzNodes.getAtI(i); }
 
-//! @brief Returns the node whose ordinal index is passed as parameter, starting from the beginning.
+//! @brief Returns the node whose ordinal index is passed as
+//! parameter, starting from the beginning.
 XC::Node *XC::Edge::GetNodoDir(const size_t &i)
   { return GetNodo(i); }
 
-//! @brief Return the node whose ordinal index is passed as parameter, starting from the beginning.
+//! @brief Return the node whose ordinal index is passed as parameter,
+//! starting from the beginning.
+//!
+//! @param i: index of the layer.
 const XC::Node *XC::Edge::GetNodoDir(const size_t &i) const
   { return GetNodo(i); }
 
-//! @brief Return the node whose ordinal index is passed as parameter, starting from the end.
+//! @brief Return the node whose ordinal index is passed as parameter,
+//! starting from the end.
+//!
+//! @param i: index of the layer.
 XC::Node *XC::Edge::GetNodoInv(const size_t &i)
   { return GetNodo(getNumberOfNodes()-i+1); }
 
-//! @brief Return the node whose ordinal index is passed as parameter, starting from the end.
+//! @brief Return the node whose ordinal index is passed as parameter,
+//! starting from the end.
+//!
+//! @param i: index of the layer.
 const XC::Node *XC::Edge::GetNodoInv(const size_t &i) const
   { return GetNodo(getNumberOfNodes()-i+1); }
 
@@ -509,8 +553,9 @@ void XC::Edge::genMesh(meshing_dir dm)
 //! @brief Return a vector tangent to the line in point at parameter s.
 const XC::Vector &XC::Edge::getTang(const double &s) const
   {
-    static XC::Vector retval(1);
-    std::cerr << "Edge::getTang; not implemented." << std::endl;
+    static Vector retval(1);
+    std::cerr << nombre_clase() << "::" << __FUNCTION__
+	      << "; not implemented." << std::endl;
     return retval;
   }
 

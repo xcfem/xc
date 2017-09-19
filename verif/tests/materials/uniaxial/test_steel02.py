@@ -53,7 +53,7 @@ elements= preprocessor.getElementLoader
 elements.defaultMaterial= "steel"
 elements.dimElem= 2 # Dimension of element space
 elements.defaultTag= 1 #Tag for the next element.
-spring= elements.newElement("spring",xc.ID([1,2]));
+spring= elements.newElement("Spring",xc.ID([1,2]));
     
 # Constraints
 constraints= preprocessor.getConstraintLoader

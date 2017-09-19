@@ -56,7 +56,7 @@ elements= preprocessor.getElementLoader
 elements.defaultTransformation= "lin"
 elements.defaultMaterial= "scc"
 elements.defaultTag= 1
-beam= elements.newElement("force_beam_column_3d",xc.ID([1,2]))
+beam= elements.newElement("ForceBeamColumn3d",xc.ID([1,2]))
 
 # Constraints
 modelSpace.fixNode000_000(1)

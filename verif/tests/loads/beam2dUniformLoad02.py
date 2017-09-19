@@ -49,7 +49,7 @@ elements.defaultMaterial= "scc"
 elements.defaultMaterial= seccPrueba.sectionName
 elements.numSections= 3 # Number of sections along the element.
 elements.defaultTag= 1
-beam2d= elements.newElement("force_beam_column_2d",xc.ID([1,2]))
+beam2d= elements.newElement("ForceBeamColumn2d",xc.ID([1,2]))
     
 # Constraints
 constraints= preprocessor.getConstraintLoader

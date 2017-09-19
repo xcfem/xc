@@ -43,11 +43,11 @@ elements= preprocessor.getElementLoader
 elements.defaultMaterial= "k"
 elements.dimElem= 3 # Dimension of element space
 elements.deraultTag= 1
-zl1= elements.newElement("zero_length",xc.ID([1,2]))
+zl1= elements.newElement("ZeroLength",xc.ID([1,2]))
 zl1.setupVectors(xc.Vector([1,1,0]),xc.Vector([-1,1,0]))
 zl1.clearMaterials()
 zl1.setMaterial(0,"k")
-zl2= elements.newElement("zero_length",xc.ID([1,2]))
+zl2= elements.newElement("ZeroLength",xc.ID([1,2]))
 zl2.setupVectors(xc.Vector([-1,1,0]),xc.Vector([-1,-1,0]))
 zl2.setMaterial(0,"k")
 

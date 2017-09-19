@@ -56,10 +56,10 @@ elements= preprocessor.getElementLoader
 elements.defaultMaterial= "elast3d"
 elements.defaultTag= 1 #Tag for the next element.
 
-brick1= elements.newElement("brick",xc.ID([1,2,3,4,5,6,7,8]))
-brick2= elements.newElement("brick",xc.ID([5,6,7,8,9,10,11,12]))
-brick3= elements.newElement("brick",xc.ID([9,10,11,12,13,14,15,16]))
-brick4= elements.newElement("brick",xc.ID([9,10,14,13,17,20,19,18]))
+brick1= elements.newElement("Brick",xc.ID([1,2,3,4,5,6,7,8]))
+brick2= elements.newElement("Brick",xc.ID([5,6,7,8,9,10,11,12]))
+brick3= elements.newElement("Brick",xc.ID([9,10,11,12,13,14,15,16]))
+brick4= elements.newElement("Brick",xc.ID([9,10,14,13,17,20,19,18]))
 
 nod17.fix(xc.ID([0,1,2]),xc.Vector([0,0,0]))
 nod18.fix(xc.ID([0,1,2]),xc.Vector([0,0,0]))

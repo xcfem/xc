@@ -76,7 +76,7 @@ for i in range(1,NumDiv+2):
   n1= l1.getNodeI(i)
   n2= l2.getNodeI(i)
   #print "i= ", i, "n1= ", n1.tag, "n2= ", n2.tag
-  beam2d= elements.newElement("elastic_beam_2d",xc.ID([n1.tag,n2.tag]))
+  beam2d= elements.newElement("ElasticBeam2d",xc.ID([n1.tag,n2.tag]))
   beam2d.h= h
 
 

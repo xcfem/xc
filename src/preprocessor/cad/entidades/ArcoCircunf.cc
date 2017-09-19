@@ -203,12 +203,14 @@ double XC::ArcoCircunf::getRadio(void) const
     return retval;
   }
 
+//! @brief Updates topology
 void XC::ArcoCircunf::actualiza_topologia(void)
   {
     LineBase::actualiza_topologia();
     if(P3()) P3()->inserta_linea(this);
   }
 
+//! @brief Returns object boundary.
 BND3d XC::ArcoCircunf::Bnd(void) const
   { return get_sector_circular3d().Bnd(); }
 

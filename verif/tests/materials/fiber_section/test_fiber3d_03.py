@@ -76,7 +76,7 @@ TK31= tangentStiffness.at(3,1); TK32= tangentStiffness.at(3,2); TEIz=  tangentSt
 elements= preprocessor.getElementLoader
 elements.defaultMaterial= "prb"
 elements.defaultTag= 1
-zl= elements.newElement("zero_length_section",xc.ID([1,2]))
+zl= elements.newElement("ZeroLengthSection",xc.ID([1,2]))
 
 # Constraints
 constraints= preprocessor.getConstraintLoader

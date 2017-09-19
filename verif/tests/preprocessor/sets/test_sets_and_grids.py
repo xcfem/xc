@@ -91,7 +91,7 @@ eSize=1
 floor1_mesh=fem.SurfSetToMesh(surfSet=floor1,matSect=deck_mat,elemSize=eSize,elemType='ShellMITC4')
 floor2_mesh=fem.SurfSetToMesh(surfSet=floor2,matSect=deck_mat,elemSize=eSize,elemType='ShellMITC4')
 wall_mesh=fem.SurfSetToMesh(surfSet=wall,matSect=wall_mat,elemSize=eSize,elemType='ShellMITC4')
-columns_mesh=fem.LinSetToMesh(linSet=columns,matSect=columns_mat,elemSize=eSize,vDirLAxZ=xc.Vector([1,0,0]),elemType='elastic_beam_3d',dimElemSpace=3,coordTransfType='linear')
+columns_mesh=fem.LinSetToMesh(linSet=columns,matSect=columns_mat,elemSize=eSize,vDirLAxZ=xc.Vector([1,0,0]),elemType='ElasticBeam3d',dimElemSpace=3,coordTransfType='linear')
 
 fem.multi_mesh(preprocessor=prep,lstMeshSets=[columns_mesh,floor1_mesh,floor2_mesh,wall_mesh])     #mesh these sets
 
@@ -149,12 +149,18 @@ ratio8=overallInHex.elements.size-wallInHex.elements.size-floor1InHex.elements.s
 
 ratio9=overallInHex.surfaces.size-wallInHex.surfaces.size-floor1InHex.surfaces.size-floor2InHex.surfaces.size-columnsInHex.surfaces.size
 
+shells=sets.getSubsetElemOfType(elemType='shell',fromSet=overallSet,toSetName='shells')
+
+numShells= len(shells.getElements)
+ratio10= numShells-278
+
+#print shells.getElementTypes()
+beams=sets.getSubsetElemOfType(elemType='ElasticBeam3d',fromSet=overallSet,toSetName='beams')
+numBeams= len(beams.getElements)
+ratio11= numBeams-16
+
+
 '''
-# ***** this doesn't work for the moment TAKE A LOOK!!!
-shells=sets.getSubsetElemOfType(elemType='ShellMITC4',fromSet=overallSet,toSetName='shells')
-
-beams=sets.getSubsetElemOfType(elemType='elastic_beam_3d',fromSet=overallSet,toSetName='beams')
-
 columnsmat=sets.getSubsetElemOfMat(matType='columns_mat',fromSet=overallSet,toSetName='columnsmat')
 
 # this works but yields lots of warning messages
@@ -164,7 +170,7 @@ deckmat=sets.getSubsetElemOfMat(matType='deck_mat',fromSet=overallSet,toSetName=
 import os
 from miscUtils import LogMessages as lmsg
 fname= os.path.basename(__file__)
-if(ratio1==0) & (ratio2==0) & (ratio3==0) & (ratio4==0) & (ratio5==0) & (ratio6==0) & (ratio7==0) & (ratio8==0) & (ratio9==0):
+if(ratio1==0) & (ratio2==0) & (ratio3==0) & (ratio4==0) & (ratio5==0) & (ratio6==0) & (ratio7==0) & (ratio8==0) & (ratio9==0) & (ratio10==0) & (ratio11==0):
   print "test ",fname,": ok."
 else:
   lmsg.error(fname+' ERROR.')

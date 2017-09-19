@@ -90,7 +90,7 @@ agg.setAdditions(["T","Vy","Vz"],["respT","respVy","respVz"])
 elements= preprocessor.getElementLoader
 elements.defaultMaterial= "sa"
 elements.dimElem= 1 # Dimension of element space
-zl= elements.newElement("zero_length_section",xc.ID([1,2]))
+zl= elements.newElement("ZeroLengthSection",xc.ID([1,2]))
 
 # Constraints
 modelSpace.fixNode000_000(1)

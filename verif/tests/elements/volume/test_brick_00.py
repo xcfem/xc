@@ -35,7 +35,7 @@ nod16= nodes.newNodeIDXYZ(16,0,1,1)
 elements= preprocessor.getElementLoader
 elements.defaultMaterial= "elast3d"
 elements.defaultTag= 1 #Tag for the next element.
-brick= elements.newElement("brick",xc.ID([9,10,11,12,13,14,15,16]));
+brick= elements.newElement("Brick",xc.ID([9,10,11,12,13,14,15,16]));
 
 constraints= preprocessor.getConstraintLoader
 #Constrain the displacement of node 1.

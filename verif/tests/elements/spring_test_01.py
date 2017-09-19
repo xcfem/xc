@@ -42,8 +42,8 @@ elements= preprocessor.getElementLoader
 elements.defaultMaterial= "elast"
 elements.dimElem= 2 # Dimension of element space
 elements.defaultTag= 1
-#  sintaxis: spring[<tag>] 
-spring= elements.newElement("spring",xc.ID([1,2]));
+#  sintaxis: Spring[<tag>] 
+spring= elements.newElement("Spring",xc.ID([1,2]));
     
 # Constraints
 constraints= preprocessor.getConstraintLoader

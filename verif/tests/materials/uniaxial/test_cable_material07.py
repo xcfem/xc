@@ -49,7 +49,7 @@ elements.defaultMaterial= "cable"
 elements.dimElem= 2 # Dimension of element space
 #  sintaxis: truss[<tag>] 
 elements.defaultTag= 1 #Tag for the next element.
-truss= elements.newElement("truss",xc.ID([1,2]));
+truss= elements.newElement("Truss",xc.ID([1,2]));
 truss.area= area
     
 # Constraints

@@ -47,10 +47,10 @@ elements.defaultTransformation= "lin"
 elements.defaultMaterial= "scc"
 #  sintaxis: beam2d_02[<tag>] 
 elements.defaultTag= 1 #Tag for next element.
-beam2d= elements.newElement("elastic_beam_2d",xc.ID([1,2]))
+beam2d= elements.newElement("ElasticBeam2d",xc.ID([1,2]))
 beam2d.h= h
         
-beam2d= elements.newElement("elastic_beam_2d",xc.ID([3,4]))
+beam2d= elements.newElement("ElasticBeam2d",xc.ID([3,4]))
 beam2d.h= h
     
 # Constraints

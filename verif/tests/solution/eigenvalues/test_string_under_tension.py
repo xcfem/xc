@@ -48,7 +48,7 @@ seedElemLoader= preprocessor.getElementLoader.seedElemLoader
 seedElemLoader.defaultMaterial= "cable"
 seedElemLoader.dimElem= 2 # Dimension of element space
 seedElemLoader.defaultTag= 1 #Tag for the next element.
-truss= seedElemLoader.newElement("corot_truss",xc.ID([0,0]))
+truss= seedElemLoader.newElement("CorotTruss",xc.ID([0,0]))
 truss.area= area
 # seed element definition ends
 

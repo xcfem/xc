@@ -57,13 +57,13 @@ scc= typical_materials.defElasticSection3d(preprocessor, "scc",A,E,G,Iz,Iy,J)
 elements= preprocessor.getElementLoader
 elements.defaultTransformation= "lin"
 elements.defaultMaterial= "scc"
-#  sintaxis: elastic_beam_3d[<tag>] 
+#  sintaxis: ElasticBeam3d[<tag>] 
 elements.defaultTag= 1
-beam1= elements.newElement("elastic_beam_3d",xc.ID([1,2]))
+beam1= elements.newElement("ElasticBeam3d",xc.ID([1,2]))
 beam1.rho= densHorm*A
-beam2= elements.newElement("elastic_beam_3d",xc.ID([3,2])) 
+beam2= elements.newElement("ElasticBeam3d",xc.ID([3,2])) 
 beam2.rho= densHorm*A
-beam3= elements.newElement("elastic_beam_3d",xc.ID([2,4])) 
+beam3= elements.newElement("ElasticBeam3d",xc.ID([2,4])) 
 beam3.rho= densHorm*A
 
 # Constraints

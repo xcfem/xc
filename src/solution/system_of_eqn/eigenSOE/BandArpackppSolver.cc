@@ -28,7 +28,6 @@
 
 #include <solution/system_of_eqn/eigenSOE/BandArpackppSolver.h>
 #include <solution/system_of_eqn/eigenSOE/BandArpackppSOE.h>
-#include "arpack++/arbnsmat.h"
 #include "arpack++/arbgnsym.h"
 
 //! @brief Constructor.
@@ -43,7 +42,7 @@ XC::BandArpackppSolver::BandArpackppSolver(const int &nModes)
 
 //! @brief Solves para todos los eigenvalues del problema.
 int XC::BandArpackppSolver::solve(void)
-  {return solve(theSOE->size);}
+  { return solve(theSOE->size);}
 
 ARbdNonSymMatrix<double, double> creaARbdNonSymMatrix(const msp_double &m,XC::Vector &v)
   {
@@ -148,7 +147,8 @@ bool XC::BandArpackppSolver::setEigenSOE(EigenSOE *soe)
       }
     else
       std::cerr << nombre_clase() << "::" << __FUNCTION__
-	        << "the system of equations has not a suitable type for this solver."
+	        << "the system of equations has not"
+	        << "a suitable type for this solver."
 		<< std::endl;
     return retval;
   }

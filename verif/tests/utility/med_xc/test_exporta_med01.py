@@ -56,7 +56,7 @@ elast2d= typical_materials.defElasticIsotropicPlaneStress(preprocessor, "elast2d
 # Elements definition
 elements= preprocessor.getElementLoader
 elements.defaultMaterial= "elast2d"
-quad4n= elements.newElement("quad4n",xc.ID([101,102,103,104]))
+quad4n= elements.newElement("FourNodeQuad",xc.ID([101,102,103,104]))
 quad4n.commitState()
 
 ele0= elements.getElement(0)

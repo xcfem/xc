@@ -50,9 +50,9 @@ elast2d= typical_materials.defElasticIsotropicPlaneStress(preprocessor, "elast2d
 # Elements definition
 elements= preprocessor.getElementLoader
 elements.defaultMaterial= "elast2d"
-a= elements.newElement("quad4n",xc.ID([1,2,3,4]))
-b= elements.newElement("quad4n",xc.ID([2,5,6,3]))
-c= elements.newElement("quad4n",xc.ID([3,6,7,8]))
+a= elements.newElement("FourNodeQuad",xc.ID([1,2,3,4]))
+b= elements.newElement("FourNodeQuad",xc.ID([2,5,6,3]))
+c= elements.newElement("FourNodeQuad",xc.ID([3,6,7,8]))
 
 totalSet= preprocessor.getSets.getSet('total')
 polygons= totalSet.getElements.getContours(True)

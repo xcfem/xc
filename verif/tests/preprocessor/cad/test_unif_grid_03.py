@@ -33,7 +33,7 @@ seedElemLoader= preprocessor.getElementLoader.seedElemLoader
 seedElemLoader.defaultMaterial= "elast3d"
 seedElemLoader.dimElem= 3 # Dimension of element space
 seedElemLoader.defaultTag= 1 #Tag for the next element.
-brick= seedElemLoader.newElement("brick",xc.ID([0,0,0,0,0,0,0,0]));
+brick= seedElemLoader.newElement("Brick",xc.ID([0,0,0,0,0,0,0,0]));
 
 unifGrids= preprocessor.getCad.getUniformGrids
 uGrid= unifGrids.newUniformGrid()

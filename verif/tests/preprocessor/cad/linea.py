@@ -33,7 +33,7 @@ seedElemLoader= preprocessor.getElementLoader.seedElemLoader
 seedElemLoader.dimElem= 3 #Bars defined in a three dimensional space.
 seedElemLoader.defaultMaterial= "elast"
 seedElemLoader.defaultTag= 1 #Number for the next element will be 1.
-truss= seedElemLoader.newElement("truss",xc.ID([1,2]));
+truss= seedElemLoader.newElement("Truss",xc.ID([1,2]));
 truss.area= 10
 
 points= preprocessor.getCad.getPoints

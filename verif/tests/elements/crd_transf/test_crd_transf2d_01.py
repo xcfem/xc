@@ -40,7 +40,7 @@ elements.defaultTransformation= "lin"
 elements.defaultMaterial= "seccion"
 #  sintaxis: beam2d_02[<tag>] 
 elements.defaultTag= 1 #Tag for next element.
-beam2d= elements.newElement("elastic_beam_2d",xc.ID([1,2]))
+beam2d= elements.newElement("ElasticBeam2d",xc.ID([1,2]))
 coordTransf= beam2d.getCoordTransf
 centroideG= coordTransf.getPointGlobalCoordFromBasic(0.5)
 posCentroideG= geom.Pos2d(centroideG[0],centroideG[1])

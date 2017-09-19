@@ -193,7 +193,7 @@ class RectangularSection(SectionProperties):
     return self.Iz()/(self.h/2.0)
   def alphaY(self):
     '''Return shear shape factor with respect to local y-axis'''
-    return 5.0/6.0 #Coeficiente de distorsión, ver libro E. Oñate pág. 122.
+    return 5.0/6.0 #Coeficiente de distorsión, ver libro E. Oñate page 122.
   def alphaZ(self):
     '''Return shear shape factor with respect to local z-axis'''
     return self.alphaY()
@@ -355,7 +355,7 @@ class GenericSection(SectionProperties):
     return self.W_z
   def alphaY(self):
     '''Return shear shape factor with respect to local y-axis'''
-    return self.alphY #Coeficiente de distorsión, ver libro E. Oñate pág. 122.
+    return self.alphY #Coeficiente de distorsión, ver libro E. Oñate page 122.
   def alphaZ(self):
     '''Return shear shape factor with respect to local z-axis'''
     return self.alphZ
@@ -448,7 +448,7 @@ class ISection(SectionProperties):
     return self.J()/max(max(self.tTF,self.tBF),self.tW)
   def alphaY(self):
     '''Return shear shape factor with respect to local y-axis'''
-    return 0.32 #Coeficiente de distorsión, ver libro E. Oñate pág. 122.
+    return 0.32 #Coeficiente de distorsión, ver libro E. Oñate page 122.
   def alphaZ(self):
     '''Return shear shape factor with respect to local z-axis'''
     return 0.69

@@ -26,8 +26,8 @@ seccion= typical_materials.defElasticSection3d(preprocessor, "seccion",1,1,1,1,1
 elements= preprocessor.getElementLoader
 elements.defaultTransformation= "lin" # Coord. transformation.
 elements.defaultMaterial= "seccion"
-ele0= elements.newElement("elastic_beam_3d",xc.ID([nod0.tag,nod1.tag]))
-ele1= elements.newElement("elastic_beam_3d",xc.ID([nod2.tag,nod3.tag]))
+ele0= elements.newElement("ElasticBeam3d",xc.ID([nod0.tag,nod1.tag]))
+ele1= elements.newElement("ElasticBeam3d",xc.ID([nod2.tag,nod3.tag]))
 
 points= preprocessor.getCad.getPoints
 pt0= points.newPntFromPos3d(geom.Pos3d(0.0,0.0,0.0))

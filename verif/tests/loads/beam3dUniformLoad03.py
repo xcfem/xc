@@ -46,8 +46,8 @@ elements.defaultTransformation= "lin"
 elements.defaultMaterial= seccPrueba.sectionName
 elements.numSections= 3 # Number of sections along the element.
 elements.defaultTag= 1
-beam3d1= elements.newElement("force_beam_column_3d",xc.ID([1,2]))
-beam3d2= elements.newElement("force_beam_column_3d",xc.ID([2,3]))
+beam3d1= elements.newElement("ForceBeamColumn3d",xc.ID([1,2]))
+beam3d2= elements.newElement("ForceBeamColumn3d",xc.ID([2,3]))
     
 # Constraints
 modelSpace.fixNode000_000(1)

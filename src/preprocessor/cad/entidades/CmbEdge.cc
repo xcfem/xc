@@ -74,7 +74,7 @@ const XC::Pnt *XC::CmbEdge::Lado::P2(void) const
 
 
 //! @brief Returns true if the points being passed as parameters
-//! son los extremos del lado.
+//! are the endpoints of the side.
 bool XC::CmbEdge::Lado::ExtremosEn(const Pnt *p1,const Pnt *p2) const
   {
     bool retval= false;
@@ -89,21 +89,27 @@ bool XC::CmbEdge::Lado::ExtremosEn(const Pnt *p1,const Pnt *p2) const
     return retval;
   }
 
-//! @brief Returns the nombre of the line.
+//! @brief Returns the name of the line.
 const std::string &XC::CmbEdge::Lado::getName(void) const
   { return edge->getName(); }
 
-//! @brief Return the longitud del lado.
+//! @brief Return the side length.
 double XC::CmbEdge::Lado::getLongitud(void) const
   { return edge->getLongitud(); }
 
 //! @brief Returns true if this object lies inside the
 //! geometric object.
+//!
+//! @param geomObj: object to be contained in.
+//! @param tol: tolerance.
 bool XC::CmbEdge::Lado::In(const GeomObj3d &geomObj, const double &tol) const
   { return edge->In(geomObj,tol); }
 
 //! @brief Returns true if this object lies outside the
 //! geometric object.
+//!
+//! @param geomObj: object to be contained in.
+//! @param tol: tolerance.
 bool XC::CmbEdge::Lado::Out(const GeomObj3d &geomObj, const double &tol) const
   { return !In(geomObj,tol); }
 
@@ -353,6 +359,9 @@ Pos3d XC::CmbEdge::getCentroid(void) const
 
 //! @brief Returns true if this object lies inside the
 //! geometric object.
+//!
+//! @param geomObj: object to be contained in.
+//! @param tol: tolerance.
 bool XC::CmbEdge::In(const GeomObj3d &geomObj, const double &tol) const
   {
     bool retval= true;
@@ -364,6 +373,9 @@ bool XC::CmbEdge::In(const GeomObj3d &geomObj, const double &tol) const
 
 //! @brief Returns true if this object lies outside the
 //! geometric object.
+//!
+//! @param geomObj: object to be contained in.
+//! @param tol: tolerance.
 bool XC::CmbEdge::Out(const GeomObj3d &geomObj, const double &tol) const
   { return !In(geomObj,tol); }
 
@@ -378,6 +390,8 @@ size_t XC::CmbEdge::NDiv(void) const
   }
 
 //! @brief Sets the number of divisions for the whole object.
+//!
+//! @param nd: number of divisions.
 void XC::CmbEdge::SetNDiv(const size_t &nd)
   {
     const size_t nl= NumEdges();
@@ -642,7 +656,7 @@ const XC::CmbEdge::Lado *XC::CmbEdge::GetLadoPorPuntos(const Pnt *p1,const Pnt *
           retval= &(*i);
           break;
         }
-    return retval; //No la encuentra.
+    return retval; //Not found.
   }
 
 //! @brief Returns the lado que tiene por extremos los puntos

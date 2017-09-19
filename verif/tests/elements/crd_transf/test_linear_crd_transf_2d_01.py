@@ -35,7 +35,7 @@ elements= preprocessor.getElementLoader
 elements.defaultTransformation= "lin" # Coordinate transformation for the new elements
 elements.defaultMaterial= "seccion"
 elements.defaultTag= 1 #Tag for next element.
-beam2d= elements.newElement("elastic_beam_2d",xc.ID([1,2]))
+beam2d= elements.newElement("ElasticBeam2d",xc.ID([1,2]))
 
 setTotal= preprocessor.getSets.getSet("total")
 elems= setTotal.getElements

@@ -151,11 +151,11 @@ elements.defaultMaterial= "scc"
 elements.defaultTag= 1 #Tag for next element.
 
 elements.defaultTransformation= "ltXbeam"
-beam3dX= elements.newElement("elastic_beam_3d",xc.ID([0,1]))
+beam3dX= elements.newElement("ElasticBeam3d",xc.ID([0,1]))
 elements.defaultTransformation= "ltYbeam"
-beam3dY= elements.newElement("elastic_beam_3d",xc.ID([0,2]))
+beam3dY= elements.newElement("ElasticBeam3d",xc.ID([0,2]))
 elements.defaultTransformation= "ltZbeam"
-beam3dZ= elements.newElement("elastic_beam_3d",xc.ID([0,3]))
+beam3dZ= elements.newElement("ElasticBeam3d",xc.ID([0,3]))
 
     
 # Constraints

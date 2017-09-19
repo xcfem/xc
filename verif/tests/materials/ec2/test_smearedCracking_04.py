@@ -130,7 +130,7 @@ elements= preprocessor.getElementLoader
 elements.defaultMaterial='sctFibers'
 elements.dimElem= 1 # Dimension of element space
 elements.defaultTag= 1
-elem= elements.newElement("zero_length_section",xc.ID([1,2]))
+elem= elements.newElement("ZeroLengthSection",xc.ID([1,2]))
 
 # Constraints
 modelSpace.fixNode000_000(1)

@@ -96,6 +96,9 @@ int XC::EntMdlr::getMEDCellType(void) const
 
 //! @brief Returns true if the object lies inside the
 //! geometric object.
+//!
+//! @param geomObj: object to be contained in.
+//! @param tol: tolerance.
 bool XC::EntMdlr::In(const GeomObj3d &geomObj, const double &tol) const
   {
     std::cerr << nombre_clase() << "::" << __FUNCTION__
@@ -106,6 +109,9 @@ bool XC::EntMdlr::In(const GeomObj3d &geomObj, const double &tol) const
 
 //! @brief Returns true if the object lies outside the
 //! geometric object.
+//!
+//! @param geomObj: object to be contained in.
+//! @param tol: tolerance.
 bool XC::EntMdlr::Out(const GeomObj3d &geomObj, const double &tol) const
   {
     std::cerr << nombre_clase() << "::" << __FUNCTION__
@@ -130,6 +136,10 @@ void XC::EntMdlr::BorraPtrNodElem(void)
 
 //! @brief Returns a pointer to the node which indexes are
 //! being passed as parameters.
+//!
+//! @param i: index of the layer.
+//! @param j: index of the row.
+//! @param k: index of the column.
 XC::Node *XC::EntMdlr::GetNodo(const size_t &i,const size_t &j,const size_t &k)
   {
     if(!ttzNodes.Null())
@@ -140,6 +150,10 @@ XC::Node *XC::EntMdlr::GetNodo(const size_t &i,const size_t &j,const size_t &k)
 
 //! @brief Returns a pointer to the node which indexes are
 //! being passed as parameters.
+//!
+//! @param i: index of the layer.
+//! @param j: index of the row.
+//! @param k: index of the column.
 const XC::Node *XC::EntMdlr::GetNodo(const size_t &i,const size_t &j,const size_t &k) const
   {
     if(!ttzNodes.Null())
@@ -169,6 +183,10 @@ std::vector<int> XC::EntMdlr::getTagsNodos(void) const
 
 //! @brief Returns a pointer to the element which indexes
 //! are being passed as paremeters.
+//!
+//! @param i: index of the layer.
+//! @param j: index of the row.
+//! @param k: index of the column.
 XC::Element *XC::EntMdlr::getElement(const size_t &i,const size_t &j,const size_t &k)
   {
     if(!ttzElements.Null())
@@ -178,6 +196,10 @@ XC::Element *XC::EntMdlr::getElement(const size_t &i,const size_t &j,const size_
   }
 
 //! @brief Returns a pointer to the element which indices are being passed as paremeters.
+//!
+//! @param i: index of the layer.
+//! @param j: index of the row.
+//! @param k: index of the column.
 const XC::Element *XC::EntMdlr::getElement(const size_t &i,const size_t &j,const size_t &k) const
   {
     if(!ttzElements.Null())
@@ -236,11 +258,13 @@ XC::SetEstruct *XC::EntMdlr::create_set_fila(const RangoTritriz &rango,const std
             retval= map_set.create_set_estruct(GetVarRefFilaK(rango,nmb));
           }
         else
-	  std::cerr <<  "EntMdlr::create_set_fila; no se pudo crear the set fila." << std::endl;
+	  std::cerr << nombre_clase() << "::" << __FUNCTION__
+	            << "; can't create row set." << std::endl;
       }
     else
       {
-	std::cerr << "EntMdlr::create_set_fila; falta a pointer to preprocessor." << std::endl;
+	std::cerr << nombre_clase() << "::" << __FUNCTION__
+		  << "; preprocessor undefined." << std::endl;
         return nullptr;
       }
     return retval;
@@ -329,11 +353,13 @@ bool XC::EntMdlr::create_elements(meshing_dir dm)
                     std::clog << "created." << std::endl;
                 }
               else
-                std::cerr << "EntMdlr::create_elements; pointer to preprocessor needed." << std::endl;
+                std::cerr << nombre_clase() << "::" << __FUNCTION__
+		          << "; preprocessor undefined." << std::endl;
             }
       }
     else
-      std::cerr << "EntMdlr::create_elements; there is no nodes for the elements." << std::endl;
+      std::cerr << nombre_clase() << "::" << __FUNCTION__
+		<< "; there is no nodes for the elements." << std::endl;
     const size_t numElements= ttzElements.NumPtrs();
     if(numElements==0 && verbosity>0)
       std::clog << nombre_clase() << "::" << __FUNCTION__
@@ -405,8 +431,8 @@ XC::SetFilaK XC::EntMdlr::GetVarRefFilaK(const RangoTritriz &rango,const std::st
 //! the position being passed as parameter.
 double XC::EntMdlr::DistanciaA2(const Pos3d &pt) const
   {
-    std::cerr << nombre_clase()
-              << " function DistanciaA2 not implemented." << std::endl;
+    std::cerr << nombre_clase() << "::" << __FUNCTION__
+              << "; not implemented." << std::endl;
     return 0.0;
   }
 

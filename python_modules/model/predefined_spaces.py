@@ -95,7 +95,7 @@ class PredefinedSpace(object):
     elems= self.preprocessor.getElementLoader
     elems.dimElem= self.preprocessor.getNodeLoader.dimSpace # space dimension.
     elems.defaultMaterial= next((item for item in bearingMaterials if item is not None), 'All are Nones')
-    zl= elems.newElement("zero_length",xc.ID([iNodA,iNodB]))
+    zl= elems.newElement("ZeroLength",xc.ID([iNodA,iNodB]))
     zl.clearMaterials()
     if(orientation): #Orient element.
       zl.setupVectors(orientation[0],orientation[1])
@@ -173,7 +173,7 @@ class PredefinedSpace(object):
     if(elems.dimElem>2):
       lmsg.warning("Not a bi-dimensional space.")
     elems.defaultMaterial= bearingMaterial
-    zl= elems.newElement("zero_length",xc.ID([newNode.tag,iNod]))
+    zl= elems.newElement("ZeroLength",xc.ID([newNode.tag,iNod]))
     zl.setupVectors(xc.Vector([direction[0],direction[1],0]),xc.Vector([-direction[1],direction[0],0]))
     zl.clearMaterials()
     zl.setMaterial(0,bearingMaterial)
@@ -584,7 +584,7 @@ class StructuralMechanics3D(PredefinedSpace):
     defMat= elementos.defaultMaterial
     #print "defMat= ", defMat
     elementos.defaultMaterial= matName
-    elem= elementos.newElement("elastic_beam_3d",xc.ID([nodeTagA,nodeTagB]))
+    elem= elementos.newElement("ElasticBeam3d",xc.ID([nodeTagA,nodeTagB]))
     elementos.defaultMaterial= defMat
     scc= elem.sectionProperties
     #print "A= ", elem.sectionProperties.A

@@ -48,9 +48,9 @@ elements= preprocessor.getElementLoader
 elements.dimElem= 2 #Bidimensional space.
 elements.defaultMaterial= "elast"
 elements.defaultTag= 1 #Next element number.
-truss= elements.newElement("truss",xc.ID([1,2]));
+truss= elements.newElement("Truss",xc.ID([1,2]));
 truss.area= A
-truss= elements.newElement("truss",xc.ID([2,3]))
+truss= elements.newElement("Truss",xc.ID([2,3]))
 truss.area= A
 
 constraints= preprocessor.getConstraintLoader

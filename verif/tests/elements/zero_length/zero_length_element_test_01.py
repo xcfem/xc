@@ -37,7 +37,7 @@ elements= preprocessor.getElementLoader
 elements.defaultMaterial= "elast"
 elements.dimElem= 1 #Element dimension.
 elements.defaultTag= 1
-zl= elements.newElement("zero_length",xc.ID([1,2]))
+zl= elements.newElement("ZeroLength",xc.ID([1,2]))
 
 # Constraints
 constraints= preprocessor.getConstraintLoader

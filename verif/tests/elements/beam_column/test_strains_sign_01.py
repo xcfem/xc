@@ -101,7 +101,7 @@ lin= modelSpace.newLinearCrdTransf("lin",xc.Vector([0,1,0]))
 elements= preprocessor.getElementLoader
 elements.defaultTransformation= "lin"
 elements.defaultMaterial= "fourFibersSection"
-zl= elements.newElement("force_beam_column_3d",xc.ID([1,2]))
+zl= elements.newElement("ForceBeamColumn3d",xc.ID([1,2]))
 
 # Constraints
 modelSpace.fixNode000_000(1)

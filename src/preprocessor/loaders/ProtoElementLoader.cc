@@ -162,158 +162,262 @@ const XC::CrdTransf *XC::ProtoElementLoader::get_ptr_transf_coo(void) const
     return retval;
   }
 
+//! @brief Warning messages about deprecated element type names.
+void deprecatedElementNameMsg(const std::string &errHeader, const std::string &oldCmd,const std::string &newCmd)
+  {
+     std::clog << errHeader
+               << "; type name: '" << oldCmd
+	       << "' is deprecated use '"
+               << newCmd << "' instead."
+	       << std::endl;
+  }
+
+//! @brief Warning messages about materials that are not valid
+//! for an element type.
+void materialNotSuitableMsg(const std::string &errHeader, const std::string &matName, const std::string &elemType)
+  {
+    std::cerr << "Error in "
+              << errHeader << "; material: '"
+              << matName << "' is not suitable for "
+	      << elemType << " elements." << std::endl;
+  }
+
 //! @brief Process the comands used to define
 //! the elements of the finite element model. It interprets
 //! the following commands (if the identifier (tag) is not
 //! specified a default value will be assigned):
 //!
-//! - truss[tag]: Defines a truss element (Truss). 
-//! - truss_section[tag]: Defines a truss element with section type material.
-//! - corot_truss[tag]: Defines a truss element with corotational formulation. 
-//! - corot_truss_section[tag]: Defines a truss element with corotational formulation and section type material.
-//! - beam2d_02[tag]: Defines a beam-column element (beam2d02) for plane problems. 
-//! - beam2d_03[tag]: Defines a beam-column element (beam2d03) for plane problems. 
-//! - beam2d_04[tag]: Defines a beam-column element (beam2d04) for plane problems.
-//! - beam3d_01[tag]: Defines a beam-column element (beam3d01) for 3D problems.
-//! - beam3d_02[tag]: Defines a beam-column element (beam2d02) for 3D problems.
-//! - elastic_beam2d[tag]: Defines a beam-column element (ElasticBeam2d) for plane problems.
-//! - elastic_beam3d[tag]: Defines a beam-column element (ElasticBeam3d) for 3D problems.
-//! - force_beam_column_2d[tag]: Defines a beam-column element (ForceBeamColumn2d) no lineal,
+//! - Truss: Defines a truss element (Truss). 
+//! - TrussSection: Defines a truss element with section type material.
+//! - CorotTruss: Defines a truss element with corotational formulation. 
+//! - CorotTrussSection: Defines a truss element with corotational formulation and section type material.
+//! - Beam2d_02: Defines a beam-column element (beam2d02) for plane problems. 
+//! - Beam2d_03: Defines a beam-column element (beam2d03) for plane problems. 
+//! - Beam2d_04: Defines a beam-column element (beam2d04) for plane problems.
+//! - Beam3d_01: Defines a beam-column element (beam3d01) for 3D problems.
+//! - Beam3d_02: Defines a beam-column element (beam2d02) for 3D problems.
+//! - ElasticBeam2d: Defines a beam-column element (ElasticBeam2d) for plane problems.
+//! - ElasticBeam3d: Defines a beam-column element (ElasticBeam3d) for 3D problems.
+//! - ForceBeamColumn_2d: Defines a beam-column element (ForceBeamColumn2d) no lineal,
 //!   for plane problems.
-//! - force_beam_column_3d[tag]: Defines a beam-column element (ForceBeamColumn3d) no lineal,
+//! - ForceBeamColumn_3d: Defines a beam-column element (ForceBeamColumn3d) no lineal,
 //!   for 3D problems.
-//! - shell_mitc4[tag]: Defines a shell element (ShellMITC4),
-//! - shell_nl[tag]: Defines a shell element (ShellNL),
+//! - ShellMITC4: Defines a shell element (ShellMITC4),
+//! - ShellNL: Defines a shell element (ShellNL),
 //!   for shell problems.
-//! - quad4n[tag]: Defines a four node quad (FourNodeQuad),
-//! - tri31[tag]: Defines a three node triangle with just a Gauss point (Tri31),
+//! - FourNodeQuad: Defines a four node quad (FourNodeQuad),
+//! - Tri31: Defines a three node triangle with just a Gauss point (Tri31),
 //!   for plane problems.
-//! - brick[tag]: Defines an eight node hexahedron (Brick),
+//! - Brick: Defines an eight node hexahedron (Brick),
 //!   para solid analysis.
-//! - zero_length[tag]: Defines a zero length element (ZeroLength).
-//! - zero_length_section[tag]: Defines a zero length element with section type material (ZeroLengthSection).
+//! - ZeroLength: Defines a zero length element (ZeroLength).
+//! - ZeroLengthSection: Defines a zero length element with section type material (ZeroLengthSection).
 XC::Element *XC::ProtoElementLoader::create_element(const std::string &cmd,int tag_elem)
   {
     Element *retval= nullptr;
-    if(cmd == "truss")
-      retval= new_element_dim_gen_mat<Truss>(tag_elem, dim_elem, get_ptr_material());
-    else if(cmd == "truss_section")
-      retval= new_element_dim_gen_mat<TrussSection>(tag_elem, dim_elem, get_ptr_material());
-    else if(cmd == "corot_truss")
-      retval= new_element_dim_gen_mat<CorotTruss>(tag_elem, dim_elem, get_ptr_material());
-    else if(cmd == "corot_truss_section")
-      retval= new_element_dim_gen_mat<CorotTrussSection>(tag_elem, dim_elem, get_ptr_material());
-    else if(cmd == "muelle")
+    const std::string errHeader= nombre_clase() + "::" + __FUNCTION__;
+    if((cmd == "truss")||(cmd=="Truss"))
       {
-        std::cerr << "ProtoElementLoader::create_element; 'muelle' is DEPRECATED use 'spring'" << std::endl;
-        retval= new_element_dim_gen_mat<Spring>(tag_elem, dim_elem, get_ptr_material());
+	if(cmd=="truss")
+	  deprecatedElementNameMsg(errHeader,cmd,"Truss");
+        retval= new_element_dim_gen_mat<Truss>(tag_elem, dim_elem, get_ptr_material());
       }
-    else if(cmd == "spring")
-      retval= new_element_dim_gen_mat<Spring>(tag_elem, dim_elem, get_ptr_material());
-    else if(cmd == "beam2d_02")
-      retval= new_element<beam2d02>(tag_elem);
-    else if(cmd == "beam2d_03")
-      retval= new_element<beam2d03>(tag_elem);
-    else if(cmd == "beam2d_04")
-      retval= new_element<beam2d04>(tag_elem);
-    else if(cmd == "beam3d_01")
-      retval= new_element<beam3d01>(tag_elem);
-    else if(cmd == "beam3d_02")
-      retval= new_element<beam3d02>(tag_elem);
-    else if(cmd == "elastic_beam_2d")
-      retval= new_element_mat_crd<ElasticBeam2d>(tag_elem, get_ptr_material(), get_ptr_transf_coo());
-    else if(cmd == "elastic_beam_3d")
-      retval= new_element_mat_crd<ElasticBeam3d>(tag_elem, get_ptr_material(), get_ptr_transf_coo());
-    else if(cmd == "beam_with_hinges_2d")
-      retval= new_element_gen_mat_crd<BeamWithHinges2d>(tag_elem, get_ptr_material(), get_ptr_transf_coo());
-    else if(cmd == "beam_with_hinges_3d")
-      retval= new_element_gen_mat_crd<BeamWithHinges3d>(tag_elem, get_ptr_material(), get_ptr_transf_coo());
-    else if(cmd == "disp_beam_column_2d")
-      retval= new_element_dim_gen_mat_crd<DispBeamColumn2d>(tag_elem, dim_elem, get_ptr_material(), get_ptr_transf_coo());
-    else if(cmd == "disp_beam_column_3d")
-      retval= new_element_dim_gen_mat_crd<DispBeamColumn3d>(tag_elem, dim_elem, get_ptr_material(), get_ptr_transf_coo());
-    else if(cmd == "nl_beam_column_2d")
-      retval= new_element_ns_gen_mat_crd<NLBeamColumn2d>(tag_elem, get_ptr_material(), num_sec, get_ptr_transf_coo());
-    else if(cmd == "nl_beam_column_3d")
-      retval= new_element_ns_gen_mat_crd<NLBeamColumn3d>(tag_elem, get_ptr_material(), num_sec, get_ptr_transf_coo());
-    else if(cmd == "force_beam_column_2d")
-      retval= new_element_ns_gen_mat_crd_integ<ForceBeamColumn2d>(tag_elem, get_ptr_material(), num_sec, get_ptr_transf_coo(),get_ptr_beam_integrator());
-    else if(cmd == "force_beam_column_3d")
-      retval= new_element_ns_gen_mat_crd_integ<ForceBeamColumn3d>(tag_elem, get_ptr_material(), num_sec, get_ptr_transf_coo(),get_ptr_beam_integrator());
-    else if(cmd == "zero_length")
-      retval= new_element_dim_gen_mat_dir<ZeroLength>(tag_elem, dim_elem, get_ptr_material(),dir);
-    else if(cmd == "zero_length_contact_2d")
-      retval= new_element<ZeroLengthContact2D>(tag_elem);
-    else if(cmd == "zero_length_contact_3d")
-      retval= new_element<ZeroLengthContact3D>(tag_elem);
-    else if(cmd == "zero_length_section")
-      retval= new_element_dim_gen_mat<ZeroLengthSection>(tag_elem, dim_elem, get_ptr_material());
+    else if((cmd == "truss_section")||(cmd == "TrussSection"))
+      {
+	if(cmd=="truss_section")
+	  deprecatedElementNameMsg(errHeader,cmd,"TrussSection");
+        retval=  new_element_dim_gen_mat<TrussSection>(tag_elem, dim_elem, get_ptr_material());
+      }
+    else if((cmd == "corot_truss")||(cmd == "CorotTruss"))
+      {
+	if(cmd=="corot_truss")
+	  deprecatedElementNameMsg(errHeader,cmd,"CorotTruss");
+        retval=  new_element_dim_gen_mat<CorotTruss>(tag_elem, dim_elem, get_ptr_material());
+      }
+    else if((cmd == "corot_truss_section")||(cmd == "CorotTrussSection"))
+      {
+	if(cmd=="corot_truss_section")
+	  deprecatedElementNameMsg(errHeader,cmd,"CorotTrussSection");
+        retval=  new_element_dim_gen_mat<CorotTrussSection>(tag_elem, dim_elem, get_ptr_material());
+      }
+    else if((cmd == "spring")||(cmd == "Spring"))
+      {
+	if(cmd=="spring")
+	  deprecatedElementNameMsg(errHeader,cmd,"Spring");
+        retval=  new_element_dim_gen_mat<Spring>(tag_elem, dim_elem, get_ptr_material());
+      }
+    else if((cmd == "beam2d_02")||(cmd == "beam2d02"))
+      {
+	if(cmd=="beam2d_02")
+	  deprecatedElementNameMsg(errHeader,cmd,"beam2d02");
+        retval=  new_element<beam2d02>(tag_elem);
+      }
+    else if((cmd == "beam2d_03")||(cmd == "beam2d03"))
+      {
+	if(cmd=="beam2d_03")
+	  deprecatedElementNameMsg(errHeader,cmd,"beam2d03");
+        retval=  new_element<beam2d03>(tag_elem);
+      }
+    else if((cmd == "beam2d_04")||(cmd == "beam2d04"))
+      {
+	if(cmd=="beam2d_04")
+	  deprecatedElementNameMsg(errHeader,cmd,"beam2d04");
+        retval=  new_element<beam2d04>(tag_elem);
+      }
+    else if((cmd == "beam3d_01")||(cmd == "beam3d01"))
+      {
+	if(cmd=="beam3d_01")
+	  deprecatedElementNameMsg(errHeader,cmd,"beam3d01");
+        retval=  new_element<beam3d01>(tag_elem);
+      }
+    else if((cmd == "beam3d_02")||(cmd == "beam3d02"))
+      {
+	if(cmd=="beam3d_02")
+	  deprecatedElementNameMsg(errHeader,cmd,"beam3d02");
+        retval=  new_element<beam3d02>(tag_elem);
+      }
+    else if((cmd == "elastic_beam_2d")||(cmd == "ElasticBeam2d"))
+      {
+	if(cmd=="elastic_beam_2d")
+	  deprecatedElementNameMsg(errHeader,cmd,"ElasticBeam2d");
+        retval=  new_element_mat_crd<ElasticBeam2d>(tag_elem, get_ptr_material(), get_ptr_transf_coo());
+      }
+    else if((cmd == "elastic_beam_3d")||(cmd == "ElasticBeam3d"))
+      {
+	if(cmd=="elastic_beam_3d")
+	  deprecatedElementNameMsg(errHeader,cmd,"ElasticBeam3d");
+        retval=  new_element_mat_crd<ElasticBeam3d>(tag_elem, get_ptr_material(), get_ptr_transf_coo());
+      }
+    else if((cmd == "beam_with_hinges_2d")||(cmd == "BeamWithHinges2d"))
+      {
+	if(cmd=="beam_with_hinges_2d")
+	  deprecatedElementNameMsg(errHeader,cmd,"BeamWithHinges2d");
+        retval=  new_element_gen_mat_crd<BeamWithHinges2d>(tag_elem, get_ptr_material(), get_ptr_transf_coo());
+      }
+    else if((cmd == "beam_with_hinges_3d")||(cmd == "BeamWithHinges3d"))
+      {
+	if(cmd=="beam_with_hinges_3d")
+	  deprecatedElementNameMsg(errHeader,cmd,"BeamWithHinges3d");
+        retval=  new_element_gen_mat_crd<BeamWithHinges3d>(tag_elem, get_ptr_material(), get_ptr_transf_coo());
+      }
+    else if((cmd == "disp_beam_column_2d")||(cmd == "DispBeamColumn2d"))
+      {
+	if(cmd=="disp_beam_column_2d")
+	  deprecatedElementNameMsg(errHeader,cmd,"DispBeamColumn2d");
+        retval=  new_element_dim_gen_mat_crd<DispBeamColumn2d>(tag_elem, dim_elem, get_ptr_material(), get_ptr_transf_coo());
+      }
+    else if((cmd == "disp_beam_column_3d")||(cmd == "DispBeamColumn3d"))
+      {
+	if(cmd=="disp_beam_column_3d")
+	  deprecatedElementNameMsg(errHeader,cmd,"DispBeamColumn3d");
+        retval=  new_element_dim_gen_mat_crd<DispBeamColumn3d>(tag_elem, dim_elem, get_ptr_material(), get_ptr_transf_coo());
+      }
+    else if((cmd == "nl_beam_column_2d")||(cmd == "NLBeamColumn2d"))
+      {
+	if(cmd=="nl_beam_column_2d")
+	  deprecatedElementNameMsg(errHeader,cmd,"NLBeamColumn2d");
+        retval=  new_element_ns_gen_mat_crd<NLBeamColumn2d>(tag_elem, get_ptr_material(), num_sec, get_ptr_transf_coo());
+      }
+    else if((cmd == "nl_beam_column_3d")||(cmd == "NLBeamColumn3d"))
+      {
+	if(cmd=="nl_beam_column_3d")
+	  deprecatedElementNameMsg(errHeader,cmd,"NLBeamColumn3d");
+        retval=  new_element_ns_gen_mat_crd<NLBeamColumn3d>(tag_elem, get_ptr_material(), num_sec, get_ptr_transf_coo());
+      }
+    else if((cmd == "force_beam_column_2d")||(cmd == "ForceBeamColumn2d"))
+      {
+	if(cmd=="force_beam_column_2d")
+	  deprecatedElementNameMsg(errHeader,cmd,"ForceBeamColumn2d");
+        retval=  new_element_ns_gen_mat_crd_integ<ForceBeamColumn2d>(tag_elem, get_ptr_material(), num_sec, get_ptr_transf_coo(),get_ptr_beam_integrator());
+      }
+    else if((cmd == "force_beam_column_3d")||(cmd == "ForceBeamColumn3d"))
+      {
+	if(cmd=="force_beam_column_3d")
+	  deprecatedElementNameMsg(errHeader,cmd,"ForceBeamColumn3d");
+        retval=  new_element_ns_gen_mat_crd_integ<ForceBeamColumn3d>(tag_elem, get_ptr_material(), num_sec, get_ptr_transf_coo(),get_ptr_beam_integrator());
+      }
+    else if((cmd == "zero_length")||(cmd == "ZeroLength"))
+      {
+	if(cmd=="zero_length")
+	  deprecatedElementNameMsg(errHeader,cmd,"ZeroLength");
+        retval=  new_element_dim_gen_mat_dir<ZeroLength>(tag_elem, dim_elem, get_ptr_material(),dir);
+      }
+    else if((cmd == "zero_length_contact_2d")||(cmd == "ZeroLengthContact2D"))
+      {
+	if(cmd=="zero_length_contact_2d")
+	  deprecatedElementNameMsg(errHeader,cmd,"ZeroLengthContact2D");
+        retval=  new_element<ZeroLengthContact2D>(tag_elem);
+      }
+    else if((cmd == "zero_length_contact_3d")||(cmd == "ZeroLengthContact3D"))
+      {
+	if(cmd=="zero_length_contact_3d")
+	  deprecatedElementNameMsg(errHeader,cmd,"ZeroLengthContact3D");
+        retval=  new_element<ZeroLengthContact3D>(tag_elem);
+      }
+    else if((cmd == "zero_length_section")||(cmd == "ZeroLengthSection"))
+      {
+	if(cmd=="zero_length_section")
+	  deprecatedElementNameMsg(errHeader,cmd,"ZeroLengthSection");
+        retval=  new_element_dim_gen_mat<ZeroLengthSection>(tag_elem, dim_elem, get_ptr_material());
+      }
     else if((cmd == "shell_mitc4")||(cmd == "ShellMITC4"))
       {
 	if(cmd=="shell_mitc4")
-	  std::clog << nombre_clase() << "::" << __FUNCTION__
-		    << "; type name: '" << cmd
-		    << "' is deprecated use 'ShellMITC4' instead."
-		    << std::endl;
+	  deprecatedElementNameMsg(errHeader,cmd,"ShellMITC4");
         retval= new_element_mat<ShellMITC4,SectionForceDeformation>(tag_elem, get_ptr_material());
         if(!retval)
-          std::cerr << "Error in " << nombre_clase() << "::" << __FUNCTION__ << "; material: '"
-                    << nmb_mat << "' has not a suitable type." << std::endl;
+	  materialNotSuitableMsg(errHeader,nmb_mat,cmd);
       }
     else if((cmd == "corot_shell_mitc4")||(cmd == "CorotShellMITC4"))
       {
 	if(cmd=="corot_shell_mitc4")
-	  std::clog << nombre_clase() << "::" << __FUNCTION__
-		    << "; type name: '" << cmd
-		    << "' is deprecated use 'CorotShellMITC4' instead."
-		    << std::endl;
+	  deprecatedElementNameMsg(errHeader,cmd,"CorotShellMITC4");
         retval= new_element_mat<CorotShellMITC4,SectionForceDeformation>(tag_elem, get_ptr_material());
         if(!retval)
-          std::cerr << "Error in " << nombre_clase() << "::" << __FUNCTION__
-		    << "; material: '" << nmb_mat << "' is not suitable for "
-		    << cmd << " elements." << std::endl;
+	  materialNotSuitableMsg(errHeader,nmb_mat,cmd);
       }
-    else if(cmd == "shell_nl")
+    else if((cmd == "shell_nl")||(cmd == "ShellNL"))
       {
+	if(cmd=="shell_nl")
+	  deprecatedElementNameMsg(errHeader,cmd,"ShellNL");
         retval= new_element_mat<ShellNL,SectionForceDeformation>(tag_elem, get_ptr_material());
         if(!retval)
-          std::cerr << "Error in " << nombre_clase() << "::" << __FUNCTION__
-		    << "; material: '" << nmb_mat << "' is not suitable for "
-		    << cmd << " elements." << std::endl;
+	  materialNotSuitableMsg(errHeader,nmb_mat,cmd);
       }
-    else if(cmd == "quad4n")
+    else if((cmd == "quad4n")||(cmd == "FourNodeQuad"))
       {
+	if(cmd=="quad4n")
+	  deprecatedElementNameMsg(errHeader,cmd,"FourNodeQuad");
         retval= new_element_mat<FourNodeQuad,NDMaterial>(tag_elem, get_ptr_material());
         if(!retval)
-          std::cerr << "Error in " << nombre_clase() << "::" << __FUNCTION__
-		    << "; material: '" << nmb_mat << "' is not suitable for "
-		    << cmd << " elements." << std::endl;
+	  materialNotSuitableMsg(errHeader,nmb_mat,cmd);
       }
-    else if(cmd == "tri31")
+    else if((cmd == "tri31")||(cmd == "Tri31"))
       {
+	if(cmd=="tri31")
+	  deprecatedElementNameMsg(errHeader,cmd,"Tri31");
         retval= new_element_mat<Tri31,NDMaterial>(tag_elem, get_ptr_material());
         if(!retval)
-          std::cerr << "Error in " << nombre_clase() << "::" << __FUNCTION__
-		    << "; material: '" << nmb_mat << "' is not suitable for "
-		    << cmd << " elements." << std::endl;
+	  materialNotSuitableMsg(errHeader,nmb_mat,cmd);
       }
-    else if(cmd == "brick")
+    else if((cmd == "brick")||(cmd == "Brick"))
       {
+	if(cmd=="brick")
+	  deprecatedElementNameMsg(errHeader,cmd,"Brick");
         retval= new_element_mat<Brick,NDMaterial>(tag_elem, get_ptr_material());
         if(!retval)
-          std::cerr << "Error in " << nombre_clase() << "::" << __FUNCTION__
-		    << "; material: '" << nmb_mat << "' is not suitable for "
-		    << cmd << " elements." << std::endl;
+	  materialNotSuitableMsg(errHeader,nmb_mat,cmd);
       }
     else
-      std::cerr << "Element type: " << cmd << " unknown." << std::endl;
+      std::cerr << errHeader
+		<< "; element type: " << cmd << " unknown."
+		<< std::endl;
     return retval;
   }
 
 //! @brief Create a new element.
-//! @param tipo: type of element. Available types:'truss','truss_section','corot_truss','corot_truss_section','muelle', 'spring', 'beam2d_02', 'beam2d_03',  'beam2d_04', 'beam3d_01', 'beam3d_02', 'elastic_beam2d', 'elastic_beam3d', 'beam_with_hinges_2d', 'beam_with_hinges_3d', 'nl_beam_column_2d', 'nl_beam_column_3d','force_beam_column_2d', 'force_beam_column_3d', 'shell_mitc4', ' shell_nl', 'quad4n', 'tri31', 'brick', 'zero_length', 'zero_length_contact_2d', 'zero_length_contact_3d', 'zero_length_section'.
+//! @param tipo: type of element. Available types:'Truss','TrussSection','CorotTruss','CorotTrussSection','Spring', 'Beam2d02', 'Beam2d03',  'Beam2d04', 'Beam3d01', 'Beam3d02', 'ElasticBeam2d', 'ElasticBeam3d', 'BeamWithHinges2d', 'BeamWithHinges3d', 'NlBeamColumn2d', 'NlBeamColumn3d','ForceBeamColumn2d', 'ForceBeamColumn3d', 'ShellMitc4', ' shellNl', 'Quad4n', 'Tri31', 'Brick', 'ZeroLength', 'ZeroLengthContact2d', 'ZeroLengthContact3d', 'ZeroLengthSection'.
 //! @param iNodos: nodes ID, e.g. xc.ID([1,2]) to create a linear element from node 1 to node 2.
-
 XC::Element *XC::ProtoElementLoader::newElement(const std::string &tipo,const ID &iNodos)
   {
     const int tag_elem= getDefaultTag();

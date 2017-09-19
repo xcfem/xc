@@ -46,7 +46,7 @@ elements= preprocessor.getElementLoader
 elements.defaultMaterial= "kx"
 elements.dimElem= 2 # Dimension of element space
 elements.defaultTag= 1
-elem= elements.newElement("zero_length",xc.ID([1,2]))
+elem= elements.newElement("ZeroLength",xc.ID([1,2]))
 elem.clearMaterials()
 elem.setMaterial(0,"kx")
 elem.setMaterial(1,"ky")

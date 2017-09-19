@@ -460,7 +460,7 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
     seedElemLoader= preprocessor.getElementLoader.seedElemLoader
     seedElemLoader.defaultMaterial= foundationSection.sectionName
     seedElemLoader.defaultTransformation= transformationName
-    seedElem= seedElemLoader.newElement("elastic_beam_2d",xc.ID([0,0]))
+    seedElem= seedElemLoader.newElement("ElasticBeam2d",xc.ID([0,0]))
     self.wallSet= preprocessor.getSets.defSet("wallSet")
     self.heelSet= preprocessor.getSets.defSet("heelSet")
     self.toeSet= preprocessor.getSets.defSet("toeSet")
