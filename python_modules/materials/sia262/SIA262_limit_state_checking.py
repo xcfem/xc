@@ -207,12 +207,12 @@ class ShearController(lsc.LimitStateControllerBase):
 
   def check(self,elements,nmbComb):
     '''
-    Comprobación de las secciones de hormigón frente a cortante.
-       XXX Falta tener en cuenta la dirección de las barras de refuerzo
-       a cortante.
+    Check the shear strength of the RC section.
+       XXX Orientation of the transverse reinforcement is not
+       taken into account.
     '''
     print "Postprocesing combination: ",nmbComb
-    # XXX Ignoramos la deformación por torsión.
+    # XXX torsional deformation ingnored.
 
     for e in elements:
       e.getResistingForce()
@@ -220,8 +220,6 @@ class ShearController(lsc.LimitStateControllerBase):
       idSection= e.getProp("idSection")
       section= scc.getProp("datosSecc")
       self.setSection(section)
-      #concreteCode= section.concrType
-      #codArmadura= section.reinfSteelType
       AsTrsv= section.shReinfY.getAs()
       alpha= section.shReinfY.angAlphaShReinf
       theta= section.shReinfY.angThetaConcrStruts
@@ -230,10 +228,10 @@ class ShearController(lsc.LimitStateControllerBase):
       NTmp= scc.getStressResultantComponent("N")
       MyTmp= scc.getStressResultantComponent("My")
       momentThreshold= VuTmp/1000.0
-      if(abs(MyTmp)<momentThreshold): #Too small moment.
+      if(abs(MyTmp)<momentThreshold): #bending moment too small.
         MyTmp= momentThreshold
       MzTmp= scc.getStressResultantComponent("Mz")
-      if(abs(MzTmp)<momentThreshold): #Too small moment.
+      if(abs(MzTmp)<momentThreshold): #bending moment too small.
         MzTmp= momentThreshold
       VyTmp= scc.getStressResultantComponent("Vy")
       if(abs(VyTmp)>VuTmp/5.0): #We "eliminate" very small shear forces.
@@ -251,10 +249,10 @@ class ShearController(lsc.LimitStateControllerBase):
         VzTmp= scc.getStressResultantComponent("Vz")
         e.setProp(self.limitStateLabel,cv.RCShearControlVars(idSection,nmbComb,FCtmp,NTmp,MyTmp,MzTmp,Mu,VyTmp,VzTmp,theta,self.Vcu,self.Vsu,VuTmp)) # Worst case
 
-# Crack control checking of a reinforced concrete section
-# according to SIA 262.
 
 class CrackControlSIA262(lsc.CrackControlBaseParameters):
+  '''Crack control checking of a reinforced concrete section
+   according to SIA 262.'''
   def __init__(self,limitStateLabel,limitStress):
     super(CrackControlSIA262,self).__init__(limitStateLabel)
     self.limitStress= limitStress #Limit value for rebar stresses.
@@ -356,7 +354,7 @@ class CrackControlSIA262PlanB(CrackControlSIA262):
 
 
 def procesResultVerifFISSIA262(preprocessor,nmbComb,limitStress):
-  # Comprobación de las secciones de hormigón frente a fisuración.
+  '''Crack control checking of reinforced concrete sections.'''
   print "Postprocesing combination: ",nmbComb,"\n"
 
   secHAParamsFis= CrackControlSIA262(limitStress)
@@ -364,7 +362,7 @@ def procesResultVerifFISSIA262(preprocessor,nmbComb,limitStress):
   secHAParamsFis.check(elements,nmbComb)
 
 def procesResultVerifFISSIA262PlanB(preprocessor,nmbComb,limitStress):
-  # Comprobación de las secciones de hormigón frente a fisuración estimando la tensión en la reinforcement.
+  '''Crack control checking of reinforced concrete sections.'''
   print "Postprocesing combination: ",nmbComb,"\n"
 
   secHAParamsFis= CrackControlSIA262PlanB(limitStress)
@@ -372,6 +370,7 @@ def procesResultVerifFISSIA262PlanB(preprocessor,nmbComb,limitStress):
   secHAParamsFis.check(elements,nmbComb)
 
 # Control of fatigue limit state according to SIA 262.
+
 def estimateSteelStress(sccData, N, M, As, y):
   retval= 0.0
   eNC= sccData.depth/3.0

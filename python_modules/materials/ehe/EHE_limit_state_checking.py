@@ -265,13 +265,13 @@ class ParamsCortante(object):
 
   def printParams(self):
     '''Print shear checking values.'''
-    print "Area of tensioned rebars; As= ",self.tensionedRebarsArea*1e4," cm2"
+    print "area of tensioned rebars; As= ",self.tensionedRebarsArea*1e4," cm2"
     print "transverse reinforcement area; AsTrsv= ",self.areaShReinfBranchsTrsv*1e4," cm2"
     print "design value of normal stress; sigmaXD= ",self.sigmaXD/1e6," MPa"
     print "effective depth; d= ",self.depthUtil," m"
     print "minimal width; b0= ",self.widthMin," m"
-    print "Lever arm; z= ",self.mechanicLeverArm," m"
-    print "cortanteUltimo; Vu= ",self.cortanteUltimo/1e3," kN"
+    print "mechanic lever arm; z= ",self.mechanicLeverArm," m"
+    print "shear strength; Vu= ",self.cortanteUltimo/1e3," kN"
 
 def getF1cdEHE08(fck,fcd):
     '''getF1cdEHE08(fck,fcd)
