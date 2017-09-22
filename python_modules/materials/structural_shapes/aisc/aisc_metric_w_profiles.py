@@ -12,10 +12,9 @@
 #       |             |
 #     -----         -----
 
-# Los ejes en los que se definen las características mecánicas de la sección
-# en el catálogo original del AISC se han cambiado para acomodarlos a los
-# habituales en XC (eje fuerte paralelo al eje Z). Para ello, como puede verse
-# en la figura, basta intercambiar los ejes X y Z.
+# The axis used in AISC catalogue are different from those used in XC
+# (strong axis parallel to z axis) in other words: values for Y and Z axis 
+# are swapped with respect to those in the catalog.
 
 WAISCprofiles={}
 

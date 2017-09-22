@@ -15,7 +15,7 @@ def axialResistanceSteelFailure(As, fuk):
   '''Characteristic value of anchor bolt strength in tension
    due to steel collapse according to clause 5.2.2.2 of EOTA TR029.
 
-   As: Área de la sección transversal del perno (m2).
+   As: Bolt area (m2).
    fuk: Valor característico de la carga de rotura a tracción (Pa).
   '''
   return As*fuk

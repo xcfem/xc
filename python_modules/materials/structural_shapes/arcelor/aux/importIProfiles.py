@@ -4,28 +4,27 @@ import csv
 fNameIn= 'arcelor_ipe_profiles.csv'
 fNameOut= 'dict_arcelor_ipe_profiles.py'
 dictName= 'IPEprofiles'
-'''
-Ejes de la sección:
 
-   ARCELOR          XC
+# Section axis:
 
-                    ^ Y                    
-                    |
+#    ARCELOR          XC
 
-    -----         -----
-      |             | 
-      | -> Y        | -> Z
-      |             |
-    -----         -----
+#                     ^ Y                    
+#                     |
 
-      |
-      v Z
+#     -----         -----
+#       |             | 
+#       | -> Y        | -> Z
+#       |             |
+#     -----         -----
 
-Los ejes en los que se definen las características mecánicas de la sección
-en el catálogo original de Arcelor se han cambiado para acomodarlos a los
-habituales en XC (eje fuerte paralelo al eje Z). Para ello, como puede verse
-en la figura, basta intercambiar los ejes Y y Z.  
-'''
+#       |
+#       v Z
+
+# The axis used in Arcelor documentation are different from those used in XC
+# (strong axis parallel to z axis) in other words: values for Y and Z axis 
+# are swapped with respect to those in the catalog.
+
 def writeIPEProfileRecord(out,row):
   name= row[0]
   if(name.find('IPE')!=-1):

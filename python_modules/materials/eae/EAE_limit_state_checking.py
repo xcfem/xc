@@ -351,7 +351,7 @@ def ultimateLoadRig(CE,d,MplRd):
 
     :param CE: Coeficiente de escuadra.
     :param d: Lever arm of the load.
-    :param MplRd: Momento plástico de la sección del rigidizador de depth c. 
+    :param MplRd: Plastic moment of the stiffener section. 
     '''
     return CE*MplRd/d 
 
