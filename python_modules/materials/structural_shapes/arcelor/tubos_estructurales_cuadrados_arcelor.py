@@ -29,7 +29,7 @@
 SHSprofiles={}
 
 '''
-XXX Repasar coeficientes de distorsión
+XXX Control shear distortion constants
    alpha-> alphaZ,alphaY
 '''
 SHSprofiles['SHS50x50x2_5']= {'nmb':'SHS50x50x2.5', 'b':0.05, 'h':0.05, 'e':2.5e-3, 'P':3.54, 'A':4.51e-4, 'Iz':17.9e-8, 'Iy':17.9e-8, 'Wzel':7.16e-6, 'Wzpl':8.47e-6, 'iz':1.99e-2, 'iy':1.99e-2, 'It':26.8e-8, 'E':210000e6, 'nu':0.3}

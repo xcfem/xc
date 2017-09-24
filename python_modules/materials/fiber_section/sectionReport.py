@@ -126,7 +126,7 @@ class SectionInfo(object):
       self.lista_fams_reinforcement.append(datosFam)
     self.GH= self.geomSection.getCdgHomogenizedSection(self.tangConcr) # Center of gravity of the homogenized section
     self.AH= self.geomSection.getAreaHomogenizedSection(self.tangConcr) # Area of the homogenized section
-    self.IyH= self.geomSection.getIyHomogenizedSection(self.tangConcr) # Tensor de inercia de la sección homogeneizada.
+    self.IyH= self.geomSection.getIyHomogenizedSection(self.tangConcr) # Inertia tensor of homogenized section.
     self.IzH=  self.geomSection.getIzHomogenizedSection(self.tangConcr)
     self.PyzH= self.geomSection.getPyzHomogenizedSection(self.tangConcr)
 

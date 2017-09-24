@@ -85,7 +85,7 @@ class CrackControlBaseParameters(LimitStateControllerBase):
     self.rcSets= None
 
   def printParams(self):
-    # Imprime los parámetros de fisuración de la sección.
+    # Prints the section crack control parameters.
     print "Clase esfuerzo: ",self.claseEsfuerzo,"\n"
     self.tensionedRebars.printParams()
 

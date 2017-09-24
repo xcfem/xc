@@ -431,7 +431,7 @@ class RecordRCSimpleSection(BasicRecordRCSection):
 
   def getRespT(self,preprocessor,JTorsion):
     '''Material for modeling torsional response of section'''
-    return typical_materials.defElasticMaterial(preprocessor,self.respTName(),self.concrType.Gcm()*JTorsion) # Respuesta de la sección a torsión.
+    return typical_materials.defElasticMaterial(preprocessor,self.respTName(),self.concrType.Gcm()*JTorsion) # Torsional response of the section.
 
   def getRespVy(self,preprocessor):
     '''Material for modeling Y shear response of section'''
@@ -461,7 +461,7 @@ class RecordRCSimpleSection(BasicRecordRCSection):
                  ="d" for design diagram)
      '''
     self.JTorsion= self.getJTorsion()
-    self.respT= self.getRespT(preprocessor,self.JTorsion) # Respuesta de la sección a torsión.
+    self.respT= self.getRespT(preprocessor,self.JTorsion) # Torsional response of the section.
     self.respVy= self.getRespVy(preprocessor)
     self.respVz= self.getRespVz(preprocessor)
 

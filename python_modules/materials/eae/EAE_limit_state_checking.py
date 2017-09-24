@@ -100,7 +100,7 @@ def getFilletWeldThroatPlaneCapacityFactor(sigmaN, tauN, tauPll, fu, fy, gammaM2
   Return the minimum of the capacity factors that correspond to the
   conditions of clause 59.8.2 of EAE (page 256).
 
-  :param sigmaN: Tensión normal sobre el plano de garganta del cordón (ver figure 59.8).
+  :param sigmaN: Normal stress in weld bead throat plane (see figure 59.8).
   :param fu: Steel ultimate strength (table 59.8.2 page 304 EAE).
   :param gammaM2: Partial safety factor of value 1.25.
   '''

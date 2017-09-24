@@ -22,7 +22,7 @@
 # (strong axis parallel to z axis) in other words: values for Y and Z axis 
 # are swapped with respect to those in the catalog.
 
-# XXX Repasar coeficientes de distorsión
+# XXX Control shear distortion constants:
 #   alpha-> alphaY,alphaZ}
 
 

@@ -144,7 +144,7 @@ class EHEConcrete(concrete_base.Concrete):
             return (2.6+14.4*((100-self.fckMPa())/100)**4)*(-1e-3)
 
 #    def tangDConcrete(self,eps):
-#        """Diagrama característico tensión deformación del hormigón according to EHE."""
+#        """Characteristic concrete stress-strain diagram according to EHE."""
 #        return tangc(eps,self.fcd())
 
 #Parabola-rectangle diagrams for concrete under compression 
@@ -181,7 +181,7 @@ class EHEConcrete(concrete_base.Concrete):
 
                        - Ac= cross sectional area
                        - u = perimeter of the member in contact with the atmosphere
-                       - sigmaT0: Tensión constante aplicada en t0.
+                       - sigmaT0: Constant stress appliend in t0.
         '''
         return sigmaT0*(1.0/self.getEcmT(t0)+self.getCreepFitt0(t,t0,RH,h0mm)/self.getEcm())
  

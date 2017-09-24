@@ -121,7 +121,7 @@ class ElastomericBearing(Bearing):
 
     # Points that define the values of beta as a function of h/b
     #   see ALPHA in "Hormigón" book from Jiménez Montoya et al.
-    #   14a. edición page 405
+    #   14th. edition page 405
     xBeta= [1.0,1.25,1.5,2.0,3.0,4.0,6.0,10.0,10000]
     yBeta= [0.14,0.171,0.196,0.229,0.263,0.281,0.299,0.313,1/3.0]
     betaTable= scipy.interpolate.interp1d(xBeta,yBeta)
@@ -217,7 +217,7 @@ class ElastomericBearing(Bearing):
 # from the mean compressive stress
 # See the book «Aparatos de apoyo en puentes» from AIPCR page 46
 
-# Tabla 59.8.2 del artículo 59.8.2 de EAE (page 256)
+# Table 59.8.2 of clase 59.8.2 of EAE (page 256)
 xT= [5e6,10e6,20e6,30e6,45e6,1000e6]
 yT= [0.08,0.06,0.04,0.03,0.025,0.024]
 

@@ -187,7 +187,7 @@ class ShearController(lsc.LimitStateControllerBase):
     self.Vsu= VuShearRebars90SIA262(self.AsTrsv,1.0,self.steel,self.mechanicLeverArm)
 
   def calcVu(self, Nd, Md, Mu, Vd):
-    '''  Calcula el cortante último de la sección.'''
+    '''  Computes section ultimate shear strength.'''
     self.Vcu= 0.0
     self.Vsu= 0.0
     self.calcVcu(Nd,abs(Md),abs(Mu))

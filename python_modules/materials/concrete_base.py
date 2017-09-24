@@ -107,7 +107,7 @@ class ReinforcedConcreteLimitStrains(object):
 
 
 class Concrete(matWDKD.MaterialWithDKDiagrams):
-    """ Concrete model according to Eurocode 2 - Base class.
+    ''' Concrete model according to Eurocode 2 - Base class.
 
     :ivar matTagD:  tag of the uni-axial material in the design diagram
     :ivar fck:       characteristic (5%) cylinder strength of the concrete [Pa]
@@ -125,7 +125,7 @@ class Concrete(matWDKD.MaterialWithDKDiagrams):
 
       - If tensionStiffparam==None (default value) no tensile strength is considered; the stress strain relationship corresponds to a concrete01 material (zero tensile strength).
       - If tensionStiffparam is an instance of the class paramTensStiffness, tension stiffness of concrete is considered in the constitutive model to take into account the tensile capacity of the intact concrete between cracks. The stress strain relationship corresponds to a concrete02 material (linear tension softening),  based on the tension-stiffening constitutive model proposed by Stramandinoli & La Rovere (ref. article: Engineering Structures 30 (2008) 2069-2080).
-    """
+    '''
     nuc= 0.2 #** Poisson coefficient
     cemType='N'     #type of cement:
              #    = 0,20 for cement of strength Classes CEM 42,5 R, CEM 52,5 Nand CEM 52,5 R (Class R) 
@@ -166,67 +166,67 @@ class Concrete(matWDKD.MaterialWithDKDiagrams):
         return self.fcd()
 
     def fckMPa(self):
-        """characteristic (5%) cylinder strength of the concrete in MPa (absolute value)""" 
+        '''characteristic (5%) cylinder strength of the concrete in MPa (absolute value)''' 
         return abs(self.fck)*1e-6
 
     def fctm(self):
-        """mean tensile strength [Pa][+] (table 3.1 EC2)"""
+        '''mean tensile strength [Pa][+] (table 3.1 EC2)'''
         return self.getFctm() 
 
     def fctk(self):
-        """characteristic tensile strength [Pa] (5% fractile)"""
+        '''characteristic tensile strength [Pa] (5% fractile)'''
         return self.getFctk005()
 
     def fctd(self):
-        """Design mean tensile strength [Pa][+]."""
+        '''Design mean tensile strength [Pa][+].'''
         return abs(self.fctk())/self.gmmC 
 
     def epsilon0(self):
-        """ strain at peak stress at parabola-rectangle diagram"""
+        ''' strain at peak stress at parabola-rectangle diagram'''
         return self.getEpsc2()
 
     def epsilonU(self):
-        """ nominal ultimate strain at parabola-rectangle diagram"""
+        ''' nominal ultimate strain at parabola-rectangle diagram'''
         return self.getEpscu2()
 
     def expnPR(self):
-        """ exponent n for the parabola-rectangle diagram """
+        ''' exponent n for the parabola-rectangle diagram '''
         return self.getExpN()
 
     def Ecm(self):
-        """Módulo de deformación longitudinal secante a 28 días expresado
-        en [Pa] [+] 
-        """
+        '''longitudinal secant modulus of deformation, at 28 days
+           (slope of the secant of the actual stress-strain curve)) [Pa] [+] 
+        '''
         return self.getEcm()
 
     def Ect(self):
-        """Elastic modulus in the tensile linear-elastic range of concrete
+        '''Elastic modulus in the tensile linear-elastic range of concrete
         [Pa] [+] 
-        """
+        '''
         return self.E0()
 
     def Gcm(self):
-        """ Shear elactic modulus [Pa][+] """
+        ''' Shear elactic modulus [Pa][+] '''
         return self.getEcm()/(2*(1+self.nuc))  #**
 
     def getFcm(self):
-        """Fcm: mean compressive strength [Pa][-] at 28 days 
+        '''Fcm: mean compressive strength [Pa][-] at 28 days 
         (table 3.1 EC2, art. 39.6 EHE-08)
-        """
+        '''
         return (self.fckMPa()+8)*(-1e6)
  
     def getFctk005(self,t=28):
-        """Fctk005: tensile strength [Pa][+] 5% fractile (table 3.1 EC2)
+        '''Fctk005: tensile strength [Pa][+] 5% fractile (table 3.1 EC2)
 
         :param t: age of the concrete in days
-        """
+        '''
         return 0.7*self.getFctm()
  
     def getFctk095(self,t=28):
-        """Fctk095: tensile strength [Pa][+] 95% fractile (table 3.1 EC2)
+        '''Fctk095: tensile strength [Pa][+] 95% fractile (table 3.1 EC2)
 
         :param t:      age of the concrete in days
-        """
+        '''
         return 1.3*self.getFctm()
 
     def defDiagK(self,preprocessor):
@@ -278,15 +278,15 @@ class Concrete(matWDKD.MaterialWithDKDiagrams):
         return self.materialDiagramD #30160925 was 'return self.matTagD'
 
     def sigmaPR(self,eps):
-        """ stress as function of strain according to parabola-rectangle diagram"""
+        ''' stress as function of strain according to parabola-rectangle diagram'''
         return self.sigmac(eps)
 
 #Time-dependent properties of concrete according to Eurocode 2
     def getBetaCC(self,t=28):
-        """beta_cc: coefficient (sect. 3.1.2 EC2, art. 31.3 EHE-08)
+        '''beta_cc: coefficient (sect. 3.1.2 EC2, art. 31.3 EHE-08)
 
         :param t:      age of the concrete in days
-        """
+        '''
         if self.cemType=='R':    #high-strength cement
             s=0.20
         elif self.cemType=='S':  #slow cement
@@ -296,19 +296,19 @@ class Concrete(matWDKD.MaterialWithDKDiagrams):
         return math.exp(s*(1-math.sqrt(28/t)))
 
     def getFcmT(self,t=28):
-        """FcmT: mean concrete compressive strength [Pa][-] at an age of t days 
+        '''FcmT: mean concrete compressive strength [Pa][-] at an age of t days 
         (sect. 3.1.2 EC2, art. 31.3 EHE-08)
  
         :param t: age of the concrete in days
-        """
+        '''
         return self.getFcm()*self.getBetaCC(t)
 
     def getFckt(self,t=28):
-        """Fckt: concrete compressive strength [Pa][-] at time t (for stages) 
+        '''Fckt: concrete compressive strength [Pa][-] at time t (for stages) 
            (sect. 3.1.2 EC2)
 
         :param t:      age of the concrete in days
-        """
+        '''
         if t >= 28:
             return self.fckMPa()*(-1e6)
         elif t > 3:
@@ -812,14 +812,14 @@ def concreteDesignTangentTest(preprocessor, concreteRecord):
 # Reinforcing steel.
 
 class ReinforcingSteel(matWDKD.MaterialWithDKDiagrams):
-  """Reinforcing steel parameters 
+  '''Reinforcing steel parameters 
 
     :ivar fyk:      Characteristic value of the yield strength.
     :ivar emax:     maximum strain in tension
     :ivar gammaS:   Partial factor for material.
     :ivar k:        fmaxk/fyk ratio (Annex C of EC2: class A k>=1,05,
      class B k>=1,08)
-  """
+  '''
   Es= 2e11 # Elastic modulus of the material.
 #  fmaxk= 0.0 # Characteristic ultimate stress
   Esh= 0.0 # Slope of the line in the yielding region.
@@ -833,31 +833,31 @@ class ReinforcingSteel(matWDKD.MaterialWithDKDiagrams):
     self.k=k        # fmaxk/fyk ratio
  
   def fmaxk(self):
-    """ Characteristic ultimate strength. """
+    ''' Characteristic ultimate strength. '''
     return self.k*self.fyk
   def fyd(self):
-    """ Design yield stress. """
+    ''' Design yield stress. '''
     return self.fyk/self.gammaS
   def eyk(self):
-    """ Caracteristic strain at yield point. """
+    ''' Caracteristic strain at yield point. '''
     return self.fyk/self.Es
   def eyd(self):
-    """ Design strain at yield point. """
+    ''' Design strain at yield point. '''
     return self.fyd()/self.Es
   def Esh(self):
-    """ Slope of the curve in the yielding region. """
+    ''' Slope of the curve in the yielding region. '''
     return (self.fmaxk()-self.fyk)/(self.emax-self.eyk())
   def bsh(self):
-    """ Ratio between post-yield tangent and initial elastic tangent. """
+    ''' Ratio between post-yield tangent and initial elastic tangent. '''
     return self.Esh()/self.Es
   def defDiagK(self,preprocessor):
-    """ Returns XC uniaxial material (characteristic values). """
+    ''' Returns XC uniaxial material (characteristic values). '''
     self.materialDiagramK= typical_materials.defSteel01(preprocessor,self.nmbDiagK,self.Es,self.fyk,self.bsh())
     self.matTagK= self.materialDiagramK.tag
     return self.materialDiagramK #30160925 was 'return self.matTagK'
 
   def defDiagD(self,preprocessor):
-    """ Returns XC uniaxial material (design values). """
+    ''' Returns XC uniaxial material (design values). '''
     self.materialDiagramD= typical_materials.defSteel01(preprocessor,self.nmbDiagD,self.Es,self.fyd(),self.bsh())
     self.matTagD= self.materialDiagramD.tag
     return self.materialDiagramD #30160925 was 'return self.matTagD'
@@ -963,11 +963,11 @@ class PrestressingSteel(matWDKD.MaterialWithDKDiagrams):
        :param tendonClass: Tendon class wire, strand or bar.
     '''
     super(PrestressingSteel,self).__init__(steelName)
-    self.gammaS= 1.15 # Minoración del material.
-    self.fpk= fpk # Elastic limit.
+    self.gammaS= 1.15 # partial safety factor for steel.
+    self.fpk= fpk # elastic limit.
     self.fmax= fmax
     self.alpha= alpha
-    self.Es= 190e9 # Elastic modulus.
+    self.Es= 190e9 # elastic modulus.
     self.bsh= 0.001 # slope ration (yield branch/elastic branch)
     self.steelRelaxationClass= steelRelaxationClass
     self.tendonClass= tendonClass
