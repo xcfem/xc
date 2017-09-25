@@ -21,6 +21,14 @@
 //----------------------------------------------------------------------------
 //python_interface.tcc
 
+class_<XC::PseudoTimeTracker, bases<XC::MovableObject>, boost::noncopyable >("PseudoTimeTracker", no_init)
+  .add_property("getCurrentTime", make_function(&XC::PseudoTimeTracker::getCurrentTime, return_value_policy<copy_const_reference>() ),"return current pseudo-time.")
+  .add_property("getCommittedTime", make_function(&XC::PseudoTimeTracker::getCommittedTime, return_value_policy<copy_const_reference>() ),"return committed pseudo-time.")
+  .add_property("getDt", make_function(&XC::PseudoTimeTracker::getDt, return_value_policy<copy_const_reference>() ),"return difference between committed and current time.")
+  .add_property("getEigenValueTimeSet", make_function(&XC::PseudoTimeTracker::getEigenValueTimeSet, return_value_policy<copy_const_reference>() ),"return eigenvalue time set.")
+  
+  ;
+
 XC::Mesh &(XC::Domain::*getMeshRef)(void)= &XC::Domain::getMesh;
 XC::Preprocessor *(XC::Domain::*getPreprocessor)(void)= &XC::Domain::getPreprocessor;
 XC::ConstrContainer &(XC::Domain::*getConstraintsRef)(void)= &XC::Domain::getConstraints;
@@ -28,6 +36,7 @@ class_<XC::Domain, bases<XC::ObjWithRecorders>, boost::noncopyable >("Domain", n
   .add_property("getPreprocessor", make_function( getPreprocessor, return_internal_reference<>() ),"returns preprocessor.")
   .add_property("getMesh", make_function( getMeshRef, return_internal_reference<>() ),"returns finite element mesh.")
   .add_property("getConstraints", make_function( getConstraintsRef, return_internal_reference<>() ),"returns mesh constraints.")
+  .add_property("getTimeTracker", make_function( &XC::Domain::getTimeTracker, return_internal_reference<>() ),"returns the pseudo-time tracker of the domain.")
   .def("setDeadSRF",XC::Domain::setDeadSRF,"Assigns Stress Reduction Factor for element deactivation.")
   .def("commit",&XC::Domain::commit)
   .def("revertToLastCommit",&XC::Domain::revertToLastCommit)
