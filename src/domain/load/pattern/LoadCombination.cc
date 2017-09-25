@@ -62,9 +62,9 @@ const XC::LoadPattern *XC::LoadCombination::sumando::Caso(void) const
 XC::LoadPattern *XC::LoadCombination::sumando::Caso(void)
   { return lpattern; }
 
-//! @brief Returns the nombre del caso al que se refiere el sumando.
+//! @brief Returns the name of the load case al que se refiere el sumando.
 const std::string &XC::LoadCombination::sumando::getNombreCaso(const MapLoadPatterns &casos) const
-  { return casos.getNombreLoadPattern(lpattern); }
+  { return casos.getLoadPatternName(lpattern); }
 
 //! @brief Cambia de signo el sumando.
 void XC::LoadCombination::sumando::neg(void)

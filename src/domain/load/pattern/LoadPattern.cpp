@@ -117,6 +117,33 @@ XC::LoadPattern *XC::LoadPattern::getCopy(void)
 XC::LoadPattern::~LoadPattern(void)
   { free(); }
 
+//! @brief Returns a const pointer to the container of the load pattern.
+const XC::MapLoadPatterns *XC::LoadPattern::getMapLoadPatterns(void) const
+  {
+    const MapLoadPatterns *retval= dynamic_cast<const MapLoadPatterns *>(Owner());
+    if(!retval)
+      std::cerr << nombre_clase() << "::" << __FUNCTION__
+	        << "; load pattern container not defined." << std::endl;
+    return retval;
+  }
+
+//! @brief Returns a pointer to the container of the load pattern.
+XC::MapLoadPatterns *XC::LoadPattern::getMapLoadPatterns(void)
+  {
+    MapLoadPatterns *retval= dynamic_cast<MapLoadPatterns *>(Owner());
+    if(!retval)
+      std::cerr << nombre_clase() << "::" << __FUNCTION__
+	        << "; load pattern container not defined." << std::endl;
+    return retval;
+  }
+
+//! @brief Returns the name of this load pattern.
+const std::string &XC::LoadPattern::getName(void) const
+  {
+    const MapLoadPatterns *mloader= getMapLoadPatterns();
+    return mloader->getLoadPatternName(this);
+  }
+
 
 void XC::LoadPattern::setTimeSeries(TimeSeries *theTimeSeries)
   {

@@ -80,7 +80,6 @@ namespace XC {
 //! to the model. 
 class TimeSeries: public MovableObject, public EntCmd
   {
-  protected:
   public:
     TimeSeries(int classTag);
     inline virtual ~TimeSeries(void)
@@ -93,7 +92,7 @@ class TimeSeries: public MovableObject, public EntCmd
     virtual double getDuration(void) const= 0;
     virtual double getPeakFactor(void) const= 0;
 
-    virtual double getTimeIncr (double pseudoTime) const= 0;
+    virtual double getTimeIncr(double pseudoTime) const= 0;
     // This is defined to be the time increment from the argument
     // 'pseudoTime' to the NEXT point in the time series path
     // THIS MAY CHANGE -- MAY BE BETTER TO GET THE TIME INCREMENT

@@ -752,7 +752,7 @@ std::string XC::ConstrContainer::getLoadPatternsNames(void) const
                 const MapLoadPatterns &casos= loadLoader.getLoadPatterns();
                 for(MapCasosActivos<LoadPattern>::const_iterator i= activeLoadPatterns.begin();
                     i!= activeLoadPatterns.end();i++)
-                  retval+= casos.getNombreLoadPattern((*i).second) + " ";
+                  retval+= casos.getLoadPatternName((*i).second) + " ";
               }
             else
 	      std::cerr << nombre_clase() << "::" << __FUNCTION__
@@ -918,7 +918,7 @@ int XC::ConstrContainer::recvLPatternsTags(const int &posFlag,const int &posDbTa
                             const MapLoadPatterns &casos= loadLoader.getLoadPatterns();
 	                    std::cerr << nombre_clase() << "::" << __FUNCTION__
 			              << "; could not add load pattern: '"
-                                      << casos.getNombreLoadPattern(load)
+                                      << casos.getLoadPatternName(load)
                                       << "' with tag: " << load->getTag() << std::endl;
                           }
                       }

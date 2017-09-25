@@ -46,7 +46,7 @@ class MapLoadPatterns: public LoadLoaderMember
   {
     typedef std::map<std::string,TimeSeries *> map_timeseries;
     map_timeseries tseries; //!< Load/displacement time variation.
-    std::string nmb_ts; //!< Time series identifier for news load patterns.
+    std::string nmb_ts; //!< Time series identifier for new load patterns.
 
     typedef std::map<std::string,LoadPattern *> map_loadpatterns; //!< Load pattern container type.
     map_loadpatterns loadpatterns; //!< Load pattern container.
@@ -108,7 +108,7 @@ class MapLoadPatterns: public LoadLoaderMember
     const LoadPattern *buscaLoadPattern(const std::string &) const;
     LoadPattern *buscaLoadPattern(const int &);
     const LoadPattern *buscaLoadPattern(const int &) const;
-    const std::string &getNombreLoadPattern(const LoadPattern *) const;
+    const std::string &getLoadPatternName(const LoadPattern *) const;
     TimeSeries *newTimeSeries(const std::string &,const std::string &);
     inline const std::string &getCurrentTimeSeries(void) const
       { return nmb_ts; }
