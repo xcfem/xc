@@ -53,37 +53,14 @@ void XC::NodePropRecorder::setNodes(const ID &iNodos)
 //! @brief Records object properties when commit is triggered.
 int XC::NodePropRecorder::record(int commitTag, double timeStamp)
   {
-    lastCommitTag= commitTag;
-    lastTimeStamp= timeStamp;
-    for(dq_nodes::iterator i= nodes.begin();i!=nodes.end();i++)
-      {
-        Node *tmp= *i;
-        if(tmp)
-          {
-            boost::python::object pyObj(boost::ref(*tmp));
-            EntCmd_exec(pyObj,CallbackRecord);
-          }
-        else
-	  std::cerr << nombre_clase() << "::" << __FUNCTION__
-	            << "; trying to use a NULL pointer." << std::endl;
-      }
+    callRecordCallback(nodes,commitTag,timeStamp);
     return 0;
   }
 
-//! @brief Reinicia el recorder.
+//! @brief Restarts recorder.
 int XC::NodePropRecorder::restart(void)
   {
-    for(dq_nodes::iterator i= nodes.begin();i!=nodes.end();i++)
-      {
-        Node *tmp= *i;
-        if(tmp)
-          {
-            boost::python::object pyObj(boost::ref(*tmp));
-            EntCmd_exec(pyObj,CallbackRecord);
-          }
-        else
-	  std::cerr << "XC::NodePropRecorder::restart(); se intentó llamar a a null pointer." << std::endl;
-      }
+    callRestartCallback(nodes);
     return 0;
   }
 

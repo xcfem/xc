@@ -54,36 +54,14 @@ void XC::ElementPropRecorder::setElements(const ID &iElements)
 //! @brief Records object properties when commit is achieved.
 int XC::ElementPropRecorder::record(int commitTag, double timeStamp)
   {
-    lastCommitTag= commitTag;
-    lastTimeStamp= timeStamp;
-    for(dq_elements::iterator i= elements.begin();i!=elements.end();i++)
-      {
-        Element *tmp= *i;
-        if(tmp)
-          {
-            boost::python::object pyObj(boost::ref(*tmp));
-            EntCmd_exec(pyObj,CallbackRecord);
-          }
-        else
-	  std::cerr << "XC::ElementPropRecorder::record(); se intentó llamar a a null pointer." << std::endl;
-      }
+    callRecordCallback(elements,commitTag,timeStamp);
     return 0;
   }
 
 //! @brief Reinicia el recorder.
 int XC::ElementPropRecorder::restart(void)
   {
-    for(dq_elements::iterator i= elements.begin();i!=elements.end();i++)
-      {
-        Element *tmp= *i;
-        if(tmp)
-          {
-            boost::python::object pyObj(boost::ref(*tmp));
-            EntCmd_exec(pyObj,CallbackRecord);
-          }
-        else
-	  std::cerr << "XC::ElementPropRecorder::restart(); se intentó llamar a a null pointer." << std::endl;
-      }
+    callRestartCallback(elements);
     return 0;
   }
 

@@ -30,6 +30,7 @@
 #define PropRecorder_h
 
 #include <utility/recorder/Recorder.h>
+#include "xc_utils/src/nucleo/python_utils.h"
 
 namespace XC {
 
@@ -45,6 +46,10 @@ class PropRecorder: public Recorder
 
     Domain *theDomain; //!< poiter to the domain.
 
+    template <class Container>
+    void callRecordCallback(Container &c,const int &commitTag,const double &timeStamp);
+    template <class Container>
+    void callRestartCallback(Container &c);
   public:
     PropRecorder(int classTag, Domain *ptr_dom= nullptr);
 
@@ -65,6 +70,45 @@ class PropRecorder: public Recorder
     std::string getCallbackRestart(void);
 
   };
+
+//! @brief Calls record callback on each container element.
+template <class Container>
+void XC::PropRecorder::callRecordCallback(Container &c,const int &commitTag,const double &timeStamp)
+  {
+    this->lastCommitTag= commitTag;
+    this->lastTimeStamp= timeStamp;
+    for(typename Container::iterator i= c.begin();i!=c.end();i++)
+      {
+	typename Container::value_type tmp= *i;
+        if(tmp)
+          {
+            boost::python::object pyObj(boost::ref(*tmp));
+            EntCmd_exec(pyObj,CallbackRecord);
+          }
+        else
+	  std::cerr << nombre_clase() << "::" << __FUNCTION__
+	            << "; pointer is null." << std::endl;
+      }
+  }
+
+//! @brief Calls restart callback on each container element.
+template <class Container>
+void PropRecorder::callRestartCallback(Container &c)
+  {
+    for(typename Container::iterator i= c.begin();i!=c.end();i++)
+      {
+	typename Container::value_type tmp= *i;
+        if(tmp)
+          {
+            boost::python::object pyObj(boost::ref(*tmp));
+            EntCmd_exec(pyObj,this->CallbackRestart);
+          }
+        else
+	  std::cerr << nombre_clase() << "::" << __FUNCTION__
+	            << "; pointer is null." << std::endl;
+      }
+  }
+ 
 } // end of XC namespace
 
 #endif
