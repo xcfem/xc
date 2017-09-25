@@ -77,9 +77,6 @@ elements.defaultMaterial= "seccion"
 elements.defaultTag= 1 #Tag for the next element.
 beam2d= elements.newElement("ElasticBeam2d",xc.ID([1,2]));
 
-
-
-constraints= preprocessor.getConstraintLoader
 modelSpace.fixNode000(1)
 
 cargas= preprocessor.getLoadLoader
