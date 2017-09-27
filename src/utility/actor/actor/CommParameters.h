@@ -144,7 +144,17 @@ class CommParameters
     int receiveDoubles(double &,double &,double &,double &,double &,double &,DbTagData &, const CommMetaData &) const;
 
     int sendBool(const bool &,DbTagData &, const CommMetaData &);
+    int sendBools(const bool &,const bool &,DbTagData &, const CommMetaData &);
+    int sendBools(const bool &,const bool &,const bool &,DbTagData &, const CommMetaData &);
+    int sendBools(const bool &,const bool &,const bool &,const bool &,DbTagData &, const CommMetaData &);
+    int sendBools(const bool &,const bool &,const bool &,const bool &,const bool &,DbTagData &, const CommMetaData &);
+    int sendBools(const bool &,const bool &,const bool &,const bool &,const bool &,const bool &,DbTagData &, const CommMetaData &);
     int receiveBool(bool &,DbTagData &, const CommMetaData &) const;
+    int receiveBools(bool &,bool &,DbTagData &, const CommMetaData &) const;
+    int receiveBools(bool &,bool &,bool &,DbTagData &, const CommMetaData &) const;
+    int receiveBools(bool &,bool &,bool &,bool &,DbTagData &, const CommMetaData &) const;
+    int receiveBools(bool &,bool &,bool &,bool &,bool &,DbTagData &, const CommMetaData &) const;
+    int receiveBools(bool &,bool &,bool &,bool &,bool &,bool &,DbTagData &, const CommMetaData &) const;
 
     int sendInt(const int &,DbTagData &, const CommMetaData &);
     int sendInts(const int &,const int &,DbTagData &, const CommMetaData &);
