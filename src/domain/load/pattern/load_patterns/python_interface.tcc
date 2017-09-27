@@ -27,6 +27,8 @@ class_<XC::EarthquakePattern , bases<XC::EQBasePattern>, boost::noncopyable >("E
 
 class_<XC::UniformExcitation, bases<XC::EarthquakePattern>, boost::noncopyable >("UniformExcitation", no_init)
   .add_property("motionRecord", make_function( &XC::UniformExcitation::getGroundMotionRecord, return_internal_reference<>()),"Ground motion data.")
+  .add_property("dof", &XC::UniformExcitation::getDof, &XC::UniformExcitation::setDof,"the dof corresponding to the ground motion.")
+  .add_property("initialVelocity", &XC::UniformExcitation::getInitialVelocity, &XC::UniformExcitation::setInitialVelocity,"the initial velocity, should be neg of ug dot(0).")
   ;
 
 class_<XC::MultiSupportPattern, bases<XC::EQBasePattern>, boost::noncopyable >("MultiSupportPattern", no_init);
