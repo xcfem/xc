@@ -41,5 +41,6 @@ class_<XC::Domain, bases<XC::ObjWithRecorders>, boost::noncopyable >("Domain", n
   .def("commit",&XC::Domain::commit)
   .def("revertToLastCommit",&XC::Domain::revertToLastCommit)
   .def("revertToStart",&XC::Domain::revertToStart)  
-  .def("setTime",&XC::Domain::setTime,"Assigns time tracker time.")  
+  .def("setLoadConstant",&XC::Domain::setLoadConstant,"sets currents load patterns as constant in time.")  
+  .def("setTime",&XC::Domain::setTime,"sets the time on the time tracker.")  
   ;
