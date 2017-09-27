@@ -72,7 +72,7 @@ class UniformExcitation: public EarthquakePattern
   {
   private:
     GroundMotion *theMotion; //!< the ground motion
-    int theDof;      //!< the dof corrseponding to the ground motion
+    int theDof;      //!< the dof corresponding to the ground motion
     double vel0;     //!< the initial velocity, should be neg of ug dot(0)
 
     UniformExcitation(const UniformExcitation &otro);
@@ -91,6 +91,18 @@ class UniformExcitation: public EarthquakePattern
     void applyLoad(double time);
     void Print(std::ostream &s, int flag =0);
 
+    //! @brief set the affected dof.
+    inline void setDof(const int &dof)
+      { theDof= dof; }
+    //! @brief return the affected dof.
+    inline int getDof(void) const
+      { return theDof; }
+    //! @brief set initial velocity.
+    inline void setInitialVelocity(const int &v0)
+      { vel0= v0; }
+    //! @brief return initial velocity.
+    inline int getInitialVelocity(void) const
+      { return vel0; }
     int sendSelf(CommParameters &);
     int recvSelf(const CommParameters &);
 

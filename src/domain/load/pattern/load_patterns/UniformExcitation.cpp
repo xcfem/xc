@@ -68,10 +68,12 @@
 #include <utility/actor/objectBroker/FEM_ObjectBroker.h>
 
 
+//! @brief Constructor.
 XC::UniformExcitation::UniformExcitation(int tag)
   :EarthquakePattern(tag, PATTERN_TAG_UniformExcitation),
     theMotion(nullptr), theDof(0), vel0(0.0) {}
 
+//! @brief Constructor.
 XC::UniformExcitation::UniformExcitation(GroundMotion &_theMotion, int dof, int tag, double velZero)
   :EarthquakePattern(tag, PATTERN_TAG_UniformExcitation), theMotion(&_theMotion), theDof(dof), vel0(velZero)
   {
@@ -79,6 +81,7 @@ XC::UniformExcitation::UniformExcitation(GroundMotion &_theMotion, int dof, int 
     addMotion(*theMotion);
   }
 
+//! @brief Return the ground motion record.
 XC::GroundMotion &XC::UniformExcitation::getGroundMotionRecord(void)
   {
     if(!theMotion)
@@ -90,9 +93,10 @@ XC::GroundMotion &XC::UniformExcitation::getGroundMotionRecord(void)
     return *theMotion;
   }
 
+//! @brief Assigns a domain to this load.
 void XC::UniformExcitation::setDomain(Domain *theDomain) 
   {
-    XC::EarthquakePattern::setDomain(theDomain);
+    EarthquakePattern::setDomain(theDomain);
 
     // now we go through and set all the node velocities to be vel0
     if(vel0 != 0.0)
@@ -115,6 +119,9 @@ void XC::UniformExcitation::setDomain(Domain *theDomain)
       }
   }
 
+//! @brief Applies the load.
+//!
+//! @param time: instant to calculate the value of the load.
 void XC::UniformExcitation::applyLoad(double time)
   {
     Domain *theDomain = getDomain();
@@ -122,7 +129,7 @@ void XC::UniformExcitation::applyLoad(double time)
       {
         //if (numNodes != theDomain->getNumNodes()) {
         NodeIter &theNodes = theDomain->getNodes();
-        Node *theNode;
+        Node *theNode= nullptr;
         while((theNode = theNodes()) != 0)
           {
             theNode->setNumColR(1);
@@ -134,6 +141,7 @@ void XC::UniformExcitation::applyLoad(double time)
     return;
   }
 
+//! @brief Applies load sensitivity.
 void XC::UniformExcitation::applyLoadSensitivity(double time)
   {
     Domain *theDomain = this->getDomain();
@@ -183,7 +191,8 @@ int XC::UniformExcitation::sendSelf(CommParameters &cp)
 
     res+= cp.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
-      std::cerr << nombre_clase() << "sendSelf() - failed to send data\n";
+      std::cerr << nombre_clase() << "::" << __FUNCTION__
+	        << ";failed to send data\n";
     return res;
   }
 
@@ -196,19 +205,23 @@ int XC::UniformExcitation::recvSelf(const CommParameters &cp)
     int res= cp.receiveIdData(getDbTagData(),dataTag);
 
     if(res<0)
-      std::cerr << nombre_clase() << "::recvSelf - failed to receive ids.\n";
+      std::cerr << nombre_clase() << "::" << __FUNCTION__
+	        << ";failed to receive ids.\n";
     else
       {
         setTag(getDbTagDataPos(0));
         res+= recvData(cp);
         if(res<0)
-          std::cerr << nombre_clase() << "::recvSelf - failed to receive data.\n";
+          std::cerr << nombre_clase() << "::" << __FUNCTION__
+                    << ";failed to receive data\n";
       }
     return res;
   }
 
+//! @brief Prints stuff.
 void XC::UniformExcitation::Print(std::ostream &s, int flag)
   {
-    s << "UniformExcitation  " << this->getTag() 
-      << " - Not Printing the XC::GroundMotion\n";
+    s << nombre_clase() << "::" << __FUNCTION__
+      << "; " << this->getTag() 
+      << " - Not Printing the GroundMotion.\n";
   }
