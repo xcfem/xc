@@ -130,7 +130,7 @@ int XC::SFreedom_Constraint::applyConstraint(double loadFactor)
   {
     // as SFreedom_Constraint objects are time invariant nothing is done
     if(isConstant == false)
-      valueC = loadFactor*valueR;
+      valueC= loadFactor*valueR;
     return 0;
   }
 

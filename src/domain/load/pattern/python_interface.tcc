@@ -44,6 +44,7 @@ class_<XC::LoadPattern, bases<XC::NodeLocker>, boost::noncopyable >("LoadPattern
   .add_property("description", make_function( &XC::LoadPattern::getDescription, return_value_policy<return_by_value>() ), &XC::LoadPattern::setGammaF,"load case description.")
   .add_property("loadFactor", make_function( &XC::LoadPattern::getLoadFactor, return_value_policy<return_by_value>() ))
   .add_property("gammaF", make_function( getGammaFRef, return_value_policy<return_by_value>() ), &XC::LoadPattern::setGammaF)
+  .add_property("constant", &XC::LoadPattern::getIsConstant, &XC::LoadPattern::setIsConstant,"determines if the load is constant in time or not.")
   .def("newNodalLoad", &XC::LoadPattern::newNodalLoad,return_internal_reference<>(),"Create a nodal load.")
   .add_property("getNumNodalLoads",&XC::LoadPattern::getNumNodalLoads,"return the number of nodal loads.")
   .add_property("getNumElementalLoads",&XC::LoadPattern::getNumElementalLoads,"return the number of elemental loads.")

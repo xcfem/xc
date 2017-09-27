@@ -104,7 +104,12 @@ class SFreedom_Constraint: public Constraint
     virtual bool isHomogeneous(void) const;
     virtual void setLoadPatternTag(int loadPaternTag);
     virtual int getLoadPatternTag(void) const;
- 
+    
+    inline void setIsConstant(const bool &b)
+      { isConstant= b; }
+    inline bool getIsConstant(void) const
+      { return isConstant; }
+
     int getVtkCellType(void) const;
 
     int sendSelf(CommParameters &);

@@ -122,13 +122,13 @@ XC::EarthquakePattern::~EarthquakePattern(void)
 
 void XC::EarthquakePattern::applyLoad(double time)
   {
-    // see if XC::quick return, i.e. no Ground Motions or domain set
+    // see if quick return, i.e. no Ground Motions or domain set
     const size_t nMotions= getNumMotions();
     if(nMotions == 0)
       return;
 
     // check if setLoadConstant() has been called
-    if(isConstant != 0)
+    if(!isConstant)
       currentTime = time;
 
     Domain *theDomain= getDomain();
@@ -144,7 +144,7 @@ void XC::EarthquakePattern::applyLoad(double time)
       }
 
     NodeIter &theNodes= theDomain->getNodes();
-    Node *theNode;
+    Node *theNode= nullptr;
     while((theNode = theNodes()) != 0) 
       theNode->addInertiaLoadToUnbalance(*uDotDotG, 1.0);
  

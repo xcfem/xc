@@ -104,7 +104,7 @@ class LoadPattern: public NodeLocker
 
     void free(void);
   protected:
-    int isConstant;     // to indicate whether setConstant has been called
+    bool isConstant; //!< to indicate whether setConstant has been called
     DbTagData &getDbTagData(void) const;
     int sendData(CommParameters &cp);
     int recvData(const CommParameters &cp);
@@ -149,6 +149,10 @@ class LoadPattern: public NodeLocker
     // methods to apply loads
     virtual void applyLoad(double pseudoTime = 0.0);
     virtual void setLoadConstant(void);
+    inline void setIsConstant(const bool &b)
+      { isConstant= b; }
+    inline bool getIsConstant(void) const
+      { return isConstant; }
 
 
     const MapLoadPatterns *getMapLoadPatterns(void) const;

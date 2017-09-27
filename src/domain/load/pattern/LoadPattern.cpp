@@ -90,20 +90,20 @@ void XC::LoadPattern::free(void)
 //! @brief Constructor
 XC::LoadPattern::LoadPattern(int tag, int classTag)
   : NodeLocker(tag,classTag), loadFactor(0.0), gamma_f(1.0),
-    theSeries(nullptr), theLoads(this), randomLoads(nullptr), isConstant(1)
+    theSeries(nullptr), theLoads(this), randomLoads(nullptr), isConstant(false)
   {}
 
 
 //! @brief Default constructor.
 XC::LoadPattern::LoadPattern(void)
   :NodeLocker(0,PATTERN_TAG_LoadPattern), loadFactor(0.0), gamma_f(1.0),
-   theSeries(nullptr), theLoads(this), randomLoads(nullptr), isConstant(1)
+   theSeries(nullptr), theLoads(this), randomLoads(nullptr), isConstant(false)
   {}
 
 //! @brief Constructor.
 XC::LoadPattern::LoadPattern(int tag)
   :NodeLocker(tag,PATTERN_TAG_LoadPattern),loadFactor(0.0), gamma_f(1.0),
-   theSeries(nullptr), theLoads(this), randomLoads(nullptr), isConstant(1)
+   theSeries(nullptr), theLoads(this), randomLoads(nullptr), isConstant(false)
   {}
 
 
@@ -325,11 +325,12 @@ void XC::LoadPattern::applyLoad(double pseudoTime)
   {
     if(theSeries)  // first determine the load factor
       {
-        if(isConstant != 0)
+        if(!isConstant)
           loadFactor= theSeries->getFactor(pseudoTime);
       }
     else
-      std::cerr << "ERROR in applyLoad: Time series not defined. Using load factor: "
+      std::cerr << nombre_clase() << "::" << __FUNCTION__
+	        << "; ERROR: time series not defined. Using load factor: "
 	        << loadFactor << std::endl;
     const double factor= loadFactor*gamma_f; //Ponderación de la hipótesis.
 
@@ -339,7 +340,7 @@ void XC::LoadPattern::applyLoad(double pseudoTime)
   }
 
 void XC::LoadPattern::setLoadConstant(void)
-  { isConstant = 0; }
+  { isConstant= true; }
 
 //! @brief Returns the factor de ponderación obtenido of the TimeSeries object.
 const double &XC::LoadPattern::getLoadFactor(void) const
@@ -386,7 +387,7 @@ int XC::LoadPattern::sendData(CommParameters &cp)
     res+= cp.sendMovable(theLoads,getDbTagData(),CommMetaData(10));
 
     res+= cp.sendVectorPtr(randomLoads,getDbTagData(),ArrayCommMetaData(11,12,13));
-    res+= cp.sendBool(RVisRandomProcessDiscretizer,getDbTagData(),CommMetaData(14));
+    res+= cp.sendBools(RVisRandomProcessDiscretizer,isConstant,getDbTagData(),CommMetaData(14));
     return res;
   }
 
@@ -398,7 +399,7 @@ int XC::LoadPattern::recvData(const CommParameters &cp)
     theSeries= receiveTimeSeriesPtr(theSeries,8,9,getDbTagData(),cp);
     res+= cp.receiveMovable(theLoads,getDbTagData(),CommMetaData(10));
     randomLoads= cp.receiveVectorPtr(randomLoads,getDbTagData(),ArrayCommMetaData(11,12,13));
-    res+= cp.receiveBool(RVisRandomProcessDiscretizer,getDbTagData(),CommMetaData(14));
+    res+= cp.receiveBools(RVisRandomProcessDiscretizer,isConstant,getDbTagData(),CommMetaData(14));
     return res;
   }
 
@@ -455,7 +456,7 @@ XC::GroundMotion *XC::LoadPattern::getMotion(int tag)
 // AddingSensitivity:BEGIN ////////////////////////////////////
 void XC::LoadPattern::applyLoadSensitivity(double pseudoTime)
   {
-    if(theSeries && isConstant != 0)
+    if(theSeries && !isConstant)
       loadFactor= theSeries->getFactorSensitivity(pseudoTime);
 
     const double factor= loadFactor*gamma_f;

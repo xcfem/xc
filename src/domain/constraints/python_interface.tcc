@@ -29,11 +29,12 @@ class_<XC::Constraint, bases<XC::ContinuaReprComponent>, boost::noncopyable >("C
   .add_property("getMEDCellType",&XC::Constraint::getMEDCellType,"Returns cell type for MED fichier.")
   ;
 
-class_<XC::SFreedom_Constraint, XC::SFreedom_Constraint *, bases<XC::Constraint>, boost::noncopyable >("SPConstraint", no_init)
+class_<XC::SFreedom_Constraint, XC::SFreedom_Constraint *, bases<XC::Constraint>, boost::noncopyable >("SFreedom_Constraint", no_init)
   .add_property("getDOFNumber", &XC::SFreedom_Constraint::getDOF_Number,"return DOF's number.")
   .add_property("getValue", &XC::SFreedom_Constraint::getValue,"returns imposed value for DOF.")
   .add_property("isHomogeneous", &XC::SFreedom_Constraint::isHomogeneous,"true if it's an homogeneous boundary condition.")
-  .add_property("loadPatternTag", &XC::SFreedom_Constraint::getLoadPatternTag,&XC::SFreedom_Constraint::setLoadPatternTag,"assigns/retrieves load pattern tag.") 
+  .add_property("loadPatternTag", &XC::SFreedom_Constraint::getLoadPatternTag,&XC::SFreedom_Constraint::setLoadPatternTag,"assigns/retrieves load pattern tag.")  .add_property("constant", &XC::SFreedom_Constraint::getIsConstant, &XC::SFreedom_Constraint::setIsConstant,"determines if the constraint is constant in time or not.")
+ 
   .add_property("getVtkCellType", &XC::SFreedom_Constraint::getVtkCellType, "returns VTK cell type")
   ;
 
