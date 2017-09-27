@@ -21,42 +21,13 @@
 //----------------------------------------------------------------------------
 //python_interface.tcc
 
-class_<XC::Information, boost::noncopyable >("Information", no_init);
-
+//Python exposition of the utilities.
 
 //class_<XC::ElemPos, bases<KDTreePos>, boost::noncopyable >("ElemPos", no_init);
 
-class_<XC::ParticlePos3d>("ParticlePos3d")
-  .def(init<Pos2d>())
-  .def(init<Pos3d>())
-  .add_property("r", make_function( &XC::ParticlePos3d::r_coordinate, return_value_policy<return_by_value>()), &XC::ParticlePos3d::set_r_coordinate, "Return r coordinate.")
-  .add_property("s", make_function( &XC::ParticlePos3d::s_coordinate, return_value_policy<return_by_value>()), &XC::ParticlePos3d::set_s_coordinate, "Return s coordinate.")
-  .add_property("t", make_function( &XC::ParticlePos3d::t_coordinate, return_value_policy<return_by_value>()), &XC::ParticlePos3d::set_t_coordinate, "Return t coordinate.")
-  .def(self_ns::str(self_ns::self))
-  ;
-
-class_<XC::RayleighDampingFactors, bases<EntCmd>, boost::noncopyable >("RayleighDampingFactors", no_init);
-
 #include "utils/fvectors/python_interface.tcc"
 #include "utils/physical_properties/python_interface.tcc"
-
-typedef XC::NodePtrs::vector_ptr_nodes vector_ptr_nodes;
-class_<vector_ptr_nodes, boost::noncopyable>("vector_ptr_nodes")
-  .def(vector_indexing_suite<vector_ptr_nodes>() )
-  ;
-
-XC::Node *(XC::NodePtrs::*getNearestNodePtr)(const Pos3d &,bool initialGeometry)= &XC::NodePtrs::getNearestNode;
-bool (XC::NodePtrs::*NodePtrsIn3D)(const GeomObj3d &,const double &,const double &) const= &XC::NodePtrs::In;
-bool (XC::NodePtrs::*NodePtrsOut3D)(const GeomObj3d &,const double &,const double &) const= &XC::NodePtrs::Out;
-class_<XC::NodePtrs, bases<EntCmd,vector_ptr_nodes>, boost::noncopyable >("NodePtrs", no_init)
-  .def("getNearestNode",make_function(getNearestNodePtr, return_internal_reference<>() ),"Return nearest node.")
-  .def("In", NodePtrsIn3D,"\n""In(geomObject,factor,tolerance) \n""Return true if the current positions of all the nodes scaled by a factor: initialPos+factor*currentDisplacement lie inside the geometric object.")
-  .def("Out", NodePtrsOut3D,"\n""Out(geomObject,factor,tolerance) \n""Return true if current positions of all the nodes scaled by a factor: initialPos+factor*currentDisplacement lie outside the geometric object.")
-  ;
-
-class_<XC::NodePtrsWithIDs, bases<XC::NodePtrs>, boost::noncopyable >("NodePtrsWithIDs", no_init)
-  .add_property("getExternalNodes",make_function(&XC::NodePtrsWithIDs::getExternalNodes, return_internal_reference<>() ),"Return tags of external nodes.")
-  ;
+#include "domain/mesh/element/utils/python_interface.tcc"
 
 XC::NodePtrsWithIDs &(XC::Element::*getNodePtrsRef)(void)= &XC::Element::getNodePtrs;
 const XC::Vector &(XC::Element::*getResistingForceRef)(void) const= &XC::Element::getResistingForce;
