@@ -109,9 +109,9 @@ int XC::FullGenEigenSolver::solve(int nEigen)
     numModes = nEigen;
     if(numModes > n)
       {
-	std::clog << "FullGenEigenSolver::solve; the número de modos: " << numModes
-                  << " es superior al máximo: " << n 
-                  << " se adopta the máximo." << std::endl;
+	std::clog << "FullGenEigenSolver::solve; number of nodes: " << numModes
+                  << " is greater than the maximum: " << n 
+                  << " we take the maximum." << std::endl;
         numModes = n;
       }
 
