@@ -77,6 +77,10 @@ class SensitivityAlgorithm;
 //! @ingroup AnalysisType
 //
 //! @brief Direct integration dynamic analysis.
+//!
+//! DirectIntegrationAnalysis is a subclass of TransientAnalysis. It
+//! is used to perform a transient analysis using an incremental approach
+//! on the Domain.
 class DirectIntegrationAnalysis: public TransientAnalysis
   {
   private:

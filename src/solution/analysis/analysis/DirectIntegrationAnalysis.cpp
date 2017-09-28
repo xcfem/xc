@@ -89,6 +89,8 @@ XC::DirectIntegrationAnalysis::DirectIntegrationAnalysis(SoluMethod *metodo_solu
   }
 
 //! @brief Destructor.
+//! Does nothing. clearAll() must be invoked if the destructor on
+//! the objects in the aggregation need to be invoked.
 XC::DirectIntegrationAnalysis::~DirectIntegrationAnalysis(void)
   {
     // we don't invoke the destructors in case user switching
@@ -97,6 +99,10 @@ XC::DirectIntegrationAnalysis::~DirectIntegrationAnalysis(void)
   }
 
 //! @brief Clears all object members (constraint handler, analysis model,...).
+//!
+//! Will invoke the destructor on all the objects in the aggregation. NOTE
+//! this means they must have been constructed using new(),
+//! otherwise a segmentation fault can occur.
 void XC::DirectIntegrationAnalysis::clearAll(void)
   {
 // AddingSensitivity:BEGIN ////////////////////////////////////
@@ -138,6 +144,15 @@ int XC::DirectIntegrationAnalysis::initialize(void)
 //!
 //! @param numSteps: number of steps in the analysis.
 //! @param dT: time increment.
+//!
+//! Invoked to perform a transient analysis on the FE\_Model. The method
+//! checks to see if the domain has changed before it performs the
+//! analysis.
+//! The type of analysis performed, depends on the type of the
+//! objects in the analysis aggregation. If any of the methods invoked
+//! returns a negative number, an error message is printed, {\em
+//! revertToLastCommit()} is invoked on the Domain, and a negative number
+//! is immediately returned. Returns a \f$0\f$ if the algorithm is successful.
 int XC::DirectIntegrationAnalysis::analyze(int numSteps, double dT)
   {
     int result= 0;
@@ -232,6 +247,31 @@ int XC::DirectIntegrationAnalysis::analyze(int numSteps, double dT)
   }
 
 //! @brief Ejecuta los cambios que implica un cambio en el domain del problema.
+//!
+//! This is a method invoked by a domain which indicates to the analysis
+//! that the domain has changed. The method invokes the following:
+//! - It invokes clearAll() on \p theModel which causes the
+//!   AnalysisModel to clear out its list of FE\_Elements and DOF\_Groups,
+//!   and clearAll() on \p theHandler.
+//! - It then invokes handle() on \p theHandler. This causes
+//!   the constraint handler to recreate the appropriate FE\_Element and
+//!   DOF\_Groups to perform the analysis subject to the boundary conditions
+//!   in the modified domain.
+//! - It then invokes number() on \p theNumberer. This causes
+//!   the DOF numberer to assign equation numbers to the individual
+//!   dof's. Once the equation numbers have been set the numberer then
+//!   invokes setID() on all the FE\_Elements in the model. Finally
+//!   the numberer invokes setNumEqn() on the model.
+//! - It then invokes domainChanged() on \p theIntegrator and
+//!   theAlgorithm to inform these objects that changes have occurred
+//!   in the model.
+//! - It invokes {\em setSize(theModel.getDOFGraph())} on {\em
+//!   theSOE} which causes the system of equation to determine its size
+//!   based on the connectivity of the dofs in the analysis model. 
+//! - Finally it invokes domainChanged() on \p theIntegrator and theAlgorithm. 
+//!   Returns \f$0\f$ if successful. At any stage above, if an error occurs the
+//!   method is stopped, a warning message is printed and a negative number
+//!   is returned. 
 int XC::DirectIntegrationAnalysis::domainChanged(void)
   {
     assert(metodo_solu);
@@ -306,6 +346,16 @@ int XC::DirectIntegrationAnalysis::setNumberer(DOF_Numberer &theNewNumberer)
 
 
 //! @brief Sets the solutio algorithm to use in the analysis.
+//!
+//! To change the algorithm between analysis. It first invokes the
+//! destructor on the old SolutionAlgorithm object associated with the
+//! analysis. It then sets the SolutionAlgorithm 
+//! associated with the analysis to be \p newAlgorithm and sets the
+//! links for this object by invoking setLinks(). Checks then to
+//! see if the domain has changed, if true it invokes {\em
+//! domainChanged()}, otherwise it invokes domainChanged() on the
+//! new SolutionAlgorithm. Returns \f$0\f$ if successful, a warning message
+//! and a negative number if not.
 int XC::DirectIntegrationAnalysis::setAlgorithm(EquiSolnAlgo &theNewAlgorithm) 
   {
     // invoke the destructor on the old one
@@ -339,6 +389,17 @@ int XC::DirectIntegrationAnalysis::setAlgorithm(EquiSolnAlgo &theNewAlgorithm)
   }
 
 //! @brief Sets the integrator to use in the analysis.
+//!
+//! To change the integration scheme between analysis. It first invokes the
+//! destructor on the old Integrator object associated with the
+//! analysis. It then sets the SolutionAlgorithm 
+//! associated with the analysis to be \p newAlgorithm and sets the
+//! links for this object by invoking setLinks(). It also invokes
+//! setLinks() on the ConstraintHandler and SolutionAlgorithm
+//! objects. Checks then to see if the domain has changed, if true it
+//! invokes domainChanged(), otherwise it invokes {\em
+//! domainChanged()} on the new Integrator. Returns \f$0\f$ if
+//! successful, a warning message and a negative number if not.
 int XC::DirectIntegrationAnalysis::setIntegrator(TransientIntegrator &theNewIntegrator)
   {
     // set the links needed by the other objects in the aggregation
@@ -369,6 +430,17 @@ int XC::DirectIntegrationAnalysis::setIntegrator(TransientIntegrator &theNewInte
   }
 
 //! @brief Sets the linear system of equations to use in the analysis.
+//!
+//! To change the linear system of equation object between analysis. It
+//! first invokes the destructor on the old LinearSOE object associated
+//! with the analysis. It then sets the SolutionAlgorithm 
+//! associated with the analysis to be \p newSOE.
+//! links for this object by invoking setLinks(). It then invokes
+//! setLinks() on the ConstraintHandler and SolutionAlgorithm
+//! objects. Checks then to see if the domain has changed, if true it
+//! invokes domainChanged(), otherwise it invokes {\em
+//! setSize()} on the new LinearSOE. Returns \f$0\f$ if successful, a warning
+//! message and a negative number if not.
 int XC::DirectIntegrationAnalysis::setLinearSOE(LinearSOE &theNewSOE)
   {
     // invoke the destructor on the old one
