@@ -44,7 +44,7 @@ class BeamUniformLoad : public BeamMecLoad
     BeamUniformLoad(int classTag);
 
     std::string Categoria(void) const;
-    //! @brief Returns distributed force vectors (one for each element) expressed in elemnt local coordinates. Is simply a convenience function that makes the distributedness more explicit.
+    //! @brief Returns distributed force vectors (one for each element) expressed in element local coordinates. Is simply a convenience function that makes the distributedness more explicit.
     inline const Matrix &getDistributedLocalForces(void) const
       { return getLocalForces(); }
     //! @brief Returns distributed moments (one for each element) expressed in element local coordinates. Is simply a convenience function that makes the distributedness more explicit.
