@@ -86,6 +86,10 @@ bool XC::ProcSolu::alloc_analysis(const std::string &nmb,const std::string &cod_
             else if(nmb=="variable_time_step_direct_integration_analysis")
               theAnalysis= new VariableTimeStepDirectIntegrationAnalysis(metodo);
 	  }
+        else
+          std::cerr << nombre_clase() << "::" << __FUNCTION__
+	            << "; analysis type: '"
+                    << nmb << "' unknown." << std::endl;
       }
     else
       std::cerr << nombre_clase() << "::" << __FUNCTION__
@@ -161,6 +165,7 @@ XC::ProblemaEF *XC::ProcSolu::getProblemaEF(void)
 const XC::ProblemaEF *XC::ProcSolu::getProblemaEF(void) const
   { return dynamic_cast<const ProblemaEF *>(Owner()); }
 
+//! @brief Return a pointer to the domain.
 XC::Domain *XC::ProcSolu::getDomainPtr(void)
   {
     ProblemaEF *prb= getProblemaEF();
@@ -168,6 +173,7 @@ XC::Domain *XC::ProcSolu::getDomainPtr(void)
     return prb->getDomain();
   }
 
+//! @brief Return a const pointer to the domain.
 const XC::Domain *XC::ProcSolu::getDomainPtr(void) const
   {
     const ProblemaEF *prb= getProblemaEF();

@@ -68,14 +68,27 @@ class ID;
 //! 
 //! @brief Solution procedure for the finite element problem. The
 //! solution procedure is defined by specifiying:
-//! - Wrapper for the finite element model.
-//! - Solution algorithm.
-//! - Integration scheme.
-//! - Solver for the system of equations.
-//  - Convergence test.
+//! - Wrapper for the finite element model. Container for the finite
+//!   element model "as seen" from the solver.
+//! - Solution algorithm.  An algorithmic class specifying the
+//!   sequence of operations to be performed in setting up and solving the
+//!   finite element equation which can be represented by the equation K(U)
+//!   U = P(U). 
+//! - Integration scheme. An algorithmic object which provides
+//!   methods which are invoked by the FE\_Element to determine their
+//!   current tangent and residual matrices; that is this is the object that
+//!   sets up the system of equations.  It also provides the {\em
+//!   update()} method which is invoked to set up the appropriate dof
+//!   response values once the solution algorithm has formed and solved the
+//!   system of equations.
+//! - System of equations. A numeric object responsible for the creation
+//!   and subsequent solution of large systems of linear equations of the
+//!   form \f$Ax = b\f$, where \f$A\f$ is a matrix and \f$x\f$
+//!   and \f$b\f$ are vectors.
+//! - Convergence test.
 class SoluMethod: public EntCmd
   {
-    ModelWrapper *base; //!< Wrapper for the finite elemnt model.
+    ModelWrapper *base; //!< Wrapper for the finite element model.
     SolutionAlgorithm *theSolnAlgo; //!< Solution algorithm.
     Integrator *theIntegrator; //!< Integration scheme.
     SystemOfEqn *theSOE; //!< System of equations.

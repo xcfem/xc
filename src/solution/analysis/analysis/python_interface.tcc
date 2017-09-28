@@ -81,7 +81,9 @@ class_<XC::ModalAnalysis , bases<XC::EigenAnalysis>, boost::noncopyable >("Modal
 
 //class_<XC::SubdomainAnalysis, bases<XC::Analysis, XC::MovableObject>, boost::noncopyable >("SubdomainAnalysis", no_init);
 
-class_<XC::TransientAnalysis, bases<XC::Analysis>, boost::noncopyable >("TransientAnalysis", no_init);
+class_<XC::TransientAnalysis, bases<XC::Analysis>, boost::noncopyable >("TransientAnalysis", no_init)
+  .def("analyze", &XC::TransientAnalysis::analyze,"analyze(nSteps,dT) performs the analysis.")
+  ;
 
 class_<XC::DirectIntegrationAnalysis, bases<XC::TransientAnalysis>, boost::noncopyable >("DirectIntegrationAnalysis", no_init);
 
