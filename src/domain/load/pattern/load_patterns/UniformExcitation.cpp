@@ -122,6 +122,11 @@ void XC::UniformExcitation::setDomain(Domain *theDomain)
 //! @brief Applies the load.
 //!
 //! @param time: instant to calculate the value of the load.
+//!
+//! Checks to see if the number of nodes in the domain has changed, if
+//! there has been a change it invokes {\em setNumColR(1)} and then 
+//! {\em setR(theDof, 0, 1.0)} on each Node. It then invokes the base classes
+//! applyLoad() method. THIS SHOULD BE CHANGED TO USE LATEST domainChanged().
 void XC::UniformExcitation::applyLoad(double time)
   {
     Domain *theDomain = getDomain();

@@ -61,19 +61,26 @@
 // EarthquakePattern is an abstract class.
 
 #include "EQBasePattern.h"
+#include "utility/matrix/Vector.h"
 
 namespace XC {
 class GroundMotion;
-class Vector;
 
 //! @ingroup LPatterns
 //
 //! @brief Earthquake load pattern.
+//!
+//! The EarthquakePattern class is an abstract class. An
+//! EarthquakePattern is an object which adds earthquake loads to
+//! models. This abstract class keeps track of the GroundMotion objects
+//! and implements the applyLoad() method. It is up to the concrete
+//! subclasses to set the appropriate values of \p R at each node in
+//! the model.
 class EarthquakePattern : public EQBasePattern
   {
   private:
-    Vector *uDotG; //!< Velocities.
-    Vector *uDotDotG; //!< Accelerations.
+    Vector uDotG; //!< Velocities.
+    Vector uDotDotG; //!< Accelerations.
     double currentTime;
 
 // AddingSensitivity:BEGIN //////////////////////////////////////////
@@ -82,15 +89,12 @@ class EarthquakePattern : public EQBasePattern
     EarthquakePattern(const EarthquakePattern &otro);
     EarthquakePattern &operator=(const EarthquakePattern &);
   protected:
-    void libera(void);
-    void alloc(const size_t &);
     void copia(const Vector *,const Vector *);
     int addMotion(GroundMotion &);
     int sendData(CommParameters &);
     int recvData(const CommParameters &);
   public:
     EarthquakePattern(int tag, int classTag);
-    virtual ~EarthquakePattern(void);
 
     virtual void applyLoad(double time);
     virtual bool addSFreedom_Constraint(SFreedom_Constraint *);

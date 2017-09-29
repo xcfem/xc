@@ -68,12 +68,19 @@ namespace XC {
 //
 //! @brief Load pattern for a earthquake with a similar
 //! excitation for all supports.
+//!
+//! A UniformExcitation is an object which adds the loads imposed
+//! by a single ground excitation to the model. For a UniformExcitation
+//! this means that the \p R matrix at each node will have \f$1\f$ column
+//! and all entries but those corresponding to the degree of freedom
+//! direction will be set to \f$0\f$, the value for the degree of freedom
+//! direction will be set to \f$1\f$.
 class UniformExcitation: public EarthquakePattern
   {
   private:
     GroundMotion *theMotion; //!< the ground motion
-    int theDof;      //!< the dof corresponding to the ground motion
-    double vel0;     //!< the initial velocity, should be neg of ug dot(0)
+    int theDof; //!< the dof corresponding to the ground motion
+    double vel0; //!< the initial velocity, should be neg of ug dot(0)
 
     UniformExcitation(const UniformExcitation &otro);
     UniformExcitation &operator=(const UniformExcitation &otro);

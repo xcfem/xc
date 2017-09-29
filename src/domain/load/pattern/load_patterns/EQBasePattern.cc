@@ -40,11 +40,11 @@ int XC::EQBasePattern::addMotion(GroundMotion &theMotion)
     return 0;
   }
 
-void XC::EQBasePattern::alloc(const size_t &sz)
-  { theMotions= DqGroundMotions(sz); }
-
 void XC::EQBasePattern::Print(std::ostream &s, int flag)
-  { std::cerr << "XC::EQBasePattern::Print() - not yet implemented\n"; }
+  {
+    std::cerr << nombre_clase() << "::" << __FUNCTION__
+	      << "; not yet implemented\n";
+  }
 
 //! @brief Send members through the channel being passed as parameter.
 int XC::EQBasePattern::sendData(CommParameters &cp)

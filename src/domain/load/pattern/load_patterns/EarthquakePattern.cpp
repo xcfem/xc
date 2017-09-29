@@ -67,59 +67,25 @@
 
 #include "utility/actor/actor/ArrayCommMetaData.h"
 
-void XC::EarthquakePattern::libera(void)
-  {
-    if(uDotG)
-      delete uDotG;
-    uDotG= nullptr;
-    if(uDotDotG)
-      delete uDotDotG;
-    uDotDotG= nullptr;
-  }
-
-void XC::EarthquakePattern::alloc(const size_t &sz)
-  {
-    libera();
-    if(sz)
-      {
-        uDotG= new Vector(sz);
-        uDotDotG= new Vector(sz);
-        if(uDotDotG == 0 || uDotDotG->Size() == 0 || uDotG == 0 || uDotG->Size() == 0)
-          std::cerr << "EarthquakePattern::alloc - ran out of memory creating vectors\n";
-      }
-  }
-
 void XC::EarthquakePattern::copia(const Vector *a,const Vector *b)
   {
-    libera();
     if(a)
-      {
-        uDotG= new Vector(*a);
-        if(!uDotG)
-          {
-            std::cerr << "EarthquakePattern::copia - ran out of memory constructing";
-            std::cerr << " vector uDotG of size: " << a->Size() << std::endl;
-          }
-      }
+      uDotG= Vector(*a);
     if(b)
-      {
-        uDotDotG= new Vector(*b);
-        if(!uDotDotG)
-          {
-            std::cerr << "EarthquakePattern::copia - ran out of memory constructing";
-            std::cerr << " vector uDotDotG of size: " << b->Size() << std::endl;
-          }
-      }
+      uDotDotG= Vector(*b);
   }
 
 XC::EarthquakePattern::EarthquakePattern(int tag, int _classTag)
-  :EQBasePattern(tag, _classTag), uDotG(nullptr), uDotDotG(nullptr), currentTime(0.0), parameterID(0) {}
+  :EQBasePattern(tag, _classTag), uDotG(), uDotDotG(), currentTime(0.0), parameterID(0) {}
 
-
-XC::EarthquakePattern::~EarthquakePattern(void)
-  { libera(); }
-
-
+//! @brief Applies the earthquake load.
+//!
+//! Obtains from each GroundMotion, the velocity and acceleration for the
+//! time specified. These values are placed in two Vectors of size equal
+//! to the number of GroundMotion objects. For each node in the Domain
+//! addInertiaLoadToUnbalance() is invoked with the acceleration Vector
+//! objects. SIMILAR OPERATION WITH VEL and ACCEL NEEDS TO BE INVOKED ON
+//! ELEMENTS .. NEED TO MODIFY ELEMENT INTERFACE
 void XC::EarthquakePattern::applyLoad(double time)
   {
     // see if quick return, i.e. no Ground Motions or domain set
@@ -139,25 +105,25 @@ void XC::EarthquakePattern::applyLoad(double time)
     // set the vel and accel vector
     for(size_t i=0;i<nMotions;i++)
       {
-        //    (*uDotG)(i) = theMotions[i]->getVel(currentTime);
-        (*uDotDotG)(i) = theMotions[i]->getAccel(currentTime);
+        //    (uDotG)(i) = theMotions[i]->getVel(currentTime);
+        (uDotDotG)(i) = theMotions[i]->getAccel(currentTime);
       }
 
     NodeIter &theNodes= theDomain->getNodes();
     Node *theNode= nullptr;
     while((theNode = theNodes()) != 0) 
-      theNode->addInertiaLoadToUnbalance(*uDotDotG, 1.0);
+      theNode->addInertiaLoadToUnbalance(uDotDotG, 1.0);
  
 
     ElementIter &theElements = theDomain->getElements();
     Element *theElement;
     while ((theElement = theElements()) != 0) 
-      theElement->addInertiaLoadToUnbalance(*uDotDotG);
+      theElement->addInertiaLoadToUnbalance(uDotDotG);
   }
     
 void XC::EarthquakePattern::applyLoadSensitivity(double time)
   {
-    // see if XC::quick return, i.e. no Ground Motions or domain set
+    // see if quick return, i.e. no Ground Motions or domain set
     const size_t nMotions= getNumMotions();
     if(nMotions == 0)
       return;
@@ -169,13 +135,13 @@ void XC::EarthquakePattern::applyLoadSensitivity(double time)
     // set the vel and accel vector
     for(size_t i=0; i<nMotions; i++)
       {
-        (*uDotG)(i) = theMotions[i]->getVel(time);
+        uDotG(i) = theMotions[i]->getVel(time);
         if(parameterID != 0)
           { // Something is random in the motions
-            (*uDotDotG)(i) = theMotions[i]->getAccelSensitivity(time);
+            uDotDotG(i) = theMotions[i]->getAccelSensitivity(time);
           }
         else
-          { (*uDotDotG)(i) = theMotions[i]->getAccel(time); }
+          { uDotDotG(i) = theMotions[i]->getAccel(time); }
       }
     bool somethingRandomInMotions = false;
     if(parameterID != 0)
@@ -185,38 +151,44 @@ void XC::EarthquakePattern::applyLoadSensitivity(double time)
     NodeIter &theNodes = theDomain->getNodes();
     Node *theNode;
     while((theNode = theNodes()) != 0) 
-      theNode->addInertiaLoadSensitivityToUnbalance(*uDotDotG, 1.0,  somethingRandomInMotions);
+      theNode->addInertiaLoadSensitivityToUnbalance(uDotDotG, 1.0,  somethingRandomInMotions);
 
     ElementIter &theElements = theDomain->getElements();
     Element *theElement;
     while((theElement = theElements()) != 0) 
-      theElement->addInertiaLoadSensitivityToUnbalance(*uDotDotG,  somethingRandomInMotions);
+      theElement->addInertiaLoadSensitivityToUnbalance(uDotDotG,  somethingRandomInMotions);
   }
     
+//! @brief Adds the GroundMotion, \p theMotion to the list of GroundMotion
+//! objects.
 int XC::EarthquakePattern::addMotion(GroundMotion &theMotion)
   {
     theMotions.addMotion(theMotion);
     const size_t nMotions= getNumMotions();
-    alloc(nMotions);
+    uDotG.resize(nMotions);
+    uDotDotG.resize(nMotions);
     return 0;
   }
 
 
 bool XC::EarthquakePattern::addSFreedom_Constraint(SFreedom_Constraint *)
   {
-    std::cerr << "XC::EarthquakePattern::addSFreedom_Constraint() - cannot add XC::SFreedom_Constraint to EQ pattern\n";
+    std::cerr << nombre_clase() << "::" << __FUNCTION__
+              << "; cannot add SFreedom_Constraint to EQ pattern.\n";
     return false;
   }
 
 bool XC::EarthquakePattern::addNodalLoad(NodalLoad *)
   {
-    std::cerr << "XC::EarthquakePattern::addNodalLoad() - cannot add XC::NodalLoad to EQ pattern\n";  
+    std::cerr << nombre_clase() << "::" << __FUNCTION__
+              << "; cannot add NodalLoad to EQ pattern.\n";  
     return false;
   }
 
 bool XC::EarthquakePattern::addElementalLoad(ElementalLoad *)
   {
-    std::cerr << "XC::EarthquakePattern::addElementalLoad() - cannot add XC::ElementalLoad to EQ pattern\n";    
+    std::cerr << nombre_clase() << "::" << __FUNCTION__
+              << "; cannot add ElementalLoad to EQ pattern.\n";    
     return false;
   }
 
@@ -224,9 +196,9 @@ bool XC::EarthquakePattern::addElementalLoad(ElementalLoad *)
 int XC::EarthquakePattern::sendData(CommParameters &cp)
   {
     int res= EQBasePattern::sendData(cp);
-    res+= cp.sendVectorPtr(uDotG,getDbTagData(),ArrayCommMetaData(17,18,19));
-    res+= cp.sendVectorPtr(uDotDotG,getDbTagData(),ArrayCommMetaData(20,21,22));
-    res+= cp.sendDouble(currentTime,getDbTagData(),CommMetaData(23));
+    res+= cp.sendVector(uDotG,getDbTagData(),CommMetaData(17));
+    res+= cp.sendVector(uDotDotG,getDbTagData(),CommMetaData(18));
+    res+= cp.sendDouble(currentTime,getDbTagData(),CommMetaData(19));
     return res;
   }
 
@@ -234,9 +206,9 @@ int XC::EarthquakePattern::sendData(CommParameters &cp)
 int XC::EarthquakePattern::recvData(const CommParameters &cp)
   {
     int res= EQBasePattern::recvData(cp);
-    uDotG= cp.receiveVectorPtr(uDotG,getDbTagData(),ArrayCommMetaData(17,18,19));
-    uDotDotG= cp.receiveVectorPtr(uDotDotG,getDbTagData(),ArrayCommMetaData(20,21,22));
-    res+= cp.receiveDouble(currentTime,getDbTagData(),CommMetaData(23));
+    res+= cp.receiveVector(uDotG,getDbTagData(),CommMetaData(17));
+    res+= cp.receiveVector(uDotDotG,getDbTagData(),CommMetaData(18));
+    res+= cp.receiveDouble(currentTime,getDbTagData(),CommMetaData(19));
     return res;
   }
 
@@ -256,7 +228,8 @@ int XC::EarthquakePattern::setParameter(const std::vector<std::string> &argv, Pa
       }
     else
       {
-        std::cerr << "Unknown parameter in XC::EarthquakePattern. " << std::endl;
+        std::cerr << nombre_clase() << "::" << __FUNCTION__
+                  << "; unknown parameter in EarthquakePattern." << std::endl;
         return -1;
       }
   }
