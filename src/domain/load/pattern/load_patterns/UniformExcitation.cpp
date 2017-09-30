@@ -71,11 +71,11 @@
 //! @brief Constructor.
 XC::UniformExcitation::UniformExcitation(int tag)
   :EarthquakePattern(tag, PATTERN_TAG_UniformExcitation),
-    theMotion(nullptr), theDof(0), vel0(0.0) {}
+   theMotion(nullptr), theDof(0), vel0(0.0), fact(1.0) {}
 
 //! @brief Constructor.
-XC::UniformExcitation::UniformExcitation(GroundMotion &_theMotion, int dof, int tag, double velZero)
-  :EarthquakePattern(tag, PATTERN_TAG_UniformExcitation), theMotion(&_theMotion), theDof(dof), vel0(velZero)
+XC::UniformExcitation::UniformExcitation(GroundMotion &_theMotion, int dof, int tag, double velZero, const double &f)
+  :EarthquakePattern(tag, PATTERN_TAG_UniformExcitation), theMotion(&_theMotion), theDof(dof), vel0(velZero), fact(f)
   {
     // add the motion to the list of ground motions
     addMotion(*theMotion);
@@ -99,10 +99,23 @@ void XC::UniformExcitation::setDomain(Domain *theDomain)
     EarthquakePattern::setDomain(theDomain);
 
     // now we go through and set all the node velocities to be vel0
+    // for those nodes not fixed in the dirn!
     if(vel0 != 0.0)
       {
+	 SP_ConstraintIter &theSPs = theDomain->getSPs();
+	 SP_Constraint *theSP;
+	 ID constrainedNodes(0);
+	 int count = 0;
+	 while((theSP=theSPs()) != 0)
+	   {
+	     if(theSP->getDOF_Number() == theDof)
+	       {
+	         constrainedNodes[count] = theSP->getNodeTag();
+	         count++;
+	       }
+	   }
         NodeIter &theNodes = theDomain->getNodes();
-        Node *theNode;
+        Node *theNode= nullptr;
         Vector newVel(1);
         int currentSize = 1;
         while ((theNode = theNodes()) != 0)
@@ -132,15 +145,61 @@ void XC::UniformExcitation::applyLoad(double time)
     Domain *theDomain = getDomain();
     if(theDomain)
       {
-        //if (numNodes != theDomain->getNumNodes()) {
-        NodeIter &theNodes = theDomain->getNodes();
-        Node *theNode= nullptr;
-        while((theNode = theNodes()) != 0)
-          {
-            theNode->setNumColR(1);
-            theNode->setR(theDof, 0, 1.0);
-          }
-        //  }
+	NodeIter &theNodes = theDomain->getNodes();
+	Node *theNode= nullptr;
+	while ((theNode = theNodes()) != 0)
+	  {
+	    theNode->setNumColR(1);
+	    const Vector &crds=theNode->getCrds();
+	    const int ndm= crds.Size();
+
+	    if(ndm == 1)
+	      {	theNode->setR(theDof, 0, fact); }
+	    else if(ndm == 2)
+	      {
+		if(theDof < 2)
+		  { theNode->setR(theDof, 0, fact); }
+		else if(theDof == 2)
+		  {
+		    const double xCrd = crds(0);
+		    const double yCrd = crds(1);
+		    theNode->setR(0, 0, -fact*yCrd);
+		    theNode->setR(1, 0, fact*xCrd);
+		    theNode->setR(2, 0, fact);
+		  }
+	      }
+	    else if(ndm == 3)
+	      {
+		if(theDof < 3)
+		  {
+		    theNode->setR(theDof, 0, fact);
+		  }
+		else if(theDof == 3)
+		  {
+		    const double yCrd = crds(1);
+		    const double zCrd = crds(2);
+		    theNode->setR(1, 0, -fact*zCrd);
+		    theNode->setR(2, 0, fact*yCrd);
+		    theNode->setR(3, 0, fact);
+		  }
+		else if(theDof == 4)
+		  {
+		    const double xCrd = crds(0);
+		    const double zCrd = crds(2);
+		    theNode->setR(0, 0, fact*zCrd);
+		    theNode->setR(2, 0, -fact*xCrd);
+		    theNode->setR(4, 0, fact);
+		  }
+		else if(theDof == 5)
+		  {
+		    const double xCrd = crds(0);
+		    const double yCrd = crds(1);
+		    theNode->setR(0, 0, -fact*yCrd);
+		    theNode->setR(1, 0, fact*xCrd);
+		    theNode->setR(5, 0, fact);
+		  }
+	      }
+	  }
         EarthquakePattern::applyLoad(time);
       }
     return;
@@ -153,7 +212,7 @@ void XC::UniformExcitation::applyLoadSensitivity(double time)
     if(theDomain)
       {
 
-        //if (numNodes != theDomain->getNumNodes()) {
+        //if(numNodes != theDomain->getNumNodes()) {
         NodeIter &theNodes = theDomain->getNodes();
         Node *theNode;
         while((theNode = theNodes()) != 0)
@@ -171,7 +230,7 @@ int XC::UniformExcitation::sendData(CommParameters &cp)
   {
     int res= EarthquakePattern::sendData(cp);
     res+= cp.sendInt(theDof,getDbTagData(),CommMetaData(23));
-    res+= cp.sendDouble(vel0,getDbTagData(),CommMetaData(24));
+    res+= cp.sendDoubles(vel0,fact,getDbTagData(),CommMetaData(24));
     res+= sendGroundMotionPtr(theMotion,getDbTagData(),cp,BrokedPtrCommMetaData(25,26,27));
     return res;
   }
@@ -181,7 +240,7 @@ int XC::UniformExcitation::recvData(const CommParameters &cp)
   {
     int res= EarthquakePattern::recvData(cp);
     res+= cp.receiveInt(theDof,getDbTagData(),CommMetaData(23));
-    res+= cp.receiveDouble(vel0,getDbTagData(),CommMetaData(24));
+    res+= cp.receiveDoubles(vel0,fact,getDbTagData(),CommMetaData(24));
     theMotion= receiveGroundMotionPtr(theMotion,getDbTagData(),cp,BrokedPtrCommMetaData(25,26,27));
     return res;
   }

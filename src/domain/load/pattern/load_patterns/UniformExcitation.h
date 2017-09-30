@@ -81,6 +81,7 @@ class UniformExcitation: public EarthquakePattern
     GroundMotion *theMotion; //!< the ground motion
     int theDof; //!< the dof corresponding to the ground motion
     double vel0; //!< the initial velocity, should be neg of ug dot(0)
+    double fact; //!< factor that multiplies the signal.
 
     UniformExcitation(const UniformExcitation &otro);
     UniformExcitation &operator=(const UniformExcitation &otro);
@@ -90,7 +91,7 @@ class UniformExcitation: public EarthquakePattern
 
   public:
     UniformExcitation(int tag= 0);
-    UniformExcitation(GroundMotion &theMotion, int dof, int tag, double vel0 = 0.0);
+    UniformExcitation(GroundMotion &theMotion, int dof, int tag, double vel0 = 0.0, const double &fact= 1.0);
 
     GroundMotion &getGroundMotionRecord(void);
     
@@ -105,11 +106,17 @@ class UniformExcitation: public EarthquakePattern
     inline int getDof(void) const
       { return theDof; }
     //! @brief set initial velocity.
-    inline void setInitialVelocity(const int &v0)
+    inline void setInitialVelocity(const double &v0)
       { vel0= v0; }
     //! @brief return initial velocity.
-    inline int getInitialVelocity(void) const
+    inline double getInitialVelocity(void) const
       { return vel0; }
+    //! @brief set multiplication factor.
+    inline void setFactor(const double &f)
+      { fact= f; }
+    //! @brief return multiplication factor.
+    inline double getFactor(void) const
+      { return fact; }
     int sendSelf(CommParameters &);
     int recvSelf(const CommParameters &);
 
