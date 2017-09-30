@@ -90,35 +90,34 @@ void XC::EarthquakePattern::applyLoad(double time)
   {
     // see if quick return, i.e. no Ground Motions or domain set
     const size_t nMotions= getNumMotions();
-    if(nMotions == 0)
-      return;
-
-    // check if setLoadConstant() has been called
-    if(!isConstant)
-      currentTime = time;
-
-    Domain *theDomain= getDomain();
-    if(!theDomain)
-      return;
-
-
-    // set the vel and accel vector
-    for(size_t i=0;i<nMotions;i++)
+    if(nMotions>0)
       {
-        //    (uDotG)(i) = theMotions[i]->getVel(currentTime);
-        (uDotDotG)(i) = theMotions[i]->getAccel(currentTime);
+        // check if setLoadConstant() has been called
+        if(!isConstant)
+          currentTime = time;
+
+	Domain *theDomain= getDomain();
+	if(theDomain)
+	  {
+	    // set the vel and accel vector
+	    for(size_t i=0;i<nMotions;i++)
+	      {
+		//    (uDotG)(i) = theMotions[i]->getVel(currentTime);
+		(uDotDotG)(i) = theMotions[i]->getAccel(currentTime);
+	      }
+
+	    NodeIter &theNodes= theDomain->getNodes();
+	    Node *theNode= nullptr;
+	    while((theNode = theNodes()) != 0) 
+	      theNode->addInertiaLoadToUnbalance(uDotDotG, 1.0);
+
+
+	    ElementIter &theElements = theDomain->getElements();
+	    Element *theElement= nullptr;
+	    while ((theElement = theElements()) != 0) 
+	      theElement->addInertiaLoadToUnbalance(uDotDotG);
+	  }
       }
-
-    NodeIter &theNodes= theDomain->getNodes();
-    Node *theNode= nullptr;
-    while((theNode = theNodes()) != 0) 
-      theNode->addInertiaLoadToUnbalance(uDotDotG, 1.0);
- 
-
-    ElementIter &theElements = theDomain->getElements();
-    Element *theElement;
-    while ((theElement = theElements()) != 0) 
-      theElement->addInertiaLoadToUnbalance(uDotDotG);
   }
     
 void XC::EarthquakePattern::applyLoadSensitivity(double time)
