@@ -153,7 +153,7 @@ int XC::ElasticSection2d::sendSelf(CommParameters &cp)
 
     res+= cp.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
-      std::cerr << nombre_clase() << "::" << __FUNCTION__
+      std::cerr << getClassName() << "::" << __FUNCTION__
 		    << "; failed to send data\n";
     return res;
   }
@@ -166,14 +166,14 @@ int XC::ElasticSection2d::recvSelf(const CommParameters &cp)
     int res= cp.receiveIdData(getDbTagData(),dataTag);
 
     if(res<0)
-      std::cerr << nombre_clase() << "::" << __FUNCTION__
+      std::cerr << getClassName() << "::" << __FUNCTION__
 	        << "; failed to receive ids.\n";
     else
       {
         setTag(getDbTagDataPos(0));
         res+= recvData(cp);
         if(res<0)
-          std::cerr << nombre_clase() << "::" << __FUNCTION__
+          std::cerr << getClassName() << "::" << __FUNCTION__
 		    << "; failed to receive data.\n";
       }
     return res;

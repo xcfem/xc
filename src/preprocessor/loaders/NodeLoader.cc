@@ -91,7 +91,7 @@ XC::Node *XC::NodeLoader::duplicateNode(const int &tagNodoOrg)
     Node *retval= nullptr;
     Node *org_node_ptr= getDomain()->getNode(tagNodoOrg);
     if(!org_node_ptr)
-      std::cerr << nombre_clase() << "::" << __FUNCTION__
+      std::cerr << getClassName() << "::" << __FUNCTION__
 	        << "; node identified by:"
                 << tagNodoOrg << " not found." << std::endl;
     else
@@ -179,7 +179,7 @@ XC::Node *XC::NodeLoader::newNode(const Vector &coo)
     else if(sz>=3)
       retval= newNode(coo[0],coo[1],coo[2]);
     else
-      std::cerr << nombre_clase() << "::" << __FUNCTION__ << "; vector empty."
+      std::cerr << getClassName() << "::" << __FUNCTION__ << "; vector empty."
                 << std::endl;
     return retval;
   }

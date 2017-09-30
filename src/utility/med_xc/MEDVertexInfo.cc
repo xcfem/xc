@@ -70,7 +70,7 @@ void XC::MEDVertexInfo::new_vertice(size_t i,const std::vector<double> &coo)
         new_tag(i);
       }
     else
-      std::cerr << nombre_clase() << "::" << __FUNCTION__
+      std::cerr << getClassName() << "::" << __FUNCTION__
 	        << "; " << spaceDimension << " components expected "
                 << sz << " obtained." << std::endl;
   }

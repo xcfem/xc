@@ -133,7 +133,7 @@ const XC::BeamIntegration *XC::ProtoElementLoader::get_ptr_beam_integrator(void)
       retval= iInteg->second;
     else
       if(verbosity>0)
-        std::cerr << nombre_clase() << "::" << __FUNCTION__
+        std::cerr << getClassName() << "::" << __FUNCTION__
 	          << "; integrator named: '" 
                   << nmb_integ << "' not found.\n";
     return retval;
@@ -156,7 +156,7 @@ const XC::CrdTransf *XC::ProtoElementLoader::get_ptr_transf_coo(void) const
       retval= itrf->second;
     else
       if(verbosity>0)
-        std::cerr << nombre_clase() << "::" << __FUNCTION__
+        std::cerr << getClassName() << "::" << __FUNCTION__
 	          << "; coordinate transformation named: '" 
                   << nmb_transf << "' not found.\n";
     return retval;
@@ -215,7 +215,7 @@ void materialNotSuitableMsg(const std::string &errHeader, const std::string &mat
 XC::Element *XC::ProtoElementLoader::create_element(const std::string &cmd,int tag_elem)
   {
     Element *retval= nullptr;
-    const std::string errHeader= nombre_clase() + "::" + __FUNCTION__;
+    const std::string errHeader= getClassName() + "::" + __FUNCTION__;
     if((cmd == "truss")||(cmd=="Truss"))
       {
 	if(cmd=="truss")
@@ -432,7 +432,7 @@ XC::Element *XC::ProtoElementLoader::newElement(const std::string &tipo,const ID
           }
       }
     else
-      std::cerr << nombre_clase() << "::" << __FUNCTION__
+      std::cerr << getClassName() << "::" << __FUNCTION__
 	        << "; ERROR the element: "
                 << tag_elem << " already exists.\n";
     return retval;

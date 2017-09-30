@@ -95,7 +95,7 @@ XC::DeformationPlane XC::PrismaticBarCrossSection::getDeformationPlane(void) con
 double XC::PrismaticBarCrossSection::getStrain(const double &y,const double &z) const
   {
     std::cerr << "getStrain not implemented for class: "
-              << nombre_clase() << std::endl;
+              << getClassName() << std::endl;
     return 0.0;
   }
 

@@ -79,7 +79,7 @@ void XC::EntMdlr::set_indice(const size_t &i)
 //! @brief Interfaz con VTK.
 int XC::EntMdlr::getVtkCellType(void) const
   {
-    std::cerr << nombre_clase() << "::" << __FUNCTION__
+    std::cerr << getClassName() << "::" << __FUNCTION__
               << "; must be overloaded in derived classes."
 	      << std::endl;
     return VTK_EMPTY_CELL;
@@ -88,7 +88,7 @@ int XC::EntMdlr::getVtkCellType(void) const
 //! @brief Interfaz con el formato MED de Salome.
 int XC::EntMdlr::getMEDCellType(void) const
   {
-    std::cerr << nombre_clase() << "::" << __FUNCTION__
+    std::cerr << getClassName() << "::" << __FUNCTION__
 	      << "; must be overloaded in derived classes."
 	      << std::endl;
     return MED_NONE;
@@ -101,7 +101,7 @@ int XC::EntMdlr::getMEDCellType(void) const
 //! @param tol: tolerance.
 bool XC::EntMdlr::In(const GeomObj3d &geomObj, const double &tol) const
   {
-    std::cerr << nombre_clase() << "::" << __FUNCTION__
+    std::cerr << getClassName() << "::" << __FUNCTION__
 	      << "; not implemented yet."
 	      << std::endl;
     return false;
@@ -114,7 +114,7 @@ bool XC::EntMdlr::In(const GeomObj3d &geomObj, const double &tol) const
 //! @param tol: tolerance.
 bool XC::EntMdlr::Out(const GeomObj3d &geomObj, const double &tol) const
   {
-    std::cerr << nombre_clase() << "::" << __FUNCTION__
+    std::cerr << getClassName() << "::" << __FUNCTION__
 	      << "; not implemented yet."
 	      << std::endl;
     return false;
@@ -258,12 +258,12 @@ XC::SetEstruct *XC::EntMdlr::create_set_fila(const RangoTritriz &rango,const std
             retval= map_set.create_set_estruct(GetVarRefFilaK(rango,nmb));
           }
         else
-	  std::cerr << nombre_clase() << "::" << __FUNCTION__
+	  std::cerr << getClassName() << "::" << __FUNCTION__
 	            << "; can't create row set." << std::endl;
       }
     else
       {
-	std::cerr << nombre_clase() << "::" << __FUNCTION__
+	std::cerr << getClassName() << "::" << __FUNCTION__
 		  << "; preprocessor undefined." << std::endl;
         return nullptr;
       }
@@ -309,13 +309,13 @@ void XC::EntMdlr::create_nodes(const TritrizPos3d &posiciones)
             for(register size_t k= 1;k<=cols;k++)
               create_node(posiciones(i,j,k),i,j,k);
         if(verbosity>5)
-	  std::cerr << nombre_clase() << "::" << __FUNCTION__
+	  std::cerr << getClassName() << "::" << __FUNCTION__
 		    << "; created " << ttzNodes.NumPtrs() << " node(s)."
 		    << std::endl;
       }
     else
       if(verbosity>2)
-        std::clog << nombre_clase() << "::" << __FUNCTION__
+        std::clog << getClassName() << "::" << __FUNCTION__
 	          << "; nodes from entity: '" << getName()
 		  << "' already exist." << std::endl;
   }
@@ -328,7 +328,7 @@ bool XC::EntMdlr::create_elements(meshing_dir dm)
     if(!ttzNodes.empty())
       {
         if(ttzNodes.HasNull())
-          std::cerr << nombre_clase() << "::" << __FUNCTION__
+          std::cerr << getClassName() << "::" << __FUNCTION__
 	            << "; there are null pointers."
                     << " Elements were not created." << std::endl;
         else
@@ -347,22 +347,22 @@ bool XC::EntMdlr::create_elements(meshing_dir dm)
                       retval= true;
                     }
                   else if(verbosity>0)
-                    std::clog << nombre_clase() << "::" << __FUNCTION__
+                    std::clog << getClassName() << "::" << __FUNCTION__
 		              << "; seed element not set." << std::endl;
                   if(verbosity>4)
                     std::clog << "created." << std::endl;
                 }
               else
-                std::cerr << nombre_clase() << "::" << __FUNCTION__
+                std::cerr << getClassName() << "::" << __FUNCTION__
 		          << "; preprocessor undefined." << std::endl;
             }
       }
     else
-      std::cerr << nombre_clase() << "::" << __FUNCTION__
+      std::cerr << getClassName() << "::" << __FUNCTION__
 		<< "; there is no nodes for the elements." << std::endl;
     const size_t numElements= ttzElements.NumPtrs();
     if(numElements==0 && verbosity>0)
-      std::clog << nombre_clase() << "::" << __FUNCTION__
+      std::clog << getClassName() << "::" << __FUNCTION__
 	        << "; warning 0 elements created for line: " << getName()
 	        << std::endl;
 
@@ -400,7 +400,7 @@ void XC::EntMdlr::create_points(const MatrizPos3d &posiciones)
             }
       }
     else
-      std::cerr << nombre_clase() << __FUNCTION__
+      std::cerr << getClassName() << __FUNCTION__
 	        << "; preprocessor needed." << std::endl;
     if(verbosity>4)
       std::clog << "creados." << std::endl;
@@ -431,7 +431,7 @@ XC::SetFilaK XC::EntMdlr::GetVarRefFilaK(const RangoTritriz &rango,const std::st
 //! the position being passed as parameter.
 double XC::EntMdlr::DistanciaA2(const Pos3d &pt) const
   {
-    std::cerr << nombre_clase() << "::" << __FUNCTION__
+    std::cerr << getClassName() << "::" << __FUNCTION__
               << "; not implemented." << std::endl;
     return 0.0;
   }

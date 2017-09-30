@@ -98,7 +98,7 @@ int XC::SystemOfEqn::checkSize(Graph &theGraph) const
   {
     const int retval= theGraph.getNumVertex();
     if(retval==0)
-      std::cerr << "WARNING! " << nombre_clase() << "::" << __FUNCTION__
+      std::cerr << "WARNING! " << getClassName() << "::" << __FUNCTION__
 	        << "; model has zero DOFs, add nodes or reduce constraints." << std::endl;
     return retval;
   }

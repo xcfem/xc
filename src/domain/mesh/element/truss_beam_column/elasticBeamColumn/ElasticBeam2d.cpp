@@ -238,13 +238,13 @@ void XC::ElasticBeam2d::setDomain(Domain *theDomain)
         double L= theCoordTransf->getInitialLength();
         if(L == 0.0)
           {
-            std::cerr << nombre_clase() << "::" << __FUNCTION__
+            std::cerr << getClassName() << "::" << __FUNCTION__
 		      << "; element has zero length\n";
             exit(-1);
           }
       }
     else
-      std::cerr << nombre_clase() << "::" << __FUNCTION__
+      std::cerr << getClassName() << "::" << __FUNCTION__
 	        << "; the element has not coordinate transformation."
 		<< std::endl;
    }
@@ -294,7 +294,7 @@ int XC::ElasticBeam2d::update(void)
 const XC::Vector &XC::ElasticBeam2d::getVDirStrongAxisGlobalCoord(bool initialGeometry) const
   {
     if(!initialGeometry)
-      std::cerr << nombre_clase() << "::" << __FUNCTION__
+      std::cerr << getClassName() << "::" << __FUNCTION__
                 << "; not implemented for deformed geometry." << std::endl;
     if(theCoordTransf)
       {
@@ -303,7 +303,7 @@ const XC::Vector &XC::ElasticBeam2d::getVDirStrongAxisGlobalCoord(bool initialGe
       }
     else
       {
-        std::cerr << nombre_clase() << "::" << __FUNCTION__
+        std::cerr << getClassName() << "::" << __FUNCTION__
 	          << "; coordinate transformation not defined."
                   << std::endl;
         return P;
@@ -315,7 +315,7 @@ const XC::Vector &XC::ElasticBeam2d::getVDirStrongAxisGlobalCoord(bool initialGe
 const XC::Vector &XC::ElasticBeam2d::getVDirWeakAxisGlobalCoord(bool initialGeometry) const
   {
     if(!initialGeometry)
-      std::cerr << nombre_clase() << "::" << __FUNCTION__
+      std::cerr << getClassName() << "::" << __FUNCTION__
                 << "; not implemented for deformed geometry." << std::endl;
     if(theCoordTransf)
       {
@@ -324,7 +324,7 @@ const XC::Vector &XC::ElasticBeam2d::getVDirWeakAxisGlobalCoord(bool initialGeom
       }
     else
       {
-        std::cerr << nombre_clase() << "::" << __FUNCTION__
+        std::cerr << getClassName() << "::" << __FUNCTION__
 	          << "; coordinate transformation not defined."
                   << std::endl;
         return P;
@@ -424,7 +424,7 @@ void XC::ElasticBeam2d::zeroLoad(void)
 int XC::ElasticBeam2d::addLoad(ElementalLoad *theLoad, double loadFactor)
   {
     if(isDead())
-      std::cerr << nombre_clase() 
+      std::cerr << getClassName() 
                 << "; load over inactive element: "
                 << getTag()  
                 << std::endl;

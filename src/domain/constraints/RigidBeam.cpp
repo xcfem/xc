@@ -76,7 +76,7 @@ XC::Matrix XC::RigidBeam::setup_matrix(int numDOF,const Vector &crdR,const Vecto
 
     if(dimR != dimC)
       {
-        std::cerr << nombre_clase() << "::" << __FUNCTION__
+        std::cerr << getClassName() << "::" << __FUNCTION__
 	          << "; mismatch in dimension "
 		  << "between constrained node " <<  getNodeConstrained()
 		  <<  " and retained node" << getNodeRetained() << std::endl;
@@ -86,7 +86,7 @@ XC::Matrix XC::RigidBeam::setup_matrix(int numDOF,const Vector &crdR,const Vecto
     // check the number of dof at the nodes >= dimension of problem
     if(numDOF < dimR)
       {    
-	std::cerr << nombre_clase() << "::" << __FUNCTION__
+	std::cerr << getClassName() << "::" << __FUNCTION__
 		  << "; numDOF at nodes " << getNodeRetained()
 		  << " and " <<  getNodeConstrained()
 		  <<  "must be >= dimension of problem\n";
@@ -130,7 +130,7 @@ XC::Matrix XC::RigidBeam::setup_matrix(int numDOF,const Vector &crdR,const Vecto
           }
         else
           { // not valid
-            std::cerr << nombre_clase() << "::" << __FUNCTION__
+            std::cerr << getClassName() << "::" << __FUNCTION__
 		      << "; for nodes " << getNodeRetained()
 		      << "and " << getNodeConstrained()
 		      <<  "nodes do not have valid numDOF for their dimension\n";
@@ -140,7 +140,7 @@ XC::Matrix XC::RigidBeam::setup_matrix(int numDOF,const Vector &crdR,const Vecto
     // check the number of dof at the nodes >= dimension of problem
     if(numDOF < dimR)
       {
-        std::cerr << nombre_clase() << "::" << __FUNCTION__
+        std::cerr << getClassName() << "::" << __FUNCTION__
 		  << "; numDOF at nodes " << getNodeRetained()
 		  << " and " <<  getNodeConstrained()
 		  <<  "must be >= dimension of problem\n";

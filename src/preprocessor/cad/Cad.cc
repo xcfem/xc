@@ -85,11 +85,11 @@ XC::Edge *XC::Cad::busca_edge_extremos(const MapPuntos::Indice &pA,const MapPunt
     else
       {
         if(!p1)
-          std::cerr << nombre_clase() << "::" << __FUNCTION__
+          std::cerr << getClassName() << "::" << __FUNCTION__
 		    << "; point identified by : "
                     << pA << " not found." << std::endl;
         if(!p2)
-          std::cerr << nombre_clase() << "::" << __FUNCTION__
+          std::cerr << getClassName() << "::" << __FUNCTION__
 		    << "; point identified by : "
                     << pB << " not found." << std::endl;
       }
@@ -108,11 +108,11 @@ const XC::Edge *XC::Cad::busca_edge_extremos(const MapPuntos::Indice &pA,const M
     else
       {
         if(!p1)
-          std::cerr << nombre_clase() << "::" << __FUNCTION__
+          std::cerr << getClassName() << "::" << __FUNCTION__
 		    << "; point identified by : "
                     << pA << " not found." << std::endl;
         if(!p2)
-          std::cerr << nombre_clase() << "::" << __FUNCTION__
+          std::cerr << getClassName() << "::" << __FUNCTION__
 		    << "; point identified by : "
                     << pB << " not found." << std::endl;
       }

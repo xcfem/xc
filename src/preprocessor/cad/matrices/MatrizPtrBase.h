@@ -117,7 +117,7 @@ bool MatrizPtrBase<T>::HasNull(void) const
 template <class T>
 std::vector<int> XC::MatrizPtrBase<T>::getTagsObjsFila(const size_t &f)
   {
-    const std::string nmbBlq= nombre_clase()+":objetos_fila:"+boost::lexical_cast<std::string>(f);
+    const std::string nmbBlq= getClassName()+":objetos_fila:"+boost::lexical_cast<std::string>(f);
     const size_t numCols= this->getNumCols();
     std::vector<int> retval(numCols);
     for(size_t i= 1;i<=numCols;i++)
@@ -130,7 +130,7 @@ std::vector<int> XC::MatrizPtrBase<T>::getTagsObjsFila(const size_t &f)
 template <class T>
 std::vector<int>  XC::MatrizPtrBase<T>::getTagsObjsColumna(const size_t &c)
   {
-    const std::string nmbBlq= nombre_clase()+":objetos_columna:"+boost::lexical_cast<std::string>(c);
+    const std::string nmbBlq= getClassName()+":objetos_columna:"+boost::lexical_cast<std::string>(c);
     const size_t numFilas= this->getNumFilas();
     std::vector<int> retval(numFilas);
     for(size_t i= 1;i<=numFilas;i++)
@@ -143,7 +143,7 @@ std::vector<int>  XC::MatrizPtrBase<T>::getTagsObjsColumna(const size_t &c)
 template <class T>
 std::vector<int> XC::MatrizPtrBase<T>::getTagsObjsInterioresFila(const size_t &f)
   {
-    const std::string nmbBlq= nombre_clase()+":objetos_interiores_fila:"+boost::lexical_cast<std::string>(f);
+    const std::string nmbBlq= getClassName()+":objetos_interiores_fila:"+boost::lexical_cast<std::string>(f);
     const size_t numCols= this->getNumCols();
     std::vector<int> retval(numCols-2);
     for(size_t i= 2;i<numCols;i++)
@@ -156,7 +156,7 @@ std::vector<int> XC::MatrizPtrBase<T>::getTagsObjsInterioresFila(const size_t &f
 template <class T>
 std::vector<int> XC::MatrizPtrBase<T>::getTagsObjsInterioresColumna(const size_t &c)
   {
-    const std::string nmbBlq= nombre_clase()+":objetos_interiores_columna:"+boost::lexical_cast<std::string>(c);
+    const std::string nmbBlq= getClassName()+":objetos_interiores_columna:"+boost::lexical_cast<std::string>(c);
     const size_t numFilas= this->getNumFilas();
     std::vector<int> retval(numFilas-2);
     for(size_t i= 2;i<numFilas;i++)

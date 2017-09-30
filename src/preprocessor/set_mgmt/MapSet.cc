@@ -77,7 +77,7 @@ XC::SetBase &XC::MapSet::getSet(const std::string &nmb)
     SetBase *retval= busca_set(nmb);
     if(!retval)
       {
-	std::cerr << nombre_clase() << "::" << __FUNCTION__
+	std::cerr << getClassName() << "::" << __FUNCTION__
 	          << "; set named '"
                   << nmb << "' not found. Total set returned." << std::endl;
         retval= total;
@@ -116,7 +116,7 @@ void XC::MapSet::abre_set(const std::string &nmb)
   {
     SetBase *tmp =nullptr;
     if(!exists(nmb)) //Set doesn't exists.
-      std::cerr << nombre_clase() << "::" << __FUNCTION__
+      std::cerr << getClassName() << "::" << __FUNCTION__
 		<< "; the set: '"
                 << nmb << "' doesn't exists.\n";
     else //The set exists
@@ -129,7 +129,7 @@ void XC::MapSet::abre_set(const std::string &nmb)
 void XC::MapSet::cierra_set(const std::string &nmb)
   {
     if(!exists(nmb)) //Set doesn't exists.
-      std::cerr << nombre_clase() << "::" << __FUNCTION__
+      std::cerr << getClassName() << "::" << __FUNCTION__
 		<< "; the set: '"
                 << nmb << "' doesn't exists.\n";
     else //The set exists
@@ -139,7 +139,7 @@ void XC::MapSet::cierra_set(const std::string &nmb)
           abiertos.erase(i);
         else
           if(verbosity>1)
-	    std::cerr << nombre_clase() << "::" << __FUNCTION__
+	    std::cerr << getClassName() << "::" << __FUNCTION__
 		      << "; the set: '"
                       << nmb << "' is already closed.\n";
       }
@@ -151,7 +151,7 @@ XC::SetEstruct *XC::MapSet::create_set_estruct(const SetEstruct &set_estruct)
     const std::string nmb= set_estruct.getName();
     if(exists(nmb)) //The set exists
       {
-	std::cerr << nombre_clase() << "::" << __FUNCTION__
+	std::cerr << getClassName() << "::" << __FUNCTION__
 		  << "; the set: " << nmb
 		  << " already exists. Doing nothing." << std::endl;
         return nullptr;
@@ -177,7 +177,7 @@ XC::SetBase *XC::MapSet::broke_set(const std::string &nmb,const std::string &nmb
 //         else if(nmb_clase == "XC::SetEstruct")
 //           retval= new SetEstruct(nmb,getPreprocessor());
         else
-	  std::cerr << nombre_clase() << "::" << __FUNCTION__
+	  std::cerr << getClassName() << "::" << __FUNCTION__
 	            << "; class name: '"
                     << nmb_clase << "' unknown." << std::endl;
       }
@@ -191,7 +191,7 @@ XC::EntMdlr *XC::MapSet::inserta_ent_mdlr(EntMdlr *ent_mdlr)
     const std::string nmb= ent_mdlr->getName();
     if(exists(nmb)) //The set exists
       {
-	std::cerr << nombre_clase() << "::" << __FUNCTION__
+	std::cerr << getClassName() << "::" << __FUNCTION__
 		  << "the set: " << nmb
 		  << " already exists. New set not inserted." << std::endl;
         return nullptr;
@@ -254,7 +254,7 @@ void XC::MapSet::removeSet(const std::string &nmb)
         sets.erase(nmb);
       }
     else
-      std::cerr << nombre_clase() << "::" << __FUNCTION__
+      std::cerr << getClassName() << "::" << __FUNCTION__
 		<< "; ERROR set named: "
                 << nmb << " not found." << std::endl;
   }
@@ -320,7 +320,7 @@ const std::deque<std::string> &XC::MapSet::getSetsClassNames(void)
         // loop over sets in map adding their classTag to the ID
         for(const_iterator i= begin();i!=end();i++)
           {
-            setsClassNames[loc]= (*i).second->nombre_clase();
+            setsClassNames[loc]= (*i).second->getClassName();
             loc++;
           }
       }
@@ -346,7 +346,7 @@ int XC::MapSet::sendSetsDbTags(int posDbTag,CommParameters &cp)
         res+= cp.sendID(setsDbTags,getDbTagData(),CommMetaData(posDbTag));
       }
     if(res<0)
-      std::cerr << nombre_clase() << "::" << __FUNCTION__
+      std::cerr << getClassName() << "::" << __FUNCTION__
 		<< "; ch failed to send the IDs.\n";
     return res;
   }
@@ -362,7 +362,7 @@ int XC::MapSet::sendSetsClassNames(int posDbTag,CommParameters &cp)
         res+= cp.sendStrings(setsClassNames,getDbTagData(),CommMetaData(posDbTag));
       }
     if(res<0)
-      std::cerr << nombre_clase() << "::" << __FUNCTION__
+      std::cerr << getClassName() << "::" << __FUNCTION__
 		<< "; ch failed to send the IDs.\n";
     return res;
   }
@@ -375,7 +375,7 @@ int XC::MapSet::receiveSetsDbTags(int posDbTag,int size,const CommParameters &cp
     if(size>0)
       res= cp.receiveID(setsDbTags,getDbTagData(),CommMetaData(posDbTag));
     if(res<0)
-      std::cerr << nombre_clase() << "::" << __FUNCTION__
+      std::cerr << getClassName() << "::" << __FUNCTION__
 		<< "; ch failed to receive the IDs.\n";
     return res;
   }
@@ -388,7 +388,7 @@ int XC::MapSet::receiveSetsClassNames(int posDbTag,int size,const CommParameters
     if(size>0)
       res= cp.receiveStrings(setsClassNames,getDbTagData(),CommMetaData(posDbTag));
     if(res<0)
-      std::cerr << nombre_clase() << "::" << __FUNCTION__
+      std::cerr << getClassName() << "::" << __FUNCTION__
 		<< "; ch failed to receive the IDs.\n";
     return res;
   }
@@ -425,7 +425,7 @@ int XC::MapSet::receiveSets(int posDbTag1, int posDbTag2, int posDbTag3,const in
         if(tmp)
           cp.receiveMovable(*tmp,tags,CommMetaData(loc));
         else
-	  std::cerr << nombre_clase() << "::" << __FUNCTION__
+	  std::cerr << getClassName() << "::" << __FUNCTION__
 		    << "; error receiving set: '" << *i << "'.\n";
       }
     return res;
@@ -497,7 +497,7 @@ int XC::MapSet::sendSelf(CommParameters &cp)
 
     res+= cp.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
-      std::cerr << nombre_clase() << "::" << __FUNCTION__
+      std::cerr << getClassName() << "::" << __FUNCTION__
 		<< "; failed to send data\n";
     return res;
   }
@@ -510,14 +510,14 @@ int XC::MapSet::recvSelf(const CommParameters &cp)
     int res= cp.receiveIdData(getDbTagData(),dataTag);
 
     if(res<0)
-      std::cerr << nombre_clase() << "::" << __FUNCTION__
+      std::cerr << getClassName() << "::" << __FUNCTION__
 		<< "; failed to receive ids.\n";
     else
       {
         //setTag(getDbTagDataPos(0));
         res+= recvData(cp);
         if(res<0)
-          std::cerr << nombre_clase() << "::" << __FUNCTION__
+          std::cerr << getClassName() << "::" << __FUNCTION__
 		    << "; failed to receive data.\n";
       }
     return res;

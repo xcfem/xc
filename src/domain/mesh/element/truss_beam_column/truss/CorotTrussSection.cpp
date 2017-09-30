@@ -78,7 +78,7 @@ XC::CorotTrussSection::CorotTrussSection(int tag, int dim,int Nd1, int Nd2, Sect
     theSection = theSec.getCopy();
     if(!theSection)
       {
-        std::cerr << nombre_clase() << "::" << __FUNCTION__
+        std::cerr << getClassName() << "::" << __FUNCTION__
 		  << "FATAL element " << tag
 		  << " failed to get a copy of material with tag "
 		  << theSec.getTag() << std::endl;
@@ -242,7 +242,7 @@ int XC::CorotTrussSection::commitState()
     // call element commitState to do any base class stuff
     if((retVal = this->XC::Element::commitState()) != 0)
       {
-        std::cerr << nombre_clase() << "::" << __FUNCTION__
+        std::cerr << getClassName() << "::" << __FUNCTION__
 	          << "; failed in base class." << std::endl;
       }
     retVal = theSection->commitState();

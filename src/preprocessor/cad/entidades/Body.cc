@@ -204,13 +204,13 @@ BND3d XC::Body::Bnd(void) const
     const size_t nv= NumVertices();
     if(nv<1) //the set is empty.
       {
-	std::cerr << nombre_clase() << "::" << __FUNCTION__
+	std::cerr << getClassName() << "::" << __FUNCTION__
 		  << "; body is empty." << std::endl;
         return retval;
       }
     if(nv<2)
       {
-	std::cerr << nombre_clase() << "::" << __FUNCTION__
+	std::cerr << getClassName() << "::" << __FUNCTION__
 		  << "; body has only one point." << std::endl;
         retval= BND3d(GetVertice(1)->GetPos(),GetVertice(1)->GetPos());
         return retval;
@@ -229,12 +229,12 @@ bool XC::Body::In(const GeomObj3d &geomObj, const double &tol) const
     const size_t nv= NumVertices();
     if(nv<1) //the set is empty.
       {
-	std::cerr << nombre_clase() << "::" << __FUNCTION__
+	std::cerr << getClassName() << "::" << __FUNCTION__
 		  << "; body is empty." << std::endl;
       }
     else if(nv<2)
       {
-	std::cerr << nombre_clase() << "::" << __FUNCTION__
+	std::cerr << getClassName() << "::" << __FUNCTION__
 		  << "; body has only one point." << std::endl;
 	retval= geomObj.In(GetVertice(1)->GetPos(),tol);
       }
@@ -269,7 +269,7 @@ std::set<XC::SetBase *> XC::Body::get_sets(void) const
         retval= sets.get_sets(this);
       }
     else
-      std::cerr << nombre_clase() << __FUNCTION__
+      std::cerr << getClassName() << __FUNCTION__
 	        << "; preprocessor needed." << std::endl;
     return retval;
   }

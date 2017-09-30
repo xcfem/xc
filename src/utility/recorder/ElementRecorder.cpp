@@ -155,10 +155,10 @@ int XC::ElementRecorder::initialize(void)
     if(numEle == 0 || theDomain == 0)
       {
         if(!theDomain)
-	  std::cerr << nombre_clase() << "::" << __FUNCTION__
+	  std::cerr << getClassName() << "::" << __FUNCTION__
 	            << "; undefined domain." << std::endl;
         if(numEle == 0)
-	  std::cerr << nombre_clase() << "::" << __FUNCTION__
+	  std::cerr << getClassName() << "::" << __FUNCTION__
 	            << "; there is no elements." << std::endl;
         return -1;
       }

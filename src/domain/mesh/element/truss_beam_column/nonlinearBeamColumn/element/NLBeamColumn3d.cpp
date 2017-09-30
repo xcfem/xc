@@ -869,7 +869,7 @@ void XC::NLBeamColumn3d::zeroLoad(void)
 int XC::NLBeamColumn3d::addLoad(ElementalLoad *theLoad, double loadFactor)
   {
     if(isDead())
-      std::cerr << nombre_clase() 
+      std::cerr << getClassName() 
                 << "; load over inactive element: "
                 << getTag()  
                 << std::endl;

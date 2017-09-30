@@ -54,7 +54,7 @@ void XC::BidimMecLoad::Print(std::ostream &s, int flag) const
 //! brief Returns load resultant (force and moment integration over the elements).
 SVD3d XC::BidimMecLoad::getResultant(const Pos3d &centro, bool initialGeometry) const
   {
-    std::cerr << nombre_clase()
+    std::cerr << getClassName()
               << "::getResultant not yet implemented." << std::endl;
     return SVD3d(centro);
   }

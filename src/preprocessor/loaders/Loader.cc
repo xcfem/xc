@@ -42,7 +42,7 @@ XC::Loader::Loader(Preprocessor *owr)
 //! @brief Sends object through the channel being passed as parameter.
 int XC::Loader::sendSelf(CommParameters &cp)
   {
-    std::cerr << nombre_clase() << "::" << __FUNCTION__
+    std::cerr << getClassName() << "::" << __FUNCTION__
               << "; not implemented.\n";    
     return -1;
   }
@@ -51,7 +51,7 @@ int XC::Loader::sendSelf(CommParameters &cp)
 //! @brief Receives object through the channel being passed as parameter.
 int XC::Loader::recvSelf(const CommParameters &cp)
   {
-    std::cerr << nombre_clase() << "::" << __FUNCTION__
+    std::cerr << getClassName() << "::" << __FUNCTION__
               << "; not implemented.\n";    
     return -1;
   }

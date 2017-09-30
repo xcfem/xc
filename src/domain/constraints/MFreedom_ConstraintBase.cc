@@ -118,7 +118,7 @@ bool XC::MFreedom_ConstraintBase::isTimeVarying(void) const
 //! @brief Add reactions to nodes.
 int XC::MFreedom_ConstraintBase::addResistingForceToNodalReaction(bool inclInertia)
   {
-    std::cerr << nombre_clase() << "::" << __FUNCTION__
+    std::cerr << getClassName() << "::" << __FUNCTION__
               << "; subclass responsibility."
               << std::endl;
     return 0;

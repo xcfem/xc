@@ -364,7 +364,7 @@ const XC::Matrix &XC::ElasticBeam3d::getInitialStiff(void) const
     const double eiyz= ctes_scc.EIyz();
     const double eimax= std::max(ctes_scc.EIz(),ctes_scc.EIy());
     if(std::abs(eiyz/eimax)>1e-5) //Producto de inercia no nulo.
-      std::cerr << nombre_clase() << "::" << __FUNCTION__
+      std::cerr << getClassName() << "::" << __FUNCTION__
 	        << "; this element must not"
                 << " be used with sections that has "
                 << " a non-zero product of inertia."
@@ -437,7 +437,7 @@ void XC::ElasticBeam3d::zeroLoad(void)
 int XC::ElasticBeam3d::addLoad(ElementalLoad *theLoad, double loadFactor)
   {
     if(isDead())
-      std::cerr << nombre_clase() 
+      std::cerr << getClassName() 
                 << "; load over inactive element: "
                 << getTag()  
                 << std::endl;
@@ -579,7 +579,7 @@ const XC::Vector &XC::ElasticBeam3d::getResistingForce(void) const
 const XC::Vector &XC::ElasticBeam3d::getVDirStrongAxisGlobalCoord(bool initialGeometry) const
   {
     if(!initialGeometry)
-      std::cerr << nombre_clase() << "::" << __FUNCTION__
+      std::cerr << getClassName() << "::" << __FUNCTION__
                 << "; not implemented for deformed geometry." << std::endl;
     if(theCoordTransf)
       {
@@ -588,7 +588,7 @@ const XC::Vector &XC::ElasticBeam3d::getVDirStrongAxisGlobalCoord(bool initialGe
       }
     else
       {
-        std::cerr << nombre_clase() << "::" << __FUNCTION__
+        std::cerr << getClassName() << "::" << __FUNCTION__
 		  << "; coordinate transformation not defined."
                   << std::endl;
         return P;
@@ -600,7 +600,7 @@ const XC::Vector &XC::ElasticBeam3d::getVDirStrongAxisGlobalCoord(bool initialGe
 const XC::Vector &XC::ElasticBeam3d::getVDirWeakAxisGlobalCoord(bool initialGeometry) const
   {
     if(!initialGeometry)
-      std::cerr << nombre_clase() << "::" << __FUNCTION__
+      std::cerr << getClassName() << "::" << __FUNCTION__
                 << "; not implemented for deformed geometry." << std::endl;
     if(theCoordTransf)
       {
@@ -609,7 +609,7 @@ const XC::Vector &XC::ElasticBeam3d::getVDirWeakAxisGlobalCoord(bool initialGeom
       }
     else
       {
-        std::cerr << nombre_clase() << "::" << __FUNCTION__
+        std::cerr << getClassName() << "::" << __FUNCTION__
 		  << "; coordinate transformation not defined."
                   << std::endl;
         return P;

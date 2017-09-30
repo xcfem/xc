@@ -55,7 +55,7 @@ void XC::ElementEdges::setPtrs(Domain *theDomain, const ID &theElementTags, cons
               (*this)[i]= ElementEdge(tmp,theEdgesIndex(i));
             else
               {
-                std::cerr << nombre_clase() << "::" << __FUNCTION__
+                std::cerr << getClassName() << "::" << __FUNCTION__
 		          << "; Warning! ele with tag "
 	                  << theElementTags(i) << " does not exist in the domain\n";
               }

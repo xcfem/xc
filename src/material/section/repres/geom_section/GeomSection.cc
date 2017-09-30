@@ -208,7 +208,7 @@ XC::Segment *XC::GeomSection::newSegment(size_t p1,size_t p2)
     if(s)
       s->setEndPoints(p1,p2);
     else
-      std::cerr << nombre_clase() << "::" << __FUNCTION__ << "; can't assign endpoints."
+      std::cerr << getClassName() << "::" << __FUNCTION__ << "; can't assign endpoints."
                 << std::endl;
     return s;
   }
@@ -221,10 +221,10 @@ double XC::GeomSection::DistSpots(const size_t &i,const size_t &j) const
     const Spot *pA= busca_spot(i);
     const Spot *pB= busca_spot(j);
     if(!pA)
-      std::cerr << nombre_clase() << "::" << __FUNCTION__
+      std::cerr << getClassName() << "::" << __FUNCTION__
 	        << "; point: " << i << " not found. " << std::endl;
     else if(!pB)
-      std::cerr << nombre_clase() << "::" << __FUNCTION__
+      std::cerr << getClassName() << "::" << __FUNCTION__
 	        << "; point: " << j << " not found. " << std::endl;
     else
       retval= pA->DistanciaA(pB->GetPos());
@@ -239,7 +239,7 @@ Poligono2d XC::GeomSection::getRegionsContour(void) const
     if(!tmp.empty())
       {
         if(tmp.size()>1)
-	  std::cerr << nombre_clase() << "::" << __FUNCTION__
+	  std::cerr << getClassName() << "::" << __FUNCTION__
 		    << "; cross section is not a simply connected region."
                     << std::endl;
         retval= *tmp.begin();
@@ -256,7 +256,7 @@ Poligono2d XC::GeomSection::getCompressedZoneContour(const Semiplano2d &sp_compr
       {
 	std::list<Poligono2d> tmpList= tmp.Interseccion(sp_compresiones);
         if(tmpList.size()>1)
-	  std::cerr << nombre_clase() << "::" << __FUNCTION__
+	  std::cerr << getClassName() << "::" << __FUNCTION__
 		    << "; is not a simply connected region."
                     << std::endl;
         retval= *tmpList.begin();

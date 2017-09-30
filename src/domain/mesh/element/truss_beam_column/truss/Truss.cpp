@@ -263,7 +263,7 @@ int XC::Truss::commitState()
     int retVal = 0;
     // call element commitState to do any base class stuff
     if((retVal = this->TrussBase::commitState()) != 0)
-      std::cerr << nombre_clase() << "::" << __FUNCTION__
+      std::cerr << getClassName() << "::" << __FUNCTION__
 		<< "; failed in base class";
     retVal = theMaterial->commitState();
     return retVal;
@@ -278,7 +278,7 @@ int XC::Truss::revertToLastCommit()
     int retVal= 0;
     // DONT call element revertToLastCommit because is a pure virtual method.
     // if((retVal = this->TrussBase::revertToLastCommit()) != 0)
-    //   std::cerr << nombre_clase() << "::" << __FUNCTION__
+    //   std::cerr << getClassName() << "::" << __FUNCTION__
     // 		<< "; failed in base class";
     retVal = theMaterial->revertToLastCommit();
     return retVal;
@@ -293,7 +293,7 @@ int XC::Truss::revertToStart()
     int retVal= 0;
     // call element revertToLastCommit to do any base class stuff
     if((retVal = this->TrussBase::revertToStart()) != 0)
-      std::cerr << nombre_clase() << "::" << __FUNCTION__
+      std::cerr << getClassName() << "::" << __FUNCTION__
 		<< "; failed in base class";
     retVal = theMaterial->revertToStart();
     return retVal;
@@ -451,7 +451,7 @@ void XC::Truss::zeroLoad(void)
 int XC::Truss::addLoad(ElementalLoad *theLoad, double loadFactor)
   {
     if(isDead())
-      std::cerr << nombre_clase() 
+      std::cerr << getClassName() 
                 << "; load over inactive element: "
                 << getTag() << std::endl;
     else

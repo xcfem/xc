@@ -44,7 +44,7 @@ const XC::Domain *XC::PreprocessorContainer::getDomain(void) const
       return preprocessor->getDomain();
     else
       {
-	std::cerr << nombre_clase() << __FUNCTION__
+	std::cerr << getClassName() << __FUNCTION__
 	          << "; preprocessor needed." << std::endl;
         return nullptr;
       }
@@ -57,7 +57,7 @@ XC::Domain *XC::PreprocessorContainer::getDomain(void)
       return preprocessor->getDomain();
     else
       {
-	std::cerr << nombre_clase() << __FUNCTION__
+	std::cerr << getClassName() << __FUNCTION__
 	          << "; preprocessor needed." << std::endl;
         return nullptr;
       }

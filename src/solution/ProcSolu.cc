@@ -87,12 +87,12 @@ bool XC::ProcSolu::alloc_analysis(const std::string &nmb,const std::string &cod_
               theAnalysis= new VariableTimeStepDirectIntegrationAnalysis(metodo);
 	  }
         else
-          std::cerr << nombre_clase() << "::" << __FUNCTION__
+          std::cerr << getClassName() << "::" << __FUNCTION__
 	            << "; analysis type: '"
                     << nmb << "' unknown." << std::endl;
       }
     else
-      std::cerr << nombre_clase() << "::" << __FUNCTION__
+      std::cerr << getClassName() << "::" << __FUNCTION__
 	        << "; analysis method: '"
                 << cod_solu_metodo << "' not found, in command: " << nmb << std::endl;
     if(theAnalysis)

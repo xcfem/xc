@@ -147,7 +147,7 @@ int XC::MinUnbalDispNorm::newStep(void)
     applyLoadModel(vectores.getCurrentLambda());    
     if(updateModel() < 0)
       {
-        std::cerr << nombre_clase() << "::" << __FUNCTION__
+        std::cerr << getClassName() << "::" << __FUNCTION__
 		  << "; update failed for the new dU\n";
         return -1;
       }
@@ -195,7 +195,7 @@ int XC::MinUnbalDispNorm::update(const Vector &dU)
 
     if(updateModel() < 0)
       {
-        std::cerr << nombre_clase() << "::" << __FUNCTION__
+        std::cerr << getClassName() << "::" << __FUNCTION__
 	          << "; update failed for the new dU\n";
         return -1;
       }
@@ -254,7 +254,7 @@ int XC::MinUnbalDispNorm::sendSelf(CommParameters &cp)
 
     res+= cp.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
-      std::cerr << nombre_clase() << "sendSelf() - failed to send data\n";
+      std::cerr << getClassName() << "sendSelf() - failed to send data\n";
     return res;
   }
 
@@ -266,13 +266,13 @@ int XC::MinUnbalDispNorm::recvSelf(const CommParameters &cp)
     int res= cp.receiveIdData(getDbTagData(),dataTag);
 
     if(res<0)
-      std::cerr << nombre_clase() << "::recvSelf - failed to receive ids.\n";
+      std::cerr << getClassName() << "::recvSelf - failed to receive ids.\n";
     else
       {
         //setTag(getDbTagDataPos(0));
         res+= recvData(cp);
         if(res<0)
-          std::cerr << nombre_clase() << "::recvSelf - failed to receive data.\n";
+          std::cerr << getClassName() << "::recvSelf - failed to receive data.\n";
       }
     return res;
   }

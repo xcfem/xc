@@ -135,7 +135,7 @@ void XC::NodePtrs::setPtrs(Domain *theDomain, const ID &theNodeTags)
           (*this)[i]->connect(owr);
         else
           {
-            std::cerr << nombre_clase() << "::" << __FUNCTION__
+            std::cerr << getClassName() << "::" << __FUNCTION__
 	              << "; node with tag " << theNodeTags(i)
 		      << " does not exist in the domain.\n";
           }
@@ -286,7 +286,7 @@ bool XC::NodePtrs::checkDimension(const size_t &dim) const
 	  {
             if(dim!= (*this)[i]->getDim())
 	      {
-	        std::cerr << nombre_clase() << "::" << __FUNCTION__
+	        std::cerr << getClassName() << "::" << __FUNCTION__
 	                  << " wrong dimension of node coordinates in node: "
 	                  << i << " was: " << (*this)[i]->getDim()
 		          << ", must be: " << dim
@@ -296,7 +296,7 @@ bool XC::NodePtrs::checkDimension(const size_t &dim) const
               }
 	  }
 	else
-          std::cerr << nombre_clase() << "::" << __FUNCTION__
+          std::cerr << getClassName() << "::" << __FUNCTION__
 	            << "; pointer to node 0 is null."
 	            << std::endl;
       }
@@ -313,13 +313,13 @@ size_t XC::NodePtrs::getDimension(void) const
 	  { retval= (*this)[0]->getDim(); }
         else
 	  {
-	    std::cerr << nombre_clase() << "::" << __FUNCTION__
+	    std::cerr << getClassName() << "::" << __FUNCTION__
 	              << "; pointer to node 0 is null."
 	              << std::endl;
 	  }
       }
     else
-      std::cerr << nombre_clase() << "::" << __FUNCTION__
+      std::cerr << getClassName() << "::" << __FUNCTION__
                 << "; node pointers container is empty."
                 << std::endl;
     return retval;

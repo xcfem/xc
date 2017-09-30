@@ -94,7 +94,7 @@ void XC::LoadCombinationGroup::remove(const std::string &comb_code)
         erase(icomb);
       }
     else
-      std::cerr << nombre_clase() << "::" << __FUNCTION__
+      std::cerr << getClassName() << "::" << __FUNCTION__
 	        << "; load combination: '" 
                 << comb_code << "' not found." << std::endl;
   }
@@ -106,7 +106,7 @@ void XC::LoadCombinationGroup::addToDomain(const std::string &comb_code)
     if(comb)
       getDomain()->addLoadCombination(comb);
     else
-      std::cerr << nombre_clase() << "::" << __FUNCTION__
+      std::cerr << getClassName() << "::" << __FUNCTION__
 	        << "; load combination: '" 
                 << comb_code << "' not found." << std::endl;
   }
@@ -118,7 +118,7 @@ void XC::LoadCombinationGroup::removeFromDomain(const std::string &comb_code)
     if(comb)
       getDomain()->removeLoadCombination(comb);
     else
-      std::cerr << nombre_clase() << "::" << __FUNCTION__
+      std::cerr << getClassName() << "::" << __FUNCTION__
 	        << "; load combination: '" 
                 << comb_code << "' not found." << std::endl;
   }

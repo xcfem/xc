@@ -227,7 +227,7 @@ int XC::CrdTransf2d::computeElemtLengthAndOrient(void) const
         sinTheta= dx(1)/L;
       }
     else
-      std::cerr << nombre_clase() << "::" << __FUNCTION__ << "; pointer to nodo nulo." << std::endl;
+      std::cerr << getClassName() << "::" << __FUNCTION__ << "; pointer to nodo nulo." << std::endl;
     return 0;
   }
 

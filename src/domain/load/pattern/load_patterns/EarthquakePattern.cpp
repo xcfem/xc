@@ -172,21 +172,21 @@ int XC::EarthquakePattern::addMotion(GroundMotion &theMotion)
 
 bool XC::EarthquakePattern::addSFreedom_Constraint(SFreedom_Constraint *)
   {
-    std::cerr << nombre_clase() << "::" << __FUNCTION__
+    std::cerr << getClassName() << "::" << __FUNCTION__
               << "; cannot add SFreedom_Constraint to EQ pattern.\n";
     return false;
   }
 
 bool XC::EarthquakePattern::addNodalLoad(NodalLoad *)
   {
-    std::cerr << nombre_clase() << "::" << __FUNCTION__
+    std::cerr << getClassName() << "::" << __FUNCTION__
               << "; cannot add NodalLoad to EQ pattern.\n";  
     return false;
   }
 
 bool XC::EarthquakePattern::addElementalLoad(ElementalLoad *)
   {
-    std::cerr << nombre_clase() << "::" << __FUNCTION__
+    std::cerr << getClassName() << "::" << __FUNCTION__
               << "; cannot add ElementalLoad to EQ pattern.\n";    
     return false;
   }
@@ -227,7 +227,7 @@ int XC::EarthquakePattern::setParameter(const std::vector<std::string> &argv, Pa
       }
     else
       {
-        std::cerr << nombre_clase() << "::" << __FUNCTION__
+        std::cerr << getClassName() << "::" << __FUNCTION__
                   << "; unknown parameter in EarthquakePattern." << std::endl;
         return -1;
       }

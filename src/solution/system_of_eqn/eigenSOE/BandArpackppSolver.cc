@@ -83,7 +83,7 @@ int XC::BandArpackppSolver::solve(int nModes)
     int retval= 0;
     if(!theSOE)
       {
-        std::cerr << nombre_clase() << "::" << __FUNCTION__
+        std::cerr << getClassName() << "::" << __FUNCTION__
 	          << "; eigen SOE was not assigned yet.\n";
         retval= -1;
       }
@@ -96,7 +96,7 @@ int XC::BandArpackppSolver::solve(int nModes)
         if((numModes <= 1) || (numModes>=(n-1)))
           {
             numModes= 0;
-	    std::cerr << nombre_clase() << "::" << __FUNCTION__
+	    std::cerr << getClassName() << "::" << __FUNCTION__
 	              << "; the number of modes must be"
                       << " between: " << 2 << " and " << n-2 << ".\n";
             retval= -2;
@@ -146,7 +146,7 @@ bool XC::BandArpackppSolver::setEigenSOE(EigenSOE *soe)
         retval= true;
       }
     else
-      std::cerr << nombre_clase() << "::" << __FUNCTION__
+      std::cerr << getClassName() << "::" << __FUNCTION__
 	        << "the system of equations has not"
 	        << "a suitable type for this solver."
 		<< std::endl;
@@ -162,7 +162,7 @@ const XC::Vector &XC::BandArpackppSolver::getEigenvector(int mode) const
     static Vector retval(1);
     if(mode < 1 || mode > numModes)
       {
-        std::cerr << nombre_clase() << "::" << __FUNCTION__
+        std::cerr << getClassName() << "::" << __FUNCTION__
 		  << "; mode " << mode << " is out of range (1 - "
 	          << numModes << ")\n";
       }
@@ -175,7 +175,7 @@ const double &XC::BandArpackppSolver::getEigenvalue(int mode) const
   {
     static double retval= 0.0;
     if(mode < 1 || mode > numModes)
-        std::cerr << nombre_clase() << "::" << __FUNCTION__
+        std::cerr << getClassName() << "::" << __FUNCTION__
 		  << "; -- mode " 
                   << mode << " is out of range (1 - " << numModes << ")\n";
     else

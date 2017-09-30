@@ -107,7 +107,7 @@ int XC::FullGenEigenSOE::setSize(Graph &theGraph)
         int solverOK= theSolver->setSize();
         if(solverOK < 0)
           {
-            std::cerr << nombre_clase() << "::" << __FUNCTION__ << "; ";
+            std::cerr << getClassName() << "::" << __FUNCTION__ << "; ";
             std::cerr << "solver failed in setSize()\n";
             return solverOK;
           }

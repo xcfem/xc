@@ -46,7 +46,7 @@ void XC::NodePropRecorder::setNodes(const ID &iNodos)
           nodes.push_back(theDomain->getNode(iNodos(i)));
       }
     else
-      std::cerr << "Error; " << nombre_clase() << "::" << __FUNCTION__
+      std::cerr << "Error; " << getClassName() << "::" << __FUNCTION__
                 << " node list is empty." << std::endl;
   }
 

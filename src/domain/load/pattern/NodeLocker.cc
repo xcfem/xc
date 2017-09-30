@@ -74,7 +74,7 @@ void XC::NodeLocker::alloc_containers(void)
 
     if(!theSPs)
       {
-        std::cerr << nombre_clase() << "::" << __FUNCTION__
+        std::cerr << getClassName() << "::" << __FUNCTION__
 	          << "; ran out of memory\n";
         exit(-1);
       }
@@ -87,7 +87,7 @@ void XC::NodeLocker::alloc_iterators(void)
 
     if(theSpIter == 0)
       {
-        std::cerr << nombre_clase() << "::" << __FUNCTION__
+        std::cerr << getClassName() << "::" << __FUNCTION__
 	          << "; ran out of memory\n";
         exit(-1);
       }
@@ -204,7 +204,7 @@ bool XC::NodeLocker::removeSFreedom_Constraint(int tag)
   {
     const bool retval= theSPs->removeComponent(tag);
     if(!retval)
-      std::cerr << nombre_clase() << "::" << __FUNCTION__
+      std::cerr << getClassName() << "::" << __FUNCTION__
 	        << "; constraint identified by: "
                 << tag << " not found." << std::endl;
     return retval;

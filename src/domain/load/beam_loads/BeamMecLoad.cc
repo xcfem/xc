@@ -71,13 +71,13 @@ void XC::BeamMecLoad::addFixedEndForcesInBasicSystem(const double &L,const doubl
 
 void XC::BeamMecLoad::addElasticDeformations(const double &L,const CrossSectionProperties2d &ctes_scc,const double &lpI,const double &lpJ,const double &loadFactor,FVector &v0)
   {
-    std::cerr << nombre_clase() << "::" << __FUNCTION__
+    std::cerr << getClassName() << "::" << __FUNCTION__
               << " not defined for 2D sections." << std::endl;
   }
 
 void XC::BeamMecLoad::addElasticDeformations(const double &L,const CrossSectionProperties3d &ctes_scc,const double &lpI,const double &lpJ,const double &loadFactor,FVector &v0)
   {
-    std::cerr << nombre_clase() << "::" << __FUNCTION__
+    std::cerr << getClassName() << "::" << __FUNCTION__
               << " not defined for 3D sections." << std::endl;
   }
 
@@ -173,7 +173,7 @@ const XC::Matrix &XC::BeamMecLoad::getGlobalMoments(void) const
 //! brief Returns load resultant (force and moment integration over the elements).
 SVD3d XC::BeamMecLoad::getResultant(const Pos3d &centro, bool initialGeometry) const
   {
-    std::cerr << nombre_clase()
+    std::cerr << getClassName()
               << "::getResultant not yet implemented." << std::endl;
     return SVD3d(centro);
   }

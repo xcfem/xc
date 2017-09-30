@@ -263,7 +263,7 @@ double XC::FiberSectionBase::getCompressedZoneLeverArm(const Recta2d &r) const
         else
           {
             retval= NAN;
-	    std::cerr << nombre_clase() << "::" << __FUNCTION__
+	    std::cerr << getClassName() << "::" << __FUNCTION__
 	              << "; can't get the compressed half-plane."
                       << std::endl;
 	  }
@@ -285,7 +285,7 @@ double XC::FiberSectionBase::getCompressedZoneLeverArm(void) const
         else
           {
             retval= NAN;
-	    std::cerr << nombre_clase() << "::" << __FUNCTION__
+	    std::cerr << getClassName() << "::" << __FUNCTION__
 	              << "; can't get the compressed half-plane."
                       << std::endl;
           }
@@ -402,12 +402,12 @@ std::list<Poligono2d> XC::FiberSectionBase::getGrossEffectiveConcreteAreaContour
               retval.push_back(contour);
           }
         else
-          std::cerr << nombre_clase() << "::" << __FUNCTION__
+          std::cerr << getClassName() << "::" << __FUNCTION__
 	            << "; maximum efficient height is zero." << std::endl;
       }
     if(retval.empty())
       {
-        std::cerr << nombre_clase() << "::" << __FUNCTION__
+        std::cerr << getClassName() << "::" << __FUNCTION__
 	          << "; can't get contour of gross effective concrete area."
                   << std::endl;
       }
@@ -434,12 +434,12 @@ double XC::FiberSectionBase::getNetEffectiveConcreteArea(const double &hEfMax,co
             retval= armaduras.computeFibersEffectiveConcreteArea(grossEffectiveConcreteAreaContour,factor);
           }
         else
-          std::cerr << nombre_clase() << "::" << __FUNCTION__
+          std::cerr << getClassName() << "::" << __FUNCTION__
 	            << "; fiber set: "
                     << nmbSetArmaduras << " not found." << std::endl;
       }
     else
-      std::cerr << nombre_clase() << "::" << __FUNCTION__
+      std::cerr << getClassName() << "::" << __FUNCTION__
 		<< "; can't compute efficient area." << std::endl;
     return retval;
   }
@@ -458,12 +458,12 @@ double XC::FiberSectionBase::computeFibersEffectiveConcreteArea(const double &hE
             retval= armaduras.computeFibersEffectiveConcreteArea(grossEffectiveConcreteAreaContour,factor);
           }
         else
-          std::cerr << nombre_clase() << "::" << __FUNCTION__
+          std::cerr << getClassName() << "::" << __FUNCTION__
 	            << "; fiber set: "
                     << nmbSetArmaduras << " not found." << std::endl;
       }
     else
-      std::cerr << nombre_clase() << "::" << __FUNCTION__
+      std::cerr << getClassName() << "::" << __FUNCTION__
 		<< "; can't compute efficient area." << std::endl;
     return retval;
   }
@@ -480,7 +480,7 @@ void XC::FiberSectionBase::computeCovers(const std::string &nmbSetArmaduras) con
           armaduras.computeCovers(*geom);
       }
     else
-      std::cerr << nombre_clase() << "::" << __FUNCTION__
+      std::cerr << getClassName() << "::" << __FUNCTION__
                 << "; fiber set: "
                 << nmbSetArmaduras << " not found." << std::endl;
   }
@@ -495,7 +495,7 @@ void XC::FiberSectionBase::computeSpacement(const std::string &nmbSetArmaduras) 
         armaduras.computeSpacement();
       }
     else
-      std::cerr << nombre_clase() << "::" << __FUNCTION__
+      std::cerr << getClassName() << "::" << __FUNCTION__
                 << "; fiber set: "
                 << nmbSetArmaduras << " not found." << std::endl;
   }
@@ -695,7 +695,7 @@ XC::InteractionDiagram XC::FiberSectionBase::GetInteractionDiagram(const Interac
         retval= InteractionDiagram(Pos3d(0,0,0),Triang3dMesh(get_convex_hull(lp)));
         const double error= fabs(retval.FactorCapacidad(lp).Norm2()-lp.size())/lp.size();
         if(error>0.005)
-	  std::cerr << nombre_clase() << "::" << __FUNCTION__
+	  std::cerr << getClassName() << "::" << __FUNCTION__
 	            << "; error in computation of interaction diagram ("
                     << error << ") seems too big." << std::endl;
       }
@@ -712,7 +712,7 @@ XC::InteractionDiagram2d XC::FiberSectionBase::GetInteractionDiagramForPlane(con
         retval= InteractionDiagram2d(get_convex_hull2d(lp));
         const double error= fabs(retval.FactorCapacidad(lp).Norm2()-lp.size())/lp.size();
         if(error>0.005)
-	  std::cerr << nombre_clase() << "::" << __FUNCTION__
+	  std::cerr << getClassName() << "::" << __FUNCTION__
 	            << "; error in computation of interaction diagram ("
                     << error << ") seems too big." << std::endl;
       }
@@ -799,7 +799,7 @@ Recta2d XC::FiberSectionBase::getTrazaPlanoTraccion(void) const
   {
     Recta2d retval= fibers.getTrazaPlanoTraccion();
     if(!retval.exists())
-      std::cerr << nombre_clase() << "::" << __FUNCTION__
+      std::cerr << getClassName() << "::" << __FUNCTION__
 		<< "; intercept of the tension plane not found." << std::endl;
     return retval;
   }

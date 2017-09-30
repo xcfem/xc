@@ -119,11 +119,11 @@ void XC::ProtoTruss::setup_matrix_vector_ptrs(int dofNd1)
     else
       {
 	if(numDim==0)
-           std::cerr << nombre_clase() << "::" << __FUNCTION__
+           std::cerr << getClassName() << "::" << __FUNCTION__
                      << "; WARNING dimension of the element space is " << numDim
 	             << ". Have you set the dimElem property of the element?\n";
 	else
-	   std::cerr << nombre_clase() << "::" << __FUNCTION__
+	   std::cerr << getClassName() << "::" << __FUNCTION__
 	             << "; WARNING dimension of the element space is " << numDim
 	             << " which is not compatible with a "
 		     << dofNd1  << " DOFs problem.\n";

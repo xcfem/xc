@@ -693,14 +693,14 @@ const XC::Vector &XC::TransformationDOF_Group::getM_Force(const XC::Vector &Udot
 
 const XC::Vector &XC::TransformationDOF_Group::getC_Force(const XC::Vector &Udotdot, double fact)
   {
-    std::cerr << nombre_clase() << "::" << __FUNCTION__
+    std::cerr << getClassName() << "::" << __FUNCTION__
               << "; not yet implemented\n";
     return unbalAndTangentMod.getResidual();
   }
 
 const XC::Vector &XC::TransformationDOF_Group::getTangForce(const XC::Vector &Udotdot, double fact)
   {
-    std::cerr << nombre_clase() << "::" << __FUNCTION__
+    std::cerr << getClassName() << "::" << __FUNCTION__
               << "; not yet implemented\n";
     return unbalAndTangentMod.getResidual();
   }

@@ -166,7 +166,7 @@ template <class PhysProp>
 int XC::TriBase3N<PhysProp>::addLoad(ElementalLoad *theLoad, double loadFactor)
   {
     if(this->isDead())
-      std::cerr << this->nombre_clase() 
+      std::cerr << this->getClassName() 
                 << "; load over inactive element: "
                 << this->getTag() << std::endl;
     else

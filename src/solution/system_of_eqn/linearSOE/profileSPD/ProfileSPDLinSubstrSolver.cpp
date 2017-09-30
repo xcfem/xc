@@ -291,14 +291,14 @@ XC::ProfileSPDLinSubstrSolver::condenseRHS(int numInt, Vector *v)
     if (theSOE->isAcondensed != true) {
 	int ok = this->condenseA(numInt);
 	if (ok < 0) {
-	    std::cerr << nombre_clase() << "::" << __FUNCTION__;
+	    std::cerr << getClassName() << "::" << __FUNCTION__;
 	    std::cerr << " - failed to condenseA\n";
 	    return ok;
 	}
     }
 
     if (theSOE->numInt != numInt) {	
-	std::cerr << nombre_clase() << "::" << __FUNCTION__;
+	std::cerr << getClassName() << "::" << __FUNCTION__;
 	std::cerr << " - numInt " << numInt << "does not agree with condensedA";
 	std::cerr << " numInt " << theSOE->numInt << std::endl;
 	return -1;

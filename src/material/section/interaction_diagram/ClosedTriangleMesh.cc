@@ -282,7 +282,7 @@ GeomObj::list_Pos3d XC::ClosedTriangleMesh::get_intersection(const Pos3d &p) con
     const Triedro3d *i= BuscaPtrTriedro(p);
     if(!i)
       {
-	std::cerr << nombre_clase() << "::" << __FUNCTION__
+	std::cerr << getClassName() << "::" << __FUNCTION__
 	          << "; bounding trihedron for :"
                   << p << " not found. Quadrant: "
 		  << p.Cuadrante() << std::endl;

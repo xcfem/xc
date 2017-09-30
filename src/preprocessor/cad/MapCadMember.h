@@ -99,7 +99,7 @@ T * MapCadMember<T>::get(const size_t &iEnt)
   {
     T *retval= busca(iEnt);
     if(!retval)
-      std::cerr << nombre_clase() << "::" << __FUNCTION__
+      std::cerr << getClassName() << "::" << __FUNCTION__
 	        << "; entity: '" 
                 << iEnt << "' not found.\n";
     return retval;   

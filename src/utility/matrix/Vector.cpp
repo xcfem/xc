@@ -96,12 +96,12 @@ void XC::Vector::alloc(const size_t &size)
           }
       }
     else
-      std::cerr << nombre_clase() << "::" << __FUNCTION__
+      std::cerr << getClassName() << "::" << __FUNCTION__
 		<< "; size specified: " << size << " <0\n";
 
     if(!theData && (size>0))
       {
-        std::cerr << nombre_clase() << "::" << __FUNCTION__
+        std::cerr << getClassName() << "::" << __FUNCTION__
 		  << "; out of memory creating vector of size "
 		  << size << std::endl;
         sz= 0; // set this should fatal error handler not kill process!!
@@ -204,7 +204,7 @@ int XC::Vector::setData(double *newData, int size)
 
     if(sz <= 0)
       {
-        std::cerr << nombre_clase() << "::" << __FUNCTION__
+        std::cerr << getClassName() << "::" << __FUNCTION__
 		  << "; size specified: " << size << " <= 0\n";
         sz= 0;
       }
@@ -216,13 +216,13 @@ int XC::Vector::setData(double *newData, int size)
 int XC::Vector::resize(int newSize)
   {
     if(fromFree!=0)
-      std::cerr << nombre_clase() << "::" << __FUNCTION__
+      std::cerr << getClassName() << "::" << __FUNCTION__
 		<< "; with fromFree= " << fromFree << std::endl;
 
     // first check that newSize is valid
     if(newSize<0)
       {
-        std::cerr << nombre_clase() << "::" << __FUNCTION__
+        std::cerr << getClassName() << "::" << __FUNCTION__
 		  << "; size specified " << newSize << " <= 0\n";
         return -1;
       } 
@@ -264,11 +264,11 @@ int XC::Vector::Assemble(const XC::Vector &V, const XC::ID &l, double fact )
           {
             result= -1;
             if(pos < sz)
-	      std::cerr << nombre_clase() << "::" << __FUNCTION__
+	      std::cerr << getClassName() << "::" << __FUNCTION__
 			<< "; " << pos << " out of range [1, "
 			<< sz-1 << "]\n";
             else
-	      std::cerr << nombre_clase() << "::" << __FUNCTION__
+	      std::cerr << getClassName() << "::" << __FUNCTION__
 			<< "; " << pos
 			<< " out of range [1, "<< V.Size()-1 << "]\n";
           }
@@ -343,7 +343,7 @@ int XC::Vector::addVector(double thisFact, const XC::Vector &other, double other
     if(sz != other.sz)
       {
         // else sizes are incompatable, do nothing but warning
-        std::cerr << nombre_clase() << "::" << __FUNCTION__
+        std::cerr << getClassName() << "::" << __FUNCTION__
 		  << "; incompatable Vector sizes\n";
         return -1;
       }
@@ -432,7 +432,7 @@ int XC::Vector::addMatrixVector(double thisFact, const Matrix &m, const XC::Vect
     if((sz != m.noRows()) && (m.noCols() != v.sz))
       {
         // otherwise incompatable sizes
-        std::cerr << nombre_clase() << "::" << __FUNCTION__
+        std::cerr << getClassName() << "::" << __FUNCTION__
 		  << "; incompatable sizes\n";
         return -1;    
       }
@@ -564,7 +564,7 @@ int XC::Vector::addMatrixTransposeVector(double thisFact, const XC::Matrix &m, c
     if((sz != m.noRows()) && (m.noRows() != v.sz))
       {
         // otherwise incompatable sizes
-        std::cerr << nombre_clase() << "::" << __FUNCTION__
+        std::cerr << getClassName() << "::" << __FUNCTION__
 		  << "; incompatable sizes\n";
         return -1;    
       }
@@ -780,7 +780,7 @@ bool XC::Vector::CheckIndice0(const size_t &i) const
   {
     if(i<0 || i>=size_t(sz))
       {
-        std::cerr << nombre_clase() << "::" << __FUNCTION__
+        std::cerr << getClassName() << "::" << __FUNCTION__
 	          << "; index: " << i
 		  << " out of range: 0 - << " << sz-1 << std::endl;
         return false;
@@ -821,7 +821,7 @@ XC::Vector XC::Vector::operator()(const XC::ID &rows) const
     // check if obtained VEctor of correct size
     if(result.Size() != rows.Size())
       {
-        std::cerr << nombre_clase() << "::" << __FUNCTION__
+        std::cerr << getClassName() << "::" << __FUNCTION__
 		  << "; new_ XC::Vector could not be constructed\n";
         return result;
       }
@@ -833,7 +833,7 @@ XC::Vector XC::Vector::operator()(const XC::ID &rows) const
         pos= rows(i);
         if(pos <0 || pos >= sz)
           {
-            std::cerr << nombre_clase() << "::" << __FUNCTION__
+            std::cerr << getClassName() << "::" << __FUNCTION__
 		      << "; invalid location " 
                       << pos << " outside range [0, " << sz-1 << "]\n";
           }
@@ -928,7 +928,7 @@ XC::Vector  XC::Vector::operator+(double fact) const
   {
     Vector result(*this);
     if(result.Size() != sz) 
-      std::cerr << nombre_clase() << "::" << __FUNCTION__
+      std::cerr << getClassName() << "::" << __FUNCTION__
 		<< "; ran out of memory for new_ Vector\n";
     result+= fact;
     return result;
@@ -942,7 +942,7 @@ XC::Vector  XC::Vector::operator-(double fact) const
   {
     Vector result(*this);
     if(result.Size() != sz) 
-      std::cerr << nombre_clase() << "::" << __FUNCTION__
+      std::cerr << getClassName() << "::" << __FUNCTION__
 		<< "; ran out of memory for new_ Vector\n";
     result-= fact;
     return result;
@@ -956,7 +956,7 @@ XC::Vector  XC::Vector::operator*(double fact) const
   {
     Vector result(*this);
     if(result.Size() != sz) 
-      std::cerr << nombre_clase() << "::" << __FUNCTION__
+      std::cerr << getClassName() << "::" << __FUNCTION__
 		<< "; ran out of memory for new_ Vector\n";
     result*= fact;
     return result;
@@ -970,12 +970,12 @@ XC::Vector  XC::Vector::operator*(double fact) const
 XC::Vector XC::Vector::operator/(double fact) const
   {
     if(fact == 0.0) 
-      std::cerr << nombre_clase() << "::" << __FUNCTION__
+      std::cerr << getClassName() << "::" << __FUNCTION__
 		<< "; divide-by-zero error coming\n";
 
     Vector result(*this);
     if(result.Size() != sz) 
-      std::cerr << nombre_clase() << "::" << __FUNCTION__
+      std::cerr << getClassName() << "::" << __FUNCTION__
 		<< "; ran out of memory for new_ Vector\n";
     result/= fact;
     return result;
@@ -998,7 +998,7 @@ XC::Vector &XC::Vector::operator+=(const Vector &other)
 #ifdef _G3DEBUG
     if(sz != other.sz)
       {
-        std::cerr << nombre_clase() << "::" << __FUNCTION__
+        std::cerr << getClassName() << "::" << __FUNCTION__
 		  << "; WARNING vectors not of same sizes: "
 		  << sz << " != " << other.sz << std::endl;
         return *this;
@@ -1018,7 +1018,7 @@ XC::Vector &XC::Vector::operator-=(const XC::Vector &other)
   {
 #ifdef _G3DEBUG
   if(sz != other.sz) {
-    std::cerr << nombre_clase() << "::" << __FUNCTION__
+    std::cerr << getClassName() << "::" << __FUNCTION__
 	      << "; WARNING vectors not of same sizes: "
 	      << sz << " != " << other.sz << std::endl;
     return *this;
@@ -1040,7 +1040,7 @@ XC::Vector  XC::Vector::operator+(const XC::Vector &b) const
 #ifdef _G3DEBUG
     if(sz != b.sz)
       {
-        std::cerr << nombre_clase() << "::" << __FUNCTION__
+        std::cerr << getClassName() << "::" << __FUNCTION__
 		  << "; WARNING vectors not of same sizes: "
 		  << sz << " != " << b.sz << std::endl;
         return *this;
@@ -1052,7 +1052,7 @@ XC::Vector  XC::Vector::operator+(const XC::Vector &b) const
     // check new_ Vector of correct size
     if(result.Size() != sz)
       {
-        std::cerr << nombre_clase() << "::" << __FUNCTION__
+        std::cerr << getClassName() << "::" << __FUNCTION__
 		  << "; vector not of correct size \n";
         return result;
       }
@@ -1069,7 +1069,7 @@ XC::Vector XC::Vector::operator-(const XC::Vector &b) const
 #ifdef _G3DEBUG
     if(sz!=b.sz)
       {
-        std::cerr << nombre_clase() << "::" << __FUNCTION__
+        std::cerr << getClassName() << "::" << __FUNCTION__
 		  << "; WARNING vectors not of same sizes: "
 		  << sz << " != " << b.sz << std::endl;
         return *this;
@@ -1081,7 +1081,7 @@ XC::Vector XC::Vector::operator-(const XC::Vector &b) const
     // check new_ Vector of correct size
     if(result.Size() != sz)
       {
-        std::cerr << nombre_clase() << "::" << __FUNCTION__
+        std::cerr << getClassName() << "::" << __FUNCTION__
 		  << "; vector not of correct size \n";
         return result;
       }
@@ -1097,7 +1097,7 @@ double XC::Vector::operator^(const XC::Vector &V) const
 #ifdef _G3DEBUG
     if(sz != V.sz)
       {
-        std::cerr << nombre_clase() << "::" << __FUNCTION__
+        std::cerr << getClassName() << "::" << __FUNCTION__
 		  << "; WARNING vectors not of same sizes: " 
                   << sz << " != "  << V.sz << std::endl;
         return 0.0;
@@ -1214,7 +1214,7 @@ int XC::Vector::Assemble(const XC::Vector &V, int init_pos, double fact)
       }
     else 
       {
-        std::cerr << nombre_clase() << "::" << __FUNCTION__
+        std::cerr << getClassName() << "::" << __FUNCTION__
 	          << "; (const Vector &V, int init_pos, double fact): "
                   << "position outside bounds \n";
         res= -1;
@@ -1235,7 +1235,7 @@ int XC::Vector::Extract(const Vector &V, int init_pos, double fact)
       }
     else 
       {
-        std::cerr << nombre_clase() << "::" << __FUNCTION__
+        std::cerr << getClassName() << "::" << __FUNCTION__
 	          << "; (const Vector &V, int init_pos, double fact): "
                   << "position outside bounds \n";
         res= -1;

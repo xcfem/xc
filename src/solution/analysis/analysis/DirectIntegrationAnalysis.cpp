@@ -124,14 +124,14 @@ int XC::DirectIntegrationAnalysis::initialize(void)
         domainStamp = stamp;	
         if(this->domainChanged() < 0)
           {
-	    std::cerr << nombre_clase() << "::" << __FUNCTION__
+	    std::cerr << getClassName() << "::" << __FUNCTION__
 		      << "; domainChanged() failed\n";
 	    return -1;
           }	
       }
     if(metodo_solu->getTransientIntegratorPtr()->initialize() < 0)
       {
-	std::cerr << nombre_clase() << "::" << __FUNCTION__
+	std::cerr << getClassName() << "::" << __FUNCTION__
 		  << "; integrator initialize() failed\n";
 	return -2;
       }
@@ -165,7 +165,7 @@ int XC::DirectIntegrationAnalysis::analyze(int numSteps, double dT)
       {
         if(newStepDomain(metodo_solu->getModelWrapperPtr()->getAnalysisModelPtr(),dT) < 0)
           {
-	    std::cerr << nombre_clase() << "::" << __FUNCTION__
+	    std::cerr << getClassName() << "::" << __FUNCTION__
 		      << "; the AnalysisModel failed"
 		      << " at time "
 		      << the_Domain->getTimeTracker().getCurrentTime()
@@ -181,7 +181,7 @@ int XC::DirectIntegrationAnalysis::analyze(int numSteps, double dT)
 	    domainStamp = stamp;	
 	    if(this->domainChanged() < 0)
               {
-	        std::cerr << nombre_clase() << "::" << __FUNCTION__
+	        std::cerr << getClassName() << "::" << __FUNCTION__
 			  << "; domainChanged() failed\n";
 	        return -1;
               }	
@@ -189,7 +189,7 @@ int XC::DirectIntegrationAnalysis::analyze(int numSteps, double dT)
 
         if(metodo_solu->getTransientIntegratorPtr()->newStep(dT) < 0)
           {
-	    std::cerr << nombre_clase() << "::" << __FUNCTION__
+	    std::cerr << getClassName() << "::" << __FUNCTION__
 		      << "; the XC::Integrator failed at time "
 		      << the_Domain->getTimeTracker().getCurrentTime()
 		      << std::endl;
@@ -200,7 +200,7 @@ int XC::DirectIntegrationAnalysis::analyze(int numSteps, double dT)
         result = metodo_solu->getEquiSolutionAlgorithmPtr()->solveCurrentStep();
         if(result < 0)
           {
-	    std::cerr << nombre_clase() << "::" << __FUNCTION__
+	    std::cerr << getClassName() << "::" << __FUNCTION__
 		      << "; the Algorithm failed at time "
 		      << the_Domain->getTimeTracker().getCurrentTime()
 		      << std::endl;
@@ -216,7 +216,7 @@ int XC::DirectIntegrationAnalysis::analyze(int numSteps, double dT)
 	    result = theSensitivityAlgorithm->computeSensitivities();
 	    if(result < 0)
               {
-                std::cerr << nombre_clase() << "::" << __FUNCTION__
+                std::cerr << getClassName() << "::" << __FUNCTION__
 			  << "; the SensitivityAlgorithm failed"
 			  << " at iteration: " << i
 			  << " with domain at load factor "
@@ -233,7 +233,7 @@ int XC::DirectIntegrationAnalysis::analyze(int numSteps, double dT)
         result= metodo_solu->getTransientIntegratorPtr()->commit();
         if(result < 0)
           {
-	    std::cerr << nombre_clase() << "::" << __FUNCTION__
+	    std::cerr << getClassName() << "::" << __FUNCTION__
 		      << "; the Integrator failed to commit at time "
 		      << the_Domain->getTimeTracker().getCurrentTime()
 		      << std::endl;
@@ -337,7 +337,7 @@ int XC::DirectIntegrationAnalysis::setNumberer(DOF_Numberer &theNewNumberer)
     result = this->domainChanged();    
     if(result < 0)
       {
-        std::cerr << nombre_clase() << "::" << __FUNCTION__
+        std::cerr << getClassName() << "::" << __FUNCTION__
 		  << "; setNumberer() failed";
         return -1;
       }	
@@ -371,7 +371,7 @@ int XC::DirectIntegrationAnalysis::setAlgorithm(EquiSolnAlgo &theNewAlgorithm)
 	domainStamp = stamp;	    
 	if(this->domainChanged() < 0)
           {
-	    std::cerr << nombre_clase() << "::" << __FUNCTION__
+	    std::cerr << getClassName() << "::" << __FUNCTION__
 		      << "; domainChanged failed";
 	    return -1;
 	  }	
@@ -380,7 +380,7 @@ int XC::DirectIntegrationAnalysis::setAlgorithm(EquiSolnAlgo &theNewAlgorithm)
       {
 	if(metodo_solu->getEquiSolutionAlgorithmPtr()->domainChanged() < 0)
           {
-	    std::cerr << nombre_clase() << "::" << __FUNCTION__
+	    std::cerr << getClassName() << "::" << __FUNCTION__
 		      << "; algorithm::domainChanged() failed";
 	    return -2;
 	  }
@@ -412,7 +412,7 @@ int XC::DirectIntegrationAnalysis::setIntegrator(TransientIntegrator &theNewInte
 	domainStamp = stamp;	    
 	if(this->domainChanged() < 0)
           {
-	    std::cerr << nombre_clase() << "::" << __FUNCTION__
+	    std::cerr << getClassName() << "::" << __FUNCTION__
 		      << "; domainChanged failed";
 	    return -1;
           }	
@@ -421,7 +421,7 @@ int XC::DirectIntegrationAnalysis::setIntegrator(TransientIntegrator &theNewInte
       {
         if(metodo_solu->getTransientIntegratorPtr()->domainChanged() < 0)
           {
-	    std::cerr << nombre_clase() << "::" << __FUNCTION__
+	    std::cerr << getClassName() << "::" << __FUNCTION__
 		      << "; Integrator::domainChanged failed";
 	    return -1;
           }	
@@ -457,7 +457,7 @@ int XC::DirectIntegrationAnalysis::setLinearSOE(LinearSOE &theNewSOE)
         domainStamp = stamp;	    
         if(this->domainChanged() < 0)
           {
-	    std::cerr << nombre_clase() << "::" << __FUNCTION__
+	    std::cerr << getClassName() << "::" << __FUNCTION__
 		      << "; domainChanged failed";
 	    return -1;
           }	
@@ -467,7 +467,7 @@ int XC::DirectIntegrationAnalysis::setLinearSOE(LinearSOE &theNewSOE)
         Graph &theGraph = metodo_solu->getModelWrapperPtr()->getAnalysisModelPtr()->getDOFGraph();
         if(metodo_solu->getLinearSOEPtr()->setSize(theGraph) < 0)
           {
-	    std::cerr << nombre_clase() << "::" << __FUNCTION__
+	    std::cerr << getClassName() << "::" << __FUNCTION__
 		      << "; LinearSOE::setSize() failed";
 	    return -2;	
           }
@@ -496,7 +496,7 @@ int XC::DirectIntegrationAnalysis::checkDomainChange(void)
         domainStamp = stamp;	
         if(this->domainChanged() < 0)
           {
-            std::cerr << nombre_clase() << "::" << __FUNCTION__
+            std::cerr << getClassName() << "::" << __FUNCTION__
 		      << "; domainChanged() failed\n";
             return -1;
           }	

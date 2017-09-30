@@ -251,7 +251,7 @@ int XC::MFreedom_Constraint::addResistingForceToNodalReaction(bool inclInertia)
     rN->addReactionForce(tmp,1.0);
 
     if(inclInertia)
-      std::cerr << nombre_clase() << "::" << __FUNCTION__
+      std::cerr << getClassName() << "::" << __FUNCTION__
 	        << " ERROR;  inertia effects not yet implemented." << std::endl;
     return 0;
   }

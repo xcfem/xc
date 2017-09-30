@@ -101,7 +101,7 @@ int XC::Face::SenseOfEdge(const Edge *l,const Face &otra) const
     const size_t ind_l_esta= IndiceEdge(l);
     if(ind_l_esta == 0)
       {
-        std::cerr << nombre_clase() << "::" << __FUNCTION__
+        std::cerr << getClassName() << "::" << __FUNCTION__
 		  << "; line :" << l->getName() 
                   << " is not an edge of the surface: "
 		  << getName() << std::endl;
@@ -110,7 +110,7 @@ int XC::Face::SenseOfEdge(const Edge *l,const Face &otra) const
     const size_t ind_l_otra= otra.IndiceEdge(l);
     if(ind_l_otra == 0)
       {
-        std::cerr << nombre_clase() << "::" << __FUNCTION__
+        std::cerr << getClassName() << "::" << __FUNCTION__
 		  << "; line :" << l->getName() 
                   << " is not an edge of the surface: "
 		  << otra.getName() << std::endl;
@@ -155,7 +155,7 @@ std::set<XC::SetBase *> XC::Face::get_sets(void) const
         retval= sets.get_sets(this);
       }
     else
-      std::cerr << nombre_clase() << __FUNCTION__
+      std::cerr << getClassName() << __FUNCTION__
 	        << "; preprocessor needed." << std::endl;
     return retval;
   }
@@ -201,7 +201,7 @@ const XC::Node *XC::Face::GetNodo(const size_t &i,const size_t &j) const
     else if(ttzNodes.EsCapaKCte())
       retval= CmbEdge::GetNodo(i,j,1);
     else
-      std::cerr << nombre_clase() << "::" << __FUNCTION__
+      std::cerr << getClassName() << "::" << __FUNCTION__
 	        << "; the node set is not one-dimensional." << std::endl;
     return retval;
   }
@@ -209,7 +209,7 @@ const XC::Node *XC::Face::GetNodo(const size_t &i,const size_t &j) const
 //! @brief Returns a pointer to node which index is being passed as parameter.
 XC::Node *XC::Face::GetNodo(const size_t &i)
   {
-    std::cerr << nombre_clase() << __FUNCTION__
+    std::cerr << getClassName() << __FUNCTION__
               << "; must not be called with only one index." << std::endl; 
     return nullptr;
   }

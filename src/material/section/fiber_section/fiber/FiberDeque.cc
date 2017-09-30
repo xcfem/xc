@@ -294,7 +294,7 @@ double XC::FiberDeque::getAreaHomogenizedSection(const double &E0) const
 const XC::Vector &XC::FiberDeque::getCdgHomogenizedSection(const double &E0) const
   {
     if(fabs(E0)<1e-6)
-      std::clog << nombre_clase() << "::" << __FUNCTION__
+      std::clog << getClassName() << "::" << __FUNCTION__
 	        << ";homogenization reference modulus too small; E0= "
 		<< E0 << std::endl; 
     double Qy= 0.0,Qz= 0.0;
@@ -339,11 +339,11 @@ double XC::FiberDeque::getIyHomogenizedSection(const double &E0) const
           if(mat)
             retval+= (*i)->getArea()*sqr((*i)->getLocZ()-cdg[1])*(mat->getTangent()/E0);
           else
-	    std::cerr << nombre_clase() << "::" << __FUNCTION__
+	    std::cerr << getClassName() << "::" << __FUNCTION__
 		      << "; null pointer to material." << std::endl;
         }
       else
-        std::cerr << nombre_clase() << "::" << __FUNCTION__
+        std::cerr << getClassName() << "::" << __FUNCTION__
 		  << "; null pointer to fiber." << std::endl;
     return retval;
   }
@@ -353,7 +353,7 @@ double XC::FiberDeque::getIyHomogenizedSection(const double &E0) const
 double XC::FiberDeque::getIzHomogenizedSection(const double &E0) const
   {
     if(fabs(E0)<1e-6)
-      std::clog << nombre_clase() << "::" << __FUNCTION__
+      std::clog << getClassName() << "::" << __FUNCTION__
 		<< "homogenization reference modulus too small; E0= "
 		<< E0 << std::endl; 
     double retval= 0.0;
@@ -366,11 +366,11 @@ double XC::FiberDeque::getIzHomogenizedSection(const double &E0) const
           if(mat)
             retval+= (*i)->getArea()*sqr((*i)->getLocY()-cdg[0])*(mat->getTangent()/E0);
           else
-	    std::cerr << nombre_clase() << "::" << __FUNCTION__
+	    std::cerr << getClassName() << "::" << __FUNCTION__
 		      << "; null pointer to material." << std::endl;
         }
       else
-        std::cerr << nombre_clase() << "::" << __FUNCTION__
+        std::cerr << getClassName() << "::" << __FUNCTION__
 		  << "; null pointer to fiber." << std::endl;
     return retval;
   }
@@ -391,11 +391,11 @@ double XC::FiberDeque::getPyzHomogenizedSection(const double &E0) const
           if(mat)
             retval+= (*i)->getArea()*((*i)->getLocZ()-cdg[1])*((*i)->getLocY()-cdg[0])*(mat->getTangent()/E0);
           else
-	    std::cerr << nombre_clase() << "::" << __FUNCTION__
+	    std::cerr << getClassName() << "::" << __FUNCTION__
 		      << "null pointer to material." << std::endl;
         }
       else
-        std::cerr << nombre_clase() << "::" << __FUNCTION__
+        std::cerr << getClassName() << "::" << __FUNCTION__
 		  << "; null pointer to fiber." << std::endl;
     return retval;
   }
@@ -476,7 +476,7 @@ double XC::FiberDeque::getSzPos(const double &yf,const double &y0,const double &
             }
         }
       else
-        std::cerr << nombre_clase() << "::" << __FUNCTION__
+        std::cerr << getClassName() << "::" << __FUNCTION__
 		  << "; null pointer to fiber." << std::endl;
     retval*= factor;
     return retval;
@@ -500,7 +500,7 @@ double XC::FiberDeque::getSzNeg(const double &yf,const double &y0,const double &
             }
         }
       else
-        std::cerr << nombre_clase() << "::" << __FUNCTION__
+        std::cerr << getClassName() << "::" << __FUNCTION__
 		  << "; null pointer to fiber." << std::endl;
     retval*= factor;
     return retval;
@@ -521,7 +521,7 @@ double XC::FiberDeque::getSyPos(const double &zf,const double &z0,const double &
             retval+= (*i)->getArea()*(z_fiber-z0);
         }
       else
-        std::cerr << nombre_clase() << "::" << __FUNCTION__
+        std::cerr << getClassName() << "::" << __FUNCTION__
 		  << "; null pointer to fiber." << std::endl;
     retval*= factor;
     return retval;
@@ -542,7 +542,7 @@ double XC::FiberDeque::getSyNeg(const double &zf,const double &z0,const double &
             retval+= (*i)->getArea()*(z_fiber-z0);
         }
       else
-        std::cerr << nombre_clase() << "::" << __FUNCTION__
+        std::cerr << getClassName() << "::" << __FUNCTION__
 		  << "; null pointer to fiber." << std::endl;
     retval*= factor;
     return retval;
@@ -1378,7 +1378,7 @@ const std::list<Poligono2d> &XC::FiberDeque::getFiberEffectiveConcretAreaContour
 double XC::FiberDeque::getFiberEffectiveConcreteArea(const size_t &i) const
   {
     if(dq_ac_effective.size()!=size())
-      std::cerr << nombre_clase() << "::" << __FUNCTION__
+      std::cerr << getClassName() << "::" << __FUNCTION__
 	        << "; effective areas are not computed yet."
                 << std::endl;
     return area(dq_ac_effective[i].begin(),dq_ac_effective[i].end());
@@ -1389,7 +1389,7 @@ double XC::FiberDeque::getFibersEffectiveConcreteArea(void) const
   {
     const size_t sz= dq_ac_effective.size();
     if(sz!=size())
-      std::cerr << nombre_clase() << "::" << __FUNCTION__
+      std::cerr << getClassName() << "::" << __FUNCTION__
 	        << "; effective areas are not computed yet."
                 << std::endl;
     double retval= 0.0;
@@ -1419,7 +1419,7 @@ void XC::FiberDeque::computeSpacement(void) const
 const double &XC::FiberDeque::getFiberCover(const size_t &i) const
   {
     if(recubs.size()!=size())
-      std::cerr << nombre_clase() << "::" << __FUNCTION__
+      std::cerr << getClassName() << "::" << __FUNCTION__
 	        << "; cover not computed."
                 << std::endl;
     return recubs[i];
@@ -1429,7 +1429,7 @@ const double &XC::FiberDeque::getFiberCover(const size_t &i) const
 const double &XC::FiberDeque::getFiberSpacing(const size_t &i) const
   {
     if(seps.size()!=size())
-      std::cerr << nombre_clase() << "::" << __FUNCTION__
+      std::cerr << getClassName() << "::" << __FUNCTION__
 		<< "; spacing not computed."
                 << std::endl;
     return seps[i];
@@ -2194,7 +2194,7 @@ size_t XC::FiberDeque::getFiberWithMaxCoord(const Ref3d3d &r,const size_t &iCoo)
     const size_t nf= getNumFibers();
     if(nf<1)
       {
-        std::cerr << nombre_clase() << "::" << __FUNCTION__
+        std::cerr << getClassName() << "::" << __FUNCTION__
 	          << "; there is no fibers defined." << std::endl;
         return retval;
       }
@@ -2225,7 +2225,7 @@ size_t XC::FiberDeque::getFiberWithMinCoord(const Ref3d3d &r,const size_t &iCoo)
     const size_t nf= getNumFibers();
     if(nf<1)
       {
-        std::cerr << nombre_clase() << "::" << __FUNCTION__
+        std::cerr << getClassName() << "::" << __FUNCTION__
 	          << "; container is empty." << std::endl;
         return retval;
       }

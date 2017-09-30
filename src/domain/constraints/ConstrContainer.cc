@@ -109,7 +109,7 @@ bool XC::ConstrContainer::check_contenedores(void) const
     if((theSPs == nullptr) || (theMPs == nullptr) || (theMRMPs == nullptr) ||
        (theMFreedom_Iter == nullptr) || (theSFreedom_Iter == nullptr) || (theMRMFreedom_Iter == nullptr))
       {
-        std::cerr << nombre_clase() << "::" << __FUNCTION__
+        std::cerr << getClassName() << "::" << __FUNCTION__
 		  << " - out of memory\n";
         return false;
       }
@@ -164,7 +164,7 @@ bool XC::ConstrContainer::addSFreedom_Constraint(SFreedom_Constraint *spConstrai
     TaggedObject *other= theSPs->getComponentPtr(tag);
     if(other)
       {
-        std::clog << nombre_clase() << "::" << __FUNCTION__
+        std::clog << getClassName() << "::" << __FUNCTION__
 		  << " - cannot add a constraint with tag "
                   << tag << " already exists in model\n";
         retval= false;
@@ -186,7 +186,7 @@ bool XC::ConstrContainer::addMFreedom_Constraint(MFreedom_Constraint *mfConstrai
     TaggedObject *other= theMPs->getComponentPtr(tag);
     if(other)
       {
-        std::clog << nombre_clase() << "::" << __FUNCTION__
+        std::clog << getClassName() << "::" << __FUNCTION__
 		  << " - cannot add as constraint with tag "
                   << tag << " already exists in model";
       }
@@ -206,7 +206,7 @@ bool XC::ConstrContainer::addMRMFreedom_Constraint(MRMFreedom_Constraint *mrmfCo
     TaggedObject *other= theMRMPs->getComponentPtr(tag);
     if(other)
       {
-        std::clog << nombre_clase() << "::" << __FUNCTION__
+        std::clog << getClassName() << "::" << __FUNCTION__
 		  << " - cannot add as constraint with tag "
                   << tag << " already exists in model";
       }
@@ -226,7 +226,7 @@ bool XC::ConstrContainer::addLoadPattern(LoadPattern *load)
     if(i!=activeLoadPatterns.end())
       {
         if(verbosity>3)
-          std::cerr << nombre_clase() << "::" << __FUNCTION__
+          std::cerr << getClassName() << "::" << __FUNCTION__
 		    << " - cannot add as LoadPattern with tag "
                     << tag << " already exists in model\n";
         retval= false;
@@ -246,7 +246,7 @@ bool XC::ConstrContainer::addNodeLocker(NodeLocker *nl)
     MapCasosActivos<NodeLocker>::const_iterator i= activeNodeLockers.find(tag);
     if(i!=activeNodeLockers.end())
       {
-        std::clog << nombre_clase() << "::" << __FUNCTION__
+        std::clog << getClassName() << "::" << __FUNCTION__
 		  << " - cannot add as LoadPattern with tag "
                   << tag << " already exists in model\n";
         retval= false;
@@ -267,7 +267,7 @@ bool XC::ConstrContainer::addSFreedom_Constraint(SFreedom_Constraint *spConstrai
     if(caso)
       retval= caso->addSFreedom_Constraint(spConstraint);
     else
-      std::cerr << nombre_clase() << "::" << __FUNCTION__
+      std::cerr << getClassName() << "::" << __FUNCTION__
 		<< " - cannot add as pattern with tag "
                 << loadPatternTag << " does not exist in domain\n";
     return retval;
@@ -283,7 +283,7 @@ bool XC::ConstrContainer::addNodalLoad(NodalLoad *load, int loadPatternTag)
     const Node *res= getDomain()->getNode(nodTag);
     if(res == nullptr)
       {
-        std::cerr << nombre_clase() << "::" << __FUNCTION__
+        std::cerr << getClassName() << "::" << __FUNCTION__
 		  << " - no node with tag: " << nodTag
 		  << " exists in  the model, not adding the nodal load"
 		  << *load << std::endl;
@@ -296,7 +296,7 @@ bool XC::ConstrContainer::addNodalLoad(NodalLoad *load, int loadPatternTag)
           retval= caso->addNodalLoad(load);
         else
           {
-            std::cerr << nombre_clase() << "::" << __FUNCTION__
+            std::cerr << getClassName() << "::" << __FUNCTION__
 		      << " - no pattern with tag: " << loadPatternTag
 		      << " in  the model, not adding the nodal load"
 		      << *load << std::endl;
@@ -317,7 +317,7 @@ bool XC::ConstrContainer::addElementalLoad(ElementalLoad *load, int loadPatternT
       retval= caso->addElementalLoad(load);
     else
       {
-        std::cerr << nombre_clase() << "::" << __FUNCTION__
+        std::cerr << getClassName() << "::" << __FUNCTION__
 		  << " - no pattern with tag " << loadPatternTag
 		  << "exits in  the model, not adding the ele load "
 		  << *load << std::endl;
@@ -589,7 +589,7 @@ XC::LoadPattern *XC::ConstrContainer::getLoadPattern(const int &tag)
     LoadPattern *retval= nullptr;
     MapCasosActivos<LoadPattern>::iterator i= activeLoadPatterns.find(tag);
     if(i==activeLoadPatterns.end())
-      std::cerr << nombre_clase() << "::" << __FUNCTION__
+      std::cerr << getClassName() << "::" << __FUNCTION__
 	        << " - load pattern with tag: " << tag << " not found\n";
     else
       retval= (*i).second;
@@ -602,7 +602,7 @@ const XC::LoadPattern *XC::ConstrContainer::getLoadPattern(const int &tag) const
     const LoadPattern *retval= nullptr;
     MapCasosActivos<LoadPattern>::const_iterator i= activeLoadPatterns.find(tag);
     if(i==activeLoadPatterns.end())
-      std::cerr << nombre_clase() << "::" << __FUNCTION__
+      std::cerr << getClassName() << "::" << __FUNCTION__
 	        << " - load pattern with tag: "
 	        << tag << " not found\n";
     else
@@ -616,7 +616,7 @@ XC::NodeLocker *XC::ConstrContainer::getNodeLocker(const int &tag)
     NodeLocker *retval= nullptr;
     MapCasosActivos<NodeLocker>::iterator i= activeNodeLockers.find(tag);
     if(i==activeNodeLockers.end())
-      std::cerr << nombre_clase() << "::" << __FUNCTION__
+      std::cerr << getClassName() << "::" << __FUNCTION__
 	        << " - node locker with tag: "
 	        << tag << " not found\n";
     else
@@ -630,7 +630,7 @@ const XC::NodeLocker *XC::ConstrContainer::getNodeLocker(const int &tag) const
     const NodeLocker *retval= nullptr;
     MapCasosActivos<NodeLocker>::const_iterator i= activeNodeLockers.find(tag);
     if(i==activeNodeLockers.end())
-      std::cerr << nombre_clase() << "::" << __FUNCTION__
+      std::cerr << getClassName() << "::" << __FUNCTION__
 	        << " - node locker with tag: "
 	        << tag << " not found\n";
     else
@@ -755,11 +755,11 @@ std::string XC::ConstrContainer::getLoadPatternsNames(void) const
                   retval+= casos.getLoadPatternName((*i).second) + " ";
               }
             else
-	      std::cerr << nombre_clase() << "::" << __FUNCTION__
+	      std::cerr << getClassName() << "::" << __FUNCTION__
 		        << " preprocessor not defined." << std::endl;
           }
         else
-	      std::cerr << nombre_clase() << "::" << __FUNCTION__
+	      std::cerr << getClassName() << "::" << __FUNCTION__
 		        << " domain not defined." << std::endl;
       }
     return retval;
@@ -783,13 +783,29 @@ bool XC::ConstrContainer::nodeAffectedBySPs(int nodeTag) const
     bool retval= false;
     ConstrContainer *this_no_const= const_cast<ConstrContainer *>(this);
     SFreedom_ConstraintIter &theSPs= this_no_const->getDomainAndLoadPatternSPs();
-    SFreedom_Constraint *theSP;
+    SFreedom_Constraint *theSP= nullptr;
     while((theSP= theSPs()) != 0)
       if(theSP->getNodeTag() == nodeTag)
         {
           retval= true;
           break;
         }
+    return retval;
+  }
+
+//! @brief Returns the tags of the nodes that are which theDOF
+//! constrained by one or more single freedom constraints.
+std::set<int> XC::ConstrContainer::getTagsNodesffectedBySPs(int theDOF) const
+  {
+    std::set<int> retval;
+    ConstrContainer *this_no_const= const_cast<ConstrContainer *>(this);
+    SFreedom_ConstraintIter &theSPs= this_no_const->getDomainAndLoadPatternSPs();
+    SFreedom_Constraint *theSP= nullptr;
+    while((theSP= theSPs()) != 0)
+      {
+	if(theSP->getDOF_Number() == theDOF)
+	  retval.insert(theSP->getNodeTag());
+      }
     return retval;
   }
 
@@ -916,7 +932,7 @@ int XC::ConstrContainer::recvLPatternsTags(const int &posFlag,const int &posDbTa
                         if(verbosity>3)
                           {
                             const MapLoadPatterns &casos= loadLoader.getLoadPatterns();
-	                    std::cerr << nombre_clase() << "::" << __FUNCTION__
+	                    std::cerr << getClassName() << "::" << __FUNCTION__
 			              << "; could not add load pattern: '"
                                       << casos.getLoadPatternName(load)
                                       << "' with tag: " << load->getTag() << std::endl;
@@ -924,7 +940,7 @@ int XC::ConstrContainer::recvLPatternsTags(const int &posFlag,const int &posDbTa
                       }
                   }
                 else
-	          std::cerr << nombre_clase() << "::" << __FUNCTION__
+	          std::cerr << getClassName() << "::" << __FUNCTION__
 		            << " load with tag: " << loadPatternsTags[i]
 			    << "not found." << std::endl;
               }
@@ -977,7 +993,7 @@ int XC::ConstrContainer::recvNLockersTags(const int &posFlag,const int &posDbTag
                   nl->setDomain(dom);
               }
             else
-              std::cerr << nombre_clase() << "::" << __FUNCTION__
+              std::cerr << getClassName() << "::" << __FUNCTION__
 		        << "; node locker identified by : "
                         << nLockersTags[i] << " not found." << std::endl;
           }
@@ -1017,7 +1033,7 @@ int XC::ConstrContainer::sendSelf(CommParameters &cp)
     const int dataTag= getDbTag(cp);
     res+= cp.sendIdData(getDbTagData(),dataTag);
     if(res<0)
-      std::cerr << nombre_clase() << "::" << __FUNCTION__
+      std::cerr << getClassName() << "::" << __FUNCTION__
 		<< " - channel failed to send the initial ID\n";
     return res;
   }
@@ -1030,7 +1046,7 @@ int XC::ConstrContainer::recvSelf(const CommParameters &cp)
     inicComm(7);
     int res= cp.receiveIdData(getDbTagData(),getDbTag());
     if(res<0)
-      std::cerr << nombre_clase() << "::" << __FUNCTION__
+      std::cerr << getClassName() << "::" << __FUNCTION__
 		<< " - channel failed to recv the initial ID\n";
     else
       res+= recvData(cp);

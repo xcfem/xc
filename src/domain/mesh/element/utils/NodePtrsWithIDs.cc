@@ -67,7 +67,7 @@ void XC::NodePtrsWithIDs::set_id_nodes(const std::vector<int> &inodos)
   {
     const size_t numNodes= getNumExternalNodes();
     if(numNodes != inodos.size())
-      std::cerr << nombre_clase() << "::" << __FUNCTION__
+      std::cerr << getClassName() << "::" << __FUNCTION__
 	        << "; " 
                 << numNodes << " node indexes were expected." << std::endl;
     for(register size_t i= 0;i<numNodes;i++)
@@ -79,7 +79,7 @@ void XC::NodePtrsWithIDs::set_id_nodes(const ID &inodos)
   {
     const int numNodes= getNumExternalNodes();
     if(numNodes != inodos.Size())
-      std::cerr << nombre_clase() << "::" << __FUNCTION__
+      std::cerr << getClassName() << "::" << __FUNCTION__
 	        << "; " 
                 << numNodes << " node indexes were expected." << std::endl;
     for(register int i= 0;i<numNodes;i++)

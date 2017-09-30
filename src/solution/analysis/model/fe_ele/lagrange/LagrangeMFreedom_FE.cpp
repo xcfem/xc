@@ -89,14 +89,14 @@ XC::LagrangeMFreedom_FE::LagrangeMFreedom_FE(int tag, Domain &theDomain, MFreedo
 
     if(theRetainedNode == 0)
       {
-	std::cerr << nombre_clase() << "::" << __FUNCTION__
+	std::cerr << getClassName() << "::" << __FUNCTION__
 		  << "; no associated retained node\n";
 	exit(-1);
       }
     
     if(theConstrainedNode == 0)
       {
-	std::cerr << nombre_clase() << "::" << __FUNCTION__
+	std::cerr << getClassName() << "::" << __FUNCTION__
 		  << "; no asscoiated constrained node\n";
 	exit(-1);
       }
@@ -148,7 +148,7 @@ const XC::Vector &XC::LagrangeMFreedom_FE::getResidual(Integrator *theNewIntegra
 
 const XC::Vector &XC::LagrangeMFreedom_FE::getTangForce(const Vector &disp, double fact)
   {
-    std::cerr << nombre_clase() << "::" << __FUNCTION__
+    std::cerr << getClassName() << "::" << __FUNCTION__
 	      << "; not yet implemented\n";
     resid.Zero(); //Added by LCPT.
     return  resid;
@@ -156,7 +156,7 @@ const XC::Vector &XC::LagrangeMFreedom_FE::getTangForce(const Vector &disp, doub
 
 const XC::Vector &XC::LagrangeMFreedom_FE::getK_Force(const Vector &disp, double fact)
   {
-    std::cerr << nombre_clase() << "::" << __FUNCTION__
+    std::cerr << getClassName() << "::" << __FUNCTION__
 	      << "; not yet implemented\n";
     resid.Zero(); //Added by LCPT.
     return resid;
@@ -164,7 +164,7 @@ const XC::Vector &XC::LagrangeMFreedom_FE::getK_Force(const Vector &disp, double
 
 const XC::Vector &XC::LagrangeMFreedom_FE::getC_Force(const Vector &disp, double fact)
   {
-    std::cerr << nombre_clase() << "::" << __FUNCTION__
+    std::cerr << getClassName() << "::" << __FUNCTION__
 	      << "; not yet implemented\n";
     resid.Zero(); //Added by LCPT.
     return resid;
@@ -172,7 +172,7 @@ const XC::Vector &XC::LagrangeMFreedom_FE::getC_Force(const Vector &disp, double
 
 const XC::Vector &XC::LagrangeMFreedom_FE::getM_Force(const XC::Vector &disp, double fact)
   {
-    std::cerr << nombre_clase() << "::" << __FUNCTION__
+    std::cerr << getClassName() << "::" << __FUNCTION__
 	      << "; not yet implemented\n";
     resid.Zero(); //Added by LCPT.
     return resid;

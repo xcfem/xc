@@ -102,17 +102,17 @@ void XC::FiberSectionShear3d::setRespVyVzT(const UniaxialMaterial *rvy,const Uni
     if(rvy)
       respVy= rvy->getCopy();
     else
-      std::cerr << nombre_clase() << "::" << __FUNCTION__ << "; "
+      std::cerr << getClassName() << "::" << __FUNCTION__ << "; "
                 << " no se ha definido la respuesta al cortante según «y»." << std::endl;
     if(rvz)
       respVz= rvz->getCopy();
     else
-      std::cerr << nombre_clase() << "::" << __FUNCTION__ << "; "
+      std::cerr << getClassName() << "::" << __FUNCTION__ << "; "
                 << " no se ha definido la respuesta al cortante según «z»." << std::endl;
     if(rt)
       respT= rt->getCopy();
     else
-      std::cerr << nombre_clase() << "::" << __FUNCTION__ << "; "
+      std::cerr << getClassName() << "::" << __FUNCTION__ << "; "
                 << " no se ha definido la respuesta al torsor." << std::endl;
   }
 
@@ -146,12 +146,12 @@ void XC::FiberSectionShear3d::setRespVyByName(const std::string &nmb_mat)
         if(tmp)
           setRespVy(tmp);
         else
-          std::cerr << nombre_clase() << "::" << __FUNCTION__ << "; "
+          std::cerr << getClassName() << "::" << __FUNCTION__ << "; "
                     << "material identified by: '" << nmb_mat
                     << "' is not uniaxial.\n";
       }
     else
-      std::cerr << nombre_clase() << "::" << __FUNCTION__ << "; "
+      std::cerr << getClassName() << "::" << __FUNCTION__ << "; "
                 << "material identified by: '" << nmb_mat
                 << "' not found.\n";
   }
@@ -170,12 +170,12 @@ void XC::FiberSectionShear3d::setRespVzByName(const std::string &nmb_mat)
         if(tmp)
           setRespVz(tmp);
         else
-          std::cerr << nombre_clase() << "::" << __FUNCTION__ << "; "
+          std::cerr << getClassName() << "::" << __FUNCTION__ << "; "
                     << "material identified by: '" << nmb_mat
                     << "' is not uniaxial.\n";
       }
     else
-      std::cerr << nombre_clase() << "::" << __FUNCTION__ << "; "
+      std::cerr << getClassName() << "::" << __FUNCTION__ << "; "
                 << "material identified by: '" << nmb_mat
                 << "'. not found.\n";
   }
@@ -194,12 +194,12 @@ void XC::FiberSectionShear3d::setRespTByName(const std::string &nmb_mat)
         if(tmp)
           setRespT(tmp);
         else
-          std::cerr << nombre_clase() << "::" << __FUNCTION__ << "; "
+          std::cerr << getClassName() << "::" << __FUNCTION__ << "; "
                     << "material identified by: '" << nmb_mat
                     << "' is not uniaxial.\n";
       }
     else
-      std::cerr << nombre_clase() << "::" << __FUNCTION__ << "; "
+      std::cerr << getClassName() << "::" << __FUNCTION__ << "; "
                 << "material identified by: '" << nmb_mat
                 << "' not found.\n";
   }
@@ -390,7 +390,7 @@ int XC::FiberSectionShear3d::revertToStart(void)
 int XC::FiberSectionShear3d::sendData(CommParameters &cp)
   {
     int res= FiberSection3d::sendData(cp);
-    std::cerr << nombre_clase() << "::" << __FUNCTION__ << " - not implemented.\n";
+    std::cerr << getClassName() << "::" << __FUNCTION__ << " - not implemented.\n";
     return res;
   }
 
@@ -398,7 +398,7 @@ int XC::FiberSectionShear3d::sendData(CommParameters &cp)
 int XC::FiberSectionShear3d::recvData(const CommParameters &cp)
   {
     int res= FiberSection3d::recvData(cp);
-    std::cerr << nombre_clase() << "::" << __FUNCTION__ << " - not implemented.\n";
+    std::cerr << getClassName() << "::" << __FUNCTION__ << " - not implemented.\n";
     return res;
   }
 
@@ -412,7 +412,7 @@ int XC::FiberSectionShear3d::sendSelf(CommParameters &cp)
 
     res+= cp.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
-      std::cerr << nombre_clase() << "sendSelf() - failed to send data\n";
+      std::cerr << getClassName() << "sendSelf() - failed to send data\n";
     return res;
   }
 
@@ -425,13 +425,13 @@ int XC::FiberSectionShear3d::recvSelf(const CommParameters &cp)
     int res= cp.receiveIdData(getDbTagData(),dataTag);
 
     if(res<0)
-      std::cerr << nombre_clase() << "::recvSelf - failed to receive ids.\n";
+      std::cerr << getClassName() << "::recvSelf - failed to receive ids.\n";
     else
       {
         setTag(getDbTagDataPos(0));
         res+= recvData(cp);
         if(res<0)
-          std::cerr << nombre_clase() << "::recvSelf - failed to receive data.\n";
+          std::cerr << getClassName() << "::recvSelf - failed to receive data.\n";
       }
     return res;
   }

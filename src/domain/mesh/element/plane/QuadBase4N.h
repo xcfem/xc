@@ -162,7 +162,7 @@ template <class PhysProp>
 int XC::QuadBase4N<PhysProp>::addLoad(ElementalLoad *theLoad, double loadFactor)
   {
     if(this->isDead())
-      std::cerr << this->nombre_clase() 
+      std::cerr << this->getClassName() 
                 << "; load over inactiva element: "
                 << this->getTag() << std::endl;
     else

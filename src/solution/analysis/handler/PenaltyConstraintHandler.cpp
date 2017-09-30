@@ -99,7 +99,7 @@ int XC::PenaltyConstraintHandler::handle(const ID *nodesLast)
 
     if((!theDomain) || (!theModel) || (!theIntegrator))
       {
-        std::cerr << nombre_clase() << "::" << __FUNCTION__
+        std::cerr << getClassName() << "::" << __FUNCTION__
 	          << "; domain, model or integrator was not set.\n";
         return -1;
       }
@@ -152,7 +152,7 @@ int XC::PenaltyConstraintHandler::handle(const ID *nodesLast)
                   }
                 else
                   {
-                    std::cerr << nombre_clase() << "::" << __FUNCTION__
+                    std::cerr << getClassName() << "::" << __FUNCTION__
 		              << "; boundary sp constraint in subdomain"
                               << " this should not be - results suspect \n";
                   }

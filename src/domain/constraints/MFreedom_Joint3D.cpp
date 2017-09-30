@@ -95,7 +95,7 @@ XC::MFreedom_Joint3D::MFreedom_Joint3D(Domain *theDomain, int tag, int nodeRetai
     int CnumDOF = ConstrainedNode->getNumberDOF();
     if(RnumDOF != 9 || CnumDOF != 6 )
       {
-        std::cerr << nombre_clase() << "::" << __FUNCTION__
+        std::cerr << getClassName() << "::" << __FUNCTION__
 	          << "; mismatch in numDOF\n DOF not supported by this type of constraint";
         return;
       }
@@ -104,7 +104,7 @@ XC::MFreedom_Joint3D::MFreedom_Joint3D(Domain *theDomain, int tag, int nodeRetai
     // check the main degree of freedom. Assign auxilary DOF 
     if( RotDOF<6 || RotDOF>8 || DispDOF<6 || DispDOF>8 || RotDOF==DispDOF )
       {
-        std::cerr << nombre_clase() << "::" << __FUNCTION__
+        std::cerr << getClassName() << "::" << __FUNCTION__
 		  << "; Wrong degrees of freedom" ;
         return;
       }
@@ -121,7 +121,7 @@ XC::MFreedom_Joint3D::MFreedom_Joint3D(Domain *theDomain, int tag, int nodeRetai
 
     if(dimRet != 3 || dimCon != 3 || dimRot != 3 || dimDsp != 3 )
       {
-        std::cerr << nombre_clase() << "::" << __FUNCTION__
+        std::cerr << getClassName() << "::" << __FUNCTION__
 	          << "; mismatch in dimnesion\n dimension not supported by this type of constraint";
         return;
       }
@@ -135,7 +135,7 @@ XC::MFreedom_Joint3D::MFreedom_Joint3D(Domain *theDomain, int tag, int nodeRetai
     Length0= sqrt( deltaX*deltaX + deltaY*deltaY + deltaY*deltaY );
     if(Length0 <= 1.0e-12)
       {
-	std::cerr << nombre_clase() << "::" << __FUNCTION__
+	std::cerr << getClassName() << "::" << __FUNCTION__
 		  << "; the constraint length is zero\n";
       }
   
@@ -148,7 +148,7 @@ XC::MFreedom_Joint3D::MFreedom_Joint3D(Domain *theDomain, int tag, int nodeRetai
   
     if(RotNormVect.Norm() <= 1.0e-12 || DspNormVect.Norm() <= 1.0e-12 )
       {
-	std::cerr << nombre_clase() << "::" << __FUNCTION__
+	std::cerr << getClassName() << "::" << __FUNCTION__
 	          << "; the normal vector for the rotation mode or the displacement mode is zero\n";
       }
     RotNormVect= RotNormVect / RotNormVect.Norm();
@@ -264,7 +264,7 @@ int XC::MFreedom_Joint3D::applyConstraint(double timeStamp)
 //! @brief Sends the object through the channel being passed as parameter.
 int XC::MFreedom_Joint3D::sendSelf(CommParameters &cp)
   {
-    std::cerr << nombre_clase() << "::" << __FUNCTION__
+    std::cerr << getClassName() << "::" << __FUNCTION__
               << ": not implemented." << std::endl;
     return 0;
   }
@@ -272,7 +272,7 @@ int XC::MFreedom_Joint3D::sendSelf(CommParameters &cp)
 //! @brief Receives the object through the channel being passed as parameter.
 int XC::MFreedom_Joint3D::recvSelf(const CommParameters &cp)
   {
-    std::cerr << nombre_clase() << "::" << __FUNCTION__
+    std::cerr << getClassName() << "::" << __FUNCTION__
               << ": not implemented." << std::endl;
     return 0;
   }
@@ -282,7 +282,7 @@ const XC::Matrix &XC::MFreedom_Joint3D::getConstraint(void)
   {
     if(constraintMatrix.Nula())
       {
-        std::cerr << nombre_clase() << "::" << __FUNCTION__
+        std::cerr << getClassName() << "::" << __FUNCTION__
 		  << "; no matrix was set\n";
         exit(-1);
       }    
@@ -354,7 +354,7 @@ void XC::MFreedom_Joint3D::setDomain(Domain *theDomain)
 	  RotationNode->connect(this);
 	else
           {
-            std::cerr << nombre_clase() << "::" << __FUNCTION__
+            std::cerr << getClassName() << "::" << __FUNCTION__
 		      << "; nodeRotation: " << nodeRotation
 		      << "does not exist in model\n";
           }
@@ -364,7 +364,7 @@ void XC::MFreedom_Joint3D::setDomain(Domain *theDomain)
 	  DisplacementNode->connect(this);
         else    
           {
-            std::cerr << nombre_clase() << "::" << __FUNCTION__
+            std::cerr << getClassName() << "::" << __FUNCTION__
                       << "; nodeDisplacement: " << nodeDisplacement
 		      << "does not exist in model\n";
           }

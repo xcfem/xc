@@ -46,7 +46,7 @@ int XC::KEigenIntegrator::formM(void)
     EigenSOE *theSOE= getEigenSOEPtr();
     if(!mdl || !theSOE)
       {
-	std::cerr << nombre_clase() << "::" << __FUNCTION__
+	std::cerr << getClassName() << "::" << __FUNCTION__
 	          << "; no AnalysisModel or EigenSOE has been set\n";
 	retval= -1;
       }

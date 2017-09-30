@@ -176,10 +176,10 @@ const XC::Vector &XC::NodalLoad::getForce(void) const
     else
       {
         if(load.Nulo())
-          std::cerr << nombre_clase() << "::" << __FUNCTION__
+          std::cerr << getClassName() << "::" << __FUNCTION__
 	            << "; load not defined." << std::endl;
         if(!myNodePtr)
-          std::cerr << nombre_clase() << "::" << __FUNCTION__
+          std::cerr << getClassName() << "::" << __FUNCTION__
 		    << "; pointer to node is NULL." << std::endl;
       }
     return retval;
@@ -234,7 +234,7 @@ const XC::Node *XC::NodalLoad::get_node_ptr(void) const
         retval= theDomain->getNode(myNode);
         if(!retval)
           {
-            std::cerr << nombre_clase() << "::" << __FUNCTION__
+            std::cerr << getClassName() << "::" << __FUNCTION__
 	              << "; node identified by: "
                       << myNode << " not found." << std::endl;
           }

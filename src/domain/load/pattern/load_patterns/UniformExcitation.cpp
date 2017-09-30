@@ -65,6 +65,8 @@
 #include <domain/mesh/element/Element.h>
 #include "domain/mesh/node/NodeIter.h"
 #include "domain/mesh/element/ElementIter.h"
+#include "domain/constraints/SFreedom_Constraint.h"
+#include "domain/constraints/SFreedom_ConstraintIter.h"
 #include <utility/actor/objectBroker/FEM_ObjectBroker.h>
 
 
@@ -102,32 +104,27 @@ void XC::UniformExcitation::setDomain(Domain *theDomain)
     // for those nodes not fixed in the dirn!
     if(vel0 != 0.0)
       {
-	 SP_ConstraintIter &theSPs = theDomain->getSPs();
-	 SP_Constraint *theSP;
-	 ID constrainedNodes(0);
-	 int count = 0;
-	 while((theSP=theSPs()) != 0)
-	   {
-	     if(theSP->getDOF_Number() == theDof)
-	       {
-	         constrainedNodes[count] = theSP->getNodeTag();
-	         count++;
-	       }
-	   }
+	std::set<int> constrainedNodes= theDomain->getConstraints().getTagsNodesffectedBySPs(theDof);
+
         NodeIter &theNodes = theDomain->getNodes();
         Node *theNode= nullptr;
         Vector newVel(1);
         int currentSize = 1;
         while ((theNode = theNodes()) != 0)
           {
-            int numDOF = theNode->getNumberDOF();
-            if(numDOF != currentSize) 
-	      newVel.resize(numDOF);
-      
-            newVel = theNode->getVel();
-            newVel(theDof) = vel0;
-            theNode->setTrialVel(newVel);
-            theNode->commitState();
+	    const int tag= theNode->getTag();
+	    if(constrainedNodes.count(tag)==0)
+	      {
+		const int numDOF = theNode->getNumberDOF();
+
+		if(numDOF != currentSize) 
+		  newVel.resize(numDOF);
+
+		newVel = theNode->getVel();
+		newVel(theDof) = vel0;
+		theNode->setTrialVel(newVel);
+		theNode->commitState();
+	      }
           }
       }
   }
@@ -255,7 +252,7 @@ int XC::UniformExcitation::sendSelf(CommParameters &cp)
 
     res+= cp.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
-      std::cerr << nombre_clase() << "::" << __FUNCTION__
+      std::cerr << getClassName() << "::" << __FUNCTION__
 	        << ";failed to send data\n";
     return res;
   }
@@ -269,14 +266,14 @@ int XC::UniformExcitation::recvSelf(const CommParameters &cp)
     int res= cp.receiveIdData(getDbTagData(),dataTag);
 
     if(res<0)
-      std::cerr << nombre_clase() << "::" << __FUNCTION__
+      std::cerr << getClassName() << "::" << __FUNCTION__
 	        << ";failed to receive ids.\n";
     else
       {
         setTag(getDbTagDataPos(0));
         res+= recvData(cp);
         if(res<0)
-          std::cerr << nombre_clase() << "::" << __FUNCTION__
+          std::cerr << getClassName() << "::" << __FUNCTION__
                     << ";failed to receive data\n";
       }
     return res;
@@ -285,7 +282,7 @@ int XC::UniformExcitation::recvSelf(const CommParameters &cp)
 //! @brief Prints stuff.
 void XC::UniformExcitation::Print(std::ostream &s, int flag)
   {
-    s << nombre_clase() << "::" << __FUNCTION__
+    s << getClassName() << "::" << __FUNCTION__
       << "; " << this->getTag() 
       << " - Not Printing the GroundMotion.\n";
   }

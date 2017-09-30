@@ -36,7 +36,7 @@ void XC::RigidBase::setDomain(Domain *theDomain)
   {
     if(theDomain == nullptr)
       {
-        std::cerr << nombre_clase() << "::" << __FUNCTION__
+        std::cerr << getClassName() << "::" << __FUNCTION__
 	          << "; specified domain does not exist";
         std::cerr << "Domain = 0\n";
         return;
@@ -49,7 +49,7 @@ void XC::RigidBase::setDomain(Domain *theDomain)
         nodeR = theDomain->getNode(getNodeRetained());
         if(!nodeR)
           {
-            std::cerr << nombre_clase() << "::" << __FUNCTION__
+            std::cerr << getClassName() << "::" << __FUNCTION__
 		      << "; retained node " <<  getNodeRetained()
 		      <<  " not in domain\n";
           }
@@ -58,7 +58,7 @@ void XC::RigidBase::setDomain(Domain *theDomain)
         nodeC = theDomain->getNode(getNodeConstrained());
         if(!nodeC)
           {
-            std::cerr << nombre_clase() << "::" << __FUNCTION__
+            std::cerr << getClassName() << "::" << __FUNCTION__
 		      << "; constrained node " <<  getNodeConstrained()
 		      <<  " not in domain\n";
           }

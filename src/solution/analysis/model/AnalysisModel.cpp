@@ -189,7 +189,7 @@ XC::FE_Element *XC::AnalysisModel::createFE_Element(const int &tag, Element *ele
     if(retval)
       addFE_Element(retval);
     else
-      std::cerr << nombre_clase() << "::" << __FUNCTION__
+      std::cerr << getClassName() << "::" << __FUNCTION__
                 << "; ran out of memory"
                 << " creating FE_Element: " << tag << std::endl;
     return retval;
@@ -202,7 +202,7 @@ XC::LagrangeSFreedom_FE *XC::AnalysisModel::createLagrangeSFreedom_FE(const int 
     if(retval)
       addFE_Element(retval);
     else
-      std::cerr << nombre_clase() << "::" << __FUNCTION__
+      std::cerr << getClassName() << "::" << __FUNCTION__
                 << "; ran out of memory"
                 << " creating LagrangeFE_Element: " << tag << std::endl;
     return retval;    
@@ -215,7 +215,7 @@ XC::LagrangeMFreedom_FE *XC::AnalysisModel::createLagrangeMFreedom_FE(const int 
     if(retval)
       addFE_Element(retval);
     else
-      std::cerr << nombre_clase() << "::" << __FUNCTION__
+      std::cerr << getClassName() << "::" << __FUNCTION__
                 << "; ran out of memory"
                 << " creating LagrangeFE_Element: " << tag << std::endl;
     return retval;    
@@ -228,7 +228,7 @@ XC::LagrangeMRMFreedom_FE *XC::AnalysisModel::createLagrangeMRMFreedom_FE(const 
     if(retval)
       addFE_Element(retval);
     else
-      std::cerr << nombre_clase() << "::" << __FUNCTION__
+      std::cerr << getClassName() << "::" << __FUNCTION__
                 << "; ran out of memory"
                 << " creating LagrangeFE_Element: " << tag << std::endl;
     return retval;
@@ -241,7 +241,7 @@ XC::PenaltySFreedom_FE *XC::AnalysisModel::createPenaltySFreedom_FE(const int &t
     if(retval)
       addFE_Element(retval);
     else
-      std::cerr << nombre_clase() << "::" << __FUNCTION__
+      std::cerr << getClassName() << "::" << __FUNCTION__
                 << "; ran out of memory"
                 << " creating PenaltyFE_Element: " << tag << std::endl;
     return retval;    
@@ -254,7 +254,7 @@ XC::PenaltyMFreedom_FE *XC::AnalysisModel::createPenaltyMFreedom_FE(const int &t
     if(retval)
       addFE_Element(retval);
     else
-      std::cerr << nombre_clase() << "::" << __FUNCTION__
+      std::cerr << getClassName() << "::" << __FUNCTION__
                 << "; ran out of memory"
                 << " creating PenaltyFE_Element: " << tag << std::endl;
     return retval;    
@@ -267,7 +267,7 @@ XC::PenaltyMRMFreedom_FE *XC::AnalysisModel::createPenaltyMRMFreedom_FE(const in
     if(retval)
       addFE_Element(retval);
     else
-      std::cerr << nombre_clase() << "::" << __FUNCTION__
+      std::cerr << getClassName() << "::" << __FUNCTION__
                 << "; ran out of memory"
                 << " creating PenaltyFE_Element: " << tag << std::endl;
     return retval;    
@@ -328,7 +328,7 @@ bool XC::AnalysisModel::addDOF_Group(DOF_Group *theGroup)
     TaggedObject *other= theDOFGroups.getComponentPtr(tag);
     if(other)
       {
-        std::cerr << nombre_clase() << "::" << __FUNCTION__
+        std::cerr << getClassName() << "::" << __FUNCTION__
 		  << "; group with tag " << tag
 		  << " already exists in model\n"; 
         return false;
@@ -356,7 +356,7 @@ XC::DOF_Group *XC::AnalysisModel::createDOF_Group(const int &tag, Node *myNode)
         addDOF_Group(dofPtr);
       }
     else
-      std::cerr << nombre_clase() << "::" << __FUNCTION__
+      std::cerr << getClassName() << "::" << __FUNCTION__
                 << "; ran out of memory"
                 << " creating DOF_Group " << tag << std::endl;
 
@@ -377,7 +377,7 @@ XC::LagrangeDOF_Group *XC::AnalysisModel::createLagrangeDOF_Group(const int &tag
         addDOF_Group(dofPtr);
       }
     else
-      std::cerr << nombre_clase() << "::" << __FUNCTION__
+      std::cerr << getClassName() << "::" << __FUNCTION__
                 << "; ran out of memory"
                 << " creating DOF_Group " << tag << std::endl;
     return dofPtr;
@@ -397,7 +397,7 @@ XC::LagrangeDOF_Group *XC::AnalysisModel::createLagrangeDOF_Group(const int &tag
         addDOF_Group(dofPtr);
       }
     else
-      std::cerr << nombre_clase() << "::" << __FUNCTION__
+      std::cerr << getClassName() << "::" << __FUNCTION__
                 << "; ran out of memory"
                 << " creating DOF_Group " << tag << std::endl;
     return dofPtr;
@@ -418,7 +418,7 @@ XC::LagrangeDOF_Group *XC::AnalysisModel::createLagrangeDOF_Group(const int &tag
         addDOF_Group(dofPtr);
       }
     else
-      std::cerr << nombre_clase() << "::" << __FUNCTION__
+      std::cerr << getClassName() << "::" << __FUNCTION__
                 << "; ran out of memory"
                 << " creating DOF_Group " << tag << std::endl;
     return dofPtr;
@@ -435,7 +435,7 @@ XC::TransformationDOF_Group *XC::AnalysisModel::createTransformationDOF_Group(co
         addDOF_Group(dofPtr);
       }
     else
-      std::cerr << nombre_clase() << "::" << __FUNCTION__
+      std::cerr << getClassName() << "::" << __FUNCTION__
                 << "; ran out of memory"
                 << " creating DOF_Group " << tag << std::endl;
     return dofPtr;
@@ -451,7 +451,7 @@ XC::TransformationDOF_Group *XC::AnalysisModel::createTransformationDOF_Group(co
         addDOF_Group(dofPtr);
       }
     else
-      std::cerr << nombre_clase() << "::" << __FUNCTION__
+      std::cerr << getClassName() << "::" << __FUNCTION__
                 << "; ran out of memory"
                 << " creating DOF_Group " << tag << std::endl;
     return dofPtr;
@@ -668,7 +668,7 @@ void XC::AnalysisModel::applyLoadDomain(double pseudoTime)
         getHandlerPtr()->applyLoad();
       }
     else
-      std::cerr << nombre_clase() << "::" << __FUNCTION__
+      std::cerr << getClassName() << "::" << __FUNCTION__
 		<< "; WARNING no domain linked.\n";
   }
 
@@ -679,7 +679,7 @@ int XC::AnalysisModel::updateDomain(void)
     int res= 0;
     Domain *dom= getDomainPtr();
     if(!dom)
-      std::cerr << nombre_clase() << "::" << __FUNCTION__
+      std::cerr << getClassName() << "::" << __FUNCTION__
 		<< "; WARNING no domain linked.\n";
     else
       {
@@ -698,7 +698,7 @@ int XC::AnalysisModel::updateDomain(double newTime, double dT)
     int res= 0;
     Domain *dom= getDomainPtr();
     if(!dom)
-      std::cerr << nombre_clase() << "::" << __FUNCTION__
+      std::cerr << getClassName() << "::" << __FUNCTION__
 		<< "; WARNING: no domain linked.\n";
     else
       {
@@ -720,7 +720,7 @@ int XC::AnalysisModel::newStepDomain(double dT)
     int retval= -1;
     Domain *dom= getDomainPtr();
     if(!dom)
-      std::cerr << nombre_clase() << "::" << __FUNCTION__
+      std::cerr << getClassName() << "::" << __FUNCTION__
 		<< "; no domain linked."
                 << std::endl;
     else
@@ -736,7 +736,7 @@ int XC::AnalysisModel::commitDomain(void)
     int retval= -1;
     Domain *dom= getDomainPtr();
     if(!dom)
-      std::cerr << nombre_clase() << "::" << __FUNCTION__
+      std::cerr << getClassName() << "::" << __FUNCTION__
 		<< "; no domain linked."
                 << std::endl;
     else
@@ -758,12 +758,12 @@ int XC::AnalysisModel::revertDomainToLastCommit(void)
     int retval= -1;
     Domain *dom= getDomainPtr();
     if(!dom)
-      std::cerr << nombre_clase() << "::" << __FUNCTION__
+      std::cerr << getClassName() << "::" << __FUNCTION__
 		<< "; no domain linked."
                 << std::endl;
     else if(dom->revertToLastCommit()<0)
       {
-        std::cerr << nombre_clase() << "::" << __FUNCTION__
+        std::cerr << getClassName() << "::" << __FUNCTION__
 		  << "; failed." << std::endl;
         retval= -2;
       }        
@@ -776,7 +776,7 @@ double XC::AnalysisModel::getCurrentDomainTime(void)
     double retval= 0.0;
     Domain *dom= getDomainPtr();
     if(!dom)
-      std::cerr << nombre_clase() << "::" << __FUNCTION__
+      std::cerr << getClassName() << "::" << __FUNCTION__
 		<< "; no domain linked."
                 << std::endl;
     else
@@ -789,7 +789,7 @@ void XC::AnalysisModel::setCurrentDomainTime(double newTime)
   {
     Domain *dom= getDomainPtr();
     if(!dom)
-      std::cerr << nombre_clase() << "::" << __FUNCTION__
+      std::cerr << getClassName() << "::" << __FUNCTION__
 		<< "; no domain linked."
                 << std::endl;
     else
@@ -802,7 +802,7 @@ void XC::AnalysisModel::setRayleighDampingFactors(const RayleighDampingFactors &
   {
     Domain *dom= getDomainPtr();
     if(!dom)
-      std::cerr << nombre_clase() << "::" << __FUNCTION__
+      std::cerr << getClassName() << "::" << __FUNCTION__
 		<< "; no domain linked."
                 << std::endl;
     else

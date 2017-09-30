@@ -514,7 +514,7 @@ void XC::DOF_Group::incrNodeDisp(const Vector &u)
   {
     if(!myNode)
       {
-        std::cerr << nombre_clase() << "::" << __FUNCTION__
+        std::cerr << getClassName() << "::" << __FUNCTION__
 	          << "; null node pointer\n";
         exit(-1);
       }
@@ -523,7 +523,7 @@ void XC::DOF_Group::incrNodeDisp(const Vector &u)
 
     if(disp.Size() == 0)
       {
-        std::cerr << nombre_clase() << "::" << __FUNCTION__
+        std::cerr << getClassName() << "::" << __FUNCTION__
 	          << "; out of space\n";
         return;
       }

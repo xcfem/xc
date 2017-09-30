@@ -147,7 +147,7 @@ XC::fiber_list XC::FiberSectionRepr::get2DFibers(void) const
     fiber_list retval;
     if(!material_loader)
       {
-        std::cerr << nombre_clase() << "::" << __FUNCTION__
+        std::cerr << getClassName() << "::" << __FUNCTION__
 		  << "; material handler not defined.\n";
         return retval;
       }
@@ -165,7 +165,7 @@ XC::fiber_list XC::FiberSectionRepr::get3DFibers(void) const
     fiber_list retval;
     if(!material_loader)
       {
-        std::cerr << nombre_clase() << "::" << __FUNCTION__
+        std::cerr << getClassName() << "::" << __FUNCTION__
 	          << "; material handler not defined.\n";
         return retval;
       }

@@ -52,7 +52,7 @@ void XC::LoadLoader::addToDomain(const std::string &lp_code)
       {
         bool result= getDomain()->addLoadPattern(lp);
         if((!result) && (verbosity>3))
-          std::cerr << nombre_clase() << "::" << __FUNCTION__
+          std::cerr << getClassName() << "::" << __FUNCTION__
 	            << "; can't add the load pattern: '"
                     << lp_code << "'\n";
       }
@@ -125,7 +125,7 @@ int XC::LoadLoader::sendSelf(CommParameters &cp)
 
     res+= cp.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
-      std::cerr << nombre_clase() << "::sendSelf() - failed to send data\n";
+      std::cerr << getClassName() << "::sendSelf() - failed to send data\n";
     return res;
   }
 
@@ -138,13 +138,13 @@ int XC::LoadLoader::recvSelf(const CommParameters &cp)
     int res= cp.receiveIdData(getDbTagData(),dataTag);
 
     if(res<0)
-      std::cerr << nombre_clase() << "::recvSelf - failed to receive ids.\n";
+      std::cerr << getClassName() << "::recvSelf - failed to receive ids.\n";
     else
       {
         //setTag(getDbTagDataPos(0));
         res+= recvData(cp);
         if(res<0)
-          std::cerr << nombre_clase() << "::recvSelf - failed to receive data.\n";
+          std::cerr << getClassName() << "::recvSelf - failed to receive data.\n";
       }
     return res;
   }

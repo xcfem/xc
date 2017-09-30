@@ -212,7 +212,7 @@ bool DqPtrs<T>::push_back(T *t)
           }
       }
     else
-      std::cerr << nombre_clase() << "::" << __FUNCTION__
+      std::cerr << getClassName() << "::" << __FUNCTION__
 	        << "; attempt to insert a null pointer." << std::endl;
     return retval;
   }
@@ -230,7 +230,7 @@ bool DqPtrs<T>::push_front(T *t)
           }
       }
     else
-      std::cerr << nombre_clase() << "::" << __FUNCTION__
+      std::cerr << getClassName() << "::" << __FUNCTION__
 	        << "; attempt to insert a null pointer." << std::endl;
     return retval;
   }

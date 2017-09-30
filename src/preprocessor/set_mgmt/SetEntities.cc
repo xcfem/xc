@@ -238,7 +238,7 @@ void XC::SetEntities::fillDownwards(SetMeshComp &mc)
 //! to one or more of the objects that already make part of the set.
 void XC::SetEntities::fillUpwards(const SetMeshComp &mc)
   {
-    std::cerr << nombre_clase() << "::" << __FUNCTION__
+    std::cerr << getClassName() << "::" << __FUNCTION__
               << "; work in progress." << std::endl;
     for(pnt_iterator i=points.begin();i!=points.end();i++)
       {
@@ -289,7 +289,7 @@ XC::SetEntities XC::SetEntities::create_copy(const std::string &name,const Vecto
     Preprocessor *preprocessor= getPreprocessor();
     SetEntities retval(preprocessor);
     if(!preprocessor)
-      std::cerr << nombre_clase() << "::" << __FUNCTION__
+      std::cerr << getClassName() << "::" << __FUNCTION__
                 << "; preprocessor not assigned." << std::endl;
     else
       {
@@ -503,7 +503,7 @@ void XC::SetEntities::sel_points_lista(const ID &tags)
               }
           }
         else
-          std::cerr << nombre_clase() << __FUNCTION__
+          std::cerr << getClassName() << __FUNCTION__
 	            << "; preprocessor needed." << std::endl;
       }
   }
@@ -531,7 +531,7 @@ void XC::SetEntities::sel_lineas_lista(const ID &tags)
               }
           }
         else
-          std::cerr << nombre_clase() << __FUNCTION__
+          std::cerr << getClassName() << __FUNCTION__
 	            << "; preprocessor needed." << std::endl;
       }
   }
@@ -556,7 +556,7 @@ void XC::SetEntities::sel_surfaces_lst(const ID &tags)
               }
           }
         else
-          std::cerr << nombre_clase() << __FUNCTION__
+          std::cerr << getClassName() << __FUNCTION__
 	            << "; preprocessor needed." << std::endl;
       }
   }
@@ -573,7 +573,7 @@ XC::DbTagData &XC::SetEntities::getDbTagData(void) const
 int XC::SetEntities::sendData(CommParameters &cp)
   {
     int res= 0;
-    std::cerr << nombre_clase() << "::" << __FUNCTION__
+    std::cerr << getClassName() << "::" << __FUNCTION__
               << "; not implemented yet." << std::endl;
 //     res+= points.sendTags(9,10,getDbTagData(),cp);
 //     res+= lines.sendTags(11,12,getDbTagData(),cp);
@@ -588,7 +588,7 @@ int XC::SetEntities::recvData(const CommParameters &cp)
   {
     ID tmp;
     int res= 0;
-    std::cerr << nombre_clase() << "::" << __FUNCTION__
+    std::cerr << getClassName() << "::" << __FUNCTION__
               << "; not implemented yet." << std::endl;
 //     tmp= points.receiveTags(9,10,getDbTagData(),cp);
 //     sel_points_lista(tmp);
@@ -616,7 +616,7 @@ int XC::SetEntities::sendSelf(CommParameters &cp)
 
     res+= cp.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
-      std::cerr << nombre_clase() << "::" << __FUNCTION__
+      std::cerr << getClassName() << "::" << __FUNCTION__
 	        << "; failed to send data\n";
     return res;
   }
@@ -629,14 +629,14 @@ int XC::SetEntities::recvSelf(const CommParameters &cp)
     int res= cp.receiveIdData(getDbTagData(),dataTag);
 
     if(res<0)
-      std::cerr << nombre_clase() << "::" << __FUNCTION__
+      std::cerr << getClassName() << "::" << __FUNCTION__
                 << "; failed to receive ids.\n";
     else
       {
         //setTag(getDbTagDataPos(0));
         res+= recvData(cp);
         if(res<0)
-          std::cerr << nombre_clase() << "::" << __FUNCTION__
+          std::cerr << getClassName() << "::" << __FUNCTION__
 		    << "; failed to receive data.\n";
       }
     return res;

@@ -89,7 +89,7 @@ std::set<XC::SetBase *> XC::UniformGrid::get_sets(void) const
         retval= sets.get_sets(this);
       }
     else
-      std::cerr << nombre_clase() << __FUNCTION__
+      std::cerr << getClassName() << __FUNCTION__
 	        << "; preprocessor needed." << std::endl;
     return retval;
   }

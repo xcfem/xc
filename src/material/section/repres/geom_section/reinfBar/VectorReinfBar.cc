@@ -114,7 +114,7 @@ double XC::VectorReinfBar::getAreaHomogenizedSection(const double &E0) const
             retval+= n*(*i)->getArea();
           }
         else
-	  std::cerr << nombre_clase() << "::" << __FUNCTION__ << "; material not found." << std::endl; 
+	  std::cerr << getClassName() << "::" << __FUNCTION__ << "; material not found." << std::endl; 
       }
     return retval;
   }
@@ -137,7 +137,7 @@ XC::Vector XC::VectorReinfBar::getCdgHomogenizedSection(const double &E0) const
             divisor+= weight;
           }
         else
-	  std::cerr << nombre_clase() << "::" << __FUNCTION__ << "; region material undefined." << std::endl;
+	  std::cerr << getClassName() << "::" << __FUNCTION__ << "; region material undefined." << std::endl;
       }
     retval/= divisor;
     return retval;
@@ -161,7 +161,7 @@ double XC::VectorReinfBar::getIyHomogenizedSection(const double &E0) const
             retval+= n*((*i)->Iy()+(*i)->getArea()*sqr(d));
           }
         else
-	  std::cerr << nombre_clase() << "::" << __FUNCTION__ << "; region material undefined." << std::endl; 
+	  std::cerr << getClassName() << "::" << __FUNCTION__ << "; region material undefined." << std::endl; 
       }
     return retval;
   }
@@ -184,7 +184,7 @@ double XC::VectorReinfBar::getIzHomogenizedSection(const double &E0) const
             retval+= n*((*i)->Iz()+(*i)->getArea()*sqr(d));
           }
         else
-	  std::cerr << nombre_clase() << "::" << __FUNCTION__ << "; region material undefined." << std::endl; 
+	  std::cerr << getClassName() << "::" << __FUNCTION__ << "; region material undefined." << std::endl; 
       }
     return retval;
   }
@@ -208,7 +208,7 @@ double XC::VectorReinfBar::getPyzHomogenizedSection(const double &E0) const
             retval+= n*((*i)->Pyz()+(*i)->getArea()*d2);
           }
         else
-	  std::cerr << nombre_clase() << "::" << __FUNCTION__ << "; region material not found." << std::endl; 
+	  std::cerr << getClassName() << "::" << __FUNCTION__ << "; region material not found." << std::endl; 
       }
     return retval;
   }

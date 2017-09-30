@@ -104,7 +104,7 @@ const XC::Vector &XC::LagrangeMRMFreedom_FE::getResidual(Integrator *theNewInteg
 
 const XC::Vector &XC::LagrangeMRMFreedom_FE::getTangForce(const Vector &disp, double fact)
   {
-    std::cerr << nombre_clase() << "::" << __FUNCTION__
+    std::cerr << getClassName() << "::" << __FUNCTION__
 	      << "; not yet implemented\n";
     resid.Zero(); //Added by LCPT.
     return  resid;
@@ -112,7 +112,7 @@ const XC::Vector &XC::LagrangeMRMFreedom_FE::getTangForce(const Vector &disp, do
 
 const XC::Vector &XC::LagrangeMRMFreedom_FE::getK_Force(const Vector &disp, double fact)
   {
-    std::cerr << nombre_clase() << "::" << __FUNCTION__
+    std::cerr << getClassName() << "::" << __FUNCTION__
 	      << "; not yet implemented\n";
     resid.Zero(); //Added by LCPT.
     return resid;
@@ -120,7 +120,7 @@ const XC::Vector &XC::LagrangeMRMFreedom_FE::getK_Force(const Vector &disp, doub
 
 const XC::Vector &XC::LagrangeMRMFreedom_FE::getC_Force(const Vector &disp, double fact)
   {
-    std::cerr << nombre_clase() << "::" << __FUNCTION__
+    std::cerr << getClassName() << "::" << __FUNCTION__
 	      << "; not yet implemented\n";
     resid.Zero(); //Added by LCPT.
     return resid;
@@ -128,7 +128,7 @@ const XC::Vector &XC::LagrangeMRMFreedom_FE::getC_Force(const Vector &disp, doub
 
 const XC::Vector &XC::LagrangeMRMFreedom_FE::getM_Force(const XC::Vector &disp, double fact)
   {
-    std::cerr << nombre_clase() << "::" << __FUNCTION__
+    std::cerr << getClassName() << "::" << __FUNCTION__
 	      << "; not yet implemented\n";
     resid.Zero(); //Added by LCPT.
     return resid;

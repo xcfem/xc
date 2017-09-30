@@ -151,14 +151,14 @@ int XC::NewtonLineSearch::solveCurrentStep(void)
     theTest->set_owner(getSoluMethod());
     if(theTest->start() < 0)
       {
-        std::cerr << nombre_clase() << "::" << __FUNCTION__ << "; ";
+        std::cerr << getClassName() << "::" << __FUNCTION__ << "; ";
         std::cerr << "the convergence test object failed in start()\n";
         return -3;
       }
 
     if(theIntegrator->formUnbalance() < 0)
       {
-        std::cerr << nombre_clase() << "::" << __FUNCTION__ << "; ";
+        std::cerr << getClassName() << "::" << __FUNCTION__ << "; ";
         std::cerr << "the integrator failed in formUnbalance()\n";
         return -2;
       }
@@ -172,7 +172,7 @@ int XC::NewtonLineSearch::solveCurrentStep(void)
         //form the tangent
         if(theIntegrator->formTangent() < 0)
           {
-            std::cerr << nombre_clase() << "::" << __FUNCTION__ << "; ";
+            std::cerr << getClassName() << "::" << __FUNCTION__ << "; ";
             std::cerr << "the integrator failed in formTangent()\n";
             return -1;
           }
@@ -180,7 +180,7 @@ int XC::NewtonLineSearch::solveCurrentStep(void)
         //solve
         if(theSOE->solve() < 0)
           {
-            std::cerr << nombre_clase() << "::" << __FUNCTION__ << "; ";
+            std::cerr << getClassName() << "::" << __FUNCTION__ << "; ";
             std::cerr << "the LinearSysOfEqn failed in solve()\n";
             return -3;
           }
@@ -193,14 +193,14 @@ int XC::NewtonLineSearch::solveCurrentStep(void)
 
        if(theIntegrator->update(theSOE->getX()) < 0)
           {
-            std::cerr << nombre_clase() << "::" << __FUNCTION__ << "; ";
+            std::cerr << getClassName() << "::" << __FUNCTION__ << "; ";
             std::cerr << "the integrator failed in update()\n";
             return -4;
           }
 
         if(theIntegrator->formUnbalance() < 0)
           {
-            std::cerr << nombre_clase() << "::" << __FUNCTION__ << "; ";
+            std::cerr << getClassName() << "::" << __FUNCTION__ << "; ";
             std::cerr << "the integrator failed in formUnbalance()\n";
             return -2;
           }
@@ -221,7 +221,7 @@ int XC::NewtonLineSearch::solveCurrentStep(void)
 
     if(result == -2)
       {
-        std::cerr << nombre_clase() << "::" << __FUNCTION__ << "; ";
+        std::cerr << getClassName() << "::" << __FUNCTION__ << "; ";
         std::cerr << "the convergence test object failed in test()\n"
                   << "convergence test message: "
 		  << theTest->getStatusMsg(1) << std::endl;

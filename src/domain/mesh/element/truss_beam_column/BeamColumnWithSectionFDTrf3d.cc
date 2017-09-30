@@ -119,7 +119,7 @@ XC::Vector XC::BeamColumnWithSectionFDTrf3d::getVDirStrongAxisLocalCoord(const s
       }
     else
       {
-        std::cerr << nombre_clase() << __FUNCTION__
+        std::cerr << getClassName() << __FUNCTION__
 	          << "; section: "
                   << i << " doesn't returns principal axes." << std::endl;
       }
@@ -139,7 +139,7 @@ XC::Vector XC::BeamColumnWithSectionFDTrf3d::getVDirWeakAxisLocalCoord(const siz
       }
     else
       {
-        std::cerr << nombre_clase() << __FUNCTION__
+        std::cerr << getClassName() << __FUNCTION__
 	          << "; section: "
                   << i << " doesn't returns principal axes." << std::endl;
         return retval;
@@ -167,7 +167,7 @@ double XC::BeamColumnWithSectionFDTrf3d::getWeakAxisAngle(const size_t &i) const
 const XC::Vector &XC::BeamColumnWithSectionFDTrf3d::getVDirStrongAxisGlobalCoord(const size_t &i, bool initialGeometry) const
   {
     if(!initialGeometry)
-      std::cerr << nombre_clase() << "::" << __FUNCTION__
+      std::cerr << getClassName() << "::" << __FUNCTION__
                 << "; not implemented for deformed geometry." << std::endl;
     const CrdTransf *ct= checkCoordTransf();
     if(ct)
@@ -186,7 +186,7 @@ const XC::Vector &XC::BeamColumnWithSectionFDTrf3d::getVDirStrongAxisGlobalCoord
 const XC::Vector &XC::BeamColumnWithSectionFDTrf3d::getVDirWeakAxisGlobalCoord(const size_t &i, bool initialGeometry) const
   {
     if(!initialGeometry)
-      std::cerr << nombre_clase() << "::" << __FUNCTION__
+      std::cerr << getClassName() << "::" << __FUNCTION__
                 << "; not implemented for deformed geometry." << std::endl;
     const CrdTransf *ct= checkCoordTransf();
     if(ct)

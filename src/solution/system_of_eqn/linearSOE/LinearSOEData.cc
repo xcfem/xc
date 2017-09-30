@@ -44,7 +44,7 @@ void XC::LinearSOEData::inic(const size_t &sz)
         zero();
       }
     else
-      std::cerr << "¡WARNING! " << nombre_clase() << "::" << __FUNCTION__
+      std::cerr << "¡WARNING! " << getClassName() << "::" << __FUNCTION__
 	        << " model has zero DOFs"
                 << " add nodes or reduce constraints." << std::endl;
   }

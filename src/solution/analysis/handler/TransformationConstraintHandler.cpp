@@ -97,15 +97,15 @@ int XC::TransformationConstraintHandler::handle(const ID *nodesLast)
     // first check links exist to a Domain and an AnalysisModel object
     Domain *theDomain= this->getDomainPtr();
     if(!theDomain)
-      std::cerr << nombre_clase() << "::" << __FUNCTION__
+      std::cerr << getClassName() << "::" << __FUNCTION__
                 << "; null pointer to domain." << std::endl;
     AnalysisModel *theModel= this->getAnalysisModelPtr();
     if(!theModel)
-      std::cerr << nombre_clase() << "::" << __FUNCTION__
+      std::cerr << getClassName() << "::" << __FUNCTION__
 		<< " pointer to analysis model is null." << std::endl;
     Integrator *theIntegrator= this->getIntegratorPtr();
     if(!theIntegrator)
-      std::cerr << nombre_clase() << "::" << __FUNCTION__
+      std::cerr << getClassName() << "::" << __FUNCTION__
                 << " pointer to integrator is null." << std::endl;
 
     // get number of elements and nodes in the domain
@@ -182,7 +182,7 @@ int XC::TransformationConstraintHandler::handle(const ID *nodesLast)
     // create an array for the DOF_Groups and zero it
     if(numDOF <= 0)
       {
-        std::cerr << nombre_clase() << "::" << __FUNCTION__
+        std::cerr << getClassName() << "::" << __FUNCTION__
 		  << " DOF_Groups array of size " << numDOF << std::endl;
         return -3;
       }
@@ -302,7 +302,7 @@ int XC::TransformationConstraintHandler::handle(const ID *nodesLast)
           }
 
         if(dofPtr == 0)
-          std::cerr << nombre_clase() << "::" << __FUNCTION__
+          std::cerr << getClassName() << "::" << __FUNCTION__
 		    << "; error in logic.\n";
 
       }
@@ -373,7 +373,7 @@ int XC::TransformationConstraintHandler::handle(const ID *nodesLast)
     // create an array for the FE_elements and zero it
     if(numberOfElements>0 && numFE<=0)
       {
-        std::cerr << nombre_clase() << "::" << __FUNCTION__
+        std::cerr << getClassName() << "::" << __FUNCTION__
 	          << "; FE_Element array of size " << numFE << std::endl;
         return -2;
       }
@@ -412,7 +412,7 @@ int XC::TransformationConstraintHandler::handle(const ID *nodesLast)
                       count3++;
                     }
                   else
-                    std::cerr << nombre_clase() << "::" << __FUNCTION__
+                    std::cerr << getClassName() << "::" << __FUNCTION__
   		              << "; boundary sp constraint in subdomain"
                               << " this should not be - results suspect \n";
                 }

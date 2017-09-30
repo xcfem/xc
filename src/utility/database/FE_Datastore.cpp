@@ -153,12 +153,12 @@ int XC::FE_Datastore::restoreState(int commitTag)
             CommParameters cp(commitTag,*this,*theObjectBroker);
             res= getPreprocessor()->recvSelf(cp);
             if(res < 0)
-              std::cerr << nombre_clase() << "::" << __FUNCTION__
+              std::cerr << getClassName() << "::" << __FUNCTION__
 	                << "; preprocessor failed to recvSelf\n";
             ID maxlastDbTag(1);
             res= recvID(-1,commitTag,maxlastDbTag);
             if(res<0)
-              std::cerr << nombre_clase() << "::" << __FUNCTION__
+              std::cerr << getClassName() << "::" << __FUNCTION__
                         << ";- failed to get max lastDbTag data"
 		        << " from database - problems may arise\n";
             else

@@ -67,10 +67,10 @@ Vector3d XC::MapPuntos::getVector(const Indice &i,const Indice &j) const
     const Pnt *pA= busca(i);
     const Pnt *pB= busca(j);
     if(!pA)
-      std::cerr << nombre_clase() << "::" << __FUNCTION__ << "; point: " << i
+      std::cerr << getClassName() << "::" << __FUNCTION__ << "; point: " << i
 		<< " not found." << std::endl;
     else if(!pB)
-      std::cerr << nombre_clase() << "::" << __FUNCTION__ << "; point: " << j 
+      std::cerr << getClassName() << "::" << __FUNCTION__ << "; point: " << j 
 		<< " not found." << std::endl;
     else
       retval= Vector3d(pA->GetPos(),pB->GetPos());
@@ -84,10 +84,10 @@ Recta3d XC::MapPuntos::getRecta(const Indice &i,const Indice &j) const
     const Pnt *pA= busca(i);
     const Pnt *pB= busca(j);
     if(!pA)
-      std::cerr << nombre_clase() << "::" << __FUNCTION__ << "; point: " << i
+      std::cerr << getClassName() << "::" << __FUNCTION__ << "; point: " << i
 		<< " not found." << std::endl;
     else if(!pB)
-      std::cerr << nombre_clase() << "::" << __FUNCTION__ << "; point: " << j 
+      std::cerr << getClassName() << "::" << __FUNCTION__ << "; point: " << j 
 		<< " not found." << std::endl;
     else
       retval= Recta3d(pA->GetPos(),pB->GetPos());
@@ -102,13 +102,13 @@ Plano3d XC::MapPuntos::getPlano(const Indice &i,const Indice &j,const Indice &k)
     const Pnt *pB= busca(j);
     const Pnt *pC= busca(k);
     if(!pA)
-      std::cerr << nombre_clase() << "::" << __FUNCTION__ << "; point: " << i
+      std::cerr << getClassName() << "::" << __FUNCTION__ << "; point: " << i
 		<< " not found." << std::endl;
     else if(!pB)
-      std::cerr << nombre_clase() << "::" << __FUNCTION__ << "; point: " << j 
+      std::cerr << getClassName() << "::" << __FUNCTION__ << "; point: " << j 
 		<< " not found." << std::endl;
     else if(!pC)
-      std::cerr << nombre_clase() << "::" << __FUNCTION__ << "; point: " << k 
+      std::cerr << getClassName() << "::" << __FUNCTION__ << "; point: " << k 
 		<< " not found." << std::endl;
     else
       retval= Plano3d(pA->GetPos(),pB->GetPos(),pC->GetPos());
@@ -143,7 +143,7 @@ XC::Pnt *XC::MapPuntos::New(const Pos3d &pos)
   {
     Pnt *retval= busca(getTag());
     if(retval)
-      std::cerr << nombre_clase() << "::" << __FUNCTION__ << "; point with tag: " 
+      std::cerr << getClassName() << "::" << __FUNCTION__ << "; point with tag: " 
                 << getTag() << " already exists, doing nothing." << std::endl;
     else //The point is new.
       {
@@ -180,12 +180,12 @@ XC::Pnt *XC::MapPuntos::Copia(const Pnt *p,const Vector3d &v= Vector3d())
     Pnt *retval= busca(getTag());
     if(!p)
       {
-        std::cerr << nombre_clase() << "::" << __FUNCTION__
+        std::cerr << getClassName() << "::" << __FUNCTION__
 		  << "; the pointer to original point is null." << std::endl;
         return retval;
       }
     if(retval)
-      std::cerr << nombre_clase() << "::" << __FUNCTION__
+      std::cerr << getClassName() << "::" << __FUNCTION__
 		<< "; the point identified by: " 
                 << getTag() << " already exists, no changes made." << std::endl;
     else //The point is new.
@@ -201,7 +201,7 @@ XC::Pnt *XC::MapPuntos::Copia(const Pnt *p,const Vector3d &v= Vector3d())
             tag++;
 	  }
         else
-	  std::cerr << nombre_clase() << "::" << __FUNCTION__
+	  std::cerr << getClassName() << "::" << __FUNCTION__
 		    << "; memoria agotada." << std::endl; 
       }
     return retval;
@@ -216,7 +216,7 @@ void XC::MapPuntos::Copia(const std::vector<Indice> &indices)
         if(original)
           Copia(original);
         else
-	  std::cerr << nombre_clase() << "::" << __FUNCTION__
+	  std::cerr << getClassName() << "::" << __FUNCTION__
 	            << "; point: " << *i << " not found.\n";
       }
   }
@@ -231,7 +231,7 @@ void XC::MapPuntos::Transforma(const TrfGeom &trf,const std::vector<Indice> &ind
         if(p)
           p->Transforma(trf);
         else
-	  std::cerr << nombre_clase() << "::" << __FUNCTION__
+	  std::cerr << getClassName() << "::" << __FUNCTION__
 	            << "; point: " << *i << " not found.\n";
       }
   }
@@ -243,11 +243,11 @@ double XC::MapPuntos::Dist(const Indice &i,const Indice &j) const
     const Pnt *pA= busca(i);
     const Pnt *pB= busca(j);
     if(!pA)
-      std::cerr << nombre_clase() << "::" << __FUNCTION__
+      std::cerr << getClassName() << "::" << __FUNCTION__
 	        << "; point identified by: " 
                 << i << " not found." << std::endl;
     else if(!pB)
-      std::cerr << nombre_clase() << "::" << __FUNCTION__
+      std::cerr << getClassName() << "::" << __FUNCTION__
 	        << "; point identified by: " 
                 << j << " not found." << std::endl;
     else

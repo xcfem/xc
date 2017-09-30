@@ -340,7 +340,7 @@ bool XC::Domain::addLoadPattern(LoadPattern *load)
     else
       {
         if(verbosity>3)
-          std::cerr << nombre_clase() << "::" << __FUNCTION__
+          std::cerr << getClassName() << "::" << __FUNCTION__
 	            << "; can't add load pattern identified by: "
                     << load->getTag() << "'\n";
       }
@@ -366,7 +366,7 @@ bool XC::Domain::addLoadCombination(LoadCombination *comb)
     if(comb)
       {
         if(nmbCombActual!= "")
-	  std::clog << nombre_clase() << __FUNCTION__
+	  std::clog << getClassName() << __FUNCTION__
 	            << "; warning! "
                     << "adding combination: " << comb->getNombre()
                     << " without removing: " << nmbCombActual

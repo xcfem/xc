@@ -2756,7 +2756,7 @@ int XC::EightNodeBrick::addLoad(ElementalLoad *theLoad, double loadFactor)
     //        this->getTag());
 
     if(isDead())
-      std::cerr << nombre_clase() 
+      std::cerr << getClassName() 
                 << "; load over inactive element: "
                 << getTag()  
                 << std::endl;

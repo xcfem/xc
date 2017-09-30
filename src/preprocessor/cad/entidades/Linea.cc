@@ -133,7 +133,7 @@ XC::Edge *XC::Linea::splitAtPoint(Pnt *p)
       }
     else
       {
-        std::cerr << nombre_clase() << "::" << __FUNCTION__
+        std::cerr << getClassName() << "::" << __FUNCTION__
 	          << "; pointer to point is null."
                   << std::endl;
       }

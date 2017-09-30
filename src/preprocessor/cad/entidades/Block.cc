@@ -235,7 +235,7 @@ void XC::Block::coloca(const size_t &i,Face *s)
         if(!cara) { icara=3; cara= sups[icara].Surface(); }
         if(!cara) { icara=4; cara= sups[icara].Surface(); }
         if(!cara)
-          std::cerr << nombre_clase() << "::" << __FUNCTION__
+          std::cerr << getClassName() << "::" << __FUNCTION__
 		    << "; error before introducing face 5 you must introduce"
 	            << " either the 1 , 2 , 3 or 4 faces." << std::endl;
         else
@@ -248,7 +248,7 @@ void XC::Block::coloca(const size_t &i,Face *s)
               }
             else //They don't share a common edge.
               {
-                std::cerr << nombre_clase() << "::" << __FUNCTION__
+                std::cerr << getClassName() << "::" << __FUNCTION__
 			  << "; error: Block(" << getName() << "); the face "
 			  << s->getName() 
                           << " does not share a common edge with face "
@@ -263,7 +263,7 @@ void XC::Block::coloca(const size_t &i,Face *s)
       if(sentido==-1)
         directo= false;
       else
-        std::cerr << nombre_clase() << "::" << __FUNCTION__
+        std::cerr << getClassName() << "::" << __FUNCTION__
 		  << "; the surfaces do not share a common edge."
 		  << std::endl;
     sups[i]= BodyFace(s,primero,directo);
@@ -277,7 +277,7 @@ void XC::Block::inserta(const size_t &i)
     if(s)
       coloca(indice(s),s);
     else
-      std::cerr << nombre_clase() << "::" << __FUNCTION__
+      std::cerr << getClassName() << "::" << __FUNCTION__
 		<< "; surface: " << i
 		<< " not found." << std::endl;
   }
@@ -468,7 +468,7 @@ void XC::Block::create_nodes(void)
       }
     else
       if(verbosity>2)
-        std::clog << nombre_clase() << "::" << __FUNCTION__
+        std::clog << getClassName() << "::" << __FUNCTION__
 	          << "; nodes of entity: '" << getName()
 		  << "' already exist." << std::endl;      
   }
@@ -483,7 +483,7 @@ void XC::Block::genMesh(meshing_dir dm)
       create_elements(dm);
     else
       if(verbosity>2)
-        std::clog << nombre_clase() << "::" << __FUNCTION__
+        std::clog << getClassName() << "::" << __FUNCTION__
 	          << "; nodes of entity: '" << getName()
 		  << "' already exist." << std::endl;      
     if(verbosity>3)

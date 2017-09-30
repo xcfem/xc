@@ -110,7 +110,7 @@ MaterialVector<MAT>::MaterialVector(const size_t &nMat,const MAT *matModel)
           {
             (*i)= matModel->getCopy();
             if(!(*i))
-              std::cerr << nombre_clase() << "::" << __FUNCTION__
+              std::cerr << getClassName() << "::" << __FUNCTION__
 		        << "; failed allocate material model pointer\n";
           }
       }
@@ -129,7 +129,7 @@ void MaterialVector<MAT>::alloc(const std::vector<MAT *> &mats)
           {
             (*this)[i]= mats[i]->getCopy();
             if(!(*this)[i])
-              std::cerr << nombre_clase() << "::" << __FUNCTION__
+              std::cerr << getClassName() << "::" << __FUNCTION__
 		        << "; failed allocate material model pointer\n";
           }
       }
@@ -159,7 +159,7 @@ void MaterialVector<MAT>::setMaterial(const MAT *new_mat)
           {
             (*i)= new_mat->getCopy();
             if(!(*i))
-              std::cerr << nombre_clase() << "::" << __FUNCTION__
+              std::cerr << getClassName() << "::" << __FUNCTION__
 		        << "; failed allocate material model pointer\n";
           }
       }
@@ -175,7 +175,7 @@ void MaterialVector<MAT>::setMaterial(const MAT *new_mat, const std::string &tip
           {
             (*i)= new_mat->getCopy(tipo.c_str());
             if(!(*i))
-              std::cerr << nombre_clase() << "::" << __FUNCTION__
+              std::cerr << getClassName() << "::" << __FUNCTION__
 		        << "; failed allocate material model pointer\n";
           }
       }
@@ -357,7 +357,7 @@ double MaterialVector<MAT>::getMeanGeneralizedStrainByName(const std::string &co
     else if(cod == "n12")
       retval= this->getMeanGeneralizedStrain(MEMBRANE_RESPONSE_n12);
     else
-      std::cerr << nombre_clase() << "::" << __FUNCTION__
+      std::cerr << getClassName() << "::" << __FUNCTION__
 		<< "stress code: '" << cod << " unknown." << std::endl;
     return retval;
   }
@@ -400,7 +400,7 @@ double MaterialVector<MAT>::getMeanGeneralizedStressByName(const std::string &co
     else if(cod == "q23")
       retval= this->getMeanGeneralizedStress(PLATE_RESPONSE_q23);
     else
-      std::cerr << nombre_clase() << "::" << __FUNCTION__
+      std::cerr << getClassName() << "::" << __FUNCTION__
 		<< "stress code: '" << cod << " unknown." << std::endl;
     return retval;
   }
@@ -450,7 +450,7 @@ void MaterialVector<MAT>::setInitialGeneralizedStrains(const std::vector<Vector>
     const size_t nMat= this->size();
     const size_t sz= std::min(nMat,iS.size());
     if(iS.size()<nMat)
-      std::cerr << nombre_clase() << "::" << __FUNCTION__
+      std::cerr << getClassName() << "::" << __FUNCTION__
 	        << "; received: "
                 << iS.size() << " generalized strain vectors, expected: "
                 << nMat << ".\n";
@@ -465,7 +465,7 @@ void MaterialVector<MAT>::addInitialGeneralizedStrains(const std::vector<Vector>
     const size_t nMat= this->size();
     const size_t sz= std::min(nMat,iS.size());
     if(iS.size()<nMat)
-      std::cerr << nombre_clase() << "::" << __FUNCTION__
+      std::cerr << getClassName() << "::" << __FUNCTION__
 	        << "; received: "
                 << iS.size() << " generalized strain vectors, expected: "
                 << nMat << ".\n";
@@ -563,7 +563,7 @@ int MaterialVector<MAT>::sendSelf(CommParameters &cp)
     const int dataTag=getDbTag();
     res+= cp.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
-      std::cerr << nombre_clase() << "::" << __FUNCTION__
+      std::cerr << getClassName() << "::" << __FUNCTION__
                 << dataTag << " failed to send ID";
     return res;
   }
@@ -576,7 +576,7 @@ int MaterialVector<MAT>::recvSelf(const CommParameters &cp)
     inicComm(2);
     int res= cp.receiveIdData(getDbTagData(),dataTag);
     if(res<0)
-      std::cerr << nombre_clase() << "::" << __FUNCTION__
+      std::cerr << getClassName() << "::" << __FUNCTION__
                 << dataTag << " failed to receive ID\n";
     else
       res+= recvData(cp);

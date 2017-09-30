@@ -219,7 +219,7 @@ int XC::ConvergenceTest::sendSelf(CommParameters &cp)
 
     res+= cp.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
-      std::cerr << nombre_clase() << "sendSelf() - failed to send data\n";
+      std::cerr << getClassName() << "sendSelf() - failed to send data\n";
     return res;
   }
 
@@ -231,13 +231,13 @@ int XC::ConvergenceTest::recvSelf(const CommParameters &cp)
     int res= cp.receiveIdData(getDbTagData(),dataTag);
 
     if(res<0)
-      std::cerr << nombre_clase() << "::recvSelf - failed to receive ids.\n";
+      std::cerr << getClassName() << "::recvSelf - failed to receive ids.\n";
     else
       {
         //setTag(getDbTagDataPos(0));
         res+= recvData(cp);
         if(res<0)
-          std::cerr << nombre_clase() << "::recvSelf - failed to receive data.\n";
+          std::cerr << getClassName() << "::recvSelf - failed to receive data.\n";
       }
     return res;
   }
@@ -245,14 +245,14 @@ int XC::ConvergenceTest::recvSelf(const CommParameters &cp)
 //! @brief Returns a string with the name of the class and the iteration number.
 std::string XC::ConvergenceTest::getTestIterationMessage(void) const
   {
-    return nombre_clase() + "::test() - iteration: "+std::to_string(currentIter);
+    return getClassName() + "::test() - iteration: "+std::to_string(currentIter);
   }
 
 //! @brief Returns a string with the proper failed to converge message.
 std::string XC::ConvergenceTest::getFailedToConvergeMessage(void) const
   {
     std::ostringstream retval; 
-    retval << "WARNING: " << nombre_clase()
+    retval << "WARNING: " << getClassName()
 	   << "::test() - failed to converge \n"
            << "after: " << currentIter << " iterations\n";	
     return retval.str();

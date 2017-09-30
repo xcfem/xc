@@ -411,7 +411,7 @@ const XC::Matrix &XC::UpdatedLagrangianBeam2D::getMass(void) const
 int XC::UpdatedLagrangianBeam2D::addLoad(const XC::Vector &moreLoad)
   {
     if(isDead())
-      std::cerr << nombre_clase() 
+      std::cerr << getClassName() 
                 << "; load over inactive element: "
                 << getTag()  
                 << std::endl;

@@ -3178,7 +3178,7 @@ const XC::Matrix &XC::TwentySevenNodeBrick::getMass(void) const
 int XC::TwentySevenNodeBrick::addLoad(ElementalLoad *theLoad, double loadFactor)
   {
     if(isDead())
-      std::cerr << nombre_clase() 
+      std::cerr << getClassName() 
                 << "; load over inactive element: "
                 << getTag()  
                 << std::endl;

@@ -121,7 +121,7 @@ void XC::SetBase::resetTributaries(void) const
             if(elem)
               elem->resetTributaries();
             else
-	      std::cerr << nombre_clase() << "::" << __FUNCTION__
+	      std::cerr << getClassName() << "::" << __FUNCTION__
                         << " element identified by: "
                         << tag_elem << " not found." << std::endl;
           }
@@ -145,7 +145,7 @@ void XC::SetBase::computeTributaryLengths(bool initialGeometry) const
             if(elem)
               elem->computeTributaryLengths(initialGeometry);
             else
-	      std::cerr << nombre_clase() << "::" << __FUNCTION__
+	      std::cerr << getClassName() << "::" << __FUNCTION__
                         << " element identified by: "
                         << tag_elem << " not found." << std::endl;
           }
@@ -169,7 +169,7 @@ void XC::SetBase::computeTributaryAreas(bool initialGeometry) const
             if(elem)
               elem->computeTributaryAreas(initialGeometry);
             else
-	      std::cerr << nombre_clase() << "::" << __FUNCTION__
+	      std::cerr << getClassName() << "::" << __FUNCTION__
                         << " element identified by: "
                         << tag_elem << " not found." << std::endl;
           }
@@ -193,7 +193,7 @@ void XC::SetBase::computeTributaryVolumes(bool initialGeometry) const
             if(elem)
               elem->computeTributaryVolumes(initialGeometry);
             else
-	      std::cerr << nombre_clase() << "::" << __FUNCTION__
+	      std::cerr << getClassName() << "::" << __FUNCTION__
                         << " element identified by: "
                         << tag_elem << " not found." << std::endl;
           }

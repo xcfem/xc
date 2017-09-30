@@ -89,7 +89,7 @@ bool XC::ArcoCircunf::check_points(void) const
     if(p1 && p2 && p3)
       retval= true;
     else
-      std::cerr << nombre_clase() << "::" << __FUNCTION__
+      std::cerr << getClassName() << "::" << __FUNCTION__
 	        << "; arc: '" << getName()
                 << " is not defined." << std::endl;
     return retval;

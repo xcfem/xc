@@ -73,7 +73,7 @@ int XC::DiagonalDirectSolver::setSize(void)
   {
     if(!theSOE)
       {
-        std::cerr << nombre_clase() << "::" << __FUNCTION__;
+        std::cerr << getClassName() << "::" << __FUNCTION__;
         std::cerr << " No system has been set!\n";
         return -1;
       }
@@ -87,7 +87,7 @@ int XC::DiagonalDirectSolver::solve(void)
     // check for XC::quick returns
     if(!theSOE)
       {
-        std::cerr << nombre_clase() << "::" << __FUNCTION__;
+        std::cerr << getClassName() << "::" << __FUNCTION__;
         std::cerr << " - No ProfileSPDSOE has been assigned\n";
         return -1;
       }
@@ -112,12 +112,12 @@ int XC::DiagonalDirectSolver::solve(void)
 
       // check that the diag > the tolerance specified
       if (aii == 0.0) {
-	std::cerr << nombre_clase() << "::" << __FUNCTION__ << "; ";
+	std::cerr << getClassName() << "::" << __FUNCTION__ << "; ";
 	std::cerr << " aii = 0 (i, aii): (" << i << ", " << aii << ")\n"; 
 	return(-2);
       }
       if (fabs(aii) <= minDiagTol) {
-	std::cerr << nombre_clase() << "::" << __FUNCTION__ << "; ";
+	std::cerr << getClassName() << "::" << __FUNCTION__ << "; ";
 	std::cerr << " aii < minDiagTol (i, aii): (" << i;
 	std::cerr << ", " << aii << ")\n"; 
 	return(-2);
@@ -151,7 +151,7 @@ double XC::DiagonalDirectSolver::getDeterminant(void)
 int XC::DiagonalDirectSolver::setDiagonalSOE(DiagonalSOE &theNewSOE)
 {
   if (theSOE != 0) {
-    std::cerr << nombre_clase() << "::" << __FUNCTION__ << "; ";
+    std::cerr << getClassName() << "::" << __FUNCTION__ << "; ";
     std::cerr << " has already been called \n";	
     return -1;
   }

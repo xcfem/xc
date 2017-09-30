@@ -100,7 +100,7 @@ XC::PrismaticBarCrossSectionsVector::PrismaticBarCrossSectionsVector(const Prism
           {
             (*this)[i]= copy_section(otro[i]);
             if(!(*this)[i])
-              std::cerr << nombre_clase() << "::" << __FUNCTION__
+              std::cerr << getClassName() << "::" << __FUNCTION__
 		        << "; failed allocate material model pointer\n";
           }
       }
@@ -227,21 +227,21 @@ bool XC::PrismaticBarCrossSectionsVector::setSections(const std::vector<Prismati
     const size_t ptrsSize= sectionPtrs.size();
     const size_t nSections= size();
     if(ptrsSize<nSections)
-      std::cerr << nombre_clase() << "::" << __FUNCTION__
+      std::cerr << getClassName() << "::" << __FUNCTION__
 	        << "; error: not enough sections (" << ptrsSize
 	        << "), " << nSections << " needed.";
     for(size_t i= 0;i<nSections;i++)
       {
         if(!sectionPtrs[i])
           {
-            std::cerr << nombre_clase() << "::" << __FUNCTION__
+            std::cerr << getClassName() << "::" << __FUNCTION__
 	              << "; null section pointer at " << i << std::endl;
             exit(-1);
           }  
         (*this)[i]= copy_section(sectionPtrs[i]);
         if(!(*this)[i])
           {
-            std::cerr << nombre_clase() << "::" << __FUNCTION__
+            std::cerr << getClassName() << "::" << __FUNCTION__
 	              << "; could not create copy of section " << i << std::endl;
             exit(-1);
           }
@@ -347,7 +347,7 @@ int XC::PrismaticBarCrossSectionsVector::sendSelf(CommParameters &cp)
 
     res+= cp.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
-      std::cerr << nombre_clase() << "sendSelf() - failed to send data\n";
+      std::cerr << getClassName() << "sendSelf() - failed to send data\n";
     return res;
   }
 
@@ -359,13 +359,13 @@ int XC::PrismaticBarCrossSectionsVector::recvSelf(const CommParameters &cp)
     int res= cp.receiveIdData(getDbTagData(),dataTag);
 
     if(res<0)
-      std::cerr << nombre_clase() << "::recvSelf - failed to receive ids.\n";
+      std::cerr << getClassName() << "::recvSelf - failed to receive ids.\n";
     else
       {
         //setTag(getDbTagDataPos(0));
         res+= recvData(cp);
         if(res<0)
-          std::cerr << nombre_clase() << "::recvSelf - failed to receive data.\n";
+          std::cerr << getClassName() << "::recvSelf - failed to receive data.\n";
       }
     return res;
   }

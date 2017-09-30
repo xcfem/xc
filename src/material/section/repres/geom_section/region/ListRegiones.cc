@@ -83,7 +83,7 @@ XC::RgSccQuad *XC::ListRegiones::newQuadRegion(const std::string &cod_mat)
   {
     Material *mat= material_loader->find_ptr(cod_mat);
     if(!mat)
-      std::cerr << nombre_clase() << __FUNCTION__
+      std::cerr << getClassName() << __FUNCTION__
 	        << "; warning!, material: '"
                 << cod_mat << "' not found. Material definition pending.\n";
     RgSccQuad tmp(mat);
@@ -97,7 +97,7 @@ XC::RgSccCirc *XC::ListRegiones::newCircularRegion(const std::string &cod_mat)
   {
     Material *mat= material_loader->find_ptr(cod_mat);
     if(!mat)
-      std::cerr << nombre_clase() << __FUNCTION__
+      std::cerr << getClassName() << __FUNCTION__
 	        << "; warning!, material: '"
                 << cod_mat << "' not found. Material definition pending.\n";
     RgSccCirc tmp(mat);
@@ -171,7 +171,7 @@ BND2d XC::ListRegiones::getBnd(void) const
           retval+= (*i)->getPolygon().Bnd();
       }
     else
-      std::cerr << nombre_clase() << "::" << __FUNCTION__
+      std::cerr << getClassName() << "::" << __FUNCTION__
 	        << "; region container is empty. Boundary has no sense." << std::endl;
     return retval;
   }
@@ -208,7 +208,7 @@ XC::Vector XC::ListRegiones::getCdgGrossSection(void) const
             divisor+= weight;
           }
         else
-          std::cerr << nombre_clase() << __FUNCTION__
+          std::cerr << getClassName() << __FUNCTION__
 		    << "; region: "
                     << *i << " has zero or negative weight." 
                     << std::endl;
@@ -289,7 +289,7 @@ double XC::ListRegiones::getAreaHomogenizedSection(const double &E0) const
             retval+= n*(*i)->Area();
           }
         else
-	  std::cerr << nombre_clase() << __FUNCTION__
+	  std::cerr << getClassName() << __FUNCTION__
 		    << "; can't get region material." << std::endl; 
       }
     return retval;
@@ -314,13 +314,13 @@ XC::Vector XC::ListRegiones::getCdgHomogenizedSection(const double &E0) const
                 divisor+= weight;
               }
             else
-	      std::cerr << nombre_clase() << __FUNCTION__
+	      std::cerr << getClassName() << __FUNCTION__
 			<< "; region: "
                         << *i << " weight is zero or negative." 
                         << std::endl;
           }
         else
-	  std::cerr << nombre_clase() << __FUNCTION__
+	  std::cerr << getClassName() << __FUNCTION__
 		    << "; can't get region material." << std::endl; 
       }
     retval/= divisor;
@@ -347,7 +347,7 @@ double XC::ListRegiones::getIyHomogenizedSection(const double &E0) const
             retval+= n*((*i)->Iy()+(*i)->Area()*sqr(d));
           }
         else
-	  std::cerr << nombre_clase() << __FUNCTION__
+	  std::cerr << getClassName() << __FUNCTION__
 	            << "; can't get section material." << std::endl; 
       }
     return retval;
@@ -373,7 +373,7 @@ double XC::ListRegiones::getIzHomogenizedSection(const double &E0) const
             retval+= n*((*i)->Iz()+(*i)->Area()*sqr(d));
           }
         else
-	  std::cerr << nombre_clase() << __FUNCTION__
+	  std::cerr << getClassName() << __FUNCTION__
 	            << "; can't get region material." << std::endl; 
       }
     return retval;
@@ -401,7 +401,7 @@ double XC::ListRegiones::getPyzHomogenizedSection(const double &E0) const
             retval+= n*((*i)->Pyz()+(*i)->Area()*d2);
           }
         else
-	  std::cerr << nombre_clase() << __FUNCTION__
+	  std::cerr << getClassName() << __FUNCTION__
 	            << "; can't get region material." << std::endl; 
       }
     return retval;

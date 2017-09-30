@@ -407,7 +407,7 @@ typename TritrizPtrBase<MatrizPtr>::const_reference TritrizPtrBase<MatrizPtr>::g
       return operator()(i,j,1);
     else
       {
-	std::cerr << nombre_clase() << "::" << __FUNCTION__
+	std::cerr << getClassName() << "::" << __FUNCTION__
 	          << "; the node set is not bidimensional." << std::endl;
         return nullptr;
       } 

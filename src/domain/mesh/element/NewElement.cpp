@@ -155,7 +155,7 @@ void XC::NewElement::zeroLoad(void)
 int XC::NewElement::addLoad(const Vector &addP)
   {
     if(isDead())
-      std::cerr << nombre_clase() 
+      std::cerr << getClassName() 
                 << "; load over inactive element: "
                 << getTag() << std::endl;
     return 0;

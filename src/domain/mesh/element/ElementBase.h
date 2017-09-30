@@ -117,7 +117,7 @@ TIPOMAT *ElementBase<NNODOS>::cast_material(const Material *ptr_mat)
       retval= tmp->getCopy();
     else
       {
-        std::cerr << nombre_clase() << "::" << __FUNCTION__
+        std::cerr << getClassName() << "::" << __FUNCTION__
 	          << "; on element: " << getTag() 
                   << " the material " << ptr_mat->getTag()
                   << " has not a suitable type." << std::endl;
@@ -125,7 +125,7 @@ TIPOMAT *ElementBase<NNODOS>::cast_material(const Material *ptr_mat)
       }
     if(!retval)
       {
-	std::cerr << nombre_clase() << "::" << __FUNCTION__
+	std::cerr << getClassName() << "::" << __FUNCTION__
 	          << "; on element: " << getTag()
 		  << "can't get a copy of the material with tag: "
 		  << ptr_mat->getTag() << std::endl;

@@ -80,7 +80,7 @@ XC::SubstructuringAnalysis::SubstructuringAnalysis(Subdomain &the_Domain,DomainS
 //! @brief Performs the analysis.
 int XC::SubstructuringAnalysis::analyze(void)
   {
-    std::cerr << nombre_clase() << "::" << __FUNCTION__
+    std::cerr << getClassName() << "::" << __FUNCTION__
 	      << "; does nothing and should not have been called\n";
     return -1;
   }

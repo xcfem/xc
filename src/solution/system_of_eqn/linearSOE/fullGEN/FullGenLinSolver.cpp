@@ -83,7 +83,7 @@ bool XC::FullGenLinSolver::setLinearSOE(LinearSOE *soe)
         retval= true;
       }
     else
-      std::cerr << nombre_clase() << "::" << __FUNCTION__
+      std::cerr << getClassName() << "::" << __FUNCTION__
 	        << "; system of equations is not of a"
 	        << " suitable type for this solver." << std::endl;
     return retval;

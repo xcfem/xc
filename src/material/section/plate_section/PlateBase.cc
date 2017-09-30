@@ -44,6 +44,6 @@ XC::PlateBase::PlateBase(int tag, int classTag, double thickness)
 double XC::PlateBase::getStrain(const double &,const double &) const
   {
     std::cerr << "getStrain not implemented for class: "
-              << nombre_clase() << std::endl;
+              << getClassName() << std::endl;
     return 0.0;
   }

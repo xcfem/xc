@@ -452,7 +452,7 @@ void XC::SetMeshComp::fillDownwards(void)
 //! or more of the objects that already are in the set.
 void XC::SetMeshComp::fillUpwards(void)
   {
-    std::cerr << nombre_clase() << "::" << __FUNCTION__
+    std::cerr << getClassName() << "::" << __FUNCTION__
               << "; implementation pending." << std::endl;
   }
 
@@ -467,7 +467,7 @@ void XC::SetMeshComp::sel_nodes_from_list(const ID &tags)
           for(size_t i= 0;i<sz;i++)
             nodes.push_back(preprocessor->getDomain()->getNode(tags(i)));
         else
-          std::cerr << nombre_clase() << "::" << __FUNCTION__
+          std::cerr << getClassName() << "::" << __FUNCTION__
 	            << "; preprocessor needed." << std::endl;
       }
   }
@@ -496,7 +496,7 @@ void XC::SetMeshComp::sel_elements_from_list(const ID &tags)
           for(size_t i= 0;i<sz;i++)
             elements.push_back(preprocessor->getDomain()->getElement(tags(i)));
         else
-          std::cerr << nombre_clase() << __FUNCTION__
+          std::cerr << getClassName() << __FUNCTION__
 	            << "; preprocessor needed." << std::endl;
       }
   }
@@ -556,13 +556,13 @@ void XC::SetMeshComp::sel_constraints_from_list(const ID &tags)
               else if((tmp=preprocessor->getDomain()->getConstraints().getMFreedom_Constraint(tags(i))))
                 constraints.push_back(tmp);
               else
-		std::cerr << nombre_clase() << "::" << __FUNCTION__
+		std::cerr << getClassName() << "::" << __FUNCTION__
 		          << "; constraint idenfified by: "
                           << tags(i) << " not found." << std::endl;
             }
 
         else
-          std::cerr << nombre_clase() << "::" << __FUNCTION__
+          std::cerr << getClassName() << "::" << __FUNCTION__
 	            << "preprocessor needed." << std::endl;
       }
   }
@@ -613,7 +613,7 @@ int XC::SetMeshComp::sendSelf(CommParameters &cp)
 
     res+= cp.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
-      std::cerr << nombre_clase() << "::sendSelf() - failed to send data\n";
+      std::cerr << getClassName() << "::sendSelf() - failed to send data\n";
     return res;
   }
 
@@ -625,13 +625,13 @@ int XC::SetMeshComp::recvSelf(const CommParameters &cp)
     int res= cp.receiveIdData(getDbTagData(),dataTag);
 
     if(res<0)
-      std::cerr << nombre_clase() << "::recvSelf - failed to receive ids.\n";
+      std::cerr << getClassName() << "::recvSelf - failed to receive ids.\n";
     else
       {
         //setTag(getDbTagDataPos(0));
         res+= recvData(cp);
         if(res<0)
-          std::cerr << nombre_clase() << "::recvSelf - failed to receive data.\n";
+          std::cerr << getClassName() << "::recvSelf - failed to receive data.\n";
       }
     return res;
   }

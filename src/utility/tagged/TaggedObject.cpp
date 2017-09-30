@@ -76,7 +76,7 @@ XC::TaggedObject::TaggedObject(int tag,EntCmd *owr)
 XC::TaggedObject *XC::TaggedObject::getCopy(void) const
   {
     std::cerr << "No se ha definido getCopy para la clase: '"
-              << nombre_clase() << "'\n";
+              << getClassName() << "'\n";
     return nullptr;
   }
 
@@ -94,7 +94,7 @@ void XC::TaggedObject::assignTag(int newTag)
 //! @brief Imprime el objeto.
 void XC::TaggedObject::Print(std::ostream &s, int flag)
   {
-    s << nombre_clase() << "::Print(std::ostream,flag) sin implementar."
+    s << getClassName() << "::Print(std::ostream,flag) sin implementar."
       << std::endl;
   }
 

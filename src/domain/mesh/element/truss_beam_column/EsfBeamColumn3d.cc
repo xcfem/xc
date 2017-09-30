@@ -42,7 +42,7 @@ XC::EsfBeamColumn3d::EsfBeamColumn3d(const Vector &v)
       for(int i=0;i<6;i++)
         (*this)[i]= v[i];
     else
-      std::cerr << nombre_clase() << "::" << __FUNCTION__
+      std::cerr << getClassName() << "::" << __FUNCTION__
 	        << " vector of dimension 6 expected "
                 << v << " was obtained." << std::endl;
   }

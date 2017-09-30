@@ -76,7 +76,7 @@ XC::CorotTruss::CorotTruss(int tag, int dim,int Nd1, int Nd2, UniaxialMaterial &
     theMaterial = theMat.getCopy();
     if(theMaterial == 0)
       {
-        std::cerr << nombre_clase() << "::" << __FUNCTION__
+        std::cerr << getClassName() << "::" << __FUNCTION__
 		  << "; FATAL error in element: " <<  tag
 		  << "failed to get a copy of material with tag "
 		  << theMat.getTag() << std::endl;
@@ -154,7 +154,7 @@ void XC::CorotTruss::setDomain(Domain *theDomain)
     // if differing dof at the ends - print a warning message
     if(dofNd1 != dofNd2)
       {
-        std::cerr << nombre_clase() << "::" << __FUNCTION__
+        std::cerr << getClassName() << "::" << __FUNCTION__
 		  << "WARNING; nodes " << theNodes[0]->getTag()
 		  << " and " << theNodes[1]->getTag()
 		  << "have differing dof at ends for CorotTruss element: "
@@ -241,7 +241,7 @@ int XC::CorotTruss::commitState(void)
     // call element commitState to do any base class stuff
     if((retVal = this->CorotTrussBase::commitState()) != 0)
       {
-        std::cerr << nombre_clase() << "::" << __FUNCTION__
+        std::cerr << getClassName() << "::" << __FUNCTION__
 		  << "; failed in base class.\n";
       }
     retVal = theMaterial->commitState();
@@ -304,7 +304,7 @@ const XC::Matrix &XC::CorotTruss::getTangentStiff(void) const
     //
     // Get material tangent
     if(A<1e-8)
-      std::clog << nombre_clase() << "::" << __FUNCTION__
+      std::clog << getClassName() << "::" << __FUNCTION__
 	        << "; WARNING area of element: " << getTag()
 	        << " is extremely small: " << A << std::endl;
     double EA = A*theMaterial->getTangent();
@@ -358,7 +358,7 @@ const XC::Matrix &XC::CorotTruss::getInitialStiff(void) const
     static Matrix kl(3,3);
 
     if(A<1e-8)
-      std::clog << nombre_clase() << "::" << __FUNCTION__
+      std::clog << getClassName() << "::" << __FUNCTION__
 	        << "; WARNING area of element: " << getTag()
 	        << " is extremely small: " << A << std::endl;
     // Material stiffness
@@ -430,7 +430,7 @@ void XC::CorotTruss::zeroLoad(void)
 int XC::CorotTruss::addLoad(ElementalLoad *theLoad, double loadFactor)
   {
     if(isDead())
-      std::cerr << nombre_clase() << "::" << __FUNCTION__
+      std::cerr << getClassName() << "::" << __FUNCTION__
                 << "; load over inactive element: "
                 << getTag() << std::endl;
     else
@@ -445,7 +445,7 @@ int XC::CorotTruss::addLoad(ElementalLoad *theLoad, double loadFactor)
           }
         else
           {
-            std::cerr << nombre_clase() << "::" << __FUNCTION__
+            std::cerr << getClassName() << "::" << __FUNCTION__
 		      <<"; load type unknown for truss with tag: "
 		      << this->getTag() << std::endl;
             return -1;
@@ -599,7 +599,7 @@ int XC::CorotTruss::sendSelf(CommParameters &cp)
     const int dataTag= getDbTag(cp);
     res+= cp.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
-      std::cerr << nombre_clase() << "::" << __FUNCTION__
+      std::cerr << getClassName() << "::" << __FUNCTION__
 		<< "; failed to send ID data\n";
     return res;
   }
@@ -612,7 +612,7 @@ int XC::CorotTruss::recvSelf(const CommParameters &cp)
     const int dataTag= getDbTag();
     int res= cp.receiveIdData(getDbTagData(),dataTag);
     if(res<0)
-      std::cerr << nombre_clase() << "::" << __FUNCTION__
+      std::cerr << getClassName() << "::" << __FUNCTION__
 		<< "; failed to recv ID data";
     else
       res+= recvData(cp);

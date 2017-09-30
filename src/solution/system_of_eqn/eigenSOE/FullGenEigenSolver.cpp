@@ -253,7 +253,7 @@ bool XC::FullGenEigenSolver::setEigenSOE(EigenSOE *soe)
         retval= true;
       }
     else
-      std::cerr << nombre_clase() << "::setEigenSOE: the system of equations no es del tipo adecuado para este solver." << std::endl;
+      std::cerr << getClassName() << "::setEigenSOE: the system of equations no es del tipo adecuado para este solver." << std::endl;
     return retval;
   }
 
@@ -282,7 +282,7 @@ const XC::Vector& XC::FullGenEigenSolver::getEigenvector(int mode) const
       }
     else
       {
-        std::cerr << nombre_clase() << "::" << __FUNCTION__ << "; "
+        std::cerr << getClassName() << "::" << __FUNCTION__ << "; "
             << "eigenvectors not computed yet\n";
         eigenV.Zero();
       }      
@@ -305,7 +305,7 @@ const double &XC::FullGenEigenSolver::getEigenvalue(int mode) const
           { return eigenvalue[mode-1]; }
         else
           {
-            std::cerr << nombre_clase() << "::" << __FUNCTION__ << "; "
+            std::cerr << getClassName() << "::" << __FUNCTION__ << "; "
                       << "eigenvalues not yet computed\n";
             return retval;
           }

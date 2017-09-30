@@ -98,7 +98,7 @@ XC::LagrangeSFreedom_FE::LagrangeSFreedom_FE(int tag, Domain &theDomain, SFreedo
     theNode= theDomain.getNode(nodeTag);    
     if(!theNode)
       {
-	std::cerr << nombre_clase() << "::" << __FUNCTION__
+	std::cerr << getClassName() << "::" << __FUNCTION__
 	          << "; WARNING node: " << nodeTag
 	          << " not found." << std::endl;
 	exit(-1);
@@ -113,7 +113,7 @@ XC::LagrangeSFreedom_FE::LagrangeSFreedom_FE(int tag, Domain &theDomain, SFreedo
     DOF_Group *theNodesDOFs= theNode->getDOF_GroupPtr();
     if(!theNodesDOFs)
       {
-	std::cerr << nombre_clase() << "::" << __FUNCTION__
+	std::cerr << getClassName() << "::" << __FUNCTION__
 	          << "; WARNING no DOF_Group found for constrained node: "
 		  << nodeTag << std::endl;
 	exit(-1);
@@ -148,7 +148,7 @@ int XC::LagrangeSFreedom_FE::setID(void)
     DOF_Group *theNodesDOFs = theNode->getDOF_GroupPtr();
     if(!theNodesDOFs)
       {
-	std::cerr << nombre_clase() << "::" << __FUNCTION__
+	std::cerr << getClassName() << "::" << __FUNCTION__
 	          << "; WARNING no DOF_Group found for constrained node: "
 		  << theNode->getTag() << std::endl;
 	return -1;
@@ -159,7 +159,7 @@ int XC::LagrangeSFreedom_FE::setID(void)
     
     if(restrainedDOF < 0 || restrainedDOF >= theNodesID.Size())
       {
-	std::cerr << nombre_clase() << "::" << __FUNCTION__
+	std::cerr << getClassName() << "::" << __FUNCTION__
 	          << "; WARNING restrained DOF: " << restrainedDOF
 	          << " is invalid.\n";
 	return -2;
@@ -192,7 +192,7 @@ const XC::Vector &XC::LagrangeSFreedom_FE::getResidual(Integrator *theNewIntegra
 
     if(constrainedDOF < 0 || constrainedDOF >= nodeDisp.Size())
       {
-	std::cerr << nombre_clase() << "::" << __FUNCTION__
+	std::cerr << getClassName() << "::" << __FUNCTION__
 	          << " constrained DOF " << constrainedDOF
 		  << " ouside range.\n";
 	resid(1)= 0;
@@ -219,7 +219,7 @@ const XC::Vector &XC::LagrangeSFreedom_FE::getTangForce(const XC::Vector &disp, 
     const int constrainedID = myID(1);
     if(constrainedID < 0 || constrainedID >= disp.Size())
       {
-	std::cerr << nombre_clase() << "::" << __FUNCTION__
+	std::cerr << getClassName() << "::" << __FUNCTION__
 	          << " constrained ID " << constrainedID
 		  << " outside disp.\n";
 	resid(1)= constraint*alpha;
@@ -231,7 +231,7 @@ const XC::Vector &XC::LagrangeSFreedom_FE::getTangForce(const XC::Vector &disp, 
 
 const XC::Vector &XC::LagrangeSFreedom_FE::getK_Force(const XC::Vector &disp, double fact)
   {
-    std::cerr << nombre_clase() << "::" << __FUNCTION__
+    std::cerr << getClassName() << "::" << __FUNCTION__
 	      << "; WARNING not yet implemented\n";
     resid.Zero(); //Added by LCPT.
     return resid;
@@ -239,7 +239,7 @@ const XC::Vector &XC::LagrangeSFreedom_FE::getK_Force(const XC::Vector &disp, do
 
 const XC::Vector &XC::LagrangeSFreedom_FE::getC_Force(const XC::Vector &disp, double fact)
   {
-    std::cerr << nombre_clase() << "::" << __FUNCTION__
+    std::cerr << getClassName() << "::" << __FUNCTION__
 	      << "; WARNING not yet implemented\n";
     resid.Zero(); //Added by LCPT.
     return resid;
@@ -247,7 +247,7 @@ const XC::Vector &XC::LagrangeSFreedom_FE::getC_Force(const XC::Vector &disp, do
 
 const XC::Vector &XC::LagrangeSFreedom_FE::getM_Force(const XC::Vector &disp, double fact)
   {
-    std::cerr << nombre_clase() << "::" << __FUNCTION__
+    std::cerr << getClassName() << "::" << __FUNCTION__
 	      << "; WARNING not yet implemented\n";
     resid.Zero(); //Added by LCPT.
     return resid;

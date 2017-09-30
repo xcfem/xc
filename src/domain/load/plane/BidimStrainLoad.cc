@@ -65,12 +65,12 @@ void XC::BidimStrainLoad::setStrainComp(const size_t &i,const size_t &j,const do
         if(j<size_t(def.Size()))
           def(j)= strain;
         else
-          std::cerr << nombre_clase() << "::setStrainComp "
+          std::cerr << getClassName() << "::setStrainComp "
                     << " component: " << j
 	            << " doesn't exist." << std::endl;
       }
     else
-      std::cerr << nombre_clase() << "::setStrainComp "
+      std::cerr << getClassName() << "::setStrainComp "
                 << " gauss point: "  << i
                 << " doesn't exist." << std::endl;
   }

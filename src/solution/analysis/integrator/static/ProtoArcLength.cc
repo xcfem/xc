@@ -71,7 +71,7 @@ int XC::ProtoArcLength::newStep(void)
     applyLoadModel(vectores.getCurrentLambda());
     if(updateModel() < 0)
       {
-        std::cerr << nombre_clase() << "::" << __FUNCTION__
+        std::cerr << getClassName() << "::" << __FUNCTION__
 	          << "; update failed for the new dU\n";
         return -1;
       }
@@ -86,7 +86,7 @@ int XC::ProtoArcLength::update(const Vector &dU)
     AnalysisModel *mdl= getAnalysisModelPtr();
     if(!mdl || !theLinSOE)
       {
-        std::cerr << nombre_clase() << "::" << __FUNCTION__
+        std::cerr << getClassName() << "::" << __FUNCTION__
 	          << "; no AnalysisModel or LinearSOE has been set\n";
 	return -1;
       }
@@ -102,7 +102,7 @@ int XC::ProtoArcLength::update(const Vector &dU)
     applyLoadModel(vectores.getCurrentLambda());    
     if(updateModel() < 0)
       {
-        std::cerr << nombre_clase() << "::" << __FUNCTION__
+        std::cerr << getClassName() << "::" << __FUNCTION__
 	          << "; update failed for the new dU\n";
       }
     
@@ -160,7 +160,7 @@ int XC::ProtoArcLength::sendSelf(CommParameters &cp)
 
     res+= cp.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
-      std::cerr << nombre_clase() << "::" << __FUNCTION__
+      std::cerr << getClassName() << "::" << __FUNCTION__
 	        << "; failed to send data\n";
     return res;
   }
@@ -173,14 +173,14 @@ int XC::ProtoArcLength::recvSelf(const CommParameters &cp)
     int res= cp.receiveIdData(getDbTagData(),dataTag);
 
     if(res<0)
-      std::cerr << nombre_clase() << "::" << __FUNCTION__
+      std::cerr << getClassName() << "::" << __FUNCTION__
 	        << "; failed to receive ids.\n";
     else
       {
         //setTag(getDbTagDataPos(0));
         res+= recvData(cp);
         if(res<0)
-           std::cerr << nombre_clase() << "::" << __FUNCTION__
+           std::cerr << getClassName() << "::" << __FUNCTION__
                      << "; failed to receive ids.\n";
       }
     return res;

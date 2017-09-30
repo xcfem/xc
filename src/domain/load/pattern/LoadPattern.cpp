@@ -122,7 +122,7 @@ const XC::MapLoadPatterns *XC::LoadPattern::getMapLoadPatterns(void) const
   {
     const MapLoadPatterns *retval= dynamic_cast<const MapLoadPatterns *>(Owner());
     if(!retval)
-      std::cerr << nombre_clase() << "::" << __FUNCTION__
+      std::cerr << getClassName() << "::" << __FUNCTION__
 	        << "; load pattern container not defined." << std::endl;
     return retval;
   }
@@ -132,7 +132,7 @@ XC::MapLoadPatterns *XC::LoadPattern::getMapLoadPatterns(void)
   {
     MapLoadPatterns *retval= dynamic_cast<MapLoadPatterns *>(Owner());
     if(!retval)
-      std::cerr << nombre_clase() << "::" << __FUNCTION__
+      std::cerr << getClassName() << "::" << __FUNCTION__
 	        << "; load pattern container not defined." << std::endl;
     return retval;
   }
@@ -176,7 +176,7 @@ bool XC::LoadPattern::addToDomain(void)
     if(theDomain)
       retval= theDomain->addLoadPattern(this);
     else
-      std::cerr << nombre_clase() << "::" << __FUNCTION__
+      std::cerr << getClassName() << "::" << __FUNCTION__
 	        << "; WARNING: null pointer to the domain\n";
     return retval;
   }
@@ -188,7 +188,7 @@ void XC::LoadPattern::removeFromDomain(void)
     if(theDomain)
       theDomain->removeLoadPattern(this);
     else
-      std::cerr << nombre_clase() << "::" << __FUNCTION__
+      std::cerr << getClassName() << "::" << __FUNCTION__
 	        << "; WARNING: null pointer to the domain\n";
   }
 
@@ -207,7 +207,7 @@ bool XC::LoadPattern::addNodalLoad(NodalLoad *load)
         currentGeoTag++;
       }
     else
-      std::cerr << nombre_clase() << "::" << __FUNCTION__
+      std::cerr << getClassName() << "::" << __FUNCTION__
 	        << "; WARNING: load could not be added\n";
     return result;
   }
@@ -329,7 +329,7 @@ void XC::LoadPattern::applyLoad(double pseudoTime)
           loadFactor= theSeries->getFactor(pseudoTime);
       }
     else
-      std::cerr << nombre_clase() << "::" << __FUNCTION__
+      std::cerr << getClassName() << "::" << __FUNCTION__
 	        << "; ERROR: time series not defined. Using load factor: "
 	        << loadFactor << std::endl;
     const double factor= loadFactor*gamma_f; //Ponderación de la hipótesis.
@@ -411,7 +411,7 @@ int XC::LoadPattern::sendSelf(CommParameters &cp)
     const int dataTag= getDbTag(cp);
     res+= cp.sendIdData(getDbTagData(),dataTag);
     if(res<0)
-      std::cerr << nombre_clase() << "::" << __FUNCTION__
+      std::cerr << getClassName() << "::" << __FUNCTION__
 	        << "; failed to send data.\n";    
     return res;
   }
@@ -424,7 +424,7 @@ int XC::LoadPattern::recvSelf(const CommParameters &cp)
     const int dataTag= getDbTag();
     int res= cp.receiveIdData(getDbTagData(),dataTag);
     if(res<0)
-      std::cerr << nombre_clase() << "::" << __FUNCTION__
+      std::cerr << getClassName() << "::" << __FUNCTION__
 	        << ";  data could not be received.\n" ;
     else
       res+= recvData(cp);
@@ -475,7 +475,7 @@ int XC::LoadPattern::setParameter(const std::vector<std::string> &argv, Paramete
   {
     if(!theSeries)
       {
-	std::cerr << nombre_clase() << "::" << __FUNCTION__
+	std::cerr << getClassName() << "::" << __FUNCTION__
 	          << "; set/update/activate parameter is illegaly called." << std::endl; }
 
     //const int argc= argv.size();
@@ -506,7 +506,7 @@ int XC::LoadPattern::updateParameter(int parameterID, Information &info)
   {
     if(!theSeries)
       {
-	std::cerr << nombre_clase() << "::" << __FUNCTION__
+	std::cerr << getClassName() << "::" << __FUNCTION__
 	          << "set/update/activate parameter is illegaly called."
 		  << std::endl;
       }
@@ -521,7 +521,7 @@ int XC::LoadPattern::activateParameter(int parameterID)
   {
     if(!theSeries)
       {
-	std::cerr << nombre_clase() << "::" << __FUNCTION__
+	std::cerr << getClassName() << "::" << __FUNCTION__
 	          << "set/update/activate parameter is illegaly called."
 		  << std::endl;
       }

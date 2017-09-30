@@ -78,7 +78,7 @@ int XC::BandSPDLinLapackSolver::solve(void)
   {
     if(!theSOE)
       {
-	std::cerr << nombre_clase() << "::" << __FUNCTION__
+	std::cerr << getClassName() << "::" << __FUNCTION__
 	          << "; no LinearSOE object has been set\n";
 	return -1;
       }

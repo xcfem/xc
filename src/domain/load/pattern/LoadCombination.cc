@@ -155,7 +155,7 @@ void XC::LoadCombination::LoadCombination::set_gamma_f(void)
         if(lp)
           lp->GammaF()= i->Factor();
         else
-	  std::cerr << nombre_clase() << "::" << __FUNCTION__
+	  std::cerr << getClassName() << "::" << __FUNCTION__
 	            << "; null pointer found in expression." << std::endl;
       }
   }
@@ -171,7 +171,7 @@ void XC::LoadCombination::set_domain(void)
         if(lp)
           lp->setDomain(dom);
         else
-	  std::cerr << nombre_clase() << "::" << __FUNCTION__
+	  std::cerr << getClassName() << "::" << __FUNCTION__
 	            << "; null pointer found in expression." << std::endl;
       }
   }
@@ -200,7 +200,7 @@ bool XC::LoadCombination::addToDomain(void)
             retval= (retval && result);
           }
         else
-	  std::cerr << nombre_clase() << "::" << __FUNCTION__
+	  std::cerr << getClassName() << "::" << __FUNCTION__
 	            << "; null pointer found in expression." << std::endl;
       }
     return retval;
@@ -217,7 +217,7 @@ void XC::LoadCombination::removeFromDomain(void)
         if(lp)
           dom->removeLoadPattern(lp);
         else
-	  std::cerr << nombre_clase() << "::" << __FUNCTION__
+	  std::cerr << getClassName() << "::" << __FUNCTION__
 	            << "; null pointer found in expression." << std::endl;
       }
   }
@@ -259,7 +259,7 @@ void XC::LoadCombination::interpreta_descomp(const std::string &str_descomp)
                 if(lp)
                   add_component(sumando(factor,lp));
                 else
-	          std::cerr << nombre_clase() << "::" << __FUNCTION__
+	          std::cerr << getClassName() << "::" << __FUNCTION__
 		            << " load case identified by: '" 
                             << nmb_hipot << "' not found.\n";
               }
@@ -468,7 +468,7 @@ XC::LoadCombination &XC::LoadCombination::suma(const std::string &nmbComb)
         if(cmb)
           suma(*cmb);
         else
-          std::cerr << nombre_clase() << "::" << __FUNCTION__
+          std::cerr << getClassName() << "::" << __FUNCTION__
 	            << "; load combination identified by: '" 
                     << nmbComb << "' not found.\n";
       }
@@ -494,7 +494,7 @@ XC::LoadCombination &XC::LoadCombination::resta(const std::string &nmbComb)
         if(cmb)
           resta(*cmb);
         else
-          std::cerr << nombre_clase() << "::" << __FUNCTION__
+          std::cerr << getClassName() << "::" << __FUNCTION__
 	            << "; load combination identified by: '" 
                     << nmbComb << "' not found.\n";
       }
@@ -510,7 +510,7 @@ XC::LoadCombination &XC::LoadCombination::asigna(const std::string &nmbComb)
         if(cmb)
           (*this)= *cmb;
         else
-          std::cerr << nombre_clase() << "::" << __FUNCTION__
+          std::cerr << getClassName() << "::" << __FUNCTION__
 	            << "; load combination identified by: '" 
                     << nmbComb << "' not found.\n";
       }

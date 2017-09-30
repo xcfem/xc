@@ -90,7 +90,7 @@ template <class PhysProp>
 Poligono3d XC::QuadBase9N<PhysProp>::getPolygon(bool initialGeometry) const
   {
     Poligono3d retval;
-    std::cerr << this->nombre_clase() << "::" << __FUNCTION__
+    std::cerr << this->getClassName() << "::" << __FUNCTION__
 	      << "; not implemented." << std::endl;
     return retval;
   }
@@ -100,7 +100,7 @@ template <class PhysProp>
 Segmento3d XC::QuadBase9N<PhysProp>::getLado(const size_t &i,bool initialGeometry) const
   {
     Segmento3d retval;
-    std::cerr << this->nombre_clase() << "::" << __FUNCTION__
+    std::cerr << this->getClassName() << "::" << __FUNCTION__
 	      << "; not implemented." << std::endl;
     return retval;
   }
@@ -110,7 +110,7 @@ template <class PhysProp>
 XC::Element::NodesEdge XC::QuadBase9N<PhysProp>::getNodesEdge(const size_t &i) const
   {
     Element::NodesEdge retval(3,static_cast<Node *>(nullptr));
-    std::cerr << this->nombre_clase() << "::" << __FUNCTION__
+    std::cerr << this->getClassName() << "::" << __FUNCTION__
 	      << "; not implemented." << std::endl;
     return retval;    
   }
@@ -121,7 +121,7 @@ template <class PhysProp>
 int XC::QuadBase9N<PhysProp>::getEdgeNodes(const Node *n1,const Node *n2) const
   {
     int retval= -1;
-    std::cerr << this->nombre_clase() << "::" << __FUNCTION__
+    std::cerr << this->getClassName() << "::" << __FUNCTION__
               << "; not implemented." << std::endl;
     return retval;
   }
@@ -131,7 +131,7 @@ template <class PhysProp>
 ID XC::QuadBase9N<PhysProp>::getLocalIndexNodesEdge(const size_t &i) const
   {
     ID retval(2);
-    std::cerr << this->nombre_clase() << "::" << __FUNCTION__
+    std::cerr << this->getClassName() << "::" << __FUNCTION__
 	      << "; not implemented." << std::endl;
     return retval;
   }
@@ -150,7 +150,7 @@ template <class PhysProp>
 int XC::QuadBase9N<PhysProp>::addLoad(ElementalLoad *theLoad, double loadFactor)
   {
     if(this->isDead())
-      std::cerr << this->nombre_clase() 
+      std::cerr << this->getClassName() 
                 << "; load over inactive elements: "
                 << this->getTag() << std::endl;
     else
@@ -165,7 +165,7 @@ int XC::QuadBase9N<PhysProp>::addLoad(ElementalLoad *theLoad, double loadFactor)
           }
         else
           {
-            std::cerr << this->nombre_clase() << "::" << __FUNCTION__
+            std::cerr << this->getClassName() << "::" << __FUNCTION__
 		      << "; load type unknown for element with tag: " <<
             this->getTag() << std::endl;
             return -1;

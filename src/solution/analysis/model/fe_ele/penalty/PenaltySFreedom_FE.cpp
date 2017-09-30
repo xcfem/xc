@@ -82,7 +82,7 @@ XC::PenaltySFreedom_FE::PenaltySFreedom_FE(int tag, Domain &theDomain, SFreedom_
     theNode = theDomain.getNode(theSP->getNodeTag());
     if(!theNode)
       {
-	std::cerr << nombre_clase() << "::" << __FUNCTION__
+	std::cerr << getClassName() << "::" << __FUNCTION__
 	          << "; node identified by: "
 	          << theSP->getNodeTag() << " not found.\n";
 	exit(-1);

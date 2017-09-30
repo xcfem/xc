@@ -88,15 +88,15 @@ XC::MaterialLoader *XC::ZeroLengthMaterials::get_material_loader(void)
             if(preprocessor)
               retval= &preprocessor->getMaterialLoader();
             else
-              std::cerr << nombre_clase() << __FUNCTION__
+              std::cerr << getClassName() << __FUNCTION__
 		        << "; null pointer to preprocessor." << std::endl;
           }
         else
-          std::cerr << nombre_clase() << __FUNCTION__
+          std::cerr << getClassName() << __FUNCTION__
 		    << "; owner is not an element." << std::endl;
       }
     else
-      std::cerr << nombre_clase() << __FUNCTION__
+      std::cerr << getClassName() << __FUNCTION__
 		<< "; pointer to owner not found." << std::endl;
     return retval;
   }
@@ -115,7 +115,7 @@ void XC::ZeroLengthMaterials::push_back(const int &dir,const UniaxialMaterial *t
             directions.push_back(dir);
           }
         else
-          std::cerr << nombre_clase() << "::" << __FUNCTION__
+          std::cerr << getClassName() << "::" << __FUNCTION__
 	        << "; cant' create an UniaxialMaterial objet." << std::endl;
       }
   }
@@ -123,7 +123,7 @@ void XC::ZeroLengthMaterials::push_back(const int &dir,const UniaxialMaterial *t
 void XC::ZeroLengthMaterials::push_front(const int &dir,const UniaxialMaterial *t)
   {
     if(!t)
-      std::cerr << nombre_clase() << "::" << __FUNCTION__
+      std::cerr << getClassName() << "::" << __FUNCTION__
 	        << "; pointer to material is null." << std::endl;
     else
       {
@@ -135,7 +135,7 @@ void XC::ZeroLengthMaterials::push_front(const int &dir,const UniaxialMaterial *
             directions.push_front(dir);
           }
         else
-          std::cerr << nombre_clase() << "::" << __FUNCTION__
+          std::cerr << getClassName() << "::" << __FUNCTION__
 	            << "; cant' create an UniaxialMaterial objet."
 		    << std::endl;
       }
@@ -156,7 +156,7 @@ int XC::ZeroLengthMaterials::sendSelf(CommParameters &cp)
 
     res+= cp.sendIdData(getDbTagData(),dataTag);
     if(res<0)
-      std::cerr << nombre_clase() << "::" << __FUNCTION__
+      std::cerr << getClassName() << "::" << __FUNCTION__
 	        << "; failed to send.\n";
     return res;
   }
@@ -167,7 +167,7 @@ int XC::ZeroLengthMaterials::recvSelf(const CommParameters &cp)
     const int dataTag= getDbTag();
     int res= cp.receiveIdData(getDbTagData(),dataTag);
     if(res < 0)
-      std::cerr << nombre_clase() << "::" << __FUNCTION__
+      std::cerr << getClassName() << "::" << __FUNCTION__
 	        << "; failed to receive.\n";
     else
       {

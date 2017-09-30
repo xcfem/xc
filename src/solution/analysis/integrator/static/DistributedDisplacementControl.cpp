@@ -134,7 +134,7 @@ int XC::DistributedDisplacementControl::newStep(void)
     applyLoadModel(vectores.getCurrentLambda());    
     if(updateModel() < 0)
       {
-        std::cerr << nombre_clase() << "::" << __FUNCTION__
+        std::cerr << getClassName() << "::" << __FUNCTION__
 	          << "; update failed for the new dU\n";
         return -1;
       }
@@ -179,7 +179,7 @@ int XC::DistributedDisplacementControl::update(const XC::Vector &dU)
     applyLoadModel(vectores.getCurrentLambda());    
     if(updateModel() < 0)
       {
-        std::cerr << nombre_clase() << "::" << __FUNCTION__
+        std::cerr << getClassName() << "::" << __FUNCTION__
 	          << "; update failed for the new dU\n";
         return -1;
       }

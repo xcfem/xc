@@ -68,7 +68,7 @@ bool XC::LineBase::check_points(void) const
     if(p1 && p2)
       retval= true;
     else
-      std::cerr << nombre_clase() << "::" << __FUNCTION__
+      std::cerr << getClassName() << "::" << __FUNCTION__
 	        << "; entity: '" << getName()
                 << " is not defined." << std::endl;
     return retval;
@@ -95,7 +95,7 @@ void XC::LineBase::SetVertice(const size_t &i,const size_t &id_punto)
   {
     SetVertice(i,BuscaPnt(id_punto));
     if(!GetVertice(i))
-      std::cerr << nombre_clase() << "::" << __FUNCTION__
+      std::cerr << getClassName() << "::" << __FUNCTION__
 	        << "; point: '" << id_punto << "' not found \n";
   }
 
@@ -103,13 +103,13 @@ void XC::LineBase::SetVertice(const size_t &i,const size_t &id_punto)
 void XC::LineBase::SetVertices(Pnt *pA,Pnt *pB)
   {
     if(pA==pB)
-      std::cerr << nombre_clase() << "::" << __FUNCTION__
+      std::cerr << getClassName() << "::" << __FUNCTION__
 		<< " degenerated line (starts and end in the same point): '"
                 << getName() << "'." << std::endl;
     SetVertice(1,pA);
     SetVertice(2,pB);
     if(p1==p2)
-      std::cerr << nombre_clase() << "::" << __FUNCTION__
+      std::cerr << getClassName() << "::" << __FUNCTION__
 		<< " degenerated line (starts and end in the same point): '"
                 << getName() << "'." << std::endl;
     actualiza_topologia();

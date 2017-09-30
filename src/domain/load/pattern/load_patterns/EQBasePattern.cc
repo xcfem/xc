@@ -42,7 +42,7 @@ int XC::EQBasePattern::addMotion(GroundMotion &theMotion)
 
 void XC::EQBasePattern::Print(std::ostream &s, int flag)
   {
-    std::cerr << nombre_clase() << "::" << __FUNCTION__
+    std::cerr << getClassName() << "::" << __FUNCTION__
 	      << "; not yet implemented\n";
   }
 

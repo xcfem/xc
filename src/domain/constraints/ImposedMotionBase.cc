@@ -92,7 +92,7 @@ int XC::ImposedMotionBase::getMotion(void)
   {
     if(!theNode)
       {
-        std::cerr << nombre_clase() << "::" << __FUNCTION__
+        std::cerr << getClassName() << "::" << __FUNCTION__
 	          << "; null pointer to node: "
                   <<  getNodeTag() <<  "\n";
       }

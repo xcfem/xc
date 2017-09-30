@@ -102,7 +102,7 @@ int XC::VariableTimeStepDirectIntegrationAnalysis::analyze(int numSteps, double 
 
         if(this->checkDomainChange() != 0)
           {
-            std::cerr << nombre_clase() << "::" << __FUNCTION__
+            std::cerr << getClassName() << "::" << __FUNCTION__
 		      << "; failed checkDomainChange\n";
             return -1;
           }
@@ -144,7 +144,7 @@ int XC::VariableTimeStepDirectIntegrationAnalysis::analyze(int numSteps, double 
             // if last dT was <= min specified the analysis FAILS - return FAILURE
             if(currentDt <= dtMin)
               {
-	        std::cerr << nombre_clase() << "::" << __FUNCTION__
+	        std::cerr << getClassName() << "::" << __FUNCTION__
 			  << "; failed at time "
 			  << theDom->getTimeTracker().getCurrentTime()
 			  << std::endl;

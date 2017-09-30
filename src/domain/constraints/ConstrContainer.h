@@ -32,6 +32,7 @@
 #include "domain/mesh/MeshComponentContainer.h"
 #include "MapCasosActivos.h"
 #include <deque>
+#include <set>
 
 namespace XC {
 class SFreedom_Constraint;
@@ -61,7 +62,7 @@ class TaggedObjectStorage;
 class ConstrContainer: public MeshComponentContainer
   {
   private:
-    TaggedObjectStorage *theSPs;//!< Single freedomt constraints.
+    TaggedObjectStorage *theSPs;//!< Single freedom constraints.
     TaggedObjectStorage *theMPs;//!< Multi-freedom constraints.
     TaggedObjectStorage *theMRMPs;//!< Multi-row multi-freedom constraints.
     MapCasosActivos<NodeLocker> activeNodeLockers; //!< active node lockers.
@@ -153,6 +154,7 @@ class ConstrContainer: public MeshComponentContainer
     std::deque<int> getTagsLPs(void) const;
     std::deque<int> getTagsNLs(void) const;
     bool nodeAffectedBySPs(int ) const;
+    std::set<int> getTagsNodesffectedBySPs(int ) const;
     bool nodeAffectedByMPs(int ) const;
     bool nodeAffectedByMRMPs(int ) const;
     bool nodeAffectedBySPsOMPs(int ) const;

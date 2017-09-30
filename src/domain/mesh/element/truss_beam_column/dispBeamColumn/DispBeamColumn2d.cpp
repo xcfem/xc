@@ -467,7 +467,7 @@ void XC::DispBeamColumn2d::zeroLoad(void)
 int XC::DispBeamColumn2d::addLoad(ElementalLoad *theLoad, double loadFactor)
   {
     if(isDead())
-      std::cerr << nombre_clase() 
+      std::cerr << getClassName() 
                 << "; load over inactive element: "
                 << getTag()  
                 << std::endl;

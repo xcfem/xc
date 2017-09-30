@@ -182,12 +182,12 @@ void XC::MapLoadPatterns::addToDomain(const std::string &lp_code)
       {
         bool result= getDomain()->addLoadPattern(lp);
         if((!result) && (verbosity>3))
-          std::cerr << nombre_clase() << "::" << __FUNCTION__
+          std::cerr << getClassName() << "::" << __FUNCTION__
 	            << "; can't add the load pattern: '"
                     << lp_code << "'\n";
       }
     else
-      std::cerr << nombre_clase() << "::" << __FUNCTION__
+      std::cerr << getClassName() << "::" << __FUNCTION__
 	        << "; load pattern: '" 
                 << lp_code << "' not found." << std::endl;
   }
@@ -199,7 +199,7 @@ void XC::MapLoadPatterns::removeFromDomain(const std::string &lp_code)
     if(lp)
       getDomain()->removeLoadPattern(lp);
     else
-      std::cerr << nombre_clase() << "::" << __FUNCTION__
+      std::cerr << getClassName() << "::" << __FUNCTION__
 	        << "; load pattern: '" 
                 << lp_code << "' not found." << std::endl;
   }

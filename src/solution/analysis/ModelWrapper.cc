@@ -141,7 +141,7 @@ bool XC::ModelWrapper::setup_numerador(void)
         retval= true;
       }
     else
-      std::cerr << nombre_clase() << "::" << __FUNCTION__
+      std::cerr << getClassName() << "::" << __FUNCTION__
 	        << "; numberer is not defined."
                 << std::endl;
     return retval;

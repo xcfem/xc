@@ -272,7 +272,7 @@ std::set<std::string> XC::DqPtrsElem::getTypes(void) const
     std::set<std::string> retval;
     for(const_iterator i= begin();i!=end();i++)
       {
-        const std::string className= (*i)->nombre_clase();
+        const std::string className= (*i)->getClassName();
 	if(retval.find(className)==retval.end())
 	  retval.insert(className);
       }
@@ -300,7 +300,7 @@ XC::DqPtrsElem XC::DqPtrsElem::pickElemsOfType(const std::string &typeName)
       {
         Element *e= (*i);
         assert(e);
-        const std::string className= e->nombre_clase();
+        const std::string className= e->getClassName();
 	if(boost::algorithm::ifind_first(className,typeName))
 	  retval.push_back(e);
       }

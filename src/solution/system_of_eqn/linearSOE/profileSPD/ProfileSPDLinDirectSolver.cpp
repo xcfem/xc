@@ -73,7 +73,7 @@ int XC::ProfileSPDLinDirectSolver::setSize(void)
 
     if(!theSOE)
       {
-	std::cerr << nombre_clase() << "::" << __FUNCTION__
+	std::cerr << getClassName() << "::" << __FUNCTION__
 		  << "; No system of equations has been set.\n";
 	return -1;
       }
@@ -118,7 +118,7 @@ int XC::ProfileSPDLinDirectSolver::solve(void)
     // check for quick returns
     if(!theSOE)
       {
-	std::cerr << nombre_clase() << "::" << __FUNCTION__
+	std::cerr << getClassName() << "::" << __FUNCTION__
 		  << "; no system of equations has been assigned\n";
 	return -1;
       }
@@ -163,7 +163,7 @@ int XC::ProfileSPDLinDirectSolver::solve(void)
 	const double &a00 = theSOE->A[0];
 	if(a00 <= 0.0)
 	  {
-            std::cerr << nombre_clase() << "::" << __FUNCTION__
+            std::cerr << getClassName() << "::" << __FUNCTION__
 		      << "; aii < 0 (i, aii): (0,0)\n"; 
 	    return(-2);
 	  }    
@@ -223,14 +223,14 @@ int XC::ProfileSPDLinDirectSolver::solve(void)
 	    // check that the diag > the tolerance specified
 	    if(aii == 0.0)
 	      {
-		std::cerr << nombre_clase() << "::" << __FUNCTION__
+		std::cerr << getClassName() << "::" << __FUNCTION__
 			  << "; aii < 0 (i, aii): (" << i << ", "
 			  << aii << ")\n"; 
 		return(-2);
 	      }
 	    if (fabs(aii) <= minDiagTol)
 	      {
-		std::cerr << nombre_clase() << "::" << __FUNCTION__
+		std::cerr << getClassName() << "::" << __FUNCTION__
 			  << "; aii < minDiagTol (i, aii): (" << i
 			  << ", " << aii << ")\n"; 
 		return(-2);
@@ -328,7 +328,7 @@ int XC::ProfileSPDLinDirectSolver::setProfileSOE(ProfileSPDLinSOE &theNewSOE)
     int retval= 0;
     if(theSOE)
       {
-	std::cerr << nombre_clase() << "::" << __FUNCTION__
+	std::cerr << getClassName() << "::" << __FUNCTION__
 		  << ";  has already been called \n";	
 	retval= -1;
       }
@@ -344,7 +344,7 @@ int XC::ProfileSPDLinDirectSolver::factor(int n)
     // check for XC::quick returns
     if(theSOE == 0)
       {
-	std::cerr << nombre_clase() << "::" << __FUNCTION__;
+	std::cerr << getClassName() << "::" << __FUNCTION__;
 	std::cerr << " - No ProfileSPDSOE has been assigned\n";
 	return -1;
       }
@@ -352,7 +352,7 @@ int XC::ProfileSPDLinDirectSolver::factor(int n)
     int theSize = theSOE->size;    
     if(n > theSize)
       {
-	std::cerr << nombre_clase() << "::" << __FUNCTION__;
+	std::cerr << getClassName() << "::" << __FUNCTION__;
 	std::cerr << " - n " << n << " greater than size of system" << theSize << std::endl;
 	return -1;
       }
@@ -417,12 +417,12 @@ int XC::ProfileSPDLinDirectSolver::factor(int n)
 	    
 	    // check that the diag > the tolerance specified
 	    if (aii <= 0.0) {
-		std::cerr << nombre_clase() << "::" << __FUNCTION__ << "; ";
+		std::cerr << getClassName() << "::" << __FUNCTION__ << "; ";
 		std::cerr << " aii < 0 (i, aii): (" << i << ", " << aii << ")\n"; 
 		return(-2);
 	    }
 	    if (aii <= minDiagTol) {
-		std::cerr << nombre_clase() << "::" << __FUNCTION__ << "; ";
+		std::cerr << getClassName() << "::" << __FUNCTION__ << "; ";
 		std::cerr << " aii < minDiagTol (i, aii): (" << i;
 		std::cerr << ", " << aii << ")\n"; 
 		return(-2);

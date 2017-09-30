@@ -81,7 +81,7 @@ void XC::Element1D::vector2dUniformLoadLocal(const Vector &v)
     if(sz>1)
       {
         if(sz>2)
-	  std::cerr << nombre_clase() << "::" << __FUNCTION__
+	  std::cerr << getClassName() << "::" << __FUNCTION__
 		    << "; WARNING a vector of dimension 2"
 	            << " was expected instead of: " << v << std::endl;
         Beam2dUniformLoad *tmp= new Beam2dUniformLoad(loadTag,v[1],v[0],eTags);
@@ -92,12 +92,12 @@ void XC::Element1D::vector2dUniformLoadLocal(const Vector &v)
             casos.setCurrentElementLoadTag(loadTag+1);
           }
         else
-	  std::cerr << nombre_clase() << "::" << __FUNCTION__
+	  std::cerr << getClassName() << "::" << __FUNCTION__
 		    << "; there is no current load pattern. Load ignored."
                     << std::endl; 
       }
     else
-      std::cerr << nombre_clase() << "::" << __FUNCTION__
+      std::cerr << getClassName() << "::" << __FUNCTION__
                 << "; ERROR a vector of dimension 2"
 	        << " was expected instead of: " << v << std::endl;
   }
@@ -112,7 +112,7 @@ void XC::Element1D::vector2dPointByRelDistLoadGlobal(const double &x,const Vecto
         vector2dPointByRelDistLoadLocal(x,vTrf);
       }
     else
-      std::cerr << nombre_clase() << __FUNCTION__
+      std::cerr << getClassName() << __FUNCTION__
                 << "; ERROR a vector of dimension 2"
 	        << " was expected instead of: " << v << std::endl;
   }
@@ -129,7 +129,7 @@ void XC::Element1D::vector2dPointByRelDistLoadLocal(const double &x,const Vector
         const int &loadTag= casos.getCurrentElementLoadTag(); //Load identifier.
 
 	if(sz>2)
-	  std::cerr << nombre_clase() << "::" << __FUNCTION__
+	  std::cerr << getClassName() << "::" << __FUNCTION__
                     << "; ERROR a vector of dimension 2"
 	            << " was expected instead of: " << v << std::endl;
         Beam2dPointLoad *tmp= new Beam2dPointLoad(loadTag,v[1],x,eTags,v[0]);
@@ -140,12 +140,12 @@ void XC::Element1D::vector2dPointByRelDistLoadLocal(const double &x,const Vector
             casos.setCurrentElementLoadTag(loadTag+1);
           }
         else
-	  std::cerr << nombre_clase() << "::" << __FUNCTION__
+	  std::cerr << getClassName() << "::" << __FUNCTION__
 		    << "; there is no current load pattern. Load ignored."
                     << std::endl; 
       }
     else
-      std::cerr << nombre_clase() << "::" << __FUNCTION__
+      std::cerr << getClassName() << "::" << __FUNCTION__
                 << "; ERROR a vector of dimension 2"
                 << " was expected instead of: " << v << std::endl;
   }
@@ -155,7 +155,7 @@ void XC::Element1D::vector2dPointLoadGlobal(const Vector &p,const Vector &v)
     const CrdTransf *crd_trf= getCoordTransf();
     const double x= crd_trf->getPointBasicCoordFromGlobal(p);
     if(x<0.0 || x>1.0)
-      std::cerr << nombre_clase() << "::" << __FUNCTION__
+      std::cerr << getClassName() << "::" << __FUNCTION__
 		<< "; the relative distance x= "
                 << x << " obtained from point: " << p
                 << " must be between 0 and 1." << std::endl;
@@ -167,7 +167,7 @@ void XC::Element1D::vector2dPointLoadLocal(const Vector &p,const Vector &v)
     const CrdTransf *crd_trf= getCoordTransf();
     const double x= crd_trf->getPointBasicCoordFromGlobal(p);
     if(x<0.0 || x>1.0)
-      std::cerr << nombre_clase() << "::" << __FUNCTION__
+      std::cerr << getClassName() << "::" << __FUNCTION__
 		<< "; the relative distance x= "
                 << x << " obtained from point: " << p
                 << " must be between 0 and 1." << std::endl;
@@ -184,7 +184,7 @@ void XC::Element1D::vector3dUniformLoadGlobal(const Vector &v)
         vector3dUniformLoadLocal(vTrf);
       }
     else
-      std::cerr << nombre_clase() << "::" << __FUNCTION__
+      std::cerr << getClassName() << "::" << __FUNCTION__
                 << "; ERROR a vector of dimension 3"
 	        << " was expected instead of: " << v << std::endl;
   }
@@ -208,12 +208,12 @@ void XC::Element1D::vector3dUniformLoadLocal(const Vector &v)
             casos.setCurrentElementLoadTag(loadTag+1);
           }
         else
-	  std::cerr << nombre_clase() << "::" << __FUNCTION__
+	  std::cerr << getClassName() << "::" << __FUNCTION__
 		    << "; there is no current load pattern. Load ignored."
                     << std::endl; 
       }
     else
-      std::cerr << nombre_clase() << "::" << __FUNCTION__
+      std::cerr << getClassName() << "::" << __FUNCTION__
                 << "; ERROR a vector of dimension 3"
 	        << " was expected instead of: " << v << std::endl;
   }
@@ -228,7 +228,7 @@ void XC::Element1D::vector3dPointByRelDistLoadGlobal(const double &x,const Vecto
         vector3dPointByRelDistLoadLocal(x,vTrf);
       }
     else
-      std::cerr << nombre_clase() << "::" << __FUNCTION__
+      std::cerr << getClassName() << "::" << __FUNCTION__
                 << "; ERROR a vector of dimension 3"
 	        << " was expected instead of: " << v << std::endl;
   }
@@ -252,13 +252,13 @@ void XC::Element1D::vector3dPointByRelDistLoadLocal(const double &x,const Vector
             casos.setCurrentElementLoadTag(loadTag+1);
           }
         else
-	  std::cerr << nombre_clase() << "::" << __FUNCTION__
+	  std::cerr << getClassName() << "::" << __FUNCTION__
 		    << "; there is no current load pattern. Load ignored."
                     << std::endl; 
 
       }
     else
-      std::cerr << nombre_clase() << "::" << __FUNCTION__
+      std::cerr << getClassName() << "::" << __FUNCTION__
                 << "; ERROR a vector of dimension 3"
 	        << " was expected instead of: " << v << std::endl;
   }
@@ -268,7 +268,7 @@ void XC::Element1D::vector3dPointLoadGlobal(const Vector &p,const Vector &v)
     const CrdTransf *crd_trf= getCoordTransf();
     const double x= crd_trf->getPointBasicCoordFromGlobal(p);
     if(x<0.0 || x>1.0)
-      std::cerr << nombre_clase() << "::" << __FUNCTION__
+      std::cerr << getClassName() << "::" << __FUNCTION__
 		<< "; the relative distance x= "
                 << x << " obtained from point: " << p
                 << " must be between 0 and 1." << std::endl;
@@ -280,7 +280,7 @@ void XC::Element1D::vector3dPointLoadLocal(const Vector &p,const Vector &v)
     const CrdTransf *crd_trf= getCoordTransf();
     const double x= crd_trf->getPointBasicCoordFromGlobal(p);
     if(x<0.0 || x>1.0)
-      std::cerr << nombre_clase() << "::" << __FUNCTION__
+      std::cerr << getClassName() << "::" << __FUNCTION__
 		<< "; the relative distance x= "
                 << x << " obtained from point: " << p
                 << " must be between 0 and 1." << std::endl;
@@ -305,7 +305,7 @@ void XC::Element1D::strainLoad(const DeformationPlane &p1,const DeformationPlane
         casos.setCurrentElementLoadTag(loadTag+1);
       }
     else
-      std::cerr << nombre_clase() << "::" << __FUNCTION__
+      std::cerr << getClassName() << "::" << __FUNCTION__
                 << "; there is no current load pattern. Load ignored."
                 << std::endl; 
   }
@@ -397,7 +397,7 @@ XC::TritrizPtrElem XC::Element1D::put_on_mesh(const TritrizPtrNod &nodos,meshing
               {
               case dirm_i:
                 if(ncapas<2)
-		  std::cerr << nombre_clase() << "::" << __FUNCTION__
+		  std::cerr << getClassName() << "::" << __FUNCTION__
 		            << " insufficient number of nodes on i direction."
 		            << " Can't create elements." << std::endl;
                 else
@@ -413,7 +413,7 @@ XC::TritrizPtrElem XC::Element1D::put_on_mesh(const TritrizPtrNod &nodos,meshing
                 break;
               case dirm_j:
                 if(nfilas<2)
-		  std::cerr << nombre_clase() << "::" << __FUNCTION__
+		  std::cerr << getClassName() << "::" << __FUNCTION__
 		            << " insufficient number of nodes on j direction."
 		            << " Can't create elements." << std::endl;
                 else
@@ -429,7 +429,7 @@ XC::TritrizPtrElem XC::Element1D::put_on_mesh(const TritrizPtrNod &nodos,meshing
                 break;
               case dirm_k:
                 if(ncols<2)
-		  std::cerr << nombre_clase() << "::" << __FUNCTION__
+		  std::cerr << getClassName() << "::" << __FUNCTION__
 		            << " insufficient number of nodes on k direction."
 		            << " Can't create elements." << std::endl;
                 else
@@ -489,7 +489,7 @@ XC::CrdTransf *XC::Element1D::checkCoordTransf(void)
   {
     CrdTransf *ct= getCoordTransf();
     if(!ct)
-      std::cerr << nombre_clase() << "::" << __FUNCTION__
+      std::cerr << getClassName() << "::" << __FUNCTION__
                 << "; coordinate transformation not defined."
                 << std::endl;
     return ct;
@@ -500,7 +500,7 @@ const XC::CrdTransf *XC::Element1D::checkCoordTransf(void) const
   {
     const CrdTransf *ct= getCoordTransf();
     if(!ct)
-      std::cerr << nombre_clase() << "::" << __FUNCTION__
+      std::cerr << getClassName() << "::" << __FUNCTION__
                 << "; coordinate transformation not defined."
                 << std::endl;
     return ct;
@@ -644,7 +644,7 @@ XC::CrdTransf *XC::Element1D::recvCoordTransf(int posFlag,const int &posClassTag
           {
             ptr= cp.getNewCrdTransf(getDbTagDataPos(posClassTag));
             if(!ptr)
-              std::cerr << nombre_clase() << "::" << __FUNCTION__
+              std::cerr << getClassName() << "::" << __FUNCTION__
 			<< "; ran out of memory\n";
           }
         if(ptr)
@@ -652,7 +652,7 @@ XC::CrdTransf *XC::Element1D::recvCoordTransf(int posFlag,const int &posClassTag
             int res= cp.receiveMovable(*ptr,dt,CommMetaData(posDbTag));
             ptr->revertToLastCommit();// Revert the crdtrasf to its last committed state
             if(res<0)
-              std::cerr << nombre_clase() << "::" << __FUNCTION__
+              std::cerr << getClassName() << "::" << __FUNCTION__
 			<< "; failed to receive vector data\n";
           }
       }
@@ -669,7 +669,7 @@ XC::CrdTransf2d *XC::Element1D::recvCoordTransf2d(int posFlag,const int &posClas
         retval= dynamic_cast<CrdTransf2d *>(tmp);
         if(!retval)
           {
-	    std::cerr << nombre_clase() << "::" << __FUNCTION__
+	    std::cerr << getClassName() << "::" << __FUNCTION__
 		      << "Incompatible transformation type."
                       << std::endl;
             delete tmp;
@@ -688,7 +688,7 @@ XC::CrdTransf3d *XC::Element1D::recvCoordTransf3d(int posFlag,const int &posClas
         retval= dynamic_cast<CrdTransf3d *>(tmp);
         if(!retval)
           {
-	    std::cerr << nombre_clase() << "::" << __FUNCTION__
+	    std::cerr << getClassName() << "::" << __FUNCTION__
 		      << "Incompatible transformation type."
                       << std::endl;
             delete tmp;

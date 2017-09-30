@@ -318,7 +318,7 @@ void XC::ShellNL::zeroLoad(void)
 int XC::ShellNL::addLoad(ElementalLoad *theLoad, double loadFactor)
   {
     if(isDead())
-      std::cerr << nombre_clase() 
+      std::cerr << getClassName() 
                 << "; load over inactive element: "
                 << getTag() << std::endl;
     else

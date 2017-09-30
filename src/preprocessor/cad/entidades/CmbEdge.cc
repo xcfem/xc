@@ -399,7 +399,7 @@ void XC::CmbEdge::SetNDiv(const size_t &nd)
       {
         const size_t resto= nd % nl;
         if(resto != 0)
-          std::clog << nombre_clase() << "::" << __FUNCTION__
+          std::clog << getClassName() << "::" << __FUNCTION__
 	            << "; the number of divisions ("
                     << nd << ") is not a multiple of the number of segments ("
                     << nl << ")." << std::endl;
@@ -408,7 +408,7 @@ void XC::CmbEdge::SetNDiv(const size_t &nd)
           (*i).SetNDiv(q);
       }
     else
-      std::cerr << nombre_clase() << "::" << __FUNCTION__
+      std::cerr << getClassName() << "::" << __FUNCTION__
 		<< "; no segments defined." << std::endl;
   }
 
@@ -497,20 +497,20 @@ void XC::CmbEdge::addPoints(const ID &indices_ptos)
         {
           Pnt *pA= BuscaPnt(indices_ptos(i-1));
           if(!pA)
-	    std::cerr << nombre_clase() << "::" << __FUNCTION__
+	    std::cerr << getClassName() << "::" << __FUNCTION__
 	              << "; point: " << indices_ptos(i-1)
 		      << " not found in definition of surface: '"
                       << getName() << "'" << std::endl;
           Pnt *pB= BuscaPnt(indices_ptos(i));
           if(!pB)
-	    std::cerr << nombre_clase() << "::" << __FUNCTION__
+	    std::cerr << getClassName() << "::" << __FUNCTION__
 		      << "; point: " << indices_ptos(i)
 		      << " not found in definition of surface: '"
                       << getName() << "'" << std::endl;
           NuevaLinea(pA,pB);
         }
     else
-      std::cerr << nombre_clase() << "::" << __FUNCTION__
+      std::cerr << getClassName() << "::" << __FUNCTION__
 		<< "; at least two points are needed." << std::endl;
   }
 
@@ -520,16 +520,16 @@ void XC::CmbEdge::cierra(void)
     //Cierra la polilinea.
     Pnt *pA= P2();
     if(!pA)
-      std::cerr << nombre_clase() << "::" << __FUNCTION__
+      std::cerr << getClassName() << "::" << __FUNCTION__
 	        << "; last point not found." << std::endl;
     Pnt *pB= P1();
     if(!pB)
-      std::cerr << nombre_clase() << "::" << __FUNCTION__
+      std::cerr << getClassName() << "::" << __FUNCTION__
 	        << "; first point not found." << std::endl;
     if(pA!=pB)
       NuevaLinea(pA,pB);
     else
-      std::cerr << nombre_clase() << "::" << __FUNCTION__
+      std::cerr << getClassName() << "::" << __FUNCTION__
 	        << "; line is already closed." << std::endl;
   }
 
@@ -550,7 +550,7 @@ XC::Edge *XC::CmbEdge::NuevaLinea(Pnt *pA,Pnt *pB)
           }
       }    
     else
-       std::cerr << nombre_clase() << "::" << __FUNCTION__
+       std::cerr << getClassName() << "::" << __FUNCTION__
 		 << "; line between points: "
                  << pA->getName() << " and " << pB->getName()
 		 << " not found in definition of surface: '"
@@ -568,7 +568,7 @@ XC::Edge *XC::CmbEdge::NuevaLinea(Pnt *pA,Pnt *pB,Pnt *pC)
     if(retval)
       inserta(retval);
     else
-      std::cerr << nombre_clase() << "::" << __FUNCTION__
+      std::cerr << getClassName() << "::" << __FUNCTION__
 	        << "; arc between points: "
                 << pA->getName() << ", " << pB->getName()
                 << " and " << pC->getName()
@@ -582,7 +582,7 @@ void XC::CmbEdge::inserta(const size_t &i)
   {
     Edge *tmp= BuscaEdge(i);
     if(!tmp)
-      std::cerr << nombre_clase() << "::" << __FUNCTION__
+      std::cerr << getClassName() << "::" << __FUNCTION__
 		<< "; line identified by: '" 
                 << i << "' not found.\n";
     else
@@ -593,7 +593,7 @@ void XC::CmbEdge::inserta(const size_t &i)
 void XC::CmbEdge::inserta(Edge *l)
   {
     if(IndiceEdge(l)!= 0) //Line already belongs to the set.
-      std::cerr << nombre_clase() << "::" << __FUNCTION__
+      std::cerr << getClassName() << "::" << __FUNCTION__
 		<< "; line already belongs to the set, insertion ignored.\n";
     else
       {
@@ -610,7 +610,7 @@ void XC::CmbEdge::inserta(Edge *l)
             else if(l->P2()== P1()) //directo
               lineas.push_front(Lado(l,true));
             else
-              std::cerr << nombre_clase() << "::" << __FUNCTION__
+              std::cerr << getClassName() << "::" << __FUNCTION__
 			<< "; line: '" << l->getName()
 			<< "' which ends are: '" << l->P1()->getName() << "' y '"
                         << l->P2()->getName() 
@@ -713,7 +713,7 @@ const XC::Pnt *XC::CmbEdge::GetVertice(const size_t &i) const
 //! @brief Sets the i-th vertex.
 void XC::CmbEdge::SetVertice(const size_t &,Pnt *)
   {
-    std::cerr << nombre_clase() << "::" << __FUNCTION__
+    std::cerr << getClassName() << "::" << __FUNCTION__
 	      << "; not implemented." << std::endl;
   }
 
@@ -745,13 +745,13 @@ BND3d XC::CmbEdge::Bnd(void) const
     const size_t nv= NumVertices();
     if(nv<1) //the set is empty.
       {
-	std::cerr << nombre_clase() << "::" << __FUNCTION__
+	std::cerr << getClassName() << "::" << __FUNCTION__
 	          << "; polyline empty." << std::endl;
         return retval;
       }
     if(nv<2)
       {
-	std::cerr << nombre_clase() << "::" << __FUNCTION__
+	std::cerr << getClassName() << "::" << __FUNCTION__
 		  << "; the polyline has only a point." << std::endl;
         retval= BND3d(GetVertice(1)->GetPos(),GetVertice(1)->GetPos());
         return retval;

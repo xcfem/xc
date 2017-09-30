@@ -143,7 +143,7 @@ int XC::IncrementalIntegrator::getLastResponse(Vector &result, const XC::ID &id)
     LinearSOE *theSOE= getLinearSOEPtr();
     if(!theSOE)
       {
-	std::cerr << nombre_clase() << "::" << __FUNCTION__
+	std::cerr << getClassName() << "::" << __FUNCTION__
 	          << "; WARNING no LineaerSOE object associated with this object\n";	
 	return -1;
       }
@@ -160,7 +160,7 @@ int XC::IncrementalIntegrator::getLastResponse(Vector &result, const XC::ID &id)
           { result(i) = X(loc);	}
 	else
           {
-	    std::cerr << nombre_clase() << "::" << __FUNCTION__
+	    std::cerr << getClassName() << "::" << __FUNCTION__
 		      << "; WARNING location " << loc
 		      << "in ID ouside bounds ";
 	    std::cerr << size << "\n";	

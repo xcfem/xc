@@ -187,7 +187,7 @@ int XC::Pnt::getTagNode(void) const
     if(nod)
       retval= nod->getTag();
     else
-      std::cerr << nombre_clase() << "::" << __FUNCTION__ << "; the point: '" << getName()
+      std::cerr << getClassName() << "::" << __FUNCTION__ << "; the point: '" << getName()
                 << "' has not a node (is not meshed)." << std::endl;
     return retval;
   }
@@ -198,7 +198,7 @@ XC::Node *XC::Pnt::getNode(void)
   {
     Node *nod= GetNodo();
     if(!nod)
-      std::cerr << nombre_clase() << "::" << __FUNCTION__ << "; the point: '" << getName()
+      std::cerr << getClassName() << "::" << __FUNCTION__ << "; the point: '" << getName()
                 << "' has not a node (is not meshed)." << std::endl;
     return nod;
   }
@@ -214,7 +214,7 @@ std::set<XC::SetBase *> XC::Pnt::get_sets(void) const
         retval= sets.get_sets(this);
       }
     else
-      std::cerr << nombre_clase() << __FUNCTION__
+      std::cerr << getClassName() << __FUNCTION__
 	        << "; preprocessor needed." << std::endl;
     return retval;
   }

@@ -60,7 +60,7 @@ XC::MFreedom_Joint::MFreedom_Joint(Domain *domain, int tag, int classTag, int no
     setDomain(domain);
     if(getDomain() == nullptr)
       {
-        std::cerr << nombre_clase() << "::" << __FUNCTION__
+        std::cerr << getClassName() << "::" << __FUNCTION__
 	          << "; specified domain does not exist";
         std::cerr << "Domain = 0\n";
         return;
@@ -100,7 +100,7 @@ void XC::MFreedom_Joint::setDomain(Domain *domain)
   {
     if(domain == nullptr)
       {
-        std::cerr << nombre_clase() << "::" << __FUNCTION__
+        std::cerr << getClassName() << "::" << __FUNCTION__
 	          << "; specified domain does not exist";
         std::cerr << "Domain = 0\n";
         return;
@@ -111,7 +111,7 @@ void XC::MFreedom_Joint::setDomain(Domain *domain)
       RetainedNode->connect(this);
     else
       {
-        std::cerr <<  nombre_clase() << "::" << __FUNCTION__
+        std::cerr <<  getClassName() << "::" << __FUNCTION__
                   << "; retained node: "<< getNodeRetained()
 		  << "does not exist in model\n";
       }
@@ -120,7 +120,7 @@ void XC::MFreedom_Joint::setDomain(Domain *domain)
       ConstrainedNode->connect(this);
     else
       {
-        std::cerr <<  nombre_clase() << "::" << __FUNCTION__
+        std::cerr <<  getClassName() << "::" << __FUNCTION__
                   << "; constrained node: "<< getNodeConstrained()
                   << "does not exist in model\n";
       }

@@ -143,7 +143,7 @@ const XC::Vector &XC::GenericSectionNd::getSectionDeformation(void) const
 double XC::GenericSectionNd::getStrain(const double &,const double &) const
   {
     std::cerr << "getStrain not implemented for class: "
-              << nombre_clase() << std::endl;
+              << getClassName() << std::endl;
     return 0.0;
   }
 
@@ -203,7 +203,7 @@ int XC::GenericSectionNd::sendSelf(CommParameters &cp)
 
     res+= cp.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
-      std::cerr << nombre_clase() << "sendSelf() - failed to send data\n";
+      std::cerr << getClassName() << "sendSelf() - failed to send data\n";
     return res;
   }
 
@@ -214,13 +214,13 @@ int XC::GenericSectionNd::recvSelf(const CommParameters &cp)
     int res= cp.receiveIdData(getDbTagData(),dataTag);
 
     if(res<0)
-      std::cerr << nombre_clase() << "::recvSelf - failed to receive ids.\n";
+      std::cerr << getClassName() << "::recvSelf - failed to receive ids.\n";
     else
       {
         setTag(getDbTagDataPos(0));
         res+= recvData(cp);
         if(res<0)
-          std::cerr << nombre_clase() << "::recvSelf - failed to receive data.\n";
+          std::cerr << getClassName() << "::recvSelf - failed to receive data.\n";
       }
     return res;
   }

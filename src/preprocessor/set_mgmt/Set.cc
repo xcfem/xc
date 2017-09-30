@@ -165,12 +165,12 @@ void XC::Set::create_copy(const std::string &name,const Vector3d &v= Vector3d())
     Preprocessor *preprocessor= getPreprocessor();
     if(!preprocessor)
       {
-        std::cerr << nombre_clase() << "::" << __FUNCTION__
+        std::cerr << getClassName() << "::" << __FUNCTION__
 	          << "; preprocessor not assigned." << std::endl;
 	return;
       }
     Set *new_set= getPreprocessor()->get_sets().create_set(name);
-    std::clog << nombre_clase() << "::" << __FUNCTION__
+    std::clog << getClassName() << "::" << __FUNCTION__
               << "; warning! copy of nodes and elements"
               << " not implemented." << std::endl;
     //Copying entities.
@@ -328,7 +328,7 @@ int XC::Set::sendSelf(CommParameters &cp)
 
     res+= cp.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
-      std::cerr << nombre_clase() << "::sendSelf() - failed to send data\n";
+      std::cerr << getClassName() << "::sendSelf() - failed to send data\n";
     return res;
   }
 
@@ -340,13 +340,13 @@ int XC::Set::recvSelf(const CommParameters &cp)
     int res= cp.receiveIdData(getDbTagData(),dataTag);
 
     if(res<0)
-      std::cerr << nombre_clase() << "::recvSelf - failed to receive ids.\n";
+      std::cerr << getClassName() << "::recvSelf - failed to receive ids.\n";
     else
       {
         //setTag(getDbTagDataPos(0));
         res+= recvData(cp);
         if(res<0)
-          std::cerr << nombre_clase() << "::recvSelf - failed to receive data.\n";
+          std::cerr << getClassName() << "::recvSelf - failed to receive data.\n";
       }
     return res;
   }

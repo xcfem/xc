@@ -96,7 +96,7 @@ T *TransfCooLoader::newCrdTransf(const std::string &trfName)
     CrdTransf *ptr= find_ptr(trfName);
     if(ptr)
       {
-	std::cerr << nombre_clase() << "::" << __FUNCTION__
+	std::cerr << getClassName() << "::" << __FUNCTION__
 	          << "transformation: '" << trfName
 	          << "' aready exists. I do nothing." << std::endl;
 	retval= dynamic_cast<T *>(ptr);

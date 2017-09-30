@@ -86,7 +86,7 @@ void XC::PropRecorder::callRecordCallback(Container &c,const int &commitTag,cons
             EntCmd_exec(pyObj,CallbackRecord);
           }
         else
-	  std::cerr << nombre_clase() << "::" << __FUNCTION__
+	  std::cerr << getClassName() << "::" << __FUNCTION__
 	            << "; pointer is null." << std::endl;
       }
   }
@@ -104,7 +104,7 @@ void PropRecorder::callRestartCallback(Container &c)
             EntCmd_exec(pyObj,this->CallbackRestart);
           }
         else
-	  std::cerr << nombre_clase() << "::" << __FUNCTION__
+	  std::cerr << getClassName() << "::" << __FUNCTION__
 	            << "; pointer is null." << std::endl;
       }
   }

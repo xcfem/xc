@@ -151,7 +151,7 @@ const XC::Vector &XC::Element0D::getZ(void) const
 XC::Matrix XC::Element0D::getLocalAxes(bool initialGeometry) const
   {
     if(!initialGeometry)
-      std::cerr << nombre_clase() << "::" << __FUNCTION__
+      std::cerr << getClassName() << "::" << __FUNCTION__
 	        << "not implemented for deformed geometry."
                 << std::endl;
     return transformation;
@@ -161,7 +161,7 @@ XC::Matrix XC::Element0D::getLocalAxes(bool initialGeometry) const
 SisCooRect3d3d XC::Element0D::getSisCoo(bool initialGeometry) const
   {
     if(!initialGeometry)
-      std::cerr << nombre_clase() << "::" << __FUNCTION__
+      std::cerr << getClassName() << "::" << __FUNCTION__
 	        << "not implemented for deformed geometry."
                 << std::endl;
     const Vector3d x(transformation(0,0), transformation(0,1), transformation(0,2));

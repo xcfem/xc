@@ -303,7 +303,7 @@ bool XC::PetscSOE::setSolver(PetscSolver *newSolver)
 	bool solverOK= (newSolver->setSize()>=0);
 	if(!solverOK)
           {
-	    std::cerr << nombre_clase() << "::"" __FUNCTION__"
+	    std::cerr << getClassName() << "::"" __FUNCTION__"
 	              << "; the new solver can't change size, "
 	              << " keeping previous size.\n";
 	    return solverOK;

@@ -138,7 +138,7 @@ int XC::FullGenLinLapackSolver::solve(void)
     // check if successfull
     if(info != 0)
       {
-	std::cerr << nombre_clase() << "::" << __FUNCTION__
+	std::cerr << getClassName() << "::" << __FUNCTION__
 	          << "; lapack solver failed - " << info
 		  << " returned.\n";
 	return -info;
@@ -166,7 +166,7 @@ int XC::FullGenLinLapackSolver::setSize(void)
       return 0;
     else
       {
-	std::cerr << nombre_clase() << "::" << __FUNCTION__
+	std::cerr << getClassName() << "::" << __FUNCTION__
 	          << "; ran out of memory.\n";
 	return -1;	
       }

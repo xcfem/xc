@@ -89,14 +89,14 @@ XC::Matrix::Matrix(int nRows,int nCols)
 #ifdef _G3DEBUG
     if(nRows < 0)
       {
-        std::cerr << nombre_clase() << "::" << __FUNCTION__
+        std::cerr << getClassName() << "::" << __FUNCTION__
 		  << "; WARNING: tried to init matrix ";
         std::cerr << "with num rows: " << nRows << " <0\n";
         numRows= 0; numCols =0;
       }
     if(nCols < 0)
       {
-        std::cerr << nombre_clase() << "::" << __FUNCTION__
+        std::cerr << getClassName() << "::" << __FUNCTION__
 		  << "; WARNING: tried to init matrix";
         std::cerr << "with num cols: " << nCols << " <0\n";
         numRows= 0; numCols =0;
@@ -111,14 +111,14 @@ XC::Matrix::Matrix(double *theData, int row, int col)
 #ifdef _G3DEBUG
     if(row < 0)
       {
-        std::cerr << nombre_clase() << "::" << __FUNCTION__
+        std::cerr << getClassName() << "::" << __FUNCTION__
 		  << "; WARNING: tried to init matrix with numRows: ";
         std::cerr << row << " <0\n";
         numRows= 0; numCols =0;
       }
     if(col < 0)
       {
-        std::cerr << nombre_clase() << "::" << __FUNCTION__
+        std::cerr << getClassName() << "::" << __FUNCTION__
 		  << "; WARNING: tried to init matrix with numCols: ";
         std::cerr << col << " <0\n";
         numRows= 0; numCols =0;
@@ -161,7 +161,7 @@ void XC::Matrix::Identity(void)
   {
     Zero();
     if(noRows()!=noCols())
-      std::cerr << nombre_clase() << "::" << __FUNCTION__
+      std::cerr << getClassName() << "::" << __FUNCTION__
 		<< "; not an square matrix." << std::endl;
     const int n= std::min(noRows(),noCols());
     for(int i=0;i<n;i++)
@@ -175,7 +175,7 @@ int XC::Matrix::resize(int rows, int cols)
 
     if(newSize<0)
       {
-        std::cerr << nombre_clase() << "::" << __FUNCTION__
+        std::cerr << getClassName() << "::" << __FUNCTION__
 		  << "; rows " << rows << " or cols " << cols
 		  << " specified <= 0\n";
         return -1;
@@ -220,7 +220,7 @@ int XC::Matrix::Assemble(const Matrix &V, const ID &rows, const ID &cols, double
 	      (*this)(pos_Rows,pos_Cols) += V(j,i)*fact;
             else
               {
-                std::cerr << nombre_clase() << "::" << __FUNCTION__
+                std::cerr << getClassName() << "::" << __FUNCTION__
 			  << "; WARNING: position (" << pos_Rows
 			  << "," << pos_Cols << ") outside bounds \n";
 	        res= -1;
@@ -270,7 +270,7 @@ int XC::Matrix::Solve(const Vector &b, Vector &x) const
 
 #ifdef _G3DEBUG    
     if(numRows != numCols) {
-      std::cerr << nombre_clase() << "::" << __FUNCTION__
+      std::cerr << getClassName() << "::" << __FUNCTION__
 		<< "; the matrix of dimensions " 
 	        << numRows << ", " << numCols
 		<< " is not square " << std::endl;
@@ -278,14 +278,14 @@ int XC::Matrix::Solve(const Vector &b, Vector &x) const
     }
 
     if(n != x.Size()) {
-      std::cerr << nombre_clase() << "::" << __FUNCTION__
+      std::cerr << getClassName() << "::" << __FUNCTION__
 		<< "; dimension of x, " << numRows
 		<< "is not same as matrix " <<  x.Size() << std::endl;
       return -2;
     }
 
     if(n != b.Size()) {
-      std::cerr << nombre_clase() << "::" << __FUNCTION__
+      std::cerr << getClassName() << "::" << __FUNCTION__
 		<< ";- dimension of x, " << numRows
 		<< "is not same as matrix " <<  b.Size() << std::endl;
       return -2;
@@ -332,28 +332,28 @@ int XC::Matrix::Solve(const Matrix &b, Matrix &x) const
 
 #ifdef _G3DEBUG    
     if(numRows != numCols) {
-      std::cerr << nombre_clase() << "::" << __FUNCTION__
+      std::cerr << getClassName() << "::" << __FUNCTION__
 		<< "; the matrix of dimensions ["
 		<< numRows << " " <<  numCols << "] is not square\n";
       return -1;
     }
 
     if(n != x.numRows) {
-      std::cerr << nombre_clase() << "::" << __FUNCTION__
+      std::cerr << getClassName() << "::" << __FUNCTION__
 		<< "; #rows of X, " << x.numRows
 		<< " is not same as the matrices: " << numRows << std::endl;
       return -2;
     }
 
     if(n != b.numRows) {
-      std::cerr << nombre_clase() << "::" << __FUNCTION__
+      std::cerr << getClassName() << "::" << __FUNCTION__
 		<< "; #rows of B, " << b.numRows
 		<< " is not same as the matrices: " << numRows << std::endl;
       return -2;
     }
 
     if(x.numCols != b.numCols) {
-      std::cerr << nombre_clase() << "::" << __FUNCTION__
+      std::cerr << getClassName() << "::" << __FUNCTION__
 		<< "; #cols of B, " << b.numCols
 		<< " , is not same as that of X, b " <<  x.numCols << std::endl;
       return -3;
@@ -413,14 +413,14 @@ int XC::Matrix::Invert(Matrix &theInverse) const
 
 #ifdef _G3DEBUG    
     if(numRows != numCols) {
-      std::cerr << nombre_clase() << "::" << __FUNCTION__
+      std::cerr << getClassName() << "::" << __FUNCTION__
 		<< "; the matrix of dimensions ["
 		<< numRows << "," << numCols << "] is not square\n";
       return -1;
     }
 
     if(n != theInverse.numRows) {
-      std::cerr << nombre_clase() << "::" << __FUNCTION__
+      std::cerr << getClassName() << "::" << __FUNCTION__
 		<< "; #rows of X, " << numRows
 		<< ", is not same as matrix " << theInverse.numRows
 		<< std::endl;
@@ -465,7 +465,7 @@ int XC::Matrix::addMatrix(double factThis, const Matrix &other, double factOther
 
 #ifdef _G3DEBUG
     if((other.numRows != numRows) || (other.numCols != numCols)) {
-      std::cerr << nombre_clase() << "::" << __FUNCTION__
+      std::cerr << getClassName() << "::" << __FUNCTION__
 		<< "; incompatable matrices\n";
       return -1;
     }
@@ -534,7 +534,7 @@ int XC::Matrix::addMatrixProduct(double thisFact, const Matrix &B, const Matrix 
       return 0;
 #ifdef _G3DEBUG
     if((B.numRows != numRows) || (C.numCols != numCols) || (B.numCols != C.numRows)) {
-      std::cerr << nombre_clase() << "::" << __FUNCTION__
+      std::cerr << getClassName() << "::" << __FUNCTION__
 		<< "; incompatable matrices, this\n";
       return -1;
     }
@@ -614,7 +614,7 @@ int XC::Matrix::addMatrixTripleProduct(double thisFact,
 #ifdef _G3DEBUG
     if((numCols != numRows) || (B.numCols != B.numRows) || (T.numCols != numRows) ||
 	(T.numRows != B.numCols)) {
-      std::cerr << nombre_clase() << "::" << __FUNCTION__
+      std::cerr << getClassName() << "::" << __FUNCTION__
 		<< "; incompatable matrices\n";
       return -1;
     }
@@ -821,7 +821,7 @@ XC::Matrix &XC::Matrix::operator/=(double fact)
         else
           {
             // print out the warining message
-            std::cerr << nombre_clase() << "::" << __FUNCTION__
+            std::cerr << getClassName() << "::" << __FUNCTION__
 		      << "; WARNING: 0 factor specified all values in Matrix set to ";
             std::cerr << MATRIX_VERY_LARGE_VALUE << std::endl;
 
@@ -863,7 +863,7 @@ XC::Matrix XC::Matrix::operator*(double fact) const
 XC::Matrix XC::Matrix::operator/(double fact) const
 {
     if(fact == 0.0) {
-	std::cerr << nombre_clase() << "::" << __FUNCTION__
+	std::cerr << getClassName() << "::" << __FUNCTION__
 		  << "; ERROR divide-by-zero\n";
 	exit(0);
     }
@@ -883,7 +883,7 @@ XC::Vector XC::Matrix::operator*(const Vector &V) const
     
     if(V.Size() != numCols)
       {
-	std::cerr << nombre_clase() << "::" << __FUNCTION__
+	std::cerr << getClassName() << "::" << __FUNCTION__
 		  << "; incompatable sizes\n";
 	return result;
       } 
@@ -917,7 +917,7 @@ XC::Vector XC::Matrix::operator^(const Vector &V) const
     
     if(V.Size() != numRows)
       {
-        std::cerr << nombre_clase() << "::" << __FUNCTION__
+        std::cerr << getClassName() << "::" << __FUNCTION__
 		  << "; incompatable sizes\n";
         return result;
       } 
@@ -964,7 +964,7 @@ XC::Matrix XC::Matrix::operator*(const Matrix &M) const
     
     if(numCols != M.numRows || result.numRows != numRows)
       {
-	std::cerr << nombre_clase() << "::" << __FUNCTION__
+	std::cerr << getClassName() << "::" << __FUNCTION__
 		  << "; incompatable sizes\n";
 	return result;
       } 
@@ -1006,7 +1006,7 @@ XC::Matrix XC::Matrix::operator^(const Matrix &M) const
   
     if(numRows != M.numRows || result.numRows != numCols)
       {
-        std::cerr << nombre_clase() << "::" << __FUNCTION__
+        std::cerr << getClassName() << "::" << __FUNCTION__
 		  << "; incompatable sizes\n";
         return result;
       } 
@@ -1038,7 +1038,7 @@ XC::Matrix &XC::Matrix::operator+=(const Matrix &M)
   {
 #ifdef _G3DEBUG
   if(numRows != M.numRows || numCols != M.numCols) {
-    std::cerr << nombre_clase() << "::" << __FUNCTION__
+    std::cerr << getClassName() << "::" << __FUNCTION__
 	      << "; matrices incompatable\n";
     return *this;
   }
@@ -1056,7 +1056,7 @@ XC::Matrix &XC::Matrix::operator-=(const Matrix &M)
   {
 #ifdef _G3DEBUG
   if(numRows != M.numRows || numCols != M.numCols) {
-    std::cerr << nombre_clase() << "::" << __FUNCTION__
+    std::cerr << getClassName() << "::" << __FUNCTION__
 	      << ";  matrices incompatable [" << numRows << " "
 	      << numCols << "]" << "[" << M.numRows << "]"
 	      << M.numCols << "]\n";
@@ -1197,7 +1197,7 @@ int XC::Matrix::Assemble(const Matrix &V, int init_row, int init_col, double fac
   }  
   else 
   {
-     std::cerr << nombre_clase() << "::" << __FUNCTION__
+     std::cerr << getClassName() << "::" << __FUNCTION__
 	       << "; WARNING: position outside bounds \n";
      res= -1;
   }
@@ -1241,7 +1241,7 @@ int XC::Matrix::AssembleTranspose(const Matrix &V, int init_row, int init_col, d
   }  
   else 
   {
-     std::cerr << nombre_clase() << "::" << __FUNCTION__
+     std::cerr << getClassName() << "::" << __FUNCTION__
 	       << "; WARNING: position outside bounds \n";
      res= -1;
   }
@@ -1278,7 +1278,7 @@ int XC::Matrix::Extract(const Matrix &V, int init_row, int init_col, double fact
   }  
   else 
   {
-     std::cerr << nombre_clase() << "::" << __FUNCTION__
+     std::cerr << getClassName() << "::" << __FUNCTION__
 	       << "; WARNING: position outside bounds \n";
      res= -1;
   }
@@ -1353,7 +1353,7 @@ double XC::Matrix::Norm2(void) const
           r+= prod(i,i);
       }
     else
-      std::cerr << nombre_clase() << "::" << __FUNCTION__
+      std::cerr << getClassName() << "::" << __FUNCTION__
 		<< "; non-square matrix." << std::endl;
     return r;
   }

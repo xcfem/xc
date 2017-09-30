@@ -74,7 +74,7 @@ void XC::RigidRod::setup(Domain *theDomain)
     int dimC = crdC.Size();
     if(dimR != dimC)
       {
-        std::cerr << nombre_clase() << "::" << __FUNCTION__
+        std::cerr << getClassName() << "::" << __FUNCTION__
 	          << "; mismatch in dimension "
 		  << "between constrained node " <<  getNodeConstrained()
 		  <<  " and Retained node " << getNodeRetained() << std::endl;
@@ -85,7 +85,7 @@ void XC::RigidRod::setup(Domain *theDomain)
     int numDOF = nodeR->getNumberDOF();
     if(numDOF != nodeC->getNumberDOF())
       {
-        std::cerr << nombre_clase() << "::" << __FUNCTION__
+        std::cerr << getClassName() << "::" << __FUNCTION__
 	          << "; mismatch in numDOF "
 		  << "between constrained node " <<  getNodeConstrained()
 		  <<  " and retained node " << getNodeRetained() << std::endl;
@@ -95,7 +95,7 @@ void XC::RigidRod::setup(Domain *theDomain)
     // check the number of dof at the nodes >= dimension of problem
     if(numDOF < dimR)
       {
-        std::cerr << nombre_clase() << "::" << __FUNCTION__
+        std::cerr << getClassName() << "::" << __FUNCTION__
 		  << ";  - numDOF at nodes " << getNodeRetained()
 		  << " and " << getNodeConstrained()
 		  << "must be >= dimension of problem\n";

@@ -93,7 +93,7 @@ int XC::BandGenLinLapackSolver::solve(void)
   {
     if(theSOE == 0)
       {
-	std::cerr << nombre_clase() << "::" << __FUNCTION__
+	std::cerr << getClassName() << "::" << __FUNCTION__
 	          << "; no LinearSOE object has been set.\n";
 	return -1;
       }
@@ -102,7 +102,7 @@ int XC::BandGenLinLapackSolver::solve(void)
     // check iPiv is large enough
     if(iPiv.Size() < n)
       {
-	std::cerr << nombre_clase() << "::" << __FUNCTION__
+	std::cerr << getClassName() << "::" << __FUNCTION__
 		  << "; iPiv not large enough - has setSize() been called?\n";
 	return -1;
       }

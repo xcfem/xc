@@ -242,7 +242,7 @@ Pos3d XC::InteractionDiagram::getIntersection(const Pos3d &esf_d) const
       retval= *(lst_intersec.begin());
     else
       {
-	std::cerr << nombre_clase() << "::" << __FUNCTION__ << "; intersection for triplet (N,My,Mz): " << esf_d << " not found." << std::endl;
+	std::cerr << getClassName() << "::" << __FUNCTION__ << "; intersection for triplet (N,My,Mz): " << esf_d << " not found." << std::endl;
       }
     return retval;    
   }
@@ -273,7 +273,7 @@ double XC::InteractionDiagram::FactorCapacidad(const Pos3d &esf_d) const
           }
         else
           {
-	    std::cerr << nombre_clase() << "::" << __FUNCTION__
+	    std::cerr << getClassName() << "::" << __FUNCTION__
 	              << "; intersection for the triplet: "
                       << esf_d << " not found." << std::endl;
             retval= d/rMin; //Intersection not found.

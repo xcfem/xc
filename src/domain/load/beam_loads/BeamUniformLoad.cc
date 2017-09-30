@@ -70,17 +70,17 @@ SVD3d XC::BeamUniformLoad::getResultant(const Pos3d &centro, bool initialGeometr
 		    retval+= VDesliz3d(ptrElem->getPosCdg(),force);
 		  }
                 else
-		  std::cerr << nombre_clase() << "::getResultant; the element: "
+		  std::cerr << getClassName() << "::getResultant; the element: "
                             << elemTag << " no tiene coordinate transformation." << std::endl;
 
               }
             else
-	      std::cerr << nombre_clase() << "::getResultant; the element: "
+	      std::cerr << getClassName() << "::getResultant; the element: "
                         << elemTag << " is not a 1D element." << std::endl;
           }
       }
     else
-      std::cerr << nombre_clase() << "::getResultant; pointer to domain is NULL." << std::endl;
+      std::cerr << getClassName() << "::getResultant; pointer to domain is NULL." << std::endl;
     return retval;
   }
 

@@ -70,14 +70,14 @@ int XC::LineSearch::updateAndUnbalance(IncrementalIntegrator &theIntegrator)
     int retval= 0;
     if(theIntegrator.update(x) < 0)
       {
-        std::cerr << nombre_clase() << "::" << __FUNCTION__
+        std::cerr << getClassName() << "::" << __FUNCTION__
 	        << "; the integrator failed in update()\n";	
         retval= -1;
       }
     
     if(theIntegrator.formUnbalance() < 0)
       {
-        std::cerr << nombre_clase() << "::" << __FUNCTION__
+        std::cerr << getClassName() << "::" << __FUNCTION__
                   << "the integrator failed in formUnbalance()\n";	
         retval= -2;
       }
@@ -103,7 +103,7 @@ void XC::LineSearch::Print(std::ostream &s, int flag)
   {
     if(flag == 0)
       {
-        s << nombre_clase() << " :: Line Search Tolerance = " << tolerance << std::endl; 
+        s << getClassName() << " :: Line Search Tolerance = " << tolerance << std::endl; 
         s << "                         max num Iterations = " << maxIter << std::endl;
         s << "                         min value on eta = " << minEta << std::endl;
         s << "                         max value on eta = " << maxEta << std::endl;

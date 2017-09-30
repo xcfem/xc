@@ -209,7 +209,7 @@ int XC::MRMFreedom_Constraint::addResistingForceToNodalReaction(bool inclInertia
         rN->addReactionForce(tmp,1.0);
       }
     if(inclInertia)
-      std::cerr << nombre_clase() << "::" << __FUNCTION__
+      std::cerr << getClassName() << "::" << __FUNCTION__
 	        << " ERROR;  inertia effects not yet implemented." << std::endl;
     return 0;
   }
@@ -239,7 +239,7 @@ int XC::MRMFreedom_Constraint::sendSelf(CommParameters &cp)
     const int dataTag= getDbTag();
     result = cp.sendIdData(getDbTagData(),dataTag);
     if(result < 0)
-      std::cerr << nombre_clase() << "::" << __FUNCTION__
+      std::cerr << getClassName() << "::" << __FUNCTION__
 	        << "; error sending ID data\n";
     return result;
   }
@@ -252,7 +252,7 @@ int XC::MRMFreedom_Constraint::recvSelf(const CommParameters &cp)
     const int dataTag= getDbTag();
     int res= cp.receiveIdData(getDbTagData(),dataTag);
     if(res<0)
-      std::cerr << nombre_clase() << "::" << __FUNCTION__
+      std::cerr << getClassName() << "::" << __FUNCTION__
 	        << "; error receiving ID data\n";
     else
       res+= recvData(cp);
@@ -273,7 +273,7 @@ void XC::MRMFreedom_Constraint::Print(std::ostream &s, int flag)
 //! @brief Interfaz con VTK.
 int XC::MRMFreedom_Constraint::getVtkCellType(void) const
   {
-    std::cerr << nombre_clase() << "::" << __FUNCTION__
+    std::cerr << getClassName() << "::" << __FUNCTION__
               << "; not implemented." << std::endl;
     return VTK_EMPTY_CELL;
   }

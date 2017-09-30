@@ -477,7 +477,7 @@ XC::Material *XC::MaterialLoader::newMaterial(const std::string &cmd,const std::
         retval->set_owner(this);
         if(materials.find(cod_mat)!=materials.end()) //Material exists.
           {
-	    std::clog << nombre_clase() << "::" << __FUNCTION__
+	    std::clog << getClassName() << "::" << __FUNCTION__
 	              << "; ¡ojo! se redefine el material: '"
                       << cod_mat << "'." << std::endl;
             delete materials[cod_mat];
@@ -494,7 +494,7 @@ XC::GeomSection *XC::MaterialLoader::newSectionGeometry(const std::string &cod)
     XC::GeomSection *retval= nullptr;
     if(sections_geometry.find(cod)!=sections_geometry.end()) //Section geometry already exists.
       {
-	std::cerr << nombre_clase() << "::" << __FUNCTION__
+	std::cerr << getClassName() << "::" << __FUNCTION__
 	          << "; warning! section: '"
                   << cod << "' already exists. "<< '.' << std::endl;
         retval= sections_geometry[cod];
@@ -514,7 +514,7 @@ XC::InteractionDiagram *XC::MaterialLoader::newInteractionDiagram(const std::str
     InteractionDiagram *retval= nullptr;
     if(interaction_diagrams.find(cod_diag)!=interaction_diagrams.end()) //Diagrams exists.
       {
-	std::clog << nombre_clase() << "::" << __FUNCTION__
+	std::clog << getClassName() << "::" << __FUNCTION__
 	          << "; WARNING the interaction diagram named: '"
                    << cod_diag << "' already exists. " << std::endl;
          retval= interaction_diagrams[cod_diag];
@@ -533,7 +533,7 @@ XC::InteractionDiagram2d *XC::MaterialLoader::new2DInteractionDiagram(const std:
     InteractionDiagram2d *retval= nullptr;
     if(interaction_diagrams2D.find(cod_diag)!=interaction_diagrams2D.end()) //Diagram already exists.
       {
-	std::clog << nombre_clase() << "::" << __FUNCTION__
+	std::clog << getClassName() << "::" << __FUNCTION__
 	          << "; WARNING interaction diagram named: '"
                    << cod_diag << "' already exists. " << std::endl;
          retval= interaction_diagrams2D[cod_diag];
@@ -592,7 +592,7 @@ XC::InteractionDiagram2d *XC::MaterialLoader::calcInteractionDiagramNMy(const st
             const std::string cod_diag= "diagIntNMy"+cod_scc;
             if(interaction_diagrams2D.find(cod_diag)!=interaction_diagrams2D.end()) //Diagram exists.
               {
-	        std::clog << nombre_clase() << "::" << __FUNCTION__
+	        std::clog << getClassName() << "::" << __FUNCTION__
 		          << "; ¡warning! interaction diagram: '"
                           << cod_diag << "' redefined." << std::endl;
                 delete interaction_diagrams2D[cod_diag];

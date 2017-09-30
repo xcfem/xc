@@ -228,7 +228,7 @@ int XC::LinearSOE::setSolverSize(void)
     const int retval = theSolver->setSize();
     if(retval < 0)
       {
-        std::cerr << nombre_clase() << "::setSize :";
+        std::cerr << getClassName() << "::setSize :";
         std::cerr << " solver failed setSize()\n";
       }
     return retval;

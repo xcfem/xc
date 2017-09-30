@@ -44,7 +44,7 @@ XC::RegionSecc::RegionSecc(Material *mat)
 //! @brief Return the region contour.
 Poligono2d XC::RegionSecc::getPolygon(void) const
   {
-    std::cerr << nombre_clase() << "::" << __FUNCTION__
+    std::cerr << getClassName() << "::" << __FUNCTION__
               << "; not implemented." << std::endl;
     Poligono2d retval;
     return retval;
@@ -57,7 +57,7 @@ XC::RgSccPoligono XC::RegionSecc::Intersection(const Semiplano2d &sp) const
   {
     std::list<Poligono2d> tmpList= getPolygon().Interseccion(sp);
     if(tmpList.size()>1)
-      std::cerr << nombre_clase() << __FUNCTION__
+      std::cerr << getClassName() << __FUNCTION__
 	        << "; not a simply connected region."
                 << std::endl;
     Poligono2d tmp= *tmpList.begin();

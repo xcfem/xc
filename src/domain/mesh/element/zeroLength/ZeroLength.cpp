@@ -127,12 +127,12 @@ void XC::ZeroLength::setMaterial(const int &dir,const std::string &nmbMat)
             if(tmp)
               theMaterial1d.push_back(dir,tmp);
             else
-	      std::cerr << nombre_clase() << "::" << __FUNCTION__ << "; "
+	      std::cerr << getClassName() << "::" << __FUNCTION__ << "; "
                         << "material identified by: '" << nmbMat
                         << "' is not an uniaxial material.\n";
           }
         else
-          std::cerr << nombre_clase() << "::" << __FUNCTION__ << "; "
+          std::cerr << getClassName() << "::" << __FUNCTION__ << "; "
                     << "material identified by: '" << nmbMat
                     << "' not found.\n";
         if(theMaterial1d.size() > 0 )
@@ -140,7 +140,7 @@ void XC::ZeroLength::setMaterial(const int &dir,const std::string &nmbMat)
       }
     else
       {
-	std::cerr << nombre_clase() << "::" << __FUNCTION__
+	std::cerr << getClassName() << "::" << __FUNCTION__
 		  << "; null pointer to preprocessor." << std::endl;
       }
   }
@@ -164,12 +164,12 @@ void XC::ZeroLength::setMaterials(const std::deque<int> &dirs,const std::vector<
                 if(tmp)
                   theMaterial1d.push_back(dirs[i],tmp);
                 else
-	      std::cerr << nombre_clase() << "::" << __FUNCTION__ << "; "
+	      std::cerr << getClassName() << "::" << __FUNCTION__ << "; "
                             << "el material de código: '" << nmbMats[i]
                             << "' no corresponde a un material uniaxial.\n";
               }
             else
-              std::cerr << nombre_clase() << "::" << __FUNCTION__ << "; "
+              std::cerr << getClassName() << "::" << __FUNCTION__ << "; "
                         << "material identified by : '" << nmbMats[i]
                         << "' not found.\n";
           }
@@ -178,7 +178,7 @@ void XC::ZeroLength::setMaterials(const std::deque<int> &dirs,const std::vector<
       }
     else
       {
-	std::cerr << nombre_clase() << "::" << __FUNCTION__
+	std::cerr << getClassName() << "::" << __FUNCTION__
 		  << "; null pointer to preprocessor." << std::endl;
       }
   }

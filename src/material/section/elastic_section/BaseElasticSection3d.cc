@@ -53,18 +53,18 @@ void XC::BaseElasticSection3d::sectionGeometry(const std::string &cod_geom)
         if(geom)
           {
             if(ctes_scc.E()==0.0)
-	      std::cerr << nombre_clase()<< "::" << __FUNCTION__
+	      std::cerr << getClassName()<< "::" << __FUNCTION__
 		        << "; reference elastic modulus must not be zero."
 			<< std::endl;
             ctes_scc= geom->getCrossSectionProperties3d(ctes_scc);
           }
         else
-          std::cerr << nombre_clase()<< "::" << __FUNCTION__
+          std::cerr << getClassName()<< "::" << __FUNCTION__
 		    << "; section geometry called: '"
                     << cod_geom << "' not found." << std::endl;
       }
     else
-      std::cerr << nombre_clase()<< "::" << __FUNCTION__
+      std::cerr << getClassName()<< "::" << __FUNCTION__
 		<< "; material handler not defined." << std::endl;
   }
 

@@ -101,7 +101,7 @@ XC::Element *XC::ElementLoader::getElement(int tag)
     if(tmp)
       retval= tmp->getElement(tag);
     else
-      std::cerr << nombre_clase() << "::" << __FUNCTION__
+      std::cerr << getClassName() << "::" << __FUNCTION__
 	        << "; domain not yet defined." << std::endl;
     return retval;
   }

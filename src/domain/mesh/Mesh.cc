@@ -230,7 +230,7 @@ bool XC::Mesh::addElement(Element *element)
   {
     if(!element)
       {
-        std::cerr << nombre_clase() << "::" << __FUNCTION__
+        std::cerr << getClassName() << "::" << __FUNCTION__
 	          << "; pointer to element is null." << std::endl;
         return false;
       }
@@ -241,7 +241,7 @@ bool XC::Mesh::addElement(Element *element)
     TaggedObject *other = theElements->getComponentPtr(eleTag);
     if(other)
       {
-        std::clog << nombre_clase() << "::" << __FUNCTION__
+        std::clog << getClassName() << "::" << __FUNCTION__
 		  << "; element with tag " << eleTag
 		  << " already exists in model\n";
         return false;
@@ -253,7 +253,7 @@ bool XC::Mesh::addElement(Element *element)
     if(result)
       add_element_to_domain(element);
     else
-      std::cerr << nombre_clase() << "::" << __FUNCTION__
+      std::cerr << getClassName() << "::" << __FUNCTION__
 		<< "; element " << eleTag
 		<< " could not be added to container\n";
     return result;
@@ -325,7 +325,7 @@ bool XC::Mesh::addNode(Node * node)
     TaggedObject *other = theNodes->getComponentPtr(nodTag);
     if(other)
       {
-        std::clog << nombre_clase() << "::" << __FUNCTION__
+        std::clog << getClassName() << "::" << __FUNCTION__
 	          << "; node with tag " << nodTag
 		  << " already exists in model\n";
         return false;
@@ -334,7 +334,7 @@ bool XC::Mesh::addNode(Node * node)
     if(result)
       add_node_to_domain(node);
     else
-      std::cerr << nombre_clase() << "::" << __FUNCTION__
+      std::cerr << getClassName() << "::" << __FUNCTION__
 	        << "; node with tag " << nodTag
 		<< " could not be added to container\n";
     return result;

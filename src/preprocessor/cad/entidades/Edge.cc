@@ -68,7 +68,7 @@ void XC::Edge::actualiza_topologia(void)
 //! @brief Return a pointer to the edge's start point.
 XC::Pnt *XC::Edge::P1(void)
   {
-    std::cerr << nombre_clase() << "::" << __FUNCTION__
+    std::cerr << getClassName() << "::" << __FUNCTION__
               << "; this function must be redefined on"
               << " derived classes, nullptr returned;" << std::endl;
     return nullptr;
@@ -77,7 +77,7 @@ XC::Pnt *XC::Edge::P1(void)
 //! @brief Return a constant pointer to the edge's start point.
 const XC::Pnt *XC::Edge::P1(void) const
   {
-    std::cerr << nombre_clase() << "::" << __FUNCTION__
+    std::cerr << getClassName() << "::" << __FUNCTION__
 	      << "; this function must be redefined on"
               << " derived classes, nullptr returned;" << std::endl;
     return nullptr;
@@ -86,7 +86,7 @@ const XC::Pnt *XC::Edge::P1(void) const
 //! @brief Return a pointer to the edge's start point.
 XC::Pnt *XC::Edge::P2(void)
   {
-    std::cerr << nombre_clase() << "::" << __FUNCTION__
+    std::cerr << getClassName() << "::" << __FUNCTION__
               << "; this function must be redefined on"
               << " derived classes, nullptr returned;" << std::endl;
     return nullptr;
@@ -95,7 +95,7 @@ XC::Pnt *XC::Edge::P2(void)
 //! @brief Return a constant pointer to the edge's end point.
 const XC::Pnt *XC::Edge::P2(void) const
   {
-    std::cerr << nombre_clase() << "::" << __FUNCTION__
+    std::cerr << getClassName() << "::" << __FUNCTION__
 	      << "; this function must be redefined on"
               << " derived classes, nullptr returned;" << std::endl;
     return nullptr;
@@ -131,12 +131,12 @@ bool XC::Edge::In(const GeomObj3d &geomObj, const double &tol) const
     if(p1)
       retval= p1->In(geomObj,tol);
     else
-      std::cerr << nombre_clase() << "::" << __FUNCTION__
+      std::cerr << getClassName() << "::" << __FUNCTION__
 	        << "; p1 not defined." << std::endl;
     if(p2)
       retval= retval && p2->In(geomObj,tol);
     else
-      std::cerr << nombre_clase() << "::" << __FUNCTION__
+      std::cerr << getClassName() << "::" << __FUNCTION__
 	        << "; p2 not defined." << std::endl;
     return retval;
   }
@@ -154,12 +154,12 @@ bool XC::Edge::Out(const GeomObj3d &geomObj, const double &tol) const
     if(p1)
       retval= p1->Out(geomObj,tol);
     else
-      std::cerr << nombre_clase() << "::" << __FUNCTION__
+      std::cerr << getClassName() << "::" << __FUNCTION__
 	        << "; p1 not defined." << std::endl;
     if(p2)
       retval= retval && p2->Out(geomObj,tol);
     else
-      std::cerr << nombre_clase() << "::" << __FUNCTION__
+      std::cerr << getClassName() << "::" << __FUNCTION__
 	        << "; p2 not defined." << std::endl;
     return retval;
   }
@@ -176,7 +176,7 @@ void XC::Edge::SetNDiv(const size_t &nd)
             const size_t ns= sups_linea.size();
             if(ns>1)
               {
-// 	        std::clog << nombre_clase() << "::" << __FUNCTION__
+// 	        std::clog << getClassName() << "::" << __FUNCTION__
 //		          << "; " << getName()
 //                           << " is an edge of the surfaces: "
 //                           << NombresSupsTocan()
@@ -189,7 +189,7 @@ void XC::Edge::SetNDiv(const size_t &nd)
               ndiv= nd;
           }
         else
-          std::cerr << nombre_clase() << "::" << __FUNCTION__
+          std::cerr << getClassName() << "::" << __FUNCTION__
 	            << "; " << getName()
                     << " edge is already meshed"
 	            << " and keeps its number of divisions"
@@ -455,7 +455,7 @@ void XC::Edge::create_nodes_en_extremos(void)
       std::clog << "Creating nodes for '" << getName() << "' edge ends...";   
     if(!P1())
       {
-	std::cerr << nombre_clase() << "::" << __FUNCTION__
+	std::cerr << getClassName() << "::" << __FUNCTION__
 	          << "; start point undefined." << std::endl;
         return;
       }
@@ -468,7 +468,7 @@ void XC::Edge::create_nodes_en_extremos(void)
       
     if(!P2())
       {
-	std::cerr << nombre_clase() << "::" << __FUNCTION__
+	std::cerr << getClassName() << "::" << __FUNCTION__
 	          << "; end point undefined." << std::endl;
         return;
       }
@@ -482,7 +482,7 @@ void XC::Edge::create_nodes_en_extremos(void)
     ttzNodes(1,filas,cols)= node_p2; //Node of end point.
 
     if(verbosity>4)
-      std::cerr << nombre_clase() << "::" << __FUNCTION__
+      std::cerr << getClassName() << "::" << __FUNCTION__
 	        << "; creados." << std::endl;
   }
 
@@ -496,7 +496,7 @@ void XC::Edge::create_nodes(void)
     if(ttzNodes.Null())
       {
         if(!getPreprocessor())
-          std::cerr << nombre_clase() << "::" << __FUNCTION__
+          std::cerr << getClassName() << "::" << __FUNCTION__
 	            << "; preprocessor undefined." << std::endl;
         else
           {
@@ -520,21 +520,21 @@ void XC::Edge::create_nodes(void)
               }
           }
         if(verbosity>4)
-	  std::clog << nombre_clase() << "::" << __FUNCTION__
+	  std::clog << getClassName() << "::" << __FUNCTION__
 	            << "; created " << ttzNodes.NumPtrs()
 		    << " node(s)." << std::endl;
       }
     else
       {
         if(verbosity>2)
-          std::clog << nombre_clase() << "::" << __FUNCTION__
+          std::clog << getClassName() << "::" << __FUNCTION__
 	            << "; nodes of the line: '" << getName() << "' already exist." << std::endl;
       }
     if(verbosity>4)
       std::clog << "created." << std::endl;
     const size_t numNodes= ttzNodes.NumPtrs();
     if(numNodes==0 && verbosity>0)
-      std::clog << nombre_clase() << "::" << __FUNCTION__
+      std::clog << getClassName() << "::" << __FUNCTION__
 	        << "; warning 0 nodes created for line: " << getName()
 	        << std::endl;
   }
@@ -554,7 +554,7 @@ void XC::Edge::genMesh(meshing_dir dm)
 const XC::Vector &XC::Edge::getTang(const double &s) const
   {
     static Vector retval(1);
-    std::cerr << nombre_clase() << "::" << __FUNCTION__
+    std::cerr << getClassName() << "::" << __FUNCTION__
 	      << "; not implemented." << std::endl;
     return retval;
   }
@@ -570,7 +570,7 @@ std::set<XC::SetBase *> XC::Edge::get_sets(void) const
         retval= sets.get_sets(this);
       }
     else
-      std::cerr << nombre_clase() << __FUNCTION__
+      std::cerr << getClassName() << __FUNCTION__
 	        << "; preprocessor needed." << std::endl;
     return retval;
   }

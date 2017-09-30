@@ -55,7 +55,7 @@ XC::SisRef *XC::MapSisRef::New(const std::string &tipo)
             tag++;
           }
         else
-	  std::cerr << nombre_clase() << "::" << __FUNCTION__
+	  std::cerr << getClassName() << "::" << __FUNCTION__
 	            << "; reference system type: '" << tipo
                     << "' unknown." << std::endl;
       }

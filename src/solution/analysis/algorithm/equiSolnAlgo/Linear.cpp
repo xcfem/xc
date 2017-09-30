@@ -85,29 +85,33 @@ int XC::Linear::resuelve(void)
 
     if((!theAnalysisModel) || (!theIncIntegrator) || (!theSOE))
       {
-	std::cerr << "WARNING Linear::solveCurrentStep() -";
-	std::cerr << "no se ha asignado modelo, integrator o system of equations.\n";
+	std::cerr << getClassName() << "::" << __FUNCTION__
+	          << "; WARNING undefined analysis model,"
+	          << " integrator or system of equations.\n";
 	return -5;
       }
 
     if(theIncIntegrator->formTangent()<0) //Builds tangent stiffness matrix.
       {
-	std::cerr << "WARNING Linear::solveCurrentStep() -";
-	std::cerr << "the XC::Integrator failed in formTangent()\n";
+	std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; WARNING the XC::Integrator"
+	          << " failed in formTangent().\n";
 	return -1;
       }
     
     if(theIncIntegrator->formUnbalance()<0) //Builds load vector.
       {
-	std::cerr << "WARNING XC::Linear::solveCurrentStep() -";
-	std::cerr << "the XC::Integrator failed in formUnbalance()\n";	
+	std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; WARNING the XC::Integrator"
+	          << " failed in formUnbalance().\n";
 	return -2;
       }
 
     if(theSOE->solve() < 0) //launches SOE solution.
       {
-	std::cerr << "WARNING XC::Linear::solveCurrentStep() -";
-	std::cerr << "the " << theSOE->nombre_clase() << " failed in solve()\n";	
+	std::cerr << getClassName() << "::" << __FUNCTION__
+	          << "; WARNING the " << theSOE->getClassName()
+		  << " failed in solve()\n";	
 	return -3;
       }
 
@@ -115,7 +119,7 @@ int XC::Linear::resuelve(void)
 
     if(theIncIntegrator->update(deltaU) < 0) //Actualiza movimientos.
       {
-	std::cerr << nombre_clase() << "::" << __FUNCTION__ 
+	std::cerr << getClassName() << "::" << __FUNCTION__ 
 	          << "the integrator failed in update()\n";	
 	return -4;
       }

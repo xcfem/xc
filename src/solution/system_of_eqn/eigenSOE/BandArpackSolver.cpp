@@ -144,7 +144,7 @@ int XC::BandArpackSolver::solve(void)
     // check iPiv is large enough
     if(iPiv.Size() < n)
       {
-        std::cerr << nombre_clase() << "::" << __FUNCTION__
+        std::cerr << getClassName() << "::" << __FUNCTION__
 	          << "WARNING - ";
         std::cerr << " iPiv not large enough - has setSize() been called?\n";
         return -1;
@@ -160,7 +160,7 @@ int XC::BandArpackSolver::solve(void)
     int *iPIV = iPiv.getDataPtr(); //Pivots indexes.
 
     if(numModes==n)
-      std::cerr << nombre_clase() << "::" << __FUNCTION__
+      std::cerr << getClassName() << "::" << __FUNCTION__
 	        << "; number of modes to obtain ("
                 << numModes << ") must be lesser than N= "
                 << n << ".\n" << std::endl;
@@ -203,7 +203,7 @@ int XC::BandArpackSolver::solve(void)
 
     if(ierr != 0)
       {
-        std::cerr << nombre_clase() << "::" << __FUNCTION__
+        std::cerr << getClassName() << "::" << __FUNCTION__
 		  << "; error in dgbtrf_ " << std::endl;
         return -1;
       }
@@ -219,7 +219,7 @@ int XC::BandArpackSolver::solve(void)
             dgbtrs_(ene, &n, &kl, &ku, &nrhs, Aptr, &ldA, iPIV,&workd[ipntr[1] - 1], &ldB, &ierr);
             if(ierr != 0)
               {
-                std::cerr << nombre_clase() << "::" << __FUNCTION__
+                std::cerr << getClassName() << "::" << __FUNCTION__
 			  << "; error with dgbtrs_ 1" <<std::endl;
                 exit(0);
               }
@@ -392,7 +392,7 @@ bool XC::BandArpackSolver::setEigenSOE(EigenSOE *soe)
         retval= true;
       }
     else
-      std::cerr << nombre_clase() << __FUNCTION__
+      std::cerr << getClassName() << __FUNCTION__
                 << ": the system of equations no es del tipo adecuado para este solver." << std::endl;
     return retval;
   }

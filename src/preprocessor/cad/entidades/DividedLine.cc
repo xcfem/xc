@@ -62,7 +62,7 @@ MatrizPos3d XC::DividedLine::get_posiciones(void) const
         retval= MatrizPos3d(P1()->GetPos(),P2()->GetPos(),tmp);
       }
     else
-      std::cerr << nombre_clase() << __FUNCTION__
+      std::cerr << getClassName() << __FUNCTION__
 		<< "; undifined line." << std::endl;
     return retval;
   }

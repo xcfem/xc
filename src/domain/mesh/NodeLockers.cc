@@ -104,17 +104,17 @@ XC::NodeLocker *XC::NodeLockers::newNodeLocker(const std::string &nmb)
                 tag++;
               }
             else
-              std::cerr << nombre_clase() << "::" << __FUNCTION__
+              std::cerr << getClassName() << "::" << __FUNCTION__
 		        << "; can't create: '"
                         << nmb << "'\n";
           }
         else
-	  std::clog << nombre_clase() << "::" << __FUNCTION__
+	  std::clog << getClassName() << "::" << __FUNCTION__
 		    << "; '"
                     << nmb << "' already exists.\n";
       }
     else
-      std::cerr << nombre_clase() << "::" << __FUNCTION__
+      std::cerr << getClassName() << "::" << __FUNCTION__
 		<< "; name is empty." << std::endl;
     return retval;
   }
@@ -128,7 +128,7 @@ void XC::NodeLockers::borraNodeLocker(const std::string &nmb)
         node_lockers.erase(i);
       }
     else
-      std::cerr << nombre_clase() << "::" << __FUNCTION__
+      std::cerr << getClassName() << "::" << __FUNCTION__
 	        << "; node locker: '"
                 << nmb << "' not found.\n";
   }
@@ -140,7 +140,7 @@ void XC::NodeLockers::removeFromDomain(const std::string &cod)
       getDomain()->removeNodeLocker(p);
     else
       {
-        std::cerr << nombre_clase() << "::" << __FUNCTION__
+        std::cerr << getClassName() << "::" << __FUNCTION__
 		  << "; load case: '" 
                   << cod << "' not found." << std::endl;
       }

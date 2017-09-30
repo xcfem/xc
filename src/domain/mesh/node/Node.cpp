@@ -290,7 +290,7 @@ void XC::Node::connect(ContinuaReprComponent *el) const
     if(el)
       connected.insert(el);
     else
-      std::cerr << nombre_clase() << "::" << __FUNCTION__
+      std::cerr << getClassName() << "::" << __FUNCTION__
 		<< "; null argument." << std::endl;
   }
 
@@ -316,7 +316,7 @@ const bool XC::Node::isAlive(void) const
     bool retval= false;
     if(connected.empty())
       {
-        std::cerr << nombre_clase() << "::" << __FUNCTION__
+        std::cerr << getClassName() << "::" << __FUNCTION__
 		  << ";node: " << getTag() << " is free." << std::endl;
         retval= true;
       }
@@ -334,7 +334,7 @@ const bool XC::Node::isAlive(void) const
                   }
               }
             else
-	      std::cerr << nombre_clase() << "::" << __FUNCTION__
+	      std::cerr << getClassName() << "::" << __FUNCTION__
 			<< "; null pointer in the connected list."
 			<< std::endl;
           }
@@ -402,13 +402,13 @@ const bool XC::Node::isFree(void) const
 
 void XC::Node::kill(void)
   {
-    std::cerr << nombre_clase() << "::" << __FUNCTION__
+    std::cerr << getClassName() << "::" << __FUNCTION__
 	      << "; must not be called." << std::endl;
   }
 
 void XC::Node::alive(void)
   {
-    std::cerr << nombre_clase() << "::" << __FUNCTION__
+    std::cerr << getClassName() << "::" << __FUNCTION__
 	      << "; must not be called." << std::endl;
   }
 
@@ -435,7 +435,7 @@ void XC::Node::fix(const std::vector<int> &idGdls,const std::vector<double> &val
         ConstraintLoader &cl= getPreprocessor()->getConstraintLoader();
         const int sz= std::min(idGdls.size(),valores.size());
         if(valores.size()<idGdls.size())
-	  std::cerr << nombre_clase() << "::" << __FUNCTION__
+	  std::cerr << getClassName() << "::" << __FUNCTION__
 		    << "; vector of prescribed displacements"
                     << " must be of " << idGdls.size()
                     << " dimension." << std::endl;
@@ -445,11 +445,11 @@ void XC::Node::fix(const std::vector<int> &idGdls,const std::vector<double> &val
               cl.addSFreedom_Constraint(getTag(),idGdls[i],valores[i]);
           }
         else
-          std::cerr << nombre_clase() << "::" << __FUNCTION__
+          std::cerr << getClassName() << "::" << __FUNCTION__
 		    << "; DOFs list is empty." << std::endl;
       }
     else
-      std::cerr << nombre_clase() << "::" << __FUNCTION__
+      std::cerr << getClassName() << "::" << __FUNCTION__
 		<< "; domain not defined. Constraint ignored." << std::endl;
   }
 
@@ -932,16 +932,16 @@ const XC::NodalLoad *XC::Node::newLoad(const Vector &v)
             if(lp)
               retval= lp->newNodalLoad(nodeTag,v);
             else
-	      std::cerr << nombre_clase() << "::" << __FUNCTION__
+	      std::cerr << getClassName() << "::" << __FUNCTION__
                         << "; there is no current load pattern."
                         << " Nodal load ignored." << std::endl; 
           }
         else
-          std::cerr << nombre_clase() << "::" << __FUNCTION__
+          std::cerr << getClassName() << "::" << __FUNCTION__
                     << "; a vector of dimension greater than zero was expected." << std::endl;
       }
     else
-      std::cerr << nombre_clase() << "::" << __FUNCTION__
+      std::cerr << getClassName() << "::" << __FUNCTION__
 	        << "; preprocessor not defined." << std::endl;
     return retval;
   }
@@ -964,7 +964,7 @@ int XC::Node::addUnbalancedLoad(const Vector &add, double fact)
     // check vector arg is of correct size
     if(add.Size() != numberDOF)
       {
-        std::cerr << nombre_clase() << "::" << __FUNCTION__
+        std::cerr << getClassName() << "::" << __FUNCTION__
 		  << "; load to add of incorrect size "
 		  << add.Size() << " should be " <<  numberDOF
 		  << std::endl;
@@ -973,7 +973,7 @@ int XC::Node::addUnbalancedLoad(const Vector &add, double fact)
       {
         if(isDead())
           {
-            std::cerr << nombre_clase() << "::" << __FUNCTION__
+            std::cerr << getClassName() << "::" << __FUNCTION__
 		      << "; load over dead node: "
                       << getTag() << std::endl;
           }
@@ -1001,7 +1001,7 @@ int XC::Node::addInertiaLoadToUnbalance(const Vector &accelG, double fact)
     // otherwise we must determine MR accelG
     if(accelG.Size() != R.noCols())
       {
-        std::cerr << nombre_clase() << "::" << __FUNCTION__
+        std::cerr << getClassName() << "::" << __FUNCTION__
 	          << "; accelG not of correct dimension";
         return -1;
       }
@@ -1025,7 +1025,7 @@ int XC::Node::addInertiaLoadSensitivityToUnbalance(const XC::Vector &accelG, dou
     // otherwise we must determine MR accelG
     if(accelG.Size() != R.noCols())
       {
-        std::cerr << nombre_clase() << "::" << __FUNCTION__
+        std::cerr << getClassName() << "::" << __FUNCTION__
 		  << "; accelG not of correct dimension";
         return -1;
       }
@@ -1215,7 +1215,7 @@ int XC::Node::setMass(const Matrix &newMass)
     // check right size
     if(newMass.noRows() != numberDOF || newMass.noCols() != numberDOF)
       {
-        std::cerr << nombre_clase() << "::" << __FUNCTION__
+        std::cerr << getClassName() << "::" << __FUNCTION__
 		  << "; incompatible matrices."
                   << " A matrix with dimensions: "
 		  << numberDOF << 'x' << numberDOF
@@ -1248,7 +1248,7 @@ int XC::Node::setR(int row, int col, double Value)
     // ensure row, col in range (matrix assignment will catch this - extra work)
     if(row < 0 || row > numberDOF || col < 0 || col > R.noCols())
       {
-        std::cerr << nombre_clase() << "::" << __FUNCTION__
+        std::cerr << getClassName() << "::" << __FUNCTION__
 	          << "; row, col index out of range\n";
         return -1;
       }
@@ -1276,7 +1276,7 @@ const XC::Vector &XC::Node::getRV(const Vector &V)
     // check dimesions of R and V
     if(R.noCols() != V.Size())
       {
-        std::cerr << nombre_clase() << "::" << __FUNCTION__
+        std::cerr << getClassName() << "::" << __FUNCTION__
 	          << "; R and V of incompatible dimensions.\n"
                   << "R: " << R << "V: " << V;
         unbalLoadWithInertia.Zero();
@@ -1296,7 +1296,7 @@ int XC::Node::setNumEigenvectors(int numVectorsToStore)
     // ensure a positive number of vectors
     if(numVectorsToStore <= 0)
       {
-        std::cerr << nombre_clase() << "::" << __FUNCTION__
+        std::cerr << getClassName() << "::" << __FUNCTION__
 		  << "; " << numVectorsToStore << " < 0\n";
         return -1;
       }
@@ -1315,14 +1315,14 @@ int XC::Node::setEigenvector(int mode, const Vector &eigenvector)
   {
     if(getNumModes() < mode)
       {
-        std::cerr << nombre_clase() << "::" << __FUNCTION__
+        std::cerr << getClassName() << "::" << __FUNCTION__
 		  << "; mode " << mode << " invalid\n";
         return -1;
       }
 
     if(eigenvector.Size() != numberDOF)
       {
-        std::cerr << nombre_clase() << "::" << __FUNCTION__
+        std::cerr << getClassName() << "::" << __FUNCTION__
 		  << "; eigenvector of incorrect size\n";
         return -2;
       }
@@ -1421,7 +1421,7 @@ double XC::Node::getModalParticipationFactor(int mode,const std::set<int> &gdls)
         const int sz= ev.Size();
         double num= 0;
         if((mass.noRows()!=sz) || (mass.noCols()!=sz))
-          std::cerr << nombre_clase() << "::" << __FUNCTION__
+          std::cerr << getClassName() << "::" << __FUNCTION__
 		    << "; ERROR. The eigenvector has dimension " << sz
                     << " and the mass matrix has dimension " << mass.noRows()
                     << "x" << mass.noCols() << ".\n";
@@ -1679,7 +1679,7 @@ int XC::Node::sendSelf(CommParameters &cp)
     const int dataTag= getDbTag();
     res+= cp.sendIdData(getDbTagData(),dataTag);
     if(res<0)
-      std::cerr << nombre_clase() << "::" << __FUNCTION__
+      std::cerr << getClassName() << "::" << __FUNCTION__
 		<< "; failed to send ID data.\n";
     return res;
   }
@@ -1699,7 +1699,7 @@ int XC::Node::recvSelf(const CommParameters &cp)
     inicComm(22);
     int res = cp.receiveIdData(getDbTagData(),dataTag);
     if(res < 0)
-      std::cerr << nombre_clase() << "::" << __FUNCTION__
+      std::cerr << getClassName() << "::" << __FUNCTION__
 		<< "; failed to receive ID data\n";
     else
       res+= recvData(cp);
@@ -1717,7 +1717,7 @@ std::set<XC::SetBase *> XC::Node::get_sets(void) const
         retval= sets.get_sets(this);
       }
     else
-      std::cerr << nombre_clase() << __FUNCTION__
+      std::cerr << getClassName() << __FUNCTION__
 	        << "; preprocessor needed." << std::endl;
     return retval;
   }
@@ -1739,7 +1739,7 @@ void XC::Node::Print(std::ostream &s, int flag)
   {
     if(flag == 0)
       { // print out everything
-        s << "\n "<< nombre_clase()<< ": " << getTag() << std::endl;
+        s << "\n "<< getClassName()<< ": " << getTag() << std::endl;
         s << "\tCoordinates  : " << Crd;
         disp.Print(s,flag);
         vel.Print(s,flag);
@@ -1813,7 +1813,7 @@ int XC::Node::setParameter(const std::vector<std::string> &argv, Parameter &para
           return param.addObject(direction+3, this);
       }
     else
-      std::cerr << nombre_clase() << "::" << __FUNCTION__
+      std::cerr << getClassName() << "::" << __FUNCTION__
 		<< "; could not set parameter in node: "
 		<< getTag() << std::endl;
     return -1;
@@ -1977,7 +1977,7 @@ const XC::Vector &XC::Node::getResistingForce(const std::set<const Element *> &e
                     }
                 }
               else
-		std::cerr << nombre_clase() << "::" << __FUNCTION__
+		std::cerr << getClassName() << "::" << __FUNCTION__
 		          << "; node: " << getTag()
                           << " has a constraint." << std::endl;
             }
@@ -2001,7 +2001,7 @@ SVD3d XC::Node::getResistingSVD3d(const std::set<const Element *> &elements,cons
     else
       {
         retval= SVD3d(o);
-        std::cerr << nombre_clase() << "::" << __FUNCTION__
+        std::cerr << getClassName() << "::" << __FUNCTION__
 		  << "; dof number: "
                   << numberDOF << " not covered."
                   << std::endl;
@@ -2019,7 +2019,7 @@ int XC::Node::addReactionForce(const Vector &add, double factor)
     // check vector of appropraie size
     if(add.Size() != numberDOF)
       {
-        std::cerr << nombre_clase() << "::" << __FUNCTION__
+        std::cerr << getClassName() << "::" << __FUNCTION__
 		  << "; vector not of correct size.\n";
         return -1;
       }
@@ -2042,7 +2042,7 @@ void XC::Node::checkReactionForce(const double &tol)
     if(norm2>tol)
       {
         if(!cc.nodeAffectedBySPsOMPs(getTag()) && !isFrozen())
-          std::cerr << nombre_clase() << "::" << __FUNCTION__
+          std::cerr << getClassName() << "::" << __FUNCTION__
 		    << "the node: " << getTag()
                     << " has not constraints and however"
                     << " is has a reaction with value: " << reaction 

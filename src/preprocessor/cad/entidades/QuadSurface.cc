@@ -104,7 +104,7 @@ const XC::Edge *XC::QuadSurface::get_lado_homologo(const Edge *l) const
           retval= lineas[1].getEdge();
       }
     else //No la encuentra.
-      std::cerr << nombre_clase() << "::" << __FUNCTION__
+      std::cerr << getClassName() << "::" << __FUNCTION__
 		<< "; line :" << l->getName() 
                 << " is not an edge of the surface: "
 		<< getName() << std::endl;    
@@ -116,7 +116,7 @@ const XC::Edge *XC::QuadSurface::get_lado_homologo(const Edge *l) const
 void XC::QuadSurface::SetNDivI(const size_t &ndi)
   {
     if(lineas.size()<4)
-      std::cerr << nombre_clase() << "::" << __FUNCTION__
+      std::cerr << getClassName() << "::" << __FUNCTION__
 		<< "; not a quadrilateral surface, it has " 
                 << lineas.size() << " sides." << std::endl;
     else
@@ -172,7 +172,7 @@ bool XC::QuadSurface::checkNDivs(const size_t &i,const size_t &j) const
     const size_t ndivB= lineas[j].getEdge()->NDiv();
     if(ndivA!=ndivB)
       {
-        std::cerr << nombre_clase() << "::" << __FUNCTION__
+        std::cerr << getClassName() << "::" << __FUNCTION__
 		  << "; lines: "
                   << lineas[i].getEdge()->getName() << " and "
                   << lineas[j].getEdge()->getName() 
@@ -228,13 +228,13 @@ void XC::QuadSurface::setPuntos(const ID &indices_ptos)
   {
     const size_t np= indices_ptos.Size(); //Number of indexes.
     if(np!=4)
-      std::cerr << nombre_clase() << __FUNCTION__
+      std::cerr << getClassName() << __FUNCTION__
 	        << "; surface definition needs "
                 << 4 << " points, we got: " << np << ".\n";
     else
       {
         if(NumEdges()>0)
-          std::cerr << nombre_clase() << __FUNCTION__
+          std::cerr << getClassName() << __FUNCTION__
 	            << "; warning redefinition of surface: '"
                     << getName() << "'.\n";
 
@@ -243,7 +243,7 @@ void XC::QuadSurface::setPuntos(const ID &indices_ptos)
       }
     int tagV1= GetVertice(1)->GetTag();
     if(tagV1!=indices_ptos(0))
-      std::cerr << nombre_clase() << "::" << __FUNCTION__
+      std::cerr << getClassName() << "::" << __FUNCTION__
 		<< "; surface: " << GetTag()
                 << "is inverted." << std::endl;
   }
@@ -254,14 +254,14 @@ void XC::QuadSurface::setPuntos(const MatrizPtrPnt &pntPtrs)
     const size_t nf= pntPtrs.getNumFilas(); //No. de filas de puntos.
     if(nf<2)
       {
-        std::cerr << nombre_clase() << "::" << __FUNCTION__
+        std::cerr << getClassName() << "::" << __FUNCTION__
 		  << "; pointer matrix must have at least two rows." << std::endl;
         return;
       }
     const size_t nc= pntPtrs.getNumCols(); //No. de columnas de puntos.
     if(nc<2)
       {
-        std::cerr << nombre_clase() << "::" << __FUNCTION__
+        std::cerr << getClassName() << "::" << __FUNCTION__
 		  << "; pointer matrix must have at least two columns." << std::endl;
         return;
       }
@@ -333,7 +333,7 @@ void XC::QuadSurface::setPuntos(const m_int &indices_ptos)
               if(p)
                 puntos(i,j)= p;
               else
-	        std::cerr << nombre_clase() << "::" << __FUNCTION__
+	        std::cerr << getClassName() << "::" << __FUNCTION__
 			  << "; NULL pointer to point in position: ("
                           << i << ',' << j << ") in definition of surface: '"
                           << getName() << "'" << std::endl;
@@ -365,7 +365,7 @@ MatrizPos3d XC::QuadSurface::get_posiciones(void) const
     const int numEdges= NumEdges();
     if(numEdges!=4)
       {
-        std::cerr << nombre_clase() << "::" << __FUNCTION__
+        std::cerr << getClassName() << "::" << __FUNCTION__
 		  << "; can't mesh surfaces with: "
 	          << numEdges << " edges." << std::endl;
         return retval;
@@ -455,7 +455,7 @@ void XC::QuadSurface::create_nodes(void)
       }
     else
       if(verbosity>2)
-        std::clog << nombre_clase() << "::" << __FUNCTION__
+        std::clog << getClassName() << "::" << __FUNCTION__
 	          << "; nodes of entity: '" << getName()
 		  << "' already exist." << std::endl;      
   }
@@ -471,7 +471,7 @@ void XC::QuadSurface::genMesh(meshing_dir dm)
       create_elements(dm);
     else
       if(verbosity>2)
-        std::clog << nombre_clase() << "::" << __FUNCTION__
+        std::clog << getClassName() << "::" << __FUNCTION__
 	          << "; elements for surface: '" << getName()
 		  << "' already exist." << std::endl;      
     if(verbosity>3)

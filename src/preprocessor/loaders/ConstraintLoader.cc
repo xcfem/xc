@@ -59,7 +59,7 @@ XC::SFreedom_Constraint *XC::ConstraintLoader::addSFreedom_Constraint(const int 
         getPreprocessor()->UpdateSets(sp);
       }
     else
-      std::cerr << nombre_clase() << "::" << __FUNCTION__
+      std::cerr << getClassName() << "::" << __FUNCTION__
 	        << "; could not create constraint." << std::endl;
     return sp;    
   }
@@ -75,7 +75,7 @@ XC::SFreedom_Constraint *XC::ConstraintLoader::addSFreedom_Constraint(const int 
         getPreprocessor()->UpdateSets(sp);
       }
     else
-      std::cerr << nombre_clase() << "::" << __FUNCTION__
+      std::cerr << getClassName() << "::" << __FUNCTION__
 	        << "; could not create constraint." << std::endl;
     return sp;    
   }
@@ -95,7 +95,7 @@ XC::MFreedom_Constraint *XC::ConstraintLoader::newMPConstraint(const int &master
         getPreprocessor()->UpdateSets(mp);
       }
     else
-      std::cerr << nombre_clase() << "::" << __FUNCTION__
+      std::cerr << getClassName() << "::" << __FUNCTION__
 	        << "; could not create constraint." << std::endl;
     return mp;
   }
@@ -116,7 +116,7 @@ XC::MFreedom_Constraint *XC::ConstraintLoader::newEqualDOF(const int &masterNode
         getPreprocessor()->UpdateSets(mp);
       }
     else
-      std::cerr << nombre_clase() << "::" << __FUNCTION__
+      std::cerr << getClassName() << "::" << __FUNCTION__
 	        << "; could not create constraint." << std::endl;
     return mp;
   }
@@ -132,7 +132,7 @@ XC::MFreedom_Constraint *XC::ConstraintLoader::newRigidBeam(const int &masterNod
         getPreprocessor()->UpdateSets(mp);
       }
     else
-      std::cerr << nombre_clase() << "::" << __FUNCTION__
+      std::cerr << getClassName() << "::" << __FUNCTION__
 	        << "; could not create constraint." << std::endl;
     return mp;
   }
@@ -148,7 +148,7 @@ XC::MFreedom_Constraint *XC::ConstraintLoader::newRigidRod(const int &masterNode
         getPreprocessor()->UpdateSets(mp);
       }
     else
-      std::cerr << nombre_clase() << "::" << __FUNCTION__
+      std::cerr << getClassName() << "::" << __FUNCTION__
 	        << "; could not create constraint." << std::endl;
     return mp;
   }
@@ -164,7 +164,7 @@ XC::MRMFreedom_Constraint *XC::ConstraintLoader::newMRMPConstraint(const ID &ret
         getPreprocessor()->UpdateSets(mrmp);
       }
     else
-      std::cerr << nombre_clase() << "::" << __FUNCTION__
+      std::cerr << getClassName() << "::" << __FUNCTION__
 	        << "; could not create constraint." << std::endl;
     return mrmp;
   }
@@ -179,7 +179,7 @@ XC::MRMFreedom_Constraint *XC::ConstraintLoader::newGlueNodeToElement(const Node
         getPreprocessor()->UpdateSets(mrmp);
       }
     else
-      std::cerr << nombre_clase() << "::" << __FUNCTION__
+      std::cerr << getClassName() << "::" << __FUNCTION__
 	        << "; could not create constraint." << std::endl;
     return mrmp;
   }
@@ -190,7 +190,7 @@ void XC::ConstraintLoader::removeSPConstraint(const int &tagC)
   {
     bool sp= getDomain()->removeSFreedom_Constraint(tagC);
     if(!sp)
-      std::cerr << nombre_clase() << "::" << __FUNCTION__
+      std::cerr << getClassName() << "::" << __FUNCTION__
 	        << "; could not remove constraint." << std::endl;
   }
 

@@ -713,7 +713,7 @@ int XC::NLBeamColumn2d::update()
 		  // invert3by3Matrix(f, kv);
 
 		  if(f.Solve(I, kvTrial) < 0)
-		    std::cerr << nombre_clase() << "::" << __FUNCTION__
+		    std::cerr << getClassName() << "::" << __FUNCTION__
 			      << "; could not invert flexibility\n";
 
 		  // dv = vin + dvTrial  - vr
@@ -780,7 +780,7 @@ int XC::NLBeamColumn2d::update()
     // if fail to converge we return an error flag & print an error message
     if(converged == false)
       {
-        std::cerr << nombre_clase() << "::" << __FUNCTION__
+        std::cerr << getClassName() << "::" << __FUNCTION__
 	          << "; WARNING - failed to get compatable "
 		  << "element forces & deformations for element: "
 		  << this->getTag() << "(dW: << " << dW << ")\n";
@@ -893,7 +893,7 @@ void XC::NLBeamColumn2d::zeroLoad(void)
 int XC::NLBeamColumn2d::addLoad(ElementalLoad *theLoad, double loadFactor)
   {
     if(isDead())
-      std::cerr << nombre_clase() 
+      std::cerr << getClassName() 
                 << "; load over inactive element: "
                 << getTag()  
                 << std::endl;

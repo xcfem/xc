@@ -80,7 +80,7 @@ XC::RigidDiaphragm::RigidDiaphragm(Domain &theDomain, int nR, ID &nC, int perpPl
     // check plane is valid, i.e. perpPlaneConstrained must be 0, 1 or 2
     if(perpPlaneConstrained < 0 || perpPlaneConstrained > 2)
       {
-        std::cerr << nombre_clase() << "::" << __FUNCTION__
+        std::cerr << getClassName() << "::" << __FUNCTION__
 	          << "; the directionn of perpendicular to constrained plane"
 		  << perpPlaneConstrained <<  " not valid\n";
         return;
@@ -98,7 +98,7 @@ XC::RigidDiaphragm::RigidDiaphragm(Domain &theDomain, int nR, ID &nC, int perpPl
     Node *nodeR = theDomain.getNode(nR);
     if(!nodeR)
       {
-        std::cerr << nombre_clase() << "::" << __FUNCTION__
+        std::cerr << getClassName() << "::" << __FUNCTION__
 		  << "; retained Node" <<  nR <<  "not in domain\n";
         return;
       }
@@ -108,7 +108,7 @@ XC::RigidDiaphragm::RigidDiaphragm(Domain &theDomain, int nR, ID &nC, int perpPl
     const Vector &crdR = nodeR->getCrds();
     if((nodeR->getNumberDOF() != 6) || (crdR.Size() != 3))
       {
-        std::cerr << nombre_clase() << "::" << __FUNCTION__
+        std::cerr << getClassName() << "::" << __FUNCTION__
 		  << "; retained XC::Node" << nR
 		  << "not in 3D space with 6 dof\n";
         return;
@@ -168,7 +168,7 @@ XC::RigidDiaphragm::RigidDiaphragm(Domain &theDomain, int nR, ID &nC, int perpPl
                       mat(1,2) = deltaX;
                     }
                   else
-		    std::cerr << nombre_clase() << "::" << __FUNCTION__
+		    std::cerr << getClassName() << "::" << __FUNCTION__
 		              << "; ignoring constrained node " << ndC << ", not in xy plane\n";
                       
                 }
@@ -185,7 +185,7 @@ XC::RigidDiaphragm::RigidDiaphragm(Domain &theDomain, int nR, ID &nC, int perpPl
                         mat(1,2) = -deltaX;
                       }
                     else
-                      std::cerr << nombre_clase() << "::" << __FUNCTION__
+                      std::cerr << getClassName() << "::" << __FUNCTION__
 			        << "; ignoring constrained node "
 				<< ndC << ", not in xz plane\n";
                                 
@@ -202,7 +202,7 @@ XC::RigidDiaphragm::RigidDiaphragm(Domain &theDomain, int nR, ID &nC, int perpPl
                         mat(1,2) = deltaY;
                       }
                     else
-		      std::cerr << nombre_clase() << "::" << __FUNCTION__
+		      std::cerr << getClassName() << "::" << __FUNCTION__
 				<< "; ignoring constrained node " 
                                 << ndC << ", not in yz plane\n";
                   }
@@ -210,7 +210,7 @@ XC::RigidDiaphragm::RigidDiaphragm(Domain &theDomain, int nR, ID &nC, int perpPl
               MFreedom_Constraint *newC = new MFreedom_Constraint(startMPtag+i, nR, ndC,mat, id, id);
               if(newC == 0)
                 {
-                  std::cerr << nombre_clase() << "::" << __FUNCTION__
+                  std::cerr << getClassName() << "::" << __FUNCTION__
 			    << "; ignoring constrained node "
 			    << ndC << ", out of memory\n";
                 }
@@ -219,7 +219,7 @@ XC::RigidDiaphragm::RigidDiaphragm(Domain &theDomain, int nR, ID &nC, int perpPl
                   // add the constraint to the domain
                  if(theDomain.addMFreedom_Constraint(newC) == false)
                    {
-                     std::cerr << nombre_clase() << "::" << __FUNCTION__
+                     std::cerr << getClassName() << "::" << __FUNCTION__
 			       << ";  ignoring constrained node "
 			       << ndC << ", failed to add\n";
                      delete newC;
@@ -228,12 +228,12 @@ XC::RigidDiaphragm::RigidDiaphragm(Domain &theDomain, int nR, ID &nC, int perpPl
 
         }
       else  // node not in 3d space
-        std::cerr << nombre_clase() << "::" << __FUNCTION__
+        std::cerr << getClassName() << "::" << __FUNCTION__
 	          << "; ignoring constrained node "
 		  << ndC << ", not 3d node\n";
       }
     else // node does not exist
-      std::cerr << nombre_clase() << "::" << __FUNCTION__
+      std::cerr << getClassName() << "::" << __FUNCTION__
 		<< "; ignoring constrained node "
 		<< ndC << " as no node in domain\n";
     } // for each node in constrained nodes

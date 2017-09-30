@@ -104,7 +104,7 @@ XC::ForceBeamColumn3d &XC::ForceBeamColumn3d::operator=(const ForceBeamColumn3d 
 //       alloc(*otro.beamIntegr);
 //     v0= otro.v0;
 //     maxSubdivisions= otro.maxSubdivisions;
-    std::cerr << nombre_clase() << "::" << __FUNCTION__
+    std::cerr << getClassName() << "::" << __FUNCTION__
               << "; assignment operator must not be called."
               << std::endl;
     return *this;    
@@ -894,7 +894,7 @@ void XC::ForceBeamColumn3d::zeroLoad(void)
 int XC::ForceBeamColumn3d::addLoad(ElementalLoad *theLoad, double loadFactor)
   {
     if(isDead())
-      std::cerr << nombre_clase() 
+      std::cerr << getClassName() 
                 << "; load over inactive element: "
                 << getTag()  
                 << std::endl;

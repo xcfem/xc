@@ -182,7 +182,7 @@ XC::MFreedom_Joint2D::MFreedom_Joint2D(Domain *domain, int tag, int nodeRetain, 
  
     if(constraintMatrix.Nula())
        {
-         std::cerr << nombre_clase() << "::" << __FUNCTION__
+         std::cerr << getClassName() << "::" << __FUNCTION__
 	           << "; ran out of memory \ncan not generate the constraint matrix";
          exit(-1);
        }
@@ -243,7 +243,7 @@ int XC::MFreedom_Joint2D::sendSelf(CommParameters &cp)
     const int dataTag= getDbTag();
     result = cp.sendIdData(getDbTagData(),dataTag);
     if(result<0)
-      std::cerr << nombre_clase() << "::" << __FUNCTION__
+      std::cerr << getClassName() << "::" << __FUNCTION__
 	        << "; error sending ID data\n";
     return result;  
   }
@@ -256,7 +256,7 @@ int XC::MFreedom_Joint2D::recvSelf(const CommParameters &cp)
     const int dataTag= getDbTag();
     int result = cp.receiveIdData(getDbTagData(),dataTag);
     if(result < 0)
-      std::cerr << nombre_clase() << "::" << __FUNCTION__
+      std::cerr << getClassName() << "::" << __FUNCTION__
 	        << "; error receiving ID data\n";
     else
       {
@@ -275,7 +275,7 @@ const XC::Matrix &XC::MFreedom_Joint2D::getConstraint(void) const
   {
     if(constraintMatrix.Nula())
       {
-        std::cerr << nombre_clase() << "::" << __FUNCTION__
+        std::cerr << getClassName() << "::" << __FUNCTION__
                   << "; no matrix was set\n";
         exit(-1);
       }    

@@ -47,7 +47,7 @@ void XC::ElementPropRecorder::setElements(const ID &iElements)
           elements.push_back(theDomain->getElement(iElements(i)));
       }
     else
-      std::cerr << "Error; " << nombre_clase() << "::" << __FUNCTION__
+      std::cerr << "Error; " << getClassName() << "::" << __FUNCTION__
                 << " element list is empty." << std::endl;
   }
 

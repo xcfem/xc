@@ -120,7 +120,7 @@ XC::Edge *XC::MapLineas::createLine(Pnt *pA,Pnt *pB)
     if(pA && pB)
       {
         if(pA==pB)
-	  std::cerr << nombre_clase() << __FUNCTION__
+	  std::cerr << getClassName() << __FUNCTION__
 	            << "; ends of the line: ("
                     << pA->getName() << ","
                     << pB->getName() 
@@ -135,13 +135,13 @@ XC::Edge *XC::MapLineas::createLine(Pnt *pA,Pnt *pB)
             tmp->SetVertice(2,pB);
           }
         if(!tmp)
-	  std::cerr << nombre_clase() << __FUNCTION__
+	  std::cerr << getClassName() << __FUNCTION__
 		    << "; can't get a line"
                     << " between points: " << pA->getName()
                     << " and " << pB->getName() << std::endl;
       }
     else
-      std::cerr << nombre_clase() << __FUNCTION__
+      std::cerr << getClassName() << __FUNCTION__
 		<< "; error, null pointer to point (A, B or both)."
 		<< std::endl;
     return tmp;
@@ -157,7 +157,7 @@ XC::Edge *XC::MapLineas::createDividedLine(Pnt *pA,Pnt *pB)
     if(pA && pB)
       {
         if(pA==pB)
-	  std::cerr << nombre_clase() << __FUNCTION__
+	  std::cerr << getClassName() << __FUNCTION__
 	            << "; ends of the line: ("
                     << pA->getName() << ","
                     << pB->getName() 
@@ -172,13 +172,13 @@ XC::Edge *XC::MapLineas::createDividedLine(Pnt *pA,Pnt *pB)
             tmp->SetVertice(2,pB);
           }
         if(!tmp)
-	  std::cerr << nombre_clase() << __FUNCTION__
+	  std::cerr << getClassName() << __FUNCTION__
 		    << "; can't get a line"
                     << " between points: " << pA->getName()
                     << " and " << pB->getName() << std::endl;
       }
     else
-      std::cerr << nombre_clase() << __FUNCTION__
+      std::cerr << getClassName() << __FUNCTION__
 		<< "; error, null pointer to point (A, B or both)."
 		<< std::endl;
     return tmp;
@@ -202,14 +202,14 @@ XC::Edge *XC::MapLineas::createArc(Pnt *pA,Pnt *pB,Pnt *pC)
             tmp->SetVertice(3,pB); //Punto intermedio.
           }
         if(!tmp)
-	  std::cerr << nombre_clase() << __FUNCTION__
+	  std::cerr << getClassName() << __FUNCTION__
 		    << "; can't get an arc"
                     << " between the points: "
 		    << pA->getName() << ", " << pB->getName()
                     << " and " << pC->getName() << std::endl;
       }
     else
-      std::cerr << nombre_clase() << __FUNCTION__
+      std::cerr << getClassName() << __FUNCTION__
 		<< "; error, null pointer to point (A, B and/or C)." << std::endl;
     return tmp;
   }
@@ -229,7 +229,7 @@ XC::Edge *XC::MapLineas::createCopy(const Edge *l)
   {
     Edge *retval= busca(getTag());
     if(retval)
-      std::cerr << nombre_clase() << __FUNCTION__
+      std::cerr << getClassName() << __FUNCTION__
 	        << "; line identified by: " 
                 << getTag() << " already exist, do nothing." << std::endl;
     else //Line is new.
@@ -243,7 +243,7 @@ XC::Edge *XC::MapLineas::createCopy(const Edge *l)
             tag++;
 	  }
         else
-	  std::cerr << nombre_clase() << __FUNCTION__
+	  std::cerr << getClassName() << __FUNCTION__
 	            << "; memory exhausted or the objet: '"
                     << l->getName() << "is not a line." << std::endl; 
       }

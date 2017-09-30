@@ -75,7 +75,7 @@ bool XC::DistributedDiagonalSolver::setLinearSOE(LinearSOE *soe)
         retval= true;
       }
     else
-      std::cerr << nombre_clase() << "::setLinearSOE: el system of equations no es del tipo adecuado para este solver." << std::endl;
+      std::cerr << getClassName() << "::setLinearSOE: el system of equations no es del tipo adecuado para este solver." << std::endl;
     return retval;
   }
 

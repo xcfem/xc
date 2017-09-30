@@ -97,7 +97,7 @@ int XC::PlainHandler::handle(const ID *nodesLast)
     
     if((!theDomain) || (!theModel) || (!theIntegrator))
       {
-        std::cerr << nombre_clase() << "::" << __FUNCTION__
+        std::cerr << getClassName() << "::" << __FUNCTION__
                   << "; domain, model or integrator was not set.\n";
         return -1;
       }
@@ -126,7 +126,7 @@ int XC::PlainHandler::handle(const ID *nodesLast)
             if(spPtr->getNodeTag() == nodeID)
               {
                 if(spPtr->isHomogeneous() == false)
-                  std::cerr << nombre_clase() << "::" << __FUNCTION__
+                  std::cerr << getClassName() << "::" << __FUNCTION__
                             << ";  non-homogeneos constraint"
                             << " for node " << spPtr->getNodeTag()
                             << " homo assumed\n";
@@ -138,7 +138,7 @@ int XC::PlainHandler::handle(const ID *nodesLast)
                         countDOF--;        
                   }
                 else
-                  std::cerr << nombre_clase() << "::" << __FUNCTION__
+                  std::cerr << getClassName() << "::" << __FUNCTION__
                             << "; multiple single pointconstraints at DOF "
                             << dof << " for node " << spPtr->getNodeTag()
                             << std::endl;
@@ -154,7 +154,7 @@ int XC::PlainHandler::handle(const ID *nodesLast)
             if(mpPtr->getNodeConstrained() == nodeID)
               {
                 if(mpPtr->isTimeVarying() == true)
-                  std::cerr << nombre_clase() << "::" << __FUNCTION__
+                  std::cerr << getClassName() << "::" << __FUNCTION__
                             << ";  time-varying constraint"
                             << " for node " << nodeID
                             << " non-varying assumed\n";
@@ -162,7 +162,7 @@ int XC::PlainHandler::handle(const ID *nodesLast)
                 int numRows = C.noRows();
                 int numCols = C.noCols();
                 if(numRows != numCols)
-                  std::cerr << nombre_clase() << "::" << __FUNCTION__
+                  std::cerr << getClassName() << "::" << __FUNCTION__
                             << " constraint matrix not diagonal,"
                             << " ignoring constraint for node "
                             << nodeID << std::endl;
@@ -178,7 +178,7 @@ int XC::PlainHandler::handle(const ID *nodesLast)
                           ok = 1;
                       }
                     if(ok != 0)
-                      std::cerr << nombre_clase() << "::" << __FUNCTION__
+                      std::cerr << getClassName() << "::" << __FUNCTION__
                                 << "; constraint matrix not identity,"
                                 << " ignoring constraint for node "
                                 << nodeID << std::endl;
@@ -195,7 +195,7 @@ int XC::PlainHandler::handle(const ID *nodesLast)
                                 countDOF--;        
                               }
                             else
-                              std::cerr << nombre_clase() << "::" << __FUNCTION__
+                              std::cerr << getClassName() << "::" << __FUNCTION__
                                         << ";  constraint at dof " << dof
                                         << " already specified for constrained node"
                                         << " in MFreedom_Constraint at node "
@@ -212,7 +212,7 @@ int XC::PlainHandler::handle(const ID *nodesLast)
         MRMFreedom_Constraint *mrmpPtr;
         while((mrmpPtr = theMRMPs()) != 0)
           {
-            std::cerr << nombre_clase() << "::" << __FUNCTION__
+            std::cerr << getClassName() << "::" << __FUNCTION__
 		      << "; loop through the MRMFreedom_Constraints." << std::endl;
           }
       }
@@ -240,7 +240,7 @@ int XC::PlainHandler::handle(const ID *nodesLast)
                         count3++;
                       }
 		    else
-		      std::cerr << nombre_clase() << "::" << __FUNCTION__
+		      std::cerr << getClassName() << "::" << __FUNCTION__
 		                << "; boundary sp constraint in subdomain"
 		                << " this should not be - results suspect \n";
 	      }
