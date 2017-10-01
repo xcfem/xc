@@ -1,8 +1,8 @@
 
-Elastic foundation
-------------------
+Generation of boundary conditions based on springs
+--------------------------------------------------
 
-.. automodule:: model.boundary_cond.elastic_foundation
+.. automodule:: model.boundary_cond.spring_bound_cond
     :members:
     :undoc-members:
     :show-inheritance:

@@ -35,11 +35,11 @@ def flatten_attribute(elemSet,attributeName, treshold, limit):
 
 def create_attribute_at_nodes(xcSet,attributeName,initialValue):
     ''' Create an attribute on the nodes of the set passed as parameter.
+    return tags of the affected nodes.
 
     :param xcSet: nodes that will receive the attribute.
     :param attributeName: name of the attribute to define.
     :param initialValue: initial value to assign to the attribute.
-    return tags of the affected nodes.
     '''
     nodeTags= {}
     for e in xcSet:
@@ -60,11 +60,12 @@ def create_attribute_at_nodes(xcSet,attributeName,initialValue):
 def extrapolate_elem_function_attr(elemSet,attributeName,function, argument,initialValue= 0.0):
     '''Extrapolate element's function values to the nodes.
 
-    elemSet: set of elements.
-    attributeName: name of the property which will be defined at the nodes.
-    function: name of the function to call for each element.
-    argument: name of the argument to send to the function (optional).
-    initialValue: initial value for the attribute defined at the nodes.
+    :param elemSet: set of elements.
+    :param attributeName: name of the property which will be defined
+     at the nodes.
+    :param function: name of the function to call for each element.
+    :param argument: name of the argument to send to the function (optional).
+    :param initialValue: initial value for the attribute defined at the nodes.
     '''
     nodeTags= create_attribute_at_nodes(elemSet,attributeName,initialValue)
     #Calculate totals.

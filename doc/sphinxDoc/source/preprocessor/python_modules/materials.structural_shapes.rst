@@ -1,12 +1,19 @@
-Structural shapes
-==================
+Structural steel shapes
+=======================
 
-.. toctree::
+aisc_metric_shapes
+----------------------
 
-    materials.structural_shapes.aisc
-    materials.structural_shapes.arcelor
+.. automodule:: materials.structural_shapes.aisc_metric_shapes
+    :members:
+    :undoc-members:
+    :show-inheritance:
 
 
+arcelor_steel_shapes
+----------------------
 
-
-
+.. automodule:: materials.structural_shapes.arcelor_metric_shapes
+    :members:
+    :undoc-members:
+    :show-inheritance:
