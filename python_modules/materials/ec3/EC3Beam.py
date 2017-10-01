@@ -15,15 +15,15 @@ from model.geometry import line_utils as lu
 from materials.ec3 import EC3_limit_state_checking as EC3lsc
 
 class EC3Beam(lu.LineWrapper):
-  def __init__(self,line,ec3Profile):
+  def __init__(self,line,ec3Shape):
     super(EC3Beam,self).__init__(line)
-    self.ec3Profile= ec3Profile
+    self.ec3Shape= ec3Shape
   def getLateralBucklingReductionFactor(self,sectionClass,ky= 1.0, kw= 1.0, k1= 1.0, k2= 1.0,typo= 'rolled'):
     ''' Returns lateral torsional buckling reduction factor value
         for the elements inside the line.'''
     xi= self.getNodeAbcissae()
     Mi= self.getElementFunctionOrdinates(-1,'getMz1',1,'getMz2')
-    return self.ec3Profile.getLateralBucklingReductionFactor(sectionClass,xi,Mi,ky,kw, k1, k2,typo)
+    return self.ec3Shape.getLateralBucklingReductionFactor(sectionClass,xi,Mi,ky,kw, k1, k2,typo)
 
   def updateLateralBucklingReductionFactor(self,sectionClass,ky= 1.0, kw= 1.0, k1= 1.0, k2= 1.0,typo= 'rolled'):
     chiLT= self.getLateralBucklingReductionFactor(sectionClass,ky,kw, k1, k2,typo)
@@ -45,7 +45,7 @@ class EC3Beam(lu.LineWrapper):
       e.setProp('ULSControlRecorder',recorder)
     idEleTags= xc.ID(eleTags)
     recorder.setElements(idEleTags)
-    self.ec3Profile.setupULSControlVars(elems,sectionClass,chiLT)
+    self.ec3Shape.setupULSControlVars(elems,sectionClass,chiLT)
     if(nodes.numGdls==3):
       recorder.callbackRecord= EC3lsc.controlULSCriterion2D()
     else:

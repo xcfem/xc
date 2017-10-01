@@ -6,7 +6,7 @@ import xc_base
 import geom
 import xc
 
-from materials.structural_shapes.arcelor import arcelor_ipe_profiles as ipe
+from materials.structural_shapes import arcelor_metric_shapes
 from materials.ec3 import EC3_materials
 
 __author__= "Luis C. Pérez Tato (LCPT)"
@@ -21,7 +21,7 @@ preprocessor=  test.getPreprocessor
 S275JR= EC3_materials.S275JR
 S275JR.gammaM= 1.05
 epp= S275JR.getDesignElasticPerfectlyPlasticMaterial(preprocessor, "epp")
-IPE200= ipe.IPEProfile(S275JR,'IPE_200')
+IPE200= arcelor_metric_shapes.IPEShape(S275JR,'IPE_200')
 fs3d= IPE200.getFiberSection3d(preprocessor,'epp')
 
 curvM= 0.13

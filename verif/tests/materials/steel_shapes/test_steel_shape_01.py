@@ -8,7 +8,7 @@ import xc
 from solution import predefined_solutions
 from model import predefined_spaces
 from materials import typical_materials
-from materials.structural_shapes.arcelor import arcelor_he_profiles as HE_profiles
+from materials.structural_shapes import arcelor_metric_shapes
 from materials import structural_steel
 from materials.ec3 import EC3_materials
 from postprocess import def_params_control as dp
@@ -40,7 +40,7 @@ lin= modelSpace.newLinearCrdTransf("lin",xc.Vector([0,1,0]))
 S275JR= EC3_materials.S275JR
 gammaM0= 1.05
 S275JR.gammaM= gammaM0 
-HE400B= structural_steel.SteelProfile(S275JR,"HE_400_B",HE_profiles.HEprofiles)
+HE400B= structural_steel.SteelShape(S275JR,"HE_400_B",arcelor_metric_shapes.HE)
 matHE400B=typical_materials.MaterialData(name='S275JR',E=S275JR.E,nu=S275JR.nu,rho=7850)
 profil= HE400B.defSeccShElastica3d(preprocessor,matHE400B)
 
@@ -51,7 +51,7 @@ elements.defaultTransformation= "lin"
 elements.defaultMaterial= HE400B.sectionName
 elem= elements.newElement("ElasticBeam3d",xc.ID([1,2]))
 elem.rho= HE400B.get('P')
-dp.defSteelProfileElasticRangeElementParameters(elem,HE400B)
+dp.defSteelShapeElasticRangeElementParameters(elem,HE400B)
 vc.defVarsControlTensRegElastico3d([elem])
 
 

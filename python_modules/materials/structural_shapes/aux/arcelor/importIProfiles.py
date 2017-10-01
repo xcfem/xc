@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 import csv
 
-fNameIn= 'arcelor_ipe_profiles.csv'
-fNameOut= 'dict_arcelor_ipe_profiles.py'
-dictName= 'IPEprofiles'
+fNameIn= 'arcelor_ipe_shapes.csv'
+fNameOut= 'dict_arcelor_ipe_shapes.py'
+dictName= 'IPEshapes'
 
 # Section axis:
 
@@ -25,7 +25,7 @@ dictName= 'IPEprofiles'
 # (strong axis parallel to z axis) in other words: values for Y and Z axis 
 # are swapped with respect to those in the catalog.
 
-def writeIPEProfileRecord(out,row):
+def writeIPEShapeRecord(out,row):
   name= row[0]
   if(name.find('IPE')!=-1):
     out.write(dictName+"['" + row[0] + "']= ")
@@ -66,4 +66,4 @@ with open(fNameIn, mode='r') as infile:
   reader = csv.reader(infile)
   for rows in reader:
     if(len(rows)>0):
-      writeIPEProfileRecord(outfile,rows)
+      writeIPEShapeRecord(outfile,rows)

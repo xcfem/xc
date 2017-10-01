@@ -17,12 +17,12 @@ import xc_base
 import geom
 import xc
 from materials.ec3 import EC3_materials
-from materials.structural_shapes.arcelor import arcelor_he_profiles as he
+from materials.structural_shapes import arcelor_metric_shapes
 
 S355JR= EC3_materials.S355JR
 gammaM0= 1.00
 S355JR.gammaM= gammaM0 
-HEB340= he.HEProfile(S355JR,'HE_340_B')
+HEB340= arcelor_metric_shapes.HEShape(S355JR,'HE_340_B')
 
 
 

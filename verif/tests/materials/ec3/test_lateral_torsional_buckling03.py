@@ -25,7 +25,7 @@ from rough_calculations import ng_simple_beam as sb
 S355JR= EC3_materials.S355JR
 gammaM0= 1.00
 S355JR.gammaM= gammaM0 
-IPE400= EC3_materials.IPEProfile(S355JR,"IPE_400")
+IPE400= EC3_materials.IPEShape(S355JR,"IPE_400")
 
 
 # Geometry

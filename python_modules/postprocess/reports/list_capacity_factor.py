@@ -39,7 +39,7 @@ def printCierreListadoFactorCapacidad(archivo):
 def listaFactorCapacidad(preprocessor,setName, fName, titulo):
   '''
   Print results of normal stresses in elastic range checking for an
-  elment set whose material is a steel profile.
+  elment set whose material is a steel shape.
   '''
   printCabeceraListadoFactorCapacidad(fName,titulo)
   st= preprocessor.getSetLoader.getSet(setName)

@@ -100,13 +100,13 @@ S355JR= EC3Steel(fy= 355e6, fy16= 355e6, fy40= 345e6, fy63= 335e6, fy80= 325e6, 
 
 S450J0= EC3Steel(fy= 450e6, fy16= 450e6, fy40= 430e6, fy63= 410e6, fy80= 390e6, fy100= 380e6, fy125= 380e6, fu= 360e6, gammaM= 1.1)
 
-class EC3Profile(object):
-  """Steel profile with Eurocode 3 verification routines."""
+class EC3Shape(object):
+  """Steel shape with Eurocode 3 verification routines."""
   def __init__(self,typo= 'rolled'):
     '''
       Constructor.
 
-      :param typo: 'rolled' or 'welded' profile
+      :param typo: 'rolled' or 'welded' shape
     '''
     self.typo= typo
   def getLateralTorsionalBucklingCurve(self):
@@ -209,7 +209,7 @@ class EC3Profile(object):
      for lateral torsional buckling
      see parameter definition on method getMcr.
 
-     :param profile: cross section profile.
+     :param shape: cross section shape.
      :param sectionClass: section classification (1,2,3 or 4)
      :param xi: abcissae for the moment diagram
      :param Mi: ordinate for the moment diagram
@@ -244,7 +244,7 @@ class EC3Profile(object):
   def setupULSControlVars(self,elems,sectionClass= 1, chiLT=1.0):
     '''For each element creates the variables
        needed to check ultimate limit state criterion to satisfy.'''
-    super(EC3Profile,self).setupULSControlVars(elems)
+    super(EC3Shape,self).setupULSControlVars(elems)
     for e in elems:
       e.setProp('sectionClass',sectionClass) #Cross section class.
       e.setProp('chiLT',chiLT) #Lateral torsional buckling reduction factor.
@@ -293,18 +293,18 @@ So:
 
 '''
 
-from materials.structural_shapes.arcelor import arcelor_ipe_profiles as ipe
+from materials.structural_shapes import arcelor_metric_shapes
 
-class IPEProfile(EC3Profile,ipe.IPEProfile):
-  """IPE profile with Eurocode 3 verification routines."""
+class IPEShape(EC3Shape,arcelor_metric_shapes.IPEShape):
+  """IPE shape with Eurocode 3 verification routines."""
   def __init__(self,steel,name):
     ''' Constructor.
 
     :param steel: steel material.
     :param name: shape name (i.e. IPE_600)
     '''
-    EC3Profile.__init__(self,'rolled')
-    ipe.IPEProfile.__init__(self,steel,name)
+    EC3Shape.__init__(self,'rolled')
+    arcelor_metric_shapes.IPEShape.__init__(self,steel,name)
 
 '''
 European H beams
@@ -331,28 +331,28 @@ So:
 
 '''
 
-from materials.structural_shapes.arcelor import arcelor_he_profiles as he
+from materials.structural_shapes import arcelor_metric_shapes
 
-class HEProfile(EC3Profile,he.HEProfile):
-  """HE profile with Eurocode 3 verification routines."""
+class HEShape(EC3Shape,arcelor_metric_shapes.HEShape):
+  """HE shape with Eurocode 3 verification routines."""
   def __init__(self,steel,name):
     ''' Constructor.
 
     :param steel: steel material.
     :param name: shape name (i.e. HE_600_A)
     '''
-    EC3Profile.__init__(self,'rolled')
-    he.HEProfile.__init__(self,steel,name)
+    EC3Shape.__init__(self,'rolled')
+    arcelor_metric_shapes.HEShape.__init__(self,steel,name)
 
-from materials.structural_shapes.arcelor import arcelor_u_shaped_sheet_piles
+from materials.structural_shapes import arcelor_metric_shapes
 
-class AUProfile(EC3Profile,arcelor_u_shaped_sheet_piles.AUProfile):
-  """AU profile with Eurocode 3 verification routines."""
+class AUShape(EC3Shape,arcelor_metric_shapes.AUShape):
+  """AU shape with Eurocode 3 verification routines."""
   def __init__(self,steel,name):
     ''' Constructor.
 
     :param steel: steel material.
     :param name: shape name (i.e. AU_23)
     '''
-    EC3Profile.__init__(self,'rolled')
-    arcelor_u_shaped_sheet_piles.AUProfile.__init__(self,steel,name)
+    EC3Shape.__init__(self,'rolled')
+    arcelor_metric_shapes.AUShape.__init__(self,steel,name)

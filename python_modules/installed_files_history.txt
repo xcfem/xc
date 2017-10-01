@@ -623,6 +623,8 @@
 /usr/local/lib/python2.7/dist-packages/materials/structural_shapes/aisc/aisc_metric_w_profiles.pyc
 /usr/local/lib/python2.7/dist-packages/materials/structural_shapes/aisc/__init__.py
 /usr/local/lib/python2.7/dist-packages/materials/structural_shapes/aisc/__init__.pyc
+/usr/local/lib/python2.7/dist-packages/materials/structural_shapes/aisc_metric_shapes.py
+/usr/local/lib/python2.7/dist-packages/materials/structural_shapes/aisc_metric_shapes.pyc
 /usr/local/lib/python2.7/dist-packages/materials/structural_shapes/aisc/perfiles_w_aisc_metric.py
 /usr/local/lib/python2.7/dist-packages/materials/structural_shapes/aisc/perfiles_w_aisc_metric.pyc
 /usr/local/lib/python2.7/dist-packages/materials/structural_shapes/aisc/tubos_rectangulares_aisc_metric.py
@@ -643,6 +645,8 @@
 /usr/local/lib/python2.7/dist-packages/materials/structural_shapes/arcelor/barras_redondas_acero_laminado_arcelor.pyc
 /usr/local/lib/python2.7/dist-packages/materials/structural_shapes/arcelor/__init__.py
 /usr/local/lib/python2.7/dist-packages/materials/structural_shapes/arcelor/__init__.pyc
+/usr/local/lib/python2.7/dist-packages/materials/structural_shapes/arcelor_metric_shapes.py
+/usr/local/lib/python2.7/dist-packages/materials/structural_shapes/arcelor_metric_shapes.pyc
 /usr/local/lib/python2.7/dist-packages/materials/structural_shapes/arcelor/perfiles_he_arcelor.py
 /usr/local/lib/python2.7/dist-packages/materials/structural_shapes/arcelor/perfiles_he_arcelor.pyc
 /usr/local/lib/python2.7/dist-packages/materials/structural_shapes/arcelor/perfiles_ipe_arcelor.py

@@ -56,22 +56,22 @@ def alphaImperfectionFactor(bucklingCurve):
   return retval
 
 
-class SteelProfile(sp.SectionProperties):
+class SteelShape(sp.SectionProperties):
   '''Properties of a section in structural steel
 
   :ivar steel:    steel object (e.g. S275JR)
   :ivar table:    module containing a dictionary with mechanical characteristics
-                  of a series of profiles 
-                  (e.g. materials.structural_shapes.arcelor.arcelor_he_profiles)
+                  of a series of shapes 
+                  (e.g. materials.structural_shapes.arcelor_metric_shapes.IPE)
   :ivar name:     name identifying the section in the table
   '''
   def __init__(self,steel,name,table):
     self.steelType= steel
-    self.profil= table[name]
-#    super(SteelProfile,self).__init__(name,self.profil['E'],self.profil['nu'])
-    super(SteelProfile,self).__init__(name)
+    self.shape= table[name]
+#    super(SteelShape,self).__init__(name,self.shape['E'],self.shape['nu'])
+    super(SteelShape,self).__init__(name)
   def get(self,code):
-    return self.profil[code]
+    return self.shape[code]
   def A(self):
     '''return cross-sectional area of the section'''
     return self.get('A')

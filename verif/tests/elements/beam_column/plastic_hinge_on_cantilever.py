@@ -13,7 +13,7 @@ import xc_base
 import geom
 import xc
 
-from materials.structural_shapes.arcelor import arcelor_ipe_profiles as ipe
+from materials.structural_shapes import arcelor_metric_shapes
 from materials.ec3 import EC3_materials
 from model import predefined_spaces
 from solution import predefined_solutions
@@ -24,7 +24,7 @@ preprocessor=  test.getPreprocessor
 S355JR= EC3_materials.S355JR
 S355JR.gammaM= 1.05
 epp= S355JR.getDesignElasticPerfectlyPlasticMaterial(preprocessor, "epp")
-IPE200= ipe.IPEProfile(S355JR,'IPE_200')
+IPE200= arcelor_metric_shapes.IPEShape(S355JR,'IPE_200')
 fs3d= IPE200.getFiberSection3d(preprocessor,'epp')
 
 L= 1.0
