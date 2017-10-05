@@ -15,64 +15,64 @@ import numpy
 
 # Lateral torsional buckling of steel beams.
 
-def getLateralTorsionalBucklingCurve(profile):
+def getLateralTorsionalBucklingCurve(shape):
   ''' Returns the lateral torsional bukling curve name (a,b,c or d) depending of the type of section (rolled, welded,...). EC3 Table 6.4, 6.3.2.2(2).
-  :param profile: cross section profile.
-  :param rypo: 'rolled' or 'welded' profile
+  :param shape: cross section shape.
+  :param rypo: 'rolled' or 'welded' shape
   '''
-  if(profile.typo=='rolled'):
-    if((profile.h()/profile.b())<=2):
+  if(shape.typo=='rolled'):
+    if((shape.h()/shape.b())<=2):
       return 'a'
     else:
       return 'b'
-  elif(profile.typo=='welded'):
-    if((profile.h()/profile.b())<=2):
+  elif(shape.typo=='welded'):
+    if((shape.h()/shape.b())<=2):
       return 'c'
     else:
       return 'd'
   else:
     return 'd'
 
-def shearBucklingVerificationNeeded(profile):
+def shearBucklingVerificationNeeded(shape):
   '''Returns true if shear buckling verification is needed EC3-1-5
-  :param profile: cross section profile.'''
-  epsilon= math.sqrt(235e6/profile.steelType.fy)
+  :param shape: cross section shape.'''
+  epsilon= math.sqrt(235e6/shape.steelType.fy)
   eta= 1.0 #Conservative
-  f1= profile.hw()/profile.tw()
+  f1= shape.hw()/shape.tw()
   f2= 72*epsilon/eta
   return (f1>f2)
 
-def getBendingResistanceReductionCoefficient(profile,Vd):
+def getBendingResistanceReductionCoefficient(shape,Vd):
   '''Returns bending resistance reduction coefficient as in
      clause 6.2.8 of EC31-1
-  :param profile: cross section profile.
+  :param shape: cross section shape.
   '''
-  VplRd= profile.getVplRdy()
+  VplRd= shape.getVplRdy()
   ratio= Vd/VplRd
   if(ratio<=0.5):
     return 0.0 #No reduction
   else:
     return (2*ratio-1)**2
 
-def getMvRdz(profile,sectionClass,Vd):
+def getMvRdz(shape,sectionClass,Vd):
   '''Returns the major bending resistance of the cross-section under a
      shear force of Vd.
-    :param profile: cross section profile.
+    :param shape: cross section shape.
   '''
-  McRdz= profile.getMcRdz(sectionClass)
-  reductionCoeff= profile.getBendingResistanceReductionCoefficient(Vd)
+  McRdz= shape.getMcRdz(sectionClass)
+  reductionCoeff= shape.getBendingResistanceReductionCoefficient(Vd)
   if(reductionCoeff<=0.0):
     return McRdz
   else:
-    Aw= profile.hw()*profile.tw()
-    sustr= reductionCoeff*Aw**2/4.0/profile.tw()
-    return min((profile.getWz(sectionClass)-sustr)*profile.steelType.fy/profile.steelType.gammaM0(),McRdz)
+    Aw= shape.hw()*shape.tw()
+    sustr= reductionCoeff*Aw**2/4.0/shape.tw()
+    return min((shape.getWz(sectionClass)-sustr)*shape.steelType.fy/shape.steelType.gammaM0(),McRdz)
 
-def getLateralBucklingImperfectionFactor(profile):
+def getLateralBucklingImperfectionFactor(shape):
   ''' Returns lateral torsional imperfection factor depending of the type of section (rolled, welded,...).
-    :param profile: cross section profile.
+    :param shape: cross section shape.
   '''
-  curve= getLateralTorsionalBucklingCurve(profile)
+  curve= getLateralTorsionalBucklingCurve(shape)
   if(curve=='A' or curve=='a'):
     return 0.21
   elif(curve=='B' or curve=='b'):
@@ -110,32 +110,32 @@ class SupportCoefficients(object):
     ''' returns the five alpha values that are needed for C1 calculation.'''
     return [(1.0-self.k2),5*self.k1**3/self.k2**2,5*(1.0/self.k1+1.0/self.k2),5*self.k2**3/self.k1**2,(1.0-self.k1)]
 
-def getLateralBucklingIntermediateFactor(profile,sectionClass,xi,Mi,supportCoefs= SupportCoefficients()):
+def getLateralBucklingIntermediateFactor(shape,sectionClass,xi,Mi,supportCoefs= SupportCoefficients()):
   ''' Returns lateral torsional buckling intermediate factor value.
 
-     :param profile: cross section profile.
+     :param shape: cross section shape.
      :param xi: abcissae for the moment diagram
      :param Mi: ordinate for the moment diagram
      :param supportCoefs: coefficients that represent support conditions.
   '''
-  alphaLT= profile.getLateralBucklingImperfectionFactor()
-  overlineLambdaLT= profile.getLateralBucklingNonDimensionalBeamSlenderness(sectionClass,xi,Mi,supportCoefs)
+  alphaLT= shape.getLateralBucklingImperfectionFactor()
+  overlineLambdaLT= shape.getLateralBucklingNonDimensionalBeamSlenderness(sectionClass,xi,Mi,supportCoefs)
   return 0.5*(1+alphaLT*(overlineLambdaLT-0.2)+overlineLambdaLT**2)
 
-def getLateralBucklingReductionFactor(profile,sectionClass,xi,Mi,supportCoefs= SupportCoefficients()):
+def getLateralBucklingReductionFactor(shape,sectionClass,xi,Mi,supportCoefs= SupportCoefficients()):
   ''' Returns lateral torsional buckling reduction factor value.
 
-     :param profile: cross section profile.
+     :param shape: cross section shape.
      :param sectionClass: section classification (1,2,3 or 4)
      :param xi: abcissae for the moment diagram
      :param Mi: ordinate for the moment diagram
      :param supportCoefs: coefficients that represent support conditions.
   '''  
-  phiLT= profile.getLateralBucklingIntermediateFactor(sectionClass,xi,Mi,supportCoefs)
-  overlineLambdaLT= profile.getLateralBucklingNonDimensionalBeamSlenderness(sectionClass,xi,Mi,supportCoefs)
+  phiLT= shape.getLateralBucklingIntermediateFactor(sectionClass,xi,Mi,supportCoefs)
+  overlineLambdaLT= shape.getLateralBucklingNonDimensionalBeamSlenderness(sectionClass,xi,Mi,supportCoefs)
   return 1.0/(phiLT+math.sqrt(phiLT**2-overlineLambdaLT**2))
 
-def getLateralTorsionalBucklingResistance(profile,sectionClass,xi,Mi,supportCoefs= SupportCoefficients()):
+def getLateralTorsionalBucklingResistance(shape,sectionClass,xi,Mi,supportCoefs= SupportCoefficients()):
   '''Returns lateral torsional buckling resistance of this cross-section.
      Calculation is made following the paper:
 
@@ -144,16 +144,16 @@ def getLateralTorsionalBucklingResistance(profile,sectionClass,xi,Mi,supportCoef
      the moment gradient factor.
      (Lisbon, Portugal: Stability and ductility of steel structures, 2006).
 
-     :param profile: cross section profile.
+     :param shape: cross section shape.
      :param sectionClass: section classification (1,2,3 or 4)
      :param xi: abcissae for the moment diagram
      :param Mi: ordinate for the moment diagram
      :param supportCoefs: coefficients that represent support conditions.
   '''  
-  chiLT= profile.getLateralBucklingReductionFactor(sectionClass,xi,Mi,supportCoefs)
-  return chiLT*profile.getMcRdz(sectionClass)
+  chiLT= shape.getLateralBucklingReductionFactor(sectionClass,xi,Mi,supportCoefs)
+  return chiLT*shape.getMcRdz(sectionClass)
 
-def getMcr(profile,xi,Mi,supportCoefs= SupportCoefficients()):
+def getMcr(shape,xi,Mi,supportCoefs= SupportCoefficients()):
   '''Returns elastic critical moment about minor axis: y
      Calculation is made following the paper:
 
@@ -162,7 +162,7 @@ def getMcr(profile,xi,Mi,supportCoefs= SupportCoefficients()):
      the moment gradient factor.
      (Lisbon, Portugal: Stability and ductility of steel structures, 2006).
 
-     :param profile: cross section profile.
+     :param shape: cross section shape.
      :param xi: abcissae for the moment diagram
      :param Mi: ordinate for the moment diagram
      :param supportCoefs: coefficients that represent support conditions.
@@ -170,17 +170,17 @@ def getMcr(profile,xi,Mi,supportCoefs= SupportCoefficients()):
   mgf= MomentGradientFactorC1(xi,Mi)
   L= mgf.getL()
   C1= mgf.getC1(supportCoefs)
-  pi2EIy= math.pi**2*profile.EIy()
-  GIt= profile.GJ()
+  pi2EIy= math.pi**2*shape.EIy()
+  GIt= shape.GJ()
   kyL2= (supportCoefs.ky*L)**2
   Mcr0= pi2EIy/kyL2
-  sum1= (supportCoefs.ky/supportCoefs.kw)**2*profile.Iw()/profile.Iy()
+  sum1= (supportCoefs.ky/supportCoefs.kw)**2*shape.Iw()/shape.Iy()
   sum2= GIt/Mcr0
   f2= math.sqrt(sum1+sum2)
   # print '  L= ', L
   # print '  kyL2= ', kyL2
   # print '  GJ= ', GIt/1e3
-  # print '  Iw= ', profile.Iw()*100**6, ' cm^6'
+  # print '  Iw= ', shape.Iw()*100**6, ' cm^6'
   # print '  C1= ', C1
   # print '  Mcr0=', Mcr0/1e3  
   # print '  sum1= ', sum1
@@ -188,19 +188,19 @@ def getMcr(profile,xi,Mi,supportCoefs= SupportCoefficients()):
   # print '  f2= ', f2
   return C1*Mcr0*f2
 
-def getLateralBucklingNonDimensionalBeamSlenderness(profile,sectionClass,xi,Mi,supportCoefs= SupportCoefficients()):
+def getLateralBucklingNonDimensionalBeamSlenderness(shape,sectionClass,xi,Mi,supportCoefs= SupportCoefficients()):
   '''Returns non dimensional beam slenderness
      for lateral torsional buckling
      see parameter definition on method getMcr.
 
-     :param profile: cross section profile.
+     :param shape: cross section shape.
      :param sectionClass: section classification (1,2,3 or 4)
      :param xi: abcissae for the moment diagram
      :param Mi: ordinate for the moment diagram
      :param supportCoefs: coefficients that represent support conditions.
   '''
-  Mcr= profile.getMcr(xi,Mi,supportCoefs)
-  return math.sqrt(profile.getWz(sectionClass)*profile.steelType.fy/Mcr)
+  Mcr= shape.getMcr(xi,Mi,supportCoefs)
+  return math.sqrt(shape.getWz(sectionClass)*shape.steelType.fy/Mcr)
 
 class MomentGradientFactorC1(object):
   ''' Calculation of the C1 moment gradient factor as defined

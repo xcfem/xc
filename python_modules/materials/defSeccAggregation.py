@@ -4,7 +4,7 @@ import xc_base
 from materials import typical_materials
 
 def defSeccAggregation3d(preprocessor,defSecc,defMat):
-  ''' Definition of a elastic material-section for 3D elements
+  ''' Definition of a elastic material section for 3D elements
 
   :param preprocessor: preprocessor name
   :param defSecc:  object with the mechanical properties of the section (A, Iy, Iz, ...)

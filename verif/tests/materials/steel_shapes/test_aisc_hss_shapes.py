@@ -5,7 +5,7 @@ import xc
 from solution import predefined_solutions
 from model import predefined_spaces
 from materials import typical_materials
-from materials.structural_shapes.aisc import tubos_rectangulares_aisc_metric
+from materials.structural_shapes import aisc_metric_shapes
 from sympy.physics import units
 
 __author__= "Luis C. Pérez Tato (LCPT)"
@@ -32,7 +32,7 @@ ratio15= 10
 ratio16= 10
 ratio17= 10
 
-hssSection= tubos_rectangulares_aisc_metric.HSSAISCprofiles['HSS7X7X_375']
+hssSection= aisc_metric_shapes.HSS['HSS7X7X_375']
 
 meter= units.m
 meter2= units.m*units.m

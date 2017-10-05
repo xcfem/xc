@@ -7,7 +7,7 @@ Constaints
     :members:
     :show-inheritance:
 
-.. autoclass:: SPConstraint
+.. autoclass:: SFreedom_Constraint
     :members:
     :show-inheritance:
 

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-def printTNListingHeaderSteelProfile(archivo, tit):
+def printTNListingHeaderSteelShape(archivo, tit):
   '''Open the normal stresses listing.'''
   archivo.write("\\begin{center}\n")
   archivo.write("\\begin{footnotesize}\n")
@@ -28,19 +28,19 @@ def printTNListingHeaderSteelProfile(archivo, tit):
   archivo.write("\\begin{supertabular}{|l|r|r|r|r|r|}\n")
 
 
-def printTNListingEndSteelProfile(archivo):
+def printTNListingEndSteelShape(archivo):
   '''Closes the listing.'''
   archivo.write("\\end{supertabular}\n")
   archivo.write("\\end{footnotesize}\n")
   archivo.write("\\end{center}\n")
 
 
-def listSteelProfileTNStrengthElasticRange(setName, fName, titulo):
+def listSteelShapeTNStrengthElasticRange(setName, fName, titulo):
   '''
   Print the results of normal stresses checking in an element set
-  whose material is a steel profile.
+  whose material is a steel shape.
   '''
-  printTNListingHeaderSteelProfile(fName,titulo) 
+  printTNListingHeaderSteelShape(fName,titulo) 
   st= preprocessor.getSetLoader.getSet(setName)
   elems= st.getElements()
   tagFCTNCPCP= 0
@@ -57,11 +57,11 @@ def listSteelProfileTNStrengthElasticRange(setName, fName, titulo):
   fName.write("\\hline\n")
   fName.write(tagFCTNCPCP," & ",HIPCPCPTN," &  &  &  & ",'{:3.2f}'.format(FCTNCPCP),"\\\\\n")
 
-  printTNListingEndSteelProfile(fName) 
+  printTNListingEndSteelShape(fName) 
 
 
 
-def printVListingHeaderSteelProfile(archivo, tit):
+def printVListingHeaderSteelShape(archivo, tit):
   '''Open the shear listing.'''
   archivo.write("\\begin{center}\n")
   archivo.write("\\begin{footnotesize}\n")
@@ -88,12 +88,12 @@ def printVListingHeaderSteelProfile(archivo, tit):
   archivo.write("\\tablelasttail{\hline}\n")
   archivo.write("\\begin{supertabular}{|l|r|r|r|r|r|}\n")
 
-def listSteelProfileVStrength(setName, fName, titulo):
+def listSteelShapeVStrength(setName, fName, titulo):
   '''
   Print the results of shear stress checking in an element set
-  whose material is a steel profile.
+  whose material is a steel shape.
   '''
-  printVListingHeaderSteelProfile(fName,titulo) 
+  printVListingHeaderSteelShape(fName,titulo) 
   st= preprocessor.getSetLoader.getSet(setName)
   elems= st.getElements()
   tagFCTNCPCP= 0
@@ -109,5 +109,5 @@ def listSteelProfileVStrength(setName, fName, titulo):
   fName.write("\\multicolumn{5}{|c|}{Caso pésimo}\\\\\n")
   fName.write("\\hline\n")
   fName.write(tagFCVCPCP," & ",HIPCPCPV," &  &  & ",format(e.getProp("FCVCPCP"),'{:3.2f}'),"\\\\\n")
-  printTNListingEndSteelProfile(fName) 
+  printTNListingEndSteelShape(fName) 
 
