@@ -14,6 +14,8 @@ import numpy as np
 from scipy import interpolate
 from scipy.spatial import distance
 import matplotlib.pyplot as plt
+from miscUtils import LogMessages as lmsg
+from mpl_toolkits.mplot3d import Axes3D
 
 class PrestressTendon(object):
     '''Geometry and prestressing losses of a prestressing tendon
@@ -66,28 +68,123 @@ class PrestressTendon(object):
         return np.flipud(lcum_back)
 
     def getAngleSequence(self):
-        '''Return for each point in fineCoordMtr the deviation (angle in rad) 
-        with respect to the preceding point
+        '''Return for each point in fineCoordMtr the deviation deviation 
+        (angle in rad) with respect to the preceding point
         '''
         aseq=[0]+ [angle_between((self.fineDerivMtr[0][i], self.fineDerivMtr[1][i], self.fineDerivMtr[2][i]),(self.fineDerivMtr[0][i+1], self.fineDerivMtr[1][i+1], self.fineDerivMtr[2][i+1])) for i in range(len(self.fineDerivMtr[0])-1)]
         return aseq
         
     def getCumAngle(self):
-        '''Return for each point in fineCoordMtr the cumulative deviation 
-        (angle in rad) of the tendon from its starting point
+        '''Return for each point in fineCoordMtr the cumulative angular 
+        deviation (angle in rad) of the tendon from its starting point
         '''
         angl_sequence=self.getAngleSequence()
         return np.cumsum(angl_sequence)
 
     def getReverseCumAngle(self):
-        '''Return for each point in fineCoordMtr the cumulative deviation 
-        (angle in rad) of the tendon from its ending point
+        '''Return for each point in fineCoordMtr the cumulative angular 
+        deviation (angle in rad) of the tendon from its ending point
         '''
         aseq=self.getAngleSequence()
         aseq.append(aseq.pop(0))
         aseq.reverse()
         acum_back=np.cumsum(aseq)
         return np.flipud(acum_back)
+
+    def getLossFriction(self,coefFric,uninDev,sigmaP0_extr1=0.0,sigmaP0_extr2=0.0):
+        '''Return for each point in fineCoordMtr the cumulative immediate loss 
+        of prestressing due to friction.
+
+        :param sigmaP0_extr1: maximum stress applied at the extremity 1 of 
+                        the tendon (starting point) (stress refers to its 
+                        value at the end of the anchorage, in the contact
+                        with concrete). Defaults to 0.0 (no prestress applied)
+        :param sigmaP0_extr2: idem for prestress applied at extremity 2
+                         (end point of the tendon). Defaults to 0.0 (no 
+                         prestress applied)
+        :param coefFric: coefficient of friction between the tendon and its 
+                        sheathing
+        :param uninDev: unintentional angular deviation (rad/m tendon)
+        '''
+        if (sigmaP0_extr1 != 0.0):
+            cum_len=self.getCumLength()
+            cum_angl=self.getCumAngle()
+            loss_frict_ext1=np.array([sigmaP0_extr1*(1-math.exp(-coefFric*(cum_angl[i]+uninDev*cum_len[i]))) for i in range(len(cum_angl))])
+        if (sigmaP0_extr2 != 0.0):
+            cum_len=self.getReverseCumLength()
+            cum_angl=self.getReverseCumAngle()
+            loss_frict_ext2=np.array([sigmaP0_extr2*(1-math.exp(-coefFric*(cum_angl[i]+uninDev*cum_len[i]))) for i in range(len(cum_angl))])
+        if (sigmaP0_extr1 != 0.0) and (sigmaP0_extr2 != 0.0):
+            self.lossFriction=np.maximum(loss_frict_ext1,loss_frict_ext2)
+        elif (sigmaP0_extr1 != 0.0):
+            self.lossFriction=loss_frict_ext1
+        elif (sigmaP0_extr2 != 0.0):
+            self.lossFriction=loss_frict_ext2
+        else:
+            lmsg.warning("No prestressing applied.")
+        return
+
+    def plot3D(self,fileName='plot.png',symbolRougPoints=None,symbolFinePoints=None,symbolTendon=None,symbolLossFriction=None):
+        '''Plot in a 3D graphic the results to which a symbol is assigned.
+        Symbol examples: 'r-': red solid line, 'mo': magenta circle, 'b--': blue dashes, 'ks':black square,'g^' green triangle_up, 'c*': cyan star, ...
+        '''
+        fig = plt.figure()
+        ax3d = fig.add_subplot(111, projection='3d')
+        if symbolRougPoints:
+            ax3d.scatter(self.roughCoordMtr[0],self.roughCoordMtr[1],self.roughCoordMtr[2],symbolRougPoints,label='Rough points')
+        if symbolFinePoints:
+            ax3d.plot(self.fineCoordMtr[0],self.fineCoordMtr[1],self.fineCoordMtr[2],symbolFinePoints,label='Interpolated points (spline)')
+        if symbolTendon:
+            ax3d.plot(self.fineCoordMtr[0],self.fineCoordMtr[1],self.fineCoordMtr[2],symbolTendon,label='Tendon')
+        if symbolLossFriction:
+            ax3d.plot(self.fineCoordMtr[0],self.fineCoordMtr[1],self.lossFriction,symbolLossFriction,label='Immediate loss due to friction')
+        ax3d.legend()
+        ax3d.set_xlabel('X')
+        ax3d.set_ylabel('Y')
+        ax3d.set_zlabel('Z')
+        fig.savefig(fileName)
+        return
+
+    def plot2D(self,XaxisValues='X',fileName='plot.png',symbolRougPoints=None,symbolFinePoints=None,symbolTendon=None,symbolLossFriction=None):
+        '''Plot in a 2D graphic the results to which a symbol is assigned.
+        Symbol examples: 'r-': red solid line, 'mo': magenta circle, 'b--': blue dashes, 'ks':black square,'g^' green triangle_up, 'c*': cyan star, ...
+        :param XaxisValues: ='X' (default) to represent in the diagram X-axis
+                              the X coordinates of the tendon,
+                            ='Y' to represent in the diagram X-axis 
+                              the Y coordinates of the tendon,
+                            ='S' to represent in the diagram X-axis 
+                              the curviline coordinates of the tendon 
+                              (sqrt(X**2+Y**2)
+        '''
+        if XaxisValues.upper()=='X':
+            XaxisCoord=self.fineCoordMtr[0]
+            XaxisRoughCoord=self.roughCoordMtr[0]
+            xLab='X'
+        elif XaxisValues.upper()=='Y':
+            XaxisCoord=self.fineCoordMtr[1]
+            YaxisRoughCoord=self.roughCoordMtr[1]
+            xLab='Y'
+        elif XaxisValues.upper()=='S':
+            XaxisCoord=(self.fineCoordMtr[0]**2+self.fineCoordMtr[1]**2)**(0.5)
+            XaxisRoughCoord=(self.roughCoordMtr[0]**2+self.roughCoordMtr[1]**2)**(0.5)
+            xLab='S'
+        else:
+            lmsg.warning("Wrong value for XaxisValues ('X','Y','S'): X coordinates are represented in the figure")
+
+        fig = plt.figure()
+        ax2d=plt.subplot(111)
+        if symbolRougPoints:
+            ax2d.plot(XaxisRoughCoord,self.roughCoordMtr[2],symbolRougPoints,label='Rough points')
+        if symbolFinePoints:
+            ax2d.plot(XaxisCoord,self.fineCoordMtr[2],symbolFinePoints,label='Interpolated points (spline)')
+        if symbolTendon:
+            ax2d.plot(XaxisCoord,self.fineCoordMtr[2],symbolTendon,label='Tendon')
+        if symbolLossFriction:
+            ax2d.plot(XaxisCoord,self.lossFriction,symbolLossFriction,label='Immediate loss due to friction')
+        ax2d.legend()
+        ax2d.set_xlabel(xLab)
+        fig.savefig(fileName)
+        return
 
 def angle_between(a,b):
   arccosInput = np.dot(a,b)/np.linalg.norm(a)/np.linalg.norm(b)
