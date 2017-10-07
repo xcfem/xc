@@ -478,6 +478,9 @@ python tests/materials/test_material_elastic_membrane_plate_section_01.py
 python tests/materials/test_material_elastic_plate_section_01.py
 python tests/materials/test_inercia_torsion_cajon.py
 
+echo "$BLEU" "  Prestressing." "$NORMAL"
+python tests/materials/prestressing/test_layout3D_frictLoss_prestress_tendon.py
+
 echo "$BLEU" "  Other materials tests." "$NORMAL"
 python tests/materials/test_elastomeric_bearing_stiffness.py
 python tests/materials/test_anchor_bolt01.py
