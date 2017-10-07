@@ -515,7 +515,7 @@ const XC::Vector &XC::EnhancedQuad::getResistingForce(void) const
 const XC::Vector &XC::EnhancedQuad::getResistingForceIncInertia(void) const
   {
     int tang_flag = 0 ; //don't get the tangent
-    static XC::Vector res(8);
+    static Vector res(8);
 
     //do tangent and residual here
     formResidAndTangent( tang_flag ) ;
@@ -526,8 +526,8 @@ const XC::Vector &XC::EnhancedQuad::getResistingForceIncInertia(void) const
     res = resid;
 
     // add the damping forces if rayleigh damping
-    if(!rayFactors.Nulos())
-      res += this->getRayleighDampingForces();
+    if(!rayFactors.nullValues())
+      res+= this->getRayleighDampingForces();
 
     // subtract external loads
     if(!load.Nulo())

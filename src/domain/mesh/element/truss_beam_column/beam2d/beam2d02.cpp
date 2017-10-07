@@ -259,8 +259,8 @@ const XC::Vector &XC::beam2d02::getResistingForceIncInertia(void) const
 
     if(M != 0.0)
       {
-        const XC::Vector &end1Accel = theNodes[0]->getTrialAccel();
-        const XC::Vector &end2Accel = theNodes[1]->getTrialAccel();
+        const Vector &end1Accel = theNodes[0]->getTrialAccel();
+        const Vector &end2Accel = theNodes[1]->getTrialAccel();
         Vector inertia(6);
         rForce(0) += M*end1Accel(0);
         rForce(1) += M*end1Accel(1);
@@ -269,11 +269,11 @@ const XC::Vector &XC::beam2d02::getResistingForceIncInertia(void) const
       }
 
     // add rayleigh damping forces
-    if(!rayFactors.Nulos())
-      rForce += this->getRayleighDampingForces();
+    if(!rayFactors.nullValues())
+      rForce+= this->getRayleighDampingForces();
 
     if(isDead())
-      rForce*=dead_srf; //XXX Se aplica 2 veces sobre getResistingForce: arreglar.
+      rForce*=dead_srf; //XXX Applied twice over getResistingForce: to fix.
     return rForce;
   }
 

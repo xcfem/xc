@@ -599,35 +599,36 @@ const XC::Vector &XC::DispBeamColumn3d::getResistingForce(void) const
 
 const XC::Vector &XC::DispBeamColumn3d::getResistingForceIncInertia(void) const
   {
-  this->getResistingForce();
-
-  if(rho != 0.0) {
-    const XC::Vector &accel1 = theNodes[0]->getTrialAccel();
-    const XC::Vector &accel2 = theNodes[1]->getTrialAccel();
-
-    // Compute the current resisting force
     this->getResistingForce();
 
-    double L = theCoordTransf->getInitialLength();
-    double m = 0.5*rho*L;
+    if(rho != 0.0)
+      {
+	const Vector &accel1 = theNodes[0]->getTrialAccel();
+	const Vector &accel2 = theNodes[1]->getTrialAccel();
 
-    P(0) += m*accel1(0);
-    P(1) += m*accel1(1);
-    P(2) += m*accel1(2);
-    P(6) += m*accel2(0);
-    P(7) += m*accel2(1);
-    P(8) += m*accel2(2);
+	// Compute the current resisting force
+	this->getResistingForce();
 
-    // add the damping forces if rayleigh damping
-    if(!rayFactors.Nulos())
-      P += this->getRayleighDampingForces();
+	const double L = theCoordTransf->getInitialLength();
+	const double m = 0.5*rho*L;
 
-  } else {
+	P(0) += m*accel1(0);
+	P(1) += m*accel1(1);
+	P(2) += m*accel1(2);
+	P(6) += m*accel2(0);
+	P(7) += m*accel2(1);
+	P(8) += m*accel2(2);
 
-    // add the damping forces if rayleigh damping
-    if(!rayFactors.KNulos())
-      P += this->getRayleighDampingForces();
-  }
+	// add the damping forces if rayleigh damping
+	if(!rayFactors.nullValues())
+	  P+= this->getRayleighDampingForces();
+      }
+    else
+      {
+	// add the damping forces if rayleigh damping
+	if(!rayFactors.nullKValues())
+	  P+= this->getRayleighDampingForces();
+      }
     if(isDead())
       P*=dead_srf; //XXX Se aplica 2 veces sobre getResistingForce: arreglar.
     return P;

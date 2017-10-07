@@ -449,8 +449,8 @@ const XC::Vector &XC::NineNodeMixedQuad::getResistingForceIncInertia(void) const
     res = resid;
 
     // add the damping forces if rayleigh damping
-    if(!rayFactors.Nulos())
-      res += this->getRayleighDampingForces();
+    if(!rayFactors.nullValues())
+      res+= this->getRayleighDampingForces();
 
     // subtract external loads
     if(!load.Nulo())

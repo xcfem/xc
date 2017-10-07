@@ -376,7 +376,7 @@ const XC::Vector& XC::FlatSliderSimple2d::getResistingForceIncInertia()
     theVector = this->getResistingForce();
 	
     // add the damping forces if rayleigh damping
-    if(!rayFactors.Nulos())
+    if(!rayFactors.nullValues())
       theVector += this->getRayleighDampingForces();
     
     // now include the mass portion

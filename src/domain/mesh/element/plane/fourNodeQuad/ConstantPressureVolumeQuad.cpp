@@ -626,8 +626,8 @@ const XC::Vector& XC::ConstantPressureVolumeQuad::getResistingForceIncInertia(vo
       res-= load;
 
     // add the damping forces if rayleigh damping
-    if(!rayFactors.Nulos())
-      res += this->getRayleighDampingForces();
+    if(!rayFactors.nullValues())
+      res+= this->getRayleighDampingForces();
     if(isDead())
       res*=dead_srf;
     return res;

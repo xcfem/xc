@@ -560,8 +560,8 @@ const XC::Vector &XC::BeamWithHinges3d::getResistingForceIncInertia(void) const
     if(rho != 0.0)
       {
         double ag[12];
-        const XC::Vector &accel1 = theNodes[0]->getTrialAccel();
-        const XC::Vector &accel2 = theNodes[1]->getTrialAccel();
+        const Vector &accel1 = theNodes[0]->getTrialAccel();
+        const Vector &accel2 = theNodes[1]->getTrialAccel();
 
         ag[0] = accel1(0);
         ag[1] = accel1(1);
@@ -572,23 +572,22 @@ const XC::Vector &XC::BeamWithHinges3d::getResistingForceIncInertia(void) const
 
         theVector = this->getResistingForce();
 
-        double L = theCoordTransf->getInitialLength();
-        double mass = 0.5*L*rho;
-
-        int i,j;
+        const double L = theCoordTransf->getInitialLength();
+        const double mass = 0.5*L*rho;
+        int i= 0,j= 6;
         for(i = 0, j = 6; i < 3; i++, j++)
           {
-            theVector(i) += mass*ag[i];
-            theVector(j) += mass*ag[j];
+            theVector(i)+= mass*ag[i];
+            theVector(j)+= mass*ag[j];
           }
         // add the damping forces if rayleigh damping
-        if(!rayFactors.Nulos())
+        if(!rayFactors.nullValues())
           theVector += this->getRayleighDampingForces();
       }
     else
       {
         // add the damping forces if rayleigh damping
-        if(!rayFactors.KNulos())
+        if(!rayFactors.nullKValues())
           theVector += this->getRayleighDampingForces();
       }
     if(isDead())

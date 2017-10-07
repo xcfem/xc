@@ -443,22 +443,22 @@ const XC::Vector &XC::TrussSection::getResistingForceIncInertia(void) const
     // now include the mass portion
     if(L != 0.0 && rho != 0.0)
       {
-        const XC::Vector &accel1 = theNodes[0]->getTrialAccel();
-        const XC::Vector &accel2 = theNodes[1]->getTrialAccel();
+        const Vector &accel1 = theNodes[0]->getTrialAccel();
+        const Vector &accel2 = theNodes[1]->getTrialAccel();
 
-        double M = 0.5*rho*L;
-        int dof = getNumDIM();
-        int start = numDOF/2;
+        const double M = 0.5*rho*L;
+        const int dof = getNumDIM();
+        const int start = numDOF/2;
         for(int i=0; i<dof; i++)
           {
-            (*theVector)(i) += M*accel1(i);
-            (*theVector)(i+start) += M*accel2(i);
+            (*theVector)(i)+= M*accel1(i);
+            (*theVector)(i+start)+= M*accel2(i);
           }
       }
 
     // add the damping forces if rayleigh damping
-    if(!rayFactors.Nulos())
-      *theVector += this->getRayleighDampingForces();
+    if(!rayFactors.nullValues())
+      *theVector+= this->getRayleighDampingForces();
 
     if(isDead())
       (*theVector)*=dead_srf; //XXX Se aplica 2 veces sobre getResistingForce: arreglar.

@@ -534,13 +534,13 @@ const XC::Vector &XC::BeamWithHinges2d::getResistingForceIncInertia(void) const
           }
 
         // add the damping forces if rayleigh damping
-        if(!rayFactors.Nulos())
+        if(!rayFactors.nullValues())
           theVector += this->getRayleighDampingForces();
       }
     else
       {
         // add the damping forces if rayleigh damping
-        if(!rayFactors.KNulos())
+        if(!rayFactors.nullKValues())
          theVector += this->getRayleighDampingForces();
       }
     if(isDead())

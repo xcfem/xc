@@ -31,11 +31,16 @@
 #include "utility/matrix/Vector.h"
 #include <domain/mesh/element/utils/Information.h>
 
-//! @brief constructor
+//! @brief Constructor.
 XC::RayleighDampingFactors::RayleighDampingFactors(void)
   :EntCmd(), MovableObject(0), alphaM(0.0), betaK(0.0), betaK0(0.0), betaKc(0.0) {}
 
-//! @brief constructor
+//! @brief Constructor.
+//!
+//! @param aM: factor applied to elements or nodes mass matrix.
+//! @param bK: factor applied to elements current stiffness matrix.
+//! @param bK0: factor applied to elements initial stiffness matrix.
+//! @param bKc: factor applied to elements committed stiffness matrix.
 XC::RayleighDampingFactors::RayleighDampingFactors(const double &aM,const double &bK,const double &bK0,const double &bKc)
   :EntCmd(), MovableObject(0), alphaM(aM), betaK(bK), betaK0(bK0), betaKc(bKc) {}
 
@@ -43,13 +48,15 @@ XC::RayleighDampingFactors::RayleighDampingFactors(const double &aM,const double
 XC::RayleighDampingFactors::RayleighDampingFactors(const Vector &v)
   : EntCmd(), MovableObject(0), alphaM(v[0]), betaK(v[1]), betaK0(v[2]), betaKc(v[3]) {}
 
+//! @brief Print Rayleigh factors values.
 void XC::RayleighDampingFactors::Print(std::ostream &s, int flag) const
   {
-    s << "rayleigh damping factors: alphaM: " << alphaM << " betaK: ";
-    s << betaK << " betaK0: " << betaK0 << std::endl;
+    s << "alphaM: " << alphaM << " betaK: "
+      << betaK << " betaK0: " << betaK0
+      << " betaKc: " << betaKc << std::endl;
   }
 
-
+//! @brief Update the value of a parameter.
 int XC::RayleighDampingFactors::updateParameter(int parameterID, Information &info)
   {
     switch (parameterID)
@@ -89,7 +96,8 @@ int XC::RayleighDampingFactors::sendSelf(CommParameters &cp)
 
     res+= cp.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
-      std::cerr << getClassName() << "sendSelf() - failed to send data\n";
+      std::cerr << getClassName() << "::" << __FUNCTION__
+	        << "; failed to send data\n";
     return res;
   }
 
@@ -101,18 +109,21 @@ int XC::RayleighDampingFactors::recvSelf(const CommParameters &cp)
     int res= cp.receiveIdData(getDbTagData(),dataTag);
 
     if(res<0)
-      std::cerr << getClassName() << "::recvSelf - failed to receive ids.\n";
+      std::cerr << getClassName() << "::" << __FUNCTION__
+	        << "; failed to receive ids.\n";
     else
       {
         //setTag(getDbTagDataPos(0));
         res+= recvData(cp);
         if(res<0)
-          std::cerr << getClassName() << "::recvSelf - failed to receive data.\n";
+          std::cerr << getClassName() << "::" << __FUNCTION__
+		    << "; failed to receive data.\n";
       }
     return res;
   }
 
-std::ostream &XC::operator<<(std::ostream &os,const XC::RayleighDampingFactors &rF)
+//! @brief insertion on an output stream.
+std::ostream &XC::operator<<(std::ostream &os,const RayleighDampingFactors &rF)
   {
     rF.Print(os);
     return os;

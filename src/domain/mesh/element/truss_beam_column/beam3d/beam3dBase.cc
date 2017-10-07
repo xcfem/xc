@@ -115,7 +115,7 @@ const XC::Vector &XC::beam3dBase::getResistingForceIncInertia(void) const
     this->getResistingForce();
 
     // add rayleigh damping force if factors present
-    if(!rayFactors.KNulos())
+    if(!rayFactors.nullKValues())
     rForce += this->getRayleighDampingForces();
 
     if(isDead()) //XXX Se aplica 2 veces sobre getResistingForce: arreglar.

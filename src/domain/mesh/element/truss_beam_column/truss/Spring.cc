@@ -466,7 +466,7 @@ const XC::Vector &XC::Spring::getResistingForceIncInertia(void) const
         const Vector &accel1= theNodes[0]->getTrialAccel();
         const Vector &accel2= theNodes[1]->getTrialAccel();
 
-        int numDOF2= numDOF/2;
+        const int numDOF2= numDOF/2;
         for(int i= 0;i<getNumDIM();i++)
           {
             (*theVector)(i) += M*accel1(i);
@@ -474,14 +474,14 @@ const XC::Vector &XC::Spring::getResistingForceIncInertia(void) const
           }
 
         // add the damping forces if rayleigh damping
-        if(!rayFactors.Nulos())
-          (*theVector) += this->getRayleighDampingForces();
+        if(!rayFactors.nullValues())
+          (*theVector)+= this->getRayleighDampingForces();
       }
     else
       {
         // add the damping forces if rayleigh damping
-        if(!rayFactors.KNulos())
-          (*theVector) += this->getRayleighDampingForces();
+        if(!rayFactors.nullKValues())
+          (*theVector)+= this->getRayleighDampingForces();
       }
     if(isDead())
       (*theVector)*=dead_srf;

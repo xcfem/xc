@@ -269,7 +269,7 @@ const XC::Vector &XC::beam2d04::getResistingForceIncInertia(void) const
   {
     this->getResistingForce();
 
-    if(!rayFactors.KNulos())
+    if(!rayFactors.nullKValues())
       rForce += this->getRayleighDampingForces();
 
     if(isDead())

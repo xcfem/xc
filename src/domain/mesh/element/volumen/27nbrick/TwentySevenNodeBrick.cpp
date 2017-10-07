@@ -3652,149 +3652,144 @@ const XC::Vector &XC::TwentySevenNodeBrick::getResistingForce(void) const
 
 //=============================================================================
 const XC::Vector &XC::TwentySevenNodeBrick::getResistingForceIncInertia(void) const
-{
+  {
 
-  this->getResistingForce();
+    this->getResistingForce();
 
-  //
-  // now add dynamic terms
-  // P += M * a + C * v
-  //
+    //
+    // now add dynamic terms
+    // P += M * a + C * v
+    //
+    if(rho != 0.0)
+      {
+	// form the mass matrix
+	this->getMass();
 
-  if(rho != 0.0) {
+	const Vector &accel1 = theNodes[0]->getTrialAccel();
+	const Vector &accel2 = theNodes[1]->getTrialAccel();
+	const Vector &accel3 = theNodes[2]->getTrialAccel();
+	const Vector &accel4 = theNodes[3]->getTrialAccel();
+	const Vector &accel5 = theNodes[4]->getTrialAccel();
+	const Vector &accel6 = theNodes[5]->getTrialAccel();
+	const Vector &accel7 = theNodes[6]->getTrialAccel();
+	const Vector &accel8 = theNodes[7]->getTrialAccel();
+	const Vector &accel9 = theNodes[8]->getTrialAccel();
+	const Vector &accel10 = theNodes[9]->getTrialAccel();
+	const Vector &accel11 = theNodes[10]->getTrialAccel();
+	const Vector &accel12 = theNodes[11]->getTrialAccel();
+	const Vector &accel13 = theNodes[12]->getTrialAccel();
+	const Vector &accel14 = theNodes[13]->getTrialAccel();
+	const Vector &accel15 = theNodes[14]->getTrialAccel();
+	const Vector &accel16 = theNodes[15]->getTrialAccel();
+	const Vector &accel17 = theNodes[16]->getTrialAccel();
+	const Vector &accel18 = theNodes[17]->getTrialAccel();
+	const Vector &accel19 = theNodes[18]->getTrialAccel();
+	const Vector &accel20 = theNodes[19]->getTrialAccel();
+	const Vector &accel21 = theNodes[20]->getTrialAccel();
+	const Vector &accel22 = theNodes[21]->getTrialAccel();
+	const Vector &accel23 = theNodes[22]->getTrialAccel();
+	const Vector &accel24 = theNodes[23]->getTrialAccel();
+	const Vector &accel25 = theNodes[24]->getTrialAccel();
+	const Vector &accel26 = theNodes[25]->getTrialAccel();
+	const Vector &accel27 = theNodes[26]->getTrialAccel();
 
-    // form the mass matrix
-    this->getMass();
+	static Vector a(81);  // originally 8
 
-    const XC::Vector &accel1 = theNodes[0]->getTrialAccel();
-    const XC::Vector &accel2 = theNodes[1]->getTrialAccel();
-    const XC::Vector &accel3 = theNodes[2]->getTrialAccel();
-    const XC::Vector &accel4 = theNodes[3]->getTrialAccel();
-    const XC::Vector &accel5 = theNodes[4]->getTrialAccel();
-    const XC::Vector &accel6 = theNodes[5]->getTrialAccel();
-    const XC::Vector &accel7 = theNodes[6]->getTrialAccel();
-    const XC::Vector &accel8 = theNodes[7]->getTrialAccel();
-    const XC::Vector &accel9 = theNodes[8]->getTrialAccel();
-    const XC::Vector &accel10 = theNodes[9]->getTrialAccel();
-    const XC::Vector &accel11 = theNodes[10]->getTrialAccel();
-    const XC::Vector &accel12 = theNodes[11]->getTrialAccel();
-    const XC::Vector &accel13 = theNodes[12]->getTrialAccel();
-    const XC::Vector &accel14 = theNodes[13]->getTrialAccel();
-    const XC::Vector &accel15 = theNodes[14]->getTrialAccel();
-    const XC::Vector &accel16 = theNodes[15]->getTrialAccel();
-    const XC::Vector &accel17 = theNodes[16]->getTrialAccel();
-    const XC::Vector &accel18 = theNodes[17]->getTrialAccel();
-    const XC::Vector &accel19 = theNodes[18]->getTrialAccel();
-    const XC::Vector &accel20 = theNodes[19]->getTrialAccel();
-    const XC::Vector &accel21 = theNodes[20]->getTrialAccel();
-    const XC::Vector &accel22 = theNodes[21]->getTrialAccel();
-    const XC::Vector &accel23 = theNodes[22]->getTrialAccel();
-    const XC::Vector &accel24 = theNodes[23]->getTrialAccel();
-    const XC::Vector &accel25 = theNodes[24]->getTrialAccel();
-    const XC::Vector &accel26 = theNodes[25]->getTrialAccel();
-    const XC::Vector &accel27 = theNodes[26]->getTrialAccel();
+	a( 0) = accel1(0);
+	a( 1) = accel1(1);
+	a( 2) = accel1(2);
+	a( 3) = accel2(0);
+	a( 4) = accel2(1);
+	a( 5) = accel2(2);
+	a( 6) = accel3(0);
+	a( 7) = accel3(1);
+	a( 8) = accel3(2);
+	a( 9) = accel4(0);
+	a(10) = accel4(1);
+	a(11) = accel4(2);
+	a(12) = accel5(0);
+	a(13) = accel5(1);
+	a(14) = accel5(2);
+	a(15) = accel6(0);
+	a(16) = accel6(1);
+	a(17) = accel6(2);
+	a(18) = accel7(0);
+	a(19) = accel7(1);
+	a(20) = accel7(2);
+	a(21) = accel8(0);
+	a(22) = accel8(1);
+	a(23) = accel8(2);
+	a(24) = accel9(0);
+	a(25) = accel9(1);
+	a(26) = accel9(2);
+	a(27) = accel10(0);
+	a(28) = accel10(1);
+	a(29) = accel10(2);
+	a(30) = accel11(0);
+	a(31) = accel11(1);
+	a(32) = accel11(2);
+	a(33) = accel12(0);
+	a(34) = accel12(1);
+	a(35) = accel12(2);
+	a(36) = accel13(0);
+	a(37) = accel13(1);
+	a(38) = accel13(2);
+	a(39) = accel14(0);
+	a(40) = accel14(1);
+	a(41) = accel14(2);
+	a(42) = accel15(0);
+	a(43) = accel15(1);
+	a(44) = accel15(2);
+	a(45) = accel16(0);
+	a(46) = accel16(1);
+	a(47) = accel16(2);
+	a(48) = accel17(0);
+	a(49) = accel17(1);
+	a(50) = accel17(2);
+	a(51) = accel18(0);
+	a(52) = accel18(1);
+	a(53) = accel18(2);
+	a(54) = accel19(0);
+	a(55) = accel19(1);
+	a(56) = accel19(2);
+	a(57) = accel20(0);
+	a(58) = accel20(1);
+	a(59) = accel20(2);
+	a(60) = accel21(0);
+	a(61) = accel21(1);
+	a(62) = accel21(2);
+	a(63) = accel22(0);
+	a(64) = accel22(1);
+	a(65) = accel22(2);
+	a(66) = accel23(0);
+	a(67) = accel23(1);
+	a(68) = accel23(2);
+	a(69) = accel24(0);
+	a(70) = accel24(1);
+	a(71) = accel24(2);
+	a(72) = accel25(0);
+	a(73) = accel25(1);
+	a(74) = accel25(2);
+	a(75) = accel26(0);
+	a(76) = accel26(1);
+	a(77) = accel26(2);
+	a(78) = accel27(0);
+	a(79) = accel27(1);
+	a(80) = accel27(2);
 
-    static XC::Vector a(81);  // originally 8
+        // P += M * a
+        P.addMatrixVector(1.0, M, a, 1.0);
 
-    a( 0) = accel1(0);
-    a( 1) = accel1(1);
-    a( 2) = accel1(2);
-    a( 3) = accel2(0);
-    a( 4) = accel2(1);
-    a( 5) = accel2(2);
-    a( 6) = accel3(0);
-    a( 7) = accel3(1);
-    a( 8) = accel3(2);
-    a( 9) = accel4(0);
-    a(10) = accel4(1);
-    a(11) = accel4(2);
-    a(12) = accel5(0);
-    a(13) = accel5(1);
-    a(14) = accel5(2);
-    a(15) = accel6(0);
-    a(16) = accel6(1);
-    a(17) = accel6(2);
-    a(18) = accel7(0);
-    a(19) = accel7(1);
-    a(20) = accel7(2);
-    a(21) = accel8(0);
-    a(22) = accel8(1);
-    a(23) = accel8(2);
-    a(24) = accel9(0);
-    a(25) = accel9(1);
-    a(26) = accel9(2);
-    a(27) = accel10(0);
-    a(28) = accel10(1);
-    a(29) = accel10(2);
-    a(30) = accel11(0);
-    a(31) = accel11(1);
-    a(32) = accel11(2);
-    a(33) = accel12(0);
-    a(34) = accel12(1);
-    a(35) = accel12(2);
-    a(36) = accel13(0);
-    a(37) = accel13(1);
-    a(38) = accel13(2);
-    a(39) = accel14(0);
-    a(40) = accel14(1);
-    a(41) = accel14(2);
-    a(42) = accel15(0);
-    a(43) = accel15(1);
-    a(44) = accel15(2);
-    a(45) = accel16(0);
-    a(46) = accel16(1);
-    a(47) = accel16(2);
-    a(48) = accel17(0);
-    a(49) = accel17(1);
-    a(50) = accel17(2);
-    a(51) = accel18(0);
-    a(52) = accel18(1);
-    a(53) = accel18(2);
-    a(54) = accel19(0);
-    a(55) = accel19(1);
-    a(56) = accel19(2);
-    a(57) = accel20(0);
-    a(58) = accel20(1);
-    a(59) = accel20(2);
-    a(60) = accel21(0);
-    a(61) = accel21(1);
-    a(62) = accel21(2);
-    a(63) = accel22(0);
-    a(64) = accel22(1);
-    a(65) = accel22(2);
-    a(66) = accel23(0);
-    a(67) = accel23(1);
-    a(68) = accel23(2);
-    a(69) = accel24(0);
-    a(70) = accel24(1);
-    a(71) = accel24(2);
-    a(72) = accel25(0);
-    a(73) = accel25(1);
-    a(74) = accel25(2);
-    a(75) = accel26(0);
-    a(76) = accel26(1);
-    a(77) = accel26(2);
-    a(78) = accel27(0);
-    a(79) = accel27(1);
-    a(80) = accel27(2);
-
-
-
-    // P += M * a
-    P.addMatrixVector(1.0, M, a, 1.0);
-
-    // add the damping forces if rayleigh damping
-    if(!rayFactors.Nulos())
-      P += this->getRayleighDampingForces();
-
-  } else {
-
-    // add the damping forces if rayleigh damping
-    if(!rayFactors.KNulos())
-      P += this->getRayleighDampingForces();
-
-  }
-
+        // add the damping forces if rayleigh damping
+        if(!rayFactors.nullValues())
+	  P+= this->getRayleighDampingForces();
+      }
+    else
+      {
+        // add the damping forces if rayleigh damping
+        if(!rayFactors.nullKValues())
+  	  P+= this->getRayleighDampingForces();
+      }
     if(isDead())
       P*=dead_srf;
     return P;
@@ -4007,8 +4002,8 @@ int XC::TwentySevenNodeBrick::getResponse (int responseID, Information &eleInfo)
     InfoMoment(109+0) = GaussCoord(6); //Zcoor of middle layer
 
                 //Computing Height of element
-    //const XC::Vector &coor = theNodes[17]->getCrds();
-    const XC::Vector &TotDis = theNodes[17]->getTrialDisp();
+    //const Vector &coor = theNodes[17]->getCrds();
+    const Vector &TotDis = theNodes[17]->getTrialDisp();
           //checking Z-coor. of moddile layer gauss point
     //if( (coor(2) - GaussCoord(6)) > 0.0001 )
     //  std::cerr << " Warning: Middle layer Gauss Point Z-coor. wrong...\n";
@@ -4057,8 +4052,8 @@ int XC::TwentySevenNodeBrick::getResponse (int responseID, Information &eleInfo)
     if(tp==strTipoElasticIsotropic3D)
       {
          wt = getWeightofGP();
-         const XC::Vector &end1Crd = theNodes[0]->getCrds();
-         const XC::Vector &end5Crd = theNodes[4]->getCrds();
+         const Vector &end1Crd = theNodes[0]->getCrds();
+         const Vector &end5Crd = theNodes[4]->getCrds();
          height = end1Crd(2) - end5Crd(2);
          //if(getTag() == 432) {
          //   std::cerr << getTag() << " height " << height << std::endl;
@@ -4273,18 +4268,18 @@ int XC::TwentySevenNodeBrick::getResponse (int responseID, Information &eleInfo)
 //XC::TwentySevenNodeBrick::getTangentStiff ()
 //{
 //  int order = theQuadRule->getOrder();
-//  const XC::Vector &intPt = theQuadRule->getIntegrPointCoords();
-//  const XC::Vector &intWt = theQuadRule->getIntegrPointWeights();
+//  const Vector &intPt = theQuadRule->getIntegrPointCoords();
+//  const Vector &intWt = theQuadRule->getIntegrPointWeights();
 //
-//  const XC::Vector &disp1 = theNodes[0]->getTrialDisp();
-//        const XC::Vector &disp2 = theNodes[1]->getTrialDisp();
-//  const XC::Vector &disp3 = theNodes[2]->getTrialDisp();
-//        const XC::Vector &disp4 = theNodes[3]->getTrialDisp();
+//  const Vector &disp1 = theNodes[0]->getTrialDisp();
+//        const Vector &disp2 = theNodes[1]->getTrialDisp();
+//  const Vector &disp3 = theNodes[2]->getTrialDisp();
+//        const Vector &disp4 = theNodes[3]->getTrialDisp();
 //       // Xiaoyan added 5-8 07/06/00
-//        const XC::Vector &disp5 = theNodes[4]->getTrialDisp();
-//        const XC::Vector &disp6 = theNodes[5]->getTrialDisp();
-//  const XC::Vector &disp7 = theNodes[6]->getTrialDisp();
-//        const XC::Vector &disp8 = theNodes[7]->getTrialDisp();
+//        const Vector &disp5 = theNodes[4]->getTrialDisp();
+//        const Vector &disp6 = theNodes[5]->getTrialDisp();
+//  const Vector &disp7 = theNodes[6]->getTrialDisp();
+//        const Vector &disp8 = theNodes[7]->getTrialDisp();
 //
 //  static XC::Vector u(24);      //Changed from u(8) to u(24) Xiaoyn 07/06/00
 //
@@ -4367,8 +4362,8 @@ int XC::TwentySevenNodeBrick::getResponse (int responseID, Information &eleInfo)
 //XC::TwentySevenNodeBrick::getMass ()
 //{
 //  int order = theQuadRule->getOrder();
-//  const XC::Vector &intPt = theQuadRule->getIntegrPointCoords();
-//  const XC::Vector &intWt = theQuadRule->getIntegrPointWeights();
+//  const Vector &intPt = theQuadRule->getIntegrPointCoords();
+//  const Vector &intWt = theQuadRule->getIntegrPointWeights();
 //
 //  M.Zero();
 //
@@ -4410,22 +4405,22 @@ int XC::TwentySevenNodeBrick::getResponse (int responseID, Information &eleInfo)
 //  return M;
 //}
 //
-//const XC::Vector&
+//const Vector&
 //XC::TwentySevenNodeBrick::getResistingForce ()
 //{
 //  int order = theQuadRule->getOrder();
-//  const XC::Vector &intPt = theQuadRule->getIntegrPointCoords();
-//  const XC::Vector &intWt = theQuadRule->getIntegrPointWeights();
+//  const Vector &intPt = theQuadRule->getIntegrPointCoords();
+//  const Vector &intWt = theQuadRule->getIntegrPointWeights();
 //
-//  const XC::Vector &disp1 = theNodes[0]->getTrialDisp();
-//        const XC::Vector &disp2 = theNodes[1]->getTrialDisp();
-//  const XC::Vector &disp3 = theNodes[2]->getTrialDisp();
-//        const XC::Vector &disp4 = theNodes[3]->getTrialDisp();
+//  const Vector &disp1 = theNodes[0]->getTrialDisp();
+//        const Vector &disp2 = theNodes[1]->getTrialDisp();
+//  const Vector &disp3 = theNodes[2]->getTrialDisp();
+//        const Vector &disp4 = theNodes[3]->getTrialDisp();
 //  //6-8 added by Xiaoyan 07/06/00
-//  const XC::Vector &disp5 = theNodes[4]->getTrialDisp();
-//        const XC::Vector &disp6 = theNodes[5]->getTrialDisp();
-//  const XC::Vector &disp7 = theNodes[6]->getTrialDisp();
-//        const XC::Vector &disp8 = theNodes[7]->getTrialDisp();
+//  const Vector &disp5 = theNodes[4]->getTrialDisp();
+//        const Vector &disp6 = theNodes[5]->getTrialDisp();
+//  const Vector &disp7 = theNodes[6]->getTrialDisp();
+//        const Vector &disp8 = theNodes[7]->getTrialDisp();
 //
 //
 //  static XC::Vector u(24);      //Changed from u(8) to u(24) Xiaoyn 07/06/00
@@ -4475,7 +4470,7 @@ int XC::TwentySevenNodeBrick::getResponse (int responseID, Information &eleInfo)
 //      (theMaterial[i][j])->setTrialStrain (eps);
 //
 //      // Get material stress response
-//      const XC::Vector &sigma = (theMaterial[i][j])->getStress();
+//      const Vector &sigma = (theMaterial[i][j])->getStress();
 //
 //      // Form the Jacobian of the coordinate transformation
 //      double detJ = this->formDetJ (intPt(i), intPt(j));
@@ -4490,7 +4485,7 @@ int XC::TwentySevenNodeBrick::getResponse (int responseID, Information &eleInfo)
 //  return P;
 //}
 //
-//const XC::Vector&
+//const Vector&
 //XC::TwentySevenNodeBrick::getResistingForceIncInertia ()
 //{
 //  // Yet to implement
@@ -4516,26 +4511,26 @@ int XC::TwentySevenNodeBrick::getResponse (int responseID, Information &eleInfo)
     // first determine the end points of the quad based on
     // the display factor (a measure of the distorted image)
     // store this information in 2 3d vectors v1 and v2
-//        const XC::Vector &end1Crd = theNodes[0]->getCrds();
-//        const XC::Vector &end2Crd = theNodes[1]->getCrds();
-//  const XC::Vector &end3Crd = theNodes[2]->getCrds();
-//  const XC::Vector &end4Crd = theNodes[3]->getCrds();
+//        const Vector &end1Crd = theNodes[0]->getCrds();
+//        const Vector &end2Crd = theNodes[1]->getCrds();
+//  const Vector &end3Crd = theNodes[2]->getCrds();
+//  const Vector &end4Crd = theNodes[3]->getCrds();
 //  // 5-8 were added by Xiaoyan
-//        const XC::Vector &end5Crd = theNodes[4]->getCrds();
-//        const XC::Vector &end6Crd = theNodes[5]->getCrds();
-//  const XC::Vector &end7Crd = theNodes[6]->getCrds();
-//  const XC::Vector &end8Crd = theNodes[7]->getCrds();
+//        const Vector &end5Crd = theNodes[4]->getCrds();
+//        const Vector &end6Crd = theNodes[5]->getCrds();
+//  const Vector &end7Crd = theNodes[6]->getCrds();
+//  const Vector &end8Crd = theNodes[7]->getCrds();
 ////---------------------------------------------------------------
-//      const XC::Vector &end1Disp = theNodes[0]->getDisp();
-//  const XC::Vector &end2Disp = theNodes[1]->getDisp();
-//  const XC::Vector &end3Disp = theNodes[2]->getDisp();
-//  const XC::Vector &end4Disp = theNodes[3]->getDisp();
+//      const Vector &end1Disp = theNodes[0]->getDisp();
+//  const Vector &end2Disp = theNodes[1]->getDisp();
+//  const Vector &end3Disp = theNodes[2]->getDisp();
+//  const Vector &end4Disp = theNodes[3]->getDisp();
 //
   // 5-8 were added by Xiaoyan
-//        const XC::Vector &end5Disp = theNodes[4]->getDisp();
-//  const XC::Vector &end6Disp = theNodes[5]->getDisp();
-//  const XC::Vector &end7Disp = theNodes[6]->getDisp();
-//  const XC::Vector &end8Disp = theNodes[7]->getDisp();
+//        const Vector &end5Disp = theNodes[4]->getDisp();
+//  const Vector &end6Disp = theNodes[5]->getDisp();
+//  const Vector &end7Disp = theNodes[6]->getDisp();
+//  const Vector &end8Disp = theNodes[7]->getDisp();
 //
 //  Vector v1(3);
 //  Vector v2(3);
@@ -4603,15 +4598,15 @@ int XC::TwentySevenNodeBrick::getResponse (int responseID, Information &eleInfo)
 //XC::TwentySevenNodeBrick::setJacobian (double r, double s, double t)
 ////Changed xi, eta to r,s and added t Xiaoyan 07/06/00
 //{
-//  const XC::Vector &nd1Crds = theNodes[0]->getCrds();
-//  const XC::Vector &nd2Crds = theNodes[1]->getCrds();
-//  const XC::Vector &nd3Crds = theNodes[2]->getCrds();
-//  const XC::Vector &nd4Crds = theNodes[3]->getCrds();
+//  const Vector &nd1Crds = theNodes[0]->getCrds();
+//  const Vector &nd2Crds = theNodes[1]->getCrds();
+//  const Vector &nd3Crds = theNodes[2]->getCrds();
+//  const Vector &nd4Crds = theNodes[3]->getCrds();
 //  // Xiaoyan added 5-8 07/06/00
-//  const XC::Vector &nd5Crds = theNodes[4]->getCrds();
-//  const XC::Vector &nd6Crds = theNodes[5]->getCrds();
-//  const XC::Vector &nd7Crds = theNodes[6]->getCrds();
-//  const XC::Vector &nd8Crds = theNodes[7]->getCrds();
+//  const Vector &nd5Crds = theNodes[4]->getCrds();
+//  const Vector &nd6Crds = theNodes[5]->getCrds();
+//  const Vector &nd7Crds = theNodes[6]->getCrds();
+//  const Vector &nd8Crds = theNodes[7]->getCrds();
 //
 ////  J(0,0) = -nd1Crds(0)*(1.0-eta) + nd2Crds(0)*(1.0-eta) +
 ////        nd3Crds(0)*(1.0+eta) - nd4Crds(0)*(1.0+eta);

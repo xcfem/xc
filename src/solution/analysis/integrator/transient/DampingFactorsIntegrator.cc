@@ -40,7 +40,7 @@ XC::DampingFactorsIntegrator::DampingFactorsIntegrator(SoluMethod *owr,int class
 void XC::DampingFactorsIntegrator::setRayleighDampingFactors(void)
   {
     // if damping factors exist set them in the ele & node of the domain
-    if(!rayFactors.Nulos())
+    if(!rayFactors.nullValues())
       Integrator::setRayleighDampingFactors(rayFactors);
   }
 

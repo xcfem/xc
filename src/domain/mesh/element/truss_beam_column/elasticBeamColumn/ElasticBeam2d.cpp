@@ -488,13 +488,13 @@ const XC::Vector &XC::ElasticBeam2d::getResistingForceIncInertia(void) const
     P= getResistingForce();
 
     // add the damping forces if rayleigh damping
-    if(!rayFactors.Nulos())
+    if(!rayFactors.nullValues())
       P+= this->getRayleighDampingForces();
 
     if(rho!=0.0)
       {
-        const XC::Vector &accel1 = theNodes[0]->getTrialAccel();
-        const XC::Vector &accel2 = theNodes[1]->getTrialAccel();
+        const Vector &accel1 = theNodes[0]->getTrialAccel();
+        const Vector &accel2 = theNodes[1]->getTrialAccel();
 
         const double L = theCoordTransf->getInitialLength();
         const double m = 0.5*rho*L;

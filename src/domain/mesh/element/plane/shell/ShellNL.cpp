@@ -382,9 +382,8 @@ const XC::Vector &XC::ShellNL::getResistingForceIncInertia(void) const
     formInertiaTerms(0);
 
     // add the damping forces if rayleigh damping
-    if(!rayFactors.Nulos())
-      res += this->getRayleighDampingForces();
-
+    if(!rayFactors.nullValues())
+      res+= this->getRayleighDampingForces();
     return res;
   }
 //! @brief form inertia terms

@@ -505,8 +505,8 @@ const XC::Vector &XC::ElasticBeam3d::getResistingForceIncInertia(void) const
     P = this->getResistingForce();
 
     // add the damping forces if rayleigh damping
-    if(!rayFactors.Nulos())
-      P += this->getRayleighDampingForces();
+    if(!rayFactors.nullValues())
+      P+= this->getRayleighDampingForces();
 
     if(rho == 0.0)
       return P;

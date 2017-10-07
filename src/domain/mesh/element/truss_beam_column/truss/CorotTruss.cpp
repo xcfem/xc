@@ -515,8 +515,8 @@ const XC::Vector &XC::CorotTruss::getResistingForceIncInertia(void) const
       }
 
     // add the damping forces if rayleigh damping
-    if(!rayFactors.Nulos())
-      *theVector += this->getRayleighDampingForces();
+    if(!rayFactors.nullValues())
+      *theVector+= this->getRayleighDampingForces();
 
     if(isDead())
       (*theVector)*=dead_srf; //XXX Se aplica 2 veces sobre getResistingForce: arreglar.

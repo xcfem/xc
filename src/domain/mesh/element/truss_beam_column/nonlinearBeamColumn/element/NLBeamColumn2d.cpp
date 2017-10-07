@@ -941,33 +941,34 @@ int XC::NLBeamColumn2d::addInertiaLoadToUnbalance(const XC::Vector &accel)
 }
 
 const XC::Vector &XC::NLBeamColumn2d::getResistingForceIncInertia(void) const
-{
-  // Compute the current resisting force
-  theVector = this->getResistingForce();
+  {
+    // Compute the current resisting force
+    theVector = this->getResistingForce();
 
-  // Check for a XC::quick return
-  if(rho != 0.0) {
-    const XC::Vector &accel1 = theNodes[0]->getTrialAccel();
-    const XC::Vector &accel2 = theNodes[1]->getTrialAccel();
+    // Check for a quick return
+    if(rho != 0.0)
+      {
+        const Vector &accel1 = theNodes[0]->getTrialAccel();
+        const Vector &accel2 = theNodes[1]->getTrialAccel();
 
-    double L = theCoordTransf->getInitialLength();
-    double m = 0.5*rho*L;
+	const double L = theCoordTransf->getInitialLength();
+	const double m = 0.5*rho*L;
 
-    theVector(0) += m*accel1(0);
-    theVector(1) += m*accel1(1);
-    theVector(3) += m*accel2(0);
-    theVector(4) += m*accel2(1);
+	theVector(0) += m*accel1(0);
+	theVector(1) += m*accel1(1);
+	theVector(3) += m*accel2(0);
+	theVector(4) += m*accel2(1);
 
-    // add the damping forces if rayleigh damping
-    if(!rayFactors.Nulos())
-      theVector += this->getRayleighDampingForces();
-
-  } else {
-    // add the damping forces if rayleigh damping
-    if(!rayFactors.KNulos())
-      theVector += this->getRayleighDampingForces();
-  }
-
+	// add the damping forces if rayleigh damping
+	if(!rayFactors.nullValues())
+	  theVector+= this->getRayleighDampingForces();
+      }
+    else
+      {
+	// add the damping forces if rayleigh damping
+	if(!rayFactors.nullKValues())
+	  theVector+= this->getRayleighDampingForces();
+      }
     if(isDead())
       theVector*=dead_srf;
     return theVector;

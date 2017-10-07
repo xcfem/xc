@@ -975,13 +975,13 @@ const XC::Vector &XC::ForceBeamColumn3d::getResistingForceIncInertia(void) const
         theVector(8) += m*accel2(2);
 
         // add the damping forces if rayleigh damping
-        if(!rayFactors.Nulos())
-          theVector += this->getRayleighDampingForces();
+        if(!rayFactors.nullValues())
+          theVector+= this->getRayleighDampingForces();
       }
     else
       {
         // add the damping forces if rayleigh damping
-        if(!rayFactors.KNulos())
+        if(!rayFactors.nullKValues())
           theVector+= this->getRayleighDampingForces();
       }
     if(isDead())

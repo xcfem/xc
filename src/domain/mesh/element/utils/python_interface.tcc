@@ -26,14 +26,19 @@ class_<XC::Information, boost::noncopyable >("Information", no_init);
 class_<XC::ParticlePos3d>("ParticlePos3d")
   .def(init<Pos2d>())
   .def(init<Pos3d>())
-  .add_property("r", make_function( &XC::ParticlePos3d::r_coordinate, return_value_policy<return_by_value>()), &XC::ParticlePos3d::set_r_coordinate, "Return r coordinate.")
-  .add_property("s", make_function( &XC::ParticlePos3d::s_coordinate, return_value_policy<return_by_value>()), &XC::ParticlePos3d::set_s_coordinate, "Return s coordinate.")
-  .add_property("t", make_function( &XC::ParticlePos3d::t_coordinate, return_value_policy<return_by_value>()), &XC::ParticlePos3d::set_t_coordinate, "Return t coordinate.")
+  .add_property("r", make_function( &XC::ParticlePos3d::r_coordinate, return_value_policy<return_by_value>()), &XC::ParticlePos3d::set_r_coordinate, "r coordinate.")
+  .add_property("s", make_function( &XC::ParticlePos3d::s_coordinate, return_value_policy<return_by_value>()), &XC::ParticlePos3d::set_s_coordinate, "s coordinate.")
+  .add_property("t", make_function( &XC::ParticlePos3d::t_coordinate, return_value_policy<return_by_value>()), &XC::ParticlePos3d::set_t_coordinate, "t coordinate.")
   .def(self_ns::str(self_ns::self))
   ;
 
 class_<XC::RayleighDampingFactors, bases<EntCmd> >("RayleighDampingFactors")
   .def(init<double,double,double,double>())
+  .add_property("alphaM",make_function( &XC::RayleighDampingFactors::getAlphaM, return_value_policy<return_by_value>()), &XC::RayleighDampingFactors::setAlphaM, "factor applied to elements or nodes mass matrix.")
+  .add_property("betaK",make_function( &XC::RayleighDampingFactors::getBetaK, return_value_policy<return_by_value>()), &XC::RayleighDampingFactors::setBetaK, "factor applied to elements current stiffness matrix.")
+  .add_property("betaKinit",make_function( &XC::RayleighDampingFactors::getBetaK0, return_value_policy<return_by_value>()), &XC::RayleighDampingFactors::setBetaK0, "factor applied to elements initial stiffness matrix.")
+  .add_property("betaKcommit",make_function( &XC::RayleighDampingFactors::getBetaKc, return_value_policy<return_by_value>()), &XC::RayleighDampingFactors::setBetaKc, "factor applied to elements committed stiffness matrix.")
+  .def(self_ns::str(self_ns::self))
   ;
 
 typedef XC::NodePtrs::vector_ptr_nodes vector_ptr_nodes;

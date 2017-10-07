@@ -340,7 +340,7 @@ const XC::Vector &XC::ZeroLengthSection::getResistingForceIncInertia(void) const
     this->getResistingForce();
 
     // add the damping forces if rayleigh damping
-    if(!rayFactors.KNulos())
+    if(!rayFactors.nullKValues())
       *P += this->getRayleighDampingForces();
     if(isDead())
       (*P)*=dead_srf;

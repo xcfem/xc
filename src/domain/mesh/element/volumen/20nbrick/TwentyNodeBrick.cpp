@@ -3231,7 +3231,7 @@ const XC::Vector &XC::TwentyNodeBrick::getResistingForceIncInertia(void) const
         const Vector &accel19 = theNodes[18]->getTrialAccel();
         const Vector &accel20 = theNodes[19]->getTrialAccel();
 
-        static XC::Vector a(60);  // originally 8
+        static Vector a(60);  // originally 8
 
         a( 0) = accel1(0);
         a( 1) = accel1(1);
@@ -3298,13 +3298,13 @@ const XC::Vector &XC::TwentyNodeBrick::getResistingForceIncInertia(void) const
         P.addMatrixVector(1.0, M, a, 1.0);
 
         // add the damping forces if rayleigh damping
-        if(!rayFactors.Nulos())
-          P += this->getRayleighDampingForces();
+        if(!rayFactors.nullValues())
+          P+= this->getRayleighDampingForces();
       }
     else
       {
         // add the damping forces if rayleigh damping
-        if(!rayFactors.KNulos())
+        if(!rayFactors.nullKValues())
           P+= this->getRayleighDampingForces();
       }
     if(isDead())

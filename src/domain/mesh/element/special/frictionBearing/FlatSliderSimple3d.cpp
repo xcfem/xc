@@ -406,28 +406,28 @@ const XC::Vector& XC::FlatSliderSimple3d::getResistingForce()
 }
 
 
-const XC::Vector& XC::FlatSliderSimple3d::getResistingForceIncInertia()
+const XC::Vector &XC::FlatSliderSimple3d::getResistingForceIncInertia()
   {	
     theVector = this->getResistingForce();
 	
-	// add the damping forces if rayleigh damping
-    if(!rayFactors.Nulos())
-      theVector += this->getRayleighDampingForces();
+    // add the damping forces if rayleigh damping
+    if(!rayFactors.nullValues())
+      theVector+= this->getRayleighDampingForces();
     
-	// now include the mass portion
-	if (mass != 0.0)  {
-		const Vector &accel1 = theNodes[0]->getTrialAccel();
-		const Vector &accel2 = theNodes[1]->getTrialAccel();    
-		
-		double m = 0.5*mass;
-		for (int i=0; i<3; i++)  {
-			theVector(i)   += m * accel1(i);
-			theVector(i+3) += m * accel2(i);
-		}
-	}
-	
-	return theVector;
-}
+    // now include the mass portion
+    if(mass != 0.0)
+      {
+	const Vector &accel1= theNodes[0]->getTrialAccel();
+	const Vector &accel2= theNodes[1]->getTrialAccel();    
+	const double m = 0.5*mass;
+	for (int i=0; i<3; i++)
+	  {
+	    theVector(i)   += m * accel1(i);
+	    theVector(i+3) += m * accel2(i);
+	  }
+      }
+    return theVector;
+  }
 
 //! @brief Send members through the channel being passed as parameter.
 int XC::FlatSliderSimple3d::sendData(CommParameters &cp)

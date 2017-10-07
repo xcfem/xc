@@ -363,31 +363,32 @@ const XC::Vector& XC::SingleFPSimple2d::getResistingForce()
     theVector.addVector(1.0, load, -1.0);
     
     return theVector;
-}
+  }
 
 
 const XC::Vector& XC::SingleFPSimple2d::getResistingForceIncInertia()
-{	
-	theVector = this->getResistingForce();
+  {	
+    theVector = this->getResistingForce();
 	
-	// add the damping forces if rayleigh damping
-    if(!rayFactors.Nulos())
+    // add the damping forces if rayleigh damping
+    if(!rayFactors.nullValues())
       theVector += this->getRayleighDampingForces();
     
-	// now include the mass portion
-	if (mass != 0.0)  {
-		const Vector &accel1 = theNodes[0]->getTrialAccel();
-		const Vector &accel2 = theNodes[1]->getTrialAccel();    
+    // now include the mass portion
+    if(mass != 0.0)
+      {
+	const Vector &accel1 = theNodes[0]->getTrialAccel();
+	const Vector &accel2 = theNodes[1]->getTrialAccel();    
 		
-		double m = 0.5*mass;
-		for (int i=0; i<2; i++)  {
-			theVector(i)   += m * accel1(i);
-			theVector(i+3) += m * accel2(i);
-		}
-	}
-	
-	return theVector;
-}
+	const double m = 0.5*mass;
+	for (int i=0; i<2; i++)
+	  {
+	    theVector(i)+= m * accel1(i);
+	    theVector(i+3) += m * accel2(i);
+	  }
+      }
+    return theVector;
+  }
 
 //! @brief Send members through the channel being passed as parameter.
 int XC::SingleFPSimple2d::sendData(CommParameters &cp)

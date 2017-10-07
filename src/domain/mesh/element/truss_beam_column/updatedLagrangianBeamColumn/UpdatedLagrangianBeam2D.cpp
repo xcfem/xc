@@ -539,10 +539,10 @@ const XC::Vector &XC::UpdatedLagrangianBeam2D::getResistingForceIncInertia(void)
   {
     // check for XC::quick return
     if(L == 0)
-        return ZeroVector;
+      return ZeroVector;
 
     // form the stiffness matrix - we will do a P-kU-MA
-    force = this->getResistingForce(); // now we have P-Ku
+    force= this->getResistingForce(); // now we have P-Ku
 
     // massDof <  0 for distributed mass
     // massDof =  0 if mass is specified at nodes
@@ -551,39 +551,42 @@ const XC::Vector &XC::UpdatedLagrangianBeam2D::getResistingForceIncInertia(void)
 
     // determine -Ma
     // optimize for lumped mass
-    if(massDof != 0) {
-      if(massDof > 0) {
-        const XC::Vector &end1Accel = end1Ptr()->getTrialAccel();
-        const XC::Vector &end2Accel = end2Ptr()->getTrialAccel();
-        force(0) -= massDof*end1Accel(0);
-        force(1) -= massDof*end1Accel(1);
-        force(3) -= massDof*end2Accel(0);
-        force(4) -= massDof*end2Accel(1);
-      } else if(massDof < 0) {
-        M = this->getMass();
-
-        const XC::Vector &end1Accel = end1Ptr()->getTrialAccel();
-        const XC::Vector &end2Accel = end2Ptr()->getTrialAccel();
-        Vector Accel(6), f(6);
-        int i=0;
-        for(i=0; i<3; i++)
-          {
-            Accel(i)   = end1Accel(i);
-            Accel(i+3) = end2Accel(i);
-          }
-        f = M*Accel;
-        for(i=0; i<6; i++) force(i) -= f(i);
+    if(massDof != 0)
+      {
+	if(massDof > 0)
+	  {
+	    const Vector &end1Accel = end1Ptr()->getTrialAccel();
+	    const Vector &end2Accel = end2Ptr()->getTrialAccel();
+	    force(0) -= massDof*end1Accel(0);
+	    force(1) -= massDof*end1Accel(1);
+	    force(3) -= massDof*end2Accel(0);
+	    force(4) -= massDof*end2Accel(1);
+	  }
+	else if(massDof < 0)
+	  {
+	    M = this->getMass();
+	    const Vector &end1Accel = end1Ptr()->getTrialAccel();
+	    const Vector &end2Accel = end2Ptr()->getTrialAccel();
+	    Vector Accel(6), f(6);
+	    for(int i=0; i<3; i++)
+	      {
+		Accel(i)   = end1Accel(i);
+		Accel(i+3) = end2Accel(i);
+	      }
+	    f = M*Accel;
+	    for(int i=0; i<6; i++)
+	      force(i) -= f(i);
+	  }
+	if(!rayFactors.nullValues())
+	  force+= this->getRayleighDampingForces();
       }
-
-      if(!rayFactors.Nulos())
-        force += this->getRayleighDampingForces();
-    } else {
-
-      if(!rayFactors.KNulos())
-        force += this->getRayleighDampingForces();
-    }
+    else
+      {
+        if(!rayFactors.nullKValues())
+          force+= this->getRayleighDampingForces();
+      }
     if(isDead())
-      force*=dead_srf; //XXX Se aplica 2 veces sobre getResistingForce: arreglar.
+      force*=dead_srf; //XXX Applied twice over getResistingForce: to fix.
     return force;
   }
 

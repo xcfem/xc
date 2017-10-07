@@ -630,11 +630,11 @@ const XC::Vector &XC::Truss::getResistingForceIncInertia(void) const
     if(L != 0.0 && rho != 0.0)
       {
 
-        const XC::Vector &accel1 = theNodes[0]->getTrialAccel();
-        const XC::Vector &accel2 = theNodes[1]->getTrialAccel();
+        const Vector &accel1 = theNodes[0]->getTrialAccel();
+        const Vector &accel2 = theNodes[1]->getTrialAccel();
 
-        int numDOF2 = numDOF/2;
-        double M = 0.5*rho*L;
+        const int numDOF2 = numDOF/2;
+        const double M = 0.5*rho*L;
         for(int i = 0; i < getNumDIM(); i++)
           {
             (*theVector)(i) += M*accel1(i);
@@ -642,13 +642,13 @@ const XC::Vector &XC::Truss::getResistingForceIncInertia(void) const
           }
 
         // add the damping forces if rayleigh damping
-        if(!rayFactors.Nulos())
-          (*theVector) += this->getRayleighDampingForces();
+        if(!rayFactors.nullValues())
+          (*theVector)+= this->getRayleighDampingForces();
       }
     else
       {
         // add the damping forces if rayleigh damping
-        if(!rayFactors.KNulos())
+        if(!rayFactors.nullKValues())
           (*theVector) += this->getRayleighDampingForces();
       }
     if(isDead())

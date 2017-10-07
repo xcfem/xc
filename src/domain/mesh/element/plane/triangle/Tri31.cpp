@@ -447,7 +447,7 @@ const XC::Vector &XC::Tri31::getResistingForceIncInertia() const
         this->getResistingForce();
 
         // add the damping forces if rayleigh damping
-        if(!rayFactors.KNulos())
+        if(!rayFactors.nullKValues())
           P += this->getRayleighDampingForces();
         return P;
       }
@@ -475,8 +475,8 @@ const XC::Vector &XC::Tri31::getResistingForceIncInertia() const
     for(int i = 0; i < 2*numNodos(); i++) P(i) += K(i,i)*a[i];
 
     // add the damping forces if rayleigh damping
-    if(!rayFactors.Nulos())
-      P += this->getRayleighDampingForces();
+    if(!rayFactors.nullValues())
+      P+= this->getRayleighDampingForces();
     if(isDead())
       P*=dead_srf;
     return P;

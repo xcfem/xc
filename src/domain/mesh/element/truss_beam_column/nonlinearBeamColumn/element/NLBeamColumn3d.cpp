@@ -926,8 +926,8 @@ const XC::Vector &XC::NLBeamColumn3d::getResistingForceIncInertia(void) const
 
     if(rho != 0.0)
       {
-        const XC::Vector &accel1 = theNodes[0]->getTrialAccel();
-        const XC::Vector &accel2 = theNodes[1]->getTrialAccel();
+        const Vector &accel1 = theNodes[0]->getTrialAccel();
+        const Vector &accel2 = theNodes[1]->getTrialAccel();
 
        // Compute the current resisting force
        theVector = this->getResistingForce();
@@ -943,13 +943,13 @@ const XC::Vector &XC::NLBeamColumn3d::getResistingForceIncInertia(void) const
        theVector(8)+= m*accel2(2);
 
       // add the damping forces if rayleigh damping
-      if(!rayFactors.Nulos())
+      if(!rayFactors.nullValues())
         theVector+= this->getRayleighDampingForces();
       }
     else
       {
         // add the damping forces if rayleigh damping
-        if(!rayFactors.KNulos())
+        if(!rayFactors.nullKValues())
           theVector+= this->getRayleighDampingForces();
       }
     if(isDead())

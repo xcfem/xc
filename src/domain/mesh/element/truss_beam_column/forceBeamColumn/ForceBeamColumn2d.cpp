@@ -879,8 +879,8 @@ const XC::Vector &XC::ForceBeamColumn2d::getResistingForceIncInertia(void) const
     // Check for a quick return
     if(rho != 0.0)
       {
-        const XC::Vector &accel1 = theNodes[0]->getTrialAccel();
-        const XC::Vector &accel2 = theNodes[1]->getTrialAccel();
+        const Vector &accel1 = theNodes[0]->getTrialAccel();
+        const Vector &accel2 = theNodes[1]->getTrialAccel();
 
         const double L = theCoordTransf->getInitialLength();
         const double m = 0.5*rho*L;
@@ -891,17 +891,17 @@ const XC::Vector &XC::ForceBeamColumn2d::getResistingForceIncInertia(void) const
         theVector(4) += m*accel2(1);
 
         // add the damping forces if rayleigh damping
-        if(!rayFactors.Nulos())
-          theVector += this->getRayleighDampingForces();
+        if(!rayFactors.nullValues())
+          theVector+= this->getRayleighDampingForces();
       }
     else
       {
         // add the damping forces if rayleigh damping
-        if(!rayFactors.KNulos())
-          theVector += this->getRayleighDampingForces();
+        if(!rayFactors.nullKValues())
+          theVector+= this->getRayleighDampingForces();
       }
     if(isDead())
-      theVector*=dead_srf; //XXX Se aplica 2 veces sobre getResistingForce: arreglar.
+      theVector*=dead_srf; //XXX Applied twice over getResistingForce: to fix.
     return theVector;
   }
 

@@ -467,8 +467,8 @@ const XC::Vector &XC::Brick::getResistingForce(void) const
   }
 
 
-//get residual with inertia terms
-const XC::Vector&  XC::Brick::getResistingForceIncInertia(void) const
+//! @brief Get residual with inertia terms.
+const XC::Vector &XC::Brick::getResistingForceIncInertia(void) const
   {
     static Vector res(24);
 
@@ -481,8 +481,8 @@ const XC::Vector&  XC::Brick::getResistingForceIncInertia(void) const
     res = resid;
 
     // add the damping forces if rayleigh damping
-    if(!rayFactors.Nulos())
-      res += this->getRayleighDampingForces();
+    if(!rayFactors.nullValues())
+      res+= this->getRayleighDampingForces();
 
     if(!load.Nulo())
       res-= load;
