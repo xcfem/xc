@@ -14,7 +14,7 @@ nuC= 0.2 # Concrete Poisson's ratio EHE-08.
 hLosa= 0.2 # Thickness.
 densLosa= 2500*hLosa # Deck density kg/m2.
 # Load
-F= 5.5e4 # Load magnitude en N
+F= 5.5e4 # Load magnitude in N
 
 # Armadura activa
 Ep= 190e9 # Elastic modulus expressed in MPa
