@@ -39,6 +39,7 @@ namespace XC {
 class PropRecorder: public Recorder
   {
   protected:
+    std::string CallbackSetup; //!< Python script to execute before any record calls.
     std::string CallbackRecord; //!< Python script to execute on each record call.
     std::string CallbackRestart; //!< Python script to execute on each restart call.
     int lastCommitTag; //!< CommitTag of the last record call.
@@ -46,14 +47,17 @@ class PropRecorder: public Recorder
 
     Domain *theDomain; //!< poiter to the domain.
 
+    void callSetupCallback(const int &,const double &);
     template <class Container>
-    void callRecordCallback(Container &c,const int &commitTag,const double &timeStamp);
+    void callRecordCallback(Container &c,const int &,const double &);
     template <class Container>
     void callRestartCallback(Container &c);
   public:
     PropRecorder(int classTag, Domain *ptr_dom= nullptr);
 
     int setDomain(Domain &theDomain);
+    inline Domain *getDomain(void)
+      { return theDomain; }
     std::string getNombreCombActual(void) const;
 
     inline int getLastCommitTag(void) const
@@ -64,6 +68,8 @@ class PropRecorder: public Recorder
     double getCommittedTime(void) const;
     int getCommitTag(void) const;
 
+    void setCallbackSetup(const std::string &);
+    std::string getCallbackSetup(void);
     void setCallbackRecord(const std::string &);
     std::string getCallbackRecord(void);
     void setCallbackRestart(const std::string &);
@@ -75,8 +81,7 @@ class PropRecorder: public Recorder
 template <class Container>
 void XC::PropRecorder::callRecordCallback(Container &c,const int &commitTag,const double &timeStamp)
   {
-    this->lastCommitTag= commitTag;
-    this->lastTimeStamp= timeStamp;
+    this->callSetupCallback(commitTag,timeStamp);
     for(typename Container::iterator i= c.begin();i!=c.end();i++)
       {
 	typename Container::value_type tmp= *i;

@@ -80,9 +80,8 @@ class NodeRecorder: public NodeRecorderBase
     int sensitivity;
     // AddingSensitivity:END ////////////////////////////////
 
-    void setup_dofs(const XC::ID &dofs);
-    void setup_nodes(const XC::ID &nodes);
-    void setup_data_flag(const std::string &dataToStore);
+    void setup_dofs(const ID &dofs);
+    void setup_nodes(const ID &nodes);
   protected:
     int sendData(CommParameters &);  
     int receiveData(const CommParameters &);
@@ -94,6 +93,7 @@ class NodeRecorder: public NodeRecorderBase
 		 Domain &theDomain, DataOutputHandler &theOutputHandler,
 		 double deltaT = 0.0, bool echoTimeFlag = true); 
 
+    void setupDataFlag(const std::string &dataToStore);
     int record(int commitTag, double timeStamp);
 
     int sendSelf(CommParameters &);  

@@ -75,7 +75,7 @@
 #include "boost/lexical_cast.hpp"
 
 //! @brief store copy of dof's to be recorder, verifying dof are valid, i.e. >= 0
-void XC::NodeRecorder::setup_dofs(const XC::ID &dofs)
+void XC::NodeRecorder::setup_dofs(const ID &dofs)
   {
     const int numDOF = dofs.Size();
     if(numDOF != 0)
@@ -101,44 +101,45 @@ void XC::NodeRecorder::setup_dofs(const XC::ID &dofs)
   }
 
 //! @brief create memory to hold nodal XC::ID's (neeed parallel).
-void XC::NodeRecorder::setup_nodes(const XC::ID &nodes)
+void XC::NodeRecorder::setup_nodes(const ID &nodes)
   {
     const int numNode = nodes.Size();
     if(numNode != 0)
       {
-        theNodalTags = new XC::ID(nodes);
+        theNodalTags = new ID(nodes);
         if(theNodalTags == 0)
-          { std::cerr << "XC::NodeRecorder::NodeRecorder - out of memory\n"; }
+          std::cerr << getClassName() << "::" << __FUNCTION__
+	            << "; out of memory\n";
       }
   }
 
 //! @brief set the data flag used as a switch to get the response in a record
-void XC::NodeRecorder::setup_data_flag(const std::string &dataToStore)
+void XC::NodeRecorder::setupDataFlag(const std::string &dataToStore)
   {
-    std::deque<std::string> campos= separa_cadena(dataToStore," ");
+    std::deque<std::string> fields= separa_cadena(dataToStore," ");
     int entero= -1;
-    if(campos.size()>1) entero= boost::lexical_cast<int>(campos[1]);
+    if(fields.size()>1) entero= boost::lexical_cast<int>(fields[1]);
 
-    if(dataToStore.size() == 0 || (campos[0]== "disp"))
+    if(dataToStore.size() == 0 || (fields[0]== "disp"))
       { dataFlag = 0; }
-    else if((campos[0]== "vel"))
+    else if((fields[0]== "vel"))
       { dataFlag = 1; }
-    else if((campos[0]== "accel"))
+    else if((fields[0]== "accel"))
       { dataFlag = 2; }
-    else if((campos[0]== "incrDisp"))
+    else if((fields[0]== "incrDisp"))
       { dataFlag = 3; }
-    else if((campos[0]== "incrDeltaDisp"))
+    else if((fields[0]== "incrDeltaDisp"))
       { dataFlag = 4; }
-    else if((campos[0]== "unbalance"))
+    else if((fields[0]== "unbalance"))
       { dataFlag = 5; }
-    else if((campos[0]== "unbalanceInclInertia"))
+    else if((fields[0]== "unbalanceInclInertia"))
       { dataFlag = 6; }
-    else if((campos[0]== "reaction"))
+    else if((fields[0]== "reaction"))
       { dataFlag = 7; }
-    else if( (campos[0]== "reactionIncInertia") || 
-              (campos[0]== "reactionIncludingInertia"))
+    else if( (fields[0]== "reactionIncInertia") || 
+              (fields[0]== "reactionIncludingInertia"))
       { dataFlag = 8; }
-    else if(campos[0] == "eigen")
+    else if(fields[0] == "eigen")
       {
         int mode= entero;
         if(mode > 0)
@@ -146,7 +147,7 @@ void XC::NodeRecorder::setup_data_flag(const std::string &dataToStore)
         else
           dataFlag = 6;
       }
-    else if(campos[0] == "sensitivity")
+    else if(fields[0] == "sensitivity")
       {
         int grad= entero;
         if(grad > 0)
@@ -154,7 +155,7 @@ void XC::NodeRecorder::setup_data_flag(const std::string &dataToStore)
         else
           dataFlag = 6;
       }
-    else if(campos[0] == "velSensitivity")
+    else if(fields[0] == "velSensitivity")
       {
         int grad= entero;
         if(grad > 0)
@@ -162,7 +163,7 @@ void XC::NodeRecorder::setup_data_flag(const std::string &dataToStore)
         else
           dataFlag = 6;
       }
-    else if(campos[0] == "accSensitivity")
+    else if(fields[0] == "accSensitivity")
       {
         int grad= entero;
         if(grad > 0)
@@ -173,8 +174,9 @@ void XC::NodeRecorder::setup_data_flag(const std::string &dataToStore)
     else
       {
         dataFlag = 6;
-        std::cerr << "XC::NodeRecorder::NodeRecorder - dataToStore " << dataToStore;
-        std::cerr << "not recognized (disp, vel, accel, incrDisp, incrDeltaDisp)\n";
+        std::cerr << getClassName() << "::" << __FUNCTION__
+	          << "; dataToStore " << dataToStore
+		  << "not recognized (disp, vel, accel, incrDisp, incrDeltaDisp)\n";
       }
   }
 
@@ -193,7 +195,7 @@ XC::NodeRecorder::NodeRecorder(const ID &dofs, const ID &nodes,
   {
     setup_dofs(dofs);
     setup_nodes(nodes);
-    setup_data_flag(dataToStore);
+    setupDataFlag(dataToStore);
   }
 
 int XC::NodeRecorder::record(int commitTag, double timeStamp)

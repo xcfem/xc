@@ -36,7 +36,7 @@ namespace XC {
 class Domain;
 class FE_Datastore;
 class DataOutputHandler;
- class ID;
+class ID;
 
 //! @ingroup Recorder
 //
@@ -58,7 +58,8 @@ class NodeRecorderBase: public MeshCompRecorder
   public:
     NodeRecorderBase(int classTag);
     NodeRecorderBase(int classTag, const ID &theDof, 
-		     const ID &theNodes, Domain &theDomain, DataOutputHandler &theOutputHandler,
+		     const ID &theNodes, Domain &theDomain,
+		     DataOutputHandler &theOutputHandler,
 		     double deltaT = 0.0, bool echoTimeFlag = true); 
     ~NodeRecorderBase(void);
 

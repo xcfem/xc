@@ -60,10 +60,25 @@ std::string XC::PropRecorder::getNombreCombActual(void) const
     return retval;
   }
 
+//! @brief Runs setup callback.
+void XC::PropRecorder::callSetupCallback(const int &commitTag,const double &timeStamp)
+  {
+    this->lastCommitTag= commitTag;
+    this->lastTimeStamp= timeStamp;
+    boost::python::object pyObj(boost::ref(*this));
+    if(!CallbackSetup.empty())
+      EntCmd_exec(pyObj,CallbackSetup);
+  }
+
+
 void XC::PropRecorder::setCallbackRecord(const std::string &str)
   { CallbackRecord= str; }
 std::string XC::PropRecorder::getCallbackRecord(void)
   { return CallbackRecord; }
+void XC::PropRecorder::setCallbackSetup(const std::string &str)
+  { CallbackSetup= str; }
+std::string XC::PropRecorder::getCallbackSetup(void)
+  { return CallbackSetup; }
 void XC::PropRecorder::setCallbackRestart(const std::string &str)
   { CallbackRestart= str; }
 std::string XC::PropRecorder::getCallbackRestart(void)

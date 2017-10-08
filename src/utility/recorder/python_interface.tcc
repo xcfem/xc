@@ -35,6 +35,7 @@ class_<XC::DomainRecorderBase, bases<XC::Recorder>, boost::noncopyable >("Domain
 //class_<XC::FilePlotter , bases<XC::Recorder>, boost::noncopyable >("FilePlotter", no_init);
 
 class_<XC::PropRecorder, bases<XC::Recorder>, boost::noncopyable >("PropRecorder", no_init)
+  .add_property("callbackSetup",&XC::PropRecorder::getCallbackSetup,&XC::PropRecorder::setCallbackSetup,"Assigns code to execute to setup recording.")
   .add_property("callbackRecord",&XC::PropRecorder::getCallbackRecord,&XC::PropRecorder::setCallbackRecord,"Assigns code to execute while recording.")
   .add_property("callbackRestart",&XC::PropRecorder::getCallbackRestart,&XC::PropRecorder::setCallbackRestart,"Assigns code to execute while restartingg.")
   .add_property("getLastCommitTag",&XC::PropRecorder::getLastCommitTag)
@@ -43,6 +44,7 @@ class_<XC::PropRecorder, bases<XC::Recorder>, boost::noncopyable >("PropRecorder
   .add_property("getCommittedTime",&XC::PropRecorder::getCommittedTime)
   .add_property("getCommitTag",&XC::PropRecorder::getCommitTag)
   .add_property("getNombreCombActual",&XC::PropRecorder::getNombreCombActual)
+  .add_property("getDomain", make_function( &XC::PropRecorder::getDomain, return_internal_reference<>() ),"Returns a reference to the domain.")
   ;
 
 class_<XC::NodePropRecorder, bases<XC::PropRecorder>, boost::noncopyable >("NodePropRecorder", no_init)

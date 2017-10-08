@@ -31,6 +31,7 @@
 #include <domain/mesh/node/Node.h>
 #include <domain/mesh/element/Element.h>
 #include "xc_utils/src/nucleo/python_utils.h"
+#include <boost/algorithm/string/predicate.hpp>
 
 //! @brief Constructor.
 XC::NodePropRecorder::NodePropRecorder(Domain *ptr_dom)
@@ -49,6 +50,7 @@ void XC::NodePropRecorder::setNodes(const ID &iNodos)
       std::cerr << "Error; " << getClassName() << "::" << __FUNCTION__
                 << " node list is empty." << std::endl;
   }
+
 
 //! @brief Records object properties when commit is triggered.
 int XC::NodePropRecorder::record(int commitTag, double timeStamp)

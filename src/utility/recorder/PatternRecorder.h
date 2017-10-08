@@ -71,8 +71,7 @@ class PatternRecorder: public DomainRecorderBase
   {
   private:
     int thePattern;
-    int flag;   // flag indicating whether time, load factor or nothing printed
-	        // at start of each line in file
+    int flag; //!< flag indicating whether time, load factor or nothing printed at start of each line in file
     std::string fileName;
     std::ofstream theFile;     
 
