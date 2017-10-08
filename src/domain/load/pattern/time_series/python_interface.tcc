@@ -23,7 +23,8 @@
 
 
 class_<XC::CFactorSeries, bases<XC::TimeSeries>, boost::noncopyable >("CFactorSeries", no_init)
-  .add_property("factor", &XC::CFactorSeries::getFactor,&XC::CFactorSeries::setFactor)
+  .def("getFactor",&XC::CFactorSeries::getFactor,"getFactor(time): return factor value at specified time.")
+  .def("setFactor",&XC::CFactorSeries::setFactor,"setFactor(factor): sets factor value.")
   ;
 
 class_<XC::ConstantSeries, bases<XC::CFactorSeries>, boost::noncopyable >("ConstantSeries", no_init)
@@ -52,7 +53,8 @@ class_<XC::PathSeriesBase, bases<XC::CFactorSeries>, boost::noncopyable >("PathS
   ;
 
 class_<XC::PathSeries, bases<XC::PathSeriesBase>, boost::noncopyable >("PathSeries", no_init)
-  .add_property("pathTimeIncr", &XC::PathSeries::getPathTimeIncr,&XC::PathSeries::setPathTimeIncr)
+  .def("getTimeIncr",&XC::PathSeries::getTimeIncr,"getTimeIncr(time): return time increment.")
+  .def("setTimeIncr",&XC::PathSeries::setTimeIncr,"setTimeIncr(factor): sets time increment.")
   .def("readFromFile",&XC::PathSeries::readFromFile,"Read motion data from file.")
   ;
 

@@ -40,7 +40,7 @@ motionPathSize= mr.history.getNumberOfDataPoints()
 motionFactor= mr.history.accel.getFactor(0.5)
 motionPeakFactor= mr.history.accel.getPeakFactor
 motionLastSendCommitTag= mr.history.accel.lastSendCommitTag
-motionPathTimeIncrement= mr.history.accel.pathTimeIncr
+motionPathTimeIncrement= mr.history.accel.getTimeIncr(0.5)
 
 ratio1= (motionDuration-4)/4
 ratio2= (motionFactor-1.5)/1.5

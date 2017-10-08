@@ -51,8 +51,8 @@ class PathSeriesBase: public CFactorSeries
     int recvData(const CommParameters &cp);
   public:
     // constructors
-    PathSeriesBase(int classTag,const double &cfactor= 1.0);
-    PathSeriesBase(int classTag,const Vector &thePath,const double &cfactor= 1.0);
+    PathSeriesBase(int classTag,const double &cf= 1.0);
+    PathSeriesBase(int classTag,const Vector &thePath,const double &cf= 1.0);
 
     size_t getNumDataPoints(void) const;
     size_t getNumDataPointsOnFile(const std::string &) const;

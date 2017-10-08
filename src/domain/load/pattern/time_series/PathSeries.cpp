@@ -78,7 +78,7 @@ XC::PathSeries::PathSeries(void)
 
 		   
 //! @brief Constructor.
-XC::PathSeries::PathSeries(const XC::Vector &theLoadPath, double theTimeIncr, double theFactor)
+XC::PathSeries::PathSeries(const Vector &theLoadPath, double theTimeIncr, double theFactor)
   :PathSeriesBase(TSERIES_TAG_PathSeries,theLoadPath,theFactor), pathTimeIncr(theTimeIncr) {}
 
 
@@ -100,8 +100,8 @@ void XC::PathSeries::readFromFile(const std::string &fileName)
         theFile1.open(fileName.c_str(), std::ios::in);
         if(theFile1.bad() || !theFile1.is_open())
           {
-            std::cerr << "WARNING - XC::PathSeries::PathSeries()";
-            std::cerr << " - could not open file " << fileName << std::endl;
+            std::cerr << getClassName() << "::" << __FUNCTION__
+		      << "; could not open file: " << fileName << std::endl;
           }
         else
           {
@@ -117,14 +117,13 @@ void XC::PathSeries::readFromFile(const std::string &fileName)
 double XC::PathSeries::getFactor(double pseudoTime) const
   {
     double retval= 0.0;
-    // check for a quick return
     if(pseudoTime > 0.0)
       {
 
         // determine indexes into the data array whose boundary holds the time
-        double incr = pseudoTime/pathTimeIncr;
-        int incr1 = static_cast<int>(floor(incr));
-        int incr2 = incr1+1;
+        const double incr = pseudoTime/pathTimeIncr;
+        const int incr1= static_cast<int>(floor(incr));
+        const int incr2= incr1+1;
 
         if(incr2 <thePath.Size())
           {
@@ -164,7 +163,8 @@ int XC::PathSeries::sendSelf(CommParameters &cp)
     const int dataTag= getDbTag();
     result+= cp.sendIdData(getDbTagData(),dataTag);
     if(result < 0)
-      std::cerr << "PathSeries::sendSelf() - ch failed to send data\n";
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; ch failed to send data\n";
     return result;
   }
 
@@ -176,7 +176,8 @@ int XC::PathSeries::recvSelf(const CommParameters &cp)
     const int dataTag = this->getDbTag();  
     int result = cp.receiveIdData(getDbTagData(),dataTag);
     if(result<0)
-      std::cerr << "PathSeries::sendSelf() - ch failed to receive data\n";
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; ch failed to receive data\n";
     else
       result+= recvData(cp);
     return result;    

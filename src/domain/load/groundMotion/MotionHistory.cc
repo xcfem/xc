@@ -116,34 +116,46 @@ void XC::MotionHistory::setIntegrator(TimeSeriesIntegrator *integrator)
 
 XC::TimeSeries *XC::MotionHistory::integrate(TimeSeries *theSeries) const
   {
+    const std::string method_identifier=  getClassName() +"::"+__FUNCTION__;
     TimeSeries *retval= nullptr;
     // check that an integrator & accel series exist
     if(!theIntegrator)
       {
         if(verbosity>1)
-          std::cerr << "WARNING: MotionHistory::integrate() - no XC::TimeSeriesIntegrator provided - will use Trapezoidal. \n";
-        theIntegrator= new XC::TrapezoidalTimeSeriesIntegrator();
+          std::cerr << method_identifier
+		    << ";no TimeSeriesIntegrator provided,"
+	            << " will use Trapezoidal.\n";
+        theIntegrator= new TrapezoidalTimeSeriesIntegrator();
         if(!theIntegrator)
           {
-            std::cerr << "WARNING: MotionHistory::integrate() - no XC::TimeSeriesIntegrator provided - failed to create a Trapezoidal .. memory problems! \n";
+            std::cerr << method_identifier
+		      << "; no TimeSeriesIntegrator provided"
+	              << " and failed to create a Trapezoidal one..."
+	              << " memory problems! \n";
             return retval;
           }
       }
     if(!theSeries)
       {
-        std::cerr << "MotionHistory::integrate - no TimeSeries specified\n";
+        std::cerr << method_identifier
+	          << "; no TimeSeries specified.\n";
         return retval;
       }
 
     // integrate the series, if no vel series exists set it to new one
-    if(delta>0)
+    const double dT= getDelta();
+    if(dT>0.0)
       {
-        retval= theIntegrator->integrate(theSeries, delta);
+        retval= theIntegrator->integrate(theSeries, dT);
         if(!retval)
-          std::cerr << "MotionHistory::integrate - no XC::TimeSeriesIntegrator failed to integrate\n";
+          std::cerr << method_identifier
+	            << "; no TimeSeriesIntegrator defined, "
+		    << "failed to integrate\n";
       }
     else
-      std::cerr << "MotionHistory::integrate - integration increment must not bue zero, dT=" << delta << std::endl;
+      std::cerr << method_identifier
+		<< "; integration increment must not be zero, dT="
+		<< dT << std::endl;
     return retval;
   }
 
@@ -286,7 +298,8 @@ void XC::MotionHistory::loadAccelFile(const std::string &fileNameAccel,const dou
     clearSeries();
     theAccelSeries = new PathSeries(fileNameAccel, timeStep, theFactor);
     if(!theAccelSeries)
-      std::cerr << "XC::MotionHistory::loadAccelFile - unable to create XC::PathSeries\n";
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; unable to create PathSeries.\n";
   }
 
 void XC::MotionHistory::loadAccelTimeFile(const std::string &fileNameAccel, const std::string &fileNameTime,const double &theFactor)
@@ -294,5 +307,6 @@ void XC::MotionHistory::loadAccelTimeFile(const std::string &fileNameAccel, cons
     clearSeries();
     theAccelSeries = new PathTimeSeries(fileNameAccel, fileNameTime, theFactor);
     if(!theAccelSeries)
-      std::cerr << "XC::MotionHistory::loadAccelFile - unable to create XC::PathTimeSeries\n";
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; unable to create PathTimeSeries.\n";
   }

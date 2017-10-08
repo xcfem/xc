@@ -64,6 +64,10 @@
 #include <utility/matrix/Vector.h>
 
 //! @brief Constructor.
+//!
+//! @param startTime: beginning of the rectangular pulse.
+//! @param finishTime: end of the rectangular pulse.
+//! @param theFactor: factor that multiplies the signal.
 XC::RectangularSeries::RectangularSeries(double startTime, double finishTime,double theFactor)
   :PulseBaseSeries(TSERIES_TAG_RectangularSeries,startTime,finishTime,theFactor) {}
 
@@ -71,7 +75,7 @@ XC::RectangularSeries::RectangularSeries(double startTime, double finishTime,dou
 XC::RectangularSeries::RectangularSeries(void)
   :PulseBaseSeries(TSERIES_TAG_RectangularSeries) {}
 
-//! @brief Returns the valor del factor para el instante being passed as parameter.
+//! @brief Returns factor (zero if pseudoTime outside of [tStart,tFinish]).
 double XC::RectangularSeries::getFactor(double pseudoTime) const
   {	
     if(pseudoTime >= tStart && pseudoTime <= tFinish)

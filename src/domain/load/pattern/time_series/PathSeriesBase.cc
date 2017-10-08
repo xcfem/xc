@@ -41,7 +41,8 @@ XC::PathSeriesBase::PathSeriesBase(int classTag, const double &theFactor)
 		   
 //! @brief Constructor.
 XC::PathSeriesBase::PathSeriesBase(int classTag,const Vector &theLoadPath,const double &theFactor)
-  :CFactorSeries(classTag,theFactor), thePath(theLoadPath), lastSendCommitTag(-1)
+  :CFactorSeries(classTag,theFactor),
+   thePath(theLoadPath), lastSendCommitTag(-1)
   {}
 
 //! @brief Returns the número de puntos que definen el path.
@@ -88,18 +89,18 @@ double XC::PathSeriesBase::getPeakFactor(void) const
   {
     double peak = fabs(thePath(0));
     const int num = thePath.Size();
-    double temp;
+    double temp= 0.0;
 
     for(int i=1;i<num;i++)
       {
-        temp = fabs(thePath(i));
+        temp= fabs(thePath(i));
         if(temp > peak)
-          peak = temp;
+          peak= temp;
       }
     return (peak*cFactor);
   }
 
-//! @brief Imprime el objeto.
+//! @brief Printing stuff.
 void XC::PathSeriesBase::Print(std::ostream &s, int flag) const
   {
     if(flag == 1)

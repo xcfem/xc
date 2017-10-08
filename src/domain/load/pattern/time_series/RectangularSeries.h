@@ -72,11 +72,9 @@ namespace XC {
 
 //! @ingroup TSeries
 //
-//! @brief Pulso rectangular.
+//! @brief Rectangular pulse.
 class RectangularSeries: public PulseBaseSeries
   {
-  protected:
-
   public:
     // constructors
     RectangularSeries(double tStart, double tFinal, double cFactor = 1.0);

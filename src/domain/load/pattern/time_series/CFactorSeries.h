@@ -38,23 +38,24 @@ namespace XC {
 class CFactorSeries: public TimeSeries
   {
   protected:
-    double cFactor;  // factor = cFactor
+    double cFactor; //!< factor that multiplies series values.
 
     DbTagData &getDbTagData(void) const;
     int sendData(CommParameters &cp);
     int recvData(const CommParameters &cp);
 
   public:
-    CFactorSeries(int classTag,double cFactor = 1.0);
+    CFactorSeries(int classTag,double cf= 1.0);
 
     int sendSelf(CommParameters &);
     int recvSelf(const CommParameters &);
 
-    double getFactor(double pseudoTime) const {return cFactor;}
+    //! @brief Returns factor value.
+    double getFactor(double pseudoTime) const
+      {return cFactor;}
+    //! @brief Sets factor value.
     void setFactor(const double &d)
       { cFactor= d; }
-
-
   };
 } // end of XC namespace
 

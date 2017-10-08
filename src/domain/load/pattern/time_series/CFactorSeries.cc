@@ -96,7 +96,8 @@ int XC::CFactorSeries::sendSelf(CommParameters &cp)
     const int dataTag= getDbTag(cp);
     result+= cp.sendIdData(getDbTagData(),dataTag);
     if(result < 0)
-      std::cerr << "CFactorSeries::sendSelf() - ch failed to send data\n";
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; ch failed to send data.\n";
     return result;
   }
 
@@ -108,7 +109,8 @@ int XC::CFactorSeries::recvSelf(const CommParameters &cp)
     const int dataTag = this->getDbTag();  
     int result = cp.receiveIdData(getDbTagData(),dataTag);
     if(result<0)
-      std::cerr << "CFactorSeries::sendSelf() - ch failed to receive data\n";
+      std::cerr << getClassName() << "::" << __FUNCTION__
+                << "; ch failed to receive data.\n";
     else
       result+= recvData(cp);
     return result;    

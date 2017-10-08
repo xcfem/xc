@@ -73,7 +73,7 @@ namespace XC {
 class ConstantSeries : public CFactorSeries
   {
   public:
-    ConstantSeries(double cFactor = 1.0);
+    ConstantSeries(double cf= 1.0);
     TimeSeries *getCopy(void) const;
 
     // None of the following functions should be invoked on this type

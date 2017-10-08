@@ -45,17 +45,15 @@ namespace XC {
 class MotionHistory: public EntCmd
   {
   private:
-    TimeSeries *theAccelSeries; //!< Ground acceleration
-    mutable TimeSeries *theVelSeries; //!< Ground velocity
-    mutable TimeSeries *theDispSeries; //!< Ground displacement
-    mutable TimeSeriesIntegrator *theIntegrator;    
+    TimeSeries *theAccelSeries; //!< Ground acceleration.
+    mutable TimeSeries *theVelSeries; //!< Ground velocity.
+    mutable TimeSeries *theDispSeries; //!< Ground displacement.
+    mutable TimeSeriesIntegrator *theIntegrator; //!< Integrator to use.
     double delta;
 
     void calcVel(void) const;
     void calcDisp(void) const;
     void clearSeries(void);
-  protected:
-
   public:
     MotionHistory(const double &dt= 0.0);
     MotionHistory(const MotionHistory &otro);
@@ -80,7 +78,7 @@ class MotionHistory: public EntCmd
     double getAccel(double time) const;
     double getVel(double time) const;
     double getDisp(double time) const;
-    const XC::Vector &getDispVelAccel(Vector &data,const double &time) const;
+    const Vector &getDispVelAccel(Vector &data,const double &time) const;
     
     void setIntegrator(TimeSeriesIntegrator *integrator);
     TimeSeries *integrate(TimeSeries *theSeries) const; 

@@ -83,8 +83,8 @@ class PathSeries : public PathSeriesBase
 
   public:
     // constructors
-    PathSeries(const Vector &thePath,double pathTimeIncr = 1.0, double cfactor = 1.0);
-    PathSeries(const std::string &fileName, double pathTimeIncr = 1.0, double cfactor = 1.0);
+    PathSeries(const Vector &thePath,double pathTimeIncr = 1.0, double cf= 1.0);
+    PathSeries(const std::string &fileName, double pathTimeIncr = 1.0, double cf= 1.0);
     PathSeries(void);
     TimeSeries *getCopy(void) const
       { return new PathSeries(*this); }
@@ -92,12 +92,10 @@ class PathSeries : public PathSeriesBase
     // method to get factor
     double getFactor(double pseudoTime) const;
     double getDuration(void) const;
-    double getTimeIncr(double pseudoTime) const {return pathTimeIncr;}
-
-    inline double getPathTimeIncr(void) const
-      { return pathTimeIncr; }
-    inline void setPathTimeIncr(const double &d)
+    inline void setTimeIncr(const double &d)
       { pathTimeIncr= d; }
+    inline double getTimeIncr(double) const
+      {return pathTimeIncr;}
 
     void readFromFile(const std::string &fileName);
 
