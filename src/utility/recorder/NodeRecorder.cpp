@@ -183,7 +183,7 @@ XC::NodeRecorder::NodeRecorder(void)
    response(0),sensitivity(0)
   {}
 
-XC::NodeRecorder::NodeRecorder(const XC::ID &dofs, const XC::ID &nodes, 
+XC::NodeRecorder::NodeRecorder(const ID &dofs, const ID &nodes, 
 			       int psensitivity, const std::string &dataToStore,
                                Domain &theDom, DataOutputHandler &theOutputHandler,
                                double dT, bool timeFlag)
@@ -202,13 +202,15 @@ int XC::NodeRecorder::record(int commitTag, double timeStamp)
       { return 0; }
     if(theHandler == 0)
       {
-        std::cerr << "XC::NodeRecorder::record() - no XC::DataOutputHandler has been set\n";
+        std::cerr << getClassName() << "::" << __FUNCTION__
+	          << "; no DataOutputHandler has been set.\n";
         return -1;
       }
     if(initializationDone != true) 
     if(this->initialize() != 0)
       {
-        std::cerr << "XC::NodeRecorder::record() - failed in initialize()\n";
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; failed in initialize().\n";
         return -1;
       }
 
@@ -216,7 +218,7 @@ int XC::NodeRecorder::record(int commitTag, double timeStamp)
     if(deltaT == 0.0 || timeStamp >= nextTimeStampToRecord)
       {
         if(deltaT != 0.0) 
-          nextTimeStampToRecord = timeStamp + deltaT;
+          nextTimeStampToRecord= timeStamp + deltaT;
 
         //
         // if need nodal reactions get the domain to calculate them
@@ -235,7 +237,7 @@ int XC::NodeRecorder::record(int commitTag, double timeStamp)
         if(echoTimeFlag == true)
           {
             timeOffset = 1;
-            response(0) = timeStamp;
+            response(0)= timeStamp;
           }
 
         //
@@ -250,10 +252,10 @@ int XC::NodeRecorder::record(int commitTag, double timeStamp)
                 // AddingSensitivity:BEGIN ///////////////////////////////////
                 if(sensitivity==0)
                   {
-                    const XC::Vector &theResponse = theNode->getTrialDisp();
+                    const Vector &theResponse = theNode->getTrialDisp();
                     for(int j=0; j<numDOF; j++)
                       {
-                        int dof = (*theDofs)(j);
+                        const int dof= (*theDofs)(j);
                         if(theResponse.Size() > dof)
                           { response(cnt) = theResponse(dof); }
                         else
@@ -265,7 +267,7 @@ int XC::NodeRecorder::record(int commitTag, double timeStamp)
                   {
                     for(int j=0;j<numDOF;j++)
                       {
-                        int dof= (*theDofs)(j);
+                        const int dof= (*theDofs)(j);
                         response(cnt) = theNode->getDispSensitivity(dof+1, sensitivity);
                         cnt++;
                       }
@@ -274,10 +276,10 @@ int XC::NodeRecorder::record(int commitTag, double timeStamp)
              }
            else if(dataFlag == 1)
              {
-               const XC::Vector &theResponse = theNode->getTrialVel();
+               const Vector &theResponse= theNode->getTrialVel();
                for(int j=0; j<numDOF; j++)
                  {
-                   int dof = (*theDofs)(j);
+                   const int dof= (*theDofs)(j);
                    if(theResponse.Size() > dof)
                      { response(cnt) = theResponse(dof); }
                    else 
@@ -287,10 +289,10 @@ int XC::NodeRecorder::record(int commitTag, double timeStamp)
              }
            else if(dataFlag == 2)
              {
-               const XC::Vector &theResponse = theNode->getTrialAccel();
+               const Vector &theResponse= theNode->getTrialAccel();
                for(int j=0;j<numDOF;j++)
                  {
-                   int dof = (*theDofs)(j);
+                   const int dof= (*theDofs)(j);
                    if(theResponse.Size() > dof)
                      { response(cnt) = theResponse(dof); }
                    else 
@@ -300,10 +302,10 @@ int XC::NodeRecorder::record(int commitTag, double timeStamp)
              }
            else if(dataFlag == 3)
              {
-               const XC::Vector &theResponse = theNode->getIncrDisp();
+               const Vector &theResponse= theNode->getIncrDisp();
                for(int j=0; j<numDOF; j++)
                  {
-                   int dof= (*theDofs)(j);
+                   const int dof= (*theDofs)(j);
                    if(theResponse.Size() > dof)
                      { response(cnt) = theResponse(dof); }
                    else 
@@ -313,10 +315,10 @@ int XC::NodeRecorder::record(int commitTag, double timeStamp)
              }
            else if(dataFlag == 4)
              {
-               const XC::Vector &theResponse = theNode->getIncrDeltaDisp();
+               const Vector &theResponse= theNode->getIncrDeltaDisp();
                for(int j=0; j<numDOF; j++)
                  {
-                   int dof= (*theDofs)(j);
+                   const int dof= (*theDofs)(j);
                    if(theResponse.Size() > dof)
                      { response(cnt) = theResponse(dof); }
                    else 
@@ -326,10 +328,10 @@ int XC::NodeRecorder::record(int commitTag, double timeStamp)
              }
            else if(dataFlag == 5)
              {
-               const XC::Vector &theResponse = theNode->getUnbalancedLoad();
+               const Vector &theResponse= theNode->getUnbalancedLoad();
                for(int j=0; j<numDOF; j++)
                  {
-                   int dof = (*theDofs)(j);
+                   const int dof= (*theDofs)(j);
                    if(theResponse.Size() > dof)
                      { response(cnt) = theResponse(dof); }
                    else 
@@ -340,10 +342,10 @@ int XC::NodeRecorder::record(int commitTag, double timeStamp)
              }
            else if(dataFlag == 6)
              {
-               const XC::Vector &theResponse = theNode->getUnbalancedLoadIncInertia();
+               const Vector &theResponse= theNode->getUnbalancedLoadIncInertia();
                for(int j=0;j<numDOF;j++)
                  {
-                   int dof = (*theDofs)(j);
+                   const int dof= (*theDofs)(j);
                    if(theResponse.Size() > dof)
                      { response(cnt) = theResponse(dof); }
                    else 
@@ -353,10 +355,10 @@ int XC::NodeRecorder::record(int commitTag, double timeStamp)
              }
            else if(dataFlag == 7)
              {
-               const XC::Vector &theResponse = theNode->getReaction();
+               const Vector &theResponse = theNode->getReaction();
                for(int j=0; j<numDOF; j++)
                  {
-                   int dof = (*theDofs)(j);
+                   const int dof= (*theDofs)(j);
                    if(theResponse.Size() > dof)
                      { response(cnt) = theResponse(dof); }
                    else 
@@ -366,10 +368,10 @@ int XC::NodeRecorder::record(int commitTag, double timeStamp)
              }
            else if(dataFlag == 8)
              {
-               const XC::Vector &theResponse = theNode->getReaction();
+               const Vector &theResponse = theNode->getReaction();
                for(int j=0; j<numDOF; j++)
                  {
-                   int dof = (*theDofs)(j);
+                   const int dof= (*theDofs)(j);
                    if(theResponse.Size() > dof)
                      { response(cnt) = theResponse(dof); }
                    else 
@@ -381,13 +383,13 @@ int XC::NodeRecorder::record(int commitTag, double timeStamp)
              {
                int mode= dataFlag - 10;
                int column = mode - 1;
-               const XC::Matrix &theEigenvectors = theNode->getEigenvectors();
+               const Matrix &theEigenvectors = theNode->getEigenvectors();
                if(theEigenvectors.noCols() > column)
                  {
                    int noRows = theEigenvectors.noRows();
                    for(int j=0; j<numDOF; j++)
                      {
-                       int dof = (*theDofs)(j);
+                       const int dof= (*theDofs)(j);
                        if(noRows > dof)
                          { response(cnt) = theEigenvectors(dof,column); }
                        else 
@@ -401,8 +403,8 @@ int XC::NodeRecorder::record(int commitTag, double timeStamp)
               int grad = dataFlag - 1000;
               for(int j=0; j<numDOF; j++)
                 {
-                  int dof = (*theDofs)(j);
-                  dof += 1; // Terje uses 1 through DOF for the dof indexing; the fool then subtracts 1 
+                  int dof= (*theDofs)(j);
+                  dof+= 1; // Terje uses 1 through DOF for the dof indexing; the fool then subtracts 1 
                             // his code!!
                   response(cnt) = theNode->getDispSensitivity(dof, grad);
                   cnt++;
@@ -413,8 +415,8 @@ int XC::NodeRecorder::record(int commitTag, double timeStamp)
               int grad = dataFlag - 2000;
               for(int j=0; j<numDOF; j++)
                 {
-                  int dof = (*theDofs)(j);
-                  dof += 1; // Terje uses 1 through DOF for the dof indexing; the fool then subtracts 1 
+                  int dof= (*theDofs)(j);
+                  dof+= 1; // Terje uses 1 through DOF for the dof indexing; the fool then subtracts 1 
                             // his code!!
                   response(cnt) = theNode->getVelSensitivity(dof, grad);
                   cnt++;
@@ -427,8 +429,8 @@ int XC::NodeRecorder::record(int commitTag, double timeStamp)
               int grad = dataFlag - 3000;
               for(int j=0; j<numDOF; j++)
                 {
-                  int dof = (*theDofs)(j);
-                  dof += 1; // Terje uses 1 through DOF for the dof indexing; the fool then subtracts 1 
+                  int dof= (*theDofs)(j);
+                  dof+= 1; // Terje uses 1 through DOF for the dof indexing; the fool then subtracts 1 
                             // his code!!
                   response(cnt) = theNode->getAccSensitivity(dof, grad);
                   cnt++;
