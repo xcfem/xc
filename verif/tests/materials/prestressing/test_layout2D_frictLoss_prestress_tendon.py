@@ -1,4 +1,4 @@
-import numpy as np
+import numpy as np                                                                              
 import matplotlib.pyplot as plt
 from scipy import interpolate
 from scipy.spatial import distance
@@ -10,10 +10,9 @@ lBeam=20    #beam span [m]
 #Parabola
 eEnds=0         #eccentricity of cables at both ends of the beam
 eMidspan=-0.3   #eccentricity of cables at midspan
-angl_Parab_XZ=math.pi/4 #angle between the vertical plane that contains the
-                        #parabola and the plane XZ
 
 # Material properties
+
 #Prestressing steel
 sigmap=1600e6  #breaking strength [Pa]
 sigmapk=1400e6 #characteristic strength [Pa]
@@ -39,32 +38,33 @@ def fricLosses(x,sigmap0max,alphaUnit,mu,unintDev):
     return sigmaLoss
 
 #Exact parabola
-def fit_parabola(x, y):
-    '''Fits the equation "y = ax^2 + bx + c" given exactly 3 points as two
+def fit_parabola(x, z):
+    '''Fits the equation "z = ax^2 + bx + c" given exactly 3 points as two
     lists or arrays of x & y coordinates
     '''
     A = np.zeros((3,3), dtype=np.float)
     A[:,0] = x**2
     A[:,1] = x
     A[:,2] = 1
-    a, b, c = np.linalg.solve(A, y)
+    a, b, c = np.linalg.solve(A, z)
     return a, b, c
 
-a,b,c=fit_parabola(x=np.array([0,lBeam/2.0,lBeam]), y=np.array([eEnds,eMidspan,eEnds]))
+a,b,c=fit_parabola(x=np.array([0,lBeam/2.0,lBeam]), z=np.array([eEnds,eMidspan,eEnds]))
 
-def eq_points_parabola(startS,stopS,numPts,a,b,c,angSX):
-    '''Returns equispaced nPts points of the parabola "y=ax^2 + bx + c" 
+def eq_points_parabola(startX,stopX,numPts,a,b,c):
+    '''Returns equispaced nPts points of the parabola "z=ax^2 + bx + c" 
     in the X range [startX,stopX]
     '''
-    s_parab=np.linspace(startS,stopS,numPts)
-    x_parab=np.linspace(startS*math.cos(angSX),stopS*math.cos(angSX),numPts)
-    y_parab=np.linspace(startS*math.sin(angSX),stopS*math.sin(angSX),numPts)
-    z_parab=a*s_parab**2+b*s_parab+c
-    return x_parab,y_parab,z_parab
+    x_parab=np.linspace(startX,stopX,numPts)
+    z_parab=a*x_parab**2+b*x_parab+c
+    return x_parab,z_parab
 
-x_parab_rough,y_parab_rough,z_parab_rough=eq_points_parabola(0,lBeam,n_points_rough,a,b,c,angl_Parab_XZ)
-x_parab_fine,y_parab_fine,z_parab_fine=eq_points_parabola(0,lBeam,n_points_fine,a,b,c,angl_Parab_XZ)
-aprox_cum_angle=alphaUnit*(x_parab_fine**2+y_parab_fine**2)**(1/2.0)
+
+x_parab_rough,z_parab_rough=eq_points_parabola(0,lBeam,n_points_rough,a,b,c)
+y_parab_rough=np.zeros(n_points_rough)
+x_parab_fine,z_parab_fine=eq_points_parabola(0,lBeam,n_points_fine,a,b,c)
+y_parab_fine=np.zeros(n_points_fine)
+aprox_cum_angle=alphaUnit*x_parab_fine
 aprox_length_sequence=[0]+[distance.euclidean((x_parab_fine[i],y_parab_fine[i],z_parab_fine[i]),(x_parab_fine[i+1],y_parab_fine[i+1],z_parab_fine[i+1])) for i in range(len(x_parab_fine)-1)]
 aprox_cumulative_length=np.cumsum(aprox_length_sequence)
 
@@ -77,7 +77,7 @@ tendon.roughCoordMtr=np.array([x_parab_rough,y_parab_rough,z_parab_rough])
 tendon.pntsInterpTendon(n_points_fine,1)
 #Cumulative lengths of the sequence of segments
 cumulative_length=tendon.getCumLength()
-
+   
 ratio1= np.mean((cumulative_length-aprox_cumulative_length)**2)/np.mean(cumulative_length)
 
 # Cumulative deviation
@@ -87,12 +87,12 @@ ratio2= np.mean((cumulative_angl-aprox_cum_angle)**2)/np.mean(cumulative_angl)
 
 # Losses of prestressing due to friction
 tendon.getLossFriction(coefFric=mu,uninDev=k,sigmaP0_extr1=sigmap0max,sigmaP0_extr2=0.0)
-
 ratio3= np.mean((tendon.lossFriction-aprox_cum_loss)**2)/np.mean(tendon.lossFriction)
-#Plot
-#tendon.plot2D(XaxisValues='S',fileName='parab.png',symbolRougPoints='b*',symbolFinePoints='r*',symbolTendon='g-',symbolLossFriction='m-')
 
-#tendon.plot3D(fileName='parab.png',symbolRougPoints='b*',symbolFinePoints='r*',symbolTendon='g-',symbolLossFriction=None)
+#Plot
+# tendon.plot2D(XaxisValues='X',fileName='parab.png',symbolRougPoints='b*',symbolFinePoints='r*',symbolTendon='g-',symbolLossFriction=None)
+
+# tendon.plot2D(XaxisValues='X',fileName='loss.png',symbolRougPoints=None,symbolFinePoints=None,symbolTendon=None,symbolLossFriction='m-')
 
 import os
 from miscUtils import LogMessages as lmsg
