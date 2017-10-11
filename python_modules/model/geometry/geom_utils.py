@@ -9,6 +9,7 @@ __email__= "l.pereztato@gmail.com"
 
 from miscUtils import LogMessages as lmsg
 from postprocess import extrapolate_elem_attr as extrap
+import numpy as np
 
 class LineWrapper(object):
   def __init__(self,line):
@@ -100,3 +101,14 @@ def getLastNode(line):
   lw= LineWrapper(line)
   return lw.getLastNode()
 
+#Exact parabola
+def fit_parabola(x, y):
+    '''Fits the equation "y = ax^2 + bx + c" given exactly 3 points as two
+    lists or arrays of x & y coordinates
+    '''
+    A = np.zeros((3,3), dtype=np.float)
+    A[:,0] = x**2
+    A[:,1] = x
+    A[:,2] = 1
+    a, b, c = np.linalg.solve(A, y)
+    return a, b, c

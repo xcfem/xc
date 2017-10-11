@@ -39,18 +39,9 @@ def fricLosses(x,sigmap0max,alphaUnit,mu,unintDev):
     return sigmaLoss
 
 #Exact parabola
-def fit_parabola(x, y):
-    '''Fits the equation "y = ax^2 + bx + c" given exactly 3 points as two
-    lists or arrays of x & y coordinates
-    '''
-    A = np.zeros((3,3), dtype=np.float)
-    A[:,0] = x**2
-    A[:,1] = x
-    A[:,2] = 1
-    a, b, c = np.linalg.solve(A, y)
-    return a, b, c
+from model.geometry import geom_utils
 
-a,b,c=fit_parabola(x=np.array([0,lBeam/2.0,lBeam]), y=np.array([eEnds,eMidspan,eEnds]))
+a,b,c=geom_utils.fit_parabola(x=np.array([0,lBeam/2.0,lBeam]), y=np.array([eEnds,eMidspan,eEnds]))
 
 def eq_points_parabola(startS,stopS,numPts,a,b,c,angSX):
     '''Returns equispaced nPts points of the parabola "y=ax^2 + bx + c" 
