@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-''' Utilities for line related manipulations. '''
+''' Utilities for geometry entities related manipulations. '''
 __author__= "Luis C. Pérez Tato (LCPT)"
 __copyright__= "Copyright 2014 LCPT"
 __license__= "GPL"

@@ -91,6 +91,39 @@ class PrestressTendon(object):
         acum_back=np.cumsum(aseq)
         return np.flipud(acum_back)
 
+    def creaTendonElements(self,preprocessor,materialName,elemTypeName,crdTransfName,areaTendon,setName):
+        '''Creates the nodes and elements of the tendon and appends them to a set.
+
+        :param preporcessor: preprocessor
+        :param materialName: name of the material
+        :param elemTypeName: name of the type of element
+        :param crdTransfName: name of the coordinate transformation
+        :param areaTendon:   area of the cross-section of the tencon
+        :param setName:      name of the set to which append the nodes and elements
+                             created (if the set doesn't exist, it's created)
+        '''
+        setsMng=preprocessor.getSets
+        if setsMng.exists(setName):
+            tendonSet=setsMng.getSet(setName)
+        else:
+            tendonSet=setsMng.defSet(setName)
+        nodes= preprocessor.getNodeLoader
+        elems= preprocessor.getElementLoader
+        elems.dimElem= preprocessor.getNodeLoader.dimSpace
+        elems.defaultMaterial=tendonMaterialName
+        elems.defaultTransformation=crdTransfName
+        nEnd2=nodes.newNodeXYZ(fineCoordMtr[0][0],fineCoordMtr[1][0],fineCoordMtr[2][0])
+        tendonSet.getNodes.append(nEnd2)
+        for i in range(1,len(self.fineCoordMtr[0])):
+            nEnd1=nodes.getNode(nEnd2.tag)
+            nEnd2=nodes.newNodeXYZ(fineCoordMtr[0][0],fineCoordMtr[1][0],fineCoordMtr[2][0])
+            elem=elements.newElement(elemTypeName,xc.ID([nEnd1.tag,nEnd2.tag]))
+            elem.area=areaTendon
+            tendonSet.getNodes.append(nEnd2)
+            tendonSet.getElements.append(elem)
+        return tendonSet
+            
+
     def getLossFriction(self,coefFric,uninDev,sigmaP0_extr1=0.0,sigmaP0_extr2=0.0):
         '''Return for each point in fineCoordMtr the cumulative immediate loss 
         of prestressing due to friction.

@@ -11,7 +11,7 @@ import math
 import xc_base
 import geom
 import xc
-from model.geometry import line_utils as lu
+from model.geometry import geom_utils as lu
 from materials.ec3 import EC3_limit_state_checking as EC3lsc
 
 class EC3Beam(lu.LineWrapper):
