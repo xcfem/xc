@@ -43,18 +43,8 @@ from model.geometry import geom_utils
 
 a,b,c=geom_utils.fit_parabola(x=np.array([0,lBeam/2.0,lBeam]), y=np.array([eEnds,eMidspan,eEnds]))
 
-def eq_points_parabola(startS,stopS,numPts,a,b,c,angSX):
-    '''Returns equispaced nPts points of the parabola "y=ax^2 + bx + c" 
-    in the X range [startX,stopX]
-    '''
-    s_parab=np.linspace(startS,stopS,numPts)
-    x_parab=np.linspace(startS*math.cos(angSX),stopS*math.cos(angSX),numPts)
-    y_parab=np.linspace(startS*math.sin(angSX),stopS*math.sin(angSX),numPts)
-    z_parab=a*s_parab**2+b*s_parab+c
-    return x_parab,y_parab,z_parab
-
-x_parab_rough,y_parab_rough,z_parab_rough=eq_points_parabola(0,lBeam,n_points_rough,a,b,c,angl_Parab_XZ)
-x_parab_fine,y_parab_fine,z_parab_fine=eq_points_parabola(0,lBeam,n_points_fine,a,b,c,angl_Parab_XZ)
+x_parab_rough,y_parab_rough,z_parab_rough=geom_utils.eq_points_parabola(0,lBeam,n_points_rough,a,b,c,angl_Parab_XZ)
+x_parab_fine,y_parab_fine,z_parab_fine=geom_utils.eq_points_parabola(0,lBeam,n_points_fine,a,b,c,angl_Parab_XZ)
 aprox_cum_angle=alphaUnit*(x_parab_fine**2+y_parab_fine**2)**(1/2.0)
 aprox_length_sequence=[0]+[distance.euclidean((x_parab_fine[i],y_parab_fine[i],z_parab_fine[i]),(x_parab_fine[i+1],y_parab_fine[i+1],z_parab_fine[i+1])) for i in range(len(x_parab_fine)-1)]
 aprox_cumulative_length=np.cumsum(aprox_length_sequence)

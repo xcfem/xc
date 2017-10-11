@@ -10,6 +10,7 @@ __email__= "l.pereztato@gmail.com"
 from miscUtils import LogMessages as lmsg
 from postprocess import extrapolate_elem_attr as extrap
 import numpy as np
+import math
 
 class LineWrapper(object):
   def __init__(self,line):
@@ -112,3 +113,15 @@ def fit_parabola(x, y):
     A[:,2] = 1
     a, b, c = np.linalg.solve(A, y)
     return a, b, c
+
+def eq_points_parabola(startS,stopS,numPts,a,b,c,angSX):
+    '''Returns equispaced nPts points of the parabola "z=as^2 + bs + c" 
+    in the range [startS,stopS].
+    S is a coordinate by the straight line projection of the parabola on the XY plane.
+    angSX is the angle (in rad) between that line and the X-axis
+    '''
+    s_parab=np.linspace(startS,stopS,numPts)
+    x_parab=np.linspace(startS*math.cos(angSX),stopS*math.cos(angSX),numPts)
+    y_parab=np.linspace(startS*math.sin(angSX),stopS*math.sin(angSX),numPts)
+    z_parab=a*s_parab**2+b*s_parab+c
+    return x_parab,y_parab,z_parab
