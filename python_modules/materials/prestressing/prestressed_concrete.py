@@ -9,6 +9,7 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "ana.Ortega@ciccp.es"
 
+import xc
 import math
 import numpy as np
 from scipy import interpolate
@@ -110,14 +111,14 @@ class PrestressTendon(object):
         nodes= preprocessor.getNodeLoader
         elems= preprocessor.getElementLoader
         elems.dimElem= preprocessor.getNodeLoader.dimSpace
-        elems.defaultMaterial=tendonMaterialName
+        elems.defaultMaterial=materialName
         elems.defaultTransformation=crdTransfName
-        nEnd2=nodes.newNodeXYZ(fineCoordMtr[0][0],fineCoordMtr[1][0],fineCoordMtr[2][0])
+        nEnd2=nodes.newNodeXYZ(self.fineCoordMtr[0][0],self.fineCoordMtr[1][0],self.fineCoordMtr[2][0])
         tendonSet.getNodes.append(nEnd2)
         for i in range(1,len(self.fineCoordMtr[0])):
             nEnd1=nodes.getNode(nEnd2.tag)
-            nEnd2=nodes.newNodeXYZ(fineCoordMtr[0][0],fineCoordMtr[1][0],fineCoordMtr[2][0])
-            elem=elements.newElement(elemTypeName,xc.ID([nEnd1.tag,nEnd2.tag]))
+            nEnd2=nodes.newNodeXYZ(self.fineCoordMtr[0][i],self.fineCoordMtr[1][i],self.fineCoordMtr[2][i])
+            elem=elems.newElement(elemTypeName,xc.ID([nEnd1.tag,nEnd2.tag]))
             elem.area=areaTendon
             tendonSet.getNodes.append(nEnd2)
             tendonSet.getElements.append(elem)
