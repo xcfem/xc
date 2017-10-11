@@ -1,4 +1,16 @@
-import numpy as np                                                                              
+# -*- coding: utf-8 -*-
+
+'''Layout of prestressing tendons and calculation of the loss of prestress
+force due to friction.
+
+'''
+__author__= "Ana Ortega (AO_O) "
+__copyright__= "Copyright 2016, AO_O"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "ana.ortega@xcengineering.xyz"
+
+import numpy as np
 import matplotlib.pyplot as plt
 from scipy import interpolate
 from scipy.spatial import distance
