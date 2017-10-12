@@ -1,4 +1,16 @@
-import numpy as np                                                                              
+# -*- coding: utf-8 -*-
+
+'''Layout of prestressing tendons and calculation of the loss of prestress
+force due to friction.
+
+'''
+__author__= "Ana Ortega (AO_O) "
+__copyright__= "Copyright 2016, AO_O"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "ana.ortega@xcengineering.xyz"
+
+import numpy as np
 import matplotlib.pyplot as plt
 from scipy import interpolate
 from scipy.spatial import distance
@@ -38,32 +50,12 @@ def fricLosses(x,sigmap0max,alphaUnit,mu,unintDev):
     return sigmaLoss
 
 #Exact parabola
-def fit_parabola(x, z):
-    '''Fits the equation "z = ax^2 + bx + c" given exactly 3 points as two
-    lists or arrays of x & y coordinates
-    '''
-    A = np.zeros((3,3), dtype=np.float)
-    A[:,0] = x**2
-    A[:,1] = x
-    A[:,2] = 1
-    a, b, c = np.linalg.solve(A, z)
-    return a, b, c
+from model.geometry import geom_utils
 
-a,b,c=fit_parabola(x=np.array([0,lBeam/2.0,lBeam]), z=np.array([eEnds,eMidspan,eEnds]))
+a,b,c=geom_utils.fit_parabola(x=np.array([0,lBeam/2.0,lBeam]), y=np.array([eEnds,eMidspan,eEnds]))
 
-def eq_points_parabola(startX,stopX,numPts,a,b,c):
-    '''Returns equispaced nPts points of the parabola "z=ax^2 + bx + c" 
-    in the X range [startX,stopX]
-    '''
-    x_parab=np.linspace(startX,stopX,numPts)
-    z_parab=a*x_parab**2+b*x_parab+c
-    return x_parab,z_parab
-
-
-x_parab_rough,z_parab_rough=eq_points_parabola(0,lBeam,n_points_rough,a,b,c)
-y_parab_rough=np.zeros(n_points_rough)
-x_parab_fine,z_parab_fine=eq_points_parabola(0,lBeam,n_points_fine,a,b,c)
-y_parab_fine=np.zeros(n_points_fine)
+x_parab_rough,y_parab_rough,z_parab_rough=geom_utils.eq_points_parabola(0,lBeam,n_points_rough,a,b,c,0)
+x_parab_fine,y_parab_fine,z_parab_fine=geom_utils.eq_points_parabola(0,lBeam,n_points_fine,a,b,c,0)
 aprox_cum_angle=alphaUnit*x_parab_fine
 aprox_length_sequence=[0]+[distance.euclidean((x_parab_fine[i],y_parab_fine[i],z_parab_fine[i]),(x_parab_fine[i+1],y_parab_fine[i+1],z_parab_fine[i+1])) for i in range(len(x_parab_fine)-1)]
 aprox_cumulative_length=np.cumsum(aprox_length_sequence)

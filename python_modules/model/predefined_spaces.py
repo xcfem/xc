@@ -436,6 +436,7 @@ class StructuralMechanics3D(PredefinedSpace):
     retval.xzVector= xzVector
     return retval
 
+    
   def fixNode000_000(self, nodeTag):
     '''Restrain all six node DOFs (i. e. make them zero).'''
     self.constraints.newSPConstraint(nodeTag,0,0.0) # nodeTag, DOF, constrValue
@@ -541,6 +542,17 @@ class StructuralMechanics3D(PredefinedSpace):
     self.constraints.newSPConstraint(nodeTag,0,0.0) # nodeTag, DOF, constrValue
     self.constraints.newSPConstraint(nodeTag,2,0.0)
  
+  def fixNode(self,DOFpattern,nodeTag):
+    '''Restrain DOF of a node according to the DOFpattern, which is a given
+    string of type '0FF_00F' that matches the DOFs (uX,uY,uZ,rotX,rotY,rotZ)
+    where 'F' means FREE and '0' means constrained with value=0
+    Note: DOFpaterns '0FF_00F','0FF00F','0_FF_0_0F', ... are equivalent
+    '''
+    DOFpatclean=DOFpattern.replace('_','')
+    DOFtoConstr=[i for i in range(len(DOFpatclean)) if DOFpatclean[i]=='0']
+    for nc in DOFtoConstr:
+      self.constraints.newSPConstraint(nodeTag,nc,0.0)
+    
   def LstNodes6DOFConstr(self,lstNodes,constrCond):
     '''Constraint the nodes in the list passed as parameter 
     according to given 6-values set of constraints conditions

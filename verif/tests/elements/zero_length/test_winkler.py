@@ -13,7 +13,7 @@ import xc
 from solution import predefined_solutions
 from model import predefined_spaces
 from materials import typical_materials
-from model.geometry import line_utils
+from model.geometry import geom_utils
 import math
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
@@ -90,15 +90,15 @@ modelSpace.fixNode00F(pt1.getTagNode)
 modelSpace.fixNode00F(pt3.getTagNode)
 
 # Apoyamos los interiores.
-l1InteriorNodes= line_utils.LineWrapper(l1).getInteriorNodes()
+l1InteriorNodes= geom_utils.LineWrapper(l1).getInteriorNodes()
 for n in l1InteriorNodes:
   fixedNodeId, idElem= modelSpace.setUniaxialBearing2D(n.tag,"kY",[0,1])
 
-l1LastNode= line_utils.LineWrapper(l1).getLastNode()
+l1LastNode= geom_utils.LineWrapper(l1).getLastNode()
 idCentralNode= l1LastNode.tag
 fixedNodeId, idElem= modelSpace.setUniaxialBearing2D(l1LastNode.tag,"kY",[0,1])
 
-l2InteriorNodes= line_utils.LineWrapper(l2).getInteriorNodes()
+l2InteriorNodes= geom_utils.LineWrapper(l2).getInteriorNodes()
 for n in l2InteriorNodes:
   fixedNodeId, idElem= modelSpace.setUniaxialBearing2D(n.tag,"kY",[0,1])
 
