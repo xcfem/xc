@@ -46,5 +46,5 @@ The main capabilities of the program:
 - Interface with Salome (in progress...).
 - Interface with SCIA Engineering (in progress...).
 
-You can take a look to the project <a href="https://sites.google.com/site/xcfemanalysis/" target="_new">home</a>, to the <a href="https://lcpt.github.io/XCmanual/" target="_new">Python documentation</a> or the <a href="https://codedocs.xyz/lcpt/xc/index.html" target="_new">C++ API documentation</a> or to our brand new <a href="https://gitter.im/xc_development" target="_new"> Gitter community</a> (all of them are work in progress ;-). 
+You can take a look to the project <a href="https://sites.google.com/site/xcfemanalysis/" target="_new">home</a>, to the <a href="https://lcpt.github.io/XCmanual/" target="_new">Python documentation</a> or the <a href="https://codedocs.xyz/lcpt/xc/index.html" target="_new">C++ API documentation</a> or to our brand new <a href="http://www.xcengineering.xyz/html_files/software.html" target="_new"> XC page in the company site.</a> (all of them are work in progress ;-). 
 
