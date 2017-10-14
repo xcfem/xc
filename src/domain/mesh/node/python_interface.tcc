@@ -47,14 +47,18 @@ class_<XC::Node, XC::Node *, bases<XC::MeshComponent>, boost::noncopyable >("Nod
   .def("getCurrentPos3d", &XC::Node::getCurrentPosition3d,"\n""getCurrentPos3d(factor) \n""Return 3D current position of node scaled by a factor: initialPos+factor*currentDisplacement.")
   .def("In", In3D,"\n""In(geomObject,factor,tolerance) \n""Return true if current position of node scaled by a factor: initialPos+factor*currentDisplacement lies inside the geometric object.")
   .def("Out", Out3D,"\n""Out(geomObject,factor,tolerance) \n""Return true if current position of node scaled by a factor: initialPos+factor*currentDisplacement lies outside the geometric object.")
-  .add_property("getReaction", make_function( &XC::Node::getReaction, return_internal_reference<>() ))
-  .add_property("getDisp", make_function( &XC::Node::getDisp, return_internal_reference<>() ))
+  //Call Policies: here we don't use return_internal_reference because
+  // if we do so we obtain always last calculated value and that makes imposible
+  // to put history results in a Python list for example. That's why we use
+  // copy_const_reference instead. 
+  .add_property("getReaction", make_function( &XC::Node::getReaction, return_value_policy<copy_const_reference>() ))
+  .add_property("getDisp", make_function( &XC::Node::getDisp, return_value_policy<copy_const_reference>() ))
   .add_property("getDispXYZ", &XC::Node::getDispXYZ)
   .add_property("getRotXYZ", &XC::Node::getRotXYZ)
-  .add_property("getVel", make_function( &XC::Node::getVel, return_internal_reference<>() ))
+  .add_property("getVel", make_function( &XC::Node::getVel, return_value_policy<copy_const_reference>() ))
   .add_property("getVelXYZ", &XC::Node::getVelXYZ)
   .add_property("getOmegaXYZ", &XC::Node::getOmegaXYZ)
-  .add_property("getAccel", make_function( &XC::Node::getAccel, return_internal_reference<>() ))
+  .add_property("getAccel", make_function( &XC::Node::getAccel, return_value_policy<copy_const_reference>() ))
   .add_property("getAccelXYZ", &XC::Node::getAccelXYZ)
   .add_property("getAlphaXYZ", &XC::Node::getAlphaXYZ)
   .add_property("isAlive",&XC::Node::isAlive)
