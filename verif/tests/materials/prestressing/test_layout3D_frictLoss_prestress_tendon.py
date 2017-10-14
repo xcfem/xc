@@ -1,3 +1,15 @@
+# -*- coding: utf-8 -*-
+
+'''Home made test to check the accuracy of the 3D spline interpolation to 
+be used in the layout of prestressing tendons and to check the calculation
+of prestress losss due to firction.
+'''
+__author__= "Ana Ortega (AO_O)"
+__copyright__= "Copyright 2017, AO_O"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "ana.ortega@xcengineering.xyz"
+
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy import interpolate
@@ -55,7 +67,7 @@ aprox_cum_loss=np.array([sigmap0max*(1-math.exp(-mu*(aprox_cum_angle[i]+k*aprox_
 tendon=presconc.PrestressTendon([])
 tendon.roughCoordMtr=np.array([x_parab_rough,y_parab_rough,z_parab_rough])
 #Interpolated 3D spline 
-tendon.pntsInterpTendon(n_points_fine,1)
+tendon.pntsInterpTendon(n_points_fine,smoothness=1,kgrade=3)
 #Cumulative lengths of the sequence of segments
 cumulative_length=tendon.getCumLength()
 
@@ -67,13 +79,15 @@ cumulative_angl=tendon.getCumAngle()
 ratio2= np.mean((cumulative_angl-aprox_cum_angle)**2)/np.mean(cumulative_angl)
 
 # Losses of prestressing due to friction
-tendon.getLossFriction(coefFric=mu,uninDev=k,sigmaP0_extr1=sigmap0max,sigmaP0_extr2=0.0)
+tendon.calcLossFriction(coefFric=mu,uninDev=k,sigmaP0_extr1=sigmap0max,sigmaP0_extr2=0.0)
 
 ratio3= np.mean((tendon.lossFriction-aprox_cum_loss)**2)/np.mean(tendon.lossFriction)
 #Plot
 #tendon.plot2D(XaxisValues='S',fileName='parab.png',symbolRougPoints='b*',symbolFinePoints='r*',symbolTendon='g-',symbolLossFriction='m-')
 
 #tendon.plot3D(fileName='parab.png',symbolRougPoints='b*',symbolFinePoints='r*',symbolTendon='g-',symbolLossFriction=None)
+
+#tendon.plot3D(fileName='loss.png',symbolStressAfterLossFriction='r-')
 
 import os
 from miscUtils import LogMessages as lmsg
