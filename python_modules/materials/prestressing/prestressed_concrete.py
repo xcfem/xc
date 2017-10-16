@@ -267,7 +267,7 @@ class PrestressTendon(object):
         fig.savefig(fileName)
         return
 
-    def plot2D(self,XaxisValues='X',fileName='plot.png',symbolRougPoints=None,symbolFinePoints=None,symbolTendon=None,symbolLossFriction=None,symbolStressAfterLossFriction=None,symbolLossAnchor=None):
+    def plot2D(self,XaxisValues='X',fileName='plot.png',symbolRougPoints=None,symbolFinePoints=None,symbolTendon=None,symbolLossFriction=None,symbolStressAfterLossFriction=None,symbolLossAnch=None):
         '''Plot in a 2D graphic the results to which a symbol is assigned.
         Symbol examples: 'r-': red solid line, 'mo': magenta circle, 'b--': blue dashes, 'ks':black square,'g^' green triangle_up, 'c*': cyan star, ...
         :param XaxisValues: ='X' (default) to represent in the diagram X-axis
@@ -305,8 +305,8 @@ class PrestressTendon(object):
             ax2d.plot(XaxisCoord,self.lossFriction,symbolLossFriction,label='Immediate loss due to friction')
         if symbolStressAfterLossFriction:
             ax2d.plot(XaxisCoord,self.stressAfterLossFriction,symbolStressAfterLossFriction,label='Stress after loss due to friction')
-        if symbolLossAnchor:
-            ax2d.plot(XaxisCoord,self.lossAnchor,symbolLossAnchor,label='Immediate loss due to anchorage slip')
+        if symbolLossAnch:
+            ax2d.plot(XaxisCoord,self.lossAnch,symbolLossAnch,label='Immediate loss due to anchorage slip')
         ax2d.legend()
         ax2d.set_xlabel(xLab)
         fig.savefig(fileName)
