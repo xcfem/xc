@@ -197,16 +197,35 @@ class PrestressTendon(object):
                         modulus of the prestresing steel  (= deltaL x Ep)
         '''
         self.tckLossFric=interpolate.splrep(self.fineScoord,self.stressAfterLossFriction,k=3)
-        self.ScoordZeroAnchLoss=[0,self.fineScoord[-1]] # S coordinates of the points near
-                                   # extremity 1 and extremity 2, respectively, that delimite
-                                   # the lengths of tendon affected by 
-                                   # the loss of prestress due to the anchorages slip
+        self.ScoordZeroAnchLoss=[0,self.fineScoord[-1]] # S coordinates of the
+                                   # points near extremity 1 and extremity 2,
+                                   #respectively, that delimite the lengths of
+                                   # tendon affected by the loss of prestress
+                                   # due to the anchorages slip
         if Ep_by_anc_slip_extr1 >0:
             self.slip1=Ep_by_anc_slip_extr1
-            sCoordZeroLoss=optimize.newton_krylov(self.fAnc_ext1,self.fineScoord[-1]/2.0,f_tol=1e-2)
+            sCoordZeroLoss=optimize.newton_krylov(self.fAnc_ext1,self.fineScoord[-1]/2.0,f_tol=1e-2)   #point from which the tendon is not affected by the
+                       #anchorage slip
+            stressSCoordZeroLoss=interpolate.splev(sCoordZeroLoss,self.tckLossFric,der=0)              #stress in that point (after loss due to friction)
             self.ScoordZeroAnchLoss[0]=sCoordZeroLoss.item(0)
-        self.slip2=Ep_by_anc_slip_extr2
-
+            condlist=[self.fineScoord <= sCoordZeroLoss]
+            choicelist = [2*(self.stressAfterLossFriction-stressSCoordZeroLoss)]
+            lossAnchExtr1=np.select(condlist,choicelist)
+        else:
+            lossAnchExtr1=np.zeros(len(self.fineScoord))
+        if Ep_by_anc_slip_extr2 >0:
+            self.slip2=Ep_by_anc_slip_extr2
+            sCoordZeroLoss=optimize.newton_krylov(self.fAnc_ext2,self.fineScoord[-1]/2.0,f_tol=1e-2)   #point from which the tendon is affected by the
+                       #anchorage slip
+            stressSCoordZeroLoss=interpolate.splev(sCoordZeroLoss,self.tckLossFric,der=0)              #stress in that point (after loss due to friction)
+            self.ScoordZeroAnchLoss[1]=sCoordZeroLoss.item(0)
+            condlist=[self.fineScoord >= sCoordZeroLoss]
+            choicelist = [2*(self.stressAfterLossFriction-stressSCoordZeroLoss)]
+            lossAnchExtr2=np.select(condlist,choicelist)
+        else:
+            lossAnchExtr2=np.zeros(len(self.fineScoord))
+        self.lossAnch=lossAnchExtr1+lossAnchExtr2
+ 
     def fAnc_ext1(self,s):
         '''Funtion to obtain the parameters for calculating the loss due to
         anchorage slip in extremity 1
@@ -218,7 +237,7 @@ class PrestressTendon(object):
         '''Funtion to obtain the parameters for calculating the loss due to
         anchorage slip in extremity 2
         '''
-        y=interpolate.splint(s,self.fineScoord[-1],self.tckLossFric)-(self.fineScoord[-1]-s)*interpolate.splev(s,self.tckLossFric,der=0)-self.slip1/2.0
+        y=interpolate.splint(s,self.fineScoord[-1],self.tckLossFric)-(self.fineScoord[-1]-s)*interpolate.splev(s,self.tckLossFric,der=0)-self.slip2/2.0
         return y
         
     def plot3D(self,fileName='plot.png',symbolRougPoints=None,symbolFinePoints=None,symbolTendon=None,symbolLossFriction=None,symbolStressAfterLossFriction=None):
