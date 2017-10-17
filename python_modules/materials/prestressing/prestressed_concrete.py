@@ -162,21 +162,21 @@ class PrestressTendon(object):
             cum_len=self.getCumLength()
             cum_angl=self.getCumAngle()
             loss_frict_ext1=np.array([sigmaP0_extr1*(1-math.exp(-coefFric*(cum_angl[i]+uninDev*cum_len[i]))) for i in range(len(cum_angl))])
-            sigma_after_loss_frict_ext1=sigmaP0_extr1-loss_frict_ext1
+            self.stressAfterLossFrictionOnlyExtr1=sigmaP0_extr1-loss_frict_ext1
         if (sigmaP0_extr2 != 0.0):
             cum_len=self.getReverseCumLength()
             cum_angl=self.getReverseCumAngle()
             loss_frict_ext2=np.array([sigmaP0_extr2*(1-math.exp(-coefFric*(cum_angl[i]+uninDev*cum_len[i]))) for i in range(len(cum_angl))])
-            sigma_after_loss_frict_ext2=sigmaP0_extr2-loss_frict_ext2
+            self.stressAfterLossFrictionOnlyExtr2=sigmaP0_extr2-loss_frict_ext2
         if (sigmaP0_extr1 != 0.0) and (sigmaP0_extr2 != 0.0):
             self.lossFriction=np.minimum(loss_frict_ext1,loss_frict_ext2)
-            self.stressAfterLossFriction=np.maximum(sigma_after_loss_frict_ext1,sigma_after_loss_frict_ext2)
+            self.stressAfterLossFriction=np.maximum(self.stressAfterLossFrictionOnlyExtr1,self.stressAfterLossFrictionOnlyExtr2)
         elif (sigmaP0_extr1 != 0.0):
             self.lossFriction=loss_frict_ext1
-            self.stressAfterLossFriction=sigma_after_loss_frict_ext1
+            self.stressAfterLossFriction=self.stressAfterLossFrictionOnlyExtr1
         elif (sigmaP0_extr2 != 0.0):
             self.lossFriction=loss_frict_ext2
-            self.stressAfterLossFriction=sigma_after_loss_frict_ext2
+            self.stressAfterLossFriction=self.stressAfterLossFrictionOnlyExtr2
         else:
             lmsg.warning("No prestressing applied.")
         return
@@ -196,36 +196,53 @@ class PrestressTendon(object):
                         the tendon (ending point) muliplied by the elastic 
                         modulus of the prestresing steel  (= deltaL x Ep)
         '''
-        self.tckLossFric=interpolate.splrep(self.fineScoord,self.stressAfterLossFriction,k=3)
         self.ScoordZeroAnchLoss=[0,self.fineScoord[-1]] # S coordinates of the
                                    # points near extremity 1 and extremity 2,
                                    #respectively, that delimite the lengths of
                                    # tendon affected by the loss of prestress
                                    # due to the anchorages slip
+        #Initialization values
+        lossAnchExtr1=np.zeros(len(self.fineScoord))
+        lossAnchExtr2=np.zeros(len(self.fineScoord))
         if Ep_by_anc_slip_extr1 >0:
             self.slip1=Ep_by_anc_slip_extr1
-            sCoordZeroLoss=optimize.newton_krylov(self.fAnc_ext1,self.fineScoord[-1]/2.0,f_tol=1e-2)   #point from which the tendon is not affected by the
+            self.tckLossFric=interpolate.splrep(self.fineScoord,self.stressAfterLossFrictionOnlyExtr1,k=3)
+            if self.fAnc_ext1(self.fineScoord[-1])<0:  #the anchorage slip  
+                                             #affects all the tendon length
+                print 'pasa por aquí'
+                lackArea=-2*self.fAnc_ext1(self.fineScoord[-1])
+                print 'lackArea=',lackArea
+                excess_delta_sigma=lackArea/self.getCumLength().item(-1)
+                sCoordZeroLoss=self.fineScoord[-1]
+            else:    
+                sCoordZeroLoss=optimize.newton_krylov(self.fAnc_ext1,self.fineScoord[-1]/2.0,f_tol=1e-2)   #point from which the tendon is not affected by the
                        #anchorage slip
+                self.ScoordZeroAnchLoss[0]=sCoordZeroLoss.item(0)
+                excess_delta_sigma=0
             stressSCoordZeroLoss=interpolate.splev(sCoordZeroLoss,self.tckLossFric,der=0)              #stress in that point (after loss due to friction)
-            self.ScoordZeroAnchLoss[0]=sCoordZeroLoss.item(0)
             condlist=[self.fineScoord <= sCoordZeroLoss]
-            choicelist = [2*(self.stressAfterLossFriction-stressSCoordZeroLoss)]
+            choicelist = [2*(self.stressAfterLossFrictionOnlyExtr1-stressSCoordZeroLoss)+excess_delta_sigma]
             lossAnchExtr1=np.select(condlist,choicelist)
-        else:
-            lossAnchExtr1=np.zeros(len(self.fineScoord))
         if Ep_by_anc_slip_extr2 >0:
             self.slip2=Ep_by_anc_slip_extr2
-            sCoordZeroLoss=optimize.newton_krylov(self.fAnc_ext2,self.fineScoord[-1]/2.0,f_tol=1e-2)   #point from which the tendon is affected by the
+            self.tckLossFric=interpolate.splrep(self.fineScoord,self.stressAfterLossFrictionOnlyExtr2,k=3)
+            if self.fAnc_ext2(self.fineScoord[0])<0:  #the anchorage slip 
+                                             #affects all the tendon length
+                lackArea=-2*self.fAnc_ext2(self.fineScoord[0])
+                excess_delta_sigma=lackArea/self.getCumLength().item(-1)
+                sCoordZeroLoss=self.fineScoord[0]
+            else:    
+                sCoordZeroLoss=optimize.newton_krylov(self.fAnc_ext2,self.fineScoord[-1]/2.0,f_tol=1e-2)   #point from which the tendon is affected by the
                        #anchorage slip
+                self.ScoordZeroAnchLoss[1]=sCoordZeroLoss.item(0)
+                excess_delta_sigma=0
             stressSCoordZeroLoss=interpolate.splev(sCoordZeroLoss,self.tckLossFric,der=0)              #stress in that point (after loss due to friction)
-            self.ScoordZeroAnchLoss[1]=sCoordZeroLoss.item(0)
             condlist=[self.fineScoord >= sCoordZeroLoss]
-            choicelist = [2*(self.stressAfterLossFriction-stressSCoordZeroLoss)]
+            choicelist = [2*(self.stressAfterLossFriction-stressSCoordZeroLoss)+excess_delta_sigma]
             lossAnchExtr2=np.select(condlist,choicelist)
-        else:
-            lossAnchExtr2=np.zeros(len(self.fineScoord))
         self.lossAnch=lossAnchExtr1+lossAnchExtr2
- 
+        self.stressAfterLossAnch=self.stressAfterLossFriction-self.lossAnch
+
     def fAnc_ext1(self,s):
         '''Funtion to obtain the parameters for calculating the loss due to
         anchorage slip in extremity 1
@@ -240,7 +257,7 @@ class PrestressTendon(object):
         y=interpolate.splint(s,self.fineScoord[-1],self.tckLossFric)-(self.fineScoord[-1]-s)*interpolate.splev(s,self.tckLossFric,der=0)-self.slip2/2.0
         return y
         
-    def plot3D(self,fileName='plot.png',symbolRougPoints=None,symbolFinePoints=None,symbolTendon=None,symbolLossFriction=None,symbolStressAfterLossFriction=None,symbolLossAnch=None):
+    def plot3D(self,fileName='plot.png',symbolRougPoints=None,symbolFinePoints=None,symbolTendon=None,symbolLossFriction=None,symbolStressAfterLossFriction=None,symbolLossAnch=None,symbolStressAfterLossAnch=None):
         '''Plot in a 3D graphic the results to which a symbol is assigned.
         Symbol examples: 'r-': red solid line, 'mo': magenta circle, 
         'b--': blue dashes, 'ks':black square,'g^' green triangle_up, 
@@ -260,6 +277,8 @@ class PrestressTendon(object):
             ax3d.plot(self.fineCoordMtr[0],self.fineCoordMtr[1],self.stressAfterLossFriction,symbolStressAfterLossFriction,label='Stress after loss due to friction')
         if symbolLossAnch:
             ax3d.plot(self.fineCoordMtr[0],self.fineCoordMtr[1],self.lossAnch,symbolLossAnch,label='Immediate loss due to anchorage slip')
+        if symbolStressAfterLossAnch:
+            ax3d.plot(self.fineCoordMtr[0],self.fineCoordMtr[1],self.stressAfterLossAnch,symbolStressAfterLossAnch,label='Stress after loss due to anchorage slip')
         ax3d.legend()
         ax3d.set_xlabel('X')
         ax3d.set_ylabel('Y')
@@ -267,7 +286,7 @@ class PrestressTendon(object):
         fig.savefig(fileName)
         return
 
-    def plot2D(self,XaxisValues='X',fileName='plot.png',symbolRougPoints=None,symbolFinePoints=None,symbolTendon=None,symbolLossFriction=None,symbolStressAfterLossFriction=None,symbolLossAnch=None):
+    def plot2D(self,XaxisValues='X',fileName='plot.png',symbolRougPoints=None,symbolFinePoints=None,symbolTendon=None,symbolLossFriction=None,symbolStressAfterLossFriction=None,symbolLossAnch=None,symbolStressAfterLossAnch=None):
         '''Plot in a 2D graphic the results to which a symbol is assigned.
         Symbol examples: 'r-': red solid line, 'mo': magenta circle, 'b--': blue dashes, 'ks':black square,'g^' green triangle_up, 'c*': cyan star, ...
         :param XaxisValues: ='X' (default) to represent in the diagram X-axis
@@ -307,6 +326,8 @@ class PrestressTendon(object):
             ax2d.plot(XaxisCoord,self.stressAfterLossFriction,symbolStressAfterLossFriction,label='Stress after loss due to friction')
         if symbolLossAnch:
             ax2d.plot(XaxisCoord,self.lossAnch,symbolLossAnch,label='Immediate loss due to anchorage slip')
+        if symbolStressAfterLossAnch:
+            ax2d.plot(XaxisCoord,self.stressAfterLossAnch,symbolStressAfterLossAnch,label='Stress after loss due to anchorage slip')
         ax2d.legend()
         ax2d.set_xlabel(xLab)
         fig.savefig(fileName)
