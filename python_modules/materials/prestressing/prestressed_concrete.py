@@ -209,9 +209,7 @@ class PrestressTendon(object):
             self.tckLossFric=interpolate.splrep(self.fineScoord,self.stressAfterLossFrictionOnlyExtr1,k=3)
             if self.fAnc_ext1(self.fineScoord[-1])<0:  #the anchorage slip  
                                              #affects all the tendon length
-                print 'pasa por aquí'
                 lackArea=-2*self.fAnc_ext1(self.fineScoord[-1])
-                print 'lackArea=',lackArea
                 excess_delta_sigma=lackArea/self.getCumLength().item(-1)
                 sCoordZeroLoss=self.fineScoord[-1]
             else:    
