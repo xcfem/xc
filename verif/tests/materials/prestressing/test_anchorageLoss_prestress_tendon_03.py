@@ -1,11 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import division
 '''Test for checking the calculation of loss of prestress due to 
-the anchorage slip.
-Data for the problem and approximate calculation are taken from 
-Example 4.3 of the topic 4 of course "Prestressed Concrete Design 
-(SAB 4323) by Baderul Hisham Ahmad 
-ocw.utm.my
+the anchorage slip whem this loss affects the whole length of tendon.
 '''
 __author__= "Ana Ortega (AO_O)"
 __copyright__= "Copyright 2017, AO_O"
@@ -75,15 +71,19 @@ tendon.calcLossFriction(coefFric=mu,uninDev=k,sigmaP0_extr1=sigmap0max,sigmaP0_e
 # previously calculated
 tendon.calcLossAnchor(Ep_by_anc_slip_extr1=deltaL*Ep,Ep_by_anc_slip_extr2=0.0)
 
-tendon.plot2D(XaxisValues='S',fileName='plot.png',symbolStressAfterLossFriction='g-',symbolStressAfterLossAnch='r-')
+#Plot
+# tendon.plot2D(XaxisValues='S',fileName='plot.png',symbolStressAfterLossFriction='g-',symbolStressAfterLossAnch='r-')
 
-quit()
+areaSigmFric=interpolate.splint(0,tendon.fineScoord[-1],tendon.tckLossFric)
+tckLA=interpolate.splrep(tendon.fineScoord,tendon.stressAfterLossAnch,k=3)
+areaSigmAnc=interpolate.splint(0,tendon.fineScoord[-1],tckLA)
+
+ratio=(areaSigmFric-areaSigmAnc)-Ep*deltaL
   
-ratio=(xA_rough-Laffected*1e-3)/xA_rough
 import os
 from miscUtils import LogMessages as lmsg
 fname= os.path.basename(__file__)
-if (abs(ratio)<2.05e-2) :
+if (abs(ratio)<1e-6) :
   print "test ",fname,": ok."
 else:
   lmsg.error(fname+' ERROR.')
