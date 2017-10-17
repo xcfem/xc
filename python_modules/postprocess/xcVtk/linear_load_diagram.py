@@ -1,11 +1,11 @@
  # -*- coding: utf-8 -*-
 
-''' Representación de cargas sobre elementos lineales. '''
+''' Display of loads over linear elements. '''
 
 import geom
 import vtk
 from postprocess.xcVtk import colored_diagram as cd
-
+from miscUtils import LogMessages as lmsg
 
 class LinearLoadDiagram(cd.ColoredDiagram):
   '''Draws a load over a linear element (qx,qy,qz,...)'''
@@ -18,35 +18,37 @@ class LinearLoadDiagram(cd.ColoredDiagram):
   def dumpElementalLoads(self,preprocessor,lp,indxDiagram):
     ''' Iterate over loaded elements dumping its loads into the graphic.'''
     lIter= lp.loads.getElementalLoadIter
-    el= lIter.next()
-    while(el):
-      tags= el.elementTags
+    eLoad= lIter.next()
+    while(eLoad):
+      tags= eLoad.elementTags
       for i in range(0,len(tags)):
         eTag= tags[i]
         elem= preprocessor.getElementLoader.getElement(eTag)
         if(self.component=='axialComponent'):
           self.vDir= elem.getJVector3d(True)
-          indxDiagram= self.agregaDatosADiagrama(elem,indxDiagram,el.axialComponent,el.axialComponent)
+          indxDiagram= self.agregaDatosADiagrama(elem,indxDiagram,eLoad.axialComponent,eLoad.axialComponent)
         elif(self.component=='transComponent'):
           self.vDir= elem.getJVector3d(True) # initialGeometry= True  
-          indxDiagram= self.agregaDatosADiagrama(elem,indxDiagram,el.transComponent,el.transComponent)
+          indxDiagram= self.agregaDatosADiagrama(elem,indxDiagram,eLoad.transComponent,eLoad.transComponent)
         elif(self.component=='transYComponent'):
           self.vDir= elem.getJVector3d(True) # initialGeometry= True  
-          indxDiagram= self.agregaDatosADiagrama(elem,indxDiagram,el.transYComponent,el.transYComponent)
+          indxDiagram= self.agregaDatosADiagrama(elem,indxDiagram,eLoad.transYComponent,eLoad.transYComponent)
         elif(self.component=='transZComponent'):
           self.vDir= elem.getKVector3d(True) # initialGeometry= True  
-          indxDiagram= self.agregaDatosADiagrama(elem,indxDiagram,el.transZComponent,el.transZComponent)
+          indxDiagram= self.agregaDatosADiagrama(elem,indxDiagram,eLoad.transZComponent,eLoad.transZComponent)
         else:
-          print "LinearLoadDiagram :'", self.component, "' unknown."        
-      el= lIter.next()
-
+          lmsg.error("LinearLoadDiagram :'"+self.component+"' unknown.")        
+      eLoad= lIter.next()
   def dumpLoads(self, preprocessor, indxDiagram):
     preprocessor.resetLoadCase()
     loadPatterns= preprocessor.getLoadLoader.getLoadPatterns
     loadPatterns.addToDomain(self.lpName)
     lp= loadPatterns[self.lpName]
     #Iterate over loaded elements.
-    self.dumpElementalLoads(preprocessor,lp,indxDiagram)
+    if(lp):
+      self.dumpElementalLoads(preprocessor,lp,indxDiagram)
+    else:
+      lmsg.error('load pattern: '+self.lpName+' not found.')
 
   def addDiagram(self,preprocessor):
     self.creaEstrucDatosDiagrama()
