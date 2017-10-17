@@ -204,7 +204,8 @@ class QuickGraphics(object):
     defDisplay.displayScene(caption=caption,fName=fileName)
 
   def dispLoadCaseBeamEl(self,loadCaseName='',setToDisplay=None,fUnitConv=1.0,elLoadComp='transComponent',elLoadScaleF=1.0,nodLoadScaleF=1.0,viewName='XYZPos',hCamFct=1.0,caption='',fileName=None,defFScale=0.0):
-    '''displays the loads applied on beam elements and nodes for a given load case
+    '''Display the loads applied on beam elements and nodes for a given load case
+
     :param setToDisplay:    set of beam elements to be represented
     :param fUnitConv:       factor of conversion to be applied to the results (defaults to 1)
     :param elLoadComp:      component of the loads on elements to be depicted
@@ -248,7 +249,12 @@ class QuickGraphics(object):
     # nodal loads
     vField=lvf.LoadVectorField(loadPatternName=loadCaseName,fUnitConv=fUnitConv,scaleFactor=nodLoadScaleF,showPushing= True)
 #    loadPatterns= preprocessor.getLoadLoader.getLoadPatterns
-    count=vField.dumpNodalLoads(preprocessor,lp=loadPatterns[loadCaseName],defFScale=defFScale)
+    lPattern= loadPatterns[loadCaseName]
+    count= 0
+    if(lPattern):
+      count=vField.dumpNodalLoads(preprocessor,lp=loadPatterns[loadCaseName],defFScale=defFScale)
+    else:
+      lmsg.error('load pattern: '+ loadCaseName + ' not found.')
     if count >0:
       vField.setupActor()
       defDisplay.renderer.AddActor(vField.actor)
