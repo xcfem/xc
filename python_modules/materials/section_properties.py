@@ -360,6 +360,22 @@ class GenericSection(SectionProperties):
     '''Return shear shape factor with respect to local z-axis'''
     return self.alphZ
 
+def Steiner(section,pos):
+  '''Return the moments of inertia obtained by applying
+     the parallel axis theorem (or Huygens-Steiner theorem
+     or Steiner's theorem.
+
+    :param section: original section
+    :param pos: position of the original section centroid
+  '''
+  y= pos.x
+  z= pos.y
+  A= section.A()
+  newIy= section.Iy()+A*z**2
+  newIz= section.Iz()+A*y**2
+  return newIy,newIz
+
+
 class ISection(SectionProperties):
   '''I section geometric parameters
 
