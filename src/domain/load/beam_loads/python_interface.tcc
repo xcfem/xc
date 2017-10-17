@@ -38,6 +38,7 @@ class_<XC::BeamStrainLoad, bases<XC::BeamLoad>, boost::noncopyable >("BeamStrain
 class_<XC::BeamMecLoad, bases<XC::BeamLoad>, boost::noncopyable >("BeamMecLoad", no_init)
   .add_property("axialComponent", &XC::BeamMecLoad::getAxialComponent, &XC::BeamMecLoad::setAxialComponent)
   .add_property("transComponent", &XC::BeamMecLoad::getTransComponent, &XC::BeamMecLoad::setTransComponent)
+  .add_property("transYComponent", &XC::BeamMecLoad::getTransComponent, &XC::BeamMecLoad::setTransComponent)
   .def("getLocalForce",&XC::BeamMecLoad::getLocalForce,"Returns local coordinates or force vector.")
   .def("getLocalMoment",&XC::BeamMecLoad::getLocalMoment,"Returns local coordinates of bending moment vector.")
   .def("getLocalForces",make_function(&XC::BeamMecLoad::getLocalForces, return_internal_reference<>() ),"Returns punctual/distributed force vectors (one for each element) expressed in element local coordinates.")
@@ -72,7 +73,7 @@ class_<XC::Beam3dPointLoad, bases<XC::BeamPointLoad>, boost::noncopyable >("Beam
   ;
 
 class_<XC::Beam3dUniformLoad, bases<XC::BeamUniformLoad>, boost::noncopyable >("Beam3dUniformLoad", no_init)
-  .add_property("transZComponent", &XC::Beam3dUniformLoad::getTransComponent, &XC::Beam3dUniformLoad::setTransZComponent)
+  .add_property("transZComponent", &XC::Beam3dUniformLoad::getTransZComponent, &XC::Beam3dUniformLoad::setTransZComponent)
   ;
 
 
