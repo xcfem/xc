@@ -481,6 +481,9 @@ python tests/materials/test_inercia_torsion_cajon.py
 echo "$BLEU" "  Prestressing." "$NORMAL"
 python tests/materials/prestressing/test_layout2D_frictLoss_prestress_tendon.py
 python tests/materials/prestressing/test_layout3D_frictLoss_prestress_tendon.py
+python tests/materials/prestressing/test_anchorageLoss_prestress_tendon_01.py
+python tests/materials/prestressing/test_anchorageLoss_prestress_tendon_02.py
+python tests/materials/prestressing/test_anchorageLoss_prestress_tendon_03.py
 
 echo "$BLEU" "  Other materials tests." "$NORMAL"
 python tests/materials/test_elastomeric_bearing_stiffness.py

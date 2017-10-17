@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
-'''Layout of prestressing tendons and calculation of the loss of prestress
-force due to friction.
-
+'''Home made test to check the accuracy of the 2D spline interpolation to 
+be used in the layout of prestressing tendons and to check the calculation
+of prestress losss due to firction.
 '''
 __author__= "Ana Ortega (AO_O) "
 __copyright__= "Copyright 2016, AO_O"
@@ -78,7 +78,7 @@ cumulative_angl=tendon.getCumAngle()
 ratio2= np.mean((cumulative_angl-aprox_cum_angle)**2)/np.mean(cumulative_angl)
 
 # Losses of prestressing due to friction
-tendon.getLossFriction(coefFric=mu,uninDev=k,sigmaP0_extr1=sigmap0max,sigmaP0_extr2=0.0)
+tendon.calcLossFriction(coefFric=mu,uninDev=k,sigmaP0_extr1=sigmap0max,sigmaP0_extr2=0.0)
 ratio3= np.mean((tendon.lossFriction-aprox_cum_loss)**2)/np.mean(tendon.lossFriction)
 
 #Plot
@@ -86,6 +86,7 @@ ratio3= np.mean((tendon.lossFriction-aprox_cum_loss)**2)/np.mean(tendon.lossFric
 
 # tendon.plot2D(XaxisValues='X',fileName='loss.png',symbolRougPoints=None,symbolFinePoints=None,symbolTendon=None,symbolLossFriction='m-')
 
+# tendon.plot2D(XaxisValues='X',fileName='loss.png',symbolStressAfterLossFriction='r-')
 import os
 from miscUtils import LogMessages as lmsg
 fname= os.path.basename(__file__)
