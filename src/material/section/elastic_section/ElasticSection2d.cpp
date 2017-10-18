@@ -73,9 +73,14 @@
 
 XC::Vector XC::ElasticSection2d::s(2);
 
+//! @brief Constructor.
+//!
+//! @param tag: identifier for the object.
+//! @param mat_ldr: manager of the material objects.
 XC::ElasticSection2d::ElasticSection2d(int tag, MaterialLoader *mat_ldr)
   : BaseElasticSection2d(tag,SEC_TAG_Elastic2d,2,mat_ldr) {}
 
+//! @breif Default constructor.
 XC::ElasticSection2d::ElasticSection2d(void)
   : BaseElasticSection2d(0,SEC_TAG_Elastic2d,2) {}
 
@@ -83,6 +88,11 @@ XC::ElasticSection2d::ElasticSection2d(void)
 //! To construct an ElasticSection2D with an integer identifier {\em
 //! tag}, an elastic modulus of \f$E\f$, a second moment of area \f$I\f$,
 //! a section area of \f$A\f$.
+//!
+//! @param tag: identifier for the object.
+//! @param E: elastic modulus
+//! @param A: area.
+//! @param I: moment of inertia.
 XC::ElasticSection2d::ElasticSection2d(int tag, double E, double A, double I)
   : BaseElasticSection2d(tag,SEC_TAG_Elastic2d,2,E,A,I,0.0,0.0)
   {}
@@ -92,6 +102,23 @@ XC::ElasticSection2d::ElasticSection2d(int tag, double EA, double EI)
   {}
 
 //! @brief Returns the cross-section stress resultant.
+//!
+//! Returns the section stress resultants, \f$\ssec\f$, the product of the 
+//! section stiffness matrix, \f$\ksec\f$, and the section deformation 
+//! vector, \f$\esec\f$,
+//! \f[
+//! \begin{equation}
+//! \ssec = \ksec \esec = \left[
+//!    \begin{array}{c}
+//!        P
+//!        M_z
+//!        V_y
+//!    \end{array} 
+//!  \right]
+//! \end{equation}
+//! \f]
+//! where \f$P\f$ is the axial force, \f$M_z\f$ is the bending moment about the
+//! local z-axis, and \f$V_y\f$ is the shear force along the local y-axis.
 const XC::Vector &XC::ElasticSection2d::getStressResultant(void) const
   {
     const Vector &e= getSectionDeformation();
@@ -101,6 +128,18 @@ const XC::Vector &XC::ElasticSection2d::getStressResultant(void) const
   }
 
 //! @brief Returns the tangent stiffness matrix.
+//!
+//! \f[
+//! \begin{equation}
+//! \fsec = \left[
+//!    \begin{array}{ccc}
+//!        EA &  0 &  0
+//!         0 & EI &  0
+//!         0 &  0 & \alpha GA
+//!    \end{array} 
+//!  \right]
+//! \end{equation}
+//! \f]
 const XC::Matrix &XC::ElasticSection2d::getSectionTangent(void) const
   { return ctes_scc.getSectionTangent2x2(); }
 
@@ -110,6 +149,18 @@ const XC::Matrix &XC::ElasticSection2d::getInitialTangent(void) const
   { return getSectionTangent(); }
 
 //! @brief Returns the flexibility matrix.
+//!
+//! \f[
+//! \begin{equation}
+//! \fsec = \left[
+//!    \begin{array}{ccc}
+//!        \frac{1}{EA} &            0 &                  0
+//!                   0 & \frac{1}{EI} &                  0
+//!                   0 &            0 & \frac{1}{\alpha GA}
+//!    \end{array} 
+//!  \right]
+//! \end{equation}
+//! \f]
 const XC::Matrix &XC::ElasticSection2d::getSectionFlexibility(void) const
   { return ctes_scc.getSectionFlexibility2x2(); }
 
@@ -117,7 +168,7 @@ const XC::Matrix &XC::ElasticSection2d::getSectionFlexibility(void) const
 const XC::Matrix &XC::ElasticSection2d::getInitialFlexibility(void) const
   { return getSectionFlexibility(); }
 
-
+//! @brief Virtual constructor.
 XC::SectionForceDeformation *XC::ElasticSection2d::getCopy(void) const
   { return new XC::ElasticSection2d(*this); }
 
@@ -179,6 +230,7 @@ int XC::ElasticSection2d::recvSelf(const CommParameters &cp)
     return res;
   }
 
+//! @brief Print stuff.
 void XC::ElasticSection2d::Print(std::ostream &s, int flag) const
   {
     s << "ElasticSection2d, tag: " << this->getTag() << std::endl;
