@@ -526,6 +526,18 @@ XC::SetMeshComp XC::SetMeshComp::pickElemsOfType(const std::string &newSetName, 
     return retval;
   }
 
+//! @brief Return a new set that contains the elements of the specified
+//! dimension.
+//!
+//! @param newSetName: name for the new set.
+//! @param targetDim: element dimension (point: 0, line: 1, surface: 2, volume: 3)
+XC::SetMeshComp XC::SetMeshComp::pickElemsOfDimension(const std::string &newSetName, const size_t &targetDim)
+  {
+    SetMeshComp retval(newSetName);
+    retval.elements= elements.pickElemsOfDimension(targetDim);
+    return retval;
+  }
+
 //! @brief Return a new set that contains the elements who have the material
 //! being passed as parameter.
 //!

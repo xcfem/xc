@@ -289,6 +289,30 @@ boost::python::list XC::DqPtrsElem::getTypesPy(void) const
     return retval;
   }
 
+
+//! @brief Return the dimensions of the elements.
+std::set<size_t> XC::DqPtrsElem::getDimensions(void) const
+  {
+    std::set<size_t> retval;
+    for(const_iterator i= begin();i!=end();i++)
+      {
+        const size_t dim= (*i)->getDimension();
+	if(retval.find(dim)==retval.end())
+	  retval.insert(dim);
+      }
+    return retval;    
+  }
+
+//! @brief Return the dimensions of the elements.
+boost::python::list XC::DqPtrsElem::getDimensionsPy(void) const
+  {
+    boost::python::list retval;
+    std::set<size_t> tmp= getDimensions();
+    for(std::set<size_t>::const_iterator i= tmp.begin();i!=tmp.end();i++)
+        retval.append(*i);
+    return retval;
+  }
+
 //! @brief Return a container with the elements whose class name
 //! contains the string.
 //!
@@ -302,6 +326,23 @@ XC::DqPtrsElem XC::DqPtrsElem::pickElemsOfType(const std::string &typeName)
         assert(e);
         const std::string className= e->getClassName();
 	if(boost::algorithm::ifind_first(className,typeName))
+	  retval.push_back(e);
+      }
+    return retval;
+  }
+
+//! @brief Return a container with the elements of the specified
+//! dimension.
+//!
+//! @param dim: element dimension (point: 0, line: 1, surface: 2, volume: 3)
+XC::DqPtrsElem XC::DqPtrsElem::pickElemsOfDimension(const size_t &dim)
+  {
+    DqPtrsElem retval;
+    for(iterator i= begin();i!=end();i++)
+      {
+        Element *e= (*i);
+        assert(e);
+	if(e->getDimension()==dim)
 	  retval.push_back(e);
       }
     return retval;
