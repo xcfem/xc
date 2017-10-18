@@ -29,6 +29,11 @@ libvtk5-dev
 libX11-dev
 petsc-dev
 python-vtk
+python-scipy
+python-sympy
+python-matplotlib
+python-pandas
+python-sklearn
 tcl-dev
 X11proto-core-dev ¿?
 
