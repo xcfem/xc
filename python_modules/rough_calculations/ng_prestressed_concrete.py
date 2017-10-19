@@ -19,8 +19,8 @@ from scipy import integrate
 
 #Rough calculation of prestress loss due to elastic shortening of concrete
 def loss_elastic_shortening_concr(Ac,Ic,Ec,Ep,Ap,ec_p,sigma_p_0,M_sw):
-    '''return the loss of prestress in a section due to elastic shortening 
-    of concrete.
+    '''return a rough estimation of the loss of prestress in a section due 
+    to elastic shortening of concrete.
 
     :param Ac: cross-section area of concrete
     :param Ic: moment of inertia of the concrete cross-section
@@ -37,7 +37,8 @@ def loss_elastic_shortening_concr(Ac,Ic,Ec,Ep,Ap,ec_p,sigma_p_0,M_sw):
     return loss_prestr
   
 def sigma_concr_tendon_lev(Ac,Ic,Ec,Ep,Ap,ec_p,sigma_p_0,M_sw):
-    '''return the stress in concrete at the level of the tendon
+    '''return a rough estimation of the stress in concrete at the level of 
+    the tendon.
 
     :param Ac: cross-section area of concrete
     :param Ic: moment of inertia of the concrete cross-section
@@ -55,7 +56,20 @@ def sigma_concr_tendon_lev(Ac,Ic,Ec,Ep,Ap,ec_p,sigma_p_0,M_sw):
     return fco
 
 
+def loss_friction(s,sigma_p_0,alpha_unit,mu,unint_dev):
+    '''return a rough estimation of the loss of prestress due to friction.
 
+    :param s: cable length from start to section considered
+    :param sigma_p_0: initial stress in tendon
+    :param alpha_unit: mean angular deviation per unit lenght. 
+        E.g.: Assimilating the parabolic profile of the cable to a 
+        circular profile the angular deviation is constant in the beam length 
+        and can be expressed as:
+          8*eccentricity_mid_span/Lbeam**2
+    :param unint_dev: unintentional angular deviation per unit length
+    '''
+    loss_prestr=sigma_p_0*(1-math.exp(-mu*(alpha_unit+unint_dev)*s))
+    return loss_prestr
 
 
 class prestressingWire(object):

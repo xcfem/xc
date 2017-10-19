@@ -38,22 +38,6 @@ n_points_fine=101   #number of points interpolated
 #Anchorage slip
 deltaL=5            #anchorage draw-in (provided by manufacturer) [mm]
 
-#Rough calculation
-Aps=2850          #area of tendon cross-section [mm2]
-P_i=Aps*sigmap0max*1e-3 #kN
-rps=(lBeam*1e-3)**2/(8*abs(eMidspan)*1e-3)   # parabolic curve [m]
-p=P_i*(1-math.exp(-(mu/rps+k*mu*1e3)))       # friction loss [kN/m]
-xA_rough=(deltaL*Ep*Aps/p)**0.5*1e-3         # effective length of tendon
-                             #affected by the anchorage slip [m]
-DeltaPa_rough=2*p*xA_rough   #loss of prestress force at the left-hand end [kN]
-P_left_end=P_i-DeltaPa_rough
-P_mid_span=P_i-DeltaPa_rough+p*lBeam*1e-3/2.0
-P_right_end=P_i-p*lBeam*1e-3
-                              
-sigma_left_end=P_left_end*1e3/Aps #stress at left-end [MPa]
-sigma_mid_span=P_mid_span*1e3/Aps #stress at mid-span [MPa]
-sigma_right_end=P_right_end*1e3/Aps #stress at right-end [MPa]
-
 #XC calculation
 #Exact parabola
 from model.geometry import geom_utils
