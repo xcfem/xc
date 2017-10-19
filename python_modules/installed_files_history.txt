@@ -1227,6 +1227,8 @@
 /usr/local/lib/python2.7/dist-packages/rough_calculations/ng_pinned_fixed_beam.pyc
 /usr/local/lib/python2.7/dist-packages/rough_calculations/ng_predim_pilotes.py
 /usr/local/lib/python2.7/dist-packages/rough_calculations/ng_predim_pilotes.pyc
+/usr/local/lib/python2.7/dist-packages/rough_calculations/ng_prestressed_concrete.py
+/usr/local/lib/python2.7/dist-packages/rough_calculations/ng_prestressed_concrete.pyc
 /usr/local/lib/python2.7/dist-packages/rough_calculations/ng_prestressing_wire.py
 /usr/local/lib/python2.7/dist-packages/rough_calculations/ng_prestressing_wire.pyc
 /usr/local/lib/python2.7/dist-packages/rough_calculations/ng_punzonamiento.py

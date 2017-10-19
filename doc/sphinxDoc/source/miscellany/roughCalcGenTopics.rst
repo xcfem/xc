@@ -95,10 +95,10 @@ ng_pinned_fixed_beam
     :show-inheritance:
 
 
-ng_prestressing_wire
---------------------
+ng_prestressed_concrete
+-----------------------
 
-.. automodule:: rough_calculations.ng_prestressing_wire
+.. automodule:: rough_calculations.ng_prestressed_concrete
     :members:
     :undoc-members:
     :show-inheritance:

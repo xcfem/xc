@@ -32,6 +32,7 @@ Reinforced and prestressed concrete
    python_modules/materials.ec2
    python_modules/materials.ehe
    python_modules/materials.sia262
+   python_modules/materials.prestressing
 
 
 Steel
