@@ -141,6 +141,7 @@ class Set: public SetMeshComp
     bool In(const UniformGrid *) const;
 
     BND3d Bnd(const double &) const;
+    Set pickEntitiesInside(const std::string &, const GeomObj3d &, const double &tol= 0.0);
     
     void genMesh(meshing_dir dm);
 
