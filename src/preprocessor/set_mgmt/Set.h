@@ -140,6 +140,8 @@ class Set: public SetMeshComp
       { return entities.getUniformGrids(); }
     bool In(const UniformGrid *) const;
 
+    BND3d Bnd(const double &) const;
+    
     void genMesh(meshing_dir dm);
 
 

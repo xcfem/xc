@@ -480,6 +480,32 @@ XC::SetEntities XC::SetEntities::pickBodiesInside(const GeomObj3d &geomObj, cons
 bool XC::SetEntities::In(const UniformGrid *ug) const
   { return uniform_grids.in(ug); }
 
+//! @brief Return the nodes current position boundary.
+BND3d XC::SetEntities::Bnd(void) const
+  {
+    BND3d retval= points.Bnd();
+    retval+= lines.Bnd();
+    retval+= surfaces.Bnd();
+    retval+= bodies.Bnd();
+    return retval;
+  }
+
+//! @brief Return a new set that contains the bodies that lie inside the
+//! geometric object.
+//!
+//! @param geomObj: geometric object that must contain the nodes.
+//! @param tol: tolerance for "In" function.
+XC::SetEntities XC::SetEntities::pickEntitiesInside(const GeomObj3d &geomObj, const double &tol) const
+  {
+    Preprocessor *prep= const_cast<Preprocessor *>(getPreprocessor());
+    SetEntities retval(prep);
+    retval.points= points.pickEntitiesInside(geomObj,tol);
+    retval.lines= lines.pickEntitiesInside(geomObj,tol);
+    retval.surfaces= surfaces.pickEntitiesInside(geomObj,tol);
+    retval.bodies= bodies.pickEntitiesInside(geomObj,tol);
+    return retval;
+  }
+
 //! @brief Select the points identified by the tags in the parameter.
 //!
 //! @param tags: identifiers of the points to select.

@@ -29,6 +29,8 @@
 #include "domain/mesh/node/Node.h"
 #include "preprocessor/cad/trf/TrfGeom.h"
 #include "xc_basic/src/funciones/algebra/ExprAlgebra.h"
+#include "xc_utils/src/geom/pos_vec/Pos3d.h"
+#include "xc_utils/src/geom/d3/BND3d.h"
 
 //! @brief Constructor.
 XC::DqPtrsNode::DqPtrsNode(EntCmd *owr)
@@ -203,6 +205,22 @@ XC::DqPtrsNode XC::DqPtrsNode::pickNodesInside(const GeomObj3d &geomObj, const d
         assert(n);
 	if(n->In(geomObj,tol))
 	  retval.push_back(n);
+      }
+    return retval;    
+  }
+
+//! @brief Return the nodes current position boundary.
+//!
+//! @param factor: scale factor for the current position
+//!                initPos+ factor * nodDisplacement.
+BND3d XC::DqPtrsNode::Bnd(const double &factor= 1.0) const
+  {
+    BND3d retval;
+    for(const_iterator i= begin();i!=end();i++)
+      {
+        Node *n= (*i);
+        assert(n);
+	retval+= n->getCurrentPosition3d(factor);
       }
     return retval;    
   }

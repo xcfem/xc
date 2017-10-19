@@ -43,6 +43,7 @@
 #include "xc_utils/src/geom/pos_vec/SVD3d.h"
 #include "xc_utils/src/geom/d2/Plano3d.h"
 #include "xc_utils/src/geom/d3/SemiEspacio3d.h"
+#include "xc_utils/src/geom/d3/BND3d.h"
 
 
 //! @brief Constructor.
@@ -238,6 +239,18 @@ XC::Set XC::Set::pickSurfacesInside(const std::string &newSetName, const GeomObj
 //! @brief Returns true if the body belongs to the set.
 bool XC::Set::In(const Body *b) const
   { return entities.In(b); }
+
+//! @brief Return the set boundary.
+//!
+//! @param factor: scale factor for the current position
+//!                of the nodes: initPos+ factor * nodDisplacement.
+BND3d XC::Set::Bnd(const double &factor) const
+  {
+    BND3d retval= SetMeshComp::Bnd(factor);
+    retval+= entities.Bnd();
+    return retval;
+  }
+
 
 //! @brief Return a new set that contains the bodies that lie inside the
 //! geometric object.

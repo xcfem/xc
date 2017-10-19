@@ -33,8 +33,10 @@
 
 #include "DqPtrs.h"
 #include "xc_utils/src/geom/pos_vec/Pos3d.h"
+#include "xc_utils/src/geom/d3/BND3d.h"
 
 class GeomObj3d;
+class BND3d;
 
 namespace XC {
 
@@ -66,6 +68,7 @@ class DqPtrsEntities: public DqPtrs<T>
     T *getNearest(const Pos3d &p);
     const T *getNearest(const Pos3d &p) const;
     DqPtrsEntities<T> pickEntitiesInside(const GeomObj3d &, const double &tol= 0.0) const;
+    BND3d Bnd(void) const;
   };
 
  
@@ -141,6 +144,21 @@ DqPtrsEntities<T> DqPtrsEntities<T>::pickEntitiesInside(const GeomObj3d &geomObj
         assert(t);
 	if(t->In(geomObj,tol))
 	  retval.push_back(t);
+      }
+    return retval;
+  }
+
+//! @brief Return the entities boundary.
+//!
+template <class T>
+BND3d DqPtrsEntities<T>::Bnd(void) const
+  {
+    BND3d retval;
+    for(const_iterator i= this->begin();i!= this->end();i++)
+      {
+        const T *t= (*i);
+        assert(t);
+	retval+= t->Bnd();
       }
     return retval;
   }

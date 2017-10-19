@@ -40,6 +40,7 @@ class_<XC::DqPtrsNode, bases<dq_ptrs_node> >("DqPtrsNode",no_init)
   .add_property("getNumDeadNodes", &XC::DqPtrsNode::getNumDeadNodes)
   .def("getNearestNode",make_function(getNearestNodeDqPtrs, return_internal_reference<>() ),"Returns nearest node.")
   .def("pickNodesInside",&XC::DqPtrsNode::pickNodesInside,"pickNodesInside(geomObj,tol) return the nodes inside the geometric object.")
+  .def("getBnd", &XC::DqPtrsNode::Bnd, "Returns nodes boundary.")
   .def(self += self)
   .def(self + self)
   .def(self - self)
@@ -128,6 +129,7 @@ class_<XC::SetMeshComp, bases<XC::SetBase>>("SetMeshComp",no_init)
   .def("pickElemsOfType",&XC::SetMeshComp::pickElemsOfType,"pickElemsOfType(typeName) return the elements whose type containts the string argument.")
   .def("getElementMaterials",&XC::SetMeshComp::getElementMaterialNamesPy,"getElementMaterials() return a list with the names of the element materials in the containe.")
   .def("pickElemsOfMaterial",&XC::SetMeshComp::pickElemsOfMaterial,"pickElemsOfMaterial(materialName) return the elements that have that material.")
+  .def("getBnd", &XC::SetMeshComp::Bnd, "Returns set boundary.")
   .def(self += self)
   .def(self -= self)
   .def(self *= self)
@@ -150,6 +152,7 @@ class_<XC::SetEntities::lst_ptr_points, bases<dq_ptrs_pnt>>("lstPnts",no_init)
   .add_property("size", &XC::SetEntities::lst_ptr_points::size, "Returns list size.")
   .def("__len__",&XC::SetEntities::lst_ptr_points::size, "Returns list size.")
   .def("pickPointsInside",&XC::SetEntities::lst_ptr_points::pickEntitiesInside,"pickPointsInside(geomObj,tol) return the nodes inside the geometric object.") 
+  .def("getBnd", &XC::SetEntities::lst_ptr_points::Bnd, "Returns points boundary.")
    ;
 
 typedef XC::DqPtrs<XC::Edge> dq_line_ptrs;
@@ -167,6 +170,7 @@ class_<XC::SetEntities::lst_line_pointers, bases<dq_line_ptrs>>("lstLines",no_in
   .def("append", &XC::SetEntities::lst_line_pointers::push_back,"Appends line at the end of the list.")
   .def("pushFront", &XC::SetEntities::lst_line_pointers::push_front,"Push line at the beginning of the list.")
   .def("pickLinesInside",&XC::SetEntities::lst_line_pointers::pickEntitiesInside,"pickLinesInside(geomObj,tol) return the nodes inside the geometric object.") 
+  .def("getBnd", &XC::SetEntities::lst_line_pointers::Bnd, "Returns lines boundary.")
    ;
 
 typedef XC::DqPtrs<XC::Face> dq_ptrs_surfaces;
@@ -183,6 +187,7 @@ class_<XC::SetEntities::lst_surface_ptrs, bases<dq_ptrs_surfaces> >("lstSurfaces
   .add_property("size", &XC::SetEntities::lst_surface_ptrs::size, "Returns list size.")
   .def("__len__",&XC::SetEntities::lst_surface_ptrs::size, "Returns list size.")
   .def("pickSurfacesInside",&XC::SetEntities::lst_surface_ptrs::pickEntitiesInside,"pickSurfacesInside(geomObj,tol) return the nodes inside the geometric object.") 
+  .def("getBnd", &XC::SetEntities::lst_surface_ptrs::Bnd, "Returns surfaces boundary.")
    ;
 
 typedef XC::DqPtrs<XC::Body> dq_ptrs_cuerpos;
@@ -199,8 +204,12 @@ class_<XC::SetEntities::lst_ptr_cuerpos, bases<dq_ptrs_cuerpos> >("lstBodies",no
   .add_property("size", &XC::SetEntities::lst_ptr_cuerpos::size, "Returns list size.")
   .def("__len__",&XC::SetEntities::lst_ptr_cuerpos::size, "Returns list size.")
   .def("pickBodiesInside",&XC::SetEntities::lst_ptr_cuerpos::pickEntitiesInside,"pickBodiesInside(geomObj,tol) return the nodes inside the geometric object.") 
+  .def("getBnd", &XC::SetEntities::lst_ptr_cuerpos::Bnd, "Returns bodies boundary.")
    ;
 
+class_<XC::SetEntities, bases<XC::PreprocessorContainer> >("SetEntities",no_init)
+  .def("getBnd", &XC::SetEntities::Bnd, "Returns entities boundary.")
+  ;
 
 XC::SetEntities::lst_ptr_points &(XC::Set::*getPoints)(void)= &XC::Set::getPoints;
 XC::SetEntities::lst_line_pointers &(XC::Set::*getLines)(void)= &XC::Set::getLines;
@@ -220,6 +229,7 @@ class_<XC::Set, bases<XC::SetMeshComp> >("Set")
   .def("fillDownwards", &XC::Set::fillDownwards,"add entities downwards.")
   .def("numerate", &XC::Set::numera,"Numerate entities (VTK).")
   .def("clear",&XC::Set::clear,"Removes all items.")
+  .def("getBnd", &XC::Set::Bnd, "Returns set boundary.")
   .def(self += self)
   .def(self + self)
   .def(self -= self)
