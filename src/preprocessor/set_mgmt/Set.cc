@@ -43,6 +43,7 @@
 #include "xc_utils/src/geom/pos_vec/SVD3d.h"
 #include "xc_utils/src/geom/d2/Plano3d.h"
 #include "xc_utils/src/geom/d3/SemiEspacio3d.h"
+#include "xc_utils/src/geom/d3/BND3d.h"
 
 
 //! @brief Constructor.
@@ -255,6 +256,30 @@ XC::Set XC::Set::pickBodiesInside(const std::string &newSetName, const GeomObj3d
 //! @brief Returns true if the «uniform grid» belongs to the set.
 bool XC::Set::In(const UniformGrid *ug) const
   { return entities.In(ug); }
+
+//! @brief Return the set boundary.
+//!
+//! @param factor: scale factor for the current position
+//!                of the nodes: initPos+ factor * nodDisplacement.
+BND3d XC::Set::Bnd(const double &factor) const
+  {
+    BND3d retval= SetMeshComp::Bnd(factor);
+    retval+= entities.Bnd();
+    return retval;
+  }
+
+//! @brief Return a new set that contains the entities that lie inside the
+//! geometric object.
+//!
+//! @param newSetName: name for the new set.
+//! @param geomObj: geometric object that must contain the nodes.
+//! @param tol: tolerance for "In" function.
+XC::Set XC::Set::pickEntitiesInside(const std::string &newSetName, const GeomObj3d &geomObj, const double &tol)
+  {
+    Set retval(newSetName,getPreprocessor());
+    retval.entities= entities.pickEntitiesInside(geomObj,tol);
+    return retval;
+  }
 
 //! @brief Appends to the set being passed as parameter
 //! the elements that intervene on the definition

@@ -36,6 +36,7 @@
 
 class Pos3d;
 class GeomObj3d;
+class BND3d;
 
 namespace XC {
 class Pnt;
@@ -170,6 +171,9 @@ class SetEntities: public PreprocessorContainer, public MovableObject
     virtual lst_ptr_uniform_grids &getUniformGrids(void)
       { return uniform_grids; }
     bool In(const UniformGrid *) const;
+
+    BND3d Bnd(void) const;
+    SetEntities pickEntitiesInside(const GeomObj3d &, const double &tol= 0.0) const;
 
     void fillUpwards(const SetMeshComp &);
     void fillDownwards(SetMeshComp &);

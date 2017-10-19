@@ -33,7 +33,12 @@
 #include <utility/matrix/Vector.h>
 
 
-
+//! @brief Constructor.
+//!
+//! @param tag: identifier for the object.
+//! @param classTag: identifier for the object class.
+//! @param dim: dimension (2 or 3).
+//! @param mat_ldr: manager of the material objects.
 XC::BaseElasticSection::BaseElasticSection(int tag, int classTag, const size_t &dim, MaterialLoader *mat_ldr)
   : PrismaticBarCrossSection(tag, classTag,mat_ldr), eTrial(dim), eInic(dim), eCommit(dim) {}
 
@@ -66,6 +71,24 @@ int XC::BaseElasticSection::setInitialSectionDeformation(const Vector &def)
   }
 
 //! @brief Set the trial (generalized) deformation of the section.
+//! Sets the value of the section deformation vector, \f$\esec\f$ to be {\em
+//! def}. The section deformation vector, \f$\esec\f$, is defined by
+//!
+//! \f[
+//! \begin{equation}
+//! \esec := \left[
+//!    \begin{array}{c}
+//!        \epsilon_a
+//!        \kappa_z
+//!        \gamma_y
+//!    \end{array} 
+//!  \right]
+//! \end{equation}
+//! \f]
+//!
+//! where \f$\epsilon_a\f$ is the axial strain, \f$\kappa_z\f$ is
+//! the curvature about the local z-axis, and \f$\gamma_y\f$ is the
+//! shear strain along the local y-axis.
 int XC::BaseElasticSection::setTrialSectionDeformation(const Vector &def)
   {
     eTrial= def;
@@ -103,6 +126,7 @@ int XC::BaseElasticSection::recvData(const CommParameters &cp)
 //! @brief Printing.
 void XC::BaseElasticSection::Print(std::ostream &s, int flag) const
   {
-    s << "BaseElasticSection, tag: " << this->getTag() << std::endl;
+    s << getClassName() << ", tag: "
+      << this->getTag() << std::endl;
   }
 

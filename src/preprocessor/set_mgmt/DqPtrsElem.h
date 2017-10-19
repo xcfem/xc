@@ -70,7 +70,10 @@ class DqPtrsElem: public DqPtrsKDTree<Element,KDTreeElements>
     boost::python::list getMaterialNamesPy(void) const;
     std::set<std::string> getTypes(void) const;
     boost::python::list getTypesPy(void) const;
+    std::set<size_t> getDimensions(void) const;
+    boost::python::list getDimensionsPy(void) const;
     DqPtrsElem pickElemsOfType(const std::string &);
+    DqPtrsElem pickElemsOfDimension(const size_t &);
     DqPtrsElem pickElemsOfMaterial(const std::string &);
     void numera(void);
   };

@@ -123,6 +123,7 @@ class SetMeshComp: public SetBase
     void sel_nodes_from_list(const ID &);
     bool In(const Node *) const;
     SetMeshComp pickNodesInside(const std::string &, const GeomObj3d &, const double &tol= 0.0);
+    BND3d Bnd(const double &) const;
 
     //! @brief Returns the number of elements.
     size_t getNumberOfElements(void) const
@@ -145,8 +146,11 @@ class SetMeshComp: public SetBase
     bool In(const Element *) const;
     SetMeshComp pickElemsInside(const std::string &, const GeomObj3d &, const double &tol= 0.0);
     SetMeshComp pickElemsOfType(const std::string &, const std::string &);
+    SetMeshComp pickElemsOfDimension(const std::string &, const size_t &);
     inline boost::python::list getElementTypesPy(void) const
       { return elements.getTypesPy(); }
+    inline boost::python::list getElementDimensionsPy(void) const
+      { return elements.getDimensionsPy(); }
     inline boost::python::list getElementMaterialNamesPy(void) const
       { return elements.getMaterialNamesPy(); }
     SetMeshComp pickElemsOfMaterial(const std::string &, const std::string &);

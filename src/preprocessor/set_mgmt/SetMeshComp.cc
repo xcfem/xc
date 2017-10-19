@@ -44,6 +44,7 @@
 #include "xc_utils/src/geom/pos_vec/SVD3d.h"
 #include "xc_utils/src/geom/d2/Plano3d.h"
 #include "xc_utils/src/geom/d3/SemiEspacio3d.h"
+#include "xc_utils/src/geom/d3/BND3d.h"
 
 
 
@@ -485,6 +486,20 @@ XC::SetMeshComp XC::SetMeshComp::pickNodesInside(const std::string &newSetName, 
     return retval;    
   }
 
+//! @brief Return the nodes current position boundary.
+//!
+//! @param factor: scale factor for the current position
+//!                initPos+ factor * nodDisplacement.
+BND3d XC::SetMeshComp::Bnd(const double &factor) const
+  {
+    BND3d retval= nodes.Bnd(factor);
+    if(nodes.empty())
+      std::clog << getClassName() << "::" << __FUNCTION__
+	        << " node container empty. Call fillDownwards?"
+	        << std::endl;
+    return retval;
+  }
+
 //! @brief Selects the elements identified by the tags being passed as parameters.
 void XC::SetMeshComp::sel_elements_from_list(const ID &tags)
   {
@@ -523,6 +538,18 @@ XC::SetMeshComp XC::SetMeshComp::pickElemsOfType(const std::string &newSetName, 
   {
     SetMeshComp retval(newSetName);
     retval.elements= elements.pickElemsOfType(typeName);
+    return retval;
+  }
+
+//! @brief Return a new set that contains the elements of the specified
+//! dimension.
+//!
+//! @param newSetName: name for the new set.
+//! @param targetDim: element dimension (point: 0, line: 1, surface: 2, volume: 3)
+XC::SetMeshComp XC::SetMeshComp::pickElemsOfDimension(const std::string &newSetName, const size_t &targetDim)
+  {
+    SetMeshComp retval(newSetName);
+    retval.elements= elements.pickElemsOfDimension(targetDim);
     return retval;
   }
 

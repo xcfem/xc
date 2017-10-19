@@ -126,7 +126,8 @@ class QuickGraphics(object):
 
   def displayIntForc(self,itemToDisp='',setToDisplay=None,fConvUnits=1.0,unitDescription= '',viewName='XYZPos',hCamFct=1.0,fileName=None,defFScale=0.0):
     '''displays the component of internal forces in the 
-    set of entities as a scalar field (i.e. appropiated for shell elements).
+    set of entities as a scalar field (i.e. appropiated for 2D elements; 
+    shells...).
     
     :param itemToDisp:   component of the internal forces ('N1', 'N2', 'N12', 
            'M1', 'M2', 'M12', 'Q1', 'Q2') to be depicted 
@@ -154,15 +155,19 @@ class QuickGraphics(object):
     else:
       lmsg.warning('QuickGraphics::displayIntForc; set to display not defined; using previously defined set (total if None).')
     vCompDisp= self.getIntForceComponentFromName(itemToDisp)
-    elSet= self.xcSet.getElements
-    propName= 'propToDisp_'+str(itemToDisp)
-    for e in elSet:
-      e.getResistingForce()
-      mat= e.getPhysicalProperties.getVectorMaterials
-      e.setProp(propName,mat.getMeanGeneralizedStressByName(vCompDisp))
-    field= Fields.ExtrapolatedProperty(propName,"getProp",self.xcSet,fUnitConv= fConvUnits)
-    defDisplay= self.getDisplay(vwName=viewName,hCamF= hCamFct)
-    field.display(defDisplay=defDisplay,fName=fileName,caption=self.loadCaseName+' '+itemToDisp+' '+unitDescription +' '+self.xcSet.name,defFScale=defFScale)
+    elSet= self.xcSet.getElements.pickElemsOfDimension(2)
+    if(len(elSet)>0):
+      propName= 'propToDisp_'+str(itemToDisp)
+      for e in elSet:
+        if(e.getDimension==2):
+          e.getResistingForce()
+          mat= e.getPhysicalProperties.getVectorMaterials
+          e.setProp(propName,mat.getMeanGeneralizedStressByName(vCompDisp))
+        else:
+          lmsg.warning('QuickGraphics::displayIntForc; not a 2D element; ignored.')
+      field= Fields.ExtrapolatedProperty(propName,"getProp",self.xcSet,fUnitConv= fConvUnits)
+      defDisplay= self.getDisplay(vwName=viewName,hCamF= hCamFct)
+      field.display(defDisplay=defDisplay,fName=fileName,caption=self.loadCaseName+' '+itemToDisp+' '+unitDescription +' '+self.xcSet.name,defFScale=defFScale)
 
 
   def displayIntForcDiag(self,itemToDisp='',setToDisplay=None,fConvUnits=1.0,scaleFactor=1.0,unitDescription= '',viewName='XYZPos',hCamFct=1.0,fileName=None,defFScale=0.0):
