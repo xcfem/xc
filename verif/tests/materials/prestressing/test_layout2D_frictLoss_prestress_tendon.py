@@ -38,16 +38,12 @@ sigmap0max=1400e6 #Initial stress of cable [Pa]
 n_points_rough=5    #number of points provided to the interpolation algorithm
 n_points_fine=101   #number of points interpolated
 
-#Approximation of the losses of prestressing due to friction
+# Approximation of the loss of prestressing due to friction
 # Assimilating the parabolic profile of the cable to a circular profile
 # the angular deviation is constant in the beam length and can be
 # expressed as:
 
 alphaUnit=8*abs(eMidspan)/lBeam**2     #alpha/x [rad/m]
-
-def fricLosses(x,sigmap0max,alphaUnit,mu,unintDev):
-    sigmaLoss=sigmap0max*(1-math.exp(-mu*(alphaUnit+unintDev)*x))
-    return sigmaLoss
 
 #Exact parabola
 from model.geometry import geom_utils
