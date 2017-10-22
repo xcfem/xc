@@ -331,8 +331,6 @@ So:
 
 '''
 
-from materials.structural_shapes import arcelor_metric_shapes
-
 class HEShape(EC3Shape,arcelor_metric_shapes.HEShape):
   """HE shape with Eurocode 3 verification routines."""
   def __init__(self,steel,name):
@@ -344,7 +342,16 @@ class HEShape(EC3Shape,arcelor_metric_shapes.HEShape):
     EC3Shape.__init__(self,'rolled')
     arcelor_metric_shapes.HEShape.__init__(self,steel,name)
 
-from materials.structural_shapes import arcelor_metric_shapes
+class UPNShape(EC3Shape,arcelor_metric_shapes.UPNShape):
+  """UPN shape with Eurocode 3 verification routines."""
+  def __init__(self,steel,name):
+    ''' Constructor.
+
+    :param steel: steel material.
+    :param name: shape name (i.e. UPN_320)
+    '''
+    EC3Shape.__init__(self,'rolled')
+    arcelor_metric_shapes.UPNShape.__init__(self,steel,name)
 
 class AUShape(EC3Shape,arcelor_metric_shapes.AUShape):
   """AU shape with Eurocode 3 verification routines."""

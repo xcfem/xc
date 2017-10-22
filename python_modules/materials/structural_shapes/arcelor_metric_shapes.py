@@ -1044,12 +1044,16 @@ class IPEShape(structural_steel.SteelShape):
   def b(self):
     return self.get('b')
   def h(self):
+    '''Return shape height.'''
     return self.get('h')
   def tf(self):
+    '''Return flange thickess'''
     return self.get('tf')
   def tw(self):
+    '''Return web thickess'''
     return self.get('tw')
   def hw(self):
+    '''Return web height'''
     return self.h()-2*self.tf()
   def getRho(self):
     ''' Returns mass per unit lenght. '''
@@ -1150,6 +1154,25 @@ class HEShape(structural_steel.SteelShape):
     self.fiberSection3d.setupFibers()
     fibras= self.fiberSection3d.getFibers()
     return self.fiberSection3d
+
+class UPNShape(structural_steel.SteelShape):
+  def __init__(self,steel,name):
+    super(UPNShape,self).__init__(steel,name,UPN)
+  def getRho(self):
+    ''' Returns mass per unit lenght. '''
+    return self.get('P')
+  def h(self):
+    '''Return shape height.'''
+    return self.get('h')
+  def tf(self):
+    '''Return flange thickess'''
+    return self.get('tf')
+  def tw(self):
+    '''Return web thickess'''
+    return self.get('tw')
+  def hw(self):
+    '''Return web height'''
+    return self.h()-2*self.tf()
 
 class AUShape(structural_steel.SteelShape):
   def __init__(self,steel,name):
