@@ -73,64 +73,109 @@
 #include <cstring>
 #include "material/section/ResponseId.h"
 
-XC::GenericSectionNd::GenericSectionNd(int tag, XC::NDMaterial &m, const XC::ResponseId &mCode)
-  : SectionForceDeformation(tag,SEC_TAG_GenericNd), theModel(0), code(0)
+//! @brief Frees memory.
+void XC::GenericSectionNd::free(void)
   {
-    theModel = m.getCopy();
-
-    if(theModel == 0)
+    if(theModel)
       {
-        std::cerr << "XC::GenericSectionNd::GenericSectionNd -- failed to get copy of material model"
-                  << std::endl;
+	delete theModel;
+	theModel= nullptr;
       }
-
-    order= theModel->getOrder();
-    code= new XC::ResponseId(mCode);
-
-    if(!code)
+    order= 0;
+    if(code)
       {
-        std::cerr << "XC::GenericSectionNd::GenericSectionNd -- failed to allocate section XC::ID"
-                  << std::endl;
-      }
-
-    if(order != code->Size())
-      {
-        std::clog << "¡Ojo!, XC::GenericSectionNd::GenericSectionNd -- code size does not match order of material model" << std::endl;
+	delete code;
+	code= nullptr;
       }
   }
 
+//! @brief Allocates memory.
+void XC::GenericSectionNd::alloc(const NDMaterial *m, const ResponseId *mCode)
+  {
+    free();
+    if(m && mCode)
+      {
+        theModel= m->getCopy();
+
+        if(!theModel)
+          std::clog << getClassName() << "::" << __FUNCTION__
+                    << "; failed to get copy of material model."
+                    << std::endl;
+
+	order= theModel->getOrder();
+	code= new ResponseId(*mCode);
+
+	if(!code)
+	  std::clog << getClassName() << "::" << __FUNCTION__
+		    << "; failed to allocate section ID"
+		    << std::endl;
+
+	if(order != code->Size())
+	  std::clog << getClassName() << "::" << __FUNCTION__
+		    << "; Warning! code size does not match"
+		    << " order of material model" << std::endl;
+      }
+  }
+
+//! @brief Constructor.
+//!
+//! @param tag: object identifier.
+//! @param m: ND material.
+//! @param mCode: material response identifiers. 
+XC::GenericSectionNd::GenericSectionNd(int tag, const NDMaterial &m, const ResponseId &mCode)
+  : SectionForceDeformation(tag,SEC_TAG_GenericNd),
+    theModel(nullptr), code(nullptr)
+  { alloc(&m,&mCode); }
+
+//! @brief Constructor.
 XC::GenericSectionNd::GenericSectionNd(int tag)
-  :SectionForceDeformation(tag,SEC_TAG_GenericNd), theModel(0), code(0), order(0)
+  :SectionForceDeformation(tag,SEC_TAG_GenericNd),
+   theModel(nullptr), code(nullptr), order(0)
   {}
 
-XC::GenericSectionNd::GenericSectionNd()
-:SectionForceDeformation(0,SEC_TAG_GenericNd), theModel(0), code(0), order(0)
-  {}
+//! @brief Copy constructor.
+XC::GenericSectionNd::GenericSectionNd(const GenericSectionNd &otro)
+  : SectionForceDeformation(otro), theModel(nullptr), code(nullptr),
+    order(0)
+  { alloc(otro.theModel,otro.code); }
 
-XC::GenericSectionNd::~GenericSectionNd(void)
+//! @brief Assignment operator.
+XC::GenericSectionNd &XC::GenericSectionNd::operator=(const GenericSectionNd &otro)
   {
-    if(theModel) delete theModel;
-    if(code) delete code;
+    SectionForceDeformation::operator=(otro);
+    alloc(otro.theModel,otro.code);
+    return *this;
   }
 
+//! @brief Destructor.
+XC::GenericSectionNd::~GenericSectionNd(void)
+  { free(); }
+
+//! @brief Set initial generalized strain.
 int XC::GenericSectionNd::setInitialSectionDeformation(const Vector& def)
   {
-    std::cerr << "GenericSectionNd::setInitialSectionDeformation not implemented." << std::endl;
+    std::cerr << getClassName() << "::" << __FUNCTION__
+	      << "; not implemented." << std::endl;
     //return theModel->setInitialStrain(def);
     return 0;
   }
 
+//! @brief Set trial generalized strain.
 int XC::GenericSectionNd::setTrialSectionDeformation(const Vector& def)
   { return theModel->setTrialStrain(def); }
 
+//! @brief Zeroes initial generalized strain.
 void XC::GenericSectionNd::zeroInitialSectionDeformation(void)
   {
-    std::cerr << "GenericSectionNd::zeroInitialSectionDeformation not implemented." << std::endl;
+    std::cerr << getClassName() << "::" << __FUNCTION__
+	      << ";not implemented." << std::endl;
   }
 
+//! @brief Return the initial generalized strain.
 const XC::Vector &XC::GenericSectionNd::getInitialSectionDeformation(void) const
   {
-    std::cerr << "GenericSectionNd::getInitialStrain not implemented." << std::endl;
+    std::cerr << getClassName() << "::" << __FUNCTION__
+	      << ";not implemented." << std::endl;
     return theModel->getStrain();
   }
 
@@ -142,35 +187,45 @@ const XC::Vector &XC::GenericSectionNd::getSectionDeformation(void) const
 //! @brief Returns strain at position being passed as parameter.
 double XC::GenericSectionNd::getStrain(const double &,const double &) const
   {
-    std::cerr << "getStrain not implemented for class: "
-              << getClassName() << std::endl;
+    std::cerr << getClassName() << "::" << __FUNCTION__
+	      << ";not implemented." << std::endl;
     return 0.0;
   }
 
+//! @brief Return the the generalized stress vector.
 const XC::Vector &XC::GenericSectionNd::getStressResultant(void) const
   { return theModel->getStress(); }
 
+//! @brief Return the stiffness matrix.
 const XC::Matrix &XC::GenericSectionNd::getSectionTangent(void) const
   { return theModel->getTangent(); }
 
+//! @brief Return the initial stiffness matrix.
 const XC::Matrix &XC::GenericSectionNd::getInitialTangent(void) const
   { return theModel->getInitialTangent(); }
 
+//! @brief Commits the current state.
 int XC::GenericSectionNd::commitState()
   { return theModel->commitState(); }
 
+//! @brief Returns the material to its last commited state.
 int XC::GenericSectionNd::revertToLastCommit()
   { return theModel->revertToLastCommit(); }
 
+//! @brief Returns the material to its initial state.
 int XC::GenericSectionNd::revertToStart()
   { return theModel->revertToStart(); }
 
+//! @brief Returns the section ID code that indicates the type
+//! of response quantities returned by this instance of GenericSectionND.
 const XC::ResponseId &XC::GenericSectionNd::getType(void) const
   { return *code; }
 
+//! @brief Returns the result of invoking getOrder() on the NDMaterial.
 int XC::GenericSectionNd::getOrder(void) const
   { return order; }
 
+//! @brief Virtual constructor.
 XC::SectionForceDeformation *XC::GenericSectionNd::getCopy(void) const
   { return new XC::GenericSectionNd(*this); }
 
@@ -184,7 +239,8 @@ int XC::GenericSectionNd::sendData(CommParameters &cp)
     return res;
   }
 
-//! @brief Receives object members through the channel being passed as parameter.
+//! @brief Receives object members through the channel
+//! being passed as parameter.
 int XC::GenericSectionNd::recvData(const CommParameters &cp)
   {
     int res= SectionForceDeformation::recvData(cp);
@@ -194,6 +250,7 @@ int XC::GenericSectionNd::recvData(const CommParameters &cp)
     return res;
   }
 
+//! @brief Sends the object
 int XC::GenericSectionNd::sendSelf(CommParameters &cp)
   {
     setDbTag(cp);
@@ -203,10 +260,12 @@ int XC::GenericSectionNd::sendSelf(CommParameters &cp)
 
     res+= cp.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
-      std::cerr << getClassName() << "sendSelf() - failed to send data\n";
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; failed to send data\n";
     return res;
   }
 
+//! @brief Receives the object.
 int XC::GenericSectionNd::recvSelf(const CommParameters &cp)
   {
     inicComm(12);
@@ -214,18 +273,21 @@ int XC::GenericSectionNd::recvSelf(const CommParameters &cp)
     int res= cp.receiveIdData(getDbTagData(),dataTag);
 
     if(res<0)
-      std::cerr << getClassName() << "::recvSelf - failed to receive ids.\n";
+      std::cerr << getClassName() << "::" << __FUNCTION__
+	        << "; failed to receive ids.\n";
     else
       {
         setTag(getDbTagDataPos(0));
         res+= recvData(cp);
         if(res<0)
-          std::cerr << getClassName() << "::recvSelf - failed to receive data.\n";
+          std::cerr << getClassName() << "::" << __FUNCTION__
+	            << "; failed to receive data.\n";
       }
     return res;
   }
 
-void XC::GenericSectionNd::Print (std::ostream &s, int flag)
+//! @brief Print stuff.
+void XC::GenericSectionNd::Print(std::ostream &s, int flag)
   {
     s << "Generic Section Nd, tag: " << this->getTag() << std::endl;
     s << "\tsection code: " << code << std::endl;

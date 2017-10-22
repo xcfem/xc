@@ -70,22 +70,28 @@ class NDMaterial;
 
 //! \ingroup MATSCC
 //
-//! @brief ??
+//! @brief GenericSectionND provides a wrapper around a NDMaterial
+//!
+//! GenericSectionND provides a wrapper around a NDMaterial
+//! so that any NDMaterial may be used to model section response. 
+//! The design of this class follows the Object Adapter pattern in 
+//! {\em Design Patterns} by Gamma et al.
 class GenericSectionNd: public SectionForceDeformation
   {
-    //XXX Add copy constructor and assignment operator.
   protected:
     NDMaterial *theModel;
     ResponseId *code;
     int order;
 
+    void free(void);
+    void alloc(const NDMaterial *,const ResponseId *);
     int sendData(CommParameters &);
     int recvData(const CommParameters &);
   public:
-    GenericSectionNd(int tag, NDMaterial& m,const ResponseId &mCode);
-    GenericSectionNd(int tag);
-    GenericSectionNd(void);
-
+    GenericSectionNd(int tag, const NDMaterial &m,const ResponseId &mCode);
+    GenericSectionNd(int tag= 0);
+    GenericSectionNd(const GenericSectionNd &);
+    GenericSectionNd &operator=(const GenericSectionNd &);
     ~GenericSectionNd(void);
 
     int setInitialSectionDeformation(const Vector&);
