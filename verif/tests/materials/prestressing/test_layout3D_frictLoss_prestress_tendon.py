@@ -83,11 +83,11 @@ tendon.calcLossFriction(coefFric=mu,uninDev=k,sigmaP0_extr1=sigmap0max,sigmaP0_e
 
 ratio3= np.mean((tendon.lossFriction-aprox_cum_loss)**2)/np.mean(tendon.lossFriction)
 #Plot
-#tendon.plot2D(XaxisValues='S',fileName='parab.png',symbolRougPoints='b*',symbolFinePoints='r*',symbolTendon='g-',symbolLossFriction='m-')
-
-#tendon.plot3D(fileName='parab.png',symbolRougPoints='b*',symbolFinePoints='r*',symbolTendon='g-',symbolLossFriction=None)
-
-#tendon.plot3D(fileName='loss.png',symbolStressAfterLossFriction='r-')
+#fig1=tendon.plot2D(XaxisValues='S',fileName='parab.png',symbolRougPoints='b*',symbolFinePoints='r*',symbolTendon='g-',symbolLossFriction='m-')
+#fig1.show()
+#fig2=tendon.plot3D(fileName='parab.png',symbolRougPoints='b*',symbolFinePoints='r*',symbolTendon='g-',symbolLossFriction=None)
+# fig2.savefig('fig2.png')
+#fig3=tendon.plot3D(fileName='loss.png',symbolStressAfterLossFriction='r-')
 
 import os
 from miscUtils import LogMessages as lmsg

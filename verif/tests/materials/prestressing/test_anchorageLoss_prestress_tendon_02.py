@@ -63,15 +63,17 @@ tendon2=presconc.PrestressTendon([])
 tendon2.roughCoordMtr=np.array([x_parab_rough,y_parab_rough,z_parab_rough])
 #Interpolated 3D spline 
 tendon2.pntsInterpTendon(n_points_fine,smoothness=1,kgrade=3)
-# Losses of prestressing due to friction 
+# Loss of prestressing due to friction 
 tendon2.calcLossFriction(coefFric=mu,uninDev=k,sigmaP0_extr1=0.0,sigmaP0_extr2=sigmap0max)
-# Losses of prestressing due to anchorage slip (loss due to friction must be
-# previously calculated
+# Loss of prestressing due to anchorage slip (loss due to friction must be
+# previously calculated)
 tendon2.calcLossAnchor(Ep_by_anc_slip_extr1=0.0,Ep_by_anc_slip_extr2=deltaL*Ep)
 
 #Plot
-# tendon1.plot2D(XaxisValues='S',fileName='plot1.png',symbolLossAnch='r-')
-# tendon2.plot3D(fileName='plot2.png',symbolLossAnch='r-')
+# fig1=tendon1.plot2D(XaxisValues='S',symbolLossAnch='r-')
+# fig1.show()
+# fig2=tendon2.plot3D(symbolLossAnch='r-')
+# fig2.savefig('fig2.png')
 
 from sklearn.metrics import mean_squared_error
 ratio=mean_squared_error(tendon1.lossAnch,np.flipud(tendon2.lossAnch))

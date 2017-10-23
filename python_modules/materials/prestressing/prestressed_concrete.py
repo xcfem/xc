@@ -255,11 +255,13 @@ class PrestressTendon(object):
         y=interpolate.splint(s,self.fineScoord[-1],self.tckLossFric)-(self.fineScoord[-1]-s)*interpolate.splev(s,self.tckLossFric,der=0)-self.slip2/2.0
         return y
         
-    def plot3D(self,fileName='plot.png',symbolRougPoints=None,symbolFinePoints=None,symbolTendon=None,symbolLossFriction=None,symbolStressAfterLossFriction=None,symbolLossAnch=None,symbolStressAfterLossAnch=None):
-        '''Plot in a 3D graphic the results to which a symbol is assigned.
+    def plot3D(self,axisEqualScale='N',symbolRougPoints=None,symbolFinePoints=None,symbolTendon=None,symbolLossFriction=None,symbolStressAfterLossFriction=None,symbolLossAnch=None,symbolStressAfterLossAnch=None):
+        '''Return in a 3D graphic the results to which a symbol is assigned.
         Symbol examples: 'r-': red solid line, 'mo': magenta circle, 
         'b--': blue dashes, 'ks':black square,'g^' green triangle_up, 
         'c*': cyan star, ...
+        :param axisEqualScale:  ='Y', 'y','yes' or 'Yes' for equal aspect ratio
+                             (defaults to 'N')
         '''
         fig = plt.figure()
         ax3d = fig.add_subplot(111, projection='3d')
@@ -281,11 +283,12 @@ class PrestressTendon(object):
         ax3d.set_xlabel('X')
         ax3d.set_ylabel('Y')
         ax3d.set_zlabel('Z')
-        fig.savefig(fileName)
-        return
+        if str.lower(axisEqualScale[0])=='y':
+            ax3d.axis('equal')
+        return fig
 
-    def plot2D(self,XaxisValues='X',fileName='plot.png',symbolRougPoints=None,symbolFinePoints=None,symbolTendon=None,symbolLossFriction=None,symbolStressAfterLossFriction=None,symbolLossAnch=None,symbolStressAfterLossAnch=None):
-        '''Plot in a 2D graphic the results to which a symbol is assigned.
+    def plot2D(self,XaxisValues='X',axisEqualScale='N',symbolRougPoints=None,symbolFinePoints=None,symbolTendon=None,symbolLossFriction=None,symbolStressAfterLossFriction=None,symbolLossAnch=None,symbolStressAfterLossAnch=None):
+        '''Return in a 2D graphic the results to which a symbol is assigned.
         Symbol examples: 'r-': red solid line, 'mo': magenta circle, 'b--': blue dashes, 'ks':black square,'g^' green triangle_up, 'c*': cyan star, ...
         :param XaxisValues: ='X' (default) to represent in the diagram X-axis
                               the X coordinates of the tendon,
@@ -294,6 +297,8 @@ class PrestressTendon(object):
                             ='S' to represent in the diagram X-axis 
                               the curviline coordinates of the tendon 
                               (sqrt(X**2+Y**2)
+        :param axisEqualScale:  ='Y', 'y','yes' or 'Yes' for equal aspect ratio
+                             (defaults to 'N')
         '''
         if XaxisValues.upper()=='X':
             XaxisCoord=self.fineCoordMtr[0]
@@ -328,8 +333,9 @@ class PrestressTendon(object):
             ax2d.plot(XaxisCoord,self.stressAfterLossAnch,symbolStressAfterLossAnch,label='Stress after loss due to anchorage slip')
         ax2d.legend()
         ax2d.set_xlabel(xLab)
-        fig.savefig(fileName)
-        return
+        if str.lower(axisEqualScale[0])=='y':
+            ax2d.axis('equal')
+        return fig
 
 def angle_between(a,b):
   arccosInput = np.dot(a,b)/np.linalg.norm(a)/np.linalg.norm(b)
