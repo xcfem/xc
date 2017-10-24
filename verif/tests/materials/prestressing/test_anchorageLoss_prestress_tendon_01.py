@@ -74,14 +74,15 @@ tendon.calcLossFriction(coefFric=mu,uninDev=k,sigmaP0_extr1=sigmap0max,sigmaP0_e
 # previously calculated
 tendon.calcLossAnchor(Ep_by_anc_slip_extr1=deltaL*Ep,Ep_by_anc_slip_extr2=0.0)
 
-Laffected=tendon.ScoordZeroAnchLoss[0] # effective length of tendon affected by
+Laffected=tendon.projXYcoordZeroAnchLoss[0] # effective length of tendon affected by
                            #the anchorage slip in extremity 1 [mm]
 
 ratio=(xA_rough-Laffected*1e-3)/xA_rough
+
 import os
 from miscUtils import LogMessages as lmsg
 fname= os.path.basename(__file__)
-if (abs(ratio)<2.05e-2) :
+if (abs(ratio)<1.95e-2) :
   print "test ",fname,": ok."
 else:
   lmsg.error(fname+' ERROR.')
