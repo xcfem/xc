@@ -502,7 +502,7 @@ void XC::Mesh::freeze_dead_nodes(const std::string &nmbLocker)
         getDomain()->addNodeLocker(locker);
       }
     else
-      std::cerr << "Mesh::freeze_dead_nodes; no se pudo crear el bloqueador: '"
+      std::cerr << "Mesh::freeze_dead_nodes; can't find locker: '"
 		<< nmbLocker << "'\n";
   }
 
@@ -521,7 +521,7 @@ void XC::Mesh::melt_alive_nodes(const std::string &nmbLocker)
         lockers.borraNodeLocker(nmbLocker);
       }
     else
-      std::cerr << "Mesh::freeze_dead_nodes; no se pudo encontrar el bloqueador: '"
+      std::cerr << "Mesh::freeze_dead_nodes; can't find locker: '"
 		<< nmbLocker << "'\n";
   }
 
