@@ -119,7 +119,7 @@ class PrestressTendon(object):
         :param materialName: name of the material
         :param elemTypeName: name of the type of element
         :param crdTransfName: name of the coordinate transformation
-        :param areaTendon:   area of the cross-section of the tencon
+        :param areaTendon:   area of the cross-section of the tendon
         :param setName:      name of the set to which append the nodes and elements
                              created (if the set doesn't exist, it's created)
         '''
@@ -145,7 +145,7 @@ class PrestressTendon(object):
         return tendonSet
             
 
-    def calcLossFriction(self,coefFric,uninDev,sigmaP0_extr1=0.0,sigmaP0_extr2=0.0):
+    def calcLossFriction(self,coefFric,k,sigmaP0_extr1=0.0,sigmaP0_extr2=0.0):
         '''Creates the attributes lossFriction and stressAfterLossFriction of 
         type array that contains  for each point in fineCoordMtr the cumulative 
         immediate loss of prestressing due to friction and the stress after 
@@ -160,17 +160,21 @@ class PrestressTendon(object):
                          prestress applied)
         :param coefFric: coefficient of friction between the tendon and its 
                         sheathing
-        :param uninDev: unintentional angular deviation (rad/m tendon)
+        :param k: wobble coefficient or coefficient for wave effect, that 
+                  refers to the unintentional deviation of the position of 
+                  the tendon along the duct. It's expressed by unit length 
+                  of tendon. The value of k varies from 0.0015 to 0.0050 per 
+                  meter length of the tendon depending on the type of tendon. 
         '''
         if (sigmaP0_extr1 != 0.0):
             cum_len=self.getCumLength()
             cum_angl=self.getCumAngle()
-            loss_frict_ext1=np.array([sigmaP0_extr1*(1-math.exp(-coefFric*(cum_angl[i]+uninDev*cum_len[i]))) for i in range(len(cum_angl))])
+            loss_frict_ext1=np.array([sigmaP0_extr1*(1-math.exp(-coefFric*cum_angl[i]-k*cum_len[i])) for i in range(len(cum_angl))])
             self.stressAfterLossFrictionOnlyExtr1=sigmaP0_extr1-loss_frict_ext1
         if (sigmaP0_extr2 != 0.0):
             cum_len=self.getReverseCumLength()
             cum_angl=self.getReverseCumAngle()
-            loss_frict_ext2=np.array([sigmaP0_extr2*(1-math.exp(-coefFric*(cum_angl[i]+uninDev*cum_len[i]))) for i in range(len(cum_angl))])
+            loss_frict_ext2=np.array([sigmaP0_extr2*(1-math.exp(-coefFric*cum_angl[i]-k*cum_len[i])) for i in range(len(cum_angl))])
             self.stressAfterLossFrictionOnlyExtr2=sigmaP0_extr2-loss_frict_ext2
         if (sigmaP0_extr1 != 0.0) and (sigmaP0_extr2 != 0.0):
             self.lossFriction=np.minimum(loss_frict_ext1,loss_frict_ext2)
@@ -356,7 +360,9 @@ class PrestressTendon(object):
         return fig
 
 def angle_between(a,b):
-  arccosInput = np.dot(a,b)/np.linalg.norm(a)/np.linalg.norm(b)
-  arccosInput = 1.0 if arccosInput > 1.0 else arccosInput
-  arccosInput = -1.0 if arccosInput < -1.0 else arccosInput
-  return math.acos(arccosInput)
+    '''Return the angle between vectors a and b
+    '''
+    arccosInput = np.dot(a,b)/np.linalg.norm(a)/np.linalg.norm(b)
+    arccosInput = 1.0 if arccosInput > 1.0 else arccosInput
+    arccosInput = -1.0 if arccosInput < -1.0 else arccosInput
+    return math.acos(arccosInput)

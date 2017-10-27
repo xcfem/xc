@@ -31,7 +31,7 @@ angl_Parab_XZ=math.pi/4 #angle between the vertical plane that contains the
 Ep=195e3       #elastic modulus of prestressing steel [MPa]
 #Prestressing process
 mu=0.25        #coefficient of friction between the cables and their sheating
-k=0.0017/mu*1e-3       #unintentional angular deviation [rad/mm]
+k=0.0017*1e-3  #wobble coefficient per millimeter length of cable
 sigmap0max=1239 #Initial stress of cable [MPa]
 
 # Interpolation
@@ -45,7 +45,7 @@ deltaL=5            #anchorage draw-in (provided by manufacturer) [mm]
 Aps=2850          #area of tendon cross-section [mm2]
 P_i=Aps*sigmap0max*1e-3 #kN
 rps=(lBeam*1e-3)**2/(8*abs(eMidspan)*1e-3)   # parabolic curve [m]
-p=P_i*(1-math.exp(-(mu/rps+k*mu*1e3)))       # friction loss [kN/m]
+p=P_i*(1-math.exp(-(mu/rps+k*1e3)))       # friction loss [kN/m]
 xA_rough=(deltaL*Ep*Aps/p)**0.5*1e-3         # effective length of tendon
                              #affected by the anchorage slip [m]
 DeltaPa_rough=2*p*xA_rough   #loss of prestress force at the left-hand end [kN]
@@ -69,7 +69,7 @@ tendon.roughCoordMtr=np.array([x_parab_rough,y_parab_rough,z_parab_rough])
 #Interpolated 3D spline 
 tendon.pntsInterpTendon(n_points_fine,smoothness=1,kgrade=3)
 # Losses of prestressing due to friction
-tendon.calcLossFriction(coefFric=mu,uninDev=k,sigmaP0_extr1=sigmap0max,sigmaP0_extr2=0.0)
+tendon.calcLossFriction(coefFric=mu,k=k,sigmaP0_extr1=sigmap0max,sigmaP0_extr2=0.0)
 # Losses of prestressing due to anchorage slip (loss due to friction must be
 # previously calculated
 tendon.calcLossAnchor(Ep_by_anc_slip_extr1=deltaL*Ep,Ep_by_anc_slip_extr2=0.0)

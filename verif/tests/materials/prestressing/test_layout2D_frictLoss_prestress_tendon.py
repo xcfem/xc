@@ -31,7 +31,7 @@ sigmapk=1400e6 #characteristic strength [Pa]
 
 #Prestressing process
 mu=0.18        #coefficient of friction between the cables and their sheating
-k=0.0015/mu       #unintentional angular deviation [rad/m]
+k=0.0015       #wobble coefficient per meter length of cable
 sigmap0max=1400e6 #Initial stress of cable [Pa]
 
 # Interpolation
@@ -56,7 +56,7 @@ aprox_cum_angle=alphaUnit*x_parab_fine
 aprox_length_sequence=[0]+[distance.euclidean((x_parab_fine[i],y_parab_fine[i],z_parab_fine[i]),(x_parab_fine[i+1],y_parab_fine[i+1],z_parab_fine[i+1])) for i in range(len(x_parab_fine)-1)]
 aprox_cumulative_length=np.cumsum(aprox_length_sequence)
 
-aprox_cum_loss=np.array([sigmap0max*(1-math.exp(-mu*(aprox_cum_angle[i]+k*aprox_cumulative_length[i]))) for i in range(len(aprox_cum_angle))])
+aprox_cum_loss=np.array([sigmap0max*(1-math.exp(-mu*aprox_cum_angle[i]-k*aprox_cumulative_length[i])) for i in range(len(aprox_cum_angle))])
 
 #Tendon definition, layout and friction losses
 tendon=presconc.PrestressTendon([])
@@ -74,7 +74,7 @@ cumulative_angl=tendon.getCumAngle()
 ratio2= np.mean((cumulative_angl-aprox_cum_angle)**2)/np.mean(cumulative_angl)
 
 # Losses of prestressing due to friction
-tendon.calcLossFriction(coefFric=mu,uninDev=k,sigmaP0_extr1=sigmap0max,sigmaP0_extr2=0.0)
+tendon.calcLossFriction(coefFric=mu,k=k,sigmaP0_extr1=sigmap0max,sigmaP0_extr2=0.0)
 ratio3= np.mean((tendon.lossFriction-aprox_cum_loss)**2)/np.mean(tendon.lossFriction)
 
 #Plot
