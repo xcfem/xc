@@ -8,8 +8,8 @@ import xc
 from solution import predefined_solutions
 from model import predefined_spaces
 from materials import typical_materials
-from materials import section_properties
-from materials import defSeccAggregation
+from materials.sections import section_properties
+from materials.sections import defSeccAggregation
 
 
 h= 0.30 # Beam cross-section depth.

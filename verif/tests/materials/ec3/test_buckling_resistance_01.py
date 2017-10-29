@@ -17,7 +17,7 @@ import xc_base
 import geom
 import xc
 from materials.ec3 import EC3_materials
-from materials.structural_shapes import arcelor_metric_shapes
+from materials.sections.structural_shapes import arcelor_metric_shapes
 
 S355JR= EC3_materials.S355JR
 gammaM0= 1.00

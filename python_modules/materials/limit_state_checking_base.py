@@ -8,8 +8,8 @@ __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
 from miscUtils import LogMessages as lmsg
-# from materials.fiber_section import createFiberSets
-from materials.fiber_section import fiberUtils
+# from materials.sections.fiber_section import createFiberSets
+from materials.sections.fiber_section import fiberUtils
 import math
 
 class LimitStateControllerBase(object):

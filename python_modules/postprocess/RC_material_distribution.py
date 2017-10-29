@@ -9,7 +9,7 @@ import xc
 # Macros
 from solution import predefined_solutions
 from postprocess import phantom_model as phm
-from materials import RCsectionsContainer as sc
+from materials.sections import RCsectionsContainer as sc
 from model.sets import sets_mng as sUtils
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AO_O)"

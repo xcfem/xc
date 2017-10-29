@@ -5,7 +5,7 @@
     page 26 and following.
     url={https://books.google.es/books?id=v7bbMwEACAAJ},
 '''
-from materials import section_properties
+from materials.sections import section_properties
 from misc import banco_pruebas_scc3d
 from solution import predefined_solutions
 

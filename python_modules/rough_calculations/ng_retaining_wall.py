@@ -19,7 +19,7 @@ import matplotlib
 #matplotlib.use('PS')
 import matplotlib.pyplot as plt
 from materials import typical_materials
-from materials import section_properties
+from materials.sections import section_properties
 from materials.sia262 import SIA262_materials
 from model.geometry import retaining_wall_geometry
 from rough_calculations import ng_rebar_def

@@ -13,7 +13,7 @@ import xc_base
 import geom
 import xc
 
-from materials.structural_shapes import arcelor_metric_shapes
+from materials.sections.structural_shapes import arcelor_metric_shapes
 from materials.ec3 import EC3_materials
 from model import predefined_spaces
 from solution import predefined_solutions

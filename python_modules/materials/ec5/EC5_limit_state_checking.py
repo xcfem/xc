@@ -9,7 +9,7 @@ __version__= "3.0"
 __email__= "ana.ortega@ciccp.es "
 
 from miscUtils import LogMessages as lmsg
-from materials import section_properties
+from materials.sections import section_properties
 from postprocess import def_vars_control
 from postprocess import callback_controls
 from postprocess import prop_statistics as ps

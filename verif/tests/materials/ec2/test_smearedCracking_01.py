@@ -25,7 +25,7 @@ from model import predefined_spaces
 from materials.ehe import EHE_materials
 from materials import concrete_base
 from materials import typical_materials
-from materials.fiber_section import createFiberSets
+from materials.sections.fiber_section import createFiberSets
 import matplotlib.pyplot as plt
 import numpy as np
 

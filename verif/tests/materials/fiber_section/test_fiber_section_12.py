@@ -17,7 +17,7 @@ from misc import banco_pruebas_scc3d
 
 
 from materials.ehe import EHE_materials
-from materials.fiber_section import createFiberSets
+from materials.sections.fiber_section import createFiberSets
 from model import predefined_spaces
 from solution import predefined_solutions
 
@@ -93,7 +93,7 @@ reinfFibers= createFiberSets.FiberSet(scc,"reinforcement",EHE_materials.Y1860S7.
 fibraSEpsMax= reinfFibers.getFiberWithMaxStrain()
 epsSMax= fibraSEpsMax.getMaterial().getStrain() # Maximum steel strain.
 
-from materials import section_properties
+from materials.sections import section_properties
 from materials.ehe import EHE_limit_state_checking
 tipoSolic= section_properties.solicitationType(epsCMin,epsSMax)
 strTipoSolic= section_properties.solicitationTypeString(tipoSolic)

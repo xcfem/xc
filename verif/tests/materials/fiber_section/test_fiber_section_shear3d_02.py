@@ -5,7 +5,7 @@ stiffnesses. Home made test.
 '''
 
 
-from materials import section_properties
+from materials.sections import section_properties
 from misc import banco_pruebas_scc3d
 import xc_base
 import geom

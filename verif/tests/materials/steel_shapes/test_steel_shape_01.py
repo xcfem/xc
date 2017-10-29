@@ -8,8 +8,8 @@ import xc
 from solution import predefined_solutions
 from model import predefined_spaces
 from materials import typical_materials
-from materials.structural_shapes import arcelor_metric_shapes
-from materials import structural_steel
+from materials.sections.structural_shapes import arcelor_metric_shapes
+from materials.sections import structural_steel
 from materials.ec3 import EC3_materials
 from postprocess import def_params_control as dp
 from postprocess import def_vars_control as vc

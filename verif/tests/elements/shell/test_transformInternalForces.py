@@ -10,7 +10,7 @@ __email__= "l.pereztato@gmail.com"
 import xc_base
 import geom
 import xc
-from materials import internal_forces
+from materials.sections import internal_forces
 import math
 
 n1= -11000

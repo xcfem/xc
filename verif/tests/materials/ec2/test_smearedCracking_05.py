@@ -24,8 +24,8 @@ from model import predefined_spaces
 from materials.ec2 import EC2_materials
 from materials import concrete_base
 from materials import typical_materials
-from materials.fiber_section import createFiberSets
-from materials.fiber_section import sectionReport 
+from materials.sections.fiber_section import createFiberSets
+from materials.sections.fiber_section import sectionReport 
 import matplotlib.pyplot as plt
 import numpy as np
 from materials.ec2 import EC2_limit_state_checking
@@ -313,7 +313,7 @@ else:
 
 ####  FIGURES & REPORTS
 # ## plotting of section geometric and mechanical properties
-# from materials.fiber_section import plotGeomSeccion as pg
+# from materials.sections.fiber_section import plotGeomSeccion as pg
 # pg.plotGeomSeccion(geomSectFibers,'./secEx74.eps')
 
 

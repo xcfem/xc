@@ -12,7 +12,7 @@ __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
 # Rectangular cross-section definition
-from materials import section_properties
+from materials.sections import section_properties
 from misc import banco_pruebas_scc3d
 import xc_base
 import geom

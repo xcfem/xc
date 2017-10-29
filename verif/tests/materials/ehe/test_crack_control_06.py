@@ -7,7 +7,7 @@ import xc
 
 from misc import banco_pruebas_scc3d
 from solution import predefined_solutions # Solution procedure
-from materials.fiber_section import defSeccionHASimple
+from materials.sections.fiber_section import defSeccionHASimple
 
 from materials.ehe import EHE_materials
 from materials.ehe import EHE_limit_state_checking

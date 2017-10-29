@@ -14,7 +14,7 @@ import scipy.interpolate
 from scipy import stats
 from materials import typical_materials
 from postprocess.reports import graph_material
-from materials import materialWithDKDiagrams as matWDKD
+from materials.sections import materialWithDKDiagrams as matWDKD
 import matplotlib.pyplot as plt
 import numpy as np
 import geom

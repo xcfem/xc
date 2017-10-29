@@ -8,9 +8,9 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@ciccp.es, ana.ortega@ciccp.es "
 
-from materials import structural_steel
+from materials import steel_base
 
-class ASTMSteel(structural_steel.BasicSteel):
+class ASTMSteel(steel_base.BasicSteel):
   '''ASTM structural steel.'''
 
   def __init__(self, fy= 250e6, fu= 400e6, gammaM= 1.0):

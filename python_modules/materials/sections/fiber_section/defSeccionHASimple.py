@@ -10,11 +10,11 @@ __email__= "l.pereztato@ciccp.es" "ana.Ortega@ciccp.es"
 import xc_base
 import geom
 import xc
-from materials import section_properties
+from materials.sections import section_properties
 from materials import typical_materials
 import math
 from materials.ehe import EHE_materials
-from materials import stressCalc as sc
+from materials.sections import stressCalc as sc
 import sys
 
 class RecordShearReinforcement(object):

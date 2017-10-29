@@ -1031,7 +1031,7 @@ for item in R:
   
 import xc_base
 import geom
-from materials import structural_steel
+from materials.sections import structural_steel
 
 class IPEShape(structural_steel.SteelShape):
   def __init__(self,steel,name):
