@@ -56,7 +56,7 @@ tendon.calcLossFriction(coefFric=mu,k=k,sigmaP0_extr1=sigmap0max,sigmaP0_extr2=0
 tendon.calcLossAnchor(Ep_by_anc_slip_extr1=deltaL*Ep,Ep_by_anc_slip_extr2=0.0)
 
 #Plot
-# fig1=tendon.plot2D(XaxisValues='S',symbolStressAfterLossFriction='g-',symbolStressAfterLossAnch='r-')
+# fig1,ax2d=tendon.plot2D(XaxisValues='S',symbolStressAfterLossFriction='g-',symbolStressAfterLossAnch='r-')
 #fig1.show()
 
 areaSigmFric=interpolate.splint(0,tendon.fineScoord[-1],tendon.tckLossFric)
