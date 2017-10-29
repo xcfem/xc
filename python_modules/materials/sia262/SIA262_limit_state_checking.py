@@ -15,9 +15,9 @@ from rough_calculations import ng_simple_bending_reinforcement
 import math
 import xc_base
 import geom
-from materials.fiber_section import createFiberSets
-from materials.fiber_section import fiberUtils
-from materials import stressCalc as sc
+from materials.sections.fiber_section import createFiberSets
+from materials.sections.fiber_section import fiberUtils
+from materials.sections import stressCalc as sc
 
 # Returns adherence stress (Pa) for concrete type (tableau 19 SIA 262).
 adherenceStress_x= [12e6 , 16e6,20e6 ,25e6 ,30e6 ,35e6 ,40e6 ,45e6 ,50e6]

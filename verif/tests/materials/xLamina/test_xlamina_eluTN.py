@@ -5,9 +5,9 @@ import xc_base
 import geom
 import xc
 from materials.ehe import EHE_materials
-from materials.fiber_section import defSeccionHASimple
+from materials.sections.fiber_section import defSeccionHASimple
 from postprocess import RC_material_distribution
-from materials import RCsectionsContainer as sc
+from materials.sections import RCsectionsContainer as sc
 from solution import predefined_solutions
 from materials.sia262 import SIA262_limit_state_checking #Change SIA262->EHE
 

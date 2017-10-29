@@ -24,11 +24,11 @@ import geom
 import xc
 from model import predefined_spaces
 from materials import typical_materials
-from materials import section_properties
+from materials.sections import section_properties
 from postprocess import control_vars as cv
 from solution import predefined_solutions
 from miscUtils import LogMessages as lmsg
-from materials import internal_forces
+from materials.sections import internal_forces
 from collections import defaultdict
 
 # Fake section (elements must have a stiffness)

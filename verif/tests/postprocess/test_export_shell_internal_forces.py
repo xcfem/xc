@@ -27,7 +27,7 @@ import xc
 from solution import predefined_solutions
 from model import predefined_spaces
 from materials import typical_materials
-from materials import internal_forces
+from materials.sections import internal_forces
 
 # Problem type
 prueba= xc.ProblemaEF()

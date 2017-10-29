@@ -5,7 +5,7 @@ import xc
 from solution import predefined_solutions
 from model import predefined_spaces
 from materials import typical_materials
-from materials.structural_shapes import aisc_metric_shapes
+from materials.sections.structural_shapes import aisc_metric_shapes
 from sympy.physics import units
 
 __author__= "Luis C. Pérez Tato (LCPT)"

@@ -6,7 +6,7 @@ import math
 import xc_base
 import geom
 from materials.ehe import EHE_materials
-from materials.fiber_section import createFiberSets
+from materials.sections.fiber_section import createFiberSets
 from materials import limit_state_checking_base as lscb
 from postprocess import control_vars as cv
 from miscUtils import LogMessages as lmsg

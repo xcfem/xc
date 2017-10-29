@@ -7,7 +7,7 @@ __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
 import math
-from materials import internal_forces
+from materials.sections import internal_forces
 from miscUtils import LogMessages as lmsg
 
 def exportInternalForces(nmbComb, elems, fDesc):

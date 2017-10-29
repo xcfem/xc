@@ -8,7 +8,7 @@ from solution import predefined_solutions
 from model import predefined_spaces
 from model import predefined_spaces
 from materials import typical_materials
-from materials import section_properties
+from materials.sections import section_properties
 from misc import banco_pruebas_scc3d
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"

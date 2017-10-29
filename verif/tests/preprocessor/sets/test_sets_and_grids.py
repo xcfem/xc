@@ -15,7 +15,7 @@ import xc
 from model import predefined_spaces
 from model.geometry import grid_model as gm
 from materials import typical_materials as tm
-from materials import section_properties as sectpr
+from materials.sections import section_properties as sectpr
 from model.mesh import finit_el_model as fem
 from model.sets import sets_mng as sets
 

@@ -9,12 +9,12 @@ __version__= "3.0"
 __email__= " ana.Ortega.Ort@gmail.com, l.pereztato@gmail.com"
 
 import math
-from materials import structural_steel
+from materials import steel_base
 from materials import typical_materials
 from materials.ec3 import EC3_limit_state_checking as EC3lsc
 from miscUtils import LogMessages as lmsg
 
-class EC3Steel(structural_steel.BasicSteel):
+class EC3Steel(steel_base.BasicSteel):
   '''Eurocode 3 structural steel.
 
     :ivar fy16: 0<t<16mm
@@ -293,7 +293,7 @@ So:
 
 '''
 
-from materials.structural_shapes import arcelor_metric_shapes
+from materials.sections.structural_shapes import arcelor_metric_shapes
 
 class IPEShape(EC3Shape,arcelor_metric_shapes.IPEShape):
   """IPE shape with Eurocode 3 verification routines."""

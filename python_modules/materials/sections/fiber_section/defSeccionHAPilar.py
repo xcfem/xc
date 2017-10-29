@@ -12,7 +12,7 @@ with reinforcement symmetric in both directions (as usual in columns)
 '''
 
 from materials.ehe import EHE_materials
-from materials.fiber_section import defSeccionHASimple
+from materials.sections.fiber_section import defSeccionHASimple
 
 class ColumnMainReinforcement(object):
   ''' Main (longitudinal) rebars of a column.

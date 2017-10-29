@@ -15,8 +15,8 @@ import os
 from latex import latexUtils
 from postprocess.reports import graph_material as mg
 import plotGeomSeccion as pg
-from materials import section_properties as prmRect
-from materials.fiber_section import  defSeccionHASimple as sHAs
+from materials.sections import section_properties as prmRect
+from materials.sections.fiber_section import  defSeccionHASimple as sHAs
 
 fmt3_1f= '{:3.1f}'
 fmt4_1f= '{:4.1f}'

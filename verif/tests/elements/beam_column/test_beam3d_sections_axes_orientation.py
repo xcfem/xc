@@ -32,7 +32,7 @@ import xc
 import numpy as np
 import csv
 
-from materials.fiber_section import defSeccionHASimple
+from materials.sections.fiber_section import defSeccionHASimple
 from postprocess import RC_material_distribution
 from materials.sia262 import SIA262_materials
 from model import predefined_spaces

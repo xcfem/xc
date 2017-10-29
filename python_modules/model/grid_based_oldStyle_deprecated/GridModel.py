@@ -16,7 +16,7 @@ import geom
 import xc
 from miscUtils import LogMessages as lmsg
 from materials import typical_materials
-from materials import section_properties
+from materials.sections import section_properties
 from model import predefined_spaces
 from model.boundary_cond import spring_bound_cond as ef
 from postprocess.xcVtk import vtk_grafico_base

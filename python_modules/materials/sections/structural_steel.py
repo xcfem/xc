@@ -9,28 +9,9 @@ __version__= "3.0"
 __email__= " ana.Ortega.Ort@gmail.com, l.pereztato@gmail.com"
 
 import math
-from materials import typical_materials
-from materials import section_properties as sp
+from materials.sections import section_properties as sp
 from postprocess import def_vars_control as vc
 from miscUtils import LogMessages as lmsg
-
-class BasicSteel(typical_materials.BasicElasticMaterial):
-  '''Base class for structural steels.
-
-    :ivar fy:  Yield stress.
-    :ivar fu: ultimate stress.
-    :ivar gammaM: partial factor for cross-section resistance.
-  '''
-
-  def __init__(self, E, nu, fy, fu, gammaM):
-    super(BasicSteel,self).__init__(E,nu)
-    self.fy= fy
-    self.fu= fu
-    self.gammaM= gammaM
-
-  def fyd(self):
-    return self.fy/self.gammaM
-
 
 
 #Alpha imperfection factor.
@@ -62,7 +43,7 @@ class SteelShape(sp.SectionProperties):
   :ivar steel:    steel object (e.g. S275JR)
   :ivar table:    module containing a dictionary with mechanical characteristics
                   of a series of shapes 
-                  (e.g. materials.structural_shapes.arcelor_metric_shapes.IPE)
+                  (e.g. materials.sections.structural_shapes.arcelor_metric_shapes.IPE)
   :ivar name:     name identifying the section in the table
   '''
   def __init__(self,steel,name,table):

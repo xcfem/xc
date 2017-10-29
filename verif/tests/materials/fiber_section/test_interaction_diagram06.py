@@ -9,7 +9,7 @@ import xc
 from materials.ehe import EHE_materials
 import math
 from materials.sia262 import SIA262_materials
-from materials.fiber_section import defSeccionHASimple
+from materials.sections.fiber_section import defSeccionHASimple
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
 __copyright__= "Copyright 2015, LCPT and AOO"
@@ -57,7 +57,7 @@ preprocessor=  prueba.getPreprocessor
 sccData.defRCSimpleSection(preprocessor, 'd')
 param= xc.InteractionDiagramParameters()
 diag= sccData.defInteractionDiagramNMy(preprocessor)
-#from materials.fiber_section import plotGeomSeccion as pg
+#from materials.sections.fiber_section import plotGeomSeccion as pg
 #pg.plotInteractionDiagram2D(diag)
 
 

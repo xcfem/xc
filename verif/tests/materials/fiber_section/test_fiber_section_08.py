@@ -21,8 +21,8 @@ from misc import banco_pruebas_scc3d
 from solution import predefined_solutions
 
 from materials.ehe import EHE_materials
-from materials.fiber_section import createFiberSets
-from materials import section_properties
+from materials.sections.fiber_section import createFiberSets
+from materials.sections import section_properties
 from model import predefined_spaces
 
 __author__= "Luis C. Pérez Tato (LCPT)"
@@ -146,7 +146,7 @@ YepsSMax= fMax.getPos().x # Y Z coordinates for the maximum steel strain.
 ZepsSMax= fMax.getPos().y
 
 
-from materials import section_properties
+from materials.sections import section_properties
 from materials.ehe import EHE_limit_state_checking
 tipoSolic= section_properties.solicitationType(epsCMin,epsSMax)
 strTipoSolic= section_properties.solicitationTypeString(tipoSolic)
