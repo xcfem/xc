@@ -31,7 +31,7 @@ angl_Parab_XZ=math.pi/4 #angle between the vertical plane that contains the
 Ep=195e3       #elastic modulus of prestressing steel [MPa]
 #Prestressing process
 mu=0.10        #coefficient of friction between the cables and their sheating
-k=0.00017/mu*1e-3       #unintentional angular deviation [rad/mm]
+k=0.00017*1e-3     #wobble coefficient per millimeter length of cable
 sigmap0max=1239 #Initial stress of cable [MPa]
 
 # Interpolation
@@ -55,7 +55,7 @@ tendon1.roughCoordMtr=np.array([x_parab_rough,y_parab_rough,z_parab_rough])
 #Interpolated 3D spline 
 tendon1.pntsInterpTendon(n_points_fine,smoothness=1,kgrade=3)
 # Losses of prestressing due to friction
-tendon1.calcLossFriction(coefFric=mu,uninDev=k,sigmaP0_extr1=sigmap0max,sigmaP0_extr2=0.0)
+tendon1.calcLossFriction(coefFric=mu,k=k,sigmaP0_extr1=sigmap0max,sigmaP0_extr2=0.0)
 # Losses of prestressing due to anchorage slip (loss due to friction must be
 # previously calculated
 tendon1.calcLossAnchor(Ep_by_anc_slip_extr1=deltaL*Ep,Ep_by_anc_slip_extr2=0.0)
@@ -67,15 +67,17 @@ tendon2.roughCoordMtr=np.array([x_parab_rough,y_parab_rough,z_parab_rough])
 #Interpolated 3D spline 
 tendon2.pntsInterpTendon(n_points_fine,smoothness=1,kgrade=3)
 # Losses of prestressing due to friction
-tendon2.calcLossFriction(coefFric=mu,uninDev=k,sigmaP0_extr1=0.0,sigmaP0_extr2=sigmap0max)
+tendon2.calcLossFriction(coefFric=mu,k=k,sigmaP0_extr1=0.0,sigmaP0_extr2=sigmap0max)
 # Losses of prestressing due to anchorage slip (loss due to friction must be
 # previously calculated
 tendon2.calcLossAnchor(Ep_by_anc_slip_extr1=0.0,Ep_by_anc_slip_extr2=deltaL*Ep)
 
 #Plot
-# tendon1.plot2D(XaxisValues='S',fileName='plot1.png',symbolStressAfterLossFriction='g-',symbolStressAfterLossAnch='r-')
-# tendon2.plot2D(XaxisValues='S',fileName='plot2.png',symbolStressAfterLossFriction='g-',symbolStressAfterLossAnch='r-')
+# fig1=tendon1.plot2D(XaxisValues='S',symbolStressAfterLossFriction='g-',symbolStressAfterLossAnch='r-')
+#fig1.show()
 
+# fig2= tendon2.plot2D(XaxisValues='S',symbolStressAfterLossFriction='g-',symbolStressAfterLossAnch='r-')
+# fig2.savefig('fig2.png')
 from sklearn.metrics import mean_squared_error
 ratio=mean_squared_error(tendon1.stressAfterLossAnch,np.flipud(tendon2.stressAfterLossAnch))
 

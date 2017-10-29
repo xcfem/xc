@@ -46,7 +46,9 @@ class PrestressTendon(object):
         in each interpolated  
         - tck: tuple (t,c,k) containing the vector of knots, the B-spline 
                coefficients, and the degree of the spline.
-        - fineScoord: coordinate by the projection of the curve on the XY 
+        - fineScoord: curvilinear coordinate (cummulative length of curve 
+                      for in each point)
+        - fineProjXYcoord: coordinate by the projection of the curve on the XY 
         plane. Matrix 1*nPntsFine whose first elements is 0 and the rest the 
         cumulative distance to the first point
         '''
@@ -57,6 +59,8 @@ class PrestressTendon(object):
         self.fineDerivMtr=np.array([x_der, y_der,z_der])
         self.tck=tck
         self.fineScoord=self.getCumLength()
+        x0,y0=(self.fineCoordMtr[0][0],self.fineCoordMtr[1][0])
+        self.fineProjXYcoord=((self.fineCoordMtr[0]-x0)**2+(self.fineCoordMtr[1]-y0)**2)**0.5
         return
 
     def getLengthSequence(self):
@@ -115,7 +119,7 @@ class PrestressTendon(object):
         :param materialName: name of the material
         :param elemTypeName: name of the type of element
         :param crdTransfName: name of the coordinate transformation
-        :param areaTendon:   area of the cross-section of the tencon
+        :param areaTendon:   area of the cross-section of the tendon
         :param setName:      name of the set to which append the nodes and elements
                              created (if the set doesn't exist, it's created)
         '''
@@ -141,7 +145,7 @@ class PrestressTendon(object):
         return tendonSet
             
 
-    def calcLossFriction(self,coefFric,uninDev,sigmaP0_extr1=0.0,sigmaP0_extr2=0.0):
+    def calcLossFriction(self,coefFric,k,sigmaP0_extr1=0.0,sigmaP0_extr2=0.0):
         '''Creates the attributes lossFriction and stressAfterLossFriction of 
         type array that contains  for each point in fineCoordMtr the cumulative 
         immediate loss of prestressing due to friction and the stress after 
@@ -156,17 +160,21 @@ class PrestressTendon(object):
                          prestress applied)
         :param coefFric: coefficient of friction between the tendon and its 
                         sheathing
-        :param uninDev: unintentional angular deviation (rad/m tendon)
+        :param k: wobble coefficient or coefficient for wave effect, that 
+                  refers to the unintentional deviation of the position of 
+                  the tendon along the duct. It's expressed by unit length 
+                  of tendon. The value of k varies from 0.0015 to 0.0050 per 
+                  meter length of the tendon depending on the type of tendon. 
         '''
         if (sigmaP0_extr1 != 0.0):
             cum_len=self.getCumLength()
             cum_angl=self.getCumAngle()
-            loss_frict_ext1=np.array([sigmaP0_extr1*(1-math.exp(-coefFric*(cum_angl[i]+uninDev*cum_len[i]))) for i in range(len(cum_angl))])
+            loss_frict_ext1=np.array([sigmaP0_extr1*(1-math.exp(-coefFric*cum_angl[i]-k*cum_len[i])) for i in range(len(cum_angl))])
             self.stressAfterLossFrictionOnlyExtr1=sigmaP0_extr1-loss_frict_ext1
         if (sigmaP0_extr2 != 0.0):
             cum_len=self.getReverseCumLength()
             cum_angl=self.getReverseCumAngle()
-            loss_frict_ext2=np.array([sigmaP0_extr2*(1-math.exp(-coefFric*(cum_angl[i]+uninDev*cum_len[i]))) for i in range(len(cum_angl))])
+            loss_frict_ext2=np.array([sigmaP0_extr2*(1-math.exp(-coefFric*cum_angl[i]-k*cum_len[i])) for i in range(len(cum_angl))])
             self.stressAfterLossFrictionOnlyExtr2=sigmaP0_extr2-loss_frict_ext2
         if (sigmaP0_extr1 != 0.0) and (sigmaP0_extr2 != 0.0):
             self.lossFriction=np.minimum(loss_frict_ext1,loss_frict_ext2)
@@ -196,7 +204,7 @@ class PrestressTendon(object):
                         the tendon (ending point) muliplied by the elastic 
                         modulus of the prestresing steel  (= deltaL x Ep)
         '''
-        self.ScoordZeroAnchLoss=[0,self.fineScoord[-1]] # S coordinates of the
+        self.projXYcoordZeroAnchLoss=[0,self.fineProjXYcoord[-1]] # projected coordinates of the
                                    # points near extremity 1 and extremity 2,
                                    #respectively, that delimite the lengths of
                                    # tendon affected by the loss of prestress
@@ -215,7 +223,7 @@ class PrestressTendon(object):
             else:    
                 sCoordZeroLoss=optimize.newton_krylov(self.fAnc_ext1,self.fineScoord[-1]/2.0,f_tol=1e-2)   #point from which the tendon is not affected by the
                        #anchorage slip
-                self.ScoordZeroAnchLoss[0]=sCoordZeroLoss.item(0)
+                self.projXYcoordZeroAnchLoss[0]=self.ScoordToXYprojCoord(sCoordZeroLoss.item(0))
                 excess_delta_sigma=0
             stressSCoordZeroLoss=interpolate.splev(sCoordZeroLoss,self.tckLossFric,der=0)              #stress in that point (after loss due to friction)
             condlist=[self.fineScoord <= sCoordZeroLoss]
@@ -232,7 +240,7 @@ class PrestressTendon(object):
             else:    
                 sCoordZeroLoss=optimize.newton_krylov(self.fAnc_ext2,self.fineScoord[-1]/2.0,f_tol=1e-2)   #point from which the tendon is affected by the
                        #anchorage slip
-                self.ScoordZeroAnchLoss[1]=sCoordZeroLoss.item(0)
+                self.projXYcoordZeroAnchLoss[1]=self.ScoordToXYprojCoord(sCoordZeroLoss.item(0))
                 excess_delta_sigma=0
             stressSCoordZeroLoss=interpolate.splev(sCoordZeroLoss,self.tckLossFric,der=0)              #stress in that point (after loss due to friction)
             condlist=[self.fineScoord >= sCoordZeroLoss]
@@ -254,12 +262,27 @@ class PrestressTendon(object):
         '''
         y=interpolate.splint(s,self.fineScoord[-1],self.tckLossFric)-(self.fineScoord[-1]-s)*interpolate.splev(s,self.tckLossFric,der=0)-self.slip2/2.0
         return y
+
+    def ScoordToXYprojCoord(self,Scoord):
+        '''return the projected XYcoordinate of the tendon point corresponding to
+        the value Scoord given as parameter
+        '''
+        index1=(np.abs(self.fineScoord-Scoord)).argmin()
+        if Scoord < self.fineScoord[index1]:
+            index2=index1-1
+        else:
+            index2=index1+1
+        prop=(Scoord-self.fineScoord[index1])/(self.fineScoord[index2]-self.fineScoord[index1])
+        XYcoor=self.fineProjXYcoord[index1]+prop*(self.fineProjXYcoord[index2]-self.fineProjXYcoord[index1])
+        return XYcoor
         
-    def plot3D(self,fileName='plot.png',symbolRougPoints=None,symbolFinePoints=None,symbolTendon=None,symbolLossFriction=None,symbolStressAfterLossFriction=None,symbolLossAnch=None,symbolStressAfterLossAnch=None):
-        '''Plot in a 3D graphic the results to which a symbol is assigned.
+    def plot3D(self,axisEqualScale='N',symbolRougPoints=None,symbolFinePoints=None,symbolTendon=None,symbolLossFriction=None,symbolStressAfterLossFriction=None,symbolLossAnch=None,symbolStressAfterLossAnch=None):
+        '''Return in a 3D graphic the results to which a symbol is assigned.
         Symbol examples: 'r-': red solid line, 'mo': magenta circle, 
         'b--': blue dashes, 'ks':black square,'g^' green triangle_up, 
         'c*': cyan star, ...
+        :param axisEqualScale:  ='Y', 'y','yes' or 'Yes' for equal aspect ratio
+                             (defaults to 'N')
         '''
         fig = plt.figure()
         ax3d = fig.add_subplot(111, projection='3d')
@@ -281,19 +304,22 @@ class PrestressTendon(object):
         ax3d.set_xlabel('X')
         ax3d.set_ylabel('Y')
         ax3d.set_zlabel('Z')
-        fig.savefig(fileName)
-        return
+        if str.lower(axisEqualScale[0])=='y':
+            ax3d.axis('equal')
+        return fig
 
-    def plot2D(self,XaxisValues='X',fileName='plot.png',symbolRougPoints=None,symbolFinePoints=None,symbolTendon=None,symbolLossFriction=None,symbolStressAfterLossFriction=None,symbolLossAnch=None,symbolStressAfterLossAnch=None):
-        '''Plot in a 2D graphic the results to which a symbol is assigned.
+    def plot2D(self,XaxisValues='X',axisEqualScale='N',symbolRougPoints=None,symbolFinePoints=None,symbolTendon=None,symbolLossFriction=None,symbolStressAfterLossFriction=None,symbolLossAnch=None,symbolStressAfterLossAnch=None):
+        '''Return in a 2D graphic the results to which a symbol is assigned.
         Symbol examples: 'r-': red solid line, 'mo': magenta circle, 'b--': blue dashes, 'ks':black square,'g^' green triangle_up, 'c*': cyan star, ...
         :param XaxisValues: ='X' (default) to represent in the diagram X-axis
                               the X coordinates of the tendon,
                             ='Y' to represent in the diagram X-axis 
                               the Y coordinates of the tendon,
-                            ='S' to represent in the diagram X-axis 
-                              the curviline coordinates of the tendon 
-                              (sqrt(X**2+Y**2)
+                            ='XY' to represent in the diagram X-axis 
+                              the coordinate by the projection of the 
+                              curve on the XY plane
+        :param axisEqualScale:  ='Y', 'y','yes' or 'Yes' for equal aspect ratio
+                             (defaults to 'N')
         '''
         if XaxisValues.upper()=='X':
             XaxisCoord=self.fineCoordMtr[0]
@@ -303,10 +329,11 @@ class PrestressTendon(object):
             XaxisCoord=self.fineCoordMtr[1]
             YaxisRoughCoord=self.roughCoordMtr[1]
             xLab='Y'
-        elif XaxisValues.upper()=='S':
-            XaxisCoord=(self.fineCoordMtr[0]**2+self.fineCoordMtr[1]**2)**(0.5)
-            XaxisRoughCoord=(self.roughCoordMtr[0]**2+self.roughCoordMtr[1]**2)**(0.5)
-            xLab='S'
+        elif XaxisValues.upper()=='XY':
+            XaxisCoord=self.fineProjXYcoord
+            x0,y0=(self.roughCoordMtr[0][0],self.roughCoordMtr[1][0])
+            XaxisRoughCoord=((self.roughCoordMtr[0]-x0)**2+(self.roughCoordMtr[1]-y0)**2)**(0.5)
+            xLab='XYproj'
         else:
             lmsg.warning("Wrong value for XaxisValues ('X','Y','S'): X coordinates are represented in the figure")
 
@@ -328,11 +355,14 @@ class PrestressTendon(object):
             ax2d.plot(XaxisCoord,self.stressAfterLossAnch,symbolStressAfterLossAnch,label='Stress after loss due to anchorage slip')
         ax2d.legend()
         ax2d.set_xlabel(xLab)
-        fig.savefig(fileName)
-        return
+        if str.lower(axisEqualScale[0])=='y':
+            ax2d.axis('equal')
+        return fig
 
 def angle_between(a,b):
-  arccosInput = np.dot(a,b)/np.linalg.norm(a)/np.linalg.norm(b)
-  arccosInput = 1.0 if arccosInput > 1.0 else arccosInput
-  arccosInput = -1.0 if arccosInput < -1.0 else arccosInput
-  return math.acos(arccosInput)
+    '''Return the angle between vectors a and b
+    '''
+    arccosInput = np.dot(a,b)/np.linalg.norm(a)/np.linalg.norm(b)
+    arccosInput = 1.0 if arccosInput > 1.0 else arccosInput
+    arccosInput = -1.0 if arccosInput < -1.0 else arccosInput
+    return math.acos(arccosInput)
