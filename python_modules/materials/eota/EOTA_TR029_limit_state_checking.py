@@ -15,62 +15,69 @@ def axialResistanceSteelFailure(As, fuk):
   '''Characteristic value of anchor bolt strength in tension
    due to steel collapse according to clause 5.2.2.2 of EOTA TR029.
 
-   As: Bolt area (m2).
-   fuk: Valor característico de la carga de rotura a tracción (Pa).
+   As: stressed cross section of steel (m2).
+   fuk: characteristic steel ultimate tensile strength (nominal value) (Pa).
   '''
   return As*fuk
 
 def axialInitialResistancePullOut(d, hEf, tauRk):
-    ''' Valor inicial de la resistencia de un perno a tracción por fallo combinado de arrancamiento y extracción de cono de hormigón according to expression 5.2a in clause 5.2.2.3 a) of EOTA TR029.
+    '''Characteristic resistance in case of combined pull -out and concrete cone failure according to expression 5.2a in clause 5.2.2.3 a) of EOTA TR029.
 
     :param d: Anchor diameter (m).
-    :param hEf: Profundidad efectiva del anclaje (m).
-    :param tauRk: Valor característico de la tensión de adherencia (debe tomarse del documento ETA que resulte aplicable) (Pa).
+    :param hEf: effective anchorage depth (m).
+    :param tauRk: Characteristic bond resistance, depending on the concrete strength class, (must be taken from relevant ETA) (Pa).
     '''   
     return math.pi*d*hEf*tauRk
 
 def axialInitialResistanceConeFailure(k1, fck_cube, hEf):
-  ''' Valor inicial de la resistencia de un perno a tracción por
-   extracción de cono de hormigón according to expression 5.3a in clause 5.2.2.4 a) of EOTA TR029.
-   :param k1: 7.2 para hormigón fisurado y 10.1 para hormigón no fisurado.
-   :param fck_cube: Concrete characteristic strength medida en probeta cúbica (Pa).
-   :param hEf: Profundidad efectiva del anclaje (m).
+  ''' Characteristic resistance of an anchor in case of concrete cone failure
+   according to expression 5.3a in clause 5.2.2.4 a) of EOTA TR029.
+
+   :param k1: 7.2 for applications in cracked concrete and 10.1 for applications in non-cracked concrete.
+   :param fck_cube: characteristic concrete compression strength measured 
+                    on cubes with a side length of 150 mm (value of concrete 
+                    strength class according to ENV 206) (Pa).
+   :param hEf: effective anchorage depth (m).
    '''
   return k1*math.sqrt(fck_cube/1e6)*pow(hEf*1e3,1.5)
 
 def getScrNp(d, hEf, tauRkUcr):
-  ''' Lado del área de influencia (distancia crítica entre pernos) de un anclaje individual according to clause 5.2.2.3 b) (ecuación 5.2c) of EOTA TR029.
+  '''Spacing for ensuring the transmission of the characteristic resistance 
+     of a single anchor without spacing and edge effects in case of pullout
+     failure. Is equal to the side of the influence area of an individual 
+     anchor (critical distance between anchors) according to clause 5.2.2.3 b)
+     (ecuación 5.2c) of EOTA TR029.
 
-   :param d: Diámetro del perno (m).
-   :param hEf: Profundidad efectiva del anclaje (m).
-   :param tauRkUcr: Valor característico de la tensión de adherencia con hormigón no fisurado (debe tomarse del documento ETA que resulte aplicable) (Pa).
+   :param d: anchor diameter (m).
+   :param hEf: effective anchorage depth (m).
+   :param tauRkUcr: Characteristic bond resistance for non-craked concrete (must be taken from relevant ETA) (Pa).
   '''   
   return min(20e3*d*math.sqrt(tauRkUcr/7.5e6),3*hEf)
 
 def getCcrNp(d, hEf, tauRkUcr):
   '''  Semi-lado del área de influencia (distancia crítica al borde) de un anclaje individual according to clause 5.2.2.3 b) (ecuación 5.2d) of EOTA TR029.
 
-   :param d: Diámetro del perno (m).
-   :param hEf: Profundidad efectiva del anclaje (m).
-   :param tauRkUcr: Valor característico de la tensión de adherencia con hormigón no fisurado (debe tomarse del documento ETA que resulte aplicable) (Pa).
+   :param d: anchor diameter (m).
+   :param hEf: effective anchorage depth (m).
+   :param tauRkUcr: Characteristic bond resistance for non-craked concrete (must be taken from relevant ETA) (Pa).
   '''   
   return getScrNp(d,hEf,tauRkUcr)/2
 
-def getA0pN(d,posPerno, hEf, tauRkUcr):
+def getA0pN(d,anchorPosition, hEf, tauRkUcr):
     '''
      Polígono que representa el área de influencia de un anclaje individual according to clause 5.2.2.3 b) (figura 5.1) of EOTA TR029.
 
-     :param d: Diámetro del perno (m).
-     :param posPerno: Posición del del perno.
-     :param hEf: Profundidad efectiva del anclaje (m).
-     :param tauRkUcr: Valor característico de la tensión de adherencia con hormigón no fisurado (debe tomarse del documento ETA que resulte aplicable) (Pa).
+     :param d: anchor diameter (m).
+     :param anchorPosition: Posición del del perno.
+     :param hEf: effective anchorage depth (m).
+     :param tauRkUcr: Characteristic bond resistance for non-cracked concrete (must be taken from relevant ETA) (Pa).
     '''   
     semiLadoA0pN= getCcrNp(d,hEf,tauRkUcr)
     retval= geom.Poligono2d()
-    retval.agregaVertice(geom.Pos2d(posPerno.x-semiLadoA0pN,posPerno.y-semiLadoA0pN))
-    retval.agregaVertice(geom.Pos2d(posPerno.x+semiLadoA0pN,posPerno.y-semiLadoA0pN))
-    retval.agregaVertice(geom.Pos2d(posPerno.x+semiLadoA0pN,posPerno.y+semiLadoA0pN))
-    retval.agregaVertice(geom.Pos2d(posPerno.x-semiLadoA0pN,posPerno.y+semiLadoA0pN))
+    retval.agregaVertice(geom.Pos2d(anchorPosition.x-semiLadoA0pN,anchorPosition.y-semiLadoA0pN))
+    retval.agregaVertice(geom.Pos2d(anchorPosition.x+semiLadoA0pN,anchorPosition.y-semiLadoA0pN))
+    retval.agregaVertice(geom.Pos2d(anchorPosition.x+semiLadoA0pN,anchorPosition.y+semiLadoA0pN))
+    retval.agregaVertice(geom.Pos2d(anchorPosition.x-semiLadoA0pN,anchorPosition.y+semiLadoA0pN))
     return retval
 
 def getFactor2pN(A0pN, ApN):
@@ -86,7 +93,7 @@ def getFactor1N(C, CcrN):
     '''
     Factor que introduce en el cálculo la influencia en la distribución de tensiones de la distancia al borde de la pieza soporte, according to expression 5.2e of clause 5.2.2.3 c).
 
-     :param C: Distancia al borde del perno.
+     :param C: edge distance.
      :param CcrN: Semi-lado del área de influencia (distancia crítica al borde).
     '''
     return min(0.7+0.3*C/CcrN,1)
@@ -97,23 +104,23 @@ def getScrN(hEf):
    according to clause 5.2.2.4 b) (ecuación 5.3b) del
    clause 5.2.2.4 b) of EOTA TR029.
 
-   :param hEf: Profundidad efectiva del anclaje (m).
+   :param hEf: effective anchorage depth (m).
   '''
   return 3*hEf
 
-def getA0cN(posPerno, hEf):
+def getA0cN(anchorPosition, hEf):
     '''
     Polígono que representa el área de influencia de un anclaje individual according to clause 5.2.2.4 b) (figura 5.4a) of EOTA TR029.
 
-    :param posPerno: Posición del del perno.
-    :param hEf: Profundidad efectiva del anclaje (m).
+    :param anchorPosition: anchor position.
+    :param hEf: effective anchorage depth (m).
     '''
     semiLadoA0cN= getScrN(hEf)/2
     retval= geom.Poligono2d()
-    retval.agregaVertice(geom.Pos2d(posPerno.x-semiLadoA0cN,posPerno.y-semiLadoA0cN))
-    retval.agregaVertice(geom.Pos2d(posPerno.x+semiLadoA0cN,posPerno.y-semiLadoA0cN))
-    retval.agregaVertice(geom.Pos2d(posPerno.x+semiLadoA0cN,posPerno.y+semiLadoA0cN))
-    retval.agregaVertice(geom.Pos2d(posPerno.x-semiLadoA0cN,posPerno.y+semiLadoA0cN))
+    retval.agregaVertice(geom.Pos2d(anchorPosition.x-semiLadoA0cN,anchorPosition.y-semiLadoA0cN))
+    retval.agregaVertice(geom.Pos2d(anchorPosition.x+semiLadoA0cN,anchorPosition.y-semiLadoA0cN))
+    retval.agregaVertice(geom.Pos2d(anchorPosition.x+semiLadoA0cN,anchorPosition.y+semiLadoA0cN))
+    retval.agregaVertice(geom.Pos2d(anchorPosition.x-semiLadoA0cN,anchorPosition.y+semiLadoA0cN))
     return retval
 
 def getFactor2cN(A0cN, AcN):
@@ -133,8 +140,8 @@ def getCcrSpHiltiHY150(h, hEf):
      de un anclaje individual according to 
      table 7 of ETA-05/0051 (page 19).
 
-   :param h: Profundidad de la pieza (m).
-   :param hEf: Profundidad efectiva del anclaje (m).
+   :param h: thickness of concrete member (m).
+   :param hEf: effective anchorage depth (m).
   '''
   if(h>=2*hEf):
     return hef 
@@ -143,19 +150,22 @@ def getCcrSpHiltiHY150(h, hEf):
   else:
     return 2.26*hEf
 
-def getA0spN(posPerno, CcrSp):
+def getA0spN(anchorPosition, CcrSp):
     '''
     Polígono que representa el área de influencia de un anclaje individual
     according to clause 5.2.2.6 b) of EOTA TR029.
 
-    :param posPerno: Posición del del perno.
-    :param CcrSp: Distancia al borde crítica por splitting (m).
+    :param anchorPosition: anchor position.
+    :param CcrSp: edge distance for ensuring the transmission of the
+                  characteristic tensile resistance of a single
+                  anchor without spacing and edge effects in case of 
+                  splitting failure (m).
     '''
     retval= geom.Poligono2d()
-    retval.agregaVertice(geom.Pos2d(posPerno.x-CcrSp,posPerno.y-CcrSp))
-    retval.agregaVertice(geom.Pos2d(posPerno.x+CcrSp,posPerno.y-CcrSp))
-    retval.agregaVertice(geom.Pos2d(posPerno.x+CcrSp,posPerno.y+CcrSp))
-    retval.agregaVertice(geom.Pos2d(posPerno.x-CcrSp,posPerno.y+CcrSp))
+    retval.agregaVertice(geom.Pos2d(anchorPosition.x-CcrSp,anchorPosition.y-CcrSp))
+    retval.agregaVertice(geom.Pos2d(anchorPosition.x+CcrSp,anchorPosition.y-CcrSp))
+    retval.agregaVertice(geom.Pos2d(anchorPosition.x+CcrSp,anchorPosition.y+CcrSp))
+    retval.agregaVertice(geom.Pos2d(anchorPosition.x-CcrSp,anchorPosition.y+CcrSp))
     return retval
 
 def getFactor2spN(A0spN, AspN):
@@ -176,17 +186,17 @@ def shearResistanceWithoutLeverArm(As, fuk):
     '''
     Resistencia de un perno a cortante according to clause 5.2.3.2 a) of EOTA TR029.
 
-    :param As: Área de la sección transversal del perno.
-    :param fuk: Valor característico de la carga de rotura a tracción.
+    :param As: stressed cross section of steel.
+    :param fuk: characteristic steel ultimate tensile strength (nominal value).
     '''
     return 0.5*As*fuk
 
 def shearResistanceGroupWithoutLeverArm(As, fuk, nr):
     '''
     Resistencia de un grupo de pernos a cortante according to clause 5.2.3.2 a) of EOTA TR029.
-     As: Área de la sección transversal del perno.
-     fuk: Valor característico de la carga de rotura a tracción.
-     n: Número de pernos del grupo.
+     As: stressed cross section of steel.
+     fuk: characteristic steel ultimate tensile strength (nominal value).
+     n: number of anchors in a group.
     '''
     return 0.5*As*fuk*nr*0.8
 
@@ -199,7 +209,7 @@ def shearResistanceConcretePryOut(NRkp, NRkc, hEf):
                   concrete cone failure (5.2.2.3 of EOTA TR029).
      :param NRkc: Characteristic resistance in case of concrete cone
                   failure (5.2.2.4 of EOTA TR029).
-     :param hEf: Profundidad efectiva of the anchor (m).
+     :param hEf: effective anchorage depth (m).
     '''
     k= 1.0
     if(hEf>=60e-3): # 60mm
@@ -217,9 +227,9 @@ def psiReVFactor(descr):
   Coeficiente que introduce la influencia del tipo de refuerzo empleado en cracked concrete  en la expresión 5.8 of EOTA TR029, calculado according to apartado g) of clause 5.2.3.4 of EOTA TR029.
 
   :param descr: Descriptor que puede tomar los valores:
-    1: Anclaje en cracked concrete o no fisurado sin reinforcement de refuerzo en el borde.
-    2: Anclaje en cracked concrete con reinforcement de refuerzo en el borde (diámetro > 12mm).
-    3: Anclaje en cracked concrete con reinforcement de refuerzo en el borde y estribos próximos entre si (separados menos de 10 cm).
+    1: anclaje en cracked concrete o no fisurado sin reinforcement de refuerzo en el borde.
+    2: anclaje en cracked concrete con reinforcement de refuerzo en el borde (diámetro > 12mm).
+    3: anclaje en cracked concrete con reinforcement de refuerzo en el borde y estribos próximos entre si (separados menos de 10 cm).
   '''
   return ifte(descr<=1,1.0,ifte(descr<=2,1.2,1.4))
 
@@ -296,8 +306,8 @@ def k1Expr58A(descr):
   Coeficiente que introduce la influencia de la fisuración del hormigón en la expresión 5.8a of EOTA TR029.
 
   :param descr: Descriptor que puede tomar los valores:
-    1: Anclaje en cracked concrete.
-    2: Anclaje en non-cracked concrete.
+    1\: anclaje en cracked concrete.
+    2\: anclaje en non-cracked concrete.
   '''
   return ifte(descr<=1,1.7,2.4)
 
@@ -305,9 +315,13 @@ def VRkC0Expr58(k1, d, hEf, fckCube, c1):
   '''
   Valor inicial de la resistencia característica of the anchor a cortante por fallo del borde according to expression 5.8a of clause 5.2.3.4 (a) of EOTA TR029.
 
+  :param d: anchor diameter.
+  :param hEf: effective anchorage depth.
+  :param fckCube: characteristic concrete compression strength measured 
+                  on cubes with a side length of 150 mm (value of concrete 
+                  strength class according to ENV 206) (Pa).
   :param c1: Distancia desde el centro de gravedad del grupo al borde situado frente al cortante.
-  :param d: Diámetro del perno.
-  :param hEf: Profundidad efectiva of the anchor.
+
   '''
   alpha= tonum(0.1*(hEf/c1)^1.5)
   beta= tonum(0.1*(d/c1)^0.2)

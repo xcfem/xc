@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
-''' Reinforced concrete materials according to ACI 318. VERIFICATION TESTS REQUIRED!!!.'''
+''' Reinforced concrete materials according to ACI 318. 
+VERIFICATION TESTS REQUIRED!!!.'''
 
 from materials import concrete_base
 from miscUtils import LogMessages as lmsg
