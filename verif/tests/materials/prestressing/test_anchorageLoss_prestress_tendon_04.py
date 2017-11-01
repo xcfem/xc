@@ -73,10 +73,10 @@ tendon2.calcLossFriction(coefFric=mu,k=k,sigmaP0_extr1=0.0,sigmaP0_extr2=sigmap0
 tendon2.calcLossAnchor(Ep_by_anc_slip_extr1=0.0,Ep_by_anc_slip_extr2=deltaL*Ep)
 
 #Plot
-# fig1=tendon1.plot2D(XaxisValues='S',symbolStressAfterLossFriction='g-',symbolStressAfterLossAnch='r-')
+# fig1,ax2d=tendon1.plot2D(XaxisValues='S',symbolStressAfterLossFriction='g-',symbolStressAfterLossAnch='r-')
 #fig1.show()
 
-# fig2= tendon2.plot2D(XaxisValues='S',symbolStressAfterLossFriction='g-',symbolStressAfterLossAnch='r-')
+# fig2,ax2d= tendon2.plot2D(XaxisValues='S',symbolStressAfterLossFriction='g-',symbolStressAfterLossAnch='r-')
 # fig2.savefig('fig2.png')
 from sklearn.metrics import mean_squared_error
 ratio=mean_squared_error(tendon1.stressAfterLossAnch,np.flipud(tendon2.stressAfterLossAnch))
