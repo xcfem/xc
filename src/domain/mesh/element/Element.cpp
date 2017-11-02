@@ -96,6 +96,9 @@ XC::DefaultTag XC::Element::defaultTag;
 
 //! @brief Constructor that takes the element's unique tag and the number
 //! of external nodes for the element.
+//!
+//! @param tag: element identifier.
+//! @param cTag: element class identifier.
 XC::Element::Element(int tag, int cTag)
   :MeshComponent(tag, cTag), nodeIndex(-1), rayFactors() 
   { defaultTag= tag+1; }
@@ -109,7 +112,10 @@ XC::DefaultTag &XC::Element::getDefaultTag(void)
 int XC::Element::getNumEdges(void) const
   { return getNumExternalNodes(); }
 
-//! @brief Consuma el estado of the element.
+//! @brief Commit the current element state.
+//!
+//! The element is to commit its current state. To return 0 if
+//! sucessfull, a negative number if not.
 int XC::Element::commitState(void)
   {
     if(!Kc.Nula())
@@ -117,10 +123,21 @@ int XC::Element::commitState(void)
     return 0;
   }
 
-//! @brief Actualiza el estado of the element.
+//! @brief Updates the element state.
+//!
+//! This method is invoked after the response quantities have been updated
+//! in the Domain, but not necessarily committed, e.g. during a
+//! non-linear Newton-Raphson solution algorithm. To return \f$0\f$ if
+//! successful, a negative number if not. This base class implementation
+//! returns 0.
 int XC::Element::update(void)
   { return 0; }
 
+//! @brief Reverts the element to its initial state.
+//!
+//! The element is to set it's current state to the state it was at before
+//! the analysis started. To return 0 if sucessfull, a negative number
+//! if not. 
 int XC::Element::revertToStart(void)
   { return 0; }
 
@@ -183,11 +200,14 @@ void XC::Element::setDomain(Domain *theDomain)
   }
 
 
-//! @brief Anula el load vector aplicadas of the element.
+//! @brief Zeroes the loads over the element.
+//!
+//! This is a method invoked to zero the element load contributions to the
+//! residual, i.e. \f[ P_e = \zero \f] 
 void XC::Element::zeroLoad(void)
   { load.Zero(); }
 
-//! @brief Forma la matriz de amortiguamiento.
+//! @brief Computes the damping matrix.
 void XC::Element::compute_damping_matrix(Matrix &theMatrix) const
   {
     theMatrix.Zero();
@@ -201,7 +221,14 @@ void XC::Element::compute_damping_matrix(Matrix &theMatrix) const
       theMatrix.addMatrix(1.0, Kc, rayFactors.getBetaKc());
   }
 
-//! @brief Returns the matriz de amortiguamiento.
+//! @brief Returns the damping matrix.
+//!
+//! To return the damping matrix. The element is to compute its
+//! damping matrix based on the original location of the nodes and the
+//! current trial response quantities at the nodes. 
+//! \f[
+//! C_e= {\frac{\partial R_i}{\partial \dot U} \vert}_{U_{trial}}
+//! \f]
 const XC::Matrix &XC::Element::getDamp(void) const
   {
     if(index == -1)
@@ -216,6 +243,13 @@ const XC::Matrix &XC::Element::getDamp(void) const
 
 
 //! @brief Returns the mass matrix.
+//!
+//! Returns the mass matrix. The element is to compute its
+//! mass matrix based on the original location of the nodes and the
+//! current trial response quantities at the nodes. 
+//! \f[
+//! M_e= {\frac{\partial I_i}{\partial \ddot U} \vert}_{U_{trial}}
+//! \f]
 const XC::Matrix &XC::Element::getMass(void) const
   {
     if(index  == -1)
@@ -387,9 +421,24 @@ const XC::Vector &XC::Element::getRayleighDampingForces(void) const
     return theVector;
   }
 
+//! @brief Returns true if the element is a subdomain.
 bool XC::Element::isSubdomain(void)
   { return false; }
 
+//! setResponse() is a method invoked to determine if the element
+//! will respond to a request for a certain of information. The
+//! information requested of the element is passed in the array of char
+//! pointers \p argv of length {em argc}. If the element does not
+//! respond to the request a \f$-1\f$ is returned. If it does respond, an
+//! integer value greater than or equal to \f$0\f$ is returned. This is the
+//! \p responseID passed in the getResponse() method. In addition
+//! the Element object is responsible for setting the Information object
+//! \p eleInformation with the type of the return, i.e. {\em IntType,
+//! DoubleType, MatrixType, VectorType, IDType}, and for creating a Matrix,
+//! Vector or ID object for the Information object, if the information to
+//! be returned is of any of these types. The information object is
+//! responsible for invoking the destructor on these objects. The base
+//! class responds to no requests and will always return \f$-1\f$.
 XC::Response *XC::Element::setResponse(const std::vector<std::string> &argv, Information &eleInfo)
   {
     if(argv[0] == "force" || argv[0] == "forces" ||
@@ -398,6 +447,14 @@ XC::Response *XC::Element::setResponse(const std::vector<std::string> &argv, Inf
     return 0;
   }
 
+//! @brief Obtain information from an analysis.
+//!
+//! getResponse is a method invoked to obtain information from an
+//! analysis. The method is invoked with the integer argument returned and
+//! the Information object that was prepared in a successfull {\em
+//! setResponse()} method invocation. To return \f$0\f$ if successfull, a
+//! negative number if not. The base class implementation will always
+//! return \f$-1\f$. 
 int XC::Element::getResponse(int responseID, Information &eleInfo)
   {
     switch (responseID)

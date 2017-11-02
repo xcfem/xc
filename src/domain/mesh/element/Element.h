@@ -103,7 +103,10 @@ class ParticlePos3d;
 //! @defgroup Elem Finite elements.
 //
 //! \ingroup Elem
-//! @brief Base calass for the finite elements.
+//! @brief Base class for the finite elements.
+//!
+//! The element class provides the interface that all element
+//! writers must provide when introducing new element classes.
 class Element: public MeshComponent
   {
   public:
@@ -144,11 +147,18 @@ class Element: public MeshComponent
     static DefaultTag &getDefaultTag(void);
 
     // methods dealing with nodes and number of external dof
+    //! @brief return the number of external nodes associated with the element.
     virtual int getNumExternalNodes(void) const =0;
     virtual int getNumEdges(void) const;
     virtual NodePtrsWithIDs &getNodePtrs(void)= 0;	
     virtual const NodePtrsWithIDs &getNodePtrs(void) const= 0;	
     std::vector<int> getIdxNodes(void) const;
+    //! @brief return the number of DOF associated with the element.
+    //!
+    //! To return the number of dof associated with the element. This should
+    //! equal the sum of the dofs at each of the external nodes. To ensure
+    //! this, each subclass can overwrite the DomainComponent classes {\em
+    //! setDomain()} method. 
     virtual int getNumDOF(void) const= 0;
     virtual size_t getDimension(void) const;
     virtual void setIdNodos(const std::vector<int> &inodos);
@@ -157,6 +167,10 @@ class Element: public MeshComponent
 
     // methods dealing with committed state and update
     virtual int commitState(void);
+    //! @brief Revert to the last commited state.
+    //!
+    //! The element is to set it's current state to the last committed
+    //! state. To return 0 if sucessfull, a negative number if not.
     virtual int revertToLastCommit(void) = 0;
     virtual int revertToStart(void);
     virtual int update(void);
@@ -164,6 +178,15 @@ class Element: public MeshComponent
 
     // methods to return the current linearized stiffness,
     // damping and mass matrices
+    
+    //! @brief Return the tangent stiffness matrix.
+    //!
+    //! To return the tangent stiffness matrix. The element is to compute its
+    //! stiffness matrix based on the original location of the nodes and the
+    //! current trial displacement at the nodes.
+    //! \f$[ 
+    //! K_e = {\frac{\partial \f_{R_i}}{\partial U} \vert}_{U_{trial}}
+    //! \f]
     virtual const Matrix &getTangentStiff(void) const= 0;
     virtual const Matrix &getInitialStiff(void) const= 0;
     virtual const Matrix &getDamp(void) const;
@@ -177,7 +200,26 @@ class Element: public MeshComponent
     virtual int setRayleighDampingFactors(const RayleighDampingFactors &rF) const;
 
     // methods for obtaining resisting force (force includes elemental loads)
+
+    //! Returns the resisting force vector for the element. This is equal to
+    //! the applied load due to element loads minus the loads at the nodes due
+    //! to internal stresses in the element due to the current trial
+    //! displacement, i.e. 
+    //! \f[
+    //! R_e= P_{e} - {R_e}(U_{trial}) 
+    //! \f]
     virtual const Vector &getResistingForce(void) const= 0;
+    
+    //! @brief Returns the resisting force vector including inertia forces.
+    //!
+    //! Returns the resisting force vector for the element with inertia forces
+    //! included. This is equal to the applied load due to element loads
+    //! (loads set using addLoad(), minus the loads at the nodes due to
+    //! internal stresses in the element due to the current trial response
+    //! quantities, i.e.
+    //! \f$[
+    //! R_e = P_e -  I_e (\ddot U_{trial}) - R_e(\dot U_{trial}, U_{trial})
+    //! \f]
     virtual const Vector &getResistingForceIncInertia(void) const;
     const Vector &getNodeResistingComponents(const size_t &,const Vector &) const;
     const Vector &getNodeResistingForce(const size_t &iNod) const;
