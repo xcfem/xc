@@ -444,7 +444,7 @@ python tests/materials/ehe/test_shear_ehe08_02.py
 python tests/materials/ehe/test_shear_ehe08_03.py
 python tests/materials/ehe/test_shear_ehe08_04.py
 python tests/materials/ehe/test_shear_ehe08_05.py
-echo "$BLEU" "    Misd. (EHE-08)." "$NORMAL"
+echo "$BLEU" "    Misc. (EHE-08)." "$NORMAL"
 python tests/materials/ehe/test_concrete_corbel_ehe.py
 echo "$BLEU" "   EC2 tests." "$NORMAL"
 python tests/materials/ec2/test_EC2Concrete.py
