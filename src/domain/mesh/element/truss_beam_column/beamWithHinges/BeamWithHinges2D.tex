@@ -127,13 +127,13 @@
 
 \begin{equation}
 \label{eq:fele}
-\fbas := \int_{0}^{L}{\bint^T \fsec \bint \: dx} = \mathbf{f}_I + \mathbf{f}_{mid} + \mathbf{f}_J
+\fbas := \int_{0}^{L}{\bint^T fsec \bint \: dx} = \mathbf{f}_I + \mathbf{f}_{mid} + \mathbf{f}_J
 \end{equation}
 
 //! The flexibility of the beam interior is obtained in closed form,
 
 \begin{equation}
-\mathbf{f}_{mid} = \int_{l_I}^{L-l_J}{\bint^T \fsec_{mid} \bint \: dx}
+\mathbf{f}_{mid} = \int_{l_I}^{L-l_J}{\bint^T fsec_{mid} \bint \: dx}
 \end{equation}
 
 //! where \f$\bint\f$ is the force interpolation matrix,
@@ -148,10 +148,10 @@
  \right]
 \end{equation}
 
-//! and \f$\fsec\f$ is the elastic section flexibility of the beam interior.
+//! and \f$fsec\f$ is the elastic section flexibility of the beam interior.
 
 \begin{equation}
-\fsec_{mid} = \left[
+fsec_{mid} = \left[
    \begin{array}{c c c}
       \frac{1}{EA} &            0 &                   0
                  0 & \frac{1}{EI} &                   0
@@ -164,12 +164,12 @@
 //! by the midpoint integration rule,
 
 \begin{equation}
-{\mathbf{f}}_i = \bint(x_i)^T \fsec_i \bint(x_i) * l_i, \:\: i=I,J
+{\mathbf{f}}_i = \bint(x_i)^T fsec_i \bint(x_i) * l_i, \:\: i=I,J
 \end{equation}
 
 //! where \f$x_i\f$ is the midpoint of hinge \f$i\f$, measured along the length of the
 //! beam, and is the point at which the force interpolation matrix, \f$\bint\f$
-//! is evaluated.  The flexiblity, \f$\fsec_i\f$, is obtained from the
+//! is evaluated.  The flexiblity, \f$fsec_i\f$, is obtained from the
 //! constitutive relation for section \f$i\f$.
 
 //! The element stiffness is then obtained by inversion of the element flexibility,

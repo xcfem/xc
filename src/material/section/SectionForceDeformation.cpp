@@ -78,6 +78,10 @@ const XC::Matrix *ptr_section_tangent= nullptr;
 const XC::Matrix *ptr_initial_tangent= nullptr;
 
 //! @brief Constructor.
+//!
+//! @param tag: object identifier.
+//! @param classTag: object class identifier.
+//! @param mat_ldr: model wide material objects manager.
 XC::SectionForceDeformation::SectionForceDeformation(int tag, int classTag,MaterialLoader *mat_ldr)
   : Material(tag,classTag), fDefault(nullptr), material_loader(mat_ldr) {}
 
@@ -99,6 +103,7 @@ XC::SectionForceDeformation &XC::SectionForceDeformation::operator=(const Sectio
     return *this;
   }
 
+//! @brief Destructor.
 XC::SectionForceDeformation::~SectionForceDeformation(void)
   {
     if(fDefault) delete fDefault;
@@ -117,6 +122,12 @@ int XC::SectionForceDeformation::addInitialSectionDeformation(const Vector &def)
 
 
 //! @brief Returns the tangent flexibility matrix of the section.
+//!
+//! Obtains the section tangent stiffness matrix, \f$ksec\f$, and returns its
+//! inverse, the section flexibility matrix, \f$fsec\f$, via an
+//! explicit matrix inversion.  NOTE: The explicit matrix
+//! inversion provides default behavior and may be overridden in
+//! subclasses to suit specific SectionForceDeformation implementations.
 const XC::Matrix &XC::SectionForceDeformation::getSectionFlexibility(void) const
   {
     int order = this->getOrder();

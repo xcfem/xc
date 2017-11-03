@@ -42,7 +42,7 @@ namespace XC {
 //!
 //! The generalized deformation vector is:
 //! \f[
-//! \esec := \left[
+//! esec := \left[
 //!   \begin{array}{c}
 //!       \epsilon_a
 //!       \kappa_z

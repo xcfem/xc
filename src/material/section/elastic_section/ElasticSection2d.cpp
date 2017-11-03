@@ -103,12 +103,12 @@ XC::ElasticSection2d::ElasticSection2d(int tag, double EA, double EI)
 
 //! @brief Returns the cross-section stress resultant.
 //!
-//! Returns the section stress resultants, \f$\ssec\f$, the product of the 
-//! section stiffness matrix, \f$\ksec\f$, and the section deformation 
-//! vector, \f$\esec\f$,
+//! Returns the section stress resultants, \f$ssec\f$, the product of the 
+//! section stiffness matrix, \f$ksec\f$, and the section deformation 
+//! vector, \f$esec\f$,
 //! \f[
 //! \begin{equation}
-//! \ssec = \ksec \esec = \left[
+//! ssec = ksec esec = \left[
 //!    \begin{array}{c}
 //!        P
 //!        M_z
@@ -131,7 +131,7 @@ const XC::Vector &XC::ElasticSection2d::getStressResultant(void) const
 //!
 //! \f[
 //! \begin{equation}
-//! \fsec = \left[
+//! fsec = \left[
 //!    \begin{array}{ccc}
 //!        EA &  0 &  0
 //!         0 & EI &  0
@@ -152,7 +152,7 @@ const XC::Matrix &XC::ElasticSection2d::getInitialTangent(void) const
 //!
 //! \f[
 //! \begin{equation}
-//! \fsec = \left[
+//! fsec = \left[
 //!    \begin{array}{ccc}
 //!        \frac{1}{EA} &            0 &                  0
 //!                   0 & \frac{1}{EI} &                  0

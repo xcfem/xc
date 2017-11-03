@@ -203,7 +203,7 @@ void XC::Element::setDomain(Domain *theDomain)
 //! @brief Zeroes the loads over the element.
 //!
 //! This is a method invoked to zero the element load contributions to the
-//! residual, i.e. \f[ P_e = \zero \f] 
+//! residual, i.e. \f$ P_e = 0 \f$ 
 void XC::Element::zeroLoad(void)
   { load.Zero(); }
 

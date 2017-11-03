@@ -71,12 +71,12 @@ int XC::BaseElasticSection::setInitialSectionDeformation(const Vector &def)
   }
 
 //! @brief Set the trial (generalized) deformation of the section.
-//! Sets the value of the section deformation vector, \f$\esec\f$ to be {\em
-//! def}. The section deformation vector, \f$\esec\f$, is defined by
+//! Sets the value of the section deformation vector, \f$esec\f$ to be {\em
+//! def}. The section deformation vector, \f$esec\f$, is defined by
 //!
 //! \f[
 //! \begin{equation}
-//! \esec := \left[
+//! esec := \left[
 //!    \begin{array}{c}
 //!        \epsilon_a
 //!        \kappa_z
