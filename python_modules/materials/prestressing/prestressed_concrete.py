@@ -113,16 +113,18 @@ class PrestressTendon(object):
         return np.flipud(acum_back)
 
     def creaTendonElements(self,preprocessor,materialName,elemTypeName,crdTransfName,areaTendon,setName):
-        '''Creates the nodes and elements of the tendon and appends them to a set.
+        '''Creates the nodes and elements of the tendon and appends them to a set. Creates also the attribute lstOrderedElems as a list with the elements of the tendon ordered from left to right.
 
         :param preporcessor: preprocessor
         :param materialName: name of the material
         :param elemTypeName: name of the type of element
         :param crdTransfName: name of the coordinate transformation
         :param areaTendon:   area of the cross-section of the tendon
-        :param setName:      name of the set to which append the nodes and elements
-                             created (if the set doesn't exist, it's created)
+        :param setName:      name of the set to which append the nodes and 
+                             elements created (if the set doesn't exist, it's 
+                             created)
         '''
+        self.lstOrderedElems=list()
         setsMng=preprocessor.getSets
         if setsMng.exists(setName):
             tendonSet=setsMng.getSet(setName)
@@ -142,9 +144,9 @@ class PrestressTendon(object):
             elem.area=areaTendon
             tendonSet.getNodes.append(nEnd2)
             tendonSet.getElements.append(elem)
+            self.lstOrderedElems.append(elem)
         return tendonSet
             
-
     def calcLossFriction(self,coefFric,k,sigmaP0_extr1=0.0,sigmaP0_extr2=0.0):
         '''Creates the attributes lossFriction and stressAfterLossFriction of 
         type array that contains  for each point in fineCoordMtr the cumulative 
@@ -310,6 +312,19 @@ class PrestressTendon(object):
             set_axes_equal(ax3d)
         return fig,ax3d
 
+    def applyStressToElems(self,stressMtr):
+        '''Initializes the stress in each tendon element with the corresponding 
+        value of stress defined in stressMtr
+
+        :param stressMtr: matrix of dimension 1*number of elements in the tendon                          with the stress to be applied to each of the elements 
+                          (from left to right)
+        '''
+        for e, s in zip(self.lstOrderedElems,stressMtr):
+            m=e.getMaterial()
+            m.initialStress=s
+#            print e, s,m.initialStr
+        return
+        
     def plot2D(self,XaxisValues='X',axisEqualScale='N',symbolRougPoints=None,symbolFinePoints=None,symbolTendon=None,symbolLossFriction=None,symbolStressAfterLossFriction=None,symbolLossAnch=None,symbolStressAfterLossAnch=None):
         '''Return in a 2D graphic the results to which a symbol is assigned.
         Symbol examples: 'r-': red solid line, 'mo': magenta circle, 'b--': blue dashes, 'ks':black square,'g^' green triangle_up, 'c*': cyan star, ...
