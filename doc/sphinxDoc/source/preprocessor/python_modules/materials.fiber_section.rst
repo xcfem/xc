@@ -3,7 +3,7 @@
 createFiberSets 
 ----------------
 
-.. automodule:: materials.fiber_section.createFiberSets
+.. automodule:: materials.sections.fiber_section.createFiberSets
     :members:
     :undoc-members:
     :show-inheritance:
@@ -11,7 +11,7 @@ createFiberSets
 geomArmaduraSeccionesFibras 
 ----------------------------
 
-.. automodule:: materials.fiber_section.geomArmaduraSeccionesFibras
+.. automodule:: materials.sections.fiber_section.geomArmaduraSeccionesFibras
     :members:
     :undoc-members:
     :show-inheritance:
@@ -19,7 +19,7 @@ geomArmaduraSeccionesFibras
 geomSeccionesFibras 
 --------------------
 
-.. automodule:: materials.fiber_section.geomSeccionesFibras
+.. automodule:: materials.sections.fiber_section.geomSeccionesFibras
     :members:
     :undoc-members:
     :show-inheritance:
@@ -27,7 +27,7 @@ geomSeccionesFibras
 defSeccionHAPilar 
 ------------------
 
-.. automodule:: materials.fiber_section.defSeccionHAPilar
+.. automodule:: materials.sections.fiber_section.defSeccionHAPilar
     :members:
     :undoc-members:
     :show-inheritance:
@@ -35,7 +35,7 @@ defSeccionHAPilar
 defSeccionHASimple 
 -------------------
 
-.. automodule:: materials.fiber_section.defSeccionHASimple
+.. automodule:: materials.sections.fiber_section.defSeccionHASimple
     :members:
     :undoc-members:
     :show-inheritance:
@@ -43,7 +43,7 @@ defSeccionHASimple
 fiberUtils 
 -----------
 
-.. automodule:: materials.fiber_section.fiberUtils
+.. automodule:: materials.sections.fiber_section.fiberUtils
     :members:
     :undoc-members:
     :show-inheritance:
@@ -51,7 +51,7 @@ fiberUtils
 plotGeomSeccion 
 ----------------
 
-.. automodule:: materials.fiber_section.plotGeomSeccion
+.. automodule:: materials.sections.fiber_section.plotGeomSeccion
     :members:
     :undoc-members:
     :show-inheritance:
@@ -59,7 +59,7 @@ plotGeomSeccion
 sectionReport 
 --------------
 
-.. automodule:: materials.fiber_section.sectionReport
+.. automodule:: materials.sections.fiber_section.sectionReport
     :members:
     :undoc-members:
     :show-inheritance:

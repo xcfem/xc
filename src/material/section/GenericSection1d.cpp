@@ -114,7 +114,7 @@ int XC::GenericSection1d::setInitialSectionDeformation(const Vector &def)
 //! @brief Sets the cross-section trial strain
 //! (generalized: axial and bending).
 //!
-//! Sets the trial section deformation vector, \f$\esec\f$, to be \p def,
+//! Sets the trial section deformation vector, \f$esec\f$, to be \p def,
 //! then invokes setTrialStrain() on the UniaxialMaterial.
 int XC::GenericSection1d::setTrialSectionDeformation(const Vector &def)
   { return theModel->setTrialStrain(def(0)); }
@@ -142,8 +142,8 @@ const XC::Vector &XC::GenericSection1d::getSectionDeformation(void) const
 
 //! @brief Return the integration of stresses over the section.
 //!
-//! Gets the section resisting force, \f$\ssec\f$, to be the result of invoking 
-//! getStress() on the UniaxialMaterial, then returns \f$\ssec\f$.
+//! Gets the section resisting force, \f$ssec\f$, to be the result of invoking 
+//! getStress() on the UniaxialMaterial, then returns \f$ssec\f$.
 const XC::Vector &XC::GenericSection1d::getStressResultant(void) const
   {
     s(0) = theModel->getStress();
@@ -152,8 +152,8 @@ const XC::Vector &XC::GenericSection1d::getStressResultant(void) const
 
 //! @brief Return the tangent stiffness matrix.
 //!
-//! Sets the section tangent stiffness matrix, \f$\ksec\f$, to be the result of
-//! invoking getTangent() on the UniaxialMaterial, then returns \f$\ksec\f$.
+//! Sets the section tangent stiffness matrix, \f$ksec\f$, to be the result of
+//! invoking getTangent() on the UniaxialMaterial, then returns \f$ksec\f$.
 const XC::Matrix &XC::GenericSection1d::getSectionTangent(void) const
   {
     ks(0,0) = theModel->getTangent();
@@ -169,9 +169,9 @@ const XC::Matrix &XC::GenericSection1d::getInitialTangent(void) const
 
 //! @brief Return the flexibility matrix.
 //!
-//! Gets the section flexibility matrix, \f$\fsec\f$, to be the inverse
+//! Gets the section flexibility matrix, \f$fsec\f$, to be the inverse
 //! of the result of invoking getTangent() on the UniaxialMaterial, then
-//! returns \f$\fsec\f$.
+//! returns \f$fsec\f$.
 const XC::Matrix &XC::GenericSection1d::getSectionFlexibility(void) const
   {
     double tangent = theModel->getTangent();

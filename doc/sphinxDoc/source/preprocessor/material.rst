@@ -15,12 +15,12 @@ Base material
 
    cpp_classes/material/material_index.rst
 
-Fiber section
-++++++++++++++
+Section materials
++++++++++++++++++
 .. toctree::
    :maxdepth: 1
 
-   python_modules/materials.fiber_section
+   python_modules/materials.sections
 
 Reinforced and prestressed concrete
 ++++++++++++++++++++++++++++++++++++

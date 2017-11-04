@@ -109,16 +109,24 @@ class SectionForceDeformation: public Material
       { return getInitialSectionDeformation(); }
 
 
+    //! @brief Set the value of the trial section deformation vector,
+    //! \f$esec\f$ to be {\em def}. To return \f$0\f$ if successful,
+    //! a negative number if not.
     virtual int setTrialSectionDeformation(const Vector &) = 0;
     virtual const Vector &getInitialSectionDeformation(void) const= 0;
+    //! @brief Return the trial section deformation vector, \f$esec\f$.
     virtual const Vector &getSectionDeformation(void) const= 0;
     double getSectionDeformation(const int &) const;
     double getSectionDeformationByName(const std::string &) const;
     virtual double getStrain(const double &y,const double &z= 0) const= 0;
 
+    //! @brief Return the section resisting forces, \f$ssec\f$,
+    //! at the current trial state.
     virtual const Vector &getStressResultant(void) const= 0;
     double getStressResultant(const int &) const;
     double getStressResultantByName(const std::string &) const;
+    //! @brief Return the section tangent stiffness matrix, \f$ksec\f$,
+    //! at the current trial state.
     virtual const Matrix &getSectionTangent(void) const= 0;
     virtual const Matrix &getInitialTangent(void) const= 0;
     virtual const Matrix &getSectionFlexibility(void) const;
@@ -130,10 +138,20 @@ class SectionForceDeformation: public Material
       { return getSectionDeformation(); }
 
     virtual double getRho(void) const;
- 
+
+    //! @brief Virtual constructor.
     virtual SectionForceDeformation *getCopy(void) const= 0;
+    //! @brief Return the ordering and type of response quantities
+    //! returned by this object.
+    //!
+    //! Return the section ResponseId code that indicates
+    //! the ordering and type of response quantities returned
+    //! by the section. Lets the calling object
+    //! (e.g. an Element) know how to interpret the quantites returned by this
+    //! object.
     virtual const ResponseId &getType(void) const= 0;
     std::string getTypeString(void) const;
+    //! @brief Return the number of response quantities provided by the section.
     virtual int getOrder(void) const = 0;
 
     virtual Response *setResponse(const std::vector<std::string> &argv, Information &info);

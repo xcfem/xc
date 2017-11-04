@@ -91,12 +91,12 @@ XC::ElasticSection3d::ElasticSection3d(int tag, double EA_in, double EIz_in, dou
 
 //! @brief Returns the stress resultant.
 //!
-//! Returns the section stress resultants, \f$\ssec\f$, the product of the 
-//! section stiffness matrix, \f$\ksec\f$, and the section deformation 
-//! vector, \f$\esec\f$,
+//! Returns the section stress resultants, \f$ssec\f$, the product of the 
+//! section stiffness matrix, \f$ksec\f$, and the section deformation 
+//! vector, \f$esec\f$,
 //! The component of the generalized stress vector are:
 //! \f[
-//!  \ssec = \ksec \esec = \left[
+//!  ssec = ksec esec = \left[
 //!   \begin{array}{c}
 //!       P
 //!       M_z
@@ -123,9 +123,9 @@ const XC::Vector &XC::ElasticSection3d::getStressResultant(void) const
 
 //! @brief Returns the tangent stiffness matrix.
 //!
-//! Returns the section stiffness matrix, \f$\ksec\f$, where
+//! Returns the section stiffness matrix, \f$ksec\f$, where
 //! \f[
-//! \ksec = \left[
+//! ksec = \left[
 //!    \begin{array}{cccccc}
 //!       EA &  0 &  0 & 0 & 0 & 0
 //!        0 & EI_z & 0 & 0 & 0 & 0
@@ -145,16 +145,16 @@ const XC::Matrix &XC::ElasticSection3d::getInitialTangent(void) const
 
 //! @brief Returns the flexibility matrix.
 //! Overrides the base class implementation and returns the section
-//! flexibility matrix, \f$\fsec\f$, where
+//! flexibility matrix, \f$fsec\f$, where
 //! \f[
-//!\fsec = \left[
+//! fsec = \left[
 //!   \begin{array}{cccccc}
-//!       \frac{1}{EA} & 0 & 0 & 0 & 0 & 0
-//!       0 & \frac{1}{EI_z} & 0 & 0 & 0 & 0
-//!       0 & 0 & \frac{1}{EI_y} & 0 & 0 & 0
-//!       0 & 0 & 0 & \frac{1}{\alpha GA} & 0 & 0 
-//!       0 & 0 & 0 & 0 & \frac{1}{\alpha GA} & 0
-//!       0 & 0 & 0 & 0 & 0 & \frac{1}{GJ}
+//!       \frac{1}{EA} & 0 & 0 & 0 & 0 & 0 \\
+//!       0 & \frac{1}{EI_z} & 0 & 0 & 0 & 0 \\
+//!       0 & 0 & \frac{1}{EI_y} & 0 & 0 & 0 \\
+//!       0 & 0 & 0 & \frac{1}{\alpha GA} & 0 & 0 \\
+//!       0 & 0 & 0 & 0 & \frac{1}{\alpha GA} & 0 \\
+//!       0 & 0 & 0 & 0 & 0 & \frac{1}{GJ} \\
 //!   \end{array} 
 //! \right]
 //! \f]
