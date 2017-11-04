@@ -191,20 +191,20 @@ class PrestressTendon(object):
             lmsg.warning("No prestressing applied.")
         return
 
-    def calcLossAnchor(self,Ep_by_anc_slip_extr1=0.0,Ep_by_anc_slip_extr2=0.0):
+    def calcLossAnchor(self,Ep,anc_slip_extr1=0.0,anc_slip_extr2=0.0):
         '''Creates the attributes lossAnchor and stressAfterLossAnchor of type 
         array that contains  for each point in fineCoordMtr the cumulative 
         immediate loss of prestressing due to anchorage slip and the stress 
         after this loss, respectively.
         Loss due to friction must be previously calculated
 
-        :param Ep_by_anc_slip_extr1: anchorage slip (data provided by the manufacturer
+        :param Ep:      elasic modulus of the prestressin steel
+
+        :param anc_slip_extr1: anchorage slip (data provided by the manufacturer
                         of the anchorage system) at extremity 1 of 
-                        the tendon (starting point) muliplied by the elastic 
-                        modulus of the prestresing steel (= deltaL x Ep)
-        :param Ep_by_anc_slip_extr2: anchorage slip at extremity 2 of 
-                        the tendon (ending point) muliplied by the elastic 
-                        modulus of the prestresing steel  (= deltaL x Ep)
+                        the tendon (starting point)  (= deltaL)
+        :param anc_slip_extr2: anchorage slip at extremity 2 of 
+                        the tendon (ending point) (= deltaL)
         '''
         self.projXYcoordZeroAnchLoss=[0,self.fineProjXYcoord[-1]] # projected coordinates of the
                                    # points near extremity 1 and extremity 2,
@@ -214,8 +214,8 @@ class PrestressTendon(object):
         #Initialization values
         lossAnchExtr1=np.zeros(len(self.fineScoord))
         lossAnchExtr2=np.zeros(len(self.fineScoord))
-        if Ep_by_anc_slip_extr1 >0:
-            self.slip1=Ep_by_anc_slip_extr1
+        if anc_slip_extr1 >0:
+            self.slip1=Ep*anc_slip_extr1
             self.tckLossFric=interpolate.splrep(self.fineScoord,self.stressAfterLossFrictionOnlyExtr1,k=3)
             if self.fAnc_ext1(self.fineScoord[-1])<0:  #the anchorage slip  
                                              #affects all the tendon length
@@ -231,8 +231,8 @@ class PrestressTendon(object):
             condlist=[self.fineScoord <= sCoordZeroLoss]
             choicelist = [2*(self.stressAfterLossFrictionOnlyExtr1-stressSCoordZeroLoss)+excess_delta_sigma]
             lossAnchExtr1=np.select(condlist,choicelist)
-        if Ep_by_anc_slip_extr2 >0:
-            self.slip2=Ep_by_anc_slip_extr2
+        if anc_slip_extr2 >0:
+            self.slip2=Ep*anc_slip_extr2
             self.tckLossFric=interpolate.splrep(self.fineScoord,self.stressAfterLossFrictionOnlyExtr2,k=3)
             if self.fAnc_ext2(self.fineScoord[0])<0:  #the anchorage slip 
                                              #affects all the tendon length

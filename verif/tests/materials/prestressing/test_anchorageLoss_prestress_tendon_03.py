@@ -53,7 +53,7 @@ tendon.pntsInterpTendon(n_points_fine,smoothness=1,kgrade=3)
 tendon.calcLossFriction(coefFric=mu,k=k,sigmaP0_extr1=sigmap0max,sigmaP0_extr2=0.0)
 # Losses of prestressing due to anchorage slip (loss due to friction must be
 # previously calculated
-tendon.calcLossAnchor(Ep_by_anc_slip_extr1=deltaL*Ep,Ep_by_anc_slip_extr2=0.0)
+tendon.calcLossAnchor(Ep=Ep,anc_slip_extr1=deltaL,anc_slip_extr2=0.0)
 
 #Plot
 # fig1,ax2d=tendon.plot2D(XaxisValues='S',symbolStressAfterLossFriction='g-',symbolStressAfterLossAnch='r-')

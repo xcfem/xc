@@ -58,7 +58,7 @@ tendon1.pntsInterpTendon(n_points_fine,smoothness=1,kgrade=3)
 tendon1.calcLossFriction(coefFric=mu,k=k,sigmaP0_extr1=sigmap0max,sigmaP0_extr2=0.0)
 # Losses of prestressing due to anchorage slip (loss due to friction must be
 # previously calculated
-tendon1.calcLossAnchor(Ep_by_anc_slip_extr1=deltaL*Ep,Ep_by_anc_slip_extr2=0.0)
+tendon1.calcLossAnchor(Ep=Ep,anc_slip_extr1=deltaL,anc_slip_extr2=0.0)
 
 # Tendon prestressed from extremity 2 (right-end)
 #Tendon definition, layout and friction losses
@@ -70,7 +70,7 @@ tendon2.pntsInterpTendon(n_points_fine,smoothness=1,kgrade=3)
 tendon2.calcLossFriction(coefFric=mu,k=k,sigmaP0_extr1=0.0,sigmaP0_extr2=sigmap0max)
 # Losses of prestressing due to anchorage slip (loss due to friction must be
 # previously calculated
-tendon2.calcLossAnchor(Ep_by_anc_slip_extr1=0.0,Ep_by_anc_slip_extr2=deltaL*Ep)
+tendon2.calcLossAnchor(Ep=Ep,anc_slip_extr1=0.0,anc_slip_extr2=deltaL)
 
 #Plot
 # fig1,ax2d=tendon1.plot2D(XaxisValues='S',symbolStressAfterLossFriction='g-',symbolStressAfterLossAnch='r-')
