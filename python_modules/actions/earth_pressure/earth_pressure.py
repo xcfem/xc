@@ -41,7 +41,7 @@ class PressureModelBase(object):
         tanDelta= math.tan(delta)
         tanVector= xc.Vector([-vDir[1],vDir[0]]) #iCoo= 1 => 2D
         if(iCoo==2): #3D
-          tangVector= xc.Vector([vDir[2],vDir[1],-vDir[0]])
+          tanVector= xc.Vector([vDir[2],vDir[1],-vDir[0]])
         if(len(vDir)==3): #3D load.
           for e in xcSet.getElements:
               presElem=self.getPressure(e.getCooCentroid(False)[iCoo])

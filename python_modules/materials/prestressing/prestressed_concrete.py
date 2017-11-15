@@ -266,10 +266,12 @@ class PrestressTendon(object):
         return y
 
     def ScoordToXYprojCoord(self,Scoord):
-        '''return the projected XYcoordinate of the tendon point corresponding to
-        the value Scoord given as parameter
+        '''return the projected XYcoordinate of the tendon point corresponding 
+        to the value Scoord given as parameter
         '''
+        print 'Scoord=', Scoord
         index1=(np.abs(self.fineScoord-Scoord)).argmin()
+        print 'index1=', index1
         if Scoord < self.fineScoord[index1]:
             index2=index1-1
         else:
