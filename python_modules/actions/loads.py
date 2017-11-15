@@ -8,6 +8,7 @@ __version__= "3.0"
 __email__= "ana.Ortega@ciccp.es"
 
 from actions.earth_pressure import earth_pressure as ep
+import xc
 
 class BaseVectorLoad(object):
     '''Base class for loads introduced using a load as an xcVector 
