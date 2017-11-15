@@ -88,6 +88,12 @@ class Response;
 //! @ingroup NDMat
 //
 //! @brief Base class for 2D and 3D materials.
+//!
+//! NDMaterial class provides the interface that all
+//! NDMaterial writers must provide when introducing new
+//! NDMaterial subclasses. An NDMaterial object 
+//! is responsible for keeping track of stress, strain and the
+//! constitution for a particular integration point in the domain. 
 class NDMaterial: public Material
   {
   private:
@@ -155,6 +161,7 @@ class NDMaterial: public Material
     virtual const straintensor getFp(void);
 // Only For Large Deformation, END////////////////////////////////////////
 
+    //! @brief Virtual constructor.
     virtual NDMaterial *getCopy(void) const= 0;
     virtual NDMaterial *getCopy(const std::string &) const= 0;
 
