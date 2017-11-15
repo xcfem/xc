@@ -96,9 +96,9 @@ class UniformLoadOnBeams(BaseVectorLoad):
         for l in self.xcSet.getLines:
             for e in l.getElements():
                 if self.refSystem=='Local':
-                    e.vector3dUniformLoadLocal(self.loadVector)
+                    load= e.vector3dUniformLoadLocal(self.loadVector)
                 else:
-                    e.vector3dUniformLoadGlobal(self.loadVector)
+                    load= e.vector3dUniformLoadGlobal(self.loadVector)
  
 
 class UniformLoadOnLines(BaseVectorLoad):
@@ -148,9 +148,9 @@ class UniformLoadOnSurfaces(BaseVectorLoad):
         ''' Append load to the current load pattern.'''
         for e in self.xcSet.getElements:
             if self.refSystem=='Local':
-                e.vector3dUniformLoadLocal(self.loadVector)
+                load=e.vector3dUniformLoadLocal(self.loadVector)
             else:
-                e.vector3dUniformLoadGlobal(self.loadVector)
+                load=e.vector3dUniformLoadGlobal(self.loadVector)
         # for s in self.xcSet.getSurfaces:
         #     for e in s.getElements():
         #         if self.refSystem=='Local':
