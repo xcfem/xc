@@ -113,7 +113,7 @@ class BJtensor: public nDarray
     friend class straintensor;
 //  private:
   public:
-    mutable std::string indices1;   //  character array of indices
+    mutable std::string indices1;   //!<  character array of indices
     mutable std::string indices2;   //  they should be checked for matching and
                                     //  then operator will be identified
   public: // just send appropriate arguments to the base constructor
