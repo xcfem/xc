@@ -78,6 +78,18 @@
 #include "material/nD/TipoMaterialND.h"
 
 //! @brief Constructor.
+//!
+//! To construct an ElasticIsotropicMaterial whose unique integer tag
+//! among NDMaterials in the domain is given by \p tag, and whose class
+//! tag is given by \p classTag.  These tags are passed to the
+//! NDMaterial class constructor.
+//!
+//! @param tag: material identifier.
+//! @param classTag: material class identifier.
+//! @param eps_size: size of the generalized strain vector.
+//! @param e: material Young modulus.
+//! @param nu: material Poisson coefficient.
+//! @param r: material density.
 XC::ElasticIsotropicMaterial::ElasticIsotropicMaterial(int tag, int classTag, int eps_size, double e, double nu, double r)
   :XC::NDMaterial(tag, classTag), E(e), v(nu), rho(r), epsilon(eps_size) {}
 
@@ -100,6 +112,9 @@ double XC::ElasticIsotropicMaterial::getE(void)
 double XC::ElasticIsotropicMaterial::getnu(void)
   { return v; }
 
+//! @brief Returns a specific implementation of an ElasticIsotropicMaterial by
+//! switching on \p type.  Outputs an error if \p type is not valid.
+//! This is the prototype method.
 XC::NDMaterial *XC::ElasticIsotropicMaterial::getCopy(const std::string &type) const
   {
     if((type==strTipoPlaneStress2D) || (type==strTipoPlaneStress))
@@ -204,6 +219,7 @@ int XC::ElasticIsotropicMaterial::setTrialStrainIncr(const Vector &v, const XC::
     return -1;
   }
 
+//! @brief Returns material tangent stiffness matrix.
 const XC::Matrix &XC::ElasticIsotropicMaterial::getTangent(void) const
   {
     std::cerr << getClassName() << "::" << __FUNCTION__
