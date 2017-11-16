@@ -61,33 +61,27 @@ XC::Vector XC::ElasticIsotropic3D::sigma(6);	 // global for XC::ElasticIsotropic
 XC::stresstensor XC::ElasticIsotropic3D::Stress;
 
 XC::ElasticIsotropic3D::ElasticIsotropic3D(int tag, double E, double nu, double rho):
-  ElasticIsotropicMaterial(tag, ND_TAG_ElasticIsotropic3D,6, E, nu, rho),Dt(0)
-{
-	// Set up the elastic constant matrix for 3D elastic isotropic 
-	D.Zero();
-}
+  ElasticIsotropicMaterial(tag, ND_TAG_ElasticIsotropic3D,6, E, nu, rho), Dt()
+  {
+    // Set up the elastic constant matrix for 3D elastic isotropic 
+    D.Zero();
+  }
 
 XC::ElasticIsotropic3D::ElasticIsotropic3D(int tag)
-  : ElasticIsotropicMaterial(tag, ND_TAG_ElasticIsotropic3D,6, 0.0, 0.0, 0.0), Dt(0)
+  : ElasticIsotropicMaterial(tag, ND_TAG_ElasticIsotropic3D,6, 0.0, 0.0, 0.0), Dt()
   {}
 
 XC::ElasticIsotropic3D::ElasticIsotropic3D()
-  : ElasticIsotropicMaterial(0, ND_TAG_ElasticIsotropic3D,6, 0.0, 0.0, 0.0), Dt(0)
+  : ElasticIsotropicMaterial(0, ND_TAG_ElasticIsotropic3D,6, 0.0, 0.0, 0.0), Dt()
   {}
 
-XC::ElasticIsotropic3D::~ElasticIsotropic3D()
+int XC::ElasticIsotropic3D::setTrialStrainIncr(const Vector &v)
   {
-    if(Dt) delete Dt;
+    epsilon+= v;
+    return 0;
   }
 
-int XC::ElasticIsotropic3D::setTrialStrainIncr(const XC::Vector &v)
-{
-	epsilon += v;
-
-	return 0;
-}
-
-int XC::ElasticIsotropic3D::setTrialStrainIncr(const XC::Vector &v, const XC::Vector &r)
+int XC::ElasticIsotropic3D::setTrialStrainIncr(const Vector &v, const XC::Vector &r)
   {
     epsilon += v;
     return 0;
@@ -131,72 +125,74 @@ const XC::Matrix &XC::ElasticIsotropic3D::getInitialTangent(void) const
 
 const XC::Vector &XC::ElasticIsotropic3D::getStress(void) const
   {
-       double mu2 = E/(1.0+v);
-       double lam = v*mu2/(1.0-2.0*v);
-       double mu  = 0.50*mu2;
+    double mu2 = E/(1.0+v);
+    double lam = v*mu2/(1.0-2.0*v);
+    double mu  = 0.50*mu2;
 
-       mu2 += lam;
-       
-       double eps0 = epsilon(0);
-       double eps1 = epsilon(1);
-       double eps2 = epsilon(2);
+    mu2 += lam;
 
-       sigma(0) = mu2*eps0 + lam*(eps1+eps2);
-       sigma(1) = mu2*eps1 + lam*(eps2+eps0);
-       sigma(2) = mu2*eps2 + lam*(eps0+eps1);
+    double eps0 = epsilon(0);
+    double eps1 = epsilon(1);
+    double eps2 = epsilon(2);
 
-       sigma(3) = mu*epsilon(3);
-       sigma(4) = mu*epsilon(4);
-       sigma(5) = mu*epsilon(5);
+    sigma(0) = mu2*eps0 + lam*(eps1+eps2);
+    sigma(1) = mu2*eps1 + lam*(eps2+eps0);
+    sigma(2) = mu2*eps2 + lam*(eps0+eps1);
 
-	return sigma;
+    sigma(3) = mu*epsilon(3);
+    sigma(4) = mu*epsilon(4);
+    sigma(5) = mu*epsilon(5);
+
+    return sigma;
   }
 
-int XC::ElasticIsotropic3D::setTrialStrain(const XC::Tensor &v)
-{
+//! @brief Sets the value of the current trial strain tensor, \f$\epsilon\f$,
+//! to be \p strain. Returns \f$0\f$.
+int XC::ElasticIsotropic3D::setTrialStrain(const Tensor &v)
+  {
     Strain = v;
     return 0;
-}
+  }
 
-int XC::ElasticIsotropic3D::setTrialStrain(const XC::Tensor &v, const XC::Tensor &r)
-{
+int XC::ElasticIsotropic3D::setTrialStrain(const Tensor &v, const Tensor &r)
+  {
     Strain = v;
     return 0;
-}
+  }
 
-int XC::ElasticIsotropic3D::setTrialStrainIncr(const XC::Tensor &v)
-{
+int XC::ElasticIsotropic3D::setTrialStrainIncr(const Tensor &v)
+  {
     //std::cerr << " before set Tri St Incr " << Strain;
     //std::cerr << " Strain Incr " << v << std::endl;n;
     Strain = Strain + v;
     //std::cerr << " after setTrialStrainIncr  " << Strain << std::endl;n;
     return 0;
-}
+  }
 
-int XC::ElasticIsotropic3D::setTrialStrainIncr(const XC::Tensor &v, const XC::Tensor &r)
-{
+int XC::ElasticIsotropic3D::setTrialStrainIncr(const Tensor &v, const Tensor &r)
+  {
     Strain = Strain + v;
     return 0;
-}
+  }
 
 const XC::Tensor &XC::ElasticIsotropic3D::getTangentTensor(void) const
   {
-    if(Dt == 0)
+    if(Dt.rank()<4)
       {
-        Dt= new XC::BJtensor( 4, def_dim_4, 0.0 ); 
+        Dt= BJtensor( 4, def_dim_4, 0.0 ); 
         setInitElasticStiffness();
       }
-    return *Dt;
+    return Dt;
   }
 
 const XC::stresstensor &XC::ElasticIsotropic3D::getStressTensor(void) const
   {
-    if(Dt == 0)
+    if(Dt.rank()<4)
       {
-        Dt = new XC::BJtensor( 4, def_dim_4, 0.0 ); 
+        Dt = BJtensor( 4, def_dim_4, 0.0 ); 
         setInitElasticStiffness();
       }
-    Stress = (*Dt)("ijkl") * Strain("kl");
+    Stress = Dt("ijkl") * Strain("kl");
     return Stress;
   }
 
@@ -206,7 +202,7 @@ const XC::straintensor &XC::ElasticIsotropic3D::getStrainTensor(void) const
 const XC::straintensor &XC::ElasticIsotropic3D::getPlasticStrainTensor(void) const
   {
     //Return zero XC::straintensor
-    static XC::straintensor t;
+    static straintensor t;
     return t;
   }
 
@@ -254,11 +250,11 @@ void XC::ElasticIsotropic3D::setInitElasticStiffness(void) const
     BJtensor I_iljk = I_ijkl.transpose0111();
     BJtensor I4s = (I_ikjl+I_iljk)*0.5;
     
-    // Building elasticity XC::BJtensor
+    // Building elasticity BJtensor
     ret = I_ijkl*( E*v / ( (1.0+v)*(1.0 - 2.0*v) ) ) + I4s*( E / (1.0 + v) );
     
     //ret.print();
-    *Dt = ret;
+    Dt= ret;
 
     return;
   }

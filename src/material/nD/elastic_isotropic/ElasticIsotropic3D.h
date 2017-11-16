@@ -69,17 +69,16 @@ namespace XC {
 class ElasticIsotropic3D : public ElasticIsotropicMaterial
   {
   private:
-    static Vector sigma;        // Stress vector
-    static Matrix D;            // Elastic constantsVector sigma;
+    static Vector sigma; //!< Stress vector
+    static Matrix D;     //!< Elastic constantsVector sigma;
 
-    mutable Tensor *Dt;			// Elastic constants tensor
-    static stresstensor Stress;	// Stress tensor    
-    straintensor Strain;	// Strain tensor    
+    mutable Tensor Dt;	 //!< Elastic constants tensor
+    static stresstensor Stress;	//!< Stress tensor    
+    straintensor Strain;	//!< Strain tensor    
   public:
     ElasticIsotropic3D(int tag, double E, double nu, double rho);
     ElasticIsotropic3D(int tag);
     ElasticIsotropic3D(void);
-    ~ElasticIsotropic3D(void);
 
     int setTrialStrainIncr(const Vector &v);
     int setTrialStrainIncr(const Vector &v, const Vector &r);
