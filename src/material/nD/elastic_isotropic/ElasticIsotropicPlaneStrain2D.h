@@ -68,6 +68,10 @@ namespace XC {
 //! @ingroup NDMat
 //
 //! @brief Elastic isotropic material for plane deformation problems.
+//!
+//! ElasticIsotropicPlaneStrain2D provides the implementation of an
+//! elastic isotropic material which exhibits plane strain behavior in two
+//! dimensions.
 class ElasticIsotropicPlaneStrain2D : public ElasticIsotropic2D
   {
   private:
@@ -75,8 +79,7 @@ class ElasticIsotropicPlaneStrain2D : public ElasticIsotropic2D
     Vector epsilon;	        // Trial strains
   public:
     ElasticIsotropicPlaneStrain2D(int tag, double E, double nu, double rho);
-    ElasticIsotropicPlaneStrain2D(int tag);
-    ElasticIsotropicPlaneStrain2D();
+    ElasticIsotropicPlaneStrain2D(int tag= 0);
 
     int setTrialStrainIncr(const Vector &v);
     int setTrialStrainIncr(const Vector &v, const Vector &r);
