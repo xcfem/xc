@@ -421,9 +421,9 @@ int XC::NewmarkSensitivityIntegrator::saveSensitivity(const XC::Vector & vNew,in
 
 
     // Compute new acceleration and velocity vectors:
-    Vector *vNewPtr = new XC::Vector(vectorSize);
-    Vector *vdotNewPtr = new XC::Vector(vectorSize);
-    Vector *vdotdotNewPtr = new XC::Vector(vectorSize);
+    Vector *vNewPtr = new Vector(vectorSize);
+    Vector *vdotNewPtr = new Vector(vectorSize);
+    Vector *vdotdotNewPtr = new Vector(vectorSize);
     (*vdotdotNewPtr) = vNew*a1 + V*a2 + Vdot*a3 + Vdotdot*a4;
     (*vdotNewPtr) = vNew*a5 + V*a6 + Vdot*a7 + Vdotdot*a8;
     (*vNewPtr) = vNew;

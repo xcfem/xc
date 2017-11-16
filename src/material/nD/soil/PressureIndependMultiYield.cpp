@@ -383,14 +383,14 @@ int XC::PressureIndependMultiYield::revertToLastCommit(void)
 
 
 XC::NDMaterial *XC::PressureIndependMultiYield::getCopy(void) const
-  { return new XC::PressureIndependMultiYield(*this); }
+  { return new PressureIndependMultiYield(*this); }
 
 XC::NDMaterial * XC::PressureIndependMultiYield::getCopy(const std::string &code) const
   {
     PressureIndependMultiYield *copy= nullptr;
     if((code==strTipoPressureIndependMultiYield) || (code==strTipoPlaneStrain)
         || (code==strTipoThreeDimensional))
-      copy = new XC::PressureIndependMultiYield(*this);
+      copy = new PressureIndependMultiYield(*this);
     return copy;
   }
 
@@ -471,11 +471,11 @@ int XC::PressureIndependMultiYield::recvSelf(const CommParameters &cp)
 XC::Response *XC::PressureIndependMultiYield::setResponse(const std::vector<std::string> &argv, Information &matInfo)
   {
     if(argv[0] == "stress" || argv[0] == "stresses")
-      return new XC::MaterialResponse(this, 1, this->getCommittedStress());
+      return new MaterialResponse(this, 1, this->getCommittedStress());
     else if(argv[0] == "strain" || argv[0] == "strains")
-      return new XC::MaterialResponse(this, 2, this->getCommittedStrain());
+      return new MaterialResponse(this, 2, this->getCommittedStrain());
     else if(argv[0] == "tangent")
-      return new XC::MaterialResponse(this, 3, this->getTangent());
+      return new MaterialResponse(this, 3, this->getTangent());
     else if(argv[0] == "backbone")
       {
         const int argc= argv.size();
@@ -483,7 +483,7 @@ XC::Response *XC::PressureIndependMultiYield::setResponse(const std::vector<std:
         static Matrix curv(numOfSurfaces+1,(argc-1)*2);
         for(int i=1; i<argc; i++)
           curv(0,(i-1)*2) = atoi(argv[i]);
-        return new XC::MaterialResponse(this, 4, curv);
+        return new MaterialResponse(this, 4, curv);
       }
     else
       return 0;

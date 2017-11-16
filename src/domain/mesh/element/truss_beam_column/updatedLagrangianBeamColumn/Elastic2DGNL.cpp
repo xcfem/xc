@@ -72,7 +72,7 @@ XC::Elastic2dGNL::Elastic2dGNL(int tag, double a, double e, double i, int Nd1, i
 
 //! @brief Virtual constructor.
 XC::Element* XC::Elastic2dGNL::getCopy(void) const
-  { return new XC::Elastic2dGNL(*this); }
+  { return new Elastic2dGNL(*this); }
 
 void XC::Elastic2dGNL::getLocalMass(Matrix &M) const
   {

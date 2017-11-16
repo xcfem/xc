@@ -325,7 +325,7 @@ XC::Response* XC::SeriesMaterial::setResponse(const std::vector<std::string> &ar
     const size_t numMaterials= theModels.size();
     const size_t argc= argv.size();
     if(argv[0] == "strains")
-      return new XC::MaterialResponse(this, 100, XC::Vector(numMaterials));
+      return new MaterialResponse(this, 100, XC::Vector(numMaterials));
     else if(argv[0] == "material" || argv[0] == "component")
       {
         if(argc > 1)

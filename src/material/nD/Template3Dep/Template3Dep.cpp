@@ -560,7 +560,7 @@ XC::Template3Dep::Template3Dep(int tag)
   {
     //YS = new DPYieldSurface();
     //PS = new DPPotentialSurface();
-    //EPS = new XC::EPState();
+    //EPS = new EPState();
     theElasticMat = 0;
     YS  = 0;
     PS  = 0;
@@ -578,7 +578,7 @@ XC::Template3Dep::Template3Dep()
 {
     //YS = new DPYieldSurface();
     //PS = new DPPotentialSurface();
-    //EPS = new XC::EPState();
+    //EPS = new EPState();
     theElasticMat = 0;
     YS  = 0;
     PS  = 0;
@@ -1280,7 +1280,7 @@ XC::NDMaterial *XC::Template3Dep::getCopy(const std::string &code) const
     Template3Dep *tmp= nullptr;
     if((code==strTipoTemplate3Dep))
       {
-        tmp= new XC::Template3Dep(*this);
+        tmp= new Template3Dep(*this);
         tmp->getEPS()->setInit();
       }
     else
@@ -1324,7 +1324,7 @@ XC::Template3Dep::Print(std::ostream &s, int flag)
 //private utilities
 
 //================================================================================
-// Set new XC::EPState
+// Set new EPState
 //================================================================================
 
 void XC::Template3Dep::setEPS( EPState & rval)

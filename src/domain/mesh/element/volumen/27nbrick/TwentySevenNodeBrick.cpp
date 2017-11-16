@@ -3884,7 +3884,7 @@ XC::Response *XC::TwentySevenNodeBrick::setResponse(const std::vector<std::strin
     if(argv[0] == "force" || argv[0] == "forces")
       return new ElementResponse(this, 1, P);
     else if(argv[0] == "stiff" || argv[0] == "stiffness")
-      return new XC::ElementResponse(this, 5, K);
+      return new ElementResponse(this, 5, K);
     else if(argv[0] == "plastic" || argv[0] == "plastified")
       {
        ////checking if element plastified

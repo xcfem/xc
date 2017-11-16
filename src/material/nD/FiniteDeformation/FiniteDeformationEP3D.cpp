@@ -139,7 +139,7 @@ XC::FiniteDeformationEP3D::FiniteDeformationEP3D(int tag,
       fdEvolutionT = 0;
       
     //if(fdeps == 0)
-    fdeps = new XC::FDEPState(); 
+    fdeps = new FDEPState(); 
                               
 }                    
 
@@ -180,7 +180,7 @@ XC::FiniteDeformationEP3D::FiniteDeformationEP3D(int tag,
     fdEvolutionT = 0;
       
     //if(fdeps == 0)
-    fdeps = new XC::FDEPState(); 
+    fdeps = new FDEPState(); 
                               
 }          
 
@@ -221,7 +221,7 @@ XC::FiniteDeformationEP3D::FiniteDeformationEP3D(int tag,
       fdEvolutionT = 0;
       
     //if(fdeps == 0)
-    fdeps = new XC::FDEPState(); 
+    fdeps = new FDEPState(); 
                               
 }        
 
@@ -258,7 +258,7 @@ XC::FiniteDeformationEP3D::FiniteDeformationEP3D(int tag,
     fdEvolutionT = 0;
       
     //if(fdeps == 0)
-    fdeps = new XC::FDEPState(); 
+    fdeps = new FDEPState(); 
                               
 }        
 
@@ -345,7 +345,7 @@ int XC::FiniteDeformationEP3D::revertToStart(void)
 
 //----------------------------------------------------------------------
 XC::NDMaterial* XC::FiniteDeformationEP3D::getCopy(void) const
-  { return  new XC::FiniteDeformationEP3D(*this); }
+  { return  new FiniteDeformationEP3D(*this); }
 
 //----------------------------------------------------------------------
 XC::NDMaterial* XC::FiniteDeformationEP3D::getCopy(const std::string &code) const

@@ -51,7 +51,7 @@ XC::Inelastic2DYS01::Inelastic2DYS01(int tag, double a, double e, double iz,
 
 //! @brief Virtual constructor.
 XC::Element* XC::Inelastic2DYS01::getCopy(void) const
-  { return new XC::Inelastic2DYS01(*this); }
+  { return new Inelastic2DYS01(*this); }
 
 // very simple element
 // provides the elastic stiffness based on the average degraded

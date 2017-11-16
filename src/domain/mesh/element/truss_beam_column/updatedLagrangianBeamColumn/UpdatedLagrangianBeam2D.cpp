@@ -776,7 +776,7 @@ XC::Response* XC::UpdatedLagrangianBeam2D::setResponse(const std::vector<std::st
         (argv[0] == "forces") ||
         (argv[0] == "localForce"))
         {
-                return new XC::ElementResponse(this, 1, Vector(6));
+                return new ElementResponse(this, 1, Vector(6));
     }
 
         else if((argv[0] == "forceDisp"))
@@ -788,25 +788,25 @@ XC::Response* XC::UpdatedLagrangianBeam2D::setResponse(const std::vector<std::st
                 if(argv[2] == "1") dofRecord = 1;
                 if(argv[2] == "2") dofRecord = 2;
 
-                return  new XC::ElementResponse(this, 4, Vector(7));
+                return  new ElementResponse(this, 4, Vector(7));
 
         }
 
         else if((argv[0] == "globalForce"))
         {
-                return  new XC::ElementResponse(this, 5, Vector(6));
+                return  new ElementResponse(this, 5, Vector(6));
     }
 
     else if((argv[0] == "disp") ||
         (argv[0] == "displacements") ||
         (argv[0] == "displacement"))
         {
-                return  new XC::ElementResponse(this, 2, Vector(6));
+                return  new ElementResponse(this, 2, Vector(6));
     }
 
     // tangent stiffness matrix
     else if(argv[0] == "stiffness") {
-        return new XC::ElementResponse(this, 3, Matrix(6,6));
+        return new ElementResponse(this, 3, Matrix(6,6));
     }
 
     // a material quantity: needs to be implemented in subclasses

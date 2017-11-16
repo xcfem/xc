@@ -136,7 +136,7 @@ double yt = 0.95, xt = 0.054029;
 
  XC::YieldSurface_BC *XC::Attalla2D::getCopy(void)
 {
-    Attalla2D *theCopy = new XC::Attalla2D(this->getTag(), capX, capY, *hModel,
+    Attalla2D *theCopy = new Attalla2D(this->getTag(), capX, capY, *hModel,
                                        a1, a2, a3, a4, a5, a6);
     //later  copy all the state variables
     return theCopy;

@@ -91,7 +91,7 @@ double drift = phi - 1;
 
  XC::YieldSurface_BC *XC::Orbison2D::getCopy(void)
 {
-    Orbison2D *theCopy = new XC::Orbison2D(this->getTag(), capX, capY, *hModel);
+    Orbison2D *theCopy = new Orbison2D(this->getTag(), capX, capY, *hModel);
     if(theCopy==0)
     {
      	std::cerr << "XC::Orbison2D::getCopy(void) - unable to make copy\n";

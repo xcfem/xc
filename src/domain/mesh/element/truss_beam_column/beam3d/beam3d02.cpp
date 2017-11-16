@@ -78,7 +78,7 @@ XC::beam3d02::beam3d02(int tag, double a, double e, double g,
 
 //! @brief Virtual constructor.
 XC::Element* XC::beam3d02::getCopy(void) const
-  { return new XC::beam3d02(*this); }
+  { return new beam3d02(*this); }
 
 //! @brief Method to return the stiffness matrix.
 void XC::beam3d02::setDomain(Domain *theDomain)

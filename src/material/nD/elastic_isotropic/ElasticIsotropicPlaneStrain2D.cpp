@@ -173,7 +173,7 @@ int XC::ElasticIsotropicPlaneStrain2D::revertToStart(void)
 
 //ª @brief Virtual constructor.
 XC::NDMaterial *XC::ElasticIsotropicPlaneStrain2D::getCopy(void) const
-  { return new XC::ElasticIsotropicPlaneStrain2D(*this); }
+  { return new ElasticIsotropicPlaneStrain2D(*this); }
 
 const std::string &XC::ElasticIsotropicPlaneStrain2D::getType(void) const
   { return strTipoPlaneStrain; }

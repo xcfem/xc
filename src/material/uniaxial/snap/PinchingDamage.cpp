@@ -344,7 +344,7 @@ int XC::PinchingDamage::sendSelf(CommParameters &cp)
         inp[10] = a_pinch;
 
         
-        PinchingDamage *theCopy = new XC::PinchingDamage(this->getTag(), inp, StrDamage, StfDamage, AccDamage, CapDamage  );
+        PinchingDamage *theCopy = new PinchingDamage(this->getTag(), inp, StrDamage, StfDamage, AccDamage, CapDamage  );
 
         for (int i=0; i<24; i++) {
                 theCopy->hsTrial[i] = hsTrial[i];

@@ -134,7 +134,7 @@ XC::EightNodeBrick_u_p_U::EightNodeBrick_u_p_U(void)
 
 //! @brief Virtual constructor.
 XC::Element *XC::EightNodeBrick_u_p_U::getCopy(void) const
-  { return new XC::EightNodeBrick_u_p_U(*this); }
+  { return new EightNodeBrick_u_p_U(*this); }
 
 //======================================================================
 XC::EightNodeBrick_u_p_U::~EightNodeBrick_u_p_U(void)
@@ -263,7 +263,7 @@ int XC::EightNodeBrick_u_p_U::addLoad(ElementalLoad *theLoad, double loadFactor)
     if(brkLoad)
       {
         if(eleQ==0)
-          eleQ = new XC::Vector(Num_ElemDof);
+          eleQ = new Vector(Num_ElemDof);
         *eleQ = (this->getExForceS() + this->getExForceF() )*loadFactor;
       }
     else

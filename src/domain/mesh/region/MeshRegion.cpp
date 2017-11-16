@@ -148,8 +148,8 @@ int XC::MeshRegion::setNodes(const XC::ID &theNods)
       }
 
     int numNodes = theNods.Size();
-    theNodes = new XC::ID(0,numNodes);
-    theElements = new XC::ID(0, numNodes);
+    theNodes = new ID(0,numNodes);
+    theElements = new ID(0, numNodes);
     if(theNodes == 0 || theElements == 0)
       {
         std::cerr << "XC::MeshRegion::setElements() - ran out of memory\n";
@@ -209,8 +209,8 @@ int XC::MeshRegion::setElements(const XC::ID &theEles)
     // create new element & node lists
 
     int numEle = theEles.Size();
-    theElements= new XC::ID(0, numEle); // don't copy yet .. make sure ele in domain
-    theNodes= new XC::ID(0, numEle); // initial guess at size of XC::ID
+    theElements= new ID(0, numEle); // don't copy yet .. make sure ele in domain
+    theNodes= new ID(0, numEle); // initial guess at size of XC::ID
     if(theElements == 0 || theNodes == 0)
       {
 	std::cerr << "XC::MeshRegion::setElements() - ran out of memory\n";

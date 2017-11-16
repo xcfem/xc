@@ -67,16 +67,16 @@
 XC::UserDefinedRV::UserDefinedRV(int passedTag, Vector pxPoints, Vector pPDFpoints, double pStartValue)
 :RandomVariable(passedTag, RANDOM_VARIABLE_userdefined)
 {
-	xPoints = new XC::Vector(pxPoints);
-	PDFpoints = new XC::Vector(pPDFpoints);
+	xPoints = new Vector(pxPoints);
+	PDFpoints = new Vector(pPDFpoints);
 	startValue = pStartValue;
 }
 
 XC::UserDefinedRV::UserDefinedRV(int passedTag, Vector pxPoints, Vector pPDFpoints)
 :RandomVariable(passedTag, RANDOM_VARIABLE_userdefined)
 {
-	xPoints = new XC::Vector(pxPoints);
-	PDFpoints = new XC::Vector(pPDFpoints);
+	xPoints = new Vector(pxPoints);
+	PDFpoints = new Vector(pPDFpoints);
 	startValue = getMean();
 }
 

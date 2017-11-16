@@ -380,7 +380,7 @@ int XC::Joint2D::addMFreedom_Joint(Domain *theDomain, int mpNum,
   {
 
     // create MFreedom_ForJoint constraint
-    MFreedom_Constraint *Temp_MF= new XC::MFreedom_Joint2D(getDomain(), mpNum, RnodeID, CnodeID, MainDOF, FixedEnd, LrgDispFlag );
+    MFreedom_Constraint *Temp_MF= new MFreedom_Joint2D(getDomain(), mpNum, RnodeID, CnodeID, MainDOF, FixedEnd, LrgDispFlag );
 
     if(Temp_MF == nullptr)
       {
@@ -802,7 +802,7 @@ int XC::Joint2D::addInertiaLoadSensitivityToUnbalance(const XC::Vector &accel, b
 {
 
   if(theLoadSens == 0) {
-    theLoadSens = new XC::Vector(numDof);
+    theLoadSens = new Vector(numDof);
   }
   else {
     theLoadSens->Zero();

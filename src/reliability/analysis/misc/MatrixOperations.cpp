@@ -69,14 +69,14 @@ XC::MatrixOperations::MatrixOperations(Matrix passedMatrix)
 	int rows = passedMatrix.noRows();
 	int cols = passedMatrix.noCols();
 
-	theMatrix = new XC::Matrix(rows,cols);
+	theMatrix = new Matrix(rows,cols);
 	(*theMatrix) = passedMatrix;
 
-	theLowerCholesky = new XC::Matrix(rows,cols);
-	theInverseLowerCholesky = new XC::Matrix(rows,cols);
-	theInverse = new XC::Matrix(rows,cols);
-	theTranspose = new XC::Matrix(rows,cols);
-	theSquareRoot = new XC::Matrix(rows,cols);
+	theLowerCholesky = new Matrix(rows,cols);
+	theInverseLowerCholesky = new Matrix(rows,cols);
+	theInverse = new Matrix(rows,cols);
+	theTranspose = new Matrix(rows,cols);
+	theSquareRoot = new Matrix(rows,cols);
 
 	theMatrixNorm = 0;
 	theTrace = 0; 
@@ -111,13 +111,13 @@ XC::MatrixOperations::setMatrix(Matrix passedMatrix)
 	delete theSquareRoot;
 
 	// reallocate
-	theMatrix = new XC::Matrix(rows,cols);
+	theMatrix = new Matrix(rows,cols);
 	(*theMatrix) = passedMatrix;
-	theLowerCholesky = new XC::Matrix(rows,cols);
-	theInverseLowerCholesky = new XC::Matrix(rows,cols);
-	theInverse = new XC::Matrix(rows,cols);
-	theTranspose = new XC::Matrix(rows,cols);
-	theSquareRoot = new XC::Matrix(rows,cols);
+	theLowerCholesky = new Matrix(rows,cols);
+	theInverseLowerCholesky = new Matrix(rows,cols);
+	theInverse = new Matrix(rows,cols);
+	theTranspose = new Matrix(rows,cols);
+	theSquareRoot = new Matrix(rows,cols);
 
 	return 0;
 }

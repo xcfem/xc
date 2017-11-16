@@ -482,13 +482,13 @@ XC::NDMaterial *XC::MultiaxialCyclicPlasticity::getCopy(const std::string &type)
     if((type==strTipoPlaneStress2D) || (type==strTipoPlaneStress))
       std::cerr << "MultiaxialCyclicPlasticity type plane stress material is NOT available now....";
     else if((type==strTipoPlaneStrain2D) || (type==strTipoPlaneStrain))
-      retval= new XC::MultiaxialCyclicPlasticityPlaneStrain(this->getTag(), density, bulk, shear, sqrt(3.0/8.0)*R,
+      retval= new MultiaxialCyclicPlasticityPlaneStrain(this->getTag(), density, bulk, shear, sqrt(3.0/8.0)*R,
                       Ho, h, m, beta, K0, eta); 
     else if((type==strTipoAxiSymmetric2D) || (type==strTipoAxiSymmetric))
-      retval= new XC::MultiaxialCyclicPlasticityAxiSymm(this->getTag(), density, bulk, shear, sqrt(3.0/8.0)*R,
+      retval= new MultiaxialCyclicPlasticityAxiSymm(this->getTag(), density, bulk, shear, sqrt(3.0/8.0)*R,
                       Ho, h, m, beta, K0, eta); 
     else if(((type==strTipoThreeDimensional)) || ((type==strTipo3D)))
-      retval= new XC::MultiaxialCyclicPlasticity3D(this->getTag(), density, bulk, shear, sqrt(3.0/8.0)*R,
+      retval= new MultiaxialCyclicPlasticity3D(this->getTag(), density, bulk, shear, sqrt(3.0/8.0)*R,
                                              Ho, h, m, beta, K0, eta); 
     else if( ((type==strTipoPlateFiber)) )
       std::cerr << "MultiaxialCyclicPlasticity type plate fiber material is NOT available now....";

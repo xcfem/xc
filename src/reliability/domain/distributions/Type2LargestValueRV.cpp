@@ -162,7 +162,7 @@ double
 XC::Type2LargestValueRV::getMean()
 {
 	double result;
-	GammaRV *aGammaRV = new XC::GammaRV(1, 0.0, 1.0, 0.0);
+	GammaRV *aGammaRV = new GammaRV(1, 0.0, 1.0, 0.0);
 	result = u * aGammaRV->gammaFunction(1.0-1.0/k);
 	delete aGammaRV;
 	return result;
@@ -173,7 +173,7 @@ XC::Type2LargestValueRV::getMean()
 double 
 XC::Type2LargestValueRV::getStdv()
 {
-	GammaRV *aGammaRV = new XC::GammaRV(1, 0.0, 1.0, 0.0);
+	GammaRV *aGammaRV = new GammaRV(1, 0.0, 1.0, 0.0);
 	double a = aGammaRV->gammaFunction(1.0-2.0/k);
 	double b = aGammaRV->gammaFunction(1.0-1.0/k);
 	delete aGammaRV;
@@ -207,7 +207,7 @@ XC::Type2LargestValueRV::setParameters(double mean, double stdv)
 void
 XC::Type2LargestValueRV::function131(double xk, double cov, double mean)
 {
-	GammaRV *aGammaRV = new XC::GammaRV(1, 0.0, 1.0, 0.0);
+	GammaRV *aGammaRV = new GammaRV(1, 0.0, 1.0, 0.0);
 	xk = xk + 1.0;
 	double x1 = 1.0 - 1.0/xk;
 	double x2 = 1.0 - 2.0/xk;
@@ -228,7 +228,7 @@ XC::Type2LargestValueRV::function132(double xk, double cov, double mean)
 	xk = xk - 0.1;
 	double x1 = 1.0 - 1.0/xk;
 	double x2 = 1.0 - 2.0/xk;
-	GammaRV *aGammaRV = new XC::GammaRV(1, 0.0, 1.0, 0.0);
+	GammaRV *aGammaRV = new GammaRV(1, 0.0, 1.0, 0.0);
 	double gm1 = aGammaRV->gammaFunction(x1);
 	double gm2 = aGammaRV->gammaFunction(x2);
 	delete aGammaRV;
@@ -246,7 +246,7 @@ XC::Type2LargestValueRV::function133(double xk, double cov, double mean)
 	xk = xk + 0.01;
 	double x1 = 1.0 - 1.0/xk;
 	double x2 = 1.0 - 2.0/xk;
-	GammaRV *aGammaRV = new XC::GammaRV(1, 0.0, 1.0, 0.0);
+	GammaRV *aGammaRV = new GammaRV(1, 0.0, 1.0, 0.0);
 	double gm1 = aGammaRV->gammaFunction(x1);
 	double gm2 = aGammaRV->gammaFunction(x2);
 	delete aGammaRV;

@@ -76,6 +76,6 @@ XC::FedeasConcr2Material::FedeasConcr2Material(int tag)
   : XC::FedeasConcrMaterial(tag, MAT_TAG_FedeasConcrete2, 2, 7) {}
 
 XC::UniaxialMaterial* XC::FedeasConcr2Material::getCopy(void) const
-  { return new XC::FedeasConcr2Material(*this); }
+  { return new FedeasConcr2Material(*this); }
 
 

@@ -120,7 +120,7 @@ XC::NDMaterial *XC::ElasticIsotropicMaterial::getCopy(const std::string &type) c
     if((type==strTipoPlaneStress2D) || (type==strTipoPlaneStress))
       {
         ElasticIsotropicPlaneStress2D *theModel;
-        theModel = new XC::ElasticIsotropicPlaneStress2D(this->getTag(), E, v, rho);
+        theModel = new ElasticIsotropicPlaneStress2D(this->getTag(), E, v, rho);
                 // DOES NOT COPY sigma, D, and epsilon ...
                 // This function should only be called during element instantiation, so
                 // no state determination is performed on the material model object
@@ -131,7 +131,7 @@ XC::NDMaterial *XC::ElasticIsotropicMaterial::getCopy(const std::string &type) c
     else if((type==strTipoPlaneStrain2D) || (type==strTipoPlaneStrain))
       {
         ElasticIsotropicPlaneStrain2D *theModel;
-        theModel = new XC::ElasticIsotropicPlaneStrain2D(this->getTag(), E, v, rho);
+        theModel = new ElasticIsotropicPlaneStrain2D(this->getTag(), E, v, rho);
                 // DOES NOT COPY sigma, D, and epsilon ...
                 // This function should only be called during element instantiation, so
                 // no state determination is performed on the material model object
@@ -141,7 +141,7 @@ XC::NDMaterial *XC::ElasticIsotropicMaterial::getCopy(const std::string &type) c
     else if((type==strTipoAxiSymmetric2D) || (type==strTipoAxiSymmetric))
       {
         ElasticIsotropicAxiSymm *theModel;
-        theModel = new XC::ElasticIsotropicAxiSymm(this->getTag(), E, v, rho);
+        theModel = new ElasticIsotropicAxiSymm(this->getTag(), E, v, rho);
                 // DOES NOT COPY sigma, D, and epsilon ...
                 // This function should only be called during element instantiation, so
                 // no state determination is performed on the material model object
@@ -153,7 +153,7 @@ XC::NDMaterial *XC::ElasticIsotropicMaterial::getCopy(const std::string &type) c
              (type==strTipo3D))
       {
         ElasticIsotropic3D *theModel;
-        theModel = new XC::ElasticIsotropic3D(this->getTag(), E, v, rho);
+        theModel = new ElasticIsotropic3D(this->getTag(), E, v, rho);
                 // DOES NOT COPY sigma, D, and epsilon ...
                 // This function should only be called during element instantiation, so
                 // no state determination is performed on the material model object
@@ -164,7 +164,7 @@ XC::NDMaterial *XC::ElasticIsotropicMaterial::getCopy(const std::string &type) c
     else if((type==strTipoPlateFiber))
       {
         ElasticIsotropicPlateFiber *theModel;
-        theModel = new XC::ElasticIsotropicPlateFiber(this->getTag(), E, v, rho);
+        theModel = new ElasticIsotropicPlateFiber(this->getTag(), E, v, rho);
                 // DOES NOT COPY sigma, D, and epsilon ...
                 // This function should only be called during element instantiation, so
                 // no state determination is performed on the material model object
@@ -174,7 +174,7 @@ XC::NDMaterial *XC::ElasticIsotropicMaterial::getCopy(const std::string &type) c
     else if((type==strTipoBeamFiber))
       {
         ElasticIsotropicBeamFiber *theModel;
-        theModel = new XC::ElasticIsotropicBeamFiber(this->getTag(), E, v, rho);
+        theModel = new ElasticIsotropicBeamFiber(this->getTag(), E, v, rho);
                 // DOES NOT COPY sigma, D, and epsilon ...
                 // This function should only be called during element instantiation, so
                 // no state determination is performed on the material model object
@@ -227,7 +227,7 @@ const XC::Matrix &XC::ElasticIsotropicMaterial::getTangent(void) const
     exit(-1);
 
     // Just to make it compile
-    XC::Matrix *ret = new XC::Matrix();
+    XC::Matrix *ret = new Matrix();
     return *ret;
   }
 

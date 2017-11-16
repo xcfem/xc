@@ -109,7 +109,7 @@ XC::NineFourNodeQuadUP::NineFourNodeQuadUP(void)
 
 //! @brief Virtual constructor.
 XC::Element* XC::NineFourNodeQuadUP::getCopy(void) const
-  { return new XC::NineFourNodeQuadUP(*this); }
+  { return new NineFourNodeQuadUP(*this); }
 
 XC::NineFourNodeQuadUP::~NineFourNodeQuadUP()
   {

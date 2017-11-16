@@ -94,7 +94,7 @@ void XC::ExponReducing::Print(std::ostream &s, int flag)
 
  XC::PlasticHardeningMaterial *XC::ExponReducing::getCopy(void)
 {
- 	PlasticHardeningMaterial *theMat = new XC::ExponReducing(getTag(), Kp0, alpha, resFactor);
+ 	PlasticHardeningMaterial *theMat = new ExponReducing(getTag(), Kp0, alpha, resFactor);
     return theMat;
 }
 

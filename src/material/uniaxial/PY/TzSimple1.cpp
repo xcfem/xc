@@ -386,7 +386,7 @@ int XC::TzSimple1::revertToStart(void)
 
 /////////////////////////////////////////////////////////////////////
 XC::UniaxialMaterial *XC::TzSimple1::getCopy(void) const
-  { return new XC::TzSimple1(*this); }
+  { return new TzSimple1(*this); }
 
 //! @brief Send object members through the channel being passed as parameter.
 int XC::TzSimple1::sendData(CommParameters &cp)

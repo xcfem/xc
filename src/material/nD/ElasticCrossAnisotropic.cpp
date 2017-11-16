@@ -106,7 +106,7 @@ XC::NDMaterial* XC::ElasticCrossAnisotropic::getCopy(const std::string &type) co
     ElasticCrossAnisotropic *theModel= nullptr;
     if((type==strTipoThreeDimensional))
       {
-        theModel = new XC::ElasticCrossAnisotropic(this->getTag(), Eh, Ev, nuhv, nuhh, Ghv, rho);
+        theModel = new ElasticCrossAnisotropic(this->getTag(), Eh, Ev, nuhv, nuhh, Ghv, rho);
             // This function should only be called during element instantiation, so
             // no state determination is performed on the material model object
             // prior to copying the material model(calling this function)

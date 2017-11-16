@@ -162,7 +162,7 @@ double
 XC::Type3SmallestValueRV::getMean()
 {
 	double result;
-	GammaRV *aGammaRV = new XC::GammaRV(1, 0.0, 1.0, 0.0);
+	GammaRV *aGammaRV = new GammaRV(1, 0.0, 1.0, 0.0);
 	result = epsilon + (u-epsilon) * aGammaRV->gammaFunction(1.0+1.0/k);
 	delete aGammaRV;
 	return result;
@@ -173,7 +173,7 @@ XC::Type3SmallestValueRV::getMean()
 double 
 XC::Type3SmallestValueRV::getStdv()
 {
-	GammaRV *aGammaRV = new XC::GammaRV(1, 0.0, 1.0, 0.0);
+	GammaRV *aGammaRV = new GammaRV(1, 0.0, 1.0, 0.0);
 	double a = aGammaRV->gammaFunction(1.0+2.0/k);
 	double b = aGammaRV->gammaFunction(1.0+1.0/k);
 	delete aGammaRV;

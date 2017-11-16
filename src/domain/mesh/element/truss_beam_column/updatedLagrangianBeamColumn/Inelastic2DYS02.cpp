@@ -58,9 +58,9 @@ XC::Inelastic2DYS02::Inelastic2DYS02(int tag, double a, double e, double iz,
 {
   massDof = A*L*rho;
   massDof = massDof/2;
-// cModel = new XC::BilinearCyclic(1, 1.0);
-//  cModel = new XC::LinearCyclic(1);
-//   cModel = new XC::QuadraticCyclic(1, 1.0);
+// cModel = new BilinearCyclic(1, 1.0);
+//  cModel = new LinearCyclic(1);
+//   cModel = new QuadraticCyclic(1, 1.0);
 /*
 	if(wT < 0 || wT > 1)
 	{
@@ -69,9 +69,9 @@ XC::Inelastic2DYS02::Inelastic2DYS02(int tag, double a, double e, double iz,
 	}
 
 	if(cyc_type == 2)
-		cModel = new XC::QuadraticCyclic(tag, wT);
+		cModel = new QuadraticCyclic(tag, wT);
 	else
-		cModel = new XC::BilinearCyclic(tag, wT);
+		cModel = new BilinearCyclic(tag, wT);
 */
 
 	cModel = cycModel->getCopy();
@@ -79,7 +79,7 @@ XC::Inelastic2DYS02::Inelastic2DYS02(int tag, double a, double e, double iz,
 
 //! @brief Virtual constructor.
 XC::Element* XC::Inelastic2DYS02::getCopy(void) const
-  { return new XC::Inelastic2DYS02(*this); }
+  { return new Inelastic2DYS02(*this); }
 
 XC::Inelastic2DYS02::~Inelastic2DYS02()
   { delete cModel; }

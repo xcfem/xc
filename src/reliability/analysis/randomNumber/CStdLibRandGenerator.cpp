@@ -106,7 +106,7 @@ int XC::CStdLibRandGenerator::generate_nIndependentStdNormalNumbers(int n, int s
     double randomNumberBetween0And1;
     Vector randomArray(n);
     NormalRV *aStdNormRV = 0;
-    aStdNormRV = new XC::NormalRV(1,0.0,1.0,0.0);
+    aStdNormRV = new NormalRV(1,0.0,1.0,0.0);
 
 
     // Check if computer ran out of memory

@@ -446,7 +446,7 @@ double XC::HardeningMaterial::getInitialTangentSensitivity(int gradNumber)
 int XC::HardeningMaterial::commitSensitivity(double TstrainSensitivity, int gradNumber, int numGrads)
   {
         if (SHVs == 0) {
-                SHVs = new XC::Matrix(3,numGrads);
+                SHVs = new Matrix(3,numGrads);
         }
 
         // First set values depending on what is random

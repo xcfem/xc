@@ -175,7 +175,7 @@ double XC::StraightReinfLayer::getSpacement(void) const
   { return getLongitud()/getNumReinfBars(); }
 
 XC::ReinfLayer *XC::StraightReinfLayer::getCopy (void) const
-  { return new XC::StraightReinfLayer(*this); }
+  { return new StraightReinfLayer(*this); }
 
 void XC::StraightReinfLayer::Print(std::ostream &s, int flag) const
   {

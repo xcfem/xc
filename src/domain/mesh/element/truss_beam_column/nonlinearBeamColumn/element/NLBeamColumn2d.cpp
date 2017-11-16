@@ -139,7 +139,7 @@ XC::NLBeamColumn2d::NLBeamColumn2d (int tag, int nodeI, int nodeJ,
 
 //! @brief Virtual constructor.
 XC::Element* XC::NLBeamColumn2d::getCopy(void) const
-  { return new XC::NLBeamColumn2d(*this); }
+  { return new NLBeamColumn2d(*this); }
 
 
 void XC::NLBeamColumn2d::setDomain(Domain *theDomain)
@@ -1158,7 +1158,7 @@ XC::Response *XC::NLBeamColumn2d::setResponse(const std::vector<std::string> &ar
     // global force -
     if(argv[0] == "forces" || argv[0] == "force"
         || argv[0] == "globalForce" || argv[0] == "globalForces")
-                return new XC::ElementResponse(this, 1, theVector);
+                return new ElementResponse(this, 1, theVector);
 
     // local force -
     else if(argv[0] == "localForce" || argv[0] == "localForces")

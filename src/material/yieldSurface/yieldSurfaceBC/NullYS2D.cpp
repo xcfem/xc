@@ -71,7 +71,7 @@ double XC::NullYS2D::getSurfaceDrift(double x, double y)
 
  XC::YieldSurface_BC *XC::NullYS2D::getCopy(void)
 {
-    NullYS2D *theCopy = new XC::NullYS2D(this->getTag());
+    NullYS2D *theCopy = new NullYS2D(this->getTag());
     return theCopy;
 }
 

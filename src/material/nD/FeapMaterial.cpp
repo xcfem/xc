@@ -300,7 +300,7 @@ int XC::FeapMaterial::revertToStart(void)
   }
 
 XC::NDMaterial *XC::FeapMaterial::getCopy(void) const
-  { return new XC::FeapMaterial(*this); }
+  { return new FeapMaterial(*this); }
 
 XC::NDMaterial *XC::FeapMaterial::getCopy(const std::string &type) const
   {

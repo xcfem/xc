@@ -294,7 +294,7 @@ int XC::FatigueMaterial::revertToStart(void)
 XC::UniaxialMaterial *XC::FatigueMaterial::getCopy(void) const
 {
   FatigueMaterial *theCopy = 
-    new XC::FatigueMaterial(this->getTag(), *theMaterial, Dmax, Nf, E0, FE);
+    new FatigueMaterial(this->getTag(), *theMaterial, Dmax, Nf, E0, FE);
   
   theCopy->Cfailed = Cfailed;
   theCopy->Tfailed = Tfailed;

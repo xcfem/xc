@@ -440,7 +440,7 @@ XC::SQPsearchDirectionMeritFunctionAndHessian::setHessianToIdentity(int size)
 
 	// Check that is exists
 	if (B == 0) {
-		B = new XC::Matrix(size,size);
+		B = new Matrix(size,size);
 	}
 
 	// Set it to unity

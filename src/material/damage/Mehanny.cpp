@@ -301,11 +301,11 @@ XC::Response *XC::Mehanny::setResponse(const std::vector<std::string> &argv, Inf
     //
   
     if( argv[0] == "damage" || argv[0] == "damageindex" )
-      return new XC::DamageResponse( this , 1 , 0.0 );
+      return new DamageResponse( this , 1 , 0.0 );
     else if (argv[0] == "Value" || argv[0] == "defo" || argv[0] == "deformation" )
-      return new XC::DamageResponse( this , 2 , 0.0 );
+      return new DamageResponse( this , 2 , 0.0 );
     else if (argv[0] == "trial" || argv[0] == "trialinfo" )
-      return new XC::DamageResponse( this , 3 , Vector(4) );
+      return new DamageResponse( this , 3 , Vector(4) );
     else 
       return 0;
   }

@@ -91,7 +91,7 @@ XC::FiniteDifferenceGradGEvaluator::FiniteDifferenceGradGEvaluator(
 	reComputeG = pReComputeG;
 
 	int nrv = passedReliabilityDomain->getNumberOfRandomVariables();
-	grad_g = new XC::Vector(nrv);
+	grad_g = new Vector(nrv);
 	grad_g_matrix = 0;
 
 	DgDdispl = 0;
@@ -242,7 +242,7 @@ XC::FiniteDifferenceGradGEvaluator::computeAllGradG(Vector gFunValues, Vector pa
 
 	// Allocate result matrix
 	if (grad_g_matrix == 0) {
-		grad_g_matrix = new XC::Matrix(nrv,lsf);
+		grad_g_matrix = new Matrix(nrv,lsf);
 	}
 	else {
 		grad_g_matrix->Zero();
@@ -381,7 +381,7 @@ XC::Matrix XC::FiniteDifferenceGradGEvaluator::getDgDdispl(void)
 
 			// Store the DgDdispl in a matrix
 			if (DgDdispl == 0) {
-				DgDdispl = new XC::Matrix(1, 3);
+				DgDdispl = new Matrix(1, 3);
 				(*DgDdispl)(0,0) = (double)nodeNumber;
 				(*DgDdispl)(0,1) = (double)direction;
 				(*DgDdispl)(0,2) = onedgdu;
@@ -390,7 +390,7 @@ XC::Matrix XC::FiniteDifferenceGradGEvaluator::getDgDdispl(void)
 				int oldSize = DgDdispl->noRows();
 				Matrix tempMatrix = *DgDdispl;
 				delete DgDdispl;
-				DgDdispl = new XC::Matrix(oldSize+1, 3);
+				DgDdispl = new Matrix(oldSize+1, 3);
 				for (i=0; i<oldSize; i++) {
 					(*DgDdispl)(i,0) = tempMatrix(i,0);
 					(*DgDdispl)(i,1) = tempMatrix(i,1);

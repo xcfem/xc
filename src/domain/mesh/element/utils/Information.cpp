@@ -304,22 +304,22 @@ XC::Information::getData(void)
 {
   if(theType == IntType) {
     if(theVector == 0) 
-      theVector = new XC::Vector(1);
+      theVector = new Vector(1);
     (*theVector)(0) = theInt;
   } else if(theType == DoubleType) {
     if(theVector == 0) 
-      theVector = new XC::Vector(1);
+      theVector = new Vector(1);
     (*theVector)(0) = theDouble;
   } else if(theType == IdType && theID != 0) {
     if(theVector == 0) 
-      theVector = new XC::Vector(theID->Size());
+      theVector = new Vector(theID->Size());
     for(int i=0; i<theID->Size(); i++)
       (*theVector)(i) =  (*theID)(i);
   } else if(theType == MatrixType && theMatrix != 0) {
     int noRows = theMatrix->noRows();
     int noCols = theMatrix->noCols();
     if(theVector == 0) 
-      theVector = new XC::Vector(noRows * noCols);
+      theVector = new Vector(noRows * noCols);
     for(int i=0; i<noRows; i++)
       for(int j=0; j<noCols; j++)
 	(*theVector)(i) = (*theMatrix)(i,j);

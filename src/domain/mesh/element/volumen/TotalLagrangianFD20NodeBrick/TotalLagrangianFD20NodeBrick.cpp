@@ -111,7 +111,7 @@ XC::TotalLagrangianFD20NodeBrick::TotalLagrangianFD20NodeBrick(void)
   }
 //! @brief Virtual constructor.
 XC::Element* XC::TotalLagrangianFD20NodeBrick::getCopy(void) const
-  { return new XC::TotalLagrangianFD20NodeBrick(*this); }
+  { return new TotalLagrangianFD20NodeBrick(*this); }
 
 
 //-------------------------------------------------------------------------------------------------
@@ -456,7 +456,7 @@ const XC::Matrix &XC::TotalLagrangianFD20NodeBrick::getInitialStiff(void) const
     K.Zero();
     K = this->getTangentStiff ();
 
-    Ki = new XC::Matrix(K);
+    Ki = new Matrix(K);
     if(isDead())
       K*=dead_srf;
     return K;
@@ -643,23 +643,23 @@ void XC::TotalLagrangianFD20NodeBrick::Print(std::ostream &s, int flag)
  XC::Response * XC::TotalLagrangianFD20NodeBrick::setResponse(const std::vector<std::string> &argv, Information &eleInfo)
 {
     if(argv[0] == "force" || argv[0] == "forces")
-      return new XC::ElementResponse(this, 1, Vector(NumElemDof));
+      return new ElementResponse(this, 1, Vector(NumElemDof));
 
     else if(argv[0] == "stiff" || argv[0] == "stiffness")
-      return new XC::ElementResponse(this, 2, Matrix(NumElemDof, NumElemDof));
+      return new ElementResponse(this, 2, Matrix(NumElemDof, NumElemDof));
 
     else if(argv[0] == "CauchyStress" || argv[0] == "stress")
-      return new XC::ElementResponse(this, 3, Vector(NumTotalGaussPts*6));
+      return new ElementResponse(this, 3, Vector(NumTotalGaussPts*6));
 
     else if(argv[0] == "PK2Stress" || argv[0] == "PK2stress")
-      return new XC::ElementResponse(this, 4, Vector(NumTotalGaussPts*6));
+      return new ElementResponse(this, 4, Vector(NumTotalGaussPts*6));
 
     // Added ZC 01/18/2005 to output strains
     else if(argv[0] == "EulerianStrain" || argv[0] == "strain")
-      return new XC::ElementResponse(this, 5, Vector(NumTotalGaussPts*6));
+      return new ElementResponse(this, 5, Vector(NumTotalGaussPts*6));
 
     else if(argv[0] == "LagrangianStrain" || argv[0] == "iniStrain")
-      return new XC::ElementResponse(this, 6, Vector(NumTotalGaussPts*6));
+      return new ElementResponse(this, 6, Vector(NumTotalGaussPts*6));
 
     else
       return 0;

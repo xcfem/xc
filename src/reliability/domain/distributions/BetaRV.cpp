@@ -253,7 +253,7 @@ double
 XC::BetaRV::betaFunction(double q, double r)
 {
 /*	OLD CODE: 
-	GammaRV *aGammaRV = new XC::GammaRV(1, 0.0, 1.0, 0.0);
+	GammaRV *aGammaRV = new GammaRV(1, 0.0, 1.0, 0.0);
 	double par1,par2,par3;
 	par1 = aGammaRV->gammaFunction(q);
 	par2 = aGammaRV->gammaFunction(q);
@@ -266,7 +266,7 @@ XC::BetaRV::betaFunction(double q, double r)
 	//    y = exp(gammaln(q)+gammaln(r)-gammaln(q+r));
 	//    ... where gammaln(.) = ln(gamma(.))
 	// So, try this instead:
-	GammaRV *aGammaRV = new XC::GammaRV(1, 0.0, 1.0, 0.0);
+	GammaRV *aGammaRV = new GammaRV(1, 0.0, 1.0, 0.0);
 	double gammaq,gammar,gammaqpr;
 	gammaq = aGammaRV->gammaFunction(q);
 	gammar = aGammaRV->gammaFunction(r);

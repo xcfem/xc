@@ -254,8 +254,8 @@ XC::EightNodeBrick::EightNodeBrick(void)
 //    //GPiterative_stress= new stresstensor[total_number_of_Gauss_points];
 //    //GPq_ast_iterative= new double[total_number_of_Gauss_points];
 //    //GPstrain= new straintensor[total_number_of_Gauss_points];
-//    //GPtangent_E= new XC::BJtensor[total_number_of_Gauss_points];
-//    //matpoint= new XC::MatPoint3D[total_number_of_Gauss_points];
+//    //GPtangent_E= new BJtensor[total_number_of_Gauss_points];
+//    //matpoint= new MatPoint3D[total_number_of_Gauss_points];
 //
 //    matpoint= std::vector<MatPoint3D>(total_number_of_Gauss_points);
 //
@@ -397,7 +397,7 @@ XC::EightNodeBrick::EightNodeBrick(void)
 //      //            node_existance[i-8]= 1;
 //      //          }
 //      //      }
-//      //    Node * N= new XC::Node[nodes_in_brick];
+//      //    Node * N= new Node[nodes_in_brick];
 //      //  // Xiaoyan comment for only 8 nodes  07/11/00
 //      return 0;
 //  }
@@ -406,7 +406,7 @@ XC::EightNodeBrick::EightNodeBrick(void)
 
 //! @brief Virtual constructor.
 XC::Element* XC::EightNodeBrick::getCopy(void) const
-  { return new XC::EightNodeBrick(*this); }
+  { return new EightNodeBrick(*this); }
 
 
 XC::EightNodeBrick::~EightNodeBrick(void)
@@ -1986,7 +1986,7 @@ XC::BJtensor XC::EightNodeBrick::linearized_nodal_forces(void) const
       std::cerr << "XC::EightNodeBrick::linearized_nodal_forces (tag: " << this->getTag() << "), not converged\n";
 
     Constitutive= (matpoint[where].matmodel)->getTangentTensor();
-          //    matpoint[where].setEPS( mmodel->getEPS() ); //Set the new XC::EPState back
+          //    matpoint[where].setEPS( mmodel->getEPS() ); //Set the new EPState back
     //}
     //else if( tmp_ndm ) { //Elastic case
     //    (matpoint[where].p_matmodel)->setTrialStrainIncr( incremental_strain );
@@ -3118,11 +3118,11 @@ void XC::EightNodeBrick::Print(std::ostream &s, int flag)
 {
     //========================================================
     if(argv[0] == "force" || argv[0] == "forces")
-    return new XC::ElementResponse(this, 1, P);
+    return new ElementResponse(this, 1, P);
 
     //========================================================
     else if(argv[0] == "stiff" || argv[0] == "stiffness")
-        return new XC::ElementResponse(this, 2, K);
+        return new ElementResponse(this, 2, K);
 
     //========================================================
     else if(argv[0] == "plasticGPC" || argv[0] == "plastifiedGPC")
@@ -3142,40 +3142,40 @@ void XC::EightNodeBrick::Print(std::ostream &s, int flag)
        //   }
        //}
 
-       return new XC::ElementResponse(this, 3, InfoP);
+       return new ElementResponse(this, 3, InfoP);
     }
     //========================================================
     else if(argv[0] == "plastic" || argv[0] == "plastified")
     {
-       return new XC::ElementResponse(this, 31, InfoP1);
+       return new ElementResponse(this, 31, InfoP1);
     }
     //========================================================
     else if(argv[0] == "stress" || argv[0] == "stresses")
     {
-       return new XC::ElementResponse(this, 4, InfoS);
+       return new ElementResponse(this, 4, InfoS);
     }
     //========================================================
     else if(argv[0] == "pq" || argv[0] == "PQ")
     {
-       return new XC::ElementResponse(this, 41, InfoSpq);
+       return new ElementResponse(this, 41, InfoSpq);
     }
     //Added 06-27-02 for p-q
     //========================================================
     else if(argv[0] == "stresspq" || argv[0] == "stressespq")
     {
-       return new XC::ElementResponse(this, 41, InfoSpq);
+       return new ElementResponse(this, 41, InfoSpq);
     }
     //Added 07-22-02 for all p-q, e_v_pl, xi
     //========================================================
     else if(argv[0] == "pqall" )
     {
-       return new XC::ElementResponse(this, 42, InfoSpq_all);
+       return new ElementResponse(this, 42, InfoSpq_all);
     }
 
     //========================================================
     else if(argv[0] == "gausspoint" || argv[0] == "GaussPoint")
     {
-       return new XC::ElementResponse(this, 5, Gsc8);
+       return new ElementResponse(this, 5, Gsc8);
     }
 
     //========================================================

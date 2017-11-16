@@ -80,7 +80,7 @@ void XC::NodeRecorder::setup_dofs(const ID &dofs)
     const int numDOF = dofs.Size();
     if(numDOF != 0)
       {
-        theDofs = new XC::ID(numDOF);
+        theDofs = new ID(numDOF);
         int count = 0;
         int i;
         for(i=0; i<numDOF; i++)

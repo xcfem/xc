@@ -178,7 +178,7 @@ const XC::VectorCells &XC::RgSccCirc::getCells(void) const
 
 //! @brief Virtual constructor.
 XC::RegionSecc *XC::RgSccCirc::getCopy(void) const
-  { return new XC::RgSccCirc(*this); }
+  { return new RgSccCirc(*this); }
  
 void XC::RgSccCirc::Print(std::ostream &s, int flag) const
   {

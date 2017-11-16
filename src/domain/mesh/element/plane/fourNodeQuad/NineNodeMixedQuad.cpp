@@ -98,7 +98,7 @@ XC::NineNodeMixedQuad::NineNodeMixedQuad(int tag,int node1,int node2,int node3,i
 
 //! @brief Virtual constructor.
 XC::Element* XC::NineNodeMixedQuad::getCopy(void) const
-  { return new XC::NineNodeMixedQuad(*this); }
+  { return new NineNodeMixedQuad(*this); }
 
 //! @brief destructor
 XC::NineNodeMixedQuad::~NineNodeMixedQuad(void)

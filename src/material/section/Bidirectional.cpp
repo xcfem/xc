@@ -321,7 +321,7 @@ int XC::Bidirectional::revertToStart(void)
 
 XC::SectionForceDeformation* XC::Bidirectional::getCopy(void) const
   {
-    Bidirectional *theCopy = new XC::Bidirectional (this->getTag(), E, sigY, Hiso, Hkin);
+    Bidirectional *theCopy = new Bidirectional (this->getTag(), E, sigY, Hiso, Hkin);
 
     for(int i = 0; i < 2; i++)
       {

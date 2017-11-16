@@ -276,7 +276,7 @@ int XC::TwentyNodeBrick_u_p_U::addLoad(ElementalLoad *theLoad, double loadFactor
     if(brkLoad)
       {
         if(eleQ==0)
-         eleQ = new XC::Vector(Num_ElemDof);
+         eleQ = new Vector(Num_ElemDof);
         *eleQ = (this->getExForceS() + this->getExForceF() )*loadFactor;
       }
     else
@@ -747,7 +747,7 @@ const XC::Matrix &XC::TwentyNodeBrick_u_p_U::getStiff(int Ki_flag) const
     if( Ki_flag == 1)
       return K;
 
-    Ki = new XC::Matrix(K);
+    Ki = new Matrix(K);
 
     if(Ki == 0) {
       std::cerr << "Error XC::TwentyNodeBrick_u_p_U::getStiff() -";

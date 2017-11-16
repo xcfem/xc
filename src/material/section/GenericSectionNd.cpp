@@ -227,7 +227,7 @@ int XC::GenericSectionNd::getOrder(void) const
 
 //! @brief Virtual constructor.
 XC::SectionForceDeformation *XC::GenericSectionNd::getCopy(void) const
-  { return new XC::GenericSectionNd(*this); }
+  { return new GenericSectionNd(*this); }
 
 //! @brief Send object members through the channel being passed as parameter.
 int XC::GenericSectionNd::sendData(CommParameters &cp)

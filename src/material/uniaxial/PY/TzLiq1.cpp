@@ -423,7 +423,7 @@ XC::TzLiq1::updateParameter(int snum,Information &eleInformation)
         // Make a new instance of this class and then assign it "this" to make a copy.
         //
         TzLiq1 *clone;                        // pointer to a XC::TzLiq1 class
-        clone = new XC::TzLiq1();        // pointer gets a new instance of XC::TzLiq1
+        clone = new TzLiq1();        // pointer gets a new instance of XC::TzLiq1
         *clone = *this;                        // the clone (dereferenced pointer) = dereferenced this.
         
         return clone;

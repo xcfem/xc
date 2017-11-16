@@ -209,7 +209,7 @@ XC::SectionForceDeformation::setResponse(const std::vector<std::string> &argv, I
     if ((strcmp(argv[0],"deformations") ==0) || 
         (strcmp(argv[0],"deformation") ==0)) {
 
-        XC::Vector *theVector = new XC::Vector(this->getOrder());
+        XC::Vector *theVector = new Vector(this->getOrder());
         if (theVector == 0) {
             std::cerr << "WARNING XC::SectionForceDeformation::setResponse() - out of memory\n";
             return -1;
@@ -223,7 +223,7 @@ XC::SectionForceDeformation::setResponse(const std::vector<std::string> &argv, I
     else if ((strcmp(argv[0],"forces") ==0) ||
              (strcmp(argv[0],"force") ==0)) {
 
-        XC::Vector *theVector = new XC::Vector(this->getOrder());
+        XC::Vector *theVector = new Vector(this->getOrder());
         if (theVector == 0) {
             std::cerr << "WARNING XC::SectionForceDeformation::setResponse() - out of memory\n";
             return -1;
@@ -237,7 +237,7 @@ XC::SectionForceDeformation::setResponse(const std::vector<std::string> &argv, I
         else if (argv[0] == "stiff" ||
                 argv[0] == "stiffness") {
                 int order = this->getOrder();
-                XC::Matrix *newMatrix = new XC::Matrix(order,order);
+                XC::Matrix *newMatrix = new Matrix(order,order);
                 if (newMatrix == 0) {
                         std::cerr << "WARNING XC::SectionForceDeformation::setResponse() - out of memory\n";
                         return -1;

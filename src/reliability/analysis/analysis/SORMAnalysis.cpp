@@ -104,7 +104,7 @@ int XC::SORMAnalysis::analyze(void)
 	double betaBreitung;
 	LimitStateFunction *theLimitStateFunction;
 	NormalRV *aStdNormRV = 0;
-	aStdNormRV = new XC::NormalRV(1,0.0,1.0,0.0);
+	aStdNormRV = new NormalRV(1,0.0,1.0,0.0);
 
 
 	// Check if computer ran out of memory

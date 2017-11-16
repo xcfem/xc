@@ -106,7 +106,7 @@ XC::FedeasHyster1Material::FedeasHyster1Material(int tag)
   {}
 
 XC::UniaxialMaterial* XC::FedeasHyster1Material::getCopy(void) const
-  { return new XC::FedeasHyster1Material(*this); }
+  { return new FedeasHyster1Material(*this); }
   
 
 double XC::FedeasHyster1Material::getInitialTangent(void) const

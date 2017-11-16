@@ -214,7 +214,7 @@ void XC::ElTawil2D::customizeInterpolate(double &xi, double &yi, double &xj, dou
 
  XC::YieldSurface_BC *XC::ElTawil2D::getCopy(void)
 {
-    ElTawil2D *theCopy = new XC::ElTawil2D(this->getTag(), xBal, yBal, yPosCap_orig, yNegCap_orig, *hModel,
+    ElTawil2D *theCopy = new ElTawil2D(this->getTag(), xBal, yBal, yPosCap_orig, yNegCap_orig, *hModel,
                                        cz, ty);
     //later  copy all the state variables
     return theCopy;

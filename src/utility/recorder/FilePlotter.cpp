@@ -84,13 +84,13 @@ XC::FilePlotter::FilePlotter(const std::string &_fileName1,
   {
 
     // create the window in which we plot on the screen
-//     theMap = new XC::PlainMap();
+//     theMap = new PlainMap();
 // #ifdef _WGL
 //     theRenderer = new OpenGLRenderer(windowTitle.c_str(), xLoc, yLoc, width, height, *theMap);
 // #elif _GLX
 //     theRenderer = new OpenGLRenderer(windowTitle.c_str(), xLoc, yLoc, width, height, *theMap);
 // #else
-//     theRenderer = new XC::X11Renderer(windowTitle.c_str(), xLoc, yLoc, width, height, *theMap);
+//     theRenderer = new X11Renderer(windowTitle.c_str(), xLoc, yLoc, width, height, *theMap);
 // #endif
 //     // set up for standard xy-plot - rendering in the xy plane at z =0
 //     theRenderer->setVRP(0.0, 0.0, 0.0); 
@@ -119,13 +119,13 @@ XC::FilePlotter::FilePlotter(const std::string &_fileName1,
   {
 
     // create the window in which we plot on the screen
-//     theMap = new XC::PlainMap();
+//     theMap = new PlainMap();
 // #ifdef _WGL
 //     theRenderer = new OpenGLRenderer(windowTitle.c_str(), xLoc, yLoc, width, height, *theMap);
 // #elif _GLX
 //     theRenderer = new OpenGLRenderer(windowTitle.c_str(), xLoc, yLoc, width, height, *theMap);
 // #else
-//     theRenderer = new XC::X11Renderer(windowTitle.c_str(), xLoc, yLoc, width, height, *theMap);
+//     theRenderer = new X11Renderer(windowTitle.c_str(), xLoc, yLoc, width, height, *theMap);
 // #endif
 //     // set up for standard xy-plot - rendering in the xy plane at z =0
 //     theRenderer->setVRP(0.0, 0.0, 0.0); 
@@ -255,8 +255,8 @@ int XC::FilePlotter::plotFile(void)
 //       if (data1a != 0) delete data1a;
 //       if (data1b != 0) delete data1b;
       
-//       data1a = new XC::Vector(numLineEntries);
-//       data1b = new XC::Vector(numLineEntries);
+//       data1a = new Vector(numLineEntries);
+//       data1b = new Vector(numLineEntries);
 //     }
 
 //     // check colX and colY for valid entries
@@ -463,10 +463,10 @@ int XC::FilePlotter::plotFiles(void)
 //       if (data2a != 0) delete data2a;
 //       if (data2b != 0) delete data2b;
       
-//       data1a = new XC::Vector(numLineEntriesX);
-//       data1b = new XC::Vector(numLineEntriesX);
-//       data2a = new XC::Vector(numLineEntriesY);
-//       data2b = new XC::Vector(numLineEntriesY);
+//       data1a = new Vector(numLineEntriesX);
+//       data1b = new Vector(numLineEntriesX);
+//       data2a = new Vector(numLineEntriesY);
+//       data2b = new Vector(numLineEntriesY);
 //     }
 
 //     // check colX and colY for valid entries
@@ -639,7 +639,7 @@ int XC::FilePlotter::setCol(const XC::ID &theCols)
   }
 
   if (cols == 0)
-    cols = new XC::ID(theCols);
+    cols = new ID(theCols);
 
   for (int j=0; j<cols->Size(); j++)
     (*cols)(j) -= 1;

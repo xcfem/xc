@@ -140,7 +140,7 @@ void XC::MultiLinearKp::Print(std::ostream &s, int flag)
 
     // Don't want to pass the actual vectors or else the size will
     // keep on increasing by 1
- 	PlasticHardeningMaterial *theMat = new XC::MultiLinearKp(getTag(), spd, kp);
+ 	PlasticHardeningMaterial *theMat = new MultiLinearKp(getTag(), spd, kp);
     return theMat;
 }
 

@@ -210,10 +210,10 @@ void XC::YieldSurface_BC::setTransformation(int xDof, int xFact)
         std::cerr << "Transforation already set\n";
         return;
     }
-    T = new XC::ID(1);
+    T = new ID(1);
     (*T)(0) = xDof;
 
-    S = new XC::ID(1);
+    S = new ID(1);
     (*S)(0) = xFact;
 
 }
@@ -227,11 +227,11 @@ void XC::YieldSurface_BC::setTransformation(int xDof, int yDof, int xFact, int y
         return;
     }
 
-    T = new XC::ID(2);
+    T = new ID(2);
     (*T)(0) = xDof;
     (*T)(1) = yDof;
 
-    S = new XC::ID(2);
+    S = new ID(2);
     (*S)(0) = xFact;
     (*S)(1) = yFact;
 
@@ -248,12 +248,12 @@ void XC::YieldSurface_BC::setTransformation(int xDof, int yDof, int zDof,
         return;
     }
 
-    T = new XC::ID(3);
+    T = new ID(3);
     (*T)(0) = xDof;
     (*T)(1) = yDof;
     (*T)(2) = zDof;
 
-    S = new XC::ID(3);
+    S = new ID(3);
     (*S)(0) = xFact;
     (*S)(1) = yFact;
     (*S)(2) = zFact;

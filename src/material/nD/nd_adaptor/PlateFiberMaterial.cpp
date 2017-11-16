@@ -82,7 +82,7 @@ XC::PlateFiberMaterial::PlateFiberMaterial(int tag, XC::NDMaterial &the3DMateria
 
 //make a clone of this material
 XC::NDMaterial *XC::PlateFiberMaterial::getCopy(void) const 
-  { return new XC::PlateFiberMaterial(*this); }
+  { return new PlateFiberMaterial(*this); }
 
 
 //make a clone of this material

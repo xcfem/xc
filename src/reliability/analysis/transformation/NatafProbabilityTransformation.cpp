@@ -84,11 +84,11 @@ XC::NatafProbabilityTransformation::NatafProbabilityTransformation(ReliabilityDo
         // Create/initialize vectors and matrices
         x = new Vector(nrv);
         u = new Vector(nrv);
-        jacobian_x_u = new XC::Matrix(nrv,nrv);
-        jacobian_u_x = new XC::Matrix(nrv,nrv);
-        lowerCholesky = new XC::Matrix(nrv,nrv);
-        inverseLowerCholesky = new XC::Matrix(nrv,nrv);
-        correlationMatrix = new XC::Matrix(nrv,nrv);
+        jacobian_x_u = new Matrix(nrv,nrv);
+        jacobian_u_x = new Matrix(nrv,nrv);
+        lowerCholesky = new Matrix(nrv,nrv);
+        inverseLowerCholesky = new Matrix(nrv,nrv);
+        correlationMatrix = new Matrix(nrv,nrv);
 
 
         // Establish correlation matrix according to the Nataf assumption
@@ -97,7 +97,7 @@ XC::NatafProbabilityTransformation::NatafProbabilityTransformation(ReliabilityDo
 
         // Create object to do matrix operations on the correlation matrix
         theMatrixOperations = 0;
-        theMatrixOperations = new XC::MatrixOperations(*correlationMatrix);
+        theMatrixOperations = new MatrixOperations(*correlationMatrix);
         if (theMatrixOperations == 0) {
                 std::cerr << "XC::NatafProbabilityTransformation::NatafProbabilityTransformation() - could " << std::endl
                         << " not create the object to perform matrix operations." << std::endl;

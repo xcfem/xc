@@ -171,7 +171,7 @@ double drift = phi - 1;
 
 XC::YieldSurface_BC *XC::Hajjar2D::getCopy(void)
   {
-    Hajjar2D *theCopy = new XC::Hajjar2D(this->getTag(), *hModel,
+    Hajjar2D *theCopy = new Hajjar2D(this->getTag(), *hModel,
 									 depth, width, thick, fc, fy);
     //later  copy all the state variables
     return theCopy;

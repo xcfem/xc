@@ -122,7 +122,7 @@ XC::CorotTrussSection &XC::CorotTrussSection::operator=(const CorotTrussSection 
 
 //! @brief Virtual constructor.
 XC::Element* XC::CorotTrussSection::getCopy(void) const
-  { return new XC::CorotTrussSection(*this); }
+  { return new CorotTrussSection(*this); }
 
 //  destructor
 //     delete must be invoked on any objects created by the object

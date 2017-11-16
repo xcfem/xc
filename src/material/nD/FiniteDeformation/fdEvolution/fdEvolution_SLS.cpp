@@ -71,7 +71,7 @@ XC::fdEvolution_SLS::fdEvolution_SLS(double H_linear_in,
 //------------------------------------------------------------------------
  XC::fdEvolution_S * XC::fdEvolution_SLS::newObj() 
 {   
-    fdEvolution_S *newEL = new XC::fdEvolution_SLS( *this );    
+    fdEvolution_S *newEL = new fdEvolution_SLS( *this );    
     return newEL;
 }
 

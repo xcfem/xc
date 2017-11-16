@@ -86,7 +86,7 @@ XC::OpenSeesGradGEvaluator::OpenSeesGradGEvaluator(
 	doGradientCheck = PdoGradientCheck;
 
 	int nrv = passedReliabilityDomain->getNumberOfRandomVariables();
-	grad_g = new XC::Vector(nrv);
+	grad_g = new Vector(nrv);
 	grad_g_matrix = 0;
 
 	DgDdispl = 0;
@@ -270,7 +270,7 @@ int XC::OpenSeesGradGEvaluator::computeGradG(double g, Vector passed_x)
 
 			// Store the DgDdispl in a matrix
 			if (DgDdispl == 0) {
-				DgDdispl = new XC::Matrix(1, 3);
+				DgDdispl = new Matrix(1, 3);
 				(*DgDdispl)(0,0) = (double)nodeNumber;
 				(*DgDdispl)(0,1) = (double)direction;
 				(*DgDdispl)(0,2) = onedgdu;
@@ -279,7 +279,7 @@ int XC::OpenSeesGradGEvaluator::computeGradG(double g, Vector passed_x)
 				int oldSize = DgDdispl->noRows();
 				Matrix tempMatrix = *DgDdispl;
 				delete DgDdispl;
-				DgDdispl = new XC::Matrix(oldSize+1, 3);
+				DgDdispl = new Matrix(oldSize+1, 3);
 				for (i=0; i<oldSize; i++) {
 					(*DgDdispl)(i,0) = tempMatrix(i,0);
 					(*DgDdispl)(i,1) = tempMatrix(i,1);
@@ -346,7 +346,7 @@ XC::OpenSeesGradGEvaluator::computeAllGradG(Vector gFunValues, Vector passed_x)
 	// Allocate result matrix
 	Vector gradG(passed_x.Size());
 	if (grad_g_matrix == 0) {
-		grad_g_matrix = new XC::Matrix(passed_x.Size(), gFunValues.Size());
+		grad_g_matrix = new Matrix(passed_x.Size(), gFunValues.Size());
 	}
 	else {
 		grad_g_matrix->Zero();

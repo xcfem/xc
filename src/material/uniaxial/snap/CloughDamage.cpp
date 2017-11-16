@@ -331,7 +331,7 @@ int XC::CloughDamage::sendSelf(CommParameters &cp)
         inp[6]  =         capDispPos;
         inp[7]  =         capDispNeg;
   
-  CloughDamage *theCopy = new XC::CloughDamage(this->getTag(), inp ,StrDamage, StfDamage, AccDamage, CapDamage);
+  CloughDamage *theCopy = new CloughDamage(this->getTag(), inp ,StrDamage, StfDamage, AccDamage, CapDamage);
   
   for (int i=0; i<24; i++) {
     theCopy->hsTrial[i] = hsTrial[i];

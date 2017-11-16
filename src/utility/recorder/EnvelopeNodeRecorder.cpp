@@ -114,7 +114,7 @@ XC::EnvelopeNodeRecorder::EnvelopeNodeRecorder(const XC::ID &dofs,
       int numNode = nodes.Size();
       if(numNode != 0)
         {
-          theNodalTags = new XC::ID(nodes);
+          theNodalTags = new ID(nodes);
           if(theNodalTags == 0)
             { std::cerr << "XC::EnvelopeNodeRecorder::EnvelopeNodeRecorder - out of memory\n"; }
         }

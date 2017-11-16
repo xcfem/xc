@@ -221,7 +221,7 @@ XC::LognormalRV::getCDFvalue(double rvValue)
 	double result;
 	if ( 0.0 < rvValue ) {
 		RandomVariable *aStandardNormalRV;
-		aStandardNormalRV= new XC::NormalRV( 1, 0.0, 1.0, 0.0);
+		aStandardNormalRV= new NormalRV( 1, 0.0, 1.0, 0.0);
 		result = aStandardNormalRV->getCDFvalue((log(rvValue)-lambda)/zeta);
 		delete aStandardNormalRV;	
 	}
