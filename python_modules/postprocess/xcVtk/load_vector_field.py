@@ -86,11 +86,11 @@ class LoadVectorField(vf.VectorField):
       nTag= nl.getNodeTag
       node= preprocessor.getNodeLoader.getNode(nTag)
       vLoad= nl.getForce
-      v= xc.Vector(vLoad[0], vLoad[1], vLoad[2])
-      if eTag in retval:
-        retval[eTag]+= v
+      v= xc.Vector([vLoad[0], vLoad[1], vLoad[2]])
+      if nTag in retval:
+        retval[nTag]+= v
       else:
-        retval[eTag]= v
+        retval[nTag]= v
       nl= lIter.next()
     return retval
 
