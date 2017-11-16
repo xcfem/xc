@@ -9,6 +9,7 @@ __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
 import geom
+import xc
 import vtk
 from miscUtils import LogMessages as lmsg
 from postprocess.xcVtk import vector_field as vf
@@ -31,12 +32,12 @@ class LoadVectorField(vf.VectorField):
     self.components= components
     self.multiplyByElementArea= multiplyByElementArea
 
-  def dumpElementalLoads(self,preprocessor,lp):
-    ''' Iterate over loaded elements dumping its loads into the graphic.'''
+  def sumElementalLoads(self,preprocessor,lp):
+    ''' Iterate over loaded elements and cumulate their loads.'''
     lIter= lp.loads.getElementalLoadIter
     elementLoad= lIter.next()
-    i= self.components[0]; j= self.components[1]; k= self.components[2]
-    count= 0 
+    comp_i= self.components[0]; comp_j= self.components[1]; comp_k= self.components[2]
+    retval= dict()
     while(elementLoad):
       tags= elementLoad.elementTags
       for i in range(0,len(tags)):
@@ -46,14 +47,52 @@ class LoadVectorField(vf.VectorField):
           vLoad= elem.getCoordTransf.getVectorGlobalCoordFromLocal(elementLoad.getLocalForce())
           if(self.multiplyByElementArea):
             vLoad*=elem.getArea(True)
-          vx= vLoad[i]; vy= vLoad[j]; vz= vLoad[k]
-          p= elem.getPosCentroid(True)
-          self.data.insertNextPair(p.x,p.y,p.z,vx,vy,vz,self.fUnitConv,self.showPushing)
+          v= xc.Vector([vLoad[comp_i],vLoad[comp_j],vLoad[comp_k]])
+          if eTag in retval:
+            retval[eTag]+= v
+          else:
+            retval[eTag]= v
         else:
           lmsg.warning('displaying of loads over 1D elements not yet implemented')
       elementLoad= lIter.next()
-      count+= 1
-    return count
+    return retval
+
+
+  def dumpElementalLoads(self,preprocessor,lp):
+    ''' Iterate over cumulated loads dumping its loads into the graphic.'''
+    loadValues= self.sumElementalLoads(preprocessor,lp)
+    for eTag in loadValues.keys():
+      elem= preprocessor.getElementLoader.getElement(eTag)
+      if(elem.getDimension==2):
+        vLoad= loadValues[eTag]
+        p= elem.getPosCentroid(True)
+        self.data.insertNextPair(p.x,p.y,p.z,vLoad[0],vLoad[1],vLoad[2],self.fUnitConv,self.showPushing)
+      else:
+        lmsg.warning('displaying of loads over 1D elements not yet implemented')
+    return len(loadValues)
+
+  def sumNodalLoads(self,preprocessor,lp):
+    ''' Iterate over loaded nodes to cumulate their loads.
+
+    :param defFScale: factor to apply to current displacement of nodes 
+              so that the display position of each node equals to
+              the initial position plus its displacement multiplied
+              by this factor.    
+    '''
+    lIter= lp.loads.getNodalLoadIter
+    nl= lIter.next()
+    retval= dict()
+    while(nl):
+      nTag= nl.getNodeTag
+      node= preprocessor.getNodeLoader.getNode(nTag)
+      vLoad= nl.getForce
+      v= xc.Vector([vLoad[0], vLoad[1], vLoad[2]])
+      if nTag in retval:
+        retval[nTag]+= v
+      else:
+        retval[nTag]= v
+      nl= lIter.next()
+    return retval
 
   def dumpNodalLoads(self,preprocessor,lp,defFScale):
     ''' Iterate over loaded nodes dumping its loads into the graphic.
@@ -63,19 +102,13 @@ class LoadVectorField(vf.VectorField):
               the initial position plus its displacement multiplied
               by this factor.    
     '''
-    lIter= lp.loads.getNodalLoadIter
-    nl= lIter.next()
-    count= 0 
-    while(nl):
-      nTag= nl.getNodeTag
+    loadValues= self.sumNodalLoads(preprocessor,lp)
+    for nTag in loadValues.keys():
       node= preprocessor.getNodeLoader.getNode(nTag)
       p= node.getCurrentPos3d(defFScale)
-      vLoad= nl.getForce
-      vx= vLoad[0]; vy= vLoad[1]; vz= vLoad[2]
-      self.data.insertNextPair(p.x,p.y,p.z,vx,vy,vz,self.fUnitConv,self.showPushing)
-      nl= lIter.next()
-      count+= 1
-    return count
+      vLoad= loadValues[nTag]
+      self.data.insertNextPair(p.x,p.y,p.z,vLoad[0],vLoad[1],vLoad[2],self.fUnitConv,self.showPushing)
+    return len(loadValues)
 
   def dumpLoads(self, preprocessor,defFScale):
     preprocessor.resetLoadCase()
