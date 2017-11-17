@@ -325,11 +325,12 @@ const XC::straintensor &XC::ElasticIsotropicMaterial::getStrainTensor(void) cons
 
 const XC::straintensor &XC::ElasticIsotropicMaterial::getPlasticStrainTensor(void) const
   {
-    std::cerr << "ElasticIsotropicMaterial::getPlasticStrainTensor -- subclass responsibility\n";
+    std::cerr << getClassName() << "::" << __FUNCTION__
+	      << "; subclass responsibility\n";
     exit(-1);
         
     // Just to make it compile
-    static XC::straintensor t;
+    static straintensor t;
     return t;
   }
 
@@ -419,7 +420,8 @@ int XC::ElasticIsotropicMaterial::sendSelf(CommParameters &cp)
 
     res+= cp.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
-      std::cerr << getClassName() << "sendSelf() - failed to send data\n";
+      std::cerr << getClassName() << "::" << __FUNCTION__
+	        << "; failed to send data\n";
     return res;
   }
 
@@ -444,6 +446,7 @@ int XC::ElasticIsotropicMaterial::recvSelf(const CommParameters &cp)
     return res;
   }
 
+//! @brief Print stuff.
 void XC::ElasticIsotropicMaterial::Print(std::ostream &s, int flag)
   {
     s << "Elastic isotropic material model" << std::endl;

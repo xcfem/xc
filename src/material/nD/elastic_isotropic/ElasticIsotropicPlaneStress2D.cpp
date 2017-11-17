@@ -57,6 +57,16 @@
 
 XC::Vector XC::ElasticIsotropicPlaneStress2D::sigma(3);
 
+//! @brief Constructor.
+//! 
+//! To construct an ElasticIsotropicPlaneStress2D whose unique integer tag
+//! among NDMaterials in the domain is given by \p tag.  The material
+//! model have Young's modulus \p E and Poisson's ratio \p v.
+//!
+//! @param tag: material identifier.
+//! @param E: material Young's modulus.
+//! @param nu: material Poisson's ratio.
+//! @param rho: material density.
 XC::ElasticIsotropicPlaneStress2D::ElasticIsotropicPlaneStress2D(int tag, double E, double nu, double rho)
   : ElasticIsotropic2D(tag, ND_TAG_ElasticIsotropicPlaneStress2d, E, nu, rho)
   {}
@@ -69,27 +79,40 @@ XC::ElasticIsotropicPlaneStress2D::ElasticIsotropicPlaneStress2D():
   ElasticIsotropic2D(0, ND_TAG_ElasticIsotropicPlaneStress2d,0.0, 0.0, 0.0)
   {}
 
-int XC::ElasticIsotropicPlaneStress2D::setTrialStrainIncr(const XC::Vector &strain)
-{
-  epsilon += strain;
-  return 0;
-}
+int XC::ElasticIsotropicPlaneStress2D::setTrialStrainIncr(const Vector &strain)
+  {
+    epsilon += strain;
+    return 0;
+  }
 
-int XC::ElasticIsotropicPlaneStress2D::setTrialStrainIncr(const XC::Vector &strain, const XC::Vector &rate)
-{
-  epsilon += strain;
-  return 0;
-}
+int XC::ElasticIsotropicPlaneStress2D::setTrialStrainIncr(const Vector &strain, const Vector &rate)
+  {
+    epsilon += strain;
+    return 0;
+  }
 
+//! Returns the material tangent stiffness matrix, \f$\D\f$.
+//!
+//! \f[
+//! \begin{displaymath}
+//! D := \frac{E}{1-\nu^2} \left[
+//!    \begin{array}{ccc}
+//!          1 & \nu &     0
+//!        \nu &   1 &     0
+//!          0 &   0 & 1-\nu
+//!    \end{array} 
+//!  \right]
+//! \end{displaymath}
+//! \f]
 const XC::Matrix &XC::ElasticIsotropicPlaneStress2D::getTangent(void) const
   {
-    double d00 = E/(1.0-v*v);
-    double d01 = v*d00;
-    double d22 = 0.5*(d00-d01);
+    const double d00= E/(1.0-v*v);
+    const double d01= v*d00;
+    const double d22= 0.5*(d00-d01);
 
-    D(0,0) = D(1,1) = d00;
-    D(1,0) = D(0,1) = d01;
-    D(2,2) = d22;
+    D(0,0)= D(1,1) = d00;
+    D(1,0)= D(0,1) = d01;
+    D(2,2)= d22;
 
     return D;
   }
@@ -107,19 +130,33 @@ const XC::Matrix &XC::ElasticIsotropicPlaneStress2D::getInitialTangent(void) con
     return D;
   }
 
+//! Returns the material stress vector, \f$\mysigma\f$, for the current
+//! trial strain.
+//!
+//! \f[
+//! \begin{displaymath}
+//! \sigma := \left[
+//!    \begin{array}{c}
+//!        \sigma_{xx}
+//!        \sigma_{yy}
+//!        \tau_{xy}   
+//!   \end{array} 
+//!  \right]
+//! \end{displaymath}
+//! \f]
 const XC::Vector &XC::ElasticIsotropicPlaneStress2D::getStress(void) const
   {
-    double d00 = E/(1.0-v*v);
-    double d01 = v*d00;
-    double d22 = 0.5*(d00-d01);
+    const double d00= E/(1.0-v*v);
+    const double d01= v*d00;
+    const double d22= 0.5*(d00-d01);
 
-    double eps0 = epsilon(0);
-    double eps1 = epsilon(1);
+    const double eps0= epsilon(0);
+    const double eps1= epsilon(1);
 
     //sigma = D*epsilon;
-    sigma(0) = d00*eps0 + d01*eps1;
-    sigma(1) = d01*eps0 + d00*eps1;
-    sigma(2) = d22*epsilon(2);
+    sigma(0)= d00*eps0 + d01*eps1;
+    sigma(1)= d01*eps0 + d00*eps1;
+    sigma(2)= d22*epsilon(2);
     return sigma;
   }
 
@@ -129,18 +166,24 @@ void XC::ElasticIsotropicPlaneStress2D::zeroInitialGeneralizedStrain(void)
     //Initial strains not yet implemented so nothing to do.
   }
 
+//! @brief Accept the current material state
+//! as being on the solution path. To return \f$0\f$ if
+//! successful, a negative number if not.
 int XC::ElasticIsotropicPlaneStress2D::commitState(void)
   { return 0; }
 
+//! @brief Revert material to its last commited state.
 int XC::ElasticIsotropicPlaneStress2D::revertToLastCommit(void)
   { return 0; }
 
+//! @brief Revert material to its initial state.
 int XC::ElasticIsotropicPlaneStress2D::revertToStart(void)
   {
     epsilon.Zero();
     return 0;
   }
 
+//! @brief Virtual constructor.
 XC::NDMaterial *XC::ElasticIsotropicPlaneStress2D::getCopy(void) const
   { return new ElasticIsotropicPlaneStress2D(*this); }
 

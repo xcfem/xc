@@ -69,6 +69,10 @@ namespace XC {
 //! @ingroup EINDMat
 //
 //! @brief Elastic isotropic material for plane stress problems.
+//!
+//! ElasticIsotropicPlaneStress2D provides the implementation of an
+//! elastic isotropic material which exhibits plane stress behavior in two
+//! dimensions.
 class ElasticIsotropicPlaneStress2D: public ElasticIsotropic2D
   {
   private:
