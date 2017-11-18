@@ -52,7 +52,7 @@
 
 
 namespace XC {
-//! @ingroup MatUnx
+//! @ingroup PYMat
 //
 //! @brief Material que representa una curva t-z.
 class TzSimple1: public PYBase

@@ -52,7 +52,7 @@
 #include <material/uniaxial/PY/PQyzBase.h>
 
 namespace XC {
-//! @ingroup MatUnx
+//! @ingroup PYMat
 //
 //! @brief Material que representa una curva p-y.
 class PySimple1: public PQyzBase

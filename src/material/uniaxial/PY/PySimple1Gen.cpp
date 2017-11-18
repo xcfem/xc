@@ -11,21 +11,21 @@
 //  of the original program (see copyright_opensees.txt)
 //  XC is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
-//  the Free Software Foundation, either version 3 of the License, or 
+//  the Free Software Foundation, either version 3 of the License, or
 //  (at your option) any later version.
 //
-//  This software is distributed in the hope that it will be useful, but 
+//  This software is distributed in the hope that it will be useful, but
 //  WITHOUT ANY WARRANTY; without even the implied warranty of
 //  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-//  GNU General Public License for more details. 
+//  GNU General Public License for more details.
 //
 //
-// You should have received a copy of the GNU General Public License 
+// You should have received a copy of the GNU General Public License
 // along with this program.
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
 //////////////////////////////////////////////////////////////////////
-//  This file contains the constructor, destructor, and member        //  
+//  This file contains the constructor, destructor, and member        //
 //  functions for the PySimple1Gen class.  The purpose of the        //
 //  class is to create PySimple1 materials associated with            //
 //  pre-defined    zeroLength elements, beam column elements, and        //
@@ -158,10 +158,9 @@ void XC::PySimple1Gen::libera(void)
     Simple1GenBase::libera();
   }
 
-////////////////////////////////////////////////////////////////////////
-// Constructor initializes global variables to zero
+//! @brief Constructor initializes global variables to zero
 XC::PySimple1Gen::PySimple1Gen(void)
-  { 
+  {
     NumPyEle = 0;
     NumMpLoadSp = 0;
     NumMp = 0;
@@ -217,7 +216,8 @@ void XC::PySimple1Gen::GetPySimple1(const std::string &file1, const std::string 
 
     if(!PyOut)
       {
-        std::cerr << "Error opening output stream for :" << file5 << ". Must Exit.";
+        std::cerr << "Error opening output stream for :"
+                  << file5 << ". Must Exit.";
         exit(-1);
       }
 
@@ -278,7 +278,7 @@ void XC::PySimple1Gen::GetPySimple1(const std::string &file1, const std::string 
                   }
               }
           }
-        
+
         if(PyIndex == -1)
           continue;
 
@@ -312,7 +312,7 @@ void XC::PySimple1Gen::GetPySimple1(const std::string &file1, const std::string 
 
         // Calculate py material properties and write to file
         if(PyIndex != -1)
-          {            
+          {
             // Calculate y50 at coordinate z.  This requires calculating pult at z, however, pult
             // will be integrated over the tributary length in sublayers following the calculation of y50.
             for(int j=0;j<NumMat;j++)
@@ -328,7 +328,9 @@ void XC::PySimple1Gen::GetPySimple1(const std::string &file1, const std::string 
                       stype = pyType[j];
                     else
                       {
-                        std::cerr << "MatType must be py1, py2, py3 or py4.  " << MatType[j] << " is not supported." << std::endl;
+                        std::cerr << "MatType must be py1, py2, py3 or py4.  "
+                                  << MatType[j] << " is not supported."
+                                  << std::endl;
                         exit(0);
                       }
                     // linearly interpolate parameters at z
@@ -345,20 +347,20 @@ void XC::PySimple1Gen::GetPySimple1(const std::string &file1, const std::string 
 
                     break;
                   }
-              }    
+              }
             stress = GetVStress(z);
             pult = GetPult(mattype);
 
             if(mattype=="py3")
               pult = GetPult(py2);  // use sand py curve to develop y50
-            y50 = GetY50(mattype);            
+            y50 = GetY50(mattype);
 
             // subdivide tributary length into 10 sublayers, and integrate pult over tributary length
             dzsub = (ztrib2 - ztrib1)/10.0; // sublayer incremental depth change
             sublength = fabs(dzsub);  // thickness of sublayer
             pult = 0.0;
             for(int k=0;k<10;k++)
-              {            
+              {
                 zsub = ztrib1 + dzsub/2.0 + k*dzsub; // z-coordinate at sublayer center
                 depthsub = maxz - zsub;
 
@@ -374,9 +376,11 @@ void XC::PySimple1Gen::GetPySimple1(const std::string &file1, const std::string 
                           stype = 2;
                         else if(MatType[j]=="py4")
                           stype = pyType[j];
-                        else                    
+                        else
                           {
-                            std::cerr << "MatType must be py1, py2, py3 or py4.  " << mattype << " is not supported." << std::endl;
+                            std::cerr << "MatType must be py1, py2, py3 or py4.  "
+                                      << mattype << " is not supported."
+                                      << std::endl;
                             exit(0);
                           }
                         // linearly interpolate parameters at z
@@ -439,9 +443,10 @@ void XC::PySimple1Gen::GetPattern(const std::string &file6)
     std::ofstream PatOut(file6.c_str(), std::ios::out);
     if(!PatOut)
       {
-        std::cerr << "Error opening " << file6 << " in XC::PySimple1Gen.cpp.  Must Exit." << std::endl;
+        std::cerr << "Error opening " << file6
+                  << " in PySimple1Gen.cpp.  Must Exit." << std::endl;
         exit(-1);
-      }    
+      }
 
     patternvalue = 0.0;
     z = 0.0;
@@ -456,11 +461,11 @@ void XC::PySimple1Gen::GetPattern(const std::string &file6)
     PatOut << "#######################################################################################" << std::endl << std::endl;
     PatOut << "#######################################################################################" << std::endl;
     PatOut << "## Begin Pattern File" << std::endl << std::endl;
-    
+
     // If loads are applied (i.e. PatternType = "load"), then the appropriate loads must be assigned to
     // the pile nodes.  The free ends of the py elements below the nodal loads (i.e. in the soil
-    // that is not spreading) must already be fixed when the mesh is generated in GiD.            
-    
+    // that is not spreading) must already be fixed when the mesh is generated in GiD.
+
     for(i=0;i<NumNodes;i++)
     {
         z = Nodey[i];
@@ -478,32 +483,32 @@ void XC::PySimple1Gen::GetPattern(const std::string &file6)
             if(z_b[j] < minz)
                 minz = z_b[j];
         }
-            
+
         // subdivide tributary length into 10 sublayers, and integrate distributed load over tributary length
-        
+
         load = 0.0;
         dzsub = (ztrib2 - ztrib1)/10.0; // sublayer incremental depth change
         sublength = fabs(dzsub);  // thickness of sublayer
         for(k=0;k<10;k++)
-        {                
+        {
             zsub = ztrib1 + dzsub/2.0 + k*dzsub; // z-coordinate at sublayer center
             depthsub = maxz - zsub;
 
             for(j=0;j<NumLoad;j++)
-            {                
+            {
                 if(zsub<=zLoad_t[j] && zsub>=zLoad_b[j])
                 {
                     load = linterp(zLoad_t[j], zLoad_b[j], load_val_t[j], load_val_b[j], zsub)*sublength + load;
                     patterntype="load";
                 }
-                
+
             }
         }
         node = -1;
         if(patterntype=="load")
         {
             for(j=0;j<NumPileEle;j++)
-            {                    
+            {
                 if(NodeNum[i] == PileNode1[j] || NodeNum[i] == PileNode2[j])
                 {
                     node = NodeNum[i];
@@ -512,7 +517,7 @@ void XC::PySimple1Gen::GetPattern(const std::string &file6)
             if(node!=-1)
             PatOut << "load " << node << " " << load << " 0.0 0.0" << std::endl;
         }
-    
+
         for(j=0;j<NumSp;j++)
         {
             if(z<=zSp_t[j] && z>=zSp_b[j])
@@ -520,8 +525,8 @@ void XC::PySimple1Gen::GetPattern(const std::string &file6)
                 sp = linterp(zSp_t[j], zSp_b[j], sp_val_t[j], sp_val_b[j], z);
                 patterntype="sp";
             }
-        }        
-    
+        }
+
         node = -1;
         if(patterntype=="sp")
         {
@@ -541,22 +546,22 @@ void XC::PySimple1Gen::GetPattern(const std::string &file6)
                     }
                 }
             }
-                
+
         // write to file
             if(node != -1)
                 PatOut << "sp " << node << " 1 " << sp << std::endl;
         }
-        
-    }                    
 
-    PatOut << std::endl << std::endl;        
+    }
+
+    PatOut << std::endl << std::endl;
 
     PatOut << "## End Pattern File" << std::endl;
     PatOut << "#######################################################################################" << std::endl;
 
     PatOut.close();
     return;
-    
+
 }
 
 //////////////////////////////////////////////////////////////////////////////////
@@ -572,7 +577,9 @@ void XC::PySimple1Gen::GetPyElements(const std::string &file)
 
     if(!in3)
     {
-        std::cerr << "File " << file << "does not exist.  Must exit." << std::endl;
+        std::cerr << "File " << file
+                  << "does not exist.  Must exit."
+                  << std::endl;
         exit(-1);
     }
 
@@ -587,7 +594,7 @@ void XC::PySimple1Gen::GetPyElements(const std::string &file)
       {
         if(in3.peek()=='e')
           {
-	    //in3.get(trash,8);
+            //in3.get(trash,8);
             in3 >> trash;
             if(trash=="element")
               {
@@ -624,7 +631,8 @@ void XC::PySimple1Gen::GetSoilProperties(const std::string &file)
 
     if(!in1)
     {
-        std::cerr << "File " << file << "does not exist.  Must exit." << std::endl;
+        std::cerr << "File " << file
+                  << "does not exist.  Must exit." << std::endl;
         exit(0);
     }
 
@@ -720,38 +728,38 @@ void XC::PySimple1Gen::GetSoilProperties(const std::string &file)
         in1 >> z_t[i] >> z_b[i] >> gamma_t[i] >> gamma_b[i];
 
         // read in arguments that are specific to certain material types
-    
+
         if(MatType[i]=="py1")
         {
             in1 >> b_t[i] >> b_b[i] >> cu_t[i] >> cu_b[i] >> e50_t[i] >> e50_b[i] >> Cd_t[i] >> Cd_b[i];
             if(in1.peek() != '\n')
                 in1 >> c_t[i] >> c_b[i];
         }
-        
+
         else if(MatType[i]=="py2")
         {
             in1 >> b_t[i] >> b_b[i] >> phi_t[i] >> phi_b[i] >> Cd_t[i] >> Cd_b[i];
             if(in1.peek() != '\n')
                 in1 >> c_t[i] >> c_b[i];
         }
-        
+
         else if(MatType[i]=="py3")
         {
             in1 >> b_t[i] >> b_b[i] >> phi_t[i] >> phi_b[i] >> Sr_t[i] >> Sr_b[i] >> ru_t[i] >> ru_b[i] >> Cd_t[i] >> Cd_b[i];
             if(in1.peek() != '\n')
                 in1 >> c_t[i] >> c_b[i];
         }
-                
+
         else if(MatType[i]=="py4")
         {
             in1 >> pyType[i] >> pult_t[i] >> pult_b[i] >> y50_t[i] >> y50_b[i] >> Cd_t[i] >> Cd_b[i];
             if(in1.peek() != '\n')
                 in1 >> c_t[i] >> c_b[i];
         }
-        
+
         else
         {
-            std::cerr << "Invalid MatType in XC::PySimple1Gen.cpp.";
+            std::cerr << "Invalid MatType in PySimple1Gen.cpp.";
             exit(0);
         }
         while(in1.get(ch))
@@ -793,7 +801,7 @@ void XC::PySimple1Gen::GetSoilProperties(const std::string &file)
     return;
 }
 
-    
+
 ///////////////////////////////////////////////////////////////////////////////////////
 // Member function to calculate pult
 double XC::PySimple1Gen::GetPult(const std::string &type)
@@ -801,7 +809,7 @@ double XC::PySimple1Gen::GetPult(const std::string &type)
     double alpha, beta, Ko, Ka, pu1, pu2, A= 0.0;
     double deg = 3.141592654/180;
     double pult_0, pult_1, pult_ru;
-    
+
     // Calculate pult for Matlock soft clay
     // note: strength = cu for clay
     if(type=="py1")
@@ -817,7 +825,7 @@ double XC::PySimple1Gen::GetPult(const std::string &type)
       {
         if(depth == 0)
           return 0.00001;
-        
+
         alpha = phi/2;
         beta = 45 + phi/2;
         // convert phi, alpha and beta from degrees to radians
@@ -842,14 +850,14 @@ double XC::PySimple1Gen::GetPult(const std::string &type)
 /////////////////////////////////////////////////////////////////////////////
 
 /////////////////////////////////////////////////////////////////////////////
-//        Original equations used in LPile generate a kink in pult vs. depth 
+//        Original equations used in LPile generate a kink in pult vs. depth
 //
 //        A = (3.0 - 0.8*depth/b);
 //        if (A < 0.9)
 //            A = 0.9;
 //
 //////////////////////////////////////////////////////////////////////////////
-    
+
         if (pu1 > pu2)
             return pu2*A;
         else
@@ -862,7 +870,7 @@ double XC::PySimple1Gen::GetPult(const std::string &type)
     {
         if(depth == 0)
         return 0.00001;
-        
+
         alpha = phi/2;
         beta = 45 + phi/2;
         // convert phi, alpha and beta from degrees to radians
@@ -888,20 +896,20 @@ double XC::PySimple1Gen::GetPult(const std::string &type)
 /////////////////////////////////////////////////////////////////////////////
 
 /////////////////////////////////////////////////////////////////////////////
-//        Original equations used in LPile generate a kink in pult vs. depth 
+//        Original equations used in LPile generate a kink in pult vs. depth
 //
 //        A = (3.0 - 0.8*depth/b);
 //        if (A < 0.9)
 //            A = 0.9;
 //
 //////////////////////////////////////////////////////////////////////////////
-        
+
         if(pu1 > pu2)
             pult_0 = pu2*A;
         else
             pult_0 = pu1*A;
         pult_1 = 9.0*sr*stress*b;
-        
+
         pult_ru = linterp(0.0, 1.0, pult_0, pult_1, ru);
 
         return pult_ru;
@@ -910,17 +918,16 @@ double XC::PySimple1Gen::GetPult(const std::string &type)
     // Calculate pult for pile cap
     // note: strength = total load on pile cap divided by pile cap height
     else if(type=="py4")
-    {
-        return PULT;
-    }
+      { return PULT; }
 
     else
-    {
-        std::cerr << "Invalid py type in XC::PySimple1GenPushover::GetPult.  Setting pult = 0";
+      {
+        std::cerr << getClassName() << "::" << __FUNCTION__
+                  << "; Invalid py type.  Setting pult = 0";
         return 0.0;
-    }
+      }
 
-}
+  }
 
 ///////////////////////////////////////////////////////////////////////////////////////
 // Member function to return y50
@@ -948,7 +955,7 @@ double XC::PySimple1Gen::GetY50(const std::string &type)
         k = (0.3141*pow(phi,3) - 32.114*pow(phi,2) + 1109.2*phi - 12808)*271.447;
         k = k*csigma;
         return 0.549*pult/k/depth;
-    
+
     }
     // Calculate y50 for liquefied sand as the same as for API sand
     else if(type=="py3")
@@ -965,7 +972,7 @@ double XC::PySimple1Gen::GetY50(const std::string &type)
         k = k*csigma;
 
         return 0.549*pult/k/depth;
-    
+
     }
 
     // Get y50 for pile cap
@@ -974,16 +981,17 @@ double XC::PySimple1Gen::GetY50(const std::string &type)
 
     // Return error message if py type is not found
     else
-    {
-        std::cerr << "Invalid py type in XC::PySimple1GenPushover::GetY50.  Setting y50 = 0";
+      {
+        std::cerr << getClassName() << "::" << __FUNCTION__
+                  << "; invalid py type.  Setting y50 = 0";
         return 0.0;
-    }
-}
+      }
+  }
 
 /////////////////////////////////////////////////////////////////////////////////////////
 // Member function to calculate vertical effective stress at a depth given the unit weight and depth arrays already read in.
 double XC::PySimple1Gen::GetVStress(double z)
-{
+  {
     double stress, maxz, minz, z_top, z_bot, gamma_top, gamma_bot, gamma_z;
     int i;
     stress = 0;
@@ -994,7 +1002,7 @@ double XC::PySimple1Gen::GetVStress(double z)
     gamma_top = 0;
     gamma_bot = 0;
 
-    
+
     // Find maximum and minimum of depth range specified in z_t and z_b
     for (i=0;i<NumMat;i++)
     {
@@ -1007,39 +1015,41 @@ double XC::PySimple1Gen::GetVStress(double z)
     // Check that z lies within range of z_t and z_b
     if(z > maxz || z < minz)
     {
-        std::cerr << "Depth lies out of range of specified depth vectors in function 'vstress' in PySimple1GenPushover. Setting stress = 0." << std::endl;
+        std::cerr << getClassName() << "::" << __FUNCTION__
+                << "; depth lies out of range of specified depth vectors in function 'vstress'. Setting stress = 0."
+                << std::endl;
         return 0.0;
     }
 
 
     // Extract coordinates of top and bottom of layer
     for(i=0;i<NumMat;i++)
-    {
+      {
         if(z >= z_b[i] && z <= z_t[i])
-        {
+          {
             z_top = z_t[i];
             z_bot = z_b[i];
             gamma_top = gamma_t[i];
             gamma_bot = gamma_b[i];
-        }
-    }
-    
+          }
+      }
+
 
 
     // Linearly interpolate unit weight at z
     gamma_z = linterp(z_top, z_bot, gamma_top, gamma_bot, z);
 
     // calculate stress
-    for (i=0;i<NumMat;i++)
-    {
+    for(i=0;i<NumMat;i++)
+      {
         if(z <= z_b[i])
             stress = stress + 0.5*(gamma_t[i] + gamma_b[i])*(z_t[i] - z_b[i]);
         if(z > z_b[i] && z < z_t[i])
             stress = stress + 0.5*(gamma_t[i] + gamma_z)*(z_t[i] - z);
-    }
-    
+      }
+
     return stress;
-}
+  }
 
 /////////////////////////////////////////////////////////////////////////////////
 // Function that returns the coordinates of the ends of the tributary length
@@ -1048,7 +1058,7 @@ double XC::PySimple1Gen::GetVStress(double z)
 // the pile elements above and below nodenum1 both attach to p-y elements at both nodes.
 void XC::PySimple1Gen::GetTributaryCoordsPy(int nodenum1)
   {
-    
+
     double coordnodenum1= 0.0;
     int pyeletag= 0;
 
@@ -1118,10 +1128,10 @@ void XC::PySimple1Gen::GetTributaryCoordsPy(int nodenum1)
 // Function that returns the coordinates of the ends of the tributary length
 // based on pile element locations.  Tributary length is based on 1/2 of the pile
 // length above nodenum1 and 1/2 of the pile length below nodenum1 even if
-// the pile elements above and below nodenum1 do not both attach to p-y elements 
+// the pile elements above and below nodenum1 do not both attach to p-y elements
 // at both nodes.
 void XC::PySimple1Gen::GetTributaryCoordsPile(int nodenum1)
-  { 
+  {
     double coordnodenum1= 0.0;
 
     // initialize tribcoord to the coordinate of nodenum1

@@ -11,16 +11,16 @@
 //  of the original program (see copyright_opensees.txt)
 //  XC is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
-//  the Free Software Foundation, either version 3 of the License, or 
+//  the Free Software Foundation, either version 3 of the License, or
 //  (at your option) any later version.
 //
-//  This software is distributed in the hope that it will be useful, but 
+//  This software is distributed in the hope that it will be useful, but
 //  WITHOUT ANY WARRANTY; without even the implied warranty of
 //  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-//  GNU General Public License for more details. 
+//  GNU General Public License for more details.
 //
 //
-// You should have received a copy of the GNU General Public License 
+// You should have received a copy of the GNU General Public License
 // along with this program.
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
@@ -59,7 +59,7 @@
 #define ITMAX 30
 #define MAX_STEP_COUNT 30
 #define NUM_OF_SUB_INCR 30
-#define KK 1000.0  
+#define KK 1000.0
 
 #include "material/nD/Template3Dep/Template3Dep.h"
 #include "material/nD/TipoMaterialND.h"
@@ -83,12 +83,207 @@
 #include <material/nD/ElasticCrossAnisotropic.h>
 #include <material/nD/elastic_isotropic/PressureDependentElastic3D.h>
 
-//================================================================================
-// Constructor
-//================================================================================
+//! @brief Alloc tensorial variables evolution laws.
+void XC::Template3Dep::allocELS(EvolutionLaw_S   *ELS1_,
+                            EvolutionLaw_S   *ELS2_,
+                            EvolutionLaw_S   *ELS3_,
+			    EvolutionLaw_S   *ELS4_)
+  {
+    freeELS();
+    // Evolution laws
+    if( ELS1_ )
+       ELS1 = ELS1_->newObj();
+    else
+       ELS1= nullptr;
 
+    if( ELS2_ )
+       ELS2 = ELS2_->newObj();
+    else
+       ELS2= nullptr;
+
+    if( ELS3_ )
+       ELS3 = ELS3_->newObj();
+    else
+       ELS3= nullptr;
+
+    if( ELS4_ )
+       ELS4 = ELS4_->newObj();
+    else
+       ELS4= nullptr;
+
+  }
+
+//! @brief Frees ELS memory.
+void XC::Template3Dep::freeELS(void)
+  {
+    if(ELS1)
+      {
+        delete ELS1;
+	ELS1= nullptr;
+      }
+
+    if(ELS2)
+      {
+        delete ELS2;
+	ELS2= nullptr;
+      }
+
+    if(ELS3)
+      {
+        delete ELS3;
+	ELS3= nullptr;
+      }
+
+    if(ELS4)
+      {
+        delete ELS4;
+	ELS4= nullptr;
+      }
+
+  }
+
+//! @brief Alloc tensorial variables evolution laws.
+void XC::Template3Dep::allocELT(EvolutionLaw_T   *ELT1_,
+                            EvolutionLaw_T   *ELT2_,
+                            EvolutionLaw_T   *ELT3_,
+                            EvolutionLaw_T   *ELT4_)
+  {
+    freeELT();
+    if( ELT1_ )
+       ELT1 = ELT1_->newObj();
+    else
+       ELT1= nullptr;
+
+    if( ELT2_ )
+       ELT2 = ELT2_->newObj();
+    else
+       ELT2= nullptr;
+
+    if( ELT3_ )
+       ELT3 = ELT3_->newObj();
+    else
+       ELT3= nullptr;
+
+    if( ELT4_ )
+       ELT4 = ELT4_->newObj();
+    else
+       ELT4= nullptr;
+  }
+
+//! @brief Frees memory.
+void XC::Template3Dep::freeELT(void)
+  {
+    if(ELT1)
+      {
+        delete ELT1;
+	ELT1= nullptr;
+      }
+
+    if(ELT2)
+      {
+        delete ELT2;
+	ELT2= nullptr;
+      }
+
+    if(ELT3)
+      {
+        delete ELT3;
+	ELT3= nullptr;
+      }
+
+    if(ELT4)
+      {
+        delete ELT4;
+	ELT4= nullptr;
+      }
+  }
+
+//! @brief Alloc objects members.
+void XC::Template3Dep::alloc( NDMaterial &theElMat,
+                            YieldSurface *YS_,
+                            PotentialSurface *PS_,
+                            EPState          *EPS_,
+                            EvolutionLaw_S   *ELS1_,
+                            EvolutionLaw_S   *ELS2_,
+                            EvolutionLaw_S   *ELS3_,
+                            EvolutionLaw_S   *ELS4_,
+                            EvolutionLaw_T   *ELT1_,
+                            EvolutionLaw_T   *ELT2_,
+                            EvolutionLaw_T   *ELT3_,
+                            EvolutionLaw_T   *ELT4_)
+  {
+    free();
+    // Get a copy of the material
+    theElasticMat = theElMat.getCopy();
+    if(theElasticMat == nullptr)
+      {
+        std::cerr << getClassName() << "::" << __FUNCTION__
+                  << "; failed to get copy of material.\n";
+        exit(-1);
+      }
+
+    if( YS_ )
+       YS = YS_->newObj();
+    else
+      {
+        std::cerr << getClassName() << "::" << __FUNCTION__
+                  << "; failed to construct the template3Dep.\n";
+        exit(-1);
+      }
+
+    if( PS_ )
+       PS = PS_->newObj();
+    else
+      {
+        std::cerr << getClassName() << "::" << __FUNCTION__
+                  << "; failed to construct the template3Dep\n";
+        exit(-1);
+      }
+
+    if( EPS_ )
+       EPS = EPS_->newObj();
+    else
+      {
+        std::cerr << getClassName() << "::" << __FUNCTION__
+                  << "; failed to construct the template3Dep\n";
+        exit(-1);
+      }
+    allocELS(ELS1_,ELS2_,ELS3_,ELS4_);
+    allocELT(ELT1_,ELT2_,ELT3_,ELT4_);
+  }
+
+//! @brief Frees memory.
+void XC::Template3Dep::free(void)
+  {
+    if(theElasticMat)
+      {
+        delete theElasticMat;
+        theElasticMat= nullptr;
+      }
+    if(YS)
+      {
+        delete YS;
+	YS= nullptr;
+      }
+
+    if(PS)
+      {
+        delete PS;
+	PS= nullptr;
+      }
+
+    if(EPS)
+      {
+        delete EPS;
+	EPS= nullptr;
+      }
+    freeELS();
+    freeELT();
+  }
+
+//! @brief Constructor
 XC::Template3Dep::Template3Dep( int tag                       ,
-                            XC::NDMaterial             &theElMat,
+                            NDMaterial             &theElMat,
                             YieldSurface     *YS_   ,
                             PotentialSurface *PS_   ,
                             EPState          *EPS_  ,
@@ -100,79 +295,12 @@ XC::Template3Dep::Template3Dep( int tag                       ,
                             EvolutionLaw_T   *ELT2_ ,
                             EvolutionLaw_T   *ELT3_ ,
                             EvolutionLaw_T   *ELT4_ )
-  :XC::NDMaterial(tag, ND_TAG_Template3Dep)
-{
-    // Get a copy of the material
-    theElasticMat = theElMat.getCopy();  
-    if(theElasticMat == 0) {
-      std::cerr << "Template3Dep:: Template3Dep failed to get copy of material\n";
-      exit(-1);
-    }
-
-    if( YS_ )
-       YS = YS_->newObj();
-    else
-    {
-      std::cerr << "Template3Dep:: Template3Dep failed to construct the template3Dep\n";
-       exit(-1);
-    }
-
-    if( PS_ )
-       PS = PS_->newObj();
-    else
-    {
-      std::cerr << "Template3Dep:: Template3Dep failed to construct the template3Dep\n";
-       exit(-1);
-    }
-
-    if( EPS_ )
-       EPS = EPS_->newObj();
-    else
-    {
-      std::cerr << "Template3Dep:: Template3Dep failed to construct the template3Dep\n";
-       exit(-1);
-    }
-
-    // Evolution laws
-    if( ELS1_ )
-       ELS1 = ELS1_->newObj();
-    else
-       ELS1 = 0;
-
-    if( ELS2_ )
-       ELS2 = ELS2_->newObj();
-    else
-       ELS2 = 0;
-
-    if( ELS3_ )
-       ELS3 = ELS3_->newObj();
-    else
-       ELS3 = 0;
-
-    if( ELS4_ )
-       ELS4 = ELS4_->newObj();
-    else
-       ELS4 = 0;
-
-    if( ELT1_ )
-       ELT1 = ELT1_->newObj();
-    else
-       ELT1 = 0;
-
-    if( ELT2_ )
-       ELT2 = ELT2_->newObj();
-    else
-       ELT2 = 0;
-
-    if( ELT3_ )
-       ELT3 = ELT3_->newObj();
-    else
-       ELT3 = 0;
-
-    if( ELT4_ )
-       ELT4 = ELT4_->newObj();
-    else
-       ELT4 = 0;
+  : XC::NDMaterial(tag, ND_TAG_Template3Dep),
+   theElasticMat(nullptr), YS(nullptr), PS(nullptr), EPS(nullptr),
+   ELS1(nullptr), ELS2(nullptr),ELS3(nullptr), ELS4(nullptr),
+   ELT1(nullptr), ELT2(nullptr), ELT3(nullptr), ELT4(nullptr)
+  {
+    alloc(theElMat,YS_,PS_,EPS_,ELS1_,ELS2_,ELS3_,ELS4_,ELT1_,ELT2_,ELT3_,ELT4_);
 
     //Initialze Eep using E-elastic
     BJtensor E  = ElasticStiffnessTensor();
@@ -180,520 +308,152 @@ XC::Template3Dep::Template3Dep( int tag                       ,
 
 }
 
-//================================================================================
-// Constructor 0
-//================================================================================
+//! @brief Constructor 0
 XC::Template3Dep::Template3Dep( int tag                     ,
-                            XC::NDMaterial             &theElMat,
+                            NDMaterial             &theElMat,
                             YieldSurface     *YS_ ,
                             PotentialSurface *PS_ ,
                             EPState          *EPS_)
-:XC::NDMaterial(tag, ND_TAG_Template3Dep)
-{
-    // Get a copy of the material
-    theElasticMat = theElMat.getCopy();  
-    if(theElasticMat == 0) {
-      std::cerr << "Template3Dep:: Template3Dep failed to get copy of material\n";
-      exit(-1);
-    }
-
-    if( YS_ )
-       YS = YS_->newObj();
-    else
-    {
-      std::cerr << "Template3Dep:: Template3Dep failed to construct the template3Dep\n";
-       exit(-1);
-    }
-
-    if( PS_ )
-       PS = PS_->newObj();
-    else
-    {
-      std::cerr << "Template3Dep:: Template3Dep failed to construct the template3Dep\n";
-       exit(-1);
-    }
-
-    if( EPS_ )
-       EPS = EPS_->newObj();
-    else
-    {
-      std::cerr << "Template3Dep:: Template3Dep failed to construct the template3Dep\n";
-       exit(-1);
-    }
-
-    // Evolution laws
-    ELS1 = 0;
-    ELS2 = 0;
-    ELS3 = 0;
-    ELS4 = 0;
-    ELT1 = 0;
-    ELT2 = 0;
-    ELT3 = 0;
-    ELT4 = 0;
-}
+  :XC::NDMaterial(tag, ND_TAG_Template3Dep),
+   theElasticMat(nullptr), YS(nullptr), PS(nullptr), EPS(nullptr),
+   ELS1(nullptr), ELS2(nullptr),ELS3(nullptr), ELS4(nullptr),
+   ELT1(nullptr), ELT2(nullptr), ELT3(nullptr), ELT4(nullptr)
+  {
+    alloc(theElMat,YS_,PS_,EPS_);
+  }
 
 
-//================================================================================
-// Constructor 1
-//================================================================================
-
+//! @brief Constructor 1
 XC::Template3Dep::Template3Dep(   int tag                     ,
-                              XC::NDMaterial       &theElMat,
+                              NDMaterial       &theElMat,
                               YieldSurface     *YS_ ,
                               PotentialSurface *PS_ ,
                               EPState          *EPS_,
                               EvolutionLaw_S   *ELS1_ )
-:XC::NDMaterial(tag, ND_TAG_Template3Dep)
-{
-    // Get a copy of the material
-    theElasticMat = theElMat.getCopy();  
-    if(theElasticMat == 0) {
-      std::cerr << "Template3Dep:: Template3Dep failed to get copy of material\n";
-      exit(-1);
-    }
+  : XC::NDMaterial(tag, ND_TAG_Template3Dep),
+   theElasticMat(nullptr), YS(nullptr), PS(nullptr), EPS(nullptr),
+   ELS1(nullptr), ELS2(nullptr),ELS3(nullptr), ELS4(nullptr),
+   ELT1(nullptr), ELT2(nullptr), ELT3(nullptr), ELT4(nullptr)
 
-    if( YS_ )
-       YS = YS_->newObj();
-    else
-    {
-      std::cerr << "Template3Dep:: Template3Dep failed to construct the template3Dep\n";
-       exit(-1);
-    }
-
-    if( PS_ )
-       PS = PS_->newObj();
-    else
-    {
-      std::cerr << "Template3Dep:: Template3Dep failed to construct the template3Dep\n";
-       exit(-1);
-    }
-
-    if( EPS_ )
-       EPS = EPS_->newObj();
-    else
-    {
-      std::cerr << "Template3Dep:: Template3Dep failed to construct the template3Dep\n";
-       exit(-1);
-    }
-
-    // Evolution laws
-    if( ELS1_ )
-       ELS1 = ELS1_->newObj();
-    else
-       ELS1 = 0;
-
-    ELS2 = 0;
-    ELS3 = 0;
-    ELS4 = 0;
-    ELT1 = 0;
-    ELT2 = 0;
-    ELT3 = 0;
-    ELT4 = 0;
-}
+  { alloc(theElMat,YS_,PS_,EPS_,ELS1); }
 
 
-//================================================================================
-// Constructor 2
-//================================================================================
-
+//! @brief Constructor 2
 XC::Template3Dep::Template3Dep(   int tag                     ,
-                              XC::NDMaterial       &theElMat,
+                              NDMaterial       &theElMat,
                               YieldSurface     *YS_ ,
                               PotentialSurface *PS_ ,
                               EPState          *EPS_,
                               EvolutionLaw_T   *ELT1_ )
-:XC::NDMaterial(tag, ND_TAG_Template3Dep)
-{
-    // Get a copy of the material
-    theElasticMat = theElMat.getCopy();  
-    if(theElasticMat == 0) {
-      std::cerr << "Template3Dep:: Template3Dep failed to get copy of material\n";
-      exit(-1);
-    }
+  :XC::NDMaterial(tag, ND_TAG_Template3Dep),
+   theElasticMat(nullptr), YS(nullptr), PS(nullptr), EPS(nullptr),
+   ELS1(nullptr), ELS2(nullptr),ELS3(nullptr), ELS4(nullptr),
+   ELT1(nullptr), ELT2(nullptr), ELT3(nullptr), ELT4(nullptr)   
+  {
+    alloc(theElMat,YS_,PS_,EPS_);
+    allocELT(ELT1_);
+  }
 
-    if( YS_ )
-       YS = YS_->newObj();
-    else
-    {
-      std::cerr << "Template3Dep:: Template3Dep failed to construct the template3Dep\n";
-       exit(-1);
-    }
-
-    if( PS_ )
-       PS = PS_->newObj();
-    else
-    {
-      std::cerr << "Template3Dep:: Template3Dep failed to construct the template3Dep\n";
-       exit(-1);
-    }
-
-    if( EPS_ )
-       EPS = EPS_->newObj();
-    else
-    {
-      std::cerr << "Template3Dep:: Template3Dep failed to construct the template3Dep\n";
-       exit(-1);
-    }
-
-    // Evolution laws
-    ELS1 = 0;
-    ELS2 = 0;
-    ELS3 = 0;
-    ELS4 = 0;
-
-    if( ELT1_ )
-       ELT1 = ELT1_->newObj();
-    else
-       ELT1 = 0;
-
-    ELT2 = 0;
-    ELT3 = 0;
-    ELT4 = 0;
-}
-
-//================================================================================
-// Constructor 3
-//================================================================================
-
+//! @brief Constructor 3
 XC::Template3Dep::Template3Dep(   int tag,
-                              XC::NDMaterial       &theElMat,
+                              NDMaterial       &theElMat,
                               YieldSurface     *YS_ ,
                               PotentialSurface *PS_ ,
                               EPState          *EPS_,
                               EvolutionLaw_S   *ELS1_,
                               EvolutionLaw_T   *ELT1_ )
-:XC::NDMaterial(tag, ND_TAG_Template3Dep)
-{
-    // Get a copy of the material
-    theElasticMat = theElMat.getCopy();  
-    if(theElasticMat == 0) {
-      std::cerr << "Template3Dep:: Template3Dep failed to get copy of material\n";
-      exit(-1);
-    }
+  :XC::NDMaterial(tag, ND_TAG_Template3Dep),
+   theElasticMat(nullptr), YS(nullptr), PS(nullptr), EPS(nullptr),
+   ELS1(nullptr), ELS2(nullptr),ELS3(nullptr), ELS4(nullptr),
+   ELT1(nullptr), ELT2(nullptr), ELT3(nullptr), ELT4(nullptr)   
+  {
+    alloc(theElMat,YS_,PS_,EPS_);
+    allocELS(ELS1_);
+    allocELT(ELT1_);
+  }
 
-    if( YS_ )
-       YS = YS_->newObj();
-    else
-    {
-      std::cerr << "Template3Dep:: Template3Dep failed to construct the template3Dep\n";
-       exit(-1);
-    }
-
-    if( PS_ )
-       PS = PS_->newObj();
-    else
-    {
-      std::cerr << "Template3Dep:: Template3Dep failed to construct the template3Dep\n";
-       exit(-1);
-    }
-
-    if( EPS_ )
-       EPS = EPS_->newObj();
-    else
-    {
-      std::cerr << "Template3Dep:: Template3Dep failed to construct the template3Dep\n";
-       exit(-1);
-    }
-
-    // Evolution laws
-    if( ELS1_ )
-       ELS1 = ELS1_->newObj();
-    else
-       ELS1 = 0;
-    ELS2 = 0;
-    ELS3 = 0;
-    ELS4 = 0;
-
-    if( ELT1_ )
-       ELT1 = ELT1_->newObj();
-    else
-       ELT1 = 0;
-    ELT2 = 0;
-    ELT3 = 0;
-    ELT4 = 0;
-}
-
-//================================================================================
-// Constructor 4
-// Two scalar evolution laws and one tensorial evolution law are provided!
-//================================================================================
-
+//! @brief Constructor 4
 XC::Template3Dep::Template3Dep(   int tag                     ,
-                              XC::NDMaterial       &theElMat, 
+                              NDMaterial       &theElMat,
                               YieldSurface     *YS_ ,
                               PotentialSurface *PS_ ,
                               EPState          *EPS_,
                               EvolutionLaw_S   *ELS1_,
                               EvolutionLaw_S   *ELS2_,
                               EvolutionLaw_T   *ELT1_ )
-:XC::NDMaterial(tag, ND_TAG_Template3Dep)
-{
-    // Get a copy of the material
-    theElasticMat = theElMat.getCopy();  
-    if(theElasticMat == 0) {
-      std::cerr << "Template3Dep:: Template3Dep failed to get copy of material\n";
-      exit(-1);
-    }
+  :XC::NDMaterial(tag, ND_TAG_Template3Dep),
+   theElasticMat(nullptr), YS(nullptr), PS(nullptr), EPS(nullptr),
+   ELS1(nullptr), ELS2(nullptr),ELS3(nullptr), ELS4(nullptr),
+   ELT1(nullptr), ELT2(nullptr), ELT3(nullptr), ELT4(nullptr)
+  {
+    alloc(theElMat,YS_,PS_,EPS_);
+    allocELS(ELS1_,ELS2_);
+    allocELT(ELT1_);
+  }
 
-    if( YS_ )
-       YS = YS_->newObj();
-    else
-    {
-      std::cerr << "Template3Dep:: Template3Dep failed to construct the template3Dep\n";
-       exit(-1);
-    }
-
-    if( PS_ )
-       PS = PS_->newObj();
-    else
-    {
-      std::cerr << "Template3Dep:: Template3Dep failed to construct the template3Dep\n";
-       exit(-1);
-    }
-
-    if( EPS_ )
-       EPS = EPS_->newObj();
-    else
-    {
-      std::cerr << "Template3Dep:: Template3Dep failed to construct the template3Dep\n";
-       exit(-1);
-    }
-
-    if( ELS1_ )
-       ELS1 = ELS1_->newObj();
-    else
-       ELS1 = 0;
-
-    if( ELS2_ )
-       ELS2 = ELS2_->newObj();
-    else
-       ELS2 = 0;
-
-    ELS3 = 0;
-    ELS4 = 0;
-
-    if( ELT1_ )
-       ELT1 = ELT1_->newObj();
-    else
-       ELT1 = 0;
-
-    ELT2 = 0;
-    ELT3 = 0;
-    ELT4 = 0;
-}
-
-//================================================================================
-// Constructor 5
-// Two scalar evolution laws and two tensorial evolution law are provided!
-//================================================================================
-
+//! @brief Constructor 5
 XC::Template3Dep::Template3Dep(   int tag                     ,
-                              XC::NDMaterial       &theElMat,
+                              NDMaterial       &theElMat,
                               YieldSurface     *YS_ ,
                               PotentialSurface *PS_ ,
                               EPState          *EPS_,
                               EvolutionLaw_S   *ELS1_,
                               EvolutionLaw_S   *ELS2_,
                               EvolutionLaw_T   *ELT1_,
-            EvolutionLaw_T   *ELT2_)
-:XC::NDMaterial(tag, ND_TAG_Template3Dep)
-{
-    // Get a copy of the material
-    theElasticMat = theElMat.getCopy();  
-    if(theElasticMat == 0) {
-      std::cerr << "Template3Dep:: Template3Dep failed to get copy of material\n";
-      exit(-1);
-    }
-
-    if( YS_ )
-       YS = YS_->newObj();
-    else
-    {
-      std::cerr << "Template3Dep:: Template3Dep failed to construct the template3Dep\n";
-       exit(-1);
-    }
-
-    if( PS_ )
-       PS = PS_->newObj();
-    else
-    {
-      std::cerr << "Template3Dep:: Template3Dep failed to construct the template3Dep\n";
-       exit(-1);
-    }
-
-    if( EPS_ )
-       EPS = EPS_->newObj();
-    else
-    {
-      std::cerr << "Template3Dep:: Template3Dep failed to construct the template3Dep\n";
-       exit(-1);
-    }
-
-    if( ELS1_ )
-       ELS1 = ELS1_->newObj();
-    else
-       ELS1 = 0;
-
-    if( ELS2_ )
-       ELS2 = ELS2_->newObj();
-    else
-       ELS2 = 0;
-    ELS3 = 0;
-    ELS4 = 0;
-
-    if( ELT1_ )
-       ELT1 = ELT1_->newObj();
-    else
-       ELT1 = 0;
-
-    if( ELT2_ )
-       ELT2 = ELT2_->newObj();
-    else
-       ELT2 = 0;
-    ELT3 = 0;
-    ELT4 = 0;
-}
+                              EvolutionLaw_T   *ELT2_)
+  :XC::NDMaterial(tag, ND_TAG_Template3Dep),
+   theElasticMat(nullptr), YS(nullptr), PS(nullptr), EPS(nullptr),
+   ELS1(nullptr), ELS2(nullptr),ELS3(nullptr), ELS4(nullptr),
+   ELT1(nullptr), ELT2(nullptr), ELT3(nullptr), ELT4(nullptr)
+  {
+    alloc(theElMat,YS_,PS_,EPS_);
+    allocELS(ELS1_,ELS2_);
+    allocELT(ELT1_,ELT2_);
+  }
 
 XC::Template3Dep::Template3Dep(int tag)
- : XC::NDMaterial(tag, ND_TAG_Template3Dep),ELS1(0), ELS2(0),ELS3(0), ELS4(0),
-   ELT1(0), ELT2(0), ELT3(0), ELT4(0)
+ : XC::NDMaterial(tag, ND_TAG_Template3Dep),
+   theElasticMat(nullptr), YS(nullptr), PS(nullptr), EPS(nullptr),
+   ELS1(nullptr), ELS2(nullptr),ELS3(nullptr), ELS4(nullptr),
+   ELT1(nullptr), ELT2(nullptr), ELT3(nullptr), ELT4(nullptr)
   {
     //YS = new DPYieldSurface();
     //PS = new DPPotentialSurface();
     //EPS = new EPState();
-    theElasticMat = 0;
-    YS  = 0;
-    PS  = 0;
-    EPS = 0;
   }
-
-//================================================================================
-// Constructor 6
-// NO parameter is provided
-//================================================================================
-
-XC::Template3Dep::Template3Dep()
-:XC::NDMaterial(0, ND_TAG_Template3Dep),ELS1(0), ELS2(0),ELS3(0), ELS4(0),
- ELT1(0), ELT2(0), ELT3(0), ELT4(0)
-{
-    //YS = new DPYieldSurface();
-    //PS = new DPPotentialSurface();
-    //EPS = new EPState();
-    theElasticMat = 0;
-    YS  = 0;
-    PS  = 0;
-    EPS = 0;
-}
-
 
 //================================================================================
 // Destructor
 //================================================================================
 
-XC::Template3Dep::~Template3Dep()
-{
-    if(theElasticMat)
-       delete theElasticMat;
+XC::Template3Dep::~Template3Dep(void)
+  { free(); }
 
-    if(YS)
-       delete YS;
+//! @brief Copy constructor
+XC::Template3Dep::Template3Dep(const Template3Dep &rval)
+  : XC::NDMaterial(rval),
+   theElasticMat(nullptr), YS(nullptr), PS(nullptr), EPS(nullptr),
+   ELS1(nullptr), ELS2(nullptr),ELS3(nullptr), ELS4(nullptr),
+   ELT1(nullptr), ELT2(nullptr), ELT3(nullptr), ELT4(nullptr)
+  {
+    alloc(*rval.theElasticMat,rval.YS,rval.PS,rval.EPS,rval.ELS1,rval.ELS2,rval.ELS3,rval.ELS4,rval.ELT1,rval.ELT2,rval.ELT3,rval.ELT4);
+  }
 
-    if(PS)
-       delete PS;
-
-     if(EPS)
-       delete EPS;
-
-     if(ELS1)
-       delete ELS1;
-
-     if(ELS2)
-       delete ELS2;
-
-     if(ELS3)
-       delete ELS3;
-
-     if(ELS4)
-       delete ELS4;
-
-     if(ELT1)
-       delete ELT1;
-
-     if(ELT2)
-       delete ELT2;
-
-     if(ELT3)
-       delete ELT3;
-
-     if(ELT4)
-       delete ELT4;
-
-
-}
-
-////================================================================================
-////copy constructor
-////================================================================================
-//XC::Template3Dep::Template3Dep(const  Template3Dep & rval) {
-//
-//    YS = rval.YS->newObj();
-//    PS = rval.PS->newObj();
-//    EPS = rval.EPS->newObj();
-//
-//    // Scalar Evolution Laws
-//    if( rval.getELS1() )
-//       ELS1  = rval.getELS1()->newObj();
-//    else
-//       ELS1 = 0;
-//
-//    if( !rval.getELS2() )
-//       ELS2 = 0;
-//    else
-//       ELS2  = rval.getELS2()->newObj();
-//
-//    if( !rval.getELS3() )
-//       ELS3 = 0;
-//    else
-//       ELS3  = rval.getELS3()->newObj();
-//
-//    if( !rval.getELS4() )
-//       ELS4 = 0;
-//    else
-//       ELS4  = rval.getELS4()->newObj();
-//
-//    // Tensorial Evolution Laws
-//    if( rval.getELT1() )
-//       ELT1  = rval.getELT1()->newObj();
-//    else
-//       ELT1 = 0;
-//
-//    if( !rval.getELT2() )
-//       ELT2 = 0;
-//    else
-//       ELT2  = rval.getELT2()->newObj();
-//
-//    if( !rval.getELT3() )
-//       ELT3 = 0;
-//    else
-//       ELT3  = rval.getELT3()->newObj();
-//
-//    if( !rval.getELT4() )
-//       ELT4 = 0;
-//    else
-//       ELT4  = rval.getELT4()->newObj();
-//
-//}
-//
+//! @brief Assignment operator.
+XC::Template3Dep &XC::Template3Dep::operator=(const Template3Dep &other)
+  {
+    NDMaterial::operator=(other);
+    alloc(*other.theElasticMat,other.YS,other.PS,other.EPS,other.ELS1,other.ELS2,other.ELS3,other.ELS4,other.ELT1,other.ELT2,other.ELT3,other.ELT4);
+    return *this;
+  }
 
 
 
-//================================================================================
-// Routine used to generate elastic compliance XC::BJtensor D for this material point
-//================================================================================
+//! @brief  Routine used to generate elastic compliance BJtensor D for this material point
 XC::BJtensor XC::Template3Dep::ElasticComplianceTensor(void) const
-{
+  {
     BJtensor ret( 4, def_dim_4, 0.0 );
-    
+
     ret = ElasticStiffnessTensor().inverse();
 
     return ret;
@@ -701,14 +461,14 @@ XC::BJtensor XC::Template3Dep::ElasticComplianceTensor(void) const
 //ZC05/2004     int eflag = (this->EPS)->getElasticflag();
 //ZC05/2004     double Ey = this->EPS->getEo();
 //ZC05/2004     double nuP =this->EPS->getnu();
-//ZC05/2004     
+//ZC05/2004
 //ZC05/2004     // Zhao, 03-09-04
 //ZC05/2004     // eflag = 0, Pressure independent Isotropic
 //ZC05/2004     //       = 1, Pressure dendent Isotropic
 //ZC05/2004     //       = 2, Pressure independent Cross Anisotropic
 //ZC05/2004     //       = 3, Pressure dependent Cross Anisotropic
-//ZC05/2004     //   default: 0, Pressure indendent Isotropic 
-//ZC05/2004     
+//ZC05/2004     //   default: 0, Pressure indendent Isotropic
+//ZC05/2004
 //ZC05/2004     // Pressure independent Isotropic
 //ZC05/2004     if( eflag == 0 )
 //ZC05/2004       {
@@ -717,20 +477,20 @@ XC::BJtensor XC::Template3Dep::ElasticComplianceTensor(void) const
 //ZC05/2004             std::cerr << std::endl << "Ey = 0! Can't give you D!!" << std::endl;
 //ZC05/2004             exit(1);
 //ZC05/2004           }
-//ZC05/2004 
+//ZC05/2004
 //ZC05/2004       // Kronecker delta XC::BJtensor
 //ZC05/2004       BJtensor I2("I", 2, def_dim_2);
-//ZC05/2004 
+//ZC05/2004
 //ZC05/2004       BJtensor I_ijkl = I2("ij")*I2("kl");
 //ZC05/2004       //I_ijkl.null_indices();
 //ZC05/2004       BJtensor I_ikjl = I_ijkl.transpose0110();
 //ZC05/2004       BJtensor I_iljk = I_ijkl.transpose0111();
 //ZC05/2004       BJtensor I4s = (I_ikjl+I_iljk)*0.5;
-//ZC05/2004 
+//ZC05/2004
 //ZC05/2004       // Building compliance XC::BJtensor
 //ZC05/2004       ret = (I_ijkl * (-nuP/Ey)) + (I4s * ((1.0+nuP)/Ey));
 //ZC05/2004       }
-//ZC05/2004     
+//ZC05/2004
 //ZC05/2004     // Pressure dependent Isotropic
 //ZC05/2004     else if( eflag == 1)
 //ZC05/2004       {
@@ -741,33 +501,33 @@ XC::BJtensor XC::Template3Dep::ElasticComplianceTensor(void) const
 //ZC05/2004             std::cerr << std::endl << "Ey = 0! Can't give you D!!" << std::endl;
 //ZC05/2004             exit(1);
 //ZC05/2004           }
-//ZC05/2004 
+//ZC05/2004
 //ZC05/2004       //Update E
 //ZC05/2004       XC::stresstensor stc = (this->EPS)->getStress();
 //ZC05/2004       double p = stc.p_hydrostatic();
 //ZC05/2004       double po = EPS->getpo();
-//ZC05/2004 
+//ZC05/2004
 //ZC05/2004       //std::cerr << " p = " <<  p;
-//ZC05/2004 
+//ZC05/2004
 //ZC05/2004       //double po = 100.0; //kPa
 //ZC05/2004 //BJ:  this is questionable to be re-examined!!!!!!!!!!!!!!!!!!!!
 //ZC05/2004       if(p <= 0.5000*KK) p = 0.500*KK;
 //ZC05/2004       E = Ey * pow(p/po/KK, 0.5); //0.5
 //ZC05/2004       //std::cerr << " Ec = " << Ey << std::endl;
-//ZC05/2004 
+//ZC05/2004
 //ZC05/2004       // Kronecker delta XC::BJtensor
 //ZC05/2004       BJtensor I2("I", 2, def_dim_2);
-//ZC05/2004 
+//ZC05/2004
 //ZC05/2004       BJtensor I_ijkl = I2("ij")*I2("kl");
 //ZC05/2004       //I_ijkl.null_indices();
 //ZC05/2004       BJtensor I_ikjl = I_ijkl.transpose0110();
 //ZC05/2004       BJtensor I_iljk = I_ijkl.transpose0111();
 //ZC05/2004       BJtensor I4s = (I_ikjl+I_iljk)*0.5;
-//ZC05/2004 
+//ZC05/2004
 //ZC05/2004       // Building compliance XC::BJtensor
 //ZC05/2004       ret = (I_ijkl * (-nuP/E)) + (I4s * ((1.0+nuP)/E));
 //ZC05/2004       }
-//ZC05/2004    
+//ZC05/2004
 //ZC05/2004    // Pressure independent Anisotropic
 //ZC05/2004     else if(eflag == 2)
 //ZC05/2004       {
@@ -776,11 +536,11 @@ XC::BJtensor XC::Template3Dep::ElasticComplianceTensor(void) const
 //ZC05/2004       double Ev = this->EPS->getEv();
 //ZC05/2004       double Ghv = this->EPS->getGhv();
 //ZC05/2004       double nuhv = this->EPS->getnuhv();
-//ZC05/2004 
+//ZC05/2004
 //ZC05/2004       double A = 1.0/Ey;
 //ZC05/2004       double B = 1.0/Ev;
 //ZC05/2004       //std::cerr << "A " << A << " B " << B;
-//ZC05/2004 
+//ZC05/2004
 //ZC05/2004       XC::Matrix D(6,6);
 //ZC05/2004       D(0,0) = D(1,1) = A;
 //ZC05/2004       D(2,2) = B;
@@ -791,22 +551,22 @@ XC::BJtensor XC::Template3Dep::ElasticComplianceTensor(void) const
 //ZC05/2004       D(3,3) = 2.0*(1.0+nu)*A;
 //ZC05/2004       D(4,4) = D(5,5) = 1.0/Ghv;
 //ZC05/2004       //std::cerr << " C " << D;
-//ZC05/2004 
-//ZC05/2004       //Convert Matric D to 4th order Elastic constants XC::BJtensor ret; 
+//ZC05/2004
+//ZC05/2004       //Convert Matric D to 4th order Elastic constants XC::BJtensor ret;
 //ZC05/2004       ret.val(1,1,1,1) = D(0,0); ret.val(1,1,2,2) = D(0,1); ret.val(1,1,3,3) = D(0,2); // --> Sigma_xx
 //ZC05/2004       ret.val(1,2,1,2) = D(3,3); ret.val(1,2,2,1) = D(3,3); // --> Sigma_xy
 //ZC05/2004       ret.val(1,3,1,3) = D(4,4); ret.val(1,3,3,1) = D(4,4); // --> Sigma_xz
-//ZC05/2004 
+//ZC05/2004
 //ZC05/2004       ret.val(2,1,1,2) = D(3,3); ret.val(2,1,2,1) = D(3,3); // --> Sigma_yx
 //ZC05/2004       ret.val(2,2,1,1) = D(1,0); ret.val(2,2,2,2) = D(1,1); ret.val(2,2,3,3) = D(1,2); // --> Sigma_yy
 //ZC05/2004       ret.val(2,3,2,3) = D(5,5); ret.val(2,3,3,2) = D(5,5); // --> Sigma_yz
-//ZC05/2004 
+//ZC05/2004
 //ZC05/2004       ret.val(3,1,1,3) = D(4,4); ret.val(3,1,3,1) = D(4,4); // --> Sigma_zx
 //ZC05/2004       ret.val(3,2,2,3) = D(5,5); ret.val(3,2,3,2) = D(5,5); // --> Sigma_zy
 //ZC05/2004       ret.val(3,3,1,1) = D(2,0); ret.val(3,3,2,2) = D(2,1); ret.val(3,3,3,3) = D(2,2); // --> Sigma_zz
-//ZC05/2004 
+//ZC05/2004
 //ZC05/2004       }
-//ZC05/2004     
+//ZC05/2004
 //ZC05/2004     // Pressure dependent Anisotropic
 //ZC05/2004     else if(eflag == 3)
 //ZC05/2004       {
@@ -822,25 +582,25 @@ XC::BJtensor XC::Template3Dep::ElasticComplianceTensor(void) const
 //ZC05/2004             std::cerr << std::endl << "Ey = 0! Can't give you D!!" << std::endl;
 //ZC05/2004             exit(1);
 //ZC05/2004           }
-//ZC05/2004 
+//ZC05/2004
 //ZC05/2004       //Update E
 //ZC05/2004       XC::stresstensor stc = (this->EPS)->getStress();
 //ZC05/2004       double p = stc.p_hydrostatic();
 //ZC05/2004       double po = EPS->getpo();
-//ZC05/2004 
+//ZC05/2004
 //ZC05/2004       //std::cerr << " p = " <<  p;
-//ZC05/2004 
+//ZC05/2004
 //ZC05/2004       //double po = 100.0; //kPa
 //ZC05/2004       if(p <= 0.5000*KK) p = 0.500*KK;
 //ZC05/2004       Ey = Ey * pow(p/po/KK, 0.5); //0.5
 //ZC05/2004       Ev = Ev * pow(p/po/KK, 0.5); //0.5
-//ZC05/2004       Ghv = Ghv * pow(p/po/KK, 0.5); //0.5 
-//ZC05/2004       //std::cerr << " Ec = " << Ey << std::endl;      
-//ZC05/2004       
+//ZC05/2004       Ghv = Ghv * pow(p/po/KK, 0.5); //0.5
+//ZC05/2004       //std::cerr << " Ec = " << Ey << std::endl;
+//ZC05/2004
 //ZC05/2004       double A = 1.0/E;
 //ZC05/2004       double B = 1.0/Ev;
 //ZC05/2004       //std::cerr << "A " << A << " B " << B;
-//ZC05/2004 
+//ZC05/2004
 //ZC05/2004       XC::Matrix D(6,6);
 //ZC05/2004       D(0,0) = D(1,1) = A;
 //ZC05/2004       D(2,2) = B;
@@ -849,26 +609,26 @@ XC::BJtensor XC::Template3Dep::ElasticComplianceTensor(void) const
 //ZC05/2004       D(3,3) = 2.0*(1.0+nu)*A;
 //ZC05/2004       D(4,4) = D(5,5) = 1.0/Ghv;
 //ZC05/2004       //std::cerr << " C " << D;
-//ZC05/2004 
+//ZC05/2004
 //ZC05/2004       //Convert Matric D to 4th order Elastic constants XC::BJtensor ret;
 //ZC05/2004       ret.val(1,1,1,1) = D(0,0); ret.val(1,1,2,2) = D(0,1); ret.val(1,1,3,3) = D(0,2); // --> Sigma_xx
 //ZC05/2004       ret.val(1,2,1,2) = D(3,3); ret.val(1,2,2,1) = D(3,3); // --> Sigma_xy
 //ZC05/2004       ret.val(1,3,1,3) = D(4,4); ret.val(1,3,3,1) = D(4,4); // --> Sigma_xz
-//ZC05/2004 
+//ZC05/2004
 //ZC05/2004       ret.val(2,1,1,2) = D(3,3); ret.val(2,1,2,1) = D(3,3); // --> Sigma_yx
 //ZC05/2004       ret.val(2,2,1,1) = D(1,0); ret.val(2,2,2,2) = D(1,1); ret.val(2,2,3,3) = D(1,2); // --> Sigma_yy
 //ZC05/2004       ret.val(2,3,2,3) = D(5,5); ret.val(2,3,3,2) = D(5,5); // --> Sigma_yz
-//ZC05/2004 
+//ZC05/2004
 //ZC05/2004       ret.val(3,1,1,3) = D(4,4); ret.val(3,1,3,1) = D(4,4); // --> Sigma_zx
 //ZC05/2004       ret.val(3,2,2,3) = D(5,5); ret.val(3,2,3,2) = D(5,5); // --> Sigma_zy
 //ZC05/2004       ret.val(3,3,1,1) = D(2,0); ret.val(3,3,2,2) = D(2,1); ret.val(3,3,3,3) = D(2,2); // --> Sigma_zz
-//ZC05/2004 
+//ZC05/2004
 //ZC05/2004       }
 //ZC05/2004     else
 //ZC05/2004       {
 //ZC05/2004       std::cerr << "Template3Dep::ElasticComplianceTensor failed to create elastic compliance XC::BJtensor. Eflag must be 0-3: " <<  eflag << std::endl;
 //ZC05/2004       exit(-1);
-//ZC05/2004 
+//ZC05/2004
 //ZC05/2004       }
 //ZC05/2004
 //ZC05/2004    return ret;
@@ -882,19 +642,21 @@ XC::BJtensor XC::Template3Dep::ElasticStiffnessTensor(void) const
   {
     BJtensor ret( 4, def_dim_4, 0.0 );
 
-    if(theElasticMat->setTrialStrain( this->EPS->getElasticStrain() ) < 0) {
-      std::cerr << "Template3Dep::theElasticMat setTrialStrain failed in material with strain ";
-      return -1;   
+    if(theElasticMat->setTrialStrain( this->EPS->getElasticStrain() ) < 0)
+      {
+        std::cerr << getClassName() << "::" << __FUNCTION__
+                  << "; setTrialStrain failed in material with strain.";
+      return -1;
     }
 
     ret = theElasticMat->getTangentTensor();
     return ret;
 
 //ZC05/2004     int eflag = (this->EPS)->getElasticflag();
-//ZC05/2004 
+//ZC05/2004
 //ZC05/2004     double Ey = this->EPS->getEo();
 //ZC05/2004     double nu =this->EPS->getnu();
-//ZC05/2004     
+//ZC05/2004
 //ZC05/2004     // Zhao, 03-09-04
 //ZC05/2004     // eflag = 0, Pressure dependent Isotropic
 //ZC05/2004     //       = 1, Pressure indendent Isotropic
@@ -906,45 +668,45 @@ XC::BJtensor XC::Template3Dep::ElasticStiffnessTensor(void) const
 //ZC05/2004        double E = Ey;
 //ZC05/2004        // Kronecker delta XC::BJtensor
 //ZC05/2004        BJtensor I2("I", 2, def_dim_2);
-//ZC05/2004 
+//ZC05/2004
 //ZC05/2004        BJtensor I_ijkl = I2("ij")*I2("kl");
-//ZC05/2004 
-//ZC05/2004 
+//ZC05/2004
+//ZC05/2004
 //ZC05/2004        //I_ijkl.null_indices();
 //ZC05/2004        BJtensor I_ikjl = I_ijkl.transpose0110();
 //ZC05/2004        BJtensor I_iljk = I_ijkl.transpose0111();
 //ZC05/2004        BJtensor I4s = (I_ikjl+I_iljk)*0.5;
-//ZC05/2004 
+//ZC05/2004
 //ZC05/2004        // Building elasticity XC::BJtensor
 //ZC05/2004        ret = I_ijkl*( E*nu / ( (1.0+nu)*(1.0 - 2.0*nu) ) ) + I4s*( E / (1.0 + nu) );
 //ZC05/2004        //ret.null_indices();
-//ZC05/2004     }    
+//ZC05/2004     }
 //ZC05/2004     else if( eflag == 1) {
-//ZC05/2004 
+//ZC05/2004
 //ZC05/2004        //Update E
 //ZC05/2004        XC::stresstensor stc = (this->EPS)->getStress();
 //ZC05/2004        double p = stc.p_hydrostatic();
 //ZC05/2004        double po = EPS->getpo();
 //ZC05/2004        //std::cerr << " p = " <<  p;
-//ZC05/2004 
+//ZC05/2004
 //ZC05/2004        //double po = 100.0; //kPa
 //ZC05/2004        if(p <= 0.5000*KK) p = 0.5000*KK;
 //ZC05/2004        double E = Ey * pow(p/po/KK, 0.5);//0.5
 //ZC05/2004        //std::cerr << " Eo = " << Ey ;
 //ZC05/2004        //std::cerr << " Ec = " << E << std::endl;
-//ZC05/2004 
-//ZC05/2004 
+//ZC05/2004
+//ZC05/2004
 //ZC05/2004        // Kronecker delta XC::BJtensor
 //ZC05/2004        BJtensor I2("I", 2, def_dim_2);
-//ZC05/2004 
+//ZC05/2004
 //ZC05/2004        BJtensor I_ijkl = I2("ij")*I2("kl");
-//ZC05/2004 
-//ZC05/2004 
+//ZC05/2004
+//ZC05/2004
 //ZC05/2004        //I_ijkl.null_indices();
 //ZC05/2004        BJtensor I_ikjl = I_ijkl.transpose0110();
 //ZC05/2004        BJtensor I_iljk = I_ijkl.transpose0111();
 //ZC05/2004        BJtensor I4s = (I_ikjl+I_iljk)*0.5;
-//ZC05/2004 
+//ZC05/2004
 //ZC05/2004        // Building elasticity XC::BJtensor
 //ZC05/2004        ret = I_ijkl*( E*nu / ( (1.0+nu)*(1.0 - 2.0*nu) ) ) + I4s*( E / (1.0 + nu) );
 //ZC05/2004        //ret.null_indices();
@@ -955,21 +717,21 @@ XC::BJtensor XC::Template3Dep::ElasticStiffnessTensor(void) const
 //ZC05/2004       double Ghv = this->EPS->getGhv();
 //ZC05/2004       double nuhv = this->EPS->getnuhv();
 //ZC05/2004       //Update E
-//ZC05/2004       
+//ZC05/2004
 //ZC05/2004       XC::stresstensor stc = (this->EPS)->getStress();
 //ZC05/2004       double p = stc.p_hydrostatic();
 //ZC05/2004       double po = EPS->getpo();
-//ZC05/2004 
+//ZC05/2004
 //ZC05/2004       //double po = 100.0; //kPa
 //ZC05/2004       if(p <= 0.5000*KK) p = 0.500*KK;
 //ZC05/2004       E = Ey * pow(p/po/KK, 0.5); //0.5
 //ZC05/2004       Ev = Ev * pow(p/po/KK, 0.5); //0.5
-//ZC05/2004       Ghv = Ghv * pow(p/po/KK, 0.5); //0.5 
-//ZC05/2004       //std::cerr << " Ec = " << Ey << std::endl;  
+//ZC05/2004       Ghv = Ghv * pow(p/po/KK, 0.5); //0.5
+//ZC05/2004       //std::cerr << " Ec = " << Ey << std::endl;
 //ZC05/2004       double A = 1.0/E;
 //ZC05/2004       double B = 1.0/Ev;
 //ZC05/2004       //std::cerr << "A " << A << " B " << B;
-//ZC05/2004 
+//ZC05/2004
 //ZC05/2004       XC::Matrix D(6,6);
 //ZC05/2004       D(0,0) = D(1,1) = A;
 //ZC05/2004       D(2,2) = B;
@@ -978,33 +740,33 @@ XC::BJtensor XC::Template3Dep::ElasticStiffnessTensor(void) const
 //ZC05/2004       D(3,3) = (1.0+nu)*A;
 //ZC05/2004       D(4,4) = D(5,5) = 0.5/Ghv;
 //ZC05/2004       //std::cerr << " C " << D;
-//ZC05/2004 
+//ZC05/2004
 //ZC05/2004       // Do invertion once to get Elastic matrix D
 //ZC05/2004       D.Invert( D );
-//ZC05/2004 
+//ZC05/2004
 //ZC05/2004       //Convert Matric D to 4th order Elastic constants XC::BJtensor ret;
 //ZC05/2004       ret.val(1,1,1,1) = D(0,0); ret.val(1,1,2,2) = D(0,1); ret.val(1,1,3,3) = D(0,2); // --> Sigma_xx
 //ZC05/2004       ret.val(1,2,1,2) = D(3,3); ret.val(1,2,2,1) = D(3,3); // --> Sigma_xy
 //ZC05/2004       ret.val(1,3,1,3) = D(4,4); ret.val(1,3,3,1) = D(4,4); // --> Sigma_xz
-//ZC05/2004 
+//ZC05/2004
 //ZC05/2004       ret.val(2,1,1,2) = D(3,3); ret.val(2,1,2,1) = D(3,3); // --> Sigma_yx
 //ZC05/2004       ret.val(2,2,1,1) = D(1,0); ret.val(2,2,2,2) = D(1,1); ret.val(2,2,3,3) = D(1,2); // --> Sigma_yy
 //ZC05/2004       ret.val(2,3,2,3) = D(5,5); ret.val(2,3,3,2) = D(5,5); // --> Sigma_yz
-//ZC05/2004 
+//ZC05/2004
 //ZC05/2004       ret.val(3,1,1,3) = D(4,4); ret.val(3,1,3,1) = D(4,4); // --> Sigma_zx
 //ZC05/2004       ret.val(3,2,2,3) = D(5,5); ret.val(3,2,3,2) = D(5,5); // --> Sigma_zy
 //ZC05/2004       ret.val(3,3,1,1) = D(2,0); ret.val(3,3,2,2) = D(2,1); ret.val(3,3,3,3) = D(2,2); // --> Sigma_zz
-//ZC05/2004 
+//ZC05/2004
 //ZC05/2004     }
 //ZC05/2004     else if( eflag == 2) {
 //ZC05/2004       double Ev = this->EPS->getEv();
 //ZC05/2004       double Ghv = this->EPS->getGhv();
 //ZC05/2004       double nuhv = this->EPS->getnuhv();
-//ZC05/2004 
+//ZC05/2004
 //ZC05/2004       double A = 1.0/Ey;
 //ZC05/2004       double B = 1.0/Ev;
 //ZC05/2004       //std::cerr << "A " << A << " B " << B;
-//ZC05/2004 
+//ZC05/2004
 //ZC05/2004       XC::Matrix D(6,6);
 //ZC05/2004       D(0,0) = D(1,1) = A;
 //ZC05/2004       D(2,2) = B;
@@ -1013,30 +775,30 @@ XC::BJtensor XC::Template3Dep::ElasticStiffnessTensor(void) const
 //ZC05/2004       D(3,3) = (1.0+nu)*A;
 //ZC05/2004       D(4,4) = D(5,5) = 0.5/Ghv;
 //ZC05/2004       //std::cerr << " C " << D;
-//ZC05/2004 
+//ZC05/2004
 //ZC05/2004       // Do invertion once to get Elastic matrix D
 //ZC05/2004       D.Invert( D );
-//ZC05/2004 
+//ZC05/2004
 //ZC05/2004       //Convert Matric D to 4th order Elastic constants XC::BJtensor ret;
 //ZC05/2004       ret.val(1,1,1,1) = D(0,0); ret.val(1,1,2,2) = D(0,1); ret.val(1,1,3,3) = D(0,2); // --> Sigma_xx
 //ZC05/2004       ret.val(1,2,1,2) = D(3,3); ret.val(1,2,2,1) = D(3,3); // --> Sigma_xy
 //ZC05/2004       ret.val(1,3,1,3) = D(4,4); ret.val(1,3,3,1) = D(4,4); // --> Sigma_xz
-//ZC05/2004 
+//ZC05/2004
 //ZC05/2004       ret.val(2,1,1,2) = D(3,3); ret.val(2,1,2,1) = D(3,3); // --> Sigma_yx
 //ZC05/2004       ret.val(2,2,1,1) = D(1,0); ret.val(2,2,2,2) = D(1,1); ret.val(2,2,3,3) = D(1,2); // --> Sigma_yy
 //ZC05/2004       ret.val(2,3,2,3) = D(5,5); ret.val(2,3,3,2) = D(5,5); // --> Sigma_yz
-//ZC05/2004 
+//ZC05/2004
 //ZC05/2004       ret.val(3,1,1,3) = D(4,4); ret.val(3,1,3,1) = D(4,4); // --> Sigma_zx
 //ZC05/2004       ret.val(3,2,2,3) = D(5,5); ret.val(3,2,3,2) = D(5,5); // --> Sigma_zy
 //ZC05/2004       ret.val(3,3,1,1) = D(2,0); ret.val(3,3,2,2) = D(2,1); ret.val(3,3,3,3) = D(2,2); // --> Sigma_zz
-//ZC05/2004 
+//ZC05/2004
 //ZC05/2004     }
 //ZC05/2004     else
 //ZC05/2004       {
 //ZC05/2004       std::cerr << "Template3Dep::ElasticStiffnessTensor failed to create elastic compliance XC::BJtensor. Eflag must be 0-3: " <<  eflag << std::endl;
 //ZC05/2004       exit(-1);
-//ZC05/2004 
-//ZC05/2004       }    
+//ZC05/2004
+//ZC05/2004       }
 //ZC05/2004    return ret;
 }
 
@@ -1102,7 +864,7 @@ const XC::Vector& XC::Template3Dep::getStrain(void) const
 int XC::Template3Dep::setTrialStrain(const XC::Tensor &v)
 {
     //Guanzhou made it compatible with global iterations Mar2005
-    this->setTrialStrainIncr( v - EPS->getStrain() ); 
+    this->setTrialStrainIncr( v - EPS->getStrain() );
     return 0;
 }
 
@@ -1176,12 +938,16 @@ int XC::Template3Dep::setTrialStrainIncr(const XC::Tensor &v)
     //EPState tmp_EPS = FESubIncrementation(v, NUM_OF_SUB_INCR);
     EPState *thisEPState = this->getEPS();
     EPState tmp_EPS;
-    if( thisEPState->getIntegratorFlag() == 0 ) tmp_EPS = ForwardEulerEPState(v);
-    else if( thisEPState->getIntegratorFlag() == 1 ) tmp_EPS = BackwardEulerEPState(v);
-    else {
-            std::cerr << "Template3Dep::setTrialStrainIncr, error when getting integrator flag from XC::EPState! \n";
+    if( thisEPState->getIntegratorFlag() == 0 )
+      tmp_EPS = ForwardEulerEPState(v);
+    else if( thisEPState->getIntegratorFlag() == 1 )
+      tmp_EPS = BackwardEulerEPState(v);
+    else
+      {
+        std::cerr << getClassName() << "::" << __FUNCTION__
+                  << "; error when getting integrator flag from EPState! \n";
         exit(1);
-    }
+      }
 
     //EPState tmp_EPS = BackwardEulerEPState(v);
     setEPS( tmp_EPS );
@@ -1230,7 +996,7 @@ const XC::straintensor &XC::Template3Dep::getPlasticStrainTensor(void) const
 //================================================================================
 double XC::Template3Dep::getpsi(void)
 {
-     //this function cannot be moved, 
+     //this function cannot be moved,
      //leave here for compiling..., Zhao04/22/04
      return 0.05;
 }
@@ -1284,7 +1050,8 @@ XC::NDMaterial *XC::Template3Dep::getCopy(const std::string &code) const
         tmp->getEPS()->setInit();
       }
     else
-      std::cerr << "Template3Dep::getCopy failed to get model: " <<  code << std::endl;
+      std::cerr << getClassName() << "::" << __FUNCTION__
+                << "; failed to get model: " <<  code << std::endl;
     return tmp;
   }
 
@@ -1370,7 +1137,7 @@ EPS->setConverged(rval.getConverged());
 */
 
 //ZC05/2004     EPS->setElasticflag(rval.getElasticflag());
-//ZC05/2004 
+//ZC05/2004
 //ZC05/2004     EPS->setEo(rval.getEo());
 //ZC05/2004     EPS->setE(rval.getE());
 //ZC05/2004     EPS->setEv(rval.getEv());
@@ -2261,7 +2028,7 @@ XC::EPState XC::Template3Dep::SemiBackwardEulerEPState( const XC::straintensor &
 XC::EPState XC::Template3Dep::BackwardEulerEPState( const XC::straintensor &strain_increment)
   {
   //!!!!!!!! Guanzhou rewrote the code according to Prof. Boris Jeremic, May2004
-  
+
   // Volumetric strain
   //double st_vol = strain_increment.p_hydrostatic();
   double st_vol = strain_increment.Iinvariant1(); //- = compressive
@@ -2269,7 +2036,7 @@ XC::EPState XC::Template3Dep::BackwardEulerEPState( const XC::straintensor &stra
   //EPState to be returned, it can be elastic or elastic-plastic XC::EPState
   EPState backwardEPS( * (this->getEPS()) );
   EPState startEPS( *(this->getEPS()) );
-  
+
   XC::stresstensor start_stress = startEPS.getStress(); //Guanzhou Mar2005
 
   //Output for plotting
@@ -2356,7 +2123,7 @@ XC::EPState XC::Template3Dep::BackwardEulerEPState( const XC::straintensor &stra
 
   //XC::stresstensor Return_stress; //  stress to be returned can be either predictor
                               // or elastic plastic stress.
-  
+
   EPState ElasticPredictorEPS( startEPS );
   XC::stresstensor elastic_predictor_stress = start_stress + stress_increment;
 
@@ -2447,16 +2214,16 @@ XC::EPState XC::Template3Dep::BackwardEulerEPState( const XC::straintensor &stra
       //Starting point by applying one Forward Euler step
       EP_PredictorEPS = PredictorEPState( strain_incr);
       //EP_PredictorEPS = ElasticPredictorEPS;
-      
+
       //std::cerr << " ----------Predictor Stress" << EP_PredictorEPS.getStress();
       //Setting the starting XC::EPState with the starting internal vars in XC::EPState
-      
+
       //MP->setEPS( EP_PredictorEPS );
-      
+
       Felplpredictor =  getYS()->f(&EP_PredictorEPS);
       //std::cerr <<  " BE: F_elplpredictor " << Felplpredictor << std::endl;
-      
-      
+
+
       //Kai     absFelplpredictor = fabs(Felplpredictor);
       if( fabs(Felplpredictor) <= Ftolerance )
       {
@@ -2470,11 +2237,11 @@ XC::EPState XC::Template3Dep::BackwardEulerEPState( const XC::straintensor &stra
       //GZ out aC    = getPS()->dQods( &EP_PredictorEPS );
       //GZ out dFods = getYS()->dFods( &EP_PredictorEPS );
       //GZ out dQods = getPS()->dQods( &EP_PredictorEPS );
-      //GZ out       
+      //GZ out
       //GZ out temp2 = (dFods("ij")*E("ijkl"))*dQods("kl");
       //GZ out temp2.null_indices();
       //GZ out lower = temp2.trace();
-      //GZ out 
+      //GZ out
       //GZ out //Guanzhou added internal evolution Mar2005
       //GZ out hardMod_ = 0.0;
       //GZ out XC::BJtensor Hh(2, def_dim_2, 0.0);
@@ -2484,28 +2251,28 @@ XC::EPState XC::Template3Dep::BackwardEulerEPState( const XC::straintensor &stra
       //GZ out              xi_s[0] = getYS()->xi_s1( &EP_PredictorEPS );
       //GZ out           hardMod_ = hardMod_ + h_s[0] * xi_s[0];
       //GZ out }
-      //GZ out 
+      //GZ out
       //GZ out //Of 2nd scalar internal vars
       //GZ out if( getELS2() ) {
       //GZ out         h_s[1]  = getELS2()->h_s( &EP_PredictorEPS, getPS());
       //GZ out              xi_s[1] = getYS()->xi_s2( &EP_PredictorEPS );
       //GZ out           hardMod_ = hardMod_ + h_s[1] * xi_s[1];
       //GZ out }
-      //GZ out 
+      //GZ out
       //GZ out //Of 3rd scalar internal vars
       //GZ out if( getELS3() ) {
       //GZ out         h_s[2]  = getELS3()->h_s( &EP_PredictorEPS, getPS());
       //GZ out              xi_s[2] = getYS()->xi_s3( &EP_PredictorEPS );
       //GZ out           hardMod_ = hardMod_ + h_s[2] * xi_s[2];
       //GZ out }
-      //GZ out 
+      //GZ out
       //GZ out //Of 4th scalar internal vars
       //GZ out if( getELS4() ) {
       //GZ out         h_s[3]  = getELS4()->h_s( &EP_PredictorEPS, getPS());
       //GZ out              xi_s[3] = getYS()->xi_s4( &EP_PredictorEPS );
       //GZ out           hardMod_ = hardMod_ + h_s[3] * xi_s[3];
       //GZ out }
-      //GZ out 
+      //GZ out
       //GZ out //Of tensorial internal var
       //GZ out // 1st tensorial var
       //GZ out if( getELT1() ) {
@@ -2514,7 +2281,7 @@ XC::EPState XC::Template3Dep::BackwardEulerEPState( const XC::straintensor &stra
       //GZ out              BJtensor hm = (h_t[0])("ij") * (xi_t[0])("ij");
       //GZ out          hardMod_ = hardMod_ + hm.trace();
       //GZ out }
-      //GZ out 
+      //GZ out
       //GZ out // 2nd tensorial var
       //GZ out if( getELT2() ) {
       //GZ out         h_t[1]  = getELT2()->h_t( &EP_PredictorEPS, getPS());
@@ -2522,7 +2289,7 @@ XC::EPState XC::Template3Dep::BackwardEulerEPState( const XC::straintensor &stra
       //GZ out              BJtensor hm = (h_t[1])("ij") * (xi_t[1])("ij");
       //GZ out          hardMod_ = hardMod_ + hm.trace();
       //GZ out }
-      //GZ out 
+      //GZ out
       //GZ out // 3rd tensorial var
       //GZ out if( getELT3() ) {
       //GZ out         h_t[2]  = getELT3()->h_t( &EP_PredictorEPS, getPS());
@@ -2530,7 +2297,7 @@ XC::EPState XC::Template3Dep::BackwardEulerEPState( const XC::straintensor &stra
       //GZ out              BJtensor hm = (h_t[2])("ij") * (xi_t[2])("ij");
       //GZ out          hardMod_ = hardMod_ + hm.trace();
       //GZ out }
-      //GZ out 
+      //GZ out
       //GZ out // 4th tensorial var
       //GZ out if( getELT4() ) {
       //GZ out         h_t[3]  = getELT4()->h_t( &EP_PredictorEPS, getPS());
@@ -2538,47 +2305,47 @@ XC::EPState XC::Template3Dep::BackwardEulerEPState( const XC::straintensor &stra
       //GZ out              BJtensor hm = (h_t[3])("ij") * (xi_t[3])("ij");
       //GZ out          hardMod_ = hardMod_ + hm.trace();
       //GZ out }
-      //GZ out 
-      //GZ out 
+      //GZ out
+      //GZ out
       //GZ out lower = lower - hardMod_;
-      //GZ out 
-      //GZ out 
+      //GZ out
+      //GZ out
       //GZ out Delta_lambda = f_pred/lower; //Guanzhou Mar2005
       //GZ out //::printf("  Delta_lambda = f_pred/lower = %.8e\n", Delta_lambda);
       //GZ out ////     Delta_lambda = Felplpredictor/lower;
       //GZ out ////::printf("  Delta_lambda = Felplpredictor/lower =%.8e \n", Delta_lambda);
-      //GZ out 
+      //GZ out
       //GZ out elastic_plastic_predictor_stress = elastic_predictor_stress - E("ijkl")*aC("kl")*Delta_lambda;
       //GZ out elastic_plastic_predictor_stress.null_indices();
       //GZ out EP_PredictorEPS.setStress( elastic_plastic_predictor_stress );
-      //GZ out 
+      //GZ out
       //GZ out //Guanzhou, update internal
-      //GZ out 
+      //GZ out
       //GZ out int NS = EP_PredictorEPS.getNScalarVar();
       //GZ out int NT = EP_PredictorEPS.getNTensorVar();
-      //GZ out 
+      //GZ out
       //GZ out double dS = 0;
       //GZ out double S  = 0;
       //GZ out //double new_S = 0;
-      //GZ out 
+      //GZ out
       //GZ out XC::stresstensor dT;
       //GZ out XC::stresstensor Tv;
       //GZ out XC::stresstensor new_T;
-      //GZ out 
+      //GZ out
       //GZ out int ii;
       //GZ out for(ii = 1; ii <= NS; ii++) {
       //GZ out         dS = Delta_lambda * h_s[ii-1] ;             // Increment to the scalar internal var
       //GZ out              S  = EP_PredictorEPS.getScalarVar(ii);      // Get the old value of the scalar internal var
       //GZ out              EP_PredictorEPS.setScalarVar(ii, S + dS );  // Update internal scalar var
       //GZ out }
-      //GZ out 
+      //GZ out
       //GZ out for(ii = 1; ii <= NT; ii++) {
       //GZ out         dT = h_t[ii-1] * Delta_lambda;            // Increment to the XC::BJtensor internal var
       //GZ out              Tv  = EP_PredictorEPS.getTensorVar(ii);     // Get the old value of the XC::BJtensor internal var
       //GZ out              new_T = Tv + dT;
       //GZ out              EP_PredictorEPS.setTensorVar(ii, new_T );  // Update tensorial scalar var
       //GZ out }
-      //GZ out 
+      //GZ out
       //GZ out Felplpredictor =  getYS()->f(&EP_PredictorEPS);
 
   //Guanzhou out Mar2005 //Zhaohui modified, sometimes give much better convergence rate
@@ -2632,7 +2399,7 @@ XC::EPState XC::Template3Dep::BackwardEulerEPState( const XC::straintensor &stra
         //      while( absFelplpredictor > Ftolerance &&
         double Felplold = 0.0;
         Delta_lambda = EP_PredictorEPS.Delta_lambda;
-        while  (( fabs(fabs(Felplpredictor) - fabs(Felplold)) > 1.0e-6 ) 
+        while  (( fabs(fabs(Felplpredictor) - fabs(Felplold)) > 1.0e-6 )
                 && ( fabs(fabs(Felplpredictor) ) > 1.0e-5 )
                 && (step_counter < MAX_STEP_COUNT) )// if more iterations than prescribed
         //while( ( fabs(fabs(Felplpredictor) ) > Ftolerance ) && (step_counter < MAX_STEP_COUNT) )// if more iterations than prescribed
@@ -2646,17 +2413,17 @@ XC::EPState XC::Template3Dep::BackwardEulerEPState( const XC::straintensor &stra
           BEstress.null_indices();
           //          Felplpredictor = Criterion.f(BEstress);
           //          ::printf("\nF_backward_Euler BE = %.10e \n", Felplpredictor);
-          
+
           //Guanzhou out Mar2005 residual = elastic_plastic_predictor_stress - BEstress;
           residual = EP_PredictorEPS.getStress() - BEstress;
-          
+
           //residual.reportshortpqtheta("\n......residual ");
           //          double ComplementaryEnergy = (residual("ij")*D("ijkl")*residual("ij")).trace();
           //::printf("\n Residual ComplementaryEnergy = %.16e\n", ComplementaryEnergy);
-          
+
           /////          residual = elastic_predictor_stress - BEstress;
 
-              
+
           //d2Qoverds2 = Criterion.d2Qods2(elastic_plastic_predictor_stress);
           d2Qoverds2 = getPS()->d2Qods2( &EP_PredictorEPS );
           //d2Qoverds2.print();
@@ -2675,11 +2442,11 @@ XC::EPState XC::Template3Dep::BackwardEulerEPState( const XC::straintensor &stra
           //dQods = Criterion.dQods(elastic_plastic_predictor_stress);
           dFods = getYS()->dFods( &EP_PredictorEPS );
           dQods = getPS()->dQods( &EP_PredictorEPS );
-          
+
           //Guanzhou Mar2005
           BJtensor H( 2, def_dim_2, 0.0);
-          H = dQods;                   
-                              
+          H = dQods;
+
           //Fold = Criterion.f(elastic_plastic_predictor_stress);
           Fold = getYS()->f( &EP_PredictorEPS );
 
@@ -2696,7 +2463,7 @@ XC::EPState XC::Template3Dep::BackwardEulerEPState( const XC::straintensor &stra
               hardMod_ = 0.0;
           BJtensor Hh(2, def_dim_2, 0.0);
               //Of 1st scalar internal vars
-            
+
              if( getELS1() ) {
                        h_s[0]  = getELS1()->h_s( &EP_PredictorEPS, getPS());
                      xi_s[0] = getYS()->xi_s1( &EP_PredictorEPS );
@@ -2775,9 +2542,9 @@ XC::EPState XC::Template3Dep::BackwardEulerEPState( const XC::straintensor &stra
           //outfornow          temp3lower = dFods("mn")*Tinv("ijmn")*E("ijkl")*dQodsextended("kl");
           // temp3lower = dFods("mn")*Tinv("ijmn")*E("ijkl")*dQods("kl"); // Bug found, Z Cheng, Jan 2004
               Hh.null_indices();
-    
+
               H = H + Hh;
-    
+
           temp3lower = dFods("mn")*Tinv("ijmn")*E("ijkl")*H("kl");
           temp3lower.null_indices();
           lower = temp3lower.trace();
@@ -2798,7 +2565,7 @@ XC::EPState XC::Template3Dep::BackwardEulerEPState( const XC::straintensor &stra
           //std::cerr << "upper " << upper << " lower " << lower << std::endl;
           Delta_lambda = Delta_lambda + delta_lambda;
           if( Delta_lambda < 0.0 ) Delta_lambda = 0.0;//Guanzhou
-    
+
     //Guanzhou corrected May2005 // Zhaohui_____10-01-2000 not sure xxxxxxxxxxxxxxxxxxx
       dPlasticStrain = dQods("kl") * delta_lambda;
       incrPlasticStrain = incrPlasticStrain + dPlasticStrain;
@@ -2835,7 +2602,7 @@ XC::EPState XC::Template3Dep::BackwardEulerEPState( const XC::straintensor &stra
           dsigma = ( (residual("ij")*Tinv("ijmn") )+
                    ( (E("ijkl")*H("kl"))*Tinv("ijmn")*delta_lambda) )*(-1.0); //Guanzhou fixed Apr2005
           dsigma.null_indices();
-              
+
           sigmaBack = EP_PredictorEPS.getStress() + dsigma;
           EP_PredictorEPS.setStress(sigmaBack);
 
@@ -2877,8 +2644,8 @@ XC::EPState XC::Template3Dep::BackwardEulerEPState( const XC::straintensor &stra
                      new_T = T + dT;
                      EP_PredictorEPS.setTensorVar(ii, new_T );  // Update tensorial scalar var
         }
-        
-        Felplold = Felplpredictor; 
+
+        Felplold = Felplpredictor;
         Felplpredictor = getYS()->f( &EP_PredictorEPS );
 
     //=======          Dq_ast = Delta_lambda * h_ * just_this_PP;
@@ -2907,10 +2674,10 @@ XC::EPState XC::Template3Dep::BackwardEulerEPState( const XC::straintensor &stra
     //Guanzhou out Mar2005       //::fprintf(stdout,"Anim BEpoint0%d   = {Sin[theta]*q, p, Cos[theta]*q} \n",step_counter+1);
     //Guanzhou out Mar2005       ////::fprintf(stdout,"Anim BEpoint0%dP = Point[BEpoint0%d] \n",step_counter+1,step_counter+1);
     //Guanzhou out Mar2005       //::fprintf(stdout,"Anim   \n");
-    //Guanzhou out Mar2005 
+    //Guanzhou out Mar2005
     //Guanzhou out Mar2005 //Criterion.kappa_set( sigmaBack, q_ast) ;
     //Guanzhou out Mar2005       EP_PredictorEPS.setStress( sigmaBack );
-    //Guanzhou out Mar2005 
+    //Guanzhou out Mar2005
     //Guanzhou out Mar2005 //Felplpredictor = Criterion.f(sigmaBack);
     //Guanzhou out Mar2005       //Kai          absFelplpredictor = fabs(Felplpredictor);
     //Guanzhou out Mar2005       //::printf("  F_bE=%.10e (%.10e)\n", Felplpredictor,Ftolerance);
@@ -3007,38 +2774,38 @@ XC::EPState XC::Template3Dep::BackwardEulerEPState( const XC::straintensor &stra
         //if( ( flag !=1) && (step_counter < MAX_STEP_COUNT) )
         //Guanzhou out Mar2005 if( ( flag !=1) ) {
           //Guanzhou out Mar2005
-  
+
            //Return_stress = elastic_plastic_predictor_stress;
            //Criterion.kappa_set( Return_stress, q_ast) ;
-  
+
            // Generating Consistent Stiffness XC::Tensor Eep
            BJtensor I2("I", 2, def_dim_2);
            BJtensor I_ijkl = I2("ij")*I2("kl");
            I_ijkl.null_indices();
            BJtensor I_ikjl = I_ijkl.transpose0110();
-  
-  
+
+
            dQods = getPS()->dQods( &EP_PredictorEPS ); // this is m_ij
            BJtensor temp2 = E("ijkl")*dQods("kl");
            temp2.null_indices();
            dFods = getYS()->dFods( &EP_PredictorEPS ); // this is n_ij
            d2Qoverds2 = getPS()->d2Qods2( &EP_PredictorEPS );
-  
+
            BJtensor T = I_ikjl + E("ijkl")*d2Qoverds2("klmn")*Delta_lambda;
        //BJtensor tt = E("ijkl")*d2Qoverds2("klmn")*Delta_lambda;
      //tt.printshort("temp tt");
      //T = I_ikjl + tt;
            T.null_indices();
            BJtensor Tinv = T.inverse();
-  
+
            BJtensor R = Tinv("ijmn")*E("ijkl");
            R.null_indices();
-  
+
      BJtensor Hh(2, def_dim_2, 0.0);
      //Hh.Reset_to(0.0);
      BJtensor H(2, def_dim_2, 0.0);
      H =dQods;
-  
+
     //Of 1st scalar internal vars
     if( getELS1() ) {
        h_s[0]  = getELS1()->h_s( &EP_PredictorEPS, getPS());
@@ -3046,7 +2813,7 @@ XC::EPState XC::Template3Dep::BackwardEulerEPState( const XC::straintensor &stra
           hardMod_ = hardMod_ + h_s[0] * xi_s[0];
        Hh = Hh + getPS()->d2Qodsds1( &EP_PredictorEPS ) *h_s[0] *Delta_lambda;
     }
-  
+
     //Of 2nd scalar internal vars
     if( getELS2() ) {
        h_s[1]  = getELS2()->h_s( &EP_PredictorEPS, getPS());
@@ -3054,7 +2821,7 @@ XC::EPState XC::Template3Dep::BackwardEulerEPState( const XC::straintensor &stra
           hardMod_ = hardMod_ + h_s[1] * xi_s[1];
        Hh = Hh + getPS()->d2Qodsds2( &EP_PredictorEPS ) *h_s[1] *Delta_lambda;
     }
-  
+
     //Of 3rd scalar internal vars
     if( getELS3() ) {
        h_s[2]  = getELS3()->h_s( &EP_PredictorEPS, getPS());
@@ -3062,7 +2829,7 @@ XC::EPState XC::Template3Dep::BackwardEulerEPState( const XC::straintensor &stra
           hardMod_ = hardMod_ + h_s[2] * xi_s[2];
        Hh = Hh + getPS()->d2Qodsds3( &EP_PredictorEPS ) *h_s[2] *Delta_lambda;
     }
-  
+
     //Of 4th scalar internal vars
     if( getELS4() ) {
        h_s[3]  = getELS4()->h_s( &EP_PredictorEPS, getPS());
@@ -3070,7 +2837,7 @@ XC::EPState XC::Template3Dep::BackwardEulerEPState( const XC::straintensor &stra
           hardMod_ = hardMod_ + h_s[3] * xi_s[3];
        Hh = Hh + getPS()->d2Qodsds4( &EP_PredictorEPS ) *h_s[3] *Delta_lambda;
     }
-  
+
     //Of tensorial internal var
     // 1st tensorial var
     if( getELT1() ) {
@@ -3080,7 +2847,7 @@ XC::EPState XC::Template3Dep::BackwardEulerEPState( const XC::straintensor &stra
          hardMod_ = hardMod_ + hm.trace();
        Hh = Hh + (getPS()->d2Qodsdt1( &EP_PredictorEPS ))("ijmn") *(h_t[0])("mn") *Delta_lambda;
     }
-  
+
     // 2nd tensorial var
     if( getELT2() ) {
        h_t[1]  = getELT2()->h_t( &EP_PredictorEPS, getPS());
@@ -3089,7 +2856,7 @@ XC::EPState XC::Template3Dep::BackwardEulerEPState( const XC::straintensor &stra
          hardMod_ = hardMod_ + hm.trace();
        Hh = Hh + (getPS()->d2Qodsdt2( &EP_PredictorEPS ))("ijmn") *(h_t[1])("mn") *Delta_lambda;
     }
-  
+
     // 3rd tensorial var
     if( getELT3() ) {
        h_t[2]  = getELT3()->h_t( &EP_PredictorEPS, getPS());
@@ -3098,7 +2865,7 @@ XC::EPState XC::Template3Dep::BackwardEulerEPState( const XC::straintensor &stra
          hardMod_ = hardMod_ + hm.trace();
        Hh = Hh + (getPS()->d2Qodsdt3( &EP_PredictorEPS ))("ijmn") *(h_t[2])("mn") *Delta_lambda;
     }
-  
+
     // 4th tensorial var
     if( getELT4() ) {
        h_t[3]  = getELT4()->h_t( &EP_PredictorEPS, getPS());
@@ -3107,16 +2874,16 @@ XC::EPState XC::Template3Dep::BackwardEulerEPState( const XC::straintensor &stra
          hardMod_ = hardMod_ + hm.trace();
        Hh = Hh + (getPS()->d2Qodsdt4( &EP_PredictorEPS ))("ijmn") *(h_t[3])("mn") *Delta_lambda;
     }
-  
+
      H = H + Hh;
-  
-  
+
+
      // BJtensor temp3lower = dFods("ot")*R("otpq")*dQods("pq");  // Bug found, Z Cheng, Jan 2004
      BJtensor temp3lower = dFods("ot")*R("otpq")*H("pq");
          temp3lower.null_indices();
-  
+
          double lower = temp3lower.trace();
-  
+
          lower = lower - hardMod_;  // h
      //std::cerr << " 2nd hardMod_ " <<  hardMod_ << "\n";
 
@@ -3132,9 +2899,9 @@ XC::EPState XC::Template3Dep::BackwardEulerEPState( const XC::straintensor &stra
      upper.null_indices();
          BJtensor Ep = upper*(1./lower);
          BJtensor Eep =  R - Ep; // elastoplastic constitutive XC::BJtensor
-         
+
          //std::cerr << "Eep :\n" << Eep;
-         
+
            //Set Elasto-Plastic stiffness XC::BJtensor
            EP_PredictorEPS.setEep(Eep);
            EP_PredictorEPS.setConverged(TRUE);
@@ -3142,23 +2909,23 @@ XC::EPState XC::Template3Dep::BackwardEulerEPState( const XC::straintensor &stra
      //GZ out //set plastic strain and total strain
            //GZ out incrPlasticStrain = dQods("kl")*Delta_lambda;
            //GZ out incrPlasticStrain.null_indices();
-           //GZ out 
+           //GZ out
            //GZ out PlasticStrain = startEPS.getStrain() - startEPS.getElasticStrain();
-           //GZ out 
+           //GZ out
            //GZ out PlasticStrain = PlasticStrain + incrPlasticStrain;
-           //GZ out 
+           //GZ out
            //GZ out EP_PredictorEPS.setPlasticStrain(PlasticStrain);
-           //GZ out 
+           //GZ out
            //GZ out XC::straintensor elastic_strain = strain_increment - incrPlasticStrain;  // elastic strain increment
            //GZ out XC::straintensor estrain = startEPS.getElasticStrain(); //get old elastic strain
            //GZ out //Guanzhou XC::straintensor pstrain = EP_PredictorEPS.getPlasticStrain(); //get old plastic strain
-           //GZ out 
+           //GZ out
            //GZ out XC::straintensor tstrain = startEPS.getStrain();        //get old total strain
            //GZ out //Guanzhou pstrain = pstrain + PlasticStrain;
            //GZ out estrain = estrain + elastic_strain;
            //GZ out tstrain = tstrain + strain_increment;
            //GZ out //std::cerr<< "Plastic:  Total strain" << tstrain <<std::endl;
-           //GZ out 
+           //GZ out
            //GZ out //Setting de_p, de_e, total plastic, elastic strain, and  total strain
            //GZ out EP_PredictorEPS.setdPlasticStrain( incrPlasticStrain );
            //GZ out EP_PredictorEPS.setdElasticStrain( elastic_strain );
@@ -3627,37 +3394,37 @@ std::ostream& XC::operator<<(std::ostream& os, const XC::Template3Dep & MP)
 //
 //  int counter = 0;
 //  double Delta_lambda = 0.0;
-//  
+//
 //  BJtensor E  = ElasticStiffnessTensor();
-//  
+//
 //  XC::straintensor strain_incr = strain_increment;
 //  XC::straintensor total_strain = backwardEPS.getStrain();
 //  total_strain = total_strain + strain_incr;
 //  backwardEPS.setStrain(total_strain);//watch out, iteration is carried out with constant total strain!!!
-//  
+//
 //  XC::straintensor plastic_strain = backwardEPS.getPlasticStrain();
 //  XC::straintensor trial_incr = total_strain - plastic_strain;
-//  
+//
 //  XC::stresstensor elastic_predictor = E("ijkl") * trial_incr("kl");
 //  elastic_predictor.null_indices();
 //
 //  backwardEPS.setStress(elastic_predictor);
-//  
+//
 //  BJtensor dFods(2, def_dim_2, 0.0);
 //  BJtensor dQods(2, def_dim_2, 0.0);
 //  BJtensor d2Qoverds2( 4, def_dim_4, 0.0);
 //
 //  dQods = getPS()->dQods( &backwardEPS );
-//  
-//  XC::straintensor plastic_strain_residual = 
+//
+//  XC::straintensor plastic_strain_residual =
 //          plastic_strain * (-1.0) + startEPS.getPlasticStrain() + dQods("kl") * Delta_lambda;
-//  
+//
 //  //double hardMod_ = 0.0;
 //  XC::Vector h_s(4);
 //  //double xi_s[4]      = {0.0, 0.0, 0.0, 0.0};
 //  XC::stresstensor h_t[4];
 //  //XC::stresstensor xi_t[4];
-//  
+//
 //  //BJtensor Hh(2, def_dim_2, 0.0);
 //  //Of 1st scalar internal vars
 //  if( getELS1() ) {
@@ -3665,28 +3432,28 @@ std::ostream& XC::operator<<(std::ostream& os, const XC::Template3Dep & MP)
 //               //xi_s[0] = getYS()->xi_s1( &backwardEPS );
 //            //hardMod_ = hardMod_ + h_s[0] * xi_s[0];
 //  }
-//  
+//
 //  //Of 2nd scalar internal vars
 //  if( getELS2() ) {
 //          h_s[1]  = getELS2()->h_s( &backwardEPS, getPS());
 //               //xi_s[1] = getYS()->xi_s2( &backwardEPS );
 //            //hardMod_ = hardMod_ + h_s[1] * xi_s[1];
 //  }
-//  
+//
 //  //Of 3rd scalar internal vars
 //  if( getELS3() ) {
 //          h_s[2]  = getELS3()->h_s( &backwardEPS, getPS());
 //               //xi_s[2] = getYS()->xi_s3( &backwardEPS );
 //            //hardMod_ = hardMod_ + h_s[2] * xi_s[2];
 //  }
-//  
+//
 //  //Of 4th scalar internal vars
 //  if( getELS4() ) {
 //          h_s[3]  = getELS4()->h_s( &backwardEPS, getPS());
 //               //xi_s[3] = getYS()->xi_s4( &backwardEPS );
 //            //hardMod_ = hardMod_ + h_s[3] * xi_s[3];
 //  }
-//  
+//
 //  //Of tensorial internal var
 //  // 1st tensorial var
 //  if( getELT1() ) {
@@ -3695,7 +3462,7 @@ std::ostream& XC::operator<<(std::ostream& os, const XC::Template3Dep & MP)
 //               //BJtensor hm = (h_t[0])("ij") * (xi_t[0])("ij");
 //           //hardMod_ = hardMod_ + hm.trace();
 //  }
-//  
+//
 //  // 2nd tensorial var
 //  if( getELT2() ) {
 //          h_t[1]  = getELT2()->h_t( &backwardEPS, getPS());
@@ -3703,7 +3470,7 @@ std::ostream& XC::operator<<(std::ostream& os, const XC::Template3Dep & MP)
 //               //BJtensor hm = (h_t[1])("ij") * (xi_t[1])("ij");
 //           //hardMod_ = hardMod_ + hm.trace();
 //  }
-//  
+//
 //  // 3rd tensorial var
 //  if( getELT3() ) {
 //          h_t[2]  = getELT3()->h_t( &backwardEPS, getPS());
@@ -3711,7 +3478,7 @@ std::ostream& XC::operator<<(std::ostream& os, const XC::Template3Dep & MP)
 //               //BJtensor hm = (h_t[2])("ij") * (xi_t[2])("ij");
 //           //hardMod_ = hardMod_ + hm.trace();
 //  }
-//  
+//
 //  // 4th tensorial var
 //  if( getELT4() ) {
 //          h_t[3]  = getELT4()->h_t( &backwardEPS, getPS());
@@ -3719,38 +3486,38 @@ std::ostream& XC::operator<<(std::ostream& os, const XC::Template3Dep & MP)
 //               //BJtensor hm = (h_t[3])("ij") * (xi_t[3])("ij");
 //           //hardMod_ = hardMod_ + hm.trace();
 //  }
-//  
+//
 //  int NS = backwardEPS.getNScalarVar();
 //  int NT = backwardEPS.getNTensorVar();
-//  
+//
 //  XC::Vector internal_variable_residual(NS+NT);
 //
 //  XC::stresstensor T;
 //  XC::stresstensor new_T;
 //  XC::stresstensor dT;
-//  
+//
 //  BJtensor
 //
 //  int ii;
 //  for(ii = 1; ii <= NS; ii++) {
-//          internal_variable_residual[ii-1] = 
-//                backwardEPS.getScalarVar(ii)*(-1.0) + startEPS.getScalarVar(ii) + 
+//          internal_variable_residual[ii-1] =
+//                backwardEPS.getScalarVar(ii)*(-1.0) + startEPS.getScalarVar(ii) +
 //                Delta_lambda * h_s[ii-1] ;
 //  }
-//  
+//
 //  for(ii = 1; ii <= NT; ii++) {
 //          new_T = backwardEPS.getTensorVar(ii)*(-1.0);
 //        T = startEPS.getTensorVar(ii);
-//          dT = h_t[ii-1] * Delta_lambda; 
-//        internal_variable_residual[NS+ii-1] = 
+//          dT = h_t[ii-1] * Delta_lambda;
+//        internal_variable_residual[NS+ii-1] =
 //                new_T.determinant() + T.determinant() + dT.determinant();
 //  }
-//  
+//
 //  double f = getYS()->f( &backwardEPS );
 //  double residual = internal_variable_residual.Norm();
 //
 //  if( (fabs(f) <= tol1) && residual <= tol2 ) {
-//          
+//
 //        XC::straintensor elastic_strain = backwardEPS.getElasticStrain();
 //        elastic_strain = elastic_strain + strain_incr;
 //          backwardEPS.setElasticStrain(elastic_strain);
@@ -3760,11 +3527,11 @@ std::ostream& XC::operator<<(std::ostream& os, const XC::Template3Dep & MP)
 //        //         getELT1()->updateEeDm(&backwardEPS, -st_vol, 0.0);
 //              //}
 //        return backwardEPS;
-//  
+//
 //  } else {
-//          
+//
 //        while d2Qoverds2 = getPS()->d2Qods2( &backwardEPS );
-//        
+//
 //          return backwardEPS;
 //  }
 //

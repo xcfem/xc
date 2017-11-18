@@ -32,7 +32,7 @@
 #include "utility/actor/actor/MovableObject.h"
 
 namespace XC {
-//! @ingroup MatUnx
+//! @ingroup PYMat
 //
 //! @brief Internal parameters for a p-y material.
 class InternalParamsA: public MovableObject

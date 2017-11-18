@@ -11,16 +11,16 @@
 //  of the original program (see copyright_opensees.txt)
 //  XC is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
-//  the Free Software Foundation, either version 3 of the License, or 
+//  the Free Software Foundation, either version 3 of the License, or
 //  (at your option) any later version.
 //
-//  This software is distributed in the hope that it will be useful, but 
+//  This software is distributed in the hope that it will be useful, but
 //  WITHOUT ANY WARRANTY; without even the implied warranty of
 //  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-//  GNU General Public License for more details. 
+//  GNU General Public License for more details.
 //
 //
-// You should have received a copy of the GNU General Public License 
+// You should have received a copy of the GNU General Public License
 // along with this program.
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
@@ -73,7 +73,7 @@
 #include <utility/matrix/ID.h>
 #include "solution/SoluMethod.h"
 
-// Constructor
+//! @brief Constructor
 XC::NewtonRaphson::NewtonRaphson(SoluMethod *owr,int theTangentToUse)
   :NewtonBased(owr,EquiALGORITHM_TAGS_NewtonRaphson,theTangentToUse) {}
 
@@ -89,15 +89,16 @@ int XC::NewtonRaphson::solveCurrentStep(void)
 
     if((theAnaModel == 0) || (theIntegrator == 0) || (theSOE == 0) || (theTest == 0))
       {
-        std::cerr << "WARNING NewtonRaphson::solveCurrentStep() - setLinks() has"
-                  << "no se ha asignado modelo, integrator o system of equations.\n";
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; - setLinks() has"
+                  << "undefined model, integrator or system of equations.\n";
         return -5;
       }
 
     if(theIntegrator->formUnbalance() < 0)
       {
-        std::cerr << "WARNING NewtonRaphson::solveCurrentStep() -"
-                  << "the Integrator failed in formUnbalance()\n";
+        std::cerr << getClassName() << "::" << __FUNCTION__
+                  << "; the Integrator failed in formUnbalance().\n";
         return -2;
       }
 
@@ -105,8 +106,8 @@ int XC::NewtonRaphson::solveCurrentStep(void)
     theTest->set_owner(getSoluMethod());
     if(theTest->start() < 0)
       {
-        std::cerr << "NewtnRaphson::solveCurrentStep() -"
-                  << "the ConvergenceTest object failed in start()\n";
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << ";the ConvergenceTest object failed in start()\n";
         return -3;
       }
 
@@ -121,8 +122,8 @@ int XC::NewtonRaphson::solveCurrentStep(void)
               {
                 if(theIntegrator->formTangent(INITIAL_TANGENT) < 0)
                   {
-                    std::cerr << "WARNING NewtonRaphson::solveCurrentStep() -";
-                    std::cerr << "the Integrator failed in formTangent()\n";
+                    std::cerr << getClassName() << "::" << __FUNCTION__
+			      << "; the Integrator failed in formTangent()\n";
                     return -1;
                   }
               }
@@ -130,8 +131,8 @@ int XC::NewtonRaphson::solveCurrentStep(void)
               {
                 if(theIntegrator->formTangent(CURRENT_TANGENT) < 0)
                   {
-                    std::cerr << "WARNING NewtonRaphson::solveCurrentStep() -";
-                    std::cerr << "the Integrator failed in formTangent()\n";
+                    std::cerr << getClassName() << "::" << __FUNCTION__
+			      << "; the Integrator failed in formTangent()\n";
                     return -1;
                   }
               }
@@ -140,28 +141,28 @@ int XC::NewtonRaphson::solveCurrentStep(void)
           {
             if(theIntegrator->formTangent(tangent) < 0)
               {
-                std::cerr << "WARNING NewtonRaphson::solveCurrentStep() -";
-                std::cerr << "the Integrator failed in formTangent()\n";
+                std::cerr << getClassName() << "::" << __FUNCTION__
+			  << "; the Integrator failed in formTangent()\n";
                 return -1;
               }
           }
         if(theSOE->solve() < 0)
           {
-            std::cerr << "WARNING NewtonRaphson::solveCurrentStep() -";
-            std::cerr << "the LinearSysOfEqn failed in solve()\n";
+            std::cerr << getClassName() << "::" << __FUNCTION__
+		      << "; the LinearSysOfEqn failed in solve()\n";
             return -3;
           }
         if(theIntegrator->update(theSOE->getX()) < 0)
           {
-            std::cerr << "WARNING NewtonRaphson::solveCurrentStep() -";
-            std::cerr << "the Integrator failed in update()\n";
+            std::cerr << getClassName() << "::" << __FUNCTION__
+		      << "; the Integrator failed in update()\n";
             return -4;
           }
 
         if(theIntegrator->formUnbalance() < 0)
           {
-            std::cerr << "WARNING NewtonRaphson::solveCurrentStep() -";
-            std::cerr << "the Integrator failed in formUnbalance()\n";
+            std::cerr << getClassName() << "::" << __FUNCTION__
+		      << "; the Integrator failed in formUnbalance()\n";
             return -2;
           }
 
@@ -172,10 +173,10 @@ int XC::NewtonRaphson::solveCurrentStep(void)
 
     if(result == -2)
       {
-        std::cerr << "NewtonRaphson::solveCurrentStep() -"
-                  << "the ConvergenceTest object failed in test()\n"
+        std::cerr << getClassName() << "::" << __FUNCTION__
+                  << "; the ConvergenceTest object failed in test()\n"
                   << "convergence test message: "
-		  << theTest->getStatusMsg(1) << std::endl;
+                  << theTest->getStatusMsg(1) << std::endl;
         return -3;
       }
 

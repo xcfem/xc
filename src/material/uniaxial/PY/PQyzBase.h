@@ -32,7 +32,7 @@
 #include <material/uniaxial/PY/PYBase.h>
 
 namespace XC {
-//! @ingroup MatUnx
+//! @ingroup PYMat
 //
 //! @brief Base class for PySimple1 y QzSimple1.
 class PQyzBase: public PYBase

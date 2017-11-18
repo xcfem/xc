@@ -36,7 +36,10 @@
 namespace XC {
 //! @ingroup MatUnx
 //
-//! @brief Material que representa una curva p-y.
+//! @degroup PYMat
+//! @ingroup PYMat
+//
+//! @brief Material that represents a p-y curve.
 class PYBase: public UniaxialMaterial
   {
   protected:

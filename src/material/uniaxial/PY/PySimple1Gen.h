@@ -28,13 +28,16 @@
 //$Date: 2004/06/30 00:27:40 $
 //$Source: /usr/local/cvs/OpenSees/SRC/material/uniaxial/PY/PySimple1Gen.h,v $
 
+#ifndef PYSIMPLE1GEN_H
+#define PYSIMPLE1GEN_H
+
 #include <string>
 #include <vector>
 
 #include "Simple1GenBase.h"
 
 namespace XC {
-//! @ingroup MatUnx
+//! @ingroup PYMat
 //
 //! @brief ??.
 class PySimple1Gen: public Simple1GenBase
@@ -77,3 +80,5 @@ public:
     ~PySimple1Gen(void);
   };
 } // end of XC namespace
+
+#endif

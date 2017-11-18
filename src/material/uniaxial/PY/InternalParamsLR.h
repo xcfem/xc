@@ -32,7 +32,7 @@
 #include <material/uniaxial/PY/InternalParamsA.h>
 
 namespace XC {
-//! @ingroup MatUnx
+//! @ingroup PYMat
 //
 //! @brief Internal parameters for a p-y material.
 class InternalParamsLR: public InternalParamsA

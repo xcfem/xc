@@ -28,10 +28,13 @@
 //$Date: 2004/06/30 00:27:40 $
 //$Source: /usr/local/cvs/OpenSees/SRC/material/uniaxial/PY/TzSimple1Gen.h,v $
 
+#ifndef TZSIMPLE1GEN_H
+#define TZSIMPLE1GEN_H
+
 #include "Simple1GenBase.h"
 
 namespace XC {
-//! @ingroup MatUnx
+//! @ingroup PYMat
 //
 //! @brief ??.
 class TzSimple1Gen: public Simple1GenBase
@@ -71,3 +74,5 @@ class TzSimple1Gen: public Simple1GenBase
   ~TzSimple1Gen();
 };
 } // end of XC namespace
+
+#endif

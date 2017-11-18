@@ -11,16 +11,16 @@
 //  of the original program (see copyright_opensees.txt)
 //  XC is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
-//  the Free Software Foundation, either version 3 of the License, or 
+//  the Free Software Foundation, either version 3 of the License, or
 //  (at your option) any later version.
 //
-//  This software is distributed in the hope that it will be useful, but 
+//  This software is distributed in the hope that it will be useful, but
 //  WITHOUT ANY WARRANTY; without even the implied warranty of
 //  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-//  GNU General Public License for more details. 
+//  GNU General Public License for more details.
 //
 //
-// You should have received a copy of the GNU General Public License 
+// You should have received a copy of the GNU General Public License
 // along with this program.
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
@@ -43,14 +43,14 @@
 **   Filip C. Filippou (filippou@ce.berkeley.edu)                     **
 **                                                                    **
 ** ****************************************************************** */
-                                                                        
+
 // $Revision: 1.3 $
 // $Date: 2006/01/12 23:39:21 $
 // $Source: /usr/local/cvs/OpenSees/SRC/graph/numberer/SimpleNumberer.cpp,v $
-                                                                        
-                                                                        
 
-// Written: fmk 
+
+
+// Written: fmk
 // Revision: A
 //
 // Description: This file contains the class definition for XC::SimpleNumberer.
@@ -66,36 +66,37 @@
 #include <solution/graph/graph/VertexIter.h>
 #include <utility/matrix/ID.h>
 
-// Constructor
+//! @brief Constructor
 XC::SimpleNumberer::SimpleNumberer(void)
  :BaseNumberer(GraphNUMBERER_TAG_SimpleNumberer) {}
 
+//! @brief Virtual constructor.
 XC::GraphNumberer *XC::SimpleNumberer::getCopy(void) const
   { return new SimpleNumberer(*this); }
 
 const XC::ID &XC::SimpleNumberer::number(Graph &theGraph, int lastVertex)
   {
     // see if we can do quick return
-    if(!checkSize(theGraph)) 
+    if(!checkSize(theGraph))
       return theRefResult;
-	    
+        
 
     // Now we go through the iter and assign the numbers
 
     if(lastVertex != -1)
       {
-	std::cerr << "WARNING:  SimpleNumberer::number -";
-	std::cerr << " - does not deal with lastVertex";
+        std::cerr << "WARNING:  SimpleNumberer::number -";
+        std::cerr << " - does not deal with lastVertex";
       }
-    
+
     Vertex *vertexPtr= nullptr;
     VertexIter &vertexIter= theGraph.getVertices();
     int count = 0;
-    
+
     while((vertexPtr = vertexIter()) != 0)
       {
-	theRefResult(count++) = vertexPtr->getTag();
-	vertexPtr->setTmp(count);
+        theRefResult(count++) = vertexPtr->getTag();
+        vertexPtr->setTmp(count);
       }
     return theRefResult;
   }

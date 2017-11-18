@@ -26,15 +26,19 @@
 //----------------------------------------------------------------------------
 //Simple1GenBase.h
 
+#ifndef SIMPLE1GENBASE_H
+#define SIMPLE1GENBASE_H
+
 #include <string>
 #include <vector>
 
+#include "xc_utils/src/nucleo/EntCmd.h"
 
 namespace XC {
-//! @ingroup MatUnx
+//! @ingroup PYMat
 //
 //! @brief ??.
-class Simple1GenBase
+class Simple1GenBase: public EntCmd
   {
   protected:	
     // Variables used for reading input files:
@@ -65,3 +69,5 @@ class Simple1GenBase
     ~Simple1GenBase(void);
   };
 } // end of XC namespace
+
+#endif
