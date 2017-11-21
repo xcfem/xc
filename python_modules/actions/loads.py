@@ -117,14 +117,23 @@ class UniformLoadOnLines(BaseVectorLoad):
         self.xcSet=xcSet
 
     def appendLoadToCurrentLoadPattern(self):
+        prep=self.xcSet.getPreprocessor
+        pointsCont=prep.getCad.getPoints
         for l in self.xcSet.getLines:
+            ptExt1tag=l.getKPoints()[0]
+            ext1=pointsCont.get(ptExt1tag).getPos
             nod=[n for n in l.getNodes()]
-            ndistOrig=[n.getCoo.Norm() for n in nod]
-            sortNod=[nod for ndistOrig,nod in sorted(zip(ndistOrig,nod))]
+            ndistExtr1=[(n.getInitialPos3d).distPos3d(ext1) for n in nod]
+            sortNod=[nod for ndistExtr1,nod in sorted(zip(ndistExtr1,nod))]
             lnInfl=[(sortNod[i-1].getInitialPos3d).distPos3d(sortNod[i+1].getInitialPos3d)/2 for i in range(1,len(sortNod)-1)]
             lnInfl.insert(0,(sortNod[0].getInitialPos3d).distPos3d(sortNod[1].getInitialPos3d)/2.0)
-            lnInfl.append((sortNod[len(sortNod)-2].getInitialPos3d).distPos3d(sortNod[len(sortNod)-1].getInitialPos3d)/2.0)
+            p2=sortNod[-2].getInitialPos3d
+            p1=sortNod[-1].getInitialPos3d
+            lnInfl.append((p2.distPos3d(p1))/2.0)
+#            lnInfl.append((sortNod[len(sortNod)-2].getInitialPos3d).distPos3d(sortNod[len(sortNod)-1].getInitialPos3d)/2.0)
             for i in range(len(sortNod)):
+                n=sortNod[i]
+                load=lnInfl[i]*self.loadVector
                 sortNod[i].newLoad(lnInfl[i]*self.loadVector)
 
 class UniformLoadOnSurfaces(BaseVectorLoad):
