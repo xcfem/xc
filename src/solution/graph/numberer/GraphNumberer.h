@@ -75,16 +75,49 @@ class ObjectBroker;
 //! @ingroup Graph
 //
 //! @brief Numberer for problem's degrees of freedom.
+//!
+//! GraphNumberer is an abstract class. The GraphNumberer
+//! class defines the interface that all programmers must provide when
+//! introducing new GraphNumberer subclasses. A GraphNumberer is an
+//! algorithmic class for numbering the Vertices of a Graph; that is
+//! assigning a unique integer value (\f$0\f$ through \p numVertex \f$-1\f$) to
+//! each Vertex (uses \p tmp variable of Vertex) of the Graph.
 class GraphNumberer : public MovableObject, public EntCmd
   {
   protected:
-
     friend class DOF_Numberer;
     GraphNumberer(int classTag);
+    //! @brief Virtual constructor.
     virtual GraphNumberer *getCopy(void) const= 0;
   public:
     virtual ~GraphNumberer(void) {}
+
+    //! @brief Graph numbering.
+    //!
+    //! This is the method invoked to perform the graph numbering, that is to
+    //! assign a unique integer \f$1\f$ through \p numVertex, to each Vertex in
+    //! the Graph. Returns an ordered ID containing the vertex references in
+    //! the order of the numbering, i.e. \f$ID(0)\f$ contains the integer
+    //! reference for the vertex assigned the number 1, \f$ID(1)\f$ contains
+    //! the integer reference for the vertex assigned the number 2 and so on.
+    //! A side effect of the numbering is that the \p Tmp variable of each
+    //! vertex is set to the number assigned to that vertex. If \p lastVertex
+    //! is not \f$-1\f$ the Vertex whose tag is given by \p lastVertex
+    //! should be numbered last (it does not have to be though THIS MAY CHANGE).
     virtual const ID &number(Graph &theGraph, int lastVertex = -1) =0;
+    
+    //! @brief Graph numbering.
+    //!
+    //! This is the method invoked to perform the graph numbering, that is to
+    //! assign a unique integer \f$1\f$ through \p numVertex, to each Vertex in
+    //! the Graph. Returns an ordered ID containing the vertex references in
+    //! the order of the numbering, i.e. \f$ID(0)\f$ contains the integer
+    //! reference for the vertex assigned the number 1, \f$ID(1)\f$ contains
+    //! the integer reference for the vertex assigned the number 2 and so on.
+    //! A side effect of the numbering is that the \p Tmp variable of each
+    //! vertex is set to the number assigned to that vertex. If \p lastVertex
+    //! is not \f$-1\f$ the Vertex whose tag is given by \p lastVertex
+    //! should be numbered last (it does not have to be though THIS MAY CHANGE).
     virtual const ID &number(Graph &theGraph, const ID &lastVertices) =0;
   };
 } // end of XC namespace

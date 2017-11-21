@@ -60,11 +60,13 @@
 
 #include "GraphNumberer.h"
 
-XC::GraphNumberer::GraphNumberer(int cTag)
-  :MovableObject(cTag)
-  {
-    // does nothing
-  }
+//! @brief Constructor.
+//!
+//! The integer \p classTag is passed to the MovableObject classes
+//! constructor. 
+XC::GraphNumberer::GraphNumberer(int classTag)
+  :MovableObject(classTag)
+  {}
 
 
 
