@@ -455,7 +455,7 @@ int XC::FDdecoupledElastic3D::revertToStart(void)
 }
 //! @brief 
 XC::NDMaterial *XC::FDdecoupledElastic3D::getCopy(void) const
-  { return new XC::FDdecoupledElastic3D(*this); }
+  { return new FDdecoupledElastic3D(*this); }
 
 //! @brief 
 XC::NDMaterial *XC::FDdecoupledElastic3D::getCopy(const std::string &type) const

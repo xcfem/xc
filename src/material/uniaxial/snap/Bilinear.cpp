@@ -416,7 +416,7 @@ int XC::Bilinear::sendSelf(CommParameters &cp)
         inp[8]  = Resfac;
 
         
-        Bilinear *theCopy = new XC::Bilinear(this->getTag(), inp ,StrDamage,StfDamage,CapDamage);
+        Bilinear *theCopy = new Bilinear(this->getTag(), inp ,StrDamage,StfDamage,CapDamage);
         
         for (int i=0; i<17; i++) {
                 theCopy->hsTrial[i] = hsTrial[i];
@@ -584,26 +584,26 @@ XC::Response* XC::Bilinear::setResponse(const std::vector<std::string> &argv, In
       }
 
     if(argv[0] == "force" || argv[0] == "stress" )
-                return new XC::MaterialResponse(this, 1, 0.0);
+                return new MaterialResponse(this, 1, 0.0);
 
         else if(argv[0] == "defo" || argv[0] == "deformation" ||
                 argv[0] == "strain")
-                return new XC::MaterialResponse(this, 2, 0.0);
+                return new MaterialResponse(this, 2, 0.0);
 
         else if(argv[0] == "plastic" || argv[0] == "plasticdefo" ||
                 argv[0] == "plasticdeformation" || argv[0] == "plasticstrain")
-                return new XC::MaterialResponse(this, 3, 0.0);
+                return new MaterialResponse(this, 3, 0.0);
 
         else if( (argv[0] == "stiff") || (argv[0] == "stiffness") )
-                return new XC::MaterialResponse(this, 4, 0.0);
+                return new MaterialResponse(this, 4, 0.0);
         
         else if( (argv[0] == "unloading") || (argv[0] == "unloadingstiffness")
                 || (argv[0] == "unloadingstiff" ) )
-                return new XC::MaterialResponse(this, 5, 0.0);
+                return new MaterialResponse(this, 5, 0.0);
 
         else if( (argv[0] == "damage") || (argv[0] == "damages")
                 || (argv[0] == "Damage" ) || (argv[0] == "Damages" ) )
-                return new XC::MaterialResponse(this, 6, XC::Vector(3));
+                return new MaterialResponse(this, 6, XC::Vector(3));
 
         else
                 return 0;
@@ -961,7 +961,7 @@ int
 XC::BoucWenMaterial::commitSensitivity(double TstrainSensitivity, int gradNumber, int numGrads)
 {
         if(SHVs == 0) {
-                SHVs = new XC::Matrix(3,numGrads);
+                SHVs = new Matrix(3,numGrads);
         }
 
         // First set values depending on what is random

@@ -261,7 +261,7 @@ const XC::VectorCells &XC::RgSccQuad::getCells(void) const
 
 
 XC::RegionSecc *XC::RgSccQuad::getCopy (void) const
-  { return new XC::RgSccQuad(*this); }
+  { return new RgSccQuad(*this); }
  
 void XC::RgSccQuad::Print(std::ostream &s, int flag) const
   {

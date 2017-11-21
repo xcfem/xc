@@ -55,7 +55,7 @@ int XC::QuadraticCyclic::createHalfCycleTask()
 
 XC::CyclicModel *XC::QuadraticCyclic::getCopy()
   {
-    XC::CyclicModel *newModel = new XC::QuadraticCyclic(getTag(), weightFactor, facty);	
+    XC::CyclicModel *newModel = new QuadraticCyclic(getTag(), weightFactor, facty);	
     return newModel;
   }
 

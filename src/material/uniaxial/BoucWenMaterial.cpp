@@ -268,9 +268,7 @@ int XC::BoucWenMaterial::revertToStart(void)
 
 XC::UniaxialMaterial *XC::BoucWenMaterial::getCopy(void) const
   {
-    BoucWenMaterial *theCopy =
-        new XC::BoucWenMaterial(this->getTag(), alpha, ko, n, gamma,
-                                                beta, Ao, deltaA, deltaNu, deltaEta,tolerance,maxNumIter);
+    BoucWenMaterial *theCopy= new BoucWenMaterial(this->getTag(), alpha, ko, n, gamma, beta, Ao, deltaA, deltaNu, deltaEta,tolerance,maxNumIter);
 
     theCopy->Tstrain = Tstrain;
     theCopy->Cstrain = Cstrain;
@@ -505,7 +503,7 @@ double XC::BoucWenMaterial::getRhoSensitivity(int gradNumber)
 int XC::BoucWenMaterial::commitSensitivity(double TstrainSensitivity, int gradNumber, int numGrads)
   {
         if (SHVs == 0) {
-                SHVs = new XC::Matrix(3,numGrads);
+                SHVs = new Matrix(3,numGrads);
         }
 
         // First set values depending on what is random

@@ -119,7 +119,7 @@ XC::ChiSquareRV::getPDFvalue(double rvValue)
 {
 	double result;
 	if ( 0.0 < rvValue ) {
-		GammaRV *aGammaRV = new XC::GammaRV(1, 0.0, 1.0, 0.0);
+		GammaRV *aGammaRV = new GammaRV(1, 0.0, 1.0, 0.0);
 		double a = aGammaRV->gammaFunction(0.5*nu);
 		result = pow(0.5*rvValue,0.5*nu-1.0)*exp(-0.5*rvValue)/(2.0*a);
 		delete aGammaRV;
@@ -136,7 +136,7 @@ XC::ChiSquareRV::getCDFvalue(double rvValue)
 {
 	double result;
 	if ( 0.0 < rvValue ) {
-		GammaRV *aGammaRV = new XC::GammaRV(1, 0.0, 1.0, 0.0);
+		GammaRV *aGammaRV = new GammaRV(1, 0.0, 1.0, 0.0);
 		double a = aGammaRV->incompleteGammaFunction(0.5*nu,0.5*rvValue);
 		double b = aGammaRV->gammaFunction(0.5*nu);
 		result = a/b;

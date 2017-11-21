@@ -109,7 +109,7 @@ XC::TimeSeries *XC::TrapezoidalTimeSeriesIntegrator::integrate(TimeSeries *theSe
       }
 
     // Set the method return value
-    PathSeries *returnSeries= new XC::PathSeries(theIntegratedValues, delta);
+    PathSeries *returnSeries= new PathSeries(theIntegratedValues, delta);
 
     if(returnSeries == 0)
       {

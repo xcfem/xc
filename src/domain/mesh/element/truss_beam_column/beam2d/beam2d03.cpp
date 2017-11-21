@@ -95,7 +95,7 @@ XC::beam2d03::beam2d03(int tag, double a, double e, double i, int Nd1, int Nd2)
 
 //! @brief Virtual constructor.
 XC::Element* XC::beam2d03::getCopy(void) const
-  { return new XC::beam2d03(*this); }
+  { return new beam2d03(*this); }
 
 int XC::beam2d03::revertToLastCommit()
   {

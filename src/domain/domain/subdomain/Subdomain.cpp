@@ -102,7 +102,7 @@ XC::Subdomain::Subdomain(int tag,DataOutputHandler::map_output_handlers *oh,EntC
     // init the arrays.
     internalNodes= new ArrayOfTaggedObjects(static_cast<Domain *>(this),8024,"intNod");
     externalNodes= new ArrayOfTaggedObjects(static_cast<Domain *>(this),256,"extNod");
-    //    realExternalNodes = new XC::ArrayOfTaggedObjects(256);
+    //    realExternalNodes = new ArrayOfTaggedObjects(256);
 
     internalNodeIter = new SingleDomNodIter(internalNodes);
     externalNodeIter = new SingleDomNodIter(externalNodes);
@@ -435,7 +435,7 @@ const XC::ID &XC::Subdomain::getExternalNodes(void) const
     int numExt = externalNodes->getNumComponents();
     if(!extNodes)
       {
-        extNodes= new XC::ID(numExt);
+        extNodes= new ID(numExt);
         if(extNodes == 0 || extNodes->Size() != numExt)
           {
             std::cerr << "XC::Subdomain::getExternalNodes(): ";
@@ -447,7 +447,7 @@ const XC::ID &XC::Subdomain::getExternalNodes(void) const
     if(extNodes->Size() != numExt)
       {
         delete extNodes;
-        extNodes = new XC::ID(numExt);
+        extNodes = new ID(numExt);
         if(extNodes == 0 || extNodes->Size() != numExt)
           {
             std::cerr << "XC::Subdomain::getExternalNodes(): ";
@@ -753,11 +753,11 @@ int XC::Subdomain::buildMap(void) const
         // determine the mapping between local dof and subdomain ana dof
         int numDOF = this->getNumDOF();
         if(map == 0)
-          map = new XC::ID(numDOF);
+          map = new ID(numDOF);
         if(map->Size() != numDOF)
           {
             delete map;
-            map = new XC::ID(numDOF);
+            map = new ID(numDOF);
           }
 
         //int numExt = theAnalysis->getNumExternalEqn();
@@ -782,18 +782,18 @@ int XC::Subdomain::buildMap(void) const
         mapBuilt = true;
 
         if(mappedVect == 0)
-          mappedVect = new XC::Vector(numDOF);
+          mappedVect = new Vector(numDOF);
         if(mappedVect->Size() != numDOF)
           {
             delete mappedVect;
-            mappedVect = new XC::Vector(numDOF);
+            mappedVect = new Vector(numDOF);
           }
         if(mappedMatrix == 0)
-          mappedMatrix = new XC::Matrix(numDOF,numDOF);
+          mappedMatrix = new Matrix(numDOF,numDOF);
         if(mappedMatrix->noRows() != numDOF)
           {
             delete mappedMatrix;
-            mappedMatrix = new XC::Matrix(numDOF,numDOF);
+            mappedMatrix = new Matrix(numDOF,numDOF);
           }
       }
     return 0;

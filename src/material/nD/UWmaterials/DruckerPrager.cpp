@@ -737,11 +737,11 @@ XC::Vector XC::DruckerPrager::getState()
 XC::Response *XC::DruckerPrager::setResponse(const std::vector<std::string> &argv, Information &matInfo)
   {
     if(argv[0] == "stress" || argv[0] == "stresses")
-      return new XC::MaterialResponse(this, 1, this->getStress());
+      return new MaterialResponse(this, 1, this->getStress());
     else if(argv[0] == "strain" || argv[0] == "strains")
-      return new XC::MaterialResponse(this, 2, this->getStrain());
+      return new MaterialResponse(this, 2, this->getStrain());
     else if(argv[0] == "state")
-      return new XC::MaterialResponse(this, 3, this->getState());
+      return new MaterialResponse(this, 3, this->getState());
     else
       return nullptr;
   }

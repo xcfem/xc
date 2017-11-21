@@ -444,11 +444,11 @@ int XC::FluidSolidPorousMaterial::recvSelf(const CommParameters &cp)
 XC::Response *XC::FluidSolidPorousMaterial::setResponse(const std::vector<std::string> &argv, Information &matInfo)
   {
     if(argv[0] == "stress" || argv[0] == "stresses")
-      return new XC::MaterialResponse(this, 1, this->getCommittedStress());
+      return new MaterialResponse(this, 1, this->getCommittedStress());
     else if(argv[0] == "strain" || argv[0] == "strains")
-      return new XC::MaterialResponse(this, 2, this->getCommittedStrain());
+      return new MaterialResponse(this, 2, this->getCommittedStrain());
     else if(argv[0] == "tangent")
-      return new XC::MaterialResponse(this, 3, this->getTangent());
+      return new MaterialResponse(this, 3, this->getTangent());
     else if(argv[0] == "backbone")
       return theSoilMaterial->setResponse(argv, matInfo);
     else if(argv[0] == "pressure")

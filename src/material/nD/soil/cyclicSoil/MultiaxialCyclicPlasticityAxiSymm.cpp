@@ -104,7 +104,7 @@ XC::MultiaxialCyclicPlasticityAxiSymm::MultiaxialCyclicPlasticityAxiSymm(   int 
 
 //make a clone of this material
 XC::NDMaterial* XC::MultiaxialCyclicPlasticityAxiSymm::getCopy(void) const 
-  { return new XC::MultiaxialCyclicPlasticityAxiSymm(*this); }
+  { return new MultiaxialCyclicPlasticityAxiSymm(*this); }
 
 
 //send back type of material

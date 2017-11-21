@@ -56,7 +56,7 @@
 namespace XC{
   class FourNodeQuad;
 
-//! @ingroup MatUnx
+//! @ingroup PYMat
 //
 //! @brief ??.
 class PyLiq1 : public PySimple1

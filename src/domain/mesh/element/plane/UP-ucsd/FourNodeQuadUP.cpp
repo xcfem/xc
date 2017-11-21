@@ -108,7 +108,7 @@ XC::FourNodeQuadUP::FourNodeQuadUP(void)
 
 //! @brief Virtual constructor.
 XC::Element* XC::FourNodeQuadUP::getCopy(void) const
-  { return new XC::FourNodeQuadUP(*this); }
+  { return new FourNodeQuadUP(*this); }
 
 XC::FourNodeQuadUP::~FourNodeQuadUP(void)
   {
@@ -276,7 +276,7 @@ const XC::Matrix &XC::FourNodeQuadUP::getInitialStiff(void) const
     }
   }
 
-  Ki = new XC::Matrix(K);
+  Ki = new Matrix(K);
       }
   if(Ki == 0) {
     std::cerr << "FATAL XC::FourNodeQuadUP::getInitialStiff() -";
@@ -668,10 +668,10 @@ void XC::FourNodeQuadUP::Print(std::ostream &s, int flag)
 XC::Response *XC::FourNodeQuadUP::setResponse(const std::vector<std::string> &argv, Information &eleInfo)
 {
     if(argv[0] == "force" || argv[0] == "forces")
-                return new XC::ElementResponse(this, 1, P);
+                return new ElementResponse(this, 1, P);
 
     else if(argv[0] == "stiff" || argv[0] == "stiffness")
-                return new XC::ElementResponse(this, 2, K);
+                return new ElementResponse(this, 2, K);
 
         else if(argv[0] == "material" || argv[0] == "integrPoint") {
                 int pointNum = atoi(argv[1]);

@@ -212,7 +212,7 @@ int XC::EPPGapMaterial::revertToStart(void)
 
 
 XC::UniaxialMaterial *XC::EPPGapMaterial::getCopy(void) const
-  { return new XC::EPPGapMaterial(*this); }
+  { return new EPPGapMaterial(*this); }
 
 int XC::EPPGapMaterial::sendSelf(CommParameters &cp)
   {

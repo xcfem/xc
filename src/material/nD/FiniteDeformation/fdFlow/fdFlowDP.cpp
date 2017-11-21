@@ -106,7 +106,7 @@ XC::fdFlowDP::fdFlowDP(double DilatedAngle_in, double Cohesion_in, int ConeIndex
 //--------------------------------------------------------------------
  XC::fdFlow * XC::fdFlowDP::newObj()
 {
-     fdFlow *newfdyd = new XC::fdFlowDP(DilatedAngle, Cohesion, ConeIndex);
+     fdFlow *newfdyd = new fdFlowDP(DilatedAngle, Cohesion, ConeIndex);
      return newfdyd;
 }
 

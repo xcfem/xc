@@ -143,7 +143,7 @@ XC::SamplingAnalysis::analyze(void)
 	Vector randomArray(numRV);
 	LimitStateFunction *theLimitStateFunction = 0;
 	NormalRV *aStdNormRV = 0;
-	aStdNormRV = new XC::NormalRV(1,0.0,1.0,0.0);
+	aStdNormRV = new NormalRV(1,0.0,1.0,0.0);
 //	ofstream *outputFile = 0;
 	bool failureHasOccured = false;
 	char myString[50];
@@ -170,7 +170,7 @@ XC::SamplingAnalysis::analyze(void)
 
 	// Create object to do matrix operations on the covariance matrix
 	MatrixOperations *theMatrixOperations = 0;
-	theMatrixOperations = new XC::MatrixOperations(covariance);
+	theMatrixOperations = new MatrixOperations(covariance);
 	if (theMatrixOperations == 0) {
 		std::cerr << "XC::SamplingAnalysis::analyze() - could not create" << std::endl
 			<< " the object to perform matrix operations." << std::endl;

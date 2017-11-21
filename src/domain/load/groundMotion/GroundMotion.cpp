@@ -79,7 +79,7 @@ XC::GroundMotion::GroundMotion(int theClassTag)
 //     if(!theIntegrator)
 //       {
 //         std::cerr << "WARNING:XC::GroundMotion::integrate() - no XC::TimeSeriesIntegrator provided - will use Trapezoidal. \n";
-//         theIntegrator = new XC::TrapezoidalTimeSeriesIntegrator();
+//         theIntegrator = new TrapezoidalTimeSeriesIntegrator();
 //         if(theIntegrator == 0)
 //           {
 //             std::cerr << "WARNING:XC::GroundMotion::integrate() - no XC::TimeSeriesIntegrator provided - failed to create a Trapezoidal .. memory problems! \n";

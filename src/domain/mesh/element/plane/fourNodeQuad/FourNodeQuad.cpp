@@ -593,9 +593,9 @@ void XC::FourNodeQuad::Print(std::ostream &s, int flag)
 XC::Response *XC::FourNodeQuad::setResponse(const std::vector<std::string> &argv, Information &eleInfo)
   {
     if(argv[0] == "force" || argv[0] == "forces")
-      return new XC::ElementResponse(this, 1, P);
+      return new ElementResponse(this, 1, P);
     else if(argv[0] == "stiff" || argv[0] == "stiffness")
-      return new XC::ElementResponse(this, 2, K);
+      return new ElementResponse(this, 2, K);
     else if(argv[0] == "material" || argv[0] == "integrPoint")
       {
         size_t pointNum = atoi(argv[1]);
@@ -605,7 +605,7 @@ XC::Response *XC::FourNodeQuad::setResponse(const std::vector<std::string> &argv
           return nullptr;
       }
     else if(argv[0] == "stresses")
-      { return new XC::ElementResponse(this, 3, P); }
+      { return new ElementResponse(this, 3, P); }
     else // otherwise response quantity is unknown for the quad class
       return nullptr;
   }

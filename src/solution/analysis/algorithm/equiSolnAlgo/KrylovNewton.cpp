@@ -11,16 +11,16 @@
 //  of the original program (see copyright_opensees.txt)
 //  XC is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
-//  the Free Software Foundation, either version 3 of the License, or 
+//  the Free Software Foundation, either version 3 of the License, or
 //  (at your option) any later version.
 //
-//  This software is distributed in the hope that it will be useful, but 
+//  This software is distributed in the hope that it will be useful, but
 //  WITHOUT ANY WARRANTY; without even the implied warranty of
 //  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-//  GNU General Public License for more details. 
+//  GNU General Public License for more details.
 //
 //
-// You should have received a copy of the GNU General Public License 
+// You should have received a copy of the GNU General Public License
 // along with this program.
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
@@ -69,7 +69,7 @@
 #include <utility/matrix/ID.h>
 #include "solution/SoluMethod.h"
 
-// Constructor
+//! @brief Constructor
 XC::KrylovNewton::KrylovNewton(SoluMethod *owr,int theTangentToUse, int maxDim)
   :EquiSolnAlgo(owr,EquiALGORITHM_TAGS_KrylovNewton),
    tangent(theTangentToUse), v(0), Av(0), AvData(0), rData(0), work(0), lwork(0),
@@ -88,8 +88,8 @@ int XC::KrylovNewton::solveCurrentStep(void)
 
     if((theAnaModel == 0) || (theIntegrator == 0) || (theSOE == 0) || (theTest == 0))
       {
-        std::cerr << "WARNING KrylovNewton::solveCurrentStep() - "
-                  << "no se ha asignado modelo, integrator o system of equations.\n";
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; undefined model, integrator or system of equations.\n";
         return -5;
       }
 
@@ -120,8 +120,8 @@ int XC::KrylovNewton::solveCurrentStep(void)
     // Evaluate system residual R(y_0)
     if(theIntegrator->formUnbalance() < 0)
       {
-        std::cerr << "WARNING XC::KrylovNewton::solveCurrentStep() -"
-                  << "the XC::Integrator failed in formUnbalance()\n";
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; the Integrator failed in formUnbalance()\n";
         return -2;
       }
 
@@ -130,8 +130,8 @@ int XC::KrylovNewton::solveCurrentStep(void)
     theTest->set_owner(getSoluMethod());
     if(theTest->start() < 0)
       {
-        std::cerr << "KrylovNewton::solveCurrentStep() -"
-                  << "the XC::ConvergenceTest object failed in start()\n";
+        std::cerr << getClassName() << "::" << __FUNCTION__
+                  << "; the ConvergenceTest object failed in start()\n";
         return -3;
       }
 
@@ -139,8 +139,8 @@ int XC::KrylovNewton::solveCurrentStep(void)
     // Evaluate system Jacobian J = R'(y)|y_0
     if(theIntegrator->formTangent(tangent) < 0)
       {
-        std::cerr << "WARNING XC::KrylovNewton::solveCurrentStep() -"
-                  << "the XC::Integrator failed in formTangent()\n";
+        std::cerr << getClassName() << "::" << __FUNCTION__
+                  << "; the Integrator failed in formTangent()\n";
         return -1;
       }
 
@@ -160,8 +160,8 @@ int XC::KrylovNewton::solveCurrentStep(void)
             dim = 0;
             if(theIntegrator->formTangent(tangent) < 0)
               {
-                std::cerr << "WARNING XC::KrylovNewton::solveCurrentStep() -";
-                std::cerr << "the XC::Integrator failed to produce new_ formTangent()\n";
+                std::cerr << getClassName() << "::" << __FUNCTION__
+                          << "; the Integrator failed to produce new_ formTangent()\n";
                 return -1;
               }
           }
@@ -169,32 +169,32 @@ int XC::KrylovNewton::solveCurrentStep(void)
         // Solve for residual f(y_k) = J^{-1} R(y_k)
         if(theSOE->solve() < 0)
           {
-            std::cerr << "WARNING XC::KrylovNewton::solveCurrentStep() -";
-            std::cerr << "the LinearSysOfEqn failed in solve()\n";
+            std::cerr << getClassName() << "::" << __FUNCTION__
+                      << "; the LinearSysOfEqn failed in solve()\n";
             return -3;
           }
 
         // Solve least squares A w_{k+1} = r_k
         if(this->leastSquares(dim) < 0)
           {
-            std::cerr << "WARNING XC::KrylovNewton::solveCurrentStep() -";
-            std::cerr << "the XC::Integrator failed in leastSquares()\n";
+            std::cerr << getClassName() << "::" << __FUNCTION__
+                      << "; the Integrator failed in leastSquares()\n";
             return -1;
           }
 
         // Update system with v_k
         if(theIntegrator->update(v[dim]) < 0)
           {
-            std::cerr << "WARNING XC::KrylovNewton::solveCurrentStep() -";
-            std::cerr << "the XC::Integrator failed in update()\n";
+            std::cerr << getClassName() << "::" << __FUNCTION__
+                      << "; the Integrator failed in update()\n";
             return -4;
           }
 
         // Evaluate system residual R(y_k)
         if(theIntegrator->formUnbalance() < 0)
           {
-            std::cerr << "WARNING XC::KrylovNewton::solveCurrentStep() -"
-                      << "the Integrator failed in formUnbalance()\n";
+            std::cerr << getClassName() << "::" << __FUNCTION__
+                      << "; the Integrator failed in formUnbalance()\n";
             return -2;
           }
 
@@ -202,16 +202,16 @@ int XC::KrylovNewton::solveCurrentStep(void)
         dim++;
 
         result = theTest->test();
-        this->record(k++); //Llama al método record(...) de todos los recorders definidos.
+        this->record(k++); //Calss record(...) method de todos los recorders definidos.
       }
     while(result == -1);
 
     if(result == -2)
       {
-        std::cerr << "XC::KrylovNewton::solveCurrentStep() -"
-                  << "the XC::ConvergenceTest object failed in test()\n"
+        std::cerr << getClassName() << "::" << __FUNCTION__
+                  << "the ConvergenceTest object failed in test()\n"
                   << "convergence test message: "
-		  << theTest->getStatusMsg(1) << std::endl;
+                  << theTest->getStatusMsg(1) << std::endl;
         return -3;
       }
 
@@ -285,8 +285,8 @@ int XC::KrylovNewton::leastSquares(int k)
   // Check for error returned by subroutine
   if(info < 0)
     {
-      std::cerr << "WARNING XC::KrylovNewton::leastSquares() - \n";
-      std::cerr << "error code " << info << " returned by LAPACK dgels\n";
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "error code " << info << " returned by LAPACK dgels\n";
       return info;
     }
 

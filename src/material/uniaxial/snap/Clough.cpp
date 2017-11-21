@@ -303,7 +303,7 @@ int XC::Clough::sendSelf(CommParameters &cp)
         inp[15] =         cd;
 
   
-  Clough *theCopy = new XC::Clough(this->getTag(), inp );
+  Clough *theCopy = new Clough(this->getTag(), inp );
   
   for (int i=0; i<24; i++) {
     theCopy->hsTrial[i] = hsTrial[i];

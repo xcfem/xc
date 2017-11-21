@@ -96,13 +96,36 @@ class Template3Dep : public NDMaterial
     EvolutionLaw_S *ELS2; 
     EvolutionLaw_S *ELS3; 
     EvolutionLaw_S *ELS4; 
+    void allocELS(EvolutionLaw_S   *ELS1_= nullptr,
+		  EvolutionLaw_S   *ELS2_= nullptr,
+		  EvolutionLaw_S   *ELS3_= nullptr,
+		  EvolutionLaw_S   *ELS4_= nullptr );
+    void freeELS(void);
     
     //Tensorial variable evolution laws (currently at most 4  allowed)
     EvolutionLaw_T *ELT1; 
     EvolutionLaw_T *ELT2; 
     EvolutionLaw_T *ELT3; 
     EvolutionLaw_T *ELT4; 
+    void allocELT(EvolutionLaw_T   *ELT1_= nullptr,
+		  EvolutionLaw_T   *ELT2_= nullptr,
+		  EvolutionLaw_T   *ELT3_= nullptr,
+		  EvolutionLaw_T   *ELT4_= nullptr );
+    void freeELT(void);
 
+    void alloc( NDMaterial &theElMat,
+		YieldSurface *YS_= nullptr,
+		PotentialSurface *PS_= nullptr,
+		EPState          *EPS_= nullptr,
+		EvolutionLaw_S   *ELS1_= nullptr,
+		EvolutionLaw_S   *ELS2_= nullptr,
+		EvolutionLaw_S   *ELS3_= nullptr,
+		EvolutionLaw_S   *ELS4_= nullptr,
+		EvolutionLaw_T   *ELT1_= nullptr,
+		EvolutionLaw_T   *ELT2_= nullptr,
+		EvolutionLaw_T   *ELT3_= nullptr,
+		EvolutionLaw_T   *ELT4_= nullptr );
+    void free(void);
   public:
     // constructor
     Template3Dep( int tag                ,
@@ -178,9 +201,10 @@ class Template3Dep : public NDMaterial
             EvolutionLaw_T   *ELT1_,
             EvolutionLaw_T   *ELT2_ );
 
-    Template3Dep(int tag);
+    Template3Dep(int tag= 0);
+    Template3Dep(const Template3Dep &);
+    Template3Dep &operator=(const Template3Dep &);
     // For parallel processing
-    Template3Dep(void);
     virtual ~Template3Dep(void);
 
     // methods to set state and retrieve state using Matrix and Vector classes

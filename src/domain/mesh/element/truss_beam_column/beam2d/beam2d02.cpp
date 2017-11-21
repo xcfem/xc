@@ -86,7 +86,7 @@ XC::beam2d02::beam2d02(int tag, double a, double e, double i, int Nd1, int Nd2,
 
 //! @brief Virtual constructor.
 XC::Element* XC::beam2d02::getCopy(void) const
-  { return new XC::beam2d02(*this); }
+  { return new beam2d02(*this); }
 
 //! @brief Destructor.
 XC::beam2d02::~beam2d02(void)

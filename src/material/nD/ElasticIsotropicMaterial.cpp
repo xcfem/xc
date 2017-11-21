@@ -78,6 +78,18 @@
 #include "material/nD/TipoMaterialND.h"
 
 //! @brief Constructor.
+//!
+//! To construct an ElasticIsotropicMaterial whose unique integer tag
+//! among NDMaterials in the domain is given by \p tag, and whose class
+//! tag is given by \p classTag.  These tags are passed to the
+//! NDMaterial class constructor.
+//!
+//! @param tag: material identifier.
+//! @param classTag: material class identifier.
+//! @param eps_size: size of the generalized strain vector.
+//! @param e: material Young modulus.
+//! @param nu: material Poisson coefficient.
+//! @param r: material density.
 XC::ElasticIsotropicMaterial::ElasticIsotropicMaterial(int tag, int classTag, int eps_size, double e, double nu, double r)
   :XC::NDMaterial(tag, classTag), E(e), v(nu), rho(r), epsilon(eps_size) {}
 
@@ -100,12 +112,15 @@ double XC::ElasticIsotropicMaterial::getE(void)
 double XC::ElasticIsotropicMaterial::getnu(void)
   { return v; }
 
+//! @brief Returns a specific implementation of an ElasticIsotropicMaterial by
+//! switching on \p type.  Outputs an error if \p type is not valid.
+//! This is the prototype method.
 XC::NDMaterial *XC::ElasticIsotropicMaterial::getCopy(const std::string &type) const
   {
     if((type==strTipoPlaneStress2D) || (type==strTipoPlaneStress))
       {
         ElasticIsotropicPlaneStress2D *theModel;
-        theModel = new XC::ElasticIsotropicPlaneStress2D(this->getTag(), E, v, rho);
+        theModel = new ElasticIsotropicPlaneStress2D(this->getTag(), E, v, rho);
                 // DOES NOT COPY sigma, D, and epsilon ...
                 // This function should only be called during element instantiation, so
                 // no state determination is performed on the material model object
@@ -116,7 +131,7 @@ XC::NDMaterial *XC::ElasticIsotropicMaterial::getCopy(const std::string &type) c
     else if((type==strTipoPlaneStrain2D) || (type==strTipoPlaneStrain))
       {
         ElasticIsotropicPlaneStrain2D *theModel;
-        theModel = new XC::ElasticIsotropicPlaneStrain2D(this->getTag(), E, v, rho);
+        theModel = new ElasticIsotropicPlaneStrain2D(this->getTag(), E, v, rho);
                 // DOES NOT COPY sigma, D, and epsilon ...
                 // This function should only be called during element instantiation, so
                 // no state determination is performed on the material model object
@@ -126,7 +141,7 @@ XC::NDMaterial *XC::ElasticIsotropicMaterial::getCopy(const std::string &type) c
     else if((type==strTipoAxiSymmetric2D) || (type==strTipoAxiSymmetric))
       {
         ElasticIsotropicAxiSymm *theModel;
-        theModel = new XC::ElasticIsotropicAxiSymm(this->getTag(), E, v, rho);
+        theModel = new ElasticIsotropicAxiSymm(this->getTag(), E, v, rho);
                 // DOES NOT COPY sigma, D, and epsilon ...
                 // This function should only be called during element instantiation, so
                 // no state determination is performed on the material model object
@@ -138,7 +153,7 @@ XC::NDMaterial *XC::ElasticIsotropicMaterial::getCopy(const std::string &type) c
              (type==strTipo3D))
       {
         ElasticIsotropic3D *theModel;
-        theModel = new XC::ElasticIsotropic3D(this->getTag(), E, v, rho);
+        theModel = new ElasticIsotropic3D(this->getTag(), E, v, rho);
                 // DOES NOT COPY sigma, D, and epsilon ...
                 // This function should only be called during element instantiation, so
                 // no state determination is performed on the material model object
@@ -149,7 +164,7 @@ XC::NDMaterial *XC::ElasticIsotropicMaterial::getCopy(const std::string &type) c
     else if((type==strTipoPlateFiber))
       {
         ElasticIsotropicPlateFiber *theModel;
-        theModel = new XC::ElasticIsotropicPlateFiber(this->getTag(), E, v, rho);
+        theModel = new ElasticIsotropicPlateFiber(this->getTag(), E, v, rho);
                 // DOES NOT COPY sigma, D, and epsilon ...
                 // This function should only be called during element instantiation, so
                 // no state determination is performed on the material model object
@@ -159,7 +174,7 @@ XC::NDMaterial *XC::ElasticIsotropicMaterial::getCopy(const std::string &type) c
     else if((type==strTipoBeamFiber))
       {
         ElasticIsotropicBeamFiber *theModel;
-        theModel = new XC::ElasticIsotropicBeamFiber(this->getTag(), E, v, rho);
+        theModel = new ElasticIsotropicBeamFiber(this->getTag(), E, v, rho);
                 // DOES NOT COPY sigma, D, and epsilon ...
                 // This function should only be called during element instantiation, so
                 // no state determination is performed on the material model object
@@ -204,6 +219,7 @@ int XC::ElasticIsotropicMaterial::setTrialStrainIncr(const Vector &v, const XC::
     return -1;
   }
 
+//! @brief Returns material tangent stiffness matrix.
 const XC::Matrix &XC::ElasticIsotropicMaterial::getTangent(void) const
   {
     std::cerr << getClassName() << "::" << __FUNCTION__
@@ -211,7 +227,7 @@ const XC::Matrix &XC::ElasticIsotropicMaterial::getTangent(void) const
     exit(-1);
 
     // Just to make it compile
-    XC::Matrix *ret = new XC::Matrix();
+    XC::Matrix *ret = new Matrix();
     return *ret;
   }
 
@@ -309,11 +325,12 @@ const XC::straintensor &XC::ElasticIsotropicMaterial::getStrainTensor(void) cons
 
 const XC::straintensor &XC::ElasticIsotropicMaterial::getPlasticStrainTensor(void) const
   {
-    std::cerr << "ElasticIsotropicMaterial::getPlasticStrainTensor -- subclass responsibility\n";
+    std::cerr << getClassName() << "::" << __FUNCTION__
+	      << "; subclass responsibility\n";
     exit(-1);
         
     // Just to make it compile
-    static XC::straintensor t;
+    static straintensor t;
     return t;
   }
 
@@ -403,7 +420,8 @@ int XC::ElasticIsotropicMaterial::sendSelf(CommParameters &cp)
 
     res+= cp.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
-      std::cerr << getClassName() << "sendSelf() - failed to send data\n";
+      std::cerr << getClassName() << "::" << __FUNCTION__
+	        << "; failed to send data\n";
     return res;
   }
 
@@ -428,6 +446,7 @@ int XC::ElasticIsotropicMaterial::recvSelf(const CommParameters &cp)
     return res;
   }
 
+//! @brief Print stuff.
 void XC::ElasticIsotropicMaterial::Print(std::ostream &s, int flag)
   {
     s << "Elastic isotropic material model" << std::endl;

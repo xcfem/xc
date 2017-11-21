@@ -192,8 +192,8 @@ XC::fElement::fElement(int tag,
     // allocate space for static varaibles on creation of first instance
     if(numfElements == 0)
       {
-        fElementM[0] = new XC::Matrix(1,1); // dummy for error
-        fElementV[0] = new XC::Vector(1);
+        fElementM[0] = new Matrix(1,1); // dummy for error
+        fElementV[0] = new Vector(1);
       }
 
     // increment number of elements
@@ -271,7 +271,7 @@ void XC::fElement::setDomain(Domain *theDomain)
     const XC::ID &theNodeTags = this->getExternalNodes();
 
     int numNodes = theNodeTags.Size();
-    theNodes = new XC::Node *[numNodes];
+    theNodes = new Node *[numNodes];
     for(int i=0; i<numNodes; i++) {
         Node *theNode = theDomain->getNode(theNodeTags(i));
         if(theNode == 0) {
@@ -333,8 +333,8 @@ void XC::fElement::setDomain(Domain *theDomain)
     // allocate the XC::Matrix and XC::Vector objects if none yet for this size nst
    if(fElementM[nst] == 0)
      {
-       fElementM[nst] = new XC::Matrix(s,nst,nst);
-       fElementV[nst] = new XC::Vector(r,nst);
+       fElementM[nst] = new Matrix(s,nst,nst);
+       fElementV[nst] = new Vector(r,nst);
 
        if((fElementM[nst] == 0) || (fElementV[nst] == 0))
          {
@@ -912,8 +912,8 @@ XC::fElement::readyfRoutine(bool incInertia)
 
     // check we have a matrix and vector created for an object of this size
     if(fElementM[nst] == 0) {
-        fElementM[nst] = new XC::Matrix(s,nst,nst);
-            fElementV[nst] = new XC::Vector(r,nst);
+        fElementM[nst] = new Matrix(s,nst,nst);
+            fElementV[nst] = new Vector(r,nst);
 
         if(fElementM[nst] == 0 || fElementV[nst] == 0) {
             std::cerr << "FATAL XC::fElement::getTangentStiff() nst: " << nst;

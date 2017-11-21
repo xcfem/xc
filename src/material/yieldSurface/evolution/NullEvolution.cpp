@@ -87,11 +87,11 @@ XC::YS_Evolution * XC::NullEvolution::getCopy()
  XC::NullEvolution *copy=0;
 
 	if(dimension == 1)
-		copy = new XC::NullEvolution(getTag(), isotropicFactor(0));
+		copy = new NullEvolution(getTag(), isotropicFactor(0));
 	else if(dimension == 2)
-		copy = new XC::NullEvolution(getTag(), isotropicFactor(0), isotropicFactor(1));
+		copy = new NullEvolution(getTag(), isotropicFactor(0), isotropicFactor(1));
 	else if(dimension == 3)
-		copy = new XC::NullEvolution(getTag(), isotropicFactor(0), isotropicFactor(1), isotropicFactor(2));
+		copy = new NullEvolution(getTag(), isotropicFactor(0), isotropicFactor(1), isotropicFactor(2));
 	else
 		copy = 0;
 	return copy;

@@ -125,7 +125,7 @@ XC::BrickUP::BrickUP(int tag,
 
 //! @brief Virtual constructor.
 XC::Element* XC::BrickUP::getCopy(void) const
-  { return new XC::BrickUP(*this); }
+  { return new BrickUP(*this); }
 
 
 //destructor
@@ -357,7 +357,7 @@ const XC::Matrix&  XC::BrickUP::getInitialStiff(void) const
     } // end for j loop
   } //end for i gauss loop
 
-  Ki = new XC::Matrix(stiff);
+  Ki = new Matrix(stiff);
       }
     if(isDead())
       stiff*=dead_srf;
@@ -1067,7 +1067,7 @@ XC::Response *XC::BrickUP::setResponse(const std::vector<std::string> &argv, Inf
           return 0;
       }
     else if(argv[0] == "stresses")
-      { return new XC::ElementResponse(this, 5, Vector(48)); }
+      { return new ElementResponse(this, 5, Vector(48)); }
     // otherwise response quantity is unknown for the XC::BrickUP class
     else
       return 0;

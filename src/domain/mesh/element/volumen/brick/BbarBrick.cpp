@@ -978,10 +978,10 @@ int  XC::BbarBrick::recvSelf(const CommParameters &cp)
 XC::Response *XC::BbarBrick::setResponse(const std::vector<std::string> &argv, Information &eleInfo)
 {
   if(argv[0] == "force" || argv[0] == "forces")
-    return new XC::ElementResponse(this, 1, resid);
+    return new ElementResponse(this, 1, resid);
 
   else if(argv[0] == "stiff" || argv[0] == "stiffness")
-    return new XC::ElementResponse(this, 2, stiff);
+    return new ElementResponse(this, 2, stiff);
 
   else if(argv[0] == "material" || argv[0] == "integrPoint") {
     int pointNum = atoi(argv[1]);
@@ -990,7 +990,7 @@ XC::Response *XC::BbarBrick::setResponse(const std::vector<std::string> &argv, I
     else
       return 0;
   } else if(argv[0] == "stresses") {
-    return new XC::ElementResponse(this, 3, Vector(48));
+    return new ElementResponse(this, 3, Vector(48));
   }
 
   // otherwise response quantity is unknown for the brick class

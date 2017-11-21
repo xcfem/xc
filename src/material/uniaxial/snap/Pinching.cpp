@@ -314,7 +314,7 @@ int XC::Pinching::sendSelf(CommParameters &cp)
         inp[17] = ca;
         inp[18] = cd;
         
-        Pinching *theCopy = new XC::Pinching(this->getTag(), inp );
+        Pinching *theCopy = new Pinching(this->getTag(), inp );
 
         for (int i=0; i<22; i++) {
                 theCopy->hsTrial[i] = hsTrial[i];

@@ -53,7 +53,7 @@
 
 
 namespace XC {
-//! @ingroup MatUnx
+//! @ingroup PYMat
 //
 //! @brief Material que representa la resistencia por fuste de un pilote.
 class QzSimple1 : public PQyzBase

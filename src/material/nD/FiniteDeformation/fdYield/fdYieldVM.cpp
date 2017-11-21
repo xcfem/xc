@@ -66,7 +66,7 @@ XC::fdYieldVM::fdYieldVM(double Y0_in) :Y0(Y0_in)
 //--------------------------------------------------------------------
  XC::fdYield * XC::fdYieldVM::newObj()
 {
-    fdYield *newfdyd = new XC::fdYieldVM(Y0);
+    fdYield *newfdyd = new fdYieldVM(Y0);
     return newfdyd;
 }
 

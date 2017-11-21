@@ -284,9 +284,9 @@ void XC::BarSlipMaterial::getBondStrength(void)
 
 void XC::BarSlipMaterial::getBarSlipEnvelope(void)
   {
-//fn = new XC::FileStream();
+//fn = new FileStream();
 //fn->setFile("BarSlipEnvelope.out", APPEND);
-//fg = new XC::FileStream();
+//fg = new FileStream();
 //fg->setFile("BarSlipDamage.out", APPEND);
 
     double delta = 0.0;
@@ -454,7 +454,7 @@ void XC::BarSlipMaterial::getBarSlipEnvelope(void)
 
 void XC::BarSlipMaterial::createMaterial(void)
   {
-/*         material = new XC::Pinching4Material (tagMat, eP(0,1), eP(0,0), eP(1,1), eP(1,0), eP(2,1), eP(2,0), eP(3,1), eP(3,0),
+/*         material = new Pinching4Material (tagMat, eP(0,1), eP(0,0), eP(1,1), eP(1,0), eP(2,1), eP(2,0), eP(3,1), eP(3,0),
             eN(0,1), eN(0,0), eN(1,1), eN(1,0), eN(2,1), eN(2,0), eN(3,1), eN(3,0), rDispP, rForceP, uForceP, rDispN,
             rForceN, uForceN, gammaK1, gammaK2, gammaK3, gammaK4, gammaKLimit, gammaD1, gammaD2, gammaD3,
             gammaD4, gammaDLimit, gammaF1, gammaF2, gammaF3, gammaF4, gammaFLimit, gammaE, 0);
@@ -531,7 +531,7 @@ int XC::BarSlipMaterial::revertToStart(void)
 
 XC::UniaxialMaterial* XC::BarSlipMaterial::getCopy(void) const
   {
-    BarSlipMaterial *theCopy = new XC::BarSlipMaterial (this->getTag(), fc, fy, Es,
+    BarSlipMaterial *theCopy = new BarSlipMaterial (this->getTag(), fc, fy, Es,
             fu, Eh, db, ld, nbars, width, depth, bsflag, type, damage, unit);
 
     theCopy->rDispN = rDispN;

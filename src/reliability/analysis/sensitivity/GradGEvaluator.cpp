@@ -152,7 +152,7 @@ XC::GradGEvaluator::computeParameterDerivatives(double g)
 			
 			// Store the DgDpar in a matrix (make it expand successively)
 			if (DgDpar == 0) {
-				DgDpar = new XC::Matrix(1, 2);
+				DgDpar = new Matrix(1, 2);
 				(*DgDpar)(0,0) = (double)parameterNumber;
 				(*DgDpar)(0,1) = onedgdpar;
 			}
@@ -160,7 +160,7 @@ XC::GradGEvaluator::computeParameterDerivatives(double g)
 				int oldSize = DgDpar->noRows();
 				Matrix tempMatrix = *DgDpar;
 				delete DgDpar;
-				DgDpar = new XC::Matrix(oldSize+1, 2);
+				DgDpar = new Matrix(oldSize+1, 2);
 				for (i=0; i<oldSize; i++) {
 					(*DgDpar)(i,0) = tempMatrix(i,0);
 					(*DgDpar)(i,1) = tempMatrix(i,1);

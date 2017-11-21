@@ -134,7 +134,7 @@ XC::BeamWithHinges3d::BeamWithHinges3d(const XC::BeamWithHinges3d &otro)
 
 //! @brief Virtual constructor.
 XC::Element* XC::BeamWithHinges3d::getCopy(void) const
-  { return new XC::BeamWithHinges3d(*this); }
+  { return new BeamWithHinges3d(*this); }
 
 //! @brief Destructor.
 XC::BeamWithHinges3d::~BeamWithHinges3d(void)
@@ -506,7 +506,7 @@ int XC::BeamWithHinges3d::addLoad(ElementalLoad *theLoad, double loadFactor)
             const Matrix xi_pt(xi,2,1);
             if(!applied_sf)
               {
-                applied_sf = new XC::Matrix(6,2);
+                applied_sf = new Matrix(6,2);
                 if(!applied_sf)
                   std::cerr << "XC::BeamWithHinges3d::addLoad() -- out of memory\n";
               }

@@ -11,16 +11,16 @@
 //  of the original program (see copyright_opensees.txt)
 //  XC is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
-//  the Free Software Foundation, either version 3 of the License, or 
+//  the Free Software Foundation, either version 3 of the License, or
 //  (at your option) any later version.
 //
-//  This software is distributed in the hope that it will be useful, but 
+//  This software is distributed in the hope that it will be useful, but
 //  WITHOUT ANY WARRANTY; without even the implied warranty of
 //  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-//  GNU General Public License for more details. 
+//  GNU General Public License for more details.
 //
 //
-// You should have received a copy of the GNU General Public License 
+// You should have received a copy of the GNU General Public License
 // along with this program.
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
@@ -28,7 +28,7 @@
 
 #include <solution/analysis/algorithm/equiSolnAlgo/NewtonBased.h>
 
-// Constructor
+//! @brief Constructor
 XC::NewtonBased::NewtonBased(SoluMethod *owr,int classTag,int theTangentToUse)
   :EquiSolnAlgo(owr,classTag), tangent(theTangentToUse) {}
 
@@ -60,7 +60,8 @@ int XC::NewtonBased::sendSelf(CommParameters &cp)
 
     res+= cp.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
-      std::cerr << getClassName() << "sendSelf() - failed to send data\n";
+      std::cerr << getClassName() << "::" << __FUNCTION__
+	        << "; failed to send data\n";
     return res;
   }
 
@@ -72,13 +73,15 @@ int XC::NewtonBased::recvSelf(const CommParameters &cp)
     int res= cp.receiveIdData(getDbTagData(),dataTag);
 
     if(res<0)
-      std::cerr << getClassName() << "::recvSelf - failed to receive ids.\n";
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; failed to receive ids.\n";
     else
       {
         //setTag(getDbTagDataPos(0));
         res+= recvData(cp);
         if(res<0)
-          std::cerr << getClassName() << "::recvSelf - failed to receive data.\n";
+          std::cerr << getClassName()  << "::" << __FUNCTION__
+		    << "; failed to receive data.\n";
       }
     return res;
   }

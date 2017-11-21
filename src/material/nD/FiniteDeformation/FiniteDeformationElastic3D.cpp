@@ -138,7 +138,7 @@ const XC::Tensor &XC::FiniteDeformationElastic3D::getTangentTensor(void) const
     std::cerr << "FiniteDeformationElastic3D-- subclass responsibility\n";
     exit(-1);
     // Just to make it compile
-    XC::Tensor *ret = new XC::Tensor;
+    XC::Tensor *ret = new Tensor;
     return *ret;
   }
 
@@ -148,7 +148,7 @@ const XC::Tensor &XC::FiniteDeformationElastic3D::getInitialTangentTensor(void) 
     std::cerr << "FiniteDeformationElastic3D-- subclass responsibility\n";
     exit(-1);
     // Just to make it compile
-    XC::Tensor *ret = new XC::Tensor;
+    XC::Tensor *ret = new Tensor;
     return *ret;
   }
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------------------

@@ -1636,7 +1636,7 @@ int XC::InelasticYS2DGNL::recvSelf(const CommParameters &cp)
 
     if(argv[0] == "ysVisual")
         {
-                suResponse =  new XC::ElementResponse(this, DISPLAY_YS);
+                suResponse =  new ElementResponse(this, DISPLAY_YS);
     }
 
         return suResponse;

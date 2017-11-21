@@ -390,15 +390,15 @@ int id0 = 0;
 	// responseIds from 1 - 3 for matX, 4 - 6 for matY
     // stress
     if (strcmp(argv[0],"stress") == 0)
-		return new XC::MaterialResponse(mat, id0+1, mat->getStress());
+		return new MaterialResponse(mat, id0+1, mat->getStress());
 
     // tangent
     else if (strcmp(argv[0],"tangent") == 0)
-		return new XC::MaterialResponse(mat, id0+2, mat->getTangent());
+		return new MaterialResponse(mat, id0+2, mat->getTangent());
 
     // strain
 	else if (strcmp(argv[0],"strain") == 0)
-		return new XC::MaterialResponse(mat, id0+3, mat->getStrain());
+		return new MaterialResponse(mat, id0+3, mat->getStrain());
 
     // otherwise unknown
     else

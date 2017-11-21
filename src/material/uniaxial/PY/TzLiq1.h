@@ -54,7 +54,7 @@
 namespace XC {
 class FourNodeQuad;
 
-//! @ingroup MatUnx
+//! @ingroup PYMat
 //
 //! @brief ??.
 class TzLiq1 : public TzSimple1

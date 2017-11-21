@@ -475,7 +475,7 @@ const XC::Matrix&  XC::TwentyEightNodeBrickUP::getStiff(int flag) const
         if( flag == 1) {
                 return stiff;
         }
-        Ki = new XC::Matrix(stiff);
+        Ki = new Matrix(stiff);
         if(Ki == 0) {
                 std::cerr << "FATAL XC::TwentyEightNodeBrickUP::getStiff() -";
                 std::cerr << "ran out of memory\n";

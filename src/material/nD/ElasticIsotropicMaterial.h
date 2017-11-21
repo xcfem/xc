@@ -76,6 +76,13 @@ namespace XC {
 //! @ingroup EINDMat
 //
 //! @brief Base class for elastic isotropic materials.
+//!
+//! ElasticIsotropicMaterial is an abstract class.  It provides the
+//! interface to which all elastic isotropic material implementations
+//! must conform.  It also serves as a prototype for all elastic isotropic
+//! material implementations, as described by the Prototype pattern in
+//! {\em Design Patterns} by Gamma et al.
+//! (see https://en.wikipedia.org/wiki/Design_Patterns).
 class ElasticIsotropicMaterial : public NDMaterial
   {
   protected:

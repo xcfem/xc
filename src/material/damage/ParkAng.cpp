@@ -243,13 +243,13 @@ XC::Response *XC::ParkAng::setResponse(const std::vector<std::string> &argv, Inf
 //
 
         if ( argv[0] == "damage" || argv[0] == "damageindex" )
-    return new XC::DamageResponse( this , 1 , 0.0 );
+    return new DamageResponse( this , 1 , 0.0 );
 
         else if (argv[0] == "Value" || argv[0] == "Values" || argv[0] == "Data" )
-    return new XC::DamageResponse( this , 2 , Vector(3) );
+    return new DamageResponse( this , 2 , Vector(3) );
 
         else if (argv[0] == "trial" || argv[0] == "trialinfo" )
-    return new XC::DamageResponse( this , 3 , Vector(6) );
+    return new DamageResponse( this , 3 , Vector(6) );
 
         else 
                 return 0;

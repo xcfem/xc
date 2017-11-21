@@ -56,16 +56,24 @@
 
 XC::Vector XC::ElasticIsotropicPlaneStrain2D::sigma(3);
 
+//! @brief Constructor.
+//!
+//! To construct an ElasticIsotropicPlaneStrain2D whose unique integer tag
+//! among NDMaterials in the domain is given by \p tag.  The material
+//! model have Young's modulus \p E and Poisson's ratio \p v.
+//!
+//! @param tag: material identifier.
+//! @param E: material Young's modulus.
+//! @param nu: material Poisson's ratio.
 XC::ElasticIsotropicPlaneStrain2D::ElasticIsotropicPlaneStrain2D(int tag, double E, double nu, double rho)
   : ElasticIsotropic2D(tag, ND_TAG_ElasticIsotropicPlaneStrain2d, E, nu, rho)
   {}
 
+//! @brief Constructor.
+//!
+//! @param tag: material identifier.
 XC::ElasticIsotropicPlaneStrain2D::ElasticIsotropicPlaneStrain2D(int tag)
   : ElasticIsotropic2D(tag, ND_TAG_ElasticIsotropicPlaneStrain2d, 0.0, 0.0, 0.0)
-  {}
-
-XC::ElasticIsotropicPlaneStrain2D::ElasticIsotropicPlaneStrain2D(void)
-  : ElasticIsotropic2D(0, ND_TAG_ElasticIsotropicPlaneStrain2d, 0.0, 0.0, 0.0)
   {}
 
 int XC::ElasticIsotropicPlaneStrain2D::setTrialStrainIncr(const XC::Vector &strain)
@@ -80,6 +88,19 @@ int XC::ElasticIsotropicPlaneStrain2D::setTrialStrainIncr(const XC::Vector &stra
     return 0;
   }
 
+//! @brief Returns the material tangent stiffness matrix, \f$D\f$.
+//!
+//! \f[
+//! \begin{displaymath}
+//! D := \frac{E}{(1+\nu)(1-2\nu)} \left[
+//!    \begin{array}{ccc}
+//!          1-\nu &     \nu &      0
+//!            \nu &   1-\nu &      0
+//!              0 &       0 & 1-2\nu
+//!    \end{array} 
+//!  \right]
+//! \end{displaymath}
+//! \f]
 const XC::Matrix &XC::ElasticIsotropicPlaneStrain2D::getTangent(void) const
   {
     double mu2 = E/(1.0+v);
@@ -106,6 +127,20 @@ const XC::Matrix &XC::ElasticIsotropicPlaneStrain2D::getInitialTangent(void) con
         return D;
   }
 
+//! @brief Returns the material stress vector, \f$\mysigma\f$, for the current
+//! trial strain.
+//!
+//! \f[
+//! \begin{displaymath}
+//! \mysigma := \left[
+//!    \begin{array}{c}
+//!        \sigma_{xx}
+//!        \sigma_{yy}
+//!        \tau_{xy}   
+//!    \end{array} 
+//!  \right]
+//! \end{displaymath}
+//! \f]
 const XC::Vector &XC::ElasticIsotropicPlaneStrain2D::getStress(void) const
   {
     double mu2 = E/(1.0+v);
@@ -136,8 +171,9 @@ int XC::ElasticIsotropicPlaneStrain2D::revertToStart(void)
     return 0;
   }
 
+//ª @brief Virtual constructor.
 XC::NDMaterial *XC::ElasticIsotropicPlaneStrain2D::getCopy(void) const
-  { return new XC::ElasticIsotropicPlaneStrain2D(*this); }
+  { return new ElasticIsotropicPlaneStrain2D(*this); }
 
 const std::string &XC::ElasticIsotropicPlaneStrain2D::getType(void) const
   { return strTipoPlaneStrain; }

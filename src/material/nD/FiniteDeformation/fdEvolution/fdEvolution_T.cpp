@@ -59,7 +59,7 @@ using namespace XC;
 
  XC::fdEvolution_T * XC::fdEvolution_T::newObj() 
 {   
-    fdEvolution_T *newEL = new XC::fdEvolution_T( *this );    
+    fdEvolution_T *newEL = new fdEvolution_T( *this );    
     return newEL;
 }
 

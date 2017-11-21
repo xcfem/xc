@@ -403,7 +403,7 @@ int XC::Pinching4Material::revertToStart(void)
 
 XC::UniaxialMaterial* XC::Pinching4Material::getCopy(void) const
 {
-        Pinching4Material *theCopy = new XC::Pinching4Material (this->getTag(),
+        Pinching4Material *theCopy = new Pinching4Material (this->getTag(),
                 stress1p, strain1p, stress2p, strain2p, stress3p, strain3p, stress4p, strain4p,
         stress1n, strain1n, stress2n, strain2n, stress3n, strain3n, stress4n, strain4n,
         rDispP, rForceP, uForceP, rDispN, rForceN, uForceN,gammaK1,gammaK2,gammaK3,gammaK4,

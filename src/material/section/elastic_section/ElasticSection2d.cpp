@@ -170,7 +170,7 @@ const XC::Matrix &XC::ElasticSection2d::getInitialFlexibility(void) const
 
 //! @brief Virtual constructor.
 XC::SectionForceDeformation *XC::ElasticSection2d::getCopy(void) const
-  { return new XC::ElasticSection2d(*this); }
+  { return new ElasticSection2d(*this); }
 
 //! @brief Section stiffness contribution response identifiers.
 //!

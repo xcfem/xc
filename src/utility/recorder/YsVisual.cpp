@@ -54,15 +54,15 @@ XC::YsVisual::YsVisual(Element *theEle, const char *title, double scale,
       std::cerr << "YsVisual only works on elements derived from XC::InelasticYS2DGNL\n";
 
 // #ifdef _GLX
-//     theMap = new XC::PlainMap();
+//     theMap = new PlainMap();
 //     pView =  new OpenGLRenderer(title, xLoc, yLoc, width, height, *theMap);
 // #endif
 
 // #ifdef _X11
 //     if(!pView) //_GLX and _X11 both defined
 //       {
-//         theMap = new XC::PlainMap();
-//         pView =  new XC::X11Renderer(title, xLoc, yLoc, width, height, *theMap);
+//         theMap = new PlainMap();
+//         pView =  new X11Renderer(title, xLoc, yLoc, width, height, *theMap);
 //       }
 // #endif
 //     if(pView)

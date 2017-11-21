@@ -414,20 +414,20 @@ XC::NDMaterial *XC::J2Plasticity::getCopy(const std::string &type) const
   {
     NDMaterial *retval= nullptr;
     if((type==strTipoPlaneStress2D) || (type==strTipoPlaneStress))
-      retval= new XC::J2PlaneStress(this->getTag(), bulk, shear, sigma_0,
+      retval= new J2PlaneStress(this->getTag(), bulk, shear, sigma_0,
                                   sigma_infty, delta, Hard, eta) ;
     else if((type==strTipoPlaneStrain2D) || (type==strTipoPlaneStrain))
-      retval= new XC::J2PlaneStrain(this->getTag(), bulk, shear, sigma_0,
+      retval= new J2PlaneStrain(this->getTag(), bulk, shear, sigma_0,
                                   sigma_infty, delta, Hard, eta) ;
     else if((type==strTipoAxiSymmetric2D) || (type==strTipoAxiSymmetric))
-      retval= new XC::J2AxiSymm(this->getTag(), bulk, shear, sigma_0,
+      retval= new J2AxiSymm(this->getTag(), bulk, shear, sigma_0,
                               sigma_infty, delta, Hard, eta) ;
     else if(((type==strTipoThreeDimensional)) ||
              ((type==strTipo3D)))
-      retval= new XC::J2ThreeDimensional(this->getTag(), bulk, shear, sigma_0,
+      retval= new J2ThreeDimensional(this->getTag(), bulk, shear, sigma_0,
                               sigma_infty, delta, Hard, eta) ;
     else if( ((type==strTipoPlateFiber)) )
-      retval= new XC::J2PlateFiber(this->getTag(), bulk, shear, sigma_0,
+      retval= new J2PlateFiber(this->getTag(), bulk, shear, sigma_0,
                               sigma_infty, delta, Hard, eta) ;
     else // Handle other cases
       std::cerr << "J2Plasticity::getModel failed to get model: " << type << std::endl;

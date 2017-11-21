@@ -102,9 +102,7 @@ class FiniteDeformationEP3D: public NDMaterial
     int ImplicitAlgorithm();
     int SemiImplicitAlgorithm();
   public:
-    FiniteDeformationEP3D(int tag);
-    // Constructor 00
-    FiniteDeformationEP3D( );
+    FiniteDeformationEP3D(int tag= 0);
     // Constructor 01
     FiniteDeformationEP3D(int tag,
                           NDMaterial *fde3d_in,

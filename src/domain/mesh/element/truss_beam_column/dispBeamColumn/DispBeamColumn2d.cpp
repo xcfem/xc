@@ -138,7 +138,7 @@ XC::DispBeamColumn2d::DispBeamColumn2d(int tag)
 
 //! @brief Virtual constructor.
 XC::Element* XC::DispBeamColumn2d::getCopy(void) const
-  { return new XC::DispBeamColumn2d(*this); }
+  { return new DispBeamColumn2d(*this); }
 
 int XC::DispBeamColumn2d::getNumDOF(void) const
   { return 6; }
@@ -692,20 +692,20 @@ XC::Response *XC::DispBeamColumn2d::setResponse(const std::vector<std::string> &
     // global force -
     if(argv[0] == "forces" || argv[0] == "force"
                 || argv[0] == "globalForce" || argv[0] == "globalForces")
-                return new XC::ElementResponse(this, 1, P);
+                return new ElementResponse(this, 1, P);
 
     // local force -
     else if(argv[0] == "localForce" || argv[0] == "localForces")
-                return new XC::ElementResponse(this, 2, P);
+                return new ElementResponse(this, 2, P);
 
     // chord rotation -
     else if(argv[0] == "chordRotation" || argv[0] == "chordDeformation"
              || argv[0] == "basicDeformation")
-      return new XC::ElementResponse(this, 3, Vector(3));
+      return new ElementResponse(this, 3, Vector(3));
 
     // plastic rotation -
     else if(argv[0] == "plasticRotation" || argv[0] == "plasticDeformation")
-      return new XC::ElementResponse(this, 4, Vector(3));
+      return new ElementResponse(this, 4, Vector(3));
 
     // section response -
     else if(argv[0] == "section" || argv[0] == "-section") {

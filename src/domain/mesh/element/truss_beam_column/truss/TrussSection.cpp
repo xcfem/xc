@@ -116,7 +116,7 @@ XC::TrussSection::TrussSection(void)
 
 //! @brief Virtual constructor.
 XC::Element* XC::TrussSection::getCopy(void) const
-  { return new XC::TrussSection(*this); }
+  { return new TrussSection(*this); }
 
 //  destructor
 //     delete must be invoked on any objects created by the object
@@ -589,11 +589,11 @@ XC::Response *XC::TrussSection::setResponse(const std::vector<std::string> &argv
   // axial force
   if(argv[0] == "force" || argv[0] == "forces" ||
       argv[0] == "axialForce")
-    return new XC::ElementResponse(this, 1, 0);
+    return new ElementResponse(this, 1, 0);
 
   else if(argv[0] == "defo" || argv[0] == "deformations" ||
            argv[0] == "deformation")
-    return new XC::ElementResponse(this, 2, 0);
+    return new ElementResponse(this, 2, 0);
 
   // a section quantity
   else if(argv[0] == "section")

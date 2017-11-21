@@ -243,7 +243,7 @@ int XC::ActorSubdomain::run(void)
 		bool result = this->XC::Subdomain::addExternalNode(theNod);
 		delete theNod;
 		/*
-		Node *dummy = new XC::Node(*theNod);
+		Node *dummy = new Node(*theNod);
 		delete theNod;
 		std::cerr << *dummy;
 		std::cerr << dummy->getMass();
@@ -683,7 +683,7 @@ int XC::ActorSubdomain::run(void)
 	    msgData(0) = intRes;
 	    this->sendID(msgData);
 	    if(intRes == 0) {
-	      theV = new XC::Vector(1);
+	      theV = new Vector(1);
 	      (*theV)(0) = doubleRes;
 	      this->sendVector(*theV);
 	      delete theV;
@@ -694,7 +694,7 @@ int XC::ActorSubdomain::run(void)
 	    tag = msgData(1);  // nodeTag
 	    dbTag = msgData(2); // noRows
 	    theOtherType = msgData(3); // noRows
-	    theM = new XC::Matrix(dbTag, theOtherType);
+	    theM = new Matrix(dbTag, theOtherType);
 	    this->recvMatrix(*theM);
 	    intRes = this->setMass(*theM, tag);
 	    
@@ -704,7 +704,7 @@ int XC::ActorSubdomain::run(void)
 	    break;
 
          case ShadowActorSubdomain_setRayleighDampingFactors:
-	   theV = new XC::Vector(4);
+	   theV = new Vector(4);
 	   this->recvVector(*theV);
 	   intRes = this->XC::Subdomain::setRayleighDampingFactors(RayleighDampingFactors(*theV));
 	   delete theV;

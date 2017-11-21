@@ -50,7 +50,7 @@ XC::Inelastic2DYS03::Inelastic2DYS03(int tag, double a_ten, double a_com,
 
 //! @brief Virtual constructor.
 XC::Element* XC::Inelastic2DYS03::getCopy(void) const
-  { return new XC::Inelastic2DYS03(*this); }
+  { return new Inelastic2DYS03(*this); }
 
 void XC::Inelastic2DYS03::getLocalStiff(Matrix &K) const
   {

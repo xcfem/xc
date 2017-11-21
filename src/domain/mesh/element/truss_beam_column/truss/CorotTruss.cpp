@@ -545,11 +545,11 @@ XC::Response *XC::CorotTruss::setResponse(const std::vector<std::string> &argv, 
   {
     // force (axialForce)
     if(argv[0] == "force" || argv[0] == "forces" || argv[0] == "axialForce")
-                return new XC::ElementResponse(this, 1, 0.0);
+                return new ElementResponse(this, 1, 0.0);
 
     else if(argv[0] == "defo" || argv[0] == "deformations" ||
                 argv[0] == "deformation")
-                return new XC::ElementResponse(this, 2, 0.0);
+                return new ElementResponse(this, 2, 0.0);
 
     // a material quantity
     else if(argv[0] == "material")

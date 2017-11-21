@@ -157,7 +157,7 @@ XC::PBowlLoading::PBowlLoading(int tag, const char *PBEfName, const char *DispfN
          std::cerr << " - Input data not sufficient...Patched with zeros " << DispfName << std::endl;
       }
       int cols = numDataPoints/thetimeSteps;
-      U = new XC::Matrix(cols, thetimeSteps);
+      U = new Matrix(cols, thetimeSteps);
 
       // ensure we did not run out of memory
       if (U == 0 || U->noRows() == 0 || U->noCols() == 0) {
@@ -233,7 +233,7 @@ XC::PBowlLoading::PBowlLoading(int tag, const char *PBEfName, const char *DispfN
              std::cerr << " - Input data not sufficient...Patched with zeros " << AccefName << std::endl;
           }
           int cols = numDataPoints/thetimeSteps;
-          Udd = new XC::Matrix(cols, thetimeSteps);
+          Udd = new Matrix(cols, thetimeSteps);
           
           // ensure we did not run out of memory
           if (Udd == 0 || Udd->noRows() == 0 || Udd->noCols() == 0) {
@@ -307,7 +307,7 @@ XC::PBowlLoading::PBowlLoading(int tag, const char *PBEfName, const char *DispfN
     } else {
 
       // now create the vector
-      PBowlElements = new XC::ID(numPBE);
+      PBowlElements = new ID(numPBE);
 
       // ensure we did not run out of memory
       if (PBowlElements == 0 || PBowlElements->Size() == 0 ) {
@@ -594,7 +594,7 @@ void XC::PBowlLoading::Print(std::ostream &s, int flag)
 // XC::PBowlLoading::addPBElements(const XC::ID &PBEle)
 // {
 //   // create a copy of the vector containg plastic bowl elements
-//   PBowlElements = new XC::ID(PBEle);
+//   PBowlElements = new ID(PBEle);
 //   // ensure we did not run out of memory
 //   if (PBowlElements == 0 || PBowlElements->Size() == 0) {
 //     std::cerr << "XC::PBowlLoading::addPBElements() - ran out of memory constructing";
@@ -620,8 +620,8 @@ XC::PBowlLoading::CompPBLoads()
   int NIE = theElement->getNumExternalNodes();
 
   int max_bnode = PBowlElements->Size() * NIE;
-  ID *Bowl_node = new XC::ID(max_bnode);
-  ID *Bound_node = new XC::ID(max_bnode);
+  ID *Bowl_node = new ID(max_bnode);
+  ID *Bound_node = new ID(max_bnode);
   ID NidesinFirstEle = theElement->getNodePtrs().getExternalNodes();
 
   int i, j, k, bi;
@@ -713,7 +713,7 @@ XC::PBowlLoading::CompPBLoads()
   }
 
   //Adding all boundary nodes on the plastic bowl
-  BoundaryNodes = new XC::ID(no_boundarynodes);
+  BoundaryNodes = new ID(no_boundarynodes);
 
   if (BoundaryNodes == 0 || BoundaryNodes->Size() == 0) {
     std::cerr << "XC::PBowlLoading::CompPBLoads() - ran out of memory constructing";
@@ -737,7 +737,7 @@ XC::PBowlLoading::CompPBLoads()
   }//end of adding boundary node loop
 
   //Adding all exterior nodes on the plastic bowl
-  ExteriorNodes = new XC::ID(no_exteriornodes);
+  ExteriorNodes = new ID(no_exteriornodes);
   if (ExteriorNodes == 0 || ExteriorNodes->Size() == 0) {
     std::cerr << "XC::PBowlLoading::CompPBLoads() - ran out of memory constructing";
     std::cerr << " a XC::Vector of size: " <<  ExteriorNodes->Size() << std::endl;
@@ -778,18 +778,18 @@ XC::PBowlLoading::CompPBLoads()
   std::cerr<<"Computing the equivalent(effective) forces for all plastic bowl nodes"<<std::endl;
   int cols = Udd->noRows();
   //Matrix to hold the computed effective nodal forces for all plastic bowl DOFs and each time step
-  Matrix *F = new XC::Matrix(cols, thetimeSteps);
+  Matrix *F = new Matrix(cols, thetimeSteps);
 
   //Assume all plastic bowl nodes have the same number of DOFs
   Node *theNode = theDomain->getNode((*BoundaryNodes)(0));
   int NDOF = theNode->getNumberDOF();
 
-  Vector *Fm = new XC::Vector(NIE*NDOF);
-  Vector *Fk  = new XC::Vector(NIE*NDOF);
-  //Matrix *Ke= new XC::Matrix(NIE*NDOF,NIE*NDOF);
-  //Matrix *Me= new XC::Matrix(NIE*NDOF,NIE*NDOF);
-  Vector *u_e = new XC::Vector(NIE*NDOF);
-  Vector *udd_e = new XC::Vector(NIE*NDOF);
+  Vector *Fm = new Vector(NIE*NDOF);
+  Vector *Fk  = new Vector(NIE*NDOF);
+  //Matrix *Ke= new Matrix(NIE*NDOF,NIE*NDOF);
+  //Matrix *Me= new Matrix(NIE*NDOF,NIE*NDOF);
+  Vector *u_e = new Vector(NIE*NDOF);
+  Vector *udd_e = new Vector(NIE*NDOF);
 
 
   // intialize the F()
@@ -813,8 +813,8 @@ XC::PBowlLoading::CompPBLoads()
    //-------------------------------------------------------------------------
 
    //Find out the boundary and exterior nodes in this element
-   ID *B_node = new XC::ID(NIE);  //array to store the indices of all boundary nodes
-   ID *E_node = new XC::ID(NIE);  //array to store the indices of all exterior nodes
+   ID *B_node = new ID(NIE);  //array to store the indices of all boundary nodes
+   ID *E_node = new ID(NIE);  //array to store the indices of all exterior nodes
    int nB=0, nE=0;
    bool bdnode;
 
@@ -893,7 +893,7 @@ XC::PBowlLoading::CompPBLoads()
 
   }  // end for bowl element
 
-  PBowlLoads = new XC::Matrix(*F);
+  PBowlLoads = new Matrix(*F);
 
   // ensure we did not run out of memory
   if (PBowlLoads->noRows() == 0 || PBowlLoads->noCols() == 0 ) {
@@ -919,7 +919,7 @@ XC::PBowlLoading::CompPBLoads()
 const XC::Vector &
 XC::PBowlLoading::getNodalLoad(int nodeTag, double time)
 {
-  Vector *dummy = new XC::Vector(0);
+  Vector *dummy = new Vector(0);
   //Get the node
   Domain *theDomain = this->getDomain();
   Node *theNode = theDomain->getNode(nodeTag);
@@ -933,7 +933,7 @@ XC::PBowlLoading::getNodalLoad(int nodeTag, double time)
 
   //Create the nodal load vector accoding to the DOFs the node has
   int numDOF = theNode->getNumberDOF();
-  Vector *nodalLoad = new XC::Vector(numDOF);
+  Vector *nodalLoad = new Vector(numDOF);
 
 
   //Get the nodal loads associated to the nodeTag

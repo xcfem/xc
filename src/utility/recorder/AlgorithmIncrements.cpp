@@ -91,13 +91,13 @@ XC::AlgorithmIncrements::AlgorithmIncrements(EquiSolnAlgo *theEquiAlgo,
   theAlgo = theEquiAlgo;
 
   // create the window in which we plot on the screen
-//   theMap = new XC::PlainMap();
+//   theMap = new PlainMap();
 // #ifdef _WGL
 //   theRenderer = new OpenGLRenderer(windowTitle, xLoc, yLoc, width, height, *theMap);
 // #elif _GLX
 //   theRenderer = new OpenGLRenderer(windowTitle, xLoc, yLoc, width, height, *theMap);
 // #else
-//   theRenderer = new XC::X11Renderer(windowTitle, xLoc, yLoc, width, height, *theMap);
+//   theRenderer = new X11Renderer(windowTitle, xLoc, yLoc, width, height, *theMap);
 // #endif
 //   // set up for standard xy-plot - rendering in the xy plane at z =0
 //   theRenderer->setVRP(0.0, 0.0, 0.0); 

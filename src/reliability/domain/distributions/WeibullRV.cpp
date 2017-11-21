@@ -159,7 +159,7 @@ XC::WeibullRV::getType()
 double 
 XC::WeibullRV::getMean()
 {
-	GammaRV *aGammaRV = new XC::GammaRV(1, 0.0, 1.0, 0.0);
+	GammaRV *aGammaRV = new GammaRV(1, 0.0, 1.0, 0.0);
 	double result = u * aGammaRV->gammaFunction(1.0+1.0/k);
 	delete aGammaRV;
 	return result;
@@ -170,7 +170,7 @@ XC::WeibullRV::getMean()
 double 
 XC::WeibullRV::getStdv()
 {
-	GammaRV *aGammaRV = new XC::GammaRV(1, 0.0, 1.0, 0.0);
+	GammaRV *aGammaRV = new GammaRV(1, 0.0, 1.0, 0.0);
 	double a = aGammaRV->gammaFunction(1.0+2.0/k);
 	double b = aGammaRV->gammaFunction(1.0+1.0/k);
 	delete aGammaRV;
@@ -202,7 +202,7 @@ XC::WeibullRV::setParameters(double mean, double stdv)
 void
 XC::WeibullRV::function141(double xk, double cov, double mean)
 {
-	GammaRV *aGammaRV = new XC::GammaRV(1, 0.0, 1.0, 0.0);
+	GammaRV *aGammaRV = new GammaRV(1, 0.0, 1.0, 0.0);
 	xk = xk + 1.0;
 	double x1 = 1.0 + 1.0/xk;
 	double x2 = 1.0 + 2.0/xk;
@@ -223,7 +223,7 @@ XC::WeibullRV::function142(double xk, double cov, double mean)
 	xk = xk - 0.1;
 	double x1 = 1.0 + 1.0/xk;
 	double x2 = 1.0 + 2.0/xk;
-	GammaRV *aGammaRV = new XC::GammaRV(1, 0.0, 1.0, 0.0);
+	GammaRV *aGammaRV = new GammaRV(1, 0.0, 1.0, 0.0);
 	double gm1 = aGammaRV->gammaFunction(x1);
 	double gm2 = aGammaRV->gammaFunction(x2);
 	delete aGammaRV;
@@ -241,7 +241,7 @@ XC::WeibullRV::function143(double xk, double cov, double mean)
 	xk = xk + 0.01;
 	double x1 = 1.0 + 1.0/xk;
 	double x2 = 1.0 + 2.0/xk;
-	GammaRV *aGammaRV = new XC::GammaRV(1, 0.0, 1.0, 0.0);
+	GammaRV *aGammaRV = new GammaRV(1, 0.0, 1.0, 0.0);
 	double gm1 = aGammaRV->gammaFunction(x1);
 	double gm2 = aGammaRV->gammaFunction(x2);
 	delete aGammaRV;

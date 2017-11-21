@@ -239,7 +239,7 @@ XC::Joint3D::Joint3D(int tag, int nd1, int nd2, int nd3, int nd4, int nd5, int n
 
 //! @brief Virtual constructor.
 XC::Element* XC::Joint3D::getCopy(void) const
-  { return new XC::Joint3D(*this); }
+  { return new Joint3D(*this); }
 
 XC::Joint3D::~Joint3D(void)
   {
@@ -283,7 +283,7 @@ void XC::Joint3D::setDomain(Domain *TheDomain)
 int XC::Joint3D::addMFreedom_Joint(Domain *theDomain, int mpNum, int RetNodeID, int ConNodeID, int RotNodeID, int Rdof, int DspNodeID, int Ddof, int LrgDispFlag )
   {
     // create MFreedom_ForJoint constraint
-    MFreedom_Constraint *Temp_MF= new XC::MFreedom_Joint3D( theDomain, mpNum, RetNodeID, ConNodeID, RotNodeID, Rdof, DspNodeID, Ddof, LrgDispFlag );
+    MFreedom_Constraint *Temp_MF= new MFreedom_Joint3D( theDomain, mpNum, RetNodeID, ConNodeID, RotNodeID, Rdof, DspNodeID, Ddof, LrgDispFlag );
 
     if(Temp_MF == nullptr)
       {
@@ -400,28 +400,28 @@ const XC::Vector &XC::Joint3D::getResistingForceIncInertia(void) const
 //
 
         if(argv[0] == "node" || argv[0] == "internalNode" )
-    return new XC::ElementResponse(this, 1, Vector(9));
+    return new ElementResponse(this, 1, Vector(9));
 
         else if(argv[0] == "size" || argv[0] == "jointSize" )
-    return new XC::ElementResponse(this, 2, Vector(3));
+    return new ElementResponse(this, 2, Vector(3));
 
         else if(argv[0] == "moment" || argv[0] == "moments"
                 || argv[0] == "force" || argv[0] == "forces" )
-    return new XC::ElementResponse(this, 3, Vector(3));
+    return new ElementResponse(this, 3, Vector(3));
 
         else if(argv[0] == "defo" || argv[0] == "deformations" ||
            argv[0] == "deformation" )
-    return new XC::ElementResponse(this, 4, Vector(3));
+    return new ElementResponse(this, 4, Vector(3));
 
         else if(argv[0] == "defoANDforce" || argv[0] == "deformationANDforce" ||
            argv[0] == "deformationsANDforces" )
-    return new XC::ElementResponse(this, 5, Vector(6));
+    return new ElementResponse(this, 5, Vector(6));
 
         else if( argv[0] == "stiff" || argv[0] == "stiffness" )
-    return new XC::ElementResponse(this, 6, Matrix(45,45) );
+    return new ElementResponse(this, 6, Matrix(45,45) );
 
         else if(argv[0] == "plasticRotation" || argv[0] == "plasticDeformation")
-                return new XC::ElementResponse(this, 7, Vector(3));
+                return new ElementResponse(this, 7, Vector(3));
 
         else
                 return 0;

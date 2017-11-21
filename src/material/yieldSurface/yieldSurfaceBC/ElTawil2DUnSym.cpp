@@ -320,12 +320,12 @@ void XC::ElTawil2DUnSym::customizeInterpolate(double &xi, double &yi, double &xj
 
  XC::YieldSurface_BC *XC::ElTawil2DUnSym::getCopy(void)
 {
-    // ElTawil2D *theCopy = new XC::ElTawil2D(this->getTag(), xBal, yBal, yPosCap_orig, yNegCap_orig, *hModel,
+    // ElTawil2D *theCopy = new ElTawil2D(this->getTag(), xBal, yBal, yPosCap_orig, yNegCap_orig, *hModel,
     //                                   cz, ty);
     //later  copy all the state variables
 
 
-    ElTawil2DUnSym *theCopy = new XC::ElTawil2DUnSym(this->getTag(), xPosBal, yPosBal+yBal,
+    ElTawil2DUnSym *theCopy = new ElTawil2DUnSym(this->getTag(), xPosBal, yPosBal+yBal,
     							  xNegBal, yNegBal+yBal, yPosCap+yBal, yNegCap+yBal,
     							  *hModel, czPos, tyPos, czNeg, tyNeg);
 

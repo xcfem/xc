@@ -114,7 +114,7 @@ XC::SectionForceDeformation* XC::YS_Section2D02::getCopy(void) const
   {
     // Make a copy of the hinge
     YS_Section2D02 *theCopy =
-    new XC::YS_Section2D02 (this->getTag(), E, A, I, maxPlstkRot, ys, use_Kr_orig);
+    new YS_Section2D02 (this->getTag(), E, A, I, maxPlstkRot, ys, use_Kr_orig);
     theCopy->eCommit = eCommit;
     theCopy->sCommit = sCommit;
     theCopy->peakPlstkRot =  peakPlstkRot;

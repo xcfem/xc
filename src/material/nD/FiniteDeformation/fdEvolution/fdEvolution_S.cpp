@@ -57,7 +57,7 @@
 
 XC::fdEvolution_S * XC::fdEvolution_S::newObj() 
 {   
-    fdEvolution_S *newEL = new XC::fdEvolution_S( *this );    
+    fdEvolution_S *newEL = new fdEvolution_S( *this );    
     return newEL;
 }
 

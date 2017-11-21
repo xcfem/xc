@@ -129,7 +129,7 @@ XC::TwentyNodeBrick::TwentyNodeBrick(int element_number,
 
     if( total_number_of_Gauss_points != 0 )
       {
-        matpoint  = new XC::MatPoint3D * [total_number_of_Gauss_points];
+        matpoint  = new MatPoint3D * [total_number_of_Gauss_points];
       }
     else
       {
@@ -206,7 +206,7 @@ Ki(0), bf(), rho(0.0), pressure(0.0), mmodel(0)
 
 //! @brief Virtual constructor.
 XC::Element* XC::TwentyNodeBrick::getCopy(void) const
-  { return new XC::TwentyNodeBrick(*this); }
+  { return new TwentyNodeBrick(*this); }
 
 
 /////////////////////////////////////////////////////////////////////////////
@@ -1895,7 +1895,7 @@ XC::BJtensor XC::TwentyNodeBrick::linearized_nodal_forces(void) const
     std::cerr << "XC::TwentyNodeBrick::linearized_nodal_forces (tag: " << this->getTag() << "), not converged\n";
 
   Constitutive = (matpoint[where]->matmodel)->getTangentTensor();
-        //    matpoint[where].setEPS( mmodel->getEPS() ); //Set the new XC::EPState back
+        //    matpoint[where].setEPS( mmodel->getEPS() ); //Set the new EPState back
   //}
   //else if( tmp_ndm ) { //Elastic case
   //    (matpoint[where].p_matmodel)->setTrialStrainIncr( incremental_strain );
@@ -3392,11 +3392,11 @@ void XC::TwentyNodeBrick::Print(std::ostream &s, int flag)
 {
     //========================================================
     if(argv[0] == "force" || argv[0] == "forces")
-  return new XC::ElementResponse(this, 1, P);
+  return new ElementResponse(this, 1, P);
 
     //========================================================
     else if(argv[0] == "stiff" || argv[0] == "stiffness")
-      return new XC::ElementResponse(this, 5, K);
+      return new ElementResponse(this, 5, K);
 
     //========================================================
     else if(argv[0] == "plastic" || argv[0] == "plastified")
@@ -3416,30 +3416,30 @@ void XC::TwentyNodeBrick::Print(std::ostream &s, int flag)
        //  }
        //}
 
-       return new XC::ElementResponse(this, 2, InfoPt);
+       return new ElementResponse(this, 2, InfoPt);
     }
     //========================================================
     //Specially designed for moment computation of solid pile elements Zhaohui Yang UCDavis August 1, 2001
     else if(argv[0] == "PileM" || argv[0] == "PileM")
     {
-       return new XC::ElementResponse(this, 3, InfoSt);
+       return new ElementResponse(this, 3, InfoSt);
     }
     //========================================================
     else if(argv[0] == "stress" || argv[0] == "stresses")
     {
-       return new XC::ElementResponse(this, 4, InfoSt);
+       return new ElementResponse(this, 4, InfoSt);
     }
 
     //========================================================
     else if(argv[0] == "pq" || argv[0] == "PQ")
     {
-       return new XC::ElementResponse(this, 41, InfoSpq2);
+       return new ElementResponse(this, 41, InfoSpq2);
     }
 
     //========================================================
     else if(argv[0] == "GaussPoint" || argv[0] == "gausspoint")
     {
-       return new XC::ElementResponse(this, 6, Gsc);
+       return new ElementResponse(this, 6, Gsc);
     }
     /*else if(argv[0] == "material" || argv[0] == "integrPoint") {
         int pointNum = atoi(argv[1]);

@@ -95,7 +95,7 @@ XC::beam2d04::beam2d04(int tag, double a, double e, double i, int Nd1, int Nd2)
 
 //! @brief Virtual constructor.
 XC::Element* XC::beam2d04::getCopy(void) const
-  { return new XC::beam2d04(*this); }
+  { return new beam2d04(*this); }
 
 void XC::beam2d04::formVar(void) const
   {

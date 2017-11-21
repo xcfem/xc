@@ -122,7 +122,7 @@ XC::FORMAnalysis::analyze(void)
 	RandomVariable *aRandomVariable;
 	LimitStateFunction *theLimitStateFunction;
 	NormalRV *aStdNormRV=0;
-	aStdNormRV = new XC::NormalRV(1,0.0,1.0,0.0);
+	aStdNormRV = new NormalRV(1,0.0,1.0,0.0);
 	Vector delta(numRV); 
 	Vector eta(numRV);
 	Vector kappa(numRV);
