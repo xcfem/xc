@@ -77,10 +77,19 @@ class FEM_ObjectBroker;
 
 //! @ingroup Graph
 //
-//! @brief The Graph class provides the abstraction of a graph, a collection of
+//! @brief The Graph class provides the abstraction of a graph
+
+//! Provides the interface for all graph classes, a collection of
 //! vertices and edges. The Graph class is a container class which stores
 //! and provides access to Vertex objects. The Vertices contain information 
 //! about the edges in this design.
+//! A Graph is a container class
+//! responsible for holding the vertex set and edge set. The class is
+//! responsible for:
+//!   -# providing methods to add vertices and edges.
+//!   -# accessing the vertices and edges.
+//! All the methods for the class are declared as
+//! virtual to allow subclasses to change its behavior.
 class Graph: public MovableObject
   {
   protected:
@@ -95,8 +104,7 @@ class Graph: public MovableObject
     int recvData(const CommParameters &);
 
   public:
-    Graph(void);
-    Graph(int numVertices);    
+    Graph(int numVertices= 32);    
     Graph(const Graph &other);
     Graph &operator=(const Graph &other);
 

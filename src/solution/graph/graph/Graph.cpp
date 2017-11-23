@@ -113,10 +113,8 @@ void XC::Graph::copia(const Graph &otro)
   }
 
 //! @brief Constructor.
-XC::Graph::Graph(void)
-  :MovableObject(Graph_TAG), myVertices(nullptr,32,"vertice"), theVertexIter(&myVertices), numEdge(0), nextFreeTag(START_VERTEX_NUM) {}
-
-//! @brief Constructor.
+//!
+//! To create an empty Graph.
 XC::Graph::Graph(int numVertices)
   :MovableObject(Graph_TAG), myVertices(nullptr,numVertices,"vertice"), theVertexIter(&myVertices), numEdge(0), nextFreeTag(START_VERTEX_NUM) {}
 
@@ -137,13 +135,21 @@ XC::Graph &XC::Graph::operator=(const Graph &other)
 //! @brief Appends a vertex to the graph. If the adjacency list of the
 //! vertex is not empty, we check before that all the vertices of the
 //! list are already on the graph.
+//!
+//! Causes the graph to add a vertex to the graph. If \p checkAdjacency
+//! is \p true, a check is made to ensure that all the Vertices in the
+//! adjacency list of the Vertex are in the Graph. If a vertex in the
+//! adjacency is not in the Graph the vertex is not added, a warning
+//! message is printed and \p false is returned. If successful,
+//! returns the result of invoking addComponent() on the
+//! TaggedStorage object used to store the Vertices.
 bool XC::Graph::addVertex(const Vertex &vrt, bool checkAdjacency)
   {
     Vertex *vertexPtr=new Vertex(vrt);
     if(!vertexPtr)
       {
-	std::cerr << "WARNING Graph::addVertex";
-	std::cerr << " - attempting to add a nullptr vertex*\n";
+	std::cerr << typeid(Graph).name() << "::" << __FUNCTION__
+	          << "; WARNING - attempting to add a nullptr vertex*\n";
 	return false;
       }
 
@@ -157,8 +163,8 @@ bool XC::Graph::addVertex(const Vertex &vrt, bool checkAdjacency)
 		Vertex *other= this->getVertexPtr(*i);
 		if(other == 0)
                   {
-		    std::cerr << "WARNING Graph::addVertex";
-		    std::cerr << " - vertex with adjacent vertex not in graph\n";
+		    std::cerr << typeid(Graph).name() << "::" << __FUNCTION__
+			      << "; WARNING  - vertex with adjacent vertex not in graph\n";
 		    return false;
 		  }		
 	      }
@@ -168,12 +174,10 @@ bool XC::Graph::addVertex(const Vertex &vrt, bool checkAdjacency)
     const int tag= vertexPtr->getTag();
     bool result = myVertices.addComponent(vertexPtr);
     if(result == false)
-      {
-        std::cerr << *this;
-        std::cerr << "BAD VERTEX\n: " << *vertexPtr;
-	std::cerr << "WARNING Graph::addVertex";
-	std::cerr << " - vertex could not be stored in TaggedObjectStorage object\n";
-      }
+      std::cerr << *this
+	        << typeid(Graph).name() << "::" << __FUNCTION__
+		<< "; BAD VERTEX\n: " << *vertexPtr
+	        << "WARNING  - vertex could not be stored in TaggedObjectStorage object\n";
 
     // check nextFreeTag
     if(tag >= nextFreeTag)
@@ -184,6 +188,16 @@ bool XC::Graph::addVertex(const Vertex &vrt, bool checkAdjacency)
 
 //! @brief Adds an edge to the graph. Previously we check that its vertices
 //! are already defined in the graph, otherwise it returns -1 (error condition)
+//!
+//! Causes the Graph to add an edge {\em (vertexTag,otherVertexTag)} to
+//! the Graph. A check is first made to see if vertices with tags given by
+//! \p vertexTag and \p otherVertexTag exist in the graph. If they
+//! do not exist a \f$-1\f$ is returned, otherwise the method invokes {\em
+//! addEdge()} on each of the corresponding vertices in the 
+//! graph. Increments \p numEdge by \f$1\f$ and returns \f$0\f$ if sucessfull,
+//! a \f$1\f$ if the edge already existed, and a \f$-2\f$ if one addEdge()
+//! was successful, but the other was not.  
+//!
 //! @param vertexTag: end of the edge.
 //! @param otherVertexTag: the other end of the edge.
 int XC::Graph::addEdge(int vertexTag, int otherVertexTag)
@@ -195,8 +209,10 @@ int XC::Graph::addEdge(int vertexTag, int otherVertexTag)
     Vertex *vertex2 = this->getVertexPtr(otherVertexTag);
     if((!vertex1) || (!vertex2))
       {
-	std::cerr << "WARNING XC::Graph::addEdge() - one or both of the vertices ";
-	std::cerr << vertexTag << " " << otherVertexTag << " not in the graph\n";
+	std::cerr << typeid(Graph).name() << "::" << __FUNCTION__
+		  << "; WARNING - one or both of the vertices "
+		  << vertexTag << " " << otherVertexTag
+		  << " not in the graph\n";
 	retval= -1;
       }
     else
@@ -214,19 +230,23 @@ int XC::Graph::addEdge(int vertexTag, int otherVertexTag)
               }
             else
               {
-	        std::cerr << " WARNING Graph::addEdge() - " << vertexTag;
-	        std::cerr << " added to " << otherVertexTag;
-	        std::cerr << " adjacency - but already there in otherVertexTag!.\n";
-	        std::cerr << *this; exit(0);
+	        std::cerr << typeid(Graph).name() << "::" << __FUNCTION__
+			  << "; WARNING - " << vertexTag
+			  << " added to " << otherVertexTag
+			  << " adjacency - but already there in otherVertexTag!.\n"
+			  << *this;
+		exit(0);
 	        retval= -2;
 	      }
           }
         else
           {
-	    std::cerr << " WARNING XC::Graph::addEdge() - " << vertexTag;
-	    std::cerr << " added to " << otherVertexTag;
-	    std::cerr << " adjacency - but not vica versa!.\n";
-	    std::cerr << *this; exit(0);
+	    std::cerr << typeid(Graph).name() << "::" << __FUNCTION__
+		      << "; WARNING - " << vertexTag
+		      << " added to " << otherVertexTag
+		      << " adjacency - but not vica versa!.\n"
+		      << *this;
+	    exit(0);
 	    retval= -2;
           }
       }
@@ -244,6 +264,11 @@ XC::Vertex *XC::Graph::getVertexPtr(int vertexTag)
   }
 
 //! @brief Returns a pointer to the vertex identified by the tag being passed as parameter.
+//!
+//! A method which returns a pointer to the vertex whose tag is given by {\em
+//! vertexTag}. If no such vertex exists in the graph \f$0\f$ is
+//! returned. Invokes {\em getComponentPtr(vertexTag)} on the vertex
+//! storage object and casts this to a Vertex * if not null.
 const XC::Vertex *XC::Graph::getVertexPtr(int vertexTag) const
   {
     const TaggedObject *res= myVertices.getComponentPtr(vertexTag);
@@ -254,6 +279,9 @@ const XC::Vertex *XC::Graph::getVertexPtr(int vertexTag) const
   }
 
 //! @brief Returns an iterator to the vertices of the graph.
+//!
+//! A method which returns a reference to the graphs VertexIter. This iter
+//! can be used for iterating through the vertices of the graph.
 XC::VertexIter &XC::Graph::getVertices(void)
   {
     // reset the iter and then return it
@@ -261,11 +289,11 @@ XC::VertexIter &XC::Graph::getVertices(void)
     return theVertexIter;
   }
 
-//! @brief Returns the number of vertices del grafo.
+//! @brief Return the number of vertices in the graph.
 int XC::Graph::getNumVertex(void) const
   { return myVertices.getNumComponents(); }
 
-//! @brief Returns the número de aristas del grafo.
+//! @brief Return the number of edges in the graph.
 int XC::Graph::getNumEdge(void) const
   { return numEdge; }
 
@@ -273,7 +301,16 @@ int XC::Graph::getNumEdge(void) const
 int XC::Graph::getFreeTag(void)
   { return nextFreeTag; }
 
-//! @brief Removes from the graph the vertex identified by the tag being passed as parameter.
+//! @brief Removes from the graph the vertex identified by
+//! the tag being passed as parameter.
+//!
+//! To remove the Vertex from the Graph whose tag is equal to {\em
+//! vertexTag}. If \p removeEdgeFlag is \p true will also remove the
+//! Vertex from the remaining Vertices adjacency lists. returns a pointer
+//! to the removed Vertex if successful, \f$0\f$ if the Vertex was not in the
+//! Graph. Invokes {\em removeComponent(vertexTag)} on the vertex
+//! storage object and casts this to a Vertex * if not null. DOES NOT YET
+//! DEAL WITH \p removeEdgeFlag.
 bool XC::Graph::removeVertex(int tag, bool flag)
   {
     Vertex *result= nullptr;
@@ -284,8 +321,8 @@ bool XC::Graph::removeVertex(int tag, bool flag)
         result= dynamic_cast<Vertex *>(mc);
         if(flag == true)
           { // remove all edges associated with the vertex
-	    std::cerr << "Graph::removeVertex(int tag, bool flag)";
-	    std::cerr << " - no code to remove edges yet\n";
+	    std::cerr << typeid(Graph).name() << "::" << __FUNCTION__
+		      << "; no code to remove edges yet\n";
           }
         myVertices.removeComponent(tag);
         retval= true;
@@ -311,7 +348,8 @@ int XC::Graph::merge(Graph &other)
             Vertex newVertex(vertexTag, vertexRef);
             if(!vertexPtr)
               {
-	        std::cerr << "Graph::merge - out of memory\n";
+	        std::cerr << typeid(Graph).name() << "::" << __FUNCTION__
+			  << "; out of memory\n";
 	        return -1;
               }
             this->addVertex(newVertex, false);
@@ -328,7 +366,8 @@ int XC::Graph::merge(Graph &other)
           {
             if(this->addEdge(vertexTag, *i) < 0)
               {
-	        std::cerr << "Graph::merge - could not add an edge!\n";
+	        std::cerr << typeid(Graph).name() << "::" << __FUNCTION__
+			  << "; could not add an edge!\n";
 	        return -2;	
               }
           }
@@ -419,11 +458,11 @@ int XC::Graph::getVertexDiffExtrema(void) const
       }
     return retval;
   }
-//! @brief Imprime.
+//! @brief Prints the graph.
 void XC::Graph::Print(std::ostream &os, int flag)
   { myVertices.Print(os, flag); }
 
-//! @brief Imprime.
+//! @brief Prints stuff.
 std::ostream &XC::operator<<(std::ostream &s, Graph &M)
   {
     M.Print(s);
@@ -458,7 +497,8 @@ int XC::Graph::sendSelf(CommParameters &cp)
 
     res+= cp.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
-      std::cerr << "Graph::sendSelf() - failed to send data\n";
+      std::cerr << typeid(Graph).name() << "::" << __FUNCTION__
+		<< "; failed to send data\n";
     return res;
   }
 
@@ -471,13 +511,15 @@ int XC::Graph::recvSelf(const CommParameters &cp)
     int res= cp.receiveIdData(getDbTagData(),dataTag);
 
     if(res<0)
-      std::cerr << "Graph::recvSelf - failed to receive ids.\n";
+      std::cerr << typeid(Graph).name() << "::" << __FUNCTION__
+		<< "; failed to receive ids.\n";
     else
       {
         //setTag(getDbTagDataPos(0));
         res+= recvData(cp);
         if(res<0)
-          std::cerr << "Graph::recvSelf - failed to receive data.\n";
+          std::cerr << typeid(Graph).name() << "::" << __FUNCTION__
+		    << "; failed to receive data.\n";
       }
     return res;
   }
