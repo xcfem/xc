@@ -61,9 +61,13 @@
 #include <utility/matrix/Vector.h>
 
 //! @brief Constructor.
+//! 
+//! To construct a Vertex whose tag, reference, weight and color are as
+//! given by the arguments. The degree of the vertex is set to \f$0\f$. The
+//! integer \p tag is passed to the TaggedObject classes constructor.
 XC::Vertex::Vertex(int tag, int ref, double weight, int color)
-  :TaggedObject(tag), MovableObject(0), myRef(ref), myWeight(weight), myColor(color), 
-   myDegree(0), myTmp(0) {}    
+  :TaggedObject(tag), MovableObject(0), myRef(ref), myWeight(weight),
+   myColor(color), myDegree(0), myTmp(0) {}    
 
 
 //! @brief Assigns a weight to the vertex.
@@ -74,9 +78,11 @@ void XC::Vertex::setWeight(double newWeight)
 void XC::Vertex::setColor(int newColor) 
   { myColor = newColor; }
 
+//! To set the temporary variable of the vertex to \p newTmp    
 void XC::Vertex::setTmp(int newTmp) 
   { myTmp = newTmp; }
 
+//! Returns the vertices integer reference.
 int XC::Vertex::getRef(void) const 
   { return myRef; }
 
@@ -88,10 +94,22 @@ double XC::Vertex::getWeight(void) const
 int XC::Vertex::getColor(void) const
   { return myColor; }
 
+//! Returns the vertices temporary variable.
 int XC::Vertex::getTmp(void) const
   { return myTmp; }
 
 //! @brief Appends an edge to the vertex.
+//!
+//! If the adjacency list for that vertex does not already contain {\em
+//! otherTag}, \p otherTag is added to the adjacency list and the
+//! degree of the vertex is incremented by \f$1\f$. Returns a \f$0\f$ if
+//! sucessfull, a \f$1\f$ if edge already existed and a negative number if
+//! not. Note that no check is done by the vertex to see that a vertex
+//! with \p otherTag exists in the graph. The adjacency list for a
+//! Vertex is stored in an ID object containing the adjacent Vertices
+//! tags. A check is made to see if \p otherTag is in this ID using
+//! getLocation(), if it needs to be added the {\em [degree]}
+//! operator is invoked on the ID. 
 int XC::Vertex::addEdge(int otherTag)
   {
     if(otherTag != this->getTag()) // don't allow itself to be added
@@ -104,10 +122,19 @@ int XC::Vertex::getDegree(void) const
   { return myDegree; }
 
 //! @brief Return the adjacency list of the vertex in the graph.
+//!
+//! Returns the vertices adjacency list, this is returned as an ID whose
+//! components are tags for vertices which have been successfully added.
 const std::set<int> &XC::Vertex::getAdjacency(void) const
   { return myAdjacency; }
 
-//! @brief Prints.
+//! @brief Print stuff.
+//!
+//! Prints the vertex. If the {\em flag = 0} only the vertex tag and
+//! adjacency list is printed. If the {\em flag =1} the vertex tag, weight
+//! and adjacency are printed. If the {\em flag =2} the vertex tag, color
+//! and adjacency are printed. If the {\em flag =3} the vertex tag,
+//! weight, color and adjacency are printed.  
 void XC::Vertex::Print(std::ostream &s, int flag)
   {
     s << this->getTag() << " " ;
@@ -151,7 +178,7 @@ int XC::Vertex::recvData(const CommParameters &cp)
     return res;
   }
 
-//! @brief Envía.
+//! @brief Send vertex data.
 int XC::Vertex::sendSelf(CommParameters &cp)
   {
     setDbTag(cp);
@@ -161,11 +188,12 @@ int XC::Vertex::sendSelf(CommParameters &cp)
 
     res+= cp.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
-      std::cerr << getClassName() << "sendSelf() - failed to send data\n";
+      std::cerr << getClassName() << __FUNCTION__
+		<< "; failed to send data\n";
     return res;
   }
 
-//! @brief Recibe.
+//! @brief Receives vertex data.
 int XC::Vertex::recvSelf(const CommParameters &cp)
   {
     inicComm(4);
@@ -173,13 +201,15 @@ int XC::Vertex::recvSelf(const CommParameters &cp)
     int res= cp.receiveIdData(getDbTagData(),dataTag);
 
     if(res<0)
-      std::cerr << getClassName() << "::recvSelf - failed to receive ids.\n";
+      std::cerr << getClassName() << __FUNCTION__
+		<< "; failed to receive ids.\n";
     else
       {
         setTag(getDbTagDataPos(0));
         res+= recvData(cp);
         if(res<0)
-          std::cerr << getClassName() << "::recvSelf - failed to receive data.\n";
+          std::cerr << getClassName() << __FUNCTION__
+		    << "; failed to receive data.\n";
       }
     return res;
   }

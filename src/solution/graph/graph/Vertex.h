@@ -70,6 +70,12 @@ namespace XC {
 //! @ingroup Graph
 //
 //! @brief Vertex of a graph.
+//!
+//! Vertex is the abstraction of a vertex in a graph. It has a
+//! color, weight and a temporary integer value associated with it. Also
+//! associated with it is an integer reference, which can be used to identify
+//! an object of some type the vertex is representing and in integer
+//! temporary variable for algorithms which work with graphs.
 class Vertex: public TaggedObject, public MovableObject
   {
   private:
