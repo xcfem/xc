@@ -151,7 +151,7 @@ int XC::ConstantPressureVolumeQuad::update( )
 
   double xsj;  // determinant jacaobian matrix
 
-  static XC::Matrix sx(2,2); // inverse jacobian matrix
+  static Matrix sx(2,2); // inverse jacobian matrix
 
   double dvol[4]; //volume elements
 
@@ -159,11 +159,11 @@ int XC::ConstantPressureVolumeQuad::update( )
 
   double theta = 0.0; //average volume change (trace of strain)
 
-  static XC::Vector strain(4); //strain in vector form
+  static Vector strain(4); //strain in vector form
 
   double trace = 0.0; //trace of the strain
 
-  static XC::Vector one(4); //rank 2 identity as a vector
+  static Vector one(4); //rank 2 identity as a vector
 
   //one vector
   one(0) = 1.0;
