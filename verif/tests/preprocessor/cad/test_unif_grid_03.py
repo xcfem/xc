@@ -19,8 +19,8 @@ ndivY= 8
 ndivZ= 2
 
 # Problem type
-prueba= xc.ProblemaEF()
-preprocessor=  prueba.getPreprocessor
+prb= xc.ProblemaEF()
+preprocessor=  prb.getPreprocessor
 # Define materials
 elast3d= typical_materials.defElasticIsotropic3d(preprocessor, "elast3d",30e6,0.3,0.0)
 

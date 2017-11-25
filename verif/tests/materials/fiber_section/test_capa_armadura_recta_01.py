@@ -26,8 +26,8 @@ izTeor= nRebars*As*(depth/2.0)**2
 F= 1000.0 # Force magnitude
 
 # Problem type
-prueba= xc.ProblemaEF()
-preprocessor=  prueba.getPreprocessor
+prb= xc.ProblemaEF()
+preprocessor=  prb.getPreprocessor
 nodes= preprocessor.getNodeLoader
 modelSpace= predefined_spaces.StructuralMechanics2D(nodes)
 
@@ -111,7 +111,7 @@ lp0.newNodalLoad(2,xc.Vector([F,0.0,0.0]))
 casos.addToDomain("0")
 
 # Solution
-analisis= predefined_solutions.simple_static_linear(prueba)
+analisis= predefined_solutions.simple_static_linear(prb)
 result= analisis.analyze(1)
 
 

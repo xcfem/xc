@@ -21,8 +21,8 @@ t= R-r
 n1= 1
 n2= 1
 
-prueba= xc.ProblemaEF()
-preprocessor=  prueba.getPreprocessor
+prb= xc.ProblemaEF()
+preprocessor=  prb.getPreprocessor
 
 elast= typical_materials.defElasticMaterial(preprocessor, "elast",1.0)
 geomPrueba= preprocessor.getMaterialLoader.newSectionGeometry("geomPrueba")

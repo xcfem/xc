@@ -22,8 +22,8 @@ dens= 1.33 # Density kg/m2.
 q= -2
 
 # Problem type
-prueba= xc.ProblemaEF()
-preprocessor=  prueba.getPreprocessor
+prb= xc.ProblemaEF()
+preprocessor=  prb.getPreprocessor
 nodes= preprocessor.getNodeLoader
 modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
 nodes.newNodeIDXYZ(1,0,0,0)
@@ -66,7 +66,7 @@ eleLoad.transComponent= q
 casos.addToDomain("0")
 
 # Solution
-analisis= predefined_solutions.simple_static_linear(prueba)
+analisis= predefined_solutions.simple_static_linear(prb)
 result= analisis.analyze(1)
 
 

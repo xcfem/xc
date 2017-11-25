@@ -20,9 +20,9 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com ana.ortega.ort@gmal.com"
 
-prueba= xc.ProblemaEF()
-preprocessor=  prueba.getPreprocessor
-prueba.logFileName= "/tmp/borrar.log" # Ignore warning messages
+prb= xc.ProblemaEF()
+preprocessor=  prb.getPreprocessor
+prb.logFileName= "/tmp/borrar.log" # Ignore warning messages
 
 # Rectangular cross-section definition
 b= 10 # Cross section width  [cm]

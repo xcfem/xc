@@ -26,8 +26,8 @@ d= 0.57 # Effective depth.
 diamBar= 22e-3 # Rebar diameter.
 areaBar= math.pi*(diamBar/2)**2 # Rebars area.
 
-prueba= xc.ProblemaEF()
-preprocessor=  prueba.getPreprocessor
+prb= xc.ProblemaEF()
+preprocessor=  prb.getPreprocessor
 concrete= typical_materials.defElasticMaterial(preprocessor, 'concrete',Ec)
 steel= typical_materials.defElasticMaterial(preprocessor, "steel",Es)
 geomPrueba= preprocessor.getMaterialLoader.newSectionGeometry("geomPrueba")

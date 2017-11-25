@@ -31,8 +31,8 @@ AT= 10 # Temperature increment (Celsius degrees)
 
 
 # Problem type
-prueba= xc.ProblemaEF()
-preprocessor=  prueba.getPreprocessor
+prb= xc.ProblemaEF()
+preprocessor=  prb.getPreprocessor
 nodes= preprocessor.getNodeLoader
 modelSpace= predefined_spaces.StructuralMechanics2D(nodes)
 
@@ -82,7 +82,7 @@ eleLoad.frontEndDeformationPlane= defTermica
 #We add the load case to domain.
 casos.addToDomain("0")
 
-analisis= predefined_solutions.simple_static_linear(prueba)
+analisis= predefined_solutions.simple_static_linear(prb)
 result= analisis.analyze(1)
 
 elem1= elements.getElement(1)

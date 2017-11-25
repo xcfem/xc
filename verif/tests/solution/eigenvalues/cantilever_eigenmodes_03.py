@@ -30,8 +30,8 @@ m= b*h*dens
 NumDiv= 10
 
 # Problem type
-prueba= xc.ProblemaEF()
-preprocessor=  prueba.getPreprocessor
+prb= xc.ProblemaEF()
+preprocessor=  prb.getPreprocessor
 nodes= preprocessor.getNodeLoader
 
 modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
@@ -69,7 +69,7 @@ for n in lNodes:
 
 
 # Solution procedure
-solu= prueba.getSoluProc
+solu= prb.getSoluProc
 solCtrl= solu.getSoluControl
 
 

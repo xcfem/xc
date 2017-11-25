@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-solu= prueba.getSoluProc
+solu= prb.getSoluProc
 solCtrl= solu.getSoluControl
 solModels= solCtrl.getModelWrapperContainer
 sm= solModels.newModelWrapper("sm")

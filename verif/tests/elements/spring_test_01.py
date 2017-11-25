@@ -20,8 +20,8 @@ from materials import typical_materials
 
 
 # Model definition
-prueba= xc.ProblemaEF()
-preprocessor=  prueba.getPreprocessor
+prb= xc.ProblemaEF()
+preprocessor=  prb.getPreprocessor
 nodes= preprocessor.getNodeLoader
 # Problem type
 modelSpace= predefined_spaces.SolidMechanics2D(nodes)
@@ -67,7 +67,7 @@ lp0.newNodalLoad(2,xc.Vector([F/2.0,0]))
 lp0.newNodalLoad(2,xc.Vector([F/2.0,0]))
 casos.addToDomain(lPattern) # Append load pattern to domain.
 # Solution
-analisis= predefined_solutions.simple_static_linear(prueba)
+analisis= predefined_solutions.simple_static_linear(prb)
 result= analisis.analyze(1)
 
 

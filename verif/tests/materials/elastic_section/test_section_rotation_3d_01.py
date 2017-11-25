@@ -15,8 +15,8 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
-prueba= xc.ProblemaEF()
-preprocessor=  prueba.getPreprocessor   
+prb= xc.ProblemaEF()
+preprocessor=  prb.getPreprocessor   
 # Define materials
 scc= typical_materials.defElasticSection3d(preprocessor, "scc",1,1,1,Iz,Iy,4)
 scc.sectionProperties.rotate(math.radians(90))

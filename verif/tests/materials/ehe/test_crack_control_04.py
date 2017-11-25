@@ -10,7 +10,7 @@ import xc_base
 import geom
 import xc
 
-from misc import banco_pruebas_scc3d
+from misc import scc3d_testing_bench
 from solution import predefined_solutions # Solution procedure
 
 
@@ -45,8 +45,8 @@ print "numBarras= ",numBarras
 print "offsetBarras= ",offsetBarras
    '''
 
-prueba= xc.ProblemaEF()
-preprocessor=  prueba.getPreprocessor
+prb= xc.ProblemaEF()
+preprocessor=  prb.getPreprocessor
 # Materials definition
 concrMatTag25= EHE_materials.HA25.defDiagK(preprocessor)
 tagB400S= EHE_materials.B400S.defDiagK(preprocessor)
@@ -81,7 +81,7 @@ fiberSectionRepr= secHA.getFiberSectionRepr()
 fiberSectionRepr.setGeomNamed("geomSecHA")
 secHA.setupFibers()
 
-banco_pruebas_scc3d.sectionModel(preprocessor, "secHA")
+scc3d_testing_bench.sectionModel(preprocessor, "secHA")
 
 # Constraints
 modelSpace= predefined_spaces.getStructuralMechanics3DSpace(preprocessor)
@@ -106,7 +106,7 @@ casos.addToDomain("0")
 
 
 # Solution procedure
-analisis= predefined_solutions.simple_newton_raphson(prueba)
+analisis= predefined_solutions.simple_newton_raphson(prb)
 analOk= analisis.analyze(10)
 
 

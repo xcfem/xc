@@ -25,10 +25,10 @@ old_stderr= sys.stderr
 numNodes= 0
 numElem= 0
 # Problem type
-prueba= xc.ProblemaEF()
-prueba.logFileName= "/tmp/borrar.log" # Ignore warning messages
-prueba.errFileName= "/tmp/borrar.err" # Ignore warning messages
-preprocessor=  prueba.getPreprocessor
+prb= xc.ProblemaEF()
+prb.logFileName= "/tmp/borrar.log" # Ignore warning messages
+prb.errFileName= "/tmp/borrar.err" # Ignore warning messages
+preprocessor=  prb.getPreprocessor
 nodes= preprocessor.getNodeLoader
 
 modelSpace= predefined_spaces.SolidMechanics2D(nodes)# Materials definition

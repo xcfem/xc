@@ -34,8 +34,8 @@ L= 1.5 # Bar length (m)
 f= 1.5e3 # Load magnitude en N/m
 
 # Problem type
-prueba= xc.ProblemaEF()
-preprocessor=  prueba.getPreprocessor   
+prb= xc.ProblemaEF()
+preprocessor=  prb.getPreprocessor   
 nodes= preprocessor.getNodeLoader
 modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
 nodes.defaultTag= 1 #First node number.
@@ -78,7 +78,7 @@ eleLoad.axialComponent= f
 casos.addToDomain("0")
 
 # Solution
-analisis= predefined_solutions.simple_static_linear(prueba)
+analisis= predefined_solutions.simple_static_linear(prb)
 result= analisis.analyze(1)
 
 nodes= preprocessor.getNodeLoader 

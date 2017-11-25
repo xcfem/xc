@@ -31,8 +31,8 @@ L= 1.5 # Bar length (m)
 # Load
 f= 1.5e3 # Load magnitude (kN/m)
 
-prueba= xc.ProblemaEF()
-preprocessor=  prueba.getPreprocessor  
+prb= xc.ProblemaEF()
+preprocessor=  prb.getPreprocessor  
 nodes= preprocessor.getNodeLoader
 
 # Problem type
@@ -78,7 +78,7 @@ comb= combs.newLoadCombination("COMB","1.33*A+1.5*B")
 cargas.addToDomain("COMB")
 
 # Solution
-analisis= predefined_solutions.simple_static_linear(prueba)
+analisis= predefined_solutions.simple_static_linear(prb)
 result= analisis.analyze(1)
 
 deltax= nodes.getNode(2).getDisp[0]

@@ -22,8 +22,8 @@ I= 7892 # Inercia de la viga in inches a la cuarta
 F= 1000.0 # Force
 
 # Problem type
-prueba= xc.ProblemaEF()
-preprocessor=  prueba.getPreprocessor   
+prb= xc.ProblemaEF()
+preprocessor=  prb.getPreprocessor   
 nodes= preprocessor.getNodeLoader
 
 modelSpace= predefined_spaces.StructuralMechanics2D(nodes)
@@ -85,17 +85,17 @@ casos.addToDomain("0")
 
 import os
 os.system("rm -r -f /tmp/test14.db")
-db= prueba.newDatabase("BerkeleyDB","/tmp/test14.db")
+db= prb.newDatabase("BerkeleyDB","/tmp/test14.db")
 db.save(100)
-prueba.clearAll()
-prueba.setVerbosityLevel(0) #Dont print warning messages
+prb.clearAll()
+prb.setVerbosityLevel(0) #Dont print warning messages
                             #about pointers to material.
 db.restore(100)
-prueba.setVerbosityLevel(1) #Print warnings again 
+prb.setVerbosityLevel(1) #Print warnings again 
 
 
 # Solution
-analisis= predefined_solutions.simple_static_linear(prueba)
+analisis= predefined_solutions.simple_static_linear(prb)
 result= analisis.analyze(1)
 
 
@@ -118,15 +118,15 @@ mesh.meltAliveNodes("congela") # Reactivate inactive nodes.
 
 
 # Solution
-analisis= predefined_solutions.simple_static_linear(prueba)
+analisis= predefined_solutions.simple_static_linear(prb)
 result= analisis.analyze(1)
 
 db.save(105)
-prueba.clearAll()
-prueba.setVerbosityLevel(0) #Dont print warning messages
+prb.clearAll()
+prb.setVerbosityLevel(0) #Dont print warning messages
                             #about pointers to material.
 db.restore(105)
-prueba.setVerbosityLevel(1) #Print warnings again 
+prb.setVerbosityLevel(1) #Print warnings again 
 
 
 nodes.calculateNodalReactions(True)

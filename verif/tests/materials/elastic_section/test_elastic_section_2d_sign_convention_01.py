@@ -20,8 +20,8 @@ __email__= "l.pereztato@gmail.com"
 
 
 # Problem type
-prueba= xc.ProblemaEF()
-preprocessor=  prueba.getPreprocessor   
+prb= xc.ProblemaEF()
+preprocessor=  prb.getPreprocessor   
 
 #Constant positive strain.
 epsilon= 3.5e-3

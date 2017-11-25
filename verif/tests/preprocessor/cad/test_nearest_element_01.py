@@ -18,8 +18,8 @@ numElements= 1000
 tg= 0
 lapso= 0
 i= 1
-prueba= xc.ProblemaEF()
-preprocessor=  prueba.getPreprocessor   
+prb= xc.ProblemaEF()
+preprocessor=  prb.getPreprocessor   
 nodes= preprocessor.getNodeLoader
 nodes.defaultTag= 1
 for i in range(1,1001):
@@ -36,7 +36,7 @@ for i in range(1,numElements):
   truss= elements.newElement("Truss",xc.ID([i,i+1]));
   truss.area= 1
 
-mesh= prueba.getDomain.getMesh
+mesh= prb.getDomain.getMesh
 # print "creados ",nnod," nodes.\n"
 start_time= time.time()
 tg= mesh.getNearestElement(geom.Pos3d(50.51,0,0)).tag

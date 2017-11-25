@@ -19,8 +19,8 @@ __email__= "l.pereztato@gmail.com"
 
 
 # Model definition
-prueba= xc.ProblemaEF()
-preprocessor=  prueba.getPreprocessor
+prb= xc.ProblemaEF()
+preprocessor=  prb.getPreprocessor
 # Define materials
 prueba= typical_materials.defElasticMembranePlateSection(preprocessor, "prueba",E,nu,dens,h)
 

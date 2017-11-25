@@ -16,8 +16,8 @@ __email__= "l.pereztato@gmail.com ana.ortega.ort@gmal.com"
 
 FCs= []
 
-prueba= xc.ProblemaEF()
-preprocessor=  prueba.getPreprocessor
+prb= xc.ProblemaEF()
+preprocessor=  prb.getPreprocessor
 # Define materials
 materiales= preprocessor.getMaterialLoader
 diagInteg= materiales.newInteractionDiagram("diagInteg")

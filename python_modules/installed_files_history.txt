@@ -781,6 +781,12 @@
 /usr/local/lib/python2.7/dist-packages/misc/metal3dToEsfBarra.pyc
 /usr/local/lib/python2.7/dist-packages/misc/project_directories.py
 /usr/local/lib/python2.7/dist-packages/misc/project_directories.pyc
+/usr/local/lib/python2.7/dist-packages/misc/scc2d_testing_bench.py
+/usr/local/lib/python2.7/dist-packages/misc/scc2d_testing_bench.pyc
+/usr/local/lib/python2.7/dist-packages/misc/scc3d_testing_bench.py
+/usr/local/lib/python2.7/dist-packages/misc/scc3d_testing_bench.pyc
+/usr/local/lib/python2.7/dist-packages/misc/shell_testing_bench.py
+/usr/local/lib/python2.7/dist-packages/misc/shell_testing_bench.pyc
 /usr/local/lib/python2.7/dist-packages/misc/tablaEsf.py
 /usr/local/lib/python2.7/dist-packages/misc/tablaEsf.pyc
 /usr/local/lib/python2.7/dist-packages/model/apoyo_elastico.py

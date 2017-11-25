@@ -30,11 +30,11 @@ Iy= width*depth**3/12 # Cross section moment of inertia (m4)
 F= 1.5e3 # Load magnitude en N
 
 # Problem type
-prueba= xc.ProblemaEF()
-preprocessor=  prueba.getPreprocessor   
+prb= xc.ProblemaEF()
+preprocessor=  prb.getPreprocessor   
 nodes= preprocessor.getNodeLoader
 modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
-prueba.logFileName= "/tmp/borrar.log" # Ignore warning messages
+prb.logFileName= "/tmp/borrar.log" # Ignore warning messages
 nodes.defaultTag= 1 #First node number.
 nod= nodes.newNodeXYZ(0,0.0,0.0)
 nod= nodes.newNodeXYZ(L,0.0,0.0)
@@ -98,7 +98,7 @@ lp0.newNodalLoad(2,xc.Vector([0,-F,0,0,0,0]))
 #We add the load case to domain.
 casos.addToDomain("0")
 # Solution procedure
-analisis= predefined_solutions.simple_static_modified_newton(prueba)
+analisis= predefined_solutions.simple_static_modified_newton(prb)
 result= analisis.analyze(10)
 
 
@@ -111,7 +111,7 @@ delta0= nod2.getDisp[1]  # Node 2 yAxis displacement
 modelSpace.constraints.removeSPConstraint(spcTag)
 
 # Solution procedure
-analisis= predefined_solutions.simple_static_linear(prueba)
+analisis= predefined_solutions.simple_static_linear(prb)
 result= analisis.analyze(1)
 
 

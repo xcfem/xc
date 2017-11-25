@@ -20,8 +20,8 @@ L= 2 # Bar length.
 P= 10e3 # Carga uniforme transversal.
 n= 1e6 # Carga uniforme axial.
 
-prueba= xc.ProblemaEF()
-preprocessor=  prueba.getPreprocessor   
+prb= xc.ProblemaEF()
+preprocessor=  prb.getPreprocessor   
 nodes= preprocessor.getNodeLoader
 
 seccPrueba= section_properties.RectangularSection("prueba",b=.20,h=.30)
@@ -70,7 +70,7 @@ casos.addToDomain("0")
 
 
 # Solution procedure
-analisis= predefined_solutions.simple_static_modified_newton(prueba)
+analisis= predefined_solutions.simple_static_modified_newton(prb)
 result= analisis.analyze(1)
 
 

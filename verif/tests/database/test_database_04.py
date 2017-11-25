@@ -24,8 +24,8 @@ v1= xc.Vector([0,math.sqrt(2)/2,math.sqrt(2)/2])
 v2= xc.Vector([0,-math.sqrt(2)/2,math.sqrt(2)/2])
 
 # Problem type
-prueba= xc.ProblemaEF()
-preprocessor=  prueba.getPreprocessor
+prb= xc.ProblemaEF()
+preprocessor=  prb.getPreprocessor
 nodes= preprocessor.getNodeLoader
 modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
 nodes.newNodeIDXYZ(1,0,0,0)
@@ -45,9 +45,9 @@ elem= elements.newElement("ShellMITC4",xc.ID([1,2,3,4]))
 
 import os
 os.system("rm -f /tmp/test04.db")
-db= prueba.newDatabase("SQLite","/tmp/test04.db")
+db= prb.newDatabase("SQLite","/tmp/test04.db")
 db.save(100)
-prueba.clearAll()
+prb.clearAll()
 db.restore(100)
 
 elements= preprocessor.getElementLoader

@@ -18,8 +18,8 @@ Ec= 20e9
 lado= 1.0
 
 
-prueba= xc.ProblemaEF()
-preprocessor=  prueba.getPreprocessor
+prb= xc.ProblemaEF()
+preprocessor=  prb.getPreprocessor
 
 
 concrete= typical_materials.defElasticMaterial(preprocessor, 'concrete',Ec)

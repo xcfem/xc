@@ -16,8 +16,8 @@ h= 0.30 # Beam cross-section depth.
 b= 0.2 # Beam cross-section width.
 E= 2e6 # Elastic modulus
 
-prueba= xc.ProblemaEF()
-preprocessor=  prueba.getPreprocessor   
+prb= xc.ProblemaEF()
+preprocessor=  prb.getPreprocessor   
 nodes= preprocessor.getNodeLoader
 
 seccPrueba= section_properties.RectangularSection("prueba",b,h)

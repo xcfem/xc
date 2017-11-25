@@ -21,8 +21,8 @@ area= 2.0
 fPret= sigmaPret*area # Prestressing force (pounds)
 
 # Model definition
-prueba= xc.ProblemaEF()
-preprocessor=  prueba.getPreprocessor
+prb= xc.ProblemaEF()
+preprocessor=  prb.getPreprocessor
 nodes= preprocessor.getNodeLoader
 # Problem type
 modelSpace= predefined_spaces.SolidMechanics2D(nodes)
@@ -58,14 +58,14 @@ spc= constraints.newSPConstraint(2,1,0.0)
 
 
 # Solution
-analisis= predefined_solutions.simple_static_linear(prueba)
+analisis= predefined_solutions.simple_static_linear(prb)
 result= analisis.analyze(1)
 
 import os
 os.system("rm -r -f /tmp/test13.db")
-db= prueba.newDatabase("BerkeleyDB","/tmp/test13.db")
+db= prb.newDatabase("BerkeleyDB","/tmp/test13.db")
 db.save(100)
-prueba.clearAll()
+prb.clearAll()
 db.restore(100)
 
 

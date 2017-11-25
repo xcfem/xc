@@ -32,8 +32,8 @@ x= 0.5 # Relative abscissae where the punctual load is applied.
 P= 1e3 # punctual load.
 n= 1e6 # Carga uniforme axial.
 
-prueba= xc.ProblemaEF()
-preprocessor=  prueba.getPreprocessor   
+prb= xc.ProblemaEF()
+preprocessor=  prb.getPreprocessor   
 nodes= preprocessor.getNodeLoader
 
 # Problem type
@@ -74,7 +74,7 @@ eleLoad.transComponent= -P
 casos.addToDomain("0")
 
 # Solution
-analisis= predefined_solutions.simple_static_linear(prueba)
+analisis= predefined_solutions.simple_static_linear(prb)
 result= analisis.analyze(1)
 
 delta0= nodes.getNode(2).getDisp[0] #xAxis displacement of node 2.

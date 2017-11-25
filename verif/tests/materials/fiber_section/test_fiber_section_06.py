@@ -28,9 +28,9 @@ x1= 0.0997 # Profundidad de la fibra neutra 1.
 
 CurvZ2= 34.787e-3 # Curvatura de prueba 2.
 x2= 0.0649 # Profundidad de la fibra neutra 2.
-prueba= xc.ProblemaEF()
-prueba.logFileName= "/tmp/borrar.log" # Ignore warning messages
-preprocessor=  prueba.getPreprocessor
+prb= xc.ProblemaEF()
+prb.logFileName= "/tmp/borrar.log" # Ignore warning messages
+preprocessor=  prb.getPreprocessor
 
 concr= EHE_materials.HA25
 concr.alfacc=0.85    #f_maxd= 0.85*fcd concrete long term compressive strength factor (normally alfacc=1)

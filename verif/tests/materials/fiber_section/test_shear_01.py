@@ -6,7 +6,7 @@
 from __future__ import division
 
 
-from misc import banco_pruebas_scc3d
+from misc import scc3d_testing_bench
 from solution import predefined_solutions
 
 from materials.ehe import EHE_materials
@@ -44,8 +44,8 @@ numBarras= 3
 print "numBarras= ",numBarras
    '''
 
-prueba= xc.ProblemaEF()
-preprocessor=  prueba.getPreprocessor
+prb= xc.ProblemaEF()
+preprocessor=  prb.getPreprocessor
 # Materials definition
 materiales= preprocessor.getMaterialLoader
 
@@ -84,7 +84,7 @@ secHA.setRespVyByName("respVy")
 secHA.setRespVzByName("respVz")
 secHA.setRespTByName("respT")
 
-banco_pruebas_scc3d.sectionModel(preprocessor, "secHA")
+scc3d_testing_bench.sectionModel(preprocessor, "secHA")
 
 
 # Constraints
@@ -112,7 +112,7 @@ casos.addToDomain("0")
 
 
 # Solution procedure
-analisis= predefined_solutions.simple_newton_raphson(prueba)
+analisis= predefined_solutions.simple_newton_raphson(prb)
 analOk= analisis.analyze(10)
 if(analOk!=0):
   print "Error!; failed to converge."

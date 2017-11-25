@@ -35,8 +35,8 @@ HE400B= structural_steel.SteelShape(S275JR,"HE_400_B",arcelor_metric_shapes.HE)
 matHE400B=typical_materials.MaterialData(name='S275JR',E=S275JR.E,nu=S275JR.nu,rho=7850)
 
 # Problem type
-prueba= xc.ProblemaEF()
-preprocessor=  prueba.getPreprocessor   
+prb= xc.ProblemaEF()
+preprocessor=  prb.getPreprocessor   
 nodes= preprocessor.getNodeLoader
 modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
 nodes.defaultTag= 1 #First node number.
@@ -56,7 +56,7 @@ elem.rho= HE400B.get('P')
 dp.defSteelShapeElasticRangeElementParameters(elem,HE400B)
 vc.defVarsControlTensRegElastico3d([elem])
 
-recorder= prueba.getDomain.newRecorder("element_prop_recorder",None);
+recorder= prb.getDomain.newRecorder("element_prop_recorder",None);
 recorder.setElements(xc.ID([0]))
 recorder.callbackRecord= cc.controTensRecElastico3d()
 
@@ -76,7 +76,7 @@ lp0.newNodalLoad(2,xc.Vector([0,0,-F,0,0,0]))
 casos.addToDomain("0")
 
 # Solution
-analisis= predefined_solutions.simple_static_linear(prueba)
+analisis= predefined_solutions.simple_static_linear(prb)
 result= analisis.analyze(1)
 
 

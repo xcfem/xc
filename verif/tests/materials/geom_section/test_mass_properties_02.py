@@ -13,8 +13,8 @@ n= 15.0
 Ec= Es/n
 areaFi16= 2.01e-4
 
-prueba= xc.ProblemaEF()
-preprocessor=  prueba.getPreprocessor
+prb= xc.ProblemaEF()
+preprocessor=  prb.getPreprocessor
 
 steel= typical_materials.defElasticMaterial(preprocessor, "steel",Es)
 

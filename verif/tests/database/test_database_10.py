@@ -26,8 +26,8 @@ from solution import predefined_solutions
 from materials import typical_materials
 
 # Problem type
-prueba= xc.ProblemaEF()
-preprocessor=  prueba.getPreprocessor
+prb= xc.ProblemaEF()
+preprocessor=  prb.getPreprocessor
 nodes= preprocessor.getNodeLoader
 
 modelSpace= predefined_spaces.SolidMechanics2D(nodes)
@@ -59,7 +59,7 @@ spc= constraints.newSPConstraint(2,1,0.0)
 
     
 
-solu= prueba.getSoluProc
+solu= prb.getSoluProc
 solCtrl= solu.getSoluControl
 
 
@@ -89,13 +89,13 @@ result= analysis.analyze(1)
 
 import os
 os.system("rm -rf /tmp/test10.db")
-db= prueba.newDatabase("BerkeleyDB","/tmp/test10.db")
+db= prb.newDatabase("BerkeleyDB","/tmp/test10.db")
 db.save(100)
-prueba.clearAll()
+prb.clearAll()
 db.restore(100)
 
 
-solu= prueba.getSoluProc
+solu= prb.getSoluProc
 solCtrl= solu.getSoluControl
 
 

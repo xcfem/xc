@@ -27,8 +27,8 @@ diamPot= 993e-3
 
 # Problem type
 # Model definition
-prueba= xc.ProblemaEF()
-preprocessor=  prueba.getPreprocessor
+prb= xc.ProblemaEF()
+preprocessor=  prb.getPreprocessor
 
 pot= bridge_bearings.PTFEPotBearing(diamPot)
 
@@ -67,7 +67,7 @@ casos.addToDomain("0")
 
 
 # Solution
-analisis= predefined_solutions.simple_static_linear(prueba)
+analisis= predefined_solutions.simple_static_linear(prb)
 result= analisis.analyze(1)
 
 R= bridge_bearings.get_reaction_on_pot(preprocessor, newElement.tag)

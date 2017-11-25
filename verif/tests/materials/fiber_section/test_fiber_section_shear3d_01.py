@@ -6,7 +6,7 @@
     url={https://books.google.es/books?id=v7bbMwEACAAJ},
 '''
 from materials.sections import section_properties
-from misc import banco_pruebas_scc3d
+from misc import scc3d_testing_bench
 from solution import predefined_solutions
 
 
@@ -43,9 +43,9 @@ execfile(pth+"/macros_test_fiber_section.py")
 fy= 2600 # Yield stress of the material expressed in kp/cm2.
 E= 2.1e6 # Young’s modulus of the material (kp/cm2).
 
-prueba= xc.ProblemaEF()
-prueba.logFileName= "/tmp/borrar.log" # Ignore warning messages
-preprocessor=  prueba.getPreprocessor
+prb= xc.ProblemaEF()
+prb.logFileName= "/tmp/borrar.log" # Ignore warning messages
+preprocessor=  prb.getPreprocessor
 # Materials definition
 epp= typical_materials.defElasticPPMaterial(preprocessor, "epp",E,fy,-fy) #elastic perfectly-plastic uniaxial material
 respT= typical_materials.defElasticMaterial(preprocessor, "respT",1e10) # Torsion response.
@@ -66,7 +66,7 @@ sa.setRespVyByName("respVy")
 sa.setRespVzByName("respVz")
 sa.setRespTByName("respT")
 
-banco_pruebas_scc3d.sectionModel(preprocessor, "sa")
+scc3d_testing_bench.sectionModel(preprocessor, "sa")
 
 # Constraints
 modelSpace= predefined_spaces.getStructuralMechanics3DSpace(preprocessor)
@@ -94,7 +94,7 @@ casos.addToDomain("0")
 
 
 # Solution procedure
-analisis= predefined_solutions.simple_newton_raphson(prueba)
+analisis= predefined_solutions.simple_newton_raphson(prb)
 analOk= analisis.analyze(1)
 if(analOk!=0):
   print "Error!; failed to converge."

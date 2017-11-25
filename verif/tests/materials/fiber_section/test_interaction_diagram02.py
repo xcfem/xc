@@ -27,8 +27,8 @@ diam= 20e-3 # Diameter of rebars [m]
 areaFi20= 3.14e-4 # Rebars cross-section area [m2]
 
 
-prueba= xc.ProblemaEF()
-preprocessor=  prueba.getPreprocessor
+prb= xc.ProblemaEF()
+preprocessor=  prb.getPreprocessor
 # Materials definition
 concr= EHE_materials.HA25
 concr.alfacc=0.85    #f_maxd= 0.85*fcd concrete long term compressive strength factor (normally alfacc=1)

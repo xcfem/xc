@@ -24,8 +24,8 @@ groundMotionPeakVel= 0.0
 groundMotionDisp= 0.0
 groundMotionPeakDisp= 0.0
 
-prueba= xc.ProblemaEF()
-preprocessor=  prueba.getPreprocessor
+prb= xc.ProblemaEF()
+preprocessor=  prb.getPreprocessor
 
 
 #Load modulation.

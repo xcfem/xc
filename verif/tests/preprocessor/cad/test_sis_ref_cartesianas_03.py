@@ -12,9 +12,9 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
-prueba= xc.ProblemaEF()
-prueba.logFileName= "/tmp/borrar.log" # Ignore warning messages
-preprocessor=  prueba.getPreprocessor
+prb= xc.ProblemaEF()
+prb.logFileName= "/tmp/borrar.log" # Ignore warning messages
+preprocessor=  prb.getPreprocessor
 
 points= preprocessor.getCad.getPoints
 pt1= points.newPntIDPos3d(1,geom.Pos3d(1.0,1.0,0.0))

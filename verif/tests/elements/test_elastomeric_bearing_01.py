@@ -32,8 +32,8 @@ e= 0.002 # Bearing net thickness (without steel plates).
 
 
 # Model definition
-prueba= xc.ProblemaEF()
-preprocessor=  prueba.getPreprocessor
+prb= xc.ProblemaEF()
+preprocessor=  prb.getPreprocessor
 
 neop= bridge_bearings.ElastomericBearing(G,a,b,e)
 neop.defineMaterials(preprocessor)
@@ -85,7 +85,7 @@ lp0.newNodalLoad(nod2.tag,xc.Vector([FX,FY,FZ,MX,MY,MZ]))
 casos.addToDomain("0")
 
 # Solution
-analisis= predefined_solutions.simple_static_linear(prueba)
+analisis= predefined_solutions.simple_static_linear(prb)
 result= analisis.analyze(1)
 
 

@@ -52,10 +52,10 @@ e6= 10e-3 # Axial trial strain 1.
 sgc6= EHE_materials.HA25.sigmac(e6)
 sgs6= concrete_base.sigmaDReinfSteel(e6,EHE_materials.B500S)
 
-prueba= xc.ProblemaEF()
-prueba.logFileName= "/tmp/borrar.log" # Don't print warnings.
+prb= xc.ProblemaEF()
+prb.logFileName= "/tmp/borrar.log" # Don't print warnings.
 
-preprocessor=  prueba.getPreprocessor
+preprocessor=  prb.getPreprocessor
 # Define materials
 tag= EHE_materials.HA25.defDiagD(preprocessor)
 dgDHA25= EHE_materials.HA25.getDiagD(preprocessor)

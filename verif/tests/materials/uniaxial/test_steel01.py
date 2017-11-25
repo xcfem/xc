@@ -29,8 +29,8 @@ y_modelo= [420,840,1260,1680,2100,2520,2600.34,2600.76,2180.76,1760.76,1340.76,9
 
 
 # Model definition
-prueba= xc.ProblemaEF()
-preprocessor=  prueba.getPreprocessor
+prb= xc.ProblemaEF()
+preprocessor=  prb.getPreprocessor
 nodes= preprocessor.getNodeLoader
 
 # Problem type
@@ -82,7 +82,7 @@ casos.addToDomain("0")
 
 x= []
 y= []
-recorder= prueba.getDomain.newRecorder("element_prop_recorder",None);
+recorder= prb.getDomain.newRecorder("element_prop_recorder",None);
 recorder.setElements(xc.ID([1]))
 recorder.callbackRecord= "x.append(self.getMaterial().getStrain()); y.append(self.getN())"
 recorder.callbackRestart= "print \"Restart method called.\""
@@ -103,7 +103,7 @@ print (d*1000)
 
 '''
 # Solution procedure
-solu= prueba.getSoluProc
+solu= prb.getSoluProc
 solCtrl= solu.getSoluControl
 solModels= solCtrl.getModelWrapperContainer
 sm= solModels.newModelWrapper("sm")

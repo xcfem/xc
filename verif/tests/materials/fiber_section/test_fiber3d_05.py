@@ -28,8 +28,8 @@ lado= math.sqrt(Area)
 eps= F/(Area*Es)
 
 # Problem type
-prueba= xc.ProblemaEF()
-preprocessor=  prueba.getPreprocessor
+prb= xc.ProblemaEF()
+preprocessor=  prb.getPreprocessor
 nodes= preprocessor.getNodeLoader
 modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
 nodes.defaultTag= 1 #First node number.
@@ -51,39 +51,39 @@ TK31= 0.0; TK32= 0.0; TEIz= 0.0
 
 elast0= typical_materials.defElasticMaterial(preprocessor, "elast0",Es)
 # Secciones
-prb= preprocessor.getMaterialLoader.newMaterial("fiber_section_3d","prb")
+prueba= preprocessor.getMaterialLoader.newMaterial("fiber_section_3d","prueba")
 
-prb.addFiber("elast0",Area/4.0,xc.Vector([yF+lado/4,zF+lado/4]))
-prb.addFiber("elast0",Area/4.0,xc.Vector([yF-lado/4,zF+lado/4]))
-prb.addFiber("elast0",Area/4.0,xc.Vector([yF-lado/4,zF-lado/4]))
-prb.addFiber("elast0",Area/4.0,xc.Vector([yF+lado/4,zF-lado/4]))
-A= prb.getArea
-yG= prb.getCdgY()
-zG= prb.getCdgZ()
-IEA= prb.getInitialTangentStiffness().at(1,1)
-IK12= prb.getInitialTangentStiffness().at(1,2)
-IK13= prb.getInitialTangentStiffness().at(1,3)
-IK21= prb.getInitialTangentStiffness().at(2,1)
-IEIy= prb.getInitialTangentStiffness().at(2,2)
-IK23= prb.getInitialTangentStiffness().at(2,3)
-IK31= prb.getInitialTangentStiffness().at(3,1)
-IK32= prb.getInitialTangentStiffness().at(3,2)
-IEIz= prb.getInitialTangentStiffness().at(3,3)
+prueba.addFiber("elast0",Area/4.0,xc.Vector([yF+lado/4,zF+lado/4]))
+prueba.addFiber("elast0",Area/4.0,xc.Vector([yF-lado/4,zF+lado/4]))
+prueba.addFiber("elast0",Area/4.0,xc.Vector([yF-lado/4,zF-lado/4]))
+prueba.addFiber("elast0",Area/4.0,xc.Vector([yF+lado/4,zF-lado/4]))
+A= prueba.getArea
+yG= prueba.getCdgY()
+zG= prueba.getCdgZ()
+IEA= prueba.getInitialTangentStiffness().at(1,1)
+IK12= prueba.getInitialTangentStiffness().at(1,2)
+IK13= prueba.getInitialTangentStiffness().at(1,3)
+IK21= prueba.getInitialTangentStiffness().at(2,1)
+IEIy= prueba.getInitialTangentStiffness().at(2,2)
+IK23= prueba.getInitialTangentStiffness().at(2,3)
+IK31= prueba.getInitialTangentStiffness().at(3,1)
+IK32= prueba.getInitialTangentStiffness().at(3,2)
+IEIz= prueba.getInitialTangentStiffness().at(3,3)
 
-TEA= prb.getTangentStiffness().at(1,1)
-TK12= prb.getTangentStiffness().at(1,2)
-TK13= prb.getTangentStiffness().at(1,3)
-TK21= prb.getTangentStiffness().at(2,1)
-TEIy= prb.getTangentStiffness().at(2,2)
-TK23= prb.getTangentStiffness().at(2,3)
-TK31= prb.getTangentStiffness().at(3,1)
-TK32= prb.getTangentStiffness().at(3,2)
-TEIz= prb.getTangentStiffness().at(3,3)
+TEA= prueba.getTangentStiffness().at(1,1)
+TK12= prueba.getTangentStiffness().at(1,2)
+TK13= prueba.getTangentStiffness().at(1,3)
+TK21= prueba.getTangentStiffness().at(2,1)
+TEIy= prueba.getTangentStiffness().at(2,2)
+TK23= prueba.getTangentStiffness().at(2,3)
+TK31= prueba.getTangentStiffness().at(3,1)
+TK32= prueba.getTangentStiffness().at(3,2)
+TEIz= prueba.getTangentStiffness().at(3,3)
 
 
 # Elements definition
 elements= preprocessor.getElementLoader
-elements.defaultMaterial= "prb"
+elements.defaultMaterial= "prueba"
 #  sintaxis: zero_length[<tag>] 
 elements.defaultTag= 1
 zl= elements.newElement("ZeroLengthSection",xc.ID([1,2]))
@@ -116,7 +116,7 @@ lp0.newNodalLoad(2,xc.Vector([F,0,0,0,MomY,MomZ]))
 casos.addToDomain("0")
 
 # Solution
-analisis= predefined_solutions.simple_static_linear(prueba)
+analisis= predefined_solutions.simple_static_linear(prb)
 result= analisis.analyze(1)
 
 

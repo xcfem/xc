@@ -25,8 +25,8 @@ diam= 16e-3 # Bar diameter expressed in meters.
 areaFi16= 2.01e-4 # Rebar area expressed in square meters.
 
 
-prueba= xc.ProblemaEF()
-preprocessor=  prueba.getPreprocessor
+prb= xc.ProblemaEF()
+preprocessor=  prb.getPreprocessor
 # Define materials
 concr= EHE_materials.HA25
 concr.alfacc=0.85    #f_maxd= 0.85*fcd concrete long term compressive strength factor (normally alfacc=1)

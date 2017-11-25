@@ -49,11 +49,11 @@ sccData.positvRebarRows=[defSeccionHASimple.MainReinfLayer(rebarsDiam=6e-3,areaR
 #sccData.setMainReinfPos(6e-3,areaFi6,0.15,0.25-0.19)
 
 
-prueba= xc.ProblemaEF()
-prueba.logFileName= "/tmp/borrar.log" # Don't print warnings.
-prueba.errFileName= "/tmp/borrar.err" # Don't print errors.
+prb= xc.ProblemaEF()
+prb.logFileName= "/tmp/borrar.log" # Don't print warnings.
+prb.errFileName= "/tmp/borrar.err" # Don't print errors.
 
-preprocessor=  prueba.getPreprocessor
+preprocessor=  prb.getPreprocessor
 sccData.defRCSimpleSection(preprocessor, 'd')
 param= xc.InteractionDiagramParameters()
 diag= sccData.defInteractionDiagramNMy(preprocessor)

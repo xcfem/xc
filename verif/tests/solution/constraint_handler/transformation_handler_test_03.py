@@ -35,8 +35,8 @@ L= 15 # Bar length (m)
 F= 1.5e3 # Load magnitude (kN)
 
 # Problem type
-prueba= xc.ProblemaEF()
-preprocessor=  prueba.getPreprocessor   
+prb= xc.ProblemaEF()
+preprocessor=  prb.getPreprocessor   
 
 # Materials
 sectionProperties= xc.CrossSectionProperties3d()

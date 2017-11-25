@@ -13,7 +13,7 @@ __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
 from materials.sections import section_properties
-from misc import banco_pruebas_scc3d
+from misc import scc3d_testing_bench
 import xc_base
 import geom
 import xc
@@ -41,9 +41,9 @@ execfile(pth+"/macros_test_fiber_section.py")
 fy= 2600 # yield stress [kp/cm2]
 E= 2.1e6 # initial elastic tangent [kp/cm2.
 
-prueba= xc.ProblemaEF()
-prueba.logFileName= "/tmp/borrar.log" # No warning messages
-preprocessor=  prueba.getPreprocessor
+prb= xc.ProblemaEF()
+prb.logFileName= "/tmp/borrar.log" # No warning messages
+preprocessor=  prb.getPreprocessor
 # Materials definition
 epp= typical_materials.defElasticPPMaterial(preprocessor, "epp",E,fy,-fy)
 respT= typical_materials.defElasticMaterial(preprocessor, "respT",1e10) # Torsion response.
@@ -66,7 +66,7 @@ agg= materiales.newMaterial("section_aggregator","sa")
 agg.setSection("rectang")
 agg.setAdditions(["T","Vy","Vz"],["respT","respVy","respVz"])
 
-banco_pruebas_scc3d.sectionModel(preprocessor, "sa")
+scc3d_testing_bench.sectionModel(preprocessor, "sa")
 # Constraints
 modelSpace= predefined_spaces.getStructuralMechanics3DSpace(preprocessor)
 modelSpace.fixNode000_000(1)
@@ -93,7 +93,7 @@ casos.addToDomain("0")
 
 
 # Solution procedure
-solu= prueba.getSoluProc
+solu= prb.getSoluProc
 solCtrl= solu.getSoluControl
 
 
@@ -108,7 +108,7 @@ numberer.useAlgorithm("simple")
 
 solution= predefined_solutions.SolutionProcedure()
 solution.convergenceTestTol= 1.0e-2
-analysis= solution.simpleNewtonRaphsonBandGen(prueba)
+analysis= solution.simpleNewtonRaphsonBandGen(prb)
 
 analOk= analysis.analyze(1)
 

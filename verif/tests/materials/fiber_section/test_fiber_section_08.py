@@ -11,13 +11,13 @@ The results obtained are acceptable considering that:
 - Fiber model discretization introduces an error.
  '''
 
-# prueba.logFileName= "/tmp/borrar.log"  #Ignore warning messages
+# prb.logFileName= "/tmp/borrar.log"  #Ignore warning messages
 
 from __future__ import division
 import xc_base
 import geom
 import xc
-from misc import banco_pruebas_scc3d
+from misc import scc3d_testing_bench
 from solution import predefined_solutions
 
 from materials.ehe import EHE_materials
@@ -40,8 +40,8 @@ x1= 0.0997 # Profundidad de la fibra neutra 1.
 MzDato= 55.949206e3 # Bendign moment that makes tension reinforcement to yield.
 NDato= 0.0
 
-prueba= xc.ProblemaEF()
-preprocessor=  prueba.getPreprocessor
+prb= xc.ProblemaEF()
+preprocessor=  prb.getPreprocessor
 # Materials definition
 reinfMatTag= EHE_materials.B500S.defDiagD(preprocessor)
 dgDB500S= EHE_materials.B500S.getDiagD(preprocessor)
@@ -60,7 +60,7 @@ fiberSectionRepr= secHA.getFiberSectionRepr()
 fiberSectionRepr.setGeomNamed("concreteSectionGeom01")
 secHA.setupFibers()
 
-banco_pruebas_scc3d.sectionModel(preprocessor, "secHA")
+scc3d_testing_bench.sectionModel(preprocessor, "secHA")
 
 # Constraints
 modelSpace= predefined_spaces.getStructuralMechanics3DSpace(preprocessor)
@@ -84,7 +84,7 @@ casos.addToDomain("0")
 
 
 # Solution procedure
-analisis= predefined_solutions.simple_newton_raphson(prueba)
+analisis= predefined_solutions.simple_newton_raphson(prb)
 analOk= analisis.analyze(1)
 
 IEIz= 0.0

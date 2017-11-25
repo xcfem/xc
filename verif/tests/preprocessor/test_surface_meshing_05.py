@@ -22,8 +22,8 @@ rho= 0.0 # Densidad
 
 nNodes= 0
 
-prueba= xc.ProblemaEF()
-preprocessor=  prueba.getPreprocessor
+prb= xc.ProblemaEF()
+preprocessor=  prb.getPreprocessor
 elast= typical_materials.defElasticMaterial(preprocessor, "elast",3000)
 prueba= typical_materials.defElasticMembranePlateSection(preprocessor, "prueba",E,nu,rho,0.25)
 
@@ -64,10 +64,10 @@ Z2= preprocessor.getSets.defSet("Z2")
 Z2.getSurfaces.append(s2)
 Z2.fillDownwards()
 
-prueba.setVerbosityLevel(0) #Dont print warning messages about element seed.
+prb.setVerbosityLevel(0) #Dont print warning messages about element seed.
 Z1.genMesh(xc.meshDir.I)
 Z2.genMesh(xc.meshDir.I)
-prueba.setVerbosityLevel(1) #Print warnings again 
+prb.setVerbosityLevel(1) #Print warnings again 
 
 
 nNodes= preprocessor.getSets.getSet("total").getNodes.size

@@ -28,8 +28,8 @@ x_modelo= [-0.00012, -0.00024, -0.00036, -0.00048, -0.0006, -0.00072, -0.00084, 
 y_modelo= [-29.1, -56.4, -81.9, -105.6, -127.5, -147.6, -165.9, -182.4, -197.1, -210, -221.1, -230.4, -237.9, -243.6, -247.5, -249.6, -248.888888889, -245.555555556, -242.222222222, -238.888888889, -235.555555556, -232.222222222, -228.888888889, -225.555555556, -222.222222222, -208.599404002, -194.976585781, -181.353767561, -167.73094934, -154.10813112, -140.485312899, -126.862494679, -113.239676458, -99.6168582375, -85.994040017, -72.3712217965, -58.748403576, -45.1255853555, -31.502767135, -17.8799489144, -4.25713069391, -17.8799489144, -31.502767135, -45.1255853555, -58.748403576, -72.3712217965, -85.994040017, -99.6168582375, -113.239676458, -126.862494679, -140.485312899, -154.10813112, -167.73094934, -181.353767561, -194.976585781, -208.599404002, -222.222222222, -218.888888889, -215.555555556, -212.222222222, -208.888888889, -197.227782957, -185.566677025, -173.905571093, -162.244465162, -150.58335923, -138.922253298, -127.261147366, -115.600041434, -103.938935502, -92.2778295705, -80.6167236386, -68.9556177068, -57.2945117749, -45.6334058431, -33.9722999112, -22.3111939794, -10.6500880476]
 
 # Model definition
-prueba= xc.ProblemaEF()
-preprocessor=  prueba.getPreprocessor
+prb= xc.ProblemaEF()
+preprocessor=  prb.getPreprocessor
 nodes= preprocessor.getNodeLoader
 
 # Problem type
@@ -99,7 +99,7 @@ lp0.newNodalLoad(2,xc.Vector([-F,0]))
 casos.addToDomain("0")
 x= []
 y= []
-recorder= prueba.getDomain.newRecorder("element_prop_recorder",None);
+recorder= prb.getDomain.newRecorder("element_prop_recorder",None);
 recorder.setElements(xc.ID([0]))
 recorder.callbackRecord= "x.append(self.getMaterial().getStrain()); y.append(self.getN())"
 recorder.callbackRestart= "print \"Restart method called.\""
@@ -118,7 +118,7 @@ d= .getDisp[0]
 '''
 
 # Solution procedure
-solu= prueba.getSoluProc
+solu= prb.getSoluProc
 solCtrl= solu.getSoluControl
 solModels= solCtrl.getModelWrapperContainer
 sm= solModels.newModelWrapper("sm")

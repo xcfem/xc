@@ -24,8 +24,8 @@ A= 50.65 # viga area in inches cuadradas
 I= 7892 # Inercia de la viga in inches a la cuarta
 w= 10000/12.0 # Load per unit length (pounds)/pulgada.
 
-prueba= xc.ProblemaEF()
-preprocessor=  prueba.getPreprocessor   
+prb= xc.ProblemaEF()
+preprocessor=  prb.getPreprocessor   
 nodes= preprocessor.getNodeLoader
 # Problem type
 modelSpace= predefined_spaces.StructuralMechanics2D(nodes)
@@ -87,7 +87,7 @@ eleLoad.transComponent= -w
 casos.addToDomain("0")
 
 # Solution
-analisis= predefined_solutions.simple_static_linear(prueba)
+analisis= predefined_solutions.simple_static_linear(prb)
 result= analisis.analyze(1)
     
 

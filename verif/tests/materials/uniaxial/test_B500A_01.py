@@ -14,9 +14,9 @@ __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
 # Model definition
-prueba= xc.ProblemaEF()
-prueba.logFileName= "/tmp/borrar.log" # Para no imprimir mensajes de advertencia
-preprocessor=  prueba.getPreprocessor
+prb= xc.ProblemaEF()
+prb.logFileName= "/tmp/borrar.log" # Para no imprimir mensajes de advertencia
+preprocessor=  prb.getPreprocessor
 # Define materials
 errMax= concrete_base.testReinfSteelCharacteristicDiagram(preprocessor, SIA262_materials.B500A)
 

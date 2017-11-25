@@ -13,7 +13,7 @@ __email__= "l.pereztato@gmail.com"
 
 # Rectangular cross-section definition
 from materials.sections import section_properties
-from misc import banco_pruebas_scc3d
+from misc import scc3d_testing_bench
 import xc_base
 import geom
 import xc
@@ -22,11 +22,11 @@ from model import predefined_spaces
 from model import predefined_spaces
 from materials import typical_materials
 from solution import predefined_solutions
-from misc import banco_pruebas_scc3d
+from misc import scc3d_testing_bench
 
-prueba= xc.ProblemaEF()
-preprocessor=  prueba.getPreprocessor
-prueba.logFileName= "/tmp/borrar.log" # Ignore warning messages
+prb= xc.ProblemaEF()
+preprocessor=  prb.getPreprocessor
+prb.logFileName= "/tmp/borrar.log" # Ignore warning messages
 
 # Rectangular cross-section definition
 b= 10 # Cross section width  [cm]
@@ -61,7 +61,7 @@ fiberSectionRepr.setGeomNamed("geomRectang")
 rectang.setupFibers()
 extractFiberSectionProperties(rectang,scc10x20)
 
-banco_pruebas_scc3d.sectionModel(preprocessor, "rectang")
+scc3d_testing_bench.sectionModel(preprocessor, "rectang")
 # Constraints
 modelSpace= predefined_spaces.getStructuralMechanics3DSpace(preprocessor)
 modelSpace.fixNode000_000(1)
@@ -86,7 +86,7 @@ casos.addToDomain("0")
 
 
 # Solve
-analisis= predefined_solutions.simple_newton_raphson(prueba)
+analisis= predefined_solutions.simple_newton_raphson(prb)
 analOk= analisis.analyze(1)
 
 

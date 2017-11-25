@@ -33,8 +33,8 @@ J= 0.721e-8 # Cross section torsion constant (m4)
 AT= 10 # Temperature increment (Celsius degrees)
 
 # Problem type
-prueba= xc.ProblemaEF()
-preprocessor=  prueba.getPreprocessor
+prb= xc.ProblemaEF()
+preprocessor=  prb.getPreprocessor
 nodes= preprocessor.getNodeLoader
 modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
 nodes.defaultTag= 1 #First node number.
@@ -80,7 +80,7 @@ eleLoad.frontEndDeformationPlane= defTermica
 casos.addToDomain("0")
 
 # Solution procedure
-analisis= predefined_solutions.simple_static_modified_newton(prueba)
+analisis= predefined_solutions.simple_static_modified_newton(prb)
 result= analisis.analyze(1)
 
 

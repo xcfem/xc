@@ -15,8 +15,8 @@ __email__= "l.pereztato@gmail.com"
 
 lado= 1.0
 
-prueba= xc.ProblemaEF()
-preprocessor=  prueba.getPreprocessor
+prb= xc.ProblemaEF()
+preprocessor=  prb.getPreprocessor
 
 elast= typical_materials.defElasticMaterial(preprocessor, "elast",1.0)
 geomPrueba= preprocessor.getMaterialLoader.newSectionGeometry("geomPrueba")

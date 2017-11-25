@@ -29,8 +29,8 @@ fPret= sigmaPret*area # Prestressing force (pounds)
 
 
 # Model definition
-prueba= xc.ProblemaEF()
-preprocessor=  prueba.getPreprocessor
+prb= xc.ProblemaEF()
+preprocessor=  prb.getPreprocessor
 nodes= preprocessor.getNodeLoader
 # Problem type
 modelSpace= predefined_spaces.StructuralMechanics2D(nodes)
@@ -70,7 +70,7 @@ predefined_spaces.ConstraintsForLineInteriorNodes(l1,modelSpace.fixNodeFF0)
 
 Nstep= 10  #  apply load in 10 steps
 DInc= 1./Nstep 	#  first load increment
-solu= prueba.getSoluProc
+solu= prb.getSoluProc
 solCtrl= solu.getSoluControl
 solModels= solCtrl.getModelWrapperContainer
 sm= solModels.newModelWrapper("sm")

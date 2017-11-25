@@ -40,9 +40,9 @@ conectividad= None
 numNodeGroups= None
 numElementGroups= None
 
-prueba= xc.ProblemaEF()
-prueba.logFileName= "/tmp/borrar.log" # Ignore warning messages
-preprocessor=  prueba.getPreprocessor
+prb= xc.ProblemaEF()
+prb.logFileName= "/tmp/borrar.log" # Ignore warning messages
+preprocessor=  prb.getPreprocessor
 nodes= preprocessor.getNodeLoader
 modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
 
@@ -64,7 +64,7 @@ elem= elements.newElement("ShellMITC4",xc.ID([2,5,6,3]))
 
 
 
-fields=  prueba.getFields
+fields=  prb.getFields
 disp= fields.newField("disp")
 disp.setName= "total"
 disp.componentNames= ["UX","UY","UZ","RX","RY","RZ"]
@@ -73,7 +73,7 @@ disp.componentUnits= ["in","in","in","rad","rad","rad"]
 disp.componentsProperty= "self.getDisp"
 
 
-mesh_output= xc.MEDMeshing(prueba)
+mesh_output= xc.MEDMeshing(prb)
 vertices= mesh_output.vertices
 vertices.coordinateNames= ["X","Y","Z"]
 vertices.coordinateUnits= ["in","in","in"]

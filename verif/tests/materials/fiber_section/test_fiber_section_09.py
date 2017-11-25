@@ -4,12 +4,12 @@
    informático del hormigón estructural (Cátedra de hormigón de la ETSICCP-IECA
    UPM). '''
 
-# prueba.logFileName= "/tmp/borrar.log"  #Ignore warning messages
+# prb.logFileName= "/tmp/borrar.log"  #Ignore warning messages
 
 import xc_base
 import geom
 import xc
-from misc import banco_pruebas_scc3d
+from misc import scc3d_testing_bench
 from materials.ehe import EHE_materials
 from materials.sections.fiber_section import createFiberSets
 from model import predefined_spaces
@@ -27,8 +27,8 @@ gammas= 1.15 # Partial safety factor for steel.
 
 MzDato= 20e3
 NDato= -1345e3
-prueba= xc.ProblemaEF()
-preprocessor=  prueba.getPreprocessor
+prb= xc.ProblemaEF()
+preprocessor=  prb.getPreprocessor
 # Materials definition
 tag= EHE_materials.B500S.defDiagD(preprocessor)
 concr= EHE_materials.HA25
@@ -47,7 +47,7 @@ fiberSectionRepr= secHA.getFiberSectionRepr()
 fiberSectionRepr.setGeomNamed("concreteSectionGeom01")
 secHA.setupFibers()
 
-banco_pruebas_scc3d.sectionModel(preprocessor, "secHA")
+scc3d_testing_bench.sectionModel(preprocessor, "secHA")
 
 # Constraints
 modelSpace= predefined_spaces.getStructuralMechanics3DSpace(preprocessor)
@@ -71,7 +71,7 @@ casos.addToDomain("0")
 
 
 # Solution procedure
-analisis= predefined_solutions.simple_newton_raphson(prueba)
+analisis= predefined_solutions.simple_newton_raphson(prb)
 analOk= analisis.analyze(10)
 
 nodes= preprocessor.getNodeLoader

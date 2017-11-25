@@ -19,8 +19,8 @@ ratio0= 10
 ratio1= 10
 ratio2= 10
 ratio3= 10
-prueba= xc.ProblemaEF()
-preprocessor=  prueba.getPreprocessor   
+prb= xc.ProblemaEF()
+preprocessor=  prb.getPreprocessor   
 # Define materials
 scc= typical_materials.defElasticSection3d(preprocessor, "scc",1,1,1,Iz,Iy,4)
 scc.sectionProperties.rotate(math.radians(45))

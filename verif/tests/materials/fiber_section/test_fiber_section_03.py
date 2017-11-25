@@ -13,7 +13,7 @@ __email__= "l.pereztato@gmail.com"
 
 # Rectangular cross-section definition
 from materials.sections import section_properties
-from misc import banco_pruebas_scc3d
+from misc import scc3d_testing_bench
 import xc_base
 import geom
 import xc
@@ -39,9 +39,9 @@ execfile(pth+"/macros_test_fiber_section.py")
 fy= 2600 # Yield stress of the material expressed in kp/cm2.
 E= 2.1e6 # Young modulus of the material en kp/cm2.
 
-prueba= xc.ProblemaEF()
-prueba.logFileName= "/tmp/borrar.log" # Ignore warning messages
-preprocessor=  prueba.getPreprocessor
+prb= xc.ProblemaEF()
+prb.logFileName= "/tmp/borrar.log" # Ignore warning messages
+preprocessor=  prb.getPreprocessor
 # Materials definition
 epp= typical_materials.defElasticPPMaterial(preprocessor, "epp",E,fy,-fy)
 # Section geometry
@@ -56,7 +56,7 @@ fiberSectionRepr.setGeomNamed("geomRectang")
 rectang.setupFibers()
 extractFiberSectionProperties(rectang,scc10x20)
 
-banco_pruebas_scc3d.sectionModel(preprocessor, "rectang")
+scc3d_testing_bench.sectionModel(preprocessor, "rectang")
 
 # Constraints
 modelSpace= predefined_spaces.getStructuralMechanics3DSpace(preprocessor)
@@ -82,7 +82,7 @@ casos.addToDomain("0")
 
 
 # Solve
-analisis= predefined_solutions.simple_newton_raphson(prueba)
+analisis= predefined_solutions.simple_newton_raphson(prb)
 analOk= analisis.analyze(1)
 
 

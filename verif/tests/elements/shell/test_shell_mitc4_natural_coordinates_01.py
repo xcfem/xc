@@ -19,8 +19,8 @@ from model import predefined_spaces
 from materials import typical_materials
 import math
 
-prueba= xc.ProblemaEF()
-preprocessor=  prueba.getPreprocessor
+prb= xc.ProblemaEF()
+preprocessor=  prb.getPreprocessor
 nodes= preprocessor.getNodeLoader
 
 

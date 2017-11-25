@@ -25,8 +25,8 @@ v2= xc.Vector([0,-math.sqrt(2)/2,math.sqrt(2)/2])
 C= xc.Vector([1,0.5,0.5])
 
 # Problem type
-prueba= xc.ProblemaEF()
-preprocessor=  prueba.getPreprocessor
+prb= xc.ProblemaEF()
+preprocessor=  prb.getPreprocessor
 nodes= preprocessor.getNodeLoader
 modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
 nodes.newNodeIDXYZ(1,0,0,0)

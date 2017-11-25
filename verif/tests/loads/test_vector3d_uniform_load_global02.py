@@ -35,8 +35,8 @@ J= .2e-1 # Cross section torsion constant (m4)
 f= 1.5e3 # Load magnitude en N/m.
 
 # Problem type
-prueba= xc.ProblemaEF()
-preprocessor=  prueba.getPreprocessor
+prb= xc.ProblemaEF()
+preprocessor=  prb.getPreprocessor
 nodes= preprocessor.getNodeLoader
 modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
 nodes.defaultTag= 1 #First node number.
@@ -96,7 +96,7 @@ casos.currentTimeSeries= "ts"
 #Load case definition
 lp0= casos.newLoadPattern("default","0")
 casos.currentLoadPattern= "0"
-mesh= prueba.getDomain.getMesh
+mesh= prb.getDomain.getMesh
 eIter= mesh.getElementIter
 elem= eIter.next()
 while not(elem is None):
@@ -108,14 +108,14 @@ cargas= preprocessor.getLoadLoader
 #We add the load case to domain.
 casos.addToDomain("0")
 # Solution procedure
-analisis= predefined_solutions.simple_static_modified_newton(prueba)
-prueba.setVerbosityLevel(0) #Dont print warning messages
+analisis= predefined_solutions.simple_static_modified_newton(prb)
+prb.setVerbosityLevel(0) #Dont print warning messages
                             #about loads over
                             #elements with corotational formulation.
 result= analisis.analyze(10)
 
 execfile(pth+"/test_vector3d_uniform_load_global.py")
-prueba.setVerbosityLevel(1) #Print warnings again 
+prb.setVerbosityLevel(1) #Print warnings again 
 
 
 ''' 

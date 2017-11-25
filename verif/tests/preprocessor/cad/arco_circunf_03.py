@@ -21,8 +21,8 @@ sin45= cos45
 cooCentroElemTeor= xc.Vector([1.36603,1.36603,0])
 
 # Problem type
-prueba= xc.ProblemaEF()
-preprocessor=  prueba.getPreprocessor
+prb= xc.ProblemaEF()
+preprocessor=  prb.getPreprocessor
 nodes= preprocessor.getNodeLoader
 modelSpace= predefined_spaces.SolidMechanics3D(nodes)
 

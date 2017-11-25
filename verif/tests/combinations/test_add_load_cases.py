@@ -34,8 +34,8 @@ f= 1.5e3 # Load magnitude (kN/m)
 Gf1= 1.33 # Load factor.
 Gf2= 1.5 # Load factor.
 
-prueba= xc.ProblemaEF()
-preprocessor=  prueba.getPreprocessor   
+prb= xc.ProblemaEF()
+preprocessor=  prb.getPreprocessor   
 nodes= preprocessor.getNodeLoader
 
 # Problem type
@@ -86,7 +86,7 @@ casos.addToDomain("0")
 casos.addToDomain("1")
 
 # Solution
-analisis= predefined_solutions.simple_static_linear(prueba)
+analisis= predefined_solutions.simple_static_linear(prb)
 result= analisis.analyze(1)
 
 nod2= nodes.getNode(2)

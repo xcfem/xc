@@ -31,8 +31,8 @@ P= -100 # Carga vertical sobre la columna.
 
 NumDiv= 4
 
-prueba= xc.ProblemaEF()
-preprocessor=  prueba.getPreprocessor
+prb= xc.ProblemaEF()
+preprocessor=  prb.getPreprocessor
 nodes= preprocessor.getNodeLoader
 
 # Problem type

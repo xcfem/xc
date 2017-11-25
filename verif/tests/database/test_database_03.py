@@ -32,8 +32,8 @@ L= 1.5 # Bar length (m)
 # Load
 F= 1.5e3 # Load magnitude (kN)
 
-prueba= xc.ProblemaEF()
-preprocessor=  prueba.getPreprocessor   
+prb= xc.ProblemaEF()
+preprocessor=  prb.getPreprocessor   
 nodes= preprocessor.getNodeLoader
 
 # Problem type
@@ -72,7 +72,7 @@ lp0.newNodalLoad(2,xc.Vector([F,0,0,0,0,0]))
 casos.addToDomain("0")
 
 # Solution
-analisis= predefined_solutions.simple_static_linear(prueba)
+analisis= predefined_solutions.simple_static_linear(prb)
 result= analisis.analyze(1)
 
 cargas= preprocessor.getLoadLoader
@@ -87,13 +87,13 @@ casos.addToDomain("1")
 
 import os
 os.system("rm -f /tmp/test03.db")
-db= prueba.newDatabase("SQLite","/tmp/test03.db")
+db= prb.newDatabase("SQLite","/tmp/test03.db")
 db.save(100)
-prueba.clearAll()
+prb.clearAll()
 db.restore(100)
 
 # Solution
-analisis= predefined_solutions.simple_static_linear(prueba)
+analisis= predefined_solutions.simple_static_linear(prb)
 result= analisis.analyze(1)
 
 

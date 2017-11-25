@@ -22,8 +22,8 @@ dens= 1.33 # Density kg/m2.
 q= 1
 
 # Problem type
-prueba= xc.ProblemaEF()
-preprocessor=  prueba.getPreprocessor
+prb= xc.ProblemaEF()
+preprocessor=  prb.getPreprocessor
 nodes= preprocessor.getNodeLoader
 modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
 nodes.newNodeIDXYZ(1,0,0,0)
@@ -61,7 +61,7 @@ lp0= casos.newLoadPattern("default","0")
 casos.currentLoadPattern= "0"
 
 
-mesh= prueba.getDomain.getMesh
+mesh= prb.getDomain.getMesh
 loadVector= xc.Vector([0.0,0.0,q])
 eIter= mesh.getElementIter
 elem= eIter.next()
@@ -74,7 +74,7 @@ casos.addToDomain("0")
 
 
 # Solution
-analisis= predefined_solutions.simple_static_linear(prueba)
+analisis= predefined_solutions.simple_static_linear(prb)
 result= analisis.analyze(1)
 
 

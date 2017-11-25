@@ -18,9 +18,9 @@ __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
 # Model definition
-prueba= xc.ProblemaEF()
-prueba.logFileName= "/tmp/borrar.log" # Para no imprimir mensajes de advertencia
-mdlr= prueba.getPreprocessor
+prb= xc.ProblemaEF()
+prb.logFileName= "/tmp/borrar.log" # Para no imprimir mensajes de advertencia
+mdlr= prb.getPreprocessor
 concr= EHE_materials.HA25
 concr.alfacc=0.85 #f_maxd= 0.85*fcd
 errMax= concrete_base.concreteDesignDiagramTest(mdlr,concr)

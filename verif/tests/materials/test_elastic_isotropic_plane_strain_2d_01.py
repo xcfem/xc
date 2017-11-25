@@ -16,8 +16,8 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
-prueba= xc.ProblemaEF()
-preprocessor=  prueba.getPreprocessor
+prb= xc.ProblemaEF()
+preprocessor=  prb.getPreprocessor
 
 elast2d= typical_materials.defElasticIsotropicPlaneStrain(preprocessor, "elast2d",E,nu,rho)
 EE= elast2d.E
