@@ -120,7 +120,7 @@ if(analOk!=0):
 
 
 
-secHAParamsCortante= EHE_limit_state_checking.ShearControllerEHE('ULS_shear')
+secHAParamsCortante= EHE_limit_state_checking.ShearController('ULS_shear')
 
 
 

@@ -121,7 +121,7 @@ analisis= predefined_solutions.simple_newton_raphson(prueba)
 analOk= analisis.analyze(10)
 
 
-secHAParamsCortante= EHE_limit_state_checking.ShearControllerEHE('ULS_shear')
+secHAParamsCortante= EHE_limit_state_checking.ShearController('ULS_shear')
 
 secHAParamsCortante.AsTrsv= EHE_materials.Fi6*numRamas/0.2 # reinforcement area transversal
 secHAParamsCortante.theta= math.radians(45)

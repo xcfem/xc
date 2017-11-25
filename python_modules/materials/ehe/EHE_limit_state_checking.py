@@ -22,7 +22,6 @@ def getFcvEH91(fcd):
   :param fcd: design compressive strength of concrete.
   :param b: net width of the element according to clause 40.3.5.
   :param d: effective depth (meters).
-  
   '''
   fcdKpcm2= fcd*9.81/1e6
   return 0.5*sqrt(fcdKpcm2)/9.81*1e6
@@ -680,10 +679,10 @@ def getVuEHE08SiAt(fck,fcv,fcd,fyd,gammaC,Ncd,Ac,b0,d,z,AsPas,AsAct,AsTrsv, alph
     return  min(getVu2EHE08(fcv,fcd,fyd,gammaC,Ncd,Ac,b0,d,z,AsPas,AsAct,AsTrsv,alpha,theta,Nd,Md,Vd,Td,Es,Ep,Fp,Ae,ue),getVu1EHE08(fck,fcd,Ncd,Ac,b0,d,alpha,theta))
   
 
-class ShearControllerEHE(lscb.LimitStateControllerBase):
+class ShearController(lscb.LimitStateControllerBase):
   '''Shear control according to EHE-08.'''
   def __init__(self,limitStateLabel):
-    super(ShearControllerEHE,self).__init__(limitStateLabel)
+    super(ShearController,self).__init__(limitStateLabel)
     self.concreteFibersSetName= "concrete" #Name of the concrete fibers set.
     self.rebarFibersSetName= "reinforcement" #Name of the rebar fibers set.
     self.isBending= False # True if there is ar bending moment.
