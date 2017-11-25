@@ -18,7 +18,7 @@ import xc
 
 from materials.ehe import EHE_materials
 
-# Coeficientes de seguridad.
+# Partial safety factors.
 gammac= 1.5 # Partial safety factor for concrete.
 gammas= 1.15 # Partial safety factor for steel.
 

@@ -23,7 +23,7 @@ from materials.ehe import EHE_materials
 from model import predefined_spaces
 from solution import predefined_solutions
 
-# Coeficientes de seguridad.
+# Partial safety factors.
 gammas= 1.15 # Partial safety factor for steel.
 
 

@@ -15,7 +15,6 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
-#Coeficientes de seguridad.
 gammas= 1.15 #Partial safety factor for steel.
 
 numBarrasEstribo= 4

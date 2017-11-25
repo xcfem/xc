@@ -26,7 +26,7 @@ pth= os.path.dirname(__file__)
 #print "pth= ", pth
 if(not pth):
   pth= "."
-intForcCombFileName= pth+"/esf_test_xLamina.csv"
+intForcCombFileName= pth+"/shell_internal_forces.csv"
 
 
 elementTags= [2524,2527]

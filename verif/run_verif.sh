@@ -470,8 +470,6 @@ python tests/materials/sia262/test_anchorage_length.py
 python tests/materials/sia262/test_crack_control_01.py
 echo "$BLEU" "    SIA 263 tests." "$NORMAL"
 python tests/materials/sia263/test_coefs_fatique_SIA263.py
-echo "$BLEU" "    shell elements." "$NORMAL"
-python tests/materials/xLamina/test_xlamina_eluTN.py
 
 echo "$BLEU" "  Plate and membrane materials." "$NORMAL"
 python tests/materials/test_material_elastic_membrane_plate_section_01.py
@@ -547,8 +545,10 @@ python tests/rough_calculations/masonry_bridge_verif_01.py
 python tests/rough_calculations/masonryBridgeVerif_test01_minim.py
 
 #Postprocess tests
-echo "$BLEU" "Verifiying routines for post processing,...)." "$NORMAL"
+echo "$BLEU" "Verifiying routines for post processing." "$NORMAL"
 python tests/postprocess/test_export_shell_internal_forces.py
+echo "$BLEU" "  limit state checking." "$NORMAL"
+python tests/postprocess/limit_state_checking/test_shell_normal_stresses_uls_checking.py
 
 #VTK tests
 ##python tests/vtk/dibuja_edges.py

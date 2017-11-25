@@ -16,7 +16,7 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
-#Coeficientes de seguridad.
+#Partial safety factors.
 gammaC= 1.5
 
 #All values are fictional, they are used only to check

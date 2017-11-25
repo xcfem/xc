@@ -24,7 +24,6 @@ brazo= 0.5 # Rebar lever arm with respect to the section axis.
 from materials.ehe import EHE_materials
 from model import predefined_spaces
 
-# Coeficientes de seguridad.
 gammas= 1.15 # Partial safety factor for steel.
 
 
