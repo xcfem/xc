@@ -72,14 +72,28 @@
 namespace XC {
 //! @ingroup Graph
 //
-//! @brief Array de grafos.
+//! @brief Graph that uses an array to store its vertices.
+//!
+//! ArrayGraph is a subtype of Graph. The vertices for this type
+//! of graph are held in a simple array data structure whose initial size
+//! is specified at construction. This size can increase if
+//! needed. The array storage scheme is more efficient than a List storage
+//! scheme in terms of accessing the vertices; in very large problems
+//! where memory is limited this type of scheme may have problems getting
+//! enough contiguous meory in which case a List might be a better
+//! choice. {\bf There is a question as to whether or not the public
+//! methods should be declared as virtual. Good OOP programming would have
+//! all methods declared as virtual, however as subclasses cannot gain
+//! access to the private member data there does not seem to be much point
+//! in declaring them, except for the destructor, virtual in this
+//! instance.}
 class ArrayGraph: public Graph
   {
   private:
-    int numVertex;
-    int lastEmpty;
-    std::vector<Vertex *> theVertices;
-    ArrayVertexIter myIter;
+    int numVertex; //!< number of vertices.
+    int lastEmpty; //!< last empty position in the container.
+    std::vector<Vertex *> theVertices; //!< container for the vertex pointers.
+    ArrayVertexIter myIter; //!< iterator on the vertex pointer container.
     void libera(void);
   protected:
     int getArraySize(void) const;

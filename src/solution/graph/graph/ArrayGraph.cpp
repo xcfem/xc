@@ -65,6 +65,10 @@
 #include "solution/graph/graph/ArrayGraph.h"
 #include "solution/graph/graph/Vertex.h"
 
+//! @brief Frees memory.
+//! 
+//! Goes through \p theVertices and anywhere it finds a non-zero pointer,
+//! invokes the vertex destructor on that pointer. 
 void XC::ArrayGraph::libera(void)
   {
     for(int i=0; i<numVertex; i++)
@@ -75,14 +79,24 @@ void XC::ArrayGraph::libera(void)
         }
   }
 
+//! @brief Constructor.
+//!
+//! To construct an empty ArrayGraph. Creates a Vertex ** array, {\em
+//! theVertices} of size \p arraySize and sets the number of vertices,
+//! \p numVertex, and number of edges \p numEdge to \f$0\f$. If it fails
+//! to get an array of appropriate size it sets its \p arraySize to
+//! \f$0\f$; subclasses can check if successfull construction by invoking the
+//! protected member function getArraySize().
 XC::ArrayGraph::ArrayGraph(int arraySize)
   :numVertex(0), lastEmpty(0), theVertices(arraySize,static_cast<Vertex *>(nullptr)), myIter(*this) {}
 
+//! @brief Destructor.
 XC::ArrayGraph::~ArrayGraph(void)
   { libera(); }
 
-
-//! @brief Method to add a vertex to the graph. If the adjacency list
+//! @brief Add a vertex to the graph.
+//!
+//! Method to add a vertex to the graph. If the adjacency list
 //! of the vertex is not empty the graph will first check to see all
 //! vertices in the the the vertices adjacency list exist in the graph
 //! before the vertex is added. It then checks if it neeeds a new_ array
@@ -92,15 +106,15 @@ XC::ArrayGraph::~ArrayGraph(void)
 //! delete()} on the old array. It now tries to add the vertex in the
 //! array at location {\em vertexTag}. If this fails it adds at the first
 //! empty location it comes to. Returns a 0 if successfull addition, a
-//! $-1$ otherwise and a message to std::cerr explaining the problem.  
+//! $-1$ otherwise and a message to cerr explaining the problem.  
 bool XC::ArrayGraph::addVertex(const Vertex &vrt)
   {
-    Vertex *vertexPtr=new Vertex(vrt);
+    Vertex *vertexPtr= new Vertex(vrt);
     // check the vertex * and its adjacency list
     if(!vertexPtr)
       {
-	std::cerr << "WARNING ArrayGraph::addVertex";
-	std::cerr << " - attempting to add a nullptr vertex*\n";
+	std::cerr << typeid(*this).name() << "::" << __FUNCTION__
+		  << "; attempting to add a nullptr vertex*\n";
 	return false;
       }
     
@@ -109,11 +123,11 @@ bool XC::ArrayGraph::addVertex(const Vertex &vrt)
 	const std::set<int> &adjacency= vertexPtr->getAdjacency();
 	for(std::set<int>::const_iterator i=adjacency.begin(); i!=adjacency.end(); i++)
           {
-	    const Vertex *other = this->getVertexPtr(*i);
-	    if(other == 0)
+	    const Vertex *other= this->getVertexPtr(*i);
+	    if(other == nullptr)
               {
-		std::cerr << "WARNING XC::ArrayGraph::addVertex";
-		std::cerr << " - vertex with adjacent vertex not in graph\n";
+		std::cerr << typeid(*this).name() << "::" << __FUNCTION__
+			  << "; vertex with adjacent vertex not in graph.\n";
 		return false;
 	      }		
 	  }
@@ -128,7 +142,7 @@ bool XC::ArrayGraph::addVertex(const Vertex &vrt)
       }
 
     // now see if we can add the Vertex into the array in its vertexTag location
-    int vertexTag = vertexPtr->getTag();
+    const int vertexTag = vertexPtr->getTag();
     if((vertexTag >= 0) && (vertexTag < vsize) && (theVertices[vertexTag] == 0))
       {
 	theVertices[vertexTag]= vertexPtr;
@@ -142,7 +156,7 @@ bool XC::ArrayGraph::addVertex(const Vertex &vrt)
 	for(int i=0; i<vsize; i++) 
 	  if(theVertices[i] == nullptr)
             {
-              lastEmpty = i+1; // stores the lastEmpty place
+              lastEmpty= i+1; // stores the lastEmpty place
 	      theVertices[i]= vertexPtr;
 	      numVertex++;
 	      return true;
@@ -152,7 +166,9 @@ bool XC::ArrayGraph::addVertex(const Vertex &vrt)
     return false;
   }
 
-//! @brief A method which returns a pointer to the vertex whose tag is given by 
+//! @brief Return a pointer to the vertex identified by the tag.
+//!
+//! A method which returns a pointer to the vertex whose tag is given by 
 //! vertexTag. The method first looks at location {\em vertexTag} for the
 //! vertex, otherwise it must search through the array until it finds the
 //! vertex it is looking for. If no such vertex exists in the graph $0$ is
@@ -175,7 +191,9 @@ XC::Vertex *XC::ArrayGraph::getVertexPtr(int vertexTag)
     return 0;
   }
 
-//! @brief A method which returns a pointer to the vertex whose tag is given by 
+//! @brief Return a const pointer to the vertex identified by the tag.
+//!
+//! A method which returns a const pointer to the vertex whose tag is given by 
 //! vertexTag. The method first looks at location {\em vertexTag} for the
 //! vertex, otherwise it must search through the array until it finds the
 //! vertex it is looking for. If no such vertex exists in the graph $0$ is
@@ -197,21 +215,20 @@ const XC::Vertex *XC::ArrayGraph::getVertexPtr(int vertexTag) const
     return nullptr;
   }
 
-// int addEdge(int vertexTag, int otherVertexTag);
-// Causes the XC::Graph to add an edge {\em (vertexTag,otherVertexTag)} to
-// the XC::Graph. A check is first made to see if vertices with tags given by
-// {\em vertexTag} and {\em otherVertexTag} exist in the graph. If they
-// do not exist a $-1$ is returned, otherwise the method invokes {\em
-// addEdge()} on each of the corresponding vertices in the 
-// graph. Returns $0$ if sucessfull, a negative number if not.
-
+//! @brief Add an edge to the graph.
+//!
+//! Causes the graph to add an edge {\em (vertexTag,otherVertexTag)} to
+//! the graph. A check is first made to see if vertices with tags given by
+//! {\em vertexTag} and {\em otherVertexTag} exist in the graph. If they
+//! do not exist a $-1$ is returned, otherwise the method invokes {\em
+//! addEdge()} on each of the corresponding vertices in the 
+//! graph. Returns $0$ if sucessfull, a negative number if not.
 int XC::ArrayGraph::addEdge(int vertexTag, int otherVertexTag)
   {
     // get pointers to the vertices, if one does not exist return
-
-    Vertex *vertex1 = this->getVertexPtr(vertexTag);
-    Vertex *vertex2 = this->getVertexPtr(otherVertexTag);
-    if((vertex1 == 0) || (vertex2 == 0))
+    Vertex *vertex1= this->getVertexPtr(vertexTag);
+    Vertex *vertex2= this->getVertexPtr(otherVertexTag);
+    if((vertex1 == nullptr) || (vertex2 == nullptr))
 	return -1;
 
     // add an edge to each vertex
@@ -222,29 +239,34 @@ int XC::ArrayGraph::addEdge(int vertexTag, int otherVertexTag)
     return result;
   }
 
-// VertexIter \&getVertices(void);} 
-// A method which first invokes {\em reset()} on the graphs XC::ArrayVertexIter
-// and then returns a reference to this iter.
+//! @brief A method which first invokes {\em reset()} on the graphs
+//! ArrayVertexIter and then returns a reference to this iter.
 XC::VertexIter &XC::ArrayGraph::getVertices(void) 
   {
-    // reset the iter and then return it
-    myIter.reset();
+    myIter.reset(); // reset the iter and then return it
     return myIter;
   }
 
 
+//! Return the number of vertices in the graph, returns numVertex.
 int XC::ArrayGraph::getNumVertex(void) const
   { return numVertex; }
 
-
+//! A method to return the number of edges in the graph.
 int XC::ArrayGraph::getNumEdge(void) const
   { return numEdge; }
 
-
+//! @brief Return the size of the graphs array.
 int XC::ArrayGraph::getArraySize(void) const
   { return theVertices.size(); }
 
 
+//! @brief Print the graph.
+//!
+//! A method to print the graph. It first prints out numVertex and numEdge
+//! and then on each newline prints the vertexTag and the edges for that
+//! vertex. It does this by going through theVertices array and invoking
+//! Print()  on each non-zero pointer.
 void XC::ArrayGraph::Print(std::ostream &s) const
   {
     s << numVertex << " " << numEdge << std::endl;
@@ -261,7 +283,8 @@ void XC::ArrayGraph::Print(std::ostream &s) const
       }
   }
 
-std::ostream &XC::operator<<(std::ostream &s, const XC::ArrayGraph &M)
+//! @brief Insertion on an output stream.
+std::ostream &XC::operator<<(std::ostream &s, const ArrayGraph &M)
   {
     M.Print(s);
     return s;
