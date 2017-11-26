@@ -13,7 +13,7 @@ import xc_base
 import geom
 import xc
 from materials.ehe import EHE_materials
-from materials.fiber_section import defSeccionHASimple
+from materials.fiber_section import defSimpleRCSection
 from materials.xLamina import membranePlateRCSectionContainer as sc
 from solution import predefined_solutions
 
@@ -58,7 +58,7 @@ for eTag in elementTags:
 concrete= EHE_materials.HA30
 reinfSteel= EHE_materials.B500S
 
-datosGenericPiles= defSeccionHASimple.RecordSeccionHALosa('genericPiles',"pont Grande Eau.",0.5,concrete, reinfSteel,basicCover)
+datosGenericPiles= defSimpleRCSection.RecordSeccionHALosa('genericPiles',"pont Grande Eau.",0.5,concrete, reinfSteel,basicCover)
 datosGenericPiles.setMainReinf2neg(20e-3,areaFi20,0.15)
 datosGenericPiles.setMainReinf2pos(20e-3,areaFi20,0.15)
 datosGenericPiles.setMainReinf1neg(20e-3,areaFi30/2.0,0.15)

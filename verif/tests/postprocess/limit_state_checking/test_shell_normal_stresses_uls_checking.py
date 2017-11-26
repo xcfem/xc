@@ -5,7 +5,7 @@ import xc_base
 import geom
 import xc
 from materials.ehe import EHE_materials
-from materials.sections.fiber_section import defSeccionHASimple
+from materials.sections.fiber_section import defSimpleRCSection
 from postprocess import RC_material_distribution
 from materials.sections import RCsectionsContainer as sc
 from solution import predefined_solutions
@@ -54,11 +54,11 @@ sepL= 1.0/numReinfBarsL
 
 sections= reinfConcreteSections.sectionDefinition
 
-deckSections= defSeccionHASimple.RecordRCSlabBeamSection("deck","RC deck.",concrete, reinfSteel,0.3)
-deckSections.lstRCSects[1].positvRebarRows= [defSeccionHASimple.MainReinfLayer(rebarsDiam=12e-3,areaRebar=areaFi12,rebarsSpacing=sepT,nominalCover=basicCover)]
-deckSections.lstRCSects[1].negatvRebarRows= [defSeccionHASimple.MainReinfLayer(rebarsDiam=12e-3,areaRebar=areaFi12,rebarsSpacing=sepT,nominalCover=basicCover)]
-deckSections.lstRCSects[0].positvRebarRows= [defSeccionHASimple.MainReinfLayer(rebarsDiam=20e-3,areaRebar=areaFi20,rebarsSpacing=sepL,nominalCover=basicCover+12e-3)]
-deckSections.lstRCSects[0].negatvRebarRows= [defSeccionHASimple.MainReinfLayer(rebarsDiam=20e-3,areaRebar=areaFi20,rebarsSpacing=sepL,nominalCover=basicCover+12e-3)]
+deckSections= defSimpleRCSection.RecordRCSlabBeamSection("deck","RC deck.",concrete, reinfSteel,0.3)
+deckSections.lstRCSects[1].positvRebarRows= [defSimpleRCSection.MainReinfLayer(rebarsDiam=12e-3,areaRebar=areaFi12,rebarsSpacing=sepT,nominalCover=basicCover)]
+deckSections.lstRCSects[1].negatvRebarRows= [defSimpleRCSection.MainReinfLayer(rebarsDiam=12e-3,areaRebar=areaFi12,rebarsSpacing=sepT,nominalCover=basicCover)]
+deckSections.lstRCSects[0].positvRebarRows= [defSimpleRCSection.MainReinfLayer(rebarsDiam=20e-3,areaRebar=areaFi20,rebarsSpacing=sepL,nominalCover=basicCover+12e-3)]
+deckSections.lstRCSects[0].negatvRebarRows= [defSimpleRCSection.MainReinfLayer(rebarsDiam=20e-3,areaRebar=areaFi20,rebarsSpacing=sepL,nominalCover=basicCover+12e-3)]
 sections.append(deckSections)
 
 

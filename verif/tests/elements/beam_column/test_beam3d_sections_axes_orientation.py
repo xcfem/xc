@@ -32,7 +32,7 @@ import xc
 import numpy as np
 import csv
 
-from materials.sections.fiber_section import defSeccionHASimple
+from materials.sections.fiber_section import defSimpleRCSection
 from postprocess import RC_material_distribution
 from materials.sia262 import SIA262_materials
 from model import predefined_spaces
@@ -75,23 +75,23 @@ sections= reinfConcreteSectionDistribution.sectionDefinition #creates an RC sect
 #Generic layers (rows of rebars). Other instance variables that we can define
 #for MainReinfLayers are coverLat and nRebars.If we define nRebars that
 #value overrides the rebarsSpacing
-fi10s75r30=defSeccionHASimple.MainReinfLayer(rebarsDiam=10e-3,areaRebar= areaFi10,rebarsSpacing=0.075,width=0.25,nominalCover=0.030)
-fi16s75r30=defSeccionHASimple.MainReinfLayer(rebarsDiam=16e-3,areaRebar= areaFi16,rebarsSpacing=0.075,width=0.25,nominalCover=0.030)
+fi10s75r30=defSimpleRCSection.MainReinfLayer(rebarsDiam=10e-3,areaRebar= areaFi10,rebarsSpacing=0.075,width=0.25,nominalCover=0.030)
+fi16s75r30=defSimpleRCSection.MainReinfLayer(rebarsDiam=16e-3,areaRebar= areaFi16,rebarsSpacing=0.075,width=0.25,nominalCover=0.030)
 
-#instances of defSeccionHASimple.RecordRCSlabBeamSection that defines the
+#instances of defSimpleRCSection.RecordRCSlabBeamSection that defines the
 #variables that make up THE TWO reinforced concrete sections in the two
 #reinforcement directions of a slab or the front and back ending sections
 #of a beam element
-beamRCsect=defSeccionHASimple.RecordRCSlabBeamSection(name='beamRCsect',sectionDescr='beam section',concrType=concrete, reinfSteelType=reinfSteel,width=wbeam,depth=hbeam)
+beamRCsect=defSimpleRCSection.RecordRCSlabBeamSection(name='beamRCsect',sectionDescr='beam section',concrType=concrete, reinfSteelType=reinfSteel,width=wbeam,depth=hbeam)
 beamRCsect.lstRCSects[0].positvRebarRows=[fi10s75r30]
 beamRCsect.lstRCSects[0].negatvRebarRows=[fi16s75r30]
 beamRCsect.lstRCSects[1].positvRebarRows=[fi10s75r30]
 beamRCsect.lstRCSects[1].negatvRebarRows=[fi16s75r30]
 sections.append(beamRCsect)
 
-test= xc.FEProblem()
-test.errFileName= "/tmp/borrar.err" # Don't print errors.
-preprocessor=  test.getPreprocessor   
+feProblem= xc.FEProblem()
+feProblem.errFileName= "/tmp/borrar.err" # Don't print errors.
+preprocessor=  feProblem.getPreprocessor   
 nodes= preprocessor.getNodeLoader
 # Problem type
 modelSpace= predefined_spaces.StructuralMechanics3D(nodes) #Defines the dimension of
@@ -194,7 +194,7 @@ lcZbeam.newNodalLoad(3,xc.Vector([F/math.sqrt(2),-F/math.sqrt(2),0,M/math.sqrt(2
 # casos.addToDomain("lcbeams")
 
 # Solution
-# analisis= predefined_solutions.simple_static_linear(test)
+# analisis= predefined_solutions.simple_static_linear(feProblem)
 # result= analisis.analyze(1)
 
 
@@ -203,8 +203,9 @@ combContainer= combs.CombContainer()
 combContainer.ULS.perm.add('allLoads', '1.0*lcXbeam+1.0*lcYbeam+1.0*lcZbeam')
 totalSet= preprocessor.getSets.getSet('total')
 lsd.LimitStateData.internal_forces_results_directory= '/tmp/'
-lsd.normalStressesResistance.saveAll(test,combContainer,totalSet) 
+lsd.normalStressesResistance.saveAll(feProblem,combContainer,totalSet) 
 
+# Spatial distribution of reinforced concrete sections.
 reinfConcreteSectionDistribution.assign(elemSet=totalSet.getElements,setRCSects=beamRCsect)
 
 #Checking normal stresses.

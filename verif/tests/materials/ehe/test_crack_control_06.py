@@ -7,7 +7,7 @@ import xc
 
 from misc import scc3d_testing_bench
 from solution import predefined_solutions # Solution procedure
-from materials.sections.fiber_section import defSeccionHASimple
+from materials.sections.fiber_section import defSimpleRCSection
 
 from materials.ehe import EHE_materials
 from materials.ehe import EHE_limit_state_checking
@@ -19,17 +19,17 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
-datosScc1LosC= defSeccionHASimple.RecordRCSimpleSection()
+datosScc1LosC= defSimpleRCSection.RecordRCSimpleSection()
 datosScc1LosC.sectionName= "secHA1LosC"
 datosScc1LosC.sectionDescr= "Losa. Central portion. Section normal to X axis."
 datosScc1LosC.concrType= EHE_materials.HA25
 datosScc1LosC.depth= 0.25
 datosScc1LosC.width= 1.0
 datosScc1LosC.reinfSteelType= EHE_materials.B500S
-rebNeg=defSeccionHASimple.MainReinfLayer()
+rebNeg=defSimpleRCSection.MainReinfLayer()
 rebNeg.setUp(nRebars= 5, areaRebar= EHE_materials.Fi10,cover=0.025+0.010+0.010/2.0)
 datosScc1LosC.negatvRebarRows=[rebNeg]
-rebPos=defSeccionHASimple.MainReinfLayer()
+rebPos=defSimpleRCSection.MainReinfLayer()
 rebNeg.setUp(nRebars= 5, areaRebar= EHE_materials.Fi10,cover=0.025+0.010/2.0)
 datosScc1LosC.positvRebarRows=[rebPos]
 
