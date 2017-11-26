@@ -624,7 +624,7 @@ class Concrete(matWDKD.MaterialWithDKDiagrams):
     
     def getElasticMaterialData(self):
         '''Return the elastic material constitutive model.'''
-        materialModelName= self.name + 'MaterialData'
+        materialModelName= self.materialName + 'ElasticMaterialData'
         return typical_materials.MaterialData(name= materialModelName,E=self.getEcm(),nu=self.nuc,rho=self.density())
 
         
