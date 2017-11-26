@@ -40,8 +40,8 @@ lin= modelSpace.newLinearCrdTransf("lin",xc.Vector([0,1,0]))
 S275JR= EC3_materials.S275JR
 gammaM0= 1.05
 S275JR.gammaM= gammaM0 
-HE400B= structural_steel.SteelShape(S275JR,"HE_400_B",arcelor_metric_shapes.HE)
-matHE400B=typical_materials.MaterialData(name='S275JR',E=S275JR.E,nu=S275JR.nu,rho=7850)
+HE400B= structural_steel.SteelShape(S275JR,"HE_400_B",arcelor_metric_shapes.HE) # Section geometry.
+matHE400B=typical_materials.MaterialData(name='S275JR',E=S275JR.E,nu=S275JR.nu,rho=7850) # Section material.
 profil= HE400B.defElasticShearSection3d(preprocessor,matHE400B)
 
 # Elements definition

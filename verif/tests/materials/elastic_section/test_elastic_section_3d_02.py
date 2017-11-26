@@ -24,8 +24,8 @@ preprocessor=  feProblem.getPreprocessor
 #XXX Is not a rectangular sections so THE TEST SEEMS NOT HAVE MUCH SENSE
 # At last we must create a class for this kind to be consistent with
 # the classes already defined to deal with steel profiles.
-SHS50x50x2_5=  section_properties.RectangularSection("SHS50x50x2_5",b=0.05,h=0.05)
-matSHS50x50x2_5=  typical_materials.MaterialData(name='matSec',E=210000e6,nu=0.3e6,rho=2500)
+SHS50x50x2_5=  section_properties.RectangularSection("SHS50x50x2_5",b=0.05,h=0.05) # Section geometry.
+matSHS50x50x2_5=  typical_materials.MaterialData(name='matSec',E=210000e6,nu=0.3e6,rho=2500) #Section material.
 
 SHS50x50x2_5.sectionName= "SHS50x50x2_5"
 SHS50x50x2_5.b= 0.05

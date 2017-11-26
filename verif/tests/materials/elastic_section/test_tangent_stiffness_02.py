@@ -20,8 +20,8 @@ feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor   
 nodes= preprocessor.getNodeLoader
 
-sectionTest= section_properties.RectangularSection("sectionTest",b,h)
-sectionTestMaterial=typical_materials.MaterialData(name='sectionTestMaterial',E=E,nu=0.3,rho=2500)
+sectionTest= section_properties.RectangularSection("sectionTest",b,h) # Section geometry.
+sectionTestMaterial=typical_materials.MaterialData(name='sectionTestMaterial',E=E,nu=0.3,rho=2500) # Section material.
 
 # Define materials
 defSeccAggregation.defSeccAggregation2d(preprocessor, sectionTest,sectionTestMaterial)

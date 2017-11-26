@@ -24,8 +24,8 @@ feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor   
 nodes= preprocessor.getNodeLoader
 
-sectionTest= section_properties.RectangularSection("sectionTest",b=.20,h=.30)
-sectionTestMaterial= typical_materials.MaterialData("sectionTestMaterial",E=7E9,nu=0.3,rho=2500)
+sectionTest= section_properties.RectangularSection("sectionTest",b=.20,h=.30) # Section geometry.
+sectionTestMaterial= typical_materials.MaterialData("sectionTestMaterial",E=7E9,nu=0.3,rho=2500) # Section material.
 
 
 # Problem type

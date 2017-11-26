@@ -21,14 +21,14 @@ feProblem.logFileName= "/tmp/borrar.log" # Don't pring warnings
 preprocessor=  feProblem.getPreprocessor
 
 # Rectangular cross-section definition
-scc10x20=  section_properties.RectangularSection(name="rectang",b=.10,h=.20)
-matscc10x20=typical_materials.MaterialData(name='mtrectang',E=2.1e6,nu=0.3,rho=2500)
+scc10x20=  section_properties.RectangularSection(name="rectang",b=.10,h=.20) # Section geometry.
+matscc10x20=typical_materials.MaterialData(name='mtrectang',E=2.1e6,nu=0.3,rho=2500) # Section material.
 
 
 feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
 # Materials definition
-matPoteau= scc10x20.defElasticShearSection3d(preprocessor,matscc10x20)
+matPoteau= scc10x20.defElasticShearSection3d(preprocessor,matscc10x20) 
 elemZLS= scc3d_testing_bench.sectionModel(preprocessor, scc10x20.sectionName)
 
 # Constraints

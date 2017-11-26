@@ -31,8 +31,8 @@ F= 50e3 # Load magnitude (kN)
 S275JR= EC3_materials.S275JR
 gammaM0= 1.05
 S275JR.gammaM= gammaM0 
-HE400B= structural_steel.SteelShape(S275JR,"HE_400_B",arcelor_metric_shapes.HE)
-matHE400B=typical_materials.MaterialData(name='S275JR',E=S275JR.E,nu=S275JR.nu,rho=7850)
+HE400B= structural_steel.SteelShape(S275JR,"HE_400_B",arcelor_metric_shapes.HE) # Section geometry.
+matHE400B=typical_materials.MaterialData(name='S275JR',E=S275JR.E,nu=S275JR.nu,rho=7850) # Section material.
 
 # Problem type
 feProblem= xc.FEProblem()
