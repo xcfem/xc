@@ -29,8 +29,8 @@ NDato= 700e3 # Axial force for crack control checking.
 MyDato= 0 # Bending moment force for crack control checking.
 MzDato= 0 # Bending moment force for crack control checking.
 
-prb= xc.ProblemaEF()
-preprocessor=  prb.getPreprocessor
+feProblem= xc.FEProblem()
+preprocessor=  feProblem.getPreprocessor
 # Materials definition
 concr= EHE_materials.HA25
 concrMatTag25= concr.defDiagK(preprocessor)
@@ -85,7 +85,7 @@ casos.addToDomain("0")
 
 
 # Solution procedure
-analisis= predefined_solutions.simple_newton_raphson(prb)
+analisis= predefined_solutions.simple_newton_raphson(feProblem)
 analOk= analisis.analyze(10)
 
 

@@ -25,8 +25,8 @@ L= 2 # Bar length.
 P= 10e3 # Carga uniforme transversal.
 n= 1e6 # Carga uniforme axial.
 
-prb= xc.ProblemaEF()
-preprocessor=  prb.getPreprocessor   
+feProblem= xc.FEProblem()
+preprocessor=  feProblem.getPreprocessor   
 nodes= preprocessor.getNodeLoader
 
 seccTest= section_properties.RectangularSection("test",b=.20,h=.30)
@@ -73,7 +73,7 @@ casos.addToDomain("0")
 
 
 # Solution procedure
-analisis= predefined_solutions.simple_static_modified_newton(prb)
+analisis= predefined_solutions.simple_static_modified_newton(feProblem)
 result= analisis.analyze(1)
 
 nodes.calculateNodalReactions(True)

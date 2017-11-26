@@ -45,8 +45,8 @@ L= 0 # Length expressed in meters
 F= 1e3 # Load magnitude (kN)
 
 # Problem type
-prb= xc.ProblemaEF()
-preprocessor=  prb.getPreprocessor   
+feProblem= xc.FEProblem()
+preprocessor=  feProblem.getPreprocessor   
 nodes= preprocessor.getNodeLoader
 modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
 nodes.defaultTag= 1 #First node number.
@@ -116,7 +116,7 @@ for key in casos.getKeys():
   listaHipotesis.append(key)
 
 # Solution procedure
-solu= prb.getSoluProc
+solu= feProblem.getSoluProc
 solCtrl= solu.getSoluControl
 
 

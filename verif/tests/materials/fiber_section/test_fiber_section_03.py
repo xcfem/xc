@@ -39,9 +39,9 @@ execfile(pth+"/macros_test_fiber_section.py")
 fy= 2600 # Yield stress of the material expressed in kp/cm2.
 E= 2.1e6 # Young modulus of the material en kp/cm2.
 
-prb= xc.ProblemaEF()
-prb.logFileName= "/tmp/borrar.log" # Ignore warning messages
-preprocessor=  prb.getPreprocessor
+feProblem= xc.FEProblem()
+feProblem.logFileName= "/tmp/borrar.log" # Ignore warning messages
+preprocessor=  feProblem.getPreprocessor
 # Materials definition
 epp= typical_materials.defElasticPPMaterial(preprocessor, "epp",E,fy,-fy)
 # Section geometry
@@ -82,7 +82,7 @@ casos.addToDomain("0")
 
 
 # Solve
-analisis= predefined_solutions.simple_newton_raphson(prb)
+analisis= predefined_solutions.simple_newton_raphson(feProblem)
 analOk= analisis.analyze(1)
 
 

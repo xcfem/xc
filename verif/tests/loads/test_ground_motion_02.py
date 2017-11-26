@@ -10,8 +10,8 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
-prb= xc.ProblemaEF()
-preprocessor=  prb.getPreprocessor
+feProblem= xc.FEProblem()
+preprocessor=  feProblem.getPreprocessor
 
 
 #Load modulation.

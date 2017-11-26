@@ -18,8 +18,8 @@ from model import predefined_spaces
 from materials import typical_materials
 
 # Define materials
-prb= xc.ProblemaEF()
-preprocessor=  prb.getPreprocessor
+feProblem= xc.FEProblem()
+preprocessor=  feProblem.getPreprocessor
 mat= typical_materials.defElasticIsotropic3d(preprocessor, "elastIso3d",E,nu,rho)
 
 import os

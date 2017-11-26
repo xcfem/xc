@@ -108,7 +108,7 @@ class RCMaterialDistribution(object):
     :param limitStateController: object that controls the limit state on elements.
     :param threeDim: true if it's 3D (Fx,Fy,Fz,Mx,My,Mz) false if it's 2D (Fx,Fy,Mz).
     '''
-    feProblem= xc.ProblemaEF()
+    feProblem= xc.FEProblem()
     preprocessor= feProblem.getPreprocessor
     if(threeDim):
       self.sectionDefinition.calcInteractionDiagrams(preprocessor,matDiagType)

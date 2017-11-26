@@ -33,8 +33,8 @@ L= 1.5 # Bar length (m)
 # Load
 f= 1.5e3 # Load magnitude (kN/m)
 
-prb= xc.ProblemaEF()
-preprocessor=  prb.getPreprocessor  
+feProblem= xc.FEProblem()
+preprocessor=  feProblem.getPreprocessor  
 nodes= preprocessor.getNodeLoader
 
 # Problem type
@@ -90,14 +90,14 @@ from miscUtils import LogMessages as lmsg
 fname= os.path.basename(__file__)
 
 # Solution
-analisis= predefined_solutions.simple_static_linear(prb)
+analisis= predefined_solutions.simple_static_linear(feProblem)
 result= analisis.analyze(1)
 os.system("rm -f /tmp/combinacion04.db")
 lmsg.error(fname+' test in QUARANTINE; SQLite interface debugging needed.')
 exit(-1)
-db= prb.newDatabase("SQLite","/tmp/combinacion04.db")
+db= feProblem.newDatabase("SQLite","/tmp/combinacion04.db")
 db.save(100)
-prb.clearAll()
+feProblem.clearAll()
 db.restore(100)
 
 

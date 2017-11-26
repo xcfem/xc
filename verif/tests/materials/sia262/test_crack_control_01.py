@@ -50,8 +50,8 @@ datosScc1LosC.positvRebarRows=[posRebRow]
 NDato= 0 # Axial force for crack control checking.
 MyDato= 117e3 # Bending moment force for crack control checking.
 
-prb= xc.ProblemaEF()
-preprocessor=  prb.getPreprocessor
+feProblem= xc.FEProblem()
+preprocessor=  feProblem.getPreprocessor
 # Materials definition
 # concreteMatTag= EHE_materials.HA30.defDiagK(preprocessor)
 # reinfSteelMaterialTag= EHE_materials.B500S.defDiagK(preprocessor)
@@ -84,7 +84,7 @@ casos.addToDomain("0")
 
 
 # Solution procedure
-analisis= predefined_solutions.simple_newton_raphson(prb)
+analisis= predefined_solutions.simple_newton_raphson(feProblem)
 analOk= analisis.analyze(10)
 
 

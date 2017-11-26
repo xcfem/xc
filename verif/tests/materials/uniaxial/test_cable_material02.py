@@ -22,8 +22,8 @@ area= 2.0
 fPret= sigmaPret*area # Prestressing force (pounds)
 
 # Model definition
-prb= xc.ProblemaEF()
-preprocessor=  prb.getPreprocessor
+feProblem= xc.FEProblem()
+preprocessor=  feProblem.getPreprocessor
 nodes= preprocessor.getNodeLoader
 
 # Problem type
@@ -58,7 +58,7 @@ spc= constraints.newSPConstraint(2,1,0.0)
 
 
 # Solution
-analisis= predefined_solutions.simple_static_linear(prb)
+analisis= predefined_solutions.simple_static_linear(feProblem)
 result= analisis.analyze(1)
 
 

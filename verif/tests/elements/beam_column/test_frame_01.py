@@ -29,8 +29,8 @@ area= 1 # Section area expressed in in2
 Iz= 1/12.0 # Cross-section moment of inertia expressed in in4
 P= 1000 # Load (force-pounds).
 
-prb= xc.ProblemaEF()
-preprocessor=  prb.getPreprocessor
+feProblem= xc.FEProblem()
+preprocessor=  feProblem.getPreprocessor
 nodes= preprocessor.getNodeLoader
 modelSpace= predefined_spaces.StructuralMechanics2D(nodes)
 nodes.defaultTag= 1
@@ -90,7 +90,7 @@ eleLoad.x= 0.25
 casos.addToDomain("0")
 
 # Solution
-analisis= predefined_solutions.simple_static_linear(prb)
+analisis= predefined_solutions.simple_static_linear(feProblem)
 result= analisis.analyze(1)
 
 theta2= 0.0 # Rotation of the node 2

@@ -46,7 +46,7 @@
 namespace XC {
 class Domain;
 class Constraint;
-class ProblemaEF;
+class FEProblem;
 class FE_Datastore;
 
 //!  @defgroup Preprocessor Preprocessor.
@@ -91,7 +91,7 @@ class Preprocessor: public EntCmd, public MovableObject
     friend class ProtoElementLoader;
     friend class ElementLoader;
     friend class ConstraintLoader;
-    friend class ProblemaEF;
+    friend class FEProblem;
     void UpdateSets(Element *);
     void UpdateSets(Constraint *);
 

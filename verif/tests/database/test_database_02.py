@@ -32,8 +32,8 @@ L= 1.5 # Bar length (m)
 # Load
 F= 1.5e3 # Load magnitude (kN)
 
-prb= xc.ProblemaEF()
-preprocessor=  prb.getPreprocessor   
+feProblem= xc.FEProblem()
+preprocessor=  feProblem.getPreprocessor   
 nodes= preprocessor.getNodeLoader
 
 # Problem type
@@ -74,13 +74,13 @@ casos.addToDomain("0")
 
 import os
 os.system("rm -f /tmp/test02.db")
-db= prb.newDatabase("SQLite","/tmp/test02.db")
+db= feProblem.newDatabase("SQLite","/tmp/test02.db")
 db.save(100)
-prb.clearAll()
+feProblem.clearAll()
 db.restore(100)
 
 # Solution
-analisis= predefined_solutions.simple_static_linear(prb)
+analisis= predefined_solutions.simple_static_linear(feProblem)
 result= analisis.analyze(1)
 
 

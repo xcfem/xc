@@ -16,12 +16,12 @@ __email__= "l.pereztato@gmail.com ana.ortega.ort@gmal.com"
 
 FCs= []
 
-prb= xc.ProblemaEF()
-preprocessor=  prb.getPreprocessor
+feProblem= xc.FEProblem()
+preprocessor=  feProblem.getPreprocessor
 # Define materials
 materiales= preprocessor.getMaterialLoader
 diagInteg= materiales.newInteractionDiagram("diagInteg")
-diagInteg.readFrom("/tmp/prueba_diag_interaccion02.dat")
+diagInteg.readFrom("/tmp/interaction_diagram_test_02.dat")
 
 FCs.append(diagInteg.getCapacityFactor(geom.Pos3d(2185.5e3,0,0)))
 FCs.append(diagInteg.getCapacityFactor(geom.Pos3d(1595.8e3,0,186.5e3)))

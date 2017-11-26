@@ -26,12 +26,12 @@ d= 0.57 # Effective depth.
 diamBar= 22e-3 # Rebar diameter.
 areaBar= math.pi*(diamBar/2)**2 # Rebars area.
 
-prb= xc.ProblemaEF()
-preprocessor=  prb.getPreprocessor
+feProblem= xc.FEProblem()
+preprocessor=  feProblem.getPreprocessor
 concrete= typical_materials.defElasticMaterial(preprocessor, 'concrete',Ec)
 steel= typical_materials.defElasticMaterial(preprocessor, "steel",Es)
-geomPrueba= preprocessor.getMaterialLoader.newSectionGeometry("geomPrueba")
-regiones= geomPrueba.getRegions
+sectionGeometryTest= preprocessor.getMaterialLoader.newSectionGeometry("sectionGeometryTest")
+regiones= sectionGeometryTest.getRegions
 
 flange= regiones.newQuadRegion('concrete')# Flange
 flange.pMin= geom.Pos2d(d-hf,0.0)
@@ -40,16 +40,16 @@ web= regiones.newQuadRegion('concrete')# Web
 web.pMin= geom.Pos2d(0.0,b/2-bw/2)
 web.pMax= geom.Pos2d(d-hf,b/2+bw/2)
 
-reinforcement= geomPrueba.getReinfLayers
+reinforcement= sectionGeometryTest.getReinfLayers
 reinforcementA= reinforcement.newStraightReinfLayer("steel")
 reinforcementA.numReinfBars= 5
 reinforcementA.barArea= areaBar
 reinforcementA.p1= geom.Pos2d(0.0,b/2-bw/2+0.05)
 reinforcementA.p2= geom.Pos2d(0.0,b/2+bw/2-0.05)
 
-prb= typical_materials.defElasticSection3d(preprocessor, "prb",0.0,Ec,Gc,0.0,0.0,1.0)
-prb.sectionGeometry("geomPrueba")
-paramSeccion= prb.sectionProperties
+elasticSection= typical_materials.defElasticSection3d(preprocessor, "elasticSection",0.0,Ec,Gc,0.0,0.0,1.0)
+elasticSection.sectionGeometry("sectionGeometryTest")
+paramSeccion= elasticSection.sectionProperties
 area= paramSeccion.A
 Iy= paramSeccion.Iy
 Iz= paramSeccion.Iz

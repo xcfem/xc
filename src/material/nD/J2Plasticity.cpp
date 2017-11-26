@@ -70,7 +70,7 @@
 //
 
 #include "J2Plasticity.h"
-#include "ProblemaEF.h"
+#include "FEProblem.h"
 #include "domain/mesh/node/Node.h"
 #include "domain/mesh/element/Element.h"
 #include "domain/domain/Domain.h"
@@ -457,7 +457,7 @@ void XC::J2Plasticity::Print( std::ostream &s, int flag )
 void XC::J2Plasticity::plastic_integrator( )
   {
     const double tolerance = (1.0e-8)*sigma_0 ;
-    const double dt= ProblemaEF::theActiveDomain->getTimeTracker().getDt(); //time step
+    const double dt= FEProblem::theActiveDomain->getTimeTracker().getDt(); //time step
 
     static XC::Matrix dev_strain(3,3) ; //deviatoric strain
     static XC::Matrix dev_stress(3,3) ; //deviatoric stress

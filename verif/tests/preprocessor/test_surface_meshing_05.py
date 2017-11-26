@@ -22,16 +22,16 @@ rho= 0.0 # Densidad
 
 nNodes= 0
 
-prb= xc.ProblemaEF()
-preprocessor=  prb.getPreprocessor
+feProblem= xc.FEProblem()
+preprocessor=  feProblem.getPreprocessor
 elast= typical_materials.defElasticMaterial(preprocessor, "elast",3000)
-prueba= typical_materials.defElasticMembranePlateSection(preprocessor, "prueba",E,nu,rho,0.25)
+elasticMembranePlateSectionTest= typical_materials.defElasticMembranePlateSection(preprocessor, "elasticMembranePlateSectionTest",E,nu,rho,0.25)
 
 nodes= preprocessor.getNodeLoader
 nodes.newSeedNode()
 
 seedElemLoader= preprocessor.getElementLoader.seedElemLoader
-seedElemLoader.defaultMaterial= "prueba"
+seedElemLoader.defaultMaterial= "elasticMembranePlateSectionTest"
 seedElemLoader.defaultTag= 1
 elem= seedElemLoader.newElement("ShellMITC4",xc.ID([0,0,0,0]))
 
@@ -64,10 +64,10 @@ Z2= preprocessor.getSets.defSet("Z2")
 Z2.getSurfaces.append(s2)
 Z2.fillDownwards()
 
-prb.setVerbosityLevel(0) #Dont print warning messages about element seed.
+feProblem.setVerbosityLevel(0) #Dont print warning messages about element seed.
 Z1.genMesh(xc.meshDir.I)
 Z2.genMesh(xc.meshDir.I)
-prb.setVerbosityLevel(1) #Print warnings again 
+feProblem.setVerbosityLevel(1) #Print warnings again 
 
 
 nNodes= preprocessor.getSets.getSet("total").getNodes.size

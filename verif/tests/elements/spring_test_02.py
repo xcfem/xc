@@ -22,8 +22,8 @@ from materials import typical_materials
 
 
 # Model definition
-prb= xc.ProblemaEF()
-preprocessor=  prb.getPreprocessor
+feProblem= xc.FEProblem()
+preprocessor=  feProblem.getPreprocessor
 nodes= preprocessor.getNodeLoader
 # Problem type
 modelSpace= predefined_spaces.SolidMechanics2D(nodes)
@@ -67,7 +67,7 @@ lp0.newSPConstraint(2,0,D)
 #We add the load case to domain.
 casos.addToDomain("0")
 # Solution
-analisis= predefined_solutions.simple_static_linear(prb)
+analisis= predefined_solutions.simple_static_linear(feProblem)
 result= analisis.analyze(1)
 
 

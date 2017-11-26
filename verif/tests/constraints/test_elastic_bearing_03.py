@@ -22,8 +22,8 @@ from model import predefined_spaces
 from materials import typical_materials
 
 # Model definition
-prb= xc.ProblemaEF()
-preprocessor=  prb.getPreprocessor
+feProblem= xc.FEProblem()
+preprocessor=  feProblem.getPreprocessor
 nodes= preprocessor.getNodeLoader
 # Problem type
 modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
@@ -72,7 +72,7 @@ casos.addToDomain("0")
 
 
 # Solution
-analisis= predefined_solutions.simple_static_linear(prb)
+analisis= predefined_solutions.simple_static_linear(feProblem)
 result= analisis.analyze(1)
 
 

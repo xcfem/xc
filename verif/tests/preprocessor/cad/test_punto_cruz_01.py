@@ -27,8 +27,8 @@ L=10 # Length of bars
 
 
 # Problem type
-prb= xc.ProblemaEF()
-preprocessor=  prb.getPreprocessor
+feProblem= xc.FEProblem()
+preprocessor=  feProblem.getPreprocessor
 nodes= preprocessor.getNodeLoader
 modelSpace= predefined_spaces.StructuralMechanics2D(nodes)
 
@@ -58,14 +58,14 @@ scc= typical_materials.defElasticSection2d(preprocessor, "scc",A,E,I)
 
 setTotal= preprocessor.getSets.getSet("total")
 
-prb.setVerbosityLevel(0) #Dont print warning messages about element seed.
+feProblem.setVerbosityLevel(0) #Dont print warning messages about element seed.
 setL1= preprocessor.getSets.getSet("l1")
 setL1.genMesh(xc.meshDir.I)
 
 
 setL2= preprocessor.getSets.getSet("l2")
 setL2.genMesh(xc.meshDir.I)
-prb.setVerbosityLevel(1) #Print warnings again 
+feProblem.setVerbosityLevel(1) #Print warnings again 
 
 # totalSetNodes= setTotal.getNodes
 # for n in totalSetNodes:
@@ -116,7 +116,7 @@ for nl in nodalLoads:
 
 
 # Solution procedure
-analisis= predefined_solutions.simple_static_linear(prb)
+analisis= predefined_solutions.simple_static_linear(feProblem)
 analOk= analisis.analyze(1)
 
 nNodes= l2.getNumNodes

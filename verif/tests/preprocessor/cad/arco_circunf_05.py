@@ -25,8 +25,8 @@ cos675= math.cos(math.radians(67.5))
 sin675= math.sin(math.radians(67.5))
 
 # Problem type
-prb= xc.ProblemaEF()
-preprocessor=  prb.getPreprocessor
+feProblem= xc.FEProblem()
+preprocessor=  feProblem.getPreprocessor
 nodes= preprocessor.getNodeLoader
 modelSpace= predefined_spaces.SolidMechanics3D(nodes)
 # Define materials

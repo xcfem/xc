@@ -19,8 +19,8 @@ __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
 # Problem type
-prb= xc.ProblemaEF()
-preprocessor=  prb.getPreprocessor   
+feProblem= xc.FEProblem()
+preprocessor=  feProblem.getPreprocessor   
 
 #Constant positive strain.
 epsilon= 3.5e-3

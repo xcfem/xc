@@ -24,8 +24,8 @@ fPret= sigmaPret*area # Force magnitude de tesado final
 fPretA= fPret/2 # Force magnitude de tesado parcial
 
 # Model definition
-prb= xc.ProblemaEF()
-preprocessor=  prb.getPreprocessor
+feProblem= xc.FEProblem()
+preprocessor=  feProblem.getPreprocessor
 nodes= preprocessor.getNodeLoader
 # Problem type
 modelSpace= predefined_spaces.SolidMechanics2D(nodes)
@@ -63,7 +63,7 @@ spc= constraints.newSPConstraint(2,1,0.0)
 
 
 # Solution
-analisis= predefined_solutions.simple_static_linear(prb)
+analisis= predefined_solutions.simple_static_linear(feProblem)
 result= analisis.analyze(1)
 
 
@@ -88,7 +88,7 @@ elem1.getMaterial().prestress= sigmaPret
 
 
 # Solution
-analisis= predefined_solutions.simple_static_linear(prb)
+analisis= predefined_solutions.simple_static_linear(feProblem)
 result= analisis.analyze(1)
 
 

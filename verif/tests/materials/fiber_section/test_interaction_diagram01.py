@@ -25,8 +25,8 @@ diam= 16e-3 # Bar diameter expressed in meters.
 areaFi16= 2.01e-4 # Rebar area expressed in square meters.
 
 
-prb= xc.ProblemaEF()
-preprocessor=  prb.getPreprocessor
+feProblem= xc.FEProblem()
+preprocessor=  feProblem.getPreprocessor
 # Define materials
 concr= EHE_materials.HA25
 concr.alfacc=0.85    #f_maxd= 0.85*fcd concrete long term compressive strength factor (normally alfacc=1)
@@ -66,7 +66,7 @@ param.concreteTag= EHE_materials.HA25.matTagD
 param.tagArmadura= EHE_materials.B500S.matTagD
 diagIntsecHA= materiales.calcInteractionDiagram("secHA",param)
 
-diagIntsecHA.writeTo("/tmp/prueba_diag_interaccion01.dat") # Se usa en test test_diag_interaccion03
+diagIntsecHA.writeTo("/tmp/interaction_diagram_test_01.dat") # Se usa en test test_diag_interaccion03
 ratio1= diagIntsecHA.getCapacityFactor(geom.Pos3d(352877,0,0))-1
 ratio2= diagIntsecHA.getCapacityFactor(geom.Pos3d(352877/2.0,0,0))-0.5
 ratio3= diagIntsecHA.getCapacityFactor(geom.Pos3d(-574457,41505.4,2.00089e-11))-1.0

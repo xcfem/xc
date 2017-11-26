@@ -1,13 +1,11 @@
 # -*- coding: utf-8 -*-
-# home made test
+''' Verification of removeSPConstraint method.'''
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
 __copyright__= "Copyright 2015, LCPT and AOO"
 __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
-
-# Se comprueba el funcionamiento de remove_fix.
 
 import xc_base
 import geom
@@ -34,8 +32,8 @@ L= 1.5 # Bar length (m)
 F= 1.5e3 # Load magnitude (kN)
 
 # Problem type
-prb= xc.ProblemaEF()
-preprocessor=  prb.getPreprocessor   
+feProblem= xc.FEProblem()
+preprocessor=  feProblem.getPreprocessor   
 nodes= preprocessor.getNodeLoader
 modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
 nodes.defaultTag= 1 #First node number.
@@ -77,7 +75,7 @@ lp0.newNodalLoad(2,xc.Vector([0,-F,0,0,0,0]))
 casos.addToDomain("0")
 
 # Solution
-analisis= predefined_solutions.simple_static_linear(prb)
+analisis= predefined_solutions.simple_static_linear(feProblem)
 result= analisis.analyze(1)
 
 
@@ -94,7 +92,7 @@ modelSpace.constraints.removeSPConstraint(spcTag)
 
 
 # Solution
-analisis= predefined_solutions.simple_static_linear(prb)
+analisis= predefined_solutions.simple_static_linear(feProblem)
 result= analisis.analyze(1)
 
 

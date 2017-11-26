@@ -40,8 +40,8 @@ Lz= 1
 
 
 # Problem type
-prb= xc.ProblemaEF()
-preprocessor=  prb.getPreprocessor
+feProblem= xc.FEProblem()
+preprocessor=  feProblem.getPreprocessor
 nodes= preprocessor.getNodeLoader
 modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
 nod0= nodes.newNodeIDXYZ(0,0,0,0)
@@ -71,7 +71,7 @@ beam3d= elements.newElement("ElasticBeam3d",xc.ID([2,3]))
 
 
 # Solution procedure
-solu= prb.getSoluProc
+solu= feProblem.getSoluProc
 solCtrl= solu.getSoluControl
 
 

@@ -50,7 +50,7 @@ class MapFields: public PreprocessorContainer, public MovableObject, public std:
   private:
     bool exists(const std::string &nmb) const;
 
-    friend class ProblemaEF;
+    friend class FEProblem;
     iterator buscaField(const std::string &nmb);
     void clearAll(void);
 

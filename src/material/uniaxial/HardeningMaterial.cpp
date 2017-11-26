@@ -56,7 +56,7 @@
 // HardeningMaterial. 
 
 #include "HardeningMaterial.h"
-#include "ProblemaEF.h"
+#include "FEProblem.h"
 #include "domain/mesh/node/Node.h"
 #include "domain/mesh/element/Element.h"
 #include "domain/domain/Domain.h"
@@ -161,7 +161,7 @@ int XC::HardeningMaterial::setTrialStrain(double strain, double strainRate)
     else
       {
         double etadt = 0.0;
-        const double dT= ProblemaEF::theActiveDomain->getTimeTracker().getDt();
+        const double dT= FEProblem::theActiveDomain->getTimeTracker().getDt();
       if (eta != 0.0 || dT != 0)
           etadt = eta/dT;
 

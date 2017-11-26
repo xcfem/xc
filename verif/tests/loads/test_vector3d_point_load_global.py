@@ -39,8 +39,8 @@ n= 1e6 # punctual load axial.
 ptoAplic= xc.Vector([1+x*L*math.sqrt(2)/2.0,3+x*L*math.sqrt(2)/2.0,0])
 
 # Problem type
-prb= xc.ProblemaEF()
-preprocessor=  prb.getPreprocessor   
+feProblem= xc.FEProblem()
+preprocessor=  feProblem.getPreprocessor   
 nodes= preprocessor.getNodeLoader
 modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
 
@@ -78,7 +78,7 @@ casos.currentLoadPattern= "0"
 
 vIElem= xc.Vector([1,0,0])
 vJElem= xc.Vector([0,1,0])
-mesh= prb.getDomain.getMesh
+mesh= feProblem.getDomain.getMesh
 eIter= mesh.getElementIter
 elem= eIter.next()
 while not(elem is None):
@@ -93,7 +93,7 @@ while not(elem is None):
 casos.addToDomain("0")
 
 # Solution
-analisis= predefined_solutions.simple_static_linear(prb)
+analisis= predefined_solutions.simple_static_linear(feProblem)
 result= analisis.analyze(1)
 
 

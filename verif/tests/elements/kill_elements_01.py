@@ -22,8 +22,8 @@ I= 7892 # Inercia de la viga in inches a la cuarta
 F= 1000 # Force
 
 # Problem type
-prb= xc.ProblemaEF()
-preprocessor=  prb.getPreprocessor   
+feProblem= xc.FEProblem()
+preprocessor=  feProblem.getPreprocessor   
 nodes= preprocessor.getNodeLoader
 modelSpace= predefined_spaces.StructuralMechanics2D(nodes)
 nodes.defaultTag= 1 #First node number.
@@ -65,7 +65,7 @@ spc= constraints.newSPConstraint(4,2,0.0)
 setTotal= preprocessor.getSets.getSet("total")
 setTotal.killElements() # deactivate the elements
 
-mesh= prb.getDomain.getMesh
+mesh= feProblem.getDomain.getMesh
 mesh.setDeadSRF(0.0)
 mesh.freezeDeadNodes("congela")
 
@@ -84,7 +84,7 @@ lp0.newNodalLoad(2,xc.Vector([F,F,F]))
 casos.addToDomain("0")
 
 # Solution
-analisis= predefined_solutions.simple_static_linear(prb)
+analisis= predefined_solutions.simple_static_linear(feProblem)
 result= analisis.analyze(1)
     
 
@@ -107,7 +107,7 @@ setTotal.aliveElements()
 mesh.meltAliveNodes("congela") # Reactivate inactive nodes.
 
 # Solution
-analisis= predefined_solutions.simple_static_linear(prb)
+analisis= predefined_solutions.simple_static_linear(feProblem)
 result= analisis.analyze(1)
 
 

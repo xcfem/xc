@@ -21,8 +21,8 @@ dens= 1.33 # Density kg/m2.
 q= -2
 
 # Problem type
-prb= xc.ProblemaEF()
-preprocessor=  prb.getPreprocessor
+feProblem= xc.FEProblem()
+preprocessor=  feProblem.getPreprocessor
 nodes= preprocessor.getNodeLoader
 modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
 nodes.newNodeIDXYZ(1,0,0,0)
@@ -68,13 +68,13 @@ casos.addToDomain("0")
 
 import os
 os.system("rm -f /tmp/test07.db")
-db= prb.newDatabase("SQLite","/tmp/test07.db")
+db= feProblem.newDatabase("SQLite","/tmp/test07.db")
 db.save(100)
-prb.clearAll()
+feProblem.clearAll()
 db.restore(100)
 
 # Solution
-analisis= predefined_solutions.simple_static_linear(prb)
+analisis= predefined_solutions.simple_static_linear(feProblem)
 result= analisis.analyze(1)
 
 

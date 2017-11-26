@@ -17,9 +17,9 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
-prb= xc.ProblemaEF()
-prb.logFileName= "/tmp/borrar.log" # Don't pring warnings
-prb.errFileName= "/tmp/borrar.err" # Ignore warning messagess about maximum error in computation of the interaction diagram.
+feProblem= xc.FEProblem()
+feProblem.logFileName= "/tmp/borrar.log" # Don't pring warnings
+feProblem.errFileName= "/tmp/borrar.err" # Ignore warning messagess about maximum error in computation of the interaction diagram.
 
 import os
 pth= os.path.dirname(__file__)

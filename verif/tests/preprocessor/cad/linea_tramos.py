@@ -19,8 +19,8 @@ CooMax= 10
 raiz3= math.sqrt(3)
 
 # Problem type
-prb= xc.ProblemaEF()
-preprocessor=  prb.getPreprocessor
+feProblem= xc.FEProblem()
+preprocessor=  feProblem.getPreprocessor
 nodes= preprocessor.getNodeLoader
 modelSpace= predefined_spaces.SolidMechanics3D(nodes)
 # Materials definition

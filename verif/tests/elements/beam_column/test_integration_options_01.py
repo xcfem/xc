@@ -11,8 +11,8 @@ import xc_base
 import geom
 import xc
 
-prb= xc.ProblemaEF()
-prep= prb.getPreprocessor
+feProblem= xc.FEProblem()
+prep= feProblem.getPreprocessor
 
 numIntegratorsA= len(prep.getBeamIntegratorLoader)
 

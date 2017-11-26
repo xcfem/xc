@@ -21,7 +21,7 @@
 //----------------------------------------------------------------------------
 //utils_python_interface.cxx
 
-#include "ProblemaEF.h"
+#include "FEProblem.h"
 #include "python_interface.h"
 
 void export_utility(void)

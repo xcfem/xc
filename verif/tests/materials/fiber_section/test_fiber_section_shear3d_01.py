@@ -43,9 +43,9 @@ execfile(pth+"/macros_test_fiber_section.py")
 fy= 2600 # Yield stress of the material expressed in kp/cm2.
 E= 2.1e6 # Young’s modulus of the material (kp/cm2).
 
-prb= xc.ProblemaEF()
-prb.logFileName= "/tmp/borrar.log" # Ignore warning messages
-preprocessor=  prb.getPreprocessor
+feProblem= xc.FEProblem()
+feProblem.logFileName= "/tmp/borrar.log" # Ignore warning messages
+preprocessor=  feProblem.getPreprocessor
 # Materials definition
 epp= typical_materials.defElasticPPMaterial(preprocessor, "epp",E,fy,-fy) #elastic perfectly-plastic uniaxial material
 respT= typical_materials.defElasticMaterial(preprocessor, "respT",1e10) # Torsion response.
@@ -94,7 +94,7 @@ casos.addToDomain("0")
 
 
 # Solution procedure
-analisis= predefined_solutions.simple_newton_raphson(prb)
+analisis= predefined_solutions.simple_newton_raphson(feProblem)
 analOk= analisis.analyze(1)
 if(analOk!=0):
   print "Error!; failed to converge."

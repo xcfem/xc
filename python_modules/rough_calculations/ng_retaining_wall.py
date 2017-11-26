@@ -442,9 +442,9 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
     outputFile.write("\\end{figure}\n")
     
   def createFEProblem(self, title):
-    self.FEModel= xc.ProblemaEF()
-    self.FEModel.title= 'Retaining wall A'
-    return self.FEModel
+    self.feProblem= xc.FEProblem()
+    self.feProblem.title= 'Retaining wall A'
+    return self.feProblem
     
   def genMesh(self,nodes,springMaterials):
     self.defineWireframeModel(nodes)
@@ -716,12 +716,12 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
   
   def resultComb(self,nmbComb):
     '''Solution and result retrieval routine.'''
-    preprocessor= self.FEModel.getPreprocessor   
+    preprocessor= self.feProblem.getPreprocessor   
     preprocessor.resetLoadCase()
     preprocessor.getLoadLoader.getLoadCombinations.addToDomain(nmbComb)
     #Solution
     solution= predefined_solutions.SolutionProcedure()
-    analysis= solution.simpleStaticLinear(self.FEModel)
+    analysis= solution.simpleStaticLinear(self.feProblem)
     result= analysis.analyze(1)
     reactions= self.getReactions()
     preprocessor.getLoadLoader.getLoadCombinations.removeFromDomain(nmbComb)

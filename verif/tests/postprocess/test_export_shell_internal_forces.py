@@ -30,8 +30,8 @@ from materials import typical_materials
 from materials.sections import internal_forces
 
 # Problem type
-prb= xc.ProblemaEF()
-preprocessor=  prb.getPreprocessor
+feProblem= xc.FEProblem()
+preprocessor=  feProblem.getPreprocessor
 nodes= preprocessor.getNodeLoader
 
 modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
@@ -97,7 +97,7 @@ casos.addToDomain("0")
 
 
 # Solution procedure
-analisis= predefined_solutions.simple_static_linear(prb)
+analisis= predefined_solutions.simple_static_linear(feProblem)
 analOk= analisis.analyze(1)
 
 f1= preprocessor.getSets.getSet("f1")
@@ -106,7 +106,7 @@ from postprocess.reports import export_internal_forces
 setTotal= preprocessor.getSets["total"]
 fName= "/tmp/test_export_shell_internal_forces.txt"
 f= open(fName,"w")
-export_internal_forces.exportInternalForces("prb",setTotal.getElements,f)
+export_internal_forces.exportInternalForces("test",setTotal.getElements,f)
 f.close()
 
 

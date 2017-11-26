@@ -27,7 +27,7 @@
 //Preprocessor.cc
 
 #include "Preprocessor.h"
-#include "ProblemaEF.h"
+#include "FEProblem.h"
 #include "domain/domain/Domain.h"
 #include "domain/mesh/node/Node.h"
 #include "domain/mesh/element/Element.h"
@@ -159,7 +159,7 @@ void XC::Preprocessor::clearAll(void)
 XC::FE_Datastore *XC::Preprocessor::getDataBase(void)
   {
     FE_Datastore *retval= nullptr;
-    ProblemaEF *prb= dynamic_cast<ProblemaEF *>(Owner());
+    FEProblem *prb= dynamic_cast<FEProblem *>(Owner());
     if(prb)
       retval= prb->getDataBase();
     return retval;

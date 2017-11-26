@@ -4,7 +4,7 @@
    informático del hormigón estructural (Cátedra de hormigón de la ETSICCP-IECA
    UPM). '''
 
-# prb.logFileName= "/tmp/borrar.log"  #Ignore warning messages
+# feProblem.logFileName= "/tmp/borrar.log"  #Ignore warning messages
 
 import xc_base
 import geom
@@ -25,8 +25,8 @@ __email__= "l.pereztato@gmail.com"
 
 MzDato= 55.949e3 #The "prontuario informático" reachs only ~54.4 kN m because it uses s simplified diagram for the steel.
 NDato= 0.0 
-prb= xc.ProblemaEF()
-preprocessor=  prb.getPreprocessor
+feProblem= xc.FEProblem()
+preprocessor=  feProblem.getPreprocessor
 # Materials definition
 tag= EHE_materials.B500S.defDiagD(preprocessor)
 concr= EHE_materials.HA25
@@ -68,7 +68,7 @@ casos.addToDomain("0")
 
 
 # Solution procedure
-analisis= predefined_solutions.simple_newton_raphson(prb)
+analisis= predefined_solutions.simple_newton_raphson(feProblem)
 analOk= analisis.analyze(10)
 
 nodes= preprocessor.getNodeLoader

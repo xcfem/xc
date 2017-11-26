@@ -10,7 +10,7 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
-# prb.logFileName= "/tmp/borrar.log"  #Ignore warning messages
+# feProblem.logFileName= "/tmp/borrar.log"  #Ignore warning messages
 
 import xc_base
 import geom
@@ -25,8 +25,8 @@ from model import predefined_spaces
 
 MzDato= 8e3
 NDato= 299.54e3 # The "prontuario informático" reachs only ~285 kN because of the steel simplified diagram.
-prb= xc.ProblemaEF()
-preprocessor=  prb.getPreprocessor
+feProblem= xc.FEProblem()
+preprocessor=  feProblem.getPreprocessor
 # Materials definition
 tag= EHE_materials.B500S.defDiagD(preprocessor)
 tag= EHE_materials.HA25.defDiagD(preprocessor)
@@ -66,7 +66,7 @@ casos.addToDomain("0")
 
 
 # Solution procedure
-analisis= predefined_solutions.simple_newton_raphson(prb)
+analisis= predefined_solutions.simple_newton_raphson(feProblem)
 analOk= analisis.analyze(10)
 
 

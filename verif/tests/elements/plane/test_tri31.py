@@ -27,9 +27,9 @@ t= 1
 F=1000
 
 # Problem type
-prb= xc.ProblemaEF()
-prb.logFileName= "/tmp/borrar.log" # Don't pring warnings
-preprocessor=  prb.getPreprocessor
+feProblem= xc.FEProblem()
+feProblem.logFileName= "/tmp/borrar.log" # Don't pring warnings
+preprocessor=  feProblem.getPreprocessor
 nodes= preprocessor.getNodeLoader
 modelSpace= predefined_spaces.SolidMechanics2D(nodes)
 
@@ -74,7 +74,7 @@ lp0.newNodalLoad(3,xc.Vector([F,0]))
 casos.addToDomain("0")
 
 # Solution
-analisis= predefined_solutions.simple_static_linear(prb)
+analisis= predefined_solutions.simple_static_linear(feProblem)
 analOk= analisis.analyze(1)
 
 

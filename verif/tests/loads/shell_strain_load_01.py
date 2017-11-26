@@ -29,8 +29,8 @@ A= h*h # bar area expressed in square meters
 I= (h)**4/12 # Cross section moment of inertia (m4)
 AT= 10.0 # Temperature increment (Celsius degrees)
 
-prb= xc.ProblemaEF()
-preprocessor=  prb.getPreprocessor
+feProblem= xc.FEProblem()
+preprocessor=  feProblem.getPreprocessor
 nodes= preprocessor.getNodeLoader
 nodes.dimSpace= 3 # coord. for each node (x,y,z).
 nodes.numGdls= 6 # DOF for each node (Ux,Uy,Uz,ThX,ThY,ThZ).
@@ -84,7 +84,7 @@ eleLoad.setStrainComp(3,0,alpha*AT)
 #We add the load case to domain.
 casos.addToDomain("0")
 
-analisis= predefined_solutions.simple_static_linear(prb)
+analisis= predefined_solutions.simple_static_linear(feProblem)
 result= analisis.analyze(1)
 
 

@@ -24,8 +24,8 @@ F= 1000 # Force
 
 
 # Problem type
-prb= xc.ProblemaEF()
-preprocessor=  prb.getPreprocessor   
+feProblem= xc.FEProblem()
+preprocessor=  feProblem.getPreprocessor   
 nodes= preprocessor.getNodeLoader
 
 modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
@@ -60,7 +60,7 @@ modelSpace.fixNode000_000(8)
 setTotal= preprocessor.getSets.getSet("total")
 setTotal.killElements() # deactivate the elements
 
-mesh= prb.getDomain.getMesh
+mesh= feProblem.getDomain.getMesh
 mesh.setDeadSRF(0.0)
 mesh.freezeDeadNodes("bloquea") # Constraint inactive nodes.
 
@@ -81,7 +81,7 @@ lp0.newNodalLoad(7,xc.Vector([F,0,F,0,0,0]))
 casos.addToDomain("0")
 
 # Solution
-analisis= predefined_solutions.simple_static_linear(prb)
+analisis= predefined_solutions.simple_static_linear(feProblem)
 result= analisis.analyze(1)
 
 
@@ -113,7 +113,7 @@ setTotal.aliveElements()
 mesh.meltAliveNodes("bloquea") # Reactivate inactive nodes.
 
 # Solution
-analisis= predefined_solutions.simple_static_linear(prb)
+analisis= predefined_solutions.simple_static_linear(feProblem)
 result= analisis.analyze(1)
 
 

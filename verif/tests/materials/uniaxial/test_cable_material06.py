@@ -25,8 +25,8 @@ fPret= sigmaPret*area # Prestressing force (pounds)
 F= 100/NumDiv # Carga vertical
 
 # Model definition
-prb= xc.ProblemaEF()
-preprocessor=  prb.getPreprocessor
+feProblem= xc.FEProblem()
+preprocessor=  feProblem.getPreprocessor
 nodes= preprocessor.getNodeLoader
 
 # Problem type
@@ -82,7 +82,7 @@ casos.addToDomain(lPattern)
 Nstep= 10  #  apply load in 10 steps
 DInc= 1./Nstep 	#  first load increment
 
-solu= prb.getSoluProc
+solu= feProblem.getSoluProc
 solCtrl= solu.getSoluControl
 solModels= solCtrl.getModelWrapperContainer
 sm= solModels.newModelWrapper("sm")

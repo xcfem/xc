@@ -21,8 +21,8 @@ import math
 from postprocess.quick_inquiry import nodal_reactions
 from solution import predefined_solutions
 
-prb= xc.ProblemaEF()
-preprocessor=  prb.getPreprocessor
+feProblem= xc.FEProblem()
+preprocessor=  feProblem.getPreprocessor
 nodes= preprocessor.getNodeLoader
 
 
@@ -85,10 +85,10 @@ lp0.newNodalLoad(n10.tag,xc.Vector(loadOnDOFs))
 casos.addToDomain("0")
 
 # Solution
-#analisis= predefined_solutions.simple_static_linear(prb)
-prbSolver= predefined_solutions.SolutionProcedure()
-analisis= prbSolver.simpleLagrangeStaticLinear(prb)
-#analisis= prbSolver.simpleTransformationStaticLinear(prb)
+#analisis= predefined_solutions.simple_static_linear(feProblem)
+solver= predefined_solutions.SolutionProcedure()
+analisis= solver.simpleLagrangeStaticLinear(feProblem)
+#analisis= solver.simpleTransformationStaticLinear(feProblem)
 result= analisis.analyze(1)
 
 nodes.calculateNodalReactions(False)

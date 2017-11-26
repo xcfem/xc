@@ -40,8 +40,8 @@ print "numBarras= ",numBarras
 print "offsetBarras= ",offsetBarras
    '''
 
-prb= xc.ProblemaEF()
-preprocessor=  prb.getPreprocessor
+feProblem= xc.FEProblem()
+preprocessor=  feProblem.getPreprocessor
 # Materials definition
 concrMatTag25= EHE_materials.HA25.defDiagK(preprocessor)
 tagB400S= EHE_materials.B400S.defDiagK(preprocessor)
@@ -96,7 +96,7 @@ casos.addToDomain("0")
 
 
 # Solution procedure
-analisis= predefined_solutions.simple_newton_raphson(prb)
+analisis= predefined_solutions.simple_newton_raphson(feProblem)
 analOk= analisis.analyze(10)
 
 secHAParamsFis= EHE_limit_state_checking.CrackControl('SLS_crack')

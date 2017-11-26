@@ -36,9 +36,9 @@ nLoad= unifLoad*CooMaxX*CooMaxY/NumDivI/NumDivJ # Tributary load on each node
 tagElemCentro= 0
 tagElemLado= 0
 
-prb= xc.ProblemaEF()
-preprocessor=  prb.getPreprocessor
-prb.logFileName= "/tmp/borrar.log" # Don't pring warnings
+feProblem= xc.FEProblem()
+preprocessor=  feProblem.getPreprocessor
+feProblem.logFileName= "/tmp/borrar.log" # Don't pring warnings
 nodes= preprocessor.getNodeLoader
 
 modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
@@ -104,7 +104,7 @@ casos.addToDomain("0")
 
 
 # Solution procedure
-analisis= predefined_solutions.simple_static_linear(prb)
+analisis= predefined_solutions.simple_static_linear(feProblem)
 analOk= analisis.analyze(1)
 
 m1Centro= 0.0

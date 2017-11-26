@@ -33,9 +33,9 @@ conectividad= None
 numNodeGroups= None
 numElementGroups= None
 
-prb= xc.ProblemaEF()
-prb.logFileName= "/tmp/borrar.log" # Para no imprimir mensajes de advertencia
-preprocessor=  prb.getPreprocessor
+feProblem= xc.FEProblem()
+feProblem.logFileName= "/tmp/borrar.log" # Para no imprimir mensajes de advertencia
+preprocessor=  feProblem.getPreprocessor
 nodes= preprocessor.getNodeLoader
 modelSpace= predefined_spaces.SolidMechanics2D(nodes)
 
@@ -65,7 +65,7 @@ sgMed1= ele0.getPhysicalProperties.getCommittedAvgStress[0]
 sgMed2= ele0.getPhysicalProperties.getCommittedAvgStress[1]
 sgMed3= ele0.getPhysicalProperties.getCommittedAvgStress[2]
 
-fields=  prb.getFields
+fields=  feProblem.getFields
 
 disp= fields.newField("disp")
 disp.setName= "total"
@@ -91,15 +91,15 @@ avgStress.componentDescriptions= ["Average stress"]
 avgStress.componentUnits= ["lbs/in2"]
 avgStress.componentsProperty= "self.getPhysicalProperties.getCommittedStress"
 
-mesh_output= xc.MEDMeshing(prb)
+mesh_output= xc.MEDMeshing(feProblem)
 vertices= mesh_output.vertices
 vertices.coordinateNames= ["X","Y","Z"]
 vertices.coordinateUnits= ["in","in","in"]
-mesh_output.meshName= "prueba01"
+mesh_output.meshName= "test01"
 mesh_output.write("/tmp/test_exporta_med01.med")
 
 med_import= xc.MEDMesh()
-med_import.meshName= "prueba01"
+med_import.meshName= "test01"
 med_import.read("/tmp/test_exporta_med01.med")
 spaceDim= med_import.getSpaceDimension()
 meshDim= med_import.getMeshDimension()

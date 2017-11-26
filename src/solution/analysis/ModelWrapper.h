@@ -82,7 +82,7 @@ class ModelWrapper: public EntCmd
     SoluMethod *getSoluMethod(void);
     const SoluMethod *getSoluMethod(void) const;
   protected:
-    friend class ProblemaEF;
+    friend class FEProblem;
     friend class SoluMethod;
 
   public:

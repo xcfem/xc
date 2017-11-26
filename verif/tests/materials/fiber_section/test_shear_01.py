@@ -44,8 +44,8 @@ numBarras= 3
 print "numBarras= ",numBarras
    '''
 
-prb= xc.ProblemaEF()
-preprocessor=  prb.getPreprocessor
+feProblem= xc.FEProblem()
+preprocessor=  feProblem.getPreprocessor
 # Materials definition
 materiales= preprocessor.getMaterialLoader
 
@@ -112,7 +112,7 @@ casos.addToDomain("0")
 
 
 # Solution procedure
-analisis= predefined_solutions.simple_newton_raphson(prb)
+analisis= predefined_solutions.simple_newton_raphson(feProblem)
 analOk= analisis.analyze(10)
 if(analOk!=0):
   print "Error!; failed to converge."

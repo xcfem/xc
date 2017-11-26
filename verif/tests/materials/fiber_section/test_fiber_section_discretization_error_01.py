@@ -25,8 +25,8 @@ z0= 0
 F= 1000 # Force magnitude
 
 # Problem type
-prb= xc.ProblemaEF()
-preprocessor=  prb.getPreprocessor
+feProblem= xc.FEProblem()
+preprocessor=  feProblem.getPreprocessor
 
 # Materials definition
 E= 2.1e6 # Elastic modulus

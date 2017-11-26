@@ -25,8 +25,8 @@ izTeor= 1/12.0*depth*width**3
 y0= 5
 z0= 3.2
 
-prb= xc.ProblemaEF()
-preprocessor=  prb.getPreprocessor
+feProblem= xc.FEProblem()
+preprocessor=  feProblem.getPreprocessor
 
 #  Materials definition: uniaxial bilinear steel
 fy= 50.0   # yield strength

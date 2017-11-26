@@ -25,8 +25,8 @@ from model import predefined_spaces
 from solution import predefined_solutions
 from materials import typical_materials
 # Problem type
-prb= xc.ProblemaEF()
-preprocessor=  prb.getPreprocessor
+feProblem= xc.FEProblem()
+preprocessor=  feProblem.getPreprocessor
 nodes= preprocessor.getNodeLoader
 modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
 nodes.newNodeIDXYZ(1,0,0,0)
@@ -83,13 +83,13 @@ mat= ele1.getPhysicalProperties.getVectorMaterials[0]
 K11A= mat.getTangentStiffness().at(1,1)
 import os
 os.system("rm -f /tmp/test06.db")
-db= prb.newDatabase("SQLite","/tmp/test06.db")
+db= feProblem.newDatabase("SQLite","/tmp/test06.db")
 db.save(2120)
-prb.clearAll()
+feProblem.clearAll()
 db.restore(2120)
 
 # Solution
-analisis= predefined_solutions.simple_static_linear(prb)
+analisis= predefined_solutions.simple_static_linear(feProblem)
 result= analisis.analyze(1)
 
 elements= preprocessor.getElementLoader

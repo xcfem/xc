@@ -24,7 +24,7 @@
 // along with this program.
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
-//ProblemaEF.h
+//FEProblem.h
 
 #ifndef PROBLEMAEF_H
 #define PROBLEMAEF_H
@@ -81,7 +81,7 @@ class MEDMeshing;
 //! The program can be downloaded here: <a href="https://github.com/lcpt/xc" target="_new"> GitHub repo</a>. 
 
 //! @brief Finite element problem.
-class ProblemaEF: public EntCmd
+class FEProblem: public EntCmd
   {
     mutable DataOutputHandler::map_output_handlers output_handlers; //Manejadores para salida de resultados.
     Preprocessor preprocessor; //!< Object that manages the model.
@@ -92,8 +92,8 @@ class ProblemaEF: public EntCmd
 
   public:
     static Domain *theActiveDomain;
-    ProblemaEF(void);
-    ~ProblemaEF(void);
+    FEProblem(void);
+    ~FEProblem(void);
     static inline const std::string &getXCVersion(void)
       { return gVERSION; }
     static inline const std::string &getXCVersionShort(void)
@@ -121,9 +121,9 @@ class ProblemaEF: public EntCmd
   };
 
 inline std::string getXCVersion(void)
-   { return ProblemaEF::getXCVersion(); }
+   { return FEProblem::getXCVersion(); }
 inline std::string getXCVersionShort(void)
-   { return ProblemaEF::getXCVersionShort(); }
+   { return FEProblem::getXCVersionShort(); }
 
 } // end of XC namespace
 

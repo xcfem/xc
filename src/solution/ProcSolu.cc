@@ -27,7 +27,7 @@
 //ProcSolu.cc
 
 #include "ProcSolu.h"
-#include "ProblemaEF.h"
+#include "FEProblem.h"
 
 //Analysis
 #include <solution/analysis/analysis/Analysis.h>
@@ -127,7 +127,7 @@ void XC::ProcSolu::libera(void)
   }
 
 //! @brief Default constructor.
-XC::ProcSolu::ProcSolu(ProblemaEF *owr)
+XC::ProcSolu::ProcSolu(FEProblem *owr)
   : EntCmd(owr), solu_control(this), theAnalysis(nullptr) {}
 
 //! @brief Copy constructor.
@@ -159,16 +159,16 @@ void XC::ProcSolu::clearAll(void)
 XC::ProcSolu::~ProcSolu(void)
   { clearAll(); }
 
-XC::ProblemaEF *XC::ProcSolu::getProblemaEF(void)
-  { return dynamic_cast<ProblemaEF *>(Owner()); }
+XC::FEProblem *XC::ProcSolu::getFEProblem(void)
+  { return dynamic_cast<FEProblem *>(Owner()); }
 
-const XC::ProblemaEF *XC::ProcSolu::getProblemaEF(void) const
-  { return dynamic_cast<const ProblemaEF *>(Owner()); }
+const XC::FEProblem *XC::ProcSolu::getFEProblem(void) const
+  { return dynamic_cast<const FEProblem *>(Owner()); }
 
 //! @brief Return a pointer to the domain.
 XC::Domain *XC::ProcSolu::getDomainPtr(void)
   {
-    ProblemaEF *prb= getProblemaEF();
+    FEProblem *prb= getFEProblem();
     assert(prb);
     return prb->getDomain();
   }
@@ -176,7 +176,7 @@ XC::Domain *XC::ProcSolu::getDomainPtr(void)
 //! @brief Return a const pointer to the domain.
 const XC::Domain *XC::ProcSolu::getDomainPtr(void) const
   {
-    const ProblemaEF *prb= getProblemaEF();
+    const FEProblem *prb= getFEProblem();
     assert(prb);
     return prb->getDomain();
   }
@@ -202,7 +202,7 @@ const XC::Integrator *XC::ProcSolu::getIntegratorPtr(void) const
 //! @brief Return a pointer to the output handlers
 XC::DataOutputHandler::map_output_handlers *XC::ProcSolu::getOutputHandlers(void) const
   {
-    const ProblemaEF *prb= getProblemaEF();
+    const FEProblem *prb= getFEProblem();
     assert(prb);
     return prb->getOutputHandlers();
   }

@@ -1,13 +1,11 @@
 # -*- coding: utf-8 -*-
-# home made test
+''' Verification of removeSPConstraint method.'''
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
 __copyright__= "Copyright 2015, LCPT and AOO"
 __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
-
-# Se comprueba el funcionamiento de remove_fix.
 
 import xc_base
 import geom
@@ -30,11 +28,11 @@ Iy= width*depth**3/12 # Cross section moment of inertia (m4)
 F= 1.5e3 # Load magnitude en N
 
 # Problem type
-prb= xc.ProblemaEF()
-preprocessor=  prb.getPreprocessor   
+feProblem= xc.FEProblem()
+preprocessor=  feProblem.getPreprocessor   
 nodes= preprocessor.getNodeLoader
 modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
-prb.logFileName= "/tmp/borrar.log" # Ignore warning messages
+feProblem.logFileName= "/tmp/borrar.log" # Ignore warning messages
 nodes.defaultTag= 1 #First node number.
 nod= nodes.newNodeXYZ(0,0.0,0.0)
 nod= nodes.newNodeXYZ(L,0.0,0.0)
@@ -98,7 +96,7 @@ lp0.newNodalLoad(2,xc.Vector([0,-F,0,0,0,0]))
 #We add the load case to domain.
 casos.addToDomain("0")
 # Solution procedure
-analisis= predefined_solutions.simple_static_modified_newton(prb)
+analisis= predefined_solutions.simple_static_modified_newton(feProblem)
 result= analisis.analyze(10)
 
 
@@ -111,7 +109,7 @@ delta0= nod2.getDisp[1]  # Node 2 yAxis displacement
 modelSpace.constraints.removeSPConstraint(spcTag)
 
 # Solution procedure
-analisis= predefined_solutions.simple_static_linear(prb)
+analisis= predefined_solutions.simple_static_linear(feProblem)
 result= analisis.analyze(1)
 
 

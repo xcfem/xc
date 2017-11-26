@@ -31,8 +31,8 @@ Iz= 8.49e-8 # Cross section moment of inertia (m4)
 J= 0.721e-8 # Cross section torsion constant (m4)
 AT= 10 # Temperature increment (Celsius degrees)
 
-prb= xc.ProblemaEF()
-preprocessor=  prb.getPreprocessor
+feProblem= xc.FEProblem()
+preprocessor=  feProblem.getPreprocessor
 nodes= preprocessor.getNodeLoader
 
 # Problem type
@@ -75,7 +75,7 @@ eleLoad.frontEndDeformationPlane= defTermica
 #We add the load case to domain.
 casos.addToDomain("0")
 
-analisis= predefined_solutions.simple_static_linear(prb)
+analisis= predefined_solutions.simple_static_linear(feProblem)
 result= analisis.analyze(1)
 
 elements.getElement(1).getResistingForce()

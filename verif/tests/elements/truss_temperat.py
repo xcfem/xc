@@ -29,8 +29,8 @@ A= 4e-4 # bar area expressed in square meters
 AT= 10 # Temperature increment (Celsius degrees)
 
 # Problem type
-prb= xc.ProblemaEF()
-preprocessor=  prb.getPreprocessor
+feProblem= xc.FEProblem()
+preprocessor=  feProblem.getPreprocessor
 nodes= preprocessor.getNodeLoader
 
 modelSpace= predefined_spaces.SolidMechanics2D(nodes)
@@ -76,7 +76,7 @@ eleLoad.eps2= alpha*10
 #We add the load case to domain.
 casos.addToDomain("0")
 
-analisis= predefined_solutions.simple_static_linear(prb)
+analisis= predefined_solutions.simple_static_linear(feProblem)
 result= analisis.analyze(1)
 
 

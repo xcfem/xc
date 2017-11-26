@@ -24,8 +24,8 @@ groundMotionPeakVel= 0.0
 groundMotionDisp= 0.0
 groundMotionPeakDisp= 0.0
 
-prb= xc.ProblemaEF()
-preprocessor=  prb.getPreprocessor
+feProblem= xc.FEProblem()
+preprocessor=  feProblem.getPreprocessor
 
 
 #Load modulation.

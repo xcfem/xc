@@ -39,8 +39,8 @@ kPl3a= 20*12*Ehorm*I3a/(H**3)
 kPl4a= kPl3a
 
 # Problem type
-prb= xc.ProblemaEF()
-preprocessor=  prb.getPreprocessor
+feProblem= xc.FEProblem()
+preprocessor=  feProblem.getPreprocessor
 
 nodes= preprocessor.getNodeLoader
 modelSpace= predefined_spaces.StructuralMechanics2D(nodes)
@@ -106,7 +106,7 @@ beta= 0.29 # Ductilidad alta.
 Ki= [1.0,1.33,1.88]
 
 # Solution procedure
-solu= prb.getSoluProc
+solu= feProblem.getSoluProc
 solCtrl= solu.getSoluControl
 
 

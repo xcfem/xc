@@ -26,8 +26,8 @@ A= 0.5 #Área in inches cuadradas}
 a= 2*l*math.cos(theta) #Distance between nodes extremos}
 b= l*math.sin(theta) #Distance between nodes extremos}
 
-prb= xc.ProblemaEF()
-preprocessor=  prb.getPreprocessor
+feProblem= xc.FEProblem()
+preprocessor=  feProblem.getPreprocessor
 nodes= preprocessor.getNodeLoader
 
 # Problem type
@@ -74,7 +74,7 @@ lp0.newNodalLoad(2,xc.Vector([0,-F]))
 casos.addToDomain("0")
 
 # Solution
-analisis= predefined_solutions.simple_static_linear(prb)
+analisis= predefined_solutions.simple_static_linear(feProblem)
 result= analisis.analyze(1)
 
 delta= nodes.getNode(2).getDisp[1]

@@ -26,8 +26,8 @@ from solution import predefined_solutions
 from materials import typical_materials
 
 # Problem type
-prb= xc.ProblemaEF()
-preprocessor=  prb.getPreprocessor
+feProblem= xc.FEProblem()
+preprocessor=  feProblem.getPreprocessor
 nodes= preprocessor.getNodeLoader
 
 modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
@@ -81,14 +81,14 @@ casos.addToDomain("0")
 
 
 # Solution
-analisis= predefined_solutions.simple_static_linear(prb)
+analisis= predefined_solutions.simple_static_linear(feProblem)
 result= analisis.analyze(1)
 
 import os
 os.system("rm -f /tmp/test05.db")
-db= prb.newDatabase("SQLite","/tmp/test05.db")
+db= feProblem.newDatabase("SQLite","/tmp/test05.db")
 db.save(2120)
-prb.clearAll()
+feProblem.clearAll()
 db.restore(2120)
 
 

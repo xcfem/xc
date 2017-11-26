@@ -89,7 +89,7 @@ beamRCsect.lstRCSects[1].positvRebarRows=[fi10s75r30]
 beamRCsect.lstRCSects[1].negatvRebarRows=[fi16s75r30]
 sections.append(beamRCsect)
 
-test= xc.ProblemaEF()
+test= xc.FEProblem()
 test.errFileName= "/tmp/borrar.err" # Don't print errors.
 preprocessor=  test.getPreprocessor   
 nodes= preprocessor.getNodeLoader

@@ -16,17 +16,17 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
-prb= xc.ProblemaEF()
-prb.logFileName= "/tmp/borrar.log" # Don't pring warnings
-preprocessor=  prb.getPreprocessor
+feProblem= xc.FEProblem()
+feProblem.logFileName= "/tmp/borrar.log" # Don't pring warnings
+preprocessor=  feProblem.getPreprocessor
 
 # Rectangular cross-section definition
 scc10x20=  section_properties.RectangularSection(name="rectang",b=.10,h=.20)
 matscc10x20=typical_materials.MaterialData(name='mtrectang',E=2.1e6,nu=0.3,rho=2500)
 
 
-prb= xc.ProblemaEF()
-preprocessor=  prb.getPreprocessor
+feProblem= xc.FEProblem()
+preprocessor=  feProblem.getPreprocessor
 # Materials definition
 matPoteau= scc10x20.defSeccShElastica3d(preprocessor,matscc10x20)
 elemZLS= scc3d_testing_bench.sectionModel(preprocessor, scc10x20.sectionName)
@@ -52,7 +52,7 @@ casos.addToDomain("0")
 
 
 # Solution
-analisis= predefined_solutions.simple_static_linear(prb)
+analisis= predefined_solutions.simple_static_linear(feProblem)
 result= analisis.analyze(1)
 
 nodes= preprocessor.getNodeLoader

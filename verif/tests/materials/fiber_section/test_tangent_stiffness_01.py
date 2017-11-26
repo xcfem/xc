@@ -17,8 +17,8 @@ __email__= "l.pereztato@gmail.com"
 width= 0.2 # Cross section width expressed in meters.
 depth= 0.4 # Cross section width expressed in meters.
 E= 2.1e6 # Young modulus of the material en kp/cm2.
-prb= xc.ProblemaEF()
-preprocessor=  prb.getPreprocessor
+feProblem= xc.FEProblem()
+preprocessor=  feProblem.getPreprocessor
 # Define materials
 
 ela= typical_materials.defElasticMaterial(preprocessor, "ela",E)

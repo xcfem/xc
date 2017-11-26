@@ -17,9 +17,9 @@ from materials.ehe import EHE_materials
 
 
 # Model definition
-prb= xc.ProblemaEF()
-prb.logFileName= "/tmp/borrar.log" # Ignore warning messages
-mdlr= prb.getPreprocessor
+feProblem= xc.FEProblem()
+feProblem.logFileName= "/tmp/borrar.log" # Ignore warning messages
+mdlr= feProblem.getPreprocessor
 concr= EHE_materials.HA25
 concr.alfacc=0.85 #f_maxd= 0.85*fcd
 errMax= concrete_base.concreteDesignTangentTest(mdlr,concr)

@@ -18,18 +18,18 @@ Ec= 20e9
 lado= 1.0
 
 
-prb= xc.ProblemaEF()
-preprocessor=  prb.getPreprocessor
+feProblem= xc.FEProblem()
+preprocessor=  feProblem.getPreprocessor
 
 
 concrete= typical_materials.defElasticMaterial(preprocessor, 'concrete',Ec)
-geomPrueba= preprocessor.getMaterialLoader.newSectionGeometry("geomPrueba")
-regiones= geomPrueba.getRegions
+sectionGeometryTest= preprocessor.getMaterialLoader.newSectionGeometry("sectionGeometryTest")
+regiones= sectionGeometryTest.getRegions
 concrete= regiones.newQuadRegion('concrete')
 concrete.pMin= geom.Pos2d(0.0,0.0)
 concrete.pMax= geom.Pos2d(1.0,1.0)
 
-pt= EHE_limit_state_checking.computeEffectiveHollowSectionParameters(geomPrueba,0.5,0.03)
+pt= EHE_limit_state_checking.computeEffectiveHollowSectionParameters(sectionGeometryTest,0.5,0.03)
 
 
 ratio1= (pt.A()-1)

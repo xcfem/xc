@@ -16,9 +16,9 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
-prb= xc.ProblemaEF()
-prb.logFileName= "/tmp/borrar.log" # Ignore warning messages
-preprocessor=  prb.getPreprocessor
+feProblem= xc.FEProblem()
+feProblem.logFileName= "/tmp/borrar.log" # Ignore warning messages
+preprocessor=  feProblem.getPreprocessor
 
 
 # Rectangular cross-section definition
@@ -50,7 +50,7 @@ lp0.newNodalLoad(2,xc.Vector([0,0,loadMz]))
 casos.addToDomain("0")
 
 # Solution
-analisis= predefined_solutions.simple_static_linear(prb)
+analisis= predefined_solutions.simple_static_linear(feProblem)
 result= analisis.analyze(1)
 
 nodes= preprocessor.getNodeLoader

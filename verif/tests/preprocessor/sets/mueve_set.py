@@ -17,8 +17,8 @@ __email__= "l.pereztato@gmail.com"
 
 NumDiv= 4
 CooMax= NumDiv
-prb= xc.ProblemaEF()
-preprocessor=  prb.getPreprocessor
+feProblem= xc.FEProblem()
+preprocessor=  feProblem.getPreprocessor
 
 points= preprocessor.getCad.getPoints
 pt= points.newPntIDPos3d(1,geom.Pos3d(0.0,0.0,0.0))

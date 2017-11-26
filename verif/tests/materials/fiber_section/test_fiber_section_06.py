@@ -23,14 +23,14 @@ gammac= 1.5 # Partial safety factor for concrete.
 gammas= 1.15 # Partial safety factor for steel.
 
 
-CurvZ1= 11.474e-3 # Curvatura de prueba 1.
-x1= 0.0997 # Profundidad de la fibra neutra 1.
+CurvZ1= 11.474e-3 # Curvature test 1.
+x1= 0.0997 # Neutral axis depth 1.
 
-CurvZ2= 34.787e-3 # Curvatura de prueba 2.
-x2= 0.0649 # Profundidad de la fibra neutra 2.
-prb= xc.ProblemaEF()
-prb.logFileName= "/tmp/borrar.log" # Ignore warning messages
-preprocessor=  prb.getPreprocessor
+CurvZ2= 34.787e-3 # Curvature test 2.
+x2= 0.0649 # Neutral axis depth 2.
+feProblem= xc.FEProblem()
+feProblem.logFileName= "/tmp/borrar.log" # Ignore warning messages
+preprocessor=  feProblem.getPreprocessor
 
 concr= EHE_materials.HA25
 concr.alfacc=0.85    #f_maxd= 0.85*fcd concrete long term compressive strength factor (normally alfacc=1)

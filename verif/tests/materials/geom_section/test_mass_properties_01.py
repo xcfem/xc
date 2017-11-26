@@ -18,22 +18,22 @@ n= 15
 Ec= Es/n
 lado= 1.0
 
-prb= xc.ProblemaEF()
-preprocessor=  prb.getPreprocessor
+feProblem= xc.FEProblem()
+preprocessor=  feProblem.getPreprocessor
 
 concrete= typical_materials.defElasticMaterial(preprocessor, 'concrete',Ec)
 
-geomPrueba= preprocessor.getMaterialLoader.newSectionGeometry("geomPrueba")
-regiones= geomPrueba.getRegions
+sectionGeometryTest= preprocessor.getMaterialLoader.newSectionGeometry("sectionGeometryTest")
+regiones= sectionGeometryTest.getRegions
 concrete= regiones.newQuadRegion('concrete')
 concrete.pMin= geom.Pos2d(0.0,0.0)
 concrete.pMax= geom.Pos2d(1.0,1.0)
 
-area= geomPrueba.getAreaHomogenizedSection(Ec)
-G= geomPrueba.getCdgHomogenizedSection(Ec)
-Iy= geomPrueba.getIyHomogenizedSection(Ec)
-Iz= geomPrueba.getIzHomogenizedSection(Ec)
-Pyz= geomPrueba.getPyzHomogenizedSection(Ec)
+area= sectionGeometryTest.getAreaHomogenizedSection(Ec)
+G= sectionGeometryTest.getCdgHomogenizedSection(Ec)
+Iy= sectionGeometryTest.getIyHomogenizedSection(Ec)
+Iz= sectionGeometryTest.getIzHomogenizedSection(Ec)
+Pyz= sectionGeometryTest.getPyzHomogenizedSection(Ec)
 
 areaTeor= lado*lado
 yGTeor= lado/2.0

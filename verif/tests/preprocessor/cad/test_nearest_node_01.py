@@ -15,14 +15,14 @@ __email__= "l.pereztato@gmail.com"
 
 tg= 0
 lapso= 0
-prb= xc.ProblemaEF()
-preprocessor=  prb.getPreprocessor   
+feProblem= xc.FEProblem()
+preprocessor=  feProblem.getPreprocessor   
 nodes= preprocessor.getNodeLoader
 for i in range(1,1000):
   n= nodes.newNodeXYZ(i,0,0)
 
 # print "creados ",nnod," nodes.\n"
-mesh= prb.getDomain.getMesh
+mesh= feProblem.getDomain.getMesh
 # crono= 1
 # \crono{\start{}}
 n= mesh.getNearestNode(geom.Pos3d(50.51,0,0))

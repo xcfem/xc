@@ -59,8 +59,8 @@ l= 1e-7     # Distance between nodes
 
 
 # Model definition
-problem=xc.ProblemaEF()              #necesary to create this instance of
-                                     #the class xc.ProblemaEF()
+problem=xc.FEProblem()              #necesary to create this instance of
+                                     #the class xc.FEProblem()
 preprocessor=problem.getPreprocessor
 nodes= preprocessor.getNodeLoader     #nodes container
 modelSpace= predefined_spaces.StructuralMechanics3D(nodes)  #Defines the dimension of nodes  three coordinates (x,y,z) and six DOF for each node (Ux,Uy,Uz,thetaX,thetaY,thetaZ)

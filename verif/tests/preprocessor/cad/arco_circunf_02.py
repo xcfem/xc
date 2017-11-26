@@ -20,8 +20,8 @@ cos45= math.cos(math.radians(45))
 sin45= cos45
 
 # Problem type
-prb= xc.ProblemaEF()
-preprocessor=  prb.getPreprocessor
+feProblem= xc.FEProblem()
+preprocessor=  feProblem.getPreprocessor
 # Define materials
 elast= typical_materials.defElasticMaterial(preprocessor, "elast",3000)
 

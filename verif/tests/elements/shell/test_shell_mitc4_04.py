@@ -28,8 +28,8 @@ from solution import predefined_solutions
 from model import predefined_spaces
 from materials import typical_materials
 
-prb= xc.ProblemaEF()
-preprocessor=  prb.getPreprocessor
+feProblem= xc.FEProblem()
+preprocessor=  feProblem.getPreprocessor
 nodes= preprocessor.getNodeLoader
 
 # Problem type
@@ -100,7 +100,7 @@ casos.addToDomain("0")
 
 
 # Solution procedure
-analisis= predefined_solutions.simple_static_linear(prb)
+analisis= predefined_solutions.simple_static_linear(feProblem)
 analOk= analisis.analyze(1)
 
 node= s.getNodeIJK(1,NumDivI/2+1,NumDivJ/2+1)

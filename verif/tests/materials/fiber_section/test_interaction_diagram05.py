@@ -27,8 +27,8 @@ cover= 0.06+12e-3+diam/2.0 # Concrete cover expressed in meters.
 areaFi20= math.pi*(diam/2.0)**2 # Rebar area expressed in square meters.
 
 
-prb= xc.ProblemaEF()
-preprocessor=  prb.getPreprocessor
+feProblem= xc.FEProblem()
+preprocessor=  feProblem.getPreprocessor
 # Materials definition
 concr= EHE_materials.HA30
 concr.alfacc=0.85    #f_maxd= 0.85*fcd concrete long term compressive strength factor (normally alfacc=1)

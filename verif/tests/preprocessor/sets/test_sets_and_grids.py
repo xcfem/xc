@@ -21,7 +21,7 @@ from model.sets import sets_mng as sets
 
 
 # *** PROBLEM
-FEcase= xc.ProblemaEF()
+FEcase= xc.FEProblem()
 prep=FEcase.getPreprocessor
 nodes= prep.getNodeLoader
 elements= prep.getElementLoader

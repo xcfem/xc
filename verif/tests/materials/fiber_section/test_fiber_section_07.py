@@ -31,8 +31,8 @@ gammas= 1.15 # Partial safety factor for steel.
 MzDato= 15e3
 NDato= 0.0
 
-prb= xc.ProblemaEF()
-preprocessor=  prb.getPreprocessor
+feProblem= xc.FEProblem()
+preprocessor=  feProblem.getPreprocessor
 # Materials definition
 tag= EHE_materials.B500S.defDiagD(preprocessor)
 import os
@@ -70,7 +70,7 @@ casos.addToDomain("0")
 
 
 # Solution procedure
-analisis= predefined_solutions.simple_newton_raphson(prb)
+analisis= predefined_solutions.simple_newton_raphson(feProblem)
 analOk= analisis.analyze(1)
 
 

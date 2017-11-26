@@ -13,13 +13,13 @@ n= 15.0
 Ec= Es/n
 areaFi16= 2.01e-4
 
-prb= xc.ProblemaEF()
-preprocessor=  prb.getPreprocessor
+feProblem= xc.FEProblem()
+preprocessor=  feProblem.getPreprocessor
 
 steel= typical_materials.defElasticMaterial(preprocessor, "steel",Es)
 
-geomPrueba= preprocessor.getMaterialLoader.newSectionGeometry("geomPrueba")
-reinforcement= geomPrueba.getReinfLayers
+sectionGeometryTest= preprocessor.getMaterialLoader.newSectionGeometry("sectionGeometryTest")
+reinforcement= sectionGeometryTest.getReinfLayers
 reinforcementA= reinforcement.newStraightReinfLayer("steel")
 reinforcementA.numReinfBars= 2
 reinforcementA.barDiam= 16e-3
@@ -34,11 +34,11 @@ reinforcementB.p1= geom.Pos2d(0.95,0.95) # Armadura inferior.
 reinforcementB.p2= geom.Pos2d(0.95,0.05)
 
 nRebars= reinforcement.getNumReinfBars
-area= geomPrueba.getAreaHomogenizedSection(Ec)
-G= geomPrueba.getCdgHomogenizedSection(Ec)
-Iy= geomPrueba.getIyHomogenizedSection(Ec)
-Iz= geomPrueba.getIzHomogenizedSection(Ec)
-Pyz= geomPrueba.getPyzHomogenizedSection(Ec)
+area= sectionGeometryTest.getAreaHomogenizedSection(Ec)
+G= sectionGeometryTest.getCdgHomogenizedSection(Ec)
+Iy= sectionGeometryTest.getIyHomogenizedSection(Ec)
+Iz= sectionGeometryTest.getIzHomogenizedSection(Ec)
+Pyz= sectionGeometryTest.getPyzHomogenizedSection(Ec)
 
 areaTeor= (n*4*areaFi16)
 yGTeor= 0.5

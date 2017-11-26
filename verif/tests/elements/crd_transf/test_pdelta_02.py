@@ -32,8 +32,8 @@ from solution import predefined_solutions
 from model import predefined_spaces
 from materials import typical_materials
 
-prb= xc.ProblemaEF()
-preprocessor=  prb.getPreprocessor
+feProblem= xc.FEProblem()
+preprocessor=  feProblem.getPreprocessor
 nodes= preprocessor.getNodeLoader
 modelSpace= predefined_spaces.StructuralMechanics2D(nodes)
 nodes.newSeedNode()
@@ -98,7 +98,7 @@ nodeTag2= pt2.getTagNode
 nodeTag6= pt6.getTagNode
 nodeTag8= pt8.getTagNode
 
-mesh= prb.getDomain.getMesh
+mesh= feProblem.getDomain.getMesh
 nodeTagCentralLoad= mesh.getNearestNode(geom.Pos3d(B/2,H,0.0)).tag
 nodeTagLateralLoad= mesh.getNearestNode(geom.Pos3d(offset+B/4,H,0.0)).tag
 tagElem1= mesh.getNearestElement(geom.Pos3d(0,H/(10*nDivLines),0.0)).tag
@@ -125,7 +125,7 @@ casos.addToDomain("0")
 
 # Solution procedure
 
-analisis= predefined_solutions.simple_static_linear(prb)
+analisis= predefined_solutions.simple_static_linear(feProblem)
 result= analisis.analyze(1)
 result= analisis.analyze(1)
 

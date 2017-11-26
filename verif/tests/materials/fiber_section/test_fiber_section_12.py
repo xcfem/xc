@@ -8,7 +8,7 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
-# prb.logFileName= "/tmp/borrar.log"  #Ignore warning messages
+# feProblem.logFileName= "/tmp/borrar.log"  #Ignore warning messages
 
 import xc_base
 import geom
@@ -24,8 +24,8 @@ from solution import predefined_solutions
 MzDato= 0.0
 NDato= 0.0 # Presstressing is the only load
 
-prb= xc.ProblemaEF()
-preprocessor=  prb.getPreprocessor
+feProblem= xc.FEProblem()
+preprocessor=  feProblem.getPreprocessor
 # Materials definition
 tag= EHE_materials.Y1860S7.defDiagD(preprocessor, EHE_materials.Y1860S7.tInic())
 tag= EHE_materials.HP45.defDiagD(preprocessor)
@@ -65,7 +65,7 @@ casos.addToDomain("0")
 
 
 # Solution procedure
-analisis= predefined_solutions.simple_newton_raphson(prb)
+analisis= predefined_solutions.simple_newton_raphson(feProblem)
 analOk= analisis.analyze(10)
 
 

@@ -14,8 +14,8 @@ __email__= "l.pereztato@gmail.com"
 
 abcisas= [0.0,5.0,10.0,15.0,20.0,25.0]
 numPorticos= len(abcisas)
-prb= xc.ProblemaEF()
-preprocessor=  prb.getPreprocessor
+feProblem= xc.FEProblem()
+preprocessor=  feProblem.getPreprocessor
 
 points= preprocessor.getCad.getPoints
 nets= preprocessor.getCad.get3DNets

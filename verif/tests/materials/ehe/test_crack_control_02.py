@@ -28,8 +28,8 @@ areaFi12=1.13e-4
 NDato= -100.0 # Axial force for crack control checking.
 MyDato= 0.0 # Bending moment force for crack control checking.
 
-prb= xc.ProblemaEF()
-preprocessor=  prb.getPreprocessor
+feProblem= xc.FEProblem()
+preprocessor=  feProblem.getPreprocessor
 # Materials definition
 concrMatTag25= EHE_materials.HA25.defDiagK(preprocessor)
 tagB500S= EHE_materials.B500S.defDiagK(preprocessor)
@@ -84,7 +84,7 @@ casos.addToDomain("0")
 
 
 # Solution procedure
-analisis= predefined_solutions.simple_newton_raphson(prb)
+analisis= predefined_solutions.simple_newton_raphson(feProblem)
 analOk= analisis.analyze(10)
 
 secHAParamsFis= EHE_limit_state_checking.CrackControl('SLS_crack')

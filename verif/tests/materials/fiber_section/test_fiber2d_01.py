@@ -22,9 +22,9 @@ Area= 1.0
 eps= F/(Area*Es)
 
 # Problem type
-prb= xc.ProblemaEF()
-prb.logFileName= "/tmp/borrar.log" # Ignore warning messages
-preprocessor=  prb.getPreprocessor
+feProblem= xc.FEProblem()
+feProblem.logFileName= "/tmp/borrar.log" # Ignore warning messages
+preprocessor=  feProblem.getPreprocessor
 nodes= preprocessor.getNodeLoader
 modelSpace= predefined_spaces.StructuralMechanics2D(nodes)
 
@@ -47,26 +47,26 @@ TK21= 0.0 ; TEIy= 0.0
 elast0= typical_materials.defElasticMaterial(preprocessor, "elast0",Es)
 # Secciones
 materiales= preprocessor.getMaterialLoader
-prueba= materiales.newMaterial("fiber_section_2d","prueba")
-fiber= prueba.addFiber("elast0",Area,xc.Vector([yF]))
+fiberSectionTest= materiales.newMaterial("fiber_section_2d","fiberSectionTest")
+fiber= fiberSectionTest.addFiber("elast0",Area,xc.Vector([yF]))
 
-A= prueba.getArea()
-yG= prueba.getCdgY()
-initialTangent= prueba.getInitialTangentStiffness()
+A= fiberSectionTest.getArea()
+yG= fiberSectionTest.getCdgY()
+initialTangent= fiberSectionTest.getInitialTangentStiffness()
 IEA= initialTangent.at(1,1)
 IK12= initialTangent.at(1,2)
 IK21= initialTangent.at(2,1)
 IEIy= initialTangent.at(2,2)
 
-prueba.setTrialSectionDeformation(xc.Vector([eps,0.0]))
-tangent= prueba.getTangentStiffness()
+fiberSectionTest.setTrialSectionDeformation(xc.Vector([eps,0.0]))
+tangent= fiberSectionTest.getTangentStiffness()
 TEA= tangent.at(1,1)
 TK12= tangent.at(1,2)
 TK21= tangent.at(2,1)
 TEIy= tangent.at(2,2)
 
-R= prueba.getStressResultant()
-fibers= prueba.getFibers()
+R= fiberSectionTest.getStressResultant()
+fibers= fiberSectionTest.getFibers()
 MomZFibersDq= fibers.getMz(0.0)
 
 ratio1= R[0]-F

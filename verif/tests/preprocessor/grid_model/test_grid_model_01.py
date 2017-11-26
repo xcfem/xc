@@ -14,7 +14,7 @@ import xc
 from model.geometry import grid_model as gm
 
 # *** GEOMETRY ***
-FEcase= xc.ProblemaEF()
+FEcase= xc.FEProblem()
 prep=FEcase.getPreprocessor
 
 # coordinates in global X,Y,Z axes for the generation of grid A

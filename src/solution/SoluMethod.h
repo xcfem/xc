@@ -97,7 +97,7 @@ class SoluMethod: public EntCmd
     Analysis *getAnalysis(void);
     const Analysis *getAnalysis(void) const;    
   protected:
-    friend class ProblemaEF;
+    friend class FEProblem;
     void libera_soln_algo(void);
     bool alloc_soln_algo(const std::string &);
     void copia_soln_algo(SolutionAlgorithm *);

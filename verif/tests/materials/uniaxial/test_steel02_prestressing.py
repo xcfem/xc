@@ -24,8 +24,8 @@ __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
 # Problem type
-prb= xc.ProblemaEF()
-preprocessor=  prb.getPreprocessor
+feProblem= xc.FEProblem()
+preprocessor=  feProblem.getPreprocessor
 nodes= preprocessor.getNodeLoader
 
 modelSpace= predefined_spaces.SolidMechanics2D(nodes)
@@ -57,7 +57,7 @@ spc= constraints.newSPConstraint(2,1,0.0)
 
     
 
-solu= prb.getSoluProc
+solu= feProblem.getSoluProc
 solCtrl= solu.getSoluControl
 solModels= solCtrl.getModelWrapperContainer
 sm= solModels.newModelWrapper("sm")

@@ -24,9 +24,9 @@ from materials import typical_materials
 from solution import predefined_solutions
 from misc import scc3d_testing_bench
 
-prb= xc.ProblemaEF()
-preprocessor=  prb.getPreprocessor
-prb.logFileName= "/tmp/borrar.log" # Ignore warning messages
+feProblem= xc.FEProblem()
+preprocessor=  feProblem.getPreprocessor
+feProblem.logFileName= "/tmp/borrar.log" # Ignore warning messages
 
 # Rectangular cross-section definition
 b= 10 # Cross section width  [cm]
@@ -86,7 +86,7 @@ casos.addToDomain("0")
 
 
 # Solve
-analisis= predefined_solutions.simple_newton_raphson(prb)
+analisis= predefined_solutions.simple_newton_raphson(feProblem)
 analOk= analisis.analyze(1)
 
 

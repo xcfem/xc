@@ -22,7 +22,7 @@
 //utils_python_interface.cxx
 
 #include "python_interface.h"
-#include "ProblemaEF.h"
+#include "FEProblem.h"
 
 void export_solution(void)
   {

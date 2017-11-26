@@ -36,8 +36,8 @@ densHorm= 2500 # Reinforced concrete density.
 #
 
 # Problem type
-prb= xc.ProblemaEF()
-preprocessor=  prb.getPreprocessor
+feProblem= xc.FEProblem()
+preprocessor=  feProblem.getPreprocessor
 nodes= preprocessor.getNodeLoader
 modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
 nodes.defaultTag= 1 #First node number.
@@ -136,7 +136,7 @@ def resuelveCombEstatLin(comb):
       db.restore(tagSave)
 
     comb.addToDomain()
-    analisis= predefined_solutions.simple_static_linear(prb)
+    analisis= predefined_solutions.simple_static_linear(feProblem)
     result= analisis.analyze(1)
     comb.removeFromDomain()
 
@@ -164,7 +164,7 @@ NMin2= 1e9
 
 import os
 os.system("rm -r -f /tmp/test_pescante_02.db")
-db= prb.newDatabase("BerkeleyDB","/tmp/test_pescante_02.db")
+db= feProblem.newDatabase("BerkeleyDB","/tmp/test_pescante_02.db")
 
 nombrePrevia="" 
 tagPrevia= 0

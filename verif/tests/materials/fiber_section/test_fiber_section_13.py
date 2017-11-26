@@ -24,8 +24,8 @@ from solution import predefined_solutions
 MzDato= 1e6
 NDato= 0.0
 
-prb= xc.ProblemaEF()
-preprocessor=  prb.getPreprocessor
+feProblem= xc.FEProblem()
+preprocessor=  feProblem.getPreprocessor
 # Materials definition
 tag= EHE_materials.Y1860S7.defDiagD(preprocessor, EHE_materials.Y1860S7.tInic())
 tag= EHE_materials.HP45.defDiagD(preprocessor)
@@ -68,7 +68,7 @@ casos.addToDomain("0")
 
 # Solution procedure
 solution= predefined_solutions.SolutionProcedure()
-analysis= solution.simpleNewtonRaphson(prb)
+analysis= solution.simpleNewtonRaphson(feProblem)
 solution.ctest.tol= 1e-8
 solution.ctest.printFlag= 0 #flag used to print information on convergence (optional)
 analOk= analysis.analyze(10)

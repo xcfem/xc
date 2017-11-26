@@ -14,8 +14,8 @@ from solution import predefined_solutions
 from model import predefined_spaces
 from materials import typical_materials
 
-prb= xc.ProblemaEF()
-preprocessor=  prb.getPreprocessor  
+feProblem= xc.FEProblem()
+preprocessor=  feProblem.getPreprocessor  
 
 #Load modulation.
 cargas= preprocessor.getLoadLoader

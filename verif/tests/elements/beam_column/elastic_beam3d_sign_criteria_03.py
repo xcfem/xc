@@ -63,8 +63,8 @@ F= 1.5e3          # Load magnitude (kN)
 xRelPtoAplic= 0.5 # x relative (compared to the total length) of the
                   # point on which the load is applied
 
-prb= xc.ProblemaEF()
-preprocessor=  prb.getPreprocessor
+feProblem= xc.FEProblem()
+preprocessor=  feProblem.getPreprocessor
 nodes= preprocessor.getNodeLoader
 # Problem type
 modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
@@ -103,7 +103,7 @@ elem.vector3dPointByRelDistLoadLocal(xRelPtoAplic,xc.Vector([F,0,0]))
 casos.addToDomain("0")
 
 # Solution 0 N
-analisis= predefined_solutions.simple_static_linear(prb)
+analisis= predefined_solutions.simple_static_linear(feProblem)
 result= analisis.analyze(1)
 
 RF= elements.getElement(1).getResistingForce()
@@ -132,7 +132,7 @@ elem.vector3dPointByRelDistLoadLocal(xRelPtoAplic,xc.Vector([0,F,0]))
 casos.addToDomain("1")
 
 # Solution 1 My Vz
-analisis= predefined_solutions.simple_static_linear(prb)
+analisis= predefined_solutions.simple_static_linear(feProblem)
 result= analisis.analyze(1)
 
 RF= elements.getElement(1).getResistingForce()
@@ -162,7 +162,7 @@ elem.vector3dPointByRelDistLoadLocal(xRelPtoAplic,xc.Vector([0,0,F]))
 casos.addToDomain("2")
 
 # Solution 2 Mz Vy
-analisis= predefined_solutions.simple_static_linear(prb)
+analisis= predefined_solutions.simple_static_linear(feProblem)
 result= analisis.analyze(1)
 
 RF= elements.getElement(1).getResistingForce()
@@ -191,7 +191,7 @@ elem.vector3dUniformLoadLocal(xc.Vector([0,0,F]))
 casos.addToDomain("3")
 
 # Solution 3 T
-analisis= predefined_solutions.simple_static_linear(prb)
+analisis= predefined_solutions.simple_static_linear(feProblem)
 result= analisis.analyze(1)
 
 RF= elements.getElement(1).getResistingForce()

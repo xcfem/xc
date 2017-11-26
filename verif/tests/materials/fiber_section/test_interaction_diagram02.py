@@ -27,8 +27,8 @@ diam= 20e-3 # Diameter of rebars [m]
 areaFi20= 3.14e-4 # Rebars cross-section area [m2]
 
 
-prb= xc.ProblemaEF()
-preprocessor=  prb.getPreprocessor
+feProblem= xc.FEProblem()
+preprocessor=  feProblem.getPreprocessor
 # Materials definition
 concr= EHE_materials.HA25
 concr.alfacc=0.85    #f_maxd= 0.85*fcd concrete long term compressive strength factor (normally alfacc=1)
@@ -88,7 +88,7 @@ param.concreteTag= EHE_materials.HA25.matTagD
 param.tagArmadura= EHE_materials.B500S.matTagD
 diagIntsecHA= materiales.calcInteractionDiagram("secHA",param)
 
-diagIntsecHA.writeTo("/tmp/prueba_diag_interaccion02.dat")  # Se usa en test test_diag_interaccion04
+diagIntsecHA.writeTo("/tmp/interaction_diagram_test_02.dat")  # Se usa en test test_diag_interaccion04
 FCs= []
 FCs.append(diagIntsecHA.getCapacityFactor(geom.Pos3d(2185.5e3,0,0)))
 FCs.append(diagIntsecHA.getCapacityFactor(geom.Pos3d(1595.8e3,0,186.5e3)))

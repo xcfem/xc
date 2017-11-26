@@ -41,8 +41,8 @@ kPl3a= 20*12*Ehorm*I3a/(H**3)
 kPl4a= kPl3a
 
 # Problem type
-prb= xc.ProblemaEF()
-preprocessor=  prb.getPreprocessor
+feProblem= xc.FEProblem()
+preprocessor=  feProblem.getPreprocessor
 
 nodes= preprocessor.getNodeLoader
 modelSpace= predefined_spaces.StructuralMechanics2D(nodes)
@@ -105,7 +105,7 @@ beam2d.h= B3a
 masaTotalTeor= 5*masaPorPlanta
 
 # Solution procedure
-solu= prb.getSoluProc
+solu= feProblem.getSoluProc
 solCtrl= solu.getSoluControl
 solModels= solCtrl.getModelWrapperContainer
 sm= solModels.newModelWrapper("sm")

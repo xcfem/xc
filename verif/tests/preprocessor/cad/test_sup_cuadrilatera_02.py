@@ -24,9 +24,9 @@ nu= 0.3 # Coeficiente de Poison
 rho= 0.0 # Densidad
 
 # Problem type
-prb= xc.ProblemaEF()
-prb.logFileName= "/tmp/borrar.log" # Ignore warning messages
-preprocessor=  prb.getPreprocessor
+feProblem= xc.FEProblem()
+feProblem.logFileName= "/tmp/borrar.log" # Ignore warning messages
+preprocessor=  feProblem.getPreprocessor
 nodes= preprocessor.getNodeLoader
 
 modelSpace= predefined_spaces.SolidMechanics2D(nodes)# Materials definition
@@ -95,7 +95,7 @@ nelemCuadr= f1.getNumElements
 
 
 
-mesh= prb.getDomain.getMesh
+mesh= feProblem.getDomain.getMesh
 nnodDom= mesh.getNumNodes()
 
 ''' 

@@ -36,8 +36,8 @@ Es_exp=197*1e9
 
 As_calc=ro_exp*width*depth   #reinforcement area in the cross-section
 
-prb= xc.ProblemaEF()
-preprocessor= prb.getPreprocessor
+feProblem= xc.FEProblem()
+preprocessor= feProblem.getPreprocessor
 
 # Materials definition
 concrAux= EHE_materials.HA25           #parameters only for the compression branche 

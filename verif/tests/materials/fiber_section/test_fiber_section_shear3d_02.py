@@ -37,9 +37,9 @@ execfile(pth+"/macros_test_fiber_section.py")
 fy= 2600 # yield strength [kp/cm2].
 E= 1e6   # elastic moculus [kp/cm2].
 
-prb= xc.ProblemaEF()
-prb.logFileName= "/tmp/borrar.log" # Ignore warning messages
-preprocessor=  prb.getPreprocessor
+feProblem= xc.FEProblem()
+feProblem.logFileName= "/tmp/borrar.log" # Ignore warning messages
+preprocessor=  feProblem.getPreprocessor
 # Materials definition
 elast= typical_materials.defElasticMaterial(preprocessor, "elast",E)
 respT= typical_materials.defElasticMaterial(preprocessor, "respT",1e6) # Torsion response.
@@ -88,7 +88,7 @@ casos.addToDomain("0")
 
 
 # Solution procedure
-analisis= predefined_solutions.simple_newton_raphson(prb)
+analisis= predefined_solutions.simple_newton_raphson(feProblem)
 analOk= analisis.analyze(1)
 if(analOk!=0):
   print "Error!; failed to converge."

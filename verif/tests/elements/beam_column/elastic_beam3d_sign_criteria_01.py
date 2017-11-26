@@ -61,8 +61,8 @@ L= 1.5 # Bar length (m)
 # Load
 F= 1.5e3 # Load magnitude (kN)
 
-prb= xc.ProblemaEF()
-preprocessor=  prb.getPreprocessor
+feProblem= xc.FEProblem()
+preprocessor=  feProblem.getPreprocessor
 nodes= preprocessor.getNodeLoader
 # Problem type
 modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
@@ -99,7 +99,7 @@ lp0.newNodalLoad(2,xc.Vector([F,0,0,0,0,0])) #Positive force along x axis
 casos.addToDomain("0")
 
 # Solution 0 N
-analisis= predefined_solutions.simple_static_linear(prb)
+analisis= predefined_solutions.simple_static_linear(feProblem)
 result= analisis.analyze(1)
 
 RF= elements.getElement(1).getResistingForce()
@@ -128,7 +128,7 @@ lp1.newNodalLoad(2,xc.Vector([0,F,0,0,0,0])) #Positive force along y axis
 casos.addToDomain("1")
 
 # Solution 1 My Vz
-analisis= predefined_solutions.simple_static_linear(prb)
+analisis= predefined_solutions.simple_static_linear(feProblem)
 result= analisis.analyze(1)
 
 RF= elements.getElement(1).getResistingForce()
@@ -156,7 +156,7 @@ lp2.newNodalLoad(2,xc.Vector([0,0,F,0,0,0])) #Positive force along z axis
 casos.addToDomain("2")
 
 # Solution 2 Mz Vy
-analisis= predefined_solutions.simple_static_linear(prb)
+analisis= predefined_solutions.simple_static_linear(feProblem)
 result= analisis.analyze(1)
 
 RF= elements.getElement(1).getResistingForce()
@@ -185,7 +185,7 @@ lp3.newNodalLoad(2,xc.Vector([0,0,0,F,0,0])) #Positive moment about x axis
 casos.addToDomain("3")
 
 # Solution 3 T
-analisis= predefined_solutions.simple_static_linear(prb)
+analisis= predefined_solutions.simple_static_linear(feProblem)
 result= analisis.analyze(1)
 
 RF= elements.getElement(1).getResistingForce()
@@ -212,7 +212,7 @@ lp4.newNodalLoad(2,xc.Vector([0,0,0,0,F,0])) #Positive moment about y axis
 casos.addToDomain("4")
 
 # Solution 4 T
-analisis= predefined_solutions.simple_static_linear(prb)
+analisis= predefined_solutions.simple_static_linear(feProblem)
 result= analisis.analyze(1)
 
 RF= elements.getElement(1).getResistingForce()
@@ -239,7 +239,7 @@ lp5.newNodalLoad(2,xc.Vector([0,0,0,0,0,F])) #Positive moment about z axis
 casos.addToDomain("5")
 
 # Solution 5 T
-analisis= predefined_solutions.simple_static_linear(prb)
+analisis= predefined_solutions.simple_static_linear(feProblem)
 result= analisis.analyze(1)
 
 RF= elements.getElement(1).getResistingForce()

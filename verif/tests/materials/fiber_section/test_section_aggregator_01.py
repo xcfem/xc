@@ -41,9 +41,9 @@ execfile(pth+"/macros_test_fiber_section.py")
 fy= 2600 # yield stress [kp/cm2]
 E= 2.1e6 # initial elastic tangent [kp/cm2.
 
-prb= xc.ProblemaEF()
-prb.logFileName= "/tmp/borrar.log" # No warning messages
-preprocessor=  prb.getPreprocessor
+feProblem= xc.FEProblem()
+feProblem.logFileName= "/tmp/borrar.log" # No warning messages
+preprocessor=  feProblem.getPreprocessor
 # Materials definition
 epp= typical_materials.defElasticPPMaterial(preprocessor, "epp",E,fy,-fy)
 respT= typical_materials.defElasticMaterial(preprocessor, "respT",1e10) # Torsion response.
@@ -93,7 +93,7 @@ casos.addToDomain("0")
 
 
 # Solution procedure
-solu= prb.getSoluProc
+solu= feProblem.getSoluProc
 solCtrl= solu.getSoluControl
 
 
@@ -108,7 +108,7 @@ numberer.useAlgorithm("simple")
 
 solution= predefined_solutions.SolutionProcedure()
 solution.convergenceTestTol= 1.0e-2
-analysis= solution.simpleNewtonRaphsonBandGen(prb)
+analysis= solution.simpleNewtonRaphsonBandGen(feProblem)
 
 analOk= analysis.analyze(1)
 

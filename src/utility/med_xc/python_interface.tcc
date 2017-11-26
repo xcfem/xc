@@ -57,7 +57,7 @@ class_<XC::MEDMesh, bases<XC::MEDObject>, boost::noncopyable >("MEDMesh")
   .def("getNumberOfFamilies",&XC::MEDMesh::getNumberOfFamilies)
   ;
 
-class_<XC::MEDMeshing, bases<XC::MEDObject>, boost::noncopyable >("MEDMeshing", init<const XC::ProblemaEF &>())
+class_<XC::MEDMeshing, bases<XC::MEDObject>, boost::noncopyable >("MEDMeshing", init<const XC::FEProblem &>())
   .add_property("meshName",&XC::MEDMeshing::getMeshName,&XC::MEDMeshing::setMeshName,"Mesh name.")
   .add_property("vertices",make_function(&XC::MEDMeshing::getVertices,return_internal_reference<>()),&XC::MEDMeshing::setVertices,"Access to mesh vertices.")
   .add_property("cells",make_function(&XC::MEDMeshing::getCells,return_internal_reference<>()),&XC::MEDMeshing::setCells,"Access to mesh cells.")

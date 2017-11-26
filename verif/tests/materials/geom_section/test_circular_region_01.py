@@ -21,8 +21,8 @@ radius= 1.2/2.0
 thickness= 10.3e-3
 RExt= radius+thickness
 
-prb= xc.ProblemaEF()
-preprocessor=  prb.getPreprocessor
+feProblem= xc.FEProblem()
+preprocessor=  feProblem.getPreprocessor
 steel= typical_materials.defElasticMaterial(preprocessor, "steel",Es)
 geomTuberia= preprocessor.getMaterialLoader.newSectionGeometry("geomTuberia")
 regiones= geomTuberia.getRegions

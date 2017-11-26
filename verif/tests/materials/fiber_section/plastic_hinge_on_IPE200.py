@@ -15,7 +15,7 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
-test= xc.ProblemaEF()
+test= xc.FEProblem()
 preprocessor=  test.getPreprocessor
 
 S275JR= EC3_materials.S275JR
