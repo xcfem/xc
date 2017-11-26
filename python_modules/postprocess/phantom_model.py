@@ -132,19 +132,22 @@ class PhantomModel(object):
       elements.defaultMaterial= sccFICT.sectionName
     for tagElem in self.elementTags:
       elementSectionNames= self.sectionsDistribution.getSectionNamesForElement(tagElem)
-      elementSectionDefinitions= self.sectionsDistribution.getSectionDefinitionsForElement(tagElem)
-      mapInteractionDiagrams= self.sectionsDistribution.sectionDefinition.mapInteractionDiagrams
+      if(elementSectionNames):
+        elementSectionDefinitions= self.sectionsDistribution.getSectionDefinitionsForElement(tagElem)
+        mapInteractionDiagrams= self.sectionsDistribution.sectionDefinition.mapInteractionDiagrams
 
-      sz= len(elementSectionNames)
-      for i in range(0,sz):
-        sectionName= elementSectionNames[i]
-        diagInt= None
-        if(mapInteractionDiagrams != None):
-          diagInt= mapInteractionDiagrams[sectionName]
-        phantomElem= self.createPhantomElement(tagElem,sectionName,elementSectionDefinitions[i],i+1,diagInt,fakeSection)
-        retval.append(phantomElem)
-        self.tagsNodesToLoad[tagElem].append(phantomElem.getNodes[1].tag) #Node to load
+        sz= len(elementSectionNames)
+        for i in range(0,sz):
+          sectionName= elementSectionNames[i]
+          diagInt= None
+          if(mapInteractionDiagrams != None):
+            diagInt= mapInteractionDiagrams[sectionName]
+          phantomElem= self.createPhantomElement(tagElem,sectionName,elementSectionDefinitions[i],i+1,diagInt,fakeSection)
+          retval.append(phantomElem)
+          self.tagsNodesToLoad[tagElem].append(phantomElem.getNodes[1].tag) #Node to load
                                                                           #for this element
+      else:
+        lmsg.error("Element section names not found for element with tag: "+str(tagElem))
     controller.initControlVars(retval)
     return retval
 
@@ -214,16 +217,20 @@ class PhantomModel(object):
     '''
     return cv.writeControlVarsFromElements(controller.limitStateLabel,self.preprocessor,outputFileName)
 
-  def runChecking(self,intForcCombFileName,analysis,controller,outputFileName):
+  def runChecking(self,limitStateData,analysis,outputFileName):
     '''Run the analysis, check the results and write them into a file
 
-    :param intForcCombFileName: name of the file containing the forces 
-                           and bending moments obtained for each element 
-                           for the combinations analyzed
-    :param analysis:       type of analysis
+    :param limitStateData: object that contains the name of the file
+                           containing the internal forces 
+                           obtained for each element 
+                           for the combinations analyzed and the
+                           controller to use for the checking.
+    :param analysis:       analysis to use.
     :param controller:     object that controls limit state in elements.
     :param outputFileName: base name of output file (extensions .py and .tex)
     '''
+    intForcCombFileName= limitStateData.getInternalForcesFileName()
+    controller= limitStateData.controller
     meanCFs= -1.0 
     if(controller):
       self.build(intForcCombFileName,controller,False)

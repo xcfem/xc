@@ -69,7 +69,11 @@ class RCMaterialDistribution(object):
   def getSectionNamesForElement(self,tagElem):
     '''Returns the section names for the element which tag is being passed
        as a parameter.'''
-    return self.sectionDistribution[tagElem]
+    if tagElem in self.sectionDistribution.keys():
+      return self.sectionDistribution[tagElem]
+    else:
+      lmsg.error("element with tag: "+str(tagElem)+" not found.")
+      return None
 
   def getSectionDefinition(self,sectionName):
     '''Returns the section definition which has the name being passed
@@ -81,8 +85,11 @@ class RCMaterialDistribution(object):
        as a parameter.'''
     retval= []
     sectionNames= self.getSectionNamesForElement(tagElem)
-    for s in sectionNames:
-      retval.append(self.sectionDefinition.mapSections[s])
+    if(sectionNames):
+      for s in sectionNames:
+        retval.append(self.sectionDefinition.mapSections[s])
+    else:
+      lmsg.error("section names for element with tag: "+str(tagElem)+" not found.")
     return retval
   
   def dump(self):
@@ -97,12 +104,14 @@ class RCMaterialDistribution(object):
       self.sectionDefinition= pickle.load(f)
     f.close()
 
-  def runChecking(self,intForcCombFileName,outputFileName, matDiagType,limitStateController,threeDim= True):
+  def runChecking(self,limitStateData,outputFileName, matDiagType,threeDim= True):
     '''Creates the phantom model and runs the verification on it.
 
-    :param intForcCombFileName: name of the file containing the forces
-                                and bending moments obtained for each 
-                                element for the combinations analyzed
+    :param limitStateData: object that contains the name of the file
+                           containing the internal forces 
+                           obtained for each element 
+                           for the combinations analyzed and the
+                           controller to use for the checking.
     :param outputFileName:  name of the output file containing the results 
                             of the verification 
     :param limitStateController: object that controls the limit state on elements.
@@ -116,34 +125,38 @@ class RCMaterialDistribution(object):
       self.sectionDefinition.calcInteractionDiagrams(preprocessor,matDiagType,'NMy')
     analysis= predefined_solutions.simple_static_linear(feProblem)
     phantomModel= phm.PhantomModel(preprocessor,self)
-    result= phantomModel.runChecking(intForcCombFileName,analysis,limitStateController,outputFileName)
+    result= phantomModel.runChecking(limitStateData,analysis,outputFileName)
     return (feProblem, result)
 
-  def internalForcesVerification3D(self,intForcCombFileName,outputFileName, matDiagType,limitStateController):
+  def internalForcesVerification3D(self,limitStateData,outputFileName, matDiagType):
     '''Limit state verification based on internal force (Fx,Fy,Fz,Mx,My,Mz) values.
 
-    :param intForcCombFileName: name of the file containing the forces
-                                and bending moments obtained for each 
-                                element for the combinations analyzed
+    :param limitStateData: object that contains the name of the file
+                           containing the internal forces 
+                           obtained for each element 
+                           for the combinations analyzed and the
+                           controller to use for the checking.
     :param outputFileName:  name of the output file containing the results 
                             of the verification 
     :param limitStateController: object that controls the limit state on elements.
     '''
-    (tmp, retval)= self.runChecking(intForcCombFileName,outputFileName, matDiagType,limitStateController,True)
+    (tmp, retval)= self.runChecking(limitStateData, outputFileName, matDiagType,True)
     tmp.clearAll() #Free memory.
     return retval
 
-  def internalForcesVerification2D(self,intForcCombFileName,outputFileName, matDiagType,limitStateController):
+  def internalForcesVerification2D(self,limitStateData,outputFileName, matDiagType):
     '''Limit state verification based on internal force (Fx,Fy,Mz) values.
 
-    :param intForcCombFileName: name of the file containing the forces
-                                and bending moments obtained for each 
-                                element for the combinations analyzed
+    :param limitStateData: object that contains the name of the file
+                           containing the internal forces 
+                           obtained for each element 
+                           for the combinations analyzed and the
+                           controller to use for the checking.
     :param outputFileName:  name of the output file containing the results 
                             of the verification 
     :param limitStateController: object that controls the limit state on elements.
     '''
-    (tmp, retval)= self.runChecking(intForcCombFileName,outputFileName, matDiagType,limitStateController,False)
+    (tmp, retval)= self.runChecking(limitStateData,outputFileName, matDiagType,False)
     tmp.clearAll() #Free memory.
     return retval
 

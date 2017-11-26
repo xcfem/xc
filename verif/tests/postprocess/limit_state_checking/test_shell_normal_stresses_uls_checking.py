@@ -10,6 +10,7 @@ from postprocess import RC_material_distribution
 from materials.sections import RCsectionsContainer as sc
 from solution import predefined_solutions
 from materials.sia262 import SIA262_limit_state_checking #Change SIA262->EHE
+from postprocess import limit_state_data as lsd
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
 __copyright__= "Copyright 2015, LCPT and AOO"
@@ -20,13 +21,6 @@ __email__= "l.pereztato@gmail.com"
 feProblem= xc.FEProblem()
 feProblem.logFileName= "/tmp/borrar.log" # Don't pring warnings
 feProblem.errFileName= "/tmp/borrar.err" # Ignore warning messagess about maximum error in computation of the interaction diagram.
-
-import os
-pth= os.path.dirname(__file__)
-#print "pth= ", pth
-if(not pth):
-  pth= "."
-intForcCombFileName= pth+"/shell_internal_forces.csv"
 
 
 elementTags= [2524,2527]
@@ -62,9 +56,18 @@ deckSections.lstRCSects[0].negatvRebarRows= [defSimpleRCSection.MainReinfLayer(r
 sections.append(deckSections)
 
 
+import os
+pth= os.path.dirname(__file__)
+#print "pth= ", pth
+if(not pth):
+  pth= "."
 
-controller= SIA262_limit_state_checking.BiaxialBendingNormalStressController('ULS_normalStress')
-meanFCs= reinfConcreteSections.internalForcesVerification3D(intForcCombFileName,"/tmp/ppTN", "d",controller)
+#Checking normal stresses.
+lsd.normalStressesResistance.controller= SIA262_limit_state_checking.BiaxialBendingNormalStressController('ULS_normalStress')
+lsd.LimitStateData.internal_forces_results_directory= pth+'/'
+#intForceFileName= lsd.normalStressesResistance.getInternalForcesFileName()
+
+meanFCs= reinfConcreteSections.internalForcesVerification3D(lsd.normalStressesResistance,"/tmp/ppTN", "d")
 
 
 #print "mean FCs: ", meanFCs
