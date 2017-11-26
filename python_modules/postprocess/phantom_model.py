@@ -125,7 +125,7 @@ class PhantomModel(object):
     elements= self.preprocessor.getElementLoader
     constraints= self.preprocessor.getConstraintLoader
     # Definimos materiales
-    fkSection= sccFICT.defSeccShElastica3d(self.preprocessor,matSccFICT) # The problem is isostatic, so the section is not a matter
+    fkSection= sccFICT.defElasticShearSection3d(self.preprocessor,matSccFICT) # The problem is isostatic, so the section is not a matter
     elements.dimElem= 1
     self.tagsNodesToLoad= defaultdict(list)
     if(fakeSection):

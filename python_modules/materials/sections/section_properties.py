@@ -92,7 +92,7 @@ class SectionProperties(object):
     '''
     return 2*self.getPlasticSectionModulusZ()*fy
 
-  def defSeccElastica3d(self,preprocessor,material):
+  def defElasticSection3d(self,preprocessor,material):
     '''elastic section appropiate for 3D beam analysis
 
     :param  preprocessor: preprocessor name
@@ -104,7 +104,7 @@ class SectionProperties(object):
     else:
       retval= typical_materials.defElasticSection3d(preprocessor,self.sectionName,self.A(),material.E,material.G(),self.Iz(),self.Iy(),self.J())
       return retval
-  def defSeccShElastica3d(self,preprocessor,material):
+  def defElasticShearSection3d(self,preprocessor,material):
     '''elastic section appropiate for 3D beam analysis, including shear deformations
 
     :param  preprocessor: preprocessor name
@@ -116,11 +116,12 @@ class SectionProperties(object):
     else:
       retval= typical_materials.defElasticShearSection3d(preprocessor,self.sectionName,self.A(),material.E,material.G(),self.Iz(),self.Iy(),self.J(),self.alphaY())
       return retval
-  def defSeccElastica2d(self,preprocessor,material):
+    
+  def defElasticSection2d(self,preprocessor,material):
     '''elastic section appropiate for 2D beam analysis, including shear deformations
 
-    :param  preprocessor: preprocessor name
-    :param material:      material (for which E is the Young's modulus)
+    :param preprocessor: preprocessor name
+    :param material:     material constitutive model (for which E is the Young's modulus)
     '''
 
     materiales= preprocessor.getMaterialLoader
@@ -129,7 +130,7 @@ class SectionProperties(object):
     else:
       retval= typical_materials.defElasticSection2d(preprocessor,self.sectionName,self.A(),material.E,self.Iz())
       return retval
-  def defSeccShElastica2d(self,preprocessor,material):
+  def defElasticShearSection2d(self,preprocessor,material):
     '''elastic section appropiate for 2D beam analysis, including shear deformations
 
     :param  preprocessor: preprocessor name

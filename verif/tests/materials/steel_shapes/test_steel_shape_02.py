@@ -45,7 +45,7 @@ nod= nodes.newNodeXYZ(L,0.0,0.0)
 
 # Geometric transformations
 lin= modelSpace.newLinearCrdTransf("lin",xc.Vector([0,0,1]))
-shape= HE400B.defSeccShElastica3d(preprocessor,matHE400B)
+shape= HE400B.defElasticShearSection3d(preprocessor,matHE400B)
 
 # Elements definition
 elements= preprocessor.getElementLoader

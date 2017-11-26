@@ -26,7 +26,7 @@ scc10x20=  section_properties.RectangularSection(name="rectang",b=.10,h=.20)
 matscc10x20=typical_materials.MaterialData(name='mtrectang',E=2.1e6,nu=0.3,rho=2500)
 
 # Materials definition
-matPoteau= scc10x20.defSeccElastica2d(preprocessor,matscc10x20) 
+matPoteau= scc10x20.defElasticSection2d(preprocessor,matscc10x20) 
 elemZLS= scc2d_testing_bench.sectionModel(preprocessor, scc10x20.sectionName)
 
 # Constraints
