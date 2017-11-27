@@ -127,7 +127,7 @@ secHAParamsCortante= EHE_limit_state_checking.ShearController('ULS_shear')
 elements= preprocessor.getElementLoader
 ele1= elements.getElement(1)
 scc= ele1.getSection()
-secHAParamsCortante.calcVuEHE08(preprocessor, scc,"",EHE_materials.HA25,EHE_materials.B500S,NDato,math.sqrt(MyDato**2+MzDato**2),0,0)
+secHAParamsCortante.calcVuEHE08(scc,"",EHE_materials.HA25,EHE_materials.B500S,NDato,math.sqrt(MyDato**2+MzDato**2),0,0)
 
 
 Vu2A= secHAParamsCortante.Vu2
@@ -144,7 +144,7 @@ if(analOk!=0):
   exit()
 
 
-secHAParamsCortante.calcVuEHE08(preprocessor, scc,"",EHE_materials.HA25,EHE_materials.B500S, 0,0,0,0)
+secHAParamsCortante.calcVuEHE08(scc,"",EHE_materials.HA25,EHE_materials.B500S, 0,0,0,0)
 
 Vu2B= secHAParamsCortante.Vu2
 
@@ -160,7 +160,7 @@ if(analOk!=0):
   exit()
 
 
-secHAParamsCortante.calcVuEHE08(preprocessor, scc,"",EHE_materials.HA25,EHE_materials.B500S, 0,0,0,0)
+secHAParamsCortante.calcVuEHE08(scc,"",EHE_materials.HA25,EHE_materials.B500S, 0,0,0,0)
 
 Vu2C= secHAParamsCortante.Vu2
 

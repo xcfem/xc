@@ -143,7 +143,7 @@ NTmp= N
 MTmp= math.sqrt((My)**2+(Mz)**2)
 VTmp= math.sqrt((Vy)**2+(Vz)**2)
 TTmp= scc.getStressResultantComponent("Mx")
-secHAParamsCortante.calcVuEHE08(preprocessor, scc,secHAParamsTorsion,concr,B500S,NTmp,MTmp,VTmp,TTmp)
+secHAParamsCortante.calcVuEHE08(scc,secHAParamsTorsion,concr,B500S,NTmp,MTmp,VTmp,TTmp)
 
 
 
