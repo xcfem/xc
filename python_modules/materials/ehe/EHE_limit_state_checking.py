@@ -682,7 +682,7 @@ def getVuEHE08SiAt(fck,fcv,fcd,fyd,gammaC,Ncd,Ac,b0,d,z,AsPas,AsAct,AsTrsv, alph
 class ShearController(lscb.LimitStateControllerBase):
   '''Shear control according to EHE-08.'''
   def __init__(self,limitStateLabel):
-    super(ShearController,self).__init__(limitStateLabel)
+    super(ShearController,self).__init__(limitStateLabel,fakeSection= False)
     self.concreteFibersSetName= "concrete" #Name of the concrete fibers set.
     self.rebarFibersSetName= "reinforcement" #Name of the rebar fibers set.
     self.isBending= False # True if there is ar bending moment.
