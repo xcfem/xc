@@ -95,7 +95,7 @@ class PhantomModel(object):
     nB= self.preprocessor.getNodeLoader.newNodeXYZ(0,0,0)
     self.modelSpace.fixNode000_000(nA.tag)
     if(not fakeSection):
-      elements.defaultMaterial= sectionName
+      self.preprocessor.getElementLoader.defaultMaterial= sectionName
     phantomElement= self.preprocessor.getElementLoader.newElement("ZeroLengthSection",xc.ID([nA.tag,nB.tag]))
     phantomElement.setProp("idElem", idElem) #Element to check
     phantomElement.setProp("idSection", sectionName) #Section to check
@@ -106,7 +106,7 @@ class PhantomModel(object):
     return phantomElement
       
 
-  def createElements(self,intForcCombFileName,controller,fakeSection= True):
+  def createElements(self,intForcCombFileName,controller):
     '''Creates the phantom model elements from the data read on the file.
     
     :param   intForcCombFileName: name of the file containing the internal
@@ -114,8 +114,6 @@ class PhantomModel(object):
                                   the combinations analyzed
     :param   controller:   object that takes the internal forces and the
                            section definition and checks the limit state.
-    :param   fakeSection:  true if a fiber section model of the section 
-                           is not needed for control.
     '''
     self.setupForElementsAndCombinations(intForcCombFileName)
 
@@ -128,7 +126,7 @@ class PhantomModel(object):
     fkSection= sccFICT.defElasticShearSection3d(self.preprocessor,matSccFICT) # The problem is isostatic, so the section is not a matter
     elements.dimElem= 1
     self.tagsNodesToLoad= defaultdict(list)
-    if(fakeSection):
+    if(controller.fakeSection):
       elements.defaultMaterial= sccFICT.sectionName
     for tagElem in self.elementTags:
       elementSectionNames= self.sectionsDistribution.getSectionNamesForElement(tagElem)
@@ -142,7 +140,7 @@ class PhantomModel(object):
           diagInt= None
           if(mapInteractionDiagrams != None):
             diagInt= mapInteractionDiagrams[sectionName]
-          phantomElem= self.createPhantomElement(tagElem,sectionName,elementSectionDefinitions[i],i+1,diagInt,fakeSection)
+          phantomElem= self.createPhantomElement(tagElem,sectionName,elementSectionDefinitions[i],i+1,diagInt,controller.fakeSection)
           retval.append(phantomElem)
           self.tagsNodesToLoad[tagElem].append(phantomElem.getNodes[1].tag) #Node to load
                                                                           #for this element
@@ -178,7 +176,7 @@ class PhantomModel(object):
         nodeTag= self.tagsNodesToLoad[iforce.tagElem][iforce.idSection]
         lp.newNodalLoad(nodeTag,xc.Vector(iforce.getComponents()))
 
-  def build(self,intForcCombFileName,controller,fakeSection= True):
+  def build(self,intForcCombFileName,controller):
     '''Builds the phantom model from the data read from the file.
 
     :param intForcCombFileName: name of the file containing the forces and 
@@ -186,8 +184,6 @@ class PhantomModel(object):
                            the combinations analyzed
     :param controller:     object that takes the internal forces and the
                            section definition and checks the limit state.
-    :param fakeSection:    true if a fiber section model of the section is not 
-                           needed for control.
     '''
     retval= self.createElements(intForcCombFileName,controller)
     self.createLoads(intForcCombFileName,controller)
@@ -233,7 +229,7 @@ class PhantomModel(object):
     controller= limitStateData.controller
     meanCFs= -1.0 
     if(controller):
-      self.build(intForcCombFileName,controller,False)
+      self.build(intForcCombFileName,controller)
       self.check(analysis,controller)
       meanCFs= self.write(controller,outputFileName)
     else:
