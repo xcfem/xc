@@ -898,8 +898,9 @@ class ShearController(lscb.LimitStateControllerBase):
         FCtmp= VTmp/VuTmp
       else:
         FCtmp= 1e99
-      if(FCtmp>=e.getProp("ULS_shear").CF):
-        e.setProp("ULS_shear",cv.RCShearControlVars(idSection,nmbComb,FCtmp,NTmp,MyTmp,MzTmp,Mu,VyTmp,VzTmp,theta,self.Vcu,self.Vsu,VuTmp)) # Worst case
+      Mu= 0.0 #Apparently EHE doesn't use Mu
+      if(FCtmp>=e.getProp(self.limitStateLabel).CF):
+        e.setProp(self.limitStateLabel,cv.RCShearControlVars(idSection,nmbComb,FCtmp,NTmp,MyTmp,MzTmp,Mu,VyTmp,VzTmp,theta,self.Vcu,self.Vsu,VuTmp)) # Worst case
 
 
 class CrackControl(lscb.CrackControlBaseParameters):
