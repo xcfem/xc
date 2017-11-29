@@ -67,7 +67,15 @@
 #include <solution/analysis/model/FE_EleIter.h>
 #include <solution/analysis/model/DOF_GrpIter.h>
 
-// constructs the XC::Graph
+//! @brief Constructor.
+//!
+//! The constructor is responsible for constructing the graph given {\em
+//! theModel}. It creates the vertices of the graph, one for every
+//! equation  (each DOF that has not been constrained out by the
+//! constraint handler)  in the model and adds all edges based on the
+//! FE\_Element connectivity. For this reason the model must be fully
+//! populated with the DOF\_Group and FE\_Element objects before
+// the constructor is called.
 XC::DOF_GroupGraph::DOF_GroupGraph(const AnalysisModel &theModel)
   :ModelGraph(theModel.getNumDOF_Groups()+START_VERTEX_NUM,theModel)
   {

@@ -71,7 +71,14 @@ class AnalysisModel;
 
 //! @ingroup Graph
 //
-//! @brief Degrees of freedom group.
+//! @brief Degrees of freedom group graph.
+//!
+//! DOF\_GroupGraph Graph subclass. It is a graph of the DOF\_Group
+//! connectivity of the analysis model. It is utilised by the
+//! DOF\_Numberer to assign equation numbers to the individual DOFs in the
+//! DOF\_Groups of the model. It is a subtype of
+//! ArrayGraph, though it could just as easily be a subtype of any other
+//! type of Graph subclass that fully implements the graph interface. 
 class DOF_GroupGraph: public ModelGraph
   {
   protected:
