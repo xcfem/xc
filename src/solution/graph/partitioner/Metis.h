@@ -70,20 +70,79 @@
 namespace XC {
 //! @ingroup Graph
 //
-//! @brief Metis is a type of GraphPartitioner which uses 'METIS - Unstructured
-//! Graph Partitioning And Sparse Matrix Ordering System', developed by
-//! G. Karypis and V. Kumar at the University of Minnesota. The metis
-//! files are found in metis-2.0 which were downloaded.
+//! @brief Metis is a type of GraphPartitioner which uses METIS library.
+//!
+//! The Metis graph partitioner calls procedures defined in the METIS
+//! library to partition the graph. METIS is currently being developed by
+//! G.~Karypis and V.~Kumar at the University of Minnesota. At the present
+//! time the Graph to be partitioned MUST have the vertices
+//! labeled \f$0\f$ through \f$numVertex-1\f$.
+
+//! The METIS library uses two integer arrays to represent the graph, {\em
+//! xadj} and \p adjncy. \f$xadj(i)\f$ stores the location in \p adjncy
+//! of the start of the \f$i\f$'th Vertices adjacent Vertices. \p adjncy
+//! contains the tags of all the adjacent vertices. For example, the graph
+//! which is represented by the following matrix \f$A\f$:
+//! 'METIS - Unstructured Graph Partitioning And Sparse Matrix Ordering
+//! System', developed by G. Karypis and V. Kumar at the University of
+//! Minnesota. The metis files are found in metis-2.0 which were downloaded.
+//!
+// \f[
+// \begin{displaymath}
+// A = \left[
+//   \begin{array}{ccccc}
+//   1 & 0 & 1 & 1 & 0
+//   1 & 1 & 0 & 0 & 0
+//   0 & 1 & 1 & 0 & 0
+//   0 & 0 & 0 & 1 & 1
+//   1 & 1 & 0 & 0 & 1
+//   \end{array}
+// \right] 
+// \end{displaymath}
+// \f]
+// 
+//  is represented by:
+// 
+// \f[
+// \begin{displaymath}
+// \f$\f$
+//  xadj =
+// \left[
+// \begin{array}{cccccccccccccc}
+// 0 & 2 & 3 & 4 & 5 & 7
+// \end{array}
+// \right] 
+// \f$\f$
+// \end{displaymath}
+// \f]
+// 
+//  and
+// 
+// \f[
+// \begin{displaymath}
+// \f$\f$
+//  adjncy =
+// \left[
+// \begin{array}{cccccccccccccc}
+// 2 & 3 & 0 & 1 & 4 & 0 & 1
+// \end{array}
+// \right] 
+// \f$\f$
+// \end{displaymath}
+// \f]
+//
+// \noindent note that there is no space allocated for the diagonal
+// components.
 class Metis : public GraphPartitioner, public GraphNumberer
   {
   private:
     bool checkOptions(void);
     
-    int myPtype ; 	// package type: 
+    int myPtype; 	//!< package type: 
                         //	pmetis = 1
                         //	kmetis = 2
 
-    int myMtype;     	// type of matching scheme: 
+    int myMtype;     	//!< type of matching scheme: 
 			//	random = 1
 			//  	heavy edge = 2
 			//    	light edge = 3
@@ -93,11 +152,11 @@ class Metis : public GraphPartitioner, public GraphNumberer
 			//	sorted heavy edge =21
 			// 	sorted modified heavy edge = 51
    
-   int myCoarsenTo; 	// the number of vertices the graph is coarsened down to
+   int myCoarsenTo; 	//!< the number of vertices the graph is coarsened down to
                         //   	if pmetis default is 100
 			//	if kmetis default is 2000
 	
-    int myRtype;     	// type of refinement policy:  
+    int myRtype;     	//!< type of refinement policy:  
 			//	greedy = 1
 			//	kernighan-lin = 2
 			//    	combo greedy and K-L = 3
@@ -106,7 +165,7 @@ class Metis : public GraphPartitioner, public GraphNumberer
 			//	combo of boundary greedy and boundary K-L = 13,
 			//    	no-refinement = 20
 
-    int myIPtype; 	// type of bisection algo:  
+    int myIPtype; 	//!< type of bisection algo:  
 	                //    	graph growing partition = 1,
 			//    	greedy graph growing partition = 2,
 			//    	spectral bisection = 3,
@@ -114,7 +173,7 @@ class Metis : public GraphPartitioner, public GraphNumberer
 	
     bool defaultOptions;			    
     
-    int   numPartitions; // needed if to be used as a numberer
+    int numPartitions; //!< needed if to be used as a numberer
     ID theRefResult;
 
     Metis(int numParts =1);
