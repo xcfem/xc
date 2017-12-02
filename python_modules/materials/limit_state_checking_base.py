@@ -10,6 +10,7 @@ __email__= "l.pereztato@gmail.com"
 from miscUtils import LogMessages as lmsg
 # from materials.sections.fiber_section import createFiberSets
 from materials.sections.fiber_section import fiberUtils
+from solution import predefined_solutions
 import math
 
 class LimitStateControllerBase(object):
@@ -27,6 +28,8 @@ class LimitStateControllerBase(object):
     '''
     self.limitStateLabel= limitStateLabel
     self.fakeSection= fakeSection
+    #Linear analysis by default.
+    self.analysisToPerform= predefined_solutions.simple_static_linear
 
   def check(self,elements,nmbComb):
     '''Crack control.'''
