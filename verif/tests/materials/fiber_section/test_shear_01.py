@@ -173,7 +173,7 @@ Vu2ATeor= 117.052e3
 ratio1= ((Vu2A-Vu2ATeor)/Vu2ATeor)
 Vu2BTeor= 90906.4
 ratio2= ((Vu2B-Vu2BTeor)/Vu2BTeor)
-Vu2CTeor= 127386
+Vu2CTeor= 98923
 ratio3= ((Vu2C-Vu2CTeor)/Vu2CTeor)
 
 
