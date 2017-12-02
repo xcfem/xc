@@ -755,9 +755,9 @@ class ShearController(lscb.LimitStateControllerBase):
       tensionedReinforcement= rcSets.tensionFibers
       self.isBending= scc.isSubjectedToBending(0.1)
       self.tensionedRebars.number= rcSets.getNumTensionRebars()
+      self.E0= rcSets.getConcreteInitialTangent()
       if(self.isBending):
         self.eps1= rcSets.getMaxConcreteStrain()
-        self.E0= rcSets.getConcreteInitialTangent()
         self.concreteAxialForce= rcSets.getConcreteCompression()
         self.strutWidth= scc.getCompressedStrutWidth() # b0
         if((self.E0*self.eps1)<self.fctdH): # Non cracked section
@@ -771,15 +771,16 @@ class ShearController(lscb.LimitStateControllerBase):
           else:
             self.tensionedRebarsArea= 0.0
           self.Vu2= getVu2EHE08NoAtSiFis(self.fckH,self.fcdH,self.gammaC,self.concreteAxialForce,self.concreteArea,self.strutWidth,self.depthUtil,self.tensionedRebarsArea,0.0)
-        self.Vcu= self.Vu2
         self.Vsu= 0.0
         self.Vu1= -1.0
-        self.Vu= self.Vu2
       else: # Uncracked section
         axis= scc.getInternalForcesAxis()
         self.I= scc.getFibers().getHomogenizedSectionIRelToLine(self.E0,axis)
         self.S= scc.getFibers().getSPosHomogenizedSection(self.E0,geom.HalfPlane2d(axis))
+        self.strutWidth= scc.getCompressedStrutWidth() # b0
         self.Vu2= getVu2EHE08NoAtNoFis(self.fctdH,self.I,self.S,self.strutWidth,self.alphaL,self.concreteAxialForce,self.concreteArea)
+      self.Vcu= self.Vu2
+      self.Vu= self.Vu2
 
   def calcVuEHE08SiAt(self, scc, paramsTorsion, concrete, reinfSteel, Nd, Md, Vd, Td):
     ''' Compute the shear strength at failure WITH shear reinforcement.
@@ -1016,7 +1017,7 @@ class CrackControl(lscb.CrackControlBaseParameters):
 
   def check(self,elements,nmbComb):
     ''' Crack control of concrete sections.'''
-    print "Postprocessing combination: ",nmbComb,"\n"
+    lmsg.log("Postprocessing combination: "+nmbComb+"\n")
 
     defParamsFisuracion("secHAParamsFisuracion")
     materiales= preprocessor.getMaterialLoader

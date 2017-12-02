@@ -123,9 +123,9 @@ class RCMaterialDistribution(object):
       self.sectionDefinition.calcInteractionDiagrams(preprocessor,matDiagType)
     else:
       self.sectionDefinition.calcInteractionDiagrams(preprocessor,matDiagType,'NMy')
-    analysis= predefined_solutions.simple_static_linear(feProblem)
+    limitStateData.controller.analysis= limitStateData.controller.analysisToPerform(feProblem)
     phantomModel= phm.PhantomModel(preprocessor,self)
-    result= phantomModel.runChecking(limitStateData,analysis,outputFileName)
+    result= phantomModel.runChecking(limitStateData,outputFileName)
     return (feProblem, result)
 
   def internalForcesVerification3D(self,limitStateData,outputFileName, matDiagType):

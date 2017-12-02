@@ -189,7 +189,7 @@ class PhantomModel(object):
     self.createLoads(intForcCombFileName,controller)
     return retval
 
-  def check(self, analysis, controller):
+  def check(self, controller):
     '''Runs the analysis (linear) and checking of combinations passed as
     parameters
 
@@ -202,7 +202,7 @@ class PhantomModel(object):
     for key in combs.getKeys():
       comb= combs[key]
       #print "Resolviendo para acción: ",key
-      predefined_solutions.resuelveComb(self.preprocessor,key,analysis,1)
+      predefined_solutions.resuelveComb(self.preprocessor,key,controller.analysis,1)
       controller.check(elements,key)
 
   def write(self,controller,outputFileName):
@@ -213,7 +213,7 @@ class PhantomModel(object):
     '''
     return cv.writeControlVarsFromElements(controller.limitStateLabel,self.preprocessor,outputFileName)
 
-  def runChecking(self,limitStateData,analysis,outputFileName):
+  def runChecking(self,limitStateData,outputFileName):
     '''Run the analysis, check the results and write them into a file
 
     :param limitStateData: object that contains the name of the file
@@ -230,7 +230,7 @@ class PhantomModel(object):
     meanCFs= -1.0 
     if(controller):
       self.build(intForcCombFileName,controller)
-      self.check(analysis,controller)
+      self.check(controller)
       meanCFs= self.write(controller,outputFileName)
     else:
       lmsg.error('PhantomModel::runChecking controller not defined.')

@@ -5,7 +5,6 @@ import xc_base
 import geom
 from model import predefined_spaces
 from materials import typical_materials
-from solution import predefined_solutions
 from model.sets import sets_mng 
 
 '''Generation of boundary conditions based on springs 
