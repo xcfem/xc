@@ -79,7 +79,9 @@
 #include <domain/constraints/MFreedom_ConstraintIter.h>
 #include <domain/constraints/MRMFreedom_ConstraintIter.h>
 
-
+//! @brief Constructor.
+//!
+//! @param owr: object owner.
 XC::PlainNumberer::PlainNumberer(ModelWrapper *owr) 
   :DOF_Numberer(owr,NUMBERER_TAG_PlainNumberer) {}
 
@@ -88,9 +90,19 @@ XC::DOF_Numberer *XC::PlainNumberer::getCopy(void) const
   { return new PlainNumberer(*this);  }
 
 
-//! @brief Method to number the unnumbered DOFs in the DOF Groups. It does so
-//!        on a first come fist serve basis, first assigning all DOFs with a -2
-//!        a number, then all DOFs with a -3 a number.
+//! @brief Method to number the unnumbered DOFs in the DOF Groups.
+//!
+//! The PlainNumberer will twice obtain the DOF\_GroupIter from the
+//! AnalysisModel. It iterates twice through the DOF\_Groups first
+//! assigning the dofs with eqn numbers assigned -2 a number and 
+//! then on the next pass the dofs assigned -3. The PlainNumberer then
+//! invokes setID() on each FE\_Element in the
+//! AnalysisModel. Finally it invokes {\em setEqnNum(numEqn)} on the
+//! AnalyisModel. Returns a positive integer equal to the last equation
+//! number set if successful, a negative number if not; the value of 
+//! which depends on the type of the PlainNumberer. A PlainNumberer will
+//! not use the {\em lastDOF\_Group} integer, if one is supplied a warning
+//! message is printed. 
 int XC::PlainNumberer::numberDOF(int lastDOF)
   {
     int eqnNumber= 0; // start equation number= 0
@@ -102,15 +114,15 @@ int XC::PlainNumberer::numberDOF(int lastDOF)
 
     if(theModel == 0 || theDomain == 0)
       {
-        std::cerr << "WARNING PlainNumberer::numberDOF(int) -";
-        std::cerr << " - no AnalysisModel.\n";
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; WARNING: no AnalysisModel.\n";
         return -1;
       }
     
     if(lastDOF != -1)
       {
-        std::cerr << "WARNING PlainNumberer::numberDOF(int lastDOF):";
-        std::cerr << " does not use the lastDOF as requested\n";
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; WARNING: does not use the lastDOF as requested.\n";
       }
     
     // iterate throgh  the DOFs first time setting -2 values
@@ -182,7 +194,10 @@ int XC::PlainNumberer::numberDOF(int lastDOF)
             MRMFreedom_Constraint *mrmpPtr;
             while((mrmpPtr= theMRMPs()) != 0 )
               {
-                std::cerr << "PlainNumberer::numberDOF(int) write code loop through the MRMFreedom_Constraints." << std::endl;
+                std::cerr << getClassName() << "::" << __FUNCTION__
+		          << "; write code loop through the "
+		          << theDomain->getConstraints().getClassName()
+			  << std::endl;
               }
           }        
       }
@@ -201,14 +216,18 @@ int XC::PlainNumberer::numberDOF(int lastDOF)
     return numEqn;
   }
 
-
+//! @brief Does nothing.
 int XC::PlainNumberer::sendSelf(CommParameters &cp)
   { return 0; }
 
+//! @brief Does nothing.
 int XC::PlainNumberer::recvSelf(const CommParameters &cp)
   { return 0; }
 
 
+//! The method is identical to that outlined above. A PlainNumberer will
+//! not use the {\em lastDOF\_Groups} ID, if this method is invoked a warning
+//! message is printed. 
 int XC::PlainNumberer::numberDOF(ID &lastDOFs)
   {
     int eqnNumber= 0; // start equation number= 0
