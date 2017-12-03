@@ -89,7 +89,8 @@ void XC::DOF_Numberer::alloc(const std::string &str)
     else if(str=="simple")
       theGraphNumberer=new SimpleNumberer();
     else
-      std::cerr << "DOF_Numberer::alloc, numerator type: '" << str
+      std::cerr << getClassName() << "::" << __FUNCTION__
+	        << "; numerator type: '" << str
                 << "' unknown." << std::endl;
   }
 
@@ -109,12 +110,13 @@ void XC::DOF_Numberer::libera(void)
   }
 
 //! @brief Constructor
+//!
+//! @param owr: pointer to the ModelWrapper that ows this object.
+//! @param clsTag: class indentifier. 
 XC::DOF_Numberer::DOF_Numberer(ModelWrapper *owr, int clsTag) 
   :MovableObject(clsTag), EntCmd(owr), theGraphNumberer(nullptr) {}
 
-XC::DOF_Numberer::DOF_Numberer(ModelWrapper *owr)
-  :MovableObject(NUMBERER_TAG_DOF_Numberer), EntCmd(owr), theGraphNumberer(nullptr) {}    
-
+//! @brief Copy constructor.
 XC::DOF_Numberer::DOF_Numberer(const DOF_Numberer &otro)
   : MovableObject(otro), EntCmd(otro), theGraphNumberer(nullptr)
   {
@@ -145,6 +147,36 @@ XC::DOF_Numberer::~DOF_Numberer(void)
 XC::DOF_Numberer *XC::DOF_Numberer::getCopy(void) const
   { return new DOF_Numberer(*this);  }
 
+//! @brief Invoked to assign the equation numbers to the dofs.
+//! 
+//! Invoked to assign the equation numbers to the dofs in the DOF\_Groups
+//! and the FE\_Elements, ensuring that the dof's in the DOF\_Group whose
+//! tag is given by {\em lastDOF\_Group} are numbered last in a \f$-2\f$ or
+//! \f$-3\f$ group. The initial values of these equation numbers have been set
+//! by the ConstraintHandler object to be \f$-1\f$, \f$-2\f$ or \f$-3\f$, all dofs
+//! with a \f$-3\f$ are to be assigned higher equation numbers than those
+//! assigned a \f$-2\f$. To set the \p numEqn in the AnalysisModel and to
+//! return the number of equations \p numEqn if successful, a negative
+//! number if not.  
+//
+//! This base class performs the ordering by getting an ID containing the
+//! ordered DOF\_Group tags, obtained by invoking {\em
+//! number(theModel-\f$>\f$getDOFGroupGraph(), lastDOF\_Group)} on the
+//! GraphNumberer, \p theGraphNumberer, passed in the constructor. The
+//! base class then makes two passes through the DOF\_Group objects in the
+//! AnalysisModel by looping through this ID; in the first pass assigning the
+//! equation numbers incrementally to any degree-of-freedom marked with a
+//! \f$-2\f$ and in the second pass assigning the equation numbers
+//! incrementally to any degree-of-freedom marked with a \f$-3\f$. It then
+//! iterates through the FE\_Elements in the AnalsisModel invoking {\em
+//! setID()} on each object. Finally {\em setNumEqn(numEqn)} is invoked on
+//! the AnalysisModel. Return \p numEqn if successful, a warning
+//! message and a negative number is returned if an error occurs; \f$-1\f$ is
+//! returned if setLinks() has not yet been invoked, \f$-2\f$ if no
+//! GraphNumberer was passed in the constructor, \f$-3\f$ if the
+//! number of {\em DOF\_Groups} in AnalysisModel and size of ID returned
+//! are not the same, and a \f$-4\f$ if there is no DOF\_Group corresponding
+//! to one of the tags given in the ID.
 int XC::DOF_Numberer::numberDOF(int lastDOF_Group) 
   {
     // check if we have a model and a numberer
@@ -152,17 +184,19 @@ int XC::DOF_Numberer::numberDOF(int lastDOF_Group)
     AnalysisModel *am= getAnalysisModelPtr();
     if(am)
       theDomain= am->getDomainPtr();
-    if(theDomain == 0)
+    if(theDomain == nullptr)
       {
-        std::cerr << "WARNING DOF_Numberer::numberDOF - ";
-        std::cerr << "Pointers are not set\n";
+        std::cerr << getClassName() << "::" << __FUNCTION__
+	          << "; WARNING - "
+		  << "Pointers are not set\n";
         return -1;
       }
     
     if(!theGraphNumberer)
       {
-        std::cerr << "WARNING DOF_Numberer::numberDOF - ";
-        std::cerr << "subclasses must provide own implementation\n";
+        std::cerr << getClassName() << "::" << __FUNCTION__
+	          << "; WARNING - "
+		  << "subclasses must provide own implementation\n";
         return -2;
       }
 
@@ -176,8 +210,9 @@ int XC::DOF_Numberer::numberDOF(int lastDOF_Group)
     // we now iterate through the DOFs first time setting -2 values  
     if(orderedRefs.Size() != am->getNumDOF_Groups())
       {
-        std::cerr << "WARNING DOF_Numberer::numberDOF - "
-                  << "incompatible sizes; orderedRefs "
+        std::cerr << getClassName() << "::" << __FUNCTION__
+	          << "; WARNING - "
+		  << "incompatible sizes; orderedRefs "
                   << orderedRefs.Size() << " numDOF_Groups "
                   << am->getNumDOF_Groups() << std::endl;
         return -3;
@@ -199,8 +234,9 @@ int XC::DOF_Numberer::numberDOF(int lastDOF_Group)
           }
         else
           {
-            std::cerr << "WARNING DOF_Numberer::numberDOF - ";
-            std::cerr << "DOF_Group " << dofGroupTag << "not in AnalysisModel!\n";
+            std::cerr << getClassName() << "::" << __FUNCTION__
+	              << "; WARNING - DOF_Group "
+		      << dofGroupTag << "not in AnalysisModel!\n";
             result= -4;
           }
       }
@@ -267,7 +303,9 @@ int XC::DOF_Numberer::numberDOF(int lastDOF_Group)
             MRMFreedom_Constraint *mrmpPtr;
             while((mrmpPtr= theMRMPs()) != 0 )
               {
-	        std::cerr << "DOF_Numberer::numberDOF(int) code loop through the MRMFreedom_Constraints." << std::endl;
+	        std::cerr << getClassName() << "::" << __FUNCTION__
+		          << "; code loop through the MRMFreedom_Constraints."
+			  << std::endl;
               }
           }        
       }
@@ -291,6 +329,23 @@ int XC::DOF_Numberer::numberDOF(int lastDOF_Group)
   }
 
 
+//! @brief Invoked to assign the equation numbers to the dofs.
+//!
+//! Invoked to assign the equation numbers to the dofs in the DOF\_Groups
+//! and the FE\_Elements, ensuring that the dof's in the DOF\_Groups whose
+//! tag is given in {\em lastDOF\_Groups} are numbered last in a \f$-2\f$ or
+//! \f$-3\f$ group. The initial values of these equation numbers have been set
+//! by the ConstraintHandler object to be \f$-1\f$, \f$-2\f$ or \f$-3\f$, all dofs
+//! with a \f$-3\f$ are to be assigned higher equation numbers than those
+//! assigned a \f$-2\f$. To set the \p numEqn in the AnalysisModel and to
+//! return the number of equations \p numEqn if successful, a negative
+//! number if not.  
+//! 
+//! This method in the base class is almost identical to the one just
+//! described. The only difference is that the ID identifying the order of
+//! the DOF\_Groups is obtained by invoking {\em
+//! number(theModel-\f$>\f$getDOFGroupGraph(), lastDOF\_Groups)} on the
+//! GraphNumberer.
 int XC::DOF_Numberer::numberDOF(ID &lastDOFs) 
   {
     // check we have a model and a numberer
@@ -301,15 +356,15 @@ int XC::DOF_Numberer::numberDOF(ID &lastDOFs)
       theDomain= am->getDomainPtr();
     if(!theDomain)
       {
-        std::cerr << "WARNING XC::DOF_Numberer::numberDOF - ";
-        std::cerr << "Pointers are not set\n";
+        std::cerr << getClassName() << "::" << __FUNCTION__
+	          << "; WARNING - pointers are not set\n";
         return -1;
       }
     
-    if((theGraphNumberer == 0))
+    if((theGraphNumberer == nullptr))
       {
-        std::cerr << "WARNING XC::DOF_Numberer::numberDOF - ";
-        std::cerr << "subclasses must provide own implementation\n";
+        std::cerr << getClassName() << "::" << __FUNCTION__
+	          << "; WARNING - subclasses must provide own implementation\n";
         return -2;
       }
 
@@ -326,8 +381,8 @@ int XC::DOF_Numberer::numberDOF(ID &lastDOFs)
     int eqnNumber= 0;
     if(orderedRefs.Size() != am->getNumDOF_Groups())
       {
-        std::cerr << "WARNING XC::DOF_Numberer::numberDOF - ";
-        std::cerr << "Incompatable Sizes\n";
+        std::cerr << getClassName() << "::" << __FUNCTION__
+	          << "; WARNING - incompatable Sizes\n";
         return -3;
       }
 
@@ -339,8 +394,9 @@ int XC::DOF_Numberer::numberDOF(ID &lastDOFs)
         DOF_Group *dofGroupPtr= am->getDOF_GroupPtr(dofGroupTag);
         if(!dofGroupPtr)
           {
-            std::cerr << "WARNING XC::DOF_Numberer::numberDOF - ";
-            std::cerr << "DOF_Group " << dofGroupTag << "not in XC::AnalysisModel!\n";
+            std::cerr << getClassName() << "::" << __FUNCTION__
+	          << "; WARNING - DOF_Group "
+		      << dofGroupTag << "not in AnalysisModel!\n";
             result= -4;
           } 
         else
@@ -415,7 +471,9 @@ int XC::DOF_Numberer::numberDOF(ID &lastDOFs)
             MRMFreedom_Constraint *mrmpPtr;
             while((mrmpPtr= theMRMPs()) != 0 )
               {
-                 std::cerr << "DOF_Numberer::numberDOF(ID) code loop through the MRMFreedom_Constraints." << std::endl;
+		std::cerr << getClassName() << "::" << __FUNCTION__
+		          << "; code loop through the MRMFreedom_Constraints."
+			  << std::endl;
               }
 	  }
       }
@@ -440,6 +498,11 @@ int XC::DOF_Numberer::numberDOF(ID &lastDOFs)
 
 
 //! @brief Send object members through the channel passed as parameter.
+//!
+//! The DOF\_Numberer sends the class identifier and database tag of the
+//! GraphNumberer in a ID to the channel, if no GraphNumberer is
+//! associated a \f$-1\f$ is sent as the class tag. The object then invokes
+//! sendSelf() on the GraphNumberer. 
 int XC::DOF_Numberer::sendData(CommParameters &cp)
   {
     //setDbTagDataPos(0,getTag());
@@ -449,6 +512,13 @@ int XC::DOF_Numberer::sendData(CommParameters &cp)
   }
 
 //! @brief Receives object members through the channel being passed as parameter.
+//! 
+//! The DOF\_Numberer receives the class identifier and database tag of
+//! the GraphNumberer in an ID from the channel, if no GraphNumberer is
+//! associated a \f$-1\f$ is received. The DOF\_Numberer will then ask {\em
+//! theBroker} for a GraphNumberer with that class identifier, it sets the
+//! database tag for the GraphNumberer and it then invokes {\em
+//! recvSelf()} on that GraphNumberer.  
 int XC::DOF_Numberer::recvData(const CommParameters &cp)
   {
     //setTag(getDbTagDataPos(0));
@@ -467,7 +537,8 @@ int XC::DOF_Numberer::sendSelf(CommParameters &cp)
 
     res+= cp.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
-      std::cerr << getClassName() << "sendSelf() - failed to send data\n";
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; failed to send data\n";
     return res;
   }
 
@@ -479,13 +550,15 @@ int XC::DOF_Numberer::recvSelf(const CommParameters &cp)
     int res= cp.receiveIdData(getDbTagData(),dataTag);
 
     if(res<0)
-      std::cerr << getClassName() << "::recvSelf - failed to receive ids.\n";
+      std::cerr << getClassName()  << "::" << __FUNCTION__
+		<< "; failed to receive ids.\n";
     else
       {
         //setTag(getDbTagDataPos(0));
         res+= recvData(cp);
         if(res<0)
-          std::cerr << getClassName() << "::recvSelf - failed to receive data.\n";
+          std::cerr << getClassName() << "::" << __FUNCTION__
+		    << "; failed to receive data.\n";
       }
     return res;
   }
@@ -514,8 +587,12 @@ XC::AnalysisModel *XC::DOF_Numberer::getAnalysisModelPtr(void)
     return sm->getAnalysisModelPtr();
   }
 
+//! @brief Return a const pointer to the GraphNumberer object associated with
+//! the DOF\_Numberer, \p theGraphNumberer.
 const XC::GraphNumberer *XC::DOF_Numberer::getGraphNumbererPtr(void) const
   { return theGraphNumberer; }
 
+//! @brief Return a pointer to the GraphNumberer object associated with
+//! the DOF\_Numberer, \p theGraphNumberer.
 XC::GraphNumberer *XC::DOF_Numberer::getGraphNumbererPtr(void)
   { return theGraphNumberer; }
