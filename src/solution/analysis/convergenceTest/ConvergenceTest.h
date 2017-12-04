@@ -72,6 +72,11 @@ class SoluMethod;
 //! @ingroup CTest
 //
 //! @brief convergence test.
+//!
+//! A ConvergenceTest object is an object which can be used in an
+//! algorithmic class to test if convergence has been achieved for an 
+//! iteration. The ConvergenceTest class is an abstract class, defining
+//! the interface that all subclasses must provide.
 class ConvergenceTest: public MovableObject, public EntWOwner
   {
     SoluMethod *getSoluMethod(void);
@@ -112,6 +117,15 @@ class ConvergenceTest: public MovableObject, public EntWOwner
 
     virtual std::string getStatusMsg(const int &flag= 1) const= 0;
     virtual int start(void);
+    //! @brief Return a positive number if convergence is achieved.
+    //! 
+    //! To return a postive number if the convergence criteria defined for the
+    //! object has been satisfied, the positibe number equal to the number of
+    //! times since \p start that test() has been invoked. Otherwise a negative
+    //! number is to be returned. A {\em -2} is returned if the test fails to
+    //! meet the criteria and no more tests are to be 
+    //! performed due to limits set, i.e. the maximum number of iterations,
+    //! otherwise a {\em -1} is to be returned.
     virtual int test(void)= 0;
 
     int getMaxNumIter(void) const;

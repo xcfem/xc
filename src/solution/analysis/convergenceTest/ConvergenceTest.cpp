@@ -65,14 +65,21 @@
 
 #include "solution/SoluMethod.h"
 
-XC::ConvergenceTest::ConvergenceTest(EntCmd *owr,int clasTag)
-  :MovableObject(clasTag), EntWOwner(owr), currentIter(0), maxNumIter(0),
+//! @brief Constructor.
+//!
+//! @param classTag: class identifier.
+XC::ConvergenceTest::ConvergenceTest(EntCmd *owr,int classTag)
+  :MovableObject(classTag), EntWOwner(owr), currentIter(0), maxNumIter(0),
    printFlag(0), nType(2), norms(1), lastRatio(0.0), calculatedNormX(0.0), calculatedNormB(0.0) {}
 
-XC::ConvergenceTest::ConvergenceTest(EntCmd *owr,int clasTag,int maxIter,int prtFlg, int normType, int sz_norms)
-  :MovableObject(clasTag), EntWOwner(owr), currentIter(0), maxNumIter(maxIter),
+//! @brief Constructor.
+//!
+//! @param classTag: class identifier.
+XC::ConvergenceTest::ConvergenceTest(EntCmd *owr,int classTag,int maxIter,int prtFlg, int normType, int sz_norms)
+  :MovableObject(classTag), EntWOwner(owr), currentIter(0), maxNumIter(maxIter),
    printFlag(prtFlg), nType(normType), norms(sz_norms), lastRatio(0.0), calculatedNormX(0.0), calculatedNormB(0.0) {}
 
+//! @brief Virtual constructor.
 XC::ConvergenceTest* XC::ConvergenceTest::getCopy(int iterations) const
   {
     ConvergenceTest *theCopy= getCopy();
@@ -116,7 +123,9 @@ int XC::ConvergenceTest::getNormType(void) const
 void XC::ConvergenceTest::setNormType(const int &i)
   { nType= i; }
 
-
+//! This is invoked at the start of each iteration. To return
+//! {\em 0} if sucessfull, i.e that testing can proceed, a
+//! negative number if not.
 int XC::ConvergenceTest::start(void)
   {
     int retval= 0;
@@ -128,7 +137,8 @@ int XC::ConvergenceTest::start(void)
       }
     else
       {
-        std::cerr << "WARNING: ConvergenceTest::start() - no SOE returning true\n";
+        std::cerr << getClassName() << "::" << __FUNCTION__
+	          << "; WARNING: - no SOE returning true\n";
         retval= -1;
       }
     return retval;
@@ -219,7 +229,8 @@ int XC::ConvergenceTest::sendSelf(CommParameters &cp)
 
     res+= cp.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
-      std::cerr << getClassName() << "sendSelf() - failed to send data\n";
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; failed to send data\n";
     return res;
   }
 
@@ -231,13 +242,15 @@ int XC::ConvergenceTest::recvSelf(const CommParameters &cp)
     int res= cp.receiveIdData(getDbTagData(),dataTag);
 
     if(res<0)
-      std::cerr << getClassName() << "::recvSelf - failed to receive ids.\n";
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; failed to receive ids.\n";
     else
       {
         //setTag(getDbTagDataPos(0));
         res+= recvData(cp);
         if(res<0)
-          std::cerr << getClassName() << "::recvSelf - failed to receive data.\n";
+          std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; failed to receive data.\n";
       }
     return res;
   }
@@ -245,7 +258,7 @@ int XC::ConvergenceTest::recvSelf(const CommParameters &cp)
 //! @brief Returns a string with the name of the class and the iteration number.
 std::string XC::ConvergenceTest::getTestIterationMessage(void) const
   {
-    return getClassName() + "::test() - iteration: "+std::to_string(currentIter);
+    return getClassName() + "::" + __FUNCTION__ + " - iteration: "+std::to_string(currentIter);
   }
 
 //! @brief Returns a string with the proper failed to converge message.
