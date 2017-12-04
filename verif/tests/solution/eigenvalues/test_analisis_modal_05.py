@@ -40,8 +40,8 @@ kPl2a= kPl1a
 kPl3a= 20*12*Ehorm*I3a/(H**3)
 kPl4a= kPl3a
 
-prueba= xc.ProblemaEF()
-preprocessor=  prueba.getPreprocessor
+feProblem= xc.FEProblem()
+preprocessor=  feProblem.getPreprocessor
 nodes= preprocessor.getNodeLoader
 
 # Problem type
@@ -109,7 +109,7 @@ beam2d.h= B3a
 masaTotalTeor= 5*masaPorPlanta
 
 # Solution procedure
-solu= prueba.getSoluProc
+solu= feProblem.getSoluProc
 solCtrl= solu.getSoluControl
 solModels= solCtrl.getModelWrapperContainer
 sm= solModels.newModelWrapper("sm")

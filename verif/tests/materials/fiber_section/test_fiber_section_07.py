@@ -7,7 +7,7 @@ import math
 import xc_base
 import geom
 import xc
-from misc import banco_pruebas_scc3d
+from misc import scc3d_testing_bench
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (A_OO)"
 __copyright__= "Copyright 2015, LCPT and AO_O"
@@ -23,7 +23,7 @@ from materials.ehe import EHE_materials
 from model import predefined_spaces
 from solution import predefined_solutions
 
-# Coeficientes de seguridad.
+# Partial safety factors.
 gammas= 1.15 # Partial safety factor for steel.
 
 
@@ -31,8 +31,8 @@ gammas= 1.15 # Partial safety factor for steel.
 MzDato= 15e3
 NDato= 0.0
 
-prueba= xc.ProblemaEF()
-preprocessor=  prueba.getPreprocessor
+feProblem= xc.FEProblem()
+preprocessor=  feProblem.getPreprocessor
 # Materials definition
 tag= EHE_materials.B500S.defDiagD(preprocessor)
 import os
@@ -46,7 +46,7 @@ fiberSectionRepr= secBarras.getFiberSectionRepr()
 fiberSectionRepr.setGeomNamed("geomSecBarras")
 secBarras.setupFibers()
 
-banco_pruebas_scc3d.sectionModel(preprocessor, "secBarras")
+scc3d_testing_bench.sectionModel(preprocessor, "secBarras")
 
 # Constraints
 modelSpace= predefined_spaces.getStructuralMechanics3DSpace(preprocessor)
@@ -70,7 +70,7 @@ casos.addToDomain("0")
 
 
 # Solution procedure
-analisis= predefined_solutions.simple_newton_raphson(prueba)
+analisis= predefined_solutions.simple_newton_raphson(feProblem)
 analOk= analisis.analyze(1)
 
 

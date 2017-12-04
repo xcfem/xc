@@ -6,7 +6,7 @@ stiffnesses. Home made test.
 
 
 from materials.sections import section_properties
-from misc import banco_pruebas_scc3d
+from misc import scc3d_testing_bench
 import xc_base
 import geom
 import xc
@@ -37,9 +37,9 @@ execfile(pth+"/macros_test_fiber_section.py")
 fy= 2600 # yield strength [kp/cm2].
 E= 1e6   # elastic moculus [kp/cm2].
 
-prueba= xc.ProblemaEF()
-prueba.logFileName= "/tmp/borrar.log" # Ignore warning messages
-preprocessor=  prueba.getPreprocessor
+feProblem= xc.FEProblem()
+feProblem.logFileName= "/tmp/borrar.log" # Ignore warning messages
+preprocessor=  feProblem.getPreprocessor
 # Materials definition
 elast= typical_materials.defElasticMaterial(preprocessor, "elast",E)
 respT= typical_materials.defElasticMaterial(preprocessor, "respT",1e6) # Torsion response.
@@ -59,7 +59,7 @@ sa.setRespVyByName("respVy")
 sa.setRespVzByName("respVz")
 sa.setRespTByName("respT")
 
-banco_pruebas_scc3d.sectionModel(preprocessor, "sa")
+scc3d_testing_bench.sectionModel(preprocessor, "sa")
 # Constraints
 modelSpace= predefined_spaces.getStructuralMechanics3DSpace(preprocessor)
 modelSpace.fixNode000_000(1)
@@ -88,7 +88,7 @@ casos.addToDomain("0")
 
 
 # Solution procedure
-analisis= predefined_solutions.simple_newton_raphson(prueba)
+analisis= predefined_solutions.simple_newton_raphson(feProblem)
 analOk= analisis.analyze(1)
 if(analOk!=0):
   print "Error!; failed to converge."

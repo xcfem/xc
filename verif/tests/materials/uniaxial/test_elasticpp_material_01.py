@@ -25,9 +25,9 @@ y_modelo= [0,509.052149658,1009.3942759,1492.46538622,1950,2374.16957313,2600,26
 
 
 # Model definition
-prueba= xc.ProblemaEF()
-prueba.logFileName= "/tmp/borrar.log" # Ignore warning messages
-preprocessor=  prueba.getPreprocessor
+feProblem= xc.FEProblem()
+feProblem.logFileName= "/tmp/borrar.log" # Ignore warning messages
+preprocessor=  feProblem.getPreprocessor
 # Define materials
 epp= typical_materials.defElasticPPMaterial(preprocessor, "epp",E,fy,-fy)
 A= 1.5*epp.eyp

@@ -22,7 +22,6 @@ def getFcvEH91(fcd):
   :param fcd: design compressive strength of concrete.
   :param b: net width of the element according to clause 40.3.5.
   :param d: effective depth (meters).
-  
   '''
   fcdKpcm2= fcd*9.81/1e6
   return 0.5*sqrt(fcdKpcm2)/9.81*1e6
@@ -680,10 +679,10 @@ def getVuEHE08SiAt(fck,fcv,fcd,fyd,gammaC,Ncd,Ac,b0,d,z,AsPas,AsAct,AsTrsv, alph
     return  min(getVu2EHE08(fcv,fcd,fyd,gammaC,Ncd,Ac,b0,d,z,AsPas,AsAct,AsTrsv,alpha,theta,Nd,Md,Vd,Td,Es,Ep,Fp,Ae,ue),getVu1EHE08(fck,fcd,Ncd,Ac,b0,d,alpha,theta))
   
 
-class ShearControllerEHE(lscb.LimitStateControllerBase):
+class ShearController(lscb.LimitStateControllerBase):
   '''Shear control according to EHE-08.'''
   def __init__(self,limitStateLabel):
-    super(ShearControllerEHE,self).__init__(limitStateLabel)
+    super(ShearController,self).__init__(limitStateLabel,fakeSection= False)
     self.concreteFibersSetName= "concrete" #Name of the concrete fibers set.
     self.rebarFibersSetName= "reinforcement" #Name of the rebar fibers set.
     self.isBending= False # True if there is ar bending moment.
@@ -718,7 +717,15 @@ class ShearControllerEHE(lscb.LimitStateControllerBase):
     self.Vu2= 0.0 # Shear strength at failure due to tensile force in the web
     self.Vu= 0.0 # Shear strength at failure.
 
-  def calcVuEHE08NoAt(self, preprocessor, scc, concrete, reinfSteel):
+  def initControlVars(self,elements):
+    ''' Initialize control variables over elements.
+
+      :param elements: elements to define control variables in
+    '''
+    for e in elements:
+      e.setProp(self.limitStateLabel,cv.RCShearControlVars())
+
+  def calcVuEHE08NoAt(self, scc, concrete, reinfSteel):
     ''' Compute the shear strength at failure without shear reinforcement.
      XXX Presstressing contribution not implemented yet.
 
@@ -748,9 +755,9 @@ class ShearControllerEHE(lscb.LimitStateControllerBase):
       tensionedReinforcement= rcSets.tensionFibers
       self.isBending= scc.isSubjectedToBending(0.1)
       self.tensionedRebars.number= rcSets.getNumTensionRebars()
+      self.E0= rcSets.getConcreteInitialTangent()
       if(self.isBending):
         self.eps1= rcSets.getMaxConcreteStrain()
-        self.E0= rcSets.getConcreteInitialTangent()
         self.concreteAxialForce= rcSets.getConcreteCompression()
         self.strutWidth= scc.getCompressedStrutWidth() # b0
         if((self.E0*self.eps1)<self.fctdH): # Non cracked section
@@ -764,17 +771,18 @@ class ShearControllerEHE(lscb.LimitStateControllerBase):
           else:
             self.tensionedRebarsArea= 0.0
           self.Vu2= getVu2EHE08NoAtSiFis(self.fckH,self.fcdH,self.gammaC,self.concreteAxialForce,self.concreteArea,self.strutWidth,self.depthUtil,self.tensionedRebarsArea,0.0)
-        self.Vcu= self.Vu2
         self.Vsu= 0.0
         self.Vu1= -1.0
-        self.Vu= self.Vu2
       else: # Uncracked section
         axis= scc.getInternalForcesAxis()
         self.I= scc.getFibers().getHomogenizedSectionIRelToLine(self.E0,axis)
         self.S= scc.getFibers().getSPosHomogenizedSection(self.E0,geom.HalfPlane2d(axis))
+        self.strutWidth= scc.getCompressedStrutWidth() # b0
         self.Vu2= getVu2EHE08NoAtNoFis(self.fctdH,self.I,self.S,self.strutWidth,self.alphaL,self.concreteAxialForce,self.concreteArea)
+      self.Vcu= self.Vu2
+      self.Vu= self.Vu2
 
-  def calcVuEHE08SiAt(self, preprocessor, scc, paramsTorsion, concrete, reinfSteel, Nd, Md, Vd, Td):
+  def calcVuEHE08SiAt(self, scc, paramsTorsion, concrete, reinfSteel, Nd, Md, Vd, Td):
     ''' Compute the shear strength at failure WITH shear reinforcement.
      XXX Presstressing contribution not implemented yet.
 
@@ -829,7 +837,7 @@ class ShearControllerEHE(lscb.LimitStateControllerBase):
       else: # Uncracked section
         lmsg.error("Checking of shear strength without bending is not implemented.")
 
-  def calcVuEHE08(self, preprocessor, scc, nmbParamsTorsion, concrete, reinfSteel, Nd, Md, Vd, Td):
+  def calcVuEHE08(self, scc, nmbParamsTorsion, concrete, reinfSteel, Nd, Md, Vd, Td):
     '''  Compute the shear strength at failure.
      XXX Presstressing contribution not implemented yet.
 
@@ -840,9 +848,9 @@ class ShearControllerEHE(lscb.LimitStateControllerBase):
      :param Vd: Absolute value of effective design shear (clause 42.2.2).
      :param Td: design value of torsional moment.'''
     if(self.AsTrsv==0):
-      self.calcVuEHE08NoAt(preprocessor,scc,concrete,reinfSteel)
+      self.calcVuEHE08NoAt(scc,concrete,reinfSteel)
     else:
-      self.calcVuEHE08SiAt(preprocessor,scc,nmbParamsTorsion,concrete,reinfSteel,Nd,Md,Vd,Td)
+      self.calcVuEHE08SiAt(scc,nmbParamsTorsion,concrete,reinfSteel,Nd,Md,Vd,Td)
 
 
   def check(self,elements,nmbComb):
@@ -850,12 +858,12 @@ class ShearControllerEHE(lscb.LimitStateControllerBase):
        XXX Rebar orientation not taken into account yet.
     '''
     print "Postprocessing combination: ",nmbComb
-    secHAParamsTorsion=  EHE_limit_state_checking.TorsionParameters()
+    secHAParamsTorsion=  TorsionParameters()
     # XXX Ignore torsional deformation.
     secHAParamsTorsion.ue= 0
     secHAParamsTorsion.Ae= 1
-    elementos= preprocessor.getSets.getSet("total").getElements
-    for e in elementos:
+    for e in elements:
+      e.getResistingForce()
       scc= e.getSection()
       idSection= e.getProp("idSection")
       section= scc.getProp("datosSecc")
@@ -872,27 +880,28 @@ class ShearControllerEHE(lscb.LimitStateControllerBase):
       VzTmp= scc.getStressResultantComponent("Vz")
       VTmp= math.sqrt((VyTmp)**2+(VzTmp)**2)
       TTmp= scc.getStressResultantComponent("Mx")
-      secHAParamsCortante.calcVuEHE08(preprocessor,scc,secHAParamsTorsion,concreteCode,codArmadura,NTmp,MTmp,VTmp,TTmp)
+      self.calcVuEHE08(scc,secHAParamsTorsion,concreteCode,codArmadura,NTmp,MTmp,VTmp,TTmp)
 
-      if(secHAParamsCortante.Vu<VTmp):
-        theta= max(secHAParamsCortante.thetaMin,min(secHAParamsCortante.thetaMax,secHAParamsCortante.thetaFisuras))
-        secHAParamsCortante.calcVuEHE08(preprocessor,scc,secHAParamsTorsion,concreteCode,codArmadura,NTmp,MTmp,VTmp,TTmp)
-      if(secHAParamsCortante.Vu<VTmp):
-        theta= (secHAParamsCortante.thetaMin+secHAParamsCortante.thetaMax)/2.0
-        secHAParamsCortante.calcVuEHE08(preprocessor,scc,secHAParamsTorsion,concreteCode,codArmadura,NTmp,MTmp,VTmp,TTmp)
-      if(secHAParamsCortante.Vu<VTmp):
-        theta= 0.95*secHAParamsCortante.thetaMax
-        secHAParamsCortante.calcVuEHE08(preprocessor,scc,secHAParamsTorsion,concreteCode,codArmadura,NTmp,MTmp,VTmp,TTmp)
-      if(secHAParamsCortante.Vu<VTmp):
-        theta= 1.05*secHAParamsCortante.thetaMin
-        secHAParamsCortante.calcVuEHE08(preprocessor,scc,secHAParamsTorsion,concreteCode,codArmadura,NTmp,MTmp,VTmp,TTmp)
-      VuTmp= secHAParamsCortante.Vu
+      if(self.Vu<VTmp):
+        theta= max(self.thetaMin,min(self.thetaMax,self.thetaFisuras))
+        self.calcVuEHE08(scc,secHAParamsTorsion,concreteCode,codArmadura,NTmp,MTmp,VTmp,TTmp)
+      if(self.Vu<VTmp):
+        theta= (self.thetaMin+self.thetaMax)/2.0
+        self.calcVuEHE08(scc,secHAParamsTorsion,concreteCode,codArmadura,NTmp,MTmp,VTmp,TTmp)
+      if(self.Vu<VTmp):
+        theta= 0.95*self.thetaMax
+        self.calcVuEHE08(scc,secHAParamsTorsion,concreteCode,codArmadura,NTmp,MTmp,VTmp,TTmp)
+      if(self.Vu<VTmp):
+        theta= 1.05*self.thetaMin
+        self.calcVuEHE08(scc,secHAParamsTorsion,concreteCode,codArmadura,NTmp,MTmp,VTmp,TTmp)
+      VuTmp= self.Vu
       if(VuTmp!=0.0):
         FCtmp= VTmp/VuTmp
       else:
         FCtmp= 1e99
-      if(FCtmp>=e.getProp("ULS_shear").CF):
-        e.setProp("ULS_shear",cv.RCShearControlVars(idSection,nmbComb,FCtmp,NTmp,MyTmp,MzTmp,Mu,VyTmp,VzTmp,theta,secHAParamsCortante.Vcu,secHAParamsCortante.Vsu,VuTmp)) # Worst case
+      Mu= 0.0 #Apparently EHE doesn't use Mu
+      if(FCtmp>=e.getProp(self.limitStateLabel).CF):
+        e.setProp(self.limitStateLabel,cv.RCShearControlVars(idSection,nmbComb,FCtmp,NTmp,MyTmp,MzTmp,Mu,VyTmp,VzTmp,theta,self.Vcu,self.Vsu,VuTmp)) # Worst case
 
 
 class CrackControl(lscb.CrackControlBaseParameters):
@@ -1008,7 +1017,7 @@ class CrackControl(lscb.CrackControlBaseParameters):
 
   def check(self,elements,nmbComb):
     ''' Crack control of concrete sections.'''
-    print "Postprocessing combination: ",nmbComb,"\n"
+    lmsg.log("Postprocessing combination: "+nmbComb+"\n")
 
     defParamsFisuracion("secHAParamsFisuracion")
     materiales= preprocessor.getMaterialLoader

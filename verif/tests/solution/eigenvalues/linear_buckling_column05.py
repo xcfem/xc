@@ -36,8 +36,8 @@ P= -100 # Carga vertical sobre la columna.
 NumDiv= 4
 
 # Problem type
-prueba= xc.ProblemaEF()
-preprocessor=  prueba.getPreprocessor
+feProblem= xc.FEProblem()
+preprocessor=  feProblem.getPreprocessor
 nodes= preprocessor.getNodeLoader
 modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
 
@@ -95,7 +95,7 @@ casos.addToDomain("0")
 
 
 # Solution procedure
-#analisis= predefined_solutions.simple_static_linear(prueba)
+#analisis= predefined_solutions.simple_static_linear(feProblem)
 #result= analisis.analyze(1)
 import os
 pth= os.path.dirname(__file__)

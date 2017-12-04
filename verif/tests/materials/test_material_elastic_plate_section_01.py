@@ -18,14 +18,14 @@ from model import predefined_spaces
 from materials import typical_materials
 
 # Model definition
-prueba= xc.ProblemaEF()
-preprocessor=  prueba.getPreprocessor
+feProblem= xc.FEProblem()
+preprocessor=  feProblem.getPreprocessor
 # Define materials
-prueba= typical_materials.defElasticPlateSection(preprocessor, "prueba",E,nu,0.0,h)
+elasticPlateSectionTest= typical_materials.defElasticPlateSection(preprocessor, "elasticPlateSectionTest",E,nu,0.0,h)
 
-ratio1= (prueba.E-E)/E
-ratio2= (prueba.nu-nu)/nu
-ratio3= (prueba.h-h)/h
+ratio1= (elasticPlateSectionTest.E-E)/E
+ratio2= (elasticPlateSectionTest.nu-nu)/nu
+ratio3= (elasticPlateSectionTest.h-h)/h
 
 import os
 from miscUtils import LogMessages as lmsg

@@ -18,8 +18,8 @@ motionPeakFactor= 0.0
 motionLastSendCommitTag= 0.0
 motionPathTimeIncrement= 0.0
 
-prueba= xc.ProblemaEF()
-preprocessor=  prueba.getPreprocessor
+feProblem= xc.FEProblem()
+preprocessor=  feProblem.getPreprocessor
 
 
 #Load modulation.

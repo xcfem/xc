@@ -36,8 +36,8 @@ __email__= "l.pereztato@gmail.com"
 #
 
 # Problem type
-prueba= xc.ProblemaEF()
-preprocessor=  prueba.getPreprocessor
+feProblem= xc.FEProblem()
+preprocessor=  feProblem.getPreprocessor
 nodes= preprocessor.getNodeLoader
 modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
 nodes.defaultTag= 1 #First node number.
@@ -136,7 +136,7 @@ NMin2= 1e9
 numSteps= 1
 
 # Solve.
-analysis= predefined_solutions.simple_static_linear(prueba)
+analysis= predefined_solutions.simple_static_linear(feProblem)
 
 for key in combs.getKeys():
   predefined_solutions.resuelveComb(preprocessor, key,analysis,numSteps)

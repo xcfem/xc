@@ -16,8 +16,8 @@ __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
 
-prueba= xc.ProblemaEF()
-preprocessor=  prueba.getPreprocessor
+feProblem= xc.FEProblem()
+preprocessor=  feProblem.getPreprocessor
 
 
 #Load modulation.

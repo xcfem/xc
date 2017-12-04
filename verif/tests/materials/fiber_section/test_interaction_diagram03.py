@@ -14,11 +14,11 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
-prueba= xc.ProblemaEF()
-preprocessor=  prueba.getPreprocessor
+feProblem= xc.FEProblem()
+preprocessor=  feProblem.getPreprocessor
 materiales= preprocessor.getMaterialLoader
 diagInteg= materiales.newInteractionDiagram("diagInteg")
-diagInteg.readFrom("/tmp/prueba_diag_interaccion01.dat")
+diagInteg.readFrom("/tmp/interaction_diagram_test_01.dat")
 
 ratio1= diagInteg.getCapacityFactor(geom.Pos3d(352877,0,0))-1
 ratio2= diagInteg.getCapacityFactor(geom.Pos3d(352877/2.0,0,0))-0.5
@@ -27,7 +27,7 @@ ratio4= diagInteg.getCapacityFactor(geom.Pos3d(-978599,-10679.4,62804.3))-1.0
 
 
 import os
-os.system("rm -f /tmp/prueba_diag_interaccion01.dat")
+os.system("rm -f /tmp/interaction_diagram_test_01.dat")
 ''' 
 print "ratio1= ",(ratio1)
 print "ratio2= ",(ratio2)

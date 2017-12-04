@@ -24,8 +24,8 @@ from materials import typical_materials
 
 
 # Model definition
-prueba= xc.ProblemaEF()
-preprocessor=  prueba.getPreprocessor
+feProblem= xc.FEProblem()
+preprocessor=  feProblem.getPreprocessor
 nodes= preprocessor.getNodeLoader
 # Problem type
 modelSpace= predefined_spaces.SolidMechanics2D(nodes)

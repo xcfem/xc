@@ -14,8 +14,8 @@ __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
 # Problem type
-prueba= xc.ProblemaEF()
-preprocessor=  prueba.getPreprocessor   
+feProblem= xc.FEProblem()
+preprocessor=  feProblem.getPreprocessor   
 nodes= preprocessor.getNodeLoader
 modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
 nodes.defaultTag= 1 #First node number.
@@ -52,19 +52,19 @@ beam3d= elements.newElement("ElasticBeam3d",xc.ID([8,5]))
 beam3d= elements.newElement("ElasticBeam3d",xc.ID([5,7]))
 beam3d= elements.newElement("ElasticBeam3d",xc.ID([6,8]))
 
-# Definimos el conjunto de prueba
-prb1= preprocessor.getSets.defSet("prb1")
+# Trial set definition
+trialSet1= preprocessor.getSets.defSet("trialSet1")
 
 nodes= preprocessor.getSets.getSet("total").getNodes
 for n in nodes:
   coord= n.getCoo
   if(abs(coord[1]-0.0)<1e-2):
-    prb1.getNodes.append(n)
+    trialSet1.getNodes.append(n)
 
 
 
 '''
-nodes= prb1.getNodes
+nodes= trialSet1.getNodes
 for n in nodes:
   coord= n.getCoord
   print "  node: ",n.tag," x= ",coord[0],", y= ",coord[1],", z= ",coord[2]
@@ -72,17 +72,17 @@ for n in nodes:
 elements= preprocessor.getSets.getSet("total").getElements
 for e in elements:
   if((abs(e.getMaxCooNod(1)-0.0)<1e-2) & (abs(e.getMinCooNod(1)-0.0)<1e-2)):
-    prb1.getElements.append(e)
+    trialSet1.getElements.append(e)
 
 ''' 
-elements= prb1.getElements
+elements= trialSet1.getElements
 for e in elements:
   print "tag= ",e.tag," node I:",e.nod[0].tag," node J:",e.nod[1].tag
 '''
 import os
 from miscUtils import LogMessages as lmsg
 fname= os.path.basename(__file__)
-if(abs(prb1.getNumNodes-4)<1e-5) & (abs(prb1.getNumElements-2)<1e-5):
+if(abs(trialSet1.getNumNodes-4)<1e-5) & (abs(trialSet1.getNumElements-2)<1e-5):
   print "test ",fname,": ok."
 else:
   lmsg.error(fname+' ERROR.')

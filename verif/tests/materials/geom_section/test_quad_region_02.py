@@ -15,12 +15,12 @@ __email__= "l.pereztato@gmail.com"
 
 lado= 1.0
 
-prueba= xc.ProblemaEF()
-preprocessor=  prueba.getPreprocessor
+feProblem= xc.FEProblem()
+preprocessor=  feProblem.getPreprocessor
 
 elast= typical_materials.defElasticMaterial(preprocessor, "elast",1.0)
-geomPrueba= preprocessor.getMaterialLoader.newSectionGeometry("geomPrueba")
-regiones= geomPrueba.getRegions
+sectionGeometryTest= preprocessor.getMaterialLoader.newSectionGeometry("sectionGeometryTest")
+regiones= sectionGeometryTest.getRegions
 elast= regiones.newQuadRegion("elast")
 elast.pMin= geom.Pos2d(0.0,0.0)
 elast.pMax= geom.Pos2d(lado,lado)

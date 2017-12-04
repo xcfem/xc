@@ -9,8 +9,6 @@ import xc_base
 import geom
 import xc
 # Macros
-from solution import predefined_solutions
-from postprocess import phantom_model as phm
 from miscUtils import LogMessages as lmsg
 
 # TO ENHANCE: Interactions diagrams ("d" and "k") are calculated each time we call

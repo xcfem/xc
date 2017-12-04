@@ -23,8 +23,8 @@ F1= 1000 # Force magnitude 1 (pounds)
 F2= 1000/2 # Force magnitude 2 (pounds)
 
 # Model definition
-prueba= xc.ProblemaEF()
-preprocessor=  prueba.getPreprocessor
+feProblem= xc.FEProblem()
+preprocessor=  feProblem.getPreprocessor
 nodes= preprocessor.getNodeLoader
 
 # Problem type

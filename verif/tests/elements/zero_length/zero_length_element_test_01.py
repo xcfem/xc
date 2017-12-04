@@ -19,8 +19,8 @@ from model import predefined_spaces
 from materials import typical_materials
 
 # Model definition
-prueba= xc.ProblemaEF()
-preprocessor=  prueba.getPreprocessor
+feProblem= xc.FEProblem()
+preprocessor=  feProblem.getPreprocessor
 nodes= preprocessor.getNodeLoader
 nodes.dimSpace= 1 # One coordinate for each node.
 nodes.numGdls= 1 # One degree of freedom for each node.
@@ -58,7 +58,7 @@ nl= lp0.newNodalLoad(2,xc.Vector([F]))
 casos.addToDomain("0")
 
 # Solution
-analisis= predefined_solutions.simple_static_linear(prueba)
+analisis= predefined_solutions.simple_static_linear(feProblem)
 result= analisis.analyze(1)
 
 

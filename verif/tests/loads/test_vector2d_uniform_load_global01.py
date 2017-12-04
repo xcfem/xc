@@ -35,8 +35,8 @@ J= .2e-1 # Cross section torsion constant (m4)
 f= 1.5e3 # Longitudinal uniform load.
 p= 1000 # Transverse uniform load.
 
-prueba= xc.ProblemaEF()
-preprocessor=  prueba.getPreprocessor
+feProblem= xc.FEProblem()
+preprocessor=  feProblem.getPreprocessor
 nodes= preprocessor.getNodeLoader
 
 # Problem type
@@ -111,7 +111,7 @@ cargas= preprocessor.getLoadLoader
 cargas.addToDomain("0") # Append load pattern to domain.
 
 # Solution procedure
-analisis= predefined_solutions.simple_newton_raphson(prueba)
+analisis= predefined_solutions.simple_newton_raphson(feProblem)
 result= analisis.analyze(1)
 
 nodes.calculateNodalReactions(True) 

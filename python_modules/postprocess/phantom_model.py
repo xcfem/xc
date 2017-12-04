@@ -95,7 +95,7 @@ class PhantomModel(object):
     nB= self.preprocessor.getNodeLoader.newNodeXYZ(0,0,0)
     self.modelSpace.fixNode000_000(nA.tag)
     if(not fakeSection):
-      elements.defaultMaterial= sectionName
+      self.preprocessor.getElementLoader.defaultMaterial= sectionName
     phantomElement= self.preprocessor.getElementLoader.newElement("ZeroLengthSection",xc.ID([nA.tag,nB.tag]))
     phantomElement.setProp("idElem", idElem) #Element to check
     phantomElement.setProp("idSection", sectionName) #Section to check
@@ -106,7 +106,7 @@ class PhantomModel(object):
     return phantomElement
       
 
-  def createElements(self,intForcCombFileName,controller,fakeSection= True):
+  def createElements(self,intForcCombFileName,controller):
     '''Creates the phantom model elements from the data read on the file.
     
     :param   intForcCombFileName: name of the file containing the internal
@@ -114,8 +114,6 @@ class PhantomModel(object):
                                   the combinations analyzed
     :param   controller:   object that takes the internal forces and the
                            section definition and checks the limit state.
-    :param   fakeSection:  true if a fiber section model of the section 
-                           is not needed for control.
     '''
     self.setupForElementsAndCombinations(intForcCombFileName)
 
@@ -125,26 +123,29 @@ class PhantomModel(object):
     elements= self.preprocessor.getElementLoader
     constraints= self.preprocessor.getConstraintLoader
     # Definimos materiales
-    fkSection= sccFICT.defSeccShElastica3d(self.preprocessor,matSccFICT) # The problem is isostatic, so the section is not a matter
+    fkSection= sccFICT.defElasticShearSection3d(self.preprocessor,matSccFICT) # The problem is isostatic, so the section is not a matter
     elements.dimElem= 1
     self.tagsNodesToLoad= defaultdict(list)
-    if(fakeSection):
+    if(controller.fakeSection):
       elements.defaultMaterial= sccFICT.sectionName
     for tagElem in self.elementTags:
       elementSectionNames= self.sectionsDistribution.getSectionNamesForElement(tagElem)
-      elementSectionDefinitions= self.sectionsDistribution.getSectionDefinitionsForElement(tagElem)
-      mapInteractionDiagrams= self.sectionsDistribution.sectionDefinition.mapInteractionDiagrams
+      if(elementSectionNames):
+        elementSectionDefinitions= self.sectionsDistribution.getSectionDefinitionsForElement(tagElem)
+        mapInteractionDiagrams= self.sectionsDistribution.sectionDefinition.mapInteractionDiagrams
 
-      sz= len(elementSectionNames)
-      for i in range(0,sz):
-        sectionName= elementSectionNames[i]
-        diagInt= None
-        if(mapInteractionDiagrams != None):
-          diagInt= mapInteractionDiagrams[sectionName]
-        phantomElem= self.createPhantomElement(tagElem,sectionName,elementSectionDefinitions[i],i+1,diagInt,fakeSection)
-        retval.append(phantomElem)
-        self.tagsNodesToLoad[tagElem].append(phantomElem.getNodes[1].tag) #Node to load
+        sz= len(elementSectionNames)
+        for i in range(0,sz):
+          sectionName= elementSectionNames[i]
+          diagInt= None
+          if(mapInteractionDiagrams != None):
+            diagInt= mapInteractionDiagrams[sectionName]
+          phantomElem= self.createPhantomElement(tagElem,sectionName,elementSectionDefinitions[i],i+1,diagInt,controller.fakeSection)
+          retval.append(phantomElem)
+          self.tagsNodesToLoad[tagElem].append(phantomElem.getNodes[1].tag) #Node to load
                                                                           #for this element
+      else:
+        lmsg.error("Element section names not found for element with tag: "+str(tagElem))
     controller.initControlVars(retval)
     return retval
 
@@ -175,7 +176,7 @@ class PhantomModel(object):
         nodeTag= self.tagsNodesToLoad[iforce.tagElem][iforce.idSection]
         lp.newNodalLoad(nodeTag,xc.Vector(iforce.getComponents()))
 
-  def build(self,intForcCombFileName,controller,fakeSection= True):
+  def build(self,intForcCombFileName,controller):
     '''Builds the phantom model from the data read from the file.
 
     :param intForcCombFileName: name of the file containing the forces and 
@@ -183,14 +184,12 @@ class PhantomModel(object):
                            the combinations analyzed
     :param controller:     object that takes the internal forces and the
                            section definition and checks the limit state.
-    :param fakeSection:    true if a fiber section model of the section is not 
-                           needed for control.
     '''
     retval= self.createElements(intForcCombFileName,controller)
     self.createLoads(intForcCombFileName,controller)
     return retval
 
-  def check(self, analysis, controller):
+  def check(self, controller):
     '''Runs the analysis (linear) and checking of combinations passed as
     parameters
 
@@ -203,7 +202,7 @@ class PhantomModel(object):
     for key in combs.getKeys():
       comb= combs[key]
       #print "Resolviendo para acción: ",key
-      predefined_solutions.resuelveComb(self.preprocessor,key,analysis,1)
+      predefined_solutions.resuelveComb(self.preprocessor,key,controller.analysis,1)
       controller.check(elements,key)
 
   def write(self,controller,outputFileName):
@@ -214,20 +213,24 @@ class PhantomModel(object):
     '''
     return cv.writeControlVarsFromElements(controller.limitStateLabel,self.preprocessor,outputFileName)
 
-  def runChecking(self,intForcCombFileName,analysis,controller,outputFileName):
+  def runChecking(self,limitStateData,outputFileName):
     '''Run the analysis, check the results and write them into a file
 
-    :param intForcCombFileName: name of the file containing the forces 
-                           and bending moments obtained for each element 
-                           for the combinations analyzed
-    :param analysis:       type of analysis
+    :param limitStateData: object that contains the name of the file
+                           containing the internal forces 
+                           obtained for each element 
+                           for the combinations analyzed and the
+                           controller to use for the checking.
+    :param analysis:       analysis to use.
     :param controller:     object that controls limit state in elements.
     :param outputFileName: base name of output file (extensions .py and .tex)
     '''
+    intForcCombFileName= limitStateData.getInternalForcesFileName()
+    controller= limitStateData.controller
     meanCFs= -1.0 
     if(controller):
-      self.build(intForcCombFileName,controller,False)
-      self.check(analysis,controller)
+      self.build(intForcCombFileName,controller)
+      self.check(controller)
       meanCFs= self.write(controller,outputFileName)
     else:
       lmsg.error('PhantomModel::runChecking controller not defined.')

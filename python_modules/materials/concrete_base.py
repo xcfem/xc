@@ -623,9 +623,53 @@ class Concrete(matWDKD.MaterialWithDKDiagrams):
         retval.savefig(plt,fileName+'.eps')
         return retval
     
+    def getElasticMaterialData(self):
+        '''Return the elastic material constitutive model.'''
+        materialModelName= self.materialName + 'ElasticMaterialData'
+        return typical_materials.MaterialData(name= materialModelName,E=self.getEcm(),nu=self.nuc,rho=self.density())
+
+        
+    def defElasticSection2d(self, preprocessor, sectionProperties):
+        '''Constructs an elastic section material appropiate 
+         for elastic analysis of 2D beam elements.
+
+         :param preprocessor: preprocessor object.
+         :param sectionProperties: mass properties of the section.
+         '''
+        return sectionProperties.defElasticSection2d(preprocessor,self.getElasticMaterialData())
+        
+    def defElasticShearSection2d(self, preprocessor, sectionProperties):
+        '''Constructs an elastic section material appropiate 
+         for elastic analysis of 2D beam elements including shear
+         deformations.
+
+         :param preprocessor: preprocessor object.
+         :param sectionProperties: mass properties of the section.
+         '''
+        return sectionProperties.defElasticShearSection2d(preprocessor,self.getElasticMaterialData())
+
+    def defElasticSection3d(self, preprocessor, sectionProperties):
+        '''Constructs an elastic section material appropiate 
+         for elastic analysis of 3D beam elements.
+
+         :param preprocessor: preprocessor object.
+         :param sectionProperties: mass properties of the section.
+         '''
+        return sectionProperties.defElasticSection3d(preprocessor,self.getElasticMaterialData())
+
+    def defElasticShearSection3d(self, preprocessor, sectionProperties):
+        '''Constructs an elastic section material appropiate 
+         for elastic analysis of 3D beam elements including shear
+         deformations.
+
+         :param preprocessor: preprocessor object.
+         :param sectionProperties: mass properties of the section.
+         '''
+        return sectionProperties.defElasticShearSection3d(preprocessor,self.getElasticMaterialData())
+    
     def defElasticPlateSection(self, preprocessor,name,thickness):
       '''Constructs an elastic isotropic section material appropiate 
-         for plate analysis.
+         for elastic analysis of plate elements.
 
       :param  preprocessor: preprocessor name
       :param  name:         name identifying the section
@@ -635,7 +679,7 @@ class Concrete(matWDKD.MaterialWithDKDiagrams):
 
     def defElasticMembranePlateSection(self, preprocessor,name,thickness):
       '''Constructs an elastic isotropic section material appropiate 
-         for plate and shell analysis
+         for elastic analysis of plate and shell elements
 
       :param  preprocessor: preprocessor name
       :param  name:         name identifying the section

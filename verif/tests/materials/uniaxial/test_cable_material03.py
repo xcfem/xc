@@ -24,8 +24,8 @@ fPret= sigmaPret*area # Prestressing force (pounds)
 F= 100 # Prestressing force (pounds)
 
 # Model definition
-prueba= xc.ProblemaEF()
-preprocessor=  prueba.getPreprocessor
+feProblem= xc.FEProblem()
+preprocessor=  feProblem.getPreprocessor
 nodes= preprocessor.getNodeLoader
 
 # Problem type
@@ -75,7 +75,7 @@ lp0.newNodalLoad(2,xc.Vector([0,-F]))
 casos.addToDomain(lPattern)
 
 # Solution procedure
-analisis= predefined_solutions.simple_newton_raphson(prueba)
+analisis= predefined_solutions.simple_newton_raphson(feProblem)
 result= analisis.analyze(10)
 
 

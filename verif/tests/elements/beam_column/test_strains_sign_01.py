@@ -58,8 +58,8 @@ Mz= 0.0
 L= 1.0 # Bar length (m)
 
 # Problem type
-prueba= xc.ProblemaEF()
-preprocessor=  prueba.getPreprocessor   
+feProblem= xc.FEProblem()
+preprocessor=  feProblem.getPreprocessor   
 
 # Materials definition
 elast= typical_materials.defElasticMaterial(preprocessor, "elast",E)
@@ -124,7 +124,7 @@ lp0.newNodalLoad(2,xc.Vector([N,0,0,0,My,Mz])) #Section's y axis is element z ax
 casos.addToDomain("0")
 
 # Solution
-analisis= predefined_solutions.simple_static_linear(prueba)
+analisis= predefined_solutions.simple_static_linear(feProblem)
 result= analisis.analyze(1)
 
 zl.getResistingForce()

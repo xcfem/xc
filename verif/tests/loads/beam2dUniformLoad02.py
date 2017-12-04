@@ -20,18 +20,18 @@ L= 2 # Bar length.
 P= 10e3 # Carga uniforme transversal.
 n= 1e6 # Carga uniforme axial.
 
-prueba= xc.ProblemaEF()
-preprocessor=  prueba.getPreprocessor   
+feProblem= xc.FEProblem()
+preprocessor=  feProblem.getPreprocessor   
 nodes= preprocessor.getNodeLoader
 
-seccPrueba= section_properties.RectangularSection("prueba",b=.20,h=.30)
-matSeccPrueba= typical_materials.MaterialData("matprueba",E=7E9,nu=0.3,rho=2500)
+sectionTest= section_properties.RectangularSection("sectionTest",b=.20,h=.30) # Section geometry.
+sectionTestMaterial= typical_materials.MaterialData("sectionTestMaterial",E=7E9,nu=0.3,rho=2500) # Section material.
 
 
 # Problem type
 modelSpace= predefined_spaces.StructuralMechanics2D(nodes)
 # Definimos el material
-defSeccAggregation.defSeccAggregation2d(preprocessor, seccPrueba,matSeccPrueba)
+defSeccAggregation.defSeccAggregation2d(preprocessor, sectionTest,sectionTestMaterial)
 nodes.defaultTag= 1 #First node number.
 nod= nodes.newNodeXY(0,0)
 nod= nodes.newNodeXY(L,0.0)
@@ -40,13 +40,13 @@ nod= nodes.newNodeXY(L,0.0)
 lin= modelSpace.newLinearCrdTransf("lin")
     
 # Materials definition
-scc= typical_materials.defElasticSection2d(preprocessor, "scc",seccPrueba.A(),matSeccPrueba.E,seccPrueba.Iz())
+scc= typical_materials.defElasticSection2d(preprocessor, "scc",sectionTest.A(),sectionTestMaterial.E,sectionTest.Iz())
 
 # Elements definition
 elements= preprocessor.getElementLoader
 elements.defaultTransformation= "lin"
 elements.defaultMaterial= "scc" 
-elements.defaultMaterial= seccPrueba.sectionName
+elements.defaultMaterial= sectionTest.sectionName
 elements.numSections= 3 # Number of sections along the element.
 elements.defaultTag= 1
 beam2d= elements.newElement("ForceBeamColumn2d",xc.ID([1,2]))
@@ -72,7 +72,7 @@ eleLoad.axialComponent= n
 casos.addToDomain("0")
 
 # Solution procedure
-analisis= predefined_solutions.simple_static_modified_newton(prueba)
+analisis= predefined_solutions.simple_static_modified_newton(feProblem)
 result= analisis.analyze(1)
 
 
@@ -93,10 +93,10 @@ N0= scc0.getStressResultantComponent("N")
 
 
 F= (n*L)
-delta0Teor= (n*L**2/2.0/matSeccPrueba.E/seccPrueba.A())
+delta0Teor= (n*L**2/2.0/sectionTestMaterial.E/sectionTest.A())
 ratio0= ((delta0-delta0Teor)/delta0Teor)
 Q= P*L
-delta1Teor= (-Q*L**3/8/matSeccPrueba.E/seccPrueba.Iz())
+delta1Teor= (-Q*L**3/8/sectionTestMaterial.E/sectionTest.Iz())
 ratio1= ((delta1-delta1Teor)/delta1Teor)
 ratio2= (abs((N0-F)/F))
 ratio3= (abs((RN+F)/F))

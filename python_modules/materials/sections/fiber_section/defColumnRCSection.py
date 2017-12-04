@@ -12,7 +12,7 @@ with reinforcement symmetric in both directions (as usual in columns)
 '''
 
 from materials.ehe import EHE_materials
-from materials.sections.fiber_section import defSeccionHASimple
+from materials.sections.fiber_section import defSimpleRCSection
 
 class ColumnMainReinforcement(object):
   ''' Main (longitudinal) rebars of a column.
@@ -34,7 +34,7 @@ class ColumnMainReinforcement(object):
     self.areaRebarDepth= EHE_materials.Fi10 
 
 
-class RecordRCColumnSection(defSeccionHASimple.BasicRecordRCSection):
+class RecordRCColumnSection(defSimpleRCSection.BasicRecordRCSection):
   '''Definition of the variables that make up a reinforced concrete section 
   with reinforcement symmetric in both directions (as usual in columns)
   

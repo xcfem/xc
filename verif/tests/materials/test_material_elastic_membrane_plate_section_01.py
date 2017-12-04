@@ -19,16 +19,16 @@ __email__= "l.pereztato@gmail.com"
 
 
 # Model definition
-prueba= xc.ProblemaEF()
-preprocessor=  prueba.getPreprocessor
+feProblem= xc.FEProblem()
+preprocessor=  feProblem.getPreprocessor
 # Define materials
-prueba= typical_materials.defElasticMembranePlateSection(preprocessor, "prueba",E,nu,dens,h)
+elasticMembranePlateSectionTest= typical_materials.defElasticMembranePlateSection(preprocessor, "elasticMembranePlateSectionTest",E,nu,dens,h)
 
 
-ratio1= (prueba.E-E)/E
-ratio2= (prueba.nu-nu)/nu
-ratio3= (prueba.h-h)/h
-ratio4= (prueba.rho-dens)/dens
+ratio1= (elasticMembranePlateSectionTest.E-E)/E
+ratio2= (elasticMembranePlateSectionTest.nu-nu)/nu
+ratio3= (elasticMembranePlateSectionTest.h-h)/h
+ratio4= (elasticMembranePlateSectionTest.rho-dens)/dens
 
 import os
 from miscUtils import LogMessages as lmsg

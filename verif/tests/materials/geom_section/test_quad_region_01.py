@@ -17,12 +17,12 @@ lado= 1.0
 n1= 3
 n2= 2
 
-prueba= xc.ProblemaEF()
-preprocessor=  prueba.getPreprocessor
+feProblem= xc.FEProblem()
+preprocessor=  feProblem.getPreprocessor
 
 elast= typical_materials.defElasticMaterial(preprocessor, "elast",1.0)
-geomPrueba= preprocessor.getMaterialLoader.newSectionGeometry("geomPrueba")
-regiones= geomPrueba.getRegions
+sectionGeometryTest= preprocessor.getMaterialLoader.newSectionGeometry("sectionGeometryTest")
+regiones= sectionGeometryTest.getRegions
 elast= regiones.newQuadRegion("elast")
 elast.nDivIJ= n1
 elast.nDivJK= n2

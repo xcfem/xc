@@ -19,14 +19,14 @@ CooMaxY= 1
 E= 30e6 # Young modulus (psi)
 nu= 0.3 # Coeficiente de Poison
 rho= 0.0 # Densidad
-#prueba.logFileName= "/tmp/borrar.log" # Ignore warning messages
+#feProblem.logFileName= "/tmp/borrar.log" # Ignore warning messages
 
 numNodes= 0
 numElem= 0
 
 # Problem type
-prueba= xc.ProblemaEF()
-preprocessor=  prueba.getPreprocessor
+feProblem= xc.FEProblem()
+preprocessor=  feProblem.getPreprocessor
 nodes= preprocessor.getNodeLoader
 
 modelSpace= predefined_spaces.SolidMechanics2D(nodes)
@@ -87,9 +87,9 @@ divsOk= divsOk & surfaces.conciliaNDivs()
 
 s2.nverborrea= 5
 total= preprocessor.getSets.getSet("total")
-prueba.setVerbosityLevel(0) #Dont print warning messages about element seed.
+feProblem.setVerbosityLevel(0) #Dont print warning messages about element seed.
 total.genMesh(xc.meshDir.I)
-prueba.setVerbosityLevel(1) #Print warnings again 
+feProblem.setVerbosityLevel(1) #Print warnings again 
 
 numNodes= total.getNodes.size
 numElem= total.getElements.size

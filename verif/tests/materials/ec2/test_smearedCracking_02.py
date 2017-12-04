@@ -51,8 +51,8 @@ Flist=np.arange(0e3,400e3,10e3)     # axial force [N]
 
 
 # Model definition
-prueba= xc.ProblemaEF()
-preprocessor=  prueba.getPreprocessor
+feProblem= xc.FEProblem()
+preprocessor=  feProblem.getPreprocessor
 nodes= preprocessor.getNodeLoader     #nodes container
 modelSpace= predefined_spaces.StructuralMechanics2D(nodes)  #Defines the dimension of nodes  three coordinates (x,y,z) and six DOF for each node (Ux,Uy,theta)
 
@@ -173,8 +173,8 @@ for F in Flist:
   #We add the load case to domain.
   casos.addToDomain("0")           #reads load pattern "0" and adds it to the domain
   # Solve
-  #analisis= predefined_solutions.simple_newton_raphson(prueba)
-  analisis= predefined_solutions.simple_static_modified_newton(prueba)
+  #analisis= predefined_solutions.simple_newton_raphson(feProblem)
+  analisis= predefined_solutions.simple_static_modified_newton(feProblem)
   analOk= analisis.analyze(1)
   fConcrMin= setsRCEl1.concrFibers.getFiberWithMinStrain()
   epsCMin= fConcrMin.getMaterial().getStrain() # minimum strain among concrete fibers

@@ -73,6 +73,13 @@
 #define START_EQN_NUM 0
 
 //! @brief Constructor.
+//!
+//! The constructor is responsible for constructing the graph given {\em
+//! theModel}. It creates the vertices of the graph, one for every
+//! DOF in the model and adds all edges based on the FE\_Element
+//! connectivity. For this reason the model must be fully populated with
+//! the DOF\_Group and FE\_Element objects before the constructor is
+//! called.
 XC::DOF_Graph::DOF_Graph(const AnalysisModel &theModel)
   :ModelGraph(theModel.getNumEqn(),theModel)
   {

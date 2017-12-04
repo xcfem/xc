@@ -18,16 +18,16 @@ fy= 2600 # Yield stress of the material expressed in kp/cm2.
 E= 2.1e6 # Young modulus of the material en kp/cm2.
 xA= 1/3.0
 yA= 3/4.0
-prueba= xc.ProblemaEF()
-preprocessor=  prueba.getPreprocessor
+feProblem= xc.FEProblem()
+preprocessor=  feProblem.getPreprocessor
 epp= typical_materials.defElasticPPMaterial(preprocessor, "epp",E,fy,-fy)
-geomPrueba= preprocessor.getMaterialLoader.newSectionGeometry("geomPrueba")
-geomPrueba.tagSpot= 1
-spot1= geomPrueba.newSpot(geom.Pos2d(xA,yA))
+sectionGeometryTest= preprocessor.getMaterialLoader.newSectionGeometry("sectionGeometryTest")
+sectionGeometryTest.tagSpot= 1
+spot1= sectionGeometryTest.newSpot(geom.Pos2d(xA,yA))
 x1= spot1.pos.x
 y1= spot1.pos.y
-spot2= geomPrueba.newSpot(geom.Pos2d(0,0))
-dist= geomPrueba.distSpots(1,2)
+spot2= sectionGeometryTest.newSpot(geom.Pos2d(0,0))
+dist= sectionGeometryTest.distSpots(1,2)
 
 ''' 
              \for_each_spot

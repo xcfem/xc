@@ -23,8 +23,8 @@ from solution import predefined_solutions
 from materials import typical_materials
 
 # Model definition
-prueba= xc.ProblemaEF()
-preprocessor=  prueba.getPreprocessor
+feProblem= xc.FEProblem()
+preprocessor=  feProblem.getPreprocessor
 nodes= preprocessor.getNodeLoader
 
 # Problem type
@@ -84,8 +84,8 @@ lp0.newNodalLoad(3,xc.Vector([0,-F1]))
 casos.addToDomain("0")
 
 # Solution procedure
-prbSolver= predefined_solutions.SolutionProcedure()
-analisis= prbSolver.simpleLagrangeStaticLinear(prueba)
+solver= predefined_solutions.SolutionProcedure()
+analisis= solver.simpleLagrangeStaticLinear(feProblem)
 result= analisis.analyze(1)
 
 nodes.calculateNodalReactions(True)

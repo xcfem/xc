@@ -33,8 +33,8 @@ x= 0.5 # Relative abscissae where the punctual load is applied.
 P= 1e3 # punctual load.
 n= 1e6 # Carga uniforme axial.
 
-prueba= xc.ProblemaEF()
-preprocessor=  prueba.getPreprocessor   
+feProblem= xc.FEProblem()
+preprocessor=  feProblem.getPreprocessor   
 nodes= preprocessor.getNodeLoader
 
 # Problem type
@@ -71,7 +71,7 @@ casos.currentTimeSeries= "ts"
 #Load case definition
 lp0= casos.newLoadPattern("default","0")
 casos.currentLoadPattern= "0"
-mesh= prueba.getDomain.getMesh
+mesh= feProblem.getDomain.getMesh
 eIter= mesh.getElementIter
 elem= eIter.next()
 while not(elem is None):
@@ -84,7 +84,7 @@ cargas= preprocessor.getLoadLoader
 casos.addToDomain("0")
 
 # Solution
-analisis= predefined_solutions.simple_static_linear(prueba)
+analisis= predefined_solutions.simple_static_linear(feProblem)
 result= analisis.analyze(1)
 
 

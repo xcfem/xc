@@ -41,7 +41,7 @@ class ConstraintHandler;
 class DOF_Numberer;
 class SystemOfEqn;
 class Analysis;
-class ProblemaEF;
+class FEProblem;
 
 //!  @defgroup Solu Solution of the finite element analysis problem.
 
@@ -59,7 +59,7 @@ class ProcSolu: public EntCmd
     ProcSoluControl solu_control;//!< Control of the solution procedure.
     Analysis *theAnalysis; //! Analysis type (static, dynamic, eigenvalues,...).
   protected:
-    friend class ProblemaEF;
+    friend class FEProblem;
 
     void libera_analysis(void);
     bool alloc_analysis(const std::string &,const std::string &,const std::string &);
@@ -68,10 +68,10 @@ class ProcSolu: public EntCmd
     void libera(void);
 
     void revertToStart(void);
-    ProblemaEF *getProblemaEF(void);
-    const ProblemaEF *getProblemaEF(void) const;
+    FEProblem *getFEProblem(void);
+    const FEProblem *getFEProblem(void) const;
 
-    ProcSolu(ProblemaEF *owr);
+    ProcSolu(FEProblem *owr);
     ProcSolu(const ProcSolu &otro);
     ProcSolu &operator=(const ProcSolu &otro);
   public:

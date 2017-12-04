@@ -47,8 +47,8 @@ from model import predefined_spaces
 from materials import typical_materials
 
 # Problem type
-prueba= xc.ProblemaEF()
-preprocessor=  prueba.getPreprocessor
+feProblem= xc.FEProblem()
+preprocessor=  feProblem.getPreprocessor
 nodes= preprocessor.getNodeLoader
 modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
 nodes.defaultTag= 1 #First node number.
@@ -183,7 +183,7 @@ comb= combs.newLoadCombination("ELU026","1.35*G + 1.05*SC + 0.90*VT + 1.50*NV")
 
 #printFlag= 0
 #ctest.printFlag= printFlag
-analysis= predefined_solutions.penalty_newton_raphson(prueba)
+analysis= predefined_solutions.penalty_newton_raphson(feProblem)
 
 from solution import database_helper
 
@@ -225,7 +225,7 @@ def procesResultVerif(tagComb, nmbComb):
    '''
 import os
 os.system("rm -r -f /tmp/test_retraccion_02.db")
-db= prueba.newDatabase("BerkeleyDB","/tmp/test_retraccion_02.db")
+db= feProblem.newDatabase("BerkeleyDB","/tmp/test_retraccion_02.db")
 
 # Fase 0: pretensado, shrinking
 # Fase 1: pretensado, shrinking and creep

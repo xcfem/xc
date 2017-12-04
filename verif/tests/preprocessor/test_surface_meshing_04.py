@@ -23,8 +23,8 @@ rho= 0.0 # Densidad
 
 area= 0
 
-prueba= xc.ProblemaEF()
-preprocessor=  prueba.getPreprocessor
+feProblem= xc.FEProblem()
+preprocessor=  feProblem.getPreprocessor
 
 elast= typical_materials.defElasticMaterial(preprocessor, "elast",3000)
 matPrb= typical_materials.defElasticMembranePlateSection(preprocessor, "matPrb",E,nu,rho,0.25)

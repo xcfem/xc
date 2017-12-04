@@ -36,8 +36,8 @@ M= 1.5e3 # Moment magnitude (kN m)
 GM= 1.5 # Load factor.
 
 # Problem type
-prueba= xc.ProblemaEF()
-preprocessor=  prueba.getPreprocessor   
+feProblem= xc.FEProblem()
+preprocessor=  feProblem.getPreprocessor   
 nodes= preprocessor.getNodeLoader
 modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
 nodes.defaultTag= 1 #First node number.
@@ -78,7 +78,7 @@ casos.addToDomain("0")
 casos.addToDomain("1")
 
 # Solution
-analisis= predefined_solutions.simple_static_linear(prueba)
+analisis= predefined_solutions.simple_static_linear(feProblem)
 result= analisis.analyze(1)
 
 delta= nodes.getNode(2).getDisp[0]

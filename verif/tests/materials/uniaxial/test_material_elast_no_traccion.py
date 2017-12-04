@@ -23,9 +23,9 @@ __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
 # Model definition
-prueba= xc.ProblemaEF()
-prueba.logFileName= "/tmp/borrar.log" # Ignore warning messages
-preprocessor=  prueba.getPreprocessor
+feProblem= xc.FEProblem()
+feProblem.logFileName= "/tmp/borrar.log" # Ignore warning messages
+preprocessor=  feProblem.getPreprocessor
 # Define materials
 sIni= -0.01
 sFin= 0.01

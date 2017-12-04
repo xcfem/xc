@@ -18,8 +18,8 @@ __email__= "l.pereztato@gmail.com"
 NumDiv= 25
 CooMax= 10.0
 
-prueba= xc.ProblemaEF()
-preprocessor=  prueba.getPreprocessor
+feProblem= xc.FEProblem()
+preprocessor=  feProblem.getPreprocessor
 nodes= preprocessor.getNodeLoader
 
 # Problem type
@@ -49,7 +49,7 @@ l.nDiv= NumDiv
 setTotal= preprocessor.getSets.getSet("total")
 setTotal.genMesh(xc.meshDir.I)
 
-mesh= prueba.getDomain.getMesh
+mesh= feProblem.getDomain.getMesh
 nnod= mesh.getNumNodes()
 nelem= mesh.getNumElements()
 

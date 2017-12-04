@@ -28,8 +28,8 @@ L= 10 # Bar length (m)
 F= 50e3 # Load magnitude (kN)
 
 # Problem type
-prueba= xc.ProblemaEF()
-preprocessor= prueba.getPreprocessor   
+feProblem= xc.FEProblem()
+preprocessor= feProblem.getPreprocessor   
 nodes= preprocessor.getNodeLoader
 modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
 nodes.defaultTag= 1 #First node number.
@@ -40,9 +40,9 @@ lin= modelSpace.newLinearCrdTransf("lin",xc.Vector([0,1,0]))
 S275JR= EC3_materials.S275JR
 gammaM0= 1.05
 S275JR.gammaM= gammaM0 
-HE400B= structural_steel.SteelShape(S275JR,"HE_400_B",arcelor_metric_shapes.HE)
-matHE400B=typical_materials.MaterialData(name='S275JR',E=S275JR.E,nu=S275JR.nu,rho=7850)
-profil= HE400B.defSeccShElastica3d(preprocessor,matHE400B)
+HE400B= structural_steel.SteelShape(S275JR,"HE_400_B",arcelor_metric_shapes.HE) # Section geometry.
+matHE400B=typical_materials.MaterialData(name='S275JR',E=S275JR.E,nu=S275JR.nu,rho=7850) # Section material.
+profil= HE400B.defElasticShearSection3d(preprocessor,matHE400B)
 
 # Elements definition
 elements= preprocessor.getElementLoader
@@ -56,7 +56,7 @@ vc.defVarsControlTensRegElastico3d([elem])
 
 
 
-recorder= prueba.getDomain.newRecorder("element_prop_recorder",None);
+recorder= feProblem.getDomain.newRecorder("element_prop_recorder",None);
 recorder.setElements(xc.ID([0]))
 recorder.callbackRecord= cc.controTensRecElastico3d()
 
@@ -77,7 +77,7 @@ lp0.newNodalLoad(2,xc.Vector([0,0,-F,0,0,0]))
 casos.addToDomain("0")
 
 # Solution
-analisis= predefined_solutions.simple_static_linear(prueba)
+analisis= predefined_solutions.simple_static_linear(feProblem)
 result= analisis.analyze(1)
 
 

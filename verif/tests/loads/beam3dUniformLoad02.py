@@ -25,18 +25,18 @@ L= 2 # Bar length.
 P= 10e3 # Carga uniforme transversal.
 n= 1e6 # Carga uniforme axial.
 
-prueba= xc.ProblemaEF()
-preprocessor=  prueba.getPreprocessor   
+feProblem= xc.FEProblem()
+preprocessor=  feProblem.getPreprocessor   
 nodes= preprocessor.getNodeLoader
 
-seccPrueba= section_properties.RectangularSection("prueba",b=.20,h=.30)
-matSeccPrueba= typical_materials.MaterialData("matprueba",E=7E9,nu=0.3,rho=2500)
+seccTest= section_properties.RectangularSection("test",b=.20,h=.30) # Section geometry.
+matSeccTest= typical_materials.MaterialData("mattest",E=7E9,nu=0.3,rho=2500) # Section material.
 
 
 # Problem type
 modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
 # Definimos el material
-defSeccAggregation.defSeccAggregation3d(preprocessor, seccPrueba,matSeccPrueba)
+defSeccAggregation.defSeccAggregation3d(preprocessor, seccTest,matSeccTest)
 nodes.defaultTag= 1 #First node number.
 nod= nodes.newNodeXYZ(0,0,0)
 nod= nodes.newNodeXYZ(L,0,0)
@@ -46,7 +46,7 @@ lin= modelSpace.newLinearCrdTransf("lin",xc.Vector([0,0,1]))
 # Elements definition
 elements= preprocessor.getElementLoader
 elements.defaultTransformation= "lin"
-elements.defaultMaterial= seccPrueba.sectionName
+elements.defaultMaterial= seccTest.sectionName
 elements.numSections= 3 # Number of sections along the element.
 elements.defaultTag= 1
 beam3d= elements.newElement("ForceBeamColumn3d",xc.ID([1,2]))
@@ -73,7 +73,7 @@ casos.addToDomain("0")
 
 
 # Solution procedure
-analisis= predefined_solutions.simple_static_modified_newton(prueba)
+analisis= predefined_solutions.simple_static_modified_newton(feProblem)
 result= analisis.analyze(1)
 
 nodes.calculateNodalReactions(True)
@@ -92,10 +92,10 @@ scc0= elem1.getSections()[0]
 N0= scc0.getStressResultantComponent("N")
 
 F= (n*L)
-delta0Teor= (n*L**2/2.0/matSeccPrueba.E/seccPrueba.A())
+delta0Teor= (n*L**2/2.0/matSeccTest.E/seccTest.A())
 ratio0= ((delta0-delta0Teor)/delta0Teor)
 Q= P*L
-delta1Teor= (-Q*L**3/8/matSeccPrueba.E/seccPrueba.Iz())
+delta1Teor= (-Q*L**3/8/matSeccTest.E/seccTest.Iz())
 ratio1= ((delta1-delta1Teor)/delta1Teor)
 ratio2= (abs((N0-F)/F))
 ratio3= (abs((RN+F)/F))

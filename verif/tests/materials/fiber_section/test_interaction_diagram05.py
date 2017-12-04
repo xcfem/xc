@@ -17,7 +17,7 @@ import xc
 from materials.ehe import EHE_materials
 import math
 
-# Coeficientes de seguridad.
+# Partial safety factors.
 gammac= 1.5  # concrete safety coefficient
 gammas= 1.15 # reinforcement steel safety coefficient
 
@@ -27,8 +27,8 @@ cover= 0.06+12e-3+diam/2.0 # Concrete cover expressed in meters.
 areaFi20= math.pi*(diam/2.0)**2 # Rebar area expressed in square meters.
 
 
-prueba= xc.ProblemaEF()
-preprocessor=  prueba.getPreprocessor
+feProblem= xc.FEProblem()
+preprocessor=  feProblem.getPreprocessor
 # Materials definition
 concr= EHE_materials.HA30
 concr.alfacc=0.85    #f_maxd= 0.85*fcd concrete long term compressive strength factor (normally alfacc=1)

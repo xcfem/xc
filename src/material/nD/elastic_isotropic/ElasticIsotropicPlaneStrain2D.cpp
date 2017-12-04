@@ -103,28 +103,28 @@ int XC::ElasticIsotropicPlaneStrain2D::setTrialStrainIncr(const XC::Vector &stra
 //! \f]
 const XC::Matrix &XC::ElasticIsotropicPlaneStrain2D::getTangent(void) const
   {
-    double mu2 = E/(1.0+v);
-    double lam = v*mu2/(1.0-2.0*v);
-    double mu = 0.50*mu2;
+    const double mu2= E/(1.0+v);
+    const double lam= v*mu2/(1.0-2.0*v);
+    const double mu= 0.50*mu2;
 
-        D(0,0) = D(1,1) = mu2+lam;
-        D(0,1) = D(1,0) = lam;
-        D(2,2) = mu;
+    D(0,0) = D(1,1) = mu2+lam;
+    D(0,1) = D(1,0) = lam;
+    D(2,2) = mu;
 
-        return D;
-}
+    return D;
+  }
 
 const XC::Matrix &XC::ElasticIsotropicPlaneStrain2D::getInitialTangent(void) const
   {
-        double mu2 = E/(1.0+v);
-        double lam = v*mu2/(1.0-2.0*v);
-        double mu = 0.50*mu2;
+    const double mu2= E/(1.0+v);
+    const double lam= v*mu2/(1.0-2.0*v);
+    const double mu= 0.50*mu2;
 
-        D(0,0) = D(1,1) = mu2+lam;
-        D(0,1) = D(1,0) = lam;
-        D(2,2) = mu;
+    D(0,0) = D(1,1) = mu2+lam;
+    D(0,1) = D(1,0) = lam;
+    D(2,2) = mu;
 
-        return D;
+    return D;
   }
 
 //! @brief Returns the material stress vector, \f$\mysigma\f$, for the current

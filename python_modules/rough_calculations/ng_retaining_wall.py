@@ -442,9 +442,9 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
     outputFile.write("\\end{figure}\n")
     
   def createFEProblem(self, title):
-    self.FEModel= xc.ProblemaEF()
-    self.FEModel.title= 'Retaining wall A'
-    return self.FEModel
+    self.feProblem= xc.FEProblem()
+    self.feProblem.title= 'Retaining wall A'
+    return self.feProblem
     
   def genMesh(self,nodes,springMaterials):
     self.defineWireframeModel(nodes)
@@ -455,7 +455,7 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
     self.trf= trfs.newLinearCrdTransf2d(transformationName)
     wallMatData= typical_materials.MaterialData(name=self.name+'Concrete',E=self.concrete.getEcm(),nu=0.2,rho=2500)
     foundationSection= section_properties.RectangularSection(self.name+"FoundationSection",self.b,self.footingThickness)
-    foundationMaterial= foundationSection.defSeccShElastica2d(preprocessor,wallMatData) #Foundation elements material.
+    foundationMaterial= foundationSection.defElasticShearSection2d(preprocessor,wallMatData) #Foundation elements material.
     elementSize= 0.2
     seedElemLoader= preprocessor.getElementLoader.seedElemLoader
     seedElemLoader.defaultMaterial= foundationSection.sectionName
@@ -479,7 +479,7 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
     self.foundationSet.fillDownwards()
     
     stemSection= section_properties.RectangularSection(self.name+"StemSection",self.b,(self.stemTopWidth+self.stemBottomWidth)/2.0)
-    stemMaterial= stemSection.defSeccShElastica2d(preprocessor,wallMatData) #Stem elements material.
+    stemMaterial= stemSection.defElasticShearSection2d(preprocessor,wallMatData) #Stem elements material.
     self.stemSet= preprocessor.getSets.defSet("stemSet")
     for lineName in ['stem']:
       l= self.wireframeModelLines[lineName]
@@ -716,12 +716,12 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
   
   def resultComb(self,nmbComb):
     '''Solution and result retrieval routine.'''
-    preprocessor= self.FEModel.getPreprocessor   
+    preprocessor= self.feProblem.getPreprocessor   
     preprocessor.resetLoadCase()
     preprocessor.getLoadLoader.getLoadCombinations.addToDomain(nmbComb)
     #Solution
     solution= predefined_solutions.SolutionProcedure()
-    analysis= solution.simpleStaticLinear(self.FEModel)
+    analysis= solution.simpleStaticLinear(self.feProblem)
     result= analysis.analyze(1)
     reactions= self.getReactions()
     preprocessor.getLoadLoader.getLoadCombinations.removeFromDomain(nmbComb)

@@ -72,16 +72,28 @@ class Graph;
 
 //! @ingroup Graph
 //
-//! @brief GraphPartitioner is an abstract base class. Its
+//! @brief Base class for graph partitioners. A graph
+//! partitioner is an algorithm for partitioning
+//! (coloring) the vertices of a graph.
+//!
+//! GraphPartitioner is an abstract base class. Its
 //! subtypes are responsible for partioning the vertices
 //! of a graph. The partitioning is done in the method
 //! partition which sets the colors of the vertices of the graph to colors 1
-//! through numParrtitions.
+//! through numPartitions.
 class GraphPartitioner
   {
   protected:
+    //! @breif Constructor.
     GraphPartitioner(void) {};
   public:
+    //! @brief Method invoked to partition the graph.
+    //!
+    //! This is the method invoked to partition the graph into \p numPart
+    //! partitions. On completion of the routine each vertex will be assigned
+    //! a color \f$1\f$ through \p numPart, the color assigned indicating the
+    //! partition to which the vertex belongs. Returns a 0 if successful, a
+    //! negative number if not; the value depending on the subclass.
     virtual int partition(Graph &theGraph, int numPart) =0;
   };
 } // end of XC namespace

@@ -25,9 +25,9 @@ rotacion= xc.Matrix([[1,0,0],[0,math.cos(angRotacion),math.sin(angRotacion)],[0,
 
 
 # Problem type
-prueba= xc.ProblemaEF()
-prueba.logFileName= "/tmp/borrar.log" # Ignore warning messages
-preprocessor=  prueba.getPreprocessor
+feProblem= xc.FEProblem()
+feProblem.logFileName= "/tmp/borrar.log" # Ignore warning messages
+preprocessor=  feProblem.getPreprocessor
 nodes= preprocessor.getNodeLoader
 modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
 nod1= nodes.newNodeIDXYZ(1,0,0,0)

@@ -75,6 +75,14 @@ namespace XC {
 //! @ingroup Numerador
 //
 //! @brief Trivial DOF numberer.
+//!
+//! The PlainNumberer class is a DOF\_Numberer. An object of this
+//! class assigns the equation numbers to thee DOF\_Groups based on the
+//! order in which they are obtained from the DOF\_GroupIter object
+//! obtained from the AnalyisModel. The class is useful for situations
+//! where the SystemOfEqn or Solver objects will impose a renumbering on
+//! the equations, which makes performing a complex numbering of the
+//! degrees-of-freedom a waste of computational effort.
 class PlainNumberer: public DOF_Numberer
   {
   protected:

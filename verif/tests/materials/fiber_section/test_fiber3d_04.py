@@ -27,9 +27,9 @@ Area= 1.0
 eps= F/(Area*Es)
 
 # Problem type
-prueba= xc.ProblemaEF()
-prueba.logFileName= "/tmp/borrar.log" # Ignore warning messages
-preprocessor=  prueba.getPreprocessor
+feProblem= xc.FEProblem()
+feProblem.logFileName= "/tmp/borrar.log" # Ignore warning messages
+preprocessor=  feProblem.getPreprocessor
 nodes= preprocessor.getNodeLoader
 
 modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
@@ -53,36 +53,36 @@ TK31= 0.0; TK32= 0.0; TEIz= 0.0
 
 elast0= typical_materials.defElasticMaterial(preprocessor, "elast0",Es)
 # Secciones
-prb= preprocessor.getMaterialLoader.newMaterial("fiber_section_3d","prb")
+fiberSectionTest= preprocessor.getMaterialLoader.newMaterial("fiber_section_3d","fiberSectionTest")
 
-prb.addFiber("elast0",Area,xc.Vector([yF,zF]))
+fiberSectionTest.addFiber("elast0",Area,xc.Vector([yF,zF]))
 
-A= prb.getArea
-yG= prb.getCdgY()
-zG= prb.getCdgZ()
-IEA= prb.getInitialTangentStiffness().at(1,1)
-IK12= prb.getInitialTangentStiffness().at(1,2)
-IK13= prb.getInitialTangentStiffness().at(1,3)
-IK21= prb.getInitialTangentStiffness().at(2,1)
-IEIy= prb.getInitialTangentStiffness().at(2,2)
-IK23= prb.getInitialTangentStiffness().at(2,3)
-IK31= prb.getInitialTangentStiffness().at(3,1)
-IK32= prb.getInitialTangentStiffness().at(3,2)
-IEIz= prb.getInitialTangentStiffness().at(3,3)
+A= fiberSectionTest.getArea
+yG= fiberSectionTest.getCdgY()
+zG= fiberSectionTest.getCdgZ()
+IEA= fiberSectionTest.getInitialTangentStiffness().at(1,1)
+IK12= fiberSectionTest.getInitialTangentStiffness().at(1,2)
+IK13= fiberSectionTest.getInitialTangentStiffness().at(1,3)
+IK21= fiberSectionTest.getInitialTangentStiffness().at(2,1)
+IEIy= fiberSectionTest.getInitialTangentStiffness().at(2,2)
+IK23= fiberSectionTest.getInitialTangentStiffness().at(2,3)
+IK31= fiberSectionTest.getInitialTangentStiffness().at(3,1)
+IK32= fiberSectionTest.getInitialTangentStiffness().at(3,2)
+IEIz= fiberSectionTest.getInitialTangentStiffness().at(3,3)
 
-prb.setTrialSectionDeformation(xc.Vector([eps,0.0,0.0]))
-TEA= prb.getTangentStiffness().at(1,1)
-TK12= prb.getTangentStiffness().at(1,2)
-TK13= prb.getTangentStiffness().at(1,3)
-TK21= prb.getTangentStiffness().at(2,1)
-TEIy= prb.getTangentStiffness().at(2,2)
-TK23= prb.getTangentStiffness().at(2,3)
-TK31= prb.getTangentStiffness().at(3,1)
-TK32= prb.getTangentStiffness().at(3,2)
-TEIz= prb.getTangentStiffness().at(3,3)
+fiberSectionTest.setTrialSectionDeformation(xc.Vector([eps,0.0,0.0]))
+TEA= fiberSectionTest.getTangentStiffness().at(1,1)
+TK12= fiberSectionTest.getTangentStiffness().at(1,2)
+TK13= fiberSectionTest.getTangentStiffness().at(1,3)
+TK21= fiberSectionTest.getTangentStiffness().at(2,1)
+TEIy= fiberSectionTest.getTangentStiffness().at(2,2)
+TK23= fiberSectionTest.getTangentStiffness().at(2,3)
+TK31= fiberSectionTest.getTangentStiffness().at(3,1)
+TK32= fiberSectionTest.getTangentStiffness().at(3,2)
+TEIz= fiberSectionTest.getTangentStiffness().at(3,3)
 
-R= prb.getStressResultant()
-fibers= prb.getFibers()
+R= fiberSectionTest.getStressResultant()
+fibers= fiberSectionTest.getFibers()
 MomYFibersDq= fibers.getMy(0.0)
 MomZFibersDq= fibers.getMz(0.0)
 

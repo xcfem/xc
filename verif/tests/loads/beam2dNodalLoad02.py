@@ -30,16 +30,16 @@ x= 0.5 # Relative abscissae where the punctual load is applied.
 P= 1e3 # punctual load.
 
 # Problem type
-prueba= xc.ProblemaEF()
-preprocessor=  prueba.getPreprocessor   
+feProblem= xc.FEProblem()
+preprocessor=  feProblem.getPreprocessor   
 nodes= preprocessor.getNodeLoader
 
-sccPrueba= section_properties.RectangularSection("prueba",b,h)
-matSccPrueba=typical_materials.MaterialData(name='matSec',E=E,nu=0.3,rho=2500)
+sectionTest= section_properties.RectangularSection("sectionTest",b,h) # Section geometry.
+sectionTestMaterial=typical_materials.MaterialData(name='sectionTestMaterial',E=E,nu=0.3,rho=2500) # Section material.
 
 modelSpace= predefined_spaces.StructuralMechanics2D(nodes)
 # Definimos el material
-defSeccAggregation.defSeccAggregation2d(preprocessor, sccPrueba,matSccPrueba)
+defSeccAggregation.defSeccAggregation2d(preprocessor, sectionTest,sectionTestMaterial)
 nodes.defaultTag= 1 #First node number.
 nod= nodes.newNodeXY(0,0)
 nod= nodes.newNodeXY(L,0.0)
@@ -54,7 +54,7 @@ scc= typical_materials.defElasticSection2d(preprocessor, "scc",A,E,I)
 # Elements definition
 elements= preprocessor.getElementLoader
 elements.defaultTransformation= "lin"# Coordinate transformation for the new elements
-elements.defaultMaterial= sccPrueba.sectionName
+elements.defaultMaterial= sectionTest.sectionName
 elements.defaultTag= 1 #Tag for next element.
 beam2d= elements.newElement("ForceBeamColumn2d",xc.ID([1,2]))
     
@@ -76,7 +76,7 @@ lp0.newNodalLoad(2,xc.Vector([0,-P,0]))
 casos.addToDomain("0")
 
 # Solution
-analisis= predefined_solutions.simple_static_linear(prueba)
+analisis= predefined_solutions.simple_static_linear(feProblem)
 result= analisis.analyze(1)
 
 

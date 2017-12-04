@@ -45,8 +45,8 @@ def getMomentCurvatureDiagram3D(preprocessor, nmbSecc, esfAxil, maxK, numIncr):
   #We add the load case to domain.
   casos.addToDomain("0")
 
-  analisis= predefined_solutions.simple_newton_raphson(prueba)
-  analOk= analisis.analyze(1)
+  analysis= predefined_solutions.simple_newton_raphson(prueba)
+  analOk= analysis.analyze(1)
 
   lp1= casos.newLoadPattern("default","1")
   lp1.newNodalLoad(nod2.tag,xc.Vector([0,0,0,0,0,0,1]))

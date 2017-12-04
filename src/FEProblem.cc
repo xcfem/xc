@@ -25,9 +25,9 @@
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
 
-//ProblemaEF.cc
+//FEProblem.cc
 
-#include "ProblemaEF.h"
+#include "FEProblem.h"
 
 //Salida de resultados.
 #include "utility/handler/DataOutputHandler.h"
@@ -50,15 +50,15 @@
 #include "utility/med_xc/MEDMeshing.h"
 #include "utility/med_xc/MEDMesh.h"
 
-XC::FEM_ObjectBrokerAllClasses XC::ProblemaEF::theBroker;
-XC::Domain *XC::ProblemaEF::theActiveDomain= nullptr;
+XC::FEM_ObjectBrokerAllClasses XC::FEProblem::theBroker;
+XC::Domain *XC::FEProblem::theActiveDomain= nullptr;
 
 //! @brief Default constructor.
-XC::ProblemaEF::ProblemaEF(void)
+XC::FEProblem::FEProblem(void)
   : preprocessor(this,&output_handlers),proc_solu(this), dataBase(nullptr) {}
 
 //! @brief Database definition.
-XC::FE_Datastore *XC::ProblemaEF::defineDatabase(const std::string &tipo, const std::string &nombre)
+XC::FE_Datastore *XC::FEProblem::defineDatabase(const std::string &tipo, const std::string &nombre)
   {
     if(dataBase)
       {
@@ -83,11 +83,11 @@ XC::FE_Datastore *XC::ProblemaEF::defineDatabase(const std::string &tipo, const 
     return dataBase; 
   }
 
-XC::ProblemaEF::~ProblemaEF(void)
+XC::FEProblem::~FEProblem(void)
   { clearAll(); }
 
 //! @brief Delete all entities in the FE problem
-void XC::ProblemaEF::clearAll(void)
+void XC::FEProblem::clearAll(void)
   {
     for(DataOutputHandler::map_output_handlers::iterator i= output_handlers.begin();i!=output_handlers.end();i++)
       {

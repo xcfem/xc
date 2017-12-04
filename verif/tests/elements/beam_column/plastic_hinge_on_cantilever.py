@@ -18,7 +18,7 @@ from materials.ec3 import EC3_materials
 from model import predefined_spaces
 from solution import predefined_solutions
 
-test= xc.ProblemaEF()
+test= xc.FEProblem()
 preprocessor=  test.getPreprocessor
 
 S355JR= EC3_materials.S355JR

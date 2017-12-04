@@ -37,7 +37,7 @@ namespace XC {
 class MapSet;
 class MapFields;
 class MEDDblFieldInfo;
-class ProblemaEF;
+class FEProblem;
 
 //! @ingroup MED
 //
@@ -73,7 +73,7 @@ class MEDMeshing: public MEDObject
     
   public:
     MEDMeshing(const Mesh &,const MapSet &, const MapFields &);
-    MEDMeshing(const ProblemaEF &);
+    MEDMeshing(const FEProblem &);
     ~MEDMeshing(void);
 
     void clear(void);

@@ -21,8 +21,8 @@ sin135= -cos135
 cooCentroElemTeor= xc.Vector([-1.36603,1.36603,0])
 
 # Problem type
-prueba= xc.ProblemaEF()
-preprocessor=  prueba.getPreprocessor
+feProblem= xc.FEProblem()
+preprocessor=  feProblem.getPreprocessor
 nodes= preprocessor.getNodeLoader
 modelSpace= predefined_spaces.SolidMechanics3D(nodes)
 # Materials definition

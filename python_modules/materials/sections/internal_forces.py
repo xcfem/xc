@@ -103,6 +103,8 @@ class CrossSectionInternalForces:
     return self.getCSVString()
 
 def transformInternalForces(iForces,theta):
+  '''Computes internal forces in a system rotated theta
+     degrees with respect to the z(3) axis.'''
   cos2T= math.cos(2*theta)
   sin2T= math.sin(2*theta)
   tmpA= (iForces[0]+iForces[1])/2.0

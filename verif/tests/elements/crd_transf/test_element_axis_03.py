@@ -27,8 +27,8 @@ L= 1 # Element length expressed in meters.
 F= 1.0e3 # Load magnitude (kN)
 
 # Problem type
-prueba= xc.ProblemaEF()
-preprocessor=  prueba.getPreprocessor
+feProblem= xc.FEProblem()
+preprocessor=  feProblem.getPreprocessor
 nodes= preprocessor.getNodeLoader
 modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
 nodes.defaultTag= 1 #First node number.
@@ -79,7 +79,7 @@ lp0.newNodalLoad(2,xc.Vector([0,-F,F,0,0,0]))
 casos.addToDomain("0")
 
 # Solution
-analisis= predefined_solutions.simple_static_linear(prueba)
+analisis= predefined_solutions.simple_static_linear(feProblem)
 result= analisis.analyze(1)
 deltaYTeor= (-F*L**3/(3*E*Iz))
 deltaZTeor= (F*L**3/(3*E*Iy))

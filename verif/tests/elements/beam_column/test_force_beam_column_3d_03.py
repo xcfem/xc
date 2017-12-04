@@ -29,8 +29,8 @@ Iz= depth*width**3/12 # Cross section moment of inertia (m4)
 # Load
 F= 1.5e3 # Load magnitude en N
 
-prueba= xc.ProblemaEF()
-preprocessor=  prueba.getPreprocessor   
+feProblem= xc.FEProblem()
+preprocessor=  feProblem.getPreprocessor   
 nodes= preprocessor.getNodeLoader
 # Problem type
 modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
@@ -96,7 +96,7 @@ lp0.newNodalLoad(2,xc.Vector([0,0,-F,0,0,0]))
 #We add the load case to domain.
 casos.addToDomain("0")
 # Solution procedure
-analisis= predefined_solutions.simple_static_modified_newton(prueba)
+analisis= predefined_solutions.simple_static_modified_newton(feProblem)
 result= analisis.analyze(10)
 
 

@@ -81,6 +81,15 @@ class ModelWrapper;
 //! @ingroup Numerador
 //
 //! @brief Base class for DOF numbererers.
+//!
+//! DOF numberers purpose is to define the interface common among
+//! all subclasses.  A DOF\_Numberer object is responsible for assigning the
+//! equation numbers to the individual dofs in each of the  DOF\_Groups in the
+//! AnalysisModel. The base DOF\_Numberer uses a GraphNumberer object to first
+//! number the DOF\_Groups, based on the ordering of the DOF\_Group objects, it
+//! assigns the equation numbers to the individual degrees-of-freedom. Subtypes
+//! may wish to implement the numbering in a more efficient manner by using
+//! the FE\_Element and DOF\_Group objects directly.
 class DOF_Numberer: public MovableObject, public EntCmd
   {
   private:
@@ -102,8 +111,7 @@ class DOF_Numberer: public MovableObject, public EntCmd
 
     friend class ModelWrapper;
     friend class FEM_ObjectBroker;
-    DOF_Numberer(ModelWrapper *,int classTag);
-    DOF_Numberer(ModelWrapper *);
+    DOF_Numberer(ModelWrapper *,int classTag= NUMBERER_TAG_DOF_Numberer);
     DOF_Numberer(const DOF_Numberer &);
     DOF_Numberer &operator=(const DOF_Numberer &);
     virtual DOF_Numberer *getCopy(void) const;

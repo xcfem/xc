@@ -10,6 +10,7 @@ __email__= "l.pereztato@gmail.com"
 from miscUtils import LogMessages as lmsg
 # from materials.sections.fiber_section import createFiberSets
 from materials.sections.fiber_section import fiberUtils
+from solution import predefined_solutions
 import math
 
 class LimitStateControllerBase(object):
@@ -17,8 +18,18 @@ class LimitStateControllerBase(object):
   Basic parameters for limit state control (normal stresses, shear, crack,...).'''
   tensionedRebarsFiberSetName= "tensionedReinforcement" #Name of the tensiones rebar fibers set.
 
-  def __init__(self,limitStateLabel):
-    self.limitStateLabel= limitStateLabel #Property name in the check results file (something like 'ULS_shear' or 'SLS_crack_freq' or ...) 
+  def __init__(self,limitStateLabel, fakeSection= True):
+    '''
+    :param limitStateLabel: property name in the check results file 
+                            (something like 'ULS_shear' or 'SLS_crack_freq' 
+                            or ...).
+    :param fakeSection:    true if a fiber section model of the section is not 
+                           needed to perform control.
+    '''
+    self.limitStateLabel= limitStateLabel
+    self.fakeSection= fakeSection
+    #Linear analysis by default.
+    self.analysisToPerform= predefined_solutions.simple_static_linear
 
   def check(self,elements,nmbComb):
     '''Crack control.'''

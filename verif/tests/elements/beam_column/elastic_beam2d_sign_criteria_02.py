@@ -57,8 +57,8 @@ F= 1.5e3    # Load magnitude (kN)
 xRelPtoAplic= 0.5 # x relative (compared to the total length) of the
                   # point on which the load is applied
 
-prueba= xc.ProblemaEF()
-preprocessor=  prueba.getPreprocessor
+feProblem= xc.FEProblem()
+preprocessor=  feProblem.getPreprocessor
 nodes= preprocessor.getNodeLoader
 # Problem type
 modelSpace= predefined_spaces.StructuralMechanics2D(nodes)
@@ -99,7 +99,7 @@ eleLoad.x= xRelPtoAplic
 casos.addToDomain("0")
 
 # Solution 0 N
-analisis= predefined_solutions.simple_static_linear(prueba)
+analisis= predefined_solutions.simple_static_linear(feProblem)
 result= analisis.analyze(1)
 
 RF= elements.getElement(1).getResistingForce()
@@ -127,7 +127,7 @@ eleLoad.x= xRelPtoAplic
 casos.addToDomain("1")
 
 # Solution 1 V
-analisis= predefined_solutions.simple_static_linear(prueba)
+analisis= predefined_solutions.simple_static_linear(feProblem)
 result= analisis.analyze(1)
 
 RF= elements.getElement(1).getResistingForce()

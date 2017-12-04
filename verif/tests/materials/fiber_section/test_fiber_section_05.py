@@ -8,7 +8,7 @@
 import xc_base
 import geom
 import xc
-from misc import banco_pruebas_scc3d
+from misc import scc3d_testing_bench
 from solution import predefined_solutions
 
 __author__= "Luis C. Pérez Tato (LCPT)"
@@ -24,15 +24,14 @@ brazo= 0.5 # Rebar lever arm with respect to the section axis.
 from materials.ehe import EHE_materials
 from model import predefined_spaces
 
-# Coeficientes de seguridad.
 gammas= 1.15 # Partial safety factor for steel.
 
 
 MzDato= 10e3
 NDato= 0.0
 
-prueba= xc.ProblemaEF()
-preprocessor=  prueba.getPreprocessor
+feProblem= xc.FEProblem()
+preprocessor=  feProblem.getPreprocessor
 # Materials definition
 tag= EHE_materials.B500S.defDiagD(preprocessor)
 dgDB500S= EHE_materials.B500S.getDiagD(preprocessor)
@@ -49,7 +48,7 @@ fiberSectionRepr= secBarras.getFiberSectionRepr()
 fiberSectionRepr.setGeomNamed("geomSecBarras")
 secBarras.setupFibers()
 
-banco_pruebas_scc3d.sectionModel(preprocessor, "secBarras")
+scc3d_testing_bench.sectionModel(preprocessor, "secBarras")
 
 # Constraints
 modelSpace= predefined_spaces.getStructuralMechanics3DSpace(preprocessor)
@@ -73,7 +72,7 @@ casos.addToDomain("0")
 
 
 # Solution procedure
-analisis= predefined_solutions.simple_newton_raphson(prueba)
+analisis= predefined_solutions.simple_newton_raphson(feProblem)
 analOk= analisis.analyze(1)
 
 nodes= preprocessor.getNodeLoader

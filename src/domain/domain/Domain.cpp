@@ -60,7 +60,7 @@
 
 
 #include "Domain.h"
-#include "../../ProblemaEF.h"
+#include "../../FEProblem.h"
 #include <cstdlib>
 #include "utility/recorder/Recorder.h"
 
@@ -689,7 +689,7 @@ int XC::Domain::revertToStart(void)
 int XC::Domain::update(void)
   {
     // set the global constants
-    ProblemaEF::theActiveDomain= this;
+    FEProblem::theActiveDomain= this;
     return mesh.update();
   }
 

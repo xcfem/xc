@@ -6,7 +6,7 @@
 import xc_base
 import geom
 import xc
-from misc import banco_pruebas_scc3d
+from misc import scc3d_testing_bench
 from solution import predefined_solutions # Solution procedure
 
 
@@ -28,8 +28,8 @@ areaFi12=1.13e-4
 NDato= 0.0 # Axial force for crack control checking.
 MyDato= 40e3 # Bending moment force for crack control checking.
 
-prueba= xc.ProblemaEF()
-preprocessor=  prueba.getPreprocessor
+feProblem= xc.FEProblem()
+preprocessor=  feProblem.getPreprocessor
 # Materials definition
 concrMatTag25= EHE_materials.HA25.defDiagK(preprocessor)
 tagB500S= EHE_materials.B500S.defDiagK(preprocessor)
@@ -56,7 +56,7 @@ secHA.setupFibers()
 #fibras= secHA.getFibers()
 
 
-banco_pruebas_scc3d.sectionModel(preprocessor, "secHA")
+scc3d_testing_bench.sectionModel(preprocessor, "secHA")
 # Constraints
 modelSpace= predefined_spaces.getStructuralMechanics3DSpace(preprocessor)
 modelSpace.fixNode000_000(1)
@@ -80,7 +80,7 @@ casos.addToDomain("0")
 
 
 # Solution procedure
-analisis= predefined_solutions.simple_newton_raphson(prueba)
+analisis= predefined_solutions.simple_newton_raphson(feProblem)
 analOk= analisis.analyze(10)
 
 

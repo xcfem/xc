@@ -16,17 +16,16 @@ h= 0.30 # Beam cross-section depth.
 b= 0.2 # Beam cross-section width.
 E= 2e6 # Elastic modulus
 
-prueba= xc.ProblemaEF()
-preprocessor=  prueba.getPreprocessor   
+feProblem= xc.FEProblem()
+preprocessor=  feProblem.getPreprocessor   
 nodes= preprocessor.getNodeLoader
 
-seccPrueba= section_properties.RectangularSection("prueba",b,h)
-matseccPrueba=typical_materials.MaterialData(name='mt',E=E,nu=0.3,rho=2500)
+sectionTest= section_properties.RectangularSection("sectionTest",b,h) # Section geometry.
+sectionTestMaterial=typical_materials.MaterialData(name='sectionTestMaterial',E=E,nu=0.3,rho=2500) # Section material.
 
 # Define materials
-defSeccAggregation.defSeccAggregation2d(preprocessor, seccPrueba,matseccPrueba)
-matPrueba= preprocessor.getMaterialLoader.getMaterial("prueba")
-tang= matPrueba.getTangentStiffness()
+defSeccAggregation.defSeccAggregation2d(preprocessor, sectionTest,sectionTestMaterial)
+tang= preprocessor.getMaterialLoader.getMaterial("sectionTest").getTangentStiffness()
 EI= tang.at(1,1)
 EA= tang.at(0,0)
 
@@ -34,15 +33,15 @@ EA= tang.at(0,0)
 
 
 EITeor= (1/12.0*b*h**3*E)
-EITeor2= matseccPrueba.E*seccPrueba.Iz()
+EITeor2= sectionTestMaterial.E*sectionTest.Iz()
 ratio1= ((EI-EITeor)/EITeor)
 EATeor= (b*h*E)
 ratio2= ((EA-EATeor)/EATeor)
 
 ''' 
 print "EI= ",EI
-print "E= ", matseccPrueba.E
-print "I= ", seccPrueba.Iz()
+print "E= ", sectionTestMaterial.E
+print "I= ", sectionTest.Iz()
 print "EITeor= ",EITeor
 print "EITeor2= ",EITeor2
 print "ratio1= ",ratio1

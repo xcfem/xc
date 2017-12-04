@@ -5,7 +5,7 @@ from __future__ import division
 import xc_base
 import geom
 import xc
-from misc import banco_pruebas_scc3d
+from misc import scc3d_testing_bench
 
 
 __author__= "Luis C. Pérez Tato (LCPT)"
@@ -24,8 +24,8 @@ from solution import predefined_solutions
 MzDato= 1e6
 NDato= 0.0
 
-prueba= xc.ProblemaEF()
-preprocessor=  prueba.getPreprocessor
+feProblem= xc.FEProblem()
+preprocessor=  feProblem.getPreprocessor
 # Materials definition
 tag= EHE_materials.Y1860S7.defDiagD(preprocessor, EHE_materials.Y1860S7.tInic())
 tag= EHE_materials.HP45.defDiagD(preprocessor)
@@ -43,7 +43,7 @@ fiberSectionRepr= secHP.getFiberSectionRepr()
 fiberSectionRepr.setGeomNamed("prestressedConcretSectionGeom02")
 secHP.setupFibers()
 
-elem= banco_pruebas_scc3d.sectionModel(preprocessor, "secHP")
+elem= scc3d_testing_bench.sectionModel(preprocessor, "secHP")
 
 # Constraints
 modelSpace= predefined_spaces.getStructuralMechanics3DSpace(preprocessor)
@@ -68,7 +68,7 @@ casos.addToDomain("0")
 
 # Solution procedure
 solution= predefined_solutions.SolutionProcedure()
-analysis= solution.simpleNewtonRaphson(prueba)
+analysis= solution.simpleNewtonRaphson(feProblem)
 solution.ctest.tol= 1e-8
 solution.ctest.printFlag= 0 #flag used to print information on convergence (optional)
 analOk= analysis.analyze(10)

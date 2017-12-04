@@ -31,8 +31,8 @@ L= 1.5 # Bar length (m)
 # Load
 f= 1.5e3 # Load magnitude (kN/m)
 
-prueba= xc.ProblemaEF()
-preprocessor=  prueba.getPreprocessor   
+feProblem= xc.FEProblem()
+preprocessor=  feProblem.getPreprocessor   
 nodes= preprocessor.getNodeLoader
 
 # Problem type
@@ -81,7 +81,7 @@ comb= combs.newLoadCombination("COMB","1.33*A+1.5*B")
 # Solution procedure
 # Resolvemos para el caso A
 cargas.addToDomain("A") # Append the combination to the domain
-analisis= predefined_solutions.simple_static_linear(prueba)
+analisis= predefined_solutions.simple_static_linear(feProblem)
 result= analisis.analyze(1)
 
 lpA.removeFromDomain() # Quitamos la carga del domain
@@ -117,7 +117,7 @@ cumpleA= (abs(ratio1)<1e-5) & (abs(ratio2)<1e-5) & (abs(ratio3-1.0)<1e-5)
 # Solve for combination COMB
 cargas.addToDomain("COMB")
 
-analisis= predefined_solutions.simple_static_linear(prueba)
+analisis= predefined_solutions.simple_static_linear(feProblem)
 result= analisis.analyze(1)
 
 nod2= nodes.getNode(2)

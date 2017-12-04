@@ -6,7 +6,7 @@
 from __future__ import division
 
 
-from misc import banco_pruebas_scc3d
+from misc import scc3d_testing_bench
 from solution import predefined_solutions
 
 from materials.ehe import EHE_materials
@@ -25,7 +25,7 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
-# Coeficientes de seguridad.
+# Partial safety factors.
 gammac= 1.5 # Partial safety factor for concrete.
 gammas= 1.15 # Partial safety factor for steel.
 
@@ -35,8 +35,8 @@ cover= 0.05 # Concrete cover expressed in meters.
 areaBarra=4e-4
 
 NDato= -400e3 # Axial force for shear checking.
-MyDato= 1e5 # Bending moment force for shear checking.
-MzDato= 1e3 # Bending moment force for shear checking.
+MyDato= 1e5 # Bending moment for shear checking.
+MzDato= 1e3 # Bending moment for shear checking.
 
 numBarras= 3
 
@@ -44,8 +44,8 @@ numBarras= 3
 print "numBarras= ",numBarras
    '''
 
-prueba= xc.ProblemaEF()
-preprocessor=  prueba.getPreprocessor
+feProblem= xc.FEProblem()
+preprocessor=  feProblem.getPreprocessor
 # Materials definition
 materiales= preprocessor.getMaterialLoader
 
@@ -84,7 +84,7 @@ secHA.setRespVyByName("respVy")
 secHA.setRespVzByName("respVz")
 secHA.setRespTByName("respT")
 
-banco_pruebas_scc3d.sectionModel(preprocessor, "secHA")
+scc3d_testing_bench.sectionModel(preprocessor, "secHA")
 
 
 # Constraints
@@ -112,7 +112,7 @@ casos.addToDomain("0")
 
 
 # Solution procedure
-analisis= predefined_solutions.simple_newton_raphson(prueba)
+analisis= predefined_solutions.simple_newton_raphson(feProblem)
 analOk= analisis.analyze(10)
 if(analOk!=0):
   print "Error!; failed to converge."
@@ -120,14 +120,14 @@ if(analOk!=0):
 
 
 
-secHAParamsCortante= EHE_limit_state_checking.ShearControllerEHE('ULS_shear')
+secHAParamsCortante= EHE_limit_state_checking.ShearController('ULS_shear')
 
 
 
 elements= preprocessor.getElementLoader
 ele1= elements.getElement(1)
 scc= ele1.getSection()
-secHAParamsCortante.calcVuEHE08(preprocessor, scc,"",EHE_materials.HA25,EHE_materials.B500S,NDato,math.sqrt(MyDato**2+MzDato**2),0,0)
+secHAParamsCortante.calcVuEHE08(scc,"",EHE_materials.HA25,EHE_materials.B500S,NDato,math.sqrt(MyDato**2+MzDato**2),0,0)
 
 
 Vu2A= secHAParamsCortante.Vu2
@@ -144,7 +144,7 @@ if(analOk!=0):
   exit()
 
 
-secHAParamsCortante.calcVuEHE08(preprocessor, scc,"",EHE_materials.HA25,EHE_materials.B500S, 0,0,0,0)
+secHAParamsCortante.calcVuEHE08(scc,"",EHE_materials.HA25,EHE_materials.B500S, 0,0,0,0)
 
 Vu2B= secHAParamsCortante.Vu2
 
@@ -160,7 +160,7 @@ if(analOk!=0):
   exit()
 
 
-secHAParamsCortante.calcVuEHE08(preprocessor, scc,"",EHE_materials.HA25,EHE_materials.B500S, 0,0,0,0)
+secHAParamsCortante.calcVuEHE08(scc,"",EHE_materials.HA25,EHE_materials.B500S, 0,0,0,0)
 
 Vu2C= secHAParamsCortante.Vu2
 
@@ -173,7 +173,7 @@ Vu2ATeor= 117.052e3
 ratio1= ((Vu2A-Vu2ATeor)/Vu2ATeor)
 Vu2BTeor= 90906.4
 ratio2= ((Vu2B-Vu2BTeor)/Vu2BTeor)
-Vu2CTeor= 127386
+Vu2CTeor= 98923
 ratio3= ((Vu2C-Vu2CTeor)/Vu2CTeor)
 
 

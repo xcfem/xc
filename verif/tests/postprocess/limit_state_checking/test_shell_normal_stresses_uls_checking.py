@@ -5,11 +5,12 @@ import xc_base
 import geom
 import xc
 from materials.ehe import EHE_materials
-from materials.sections.fiber_section import defSeccionHASimple
+from materials.sections.fiber_section import defSimpleRCSection
 from postprocess import RC_material_distribution
 from materials.sections import RCsectionsContainer as sc
 from solution import predefined_solutions
 from materials.sia262 import SIA262_limit_state_checking #Change SIA262->EHE
+from postprocess import limit_state_data as lsd
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
 __copyright__= "Copyright 2015, LCPT and AOO"
@@ -17,16 +18,9 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
-prueba= xc.ProblemaEF()
-prueba.logFileName= "/tmp/borrar.log" # Don't pring warnings
-prueba.errFileName= "/tmp/borrar.err" # Ignore warning messagess about maximum error in computation of the interaction diagram.
-
-import os
-pth= os.path.dirname(__file__)
-#print "pth= ", pth
-if(not pth):
-  pth= "."
-intForcCombFileName= pth+"/esf_test_xLamina.csv"
+feProblem= xc.FEProblem()
+feProblem.logFileName= "/tmp/borrar.log" # Don't pring warnings
+feProblem.errFileName= "/tmp/borrar.err" # Ignore warning messagess about maximum error in computation of the interaction diagram.
 
 
 elementTags= [2524,2527]
@@ -54,17 +48,26 @@ sepL= 1.0/numReinfBarsL
 
 sections= reinfConcreteSections.sectionDefinition
 
-deckSections= defSeccionHASimple.RecordRCSlabBeamSection("deck","RC deck.",concrete, reinfSteel,0.3)
-deckSections.lstRCSects[1].positvRebarRows= [defSeccionHASimple.MainReinfLayer(rebarsDiam=12e-3,areaRebar=areaFi12,rebarsSpacing=sepT,nominalCover=basicCover)]
-deckSections.lstRCSects[1].negatvRebarRows= [defSeccionHASimple.MainReinfLayer(rebarsDiam=12e-3,areaRebar=areaFi12,rebarsSpacing=sepT,nominalCover=basicCover)]
-deckSections.lstRCSects[0].positvRebarRows= [defSeccionHASimple.MainReinfLayer(rebarsDiam=20e-3,areaRebar=areaFi20,rebarsSpacing=sepL,nominalCover=basicCover+12e-3)]
-deckSections.lstRCSects[0].negatvRebarRows= [defSeccionHASimple.MainReinfLayer(rebarsDiam=20e-3,areaRebar=areaFi20,rebarsSpacing=sepL,nominalCover=basicCover+12e-3)]
+deckSections= defSimpleRCSection.RecordRCSlabBeamSection("deck","RC deck.",concrete, reinfSteel,0.3)
+deckSections.lstRCSects[1].positvRebarRows= [defSimpleRCSection.MainReinfLayer(rebarsDiam=12e-3,areaRebar=areaFi12,rebarsSpacing=sepT,nominalCover=basicCover)]
+deckSections.lstRCSects[1].negatvRebarRows= [defSimpleRCSection.MainReinfLayer(rebarsDiam=12e-3,areaRebar=areaFi12,rebarsSpacing=sepT,nominalCover=basicCover)]
+deckSections.lstRCSects[0].positvRebarRows= [defSimpleRCSection.MainReinfLayer(rebarsDiam=20e-3,areaRebar=areaFi20,rebarsSpacing=sepL,nominalCover=basicCover+12e-3)]
+deckSections.lstRCSects[0].negatvRebarRows= [defSimpleRCSection.MainReinfLayer(rebarsDiam=20e-3,areaRebar=areaFi20,rebarsSpacing=sepL,nominalCover=basicCover+12e-3)]
 sections.append(deckSections)
 
 
+import os
+pth= os.path.dirname(__file__)
+#print "pth= ", pth
+if(not pth):
+  pth= "."
 
-controller= SIA262_limit_state_checking.BiaxialBendingNormalStressController('ULS_normalStress')
-meanFCs= reinfConcreteSections.internalForcesVerification3D(intForcCombFileName,"/tmp/ppTN", "d",controller)
+#Checking normal stresses.
+lsd.normalStressesResistance.controller= SIA262_limit_state_checking.BiaxialBendingNormalStressController('ULS_normalStress')
+lsd.LimitStateData.internal_forces_results_directory= pth+'/'
+#intForceFileName= lsd.normalStressesResistance.getInternalForcesFileName()
+
+meanFCs= reinfConcreteSections.internalForcesVerification3D(lsd.normalStressesResistance,"/tmp/ppTN", "d")
 
 
 #print "mean FCs: ", meanFCs

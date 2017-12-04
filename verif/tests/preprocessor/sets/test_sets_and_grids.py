@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
-'''Test sets and grid model. Generation/selection of geometric and FE entities using grid model, boolean operations with the created sets.'''
+'''Test sets and grid model. Generation/selection of geometric and FE 
+   entities using grid model, boolean operations with the created sets.'''
 
 __author__= "Ana Ortega (AO_O)"
 __copyright__= "Copyright 2017, AO_O"
@@ -21,7 +22,7 @@ from model.sets import sets_mng as sets
 
 
 # *** PROBLEM
-FEcase= xc.ProblemaEF()
+FEcase= xc.FEProblem()
 prep=FEcase.getPreprocessor
 nodes= prep.getNodeLoader
 elements= prep.getElementLoader
@@ -68,10 +69,10 @@ columns.description='Columns'
 # defDisplay.displayBlocks(xcSet=totalSet,fName= None,caption= 'Model grid')
 
 
-#                         *** MATERIALS *** 
-mat_slabs=tm.MaterialData(name='mat_slabs',E=2.55e15,nu=0.2,rho=2500)
-mat_walls=tm.MaterialData(name='mat_walls',E=2.55e15,nu=0.2,rho=2500)
-mat_cols=tm.MaterialData(name='mat_cols',E=2.55e15,nu=0.2,rho=2500)
+#                         *** MATERIALS (constitutive models) *** 
+mat_slabs= tm.MaterialData(name='mat_slabs',E=2.55e15,nu=0.2,rho=2500)
+mat_walls= tm.MaterialData(name='mat_walls',E=2.55e15,nu=0.2,rho=2500)
+mat_cols= tm.MaterialData(name='mat_cols',E=2.55e15,nu=0.2,rho=2500)
 
 # Isotropic elastic section-material appropiate for plate and shell analysis
 deck_mat=tm.DeckMaterialData(name='deck_mat',thickness= 0.25,material=mat_slabs)
@@ -79,7 +80,7 @@ deck_mat.setupElasticSection(preprocessor=prep)   #creates de section-material
 wall_mat=tm.DeckMaterialData(name='wall_mat',thickness= 0.15,material=mat_walls)
 wall_mat.setupElasticSection(preprocessor=prep)   #creates de section-material
 
-#Geometric sections
+#Sections geometry
 #rectangular sections
 geomSectColumns=sectpr.RectangularSection(name='geomSectColumns',b=0.25,h=0.25)
 columns_mat= tm.BeamMaterialData(name= 'columns_mat', section=geomSectColumns, material=mat_cols)

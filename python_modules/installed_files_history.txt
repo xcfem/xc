@@ -583,10 +583,14 @@
 /usr/local/lib/python2.7/dist-packages/materials/sections/defSeccAggregation.pyc
 /usr/local/lib/python2.7/dist-packages/materials/sections/fiber_section/createFiberSets.py
 /usr/local/lib/python2.7/dist-packages/materials/sections/fiber_section/createFiberSets.pyc
+/usr/local/lib/python2.7/dist-packages/materials/sections/fiber_section/defColumnRCSection.py
+/usr/local/lib/python2.7/dist-packages/materials/sections/fiber_section/defColumnRCSection.pyc
 /usr/local/lib/python2.7/dist-packages/materials/sections/fiber_section/defSeccionHAPilar.py
 /usr/local/lib/python2.7/dist-packages/materials/sections/fiber_section/defSeccionHAPilar.pyc
 /usr/local/lib/python2.7/dist-packages/materials/sections/fiber_section/defSeccionHASimple.py
 /usr/local/lib/python2.7/dist-packages/materials/sections/fiber_section/defSeccionHASimple.pyc
+/usr/local/lib/python2.7/dist-packages/materials/sections/fiber_section/defSimpleRCSection.py
+/usr/local/lib/python2.7/dist-packages/materials/sections/fiber_section/defSimpleRCSection.pyc
 /usr/local/lib/python2.7/dist-packages/materials/sections/fiber_section/fiberUtils.py
 /usr/local/lib/python2.7/dist-packages/materials/sections/fiber_section/fiberUtils.pyc
 /usr/local/lib/python2.7/dist-packages/materials/sections/fiber_section/geomArmaduraSeccionesFibras.py
@@ -781,6 +785,12 @@
 /usr/local/lib/python2.7/dist-packages/misc/metal3dToEsfBarra.pyc
 /usr/local/lib/python2.7/dist-packages/misc/project_directories.py
 /usr/local/lib/python2.7/dist-packages/misc/project_directories.pyc
+/usr/local/lib/python2.7/dist-packages/misc/scc2d_testing_bench.py
+/usr/local/lib/python2.7/dist-packages/misc/scc2d_testing_bench.pyc
+/usr/local/lib/python2.7/dist-packages/misc/scc3d_testing_bench.py
+/usr/local/lib/python2.7/dist-packages/misc/scc3d_testing_bench.pyc
+/usr/local/lib/python2.7/dist-packages/misc/shell_testing_bench.py
+/usr/local/lib/python2.7/dist-packages/misc/shell_testing_bench.pyc
 /usr/local/lib/python2.7/dist-packages/misc/tablaEsf.py
 /usr/local/lib/python2.7/dist-packages/misc/tablaEsf.pyc
 /usr/local/lib/python2.7/dist-packages/model/apoyo_elastico.py

@@ -14,11 +14,11 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
-prueba= xc.ProblemaEF()
-preprocessor=  prueba.getPreprocessor
+feProblem= xc.FEProblem()
+preprocessor=  feProblem.getPreprocessor
 nodes= preprocessor.getNodeLoader
 
-prueba.logFileName= "/tmp/borrar.log" # Nicely avoid warning messages.
+feProblem.logFileName= "/tmp/borrar.log" # Nicely avoid warning messages.
 NumDivI= 3
 NumDivJ= 2
 CooMax= 10
@@ -65,7 +65,7 @@ nnodCuadr= f1.getNumNodes
 nelemCuadr= f1.getNumElements
 # print "nelem= ",f1.getNumElements
 
-mesh= prueba.getDomain.getMesh
+mesh= feProblem.getDomain.getMesh
 nnodDom= mesh.getNumNodes()
 
 # print "number of nodes: ",nnod

@@ -10,12 +10,12 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
-# prueba.logFileName= "/tmp/borrar.log"  #Ignore warning messages
+# feProblem.logFileName= "/tmp/borrar.log"  #Ignore warning messages
 
 import xc_base
 import geom
 import xc
-from misc import banco_pruebas_scc3d
+from misc import scc3d_testing_bench
 from solution import predefined_solutions
 
 
@@ -25,8 +25,8 @@ from model import predefined_spaces
 
 MzDato= 8e3
 NDato= 299.54e3 # The "prontuario informático" reachs only ~285 kN because of the steel simplified diagram.
-prueba= xc.ProblemaEF()
-preprocessor=  prueba.getPreprocessor
+feProblem= xc.FEProblem()
+preprocessor=  feProblem.getPreprocessor
 # Materials definition
 tag= EHE_materials.B500S.defDiagD(preprocessor)
 tag= EHE_materials.HA25.defDiagD(preprocessor)
@@ -42,7 +42,7 @@ fiberSectionRepr= secHA.getFiberSectionRepr()
 fiberSectionRepr.setGeomNamed("concreteSectionGeom01")
 secHA.setupFibers()
 
-banco_pruebas_scc3d.sectionModel(preprocessor, "secHA")
+scc3d_testing_bench.sectionModel(preprocessor, "secHA")
 
 # Constraints
 modelSpace= predefined_spaces.getStructuralMechanics3DSpace(preprocessor)
@@ -66,7 +66,7 @@ casos.addToDomain("0")
 
 
 # Solution procedure
-analisis= predefined_solutions.simple_newton_raphson(prueba)
+analisis= predefined_solutions.simple_newton_raphson(feProblem)
 analOk= analisis.analyze(10)
 
 

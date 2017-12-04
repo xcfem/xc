@@ -27,9 +27,9 @@ Area= 1.0
 eps= F/(Area*Es)
 
 # Problem type
-prueba= xc.ProblemaEF()
-prueba.logFileName= "/tmp/borrar.log" # Ignore warning messages
-preprocessor=  prueba.getPreprocessor
+feProblem= xc.FEProblem()
+feProblem.logFileName= "/tmp/borrar.log" # Ignore warning messages
+preprocessor=  feProblem.getPreprocessor
 nodes= preprocessor.getNodeLoader
 modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
 
@@ -53,13 +53,13 @@ TK31= 0.0; TK32= 0.0; TEIz= 0.0
 
 elast0= typical_materials.defElasticMaterial(preprocessor, "elast0",Es)
 # Secciones
-prb= preprocessor.getMaterialLoader.newMaterial("fiber_section_3d","prb")
-prb.addFiber("elast0",Area,xc.Vector([yF,zF]))
+fiberSectionTest= preprocessor.getMaterialLoader.newMaterial("fiber_section_3d","fiberSectionTest")
+fiberSectionTest.addFiber("elast0",Area,xc.Vector([yF,zF]))
 
-A= prb.getArea
-yG= prb.getCdgY()
-zG= prb.getCdgZ()
-initialTangentStiffness= prb.getInitialTangentStiffness()
+A= fiberSectionTest.getArea
+yG= fiberSectionTest.getCdgY()
+zG= fiberSectionTest.getCdgZ()
+initialTangentStiffness= fiberSectionTest.getInitialTangentStiffness()
 IEA= initialTangentStiffness.at(1,1)
 IK12= initialTangentStiffness.at(1,2)
 IK13= initialTangentStiffness.at(1,3)
@@ -70,8 +70,8 @@ IK31= initialTangentStiffness.at(3,1)
 IK32= initialTangentStiffness.at(3,2)
 IEIz= initialTangentStiffness.at(3,3)
 
-prb.setTrialSectionDeformation(xc.Vector([eps,0.0,0.0]))
-tangentStiffness= prb.getTangentStiffness()
+fiberSectionTest.setTrialSectionDeformation(xc.Vector([eps,0.0,0.0]))
+tangentStiffness= fiberSectionTest.getTangentStiffness()
 TEA=  tangentStiffness.at(1,1)
 TK12=  tangentStiffness.at(1,2)
 TK13=  tangentStiffness.at(1,3)
@@ -82,8 +82,8 @@ TK31=  tangentStiffness.at(3,1)
 TK32=  tangentStiffness.at(3,2)
 TEIz=  tangentStiffness.at(3,3)
 
-R= prb.getStressResultant()
-fibers= prb.getFibers()
+R= fiberSectionTest.getStressResultant()
+fibers= fiberSectionTest.getFibers()
 MomYFibersDq= fibers.getMy(0.0)
 MomZFibersDq= fibers.getMz(0.0)
 

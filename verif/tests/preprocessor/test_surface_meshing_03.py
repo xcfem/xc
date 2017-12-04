@@ -23,8 +23,8 @@ numNodes= 0
 numElem= 0
 
 # Problem type
-prueba= xc.ProblemaEF()
-preprocessor=  prueba.getPreprocessor
+feProblem= xc.FEProblem()
+preprocessor=  feProblem.getPreprocessor
 nodes= preprocessor.getNodeLoader
 
 modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
@@ -74,9 +74,9 @@ divsOk= surfaces.conciliaNDivs()
 
 
 setTotal= preprocessor.getSets.getSet("total")
-prueba.setVerbosityLevel(0) #Dont print warning messages about element seed.
+feProblem.setVerbosityLevel(0) #Dont print warning messages about element seed.
 setTotal.genMesh(xc.meshDir.I)
-prueba.setVerbosityLevel(1) #Print warnings again 
+feProblem.setVerbosityLevel(1) #Print warnings again 
 
 
 numNodes= setTotal.getNodes.size
@@ -85,7 +85,7 @@ numElem= setTotal.getElements.size
 
 
 areaTotal= 0.0
-mesh= prueba.getDomain.getMesh
+mesh= feProblem.getDomain.getMesh
 eIter= mesh.getElementIter
 elem= eIter.next()
 while not(elem is None):

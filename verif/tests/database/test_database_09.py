@@ -32,8 +32,8 @@ L= 1.5 # Bar length (m)
 # Load
 F= 1.5e3 # Load magnitude (kN)
 
-prueba= xc.ProblemaEF()
-preprocessor=  prueba.getPreprocessor   
+feProblem= xc.FEProblem()
+preprocessor=  feProblem.getPreprocessor   
 nodes= preprocessor.getNodeLoader
 
 # Problem type
@@ -73,16 +73,16 @@ casos.addToDomain("0")
 
 import os
 os.system("rm -r -f /tmp/test09.db")
-db= prueba.newDatabase("BerkeleyDB","/tmp/test09.db")
+db= feProblem.newDatabase("BerkeleyDB","/tmp/test09.db")
 db.save(100)
-prueba.clearAll()
-prueba.setVerbosityLevel(0) #Dont print warning messages
+feProblem.clearAll()
+feProblem.setVerbosityLevel(0) #Dont print warning messages
                             #about pointers to material.
 db.restore(100)
-prueba.setVerbosityLevel(1) #Print warnings again 
+feProblem.setVerbosityLevel(1) #Print warnings again 
 
 # Solution
-analisis= predefined_solutions.simple_static_linear(prueba)
+analisis= predefined_solutions.simple_static_linear(feProblem)
 result= analisis.analyze(1)
 
 

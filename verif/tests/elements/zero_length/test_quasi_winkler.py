@@ -33,8 +33,8 @@ h= pow(12*I,1/3.0)
 A= h # Suponemos width unidad
 
 # Problem type
-prueba= xc.ProblemaEF()
-preprocessor=  prueba.getPreprocessor
+feProblem= xc.FEProblem()
+preprocessor=  feProblem.getPreprocessor
 nodes= preprocessor.getNodeLoader
 modelSpace= predefined_spaces.StructuralMechanics2D(nodes)
 
@@ -118,7 +118,7 @@ casos.addToDomain("0")
 # Solution procedure
 solution= predefined_solutions.SolutionProcedure()
 solution.convergenceTestTol= 1.0e-2
-analysis= solution.simpleNewtonRaphsonBandGen(prueba)
+analysis= solution.simpleNewtonRaphsonBandGen(feProblem)
 predefined_solutions.resuelveComb(preprocessor, "0",analysis,10)
 
 Lmedios= L/2

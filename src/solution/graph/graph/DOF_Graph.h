@@ -76,6 +76,12 @@ class AnalysisModel;
 //! @ingroup Graph
 //
 //! @brief Degrees of freedom graph.
+//!
+//! DOFGraph is a type of Graph. It is a graph of the DOF
+//! connectivity of the analysis model. It is utilised by a SystemOfEqn
+//! object to determine the sparsity of the system. It is a subtype of
+//! ArrayGraph, though it could just as easily be a subtype of any other
+//! type of Graph subclass that fully implements the graph interface.
 class DOF_Graph: public ModelGraph
   {
   protected:

@@ -28,8 +28,8 @@ lado= math.sqrt(Area)
 eps= F/(Area*Es)
 
 # Problem type
-prueba= xc.ProblemaEF()
-preprocessor=  prueba.getPreprocessor
+feProblem= xc.FEProblem()
+preprocessor=  feProblem.getPreprocessor
 nodes= preprocessor.getNodeLoader
 modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
 nodes.defaultTag= 1
@@ -52,21 +52,21 @@ TK31= 0.0; TK32= 0.0; TEIz= 0.0
 
 elast0= typical_materials.defElasticMaterial(preprocessor, "elast0",Es)
 # Secciones
-prb= preprocessor.getMaterialLoader.newMaterial("fiber_section_3d","prb")
+fiberSectionTest= preprocessor.getMaterialLoader.newMaterial("fiber_section_3d","fiberSectionTest")
 
-prb.addFiber("elast0",Area/4.0,xc.Vector([yF+lado/4,zF+lado/4]))
-prb.addFiber("elast0",Area/4.0,xc.Vector([yF-lado/4,zF+lado/4]))
-prb.addFiber("elast0",Area/4.0,xc.Vector([yF-lado/4,zF-lado/4]))
-prb.addFiber("elast0",Area/4.0,xc.Vector([yF+lado/4,zF-lado/4]))
-A= prb.getArea
-yG= prb.getCdgY()
-zG= prb.getCdgZ()
-initialTangentStiffness= prb.getInitialTangentStiffness()
+fiberSectionTest.addFiber("elast0",Area/4.0,xc.Vector([yF+lado/4,zF+lado/4]))
+fiberSectionTest.addFiber("elast0",Area/4.0,xc.Vector([yF-lado/4,zF+lado/4]))
+fiberSectionTest.addFiber("elast0",Area/4.0,xc.Vector([yF-lado/4,zF-lado/4]))
+fiberSectionTest.addFiber("elast0",Area/4.0,xc.Vector([yF+lado/4,zF-lado/4]))
+A= fiberSectionTest.getArea
+yG= fiberSectionTest.getCdgY()
+zG= fiberSectionTest.getCdgZ()
+initialTangentStiffness= fiberSectionTest.getInitialTangentStiffness()
 IEA= initialTangentStiffness.at(1,1);  IK12= initialTangentStiffness.at(1,2); IK13=  initialTangentStiffness.at(1,3)
 IK21= initialTangentStiffness.at(2,1); IEIy= initialTangentStiffness.at(2,2); IK23=  initialTangentStiffness.at(2,3)
 IK31= initialTangentStiffness.at(3,1); IK32= initialTangentStiffness.at(3,2); IEIz=  initialTangentStiffness.at(3,3)
 
-tangentStiffness= prb.getTangentStiffness()
+tangentStiffness= fiberSectionTest.getTangentStiffness()
 TEA= tangentStiffness.at(1,1);  TK12= tangentStiffness.at(1,2); TK13=  tangentStiffness.at(1,3)
 TK21= tangentStiffness.at(2,1); TEIy= tangentStiffness.at(2,2); TK23=  tangentStiffness.at(2,3)
 TK31= tangentStiffness.at(3,1); TK32= tangentStiffness.at(3,2); TEIz=  tangentStiffness.at(3,3)
@@ -74,7 +74,7 @@ TK31= tangentStiffness.at(3,1); TK32= tangentStiffness.at(3,2); TEIz=  tangentSt
 
 # Elements definition
 elements= preprocessor.getElementLoader
-elements.defaultMaterial= "prb"
+elements.defaultMaterial= "fiberSectionTest"
 elements.defaultTag= 1
 zl= elements.newElement("ZeroLengthSection",xc.ID([1,2]))
 
@@ -106,7 +106,7 @@ lp0.newNodalLoad(2,xc.Vector([F,0,0,0,MomY,MomZ]))
 casos.addToDomain("0")
 
 # Solution
-analisis= predefined_solutions.simple_static_linear(prueba)
+analisis= predefined_solutions.simple_static_linear(feProblem)
 result= analisis.analyze(1)
 
 

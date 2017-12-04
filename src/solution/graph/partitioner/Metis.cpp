@@ -86,13 +86,17 @@ extern "C"
 int METIS_PartMeshNodal(int *, int *, int *, int *, int *, int *, int *, int *, int *);
 //int METIS_PartMeshNodal(&ne, &nn, elmnts, &etype, &numflag, &nparts, &edgecut, epart, npart);
 
-
+//! To construct a Metis object which will use the default settings when
+//! partitioning. 
 XC::Metis::Metis(int numParts) 
 :GraphNumberer(GraphNUMBERER_TAG_Metis),
  myPtype(0), myMtype(0), myCoarsenTo(0), myRtype(0), myIPtype(0),
  defaultOptions(true), numPartitions(numParts), theRefResult(0)
  {}
 
+//! To construct a Metis object which will use the setting passed into the
+//! constructor as options to metis's PMETIS() routine. {\em
+//! checkOptions()} is invoked to ensure the settings are valid.
 XC::Metis::Metis(int Ptype, 
 	  int Mtype, 
 	  int coarsenTo,
@@ -105,16 +109,18 @@ XC::Metis::Metis(int Ptype,
   {
     // check the options are valid
     checkOptions();
-  }    
+  }
 
     
-bool
-XC::Metis::setOptions(int Ptype, 
+//! Sets the options for the partitioning to those passed as
+//! arguments. Then invokes checkOptions() to see if the options are
+//! valid. HOW ABOUT REFERRINGR TO MANUAL TO SEE WHAT OPTIONS MEAN.
+bool XC::Metis::setOptions(int Ptype, 
 		  int Mtype,
 		  int coarsenTo,
 		  int Rtype, 
 		  int IPtype)
-{
+  {
     myPtype=Ptype; 
     myMtype = Mtype; 
     myCoarsenTo = coarsenTo; 
@@ -124,13 +130,13 @@ XC::Metis::setOptions(int Ptype,
     defaultOptions = false;
     
     return checkOptions();
-    
-}    
+  }    
 
 
-// bool checkOptions(void) const
-//	returns true if options are o.k., false otherwise
-
+//! @brief returns true if options are o.k., false otherwise
+//!
+//! If options are not valid sets the default options. EXPAND ON VALID
+//! OPTIONS OR REFER TO METIS MANUAL.
 bool XC::Metis::checkOptions(void) 
   {
 
@@ -145,8 +151,9 @@ bool XC::Metis::checkOptions(void)
     if((myPtype != 1) || (myPtype != 2))
       {
 	okFlag = false;
-	std::cerr << "WARNING: XC::Metis::partition ";
-	std::cerr << " - Illegal Ptype " << myPtype << std::endl;
+	std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; WARNING: illegal Ptype "
+		  << myPtype << std::endl;
       }
 	
     if((myMtype != 1) ||  (myMtype != 2) || (myMtype != 3) || 
@@ -154,8 +161,9 @@ bool XC::Metis::checkOptions(void)
 	(myMtype != 21) || (myMtype != 51))
       {
 	okFlag = false;
-	std::cerr << "WARNING: Metis::partition ";
-	std::cerr << " - Illegal Mtype " << myMtype << std::endl;
+	std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; WARNING: illegal Mtype "
+		  << myMtype << std::endl;
       }
 
     if(myPtype == 1)
@@ -165,9 +173,10 @@ bool XC::Metis::checkOptions(void)
 	    (myRtype != 20))
           {
 	    okFlag = false;
-	    std::cerr << "WARNING: Metis::partition ";
-	    std::cerr << " - Illegal Rtype " << myRtype << std::endl;
-	    std::cerr << " for Ptype " << myPtype << std::endl;	    
+	    std::cerr << getClassName() << "::" << __FUNCTION__
+		      << "; WARNING: illegal Rtype "
+		      << myRtype << " for Ptype "
+		      << myPtype << std::endl;	    
 	  }
       }
     else if(myPtype == 2)
@@ -175,23 +184,25 @@ bool XC::Metis::checkOptions(void)
 	if((myRtype != 11) || (myRtype != 12) || (myRtype != 20))
           {
 	    okFlag = false;
-		std::cerr << "WARNING: Metis::partition ";
-		std::cerr << " - Illegal Rtype " << myRtype << std::endl;
-		std::cerr << " for Ptype " << myPtype << std::endl;	    
+		std::cerr << getClassName() << "::" << __FUNCTION__
+			  << "; WARNING: illegal Rtype " << myRtype
+			  << " for Ptype " << myPtype << std::endl;	    
 	      }
       }
     if((myIPtype != 1) || (myIPtype != 2) || (myIPtype != 3) || (myIPtype != 4))
       {
 	okFlag = false;
-	std::cerr << "WARNING: XC::Metis::partition ";
-	std::cerr << " - Illegal IPtype " << myIPtype << std::endl;
+	std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; WARNING: illegal IPtype "
+		  << myIPtype << std::endl;
       }
 	
     if(myCoarsenTo < 0)
       {
 	okFlag = false;
-	std::cerr << "WARNING: XC::Metis::partition ";
-	std::cerr << " - Illegal coarsen To " << myCoarsenTo << std::endl;
+	std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; WARNING: illegal coarsen To "
+		  << myCoarsenTo << std::endl;
       }	    
 
     if(okFlag == false)
@@ -200,6 +211,7 @@ bool XC::Metis::checkOptions(void)
   }
 
 
+//! @brief Sets the default options.
 bool XC::Metis::setDefaultOptions(void)
   {
     defaultOptions = true;
@@ -207,13 +219,29 @@ bool XC::Metis::setDefaultOptions(void)
   }
 
 
-// int partition(Graph &theGraph, int numPart)
-//	Method to partition the graph. It first creates the arrays needed
-//	by the metis lib and then invokes a function from the metis lib to
-//	partition the graph. The solors of the vertices of the graph are
-//	set to colors 0 through numPart-1 to indicate which partition the
-//	vrtices are in. Returns -1 if options are not set, -2 if metis failed.
-
+//! @brief Method that performs the graph partitioning.
+//!
+//! This is the method invoked to partition the graph into \p numPart
+//! partitions. On completion of the routine each vertex will be assigned
+//! a color \f$1\f$ through \p numPart, the color assigned indicating the
+//! partition to which the vertex belongs. 
+//! 
+//! To partition a number of integer arrays are created, {\em options[5]},
+//! {\em partition[numVertex+1]}, {\em xadj[numVertex+1]} and {\em
+//! adjncy[2*numEdge]} (CURRENTLY ASSUMING GRAPH IS SYMMETRIC - THIS MAY
+//! CHANGE \& xadj and partition 1 LARGER THAN REQUIRED). If not enough
+//! memory is available for the arrays, a warning message is printed and
+//! \f$-2\f$ is returned. The data for \p xadj and \p adjncy are
+//! determined from the Vertices of the Graph by iterating over each
+//! Vertex from \f$0\f$ through \p numVertex \f$-1\f$. If default options are
+//! specified {\em options[0]} is set to \f$0\f$, otherwise \f$1\f$ with {\em
+//! options[1:4] = coarsenTo, mType, ipType, rType}. if \p pType equals
+//! \f$1\f$ \p PMETIS is called, otherwise \p KMETIS is called. Both are
+//! called with the following arguments: {\em numVertex, xadj,adjncy, 0,
+//! 0, \&weightFlag, options, numPart, \&numbering, \&edgecut, partition} 
+//! The colors of the partitions are then set equal to the color indicated
+//! in \p partition.  The integer arrays are destroyed and \f$0\f$
+//! returned.
 int XC::Metis::partition(Graph &theGraph, int numPart)
   {
     // first we check that the options are valid
@@ -224,13 +252,13 @@ int XC::Metis::partition(Graph &theGraph, int numPart)
 
     int numVertex = theGraph.getNumVertex();
     int numEdge = theGraph.getNumEdge();
-    //    std::cerr << " Metis::partition --- numVertex: " << numVertex << " numEdge: "<<  numEdge << "\n";
-    int *options = new int [5];
-    int *partition = new int [numVertex+1];    
-    int *xadj = new int [numVertex+2];
-    int *adjncy = new int [2*numEdge];
-    int *vwgts = 0;
-    int *ewgts = 0;
+    //    std::cerr << getClassName() << "::" << __FUNCTION__ << "--- numVertex: " << numVertex << " numEdge: "<<  numEdge << "\n";
+    std::vector<int> options(5,0);
+    std::vector<int> partition(numVertex+1,0);    
+    std::vector<int> xadj(numVertex+2,0);
+    std::vector<int> adjncy(2*numEdge,0);
+    int *vwgts= nullptr;
+    int *ewgts= nullptr;
     int numbering = 0;
     int weightflag = 0; // no weights on our graphs yet
 
@@ -238,24 +266,19 @@ int XC::Metis::partition(Graph &theGraph, int numPart)
 	numbering = 0;	
     else if (START_VERTEX_NUM == 1)
 	numbering = 1;
-    else {
-	std::cerr << "WARNING Metis::partition - No partitioning done";
-	std::cerr << " vertex numbering must start at 0 or 1\n";
+    else
+      {
+	std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "WARNING; No partitioning done"
+		  << " vertex numbering must start at 0 or 1\n";
 	return (-2);
-    }
+      }
     int edgecut;
     
-    if ((options == 0) || (partition == 0) || (xadj == 0) || (adjncy == 0)) {
-	std::cerr << "WARNING Metis::partition - No partitioning done";
-	std::cerr << " as ran out of memory\n";
-	return (-2);
-    }
-
-
     // we build these data structures
     
     int indexEdge = 0;
-    xadj[0] = 0;
+    xadj[0]= 0;
 
     Vertex *vertexPtr;
     for (int vertex =0; vertex<numVertex; vertex++) {
@@ -264,17 +287,13 @@ int XC::Metis::partition(Graph &theGraph, int numPart)
 	// check we don't have an invalid vertex numbering scheme
 	// if so WARNING message, clean up and return -2
 
-	if (vertexPtr == 0) {
-	    std::cerr << "WARNING Metis::partition - No partitioning done";
-	    std::cerr << " Metis requires consequtive Vertex Numbering\n";
-	    
-	    delete [] options;
-	    delete [] partition;
-	    delete [] xadj;
-	    delete [] adjncy;
-	    
+	if(vertexPtr== nullptr)
+	  {
+	    std::cerr << getClassName() << "::" << __FUNCTION__
+		      << "WARNING; No partitioning done"
+		      << " Metis requires consequtive Vertex Numbering\n";    
 	    return -2;
-	}
+	  }
 	
 	const std::set<int> &adjacency = vertexPtr->getAdjacency();
 	for(std::set<int>::const_iterator i=adjacency.begin(); i!=adjacency.end(); i++)
@@ -284,59 +303,58 @@ int XC::Metis::partition(Graph &theGraph, int numPart)
     }
     
     
-    if (defaultOptions == true) 
-	options[0] = 0;
-    else {
-	options[0] =1;
-	options[1] = myCoarsenTo;
-	options[2] = myMtype;
-	options[3] = myIPtype;
-	options[4] = myRtype;
-    }
+    if(defaultOptions == true) 
+	options[0]= 0;
+    else
+      {
+	options[0]=  1;
+	options[1]= myCoarsenTo;
+	options[2]= myMtype;
+	options[3]= myIPtype;
+	options[4]= myRtype;
+      }
     
     
     // we now the metis routines
     //
 
     
-    if (myPtype == 1) {
-      //std::cerr << " Metis::partition PartGraphRecursive \n";
-      METIS_PartGraphRecursive(&numVertex, xadj, adjncy, vwgts, ewgts, &weightflag,&numbering, &numPart,options, &edgecut, partition);
-    }
-    else {		
-      //std::cerr << " Metis::partition PartGraphKway w/ \n";
-      /*
-      for (int i=0 ; i<numVertex; i++){
-	std::cerr << " list of node :" << i ;
-	std::cerr << " contains:  " ;
-	for (int j=xadj[i]; j<=xadj[i+1]-1; j++){
-	  std::cerr << adjncy[j] << " " ;
-	}
-	std::cerr << "\n";
+    if (myPtype == 1)
+      {
+        //std::cerr << getClassName() << "::" << __FUNCTION__ << " PartGraphRecursive \n";
+        METIS_PartGraphRecursive(&numVertex, &xadj[0], &adjncy[0], vwgts, ewgts, &weightflag,&numbering, &numPart, &options[0], &edgecut, &partition[0]);
       }
-      std::cerr << " numpart " << numPart;
-      std::cerr << " numbering " << numbering << "\n";
-      */
-      METIS_PartGraphKway(&numVertex, xadj, adjncy, vwgts, ewgts, &weightflag, &numbering, &numPart,options, &edgecut, partition);
-    }
+    else
+      {		
+        //std::cerr << getClassName() << "::" << __FUNCTION__ << "  PartGraphKway w/ \n";
+	/*
+	for (int i=0 ; i<numVertex; i++){
+	  std::cerr << " list of node :" << i ;
+	  std::cerr << " contains:  " ;
+	  for (int j=xadj[i]; j<=xadj[i+1]-1; j++){
+	    std::cerr << adjncy[j] << " " ;
+	  }
+	  std::cerr << "\n";
+	}
+	std::cerr << " numpart " << numPart;
+	std::cerr << " numbering " << numbering << "\n";
+	*/
+	METIS_PartGraphKway(&numVertex, &xadj[0], &adjncy[0], vwgts, ewgts, &weightflag, &numbering, &numPart, &options[0], &edgecut, &partition[0]);
+      }
     //
-    //std::cerr << " Metis::partition returned ok \n";
+    //std::cerr << getClassName() << "::" << __FUNCTION__ << "  returned ok \n";
     
     // we set the vertex colors to correspond to the partitioned scheme
-    for (int vert =0; vert<numVertex; vert++) {
+    for(int vert =0; vert<numVertex; vert++)
+      {
 	vertexPtr = theGraph.getVertexPtr(vert+START_VERTEX_NUM);
 	vertexPtr->setColor(partition[vert]+1); // start colors at 1
-    }
+      }
 
-    // clean up the space and return
-    
-    delete [] options;
-    delete [] partition;
-    delete [] xadj;
-    delete [] adjncy;
-    
+    //return
     return 0;
   }
+
 int XC::Metis::partitionGraph(int *nvtxs, int *xadj, int *adjncy, int *vwgt, 
 		      int *adjwgt, int *wgtflag, int *numflag, int *nparts, 
 		      int *options, int *edgecut, int *part, bool whichToUse)
@@ -381,20 +399,22 @@ const XC::ID &XC::Metis::number(Graph &theGraph, int lastVertex)
 	
     theRefResult.resize(numVertex);
 
-    if (checkOptions() == false) {
-      std::cerr << "ERROR:  Metis::number - chek options failed\n";
-      return theRefResult;
-    }
+    if (checkOptions() == false)
+      {
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "ERROR: chek options failed\n";
+        return theRefResult;
+      }
     
     // now we get room for the data structures metis needs
     int numEdge = theGraph.getNumEdge();
 
-    int *options = new int [5];
-    int *partition = new int [numVertex+1];    
-    int *xadj = new int [numVertex+2];
-    int *adjncy = new int [2*numEdge];
-    int *vwgts = 0;
-    int *ewgts = 0;
+    std::vector<int> options(5,0);
+    std::vector<int> partition(numVertex+1,0);    
+    std::vector<int> xadj(numVertex+2,0);
+    std::vector<int> adjncy(2*numEdge,0);
+    int *vwgts= nullptr;
+    int *ewgts= nullptr;
     int numbering = 0;
     int weightflag = 0; // no weights on our graphs yet
 
@@ -402,20 +422,15 @@ const XC::ID &XC::Metis::number(Graph &theGraph, int lastVertex)
 	numbering = 0;	
     else if (START_VERTEX_NUM == 1)
 	numbering = 1;
-    else {
-	std::cerr << "WARNING Metis::partition - No partitioning done";
-	std::cerr << " vertex numbering must start at 0 or 1\n";
+    else
+      {
+	std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "WARNING; no partitioning done"
+		  << " vertex numbering must start at 0 or 1\n";
 	return theRefResult;
-    }
+      }
     int edgecut;
     
-    if ((options == 0) || (partition == 0) || (xadj == 0) || (adjncy == 0)) {
-	std::cerr << "WARNING Metis::partition - No partitioning done";
-	std::cerr << " as ran out of memory\n";
-	return theRefResult;
-    }
-
-
     // we build these data structures
     
     int indexEdge = 0;
@@ -428,17 +443,14 @@ const XC::ID &XC::Metis::number(Graph &theGraph, int lastVertex)
 	// check we don't have an invalid vertex numbering scheme
 	// if so WARNING message, clean up and return -2
 
-	if (vertexPtr == 0) {
-	    std::cerr << "WARNING Metis::partition - No partitioning done";
-	    std::cerr << " Metis requires consequtive Vertex Numbering\n";
-	    
-	    delete [] options;
-	    delete [] partition;
-	    delete [] xadj;
-	    delete [] adjncy;
+	if(vertexPtr == nullptr)
+	  {
+	    std::cerr << getClassName() << "::" << __FUNCTION__
+		      << "WARNING; No partitioning done"
+		      << " Metis requires consequtive Vertex Numbering\n";
 	    
 	    return theRefResult;
-	}
+	  }
 	
 	const std::set<int> &adjacency= vertexPtr->getAdjacency();
 	for(std::set<int>::const_iterator i=adjacency.begin(); i!=adjacency.end(); i++)
@@ -448,35 +460,36 @@ const XC::ID &XC::Metis::number(Graph &theGraph, int lastVertex)
 
 
     if (defaultOptions == true) 
-	options[0] = 0;
-    else {
-	options[0] =1;
-	options[1] = myCoarsenTo;
-	options[2] = myMtype;
-	options[3] = myIPtype;
-	options[4] = myRtype;
-    }
-    
+	options[0]= 0;
+    else
+      {
+	options[0]= 1;
+	options[1]= myCoarsenTo;
+	options[2]= myMtype;
+	options[3]= myIPtype;
+	options[4]= myRtype;
+      }
     
     // we now the metis routines
     //
     if (myPtype == 1) 
 
-      METIS_PartGraphRecursive(&numVertex, xadj, adjncy, vwgts, ewgts, &weightflag,&numbering, &numPartitions, options, &edgecut, partition);
+      METIS_PartGraphRecursive(&numVertex, &xadj[0], &adjncy[0], vwgts, ewgts, &weightflag,&numbering, &numPartitions, &options[0], &edgecut, &partition[0]);
     else		
-      METIS_PartGraphKway(&numVertex, xadj, adjncy, vwgts, ewgts, &weightflag, 
-	     &numbering, &numPartitions, options, &edgecut, partition);
+      METIS_PartGraphKway(&numVertex, &xadj[0], &adjncy[0], vwgts, ewgts, &weightflag, 
+	     &numbering, &numPartitions, &options[0], &edgecut, &partition[0]);
     //
     /*
     if (myPtype == 1)
 
-      PMETIS(&numVertex, xadj, adjncy, vwgts, ewgts, &weightflag, 
-	     &numPartitions, options, &numbering, &edgecut, partition);
+      PMETIS(&numVertex, &xadj[0], &adjncy[0], vwgts, ewgts, &weightflag, 
+	     &numPartitions, &options[0], &numbering, &edgecut, &partition[0]);
     else		
-      KMETIS(&numVertex, xadj, adjncy, vwgts, ewgts, &weightflag, 
-	     &numPartitions, options, &numbering, &edgecut, partition);
+      KMETIS(&numVertex, &xadj[0], &adjncy[0], vwgts, ewgts, &weightflag, 
+	     &numPartitions, &options[0], &numbering, &edgecut, &partition[0]);
     */
-std::cerr << "Metis::number -2\n";
+    std::cerr << getClassName() << "::" << __FUNCTION__
+              << "number -2\n";
     // we assign numbers now based on the partitions returned.
     // each vertex in partion i is assigned a number less than
     // thos in partion i+1: NOTE WE DON'T CARE WHAT THE NUMBERING IS
@@ -492,18 +505,16 @@ std::cerr << "Metis::number -2\n";
 	}
       }
     }
-std::cerr << "Metis::number -3\n";
-    // clean up the space and return
-    delete [] options;
-    delete [] partition;
-    delete [] xadj;
-    delete [] adjncy;
-std::cerr << "Metis::number -4\n";    
+    std::cerr << getClassName() << "::" << __FUNCTION__
+              << "number -3\n";
+    //return
+    std::cerr << getClassName() << "::" << __FUNCTION__
+              << "number -4\n";    
     return theRefResult;
   }
 
 
-const XC::ID &XC::Metis::number(Graph &theGraph, const XC::ID &lastVertices)
+const XC::ID &XC::Metis::number(Graph &theGraph, const ID &lastVertices)
   { return this->number(theGraph); }
 
 int XC::Metis::sendSelf(CommParameters &cp)

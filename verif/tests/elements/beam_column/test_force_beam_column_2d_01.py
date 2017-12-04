@@ -29,8 +29,8 @@ L= 1.5 # Bar length (m)
 F= 1.5e3 # Load magnitude en N
 
 # Problem type
-prueba= xc.ProblemaEF()
-preprocessor=  prueba.getPreprocessor   
+feProblem= xc.FEProblem()
+preprocessor=  feProblem.getPreprocessor   
 nodes= preprocessor.getNodeLoader
 modelSpace= predefined_spaces.StructuralMechanics2D(nodes)
 nodes.defaultTag= 1 #First node number.
@@ -68,7 +68,7 @@ lp0.newNodalLoad(2,xc.Vector([F,0,0]))
 casos.addToDomain("0")
 
 # Solution procedure
-analisis= predefined_solutions.simple_static_modified_newton(prueba)
+analisis= predefined_solutions.simple_static_modified_newton(feProblem)
 result= analisis.analyze(10)
 
 

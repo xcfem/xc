@@ -6,9 +6,9 @@ import xc_base
 import geom
 import xc
 
-from misc import banco_pruebas_scc3d
+from misc import scc3d_testing_bench
 from solution import predefined_solutions # Solution procedure
-from materials.sections.fiber_section import defSeccionHASimple
+from materials.sections.fiber_section import defSimpleRCSection
 # from materials.sections import section_properties
 
 
@@ -26,7 +26,7 @@ __email__= "l.pereztato@gmail.com"
 areaFi22= SIA262_materials.section_barres_courantes[22e-3]
 areaFi26= SIA262_materials.section_barres_courantes[26e-3]
 
-datosScc1LosC= defSeccionHASimple.RecordRCSimpleSection()
+datosScc1LosC= defSimpleRCSection.RecordRCSimpleSection()
 datosScc1LosC.sectionName= "secHA1LosC"
 datosScc1LosC.sectionDescr= "Deck. Central portion. Section normal to X axis."
 concr= EHE_materials.HA30
@@ -35,10 +35,10 @@ datosScc1LosC.concrType= concr
 datosScc1LosC.h= 0.35
 datosScc1LosC.b= 1.0
 datosScc1LosC.reinfSteelType= EHE_materials.B500S
-negRebRow=defSeccionHASimple.MainReinfLayer()
+negRebRow=defSimpleRCSection.MainReinfLayer()
 negRebRow.setUp(nRebars=0,rebarsDiam=0.0,areaRebar=0.0,width=datosScc1LosC.b,cover=0.1)
 datosScc1LosC.negatvRebarRows=[negRebRow]
-posRebRow=defSeccionHASimple.MainReinfLayer()
+posRebRow=defSimpleRCSection.MainReinfLayer()
 posRebRow.setUp(nRebars=6,rebarsDiam=26e-3,areaRebar=(areaFi22+areaFi26)/2.0,width=datosScc1LosC.b,cover=0.05+0.026/2.0)
 datosScc1LosC.positvRebarRows=[posRebRow]
 
@@ -50,8 +50,8 @@ datosScc1LosC.positvRebarRows=[posRebRow]
 NDato= 0 # Axial force for crack control checking.
 MyDato= 117e3 # Bending moment force for crack control checking.
 
-prueba= xc.ProblemaEF()
-preprocessor=  prueba.getPreprocessor
+feProblem= xc.FEProblem()
+preprocessor=  feProblem.getPreprocessor
 # Materials definition
 # concreteMatTag= EHE_materials.HA30.defDiagK(preprocessor)
 # reinfSteelMaterialTag= EHE_materials.B500S.defDiagK(preprocessor)
@@ -59,7 +59,7 @@ preprocessor=  prueba.getPreprocessor
 
 datosScc1LosC.defRCSimpleSection(preprocessor, "k")
 
-banco_pruebas_scc3d.sectionModel(preprocessor, datosScc1LosC.sectionName)
+scc3d_testing_bench.sectionModel(preprocessor, datosScc1LosC.sectionName)
 
 # Constraints
 modelSpace= predefined_spaces.getStructuralMechanics3DSpace(preprocessor)
@@ -84,7 +84,7 @@ casos.addToDomain("0")
 
 
 # Solution procedure
-analisis= predefined_solutions.simple_newton_raphson(prueba)
+analisis= predefined_solutions.simple_newton_raphson(feProblem)
 analOk= analisis.analyze(10)
 
 

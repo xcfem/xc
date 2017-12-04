@@ -8,8 +8,8 @@ from model import predefined_spaces
 from materials import typical_materials
 from miscUtils import LogMessages as lmsg
 
-prueba= xc.ProblemaEF()
-preprocessor=  prueba.getPreprocessor   
+feProblem= xc.FEProblem()
+preprocessor=  feProblem.getPreprocessor   
 nodes= preprocessor.getNodeLoader
 modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
 nod0= nodes.newNodeXYZ(0.0,0.0,0.0)

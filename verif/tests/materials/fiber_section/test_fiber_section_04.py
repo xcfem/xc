@@ -18,7 +18,7 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com ana.ortega.ort@gmal.com"
 
-# Coeficientes de seguridad.
+# Partial safety factors.
 gammac= 1.5 # Partial safety factor for concrete.
 gammas= 1.15 # Partial safety factor for steel.
 
@@ -52,10 +52,10 @@ e6= 10e-3 # Axial trial strain 1.
 sgc6= EHE_materials.HA25.sigmac(e6)
 sgs6= concrete_base.sigmaDReinfSteel(e6,EHE_materials.B500S)
 
-prueba= xc.ProblemaEF()
-prueba.logFileName= "/tmp/borrar.log" # Don't print warnings.
+feProblem= xc.FEProblem()
+feProblem.logFileName= "/tmp/borrar.log" # Don't print warnings.
 
-preprocessor=  prueba.getPreprocessor
+preprocessor=  feProblem.getPreprocessor
 # Define materials
 tag= EHE_materials.HA25.defDiagD(preprocessor)
 dgDHA25= EHE_materials.HA25.getDiagD(preprocessor)

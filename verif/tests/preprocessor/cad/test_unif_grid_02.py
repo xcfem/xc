@@ -19,8 +19,8 @@ __email__= "l.pereztato@gmail.com"
 ndivX= 5
 ndivY= 8
 
-prueba= xc.ProblemaEF()
-preprocessor=  prueba.getPreprocessor
+feProblem= xc.FEProblem()
+preprocessor=  feProblem.getPreprocessor
 elast2d= typical_materials.defElasticIsotropicPlaneStress(preprocessor, "elast2d",30e6,0.3,0.0)
 
 nodes= preprocessor.getNodeLoader

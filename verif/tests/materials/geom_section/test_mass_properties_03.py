@@ -24,13 +24,13 @@ d= 0.57 # Effective depth.
 diamBar= 22e-3 # Rebar diameter.
 areaBar= math.pi*(diamBar/2)**2 # Rebars area.
 
-prueba= xc.ProblemaEF()
-preprocessor=  prueba.getPreprocessor
+feProblem= xc.FEProblem()
+preprocessor=  feProblem.getPreprocessor
 concrete= typical_materials.defElasticMaterial(preprocessor, 'concrete',Ec)
 steel= typical_materials.defElasticMaterial(preprocessor, "steel",Es)
-geomPrueba= preprocessor.getMaterialLoader.newSectionGeometry("geomPrueba")
+sectionGeometryTest= preprocessor.getMaterialLoader.newSectionGeometry("sectionGeometryTest")
 
-regiones= geomPrueba.getRegions
+regiones= sectionGeometryTest.getRegions
 flange= regiones.newQuadRegion('concrete')# Flange
 flange.pMin= geom.Pos2d(d-hf,0.0)
 flange.pMax= geom.Pos2d(d,b)
@@ -38,7 +38,7 @@ web= regiones.newQuadRegion('concrete')# Web
 web.pMin= geom.Pos2d(0.0,b/2-bw/2)
 web.pMax= geom.Pos2d(d-hf,b/2+bw/2)
 
-reinforcement= geomPrueba.getReinfLayers
+reinforcement= sectionGeometryTest.getReinfLayers
 reinforcementA= reinforcement.newStraightReinfLayer("steel")
 reinforcementA.numReinfBars= 5
 reinforcementA.barArea= areaBar
@@ -46,10 +46,10 @@ reinforcementA.p1= geom.Pos2d(0.0,b/2-bw/2+0.05)
 reinforcementA.p2= geom.Pos2d(0.0,b/2+bw/2-0.05)
 
 
-area= geomPrueba.getAreaHomogenizedSection(Ec)
-G= geomPrueba.getCdgHomogenizedSection(Ec)
-Iy= geomPrueba.getIyHomogenizedSection(Ec)
-Iz= geomPrueba.getIzHomogenizedSection(Ec)
+area= sectionGeometryTest.getAreaHomogenizedSection(Ec)
+G= sectionGeometryTest.getCdgHomogenizedSection(Ec)
+Iy= sectionGeometryTest.getIyHomogenizedSection(Ec)
+Iz= sectionGeometryTest.getIzHomogenizedSection(Ec)
 
 
 

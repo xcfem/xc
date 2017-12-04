@@ -54,8 +54,8 @@ L= 1.5 # Bar length (m)
 # Load
 F= 1.5e3 # Load magnitude (kN)
 
-prueba= xc.ProblemaEF()
-preprocessor=  prueba.getPreprocessor
+feProblem= xc.FEProblem()
+preprocessor=  feProblem.getPreprocessor
 nodes= preprocessor.getNodeLoader
 # Problem type
 modelSpace= predefined_spaces.StructuralMechanics2D(nodes)
@@ -90,7 +90,7 @@ lp0.newNodalLoad(2,xc.Vector([F,0,0])) #Positive force along x axis
 casos.addToDomain("0")
 
 # Solution 0 N
-analisis= predefined_solutions.simple_static_linear(prueba)
+analisis= predefined_solutions.simple_static_linear(feProblem)
 result= analisis.analyze(1)
 
 RF= elements.getElement(1).getResistingForce()
@@ -116,7 +116,7 @@ lp1.newNodalLoad(2,xc.Vector([0,F,0])) #Positive force along y axis
 casos.addToDomain("1")
 
 # Solution 1 V
-analisis= predefined_solutions.simple_static_linear(prueba)
+analisis= predefined_solutions.simple_static_linear(feProblem)
 result= analisis.analyze(1)
 
 RF= elements.getElement(1).getResistingForce()
@@ -141,7 +141,7 @@ lp2.newNodalLoad(2,xc.Vector([0,0,F])) #Positive moment about z axis
 casos.addToDomain("2")
 
 # Solution 2 M
-analisis= predefined_solutions.simple_static_linear(prueba)
+analisis= predefined_solutions.simple_static_linear(feProblem)
 result= analisis.analyze(1)
 
 RF= elements.getElement(1).getResistingForce()

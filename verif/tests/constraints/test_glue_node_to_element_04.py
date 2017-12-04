@@ -15,8 +15,8 @@ import math
 from postprocess.quick_inquiry import nodal_reactions
 from solution import predefined_solutions
 
-prueba= xc.ProblemaEF()
-preprocessor=  prueba.getPreprocessor
+feProblem= xc.FEProblem()
+preprocessor=  feProblem.getPreprocessor
 nodes= preprocessor.getNodeLoader
 
 
@@ -79,8 +79,8 @@ casos.addToDomain("0")
 
 # Solution
 # Solution
-prbSolver= predefined_solutions.SolutionProcedure()
-analisis= prbSolver.simpleLagrangeStaticLinear(prueba)
+solver= predefined_solutions.SolutionProcedure()
+analisis= solver.simpleLagrangeStaticLinear(feProblem)
 result= analisis.analyze(1)
 nodes.calculateNodalReactions(False)
 

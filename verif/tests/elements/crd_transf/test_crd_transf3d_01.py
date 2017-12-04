@@ -25,8 +25,8 @@ centroidG= None # Global coordinates of the centroid.
 centroidL= None # Local coordinates of the centroid.
 centroidB= None # Basic coordinates of the centroid.
 
-prueba= xc.ProblemaEF()
-preprocessor=  prueba.getPreprocessor   
+feProblem= xc.FEProblem()
+preprocessor=  feProblem.getPreprocessor   
 nodes= preprocessor.getNodeLoader
 modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
 nodes.defaultTag= 1 #First node number.

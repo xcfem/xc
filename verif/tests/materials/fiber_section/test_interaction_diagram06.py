@@ -9,7 +9,7 @@ import xc
 from materials.ehe import EHE_materials
 import math
 from materials.sia262 import SIA262_materials
-from materials.sections.fiber_section import defSeccionHASimple
+from materials.sections.fiber_section import defSimpleRCSection
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
 __copyright__= "Copyright 2015, LCPT and AOO"
@@ -36,24 +36,24 @@ concrete.alfacc=0.85    # f_maxd= 0.85*fcd concrete long term compressive streng
 
 reinfSteel= EHE_materials.B500S
 
-sccData=defSeccionHASimple.RecordRCSimpleSection()
+sccData=defSimpleRCSection.RecordRCSimpleSection()
 sccData.sectionName= "sccData"
 sccData.sectionDescr= "Prueba."
 sccData.concrType= concrete
 sccData.h= 0.5
 sccData.b= 1.0
 sccData.reinfSteelType= reinfSteel
-sccData.negatvRebarRows=[defSeccionHASimple.MainReinfLayer(rebarsDiam=40e-3,areaRebar= areaFi40,rebarsSpacing=0.15,width=1.0,nominalCover=0.25-0.19)]
-sccData.positvRebarRows=[defSeccionHASimple.MainReinfLayer(rebarsDiam=6e-3,areaRebar= areaFi6,rebarsSpacing=0.15,width=1.0,nominalCover=0.25-0.19)]
+sccData.negatvRebarRows=[defSimpleRCSection.MainReinfLayer(rebarsDiam=40e-3,areaRebar= areaFi40,rebarsSpacing=0.15,width=1.0,nominalCover=0.25-0.19)]
+sccData.positvRebarRows=[defSimpleRCSection.MainReinfLayer(rebarsDiam=6e-3,areaRebar= areaFi6,rebarsSpacing=0.15,width=1.0,nominalCover=0.25-0.19)]
 #sccData.setMainReinfNeg(40e-3,areaFi40,0.15,0.25-0.19)
 #sccData.setMainReinfPos(6e-3,areaFi6,0.15,0.25-0.19)
 
 
-prueba= xc.ProblemaEF()
-prueba.logFileName= "/tmp/borrar.log" # Don't print warnings.
-prueba.errFileName= "/tmp/borrar.err" # Don't print errors.
+feProblem= xc.FEProblem()
+feProblem.logFileName= "/tmp/borrar.log" # Don't print warnings.
+feProblem.errFileName= "/tmp/borrar.err" # Don't print errors.
 
-preprocessor=  prueba.getPreprocessor
+preprocessor=  feProblem.getPreprocessor
 sccData.defRCSimpleSection(preprocessor, 'd')
 param= xc.InteractionDiagramParameters()
 diag= sccData.defInteractionDiagramNMy(preprocessor)

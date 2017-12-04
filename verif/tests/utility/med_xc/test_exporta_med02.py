@@ -40,9 +40,9 @@ conectividad= None
 numNodeGroups= None
 numElementGroups= None
 
-prueba= xc.ProblemaEF()
-prueba.logFileName= "/tmp/borrar.log" # Ignore warning messages
-preprocessor=  prueba.getPreprocessor
+feProblem= xc.FEProblem()
+feProblem.logFileName= "/tmp/borrar.log" # Ignore warning messages
+preprocessor=  feProblem.getPreprocessor
 nodes= preprocessor.getNodeLoader
 modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
 
@@ -64,7 +64,7 @@ elem= elements.newElement("ShellMITC4",xc.ID([2,5,6,3]))
 
 
 
-fields=  prueba.getFields
+fields=  feProblem.getFields
 disp= fields.newField("disp")
 disp.setName= "total"
 disp.componentNames= ["UX","UY","UZ","RX","RY","RZ"]
@@ -73,15 +73,15 @@ disp.componentUnits= ["in","in","in","rad","rad","rad"]
 disp.componentsProperty= "self.getDisp"
 
 
-mesh_output= xc.MEDMeshing(prueba)
+mesh_output= xc.MEDMeshing(feProblem)
 vertices= mesh_output.vertices
 vertices.coordinateNames= ["X","Y","Z"]
 vertices.coordinateUnits= ["in","in","in"]
-mesh_output.meshName= "prueba02"
+mesh_output.meshName= "test02"
 mesh_output.write(fName)
 
 med_import= xc.MEDMesh()
-med_import.meshName= "prueba02"
+med_import.meshName= "test02"
 med_import.read(fName)
 spaceDim= med_import.getSpaceDimension()
 meshDim= med_import.getMeshDimension()

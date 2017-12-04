@@ -8,12 +8,12 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
-# prueba.logFileName= "/tmp/borrar.log"  #Ignore warning messages
+# feProblem.logFileName= "/tmp/borrar.log"  #Ignore warning messages
 
 import xc_base
 import geom
 import xc
-from misc import banco_pruebas_scc3d
+from misc import scc3d_testing_bench
 
 
 from materials.ehe import EHE_materials
@@ -24,8 +24,8 @@ from solution import predefined_solutions
 MzDato= 0.0
 NDato= 0.0 # Presstressing is the only load
 
-prueba= xc.ProblemaEF()
-preprocessor=  prueba.getPreprocessor
+feProblem= xc.FEProblem()
+preprocessor=  feProblem.getPreprocessor
 # Materials definition
 tag= EHE_materials.Y1860S7.defDiagD(preprocessor, EHE_materials.Y1860S7.tInic())
 tag= EHE_materials.HP45.defDiagD(preprocessor)
@@ -41,7 +41,7 @@ fiberSectionRepr= secHP.getFiberSectionRepr()
 fiberSectionRepr.setGeomNamed("prestressedConcretSectionGeom01")
 secHP.setupFibers()
 
-elem= banco_pruebas_scc3d.sectionModel(preprocessor, "secHP")
+elem= scc3d_testing_bench.sectionModel(preprocessor, "secHP")
 
 # Constraints
 modelSpace= predefined_spaces.getStructuralMechanics3DSpace(preprocessor)
@@ -65,7 +65,7 @@ casos.addToDomain("0")
 
 
 # Solution procedure
-analisis= predefined_solutions.simple_newton_raphson(prueba)
+analisis= predefined_solutions.simple_newton_raphson(feProblem)
 analOk= analisis.analyze(10)
 
 

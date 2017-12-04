@@ -16,8 +16,8 @@ R= 2.0
 cos45= math.cos(math.radians(45))
 sin45= cos45
 
-prueba= xc.ProblemaEF()
-preprocessor=  prueba.getPreprocessor
+feProblem= xc.FEProblem()
+preprocessor=  feProblem.getPreprocessor
 
 points= preprocessor.getCad.getPoints
 pt= points.newPntIDPos3d(1,geom.Pos3d(R,0.0,0.0))

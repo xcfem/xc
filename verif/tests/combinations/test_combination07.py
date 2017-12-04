@@ -31,8 +31,8 @@ from solution import database_helper as dbHelper
 
 
 # Problem type
-prueba= xc.ProblemaEF()
-preprocessor=  prueba.getPreprocessor
+feProblem= xc.FEProblem()
+preprocessor=  feProblem.getPreprocessor
 nodes= preprocessor.getNodeLoader
 modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
 nodes.defaultTag= 1 #First node number.
@@ -163,7 +163,7 @@ comb= combs.newLoadCombination("ELU026","1.35*G + 1.05*SC + 0.90*VT + 1.50*NV")
 
 printFlag= 0
 
-solu= prueba.getSoluProc
+solu= feProblem.getSoluProc
 solCtrl= solu.getSoluControl
 
 
@@ -221,7 +221,7 @@ def procesResultVerif(comb):
 
 import os
 os.system("rm -r -f /tmp/test_combinacion_07.db")
-db= prueba.newDatabase("BerkeleyDB","/tmp/test_combinacion_07.db")
+db= feProblem.newDatabase("BerkeleyDB","/tmp/test_combinacion_07.db")
 helper= dbHelper.DatabaseHelperSolve(db)
 
 # Fase 0: pretensado

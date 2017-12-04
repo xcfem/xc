@@ -34,13 +34,13 @@
 #include "domain/mesh/element/Element.h"
 #include "domain/mesh/element/utils/gauss_models/GaussModel.h"
 #include "domain/mesh/node/Node.h"
-#include "ProblemaEF.h"
+#include "FEProblem.h"
 
 const std::string XC::MEDMeshing::str_node_group= "_nodes";
 const std::string XC::MEDMeshing::str_element_group= "_elements";
 
 // @brief Returns med mesh to export.
-XC::MEDMeshing::MEDMeshing(const ProblemaEF &prb) 
+XC::MEDMeshing::MEDMeshing(const FEProblem &prb) 
   : sets(prb.getPreprocessor().get_sets()), fields(prb.getFields()), vertices(prb.getDomain()->getMesh()), cells(prb.getDomain()->getMesh(),vertices.getMapIndices())
   {}
 

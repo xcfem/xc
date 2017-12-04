@@ -8,7 +8,7 @@ from __future__ import division
 import xc_base
 import geom
 import xc
-from misc import banco_pruebas_scc3d
+from misc import scc3d_testing_bench
 from solution import predefined_solutions
 from model import predefined_spaces
 
@@ -47,8 +47,8 @@ numBarras= 3
 diamATrsv= 6e-3
 numRamas= 4
 
-prueba= xc.ProblemaEF()
-preprocessor=  prueba.getPreprocessor
+feProblem= xc.FEProblem()
+preprocessor=  feProblem.getPreprocessor
 # Materials definition
 materiales= preprocessor.getMaterialLoader
 
@@ -94,7 +94,7 @@ secHA.setRespVyByName("respVy")
 secHA.setRespVzByName("respVz")
 secHA.setRespTByName("respT")
 
-banco_pruebas_scc3d.sectionModel(preprocessor, "secHA")
+scc3d_testing_bench.sectionModel(preprocessor, "secHA")
 
 # Constraints
 modelSpace= predefined_spaces.getStructuralMechanics3DSpace(preprocessor)
@@ -117,11 +117,11 @@ casos.addToDomain("0")
 
 
 # Solution procedure
-analisis= predefined_solutions.simple_newton_raphson(prueba)
+analisis= predefined_solutions.simple_newton_raphson(feProblem)
 analOk= analisis.analyze(10)
 
 
-secHAParamsCortante= EHE_limit_state_checking.ShearControllerEHE('ULS_shear')
+secHAParamsCortante= EHE_limit_state_checking.ShearController('ULS_shear')
 
 secHAParamsCortante.AsTrsv= EHE_materials.Fi6*numRamas/0.2 # reinforcement area transversal
 secHAParamsCortante.theta= math.radians(45)
@@ -143,7 +143,7 @@ NTmp= N
 MTmp= math.sqrt((My)**2+(Mz)**2)
 VTmp= math.sqrt((Vy)**2+(Vz)**2)
 TTmp= scc.getStressResultantComponent("Mx")
-secHAParamsCortante.calcVuEHE08(preprocessor, scc,secHAParamsTorsion,concr,B500S,NTmp,MTmp,VTmp,TTmp)
+secHAParamsCortante.calcVuEHE08(scc,secHAParamsTorsion,concr,B500S,NTmp,MTmp,VTmp,TTmp)
 
 
 

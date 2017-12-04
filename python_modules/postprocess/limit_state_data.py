@@ -15,8 +15,8 @@ from miscUtils import LogMessages as lmsg
 
 def defaultAnalysis(feProb,steps= 1):
   '''Default analysis procedure for saveAll method.'''
-  analisis= predefined_solutions.simple_static_linear(feProb)
-  result= analisis.analyze(steps) #Same with the number of steps.
+  analysis= predefined_solutions.simple_static_linear(feProb)
+  result= analysis.analyze(steps) #Same with the number of steps.
   return result
 
 class LimitStateData(object):

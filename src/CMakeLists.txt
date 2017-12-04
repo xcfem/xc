@@ -343,7 +343,7 @@ SET(preprocessor preprocessor/EntMdlrBase preprocessor/MeshingParams ${preproces
 SET(solution solution/analysis/ModelWrapper solution/SoluMethod solution/MapSoluMethod solution/analysis/MapModelWrapper solution/ProcSoluControl solution/ProcSolu)
 
 # Build our library
-add_library(XcBib SHARED ${utility} ${material} ${siseq} ${analysis} ${convergenceTest} ${coordTransformation} ${damage} ${domain} ${gauss_models} ${cyclic_model} ${element} ${graph} ${modelbuilder} ${reliability} ${unitest} ${preprocessor} ${solution} ${post_process} version ProblemaEF)
+add_library(XcBib SHARED ${utility} ${material} ${siseq} ${analysis} ${convergenceTest} ${coordTransformation} ${damage} ${domain} ${gauss_models} ${cyclic_model} ${element} ${graph} ${modelbuilder} ${reliability} ${unitest} ${preprocessor} ${solution} ${post_process} version FEProblem)
 
 #Python interface
 TARGET_LINK_LIBRARIES(XcBib xc_utils xc_basic ${VTK_BIB} ${CGAL_LIBRARIES} ${Plot_LIBRARY} ${MPFR_LIBRARIES} ${GMP_LIBRARY} ${MYSQL_LIBRARY} ${MySQLpp_LIBRARIES} ${SQLITE3_LIBRARY} ${GNUGTS_LIBRARIES} ${BerkeleyDB_LIBRARIES} ${ARPACK_LIB} ${ARPACKPP_LIB} ${LAPACK_LIBRARIES} ${SUPERLU_LIBRARIES} ${BLAS_LIBRARIES} ${PETSC_LIB_PETSC} ${METIS_LIBRARIES} ${MED_LIBRARIES} ${TCL_LIBRARY} boost_python ${Boost_LIBRARIES} ${PYTHON_LIBRARIES})

@@ -22,8 +22,8 @@ import math
 v1= xc.Vector([0,math.sqrt(2)/2,math.sqrt(2)/2])
 v2= xc.Vector([0,-math.sqrt(2)/2,math.sqrt(2)/2])
 
-prueba= xc.ProblemaEF()
-preprocessor=  prueba.getPreprocessor
+feProblem= xc.FEProblem()
+preprocessor=  feProblem.getPreprocessor
 nodes= preprocessor.getNodeLoader
 
 # Problem type
