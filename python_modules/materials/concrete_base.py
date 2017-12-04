@@ -19,6 +19,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import geom
 import xc_base
+from postprocess.reports import graph_material as mg
 
 class ReinforcedConcreteLimitStrains(object):
     def __init__(self,EpsCU= -3.5e-3,EpsC0= -2.0e-3,SMaxStrain= 10e-3):
