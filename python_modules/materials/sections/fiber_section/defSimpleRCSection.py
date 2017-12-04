@@ -134,6 +134,8 @@ class BasicRecordRCSection(section_properties.RectangularSection):
     self.nDivIJ= 10
     self.nDivJK= 10
     self.fiberSectionRepr= None
+#    self.width=width       #2/12/2017 (for sections reports generation)
+#    self.depth=depth       #2/12/2017 
 
     self.reinfSteelType= reinfSteelType
     self.reinfDiagName= None # Name of the uniaxial material
