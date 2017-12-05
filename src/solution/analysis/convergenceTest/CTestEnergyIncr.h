@@ -70,6 +70,12 @@ namespace XC {
 //! @brief Specifies a tolerance for the product of unbalanced load vector
 //! and 0.5 times the displacement increment vector (energy increment) to
 //! be used as convergence criterion on each iteration.
+//!
+//! A CTestEnergyIncr object is an object which can be used in an
+//! algorithmic class to test if convergence has been achieved. The
+//! CTestEnergyIncr class tests using the energy increment, 0.5 times the
+//! absolute value of the dot product of the LinearSOE objects solution
+//! and rhs Vectors, and a user specified tolerance value.
 class CTestEnergyIncr: public ConvergenceTestTol
   {
   public:

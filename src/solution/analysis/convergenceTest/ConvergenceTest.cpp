@@ -110,8 +110,11 @@ void XC::ConvergenceTest::setMaxNumIter(const int &i)
     maxNumIter= i;
     norms= Vector(maxNumIter);
   }
+
+//! @brief Return the current iteration number.
 int XC::ConvergenceTest::getCurrentIter(void) const
   { return currentIter; }
+//! @brief Set the current iteration number.
 void XC::ConvergenceTest::setCurrentIter(const int &i)
   { currentIter= i; }
 int XC::ConvergenceTest::getPrintFlag(void) const
@@ -126,6 +129,9 @@ void XC::ConvergenceTest::setNormType(const int &i)
 //! This is invoked at the start of each iteration. To return
 //! {\em 0} if sucessfull, i.e that testing can proceed, a
 //! negative number if not.
+//! Sets an integer indicating the current number of iterations, {\em
+//! currentNumIter} to \f$1\f$. returns \f$0\f$ if successfull, an error message
+//! and \f$-1\f$ are returned if no LinearSOE object has been set.
 int XC::ConvergenceTest::start(void)
   {
     int retval= 0;

@@ -64,12 +64,18 @@
 #include <solution/analysis/algorithm/equiSolnAlgo/EquiSolnAlgo.h>
 #include <solution/system_of_eqn/linearSOE/LinearSOE.h>
 
+//! @brief Default constructor.
 XC::CTestEnergyIncr::CTestEnergyIncr(EntCmd *owr)	    	
   : ConvergenceTestTol(owr,CONVERGENCE_TEST_CTestEnergyIncr) {}
 
+//! @brief Constructor.
+//!
+//! @param theTol: tolerance used int test().
+//! @param maxIter: max number of iterations to be performed.
 XC::CTestEnergyIncr::CTestEnergyIncr(EntCmd *owr,double theTol, int maxIter, int printIt, int normType)
   : ConvergenceTestTol(owr,CONVERGENCE_TEST_CTestEnergyIncr,theTol,maxIter,printIt,normType,maxIter) {}
 
+//! @brief Virtual constructor.
 XC::ConvergenceTest* XC::CTestEnergyIncr::getCopy(void) const
   { return new CTestEnergyIncr(*this); }
 
@@ -86,6 +92,17 @@ std::string XC::CTestEnergyIncr::getStatusMsg(const int &flag) const
   }
 
 //! @brief Comprueba si se ha producido la convergencia.
+//!
+//! Returns {currentNumIter} if 0.5 times the absolute value of the dot
+//! product of the LinearSOE objects X and B Vectors is less than the tolerance {\em
+//! tol}. If no LinearSOE has been set \f$-2\f$ is returned. If the {\em
+//! currentNumIter} \f$>=\f$ \p maxNumIter an error message is printed and
+//! \f$-2\f$ is returned. If none of these conditions is met, the {\em
+//! currentnumIter} is incremented and \f$-1\f$ is returned. If the print flag
+//! is \f$0\f$ nothing is printed to 
+//! opserr during the method, if \f$1\f$ the current iteration and norm are
+//! printed to std::cerr, and if \f$2\f$ the norm and number of iterations to
+//! convergence are printed to std::cerr. 
 int XC::CTestEnergyIncr::test(void)
   {
     // check to ensure the SOE has been set - this should not happen if the 
@@ -96,7 +113,8 @@ int XC::CTestEnergyIncr::test(void)
     // may never get convergence later on in analysis!
     if(currentIter == 0)
       {
-        std::cerr << "WARNING: XC::CTestEnergyIncr::test() - start() was never invoked.\n";	
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; WARNING: start() was never invoked.\n";	
         return -2;
       }
     
@@ -134,8 +152,9 @@ int XC::CTestEnergyIncr::test(void)
     // algo failed to converged after specified number of iterations - but RETURN OK
     else if((printFlag == 5 || printFlag == 6) && currentIter >= maxNumIter)
       {
-        std::cerr << "WARNING: CTestEnergyIncr::test() - failed to converge but goin on -";
-        std::cerr << getEnergyProductMessage();
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; WARNING: failed to converge but goin on -"
+		  << getEnergyProductMessage();
         calculatedNormX= getNormX(); //Update values.
 	calculatedNormB= getNormB();
         std::cerr << getDeltaXRNormsMessage() << std::endl;
