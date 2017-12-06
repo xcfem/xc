@@ -73,7 +73,7 @@ XC::CTestNormUnbalance::CTestNormUnbalance(EntCmd *owr,double theTol, int maxIte
   : ConvergenceTestTol(owr,CONVERGENCE_TEST_CTestNormUnbalance,theTol,maxIter,printFlag,normType,maxIter)
   {}
 
-
+//! @brief Virtual constructor.
 XC::ConvergenceTest* XC::CTestNormUnbalance::getCopy(void) const
   { return new CTestNormUnbalance(*this); }
 
@@ -89,7 +89,17 @@ std::string XC::CTestNormUnbalance::getStatusMsg(const int &flag) const
     return retval.str();
   }
 
-//! @brief Comprueba si se ha producido la convergencia.
+//! @brief Test convergence.
+//!
+//! Returns {currentNumIter} if if the two norm of the LinearSOE objects B
+//! Vector is less than the tolerance \p tol. If no LinearSOE has been
+//! set \f$-2\f$ is returned. If the \p currentNumIter \f$>=\f$ {\em
+//! maxNumIter} an error message is printed and \f$-2\f$ is returned. If none
+//! of these conditions is met, the \p currentnumIter is incremented 
+//! and \f$-1\f$ is returned. If the print flag is \f$0\f$ nothing is printed to
+//! cerr during the method, if \f$1\f$ the current iteration and norm are
+//! printed to cerr, and if \f$2\f$ the norm and number of iterations to
+//! convergence are printed to cerr. 
 int XC::CTestNormUnbalance::test(void)
   {
     int retval= 0;
@@ -101,7 +111,8 @@ int XC::CTestNormUnbalance::test(void)
     // may never get convergence later on in analysis!
     else if(currentIter == 0)
       {
-        std::cerr << "WARNING: CTestNormUnbalance::test() - start() was never invoked.\n";	
+        std::cerr << getClassName() << "::" << __FUNCTION__
+	          << ";WARNING: start() was never invoked.\n";	
         retval= -2;
       }
     else
@@ -138,8 +149,9 @@ int XC::CTestNormUnbalance::test(void)
         // algo failed to converged after specified number of iterations - but RETURN OK
         else if((printFlag == 5 || printFlag == 6) && currentIter >= maxNumIter)
           {
-            std::cerr << "WARNING: XC::CTestNormUnbalance::test() - failed to converge but going on -";
-            std::cerr << getUnbalanceMessage();
+            std::cerr << getClassName() << "::" << __FUNCTION__
+		      << "; WARNING: failed to converge but going on -"
+		      << getUnbalanceMessage();
             retval= currentIter;
           }
         // algo failed to converged after specified number of iterations - return FAILURE -2

@@ -70,6 +70,11 @@ class LinearSOE;
 //
 //! @brief Specifies a tolerance for the norm of the unbalanced load vector
 //! on each iteration.
+//!
+//! A CTestNormUnbalance object is an object which can be used in an
+//! algorithmic class to test if convergence has been achieved. The
+//! CTestNormUnbalance class tests using the norm of the right hand side
+//! Vector of a LinearSOE object and a user specified tolerance value.
 class CTestNormUnbalance: public ConvergenceTestTol
   {
   public:

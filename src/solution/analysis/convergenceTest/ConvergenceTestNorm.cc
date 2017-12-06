@@ -48,10 +48,13 @@ XC::ConvergenceTestNorm::ConvergenceTestNorm(EntCmd *owr,int classTag)
 XC::ConvergenceTestNorm::ConvergenceTestNorm(EntCmd *owr,int classTag,double theTol, int maxIter, int printFlag, int normType, int sz_norms)
   : ConvergenceTestTol(owr,classTag,theTol,maxIter,printFlag,normType,sz_norms), norm0(0.0) {}
 
+//! Sets an integer indicating the current number of iterations, {\em
+//! currentNumIter} to \f$1\f$. Returns \f$0\f$ if successfull, an error message
+//! and \f$-1\f$ are returned if no LinearSOE object has been set. 
 int XC::ConvergenceTestNorm::start(void)
   {
-    ConvergenceTest::start();
+    int retval= ConvergenceTest::start();
     norm0 = 0.0;
-    return 0;
+    return retval;
   }
 

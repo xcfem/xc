@@ -98,7 +98,8 @@ int XC::CTestRelativeNormUnbalance::test(void)
     // may never get convergence later on in analysis!
     if(currentIter == 0)
       {
-        std::cerr << "WARNING: XC::CTestRelativeNormUnbalance::test() - start() was never invoked.\n";	
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; WARNING: start() was never invoked.\n";	
         return -2;
       }
     
@@ -142,8 +143,9 @@ int XC::CTestRelativeNormUnbalance::test(void)
     // algo failed to converged after specified number of iterations - but RETURN OK
     else if((printFlag == 5 || printFlag == 6) && currentIter >= maxNumIter)
       {
-        std::cerr << "WARNING: XC::CTestRelativeNormUnbalance::test() - failed to converge but going on -";
-        std::cerr << getRatioMessage("(dR/dR0)");
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; WARNING: failed to converge but going on -"
+		  << getRatioMessage("(dR/dR0)");
         return currentIter;
       }
     
@@ -163,14 +165,17 @@ int XC::CTestRelativeNormUnbalance::test(void)
   }
 
 
+//! Sets an integer indicating the current number of iterations, {\em
+//! currentNumIter} to \f$1\f$. Returns \f$0\f$ if successfull, an error message
+//! and \f$-1\f$ are returned if no LinearSOE object has been set. 
 int XC::CTestRelativeNormUnbalance::start(void)
   {
-    ConvergenceTestNorm::start();
+    int retval= ConvergenceTestNorm::start();
     
     // determine the initial norm .. the the norm of the initial unbalance
     calculatedNormB= getNormB();
     if(currentIter <= maxNumIter) 
       norms(0)= calculatedNormB;
     norm0= calculatedNormB;
-    return 0;
+    return retval;
   }
