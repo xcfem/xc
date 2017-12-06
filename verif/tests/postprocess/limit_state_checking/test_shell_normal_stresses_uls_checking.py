@@ -65,9 +65,11 @@ if(not pth):
 #Checking normal stresses.
 lsd.normalStressesResistance.controller= SIA262_limit_state_checking.BiaxialBendingNormalStressController('ULS_normalStress')
 lsd.LimitStateData.internal_forces_results_directory= pth+'/'
+lsd.LimitStateData.check_results_directory= '/tmp/'
+lsd.normalStressesResistance.outputDataBaseFileName= 'ppTN'
 #intForceFileName= lsd.normalStressesResistance.getInternalForcesFileName()
 
-meanFCs= reinfConcreteSections.internalForcesVerification3D(lsd.normalStressesResistance,"/tmp/ppTN", "d")
+meanFCs= reinfConcreteSections.internalForcesVerification3D(lsd.normalStressesResistance,"d")
 
 
 #print "mean FCs: ", meanFCs

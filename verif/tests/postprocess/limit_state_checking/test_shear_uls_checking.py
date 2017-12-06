@@ -122,9 +122,11 @@ reinfConcreteSectionDistribution.assign(elemSet=totalSet.getElements,setRCSects=
 #Checking shear.
 lsd.shearResistance.controller= EHE_limit_state_checking.ShearController(limitStateLabel= lsd.shearResistance.label)
 lsd.shearResistance.controller.analysisToPerform= predefined_solutions.simple_newton_raphson
+lsd.LimitStateData.check_results_directory= '/tmp/'
+lsd.normalStressesResistance.outputDataBaseFileName= 'resVerif'
 
 
-(FEcheckedModel,meanFCs)= reinfConcreteSectionDistribution.runChecking(lsd.shearResistance,outputFileName='/tmp/resVerif', matDiagType="d",threeDim= True)  
+(FEcheckedModel,meanFCs)= reinfConcreteSectionDistribution.runChecking(lsd.shearResistance, matDiagType="d",threeDim= True)  
 
 #print "mean FCs: ", meanFCs
 

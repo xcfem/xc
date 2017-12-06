@@ -211,10 +211,12 @@ reinfConcreteSectionDistribution.assign(elemSet=totalSet.getElements,setRCSects=
 #Checking normal stresses.
 limitStateLabel= lsd.normalStressesResistance.label
 lsd.normalStressesResistance.controller= SIA262_limit_state_checking.BiaxialBendingNormalStressController(limitStateLabel)
+lsd.LimitStateData.check_results_directory= '/tmp/'
+lsd.normalStressesResistance.outputDataBaseFileName= 'resVerif'
 
 # Using runChecking method we create the phantom model and run the checking on it. Unlike other check methods that also creates the phantom model this one doesn't clear the model after carrying out the verification. This method returns a tuple with the FE model (phantom model) and the result of verification
 
-(FEcheckedModel,checkResult)=reinfConcreteSectionDistribution.runChecking(lsd.normalStressesResistance,outputFileName='/tmp/resVerif', matDiagType="d",threeDim= True)  
+(FEcheckedModel,checkResult)=reinfConcreteSectionDistribution.runChecking(lsd.normalStressesResistance, matDiagType="d",threeDim= True)  
 
 #Set with all the elements in the phantom model 
 elements= FEcheckedModel.getPreprocessor.getSets.getSet('total').getElements

@@ -118,9 +118,7 @@ class NormalStressesRCLimitStateData(LimitStateData):
      
     :param reinfConcreteSections: Reinforced concrete sections on each element.
     '''
-    intForcCombFileName= self.getInternalForcesFileName()
-    outputFileName= self.getOutputDataBaseFileName()
-    return reinfConcreteSections.internalForcesVerification3D(intForcCombFileName,outputFileName, "d",self.controller)
+    return reinfConcreteSections.internalForcesVerification3D(self, "d")
 
 class ShearResistanceRCLimitStateData(LimitStateData):
   ''' Reinforced concrete shear resistance limit state data.'''
@@ -144,9 +142,7 @@ class ShearResistanceRCLimitStateData(LimitStateData):
      
     :param reinfConcreteSections: Reinforced concrete sections on each element.
     '''
-    intForcCombFileName= self.getInternalForcesFileName()
-    outputFileName= self.getOutputDataBaseFileName()
-    return reinfConcreteSections.internalForcesVerification3D(intForcCombFileName,outputFileName, "d",self.controller)
+    return reinfConcreteSections.internalForcesVerification3D(self,"d")
 
 class FreqLoadsCrackControlRCLimitStateData(LimitStateData):
   ''' Reinforced concrete crack control under frequent loads limit state data.'''
@@ -170,9 +166,7 @@ class FreqLoadsCrackControlRCLimitStateData(LimitStateData):
      
     :param reinfConcreteSections: Reinforced concrete sections on each element.
     '''
-    intForcCombFileName= self.getInternalForcesFileName()
-    outputFileName= self.getOutputDataBaseFileName()
-    return reinfConcreteSections.internalForcesVerification3D(intForcCombFileName,outputFileName, "k", self.controller)
+    return reinfConcreteSections.internalForcesVerification3D(self, "k")
 
 class QPLoadsCrackControlRCLimitStateData(LimitStateData):
   ''' Reinforced concrete crack control under quasi-permanent loads limit state data.'''
@@ -197,9 +191,7 @@ class QPLoadsCrackControlRCLimitStateData(LimitStateData):
      
     :param reinfConcreteSections: Reinforced concrete sections on each element.
     '''
-    intForcCombFileName= self.getInternalForcesFileName()
-    outputFileName= self.getOutputDataBaseFileName()
-    return reinfConcreteSections.internalForcesVerification3D(intForcCombFileName,outputFileName, "k",self.controller)
+    return reinfConcreteSections.internalForcesVerification3D(self,"k")
 
 class FreqLoadsDisplacementControlLimitStateData(LimitStateData):
   ''' Displacement control under frequent loads limit state data.'''
@@ -248,9 +240,7 @@ class FatigueResistanceRCLimitStateData(LimitStateData):
      
     :param reinfConcreteSections: Reinforced concrete sections on each element.
     '''
-    intForcCombFileName= self.getInternalForcesFileName()
-    outputFileName= self.getOutputDataBaseFileName()
-    return reinfConcreteSections.internalForcesVerification3D(intForcCombFileName,outputFileName, "d",self.controller)
+    return reinfConcreteSections.internalForcesVerification3D(self, "d")
 
 
 freqLoadsDisplacementControl= FreqLoadsDisplacementControlLimitStateData()

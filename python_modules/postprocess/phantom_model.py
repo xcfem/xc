@@ -213,7 +213,7 @@ class PhantomModel(object):
     '''
     return cv.writeControlVarsFromElements(controller.limitStateLabel,self.preprocessor,outputFileName)
 
-  def runChecking(self,limitStateData,outputFileName):
+  def runChecking(self,limitStateData):
     '''Run the analysis, check the results and write them into a file
 
     :param limitStateData: object that contains the name of the file
@@ -221,9 +221,6 @@ class PhantomModel(object):
                            obtained for each element 
                            for the combinations analyzed and the
                            controller to use for the checking.
-    :param analysis:       analysis to use.
-    :param controller:     object that controls limit state in elements.
-    :param outputFileName: base name of output file (extensions .py and .tex)
     '''
     intForcCombFileName= limitStateData.getInternalForcesFileName()
     controller= limitStateData.controller
@@ -231,7 +228,7 @@ class PhantomModel(object):
     if(controller):
       self.build(intForcCombFileName,controller)
       self.check(controller)
-      meanCFs= self.write(controller,outputFileName)
+      meanCFs= self.write(controller,limitStateData.getOutputDataBaseFileName())
     else:
       lmsg.error('PhantomModel::runChecking controller not defined.')
     return meanCFs

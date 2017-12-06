@@ -436,10 +436,14 @@ def getShearLimit(sccData,controlVars,vu):
   '''4.3.8.3.2 SIA 262 2013'''
   v_0= controlVars.state0.Vy
   v_1= controlVars.state1.Vy
-  vd_max= min(v_0,v_1)
-  vd_min= max(v_0,v_1)
-  coc= vd_min/vd_max
-  retval= 0
+  vd_min= min(v_0,v_1)
+  vd_max= max(v_0,v_1)
+  coc= vd_min
+  if(abs(vd_max)<1e-12):
+    if(vd_max<0):
+      coc*=-1 #change sign.
+  else:
+    coc/= vd_max
   if(coc>=0):
     retval= min(0.5*vu+0.45*abs(vd_min),0.9*vu)
   else:
