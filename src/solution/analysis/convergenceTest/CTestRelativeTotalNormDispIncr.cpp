@@ -62,12 +62,21 @@
 #include <solution/system_of_eqn/linearSOE/LinearSOE.h>
 
 
+//! @brief Default constructor.
+//!
+//! @param owr: object that owns this one.
 XC::CTestRelativeTotalNormDispIncr::CTestRelativeTotalNormDispIncr(EntCmd *owr)	    	
   : ConvergenceTestNorm(owr,CONVERGENCE_TEST_CTestRelativeTotalNormDispIncr) {}
 
-
-XC::CTestRelativeTotalNormDispIncr::CTestRelativeTotalNormDispIncr(EntCmd *owr,double theTol, int maxIter, int printIt, int normType)
-  : ConvergenceTestNorm(owr,CONVERGENCE_TEST_CTestRelativeTotalNormDispIncr,theTol,maxIter,printIt,normType,maxIter) {}
+//! @brief Constructor.
+//!
+//! @param owr: object that owns this one.
+//! @param theTol: the tolerance used in test().
+//! @param maxIter the max number of iterations to be performed.
+//! @param printFlag: what, if anything, is printed on each test.
+//! @param normType: type of norm to use (1-norm, 2-norm, p-norm, max-norm).
+XC::CTestRelativeTotalNormDispIncr::CTestRelativeTotalNormDispIncr(EntCmd *owr,double theTol, int maxIter, int printFlag, int normType)
+  : ConvergenceTestNorm(owr,CONVERGENCE_TEST_CTestRelativeTotalNormDispIncr,theTol,maxIter,printFlag,normType,maxIter) {}
 
 
 XC::ConvergenceTest* XC::CTestRelativeTotalNormDispIncr::getCopy(void) const

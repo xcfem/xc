@@ -31,17 +31,29 @@
 
 
 //! @brief Constructor.
-XC::ConvergenceTestTol::ConvergenceTestTol(EntCmd *owr,int clasTag)	    	
-  : ConvergenceTest(owr,clasTag), tol(0.0) {}
+//!
+//! @param owr: object that owns this one.
+//! @param classTag: identifier of the object class.
+XC::ConvergenceTestTol::ConvergenceTestTol(EntCmd *owr,int classTag)	    	
+  : ConvergenceTest(owr,classTag), tol(0.0) {}
 
 
 //! @brief Constructor.
-XC::ConvergenceTestTol::ConvergenceTestTol(EntCmd *owr,int clasTag,double theTol, int maxIter, int printIt, int normType,int sz_norms)
-  : ConvergenceTest(owr,clasTag,maxIter,printIt,normType,sz_norms), tol(theTol) {}
+//!
+//! @param owr: object that owns this one.
+//! @param classTag: identifier of the object class.
+//! @param theTol: the tolerance used in test().
+//! @param maxIter the max number of iterations to be performed.
+//! @param printFlag: what, if anything, is printed on each test.
+//! @param normType: type of norm to use (1-norm, 2-norm, p-norm, max-norm).
+XC::ConvergenceTestTol::ConvergenceTestTol(EntCmd *owr,int classTag,double theTol, int maxIter, int printFlag, int normType,int sz_norms)
+  : ConvergenceTest(owr,classTag,maxIter,printFlag,normType,sz_norms), tol(theTol) {}
 
+//! Sets the tolerance used in test() to be \p newTol.
 void XC::ConvergenceTestTol::setTolerance(double newTol)
   { tol = newTol; }
 
+//! Gets the tolerance used in test().
 double XC::ConvergenceTestTol::getTolerance(void) const
   { return tol; }
 

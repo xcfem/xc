@@ -65,8 +65,9 @@
 
 #include "solution/SoluMethod.h"
 
-//! @brief Constructor.
+//! @brief Default constructor.
 //!
+//! @param owr: object that owns this one.
 //! @param classTag: class identifier.
 XC::ConvergenceTest::ConvergenceTest(EntCmd *owr,int classTag)
   :MovableObject(classTag), EntWOwner(owr), currentIter(0), maxNumIter(0),
@@ -74,7 +75,13 @@ XC::ConvergenceTest::ConvergenceTest(EntCmd *owr,int classTag)
 
 //! @brief Constructor.
 //!
+//! @param owr: object that owns this one.
 //! @param classTag: class identifier.
+//! @param theTol: the tolerance used in test().
+//! @param maxIter the max number of iterations to be performed.
+//! @param printFlag: what, if anything, is printed on each test.
+//! @param normType: type of norm to use (1-norm, 2-norm, p-norm, max-norm).
+//! @param sz_norms: size of the vector that contains computed norms.
 XC::ConvergenceTest::ConvergenceTest(EntCmd *owr,int classTag,int maxIter,int prtFlg, int normType, int sz_norms)
   :MovableObject(classTag), EntWOwner(owr), currentIter(0), maxNumIter(maxIter),
    printFlag(prtFlg), nType(normType), norms(sz_norms), lastRatio(0.0), calculatedNormX(0.0), calculatedNormB(0.0) {}

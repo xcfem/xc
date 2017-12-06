@@ -68,6 +68,11 @@ namespace XC {
 //
 //! @brief Specifies a tolerace for the displacement increment norm
 //! to be used on each iteration.
+//!
+//! A CTestNormDispIncr object is an object which can be used in an
+//! algorithmic class to test if convergence has been achieved. The
+//! CTestNormDispIncr class tests using the norm of the solution Vector of
+//! a LinearSOE object and a user specified tolerance value. 
 class CTestNormDispIncr: public ConvergenceTestTol
   {
   public:

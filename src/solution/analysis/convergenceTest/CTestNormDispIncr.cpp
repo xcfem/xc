@@ -54,13 +54,23 @@
 #include <solution/system_of_eqn/linearSOE/LinearSOE.h>
 
 
+//! @brief Default constructor.
+//!
+//! @param owr: object that owns this one.
 XC::CTestNormDispIncr::CTestNormDispIncr(EntCmd *owr)	    	
   : ConvergenceTestTol(owr,CONVERGENCE_TEST_CTestNormDispIncr,0.0,0,0,2,25)
   {}
 
 
-XC::CTestNormDispIncr::CTestNormDispIncr(EntCmd *owr,double theTol, int maxIter, int printIt, int normType)
-  : ConvergenceTestTol(owr,CONVERGENCE_TEST_CTestNormDispIncr,theTol,maxIter,printIt,normType,maxIter)
+//! @brief Constructor.
+//!
+//! @param owr: object that owns this one.
+//! @param theTol: the tolerance used in test().
+//! @param maxIter the max number of iterations to be performed.
+//! @param printFlag: what, if anything, is printed on each test.
+//! @param normType: type of norm to use (1-norm, 2-norm, p-norm, max-norm).
+XC::CTestNormDispIncr::CTestNormDispIncr(EntCmd *owr,double theTol, int maxIter, int printFlag, int normType)
+  : ConvergenceTestTol(owr,CONVERGENCE_TEST_CTestNormDispIncr,theTol,maxIter,printFlag,normType,maxIter)
   {}
 
 //! @brief Virtual constructor.
@@ -77,6 +87,18 @@ std::string XC::CTestNormDispIncr::getStatusMsg(const int &flag) const
     return retval;
   }
 
+//! @brief Returns {currentNumIter} if the two norm of the LinearSOE objects X
+//! Vector is less than the tolerance \p tol.
+//!
+//! Returns {currentNumIter} if the two norm of the LinearSOE objects X
+//! Vector is less than the tolerance \p tol. If no LinearSOE has been
+//! set \f$-2\f$ is returned. If the \p currentNumIter \f$>=\f$ {\em
+//! maxNumIter} an error message is printed and \f$-2\f$ is returned. If none
+//! of these conditions is met, the \p currentnumIter is incremented
+//! and \f$-1\f$ is returned. If the print flag is \f$0\f$ nothing is printed to
+//! cerr during the method, if \f$1\f$ the current iteration and norm are
+//! printed to cerr, and if \f$2\f$ the norm and number of iterations to
+//! convergence are printed to cerr. 
 int XC::CTestNormDispIncr::test(void)
   {
     // check to ensure the SOE has been set - this should not happen if the 
@@ -87,7 +109,8 @@ int XC::CTestNormDispIncr::test(void)
     // may never get convergence later on in analysis!
     if(currentIter == 0)
       {
-        std::cerr << "WARNING: XC::CTestNormDispIncr::test() - start() was never invoked.\n";	
+        std::cerr << getClassName() << "::" << __FUNCTION__
+	          << "; WARNING: start() was never invoked.\n";	
         return -2;
       }
     
@@ -121,8 +144,9 @@ int XC::CTestNormDispIncr::test(void)
     // algo failed to converged after specified number of iterations - but RETURN OK
     else if((printFlag == 5 || printFlag == 6) && currentIter >= maxNumIter)
       {
-        std::cerr << "WARNING: XC::CTestNormDispIncr::test() - failed to converge but going on - ";
-        std::cerr << getDispIncrMessage() << std::endl;
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; WARNING: failed to converge but going on - "
+		  << getDispIncrMessage() << std::endl;
         return currentIter;
       }
     // algo failed to converged after specified number of iterations - return FAILURE -2

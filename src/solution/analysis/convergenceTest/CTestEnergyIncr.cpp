@@ -65,15 +65,20 @@
 #include <solution/system_of_eqn/linearSOE/LinearSOE.h>
 
 //! @brief Default constructor.
+//!
+//! @param owr: object that owns this one.
 XC::CTestEnergyIncr::CTestEnergyIncr(EntCmd *owr)	    	
   : ConvergenceTestTol(owr,CONVERGENCE_TEST_CTestEnergyIncr) {}
 
 //! @brief Constructor.
 //!
+//! @param owr: object that owns this one.
 //! @param theTol: tolerance used int test().
 //! @param maxIter: max number of iterations to be performed.
-XC::CTestEnergyIncr::CTestEnergyIncr(EntCmd *owr,double theTol, int maxIter, int printIt, int normType)
-  : ConvergenceTestTol(owr,CONVERGENCE_TEST_CTestEnergyIncr,theTol,maxIter,printIt,normType,maxIter) {}
+//! @param printFlag: what, if anything, is printed on each test.
+//! @param normType: type of norm to use (1-norm, 2-norm, p-norm, max-norm).
+XC::CTestEnergyIncr::CTestEnergyIncr(EntCmd *owr,double theTol, int maxIter, int printFlag, int normType)
+  : ConvergenceTestTol(owr,CONVERGENCE_TEST_CTestEnergyIncr,theTol,maxIter,printFlag,normType,maxIter) {}
 
 //! @brief Virtual constructor.
 XC::ConvergenceTest* XC::CTestEnergyIncr::getCopy(void) const

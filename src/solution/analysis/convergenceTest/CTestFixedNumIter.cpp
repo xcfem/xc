@@ -62,13 +62,23 @@
 #include <solution/system_of_eqn/linearSOE/LinearSOE.h>
 
 
+//! @brief Default constructor.
+//!
+//! @param owr: object that owns this one.
 XC::CTestFixedNumIter::CTestFixedNumIter(EntCmd *owr)	    	
   : ConvergenceTest(owr,CONVERGENCE_TEST_CTestFixedNumIter)
   {}
 
 
-XC::CTestFixedNumIter::CTestFixedNumIter(EntCmd *owr,int maxIter, int printIt, int normType)
-  : ConvergenceTest(owr,CONVERGENCE_TEST_CTestFixedNumIter,maxIter,printIt,normType,maxIter)
+//! @brief Constructor.
+//!
+//! @param owr: object that owns this one.
+//! @param theTol: the tolerance used in test().
+//! @param maxIter the max number of iterations to be performed.
+//! @param printFlag: what, if anything, is printed on each test.
+//! @param normType: type of norm to use (1-norm, 2-norm, p-norm, max-norm).
+XC::CTestFixedNumIter::CTestFixedNumIter(EntCmd *owr,int maxIter, int printFlag, int normType)
+  : ConvergenceTest(owr,CONVERGENCE_TEST_CTestFixedNumIter,maxIter,printFlag,normType,maxIter)
   {}
 
 //! @brief Virtual constructor.
