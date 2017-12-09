@@ -102,7 +102,7 @@ class SectionInfo(object):
     self.rfStDiag=rfStDiag
     self.width=width
     self.depth=depth
-    self.JTorsion=prmRect.getJTorsion(self.width,self.depth)
+    self.JTorsion=self.scc.getJTorsion()
     self.shReinfY=sHAs.RecordShearReinforcement()
     self.shReinfY.familyName= "Vy"
     self.shReinfZ= sHAs.RecordShearReinforcement()
@@ -232,8 +232,8 @@ class SectionInfoHASimple(SectionInfo):
     concrDiag=sectHASimple.getConcreteDiagram(preprocessor)
     rfStDiag=sectHASimple.getSteelDiagram(preprocessor)
     geomSection= preprocessor.getMaterialLoader.getSectionGeometry(sectName)
-    width=sectHASimple.width
-    depth=sectHASimple.depth
+    width=sectHASimple.b
+    depth=sectHASimple.h
     super(SectionInfoHASimple,self).__init__(preprocessor,sectName,sectDescr,concrete,rfSteel,concrDiag,rfStDiag,geomSection,width,depth)
     self.shReinfZ=sectHASimple.shReinfZ
     self.shReinfY=sectHASimple.shReinfY

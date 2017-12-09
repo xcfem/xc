@@ -224,7 +224,7 @@ class PhantomModel(object):
     '''
     intForcCombFileName= limitStateData.getInternalForcesFileName()
     controller= limitStateData.controller
-    meanCFs= -1.0 
+    meanCFs= -1.0
     if(controller):
       self.build(intForcCombFileName,controller)
       self.check(controller)
