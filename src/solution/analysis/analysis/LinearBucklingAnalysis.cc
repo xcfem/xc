@@ -64,9 +64,9 @@ void XC::LinearBucklingAnalysis::clearAll(void)
 //! increase the number of steps so \p numSteps= 1)
 int XC::LinearBucklingAnalysis::analyze(int numSteps)
   {
-    assert(metodo_solu);
-    EntCmd *old= metodo_solu->Owner();
-    metodo_solu->set_owner(this);
+    assert(solution_method);
+    EntCmd *old= solution_method->Owner();
+    solution_method->set_owner(this);
     assert(eigen_solu);
     EntCmd *oldE= eigen_solu->Owner();
     eigen_solu->set_owner(this);
@@ -87,7 +87,7 @@ int XC::LinearBucklingAnalysis::analyze(int numSteps)
         if(result < 0) //Fallo en run_analysis_step.
           return result;
       }
-    metodo_solu->set_owner(old);
+    solution_method->set_owner(old);
     eigen_solu->set_owner(oldE);
     return result;
   }

@@ -560,6 +560,6 @@ int XC::DomainDecompositionAnalysis::setLinearSOE(LinearSOE &theSOE)
 
 //! @brief Sets the convergence test to use in the analysis.
 int XC::DomainDecompositionAnalysis::setConvergenceTest(ConvergenceTest &theTest)
-  { return metodo_solu->setConvergenceTest(theTest); }
+  { return solution_method->setConvergenceTest(theTest); }
 
 

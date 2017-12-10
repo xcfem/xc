@@ -293,9 +293,9 @@ int XC::StaticAnalysis::run_analysis_step(int num_step,int numSteps)
 //! increase the number of steps so \p numSteps= 1)
 int XC::StaticAnalysis::analyze(int numSteps)
   {
-    assert(metodo_solu);
-    EntCmd *old= metodo_solu->Owner();
-    metodo_solu->set_owner(this);
+    assert(solution_method);
+    EntCmd *old= solution_method->Owner();
+    solution_method->set_owner(this);
     int result= 0;
     for(int i=0; i<numSteps; i++)
       {
@@ -303,7 +303,7 @@ int XC::StaticAnalysis::analyze(int numSteps)
         if(result < 0) //Fallo en run_analysis_step.
           break;
       }
-    metodo_solu->set_owner(old);
+    solution_method->set_owner(old);
     return result;
   }
 
@@ -467,14 +467,14 @@ int XC::StaticAnalysis::setLinearSOE(LinearSOE &theNewSOE)
 
 //! @brief Sets the convergence test to use in the analysis.
 int XC::StaticAnalysis::setConvergenceTest(ConvergenceTest &theNewTest)
-  { return metodo_solu->setConvergenceTest(theNewTest); }
+  { return solution_method->setConvergenceTest(theNewTest); }
 
 
 
 XC::ConvergenceTest *XC::StaticAnalysis::getConvergenceTest(void)
   {
-    if(metodo_solu)
-      return metodo_solu->getConvergenceTestPtr();
+    if(solution_method)
+      return solution_method->getConvergenceTestPtr();
     else
       return nullptr;
   }

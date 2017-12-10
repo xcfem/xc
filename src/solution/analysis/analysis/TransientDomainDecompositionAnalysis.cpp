@@ -105,9 +105,9 @@ bool XC::TransientDomainDecompositionAnalysis::doesIndependentAnalysis(void)
 //! @param dT: time increment.
 int XC::TransientDomainDecompositionAnalysis::analyze(double dT)
   {
-    assert(metodo_solu);
-    EntCmd *old= metodo_solu->Owner();
-    metodo_solu->set_owner(this);
+    assert(solution_method);
+    EntCmd *old= solution_method->Owner();
+    solution_method->set_owner(this);
     int result = 0;
     Domain *the_Domain = this->getDomainPtr();
 
@@ -176,7 +176,7 @@ int XC::TransientDomainDecompositionAnalysis::analyze(double dT)
         getTransientIntegratorPtr()->revertToLastStep();
         return -4;
       }    	
-    metodo_solu->set_owner(old);
+    solution_method->set_owner(old);
     return 0;
   }
 
@@ -377,8 +377,8 @@ int XC::TransientDomainDecompositionAnalysis::sendSelf(CommParameters &cp)
     data(5)= theSolver->getClassTag();
     data(6)= getTransientIntegratorPtr()->getClassTag();
 
-    if(metodo_solu->getConvergenceTestPtr() != 0)
-      data(7) = metodo_solu->getConvergenceTestPtr()->getClassTag();
+    if(solution_method->getConvergenceTestPtr() != 0)
+      data(7) = solution_method->getConvergenceTestPtr()->getClassTag();
     else
       data(7) = -1;
 
@@ -438,8 +438,8 @@ int XC::TransientDomainDecompositionAnalysis::sendSelf(CommParameters &cp)
         return -1;
       }
 
-    if(metodo_solu->getConvergenceTestPtr() != 0)
-      if(metodo_solu->getConvergenceTestPtr()->sendSelf(cp) != 0)
+    if(solution_method->getConvergenceTestPtr() != 0)
+      if(solution_method->getConvergenceTestPtr()->sendSelf(cp) != 0)
         {
           std::cerr << getClassName() << "::" << __FUNCTION__
 		    << "; failed to send integrator\n";
@@ -558,8 +558,8 @@ int XC::TransientDomainDecompositionAnalysis::recvSelf(const CommParameters &cp)
     if(getConvergenceTestPtr() == 0 || getConvergenceTestPtr()->getClassTag() != data(7))
       {
 	std::cerr << "TransientDomainDecompositionAnalysis; falta implementar la lectura del convergence test." << std::endl;
-//         if(metodo_solu->getConvergenceTestPtr() != 0)
-//           delete metodo_solu->getConvergenceTestPtr();
+//         if(solution_method->getConvergenceTestPtr() != 0)
+//           delete solution_method->getConvergenceTestPtr();
     
 //         if(data(7) != -1)
 //           {
@@ -571,7 +571,7 @@ int XC::TransientDomainDecompositionAnalysis::recvSelf(const CommParameters &cp)
 // 	        return -1;
 //               }
 //             else
-//               metodo_solu->setConvergenceTest(*tmp);
+//               solution_method->setConvergenceTest(*tmp);
 //           }
       }
     if(getConvergenceTestPtr() != 0)

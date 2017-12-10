@@ -78,8 +78,8 @@
 // AddingSensitivity:END ////////////////////////////////////
 
 //! @brief Constructor.
-XC::DirectIntegrationAnalysis::DirectIntegrationAnalysis(SoluMethod *metodo_solu)
-  :TransientAnalysis(metodo_solu), domainStamp(0)
+XC::DirectIntegrationAnalysis::DirectIntegrationAnalysis(SoluMethod *solution_method)
+  :TransientAnalysis(solution_method), domainStamp(0)
   {
 // AddingSensitivity:BEGIN ////////////////////////////////////
 #ifdef _RELIABILITY
@@ -114,8 +114,8 @@ void XC::DirectIntegrationAnalysis::clearAll(void)
 
 int XC::DirectIntegrationAnalysis::initialize(void)
   {
-    assert(metodo_solu);
-    Domain *the_Domain = metodo_solu->getDomainPtr();
+    assert(solution_method);
+    Domain *the_Domain = solution_method->getDomainPtr();
 
     // check if domain has undergone change
     int stamp = the_Domain->hasDomainChanged();
@@ -129,14 +129,14 @@ int XC::DirectIntegrationAnalysis::initialize(void)
 	    return -1;
           }	
       }
-    if(metodo_solu->getTransientIntegratorPtr()->initialize() < 0)
+    if(solution_method->getTransientIntegratorPtr()->initialize() < 0)
       {
 	std::cerr << getClassName() << "::" << __FUNCTION__
 		  << "; integrator initialize() failed\n";
 	return -2;
       }
     else
-      metodo_solu->getTransientIntegratorPtr()->commit();
+      solution_method->getTransientIntegratorPtr()->commit();
     return 0;
   }
 
@@ -156,14 +156,14 @@ int XC::DirectIntegrationAnalysis::initialize(void)
 int XC::DirectIntegrationAnalysis::analyze(int numSteps, double dT)
   {
     int result= 0;
-    assert(metodo_solu);
-    EntCmd *old= metodo_solu->Owner();
-    metodo_solu->set_owner(this);
-    Domain *the_Domain = metodo_solu->getDomainPtr();
+    assert(solution_method);
+    EntCmd *old= solution_method->Owner();
+    solution_method->set_owner(this);
+    Domain *the_Domain = solution_method->getDomainPtr();
 
     for(int i=0; i<numSteps; i++)
       {
-        if(newStepDomain(metodo_solu->getModelWrapperPtr()->getAnalysisModelPtr(),dT) < 0)
+        if(newStepDomain(solution_method->getModelWrapperPtr()->getAnalysisModelPtr(),dT) < 0)
           {
 	    std::cerr << getClassName() << "::" << __FUNCTION__
 		      << "; the AnalysisModel failed"
@@ -187,7 +187,7 @@ int XC::DirectIntegrationAnalysis::analyze(int numSteps, double dT)
               }	
           }
 
-        if(metodo_solu->getTransientIntegratorPtr()->newStep(dT) < 0)
+        if(solution_method->getTransientIntegratorPtr()->newStep(dT) < 0)
           {
 	    std::cerr << getClassName() << "::" << __FUNCTION__
 		      << "; the XC::Integrator failed at time "
@@ -197,7 +197,7 @@ int XC::DirectIntegrationAnalysis::analyze(int numSteps, double dT)
 	    return -2;
           }
 
-        result = metodo_solu->getEquiSolutionAlgorithmPtr()->solveCurrentStep();
+        result = solution_method->getEquiSolutionAlgorithmPtr()->solveCurrentStep();
         if(result < 0)
           {
 	    std::cerr << getClassName() << "::" << __FUNCTION__
@@ -205,7 +205,7 @@ int XC::DirectIntegrationAnalysis::analyze(int numSteps, double dT)
 		      << the_Domain->getTimeTracker().getCurrentTime()
 		      << std::endl;
 	    the_Domain->revertToLastCommit();	    
-	    metodo_solu->getTransientIntegratorPtr()->revertToLastStep();
+	    solution_method->getTransientIntegratorPtr()->revertToLastStep();
 	    return -3;
           }    
 
@@ -223,14 +223,14 @@ int XC::DirectIntegrationAnalysis::analyze(int numSteps, double dT)
 			  << the_Domain->getTimeTracker().getCurrentTime()
 			  << std::endl;
 	        the_Domain->revertToLastCommit();	    
-	        metodo_solu->getTransientIntegratorPtr()->revertToLastStep();
+	        solution_method->getTransientIntegratorPtr()->revertToLastStep();
 	        return -5;
 	      }
           }
 #endif
 // AddingSensitivity:END //////////////////////////////////////
       
-        result= metodo_solu->getTransientIntegratorPtr()->commit();
+        result= solution_method->getTransientIntegratorPtr()->commit();
         if(result < 0)
           {
 	    std::cerr << getClassName() << "::" << __FUNCTION__
@@ -238,11 +238,11 @@ int XC::DirectIntegrationAnalysis::analyze(int numSteps, double dT)
 		      << the_Domain->getTimeTracker().getCurrentTime()
 		      << std::endl;
 	    the_Domain->revertToLastCommit();	    
-	    metodo_solu->getTransientIntegratorPtr()->revertToLastStep();
+	    solution_method->getTransientIntegratorPtr()->revertToLastStep();
 	    return -4;
           }
       }    
-    metodo_solu->set_owner(old);
+    solution_method->set_owner(old);
     return result;
   }
 
@@ -274,36 +274,36 @@ int XC::DirectIntegrationAnalysis::analyze(int numSteps, double dT)
 //!   is returned. 
 int XC::DirectIntegrationAnalysis::domainChanged(void)
   {
-    assert(metodo_solu);
-    Domain *the_Domain = metodo_solu->getDomainPtr();
+    assert(solution_method);
+    Domain *the_Domain = solution_method->getDomainPtr();
     int stamp = the_Domain->hasDomainChanged();
     domainStamp = stamp;
    
-    metodo_solu->getModelWrapperPtr()->getAnalysisModelPtr()->clearAll();    
-    metodo_solu->getModelWrapperPtr()->getConstraintHandlerPtr()->clearAll();
+    solution_method->getModelWrapperPtr()->getAnalysisModelPtr()->clearAll();    
+    solution_method->getModelWrapperPtr()->getConstraintHandlerPtr()->clearAll();
     
     // now we invoke handle() on the constraint handler which
     // causes the creation of XC::FE_Element and XC::DOF_Group objects
     // and their addition to the XC::AnalysisModel.
 
-    metodo_solu->getModelWrapperPtr()->getConstraintHandlerPtr()->handle();
+    solution_method->getModelWrapperPtr()->getConstraintHandlerPtr()->handle();
     // we now invoke number() on the numberer which causes
     // equation numbers to be assigned to all the DOFs in the
     // AnalysisModel.
 
 
-    metodo_solu->getModelWrapperPtr()->getDOF_NumbererPtr()->numberDOF();
+    solution_method->getModelWrapperPtr()->getDOF_NumbererPtr()->numberDOF();
 
-    metodo_solu->getModelWrapperPtr()->getConstraintHandlerPtr()->doneNumberingDOF();
+    solution_method->getModelWrapperPtr()->getConstraintHandlerPtr()->doneNumberingDOF();
 
     // we invoke setGraph() on the XC::LinearSOE which
     // causes that object to determine its size
 
-    metodo_solu->getLinearSOEPtr()->setSize(metodo_solu->getModelWrapperPtr()->getAnalysisModelPtr()->getDOFGraph());
+    solution_method->getLinearSOEPtr()->setSize(solution_method->getModelWrapperPtr()->getAnalysisModelPtr()->getDOFGraph());
 
     // we invoke domainChange() on the integrator and algorithm
-    metodo_solu->getTransientIntegratorPtr()->domainChanged();
-    metodo_solu->getEquiSolutionAlgorithmPtr()->domainChanged();
+    solution_method->getTransientIntegratorPtr()->domainChanged();
+    solution_method->getEquiSolutionAlgorithmPtr()->domainChanged();
 
 
     return 0;
@@ -331,7 +331,7 @@ int XC::DirectIntegrationAnalysis::setNumberer(DOF_Numberer &theNewNumberer)
     int result= TransientAnalysis::setNumberer(theNewNumberer);
 
     // invoke domainChanged() either indirectly or directly
-    Domain *the_Domain = metodo_solu->getDomainPtr();
+    Domain *the_Domain = solution_method->getDomainPtr();
     int stamp = the_Domain->hasDomainChanged();
     domainStamp = stamp;
     result = this->domainChanged();    
@@ -362,8 +362,8 @@ int XC::DirectIntegrationAnalysis::setAlgorithm(EquiSolnAlgo &theNewAlgorithm)
     TransientAnalysis::setAlgorithm(theNewAlgorithm);
 
     // invoke domainChanged() either indirectly or directly
-    assert(metodo_solu);
-    Domain *the_Domain = metodo_solu->getDomainPtr();
+    assert(solution_method);
+    Domain *the_Domain = solution_method->getDomainPtr();
     // check if domain has undergone change
     int stamp = the_Domain->hasDomainChanged();
     if(stamp != domainStamp)
@@ -378,7 +378,7 @@ int XC::DirectIntegrationAnalysis::setAlgorithm(EquiSolnAlgo &theNewAlgorithm)
       }
     else
       {
-	if(metodo_solu->getEquiSolutionAlgorithmPtr()->domainChanged() < 0)
+	if(solution_method->getEquiSolutionAlgorithmPtr()->domainChanged() < 0)
           {
 	    std::cerr << getClassName() << "::" << __FUNCTION__
 		      << "; algorithm::domainChanged() failed";
@@ -406,7 +406,7 @@ int XC::DirectIntegrationAnalysis::setIntegrator(TransientIntegrator &theNewInte
     TransientAnalysis::setIntegrator(theNewIntegrator);
 
     // invoke domainChanged() either indirectly or directly
-    int stamp = metodo_solu->getDomainPtr()->hasDomainChanged();
+    int stamp = solution_method->getDomainPtr()->hasDomainChanged();
     if(stamp != domainStamp)
       {
 	domainStamp = stamp;	    
@@ -419,7 +419,7 @@ int XC::DirectIntegrationAnalysis::setIntegrator(TransientIntegrator &theNewInte
       }
     else
       {
-        if(metodo_solu->getTransientIntegratorPtr()->domainChanged() < 0)
+        if(solution_method->getTransientIntegratorPtr()->domainChanged() < 0)
           {
 	    std::cerr << getClassName() << "::" << __FUNCTION__
 		      << "; Integrator::domainChanged failed";
@@ -449,8 +449,8 @@ int XC::DirectIntegrationAnalysis::setLinearSOE(LinearSOE &theNewSOE)
     // set the links needed by the other objects in the aggregation
 
     // set the size either indirectly or directly
-    assert(metodo_solu);
-    Domain *the_Domain= metodo_solu->getDomainPtr();
+    assert(solution_method);
+    Domain *the_Domain= solution_method->getDomainPtr();
     int stamp = the_Domain->hasDomainChanged();
     if(stamp != domainStamp)
       {
@@ -464,8 +464,8 @@ int XC::DirectIntegrationAnalysis::setLinearSOE(LinearSOE &theNewSOE)
       }
     else
       {
-        Graph &theGraph = metodo_solu->getModelWrapperPtr()->getAnalysisModelPtr()->getDOFGraph();
-        if(metodo_solu->getLinearSOEPtr()->setSize(theGraph) < 0)
+        Graph &theGraph = solution_method->getModelWrapperPtr()->getAnalysisModelPtr()->getDOFGraph();
+        if(solution_method->getLinearSOEPtr()->setSize(theGraph) < 0)
           {
 	    std::cerr << getClassName() << "::" << __FUNCTION__
 		      << "; LinearSOE::setSize() failed";
@@ -478,16 +478,16 @@ int XC::DirectIntegrationAnalysis::setLinearSOE(LinearSOE &theNewSOE)
 //! @brief Sets the convergence test to use in the analysis.
 int XC::DirectIntegrationAnalysis::setConvergenceTest(ConvergenceTest &theNewTest)
   {
-    if(metodo_solu)
-      metodo_solu->setConvergenceTest(theNewTest);
+    if(solution_method)
+      solution_method->setConvergenceTest(theNewTest);
     return 0;
   }
 
 //! @brief Comprueba si el domain ha cambiado.
 int XC::DirectIntegrationAnalysis::checkDomainChange(void)
   {
-    assert(metodo_solu);
-    Domain *the_Domain = metodo_solu->getDomainPtr();
+    assert(solution_method);
+    Domain *the_Domain = solution_method->getDomainPtr();
 
     // check if domain has undergone change
     int stamp = the_Domain->hasDomainChanged();
