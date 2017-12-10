@@ -23,11 +23,14 @@ from postprocess import limit_state_data as lsd
 from postprocess import RC_material_distribution
 from materials.sections.fiber_section import defSimpleRCSection
 import sys
+import logging
 
 #Hide logging messages from modules.
-sysstdout = sys.stdout
-logFile= open('/tmp/test.log', 'a')
-sys.stdout = sys.stderr = logFile
+rootLogger = logging.getLogger()
+lhStdout = rootLogger.handlers[0]  # stdout is the only handler initially
+fileHandler = logging.FileHandler("{0}/{1}.log".format('/tmp/', 'test'))
+rootLogger.addHandler(fileHandler)
+rootLogger.removeHandler(lhStdout)
 
 # Geometry
 L= 1.0 # Bar length (m)
@@ -143,7 +146,7 @@ print "ratio2= ",ratio2
 '''
 
 # Show logging messages.
-sys.stdout = sysstdout
+#sys.stdout = sysstdout
 import os
 fname= os.path.basename(__file__)
 if (ratio1<0.01) & (ratio2<0.01):
