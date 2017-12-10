@@ -49,7 +49,7 @@
 // $Source: /usr/local/cvs/OpenSees/SRC/analysis/analysis/Analysis.cpp,v $
                                                                         
                                                                         
-// File: ~/analysis/analysis/Analysis.C
+// File: ~/analysis/analysis/Analysis.cpp
 // 
 // Written: fmk 
 // Created: 11/96
@@ -70,8 +70,11 @@
 
 
 //! @brief Constructor.
+//!
+//! All analysis are associated with a single solution method, this constructor
+//! sets up the link.
 XC::Analysis::Analysis(SoluMethod *s)
-  :analysis_result(-100), metodo_solu(s) {}
+  :analysis_result(-100), solution_method(s) {}
 
 int XC::Analysis::newStepDomain(AnalysisModel *theModel,const double &dT)
   { return theModel->newStepDomain(dT); }
@@ -102,8 +105,8 @@ const XC::Domain *XC::Analysis::getDomainPtr(void) const
 //! @brief Returns a pointer to the constraint handler.
 XC::ConstraintHandler *XC::Analysis::getConstraintHandlerPtr(void)
   {
-    if(metodo_solu)
-      return metodo_solu->getConstraintHandlerPtr();
+    if(solution_method)
+      return solution_method->getConstraintHandlerPtr();
     else
       return nullptr;
   }
@@ -111,16 +114,16 @@ XC::ConstraintHandler *XC::Analysis::getConstraintHandlerPtr(void)
 //! @brief Returns a pointer to the DOF numberer.
 XC::DOF_Numberer *XC::Analysis::getDOF_NumbererPtr(void) const
   {
-    if(metodo_solu)
-      return metodo_solu->getDOF_NumbererPtr();
+    if(solution_method)
+      return solution_method->getDOF_NumbererPtr();
     else
       return nullptr;
   }
 //! @brief Returns a pointer to the analysis model.
 XC::AnalysisModel *XC::Analysis::getAnalysisModelPtr(void) const
   {
-    if(metodo_solu)
-      return metodo_solu->getAnalysisModelPtr();
+    if(solution_method)
+      return solution_method->getAnalysisModelPtr();
     else
       return nullptr;
   }
@@ -128,8 +131,8 @@ XC::AnalysisModel *XC::Analysis::getAnalysisModelPtr(void) const
 //! @brief Returns a pointer to the linear system of equations.
 XC::LinearSOE *XC::Analysis::getLinearSOEPtr(void) const
   {
-    if(metodo_solu)
-      return metodo_solu->getLinearSOEPtr();
+    if(solution_method)
+      return solution_method->getLinearSOEPtr();
     else
       return nullptr;
   }
@@ -137,8 +140,8 @@ XC::LinearSOE *XC::Analysis::getLinearSOEPtr(void) const
 //! @brief Returns a pointer to the system of equations de eigenvalues.
 XC::EigenSOE *XC::Analysis::getEigenSOEPtr(void) const
   {
-    if(metodo_solu)
-      return metodo_solu->getEigenSOEPtr();
+    if(solution_method)
+      return solution_method->getEigenSOEPtr();
     else
       return nullptr;
   }
@@ -146,8 +149,8 @@ XC::EigenSOE *XC::Analysis::getEigenSOEPtr(void) const
 //! @brief Returns, if possible, a pointer al integrator otherwise it returns nullptr.
 XC::Integrator *XC::Analysis::getIntegratorPtr(void)
   {
-    if(metodo_solu)
-      return metodo_solu->getIntegratorPtr();
+    if(solution_method)
+      return solution_method->getIntegratorPtr();
     else
       return nullptr;
   }
@@ -155,8 +158,8 @@ XC::Integrator *XC::Analysis::getIntegratorPtr(void)
 //! @brief Returns, if possible, a pointer al integrator otherwise it returns nullptr.
 const XC::Integrator *XC::Analysis::getIntegratorPtr(void) const
   {
-    if(metodo_solu)
-      return metodo_solu->getIntegratorPtr();
+    if(solution_method)
+      return solution_method->getIntegratorPtr();
     else
       return nullptr;
   }
@@ -164,8 +167,8 @@ const XC::Integrator *XC::Analysis::getIntegratorPtr(void) const
 //! @brief Returns, if possible, a pointer al integrator incremental otherwise it returns nullptr.
 XC::IncrementalIntegrator *XC::Analysis::getIncrementalIntegratorPtr(void)
   {
-    if(metodo_solu)
-      return metodo_solu->getIncrementalIntegratorPtr();
+    if(solution_method)
+      return solution_method->getIncrementalIntegratorPtr();
     else
       return nullptr;
   }
@@ -173,8 +176,8 @@ XC::IncrementalIntegrator *XC::Analysis::getIncrementalIntegratorPtr(void)
 //! @brief Returns, if possible, a pointer al EigenIntegrator otherwise it returns nullptr.
 XC::EigenIntegrator *XC::Analysis::getEigenIntegratorPtr(void)
   {
-    if(metodo_solu)
-      return metodo_solu->getEigenIntegratorPtr();
+    if(solution_method)
+      return solution_method->getEigenIntegratorPtr();
     else
       return nullptr;
   }
@@ -182,8 +185,8 @@ XC::EigenIntegrator *XC::Analysis::getEigenIntegratorPtr(void)
 //! @brief Returns, if possible, a pointer al LinearBucklingIntegrator otherwise it returns nullptr.
 XC::LinearBucklingIntegrator *XC::Analysis::getLinearBucklingIntegratorPtr(void)
   {
-    if(metodo_solu)
-      return metodo_solu->getLinearBucklingIntegratorPtr();
+    if(solution_method)
+      return solution_method->getLinearBucklingIntegratorPtr();
     else
       return nullptr;
   }
@@ -191,8 +194,8 @@ XC::LinearBucklingIntegrator *XC::Analysis::getLinearBucklingIntegratorPtr(void)
 //! @brief Returns, if possible, a pointer al EigenIntegrator otherwise it returns nullptr.
 XC::TransientIntegrator *XC::Analysis::getTransientIntegratorPtr(void)
   {
-    if(metodo_solu)
-      return metodo_solu->getTransientIntegratorPtr();
+    if(solution_method)
+      return solution_method->getTransientIntegratorPtr();
     else
       return nullptr;
   }
@@ -201,8 +204,8 @@ XC::TransientIntegrator *XC::Analysis::getTransientIntegratorPtr(void)
 XC::StaticIntegrator *XC::Analysis::getStaticIntegratorPtr(void)
   {
     StaticIntegrator *retval= nullptr;
-    if(metodo_solu)
-      retval= metodo_solu->getStaticIntegratorPtr();
+    if(solution_method)
+      retval= solution_method->getStaticIntegratorPtr();
     return retval;
   }
 
@@ -210,8 +213,8 @@ XC::StaticIntegrator *XC::Analysis::getStaticIntegratorPtr(void)
 //! algorithm (if it's not defined it returns nullptr).
 XC::EigenAlgorithm *XC::Analysis::getEigenSolutionAlgorithmPtr(void)
   {
-    if(metodo_solu)
-      return metodo_solu->getEigenSolutionAlgorithmPtr();
+    if(solution_method)
+      return solution_method->getEigenSolutionAlgorithmPtr();
     else
       return nullptr;
   }
@@ -220,8 +223,8 @@ XC::EigenAlgorithm *XC::Analysis::getEigenSolutionAlgorithmPtr(void)
 //! algorithm (if it's not defined it returns nullptr).
 XC::EquiSolnAlgo *XC::Analysis::getEquiSolutionAlgorithmPtr(void)
   {
-    if(metodo_solu)
-      return metodo_solu->getEquiSolutionAlgorithmPtr();
+    if(solution_method)
+      return solution_method->getEquiSolutionAlgorithmPtr();
     else
       return nullptr;
   }
@@ -230,8 +233,8 @@ XC::EquiSolnAlgo *XC::Analysis::getEquiSolutionAlgorithmPtr(void)
 //! algorithm (if it's not defined it returns nullptr).
 XC::DomainDecompAlgo *XC::Analysis::getDomainDecompSolutionAlgorithmPtr(void)
   {
-    if(metodo_solu)
-      return metodo_solu->getDomainDecompSolutionAlgorithmPtr();
+    if(solution_method)
+      return solution_method->getDomainDecompSolutionAlgorithmPtr();
     else
       return nullptr;
   }
@@ -239,8 +242,8 @@ XC::DomainDecompAlgo *XC::Analysis::getDomainDecompSolutionAlgorithmPtr(void)
 //! @brief Returns a pointer to the convergence test (only for suitable analysis).
 XC::ConvergenceTest *XC::Analysis::getConvergenceTestPtr(void)
   {
-    if(metodo_solu)
-      return metodo_solu->getConvergenceTestPtr();
+    if(solution_method)
+      return solution_method->getConvergenceTestPtr();
     else
       return nullptr;
   }
@@ -248,8 +251,8 @@ XC::ConvergenceTest *XC::Analysis::getConvergenceTestPtr(void)
 //! @brief Returns a pointer to the convergence test (only for suitable analysis).
 const XC::ConvergenceTest *XC::Analysis::getConvergenceTestPtr(void) const
   {
-    if(metodo_solu)
-      return metodo_solu->getConvergenceTestPtr();
+    if(solution_method)
+      return solution_method->getConvergenceTestPtr();
     else
       return nullptr;
   }
@@ -295,17 +298,17 @@ void XC::Analysis::clearAll(void)
 //! @brief Sets the renumerador to use in the analysis.
 int XC::Analysis::setNumberer(DOF_Numberer &theNewNumberer) 
   {
-    if(metodo_solu)
-      if(metodo_solu->getModelWrapperPtr())
-        return metodo_solu->getModelWrapperPtr()->setNumberer(theNewNumberer);
+    if(solution_method)
+      if(solution_method->getModelWrapperPtr())
+        return solution_method->getModelWrapperPtr()->setNumberer(theNewNumberer);
     return 0;
   }
 
 //! @brief Sets the linear system of equations to use in the analysis.
 int XC::Analysis::setLinearSOE(LinearSOE &theNewSOE)
   {
-    if(metodo_solu)
-      return metodo_solu->setLinearSOE(theNewSOE);
+    if(solution_method)
+      return solution_method->setLinearSOE(theNewSOE);
     else
       return 0;
   }
@@ -313,8 +316,8 @@ int XC::Analysis::setLinearSOE(LinearSOE &theNewSOE)
 //! @brief Sets the sistema de eigenvalues to use in the analysis.
 int XC::Analysis::setEigenSOE(EigenSOE &theSOE)
   {
-    if(metodo_solu)
-      return metodo_solu->setEigenSOE(theSOE);
+    if(solution_method)
+      return solution_method->setEigenSOE(theSOE);
     else
       return 0;
   }
@@ -322,8 +325,8 @@ int XC::Analysis::setEigenSOE(EigenSOE &theSOE)
 //! @brief Sets the integrator to use in the analysis.
 int XC::Analysis::setIntegrator(Integrator &theNewIntegrator)
   {
-    if(metodo_solu)
-      return metodo_solu->setIntegrator(theNewIntegrator);
+    if(solution_method)
+      return solution_method->setIntegrator(theNewIntegrator);
     else
       return 0;
   }
@@ -331,39 +334,39 @@ int XC::Analysis::setIntegrator(Integrator &theNewIntegrator)
 //! @brief Set the solution algorithm to be used in the analysis.
 int XC::Analysis::setAlgorithm(SolutionAlgorithm &theNewAlgorithm) 
   {
-    if(metodo_solu)
-      return metodo_solu->setAlgorithm(theNewAlgorithm);
+    if(solution_method)
+      return solution_method->setAlgorithm(theNewAlgorithm);
     else
       return 0;
   }
 
 void XC::Analysis::brokeConstraintHandler(const CommParameters &cp,const ID &data)
-  { metodo_solu->getModelWrapperPtr()->brokeConstraintHandler(cp,data); }
+  { solution_method->getModelWrapperPtr()->brokeConstraintHandler(cp,data); }
 
 void XC::Analysis::brokeNumberer(const CommParameters &cp,const ID &data)
-  { metodo_solu->getModelWrapperPtr()->brokeNumberer(cp,data); }
+  { solution_method->getModelWrapperPtr()->brokeNumberer(cp,data); }
 
 void XC::Analysis::brokeAnalysisModel(const CommParameters &cp,const ID &data)
-  { metodo_solu->getModelWrapperPtr()->brokeAnalysisModel(cp,data); }
+  { solution_method->getModelWrapperPtr()->brokeAnalysisModel(cp,data); }
 
 void XC::Analysis::brokeDDLinearSOE(const CommParameters &cp,const ID &data)
-  { metodo_solu->brokeDDLinearSOE(cp,data); }
+  { solution_method->brokeDDLinearSOE(cp,data); }
 
 void XC::Analysis::brokeLinearSOE(const CommParameters &cp,const ID &data)
-  { metodo_solu->brokeLinearSOE(cp,data); }
+  { solution_method->brokeLinearSOE(cp,data); }
 
 void XC::Analysis::brokeIncrementalIntegrator(const CommParameters &cp,const ID &data)
-  { metodo_solu->brokeIncrementalIntegrator(cp,data); }
+  { solution_method->brokeIncrementalIntegrator(cp,data); }
 
 void XC::Analysis::brokeStaticIntegrator(const CommParameters &cp,const ID &data)
-  { metodo_solu->brokeStaticIntegrator(cp,data); }
+  { solution_method->brokeStaticIntegrator(cp,data); }
 
 void XC::Analysis::brokeTransientIntegrator(const CommParameters &cp,const ID &data)
-  { metodo_solu->brokeTransientIntegrator(cp,data); }
+  { solution_method->brokeTransientIntegrator(cp,data); }
 
 void XC::Analysis::brokeDomainDecompAlgo(const CommParameters &cp,const ID &data)
-  { metodo_solu->brokeDomainDecompAlgo(cp,data); }
+  { solution_method->brokeDomainDecompAlgo(cp,data); }
 
 void XC::Analysis::brokeEquiSolnAlgo(const CommParameters &cp,const ID &data)
-  { metodo_solu->brokeEquiSolnAlgo(cp,data); }
+  { solution_method->brokeEquiSolnAlgo(cp,data); }
 

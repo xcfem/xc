@@ -105,12 +105,18 @@ class CommParameters;
 //
 //! @ingroup AnalysisType
 //
-//! @brief Clase Base para los objetos que realizan the analysis.
+//! @brief Base class for the object that perform the analysis.
+//!
+//! The Analysis class is an abstract base class. Each Analysis
+//! object will be associated with a solution method. The owner of the
+//! analysis object encloses the domain upon which it will perform the
+//! analysis operations. The base Analysis class holds a pointer to this
+//! Domain and will return this pointer to subclasses.
 class Analysis: public EntCmd
   {
   protected:
     int analysis_result; //!< Equal to zero if success.
-    SoluMethod *metodo_solu; //!< Solution method.
+    SoluMethod *solution_method; //!< Solution method.
 
     int newStepDomain(AnalysisModel *theModel,const double &dT =0.0);
     ProcSolu *getProcSolu(void);
@@ -118,12 +124,13 @@ class Analysis: public EntCmd
 
     friend class ProcSolu;
     Analysis(SoluMethod *metodo);
+    //! @brief Virtual constructor.
     virtual Analysis *getCopy(void) const= 0;
   public:
     inline virtual ~Analysis(void) {}
 
     inline SoluMethod *getSoluMethodPtr(void)
-      { return metodo_solu; }
+      { return solution_method; }
     Domain *getDomainPtr(void);
     const Domain *getDomainPtr(void) const;
     ConstraintHandler *getConstraintHandlerPtr(void);

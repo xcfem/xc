@@ -80,9 +80,9 @@ XC::VariableTimeStepDirectIntegrationAnalysis::VariableTimeStepDirectIntegration
 //! @param dtMax: Maximum value for the time increment.
 int XC::VariableTimeStepDirectIntegrationAnalysis::analyze(int numSteps, double dT, double dtMin, double dtMax, int Jd)
   {
-    assert(metodo_solu);
-    EntCmd *old= metodo_solu->Owner();
-    metodo_solu->set_owner(this);
+    assert(solution_method);
+    EntCmd *old= solution_method->Owner();
+    solution_method->set_owner(this);
 
     // get some pointers
     Domain *theDom = this->getDomainPtr();
@@ -156,7 +156,7 @@ int XC::VariableTimeStepDirectIntegrationAnalysis::analyze(int numSteps, double 
         // now we determine a new_ delta T for next loop
         currentDt = this->determineDt(currentDt, dtMin, dtMax, Jd, theTest);
       }
-    metodo_solu->set_owner(old);
+    solution_method->set_owner(old);
     return 0;
   }
 

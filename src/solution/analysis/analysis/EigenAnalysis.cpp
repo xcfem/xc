@@ -100,9 +100,9 @@ void XC::EigenAnalysis::clearAll(void)
 int XC::EigenAnalysis::analyze(int numModes)
   {
     int result= 0;
-    assert(metodo_solu);
-    EntCmd *old= metodo_solu->Owner();
-    metodo_solu->set_owner(this);
+    assert(solution_method);
+    EntCmd *old= solution_method->Owner();
+    solution_method->set_owner(this);
 
     // check for change in Domain since last step. As a change can
     // occur in a commit() in a domaindecomp with load balancing
@@ -134,7 +134,7 @@ int XC::EigenAnalysis::analyze(int numModes)
 		  << "; algorithm failed\n";
 	return -3;
       }
-    metodo_solu->set_owner(old);
+    solution_method->set_owner(old);
     return 0;
   }
 
