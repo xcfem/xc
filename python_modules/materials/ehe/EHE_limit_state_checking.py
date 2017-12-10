@@ -299,7 +299,7 @@ def getKEHE08(sgpcd,fcd):
     '''
     s=-sgpcd/fcd #Positive when compressed
     if s>1:
-        print "getKEHE08; too much compression in concrete: (",sgpcd,"<",-fcd,")\n"
+        lmsg.warning("getKEHE08; too much compression in concrete: ("+str(sgpcd)+"<",str(-fcd)+")\n")
     if s<=0:
         retval=1.0
     elif s<=0.25:
@@ -549,7 +549,7 @@ def getBetaVcuEHE08(theta,thetaE):
     cotgThetaE=1/math.tan(thetaE)
     retval=0.0
     if cotgTheta<0.5:
-        print "getBetaVcuEHE08; theta angle is too small."
+        lmsg.warning('getBetaVcuEHE08; theta angle is too small.')
     else:
         if(cotgTheta<cotgThetaE):
             retval= (2*cotgTheta-1)/(2*cotgThetaE-1)
@@ -726,7 +726,8 @@ class ShearController(lscb.LimitStateControllerBase):
       e.setProp(self.limitStateLabel,cv.RCShearControlVars())
 
   def calcVuEHE08NoAt(self, scc, concrete, reinfSteel):
-    ''' Compute the shear strength at failure without shear reinforcement.
+    ''' Compute the shear strength at failure without shear reinforcement
+     according to clause 44.2.3.2.1 of EHE-08.
      XXX Presstressing contribution not implemented yet.
 
      :param reinfSteelMaterialTag: reinforcement steel material identifier.
@@ -744,7 +745,6 @@ class ShearController(lscb.LimitStateControllerBase):
     if(not scc.hasProp("rcSets")):
       scc.setProp("rcSets", createFiberSets.fiberSectionSetupRC3Sets(scc,self.concreteMatTag,self.concreteFibersSetName,self.reinfSteelMaterialTag,self.rebarFibersSetName))
     rcSets= scc.getProp("rcSets")
-
     concrFibers= rcSets.concrFibers.fSet
     self.concreteArea= rcSets.getConcreteArea(1)
     if(self.concreteArea<1e-6):
@@ -857,7 +857,7 @@ class ShearController(lscb.LimitStateControllerBase):
     ''' Check section shear strength.
        XXX Rebar orientation not taken into account yet.
     '''
-    print "Postprocessing combination: ",nmbComb
+    lmsg.log("Postprocessing combination: "+nmbComb)
     secHAParamsTorsion=  TorsionParameters()
     # XXX Ignore torsional deformation.
     secHAParamsTorsion.ue= 0
@@ -881,7 +881,6 @@ class ShearController(lscb.LimitStateControllerBase):
       VTmp= math.sqrt((VyTmp)**2+(VzTmp)**2)
       TTmp= scc.getStressResultantComponent("Mx")
       self.calcVuEHE08(scc,secHAParamsTorsion,concreteCode,codArmadura,NTmp,MTmp,VTmp,TTmp)
-
       if(self.Vu<VTmp):
         theta= max(self.thetaMin,min(self.thetaMax,self.thetaFisuras))
         self.calcVuEHE08(scc,secHAParamsTorsion,concreteCode,codArmadura,NTmp,MTmp,VTmp,TTmp)

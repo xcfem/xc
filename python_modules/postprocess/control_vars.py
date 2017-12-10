@@ -301,7 +301,9 @@ class RCShearControlVars(BiaxialBendingControlVars):
   
   '''
   def __init__(self,idSection=-1,combName= 'nil',CF= -1.0,N= 0.0, My= 0.0, Mz= 0.0, Mu= 0.0, Vy= 0.0, Vz= 0.0, theta= 0.0, Vcu= 0.0, Vsu= 0.0, Vu= 0.0):
+
     super(RCShearControlVars,self).__init__(idSection,combName,CF,N,My,Mz)
+    
     self.Mu= Mu #Ultimate bending moment.
     self.Vy= Vy #Shear parallel to the y axis.
     self.Vz= Vz #Shear parallel to the z axis.
@@ -309,6 +311,7 @@ class RCShearControlVars(BiaxialBendingControlVars):
     self.Vcu= Vcu #Vcu component of the shear resistance (defined in the codes).
     self.Vsu= Vsu #Vsu component of the shear resistance (defined in the codes).
     self.Vu= Vu # Shear resistance.
+
   def getLaTeXFields(self,factor= 1e-3):
     ''' Returns a string with the intermediate fields of the LaTeX string.
 

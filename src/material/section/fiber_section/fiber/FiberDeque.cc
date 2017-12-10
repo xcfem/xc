@@ -868,7 +868,7 @@ double XC::FiberDeque::getMyTracc(const double &z0) const
     return retval;
   }
 
-//! @brief Returns the punto de paso de la resultante de tracciones, si
+//! @brief Returns the centroid of the tensioned fibers, si
 //! no hay tracciones returns (0,0).
 const XC::Vector &XC::FiberDeque::baricentroTracciones(void) const
   {
@@ -1007,7 +1007,7 @@ double XC::FiberDeque::getStrainMin(void) const
     return retval;
   }
 
-//! @brief Returns the min strain.
+//! @brief Returns the max strain.
 double XC::FiberDeque::getStrainMax(void) const
   {
     double retval= 0.0;
@@ -1017,7 +1017,7 @@ double XC::FiberDeque::getStrainMax(void) const
         retval= (*i)->getMaterial()->getStrain();
         i++;
         for(;i!= end();i++)
-          retval= std::max(retval,(*i)->getMaterial()->getStrain());
+	  retval= std::max(retval,(*i)->getMaterial()->getStrain());
       }
     return retval;
   }
@@ -1225,17 +1225,23 @@ XC::Vector XC::FiberDeque::getVectorBrazoMecanico(void) const
     return Vector(bm.GetVector());
   }
 
-//! @brief Returns a segmento orientado desde el centro de tracciones al de compresiones.
+//! @brief Returns a segment from the tension centroid to the compression
+//! centroid.
 Segmento2d XC::FiberDeque::getSegmentoBrazoMecanico(void) const
   {
     Segmento2d retval;
+    retval.setExists(false);
     const double epsMin= getStrainMin();
     const double epsMax= getStrainMax();
     if((epsMin<0) && (epsMax>0))
       {
         const Vector &C= baricentroCompresiones();
-        const Vector &T= baricentroTracciones();
-        retval= Segmento2d(Pos2d(T[0],T[1]),Pos2d(C[0],C[1]));
+	if(!std::isnan(C[0]) && !std::isnan(C[1]))
+	  {
+            const Vector &T= baricentroTracciones();
+	    if(!std::isnan(T[0]) && !std::isnan(T[1]))
+	      retval= Segmento2d(Pos2d(T[0],T[1]),Pos2d(C[0],C[1]));
+	  }
       }
     else if(std::abs(epsMax-epsMin)>1e-6)
       {
@@ -1262,7 +1268,7 @@ Recta2d XC::FiberDeque::getTrazaPlanoTraccion(void) const
     const Recta2d trazaFlexion= getTrazaPlanoFlexion();
     Pos2d pt(getYCdg(),getZCdg());
     const double epsMax= getStrainMax();
-    if(epsMax>0) //Thera are tractions.
+    if(epsMax>0) //There are tractions.
       {
         const Vector &T= baricentroTracciones();
         pt= Pos2d(T[0],T[1]);
