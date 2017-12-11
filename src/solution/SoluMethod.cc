@@ -102,6 +102,11 @@ bool XC::SoluMethod::alloc_soln_algo(const std::string &nmb)
     return (theSolnAlgo!=nullptr);
   }
 
+//! To change the algorithm between analysis. It first invokes the
+//! destructor on the old SolutionAlgorithm object associated with the
+//! analysis. It then sets the SolutionAlgorithm 
+//! associated with the analysis to be \p newAlgorithm and sets the
+//! links for this object by invoking set_owner(). 
 void XC::SoluMethod::copia_soln_algo(SolutionAlgorithm *ptr)
   {
     if(ptr)
@@ -247,6 +252,12 @@ bool XC::SoluMethod::alloc_integrator(const std::string &nmb,const Vector &param
     return (theIntegrator!=nullptr);
   }
 
+//! To change the integration scheme between analysis. It first invokes the
+//! destructor on the old Integrator object associated with the
+//! analysis. It then sets the SolutionAlgorithm 
+//! associated with the analysis to be \p newAlgorithm and sets the
+//! links for this object by invoking setLinks(). It also invokes
+//! set_owner().
 void XC::SoluMethod::copia_integrator(Integrator *ptr)
   {
     if(ptr)
@@ -334,6 +345,12 @@ bool XC::SoluMethod::alloc_system_of_equations(const std::string &nmb,AnalysisMo
     return (theSOE!=nullptr);
   }
 
+//! To change the linear system of equation object between analysis. It
+//! first invokes the destructor on the old LinearSOE object associated
+//! with the analysis. It then sets the SolutionAlgorithm 
+//! associated with the analysis to be \p newSOE.
+//! links for this object by invoking setLinks(). It then invokes
+//! set_owner(). 
 void XC::SoluMethod::copia_system_of_equations(SystemOfEqn *ptr)
   {
     if(ptr)

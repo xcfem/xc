@@ -72,6 +72,8 @@
 #endif
 // AddingSensitivity:END ////////////////////////////////////
 
+const std::string stepNumberMessage= "In a static analysis, a number of steps greater than 1 is useless if the loads and constraints are constant.";
+
 //! @brief Constructor.
 XC::StaticAnalysis::StaticAnalysis(SoluMethod *metodo)
   :Analysis(metodo), domainStamp(0)
@@ -84,6 +86,9 @@ XC::StaticAnalysis::StaticAnalysis(SoluMethod *metodo)
   }
 
 //! @brief Destructor.
+//!
+//! Does nothing. clearAll() must be invoked if the destructor on
+//! the objects in the aggregation need to be invoked.
 XC::StaticAnalysis::~StaticAnalysis(void)
   {
   // we don't invoke the destructors in case user switching
@@ -91,7 +96,7 @@ XC::StaticAnalysis::~StaticAnalysis(void)
   // clearAll() must be invoked if user wishes to invoke destructor
   }
 
-//! @brief Clears all object members (constraint handler, analysis model,...).
+//! @brief Clears all object members.
 void XC::StaticAnalysis::clearAll(void)
   {
     // invoke the destructor on all the objects in the aggregation
@@ -120,9 +125,7 @@ int XC::StaticAnalysis::new_domain_step(int num_step)
 		  << " after " << getConvergenceTest()->getCurrentIter()-1
 		  << " iterations." << std::endl;
 	if(num_step>1)
-	  std::cerr << "In a static analysis, "
-	            << " a number of steps greater than 1 is useless"
-	            << " if the loads and constraints are constant";
+	  std::cerr << stepNumberMessage;
         getDomainPtr()->revertToLastCommit();
         return -2;
       }
@@ -148,9 +151,7 @@ int XC::StaticAnalysis::check_domain_change(int num_step,int numSteps)
 		      << " at step " << num_step << " of "
 		      << numSteps << std::endl;
 	    if(num_step>1)
-    	      std::cerr << "In a static analysis, "
-	                << " a number of steps greater than 1 is useless"
-	                << " if the loads and constraints are constant";
+    	      std::cerr << stepNumberMessage;
             return -1;
           }
       }
@@ -169,9 +170,7 @@ int XC::StaticAnalysis::new_integrator_step(int num_step)
                   << getDomainPtr()->getTimeTracker().getCurrentTime()
 		  << std::endl;
 	if(num_step>1)
-          std::cerr << "In a static analysis, "
-                    << " a number of steps greater than 1 is useless"
-                    << " if the loads and constraints are constant";
+          std::cerr << stepNumberMessage;
         getDomainPtr()->revertToLastCommit();
         return -2;
       }
@@ -190,9 +189,7 @@ int XC::StaticAnalysis::solve_current_step(int num_step)
                   << getDomainPtr()->getTimeTracker().getCurrentTime()
 		  << std::endl;
 	if(num_step>1)
-          std::cerr << "In a static analysis, "
-                    << " a number of steps greater than 1 is useless"
-                    << " if the loads and constraints are constant";	  
+          std::cerr << stepNumberMessage;
         getDomainPtr()->revertToLastCommit();
         getStaticIntegratorPtr()->revertToLastStep();
         return -3;
@@ -217,10 +214,7 @@ int XC::StaticAnalysis::compute_sensitivities_step(int num_step)
 		      << getDomainPtr()->getTimeTracker().getCurrentTime()
 		      << std::endl;
 	    if(num_step>1)
-              std::cerr << "In a static analysis, "
-                        << " a number of steps greater than 1 is useless"
-                        << " if the loads and constraints are constant";
-            getDomainPtr()->revertToLastCommit();
+              std::cerr << stepNumberMessage;
             getStaticIntegratorPtr()->revertToLastStep();
             return -5;
           }
@@ -241,9 +235,7 @@ int XC::StaticAnalysis::commit_step(int num_step)
                   << getDomainPtr()->getTimeTracker().getCurrentTime()
 		  << std::endl;
 	if(num_step>1)
-          std::cerr << "In a static analysis, "
-                    << " a number of steps greater than 1 is useless"
-                    << " if the loads and constraints are constant";	  
+          std::cerr << stepNumberMessage;
         getDomainPtr()->revertToLastCommit();
         getStaticIntegratorPtr()->revertToLastStep();
         return -4;
@@ -287,6 +279,13 @@ int XC::StaticAnalysis::run_analysis_step(int num_step,int numSteps)
   }
 
 //! @brief Performs the analysis.
+//!
+//! Invoked to perform a static analysis on the FE\_Model. The analysis 
+//! The type of analysis performed, depends on the type of the
+//! objects in the analysis aggregation. If any of the methods invoked
+//! returns a negative number, an error message is printed, {\em
+//! revertToLastCommit()} is invoked on the Domain, and a negative number
+//! is immediately returned. Returns a \f$0\f$ if the algorithm is successful.
 //!
 //! @param numSteps: number of steps in the analysis
 //! (for static analysis, if the loads are constant it's useless to
@@ -334,12 +333,34 @@ int XC::StaticAnalysis::initialize(void)
     return 0;
   }
 
-//! @brief Hace los cambios que sean necesarios tras un cambio en el domain.
+//! @brief Method invoked during the analysis to deal with domain changes.
+//!
+//! //! This is a method invoked by the analysis during the analysis method if
+//! the Domain has changed. The method invokes the following:
+//! - It invokes clearAll() on \p the analysis model which causes the
+//! AnalysisModel to clear out its list of FE\_Elements and DOF\_Groups,
+//! and clearAll() on \p the constraint handler.
+//! - It then invokes handle() on \p theHandler. This causes
+//! the constraint handler to recreate the appropriate FE\_Element and
+//! DOF\_Groups to perform the analysis subject to the boundary conditions
+//! in the modified domain.
+//! - It then invokes number() on \p theNumberer. This causes
+//! the DOF numberer to assign equation numbers to the individual
+//! dof's. Once the equation numbers have been set the numberer then
+//! invokes setID() on all the FE\_Elements in the model. Finally
+//! the numberer invokes setNumEqn() on the model.
+//! - It invokes {\em setSize(theModel.getDOFGraph())} on {\em
+//! theSOE} which causes the system of equation to determine its size
+//! based on the connectivity of the dofs in the analysis model. 
+//! - Finally domainChanged() is invoked on both \p theIntegrator and 
+//! \p theAlgorithm. 
+//! Returns \f$0\f$ if successful. At any stage above, if an error occurs the
+//! method is stopped, a warning message is printed and a negative number
+//! is returned.
 int XC::StaticAnalysis::domainChanged(void)
   {
     Domain *the_Domain= this->getDomainPtr();
-    int stamp= the_Domain->hasDomainChanged();
-    domainStamp= stamp;
+    domainStamp= the_Domain->hasDomainChanged();
 
     getAnalysisModelPtr()->clearAll();
     getConstraintHandlerPtr()->clearAll();
@@ -372,7 +393,8 @@ int XC::StaticAnalysis::domainChanged(void)
     if(result < 0)
       {
         std::cerr << getClassName() << "::" << __FUNCTION__
-                  << "; constraintHandler::doneNumberingDOF() failed." << std::endl;
+                  << "; constraintHandler::doneNumberingDOF() failed."
+		  << std::endl;
         return -3;
       }
 
@@ -437,31 +459,41 @@ int XC::StaticAnalysis::setNumberer(DOF_Numberer &theNewNumberer)
 
 
 //! @brief Sets the solution algorithm to use in the analysis.
+//! 
+//! Change the solution algorithm to use and then causes domainChanged()
+//! to be invoked by setting domainStamp= 0. Returns \f$0\f$ if
+//! successful, a warning message and a negative number if not.
 int XC::StaticAnalysis::setAlgorithm(EquiSolnAlgo &theNewAlgorithm)
   {
     Analysis::setAlgorithm(theNewAlgorithm);
 
     // invoke domainChanged() either indirectly or directly
-    domainStamp= 0;
+    domainStamp= 0; // cause domainChanged to be invoked on next analyze
     return 0;
   }
 
 //! @brief Sets the integrator to use in the analysis.
+//!
+//! Change the integrator to use and then causes domainChanged()
+//! to be invoked by setting domainStamp= 0. Returns \f$0\f$ if
+//! successful, a warning message and a negative number if not.
 int XC::StaticAnalysis::setIntegrator(StaticIntegrator &theNewIntegrator)
   {
     Analysis::setIntegrator(theNewIntegrator);
-    // cause domainChanged to be invoked on next analyze
-    domainStamp= 0;
+    domainStamp= 0; // cause domainChanged to be invoked on next analyze
     return 0;
   }
 
 //! @brief Sets the linear system of equations to use in the analysis.
+//!
+//! Change the linear system of equations to use and then causes domainChanged()
+//! to be invoked by setting domainStamp= 0. Returns \f$0\f$ if
+//! successful, a warning message and a negative number if not.
 int XC::StaticAnalysis::setLinearSOE(LinearSOE &theNewSOE)
   {
     // invoke the destructor on the old one
     Analysis::setLinearSOE(theNewSOE);
-    // cause domainChanged to be invoked on next analyze
-    domainStamp= 0;
+    domainStamp= 0; // cause domainChanged to be invoked on next analyze
     return 0;
   }
 

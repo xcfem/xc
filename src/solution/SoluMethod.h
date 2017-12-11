@@ -73,7 +73,7 @@ class ID;
 //! - Solution algorithm.  An algorithmic class specifying the
 //!   sequence of operations to be performed in setting up and solving the
 //!   finite element equation which can be represented by the equation K(U)
-//!   U = P(U). 
+//!   U = P(U).
 //! - Integration scheme. An algorithmic object which provides
 //!   methods which are invoked by the FE\_Element to determine their
 //!   current tangent and residual matrices; that is this is the object that

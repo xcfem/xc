@@ -47,16 +47,14 @@ class Integrator;
 //
 //! @brief Wrapper for the finite element model "as seen" from the solver.
 //
-//! The model wrapper is defined by:
-//! - Domain of the finite element model.
-//! - Analysis model. A container object holding the FE\_Element and
+//! The model wrapper contains:
+//! - The analysis model. A container object holding the FE\_Element and
 //!   DOF\_Group objects created by the ConstraintHandler object.
-//! - Constraint handler. An object which creates the DOF\_Group
+//! - The constraint handler. An object which creates the DOF\_Group
 //!   and FE\_Element objects, the type of objects created depending on how
 //!   the specified constraints in the domain are to be handled. 
-//! - DOF numberer.  An object responsible for providing equation
+//! - The DOF numberer.  An object responsible for providing equation
 //!   numbers to the individual degrees of freedom in each DOF\_Group object.
-//! This object is a container for those entities.
 class ModelWrapper: public EntCmd
   {
     AnalysisModel *theModel; //!< Analysis model
