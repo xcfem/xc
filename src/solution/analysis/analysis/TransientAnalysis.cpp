@@ -62,7 +62,6 @@
 // What: "@(#) TransientAnalysis.C, revA"
 
 #include <solution/analysis/analysis/TransientAnalysis.h>
-#include <solution/analysis/integrator/TransientIntegrator.h>
 
 //! @brief Constructor.
 XC::TransientAnalysis::TransientAnalysis(SoluMethod *method)

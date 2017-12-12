@@ -57,13 +57,6 @@
 // Written: fmk 
 // Created: 11/96
 // Revision: A
-//
-// Description: This file contains the class definition for TransientAnalysis.
-// TransientAnalysis is a subclass of AnalysisMethod, it is used to perform a 
-// dynamic analysis on the FE\_Model. The class itself is an abstract base
-// class. 
-//
-// What: "@(#) TransientAnalysis.h, revA"
 
 #include <solution/analysis/analysis/Analysis.h>
 
@@ -72,6 +65,10 @@ namespace XC {
 //! @ingroup AnalysisType
 //
 //! @brief Analysis of the time-dependent response of the model.
+//!
+//! TransientAnalysis is a subclass of AnalysisMethod, it is used to perform a 
+//! dynamic analysis on the FE\_Model. The class itself is an abstract base
+//! class. 
 class TransientAnalysis: public Analysis
   {
   protected:
