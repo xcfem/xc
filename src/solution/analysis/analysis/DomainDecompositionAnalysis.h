@@ -78,12 +78,21 @@ class Subdomain;
 //! @brief Used when performing a domain decomposition
 //! analysis. It provides methods which can be invoked by a subdomain to
 //! perform the numerical computations required.
+//!
+//! Used when performing an analysis using the domain decomposition
+//! method to solve the equations. Its public member functions are all
+//! virtual to allow for the generalization of the 
+//! class. The following are the aggregates of such an analysis type:
+//! - Subdomain: a pointer to the subdomain on wich the analysis is performed. 
+//! - DomainSolver: an algorithmic class specifying the
+//!   sequence of operations to be performed in performing the numerical 
+//!   operations.
 class DomainDecompositionAnalysis: public Analysis, public MovableObject
   {
   private:
     Subdomain *theSubdomain; //!< Pointer to subdomain. 
     DomainSolver *theSolver; //!< Pointer to solver de tipo DomainSolver.
-    Vector theResidual; //!< Vector residuo.
+    Vector theResidual; //!< Residual load vector.
     int numEqn; //!< number of equations.
     int numExtEqn; //!< number of external equations.
 
@@ -146,9 +155,6 @@ class DomainDecompositionAnalysis: public Analysis, public MovableObject
     virtual int setConvergenceTest(ConvergenceTest &theTest);
   };
 
-//! @brief Virtual constructor.
-inline Analysis *DomainDecompositionAnalysis::getCopy(void) const
-  { return new DomainDecompositionAnalysis(*this); }
 } // end of XC namespace
 
 #endif

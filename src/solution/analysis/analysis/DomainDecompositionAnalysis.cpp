@@ -88,10 +88,19 @@ void XC::DomainDecompositionAnalysis::set_all_links(void)
   }
 
 //! @brief Constructor.
-XC::DomainDecompositionAnalysis::DomainDecompositionAnalysis(Subdomain &the_Domain,SoluMethod *s)
+//!
+//! A constructor that is used when creating a DomainDecompositionObject which
+//! is to receive itself afterwards. Sets the links to the Subdomain. It is
+//! essential that this object recvSelf() before DomainDecompositionAnalysis
+//! methods are invoked as their invocation will cause segmentation faults.
+//!
+//! Invokes {\em setAnalysis(this)} on the Subdomain.
+//! @param subDomain: Subdomain to deal with.
+//! @param s: solution method to use.
+XC::DomainDecompositionAnalysis::DomainDecompositionAnalysis(Subdomain &subDomain,SoluMethod *s)
   : Analysis(s),
     MovableObject(DomDecompANALYSIS_TAGS_DomainDecompositionAnalysis),
-    theSubdomain(&the_Domain),
+    theSubdomain(&subDomain),
     theSolver(nullptr),
     numEqn(0),numExtEqn(0),tangFormed(false),tangFormedCount(0),
     domainStamp(0)
@@ -100,10 +109,14 @@ XC::DomainDecompositionAnalysis::DomainDecompositionAnalysis(Subdomain &the_Doma
   }
 
 //! @brief Constructor.
-XC::DomainDecompositionAnalysis::DomainDecompositionAnalysis(Subdomain &the_Domain,DomainSolver &theSlvr,SoluMethod *s)
+//!
+//! @param subDomain: subdomain to deal with.
+//! @param theSolvr: Solver to use.
+//! @param s: solution method to use.
+XC::DomainDecompositionAnalysis::DomainDecompositionAnalysis(Subdomain &subDomain,DomainSolver &theSlvr,SoluMethod *s)
   : Analysis(s),
     MovableObject(DomDecompANALYSIS_TAGS_DomainDecompositionAnalysis),
-    theSubdomain(&the_Domain),
+    theSubdomain(&subDomain),
     theSolver(&theSlvr),
     numEqn(0),numExtEqn(0),tangFormed(false),tangFormedCount(0),
     domainStamp(0)
@@ -112,14 +125,23 @@ XC::DomainDecompositionAnalysis::DomainDecompositionAnalysis(Subdomain &the_Doma
   }
 
 //! @brief Constructor.
-XC::DomainDecompositionAnalysis::DomainDecompositionAnalysis(int clsTag, Subdomain &the_Domain,SoluMethod *s)
+//!
+//! @param clsTag: class identifier.
+//! @param subDomain: subdomain to deal with.
+//! @param s: solution method to use.
+XC::DomainDecompositionAnalysis::DomainDecompositionAnalysis(int clsTag, Subdomain &subDomain,SoluMethod *s)
   : Analysis(s),
     MovableObject(clsTag),
-    theSubdomain(&the_Domain),
+    theSubdomain(&subDomain),
     theSolver(nullptr), numEqn(0),numExtEqn(0),tangFormed(false),tangFormedCount(0),
     domainStamp(0) {}
 
 //! @brief Constructor.
+//!
+//! @param clsTag: class identifier.
+//! @param subDomain: subdomain to deal with.
+//! @param theSolver: Solver to use.
+//! @param s: solution method to use.
 XC::DomainDecompositionAnalysis::DomainDecompositionAnalysis(int clsTag, Subdomain &theDomain,DomainSolver &theSolver,SoluMethod *s)
   : Analysis(s),
     MovableObject(clsTag),
@@ -127,6 +149,9 @@ XC::DomainDecompositionAnalysis::DomainDecompositionAnalysis(int clsTag, Subdoma
     theSolver(&theSolver), numEqn(0),numExtEqn(0),tangFormed(false),tangFormedCount(0),
     domainStamp(0) {}
 
+//! @brief Virtual constructor.
+XC::Analysis *XC::DomainDecompositionAnalysis::getCopy(void) const
+  { return new DomainDecompositionAnalysis(*this); }
 
 //! @brief Clears all object members (constraint handler, analysis model,...).
 void XC::DomainDecompositionAnalysis::clearAll(void)
@@ -144,7 +169,8 @@ int XC::DomainDecompositionAnalysis::analyze(double dT)
 int XC::DomainDecompositionAnalysis::initialize(void)
   { return 0; }
 
-//! @brief Returns a pointer to the DomainSolver.
+//! @brief Returns a pointer to the DomainSolver associated with
+//! this object.
 const XC::DomainSolver *XC::DomainDecompositionAnalysis::getDomainSolver(void) const
   { return theSolver; }
 
@@ -163,7 +189,7 @@ XC::Subdomain *XC::DomainDecompositionAnalysis::getSubdomain(void)
 bool XC::DomainDecompositionAnalysis::doesIndependentAnalysis(void)
   { return false; }
 
-//! @brief Performs los cambios que implica un cambio en el domain del problema.
+//! @brief Method used to inform the object that the domain has changed.
 int XC::DomainDecompositionAnalysis::domainChanged(void)
   {
     // remove existing FE_elements and DOF_Groups from the Analysis
@@ -174,31 +200,31 @@ int XC::DomainDecompositionAnalysis::domainChanged(void)
     // causes the creation of XC::FE_Element and XC::DOF_Group objects
     // and their addition to the AnalysisModel.
 
-    numExtEqn = getConstraintHandlerPtr()->handle(&(theSubdomain->getExternalNodes()));
+    numExtEqn= getConstraintHandlerPtr()->handle(&(theSubdomain->getExternalNodes()));
 
     // we now get a node to number last
 
-    const XC::ID &theExtNodes = theSubdomain->getExternalNodes();
-    int idSize = theExtNodes.Size();
-    //    int theLastDOF = -1;
+    const XC::ID &theExtNodes= theSubdomain->getExternalNodes();
+    int idSize= theExtNodes.Size();
+    //    int theLastDOF= -1;
 
     ID theLastDOFs(1);
-    int cnt = 0;
+    int cnt= 0;
 
     // create an XC::ID containing the tags of the DOF_Groups that are to
     // be numbered last
     for (int i=0; i<idSize; i++) {
-	int nodeTag = theExtNodes(i);
-	Node *nodePtr = theSubdomain->getNode(nodeTag);
-	DOF_Group *dofGrpPtr = nodePtr->getDOF_GroupPtr();
+	int nodeTag= theExtNodes(i);
+	Node *nodePtr= theSubdomain->getNode(nodeTag);
+	DOF_Group *dofGrpPtr= nodePtr->getDOF_GroupPtr();
 	if (dofGrpPtr != 0) {
-	    const XC::ID theID = dofGrpPtr->getID();
-	    int size = theID.Size();
+	    const XC::ID theID= dofGrpPtr->getID();
+	    int size= theID.Size();
 	    for (int j=0; j<size; j++)
 		if (theID(j) == -3) {
-		    theLastDOFs[cnt]  = dofGrpPtr->getTag();
+		    theLastDOFs[cnt] = dofGrpPtr->getTag();
 		    cnt++;
-		    j = size;
+		    j= size;
 		}
 	}
     }
@@ -213,7 +239,7 @@ int XC::DomainDecompositionAnalysis::domainChanged(void)
     // causes that object to determine its size    
     
     getLinearSOEPtr()->setSize(getAnalysisModelPtr()->getDOFGraph());    
-    numEqn = getLinearSOEPtr()->getNumEqn();
+    numEqn= getLinearSOEPtr()->getNumEqn();
 
     // we invoke domainChange() on the integrator and algorithm
 
@@ -222,13 +248,17 @@ int XC::DomainDecompositionAnalysis::domainChanged(void)
 
     // now set the variables to indicate that tangent has not been formed
 
-    tangFormed = false;
-    tangFormedCount = 0;
+    tangFormed= false;
+    tangFormedCount= 0;
     
     return 0;
   }
 
 //! @brief Returns the number of external equations.
+//!
+//! A method to return the number of external degrees-of-freedom on the
+//! Subdomain interface, this information is returned when handle()
+//! is invoked on \p theConstraintHandler.
 int XC::DomainDecompositionAnalysis::getNumExternalEqn(void)
   { return numExtEqn; }
 
@@ -240,25 +270,38 @@ int XC::DomainDecompositionAnalysis::getNumInternalEqn(void)
 int XC::DomainDecompositionAnalysis::newStep(double dT)
   { return getIncrementalIntegratorPtr()->newStep(dT); }
 
-
-
+//! @brief A method which invokes solveCurrentStep() on \p theAlgorithm.
 int XC::DomainDecompositionAnalysis::computeInternalResponse(void)
   {  return getDomainDecompSolutionAlgorithmPtr()->solveCurrentStep(); }
 
 
 
-//! @brief Forma la tangent stiffness matrix.
+//! @brief Assembles the tangent stiffness matrix.
+//!
+//! A method to form the condensed tangent matrix, given the current
+//! number of internal dof. It first checks to see if the Subdomain has
+//! changed, by  invoking hasDomainChanged() on the Subdomain; if it
+//! has invokeChangeOnAnalysis() is invoked on the {\em
+//! Subdomain}. It then checks to see if \p counter is equal to \f$-1\f$ or
+//! not; a \f$-1\f$ indicating the tangent has already been formed in order
+//! that the residual could be determined. If this is not the case {\em
+//! formTangent()} is invoked on \p theIntegrator, condenseA() is
+//! invoked on \p theSolver object, a flag is set to indicate that the
+//! tangent has been formed, and the \p counter is incremented. Returns
+//! a \f$0\f$ if successfull, if either the formTangent() or {\em
+//! condenseA()} method returns a negative number this number is
+//! returned.  
 int XC::DomainDecompositionAnalysis::formTangent(void)
   {
     int result =0;
 
-    Domain *the_Domain = this->getDomainPtr();
+    Domain *the_Domain= this->getDomainPtr();
 
     // we check to see if the domain has changed 
-    int stamp = the_Domain->hasDomainChanged();
+    int stamp= the_Domain->hasDomainChanged();
     if(stamp != domainStamp)
       {
-	domainStamp = stamp;
+	domainStamp= stamp;
 	this->domainChanged();
       }
     
@@ -268,45 +311,56 @@ int XC::DomainDecompositionAnalysis::formTangent(void)
 
     if(tangFormedCount != -1)
       {
-	result = getIncrementalIntegratorPtr()->formTangent();
+	result= getIncrementalIntegratorPtr()->formTangent();
 	if(result < 0)
 	  return result;
-	result = theSolver->condenseA(numEqn-numExtEqn);
+	result= theSolver->condenseA(numEqn-numExtEqn);
 	if(result < 0)
 	  return result;
       }
 	
-    tangFormed = true;
+    tangFormed= true;
     tangFormedCount++;
     
     return result;
   }
 
 
-//! @brief Forma el vector residuo.
+//! @brief Assembles the residuial vector.
+//!
+//! A method to form the condensed residual vector, given the current
+//! number of internal dof. A check to see if the Subdomain has changed is
+//! first made, this is done by invoking hasDomainChanged() on the Subdomain;
+//! if it has been modified invokeChangeOnAnalysis() 
+//! is invoked on the \p Subdomain. If the tangent has not yet been formed
+//! it invokes formTangent() on itself and sets the \p counter to \f$-1\f$.
+//! To form the residual formUnbalance() is invoked on \p theIntegrator and
+//! {\em condenseRHS(numInt)} is invoked on \p theSolver. Returns \f$0\f$ or
+//! the negative number that was returned if either formUnbalance()}
+//! or {\em condenseRHS() failed.
 int XC::DomainDecompositionAnalysis::formResidual(void)
   {
     int result =0;
-    Domain *the_Domain = this->getDomainPtr();    
+    Domain *the_Domain= this->getDomainPtr();    
     
     // we check to see if the domain has changed 
-    int stamp = the_Domain->hasDomainChanged();
+    int stamp= the_Domain->hasDomainChanged();
     if(stamp != domainStamp)
       {
-	domainStamp = stamp;
+	domainStamp= stamp;
 	this->domainChanged();
       }
     
     if(tangFormed == false)
       {
-	result = this->formTangent();
+	result= this->formTangent();
 	if(result < 0)
 	  return result;
-	tangFormedCount = -1; // set to minus number so tangent 
+	tangFormedCount= -1; // set to minus number so tangent 
 	                      // is not formed twice at same state
       }
 
-    result = getIncrementalIntegratorPtr()->formUnbalance();
+    result= getIncrementalIntegratorPtr()->formUnbalance();
 
     if(result < 0)
       return result;
@@ -314,27 +368,37 @@ int XC::DomainDecompositionAnalysis::formResidual(void)
   }
 
 
-//! @brief ??
+//! @brief form the product of the condensed tangent matrix times the
+//! vector \f$u\f$.
+//! 
+//! A method to form the product of the condensed tangent matrix times the
+//! vector \f$u\f$. A check to see if the Subdomain has changed is first made, 
+//! this is done by invoking hasDomainChanged() on the Subdomain; if it has 
+//! been modified invokeChangeOnAnalysis() 
+//! is invoked on the \p Subdomain. If the tangent has not yet been formed
+//! it invokes formTangent() on itself and sets the \p counter to \f$-1\f$.
+//! Finally the result of invoking {\em computeCondensedMatVect(numInt, u)}
+//! on {\em theSolver} is returned.
 int XC::DomainDecompositionAnalysis::formTangVectProduct(Vector &u)
   {
-    int result = 0;
+    int result= 0;
 
-    Domain *the_Domain = this->getDomainPtr();
+    Domain *the_Domain= this->getDomainPtr();
     
     // we check to see if the domain has changed 
-    int stamp = the_Domain->hasDomainChanged();
+    int stamp= the_Domain->hasDomainChanged();
     if(stamp != domainStamp)
       {
-	domainStamp = stamp;
+	domainStamp= stamp;
 	this->domainChanged();
       }
     
     if(tangFormed == false)
       {
-	result = this->formTangent();
+	result= this->formTangent();
 	if (result < 0)
 	    return result;
-	tangFormedCount = -1; // set to minus number so tangent 
+	tangFormedCount= -1; // set to minus number so tangent 
 	                      // is not formed twice at same state
       }    
     return theSolver->computeCondensedMatVect(numEqn-numExtEqn,u);
@@ -342,15 +406,23 @@ int XC::DomainDecompositionAnalysis::formTangVectProduct(Vector &u)
 
 
 //! @brief Return the tangent stiffness matrix.
+//!
+//! A method which returns the portion of A corresponding to internal
+//! equation numbers. A check to see if the Subdomain has changed is first
+//! made, this is done by invoking hasDomainChanged() on the Subdomain; if it
+//! has been modified invokeChangeOnAnalysis() is invoked on the \p Subdomain. 
+//! If the tangent has not yet been formed formTangent() is invoked. 
+//! The method returns the result of invoking getCondensedA()}
+//! on {\em theSolver().
 const XC::Matrix &XC::DomainDecompositionAnalysis::getTangent(void)
   {
-    Domain *the_Domain = this->getDomainPtr();
+    Domain *the_Domain= this->getDomainPtr();
     
     // we check to see if the domain has changed 
-    int stamp = the_Domain->hasDomainChanged();
+    int stamp= the_Domain->hasDomainChanged();
     if(stamp != domainStamp)
       {
-	domainStamp = stamp;
+	domainStamp= stamp;
 	this->domainChanged();
       }
 
@@ -360,18 +432,24 @@ const XC::Matrix &XC::DomainDecompositionAnalysis::getTangent(void)
   }
 
 
-//! @brief Returns the vector residuo.
+//! @brief Returns the residual vector.
+//!
+//! A method which returns the portion of the \f$b\f$ corresponding
+//! to the external equation numbers. A check to see if the Subdomain has
+//! changed is first made, this is done by invoking hasDomainChanged() on the
+//! Subdomain; if it has been modified invokeChangeOnAnalysis() is invoked on
+//! the \p Subdomain and formResidual() is called.  The object returns the
+//! Vector obtained from invoking getCondensedRHS() on the solver. 
 const XC::Vector &XC::DomainDecompositionAnalysis::getResidual(void)
   {
-
-    Domain *the_Domain = this->getDomainPtr();
+    Domain *the_Domain= this->getDomainPtr();
     
     // we check to see if the domain has changed 
     // we check to see if the domain has changed 
-    int stamp = the_Domain->hasDomainChanged();
+    int stamp= the_Domain->hasDomainChanged();
     if(stamp != domainStamp)
       {
-	domainStamp = stamp;
+	domainStamp= stamp;
 	this->domainChanged();
 	this->formResidual();	
       }    
@@ -379,25 +457,34 @@ const XC::Vector &XC::DomainDecompositionAnalysis::getResidual(void)
     return theResidual;
   }
 
-
+//! @brief Returns the result of invoking getCondensedMatVect() on the
+//! solver.
+//!
+//! Returns the result of invoking getCondensedMatVect() on the
+//! solver. A check to see if the Subdomain has changed is first made, 
+//! this is done by invoking hasDomainChanged() on the Subdomain; if it has 
+//! been modified invokeChangeOnAnalysis() is invoked on the \p Subdomain. 
+//! The object returns the Vector obtained from invoking getCondensedMatVect() 
+//! on \p theSolver.
 const XC::Vector &XC::DomainDecompositionAnalysis::getTangVectProduct()
   {
-    Domain *the_Domain = this->getDomainPtr();
+    Domain *the_Domain= this->getDomainPtr();
     
     // we check to see if the domain has changed 
-    int stamp = the_Domain->hasDomainChanged();
+    int stamp= the_Domain->hasDomainChanged();
     if(stamp != domainStamp)
       {
-	domainStamp = stamp;
+	domainStamp= stamp;
 	this->domainChanged();
       }
     return theSolver->getCondensedMatVect();
   }
 
+//! @brief Sends the object.
 int XC::DomainDecompositionAnalysis::sendSelf(CommParameters &cp)
   {
     // determine the type of each object in the aggregation,
-    // store it in an XC::ID and send the info off.
+    // store it in an ID and send the info off.
     getDbTag(cp);
     ID data(14);
     data(0)= getConstraintHandlerPtr()->getClassTag();
@@ -430,6 +517,7 @@ int XC::DomainDecompositionAnalysis::sendSelf(CommParameters &cp)
     return 0;
   }
 
+//! @brief Receives the object.
 int XC::DomainDecompositionAnalysis::recvSelf(const CommParameters &cp)
   {
     // receive the data identifyng the objects in the aggregation
@@ -509,7 +597,7 @@ int XC::DomainDecompositionAnalysis::recvSelf(const CommParameters &cp)
       }        	
 
     brokeDDLinearSOE(cp,ID(data(5)));
-    theSolver = cp.getNewDomainSolver();
+    theSolver= cp.getNewDomainSolver();
 
     if(getLinearSOEPtr() == 0 || theSolver == 0)
       {
