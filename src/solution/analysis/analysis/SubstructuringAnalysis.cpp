@@ -73,9 +73,17 @@
 #include "domain/domain/subdomain/Subdomain.h"
 
 //! @brief Constructor.
+//! 
+//! The constructor is responsible for ensuring a Substructuring solver is
+//! passed in as an argument. The base class does the rest. For this reason
+//! WE WILL FORGET THIS CLASS.
 XC::SubstructuringAnalysis::SubstructuringAnalysis(Subdomain &the_Domain,DomainSolver &theSolver,SoluMethod *s)
   :DomainDecompositionAnalysis(the_Domain,theSolver,s)
   {}
+
+//! @brief Virtual constructor.
+XC::Analysis *XC::SubstructuringAnalysis::getCopy(void) const
+  { return new SubstructuringAnalysis(*this); }
 
 //! @brief Performs the analysis.
 int XC::SubstructuringAnalysis::analyze(void)

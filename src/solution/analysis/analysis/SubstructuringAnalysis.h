@@ -71,23 +71,19 @@ class Subdomain;
 
 //! @ingroup AnalysisType
 //
-//! @brief SubstructuringAnalysis is a subclass 
-//! of Analysis, it is used when performing a domain decomposition
-//! analysis. It provides methods which can be invoked by a subdomain to
-//! perform the numerical computations required.
+//! @brief SubstructuringAnalysis is a subclass of DomainDecompositionAnalysis.
+//! It is used when performing an analysis using the substructuring method.
+//! It differs from the DomainDecompositionAnalysis class only in that the
+//! constructor ensures that a SubstructuringSolver is given for the Solver.
 class SubstructuringAnalysis: public DomainDecompositionAnalysis
   {
     friend class ProcSolu;
     SubstructuringAnalysis(Subdomain &theDomain,DomainSolver &theSolver,SoluMethod *s= nullptr);
     Analysis *getCopy(void) const;
   public:
-
     virtual int analyze(void);
   };
 
-//! @brief Virtual constructor.
-inline Analysis *SubstructuringAnalysis::getCopy(void) const
-  { return new SubstructuringAnalysis(*this); }
 } // end of XC namespace
 
 #endif
