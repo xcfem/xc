@@ -69,18 +69,30 @@
 #include <domain/constraints/MFreedom_Constraint.h>
 #include <domain/constraints/MRMFreedom_Constraint.h>
 
+//! @brief Constructor.
+//!
+//! @param tag: object identifier.
+//! @param spPtr: pointer to a single DOF constraint.
 XC::LagrangeDOF_Group::LagrangeDOF_Group(int tag, SFreedom_Constraint &spPtr)
   :DOF_Group(tag, 1) {}
 
+//! @brief Constructor.
+//!
+//! @param tag: object identifier.
+//! @param spPtr: pointer to a multiple DOF constraint.
 XC::LagrangeDOF_Group::LagrangeDOF_Group(int tag, MFreedom_Constraint &mpPtr)
   :DOF_Group(tag, (mpPtr.getRetainedDOFs()).Size())
   {}
 
+//! @brief Constructor.
+//!
+//! @param tag: object identifier.
+//! @param spPtr: pointer to a multiple row multiple DOF constraint.
 XC::LagrangeDOF_Group::LagrangeDOF_Group(int tag, MRMFreedom_Constraint &mrmpPtr)
   :DOF_Group(tag, mrmpPtr.getRetainedDOFs().Size())
-  { }
+  {}
 
-
+//! @brief Does nothing; the Lagrange FE_Elements provide coeffs to tangent.
 const XC::Matrix &XC::LagrangeDOF_Group::getTangent(Integrator *theIntegrator)
   {
     // does nothing - the Lagrange FE_Elements provide coeffs to tangent
@@ -88,6 +100,7 @@ const XC::Matrix &XC::LagrangeDOF_Group::getTangent(Integrator *theIntegrator)
     return unbalAndTangent.getTangent();
   }
 
+//! @brief Does nothing; the Lagrange FE_Elements provide residual.
 const XC::Vector &XC::LagrangeDOF_Group::getUnbalance(Integrator *theIntegrator)
   {
     // does nothing - the Lagrange FE_Elements provide residual 
@@ -99,48 +112,35 @@ const XC::Vector &XC::LagrangeDOF_Group::getUnbalance(Integrator *theIntegrator)
 //	Method to set the corresponding nodes displacements to the
 //	values in u, components identified by myID;
 
-void XC::LagrangeDOF_Group::setNodeDisp(const XC::Vector &u)
+//! @brief Does nothing. The lagrange multipliers are associated with no Nodes
+//! in the Domain.
+void XC::LagrangeDOF_Group::setNodeDisp(const Vector &u)
   { return; }
 	
 	
-// void setNodeVel(const XC::Vector &udot);
-//	Method to set the corresponding nodes velocities to the
-//	values in udot, components identified by myID;
-
+//! @brief Does nothing. The lagrange multipliers are associated with no Nodes
+//! in the Domain.
 void XC::LagrangeDOF_Group::setNodeVel(const XC::Vector &udot)
   { return; }
 
 
-
-// void setNodeAccel(const XC::Vector &udotdot);
-//	Method to set the corresponding nodes accelerations to the
-//	values in udotdot, components identified by myID;
-
+//! @brief Does nothing. The lagrange multipliers are associated with no Nodes
+//! in the Domain.
 void XC::LagrangeDOF_Group::setNodeAccel(const XC::Vector &udotdot)
   { return; }
 
-
-// void setNodeIncrDisp(const XC::Vector &u);
-//	Method to set the corresponding nodes displacements to the
-//	values in u, components identified by myID;
-
+//! @brief Does nothing. The lagrange multipliers are associated with no Nodes
+//! in the Domain.
 void XC::LagrangeDOF_Group::incrNodeDisp(const XC::Vector &u)
   { return; }
 	
-	
-// void setNodeincrVel(const XC::Vector &udot);
-//	Method to set the corresponding nodes velocities to the
-//	values in udot, components identified by myID;
-
+//! @brief Does nothing. The lagrange multipliers are associated with no Nodes
+//! in the Domain.
 void XC::LagrangeDOF_Group::incrNodeVel(const XC::Vector &udot)
   { return; }
 
-
-
-// void setNodeIncrAccel(const XC::Vector &udotdot);
-//	Method to set the corresponding nodes accelerations to the
-//	values in udotdot, components identified by myID;
-
+//! @brief Does nothing. The lagrange multipliers are associated with no Nodes
+//! in the Domain.
 void XC::LagrangeDOF_Group::incrNodeAccel(const XC::Vector &udotdot)
   { return; }
 
@@ -183,7 +183,8 @@ void XC::LagrangeDOF_Group::addM_Force(const XC::Vector &Udotdot, double fact)
 
 const XC::Vector &XC::LagrangeDOF_Group::getTangForce(const XC::Vector &disp, double fact)
   {
-    std::cerr << "WARNING XC::LagrangeDOF_Group::getTangForce() - not yet implemented\n";
+    std::cerr << getClassName() << "::" << __FUNCTION__
+              << "; not yet implemented\n";
     unbalAndTangent.getResidual().Zero();
     return unbalAndTangent.getResidual();
   }

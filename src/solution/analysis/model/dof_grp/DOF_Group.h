@@ -85,12 +85,24 @@ class Integrator;
 //! @defgroup AnalysisDOF DOF groups as seen by the analysis.
 //
 //! @ingroup AnalysisDOF
+//
 //! @brief A DOF_Group object is instantiated by the ConstraintHandler for 
 //! every unconstrained node in the domain. The constrained nodes require 
 //! specialised types of DOF_Group; which deal with the constraints. DOF_Group
 //! objects can handle 0 boundary constraints; if the eqn number of a DOF is 
 //! less than START_EQN_NUM a value of 0.0 is set for disp, vel and accel when
 //! a setNode*(Vector &) is invoked.
+//!
+//! Each node in the domain is associated with one DOF\_Group. DOF\_Groups are
+//! called upon in the analysis to provide their contributions of
+//! unbalanced load to the system of equations. Subclasses are used by the
+//! constraint handler to to introduce new dofs into the analysis. 
+//!
+//! The DOF\_Group is responsible for providing operations to set and
+//! access the mapping betwwen equation numbers and DOFs, allowing the
+//! Integrator to from the tangent (if nodal masses in transient problem)
+//! and unbalanced load information, and for setting and obtaining the
+//! nodal trial response quantities.
 class DOF_Group: public TaggedObject
   {
   private:
@@ -123,6 +135,7 @@ class DOF_Group: public TaggedObject
     int inicID(const int &value);
 
     virtual int getNodeTag(void) const;
+    //! @brief Returns the total number of DOFs in the DOF\_Group. 
     inline virtual int getNumDOF(void) const
       { return myID.Size(); }
     virtual int getNumFreeDOF(void) const;

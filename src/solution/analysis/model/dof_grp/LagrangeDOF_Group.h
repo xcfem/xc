@@ -74,7 +74,11 @@ class MRMFreedom_Constraint;
 //
 //! @brief A LagrangeDOF_Group object is instantiated 
 //! by a LagrangeConstraintHandler for 
-//! every constrained node in the domain. 
+//! every constrained node in the domain.
+//!
+//! It is used to
+//! introduce the lagrange multipliers associated with single and
+//! multi-point constraints into the system of equation.
 class LagrangeDOF_Group: public DOF_Group
   {
   protected:
