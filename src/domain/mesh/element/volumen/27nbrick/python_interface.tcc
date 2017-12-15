@@ -21,4 +21,4 @@
 //----------------------------------------------------------------------------
 //python_interface.tcc
 
-class_<XC::TwentySevenNodeBrick, bases<XC::ElementBase<27>>, boost::noncopyable >("TwentySevenNodeBrick", no_init);
+class_<XC::TwentySevenNodeBrick, bases<element_base_27n>, boost::noncopyable >("TwentySevenNodeBrick", no_init);

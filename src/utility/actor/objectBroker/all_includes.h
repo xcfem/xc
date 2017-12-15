@@ -187,6 +187,11 @@
 #include "domain/mesh/element/truss_beam_column/dispBeamColumn/DispBeamColumn3d.h"
 
 #include "domain/mesh/element/volumen/brick/Brick.h"
+#include "domain/mesh/element/volumen/8nbrick/EightNodeBrick.h"
+#include "domain/mesh/element/volumen/20nbrick/TwentyNodeBrick.h"
+#include "domain/mesh/element/volumen/20nbrick/Twenty_Node_Brick.h"
+#include "domain/mesh/element/volumen/27nbrick/TwentySevenNodeBrick.h"
+#include "domain/mesh/element/volumen/TotalLagrangianFD20NodeBrick/TotalLagrangianFD20NodeBrick.h"
 #include "domain/mesh/element/volumen/brick/BbarBrick.h"
 #include "domain/mesh/element/volumen/UP-ucsd/BrickUP.h"
 #include "domain/mesh/element/volumen/upU/EightNodeBrick_u_p_U.h"

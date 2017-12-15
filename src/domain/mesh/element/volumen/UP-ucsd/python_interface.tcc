@@ -23,4 +23,4 @@
 
 class_<XC::BrickUP , bases<XC::BrickBase>, boost::noncopyable >("BrickUP", no_init);
 
-class_<XC::TwentyEightNodeBrickUP , bases<XC::ElemWithMaterial<20,XC::NDMaterialPhysicalProperties>, boost::noncopyable >("TwentyEightNodeBrickUP", no_init);
+class_<XC::TwentyEightNodeBrickUP , bases<twenty_node_brick_elem>, boost::noncopyable >("TwentyEightNodeBrickUP", no_init);

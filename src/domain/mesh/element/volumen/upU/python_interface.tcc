@@ -21,6 +21,8 @@
 //----------------------------------------------------------------------------
 //python_interface.tcc
 
-class_<XC::EightNodeBrick_u_p_U, bases<XC::BrickBase>, boost::noncopyable >("EightNodeBrick_u_p_U", no_init);
+class_<XC::EightNodeBrick_u_p_U, bases<XC::BrickBase>, boost::noncopyable >("EightNodeBrick_u_p_U", no_init)
+  ;
 
-class_<XC::TwentyNodeBrick_u_p_U, bases<XC::ElemWithMaterial<20,XC::NDMaterialPhysicalProperties>, boost::noncopyable >("TwentyNodeBrick_u_p_U", no_init);
+class_<XC::TwentyNodeBrick_u_p_U, bases<twenty_node_brick_elem>, boost::noncopyable >("TwentyNodeBrick_u_p_U", no_init)
+  ;
