@@ -122,7 +122,7 @@ class QuickGraphics(object):
       n.setProp('propToDisp',n.getDisp[vCompDisp])
     field= Fields.ScalarField('propToDisp',"getProp",None,fConvUnits)
     defDisplay= self.getDisplay(vwName=viewName,hCamF= hCamFct)
-    defDisplay.displayMesh(xcSet=self.xcSet,field=field,diagrams= None, fName=fileName,caption=self.loadCaseName+' '+itemToDisp+' '+unitDescription+' '+self.xcSet.name,defFScale=defFScale)
+    defDisplay.displayMesh(xcSet=self.xcSet,field=field,diagrams= None, fName=fileName,caption=self.loadCaseName+' '+itemToDisp+' '+unitDescription+' '+self.xcSet.description,defFScale=defFScale)
 
   def displayIntForc(self,itemToDisp='',setToDisplay=None,fConvUnits=1.0,unitDescription= '',viewName='XYZPos',hCamFct=1.0,fileName=None,defFScale=0.0):
     '''displays the component of internal forces in the 
@@ -167,7 +167,7 @@ class QuickGraphics(object):
           lmsg.warning('QuickGraphics::displayIntForc; not a 2D element; ignored.')
       field= Fields.ExtrapolatedProperty(propName,"getProp",self.xcSet,fUnitConv= fConvUnits)
       defDisplay= self.getDisplay(vwName=viewName,hCamF= hCamFct)
-      field.display(defDisplay=defDisplay,fName=fileName,caption=self.loadCaseName+' '+itemToDisp+' '+unitDescription +' '+self.xcSet.name,defFScale=defFScale)
+      field.display(defDisplay=defDisplay,fName=fileName,caption=self.loadCaseName+' '+itemToDisp+' '+unitDescription +' '+self.xcSet.description,defFScale=defFScale)
 
 
   def displayIntForcDiag(self,itemToDisp='',setToDisplay=None,fConvUnits=1.0,scaleFactor=1.0,unitDescription= '',viewName='XYZPos',hCamFct=1.0,fileName=None,defFScale=0.0):
@@ -205,7 +205,7 @@ class QuickGraphics(object):
     defDisplay.defineMeshScene(None,defFScale)
     defDisplay.appendDiagram(diagram) #Append diagram to the scene.
 
-    caption= self.loadCaseName+' '+itemToDisp+' '+unitDescription +' '+self.xcSet.name
+    caption= self.loadCaseName+' '+itemToDisp+' '+unitDescription +' '+self.xcSet.description
     defDisplay.displayScene(caption=caption,fName=fileName)
 
   def dispLoadCaseBeamEl(self,loadCaseName='',setToDisplay=None,fUnitConv=1.0,elLoadComp='transComponent',elLoadScaleF=1.0,nodLoadScaleF=1.0,viewName='XYZPos',hCamFct=1.0,caption='',fileName=None,defFScale=0.0):
@@ -301,7 +301,7 @@ class QuickGraphics(object):
     defDisplay.defineMeshScene(None,defFScale)
     defDisplay.appendDiagram(diagram) #Append diagram to the scene.
 
-    caption= self.loadCaseName+' '+itemToDisp+' '+unitDescription +' '+self.xcSet.name
+    caption= self.loadCaseName+' '+itemToDisp+' '+unitDescription +' '+self.xcSet.description
     defDisplay.displayScene(caption=caption,fName=fileName)
 
 def displayAxes(vectorField, preprocessor, setToDisplay=None,vectorScale=1.0,viewNm="XYZPos",hCamFct=1.0,caption= '',fileName=None,defFScale=0.0):

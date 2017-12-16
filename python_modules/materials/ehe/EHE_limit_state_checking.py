@@ -249,6 +249,7 @@ class ParamsCortante(object):
     self.angAlpha= math.pi/2 # angle of the shear reinforcement with the part axis (figure 44.2.3.1.a EHE).
     self.angTheta= math.pi/6 # Angle between the concrete compressed struts and the member axis (figure 44.2.3.1.a EHE).
     self.cortanteUltimo= 0.0
+    print 'transv. reinf. area=',self.areaShReinfBranchsTrsv
 
   def calcCortanteUltimo(self, concreteFibersSet, rebarFibersSet, tensionedRebarsFiberSet, fck, fcd, fyd, fpd, fydTrsv):
     '''Compute section shear strength.'''
@@ -725,12 +726,10 @@ class ShearController(lscb.LimitStateControllerBase):
     for e in elements:
       e.setProp(self.limitStateLabel,cv.RCShearControlVars())
 
-  def calcVuEHE08NoAt(self, scc, concrete, reinfSteel):
-    ''' Compute the shear strength at failure without shear reinforcement
-     according to clause 44.2.3.2.1 of EHE-08.
-     XXX Presstressing contribution not implemented yet.
+  def extractFiberData(self, scc, concrete, reinfSteel):
+    ''' Extract basic parameters from the fiber model of the section
 
-     :param reinfSteelMaterialTag: reinforcement steel material identifier.
+     :param scc: fiber model of the section.
      :param concrete: parameters to modelize concrete.
      :param reinfSteel: parameters to modelize reinforcement steel.
     '''
@@ -744,7 +743,19 @@ class ShearController(lscb.LimitStateControllerBase):
 
     if(not scc.hasProp("rcSets")):
       scc.setProp("rcSets", createFiberSets.fiberSectionSetupRC3Sets(scc,self.concreteMatTag,self.concreteFibersSetName,self.reinfSteelMaterialTag,self.rebarFibersSetName))
-    rcSets= scc.getProp("rcSets")
+    return scc.getProp("rcSets")
+
+  def calcVuEHE08NoAt(self, scc, concrete, reinfSteel):
+    ''' Compute the shear strength at failure without shear reinforcement
+     according to clause 44.2.3.2.1 of EHE-08.
+     XXX Presstressing contribution not implemented yet.
+
+     :param scc: fiber model of the section.
+     :param reinfSteelMaterialTag: reinforcement steel material identifier.
+     :param concrete: parameters to modelize concrete.
+     :param reinfSteel: parameters to modelize reinforcement steel.
+    '''
+    rcSets= self.extractFiberData(scc,concrete,reinfSteel)
     concrFibers= rcSets.concrFibers.fSet
     self.concreteArea= rcSets.getConcreteArea(1)
     if(self.concreteArea<1e-6):
@@ -782,10 +793,13 @@ class ShearController(lscb.LimitStateControllerBase):
       self.Vcu= self.Vu2
       self.Vu= self.Vu2
 
-  def calcVuEHE08SiAt(self, scc, paramsTorsion, concrete, reinfSteel, Nd, Md, Vd, Td):
+  def calcVuEHE08SiAt(self, scc, torsionParameters, concrete, reinfSteel, Nd, Md, Vd, Td):
     ''' Compute the shear strength at failure WITH shear reinforcement.
      XXX Presstressing contribution not implemented yet.
 
+     :param scc: fiber model of the section.
+     :param torsionParameters: parameters that define torsional behaviour of
+                               the section as in clause 45.1 of EHE-08.
      :param reinfSteelMaterialTag: reinforcement steel material identifier.
      :param concrete: concrete material.
      :param reinfSteel: reinforcement steel.
@@ -793,25 +807,22 @@ class ShearController(lscb.LimitStateControllerBase):
      :param Md: Absolute value of design value of bending moment.
      :param Vd: Absolute value of effective design shear (clause 42.2.2).
      :param Td: design value of torsional moment. '''
-    self.VuAe= paramsTorsion.Ae()
-    self.Vuue= paramsTorsion.ue()
+    if(torsionParameters):
+      self.VuAe= torsionParameters.Ae()
+      self.Vuue= torsionParameters.ue()
+    else: # XXX Ignore torsional deformation.
+      self.VuAe= 1.0
+      self.Vuue= 0.0      
 
-    self.concreteMatTag= concrete.matTagD
-    self.fckH= abs(concrete.fck)
-    self.fcdH= abs(concrete.fcd())
-    self.fctdH= abs(concrete.fctd())
-    self.gammaC= abs(concrete.gmmC)
-    self.reinfSteelMaterialTag= reinfSteel.matTagD
-    self.fydS= reinfSteel.fyd()
+    rcSets= self.extractFiberData(scc,concrete,reinfSteel)
 
-    createFiberSets.fiberSectionSetupRC3Sets(scc,self.concreteMatTag,self.concreteFibersSetName,self.reinfSteelMaterialTag,self.rebarFibersSetName)
-    concrFibers= scc.getFiberSets()[self.concreteFibersSetName]
-    reinfFibers= scc.getFiberSets()[self.rebarFibersSetName]
-    tensionedReinforcement= scc.getFiberSets()[self.tensionedRebarsFiberSetName]
+    concrFibers= rcSets.concrFibers.fSet
+    reinfFibers= rcSets.reinfFibers.fSet
+    tensionedReinforcement= rcSets.tensionFibers
 
     self.isBending= scc.isSubjectedToBending(0.1)
-    self.tensionedRebars.number= tensionedReinforcement.getNumFibers()
-    self.concreteArea= concrFibers.getArea(1)
+    self.tensionedRebars.number= rcSets.getNumTensionRebars()
+    self.concreteArea= rcSets.getConcreteArea(1)
     if(self.concreteArea<1e-6):
       errMsg= "concrete area too smail; Ac= " + str(self.concreteArea) + " m2\n"
       lmsg.error(errMsg)
@@ -837,10 +848,13 @@ class ShearController(lscb.LimitStateControllerBase):
       else: # Uncracked section
         lmsg.error("Checking of shear strength without bending is not implemented.")
 
-  def calcVuEHE08(self, scc, nmbParamsTorsion, concrete, reinfSteel, Nd, Md, Vd, Td):
+  def calcVuEHE08(self, scc, torsionParameters, concrete, reinfSteel, Nd, Md, Vd, Td):
     '''  Compute the shear strength at failure.
      XXX Presstressing contribution not implemented yet.
 
+     :param scc: fiber model of the section.
+     :param torsionParameters: parameters that define torsional behaviour of
+                               the section as in clause 45.1 of EHE-08.
      :param concrete: parameters to model concrete.
      :param reinfSteel: parameters to model rebar's steel.
      :param Nd: Design value of axial force (positive if in tension)
@@ -850,7 +864,7 @@ class ShearController(lscb.LimitStateControllerBase):
     if(self.AsTrsv==0):
       self.calcVuEHE08NoAt(scc,concrete,reinfSteel)
     else:
-      self.calcVuEHE08SiAt(scc,nmbParamsTorsion,concrete,reinfSteel,Nd,Md,Vd,Td)
+      self.calcVuEHE08SiAt(scc,torsionParameters,concrete,reinfSteel,Nd,Md,Vd,Td)
 
 
   def check(self,elements,nmbComb):
@@ -858,10 +872,7 @@ class ShearController(lscb.LimitStateControllerBase):
        XXX Rebar orientation not taken into account yet.
     '''
     lmsg.log("Postprocessing combination: "+nmbComb)
-    secHAParamsTorsion=  TorsionParameters()
-    # XXX Ignore torsional deformation.
-    secHAParamsTorsion.ue= 0
-    secHAParamsTorsion.Ae= 1
+    secHAParamsTorsion= None # XXX Ignore torsional deformation.
     for e in elements:
       e.getResistingForce()
       scc= e.getSection()
@@ -869,7 +880,7 @@ class ShearController(lscb.LimitStateControllerBase):
       section= scc.getProp("datosSecc")
       concreteCode= section.concrType
       codArmadura= section.reinfSteelType
-      AsTrsv= section.shReinfY.getAs()
+      self.AsTrsv= section.shReinfY.getAs()
       alpha= section.shReinfY.angAlphaShReinf
       theta= section.shReinfY.angThetaConcrStruts
       NTmp= scc.getStressResultantComponent("N")
@@ -1060,7 +1071,7 @@ def printParamFisBarra():
 
 class TorsionParameters(object):
   '''Methods for checking reinforced concrete section under torsion according to
-     clause 45.1 or EHE-08.'''
+     clause 45.1 of EHE-08.'''
   def __init__(self):
     self.h0= 0.0  # Real wall thickess.
     self.c= 0.0  # Longitudinal reinforcement concrete cover.
