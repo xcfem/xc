@@ -23,4 +23,14 @@
 
 class_<XC::BbarBrick , bases<XC::BrickBase>, boost::noncopyable >("BbarBrick", no_init);
 
-class_<XC::Brick , bases<XC::BrickBase>, boost::noncopyable >("Brick", no_init);
+XC::Vector (XC::Brick::*getAvgStressPtr)(void) const= &XC::Brick::getAvgStress;
+double (XC::Brick::*getAvgStressIJPtr)(const size_t &,const size_t &) const= &XC::Brick::getAvgStress;
+XC::Vector (XC::Brick::*getAvgStrainPtr)(void) const= &XC::Brick::getAvgStrain;
+double (XC::Brick::*getAvgStrainIJPtr)(const size_t &,const size_t &) const= &XC::Brick::getAvgStrain;
+class_<XC::Brick , bases<XC::BrickBase>, boost::noncopyable >("Brick", no_init)
+  .def("getAvgStress", getAvgStressPtr,"Return the average stress on the element.")
+  .def("getAvgStressIJ", getAvgStressIJPtr,"Return (i,j) component of the average stress on the element.")
+  .def("getAvgStrain", getAvgStrainPtr,"Return the average strain on the element.")
+  .def("getAvgStrainIJ", getAvgStrainIJPtr,"Return (i,j) component of the average strain on the element.")
+
+  ;

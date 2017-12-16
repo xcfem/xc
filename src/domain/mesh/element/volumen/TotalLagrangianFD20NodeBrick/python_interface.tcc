@@ -21,4 +21,4 @@
 //----------------------------------------------------------------------------
 //python_interface.tcc
 
-class_<XC::TotalLagrangianFD20NodeBrick, bases<XC::ElemWithMaterial<20,XC::NDMaterialPhysicalProperties>>, boost::noncopyable >("TotalLagrangianFD20NodeBrick", no_init);
+class_<XC::TotalLagrangianFD20NodeBrick, bases<twenty_node_brick_elem>, boost::noncopyable >("TotalLagrangianFD20NodeBrick", no_init);

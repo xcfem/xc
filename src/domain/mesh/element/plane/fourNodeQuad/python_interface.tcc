@@ -24,7 +24,5 @@
 class_<XC::FourNodeQuad, bases<QuadBase4N_Mech2D>, boost::noncopyable >("FourNodeQuad", no_init)
   .add_property("rho", &XC::FourNodeQuad::getRho,&XC::FourNodeQuad::setRho)
   .add_property("thickness", &XC::FourNodeQuad::getThickness,&XC::FourNodeQuad::setThickness)
-//.add_property("getAvgStress", make_function(&XC::FourNodeQuad::getAvgStress, return_internal_reference<>()), "Returns average stress in element.")
-//.add_property("getAvgStrain", make_function(&XC::FourNodeQuad::getAvgStrain, return_internal_reference<>()), "Returns average strain in element.")
   .def("detJ", &XC::FourNodeQuad::detJ)
    ;
