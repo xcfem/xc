@@ -42,10 +42,10 @@ class MFreedom_Constraint;
 class MFreedom_FE: public MPBase_FE
   {
   protected:
-    MFreedom_Constraint *theMP;
+    MFreedom_Constraint *theMFreedom;
     Node *theRetainedNode;    
 
-    MFreedom_FE(int tag, int numDOF_Group, int ndof, MFreedom_Constraint &theMP,const double &alpha= 1.0);
+    MFreedom_FE(int tag, int numDOF_Group, int ndof, MFreedom_Constraint &theMFreedom,const double &alpha= 1.0);
     int determineConstrainedDOFsIDs(const int &);
     int determineRetainedDOFsIDs(const int &);
     DOF_Group *determineRetainedNodeDofGrpPtr(void);

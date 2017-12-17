@@ -81,7 +81,7 @@ class TransformationConstraintHandler;
 //! instantiated by the TransformationConstraintHandler for 
 //! every node in the domain which is constrained by an MFreedom_Constraint
 //! or an SFreedom_Constrant.
-//! This object stores the transformation matrix \f$\T\f$ used by the
+//! This object stores the transformation matrix \f$T\f$ used by the
 //! TransformationFE objects
 class TransformationDOF_Group: public DOF_Group
   {

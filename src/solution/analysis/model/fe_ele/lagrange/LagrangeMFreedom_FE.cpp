@@ -72,10 +72,25 @@
 #include <domain/constraints/MFreedom_Constraint.h>
 #include <solution/analysis/model/dof_grp/DOF_Group.h>
 
-XC::LagrangeMFreedom_FE::LagrangeMFreedom_FE(int tag, Domain &theDomain, MFreedom_Constraint &TheMP, DOF_Group &theGroup, double Alpha)
-  :MFreedom_FE(tag, 3,(TheMP.getConstrainedDOFs().Size()+TheMP.getRetainedDOFs().Size()+TheMP.getRetainedDOFs().Size()),TheMP,Alpha), Lagrange_FE(theGroup)
+//!To construct a LagrangeMFreedom\_FE element to enforce the constraint
+//! specified by the MFreedom\_Constraint \p theMFreedom using a default value
+//! for \f$\alpha\f$ of \f$alpha\f$. The FE\_Element class constructor is called
+//! with the integers \f$3\f$ and the two times the size of the \p retainedID
+//! plus the size of the \p constrainedID at the MFreedom\_Constraint {\em
+//! theMFreedom} plus . A Matrix and a Vector object are created for adding the
+//! contributions to the tangent and the residual. The residual is
+//! zeroed. If the MFreedom\_Constraint is not time varying, then the
+//! contribution to the tangent is determined. Links are set to the retained
+//! and constrained nodes. The DOF\_Group tag ID is set using the tag of the
+//! constrained Nodes DOF\_Group, the tag of the retained Node Dof\_group and
+//! the tag of the LagrangeDOF\_Group, \p theGroup. A warning message is
+//! printed and the program is terminated if either not enough memory is
+//! available for the Matrices and Vector or the constrained and retained Nodes
+//! of their DOF\_Groups do not exist.
+XC::LagrangeMFreedom_FE::LagrangeMFreedom_FE(int tag, Domain &theDomain, MFreedom_Constraint &TheMFreedom, DOF_Group &theGroup, double Alpha)
+  :MFreedom_FE(tag, 3,(TheMFreedom.getConstrainedDOFs().Size()+TheMFreedom.getRetainedDOFs().Size()+TheMFreedom.getRetainedDOFs().Size()),TheMFreedom,Alpha), Lagrange_FE(theGroup)
   {
-    const Matrix &constraint = theMP->getConstraint();
+    const Matrix &constraint = theMFreedom->getConstraint();
     const int noRows = constraint.noRows();
     const int noCols = constraint.noCols();
     const int size = 2*noRows+noCols;
@@ -84,8 +99,8 @@ XC::LagrangeMFreedom_FE::LagrangeMFreedom_FE(int tag, Domain &theDomain, MFreedo
     tang.Zero();	
     resid.Zero();
 
-    theRetainedNode= theDomain.getNode(theMP->getNodeRetained());    
-    theConstrainedNode= theDomain.getNode(theMP->getNodeConstrained());
+    theRetainedNode= theDomain.getNode(theMFreedom->getNodeRetained());    
+    theConstrainedNode= theDomain.getNode(theMFreedom->getNodeConstrained());
 
     if(theRetainedNode == 0)
       {
@@ -101,7 +116,7 @@ XC::LagrangeMFreedom_FE::LagrangeMFreedom_FE(int tag, Domain &theDomain, MFreedo
 	exit(-1);
       }
     
-    if(theMP->isTimeVarying() == false)
+    if(theMFreedom->isTimeVarying() == false)
       { this->determineTangent(); }
     
 
@@ -111,6 +126,19 @@ XC::LagrangeMFreedom_FE::LagrangeMFreedom_FE(int tag, Domain &theDomain, MFreedo
   }
 
 //! @brief  method to set the corresponding index of the ID to value.
+//!
+//! Causes the LagrangeMFreedom\_FE to determine the mapping between it's equation
+//! numbers and the degrees-of-freedom. This information is obtained by
+//! using the mapping information at the DOF\_Group objects associated with
+//! the constrained and retained nodes and the LagrangeDOF\_Group, {\em
+//! theGroup}. Returns \f$0\f$ if
+//! successful. Prints a warning message and returns a negative number if
+//! an error occurs: \f$-2\f$ if the
+//! Node has no associated DOF\_Group, \f$-3\f$ if the constrained DOF
+//! specified is invalid for this Node (sets corresponding ID component to
+//! \f$-1\f$ so nothing is added to the tangent) and \f$-4\f$ if the ID in the
+//! DOF\_Group is too small for the Node (again setting corresponding ID
+//! component to \f$-1\f$). 
 int XC::LagrangeMFreedom_FE::setID(void)
   {
     int offset = 0;
@@ -134,18 +162,24 @@ int XC::LagrangeMFreedom_FE::setID(void)
     return offset;
   }
 
+//! If the MFreedom\_Constraint is time-varying, from the MFreedom\_Constraint
+//! \p theMFreedom it obtains the current \f$C_{cr}\f$ matrix; it then adds the
+//! contribution to the tangent matrix. Returns this tangent Matrix.
 const XC::Matrix &XC::LagrangeMFreedom_FE::getTangent(Integrator *theNewIntegrator)
   {
-    if(theMP->isTimeVarying() == true)
+    if(theMFreedom->isTimeVarying() == true)
       this->determineTangent();
     return tang;
   }
 
+//! @brief Returns the residual vector.
 const XC::Vector &XC::LagrangeMFreedom_FE::getResidual(Integrator *theNewIntegrator)
   { return resid; }
 
 
 
+//! @brief CURRENTLY just returns the \f$0\f$ residual. THIS WILL NEED
+//! TO CHANGE FOR ELE-BY-ELE SOLVERS. 
 const XC::Vector &XC::LagrangeMFreedom_FE::getTangForce(const Vector &disp, double fact)
   {
     std::cerr << getClassName() << "::" << __FUNCTION__
@@ -180,7 +214,7 @@ const XC::Vector &XC::LagrangeMFreedom_FE::getM_Force(const XC::Vector &disp, do
 
 void XC::LagrangeMFreedom_FE::determineTangent(void)
   {
-    const Matrix &constraint = theMP->getConstraint();
+    const Matrix &constraint = theMFreedom->getConstraint();
     const int noRows= constraint.noRows();
     const int noCols= constraint.noCols();
     const int n= noRows+noCols;

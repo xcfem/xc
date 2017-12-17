@@ -83,7 +83,7 @@ class PenaltyMFreedom_FE: public MFreedom_FE
     Matrix C; //! to hold the C matrix
 
     friend class AnalysisModel;
-    PenaltyMFreedom_FE(int tag, Domain &, MFreedom_Constraint &theMP, double alpha);
+    PenaltyMFreedom_FE(int tag, Domain &, MFreedom_Constraint &theMFreedom, double alpha);
   public:
 
     // public methods

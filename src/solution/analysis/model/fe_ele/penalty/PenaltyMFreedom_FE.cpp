@@ -80,23 +80,25 @@ XC::PenaltyMFreedom_FE::PenaltyMFreedom_FE(int tag, Domain &theDomain,
 	    (TheMP.getRetainedDOFs()).Size(), TheMP,Alpha)
   {
     
-    const ID &id1 = theMP->getConstrainedDOFs();
+    const ID &id1= theMFreedom->getConstrainedDOFs();
     int size= id1.Size();
-    const ID &id2 = theMP->getRetainedDOFs();    
+    const ID &id2= theMFreedom->getRetainedDOFs();    
     size += id2.Size();
 
     tang= Matrix(size,size);
     resid= Vector(size);
     C= Matrix(id1.Size(),size);
 
-    theRetainedNode = theDomain.getNode(theMP->getNodeRetained());    
-    theConstrainedNode = theDomain.getNode(theMP->getNodeConstrained());
+    theRetainedNode = theDomain.getNode(theMFreedom->getNodeRetained());    
+    theConstrainedNode = theDomain.getNode(theMFreedom->getNodeConstrained());
 
-    if (theRetainedNode == 0 || theConstrainedNode == 0)
+    if(theRetainedNode == nullptr || theConstrainedNode == nullptr)
       {
-	std::cerr << "FATAL PenaltyMFreedom_FE::PenaltyMFreedom_FE() - Constrained or Retained";
-	std::cerr << " Node does not exist in Domain\n";
-	std::cerr << theMP->getNodeRetained() << " " << theMP->getNodeConstrained() << std::endl;
+	std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; FATAL - Constrained or Retained"
+		  << " Node does not exist in Domain\n"
+		  << theMFreedom->getNodeRetained() << " "
+		  << theMFreedom->getNodeConstrained() << std::endl;
 	exit(-1);
       }	
 
@@ -105,7 +107,7 @@ XC::PenaltyMFreedom_FE::PenaltyMFreedom_FE(int tag, Domain &theDomain,
     myDOF_Groups(0)= determineConstrainedNodeDofGrpPtr()->getTag();
     myDOF_Groups(1)= determineRetainedNodeDofGrpPtr()->getTag();
     
-    if(theMP->isTimeVarying() == false)
+    if(theMFreedom->isTimeVarying() == false)
       this->determineTangent();
   }
 
@@ -125,7 +127,7 @@ int XC::PenaltyMFreedom_FE::setID(void)
 
 const XC::Matrix &XC::PenaltyMFreedom_FE::getTangent(Integrator *theNewIntegrator)
   {
-    if (theMP->isTimeVarying() == true)
+    if(theMFreedom->isTimeVarying() == true)
 	this->determineTangent();    
     return tang;
   }
@@ -170,7 +172,7 @@ void XC::PenaltyMFreedom_FE::determineTangent(void)
   {
     // first determine [C] = [-I [Ccr]]
     C.Zero();
-    const XC::Matrix &constraint = theMP->getConstraint();
+    const Matrix &constraint = theMFreedom->getConstraint();
     int noRows = constraint.noRows();
     int noCols = constraint.noCols();
     

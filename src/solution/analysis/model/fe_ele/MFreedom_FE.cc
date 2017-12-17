@@ -34,7 +34,7 @@
 
 //! @brief Constructor.
 XC::MFreedom_FE::MFreedom_FE(int tag, int numDOF_Group, int ndof, MFreedom_Constraint &TheMP,const double &Alpha)
-  : MPBase_FE(tag,numDOF_Group,ndof,Alpha), theMP(&TheMP), theRetainedNode(nullptr)
+  : MPBase_FE(tag,numDOF_Group,ndof,Alpha), theMFreedom(&TheMP), theRetainedNode(nullptr)
   {}
 
 
@@ -42,7 +42,7 @@ XC::MFreedom_FE::MFreedom_FE(int tag, int numDOF_Group, int ndof, MFreedom_Const
 //! as constrained DOFs, this is obtained from the DOF_Group
 //! associated with the constrained node.
 int XC::MFreedom_FE::determineConstrainedDOFsIDs(const int &offset)
-  { return MPBase_FE::determineConstrainedDOFsIDs(*theMP,offset); }
+  { return MPBase_FE::determineConstrainedDOFsIDs(*theMFreedom,offset); }
 
 //! @brief determine determine the IDs for the retained dof's
 int XC::MFreedom_FE::determineRetainedDOFsIDs(const int &offset)
@@ -56,7 +56,7 @@ int XC::MFreedom_FE::determineRetainedDOFsIDs(const int &offset)
 	return -2;
       }    
     
-    const ID &RetainedDOFs = theMP->getRetainedDOFs();
+    const ID &RetainedDOFs = theMFreedom->getRetainedDOFs();
     const ID &theRetainedNodesID = theRetainedNodesDOFs->getID();    
 
     const int size2 = RetainedDOFs.Size();

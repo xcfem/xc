@@ -25,7 +25,7 @@
 \noindent {\bf Class Interface}
 \indent\indent // Constructor
 \indent\indent {\em PenaltyMP\_FE(Domain \&theDomain, MP\_Constraint
-\&theMP, double alpha);}
+\&theMFreedom, double alpha);}
 \indent\indent // Destructor
 \indent\indent {\em virtual~ \f$\tilde{}\f$PenaltyMP\_FE();}
 \indent\indent // Public Methods
@@ -38,13 +38,13 @@
 \&disp, double fact = 1.0);    }
 
 \noindent {\bf Constructor}
-\indent {\em PenaltyMP\_FE(Domain \&theDomain, MP\_Constraint \&theMP,
+\indent {\em PenaltyMP\_FE(Domain \&theDomain, MP\_Constraint \&theMFreedom,
 //! double alpha);}
 //! To construct a PenaltyMP\_FE element to enforce the constraint
-//! specified by the MP\_Constraint \p theMP using a default value for
+//! specified by the MP\_Constraint \p theMFreedom using a default value for
 \f$\alpha\f$ of \f$alpha\f$. The FE\_Element class constructor is called with
 //! the integers \f$2\f$ and the size of the \p retainedID plus the size of
-//! the \p constrainedID at the MP\_Constraint \p theMP. A Matrix
+//! the \p constrainedID at the MP\_Constraint \p theMFreedom. A Matrix
 //! and a Vector object are created for adding the contributions to the
 //! tangent and the residual. The residual is zeroed. A Matrix is created
 //! to store the \f$C\f$ Matrix. If the MP\_Constraint is not time varying,
@@ -68,7 +68,7 @@
 //! using the mapping information at the DOF\_Group objects associated with
 //! the constrained and retained nodes to determine the mappings between
 //! the degrees-of-freedom identified in the \p constrainedID and the
-\p retainedID at the MP\_Constraint \p theMP. Returns \f$0\f$ if
+\p retainedID at the MP\_Constraint \p theMFreedom. Returns \f$0\f$ if
 //! successful. Prints a warning message and returns a negative number if
 //! an error occurs: \f$-2\f$ if the
 //! Node has no associated DOF\_Group, \f$-3\f$ if the constrained DOF
@@ -80,7 +80,7 @@
 
 \indent {\em virtual Matrix \&getTangent(Integrator *theIntegrator);}
 //! If the MP\_Constraint is time-varying, from the MP\_Constraint
-\p theMP it obtains the current \f$C_{cr}\f$ matrix; it then forms the
+\p theMFreedom it obtains the current \f$C_{cr}\f$ matrix; it then forms the
 \f$C\f$ matrix and finally it sets the tangent matrix to be \f$\alpha
 //! C^TC\f$. Returns the tangent matrix.
 

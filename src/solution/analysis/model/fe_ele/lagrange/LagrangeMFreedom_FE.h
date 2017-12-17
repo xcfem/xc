@@ -81,14 +81,32 @@ class DOF_Group;
 //
 //! @brief LagrangeMFreedom_FE is a subclass of FE_Element
 //! which handles MFreedom_Constraints using the Lagrange method.
- class LagrangeMFreedom_FE: public MFreedom_FE, public Lagrange_FE
+//!
+//! Subclass of FE\_Element used to enforce a multi point constraint,
+//! of the form \f$U_c = C_{cr} U_r\f$, where \f$U_c\f$ are
+//! the constrained degrees-of-freedom at the constrained node, \f$U_r\f$ are
+//! the retained degrees-of-freedom at the retained node and \f$C_{cr}\f$ a
+//! matrix defining the relationship between these degrees-of-freedom. 
+
+//! To enforce the constraint the following are added to the tangent and
+//! the residual:
+//! \[ \left[ \begin{array}{cc} 0 & \alpha C^t \alpha C & 0 \end{array}
+//! \right] ,
+//! \left\{ \begin{array}{c} 0 0 \end{array} \right\} \]
+//! \noindent 
+//! \noindent at the locations
+//! corresponding to the constrained degree-of-freedoms specified by the
+//! MFreedom\_Constraint, i.e. \f$[U_c\f$ \f$U_r]\f$, and the lagrange multiplier
+//! degrees-of-freedom introduced by the LagrangeConstraintHandler for
+//! this constraint, \f$C = [-I\f$ \f$C_{cr}]\f$. Nothing is added to the residual. 
+class LagrangeMFreedom_FE: public MFreedom_FE, public Lagrange_FE
   {
   private:
     void determineTangent(void);
     
     friend class AnalysisModel;
-    LagrangeMFreedom_FE(int tag, Domain &theDomain, MFreedom_Constraint &theMP, 
-		  DOF_Group &theDofGrp, double alpha = 1.0);
+    LagrangeMFreedom_FE(int tag, Domain &, MFreedom_Constraint &, 
+		        DOF_Group &, double alpha = 1.0);
   public:
 
     // public methods
