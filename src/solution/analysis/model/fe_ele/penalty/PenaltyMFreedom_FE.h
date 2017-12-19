@@ -75,12 +75,23 @@ class Domain;
 //
 //! @brief PenaltyMFreedom_FE is a subclass of FE_Element which
 //! handles MFreedom_Constraints using the penalty method.
+//!
+//! PenaltyMP\_FE is a subclass of FE\_Element used to enforce a
+//! multi point constraint, of the form \f$U_c = C_{cr} U_r\f$,
+//! where \f$U_c\f$ are the constrained degrees-of-freedom at the
+//! constrained node, \f$U_r\f$ are the retained degrees-of-freedom
+//! at the retained node and \f$C_{cr}\f$ a matrix defining the relationship
+//! between these degrees-of-freedom. 
+//!
+//! To enforce the constraint a matrix \f$\alpha C^T C\f$ is added to the
+//! tangent for the degrees-of-freedom \f$[U_c\f$ \f$U_r]\f$, where
+//! \f$C = [-I\f$ \f$C_{cr}]\f$. Nothing is added to the residual.  
 class PenaltyMFreedom_FE: public MFreedom_FE
   {
   private:
     void determineTangent(void);
     
-    Matrix C; //! to hold the C matrix
+    Matrix C; //!< to hold the C matrix
 
     friend class AnalysisModel;
     PenaltyMFreedom_FE(int tag, Domain &, MFreedom_Constraint &theMFreedom, double alpha);
