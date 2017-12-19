@@ -75,10 +75,22 @@
 #include <domain/constraints/SFreedom_Constraint.h>
 #include <solution/analysis/model/dof_grp/DOF_Group.h>
 
+//! @brief Constructor.
+//!
+//! To construct a PenaltySFreedom\_FE element to enforce the constraint
+//! specified by the SFreedom\_Constraint \p theSP using a value for
+//! \f$\alpha\f$ of \p alpha (which, if none is specified, defaults to
+//! \f$1.0e8\f$). The FE\_Element class constructor is called with 
+//! the integers \f$1\f$ and \f$1\f$. A Matrix and a Vector object of
+//! order \f$1\f$ are created to return the tangent and residual contributions,
+//! with the tangent entry being set at \f$\alpha\f$. A link to the Node in the
+//! Domain corresponding to the SFreedom\_Constraint is also set. A warning
+//! message is printed and program terminates if there is not enough memory or
+//! no node associated with the SFreedom\_Constraint exists in the Domain.
 XC::PenaltySFreedom_FE::PenaltySFreedom_FE(int tag, Domain &theDomain, SFreedom_Constraint &TheSP, double Alpha)
   :SFreedom_FE(tag, 1,TheSP,Alpha)
   {
-    // get a pointer to the XC::Node
+    // get a pointer to the node
     theNode = theDomain.getNode(theSP->getNodeTag());
     if(!theNode)
       {
@@ -90,7 +102,7 @@ XC::PenaltySFreedom_FE::PenaltySFreedom_FE(int tag, Domain &theDomain, SFreedom_
 
     // set the DOF_Group tags
     DOF_Group *dofGrpPtr = theNode->getDOF_GroupPtr();
-    if(dofGrpPtr != 0) 
+    if(dofGrpPtr) 
       myDOF_Groups(0) = dofGrpPtr->getTag();	    
     
     // set the tangent
@@ -98,14 +110,26 @@ XC::PenaltySFreedom_FE::PenaltySFreedom_FE(int tag, Domain &theDomain, SFreedom_
   }
 
 
-// void setID(int index, int value);
-//	Method to set the corresponding index of the XC::ID to value.
+//! @brief Method to set the corresponding index of the ID.
+//!
+//! Causes the PenaltySFreedom\_FE to determine the mapping between it's
+//! equation numbers and the degrees-of-freedom. From the Node object link,
+//! created! in the constructor, the DOF\_group corresponding to the Node
+//! associated with the constraint is determined. From this {\em
+//! DOF\_Group} object the mapping for the constrained degree of freedom
+//! is determined and the ID in the base class is set. Returns \f$0\f$ if
+//! successful. Prints a warning message and returns a negative number if
+//! an error occurs: \f$-2\f$ if the
+//! Node has no associated DOF\_Group, \f$-3\f$ if the constrained DOF
+//! specified is invalid for this Node and \f$-4\f$ if the ID in the
+//! DOF\_Group is too small for the Node. 
 int XC::PenaltySFreedom_FE::setID(void)
   {
     DOF_Group *theNodesDOFs = theNode->getDOF_GroupPtr();
-    if(theNodesDOFs == 0)
+    if(!theNodesDOFs)
       {
-	std::cerr << "WARNING XC::PenaltySFreedom_FE::setID(void) - no XC::DOF_Group with XC::Node\n";
+	std::cerr << getClassName() << "::" << __FUNCTION__
+	          << "; WARNING - no DOF_Group associated with node.\n";
 	return -2;
       }    
     myDOF_Groups(0) = theNodesDOFs->getTag();
@@ -113,16 +137,17 @@ int XC::PenaltySFreedom_FE::setID(void)
     int restrainedDOF = theSP->getDOF_Number();
     if(restrainedDOF < 0 || restrainedDOF >= theNode->getNumberDOF())
       {
-	std::cerr << "¡WARNING! PenaltySFreedom_FE::setID(); - node: "
-                  << theNode->getTag() << " has not a the DOF: "
+	std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; ¡WARNING! - node: "
+                  << theNode->getTag() << " has not the DOF: "
 	          << restrainedDOF << std::endl;
 	return -3;
       }    	
-    const XC::ID &theNodesID = theNodesDOFs->getID();
+    const ID &theNodesID = theNodesDOFs->getID();
     if(restrainedDOF >= theNodesID.Size())
       {
-	std::cerr << "WARNING XC::PenaltySFreedom_FE::setID(void) - ";
-	std::cerr << " Nodes XC::DOF_Group too small\n";
+	std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; WARNING - nodes DOF_Group too small.\n";
 	return -4;
       }    		
     
@@ -131,25 +156,31 @@ int XC::PenaltySFreedom_FE::setID(void)
     return 0;
   }
 
-
+//! @brief Returns the tangent Matrix created in the constructor.
 const XC::Matrix &XC::PenaltySFreedom_FE::getTangent(Integrator *theNewIntegrator)
   { return tang; }
 
-
+//! Sets the FE\_Elements contribution to the residual to be
+//! \f$\alpha * (U_s - U_t)\f$, where \f$U_s\f$ is the specified value of the
+//! constraint and \f$U_t\f$ the current trial displacement at the node
+//! corresponding to constrained degree-of-freedom. Prints a warning
+//! message and sets this contribution to \f$0\f$ if the specified constrained
+//! degree-of-freedom is invalid. Returns this residual Vector set.
 const XC::Vector &XC::PenaltySFreedom_FE::getResidual(Integrator *theNewIntegrator)
   {
     const double constraint = theSP->getValue();
-    int constrainedDOF = theSP->getDOF_Number();
+    const int constrainedDOF = theSP->getDOF_Number();
     const Vector &nodeDisp = theNode->getTrialDisp();
 	
     if(constrainedDOF < 0 || constrainedDOF >= nodeDisp.Size())
       {
-	std::cerr << "WARNING XC::PenaltySFreedom_FE::getTangForce() - ";	
-	std::cerr << " constrained DOF " << constrainedDOF << " outside disp\n";
+	std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "WARNING; - constrained DOF "
+		  << constrainedDOF << " outside disp.\n";
 	resid(0) = 0;
       }
 
-    //    resid(0) = alpha * (constraint - nodeDisp(constrainedDOF));    
+    // resid(0) = alpha * (constraint - nodeDisp(constrainedDOF));    
     // is replace with the following to remove possible problems with
     // subtracting very small numbers
 
@@ -157,39 +188,49 @@ const XC::Vector &XC::PenaltySFreedom_FE::getResidual(Integrator *theNewIntegrat
     return resid;
   }
 
-
-const XC::Vector &XC::PenaltySFreedom_FE::getTangForce(const XC::Vector &disp, double fact)
+//! Sets the FE\_Elements contribution to the residual to be
+//! \f$\alpha * (U\_s - disp\_t)\f$, where \f$U\_s\f$ is the specified value
+//! of the constraint and \f$disp\_t\f$ the value in \p disp
+//! corresponding to constrained degree-of-freedom. Prints a warning
+//! message and sets this contribution to \f$0\f$ if the mapping, determined in
+//! setID(), for the the specified constrained degree-of-freedom lies 
+//! outside \p disp.  
+const XC::Vector &XC::PenaltySFreedom_FE::getTangForce(const Vector &disp, double fact)
   {
     //double constraint = theSP->getValue();
-    int constrainedID = myID(0);
+    int constrainedID= myID(0);
     if(constrainedID < 0 || constrainedID >= disp.Size())
       {
-	std::cerr << "WARNING PenaltySFreedom_FE::getTangForce() - ";	
-	std::cerr << " constrained DOF " << constrainedID << " outside disp\n";
+	std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; WARNING - constrained DOF "
+		  << constrainedID << " outside disp.\n";
 	resid(0) = 0.0;
-	return resid;
       }
-    resid(0)= alpha * disp(constrainedID);
+    else
+      resid(0)= alpha * disp(constrainedID);
     return resid;
   }
 
-const XC::Vector &XC::PenaltySFreedom_FE::getK_Force(const XC::Vector &disp, double fact)
+const XC::Vector &XC::PenaltySFreedom_FE::getK_Force(const Vector &disp, double fact)
   {
-    std::cerr << "WARNING PenaltySFreedom_FE::getK_Force() - not yet implemented\n";
+    std::cerr << getClassName() << "::" << __FUNCTION__
+	      << "; WARNING - not yet implemented\n";
     resid.Zero(); //Added by LCPT.
     return resid;
   }
 
-const XC::Vector &XC::PenaltySFreedom_FE::getC_Force(const XC::Vector &disp, double fact)
+const XC::Vector &XC::PenaltySFreedom_FE::getC_Force(const Vector &disp, double fact)
   {
-    std::cerr << "WARNING PenaltySFreedom_FE::getC_Force() - not yet implemented\n";
+    std::cerr << getClassName() << "::" << __FUNCTION__
+	      << "; WARNING - not yet implemented\n";
     resid.Zero(); //Added by LCPT.
     return resid;
   }
 
-const XC::Vector &XC::PenaltySFreedom_FE::getM_Force(const XC::Vector &disp, double fact)
+const XC::Vector &XC::PenaltySFreedom_FE::getM_Force(const Vector &disp, double fact)
   {
-    std::cerr << "WARNING PenaltySFreedom_FE::getM_Force() - not yet implemented\n";
+    std::cerr << getClassName() << "::" << __FUNCTION__
+	      << "; WARNING - not yet implemented\n";
     resid.Zero(); //Added by LCPT.
     return resid;
   }
