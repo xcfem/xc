@@ -15,26 +15,26 @@ ansysToEsfShell
     :undoc-members:
     :show-inheritance:
 
-banco_pruebas_scc2d
+scc2d_testing_bench
 -------------------
 
-.. automodule:: misc.banco_pruebas_scc2d
+.. automodule:: misc.scc2d_testing_bench
     :members:
     :undoc-members:
     :show-inheritance:
 
-banco_pruebas_scc3d
+scc3d_testing_bench
 -------------------
 
-.. automodule:: misc.banco_pruebas_scc3d
+.. automodule:: misc.scc3d_testing_bench
     :members:
     :undoc-members:
     :show-inheritance:
 
-banco_pruebas_shell
+shell_testing_bench
 -------------------
 
-.. automodule:: misc.banco_pruebas_shell
+.. automodule:: misc.shell_testing_bench
     :members:
     :undoc-members:
     :show-inheritance:
