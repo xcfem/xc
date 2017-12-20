@@ -81,14 +81,37 @@ class AnalysisModel;
 //! @ingroup AnalysisFE
 //
 //! @brief Finite element as seen by analysis.
+//!
+//! FE\_Element is a base class, subtypes of which are used to
+//! enforce the constraints on the domain. An object of type FE\_Element
+//! represents an element of the domain in the analysis. It enforces no
+//! constraints other than single point homogeneous boundary conditions,
+//! imposed on any of the elements nodes. It provides a similar interface
+//! to that of an Element but modified to provide features useful to an
+//! Analysis class.  The FE\_Element is responsible for:
+//!
+//! - Holding information about the mapping between equation numbers
+//!   and the degrees-of-freedom at the 
+//!   element ends, this mapping is determined from the DOF\_Group objects
+//!   associated with the elements Node objects.
+//! - Providing methods to allow the integrator to combine the elements
+//!   stiffness, mass and damping matrices into the elements contribution
+//!   to the structure tangent matrix and the elements resisting force to the
+//!   structure unbalance. Obtaining the stiffness, damping and mass matrices
+//!   from the elements.
+//! - Providing methods so other forces can be determined.
+//!
+//! While the FE\_Element class is associated with an element in the domain,
+//! subclasses do not have to be. It is the subclasses that are used to
+//! implement the constraints imposed on the nodal displacements in the domain.
 class FE_Element: public TaggedObject
   {
   private:
     int numDOF;
     UnbalAndTangent unbalAndTangent;
     AnalysisModel *theModel;
-    Element *myEle;
-    Integrator *theIntegrator; // need for Subdomain
+    Element *myEle; //!< Domain element associated with this object.
+    Integrator *theIntegrator; //!< need for Subdomain
 
     // static variables - single copy for all objects of the class	
     static Matrix errMatrix;
