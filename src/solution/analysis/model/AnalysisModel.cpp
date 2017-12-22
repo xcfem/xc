@@ -89,6 +89,12 @@
 #include "solution/analysis/handler/TransformationConstraintHandler.h"
 
 //! @brief Constructor.
+//! 
+//! Constructs an empty AnalysisModel. The constructor allocates
+//! space for two arrays of 256 pointers to FE\_Elements and DOF\_Groups.
+//! If not enough memory is available for these arrays, an error message
+//! is printed and the program is terminated. Note these arrays grow
+//! automatically if the problem needs it.
 XC::AnalysisModel::AnalysisModel(ModelWrapper *owr)
   :MovableObject(AnaMODEL_TAGS_AnalysisModel), EntCmd(owr),
    numFE_Ele(0), numDOF_Grp(0), numEqn(0),
@@ -97,6 +103,10 @@ XC::AnalysisModel::AnalysisModel(ModelWrapper *owr)
    myDOFGraph(*this), myGroupGraph(*this), updateGraphs(false) {}
 
 //! @brief Constructor.
+//!
+//! Provided for subclasses to be used. The storage of the FE\_Elements
+//! and DOF\_Groups and iters to access them must be provided by the
+//! subclass.
 XC::AnalysisModel::AnalysisModel(int theClassTag,EntCmd *owr)
   :MovableObject(theClassTag), EntCmd(owr),
    numFE_Ele(0), numDOF_Grp(0), numEqn(0),
@@ -132,42 +142,63 @@ XC::AnalysisModel &XC::AnalysisModel::operator=(const AnalysisModel &otro)
 XC::AnalysisModel *XC::AnalysisModel::getCopy(void) const
   { return new AnalysisModel(*this); }
 
-// ~AnalysisModel();    
+//! @brief Destructor.
+//!
+//! Is responsible for returning to memory the arrays used for storing
+//! pointers to the FE\_Element and DOF\_Groups which have been added to
+//! the AnalysisModel. It is not responsible for deleting the individual
+//! DOF\_Group and FE\_Element objects, that is the responsibility of the
+//! ConstraintHandler. If the Graphs have been requested their destructor
+//! is invoked.
 XC::AnalysisModel::~AnalysisModel(void)
   { clearAll(); }    
 
-//! @brief Método para agregar un objeto FE_Element al modelo.
+//! @brief Adds the FE\_Element pointed to by \p theElement to the model.
+//!
+//! Adds the FE\_Element pointed to by \p theElement to the domain and
+//! invokes {\em setAnalysisModel(*this)} on the FE\_Element. If the
+//! array for the FE\_Elements is large enough, it adds this pointer to
+//! the array and increments the number of FE\_Elements in the array. If
+//! the array is not large enough, a new one double in size is
+//! constructed, all the old pointers are copied to this new array and the
+//! new pointer is then added. If not enough room is available for this
+//! array, an error message is printed and the program is
+//! terminated. Returns \p true, otherwise \p false if {\em
+//! theElement} is \f$0\f$ or derived class used which does not implement the
+//! method. 
 bool XC::AnalysisModel::addFE_Element(FE_Element *theElement)
   {
     // check we don't add a null pointer or this is a subclass
     // trying to use this method when it should'nt
-    if(theElement == 0)
-      return false;
-
-    // check if an XC::Element with a similar tag already exists in the Domain
-    int tag= theElement->getTag();
-    TaggedObject *other= theFEs.getComponentPtr(tag);
-    if(other)
+    bool retval= false;
+    if(theElement)
       {
-        std::cerr << "AnalysisModel::addFE_Element - element with tag " << tag << " already exists in model\n"; 
-        return false;
+	// check if an Element with a similar tag already exists in the Domain
+	int tag= theElement->getTag();
+	TaggedObject *other= theFEs.getComponentPtr(tag);
+	if(other)
+	  {
+	    std::cerr << getClassName() << "::" << __FUNCTION__
+		      << "; element with tag " << tag
+		      << " already exists in model\n"; 
+	    retval= false;
+	  }
+        else
+	  {
+	    // add the element to the container object for the elements
+	    retval= theFEs.addComponent(theElement);
+	    if(retval) // o.k.
+	      {
+		theElement->setAnalysisModel(*this);
+		numFE_Ele++;
+		updateGraphs= true;
+	      }
+	  }
       }
-
-    // add the element to the container object for the elements
-    bool result= theFEs.addComponent(theElement);
-    if(result == true)
-      {
-        theElement->setAnalysisModel(*this);
-        numFE_Ele++;
-        updateGraphs= true;
-        return true;  // o.k.
-      }
-    else
-      return false;
-    return result;
+    return retval;
   }
 
-//! @brief Método para crear un objeto FE_Element y agregarlo al modelo.
+//! @brief Creates a FE_Element and appends it to the model.
 XC::FE_Element *XC::AnalysisModel::createFE_Element(const int &tag, Element *elePtr)
   {
     FE_Element *retval= nullptr;
@@ -308,13 +339,24 @@ XC::FE_Element *XC::AnalysisModel::createTransformationFE(const int &tag, Elemen
     if(retval)
       addFE_Element(retval);
     else
-      std::cerr << "WARNING AnalysisModel::createFE_Element() "
-                << "; ran out of memory"
+      std::cerr << getClassName() << "::" << __FUNCTION__
+	        << "; WARNING - ran out of memory"
                 << " creating FE_Element: " << tag << std::endl;
     return retval;
   }
 
-// @brief Method to add an DOF to the model.
+//! @brief Method to add an DOF to the model.
+//! 
+//! Adds the DOF\_Group pointed to by \p theGroup to the domain. If the
+//! array for the DOF\_Groups is large enough, it adds this pointer to
+//! the array and increments the number of DOF\_Groups in the array. If
+//! the array is not large enough, a new one double in size is
+//! constructed, all the old pointers are copied to this new array and the
+//! new pointer is then added. If not enough room is available for this
+//! array, an error message is printed and the program is
+//! terminated. Returns \p true, otherwise \p false if {\em
+//! theGroup} is \f$0\f$ or derived class used which does not implement the
+//! method. 
 bool XC::AnalysisModel::addDOF_Group(DOF_Group *theGroup)
   {
 
@@ -457,6 +499,13 @@ XC::TransformationDOF_Group *XC::AnalysisModel::createTransformationDOF_Group(co
     return dofPtr;
   }
 
+//! Clears from the model all FE\_Element and DOF\_Group objects.
+//! 
+//! Clears from the model all FE\_Element and DOF\_Group objects that have
+//! been added to the analysis model using the above two methods. It does
+//! this by setting the components in the two arrays of pointers equal to
+//! \f$0\f$ and setting the number of components to \f$0\f$. If the Graphs have
+//! been created their destructor is invoked. Also sets \p numEqn to \f$0\f$.
 void XC::AnalysisModel::clearAll(void) 
   {
     //XXX LA LÍNEA SIGUIENTE FALLA CUANDO EL MODELO NO CONTIENE ELEMENTOS.
@@ -471,13 +520,19 @@ void XC::AnalysisModel::clearAll(void)
 
 
 
-//! @brief Returns the umber of XC::DOF_Group objects added
+//! @brief Returns the umber of DOF_Group objects added to the model.
 int XC::AnalysisModel::getNumDOF_Groups(void) const
   { return numDOF_Grp; }
 
 
 //! @brief Returns a pointer to the DEF group with the tag
 //! beign passed as parameter.
+//!
+//! Returns a pointer to the DOF\_Group object whose tag is given by {\em
+//! tag}.  It first checks to see if the DOF\_Group object is at the
+//! location in the array given by \p tag; if not it searches through
+//! the array to find the DOF\_Group object. Returns a pointer to the
+//! object if found, otherwise \f$0\f$ is returned.
 XC::DOF_Group *XC::AnalysisModel::getDOF_GroupPtr(int tag)
   {
     DOF_Group *result= nullptr;
@@ -499,6 +554,7 @@ const XC::DOF_Group *XC::AnalysisModel::getDOF_GroupPtr(int tag) const
     return result;
   }
 
+//! @brief Returns an {\em FE\_EleIter} for the FE\_Elements of the model.
 XC::FE_EleIter &XC::AnalysisModel::getFEs()
   {
     theFEiter.reset();
@@ -506,6 +562,7 @@ XC::FE_EleIter &XC::AnalysisModel::getFEs()
     return theFEiter;
   }
 
+//! @brief Returns a {\em FE\_EleConstIter} for the FE\_Elements of the model.
 XC::FE_EleConstIter &XC::AnalysisModel::getConstFEs() const
   {
     theFEconst_iter.reset();
@@ -525,9 +582,17 @@ XC::DOF_GrpConstIter &XC::AnalysisModel::getConstDOFs() const
     return theDOFGroupconst_iter;
   }
 
+//! @brief Sets the value of the number of equations in the model.
+//! Invoked by the DOF\_Numberer when it is numbering the dofs.
 void XC::AnalysisModel::setNumEqn(int theNumEqn)
   { numEqn= theNumEqn; }
 
+//! @brief Returns the number of DOFs in the model which have been assigned
+//! an equation number.
+//! 
+//! Returns the number of DOFs in the model which have been assigned
+//! an equation number. Returns the value passed in setNumEqn(),
+//! if setNumEqn() was not invoked \f$0\f$ is returned.
 int XC::AnalysisModel::getNumEqn(void) const
   { return numEqn; }
 
@@ -542,6 +607,13 @@ XC::Graph &XC::AnalysisModel::getDOFGraph(void)
     return myDOFGraph;
   }
 
+//! @brief Returns the connectivity of the DOF\_Group objects in the model.
+//! 
+//! Returns the connectivity of the DOF\_Group objects in the model. 
+//! This graph is used by the DOF\_Numberer to assign equation numbers to
+//! the dofs. If no graph has yet been constructed it creates
+//! a new DOF\_GroupGraph object using itself as the argument, otherwise it
+//! returns a pointer to this graph. AGAIN WILL CHANGE.
 XC::Graph &XC::AnalysisModel::getDOFGroupGraph(void)
   {
     if(updateGraphs)
@@ -552,6 +624,12 @@ XC::Graph &XC::AnalysisModel::getDOFGroupGraph(void)
     return myGroupGraph;
   }
 
+//! Returns the DOF connectivity graph for the individual dofs in the
+//! model. This graph is used by the system of equation object to
+//! determine its size. If no graph has yet been constructed it creates
+//! a new DOF\_Graph object using itself as the argument, otherwise it
+//! returns a pointer to this graph. THIS WILL CHANGE WHEN I REMOVE
+//! DOF\_Graph CLASS - will go through and construct the Graph.
 const XC::Graph &XC::AnalysisModel::getDOFGraph(void) const
   {
     if(updateGraphs)
@@ -572,6 +650,13 @@ const XC::Graph &XC::AnalysisModel::getDOFGroupGraph(void) const
     return myGroupGraph;
   }
 
+//! @brief Sets the values of the displacement, velocity and acceleration of
+//! the nodes.
+//! 
+//! The model is responsible for invoking {\em setNodeDisp(disp)}, {\em
+//! setNodeVel(vel)} and {\em setNodeAccel(accel)} on each DOF\_Group in the
+//! model. It does this by iterating over the DOF\_Group objects using the
+//! iter.
 void XC::AnalysisModel::setResponse(const Vector &disp, const Vector &vel, const Vector &accel)
   {
     DOF_GrpIter &theDOFGrps= this->getDOFGroups();
@@ -584,6 +669,12 @@ void XC::AnalysisModel::setResponse(const Vector &disp, const Vector &vel, const
       }
   }
         
+//! @brief Sets the values of the displacement of the nodes.
+//!
+//! The model is responsible for invoking {\em setDisp(disp)} on each
+//! DOF\_Group in the model. It does this by getting an iter to the
+//! DOF\_Group objects and iterating through them invoking {\em
+//! setNodeDisp(disp)} on each DOF\_Group.
 void XC::AnalysisModel::setDisp(const Vector &disp)
   {
     DOF_GrpIter &theDOFGrps= this->getDOFGroups();
@@ -592,6 +683,12 @@ void XC::AnalysisModel::setDisp(const Vector &disp)
         dofPtr->setNodeDisp(disp);
   }        
         
+//! @brief Sets the values of the velocity of the nodes.
+//!
+//! The model is responsible for invoking {\em setVel(vel)} on each
+//! DOF\_Group in the model. It does this by getting an iter to the
+//! DOF\_Group objects and iterating through them invoking {\em
+//! setNodeVel(vel)} on each DOF\_Group.
 void XC::AnalysisModel::setVel(const Vector &vel)
   {
     DOF_GrpIter &theDOFGrps= this->getDOFGroups();
@@ -600,7 +697,12 @@ void XC::AnalysisModel::setVel(const Vector &vel)
         dofPtr->setNodeVel(vel);
   }        
         
-
+//! @brief Sets the values of the acceleration of the nodes.
+//!
+//! The model is responsible for invoking {\em setAccel(accel)} on each
+//! DOF\_Group in the model. It does this by getting an iter to the
+//! DOF\_Group objects and iterating through them invoking {\em
+//! setNodeAccel(accel)} on each DOF\_Group.
 void XC::AnalysisModel::setAccel(const Vector &accel)
   {
     DOF_GrpIter &theDOFGrps= this->getDOFGroups();
@@ -609,6 +711,12 @@ void XC::AnalysisModel::setAccel(const Vector &accel)
         dofPtr->setNodeAccel(accel);        
   }
 
+//! @brief Sets the values of the displacement increment of the nodes.
+//!
+//! The model is responsible for invoking {\em incrNodeDisp(disp)} on each
+//! DOF\_Group in the model. It does this by getting an iter to the
+//! DOF\_Group objects and iterating through them invoking {\em
+//! incrNodeDisp(disp)} on each DOF\_Group.
 void XC::AnalysisModel::incrDisp(const Vector &disp)
   {
     DOF_GrpIter &theDOFGrps= this->getDOFGroups();
@@ -617,6 +725,12 @@ void XC::AnalysisModel::incrDisp(const Vector &disp)
         dofPtr->incrNodeDisp(disp);
   }
         
+//! @brief Sets the values of the velocity increment of the nodes.
+//!
+//! The model is responsible for invoking {\em incrNodeVel(vel)} on each
+//! DOF\_Group in the model. It does this by getting an iter to the
+//! DOF\_Group objects and iterating through them invoking {\em
+//! incrNodeVel(vel)} on each DOF\_Group.
 void XC::AnalysisModel::incrVel(const Vector &vel)
   {
     DOF_GrpIter &theDOFGrps= this->getDOFGroups();
@@ -625,6 +739,12 @@ void XC::AnalysisModel::incrVel(const Vector &vel)
         dofPtr->incrNodeVel(vel);
   }        
         
+//! @brief Sets the values of the acceleration increment of the nodes.
+//!
+//! The model is responsible for invoking {\em incrNodeAccel(accel)} on each
+//! DOF\_Group in the model. It does this by getting an iter to the
+//! DOF\_Group objects and iterating through them invoking {\em
+//! incrNodeAccel(accel)} on each DOF\_Group.
 void XC::AnalysisModel::incrAccel(const Vector &accel)
   {
     DOF_GrpIter &theDOFGrps= this->getDOFGroups();
@@ -659,6 +779,13 @@ void XC::AnalysisModel::setEigenvector(int mode, const Vector &eigenvalue)
       dofPtr->setEigenvector(mode, eigenvalue);        
   }      
 
+//! @brief Method which invokes {\em applyLoad(timeStep, loadFactor)} on the
+//! domain.
+//! 
+//! Method which invokes {\em applyLoad(timeStep, loadFactor)} on the
+//! domain. This method causes the domain ask the loads in the currently
+//! set to apply themselves. If no Domain has been set nothing is done and an
+//! error message is printed. 
 void XC::AnalysisModel::applyLoadDomain(double pseudoTime)
   {
     Domain *dom= getDomainPtr();
@@ -672,7 +799,8 @@ void XC::AnalysisModel::applyLoadDomain(double pseudoTime)
 		<< "; WARNING no domain linked.\n";
   }
 
-
+//! @brief Method which invokes update() on the domain. If no Domain has
+//! been set nothing is done and an error message is printed. 
 int XC::AnalysisModel::updateDomain(void)
   {
     // check to see there is a XC::Domain linked to the Model
@@ -730,6 +858,12 @@ int XC::AnalysisModel::newStepDomain(double dT)
 
 
 //! @brief Commits domain state.
+//! 
+//! Method which invokes commit() on the domain: this is an
+//! operation which causes all nodes in the domain to take the current
+//! values of response quantities and copy them into the accepted values. 
+//! Returns \f$0\f$ if successful , a negative number if not: \f$-1\f$ if no
+//! Domain has been set and \f$-2\f$ if commit() fails on the Domain.
 int XC::AnalysisModel::commitDomain(void)
   {
     // check to see there is a domain linked to the Model
@@ -744,7 +878,8 @@ int XC::AnalysisModel::commitDomain(void)
         retval= dom->commit();
         if(retval<0)
           {
-            std::cerr << "WARNING: AnalysisModel::commitDomain - Domain::commit() failed\n";
+            std::cerr << getClassName() << "::" << __FUNCTION__
+		      << "; WARNING: Domain::commit() failed\n";
             retval= -2;
           }
       }
@@ -752,6 +887,13 @@ int XC::AnalysisModel::commitDomain(void)
   }
 
 //! @brief Returns to the last commited state.
+//!
+//! Method which invokes revertToLastCommit() on the domain: this is an
+//! operation which causes all nodes in the domain to set the trial
+//! response quantities equal to the last committed response quantities.
+//! Returns \f$0\f$ if successful , a negative number if not: \f$-1\f$ if no
+//! Domain has been set and \f$-2\f$ if \p revertToLastCommit() fails on
+//! the Domain. 
 int XC::AnalysisModel::revertDomainToLastCommit(void)
   {
     // check to see there is a XC::Domain linked to the Model
@@ -770,6 +912,11 @@ int XC::AnalysisModel::revertDomainToLastCommit(void)
     return retval;
   }
 
+//! To get the current time in the Domain.
+//!
+//! To get the current time in the Domain. If no Domain has been set a
+//! warning message is printed and \f$0.0\f$ is returned, otherwise the result
+//! of invoking getCurrentTime() on the Domain is returned.
 double XC::AnalysisModel::getCurrentDomainTime(void)
   {
     // check to see there is a Domain linked to the Model
@@ -785,6 +932,11 @@ double XC::AnalysisModel::getCurrentDomainTime(void)
   }
 
 
+//! To set the current time in the Domain to be \p newTime.
+//! 
+//! To set the current time in the Domain to be \p newTime. If no
+//! Domain has been set a warning message is printed, otherwise 
+//! {\em setCurrentTime(newTime)} is invoked on the Domain.
 void XC::AnalysisModel::setCurrentDomainTime(double newTime)
   {
     Domain *dom= getDomainPtr();
@@ -818,6 +970,8 @@ const XC::ModelWrapper *XC::AnalysisModel::getModelWrapper(void) const
   { return dynamic_cast<const ModelWrapper *>(Owner()); }
 
 
+//! @brief Returns a const pointer to the associated Domain, that is the Domain
+//! set when the links were set. 
 const XC::Domain *XC::AnalysisModel::getDomainPtr(void) const
   {
     const ModelWrapper *sm= getModelWrapper();
@@ -825,6 +979,8 @@ const XC::Domain *XC::AnalysisModel::getDomainPtr(void) const
     return sm->getDomainPtr();
   }
 
+//! @brief Returns a pointer to the associated Domain, that is the Domain
+//! set when the links were set. 
 XC::Domain *XC::AnalysisModel::getDomainPtr(void)
   {
     ModelWrapper *sm= getModelWrapper();
@@ -847,10 +1003,14 @@ XC::ConstraintHandler *XC::AnalysisModel::getHandlerPtr(void)
   }
 
 
+//! Returns \f$0\f$. Note the FE\_Elements and DOF\_Group objects are not sent
+//! as they are not MovableObjects. AnalysisModel objects are only sent
+//! when setting up a DomainDecompAnalysis on a remote process; only type
+//! info and whatever subclasses might need need to be sent.
 int XC::AnalysisModel::sendSelf(CommParameters &cp)
   { return 0; }
 
-
+//! Returns \f$0\f$.
 int XC::AnalysisModel::recvSelf(const CommParameters &cp) 
   { return 0; }
 
