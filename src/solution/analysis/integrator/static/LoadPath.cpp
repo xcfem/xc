@@ -69,26 +69,48 @@
 #include "utility/actor/actor/ArrayCommMetaData.h"
 
 //! @brief Constructor.
+//! 
+//! The integer INTEGRATOR\_TAGS\_LoadPath (defined in
+//! \f$<\f$classTags.h\f$>\f$) is passed to the StaticIntegrator classes
+//! constructor. A vector object \p path is created which is a copy of
+//! \p loadPath and an index into this vector is set to \f$0\f$.
 XC::LoadPath::LoadPath(SoluMethod *owr,const Vector &theLoadPath)
-  :StaticIntegrator(owr,INTEGRATOR_TAGS_LoadPath), loadPath(theLoadPath), currentStep(0) {}
+  :StaticIntegrator(owr,INTEGRATOR_TAGS_LoadPath), loadPath(theLoadPath),
+   currentStep(0) {}
 
 //! @brief Constructor.
+//!
+//! The integer INTEGRATOR\_TAGS\_LoadPath (defined in \f$<\f$classTags.h\f$>\f$) is
+//! passed to the StaticIntegrator classes constructor. No vector object
+//! is created. Provided for the FEM\_ObjectBroker to create a blank
+//! object, recvSelf() should be invoked on this object.
 XC::LoadPath::LoadPath(SoluMethod *owr)
   :StaticIntegrator(owr,INTEGRATOR_TAGS_LoadPath), currentStep(0) {}
 
+//! @brief Virtual constructor.
+XC::Integrator *XC::LoadPath::getCopy(void) const
+  { return new LoadPath(*this); }
+
+//! The object obtains the current value of \f$\lambda\f$ from the path
+//! vector using the current index. The index is then incremented by
+//! \f$1\f$. If the index is greater than the size of path, \f$\lambda\f$ is
+//! set to \f$0\f$ and an error message is printed. It will then invoke
+//! {\em applyLoadDomain(0.0, \f$\lambda\f$)} on the AnalysisModel
+//! object. Returns \f$0\f$ if successful. A warning message is printed and a
+//! \f$-1\f$ is returned if no AnalysisModel is associated with the object.
 int XC::LoadPath::newStep(void)
   {
     AnalysisModel *theModel = this->getAnalysisModelPtr();    
     if(theModel == 0)
       {
-	std::cerr << "XC::LoadPath::newStep() - no associated XC::AnalysisModel\n";
+	std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; no associated AnalysisModel.\n";
 	return -1;
       }
     
+    const double modelLambda= getCurrentModelTime();
 
-    double modelLambda = getCurrentModelTime();
-
-    double currentLambda;
+    double currentLambda= 0.0;
     if(currentStep < loadPath.Size())
       {
       
@@ -104,22 +126,29 @@ int XC::LoadPath::newStep(void)
       }      
     else
       {
-	currentLambda = 0.0;
-	std::cerr << "XC::LoadPath::newStep() - reached end of specified load path";
-	std::cerr << " - setting lambda = 0.0 \n";
+	currentLambda= 0.0;
+	std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; reached end of specified load path"
+		  << " - setting lambda = 0.0 \n";
       }
     currentStep++;
     applyLoadModel(currentLambda);
     return 0;
   }
     
-int XC::LoadPath::update(const XC::Vector &deltaU)
+//! Invoked this causes the object to first increment the DOF\_Group
+//! displacements with \f$\Delta U\f$, by invoking
+//! {\em incrDisp(\f$\Delta U)\f$}! on the AnalysisModel, and then to update
+//! the domain, by invoking {\em updateDomain()} on the AnalysisModel. Returns
+//! \f$0\f$ if successful, a warning message and a \f$-1\f$ is returned if
+//! no AnalysisModel is associated with the object.
+int XC::LoadPath::update(const Vector &deltaU)
   {
     AnalysisModel *myModel = this->getAnalysisModelPtr();
     if(myModel == 0)
       {
-	std::cerr << "WARNING XC::LoadPath::update() ";
-	std::cerr << "No AnalysisModel has been set\n";
+	std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; WARNING no AnalysisModel has been set.\n";
 	return -1;
       }
 
@@ -137,7 +166,8 @@ int XC::LoadPath::sendData(CommParameters &cp)
     return res;
   }
 
-//! @brief Receives object members through the channel being passed as parameter.
+//! @brief Receives object members through the channel being passed as
+//! parameter.
 int XC::LoadPath::recvData(const CommParameters &cp)
   {
     int res= StaticIntegrator::recvData(cp);
@@ -146,6 +176,10 @@ int XC::LoadPath::recvData(const CommParameters &cp)
     return res;
   }
 
+//! Places the size if \p path and the index in an ID of size 5 and send this
+//! ID. Then sends the Vector \p path. Returns \f$0\f$ if successful, a
+//! warning message is printed and a \f$-1\f$ is returned if \p theChannel
+//! fails to send the ID or the Vector. 
 int XC::LoadPath::sendSelf(CommParameters &cp)
   {
     setDbTag(cp);
@@ -155,11 +189,16 @@ int XC::LoadPath::sendSelf(CommParameters &cp)
 
     res+= cp.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
-      std::cerr << getClassName() << "sendSelf() - failed to send data\n";
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; failed to send data.\n";
     return res;
   }
 
 
+//! Receives in a ID of size 2 the size of the vector and current index.
+//! Creates a new Vector and receives the Vector from the Channel. 
+//! Returns \f$0\f$ if successful, a warning message is printed and a \f$-1\f$
+//! is returned if \p theChannel fails to receive the Vector or the ID.
 int XC::LoadPath::recvSelf(const CommParameters &cp)
   {
     inicComm(5);
@@ -167,13 +206,15 @@ int XC::LoadPath::recvSelf(const CommParameters &cp)
     int res= cp.receiveIdData(getDbTagData(),dataTag);
 
     if(res<0)
-      std::cerr << getClassName() << "::recvSelf - failed to receive ids.\n";
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; failed to receive ids.\n";
     else
       {
         //setTag(getDbTagDataPos(0));
         res+= recvData(cp);
         if(res<0)
-          std::cerr << getClassName() << "::recvSelf - failed to receive data.\n";
+          std::cerr << getClassName() << "::" << __FUNCTION__
+		    << "; failed to receive data.\n";
       }
     return res;
   }
