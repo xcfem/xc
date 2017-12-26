@@ -75,11 +75,31 @@ class AnalysisModel;
 //
 //! @brief LoadPath is an algorithmic class for performing a static analysis
 //! using a user defined load path (a user specified lambda path).
+//!
+//! LoadPath is a subclass of StaticIntegrator, it is
+//! used to when performing a static analysis on the FE\_Model using a
+//! user specified load path. The load path is specified in a Vector, {\em
+//! path}, to the objects constructor and at each step in the analysis:
+//! \[ 
+//! \lambda_n^{(i)} - \lambda_{n-1} = path(n) - path(n-1)
+//! \]
+//! 
+//! Knowing \f$\lambda_n^{(i)} = path(n)\f$ prior to each iteration, the \f$N+1\f$
+//! unknowns in equation~\ref{staticFormTaylor}, is reduced to \f$N\f$ unknowns and
+//! results in the following equation:
+//! 
+//! \begin{equation} 
+//! \R(U_{n}) = \lambda_n^{(i)} P 
+//!  - \f_{R}\left(U_{n}^{(i)} \right) - 
+//! \K_n^{(i)} 
+//! (U_{n} - U_{n}^{(i)})  
+//! \label{staticFormLoadPath}
+//! \end{equation}
 class LoadPath: public StaticIntegrator
   {
   private:
-    Vector loadPath;
-    int currentStep;
+    Vector loadPath; //!< vector that defines the load path.
+    int currentStep; //!< current step number.
   protected:
     int sendData(CommParameters &);
     int recvData(const CommParameters &);
@@ -97,8 +117,6 @@ class LoadPath: public StaticIntegrator
     int sendSelf(CommParameters &);
     int recvSelf(const CommParameters &);
   };
-inline Integrator *LoadPath::getCopy(void) const
-  { return new LoadPath(*this); }
 } // end of XC namespace
 
 #endif
