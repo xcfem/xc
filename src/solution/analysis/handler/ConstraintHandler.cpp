@@ -148,6 +148,12 @@ XC::Integrator *XC::ConstraintHandler::getIntegratorPtr(void)
   }
 
 //! @brief Reset the DOF_Group pointers to nullptr for all the nodes.
+//!
+//! Invoked to inform the ConstraintHandler object that the FE\_Elements
+//! and DOF\_Groups it constructed are no longer part of the AnalysisModel. The
+//! ConstraintHandler can delete these objects if necessary; or the
+//! ConstraintHandler can store them and use them in subsequent calls to
+//! handle(). 
 void XC::ConstraintHandler::clearAll(void)
   {
     Domain *theDomain = this->getDomainPtr();
@@ -157,13 +163,9 @@ void XC::ConstraintHandler::clearAll(void)
 
 //! @brief Send object members through the channel passed as parameter.
 int XC::ConstraintHandler::sendData(CommParameters &cp)
-  {
-    return 0;
-  }
+  { return 0; }
 
 //! @brief Receive object members through the channel passed as parameter.
 int XC::ConstraintHandler::recvData(const CommParameters &cp)
-  {
-    return 0;
-  }
+  { return 0; }
 
