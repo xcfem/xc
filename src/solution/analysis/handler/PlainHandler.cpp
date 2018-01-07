@@ -88,9 +88,29 @@ XC::ConstraintHandler *XC::PlainHandler::getCopy(void) const
   { return new PlainHandler(*this); }
 
 //! @brief Handle the constraints.
+//! 
+//! Determines the number of FE\_Elements and DOF\_Groups needed from the
+//! Domain (a one to one mapping between Elements and FE\_Elements and
+//! Nodes and DOF\_Groups) Creates two arrays of pointers to store the
+//! FE\_elements and DOF\_Groups, returning a warning message and a \f$-2\f$
+//! or \f$-3\f$ if not enough memory is available for these arrays. Then the
+//! object will iterate through the Nodes of the Domain, creating a
+//! DOF\_Group for each node and setting the initial id for each dof to
+//! \f$-2\f$ if no SFreedom\_Constraint exists for the dof, or \f$-1\f$ if a
+//! SFreedom\_Constraint exists or \f$-3\f$ if the node identifier is in {\em
+//! nodesToBeNumberedLast}. The object then iterates through the Elements
+//! of the Domain creating a FE\_Element for each Element, if the Element
+//! is a Subdomain setFE\_ElementPtr() is invoked on the Subdomain
+//! with the new FE\_Element as the argument. If not enough memory is
+//! available for any DOF\_Group or FE\_element a warning message is
+//! printed and a \f$-4\f$ or \f$-5\f$ is returned. If any MFreedom\_Constraint
+//! objects exist in the Domain a warning message is printed and \f$-6\f$ is
+//! returned. If all is successful, the method returns the number of
+//! degrees-of-freedom associated with the DOF\_Groups in {\em
+//! nodesToBeNumberedLast}.
 int XC::PlainHandler::handle(const ID *nodesLast)
   {
-    // first check links exist to a XC::Domain and an XC::AnalysisModel object
+    // first check links exist to a Domain and an AnalysisModel object
     Domain *theDomain = this->getDomainPtr();
     AnalysisModel *theModel = this->getAnalysisModelPtr();
     Integrator *theIntegrator = this->getIntegratorPtr();    
@@ -104,7 +124,7 @@ int XC::PlainHandler::handle(const ID *nodesLast)
 
     // initialse the DOF_Groups and add them to the AnalysisModel.
     //    : must of course set the initial IDs
-    NodeIter &theNod = theDomain->getNodes();
+    NodeIter &theNod= theDomain->getNodes();
     Node *nodPtr= nullptr;
     SFreedom_Constraint *spPtr= nullptr;
     DOF_Group *dofPtr= nullptr;
@@ -112,7 +132,7 @@ int XC::PlainHandler::handle(const ID *nodesLast)
     int numDOF = 0;
     int count3 = 0;
     int countDOF =0;
-    while((nodPtr = theNod()) != 0)
+    while((nodPtr = theNod()) != nullptr)
       {
         dofPtr= theModel->createDOF_Group(numDOF++, nodPtr);
         // initially set all the ID value to -2
@@ -213,7 +233,8 @@ int XC::PlainHandler::handle(const ID *nodesLast)
         while((mrmpPtr = theMRMPs()) != 0)
           {
             std::cerr << getClassName() << "::" << __FUNCTION__
-		      << "; loop through the MRMFreedom_Constraints." << std::endl;
+		      << "; loop through the MRMFreedom_Constraints."
+		      << std::endl;
           }
       }
 
@@ -257,9 +278,10 @@ int XC::PlainHandler::handle(const ID *nodesLast)
     return count3;
   }
 
-
+//! @brief Sends this object through the communicator (not implemented yet).
 int XC::PlainHandler::sendSelf(CommParameters &cp)
   { return 0; }
 
+//! @brief Receives this object through the communicator (not implemented yet).
 int XC::PlainHandler::recvSelf(const CommParameters &cp)
   { return 0; }
