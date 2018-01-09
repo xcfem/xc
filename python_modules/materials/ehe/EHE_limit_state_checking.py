@@ -54,7 +54,8 @@ def getFcv(fact, fck, Nd, Ac, b0, d, AsPas, fyd, AsAct, fpd):
   44.2.3.2.1 y  44.2.3.2.2 of EHE.
   
   :param fact: factor equal to 0.12 for parts WITHOUT shear reinforcement 
-   and 0.10 for parts WITH shear reinforcement.
+               (0.18/gammac)
+   and 0.10 for parts WITH shear reinforcement  (0.15/gammac).
   :param fck: concrete characteristic compressive strength.
   :param Nd: axial force design value (positive if in tension).
   :param Ac: concrete section total area.
@@ -77,7 +78,7 @@ def getVu2SIN(fck, Nd, Ac, b0, d, AsPas, fyd, AsAct, fpd):
   '''
   Return the value of Vu2 (shear strength at failure due to tensile force in the web)
    for parts WITHOUT shear reinforcement, according to 
-   clause 44.2.3.2.1 of EHE.
+   clause 44.2.3.2.1 of EHE (1998).
   
   :param fck: concrete characteristic compressive strength.
   :param Nd: axial force design value (positive if in tension).
@@ -97,14 +98,16 @@ def getVu2SIN(fck, Nd, Ac, b0, d, AsPas, fyd, AsAct, fpd):
 def getVcu(fck, Nd, Ac, b0, d, theta, AsPas, fyd, AsAct, fpd, sgxd, sgyd):
   '''
   Return the value of Vcu (contribution of the concrete to shear strength) 
-  for parts WITH shear reinforcement, according to clause 44.2.3.2.2 of EHE.
+  for parts WITH shear reinforcement, according to clause 44.2.3.2.2 of 
+  EHE (1998).
 
   :param fck: concrete characteristic compressive strength.
   :param Nd: axial force design value (positive if in tension).
   :param Ac: concrete section total area.
   :param b0: net width of the element according to clause 40.3.5.
   :param d: effective depth (meters).
-  :param theta: angle between the concrete compressed struts and the member axis (figure 44.2.3.1.a EHE).
+  :param theta: angle between the concrete compressed struts and the member 
+           axis (figure 44.2.3.1.a EHE 1998).
   :param AsPas: area of tensioned longitudinal steel rebars anchored
    at a distance greater than the effective depth of the section.
   :param fyd: reinforcing steel design yield strength (clause 38.3 EHE).
@@ -118,7 +121,7 @@ def getVcu(fck, Nd, Ac, b0, d, theta, AsPas, fyd, AsAct, fpd, sgxd, sgyd):
    section parallel to shear force Vd. Calculated assuming NON CRACKED 
    concrete (clause 44.2.3.2).
   '''
-  fcv= getFcv(0.10,fck,Nd,Ac,b0,d,AsPas,fyd,AsAct,fpd) 
+  fcv= getFcv(0.10,fck,Nd,Ac,b0,d,AsPas,fyd,AsAct,fpd)
   fctm= fctMedEHE08(fck) 
   ctgThetaE= min(max(0.5,sqrt(fctm-sgxd/fctm-sgyd)),2.0)
   ctgTheta= min(max(cotg(theta),0.5),2.0)
@@ -151,7 +154,7 @@ def getVu2(fck, Nd, Ac, b0, d, z, alpha, theta, AsPas, fyd, AsAct, fpd, sgxd, sg
   '''
   Return the value of Vu2 (ultimate shear force failure due to tensile force 
   in the web) for parts WITH or WITHOUT shear reinforcement, according to 
-  clause 44.2.3.2.2 of EHE.
+  clause 44.2.3.2.2 of EHE (1998).
 
   :param fck: concrete characteristic compressive strength.
   :param Nd: axial force design value (positive if in tension).
@@ -191,7 +194,7 @@ def getVu2(fck, Nd, Ac, b0, d, z, alpha, theta, AsPas, fyd, AsAct, fpd, sgxd, sg
 def getVu(fck, fcd, Nd, Ac, b0, d, z, alpha, theta, AsPas, fyd, AsAct, fpd, sgxd, sgyd, AsTrsv, fydTrsv):
   '''
   Return the value of Vu= max(Vu1,Vu2) for parts WITH or WITHOUT shear 
-   reinforcement, according to clause 44.2.3.2.2 of EHE.
+   reinforcement, according to clause 44.2.3.2.2 of EHE (1998).
 
   :param fck: concrete characteristic compressive strength.
   :param Nd: axial force design value (positive if in tension).
@@ -247,9 +250,9 @@ class ParamsCortante(object):
     self.sigmaXD= 0.0 # design value of normal stress at the centre of gravity of the section parallel to the main axis of the member. Calculated assuming NON CRACKED concrete (clause 44.2.3.2).
     self.sigmaYD= 0.0 # design value of normal stress at the centre of gravity of the section parallel to shear force Vd. Calculated assuming NON CRACKED concrete (clause 44.2.3.2).
     self.angAlpha= math.pi/2 # angle of the shear reinforcement with the part axis (figure 44.2.3.1.a EHE).
-    self.angTheta= math.pi/6 # Angle between the concrete compressed struts and the member axis (figure 44.2.3.1.a EHE).
+    self.angTheta= math.pi/6. # Angle between the concrete compressed struts and the member axis (figure 44.2.3.1.a EHE).
     self.cortanteUltimo= 0.0
-    print 'transv. reinf. area=',self.areaShReinfBranchsTrsv
+#    print 'transv. reinf. area=',self.areaShReinfBranchsTrsv
 
   def calcCortanteUltimo(self, concreteFibersSet, rebarFibersSet, tensionedRebarsFiberSet, fck, fcd, fyd, fpd, fydTrsv):
     '''Compute section shear strength.'''
@@ -881,8 +884,8 @@ class ShearController(lscb.LimitStateControllerBase):
       concreteCode= section.concrType
       codArmadura= section.reinfSteelType
       self.AsTrsv= section.shReinfY.getAs()
-      alpha= section.shReinfY.angAlphaShReinf
-      theta= section.shReinfY.angThetaConcrStruts
+      self.alpha= section.shReinfY.angAlphaShReinf
+      self.theta= section.shReinfY.angThetaConcrStruts
       NTmp= scc.getStressResultantComponent("N")
       MyTmp= scc.getStressResultantComponent("My")
       MzTmp= scc.getStressResultantComponent("Mz")
@@ -891,27 +894,41 @@ class ShearController(lscb.LimitStateControllerBase):
       VzTmp= scc.getStressResultantComponent("Vz")
       VTmp= math.sqrt((VyTmp)**2+(VzTmp)**2)
       TTmp= scc.getStressResultantComponent("Mx")
+      #Searching for the best theta angle (concrete strut inclination).
+      #We calculate Vu for several values of theta and chose the highest Vu with its associated theta
+#      print '\n VTmp=',VTmp
+      thetaVuTmp=list()
       self.calcVuEHE08(scc,secHAParamsTorsion,concreteCode,codArmadura,NTmp,MTmp,VTmp,TTmp)
+      thetaVuTmp.append([self.theta,self.Vu])
       if(self.Vu<VTmp):
-        theta= max(self.thetaMin,min(self.thetaMax,self.thetaFisuras))
+        self.theta= max(self.thetaMin,min(self.thetaMax,self.thetaFisuras))
         self.calcVuEHE08(scc,secHAParamsTorsion,concreteCode,codArmadura,NTmp,MTmp,VTmp,TTmp)
+        thetaVuTmp.append([self.theta,self.Vu])
       if(self.Vu<VTmp):
-        theta= (self.thetaMin+self.thetaMax)/2.0
+        self.theta= (self.thetaMin+self.thetaMax)/2.0
         self.calcVuEHE08(scc,secHAParamsTorsion,concreteCode,codArmadura,NTmp,MTmp,VTmp,TTmp)
+        thetaVuTmp.append([self.theta,self.Vu])
       if(self.Vu<VTmp):
-        theta= 0.95*self.thetaMax
+        self.theta= 0.95*self.thetaMax
         self.calcVuEHE08(scc,secHAParamsTorsion,concreteCode,codArmadura,NTmp,MTmp,VTmp,TTmp)
+        thetaVuTmp.append([self.theta,self.Vu])
       if(self.Vu<VTmp):
-        theta= 1.05*self.thetaMin
+        self.theta= 1.05*self.thetaMin
         self.calcVuEHE08(scc,secHAParamsTorsion,concreteCode,codArmadura,NTmp,MTmp,VTmp,TTmp)
+        thetaVuTmp.append([self.theta,self.Vu])
+      self.theta,self.Vu=max(thetaVuTmp, key=lambda item: item[1])
+#      print 'thetaFisuras=',self.thetaFisuras
+#      print 'theta=',self.theta
+#      print 'Vu=', self.Vu
       VuTmp= self.Vu
       if(VuTmp!=0.0):
         FCtmp= VTmp/VuTmp
       else:
         FCtmp= 1e99
+#      print 'FCtmp=', FCtmp
       Mu= 0.0 #Apparently EHE doesn't use Mu
       if(FCtmp>=e.getProp(self.limitStateLabel).CF):
-        e.setProp(self.limitStateLabel,cv.RCShearControlVars(idSection,nmbComb,FCtmp,NTmp,MyTmp,MzTmp,Mu,VyTmp,VzTmp,theta,self.Vcu,self.Vsu,VuTmp)) # Worst case
+        e.setProp(self.limitStateLabel,cv.RCShearControlVars(idSection,nmbComb,FCtmp,NTmp,MyTmp,MzTmp,Mu,VyTmp,VzTmp,self.theta,self.Vcu,self.Vsu,VuTmp)) # Worst case
 
 
 class CrackControl(lscb.CrackControlBaseParameters):

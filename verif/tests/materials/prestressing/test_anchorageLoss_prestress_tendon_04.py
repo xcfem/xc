@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import division
 '''Test for checking the calculation of loss of prestress due to 
-the anchorage slip whem this loss affects the whole length of tendon.
+the anchorage slip when this loss affects the whole length of tendon.
 It compares the results obtained from symetrical 
 problems when prestressing from extremity 1 (left-end) of the cable
 and from extremity 2 (right-end)
