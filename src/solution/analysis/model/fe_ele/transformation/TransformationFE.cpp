@@ -101,21 +101,27 @@ XC::TransformationFE::TransformationFE(int tag, Element *ele)
     numGroups = numNodes;
 
     // now fill the array of DOF_Group pointers
-    for(int i=0; i<numNodes; i++) {
+    for(int i=0; i<numNodes; i++)
+      {
         Node *theNode = theDomain->getNode(nodes(i));
-        if(theNode == 0) {
-            std::cerr << "FATAL XC::TransformationFE::TransformationFE() - no XC::Node with tag: ";
-            std::cerr << nodes(i) << " in the domain\n";;
+        if(!theNode)
+	  {
+            std::cerr << getClassName() << "::" << __FUNCTION__
+	              << "; FATAL no node with tag: "
+		      << nodes(i) << " in the domain\n";;
             exit(-1);
-        }
+          }
         DOF_Group *theDofGroup = theNode->getDOF_GroupPtr();
-        if(theDofGroup == 0) {
-            std::cerr << "FATAL XC::TransformationFE::TransformationFE() - no XC::DOF_Group : ";
-            std::cerr << " associated with node: " << nodes(i) << " in the domain\n";;
+        if(!theDofGroup)
+	  {
+            std::cerr << getClassName() << "::" << __FUNCTION__
+		      << "; FATAL - no DOF_Group : "
+		      << " associated with node: " << nodes(i)
+		      << " in the domain\n";
             exit(-1);
-        }        
+          }        
         theDOFs[i] = theDofGroup;
-    }
+      }
 
     // see if theTransformation array is big enough
     // if not delete the old and create a new_ one
@@ -129,8 +135,8 @@ XC::TransformationFE::TransformationFE(int tag, Element *ele)
     numTransFE++;
   }
 
-//! @brief destructor.
-XC::TransformationFE::~TransformationFE()
+//! @brief Destructor.
+XC::TransformationFE::~TransformationFE(void)
   {
     numTransFE--;
 
@@ -181,8 +187,9 @@ int XC::TransformationFE::setID(void)
                 modID(current++) = theDOFid(j);
             else
               {
-                std::cerr << "WARNING XC::TransformationFE::setID() - numDOF and";
-                std::cerr << " number of dof at the DOF_Groups\n";
+                std::cerr << getClassName() << "::" << __FUNCTION__
+			  << "; WARNING numDOF and"
+			  << " number of dof at the DOF_Groups\n";
                 return -3;
               }                
       }
@@ -345,7 +352,8 @@ const XC::Vector &XC::TransformationFE::getResidual(Integrator *theNewIntegrator
 
 const XC::Vector &XC::TransformationFE::getTangForce(const XC::Vector &disp, double fact)
   {
-    std::cerr << "XC::TransformationFE::getTangForce() - not yet implemented\n";
+    std::cerr << getClassName() << "::" << __FUNCTION__
+	      << "; not yet implemented\n";
     unbalAndTangentMod.getResidual().Zero();
     return unbalAndTangentMod.getResidual();
   }
@@ -732,20 +740,23 @@ void XC::TransformationFE::addM_Force(const XC::Vector &disp,  double fact)
 const XC::Vector &XC::TransformationFE::getLastResponse(void)
   {
     Integrator *theLastIntegrator = this->getLastIntegrator();
-    if(theLastIntegrator != 0) {
-        if(theLastIntegrator->getLastResponse(unbalAndTangentMod.getResidual(),modID) < 0) {
-            std::cerr << "WARNING XC::TransformationFE::getLastResponse(void)";
-            std::cerr << " - the XC::Integrator had problems with getLastResponse()\n";
-        }
-    }
-    else {
+    if(theLastIntegrator)
+      {
+        if(theLastIntegrator->getLastResponse(unbalAndTangentMod.getResidual(),modID) < 0)
+	  {
+	    std::cerr << getClassName() << "::" << __FUNCTION__
+		      << "; WARNING  - the Integrator had problems "
+		      << " with getLastResponse()\n";
+          }
+      }
+    else
+      {
         unbalAndTangentMod.getResidual().Zero();
-        std::cerr << "WARNING  XC::TransformationFE::getLastResponse()";
-        std::cerr << " No XC::Integrator yet passed\n";
-    }
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; WARNING  no Integrator yet passed\n";
+      }
     
-    Vector &result = unbalAndTangentMod.getResidual();
-    return result;
+    return unbalAndTangentMod.getResidual();
   }
 
 

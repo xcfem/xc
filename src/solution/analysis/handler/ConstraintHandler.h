@@ -76,21 +76,19 @@ class Integrator;
 class FEM_ObjectBroker;
 class ModelWrapper;
 
-/**
- * @ingroup Analysis
- *
- * @brief ConstraintHandlers enforce the single and multi freedom 
- * constraints that exist in the domain by creating the appropriate FE_Element
- * and DOF_Group objects.
- *
- * A constraint handler is responsible for:
- *
- *   - creating the FE_Element and DOF_Group objects and adding them to the AnalysisModel;
- *
- *   - setting the initial DOF equation numbers to -1, -2 or -3. A -1 indicates to the DOF_Numberer object that no equation number is to be allocated for this DOF, a -3 that this DOF is to be among the last group of dof to be numbered.
- *
- *   - deleting the DOF_Group and FE_Element objects that it created.
- */
+//! @ingroup Analysis
+//! 
+//! @brief ConstraintHandlers enforce the single and multi freedom 
+//! constraints that exist in the domain by creating the appropriate FE_Element
+//! and DOF_Group objects.
+//! 
+//! A constraint handler is responsible for:
+//! 
+//!   - creating the FE_Element and DOF_Group objects and adding them to the AnalysisModel;
+//! 
+//!   - setting the initial DOF equation numbers to -1, -2 or -3. A -1 indicates to the DOF_Numberer object that no equation number is to be allocated for this DOF, a -3 that this DOF is to be among the last group of dof to be numbered.
+//! 
+//!   - deleting the DOF_Group and FE_Element objects that it created.
 class ConstraintHandler: public MovableObject, public EntCmd
   {
     ModelWrapper *getModelWrapper(void);
@@ -112,6 +110,29 @@ class ConstraintHandler: public MovableObject, public EntCmd
   public:
     inline virtual ~ConstraintHandler(void) {}
     // pure virtual functions
+    //! @brief Invoked to handle the constraints imposed on the domain by the
+    //! constraints.
+    //!
+    //! Invoked to handle the constraints imposed on the domain by the
+    //! constraints. The ConstraintHandler object does
+    //! this by instantiating the appropriate FE\_ELement and DOF\_Group objects 
+    //! and adding them to the AnalysisModel. For all the dofs in each
+    //! DOF\_Group the ConstraintHandler sets initial equation numbers as
+    //! either \f$-1\f$, \f$-2\f$ or \f$-3\f$: A \f$-1\f$ indicates to the DOF\_Numberer object
+    //! that no equation number is to be allocated for this dof, a \f$-2\f$ that
+    //! an equation number is to be given for the dof, and a \f$-3\f$ that an
+    //! equation number is to be allocated and that this dof is to
+    //! be among the last group of dof to be numbered,i.e. all dof initially
+    //! assigned a \f$-3\f$ are to be given a higher equation number than those
+    //! given a \f$-2\f$. Those dof with a \f$-3\f$ should include all those dof
+    //! associated with the nodes whose tags are in {\em
+    //! nodesToBeNumberedLast}. Returns a positive number if successfully, a
+    //! negative integer if not; the positive number is to be set at the
+    //! number of dof assigned a value \f$-3\f$ (this will be the number of
+    //! external dof for a subdomain), the negative value of which depends on
+    //! the type of ConstraintHandler. For subdomains the constraint handler
+    //! is responsible for setting the FE\_Element by calling {\em
+    //! setFE\_elementPtr}.    
     virtual int handle(const ID *nodesNumberedLast =0) =0;
     virtual int update(void);
     virtual int applyLoad(void);

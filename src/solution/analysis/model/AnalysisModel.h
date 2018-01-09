@@ -108,8 +108,28 @@ class ModelWrapper;
 //
 //! @ingroup AnalysisModel
 //
-//! @brief Los objetos de esta clase, dan acceso a los
-//! objetos FE_Element y DOF_Group creados por el Constraint Handler.
+//! @brief Container for FE_Element and DOF_Group objects created by the
+//! constraint handler.
+//! 
+//! AnalysisModel is a container class. This class is responsible
+//! for holding and providing access to the FE\_Element and DOF\_Group
+//! objects that the ConstraintHandler creates. It is also responsible
+//! for updating the response quantities at the DOF\_Groups and for
+//! triggering methods in the associated Domain. It provides operations
+//! for the following:
+//!
+//! - Population: methods so that the ConstraintHandler can add the
+//!   FE\_Element and DOF\_Group objects to the analysis model. 
+//! - Access: methods so that other classes in the analysis aggregation
+//!   can access the components of the AnalysisModel. 
+//! - Connectivity: methods such that the SysOfEqn can determine the
+//!   connectivity of the dof, which is needed for storage, sparsity, etc.
+//! - Update: methods for updating the individual DOFs with the
+//!   response quantities given by the AnalysisMethod.
+//! - Trigger: methods which trigger events in the domain.
+//! 
+//! Each subclass of AnalysisModel must have its own subclasses
+//! of FE\_ELEIter and DOF\_GrpIter.
 class AnalysisModel: public MovableObject, public EntCmd
   {
   private:

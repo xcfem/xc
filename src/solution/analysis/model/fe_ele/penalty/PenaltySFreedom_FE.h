@@ -73,8 +73,16 @@ class Domain;
 
 //! @ingroup AnalysisFE
 //
-//! @brief PenaltySFreedom_FE is a subclass of SFreedom_FE which handles SFreedom_Constraints
-//! using the penalty method.
+//! @brief PenaltySFreedom_FE is a subclass of SFreedom_FE which handles
+//! SFreedom_Constraints using the penalty method.
+//!
+//! PenaltySFreedom\_FE is a subclass of FE\_Element used to enforce a
+//! single point constraint. It does this by adding \f$\alpha\f$ to the
+//! tangent and \f$\alpha * (U\_s - U\_t)\f$ to the residual at the locations
+//! corresponding to the constrained degree-of-freedom specified by the
+//! SFreedom\_Constraint, where \f$U_s\f$ is the specified value of the
+//! constraint and \f$U_t\f$ the current trial displacement at the node
+//! corresponding to the constraint.
 class PenaltySFreedom_FE: public SFreedom_FE
   {
     friend class AnalysisModel;

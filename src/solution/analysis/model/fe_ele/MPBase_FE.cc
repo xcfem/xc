@@ -39,7 +39,7 @@ XC::MPBase_FE::MPBase_FE(int tag, int numDOF_Group, int ndof,const double &Alpha
 //! @brief determine the IDs in myID for those DOFs marked
 //! as constrained DOFs, this is obtained from the DOF_Group
 //! associated with the constrained node.
-int XC::MPBase_FE::determineConstrainedDOFsIDs(const MFreedom_ConstraintBase &theMP,const int &offset)
+int XC::MPBase_FE::determineConstrainedDOFsIDs(const MFreedom_ConstraintBase &theMFreedom,const int &offset)
   {
     int retval= offset;
     DOF_Group *theConstrainedNodesDOFs = theConstrainedNode->getDOF_GroupPtr();
@@ -52,7 +52,7 @@ int XC::MPBase_FE::determineConstrainedDOFsIDs(const MFreedom_ConstraintBase &th
     else
       myDOF_Groups(0) = theConstrainedNodesDOFs->getTag();
 
-    const ID &constrainedDOFs = theMP.getConstrainedDOFs();
+    const ID &constrainedDOFs = theMFreedom.getConstrainedDOFs();
     const ID &theConstrainedNodesID = theConstrainedNodesDOFs->getID();    
     
     const int size1 = constrainedDOFs.Size();
