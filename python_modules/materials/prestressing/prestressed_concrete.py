@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+from __future__ import division
+
 '''Classes related to prestressed concrete 
 '''
 
@@ -191,7 +193,7 @@ class PrestressTendon(object):
             lmsg.warning("No prestressing applied.")
         return
 
-    def calcLossAnchor(self,Ep,anc_slip_extr1=0.0,anc_slip_extr2=0.0):
+    def calcLossAnchor(self,Ep,anc_slip_extr1=0.0,anc_slip_extr2=0.0,tol=1e-9):
         '''Creates the attributes lossAnchor and stressAfterLossAnchor of type 
         array that contains  for each point in fineCoordMtr the cumulative 
         immediate loss of prestressing due to anchorage slip and the stress 
@@ -205,6 +207,8 @@ class PrestressTendon(object):
                         the tendon (starting point)  (= deltaL)
         :param anc_slip_extr2: anchorage slip at extremity 2 of 
                         the tendon (ending point) (= deltaL)
+        :param tol: tolerance to apply newton_krylov algorithm 
+                    (defaults to 1e-9)
         '''
         self.projXYcoordZeroAnchLoss=[0,self.fineProjXYcoord[-1]] # projected coordinates of the
                                    # points near extremity 1 and extremity 2,
@@ -222,8 +226,8 @@ class PrestressTendon(object):
                 lackArea=-2*self.fAnc_ext1(self.fineScoord[-1])
                 excess_delta_sigma=lackArea/self.getCumLength().item(-1)
                 sCoordZeroLoss=self.fineScoord[-1]
-            else:    
-                sCoordZeroLoss=optimize.newton_krylov(self.fAnc_ext1,self.fineScoord[-1]/2.0,f_tol=1e-2)   #point from which the tendon is not affected by the
+            else:
+                sCoordZeroLoss=optimize.newton_krylov(self.fAnc_ext1,self.fineScoord[-1]/2.0,f_tol=tol)   #point from which the tendon is not affected by the
                        #anchorage slip
                 self.projXYcoordZeroAnchLoss[0]=self.ScoordToXYprojCoord(sCoordZeroLoss.item(0))
                 excess_delta_sigma=0
@@ -240,7 +244,7 @@ class PrestressTendon(object):
                 excess_delta_sigma=lackArea/self.getCumLength().item(-1)
                 sCoordZeroLoss=self.fineScoord[0]
             else:    
-                sCoordZeroLoss=optimize.newton_krylov(self.fAnc_ext2,self.fineScoord[-1]/2.0,f_tol=1e-2)   #point from which the tendon is affected by the
+                sCoordZeroLoss=optimize.newton_krylov(self.fAnc_ext2,self.fineScoord[-1]/2.0,f_tol=tol)   #point from which the tendon is affected by the
                        #anchorage slip
                 self.projXYcoordZeroAnchLoss[1]=self.ScoordToXYprojCoord(sCoordZeroLoss.item(0))
                 excess_delta_sigma=0
