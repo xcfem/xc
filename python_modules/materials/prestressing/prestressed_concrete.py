@@ -193,22 +193,20 @@ class PrestressTendon(object):
             lmsg.warning("No prestressing applied.")
         return
 
-    def calcLossAnchor(self,Ep,anc_slip_extr1=0.0,anc_slip_extr2=0.0,tol=1e-9):
+    def calcLossAnchor(self,Ep,anc_slip_extr1=0.0,anc_slip_extr2=0.0):
         '''Creates the attributes lossAnchor and stressAfterLossAnchor of type 
         array that contains  for each point in fineCoordMtr the cumulative 
         immediate loss of prestressing due to anchorage slip and the stress 
         after this loss, respectively.
         Loss due to friction must be previously calculated
 
-        :param Ep:      elasic modulus of the prestressin steel
+        :param Ep:      elasic modulus of the prestressing steel
 
         :param anc_slip_extr1: anchorage slip (data provided by the manufacturer
                         of the anchorage system) at extremity 1 of 
                         the tendon (starting point)  (= deltaL)
         :param anc_slip_extr2: anchorage slip at extremity 2 of 
                         the tendon (ending point) (= deltaL)
-        :param tol: tolerance to apply newton_krylov algorithm 
-                    (defaults to 1e-9)
         '''
         self.projXYcoordZeroAnchLoss=[0,self.fineProjXYcoord[-1]] # projected coordinates of the
                                    # points near extremity 1 and extremity 2,
@@ -227,8 +225,13 @@ class PrestressTendon(object):
                 excess_delta_sigma=lackArea/self.getCumLength().item(-1)
                 sCoordZeroLoss=self.fineScoord[-1]
             else:
-                sCoordZeroLoss=optimize.newton_krylov(self.fAnc_ext1,self.fineScoord[-1]/2.0,f_tol=tol)   #point from which the tendon is not affected by the
-                       #anchorage slip
+                # we use newton_krylov solver to find the zero of function
+                # fAnc_ext1 that gives us the point from which the tendon is
+                # not affected by the anchorage slip. Tolerance and relative
+                # step is given as parameters in order to enhance convergence
+                tol=self.slip1*1e-6
+                sCoordZeroLoss=optimize.newton_krylov(F=self.fAnc_ext1,xin=self.fineScoord[-1]/2.0,rdiff=0.1,f_tol=tol)   #point from which the tendon is not
+                       #affected by the anchorage slip
                 self.projXYcoordZeroAnchLoss[0]=self.ScoordToXYprojCoord(sCoordZeroLoss.item(0))
                 excess_delta_sigma=0
             stressSCoordZeroLoss=interpolate.splev(sCoordZeroLoss,self.tckLossFric,der=0)              #stress in that point (after loss due to friction)
@@ -243,9 +246,13 @@ class PrestressTendon(object):
                 lackArea=-2*self.fAnc_ext2(self.fineScoord[0])
                 excess_delta_sigma=lackArea/self.getCumLength().item(-1)
                 sCoordZeroLoss=self.fineScoord[0]
-            else:    
-                sCoordZeroLoss=optimize.newton_krylov(self.fAnc_ext2,self.fineScoord[-1]/2.0,f_tol=tol)   #point from which the tendon is affected by the
-                       #anchorage slip
+            else:
+                # we use newton_krylov solver to find the zero of function
+                # fAnc_ext1 that gives us the point from which the tendon is
+                # not affected by the anchorage slip
+                tol=self.slip2*1e-6
+                sCoordZeroLoss=optimize.newton_krylov(self.fAnc_ext2,self.fineScoord[-1]/2.0,rdiff=0.1,f_tol=tol)   #point from which the tendon is affected
+                       #by the anchorage slip
                 self.projXYcoordZeroAnchLoss[1]=self.ScoordToXYprojCoord(sCoordZeroLoss.item(0))
                 excess_delta_sigma=0
             stressSCoordZeroLoss=interpolate.splev(sCoordZeroLoss,self.tckLossFric,der=0)              #stress in that point (after loss due to friction)
@@ -256,15 +263,15 @@ class PrestressTendon(object):
         self.stressAfterLossAnch=self.stressAfterLossFriction-self.lossAnch
 
     def fAnc_ext1(self,s):
-        '''Funtion to obtain the parameters for calculating the loss due to
-        anchorage slip in extremity 1
+        '''Funtion to minimize when searching the point from which the tendon 
+        is not affected by the anchorage slip in extremity 1
         '''
         y=interpolate.splint(0.0,s,self.tckLossFric)-s*interpolate.splev(s,self.tckLossFric,der=0)-self.slip1/2.0
         return y
         
     def fAnc_ext2(self,s):
-        '''Funtion to obtain the parameters for calculating the loss due to
-        anchorage slip in extremity 2
+        '''Funtion to minimize when searching the point from which the tendon 
+        is not affected by the anchorage slip in extremity 2
         '''
         y=interpolate.splint(s,self.fineScoord[-1],self.tckLossFric)-(self.fineScoord[-1]-s)*interpolate.splev(s,self.tckLossFric,der=0)-self.slip2/2.0
         return y
@@ -273,9 +280,7 @@ class PrestressTendon(object):
         '''return the projected XYcoordinate of the tendon point corresponding 
         to the value Scoord given as parameter
         '''
-#        print 'Scoord=', Scoord
         index1=(np.abs(self.fineScoord-Scoord)).argmin()
-#        print 'index1=', index1
         if Scoord < self.fineScoord[index1]:
             index2=index1-1
         else:
@@ -328,7 +333,6 @@ class PrestressTendon(object):
         for e, s in zip(self.lstOrderedElems,stressMtr):
             m=e.getMaterial()
             m.initialStress=s
-#            print e, s,m.initialStr
         return
         
     def plot2D(self,XaxisValues='X',axisEqualScale='N',symbolRougPoints=None,symbolFinePoints=None,symbolTendon=None,symbolLossFriction=None,symbolStressAfterLossFriction=None,symbolLossAnch=None,symbolStressAfterLossAnch=None):
