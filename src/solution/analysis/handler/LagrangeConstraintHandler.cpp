@@ -92,6 +92,32 @@ XC::ConstraintHandler *XC::LagrangeConstraintHandler::getCopy(void) const
   { return new LagrangeConstraintHandler(*this); }
 
 //! @brief Handle the constraints.
+//!
+//!Determines the number of FE\_Elements and DOF\_Groups needed from the
+//! Domain (a one to one mappinging between Elements and FE\_Elements,
+//! SFreedom\_Constraints and LagrangeSFreedom\_FEs, MFreedom\_Constraints
+//! and LagrangeMFreedom\_FEs and Nodes and DOF\_Groups). Creates two arrays
+//! of pointers to store the FE\_Elements and DOF\_Groups, returning a warning
+//! message and a \f$-2\f$ or \f$-3\f$ if not enough memory is available for
+//! these arrays. Then the object will iterate through the Nodes of the Domain,
+//! creating a DOF\_Group for each node and setting the initial id for each dof
+//! to \f$-2\f$ or \f$-3\f$ if the node identifier is in {\em
+//! nodesToBeNumberedLast}. The object then iterates through the Elements
+//! of the Domain creating a FE\_Element for each Element, if the Element
+//! is a Subdomain setFE\_ElementPtr() is invoked on the Subdomain
+//! with the new FE\_Element as the argument. If not enough memory is
+//! available for any DOF\_Group or FE\_element a warning message is
+//! printed and a \f$-4\f$ or \f$-5\f$ is returned. 
+//! The object then iterates through the SFreedom\_Constraints
+//! of the Domain creating a LagrangeSFreedom\_FE for each constraint, using the
+//! Domain, the constraint and \p alphaSP as the arguments in the
+//! constructor.
+//! The object then iterates through the MP\_Constraints
+//! of the Domain creating a LagrangeMP\_FE for each constraint, using the
+//! Domain, the constraint and \p alphaMP as the arguments in the constructor.
+//! Finally the method returns the
+//! number of degrees-of-freedom associated with the DOF\_Groups in {\em
+//! nodesToBeNumberedLast}.
 int XC::LagrangeConstraintHandler::handle(const ID *nodesLast)
   {
     // first check links exist to a Domain and an XC::AnalysisModel object
