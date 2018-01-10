@@ -76,20 +76,24 @@ class DOF_Group;
 //
 //! @brief TransformationConstraintHandler is a constraint handler
 //! for handling constraints using the Transformation method.
+//!
+//! TransformationConstraintHandler objects deal with
+//! both single and multi freedom constraints using the Transformation method.
 //! For each element and degree-of-freedom at a node it constructs regular
 //! FE_Element and DOF_Groups if there is no SFreedom_Constraint or MFreedom_Constraint
 //! constraining an elements node or the node; otherwise a TransformationFE
-//! element and a TransformationDOF_Group are created.
+//! element and a TransformationDOF_Group are created.It is these objects that enforce the
+//! constraints by modifying the tangent matrix and residual vector.
 class TransformationConstraintHandler : public ConstraintHandler
   {
   private:
     std::set<FE_Element *> theFEs;
     std::vector<DOF_Group *> theDOFs;
 
-    int numDOF;
-    int numConstrainedNodes;
+    int numDOF; //!< Number or degrees of freedom.
+    int numConstrainedNodes; //!< number of constrained nodes.
 
-    int numTransformationFEs;
+    int numTransformationFEs; //!< number of TransformationFE elements.
 
     friend class ModelWrapper;
     friend class FEM_ObjectBroker;
