@@ -75,11 +75,14 @@ const double DefaultPenaltyFactor= 1e7; //10^(p/2) being p the number of decimal
 
 //! @ingroup AnalysisCH
 //
-//! @brief PenaltyConstraintHandler is a 
-//! constraint handler that deals with both single and multi point constraints using the penalty method.
-//! for each element and degree-of-freedom at a node it constructs regular
-//! FE_Element and DOF_Groups; for each SFreedom_Constraint and MFreedom_Constraint
-//! PenaltySFreedom_FE and PenaltyMFreedom_FE elements are created.
+//! @brief PenaltyConstraintHandler is a constraint handler that deals with
+//! both single and multi freedom constraints using the penalty method.
+//!
+//! This is done by, in addition to creating a DOF\_Group object
+//! for each Node and an FE\_Element for each Element in the Domain,
+//! creating either a PenaltySFreedom\_FE or a PenaltyMFreedom\_FE object for
+//! each constraint in the Domain. It is these objects that enforce the
+//! constraints by modifying the tangent matrix and residual vector. 
 class PenaltyConstraintHandler : public FactorsConstraintHandler
   {
     friend class ModelWrapper;

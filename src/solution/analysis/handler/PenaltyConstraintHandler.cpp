@@ -90,9 +90,35 @@ XC::ConstraintHandler *XC::PenaltyConstraintHandler::getCopy(void) const
   { return new PenaltyConstraintHandler(*this); }
 
 //! @brief Handle the constraints.
+//!
+//! Determines the number of FE\_Elements and DOF\_Groups needed from the
+//! Domain (a one to one mapping between Elements and FE\_Elements,
+//! SFreedom\_Constraints and PenaltySFreedom\_FEs, MFreedom\_Constraints and
+//! PenaltyMFreedom\_FEs and Nodes and DOF\_Groups). Creates two arrays of
+//! pointers to store the FE\_Elements and DOF\_Groups, returning a warning
+//! message and a \f$-2\f$ or \f$-3\f$ if not enough memory is available for
+//! these arrays. Then the object will iterate through the Nodes of the Domain,
+//! creating a DOF\_Group for each node and setting the initial id for each dof
+//! to \f$-2\f$ or \f$-3\f$ if the node identifier is in {\em
+//! nodesToBeNumberedLast}. The object then iterates through the Elements
+//! of the Domain creating a FE\_Element for each Element, if the Element
+//! is a Subdomain setFE\_ElementPtr() is invoked on the Subdomain
+//! with the new FE\_Element as the argument. If not enough memory is
+//! available for any DOF\_Group or FE\_element a warning message is
+//! printed and a \f$-4\f$ or \f$-5\f$ is returned. 
+//! The object then iterates through the SFreedom\_Constraints
+//! of the Domain creating a PenaltySFreedom\_FE for each constraint, using the
+//! Domain, the constraint and \p alphaSP as the arguments in the
+//! constructor.
+//! The object then iterates through the MP\_Constraints
+//! of the Domain creating a PenaltyMP\_FE for each constraint, using the
+//! Domain, the constraint and \p alphaMP as the arguments in the constructor.
+//! Finally the method returns the
+//! number of degrees-of-freedom associated with the DOF\_Groups in {\em
+//! nodesToBeNumberedLast}.
 int XC::PenaltyConstraintHandler::handle(const ID *nodesLast)
   {
-    // first check links exist to a XC::Domain and an XC::AnalysisModel object
+    // first check links exist to a XC::Domain and an AnalysisModel object
     Domain *theDomain = this->getDomainPtr();
     AnalysisModel *theModel = this->getAnalysisModelPtr();
     Integrator *theIntegrator = this->getIntegratorPtr();
@@ -108,15 +134,15 @@ int XC::PenaltyConstraintHandler::handle(const ID *nodesLast)
     // and init the theFEs and theDOFs arrays
     int numSPs = 0;
     SFreedom_ConstraintIter &theSPs = theDomain->getConstraints().getDomainAndLoadPatternSPs();
-    SFreedom_Constraint *spPtr;
+    SFreedom_Constraint *spPtr= nullptr;
     while((spPtr = theSPs()) != 0)
       numSPs++;
 
     // initialse the DOF_Groups and add them to the XC::AnalysisModel.
     //    : must of course set the initial IDs
-    NodeIter &theNod = theDomain->getNodes();
-    Node *nodPtr;
-    DOF_Group *dofPtr;
+    NodeIter &theNod= theDomain->getNodes();
+    Node *nodPtr= nullptr;
+    DOF_Group *dofPtr= nullptr;
 
     int numDofGrp = 0;
     int count3 = 0;
@@ -133,7 +159,7 @@ int XC::PenaltyConstraintHandler::handle(const ID *nodesLast)
     // set the number of eqn in the model
     // now see if we have to set any of the dof's to -3
     //    int numLast = 0;
-    if(nodesLast != 0)
+    if(nodesLast != nullptr)
       for(int i=0; i<nodesLast->Size(); i++)
         {
           int nodeID = (*nodesLast)(i);
@@ -161,10 +187,10 @@ int XC::PenaltyConstraintHandler::handle(const ID *nodesLast)
 
     // create the FE_Elements for the Elements and add to the XC::AnalysisModel
     ElementIter &theEle = theDomain->getElements();
-    Element *elePtr;
+    Element *elePtr= nullptr;
 
     int numFeEle = 0;
-    FE_Element *fePtr;
+    FE_Element *fePtr= nullptr;
     while((elePtr = theEle()) != 0)
       { fePtr= theModel->createFE_Element(numFeEle++, elePtr); }
 
@@ -180,7 +206,7 @@ int XC::PenaltyConstraintHandler::handle(const ID *nodesLast)
     // create the PenaltyMFreedom_FE for the MFreedom_Constraints and
     // add to the AnalysisModel
     MFreedom_ConstraintIter &theMPs = theDomain->getConstraints().getMPs();
-    MFreedom_Constraint *mpPtr;
+    MFreedom_Constraint *mpPtr= nullptr;
     while((mpPtr = theMPs()) != 0)
       {
 	fePtr= theModel->createPenaltyMFreedom_FE(numFeEle, *mpPtr, alphaMP);
@@ -190,7 +216,7 @@ int XC::PenaltyConstraintHandler::handle(const ID *nodesLast)
     // create the PenaltyMRMFreedom_FE for the MRMFreedom_Constraints and
     // add to the AnalysisModel
     MRMFreedom_ConstraintIter &theMRMPs = theDomain->getConstraints().getMRMPs();
-    MRMFreedom_Constraint *mrmpPtr;
+    MRMFreedom_Constraint *mrmpPtr= nullptr;
     while((mrmpPtr = theMRMPs()) != 0)
       {
 	fePtr= theModel->createPenaltyMRMFreedom_FE(numFeEle, *mrmpPtr, alphaMP);
