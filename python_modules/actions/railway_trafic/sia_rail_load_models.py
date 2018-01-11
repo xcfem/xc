@@ -1,26 +1,27 @@
 # -*- coding: utf-8 -*-
 from __future__ import division
 
-# Railway trafic load models from SIA 261 2003
+'''Railway trafic load models from SIA 261 2003.'''
+
+__author__= "Luis C. Pérez Tato (LCPT) Ana Ortega (A_OO)"
+__copyright__= "Copyright 2016, A_OO   LCPT"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com ana.Ortega.Ort@gmail.com"
+
 
 import math
 
 class LoadModel(object):
   ''' Railway load model SIA 261. '''
-  loadModelNumber= 0
-  numberOfAxes= 4
-  Qk= 160.0e3
-  dQk= 1.6 # Distance between Qk loads (m)
-  qk= 70e3
-  dQq= 0.8 # Distance between Qk and qk loads (m)
 
-  def __init__(self,mn,Qk,nA,dQk,qk,dQq):
+  def __init__(self,mn,Qk= 160.0e3,nA= 4,dQk=1.6,qk= 70e3,dQq= 0.8):
     self.loadModelNumber= mn
     self.Qk= Qk
     self.numberOfAxes= nA
-    self.dQk= dQk
+    self.dQk= dQk # Distance between Qk loads (m)
     self.qk= qk
-    self.dQq= dQq
+    self.dQq= dQq # Distance between Qk and qk loads (m)
 
   def trainAccelerationLoad123(self,l):
     ''' returns locomotive acceleration load for models 1, 2 and 3 (table 14)'''

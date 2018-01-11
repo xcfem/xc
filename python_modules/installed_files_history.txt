@@ -55,6 +55,10 @@
 /usr/local/lib/python2.7/dist-packages/actions/railway_trafic/trenes_reales_av.pyc
 /usr/local/lib/python2.7/dist-packages/actions/railway_trafic/vientoIAPF.py
 /usr/local/lib/python2.7/dist-packages/actions/railway_trafic/vientoIAPF.pyc
+/usr/local/lib/python2.7/dist-packages/actions/roadway_trafic/__init__.py
+/usr/local/lib/python2.7/dist-packages/actions/roadway_trafic/__init__.pyc
+/usr/local/lib/python2.7/dist-packages/actions/roadway_trafic/ofrou_report_664.py
+/usr/local/lib/python2.7/dist-packages/actions/roadway_trafic/ofrou_report_664.pyc
 /usr/local/lib/python2.7/dist-packages/actions/snow/__init__.py
 /usr/local/lib/python2.7/dist-packages/actions/snow/__init__.pyc
 /usr/local/lib/python2.7/dist-packages/actions/snow/snowSIA.py
