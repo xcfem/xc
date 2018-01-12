@@ -78,7 +78,7 @@ class Subdomain;
 class SubstructuringAnalysis: public DomainDecompositionAnalysis
   {
     friend class ProcSolu;
-    SubstructuringAnalysis(Subdomain &theDomain,DomainSolver &theSolver,SoluMethod *s= nullptr);
+    SubstructuringAnalysis(Subdomain &theDomain,DomainSolver &theSolver,AnalysisAggregation *s= nullptr);
     Analysis *getCopy(void) const;
   public:
     virtual int analyze(void);

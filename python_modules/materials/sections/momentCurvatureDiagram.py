@@ -53,6 +53,6 @@ def getMomentCurvatureDiagram3D(preprocessor, nmbSecc, esfAxil, maxK, numIncr):
 
   # Compute curvature increment.
   dK= maxK/numIncr
-  soluMethods= prb.getSolProc.getSoluMethodContainer
-  smt= getSoluMethod("smt")
-  integ= smt.newIntegrator("displacement_control_integrator")
+  soluMethods= prb.getSolProc.getAnalysisAggregationContainer
+  analysisAggregation= getAnalysisAggregation("analysisAggregation")
+  integ= analysisAggregation.newIntegrator("displacement_control_integrator")

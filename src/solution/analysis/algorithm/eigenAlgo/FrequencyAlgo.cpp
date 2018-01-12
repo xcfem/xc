@@ -70,7 +70,7 @@
 #include <solution/system_of_eqn/eigenSOE/EigenSOE.h>
 
 //! @brief Constructor.
-XC::FrequencyAlgo::FrequencyAlgo(SoluMethod *owr)
+XC::FrequencyAlgo::FrequencyAlgo(AnalysisAggregation *owr)
   :EigenAlgorithm(owr,EigenALGORITHM_TAGS_Frequency) {}
 
 //! @brief Calculate the eigenvalues for the current step.

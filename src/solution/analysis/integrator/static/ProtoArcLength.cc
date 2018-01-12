@@ -34,7 +34,7 @@
 #include "utility/actor/actor/ArrayCommMetaData.h"
 
 //! @brief Constructor.
-XC::ProtoArcLength::ProtoArcLength(SoluMethod *owr,int classTag,double arcLength)
+XC::ProtoArcLength::ProtoArcLength(AnalysisAggregation *owr,int classTag,double arcLength)
   :StaticIntegrator(owr,classTag), arcLength2(arcLength*arcLength), signLastDeltaLambdaStep(1) {}
 
 int XC::ProtoArcLength::newStep(void)

@@ -79,9 +79,9 @@ class NewtonLineSearch: public EquiSolnAlgo
   private:
     LineSearch *theLineSearch;
 
-    friend class SoluMethod;
+    friend class AnalysisAggregation;
     friend class FEM_ObjectBroker;
-    NewtonLineSearch(SoluMethod *);    
+    NewtonLineSearch(AnalysisAggregation *);    
     NewtonLineSearch(const NewtonLineSearch &otro);    
     NewtonLineSearch &operator=(const NewtonLineSearch &otro);    
     virtual SolutionAlgorithm *getCopy(void) const;

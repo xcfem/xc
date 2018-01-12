@@ -50,9 +50,9 @@ class BandArpackppSOE : public ArpackSOE
   protected:
     bool setSolver(EigenSolver *);
 
-    friend class SoluMethod;
+    friend class AnalysisAggregation;
     friend class FEM_ObjectBroker;
-    BandArpackppSOE(SoluMethod *,const double &shift = -1.0);
+    BandArpackppSOE(AnalysisAggregation *,const double &shift = -1.0);
     SystemOfEqn *getCopy(void) const;
   public:
     virtual int setSize(Graph &theGraph);

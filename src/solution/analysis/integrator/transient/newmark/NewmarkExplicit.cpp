@@ -71,15 +71,15 @@
 
 
 //! @brief Constructor.
-XC::NewmarkExplicit::NewmarkExplicit(SoluMethod *owr)
+XC::NewmarkExplicit::NewmarkExplicit(AnalysisAggregation *owr)
   :NewmarkBase(owr,INTEGRATOR_TAGS_NewmarkExplicit) {}
 
 //! @brief Constructor.
-XC::NewmarkExplicit::NewmarkExplicit(SoluMethod *owr,double _gamma)
+XC::NewmarkExplicit::NewmarkExplicit(AnalysisAggregation *owr,double _gamma)
   : NewmarkBase(owr,INTEGRATOR_TAGS_NewmarkExplicit,_gamma) {}
 
 //! @brief Constructor.
-XC::NewmarkExplicit::NewmarkExplicit(SoluMethod *owr,double _gamma,const RayleighDampingFactors &rF)
+XC::NewmarkExplicit::NewmarkExplicit(AnalysisAggregation *owr,double _gamma,const RayleighDampingFactors &rF)
     : NewmarkBase(owr,INTEGRATOR_TAGS_NewmarkExplicit,_gamma,rF) {}
 
 

@@ -64,10 +64,10 @@
 #include <solution/graph/graph/VertexIter.h>
 #include <cmath>
 
-XC::SparseGenColLinSOE::SparseGenColLinSOE(SoluMethod *owr)
+XC::SparseGenColLinSOE::SparseGenColLinSOE(AnalysisAggregation *owr)
   :SparseGenSOEBase(owr,LinSOE_TAGS_SparseGenColLinSOE) {}
 
-XC::SparseGenColLinSOE::SparseGenColLinSOE(SoluMethod *owr,int classTag)
+XC::SparseGenColLinSOE::SparseGenColLinSOE(AnalysisAggregation *owr,int classTag)
   :SparseGenSOEBase(owr,classTag) {}
 
 bool XC::SparseGenColLinSOE::setSolver(LinearSOESolver *newSolver)

@@ -85,8 +85,8 @@ class ArcLength1 : public ArcLengthBase
   {
     double getDLambdaUpdate(void) const;
   protected:
-    friend class SoluMethod;
-    ArcLength1(SoluMethod *,double arcLength, double alpha = 1.0);
+    friend class AnalysisAggregation;
+    ArcLength1(AnalysisAggregation *,double arcLength, double alpha = 1.0);
     Integrator *getCopy(void) const;
   public:
 

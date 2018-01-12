@@ -29,7 +29,7 @@
 #include <solution/system_of_eqn/linearSOE/sparseGEN/SparseGenSOEBase.h>
 
 //! @brief Constructor.
-XC::SparseGenSOEBase::SparseGenSOEBase(SoluMethod *owr,int classtag,int N, int NNZ)
+XC::SparseGenSOEBase::SparseGenSOEBase(AnalysisAggregation *owr,int classtag,int N, int NNZ)
   :SparseSOEBase(owr,classtag,N,NNZ) {}
 
 void XC::SparseGenSOEBase::zeroA(void)

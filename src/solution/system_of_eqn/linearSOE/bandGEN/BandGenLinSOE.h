@@ -78,11 +78,11 @@ class BandGenLinSOE : public FactoredSOEBase
   protected:
     virtual bool setSolver(LinearSOESolver *);
 
-    friend class SoluMethod;
+    friend class AnalysisAggregation;
     friend class FEM_ObjectBroker;
-    BandGenLinSOE(SoluMethod *);
-    BandGenLinSOE(SoluMethod *,int classTag);
-    BandGenLinSOE(SoluMethod *,int N, int numSuperDiagonals, int numSubDiagonal,BandGenLinSolver *theSolver= nullptr);        
+    BandGenLinSOE(AnalysisAggregation *);
+    BandGenLinSOE(AnalysisAggregation *,int classTag);
+    BandGenLinSOE(AnalysisAggregation *,int N, int numSuperDiagonals, int numSubDiagonal,BandGenLinSolver *theSolver= nullptr);        
     SystemOfEqn *getCopy(void) const;
   public:
     virtual int setSize(Graph &theGraph);

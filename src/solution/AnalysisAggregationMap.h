@@ -24,14 +24,14 @@
 // along with this program.
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
-//MapSoluMethod.h
+//AnalysisAggregationMap.h
 
 #ifndef MAPSOLUMETHOD_H
 #define MAPSOLUMETHOD_H
 
 #include "xc_utils/src/nucleo/EntCmd.h"
 #include "utility/handler/DataOutputHandler.h"
-#include "SoluMethod.h"
+#include "AnalysisAggregation.h"
 
 namespace XC {
 
@@ -41,16 +41,16 @@ class ModelWrapper;
 //!  \ingroup Solu
 //! 
 //! @brief Solution methods container.
-class MapSoluMethod: public EntCmd
+class AnalysisAggregationMap: public EntCmd
   {
   private:
-    typedef std::map<std::string,SoluMethod> map_solu_method;
+    typedef std::map<std::string,AnalysisAggregation> map_solu_method;
     typedef map_solu_method::iterator iterator;
     typedef map_solu_method::const_iterator const_iterator;
 
     map_solu_method solu_methods; //!< Solution method container.
   public:
-    MapSoluMethod(ProcSoluControl *owr);
+    AnalysisAggregationMap(ProcSoluControl *owr);
 
     inline iterator begin()
       { return solu_methods.begin(); }
@@ -66,12 +66,12 @@ class MapSoluMethod: public EntCmd
     inline size_t size(void) const
       { return solu_methods.size(); }
 
-    bool existeSoluMethod(const std::string &) const;
-    SoluMethod &creaSoluMethod(const std::string &,ModelWrapper *);
-    const SoluMethod *getSoluMethod(const std::string &) const;
-    SoluMethod *getSoluMethod(const std::string &);
+    bool AnalysisAggregationExists(const std::string &) const;
+    AnalysisAggregation &createAnalysisAggregation(const std::string &,ModelWrapper *);
+    const AnalysisAggregation *getAnalysisAggregation(const std::string &) const;
+    AnalysisAggregation *getAnalysisAggregation(const std::string &);
 
-    SoluMethod &newSoluMethod(const std::string &,const std::string &);
+    AnalysisAggregation &newAnalysisAggregation(const std::string &,const std::string &);
 
     void revertToStart(void);
     void clearAll(void);

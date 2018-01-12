@@ -27,7 +27,7 @@
 //ModelWrapper.cc
 
 #include "ModelWrapper.h"
-#include "solution/SoluMethod.h"
+#include "solution/AnalysisAggregation.h"
 #include <solution/analysis/model/AnalysisModel.h>
 
 //Constraints handler.
@@ -198,15 +198,15 @@ void XC::ModelWrapper::copia(const ModelWrapper &otro)
     if(otro.theDOFNumberer) copia_numerador(otro.theDOFNumberer);
   }
 
-XC::SoluMethod *XC::ModelWrapper::getSoluMethod(void)
-  { return dynamic_cast<SoluMethod *>(Owner()); }
+XC::AnalysisAggregation *XC::ModelWrapper::getAnalysisAggregation(void)
+  { return dynamic_cast<AnalysisAggregation *>(Owner()); }
 
-const XC::SoluMethod *XC::ModelWrapper::getSoluMethod(void) const
-  { return dynamic_cast<const SoluMethod *>(Owner()); }
+const XC::AnalysisAggregation *XC::ModelWrapper::getAnalysisAggregation(void) const
+  { return dynamic_cast<const AnalysisAggregation *>(Owner()); }
 
 
 //! @brief Default constructor.
-XC::ModelWrapper::ModelWrapper(SoluMethod *owr)
+XC::ModelWrapper::ModelWrapper(AnalysisAggregation *owr)
   : EntCmd(owr), theModel(nullptr), theHandler(nullptr), theDOFNumberer(nullptr)
   { alloc_analysis_model(); }
 
@@ -233,7 +233,7 @@ void XC::ModelWrapper::clearAll(void)
 //! @brief Return a pointer to the domain.
 XC::Domain *XC::ModelWrapper::getDomainPtr(void)
   {
-    SoluMethod *sm= getSoluMethod();
+    AnalysisAggregation *sm= getAnalysisAggregation();
     assert(sm);
     return sm->getDomainPtr();
   }
@@ -241,7 +241,7 @@ XC::Domain *XC::ModelWrapper::getDomainPtr(void)
 //! @brief Return a pointer to the domain.
 const XC::Domain *XC::ModelWrapper::getDomainPtr(void) const
   {
-    const SoluMethod *sm= getSoluMethod();
+    const AnalysisAggregation *sm= getAnalysisAggregation();
     assert(sm);
     return sm->getDomainPtr();
   }
@@ -249,7 +249,7 @@ const XC::Domain *XC::ModelWrapper::getDomainPtr(void) const
 //! @brief Return a pointer to the integrator.
 XC::Integrator *XC::ModelWrapper::getIntegratorPtr(void)
   {
-    SoluMethod *sm= getSoluMethod();
+    AnalysisAggregation *sm= getAnalysisAggregation();
     assert(sm);
     return sm->getIntegratorPtr();
   }
@@ -257,7 +257,7 @@ XC::Integrator *XC::ModelWrapper::getIntegratorPtr(void)
 //! @brief Return a pointer to the integrator.
 const XC::Integrator *XC::ModelWrapper::getIntegratorPtr(void) const
   {
-    const SoluMethod *sm= getSoluMethod();
+    const AnalysisAggregation *sm= getAnalysisAggregation();
     assert(sm);
     return sm->getIntegratorPtr();
   }

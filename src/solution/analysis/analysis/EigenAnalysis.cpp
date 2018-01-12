@@ -72,15 +72,15 @@
 #include <solution/analysis/integrator/EigenIntegrator.h>
 #include <domain/domain/Domain.h>
 #include "solution/analysis/ModelWrapper.h"
-#include "solution/SoluMethod.h"
+#include "solution/AnalysisAggregation.h"
 
 
 
 #include "utility/matrix/Matrix.h"
 
 //! @brief Constructor.
-XC::EigenAnalysis::EigenAnalysis(SoluMethod *metodo)
-  :Analysis(metodo), domainStamp(0) {}
+XC::EigenAnalysis::EigenAnalysis(AnalysisAggregation *analysis_aggregation)
+  :Analysis(analysis_aggregation), domainStamp(0) {}
 
 //! @brief Virtual constructor.
 XC::Analysis *XC::EigenAnalysis::getCopy(void) const

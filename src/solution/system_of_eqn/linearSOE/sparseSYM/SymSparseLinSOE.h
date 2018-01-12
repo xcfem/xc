@@ -72,8 +72,8 @@ class SymSparseLinSOE : public SparseSOEBase
   protected:
     virtual bool setSolver(LinearSOESolver *);
 
-    friend class SoluMethod;
-    SymSparseLinSOE(SoluMethod *,int lSparse= 0);
+    friend class AnalysisAggregation;
+    SymSparseLinSOE(AnalysisAggregation *,int lSparse= 0);
     SystemOfEqn *getCopy(void) const;
   public:
     ~SymSparseLinSOE(void);

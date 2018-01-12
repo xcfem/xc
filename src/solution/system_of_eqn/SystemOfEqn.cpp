@@ -61,26 +61,26 @@
 
 #include <solution/system_of_eqn/SystemOfEqn.h>
 #include <solution/analysis/model/AnalysisModel.h>
-#include "solution/SoluMethod.h"
+#include "solution/AnalysisAggregation.h"
 #include "solution/graph/graph/Graph.h"
 
 //! @brief Constructor. The integer \p classTag is provided to
 //! the constructor for the base class MovableObject.
-XC::SystemOfEqn::SystemOfEqn(SoluMethod *owr,int clasTag)
+XC::SystemOfEqn::SystemOfEqn(AnalysisAggregation *owr,int clasTag)
   : MovableObject(clasTag), EntCmd(owr) {}
 
 //! @brief Returns a pointer to the solution method that owns this object.
-XC::SoluMethod *XC::SystemOfEqn::getSoluMethod(void)
-  { return dynamic_cast<SoluMethod *>(Owner()); }
+XC::AnalysisAggregation *XC::SystemOfEqn::getAnalysisAggregation(void)
+  { return dynamic_cast<AnalysisAggregation *>(Owner()); }
 
 //! @brief Returns a const pointer to the solution method that owns this object.
-const XC::SoluMethod *XC::SystemOfEqn::getSoluMethod(void) const
-  { return dynamic_cast<const SoluMethod *>(Owner()); }
+const XC::AnalysisAggregation *XC::SystemOfEqn::getAnalysisAggregation(void) const
+  { return dynamic_cast<const AnalysisAggregation *>(Owner()); }
 
 //! @brief Returns a const pointer to the analysis model.
 const XC::AnalysisModel *XC::SystemOfEqn::getAnalysisModelPtr(void) const
   {
-    const SoluMethod *sm= getSoluMethod();
+    const AnalysisAggregation *sm= getAnalysisAggregation();
     assert(sm);
     return sm->getAnalysisModelPtr();
   }
@@ -88,7 +88,7 @@ const XC::AnalysisModel *XC::SystemOfEqn::getAnalysisModelPtr(void) const
 //! @brief Returns a pointer to the analysis model.
 XC::AnalysisModel *XC::SystemOfEqn::getAnalysisModelPtr(void)
   {
-    const SoluMethod *sm= getSoluMethod();
+    const AnalysisAggregation *sm= getAnalysisAggregation();
     assert(sm);
     return sm->getAnalysisModelPtr();
   }

@@ -72,7 +72,7 @@
 #include "domain/domain/subdomain/Subdomain.h"
 
 //! @brief Constructor.
-XC::DomainDecompAlgo::DomainDecompAlgo(SoluMethod *owr)
+XC::DomainDecompAlgo::DomainDecompAlgo(AnalysisAggregation *owr)
   :SolutionAlgorithm(owr,DomDecompALGORITHM_TAGS_DomainDecompAlgo) {}
 
 //! @brief Solve current step.

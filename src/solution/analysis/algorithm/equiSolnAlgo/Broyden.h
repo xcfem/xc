@@ -77,10 +77,10 @@ class Broyden: public BFBRoydenBase
     void BroydenUpdate(IncrementalIntegrator *theIntegrator, LinearSOE *theSOE,
 			Vector &du, int count);
 
-    friend class SoluMethod;
+    friend class AnalysisAggregation;
     friend class FEM_ObjectBroker;
-    Broyden(SoluMethod *,int tangent = CURRENT_TANGENT, int n= 10);    
-    Broyden(SoluMethod *,ConvergenceTest &theTest,int tangent = CURRENT_TANGENT, int n= 10);
+    Broyden(AnalysisAggregation *,int tangent = CURRENT_TANGENT, int n= 10);    
+    Broyden(AnalysisAggregation *,ConvergenceTest &theTest,int tangent = CURRENT_TANGENT, int n= 10);
     virtual SolutionAlgorithm *getCopy(void) const;
   public:
 

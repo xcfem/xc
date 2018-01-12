@@ -86,8 +86,8 @@ class UmfpackGenLinSOE : public FactoredSOEBase
   protected:
     bool setSolver(LinearSOESolver *);
 
-    friend class SoluMethod;
-    UmfpackGenLinSOE(SoluMethod *);        
+    friend class AnalysisAggregation;
+    UmfpackGenLinSOE(AnalysisAggregation *);        
     SystemOfEqn *getCopy(void) const;
   public:
     int setSize(Graph &theGraph);

@@ -84,8 +84,8 @@ class DistributedDiagonalSOE : public FactoredSOEBase, public DistributedLinSOE
     Vector dataShared;
     Vector vectShared;
 
-    friend class SoluMethod;
-    DistributedDiagonalSOE(SoluMethod *);
+    friend class AnalysisAggregation;
+    DistributedDiagonalSOE(AnalysisAggregation *);
     SystemOfEqn *getCopy(void) const;
   public:
     int setSize(Graph &theGraph);

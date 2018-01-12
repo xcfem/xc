@@ -80,9 +80,9 @@ class BFGS: public BFBRoydenBase
 		    LinearSOE *theSOE, Vector &du, Vector &b, 
 		    int count);
   protected:
-    friend class SoluMethod;
-    BFGS(SoluMethod *,int tangent = CURRENT_TANGENT, int n = 10);    
-    BFGS(SoluMethod *,ConvergenceTest &theTest, int tangent = CURRENT_TANGENT, int n = 10);
+    friend class AnalysisAggregation;
+    BFGS(AnalysisAggregation *,int tangent = CURRENT_TANGENT, int n = 10);    
+    BFGS(AnalysisAggregation *,ConvergenceTest &theTest, int tangent = CURRENT_TANGENT, int n = 10);
     virtual SolutionAlgorithm *getCopy(void) const;
   public:
     int solveCurrentStep(void);    

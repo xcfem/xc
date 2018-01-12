@@ -86,8 +86,8 @@ class ItpackLinSOE : public LinearSOEData
   protected:
     virtual bool setSolver(LinearSOESolver *);
 
-    friend class SoluMethod;
-    ItpackLinSOE(SoluMethod *);
+    friend class AnalysisAggregation;
+    ItpackLinSOE(AnalysisAggregation *);
     SystemOfEqn *getCopy(void) const;
   public:
     int setSize(Graph &theGraph);

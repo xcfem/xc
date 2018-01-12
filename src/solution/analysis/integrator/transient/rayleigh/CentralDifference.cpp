@@ -66,12 +66,12 @@
 #include <solution/analysis/model/AnalysisModel.h>
 
 //! @brief Constructor.
-XC::CentralDifference::CentralDifference(SoluMethod *owr)
+XC::CentralDifference::CentralDifference(AnalysisAggregation *owr)
   : RayleighBase(owr,INTEGRATOR_TAGS_CentralDifference),
     c2(0.0), c3(0.0), Utm1(0), Ut(0), U(0) {}
 
 //! @brief Constructor.
-XC::CentralDifference::CentralDifference(SoluMethod *owr,const RayleighDampingFactors &rF)
+XC::CentralDifference::CentralDifference(AnalysisAggregation *owr,const RayleighDampingFactors &rF)
   : RayleighBase(owr,INTEGRATOR_TAGS_CentralDifference,rF),
     c2(0.0), c3(0.0), Utm1(0), Ut(0), U(0) {}
 

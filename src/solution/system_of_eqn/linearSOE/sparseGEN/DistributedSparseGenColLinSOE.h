@@ -75,8 +75,8 @@ class DistributedSparseGenColLinSOE : public SparseGenColLinSOE, public Distribu
   protected:
     void calcNonZeros(Graph &);
 
-    friend class SoluMethod;
-    DistributedSparseGenColLinSOE(SoluMethod *);
+    friend class AnalysisAggregation;
+    DistributedSparseGenColLinSOE(AnalysisAggregation *);
     SystemOfEqn *getCopy(void) const;
   public:
     // these methods need to be rewritten

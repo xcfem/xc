@@ -71,10 +71,10 @@
 #include <solution/system_of_eqn/linearSOE/LinearSOE.h>
 #include <solution/analysis/convergenceTest/ConvergenceTest.h>
 #include <utility/matrix/ID.h>
-#include "solution/SoluMethod.h"
+#include "solution/AnalysisAggregation.h"
 
 //! @brief Constructor
-XC::NewtonRaphson::NewtonRaphson(SoluMethod *owr,int theTangentToUse)
+XC::NewtonRaphson::NewtonRaphson(AnalysisAggregation *owr,int theTangentToUse)
   :NewtonBased(owr,EquiALGORITHM_TAGS_NewtonRaphson,theTangentToUse) {}
 
 
@@ -103,7 +103,7 @@ int XC::NewtonRaphson::solveCurrentStep(void)
       }
 
     // set itself as the ConvergenceTest objects EquiSolnAlgo
-    theTest->set_owner(getSoluMethod());
+    theTest->set_owner(getAnalysisAggregation());
     if(theTest->start() < 0)
       {
         std::cerr << getClassName() << "::" << __FUNCTION__

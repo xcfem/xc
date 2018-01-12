@@ -65,7 +65,7 @@
 #include <solution/analysis/integrator/StaticIntegrator.h>
 #include <solution/analysis/convergenceTest/ConvergenceTest.h>
 #include "domain/domain/subdomain/Subdomain.h"
-#include "solution/SoluMethod.h"
+#include "solution/AnalysisAggregation.h"
 
 // AddingSensitivity:BEGIN //////////////////////////////////
 #ifdef _RELIABILITY
@@ -78,7 +78,7 @@
 #include "utility/matrix/ID.h"
 
 //! @brief Constructor.
-XC::StaticDomainDecompositionAnalysis::StaticDomainDecompositionAnalysis(Subdomain &the_Domain,SoluMethod *s)
+XC::StaticDomainDecompositionAnalysis::StaticDomainDecompositionAnalysis(Subdomain &the_Domain,AnalysisAggregation *s)
   :DomainDecompositionAnalysis(ANALYSIS_TAGS_StaticDomainDecompositionAnalysis, the_Domain) {}    
 
 //! @brief Destructor.

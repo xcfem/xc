@@ -85,7 +85,7 @@ class ConvergenceTest;
 class EquiSolnAlgo: public SolutionAlgorithm
   {
   protected:
-    EquiSolnAlgo(SoluMethod *,int clasTag);
+    EquiSolnAlgo(AnalysisAggregation *,int clasTag);
   public:
     // virtual functions
     virtual int solveCurrentStep(void) =0;

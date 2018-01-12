@@ -69,16 +69,16 @@
 #include <solution/analysis/model/AnalysisModel.h>
 #include <solution/analysis/integrator/IncrementalIntegrator.h>
 #include <solution/system_of_eqn/linearSOE/LinearSOE.h>
-#include "solution/SoluMethod.h"
+#include "solution/AnalysisAggregation.h"
 
 
-XC::EquiSolnAlgo::EquiSolnAlgo(SoluMethod *owr,int clasTag)
+XC::EquiSolnAlgo::EquiSolnAlgo(AnalysisAggregation *owr,int clasTag)
   :SolutionAlgorithm(owr,clasTag) {}
 
 //! @brief Returns a pointer to the convergence test.
 const XC::ConvergenceTest *XC::EquiSolnAlgo::getConvergenceTestPtr(void) const
   {
-    const SoluMethod *sm= getSoluMethod();
+    const AnalysisAggregation  *sm= getAnalysisAggregation();
     assert(sm);
     return sm->getConvergenceTestPtr();
   }
@@ -86,7 +86,7 @@ const XC::ConvergenceTest *XC::EquiSolnAlgo::getConvergenceTestPtr(void) const
 //! @brief Returns a pointer to the convergence test.
 XC::ConvergenceTest *XC::EquiSolnAlgo::getConvergenceTestPtr(void)
   {
-    SoluMethod *sm= getSoluMethod();
+    AnalysisAggregation  *sm= getAnalysisAggregation();
     assert(sm);
     return sm->getConvergenceTestPtr();
   }

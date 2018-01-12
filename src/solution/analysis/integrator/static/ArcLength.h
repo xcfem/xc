@@ -82,9 +82,9 @@ class ArcLength : public ArcLengthBase
   protected:
     virtual double getDLambdaUpdate(void) const;
 
-    friend class SoluMethod;
+    friend class AnalysisAggregation;
     friend class FEM_ObjectBroker;
-    ArcLength(SoluMethod *,double arcLength, double alpha = 1.0);
+    ArcLength(AnalysisAggregation *,double arcLength, double alpha = 1.0);
     Integrator *getCopy(void) const;
   public:
     void Print(std::ostream &s, int flag =0);    

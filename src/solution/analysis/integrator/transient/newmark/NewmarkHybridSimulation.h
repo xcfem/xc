@@ -81,10 +81,10 @@ class NewmarkHybridSimulation : public NewmarkBase2
     int sendData(CommParameters &);
     int recvData(const CommParameters &);
 
-    friend class SoluMethod;
-    NewmarkHybridSimulation(SoluMethod *);
-    NewmarkHybridSimulation(SoluMethod *,double gamma, double beta, ConvergenceTest &theTest);
-    NewmarkHybridSimulation(SoluMethod *,double gamma, double beta, ConvergenceTest &theTest,const RayleighDampingFactors &rF); 
+    friend class AnalysisAggregation;
+    NewmarkHybridSimulation(AnalysisAggregation *);
+    NewmarkHybridSimulation(AnalysisAggregation *,double gamma, double beta, ConvergenceTest &theTest);
+    NewmarkHybridSimulation(AnalysisAggregation *,double gamma, double beta, ConvergenceTest &theTest,const RayleighDampingFactors &rF); 
     Integrator *getCopy(void) const;
   public:
     

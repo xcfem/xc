@@ -86,12 +86,12 @@ class HHTGeneralizedExplicit : public HHTBase
     int sendData(CommParameters &);
     int recvData(const CommParameters &);
 
-    friend class SoluMethod;
-    HHTGeneralizedExplicit(SoluMethod *);
-    HHTGeneralizedExplicit(SoluMethod *,double rhoB, double alphaF);
-    HHTGeneralizedExplicit(SoluMethod *,double rhoB, double alphaF,const RayleighDampingFactors &rF);
-    HHTGeneralizedExplicit(SoluMethod *,double alphaI, double alphaF, double beta, double gamma);
-    HHTGeneralizedExplicit(SoluMethod *,double alphaI, double alphaF, double beta, double gamma,const RayleighDampingFactors &rF);
+    friend class AnalysisAggregation;
+    HHTGeneralizedExplicit(AnalysisAggregation *);
+    HHTGeneralizedExplicit(AnalysisAggregation *,double rhoB, double alphaF);
+    HHTGeneralizedExplicit(AnalysisAggregation *,double rhoB, double alphaF,const RayleighDampingFactors &rF);
+    HHTGeneralizedExplicit(AnalysisAggregation *,double alphaI, double alphaF, double beta, double gamma);
+    HHTGeneralizedExplicit(AnalysisAggregation *,double alphaI, double alphaF, double beta, double gamma,const RayleighDampingFactors &rF);
     Integrator *getCopy(void) const;
   public:
     

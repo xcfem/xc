@@ -63,7 +63,7 @@
 #include <utility/actor/channel/Channel.h>
 #include <utility/actor/objectBroker/FEM_ObjectBroker.h>
 
-XC::DistributedProfileSPDLinSOE::DistributedProfileSPDLinSOE(SoluMethod *owr)
+XC::DistributedProfileSPDLinSOE::DistributedProfileSPDLinSOE(AnalysisAggregation *owr)
   :ProfileSPDLinSOE(owr,LinSOE_TAGS_DistributedProfileSPDLinSOE), 
    DistributedBandLinSOE() {}
 

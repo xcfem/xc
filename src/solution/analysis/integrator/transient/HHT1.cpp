@@ -70,19 +70,19 @@
 #include "utility/actor/actor/ArrayCommMetaData.h"
 
 //! @brief Constructor.
-XC::HHT1::HHT1(SoluMethod *owr)
+XC::HHT1::HHT1(AnalysisAggregation *owr)
 :DampingFactorsIntegrator(owr,INTEGRATOR_TAGS_HHT1),
  alpha(0.5), gamma(1.0), beta(0), 
  c1(0.0), c2(0.0), c3(0.0), Ut(0), U(0), Ualpha(0) {}
 
 //! @brief Constructor.
-XC::HHT1::HHT1(SoluMethod *owr,double _alpha)
+XC::HHT1::HHT1(AnalysisAggregation *owr,double _alpha)
 :DampingFactorsIntegrator(owr,INTEGRATOR_TAGS_HHT1),
  alpha(_alpha), gamma(1.5-_alpha), beta((2-_alpha)*(2-_alpha)*0.25),
  c1(0.0), c2(0.0), c3(0.0), Ut(0),  U(0), Ualpha(0) {}
 
 //! @brief Constructor.
-XC::HHT1::HHT1(SoluMethod *owr,double _alpha,const RayleighDampingFactors &rF)
+XC::HHT1::HHT1(AnalysisAggregation *owr,double _alpha,const RayleighDampingFactors &rF)
   :DampingFactorsIntegrator(owr,INTEGRATOR_TAGS_HHT1,rF),
  alpha(_alpha), gamma(1.5-_alpha), beta((2-_alpha)*(2-_alpha)*0.25), 
  c1(0.0), c2(0.0), c3(0.0), Ut(0),  U(0), Ualpha(0) {}

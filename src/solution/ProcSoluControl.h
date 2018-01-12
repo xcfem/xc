@@ -31,7 +31,7 @@
 
 #include "xc_utils/src/nucleo/EntCmd.h"
 #include "analysis/MapModelWrapper.h"
-#include "MapSoluMethod.h"
+#include "AnalysisAggregationMap.h"
 
 namespace XC {
 
@@ -45,7 +45,7 @@ class ProcSoluControl: public EntCmd
   {
   private:
     MapModelWrapper solu_models; //!< Wrapper for the finite elment model
-    MapSoluMethod solu_methods; //!< Solution methods.
+    AnalysisAggregationMap solu_methods; //!< Solution methods.
 
     ProcSolu *getProcSolu(void);
     const ProcSolu *getProcSolu(void) const;
@@ -62,11 +62,11 @@ class ProcSoluControl: public EntCmd
     DataOutputHandler::map_output_handlers *getOutputHandlers(void) const;
     const ModelWrapper *getModelWrapper(const std::string &) const;
     ModelWrapper *getModelWrapper(const std::string &);
-    const SoluMethod *getSoluMethod(const std::string &) const;
-    SoluMethod *getSoluMethod(const std::string &);
+    const AnalysisAggregation *getAnalysisAggregation(const std::string &) const;
+    AnalysisAggregation *getAnalysisAggregation(const std::string &);
 
     MapModelWrapper &getModelWrapperContainer(void);
-    MapSoluMethod &getSoluMethodContainer(void);
+    AnalysisAggregationMap &getAnalysisAggregationContainer(void);
 
     void revertToStart(void);
     void clearAll(void);

@@ -49,7 +49,7 @@ class ArcLengthBase: public ProtoArcLength
     int sendData(CommParameters &);
     int recvData(const CommParameters &);
 
-    ArcLengthBase(SoluMethod *,int classTag,double ArcLength, double alpha = 1.0);
+    ArcLengthBase(AnalysisAggregation *,int classTag,double ArcLength, double alpha = 1.0);
   public:
 
     int sendSelf(CommParameters &);

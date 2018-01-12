@@ -80,9 +80,8 @@ class EigenAnalysis : public Analysis
   protected:
     int domainStamp;
 
-
     friend class ProcSolu;
-    EigenAnalysis(SoluMethod *metodo);
+    EigenAnalysis(AnalysisAggregation *analysis_aggregation);
     Analysis *getCopy(void) const;
   public:     
     virtual int analyze(int numModes);

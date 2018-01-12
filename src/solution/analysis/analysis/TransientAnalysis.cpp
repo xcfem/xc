@@ -64,7 +64,7 @@
 #include <solution/analysis/analysis/TransientAnalysis.h>
 
 //! @brief Constructor.
-XC::TransientAnalysis::TransientAnalysis(SoluMethod *method)
+XC::TransientAnalysis::TransientAnalysis(AnalysisAggregation *method)
   :Analysis(method) {}
 
 

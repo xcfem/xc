@@ -69,17 +69,17 @@
 #include "utility/actor/actor/ArrayCommMetaData.h"
 
 //! @brief Constructor.
-XC::Newmark::Newmark(SoluMethod *owr)
+XC::Newmark::Newmark(AnalysisAggregation *owr)
   : NewmarkBase2(owr,INTEGRATOR_TAGS_Newmark),
     displ(true), determiningMass(false) {}
 
 //! @brief Constructor.
-XC::Newmark::Newmark(SoluMethod *owr,double _gamma, double _beta, bool dispFlag)
+XC::Newmark::Newmark(AnalysisAggregation *owr,double _gamma, double _beta, bool dispFlag)
   : NewmarkBase2(owr,INTEGRATOR_TAGS_Newmark,_gamma,_beta),
     displ(dispFlag), determiningMass(false) {}
 
 //! @brief Constructor.
-XC::Newmark::Newmark(SoluMethod *owr,double _gamma, double _beta,const RayleighDampingFactors &rF,bool dispFlag)
+XC::Newmark::Newmark(AnalysisAggregation *owr,double _gamma, double _beta,const RayleighDampingFactors &rF,bool dispFlag)
   : NewmarkBase2(owr,INTEGRATOR_TAGS_Newmark,_gamma,_beta,rF),
     displ(dispFlag), determiningMass(false) {}
 

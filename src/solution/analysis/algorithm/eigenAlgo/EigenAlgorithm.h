@@ -85,7 +85,7 @@ class EigenAlgorithm : public SolutionAlgorithm
   protected:
     virtual void eigen_to_model(int numModes);
 
-    EigenAlgorithm(SoluMethod *,int classTag);
+    EigenAlgorithm(AnalysisAggregation *,int classTag);
   public:
     // pure virtural functions
     virtual int solveCurrentStep(int numModes) = 0;

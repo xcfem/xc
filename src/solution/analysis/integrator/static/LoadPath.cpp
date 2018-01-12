@@ -74,7 +74,7 @@
 //! \f$<\f$classTags.h\f$>\f$) is passed to the StaticIntegrator classes
 //! constructor. A vector object \p path is created which is a copy of
 //! \p loadPath and an index into this vector is set to \f$0\f$.
-XC::LoadPath::LoadPath(SoluMethod *owr,const Vector &theLoadPath)
+XC::LoadPath::LoadPath(AnalysisAggregation *owr,const Vector &theLoadPath)
   :StaticIntegrator(owr,INTEGRATOR_TAGS_LoadPath), loadPath(theLoadPath),
    currentStep(0) {}
 
@@ -84,7 +84,7 @@ XC::LoadPath::LoadPath(SoluMethod *owr,const Vector &theLoadPath)
 //! passed to the StaticIntegrator classes constructor. No vector object
 //! is created. Provided for the FEM\_ObjectBroker to create a blank
 //! object, recvSelf() should be invoked on this object.
-XC::LoadPath::LoadPath(SoluMethod *owr)
+XC::LoadPath::LoadPath(AnalysisAggregation *owr)
   :StaticIntegrator(owr,INTEGRATOR_TAGS_LoadPath), currentStep(0) {}
 
 //! @brief Virtual constructor.

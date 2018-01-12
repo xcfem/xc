@@ -60,12 +60,12 @@
 // What: "@(#) Integrator.C, revA"
 
 #include <solution/analysis/integrator/Integrator.h>
-#include "solution/SoluMethod.h"
+#include "solution/AnalysisAggregation.h"
 #include "solution/analysis/model/AnalysisModel.h"
 #include "domain/mesh/element/utils/RayleighDampingFactors.h"
 
 //! @brief Constructor.
-XC::Integrator::Integrator(SoluMethod *owr,int clasTag)
+XC::Integrator::Integrator(AnalysisAggregation *owr,int clasTag)
   :MovableObject(clasTag), EntCmd(owr) {}
 
 void XC::Integrator::applyLoadModel(double newTime)
@@ -90,18 +90,18 @@ int XC::Integrator::commitModel(void)
   { return getAnalysisModelPtr()->commitDomain(); }
 
 //! @brief Returns a pointer to the solution method that owns this object.
-XC::SoluMethod *XC::Integrator::getSoluMethod(void)
-  { return dynamic_cast<SoluMethod *>(Owner()); }
+XC::AnalysisAggregation *XC::Integrator::getAnalysisAggregation(void)
+  { return dynamic_cast<AnalysisAggregation *>(Owner()); }
 
 //! @brief Returns a const pointer to the solution method that owns this object.
-const XC::SoluMethod *XC::Integrator::getSoluMethod(void) const
-  { return dynamic_cast<const SoluMethod *>(Owner()); }
+const XC::AnalysisAggregation *XC::Integrator::getAnalysisAggregation(void) const
+  { return dynamic_cast<const AnalysisAggregation *>(Owner()); }
 
 
 //! @brief Returns a pointer to the analysis model.
 const XC::AnalysisModel *XC::Integrator::getAnalysisModelPtr(void) const
   {
-    const SoluMethod *sm= getSoluMethod();
+    const AnalysisAggregation *sm= getAnalysisAggregation();
     assert(sm);
     return sm->getAnalysisModelPtr();
   }
@@ -109,7 +109,7 @@ const XC::AnalysisModel *XC::Integrator::getAnalysisModelPtr(void) const
 //! @brief Returns a pointer to the analysis model.
 XC::AnalysisModel *XC::Integrator::getAnalysisModelPtr(void)
   {
-    const SoluMethod *sm= getSoluMethod();
+    const AnalysisAggregation *sm= getAnalysisAggregation();
     assert(sm);
     return sm->getAnalysisModelPtr();
   }

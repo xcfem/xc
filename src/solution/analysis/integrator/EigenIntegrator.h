@@ -90,8 +90,8 @@ class EigenIntegrator: public Integrator
     EigenSOE *getEigenSOEPtr(void);
     const EigenSOE *getEigenSOEPtr(void) const;
 
-    friend class SoluMethod;
-    EigenIntegrator(SoluMethod *);
+    friend class AnalysisAggregation ;
+    EigenIntegrator(AnalysisAggregation *);
     Integrator *getCopy(void) const;
   public:
      

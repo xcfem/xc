@@ -24,33 +24,33 @@
 // along with this program.
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
-//MapSoluMethod.cc
+//AnalysisAggregationMap.cc
 
-#include "MapSoluMethod.h"
+#include "AnalysisAggregationMap.h"
 #include "domain/domain/Domain.h"
 #include "ProcSolu.h"
 
 #include "solution/analysis/ModelWrapper.h"
-#include "solution/SoluMethod.h"
+#include "solution/AnalysisAggregation.h"
 
 #include "boost/any.hpp"
 
 
 //! @brief Default constructor.
-XC::MapSoluMethod::MapSoluMethod(ProcSoluControl *owr)
+XC::AnalysisAggregationMap::AnalysisAggregationMap(ProcSoluControl *owr)
   : EntCmd(owr) {}
 
 //! @brief Return true if the solution method exists
-bool XC::MapSoluMethod::existeSoluMethod(const std::string &cod) const
+bool XC::AnalysisAggregationMap::AnalysisAggregationExists(const std::string &cod) const
   { 
     map_solu_method::const_iterator i= solu_methods.find(cod);
     return (i != solu_methods.end());
   }
 
 //! @brief Returns a const pointer to the solution method.
-const XC::SoluMethod *XC::MapSoluMethod::getSoluMethod(const std::string &cod) const
+const XC::AnalysisAggregation *XC::AnalysisAggregationMap::getAnalysisAggregation(const std::string &cod) const
   {
-    const SoluMethod *retval= nullptr;
+    const AnalysisAggregation *retval= nullptr;
     map_solu_method::const_iterator i= solu_methods.find(cod);
     if(i != solu_methods.end())
       retval= &((*i).second);
@@ -58,9 +58,9 @@ const XC::SoluMethod *XC::MapSoluMethod::getSoluMethod(const std::string &cod) c
   }
 
 //! @brief Returns a pointer to the solution method.
-XC::SoluMethod *XC::MapSoluMethod::getSoluMethod(const std::string &cod)
+XC::AnalysisAggregation *XC::AnalysisAggregationMap::getAnalysisAggregation(const std::string &cod)
   {
-    SoluMethod *retval= nullptr;
+    AnalysisAggregation *retval= nullptr;
     map_solu_method::iterator i= solu_methods.find(cod);
     if(i != solu_methods.end())
       retval= &((*i).second);
@@ -69,34 +69,34 @@ XC::SoluMethod *XC::MapSoluMethod::getSoluMethod(const std::string &cod)
 
 //! @brief Creates a new solution method con el código being passed as parameter.
 //! @brief Si ya existe returns a pointer al mismo.
-XC::SoluMethod &XC::MapSoluMethod::creaSoluMethod(const std::string &cod,ModelWrapper *sm)
+XC::AnalysisAggregation &XC::AnalysisAggregationMap::createAnalysisAggregation(const std::string &cod,ModelWrapper *sm)
   {
-    SoluMethod *retval= nullptr;
-    if(existeSoluMethod(cod))
-      retval= getSoluMethod(cod);
+    AnalysisAggregation *retval= nullptr;
+    if(AnalysisAggregationExists(cod))
+      retval= getAnalysisAggregation(cod);
     else 
-      retval= &(solu_methods[cod]= SoluMethod(nullptr,sm));
+      retval= &(solu_methods[cod]= AnalysisAggregation(nullptr,sm));
     return *retval;
   }
 
 //! @brief Creates a new solution method con el código being passed as parameter.
-XC::SoluMethod &XC::MapSoluMethod::newSoluMethod(const std::string &cod_solu_method,const std::string &cod_solu_model)
+XC::AnalysisAggregation &XC::AnalysisAggregationMap::newAnalysisAggregation(const std::string &cod_solu_method,const std::string &cod_solu_model)
   {
     ProcSoluControl *sc= dynamic_cast<ProcSoluControl *>(Owner());
     ModelWrapper *mdl= sc->getModelWrapper(cod_solu_model);
-    SoluMethod &retval= creaSoluMethod(cod_solu_method,mdl);
+    AnalysisAggregation &retval= createAnalysisAggregation(cod_solu_method,mdl);
     return retval;
   }
 
 //! @brief Returns todo a su estado original.
-void XC::MapSoluMethod::revertToStart(void)
+void XC::AnalysisAggregationMap::revertToStart(void)
   {
     for(iterator i= solu_methods.begin();i!=solu_methods.end();i++)
       (*i).second.revertToStart();
   }
 
 //! @brief Clears all.
-void XC::MapSoluMethod::clearAll(void)
+void XC::AnalysisAggregationMap::clearAll(void)
   { solu_methods.clear(); }
 
 

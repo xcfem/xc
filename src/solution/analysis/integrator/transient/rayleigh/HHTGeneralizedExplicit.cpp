@@ -70,11 +70,11 @@
 #include <cmath>
 
 //! @brief Constructor.
-XC::HHTGeneralizedExplicit::HHTGeneralizedExplicit(SoluMethod *owr)
+XC::HHTGeneralizedExplicit::HHTGeneralizedExplicit(AnalysisAggregation *owr)
   : HHTBase(owr,INTEGRATOR_TAGS_HHTGeneralizedExplicit,1.0) {}
 
 //! @brief Constructor.
-XC::HHTGeneralizedExplicit::HHTGeneralizedExplicit(SoluMethod *owr,double _rhoB, double _alphaF)
+XC::HHTGeneralizedExplicit::HHTGeneralizedExplicit(AnalysisAggregation *owr,double _rhoB, double _alphaF)
   : HHTBase(owr,INTEGRATOR_TAGS_HHTGeneralizedExplicit,((2.0-_rhoB)/(1.0+_rhoB))),
     alphaF(_alphaF)
   {
@@ -85,7 +85,7 @@ XC::HHTGeneralizedExplicit::HHTGeneralizedExplicit(SoluMethod *owr,double _rhoB,
   }
 
 //! @brief Constructor.
-XC::HHTGeneralizedExplicit::HHTGeneralizedExplicit(SoluMethod *owr,double _rhoB, double _alphaF,const RayleighDampingFactors &rF)
+XC::HHTGeneralizedExplicit::HHTGeneralizedExplicit(AnalysisAggregation *owr,double _rhoB, double _alphaF,const RayleighDampingFactors &rF)
     : HHTBase(owr,INTEGRATOR_TAGS_HHTGeneralizedExplicit,((2.0-_rhoB)/(1.0+_rhoB)),rF), alphaF(_alphaF)
   {
     beta= ((5.0-3*_rhoB+3*_alphaF*(-2.0-_rhoB+pow(_rhoB,2))
@@ -95,12 +95,12 @@ XC::HHTGeneralizedExplicit::HHTGeneralizedExplicit(SoluMethod *owr,double _rhoB,
   }
 
 //! @brief Constructor.
-XC::HHTGeneralizedExplicit::HHTGeneralizedExplicit(SoluMethod *owr,double _alphaI, double _alphaF,
+XC::HHTGeneralizedExplicit::HHTGeneralizedExplicit(AnalysisAggregation *owr,double _alphaI, double _alphaF,
     double _beta, double _gamma)
   : HHTBase(owr,INTEGRATOR_TAGS_HHTGeneralizedExplicit,_alphaI,_beta,_gamma), alphaF(_alphaF) {}
 
 //! @brief Constructor.
-XC::HHTGeneralizedExplicit::HHTGeneralizedExplicit(SoluMethod *owr,double _alphaI, double _alphaF, double _beta, double _gamma,const RayleighDampingFactors &rF)
+XC::HHTGeneralizedExplicit::HHTGeneralizedExplicit(AnalysisAggregation *owr,double _alphaI, double _alphaF, double _beta, double _gamma,const RayleighDampingFactors &rF)
     : HHTBase(owr,INTEGRATOR_TAGS_HHTGeneralizedExplicit,_alphaI,_beta,_gamma,rF), alphaF(_alphaF) {}
 
 

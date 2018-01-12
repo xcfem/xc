@@ -73,7 +73,7 @@
 
 
 //! @brief Constructor.
-XC::TransientIntegrator::TransientIntegrator(SoluMethod *owr,int clasTag)
+XC::TransientIntegrator::TransientIntegrator(AnalysisAggregation *owr,int clasTag)
   : IncrementalIntegrator(owr,clasTag) {}
 
 //! @brief Builds tangent stiffness matrix.

@@ -64,7 +64,7 @@
 #include <utility/actor/channel/Channel.h>
 #include <utility/actor/objectBroker/FEM_ObjectBroker.h>
 
-XC::DistributedBandSPDLinSOE::DistributedBandSPDLinSOE(SoluMethod *owr)
+XC::DistributedBandSPDLinSOE::DistributedBandSPDLinSOE(AnalysisAggregation *owr)
   :BandSPDLinSOE(owr,LinSOE_TAGS_DistributedBandSPDLinSOE), DistributedBandLinSOE() {}
 
 //! @brief Calcula los valores de numSubD y numSuperD.

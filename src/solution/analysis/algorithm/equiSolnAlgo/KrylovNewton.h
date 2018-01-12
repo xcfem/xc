@@ -101,9 +101,9 @@ class KrylovNewton: public EquiSolnAlgo
     // dimension is the current dimension of the subspace
     int leastSquares(int dimension);
 
-    friend class SoluMethod;
+    friend class AnalysisAggregation;
     friend class FEM_ObjectBroker;
-    KrylovNewton(SoluMethod *,int tangent = CURRENT_TANGENT, int maxDim = 3);    
+    KrylovNewton(AnalysisAggregation *,int tangent = CURRENT_TANGENT, int maxDim = 3);    
     virtual SolutionAlgorithm *getCopy(void) const;
   public:
     int solveCurrentStep(void);    

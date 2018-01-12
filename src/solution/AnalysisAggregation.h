@@ -24,10 +24,10 @@
 // along with this program.
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
-//SoluMethod.h
+//AnalysisAggregation.h
 
-#ifndef SOLUMETHOD_H
-#define SOLUMETHOD_H
+#ifndef ANALYSISAGGREGATION_H
+#define ANALYSISAGGREGATION_H
 
 #include "xc_utils/src/nucleo/EntCmd.h"
 #include "utility/handler/DataOutputHandler.h"
@@ -86,7 +86,7 @@ class ID;
 //!   form \f$Ax = b\f$, where \f$A\f$ is a matrix and \f$x\f$
 //!   and \f$b\f$ are vectors.
 //! - Convergence test.
-class SoluMethod: public EntCmd
+class AnalysisAggregation: public EntCmd
   {
     ModelWrapper *base; //!< Wrapper for the finite element model.
     SolutionAlgorithm *theSolnAlgo; //!< Solution algorithm.
@@ -115,13 +115,13 @@ class SoluMethod: public EntCmd
     void copia_conv_test(ConvergenceTest *);
 
     void libera(void);
-    void copia(const SoluMethod &);
+    void copia(const AnalysisAggregation &);
 
   public:
-    SoluMethod(Analysis *a= nullptr,ModelWrapper *b= nullptr);
-    SoluMethod(const SoluMethod &);
-    SoluMethod &operator=(const SoluMethod &);
-    ~SoluMethod(void);
+    AnalysisAggregation(Analysis *a= nullptr,ModelWrapper *b= nullptr);
+    AnalysisAggregation(const AnalysisAggregation &);
+    AnalysisAggregation &operator=(const AnalysisAggregation &);
+    ~AnalysisAggregation(void);
 
     inline ModelWrapper *getModelWrapperPtr(void)
       { return base; }

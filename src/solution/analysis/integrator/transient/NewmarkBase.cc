@@ -36,15 +36,15 @@
 #include "utility/actor/actor/ArrayCommMetaData.h"
 
 //! @brief Constructor.
-XC::NewmarkBase::NewmarkBase(SoluMethod *owr,int classTag)
+XC::NewmarkBase::NewmarkBase(AnalysisAggregation *owr,int classTag)
  : DampingFactorsIntegrator(owr,classTag),gamma(0.0), c2(0.0), c3(0.0) {}
 
 //! @brief Constructor.
-XC::NewmarkBase::NewmarkBase(SoluMethod *owr,int classTag, double _gamma)
+XC::NewmarkBase::NewmarkBase(AnalysisAggregation *owr,int classTag, double _gamma)
  : DampingFactorsIntegrator(owr,INTEGRATOR_TAGS_Newmark), gamma(_gamma), c2(0.0), c3(0.0) {}
 
 //! @brief Constructor.
-XC::NewmarkBase::NewmarkBase(SoluMethod *owr,int classTag,double _gamma,const RayleighDampingFactors &rF)
+XC::NewmarkBase::NewmarkBase(AnalysisAggregation *owr,int classTag,double _gamma,const RayleighDampingFactors &rF)
   : DampingFactorsIntegrator(owr,classTag,rF),  gamma(_gamma),  c2(0.0), c3(0.0) {}
 
 //! @brief Populate U, Udot and Udotdot by iterating through the DOF_Groups and 

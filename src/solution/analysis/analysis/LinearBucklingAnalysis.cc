@@ -40,13 +40,13 @@
 #include "solution/analysis/integrator/StaticIntegrator.h"
 #include "solution/analysis/integrator/eigen/LinearBucklingIntegrator.h"
 #include "domain/domain/Domain.h"
-#include "solution/SoluMethod.h"
+#include "solution/AnalysisAggregation.h"
 #include "solution/ProcSolu.h"
 
 
 //! @brief Constructor.
-XC::LinearBucklingAnalysis::LinearBucklingAnalysis(SoluMethod *metodo,SoluMethod *esolu)
-  :StaticAnalysis(metodo), eigen_solu(esolu), linearBucklingEigenAnalysis(esolu),
+XC::LinearBucklingAnalysis::LinearBucklingAnalysis(AnalysisAggregation *analysis_aggregation,AnalysisAggregation *esolu)
+  :StaticAnalysis(analysis_aggregation), eigen_solu(esolu), linearBucklingEigenAnalysis(esolu),
    numModes(0),linear_buckling_analysis_step(0) {}
 
 //! @brief Clears all object members (constraint handler, analysis model,...).

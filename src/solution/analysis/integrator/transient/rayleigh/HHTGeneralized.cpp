@@ -66,31 +66,31 @@
 #include <solution/analysis/model/AnalysisModel.h>
 
 //! @brief Constructor.
-XC::HHTGeneralized::HHTGeneralized(SoluMethod *owr)
+XC::HHTGeneralized::HHTGeneralized(AnalysisAggregation *owr)
     : RayleighBase(owr,INTEGRATOR_TAGS_HHTGeneralized),
     alphaI(1.0), alphaF(1.0), beta(0.0), gamma(0.0),c1(0.0), c2(0.0), c3(0.0) {}
 
 //! @brief Constructor.
-XC::HHTGeneralized::HHTGeneralized(SoluMethod *owr,double _rhoInf)
+XC::HHTGeneralized::HHTGeneralized(AnalysisAggregation *owr,double _rhoInf)
     : RayleighBase(owr,INTEGRATOR_TAGS_HHTGeneralized),
     alphaI((2.0-_rhoInf)/(1.0+_rhoInf)), alphaF(1.0/(1.0+_rhoInf)),
     beta(1.0/(1.0+_rhoInf)/(1.0+_rhoInf)), gamma(0.5*(3.0-_rhoInf)/(1.0+_rhoInf)),
     c1(0.0), c2(0.0), c3(0.0) {}
 
 //! @brief Constructor.
-XC::HHTGeneralized::HHTGeneralized(SoluMethod *owr,double _rhoInf,const RayleighDampingFactors &rF)
+XC::HHTGeneralized::HHTGeneralized(AnalysisAggregation *owr,double _rhoInf,const RayleighDampingFactors &rF)
     : RayleighBase(owr,INTEGRATOR_TAGS_HHTGeneralized,rF), alphaI((2.0-_rhoInf)/(1.0+_rhoInf)), alphaF(1.0/(1.0+_rhoInf)),
     beta(1.0/(1.0+_rhoInf)/(1.0+_rhoInf)), gamma(0.5*(3.0-_rhoInf)/(1.0+_rhoInf)),
     c1(0.0), c2(0.0), c3(0.0) {}
 
 //! @brief Constructor.
-XC::HHTGeneralized::HHTGeneralized(SoluMethod *owr,double _alphaI, double _alphaF, double _beta, double _gamma)
+XC::HHTGeneralized::HHTGeneralized(AnalysisAggregation *owr,double _alphaI, double _alphaF, double _beta, double _gamma)
     : RayleighBase(owr,INTEGRATOR_TAGS_HHTGeneralized),
     alphaI(_alphaI), alphaF(_alphaF),
     beta(_beta), gamma(_gamma), c1(0.0), c2(0.0), c3(0.0) {}
 
 //! @brief Constructor.
-XC::HHTGeneralized::HHTGeneralized(SoluMethod *owr,double _alphaI, double _alphaF,
+XC::HHTGeneralized::HHTGeneralized(AnalysisAggregation *owr,double _alphaI, double _alphaF,
     double _beta, double _gamma,const RayleighDampingFactors &rF)
     : RayleighBase(owr,INTEGRATOR_TAGS_HHTGeneralized,rF),
     alphaI(_alphaI), alphaF(_alphaF),

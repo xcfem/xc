@@ -72,15 +72,15 @@ void XC::BandSPDLinSOE::inicA(const size_t &hsz)
     A.Zero();
   }
 
-XC::BandSPDLinSOE::BandSPDLinSOE(SoluMethod *owr)
+XC::BandSPDLinSOE::BandSPDLinSOE(AnalysisAggregation *owr)
   :FactoredSOEBase(owr,LinSOE_TAGS_BandSPDLinSOE), half_band(0){}
 
 
-XC::BandSPDLinSOE::BandSPDLinSOE(SoluMethod *owr,int classTag)
+XC::BandSPDLinSOE::BandSPDLinSOE(AnalysisAggregation *owr,int classTag)
   :FactoredSOEBase(owr,classTag), half_band(0) {}
 
 
-XC::BandSPDLinSOE::BandSPDLinSOE(SoluMethod *owr,int N, int numSuper,BandSPDLinSolver *the_Solver)
+XC::BandSPDLinSOE::BandSPDLinSOE(AnalysisAggregation *owr,int N, int numSuper,BandSPDLinSolver *the_Solver)
   :FactoredSOEBase(owr,LinSOE_TAGS_BandSPDLinSOE,N), half_band(0)
   {
     half_band = numSuper+1;

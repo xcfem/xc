@@ -90,12 +90,12 @@ class HHTGeneralized : public RayleighBase
     int sendData(CommParameters &);
     int recvData(const CommParameters &);
 
-    friend class SoluMethod;
-    HHTGeneralized(SoluMethod *);
-    HHTGeneralized(SoluMethod *,double rhoInf);
-    HHTGeneralized(SoluMethod *,double rhoInf,const RayleighDampingFactors &rF);
-    HHTGeneralized(SoluMethod *,double alphaI, double alphaF, double beta, double gamma);
-    HHTGeneralized(SoluMethod *,double alphaI, double alphaF, double beta, double gamma,const RayleighDampingFactors &rF);
+    friend class AnalysisAggregation;
+    HHTGeneralized(AnalysisAggregation *);
+    HHTGeneralized(AnalysisAggregation *,double rhoInf);
+    HHTGeneralized(AnalysisAggregation *,double rhoInf,const RayleighDampingFactors &rF);
+    HHTGeneralized(AnalysisAggregation *,double alphaI, double alphaF, double beta, double gamma);
+    HHTGeneralized(AnalysisAggregation *,double alphaI, double alphaF, double beta, double gamma,const RayleighDampingFactors &rF);
     Integrator *getCopy(void) const;
   public:
 

@@ -89,13 +89,13 @@ class HHTHybridSimulation : public HHTBase
     int sendData(CommParameters &);
     int recvData(const CommParameters &);
 
-    friend class SoluMethod;
-    HHTHybridSimulation(SoluMethod *);
-    HHTHybridSimulation(SoluMethod *,double rhoInf, ConvergenceTest &theTest);
-    HHTHybridSimulation(SoluMethod *,double rhoInf, ConvergenceTest &theTest,const RayleighDampingFactors &rF);
-    HHTHybridSimulation(SoluMethod *,double alphaI, double alphaF,
+    friend class AnalysisAggregation;
+    HHTHybridSimulation(AnalysisAggregation *);
+    HHTHybridSimulation(AnalysisAggregation *,double rhoInf, ConvergenceTest &theTest);
+    HHTHybridSimulation(AnalysisAggregation *,double rhoInf, ConvergenceTest &theTest,const RayleighDampingFactors &rF);
+    HHTHybridSimulation(AnalysisAggregation *,double alphaI, double alphaF,
         double beta, double gamma, ConvergenceTest &theTest);
-    HHTHybridSimulation(SoluMethod *,double alphaI, double alphaF,
+    HHTHybridSimulation(AnalysisAggregation *,double alphaI, double alphaF,
 			double beta, double gamma, ConvergenceTest &theTest,const RayleighDampingFactors &rF);
     Integrator *getCopy(void) const;
   public:

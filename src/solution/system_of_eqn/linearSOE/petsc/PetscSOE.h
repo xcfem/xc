@@ -98,8 +98,8 @@ class PetscSOE: public FactoredSOEBase, public DistributedLinSOE
       { return theChannels; }
     virtual bool setSolver(PetscSolver *);
 
-    friend class SoluMethod;
-    PetscSOE(SoluMethod *,int blockSize=1);    
+    friend class AnalysisAggregation;
+    PetscSOE(AnalysisAggregation *,int blockSize=1);    
     SystemOfEqn *getCopy(void) const;    
   public:
     ~PetscSOE(void);

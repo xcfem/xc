@@ -72,7 +72,7 @@
 #include <solution/graph/graph/VertexIter.h>
 #include <cmath>
 
-XC::ItpackLinSOE::ItpackLinSOE(SoluMethod *owr)
+XC::ItpackLinSOE::ItpackLinSOE(AnalysisAggregation *owr)
   :LinearSOEData(owr,LinSOE_TAGS_ItpackLinSOE), nnz(0), Aformed(false) {}
 
 bool XC::ItpackLinSOE::setSolver(LinearSOESolver *newSolver)

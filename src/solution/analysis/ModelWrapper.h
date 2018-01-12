@@ -40,7 +40,7 @@ class DOF_Numberer;
 class FEM_ObjectBroker;
 class ID;
 class CommParameters;
-class SoluMethod;
+class AnalysisAggregation;
 class Integrator;
 
 //! @ingroup Analysis
@@ -77,14 +77,14 @@ class ModelWrapper: public EntCmd
     void copia(const ModelWrapper &otro);
     void libera(void);
 
-    SoluMethod *getSoluMethod(void);
-    const SoluMethod *getSoluMethod(void) const;
+    AnalysisAggregation *getAnalysisAggregation(void);
+    const AnalysisAggregation *getAnalysisAggregation(void) const;
   protected:
     friend class FEProblem;
-    friend class SoluMethod;
+    friend class AnalysisAggregation;
 
   public:
-    ModelWrapper(SoluMethod *owr= nullptr);
+    ModelWrapper(AnalysisAggregation *owr= nullptr);
     ModelWrapper(const ModelWrapper &);
     ModelWrapper &operator=(const ModelWrapper &);
     ~ModelWrapper(void);

@@ -82,9 +82,9 @@ class CentralDifferenceNoDamping: public CentralDifferenceBase
   private:
     ResponseQuantities U; //!< response quantities at time t + deltaT
 
-    friend class SoluMethod;
+    friend class AnalysisAggregation;
     friend class FEM_ObjectBroker;
-    CentralDifferenceNoDamping(SoluMethod *);
+    CentralDifferenceNoDamping(AnalysisAggregation *);
     Integrator *getCopy(void) const;
   public:
 

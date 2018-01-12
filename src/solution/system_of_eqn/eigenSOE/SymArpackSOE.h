@@ -74,9 +74,9 @@ class SymArpackSOE : public ArpackSOE
     bool setSolver(EigenSolver *);
 
 
-    friend class SoluMethod;
+    friend class AnalysisAggregation;
     friend class FEM_ObjectBroker;
-    SymArpackSOE(SoluMethod *,double shift = 0.0);        
+    SymArpackSOE(AnalysisAggregation *,double shift = 0.0);        
     SystemOfEqn *getCopy(void) const;
   public:
     virtual ~SymArpackSOE(void);

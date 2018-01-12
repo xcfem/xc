@@ -72,7 +72,7 @@
 #include <utility/Timer.h>
 
 //! @brief Constructor
-XC::Linear::Linear(SoluMethod *owr)
+XC::Linear::Linear(AnalysisAggregation *owr)
   :EquiSolnAlgo(owr,EquiALGORITHM_TAGS_Linear) {}
 
 

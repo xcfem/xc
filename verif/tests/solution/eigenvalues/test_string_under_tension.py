@@ -77,17 +77,17 @@ sm= solModels.newModelWrapper("sm")
 cHandler= sm.newConstraintHandler("plain_handler")
 numberer= sm.newNumberer("default_numberer")
 numberer.useAlgorithm("simple")
-solMethods= solCtrl.getSoluMethodContainer
-smt= solMethods.newSoluMethod("smt","sm")
-solAlgo= smt.newSolutionAlgorithm("newton_raphson_soln_algo")
-ctest= smt.newConvergenceTest("norm_unbalance_conv_test")
+analysisAggregations= solCtrl.getAnalysisAggregationContainer
+analysisAggregation= analysisAggregations.newAnalysisAggregation("analysisAggregation","sm")
+solAlgo= analysisAggregation.newSolutionAlgorithm("newton_raphson_soln_algo")
+ctest= analysisAggregation.newConvergenceTest("norm_unbalance_conv_test")
 ctest.tol= 1e-8
 ctest.maxNumIter= 100
-integ= smt.newIntegrator("load_control_integrator",xc.Vector([]))
+integ= analysisAggregation.newIntegrator("load_control_integrator",xc.Vector([]))
 integ.dLambda1= DInc
-soe= smt.newSystemOfEqn("band_gen_lin_soe")
+soe= analysisAggregation.newSystemOfEqn("band_gen_lin_soe")
 solver= soe.newSolver("band_gen_lin_lapack_solver")
-analysis= solu.newAnalysis("static_analysis","smt","")
+analysis= solu.newAnalysis("static_analysis","analysisAggregation","")
 result= analysis.analyze(Nstep)
 
 elements= preprocessor.getElementLoader
@@ -105,13 +105,13 @@ sm= solModels.newModelWrapper("sm")
 cHandler= sm.newConstraintHandler("transformation_constraint_handler")
 numberer= sm.newNumberer("default_numberer")
 numberer.useAlgorithm("rcm")
-solMethods= solCtrl.getSoluMethodContainer
-smt= solMethods.newSoluMethod("smt","sm")
-solAlgo= smt.newSolutionAlgorithm("frequency_soln_algo")
-integ= smt.newIntegrator("eigen_integrator",xc.Vector([1.0,1,1.0,1.0]))
-soe= smt.newSystemOfEqn("sym_band_eigen_soe")
+analysisAggregations= solCtrl.getAnalysisAggregationContainer
+analysisAggregation= analysisAggregations.newAnalysisAggregation("analysisAggregation","sm")
+solAlgo= analysisAggregation.newSolutionAlgorithm("frequency_soln_algo")
+integ= analysisAggregation.newIntegrator("eigen_integrator",xc.Vector([1.0,1,1.0,1.0]))
+soe= analysisAggregation.newSystemOfEqn("sym_band_eigen_soe")
 solver= soe.newSolver("sym_band_eigen_solver")
-analysis= solu.newAnalysis("eigen_analysis","smt","")
+analysis= solu.newAnalysis("eigen_analysis","analysisAggregation","")
 
 
 analOk= analysis.analyze(3)

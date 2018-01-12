@@ -67,7 +67,7 @@
 
 namespace XC {
 class EquiSolnAlgo;
-class SoluMethod;
+class AnalysisAggregation;
 
 //! @ingroup CTest
 //
@@ -79,8 +79,8 @@ class SoluMethod;
 //! the interface that all subclasses must provide.
 class ConvergenceTest: public MovableObject, public EntWOwner
   {
-    SoluMethod *getSoluMethod(void);
-    const SoluMethod *getSoluMethod(void) const;
+    AnalysisAggregation *getAnalysisAggregation(void);
+    const AnalysisAggregation *getAnalysisAggregation(void) const;
   protected:
     int currentIter; //!< number of times test() has been invokes since last start()
     int maxNumIter;  //!< max number of iterations

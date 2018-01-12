@@ -63,7 +63,7 @@
 
 #include <solution/analysis/analysis/Analysis.h>
 #include "solution/analysis/ModelWrapper.h"
-#include "solution/SoluMethod.h"
+#include "solution/AnalysisAggregation.h"
 #include "solution/ProcSolu.h"
 #include "solution/analysis/model/AnalysisModel.h"
 
@@ -73,7 +73,7 @@
 //!
 //! All analysis are associated with a single solution method, this constructor
 //! sets up the link.
-XC::Analysis::Analysis(SoluMethod *s)
+XC::Analysis::Analysis(AnalysisAggregation *s)
   :analysis_result(-100), solution_method(s) {}
 
 int XC::Analysis::newStepDomain(AnalysisModel *theModel,const double &dT)

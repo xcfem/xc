@@ -67,10 +67,10 @@
 #include <utility/matrix/Matrix.h>
 #include <utility/matrix/Vector.h>
 #include <utility/matrix/ID.h>
-#include "solution/SoluMethod.h"
+#include "solution/AnalysisAggregation.h"
 
 //! @brief Constructor
-XC::KrylovNewton::KrylovNewton(SoluMethod *owr,int theTangentToUse, int maxDim)
+XC::KrylovNewton::KrylovNewton(AnalysisAggregation *owr,int theTangentToUse, int maxDim)
   :EquiSolnAlgo(owr,EquiALGORITHM_TAGS_KrylovNewton),
    tangent(theTangentToUse), v(0), Av(0), AvData(0), rData(0), work(0), lwork(0),
    numEqns(0), maxDimension(maxDim)
@@ -127,7 +127,7 @@ int XC::KrylovNewton::solveCurrentStep(void)
 
 
     // set itself as the XC::ConvergenceTest objects XC::EquiSolnAlgo
-    theTest->set_owner(getSoluMethod());
+    theTest->set_owner(getAnalysisAggregation());
     if(theTest->start() < 0)
       {
         std::cerr << getClassName() << "::" << __FUNCTION__

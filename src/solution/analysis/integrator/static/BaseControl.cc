@@ -68,7 +68,7 @@
 #include <utility/matrix/Vector.h>
 
 //! @brief Constructor.
-XC::BaseControl::BaseControl(SoluMethod *owr,int classTag,int numIncr)
+XC::BaseControl::BaseControl(AnalysisAggregation *owr,int classTag,int numIncr)
 :StaticIntegrator(owr,classTag), specNumIncrStep(numIncr), numIncrLastStep(numIncr)
   { setup_numIncr(numIncr); }
 

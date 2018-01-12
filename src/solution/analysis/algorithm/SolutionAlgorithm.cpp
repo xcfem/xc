@@ -50,23 +50,24 @@
                                                                         
                                                                         
 #include "SolutionAlgorithm.h"
-#include "solution/SoluMethod.h"
-#include <utility/recorder/Recorder.h>
-#include <utility/recorder/DamageRecorder.h>
-#include <utility/recorder/DatastoreRecorder.h>
-#include <utility/recorder/DriftRecorder.h>
-#include <utility/recorder/ElementRecorder.h>
-#include <utility/recorder/EnvelopeElementRecorder.h>
-#include <utility/recorder/EnvelopeNodeRecorder.h>
-#include <utility/recorder/FilePlotter.h>
-#include <utility/recorder/NodeRecorder.h>
-#include <utility/recorder/GSA_Recorder.h>
-#include <utility/recorder/MaxNodeDispRecorder.h>
-#include <utility/recorder/PatternRecorder.h>
+#include "solution/AnalysisAggregation.h"
+// #include <utility/recorder/Recorder.h>
+// #include <utility/recorder/DamageRecorder.h>
+// #include <utility/recorder/DatastoreRecorder.h>
+// #include <utility/recorder/DriftRecorder.h>
+// #include <utility/recorder/ElementRecorder.h>
+// #include <utility/recorder/EnvelopeElementRecorder.h>
+// #include <utility/recorder/EnvelopeNodeRecorder.h>
+// #include <utility/recorder/FilePlotter.h>
+// #include <utility/recorder/NodeRecorder.h>
+// #include <utility/recorder/GSA_Recorder.h>
+// #include <utility/recorder/MaxNodeDispRecorder.h>
+// #include <utility/recorder/PatternRecorder.h>
 #include <solution/analysis/model/AnalysisModel.h>
 
 
-XC::SolutionAlgorithm::SolutionAlgorithm(SoluMethod *owr,int clasTag)
+//! @brief Constructor.
+XC::SolutionAlgorithm::SolutionAlgorithm(AnalysisAggregation *owr,int clasTag)
   :MovableObject(clasTag), ObjWithRecorders(owr,nullptr)
   {
     Domain *dom= get_domain_ptr();
@@ -74,23 +75,32 @@ XC::SolutionAlgorithm::SolutionAlgorithm(SoluMethod *owr,int clasTag)
       ObjWithRecorders::setLinks(dom);
   }
 
-//! @brief Perform the appropiate changes as a result of a change in the domain.
+//! @brief Perform the appropiate modifications as a result of a change
+//! in the domain.
+//!
+//! Is called by the Analysis if the domain changes. It is called after
+//! domainChange() has been called on the ConstraintHandler,
+//! DOF\_Numberer and the Integrator and after setSize() has been
+//! called on the SystemOfEqn object. For base class nothing is done and
+//! \f$0\f$ is returned. The subclasses can provide their own implementation
+//! of this method if anything needs to be done, e.g. memory allocation,
+//! To return \f$0\f$ if successful, a negative number if not.
 int XC::SolutionAlgorithm::domainChanged(void)
   { return 0; }
 
 //! @brief Return a pointer to the solution method which owns this object.
-XC::SoluMethod *XC::SolutionAlgorithm::getSoluMethod(void)
-  { return dynamic_cast<SoluMethod *>(Owner()); }
+XC::AnalysisAggregation *XC::SolutionAlgorithm::getAnalysisAggregation(void)
+  { return dynamic_cast<AnalysisAggregation *>(Owner()); }
 
 //! @brief Return a pointer to the solution method which owns this object.
-const XC::SoluMethod *XC::SolutionAlgorithm::getSoluMethod(void) const
-  { return dynamic_cast<const SoluMethod *>(Owner()); }
+const XC::AnalysisAggregation *XC::SolutionAlgorithm::getAnalysisAggregation(void) const
+  { return dynamic_cast<const AnalysisAggregation *>(Owner()); }
 
 
 //! @brief Return a const pointer to the analysis model.
 const XC::AnalysisModel *XC::SolutionAlgorithm::getAnalysisModelPtr(void) const
   {
-    const SoluMethod *sm= getSoluMethod();
+    const AnalysisAggregation *sm= getAnalysisAggregation();
     assert(sm);
     return sm->getAnalysisModelPtr();
   }
@@ -98,7 +108,7 @@ const XC::AnalysisModel *XC::SolutionAlgorithm::getAnalysisModelPtr(void) const
 //! @brief Return a pointer to the analysis model.
 XC::AnalysisModel *XC::SolutionAlgorithm::getAnalysisModelPtr(void)
   {
-    const SoluMethod *sm= getSoluMethod();
+    const AnalysisAggregation *sm= getAnalysisAggregation();
     assert(sm);
     return sm->getAnalysisModelPtr();
   }
@@ -106,7 +116,7 @@ XC::AnalysisModel *XC::SolutionAlgorithm::getAnalysisModelPtr(void)
 //! @brief Return a pointer to the integrator.
 XC::Integrator *XC::SolutionAlgorithm::getIntegratorPtr(void)
   {
-    SoluMethod *sm= getSoluMethod();
+    AnalysisAggregation *sm= getAnalysisAggregation();
     assert(sm);
     return sm->getIntegratorPtr();
   }
@@ -114,7 +124,7 @@ XC::Integrator *XC::SolutionAlgorithm::getIntegratorPtr(void)
 //! @brief Return a const pointer to the integrator.
 const XC::Integrator *XC::SolutionAlgorithm::getIntegratorPtr(void) const
   {
-    const SoluMethod *sm= getSoluMethod();
+    const AnalysisAggregation *sm= getAnalysisAggregation();
     assert(sm);
     return sm->getIntegratorPtr();
   }
@@ -122,7 +132,7 @@ const XC::Integrator *XC::SolutionAlgorithm::getIntegratorPtr(void) const
 //! @brief Return a pointer to the linear system of equations.
 XC::LinearSOE *XC::SolutionAlgorithm::getLinearSOEPtr(void)
   {
-    SoluMethod *sm= getSoluMethod();
+    AnalysisAggregation *sm= getAnalysisAggregation();
     assert(sm);
     return sm->getLinearSOEPtr();
   }
@@ -130,7 +140,7 @@ XC::LinearSOE *XC::SolutionAlgorithm::getLinearSOEPtr(void)
 //! @brief Return a const pointer to the linear system of equations.
 const XC::LinearSOE *XC::SolutionAlgorithm::getLinearSOEPtr(void) const
   {
-    const SoluMethod *sm= getSoluMethod();
+    const AnalysisAggregation *sm= getAnalysisAggregation();
     assert(sm);
     return sm->getLinearSOEPtr();
   }
@@ -138,7 +148,7 @@ const XC::LinearSOE *XC::SolutionAlgorithm::getLinearSOEPtr(void) const
 //! @brief Return a pointer to the eigen system of equations.
 XC::EigenSOE *XC::SolutionAlgorithm::getEigenSOEPtr(void)
   {
-    SoluMethod *sm= getSoluMethod();
+    AnalysisAggregation *sm= getAnalysisAggregation();
     assert(sm);
     return sm->getEigenSOEPtr();
   }
@@ -146,7 +156,7 @@ XC::EigenSOE *XC::SolutionAlgorithm::getEigenSOEPtr(void)
 //! @brief Return a const pointer to the eigen system of equations.
 const XC::EigenSOE *XC::SolutionAlgorithm::getEigenSOEPtr(void) const
   {
-    const SoluMethod *sm= getSoluMethod();
+    const AnalysisAggregation *sm= getAnalysisAggregation();
     assert(sm);
     return sm->getEigenSOEPtr();
   }
@@ -154,7 +164,7 @@ const XC::EigenSOE *XC::SolutionAlgorithm::getEigenSOEPtr(void) const
 //! @brief Return a const pointer to the DomainSolver.
 const XC::DomainSolver *XC::SolutionAlgorithm::getDomainSolverPtr(void) const
   {
-    const SoluMethod *sm= getSoluMethod();
+    const AnalysisAggregation *sm= getAnalysisAggregation();
     assert(sm);
     return sm->getDomainSolverPtr();
   }
@@ -162,7 +172,7 @@ const XC::DomainSolver *XC::SolutionAlgorithm::getDomainSolverPtr(void) const
 //! @brief Return a pointer to the DomainSolver.
 XC::DomainSolver *XC::SolutionAlgorithm::getDomainSolverPtr(void)
   {
-    SoluMethod *sm= getSoluMethod();
+    AnalysisAggregation *sm= getAnalysisAggregation();
     assert(sm);
     return sm->getDomainSolverPtr();
   }
@@ -170,7 +180,7 @@ XC::DomainSolver *XC::SolutionAlgorithm::getDomainSolverPtr(void)
 //! @brief Return a const pointer to the subdomain.
 const XC::Subdomain *XC::SolutionAlgorithm::getSubdomainPtr(void) const
   {
-    const SoluMethod *sm= getSoluMethod();
+    const AnalysisAggregation *sm= getAnalysisAggregation();
     assert(sm);
     return sm->getSubdomainPtr();
   }
@@ -178,7 +188,7 @@ const XC::Subdomain *XC::SolutionAlgorithm::getSubdomainPtr(void) const
 //! @brief Return a pointer to the subdomain.
 XC::Subdomain *XC::SolutionAlgorithm::getSubdomainPtr(void)
   {
-    SoluMethod *sm= getSoluMethod();
+    AnalysisAggregation *sm= getAnalysisAggregation();
     assert(sm);
     return sm->getSubdomainPtr();
   }
@@ -186,7 +196,7 @@ XC::Subdomain *XC::SolutionAlgorithm::getSubdomainPtr(void)
 //! @brief Return a pointer to the domain.
 XC::Domain *XC::SolutionAlgorithm::get_domain_ptr(void)
   {
-    SoluMethod *sm= getSoluMethod();
+    AnalysisAggregation *sm= getAnalysisAggregation();
     assert(sm);
     return sm->getDomainPtr();
   }

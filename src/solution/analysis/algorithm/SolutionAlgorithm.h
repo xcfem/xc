@@ -74,7 +74,7 @@ class AnalysisModel;
 class Integrator;
 class SystemOfEqn;
 class Recorder;
-class SoluMethod;
+class AnalysisAggregation;
 
 //! @ingroup Analysis
 //
@@ -82,20 +82,23 @@ class SoluMethod;
 //
 //! @ingroup AnalAlgo
 //
-//! @brief Base class for solution algorithms.  A SolutionAlgorithm object performs the steps in the analysis by specifying the sequence of operations to be performed by members in the analysis aggregation.
+//! @brief Base class for solution algorithms.
+//!
+//! A SolutionAlgorithm object performs the steps in the analysis by
+//! specifying the sequence of operations to be performed by members
+//! in the analysis aggregation.
 class SolutionAlgorithm: public MovableObject, public ObjWithRecorders
   {
   protected:
-    SoluMethod *getSoluMethod(void);
-    const SoluMethod *getSoluMethod(void) const;
+    AnalysisAggregation *getAnalysisAggregation(void);
+    const AnalysisAggregation *getAnalysisAggregation(void) const;
 
     virtual Domain *get_domain_ptr(void);
     int sendData(CommParameters &);
     int recvData(const CommParameters &);
 
-
-    SolutionAlgorithm(SoluMethod *,int classTag);
-    friend class SoluMethod;
+    SolutionAlgorithm(AnalysisAggregation *,int classTag);
+    friend class AnalysisAggregation;
     friend class FEM_ObjectBroker;
     virtual SolutionAlgorithm *getCopy(void) const= 0;
   public:

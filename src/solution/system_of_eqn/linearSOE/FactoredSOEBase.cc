@@ -29,7 +29,7 @@
 #include <solution/system_of_eqn/linearSOE/FactoredSOEBase.h>
 
 //! @brief Constructor.
-XC::FactoredSOEBase::FactoredSOEBase(SoluMethod *owr,int classtag,int N)
+XC::FactoredSOEBase::FactoredSOEBase(AnalysisAggregation *owr,int classtag,int N)
   :LinearSOEData(owr,classtag,N), factored(false){}
 
 

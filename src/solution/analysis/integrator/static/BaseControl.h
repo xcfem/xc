@@ -47,7 +47,7 @@ class BaseControl: public StaticIntegrator
 
     void setup_numIncr(const int &);
 
-    BaseControl(SoluMethod *,int classTag,int numIncr= 1);
+    BaseControl(AnalysisAggregation *,int classTag,int numIncr= 1);
   public:
 
     inline double factor(void) const

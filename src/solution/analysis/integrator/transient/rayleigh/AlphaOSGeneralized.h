@@ -84,12 +84,12 @@ class AlphaOSGeneralized: public AlphaOSBase
     int recvData(const CommParameters &);
     virtual int formElementResidual(void);
 
-    friend class SoluMethod;
-    AlphaOSGeneralized(SoluMethod *);
-    AlphaOSGeneralized(SoluMethod *,double rhoInf);
-    AlphaOSGeneralized(SoluMethod *,double rhoInf,const RayleighDampingFactors &rF);
-    AlphaOSGeneralized(SoluMethod *,double alphaI, double alphaF, double beta, double gamma);
-    AlphaOSGeneralized(SoluMethod *,double alphaI, double alphaF, double beta, double gamma,const RayleighDampingFactors &rF);
+    friend class AnalysisAggregation;
+    AlphaOSGeneralized(AnalysisAggregation *);
+    AlphaOSGeneralized(AnalysisAggregation *,double rhoInf);
+    AlphaOSGeneralized(AnalysisAggregation *,double rhoInf,const RayleighDampingFactors &rF);
+    AlphaOSGeneralized(AnalysisAggregation *,double alphaI, double alphaF, double beta, double gamma);
+    AlphaOSGeneralized(AnalysisAggregation *,double alphaI, double alphaF, double beta, double gamma,const RayleighDampingFactors &rF);
     Integrator *getCopy(void) const;
 
   public:

@@ -67,7 +67,7 @@
 
 #include <solution/analysis/integrator/static/DisplacementControl.h>
 #include <solution/analysis/model/AnalysisModel.h>
-#include "solution/SoluMethod.h"
+#include "solution/AnalysisAggregation.h"
 #include <solution/system_of_eqn/linearSOE/LinearSOE.h>
 #include <utility/matrix/Vector.h>
 #include <domain/domain/Domain.h>
@@ -77,13 +77,13 @@
 
 
 //! @brief Constructor.
-XC::DisplacementControl::DisplacementControl(SoluMethod *owr) 
+XC::DisplacementControl::DisplacementControl(AnalysisAggregation *owr) 
   :DispBase(owr,INTEGRATOR_TAGS_DisplacementControl,1),
    theNode(-1), theDof(-1), theIncrement(1.0),
    theDofID(0), minIncrement(1.0), maxIncrement(1.0) {}
 
 //! @brief Constructor.
-XC::DisplacementControl::DisplacementControl(SoluMethod *owr,int node, int dof, 
+XC::DisplacementControl::DisplacementControl(AnalysisAggregation *owr,int node, int dof, 
 					 double increment, 
 					 int numIncr,
 					 double min, double max) 
@@ -118,7 +118,7 @@ int XC::DisplacementControl::commit(void)
 //! @brief Returns a pointer to the domain.
 XC::Domain *XC::DisplacementControl::getDomainPtr(void)
   {
-    SoluMethod *sm= getSoluMethod();
+    AnalysisAggregation  *sm= getAnalysisAggregation();
     assert(sm);
     return sm->getDomainPtr();
   }
@@ -126,7 +126,7 @@ XC::Domain *XC::DisplacementControl::getDomainPtr(void)
 //! @brief Returns a pointer to the domain.
 const XC::Domain *XC::DisplacementControl::getDomainPtr(void) const
   {
-    const SoluMethod *sm= getSoluMethod();
+    const AnalysisAggregation  *sm= getAnalysisAggregation();
     assert(sm);
     return sm->getDomainPtr();
   }

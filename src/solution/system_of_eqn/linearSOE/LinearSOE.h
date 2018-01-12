@@ -99,7 +99,7 @@ class LinearSOE : public SystemOfEqn
     virtual bool setSolver(LinearSOESolver *);
     int setSolverSize(void);
 
-    LinearSOE(SoluMethod *,int classTag);
+    LinearSOE(AnalysisAggregation *,int classTag);
   public:
     virtual ~LinearSOE(void);
 

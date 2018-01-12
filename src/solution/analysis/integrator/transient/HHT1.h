@@ -83,10 +83,10 @@ class HHT1: public DampingFactorsIntegrator
     int sendData(CommParameters &);
     int recvData(const CommParameters &);
 
-    friend class SoluMethod;
-    HHT1(SoluMethod *);
-    HHT1(SoluMethod *,double alpha);
-    HHT1(SoluMethod *,double alpha,const RayleighDampingFactors &rF);        
+    friend class AnalysisAggregation;
+    HHT1(AnalysisAggregation *);
+    HHT1(AnalysisAggregation *,double alpha);
+    HHT1(AnalysisAggregation *,double alpha,const RayleighDampingFactors &rF);        
     Integrator *getCopy(void) const;
   public:
     // methods which define what the FE_Element and DOF_Groups add

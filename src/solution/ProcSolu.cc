@@ -41,7 +41,7 @@
 
 
 #include "solution/analysis/ModelWrapper.h"
-#include "solution/SoluMethod.h"
+#include "solution/AnalysisAggregation.h"
 
 #include <domain/domain/Domain.h>
 
@@ -59,32 +59,32 @@ void XC::ProcSolu::libera_analysis(void)
       }
   }
 
-bool XC::ProcSolu::alloc_analysis(const std::string &nmb,const std::string &cod_solu_metodo,const std::string &cod_solu_eigenM)
+bool XC::ProcSolu::alloc_analysis(const std::string &nmb,const std::string &analysis_aggregation_code,const std::string &cod_solu_eigenM)
   {
     libera_analysis();
-    SoluMethod *metodo= solu_control.getSoluMethod(cod_solu_metodo);
-    if(metodo)
+    AnalysisAggregation *analysis_aggregation= solu_control.getAnalysisAggregation(analysis_aggregation_code);
+    if(analysis_aggregation)
       {
-        if(metodo->CheckPointers())
+        if(analysis_aggregation->CheckPointers())
           {
             if(nmb=="direct_integration_analysis")
-              theAnalysis= new DirectIntegrationAnalysis(metodo);
+              theAnalysis= new DirectIntegrationAnalysis(analysis_aggregation);
             else if(nmb=="eigen_analysis")
-              theAnalysis= new EigenAnalysis(metodo);
+              theAnalysis= new EigenAnalysis(analysis_aggregation);
             else if(nmb=="modal_analysis")
-              theAnalysis= new ModalAnalysis(metodo);
+              theAnalysis= new ModalAnalysis(analysis_aggregation);
             else if(nmb=="linear_buckling_analysis")
               {
-                SoluMethod *eigenM= solu_control.getSoluMethod(cod_solu_eigenM);
+                AnalysisAggregation *eigenM= solu_control.getAnalysisAggregation(cod_solu_eigenM);
                 if(eigenM)
-                  theAnalysis= new LinearBucklingAnalysis(metodo,eigenM);
+                  theAnalysis= new LinearBucklingAnalysis(analysis_aggregation,eigenM);
               }
             else if(nmb=="linear_buckling_eigen_analysis") //Sólo se usa dentro de LinearBucklingAnalysis.
-              theAnalysis= new LinearBucklingEigenAnalysis(metodo);
+              theAnalysis= new LinearBucklingEigenAnalysis(analysis_aggregation);
             else if(nmb=="static_analysis")
-              theAnalysis= new StaticAnalysis(metodo);
+              theAnalysis= new StaticAnalysis(analysis_aggregation);
             else if(nmb=="variable_time_step_direct_integration_analysis")
-              theAnalysis= new VariableTimeStepDirectIntegrationAnalysis(metodo);
+              theAnalysis= new VariableTimeStepDirectIntegrationAnalysis(analysis_aggregation);
 	  }
         else
           std::cerr << getClassName() << "::" << __FUNCTION__
@@ -94,7 +94,7 @@ bool XC::ProcSolu::alloc_analysis(const std::string &nmb,const std::string &cod_
     else
       std::cerr << getClassName() << "::" << __FUNCTION__
 	        << "; analysis method: '"
-                << cod_solu_metodo << "' not found, in command: " << nmb << std::endl;
+                << analysis_aggregation_code << "' not found, in command: " << nmb << std::endl;
     if(theAnalysis)
       theAnalysis->set_owner(this);
 
@@ -114,9 +114,9 @@ void XC::ProcSolu::copia_analysis(Analysis *ptr)
   }
 
 //! @brief Defines type of analysis (static, dynamic,...)
-XC::Analysis &XC::ProcSolu::newAnalysis(const std::string &nmb,const std::string &cod_solu_metodo,const std::string &cod_solu_eigenM)
+XC::Analysis &XC::ProcSolu::newAnalysis(const std::string &nmb,const std::string &analysis_aggregation_code,const std::string &cod_solu_eigenM)
   {
-    alloc_analysis(nmb,cod_solu_metodo,cod_solu_eigenM);
+    alloc_analysis(nmb,analysis_aggregation_code,cod_solu_eigenM);
     assert(theAnalysis);
     return *theAnalysis;
   }

@@ -168,13 +168,17 @@ XC::ObjWithRecorders::~ObjWithRecorders(void)
   }
 
 //! @brief Adds a recorder.
+//!
+//! To add a recorder object \p theRecorder to the
+//! SolutionAlgorithm. returns \f$0\f$.
 int XC::ObjWithRecorders::addRecorder(Recorder &theRecorder)
   {
     theRecorders.push_back(&theRecorder);
     return 0;
   }
 
-//! @brief Ejecuta los recorders sobre el tag being passed as parameter.
+//! @brief To invoke {\em record(cTag, timeStamp)} on any Recorder objects
+//! which have been added.
 int XC::ObjWithRecorders::record(int cTag, double timeStamp)
   {
     for(lista_recorders::iterator i= theRecorders.begin();i!= theRecorders.end(); i++)
@@ -182,7 +186,8 @@ int XC::ObjWithRecorders::record(int cTag, double timeStamp)
     return 0;
   }
 
-//! @brief Rearranca los recorders.
+//! @brief To invoke {\em restart()} on any Recorder objects
+//! which have been added.
 void XC::ObjWithRecorders::restart(void)
   {
     for(lista_recorders::iterator i= theRecorders.begin();i!= theRecorders.end(); i++)

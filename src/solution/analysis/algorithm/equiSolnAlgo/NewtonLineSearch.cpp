@@ -70,11 +70,11 @@
 #include <solution/system_of_eqn/linearSOE/LinearSOE.h>
 #include <solution/analysis/convergenceTest/ConvergenceTest.h>
 #include <utility/matrix/ID.h>
-#include "solution/SoluMethod.h"
+#include "solution/AnalysisAggregation.h"
 
 
 //! @brief Null Constructor
-XC::NewtonLineSearch::NewtonLineSearch(SoluMethod *owr)
+XC::NewtonLineSearch::NewtonLineSearch(AnalysisAggregation *owr)
   :EquiSolnAlgo(owr,EquiALGORITHM_TAGS_NewtonLineSearch), theLineSearch(nullptr) {}
 
 XC::NewtonLineSearch::NewtonLineSearch(const NewtonLineSearch &otro)
@@ -148,7 +148,7 @@ int XC::NewtonLineSearch::solveCurrentStep(void)
     theLineSearch->newStep(*theSOE);
 
     // set itself as the XC::ConvergenceTest objects XC::EquiSolnAlgo
-    theTest->set_owner(getSoluMethod());
+    theTest->set_owner(getAnalysisAggregation());
     if(theTest->start() < 0)
       {
         std::cerr << getClassName() << "::" << __FUNCTION__ << "; ";

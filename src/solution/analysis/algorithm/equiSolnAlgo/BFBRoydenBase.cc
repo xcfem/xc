@@ -47,12 +47,12 @@ void XC::BFBRoydenBase::alloc(const ConvergenceTest *theT)
   }
 
 //! @brief Constructor
-XC::BFBRoydenBase::BFBRoydenBase(SoluMethod *owr,int classTag,int theTangentToUse, int n)
+XC::BFBRoydenBase::BFBRoydenBase(AnalysisAggregation *owr,int classTag,int theTangentToUse, int n)
   :EquiSolnConvAlgo(owr,classTag,nullptr), localTest(nullptr) , tangent(theTangentToUse), numberLoops(n),s(n+3),z(n+3)
   {}
 
 //! @brief Constructor
-XC::BFBRoydenBase::BFBRoydenBase(SoluMethod *owr,int classTag,ConvergenceTest &theT, int theTangentToUse, int n)
+XC::BFBRoydenBase::BFBRoydenBase(AnalysisAggregation *owr,int classTag,ConvergenceTest &theT, int theTangentToUse, int n)
   :EquiSolnConvAlgo(owr,classTag,&theT), localTest(nullptr), tangent(theTangentToUse), numberLoops(n),s(n+3),z(n+3)
   {
     alloc(theTest);

@@ -39,7 +39,7 @@
 
 
 //! @brief Constructor.
-XC::ArpackSOE::ArpackSOE(SoluMethod *owr,int classTag, double theShift)
+XC::ArpackSOE::ArpackSOE(AnalysisAggregation *owr,int classTag, double theShift)
   :EigenSOE(owr,classTag), shift(theShift) {}
 
 

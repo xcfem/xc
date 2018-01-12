@@ -104,9 +104,9 @@ class LoadPath: public StaticIntegrator
     int sendData(CommParameters &);
     int recvData(const CommParameters &);
 
-    friend class SoluMethod;
-    LoadPath(SoluMethod *);
-    LoadPath(SoluMethod *,const Vector &theLoadPath);
+    friend class AnalysisAggregation;
+    LoadPath(AnalysisAggregation *);
+    LoadPath(AnalysisAggregation *,const Vector &theLoadPath);
     Integrator *getCopy(void) const;
   public:
 

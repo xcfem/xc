@@ -130,11 +130,11 @@ cHandler.alphaMP= 1.0e15
 numberer= sm.newNumberer("default_numberer")
 numberer.useAlgorithm("rcm")
 
-solMethods= solCtrl.getSoluMethodContainer
-smt= solMethods.newSoluMethod("smt","sm")
-solAlgo= smt.newSolutionAlgorithm("linear_soln_algo")
-integ= smt.newIntegrator("load_control_integrator",xc.Vector([]))
-soe= smt.newSystemOfEqn("band_spd_lin_soe")
+analysisAggregations= solCtrl.getAnalysisAggregationContainer
+analysisAggregation= analysisAggregations.newAnalysisAggregation("analysisAggregation","sm")
+solAlgo= analysisAggregation.newSolutionAlgorithm("linear_soln_algo")
+integ= analysisAggregation.newIntegrator("load_control_integrator",xc.Vector([]))
+soe= analysisAggregation.newSystemOfEqn("band_spd_lin_soe")
 solver= soe.newSolver("band_spd_lin_lapack_solver")
 
 
@@ -142,7 +142,7 @@ solver= soe.newSolver("band_spd_lin_lapack_solver")
 
 
 def solve():
-  analysis= solu.newAnalysis("static_analysis","smt","")
+  analysis= solu.newAnalysis("static_analysis","analysisAggregation","")
   result= analysis.analyze(1)
   return result
 

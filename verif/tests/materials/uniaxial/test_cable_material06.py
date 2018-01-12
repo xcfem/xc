@@ -89,17 +89,17 @@ sm= solModels.newModelWrapper("sm")
 numberer= sm.newNumberer("default_numberer")
 numberer.useAlgorithm("simple")
 cHandler= sm.newConstraintHandler("plain_handler")
-solMethods= solCtrl.getSoluMethodContainer
-smt= solMethods.newSoluMethod("smt","sm")
-solAlgo= smt.newSolutionAlgorithm("newton_raphson_soln_algo")
-ctest= smt.newConvergenceTest("norm_unbalance_conv_test")
+analysisAggregations= solCtrl.getAnalysisAggregationContainer
+analysisAggregation= analysisAggregations.newAnalysisAggregation("analysisAggregation","sm")
+solAlgo= analysisAggregation.newSolutionAlgorithm("newton_raphson_soln_algo")
+ctest= analysisAggregation.newConvergenceTest("norm_unbalance_conv_test")
 ctest.tol= 1e-6
 ctest.maxNumIter= 100
-integ= smt.newIntegrator("load_control_integrator",xc.Vector([]))
+integ= analysisAggregation.newIntegrator("load_control_integrator",xc.Vector([]))
 integ.dLambda1= DInc
-soe= smt.newSystemOfEqn("band_gen_lin_soe")
+soe= analysisAggregation.newSystemOfEqn("band_gen_lin_soe")
 solver= soe.newSolver("band_gen_lin_lapack_solver")
-analysis= solu.newAnalysis("static_analysis","smt","")
+analysis= solu.newAnalysis("static_analysis","analysisAggregation","")
 result= analysis.analyze(Nstep)
 
 tagN1= l.firstNode.tag

@@ -62,14 +62,14 @@
 #include <solution/graph/graph/Vertex.h>
 #include <solution/graph/graph/VertexIter.h>
 
-XC::BandGenLinSOE::BandGenLinSOE(SoluMethod *owr)
+XC::BandGenLinSOE::BandGenLinSOE(AnalysisAggregation *owr)
   :FactoredSOEBase(owr,LinSOE_TAGS_BandGenLinSOE), numSuperD(0), numSubD(0) {}
 
-XC::BandGenLinSOE::BandGenLinSOE(SoluMethod *owr,int classTag)
+XC::BandGenLinSOE::BandGenLinSOE(AnalysisAggregation *owr,int classTag)
   :FactoredSOEBase(owr,classTag), numSuperD(0), numSubD(0) {}
 
 
-XC::BandGenLinSOE::BandGenLinSOE(SoluMethod *owr,int N, int numSuperDiag, int numSubDiag,BandGenLinSolver *theSolvr)
+XC::BandGenLinSOE::BandGenLinSOE(AnalysisAggregation *owr,int N, int numSuperDiag, int numSubDiag,BandGenLinSolver *theSolvr)
   :FactoredSOEBase(owr,LinSOE_TAGS_BandGenLinSOE,N),
    numSuperD(numSuperDiag), numSubD(numSubDiag)
   {

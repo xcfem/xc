@@ -77,8 +77,8 @@ class PeriodicNewton: public NewtonBased
     int sendData(CommParameters &);
     int recvData(const CommParameters &);
 
-    friend class SoluMethod;
-    PeriodicNewton(SoluMethod *,int tangent = CURRENT_TANGENT, int maxCount = 3);
+    friend class AnalysisAggregation;
+    PeriodicNewton(AnalysisAggregation *,int tangent = CURRENT_TANGENT, int maxCount = 3);
     virtual SolutionAlgorithm *getCopy(void) const;
   public:
     int solveCurrentStep(void);    

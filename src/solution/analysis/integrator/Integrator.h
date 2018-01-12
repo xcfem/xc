@@ -76,7 +76,7 @@ class Vector;
 class ID;
 class FEM_ObjectBroker;
 class RayleighDampingFactors;
-class SoluMethod;
+class AnalysisAggregation ;
 
 //! @ingroup Analysis
 //
@@ -90,8 +90,8 @@ class SoluMethod;
 class Integrator: public MovableObject, public EntCmd
   {
   protected:
-    SoluMethod *getSoluMethod(void);
-    const SoluMethod *getSoluMethod(void) const;
+    AnalysisAggregation  *getAnalysisAggregation (void);
+    const AnalysisAggregation  *getAnalysisAggregation (void) const;
     void applyLoadModel(double newTime);
     int updateModel(void);
     int updateModel(double newTime, double dT);
@@ -105,8 +105,8 @@ class Integrator: public MovableObject, public EntCmd
     virtual AnalysisModel *getAnalysisModelPtr(void);
     virtual const AnalysisModel *getAnalysisModelPtr(void) const;
 
-    Integrator(SoluMethod *,int classTag);
-    friend class SoluMethod;
+    Integrator(AnalysisAggregation *,int classTag);
+    friend class AnalysisAggregation ;
     virtual Integrator *getCopy(void) const= 0;
   public:
     inline virtual ~Integrator(void) {}

@@ -30,11 +30,11 @@
 
 
 //! @brief Constructor.
-XC::DampingFactorsIntegrator::DampingFactorsIntegrator(SoluMethod *owr,int classTag)
+XC::DampingFactorsIntegrator::DampingFactorsIntegrator(AnalysisAggregation *owr,int classTag)
   : TransientIntegrator(owr,classTag), rayFactors() {}
 
 //! @brief Constructor.
-XC::DampingFactorsIntegrator::DampingFactorsIntegrator(SoluMethod *owr,int classTag,const RayleighDampingFactors &rF)
+XC::DampingFactorsIntegrator::DampingFactorsIntegrator(AnalysisAggregation *owr,int classTag,const RayleighDampingFactors &rF)
   : TransientIntegrator(owr,classTag), rayFactors(rF) {}
 
 void XC::DampingFactorsIntegrator::setRayleighDampingFactors(void)

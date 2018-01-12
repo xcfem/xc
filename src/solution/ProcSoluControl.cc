@@ -31,7 +31,7 @@
 #include "ProcSolu.h"
 
 #include "solution/analysis/ModelWrapper.h"
-#include "solution/SoluMethod.h"
+#include "solution/AnalysisAggregation.h"
 
 #include "boost/any.hpp"
 
@@ -86,7 +86,7 @@ XC::MapModelWrapper &XC::ProcSoluControl::getModelWrapperContainer(void)
   { return solu_models; }
 
 //! @bried Return a reference to the solution procedures container.
-XC::MapSoluMethod &XC::ProcSoluControl::getSoluMethodContainer(void)
+XC::AnalysisAggregationMap &XC::ProcSoluControl::getAnalysisAggregationContainer(void)
   { return solu_methods; }
 
 //! @brief Return a pointer to the model wrapper with the identifier
@@ -100,12 +100,12 @@ XC::ModelWrapper *XC::ProcSoluControl::getModelWrapper(const std::string &cod)
   { return solu_models.getModelWrapper(cod); }
 
 //! @brief Return a const pointer to the solution method.
-const XC::SoluMethod *XC::ProcSoluControl::getSoluMethod(const std::string &cod) const
-  { return solu_methods.getSoluMethod(cod); }
+const XC::AnalysisAggregation *XC::ProcSoluControl::getAnalysisAggregation(const std::string &cod) const
+  { return solu_methods.getAnalysisAggregation(cod); }
 
 //! @brief Return a const pointer to the solution method.
-XC::SoluMethod *XC::ProcSoluControl::getSoluMethod(const std::string &cod)
-  { return solu_methods.getSoluMethod(cod); }
+XC::AnalysisAggregation *XC::ProcSoluControl::getAnalysisAggregation(const std::string &cod)
+  { return solu_methods.getAnalysisAggregation(cod); }
 
 //! @brief Revert to the initial state.
 void XC::ProcSoluControl::revertToStart(void)

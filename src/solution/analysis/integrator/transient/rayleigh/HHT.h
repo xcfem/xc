@@ -78,13 +78,13 @@ class HHT: public HHTBase
     int sendData(CommParameters &);
     int recvData(const CommParameters &);
 
-    friend class SoluMethod;
+    friend class AnalysisAggregation;
     friend class FEM_ObjectBroker;
-    HHT(SoluMethod *);
-    HHT(SoluMethod *,double alpha);
-    HHT(SoluMethod *,double alpha,const RayleighDampingFactors &rF);
-    HHT(SoluMethod *,double alpha, double beta, double gamma);
-    HHT(SoluMethod *,double alpha, double beta, double gamma,const RayleighDampingFactors &);
+    HHT(AnalysisAggregation *);
+    HHT(AnalysisAggregation *,double alpha);
+    HHT(AnalysisAggregation *,double alpha,const RayleighDampingFactors &rF);
+    HHT(AnalysisAggregation *,double alpha, double beta, double gamma);
+    HHT(AnalysisAggregation *,double alpha, double beta, double gamma,const RayleighDampingFactors &);
     Integrator *getCopy(void) const;
   public:    
     // methods which define what the FE_Element and DOF_Groups add

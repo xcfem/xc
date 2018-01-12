@@ -38,8 +38,8 @@
 
 
 //! @brief Constructor.
-XC::LinearBucklingEigenAnalysis::LinearBucklingEigenAnalysis(SoluMethod *metodo)
-  :EigenAnalysis(metodo) {}
+XC::LinearBucklingEigenAnalysis::LinearBucklingEigenAnalysis(AnalysisAggregation *analysis_aggregation)
+  :EigenAnalysis(analysis_aggregation) {}
 
 //! @brief Performs the analysis.
 int XC::LinearBucklingEigenAnalysis::setupPreviousStep(void)

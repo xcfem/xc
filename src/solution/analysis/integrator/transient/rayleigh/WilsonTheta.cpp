@@ -69,17 +69,17 @@
 #include <solution/analysis/model/AnalysisModel.h>
 
 //! @brief Constructor.
-XC::WilsonTheta::WilsonTheta(SoluMethod *owr)
+XC::WilsonTheta::WilsonTheta(AnalysisAggregation *owr)
 :RayleighBase(owr,INTEGRATOR_TAGS_WilsonTheta),
  theta(0), c1(0.0), c2(0.0), c3(0.0) {}
 
 //! @brief Constructor.
-XC::WilsonTheta::WilsonTheta(SoluMethod *owr,double _theta)
+XC::WilsonTheta::WilsonTheta(AnalysisAggregation *owr,double _theta)
 :RayleighBase(owr,INTEGRATOR_TAGS_WilsonTheta),
  theta(_theta), c1(0.0), c2(0.0), c3(0.0) {}
 
 //! @brief Constructor.
-XC::WilsonTheta::WilsonTheta(SoluMethod *owr,double _theta,const RayleighDampingFactors &rF)
+XC::WilsonTheta::WilsonTheta(AnalysisAggregation *owr,double _theta,const RayleighDampingFactors &rF)
   :RayleighBase(owr,INTEGRATOR_TAGS_WilsonTheta,rF), theta(_theta), c1(0.0), c2(0.0), c3(0.0) {}
 
 int XC::WilsonTheta::newStep(double _deltaT)

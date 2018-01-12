@@ -59,7 +59,7 @@
 #include "utility/matrix/Matrix.h"
 
 //! @brief Constructor.
-XC::EigenSOE::EigenSOE(SoluMethod *owr,int classTag)
+XC::EigenSOE::EigenSOE(AnalysisAggregation *owr,int classTag)
   :SystemOfEqn(owr,classTag), size(0), factored(false), theSolver(nullptr) {}
 
 void XC::EigenSOE::libera(void)

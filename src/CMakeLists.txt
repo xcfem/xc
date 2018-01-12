@@ -340,7 +340,7 @@ SET(preprocessor_set_mgmt  preprocessor/set_mgmt/DqPtrsKDTree preprocessor/set_m
 
 SET(preprocessor preprocessor/EntMdlrBase preprocessor/MeshingParams ${preprocessor_cad} ${preprocessor_set_mgmt} ${preprocessor_loaders} preprocessor/Preprocessor)
 
-SET(solution solution/analysis/ModelWrapper solution/SoluMethod solution/MapSoluMethod solution/analysis/MapModelWrapper solution/ProcSoluControl solution/ProcSolu)
+SET(solution solution/analysis/ModelWrapper solution/AnalysisAggregation solution/AnalysisAggregationMap solution/analysis/MapModelWrapper solution/ProcSoluControl solution/ProcSolu)
 
 # Build our library
 add_library(XcBib SHARED ${utility} ${material} ${siseq} ${analysis} ${convergenceTest} ${coordTransformation} ${damage} ${domain} ${gauss_models} ${cyclic_model} ${element} ${graph} ${modelbuilder} ${reliability} ${unitest} ${preprocessor} ${solution} ${post_process} version FEProblem)

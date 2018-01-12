@@ -48,7 +48,7 @@ XC::LinearBucklingIntegrator *XC::LinearBucklingAlgo::getLinearBucklingIntegrato
   }
 
 //! @brief Constructor.
-XC::LinearBucklingAlgo::LinearBucklingAlgo(SoluMethod *owr)
+XC::LinearBucklingAlgo::LinearBucklingAlgo(AnalysisAggregation *owr)
   :EigenAlgorithm(owr,EigenALGORITHM_TAGS_LinearBuckling) {}
 
 //! @brief Solves the current step.

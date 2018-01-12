@@ -119,15 +119,15 @@ cHandler= sm.newConstraintHandler("transformation_constraint_handler")
 numberer= sm.newNumberer("default_numberer")
 numberer.useAlgorithm("rcm")
 
-solMethods= solCtrl.getSoluMethodContainer
-smt= solMethods.newSoluMethod("smt","sm")
-solAlgo= smt.newSolutionAlgorithm("frequency_soln_algo")
-integ= smt.newIntegrator("eigen_integrator",xc.Vector([1.0,1,1.0,1.0]))
+analysisAggregations= solCtrl.getAnalysisAggregationContainer
+analysisAggregation= analysisAggregations.newAnalysisAggregation("analysisAggregation","sm")
+solAlgo= analysisAggregation.newSolutionAlgorithm("frequency_soln_algo")
+integ= analysisAggregation.newIntegrator("eigen_integrator",xc.Vector([1.0,1,1.0,1.0]))
 
-soe= smt.newSystemOfEqn("sym_band_eigen_soe")
+soe= analysisAggregation.newSystemOfEqn("sym_band_eigen_soe")
 solver= soe.newSolver("sym_band_eigen_solver")
 
-analysis= solu.newAnalysis("modal_analysis","smt","")
+analysis= solu.newAnalysis("modal_analysis","analysisAggregation","")
 ac= 0.69 # Design acceleration.
 T0= 0.24
 T1= 0.68

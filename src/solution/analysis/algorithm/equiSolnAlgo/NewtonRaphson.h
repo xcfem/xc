@@ -78,9 +78,9 @@ namespace XC {
 class NewtonRaphson: public NewtonBased
   {
   protected:
-    friend class SoluMethod;
+    friend class AnalysisAggregation;
     friend class FEM_ObjectBroker;
-    NewtonRaphson(SoluMethod *,int tangent = CURRENT_TANGENT);    
+    NewtonRaphson(AnalysisAggregation *,int tangent = CURRENT_TANGENT);    
     virtual SolutionAlgorithm *getCopy(void) const;
   public:
     int solveCurrentStep(void);    

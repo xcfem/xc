@@ -95,7 +95,7 @@ class IncrementalIntegrator : public Integrator
     virtual int formElementResidual(void);
     int statusFlag;
 
-    IncrementalIntegrator(SoluMethod *,int classTag);
+    IncrementalIntegrator(AnalysisAggregation *,int classTag);
   public:
     // methods to set up the system of equations
     virtual int formTangent(int statusFlag = CURRENT_TANGENT);    

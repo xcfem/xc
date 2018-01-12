@@ -24,9 +24,9 @@
 // along with this program.
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
-//SoluMethod.cc
+//AnalysisAggregation.cc
 
-#include "SoluMethod.h"
+#include "AnalysisAggregation.h"
 #include "analysis/ModelWrapper.h"
 
 
@@ -58,7 +58,7 @@
 
 #include "boost/any.hpp"
 
-void XC::SoluMethod::libera_soln_algo(void)
+void XC::AnalysisAggregation::libera_soln_algo(void)
   {
     if(theSolnAlgo)
       {
@@ -67,7 +67,7 @@ void XC::SoluMethod::libera_soln_algo(void)
       }
   }
 
-bool XC::SoluMethod::alloc_soln_algo(const std::string &nmb)
+bool XC::AnalysisAggregation::alloc_soln_algo(const std::string &nmb)
   {
     libera_soln_algo();
 
@@ -94,7 +94,8 @@ bool XC::SoluMethod::alloc_soln_algo(const std::string &nmb)
     else if(nmb=="linear_buckling_soln_algo")
       theSolnAlgo=new LinearBucklingAlgo(this);
     else
-      std::cerr << "Solution algorithm: '"
+      std::cerr << getClassName() << "::" << __FUNCTION__
+	        << "; solution algorithm: '"
                 << nmb << "' unknown." << std::endl;
     if(theSolnAlgo)
       theSolnAlgo->set_owner(this);
@@ -107,7 +108,7 @@ bool XC::SoluMethod::alloc_soln_algo(const std::string &nmb)
 //! analysis. It then sets the SolutionAlgorithm 
 //! associated with the analysis to be \p newAlgorithm and sets the
 //! links for this object by invoking set_owner(). 
-void XC::SoluMethod::copia_soln_algo(SolutionAlgorithm *ptr)
+void XC::AnalysisAggregation::copia_soln_algo(SolutionAlgorithm *ptr)
   {
     if(ptr)
       {
@@ -116,18 +117,19 @@ void XC::SoluMethod::copia_soln_algo(SolutionAlgorithm *ptr)
         theSolnAlgo->set_owner(this);
       }
     else
-     std::cerr << "SoluMethod::copia_soln_algo; null pointer to solution algorithm." << std::endl;
+     std::cerr << getClassName() << "::" << __FUNCTION__
+	       << "; null pointer to solution algorithm." << std::endl;
   }
 
 //! @brief Creates a new solution algorithm with the name being passed as parameter.
-XC::SolutionAlgorithm &XC::SoluMethod::newSolutionAlgorithm(const std::string &tipo)
+XC::SolutionAlgorithm &XC::AnalysisAggregation::newSolutionAlgorithm(const std::string &tipo)
   {
     alloc_soln_algo(tipo);
     assert(theSolnAlgo);
     return *theSolnAlgo;
   }
 
-void XC::SoluMethod::libera_integrator(void)
+void XC::AnalysisAggregation::libera_integrator(void)
   {
     if(theIntegrator)
       {
@@ -136,7 +138,7 @@ void XC::SoluMethod::libera_integrator(void)
       }
   }
 
-bool XC::SoluMethod::alloc_integrator(const std::string &nmb,const Vector &params)
+bool XC::AnalysisAggregation::alloc_integrator(const std::string &nmb,const Vector &params)
   {
     libera_integrator();
 
@@ -243,7 +245,8 @@ bool XC::SoluMethod::alloc_integrator(const std::string &nmb,const Vector &param
     else if(nmb=="wilson_theta_integrator")
       theIntegrator=new WilsonTheta(this);
     else
-      std::cerr << "Integrator: '"
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; integrator: '"
                 << nmb << "' unknown." << std::endl;
 
     if(theIntegrator)
@@ -257,7 +260,7 @@ bool XC::SoluMethod::alloc_integrator(const std::string &nmb,const Vector &param
 //! analysis. It then sets the SolutionAlgorithm 
 //! associated with the analysis to be \p newAlgorithm and sets the
 //! links for this object. It also invokes set_owner().
-void XC::SoluMethod::copia_integrator(Integrator *ptr)
+void XC::AnalysisAggregation::copia_integrator(Integrator *ptr)
   {
     if(ptr)
       {
@@ -266,11 +269,12 @@ void XC::SoluMethod::copia_integrator(Integrator *ptr)
         theIntegrator->set_owner(this);
       }
     else
-     std::cerr << "SoluMethod::copia_integrator; null pointer to integrator." << std::endl;
+      std::cerr << getClassName() << "::" << __FUNCTION__
+ 	        << "; null pointer to integrator." << std::endl;
   }
 
 //! @brief Defines a new integrator.
-XC::Integrator &XC::SoluMethod::newIntegrator(const std::string &tipo, const Vector &params)
+XC::Integrator &XC::AnalysisAggregation::newIntegrator(const std::string &tipo, const Vector &params)
   {
     if(alloc_integrator(tipo,params))
       {
@@ -282,7 +286,7 @@ XC::Integrator &XC::SoluMethod::newIntegrator(const std::string &tipo, const Vec
     return *theIntegrator;
   }
 
-void XC::SoluMethod::libera_system_of_equations(void)
+void XC::AnalysisAggregation::libera_system_of_equations(void)
   {
     if(theSOE)
       {
@@ -290,7 +294,7 @@ void XC::SoluMethod::libera_system_of_equations(void)
         theSOE= nullptr;
       }
   }
-bool XC::SoluMethod::alloc_system_of_equations(const std::string &nmb,AnalysisModel *theModel)
+bool XC::AnalysisAggregation::alloc_system_of_equations(const std::string &nmb,AnalysisModel *theModel)
   {
     libera_system_of_equations();
     if(nmb=="band_arpack_soe")
@@ -336,7 +340,8 @@ bool XC::SoluMethod::alloc_system_of_equations(const std::string &nmb,AnalysisMo
 //     else if(nmb=="umfpack_gen_lin_soe")
 //       theSOE =new UmfpackGenLinSOE();
     else
-      std::cerr << "System of equations: '"
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; system of equations: '"
                 << nmb << "' unknown." << std::endl;
 
     if(theSOE)
@@ -349,7 +354,7 @@ bool XC::SoluMethod::alloc_system_of_equations(const std::string &nmb,AnalysisMo
 //! with the analysis. It then sets the SolutionAlgorithm 
 //! associated with the analysis to be \p newSOE.
 //! links for this object. It then invokes set_owner(). 
-void XC::SoluMethod::copia_system_of_equations(SystemOfEqn *ptr)
+void XC::AnalysisAggregation::copia_system_of_equations(SystemOfEqn *ptr)
   {
     if(ptr)
       {
@@ -358,11 +363,12 @@ void XC::SoluMethod::copia_system_of_equations(SystemOfEqn *ptr)
         theSOE->set_owner(this);
       }
     else
-     std::cerr << "SoluMethod::copia_system_of_equations; null pointer to SOE." << std::endl;
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; null pointer to SOE." << std::endl;
   }
 
 //! @brief Sets the system of equations type to use.
-XC::SystemOfEqn &XC::SoluMethod::newSystemOfEqn(const std::string &tipo)
+XC::SystemOfEqn &XC::AnalysisAggregation::newSystemOfEqn(const std::string &tipo)
   {
     AnalysisModel *theModel= nullptr;
     if(base)
@@ -371,12 +377,13 @@ XC::SystemOfEqn &XC::SoluMethod::newSystemOfEqn(const std::string &tipo)
         alloc_system_of_equations(tipo,theModel);
       }
     else
-      std::cerr << "Analysis model is not defined." << std::endl;
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; analysis model is not defined." << std::endl;
     assert(theSOE);
     return *theSOE;
   }
 
-void XC::SoluMethod::libera_conv_test(void)
+void XC::AnalysisAggregation::libera_conv_test(void)
   {
     if(theTest)
       {
@@ -385,7 +392,7 @@ void XC::SoluMethod::libera_conv_test(void)
       }
   }
 
-bool XC::SoluMethod::alloc_conv_test(const std::string &nmb)
+bool XC::AnalysisAggregation::alloc_conv_test(const std::string &nmb)
   {
     libera_conv_test();
     if(nmb== "energy_inc_conv_test")
@@ -405,14 +412,15 @@ bool XC::SoluMethod::alloc_conv_test(const std::string &nmb)
     else if(nmb== "relative_total_norm_disp_incr_conv_test")
       theTest= new CTestRelativeTotalNormDispIncr(this);
     else
-      std::cerr << "Convergence test type: '"
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; convergence test type: '"
                 << nmb << "' unknown." << std::endl;
     if(theTest)
       theTest->set_owner(this);
     return (theTest!=nullptr);
   }
 
-void XC::SoluMethod::copia_conv_test(ConvergenceTest *ptr)
+void XC::AnalysisAggregation::copia_conv_test(ConvergenceTest *ptr)
   {
     if(ptr)
       {
@@ -421,18 +429,19 @@ void XC::SoluMethod::copia_conv_test(ConvergenceTest *ptr)
         theTest->set_owner(this);
       }
     else
-     std::cerr << "SoluMethod::copia_conv_test; null pointer to convergence test." << std::endl;
+      std::cerr << getClassName() << "::" << __FUNCTION__
+	        << "; null pointer to convergence test." << std::endl;
   }
 
 //! @brief Set convergence test to be used.
-XC::ConvergenceTest &XC::SoluMethod::newConvergenceTest(const std::string &cmd)
+XC::ConvergenceTest &XC::AnalysisAggregation::newConvergenceTest(const std::string &cmd)
   {
     alloc_conv_test(cmd);
     assert(theTest);
     return *theTest;
   }
 
-void XC::SoluMethod::libera(void)
+void XC::AnalysisAggregation::libera(void)
   {
     libera_soln_algo();
     libera_integrator();
@@ -440,7 +449,7 @@ void XC::SoluMethod::libera(void)
     libera_conv_test();
   }
 
-void XC::SoluMethod::copia(const SoluMethod &otro)
+void XC::AnalysisAggregation::copia(const AnalysisAggregation &otro)
   {
     if(otro.theSolnAlgo) copia_soln_algo(otro.theSolnAlgo);
     if(otro.theIntegrator) copia_integrator(otro.theIntegrator);
@@ -449,7 +458,7 @@ void XC::SoluMethod::copia(const SoluMethod &otro)
   }
 
 //! @brief Default constructor.
-XC::SoluMethod::SoluMethod(Analysis *owr,ModelWrapper *b)
+XC::AnalysisAggregation::AnalysisAggregation(Analysis *owr,ModelWrapper *b)
   : EntCmd(owr), base(b), theSolnAlgo(nullptr),theIntegrator(nullptr),
     theSOE(nullptr), theTest(nullptr)
   {
@@ -459,7 +468,7 @@ XC::SoluMethod::SoluMethod(Analysis *owr,ModelWrapper *b)
 
 
 //! @brief Copy constructor.
-XC::SoluMethod::SoluMethod(const SoluMethod &otro)
+XC::AnalysisAggregation::AnalysisAggregation(const AnalysisAggregation &otro)
   : EntCmd(otro), base(otro.base), theSolnAlgo(nullptr),theIntegrator(nullptr),
     theSOE(nullptr), theTest(nullptr)
   {
@@ -470,7 +479,7 @@ XC::SoluMethod::SoluMethod(const SoluMethod &otro)
 
 
 //! @brief Assignment operator.
-XC::SoluMethod &XC::SoluMethod::operator=(const SoluMethod &otro)
+XC::AnalysisAggregation &XC::AnalysisAggregation::operator=(const AnalysisAggregation &otro)
   {
     EntCmd::operator=(otro);
     base= otro.base;
@@ -482,20 +491,20 @@ XC::SoluMethod &XC::SoluMethod::operator=(const SoluMethod &otro)
 
 
 //! @brief Destructor.
-XC::SoluMethod::~SoluMethod(void)
+XC::AnalysisAggregation::~AnalysisAggregation(void)
   { libera(); }
 
-void XC::SoluMethod::clearAll(void)
+void XC::AnalysisAggregation::clearAll(void)
   { libera(); }
 
-XC::Analysis *XC::SoluMethod::getAnalysis(void)
+XC::Analysis *XC::AnalysisAggregation::getAnalysis(void)
   { return dynamic_cast<Analysis *>(Owner()); }
 
-const XC::Analysis *XC::SoluMethod::getAnalysis(void) const
+const XC::Analysis *XC::AnalysisAggregation::getAnalysis(void) const
   { return dynamic_cast<const Analysis *>(Owner()); }
 
 //! @brief Returns a pointer to the domain.
-XC::Domain *XC::SoluMethod::getDomainPtr(void)
+XC::Domain *XC::AnalysisAggregation::getDomainPtr(void)
   {
     Domain *retval= nullptr;
     Analysis *an= getAnalysis();
@@ -505,7 +514,7 @@ XC::Domain *XC::SoluMethod::getDomainPtr(void)
   }
 
 //! @brief Returns a pointer to the domain.
-const XC::Domain *XC::SoluMethod::getDomainPtr(void) const
+const XC::Domain *XC::AnalysisAggregation::getDomainPtr(void) const
   {
     const Domain *retval= nullptr;
     const Analysis *an= getAnalysis();
@@ -516,7 +525,7 @@ const XC::Domain *XC::SoluMethod::getDomainPtr(void) const
   }
 
 //! @brief Returns a pointer to the DomainSolver.
-const XC::DomainSolver *XC::SoluMethod::getDomainSolverPtr(void) const
+const XC::DomainSolver *XC::AnalysisAggregation::getDomainSolverPtr(void) const
   {
     const Analysis *an= getAnalysis();
     assert(an);
@@ -524,7 +533,7 @@ const XC::DomainSolver *XC::SoluMethod::getDomainSolverPtr(void) const
   }
 
 //! @brief Returns a pointer to the DomainSolver.
-XC::DomainSolver *XC::SoluMethod::getDomainSolverPtr(void)
+XC::DomainSolver *XC::AnalysisAggregation::getDomainSolverPtr(void)
   {
     Analysis *an= getAnalysis();
     assert(an);
@@ -532,7 +541,7 @@ XC::DomainSolver *XC::SoluMethod::getDomainSolverPtr(void)
   }
 
 //! @brief Returns a pointer to the subdomain.
-const XC::Subdomain *XC::SoluMethod::getSubdomainPtr(void) const
+const XC::Subdomain *XC::AnalysisAggregation::getSubdomainPtr(void) const
   {
     const Analysis *an= getAnalysis();
     assert(an);
@@ -540,7 +549,7 @@ const XC::Subdomain *XC::SoluMethod::getSubdomainPtr(void) const
   }
 
 //! @brief Returns a pointer to the subdomain.
-XC::Subdomain *XC::SoluMethod::getSubdomainPtr(void)
+XC::Subdomain *XC::AnalysisAggregation::getSubdomainPtr(void)
   {
     Analysis *an= getAnalysis();
     assert(an);
@@ -548,7 +557,7 @@ XC::Subdomain *XC::SoluMethod::getSubdomainPtr(void)
   }
 
 //! @brief Returns a pointer to the constraint handler.
-XC::ConstraintHandler *XC::SoluMethod::getConstraintHandlerPtr(void)
+XC::ConstraintHandler *XC::AnalysisAggregation::getConstraintHandlerPtr(void)
   {
     if(base)
       return base->getConstraintHandlerPtr();
@@ -557,7 +566,7 @@ XC::ConstraintHandler *XC::SoluMethod::getConstraintHandlerPtr(void)
   }
 
 //! @brief Returns a pointer to the numberer.
-XC::DOF_Numberer *XC::SoluMethod::getDOF_NumbererPtr(void) const
+XC::DOF_Numberer *XC::AnalysisAggregation::getDOF_NumbererPtr(void) const
   {
     if(base)
       return base->getDOF_NumbererPtr();
@@ -565,7 +574,7 @@ XC::DOF_Numberer *XC::SoluMethod::getDOF_NumbererPtr(void) const
       return nullptr;
   }
 //! @brief Returns a pointer to the analysis model.
-XC::AnalysisModel *XC::SoluMethod::getAnalysisModelPtr(void) const
+XC::AnalysisModel *XC::AnalysisAggregation::getAnalysisModelPtr(void) const
   {
     if(base)
       return base->getAnalysisModelPtr();
@@ -575,207 +584,231 @@ XC::AnalysisModel *XC::SoluMethod::getAnalysisModelPtr(void) const
 
 
 //! @brief Returns a pointer to the linear system of equations.
-XC::LinearSOE *XC::SoluMethod::getLinearSOEPtr(void)
+XC::LinearSOE *XC::AnalysisAggregation::getLinearSOEPtr(void)
   {
     LinearSOE *ptr= dynamic_cast<LinearSOE *>(theSOE);
     if(!ptr)
-      std::cerr << "SoluMethod; el system of equations no es de tipo LinearSOE." << std::endl;
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; not a suitable system of equations (not a LinearSOE)."
+		<< std::endl;
     return ptr;
   }
 
 //! @brief Returns a pointer to the linear system of equations.
-const XC::LinearSOE *XC::SoluMethod::getLinearSOEPtr(void) const
+const XC::LinearSOE *XC::AnalysisAggregation::getLinearSOEPtr(void) const
   {
     const LinearSOE *ptr= dynamic_cast<const LinearSOE *>(theSOE);
     if(!ptr)
-      std::cerr << "SoluMethod; el system of equations no es de tipo LinearSOE." << std::endl;
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; not a suitable system of equations (not a LinearSOE)."
+		<< std::endl;
     return ptr;
   }
 
 //! @brief Returns a pointer to the system of equations de eigenvalues.
-XC::EigenSOE *XC::SoluMethod::getEigenSOEPtr(void)
+XC::EigenSOE *XC::AnalysisAggregation::getEigenSOEPtr(void)
   {
     EigenSOE *ptr= dynamic_cast<EigenSOE *>(theSOE);
     if(!ptr)
-      std::cerr << "SoluMethod; el system of equations no es de tipo EigenSOE." << std::endl;
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; not a suitable system of equations (not an EigenSOE)."
+		<< std::endl;
     return ptr;
   }
 
 //! @brief Returns a pointer to the system of equations de eigenvalues.
-const XC::EigenSOE *XC::SoluMethod::getEigenSOEPtr(void) const
+const XC::EigenSOE *XC::AnalysisAggregation::getEigenSOEPtr(void) const
   {
     const EigenSOE *ptr= dynamic_cast<const EigenSOE *>(theSOE);
     if(!ptr)
-      std::cerr << "SoluMethod; el system of equations no es de tipo EigenSOE." << std::endl;
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; not a suitable system of equations (not an EigenSOE)."
+		<< std::endl;
     return ptr;
   }
 
-//! @brief Returns, if possible, a pointer al integrator incremental otherwise it returns nullptr.
-XC::IncrementalIntegrator *XC::SoluMethod::getIncrementalIntegratorPtr(void)
+//! @brief Returns, if possible, a pointer to the incremental integrator
+//! otherwise it returns nullptr.
+XC::IncrementalIntegrator *XC::AnalysisAggregation::getIncrementalIntegratorPtr(void)
   {
     IncrementalIntegrator *ptr= dynamic_cast<IncrementalIntegrator *>(theIntegrator);
     if(!ptr)
-      std::cerr << "SoluMethod; el integrator no es de tipo incremental." << std::endl;
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; not an incremental integrator." << std::endl;
     return ptr;
   }
 
-//! @brief Returns, if possible, a pointer al EigenIntegrator otherwise it returns nullptr.
-XC::EigenIntegrator *XC::SoluMethod::getEigenIntegratorPtr(void)
+//! @brief Returns, if possible, a pointer to the eigen integrator
+//! otherwise it returns nullptr.
+XC::EigenIntegrator *XC::AnalysisAggregation::getEigenIntegratorPtr(void)
   {
     EigenIntegrator *ptr= dynamic_cast<EigenIntegrator *>(theIntegrator);
     if(!ptr)
-      std::cerr << "SoluMethod; el integrator no es de tipo eigenvalues." << std::endl;
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; not an eigen integrator." << std::endl;
     return ptr;
   }
 
-//! @brief Returns, if possible, a pointer al LinearBucklingIntegrator otherwise it returns nullptr.
-XC::LinearBucklingIntegrator *XC::SoluMethod::getLinearBucklingIntegratorPtr(void)
+//! @brief Returns, if possible, a pointer to the linear buckling integrator
+//! otherwise it returns nullptr.
+XC::LinearBucklingIntegrator *XC::AnalysisAggregation::getLinearBucklingIntegratorPtr(void)
   {
     LinearBucklingIntegrator *ptr= dynamic_cast<LinearBucklingIntegrator *>(theIntegrator);
     if(!ptr)
-      std::cerr << "SoluMethod; el integrator no es de tipo linear buckling." << std::endl;
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; not a linear buckling integrator." << std::endl;
     return ptr;
   }
 
-//! @brief Returns, if possible, a pointer al EigenIntegrator otherwise it returns nullptr.
-XC::TransientIntegrator *XC::SoluMethod::getTransientIntegratorPtr(void)
+//! @brief Returns, if possible, a pointer to the transient integrator
+//! otherwise it returns nullptr.
+XC::TransientIntegrator *XC::AnalysisAggregation::getTransientIntegratorPtr(void)
   {
     TransientIntegrator *ptr= dynamic_cast<TransientIntegrator *>(theIntegrator);
     if(!ptr)
-      std::cerr << "SoluMethod; el integrator no es de tipo transitorio." << std::endl;
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; not a transient integrator." << std::endl;
     return ptr;
   }
 
-//! @brief Returns, if possible, a pointer al StaticIntegrator otherwise it returns nullptr.
-XC::StaticIntegrator *XC::SoluMethod::getStaticIntegratorPtr(void)
+//! @brief Returns, if possible, a pointer to the static integrator
+//! otherwise it returns nullptr.
+XC::StaticIntegrator *XC::AnalysisAggregation::getStaticIntegratorPtr(void)
   {
     StaticIntegrator *ptr= dynamic_cast<StaticIntegrator *>(theIntegrator);
     if(!ptr)
-      std::cerr << "SoluMethod; integrator is not static." << std::endl;
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; not a static integrator." << std::endl;
     return ptr;
   }
 
-//! @brief Returns, if possible, a pointer al solution algorithm del sistema de 
-//! eigenvalues, otherwise it returns nullptr.
-XC::EigenAlgorithm *XC::SoluMethod::getEigenSolutionAlgorithmPtr(void)
+//! @brief Returns, if possible, a pointer to the solution algorithm
+//! of the eigen problem,, otherwise it returns nullptr.
+XC::EigenAlgorithm *XC::AnalysisAggregation::getEigenSolutionAlgorithmPtr(void)
   {
     EigenAlgorithm *ptr= dynamic_cast<EigenAlgorithm *>(theSolnAlgo);
     if(!ptr)
-      std::clog << "SoluMethod; the algorithm can't compute eigenvalues." << std::endl;
+      std::clog << getClassName() << "::" << __FUNCTION__
+		<< "; the algorithm can't compute eigenvalues." << std::endl;
     return ptr;
   }
 
 //! @brief Returns, if possible, a pointer to the system of equations
 //! solution algorithm, otherwise it returns nullptr.
-XC::EquiSolnAlgo *XC::SoluMethod::getEquiSolutionAlgorithmPtr(void)
+XC::EquiSolnAlgo *XC::AnalysisAggregation::getEquiSolutionAlgorithmPtr(void)
   {
     EquiSolnAlgo *ptr= dynamic_cast<EquiSolnAlgo *>(theSolnAlgo);
     if(!ptr)
-      std::clog << "SoluMethod; the algorithm can't solve for equilibrium." << std::endl;
+      std::clog << getClassName() << "::" << __FUNCTION__
+                << "; the algorithm can't solve for equilibrium." << std::endl;
     return ptr;
   }
 
 //! @brief Returns, if possible, a pointer al solution algorithm
 //! DomainDecomp , otherwise it returns nullptr.
-XC::DomainDecompAlgo *XC::SoluMethod::getDomainDecompSolutionAlgorithmPtr(void)
+XC::DomainDecompAlgo *XC::AnalysisAggregation::getDomainDecompSolutionAlgorithmPtr(void)
   {
     DomainDecompAlgo *ptr= dynamic_cast<DomainDecompAlgo *>(theSolnAlgo);
     if(!ptr)
-      std::cerr << "SoluMethod; the algorithm can't make domain decomposition." << std::endl;
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; the algorithm can't make domain decomposition."
+		<< std::endl;
     return ptr;
   }
 
 //! @brief Returns a pointer to the convergence test.
-XC::ConvergenceTest *XC::SoluMethod::getConvergenceTestPtr(void)
+XC::ConvergenceTest *XC::AnalysisAggregation::getConvergenceTestPtr(void)
   { return theTest; }
 
 //! @brief Returns a pointer to the convergence test.
-const XC::ConvergenceTest *XC::SoluMethod::getConvergenceTestPtr(void) const
+const XC::ConvergenceTest *XC::AnalysisAggregation::getConvergenceTestPtr(void) const
   { return theTest; }
 
 //! @brief Sets the linear system of equations to use in the analysis.
-int XC::SoluMethod::setLinearSOE(LinearSOE &theNewSOE)
+int XC::AnalysisAggregation::setLinearSOE(LinearSOE &theNewSOE)
   {
     copia_system_of_equations(&theNewSOE);
     return 0;
   }
 
 //! @brief Sets the eigenSOE to use in the analysis.
-int XC::SoluMethod::setEigenSOE(EigenSOE &theSOE)
+int XC::AnalysisAggregation::setEigenSOE(EigenSOE &theSOE)
   {
-    std::cerr << "SoluMethod::setEigenSOE() - does nothing yet\n";    
+    std::cerr << getClassName() << "::" << __FUNCTION__
+	      << "; does nothing yet\n";    
     return 0;
   }
 
 //! @brief Sets the integrator to use in the analysis.
-int XC::SoluMethod::setIntegrator(Integrator &theNewIntegrator)
+int XC::AnalysisAggregation::setIntegrator(Integrator &theNewIntegrator)
   {
     copia_integrator(&theNewIntegrator);
     return 0;
   }
 
 //! @brief Sets the solution algorithm to use in the analysis.
-int XC::SoluMethod::setAlgorithm(SolutionAlgorithm &theNewAlgorithm) 
+int XC::AnalysisAggregation::setAlgorithm(SolutionAlgorithm &theNewAlgorithm) 
   {
     copia_soln_algo(&theNewAlgorithm);
     return 0;
   }
 
 //! @brief Sets the convergence test to use in the analysis.
-int XC::SoluMethod::setConvergenceTest(ConvergenceTest &theNewTest)
+int XC::AnalysisAggregation::setConvergenceTest(ConvergenceTest &theNewTest)
   {
     copia_conv_test(&theNewTest);
     return 0;
   }
 
-void XC::SoluMethod::brokeDDLinearSOE(const CommParameters &cp,const ID &data)
+void XC::AnalysisAggregation::brokeDDLinearSOE(const CommParameters &cp,const ID &data)
   {
     theSOE = cp.brokeDDLinearSOE(data(5),data(6));
     theSOE->set_owner(this);
   }
 
-void XC::SoluMethod::brokeLinearSOE(const CommParameters &cp,const ID &data)
+void XC::AnalysisAggregation::brokeLinearSOE(const CommParameters &cp,const ID &data)
   {
     theSOE = cp.brokeLinearSOE(data(4),data(5));
     theSOE->set_owner(this);
   }
 
-void XC::SoluMethod::brokeIncrementalIntegrator(const CommParameters &cp,const ID &data)
+void XC::AnalysisAggregation::brokeIncrementalIntegrator(const CommParameters &cp,const ID &data)
   {
     theIntegrator= cp.brokeIncrementalIntegrator(data(4));
     theIntegrator->set_owner(this);
   }
 
-void XC::SoluMethod::brokeStaticIntegrator(const CommParameters &cp,const ID &data)
+void XC::AnalysisAggregation::brokeStaticIntegrator(const CommParameters &cp,const ID &data)
   {
     theIntegrator= cp.brokeStaticIntegrator(data(6));
     theIntegrator->set_owner(this);
   }
 
-void XC::SoluMethod::brokeTransientIntegrator(const CommParameters &cp,const ID &data)
+void XC::AnalysisAggregation::brokeTransientIntegrator(const CommParameters &cp,const ID &data)
   {
     theIntegrator= cp.brokeTransientIntegrator(data(6));
     theIntegrator->set_owner(this);
   }
 
-void XC::SoluMethod::brokeDomainDecompAlgo(const CommParameters &cp,const ID &data)
+void XC::AnalysisAggregation::brokeDomainDecompAlgo(const CommParameters &cp,const ID &data)
   {
     theSolnAlgo= cp.brokeDomainDecompAlgo(data(3));
     theSolnAlgo->set_owner(this);
   }
 
-void XC::SoluMethod::brokeEquiSolnAlgo(const CommParameters &cp,const ID &data)
+void XC::AnalysisAggregation::brokeEquiSolnAlgo(const CommParameters &cp,const ID &data)
   {
     theSolnAlgo= cp.brokeEquiSolnAlgo(data(3));
     theSolnAlgo->set_owner(this);
   }
 
 //! @brief Verifica que los pointers no sean nulos.
-bool XC::SoluMethod::CheckPointers(void)
+bool XC::AnalysisAggregation::CheckPointers(void)
   {
     if(!base)
       {
-        std::cerr << "SoluMethod::check_pointers; error, model not defined." << std::endl;
+        std::cerr << getClassName() << "::" << __FUNCTION__
+                  << "; error, model not defined." << std::endl;
         return false;
       }
     if(!base->CheckPointers())
@@ -784,24 +817,27 @@ bool XC::SoluMethod::CheckPointers(void)
       }
     if(!theSolnAlgo)
       {
-        std::cerr << "SoluMethod::check_pointers; error, solution algorithm not defined." << std::endl;
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; error, solution algorithm not defined." << std::endl;
         return false;
       }
     if(!theSOE)
       {
-        std::cerr << "SoluMethod::check_pointers; error, system of equations not defined." << std::endl;
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; error, system of equations not defined." << std::endl;
         return false;
       }
     if(!theIntegrator)
       {
-        std::cerr << "SoluMethod::check_pointers; error, integrator not defined." << std::endl;
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; error, integrator not defined." << std::endl;
         return false;
       }
     return true;
   }
 
 //! @brief Returns the modelo a su estado original.
-void XC::SoluMethod::revertToStart(void)
+void XC::AnalysisAggregation::revertToStart(void)
   {
 // AddingSensitivity:BEGIN ////////////////////////////////////
 	// (Calling domainChanged() don't work because the ::getX()

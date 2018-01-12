@@ -48,8 +48,8 @@ class RayleighBase : public DampingFactorsIntegrator
     int sendData(CommParameters &);
     int recvData(const CommParameters &);
 
-    RayleighBase(SoluMethod *,int classTag);
-    RayleighBase(SoluMethod *,int classTag,const RayleighDampingFactors &);
+    RayleighBase(AnalysisAggregation *,int classTag);
+    RayleighBase(AnalysisAggregation *,int classTag,const RayleighDampingFactors &);
   };
 } // end of XC namespace
 

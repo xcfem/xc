@@ -46,9 +46,9 @@ class NewmarkBase2 : public NewmarkBase
     int sendData(CommParameters &);
     int recvData(const CommParameters &);
 
-    NewmarkBase2(SoluMethod *,int classTag);
-    NewmarkBase2(SoluMethod *,int classTag,double gamma, double beta);
-    NewmarkBase2(SoluMethod *,int classTag,double gamma, double beta,const RayleighDampingFactors &rF); 
+    NewmarkBase2(AnalysisAggregation *,int classTag);
+    NewmarkBase2(AnalysisAggregation *,int classTag,double gamma, double beta);
+    NewmarkBase2(AnalysisAggregation *,int classTag,double gamma, double beta,const RayleighDampingFactors &rF); 
   };
 } // end of XC namespace
 

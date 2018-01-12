@@ -78,9 +78,9 @@ class Linear: public EquiSolnAlgo
   {
     int resuelve();
   protected:
-    friend class SoluMethod;
+    friend class AnalysisAggregation;
     friend class FEM_ObjectBroker;
-    Linear(SoluMethod *);
+    Linear(AnalysisAggregation *);
     virtual SolutionAlgorithm *getCopy(void) const;
   public:
 

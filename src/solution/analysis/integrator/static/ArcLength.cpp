@@ -71,7 +71,7 @@
 #include <utility/matrix/Vector.h>
 
 //! @brief Constructor.
-XC::ArcLength::ArcLength(SoluMethod *owr,double arcLength, double alpha)
+XC::ArcLength::ArcLength(AnalysisAggregation *owr,double arcLength, double alpha)
   :ArcLengthBase(owr,INTEGRATOR_TAGS_ArcLength,arcLength,alpha) {}
 
 //! @brief Returns the valor de dLambda para el método update.

@@ -79,8 +79,8 @@ class HSConstraint: public ProtoArcLength
     int sendData(CommParameters &);
     int recvData(const CommParameters &);
 
-    friend class SoluMethod;
-    HSConstraint(SoluMethod *,double arcLength, double psi_u=1.0, double psi_f=1.0, double u_ref=1.0);
+    friend class AnalysisAggregation ;
+    HSConstraint(AnalysisAggregation *,double arcLength, double psi_u=1.0, double psi_f=1.0, double u_ref=1.0);
     Integrator *getCopy(void) const;
   public:
 

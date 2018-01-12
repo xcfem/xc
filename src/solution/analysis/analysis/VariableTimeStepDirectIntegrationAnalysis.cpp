@@ -66,11 +66,11 @@
 #include <domain/domain/Domain.h>
 #include <solution/analysis/convergenceTest/ConvergenceTest.h>
 #include <cfloat>
-#include "solution/SoluMethod.h"
+#include "solution/AnalysisAggregation.h"
 
 //! @brief Constructor.
-XC::VariableTimeStepDirectIntegrationAnalysis::VariableTimeStepDirectIntegrationAnalysis(SoluMethod *metodo)
-  :DirectIntegrationAnalysis(metodo) {}    
+XC::VariableTimeStepDirectIntegrationAnalysis::VariableTimeStepDirectIntegrationAnalysis(AnalysisAggregation *analysis_aggregation)
+  :DirectIntegrationAnalysis(analysis_aggregation) {}    
 
 //! @brief Performs the analysis.
 //! 

@@ -80,11 +80,11 @@ class Newmark : public NewmarkBase2
     int sendData(CommParameters &);
     int recvData(const CommParameters &);
 
-    friend class SoluMethod;
+    friend class AnalysisAggregation;
     friend class FEM_ObjectBroker;
-    Newmark(SoluMethod *);
-    Newmark(SoluMethod *,double gamma, double beta, bool disp = true);
-    Newmark(SoluMethod *,double gamma, double beta,const RayleighDampingFactors &rF, bool disp = true);
+    Newmark(AnalysisAggregation *);
+    Newmark(AnalysisAggregation *,double gamma, double beta, bool disp = true);
+    Newmark(AnalysisAggregation *,double gamma, double beta,const RayleighDampingFactors &rF, bool disp = true);
     Integrator *getCopy(void) const;
   public:
 

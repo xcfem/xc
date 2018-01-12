@@ -63,16 +63,16 @@
 #include <utility/matrix/Vector.h>
 #include <utility/matrix/Matrix.h>
 
-XC::ProfileSPDLinSOE::ProfileSPDLinSOE(SoluMethod *owr)
+XC::ProfileSPDLinSOE::ProfileSPDLinSOE(AnalysisAggregation *owr)
   :FactoredSOEBase(owr,LinSOE_TAGS_ProfileSPDLinSOE),
    profileSize(0), isAcondensed(false), numInt(0) {}
 
-XC::ProfileSPDLinSOE::ProfileSPDLinSOE(SoluMethod *owr,int classTag)
+XC::ProfileSPDLinSOE::ProfileSPDLinSOE(AnalysisAggregation *owr,int classTag)
   :FactoredSOEBase(owr,classTag),
    profileSize(0), isAcondensed(false), numInt(0) {}
 
 
-XC::ProfileSPDLinSOE::ProfileSPDLinSOE(SoluMethod *owr,int N, int *iLoc,ProfileSPDLinSolver *the_Solver)
+XC::ProfileSPDLinSOE::ProfileSPDLinSOE(AnalysisAggregation *owr,int N, int *iLoc,ProfileSPDLinSolver *the_Solver)
   :FactoredSOEBase(owr,LinSOE_TAGS_ProfileSPDLinSOE,N),
    profileSize(0), isAcondensed(false), numInt(0)
   {

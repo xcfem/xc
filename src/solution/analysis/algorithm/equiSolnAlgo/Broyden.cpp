@@ -62,15 +62,15 @@
 #include <solution/system_of_eqn/linearSOE/LinearSOE.h>
 #include <solution/analysis/convergenceTest/ConvergenceTest.h>
 #include <solution/analysis/integrator/IncrementalIntegrator.h>
-#include "solution/SoluMethod.h"
+#include "solution/AnalysisAggregation.h"
 
 //! @brief Constructor
-XC::Broyden::Broyden(SoluMethod *owr,int theTangentToUse, int n)
+XC::Broyden::Broyden(AnalysisAggregation *owr,int theTangentToUse, int n)
   :BFBRoydenBase(owr,EquiALGORITHM_TAGS_Broyden,theTangentToUse,n)
   {}
 
 //! @brief Constructor
-XC::Broyden::Broyden(SoluMethod *owr,ConvergenceTest &theT, int theTangentToUse, int n)
+XC::Broyden::Broyden(AnalysisAggregation *owr,ConvergenceTest &theT, int theTangentToUse, int n)
   :BFBRoydenBase(owr,EquiALGORITHM_TAGS_Broyden,theT,theTangentToUse,n)
   {}
 
@@ -90,14 +90,14 @@ int XC::Broyden::solveCurrentStep(void)
       }
 
     // set itself as the ConvergenceTest objects EquiSolnAlgo
-    theTest->set_owner(getSoluMethod()); //LCPT. Creo que esto no hace falta.
+    theTest->set_owner(getAnalysisAggregation()); //LCPT. Creo que esto no hace falta.
     if(theTest->start() < 0)
       {
         std::cerr << "Broyden::solveCurrentStep() -"
                   << "the ConvergenceTest object failed in start()\n";
         return -3;
       }
-    localTest->set_owner(getSoluMethod());
+    localTest->set_owner(getAnalysisAggregation());
 
     int result = -1;
     int count = 0;

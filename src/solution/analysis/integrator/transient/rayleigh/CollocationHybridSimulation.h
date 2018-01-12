@@ -82,12 +82,12 @@ class CollocationHybridSimulation : public HHTBase
     int sendData(CommParameters &);
     int recvData(const CommParameters &);
 
-    friend class SoluMethod;
-    CollocationHybridSimulation(SoluMethod *);
-    CollocationHybridSimulation(SoluMethod *,double theta, ConvergenceTest &);
-    CollocationHybridSimulation(SoluMethod *,double theta, ConvergenceTest &,const RayleighDampingFactors &);
-    CollocationHybridSimulation(SoluMethod *,double theta, double beta, double gamma, ConvergenceTest &theTest);
-    CollocationHybridSimulation(SoluMethod *,double theta, double beta, double gamma, ConvergenceTest &,const RayleighDampingFactors &);
+    friend class AnalysisAggregation;
+    CollocationHybridSimulation(AnalysisAggregation *);
+    CollocationHybridSimulation(AnalysisAggregation *,double theta, ConvergenceTest &);
+    CollocationHybridSimulation(AnalysisAggregation *,double theta, ConvergenceTest &,const RayleighDampingFactors &);
+    CollocationHybridSimulation(AnalysisAggregation *,double theta, double beta, double gamma, ConvergenceTest &theTest);
+    CollocationHybridSimulation(AnalysisAggregation *,double theta, double beta, double gamma, ConvergenceTest &,const RayleighDampingFactors &);
     Integrator *getCopy(void) const;
   public:
     

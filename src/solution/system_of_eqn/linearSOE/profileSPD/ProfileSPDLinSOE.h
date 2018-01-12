@@ -82,11 +82,11 @@ class ProfileSPDLinSOE : public FactoredSOEBase
   protected:
     virtual bool setSolver(LinearSOESolver *);
 
-    friend class SoluMethod;
+    friend class AnalysisAggregation;
     friend class FEM_ObjectBroker;
-    ProfileSPDLinSOE(SoluMethod *);
-    ProfileSPDLinSOE(SoluMethod *,int classTag);
-    ProfileSPDLinSOE(SoluMethod *,int N, int *iLoc, ProfileSPDLinSolver *theSolver= nullptr);
+    ProfileSPDLinSOE(AnalysisAggregation *);
+    ProfileSPDLinSOE(AnalysisAggregation *,int classTag);
+    ProfileSPDLinSOE(AnalysisAggregation *,int N, int *iLoc, ProfileSPDLinSolver *theSolver= nullptr);
     SystemOfEqn *getCopy(void) const;
   public:
     virtual int setSize(Graph &theGraph);

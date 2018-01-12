@@ -76,8 +76,8 @@ namespace XC {
 //! @brief Algorithm to obtain the natural frequencies of the model.
 class FrequencyAlgo : public EigenAlgorithm
   {
-    friend class SoluMethod;
-    FrequencyAlgo(SoluMethod *);
+    friend class AnalysisAggregation;
+    FrequencyAlgo(AnalysisAggregation *);
     virtual SolutionAlgorithm *getCopy(void) const;
   public:
      

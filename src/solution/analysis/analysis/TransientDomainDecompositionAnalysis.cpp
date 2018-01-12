@@ -65,7 +65,7 @@
 #include <solution/analysis/integrator/TransientIntegrator.h>
 #include <solution/analysis/convergenceTest/ConvergenceTest.h>
 #include "domain/domain/subdomain/Subdomain.h"
-#include "solution/SoluMethod.h"
+#include "solution/AnalysisAggregation.h"
 
 // AddingSensitivity:BEGIN //////////////////////////////////
 #ifdef _RELIABILITY
@@ -77,7 +77,7 @@
 #include "utility/matrix/ID.h"
 
 //! @brief Constructor.
-XC::TransientDomainDecompositionAnalysis::TransientDomainDecompositionAnalysis(Subdomain &the_Domain,SoluMethod *s)
+XC::TransientDomainDecompositionAnalysis::TransientDomainDecompositionAnalysis(Subdomain &the_Domain,AnalysisAggregation *s)
   :DomainDecompositionAnalysis(ANALYSIS_TAGS_TransientDomainDecompositionAnalysis, the_Domain,s)
   {}
 

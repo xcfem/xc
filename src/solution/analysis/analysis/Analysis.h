@@ -67,7 +67,7 @@
 
 namespace XC {
 
-class SoluMethod;
+class AnalysisAggregation;
 class ProcSolu;
 
 class Domain;
@@ -116,20 +116,20 @@ class Analysis: public EntCmd
   {
   protected:
     int analysis_result; //!< Equal to zero if success.
-    SoluMethod *solution_method; //!< Solution method.
+    AnalysisAggregation *solution_method; //!< Solution method.
 
     int newStepDomain(AnalysisModel *theModel,const double &dT =0.0);
     ProcSolu *getProcSolu(void);
     const ProcSolu *getProcSolu(void) const;    
 
     friend class ProcSolu;
-    Analysis(SoluMethod *metodo);
+    Analysis(AnalysisAggregation *analysis_aggregation);
     //! @brief Virtual constructor.
     virtual Analysis *getCopy(void) const= 0;
   public:
     inline virtual ~Analysis(void) {}
 
-    inline SoluMethod *getSoluMethodPtr(void)
+    inline AnalysisAggregation *getAnalysisAggregationPtr(void)
       { return solution_method; }
     Domain *getDomainPtr(void);
     const Domain *getDomainPtr(void) const;

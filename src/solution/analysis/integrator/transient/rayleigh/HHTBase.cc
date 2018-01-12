@@ -59,26 +59,26 @@
 #include <solution/analysis/integrator/transient/rayleigh/HHTBase.h>
 
 //! @brief Constructor.
-XC::HHTBase::HHTBase(SoluMethod *owr,int classTag)
+XC::HHTBase::HHTBase(AnalysisAggregation *owr,int classTag)
   : HHTRayleighBase(owr,classTag), beta(0.0), c1(0.0) {}
 
 //! @brief Constructor.
-XC::HHTBase::HHTBase(SoluMethod *owr,int classTag,double _alpha)
+XC::HHTBase::HHTBase(AnalysisAggregation *owr,int classTag,double _alpha)
   : HHTRayleighBase(owr,classTag,_alpha),
     beta((2-_alpha)*(2-_alpha)*0.25), c1(0.0) {}
 
 //! @brief Constructor.
-XC::HHTBase::HHTBase(SoluMethod *owr,int classTag,double _alpha,const RayleighDampingFactors &rF)
+XC::HHTBase::HHTBase(AnalysisAggregation *owr,int classTag,double _alpha,const RayleighDampingFactors &rF)
   : HHTRayleighBase(owr,classTag,_alpha,rF),
     beta((2-_alpha)*(2-_alpha)*0.25), c1(0.0) {}
 
 //! @brief Constructor.
-XC::HHTBase::HHTBase(SoluMethod *owr,int classTag,double _alpha, double _beta, double _gamma)
+XC::HHTBase::HHTBase(AnalysisAggregation *owr,int classTag,double _alpha, double _beta, double _gamma)
   : HHTRayleighBase(owr,classTag,_alpha,_gamma),
     beta(_beta), c1(0.0) {}
 
 //! @brief Constructor.
-XC::HHTBase::HHTBase(SoluMethod *owr,int classTag,double _alpha, double _beta, double _gamma,const RayleighDampingFactors &rF)
+XC::HHTBase::HHTBase(AnalysisAggregation *owr,int classTag,double _alpha, double _beta, double _gamma,const RayleighDampingFactors &rF)
     : HHTRayleighBase(owr,classTag,_alpha,_gamma,rF), beta(_beta), c1(0.0) {}
 
 

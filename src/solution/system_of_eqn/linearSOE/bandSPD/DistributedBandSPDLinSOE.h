@@ -75,8 +75,8 @@ class DistributedBandSPDLinSOE: public BandSPDLinSOE, public DistributedBandLinS
   protected:
     void calcBand(Graph &);
 
-    friend class SoluMethod;
-    DistributedBandSPDLinSOE(SoluMethod *);
+    friend class AnalysisAggregation;
+    DistributedBandSPDLinSOE(AnalysisAggregation *);
     SystemOfEqn *getCopy(void) const;
   public:
     // these methods need to be rewritten

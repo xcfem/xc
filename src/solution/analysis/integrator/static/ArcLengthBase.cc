@@ -33,7 +33,7 @@
 #include "utility/actor/actor/CommMetaData.h"
 
 //! @brief Constructor.
-XC::ArcLengthBase::ArcLengthBase(SoluMethod *owr,int classTag,double arcLength, double alpha)
+XC::ArcLengthBase::ArcLengthBase(AnalysisAggregation *owr,int classTag,double arcLength, double alpha)
   :ProtoArcLength(owr,classTag,arcLength), alpha2(alpha*alpha) {}
 
 //! @brief Returns the valor de dLambda para el método newStep.

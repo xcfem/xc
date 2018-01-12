@@ -82,9 +82,9 @@ class LoadControl : public BaseControl
     int recvData(const CommParameters &);
 
 
-    friend class SoluMethod;
+    friend class AnalysisAggregation;
     friend class FEM_ObjectBroker;
-    LoadControl(SoluMethod *,double deltaLambda= 1.0, int numIncr= 1, double minLambda=1.0, double maxlambda=1.0);
+    LoadControl(AnalysisAggregation *,double deltaLambda= 1.0, int numIncr= 1, double minLambda=1.0, double maxlambda=1.0);
     Integrator *getCopy(void) const;
   public:
 

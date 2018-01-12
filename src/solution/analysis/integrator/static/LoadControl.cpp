@@ -68,7 +68,7 @@
 #include <utility/matrix/Vector.h>
 
 //! @brief Constructor.
-XC::LoadControl::LoadControl(SoluMethod *owr,double dLambda, int numIncr, double min, double max)
+XC::LoadControl::LoadControl(AnalysisAggregation *owr,double dLambda, int numIncr, double min, double max)
   :BaseControl(owr,INTEGRATOR_TAGS_LoadControl,numIncr), deltaLambda(dLambda), dLambdaMin(min), dLambdaMax(max) {}
 
 int XC::LoadControl::newStep(void)

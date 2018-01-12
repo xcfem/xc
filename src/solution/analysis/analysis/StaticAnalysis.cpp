@@ -64,7 +64,7 @@
 #include <solution/analysis/convergenceTest/ConvergenceTest.h>
 #include <solution/analysis/integrator/StaticIntegrator.h>
 #include <domain/domain/Domain.h>
-#include "solution/SoluMethod.h"
+#include "solution/AnalysisAggregation.h"
 
 // AddingSensitivity:BEGIN //////////////////////////////////
 #ifdef _RELIABILITY
@@ -75,8 +75,8 @@
 const std::string stepNumberMessage= "In a static analysis, a number of steps greater than 1 is useless if the loads and constraints are constant.";
 
 //! @brief Constructor.
-XC::StaticAnalysis::StaticAnalysis(SoluMethod *metodo)
-  :Analysis(metodo), domainStamp(0)
+XC::StaticAnalysis::StaticAnalysis(AnalysisAggregation *analysis_aggregation)
+  :Analysis(analysis_aggregation), domainStamp(0)
   {
     // AddingSensitivity:BEGIN ////////////////////////////////////
 #ifdef _RELIABILITY

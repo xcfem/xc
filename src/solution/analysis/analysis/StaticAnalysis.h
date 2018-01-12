@@ -95,7 +95,7 @@ class StaticAnalysis: public Analysis
     int run_analysis_step(int num_step,int numSteps);
 
     friend class ProcSolu;
-    StaticAnalysis(SoluMethod *metodo);
+    StaticAnalysis(AnalysisAggregation *analysis_aggregation);
     Analysis *getCopy(void) const;
   public:
 

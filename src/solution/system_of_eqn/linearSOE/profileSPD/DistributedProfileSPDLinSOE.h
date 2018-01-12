@@ -74,8 +74,8 @@ class DistributedProfileSPDLinSOE: public ProfileSPDLinSOE, public DistributedBa
   private:
     ID sizeLocal;
 
-    friend class SoluMethod;
-    DistributedProfileSPDLinSOE(SoluMethod *);
+    friend class AnalysisAggregation;
+    DistributedProfileSPDLinSOE(AnalysisAggregation *);
     SystemOfEqn *getCopy(void) const;
   public:
     // these methods need to be rewritten

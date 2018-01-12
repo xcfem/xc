@@ -89,8 +89,8 @@ class ShadowPetscSOE: public LinearSOE
     void *sendBuffer;
     int blockSize;
 
-    friend class SoluMethod;
-    ShadowPetscSOE(SoluMethod *,PetscSolver &theSolver, int blockSize);
+    friend class AnalysisAggregation;
+    ShadowPetscSOE(AnalysisAggregation *,PetscSolver &theSolver, int blockSize);
     SystemOfEqn *getCopy(void) const;
   public:
     ~ShadowPetscSOE(void);

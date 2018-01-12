@@ -44,7 +44,7 @@
 
 
 //! @brief Constructor.
-XC::BandArpackSOE::BandArpackSOE(SoluMethod *owr, double theShift)
+XC::BandArpackSOE::BandArpackSOE(AnalysisAggregation *owr, double theShift)
   :ArpackSOE(owr,EigenSOE_TAGS_BandArpackSOE,theShift),
    numSuperD(0), numSubD(0) {}
 

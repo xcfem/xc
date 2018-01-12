@@ -78,9 +78,9 @@ class NewmarkSensitivityIntegrator : public SensitivityIntegrator , public Newma
     int assemblyFlag;
     Vector independentRHS;
   public:
-    NewmarkSensitivityIntegrator(SoluMethod *);
-    NewmarkSensitivityIntegrator(SoluMethod *,int assemblyFlag, double gamma, double beta, bool disp = true);
-    NewmarkSensitivityIntegrator(SoluMethod *,int assemblyFlag, double gamma, double beta, const RayleighDampingFactors &rF, bool disp = true);
+    NewmarkSensitivityIntegrator(AnalysisAggregation *);
+    NewmarkSensitivityIntegrator(AnalysisAggregation *,int assemblyFlag, double gamma, double beta, bool disp = true);
+    NewmarkSensitivityIntegrator(AnalysisAggregation *,int assemblyFlag, double gamma, double beta, const RayleighDampingFactors &rF, bool disp = true);
     
     int setParameter(const std::vector<std::string> &argv, Parameter &param);
     int updateParameter(int parameterID, Information &info);

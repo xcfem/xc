@@ -73,18 +73,18 @@ cHandler.alphaMP= 1.0e15
 numberer= sm.newNumberer("default_numberer")
 numberer.useAlgorithm("rcm")
 
-solMethods= solCtrl.getSoluMethodContainer
-smt= solMethods.newSoluMethod("smt","sm")
-solAlgo= smt.newSolutionAlgorithm("newton_raphson_soln_algo")
-convTest= smt.newConvergenceTest("norm_unbalance_conv_test")
+analysisAggregations= solCtrl.getAnalysisAggregationContainer
+analysisAggregation= analysisAggregations.newAnalysisAggregation("analysisAggregation","sm")
+solAlgo= analysisAggregation.newSolutionAlgorithm("newton_raphson_soln_algo")
+convTest= analysisAggregation.newConvergenceTest("norm_unbalance_conv_test")
 convTest.tol=1.0e-9
 convTest.maxNumIter= 10
-integ= smt.newIntegrator("load_control_integrator",xc.Vector([]))
-soe= smt.newSystemOfEqn("band_gen_lin_soe")
+integ= analysisAggregation.newIntegrator("load_control_integrator",xc.Vector([]))
+soe= analysisAggregation.newSystemOfEqn("band_gen_lin_soe")
 solver= soe.newSolver("band_gen_lin_lapack_solver")
 
 
-analysis= solu.newAnalysis("static_analysis","smt","")
+analysis= solu.newAnalysis("static_analysis","analysisAggregation","")
 result= analysis.analyze(1)
 
 import os
@@ -109,18 +109,18 @@ cHandler.alphaMP= 1.0e15
 numberer= sm.newNumberer("default_numberer")
 numberer.useAlgorithm("rcm")
 
-solMethods= solCtrl.getSoluMethodContainer
-smt= solMethods.newSoluMethod("smt","sm")
-solAlgo= smt.newSolutionAlgorithm("newton_raphson_soln_algo")
-convTest= smt.newConvergenceTest("norm_unbalance_conv_test")
+analysisAggregations= solCtrl.getAnalysisAggregationContainer
+analysisAggregation= analysisAggregations.newAnalysisAggregation("analysisAggregation","sm")
+solAlgo= analysisAggregation.newSolutionAlgorithm("newton_raphson_soln_algo")
+convTest= analysisAggregation.newConvergenceTest("norm_unbalance_conv_test")
 convTest.tol=1.0e-9
 convTest.maxNumIter= 10
-integ= smt.newIntegrator("load_control_integrator",xc.Vector([]))
-soe= smt.newSystemOfEqn("band_gen_lin_soe")
+integ= analysisAggregation.newIntegrator("load_control_integrator",xc.Vector([]))
+soe= analysisAggregation.newSystemOfEqn("band_gen_lin_soe")
 solver= soe.newSolver("band_gen_lin_lapack_solver")
 
 
-analysis= solu.newAnalysis("static_analysis","smt","")
+analysis= solu.newAnalysis("static_analysis","analysisAggregation","")
 result= analysis.analyze(1)
 
 

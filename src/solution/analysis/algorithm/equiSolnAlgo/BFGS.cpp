@@ -56,14 +56,14 @@
 #include <solution/analysis/algorithm/equiSolnAlgo/BFGS.h>
 #include <solution/system_of_eqn/linearSOE/LinearSOE.h> 
 #include <solution/analysis/convergenceTest/ConvergenceTest.h>
-#include "solution/SoluMethod.h"
+#include "solution/AnalysisAggregation.h"
 
 //! @brief Constructor
-XC::BFGS::BFGS(SoluMethod *owr,int theTangentToUse, int n)
+XC::BFGS::BFGS(AnalysisAggregation *owr,int theTangentToUse, int n)
   :BFBRoydenBase(owr,EquiALGORITHM_TAGS_BFGS,theTangentToUse,n) {}
 
 //! @brief Constructor.
-XC::BFGS::BFGS(SoluMethod *owr,ConvergenceTest &theT, int theTangentToUse, int n)
+XC::BFGS::BFGS(AnalysisAggregation *owr,ConvergenceTest &theT, int theTangentToUse, int n)
   :BFBRoydenBase(owr,EquiALGORITHM_TAGS_BFGS,theT,theTangentToUse,n) {}
 
 //! @brief resuelve el paso actual.
@@ -82,7 +82,7 @@ int XC::BFGS::solveCurrentStep(void)
       }	
 
     // set itself as the ConvergenceTest objects EquiSolnConvAlgo
-    theTest->set_owner(getSoluMethod());
+    theTest->set_owner(getAnalysisAggregation());
     if(theTest->start() < 0)
       {
         std::cerr << "XC::BFGS::solveCurrentStep() -"
@@ -90,7 +90,7 @@ int XC::BFGS::solveCurrentStep(void)
         return -3;
       }
 
-    localTest->set_owner(getSoluMethod());
+    localTest->set_owner(getAnalysisAggregation());
 
     rdotz.resize(numberLoops+3);
     sdotr.resize(numberLoops+3);

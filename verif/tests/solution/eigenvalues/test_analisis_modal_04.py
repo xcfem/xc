@@ -112,11 +112,11 @@ sm= solModels.newModelWrapper("sm")
 cHandler= sm.newConstraintHandler("transformation_constraint_handler")
 numberer= sm.newNumberer("default_numberer")
 numberer.useAlgorithm("rcm")
-solMethods= solCtrl.getSoluMethodContainer
-smt= solMethods.newSoluMethod("smt","sm")
-solAlgo= smt.newSolutionAlgorithm("frequency_soln_algo")
-integ= smt.newIntegrator("eigen_integrator",xc.Vector([1.0,1,1.0,1.0]))
-soe= smt.newSystemOfEqn("band_arpack_soe")
+analysisAggregations= solCtrl.getAnalysisAggregationContainer
+analysisAggregation= analysisAggregations.newAnalysisAggregation("analysisAggregation","sm")
+solAlgo= analysisAggregation.newSolutionAlgorithm("frequency_soln_algo")
+integ= analysisAggregation.newIntegrator("eigen_integrator",xc.Vector([1.0,1,1.0,1.0]))
+soe= analysisAggregation.newSystemOfEqn("band_arpack_soe")
 soe.shift= 0.0
 solver= soe.newSolver("band_arpack_solver")
 solver.tol= 1e-3
@@ -124,7 +124,7 @@ solver.maxNumIter= 5
 #soe= buck.newSystemOfEqn("band_arpackpp_soe")
 #solver= soe.newSolver("band_arpackpp_solver")
 
-analysis= solu.newAnalysis("modal_analysis","smt","")
+analysis= solu.newAnalysis("modal_analysis","analysisAggregation","")
 analOk= analysis.analyze(4)
 periodos= analysis.getPeriods()
 modos= analysis.getNormalizedEigenvectors()

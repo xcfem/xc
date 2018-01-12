@@ -69,23 +69,23 @@
 #include <solution/analysis/model/AnalysisModel.h>
 
 //! @brief Constructor.
-XC::HHTExplicit::HHTExplicit(SoluMethod *owr)
+XC::HHTExplicit::HHTExplicit(AnalysisAggregation *owr)
     : HHTRayleighBase(owr,INTEGRATOR_TAGS_HHTExplicit) {}
 
 //! @brief Constructor.
-XC::HHTExplicit::HHTExplicit(SoluMethod *owr,double _alpha)
+XC::HHTExplicit::HHTExplicit(AnalysisAggregation *owr,double _alpha)
   : HHTRayleighBase(owr,INTEGRATOR_TAGS_HHTExplicit,_alpha,0.5) {}
 
 //! @brief Constructor.
-XC::HHTExplicit::HHTExplicit(SoluMethod *owr,double _alpha,const RayleighDampingFactors &rF)
+XC::HHTExplicit::HHTExplicit(AnalysisAggregation *owr,double _alpha,const RayleighDampingFactors &rF)
     : HHTRayleighBase(owr,INTEGRATOR_TAGS_HHTExplicit,_alpha,0.5,rF) {}
 
 //! @brief Constructor.
-XC::HHTExplicit::HHTExplicit(SoluMethod *owr,double _alpha, double _gamma)
+XC::HHTExplicit::HHTExplicit(AnalysisAggregation *owr,double _alpha, double _gamma)
     : HHTRayleighBase(owr,INTEGRATOR_TAGS_HHTExplicit,_alpha,_gamma) {}
 
 //! @brief Constructor.
-XC::HHTExplicit::HHTExplicit(SoluMethod *owr,double _alpha, double _gamma,const RayleighDampingFactors &rF)
+XC::HHTExplicit::HHTExplicit(AnalysisAggregation *owr,double _alpha, double _gamma,const RayleighDampingFactors &rF)
     : HHTRayleighBase(owr,INTEGRATOR_TAGS_HHTExplicit,_alpha,_gamma,rF) {}
 
 

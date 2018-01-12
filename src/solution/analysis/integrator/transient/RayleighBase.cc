@@ -29,11 +29,11 @@
 #include <solution/analysis/integrator/transient/RayleighBase.h>
 
 //! @brief Constructor.
-XC::RayleighBase::RayleighBase(SoluMethod *owr,int classTag)
+XC::RayleighBase::RayleighBase(AnalysisAggregation *owr,int classTag)
     : DampingFactorsIntegrator(owr,classTag), deltaT(0.0) {}
 
 //! @brief Constructor.
-XC::RayleighBase::RayleighBase(SoluMethod *owr,int classTag,const RayleighDampingFactors &rF)
+XC::RayleighBase::RayleighBase(AnalysisAggregation *owr,int classTag,const RayleighDampingFactors &rF)
   : DampingFactorsIntegrator(owr,classTag,rF),deltaT(0.0) {}
 
 

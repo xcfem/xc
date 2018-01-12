@@ -69,7 +69,7 @@
 #include <utility/matrix/Vector.h>
 #include <solution/analysis/model/dof_grp/DOF_Group.h>
 
-XC::StaticIntegrator::StaticIntegrator(SoluMethod *owr,int clasTag)
+XC::StaticIntegrator::StaticIntegrator(AnalysisAggregation *owr,int clasTag)
   :IncrementalIntegrator(owr,clasTag) {}
 
 //! @brief Asks the element  being passed as parameter to build

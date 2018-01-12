@@ -57,7 +57,7 @@
 // What: "@(#) IncrementalIntegrator.C, revA"
 
 #include <solution/analysis/integrator/IncrementalIntegrator.h>
-#include "solution/SoluMethod.h"
+#include "solution/AnalysisAggregation.h"
 #include <solution/analysis/model/fe_ele/FE_Element.h>
 #include <solution/system_of_eqn/linearSOE/LinearSOE.h>
 #include <solution/analysis/model/AnalysisModel.h>
@@ -68,7 +68,7 @@
 
 
 //! @brief Constructor.
-XC::IncrementalIntegrator::IncrementalIntegrator(SoluMethod *owr,int clasTag)
+XC::IncrementalIntegrator::IncrementalIntegrator(AnalysisAggregation *owr,int clasTag)
   : Integrator(owr,clasTag), statusFlag(CURRENT_TANGENT) {}
 
 
@@ -207,7 +207,7 @@ int XC::IncrementalIntegrator::revertToStart()
 //! @brief Returns a pointer to the system of equations de eigenvalues.
 XC::LinearSOE *XC::IncrementalIntegrator::getLinearSOEPtr(void)
   {
-    SoluMethod *sm= getSoluMethod();
+    AnalysisAggregation *sm= getAnalysisAggregation();
     assert(sm);
     return sm->getLinearSOEPtr();
   }
@@ -215,7 +215,7 @@ XC::LinearSOE *XC::IncrementalIntegrator::getLinearSOEPtr(void)
 //! @brief Returns a pointer to the system of equations de eigenvalues.
 const XC::LinearSOE *XC::IncrementalIntegrator::getLinearSOEPtr(void) const
   {
-    const SoluMethod *sm= getSoluMethod();
+    const AnalysisAggregation *sm= getAnalysisAggregation();
     assert(sm);
     return sm->getLinearSOEPtr();
   }

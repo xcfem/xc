@@ -65,7 +65,7 @@
 #include <utility/actor/channel/Channel.h>
 #include <utility/actor/objectBroker/FEM_ObjectBroker.h>
 
-XC::DistributedSparseGenRowLinSOE::DistributedSparseGenRowLinSOE(SoluMethod *owr)
+XC::DistributedSparseGenRowLinSOE::DistributedSparseGenRowLinSOE(AnalysisAggregation *owr)
   :SparseGenSOEBase(owr,LinSOE_TAGS_DistributedSparseGenRowLinSOE),
    colA(0), rowStartA(0), 
    numP(0), rank(-1), startRow(-1), endRow(-1), numRows(0),

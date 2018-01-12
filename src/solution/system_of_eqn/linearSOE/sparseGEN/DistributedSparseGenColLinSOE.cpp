@@ -65,7 +65,7 @@
 #include <utility/actor/objectBroker/FEM_ObjectBroker.h>
 
 //! @brief Constructor.
-XC::DistributedSparseGenColLinSOE::DistributedSparseGenColLinSOE(SoluMethod *owr)
+XC::DistributedSparseGenColLinSOE::DistributedSparseGenColLinSOE(AnalysisAggregation *owr)
   :SparseGenColLinSOE(owr,LinSOE_TAGS_DistributedSparseGenColLinSOE), DistributedBandLinSOE() {}
 
 //! @brief Calcula el valor de nnz.

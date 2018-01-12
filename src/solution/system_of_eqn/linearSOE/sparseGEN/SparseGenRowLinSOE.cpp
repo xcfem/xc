@@ -62,7 +62,7 @@
 #include <solution/graph/graph/VertexIter.h>
 #include <cmath>
 
-XC::SparseGenRowLinSOE::SparseGenRowLinSOE(SoluMethod *owr)
+XC::SparseGenRowLinSOE::SparseGenRowLinSOE(AnalysisAggregation *owr)
   :SparseGenSOEBase(owr,LinSOE_TAGS_SparseGenRowLinSOE) {}
 
 bool XC::SparseGenRowLinSOE::setSolver(LinearSOESolver *newSolver)

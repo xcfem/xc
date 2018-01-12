@@ -70,7 +70,7 @@
 #include <solution/system_of_eqn/linearSOE/LinearSOE.h>
 #include <utility/matrix/Vector.h>
 
-XC::ArcLength1::ArcLength1(SoluMethod *owr,double arcLength, double alpha)
+XC::ArcLength1::ArcLength1(AnalysisAggregation *owr,double arcLength, double alpha)
   :ArcLengthBase(owr,INTEGRATOR_TAGS_ArcLength1,arcLength,alpha) {}
 
 //! @brief Returns the valor de dLambda.

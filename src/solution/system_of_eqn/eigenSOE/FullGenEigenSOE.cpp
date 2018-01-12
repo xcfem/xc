@@ -64,7 +64,7 @@
 #include <f2c.h>
 #include <cmath>
 
-XC::FullGenEigenSOE::FullGenEigenSOE(SoluMethod *owr)
+XC::FullGenEigenSOE::FullGenEigenSOE(AnalysisAggregation *owr)
   : EigenSOE(owr,EigenSOE_TAGS_FullGenEigenSOE) {}
 
 //! @brief Sets the solver que se empleará parto solve the eigenproblem.

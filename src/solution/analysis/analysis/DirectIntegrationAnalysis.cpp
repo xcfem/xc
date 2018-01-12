@@ -61,7 +61,7 @@
 
 #include <solution/analysis/analysis/DirectIntegrationAnalysis.h>
 #include "solution/analysis/ModelWrapper.h"
-#include "solution/SoluMethod.h"
+#include "solution/AnalysisAggregation.h"
 #include <solution/analysis/algorithm/equiSolnAlgo/EquiSolnAlgo.h>
 #include <solution/analysis/model/AnalysisModel.h>
 #include <solution/system_of_eqn/linearSOE/LinearSOE.h>
@@ -78,7 +78,7 @@
 // AddingSensitivity:END ////////////////////////////////////
 
 //! @brief Constructor.
-XC::DirectIntegrationAnalysis::DirectIntegrationAnalysis(SoluMethod *solution_method)
+XC::DirectIntegrationAnalysis::DirectIntegrationAnalysis(AnalysisAggregation *solution_method)
   :TransientAnalysis(solution_method), domainStamp(0)
   {
 // AddingSensitivity:BEGIN ////////////////////////////////////

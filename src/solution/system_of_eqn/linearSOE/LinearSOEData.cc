@@ -31,7 +31,7 @@
 #include <utility/matrix/ID.h>
 
 //! @brief Constructor.
-XC::LinearSOEData::LinearSOEData(SoluMethod *owr,int classtag,int N)
+XC::LinearSOEData::LinearSOEData(AnalysisAggregation *owr,int classtag,int N)
   :LinearSOE(owr,classtag), size(N) {}
 
 

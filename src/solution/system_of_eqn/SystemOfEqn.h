@@ -72,7 +72,7 @@ namespace XC {
 class Graph;
 class AnalysisModel;
 class FEM_ObjectBroker;
-class SoluMethod;
+class AnalysisAggregation;
 
 //!  @ingroup Solu
 //! 
@@ -88,14 +88,14 @@ class SoluMethod;
 //! system of equations.
 class SystemOfEqn: public MovableObject, public EntCmd
   {
-    SoluMethod *getSoluMethod(void);
-    const SoluMethod *getSoluMethod(void) const;
+    AnalysisAggregation *getAnalysisAggregation(void);
+    const AnalysisAggregation *getAnalysisAggregation(void) const;
   protected:
     virtual AnalysisModel *getAnalysisModelPtr(void);
     virtual const AnalysisModel *getAnalysisModelPtr(void) const;
 
-    friend class SoluMethod;
-    SystemOfEqn(SoluMethod *,int classTag);
+    friend class AnalysisAggregation;
+    SystemOfEqn(AnalysisAggregation *,int classTag);
     //! @brief Virtual constructor.
     virtual SystemOfEqn *getCopy(void) const= 0;
   public:

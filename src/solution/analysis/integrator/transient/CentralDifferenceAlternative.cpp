@@ -66,7 +66,7 @@
 #include <solution/analysis/model/AnalysisModel.h>
 
 //! @brief Constructor.
-XC::CentralDifferenceAlternative::CentralDifferenceAlternative(SoluMethod *owr)
+XC::CentralDifferenceAlternative::CentralDifferenceAlternative(AnalysisAggregation *owr)
 :CentralDifferenceBase(owr,INTEGRATOR_TAGS_CentralDifferenceAlternative),
  Ut(0), Utp1(0) {}
 

@@ -74,16 +74,16 @@
 #include "domain/component/Parameter.h"
 
 
-XC::NewmarkSensitivityIntegrator::NewmarkSensitivityIntegrator(SoluMethod *owr)
+XC::NewmarkSensitivityIntegrator::NewmarkSensitivityIntegrator(AnalysisAggregation *owr)
 :SensitivityIntegrator(),Newmark(owr),parameterID(0),sensitivityFlag(0),gradNumber(0)
   { assemblyFlag = 0; }
 
-XC::NewmarkSensitivityIntegrator::NewmarkSensitivityIntegrator(SoluMethod *owr,int passedAssemblyFlag, double theGamma, double theBeta, bool dispFlag)
+XC::NewmarkSensitivityIntegrator::NewmarkSensitivityIntegrator(AnalysisAggregation *owr,int passedAssemblyFlag, double theGamma, double theBeta, bool dispFlag)
   :SensitivityIntegrator(),Newmark(owr,theGamma, theBeta, dispFlag),
 parameterID(0),sensitivityFlag(0),gradNumber(0)
   { assemblyFlag = passedAssemblyFlag; }
 
-XC::NewmarkSensitivityIntegrator::NewmarkSensitivityIntegrator(SoluMethod *owr,int passedAssemblyFlag, double theGamma, double theBeta, const RayleighDampingFactors &rF,bool dispFlag)
+XC::NewmarkSensitivityIntegrator::NewmarkSensitivityIntegrator(AnalysisAggregation *owr,int passedAssemblyFlag, double theGamma, double theBeta, const RayleighDampingFactors &rF,bool dispFlag)
   :SensitivityIntegrator(),Newmark(owr,theGamma, theBeta, rF, dispFlag), 
 parameterID(0),sensitivityFlag(0),gradNumber(0)
   { assemblyFlag = passedAssemblyFlag; }

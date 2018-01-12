@@ -34,7 +34,7 @@
 #include <solution/analysis/model/FE_EleIter.h>
 
 //! @brief Constructor.
-XC::LinearBucklingIntegrator::LinearBucklingIntegrator(SoluMethod *owr)
+XC::LinearBucklingIntegrator::LinearBucklingIntegrator(AnalysisAggregation *owr)
   :EigenIntegrator(owr) {}
 
 //! @brief Assemblies stiffness matrix for the step following formKt()

@@ -83,7 +83,7 @@ class Vector;
 class StaticIntegrator: public IncrementalIntegrator
   {
   protected:
-    StaticIntegrator(SoluMethod *,int classTag);
+    StaticIntegrator(AnalysisAggregation *,int classTag);
   public:
     inline virtual ~StaticIntegrator(void) {}
     // methods which define what the FE_Element and DOF_Groups add

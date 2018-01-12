@@ -65,11 +65,11 @@
 #include <solution/graph/graph/Vertex.h>
 #include <solution/graph/graph/VertexIter.h>
 
-XC::FullGenLinSOE::FullGenLinSOE(SoluMethod *owr)
+XC::FullGenLinSOE::FullGenLinSOE(AnalysisAggregation *owr)
   :FactoredSOEBase(owr,LinSOE_TAGS_FullGenLinSOE) {}
 
 
-XC::FullGenLinSOE::FullGenLinSOE(SoluMethod *owr,int N)
+XC::FullGenLinSOE::FullGenLinSOE(AnalysisAggregation *owr,int N)
   :FactoredSOEBase(owr,LinSOE_TAGS_FullGenLinSOE,N)
   {
     A= Vector(size*size);

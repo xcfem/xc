@@ -54,7 +54,7 @@
 #include <cmath>
 
 
-XC::SymSparseLinSOE::SymSparseLinSOE(SoluMethod *owr,int lSparse)
+XC::SymSparseLinSOE::SymSparseLinSOE(AnalysisAggregation *owr,int lSparse)
   :SparseSOEBase(owr,LinSOE_TAGS_SymSparseLinSOE),
    nblks(0), xblk(0), invp(0), diag(0), penv(0), rowblks(0),
    begblk(0), first(0) 

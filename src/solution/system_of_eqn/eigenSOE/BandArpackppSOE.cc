@@ -35,7 +35,7 @@
 
 
 //! @brief Constructor.
-XC::BandArpackppSOE::BandArpackppSOE(SoluMethod *owr,const double &shift)
+XC::BandArpackppSOE::BandArpackppSOE(AnalysisAggregation *owr,const double &shift)
   :ArpackSOE(owr,EigenSOE_TAGS_BandArpackppSOE,shift), A(), M() {}
 
 //! @brief Sets the solver to use.

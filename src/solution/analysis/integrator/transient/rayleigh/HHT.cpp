@@ -66,23 +66,23 @@
 #include <solution/analysis/model/AnalysisModel.h>
 
 //! @brief Constructor.
-XC::HHT::HHT(SoluMethod *owr)
+XC::HHT::HHT(AnalysisAggregation *owr)
   : HHTBase(owr,INTEGRATOR_TAGS_HHT) {}
 
 //! @brief Constructor.
-XC::HHT::HHT(SoluMethod *owr,double _alpha)
+XC::HHT::HHT(AnalysisAggregation *owr,double _alpha)
   : HHTBase(owr,INTEGRATOR_TAGS_HHT,_alpha) {}
 
 //! @brief Constructor.
-XC::HHT::HHT(SoluMethod *owr,double _alpha,const RayleighDampingFactors &rF)
+XC::HHT::HHT(AnalysisAggregation *owr,double _alpha,const RayleighDampingFactors &rF)
   : HHTBase(owr,INTEGRATOR_TAGS_HHT,_alpha,rF) {}
 
 //! @brief Constructor.
-XC::HHT::HHT(SoluMethod *owr,double _alpha, double _beta, double _gamma)
+XC::HHT::HHT(AnalysisAggregation *owr,double _alpha, double _beta, double _gamma)
   : HHTBase(owr,INTEGRATOR_TAGS_HHT,_alpha,_beta,_gamma) {}
 
 //! @brief Constructor.
-XC::HHT::HHT(SoluMethod *owr,double _alpha, double _beta, double _gamma,const RayleighDampingFactors &rF)
+XC::HHT::HHT(AnalysisAggregation *owr,double _alpha, double _beta, double _gamma,const RayleighDampingFactors &rF)
   : HHTBase(owr,INTEGRATOR_TAGS_HHT,_alpha,_beta,_gamma,rF) {}
 
 

@@ -78,8 +78,8 @@ class SparseGenRowLinSOE : public SparseGenSOEBase
   protected:
     virtual bool setSolver(LinearSOESolver *);
 
-    friend class SoluMethod;
-    SparseGenRowLinSOE(SoluMethod *);        
+    friend class AnalysisAggregation;
+    SparseGenRowLinSOE(AnalysisAggregation *);        
     SystemOfEqn *getCopy(void) const;
   public:
     int setSize(Graph &theGraph);

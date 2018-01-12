@@ -77,9 +77,9 @@ class ConvergenceTest;
 //! first iteration until convergence is achieved.
 class ModifiedNewton: public NewtonBased
   {
-    friend class SoluMethod;
+    friend class AnalysisAggregation;
     friend class FEM_ObjectBroker;
-    ModifiedNewton(SoluMethod *,int tangent = CURRENT_TANGENT);
+    ModifiedNewton(AnalysisAggregation *,int tangent = CURRENT_TANGENT);
     virtual SolutionAlgorithm *getCopy(void) const;
   public:
     int solveCurrentStep(void);    

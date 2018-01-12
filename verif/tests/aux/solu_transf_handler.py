@@ -7,15 +7,15 @@ cHandler= sm.newConstraintHandler("transformation_constraint_handler")
 numberer= sm.newNumberer("default_numberer")
 numberer.useAlgorithm("simple")
 
-solMethods= solCtrl.getSoluMethodContainer
-smt= solMethods.newSoluMethod("smt","sm")
+analysisAggregations= solCtrl.getAnalysisAggregationContainer
+analysisAggregation= analysisAggregations.newAnalysisAggregation("analysisAggregation","sm")
 
-solAlgo= smt.newSolutionAlgorithm("linear_soln_algo")
-integ= smt.newIntegrator("load_control_integrator",xc.Vector([]))
-soe= smt.newSystemOfEqn("sparse_gen_col_lin_soe")
+solAlgo= analysisAggregation.newSolutionAlgorithm("linear_soln_algo")
+integ= analysisAggregation.newIntegrator("load_control_integrator",xc.Vector([]))
+soe= analysisAggregation.newSystemOfEqn("sparse_gen_col_lin_soe")
 solver= soe.newSolver("super_lu_solver")
 
-analysis= solu.newAnalysis("static_analysis","smt","")
+analysis= solu.newAnalysis("static_analysis","analysisAggregation","")
 result= analysis.analyze(1)
 
     
