@@ -79,7 +79,12 @@ class Subdomain;
 
 //! @ingroup AnalAlgo
 //
-//! @brief Solution algorithm for domain decomposition.
+//! @brief Solution algorithm for domain decomposition analysis.
+//!
+//! The DomainDecompAlgo class is the SolutionAlgorithm subclass
+//! used in a DomainDecompAnalysis. The class is responsible for updating
+//! the DOF\_Group responses given the current solution to the interface
+//! problem.
 class DomainDecompAlgo: public SolutionAlgorithm
   {
   protected:

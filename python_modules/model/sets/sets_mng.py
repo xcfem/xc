@@ -128,7 +128,30 @@ def set_included_in_orthoPrism(preprocessor,setInit,prismBase,prismAxis,setName)
     s=lstElem_to_set(preprocessor,elem_inside_prism,setName)
     s.fillDownwards()
     return s
+
+def set_not_included_in_orthoPrism(preprocessor,setInit,prismBase,prismAxis,setName):
+    '''reselect from set setInit those elements NOT included in a orthogonal prism
+    defined by a 2D polygon and the direction of its axis. 
+
+    :param preprocessor: preprocessor
+    :param setInit:      set of elements to which restrict the search
+    :param prismBase:    2D polygon that defines the n-sided base of the prism.
+                         The vertices of the polygon are defined in global 
+                         coordinates in the following way:
+                         - for X-axis-prism: (y,z)
+                         - for Y-axis-prism: (x,z)
+                         - for Z-axis-prism: (x,y)
     
+    :param prismAxis:    axis of the prism (can be equal to 'X', 'Y', 'Z')
+    :param setName:      name of the set to be generated                   
+    '''
+    elementsToRemove= set_included_in_orthoPrism(preprocessor,setInit,prismBase,prismAxis,setName+'toRemove')
+    retval= setInit-elementsToRemove
+    print 'name: ', retval.name
+    retval.name= setName
+    return retval
+
+
 
 def lstElem_to_set(preprocessor,lstElem,setName):
     '''add the elements in list `lstElem` to the set named setName.

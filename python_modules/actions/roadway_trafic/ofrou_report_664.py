@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 from __future__ import division
 
-'''Roadway trafic load models from OFROU report 664:
+'''Roadway trafic load models from OFROU (Switzerland federal highway
+   authority) report 664:
    "Charges de trafic actualisées pour les dalles de roulement en béton
    des ponts existants".'''
 
@@ -28,11 +29,13 @@ class LoadModel(object):
   ''' Roadway trafic load model OFROU report 664.
     
     :ivar wheelLoads: position and loads of each wheel
+    :ivar vehicleBoundary: polygon without uniform load around the vehicle.
   '''
 
-  def __init__(self,wLoads):
+  def __init__(self,wLoads, vBoundary= None):
     self.wheelLoads= wLoads # Wheel positions and loads
-
+    self.vehicleBoundary= vBoundary
+    
   def getPositions(self):
     retval= list()
     for p in self.wheelLoads:
@@ -64,7 +67,7 @@ class LoadModel(object):
       retvalPos.y/=totalLoad
     return retvalPos
 
-  def getRelativePositions(self):
+  def getLoadRelativePositions(self):
     '''Return the loads positions with respect to the loads centroid.'''
     centroidVector= self.getCentroid().getPositionVector()
     retval= list()
@@ -73,19 +76,46 @@ class LoadModel(object):
       retval.append(pos)
     return retval
 
-  def getCenteredBoundary(self):
+  def getVehicleBoundaryRelativePositions(self):
+    '''Return the vehicle boundary positions with respect to
+       the loads centroid.'''
+    centroidVector= self.getCentroid().getPositionVector()
+    print 'centroid vector: ', centroidVector
+    retval= list()
+    for p in self.vehicleBoundary:
+      retval.append(p-centroidVector)
+    return retval
+  
+  def getCenteredLoadBoundary(self):
+    '''Return the boundary of the wheel loads with respect to
+       the load centroid.'''
     retval= geom.BND2d()
-    tmp= self.getRelativePositions()
+    tmp= self.getLoadRelativePositions()
     for p in tmp:
       retval.update(p)
     return retval
-    
+
+  def getCenteredVehicleBoundary(self):
+    '''Return the boundary of the vehicle with respect to
+       the load centroid.'''
+    retval= geom.Poligono2d()
+    tmp= self.getVehicleBoundaryRelativePositions()
+    for p in tmp:
+      retval.agregaVertice(p)
+    return retval
+
   def getRotatedPi(self):
+    '''Return the load model rotated 180 degrees (pi radians).'''
     newLoads= list()
     for i in self.wheelLoads:
       newLoads.append(WheelLoad(geom.Pos2d(-i.position.x,-i.position.y),i.load))
-    return LoadModel(newLoads)
-      
+    newVehicleBoundary= None
+    if(self.vehicleBoundary):
+      newVehicleBoundary= list()
+      for p in self.vehicleBoundary:
+        newVehicleBoundary.append(geom.Pos2d(-p.x,-p.y))
+    return LoadModel(newLoads,newVehicleBoundary)
+
 
 CraneTruckLoadModel= LoadModel(wLoads= [WheelLoad(geom.Pos2d(-3.17,1.0),216e3/2.0),
                                         WheelLoad(geom.Pos2d(-1.57,1.0),216e3/2.0),
@@ -108,7 +138,6 @@ Det11TruckLoadModel= LoadModel(wLoads= [WheelLoad(geom.Pos2d(0.0,1.0),117e3/2.0)
                                         WheelLoad(geom.Pos2d(1.80+1.60,-1.0),156e3/2.0),
                                         WheelLoad(geom.Pos2d(1.80+1.60+1.30,-1.0),195e3/2.0),
                                         WheelLoad(geom.Pos2d(1.80+1.60+1.30+1.30,-1.0),195e3/2.0)])
-
 Det12TruckLoadModel= LoadModel(wLoads= [WheelLoad(geom.Pos2d(0.0,1.0),81e3/2.0),
                                         WheelLoad(geom.Pos2d(1.80,1.0),81e3/2.0),
                                         WheelLoad(geom.Pos2d(1.80+1.60,1.0),108e3/2.0),
@@ -120,7 +149,8 @@ Det12TruckLoadModel= LoadModel(wLoads= [WheelLoad(geom.Pos2d(0.0,1.0),81e3/2.0),
                                         WheelLoad(geom.Pos2d(1.80+1.60+1.30,-1.0),135e3/2.0),
                                         WheelLoad(geom.Pos2d(1.80+1.60+1.30+1.30,-1.0),135e3/2.0)])
 
-
+Det2front= 0.75+1.50
+Det2points= [geom.Pos2d(-Det2front,-1.0),geom.Pos2d(10.0-Det2front,-1.0),geom.Pos2d(10.0-Det2front,+1.0),geom.Pos2d(-Det2front,1.0)]
 Det21TruckLoadModel= LoadModel(wLoads= [WheelLoad(geom.Pos2d(0.0,1.0),90e3/2.0),
                                         WheelLoad(geom.Pos2d(1.80,1.0),90e3/2.0),
                                         WheelLoad(geom.Pos2d(1.80+1.60,1.0),120e3/2.0),
@@ -130,7 +160,7 @@ Det21TruckLoadModel= LoadModel(wLoads= [WheelLoad(geom.Pos2d(0.0,1.0),90e3/2.0),
                                         WheelLoad(geom.Pos2d(1.80,-1.0),90e3/2.0),
                                         WheelLoad(geom.Pos2d(1.80+1.60,-1.0),120e3/2.0),
                                         WheelLoad(geom.Pos2d(1.80+1.60+1.30,-1.0),150e3/2.0),
-                                        WheelLoad(geom.Pos2d(1.80+1.60+1.30+1.30,-1.0),150e3/2.0)])
+                                        WheelLoad(geom.Pos2d(1.80+1.60+1.30+1.30,-1.0),150e3/2.0)], vBoundary= Det2points)
 
 Det22TruckLoadModel= LoadModel(wLoads= [WheelLoad(geom.Pos2d(0.0,1.0),67.5e3/2.0),
                                         WheelLoad(geom.Pos2d(1.80,1.0),67.5e3/2.0),
@@ -141,4 +171,4 @@ Det22TruckLoadModel= LoadModel(wLoads= [WheelLoad(geom.Pos2d(0.0,1.0),67.5e3/2.0
                                         WheelLoad(geom.Pos2d(1.80,-1.0),67.5e3/2.0),
                                         WheelLoad(geom.Pos2d(1.80+1.60,-1.0),90e3/2.0),
                                         WheelLoad(geom.Pos2d(1.80+1.60+1.30,-1.0),112.5e3/2.0),
-                                        WheelLoad(geom.Pos2d(1.80+1.60+1.30+1.30,-1.0),112.5e3/2.0)])
+                                        WheelLoad(geom.Pos2d(1.80+1.60+1.30+1.30,-1.0),112.5e3/2.0)], vBoundary= Det2points)

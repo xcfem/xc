@@ -72,10 +72,24 @@
 #include "domain/domain/subdomain/Subdomain.h"
 
 //! @brief Constructor.
+//!
+//! @param owr: object owner.
 XC::DomainDecompAlgo::DomainDecompAlgo(AnalysisAggregation *owr)
   :SolutionAlgorithm(owr,DomDecompALGORITHM_TAGS_DomainDecompAlgo) {}
 
 //! @brief Solve current step.
+//! This is a method which will set the external dof response in X of the
+//! system of equation. The responses set will be those X in the higher
+//! level SOE object corresponding to the subdomain. It performs the following:
+//! \begin{tabbing}
+//! while \= while \= \+ \kill
+//! theSubdomain-\f$>\f$getLastExternalSysResponse();
+//! theSolver-\f$>\f$setComputedXext(extResponse);
+//! theSolver-\f$>\f$solveXint();
+//! theIntegrator-\f$>\f$update(theSOE-\f$>\f$getX()); 
+//! \end{tabbing}
+//! \noindent Returns \f$0\f$. WILL CHANGE TO CHECK THAT THOSE METHODS
+//! INVOKED ALL RETURN \f$0\f$ OTHERWISE PRINT WARNING AND RETURN NEGATIVE.
 int XC::DomainDecompAlgo::solveCurrentStep(void)
   {
     IncrementalIntegrator *theIntegrator= dynamic_cast<IncrementalIntegrator *>(getIntegratorPtr());
