@@ -76,11 +76,24 @@ class LoadModel(object):
       retval.append(pos)
     return retval
 
+  def normalize(self):
+    '''Sets the positions with respect to the loads centroid.'''
+    dispModulus= self.getCentroid().getPositionVector().getModulo()
+    if(dispModulus>1e-4):
+      normalizedPositions= self.getLoadRelativePositions()
+      if(self.vehicleBoundary):
+        normalizedVehicleBoundary= self.getVehicleBoundaryRelativePositions()
+        self.vehicleBoundary= normalizedVehicleBoundary
+      for (old,new) in zip(self.wheelLoads,normalizedPositions):
+        print 'load positions old: ', old.position, ' new: ', new
+        old.position= new
+    
+
   def getVehicleBoundaryRelativePositions(self):
     '''Return the vehicle boundary positions with respect to
        the loads centroid.'''
     centroidVector= self.getCentroid().getPositionVector()
-    print 'centroid vector: ', centroidVector
+    print 'centroidVector= ', centroidVector
     retval= list()
     for p in self.vehicleBoundary:
       retval.append(p-centroidVector)
@@ -116,6 +129,62 @@ class LoadModel(object):
         newVehicleBoundary.append(geom.Pos2d(-p.x,-p.y))
     return LoadModel(newLoads,newVehicleBoundary)
 
+class VehicleLoad(object):
+  '''Position of a load model in the structure.
+
+    :ivar loadModel: load model that corresponds to the vehicle.
+    :ivar ref2d3d: position and orientation of the vehicle in the structure.
+  '''
+  def __init__(self,lModel, rfSys):
+    '''Constructor:
+
+       :param lModel: load model that corresponds to the vehicle.
+       :param rfSys: position and orientation of the vehicle in the structure.
+    '''
+    self.loadModel= lModel
+    self.loadModel.normalize()
+    self.refSys= rfSys
+    
+  def getCentroid(self):
+    '''Return the centroid of the loads.'''
+    return self.refSys.getOrg()
+
+  def getGlobalPositions(self,localPositions):
+    '''Return the corresponding global positions.'''
+    retval= list()
+    for p in localPositions:
+      p3D= self.refSys.getPosGlobal(p)
+      print '2D p= ', p, ' 3D p= ', p3D
+      retval.append(p3D)
+    return retval
+  
+  def getLoadPositions(self):
+    '''Return the positions of the vehicle loads.'''
+    print '**** loads.'''
+    positions= self.loadModel.getPositions()
+    return self.getGlobalPositions(positions)
+  
+  def getVehicleBoundaryPositions(self):
+    '''Return the vehicle boundary positions.'''
+    print '**** boundary.'''
+    return self.getGlobalPositions(self.loadModel.vehicleBoundary)
+  
+  def getLoadBoundary(self):
+    '''Return the boundary of the vehicle loads.'''
+    retval= geom.BND3d()
+    tmp= self.getLoadPositions()
+    for p in tmp:
+      retval.update(p)
+    return retval
+
+  def getVehicleBoundary(self):
+    '''Return the boundary of the vehicle.'''
+    retval= geom.Poligono2d()
+    tmp= self.getVehicleBoundaryPositions()
+    for p in tmp:
+      print '3D p= ', p
+      retval.agregaVertice(geom.Pos2d(p.x,p.y))
+    return retval
 
 CraneTruckLoadModel= LoadModel(wLoads= [WheelLoad(geom.Pos2d(-3.17,1.0),216e3/2.0),
                                         WheelLoad(geom.Pos2d(-1.57,1.0),216e3/2.0),
@@ -150,7 +219,7 @@ Det12TruckLoadModel= LoadModel(wLoads= [WheelLoad(geom.Pos2d(0.0,1.0),81e3/2.0),
                                         WheelLoad(geom.Pos2d(1.80+1.60+1.30+1.30,-1.0),135e3/2.0)])
 
 Det2front= 0.75+1.50
-Det2points= [geom.Pos2d(-Det2front,-1.0),geom.Pos2d(10.0-Det2front,-1.0),geom.Pos2d(10.0-Det2front,+1.0),geom.Pos2d(-Det2front,1.0)]
+Det2points= [geom.Pos2d(-Det2front,-1.5),geom.Pos2d(10.0-Det2front,-1.5),geom.Pos2d(10.0-Det2front,1.5),geom.Pos2d(-Det2front,1.5)]
 Det21TruckLoadModel= LoadModel(wLoads= [WheelLoad(geom.Pos2d(0.0,1.0),90e3/2.0),
                                         WheelLoad(geom.Pos2d(1.80,1.0),90e3/2.0),
                                         WheelLoad(geom.Pos2d(1.80+1.60,1.0),120e3/2.0),
