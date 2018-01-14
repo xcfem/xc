@@ -85,7 +85,6 @@ class LoadModel(object):
         normalizedVehicleBoundary= self.getVehicleBoundaryRelativePositions()
         self.vehicleBoundary= normalizedVehicleBoundary
       for (old,new) in zip(self.wheelLoads,normalizedPositions):
-        print 'load positions old: ', old.position, ' new: ', new
         old.position= new
     
 
@@ -93,7 +92,6 @@ class LoadModel(object):
     '''Return the vehicle boundary positions with respect to
        the loads centroid.'''
     centroidVector= self.getCentroid().getPositionVector()
-    print 'centroidVector= ', centroidVector
     retval= list()
     for p in self.vehicleBoundary:
       retval.append(p-centroidVector)
@@ -154,19 +152,16 @@ class VehicleLoad(object):
     retval= list()
     for p in localPositions:
       p3D= self.refSys.getPosGlobal(p)
-      print '2D p= ', p, ' 3D p= ', p3D
       retval.append(p3D)
     return retval
   
   def getLoadPositions(self):
     '''Return the positions of the vehicle loads.'''
-    print '**** loads.'''
     positions= self.loadModel.getPositions()
     return self.getGlobalPositions(positions)
   
   def getVehicleBoundaryPositions(self):
     '''Return the vehicle boundary positions.'''
-    print '**** boundary.'''
     return self.getGlobalPositions(self.loadModel.vehicleBoundary)
   
   def getLoadBoundary(self):
@@ -182,7 +177,6 @@ class VehicleLoad(object):
     retval= geom.Poligono2d()
     tmp= self.getVehicleBoundaryPositions()
     for p in tmp:
-      print '3D p= ', p
       retval.agregaVertice(geom.Pos2d(p.x,p.y))
     return retval
 
