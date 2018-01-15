@@ -75,6 +75,8 @@
 XC::Linear::Linear(AnalysisAggregation *owr)
   :EquiSolnAlgo(owr,EquiALGORITHM_TAGS_Linear) {}
 
+XC::SolutionAlgorithm *XC::Linear::getCopy(void) const
+  { return new Linear(*this); }
 
 //! @brief Performs the linear solution algorithm.
 int XC::Linear::resuelve(void)
@@ -115,9 +117,9 @@ int XC::Linear::resuelve(void)
         return -3;
       }
 
-    const Vector &deltaU = theSOE->getX(); //Obtiene el vector de movimientos.
+    const Vector &deltaU = theSOE->getX(); //Gets the displacement vector.
 
-    if(theIncIntegrator->update(deltaU) < 0) //Actualiza movimientos.
+    if(theIncIntegrator->update(deltaU) < 0) //Updates displacements.
       {
         std::cerr << getClassName() << "::" << __FUNCTION__
                   << "the integrator failed in update()\n";        
@@ -127,10 +129,27 @@ int XC::Linear::resuelve(void)
   }
 
 //! @brief Performs the linear solution algorithm.
+//!
+//! This method performs the linear solution algorithm:
+//! \begin{tabbing}
+//! while \= \+ whilewhilewhilewhilewhilewhilewhilewhilewhile \= \kill
+//! theIntegrator-\f$>\f$formTangent() \+ // form \f$K_{a}\f$ \-
+//! theIntegrator-\f$>\f$formUnbalance() // form \f$R(U_{a})\f$
+//! theSOE-\f$>\f$solveX() // solve for \f$\Delta U\f$
+//! theIntegrator-\f$>\f$update(theSOE-\f$>\f$getX()) // set \f$U = U_{a} + \Delta U\f$ \-  
+//! \end{tabbing}
+//! The method returns a 0 if successful, otherwise warning message is
+//! printed and a negative number is returned; a \f$-1\f$ if error during {\em
+//! formTangent()}, a \f$-2\f$ if error during formUnbalance(), a \f$-3\f$
+//! if error during solve(), a \f$-4\f$ if error during {\em
+//! update()}. If an error occurs in any of the above operations the
+//! method stops at that routine, none of the subsequent operations are
+//! invoked. A \f$-5\f$ is returned if any one of the links has not been
+//! setup.
 int XC::Linear::solveCurrentStep(void)
   {
     // set up some pointers and check they are valid
-    // NOTE this could be taken away if we set Ptrs as protecetd in superclass
+    // NOTE this could be taken away if we set Ptrs as protected in superclass
     return resuelve();
   }
 
@@ -138,12 +157,15 @@ int XC::Linear::solveCurrentStep(void)
 int XC::Linear::setConvergenceTest(ConvergenceTest *theNewTest)
   { return 0; }
 
+//! Does  nothing. Returns 0.
 int XC::Linear::sendSelf(CommParameters &cp)
   { return 0; }
 
+//! Does nothing. Returns 0.
 int XC::Linear::recvSelf(const CommParameters &cp)
   { return 0; }
 
 
+//! Sends the class name to the stream.
 void XC::Linear::Print(std::ostream &s, int flag)
-  { s << "\t XC::Linear algorithm"; }
+  { s << "\t " << getClassName() << " algorithm"; }

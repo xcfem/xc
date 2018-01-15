@@ -74,6 +74,25 @@ namespace XC {
 //
 //! @brief performs a linear solution algorihm
 //! to solve the equations.
+//!
+//! The Linear class is an algorithmic class which uses the
+//! linear solution algorithm to solve the equations. This is based on
+//! a Taylor expansion of the linear system \f$R(U) = zero\f$ about an
+//! approximate solution \f$U_{a}\f$.
+//! \begin{equation} 
+//! R(U) = 
+//! R(U_{a}) +
+//! \left[ {\frac{\partial R}{\partial U} \vert}_{U_{a}}\right]
+//! \left( U - U_{a} \right) 
+//! \end{equation}
+//! \noindent which can be expressed as:
+//! \begin{equation}
+//! K_{a} \Delta U = R(U_{a})
+//! \end{equation}
+//! which is solved for \f$\Delta U\f$ to give the approximation 
+//! \f$U = U_{a} + \Delta U\f$.
+//! To start the iteration \f$U_a = U_{trial}\f$, i.e. the current trial
+//! response quantities are chosen as approximate solution quantities.
 class Linear: public EquiSolnAlgo
   {
     int resuelve();
@@ -92,8 +111,6 @@ class Linear: public EquiSolnAlgo
     
     void Print(std::ostream &s, int flag =0);    
   };
-inline SolutionAlgorithm *Linear::getCopy(void) const
-  { return new Linear(*this); }
 } // end of XC namespace
 
 #endif
