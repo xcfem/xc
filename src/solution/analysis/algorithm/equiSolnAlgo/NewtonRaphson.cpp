@@ -74,10 +74,38 @@
 #include "solution/AnalysisAggregation.h"
 
 //! @brief Constructor
+//!
+//! @param AnalysisAggregation: object the object which is used to acces the
+//! object that compound the analysis and that, at the end of each iteration,
+//! are used to determine if convergence has been obtained.
 XC::NewtonRaphson::NewtonRaphson(AnalysisAggregation *owr,int theTangentToUse)
   :NewtonBased(owr,EquiALGORITHM_TAGS_NewtonRaphson,theTangentToUse) {}
 
-
+//! @brief Performs the Newton-Raphson iteration algorithm.
+//!
+//! When invoked the object first sets itself as the EquiSolnAlgo object
+//! that the ConvergenceTest is testing and then it performs the
+//! Newton-Raphson iteration algorithm: 
+//! \begin{tabbing}
+//! while \= \+ while \= \kill
+//! theTest-\f$>\f$start()
+//! theIntegrator-\f$>\f$formUnbalance();
+//! do \{ \+
+//! theIntegrator-\f$>\f$formTangent();
+//! theSOE-\f$>\f$solveX();
+//! theIntegrator-\f$>\f$update(theSOE-\f$>\f$getX());
+//! theIntegrator-\f$>\f$formUnbalance(); \-
+//! \} while (theTest-\f$>\f$test() \f$==\f$ false)\- 
+//! \end{tabbing}
+//!
+//! The method returns a 0 if successful, otherwise a negative number is
+//! returned; a \f$-1\f$ if error during formTangent(), a \f$-2\f$ if
+//! error during formUnbalance(), a \f$-3\f$ if error during {\em
+//! solve()}, and a \f$-4\f$ if error during update().
+//! If an error occurs in any of the above operations the method stops at
+//! that routine, none of the subsequent operations are invoked. A \f$-5\f$ is
+//! returned if any one of the links has not been setup. NOTE it is up to
+//! ConvergenceTest to ensure an infinite loop situation is not encountered.
 int XC::NewtonRaphson::solveCurrentStep(void)
   {
     // set up some pointers and check they are valid
@@ -87,7 +115,7 @@ int XC::NewtonRaphson::solveCurrentStep(void)
     LinearSOE *theSOE= getLinearSOEPtr();
     ConvergenceTest *theTest= getConvergenceTestPtr();
 
-    if((theAnaModel == 0) || (theIntegrator == 0) || (theSOE == 0) || (theTest == 0))
+    if((theAnaModel==nullptr) || (theIntegrator==nullptr) || (theSOE==nullptr) || (theTest==nullptr))
       {
         std::cerr << getClassName() << "::" << __FUNCTION__
 		  << "; - setLinks() has"
@@ -185,10 +213,11 @@ int XC::NewtonRaphson::solveCurrentStep(void)
     return result;
   }
 
+//! Sends the string 'NewtonRaphson' to the stream if \p flag equals \f$0\f$.
 void XC::NewtonRaphson::Print(std::ostream &s, int flag)
   {
     if(flag == 0)
-      s << "NewtonRaphson" << std::endl;
+      s << getClassName() << std::endl;
   }
 
 
