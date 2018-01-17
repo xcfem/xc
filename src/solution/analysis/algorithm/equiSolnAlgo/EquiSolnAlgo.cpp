@@ -71,9 +71,11 @@
 #include <solution/system_of_eqn/linearSOE/LinearSOE.h>
 #include "solution/AnalysisAggregation.h"
 
-
-XC::EquiSolnAlgo::EquiSolnAlgo(AnalysisAggregation *owr,int clasTag)
-  :SolutionAlgorithm(owr,clasTag) {}
+//! @brief Constructor.
+//! @param owr: AnalysisAggregation that owns this solution algorithm.
+//! @param classTag: class identifier.
+XC::EquiSolnAlgo::EquiSolnAlgo(AnalysisAggregation *owr,int classTag)
+  :SolutionAlgorithm(owr,classTag) {}
 
 //! @brief Returns a pointer to the convergence test.
 const XC::ConvergenceTest *XC::EquiSolnAlgo::getConvergenceTestPtr(void) const
@@ -91,5 +93,12 @@ XC::ConvergenceTest *XC::EquiSolnAlgo::getConvergenceTestPtr(void)
     return sm->getConvergenceTestPtr();
   }
 
+//! @brief Returns a pointer to the incremental integrator.
 XC::IncrementalIntegrator *XC::EquiSolnAlgo::getIncrementalIntegratorPtr(void)
   { return dynamic_cast<IncrementalIntegrator *>(getIntegratorPtr()); }
+
+//! Send information to the stream based on the integer \p flag.
+void XC::EquiSolnAlgo::Print(std::ostream &s, int flag)
+  {
+    s << getClassName() << std::endl;
+  }

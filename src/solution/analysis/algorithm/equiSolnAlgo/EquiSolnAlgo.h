@@ -79,19 +79,30 @@ class ConvergenceTest;
 //! @ingroup EQSolAlgo
 //
 //! @brief EquiSolnAlgo is an abstract base class, 
-//! i.e. no objects of it's type can be created.  Its subclasses deifine
-//! the sequence of operations to be performed in the analysis by static
-//! equilibrium of a finite element model.
+//! i.e. no objects of it's type can be created. An
+//! EquiSolnAlgo object defines the sequence of operations 
+//! performed by the the Integrator and the LinearSOE objects in
+//! solving the equilibrium equation \f$R(U) = 0\f$ given the current state of
+//! the domain at each time step in a direct integration analysis or load
+//! increment in a static analysis.
 class EquiSolnAlgo: public SolutionAlgorithm
   {
   protected:
     EquiSolnAlgo(AnalysisAggregation *,int clasTag);
   public:
     // virtual functions
+    //! @brief steps taken in order to get the system into an
+    //! equilibrium state.
+    //! 
+    //! A method implemented by each subclass which specifies the steps taken
+    //! in order to get the system into an equilibrium state. It is a pure
+    //! virtual function, i.e. all subclasses or their descendents must
+    //! implement this routine. To return \f$0\f$ if algorithm succeeds, a negative
+    //! value otherwise. 
     virtual int solveCurrentStep(void) =0;
     virtual ConvergenceTest *getConvergenceTestPtr(void);     
     virtual const ConvergenceTest *getConvergenceTestPtr(void) const;
-    virtual void Print(std::ostream &s, int flag =0) =0;    
+    virtual void Print(std::ostream &, int flag =0);    
 
     // the following are not protected as convergence test
     // may need access to them
