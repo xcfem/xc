@@ -75,6 +75,37 @@ class ConvergenceTest;
 //
 //! @brief Uses the tangent stiffness matrix computed in the
 //! first iteration until convergence is achieved.
+//!
+//! The ModifiedNewton class is an algorithmic class which obtains a
+//! solution to a non-linear system using the modified Newton-Raphson iteration
+//! scheme. The Newton-Rapson iteration scheme is based on a Taylor expansion
+//! of the non-linear system of equations \f$R(\U) = 0\f$ about an approximate
+//! solution \f$U{(i)}\f$:
+//! \begin{equation} 
+//! R(U) = 
+//! R(U^{(i)}) +
+//! \left[ {\frac{\partial R}{\partial U} \vert}_{U^{(i)}}\right]
+//! \left( U - U^{(i)} \right) 
+//! \end{equation}
+//!
+//! \noindent which can be expressed as:
+//! \begin{equation}
+//! K^{(i)}  \Delta U{(i)} = R(U^{(i)})
+//! \end{equation}
+//! which is solved for \f$\Delta U^{(i)}\f$ to give approximation for
+//! \f$U^{(i+1)} = U^{(i)} + \Delta U^{(i)}\f$. To start the
+//! iteration \f$U^{(1)} = U_{trial}\f$, i.e. the current trial
+//! response quantities are chosen as initial response quantities.
+//!
+//! in the modified version the tangent is formed only once, i.e
+//! \begin{equation}
+//! K^{(1)}  \Delta U^{(i)} = R(U^{(i)})
+//! \end{equation}
+//!
+//! To stop the iteration, a test must be performed to see if convergence
+//! has been achieved at each iteration. Each NewtonRaphson object is
+//! associated with a ConvergenceTest object. It is this object which
+//! determines if convergence has been achieved.
 class ModifiedNewton: public NewtonBased
   {
     friend class AnalysisAggregation;
@@ -86,8 +117,6 @@ class ModifiedNewton: public NewtonBased
     void Print(std::ostream &s, int flag =0);    
   };
 
-inline SolutionAlgorithm *ModifiedNewton::getCopy(void) const
-  { return new ModifiedNewton(*this); }
 } // end of XC namespace
 
 #endif

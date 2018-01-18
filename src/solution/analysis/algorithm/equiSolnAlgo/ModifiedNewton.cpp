@@ -74,10 +74,37 @@
 #include "solution/AnalysisAggregation.h"
 
 //! @brief Constructor
+//!
+//! @param AnalysisAggregation: object that owns this one.
 XC::ModifiedNewton::ModifiedNewton(AnalysisAggregation *owr,int theTangentToUse)
   :NewtonBased(owr,EquiALGORITHM_TAGS_ModifiedNewton,theTangentToUse) {}
 
-//! @brief resuelve el paso actual.
+//! @brief Virtual constructor.
+XC::SolutionAlgorithm *XC::ModifiedNewton::getCopy(void) const
+  { return new ModifiedNewton(*this); }
+
+//! @brief Solves for the current analysis step.
+//!
+//! When invoked the object first sets itself as the EquiSolnAlgo object
+//! that the ConvergenceTest is testing and then it performs the
+//! modified Newton-Raphson iteration algorithm: 
+//! \begin{tabbing}
+//! while \= \+ while \= \kill
+//! theTest-\f$>\f$start();
+//! theIntegrator-\f$>\f$formTangent();
+//! do \{ \+
+//! theIntegrator-\f$>\f$formUnbalance();
+//! theSOE-\f$>\f$solveX();
+//! theIntegrator-\f$>\f$update(theSOE-\f$>\f$getX()); \-
+//! \} while (theTest-\f$>\f$test() \f$==\f$ false)\-
+//! \end{tabbing}
+//! The method returns a 0 if successful, otherwise a negative number is
+//! returned; a \f$-1\f$ if error during formTangent(), a \f$-2\f$ if
+//! error during formUnbalance(), a \f$-3\f$ if error during {\em
+//! solve()}, and a \f$-4\f$ if error during update().
+//! If an error occurs in any of the above operations the method stops at
+//! that routine, none of the subsequent operations are invoked. A \f$-5\f$ is
+//! returned if any one of the links has not been setup.
 int XC::ModifiedNewton::solveCurrentStep(void)
   {
     // set up some pointers and check they are valid
@@ -87,10 +114,11 @@ int XC::ModifiedNewton::solveCurrentStep(void)
     LinearSOE *theSOE= getLinearSOEPtr();
     ConvergenceTest *theTest= getConvergenceTestPtr();
 
-    if((theAnalysisModel == 0) || (theIncIntegratorr == 0) || (theSOE == 0) || (theTest == 0))
+    if((theAnalysisModel==nullptr) || (theIncIntegratorr==nullptr) || (theSOE==nullptr) || (theTest==nullptr))
       {
         std::cerr << getClassName() << "::" << __FUNCTION__
-		  << "; WARNING undefined model, integrator or system of equations.\n";
+		  << "; WARNING undefined model, integrator "
+	          << "or system of equations.\n";
         return -5;
       }
 
@@ -173,8 +201,9 @@ int XC::ModifiedNewton::solveCurrentStep(void)
     return result;
   }
 
+//! @brief Sends the class name to the stream if \p flag equals \f$0\f$.
 void XC::ModifiedNewton::Print(std::ostream &s, int flag)
   {
     if(flag == 0)
-      { s << "ModifiedNewton"; }
+      { s << getClassName(); }
   }
