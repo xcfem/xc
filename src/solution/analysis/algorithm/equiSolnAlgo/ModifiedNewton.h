@@ -79,7 +79,7 @@ class ConvergenceTest;
 //! The ModifiedNewton class is an algorithmic class which obtains a
 //! solution to a non-linear system using the modified Newton-Raphson iteration
 //! scheme. The Newton-Rapson iteration scheme is based on a Taylor expansion
-//! of the non-linear system of equations \f$R(\U) = 0\f$ about an approximate
+//! of the non-linear system of equations \f$R(U) = 0\f$ about an approximate
 //! solution \f$U{(i)}\f$:
 //! \begin{equation} 
 //! R(U) = 
