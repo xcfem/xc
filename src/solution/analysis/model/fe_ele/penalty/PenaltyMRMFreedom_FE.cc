@@ -50,13 +50,13 @@ XC::PenaltyMRMFreedom_FE::PenaltyMRMFreedom_FE(int tag, Domain &theDomain,
   :MRMFreedom_FE(tag, TheMRMP.getNumDofGroups(),TheMRMP.getNumDofs(), TheMRMP,Alpha)
   {
     const ID &id1 = theMRMP->getConstrainedDOFs();
-    const int nGdls= id1.Size();
+    const int nDOFs= id1.Size();
     const int numNodes= 1+theMRMP->getRetainedNodeTags().Size();//1 constrained node + numb. of retained nodes
-    const int size= nGdls*numNodes;
+    const int size= nDOFs*numNodes;
 
     tang= Matrix(size,size);
     resid= Vector(size);
-    C= Matrix(nGdls,size);
+    C= Matrix(nDOFs,size);
 
     theConstrainedNode = theDomain.getNode(theMRMP->getNodeConstrained());
     myDOF_Groups(0)= determineConstrainedNodeDofGrpPtr()->getTag();

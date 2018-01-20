@@ -52,7 +52,7 @@ class EC5TimberRectCrossSection(section_properties.RectangularSection):
     domain= preprocessor.getDomain
     recorder= domain.newRecorder(recorderName,None);
     recorder.setElements(elemSet.getTags())
-    if(nodes.numGdls==3):
+    if(nodes.numDOFs==3):
       self.setupULSControlVars2d(elemSet)
       recorder.callbackRecord= callback_controls.controTensRecElastico2d()
     else:

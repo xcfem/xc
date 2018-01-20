@@ -108,13 +108,13 @@ modo1= modos[:,0] #.getCol(1)
 modo2= modos[:,1] #.getCol(2)
 modo3= modos[:,2] #.getCol(3)
 
-factoresParticipacionModalX= nod3.getModalParticipationFactorsForGdls([0])
+factoresParticipacionModalX= nod3.getModalParticipationFactorsForDOFs([0])
 factoresDistribucion= nod3.getDistributionFactors
-A1= matrixUtils.vectorToNumpyArray(nod3.getMaxModalDisplacementForGdls(1,aceleraciones[0],[0]))
+A1= matrixUtils.vectorToNumpyArray(nod3.getMaxModalDisplacementForDOFs(1,aceleraciones[0],[0]))
 maxDispMod1= A1[0:3] #getCaja(A1,1,1,3,1)
-A2= matrixUtils.vectorToNumpyArray(nod3.getMaxModalDisplacementForGdls(2,aceleraciones[1],[0]))
+A2= matrixUtils.vectorToNumpyArray(nod3.getMaxModalDisplacementForDOFs(2,aceleraciones[1],[0]))
 maxDispMod2= A2[0:3] #getCaja(A2,1,1,3,1)
-A3= matrixUtils.vectorToNumpyArray(nod3.getMaxModalDisplacementForGdls(3,aceleraciones[2],[0]))
+A3= matrixUtils.vectorToNumpyArray(nod3.getMaxModalDisplacementForDOFs(3,aceleraciones[2],[0]))
 maxDispMod3= A3[0:3] #getCaja(A3,1,1,3,1)
 
 

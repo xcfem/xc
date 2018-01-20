@@ -26,7 +26,7 @@ elast2d= typical_materials.defElasticIsotropicPlaneStress(preprocessor, "elast2d
 nodes= preprocessor.getNodeLoader
 
 nodes.dimSpace= 3 # 3 coordinates for each node.
-nodes.numGdls= 2 # Two degrees of freedom for each node.
+nodes.numDOFs= 2 # Two degrees of freedom for each node.
 nodes.newSeedNode()
 seedElemLoader= preprocessor.getElementLoader.seedElemLoader
 seedElemLoader.defaultMaterial= "elast2d"

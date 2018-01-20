@@ -22,7 +22,7 @@ class Reactions(object):
     for n in supportNodes:
       tag= n.tag
       tmp= n.getReaction
-      if(meshNodes.numGdls==3):
+      if(meshNodes.numDOFs==3):
         force= geom.Vector2d(tmp[0],tmp[1])
         f3d= geom.Vector3d(tmp[0],tmp[1],0.0)
         moment= geom.Vector3d(0.0,0.0,tmp[2])

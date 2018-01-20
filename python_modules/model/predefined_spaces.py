@@ -10,17 +10,17 @@ import xc
 from miscUtils import LogMessages as lmsg
 
 class PredefinedSpace(object):
-  def __init__(self,nodes,dimSpace,numGdls):
+  def __init__(self,nodes,dimSpace,numDOFs):
     '''Defines the dimension of the space and the number 
        of DOFs for each node.
 
        :param nodes: preprocessor nodes loader
        :param dimSpace: dimension of the space (1, 2 or 3)
-       :param numGdls: number of degrees of freedom for each node.
+       :param numDOFs: number of degrees of freedom for each node.
     '''
     self.setPreprocessor(nodes.getPreprocessor)
     nodes.dimSpace= dimSpace
-    nodes.numGdls= numGdls
+    nodes.numDOFs= numDOFs
     
   def setPreprocessor(self,preprocessor):
     '''Sets suitable values for the members from the dimension of the space 
@@ -38,7 +38,7 @@ class PredefinedSpace(object):
     :param prescDisplacements: (list) values of the displacements.
     '''
 
-    numDOFs= self.preprocessor.getNodeLoader.numGdls
+    numDOFs= self.preprocessor.getNodeLoader.numDOFs
     numDisp= len(prescDisplacements)
     if(numDisp<numDOFs):
       lmsg.warning('prescribed '+str(numDisp)+' displacements, nDOFS= '+str(numDOFs))
@@ -126,7 +126,7 @@ class PredefinedSpace(object):
     newElement= self.setBearingBetweenNodes(newNode.tag,iNod,bearingMaterials,orientation)
     # Boundary conditions
     constraints= self.preprocessor.getConstraintLoader
-    numDOFs= self.preprocessor.getNodeLoader.numGdls
+    numDOFs= self.preprocessor.getNodeLoader.numDOFs
     for i in range(0,numDOFs):
       spc= constraints.newSPConstraint(newNode.tag,i,0.0)
     return newNode, newElement
@@ -178,7 +178,7 @@ class PredefinedSpace(object):
     zl.clearMaterials()
     zl.setMaterial(0,bearingMaterial)
     # Boundary conditions
-    numDOFs= self.preprocessor.getNodeLoader.numGdls
+    numDOFs= self.preprocessor.getNodeLoader.numDOFs
     for i in range(0,numDOFs):
       spc= self.constraints.newSPConstraint(newNode.tag,i,0.0)
     return newNode.tag, zl.tag
@@ -191,7 +191,7 @@ def getModelSpace(preprocessor):
     '''
     nodes= preprocessor.getNodeLoader
     dimSpace= nodes.dimSpace
-    numDOFs= nodes.numGdls
+    numDOFs= nodes.numDOFs
     return PredefinedSpace(nodes,dimSpace,numDOFs)
   
 
@@ -322,7 +322,7 @@ def getStructuralMechanics2DSpace(preprocessor):
     '''
     nodes= preprocessor.getNodeLoader
     assert(nodes.dimSpace==2)
-    assert(nodes.numGdls==3)
+    assert(nodes.numDOFs==3)
     return StructuralMechanics2D(nodes)
 
 def gdls_resist_materiales2D(nodes):
@@ -610,7 +610,7 @@ def getStructuralMechanics3DSpace(preprocessor):
     '''
     nodes= preprocessor.getNodeLoader
     assert(nodes.dimSpace==3)
-    assert(nodes.numGdls==6)
+    assert(nodes.numDOFs==6)
     return StructuralMechanics3D(nodes)
 
 def gdls_resist_materiales3D(nodes):

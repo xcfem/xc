@@ -46,7 +46,7 @@ class EC3Beam(lu.LineWrapper):
     idEleTags= xc.ID(eleTags)
     recorder.setElements(idEleTags)
     self.ec3Shape.setupULSControlVars(elems,sectionClass,chiLT)
-    if(nodes.numGdls==3):
+    if(nodes.numDOFs==3):
       recorder.callbackRecord= EC3lsc.controlULSCriterion2D()
     else:
       recorder.callbackRecord= EC3lsc.controlULSCriterion()

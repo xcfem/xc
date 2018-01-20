@@ -23,18 +23,18 @@
 
 XC::Vector &(XC::Node::*getCooRef)(void)= &XC::Node::getCrds;
 XC::Vector (XC::Node::*getDistributionFactor)(int) const= &XC::Node::getDistributionFactor;
-XC::Vector (XC::Node::*getDistributionFactorForGdls)(int,const std::set<int> &) const= &XC::Node::getDistributionFactor;
+XC::Vector (XC::Node::*getDistributionFactorForDOFs)(int,const std::set<int> &) const= &XC::Node::getDistributionFactor;
 double (XC::Node::*getModalParticipationFactor)(int) const= &XC::Node::getModalParticipationFactor;
-double (XC::Node::*getModalParticipationFactorForGdls)(int,const std::set<int> &) const= &XC::Node::getModalParticipationFactor;
+double (XC::Node::*getModalParticipationFactorForDOFs)(int,const std::set<int> &) const= &XC::Node::getModalParticipationFactor;
 XC::Vector (XC::Node::*getModalParticipationFactors)(void) const= &XC::Node::getModalParticipationFactors;
-XC::Vector (XC::Node::*getModalParticipationFactorsForGdls)(const boost::python::list &) const= &XC::Node::getModalParticipationFactorsForGdls;
+XC::Vector (XC::Node::*getModalParticipationFactorsForDOFs)(const boost::python::list &) const= &XC::Node::getModalParticipationFactorsForDOFs;
 XC::Vector (XC::Node::*getMaxModalDisplacement)(int,const double &) const= &XC::Node::getMaxModalDisplacement;
 XC::Vector (XC::Node::*getMaxModalVelocity)(int,const double &) const= &XC::Node::getMaxModalVelocity;
 XC::Vector (XC::Node::*getMaxModalAcceleration)(int,const double &) const= &XC::Node::getMaxModalAcceleration;
-XC::Vector (XC::Node::*getMaxModalDisplacementForGdls)(int,const double &,const boost::python::list &) const= &XC::Node::getMaxModalDisplacementForGdls;
-XC::Vector (XC::Node::*getMaxModalVelocityForGdls)(int,const double &,const boost::python::list &) const= &XC::Node::getMaxModalVelocityForGdls;
-XC::Vector (XC::Node::*getMaxModalAccelerationForGdls)(int,const double &,const boost::python::list &) const= &XC::Node::getMaxModalAccelerationForGdls;
-void (XC::Node::*fixGdls)(const XC::ID &, const XC::Vector &)= &XC::Node::fix;
+XC::Vector (XC::Node::*getMaxModalDisplacementForDOFs)(int,const double &,const boost::python::list &) const= &XC::Node::getMaxModalDisplacementForDOFs;
+XC::Vector (XC::Node::*getMaxModalVelocityForDOFs)(int,const double &,const boost::python::list &) const= &XC::Node::getMaxModalVelocityForDOFs;
+XC::Vector (XC::Node::*getMaxModalAccelerationForDOFs)(int,const double &,const boost::python::list &) const= &XC::Node::getMaxModalAccelerationForDOFs;
+void (XC::Node::*fixDOFs)(const XC::ID &, const XC::Vector &)= &XC::Node::fix;
 bool (XC::Node::*In3D)(const GeomObj3d &,const double &,const double &) const= &XC::Node::In;
 bool (XC::Node::*Out3D)(const GeomObj3d &,const double &,const double &) const= &XC::Node::Out;
 class_<XC::Node, XC::Node *, bases<XC::MeshComponent>, boost::noncopyable >("Node", no_init)
@@ -52,25 +52,25 @@ class_<XC::Node, XC::Node *, bases<XC::MeshComponent>, boost::noncopyable >("Nod
   // to put history results in a Python list for example. That's why we use
   // copy_const_reference instead. 
   .add_property("getReaction", make_function( &XC::Node::getReaction, return_value_policy<copy_const_reference>() ))
-  .add_property("getDisp", make_function( &XC::Node::getDisp, return_value_policy<copy_const_reference>() ))
-  .add_property("getDispXYZ", &XC::Node::getDispXYZ)
-  .add_property("getRotXYZ", &XC::Node::getRotXYZ)
-  .add_property("getVel", make_function( &XC::Node::getVel, return_value_policy<copy_const_reference>() ))
-  .add_property("getVelXYZ", &XC::Node::getVelXYZ)
-  .add_property("getOmegaXYZ", &XC::Node::getOmegaXYZ)
-  .add_property("getAccel", make_function( &XC::Node::getAccel, return_value_policy<copy_const_reference>() ))
-  .add_property("getAccelXYZ", &XC::Node::getAccelXYZ)
+  .add_property("getDisp", make_function( &XC::Node::getDisp, return_value_policy<copy_const_reference>() ),"Return the displacement vector.")
+  .add_property("getDispXYZ", &XC::Node::getDispXYZ, "Return the translational components of the displacement.")
+  .add_property("getRotXYZ", &XC::Node::getRotXYZ, "Return the rotational components of the displacement.")
+  .add_property("getVel", make_function( &XC::Node::getVel, return_value_policy<copy_const_reference>() ),"Return the velocity vector.")
+  .add_property("getVelXYZ", &XC::Node::getVelXYZ,"Return the translational components of the velocity vector.")
+  .add_property("getOmegaXYZ", &XC::Node::getOmegaXYZ, "Return the rotational components of the velocity vector.")
+  .add_property("getAccel", make_function( &XC::Node::getAccel, return_value_policy<copy_const_reference>() ), "Return the acceleration vector.")
+  .add_property("getAccelXYZ", &XC::Node::getAccelXYZ, "Return the translational components of the displacement vector.")
   .add_property("getAlphaXYZ", &XC::Node::getAlphaXYZ)
-  .add_property("isAlive",&XC::Node::isAlive)
-  .add_property("isDead",&XC::Node::isAlive)
-  .add_property("isFrozen",&XC::Node::isAlive)
+  .add_property("isAlive",&XC::Node::isAlive,"True if node is active.")
+  .add_property("isDead",&XC::Node::isAlive,"True if node is frozen.")
+  .add_property("isFrozen",&XC::Node::isAlive,"True if node is frozen.")
   .add_property("isFree",&XC::Node::isAlive)
   .def("setTrialdDispComponent",&XC::Node::setTrialDispComponent,"Set value of trial displacement i-component.")
   .def("setTrialDisp",&XC::Node::setTrialDisp,"Set trial displacement vector.")
   .def("setTrialVel",&XC::Node::setTrialVel,"Set trial velocity vector.")
   .def("setTrialAccel",&XC::Node::setTrialAccel,"Set trial acceleration vector.")
   .def("setNumColR",&XC::Node::setNumColR)
-  .def("fix",fixGdls,"Set displacement constraints")
+  .def("fix",fixDOFs,"Set displacement constraints")
   .def("addTributary",&XC::Node::addTributary)
   .def("resetTributary",&XC::Node::resetTributary)
   .def("getTributary",make_function(&XC::Node::getTributary,return_value_policy<copy_const_reference>()))
@@ -80,39 +80,39 @@ class_<XC::Node, XC::Node *, bases<XC::MeshComponent>, boost::noncopyable >("Nod
   .def("getResistingForce",make_function(&XC::Node::getResistingForce,return_value_policy<copy_const_reference>()))
   .def("getResistingSVD3d",&XC::Node::getResistingSVD3d)
 
-  .def("setNumEigenvectors",&XC::Node::setNumEigenvectors)
-  .def("setEigenvector",&XC::Node::setEigenvector)
-  .add_property("getNumModes",&XC::Node::getNumModes)
-  .def("getEigenvector",&XC::Node::getEigenvector)
-  .def("getNormalizedEigenvector",&XC::Node::getNormalizedEigenvector)
-  .add_property("getEigenvectors",make_function(&XC::Node::getEigenvectors,return_internal_reference<>()))
-  .add_property("getNormalizedEigenvectors",&XC::Node::getNormalizedEigenvectors)
+  .def("setNumEigenvectors",&XC::Node::setNumEigenvectors,"set the number of eigenvectors for the node.")
+  .def("setEigenvector",&XC::Node::setEigenvector,"setEigenVector(mode, vector) set the igenvector for i-th mode.")
+  .add_property("getNumModes",&XC::Node::getNumModes,"return the number of modes for the node.")
+  .def("getEigenvector",&XC::Node::getEigenvector,"getEigenvector(i) returns the eigenvector that corresponds to i-th mode.")
+  .def("getNormalizedEigenvector",&XC::Node::getNormalizedEigenvector,"getNormalizedEigenvector(i) returns the eigenvector that corresponds to i-th mode.")
+  .add_property("getEigenvectors",make_function(&XC::Node::getEigenvectors,return_internal_reference<>()),"Returs all the eigenvectors for the node.")
+  .add_property("getNormalizedEigenvectors",&XC::Node::getNormalizedEigenvectors,"Returns all the normalized eigenvectors for the node.")
     
-  .def("getAngularFrequency",&XC::Node::getAngularFrequency)
-  .add_property("getAngularFrequencies",&XC::Node::getAngularFrequencies)
+  .def("getAngularFrequency",&XC::Node::getAngularFrequency,"Return the angular frequency corresponding to the i-th mode.")
+  .add_property("getAngularFrequencies",&XC::Node::getAngularFrequencies,"Returns the angular frequencies for all the modes.")
 
-  .def("getModalParticipationFactor",getModalParticipationFactor)
-  .add_property("getModalParticipationFactors",getModalParticipationFactors)
-  .def("getModalParticipationFactorForGdls",getModalParticipationFactorForGdls)
-  .def("getModalParticipationFactorsForGdls",getModalParticipationFactorsForGdls)
+  .def("getModalParticipationFactor",getModalParticipationFactor,"Return the modal participation factor corresponding to the i-th mode.")
+  .add_property("getModalParticipationFactors",getModalParticipationFactors,"Return the modal participation factors for all the models.")
+  .def("getModalParticipationFactorForDOFs",getModalParticipationFactorForDOFs,"getModalParticipationFactorForDOFs(i,dofs): return the 'dofs' components of the modal participation factors corresponding to the i-th model.")
+  .def("getModalParticipationFactorsForDOFs",getModalParticipationFactorsForDOFs,"getModalParticipationFactorsForDOFs(dofs): return the 'dofs' compoents of all the modal participation factors.")
 
-  .def("getDistributionFactor",getDistributionFactor)
-  .def("getDistributionFactorForGdls",getDistributionFactorForGdls)
-  .add_property("getDistributionFactors",&XC::Node::getDistributionFactors)
+  .def("getDistributionFactor",getDistributionFactor,"Returns the distribution factor corresponding to the i-th mode.")
+  .def("getDistributionFactorForDOFs",getDistributionFactorForDOFs,"getDistributionFactorForDOFs(i,dofs): returns the 'dofs' compoents of the distribution factor corresponding to the i-th mode.")
+  .add_property("getDistributionFactors",&XC::Node::getDistributionFactors,"Returns the distribution factor corresponding to all the computed modes.")
 
-  .def("getEffectiveModalMass",&XC::Node::getEffectiveModalMass)
-  .add_property("getEffectiveModalMasses",&XC::Node::getEffectiveModalMasses)
+  .def("getEffectiveModalMass",&XC::Node::getEffectiveModalMass,"Returns the effective modal mass corresponding to the i-th mode.")
+  .add_property("getEffectiveModalMasses",&XC::Node::getEffectiveModalMasses,"Returns the effective modal masses for all the computed modes.")
+  .def("getEquivalentStaticLoad",&XC::Node::getEquivalentStaticLoad,"getEquivalentStaticLoad(mode,modeAccel): return the equivalent static load for the mode being passed as parameter and the acceleration corresponding to that mode.")
 
   .def("newLoad",make_function(&XC::Node::newLoad, return_internal_reference<>() ),"Create a new load on the node and put it on the current load pattern.")
 
-  .def("getEquivalentStaticLoad",&XC::Node::getEquivalentStaticLoad)
 
   .def("getMaxModalDisplacement",getMaxModalDisplacement)
   .def("getMaxModalVelocity",getMaxModalVelocity)
   .def("getMaxModalAcceleration",getMaxModalAcceleration)
-  .def("getMaxModalDisplacementForGdls",getMaxModalDisplacementForGdls)
-  .def("getMaxModalVelocityForGdls",getMaxModalVelocityForGdls)
-  .def("getMaxModalAccelerationForGdls",getMaxModalAccelerationForGdls)
+  .def("getMaxModalDisplacementForDOFs",getMaxModalDisplacementForDOFs)
+  .def("getMaxModalVelocityForDOFs",getMaxModalVelocityForDOFs)
+  .def("getMaxModalAccelerationForDOFs",getMaxModalAccelerationForDOFs)
    ;
 
 class_<XC::NodeIter, boost::noncopyable >("NodeIter", no_init)

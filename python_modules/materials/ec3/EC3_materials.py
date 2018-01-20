@@ -260,7 +260,7 @@ class EC3Shape(object):
     for e in elems:
       e.setProp('ULSControlRecorder',recorder)
     self.setupULSControlVars(elems,sectionClass,chiLT)
-    if(nodes.numGdls==3):
+    if(nodes.numDOFs==3):
       recorder.callbackRecord= EC3lsc.controlULSCriterion2D()
     else:
       recorder.callbackRecord= EC3lsc.controlULSCriterion()

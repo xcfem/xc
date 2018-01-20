@@ -428,21 +428,21 @@ XC::SFreedom_Constraint *XC::Node::fix(const SFreedom_Constraint &semilla)
   { return getPreprocessor()->getConstraintLoader().addSFreedom_Constraint(getTag(),semilla); }
 
 //! @brief Sets prescribed displacements on the DOFs being passed as parameter.
-void XC::Node::fix(const std::vector<int> &idGdls,const std::vector<double> &valores)
+void XC::Node::fix(const std::vector<int> &idDOFs,const std::vector<double> &valores)
   {
     if(getDomain())
       {
         ConstraintLoader &cl= getPreprocessor()->getConstraintLoader();
-        const int sz= std::min(idGdls.size(),valores.size());
-        if(valores.size()<idGdls.size())
+        const int sz= std::min(idDOFs.size(),valores.size());
+        if(valores.size()<idDOFs.size())
 	  std::cerr << getClassName() << "::" << __FUNCTION__
 		    << "; vector of prescribed displacements"
-                    << " must be of " << idGdls.size()
+                    << " must be of " << idDOFs.size()
                     << " dimension." << std::endl;
         if(sz)
           {
             for(int i= 0;i<sz;i++)
-              cl.addSFreedom_Constraint(getTag(),idGdls[i],valores[i]);
+              cl.addSFreedom_Constraint(getTag(),idDOFs[i],valores[i]);
           }
         else
           std::cerr << getClassName() << "::" << __FUNCTION__
@@ -454,10 +454,10 @@ void XC::Node::fix(const std::vector<int> &idGdls,const std::vector<double> &val
   }
 
 //! @brief Sets prescribed displacements on the DOFs being passed as parameter.
-void XC::Node::fix(const ID &idGdls,const Vector &valores)
+void XC::Node::fix(const ID &idDOFs,const Vector &valores)
   {
     std::vector<double> vs= vector_to_std_vector(valores);
-    fix(idGdls,vs);
+    fix(idDOFs,vs);
   }
 
 //! @brief Return the number of node DOFs, associated with
@@ -1310,7 +1310,7 @@ int XC::Node::setNumEigenvectors(int numVectorsToStore)
     return 0;
   }
 
-//! @brief Asigna el autovector eigenvector al modo mode.
+//! @brief Asigna el eigenvector eigenvector al modo mode.
 int XC::Node::setEigenvector(int mode, const Vector &eigenvector)
   {
     if(getNumModes() < mode)
@@ -1356,11 +1356,11 @@ XC::Vector XC::Node::getAngularFrequencies(void) const
 const XC::Matrix &XC::Node::getEigenvectors(void)
   { return theEigenvectors; }
 
-//! @brief Returns the autovector that corresponds to i mode.
+//! @brief Returns the eigenvector that corresponds to i-th mode.
 XC::Vector XC::Node::getEigenvector(int mode) const
   { return theEigenvectors.getCol(mode-1); }
 
-//! @brief Returns the autovector that corresponds to i mode
+//! @brief Returns the eigenvector that corresponds to i-th mode
 //! normalized so the maximum values of the components
 //! is 1 (infinite norm).
 XC::Vector XC::Node::getNormalizedEigenvector(int mode) const
@@ -1455,13 +1455,13 @@ XC::Vector XC::Node::getModalParticipationFactors(const std::set<int> &gdls) con
 //! is not empty it "projects" the i-th mode over
 //! the selected DOFs in the argument.
 //! @param l: degrees of freedom to project on.
-XC::Vector XC::Node::getModalParticipationFactorsForGdls(const boost::python::list &l) const
+XC::Vector XC::Node::getModalParticipationFactorsForDOFs(const boost::python::list &l) const
   {
     std::set<int> tmp= set_int_from_py_list(l);
     return getModalParticipationFactors(tmp);
   }
 
-//! @brief Returns the distribution factor of the i-th mode.
+//! @brief Returns the distribution factor corresponding to the i-th mode.
 XC::Vector XC::Node::getDistributionFactor(int i) const
   { return getModalParticipationFactor(i)*getEigenvector(i); }
 
@@ -1553,42 +1553,42 @@ XC::Vector XC::Node::getMaxModalAcceleration(int mode,const double &accel_mode) 
 //! @brief Returns the maximal modal displacement on the DOFs and mode being passed
 //! as parameter and the acceleration corresponding to that mode.
 //! @param gdls: degrees of freedom to deal with.
-XC::Vector XC::Node::getMaxModalDisplacementForGdls(int mode,const double &accel_mode,const std::set<int> &gdls) const
+XC::Vector XC::Node::getMaxModalDisplacementForDOFs(int mode,const double &accel_mode,const std::set<int> &gdls) const
   {
-    return getMaxModalAccelerationForGdls(mode,accel_mode,gdls)/sqr(getAngularFrequency(mode));
+    return getMaxModalAccelerationForDOFs(mode,accel_mode,gdls)/sqr(getAngularFrequency(mode));
   }
 
 //! @brief Returns the maximal modal displacement on the DOFs and mode being passed
 //! as parameter and the acceleration corresponding to that mode.
 //! @param gdls: degrees of freedom to deal with.
-XC::Vector XC::Node::getMaxModalDisplacementForGdls(int mode,const double &accel_mode,const boost::python::list &gdls) const
+XC::Vector XC::Node::getMaxModalDisplacementForDOFs(int mode,const double &accel_mode,const boost::python::list &gdls) const
   {
     std::set<int> tmp= set_int_from_py_list(gdls);
-    return getMaxModalDisplacementForGdls(mode,accel_mode,tmp);
+    return getMaxModalDisplacementForDOFs(mode,accel_mode,tmp);
   }
 
 
 //! @brief Returns the maximum modal velocity on the DOFs and mode being passed
 //! as parameter and the acceleration corresponding to that mode.
 //! @param gdls: degrees of freedom to deal with.
-XC::Vector XC::Node::getMaxModalVelocityForGdls(int mode,const double &accel_mode,const std::set<int> &gdls) const
+XC::Vector XC::Node::getMaxModalVelocityForDOFs(int mode,const double &accel_mode,const std::set<int> &gdls) const
   {
-    return getMaxModalAccelerationForGdls(mode,accel_mode,gdls)/getAngularFrequency(mode);
+    return getMaxModalAccelerationForDOFs(mode,accel_mode,gdls)/getAngularFrequency(mode);
   }
 
 //! @brief Returns the maximum modal velocity on the DOFs and mode being passed
 //! as parameter and the acceleration corresponding to that mode.
 //! @param gdls: degrees of freedom to deal with.
-XC::Vector XC::Node::getMaxModalVelocityForGdls(int mode,const double &accel_mode,const boost::python::list &gdls) const
+XC::Vector XC::Node::getMaxModalVelocityForDOFs(int mode,const double &accel_mode,const boost::python::list &gdls) const
   {
     std::set<int> tmp= set_int_from_py_list(gdls);
-    return getMaxModalVelocityForGdls(mode,accel_mode,tmp);
+    return getMaxModalVelocityForDOFs(mode,accel_mode,tmp);
   }
 
 //! @brief Return the maximal modal acceleration on the DOFs and mode being passed
 //! as parameter and the acceleration corresponding to that mode.
 //! @param gdls: degrees of freedom to deal with.
-XC::Vector XC::Node::getMaxModalAccelerationForGdls(int mode,const double &accel_mode,const std::set<int> &gdls) const
+XC::Vector XC::Node::getMaxModalAccelerationForDOFs(int mode,const double &accel_mode,const std::set<int> &gdls) const
   {
     return accel_mode*getDistributionFactor(mode,gdls);
   }
@@ -1596,10 +1596,10 @@ XC::Vector XC::Node::getMaxModalAccelerationForGdls(int mode,const double &accel
 //! @brief Return the maximal modal acceleration on the DOFs and mode being passed
 //! as parameter and the acceleration corresponding to that mode.
 //! @param gdls: degrees of freedom to deal with.
-XC::Vector XC::Node::getMaxModalAccelerationForGdls(int mode,const double &accel_mode,const boost::python::list &gdls) const
+XC::Vector XC::Node::getMaxModalAccelerationForDOFs(int mode,const double &accel_mode,const boost::python::list &gdls) const
   {
     std::set<int> tmp= set_int_from_py_list(gdls);
-    return getMaxModalAccelerationForGdls(mode,accel_mode,tmp);
+    return getMaxModalAccelerationForDOFs(mode,accel_mode,tmp);
   }
 
 

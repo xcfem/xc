@@ -68,9 +68,9 @@ class NodeLoader: public Loader
       { return ncoo_def_node; }
     void setDimEspacio(const size_t &dim)
       { ncoo_def_node= dim; }
-    void setNumGdls(const size_t &ngdl)
+    void setNumDOFs(const size_t &ngdl)
       { ngdl_def_node= ngdl; }
-    size_t getNumGdls(void) const
+    size_t getNumDOFs(void) const
       { return ngdl_def_node; }
     Node *getNode(const int &tag);
     int getDefaultTag(void) const;

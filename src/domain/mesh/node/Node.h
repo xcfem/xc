@@ -289,7 +289,7 @@ class Node: public MeshComponent
     Vector getModalParticipationFactors(void) const;
     virtual double getModalParticipationFactor(int mode,const std::set<int> &gdls) const;
     Vector getModalParticipationFactors(const std::set<int> &gdls) const;
-    Vector getModalParticipationFactorsForGdls(const boost::python::list &) const;
+    Vector getModalParticipationFactorsForDOFs(const boost::python::list &) const;
     //Distribution factors.
     Vector getDistributionFactor(int mode) const;
     Vector getDistributionFactor(int mode,const std::set<int> &gdls) const;
@@ -306,12 +306,12 @@ class Node: public MeshComponent
     Vector getMaxModalDisplacement(int mode,const double &) const;
     Vector getMaxModalVelocity(int mode,const double &) const;
     Vector getMaxModalAcceleration(int mode,const double &) const;
-    Vector getMaxModalDisplacementForGdls(int mode,const double &,const std::set<int> &gdls) const;
-    Vector getMaxModalVelocityForGdls(int mode,const double &,const std::set<int> &gdls) const;
-    Vector getMaxModalAccelerationForGdls(int mode,const double &,const std::set<int> &gdls) const;
-    Vector getMaxModalDisplacementForGdls(int mode,const double &,const boost::python::list &gdls) const;
-    Vector getMaxModalVelocityForGdls(int mode,const double &,const boost::python::list &gdls) const;
-    Vector getMaxModalAccelerationForGdls(int mode,const double &,const boost::python::list &gdls) const;
+    Vector getMaxModalDisplacementForDOFs(int mode,const double &,const std::set<int> &gdls) const;
+    Vector getMaxModalVelocityForDOFs(int mode,const double &,const std::set<int> &gdls) const;
+    Vector getMaxModalAccelerationForDOFs(int mode,const double &,const std::set<int> &gdls) const;
+    Vector getMaxModalDisplacementForDOFs(int mode,const double &,const boost::python::list &gdls) const;
+    Vector getMaxModalVelocityForDOFs(int mode,const double &,const boost::python::list &gdls) const;
+    Vector getMaxModalAccelerationForDOFs(int mode,const double &,const boost::python::list &gdls) const;
 
     // public methods for output
     virtual int sendSelf(CommParameters &);

@@ -27,7 +27,7 @@ XC::Node *(XC::NodeLoader::*newNodeFromXYZ)(const double &x,const double &y,cons
 XC::Node *(XC::NodeLoader::*newNodeFromXY)(const double &x,const double &y)= &XC::NodeLoader::newNode;
 XC::Node *(XC::NodeLoader::*newNodeFromVector)(const XC::Vector &)= &XC::NodeLoader::newNode;
 class_<XC::NodeLoader, bases<XC::Loader>, boost::noncopyable >("NodeLoader", no_init)
-  .add_property("numGdls", &XC::NodeLoader::getNumGdls, &XC::NodeLoader::setNumGdls,"Number of degrees of freedom per node.")
+  .add_property("numDOFs", &XC::NodeLoader::getNumDOFs, &XC::NodeLoader::setNumDOFs,"Number of degrees of freedom per node.")
   .add_property("dimSpace", &XC::NodeLoader::getDimEspacio, &XC::NodeLoader::setDimEspacio, "Espace dimension.")
   .add_property("defaultTag", &XC::NodeLoader::getDefaultTag, &XC::NodeLoader::setDefaultTag,"Starting ID number to apply to the next creation of nodes ")
   .def("calculateNodalReactions", &XC::NodeLoader::calculateNodalReactions,"\n""calculateNodalReactions(inclInertia)\n""Calculate nodal reaction forces and moments.\n""If inclInertia is True, the unbalance load vector for each node is calculated including inertial forces.\n" "A tolerance of 1e-4 is taken as default value for the checking of the reaction forces and moments. \n")
