@@ -81,9 +81,18 @@ class Vector;
 
 //! @ingroup AnalysisIntegrator
 //
-//! @brief IncrementalIntegrator is an algorithmic class for setting up the finite 
-//! element equations in an incremental analysis and for updating the nodal
-//! response quantities based on the values in the soln vector.
+//! @brief IncrementalIntegrator is an algorithmic class for setting up the
+//! finite element equations in an incremental analysis and for updating the
+//! nodal response quantities based on the values in the solution vector.
+//!
+//! IncrementalIntegrator is an abstract class. A subclass of it
+//! is used when performing a static or transient analysis using an
+//! incremental displacement approach. Subclasses of
+//! IncrementalIntegrators provide methods informing the FE\_Element and
+//! DOF\_Group objects how to build the tangent and residual matrices and
+//! vectors. They also provide the method for updating the response
+//! quantities at the DOFs with appropriate values; these values being
+//! some function of the solution to the linear system of equations.
 class IncrementalIntegrator : public Integrator
   {
   protected:
@@ -102,13 +111,26 @@ class IncrementalIntegrator : public Integrator
     virtual int formUnbalance(void);
 
     // pure virtual methods to define the FE_ELe and DOF_Group contributions
+    //! @brief To inform the FE\_Element how to build its tangent matrix for
+    //! addition to the system of equations.
     virtual int formEleTangent(FE_Element *theEle) =0;
+    //! @brief To inform the DOF\_Group how to build its tangent matrix for
+    //! addition to the system of equations. The subclasses must provide the
+    //! implementation of this method. This is required in transient analysis
+    //! as th Node objects have mass. THIS MAY CHANGE.
     virtual int formNodTangent(DOF_Group *theDof) =0;    
+    //! @brief To inform the FE\_Element how to build its residual vector for
+    //! addition to the system of equations.
     virtual int formEleResidual(FE_Element *theEle) =0;
+    //! @brief To inform the DOF\_Group how to build its residual vector for
+    //! addition to the system of equations.
     virtual int formNodUnbalance(DOF_Group *theDof) =0;    
 
     // methods to update the domain
     virtual int newStep(double deltaT);
+    //! @brief When invoked causes the integrator object to update the DOF\_Group
+    //! responses with the appropriate values based on the computed solution
+    //! to the system of equation object.
     virtual int update(const Vector &deltaU) =0;
     virtual int commit(void);
     virtual int revertToLastStep(void);

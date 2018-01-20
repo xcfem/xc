@@ -69,11 +69,24 @@
 #include <utility/matrix/Vector.h>
 #include <solution/analysis/model/dof_grp/DOF_Group.h>
 
+//! @brief Constructor.
+//!
+//! @param owr: set of objects used to perform the analysis.
 XC::StaticIntegrator::StaticIntegrator(AnalysisAggregation *owr,int clasTag)
   :IncrementalIntegrator(owr,clasTag) {}
 
 //! @brief Asks the element  being passed as parameter to build
 //! its tangent stiffness matrix.
+//!
+//! To form the tangent matrix of the FE\_Element, \p theEle, is
+//! instructed to zero this matrix and then add it's \f$K\f$ matrix to the
+//! tangent, i.e. it performs the following: 
+//! \begin{tabbing}
+//! while \= \+ while \= while \= \kill
+//! theEle-\f$>\f$zeroTang()
+//! theEle-\f$>\f$addKtoTang() 
+//! \end{tabbing}
+//! \noindent The method returns \f$0\f$.
 int XC::StaticIntegrator::formEleTangent(FE_Element *theEle)
   {
     // only elements stiffness matrix needed
@@ -91,6 +104,17 @@ int XC::StaticIntegrator::formEleTangent(FE_Element *theEle)
     return 0;
   }
 
+//! To form the residual vector of the FE\_Element.
+//! 
+//! To form the residual vector of the FE\_Element, \p theEle, is
+//! instructed to zero the vector and then add it's \f$R\f$ vector to
+//! the residual, i.e. it performs the following: 
+//! \begin{tabbing}
+//! while \= \+ while \= while \= \kill
+//! theEle-\f$>\f$zeroResidual()
+//! theEle-\f$>\f$addRtoResid() 
+//! \end{tabbing}
+//! \noindent The method returns \f$0\f$.
 int XC::StaticIntegrator::formEleResidual(FE_Element *theEle)
   {
     // only elements residual needed
@@ -99,14 +123,27 @@ int XC::StaticIntegrator::formEleResidual(FE_Element *theEle)
     return 0;
   }    
 
+//! @brief This should never be called in a static analysis. An error message is
+//! printed if it is. Returns -1.
 int XC::StaticIntegrator::formNodTangent(DOF_Group *theDof)
   {
     // should never be called
-    std::cerr << "StaticIntegrator::formNodTangent() -";
-    std::cerr << " this method should never have been called!\n";
+    std::cerr << getClassName() << "::" << __FUNCTION__
+	      << "; this method should never have been called!\n";
     return -1;
   }    
 
+//! Form the unbalance vector for the DOF\_Group.
+//! 
+//! To form the unbalance vector of the DOF\_Group, \p theDof, is
+//! instructed to zero the vector and then add it's \f$P\f$ vector to the
+//! unbalance, i.e. it performs the following: 
+//! \begin{tabbing}
+//! while \= \+ while \= while \= \kill
+//! theDof-\f$>\f$zeroUnbalance()
+//! theDof-\f$>\f$addPtoUnbal() 
+//! \end{tabbing}
+//! \noindent The method returns \f$0\f$.
 int XC::StaticIntegrator::formNodUnbalance(DOF_Group *theDof)
   {
     // only nodes unbalance need be added

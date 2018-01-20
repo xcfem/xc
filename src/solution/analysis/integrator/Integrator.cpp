@@ -65,6 +65,8 @@
 #include "domain/mesh/element/utils/RayleighDampingFactors.h"
 
 //! @brief Constructor.
+//!
+//! @param owr: set of objects used to perform the analysis.
 XC::Integrator::Integrator(AnalysisAggregation *owr,int clasTag)
   :MovableObject(clasTag), EntCmd(owr) {}
 
@@ -99,6 +101,9 @@ const XC::AnalysisAggregation *XC::Integrator::getAnalysisAggregation(void) cons
 
 
 //! @brief Returns a pointer to the analysis model.
+//! 
+//! A const member function which returns a const pointer to the AnalysisModel
+//! associated with the Integrator object, i.e. \p theModel.
 const XC::AnalysisModel *XC::Integrator::getAnalysisModelPtr(void) const
   {
     const AnalysisAggregation *sm= getAnalysisAggregation();
@@ -107,6 +112,9 @@ const XC::AnalysisModel *XC::Integrator::getAnalysisModelPtr(void) const
   }
 
 //! @brief Returns a pointer to the analysis model.
+//! 
+//! A member function which returns a pointer to the AnalysisModel
+//! associated with the Integrator object, i.e. \p theModel.
 XC::AnalysisModel *XC::Integrator::getAnalysisModelPtr(void)
   {
     const AnalysisAggregation *sm= getAnalysisAggregation();
@@ -114,16 +122,24 @@ XC::AnalysisModel *XC::Integrator::getAnalysisModelPtr(void)
     return sm->getAnalysisModelPtr();
   }
 
-//! @brief Hace los cambios oportunos cuando se ha producido un cambio en el domain.
+//! @brief Make required changes when a change in the domain occurs.
+//! 
+//! Is called by the Analysis object. Refer to the Analysis classes to see
+//! when it is invoked. To return \f$0\f$ if successful, a negative number if
+//! not. This base class returns \f$0\f$.
 int XC::Integrator::domainChanged(void)
   { return 0; }
 
-void XC::Integrator::Print(std::ostream &s, int flag)
+//! @brief The Integrator is to send information to the stream based on the
+//! integer \p flag. 
+void XC::Integrator::Print(std::ostream &os, int flag)
   {
     if(getAnalysisModelPtr())
-      s << "\t XC::LoadPath - currentLambda: " << getCurrentModelTime() << std::endl;
+      os << "\t " << getClassName() << "; currentLambda: "
+	<< getCurrentModelTime() << std::endl;
     else 
-      s << "\t XC::LoadPath - no associated AnalysisModel\n"; 
+      os << "\t " << getClassName()
+	<< "; no associated AnalysisModel.\n"; 
   }
 
 //! @brief Send object members through the channel being passed as parameter.

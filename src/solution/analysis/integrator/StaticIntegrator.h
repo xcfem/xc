@@ -80,6 +80,60 @@ class Vector;
 //! @ingroup StaticIntegrator
 //
 //! @brief Base class for static integrators.
+//!
+//! StaticIntegrator is an IncrementalIntegrator provided to implement the
+//! common methods among integrator classes used in performing a static
+//! analysis on the FE\_Model. The StaticIntegrator class provides an
+//! implementation of the methods to form the FE\_Element and DOF\_Group
+//! contributions to the tangent and residual. A pure virtual method newStep()
+//! is also defined in the interface, this is the method first called at each
+//! iteration in a static analysis, see the StaticAnalysis class.
+//! 
+//! In static nonlinear finite element problems we seek a solution
+//! (\f$\mathbf{U}\f$, \f$\lambda\f$) to the nonlinear vector function
+//! 
+//! \begin{equation}
+//! R(U, \lambda) = \lambda P - F_R(U) = \zero
+//! \label{staticGenForm}
+//! \end{equation}
+//! 
+//! The most widely used technique for solving the non-linear finite
+//! element equation, equation~\ref{femGenForm}, is to use an incremental
+//! scheme. In the incremental formulation, a solution to the equation is
+//! sought at successive incremental steps.  
+//! 
+//! \begin{equation}
+//! R(U_{n}, \lambda_n) = \lambda_n P - F_R(U_{n})
+//! \label{staticIncForm}
+//! \end{equation}
+//! 
+//! The solution of this equation is typically obtained using an iterative
+//! procedure, in which a sequence of approximations
+//! (\f$U_{n}^{(i)}\f$, \f$\lambda_n^{(i)}\f$), \f$i=1,2, ..\f$ is obtained
+//! which converges to the solution (\f$U_n\f$, \f$\lambda_n)\f$. The most
+//! frequently used iterative schemes, such as Newton-Raphson, modified
+//! Newton, and quasi Newton schemes, are based on a Taylor expansion of
+//! equation~\ref{staticIncForm} about (\f$U_{n}\f$, \f$\lambda_n\f$):     
+//! 
+//! \begin{equation} 
+//! R(U_{n},\lambda_n) = \lambda_n^{(i)} P 
+//!  - \f_{R}\left(U_{n}^{(i)} \right) - \left[
+//! \begin{array}{cc}
+//! K_n^{(i)} & -P
+//! \end{array} \right] 
+//! \left\{
+//! \begin{array}{c}
+//! U_{n} - U_{n}^{(i)} 
+//! \lambda_n - \lambda_n^{(i)} 
+//! \end{array} \right\}
+//! \label{staticFormTaylor}
+//! \end{equation} 
+//! 
+//! \noindent which  a system of of \f$N\f$ equations with (\f$N+1\f$)
+//! unknowns. Two solve this, an additional equation is required, the
+//! constraint equation. The constraint equation used depends on the
+//! static integration scheme, of which there are a number, for example
+//! load control, arc length, and displacement control.
 class StaticIntegrator: public IncrementalIntegrator
   {
   protected:

@@ -84,9 +84,18 @@ class AnalysisAggregation ;
 //
 //! @ingroup AnalysisIntegrator
 //
-//! @brief Base class for the object that performs the
+//! @brief Base class for the objects that performs the
 //! integration of physical properties over the domain to
-//! form the system stiffness matrix
+//! form the system stiffness matrix.
+//!
+//! The Integrator class is an abstract base class. Its purpose is
+//! to define the interface common among all subclasses. An integrator
+//! method is responsible for defining how the system of equations are set
+//! up (this it does by specifying how the FE\_Element and DOF\_Group
+//! objects of the analysis model construct the vectors and matrices asked
+//! of them by the Analysis). It is also responsible for updating the
+//! response quantities at the DOFs with the appropriate values; the values
+//! are determined from the solution to the system of equations.
 class Integrator: public MovableObject, public EntCmd
   {
   protected:
@@ -112,12 +121,28 @@ class Integrator: public MovableObject, public EntCmd
     inline virtual ~Integrator(void) {}
     virtual int domainChanged(void);
 
+    //! @brief Called upon to determine the FE\_Element \p theEles matrix
+    //! contribution to the SystemOfEqn object. To return \f$0\f$ if successful,
+    //! a negative number otherwise. 
     virtual int formEleTangent(FE_Element *theEle) =0;
+    //! @brief Called upon to determine the DOF\_Group \p theDofs matrix
+    //! contribution to the SystemOfEqn object. To return \f$0\f$ if successful,
+    //! a negative number otherwise. 
     virtual int formNodTangent(DOF_Group *theDof) =0;    
+    //! @brief Called upon to determine the FE\_Element \p theEles vector
+    //! contribution to the SystemOfEqn object. To return \f$0\f$ if successful,
+    //! a negative number otherwise. 
     virtual int formEleResidual(FE_Element *theEle) =0;
+    //! @brief Called upon to determine the DOF\_Group \p theDofs vector
+    //! contribution to the SystemOfEqn object. To return \f$0\f$ if successful,
+    //! a negative number otherwise. 
     virtual int formNodUnbalance(DOF_Group *theDof) =0;    
 
     // Methods provided for Domain Decomposition
+    //! @brief Called upon to get the result quantities for the components
+    //! specified in the ID \p id and to place them in the Vector \p result.
+    //! This is provided for domain decomposition methods. To return \f$0\f$ if
+    //! successful, a negative number otherwise. 
     virtual int getLastResponse(Vector &result, const ID &id) =0;
 
     // Method provided for Output
