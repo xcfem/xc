@@ -548,28 +548,67 @@ Pos3d XC::Node::getInitialPosition3d(void) const
     return retval;
   }
 
-//! @brief Return the current position of the node scaled by
-//! factor: return initPos+ factor * nodDisplacement.
-Pos2d XC::Node::getCurrentPosition2d(const double &factor) const
+//! @brief Return the 2D position obtained as: initPos+ factor * v.
+Pos2d XC::Node::getPosition2d(const Vector &v) const
   {
-    const Vector fd= factor*getDisp();
     Pos2d retval;
     const size_t sz= getDim();
     if(sz==1)
       {
         if(numberDOF==1)
-          retval= Pos2d(Crd[0]+fd[0],0.0);
+          retval= Pos2d(Crd[0]+v[0],0.0);
         else if(numberDOF==2)
-          retval= Pos2d(Crd[0]+fd[0],fd[1]);
+          retval= Pos2d(Crd[0]+v[0],v[1]);
       }
     else if(sz>=2)
       {
         if(numberDOF==1)
-          retval= Pos2d(Crd[0]+fd[0],Crd[1]);
+          retval= Pos2d(Crd[0]+v[0],Crd[1]);
         else if((numberDOF==2) || (numberDOF==3) || (numberDOF==6))
-          retval= Pos2d(Crd[0]+fd[0],Crd[1]+fd[1]);
+          retval= Pos2d(Crd[0]+v[0],Crd[1]+v[1]);
       }
     return retval;
+  }
+  
+//! @brief Return the 3D position obtained as: initPos+ factor * v.
+Pos3d XC::Node::getPosition3d(const Vector &v) const
+  {
+    Pos3d retval;
+    const size_t sz= getDim();
+    if(sz==1)
+      {
+        if(numberDOF==1)
+          retval= Pos3d(Crd[0]+v[0],0.0,0.0);
+        else if(numberDOF==2)
+          retval= Pos3d(Crd[0]+v[0],v[1],0.0);
+        else if((numberDOF==3) || (numberDOF==6))
+          retval= Pos3d(Crd[0]+v[0],v[1],v[2]);
+      }
+    else if(sz==2)
+      {
+        if(numberDOF==1)
+          retval= Pos3d(Crd[0]+v[0],Crd[1],0.0);
+        else if((numberDOF==2) || (numberDOF==3))
+          retval= Pos3d(Crd[0]+v[0],Crd[1]+v[1],0.0);
+      }
+    else if(sz==3)
+      {
+        if(numberDOF==1)
+          retval= Pos3d(Crd[0]+v[0],Crd[1],Crd[2]);
+        else if(numberDOF==2)
+          retval= Pos3d(Crd[0]+v[0],Crd[1]+v[1],Crd[2]);
+        else if((numberDOF==3) || (numberDOF==6))
+          retval= Pos3d(Crd[0]+v[0],Crd[1]+v[1],Crd[2]+v[2]);
+      }
+    return retval;
+  }
+
+//! @brief Return the current position of the node scaled by
+//! factor: return initPos+ factor * nodDisplacement.
+Pos2d XC::Node::getCurrentPosition2d(const double &factor) const
+  {
+    const Vector fd= factor*getDisp();
+    return getPosition2d(fd);
   }
 
 //! @brief Return the current position of the node scaled by
@@ -577,34 +616,7 @@ Pos2d XC::Node::getCurrentPosition2d(const double &factor) const
 Pos3d XC::Node::getCurrentPosition3d(const double &factor) const
   {
     const Vector fd= factor*getDisp();
-    Pos3d retval;
-    const size_t sz= getDim();
-    if(sz==1)
-      {
-        if(numberDOF==1)
-          retval= Pos3d(Crd[0]+fd[0],0.0,0.0);
-        else if(numberDOF==2)
-          retval= Pos3d(Crd[0]+fd[0],fd[1],0.0);
-        else if((numberDOF==3) || (numberDOF==6))
-          retval= Pos3d(Crd[0]+fd[0],fd[1],fd[2]);
-      }
-    else if(sz==2)
-      {
-        if(numberDOF==1)
-          retval= Pos3d(Crd[0]+fd[0],Crd[1],0.0);
-        else if((numberDOF==2) || (numberDOF==3))
-          retval= Pos3d(Crd[0]+fd[0],Crd[1]+fd[1],0.0);
-      }
-    else if(sz==3)
-      {
-        if(numberDOF==1)
-          retval= Pos3d(Crd[0]+fd[0],Crd[1],Crd[2]);
-        else if(numberDOF==2)
-          retval= Pos3d(Crd[0]+fd[0],Crd[1]+fd[1],Crd[2]);
-        else if((numberDOF==3) || (numberDOF==6))
-          retval= Pos3d(Crd[0]+fd[0],Crd[1]+fd[1],Crd[2]+fd[2]);
-      }
-    return retval;
+    return getPosition3d(fd);
   }
 
 //! @brief Returns true if the current position of the node scaled by
@@ -1379,6 +1391,22 @@ XC::Matrix XC::Node::getNormalizedEigenvectors(void) const
           retval(i,j)= eigenvector(i);
       }
     return retval;
+  }
+
+//! @brief Return the "modal" position of the node scaled by
+//! factor: return initPos+ factor * getNormalizedEigenvector(mode).
+Pos2d XC::Node::getEigenPosition2d(const double &factor, int mode) const
+  {
+    const Vector fd= factor*getNormalizedEigenvector(mode);
+    return getPosition2d(fd);
+  }
+
+//! @brief Return the "modal" position of the node scaled by
+//! factor: return initPos+ factor * getNormalizedEigenvector(mode).
+Pos3d XC::Node::getEigenPosition3d(const double &factor, int mode) const
+  {
+    const Vector fd= factor*getNormalizedEigenvector(mode);
+    return getPosition3d(fd);
   }
 
 //! @brief Returns the modal participation factor

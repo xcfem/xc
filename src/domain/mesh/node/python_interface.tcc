@@ -41,6 +41,8 @@ class_<XC::Node, XC::Node *, bases<XC::MeshComponent>, boost::noncopyable >("Nod
   .add_property("getCoo", make_function( getCooRef, return_internal_reference<>() ))
   .add_property("mass",make_function(&XC::Node::getMass, return_internal_reference<>()) ,&XC::Node::setMass)
   .add_property("get3dCoo", &XC::Node::getCrds3d)
+  .add_property("getPos2d", &XC::Node::getPosition2d,"getPosition2d(v), returns the 2D position obtained by adding the vector to the position of node.")
+  .add_property("getPos3d", &XC::Node::getPosition3d,"getPosition3d(v), returns the 3D position obtained by adding the vector to the position of node..")
   .add_property("getInitialPos2d", &XC::Node::getInitialPosition2d,"Returns 2D initial position of node.")
   .add_property("getInitialPos3d", &XC::Node::getInitialPosition3d,"Returns 3D initial position of node.")
   .def("getCurrentPos2d", &XC::Node::getCurrentPosition2d,"Returns 2D current position of node scaled by a factor: initialPos+factor*currentDisplacement.")
@@ -87,6 +89,8 @@ class_<XC::Node, XC::Node *, bases<XC::MeshComponent>, boost::noncopyable >("Nod
   .def("getNormalizedEigenvector",&XC::Node::getNormalizedEigenvector,"getNormalizedEigenvector(i) returns the eigenvector that corresponds to i-th mode.")
   .add_property("getEigenvectors",make_function(&XC::Node::getEigenvectors,return_internal_reference<>()),"Returs all the eigenvectors for the node.")
   .add_property("getNormalizedEigenvectors",&XC::Node::getNormalizedEigenvectors,"Returns all the normalized eigenvectors for the node.")
+  .def("getEigenPos2d", &XC::Node::getEigenPosition2d,"getEigenPos2d(factor, mode) returns 2D modal position of node scaled by a factor: initialPos+factor*getNormalizedEigenvector(mode).")
+  .def("getEigenPos3d", &XC::Node::getEigenPosition3d,"\n""getEigenPos3d(factor, mode) \n""Return 3D modal position of node scaled by a factor: initialPos+factor*getNormalizedEigenVector(mode).")
     
   .def("getAngularFrequency",&XC::Node::getAngularFrequency,"Return the angular frequency corresponding to the i-th mode.")
   .add_property("getAngularFrequencies",&XC::Node::getAngularFrequencies,"Returns the angular frequencies for all the modes.")

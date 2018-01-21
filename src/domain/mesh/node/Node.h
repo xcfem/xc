@@ -199,6 +199,8 @@ class Node: public MeshComponent
     virtual const Vector &getCrds(void) const;
     virtual Vector &getCrds(void);
     Vector getCrds3d(void) const;
+    Pos2d getPosition2d(const Vector &) const;
+    Pos3d getPosition3d(const Vector &) const;
     Pos2d getInitialPosition2d(void) const;
     Pos3d getInitialPosition3d(void) const;
     Pos2d getCurrentPosition2d(const double &factor= 1.0) const;
@@ -272,13 +274,15 @@ class Node: public MeshComponent
 
     // public methods for eigen vector
     virtual int setNumEigenvectors(int numVectorsToStore);
-    virtual int setEigenvector(int mode, const Vector &eigenVector);
+    virtual int setEigenvector(int , const Vector &);
     inline int getNumModes(void) const
       { return theEigenvectors.noCols(); }
-    virtual Vector getEigenvector(int mode) const;
-    Vector getNormalizedEigenvector(int mode) const;
+    virtual Vector getEigenvector(int ) const;
+    Vector getNormalizedEigenvector(int ) const;
     virtual const Matrix &getEigenvectors(void);
     Matrix getNormalizedEigenvectors(void) const;
+    Pos2d getEigenPosition2d(const double &, int) const;
+    Pos3d getEigenPosition3d(const double &, int) const;
     
     //Angular frequencies.
     double getAngularFrequency(int) const;
