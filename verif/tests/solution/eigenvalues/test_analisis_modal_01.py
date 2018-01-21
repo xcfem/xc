@@ -163,7 +163,11 @@ print "ratio3= ",ratio3
 print "factoresDistribucion: ",factoresDistribucion
 print "ratio4= ",ratio4
  '''
-
+'''
+#Display de deformed shape associated with mode 2
+from postprocess.xcVtk.FE_model import quick_graphics as qg
+qg.displayEigenResults(preprocessor,eigenMode=2, setToDisplay=setTotal,defShapeScale=1.0,equLoadVctScale=None,accelMode=None,unitsScale=1.0,viewNm="XYZPos",hCamFct=1.0,caption= 'Mode 2: deformed shape.',fileName=None)
+'''
 import os
 from miscUtils import LogMessages as lmsg
 fname= os.path.basename(__file__)

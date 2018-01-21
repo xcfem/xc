@@ -74,17 +74,22 @@ class RecordDefDisplayEF(vtk_grafico_base.RecordDefDisplay):
         visNodos.GetProperty().SetColor(.7, .5, .5)
         self.renderer.AddActor(visNodos)
 
-    def VtkLoadElemMesh(self,field,defFScale=0.0):
+    def VtkLoadElemMesh(self,field,defFScale=0.0,eigenMode=None):
         '''Load the element mesh
 
         :param field: scalar field to be represented
         :param defFScale: factor to apply to current displacement of nodes 
                   so that the display position of each node equals to
                   the initial position plus its displacement multiplied
-                  by this factor. (Defaults to 0.0, i.e. display of 
-                  initial/undeformed shape)
+                  by this factor. In case of modal analysis, the displayed 
+                  position of each node equals to the initial position plus
+                  its eigenVector multiplied by this factor.
+                  (Defaults to 0.0, i.e. display of initial/undeformed shape)
+        :param eigenMode: eigenvibration mode if we want to display the deformed 
+                 shape associated with it when a modal analysis has been carried out. 
+                 Defaults to None: no modal analysis.
         '''
-        # Definie grid
+        # Define grid
         self.nodos= vtk.vtkPoints()
         self.gridRecord.uGrid= vtk.vtkUnstructuredGrid()
         self.gridRecord.uGrid.SetPoints(self.nodos)
@@ -98,10 +103,15 @@ class RecordDefDisplayEF(vtk_grafico_base.RecordDefDisplay):
           field.creaLookUpTable()      
         # Load nodes in vtk
         setNodos= eSet.getNodes
-        for n in setNodos:
-          pos= n.getCurrentPos3d(defFScale)
-          self.nodos.InsertPoint(n.getIdx,pos.x,pos.y,pos.z)
-        # Load elements in vtk
+        if eigenMode==None:
+            for n in setNodos:
+              pos= n.getCurrentPos3d(defFScale)
+              self.nodos.InsertPoint(n.getIdx,pos.x,pos.y,pos.z)
+        else:
+            for n in setNodos:
+              pos= n.getEigenPos3d(defFScale,eigenMode)
+              self.nodos.InsertPoint(n.getIdx,pos.x,pos.y,pos.z)
+         # Load elements in vtk
         setElems= eSet.getElements
         for e in setElems:
           vertices= xc_base.vector_int_to_py_list(e.getIdxNodes)
@@ -118,7 +128,7 @@ class RecordDefDisplayEF(vtk_grafico_base.RecordDefDisplay):
           if(c.getVtkCellType!= vtk.VTK_LINE):
             self.gridRecord.uGrid.InsertNextCell(c.getVtkCellType,vtx)
 
-    def defineMeshScene(self, field,defFScale=0.0):
+    def defineMeshScene(self, field,defFScale=0.0,eigenMode=None):
           '''Define the scene for the mesh
 
           :param field: scalar field to be represented
@@ -128,7 +138,7 @@ class RecordDefDisplayEF(vtk_grafico_base.RecordDefDisplay):
                     by this factor. (Defaults to 0.0, i.e. display of 
                     initial/undeformed shape)
           '''
-          self.VtkLoadElemMesh(field,defFScale)
+          self.VtkLoadElemMesh(field,defFScale,eigenMode)
           self.renderer= vtk.vtkRenderer()
           self.renderer.SetBackground(self.bgRComp,self.bgGComp,self.bgBComp)
           self.VtkDefineNodesActor(0.002)
@@ -288,3 +298,4 @@ class RecordDefDisplayEF(vtk_grafico_base.RecordDefDisplay):
 
     def appendDiagram(self,diagram):
         diagram.addDiagramToScene(self)
+

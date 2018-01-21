@@ -74,10 +74,7 @@ class LoadVectorField(vf.VectorField):
   def sumNodalLoads(self,preprocessor,lp):
     ''' Iterate over loaded nodes to cumulate their loads.
 
-    :param defFScale: factor to apply to current displacement of nodes 
-              so that the display position of each node equals to
-              the initial position plus its displacement multiplied
-              by this factor.    
+    :param lp: load pattern
     '''
     lIter= lp.loads.getNodalLoadIter
     nl= lIter.next()
@@ -97,6 +94,7 @@ class LoadVectorField(vf.VectorField):
   def dumpNodalLoads(self,preprocessor,lp,defFScale):
     ''' Iterate over loaded nodes dumping its loads into the graphic.
 
+    :param lp: load pattern
     :param defFScale: factor to apply to current displacement of nodes 
               so that the display position of each node equals to
               the initial position plus its displacement multiplied
