@@ -81,6 +81,103 @@ class Vector;
 //! @ingroup TransientIntegrator
 //
 //! @brief Base class for dynamic equations of motion integrators.
+//!
+//!TransientIntegrator is an abstract subclass of IncrementalIntegrator.
+//! A subclass of it is used when performing a nonlinear transient
+//! analysis of the problem using a direct integration method. The
+//! TransientIntegrator class redefines the formTangent() method of
+//! the IncrementalIntegrator class and it defines a new method {\em
+//! newStep()} which is invoked by the DirectIntegrationAnalysis class at
+//! each new time step.
+//! 
+//! In nonlinear transient finite element problems we seek a solution
+//! (\f$U\f$, \f$\dot U\f$, \f$\ddot U\f$) to the nonlinear vector function
+//! 
+//! \begin{equation}
+//! R(U,Ud, Udd) = P(t) - F_I(Udd) - F_R(U, Ud) = \zero
+//! \label{femGenForm}
+//! \end{equation}
+//!
+//! 
+//! The most widely used technique for solving the transient non-linear 
+//! finite element equation, equation~\ref{femGenForm}, is to use an
+//! incremental direct integration scheme. In the incremental formulation,
+//! a solution to the equation is sought at successive time steps \f$\Delta
+//! t\f$ apart.  
+//! 
+//! \begin{equation}
+//! R(U_{n \Delta t},Ud_{n \Delta t}, Udd_{n \Delta t}) = P(n \Delta t) -
+//! F_I(Udd_{n \Delta t}) - F_R(U_{n \Delta t}, Ud_{n \Delta t})
+//! \label{fullTimeForm}
+//! \end{equation}
+//! 
+//! For each time step, t, the integration schemes provide two operators,
+//! \f$I_1\f$ and \f$I_2\f$, to relate the velocity and accelerations at the 
+//! time step as a function of the displacement at the time step and the
+//! response at previous time steps: 
+//! 
+//! \begin{equation} 
+//! \dot U_{t} = {I}_1 (U_t, U_{t-\Delta t}, \dot U_{t-\Delta t},
+//! \ddot U_{t - \Delta t}, U_{t - 2\Delta t}, \dot U_{t - 2 \Delta t}. ..., )
+//! \label{I1}
+//! \end{equation} 
+//! 
+//! \begin{equation} 
+//! \ddot U_{t} = {I}_2 (U_t, U_{t-\Delta t}, \dot U_{t-\Delta t},
+//! \ddot U_{t - \Delta t}, U_{t - 2\Delta t}, \dot U_{t - 2 \Delta t}. ..., )
+//! \label{I2}
+//! \end{equation} 
+//! 
+//! These allow us to rewrite equation~\ref{fullTimeForm}, in terms of a
+//! single response quantity, typically the displacement:
+//! 
+//! \begin{equation}
+//! R(U_t) = P(t) - F_I(Udd_t) - F_R(U_t, Ud_t)
+//! \label{genForm}
+//! \end{equation}
+//! 
+//! The solution of this equation is typically obtained using an iterative
+//! procedure, i.e. making an initial prediction for \f$U_{t}\f$,
+//! denoted \f$U_{t}^{(0)}\f$ a sequence of approximations \f$U_{t}^{(i)}\f$,
+//! \f$i=1,2, ..\f$ is obtained which converges (we hope) to the solution \f$U_{t}\f$. The
+//! most frequently used iterative schemes, such as Newton-Raphson,
+//! modified Newton, and quasi Newton schemes, are based on a Taylor
+//! expansion of equation~\ref{genForm} about \f$U_{t}\f$:    
+//! 
+//! \begin{equation} 
+//! R(U_{t}) = 
+//! R(U_{t}^{(i)}) +
+//! \left[ {\frac{\partial R}{\partial U_t} \vert}_{U_{t}^{(i)}}\right]
+//! \left( U_{t} - U_{t}^{(i)} \right) 
+//! \end{equation}
+//! 
+//! \f$\f$
+//! R(U_{t}) = 
+//!  P (t) 
+//!  - \f_{I} \left( \ddot U_{t}^{(i)} \right) -
+//! \f_{R} \left( \dot U_{t}^{(i)}, U_{t}^{(i)} \right)
+//! \f$\f$
+//! \begin{equation} 
+//! - \left[
+//!    M^{(i)} {I}_2'
+//! +  C^{(i)} {I}_1'
+//! + K^{(i)}  \right]
+//!  \left( U_{t} - U_{t}^{(i)} \right)
+//! \label{femGenFormTaylor}
+//! \end{equation} 
+//! 
+//! To start the iteration scheme, trial values for \f$U_{t}\f$, \f$\dot
+//! U_{t} \f$ and \f$\ddot U_{t} \f$ are required. These are
+//! obtained by assuming \f$U_{t}^{(0)} = U_{t-\Delta t}\f$. The
+//! \f$\dot U_{t}^{(0)} \f$ and \f$\ddot U_{t}^{(0)}\f$
+//! can then be obtained from the operators for the integration scheme.
+//! 
+//! Subclasses of TransientIntegrators provide
+//! methods informing the FE\_Element and DOF\_Group objects how to build
+//! the tangent and residual matrices and vectors. They also provide the
+//! method for updating the response quantities at the DOFs with
+//! appropriate values; these values being some function of the solution
+//! to the linear system of equations. 
 class TransientIntegrator : public IncrementalIntegrator
   {
   protected:

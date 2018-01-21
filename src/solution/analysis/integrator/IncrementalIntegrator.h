@@ -127,10 +127,13 @@ class IncrementalIntegrator : public Integrator
     virtual int formNodUnbalance(DOF_Group *theDof) =0;    
 
     // methods to update the domain
+    //! @brief Invoked to inform the integrator that the transient analysis is
+    //! proceeding to the next time step. To return \f$0\f$ if successful, a
+    //! negative number if not.
     virtual int newStep(double deltaT);
-    //! @brief When invoked causes the integrator object to update the DOF\_Group
-    //! responses with the appropriate values based on the computed solution
-    //! to the system of equation object.
+    //! @brief When invoked causes the integrator object to update the
+    //! DOF\_Group responses with the appropriate values based on the computed
+    //! solution to the system of equations object.
     virtual int update(const Vector &deltaU) =0;
     virtual int commit(void);
     virtual int revertToLastStep(void);

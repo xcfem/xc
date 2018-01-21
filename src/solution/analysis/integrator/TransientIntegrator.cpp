@@ -73,10 +73,36 @@
 
 
 //! @brief Constructor.
+//!
+//! @param owr: set of objects used to perform the analysis.
 XC::TransientIntegrator::TransientIntegrator(AnalysisAggregation *owr,int clasTag)
   : IncrementalIntegrator(owr,clasTag) {}
 
 //! @brief Builds tangent stiffness matrix.
+//!
+//! Invoked to form the structure tangent matrix. The method is rewritten
+//! for this class to include inertia effects from the nodes. The method
+//! iterates over both the FE\_Elements and DOF\_Groups invoking methods
+//! to form their contributions to the \f$A\f$ matrix of the LinearSOE and
+//! then adding these contributions to the \f$A\f$ matrix. The method performs
+//! the following:
+//! \begin{tabbing}
+//! while \= \+ while \= while \= \kill
+//! theSysOfEqn.zeroA();
+//! DOF\_EleIter \&theDofs = theAnalysisModel.getDOFs();
+//! while((dofGroupPtr = theDofs()) \f$\neq\f$ 0) \+
+//! dofGroupPtr-\f$>\f$formTangent(theIntegrator);
+//! theSOE.addA(dofGroupPtr-\f$>\f$getTangent(this),
+//! dofGroupPtr-\f$>\f$getID()) \-
+//! FE\_EleIter \&theEles = theAnalysisModel.getFEs();
+//! while((elePtr = theEles()) \f$\neq\f$ 0) \+
+//! theSOE.addA(elePtr-\f$>\f$getTangent(this),
+//! elePtr-\f$>\f$getID(), \f$1.0\f$)
+//! \end{tabbing}
+//! \noindent Returns \f$0\f$ if successful, otherwise a \f$-1\f$ if an error
+//! occurred while trying to add the stiffness. The two loops are introduced
+//! for the FE\_Elements, to allow for efficient parallel programming when the
+//! FE\_Elements are associated with a ShadowSubdomain. 
 int XC::TransientIntegrator::formTangent(int statFlag)
   {
     int result = 0;
@@ -86,8 +112,9 @@ int XC::TransientIntegrator::formTangent(int statFlag)
     AnalysisModel *theModel = this->getAnalysisModelPtr();
     if(theLinSOE == 0 || theModel == 0)
       {
-	std::cerr << "WARNING XC::TransientIntegrator::formTangent() ";
-	std::cerr << "no XC::LinearSOE or XC::AnalysisModel has been set\n";
+	std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; WARNING no XC::LinearSOE or XC::AnalysisModel"
+	          << " has been set\n";
 	return -1;
       }
     
@@ -104,7 +131,8 @@ int XC::TransientIntegrator::formTangent(int statFlag)
       {
 	if(theLinSOE->addA(dofGroupPtr->getTangent(this),dofGroupPtr->getID()) <0)
           {
-	    std::cerr << "XC::TransientIntegrator::formTangent() - failed to addA:dof\n";
+	    std::cerr << getClassName() << "::" << __FUNCTION__
+		      << "; failed to addA: dof\n";
 	    result = -1;
 	  }
       }    
@@ -116,7 +144,8 @@ int XC::TransientIntegrator::formTangent(int statFlag)
       {
 	if(theLinSOE->addA(elePtr->getTangent(this),elePtr->getID()) < 0)
           {
-	    std::cerr << "XC::TransientIntegrator::formTangent() - failed to addA:ele\n";
+	    std::cerr << getClassName() << "::" << __FUNCTION__
+		      << "; failed to addA: ele\n";
 	    result = -2;
 	  }
       }
@@ -124,7 +153,16 @@ int XC::TransientIntegrator::formTangent(int statFlag)
   }
 
 //! @brief Assembles the unbalanced vector of the element
-//! being passed as parameter.    
+//! being passed as parameter.
+//!
+//! Called upon by the FE\_Element \p theEle to determine it's
+//! contribution to the rhs of the equation. The following are invoked
+//! before \f$0\f$ is returned.
+//! \begin{tabbing}
+//! while \= \+ while \= while \= \kill
+//! theEle-\f$>\f$zeroResidual()
+//! theEle-\f$>\f$addRIncInertiaToResid()
+//! \end{tabbing}
 int XC::TransientIntegrator::formEleResidual(FE_Element *theEle)
   {
     theEle->zeroResidual();
@@ -132,7 +170,17 @@ int XC::TransientIntegrator::formEleResidual(FE_Element *theEle)
     return 0;
   }
 
-//! @brief Forma el unbalanced load vector del nodo being passed as parameter.
+//! @brief Builds the unbalanced load vector of the node being passed
+//! as parameter.
+//!
+//! Called upon by the DOF\_Group \p theDof to determine it's
+//! contribution to the rhs of the equation. The following are invoked
+//! before \f$0\f$ is returned.
+//! \begin{tabbing}
+//! while \= \+ while \= while \= \kill
+//! theDof-\f$>\f$zeroUnbalance()
+//! theDof-\f$>\f$addPIncInertiaToUnbalance()
+//! \end{tabbing}
 int XC::TransientIntegrator::formNodUnbalance(DOF_Group *theDof)
   {
     theDof->zeroUnbalance();
