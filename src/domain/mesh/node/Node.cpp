@@ -1280,23 +1280,16 @@ const XC::Vector &XC::Node::getRV(const Vector &V)
 
     // see if quick return , i.e. R == 0
     if(R.Nula())
-      {
-        unbalLoadWithInertia.Zero();
-        return unbalLoadWithInertia;
-      }
-
-    // check dimesions of R and V
-    if(R.noCols() != V.Size())
+      unbalLoadWithInertia.Zero();
+    else if(R.noCols() != V.Size()) // check dimesions of R and V
       {
         std::cerr << getClassName() << "::" << __FUNCTION__
 	          << "; R and V of incompatible dimensions.\n"
                   << "R: " << R << "V: " << V;
         unbalLoadWithInertia.Zero();
-        return unbalLoadWithInertia;
       }
-
-    // determine the product
-    unbalLoadWithInertia.addMatrixVector(0.0, R, V, 1.0);
+    else // determine the product
+      unbalLoadWithInertia.addMatrixVector(0.0, R, V, 1.0);
     return unbalLoadWithInertia;
   }
 
