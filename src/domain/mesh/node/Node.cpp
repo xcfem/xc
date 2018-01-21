@@ -1318,23 +1318,26 @@ int XC::Node::setNumEigenvectors(int numVectorsToStore)
 //! @brief Asigna el eigenvector eigenvector al modo mode.
 int XC::Node::setEigenvector(int mode, const Vector &eigenvector)
   {
+    int retval= 0;
     if(getNumModes() < mode)
       {
         std::cerr << getClassName() << "::" << __FUNCTION__
 		  << "; mode " << mode << " invalid\n";
-        return -1;
+        retval= -1;
       }
-
-    if(eigenvector.Size() != numberDOF)
+    else if(eigenvector.Size() != numberDOF)
       {
         std::cerr << getClassName() << "::" << __FUNCTION__
 		  << "; eigenvector of incorrect size\n";
-        return -2;
+        retval= -2;
       }
-    // set the values
-    for(int i=0; i<numberDOF; i++)
-      theEigenvectors(i, mode-1)= eigenvector(i);
-    return 0;
+    else
+      {
+	// set the values
+	for(int i=0; i<numberDOF; i++)
+	  theEigenvectors(i, mode-1)= eigenvector(i);
+      }
+    return retval;
   }
 
 //! @brief Return the angular frequency corresponding to the i-th mode.
