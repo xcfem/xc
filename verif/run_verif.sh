@@ -187,11 +187,11 @@ python tests/solution/eigenvalues/linear_buckling_column03.py
 python tests/solution/eigenvalues/linear_buckling_column04.py
 python tests/solution/eigenvalues/linear_buckling_column05.py
 python tests/solution/eigenvalues/test_string_under_tension.py
-python tests/solution/eigenvalues/test_analisis_modal_01.py
-python tests/solution/eigenvalues/test_analisis_modal_02.py
-python tests/solution/eigenvalues/test_analisis_modal_03.py
-python tests/solution/eigenvalues/test_analisis_modal_04.py
-python tests/solution/eigenvalues/test_analisis_modal_05.py
+python tests/solution/eigenvalues/modal_analysis_test_01.py
+python tests/solution/eigenvalues/modal_analysis_test_02.py
+python tests/solution/eigenvalues/modal_analysis_test_03.py
+python tests/solution/eigenvalues/modal_analysis_test_04.py
+python tests/solution/eigenvalues/modal_analysis_test_05.py
 python tests/solution/eigenvalues/test_cqc_01.py
 python tests/solution/eigenvalues/test_band_arpackpp_solver_01.py
 
