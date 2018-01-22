@@ -39,9 +39,10 @@ namespace XC {
 //
 class IDVarSize: public ID
   {
+    int defaultValue;
   public:
     // constructors and destructor
-    IDVarSize(const int &,const int &);
+    IDVarSize(const int &,const int &, const int &defaultValue= 0);
 
     int &operator[](const int &i);
     const int &operator[](const int &i) const

@@ -107,7 +107,7 @@ class ID: public EntCmd, public std::vector<int>
     //! @brief Returns true if the vector is empty.
     inline bool Nulo(void) const
       { return empty(); }
-    int resize(const int &newSize);
+    int resize(const int &newSize, const int &defaultValue= 0);
     const int &max(void) const;
     const int &min(void) const;
 

@@ -119,7 +119,6 @@ int XC::EigenAnalysis::analyze(int numModes)
 	    return -1;
 	  }
       }
-
     result = getEigenIntegratorPtr()->newStep();
     if(result < 0)
       {
@@ -146,8 +145,8 @@ int XC::EigenAnalysis::domainChanged(void)
     int result= getConstraintHandlerPtr()->handle();
     if(result < 0)
       {
-        std::cerr << getClassName() << "::" << __FUNCTION__ << "; ";
-        std::cerr << "ConstraintHandler::handle() failed." << std::endl;
+        std::cerr << getClassName() << "::" << __FUNCTION__ 
+		  << "; ConstraintHandler::handle() failed." << std::endl;
         return -1;
       }
 
@@ -155,15 +154,15 @@ int XC::EigenAnalysis::domainChanged(void)
     result= getDOF_NumbererPtr()->numberDOF();
     if(result < 0)
       {
-        std::cerr << getClassName() << "::" << __FUNCTION__ << "; ";
-        std::cerr << "failed in equation numbering." << std::endl;
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; failed in equation numbering." << std::endl;
         return -2;
       }
     result= getConstraintHandlerPtr()->doneNumberingDOF();
     if(result < 0)
       {
-        std::cerr << getClassName() << "::" << __FUNCTION__ << "; ";
-        std::cerr << "fallo en doneNumberingDOF()." << std::endl;
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; failed in doneNumberingDOF()." << std::endl;
         return -3;
       }
 
@@ -190,7 +189,6 @@ int XC::EigenAnalysis::domainChanged(void)
                   << "; error in Algorithm::domainChanged()." << std::endl;
         return -5;
       }
-
     return 0;
   }
 

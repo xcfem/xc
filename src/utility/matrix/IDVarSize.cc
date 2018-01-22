@@ -60,8 +60,8 @@
 
 //! @brief Constructor used to allocate a IDVarSize of size size and
 //! reserve nReserve positions.
-XC::IDVarSize::IDVarSize(const int &size,const int &nReserve)
-  :ID()
+XC::IDVarSize::IDVarSize(const int &size,const int &nReserve, const int &dValue)
+  :ID(), defaultValue(dValue)
   {
     reserve(nReserve);
   }
@@ -72,7 +72,8 @@ int &XC::IDVarSize::operator[](const int &i)
     // check if it is inside range [0,sz-1]
     if(i < 0)
       {
-        std::cerr << "IDVarSize::[] - location " << i << " < 0\n";
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; location " << i << " < 0\n";
         return ID_NOT_VALID_ENTRY;
       }
 #endif
@@ -80,8 +81,8 @@ int &XC::IDVarSize::operator[](const int &i)
     // see if quick return
     if(i>=sz) //we have to enlarge the order of the IDVarSize
       {
-        int newArraySize= std::max(i+1,sz*2);
-        resize(newArraySize);
+        const int newArraySize= std::max(i+1,sz*2);
+        resize(newArraySize, defaultValue);
       }       
     return v_int::operator[](i);
   }

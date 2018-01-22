@@ -151,18 +151,19 @@ int XC::ID::removeValue(const int &value)
   }    
 
 
-int XC::ID::resize(const int &newSize)
+int XC::ID::resize(const int &newSize, const int &defaultValue)
   {
     int retval= 0;
     if(newSize<0) // first check that newSize is valid
       {
-        std::cerr << "ID::resize() - size specified " << newSize << " < 0\n";
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; size specified " << newSize << " < 0\n";
         retval= -1;
       }
     else if(newSize==0)
       clear();
     else
-      std::vector<int>::resize(newSize,0);
+      std::vector<int>::resize(newSize,defaultValue);
     return retval;
   }
 

@@ -143,21 +143,23 @@ const XC::Matrix &XC::ElasticSection3d::getSectionTangent(void) const
 const XC::Matrix &XC::ElasticSection3d::getInitialTangent(void) const
   { return ctes_scc.getInitialTangent4x4(); }
 
-//! @brief Returns the flexibility matrix.
-//! Overrides the base class implementation and returns the section
-//! flexibility matrix, \f$fsec\f$, where
-//! \f[
-//! fsec = \left[
-//!   \begin{array}{cccccc}
-//!       \frac{1}{EA} & 0 & 0 & 0 & 0 & 0 \\
-//!       0 & \frac{1}{EI_z} & 0 & 0 & 0 & 0 \\
-//!       0 & 0 & \frac{1}{EI_y} & 0 & 0 & 0 \\
-//!       0 & 0 & 0 & \frac{1}{\alpha GA} & 0 & 0 \\
-//!       0 & 0 & 0 & 0 & \frac{1}{\alpha GA} & 0 \\
-//!       0 & 0 & 0 & 0 & 0 & \frac{1}{GJ} \\
-//!   \end{array} 
-//! \right]
-//! \f]
+/*!
+ * @brief Returns the flexibility matrix.
+ * Overrides the base class implementation and returns the section
+ * flexibility matrix, \f$fsec\f$, where
+ * \f[
+ * fsec = \left[
+ *   \begin{array}{cccccc}
+ *       \frac{1}{EA} & 0 & 0 & 0 & 0 & 0 \\
+ *       0 & \frac{1}{EI_z} & 0 & 0 & 0 & 0 \\
+ *       0 & 0 & \frac{1}{EI_y} & 0 & 0 & 0 \\
+ *       0 & 0 & 0 & \frac{1}{\alpha GA} & 0 & 0 \\
+ *       0 & 0 & 0 & 0 & \frac{1}{\alpha GA} & 0 \\
+ *       0 & 0 & 0 & 0 & 0 & \frac{1}{GJ} \\
+ *   \end{array} 
+ * \right]
+ * \f]
+ */
 const XC::Matrix &XC::ElasticSection3d::getSectionFlexibility(void) const
   { return ctes_scc.getSectionFlexibility4x4(); }
 

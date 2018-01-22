@@ -115,24 +115,23 @@ int XC::TransformationConstraintHandler::handle(const ID *nodesLast)
     int numSPConstraints= 0;
     SFreedom_ConstraintIter &theSP1s= theDomain->getConstraints().getDomainAndLoadPatternSPs();
     SFreedom_Constraint *theSP1;
-    while((theSP1= theSP1s()) != 0)
+    while((theSP1= theSP1s()) != nullptr)
       numSPConstraints++;
-
-
     numDOF= 0;
 
     //int i= -1;
 
     // create an ID of constrained node tags in MFreedom_Constraints
     const int numMPConstraints= theDomain->getConstraints().getNumMPs();
-    IDVarSize constrainedNodesMP(0, numMPConstraints);
+    IDVarSize constrainedNodesMP(0, numMPConstraints, -1); //defaultValue= -1 otherwise we get a fase positive for
+                                                           //a node with tag 0. LCPT 22/01/2018. 
     std::vector<MFreedom_Constraint *> mfs(numMPConstraints,static_cast<MFreedom_Constraint *>(nullptr));
     if(numMPConstraints != 0)
       {
         MFreedom_ConstraintIter &theMPs= theDomain->getConstraints().getMPs();
         MFreedom_Constraint *theMP= nullptr;
         int index= 0;
-        while((theMP= theMPs()) != 0)
+        while((theMP= theMPs()) != nullptr)
           {
             const int nodeConstrained= theMP->getNodeConstrained();
             numDOF++;
@@ -144,14 +143,15 @@ int XC::TransformationConstraintHandler::handle(const ID *nodesLast)
 
     // create an ID of constrained node tags in MRMFreedom_Constraints
     const int numMRMPConstraints= theDomain->getConstraints().getNumMRMPs();
-    IDVarSize constrainedNodesMRMP(0, numMRMPConstraints);
+    IDVarSize constrainedNodesMRMP(0, numMRMPConstraints, -1); //defaultValue= -1 otherwise we get a fase positive for
+                                                               //a node with tag 0. LCPT 22/01/2018.
     std::vector<MRMFreedom_Constraint *> mrmfs(numMRMPConstraints,static_cast<MRMFreedom_Constraint *>(nullptr));
     if(numMRMPConstraints != 0)
       {
         MRMFreedom_ConstraintIter &theMRMPs= theDomain->getConstraints().getMRMPs();
         MRMFreedom_Constraint *theMRMP= nullptr;
         int index= 0;
-        while((theMRMP= theMRMPs()) != 0)
+        while((theMRMP= theMRMPs()) != nullptr)
           {
             const int nodeConstrained= theMRMP->getNodeConstrained();
             numDOF++;
@@ -162,19 +162,20 @@ int XC::TransformationConstraintHandler::handle(const ID *nodesLast)
       }
 
     // create an ID of constrained node tags in SFreedom_Constraints
-    IDVarSize constrainedNodesSP(0, numSPConstraints);
-    std::vector<SFreedom_Constraint *> sps(numSPConstraints,static_cast<SFreedom_Constraint *>(nullptr));
+    IDVarSize constrainedNodesSP(0, numSPConstraints, -1); //defaultValue= -1 otherwise we get a fase positive for
+                                                           //a node with tag 0. LCPT 22/01/2018.
+    std::vector<SFreedom_Constraint *> sFreedomConstraints(numSPConstraints,static_cast<SFreedom_Constraint *>(nullptr));
     if(numSPConstraints != 0)
       {
         SFreedom_ConstraintIter &theSPs= theDomain->getConstraints().getDomainAndLoadPatternSPs();
         SFreedom_Constraint *theSP;
         int index= 0;
-        while((theSP= theSPs()) != 0)
+        while((theSP= theSPs()) != nullptr)
           {
-            const int constrainedNode= theSP->getNodeTag();
+            const int constrainedNodeTag= theSP->getNodeTag();
             numDOF++;
-            constrainedNodesSP[index]= constrainedNode;
-            sps[index]= theSP;
+            constrainedNodesSP[index]= constrainedNodeTag;
+            sFreedomConstraints[index]= theSP;
             index++;
           }
       }
@@ -200,22 +201,22 @@ int XC::TransformationConstraintHandler::handle(const ID *nodesLast)
 
     numConstrainedNodes= 0;
     numDOF= 0;
-    while((nodPtr= theNod()) != 0) //For each node.
+    while((nodPtr= theNod()) != nullptr) //For each node.
       {
 
         DOF_Group *dofPtr= nullptr;
 
         const int nodeTag= nodPtr->getTag();
-        int numNodalDOF= nodPtr->getNumberDOF();
+        const int numNodalDOF= nodPtr->getNumberDOF();
         int loc= -1;
-        int createdDOF= 0;
+        bool createdDOF= false;
 
 	//Multi-freedom constraints.
         loc= constrainedNodesMP.getLocation(nodeTag);
         if(loc >= 0)
           {
             TransformationDOF_Group *tDofPtr= theModel->createTransformationDOF_Group(numDofGrp++, nodPtr, mfs[loc], this);
-            createdDOF= 1;
+            createdDOF= true;
             dofPtr= tDofPtr;
 
             // add any SPs
@@ -224,11 +225,11 @@ int XC::TransformationConstraintHandler::handle(const ID *nodesLast)
                 loc= constrainedNodesSP.getLocation(nodeTag);
                 if(loc >= 0)
                   {
-                    tDofPtr->addSFreedom_Constraint(*(sps[loc]));
+                    tDofPtr->addSFreedom_Constraint(*(sFreedomConstraints[loc]));
                     for(int i= loc+1; i<numSPConstraints; i++)
                       {
                         if(constrainedNodesSP(i) == nodeTag)
-                          tDofPtr->addSFreedom_Constraint(*(sps[i]));
+                          tDofPtr->addSFreedom_Constraint(*(sFreedomConstraints[i]));
                       }
                   }
                 // add the DOF to the array
@@ -238,13 +239,13 @@ int XC::TransformationConstraintHandler::handle(const ID *nodesLast)
           }
 
 	//Multi retained node, multi-freedom constraints.
-        if(createdDOF == 0)
+        if(!createdDOF)
           {
             loc= constrainedNodesMRMP.getLocation(nodeTag);
             if(loc >= 0)
               {
                 TransformationDOF_Group *tDofPtr= theModel->createTransformationDOF_Group(numDofGrp++, nodPtr, mrmfs[loc], this);
-                createdDOF= 1;
+                createdDOF= true;
                 dofPtr= tDofPtr;
                 // add any SPs
                 if(numSPConstraints != 0)
@@ -252,11 +253,11 @@ int XC::TransformationConstraintHandler::handle(const ID *nodesLast)
                     loc= constrainedNodesSP.getLocation(nodeTag);
                     if(loc >= 0)
                       {
-                        tDofPtr->addSFreedom_Constraint(*(sps[loc]));
+                        tDofPtr->addSFreedom_Constraint(*(sFreedomConstraints[loc]));
                         for(int i= loc+1; i<numSPConstraints; i++)
                           {
                             if(constrainedNodesSP(i) == nodeTag)
-                              tDofPtr->addSFreedom_Constraint(*(sps[i]));
+                              tDofPtr->addSFreedom_Constraint(*(sFreedomConstraints[i]));
                           }
                       }
                     // add the DOF to the array
@@ -267,23 +268,23 @@ int XC::TransformationConstraintHandler::handle(const ID *nodesLast)
           }
 
 	//Single freedom constraints.
-        if(createdDOF == 0)
+        if(!createdDOF)
           {
             loc= constrainedNodesSP.getLocation(nodeTag);
             if(loc >= 0)
               {
                 TransformationDOF_Group *tDofPtr= theModel->createTransformationDOF_Group(numDofGrp++, nodPtr, this);
                 int numSPs= 1;
-                createdDOF= 1;
+                createdDOF= true;
                 dofPtr= tDofPtr;
-                tDofPtr->addSFreedom_Constraint(*(sps[loc]));
+                tDofPtr->addSFreedom_Constraint(*(sFreedomConstraints[loc]));
 
                 // check for more SFreedom_constraints acting on node and add them
                 for(int i= loc+1; i<numSPConstraints; i++)
                   {
                     if(constrainedNodesSP(i) == nodeTag)
                       {
-                        tDofPtr->addSFreedom_Constraint(*(sps[i]));
+                        tDofPtr->addSFreedom_Constraint(*(sFreedomConstraints[i]));
                         numSPs++;
                       }
                   }
@@ -295,13 +296,13 @@ int XC::TransformationConstraintHandler::handle(const ID *nodesLast)
           }
 
         // create an ordinary DOF_Group object if no dof constrained
-        if(createdDOF == 0)
+        if(!createdDOF)
           {
             dofPtr= theModel->createDOF_Group(numDofGrp++, nodPtr);
             countDOF+= numNodalDOF;
           }
 
-        if(dofPtr == 0)
+        if(dofPtr == nullptr)
           std::cerr << getClassName() << "::" << __FUNCTION__
 		    << "; error in logic.\n";
 
@@ -314,7 +315,7 @@ int XC::TransformationConstraintHandler::handle(const ID *nodesLast)
 
     int numFE= 0;
     std::set<int> transformedEle;
-    while((elePtr= theEle()) != 0)
+    while((elePtr= theEle()) != nullptr)
       {
         int flag= 0;
         if(elePtr->isSubdomain() == true)
@@ -468,7 +469,7 @@ int XC::TransformationConstraintHandler::doneNumberingDOF(void)
     AnalysisModel *theModel=this->getAnalysisModelPtr();
     FE_EleIter &theEle= theModel->getFEs();
     FE_Element *elePtr;
-    while ((elePtr= theEle()) != 0)
+    while ((elePtr= theEle()) != nullptr)
       elePtr->setID();
 
     return 0;
