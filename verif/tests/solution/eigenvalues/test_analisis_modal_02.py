@@ -221,7 +221,12 @@ print "  equivalent static load mode 3: ",cargaModo3
 print "ratio5= ",ratio5
 '''
 
-
+'''
+#Display de deformed shape and the equivalent static loads 
+#associated with mode 2
+from postprocess.xcVtk.FE_model import quick_graphics as qg
+qg.displayEigenResults(preprocessor,eigenMode=2, setToDisplay=setTotal,defShapeScale=1.0,equLoadVctScale=1e-4,accelMode=aceleraciones[2],unitsScale=1.0,viewNm="XYZPos",hCamFct=1.0,caption= 'Mode 2: deformed shape and equivalent static loads.',fileName=None)
+'''
 import os
 from miscUtils import LogMessages as lmsg
 fname= os.path.basename(__file__)
