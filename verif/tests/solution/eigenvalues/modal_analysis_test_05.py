@@ -20,8 +20,8 @@ __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
 
-masaPorPlanta= 134.4e3
-nodeMassMatrix= xc.Matrix([[masaPorPlanta,0,0],[0,masaPorPlanta,0],[0,0,0]])
+storeyMass= 134.4e3
+nodeMassMatrix= xc.Matrix([[storeyMass,0,0],[0,storeyMass,0],[0,0,0]])
 Ehorm= 200000*1e5 # Concrete elastic modulus.
 
 Bbaja= 0.45 # Columns size.
@@ -106,7 +106,7 @@ beam2d.h= B3a
 
 
 
-masaTotalTeor= 5*masaPorPlanta
+targetTotalMass= 5*storeyMass
 
 # Solution procedure
 solu= feProblem.getSoluProc
@@ -125,53 +125,53 @@ soe.shift= 0.0
 solver= soe.newSolver("band_arpackpp_solver")
 analysis= solu.newAnalysis("modal_analysis","analysisAggregation","")
 analOk= analysis.analyze(3)
-periodos= analysis.getPeriods()
-modos= analysis.getNormalizedEigenvectors()
-factoresParticipacionModal= analysis.getModalParticipationFactors()
-masasModalesEfectivas= analysis.getEffectiveModalMasses()
-masaTotal= analysis.getTotalMass()
-factoresDistribucion= analysis.getDistributionFactors()
+periods= analysis.getPeriods()
+modes= analysis.getNormalizedEigenvectors()
+modalParticipationFactors= analysis.getModalParticipationFactors()
+effectiveModalMasses= analysis.getEffectiveModalMasses()
+totalMass= analysis.getTotalMass()
+distributionFactors= analysis.getDistributionFactors()
 
 
 
-periodosTeor= xc.Vector([0.468,0.177,0.105])
-ratio1= (periodos-periodosTeor).Norm()
+targetPeriods= xc.Vector([0.468,0.177,0.105])
+ratio1= (periods-targetPeriods).Norm()
 # Los modos se obtienen con distinto signo.
-modosEjemplo= xc.Matrix([[0.323,-0.764,-0.946],
+exempleModes= xc.Matrix([[0.323,-0.764,-0.946],
                                       [0.521,-0.941,-0.378],
                                       [0.685,-0.700,0.672],
                                       [0.891,0.241,1.000],
                                       [1.000,1.000,-0.849]])
-resta_modos= (modos-modosEjemplo)
-ratio2= (resta_modos).rowNorm()
+resta_modes= (modes-exempleModes)
+ratio2= (resta_modes).rowNorm()
 
 
-ratio3= abs(masaTotal-masaTotalTeor)/masaTotalTeor
+ratio3= abs(totalMass-targetTotalMass)/targetTotalMass
 factoresDistribEjemplo= xc.Matrix([[0.419,0.295,0.148],
                                    [0.676,0.363,0.059],
                                    [0.889,0.27,-0.105],
                                    [1.157,-0.093,-0.156],
                                    [1.298,-0.386,0.133]])
-resta_fdib= factoresDistribucion-factoresDistribEjemplo
+resta_fdib= distributionFactors-factoresDistribEjemplo
 ratio4= (resta_fdib).rowNorm()
 
 '''
 print "kPlBaja= ",kPlBaja
 print "kPl1a= ",kPl1a
 print "kPl3a= ",kPl3a
-print "periodos: ",periodos
+print "periods: ",periods
 print "ratio1= ",ratio1
 # Los modos se obtienen con distinto signo
-print "modos: ",modos
-print "resta_modos: ",resta_modos
+print "modes: ",modes
+print "resta_modos: ",resta_modes
 print "ratio2= ",ratio2
 
-print "factoresParticipacionModal: ",factoresParticipacionModal
-print "masasModalesEfectivas: ",masasModalesEfectivas
-print "masaTotal: ",masaTotal
-print "masaTotalTeor: ",masaTotalTeor
+print "modalParticipationFactors: ",modalParticipationFactors
+print "effectiveModalMasses: ",effectiveModalMasses
+print "totalMass: ",totalMass
+print "targetTotalMass: ",targetTotalMass
 print "ratio3= ",ratio3
-print "factoresDistribucion: ",factoresDistribucion
+print "distributionFactors: ",distributionFactors
 print "ratio4= ",ratio4
 '''
 

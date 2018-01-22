@@ -18,8 +18,8 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
-masaPorPlanta= 134.4e3
-nodeMassMatrix= xc.Matrix([[masaPorPlanta,0,0],[0,0,0],[0,0,0]])
+storeyMass= 134.4e3
+nodeMassMatrix= xc.Matrix([[storeyMass,0,0],[0,0,0],[0,0,0]])
 Ehorm= 200000*1e5 # Concrete elastic modulus.
 
 Bbaja= 0.45 # Columns size.
@@ -146,21 +146,21 @@ spectrum*=(ac)
 analysis.spectrum= spectrum
 
 analOk= analysis.analyze(5)          
-periodos= analysis.getPeriods()
-aceleraciones= []
-sz= periodos.size()
+periods= analysis.getPeriods()
+accelerations= []
+sz= periods.size()
 for i in range(0,sz):
-  T= periodos[i]
-  aceleraciones.append(analysis.spectrum(T))
+  T= periods[i]
+  accelerations.append(analysis.spectrum(T))
 
 modos= analysis.getNormalizedEigenvectors()
-factoresDistribucion= analysis.getDistributionFactors()
+distributionFactors= analysis.getDistributionFactors()
 
 
 
-factoresParticipacionModal= analysis.getModalParticipationFactors()
-masasModalesEfectivas= analysis.getEffectiveModalMasses()
-masaTotal= analysis.getTotalMass()
+modalParticipationFactors= analysis.getModalParticipationFactors()
+effectiveModalMasses= analysis.getEffectiveModalMasses()
+totalMass= analysis.getTotalMass()
 
 cargaModo1= xc.Vector([0,0,0])
 cargaModo2= xc.Vector([0,0,0])
@@ -171,21 +171,21 @@ setTotal= preprocessor.getSets["total"]
 nodes= setTotal.getNodes
 for n in nodes:
   if(n.tag>0): 
-    cargaModo1+= beta*Ki[0]*n.getEquivalentStaticLoad(1,aceleraciones[0])
-    cargaModo2+= beta*Ki[1]*n.getEquivalentStaticLoad(2,aceleraciones[1])
-    cargaModo3+= beta*Ki[2]*n.getEquivalentStaticLoad(3,aceleraciones[2])
+    cargaModo1+= beta*Ki[0]*n.getEquivalentStaticLoad(1,accelerations[0])
+    cargaModo2+= beta*Ki[1]*n.getEquivalentStaticLoad(2,accelerations[1])
+    cargaModo3+= beta*Ki[2]*n.getEquivalentStaticLoad(3,accelerations[2])
  
 
-periodosTeor= xc.Vector([0.468,0.177,0.105,0.085,0.065])
-ratio1= (periodos-periodosTeor).Norm()
-modosEjemplo= xc.Matrix([[0.323,-0.764,0.946,0.897,-0.623],
+targetPeriods= xc.Vector([0.468,0.177,0.105,0.085,0.065])
+ratio1= (periods-targetPeriods).Norm()
+exempleModes= xc.Matrix([[0.323,-0.764,0.946,0.897,-0.623],
                          [0.521,-0.941,0.378,-0.251,1.000],
                          [0.685,-0.700,-0.672,-0.907,-0.658],
                          [0.891,0.241,-1.000,1.000,0.195],
                          [1.000,1.000,0.849,-0.427,-0.042]])
-resta= (modos-modosEjemplo)
+resta= (modos-exempleModes)
 ratio2= resta.Norm()
-ratio3= abs(masaTotal-5*masaPorPlanta)/5/masaPorPlanta
+ratio3= abs(totalMass-5*storeyMass)/5/storeyMass
 ''' The values of the first three distribution factors values (fist 3 columns)
    were taken from the reference example. The two others (which are not given
 in the example) are those obtained from the program (they can always get
@@ -195,7 +195,7 @@ factoresDistribEjemplo= xc.Matrix([[0.419,0.295,0.148,0.0966714,0.0429946],
                          [0.889,0.27,-0.105,-0.0978747,0.0453662],
                          [1.157,-0.093,-0.156,0.1078,-0.0134259],
                          [1.298,-0.386,0.133,-0.0461473,0.00292086]])
-resta= factoresDistribucion-factoresDistribEjemplo
+resta= distributionFactors-factoresDistribEjemplo
 ratio4= resta.Norm()
 ratio5= math.sqrt((cargaModo1[0]-273523)**2+(cargaModo2[0]-31341)**2+(cargaModo3[0]-6214)**2)/273523.0
 
@@ -203,17 +203,17 @@ ratio5= math.sqrt((cargaModo1[0]-273523)**2+(cargaModo2[0]-31341)**2+(cargaModo3
 print "kPlBaja= ",kPlBaja
 print "kPl1a= ",kPl1a
 print "kPl3a= ",kPl3a
-print "periodos: ",periodos
-print "aceleraciones= ",aceleraciones          
+print "periods: ",periods
+print "accelerations= ",accelerations          
 print "ratio1= ",ratio1
 print "modos: ",modos
 print "resta: ",resta
 print "ratio2= ",ratio2
-print "factoresParticipacionModal: ",factoresParticipacionModal
-print "masasModalesEfectivas: ",masasModalesEfectivas
-print "masaTotal: ",masaTotal
+print "modalParticipationFactors: ",modalParticipationFactors
+print "effectiveModalMasses: ",effectiveModalMasses
+print "totalMass: ",totalMass
 print "ratio3= ",ratio3
-print "factoresDistribucion: ",factoresDistribucion
+print "distributionFactors: ",distributionFactors
 print "ratio4= ",ratio4
 print "\n  equivalent static load mode 1: ",cargaModo1
 print "  equivalent static load mode 2: ",cargaModo2
@@ -225,7 +225,7 @@ print "ratio5= ",ratio5
 #Display de deformed shape and the equivalent static loads 
 #associated with mode 2
 from postprocess.xcVtk.FE_model import quick_graphics as qg
-qg.displayEigenResults(preprocessor,eigenMode=2, setToDisplay=setTotal,defShapeScale=1.0,equLoadVctScale=1e-4,accelMode=aceleraciones[2],unitsScale=1.0,viewNm="XYZPos",hCamFct=1.0,caption= 'Mode 2: deformed shape and equivalent static loads.',fileName=None)
+qg.displayEigenResults(preprocessor,eigenMode=2, setToDisplay=setTotal,defShapeScale=1.0,equLoadVctScale=1e-4,accelMode=accelerations[2],unitsScale=1.0,viewNm="XYZPos",hCamFct=1.0,caption= 'Mode 2: deformed shape and equivalent static loads.',fileName=None)
 '''
 import os
 from miscUtils import LogMessages as lmsg

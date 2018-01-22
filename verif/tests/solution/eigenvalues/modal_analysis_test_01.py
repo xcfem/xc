@@ -17,8 +17,8 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
-masaPorPlanta= 134.4e3
-nodeMassMatrix= xc.Matrix([[masaPorPlanta,0,0],[0,masaPorPlanta,0],[0,0,0]])
+storeyMass= 134.4e3
+nodeMassMatrix= xc.Matrix([[storeyMass,0,0],[0,storeyMass,0],[0,0,0]])
 Ehorm= 200000*1e5 # Concrete elastic modulus.
 
 Bbaja= 0.45 # Columns size.
@@ -120,21 +120,21 @@ soe= analysisAggregation.newSystemOfEqn("sym_band_eigen_soe")
 solver= soe.newSolver("sym_band_eigen_solver")
 analysis= solu.newAnalysis("modal_analysis","analysisAggregation","")
 analOk= analysis.analyze(5)
-periodos= analysis.getPeriods()
+periods= analysis.getPeriods()
 modos= analysis.getNormalizedEigenvectors()
-factoresParticipacionModal= analysis.getModalParticipationFactors()
-masasModalesEfectivas= analysis.getEffectiveModalMasses()
-masaTotal= analysis.getTotalMass()
-factoresDistribucion= analysis.getDistributionFactors()
+modalParticipationFactors= analysis.getModalParticipationFactors()
+effectiveModalMasses= analysis.getEffectiveModalMasses()
+totalMass= analysis.getTotalMass()
+distributionFactors= analysis.getDistributionFactors()
 
 
 
-periodosTeor= xc.Vector([0.468,0.177,0.105,0.084,0.065])
-ratio1= (periodos-periodosTeor).Norm()
-modosEjemplo= xc.Matrix([[0.323,-0.764,0.946,0.897,-0.623],[0.521,-0.941,0.378,-0.251,1.000],[0.685,-0.700,-0.672,-0.907,-0.658],[0.891,0.241,-1.000,1.000,0.195],[1.000,1.000,0.849,-0.427,-0.042]])
-resta= (modos-modosEjemplo)
+targetPeriods= xc.Vector([0.468,0.177,0.105,0.084,0.065])
+ratio1= (periods-targetPeriods).Norm()
+exempleModes= xc.Matrix([[0.323,-0.764,0.946,0.897,-0.623],[0.521,-0.941,0.378,-0.251,1.000],[0.685,-0.700,-0.672,-0.907,-0.658],[0.891,0.241,-1.000,1.000,0.195],[1.000,1.000,0.849,-0.427,-0.042]])
+resta= (modos-exempleModes)
 ratio2= resta.Norm()
-ratio3= abs(masaTotal-5*masaPorPlanta)/5/masaPorPlanta
+ratio3= abs(totalMass-5*storeyMass)/5/storeyMass
 ''' The values of the first three distribution factors values (fist 3 columns)
    were taken from the reference example. The two others (which are not given
 in the example) are those obtained from the program (they can always get
@@ -144,23 +144,23 @@ factoresDistribEjemplo= xc.Matrix([[0.419,0.295,0.148,0.0966714,0.0429946],
                          [0.889,0.27,-0.105,-0.0978747,0.0453662],
                          [1.157,-0.093,-0.156,0.1078,-0.0134259],
                          [1.298,-0.386,0.133,-0.0461473,0.00292086]])
-resta= factoresDistribucion-factoresDistribEjemplo
+resta= distributionFactors-factoresDistribEjemplo
 ratio4= resta.Norm()
 
 ''' 
 print "kPlBaja= ",kPlBaja
 print "kPl1a= ",kPl1a
 print "kPl3a= ",kPl3a
-print "periodos: ",periodos
+print "periods: ",periods
 print "ratio1= ",ratio1
 print "modos: ",modos
 print "resta: ",resta
 print "ratio2= ",ratio2
-print "factoresParticipacionModal: ",factoresParticipacionModal
-print "masasModalesEfectivas: ",masasModalesEfectivas
-print "masaTotal: ",masaTotal
+print "modalParticipationFactors: ",modalParticipationFactors
+print "effectiveModalMasses: ",effectiveModalMasses
+print "totalMass: ",totalMass
 print "ratio3= ",ratio3
-print "factoresDistribucion: ",factoresDistribucion
+print "distributionFactors: ",distributionFactors
 print "ratio4= ",ratio4
  '''
 '''
