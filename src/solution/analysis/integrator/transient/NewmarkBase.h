@@ -42,14 +42,15 @@ class ID;
 //
 //! @ingroup NewmarkIntegrator
 //
-//! @brief The two parameter time-stepping method developed by NewmarkBase
+//! @brief Base class for the two parameter time-stepping method developed by
+//! Nathan M. Newmark.
 class NewmarkBase: public DampingFactorsIntegrator
   {
   protected:
-    double gamma;
+    double gamma; //!< gamma factor for Newmark method.
     
-    double c2, c3; // some constants we need to keep
-    ResponseQuantities U; // response quantities at time t+deltaT = predicted + corrected
+    double c2, c3; //!< some constants we need to keep
+    ResponseQuantities U; //!< response quantities at time t+deltaT = predicted + corrected
 
     void PopulateUs(XC::AnalysisModel *model);
     int sendData(CommParameters &);

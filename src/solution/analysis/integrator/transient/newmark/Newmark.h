@@ -69,13 +69,79 @@ namespace XC {
 
 //! @ingroup NewmarkIntegrator
 //
-//! @brief The two parameter time-stepping method developed by Newmark
+//! @brief The two parameter time-stepping method developed by
+//! Nathan M. Newmark.
+//!
+//! Newmark is a subclass of TransientIntegrator which implements
+//! the Newmark method. In the Newmark method, to determine the
+//! velocities, accelerations and displacements at time \f$t + \Delta t\f$,
+//! the equilibrium equation (expressed for the TransientIntegrator) is
+//! typically solved at time \f$t + \Delta t\f$ for \f$U_{t+\Delta t}\f$,
+//! i.e. solve: 
+//! 
+//! \[ R (U_{t + \Delta t}) = P(t + \Delta t) - F_I(Udd_{t+\Delta t})
+//! - F_R(Ud_{t + \Delta t},U_{t + \Delta t}) \]
+//! 
+//! \noindent for \f$U_{t+\Delta t}\f$. The following difference relations
+//!  are used to relate \f$Ud_{t + \Delta t}\f$ and \f$Udd_{t + \Delta t}\f$ to
+//! \f$U_{t + \Delta t}\f$ and the response quantities at time \f$t\f$:
+//! 
+//! \[
+//! \dot U_{t + \Delta t} = \frac{\gamma}{\beta \Delta t}
+//! \left( U_{t + \Delta t} - U_t \right)
+//!  + \left( 1 - \frac{\gamma}{\beta}\right) \dot U_t + \Delta t \left(1
+//! - \frac{\gamma}{2 \beta}\right) \ddot U_t 
+//! \]
+//! 
+//! \[
+//! \ddot U_{t + \Delta t} = \frac{1}{\beta {\Delta t}^2}
+//! \left( U_{t+\Delta t} - U_t \right)
+//!  - \frac{1}{\beta \Delta t} \dot U_t + \left( 1 - \frac{1}{2
+//! \beta} \right) \ddot U_t 
+//! \]
+//! 
+//! \noindent which  results in the following 
+//! 
+//! \[ \left[ \frac{1}{\beta \Delta t^2} M + \frac{\gamma}{\beta \Delta t}
+//! C + K \right] \Delta U_{t + \Delta t}^{(i)} = P(t + \Delta t) -
+//! F_I\left(Udd_{t+\Delta  t}^{(i-1)}\right)
+//! - F_R\left(Ud_{t + \Delta t}^{(i-1)},U_{t + \Delta t}^{(i-1)}\right) \]
+//! 
+//! \noindent An alternative approach, which does not involve \f$\Delta t\f$
+//!  in the denumerator (useful for impulse problems), is to solve for the
+//!  accelerations at time \f$t + \Delta t\f$ 
+//! 
+//! \[ R (Udd_{t + \Delta t}) = P(t + \Delta t) - F_I(Udd_{t+\Delta t})
+//! - F_R(Ud_{t + \Delta t},U_{t + \Delta t}) \]
+//! 
+//! \noindent where we use following functions to relate \f$U_{t + \Delta
+//!  t}\f$ and \f$Ud_{t + \Delta t}\f$ to \f$Udd_{t + \Delta t}\f$ and the
+//!  response quantities at time \f$t\f$:
+//! 
+//! \[
+//! U_{t + \Delta t} = U_t + \Delta t Ud_t + \left[
+//! \left(\frac{1}{2} - \beta\right)Udd_t + \beta Udd_{t + \Delta
+//!  t}\right] \Delta t^2
+//! \]
+//! 
+//! \[
+//! Ud_{t + \Delta t} = Ud_t + \left[ \left(1 - \gamma\right)Udd_t +
+//! \gammaUdd_{t + \Delta t}\right] \Delta t
+//! \]
+//! 
+//! \noindent which results in the following 
+//! 
+//! \[ \left[ M + \gamma \Delta t C + \beta \Delta t^2 K \right] \Delta
+//! Udd_{t + \Delta t}^{(i)} = P(t + \Delta t) - F_I\left(Udd_{t+\Delta 
+//!  t}^{(i-1)}\right)
+//! - F_R\left(Ud_{t + \Delta t}^{(i-1)},U_{t + \Delta
+//!  t}^{(i-1)}\right) \]
 class Newmark : public NewmarkBase2
   {
   protected:
-    bool displ;      // a flag indicating whether displ or accel increments
-    ResponseQuantities Ut;  // response quantities at time t
-    bool determiningMass; // flag to check if just want the mass contribution
+    bool displ; //!< a flag indicating whether displ or accel increments.
+    ResponseQuantities Ut; //!< response quantities at time t.
+    bool determiningMass; //!< flag to check if just want the mass contribution.
   protected:
     int sendData(CommParameters &);
     int recvData(const CommParameters &);

@@ -35,15 +35,27 @@
 
 #include "utility/actor/actor/ArrayCommMetaData.h"
 
-//! @brief Constructor.
+//! @brief Defautl constructor.
+//!
+//! @param owr: analysis aggregation that will own this object.
+//! @param classTag: class identifier.
 XC::NewmarkBase::NewmarkBase(AnalysisAggregation *owr,int classTag)
  : DampingFactorsIntegrator(owr,classTag),gamma(0.0), c2(0.0), c3(0.0) {}
 
 //! @brief Constructor.
+//!
+//! @param owr: analysis aggregation that will own this object.
+//! @param classTag: class identifier.
+//! @param _gamma: gamma factor for Newmark method.
 XC::NewmarkBase::NewmarkBase(AnalysisAggregation *owr,int classTag, double _gamma)
  : DampingFactorsIntegrator(owr,INTEGRATOR_TAGS_Newmark), gamma(_gamma), c2(0.0), c3(0.0) {}
 
 //! @brief Constructor.
+//!
+//! @param owr: analysis aggregation that will own this object.
+//! @param classTag: class identifier.
+//! @param _gamma: gamma factor for Newmark method.
+//! @param fF: Rayleigh damping factors.
 XC::NewmarkBase::NewmarkBase(AnalysisAggregation *owr,int classTag,double _gamma,const RayleighDampingFactors &rF)
   : DampingFactorsIntegrator(owr,classTag,rF),  gamma(_gamma),  c2(0.0), c3(0.0) {}
 

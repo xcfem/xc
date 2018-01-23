@@ -36,12 +36,12 @@ namespace XC {
 
 //! @ingroup NewmarkIntegrator
 //
-//! @brief ??.
+//! @brief Intermediate base class for Newmark type integrators.
 class NewmarkBase2 : public NewmarkBase
   {
   protected:
-    double beta;
-    double c1;  // some constants we need to keep
+    double beta; //!< beta factor for the Newmark integrator.
+    double c1;  //!< some constants we need to keep
 
     int sendData(CommParameters &);
     int recvData(const CommParameters &);
