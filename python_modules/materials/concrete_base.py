@@ -241,17 +241,24 @@ class Concrete(matWDKD.MaterialWithDKDiagrams):
         else:
             self.tensionStiffparam.diagType='K'
             '''
-            Approximation of the exponential decay curve in the post-cracking range by means of
-            its regression line
+            Approximation of the exponential decay curve in the post-cracking 
+            range by means of its regression line
             '''
             ftdiag=self.tensionStiffparam.pointOnsetCracking()['ft']       #stress at the adopted point for concrete onset cracking
+            self.ft=ftdiag
             ectdiag=self.tensionStiffparam.pointOnsetCracking()['eps_ct']  #strain at the adopted point for concrete onset cracking
+            self.epsct0=ectdiag
             #eydiag=self.tensionStiffparam.eps_y()                          #reinforcing steel strain at yield point
             Etsdiag=abs(self.tensionStiffparam.regresLine()['slope'])
+            self.Ets=Etsdiag
+            self.epsctu=ectdiag+ftdiag/Etsdiag
             self.materialDiagramK= typical_materials.defConcrete02(preprocessor=preprocessor,name=self.nmbDiagK,epsc0=self.epsilon0(),fpc=self.fmaxK(),fpcu=0.85*self.fmaxK(),epscu=self.epsilonU(),ratioSlope=0.1,ft=ftdiag,Ets=Etsdiag)
+            self.materialDiagramK.epsct0=ectdiag
+            self.materialDiagramK.epsctu=ectdiag+ftdiag/Etsdiag
             '''
-            Approximation of the exponential decay curve in the post-cracking range by means of
-            a regression line that passes through the point (eps_ct,f_ct) where cracking starts.
+            Approximation of the exponential decay curve in the post-cracking 
+            range by means of a regression line that passes through the point 
+            (eps_ct,f_ct) where cracking starts.
             This approximation produces a less conservative result 
             '''
             # ftdiag=self.tensionStiffparam.f_ct
@@ -271,10 +278,16 @@ class Concrete(matWDKD.MaterialWithDKDiagrams):
         else:
             self.tensionStiffparam.diagType='D'
             ftdiag=self.tensionStiffparam.pointOnsetCracking()['ft']
+            self.ft=ftdiag
             ectdiag=self.tensionStiffparam.pointOnsetCracking()['eps_ct']
+            self.epsct0=ectdiag
             eydiag=self.tensionStiffparam.eps_y()
             Etsdiag=abs(self.tensionStiffparam.regresLine()['slope'])
+            self.Ets=Etsdiag
+            self.epsctu=ectdiag+ftdiag/Etsdiag
             self.materialDiagramD= typical_materials.defConcrete02(preprocessor=preprocessor,name=self.nmbDiagD,epsc0=self.epsilon0(),fpc=self.fmaxD(),fpcu=0.85*self.fmaxD(),epscu=self.epsilonU(),ratioSlope=0.1,ft=ftdiag,Ets=Etsdiag)
+            self.materialDiagramD.epsct0=ectdiag
+            self.materialDiagramD.epsctu=ectdiag+ftdiag/Etsdiag
         self.matTagD= self.materialDiagramD.tag
         return self.materialDiagramD #30160925 was 'return self.matTagD'
 

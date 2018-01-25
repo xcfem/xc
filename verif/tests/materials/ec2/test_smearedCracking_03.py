@@ -38,7 +38,7 @@ f_ct=2.9*1e6   # concrete tensile strength
                # (in the test the calculated fctm=2896468.15 is used)
 
 cover=0.04     #cover
-A_s=2712e-6    #area of bottom reirnfocement layer (6 fi 24)
+A_s=2712e-6    #area of bottom reinforcement layer (6 fi 24)
 A_sp=452e-6    #area of top reinforcement layer (4 fi 12)
 
 ro_s=A_s/width/depth  #longitudinal steel ratio (not used)
@@ -344,7 +344,7 @@ else:
 #   fileName: name of the graphic file (defaults to None: no file generated)
 #   nContours: number of contours to be generated (defaults to 100)
 # ''' 
-# #utils_display.plotStressStrainFibSet(fiberSet=fibersSccEl1,title='cross-section concrete fibers',fileName='problem.jpeg')
+# #utils_display.plotStressStrainFibSet(fiberSet=fibersSccEl1,title='cross-section fibers',fileName='problem.jpeg')
 # utils_display.plotStressStrainFibSet(fiberSet=setsRCEl1.concrFibers.fSet,title='cross-section concrete fibers',fileName='problem.jpeg')
 
 
