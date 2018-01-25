@@ -77,6 +77,55 @@ class Vector;
 //! @brief WilsonTheta is an algorithmic class
 //! for performing a transient analysis
 //! using the WilsonTheta integration scheme.
+//!
+//!  WilsonTheta is a subclass of TransientIntegrator which implements
+//! the Wilson\f$\Theta\f$ method. In the Wilson\f$\Theta\f$ method, to
+//! determine the velocities, accelerations and displacements at time
+//! \f$t + \theta \Delta t\f$, \f$\theta \ge 1.37\f$, for \f$U_{t+ \theta
+//! \Delta t}\f$ 
+//! 
+//! \[ R (U_{t + \theta \Delta t}) = P(t + \theta \Delta t) -
+//! F_I(Udd_{t+ \theta \Delta t}) 
+//! - F_R(Ud_{t + \theta \Delta t},U_{t + \theta \Delta t}) \]
+//! 
+//! \noindent where we use following functions to relate \f$Ud_{t + \theta
+//! \Delta t}\f$ and \f$Udd_{t + \theta \Delta t}\f$ to \f$U_{t + \theta
+//! \Delta t}\f$ and the response quantities at time \f$t\f$:
+//! 
+//! \[
+//! \dot U_{t + \theta \Delta t} = \frac{3}{\theta \Delta t} \left(
+//! U_{t + \theta \Delta t} - U_t \right)
+//!  - 2 \dot U_t + \frac{\theta \Delta t}{2} \ddot U_t 
+//! \]
+//! 
+//! \[
+//! \ddot U_{t + \theta \Delta t} = \frac{6}{\theta^2 \Delta t^2}
+//! \left( U_{t+\theta \Delta t} - U_t \right)
+//!  - \frac{6}{\theta \Delta t} \dot U_t -2 Udd_t
+//! \]
+//! 
+//! \noindent which  results in the following for determining the responses at
+//! \f$t + \theta \Delta t\f$ 
+//! 
+//! \[ \left[ \frac{6}{\theta^2 \Delta t^2} M + \frac{3}{\theta \Delta t}
+//! C + K \right] \Delta U_{t + \theta \Delta t}^{(i)} = P(t + \theta
+//! \Delta t) - F_I\left(Udd_{t+\theta \Delta  t}^{(i-1)}\right) 
+//! - F_R\left(Ud_{t + \theta \Delta t}^{(i-1)},U_{t + \theta \Delta
+//! t}^{(i-1)}\right) \]
+//! 
+//! \noindent The response quantities at time \f$t + \Delta t\f$ are then
+//! determined using the following
+//! 
+//! \[
+//! Udd_{t + \Delta t} = Udd_t + \frac{1}{\theta} \left( Udd_{t +
+//! \theta \Delta t} - Udd_t \right)
+//! \]
+//! 
+//! \[ Ud_{t + \Delta t} = Ud_t + \frac{\Delta t}{2}\left( Udd_{t +
+//! \Delta t} + Udd_t \right) \]
+//! 
+//! \[ U_{t + \Delta t} = U_t + \Delta tUd_t + \frac{\Delta t^2}{6}\left(
+//! Udd_{t + \Delta t} + 2 Udd_t \right) \]
 class WilsonTheta: public RayleighBase
   {
   private:
@@ -110,8 +159,6 @@ class WilsonTheta: public RayleighBase
 
     void Print(std::ostream &s, int flag =0);        
   };
-inline Integrator *WilsonTheta::getCopy(void) const
-  { return new WilsonTheta(*this); }
 } // end of XC namespace
 
 #endif
