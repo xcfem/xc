@@ -39,7 +39,7 @@ f_ct=3.086*1e6   # concrete tensile strength
 
 coverInf=0.05     #bottom cover
 coverLat=0.04     #lateral cover
-A_s=5310e-6    #area of bottom reirnfocement layer (6 fi 26)
+A_s=5310e-6    #area of bottom reirnfocement layer (10 fi 26)
 
 ro_s=A_s/width/depth  #longitudinal steel ratio 
 
@@ -335,7 +335,7 @@ else:
 #   fileName: name of the graphic file (defaults to None: no file generated)
 #   nContours: number of contours to be generated (defaults to 100)
 # ''' 
-# #utils_display.plotStressStrainFibSet(fiberSet=fibersSccEl1,title='cross-section concrete fibers',fileName='problem.jpeg')
+# #utils_display.plotStressStrainFibSet(fiberSet=fibersSccEl1,title='cross-section fibers',fileName='problem.jpeg')
 # utils_display.plotStressStrainFibSet(fiberSet=setsRCEl1.concrFibers.fSet,title='cross-section concrete fibers',fileName='problem.jpeg')
 
 # #report of the section material
