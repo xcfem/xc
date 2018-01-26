@@ -75,6 +75,32 @@ XC::CentralDifference::CentralDifference(AnalysisAggregation *owr,const Rayleigh
   : RayleighBase(owr,INTEGRATOR_TAGS_CentralDifference,rF),
     c2(0.0), c3(0.0), Utm1(0), Ut(0), U(0) {}
 
+//! The following are performed when this method is invoked:
+//! \begin{enumerate}
+//! \item First sets the values of the three constants {\em c1}, {\em c2}
+//! and {\em c3} depending on the flag indicating whether incremental
+//! displacements or accelerations are being solved for at each iteration.
+//! If \p dispFlag was \p true, {\em c1} is set to \f$1.0\f$, {\em c2} to \f$
+//! \gamma / (\beta * deltaT)\f$ and {\em c3} to \f$1/ (\beta * deltaT^2)\f$. If
+//! the flag is \p false {\em c1} is set to \f$\beta * deltaT^2\f$, {\em c2}
+//! to \f$ \gamma * deltaT\f$ and {\em c3} to \f$1.0\f$. 
+//! \item Then the Vectors for response quantities at time \f$t\f$ are set
+//! equal to those at time \f$t + \Delta t\f$.
+//! \item Then the velocity and accelerations approximations at time \f$t +
+//! \delta t\f$ are set using the difference approximations if {\em
+//! dispFlag} was \p true. (displacement and velocity if \p false).
+//! \item The response quantities at the DOF\_Group objects are updated
+//! with the new approximations by invoking setResponse() on the
+//! AnalysisModel with new quantities for time \f$t + \Delta t\f$.
+//! \item current time is obtained from the AnalysisModel, incremented by
+//! \f$\Delta t\f$, and {\em applyLoad(time, 1.0)} is invoked on the
+//! AnalysisModel. 
+//! \item Finally updateDomain() is invoked on the AnalysisModel.
+//! \end{enumerate}
+//! The method returns \f$0\f$ if successful, otherwise a negative number is
+//! returned: \f$-1\f$ if \f$\gamma\f$ or \f$\beta\f$ are \f$0\f$, \f$-2\f$
+//! if \p dispFlag was true and \f$\Delta t\f$ is \f$0\f$, and \f$-3\f$
+//! if domainChanged() failed or has not been called.
 int XC::CentralDifference::newStep(double _deltaT)
   {
     updateCount = 0;
@@ -82,13 +108,14 @@ int XC::CentralDifference::newStep(double _deltaT)
     deltaT = _deltaT;
     if(deltaT <= 0.0)
       {
-        std::cerr << "XC::CentralDifference::newStep() - error in variable\n";
-        std::cerr << "dT = " << deltaT << std::endl;
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; error in variable.\n"
+		  << "dT = " << deltaT << std::endl;
         return -2;	
       }
     
-    // get a pointer to the XC::AnalysisModel
-    AnalysisModel *theModel = this->getAnalysisModelPtr();
+    // get a pointer to the AnalysisModel
+    AnalysisModel *theModel= this->getAnalysisModelPtr();
     
     // set the constants
     c2 = 0.5/deltaT;
@@ -96,7 +123,8 @@ int XC::CentralDifference::newStep(double _deltaT)
     
     if(Ut.get().Size() == 0)
       {
-        std::cerr << "XC::CentralDifference::newStep() - domainChange() failed or hasn't been called\n";
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; domainChange() failed or hasn't been called\n";
         return -3;	
       }
     
@@ -119,32 +147,57 @@ int XC::CentralDifference::newStep(double _deltaT)
     (Ut.getDotDot()) = U.getDotDot();
     
     return 0;
-}
+  }
 
-
+//! This tangent for each FE\_Element is defined to be \f$K_e = c1 K + c2
+//! D + c3 M\f$, where c1,c2 and c3 were determined in the last invocation
+//! of the newStep() method.  The method returns \f$0\f$ after
+//! performing the following operations:
+//! \begin{tabbing}
+//! while \= \+ while \= while \= \kill
+//! theEle-\f$>\f$zeroTang()
+//! theEle-\f$>\f$addKtoTang(c1)
+//! theEle-\f$>\f$addCtoTang(c2)
+//! theEle-\f$>\f$addMtoTang(c3) 
+//! \end{tabbing}
 int XC::CentralDifference::formEleTangent(FE_Element *theEle)
-{
+  {
     theEle->zeroTangent();
     
     theEle->addCtoTang(c2);
     theEle->addMtoTang(c3);
     
     return 0;
-}    
+  }    
 
 
+//! The method returns \f$0\f$ after performing the following operations:
+//! \begin{tabbing}
+//! while \= \+ while \= while \= \kill
+//! theDof-\f$>\f$zeroUnbalance()
+//! theDof-\f$>\f$addMtoTang(c3) 
+//! \end{tabbing}
 int XC::CentralDifference::formNodTangent(DOF_Group *theDof)
-{
+  {
     theDof->zeroTangent();
     
     theDof->addCtoTang(c2);
     theDof->addMtoTang(c3);
 
-    return(0);
-}    
+    return 0;
+  }    
 
-
-int XC::CentralDifference::domainChanged()
+//! If the size of the LinearSOE has changed, the object deletes any old Vectors
+//! created and then creates \f$6\f$ new Vector objects of size equal to {\em
+//! theLinearSOE-\f$>\f$getNumEqn()}. There is a Vector object created to store
+//! the current displacement, velocity and accelerations at times \f$t\f$ and
+//! \f$t + \Delta t\f$. The response quantities at time \f$t + \Delta t\f$ are
+//! then set by iterating over the DOF\_Group objects in the model and
+//! obtaining their committed values. 
+//! Returns \f$0\f$ if successful, otherwise a warning message and a negative
+//! number is returned: \f$-1\f$ if no memory was available for constructing
+//! the Vectors.
+int XC::CentralDifference::domainChanged(void)
   {
     AnalysisModel *myModel = this->getAnalysisModelPtr();
     LinearSOE *theLinSOE = this->getLinearSOEPtr();
@@ -196,41 +249,59 @@ int XC::CentralDifference::domainChanged()
           ***/
       }
     
-    std::cerr << "WARNING: CentralDifference::domainChanged() - assuming Ut-1 = Ut\n";
+    std::cerr << getClassName() << "::" << __FUNCTION__
+	      << "; WARNING: assuming Ut-1 = Ut\n";
     
     return 0;
-}
+  }
 
-
+//! Invoked this causes the object to increment the DOF\_Group
+//! response quantities at time \f$t + \Delta t\f$. The displacement Vector is  
+//! incremented by \f$ c1 * \Delta U\f$, the velocity Vector by \f$
+//! c2 * \Delta U\f$, and the acceleration Vector by \f$c3 * \Delta U\f$. 
+//! The response at the DOF\_Group objects are then updated by invoking
+//! setResponse() on the AnalysisModel with quantities at time \f$t +
+//! \Delta t\f$. Finally updateDomain() is invoked on the
+//! AnalysisModel. Returns
+//! \f$0\f$ if successful. A warning message is printed and a negative number
+//! returned if an error occurs: \f$-1\f$ if no associated AnalysisModel,
+//! \f$-2\f$ if the Vector objects have not been created, \f$-3\f$ if the Vector
+//! objects and \f$\delta U\f$ are of different sizes.
 int XC::CentralDifference::update(const Vector &upU)
   {
     updateCount++;
     if(updateCount > 1)
       {
-        std::cerr << "WARNING XC::CentralDifference::update() - called more than once -";
-        std::cerr << " CentralDifference integration scheme requires a LINEAR solution algorithm\n";
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; WARNING - called more than once -"
+		  << " CentralDifference integration scheme"
+	          << " requires a LINEAR solution algorithm\n";
         return -1;
       }
     
     AnalysisModel *theModel = this->getAnalysisModelPtr();
     if(theModel == 0)
       {
-        std::cerr << "WARNING XC::CentralDifference::update() - no XC::AnalysisModel set\n";
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; WARNING - no XC::AnalysisModel set\n";
         return -1;
       }
     
     // check domainChanged() has been called, i.e. Ut will not be zero
     if(Ut.get().Size() == 0)
       {
-        std::cerr << "WARNING XC::CentralDifference::update() - domainChange() failed or not called\n";
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; WARNING - domainChange() failed or not called\n";
         return -2;
       }	
     
     // check U is of correct size
     if(upU.Size() != Ut.get().Size())
       {
-        std::cerr << "WARNING XC::CentralDifference::update() - Vectors of incompatible size ";
-        std::cerr << " expecting " << Ut.get().Size() << " obtained " << upU.Size() << std::endl;
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; WARNING vectors of incompatible size "
+		  << " expecting " << Ut.get().Size()
+		  << " obtained " << upU.Size() << std::endl;
         return -3;
       }
     
@@ -252,7 +323,8 @@ int XC::CentralDifference::update(const Vector &upU)
     theModel->setResponse(upU, U.getDot(), U.getDotDot());
     if(updateModel() < 0)
       {
-        std::cerr << "CentralDifference::update() - failed to update the domain\n";
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; failed to update the domain\n";
         return -4;
       }
     return 0;
@@ -264,7 +336,8 @@ int XC::CentralDifference::commit(void)
     AnalysisModel *theModel = this->getAnalysisModelPtr();
     if(!theModel)
       {
-        std::cerr << "WARNING XC::CentralDifference::commit() - no XC::AnalysisModel set\n";
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "WARNING no AnalysisModel set\n";
         return -1;
       }	  
     
@@ -310,7 +383,8 @@ int XC::CentralDifference::sendSelf(CommParameters &cp)
 
     res+= cp.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
-      std::cerr << getClassName() << "sendSelf() - failed to send data\n";
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; failed to send data\n";
     return res;
   }
 
@@ -323,18 +397,21 @@ int XC::CentralDifference::recvSelf(const CommParameters &cp)
     int res= cp.receiveIdData(getDbTagData(),dataTag);
 
     if(res<0)
-      std::cerr << getClassName() << "::recvSelf - failed to receive ids.\n";
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; failed to receive ids.\n";
     else
       {
         //setTag(getDbTagDataPos(0));
         res+= recvData(cp);
         if(res<0)
-          std::cerr << getClassName() << "::recvSelf - failed to receive data.\n";
+          std::cerr << getClassName() << "::" << __FUNCTION__
+		    << "; failed to receive data.\n";
       }
     return res;
   }
 
-
+//! @brief The object sends to \f$s\f$ its type, the current time,
+//! \f$\gamma\f$ and \f$\beta\f$. 
 void XC::CentralDifference::Print(std::ostream &s, int flag)
   {
     RayleighBase::Print(s,flag);

@@ -75,6 +75,37 @@ class Vector;
 //! @brief CentralDifference is an algorithmic class
 //! for performing a transient analysis
 //! using the central difference integration scheme.
+//!
+//!CentralDifference is a subclass of TransientIntegrator which implements
+//! the CentralDifference method. In the CentralDifference method, to determine
+//! the velocities, accelerations and displacements at time \f$t + \Delta t\f$,
+//! the equilibrium equation (expressed for the TransientIntegrator) is
+//! typically solved at time \f$t\f$ for \f$U_{t+\Delta t}\f$, i.e. solve: 
+//! 
+//! \[ R (U_{t+ \Delta t}) = P(t) - F_I(Udd_{t})
+//! - F_R(Ud_{t},U_{t}) \]
+//! 
+//! \noindent where we use following to relate \f$Ud_{t}\f$ and \f$Udd_{t}\f$ to
+//! \f$U_{t}\f$ and the displacement quantities at times \f$t\f$
+//! and \f$t - \Delta t\f$: 
+//! 
+//! \[
+//! \dot U_{t} = \frac{1}{2 \Delta t} \left(
+//! U_{t + \Delta t} -  U_{t - \Delta t} \right)
+//! \]
+//! 
+//! \[
+//! \ddot U_{t} = \frac{1}{\Delta t^2} \left(
+//! U_{t + \Delta t} - 2 U_t + U_{t - \Delta t}\right)
+//! \]
+//! 
+//! 
+//! \noindent which results in the following 
+//! 
+//! \[ \left[ \frac{1}{\Delta t^2} M + \frac{1}{2 \Delta t}
+//! C \right] U_{t + \Delta t} = P(t) - F_I \left(Udd_t^{(i-1)}
+//! \right)
+//! -F_R\left( Ud_t^{(i-1)}, U_t)\right) \]
 class CentralDifference: public RayleighBase
   {
   private:

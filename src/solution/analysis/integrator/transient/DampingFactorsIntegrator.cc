@@ -30,10 +30,17 @@
 
 
 //! @brief Constructor.
+//!
+//! @param owr: analysis aggregation that will own this object.
+//! @param classTag: class identifier.
 XC::DampingFactorsIntegrator::DampingFactorsIntegrator(AnalysisAggregation *owr,int classTag)
   : TransientIntegrator(owr,classTag), rayFactors() {}
 
 //! @brief Constructor.
+//!
+//! @param owr: analysis aggregation that will own this object.
+//! @param classTag: class identifier.
+//! @param fF: Rayleigh damping factors.
 XC::DampingFactorsIntegrator::DampingFactorsIntegrator(AnalysisAggregation *owr,int classTag,const RayleighDampingFactors &rF)
   : TransientIntegrator(owr,classTag), rayFactors(rF) {}
 
