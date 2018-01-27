@@ -37,14 +37,15 @@ namespace XC {
 
 //! @ingroup RayleighIntegrator
 //
-//! @brief HHTRayleighBase is an algorithmic class
-//! for performing a transient analysis
-//! using the HHTRayleighBase integration scheme.
+//! @brief HHTRayleighBase is a base for the
+//! classes performing a transient analysis
+//! using the Hilber-Hughes-Taylor integration scheme.
 class HHTRayleighBase: public RayleighBase
   {
   protected:
-    double alpha;
-    double gamma;
+    double alpha; //!< \alpha should be between 0.67 and 1.0
+                  //! (alpha factor corresponds to Newmark method. 
+    double gamma; //!< \gamma factor.
     
     double c2, c3;              // some constants we need to keep
     ResponseQuantities Ut; //!< response quantities at time t

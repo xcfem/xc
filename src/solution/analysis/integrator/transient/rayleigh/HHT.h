@@ -71,7 +71,37 @@ namespace XC {
 //
 //! @brief HHT is an algorithmic class
 //! for performing a transient analysis
-//! using the HHT integration scheme.
+//! using the Hilber-Hughes-Taylor integration scheme.
+//!
+//! HHT is a subclass of TransientIntegrator which implements
+//! the Hilber-Hughes-Taylor (HHT) method. In the HHT method, to determine the
+//! velocities, accelerations and displacements at time \f$t + \Delta t\f$,
+//! by solving the following equilibrium equation.
+//!
+//! \noindent {\bf Description} 
+//! \indent 
+//! 
+//! \[ R (U_{t + \Delta t}) = P(t + \Delta t) -
+//! F_I(Udd_{t+\Delta t}) - F_R(Ud_{t + \alpha \Delta t},U_{t +
+//! \alpha \Delta t}) \] 
+//! 
+//! \noindent where
+//! 
+//! \[ U_{t + \alpha} = \left( 1 - \alpha \right) U_t + \alpha U_{t +
+//! \Delta t} \]
+//! 
+//! \[ Ud_{t + \alpha} = \left( 1 - \alpha \right) Ud_t + \alpha Ud_{t +
+//! \Delta t} \]
+//! 
+//! \noindent and the velocities and accelerations at time \f$t + \Delta t\f$
+//! //! are determined using the Newmark relations. The HHT method results in
+//! //! the following for determining the response at \f$t + \Delta t\f$
+//! 
+//! \[ \left[ \frac{1}{\beta \Delta t^2} M + \frac{\alpha \gamma}{\beta
+//! \Delta t} C + \alpha K \right] \Delta U_{t + \Delta t}^{(i)} = P(t
+//! + \Delta t) - F_I\left(Udd_{t+\Delta  t}^{(i-1)}\right)
+//! - F_R\left(Ud_{t + \alpha \Delta t}^{(i-1)},U_{t + \alpha \Delta
+//! t}^{(i-1)}\right) \] 
 class HHT: public HHTBase
   {
   protected:
@@ -103,8 +133,6 @@ class HHT: public HHTBase
     
     void Print(std::ostream &s, int flag = 0);        
   };
-inline Integrator *HHT::getCopy(void) const
-  { return new HHT(*this); }
 } // end of XC namespace
 
 #endif

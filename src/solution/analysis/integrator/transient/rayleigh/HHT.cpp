@@ -66,37 +66,111 @@
 #include <solution/analysis/model/AnalysisModel.h>
 
 //! @brief Constructor.
+//!
+//! @param owr: analysis aggregation that will own this object.
 XC::HHT::HHT(AnalysisAggregation *owr)
   : HHTBase(owr,INTEGRATOR_TAGS_HHT) {}
 
 //! @brief Constructor.
+//!
+//! @param owr: analysis aggregation that will own this object.
 XC::HHT::HHT(AnalysisAggregation *owr,double _alpha)
   : HHTBase(owr,INTEGRATOR_TAGS_HHT,_alpha) {}
 
 //! @brief Constructor.
+//!
+//! Sets \f$\alpha\f$ to \p alpha, \f$\gamma\f$ to \f$(1.5 - \alpha)\f$
+//! and \f$\beta\f$ to \f$0.25*\alpha^2\f$.
+//!
+//! @param owr: analysis aggregation that will own this object.
+//! @param rF: value of the Rayleigh damping factors.
 XC::HHT::HHT(AnalysisAggregation *owr,double _alpha,const RayleighDampingFactors &rF)
   : HHTBase(owr,INTEGRATOR_TAGS_HHT,_alpha,rF) {}
 
 //! @brief Constructor.
+//!
+//! @param owr: analysis aggregation that will own this object.
+//! @param _alpha: value for the alpha parameter.
+//! @param _beta: value for the beta parameter.
+//! @param _gamma: value for the gamma parameter.
 XC::HHT::HHT(AnalysisAggregation *owr,double _alpha, double _beta, double _gamma)
   : HHTBase(owr,INTEGRATOR_TAGS_HHT,_alpha,_beta,_gamma) {}
 
 //! @brief Constructor.
+//!
+//! @param owr: analysis aggregation that will own this object.
+//! @param _alpha: value for the alpha parameter.
+//! @param _beta: value for the beta parameter.
+//! @param _gamma: value for the gamma parameter.
+//! @param rF: value of the Rayleigh damping factors.
 XC::HHT::HHT(AnalysisAggregation *owr,double _alpha, double _beta, double _gamma,const RayleighDampingFactors &rF)
   : HHTBase(owr,INTEGRATOR_TAGS_HHT,_alpha,_beta,_gamma,rF) {}
 
+XC::Integrator *XC::HHT::getCopy(void) const
+  { return new HHT(*this); }
 
+//! The following are performed when this method is invoked:
+//! \begin{enumerate}
+//! \item First sets the values of the three constants {\em c1}, {\em c2}
+//! and {\em c3}, {\em c1} is set to \f$1.0\f$, {\em c2} to \f$
+//! \gamma / (\beta * \Delta t)\f$ and {\em c3} to \f$1/ (\beta * \Delta t^2)\f$.
+//! \item Then the Vectors for response quantities at time \f$t\f$ are set
+//! equal to those at time \f$t + \Delta t\f$.
+//! \begin{tabbing}
+//! while \= while \= while \= while \= \kill
+//! \>\> \f$ U_t = U_{t + \Delta t}\f$
+//! \>\> \f$ Ud_t = Ud_{t + \Delta t} \f$
+//! \>\> \f$ Udd_t = Udd_{t + \Delta t} \f$ 
+//! \end{tabbing}
+//! \item Then the velocity and accelerations approximations at time \f$t +
+//! \Delta t\f$ and the displacement and velocity at time \f$t + \alpha \Delta t\f$
+//! are set using the difference approximations.
+//! \begin{tabbing}
+//! while \= while \= while \= while \= \kill
+//! \>\> \f$ U_{t + \alpha \Delta t} = U_t\f$
+//! \>\> \f$ \dot U_{t + \Delta t} = 
+//!  \left( 1 - \frac{\gamma}{\beta}\right) \dot U_t + \Delta t \left(1
+//! - \frac{\gamma}{2 \beta}\right) \ddot U_t \f$
+//! \>\> \f$ Ud_{t + \alpha \Delta t} = (1 - \alpha) Ud_t + \alpha Ud_{t +
+//! \Delta t}\f$
+//! \>\> \f$ \ddot U_{t + \Delta t} = 
+//!  - \frac{1}{\beta \Delta t} \dot U_t + \left( 1 - \frac{1}{2
+//! \beta} \right) \ddot U_t  \f$
+//! \>\> theModel-\f$>\f$setResponse\f$(U_{t + \alpha \Delta t}, Ud_{t+\alpha
+//! \Delta t}, Udd_{t+\Delta t})\f$ 
+//! \end{tabbing}
+//! \item The response quantities at the DOF\_Group objects are updated
+//! with the new approximations by invoking setResponse() on the
+//! AnalysisModel with displacements and velocities at time \f$t + \alpha
+//! \Delta t\f$ and the accelerations at time \f$t + \Delta t\f$.
+//! \begin{tabbing}
+//! while \= while \= while \= while \= \kill
+//! \>\> theModel-\f$>\f$setResponse\f$(U_{t + \alpha \Delta t}, Ud_{t+\alpha
+//! \Delta t}, Udd_{t+\Delta t})\f$ 
+//! \end{tabbing}
+//! \item current time is obtained from the AnalysisModel, incremented by
+//! \f$\Delta t\f$, and {\em applyLoad(time, 1.0)} is invoked on the
+//! AnalysisModel. 
+//! \item Finally updateDomain() is invoked on the AnalysisModel.
+//! \end{enumerate}
+//! The method returns \f$0\f$ if successful, otherwise a negative number is
+//! returned: \f$-1\f$ if \f$\gamma\f$ or \f$\beta\f$ are \f$0\f$, \f$-2\f$
+//! if \p dispFlag was true and \f$\Delta t\f$ is \f$0\f$, and \f$-3\f$ if
+//! domainChanged() failed or has not been called.
 int XC::HHT::newStep(double _deltaT)
   {
     deltaT = _deltaT;
-    if (beta == 0 || gamma == 0 )  {
-        std::cerr << "XC::HHT::newStep() - error in variable\n";
-        std::cerr << "gamma = " << gamma << " beta = " << beta << std::endl;
+    if (beta == 0 || gamma == 0 )
+      {
+        std::cerr << getClassName() << "::" << __FUNCTION__
+	          << "; error in variable\n"
+		  << "gamma = " << gamma << " beta = " << beta << std::endl;
         return -1;
     }
     
     if (deltaT <= 0.0)  {
-        std::cerr << "XC::HHT::newStep() - error in variable\n";
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; error in variable\n";
         std::cerr << "dT = " << deltaT << std::endl;
         return -2;	
     }
@@ -111,7 +185,8 @@ int XC::HHT::newStep(double _deltaT)
        
     if(U.get().Size() == 0)
       {
-        std::cerr << "HHT::newStep() - domainChange() failed or hasn't been called\n";
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; failed or hasn't been called\n";
         return -3;
       }
     
@@ -124,7 +199,8 @@ int XC::HHT::newStep(double _deltaT)
 //    theModel->applyLoadDomain(time);
     if(updateModel(time, deltaT) < 0)
       {
-        std::cerr << "XC::HHT::newStep() - failed to update the domain\n";
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; failed to update the domain\n";
         return -4;
       }
 
@@ -156,40 +232,77 @@ int XC::HHT::revertToLastStep()
     return 0;
   }
 
-
+//! This tangent for each FE\_Element is defined to be \f$K_e = c1\alpha K
+//! + c2\alpha \D + c3 M\f$, where c1,c2 and c3 were determined in the last
+//! invocation of the newStep() method. Returns \f$0\f$ after performing the
+//! following operations:  
+//! \begin{tabbing}
+//! while \= \+ while \= while \= \kill
+//! if (RayleighDamping == false) \{ \+
+//! theEle-\f$>\f$zeroTang()
+//! theEle-\f$>\f$addKtoTang(c1)
+//! theEle-\f$>\f$addCtoTang(c2)
+//! theEle-\f$>\f$addMtoTang(c3)  \-
+//! \} else \{ \+
+//! theEle-\f$>\f$zeroTang()
+//! theEle-\f$>\f$addKtoTang(c1 + c2 * \f$\beta_K\f$)
+//! theEle-\f$>\f$addMtoTang(c3 + c2 * \f$\alpha_M\f$)  \- 
+//! \}
+//! \end{tabbing}
 int XC::HHT::formEleTangent(FE_Element *theEle)
   {
     theEle->zeroTangent();
-    if (statusFlag == CURRENT_TANGENT)  {
+    if(statusFlag == CURRENT_TANGENT)
+      {
         theEle->addKtToTang(alpha*c1);
         theEle->addCtoTang(alpha*c2);
         theEle->addMtoTang(c3);
-    } else if (statusFlag == INITIAL_TANGENT)  {
+      }
+    else if(statusFlag == INITIAL_TANGENT)
+      {
         theEle->addKiToTang(alpha*c1);
         theEle->addCtoTang(alpha*c2);
         theEle->addMtoTang(c3);
-    }
-    
+      }
     return 0;
-}   
+  }
  
 
+//! This performs the following:
+//! \begin{tabbing}
+//! while \= \+ while \= while \= \kill
+//! if (RayleighDamping == false)  \+
+//! theDof-\f$>\f$addMtoTang(c3)  \-
+//! else \+
+//! theDof-\f$>\f$addMtoTang(c3 + c2 * \f$\alpha_M\f$)  \- 
+//! \end{tabbing}
 int XC::HHT::formNodTangent(DOF_Group *theDof)
-{
+  {
     theDof->zeroTangent();
 
     theDof->addCtoTang(alpha*c2);
     theDof->addMtoTang(c3);
     
     return 0;
-}
+  }
 
 
-int XC::HHT::domainChanged()
+//! If the size of the LinearSOE has changed, the object deletes any old Vectors
+//! created and then creates \f$8\f$ new Vector objects of size equal to {\em
+//! theLinearSOE-\f$>\f$getNumEqn()}. There is a Vector object created to store
+//! the current displacement, velocity and accelerations at times \f$t\f$ and
+//! \f$t + \Delta t\f$, and the displacement and velocity at time \f$t + \alpha
+//! \Delta t\f$. The response quantities at time \f$t + \Delta t\f$ are
+//! then set by iterating over the DOF\_Group objects in the model and
+//! obtaining their committed values. 
+//! Returns \f$0\f$ if successful, otherwise a warning message and a negative
+//! number is returned: \f$-1\f$ if no memory was available for constructing
+//! the Vectors.
+int XC::HHT::domainChanged(void)
   {
     AnalysisModel *myModel = this->getAnalysisModelPtr();
     LinearSOE *theLinSOE = this->getLinearSOEPtr();
-    const XC::Vector &x = theLinSOE->getX();
+    const Vector &x = theLinSOE->getX();
     int size = x.Size();
     
     setRayleighDampingFactors();
@@ -209,7 +322,7 @@ int XC::HHT::domainChanged()
     
     while ((dofGroupPtr = theDOFGroups()) != 0)
       {
-        const XC::ID &id = dofGroupPtr->getID();
+        const ID &id = dofGroupPtr->getID();
         
         const Vector &disp = dofGroupPtr->getCommittedDisp();	
         U.setDisp(id,disp);
@@ -231,27 +344,60 @@ int XC::HHT::domainChanged()
     return 0;
   }
 
-
+//! Invoked this first causes the object to increment the DOF\_Group
+//! response quantities at time \f$t + \Delta t\f$. The displacement Vector is  
+//! incremented by \f$ c1 * \Delta U\f$, the velocity Vector by \f$
+//! c2 * \Delta U\f$, and the acceleration Vector by \f$c3 * \Delta U\f$. 
+//! The displacement Vector at time \f$t + \alpha \Delta t\f$ is incremented
+//! by \f$c1 \alpha \Delta U\f$ and the velocity Vector by \f$c2 \alpha
+//! \Delta U\f$.
+//! The response quantities at the DOF\_Group objects are then updated
+//! with the new approximations by invoking setResponse() on the
+//! AnalysisModel with displacement and velocity at time \f$t + \alpha
+//! \Delta t\f$ and the accelerations at time \f$t + \Delta t\f$. 
+//! Finally updateDomain() is invoked on the AnalysisModel. 
+//! \begin{tabbing}
+//! while \= \+ while \= while \= \kill
+//! \>\> \f$ U_{t + \Delta t} += \Delta U\f$
+//! \>\> \f$ \dot U_{t + \Delta t} += \frac{\gamma}{\beta \Delta t} \Delta U \f$
+//! \>\> \f$ \ddot U_{t + \Delta t} += \frac{1}{\beta {\Delta t}^2} \Delta U \f$
+//! \>\> \f$ U_{t + \alpha \Delta t} += \alpha \Delta U \f$
+//! \>\> \f$ Ud_{t + \alpha \Delta t} += \frac{\alpha \gamma}{\beta \Delta t}
+//! \Delta U \f$ 
+//! \>\> theModel-\f$>\f$setResponse\f$(U_{t + \alpha \Delta t}, Ud_{t+\alpha
+//! \Delta t}, Udd_{t+\Delta t})\f$
+//! \>\> theModel-\f$>\f$updateDomain()
+//! \end{tabbing}
+//! Returns
+//! \f$0\f$ if successful. A warning message is printed and a negative number
+//! returned if an error occurs: \f$-1\f$ if no associated AnalysisModel,
+//! \f$-2\f$ if the Vector objects have not been created, \f$-3\f$ if the Vector
+//! objects and \f$\Delta U\f$ are of different sizes.
 int XC::HHT::update(const Vector &deltaU)
-{
-    AnalysisModel *theModel = this->getAnalysisModelPtr();
-    if (theModel == 0)  {
-        std::cerr << "WARNING XC::HHT::update() - no XC::AnalysisModel set\n";
+  {
+    AnalysisModel *theModel= this->getAnalysisModelPtr();
+    if(theModel == nullptr)
+      {
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; no AnalysisModel set.\n";
         return -1;
-    }
+      }
     
     // check domainChanged() has been called, i.e. Ut will not be zero
     if(Ut.get().Size() == 0)
       {
-        std::cerr << "WARNING XC::HHT::update() - domainChange() failed or not called\n";
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; domainChange() failed or not called\n";
         return -2;
       }
     
     // check deltaU is of correct size
     if(deltaU.Size() != U.get().Size())
       {
-        std::cerr << "WARNING XC::HHT::update() - Vectors of incompatible size ";
-        std::cerr << " expecting " << U.get().Size() << " obtained " << deltaU.Size() << std::endl;
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; vectors of incompatible size "
+		  << " expecting " << U.get().Size()
+		  << " obtained " << deltaU.Size() << std::endl;
         return -3;
       }
     
@@ -270,26 +416,36 @@ int XC::HHT::update(const Vector &deltaU)
     theModel->setResponse(Ualpha.get(),Ualpha.getDot(),U.getDotDot());
     if(updateModel() < 0)
       {
-        std::cerr << "XC::HHT::update() - failed to update the domain\n";
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; failed to update the domain.\n";
         return -4;
       }
     return 0;
   }
 
-
+//! First the response quantities at the DOF\_Group objects are updated
+//! with the new approximations by invoking setResponse() on the
+//! AnalysisModel with displacement, velocity and accelerations at time \f$t +
+//! \Delta t\f$. Finally updateDomain()} and {\em commitDomain() are
+//! invoked on the AnalysisModel. 
+//! Returns \f$0\f$ if successful, a warning
+//! message and a negative number if not: \f$-1\f$ if no AnalysisModel
+//! associated with the object and \f$-2\f$ if commitDomain() failed.
 int XC::HHT::commit(void)
   {
     AnalysisModel *theModel = this->getAnalysisModelPtr();
     if(theModel == 0)
       {
-        std::cerr << "WARNING XC::HHT::commit() - no XC::AnalysisModel set\n";
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; WARNING no AnalysisModel set.\n";
         return -1;
       }
     
     // update the response at the DOFs
     theModel->setResponse(U.get(),U.getDot(),U.getDotDot());
 //    if (theModel->updateDomain() < 0)  {
-//        std::cerr << "XC::HHT::commit() - failed to update the domain\n";
+//        std::cerr << getClassName() << "::" << __FUNCTION__ <
+//                  << ": failed to update the domain\n";
 //        return -4;
 //    }
     
@@ -308,7 +464,8 @@ int XC::HHT::sendData(CommParameters &cp)
     return res;
   }
 
-//! @brief Receives object members through the channel being passed as parameter.
+//! @brief Receives object members through the channel being passed
+//! as parameter.
 int XC::HHT::recvData(const CommParameters &cp)
   {
     int res= HHTBase::recvData(cp);
@@ -324,7 +481,8 @@ int XC::HHT::sendSelf(CommParameters &cp)
 
     res+= cp.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
-      std::cerr << getClassName() << "sendSelf() - failed to send data\n";
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; failed to send data\n";
     return res;
   }
 
@@ -335,21 +493,28 @@ int XC::HHT::recvSelf(const CommParameters &cp)
     int res= cp.receiveIdData(getDbTagData(),dataTag);
 
     if(res<0)
-      std::cerr << getClassName() << "::recvSelf - failed to receive ids.\n";
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; failed to receive ids.\n";
     else
       {
         //setTag(getDbTagDataPos(0));
         res+= recvData(cp);
         if(res<0)
-          std::cerr << getClassName() << "::recvSelf - failed to receive data.\n";
+          std::cerr << getClassName() << "::" << __FUNCTION__
+		    << "; failed to receive data.\n";
       }
     return res;
   }
 
 
+//! The object sends to \f$s\f$ its type, the current time, \f$\alpha\f$,
+//! \f$\gamma\f$ and \f$\beta\f$. If Rayleigh damping is specified, the
+//! constants \f$\alpha_M\f$ and \f$\beta_K\f$ are also printed.
 void XC::HHT::Print(std::ostream &s, int flag)
   {
     HHTBase::Print(s,flag);
-    s << "  alpha: " << alpha << " beta: " << beta  << " gamma: " << gamma << std::endl;
-    s << "  c1: " << c1 << " c2: " << c2 << " c3: " << c3 << std::endl;
+    s << "  alpha: " << alpha << " beta: " << beta
+      << " gamma: " << gamma << std::endl;
+    s << "  c1: " << c1 << " c2: " << c2
+      << " c3: " << c3 << std::endl;
   }

@@ -52,8 +52,8 @@ namespace XC {
 class HHTBase: public HHTRayleighBase
   {
   protected:
-    double beta;
-    double c1;              // some constants we need to keep
+    double beta; //! \beta parameter
+    double c1;   //!< some constants we need to keep
 
     int sendData(CommParameters &);
     int recvData(const CommParameters &);
