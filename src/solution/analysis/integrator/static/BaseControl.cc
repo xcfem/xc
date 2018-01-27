@@ -68,6 +68,8 @@
 #include <utility/matrix/Vector.h>
 
 //! @brief Constructor.
+//!
+//! @param owr: set of objects used to perform the analysis.
 XC::BaseControl::BaseControl(AnalysisAggregation *owr,int classTag,int numIncr)
 :StaticIntegrator(owr,classTag), specNumIncrStep(numIncr), numIncrLastStep(numIncr)
   { setup_numIncr(numIncr); }

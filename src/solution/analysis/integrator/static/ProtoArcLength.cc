@@ -37,6 +37,12 @@
 XC::ProtoArcLength::ProtoArcLength(AnalysisAggregation *owr,int classTag,double arcLength)
   :StaticIntegrator(owr,classTag), arcLength2(arcLength*arcLength), signLastDeltaLambdaStep(1) {}
 
+//! Performs the first iteration, that is it solves for 
+//! \f$\lambda_n^{(1)}\f$ and \f$\Delta  U_n^{(1)}\f$ and updates the model with
+//! \f$\Delta  U_n^{(1)}\f$ and increments the load factor by
+//! \f$\lambda_n^{(1)}\f$. To do this it must set the rhs of the LinearSOE to
+//! \f$ P\f$, invoke formTangent() on itself and solve the LinearSOE to
+//! get \f$\Delta  Uh_n^{(1)}\f$.
 int XC::ProtoArcLength::newStep(void)
   {
     // get pointers to AnalysisModel and LinearSOE
@@ -44,8 +50,8 @@ int XC::ProtoArcLength::newStep(void)
     AnalysisModel *mdl= getAnalysisModelPtr();
     if(!mdl || !theLinSOE)
       {
-        std::cerr << "WARNING ArcLength::newStep() ";
-        std::cerr << "No AnalysisModel or LinearSOE has been set\n";
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; WARNING - no AnalysisModel or LinearSOE has been set\n";
         return -1;
       }
 
@@ -79,7 +85,17 @@ int XC::ProtoArcLength::newStep(void)
     return 0;
   }
 
-//! @brief Actualiza el estado del sistema.
+//! @brief Updates the model.
+//!
+//! Note the argument \f$\Delta U\f$ should be equal to \f$\Delta Ub_n^{(i)}\f$.
+//! The object then determines \f$\Delta Uh_n^{(i)}\f$ by setting the rhs of
+//! the linear system of equations to be \f$\P\f$ and then solving the
+//! linearSOE. It then solves for
+//! \f$\Delta \lambda_n^{(i)}\f$ and \f$\Delta  U_n^{(i)}\f$ and updates the
+//! model with \f$\Delta  U_n^{(i)}\f$ and increments the load factor by
+//! \f$\Delta \lambda_n^{(i)}\f$. Sets the vector \f$x\f$ in the LinearSOE
+//! object to be equal to \f$\Delta  U_n^{(i)}\f$ before returning (this is
+//! for the convergence test stuff.
 int XC::ProtoArcLength::update(const Vector &dU)
   {
     LinearSOE *theLinSOE = this->getLinearSOEPtr();    
@@ -112,16 +128,24 @@ int XC::ProtoArcLength::update(const Vector &dU)
     return 0;
   }
 
-//! @brief Respuesta a un cambio en el domain.
+//! @brief Response to a change in the domain.
+//!
+//! The object creates the Vector objects it needs. Vectors are created to
+//! stor \f$ P\f$, \f$\Delta  Ub_n^{(i)}\f$, \f$\Delta  Uh_n^{(i)}\f$, \f$\Delta
+//! Ub_n^{(i)}\f$, \f$dU^{(i)}\f$. To form \f$ P\f$, the current load factor is
+//! obtained from the model, it is incremented by \f$1.0\f$, {\em
+//! formUnbalance()} is invoked on the object, and the \f$b\f$ vector is
+//! obtained from the linearSOE. This is \f$ P\f$, the load factor on the
+//! model is then decremented by \f$1.0\f$.
 int XC::ProtoArcLength::domainChanged(void)
   {
     // we first create the Vectors needed
-    LinearSOE *theLinSOE = this->getLinearSOEPtr();    
+    LinearSOE *theLinSOE= this->getLinearSOEPtr();    
     AnalysisModel *mdl= getAnalysisModelPtr();
     if(!mdl || !theLinSOE)
       {
-	std::cerr << "WARNING ArcLengthBase::domainChanged() ";
-	std::cerr << "No AnalysisModel or LinearSOE has been set\n";
+	std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "WARNING - no AnalysisModel or LinearSOE has been set.\n";
 	return -1;
       }    
     const size_t sz= mdl->getNumEqn(); // ask model in case N+1 space

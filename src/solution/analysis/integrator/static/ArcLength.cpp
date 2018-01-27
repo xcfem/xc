@@ -71,8 +71,14 @@
 #include <utility/matrix/Vector.h>
 
 //! @brief Constructor.
+//!
+//! @param owr: set of objects used to perform the analysis.
 XC::ArcLength::ArcLength(AnalysisAggregation *owr,double arcLength, double alpha)
   :ArcLengthBase(owr,INTEGRATOR_TAGS_ArcLength,arcLength,alpha) {}
+
+//! @brief Virtual constructor.
+XC::Integrator *XC::ArcLength::getCopy(void) const
+  { return new ArcLength(*this); }
 
 //! @brief Returns the valor de dLambda para el método update.
 double XC::ArcLength::getDLambdaUpdate(void) const
@@ -90,28 +96,31 @@ double XC::ArcLength::getDLambdaUpdate(void) const
     double b24ac = b*b - 4.0*a*c;
     if(b24ac < 0)
       {
-        std::cerr << "ArcLength::getDLambda() - imaginary roots due to multiple instability";
-        std::cerr << " directions - initial load increment was too large\n";
-        std::cerr << "a: " << a << " b: " << b << " c: " << c << " b24ac: " << b24ac << std::endl;
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; imaginary roots due to multiple instability"
+		  << " directions - initial load increment was too large\n"
+		  << "a: " << a << " b: " << b << " c: " << c
+		  << " b24ac: " << b24ac << std::endl;
         return -1;
       }
     const double a2 = 2.0*a;
     if(a2 == 0.0)
       {
-        std::cerr << "ArcLength::getDLambda() - zero denominator";
-        std::cerr << " alpha was set to 0.0 and zero reference load\n";
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; zero denominator"
+		  << " alpha was set to 0.0 and zero reference load\n";
         return -2;
       }
 
     // determine the roots of the quadratic
-    double sqrtb24ac = sqrt(b24ac);
-    double dlambda1 = (-b + sqrtb24ac)/a2;
-    double dlambda2 = (-b - sqrtb24ac)/a2;
+    const double sqrtb24ac = sqrt(b24ac);
+    const double dlambda1= (-b + sqrtb24ac)/a2;
+    const double dlambda2= (-b - sqrtb24ac)/a2;
 
-    double val = dUhat^dUstep;
+    const double val = dUhat^dUstep;
     double theta1 = (dUstep^dUstep) + (dUbar^dUstep);
-    //    double theta2 = theta1 + dlambda2*val;
-    theta1 += dlambda1*val;
+    //    const double theta2 = theta1 + dlambda2*val;
+    theta1+= dlambda1*val;
 
     // choose dLambda based on angle between incremental displacement before
     // and after this step -- want positive
@@ -123,7 +132,10 @@ double XC::ArcLength::getDLambdaUpdate(void) const
     return retval;
   }
 
-//! @brief Imprime el objeto.
+//! @brief Prints stuff.
+//!
+//! The object sends to \f$s\f$ its type, the current value of \f$\lambda\f$,
+//! and \f$\delta \lambda\f$. 
 void XC::ArcLength::Print(std::ostream &s, int flag)
   {
     ArcLengthBase::Print(s,flag);

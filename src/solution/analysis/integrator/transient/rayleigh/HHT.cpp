@@ -233,7 +233,7 @@ int XC::HHT::revertToLastStep()
   }
 
 //! This tangent for each FE\_Element is defined to be \f$K_e = c1\alpha K
-//! + c2\alpha \D + c3 M\f$, where c1,c2 and c3 were determined in the last
+//! + c2\alpha D + c3 M\f$, where c1,c2 and c3 were determined in the last
 //! invocation of the newStep() method. Returns \f$0\f$ after performing the
 //! following operations:  
 //! \begin{tabbing}
