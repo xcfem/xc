@@ -70,8 +70,44 @@ namespace XC {
 
 //! @ingroup StaticIntegrator
 //
-//! @brief Sets the incremental factor to apply on the loads for
+//! @brief Integratior used to perform a static analysis using the load
+//! control method. Sets the incremental factor to apply on the loads for
 //! each analysis step.
+//!
+//! \indent LoadControl is a subclass of StaticIntegrator, it is
+//! used to when performing a static analysis on the FE\_Model using the
+//! load control method. In the load control method, the following
+//! constraint equation is added to equation~\ref{staticFormTaylor} of the
+//! StaticIntegrator class: 
+//!
+//! \[ 
+//! \lambda_n^{(i)} - \lambda_{n-1} = \delta \lambda_n
+//! \]
+//!
+//! \noindent where \f$\delta \lambda_n\f$ depends on
+//! \f$\delta \lambda_{n-1}\f$ the load increment at the previous time step,
+//! \f$J_{n-1}\f$, the number of iterations required to achieve convergence in
+//! the previous load step, and \f$Jd\f$, the desired number of iteraions.
+//! \f$\delta \lambda_n\f$ is bounded by \f$\delta \lambda_{min}\f$
+//! and \f$\delta \lambda_{max}\f$.
+//!
+//! \[ 
+//! \delta \lambda_n = max \left( \delta \lambda_{min}, min \left(
+//! \frac{Jd}{J_{n-1}} \delta \lambda_{n-1}, \delta \lambda_{max} \right)
+//! \right)
+//! \]
+//!
+//! Knowing \f$\lambda_n^{(i)}\f$ prior to each iteration, the \f$N+1\f$
+//! unknowns in equation~\ref{staticFormTaylor}, is reduced to \f$N\f$
+//! unknowns and results in the following equation:
+//!
+//! \begin{equation} 
+//! R(U_{n}) = \lambda_n^{(i)} P 
+//! - \f_{R}\left(U_{n}^{(i)} \right) - 
+//! K_n^{(i)} 
+//! (U_{n} - U_{n}^{(i)})  
+//! \label{staticFormLoadControl}
+//! \end{equation} 
 class LoadControl : public BaseControl
   {
   private:

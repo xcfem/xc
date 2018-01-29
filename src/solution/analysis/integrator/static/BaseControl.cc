@@ -70,6 +70,8 @@
 //! @brief Constructor.
 //!
 //! @param owr: set of objects used to perform the analysis.
+//! @param classTag: class identifier.
+//! @param numIncr: number of increments.
 XC::BaseControl::BaseControl(AnalysisAggregation *owr,int classTag,int numIncr)
 :StaticIntegrator(owr,classTag), specNumIncrStep(numIncr), numIncrLastStep(numIncr)
   { setup_numIncr(numIncr); }
@@ -79,7 +81,8 @@ void XC::BaseControl::setup_numIncr(const int &numIncr)
     // to avoid divide-by-zero error on first update() ensure numIncr != 0
     if(numIncr == 0)
       {
-        std::cerr << "WARNING XC::BaseControl::BaseControl() - numIncr set to 0, 1 assumed\n";
+        std::cerr << getClassName() << "::" << __FUNCTION__
+	          << "; numIncr set to 0, 1 assumed\n";
         specNumIncrStep= 1.0;
         numIncrLastStep= 1.0;
       }

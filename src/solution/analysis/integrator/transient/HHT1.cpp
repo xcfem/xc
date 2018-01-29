@@ -70,18 +70,24 @@
 #include "utility/actor/actor/ArrayCommMetaData.h"
 
 //! @brief Constructor.
+//!
+//! @param owr: analysis aggregation that will own this object.
 XC::HHT1::HHT1(AnalysisAggregation *owr)
 :DampingFactorsIntegrator(owr,INTEGRATOR_TAGS_HHT1),
  alpha(0.5), gamma(1.0), beta(0), 
  c1(0.0), c2(0.0), c3(0.0), Ut(0), U(0), Ualpha(0) {}
 
 //! @brief Constructor.
+//!
+//! @param owr: analysis aggregation that will own this object.
 XC::HHT1::HHT1(AnalysisAggregation *owr,double _alpha)
 :DampingFactorsIntegrator(owr,INTEGRATOR_TAGS_HHT1),
  alpha(_alpha), gamma(1.5-_alpha), beta((2-_alpha)*(2-_alpha)*0.25),
  c1(0.0), c2(0.0), c3(0.0), Ut(0),  U(0), Ualpha(0) {}
 
 //! @brief Constructor.
+//!
+//! @param owr: analysis aggregation that will own this object.
 XC::HHT1::HHT1(AnalysisAggregation *owr,double _alpha,const RayleighDampingFactors &rF)
   :DampingFactorsIntegrator(owr,INTEGRATOR_TAGS_HHT1,rF),
  alpha(_alpha), gamma(1.5-_alpha), beta((2-_alpha)*(2-_alpha)*0.25), 
@@ -94,57 +100,60 @@ int XC::HHT1::initialize(void)
 
 int XC::HHT1::newStep(double deltaT)
   {
-
-    if(beta == 0 || gamma == 0 ) {
-    std::cerr << "XC::HHT1::newStep() - error in variable\n";
-    std::cerr << "gamma = " << gamma << " beta= " << beta << std::endl;
-    return -1;
-  }
+    if(beta == 0 || gamma == 0 )
+      {
+        std::cerr << getClassName() << "::" << __FUNCTION__
+	          << "; error in variable\n"
+		  << "gamma = " << gamma << " beta= " << beta << std::endl;
+        return -1;
+      }
     
-  if (deltaT <= 0.0) {
-    std::cerr << "XC::HHT1::newStep() - error in variable\n";
-    std::cerr << "dT = " << deltaT << std::endl;
-    return -2;	
-  }
-  c1 = 1.0;
-  c2 = gamma/(beta*deltaT);
-  c3 = 1.0/(beta*deltaT*deltaT);
+    if(deltaT <= 0.0)
+      {
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; error in variable\n"
+		  << "dT = " << deltaT << std::endl;
+        return -2;	
+      }
+    c1 = 1.0;
+    c2 = gamma/(beta*deltaT);
+    c3 = 1.0/(beta*deltaT*deltaT);
 
 
-  AnalysisModel *theModel = this->getAnalysisModelPtr();
+    AnalysisModel *theModel = this->getAnalysisModelPtr();
 
-  // set response at t to be that at t+delta t of previous step
-  Ut= U;
-    
-  // set new_ velocity and accelerations at t + delta t
-  double a1 = (1.0 - gamma/beta); 
-  double a2 = (deltaT)*(1.0 - 0.5*gamma/beta);
+    // set response at t to be that at t+delta t of previous step
+    Ut= U;
 
-  //  (U.getDot()) *= a1;
-  U.getDot().addVector(a1, Ut.getDotDot(),a2);
+    // set new_ velocity and accelerations at t + delta t
+    double a1 = (1.0 - gamma/beta); 
+    double a2 = (deltaT)*(1.0 - 0.5*gamma/beta);
 
-  double a3 = -1.0/(beta*deltaT);
-  double a4 = 1 - 0.5/beta;
-  //  (U.getDotDot()) *= a4;  
-  U.getDotDot().addVector(a4, Ut.getDot(),a3);
+    //  (U.getDot()) *= a1;
+    U.getDot().addVector(a1, Ut.getDotDot(),a2);
 
-  Ualpha= Ut;
-  //  (Ualpha.getDot()) *= (1 - alpha);
-  Ualpha.getDot().addVector((1-alpha), U.getDot(), alpha);
+    double a3 = -1.0/(beta*deltaT);
+    double a4 = 1 - 0.5/beta;
+    //  (U.getDotDot()) *= a4;  
+    U.getDotDot().addVector(a4, Ut.getDot(),a3);
 
-  // set the new_ trial response quantities
+    Ualpha= Ut;
+    //  (Ualpha.getDot()) *= (1 - alpha);
+    Ualpha.getDot().addVector((1-alpha), U.getDot(), alpha);
 
-  theModel->setResponse(Ualpha.get(),Ualpha.getDot(),U.getDotDot());        
+    // set the new_ trial response quantities
 
-  // increment the time and apply the load
-  double time = getCurrentModelTime();
-  time +=deltaT;
-  if(updateModel(time, deltaT) < 0)
-    {
-      std::cerr << "XC::HHT::newStep() - failed to update the domain\n";
-      return -4;
-    }
-   return 0;
+    theModel->setResponse(Ualpha.get(),Ualpha.getDot(),U.getDotDot());        
+
+    // increment the time and apply the load
+    double time = getCurrentModelTime();
+    time +=deltaT;
+    if(updateModel(time, deltaT) < 0)
+      {
+	std::cerr << "XC::HHT::newStep() - failed to update the domain\n";
+	return -4;
+      }
+     return 0;
   }
 
 

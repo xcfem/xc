@@ -68,9 +68,29 @@
 #include <utility/matrix/Vector.h>
 
 //! @brief Constructor.
+//!
+//! @param owr: analysis aggregation that will own this object.
+//! @param dLambda: load factor used in the first step.
+//! @param numIncr: number of load increments.
+//! @param min: minimum value for the load factor at each step.
+//! @param max: maximum value for the load factor at each step.
 XC::LoadControl::LoadControl(AnalysisAggregation *owr,double dLambda, int numIncr, double min, double max)
   :BaseControl(owr,INTEGRATOR_TAGS_LoadControl,numIncr), deltaLambda(dLambda), dLambdaMin(min), dLambdaMax(max) {}
 
+//! @brief Perform a new analysis step.
+//!
+//! The object obtains the current value of \f$\lambda\f$ from the AnalysisModel
+//! object. It increments this by \f$\delta \lambda_n \f$.
+//!
+//! \[ 
+//! \delta \lambda_n = max \left( \delta \lambda_{min}, min \left(
+//! \frac{Jd}{J_{n-1}} \delta \lambda_{n-1}, \delta \lambda_{max} \right)
+//! \right) \]
+//! 
+//! \noindent It will then invoke
+//! {\em applyLoadDomain(0.0, \f$\lambda\f$)} on the AnalysisModel
+//! object. Returns \f$0\f$ if successful. A warning message is printed and a
+//! \f$-1\f$ is returned if no AnalysisModel is associated with the object.
 int XC::LoadControl::newStep(void)
   {
     int retval= 0;
@@ -91,12 +111,21 @@ int XC::LoadControl::newStep(void)
       }
     else
       {
-	std::cerr << "LoadControl::newStep() - no associated AnalysisModel\n";
+	std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; no associated AnalysisModel.\n";
 	retval= -1;
       }
     return retval;
   }
     
+//! @brief Update the model state.
+//!
+//! Invoked this causes the object to first increment the DOF\_Group
+//! displacements with \f$\Delta U\f$, by invoking
+//! {\em incrDisp(\f$\Delta U)\f$} on the AnalysisModel, and then to update
+//! the domain, by invoking {\em updateDomain()} on the AnalysisModel. Returns
+//! \f$0\f$ if successful, a warning message and a \f$-1\f$ is returned if no
+//! AnalysisModel is associated with the object.
 int XC::LoadControl::update(const Vector &deltaU)
   {
     AnalysisModel *myModel = this->getAnalysisModelPtr();
@@ -122,7 +151,7 @@ int XC::LoadControl::update(const Vector &deltaU)
     return 0;
   }
 
-//! @brief Assings deltaLambda and updates dLamdaMin and dLambdaMax values.
+//! @brief Sets deltaLambda and updates dLamdaMin and dLambdaMax values.
 void XC::LoadControl::setDeltaLambda(const double &newValue)
   {
     // we set the #incr at last step = #incr so get newValue incr
@@ -134,9 +163,11 @@ void XC::LoadControl::setDeltaLambda(const double &newValue)
       dLambdaMax= deltaLambda;
   }
 
+//! @brief Sets the value of the minimum increment factor.
 void XC::LoadControl::setDeltaLambdaMin(const double &d)
   { dLambdaMin= d; }
 
+//! @brief Sets the value of the maximum increment factor.
 void XC::LoadControl::setDeltaLambdaMax(const double &d)
   { dLambdaMax= d; }
 
@@ -190,10 +221,11 @@ int XC::LoadControl::recvSelf(const CommParameters &cp)
     return res;
   }
 
-
-void XC::LoadControl::Print(std::ostream &s, int flag)
+//! @brief The object sends to \f$os\f$ its type, the current value
+//! of \f$\lambda\f$, and \f$\delta \lambda\f$. 
+void XC::LoadControl::Print(std::ostream &os, int flag)
   {
-    BaseControl::Print(s,flag);
-    s << "  deltaLambda: " << deltaLambda << std::endl;
+    BaseControl::Print(os,flag);
+    os << "  deltaLambda: " << deltaLambda << std::endl;
   }
 
