@@ -77,20 +77,32 @@
 
 
 //! @brief Constructor.
+//!
+//! @param owr: set of objects used to perform the analysis.
 XC::DisplacementControl::DisplacementControl(AnalysisAggregation *owr) 
   :DispBase(owr,INTEGRATOR_TAGS_DisplacementControl,1),
-   theNode(-1), theDof(-1), theIncrement(1.0),
-   theDofID(0), minIncrement(1.0), maxIncrement(1.0) {}
+   theNodeTag(-1), theDof(-1), theDofID(0),
+   theIncrement(1.0), minIncrement(1.0), maxIncrement(1.0) {}
 
 //! @brief Constructor.
-XC::DisplacementControl::DisplacementControl(AnalysisAggregation *owr,int node, int dof, 
-					 double increment, 
-					 int numIncr,
-					 double min, double max) 
+//!
+//! @param owr: set of objects used to perform the analysis.
+//! @param nodeTag: the tag of the node to follow.
+//! @param dof: the id of the DOF (of the previous node) to follow.
+//! @param increment: deltaU at i-th step.
+//! @param numIncr: number of increments.
+//! @param min: minimum value of deltaU at i-th step.
+//! @param max: maximum value of deltaU at i-th step.
+XC::DisplacementControl::DisplacementControl(AnalysisAggregation *owr,int nodeTag, int dof, double increment, int numIncr, double min, double max) 
   :DispBase(owr,INTEGRATOR_TAGS_DisplacementControl,numIncr),
-   theNode(node), theDof(dof), theIncrement(increment),
-   theDofID(0), minIncrement(min), maxIncrement(max) {}
+   theNodeTag(nodeTag), theDof(dof), theDofID(0),
+   theIncrement(increment), minIncrement(min), maxIncrement(max) {}
 
+//! @brief Virtual constructor.
+XC::Integrator *XC::DisplacementControl::getCopy(void) const
+  { return new DisplacementControl(*this); }
+
+//! @brief Destructor. 
 XC::DisplacementControl::~DisplacementControl(void)
   {
     Domain *dom= getDomainPtr();
@@ -106,12 +118,12 @@ void XC::DisplacementControl::setIncrement(const double &d)
     maxIncrement= std::max(theIncrement,maxIncrement);
   }
 
-//! @brief Consuma los valores calculados hasta ahora.
+//! @brief Commits model state.
 int XC::DisplacementControl::commit(void) 
   {
     Domain *dom= getDomainPtr();
     if(dom)
-      dom->setNodeReactionException(theNode);
+      dom->setNodeReactionException(theNodeTag);
     return DispBase::commit();
   }
 
@@ -131,15 +143,17 @@ const XC::Domain *XC::DisplacementControl::getDomainPtr(void) const
     return sm->getDomainPtr();
   }
 
+//! @brief Performs a new analysis step.
 int XC::DisplacementControl::newStep(void)
   {
-    // get pointers to AnalysisModel and XC::LinearSOE
+    // get pointers to AnalysisModel and LinearSOE
     AnalysisModel *theModel = this->getAnalysisModelPtr();
     LinearSOE *theLinSOE = this->getLinearSOEPtr();    
     if(!theModel || theLinSOE == 0)
       {
-	std::cerr << "WARNING XC::DisplacementControl::newStep() ";
-	std::cerr << "No XC::AnalysisModel or XC::LinearSOE has been set\n";
+	std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; WARNING - no AnalysisModel"
+	          << " or LinearSOE has been set.\n";
 	return -1;
       }
 
@@ -165,8 +179,9 @@ int XC::DisplacementControl::newStep(void)
     const double dUahat= dUhat(theDofID);
     if(dUahat == 0.0)
       {
-	std::cerr << "WARNING XC::DisplacementControl::newStep() ";
-	std::cerr << "dUahat is zero -- zero reference displacement at control node DOF\n";
+	std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; WARNING - dUahat is zero -- "
+	          << "zero reference displacement at control node DOF.\n";
 	return -1;
       }
     
@@ -194,15 +209,17 @@ int XC::DisplacementControl::update(const Vector &dU)
   {
     if(theDofID == -1)
       {
-	std::cerr << "DisplacementControl::updata(dU) - domainChanged has not been called\n";
+	std::cerr << getClassName() << "::" << __FUNCTION__
+		  << " ERROR; domainChanged has not been called\n";
         return -1;
       } 
     AnalysisModel *theModel= this->getAnalysisModelPtr();
     LinearSOE *theLinSOE= this->getLinearSOEPtr();    
     if(!theModel || theLinSOE == 0)
       {
-	std::cerr << "WARNING XC::DisplacementControl::update() ";
-	std::cerr << "No XC::AnalysisModel or XC::LinearSOE has been set\n";
+	std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; WARNING - no AnalysisModel "
+	          << "or LinearSOE has been set.\n";
 	return -1;
       }
 
@@ -214,8 +231,9 @@ int XC::DisplacementControl::update(const Vector &dU)
     const double dUahat= vectores.getDeltaUhat()(theDofID);
     if(dUahat == 0.0)
       {
-	std::cerr << "WARNING DisplacementControl::update() ";
-	std::cerr << "dUahat is zero -- zero reference displacement at control node DOF\n";
+	std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; WARNING - dUahat is zero "
+	          << "-- zero reference displacement at control node DOF.\n";
 	return -1;
       }
     
@@ -251,8 +269,9 @@ int XC::DisplacementControl::domainChanged(void)
     LinearSOE *theLinSOE = this->getLinearSOEPtr();    
     if(theModel == 0 || theLinSOE == 0)
       {
-	std::cerr << "WARNING DisplacementControl::domainChanged() ";
-	std::cerr << "No AnalysisModel or LinearSOE has been set\n";
+	std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; WARNING - no AnalysisModel"
+	          << " or LinearSOE has been set.\n";
 	return -1;
       }
     const size_t sz= theModel->getNumEqn(); // ask model in case N+1 space
@@ -266,13 +285,14 @@ int XC::DisplacementControl::domainChanged(void)
     Domain *dom= getDomainPtr();
     if(dom)
       {
-        Node *theNodePtr= dom->getNode(theNode);
+        Node *theNodePtr= dom->getNode(theNodeTag);
         DOF_Group *theGroup= theNodePtr->getDOF_GroupPtr();
         const ID &theID= theGroup->getID();
-        theDofID = theID(theDof);
+        theDofID= theID(theDof);
       }
     else
-      std::cerr << "DisplacementControl::domainChanged; no se ha asignado el domain." << std::endl;
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; doman has not been set." << std::endl;
     
     return 0;
   }
@@ -290,6 +310,7 @@ int XC::DisplacementControl::recvSelf(const CommParameters &cp)
     return 0;
   }
 
+//! @brief Print stuff.
 void XC::DisplacementControl::Print(std::ostream &s, int flag)
   {
     // TO FINISH    

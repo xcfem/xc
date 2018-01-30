@@ -55,16 +55,6 @@
 // Created: 07/98
 // Revision: A
 //
-// Description: This file contains the class definition for DisplacementControl.
-// DisplacementControl is an algorithmic class for perfroming a static analysis
-// using the arc length scheme, that is within a load step the follwing
-// constraint is enforced: 
-//  i=1        delta U^T delta U + alpha^2 delta lambda^2 = delta s^2
-//  i>1        dU^T delta U + alpha^2 dLambda delta lambda = 0
-// where dU is change in nodal displacements for step, dLambda is
-// change in applied load and DisplacementControl is a control parameter.
-//
-// What: "@(#) DisplacementControl.h, revA"
 
 #ifndef DisplacementControl_h
 #define DisplacementControl_h
@@ -77,29 +67,47 @@ class Domain;
 
 //! @ingroup StaticIntegrator
 //
-//! @brief DisplacementControl is an algorithmic class for perfroming a static analysis
-//! using the arc length scheme, that is within a load step the follwing
-//! constraint is enforced: 
-//!  i=1        delta U^T delta U + alpha^2 delta lambda^2 = delta s^2
-//!  i>1        dU^T delta U + alpha^2 dLambda delta lambda = 0
-//! where dU is change in nodal displacements for step, dLambda is
-//! change in applied load and DisplacementControl is a control parameter.
+//! @brief DisplacementControl is an algorithmic class for performing a static
+//! analysis using the displacement control method.
+//!
+//! DisplacementControl is a subclass of StaticIntegrator, it is
+//! used to when performing a static analysis on the FE\_Model using the
+//! displacement control method. In the displacement control method the
+//! displacement at a specified degree-of-freedom Uc is specified for each
+//! iteration. The following constraint equation is added to
+//! equation~\ref{staticFormTaylor} of the StaticIntegrator class: 
+//! 
+//! \[ 
+//!  Uc_n^{(i)} - Uc_{n-1} = \delta Uc_n
+//! \]
+//! 
+//! \noindent where \f$\delta Uc_n\f$ depends on \f$\delta Uc_{n-1}\f$,
+//! the displacement increment at the previous time step, \f$J_{n-1}\f$,
+//! the number of iterations required to achieve convergence in the
+//! previos load step, and \f$Jd\f$, the desired number of iteraions. \f$\delta
+//! Uc_n\f$ is bounded by \f$\delta Uc_{min}\f$  and \f$\delta Uc_{max}\f$.
+//! 
+//! 
+//! \[ 
+//! \delta Ucn = max \left( \delta Uc{min}, min \left(
+//! \frac{Jd}{J_{n-1}} \delta Uc{n-1}, \delta Uc{max} \right) \right)
+//! \]
 class DisplacementControl: public DispBase
   {
   protected:
-    int theNode; //!< the node that is being followed
+    int theNodeTag; //!< the node that is being followed
     int theDof; //!< the dof at the node being followed
-    double theIncrement; //!< deltaU at step (i)
     int theDofID; //!< the system level id of the dof being followed
     
-    double minIncrement, maxIncrement; // min/max values of deltaU at (i)
+    double theIncrement; //!< deltaU at step (i)    
+    double minIncrement, maxIncrement; //!< min/max values of deltaU at (i)
 
     const Domain *getDomainPtr(void) const;
     Domain *getDomainPtr(void);
 
     friend class AnalysisAggregation;
     DisplacementControl(AnalysisAggregation *); 
-    DisplacementControl(AnalysisAggregation *,int node, int dof, double increment,int numIncrStep, double minIncrement, double maxIncrement);
+    DisplacementControl(AnalysisAggregation *,int nodeTag, int dof, double increment,int numIncrStep, double minIncrement, double maxIncrement);
     Integrator *getCopy(void) const;
 
   public:
@@ -111,9 +119,9 @@ class DisplacementControl: public DispBase
     int domainChanged(void);
 
     inline void setNodeTag(const int &tag)
-      { theNode= tag; }
+      { theNodeTag= tag; }
     inline int getNodeTag(void) const
-      { return theNode; }
+      { return theNodeTag; }
     inline void setDof(const int &dof)
       { theDof= dof; }
     inline int getDof(void) const
@@ -127,8 +135,6 @@ class DisplacementControl: public DispBase
     void Print(std::ostream &s, int flag =0);
 
   };
-inline Integrator *DisplacementControl::getCopy(void) const
-  { return new DisplacementControl(*this); }
 } // end of XC namespace
 
 #endif

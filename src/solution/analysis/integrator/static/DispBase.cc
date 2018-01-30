@@ -38,6 +38,10 @@
 #include "utility/actor/actor/ArrayCommMetaData.h"
 
 //! @brief Constructor.
+//!
+//! @param owr: set of objects used to perform the analysis.
+//! @param classTag: class identifier.
+//! @param numIncr: number of increments.
 XC::DispBase::DispBase(AnalysisAggregation *owr,int classTag,const int &numIncr) 
   :BaseControl(owr,classTag,numIncr){}
 

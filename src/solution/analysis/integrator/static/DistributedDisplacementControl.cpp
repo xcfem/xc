@@ -220,7 +220,7 @@ int XC::DistributedDisplacementControl::domainChanged(void)
       }
 
     theDofID = -1;
-    Node *theNodePtr= theDomain->getNode(theNode);
+    Node *theNodePtr= theDomain->getNode(theNodeTag);
     if(theNodePtr)
       {
         DOF_Group *theGroup = theNodePtr->getDOF_GroupPtr();
@@ -321,7 +321,7 @@ int XC::DistributedDisplacementControl::sendSelf(CommParameters &cp)
       sendID = processID;
 
     // send remotes processID & info about node, dof and numIncr
-    int res= cp.sendInts(sendID,theNode,theDof,DistributedObj::getDbTagData(),CommMetaData(18));
+    int res= cp.sendInts(sendID,theNodeTag,theDof,DistributedObj::getDbTagData(),CommMetaData(18));
     if(res < 0)
       {
         std::cerr <<"WARNING DistributedDisplacementControl::sendSelf() - failed to send data\n";
@@ -340,7 +340,7 @@ int XC::DistributedDisplacementControl::sendSelf(CommParameters &cp)
 int XC::DistributedDisplacementControl::recvSelf(const CommParameters &cp)
   {
     int sendID =0;
-    int res= cp.receiveInts(sendID,theNode,theDof,DistributedObj::getDbTagData(),CommMetaData(18));
+    int res= cp.receiveInts(sendID,theNodeTag,theDof,DistributedObj::getDbTagData(),CommMetaData(18));
     if(res < 0)
       {
         std::cerr <<"WARNING XC::DistributedDisplacementControl::recvSelf() - failed to recv id data\n";
