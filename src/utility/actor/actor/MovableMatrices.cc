@@ -36,7 +36,7 @@
 
 //! @brief Constructor.
 XC::MovableMatrices::MovableMatrices(std::vector<Matrix> &v)
-  : MovableObject(0), vectores(v) {}
+  : MovableObject(0), vectors(v) {}
 
 //! @brief Envia el vector through the channel being passed as parameter.
 int XC::MovableMatrices::sendSelf(CommParameters &cp)
@@ -44,10 +44,10 @@ int XC::MovableMatrices::sendSelf(CommParameters &cp)
     setDbTag(cp);
     const int dataTag= getDbTag();
     inicComm(2);
-    const int sz= vectores.size();
+    const int sz= vectors.size();
     setDbTagDataPos(0,sz);
 
-    int res= cp.sendMatrices(vectores,getDbTagData(),CommMetaData(1));
+    int res= cp.sendMatrices(vectors,getDbTagData(),CommMetaData(1));
 
     res+= cp.sendIdData(getDbTagData(),dataTag);
     if(res<0)
@@ -64,7 +64,7 @@ int XC::MovableMatrices::recvSelf(const CommParameters &cp)
     if(res < 0)
       std::cerr << "MovableMatrices::recvSelf() - failed to receive ID data\n";
     else
-      res= cp.receiveMatrices(vectores,getDbTagData(),CommMetaData(1));
+      res= cp.receiveMatrices(vectors,getDbTagData(),CommMetaData(1));
     if(res<0)
       {
         std::cerr << "MovableMatrices::recvSelf - failed to receive data\n";

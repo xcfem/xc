@@ -34,6 +34,10 @@
 #include "utility/actor/actor/ArrayCommMetaData.h"
 
 //! @brief Constructor.
+//!
+//! @param owr: set of objects used to perform the analysis.
+//! @param classTag: class identifier.
+//! @param arcLength: value for the arc length.
 XC::ProtoArcLength::ProtoArcLength(AnalysisAggregation *owr,int classTag,double arcLength)
   :StaticIntegrator(owr,classTag), arcLength2(arcLength*arcLength), signLastDeltaLambdaStep(1) {}
 
@@ -56,25 +60,25 @@ int XC::ProtoArcLength::newStep(void)
       }
 
     // get the current load factor
-    vectores.setCurrentLambda(getCurrentModelTime());
+    vectors.setCurrentLambda(getCurrentModelTime());
 
-    if(vectores.getDeltaLambdaStep() < 0)
+    if(vectors.getDeltaLambdaStep() < 0)
       signLastDeltaLambdaStep= -1;
     else
       signLastDeltaLambdaStep= +1;
 
     // determine dUhat
     this->formTangent();
-    vectores.determineUhat(*theLinSOE);
+    vectors.determineUhat(*theLinSOE);
 
     // determine delta lambda(1) == dlambda
     const double dLambda = getDLambdaNewStep();
 
-    vectores.newStep(dLambda,vectores.getDeltaUhat());
+    vectors.newStep(dLambda,vectors.getDeltaUhat());
 
     // update model with delta lambda and delta U
-    mdl->incrDisp(vectores.getDeltaU());
-    applyLoadModel(vectores.getCurrentLambda());
+    mdl->incrDisp(vectors.getDeltaU());
+    applyLoadModel(vectors.getCurrentLambda());
     if(updateModel() < 0)
       {
         std::cerr << getClassName() << "::" << __FUNCTION__
@@ -107,15 +111,15 @@ int XC::ProtoArcLength::update(const Vector &dU)
 	return -1;
       }
 
-    vectores.solve(dU,*theLinSOE);
+    vectors.solve(dU,*theLinSOE);
 
     const double dLambda= getDLambdaUpdate();
 
-    vectores.update(dLambda);
+    vectors.update(dLambda);
 
     // update the model
-    mdl->incrDisp(vectores.getDeltaU());    
-    applyLoadModel(vectores.getCurrentLambda());    
+    mdl->incrDisp(vectors.getDeltaU());    
+    applyLoadModel(vectors.getCurrentLambda());    
     if(updateModel() < 0)
       {
         std::cerr << getClassName() << "::" << __FUNCTION__
@@ -123,7 +127,7 @@ int XC::ProtoArcLength::update(const Vector &dU)
       }
     
     // set the X soln in linearSOE to be deltaU for convergence Test
-    theLinSOE->setX(vectores.getDeltaU());
+    theLinSOE->setX(vectors.getDeltaU());
 
     return 0;
   }
@@ -150,7 +154,7 @@ int XC::ProtoArcLength::domainChanged(void)
       }    
     const size_t sz= mdl->getNumEqn(); // ask model in case N+1 space
 
-    vectores.domainChanged(sz,*this,*theLinSOE);
+    vectors.domainChanged(sz,*this,*theLinSOE);
     
     return 0;
   }
@@ -160,7 +164,7 @@ int XC::ProtoArcLength::sendData(CommParameters &cp)
   {
     int res= StaticIntegrator::sendData(cp);
     res+= cp.sendDouble(arcLength2,getDbTagData(),CommMetaData(1));
-    res+= cp.sendMovable(vectores,getDbTagData(),CommMetaData(2));
+    res+= cp.sendMovable(vectors,getDbTagData(),CommMetaData(2));
     res+= cp.sendInt(signLastDeltaLambdaStep,getDbTagData(),CommMetaData(3));
     return res;
   }
@@ -170,7 +174,7 @@ int XC::ProtoArcLength::recvData(const CommParameters &cp)
   {
     int res= StaticIntegrator::recvData(cp);
     res+= cp.receiveDouble(arcLength2,getDbTagData(),CommMetaData(1));
-    res+= cp.receiveMovable(vectores,getDbTagData(),CommMetaData(2));
+    res+= cp.receiveMovable(vectors,getDbTagData(),CommMetaData(2));
     res+= cp.receiveInt(signLastDeltaLambdaStep,getDbTagData(),CommMetaData(7));
     return res;
   }

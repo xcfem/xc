@@ -92,7 +92,7 @@ class EigenAnalysis : public Analysis
     virtual int setIntegrator(EigenIntegrator &theIntegrator);
     virtual int setEigenSOE(EigenSOE &theSOE);  
 
-    //Autovectores.
+    //Eigenvectors.
     virtual const Vector &getEigenvector(int mode) const;
     Vector getNormalizedEigenvector(int mode) const;
     Matrix getEigenvectors(void) const;

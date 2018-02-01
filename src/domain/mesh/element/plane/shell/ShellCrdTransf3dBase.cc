@@ -322,7 +322,7 @@ const XC::Matrix &XC::ShellCrdTransf3dBase::getVectorGlobalCoordFromLocal(const 
   {
     const Matrix &R= getTrfMatrix();
     static Matrix retval;
-    const size_t numPts= localCoords.noRows(); //Número de vectores a transformar.
+    const size_t numPts= localCoords.noRows(); //Number of vectors to transform
     retval.resize(numPts,3);
     for(size_t i= 0;i<numPts;i++)
       {

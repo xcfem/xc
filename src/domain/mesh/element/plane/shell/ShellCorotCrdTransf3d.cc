@@ -45,7 +45,7 @@ XC::ShellCorotCrdTransf3d::ShellCorotCrdTransf3d(void)
 XC::ShellCorotCrdTransf3d::ShellCorotCrdTransf3d(const Vector &v1,const Vector &v2,const Vector &v3)
   : ShellCrdTransf3dBase(v1,v2,v3) {}
 
-//! @brief Calcula los vectores básicos a partir de las coordinates of the nodes.
+//! @brief Computes basic vectors from the node coordinates.
 XC::ShellCorotCrdTransf3d::ShellCorotCrdTransf3d(const NodePtrs &theNodes)
   : ShellCrdTransf3dBase()
   { initialize(theNodes); }

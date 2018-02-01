@@ -51,7 +51,7 @@ XC::Element0D::Vxy::Vxy(void)
 XC::Element0D::Vxy::Vxy(const Vector &a,const Vector &b)
   : x(a),y(b) {}
 
-//! @brief Chequea los vectores.
+//! @brief Checks vectors.
 bool XC::Element0D::Vxy::check(void) const
   {
     bool retval= true;

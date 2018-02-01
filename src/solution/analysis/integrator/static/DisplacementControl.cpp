@@ -168,13 +168,13 @@ int XC::DisplacementControl::newStep(void)
 
 
     // get the current load factor
-    vectores.setCurrentLambda(getCurrentModelTime());
+    vectors.setCurrentLambda(getCurrentModelTime());
 
     // determine dUhat
     this->formTangent();
-    vectores.determineUhat(*theLinSOE);
+    vectors.determineUhat(*theLinSOE);
 
-    const Vector &dUhat= vectores.getDeltaUhat();
+    const Vector &dUhat= vectors.getDeltaUhat();
 
     const double dUahat= dUhat(theDofID);
     if(dUahat == 0.0)
@@ -188,12 +188,12 @@ int XC::DisplacementControl::newStep(void)
     // determine delta lambda(1) == dlambda    
     const double dLambda = theIncrement/dUahat;
 
-    vectores.newStep(dLambda,vectores.getDeltaUhat());
+    vectors.newStep(dLambda,vectors.getDeltaUhat());
 
     // update model with delta lambda and delta U
-    theModel->incrDisp(vectores.getDeltaU());
+    theModel->incrDisp(vectors.getDeltaU());
 
-    applyLoadModel(vectores.getCurrentLambda());
+    applyLoadModel(vectors.getCurrentLambda());
     if(updateModel() < 0)
       {
         std::cerr << getClassName() << "::" << __FUNCTION__
@@ -223,12 +223,12 @@ int XC::DisplacementControl::update(const Vector &dU)
 	return -1;
       }
 
-    vectores.setDeltaUbar(dU); // have to do this as the SOE is gonna change
-    const double dUabar= vectores.getDeltaUbar()(theDofID);
+    vectors.setDeltaUbar(dU); // have to do this as the SOE is gonna change
+    const double dUabar= vectors.getDeltaUbar()(theDofID);
     
-    vectores.determineUhat(*theLinSOE);
+    vectors.determineUhat(*theLinSOE);
 
-    const double dUahat= vectores.getDeltaUhat()(theDofID);
+    const double dUahat= vectors.getDeltaUhat()(theDofID);
     if(dUahat == 0.0)
       {
 	std::cerr << getClassName() << "::" << __FUNCTION__
@@ -240,10 +240,10 @@ int XC::DisplacementControl::update(const Vector &dU)
     // determine delta lambda(1) == dlambda    
     const double dLambda = -dUabar/dUahat;
     
-    vectores.update(dLambda);
+    vectors.update(dLambda);
 
     // update the model
-    theModel->incrDisp(vectores.getDeltaU());
+    theModel->incrDisp(vectors.getDeltaU());
     //applyLoadModel(currentLambda); XXX Commented out by LCPT 3-07-2009 (If executed pseudoTime becomes wrong).
 
     if(updateModel() < 0)
@@ -255,7 +255,7 @@ int XC::DisplacementControl::update(const Vector &dU)
 	
     
     // set the X soln in linearSOE to be deltaU for convergence Test
-    theLinSOE->setX(vectores.getDeltaU());
+    theLinSOE->setX(vectors.getDeltaU());
 
     numIncrLastStep++;
 
@@ -276,7 +276,7 @@ int XC::DisplacementControl::domainChanged(void)
       }
     const size_t sz= theModel->getNumEqn(); // ask model in case N+1 space
 
-    vectores.domainChanged(sz,*this,*theLinSOE);
+    vectors.domainChanged(sz,*this,*theLinSOE);
 
 
     // lastly we determine the id of the nodal dof

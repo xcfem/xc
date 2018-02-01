@@ -570,11 +570,11 @@ const XC::Vector &XC::CrdTransf2d::getVectorGlobalCoordFromLocal(const Vector &l
     return retval;
   }
 
-//! @brief Returns the vectores expresados en global coordinates.
+//! @brief Returns the vectors expressed in global coordinates.
 const XC::Matrix &XC::CrdTransf2d::getVectorGlobalCoordFromLocal(const Matrix &localCoords) const
   {
     static Matrix retval;
-    const size_t numPts= localCoords.noRows(); //Número de vectores a transformar.
+    const size_t numPts= localCoords.noRows(); //Number of vectors to transform.
     retval.resize(numPts,2);
     for(size_t i= 0;i<numPts;i++)
       {

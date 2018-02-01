@@ -42,13 +42,13 @@ namespace XC {
 class MovableMatrices: public MovableObject
   {
   protected:
-    std::vector<Matrix> &vectores;
+    std::vector<Matrix> &vectors;
   public:
     explicit MovableMatrices(std::vector<Matrix> &);
 
     void setMatrices(const std::vector<Matrix> &);
     const std::vector<Matrix> &getMatrices(void) const
-      { return vectores; }
+      { return vectors; }
 
     virtual int sendSelf(CommParameters &);
     virtual int recvSelf(const CommParameters &);

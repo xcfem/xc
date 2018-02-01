@@ -95,7 +95,7 @@ class EigenSOE : public SystemOfEqn
 
     const int &getNumModes(void) const;
 
-    //Autovectores
+    //Eigenvectors
     virtual const Vector &getEigenvector(int mode) const;
     Vector getNormalizedEigenvector(int mode) const;
     Matrix getEigenvectors(void) const;

@@ -88,7 +88,7 @@ double XC::MinUnbalDispNorm::getDLambdaNewStep(void) const
 
     if(signFirstStepMethod == SIGN_LAST_STEP)
       {
-        if(vectores.getDeltaLambdaStep() < 0)
+        if(vectors.getDeltaLambdaStep() < 0)
           signLastDeltaLambdaStep = -1;
         else
 	  signLastDeltaLambdaStep = +1;
@@ -122,12 +122,12 @@ int XC::MinUnbalDispNorm::newStep(void)
       }
 
     // get the current load factor
-    vectores.setCurrentLambda(getCurrentModelTime());
+    vectors.setCurrentLambda(getCurrentModelTime());
 
 
     // determine dUhat
     this->formTangent();
-    vectores.determineUhat(*theLinSOE);
+    vectors.determineUhat(*theLinSOE);
 
     const double dLambda= getDLambdaNewStep();
 
@@ -139,12 +139,12 @@ int XC::MinUnbalDispNorm::newStep(void)
     if (signCurrentWork != signLastDeltaStep)
     */
 
-    vectores.newStep(dLambda,vectores.getDeltaUhat());
+    vectors.newStep(dLambda,vectors.getDeltaUhat());
     numIncrLastStep= 0;
 
     // update model with delta lambda and delta U
-    theModel->incrDisp(vectores.getDeltaU());    
-    applyLoadModel(vectores.getCurrentLambda());    
+    theModel->incrDisp(vectors.getDeltaU());    
+    applyLoadModel(vectors.getCurrentLambda());    
     if(updateModel() < 0)
       {
         std::cerr << getClassName() << "::" << __FUNCTION__
@@ -157,8 +157,8 @@ int XC::MinUnbalDispNorm::newStep(void)
 //! @brief Returns the valor de dLambda para el método update.
 double XC::MinUnbalDispNorm::getDLambdaUpdate(void) const
   {
-    const Vector &dUhat= vectores.getDeltaUhat();
-    const Vector &dUbar= vectores.getDeltaUbar();
+    const Vector &dUhat= vectors.getDeltaUhat();
+    const Vector &dUbar= vectors.getDeltaUbar();
     // determine delta lambda(i)
     double a = dUhat^dUbar;
     double b = dUhat^dUhat;
@@ -180,18 +180,18 @@ int XC::MinUnbalDispNorm::update(const Vector &dU)
 	return -1;
     }
 
-    vectores.setDeltaUbar(dU); // have to do this as the SOE is gonna change
+    vectors.setDeltaUbar(dU); // have to do this as the SOE is gonna change
 
-    vectores.determineUhat(*theLinSOE);
+    vectors.determineUhat(*theLinSOE);
 
     const double dLambda= getDLambdaUpdate();
 
     
-    vectores.update(dLambda);
+    vectors.update(dLambda);
 
     // update the model
-    theModel->incrDisp(vectores.getDeltaU());    
-    applyLoadModel(vectores.getCurrentLambda());    
+    theModel->incrDisp(vectors.getDeltaU());    
+    applyLoadModel(vectors.getCurrentLambda());    
 
     if(updateModel() < 0)
       {
@@ -201,7 +201,7 @@ int XC::MinUnbalDispNorm::update(const Vector &dU)
       }
 
     // set the X soln in linearSOE to be deltaU for convergence Test
-    theLinSOE->setX(vectores.getDeltaU());
+    theLinSOE->setX(vectors.getDeltaU());
 
     numIncrLastStep++;
     return 0;
@@ -222,7 +222,7 @@ int XC::MinUnbalDispNorm::domainChanged(void)
       }    
     const size_t sz= theModel->getNumEqn(); // ask model in case N+1 space
 
-    vectores.domainChanged(sz,*this,*theLinSOE);
+    vectors.domainChanged(sz,*this,*theLinSOE);
 
     return 0;
   }

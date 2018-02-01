@@ -445,19 +445,19 @@ int XC::CommParameters::receiveVector(std::vector<double> &v,DbTagData &dt, cons
 
 //! @brief Sends the vector container through the channel being passed as parameter.
 //! @param meta: index where the object dbTag is stored.
-int XC::CommParameters::sendVectors(std::vector<Vector> &vectores,DbTagData &dt, const CommMetaData &meta)
+int XC::CommParameters::sendVectors(std::vector<Vector> &vectors,DbTagData &dt, const CommMetaData &meta)
   {
-    MovableVectors mv(vectores);
+    MovableVectors mv(vectors);
     return sendMovable(mv,dt,meta);
   }
 
 //! @brief Receives the vector container through the channel being passed as parameter.
 //! @param meta: index where the object dbTag is stored.
-int XC::CommParameters::receiveVectors(std::vector<Vector> &vectores,DbTagData &dt, const CommMetaData &meta) const
+int XC::CommParameters::receiveVectors(std::vector<Vector> &vectors,DbTagData &dt, const CommMetaData &meta) const
   {
-    MovableVectors mv(vectores);
+    MovableVectors mv(vectors);
     int res= receiveMovable(mv,dt,meta);
-    vectores= mv.getVectores();
+    vectors= mv.getVectores();
     return res;
   }
 

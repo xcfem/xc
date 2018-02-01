@@ -40,7 +40,7 @@ namespace XC {
 class DispBase: public BaseControl
   {
   protected:
-    IntegratorVectors vectores;
+    IntegratorVectors vectors;
 
     int sendData(CommParameters &);
     int recvData(const CommParameters &);

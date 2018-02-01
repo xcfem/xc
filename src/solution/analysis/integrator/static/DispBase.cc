@@ -49,7 +49,7 @@ XC::DispBase::DispBase(AnalysisAggregation *owr,int classTag,const int &numIncr)
 int XC::DispBase::sendData(CommParameters &cp)
   {
     int res= BaseControl::sendData(cp);
-    res+= cp.sendMovable(vectores,getDbTagData(),CommMetaData(1));
+    res+= cp.sendMovable(vectors,getDbTagData(),CommMetaData(1));
     return res;
   }
 
@@ -57,7 +57,7 @@ int XC::DispBase::sendData(CommParameters &cp)
 int XC::DispBase::recvData(const CommParameters &cp)
   {
     int res= BaseControl::recvData(cp);
-    res+= cp.receiveMovable(vectores,getDbTagData(),CommMetaData(1));
+    res+= cp.receiveMovable(vectors,getDbTagData(),CommMetaData(1));
     return res;
   }
 

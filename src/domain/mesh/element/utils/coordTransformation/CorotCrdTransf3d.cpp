@@ -1486,17 +1486,18 @@ const XC::Vector &XC::CorotCrdTransf3d::getVectorGlobalCoordFromLocal(const Vect
     return CrdTransf3d::getVectorLocalCoordFromGlobal(localCoords);//Esta clase emplea la matriz R traspuesta.
   }
 
-//! @brief Returns the vectores expresados en coordenadas globales
-//! Se redefine aqui porque esta clase emplea la matriz R traspuesta.
+//! @brief Returns the vectors expressed in global coordinates
+//! We redefine that here because this class uses the transposed of
+//! R matrix.
 const XC::Matrix &XC::CorotCrdTransf3d::getVectorGlobalCoordFromLocal(const Matrix &localCoords) const
   {
-    calculaEjesLocales(); //Actualiza la matriz R.
+    calculaEjesLocales(); //Updates R matrix.
     static Matrix retval;
-    const size_t numPts= localCoords.noRows(); //Número de vectores a transformar.
+    const size_t numPts= localCoords.noRows(); //Number of vectors to transform.
     retval.resize(numPts,3);
     for(size_t i= 0;i<numPts;i++)
       {
-        // retval = Rlj'*localCoords (Multiplica el vector por R traspuesta).
+        // retval = Rlj'*localCoords (Multiplies the vector by the transposed of R).
         retval(i,0)= R(0,0)*localCoords(i,0) + R(0,1)*localCoords(i,1) + R(0,2)*localCoords(i,2);
         retval(i,1)= R(1,0)*localCoords(i,0) + R(1,1)*localCoords(i,1) + R(1,2)*localCoords(i,2);
         retval(i,2)= R(2,0)*localCoords(i,0) + R(2,1)*localCoords(i,1) + R(2,2)*localCoords(i,2);

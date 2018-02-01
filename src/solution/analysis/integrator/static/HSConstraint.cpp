@@ -67,8 +67,8 @@ XC::HSConstraint::HSConstraint(AnalysisAggregation *owr,double arcLength, double
 //! @brief Returns the valor de dLambda para el método newStep.
 double XC::HSConstraint::getDLambdaNewStep(void) const
   {
-    const Vector &dUhat= vectores.getDeltaUhat();
-    const Vector &f_ext= vectores.getPhat();
+    const Vector &dUhat= vectors.getDeltaUhat();
+    const Vector &f_ext= vectors.getPhat();
 
     // determine delta lambda(1) == dlambda
 //    double retval = sqrt(arcLength2/((dUhat^dUhat)+alpha2));
@@ -84,11 +84,11 @@ double XC::HSConstraint::getDLambdaNewStep(void) const
 //! @brief Returns the valor de dLambda para el método update.
 double XC::HSConstraint::getDLambdaUpdate(void) const
   {
-    const double &dLStep= vectores.getDeltaLambdaStep();
-    const Vector &dUhat= vectores.getDeltaUhat();
-    const Vector &dUstep= vectores.getDeltaUstep();
-    const Vector &dUbar= vectores.getDeltaUbar();
-    const Vector &f_ext= vectores.getPhat();
+    const double &dLStep= vectors.getDeltaLambdaStep();
+    const Vector &dUhat= vectors.getDeltaUhat();
+    const Vector &dUstep= vectors.getDeltaUstep();
+    const Vector &dUbar= vectors.getDeltaUbar();
+    const Vector &f_ext= vectors.getPhat();
     const double prod_f_ext= (f_ext^f_ext);
 
     // determine the coeeficients of our quadratic equation

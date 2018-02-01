@@ -342,7 +342,7 @@ int XC::NodeVectors::recvData(const CommParameters &cp)
     return res;
   }
 
-//! @brief Envia los vectores through the channel being passed as parameter.E
+//! @brief Sends the vector through the communicator.
 int XC::NodeVectors::sendSelf(CommParameters &cp)
   {
     setDbTag(cp);

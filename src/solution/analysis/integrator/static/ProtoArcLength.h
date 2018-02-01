@@ -44,8 +44,8 @@ class FE_Element;
 class ProtoArcLength: public StaticIntegrator
   {
   protected:
-    double arcLength2;
-    IntegratorVectors vectores;
+    double arcLength2; //!< Squared value of the arc length.
+    IntegratorVectors vectors;
     int signLastDeltaLambdaStep;
 
     virtual double getDLambdaNewStep(void) const= 0;
