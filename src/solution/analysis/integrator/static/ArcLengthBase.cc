@@ -33,17 +33,22 @@
 #include "utility/actor/actor/CommMetaData.h"
 
 //! @brief Constructor.
+//!
+//! @param owr: set of objects used to perform the analysis.
+//! @param classTag: class identifier.
+//! @param arcLength: value for the arc length.
+//! @param alpha: scaling factor on the reference loads.
 XC::ArcLengthBase::ArcLengthBase(AnalysisAggregation *owr,int classTag,double arcLength, double alpha)
   :ProtoArcLength(owr,classTag,arcLength), alpha2(alpha*alpha) {}
 
-//! @brief Returns the valor de dLambda para el método newStep.
+//! @brief Returns the dLambda value for the newStep method.
 double XC::ArcLengthBase::getDLambdaNewStep(void) const
   {
-    const Vector &dUhat= vectores.getDeltaUhat();
+    const Vector &dUhat= vectors.getDeltaUhat();
     // determine delta lambda(1) == dlambda
     double retval = sqrt(arcLength2/((dUhat^dUhat)+alpha2));
-    retval *= signLastDeltaLambdaStep; // base sign of load change
-                                        // on what was happening last step
+    retval*= signLastDeltaLambdaStep; // base sign of load change
+                                      // on what was happening last step
     return retval;
   }
 

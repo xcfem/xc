@@ -73,6 +73,8 @@
 //! @brief Constructor.
 //!
 //! @param owr: set of objects used to perform the analysis.
+//! @param arcLength: value for the arc length.
+//! @param alpha: scaling factor on the reference loads.
 XC::ArcLength::ArcLength(AnalysisAggregation *owr,double arcLength, double alpha)
   :ArcLengthBase(owr,INTEGRATOR_TAGS_ArcLength,arcLength,alpha) {}
 
@@ -83,10 +85,10 @@ XC::Integrator *XC::ArcLength::getCopy(void) const
 //! @brief Returns the valor de dLambda para el método update.
 double XC::ArcLength::getDLambdaUpdate(void) const
   {
-    const double &dLStep= vectores.getDeltaLambdaStep();
-    const Vector &dUhat= vectores.getDeltaUhat();
-    const Vector &dUstep= vectores.getDeltaUstep();
-    const Vector &dUbar= vectores.getDeltaUbar();
+    const double &dLStep= vectors.getDeltaLambdaStep();
+    const Vector &dUhat= vectors.getDeltaUhat();
+    const Vector &dUstep= vectors.getDeltaUstep();
+    const Vector &dUbar= vectors.getDeltaUbar();
     // determine the coeeficients of our quadratic equation
     const double a = alpha2 + (dUhat^dUhat);
     double b = alpha2*dLStep + (dUhat^dUbar) + (dUstep^dUhat);

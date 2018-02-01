@@ -43,7 +43,9 @@ class Vector;
 class ArcLengthBase: public ProtoArcLength
   {
   protected:
-    double alpha2;
+    double alpha2; //!< squared value of the scaling factor
+                   //! on the reference loads.
+
 
     double getDLambdaNewStep(void) const;
     int sendData(CommParameters &);

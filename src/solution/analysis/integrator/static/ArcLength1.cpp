@@ -70,28 +70,41 @@
 #include <solution/system_of_eqn/linearSOE/LinearSOE.h>
 #include <utility/matrix/Vector.h>
 
+//! @brief Constructor.
+//!
+//! @param owr: set of objects used to perform the analysis.
+//! @param arcLength: value for the arc length.
+//! @param alpha: scaling factor on the reference loads.
 XC::ArcLength1::ArcLength1(AnalysisAggregation *owr,double arcLength, double alpha)
-  :ArcLengthBase(owr,INTEGRATOR_TAGS_ArcLength1,arcLength,alpha) {}
+  : ArcLengthBase(owr,INTEGRATOR_TAGS_ArcLength1,arcLength,alpha) {}
 
-//! @brief Returns the valor de dLambda.
+//! @brief Virtual constructor.
+XC::Integrator *XC::ArcLength1::getCopy(void) const
+  { return new ArcLength1(*this); }
+
+//! @brief Returns dLambda value.
 double XC::ArcLength1::getDLambdaUpdate(void) const
   {
     // determine delta lambda(i)
-    const double a= vectores.getDeltaUstep()^vectores.getDeltaUbar();
-    const double b= (vectores.getDeltaUstep()^vectores.getDeltaUhat())
-                    + alpha2*vectores.getDeltaLambdaStep();
+    const double a= vectors.getDeltaUstep()^vectors.getDeltaUbar();
+    const double b= (vectors.getDeltaUstep()^vectors.getDeltaUhat())
+                    + alpha2*vectors.getDeltaLambdaStep();
     if(b == 0)
       {
-        std::cerr << "ArcLength1::update() - zero denominator,";
-        std::cerr << " alpha was set to 0.0 and zero reference load\n";
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; zero denominator,"
+		  << " alpha was set to 0.0 and zero reference load.\n";
         return -1;
       }
     return -a/b;
   }
 
+//! The object sends to \f$s\f$ its type, the current value of \f$\lambda\f$, and
+//! \f$\delta \lambda\f$. 
 void XC::ArcLength1::Print(std::ostream &s, int flag)
   {
     ArcLengthBase::Print(s,flag);
-    s << "  ArcLength1: " << sqrt(arcLength2) <<  "  alpha: ";
-    s << sqrt(alpha2) << std::endl;
+    s << "  " << getClassName() << ": "
+      << sqrt(arcLength2) <<  "  alpha: "
+      << sqrt(alpha2) << std::endl;
   }
