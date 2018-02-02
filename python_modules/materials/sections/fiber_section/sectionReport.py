@@ -14,7 +14,7 @@ import math
 import os
 from latex import latexUtils
 from postprocess.reports import graph_material as mg
-import plotGeomSeccion as pg
+import plot_fiber_section as pfs
 from materials.sections import section_properties as prmRect
 from materials.sections.fiber_section import  defSimpleRCSection as sHAs
 
@@ -132,7 +132,7 @@ class SectionInfo(object):
 
   def writeReport(self,archTex, pathFigura):
     if(self.geomSection):
-      pg.plotGeomSeccion(self.geomSection,pathFigura)
+      pfs.plotGeomSeccion(self.geomSection,pathFigura)
     else:
       sys.stderr.write('error: geometry of section: '+self.sectName+' not defined\n')
     fileHandler= open(archTex,'w')
