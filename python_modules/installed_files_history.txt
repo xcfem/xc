@@ -603,6 +603,8 @@
 /usr/local/lib/python2.7/dist-packages/materials/sections/fiber_section/geomSeccionesFibras.pyc
 /usr/local/lib/python2.7/dist-packages/materials/sections/fiber_section/__init__.py
 /usr/local/lib/python2.7/dist-packages/materials/sections/fiber_section/__init__.pyc
+/usr/local/lib/python2.7/dist-packages/materials/sections/fiber_section/plot_fiber_section.py
+/usr/local/lib/python2.7/dist-packages/materials/sections/fiber_section/plot_fiber_section.pyc
 /usr/local/lib/python2.7/dist-packages/materials/sections/fiber_section/plotGeomSeccion.py
 /usr/local/lib/python2.7/dist-packages/materials/sections/fiber_section/plotGeomSeccion.pyc
 /usr/local/lib/python2.7/dist-packages/materials/sections/fiber_section/sectionReport.py
