@@ -73,7 +73,12 @@ namespace XC {
 
 //! @ingroup StaticIntegrator
 //
-//! @brief Specifies the incremental load factor such that the residual displacement norm in minimized.
+//! @brief Specifies the incremental load factor such that the residual
+//! displacement norm in minimized.
+//!
+//! MinUnbalDispNorm is a subclass of StaticIntegrator, it is
+//! used to when performing a static analysis on the FE\_Model using the
+//! minimum unbalanced displacement norm method. In this method WHAT
 class MinUnbalDispNorm: public DispBase
   {
   private:
@@ -105,8 +110,6 @@ class MinUnbalDispNorm: public DispBase
     int recvSelf(const CommParameters &);
 
   };
-inline Integrator *MinUnbalDispNorm::getCopy(void) const
-  { return new MinUnbalDispNorm(*this); }
 } // end of XC namespace
 
 #endif

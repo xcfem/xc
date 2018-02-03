@@ -65,11 +65,18 @@
 #include <cmath>
 
 //! @brief Constructor.
+//!
+//! @param owr: set of objects used to perform the analysis.
 XC::MinUnbalDispNorm::MinUnbalDispNorm(AnalysisAggregation *owr,double lambda1, int specNumIter,double min, double max, int signFirstStep)
   :DispBase(owr,INTEGRATOR_TAGS_MinUnbalDispNorm,specNumIter),
- dLambda1LastStep(lambda1), signLastDeltaLambdaStep(1),
- dLambda1min(min), dLambda1max(max), signLastDeterminant(1), signFirstStepMethod(signFirstStep)
+   dLambda1LastStep(lambda1), signLastDeltaLambdaStep(1),
+   dLambda1min(min), dLambda1max(max), signLastDeterminant(1),
+   signFirstStepMethod(signFirstStep)
   {}
+
+//! @brief Virtual constructor.
+XC::Integrator *XC::MinUnbalDispNorm::getCopy(void) const
+  { return new MinUnbalDispNorm(*this); }
 
 //! @brief Returns the valor de dLambda para el método newStep
 double XC::MinUnbalDispNorm::getDLambdaNewStep(void) const
@@ -111,13 +118,13 @@ double XC::MinUnbalDispNorm::getDLambdaNewStep(void) const
 
 int XC::MinUnbalDispNorm::newStep(void)
   {
-    // get pointers to XC::AnalysisModel and XC::LinearSOE
+    // get pointers to AnalysisModel and LinearSOE
     AnalysisModel *theModel = this->getAnalysisModelPtr();
     LinearSOE *theLinSOE = this->getLinearSOEPtr();    
     if(theModel == 0 || theLinSOE == 0)
       {
-	std::cerr << "WARNING XC::MinUnbalDispNorm::newStep() ";
-	std::cerr << "No XC::AnalysisModel or XC::LinearSOE has been set\n";
+	std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; WARNING no AnalysisModel or LinearSOE has been set\n";
 	return -1;
       }
 
@@ -164,7 +171,8 @@ double XC::MinUnbalDispNorm::getDLambdaUpdate(void) const
     double b = dUhat^dUhat;
     if(b == 0)
       {
-        std::cerr << "XC::MinUnbalDispNorm::getDLambdaUpdate() - zero denominator\n";
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; zero denominator.\n";
         return -1;
       }
     return -a/b;
@@ -175,8 +183,8 @@ int XC::MinUnbalDispNorm::update(const Vector &dU)
     AnalysisModel *theModel = this->getAnalysisModelPtr();
     LinearSOE *theLinSOE = this->getLinearSOEPtr();    
     if (theModel == 0 || theLinSOE == 0) {
-	std::cerr << "WARNING XC::MinUnbalDispNorm::update() ";
-	std::cerr << "No AnalysisModel or LinearSOE has been set\n";
+	std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; WARNING no AnalysisModel or LinearSOE has been set.\n";
 	return -1;
     }
 
@@ -216,8 +224,8 @@ int XC::MinUnbalDispNorm::domainChanged(void)
     LinearSOE *theLinSOE = this->getLinearSOEPtr();    
     if(theModel == 0 || theLinSOE == 0)
       {
-	std::cerr << "WARNING XC::MinUnbalDispNorm::update() ";
-	std::cerr << "No XC::AnalysisModel or XC::LinearSOE has been set\n";
+	std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; WARNING no AnalysisModel or LinearSOE has been set.\n";
 	return -1;
       }    
     const size_t sz= theModel->getNumEqn(); // ask model in case N+1 space
@@ -254,7 +262,8 @@ int XC::MinUnbalDispNorm::sendSelf(CommParameters &cp)
 
     res+= cp.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
-      std::cerr << getClassName() << "sendSelf() - failed to send data\n";
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; failed to send data\n";
     return res;
   }
 
@@ -266,13 +275,15 @@ int XC::MinUnbalDispNorm::recvSelf(const CommParameters &cp)
     int res= cp.receiveIdData(getDbTagData(),dataTag);
 
     if(res<0)
-      std::cerr << getClassName() << "::recvSelf - failed to receive ids.\n";
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; failed to receive ids.\n";
     else
       {
         //setTag(getDbTagDataPos(0));
         res+= recvData(cp);
         if(res<0)
-          std::cerr << getClassName() << "::recvSelf - failed to receive data.\n";
+          std::cerr << getClassName() << "::" << __FUNCTION__
+		    << "; failed to receive data.\n";
       }
     return res;
   }

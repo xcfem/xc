@@ -78,18 +78,32 @@ class LinearSOE;
 //
 //! @ingroup LinearSolver
 //
-//! @brief Solution of the linear system of equations.
+//! @brief Base class of the solvers for linear system of equations.
+//!
+//! A LinearSOESolver object is responsible for solving the LinearSOE
+//! object that it is associated with. That is, to find \f$x\f$ such
+//! that the matrix equation \f$Ax=b\f$ is satisfied.
 class LinearSOESolver : public Solver
   {
   protected:
     LinearSOESolver(int classTag= 0);
     friend class LinearSOE;
+    //! @brief Virtual constructor.
     virtual LinearSOESolver *getCopy(void) const= 0;
+    //! @brief Sets the systems of equations to solve.
     virtual bool setLinearSOE(LinearSOE *theSOE) = 0;
   public:
+    //! @brief Destructor.
     virtual ~LinearSOESolver(void)
       {}
+    //! @brief Sets the number of equations.
+    //!
+    //!This is invoked by the \p LinearSOE object when setSize() has
+    //! been invoked on it. Solvers may sometimes need to store additional
+    //! data that needs to be updated if the size of the system of equation
+    //! changes.
     virtual int setSize(void) = 0;
+    //! @brief Returns the determinant of the system matrix.
     virtual double getDeterminant(void) {return 1.0;};
   };
 } // end of XC namespace

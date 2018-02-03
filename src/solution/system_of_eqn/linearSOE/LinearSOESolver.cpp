@@ -65,9 +65,11 @@
 
 #include <solution/system_of_eqn/linearSOE/LinearSOESolver.h>
 
-
-XC::LinearSOESolver::LinearSOESolver(int classtag)
- : Solver(classtag) {}
+//! @brief Constructor.
+//!
+//! @param classTag: identifier of the class.
+XC::LinearSOESolver::LinearSOESolver(int classTag)
+ : Solver(classTag) {}
 
 
 

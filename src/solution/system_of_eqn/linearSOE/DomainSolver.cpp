@@ -66,5 +66,8 @@
 
 #include <solution/system_of_eqn/linearSOE/DomainSolver.h>
 
-XC::DomainSolver::DomainSolver(int classtag)
-  : LinearSOESolver(classtag) {}
+//! @brief Constructor.
+//!
+//! @param classTag: identifier of the class.
+XC::DomainSolver::DomainSolver(int classTag)
+  : LinearSOESolver(classTag) {}
