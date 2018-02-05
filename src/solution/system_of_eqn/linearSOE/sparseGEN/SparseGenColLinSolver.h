@@ -73,15 +73,14 @@ class SparseGenColLinSOE;
 //! @ingroup LinearSolver
 //
 //! @brief Base class for sparse general matrix linear SOE solver.
-class SparseGenColLinSolver : public LinearSOESolver
+class SparseGenColLinSolver: public LinearSOESolver
   {
   protected:
-    SparseGenColLinSOE *theSOE;
+    SparseGenColLinSOE *theSOE; //!< System of equations to solve.
 
-    SparseGenColLinSolver(int classTag);    
+    SparseGenColLinSolver(int classTag);
     virtual bool setLinearSOE(LinearSOE *theSOE);
   public:
-
     virtual bool setLinearSOE(SparseGenColLinSOE &theSOE);
   };
 } // end of XC namespace

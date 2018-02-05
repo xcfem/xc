@@ -62,9 +62,11 @@
 #include <solution/system_of_eqn/linearSOE/sparseGEN/SparseGenColLinSolver.h>
 #include <solution/system_of_eqn/linearSOE/sparseGEN/SparseGenColLinSOE.h>
 
-XC::SparseGenColLinSolver::SparseGenColLinSolver(int theClassTag)    
-:LinearSOESolver(theClassTag), theSOE(nullptr)
-  {}    
+//! @brief Constructor.
+//!
+//! @param classTag: class identifier.
+XC::SparseGenColLinSolver::SparseGenColLinSolver(int classTag)    
+  :LinearSOESolver(classTag), theSOE(nullptr) {}    
 
 //! @brief Sets the system of equations to solve.
 bool XC::SparseGenColLinSolver::setLinearSOE(LinearSOE *soe)
@@ -77,10 +79,14 @@ bool XC::SparseGenColLinSolver::setLinearSOE(LinearSOE *soe)
         retval= true;
       }
     else
-      std::cerr << getClassName() << "::setLinearSOE: el system of equations no es del tipo adecuado para este solver." << std::endl;
+      std::cerr << getClassName() << "::" << __FUNCTION__
+	        << "; the system of equations has not"
+	        << " a suitable type." << std::endl;
     return retval;
   }
 
+//! @brief Sets the link to the SparseGenColLinSOE object \p theSOE. This is
+//! the object on which the solver will perform the numerical computations.
 bool XC::SparseGenColLinSolver::setLinearSOE(SparseGenColLinSOE &theSparseGenColSOE)
   { return setLinearSOE(&theSparseGenColSOE); }
 

@@ -6,11 +6,11 @@ import scipy.interpolate
 from materials.ec2 import EC2_materials as ec2
 from materials import concrete_base
 
-__author__= "Luis C. Pérez Tato (LCPT) Ana Ortega (A_OO)"
-__copyright__= "Copyright 2015, LCPT, A_OO"
-__license__= "GPL"
-__version__= "3.0"
-__email__= "l.pereztato@gmail.com ana.Ortega.Ort@gmail.com"
+__author__= 'Luis C. Pérez Tato (LCPT) Ana Ortega (A_OO)'
+__copyright__= 'Copyright 2015, LCPT, A_OO'
+__license__= 'GPL'
+__version__= '3.0'
+__email__= 'l.pereztato@gmail.com ana.Ortega.Ort@gmail.com'
 
 
 class ConcreteSIA262(ec2.EC2Concrete):
@@ -42,18 +42,33 @@ class ConcreteSIA262(ec2.EC2Concrete):
     return 0.3*math.sqrt(-self.fck/1e6)*1e6/self.gmmC
   def kDmax(self):
     return 48/(self.Dmax*1e3+16)
+  def getEpsc1d(self):
+    '''Design value of concrete strain when f_cd
+       is reached; SIA 262 section 4.2.1.4 table 8.'''
+    return self.getEpsc2()
+  def getEpscu2(self):
+    '''
+    epscu2: nominal ultimate strain [-] at parabola-rectangle diagram 
+    SIA 262 section 4.2.1.4 table 8.'''
+    return -3e-3
+  
+  def getEpsc2d(self):
+    '''Design value of concrete ultimate strain;
+       SIA 262 section 4.2.1.4 table 8.'''
+    return self.getEpscu2()
+  
 
-c12_15= ConcreteSIA262("C12-15",-12e6,1.5)
-c16_20= ConcreteSIA262("C16-20",-16e6,1.5)
-c20_25= ConcreteSIA262("C20-25",-20e6,1.5)
-c25_30= ConcreteSIA262("C25-30",-25e6,1.5)
-c30_37= ConcreteSIA262("C30-37",-30e6,1.5)
-c35_45= ConcreteSIA262("C35-45",-35e6,1.5)
-c40_50= ConcreteSIA262("C40-50",-40e6,1.5)
-c45_55= ConcreteSIA262("C45-55",-45e6,1.5)
-c50_60= ConcreteSIA262("C50-60",-50e6,1.5)
-c55_67= ConcreteSIA262("C55-67",-55e6,1.5)
-c60_75= ConcreteSIA262("C60-75",-60e6,1.5)
+c12_15= ConcreteSIA262('C12-15',-12e6,1.5)
+c16_20= ConcreteSIA262('C16-20',-16e6,1.5)
+c20_25= ConcreteSIA262('C20-25',-20e6,1.5)
+c25_30= ConcreteSIA262('C25-30',-25e6,1.5)
+c30_37= ConcreteSIA262('C30-37',-30e6,1.5)
+c35_45= ConcreteSIA262('C35-45',-35e6,1.5)
+c40_50= ConcreteSIA262('C40-50',-40e6,1.5)
+c45_55= ConcreteSIA262('C45-55',-45e6,1.5)
+c50_60= ConcreteSIA262('C50-60',-50e6,1.5)
+c55_67= ConcreteSIA262('C55-67',-55e6,1.5)
+c60_75= ConcreteSIA262('C60-75',-60e6,1.5)
 
 def reductionFactorKT(t):
   return 1/(1+0.5*t)
@@ -73,12 +88,12 @@ def reductionFactorKT(t):
 #   emax:     maximum strain in tension
 #   gammaS:   Partial factor for material.
 #   k:        fmaxk/fyk ratio
-B500A= concrete_base.ReinforcingSteel(steelName="B500A", fyk=500e6, emax=0.02, gammaS=500/435, k=1.05)
-B500B= concrete_base.ReinforcingSteel(steelName="B500B", fyk=500e6, emax=0.045, gammaS=500/435, k=1.08)
-B500C= concrete_base.ReinforcingSteel(steelName="B500C", fyk=500e6, emax=0.065, gammaS=500/435, k=1.15)
-B700B= concrete_base.ReinforcingSteel(steelName="B700B", fyk=700e6, emax=0.045, gammaS=500/435, k=1.08)
+B500A= concrete_base.ReinforcingSteel(steelName='B500A', fyk=500e6, emax=0.02, gammaS=500/435, k=1.05)
+B500B= concrete_base.ReinforcingSteel(steelName='B500B', fyk=500e6, emax=0.045, gammaS=500/435, k=1.08)
+B500C= concrete_base.ReinforcingSteel(steelName='B500C', fyk=500e6, emax=0.065, gammaS=500/435, k=1.15)
+B700B= concrete_base.ReinforcingSteel(steelName='B700B', fyk=700e6, emax=0.045, gammaS=500/435, k=1.08)
 
-SpecialII1956SIA161= concrete_base.ReinforcingSteel(steelName="SpecialII", fyk=300e6, emax=0.045,gammaS=1.15,k=1.05)
+SpecialII1956SIA161= concrete_base.ReinforcingSteel(steelName='SpecialII', fyk=300e6, emax=0.045,gammaS=1.15,k=1.05)
 
 x= [50e-3,100e-3,150e-3,200e-3,250e-3,300e-3]
 y= [435e6,435e6,435e6,435e6,435e6,435e6]
@@ -94,11 +109,11 @@ courbeC= scipy.interpolate.interp1d(x,y)
 
 
 def limitationContraintes(exigence,s):
-  if(exigence=="A"):
+  if(exigence=='A'):
     return courbeA(s)
-  elif (exigence=="B"):
+  elif (exigence=='B'):
     return courbeB(s)
-  elif (exigence=="C"):
+  elif (exigence=='C'):
     return courbeC(s)
   else:
     print "Value for exigence: '",exigence,"' unknown."
