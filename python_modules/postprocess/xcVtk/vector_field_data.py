@@ -71,7 +71,7 @@ class VectorFieldData(object):
   def setupGlyph(self,fUnitConv= 1.0):
     self.polydata= self.getPolydata(fUnitConv)
     # Generate the arrow for the glyphs
-    arrow = vtk.vtkArrowSource()#vtk.vtkConeSource()
+    arrow = vtk.vtkArrowSource()
     #arrow.SetRadius(0.1)
     #arrow.SetHeight(0.5)
     self.glyph = vtk.vtkGlyph3D()
