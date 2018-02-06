@@ -171,6 +171,7 @@ class RecordDefDisplayEF(vtk_grafico_base.RecordDefDisplay):
           self.setupGrid(xcSet)
           self.displayGrid(caption)
 
+
     def displayMesh(self, xcSet, field= None, diagrams= None, fName= None, caption= '',defFScale=0.0):
           '''Display the finite element mesh 
 
@@ -190,6 +191,7 @@ class RecordDefDisplayEF(vtk_grafico_base.RecordDefDisplay):
           if(diagrams):
             for d in diagrams:
               self.appendDiagram(d)
+          self.displaySPconstraints(xcSet)
           self.displayScene(caption,fName)
 
     def displayScalarField(self, preprocessor, xcSet, field, fName= None):
@@ -211,14 +213,13 @@ class RecordDefDisplayEF(vtk_grafico_base.RecordDefDisplay):
                     initial/undeformed shape)
           '''
           #actorName= baseName+"%04d".format(nod.tag) # Tag nodo.
-
           pos= nod.getCurrentPos3d(defFScale)
           absForce= force.Norm()
           if(absForce>1e-6):
-            utilsVtk.dibujaFlecha(self.renderer,color,pos,force,fScale*absForce)
+            utilsVtk.drawVtkSymb('arrow',self.renderer,color,pos,force,fScale*absForce)
           absMoment= moment.Norm()
           if(absMoment>1e-6):
-            utilsVtk.dibujaFlechaDoble(self.renderer,color,pos,moment,fScale*absMoment)
+            utilsVtk.drawVtkSymb('doubleArrow',self.renderer,color,pos,moment,fScale*absMoment)
 
     def displayNodalLoads(self, preprocessor, loadPattern, color, fScale):
         '''Display the all nodal loads defined in a load pattern
@@ -258,7 +259,7 @@ class RecordDefDisplayEF(vtk_grafico_base.RecordDefDisplay):
           ele= preprocessor.getElementLoader.getElement(tag)
           actorName+= "%04d".format(tag) # Tag elemento.
           pos= ele.punto(xForce)
-          utilsVtk.dibujaFlecha(self.renderer,color,pos,force,fScale)()
+          utilsVtk.drawVtkSymb('arrow',self.renderer,color,pos,force,fScale)
 
     def displayElementUniformLoad(self, preprocessor, unifLoad,loadPattern, color, force, fScale):
         loadPatternName= loadPattern.getProp("dispName")
@@ -273,7 +274,7 @@ class RecordDefDisplayEF(vtk_grafico_base.RecordDefDisplay):
           # for capa in puntos:
           #   for pos in capa: 
           #     print pos
-          #     utilsVtk.dibujaFlecha(self.renderer,color,pos,force,fScale*force.Norm())
+          #     utilsVtk.drawArrow(self.renderer,color,pos,force,fScale*force.Norm())
           #     i+= 1
 
     def displayElementalLoads(self, preprocessor,loadPattern, color, fScale):
@@ -299,3 +300,22 @@ class RecordDefDisplayEF(vtk_grafico_base.RecordDefDisplay):
     def appendDiagram(self,diagram):
         diagram.addDiagramToScene(self)
 
+    def displaySPconstraints(self, xcSet):
+        prep=xcSet.getPreprocessor
+        nodInSet=xcSet.nodes.getTags()
+        #direction vectors for each DOF
+        vx,vy,vz=[1,0,0],[0,1,0],[0,0,1]
+        DOFdirVct=(vx,vy,vz,vx,vy,vz)
+        spIter= prep.getDomain.getConstraints.getSPs
+        sp= spIter.next()
+        while sp:
+            nod=sp.getNode
+            if nod.tag in nodInSet:
+                dof=sp.getDOFNumber
+                if dof < 3:
+                    utilsVtk.drawVtkSymb(symbType='cone',renderer=self.renderer, RGBcolor=[0,0,1], vPos=nod.getCoo, vDir=DOFdirVct[dof], scale=0.2)
+                else:
+                    utilsVtk.drawVtkSymb(symbType='doubleCone',renderer=self.renderer, RGBcolor=[0,1,0], vPos=nod.getCoo, vDir=DOFdirVct[dof], scale=0.2)
+            sp= spIter.next()
+        return
+                    

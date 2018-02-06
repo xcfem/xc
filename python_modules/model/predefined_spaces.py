@@ -542,6 +542,10 @@ class StructuralMechanics3D(PredefinedSpace):
     self.constraints.newSPConstraint(nodeTag,0,0.0) # nodeTag, DOF, constrValue
     self.constraints.newSPConstraint(nodeTag,2,0.0)
  
+  def fixNode0FF_FFF(self, nodeTag):
+    '''Restrain only X displacement DOF (i. e. Ux= 0).'''
+    self.constraints.newSPConstraint(nodeTag,0,0.0) # nodeTag, DOF, constrValue
+ 
   def fixNode(self,DOFpattern,nodeTag):
     '''Restrain DOF of a node according to the DOFpattern, which is a given
     string of type '0FF_00F' that matches the DOFs (uX,uY,uZ,rotX,rotY,rotZ)

@@ -52,8 +52,8 @@ class LoadVectorField(vf.VectorField):
             retval[eTag]+= v
           else:
             retval[eTag]= v
-        else:
-          lmsg.warning('displaying of loads over 1D elements not yet implemented')
+#        else:
+#          lmsg.warning('displaying of loads over 1D elements not yet implemented')
       elementLoad= lIter.next()
     return retval
 
