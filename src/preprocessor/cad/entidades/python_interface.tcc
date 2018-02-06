@@ -144,12 +144,10 @@ typedef XC::MapCadMember<XC::Face> map_cm_faces;
 //   .def_readwrite("first", &map_cm_faces::pair::first)
 //   .def_readwrite("second", &map_cm_faces::pair::second);
 class_<map_cm_faces, bases<XC::MapCadMemberBase>, boost::noncopyable >("MapCMFaces", no_init)
-//.def("__iter__", boost::python::iterator<map_cm_faces>())
   .add_property("size", &map_cm_faces::size)
   .def("exists", &map_cm_faces::exists)
   .def("get", make_function(&map_cm_faces::get,return_internal_reference<>()))
   .def("getKeys", &map_cm_faces::getKeys)
-//.def("__getitem__",getItemMapCMFaces, return_value_policy<copy_const_reference>())
    ;
 
 typedef XC::MapEnt<XC::Face> map_faces;

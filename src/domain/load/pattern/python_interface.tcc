@@ -106,6 +106,8 @@ class_<XC::TimeSeriesIntegrator , bases<XC::MovableObject>, boost::noncopyable >
 #include "time_series_integrator/python_interface.tcc"
 
 const XC::LoadPattern *(XC::MapLoadPatterns::*buscaLoadPatternByName)(const std::string &) const= &XC::MapLoadPatterns::buscaLoadPattern;
+XC::MapLoadPatterns::const_iterator (XC::MapLoadPatterns::*cBegin)(void) const= &XC::MapLoadPatterns::begin;
+XC::MapLoadPatterns::const_iterator (XC::MapLoadPatterns::*cEnd)(void) const= &XC::MapLoadPatterns::end;
 class_<XC::MapLoadPatterns, bases<XC::LoadLoaderMember>, boost::noncopyable >("MapLoadPatterns", no_init)
   .add_property("defaultElementLoadTag", make_function( &XC::MapLoadPatterns::getCurrentElementLoadTag, return_value_policy<copy_const_reference>() ), &XC::MapLoadPatterns::setCurrentElementLoadTag)
   .add_property("defaultNodeLoadTag", make_function( &XC::MapLoadPatterns::getCurrentElementLoadTag, return_value_policy<copy_const_reference>() ), &XC::MapLoadPatterns::setCurrentElementLoadTag)
@@ -118,4 +120,5 @@ class_<XC::MapLoadPatterns, bases<XC::LoadLoaderMember>, boost::noncopyable >("M
   .def("removeAllFromDomain", &XC::MapLoadPatterns::removeAllFromDomain,return_internal_reference<>(),"Eliminates all loads cases from domain.")
   .def("getKeys", &XC::MapLoadPatterns::getKeys,"Returns load case names")
   .def("__getitem__",buscaLoadPatternByName, return_value_policy<reference_existing_object>())
+  .def("__iter__",range(cBegin, cEnd))
   ;
