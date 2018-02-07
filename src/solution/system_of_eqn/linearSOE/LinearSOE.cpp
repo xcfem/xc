@@ -125,7 +125,8 @@ void XC::LinearSOE::copy(const LinearSOESolver *newSolver)
         if(tmp)
           setSolver(tmp);
         else
-	  std::cerr << "LinearSOE::copia; no se pudo crear el solver." << std::endl;
+	  std::cerr << getClassName() << "::" << __FUNCTION__
+		    << "; can't create solver." << std::endl;
       }
   }
 
@@ -148,13 +149,14 @@ bool XC::LinearSOE::setSolver(LinearSOESolver *newSolver)
         const int solverOK= theSolver->setSize();
         if(solverOK < 0)
           {
-            std::cerr << "WARNING LinearSOE::setSolver :";
-            std::cerr << " solver failed setSize() in constructor\n";
+            std::cerr << getClassName() << "::" << __FUNCTION__
+		      << "; WARNING - solver failed setSize().\n";
           }
         retval= true;
       }
     else
-      std::cerr << "LinearSOE::setSolver; null pointer to solver." << std::endl;
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; null pointer to solver." << std::endl;
     return retval;
   }
 
@@ -228,8 +230,8 @@ int XC::LinearSOE::setSolverSize(void)
     const int retval = theSolver->setSize();
     if(retval < 0)
       {
-        std::cerr << getClassName() << "::setSize :";
-        std::cerr << " solver failed setSize()\n";
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; solver failed setSize().\n";
       }
     return retval;
   }
