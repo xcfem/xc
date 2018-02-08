@@ -231,7 +231,7 @@ int XC::FullGenLinSOE::sendSelf(CommParameters &cp)
   }
 
 //! @brief Receives objects through the communicator.
-iint XC::FullGenLinSOE::recvSelf(const CommParameters &cp)
+int XC::FullGenLinSOE::recvSelf(const CommParameters &cp)
   {
     return 0;
   }
