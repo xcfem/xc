@@ -66,8 +66,11 @@
 
 //! @brief Constructor. The integer \p classTag is provided to
 //! the constructor for the base class MovableObject.
-XC::SystemOfEqn::SystemOfEqn(AnalysisAggregation *owr,int clasTag)
-  : MovableObject(clasTag), EntCmd(owr) {}
+//!
+//! @param owr: analysis aggregation that owns this object.
+//! @param classTag: identifier of the class.
+XC::SystemOfEqn::SystemOfEqn(AnalysisAggregation *owr,int classTag)
+  : MovableObject(classTag), EntCmd(owr) {}
 
 //! @brief Returns a pointer to the solution method that owns this object.
 XC::AnalysisAggregation *XC::SystemOfEqn::getAnalysisAggregation(void)

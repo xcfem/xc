@@ -40,7 +40,7 @@ namespace XC {
 class FactoredSOEBase: public LinearSOEData
   {
   protected:
-    bool factored;
+    bool factored; //!< True if the system is factored.
 
     FactoredSOEBase(AnalysisAggregation *,int classTag,int N= 0);
   };

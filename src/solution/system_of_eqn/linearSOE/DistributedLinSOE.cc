@@ -37,11 +37,13 @@
 #include <utility/actor/channel/Channel.h>
 #include <utility/actor/objectBroker/FEM_ObjectBroker.h>
 
-XC::DistributedLinSOE::DistributedLinSOE()
+//! @brief Constructor.
+XC::DistributedLinSOE::DistributedLinSOE(void)
   : DistributedObj() {}
 
 
-//! @brief Collect graph, send it off, vector back containing size of system, etc.
+//! @brief Collect graph, send it off, vector back containing size of
+//! system, etc.
 int XC::DistributedLinSOE::sendGraph(Graph &theGraph,ID &data)
   {
     int res= 0;

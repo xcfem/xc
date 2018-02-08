@@ -31,8 +31,12 @@
 #include <utility/matrix/ID.h>
 
 //! @brief Constructor.
-XC::LinearSOEData::LinearSOEData(AnalysisAggregation *owr,int classtag,int N)
-  :LinearSOE(owr,classtag), size(N) {}
+//!
+//! @param owr: analysis aggregation that owns this object.
+//! @param classTag: identifier of the class.
+//! @param N: size of the system.
+XC::LinearSOEData::LinearSOEData(AnalysisAggregation *owr,int classTag,int N)
+  :LinearSOE(owr,classTag), size(N) {}
 
 
 void XC::LinearSOEData::inic(const size_t &sz)

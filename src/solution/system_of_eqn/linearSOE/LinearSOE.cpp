@@ -102,8 +102,11 @@
 
 //! @brief Constructor. The integer \p classTag} is passed to
 //! the constructor of the base class. 
-XC::LinearSOE::LinearSOE(AnalysisAggregation *owr,int classtag)
-  :SystemOfEqn(owr,classtag), theSolver(nullptr) {}
+//!
+//! @param owr: analysis aggregation that owns this object.
+//! @param classTag: identifier of the class.
+XC::LinearSOE::LinearSOE(AnalysisAggregation *owr,int classTag)
+  :SystemOfEqn(owr,classTag), theSolver(nullptr) {}
 
 //! @brief Frees memory.
 void XC::LinearSOE::free_memory(void)
