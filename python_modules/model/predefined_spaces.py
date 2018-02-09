@@ -280,31 +280,49 @@ class StructuralMechanics2D(PredefinedSpace):
     return retval
 
   def fixNode000(self, nodeTag):
-    '''Restrain all three node DOFs (i. e. make them zero).'''
+    '''Restrain all three node DOFs (i. e. make them zero).
+
+       :param nodeTag: node identifier.
+    '''
     self.constraints.newSPConstraint(nodeTag,0,0.0) # nodeTag, DOF, constrValue
     self.constraints.newSPConstraint(nodeTag,1,0.0)
     self.constraints.newSPConstraint(nodeTag,2,0.0)
 
   def fixNode00F(self, nodeTag):
-    '''Restrain only displacement DOFs (i. e. Ux= 0 and Uy= 0).'''
+    '''Restrain only displacement DOFs (i. e. Ux= 0 and Uy= 0).
+
+       :param nodeTag: node identifier.
+    '''
     self.constraints.newSPConstraint(nodeTag,0,0.0) # nodeTag, DOF, constrValue
     self.constraints.newSPConstraint(nodeTag,1,0.0)
 
   def fixNode0F0(self, nodeTag):
-    '''Restrain all three node DOFs (i. e. make them zero).'''
+    '''Restrain all three node DOFs (i. e. make them zero).
+
+       :param nodeTag: node identifier.
+    '''
     self.constraints.newSPConstraint(nodeTag,0,0.0) # nodeTag, DOF, constrValue
     self.constraints.newSPConstraint(nodeTag,2,0.0)
 
   def fixNode0FF(self, nodeTag):
-    '''Restrain only X displacement DOF (i. e. Ux= 0).'''
+    '''Restrain only X displacement DOF (i. e. Ux= 0).
+
+       :param nodeTag: node identifier.
+    '''
     self.preprocessor.getConstraintLoader.newSPConstraint(nodeTag,0,0.0) 
 
   def fixNodeF0F(self, nodeTag):
-    '''Restrain only Y displacement DOF (i. e. Uy= 0).'''
+    '''Restrain only Y displacement DOF (i. e. Uy= 0).
+
+       :param nodeTag: node identifier.
+    '''
     self.preprocessor.getConstraintLoader.newSPConstraint(nodeTag,1,0.0) 
 
   def fixNodeFF0(self, nodeTag):
-    '''Restrain only rotation DOF (i. e. Theta= 0).'''
+    '''Restrain only rotation DOF (i. e. Theta= 0).
+
+       :param nodeTag: node identifier.
+    '''
     self.preprocessor.getConstraintLoader.newSPConstraint(nodeTag,2,0.0)
 
   def fixNodesLine(self, line):
@@ -354,13 +372,19 @@ class SolidMechanics3D(PredefinedSpace):
     return []
   
   def getDisplacementVector(self,nodeTag):
-    ''' Return a vector with the displacement components of the node motion.'''
+    ''' Return a vector with the displacement components of the node motion.
+
+        :param nodeTag: node identifier.
+    '''
     nod= self.preprocessor.getNodeLoader.getNode(nodeTag)
     disp= nod.getDisp
     return xc.Vector([disp[self.Ux],disp[self.Uy],disp[self.Uz]])
 
   def fixNode000(self, nodeTag):
-    '''Restrain all three node DOFs (i. e. make them zero).'''
+    '''Restrain all three node DOFs (i. e. make them zero).
+
+        :param nodeTag: node identifier.
+    '''
     self.constraints.newSPConstraint(nodeTag,0,0.0) # nodeTag, DOF, constrValue
     self.constraints.newSPConstraint(nodeTag,1,0.0)
     self.constraints.newSPConstraint(nodeTag,2,0.0)
@@ -398,7 +422,10 @@ class StructuralMechanics3D(PredefinedSpace):
     return [self.ThetaX,self.ThetaY,self.ThetaZ]
                      
   def getDisplacementVector(self,nodeTag):
-    ''' Return a vector with the displacement components of the node motion.'''
+    ''' Return a vector with the displacement components of the node motion.
+
+        :param nodeTag: node identifier.
+    '''
     nod= self.preprocessor.getNodeLoader.getNode(nodeTag)
     disp= nod.getDisp
     return xc.Vector([disp[self.Ux],disp[self.Uy],disp[self.Uz]])
@@ -438,7 +465,10 @@ class StructuralMechanics3D(PredefinedSpace):
 
     
   def fixNode000_000(self, nodeTag):
-    '''Restrain all six node DOFs (i. e. make them zero).'''
+    '''Restrain all six node DOFs (i. e. make them zero).
+
+       :param nodeTag: node identifier.
+    '''
     self.constraints.newSPConstraint(nodeTag,0,0.0) # nodeTag, DOF, constrValue
     self.constraints.newSPConstraint(nodeTag,1,0.0)
     self.constraints.newSPConstraint(nodeTag,2,0.0)
@@ -447,14 +477,20 @@ class StructuralMechanics3D(PredefinedSpace):
     self.constraints.newSPConstraint(nodeTag,5,0.0)
 
   def fixNode000_FFF(self, nodeTag):
-    '''Restrain only displacement DOFs (i. e. Ux= 0, Uy= 0 and Uz= 0).'''
+    '''Restrain only displacement DOFs (i. e. Ux= 0, Uy= 0 and Uz= 0).
+
+       :param nodeTag: node identifier.
+    '''
     self.constraints.newSPConstraint(nodeTag,0,0.0) # nodeTag, DOF, constrValue
     self.constraints.newSPConstraint(nodeTag,1,0.0)
     self.constraints.newSPConstraint(nodeTag,2,0.0)
     
   def fixNode000_0FF(self, nodeTag):
     '''Restrain the displacements (Ux,Uy and Uz) and
-       the rotation about X axis.'''
+       the rotation about X axis.
+
+       :param nodeTag: node identifier.
+    '''
     self.constraints.newSPConstraint(nodeTag,0,0.0) # nodeTag, DOF, constrValue
     self.constraints.newSPConstraint(nodeTag,1,0.0)
     self.constraints.newSPConstraint(nodeTag,2,0.0)
@@ -462,7 +498,10 @@ class StructuralMechanics3D(PredefinedSpace):
 
   def fixNode000_F0F(self, nodeTag):
     '''Restrain the displacements (Ux,Uy and Uz) and
-       the rotation about Y axis.'''
+       the rotation about Y axis.
+
+       :param nodeTag: node identifier.
+    '''
     self.constraints.newSPConstraint(nodeTag,0,0.0) # nodeTag, DOF, constrValue
     self.constraints.newSPConstraint(nodeTag,1,0.0)
     self.constraints.newSPConstraint(nodeTag,2,0.0)
@@ -470,14 +509,20 @@ class StructuralMechanics3D(PredefinedSpace):
 
   def fixNode000_FF0(self, nodeTag):
     '''Restrain the displacements (Ux,Uy and Uz) and
-       the rotation about Z axis.'''
+       the rotation about Z axis.
+
+       :param nodeTag: node identifier.
+    '''
     self.constraints.newSPConstraint(nodeTag,0,0.0) # nodeTag, DOF, constrValue
     self.constraints.newSPConstraint(nodeTag,1,0.0)
     self.constraints.newSPConstraint(nodeTag,2,0.0)
     self.constraints.newSPConstraint(nodeTag,5,0.0)
     
   def fixNode000_F00(self, nodeTag):
-    '''Restrain all DOFs except for the rotation about X axis.'''
+    '''Restrain all DOFs except for the rotation about X axis.
+
+       :param nodeTag: node identifier.
+    '''
     self.constraints.newSPConstraint(nodeTag,0,0.0) # nodeTag, DOF, constrValue
     self.constraints.newSPConstraint(nodeTag,1,0.0)
     self.constraints.newSPConstraint(nodeTag,2,0.0)
@@ -485,7 +530,10 @@ class StructuralMechanics3D(PredefinedSpace):
     self.constraints.newSPConstraint(nodeTag,5,0.0)   
 
   def fixNode000_0F0(self, nodeTag):
-    '''Restrain all DOFs except for the rotation about Y axis.'''
+    '''Restrain all DOFs except for the rotation about Y axis.
+
+       :param nodeTag: node identifier.
+    '''
     self.constraints.newSPConstraint(nodeTag,0,0.0) # nodeTag, DOF, constrValue
     self.constraints.newSPConstraint(nodeTag,1,0.0)
     self.constraints.newSPConstraint(nodeTag,2,0.0)
@@ -493,7 +541,10 @@ class StructuralMechanics3D(PredefinedSpace):
     self.constraints.newSPConstraint(nodeTag,5,0.0)   
 
   def fixNode000_00F(self, nodeTag):
-    '''Restrain all DOFs except for the rotation about Z axis.'''
+    '''Restrain all DOFs except for the rotation about Z axis.
+
+       :param nodeTag: node identifier.
+    '''
     self.constraints.newSPConstraint(nodeTag,0,0.0) # nodeTag, DOF, constrValue
     self.constraints.newSPConstraint(nodeTag,1,0.0)
     self.constraints.newSPConstraint(nodeTag,2,0.0)
@@ -502,7 +553,10 @@ class StructuralMechanics3D(PredefinedSpace):
 
   def fixNodeF00_F00(self, nodeTag):
     '''Restrain all DOFs except for X displacement and the
-       rotation about X axis.'''
+       rotation about X axis.
+
+       :param nodeTag: node identifier.
+    '''
     self.constraints.newSPConstraint(nodeTag,1,0.0) # nodeTag, DOF, constrValue
     self.constraints.newSPConstraint(nodeTag,2,0.0)
     self.constraints.newSPConstraint(nodeTag,4,0.0)
@@ -510,7 +564,10 @@ class StructuralMechanics3D(PredefinedSpace):
 
   def fixNodeF00_0F0(self, nodeTag):
     '''Restrain all DOFs except for X displacement and the
-       rotation about Y axis.'''
+       rotation about Y axis.
+
+       :param nodeTag: node identifier.
+    '''
     self.constraints.newSPConstraint(nodeTag,1,0.0) # nodeTag, DOF, constrValue
     self.constraints.newSPConstraint(nodeTag,2,0.0)
     self.constraints.newSPConstraint(nodeTag,3,0.0)
@@ -518,7 +575,10 @@ class StructuralMechanics3D(PredefinedSpace):
 
   def fixNodeF00_00F(self, nodeTag):
     '''Restrain all DOFs except for X displacement and the
-       rotation about Z axis.'''
+       rotation about Z axis.
+
+       :param nodeTag: node identifier.
+    '''
     self.constraints.newSPConstraint(nodeTag,1,0.0) # nodeTag, DOF, constrValue
     self.constraints.newSPConstraint(nodeTag,2,0.0)
     self.constraints.newSPConstraint(nodeTag,3,0.0)
@@ -526,31 +586,45 @@ class StructuralMechanics3D(PredefinedSpace):
 
   def fixNodeF00_0FF(self, nodeTag):
     '''Restrain all DOFs except for X displacement and the
-       rotations about Y and Z axis.'''
+       rotations about Y and Z axis.
+
+       :param nodeTag: node identifier.
+    '''
     self.constraints.newSPConstraint(nodeTag,1,0.0) # nodeTag, DOF, constrValue
     self.constraints.newSPConstraint(nodeTag,2,0.0)
     self.constraints.newSPConstraint(nodeTag,3,0.0)
 
   def fixNodeFFF_000(self, nodeTag):
-    '''Restrain only rotations (i. e. ThetaX= 0, ThetaY= 0 and ThetaZ= 0).'''
+    '''Restrain only rotations (i. e. ThetaX= 0, ThetaY= 0 and ThetaZ= 0).
+
+       :param nodeTag: node identifier.
+    '''
     self.constraints.newSPConstraint(nodeTag,3,0.0) # nodeTag, DOF, constrValue
     self.constraints.newSPConstraint(nodeTag,4,0.0)
     self.constraints.newSPConstraint(nodeTag,5,0.0)
 
   def fixNode0F0_FFF(self, nodeTag):
-    '''Restrain only displacement DOFs (i. e. Ux= 0 and Uz= 0).'''
+    '''Restrain only displacement DOFs (i. e. Ux= 0 and Uz= 0).
+
+       :param nodeTag: node identifier.
+    '''
     self.constraints.newSPConstraint(nodeTag,0,0.0) # nodeTag, DOF, constrValue
     self.constraints.newSPConstraint(nodeTag,2,0.0)
  
   def fixNode0FF_FFF(self, nodeTag):
-    '''Restrain only X displacement DOF (i. e. Ux= 0).'''
+    '''Restrain only X displacement DOF (i. e. Ux= 0).
+
+       :param nodeTag: node identifier.
+    '''
     self.constraints.newSPConstraint(nodeTag,0,0.0) # nodeTag, DOF, constrValue
  
   def fixNode(self,DOFpattern,nodeTag):
     '''Restrain DOF of a node according to the DOFpattern, which is a given
-    string of type '0FF_00F' that matches the DOFs (uX,uY,uZ,rotX,rotY,rotZ)
-    where 'F' means FREE and '0' means constrained with value=0
-    Note: DOFpaterns '0FF_00F','0FF00F','0_FF_0_0F', ... are equivalent
+       string of type '0FF_00F' that matches the DOFs (uX,uY,uZ,rotX,rotY,rotZ)
+       where 'F' means FREE and '0' means constrained with value=0
+       Note: DOFpaterns '0FF_00F','0FF00F','0_FF_0_0F', ... are equivalent
+
+       :param nodeTag: node identifier.
     '''
     DOFpatclean=DOFpattern.replace('_','')
     DOFtoConstr=[i for i in range(len(DOFpatclean)) if DOFpatclean[i]=='0']
