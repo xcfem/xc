@@ -77,13 +77,13 @@ class PredefinedSpace(object):
     rb= self.constraints.newRigidBeam(nodeTagA,fulcrumNode.tag)
     ed= self.constraints.newEqualDOF(fulcrumNode.tag,pivotNode,xc.ID(self.getDisplacementDOFs()))
 
-  def setBearingBetweenNodes(self,iNodA,iNodB,bearingMaterials,orientation= None):
+  def setBearingBetweenNodes(self,iNodA,iNodB,bearingMaterialNames,orientation= None):
     '''Modelize a bearing between the nodes
 
         Args:
             :param iNodA: (int) first node identifier (tag).
             :param iNodB: (int) second node identifier (tag).
-            :param bearingMaterials: (list) material names for the zero length
+            :param bearingMaterialNames: (list) material names for the zero length
                element.
             :param orientation: (list) vectors used to orient the zero length
                element; (x,yp) x: axis of the element, yp: vector that lies 
@@ -94,24 +94,24 @@ class PredefinedSpace(object):
     # Element definition
     elems= self.preprocessor.getElementLoader
     elems.dimElem= self.preprocessor.getNodeLoader.dimSpace # space dimension.
-    elems.defaultMaterial= next((item for item in bearingMaterials if item is not None), 'All are Nones')
+    elems.defaultMaterial= next((item for item in bearingMaterialNames if item is not None), 'All are Nones')
     zl= elems.newElement("ZeroLength",xc.ID([iNodA,iNodB]))
     zl.clearMaterials()
     if(orientation): #Orient element.
       zl.setupVectors(orientation[0],orientation[1])
-    numMats= len(bearingMaterials)
+    numMats= len(bearingMaterialNames)
     for i in range(0,numMats):
-      material= bearingMaterials[i]
+      material= bearingMaterialNames[i]
       if(material!=None):
         zl.setMaterial(i,material)
     return zl
 
-  def setBearing(self,iNod,bearingMaterials, orientation= None):
+  def setBearing(self,iNod,bearingMaterialNames, orientation= None):
     '''Modelize a bearing on X, XY or XYZ directions.
 
         Args:
             :param iNod: (int) node identifier (tag).
-            :param bearingMaterials (list): material names for the zero length
+            :param bearingMaterialNames (list): material names for the zero length
                element.
             :param orientation: (list) vectors used to orient the zero length
                element; (x,yp) x: axis of the element, yp: vector that lies 
@@ -123,7 +123,7 @@ class PredefinedSpace(object):
     newNode= nodos.duplicateNode(iNod) # new node.
 
     # Element definition
-    newElement= self.setBearingBetweenNodes(newNode.tag,iNod,bearingMaterials,orientation)
+    newElement= self.setBearingBetweenNodes(newNode.tag,iNod,bearingMaterialNames,orientation)
     # Boundary conditions
     constraints= self.preprocessor.getConstraintLoader
     numDOFs= self.preprocessor.getNodeLoader.numDOFs
@@ -142,15 +142,15 @@ class PredefinedSpace(object):
     '''
     return setBearing(iNod,[bearingMaterial])
 
-  def setBearingOnXYRigZ(self,iNod,bearingMaterials):
+  def setBearingOnXYRigZ(self,iNod,bearingMaterialNames):
     '''Modelize a non rigid on X and Y directions and rigid on Z bearing.
 
         Args:
             iNod (int): node identifier (tag).
-            bearingMaterial (string): material name for the zero length
+            bearingMaterialNames (string): material names for the zero length
                element.
     '''
-    newNode, newElement= self.setBearing(iNod,bearingMaterials)
+    newNode, newElement= self.setBearing(iNod,bearingMaterialNames)
     eDofs= self.constraints.newEqualDOF(newNode.tag,iNod,xc.ID([2]))
     return newNode, newElement
 
