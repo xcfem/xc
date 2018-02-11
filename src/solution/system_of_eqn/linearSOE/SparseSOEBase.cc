@@ -29,8 +29,13 @@
 #include <solution/system_of_eqn/linearSOE/SparseSOEBase.h>
 
 //! @brief Constructor.
-XC::SparseSOEBase::SparseSOEBase(AnalysisAggregation *owr,int classtag,int N, int NNZ)
-  :FactoredSOEBase(owr,classtag), nnz(NNZ), Bsize(0){}
+//!
+//! @param owr: analysis aggregation that owns this object.
+//! @param classTag: class identifier.
+//! @param N: system size.
+//! @param NNZ: number of non-zeros.
+XC::SparseSOEBase::SparseSOEBase(AnalysisAggregation *owr,int classTag,int N, int NNZ)
+  : FactoredSOEBase(owr,classTag), nnz(NNZ), Bsize(0){}
 
 
 

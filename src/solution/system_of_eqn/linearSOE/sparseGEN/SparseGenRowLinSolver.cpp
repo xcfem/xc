@@ -58,12 +58,11 @@
 #include <solution/system_of_eqn/linearSOE/sparseGEN/SparseGenRowLinSolver.h>
 #include <solution/system_of_eqn/linearSOE/sparseGEN/SparseGenRowLinSOE.h>
 
-XC::SparseGenRowLinSolver::SparseGenRowLinSolver(int theClassTag)    
-:LinearSOESolver(theClassTag),
- theSOE(0)
-{
-
-}    
+//! @brief Constructor.
+//!
+//! @param classTag: class identifier.
+XC::SparseGenRowLinSolver::SparseGenRowLinSolver(int classTag)    
+  :LinearSOESolver(classTag), theSOE(nullptr) {}    
 
 //! @brief Sets the system of equations to solve.
 bool XC::SparseGenRowLinSolver::setLinearSOE(LinearSOE *soe)

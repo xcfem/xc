@@ -34,6 +34,7 @@
 #include <utility/actor/channel/Channel.h>
 #include <utility/actor/objectBroker/FEM_ObjectBroker.h>
 
+//! @brief Default constructor.
 XC::DistributedBandLinSOE::DistributedBandLinSOE(void)
   : DistributedLinSOE() {}
 

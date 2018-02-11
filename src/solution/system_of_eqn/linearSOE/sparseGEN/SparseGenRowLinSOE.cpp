@@ -62,8 +62,11 @@
 #include <solution/graph/graph/VertexIter.h>
 #include <cmath>
 
+//! @brief Constructor.
+//!
+//! @param owr: analysis aggregation that owns this object.
 XC::SparseGenRowLinSOE::SparseGenRowLinSOE(AnalysisAggregation *owr)
-  :SparseGenSOEBase(owr,LinSOE_TAGS_SparseGenRowLinSOE) {}
+  : SparseGenSOEBase(owr,LinSOE_TAGS_SparseGenRowLinSOE) {}
 
 bool XC::SparseGenRowLinSOE::setSolver(LinearSOESolver *newSolver)
   {

@@ -29,8 +29,11 @@
 #include <solution/system_of_eqn/linearSOE/FactoredSOEBase.h>
 
 //! @brief Constructor.
-XC::FactoredSOEBase::FactoredSOEBase(AnalysisAggregation *owr,int classtag,int N)
-  :LinearSOEData(owr,classtag,N), factored(false){}
+//!
+//! @param owr: analysis aggregation that owns this object.
+//! @param classTag: identifier of the class.
+XC::FactoredSOEBase::FactoredSOEBase(AnalysisAggregation *owr,int classTag,int N)
+  : LinearSOEData(owr,classTag,N), factored(false){}
 
 
 

@@ -65,6 +65,9 @@
 #include <utility/actor/channel/Channel.h>
 #include <utility/actor/objectBroker/FEM_ObjectBroker.h>
 
+//! @brief Constructor.
+//!
+//! @param owr: analysis aggregation that owns this object.
 XC::DistributedSparseGenRowLinSOE::DistributedSparseGenRowLinSOE(AnalysisAggregation *owr)
   :SparseGenSOEBase(owr,LinSOE_TAGS_DistributedSparseGenRowLinSOE),
    colA(0), rowStartA(0), 

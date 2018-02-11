@@ -64,6 +64,7 @@
 #include <solution/system_of_eqn/linearSOE/sparseGEN/ThreadedSuperLU.h>
 #include <solution/system_of_eqn/linearSOE/sparseGEN/SparseGenColLinSOE.h>
 
+//! @brief Constructor.
 XC::ThreadedSuperLU:: XC::ThreadedSuperLU(int numT, int perm, int relx, 
 			     int panel, double thrsh) 
 :SparseGenColLinSolver(SOLVER_TAGS_ThreadedSuperLU), perm_r(0),perm_c(0), 

@@ -61,13 +61,14 @@
 #include <utility/actor/objectBroker/FEM_ObjectBroker.h>
 #include <utility/matrix/ID.h>
 
+//! @brief Constructor.
 XC::DistributedSuperLU::DistributedSuperLU(int npR, int npC)
   :SparseGenColLinSolver(SOLVER_TAGS_DistributedSuperLU), 
    gridInit(false), npRow(npR), npCol(npC),
    processID(0), numChannels(0), theChannels(0){}
 
-
-XC::DistributedSuperLU::DistributedSuperLU()
+//! @brief Default constructor.
+XC::DistributedSuperLU::DistributedSuperLU(void)
   :SparseGenColLinSolver(SOLVER_TAGS_DistributedSuperLU), 
    gridInit(false), npRow(0), npCol(0),
    processID(0), numChannels(0), theChannels(0){}

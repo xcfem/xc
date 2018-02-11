@@ -100,8 +100,7 @@
 
 //#include <solution/system_of_eqn/linearSOE/umfGEN/UmfpackGenLinSolver.h>
 
-//! @brief Constructor. The integer \p classTag} is passed to
-//! the constructor of the base class. 
+//! @brief Constructor.
 //!
 //! @param owr: analysis aggregation that owns this object.
 //! @param classTag: identifier of the class.

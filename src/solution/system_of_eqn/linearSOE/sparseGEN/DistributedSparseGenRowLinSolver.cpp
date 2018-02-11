@@ -58,6 +58,9 @@
 #include <solution/system_of_eqn/linearSOE/sparseGEN/DistributedSparseGenRowLinSolver.h>
 #include <solution/system_of_eqn/linearSOE/sparseGEN/DistributedSparseGenRowLinSOE.h>
 
+//! @brief Constructor.
+//!
+//! @param classTag: class identifier.
 XC::DistributedSparseGenRowLinSolver::DistributedSparseGenRowLinSolver(int theClassTag)    
 :LinearSOESolver(theClassTag),
  theSOE(nullptr)

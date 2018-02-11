@@ -64,12 +64,26 @@
 #include <solution/graph/graph/VertexIter.h>
 #include <cmath>
 
+//! @brief Constructor.
+//!
+//! @param owr: analysis aggregation that owns this object.
 XC::SparseGenColLinSOE::SparseGenColLinSOE(AnalysisAggregation *owr)
   :SparseGenSOEBase(owr,LinSOE_TAGS_SparseGenColLinSOE) {}
 
+//! @brief Constructor.
+//!
+//! @param owr: analysis aggregation that owns this object.
+//! @param classTag: class identifier.
 XC::SparseGenColLinSOE::SparseGenColLinSOE(AnalysisAggregation *owr,int classTag)
   :SparseGenSOEBase(owr,classTag) {}
 
+//! @brief Set the solver to use.
+//!
+//! Invokes {\em setLinearSOE(*this)} on \p newSolver.
+//! If the system size is not equal to \f$0\f$, it also invokes setSize()
+//! on \p newSolver, printing a warning and returning \f$-1\f$ if this
+//! method returns a number less than \f$0\f$. Finally it returns the result
+//! of invoking the LinearSOE classes setSolver() method.
 bool XC::SparseGenColLinSOE::setSolver(LinearSOESolver *newSolver)
   {
     bool retval= false;
@@ -77,11 +91,34 @@ bool XC::SparseGenColLinSOE::setSolver(LinearSOESolver *newSolver)
     if(tmp)
       retval= SparseGenSOEBase::setSolver(tmp);
     else
-      std::cerr << "SparseGenColLinSOE::setSolver; solver incompatible con system of equations." << std::endl;
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; solver type incompatible with this system of equations."
+		<< std::endl;
     return retval;
   }
 
 //! @brief Sets the size of the system from the number of vertices in the graph.
+//!
+//! The size of the system is determined from the Graph object {\em
+//! theGraph}, which must contain \p size vertices labelled \f$0\f$ through
+//! \f$size-1\f$, the adjacency list for each vertex containing the associated
+//! vertices in a column of the matrix \f$A\f$. The size is determined by
+//! invoking getNumVertex() on \p theGraph and the number of
+//! non-zeros is determined by looking at the size of the adjacenecy list
+//! of each vertex in the graph, allowing space for the diagonal term. If
+//! the old space allocated for the 1d arrays is not big enough, it the
+//! old space is returned to the heap and new space is allocated from the
+//! heap. Prints a warning message, sets size to \f$0\f$ and returns a \f$-1\f$,
+//! if not enough memory is available on the heap for the 1d arrays. If
+//! memory is available, the components of the arrays are 
+//! zeroed and \f$A\f$ is marked as being unfactored. If the system size has
+//! increased, new Vector objects for \f$x\f$ and \f$b\f$ using the {\em (double
+//! *,int)} Vector constructor are created. The \f$colStartA\f$ and \f$rowA\f$
+//! are then determined by looping through the vertices, setting \f$colStartA(i)
+//! = colStartA(i-1) + 1 + \f$the size of Vertices \f$i\f$ adjacency list and 
+//! placing the contents of \f$i\f$ and the adjacency list into \f$rowA\f$ in
+//! ascending order. Finally, the result of invoking setSize() on
+//! the associated Solver object is returned.
 int XC::SparseGenColLinSOE::setSize(Graph &theGraph)
   {
     int result = 0;
@@ -125,8 +162,10 @@ int XC::SparseGenColLinSOE::setSize(Graph &theGraph)
             theVertex = theGraph.getVertexPtr(a);
 	    if(theVertex == 0)
               {
-	        std::cerr << "WARNING:XC::SparseGenColLinSOE::setSize :";
-	        std::cerr << " vertex " << a << " not in graph! - size set to 0\n";
+	        std::cerr << getClassName() << "::" << __FUNCTION__
+			  << "; WARNING :"
+			  << " vertex " << a
+			  << " not in graph! - size set to 0.\n";
 	        size = 0;
 	        return -1;
 	      }
@@ -163,13 +202,25 @@ int XC::SparseGenColLinSOE::setSize(Graph &theGraph)
     int solverOK = the_Solver->setSize();
     if(solverOK < 0)
       {
-	std::cerr << "WARNING:XC::SparseGenColLinSOE::setSize :";
-	std::cerr << " solver failed setSize()\n";
+	std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; WARNING :"
+		  << " solver failed setSize()\n";
 	return solverOK;
       }   
     return result;
   }
 
+//! @brief Assemblies the product fact*m into the system matrix.
+//!
+//! First tests that \p loc and \p M are of compatable sizes; if not
+//! a warning message is printed and a \f$-1\f$ is returned. The LinearSOE
+//! object then assembles \p fact times the Matrix {\em 
+//! M} into the matrix \f$A\f$. The Matrix is assembled into \f$A\f$ at the
+//! locations given by the ID object \p loc, i.e. \f$a_{loc(i),loc(j)} +=
+//! fact * M(i,j)\f$. If the location specified is outside the range,
+//! i.e. \f$(-1,-1)\f$ the corrseponding entry in \p M is not added to
+//! \f$A\f$. If \p fact is equal to \f$0.0\f$ or \f$1.0\f$, more efficient steps
+//! are performed. Returns \f$0\f$.
 int XC::SparseGenColLinSOE::addA(const Matrix &m, const ID &id, double fact)
   {
     // check for a XC::quick return 
@@ -180,8 +231,8 @@ int XC::SparseGenColLinSOE::addA(const Matrix &m, const ID &id, double fact)
     
     // check that m and id are of similar size
     if (idSize != m.noRows() && idSize != m.noCols()) {
-	std::cerr << "SparseGenColLinSOE::addA() ";
-	std::cerr << " - Matrix and XC::ID not of similar sizes\n";
+	std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; Matrix and ID not of similar sizes\n";
 	return -1;
     }
     

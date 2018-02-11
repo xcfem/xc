@@ -37,7 +37,7 @@
 #include <utility/actor/channel/Channel.h>
 #include <utility/actor/objectBroker/FEM_ObjectBroker.h>
 
-//! @brief Constructor.
+//! @brief Default constructor.
 XC::DistributedLinSOE::DistributedLinSOE(void)
   : DistributedObj() {}
 

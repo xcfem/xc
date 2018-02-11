@@ -29,9 +29,16 @@
 #include <solution/system_of_eqn/linearSOE/sparseGEN/SparseGenSOEBase.h>
 
 //! @brief Constructor.
-XC::SparseGenSOEBase::SparseGenSOEBase(AnalysisAggregation *owr,int classtag,int N, int NNZ)
-  :SparseSOEBase(owr,classtag,N,NNZ) {}
+//!
+//! @param owr: analysis aggregation that owns this object.
+//! @param classTag: class identifier.
+//! @param N: system size.
+//! @param NNZ: number of non-zeros.
+XC::SparseGenSOEBase::SparseGenSOEBase(AnalysisAggregation *owr,int classTag,int N, int NNZ)
+  :SparseSOEBase(owr,classTag,N,NNZ) {}
 
+//! @brief Zeros the entries in the 1d array for \f$A\f$ and marks the system
+//! as not having been factored.
 void XC::SparseGenSOEBase::zeroA(void)
   {
     A.Zero();
