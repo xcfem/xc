@@ -386,7 +386,7 @@ class trafficLoadResult(object):
     #print "vQt= ",vQt," m"
     print "Charge de trafic uniformemente répartie après diffussion transversale (voir 6-15) qtrans= ",self.getqtrans()," N/m"
     #print "lQt= ",lQt," m"
-    print "Charge de trafic ponctuelle aprés diffusion longitudinale et transversale (void 6.18); X= ",self.getX()/1e6," MPa"
+    print "Charge de trafic ponctuelle aprés diffusion longitudinale et transversale (voir 6.18); X= ",self.getX()/1e6," MPa"
 
 class resistance(object):
   def __init__(self,Nadmis,gm,fc,tl,plR,tlR):
