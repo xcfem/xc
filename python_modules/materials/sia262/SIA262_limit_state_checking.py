@@ -18,6 +18,7 @@ import geom
 from materials.sections.fiber_section import createFiberSets
 from materials.sections.fiber_section import fiberUtils
 from materials.sections import stressCalc as sc
+from miscUtils import LogMessages as lmsg
 
 # Returns adherence stress (Pa) for concrete type (tableau 19 SIA 262).
 adherenceStress_x= [12e6 , 16e6,20e6 ,25e6 ,30e6 ,35e6 ,40e6 ,45e6 ,50e6]
@@ -238,9 +239,16 @@ class ShearController(lsc.LimitStateControllerBase):
         posEsf= geom.Pos3d(NTmp,MyTmp,MzTmp)
         diagInt= e.getProp("diagInt")
         intersection= diagInt.getIntersection(posEsf)
-
         Mu= intersection.z
         VuTmp= self.calcVu(NTmp,MzTmp, Mu, VyTmp) #Mz associated with Vy
+      else:
+        #Fictitious ultimate moment.
+        Mu= self.concrete.Ecm()*section.getIz_RClocalZax()*1e-3/section.h
+        if(abs(MzTmp)>Mu):
+          errMsg= 'Fictitious ultimate moment too low;'
+          errMsg+= ' Mu= '+ str(Mu) + ' MzTmp= ' + str(MzTmp)
+          lsmg.error(errMsg)
+      #13.02.2018 right-justified in order to be run only if VyTmp>VuTmp/5.0
       if(VuTmp!=0.0):
         FCtmp= abs(VyTmp)/VuTmp
       else:
@@ -248,6 +256,7 @@ class ShearController(lsc.LimitStateControllerBase):
       if(FCtmp>=e.getProp(self.limitStateLabel).CF):
         VzTmp= scc.getStressResultantComponent("Vz")
         e.setProp(self.limitStateLabel,cv.RCShearControlVars(idSection,nmbComb,FCtmp,NTmp,MyTmp,MzTmp,Mu,VyTmp,VzTmp,theta,self.Vcu,self.Vsu,VuTmp)) # Worst case
+      #13.02.2018 End of changes
 
 
 class CrackControlSIA262(lsc.CrackControlBaseParameters):
