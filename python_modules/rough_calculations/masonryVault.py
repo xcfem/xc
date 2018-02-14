@@ -1,5 +1,6 @@
 #-*- coding: utf-8 -*-
 from __future__ import division
+import scipy.interpolate
 
 '''Based on the thesis: Capacité portante de ponts en arc en maçonnerie de pierre naturelle - Modèle d'évaluation intégrant le niveau d'endommagement. Alix Grandjean (2010). documenturl: https://infoscience.epfl.ch/record/142552/files/EPFL_TH4596.pdf
 '''
@@ -15,6 +16,14 @@ import sys
 from scipy.optimize import minimize
 from miscUtils import LogMessages as lmsg
 
+s_values= [0.1, 0.15,0.186,0.25,0.3, 0.35,0.4,0.45,0.51]
+N_values= [3388e3,1825e3,1450e3, 1088e3,1038e3,1050e3,1075e3,1175e3,538e3]
+Nadm= scipy.interpolate.interp1d(s_values,N_values)
+
+def getAdmissibleAxialForce(S):
+  '''Normal axial force as in table 8.1.'''
+  return Nadm(S)
+   
 #Basic functions.
 def yAxis(f,j,k,r,x):
   "Polynomial interpolation for arc's axis."
@@ -216,6 +225,9 @@ class archGeometry(object):
     """Y coordinate in keystone of arch (at arcSpan/2)""" 
     x=self.arcSpan/2
     return yAxis(self.coefPolArch[0],self.coefPolArch[1],self.coefPolArch[2],self.coefPolArch[3],x)
+  def getS(self):
+    '''Rise to span ratio.'''
+    return self.getYKeystone()/self.arcSpan
   def __str__(self):
     retval= "Overture de la voûte L= " + str(self.arcSpan) +" m\n"
     retval+= "Paramètres de l'équation polynomiale: \n"
@@ -352,8 +364,8 @@ class permLoadResult(object):
     retval+= "Facteur de correction; mc= "+ str(self.fillChar.mc) +'\n'
     retval+= "Coefficient de pousée des terres (voir 6.11); Kc= "+str(self.fillChar.getKc())+"\n"
     retval+= "Resultante de la force horizontale (voir 6.12 et A 12.1); R= "+ str(self.getR()/1e3) + " kN\n"
-    retval+= "Moment de flexion induit par la résultante de la force horizontale R para rapport a la rotule B (voir 6.13 et A 12.2); RzB= "+ str(self.getRzB())+ " N\n"
-    retval+= "Moment de flexion induit par la résultante de la force horizontale R para rapport a la rotule D (voir 6.14 et A 12.3); RzD= "+ str(self.getRzD())+ " N\n"
+    retval+= "Moment de flexion induit par la résultante de la force horizontale R par rapport a la rotule B (voir 6.13 et A 12.2); RzB= "+ str(self.getRzB())+ " N\n"
+    retval+= "Moment de flexion induit par la résultante de la force horizontale R par rapport a la rotule D (voir 6.14 et A 12.3); RzD= "+ str(self.getRzD())+ " N\n"
     return retval
   
   def printResults(self,fillChar):
