@@ -90,7 +90,9 @@ void XC::SuperLU::libera_matricesABAC(void)
             AC.ncol= 0;
           }
         else
-	  std::cerr << "Error al liberar matriz AC en SuperLU." << std::endl;
+	  std::cerr << getClassName() << "::" << __FUNCTION__
+		    << "; ERROR when releasing AC matrix."
+		    << std::endl;
       }
     if(A.ncol != 0)
       {
@@ -158,21 +160,47 @@ void XC::SuperLU::alloc(const size_t &n)
       }
   }
 
+//! @brief Copy constructor.
 XC::SuperLU::SuperLU(const SuperLU &otro)
   : SparseGenColLinSolver(otro)
   {
-    std::cerr << "SuperLU::SuperLU constructor de copia no implementado."
+    std::cerr << getClassName() << "::" << __FUNCTION__
+	      << "; ERROR copy constructor not implemented."
               << std::endl;
   }
 
 //! @brief Assignment operator.
 XC::SuperLU &XC::SuperLU::operator=(const SuperLU &otro)
   {
-    std::cerr << "SuperLU::SuperLU assignment operator."
+    std::cerr << getClassName() << "::" << __FUNCTION__
+	      << "; ERROR assignment operator not implemented."
               << std::endl;
     return *this;
   }
 
+//! @brief Virtual constructor.
+XC::LinearSOESolver *XC::SuperLU::getCopy(void) const
+   { return new SuperLU(*this); }
+
+//! @brief Constructor.
+//!
+//! Saves the values for the arguments
+//! \p permSpec, \p panelSize, \p relax and \p thresh that
+//! will be used when calling the SuperLU routines in solve() and
+//! setSize().
+//!
+//! \p permSpec defines the ordering routine used in defining the
+//! column permutations \p permC: \f$0\f$ uses the original ordering
+//! supplied, \f$1\f$ defines a min-degree ordering based on \f$A^TA\f$
+//! and \f$2\f$ a min-degree ordering based on \f$A^T + A\f$. \p relax defines
+//! the min number of columns in a subtree for the subtree to be considered a
+//! single supernode. \p thresh defines the pivoting threshhold: at
+//! step j of the Gaussian elimination if (abs\f$(A_{jj}) \ge\f$ \p thresh
+//! (max\f$ i \ge j\f$ abs(\f$A_{ij}\f$)). A value for \p thresh of \f$0.0\f$
+//! definines no pivoting, a value of \f$1.0\f$ classical partial pivoting.
+//! \p panelSize defines the number of consequtive columns used as a
+//! panel in the elimination. For more information on these values see the
+//! SuperLU manual.
 XC::SuperLU::SuperLU(int perm, double drop_tolerance, int panel, int relx, char symm)
   :SparseGenColLinSolver(SOLVER_TAGS_SuperLU), relax(relx), permSpec(perm), panelSize(panel), drop_tol(drop_tolerance), symmetric(symm)
   {
@@ -220,8 +248,9 @@ int XC::SuperLU::factoriza(void)
         dgstrf(&options, &AC, relax, panelSize,etree.getDataPtr(), nullptr, 0, perm_c.getDataPtr(), perm_r.getDataPtr(), &L, &U, &slu_stat, &info);
         if(info != 0)
           {        
-             std::cerr << "WARNING XC::SuperLU::factorize(void)- ";
-             std::cerr << " Error " << info << " returned in factorization dgstrf()\n";
+             std::cerr << getClassName() << "::" << __FUNCTION__
+		       << "; WARNING - error " << info
+		       << " returned in factorization dgstrf()\n";
              retval= -info;
           }
         StatFree(&slu_stat);
@@ -234,13 +263,24 @@ int XC::SuperLU::factoriza(void)
     return retval;
   }
 
+//! @brief Solve the system.
+//!
+//! First copies \f$B\f$ into \f$X\f$ and then solves the FullGenLinSOE system 
+//! it is associated with (pointer kept by parent class) by calling the SeuperLU
+//! routine dgstrf(), if the system is marked as not having been factored,
+//! or dgstrs(), if system is marked as having been factored. If the
+//! solution is sucessfully obtained, i.e. the SuperLU routines return \f$0\f$
+//! in the INFO argument, it marks the system has having been
+//! factored and returns \f$0\f$, otherwise it prints a warning message and
+//! returns INFO. The solve process changes \f$A\f$ and \f$X\f$ and sets the
+//! char \p rafact to \p Y.
 int XC::SuperLU::solve(void)
   {
     int retval= 0;
     if(!theSOE)
       {
-	std::cerr << "WARNING XC::SuperLU::solve(void)- ";
-	std::cerr << " No XC::LinearSOE object has been set\n";
+	std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; WARNING - no LinearSOE object has been set\n";
         retval= -1;
       }
     else
@@ -253,8 +293,9 @@ int XC::SuperLU::solve(void)
             const size_t sizePerm= perm_r.Size();
             if(sizePerm != n)
               {
-	        std::cerr << "WARNING XC::SuperLU::solve(void)- ";
-                std::cerr << "  size for row and col permutations 0 - has setSize() been called?\n";
+	        std::cerr << getClassName() << "::" << __FUNCTION__
+			  << "; WARNING - size for row and col permutations"
+		          << " are 0 - has setSize() been called?\n";
 	        retval= -1;
               }
             else
@@ -276,8 +317,9 @@ int XC::SuperLU::solve(void)
                     dgstrs(trans, &L, &U, perm_c.getDataPtr(), perm_r.getDataPtr(), &B, &slu_stat, &info);    
                     if(info != 0)
                       {        
-                        std::cerr << "WARNING XC::SuperLU::solve(void)- ";
-                        std::cerr << " Error " << info << " returned in substitution dgstrs()\n";
+                        std::cerr << getClassName() << "::" << __FUNCTION__
+				  << "; WARNING - "
+				  << " error " << info << " returned in substitution dgstrs()\n";
                         retval= -info;
                       }
                     else
@@ -292,6 +334,20 @@ int XC::SuperLU::solve(void)
   }
 
 
+//! @brief Set the system size.
+//! 
+//! Obtains the size of the system from it's associaed SparseGenColLinSOE
+//! object. With this information it creates space for the integer arrays
+//! \p permR, \p permC and \p etree. It then creates the
+//! a SuperMatrix for A by calling the SuperLU routine {\em
+//! dCreate\_CompCol\_Matrix()}, sets the column permutation \p permR
+//! by calling the SuperLU routine {\em get\_perm\_c(permSpec, A, permC)},
+//! applies this permutation and determines the elimination tree {\em
+//! etree} by calling the SuperLU routine sp\_preorder(). It then
+//! creates a SuperMatrix for X by calling the SuperLU routine 
+//! dCreate\_Dense\_Matrix().
+//! Returns \f$0\f$ if sucessfull, prints a warning message and returns
+//! a \f$-1\f$ if not enough memory is available for the arrays.
 int XC::SuperLU::setSize(void)
   {
     const size_t n = theSOE->size;
@@ -299,7 +355,9 @@ int XC::SuperLU::setSize(void)
       {
         const size_t sizePerm= perm_r.Size();
         if((sizePerm>0) && (sizePerm<n))
-          std::clog << "SuperLU, sometimes, fails when dimension of the system is changerd." << std::endl;
+          std::clog << getClassName() << "::" << __FUNCTION__
+		    << "SuperLU, sometimes, fails when dimension"
+	            << " of the system is changed." << std::endl;
         alloc(n);
         
         // set the refact variable to 'N' after first factorization with new_ size 
@@ -314,8 +372,8 @@ int XC::SuperLU::setSize(void)
         return 0;
       else
         {
-          std::cerr << "WARNING XC::SuperLU::setSize()";
-          std::cerr << " - order of system <  0\n";
+          std::cerr << getClassName() << "::" << __FUNCTION__
+		    << "WARNING; order of system <  0\n";
           return -1;        
         }
     return 0;
