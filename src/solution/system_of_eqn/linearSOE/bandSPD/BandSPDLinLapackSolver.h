@@ -71,6 +71,11 @@ namespace XC {
 //! @ingroup Solver
 //
 //! @brief <a href="http://http://www.netlib.org/lapack/" target="_new"> Lapack</a> based band matrix linear SOE solver.
+//!
+//! A BandSPDLinLapackSolver object can be constructed to solve
+//! a BandSPDLinSOE object. It obtains the solution by making calls on the
+//! the LAPACK library. The class is defined to be a friend of the 
+//! BandSPDLinSOE class.
 class BandSPDLinLapackSolver : public BandSPDLinSolver
   {
     friend class FEM_ObjectBroker;
@@ -86,8 +91,6 @@ class BandSPDLinLapackSolver : public BandSPDLinSolver
     int recvSelf(const CommParameters &);  
   };
 
-inline LinearSOESolver *BandSPDLinLapackSolver::getCopy(void) const
-   { return new BandSPDLinLapackSolver(*this); }
 } // end of XC namespace
 
 #endif

@@ -72,14 +72,37 @@ void XC::BandSPDLinSOE::inicA(const size_t &hsz)
     A.Zero();
   }
 
+//! @brief Constructor.
+//!
+//! The system size is set to \f$0\f$ and the matrix \f$A\f$ is marked as
+//! not having been factored. Invokes {\em setLinearSOE(*this)} on the
+//! \p solver. No memory is allocated for the 3 1d arrays.
+//! 
+//! @param owr: analysis aggregation that owns this object.
 XC::BandSPDLinSOE::BandSPDLinSOE(AnalysisAggregation *owr)
   :FactoredSOEBase(owr,LinSOE_TAGS_BandSPDLinSOE), half_band(0){}
 
 
+//! @brief Constructor.
+//!
+//! @param owr: analysis aggregation that owns this object.
+//! @param classTag: identifier of the class.
 XC::BandSPDLinSOE::BandSPDLinSOE(AnalysisAggregation *owr,int classTag)
   :FactoredSOEBase(owr,classTag), half_band(0) {}
 
 
+//! @brief Constructor.
+//!
+//! Invokes {\em setLinearSOE(*this)} and setSize() on the \p theSolver,
+//! printing a warning message if setSize() returns a negative number. Also
+//! creates Vector objects for \f$x\f$ and \f$b\f$ using the
+//! {\em (double *,int)} Vector constructor.
+//! 
+//! @param owr: analysis aggregation that owns this object.
+//! @param classTag: identifier of the class.
+//! @param N: size of the system.
+//! @param numSuper: number of super diagonals.
+//! @param the_Solver: pointer to the solver.
 XC::BandSPDLinSOE::BandSPDLinSOE(AnalysisAggregation *owr,int N, int numSuper,BandSPDLinSolver *the_Solver)
   :FactoredSOEBase(owr,LinSOE_TAGS_BandSPDLinSOE,N), half_band(0)
   {
@@ -92,9 +115,21 @@ XC::BandSPDLinSOE::BandSPDLinSOE(AnalysisAggregation *owr,int N, int numSuper,Ba
     if(the_Solver)
       setSolver(the_Solver);
     else
-      std::cerr << "BandSPDLinSOE::BandSPDLinSOE; no se especificó el solver." << std::endl;
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; solver not set." << std::endl;
   }
 
+//! @brief Virtual constructor.
+XC::SystemOfEqn *XC::BandSPDLinSOE::getCopy(void) const
+  { return new BandSPDLinSOE(*this); }
+
+//! @brief Set pointer to solver.
+//!
+//! Invokes {\em setLinearSOE(*this)} on \p newSolver.
+//! If the system size is not equal to \f$0\f$, it also invokes setSize()
+//! on \p newSolver, printing a warning and returning the returned value if this
+//! method returns a number less than \f$0\f$. Finally it returns the result
+//! of invoking the LinearSOE classes setSolver() method.
 bool XC::BandSPDLinSOE::setSolver(LinearSOESolver *newSolver)
   {
     bool retval= false;
@@ -102,11 +137,30 @@ bool XC::BandSPDLinSOE::setSolver(LinearSOESolver *newSolver)
     if(tmp)
       retval= FactoredSOEBase::setSolver(tmp);
     else
-      std::cerr << "BandSPDLinSOE::setSolver; solver incompatible con system of equations." << std::endl;
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; incompatible solver." << std::endl;
     return retval;
   }
 
 //! @brief Sets the size of the system from the number of vertices in the graph.
+//!
+//! The size of the system is determined by looking at the adjacency ID of
+//! each Vertex in the Graph object \p G. This is done by first setting
+//! \p ku equal to \f$0\f$ and then checking for each Vertex
+//! in \p G, whether any of the vertex tags in the Vertices adjacency
+//! ID results in \p ku being increased. Knowing \p ku and the size
+//! of the system (the number of Vertices in \p G, a check to see if
+//! the previously allocated 1d arrays for \f$A\f$, \f$x\f$ and \f$b\f$ are
+//! large enough. If the memory portions allocated for the 1d arrays are not big
+//! enough, the old space is returned to the heap and new space is
+//! allocated from the heap. Prints a warning message if not enough
+//! memory is available on the heap for the 1d arrays and returns a
+//! \f$-1\f$. If memory is available, the components of the arrays are zeroed
+//! and \f$A\f$ is marked as being unfactored. If the system size has
+//! increased, new Vector objects for \f$x\f$ and \f$b\f$ using the {\em (double
+//! *,int)} Vector constructor are created. Finally, the result of
+//! invoking setSize() on the associated Solver object is
+//! returned. 
 int XC::BandSPDLinSOE::setSize(Graph &theGraph)
   {
     int result = 0;
@@ -131,14 +185,23 @@ int XC::BandSPDLinSOE::setSize(Graph &theGraph)
     int solverOK = the_Solver->setSize();
     if(solverOK < 0)
       {
-        std::cerr << "WARNING: BandSPDLinSOE::setSize :";
-        std::cerr << " solver failed setSize()\n";
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; WARNING: solver failed in setSize()\n";
         return solverOK;
       }
 
     return result;
   }
 
+//! First tests that \p loc and \p M are of compatible sizes; if not
+//! a warning message is printed and a \f$-1\f$ is returned. The LinearSOE
+//! object then assembles \p fact times the Matrix {\em 
+//! M} into the matrix \f$A\f$. The Matrix is assembled into \f$A\f$ at the
+//! locations given by the ID object \p loc, i.e. \f$a_{loc(i),loc(j)} +=
+//! fact * M(i,j)\f$. If the location specified is outside the range,
+//! i.e. \f$(-1,-1)\f$ the corresponding entry in \p M is not added to
+//! \f$A\f$. If \p fact is equal to \f$0.0\f$ or \f$1.0\f$, more efficient steps
+//! are performed. Returns \f$0\f$.
 int XC::BandSPDLinSOE::addA(const Matrix &m, const ID &id, double fact)
   {
     // check for a quick return
@@ -148,7 +211,8 @@ int XC::BandSPDLinSOE::addA(const Matrix &m, const ID &id, double fact)
     int idSize = id.Size();
     if(idSize != m.noRows() && idSize != m.noCols())
       {
-        std::cerr << "BandSPDLinSOE::addA() - Matrix and XC::ID not of similar sizes\n";
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; Matrix and ID not of similar sizes.\n";
         return -1;
       }
 
@@ -200,6 +264,8 @@ int XC::BandSPDLinSOE::addA(const Matrix &m, const ID &id, double fact)
   }
 
 
+//! @brief Zeros the entries in the 1d array for \f$A\f$ and marks the system
+//! as not having been factored.
 void XC::BandSPDLinSOE::zeroA(void)
   {
     A.Zero();

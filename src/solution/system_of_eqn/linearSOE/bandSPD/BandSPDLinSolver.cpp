@@ -62,9 +62,14 @@
 #include <solution/system_of_eqn/linearSOE/bandSPD/BandSPDLinSolver.h>
 #include <solution/system_of_eqn/linearSOE/bandSPD/BandSPDLinSOE.h>
 
-XC::BandSPDLinSolver::BandSPDLinSolver(int theClassTag)    
-  :LinearSOESolver(theClassTag), theSOE(nullptr) {}    
+//! @brief Constructor.
+//!
+//! @param classTag: class identifier.
+XC::BandSPDLinSolver::BandSPDLinSolver(int classTag)    
+  :LinearSOESolver(classTag), theSOE(nullptr) {}    
 
+//! @brief Set up the link between the BandSPDLinSOE object and the
+//! BandSPDLinSolver, that it is sets the pointer the subclasses use.
 bool XC::BandSPDLinSolver::setLinearSOE(LinearSOE *soe)
   {
     bool retval= false;
@@ -75,10 +80,14 @@ bool XC::BandSPDLinSolver::setLinearSOE(LinearSOE *soe)
         retval= true;
       }
     else
-      std::cerr << getClassName() << "::setLinearSOE: el system of equations no es del tipo adecuado para este solver." << std::endl;
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< " not a suitable type for the system of equations."
+		<< std::endl;
     return retval;
   }
 
+//! @brief Set up the link between the BandSPDLinSOE object and the
+//! BandSPDLinSolver, that it is sets the pointer the subclasses use.
 bool XC::BandSPDLinSolver::setLinearSOE(BandSPDLinSOE &theBandSPDSOE)
   { return setLinearSOE(&theBandSPDSOE); }
 
