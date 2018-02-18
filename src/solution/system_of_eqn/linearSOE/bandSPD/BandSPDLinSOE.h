@@ -76,12 +76,43 @@ class BandSPDLinSolver;
 //! @ingroup SOE
 //
 //! @brief Base class for band matrix system of equations.
+//!
+//! BandSPDLinSOE is class which is used to store a banded symmetric system
+//! with ku superdiagonals. The \f$A\f$ matrix is stored in a
+// 1d double array with (ku+1)*n elements, where n is the size of the
+//! system. \f$A_{i,j}\f$ is stored at location \f$(ku+1+i-j) +
+//! j*(ku+1)\f$, where \f$i\f$ and \f$j\f$ range from \f$0\f$ to\f$n-1\f$,
+//! i.e. C notation. For example when \f$n=5\f$, \f$ku = 2\f$: 
+//! \f$\f$
+//! \left[
+//! \begin{array}{ccccc}
+//! //! a_{0,0} & a_{0,1}  & a_{0,1} & 0 & 0
+//! a_{1,0} & a_{1,1} & a_{1,2} & a_{1,3} & 0
+//! a_{2,0} & a_{2,1} & a_{2,2} & a_{2,3} & a_{2,4}
+//! 0 & a_{3,1} & a_{3,2} & a_{3,3} & a_{3,4}
+//! 0 & 0 & a_{4,2} & a_{4,3} & a_{4,4}
+//! \end{array}
+//! \right] 
+//! \f$\f$
+//! 
+//! is stored in:
+//! 
+//! \f$\f$
+//! \left[
+//! \begin{array}{cccccccccccccccccccc}
+//! * & * & a_{0,0} & * & a_{0,1}  & a_{1,1} & a_{0,2} & a_{1,2} & a_{2,2} &
+//! //! a_{1,3} & a_{2,3} & a_{3,3} & a_{2,4} & a_{3,4} & a_{4,4}
+//! \end{array}
+//! \right] 
+//! \f$\f$
+//! 
+//! The \f$X\f$ and \f$B\f$ vectors are stored in 1d double arrays of
+//! length \f$N\f$.
 class BandSPDLinSOE: public FactoredSOEBase
   {
   protected:
     int half_band;    
-    Vector A;
-    int aFactored;
+    Vector A; //!< Storage for the matrix.
 
     void inicA(const size_t &);
     bool setSolver(LinearSOESolver *);
@@ -107,8 +138,6 @@ class BandSPDLinSOE: public FactoredSOEBase
     friend class BandSPDLinThreadSolver;        
     
   };
-inline SystemOfEqn *BandSPDLinSOE::getCopy(void) const
-  { return new BandSPDLinSOE(*this); }
 } // end of XC namespace
 
 

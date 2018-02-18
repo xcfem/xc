@@ -73,10 +73,14 @@ class BandSPDLinSOE;
 //! @ingroup Solver
 //
 //! @brief Solver for band matrix linear systems of equations.
+//!
+//! The BandSPDLinSolver
+//! class provides access for each subclass to the BandSPDLinSOE object
+//! through the pointer \p theSOE, which is a protected pointer.
 class BandSPDLinSolver : public LinearSOESolver
   {
   protected:
-    BandSPDLinSOE *theSOE;
+    BandSPDLinSOE *theSOE; //!< Pointer to the solver.
 
     BandSPDLinSolver(int classTag);    
     virtual bool setLinearSOE(LinearSOE *theSOE);

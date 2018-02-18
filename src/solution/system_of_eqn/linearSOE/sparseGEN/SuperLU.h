@@ -80,6 +80,16 @@ namespace XC {
 //! @ingroup LinearSolver
 //
 //! @brief <a href="https://launchpad.net/ubuntu/+source/superlu" target="_new"> SuperLU</a> based sparse general matrix linear SOE solver.
+//!
+//! A SuperLU object can be constructed to solve
+//! a SparseGenColLinSOE object. It obtains the solution by making calls on the
+//! the SuperLU library developed at UC Berkeley by Prof. James Demmel, 
+//! Xiaoye S. Li and John R. Gilbert.
+//! The SuperLU library contains a set of subroutines to solve a sparse
+//! linear system  \f$AX=B\f$. It uses Gaussian elimination with partial
+//! pivoting (GEPP). The columns of A may be preordered before
+//! factorization; the preordering for sparsity is completely separate
+//! from the factorization and a number of ordering schemes are provided.
 class SuperLU : public SparseGenColLinSolver
   {
   private:
@@ -118,8 +128,6 @@ class SuperLU : public SparseGenColLinSolver
 
     void Print(std::ostream &os) const;
   };
-inline LinearSOESolver *SuperLU::getCopy(void) const
-   { return new SuperLU(*this); }
 } // end of XC namespace
 
 #endif

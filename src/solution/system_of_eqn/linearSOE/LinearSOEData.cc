@@ -39,6 +39,7 @@ XC::LinearSOEData::LinearSOEData(AnalysisAggregation *owr,int classTag,int N)
   :LinearSOE(owr,classTag), size(N) {}
 
 
+//! @brief Initializes storage.
 void XC::LinearSOEData::inic(const size_t &sz)
   {
     if(sz>0)
@@ -53,7 +54,7 @@ void XC::LinearSOEData::inic(const size_t &sz)
                 << " add nodes or reduce constraints." << std::endl;
   }
 
-//! @brief A method which returns the current size of the system.
+//! @brief Return the current size of the system.
 int XC::LinearSOEData::getNumEqn(void) const
   { return size; }
 
@@ -178,7 +179,7 @@ int XC::LinearSOEData::addB(const Vector &v, const double &fact)
 //! @param fact: factor that multiplies v.
 int XC::LinearSOEData::addB(const Vector &v, const ID &id,const double &fact)
   {
-    // check for a XC::quick return
+    // check for a quick return
     if(fact == 0.0)  return 0;
 
 
