@@ -87,13 +87,16 @@ class ElastomericBearing(Bearing):
 
     Reference:
         :"Puentes": book from Javier Manterola Armisén page 591 and 592.
+
     Class-wide members:
-        :v2table: interpolation function for the V2 shape factor.
-        :v3table: interpolation function for the V3 shape factor.
-        :v4table: interpolation function for the V4 shape factor.
-        :betaTable: interpolation function for the beta shape factor.
+
+        :param v2table: interpolation function for the V2 shape factor.
+        :param v3table: interpolation function for the V3 shape factor.
+        :param v4table: interpolation function for the V4 shape factor.
+        :param betaTable: interpolation function for the beta shape factor.
 
     Attributes:
+
         :ivar G: (float) Elastomer shear modulus.
         :ivar a: (float) Width of the bearing (parallel to lintel axis).
         :ivar b: (float) Length of the bearing (parallel to bridge axis).
