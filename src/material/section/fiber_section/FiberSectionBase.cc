@@ -348,25 +348,26 @@ double XC::FiberSectionBase::getNeutralAxisDist(const double &y,const double &) 
     return retval;
   }
 
-//! @brief Returns the line that limits the concrete efficient area $A_{c,ef}$
+//! @brief Returns the line that limits the concrete effective area $A_{c,ef}$
 //! as in article 49.2.4 from EHE-08 (hatched area in figure 49.2.4b).
 //! See also figures 47.5 y 47.6 from volume II of the
 //! book: "Proyecto y cálculo de estructuras de hormigón" author: J. Calavera.
 Recta2d XC::FiberSectionBase::getEffectiveConcreteAreaLimitLine(const double &hEfMax) const
   {
     Recta2d retval;
-    Recta2d fn= getNeutralAxis();
-    if(!fn.exists())
-      fn= fibers.getNeutralAxis();
+    Recta2d fn= getNeutralAxis(); //Neutral axis computed from deformation plane.
+    if(!fn.exists()) //It this doesn't work.
+      fn= fibers.getNeutralAxis(); //Neutral axis computed from fiber model. 
     if(fn.exists())
       {
-        const double hef= getTensionedZoneLeverArm();
+        const double hef= getTensionedZoneLeverArm(); //Lever arm of cross-section tensioned zone.
         assert(!std::isnan(hef));
         if(hef<hEfMax)
           retval= fn;
         else
           {
-            const double d= -(hef-hEfMax); //Sign changet to move over tensioned zone.
+	    //Compute a parallel line at (hef-fEfMax) distance over the tensioned zone.
+            const double d= -(hef-hEfMax); //Sign changed to move over tensioned zone.
             const Vector v= normalize(getVectorBrazoMecanico())*d;
             retval= fn.Offset(Vector2d(v[0],v[1]));
           }
@@ -375,26 +376,30 @@ Recta2d XC::FiberSectionBase::getEffectiveConcreteAreaLimitLine(const double &hE
   }
 
 //! @brief Returns the contours of the concrete effective area \f$A_{c,ef}\f$
-//! as in article 49.2.4 from EHE-08 (hatched area in figure 49.2.4b).
-//! See also figures 47.5 y 47.6 from volume II of the
+//! the area that CAN "collaborate" with rebars to resist tension in SLS.
+//! 
+//! Concrete effective area as in article 49.2.4 from EHE-08 (hatched area
+//! in figure 49.2.4b). See also figures 47.5 y 47.6 from volume II of the
 //! book: "Proyecto y cálculo de estructuras de hormigón" author: J. Calavera.
 std::list<Poligono2d> XC::FiberSectionBase::getGrossEffectiveConcreteAreaContour(const double &hEfMax) const
   {
     std::list<Poligono2d> retval;
-    Poligono2d contour= getRegionsContour();
+    Poligono2d contour= getRegionsContour(); //Computes cross-section contour.
 
-    const double epsMin= fibers.getStrainMin();
-    const double epsMax= fibers.getStrainMax();
+    const double epsMin= fibers.getStrainMin(); //Minimal strain.
+    const double epsMax= fibers.getStrainMax(); //Maximal strain.
     if(epsMin>0) //Full section is in tension.
-      retval.push_back(contour);
-    else if(epsMax>0) //Bending.
+      retval.push_back(contour); //XXX This is an error.
+    else if(epsMax>0) //Some (epsMin<=0) but not all the section is compressed.
       {
         if(hEfMax>1e-6)
           {
-            const Recta2d limite= getEffectiveConcreteAreaLimitLine(hEfMax);
-            if(limite.exists())
+	    // Compute the line that limits the effective area contour
+            const Recta2d limit= getEffectiveConcreteAreaLimitLine(hEfMax);
+            if(limit.exists())
               {
-                const Semiplano2d tensionedArea= getTensionedHalfPlane(limite);
+		// Compute the half plane that is in tension.
+                const Semiplano2d tensionedArea= getTensionedHalfPlane(limit);
                 assert(tensionedArea.exists());
                 retval= contour.Interseccion(tensionedArea);
               }
@@ -403,7 +408,7 @@ std::list<Poligono2d> XC::FiberSectionBase::getGrossEffectiveConcreteAreaContour
           }
         else
           std::cerr << getClassName() << "::" << __FUNCTION__
-	            << "; maximum efficient height is zero." << std::endl;
+	            << "; maximum effective height is zero." << std::endl;
       }
     if(retval.empty())
       {
@@ -420,18 +425,19 @@ double XC::FiberSectionBase::getGrossEffectiveConcreteArea(const double &hEfMax)
     return area(tmp.begin(),tmp.end());
   }
 
-//! @brief Returns the sum of the efficient areas of rebars in tension.
+//! @brief Returns the sum of the effective areas of rebars in tension.
 double XC::FiberSectionBase::getNetEffectiveConcreteArea(const double &hEfMax,const std::string &nmbSetArmaduras,const double &factor) const
   {
     double retval= 0.0;
     std::list<Poligono2d> grossEffectiveConcreteAreaContour= getGrossEffectiveConcreteAreaContour(hEfMax);
     if(!grossEffectiveConcreteAreaContour.empty())
       {
+	//Iterate over the rebar set.
         fiber_set_const_iterator i= fiber_sets.find(nmbSetArmaduras);
         if(i!=fiber_sets.end())
           {
-            const FiberDeque &armaduras= (*i).second; //Armaduras.
-            retval= armaduras.computeFibersEffectiveConcreteArea(grossEffectiveConcreteAreaContour,factor);
+            const FiberDeque &armaduras= (*i).second; //Rebar family.
+            retval+= armaduras.computeFibersEffectiveConcreteArea(grossEffectiveConcreteAreaContour,factor);
           }
         else
           std::cerr << getClassName() << "::" << __FUNCTION__
@@ -440,7 +446,7 @@ double XC::FiberSectionBase::getNetEffectiveConcreteArea(const double &hEfMax,co
       }
     else
       std::cerr << getClassName() << "::" << __FUNCTION__
-		<< "; can't compute efficient area." << std::endl;
+		<< "; can't compute effective area." << std::endl;
     return retval;
   }
 
@@ -464,7 +470,7 @@ double XC::FiberSectionBase::computeFibersEffectiveConcreteArea(const double &hE
       }
     else
       std::cerr << getClassName() << "::" << __FUNCTION__
-		<< "; can't compute efficient area." << std::endl;
+		<< "; can't compute effective area." << std::endl;
     return retval;
   }
 

@@ -1317,6 +1317,7 @@ double XC::FiberDeque::getAverageDistanceBetweenFibers(void) const
 //! Instead to consider an square shape we consider a dodecagone with the
 //! same area. I think it's less anisotropic.
 //! @param grossEffectiveConcreteAreaContour: Contour of the gross effective area obtained from the section.
+//! @param factor: factor that multiplies rebar diameter to obtain the square prescribed by the standard (i.e. for EHE-08 factor= 15).
 double XC::FiberDeque::computeFibersEffectiveConcreteArea(const std::list<Poligono2d> &grossEffectiveConcreteAreaContour,const double &factor) const
   {
     double retval= 0.0;
@@ -1326,7 +1327,8 @@ double XC::FiberDeque::computeFibersEffectiveConcreteArea(const std::list<Poligo
     dq_ac_effective.clear();
     dq_ac_effective.resize(sz);
     Poligono2d tmp;
-    for(size_t i= 0;i<sz;i++)
+    //Clip the rebars areas with the effective area contour.
+    for(size_t i= 0;i<sz;i++) //For each rebar in the family.
       {
         dm= getEquivalentDiameterOfFiber(i);
         L= factor*dm; //Side of the square prescribed by the standard.
@@ -1347,7 +1349,7 @@ double XC::FiberDeque::computeFibersEffectiveConcreteArea(const std::list<Poligo
             }
       }
 
-    //Clip intersections.
+    //Clip computed intersections.
     for(size_t i= 0;i<sz;i++)
       {
 	std::list<Poligono2d> &p1= dq_ac_effective[i];
@@ -1362,6 +1364,7 @@ double XC::FiberDeque::computeFibersEffectiveConcreteArea(const std::list<Poligo
               }
           }
       }
+    //Sum areas.
     for(size_t i= 0;i<sz;i++)
       {
         if(!dq_ac_effective[i].empty())
