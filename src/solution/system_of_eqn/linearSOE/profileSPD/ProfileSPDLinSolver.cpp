@@ -66,8 +66,11 @@
 #include <solution/system_of_eqn/linearSOE/profileSPD/ProfileSPDLinSolver.h>
 #include <solution/system_of_eqn/linearSOE/profileSPD/ProfileSPDLinSOE.h>
 
-XC::ProfileSPDLinSolver::ProfileSPDLinSolver(int theClassTag)    
-:LinearSOESolver(theClassTag), theSOE(nullptr) {}    
+//! @brief Constructor.
+//!
+//! @param classTag: class identifier.
+XC::ProfileSPDLinSolver::ProfileSPDLinSolver(int classTag)    
+:LinearSOESolver(classTag), theSOE(nullptr) {}    
 
 //! @brief Sets the system of equations to solve.
 bool XC::ProfileSPDLinSolver::setLinearSOE(LinearSOE *soe)
@@ -80,10 +83,13 @@ bool XC::ProfileSPDLinSolver::setLinearSOE(LinearSOE *soe)
         retval= true;
       }
     else
-      std::cerr << getClassName() << "::setLinearSOE: el system of equations no es del tipo adecuado para este solver." << std::endl;
+      std::cerr << getClassName() << "::" << __FUNCTION__
+	        << "; ERROR system of equations not of a suitable type."
+		<< std::endl;
     return retval;
   }
 
+//! @brief Sets the system of equations to solve.
 bool XC::ProfileSPDLinSolver::setLinearSOE(ProfileSPDLinSOE &theProfileSPDSOE)
   { return setLinearSOE(&theProfileSPDSOE); }
 
