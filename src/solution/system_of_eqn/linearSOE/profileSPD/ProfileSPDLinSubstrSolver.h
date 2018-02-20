@@ -75,7 +75,8 @@ class ProfileSPDLinSOE;
 
 //! @ingroup LinearSolver
 //
-//! @brief Some kind of profile matrix linear SOE solver.
+//! @brief A ProfileSPDLinSubstrSolver object will perform the numerical
+//! substructuring operations on a ProfileSPDLinSOE object.
 class ProfileSPDLinSubstrSolver : public ProfileSPDLinDirectSolver,
                                   public DomainSolver
   {
@@ -87,10 +88,9 @@ class ProfileSPDLinSubstrSolver : public ProfileSPDLinDirectSolver,
 
   protected:
     friend class FEM_ObjectBroker;
-    ProfileSPDLinSubstrSolver(double tol=1.0e-12);    
+    ProfileSPDLinSubstrSolver(double tol=1.0e-12);
     virtual LinearSOESolver *getCopy(void) const;
   public:
-
     int solve(void);
     int condenseA(int numInt);
     int condenseRHS(int numInt, Vector *v =0);
