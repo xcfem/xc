@@ -94,8 +94,8 @@ namespace XC {
 //! \Delta t} \]
 //! 
 //! \noindent and the velocities and accelerations at time \f$t + \Delta t\f$
-//! //! are determined using the Newmark relations. The HHT method results in
-//! //! the following for determining the response at \f$t + \Delta t\f$
+//! are determined using the Newmark relations. The HHT method results in
+//! the following for determining the response at \f$t + \Delta t\f$
 //! 
 //! \[ \left[ \frac{1}{\beta \Delta t^2} M + \frac{\alpha \gamma}{\beta
 //! \Delta t} C + \alpha K \right] \Delta U_{t + \Delta t}^{(i)} = P(t

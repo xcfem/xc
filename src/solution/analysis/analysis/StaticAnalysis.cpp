@@ -335,7 +335,7 @@ int XC::StaticAnalysis::initialize(void)
 
 //! @brief Method invoked during the analysis to deal with domain changes.
 //!
-//! //! This is a method invoked by the analysis during the analysis method if
+//! This is a method invoked by the analysis during the analysis method if
 //! the Domain has changed. The method invokes the following:
 //! - It invokes clearAll() on \p the analysis model which causes the
 //! AnalysisModel to clear out its list of FE\_Elements and DOF\_Groups,

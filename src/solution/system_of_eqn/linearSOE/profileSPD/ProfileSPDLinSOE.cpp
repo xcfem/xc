@@ -63,15 +63,35 @@
 #include <utility/matrix/Vector.h>
 #include <utility/matrix/Matrix.h>
 
+//! @brief Constructor.
+//!
+//! @param owr: analysis aggregation that owns this object.
 XC::ProfileSPDLinSOE::ProfileSPDLinSOE(AnalysisAggregation *owr)
   :FactoredSOEBase(owr,LinSOE_TAGS_ProfileSPDLinSOE),
    profileSize(0), isAcondensed(false), numInt(0) {}
 
+//! @brief Constructor.
+//!
+//! @param owr: analysis aggregation that owns this object.
+//! @param classTag: identifier of the class.
 XC::ProfileSPDLinSOE::ProfileSPDLinSOE(AnalysisAggregation *owr,int classTag)
   :FactoredSOEBase(owr,classTag),
    profileSize(0), isAcondensed(false), numInt(0) {}
 
 
+//! @brief Constructor.
+//!
+//! The size of \f$A\f$ is given
+//! by \f$newIloc(N-1)\f$, if this is not a valid address in \p newIloc a
+//! segmentation fault or erronious results will result. The contents of
+//! \f$iLoc\f$ are set equal to those of \p newIloc. Invokes {\em
+//! setLinearSOE(*this)} and setSize() on \p solver,
+//! printing a warning message if setSize() returns a negative
+//! number. Also creates Vector objects for \f$x\f$ and \f$b\f$.
+//! 
+//! @param owr: analysis aggregation that owns this object.
+//! @param N: size of the system.
+//! @param the_Solver: pointer to the solver to use.
 XC::ProfileSPDLinSOE::ProfileSPDLinSOE(AnalysisAggregation *owr,int N, int *iLoc,ProfileSPDLinSolver *the_Solver)
   :FactoredSOEBase(owr,LinSOE_TAGS_ProfileSPDLinSOE,N),
    profileSize(0), isAcondensed(false), numInt(0)
@@ -94,10 +114,17 @@ XC::ProfileSPDLinSOE::ProfileSPDLinSOE(AnalysisAggregation *owr,int N, int *iLoc
     if(the_Solver)
       setSolver(the_Solver);
     else
-      std::cerr << "BandGenLinSOE::BandGenLinSOE; no se especificó el solver." << std::endl;
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; solver not set." << std::endl;
   }
 
-    
+//! @brief Set the solver to use.
+//!
+//! Invokes {\em setLinearSOE(*this)} on \p newSolver.
+//! If the system size is not equal to \f$0\f$, it also invokes setSize()
+//! on \p newSolver, printing a warning and returning the returned value if this
+//! method returns a number less than \f$0\f$. Finally it returns the result
+//! of invoking the LinearSOE classes setSolver() method.
 bool XC::ProfileSPDLinSOE::setSolver(LinearSOESolver *newSolver)
   {
     bool retval= false;
@@ -105,10 +132,32 @@ bool XC::ProfileSPDLinSOE::setSolver(LinearSOESolver *newSolver)
     if(tmp)
       retval= FactoredSOEBase::setSolver(tmp);
     else
-      std::cerr << "XC::ProfileSPDLinSOE::setSolver; solver incompatible con system of equations." << std::endl;
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; not a suitable solver." << std::endl;
     return retval;
   }
 
+//! @brief Sets the system size.
+//!
+//! The size of the system is determined by looking at the adjacency ID of
+//! each Vertex in the Graph object \p G. This is done by first
+//! determining the column height for each Vertex \f$i\f$ in \p G, done by
+//! setting \f$iLoc(i)\f$ equal to \f$0\f$ and then checking for each Vertex
+//! in \p G, whether any of the vertex tags in the Vertices adjacency
+//! ID results in \f$iLoc(i)\f$ being increased. Knowing the col height of
+//! each column, the values of \p iLoc can be determined. Knowing {\em
+//! iLoc} and the size of the system (the number of Vertices in \p G, 
+//! a check to see if the previously allocated 1d arrays for \f$A\f$, \f$x\f$
+//! and \f$b\f$ are large enough. If the memory portions allocated for the 1d
+//! arrays are not big enough, the old space is returned to the heap and
+//! new space is allocated from the heap. Printins a warning message if
+//! not enough memory is available on the heap for the 1d arrays and
+//! returns a \f$-1\f$. If memory is available, the components of the arrays
+//! are zeroed and \f$A\f$ is marked as being unfactored. If the system size
+//! has increased, new Vector objects for \f$x\f$ and \f$b\f$ using the {\em
+//! (double *,int)} Vector constructor are created. Finally, the result of 
+//! invoking setSize() on the associated Solver object is
+//! returned. 
 int XC::ProfileSPDLinSOE::setSize(Graph &theGraph)
   {
     int result = 0;
@@ -180,13 +229,24 @@ int XC::ProfileSPDLinSOE::setSize(Graph &theGraph)
     int solverOK = the_Solver->setSize();
     if(solverOK < 0)
       {
-        std::cerr << "WARNING XC::ProfileSPDLinSOE::setSize :";
-        std::cerr << " solver failed setSize()\n";
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; WARNING solver failed setSize()\n";
         return solverOK;
       }    
     return result;
   }
 
+//! @brief Assembles the product of m by fact into A.
+//! 
+//! First tests that \p loc and \p M are of compatable sizes; if not
+//! a warning message is printed and a \f$-1\f$ is returned. The LinearSOE
+//! object then assembles \p fact times the Matrix {\em 
+//! M} into the matrix \f$A\f$. The Matrix is assembled into \f$A\f$ at the
+//! locations given by the ID object \p loc, i.e. \f$a_{loc(i),loc(j)} +=
+//! fact * M(i,j)\f$. If the location specified is outside the range,
+//! i.e. \f$(-1,-1)\f$ the corrseponding entry in \p M is not added to
+//! \f$A\f$. If \p fact is equal to \f$0.0\f$ or \f$1.0\f$, more efficient steps
+//! are performed. Returns \f$0\f$.
 int XC::ProfileSPDLinSOE::addA(const Matrix &m, const ID &id, double fact)
   {
     // check for a XC::quick return 
@@ -194,10 +254,12 @@ int XC::ProfileSPDLinSOE::addA(const Matrix &m, const ID &id, double fact)
     
     // check that m and id are of similar size
     int idSize = id.Size();    
-    if(idSize != m.noRows() && idSize != m.noCols()) {
-        std::cerr << "ProfileSPDLinSOE::addA() - Matrix and XC::ID not of similar sizes\n";
+    if(idSize != m.noRows() && idSize != m.noCols())
+      {
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; Matrix and ID not of similar sizes.\n";
         return -1;
-    }
+      }
 
     double *addrA= A.getDataPtr();
     if(fact == 1.0)
@@ -256,6 +318,8 @@ int XC::ProfileSPDLinSOE::addA(const Matrix &m, const ID &id, double fact)
   }
 
     
+//! @brief Zeros the entries in the 1d array for \f$A\f$ and marks the system
+//! as not having been factored.
 void XC::ProfileSPDLinSOE::zeroA(void)
   {
     A.Zero();
