@@ -74,6 +74,14 @@ class ProfileSPDLinSOE;
 //
 //! @brief solves a ProfileSPDLinSOE object using
 //! the LDL^t factorization (threaded version).
+//!
+//! A ProfileSPDLinDirectThreadSolver object can be constructed to
+//! solve a ProfileSPDLinSOE object. It does this in parallel using
+//! threads by direct means, using the \f$LDL^t\f$ variation of the cholesky
+//! factorization. The matrx \f$A\f$ is factored one row block at a time using
+//! a left-looking approach. Within a row block the factorization is
+//! performed by \f$NP\f$ threads. No BLAS or LAPACK routines are called 
+//! for the factorization or subsequent substitution.
 class ProfileSPDLinDirectThreadSolver : public ProfileSPDLinDirectBase
   {
   protected:
@@ -97,8 +105,6 @@ class ProfileSPDLinDirectThreadSolver : public ProfileSPDLinDirectBase
     int recvSelf(const CommParameters &);
   };
 
-inline LinearSOESolver *ProfileSPDLinDirectThreadSolver::getCopy(void) const
-   { return new ProfileSPDLinDirectThreadSolver(*this); }
 } // end of XC namespace
 
 

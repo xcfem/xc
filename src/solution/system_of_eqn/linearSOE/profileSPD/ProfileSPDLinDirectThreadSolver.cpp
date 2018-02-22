@@ -106,19 +106,23 @@ struct thread_control_block {
 
 void *ProfileSPDLinDirectThreadSolver_Worker(void *arg);
 
+//! @brief Default constructor.
 XC::ProfileSPDLinDirectThreadSolver::ProfileSPDLinDirectThreadSolver(void)
   :ProfileSPDLinDirectBase(SOLVER_TAGS_ProfileSPDLinDirectThreadSolver,1.0e-12),
  NP(2), running(false), blockSize(4), maxColHeight(0) {}
 
+//! @brief Constructor.
+//!
+//! @param numProcessors: number of processors to use.
 XC::ProfileSPDLinDirectThreadSolver::ProfileSPDLinDirectThreadSolver(int numProcessors, int blckSize, double tol) 
 :ProfileSPDLinDirectBase(SOLVER_TAGS_ProfileSPDLinDirectThreadSolver,tol),
  NP(numProcessors), running(false), blockSize(blckSize), maxColHeight(0)
   {}
 
-    
+//! @brief Set system size.    
 int XC::ProfileSPDLinDirectThreadSolver::setSize(void)
   {
-    if(theSOE == 0)
+    if(!theSOE)
       {
 	std::cerr << getClassName() << "::" << __FUNCTION__;
 	std::cerr << " No system has been set\n";
@@ -158,8 +162,11 @@ int XC::ProfileSPDLinDirectThreadSolver::setSize(void)
 }
 
 
+//! The solver first copies the B vector into X.
+//! FILL IN
+//! The solve process changes \f$A\f$ and \f$X\f$.   
 int XC::ProfileSPDLinDirectThreadSolver::solve(void)
-{
+  {
     // check for XC::quick returns
     if (theSOE == 0) {
 	std::cerr << getClassName() << "::" << __FUNCTION__;
