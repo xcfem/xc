@@ -101,7 +101,7 @@ int XC::UmfpackGenLinSolver::solve(void)
     int ne = theSOE->nnz;
     int lValue = theSOE->lValue;
 
-    // check for XC::quick return
+    // check for quick return
     if (n == 0)
 	return 0;
 

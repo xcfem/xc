@@ -374,7 +374,7 @@ const XC::Matrix &XC::Spring::getMass(void) const
     mass.Zero();
 
     const double M= getRho();//Aquí rho será la masa concentrada.
-    // check for XC::quick return
+    // check for quick return
     if(M == 0.0) return mass;
 
     int numDOF2= numDOF/2;

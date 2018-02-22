@@ -332,9 +332,9 @@ XC::Vector XC::normalize(const Vector &v)
 XC::Vector XC::normalize_inf(const Vector &v)
   { return v.NormalizedInf(); }
 
-int XC::Vector::addVector(double thisFact, const XC::Vector &other, double otherFact )
+int XC::Vector::addVector(double thisFact, const Vector &other, double otherFact )
   {
-    // check if XC::quick return
+    // check if quick return
     if(otherFact == 0.0 && thisFact == 1.0)
       return 0; 
 
@@ -422,7 +422,7 @@ int XC::Vector::addVector(double thisFact, const XC::Vector &other, double other
 	
 int XC::Vector::addMatrixVector(double thisFact, const Matrix &m, const XC::Vector &v, double otherFact )
   {
-    // see if XC::quick return
+    // see if quick return
     if(thisFact == 1.0 && otherFact == 0.0)
       return 0;
 
@@ -555,7 +555,7 @@ int XC::Vector::addMatrixVector(double thisFact, const Matrix &m, const XC::Vect
 
 int XC::Vector::addMatrixTransposeVector(double thisFact, const XC::Matrix &m, const XC::Vector &v, double otherFact)
   {
-  // see if XC::quick return
+  // see if quick return
     if(otherFact == 0.0 && thisFact == 1.0)
       return 0;
 

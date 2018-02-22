@@ -332,7 +332,7 @@ const XC::Matrix &XC::TrussSection::getMass(void) const
     mass.Zero();
 
     const double rho= getRho();
-    // check for XC::quick return
+    // check for quick return
     if(L == 0.0 || rho == 0.0)
       { // - problem in setDomain() no further warnings
         return mass;
@@ -363,7 +363,7 @@ int XC::TrussSection::addLoad(ElementalLoad *theLoad, double loadFactor)
 int XC::TrussSection::addInertiaLoadToUnbalance(const XC::Vector &accel)
   {
     const double rho= getRho();
-    // check for a XC::quick return
+    // check for a quick return
     if(L == 0.0 || rho == 0.0)
         return 0;
 

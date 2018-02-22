@@ -83,7 +83,7 @@ int XC::ProfileSPDLinDirectBlockSolver::setSize(void)
 	return -1;
       }
 
-    // check for XC::quick return 
+    // check for quick return 
     if(theSOE->size == 0)
 	return 0;
     if(size != theSOE->size)
@@ -118,7 +118,7 @@ int XC::ProfileSPDLinDirectBlockSolver::setSize(void)
 
 int XC::ProfileSPDLinDirectBlockSolver::solve(void)
   {
-    // check for XC::quick returns
+    // check for quick returns
     if(theSOE == 0)
       {
 	std::cerr << getClassName() << "::" << __FUNCTION__;

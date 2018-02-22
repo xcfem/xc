@@ -115,7 +115,7 @@ class ProfileSPDLinSolver;
 //! is to facilitate calls to Fortran libraries, e.g. Digital's DXML.
 //! The \f$x\f$ and \f$b\f$ vectors are stored in 1d double arrays of
 //! length \f$N\f$.
-class ProfileSPDLinSOE : public FactoredSOEBase
+class ProfileSPDLinSOE: public FactoredSOEBase
   {
   protected:
     int profileSize;    

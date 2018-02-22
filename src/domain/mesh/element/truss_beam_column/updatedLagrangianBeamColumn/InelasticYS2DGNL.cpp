@@ -623,7 +623,7 @@ const XC::Vector &XC::InelasticYS2DGNL::getResistingForce(void) const
         this->update();
         init = true;
       }
-    // check for XC::quick return
+    // check for quick return
     if(L == 0)
       return ZeroVector;
     m_Iter++;

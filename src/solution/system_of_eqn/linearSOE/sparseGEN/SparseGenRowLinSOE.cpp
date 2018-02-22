@@ -172,7 +172,7 @@ int XC::SparseGenRowLinSOE::setSize(Graph &theGraph)
 int 
 XC::SparseGenRowLinSOE::addA(const XC::Matrix &m, const XC::ID &id, double fact)
 {
-    // check for a XC::quick return 
+    // check for a quick return 
     if (fact == 0.0)  
 	return 0;
 

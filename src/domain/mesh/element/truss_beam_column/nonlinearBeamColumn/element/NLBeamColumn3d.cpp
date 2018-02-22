@@ -274,7 +274,7 @@ int XC::NLBeamColumn3d::revertToStart(void)
 const XC::Matrix &XC::NLBeamColumn3d::getInitialStiff(void) const
   {
 
-    // check for XC::quick return
+    // check for quick return
     if(!Ki.Nula())
       return Ki;
 
@@ -897,7 +897,7 @@ int XC::NLBeamColumn3d::addLoad(ElementalLoad *theLoad, double loadFactor)
 
 int XC::NLBeamColumn3d::addInertiaLoadToUnbalance(const XC::Vector &accel)
   {
-    // Check for a XC::quick return
+    // Check for a quick return
     if(rho == 0.0)
       return 0;
 
@@ -920,7 +920,7 @@ int XC::NLBeamColumn3d::addInertiaLoadToUnbalance(const XC::Vector &accel)
 
 const XC::Vector &XC::NLBeamColumn3d::getResistingForceIncInertia(void) const
   {
-    // Check for a XC::quick return
+    // Check for a quick return
     if(rho == 0.0)
       theVector = this->getResistingForce();
 

@@ -515,7 +515,7 @@ XC::TotalLagrangianFD20NodeBrick::addLoad(ElementalLoad *theLoad, double loadFac
 //=============================================================================
 int XC::TotalLagrangianFD20NodeBrick::addInertiaLoadToUnbalance(const XC::Vector &accel)
 {
-    // Check for a XC::quick return
+    // Check for a quick return
     if(rho == 0.0) return 0;
 
     static XC::Vector ra(NumElemDof);

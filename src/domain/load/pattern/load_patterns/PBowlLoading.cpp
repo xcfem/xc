@@ -407,7 +407,7 @@ XC::PBowlLoading::applyLoad(double time)
   if ( !LoadComputed )
      this->CompPBLoads();
 
-  // see if XC::quick return, i.e. no plastic bowl nodes or domain set
+  // see if quick return, i.e. no plastic bowl nodes or domain set
   int numBnodes = BoundaryNodes->Size();
   int numEnodes = ExteriorNodes->Size();
   if ( (numBnodes + numEnodes) == 0)
@@ -937,7 +937,7 @@ XC::PBowlLoading::getNodalLoad(int nodeTag, double time)
 
 
   //Get the nodal loads associated to the nodeTag
-  // check for a XC::quick return
+  // check for a quick return
   if (time < 0.0 || PBowlLoads == 0)
     return (*nodalLoad);
 

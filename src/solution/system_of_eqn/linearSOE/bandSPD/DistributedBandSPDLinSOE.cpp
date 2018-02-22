@@ -147,7 +147,7 @@ int XC::DistributedBandSPDLinSOE::setSize(Graph &theGraph)
 
 int XC::DistributedBandSPDLinSOE::addA(const Matrix &m, const ID &id, double fact)
   {
-    // check for a XC::quick return 
+    // check for a quick return 
     if(fact == 0.0)  return 0;
   
     // check that m and id are of similar size

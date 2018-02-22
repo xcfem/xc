@@ -223,7 +223,7 @@ int XC::SparseGenColLinSOE::setSize(Graph &theGraph)
 //! are performed. Returns \f$0\f$.
 int XC::SparseGenColLinSOE::addA(const Matrix &m, const ID &id, double fact)
   {
-    // check for a XC::quick return 
+    // check for a quick return 
     if (fact == 0.0)  
 	return 0;
 

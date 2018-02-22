@@ -368,7 +368,7 @@ int XC::DOF_Numberer::numberDOF(ID &lastDOFs)
         return -2;
       }
 
-    // check we cant do XC::quick return
+    // check we cant do quick return
     if(am->getNumDOF_Groups() == 0)
       return 0;
 

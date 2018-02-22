@@ -93,7 +93,7 @@ int XC::DistributedSuperLU::solve(void)
     return -1;
   }
 
-  // check for XC::quick return
+  // check for quick return
   if (theSOE->size == 0)
     return 0;
 

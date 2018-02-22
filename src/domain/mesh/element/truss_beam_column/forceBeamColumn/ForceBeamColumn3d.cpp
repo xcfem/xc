@@ -931,7 +931,7 @@ int XC::ForceBeamColumn3d::addLoad(ElementalLoad *theLoad, double loadFactor)
 
 int XC::ForceBeamColumn3d::addInertiaLoadToUnbalance(const XC::Vector &accel)
   {
-    // Check for a XC::quick return
+    // Check for a quick return
     if(rho == 0.0)
       return 0;
 

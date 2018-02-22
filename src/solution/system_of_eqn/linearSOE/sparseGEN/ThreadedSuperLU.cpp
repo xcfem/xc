@@ -100,7 +100,7 @@ XC::ThreadedSuperLU::solve(void)
     
     int n = theSOE->size;
     
-    // check for XC::quick return
+    // check for quick return
     if (n == 0)
 	return 0;
 

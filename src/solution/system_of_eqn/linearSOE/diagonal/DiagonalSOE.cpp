@@ -121,7 +121,7 @@ int XC::DiagonalSOE::setSize(Graph &theGraph)
 
 int XC::DiagonalSOE::addA(const Matrix &m, const ID &id, double fact)
   {
-    // check for a XC::quick return 
+    // check for a quick return 
     if (fact == 0.0)  return 0;
   
 #ifdef _G3DEBUG

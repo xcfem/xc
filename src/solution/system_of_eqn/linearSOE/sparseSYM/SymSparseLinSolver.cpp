@@ -77,7 +77,7 @@ int XC::SymSparseLinSolver::solve(void)
 
     int neq = theSOE->size;
 
-    // check for XC::quick return
+    // check for quick return
     if (neq == 0)
 	return 0;
 

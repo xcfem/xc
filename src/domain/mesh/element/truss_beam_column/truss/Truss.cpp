@@ -420,7 +420,7 @@ const XC::Matrix &XC::Truss::getMass(void) const
     mass.Zero();
 
     const double rho= getRho();
-    // check for XC::quick return
+    // check for quick return
     if(L == 0.0 || rho == 0.0)
       { // - problem in setDomain() no further warnings
         return mass;
@@ -517,7 +517,7 @@ int XC::Truss::addInertiaLoadSensitivityToUnbalance(const XC::Vector &accel, boo
   if(somethingRandomInMotions)
     {
 
-    // check for a XC::quick return
+    // check for a quick return
     if(L == 0.0 || rho == 0.0)
       return 0;
 
@@ -551,7 +551,7 @@ int XC::Truss::addInertiaLoadSensitivityToUnbalance(const XC::Vector &accel, boo
   }
   else {
 
-    // check for a XC::quick return
+    // check for a quick return
     if(L == 0.0 || rho == 0.0)
       return 0;
 

@@ -384,7 +384,7 @@ int XC::fElement::revertToStart()
 const XC::Matrix &XC::fElement::getTangentStiff(void) const
   {
     static Matrix K;
-    // check for XC::quick return
+    // check for quick return
     if(nen == 0)
       K= (*fElementM[0]);
     else
@@ -427,7 +427,7 @@ const XC::Matrix &XC::fElement::getTangentStiff(void) const
 
 const XC::Matrix &XC::fElement::getDamp(void) const
   {
-    // check for XC::quick return
+    // check for quick return
     if(nen == 0)
       return (*fElementM[0]);
 
@@ -467,7 +467,7 @@ const XC::Matrix &XC::fElement::getDamp(void) const
 
 const XC::Matrix &XC::fElement::getMass(void) const
   {
-    // check for XC::quick return
+    // check for quick return
     if(nen == 0)
         return (*fElementM[0]);
 
@@ -541,7 +541,7 @@ int XC::fElement::addInertiaLoadToUnbalance(const Vector &accel)
 
 const XC::Vector &XC::fElement::getResistingForce(void) const
   {
-    // check for XC::quick return
+    // check for quick return
     if(nen == 0)
       return (*fElementV[0]);
 
@@ -587,7 +587,7 @@ const XC::Vector &XC::fElement::getResistingForce(void) const
 
 const XC::Vector &XC::fElement::getResistingForceIncInertia(void) const
   {
-    // check for XC::quick return
+    // check for quick return
     if(nen == 0)
         return (*fElementV[0]);
 

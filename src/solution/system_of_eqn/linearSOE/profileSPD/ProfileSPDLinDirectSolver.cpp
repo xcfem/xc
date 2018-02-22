@@ -78,7 +78,7 @@ int XC::ProfileSPDLinDirectSolver::setSize(void)
 	return -1;
       }
 
-    // check for XC::quick return 
+    // check for quick return 
     if(theSOE->size == 0)
       return 0;
     
@@ -341,7 +341,7 @@ int XC::ProfileSPDLinDirectSolver::setProfileSOE(ProfileSPDLinSOE &theNewSOE)
 int XC::ProfileSPDLinDirectSolver::factor(int n)
   {
 
-    // check for XC::quick returns
+    // check for quick returns
     if(theSOE == 0)
       {
 	std::cerr << getClassName() << "::" << __FUNCTION__;

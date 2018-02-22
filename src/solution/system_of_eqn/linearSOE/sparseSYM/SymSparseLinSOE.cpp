@@ -220,7 +220,7 @@ int XC::SymSparseLinSOE::setSize(Graph &theGraph)
  */
 int XC::SymSparseLinSOE::addA(const XC::Matrix &in_m, const XC::ID &in_id, double fact)
 {
-   // check for a XC::quick return
+   // check for a quick return
    if(fact == 0.0)  
        return 0;
 
@@ -369,7 +369,7 @@ int XC::SymSparseLinSOE::addA(const XC::Matrix &in_m, const XC::ID &in_id, doubl
  */
 int XC::SymSparseLinSOE::addB(const XC::Vector &in_v, const ID &in_id,const double &fact)
   {
-    // check for a XC::quick return 
+    // check for a quick return 
     if(fact == 0.0)  return 0;
 
     int idSize = in_id.Size();    

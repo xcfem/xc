@@ -84,7 +84,7 @@ int XC::DiagonalDirectSolver::setSize(void)
 int XC::DiagonalDirectSolver::solve(void)
   {
 
-    // check for XC::quick returns
+    // check for quick returns
     if(!theSOE)
       {
         std::cerr << getClassName() << "::" << __FUNCTION__;

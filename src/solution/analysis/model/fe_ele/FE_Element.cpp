@@ -404,7 +404,7 @@ void XC::FE_Element::addKtToTang(double fact)
   {
     if(myEle)
       {
-        // check for a XC::quick return
+        // check for a quick return
         if(fact == 0.0)
           return;
         else if(myEle->isSubdomain() == false)
@@ -435,7 +435,7 @@ void XC::FE_Element::addCtoTang(double fact)
   {
     if(myEle)
       {
-        // check for a XC::quick return
+        // check for a quick return
         if(fact == 0.0)
           return;
         else if(myEle->isSubdomain() == false)
@@ -466,7 +466,7 @@ void XC::FE_Element::addMtoTang(double fact)
   {
     if(myEle)
       {
-        // check for a XC::quick return
+        // check for a quick return
         if(fact == 0.0)
           return;
         else if(myEle->isSubdomain() == false)
@@ -636,7 +636,7 @@ const XC::Vector &XC::FE_Element::getTangForce(const Vector &disp, double fact)
         // zero out the force vector
         unbalAndTangent.getResidual().Zero();
 
-        // check for a XC::quick return
+        // check for a quick return
         if(fact == 0.0)
           return unbalAndTangent.getResidual();
 
@@ -693,7 +693,7 @@ const XC::Vector &XC::FE_Element::getK_Force(const Vector &disp, double fact)
         // zero out the force vector
         unbalAndTangent.getResidual().Zero();
 
-        // check for a XC::quick return
+        // check for a quick return
         if(fact == 0.0)
             return unbalAndTangent.getResidual();
 
@@ -779,7 +779,7 @@ const XC::Vector &XC::FE_Element::getC_Force(const XC::Vector &disp, double fact
         // zero out the force vector
         unbalAndTangent.getResidual().Zero();
 
-        // check for a XC::quick return
+        // check for a quick return
         if(fact == 0.0)
           return unbalAndTangent.getResidual();
 
@@ -914,7 +914,7 @@ void XC::FE_Element::addD_Force(const XC::Vector &accel, double fact)
   {
     if(myEle)
       {
-        // check for a XC::quick return
+        // check for a quick return
         if(fact == 0.0)
           return;
         if(myEle->isSubdomain() == false)
@@ -954,7 +954,7 @@ void XC::FE_Element::addLocalM_Force(const XC::Vector &accel, double fact)
   {
     if(myEle)
       {
-        // check for a XC::quick return
+        // check for a quick return
         if(fact == 0.0)
           return;
         if(myEle->isSubdomain() == false)
@@ -983,7 +983,7 @@ void XC::FE_Element::addLocalD_Force(const XC::Vector &accel, double fact)
   {
     if(myEle != 0)
       {
-        // check for a XC::quick return
+        // check for a quick return
         if(fact == 0.0)
           return;
         if(myEle->isSubdomain() == false)
@@ -1042,7 +1042,7 @@ void XC::FE_Element::addD_ForceSensitivity(int gradNumber, const XC::Vector &vec
   {
     if(myEle)
       {
-        // check for a XC::quick return
+        // check for a quick return
         if(fact == 0.0)
           return;
         if(myEle->isSubdomain() == false)
@@ -1082,7 +1082,7 @@ void XC::FE_Element::addLocalD_ForceSensitivity(int gradNumber, const XC::Vector
   {
     if(myEle)
       {
-        // check for a XC::quick return
+        // check for a quick return
         if(fact == 0.0)
           return;
         if(myEle->isSubdomain() == false)
@@ -1111,7 +1111,7 @@ void XC::FE_Element::addLocalM_ForceSensitivity(int gradNumber, const XC::Vector
   {
     if(myEle)
       {
-        // check for a XC::quick return
+        // check for a quick return
         if(fact == 0.0)
           return;
         if(myEle->isSubdomain() == false)

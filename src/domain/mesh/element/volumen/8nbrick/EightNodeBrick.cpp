@@ -2766,7 +2766,7 @@ int XC::EightNodeBrick::addLoad(ElementalLoad *theLoad, double loadFactor)
         if(brkLoad)
           {
             Vector bforce(24);
-            // Check for a XC::quick return
+            // Check for a quick return
             //std::cerr << "rho " << rho << std::endl;
             if(rho == 0.0)
               return 0;
@@ -2819,7 +2819,7 @@ int XC::EightNodeBrick::addLoad(ElementalLoad *theLoad, double loadFactor)
 //=============================================================================
 int XC::EightNodeBrick::addInertiaLoadToUnbalance(const XC::Vector &accel)
 {
-  // Check for a XC::quick return
+  // Check for a quick return
   if(rho == 0.0)
     return 0;
 
@@ -2900,7 +2900,7 @@ const XC::Vector XC::EightNodeBrick::FormEquiBodyForce(void)
 
     Vector bforce(24);
 
-    // Check for a XC::quick return
+    // Check for a quick return
     //std::cerr << "rho " << rho << std::endl;
     if(rho == 0.0)
       return bforce;

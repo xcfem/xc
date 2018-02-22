@@ -848,7 +848,7 @@ int XC::ForceBeamColumn2d::addLoad(ElementalLoad *theLoad, double loadFactor)
 //! @brief Add the inertial loads to the unbalanced load vector.
 int XC::ForceBeamColumn2d::addInertiaLoadToUnbalance(const Vector &accel)
   {
-    // Check for a XC::quick return
+    // Check for a quick return
     if(rho == 0.0)
       return 0;
 

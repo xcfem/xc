@@ -483,7 +483,7 @@ void XC::UpdatedLagrangianBeam2D::getTrialLocalForce(Vector &lforce) const
 
 const XC::Vector &XC::UpdatedLagrangianBeam2D::getResistingForce(void) const
   {
-    // check for XC::quick return
+    // check for quick return
     if(L == 0)
       return ZeroVector;
 
@@ -537,7 +537,7 @@ double f5 = eleForce(5);
 
 const XC::Vector &XC::UpdatedLagrangianBeam2D::getResistingForceIncInertia(void) const
   {
-    // check for XC::quick return
+    // check for quick return
     if(L == 0)
       return ZeroVector;
 

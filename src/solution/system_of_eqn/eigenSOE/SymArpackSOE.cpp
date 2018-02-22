@@ -181,7 +181,7 @@ int XC::SymArpackSOE::setSize(Graph &theGraph)
 //! by the fact parameter.
 int XC::SymArpackSOE::addA(const Matrix &m, const ID &id, double fact)
   {
-    // check for a XC::quick return
+    // check for a quick return
     if(fact == 0.0)  
 	return 0;
 

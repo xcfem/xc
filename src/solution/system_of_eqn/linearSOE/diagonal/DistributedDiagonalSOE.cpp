@@ -286,7 +286,7 @@ int XC::DistributedDiagonalSOE::setSize(Graph &theGraph)
 
 int XC::DistributedDiagonalSOE::addA(const XC::Matrix &m, const XC::ID &id, double fact)
   {
-    // check for a XC::quick return 
+    // check for a quick return 
     if(fact == 0.0)  return 0;
   
 #ifdef _G3DEBUG

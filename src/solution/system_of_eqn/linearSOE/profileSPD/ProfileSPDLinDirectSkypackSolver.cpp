@@ -135,7 +135,7 @@ extern "C" int skyss_(int *LDX, int *N, int *NRHS,
 
 int XC::ProfileSPDLinDirectSkypackSolver::solve(void)
   {
-    // check for XC::quick returns
+    // check for quick returns
     if(theSOE == 0)
       {
 	std::cerr << getClassName() << "::" << __FUNCTION__;

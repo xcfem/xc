@@ -28,6 +28,9 @@
 
 #include <solution/system_of_eqn/linearSOE/profileSPD/ProfileSPDLinDirectBase.h>
 
+//! @brief Constructor.
+//!
+//! @param classTag: identifier of the class.
 XC::ProfileSPDLinDirectBase::ProfileSPDLinDirectBase(int classTag,double tol)
 :ProfileSPDLinSolver(classTag), minDiagTol(tol), size(0) {}
 

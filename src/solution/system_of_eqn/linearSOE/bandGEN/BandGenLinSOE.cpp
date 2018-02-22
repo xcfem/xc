@@ -203,7 +203,7 @@ int XC::BandGenLinSOE::addA(const Matrix &m, const ID &id, double fact)
   {
   //  std::cerr << "BAND- addA() " << m << id;
 
-    // check for a XC::quick return
+    // check for a quick return
     if(fact == 0.0)  return 0;
 
 

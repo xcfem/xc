@@ -249,7 +249,7 @@ int XC::ProfileSPDLinSOE::setSize(Graph &theGraph)
 //! are performed. Returns \f$0\f$.
 int XC::ProfileSPDLinSOE::addA(const Matrix &m, const ID &id, double fact)
   {
-    // check for a XC::quick return 
+    // check for a quick return 
     if(fact == 0.0)  return 0;
     
     // check that m and id are of similar size

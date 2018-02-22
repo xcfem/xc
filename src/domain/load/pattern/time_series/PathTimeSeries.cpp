@@ -214,14 +214,14 @@ double XC::PathTimeSeries::getTimeIncr(double pseudoTime) const
 //! @brief Returns the valor correspondiente al instante being passed as parameter.
 double XC::PathTimeSeries::getFactor(double pseudoTime) const
   {
-    // check for a XC::quick return
+    // check for a quick return
     if(thePath.Size()<1)
       return 0.0;
 
     // determine indexes into the data array whose boundary holds the time
     double time1= time(currentTimeLoc);
 
-    // check for another XC::quick return
+    // check for another quick return
     if(pseudoTime == time1)
       return cFactor * thePath(currentTimeLoc);
 

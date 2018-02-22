@@ -403,7 +403,7 @@ const XC::Matrix &XC::CorotTruss::getMass(void) const
     Mass.Zero();
 
     const double rho= getRho();
-    // check for XC::quick return
+    // check for quick return
     if(Lo == 0.0 || rho == 0.0)
       return Mass;
 

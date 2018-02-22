@@ -1109,7 +1109,7 @@ XC::Graph &XC::PartitionedDomain::getSubdomainGraph(void)
 
     int numVertex= theSubdomains->getNumComponents();
 
-    // see if XC::quick return
+    // see if quick return
 
     if(numVertex!=0)
       {
