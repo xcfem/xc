@@ -72,14 +72,14 @@ XC::ProfileSPDLinDirectBlockSolver::ProfileSPDLinDirectBlockSolver(double tol, i
   :ProfileSPDLinDirectBase(SOLVER_TAGS_ProfileSPDLinDirectBlockSolver,tol), blockSize(blckSize), maxColHeight(0) {}
 
     
-
+//! @brief Set the system size.
 int XC::ProfileSPDLinDirectBlockSolver::setSize(void)
   {
 
     if(theSOE == 0)
       {
-	std::cerr << getClassName() << "::" << __FUNCTION__;
-	std::cerr << " No system has been set\n";
+	std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; no system has been set.\n";
 	return -1;
       }
 
@@ -107,7 +107,7 @@ int XC::ProfileSPDLinDirectBlockSolver::setSize(void)
     for(int j=1; j<size; j++)
       {
 	int icolsz= iDiagLoc[j] - iDiagLoc[j-1];
-        if (icolsz > maxColHeight) maxColHeight = icolsz;
+        if(icolsz > maxColHeight) maxColHeight = icolsz;
 	RowTop(j) = j - icolsz +  1;
 	topRowPtr[j] = &A[iDiagLoc[j-1]]; // FORTRAN array indexing in iDiagLoc
       }
@@ -115,14 +115,14 @@ int XC::ProfileSPDLinDirectBlockSolver::setSize(void)
     return 0;
   }
 
-
+//! @brief Solve the system.
 int XC::ProfileSPDLinDirectBlockSolver::solve(void)
   {
     // check for quick returns
-    if(theSOE == 0)
+    if(!theSOE)
       {
-	std::cerr << getClassName() << "::" << __FUNCTION__;
-	std::cerr << " - No ProfileSPDSOE has been assigned\n";
+	std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; no ProfileSPDSOE has been assigned.\n";
 	return -1;
       }
     
@@ -135,7 +135,7 @@ int XC::ProfileSPDLinDirectBlockSolver::solve(void)
     int n = theSOE->size;
 
     // copy B into X
-    for (int ii=0; ii<n; ii++)
+    for(int ii=0; ii<n; ii++)
 	X[ii] = B[ii];
     
     if(theSOE->factored == false)
@@ -146,214 +146,229 @@ int XC::ProfileSPDLinDirectBlockSolver::solve(void)
 	int lastRow = startRow+blockSize-1;
         int lastColEffected = lastRow+maxColHeight -1;
         int nBlck = n/blockSize;
-	if ((n % blockSize) != 0)
+	if((n % blockSize) != 0)
 	  nBlck++;
 
 	// for every block across      
-	for (int i=0; i<nBlck; i++) {
+	for(int i=0; i<nBlck; i++)
+	  {
+	    // first factor the diagonal block int Ui,i and Di
+	    for(int j=0; j<blockSize; j++)
+	      {
+		int currentRow = startRow + j;
 
-	  // first factor the diagonal block int Ui,i and Di
-          int j;
-	  for (j=0; j<blockSize; j++) {
-            int currentRow = startRow + j;
+		if(currentRow < n)
+		  { // this is for case when size%blockSize != 0
 
-	    if (currentRow < n) { // this is for case when size%blockSize != 0
+		  int rowjTop= RowTop(currentRow);
+		  double *akjPtr= topRowPtr[currentRow];
+		  int maxRowijTop;
+		  if(rowjTop < startRow)
+		    {
+		      // pointer to start of block row
+		      akjPtr += startRow-rowjTop; 
+		      maxRowijTop = startRow;
+		    }
+		  else
+		    maxRowijTop = rowjTop;
 
-	      int rowjTop= RowTop(currentRow);
-	      double *akjPtr= topRowPtr[currentRow];
-	      int maxRowijTop;
-	      if(rowjTop < startRow)
-                {
-		  akjPtr += startRow-rowjTop; // pointer to start of block row
-		  maxRowijTop = startRow;
-	        }
-              else
-		maxRowijTop = rowjTop;
+		  for(int k=maxRowijTop; k<currentRow; k++)
+		    {
+		      double tmp= *akjPtr;
+		      const int rowkTop= RowTop[k];
+		      int maxRowkjTop;
+		      double *alkPtr, *aljPtr;
+		      if(rowkTop < rowjTop)
+			{
+			  alkPtr = topRowPtr[k] + (rowjTop - rowkTop);
+			  aljPtr = topRowPtr[currentRow];
+			  maxRowkjTop = rowjTop;
+			}
+		      else
+			{
+			  alkPtr = topRowPtr[k];
+			  aljPtr = topRowPtr[currentRow] + (rowkTop - rowjTop);
+			  maxRowkjTop = rowkTop;
+			}
+		      for(int l = maxRowkjTop; l<k; l++) 
+			tmp -= *alkPtr++ * *aljPtr++;
+		      *akjPtr++ = tmp;
+		    }
 
-	      int k;
-	      for (k=maxRowijTop; k<currentRow; k++) {
-		double tmp = *akjPtr;
-		int rowkTop = RowTop[k];
-		int maxRowkjTop;
-		double *alkPtr, *aljPtr;
-		if (rowkTop < rowjTop) {
-		  alkPtr = topRowPtr[k] + (rowjTop - rowkTop);
-		  aljPtr = topRowPtr[currentRow];
-		  maxRowkjTop = rowjTop;
-		} else {
-		  alkPtr = topRowPtr[k];
-		  aljPtr = topRowPtr[currentRow] + (rowkTop - rowjTop);
-		  maxRowkjTop = rowkTop;
+		double ajj= *akjPtr;
+		akjPtr= topRowPtr[currentRow];
+		double *bjPtr  = &X[rowjTop];  
+		double tmp= 0;	    
+
+		for(int k=rowjTop; k<currentRow; k++)
+		  {
+		    double akj = *akjPtr;
+		    double lkj = akj * invD[k];
+		    tmp -= lkj * *bjPtr++; 		
+		    *akjPtr++ = lkj;
+		    ajj= ajj -lkj * akj;
+		  }
+
+		X[currentRow] += tmp;
+
+		// check that the diag > the tolerance specified
+		if(ajj <= 0.0)
+		  {
+		    std::cerr << getClassName() << "::" << __FUNCTION__ << "; "
+			      << " aii < 0 (i, aii): (" << currentRow
+			      << ", " << ajj << ")\n"; 
+		    return(-2);
+		  }
+		if(ajj <= minDiagTol)
+		  {
+		    std::cerr << getClassName() << "::" << __FUNCTION__ << "; "
+			      << " aii < minDiagTol (i, aii): (" << currentRow
+			      << ", " << ajj << ")\n"; 
+		    return(-2);
+		  }		
+		invD[currentRow] = 1.0/ajj; 
+
 		}
-
-		for (int l = maxRowkjTop; l<k; l++) 
-		  tmp -= *alkPtr++ * *aljPtr++;
-		
-		*akjPtr++ = tmp;
-	      }
-
-	      double ajj = *akjPtr;
-	      akjPtr = topRowPtr[currentRow];
-	      double *bjPtr  = &X[rowjTop];  
-	      double tmp = 0;	    
-
-	      for (k=rowjTop; k<currentRow; k++){
-		double akj = *akjPtr;
-		double lkj = akj * invD[k];
-		tmp -= lkj * *bjPtr++; 		
-		*akjPtr++ = lkj;
-		ajj = ajj -lkj * akj;
-	      }
-
-	      X[currentRow] += tmp;
-
-	      // check that the diag > the tolerance specified
-	      if (ajj <= 0.0) {
-		std::cerr << getClassName() << "::" << __FUNCTION__ << "; ";
-		std::cerr << " aii < 0 (i, aii): (" << currentRow << ", " << ajj << ")\n"; 
-		return(-2);
-	      }
-	      if (ajj <= minDiagTol) {
-		std::cerr << getClassName() << "::" << __FUNCTION__ << "; ";
-		std::cerr << " aii < minDiagTol (i, aii): (" << currentRow;
-		std::cerr << ", " << ajj << ")\n"; 
-		return(-2);
-	      }		
-	      invD[currentRow] = 1.0/ajj; 
-
-	    } else 
-	      j = blockSize;
-
-	  }
+	      else 
+		j = blockSize;
+ 	    }
 
 	  // now do rest of i'th block row doing a block of columns at a time
           // forming Ui,j*Di
 	  int currentCol = startRow + blockSize;
-	  for (j=i+1; j<nBlck; j++) 
-	    for (int k=0; k<blockSize; k++) {
+	  for(int j=i+1; j<nBlck; j++) 
+	    for(int k=0; k<blockSize; k++)
+	      {
+		if(currentCol < n)
+		  { // this is for case when size%blockSize != 0
+		  int rowkTop = RowTop[currentCol];
+		  double *alkPtr = topRowPtr[currentCol];
+		  int maxRowikTop;
+		  if(rowkTop < startRow)
+		    {
+		      alkPtr += startRow-rowkTop; // pointer to start of block row
+		      maxRowikTop = startRow;
+		    }
+		  else
+		    maxRowikTop = rowkTop;
 
-	      if (currentCol < n) { // this is for case when size%blockSize != 0
+		  for(int l=maxRowikTop; l<=lastRow; l++)
+		    {
+		      double tmp = *alkPtr;
+		      int rowlTop = RowTop[l];
+		      int maxRowklTop;
+		      double *amlPtr, *amkPtr;
+		      if(rowlTop < rowkTop)
+			{
+			amlPtr = topRowPtr[l] + (rowkTop - rowlTop);
+			amkPtr = topRowPtr[currentCol];
+			maxRowklTop = rowkTop;
+			}
+		      else
+			{
+			amlPtr = topRowPtr[l];
+			amkPtr = topRowPtr[currentCol] + (rowlTop - rowkTop);
+			maxRowklTop = rowlTop;
+			}
 
-		int rowkTop = RowTop[currentCol];
-		double *alkPtr = topRowPtr[currentCol];
-		int maxRowikTop;
-		if (rowkTop < startRow) {
-		  alkPtr += startRow-rowkTop; // pointer to start of block row
-		  maxRowikTop = startRow;
-		} else
-		  maxRowikTop = rowkTop;
+		      for(int m = maxRowklTop; m<l; m++) 
+			tmp -= *amkPtr++ * *amlPtr++;
 
-		for (int l=maxRowikTop; l<=lastRow; l++) {
-		  double tmp = *alkPtr;
-		  int rowlTop = RowTop[l];
-		  int maxRowklTop;
-		  double *amlPtr, *amkPtr;
-		  if (rowlTop < rowkTop) {
-		    amlPtr = topRowPtr[l] + (rowkTop - rowlTop);
-		    amkPtr = topRowPtr[currentCol];
-		    maxRowklTop = rowkTop;
-		  } else {
-		    amlPtr = topRowPtr[l];
-		    amkPtr = topRowPtr[currentCol] + (rowlTop - rowkTop);
-		    maxRowklTop = rowlTop;
+		      *alkPtr++ = tmp;
+		    }
+		  currentCol++;
+		  if(currentCol > lastColEffected)
+		    {
+		      k = blockSize;
+		      j = nBlck;
+		    }
+
 		  }
-		  
-		  for (int m = maxRowklTop; m<l; m++) 
-		    tmp -= *amkPtr++ * *amlPtr++;
-		  
-		  *alkPtr++ = tmp;
-		}
-		currentCol++;
-		if (currentCol > lastColEffected) {
+		else
 		  k = blockSize;
-		  j = nBlck;
-		}
-
-	      } else
-		k = blockSize;
-
-	    }
-
-	  startRow += blockSize;
-	  lastRow = startRow + blockSize -1;
-          lastColEffected = lastRow + maxColHeight -1;
-	}
-
+	      }
+	    startRow += blockSize;
+	    lastRow = startRow + blockSize -1;
+            lastColEffected = lastRow + maxColHeight -1;
+	   }
 	theSOE->factored = true;
 	theSOE->numInt = 0;
 	
 	// divide by diag term 
 	double *bjPtr = X; 
 	double *aiiPtr= invD.getDataPtr();
-	for (int j=0; j<n; j++) 
+	for(int j=0; j<n; j++) 
 	  *bjPtr++ = *aiiPtr++ * X[j];
 
     
 	// now do the back substitution storing result in X
-	for (int k=(n-1); k>0; k--) {
-      
-	  int rowktop = RowTop[k];
-	  double bk = X[k];
-	  double *ajiPtr = topRowPtr[k]; 		
+	for(int k=(n-1); k>0; k--)
+	  {
+	    int rowktop = RowTop[k];
+	    double bk = X[k];
+	    double *ajiPtr = topRowPtr[k]; 		
 
-	  for (int j=rowktop; j<k; j++) 
-	    X[j] -= *ajiPtr++ * bk;
-	}   	 
-    } else { // just do forward and back substitution
-      
-      // do forward substitution 
-      for (int i=1; i<n; i++) {
-	    
-	int rowitop = RowTop[i];	    
-	double *ajiPtr = topRowPtr[i];
-	double *bjPtr  = &X[rowitop];  
-	double tmp = 0;	    
-	    
-	for (int j=rowitop; j<i; j++) 
-	  tmp -= *ajiPtr++ * *bjPtr++; 
-	    
-	X[i] += tmp;
+	    for(int j=rowktop; j<k; j++) 
+	      X[j] -= *ajiPtr++ * bk;
+	  }   	 
       }
-
-      // divide by diag term 
-      double *bjPtr = X; 
-      double *aiiPtr = invD.getDataPtr();
-      for (int j=0; j<n; j++) 
-	*bjPtr++ = *aiiPtr++ * X[j];
-
-    
-      // now do the back substitution storing result in X
-      for (int k=(n-1); k>0; k--) {
+    else
+      { // just do forward and back substitution
       
-	int rowktop = RowTop[k];
-	double bk = X[k];
-	double *ajiPtr = topRowPtr[k]; 		
+	// do forward substitution 
+	for(int i=1; i<n; i++)
+	  {    
+	    int rowitop = RowTop[i];	    
+	    double *ajiPtr = topRowPtr[i];
+	    double *bjPtr  = &X[rowitop];  
+	    double tmp = 0;	    
 
-	for (int j=rowktop; j<k; j++) 
-	  X[j] -= *ajiPtr++ * bk;
-      }   	 
-    }    
+	    for(int j=rowitop; j<i; j++) 
+	      tmp -= *ajiPtr++ * *bjPtr++; 
+
+	    X[i] += tmp;
+	  }
+
+	// divide by diag term 
+	double *bjPtr = X; 
+	double *aiiPtr = invD.getDataPtr();
+	for(int j=0; j<n; j++) 
+	  *bjPtr++ = *aiiPtr++ * X[j];
+
+	// now do the back substitution storing result in X
+	for(int k=(n-1); k>0; k--)
+	  {
+	    const int rowktop = RowTop[k];
+	    double bk = X[k];
+	    double *ajiPtr = topRowPtr[k]; 		
+
+	    for(int j=rowktop; j<k; j++) 
+	      X[j] -= *ajiPtr++ * bk;
+	  }   	 
+      }    
     return 0;
-}
+  }
 
+//! @brief Sets the link to the system to solve.
 int XC::ProfileSPDLinDirectBlockSolver::setProfileSOE(ProfileSPDLinSOE &theNewSOE)
-{
-    if (theSOE != 0) {
-	std::cerr << getClassName() << "::" << __FUNCTION__ << "; ";
-	std::cerr << " has already been called \n";	
+  {
+    if(theSOE)
+      {
+	std::cerr << getClassName() << "::" << __FUNCTION__ << "; "
+		  << " has already been called \n";	
 	return -1;
-    }
-    
+      }
     theSOE = &theNewSOE;
     return 0;
-}
+  }
 	
 int XC::ProfileSPDLinDirectBlockSolver::sendSelf(CommParameters &cp)
-{
-    if (size != 0)
-	std::cerr << "XC::ProfileSPDLinDirectBlockSolver::sendSelf - does not send itself YET\n"; 
+  {
+    if(size != 0)
+	std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; does not send itself YET.\n"; 
     return 0;
-}
+  }
 
 
 int XC::ProfileSPDLinDirectBlockSolver::recvSelf(const CommParameters &cp)

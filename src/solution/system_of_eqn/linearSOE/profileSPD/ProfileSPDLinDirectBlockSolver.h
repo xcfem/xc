@@ -74,6 +74,13 @@ class ProfileSPDLinSOE;
 //
 //! @brief solves a ProfileSPDLinSOE object using
 //! the LDL^t factorization.
+//!
+//! A ProfileSPDLinDirectBlockSolver object can be constructed to
+//! solve a ProfileSPDLinSOE object. It does this by direct means, using
+//! the \f$LDL^t\f$ variation of the cholesky factorization. The matrix
+//! \f$A\f$ is factored one block row at a time using a right-looking approach.
+//! No BLAS or LAPACK routines are called for the factorization or subsequent
+//! substitution.
 class ProfileSPDLinDirectBlockSolver: public ProfileSPDLinDirectBase
   {
   protected:
