@@ -67,19 +67,26 @@
 #include <solution/system_of_eqn/linearSOE/profileSPD/ProfileSPDLinSOE.h>
 #include <utility/Timer.h>
 
-XC::ProfileSPDLinDirectSkypackSolver::ProfileSPDLinDirectSkypackSolver()
-:ProfileSPDLinSolver(SOLVER_TAGS_ProfileSPDLinDirectSkypackSolver),
- mCols(0), mRows(0),rw(0),tw(0), index(0),
- size(0), invD(0)
-{
+//! @brief Default constructor.
+//! Sets \p mCols and \p mRows
+//! equal to \f$0\f$ and does not try and allocate any memory for the work
+//! arrays.
+XC::ProfileSPDLinDirectSkypackSolver::ProfileSPDLinDirectSkypackSolver(void)
+  :ProfileSPDLinSolver(SOLVER_TAGS_ProfileSPDLinDirectSkypackSolver),
+   mCols(0), mRows(0),rw(0),tw(0), index(0), size(0), invD(0)
+  {}
 
-}
-
+//! @brief Constructor.
+//! 
+//! Sets \p mCols and \p mRows and allocates space in memory for the work
+//! arrays \p rw, \p tw and \p index. If not enough memory is available in
+//! memory, \p mCols and \p mRows is set equal to \f$0\f$ and an error message
+//! is printed.
 XC::ProfileSPDLinDirectSkypackSolver::ProfileSPDLinDirectSkypackSolver(int Mcols, int Mrows)
 :ProfileSPDLinSolver(SOLVER_TAGS_ProfileSPDLinDirectSkypackSolver),
  mCols(Mcols), mRows(Mrows),rw(0),tw(0), index(0),
  size(0), invD(0)
-{
+  {
     if(mCols != 0 && mRows != 0)
       {
 	rw= Vector(mRows*mCols);
@@ -97,20 +104,26 @@ XC::ProfileSPDLinDirectSkypackSolver::ProfileSPDLinDirectSkypackSolver(int Mcols
 
   }
 
-    
+//! @brief Set the size of the system.
+//! 
+//! Is responsible for setting the \p block information required by the
+//! SKYPACK routines (block[0]=1; block[1]=size, block[2]=1) and for
+//! creating space for the \p invD work array. Returns \f$0\f$ if
+//! successfull, otherwise a warning message is printed and a \f$-1\f$ is
+//! returned.
 int XC::ProfileSPDLinDirectSkypackSolver::setSize(void)
   {
     int result = 0;
 
     if(theSOE == 0)
       {
-	std::cerr << getClassName() << "::" << __FUNCTION__;
-	std::cerr << " No system has been set\n";
+	std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; no system has been set.\n";
 	return -1;
       }
 
     // check for quick return 
-    if (theSOE->size == 0)
+    if(theSOE->size == 0)
 	return 0;
     
     size = theSOE->size;
@@ -133,13 +146,26 @@ extern "C" int skyss_(int *LDX, int *N, int *NRHS,
 		      int *BLOCK, int *NBLOCK,
 		      char *FNAME, int *FUNIT, int *INFO);
 
+//! @brief Solve the system of equations.
+//!
+//! The solver first copies the B vector into X and then solves the
+//! BandSPDLinSOE system. If the matrix has not been factored, the matrix
+//! is first factored using the SKYPACK routine skysf2(), if {\em
+//! mCols} and \p mRows equal \f$0\f$, or skypf2()}. {\em skysf2() is
+//! a routine which uses the BLAS level 1 routines, skypf2() is a
+//! routine which uses BLAS levels 2 and 3. If skypf2()
+//! has been called, \p invD is set up. Once the matrix has been
+//! factored, skyss() is called. If the solution is sucessfully
+//! obtained, i.e. the skyss() routine returns \f$0\f$ in the INFO
+//! argument, \f$0\f$ is returned, otherwise it prints a warning message and
+//! returns INFO. The solve process changes \f$A\f$ and \f$X\f$.   
 int XC::ProfileSPDLinDirectSkypackSolver::solve(void)
   {
     // check for quick returns
     if(theSOE == 0)
       {
-	std::cerr << getClassName() << "::" << __FUNCTION__;
-	std::cerr << " - No ProfileSPDSOE has been assigned\n";
+	std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; no ProfileSPDSOE has been assigned.\n";
 	return -1;
       }
     
@@ -150,8 +176,8 @@ int XC::ProfileSPDLinDirectSkypackSolver::solve(void)
     // check that work area invD has been created
     if(invD.Nulo())
       {
-	std::cerr << getClassName() << "::" << __FUNCTION__;
-	std::cerr << " - no space for invD - has setSize() been called?\n";
+	std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; no space for invD - has setSize() been called?\n";
 	return -1;
       }	
 
@@ -171,12 +197,13 @@ int XC::ProfileSPDLinDirectSkypackSolver::solve(void)
       {
       
 	// FACTOR 
-	if (mRows == 0 || mCols == 0) { // factor using skysf2_
+	if(mRows == 0 || mCols == 0) { // factor using skysf2_
 	    int JMIN =1;
 	    int JMAX = size;
 	    skysf2_(A, invD.getDataPtr(), iDiagLoc, &JMIN, &JMAX); 
 	}
-	else { // factor using skypf2_
+	else
+	  { // factor using skypf2_
 	    int JMIN =1;
 	    int JMAX = size;
 	    int MCOLS = mCols;
@@ -187,14 +214,14 @@ int XC::ProfileSPDLinDirectSkypackSolver::solve(void)
 	    skypf2_(INDEX, &JMAX, &JMIN, &MCOLS, &MROWS, iDiagLoc, A, RW, TW);
 
 	    // set up invD
-	    for (int i=0; i<size; i++)
+	    for(int i=0; i<size; i++)
 		invD[i] = 1.0/A[iDiagLoc[i]-1]; // iDiagLoc has fortran array indexing
-	}
+	  }
       
 	// mark the system as having been factored
 	theSOE->factored = true;
 	theSOE->numInt = 0;      
-    }
+      }
 
     /*
      * now do the forward and back substitution
@@ -214,33 +241,34 @@ int XC::ProfileSPDLinDirectSkypackSolver::solve(void)
 	   FILE,  &fileFD, &INFO);
       
     // return
-    if (INFO < 0) {
-	std::cerr << getClassName() << "::" << __FUNCTION__;
-	std::cerr << " error value returned from skyss()\n";
-    }    
-
+    if(INFO < 0)
+      {
+	std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; error value returned from skyss().\n";
+      }
     return INFO;
 
-}
+  }
 
 
 int XC::ProfileSPDLinDirectSkypackSolver::setProfileSOE(ProfileSPDLinSOE &theNewSOE)
-{
+  {
     theSOE = &theNewSOE;
     return 0;
-}
+  }
 	
 int XC::ProfileSPDLinDirectSkypackSolver::sendSelf(CommParameters &cp)
-{
-    if (size != 0)
-	std::cerr << "XC::ProfileSPDLinDirectSkypackSolver::sendSelf - does not send itself YET\n"; 
+  {
+    if(size != 0)
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; does not send itself YET\n"; 
     return 0;
-}
+  }
 
 
 int XC::ProfileSPDLinDirectSkypackSolver::recvSelf(const CommParameters &cp)
-{
+  {
     return 0;
-}
+  }
 
 

@@ -75,13 +75,24 @@ class ProfileSPDLinSOE;
 //! @ingroup LinearSolver
 //
 //! @brief <a href="http://crd-legacy.lbl.gov/~osni/#Software" target="_new"> Skypakc</a> based linear SOE solver.
+//!
+//! A ProfileSPDLinDirectSkypackSolver object can be constructed
+//! to solve a ProfileSPDLinSOE object. It does this by direct means using
+//! the routines supplied in the SKYPACK library, a library which uses the
+//! BLAS levels 1,2 and 3 for the factorization and substitution. 
+
+//! The routines in SKYPACK require a number of work areas: {\em int
+//! block[3]} and {\em double invD[size]}. In addition, to allow the use
+//! of the BLAS 2 and 3, work areas {\em double rw[mRows x mCols]}, {\em
+//! double tw[mRows x mRows]} and {\em int index[max(mCols,mRows)]} are 
+//! created.
 class ProfileSPDLinDirectSkypackSolver : public ProfileSPDLinSolver
   {
   private:
     int mCols, mRows;
-    Vector rw; // work array of dimension mRows*mCols
-    Vector tw; // work array of dimension mRows*mRows
-    ID index; // integer array of dimension max(mRows,mCols)		     
+    Vector rw; //!< work array of dimension mRows*mCols
+    Vector tw; //!< work array of dimension mRows*mRows
+    ID index; //!< integer array of dimension max(mRows,mCols)		     
     int size;
     
     Vector invD;
