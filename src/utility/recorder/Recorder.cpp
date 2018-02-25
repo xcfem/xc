@@ -62,6 +62,17 @@
 XC::Recorder::Recorder(int classTag)
   :MovableObject(classTag), EntCmd() {}
 
+//! @brief //! Invoked by the analyst after the analysis has been performed.
+//! What the method does depends on the concrete subtype.
+int XC::Recorder::playback(int)
+  {
+    std::cerr << getClassName() << "::" << __FUNCTION__
+	      << "; not implemented." << std::endl;
+    return 0;
+  }
+
+//! Invoked by the Domain object when revertToStart() is invoked on
+//! the Domain object. What the Recorder does depends on the concrete subtype. 
 int XC::Recorder::restart(void)
   { return 0; }
 
@@ -70,12 +81,14 @@ int XC::Recorder::setDomain(Domain &theDomain)
 
 int XC::Recorder::sendSelf(CommParameters &cp)
   {
-    std::cerr << "Recorder::sendSelf() - not yet implemented\n";
+    std::cerr << getClassName() << "::" << __FUNCTION__
+              << "; not yet implemented.\n";
     return 0;
   }
 
 int XC::Recorder::recvSelf(const CommParameters &cp)
   {
-    std::cerr << "Recorder::recvSelf() - not yet implemented\n";
+    std::cerr << getClassName() << "::" << __FUNCTION__
+	      << "; not yet implemented.\n";
     return 0;
   }

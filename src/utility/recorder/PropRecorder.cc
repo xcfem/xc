@@ -34,15 +34,8 @@
 
 //! @brief Constructor.
 XC::PropRecorder::PropRecorder(int classTag,Domain *ptr_dom)
-  :Recorder(classTag), CallbackRecord(), CallbackRestart(),
-  lastCommitTag(-1),lastTimeStamp(-1.0),theDomain(ptr_dom) {}
-
-//! @brief Asigna el domain al recorder.
-int XC::PropRecorder::setDomain(Domain &theDom)
-  {
-    theDomain = &theDom;
-    return 0;
-  }
+  : DomainRecorderBase(classTag,ptr_dom), CallbackRecord(), CallbackRestart(),
+  lastCommitTag(-1),lastTimeStamp(-1.0) {}
 
 double XC::PropRecorder::getCurrentTime(void) const
   { return theDomain->getTimeTracker().getCurrentTime(); }
@@ -52,11 +45,11 @@ int XC::PropRecorder::getCommitTag(void) const
   { return theDomain->getCommitTag(); }
 
 //! @brief Returns the name of the current combination.
-std::string XC::PropRecorder::getNombreCombActual(void) const
+std::string XC::PropRecorder::getCurrentCombinationName(void) const
   {
     std::string retval= "";
     if(theDomain)
-      retval= theDomain->getNombreCombActual();
+      retval= theDomain->getCurrentCombinationName();
     return retval;
   }
 

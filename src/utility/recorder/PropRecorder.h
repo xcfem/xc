@@ -29,14 +29,14 @@
 #ifndef PropRecorder_h
 #define PropRecorder_h
 
-#include <utility/recorder/Recorder.h>
+#include <utility/recorder/DomainRecorderBase.h>
 #include "xc_utils/src/nucleo/python_utils.h"
 
 namespace XC {
 
 //! @ingroup Recorder
 //
-class PropRecorder: public Recorder
+class PropRecorder: public DomainRecorderBase
   {
   protected:
     std::string CallbackSetup; //!< Python script to execute before any record calls.
@@ -44,8 +44,6 @@ class PropRecorder: public Recorder
     std::string CallbackRestart; //!< Python script to execute on each restart call.
     int lastCommitTag; //!< CommitTag of the last record call.
     double lastTimeStamp; //!< TimeStamp of the last record call.
-
-    Domain *theDomain; //!< poiter to the domain.
 
     void callSetupCallback(const int &,const double &);
     template <class Container>
@@ -55,10 +53,7 @@ class PropRecorder: public Recorder
   public:
     PropRecorder(int classTag, Domain *ptr_dom= nullptr);
 
-    int setDomain(Domain &theDomain);
-    inline Domain *getDomain(void)
-      { return theDomain; }
-    std::string getNombreCombActual(void) const;
+    std::string getCurrentCombinationName(void) const;
 
     inline int getLastCommitTag(void) const
       { return lastCommitTag; }

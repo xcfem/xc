@@ -76,14 +76,24 @@ class Domain;
 //
 //! @brief An Recorder object is used in the program to
 //! store/restore information at each commit().
+//!
+//! The Recorder class is an abstract class which is introduced to allow
+//! information to be saved during the analysis. The interface defines two
+//! pure virtual methods record()} and {\em playback(). {\em
+//! record()} is a method which is called by the Domain object during a
+//! commit()}. The {\em playback() method can be called by the analyst after
+//! the analysis has been performed.
 class Recorder: public MovableObject, public EntCmd
   {
   public:
     Recorder(int classTag);
     virtual ~Recorder(void) {}
 
+    //! Invoked by the Domain object after commit() has been invoked on all the
+    //! domain component objects. What the Recorder records depends on the
+    //! concrete subtype.
     virtual int record(int commitTag, double timeStamp) =0;
-    
+    virtual int playback(int commitTag);
     virtual int restart(void);
     virtual int setDomain(Domain &theDomain);
     virtual int sendSelf(CommParameters &);  
