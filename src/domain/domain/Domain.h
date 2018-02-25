@@ -197,7 +197,7 @@ class Domain: public ObjWithRecorders, public DistributedBase
     virtual ConstrContainer &getConstraints(void);
     virtual const ConstrContainer &getConstraints(void) const;
 
-    const std::string &getNombreCombActual(void) const;
+    const std::string &getCurrentCombinationName(void) const;
 
     bool existElement(int tag);
     virtual Element *getElement(int tag);

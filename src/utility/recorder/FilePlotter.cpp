@@ -614,38 +614,47 @@ int XC::FilePlotter::plotFiles(void)
 }
 
 
-int XC::FilePlotter::setCol(const XC::ID &theCols)
-{
-  if (theCols.Size()%2 != 0) {
-    std::cerr << "XC::FilePlotter::setCol() - the size of the cols XC::ID " << theCols.Size() << " is not a multiple of 2\n";
-    return -1;
+int XC::FilePlotter::setCol(const ID &theCols)
+  {
+    if (theCols.Size()%2 != 0)
+      {
+        std::cerr << "XC::FilePlotter::setCol() - the size of the cols XC::ID "
+		  << theCols.Size()
+		  << " is not a multiple of 2\n";
+        return -1;
+      }
+
+    for (int i=0; i<theCols.Size(); i++)
+      {
+	if (theCols(i) < 1)
+	  {
+	    std::cerr << "XC::FilePlotter::FilePlotter() - a value of the cols "
+		      << theCols(i) << " is < 1\n";
+	    return -2;
+	  }
+      }
+    // check colX is valid, i.e. >= 1
+    // if valid set colX using c indexing
+
+    if (cols != 0)
+      {
+	if (cols->Size() != theCols.Size())
+	  {
+	    delete cols;
+	    cols = 0;
+	  }
+	else
+	  *cols = theCols;
+      }
+
+    if(cols == 0)
+      cols = new ID(theCols);
+
+    for(int j=0; j<cols->Size(); j++)
+      (*cols)(j) -= 1;
+
+    return 0;
   }
-
-  for (int i=0; i<theCols.Size(); i++) {
-    if (theCols(i) < 1) {
-      std::cerr << "XC::FilePlotter::FilePlotter() - a value of the cols " << theCols(i) << " is < 1\n";
-      return -2;
-    }
-  }
-  // check colX is valid, i.e. >= 1
-  // if valid set colX using c indexing
-
-  if (cols != 0) {
-    if (cols->Size() != theCols.Size()) {
-      delete cols;
-      cols = 0;
-    } else
-      *cols = theCols;
-  }
-
-  if (cols == 0)
-    cols = new ID(theCols);
-
-  for (int j=0; j<cols->Size(); j++)
-    (*cols)(j) -= 1;
-    
-  return 0;
-}
 
 
 

@@ -278,20 +278,20 @@ class MomentGradientFactorC1(object):
 
 def controlBiaxialBendingEfficiency():
   '''Code to execute in every commit to check stress criterion (bars in 3D problems).'''
-  return '''nmbComb= recorder.getNombreCombActual
+  return '''nmbComb= recorder.getCurrentCombinationName
 self.getResistingForce()
 crossSection= self.getProp('crossSection')
 crossSection.checkBiaxialBendingForElement(self,nmbComb)'''
 
 def controlYShearEfficiency():
-  return '''nmbComb= recorder.getNombreCombActual
+  return '''nmbComb= recorder.getCurrentCombinationName
 self.getResistingForce()
 crossSection= self.getProp('crossSection')
 crossSection.checkYShearForElement(self,nmbComb)'''
 
 def controlULSCriterion():
   return '''recorder= self.getProp('ULSControlRecorder')
-nmbComb= recorder.getNombreCombActual
+nmbComb= recorder.getCurrentCombinationName
 self.getResistingForce()
 crossSection= self.getProp('crossSection')
 crossSection.checkBiaxialBendingForElement(self,nmbComb)
@@ -299,7 +299,7 @@ crossSection.checkYShearForElement(self,nmbComb)'''
 
 def controlULSCriterion2D():
   return '''recorder= self.getProp('ULSControlRecorder')
-nmbComb= recorder.getNombreCombActual
+nmbComb= recorder.getCurrentCombinationName
 self.getResistingForce()
 crossSection= self.getProp('crossSection')
 crossSection.checkUniaxialBendingForElement(self,nmbComb)

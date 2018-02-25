@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 def controlTNHA():
-  return """nmbComb= recorder.getNombreCombActual
+  return """nmbComb= recorder.getCurrentCombinationName
 self.getResistingForce()
 Ntmp= self.getN1
 MyTmp= self.getMy1

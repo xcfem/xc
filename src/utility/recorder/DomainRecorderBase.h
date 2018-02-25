@@ -36,7 +36,8 @@ class Domain;
 
 //! @ingroup Recorder
 //
-//! @brief Recording of domain information.
+//! @brief Base class for the recorders that store 
+//! a link with the domain.
 class DomainRecorderBase: public Recorder
   {
   protected:
@@ -46,6 +47,8 @@ class DomainRecorderBase: public Recorder
     DomainRecorderBase(int classTag,Domain *ptr_dom= nullptr);
 
     int setDomain(Domain &theDomain);
+    inline Domain *getDomain(void)
+      { return theDomain; }
   };
 } // end of XC namespace
 

@@ -43,7 +43,7 @@ class_<XC::PropRecorder, bases<XC::Recorder>, boost::noncopyable >("PropRecorder
   .add_property("getCurrentTime",&XC::PropRecorder::getCurrentTime)
   .add_property("getCommittedTime",&XC::PropRecorder::getCommittedTime)
   .add_property("getCommitTag",&XC::PropRecorder::getCommitTag)
-  .add_property("getNombreCombActual",&XC::PropRecorder::getNombreCombActual)
+  .add_property("getCurrentCombinationName",&XC::PropRecorder::getCurrentCombinationName)
   .add_property("getDomain", make_function( &XC::PropRecorder::getDomain, return_internal_reference<>() ),"Returns a reference to the domain.")
   ;
 

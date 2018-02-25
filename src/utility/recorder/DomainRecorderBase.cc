@@ -28,10 +28,14 @@
 
 #include <utility/recorder/DomainRecorderBase.h>
 
+//! @brief Constructor.
+//!
+//! @param classTag: class identifier.
+//! @param ptr_dom: pointer to the domain.
 XC::DomainRecorderBase::DomainRecorderBase(int classTag,Domain *ptr_dom)
-  :Recorder(classTag),theDomain(0) {}
+  :Recorder(classTag),theDomain(ptr_dom) {}
 
-
+//! @brief Set the link with the domain.
 int XC::DomainRecorderBase::setDomain(Domain &theDom)
   {
     theDomain = &theDom;

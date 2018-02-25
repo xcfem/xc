@@ -1,6 +1,6 @@
 def controlMovU():
   return """U= self.getDisp[0]
-nmbComb= recorder.getNombreCombActual
+nmbComb= recorder.getCurrentCombinationName
 if(U>self.getProp("UMax")):
    self.setProp("UMax",U)
    self.setProp("CombUMax",nmbComb)
@@ -10,7 +10,7 @@ if(U<self.getProp("UMin")):
 
 def controlMovV():
   return """V= self.getDisp[1]
-nmbComb= recorder.getNombreCombActual
+nmbComb= recorder.getCurrentCombinationName
 if(V>self.getProp("VMax")):
    self.setProp("VMax",V)
    self.setProp("CombVMax",nmbComb)
@@ -20,7 +20,7 @@ if(V<self.getProp("VMin")):
 
 def controlMovW():
   return """W= self.getDisp[2]
-nmbComb= recorder.getNombreCombActual
+nmbComb= recorder.getCurrentCombinationName
 if(W>self.getProp("WMax")):
    self.setProp("WMax",W)
    self.setProp("CombWMax",nmbComb)
@@ -30,7 +30,7 @@ if(W<self.getProp("WMin")):
 
 def controlMovUV():
   return """U= self.getDisp[0]
-nmbComb= recorder.getNombreCombActual
+nmbComb= recorder.getCurrentCombinationName
 if(U>self.getProp("UMax")):
    self.setProp("UMax",U)
    self.setProp("CombUMax",nmbComb)
@@ -47,7 +47,7 @@ if(V<self.getProp("VMin")):
 
 def controlMovModulusUV():
   return """modMov= math.sqrt(self.getDisp[0]**2+self.getDisp[1]**2)
-nmbComb= recorder.getNombreCombActual
+nmbComb= recorder.getCurrentCombinationName
 if(modMov>self.getProp("dispMax")):
    self.setProp("dispMax",modMov)
    self.setProp("CombDispMax",nmbComb)"""
@@ -58,7 +58,7 @@ def fnControlMovComponent(recorder, obj, codeComponent, value):
   propVMin= codeComponent+'Min'
   propCombVMin= 'Comb'+propVMin
 
-  nmbComb= recorder.getNombreCombActual
+  nmbComb= recorder.getCurrentCombinationName
   if(value>obj.getProp(propVMax)):
      obj.setProp(propVMax,value)
      obj.setProp(propCombVMax,nmbComb)
@@ -88,14 +88,14 @@ def controlMovs():
 
 def controlMovModulusUVW():
   return """modMov= math.sqrt(self.getDisp[0]**2+self.getDisp[1]**2+self.getDisp[2]**2)
-nmbComb= recorder.getNombreCombActual
+nmbComb= recorder.getCurrentCombinationName
 if(modMov>self.getProp("dispMax")):
    self.setProp("dispMax",modMov)
    self.setProp("CombDispMax",nmbComb)"""
 
 def controTensRecElastico3d():
   '''Code to execute in every commit to check stress criterion (bars in 3D problems).'''
-  return """nmbComb= recorder.getNombreCombActual
+  return """nmbComb= recorder.getCurrentCombinationName
 self.getResistingForce()
 Area= self.sectionProperties.A
 Wyel= self.getProp("Wyel")
@@ -293,7 +293,7 @@ if(self.getProp("FCV") > self.getProp("FCVCP")):
 
 def controTensRecElastico2d():
   '''Code to execute in every commit to check stress criterion (bars in plane problems).'''
-  return """nmbComb= recorder.getNombreCombActual
+  return """nmbComb= recorder.getCurrentCombinationName
 self.getResistingForce()
 Area= self.sectionProperties.A
 Wel= self.getProp("Wel")

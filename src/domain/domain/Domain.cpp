@@ -430,7 +430,7 @@ bool XC::Domain::removeNodeLocker(NodeLocker *nl)
   }
 
 //! @brief Returns the name of the current load combination.
-const std::string &XC::Domain::getNombreCombActual(void) const
+const std::string &XC::Domain::getCurrentCombinationName(void) const
   { return nmbCombActual; }
 
 //! @brief Removes from the domain the load combination

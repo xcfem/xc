@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 def controTNHA():
-  return """nmbComb= recorder.getNombreCombActual
+  return """nmbComb= recorder.getCurrentCombinationName
   self.calcResistingForce()
 
   Sg= self.getStress
@@ -11,7 +11,7 @@ def controTNHA():
     if(FCTN>FCTNCP): 
       FCTNCP= FCTN}
       NCP=getN  
-      HIPCPTN= getNombreCombActual
+      HIPCPTN= getCurrentCombinationName
 
   if(Sg<SgMin):
     SgMin= Sg 
@@ -19,4 +19,4 @@ def controTNHA():
     if(FCTN>FCTNCP):
       FCTNCP= FCTN
       NCP=getN  
-      HIPCPTN= getNombreCombActual"""
+      HIPCPTN= getCurrentCombinationName"""

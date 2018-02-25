@@ -72,7 +72,7 @@ class Vector;
 //
 //! @brief AlgorithmIncrements will display the X and B in the SOE
 //! associated with the algorithm on a record.
-class AlgorithmIncrements : public Recorder
+class AlgorithmIncrements: public Recorder
   {
   private:
     //    ColorMap *theMap;
