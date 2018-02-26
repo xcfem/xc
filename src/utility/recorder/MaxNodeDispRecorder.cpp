@@ -68,41 +68,60 @@
 #include <utility/matrix/Vector.h>
 #include <utility/matrix/ID.h>
 
+//! @brief Default constructor.
 XC::MaxNodeDispRecorder::MaxNodeDispRecorder(void)
-  :DomainRecorderBase(RECORDER_TAGS_MaxNodeDispRecorder,nullptr), theNodes(), maxDisp(),dof(-1)
+  :DomainRecorderBase(RECORDER_TAGS_MaxNodeDispRecorder,nullptr), nodeTags(), maxDisp(),dof(-1)
   {}
 
-XC::MaxNodeDispRecorder::MaxNodeDispRecorder(int theDof,const XC::ID &nodes, Domain &theDom)
-  :DomainRecorderBase(RECORDER_TAGS_MaxNodeDispRecorder,&theDom), theNodes(nodes), maxDisp(nodes.Size()), 
- dof(theDof)
+//! @brief Constructor.
+//!
+//! @param theDof: index of the degree of freedom to follow.
+//! @param nTags: identifiers of the nodes to follow.
+//! @param theDom: domain of the nodes.
+XC::MaxNodeDispRecorder::MaxNodeDispRecorder(int theDof,const ID &nTags, Domain &theDom)
+  :DomainRecorderBase(RECORDER_TAGS_MaxNodeDispRecorder,&theDom), nodeTags(nTags), maxDisp(nTags.Size()), dof(theDof)
   { if (dof < 0) dof = 0; }
 
+//! For each node in \p nodeTags the value of the \p dof'th committed
+//! displacement is obtained. If the absolute value of this is greater
+//! than the value currently stored in the Vector of max displacements,
+//! the value in the Vector is updated. If no Node exists in {\em
+//! theDomain} with the tag or the Node does not have a \p dof'th
+//! degree-of-freedom associated with it \f$0\f$ is entered in the
+//! Vector. Returns \f$0\f$.
 int XC::MaxNodeDispRecorder::record(int commitTag, double timeStamp)
   {
-    for (int i=0; i<theNodes.Size(); i++) {
-	Node *theNode = theDomain->getNode(theNodes(i));
-	if (theNode != 0) {
-	    const XC::Vector &theDisp = theNode->getTrialDisp();
-	    if (theDisp.Size() > dof) {
+    for (int i=0; i<nodeTags.Size(); i++)
+      {
+	Node *theNode = theDomain->getNode(nodeTags(i));
+	if (theNode != 0)
+	  {
+	    const Vector &theDisp = theNode->getTrialDisp();
+	    if (theDisp.Size() > dof)
+	      {
 		double disp = theDisp(dof);
 		if (disp > 0 && disp > maxDisp(i))
 		    maxDisp(i) = disp;
 		else if (disp < 0 && -disp > maxDisp(i))
 		    maxDisp(i) = -disp;
-	    }
-	}
-    }
+	      }
+	  }
+      }
     return 0;
   }
 
 
+//! @brief Prints to clog the vector containing the maximum absolute nodal
+//! displacements. Note, at the end of the analysis, what is printed is
+//! independent of \p commitTag. Returns \f$0\f$.
 int XC::MaxNodeDispRecorder::playback(int commitTag)
   {
-    std::cerr << "Max Recorded Displacement: " << maxDisp << std::endl;
+    std::clog << "Max Recorded Displacement: " << maxDisp << std::endl;
     return 0;
   }
 
 
+//! @brief Zeros the Vector of maximum nodal displacements.
 int XC::MaxNodeDispRecorder::restart(void)
   {
     maxDisp.Zero();

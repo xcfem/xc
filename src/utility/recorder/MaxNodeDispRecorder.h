@@ -74,18 +74,17 @@ class Domain;
 //! last commitTag).
 class MaxNodeDispRecorder: public DomainRecorderBase
   {
-  private:	
-    ID theNodes; //!< node identifier.
+  private:
+    ID nodeTags; //!< node identifiers.
     Vector maxDisp; //!< max displacements values.
     int dof; //!< degree of freedom.
   public:
     MaxNodeDispRecorder(void);
-    MaxNodeDispRecorder(int dof,const ID &theNodes, Domain &theDomain);
+    MaxNodeDispRecorder(int dof,const ID &nodeTags, Domain &theDomain);
 
     int record(int commitTag, double timeStamp);
     int playback(int commitTag);
     int restart(void);    
-    
   };
 } // end of XC namespace
 
