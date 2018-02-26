@@ -65,20 +65,28 @@
 #include <domain/domain/Domain.h>
 #include <utility/database/FE_Datastore.h>
 
+//! @brief Default constructor.
 XC::DatastoreRecorder::DatastoreRecorder(void)
   :Recorder(RECORDER_TAGS_DatastoreRecorder), theDatastore(nullptr) {}
 
+//! @brief Constructor.
+//!
+//! @param theDb: reference to the datastore object.
 XC::DatastoreRecorder::DatastoreRecorder(FE_Datastore &theDb)
   :Recorder(RECORDER_TAGS_DatastoreRecorder), theDatastore(&theDb) {}
 
 
+//! @brief Return the result of invoking {\em commitState(commitTag)} on {\em
+//! theDatastore} object. 
 int XC::DatastoreRecorder::record(int commitTag, double timeStamp)
   { return theDatastore->commitState(commitTag); }
 
 
+//! brief Return the result of invoking {\em restoreState(commitTag)} on {\em
+//! theDatastore} object. 
 int XC::DatastoreRecorder::playback(int commitTag)
   { return theDatastore->restoreState(commitTag); }
 
-
+//! @brief Do nothing.
 int XC::DatastoreRecorder::restart(void)
   { return 0; }

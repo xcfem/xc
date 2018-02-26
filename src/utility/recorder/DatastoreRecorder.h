@@ -72,11 +72,14 @@ class Domain;
 class FE_Datastore;
 
 //! @ingroup Recorder
-//
+//!
+//! @brief // A DatastoreRecorder object is used in the program to invoke
+//! commitState() on an FE\_datastore object when commit() is invoked on
+//! a Domain. 
 class DatastoreRecorder: public Recorder
   {
   private:	
-    FE_Datastore *theDatastore;
+    FE_Datastore *theDatastore; //!< Link with the datastore object.
   public:
     DatastoreRecorder(void);
     DatastoreRecorder(FE_Datastore &theDatastore);
