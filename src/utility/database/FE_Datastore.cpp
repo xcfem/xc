@@ -72,8 +72,15 @@
 int XC::FE_Datastore::lastDbTag(0);
 
 //! @brief Constructor.
+//!
+//! @param prep: preprocessor used to build the finite element model.
+//! @param theBroker: deals with object serialization.
 XC::FE_Datastore::FE_Datastore(Preprocessor &prep, FEM_ObjectBroker &theBroker) 
   : Channel(&prep), theObjectBroker(&theBroker),  savedStates() {}
+
+//! @brief Returns a pointer to \p theBroker object passed in the constructor. 
+XC::FEM_ObjectBroker *XC::FE_Datastore::getObjectBroker(void)
+  { return theObjectBroker; }
 
 //! @brief Returns a pointer to the object preprocessor.
 const XC::Preprocessor *XC::FE_Datastore::getPreprocessor(void) const
@@ -83,6 +90,7 @@ const XC::Preprocessor *XC::FE_Datastore::getPreprocessor(void) const
 XC::Preprocessor *XC::FE_Datastore::getPreprocessor(void)
   { return dynamic_cast<Preprocessor *>(Owner()); }
 
+//! @brief Return true (this channel type IS a Datastore).
 bool XC::FE_Datastore::isDatastore(void) const
   { return true; }
 
@@ -110,12 +118,24 @@ int XC::FE_Datastore::sendObj(int commitTag,MovableObject &theObject, ChannelAdd
 int XC::FE_Datastore::recvObj(int commitTag,MovableObject &theObject, FEM_ObjectBroker &theNewBroker, ChannelAddress *theAddress)
   { return receiveMovable(commitTag,theObject,theNewBroker); }
 
-//! @brief Salva el estado en la database.
+//! @brief Stores the current state on the database.
+//!
+//! Invoked to store the current state of the domain in the database. The
+//! integer \p commitTag is used to identify the state for subsequent
+//! calls to restore the information from the database. To return
+//! \f$0\f$ if successful, a negative number if not.
+//! 
+//! The object loops over all the components of the
+//! Domain object invoking {\em sendSelf(commitTag, this)} on each of
+//! these objects. Returns \f$0\f$ if successful, a negative number if
+//! not. For each domain component that could not send itself a warning
+//! message is printed.
 int XC::FE_Datastore::commitState(int commitTag)
   {
     int res = 0;
     if(commitTag<1)
-      std::cerr << "FE_Datastore::commitState se esperaba un valor de commitTag mayor que 0, se obtuvo: "
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< ";a commitTag greater than 0 was expected, we get: "
                 << commitTag << std::endl;
     clearDbTags();
     if(getPreprocessor())
@@ -123,13 +143,16 @@ int XC::FE_Datastore::commitState(int commitTag)
         CommParameters cp(commitTag,*this);
         res = getPreprocessor()->sendSelf(cp);
         if(res < 0)
-          std::cerr << "FE_Datastore::commitState - modeler failed to sendSelf\n";
+          std::cerr << getClassName() << "::" << __FUNCTION__
+		    << "; preprocessor failed to sendSelf\n";
         else
           {
             ID maxlastDbTag(1);
             maxlastDbTag(0)= lastDbTag;
             if(this->sendID(-1,commitTag,maxlastDbTag) < 0)
-              std::cerr << "FE_Datastore::commitState - failed to send max lastDbTag data from database - problems may arise\n";
+              std::cerr << getClassName() << "::" << __FUNCTION__
+			<< "; failed to send max lastDbTag data"
+		        << " from database - problems may arise.\n";
             else
               savedStates.insert(commitTag);
 	  }
@@ -137,11 +160,22 @@ int XC::FE_Datastore::commitState(int commitTag)
     return res;
   }
 
-//! @brief Returns true if the estado se salvó
-//" con anterioridad en la database.
+//! @brief Returns true if the state identified by commitTag was
+//! previously saved on the database.
 bool XC::FE_Datastore::isSaved(int commitTag) const
   { return (savedStates.count(commitTag)>0); }
 
+//! @brief Invoked to restore the state of the domain from a database.
+//! 
+//! Invoked to restore the state of the domain from a database. The state
+//! of the domain at the end of this call is to be the same as the state
+//! of the domain when {\em commitState(commitTag)} was invoked. To return
+//! \f$0\f$ if successful, a negative number if not. 
+//! 
+//! The object loops over all the components of the Domain object invoking
+//! {\em recvSelf(commitTag, this)} on each of these objects. Returns \f$0\f$
+//! if successful, a negative number if not. For each domain component that
+//! could not send itself a warning message is printed. 
 int XC::FE_Datastore::restoreState(int commitTag)
   {
     int res= 0;
@@ -170,24 +204,30 @@ int XC::FE_Datastore::restoreState(int commitTag)
 
 int XC::FE_Datastore::createTable(const std::string &table, const std::vector<std::string> &columns)
   {
-    std::cerr << "FE_Datastore::createTable - not yet implemented\n";
+    std::cerr << getClassName() << "::" << __FUNCTION__
+	      << "; not yet implemented\n";
     return -1;
   }
 
 
 int XC::FE_Datastore::insertData(const std::string &tableName,const std::vector<std::string> &columns, int commitTag, const XC::Vector &data)
   {
-    std::cerr << "FE_Datastore::insertData - not yet implemented\n";
+    std::cerr << getClassName() << "::" << __FUNCTION__
+	      << "; not yet implemented\n";
     return -1;
   }
 
 
 int XC::FE_Datastore::getData(const std::string &table,const std::vector<std::string> &columns, int commitTag, Vector &data)
   {
-    std::cerr << "FE_Datastore::getData - not yet implemented\n";
+    std::cerr << getClassName() << "::" << __FUNCTION__
+	      << "; not yet implemented\n";
     return -1;
   }
 
+//! @brief To return a unique integer identifier at each call. This identifier
+//! will be used by the objects to store/retrieve their information
+//! to/from the database.
 int XC::FE_Datastore::getDbTag(void) const
   {
     lastDbTag++;
@@ -198,7 +238,8 @@ int XC::FE_Datastore::save(const int &commitTag)
   {
     const int retval= commitState(commitTag);
     if(retval < 0)
-      std::cerr << "WARNING - database failed to commitState \n";
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; WARNING - database failed to commitState.\n";
     return retval;
   }
 
@@ -206,7 +247,8 @@ int XC::FE_Datastore::restore(const int &commitTag)
   {
     const int retval= restoreState(commitTag);
     if(retval < 0)
-      std::cerr << "WARNING - database failed to commitState \n";
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; WARNING - database failed to commitState.\n";
     return retval;
   }
 

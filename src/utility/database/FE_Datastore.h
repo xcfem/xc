@@ -72,11 +72,15 @@ class Preprocessor;
 class FEM_ObjectBroker;
 
 //! @ingroup Database
-//
+//!
+//! Objects of this class are used in the program to store/restore
+//! the geometry and state information in the domain at particular
+//! instances. How, where and how the data is stored depends on the
+//! implementation provided by the concrete subclasses.  
 class FE_Datastore: public Channel
   {
   private:
-    FEM_ObjectBroker *theObjectBroker;
+    FEM_ObjectBroker *theObjectBroker; //!< Deals with the object serialization.
     static int lastDbTag;
     std::set<int> savedStates;
   protected:
