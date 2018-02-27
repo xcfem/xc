@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 def VtkLoadStrPropCells(setName, nmbProp, nmbContndr):
-  nmbContndr= vtk.vtkShStrArray() # Definimos el contenedor para las etiquetas a dibujar
+  nmbContndr= vtk.vtkShStrArray() # Define label container
   eSet= preprocessor.getSets.getSet(setName)
   eSet.numerate()
   elementsSet= eSet.getElements
   for e in elementSet:
-    nmbContndr.insert_value(e.getIdx,deref(nmbProp)) # Asignamos etiqueta
+    nmbContndr.insert_value(e.getIdx,deref(nmbProp)) # Set label.
 
   ugrid.CellData().SetStrings(nmbContndr)
