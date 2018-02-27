@@ -92,13 +92,14 @@ void XC::Mesh::alloc_iters(void)
     theEleIter= new SingleDomEleIter(theElements);
   }
 
-//! @brief Comprueba que se ha podido reservar memoria para los contenedores.
-bool XC::Mesh::check_contenedores(void) const
+//! @brief Check that there is enough memory for the containers.
+bool XC::Mesh::check_containers(void) const
   {
     // check that there was space to create the data structures
     if (theElements ==0 || theNodes == 0)
       {
-        std::cerr << "Mesh::Mesh() - out of memory\n";
+        std::cerr << getClassName() << "::" << __FUNCTION__
+	          << "; out of memory.\n";
         return false;
       }
     else
@@ -116,7 +117,7 @@ XC::Mesh::Mesh(EntCmd *owr)
   {
     alloc_containers();
     alloc_iters();
-    check_contenedores();
+    check_containers();
     init_bounds();
     tagNodeCheckReactionException= -1;
   }
@@ -128,7 +129,7 @@ XC::Mesh::Mesh(EntCmd *owr,TaggedObjectStorage &theNodesStorage,TaggedObjectStor
   {
     // init the iters
     alloc_iters();
-    if(!check_contenedores()) exit(-1);
+    if(!check_containers()) exit(-1);
 
     // check that the containers are empty
     if(theElements->getNumComponents() != 0 ||
@@ -151,7 +152,7 @@ XC::Mesh::Mesh(EntCmd *owr,TaggedObjectStorage &theStorage)
     theNodes= theStorage.getEmptyCopy();
 
     alloc_iters();// init the iters
-    check_contenedores();
+    check_containers();
     init_bounds();
     tagNodeCheckReactionException= -1;
   }

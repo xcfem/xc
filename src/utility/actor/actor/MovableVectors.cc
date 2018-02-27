@@ -38,10 +38,10 @@
 XC::MovableVectors::MovableVectors(std::vector<Vector> &v)
   : MovableContainer<std::vector<Vector> >(v) {}
 
-//! @brief Envía un objecto del contenedor.
+//! @brief Sends a container object.
 int XC::MovableVectors::sendItem(const Vector &v,CommParameters &cp,DbTagData &dt, const CommMetaData &meta)
   { return cp.sendVector(v,dt,meta); }
 
-//! @brief Recibe un objecto del contenedor.
+//! @brief Receives a container object.
 int XC::MovableVectors::receiveItem(Vector &v, const CommParameters &cp,DbTagData &dt, const CommMetaData &meta)
   { return cp.receiveVector(v,dt,meta); }

@@ -66,7 +66,7 @@ class RegionSecc: public DiscretBase
     // inquiring functions
     //! @brief Returns the number of cells of the region.
     virtual int getNumCells(void) const= 0;
-    //! @brief Returns the contenedor de celdas.
+    //! @brief Returns the cell container.
     virtual const VectorCells &getCells(void) const= 0;
     //! @brief Returns a copy of the region.
     virtual RegionSecc *getCopy(void) const= 0;

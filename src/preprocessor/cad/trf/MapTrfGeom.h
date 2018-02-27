@@ -38,20 +38,15 @@ namespace XC {
 
 //! @ingroup Cad
 //
-//! @brief Contenedor de puntos del modelo.
+//! @brief Geometric transformations container.
 class MapTrfGeom: public MapCadMember<TrfGeom>
   {
-  protected:
-
-
   public:
     MapTrfGeom(Cad *cad= nullptr);
 
     template <class T>
     TrfGeom *Nueva(void);
     TrfGeom *newTransformation(const std::string &type);
-
-
   };
 
 //! @brief Creates a new geometric transformation.

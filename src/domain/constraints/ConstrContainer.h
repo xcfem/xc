@@ -75,7 +75,7 @@ class ConstrContainer: public MeshComponentContainer
 
     void alloc_containers(void);
     void alloc_iters(void);
-    bool check_contenedores(void) const;
+    bool check_containers(void) const;
   protected:
     friend class Domain;
     // methods to populate containers

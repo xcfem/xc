@@ -44,7 +44,7 @@ class TrfGeom;
 
 //!  \ingroup Set
 //! 
-//!  \brief Contenedor de pointers to nodes.
+//!  \brief Pointers to node container.
 //! 
 class DqPtrsNode: public DqPtrsKDTree<Node,KDTreeNodes>
   {

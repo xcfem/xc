@@ -596,7 +596,7 @@ bool XC::ShadowSubdomain::removeLoadPattern(int loadTag)
     return retval;
   }
 
-//! @brief Elimina the load nodal del contenedor.
+//! @brief Removes the nodal load from container.
 bool XC::ShadowSubdomain::removeNodalLoad(int loadTag, int loadPattern)
   {
     bool res= false;
@@ -616,7 +616,7 @@ bool XC::ShadowSubdomain::removeNodalLoad(int loadTag, int loadPattern)
     return res;
   }
 
-//! @brief Elimina del contenedor the load over element.
+//! @brief Removes the elemental load from container.
 bool XC::ShadowSubdomain::removeElementalLoad(int loadTag, int loadPattern)
   {
     bool res= false;

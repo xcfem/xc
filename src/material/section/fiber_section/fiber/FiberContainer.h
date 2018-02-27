@@ -36,7 +36,7 @@ namespace XC {
 
 //! \ingroup MATSCCFibers
 //
-//! @brief Contenedor de fibers.
+//! @brief Fiber container.
 class FiberContainer : public FiberDeque
   {
     void libera(void);

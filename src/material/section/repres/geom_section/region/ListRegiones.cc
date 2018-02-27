@@ -52,7 +52,7 @@ void XC::ListRegiones::libera(void)
     erase(begin(),end());
   }
 
-//! @brief Copia las regiones de otro contenedor.
+//! @brief Copy the regions from another container.
 void XC::ListRegiones::copia(const ListRegiones &otra)
   {
     libera();

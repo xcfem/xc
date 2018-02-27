@@ -39,9 +39,9 @@ namespace XC {
 class MEDObject: public EntCmd
   {
   public:
-    typedef ObjMap<MEDObject> contenedor;
-    typedef contenedor::iterator iterator;
-    typedef contenedor::const_iterator const_iterator;
+    typedef ObjMap<MEDObject> container;
+    typedef container::iterator iterator;
+    typedef container::const_iterator const_iterator;
   public:
     MEDObject(void);
 

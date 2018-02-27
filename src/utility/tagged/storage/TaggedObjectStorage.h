@@ -90,7 +90,7 @@ class TaggedObjectStorage: public EntCmd, public MovableObject
     int createObjects(const CommParameters &,T *(FEM_ObjectBroker::*p)(int));
     int receiveObjects(const CommParameters &);
   protected:
-    std::string containerName; //!< Nombre del contenedor en procesa_cmd.
+    std::string containerName; //!< Container name.
     bool transmitIDs;
     DbTagData &getDbTagData(void) const;
 

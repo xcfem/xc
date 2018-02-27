@@ -37,7 +37,7 @@ namespace XC {
 
 //! @ingroup Cad
 //
-//! @brief Contenedor de puntos del modelo.
+//! @brief Model points container.
 class MapSurfaces: public MapEnt<Face>
   {
   private:

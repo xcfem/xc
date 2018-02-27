@@ -103,7 +103,7 @@ void XC::ConstrContainer::alloc_iters(void)
   }
 
 //! @brief Check that pointers are not null.
-bool XC::ConstrContainer::check_contenedores(void) const
+bool XC::ConstrContainer::check_containers(void) const
   {
     // check that there was space to create the data structures
     if((theSPs == nullptr) || (theMPs == nullptr) || (theMRMPs == nullptr) ||
@@ -125,7 +125,7 @@ XC::ConstrContainer::ConstrContainer(Domain *owr)
     // init the arrays for storing the domain components
     alloc_containers();
     alloc_iters();
-    if(!check_contenedores())
+    if(!check_containers())
       { exit(-1); }
   }
 

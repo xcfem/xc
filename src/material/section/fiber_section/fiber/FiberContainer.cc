@@ -87,7 +87,7 @@ XC::FiberContainer &XC::FiberContainer::operator=(const FiberContainer &otro)
     return *this;
   }
 
-//! @brief Copia las fibers del contenedor being passed as parameter.
+//! @brief Copy the fibers from the container being passed as parameter.
 void XC::FiberContainer::copy_fibers(const fiber_list &fibers)
   {
     const size_t numFibers= fibers.size();
@@ -98,7 +98,8 @@ void XC::FiberContainer::copy_fibers(const fiber_list &fibers)
         (*this)[i]= (*ifib)->getCopy();
         if(!(*this)[i])
           {
-            std::cerr << "XC::FiberContainer::copy_fibers -- failed to get copy of a XC::Fiber\n";
+            std::cerr << getClassName() << "::" << __FUNCTION__
+		      << "; failed to get copy of a Fiber.\n";
             exit(-1);
           }
       }

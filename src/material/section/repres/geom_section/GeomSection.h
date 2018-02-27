@@ -131,7 +131,7 @@ class GeomSection: public SectionMassProperties
     double getCover(const Pos2d &) const;
     double getCompressedStrutWidth(const Segmento2d &) const;
 
-    //Acceso contenedores.
+    //Access to containers.
     inline const ListRegiones &getRegiones(void) const
       { return regiones; }
     inline ListRegiones &getRegiones(void)

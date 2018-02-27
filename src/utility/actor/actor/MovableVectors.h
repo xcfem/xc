@@ -47,7 +47,7 @@ class MovableVectors: public MovableContainer<std::vector<Vector> >
     int receiveItem(Vector &,const CommParameters &,DbTagData &, const CommMetaData &);
 
     const std::vector<Vector> &getVectores(void) const
-      { return contenedor; }
+      { return container; }
   };
 
 

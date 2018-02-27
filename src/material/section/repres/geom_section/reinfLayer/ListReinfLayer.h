@@ -49,7 +49,7 @@ class GeomSection;
 
 //! @ingroup MATSCCArmaduras
 //
-//! @brief Contenedor (lista) de capas de armadura.
+//! @brief Reinf layer container (list).
 class ListReinfLayer: public std::list<ReinfLayer *>, public SectionMassProperties
   {
   public:

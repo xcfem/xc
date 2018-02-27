@@ -49,7 +49,7 @@ void XC::ListReinfLayer::libera(void)
     erase(begin(),end());
   }
 
-//! @brief Copia las ReinfLayer de otro contenedor.
+//! @brief Copy the layers from another container.
 void XC::ListReinfLayer::copia(const ListReinfLayer &otra)
   {
     libera();

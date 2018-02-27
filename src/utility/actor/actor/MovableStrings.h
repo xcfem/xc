@@ -46,7 +46,7 @@ class MovableStrings: public MovableContainer<std::deque<std::string> >
     int receiveItem(std::string &s,const CommParameters &,DbTagData &, const CommMetaData &);
 
     const std::deque<std::string> &getStrings(void) const
-      { return contenedor; }
+      { return container; }
   };
 
 } // end of XC namespace

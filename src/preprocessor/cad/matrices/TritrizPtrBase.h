@@ -187,7 +187,7 @@ TritrizPtrBase<MatrizPtr>::TritrizPtrBase(const size_t &capas,const size_t &fila
     set_owner_matrices();
   }
 
-//! @brief Asigna el propietario a las matrices del contenedor.
+//! @brief Sets the owner for the matrices.
 template <class MatrizPtr>
 void TritrizPtrBase<MatrizPtr>::set_owner_matrices(void)
   {

@@ -47,7 +47,7 @@ const int XC::TaggedObjectStorage::posDbTag3;
 XC::TaggedObjectStorage::TaggedObjectStorage(EntCmd *owr,const std::string &contrName)
   : EntCmd(owr), MovableObject(0), containerName(contrName), transmitIDs(true) {}
 
-//! @brief Copia en éste los componentes del contenedor being passed as parameter.
+//! @brief Copy the components from the container into this one.
 void XC::TaggedObjectStorage::copia(const TaggedObjectStorage &otro)
   {
     TaggedObject *ptr= nullptr;
@@ -189,7 +189,7 @@ int XC::TaggedObjectStorage::sendObjects(CommParameters &cp)
     int res= 0;
     if(size>0)
       {
-        TaggedObject *ptr;
+        TaggedObject *ptr= nullptr;
         TaggedObjectIter &theIter= getComponents();
         // loop over nodes in mesh adding their dbTag to the ID
         while((ptr= theIter()) != nullptr)
@@ -201,20 +201,22 @@ int XC::TaggedObjectStorage::sendObjects(CommParameters &cp)
                 res= tmp->sendSelf(cp);
                 if(res<0)
                   {
-                    std::cerr << "TaggedObjectStorage::send - object with tag "
-                              << ptr->getTag() << " failed in sendSelf\n";
+                    std::cerr << getClassName() << "::" << __FUNCTION__
+		              << "; object with tag "
+                              << ptr->getTag() << " failed in sendSelf.\n";
                     break;
                   }
               }
             else
-	      std::cerr << "El objeto de tag: "
-                        << ptr->getTag() << " no es móvil." << std::endl;
+	      std::cerr << "The object with tag: "
+                        << ptr->getTag() << " is not movable." << std::endl;
           }
       }
     return res;
   }
 
-//! @brief Recibe los objetos del contenedor through the channel being passed as parameter.
+//! @brief Receive the objects through the communicator being
+//! passed as parameter.
 int XC::TaggedObjectStorage::receiveObjects(const CommParameters &cp)
   {
     TaggedObject *ptr= nullptr;

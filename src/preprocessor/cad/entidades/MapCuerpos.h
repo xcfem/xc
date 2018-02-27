@@ -36,7 +36,7 @@ namespace XC {
 
 //! @ingroup Cad
 //
-//! @brief Body contaainer. 
+//! @brief Body container. 
 class MapCuerpos: public MapEnt<Body>
   {
   private:

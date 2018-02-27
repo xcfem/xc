@@ -40,7 +40,7 @@ namespace XC {
 
 //! @ingroup MatUnx
 //
-//! @brief Contenedor de pointers to UniaxialMaterial.
+//! @brief Pointers to UniaxialMaterial container.
 class DqUniaxialMaterial: public EntCmd, public MovableObject, public std::deque<UniaxialMaterial *>
   {
     void libera(void);

@@ -87,7 +87,7 @@ class Mesh: public MeshComponentContainer
 
     void alloc_containers(void);
     void alloc_iters(void);
-    bool check_contenedores(void) const;
+    bool check_containers(void) const;
     void init_bounds(void);
     void update_bounds(const Vector &);
     void add_node_to_domain(Node *);

@@ -47,7 +47,7 @@ class MovableContainer: public MovableObject
     typedef typename C::reference reference;
     typedef typename C::const_reference const_reference;
   protected:
-    C &contenedor;
+    C &container;
     DbTagData &getDbTagData(void) const;
     virtual int sendItem(const_reference s,CommParameters &,DbTagData &, const CommMetaData &)= 0;
     virtual int receiveItem(reference s,const CommParameters &,DbTagData &, const CommMetaData &)= 0;
@@ -63,7 +63,7 @@ class MovableContainer: public MovableObject
 //! @brief Constructor.
 template <class C>
 XC::MovableContainer<C>::MovableContainer(C &v)
-  : MovableObject(0), contenedor(v) {}
+  : MovableObject(0), container(v) {}
 
 
 //! @brief Returns a vector para almacenar los dbTags
@@ -79,7 +79,7 @@ XC::DbTagData &XC::MovableContainer<C>::getDbTagData(void) const
 template <class C>
 int XC::MovableContainer<C>::sendData(CommParameters &cp)
   {
-    const size_t sz= contenedor.size();
+    const size_t sz= container.size();
     DbTagData &dt= getDbTagData();
 
     dt.setDbTagDataPos(0, sz);
@@ -88,7 +88,7 @@ int XC::MovableContainer<C>::sendData(CommParameters &cp)
 
     int res= 0;
     int loc= 0;
-    for(const_iterator i= contenedor.begin();i!=contenedor.end();i++)
+    for(const_iterator i= container.begin();i!=container.end();i++)
       res+= this->sendItem(*i,cp,dbTags,CommMetaData(loc++));
     res+= dbTags.send(dt,cp,CommMetaData(1));
     if(res<0)
@@ -102,13 +102,13 @@ int XC::MovableContainer<C>::recvData(const CommParameters &cp)
   {
     DbTagData &dt= getDbTagData();
     const int sz= dt.getDbTagDataPos(0);
-    contenedor.resize(sz);
+    container.resize(sz);
     DbTagData dbTags(sz);
 
 
     int res= dbTags.receive(dt,cp,CommMetaData(1));
     int loc= 0;
-    for(iterator i= contenedor.begin();i!=contenedor.end();i++)
+    for(iterator i= container.begin();i!=container.end();i++)
       res+= this->receiveItem(*i,cp,dbTags,CommMetaData(loc++));
     return res;
   }
