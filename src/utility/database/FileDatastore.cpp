@@ -79,7 +79,7 @@
 #include "domain/mesh/element/Element.h"
 #include "domain/mesh/node/Node.h"
 
-void XC::FileDatastore::libera(void)
+void XC::FileDatastore::free_mem(void)
   {
     if(charPtrData)
       {
@@ -90,24 +90,37 @@ void XC::FileDatastore::libera(void)
   }
 void XC::FileDatastore::alloc(const size_t &sz)
   {
-    libera();
+    free_mem();
     charPtrData= new char[sz];
     if(charPtrData)
       sizeData= sz;
     else
       {
-        std::cerr << "FileDatastore::alloc(size_t sz) - out of memory for size: " << sz << std::endl;
+        std::cerr << getClassName() << "::" << __FUNCTION__
+	          << "; out of memory for size: " << sz << std::endl;
         sizeData= 0;
       }
   }
 
+//! @brief Constructor.
+//!
+//! Opens the files for the domain and base component relations, files have
+//! names {\em name.relation}, and stores the end of file locations. Creates
+//! three arrays of file pointers for the ID, Vector and Matrix files and then
+//! zeros these arrays. If the files could not be opened, or there is not enough
+//! memory for the arrays an error message is printed and the program
+//! is terminated.
 XC::FileDatastore::FileDatastore(const std::string &dataBaseName,Preprocessor &preprocessor, FEM_ObjectBroker &theObjBroker)
   :FE_Datastore(preprocessor, theObjBroker), dataBase(dataBaseName), charPtrData(nullptr), sizeData(0), currentMaxInt(0), currentMaxDouble(0)
   { resizeDouble(1024); }
 
+//! @brief Destructor.
+//! 
+//! Each file that is opened is closed and the arrays of file pointers
+//! obtained from the heap in the constructor are returned to the heap.
 XC::FileDatastore::~FileDatastore(void)
   {
-    libera();
+    free_mem();
     //  while(theIDFilesIter != theIDFiles.end()) {
     //    theIDFilesIter++;
     // }
@@ -155,7 +168,7 @@ XC::FileDatastore::~FileDatastore(void)
 
 int XC::FileDatastore::commitState(int commitTag)
   {
-    int result = XC::FE_Datastore::commitState(commitTag);
+    int result = FE_Datastore::commitState(commitTag);
     if(result == commitTag)
       resetFilePointers();
     return result;
@@ -207,15 +220,19 @@ void XC::FileDatastore::resetFilePointers(void)
 }
 
 
+//! @brief Prints an error message and returns \f$-1\f$ as not yet implemented.
 int XC::FileDatastore::sendMsg(int dBTag, int commitTag, const XC::Message &, ChannelAddress *theAddress)
   {
-    std::cerr << "FileDatastore::sendMsg() - not yet implemented\n";
+    std::cerr << getClassName() << "::" << __FUNCTION__
+	      << "; not yet implemented\n";
     return -1;
   }
 
+//! @brief Prints an error message and returns \f$-1\f$ as not yet implemented.
 int XC::FileDatastore::recvMsg(int dBTag, int commitTag, Message &, ChannelAddress *theAddress)
   {
-    std::cerr << "FileDatastore::recvMsg() - not yet implemented\n";
+    std::cerr << getClassName() << "::" << __FUNCTION__
+	      << "; not yet implemented\n";
     return -1;
   }
 
@@ -223,17 +240,29 @@ int XC::FileDatastore::recvMsg(int dBTag, int commitTag, Message &, ChannelAddre
 std::string XC::FileDatastore::getFileName(const std::string &tp, int idSize,int commitTag) const
   { return dataBase + tp + boost::lexical_cast<std::string>(idSize)+"."+boost::lexical_cast<std::string>(commitTag); }
 
+//! @brief Send (write) the ID.
+//!
+//! //! If a file for IDs of this size has not yet been created, one is created
+//! now and the cell in the array of file pointers is set. If file can not be
+//! created a warning message is printed and program is terminated. A
+//! sequential search is made in the file to see if information is already
+//! stored for a ID with this \p dbTag and \p commitTag. The data is then
+//! written at this location, or eof if no location was found. The end of file
+//! location for IDss of this size is updated. If successful \f$0\f$ is
+//! returned. A warning message and a negative number is returned if the
+//! operation fails: \f$-1\f$ if ID size is too large.
 int XC::FileDatastore::sendID(int dBTag, int commitTag, const ID &theID, ChannelAddress *theAddress)
   {
     if(!checkDbTag(dBTag))
-      std::cerr << "Error en FileDatastore::sendID." << std::endl;
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "ERROR in checkDBTag." << std::endl;
 
     if(currentCommitTag != commitTag)
       this->resetFilePointers();
 
     currentCommitTag = commitTag;
 
-    FileDatastoreOutputFile *theFileStruct =0;
+    FileDatastoreOutputFile *theFileStruct= nullptr;
 
     //
     // next we see if we already have this file;
@@ -253,7 +282,8 @@ int XC::FileDatastore::sendID(int dBTag, int commitTag, const ID &theID, Channel
           {
             if(this->resizeInt(idSize) < 0)
               {
-	        std::cerr << "FileDatastore::sendID() - failed in resizeInt()\n";
+	        std::cerr << getClassName() << "::" << __FUNCTION__
+			  << "; failed in resizeInt()\n";
 	        return -1;
               }
           }
@@ -262,7 +292,8 @@ int XC::FileDatastore::sendID(int dBTag, int commitTag, const ID &theID, Channel
 
         if(!theFileStruct)
           {
-            std::cerr << "FileDatastore::sendID() - out of memory\n";
+            std::cerr << getClassName() << "::" << __FUNCTION__
+		      << "; out of memory\n";
             return -1;
           }
 
@@ -270,7 +301,8 @@ int XC::FileDatastore::sendID(int dBTag, int commitTag, const ID &theID, Channel
 
         if(this->openFile(fileName, theFileStruct, stepSize) < 0)
           {
-            std::cerr << "FileDatastore::sendID() - could not open file\n";
+            std::cerr << getClassName() << "::" << __FUNCTION__
+		      << "; could not open file\n";
             return -1;
           }
         else
@@ -286,14 +318,16 @@ int XC::FileDatastore::sendID(int dBTag, int commitTag, const ID &theID, Channel
               {
                 if(this->resizeInt(idSize) < 0)
                   {
-                    std::cerr << "FileDatastore::sendID() - failed in resizeInt()\n";
+                    std::cerr << getClassName() << "::" << __FUNCTION__
+			      << "; failed in resizeInt()\n";
                     return -1;
 	          }
               }
             const std::string fileName= getFileName(".IDs.",idSize,commitTag);
             if(this->openFile(fileName, theFileStruct, stepSize) < 0)
               {
-        	std::cerr << "FileDatastore::sendID() - could not open file\n";
+        	std::cerr << getClassName() << "::" << __FUNCTION__
+			  << "; could not open file\n";
                 return -1;
               }
           }
@@ -361,7 +395,8 @@ int XC::FileDatastore::sendID(int dBTag, int commitTag, const ID &theID, Channel
     theStream->write(charPtrData, stepSize);
     if(theStream->bad())
       {
-        std::cerr << "FileDatastore::sendID() - error writing to file\n";
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; error writing to file\n";
         return -1;
       }
 
@@ -373,10 +408,19 @@ int XC::FileDatastore::sendID(int dBTag, int commitTag, const ID &theID, Channel
     return 0;
   }		
 
+//! @brief Receive (read) the ID.
+//!
+//! If a file for IDs of this size has not yet been created, an error message
+//! is printed and \f$-1\f$ is returned.  A sequential search
+//! is made in the file to see if information is already stored for a ID with
+//! this \p dbTag and \p commitTag. If no information is stored a
+//! \f$-1\f$ is returned. If information is stored, the information is
+//! retrieved and the data in the ID is set. Returns \f$0\f$ if successful. 
 int XC::FileDatastore::recvID(int dBTag, int commitTag, ID &theID, ChannelAddress *theAddress)
   {
     if(!checkDbTag(dBTag))
-      std::cerr << "Error en FileDatastore::recvID." << std::endl;
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "Error in checkDbTag." << std::endl;
     if(currentCommitTag != commitTag)
       this->resetFilePointers();
 
@@ -402,7 +446,8 @@ int XC::FileDatastore::recvID(int dBTag, int commitTag, ID &theID, ChannelAddres
           {
             if(this->resizeInt(idSize) < 0)
               {
-	        std::cerr << "FileDatastore::recvID() - failed in resizeInt()\n";
+	        std::cerr << getClassName() << "::" << __FUNCTION__
+			  << "; failed in resizeInt()\n";
                 return -1;
               }
           }
@@ -410,7 +455,8 @@ int XC::FileDatastore::recvID(int dBTag, int commitTag, ID &theID, ChannelAddres
         theFileStruct = new FileDatastoreOutputFile;
         if(theFileStruct == 0)
           {
-            std::cerr << "FileDatastore::recvID() - out of memory\n";
+            std::cerr << getClassName() << "::" << __FUNCTION__
+		      << "; out of memory\n";
             return -1;
           }
 
@@ -418,7 +464,8 @@ int XC::FileDatastore::recvID(int dBTag, int commitTag, ID &theID, ChannelAddres
 
         if(this->openFile(fileName, theFileStruct, stepSize) < 0)
           {
-            std::cerr << "FileDatastore::recvID() - could not open file\n";
+            std::cerr << getClassName() << "::" << __FUNCTION__
+		      << "; could not open file\n";
             return -1;
           }
         else
@@ -435,7 +482,8 @@ int XC::FileDatastore::recvID(int dBTag, int commitTag, ID &theID, ChannelAddres
               {
                 if(this->resizeInt(idSize) < 0)
                   {
-                    std::cerr << "FileDatastore::recvID() - failed in resizeInt()\n";
+                    std::cerr << getClassName() << "::" << __FUNCTION__
+			      << "; failed in resizeInt()\n";
                     return -1;
 	          }
               }
@@ -443,7 +491,8 @@ int XC::FileDatastore::recvID(int dBTag, int commitTag, ID &theID, ChannelAddres
 
             if(this->openFile(fileName, theFileStruct, stepSize) < 0)
               {
-	        std::cerr << "FileDatastore::recvID() - could not open file\n";
+	        std::cerr << getClassName() << "::" << __FUNCTION__
+			  << "; could not open file\n";
                 return -1;
               }
           }
@@ -487,7 +536,8 @@ int XC::FileDatastore::recvID(int dBTag, int commitTag, ID &theID, ChannelAddres
 
     if(found == false)
       {
-        std::cerr << "FileDatastore::recvID() - failed\n";
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; failed\n";
         return -1;
       }
     //std::cerr << "READ: " << dBTag << " " << pos << std::endl;
@@ -498,11 +548,23 @@ int XC::FileDatastore::recvID(int dBTag, int commitTag, ID &theID, ChannelAddres
     return 0;
   }		
 
-
-int XC::FileDatastore::sendMatrix(int dBTag, int commitTag,const XC::Matrix &theMatrix,ChannelAddress *theAddress)
+//! @brief Send (write) the matrix.
+//!
+//! First determines the size of the matrix, \f$noRows * noCols\f$. If a files
+//! for matrices of this size has not yet been created, one is created now
+//! and the cell in the array of file pointers is set. If file can not be
+//! created a warning message is printed and program is terminated. A sequential
+//! search is made in the file to see if information is already stored for a
+//! Matrix with this \p dbTag and \p commitTag. The data is then written at this
+//! location, or eof if no location was found. The end of file location
+//! for Matrices of this size is updated. If successful \f$0\f$ is
+//! returned. A warning message and a negative number is returned if the
+//! operation fails: \f$-1\f$ if Matrix size is too large.
+int XC::FileDatastore::sendMatrix(int dBTag, int commitTag,const Matrix &theMatrix,ChannelAddress *theAddress)
   {
     if(!checkDbTag(dBTag))
-      std::cerr << "Error en FileDatastore::sendMatrix." << std::endl;
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "Error in checkDbTag." << std::endl;
 
     if(currentCommitTag != commitTag)
       this->resetFilePointers();
@@ -531,7 +593,8 @@ int XC::FileDatastore::sendMatrix(int dBTag, int commitTag,const XC::Matrix &the
           {
             if(this->resizeDouble(matSize) < 0)
               {
-	        std::cerr << "FileDatastore::sendMatrix() - failed in resizeInt()\n";
+	        std::cerr << getClassName() << "::" << __FUNCTION__
+			  << "; failed in resizeDouble()\n";
 	        return -1;
               }
           }
@@ -539,7 +602,8 @@ int XC::FileDatastore::sendMatrix(int dBTag, int commitTag,const XC::Matrix &the
         theFileStruct = new FileDatastoreOutputFile;
         if(theFileStruct == 0)
           {
-            std::cerr << "FileDatastore::sendMatrix() - out of memory\n";
+            std::cerr << getClassName() << "::" << __FUNCTION__
+		      << "; out of memory\n";
             return -1;
           }
 
@@ -547,7 +611,8 @@ int XC::FileDatastore::sendMatrix(int dBTag, int commitTag,const XC::Matrix &the
 
         if(this->openFile(fileName, theFileStruct, stepSize) < 0)
           {
-            std::cerr << "FileDatastore::sendMatrix() - could not open file\n";
+            std::cerr << getClassName() << "::" << __FUNCTION__
+		      << "; could not open file\n";
             return -1;
           }
         else
@@ -564,7 +629,8 @@ int XC::FileDatastore::sendMatrix(int dBTag, int commitTag,const XC::Matrix &the
               {
                 if(this->resizeDouble(matSize) < 0)
                   {
-	            std::cerr << "FileDatastore::sendMatrix() - failed in resizeInt()\n";
+	            std::cerr << getClassName() << "::" << __FUNCTION__
+			      << "; failed in resizeDouble()\n";
 	            return -1;
 	          }
               }
@@ -573,7 +639,8 @@ int XC::FileDatastore::sendMatrix(int dBTag, int commitTag,const XC::Matrix &the
 
             if(this->openFile(fileName, theFileStruct, stepSize) < 0)
               {
-	        std::cerr << "FileDatastore::sendMatrix() - could not open file\n";
+	        std::cerr << getClassName() << "::" << __FUNCTION__
+			  << "; could not open file\n";
                 return -1;
               }
           }
@@ -650,13 +717,21 @@ int XC::FileDatastore::sendMatrix(int dBTag, int commitTag,const XC::Matrix &the
     return 0;
   }		
 
-
-
-
+//! @brief Receive (read) the matrix.
+//!
+//! First determines the size of the matrix, \f$noRows * noCols\f$. If a files
+//! for matrices of this size has not yet been created, an error message
+//! is printed and \f$-1\f$ is returned.  A sequential search
+//! is made in the file to see if information is already stored for a Matrix
+//! with this \p dbTag and \p commitTag. If no information is stored a
+//! \f$-1\f$ is returned. If information is stored, the information is
+//! retrieved and the data in the Matrix is set. returns \f$0\f$ if
+//! successful.
 int XC::FileDatastore::recvMatrix(int dBTag, int commitTag,Matrix &theMatrix,ChannelAddress *theAddress)
   {
     if(!checkDbTag(dBTag))
-      std::cerr << "Error en FileDatastore::recvMatrix." << std::endl;
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "Error in checkDbTag." << std::endl;
 
     if(currentCommitTag != commitTag)
       this->resetFilePointers();
@@ -682,25 +757,32 @@ int XC::FileDatastore::recvMatrix(int dBTag, int commitTag,Matrix &theMatrix,Cha
 
     // we first check if we need to resize recv buffer
     if(matSize > currentMaxDouble) {
-      if(this->resizeDouble(matSize) < 0) {
-	std::cerr << "FileDatastore::recvMatrix() - failed in resizeDouble()\n";
-	return -1;
-      }
+      if(this->resizeDouble(matSize) < 0)
+	{
+	  std::cerr << getClassName() << "::" << __FUNCTION__
+	  	    << "; failed in resizeDouble()\n";
+	  return -1;
+        }
     }
 
     theFileStruct = new FileDatastoreOutputFile;
 
-    if(theFileStruct == 0) {
-      std::cerr << "FileDatastore::recvMatrix() - out of memory\n";
-      return -1;
-    }
+    if(theFileStruct == 0)
+      {
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; out of memory\n";
+        return -1;
+      }
 
-        const std::string fileName= getFileName(".MATs.",matSize,commitTag);
+    const std::string fileName= getFileName(".MATs.",matSize,commitTag);
 
-    if(this->openFile(fileName, theFileStruct, stepSize) < 0) {
-      std::cerr << "FileDatastore::recvMatrix() - could not open file\n";
-      return -1;
-    } else
+    if(this->openFile(fileName, theFileStruct, stepSize) < 0)
+      {
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; could not open file\n";
+        return -1;
+      }
+    else
       theMatFiles.insert(MAP_FILES_TYPE(matSize, theFileStruct));
 
 
@@ -712,14 +794,17 @@ int XC::FileDatastore::recvMatrix(int dBTag, int commitTag,Matrix &theMatrix,Cha
     if(theFileStruct->theFile == 0) {
 
       if(matSize > currentMaxDouble) {
-	if(this->resizeDouble(matSize) < 0) {
-	  std::cerr << "FileDatastore::recvMatrix() - failed in resizeInt()\n";
-	  return -1;
-	}
+	if(this->resizeDouble(matSize) < 0)
+	  {
+	    std::cerr << getClassName() << "::" << __FUNCTION__
+		      << "; failed in resizeDouble()\n";
+	    return -1;
+	  }
       }
       const std::string fileName= getFileName(".MATs.",matSize,commitTag);
       if(this->openFile(fileName, theFileStruct, stepSize) < 0) {
-	std::cerr << "FileDatastore::recvMatrix() - could not open file\n";
+	std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; could not open file\n";
 	return -1;
       }
 
@@ -760,10 +845,12 @@ int XC::FileDatastore::recvMatrix(int dBTag, int commitTag,Matrix &theMatrix,Cha
     }
   }
 
-  if(found == false) {
-    std::cerr << "FileDatastore::recvMatrix() - failed\n";
-    return -1;
-  }
+  if(found == false)
+    {
+      std::cerr << getClassName() << "::" << __FUNCTION__
+	        << "; failed\n";
+      return -1;
+    }
 
   int loc=0;
   for(int j=0; j<noMatCols; j++)
@@ -775,12 +862,22 @@ int XC::FileDatastore::recvMatrix(int dBTag, int commitTag,Matrix &theMatrix,Cha
   return 0;
 }		
 
-
-
-int XC::FileDatastore::sendVector(int dBTag, int commitTag,const XC::Vector &theVector,ChannelAddress *theAddress)
+//! @brief Send (write) the vector.
+//!
+//! If a file for Vectors of this size has not yet been created, one is created
+//! now and the cell in the array of file pointers is set. If file can not be
+//! created a warning message is printed and program is terminated. A sequential
+//! search is made in the file to see if information is already stored for a
+//! Vector with this \p dbTag and \p commitTag. The data is then written at this
+//! location, or eof if no location was found. The end of file location
+//! for Vectors of this size is updated. If successful \f$0\f$ is
+//! returned. A warning message and a negative number is returned if the
+//! operation fails: \f$-1\f$ if Vector size is too large.
+int XC::FileDatastore::sendVector(int dBTag, int commitTag,const Vector &theVector,ChannelAddress *theAddress)
   {
     if(!checkDbTag(dBTag))
-      std::cerr << "Error en FileDatastore::sendVector." << std::endl;
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "Error in checkDbTag." << std::endl;
 
   if(currentCommitTag != commitTag)
     this->resetFilePointers();
@@ -804,23 +901,27 @@ int XC::FileDatastore::sendVector(int dBTag, int commitTag,const XC::Vector &the
 
     // we first check if we need to resize send buffer
     if(vectSize > currentMaxDouble) {
-      if(this->resizeDouble(vectSize) < 0) {
-	std::cerr << "FileDatastore::sendVector() - failed in resizeInt()\n";
-	return -1;
-      }
+      if(this->resizeDouble(vectSize) < 0)
+	{
+	  std::cerr << getClassName() << "::" << __FUNCTION__
+		    << "; failed in resizeDouble()\n";
+	  return -1;
+        }
     }
 
     theFileStruct = new FileDatastoreOutputFile;
 
     if(theFileStruct == 0) {
-      std::cerr << "FileDatastore::sendVector() - out of memory\n";
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; out of memory\n";
       return -1;
     }
 
     const std::string fileName= getFileName(".VECs.",vectSize,commitTag);
 
     if(this->openFile(fileName, theFileStruct, stepSize) < 0) {
-      std::cerr << "FileDatastore::sendVector() - could not open file\n";
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; could not open file\n";
       return -1;
     } else
       theVectFiles.insert(MAP_FILES_TYPE(vectSize, theFileStruct));
@@ -835,14 +936,16 @@ int XC::FileDatastore::sendVector(int dBTag, int commitTag,const XC::Vector &the
 
       if(vectSize > currentMaxDouble) {
 	if(this->resizeDouble(vectSize) < 0) {
-	  std::cerr << "FileDatastore::sendVector() - failed in resizeInt()\n";
+	  std::cerr << getClassName() << "::" << __FUNCTION__
+		    << "; failed in resizeDouble()\n";
 	  return -1;
 	}
       }
       const std::string fileName= getFileName(".VECs.",vectSize,commitTag);
 
       if(this->openFile(fileName, theFileStruct, stepSize) < 0) {
-	std::cerr << "FileDatastore::sendVector() - could not open file\n";
+	std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; could not open file\n";
 	return -1;
       }
 
@@ -923,10 +1026,20 @@ int XC::FileDatastore::sendVector(int dBTag, int commitTag,const XC::Vector &the
   return 0;
 }		
 
+//! @brief Receive (read) the vector.
+//!
+//! If a file for Vectors of this size has not yet been created, an error
+//! message is printed and \f$-1\f$ is returned.  A sequential search
+//! is made in the file to see if information is already stored for a Vector
+//! with this \p dbTag and \p commitTag. If no information is stored a
+//! \f$-1\f$ is returned. If information is stored, the information is
+//! retrieved and the data in the Vector is set. Returns \f$0\f$ if
+//! successful.
 int XC::FileDatastore::recvVector(int dBTag, int commitTag, Vector &theVector, ChannelAddress *theAddress)
 {
     if(!checkDbTag(dBTag))
-      std::cerr << "Error en FileDatastore::recvMatrix." << std::endl;
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "Error in checkDbTag." << std::endl;
 
   if(currentCommitTag != commitTag)
     this->resetFilePointers();
@@ -951,7 +1064,8 @@ int XC::FileDatastore::recvVector(int dBTag, int commitTag, Vector &theVector, C
     // we first check if we need to resize recv buffer
     if(vectSize > currentMaxDouble) {
       if(this->resizeDouble(vectSize) < 0) {
-	std::cerr << "FileDatastore::recvVectrix() - failed in resizeDouble()\n";
+	std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; failed in resizeDouble()\n";
 	return -1;
       }
     }
@@ -959,14 +1073,16 @@ int XC::FileDatastore::recvVector(int dBTag, int commitTag, Vector &theVector, C
     theFileStruct = new FileDatastoreOutputFile;
 
     if(theFileStruct == 0) {
-      std::cerr << "FileDatastore::recvVectrix() - out of memory\n";
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; out of memory\n";
       return -1;
     }
 
     const std::string fileName= getFileName(".VECs.",vectSize,commitTag);
 
     if(this->openFile(fileName, theFileStruct, stepSize) < 0) {
-      std::cerr << "FileDatastore::recvVectrix() - could not open file\n";
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; could not open file\n";
       return -1;
     } else
       theVectFiles.insert(MAP_FILES_TYPE(vectSize, theFileStruct));
@@ -981,14 +1097,16 @@ int XC::FileDatastore::recvVector(int dBTag, int commitTag, Vector &theVector, C
 
       if(vectSize > currentMaxDouble) {
 	if(this->resizeDouble(vectSize) < 0) {
-	  std::cerr << "FileDatastore::recvVectrix() - failed in resizeInt()\n";
+	  std::cerr << getClassName() << "::" << __FUNCTION__
+		    << "; failed in resizeDouble()\n";
 	  return -1;
 	}
       }
       const std::string fileName= getFileName(".VECs.",vectSize,commitTag);
 
       if(this->openFile(fileName, theFileStruct, stepSize) < 0) {
-	std::cerr << "FileDatastore::recvVectrix() - could not open file\n";
+	std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; could not open file\n";
 	return -1;
       }
 
@@ -1029,7 +1147,8 @@ int XC::FileDatastore::recvVector(int dBTag, int commitTag, Vector &theVector, C
   }
 
   if(found == false) {
-    std::cerr << "FileDatastore::recvVector() - failed\n";
+    std::cerr << getClassName() << "::" << __FUNCTION__
+	      << "; failed\n";
     return -1;
   }
 
@@ -1055,7 +1174,8 @@ int XC::FileDatastore::createTable(const std::string &tableName,const std::vecto
 
     if(table.bad() == true || table.is_open() == false)
       {
-        std::cerr << "FileDatastore::insertData - failed to open file: " << fileName << std::endl;
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; failed to open file: " << fileName << std::endl;
         res = -1;
       }
 
@@ -1075,7 +1195,8 @@ int XC::FileDatastore::insertData(const std::string &tableName,const std::vector
     std::ofstream table;
   table.open(fileName.c_str(), std::ios::app);
   if(table.bad() == true || table.is_open() == false) {
-    std::cerr << "FileDatastore::insertData - failed to open file: " << fileName << std::endl;
+    std::cerr << getClassName() << "::" << __FUNCTION__
+	      << "; failed to open file: " << fileName << std::endl;
     return -1;
   }
 
@@ -1108,7 +1229,9 @@ int XC::FileDatastore::openFile(const std::string &fileName, FileDatastoreOutput
     fstream *res= new fstream();
     if(res == 0)
       {
-        std::cerr << "FileDatastore::openFile - out of memory; failed to open file: " << fileName << std::endl;
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; out of memory; failed to open file: " << fileName
+		  << std::endl;
         return 0;
       }
 
@@ -1120,7 +1243,9 @@ int XC::FileDatastore::openFile(const std::string &fileName, FileDatastoreOutput
     delete res;
     res = new fstream();
     if(res == 0) {
-      std::cerr << "FileDatastore::openFile - out of memory; failed to open file: " << fileName << std::endl;
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; out of memory; failed to open file: "
+		<< fileName << std::endl;
       theFileStruct->theFile = res;
       return -1;
     }
@@ -1128,12 +1253,14 @@ int XC::FileDatastore::openFile(const std::string &fileName, FileDatastoreOutput
   }
 
   if(res->bad() == true || res->is_open() == false)
-   {
-    std::cerr << "FATAL - XC::FileDatastore::openFile() - could not open file " << fileName << std::endl;
-    delete res;
-    theFileStruct->theFile = 0;
-    return -1;
-  }
+    {
+       std::cerr << getClassName() << "::" << __FUNCTION__
+		 << "; FATAL - could not open file: "
+		 << fileName << std::endl;
+       delete res;
+       theFileStruct->theFile = 0;
+       return -1;
+    }
 
   // set the position for writing to eof
   res->seekp(0,std::ios::end);
@@ -1176,7 +1303,8 @@ int XC::FileDatastore::resizeInt(int newSize)
 
     if(newSize <= 0)
       {
-        std::cerr << "FileDatastore::resizeInt(int newSize) - invalidSize " << newSize << std::endl;
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; invalidSize: " << newSize << std::endl;
         return -1; // invalid size
       }
 
@@ -1204,7 +1332,8 @@ int XC::FileDatastore::resizeDouble(int newSize)
 
     if(newSize <= 0)
       {
-        std::cerr << "FileDatastore::resizeInt(int newSize) - invalidSize " << newSize << std::endl;
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; invalidSize: " << newSize << std::endl;
         return -1; // invalid size
       }
     alloc(newSize);

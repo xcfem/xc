@@ -102,7 +102,28 @@ typedef struct doubleData
 
 
 //! @ingroup Database
-//
+//!
+//! @brief used in the program to store/restore the geometry and state
+//! information in the domain at particular instances. This information is
+//! stored in binary form in files.
+//! 
+//! An FileDatastore object is used in the program to store/restore the
+//! geometry and state information in the domain at particular instances. This
+//! information is stored in binary form in files. As no standard format is
+//! used for the storage of integers and double values, files used to store
+//! the data on one type of machine, may not be read by a FileDatastore object
+//! on another type of machine where the storage of integers and doubles is
+//! different.
+//!
+//! For each of the base relations, i.e. Domain, Nodes, Elements,
+//! SFreedom\_Constraints, MFreedom\_Constraints, NodalLoads and ElementalLoads,
+//! a separate file is used to store the information. Files are also used
+//! for each size of ID, Vector and Matrix stored. At present, Messages
+//! are not stored, only ID and Vector objects of size \f$<= 200\f$ can be
+//! stored, the max \f$noRows * noCols\f$ of Matrices that can be stored
+//! is \f$<= 2000\f$, and only a single relation is created for Matrices which
+//! have similar sizes but differing dimensions. The data is stored in the
+//! files following the schema outlined previously.
 class FileDatastore: public FE_Datastore
   {
   private:
@@ -132,7 +153,7 @@ class FileDatastore: public FE_Datastore
     int currentMaxInt;
     int currentMaxDouble;
 
-    void libera(void);
+    void free_mem(void);
     void alloc(const size_t &sz);
     std::string getFileName(const std::string &, int idSize,int commitTag) const;
   public:
