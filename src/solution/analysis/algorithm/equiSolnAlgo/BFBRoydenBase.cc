@@ -29,7 +29,7 @@
 #include <solution/analysis/algorithm/equiSolnAlgo/BFBRoydenBase.h>
 #include <solution/analysis/convergenceTest/ConvergenceTest.h>
 
-void XC::BFBRoydenBase::libera(void)
+void XC::BFBRoydenBase::free_mem(void)
   {
     if(localTest)
       {
@@ -40,7 +40,7 @@ void XC::BFBRoydenBase::libera(void)
 
 void XC::BFBRoydenBase::alloc(const ConvergenceTest *theT)
   {
-    libera();
+    free_mem();
     localTest= theT->getCopy(numberLoops);
     if(!localTest)
       std::cerr << "BFBRoydenBase::alloc() - could not get a copy\n";
@@ -60,7 +60,7 @@ XC::BFBRoydenBase::BFBRoydenBase(AnalysisAggregation *owr,int classTag,Convergen
 
 //! @brief Destructor
 XC::BFBRoydenBase::~BFBRoydenBase(void)
-  { libera(); }
+  { free_mem(); }
 
 //! @brief Sets convergence test to use with the algorithm.
 int XC::BFBRoydenBase::setConvergenceTest(ConvergenceTest *nwTest)

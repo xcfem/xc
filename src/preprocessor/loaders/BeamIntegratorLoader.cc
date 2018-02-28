@@ -50,7 +50,7 @@
 
 
 
-void XC::BeamIntegratorLoader::libera(void)
+void XC::BeamIntegratorLoader::free_mem(void)
   {
     for(iterator i= begin();i!= end();i++)
       delete (*i).second;
@@ -81,7 +81,7 @@ XC::BeamIntegratorLoader &XC::BeamIntegratorLoader::operator=(const BeamIntegrat
   }
 
 XC::BeamIntegratorLoader::~BeamIntegratorLoader(void)
-  { libera(); }
+  { free_mem(); }
 
 //! @brief Returns a reference to the beam integrator container.
 const XC::BeamIntegratorLoader::map_beam_integrators &XC::BeamIntegratorLoader::Map(void) const

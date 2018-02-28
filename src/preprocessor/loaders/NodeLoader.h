@@ -45,7 +45,7 @@ class NodeLoader: public Loader
     size_t ngdl_def_node; //!< Default number of DOFs for new nodes.
     size_t ncoo_def_node; //!< Number of coordinates for new nodes (1,2 or 3).
     Node *seed_node; //!< Seed node for semi-automatic meshing.
-    void libera(void);
+    void free_mem(void);
     Node *new_node(const int &tag,const size_t &dim,const int &ngdl,const double &x,const double &y=0.0,const double &z=0.0);
   public:
     NodeLoader(Preprocessor *);

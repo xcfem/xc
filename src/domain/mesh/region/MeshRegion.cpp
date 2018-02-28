@@ -77,7 +77,7 @@
 
 
 
-void XC::MeshRegion::libera(void) 
+void XC::MeshRegion::free_mem(void) 
   {
     if(theNodes)
       delete theNodes;
@@ -89,7 +89,7 @@ void XC::MeshRegion::libera(void)
 
 void XC::MeshRegion::copia(const MeshRegion &otra) 
   {
-    libera();
+    free_mem();
     if(otra.theNodes)
       {
         size_t numNodes = otra.theNodes->Size();
@@ -129,11 +129,11 @@ XC::MeshRegion *XC::MeshRegion::getCopy(void) const
   { return new MeshRegion(*this); }
 
 XC::MeshRegion::~MeshRegion(void) 
-  { libera(); }
+  { free_mem(); }
 
 int XC::MeshRegion::setNodes(const XC::ID &theNods)
   {
-    libera();
+    free_mem();
 
     //
     // create new element & node lists
@@ -204,7 +204,7 @@ int XC::MeshRegion::setNodes(const XC::ID &theNods)
 
 int XC::MeshRegion::setElements(const XC::ID &theEles)
   {
-    libera();
+    free_mem();
 
     // create new element & node lists
 

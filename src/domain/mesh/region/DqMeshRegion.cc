@@ -29,8 +29,8 @@
 #include "DqMeshRegion.h"
 #include "MeshRegion.h" 
 
-//! @brief Libera todas las posiciones.
-void XC::DqMeshRegion::libera(void)
+//! @brief Release memory for every position.
+void XC::DqMeshRegion::free_mem(void)
   {
     const size_t sz= size();
     for(size_t i= 0;i<sz;i++)
@@ -74,13 +74,13 @@ XC::DqMeshRegion &XC::DqMeshRegion::operator=(const DqMeshRegion &otro)
 
 //! @brief Destructor.
 XC::DqMeshRegion::~DqMeshRegion(void)
-  { libera(); }
+  { free_mem(); }
 
 
 //! @brief Changes the container size.
 void XC::DqMeshRegion::resize(const size_t sz)
   {
-    libera();
+    free_mem();
     dq_Reg::resize(sz);
     for(size_t i= 0;i<sz;i++)
       (*this)[i]= nullptr;

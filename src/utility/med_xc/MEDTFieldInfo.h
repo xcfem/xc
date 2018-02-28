@@ -47,7 +47,7 @@ class MEDTFieldInfo: public MEDFieldInfo
   protected:
     mutable TipoCampo *campo; //!< Field definition in MEDMEM.
     bool has_gauss_points;
-    void libera(void) const;
+    void free_mem(void) const;
     void alloc(void) const;
     ArrayGauss *getArrayGauss(void) const;
     static void checkVectorDimension(const std::string &,const std::vector<T> &, const size_t &);
@@ -76,11 +76,11 @@ MEDTFieldInfo<T>::MEDTFieldInfo(const FieldInfo &fi,MEDGroupInfo *grp)
 //! @brief Destructor.
 template <class T>
 MEDTFieldInfo<T>::~MEDTFieldInfo(void)
-  { libera(); }
+  { free_mem(); }
 
 //! @brief Frees memory (and erases the field definition).
 template <class T>
-void MEDTFieldInfo<T>::libera(void) const
+void MEDTFieldInfo<T>::free_mem(void) const
   {
     if(campo)
       {
@@ -93,7 +93,7 @@ void MEDTFieldInfo<T>::libera(void) const
 template <class T>
 void MEDTFieldInfo<T>::alloc(void) const
   {
-    libera();
+    free_mem();
     const int nc= getXCFieldInfo().getNumberOfComponents();
     if(nc>0)
       {

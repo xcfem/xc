@@ -56,7 +56,7 @@
 #include <domain/mesh/element/utils/Information.h>
 #include "domain/component/Parameter.h"
 
-void XC::DistHingeIntegration::libera(void)
+void XC::DistHingeIntegration::free_mem(void)
   {
     if(beamInt)
       delete beamInt;
@@ -65,7 +65,7 @@ void XC::DistHingeIntegration::libera(void)
 
 void XC::DistHingeIntegration::copia(const BeamIntegration *bi)
   {
-    libera();
+    free_mem();
     if(bi)
       beamInt = bi->getCopy();
 //     if(!beamInt)
@@ -94,7 +94,7 @@ XC::DistHingeIntegration &XC::DistHingeIntegration::operator=(const DistHingeInt
   }
 
 XC::DistHingeIntegration::~DistHingeIntegration(void)
-  { libera(); }
+  { free_mem(); }
 
 void XC::DistHingeIntegration::getSectionLocations(int numSections, double L,double *xi) const
   {

@@ -81,7 +81,7 @@ XC::Matrix XC::ShellMITC4Base::mass(24,24);
 
 XC::ShellBData XC::ShellMITC4Base::BData;
 
-void XC::ShellMITC4Base::libera(void)
+void XC::ShellMITC4Base::free_mem(void)
   {
     if(theCoordTransf)
       {
@@ -92,7 +92,7 @@ void XC::ShellMITC4Base::libera(void)
 
 void XC::ShellMITC4Base::alloc(const ShellCrdTransf3dBase *crdTransf)
   {
-    libera();
+    free_mem();
     if(crdTransf)
       theCoordTransf= crdTransf->getCopy();
   }
@@ -137,7 +137,7 @@ XC::ShellMITC4Base &XC::ShellMITC4Base::operator=(const ShellMITC4Base &otro)
 
 //! @brief Destructor.
 XC::ShellMITC4Base::~ShellMITC4Base(void)
-  { libera(); }
+  { free_mem(); }
 
 //! @brief Defines a load over the element from a vector in local coordinates.
 const XC::ShellUniformLoad *XC::ShellMITC4Base::vector3dUniformLoadLocal(const Vector &v)

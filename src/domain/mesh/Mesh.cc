@@ -59,7 +59,7 @@
 //! WARNING: if 3rd constructor, TaggedObjectStorage objects passed
 //! must have been created with new_ and nowhere else must the
 //! destructor be called.
-void XC::Mesh::libera(void)
+void XC::Mesh::free_mem(void)
   {
     clearAll(); //delete the objects in the mesh
 
@@ -182,7 +182,7 @@ void XC::Mesh::clearAll(void)
 
 //! @brief Destructor.
 XC::Mesh::~Mesh(void)
-  { libera(); }
+  { free_mem(); }
 
 
 //! @brief Assigns Stress Reduction Factor for element deactivation.

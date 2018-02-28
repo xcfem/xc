@@ -52,7 +52,7 @@ class RgQuadCell: public RegionSecc
     mutable Rejilla2d *rejilla; //!< Grid points.
   protected:
     int nDivIJ, nDivJK; //!< number of divisions.
-    void libera(void) const;
+    void free_mem(void) const;
     const Rejilla2d &alloc(const Rejilla2d &) const;
 
   public:

@@ -63,7 +63,7 @@ class PySimple1Gen: public Simple1GenBase
     void GetPySimple1(const std::string &file1, const std::string &file2, const std::string &file3, const std::string &file4, const std::string &file5);
     void GetPattern(const std::string &file6);
 
-    void libera(void);
+    void free_mem(void);
     // Member functions for calculating pult:
     double GetPult(const std::string &type);
     double GetY50(const std::string &type);

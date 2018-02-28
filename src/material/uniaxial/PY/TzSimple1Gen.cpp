@@ -47,7 +47,7 @@
 #include <utility/matrix/ID.h> 
 
 //! @brief Free allocated memory
-void XC::TzSimple1Gen::libera(void)
+void XC::TzSimple1Gen::free_mem(void)
   {
     if(TzEleNum)
       {
@@ -159,7 +159,7 @@ void XC::TzSimple1Gen::libera(void)
         delete[] tzType;
         tzType= nullptr;
       }
-    Simple1GenBase::libera();
+    Simple1GenBase::free_mem();
   }
 
 ////////////////////////////////////////////////////////////////////////
@@ -183,7 +183,7 @@ XC::TzSimple1Gen::TzSimple1Gen(void)
 // Destructor deletes dynamically allocated arrays
 XC::TzSimple1Gen::~TzSimple1Gen(void)
   {
-    libera();
+    free_mem();
   }
 
 ///////////////////////////////////////////////////////////////////////////////////////

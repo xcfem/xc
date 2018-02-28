@@ -86,7 +86,7 @@
 #include <utility/recorder/Recorder.h>
 #include "domain/mesh/element/utils/NodePtrsWithIDs.h"
 
-void XC::PartitionedDomain::libera(void)
+void XC::PartitionedDomain::free_mem(void)
   {
     if(elements) delete elements;
     elements= nullptr;
@@ -100,7 +100,7 @@ void XC::PartitionedDomain::libera(void)
 
 void XC::PartitionedDomain::alloc(void)
   {
-    libera();
+    free_mem();
     elements= new ArrayOfTaggedObjects(this,1024,"element");
     theSubdomains= new ArrayOfTaggedObjects(this,32,"subdomains");
     theSubdomainIter= new PartitionedDomainSubIter(theSubdomains);
@@ -144,7 +144,7 @@ XC::PartitionedDomain::PartitionedDomain(EntCmd *owr,int numNodes, int numElemen
 XC::PartitionedDomain::~PartitionedDomain(void)
   {
     this->clearAll();
-    libera();
+    free_mem();
   }
 
 void XC::PartitionedDomain::clearAll(void)

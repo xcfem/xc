@@ -41,7 +41,7 @@ class IntPtrWrapper: public EntCmd
     int sz;
     int *data;
     int fromFree;
-    void libera(void);
+    void free_mem(void);
     void check_sizes(void);
     IntPtrWrapper(const IntPtrWrapper &);
     IntPtrWrapper &operator=(const IntPtrWrapper  &V);

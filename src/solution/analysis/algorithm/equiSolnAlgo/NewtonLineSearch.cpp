@@ -88,7 +88,7 @@ XC::NewtonLineSearch &XC::NewtonLineSearch::operator=(const NewtonLineSearch &ot
     return *this;
   }
 
-void XC::NewtonLineSearch::libera(void)
+void XC::NewtonLineSearch::free_mem(void)
   {
     if(theLineSearch)
       {
@@ -99,7 +99,7 @@ void XC::NewtonLineSearch::libera(void)
 
 bool XC::NewtonLineSearch::alloc(const std::string &nmb)
   {
-    libera();
+    free_mem();
     if(nmb=="bisection_line_search")
       theLineSearch=new BisectionLineSearch();
     else if(nmb=="initial_interpolated_line_search")
@@ -117,7 +117,7 @@ void XC::NewtonLineSearch::copia(LineSearch *ptr)
   {
     if(ptr)
       {
-        libera();
+        free_mem();
         theLineSearch= ptr->getCopy();
         theLineSearch->set_owner(this);
       }
@@ -126,7 +126,7 @@ void XC::NewtonLineSearch::copia(LineSearch *ptr)
   }
 
 XC::NewtonLineSearch::~NewtonLineSearch(void)
-  { libera(); }
+  { free_mem(); }
 
 //! @brief resuelve el paso actual.
 int XC::NewtonLineSearch::solveCurrentStep(void)

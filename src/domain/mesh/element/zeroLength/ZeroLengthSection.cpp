@@ -80,7 +80,7 @@ XC::Vector XC::ZeroLengthSection::P12(12);
 
 void XC::ZeroLengthSection::setup_section(const Material *sec)
   {
-    libera();
+    free_mem();
     if(!sec)
       std::cerr << "ZeroLengthSection::setup_section; pointer to material is null." << std::endl;
     else
@@ -114,7 +114,7 @@ void XC::ZeroLengthSection::inicAv(void)
 
 //! @brief invoke the destructor on any objects created by the object
 //! that the object still holds a pointer to
-void XC::ZeroLengthSection::libera(void)
+void XC::ZeroLengthSection::free_mem(void)
   {
     if(theSection) delete theSection;
     theSection=nullptr;
@@ -167,7 +167,7 @@ XC::Element *XC::ZeroLengthSection::getCopy(void) const
 
 //! @brief Destructor.
 XC::ZeroLengthSection::~ZeroLengthSection(void)
-  { libera(); }
+  { free_mem(); }
 
 // method: setDomain()
 //    to set a link to the enclosing XC::Domain and to set the node pointers.

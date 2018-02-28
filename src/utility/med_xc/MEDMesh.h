@@ -37,7 +37,7 @@ class MEDMesh: public MEDObject
   {
     std::string meshName;
     mutable MEDMEM::MESH *mesh;
-    void libera(void) const;
+    void free_mem(void) const;
     void alloc(const std::string &) const;
     void alloc(const MEDMesh &) const;
     MEDMesh(const MEDMesh &);

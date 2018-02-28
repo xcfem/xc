@@ -39,7 +39,7 @@ namespace XC {
 //! @brief ??
 class BFBRoydenBase: public EquiSolnConvAlgo
   {
-    void libera(void);
+    void free_mem(void);
     void alloc(const ConvergenceTest *);
   protected:
     ConvergenceTest *localTest;

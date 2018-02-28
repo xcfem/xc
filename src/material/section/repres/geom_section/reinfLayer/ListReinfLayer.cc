@@ -42,7 +42,7 @@
 #include "material/section/repres/geom_section/GeomSection.h"
 
 //! @brief Liberta todas las pociciones.
-void XC::ListReinfLayer::libera(void)
+void XC::ListReinfLayer::free_mem(void)
   {
     for(iterator i=begin();i!=end();i++)
       delete *i;
@@ -52,7 +52,7 @@ void XC::ListReinfLayer::libera(void)
 //! @brief Copy the layers from another container.
 void XC::ListReinfLayer::copia(const ListReinfLayer &otra)
   {
-    libera();
+    free_mem();
     for(const_iterator i=otra.begin();i!=otra.end();i++)
       push_back(*(*i)->getCopy());
   }
@@ -107,11 +107,11 @@ XC::SingleBar *XC::ListReinfLayer::newReinfBar(const std::string &cod_mat)
 
 //! @brief Destructor.
 XC::ListReinfLayer::~ListReinfLayer(void)
-  { libera(); }
+  { free_mem(); }
 
 //! @brief Erases las armaduras definidas.
 void XC::ListReinfLayer::clear(void)
-  { libera(); }
+  { free_mem(); }
 
 //! @brief Adds a rebar layer to the container.
 XC::ReinfLayer *XC::ListReinfLayer::push_back(const ReinfLayer &reg)

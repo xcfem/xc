@@ -58,7 +58,7 @@ XC::Vector XC::FluidSolidPorousMaterial::workV6(6);
 XC::Matrix XC::FluidSolidPorousMaterial::workM3(3,3);
 XC::Matrix XC::FluidSolidPorousMaterial::workM6(6,6);
 
-void XC::FluidSolidPorousMaterial::libera(void)
+void XC::FluidSolidPorousMaterial::free_mem(void)
   {
     if(theSoilMaterial) delete theSoilMaterial;
     theSoilMaterial= nullptr;
@@ -66,7 +66,7 @@ void XC::FluidSolidPorousMaterial::libera(void)
 
 void XC::FluidSolidPorousMaterial::alloc(const NDMaterial *s)
   {
-    libera();
+    free_mem();
     if(s)
       theSoilMaterial= s->getCopy();
   }
@@ -154,7 +154,7 @@ XC::FluidSolidPorousMaterial &XC::FluidSolidPorousMaterial::operator=(const Flui
 
 //! @brief Destructor.
 XC::FluidSolidPorousMaterial::~FluidSolidPorousMaterial(void)
-  { libera(); }
+  { free_mem(); }
 
 
 int XC::FluidSolidPorousMaterial::setTrialStrain(const Vector &strain)

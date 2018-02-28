@@ -94,7 +94,7 @@ void XC::SectionAggregator::check_ptrs(void) const
 
 void XC::SectionAggregator::alloc_storage_ptrs(void)
   {
-    libera_storage_ptrs();
+    free_storage_ptrs();
     const size_t order= getOrder();
     if(order > maxOrder)
       {
@@ -120,7 +120,7 @@ void XC::SectionAggregator::alloc_storage_ptrs(void)
 		<< "; 0 or negative order; order= " << order << std::endl;
   }
 
-void XC::SectionAggregator::libera_storage_ptrs(void)
+void XC::SectionAggregator::free_storage_ptrs(void)
   {
     if(def)
       {
@@ -154,14 +154,14 @@ void XC::SectionAggregator::libera_storage_ptrs(void)
       }
   }
 
-void XC::SectionAggregator::libera(void)
+void XC::SectionAggregator::free_mem(void)
   {
     if(theSection)
       {
         delete theSection;
         theSection= nullptr;
       }
-    libera_storage_ptrs();
+    free_storage_ptrs();
   }
 
 void XC::SectionAggregator::copy_section(const SectionForceDeformation *theSec)
@@ -235,7 +235,7 @@ XC::SectionAggregator::SectionAggregator(MaterialLoader *mat_ldr)
 //! @brief Assignment operator.
 XC::SectionAggregator &XC::SectionAggregator::operator=(const SectionAggregator &otro)
   {
-    libera();
+    free_mem();
     PrismaticBarCrossSection::operator=(otro);
     copy_section(otro.theSection);
     theAdditions= otro.theAdditions;
@@ -315,7 +315,7 @@ void XC::SectionAggregator::setAddtionsPyList(const boost::python::list &respons
 
 //! @brief destructor:
 XC::SectionAggregator::~SectionAggregator(void)
-  { libera(); }
+  { free_mem(); }
 
 //! @brief Virtual constructor.
 XC::SectionForceDeformation *XC::SectionAggregator::getCopy(void) const

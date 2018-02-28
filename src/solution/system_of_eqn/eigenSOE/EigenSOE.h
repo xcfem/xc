@@ -70,7 +70,7 @@ class EigenSOE : public SystemOfEqn
     sparse_matrix massMatrix; //!< Matriz de masas (se usa en getModalParticipationFactor).
     EigenSolver *theSolver;
 
-    void libera(void);
+    void free_mem(void);
     void copia(const EigenSolver *);
     virtual bool setSolver(EigenSolver *);
     void resize_mass_matrix_if_needed(const size_t &);

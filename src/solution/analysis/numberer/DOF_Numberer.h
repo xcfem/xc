@@ -107,7 +107,7 @@ class DOF_Numberer: public MovableObject, public EntCmd
     int recvData(const CommParameters &);
     void alloc(const std::string &);
     void copia(const GraphNumberer &);
-    void libera(void);
+    void free_mem(void);
 
     friend class ModelWrapper;
     friend class FEM_ObjectBroker;

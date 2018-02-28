@@ -80,7 +80,7 @@ class MPI_MachineBroker : public MachineBroker
     ID *usedChannels;
     std::vector<MPI_Channel *> theChannels;
 
-    void libera(void);
+    void free_mem(void);
     void alloc(const std::size_t &);
     MPI_MachineBroker(const MPI_MachineBroker &);
     MPI_MachineBroker &operator=(const MPI_MachineBroker &);

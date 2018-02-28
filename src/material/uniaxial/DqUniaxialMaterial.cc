@@ -37,7 +37,7 @@
 //! @brief Copia la lista being passed as parameter.
 void XC::DqUniaxialMaterial::copia_lista(const DqUniaxialMaterial &otro,SectionForceDeformation *s)
   {
-    libera();
+    free_mem();
     const size_t numMats= otro.size();
     if(numMats>0)
       {
@@ -64,7 +64,7 @@ void XC::DqUniaxialMaterial::copia_lista(const DqUniaxialMaterial &otro,SectionF
       erase(begin(),end());
   }
 
-void XC::DqUniaxialMaterial::libera(void)
+void XC::DqUniaxialMaterial::free_mem(void)
   {
     for(iterator i= begin();i!=end();i++)
       if(*i)
@@ -76,7 +76,7 @@ void XC::DqUniaxialMaterial::libera(void)
 
 void XC::DqUniaxialMaterial::resize(const size_t &n)
   {
-    libera();
+    free_mem();
     lst_ptr::resize(n,nullptr);
   }
 
@@ -139,7 +139,7 @@ XC::DqUniaxialMaterial::~DqUniaxialMaterial(void)
 //! @brief Clears the container.
 void XC::DqUniaxialMaterial::clear(void)
   {
-    libera();
+    free_mem();
     lst_ptr::clear();
   }
 

@@ -73,7 +73,7 @@
 #include "utility/actor/actor/ArrayCommMetaData.h"
 
 
-void XC::DriftRecorder::libera_nodes(void)
+void XC::DriftRecorder::free_nodes(void)
   {
     oneOverL.resize(0);
     data.resize(0);
@@ -82,14 +82,14 @@ void XC::DriftRecorder::libera_nodes(void)
 
 int XC::DriftRecorder::alloc_nodes(const int &numNodes,const int &timeOffset)
   {
-    libera_nodes();
+    free_nodes();
     theNodes= std::vector<Node *>(2*numNodes,static_cast<Node *>(nullptr));
     oneOverL= Vector(numNodes);
     data= Vector(numNodes+timeOffset); // data(0) allocated for time
     return 0;
   }
 
-void XC::DriftRecorder::libera_ndIJ(void)
+void XC::DriftRecorder::free_ndIJ(void)
   {
     if(ndI) delete ndI;
     ndI= nullptr;
@@ -99,7 +99,7 @@ void XC::DriftRecorder::libera_ndIJ(void)
 
 void XC::DriftRecorder::alloc_ndIJ(const int &sz)
   {
-    libera_ndIJ();
+    free_ndIJ();
     ndI=new ID(sz);
     ndJ=new ID(sz);
     assert(ndI);
@@ -108,7 +108,7 @@ void XC::DriftRecorder::alloc_ndIJ(const int &sz)
 
 void XC::DriftRecorder::set_ndIJ(const ID &nI,const ID &nJ)
   {
-    libera_ndIJ();
+    free_ndIJ();
     ndI=new ID(nI);
     ndJ=new ID(nJ);
     assert(ndI);
@@ -158,8 +158,8 @@ XC::DriftRecorder::DriftRecorder(const ID &nI,const ID &nJ, int df,int dirn, Dom
 
 XC::DriftRecorder::~DriftRecorder(void)
   {
-    libera_ndIJ();
-    libera_nodes();
+    free_ndIJ();
+    free_nodes();
   }
 
 int XC::DriftRecorder::record(int commitTag, double timeStamp)
@@ -226,7 +226,7 @@ int XC::DriftRecorder::initialize(void)
 
     if(!theNodes.empty())
       theNodes.clear();
-    libera_nodes();
+    free_nodes();
 
     //
     // check valid node ID's

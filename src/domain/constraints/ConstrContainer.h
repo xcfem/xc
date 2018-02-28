@@ -105,7 +105,7 @@ class ConstrContainer: public MeshComponentContainer
     virtual bool removeElementalLoad(int tag, int loadPattern);
     virtual bool removeSFreedom_Constraint(int tag, int loadPattern);
 
-    void libera(void);
+    void free_mem(void);
     DbTagData &getDbTagData(void) const;
     int sendLPatternsTags(const int &,const int &,CommParameters &);
     int recvLPatternsTags(const int &,const int &,const CommParameters &);

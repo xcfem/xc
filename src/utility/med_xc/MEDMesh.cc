@@ -28,8 +28,8 @@
 
 #include "utility/matrix/Matrix.h"
 
-//! @brief Libera la memoria ocupada.
-void XC::MEDMesh::libera(void) const
+//! @brief Free memory.
+void XC::MEDMesh::free_mem(void) const
   {
     if(mesh)
       {
@@ -41,7 +41,7 @@ void XC::MEDMesh::libera(void) const
 //! @brief Allocs memory for the MED mesh.
 void XC::MEDMesh::alloc(const std::string &fName) const
   {
-    libera();
+    free_mem();
     mesh= new MEDMEM::MESH(MEDMEM::MED_DRIVER,fName,meshName);
     if(!mesh)
       std::cerr << "MEDMesh::alloc; error in mesh reading: "
@@ -50,7 +50,7 @@ void XC::MEDMesh::alloc(const std::string &fName) const
 
 void XC::MEDMesh::alloc(const MEDMesh &otro) const
   {
-    libera();
+    free_mem();
     if(otro.mesh)
       mesh= new MEDMEM::MESH(*otro.mesh);
   }
@@ -77,7 +77,7 @@ XC::MEDMesh &XC::MEDMesh::operator=(const MEDMesh &otro)
   }
 //! Destructor.
 XC::MEDMesh::~MEDMesh(void)
-  { libera(); }
+  { free_mem(); }
 
 void XC::MEDMesh::read(const std::string &fileName)
   {

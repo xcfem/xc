@@ -132,9 +132,11 @@ int XC::OracleDatastore::searchProjTag(const std::string &projName)
 char *XC::OracleDatastore::addToProgram(void)
   { return 0; }
 
+//! @brief Return \f$0\f$.
 int XC::OracleDatastore::setUpShadow(void)
   { return 0; }
 
+//! @brief Return \f$0\f$.
 int XC::OracleDatastore::setUpActor(void)
   { return 0; }
 

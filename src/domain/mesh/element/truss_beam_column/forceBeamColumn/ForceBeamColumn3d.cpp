@@ -69,7 +69,7 @@
 #include "material/section/ResponseId.h"
 
 
-void XC::ForceBeamColumn3d::libera(void)
+void XC::ForceBeamColumn3d::free_mem(void)
   {
     if(beamIntegr)
       delete beamIntegr;
@@ -78,7 +78,7 @@ void XC::ForceBeamColumn3d::libera(void)
 
 void XC::ForceBeamColumn3d::alloc(const BeamIntegration &bi)
   {
-    libera();
+    free_mem();
     beamIntegr= bi.getCopy();
   }
 
@@ -148,7 +148,7 @@ XC::Element* XC::ForceBeamColumn3d::getCopy(void) const
 
 //! @brief Destructor.
 XC::ForceBeamColumn3d::~ForceBeamColumn3d(void)
-  { libera(); }
+  { free_mem(); }
 
 void XC::ForceBeamColumn3d::setDomain(Domain *theDomain)
   {

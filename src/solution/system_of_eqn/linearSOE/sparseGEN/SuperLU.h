@@ -102,10 +102,10 @@ class SuperLU : public SparseGenColLinSolver
     double drop_tol;
     char symmetric;
     superlu_options_t options;
-    void libera_matricesLU(void);
-    void libera_matricesABAC(void);
-    void libera_matrices(void);
-    void libera(void);
+    void free_matricesLU(void);
+    void free_matricesABAC(void);
+    void free_matrices(void);
+    void free_mem(void);
     void inic_permutation_vectors(const size_t &n);
     void alloc_matrices(const size_t &n);
     void alloc(const size_t &n);

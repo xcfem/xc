@@ -39,7 +39,7 @@
 #include "domain/mesh/element/Element.h"
 #include "utility/tagged/DefaultTag.h"
 
-void XC::NodeLoader::libera(void)
+void XC::NodeLoader::free_mem(void)
   {
     if(seed_node) delete seed_node;
     seed_node= nullptr; 
@@ -50,7 +50,7 @@ XC::NodeLoader::NodeLoader(Preprocessor *preprocessor)
 
 //! @brief Destructor.
 XC::NodeLoader::~NodeLoader(void)
-  { libera(); }
+  { free_mem(); }
 
 //! @brief Return the default value for next node.
 int XC::NodeLoader::getDefaultTag(void) const
@@ -63,7 +63,7 @@ void XC::NodeLoader::setDefaultTag(const int &tag)
 //! @brief Clear all nodes.
 void XC::NodeLoader::clearAll(void)
   {
-    libera();
+    free_mem();
     setDefaultTag(0);
   }
 
@@ -187,7 +187,7 @@ XC::Node *XC::NodeLoader::newNode(const Vector &coo)
 //! @brief Defines the seed node.
 XC::Node *XC::NodeLoader::newSeedNode(void)
   {
-    libera();
+    free_mem();
     seed_node= new_node(0,ncoo_def_node,ngdl_def_node,0.0,0.0,0.0);
     return seed_node;
   }

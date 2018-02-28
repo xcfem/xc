@@ -102,10 +102,10 @@ class ShadowSubdomain: public Shadow, public Subdomain
     static int numShadowSubdomains;
     static std::deque<ShadowSubdomain *> theShadowSubdomains;
 
-    void libera_vectors(void) const;
+    void free_vectors(void) const;
     void alloc_vectors(const size_t &) const;
     void resize_vectors(const size_t &) const;
-    void libera_arrays(void);
+    void free_arrays(void);
     void alloc_arrays(const size_t &,const size_t &);
   protected:    
     virtual int buildMap(void) const;

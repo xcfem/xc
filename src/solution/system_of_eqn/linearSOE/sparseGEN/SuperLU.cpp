@@ -63,7 +63,7 @@
 #include <cmath>
 
 
-void XC::SuperLU::libera_matricesLU(void)
+void XC::SuperLU::free_matricesLU(void)
   {
     if(L.ncol!=0)
       {
@@ -77,7 +77,7 @@ void XC::SuperLU::libera_matricesLU(void)
       }
   }
 
-void XC::SuperLU::libera_matricesABAC(void)
+void XC::SuperLU::free_matricesABAC(void)
   {
     if(AC.ncol != 0)
       {
@@ -106,15 +106,15 @@ void XC::SuperLU::libera_matricesABAC(void)
       }
   }
 
-void XC::SuperLU::libera_matrices(void)
+void XC::SuperLU::free_matrices(void)
   {
-    libera_matricesLU();
-    libera_matricesABAC();
+    free_matricesLU();
+    free_matricesABAC();
   }
 
-void XC::SuperLU::libera(void)
+void XC::SuperLU::free_mem(void)
   {
-    libera_matrices();
+    free_matrices();
   }
 
 void XC::SuperLU::inic_permutation_vectors(const size_t &n)
@@ -139,7 +139,7 @@ void XC::SuperLU::inic_permutation_vectors(const size_t &n)
 
 void XC::SuperLU::alloc_matrices(const size_t &n)
   {
-    libera_matrices();
+    free_matrices();
     // create the SuperMatrix A	
     dCreate_CompCol_Matrix(&A, n, n, theSOE->nnz, theSOE->A.getDataPtr(), theSOE->rowA.getDataPtr(), theSOE->colStartA.getDataPtr(), SLU_NC, SLU_D, SLU_GE);
 
@@ -228,7 +228,7 @@ XC::SuperLU::SuperLU(int perm, double drop_tolerance, int panel, int relx, char 
 
 //! @brief Destructor.
 XC::SuperLU::~SuperLU(void)
-  { libera(); }
+  { free_mem(); }
 
 
 int XC::SuperLU::factoriza(void)
@@ -237,7 +237,7 @@ int XC::SuperLU::factoriza(void)
     if(theSOE->factored == false)
       {
         // factor the matrix
-        libera_matricesLU();
+        free_matricesLU();
         int info= 0;
         SuperLUStat_t slu_stat;
         StatInit(&slu_stat);

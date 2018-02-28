@@ -36,7 +36,7 @@
 #include "domain/mesh/node/Node.h"
 #include "utility/tagged/DefaultTag.h"
 
-void XC::ElementLoader::SeedElemLoader::libera(void)
+void XC::ElementLoader::SeedElemLoader::free_mem(void)
   {
     if(semilla) delete semilla;
     semilla= nullptr;
@@ -57,17 +57,17 @@ XC::ElementLoader::SeedElemLoader &XC::ElementLoader::SeedElemLoader::operator=(
 //! @brief Defines seed element.
 void XC::ElementLoader::SeedElemLoader::add(XC::Element *e)
   {
-    libera();
+    free_mem();
     assert(e);
     semilla= e;
   }
 
 //! @brief Destructor.
 XC::ElementLoader::SeedElemLoader::~SeedElemLoader(void)
-  { libera(); }
+  { free_mem(); }
 
 void XC::ElementLoader::SeedElemLoader::clearAll(void)
-  { libera(); }
+  { free_mem(); }
 
 int XC::ElementLoader::SeedElemLoader::getDefaultTag(void) const
   {

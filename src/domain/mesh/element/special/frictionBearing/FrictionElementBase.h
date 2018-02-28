@@ -67,7 +67,7 @@ class FrictionElementBase: public Element0D
     // initial stiffness matrix in basic system
     Matrix kbInit;
     
-    void libera_friction_model(void);
+    void free_friction_model(void);
     void alloc_friction_model(const FrictionModel &);
     int sendData(CommParameters &);
     int recvData(const CommParameters &);

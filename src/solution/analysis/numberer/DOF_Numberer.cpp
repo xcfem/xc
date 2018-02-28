@@ -83,7 +83,7 @@
 //! @brief Create the graph numberer (
 void XC::DOF_Numberer::alloc(const std::string &str)
   {
-    libera();
+    free_mem();
     if(str=="rcm")
       theGraphNumberer=new RCM(); //Reverse Cuthill-Macgee.
     else if(str=="simple")
@@ -97,12 +97,12 @@ void XC::DOF_Numberer::alloc(const std::string &str)
 //! @brief Copia el numerador de grafos.
 void XC::DOF_Numberer::copia(const GraphNumberer &gn)
   {
-    libera();
+    free_mem();
     theGraphNumberer= gn.getCopy();
   }
 
 //! @brief Constructor
-void XC::DOF_Numberer::libera(void)
+void XC::DOF_Numberer::free_mem(void)
   {
     if(theGraphNumberer)
       delete theGraphNumberer;
@@ -141,7 +141,7 @@ void XC::DOF_Numberer::useAlgorithm(const std::string &nmb)
 
 //! @brief Destructor
 XC::DOF_Numberer::~DOF_Numberer(void) 
-  { libera(); }
+  { free_mem(); }
 
 //! @brief Virtual constructor.
 XC::DOF_Numberer *XC::DOF_Numberer::getCopy(void) const

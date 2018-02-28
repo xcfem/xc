@@ -139,7 +139,7 @@ class Domain: public ObjWithRecorders, public DistributedBase
     inline virtual Domain *get_domain_ptr(void)
       { return this; }
 
-    void libera(void);
+    void free_mem(void);
     DbTagData &getDbTagData(void) const;
     int sendData(CommParameters &cp);
     int recvData(const CommParameters &cp);

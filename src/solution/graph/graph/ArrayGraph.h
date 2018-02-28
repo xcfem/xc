@@ -94,7 +94,7 @@ class ArrayGraph: public Graph
     int lastEmpty; //!< last empty position in the container.
     std::vector<Vertex *> theVertices; //!< container for the vertex pointers.
     ArrayVertexIter myIter; //!< iterator on the vertex pointer container.
-    void libera(void);
+    void free_mem(void);
   protected:
     int getArraySize(void) const;
 

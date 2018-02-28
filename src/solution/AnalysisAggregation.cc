@@ -58,7 +58,7 @@
 
 #include "boost/any.hpp"
 
-void XC::AnalysisAggregation::libera_soln_algo(void)
+void XC::AnalysisAggregation::free_soln_algo(void)
   {
     if(theSolnAlgo)
       {
@@ -69,7 +69,7 @@ void XC::AnalysisAggregation::libera_soln_algo(void)
 
 bool XC::AnalysisAggregation::alloc_soln_algo(const std::string &nmb)
   {
-    libera_soln_algo();
+    free_soln_algo();
 
     if(nmb=="bfgs_soln_algo")
       theSolnAlgo=new BFGS(this);
@@ -112,7 +112,7 @@ void XC::AnalysisAggregation::copia_soln_algo(SolutionAlgorithm *ptr)
   {
     if(ptr)
       {
-        libera_soln_algo();
+        free_soln_algo();
         theSolnAlgo= ptr->getCopy();
         theSolnAlgo->set_owner(this);
       }
@@ -129,7 +129,7 @@ XC::SolutionAlgorithm &XC::AnalysisAggregation::newSolutionAlgorithm(const std::
     return *theSolnAlgo;
   }
 
-void XC::AnalysisAggregation::libera_integrator(void)
+void XC::AnalysisAggregation::free_integrator(void)
   {
     if(theIntegrator)
       {
@@ -140,7 +140,7 @@ void XC::AnalysisAggregation::libera_integrator(void)
 
 bool XC::AnalysisAggregation::alloc_integrator(const std::string &nmb,const Vector &params)
   {
-    libera_integrator();
+    free_integrator();
 
     if(nmb=="arc_length_integrator")
       {
@@ -264,7 +264,7 @@ void XC::AnalysisAggregation::copia_integrator(Integrator *ptr)
   {
     if(ptr)
       {
-        libera_integrator();
+        free_integrator();
         theIntegrator= ptr->getCopy();
         theIntegrator->set_owner(this);
       }
@@ -286,7 +286,7 @@ XC::Integrator &XC::AnalysisAggregation::newIntegrator(const std::string &tipo, 
     return *theIntegrator;
   }
 
-void XC::AnalysisAggregation::libera_system_of_equations(void)
+void XC::AnalysisAggregation::free_system_of_equations(void)
   {
     if(theSOE)
       {
@@ -296,7 +296,7 @@ void XC::AnalysisAggregation::libera_system_of_equations(void)
   }
 bool XC::AnalysisAggregation::alloc_system_of_equations(const std::string &nmb,AnalysisModel *theModel)
   {
-    libera_system_of_equations();
+    free_system_of_equations();
     if(nmb=="band_arpack_soe")
       theSOE=new BandArpackSOE(this);
     else if(nmb=="band_arpackpp_soe")
@@ -358,7 +358,7 @@ void XC::AnalysisAggregation::copia_system_of_equations(SystemOfEqn *ptr)
   {
     if(ptr)
       {
-        libera_system_of_equations();
+        free_system_of_equations();
         theSOE= ptr->getCopy();
         theSOE->set_owner(this);
       }
@@ -383,7 +383,7 @@ XC::SystemOfEqn &XC::AnalysisAggregation::newSystemOfEqn(const std::string &tipo
     return *theSOE;
   }
 
-void XC::AnalysisAggregation::libera_conv_test(void)
+void XC::AnalysisAggregation::free_conv_test(void)
   {
     if(theTest)
       {
@@ -394,7 +394,7 @@ void XC::AnalysisAggregation::libera_conv_test(void)
 
 bool XC::AnalysisAggregation::alloc_conv_test(const std::string &nmb)
   {
-    libera_conv_test();
+    free_conv_test();
     if(nmb== "energy_inc_conv_test")
       theTest= new CTestEnergyIncr(this);
     else if(nmb== "fixed_num_iter_conv_test")
@@ -424,7 +424,7 @@ void XC::AnalysisAggregation::copia_conv_test(ConvergenceTest *ptr)
   {
     if(ptr)
       {
-        libera_conv_test();
+        free_conv_test();
         theTest= ptr->getCopy();
         theTest->set_owner(this);
       }
@@ -441,12 +441,12 @@ XC::ConvergenceTest &XC::AnalysisAggregation::newConvergenceTest(const std::stri
     return *theTest;
   }
 
-void XC::AnalysisAggregation::libera(void)
+void XC::AnalysisAggregation::free_mem(void)
   {
-    libera_soln_algo();
-    libera_integrator();
-    libera_system_of_equations();
-    libera_conv_test();
+    free_soln_algo();
+    free_integrator();
+    free_system_of_equations();
+    free_conv_test();
   }
 
 void XC::AnalysisAggregation::copia(const AnalysisAggregation &otro)
@@ -492,10 +492,10 @@ XC::AnalysisAggregation &XC::AnalysisAggregation::operator=(const AnalysisAggreg
 
 //! @brief Destructor.
 XC::AnalysisAggregation::~AnalysisAggregation(void)
-  { libera(); }
+  { free_mem(); }
 
 void XC::AnalysisAggregation::clearAll(void)
-  { libera(); }
+  { free_mem(); }
 
 XC::Analysis *XC::AnalysisAggregation::getAnalysis(void)
   { return dynamic_cast<Analysis *>(Owner()); }

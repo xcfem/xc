@@ -105,7 +105,7 @@
 #include "utility/actor/actor/ArrayCommMetaData.h"
 
 
-void XC::Domain::libera(void)
+void XC::Domain::free_mem(void)
   {
     //delete the objects in the domain
     clearAll();
@@ -171,7 +171,7 @@ void XC::Domain::clearAll(void)
 //! must have been created with new and nowhere else must the
 //! destructor be called.
 XC::Domain::~Domain(void)
-  { libera(); }
+  { free_mem(); }
 
 //! @brief Prepares the domain to solve for a new load pattern.
 void XC::Domain::resetLoadCase(void)

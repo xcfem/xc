@@ -29,7 +29,7 @@
 #include "UnbalAndTangent.h"
 
 
-bool XC::UnbalAndTangent::libera(void)
+bool XC::UnbalAndTangent::free_mem(void)
   {
     // delete tangent and residual if created specially
     if(nDOF>=unbalAndTangentArray.size())
@@ -47,7 +47,7 @@ bool XC::UnbalAndTangent::libera(void)
 void XC::UnbalAndTangent::alloc(void)
   {
     // create matrices and vectors for each object instance
-    if(libera())
+    if(free_mem())
       {
         theResidual=new Vector(nDOF);
         theTangent=new Matrix(nDOF, nDOF);
@@ -69,7 +69,7 @@ void XC::UnbalAndTangent::alloc(void)
 void XC::UnbalAndTangent::copia(const UnbalAndTangent &otro)
   {
     // create matrices and vectors for each object instance
-    if(libera())
+    if(free_mem())
       {
         if(otro.theResidual) theResidual=new Vector(*otro.theResidual);
         if(otro.theTangent) theTangent=new Matrix(*otro.theTangent);
@@ -97,7 +97,7 @@ XC::UnbalAndTangent::UnbalAndTangent(const size_t &n,UnbalAndTangentStorage &a)
 XC::UnbalAndTangent::UnbalAndTangent(const UnbalAndTangent &otro)
   :nDOF(0), theResidual(nullptr), theTangent(nullptr), unbalAndTangentArray(otro.unbalAndTangentArray) 
   {
-    libera();
+    free_mem();
     nDOF= otro.nDOF;
     copia(otro);
   }
@@ -105,7 +105,7 @@ XC::UnbalAndTangent::UnbalAndTangent(const UnbalAndTangent &otro)
 //! @brief Assignment operator.
 XC::UnbalAndTangent &XC::UnbalAndTangent::operator=(const UnbalAndTangent &otro)
   {
-    libera();
+    free_mem();
     unbalAndTangentArray= otro.unbalAndTangentArray;
     nDOF= otro.nDOF;
     copia(otro);
@@ -114,7 +114,7 @@ XC::UnbalAndTangent &XC::UnbalAndTangent::operator=(const UnbalAndTangent &otro)
 
 //! @brief destructor.
 XC::UnbalAndTangent::~UnbalAndTangent(void)
-  { libera(); }
+  { free_mem(); }
 
 //! @brief Return the tangent stiffness matrix.
 const XC::Matrix &XC::UnbalAndTangent::getTangent(void) const

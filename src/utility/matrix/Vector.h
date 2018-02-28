@@ -86,7 +86,7 @@ class Vector: public EntCmd
     int sz;
     double *theData;
     int fromFree;
-    void libera(void);
+    void free_mem(void);
     void alloc(const size_t &sz);
   public:
     // constructors and destructor

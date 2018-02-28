@@ -33,7 +33,7 @@ double XC::CrossSectionKR::vas1= 0.0;
 double XC::CrossSectionKR::vas2= 0.0;
 double XC::CrossSectionKR::vas1as2= 0.0;
 
-void XC::CrossSectionKR::libera(void)
+void XC::CrossSectionKR::free_mem(void)
   {
     if(R)
       {
@@ -49,14 +49,14 @@ void XC::CrossSectionKR::libera(void)
 
 void XC::CrossSectionKR::alloc(const size_t &dim)
   {
-    libera();
+    free_mem();
     R= new Vector(rData,dim);
     K= new Matrix(kData,dim,dim);
   }
 
 void XC::CrossSectionKR::copia(const CrossSectionKR &otra)
   {
-    libera();
+    free_mem();
     rData[0]= otra.rData[0]; rData[1]= otra.rData[1];
     rData[2]= otra.rData[2]; rData[3]= otra.rData[3];
 
@@ -104,5 +104,5 @@ XC::CrossSectionKR &XC::CrossSectionKR::operator=(const CrossSectionKR &otro)
 //! @brief Destructor.
 XC::CrossSectionKR::~CrossSectionKR(void)
   {
-    libera();
+    free_mem();
   }

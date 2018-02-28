@@ -45,7 +45,7 @@
 #include <utility/actor/objectBroker/FEM_ObjectBroker.h>
 #include "utility/matrix/ID.h"
 
-void XC::ModelWrapper::libera_analysis_model(void)
+void XC::ModelWrapper::free_analysis_model(void)
   {
     if(theModel)
       {
@@ -56,7 +56,7 @@ void XC::ModelWrapper::libera_analysis_model(void)
 
 void XC::ModelWrapper::alloc_analysis_model(void)
   {
-    libera_analysis_model();
+    free_analysis_model();
     theModel= new AnalysisModel(this);
   }
 
@@ -64,7 +64,7 @@ void XC::ModelWrapper::copia_analysis_model(AnalysisModel *ptr)
   {
     if(ptr)
       {
-        libera_analysis_model();
+        free_analysis_model();
         theModel= ptr->getCopy();
         theModel->set_owner(this);
       }
@@ -72,7 +72,7 @@ void XC::ModelWrapper::copia_analysis_model(AnalysisModel *ptr)
       std::cerr << "ModelWrapper::copia_analysis_model; null pointer to analysis model." << std::endl;
   }
 
-void XC::ModelWrapper::libera_constraint_handler(void)
+void XC::ModelWrapper::free_constraint_handler(void)
   {
     if(theHandler)
       {
@@ -83,7 +83,7 @@ void XC::ModelWrapper::libera_constraint_handler(void)
 
 bool XC::ModelWrapper::alloc_constraint_handler(const std::string &nmb)
   {
-    libera_constraint_handler();
+    free_constraint_handler();
 
     if(nmb=="lagrange_constraint_handler")
       theHandler=new LagrangeConstraintHandler(this);
@@ -107,7 +107,7 @@ void XC::ModelWrapper::copia_constraint_handler(const ConstraintHandler *ptr)
   {
     if(ptr)
       {
-        libera_constraint_handler();
+        free_constraint_handler();
         theHandler= ptr->getCopy();
         theHandler->set_owner(this);
       }
@@ -123,7 +123,7 @@ XC::ConstraintHandler &XC::ModelWrapper::newConstraintHandler(const std::string 
     return *theHandler;
   }
 
-void XC::ModelWrapper::libera_numerador(void)
+void XC::ModelWrapper::free_numerador(void)
   {
     if(theDOFNumberer)
       {
@@ -149,7 +149,7 @@ bool XC::ModelWrapper::setup_numerador(void)
 
 bool XC::ModelWrapper::alloc_numerador(const std::string &nmb)
   {
-    libera_numerador();
+    free_numerador();
 
     if(nmb=="default_numberer")
       theDOFNumberer= new DOF_Numberer(this);
@@ -167,7 +167,7 @@ void XC::ModelWrapper::copia_numerador(const DOF_Numberer *dn)
   {
     if(dn)
       {
-        libera_numerador();
+        free_numerador();
         theDOFNumberer= dn->getCopy();
         theDOFNumberer->set_owner(this);
         setup_numerador();
@@ -184,11 +184,11 @@ XC::DOF_Numberer &XC::ModelWrapper::newNumberer(const std::string &nmb)
     return *theDOFNumberer;
   }
 
-void XC::ModelWrapper::libera(void)
+void XC::ModelWrapper::free_mem(void)
   {
-    libera_analysis_model();
-    libera_constraint_handler();
-    libera_numerador();
+    free_analysis_model();
+    free_constraint_handler();
+    free_numerador();
   }
 
 void XC::ModelWrapper::copia(const ModelWrapper &otro)
@@ -225,10 +225,10 @@ XC::ModelWrapper &XC::ModelWrapper::operator=(const ModelWrapper &otro)
 
 //! @brief Destructor.
 XC::ModelWrapper::~ModelWrapper(void)
-  { libera(); }
+  { free_mem(); }
 
 void XC::ModelWrapper::clearAll(void)
-  { libera(); }
+  { free_mem(); }
 
 //! @brief Return a pointer to the domain.
 XC::Domain *XC::ModelWrapper::getDomainPtr(void)

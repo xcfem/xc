@@ -93,8 +93,8 @@ class SectionAggregator : public PrismaticBarCrossSection
     void copy_section(const SectionForceDeformation *);
     void check_ptrs(void) const;
     void alloc_storage_ptrs(void);
-    void libera_storage_ptrs(void);
-    void libera(void);
+    void free_storage_ptrs(void);
+    void free_mem(void);
   protected:
     int sendData(CommParameters &);
     int recvData(const CommParameters &);

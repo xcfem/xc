@@ -44,7 +44,7 @@ class ElementLoader: public ProtoElementLoader
         Element *semilla;
         SeedElemLoader(const SeedElemLoader &otro);
         SeedElemLoader &operator=(const SeedElemLoader &otro);
-        void libera(void);
+        void free_mem(void);
       protected:
         void add(Element *);
       public:

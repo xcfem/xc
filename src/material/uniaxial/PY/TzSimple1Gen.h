@@ -57,7 +57,7 @@ class TzSimple1Gen: public Simple1GenBase
    void GetTributaryCoordsTz(int nodenum1);
    void GetTributaryCoordsPile(int nodenum1);
   
-    void libera(void);
+    void free_mem(void);
   // Member functions for generating output:
   void GetTzSimple1(const std::string &file1,const std::string &file2,const std::string &file3,const std::string &file4, const std::string &file5);
   void GetPattern(const std::string &file6);

@@ -56,7 +56,7 @@ class TransfCooLoader: public Loader
     map_transfcoo transfcoo; //!< Coordinate transformation container.
     int tag_trf; //!< Tag de la coordinate transformation.
   protected:
-    void libera(void);
+    void free_mem(void);
     TransfCooLoader(const TransfCooLoader &otro);
     TransfCooLoader &operator=(const TransfCooLoader &otro);
   public:

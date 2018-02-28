@@ -36,7 +36,7 @@
 //! two (yLoc,Area) for 2D sections (getOrder()= 2) and three (yLoc,zLoc,Area) for 3D sections (getOrder()= 3).
 void XC::FiberContainer::allocFibers(int numOfFibers,const Fiber *muestra)
   {
-    libera();
+    free_mem();
     if(numOfFibers)
       {
         resize(numOfFibers);
@@ -48,7 +48,7 @@ void XC::FiberContainer::allocFibers(int numOfFibers,const Fiber *muestra)
 
 void XC::FiberContainer::copy_fibers(const FiberContainer &otro)
   {
-    libera();
+    free_mem();
     const size_t numFibers= otro.getNumFibers();
     if(numFibers)
       {
@@ -58,7 +58,7 @@ void XC::FiberContainer::copy_fibers(const FiberContainer &otro)
       }
   }
 
-void XC::FiberContainer::libera(void)
+void XC::FiberContainer::free_mem(void)
   {
     const size_t numFibers= getNumFibers();
     for(register size_t i= 0;i<numFibers;i++)
@@ -134,4 +134,4 @@ void XC::FiberContainer::setup(FiberSectionGJ &SectionGJ,const fiber_list &fiber
 
 //! @brief Destructor:
 XC::FiberContainer::~FiberContainer(void)
-  { libera(); }
+  { free_mem(); }

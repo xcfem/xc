@@ -43,7 +43,7 @@ namespace XC {
 //! @brief Pointers to UniaxialMaterial container.
 class DqUniaxialMaterial: public EntCmd, public MovableObject, public std::deque<UniaxialMaterial *>
   {
-    void libera(void);
+    void free_mem(void);
   public:
     typedef std::deque<UniaxialMaterial *> lst_ptr;
     typedef lst_ptr::const_iterator const_iterator;

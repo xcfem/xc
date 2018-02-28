@@ -92,7 +92,7 @@ class PartitionedDomain: public Domain
     
     Graph mySubdomainGraph; //! Grafo de conectividad de subdomains.
     void alloc(void);
-    void libera(void);
+    void free_mem(void);
   protected:
     int barrierCheck(int result);
     DomainPartitioner *getPartitioner(void) const;

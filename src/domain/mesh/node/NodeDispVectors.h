@@ -46,7 +46,7 @@ class NodeDispVectors: public NodeVectors
     Vector *incrDisp;
     Vector *incrDeltaDisp;
   protected:
-    void libera(void);
+    void free_mem(void);
   public:
     // constructors
     NodeDispVectors(void);

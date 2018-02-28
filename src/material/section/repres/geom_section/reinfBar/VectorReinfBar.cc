@@ -40,15 +40,15 @@
 
 
 //! @brief Frees memory for all the bars.
-void XC::VectorReinfBar::libera(void)
+void XC::VectorReinfBar::free_mem(void)
   {
     const size_t sz= size();
     for(size_t i= 0;i<sz;i++)
-      libera(i);
+      free_mem(i);
   }
 
 //! @brief Frees memory for the i-th bar.
-void XC::VectorReinfBar::libera(const size_t i)
+void XC::VectorReinfBar::free_mem(const size_t i)
   {
     if((*this)[i])
       delete (*this)[i];
@@ -58,7 +58,7 @@ void XC::VectorReinfBar::libera(const size_t i)
 //! @brief Stores a copy of the bar at the i-th position.
 void XC::VectorReinfBar::alloc(const size_t i,const ReinfBar &c)
   {
-    libera(i);
+    free_mem(i);
     (*this)[i]= c.getCopy();
   }
 
@@ -95,7 +95,7 @@ XC::VectorReinfBar &XC::VectorReinfBar::operator=(const VectorReinfBar &otro)
 
 //! @brief Destructor.
 XC::VectorReinfBar::~VectorReinfBar(void)
-  { libera(); }
+  { free_mem(); }
 
 //! @brief Returns the homogenized area de las regiones.
 double XC::VectorReinfBar::getAreaHomogenizedSection(const double &E0) const
@@ -286,7 +286,7 @@ double XC::VectorReinfBar::getPyzGrossSection(void) const
 //! @brief Resizes vector.
 void XC::VectorReinfBar::resize(const size_t sz)
   {
-    libera();
+    free_mem();
     v_rfBar::resize(sz);
     for(size_t i= 0;i<sz;i++)
       (*this)[i]= nullptr;

@@ -43,7 +43,7 @@
 #include <utility/matrix/ID.h>
 
 //! @brief Frees allocated memory.
-void XC::PySimple1Gen::libera(void)
+void XC::PySimple1Gen::free_mem(void)
   {
     if(PyEleNum)
       {
@@ -155,7 +155,7 @@ void XC::PySimple1Gen::libera(void)
         delete[] pyType;
         pyType= nullptr;
       }
-    Simple1GenBase::libera();
+    Simple1GenBase::free_mem();
   }
 
 //! @brief Constructor initializes global variables to zero
@@ -179,7 +179,7 @@ XC::PySimple1Gen::PySimple1Gen(void)
 /////////////////////////////////////////////////////////////////////////
 // Destructor deletes dynamically allocated arrays
 XC::PySimple1Gen::~PySimple1Gen()
-  { libera(); }
+  { free_mem(); }
 
 ///////////////////////////////////////////////////////////////////////////////////////
 // Function to call appropriate subroutines given input from XC::main

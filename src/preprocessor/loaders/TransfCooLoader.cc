@@ -36,7 +36,7 @@
 #include "boost/any.hpp"
 
 //! @brief Frees memory.
-void XC::TransfCooLoader::libera(void)
+void XC::TransfCooLoader::free_mem(void)
   {
     for(iterator i= begin();i!=end();i++)
       delete (*i).second;
@@ -62,7 +62,7 @@ XC::TransfCooLoader &XC::TransfCooLoader::operator=(const TransfCooLoader &otro)
 
 //! @brief Destructor.
 XC::TransfCooLoader::~TransfCooLoader(void)
-  { libera(); }
+  { free_mem(); }
 
 //! @brief Creates a new linear 2D coordinate transformation.
 XC::LinearCrdTransf2d *XC::TransfCooLoader::newLinearCrdTransf2d(const std::string &trfName)
@@ -181,6 +181,6 @@ std::string XC::TransfCooLoader::getName(const int &tag) const
 //! @brief Deletes all members.
 void XC::TransfCooLoader::clearAll(void)
   {
-    libera();
+    free_mem();
     tag_trf= 0;
   }

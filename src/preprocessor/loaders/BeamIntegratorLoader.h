@@ -46,7 +46,7 @@ class BeamIntegratorLoader: public Loader
     typedef map_beam_integrators::iterator iterator;
   private:
     map_beam_integrators beam_integrators;
-    void libera(void);
+    void free_mem(void);
     BeamIntegratorLoader(const BeamIntegratorLoader &otro);
     BeamIntegratorLoader &operator=(const BeamIntegratorLoader &otro);
   protected:
@@ -72,7 +72,7 @@ class BeamIntegratorLoader: public Loader
 
     ~BeamIntegratorLoader(void);
     inline void clearAll(void)
-      { libera(); }
+      { free_mem(); }
   };
 
 } // end of XC namespace

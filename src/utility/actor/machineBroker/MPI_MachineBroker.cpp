@@ -60,7 +60,7 @@
 
 #include <mpi/mpi.h>
 
-void XC::MPI_MachineBroker::libera(void)
+void XC::MPI_MachineBroker::free_mem(void)
   {
     const size_t sz= theChannels.size();
     for(size_t i=0; i<sz; i++)
@@ -83,7 +83,7 @@ void XC::MPI_MachineBroker::libera(void)
 
 void XC::MPI_MachineBroker::alloc(const std::size_t &sz)
   {
-    libera();
+    free_mem();
     theChannels= std::vector<MPI_Channel *>(sz,nullptr);
     for(size_t i=0; i<sz; i++)
       theChannels[i]= new MPI_Channel(i);
@@ -106,7 +106,7 @@ XC::MPI_MachineBroker::MPI_MachineBroker(FEM_ObjectBroker *theBroker, int argc,c
 
 XC::MPI_MachineBroker::~MPI_MachineBroker(void)
   {
-    libera();
+    free_mem();
     MPI_Finalize();
   }
 

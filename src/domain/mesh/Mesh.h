@@ -98,7 +98,7 @@ class Mesh: public MeshComponentContainer
     Mesh(const Mesh &otra);
     Mesh &operator=(const Mesh &otra);
   protected:
-    void libera(void);
+    void free_mem(void);
     DbTagData &getDbTagData(void) const;
     int sendData(CommParameters &);
     int recvData(const CommParameters &);

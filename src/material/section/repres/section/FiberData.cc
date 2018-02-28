@@ -70,7 +70,7 @@ size_t XC::FiberData::put_cells(const size_t &offset,const VectorCells &cells,Ma
         Position(1,k)= fiberPosition(1);
         k++;
       }
-    //cells.libera();
+    //cells.free_mem();
     return k;
   }
 
@@ -91,7 +91,7 @@ size_t XC::FiberData::put_reinf_bars(const size_t &offset,const VectorReinfBar &
         Position(1,k) = fiberPosition(1);
         k++;
       }
-    //bars.libera();
+    //bars.free_mem();
     return k;
   }
 

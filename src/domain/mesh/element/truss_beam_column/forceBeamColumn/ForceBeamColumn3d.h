@@ -67,7 +67,7 @@ class BeamIntegration;
 class ForceBeamColumn3d: public NLForceBeamColumn3dBase
   {
   private:
-    void libera(void);
+    void free_mem(void);
     void alloc(const BeamIntegration &);
     void getForceInterpolatMatrix(double xi, Matrix &b, const ID &code);
     void getDistrLoadInterpolatMatrix(double xi, Matrix &bp, const ID &code);

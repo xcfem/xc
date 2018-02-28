@@ -53,7 +53,7 @@ class Simple1GenBase: public EntCmd
     std::vector<std::string> MatType;
     std::string PatternInfo;
 
-    void libera(void);
+    void free_mem(void);
     // Member functions for reading input files:
     void GetNodes(const std::string &file);
     void GetPileElements(const std::string &file);

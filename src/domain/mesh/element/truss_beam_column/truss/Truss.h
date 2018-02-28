@@ -95,9 +95,9 @@ class Truss : public TrussBase
     DbTagData &getDbTagData(void) const;
     int sendData(CommParameters &cp);
     int recvData(const CommParameters &cp);
-    void libera_material(void);
-    void libera_load_sens(void);
-    void libera(void);
+    void free_material(void);
+    void free_load_sens(void);
+    void free_mem(void);
     void set_material(const UniaxialMaterial &);
     void set_load_sens(const Vector &);
 

@@ -105,7 +105,7 @@ Journal of Structural Engineering, Approved for publication, February 2007.
 #include "utility/actor/actor/MovableVector.h"
 
 
-void XC::ForceBeamColumn2d::libera(void)
+void XC::ForceBeamColumn2d::free_mem(void)
   {
     if(beamIntegr)
       delete beamIntegr;
@@ -114,7 +114,7 @@ void XC::ForceBeamColumn2d::libera(void)
 
 void XC::ForceBeamColumn2d::alloc(const BeamIntegration &bi)
   {
-    libera();
+    free_mem();
     beamIntegr= bi.getCopy();
   }
 
@@ -184,7 +184,7 @@ XC::Element* XC::ForceBeamColumn2d::getCopy(void) const
 
 //! @brief Destructor
 XC::ForceBeamColumn2d::~ForceBeamColumn2d(void)
-  { libera(); }
+  { free_mem(); }
 
 void XC::ForceBeamColumn2d::setDomain(Domain *theDomain)
   {

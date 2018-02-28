@@ -98,23 +98,30 @@ bool XC::FE_Datastore::isDatastore(void) const
  *                   CHANNEL METHODS  THAT DO NOTHING               *
  ********************************************************************/
 
+//! @brief Return \f$nullptr\f$.
 char *XC::FE_Datastore::addToProgram(void)
   { return nullptr; }
 
 int XC::FE_Datastore::setUpConnection(void)
   { return 0; }
 
+//! @brief Return \f$0\f$.
 int XC::FE_Datastore::setNextAddress(const ChannelAddress &otherChannelAddress)
   { return 0; }
 
 
+//! @brief Return \f$nullptr\f$.
 XC::ChannelAddress *XC::FE_Datastore::getLastSendersAddress(void)
   { return nullptr; }
 
 
+//! @brief Call {\em sendSelf(commitTag, *this, theBroker)} on
+//! \p theObject and return the result.
 int XC::FE_Datastore::sendObj(int commitTag,MovableObject &theObject, ChannelAddress *theAddress)
   { return sendMovable(commitTag,theObject); }
 
+//! @brief Call {\em recvSelf(commitTag, *this, theBroker)} on
+//! \p theObject and return the result.
 int XC::FE_Datastore::recvObj(int commitTag,MovableObject &theObject, FEM_ObjectBroker &theNewBroker, ChannelAddress *theAddress)
   { return receiveMovable(commitTag,theObject,theNewBroker); }
 
@@ -225,9 +232,11 @@ int XC::FE_Datastore::getData(const std::string &table,const std::vector<std::st
     return -1;
   }
 
-//! @brief To return a unique integer identifier at each call. This identifier
-//! will be used by the objects to store/retrieve their information
-//! to/from the database.
+//! @brief To return a unique integer identifier at each call.
+//!
+//! This identifier will be used by the objects to store/retrieve their
+//! information to/from the database. Increments the integer containing
+//! the current dbTag and returns this integer.
 int XC::FE_Datastore::getDbTag(void) const
   {
     lastDbTag++;

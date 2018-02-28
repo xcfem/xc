@@ -29,7 +29,7 @@
 #include "utility/matrix/Vector.h"
 
 
-void XC::EncapsulatedMaterial::libera(void)
+void XC::EncapsulatedMaterial::free_mem(void)
   {
     if(theMaterial) delete theMaterial;
     theMaterial= nullptr;
@@ -37,7 +37,7 @@ void XC::EncapsulatedMaterial::libera(void)
 
 void XC::EncapsulatedMaterial::copia(const UniaxialMaterial *otro)
   {
-    libera();
+    free_mem();
     if(otro)
       theMaterial= otro->getCopy();
   }
@@ -57,7 +57,7 @@ XC::EncapsulatedMaterial::EncapsulatedMaterial(int tag, int classTag)
   :UniaxialMaterial(tag,classTag), theMaterial(nullptr) {}
 
 XC::EncapsulatedMaterial::~EncapsulatedMaterial(void)
-  { libera(); }
+  { free_mem(); }
 
 XC::EncapsulatedMaterial::EncapsulatedMaterial(const EncapsulatedMaterial &otro)
   :UniaxialMaterial(otro), theMaterial(nullptr)

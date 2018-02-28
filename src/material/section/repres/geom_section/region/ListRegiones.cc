@@ -45,7 +45,7 @@
 #include "xc_utils/src/geom/d2/poligonos2d/bool_op_poligono2d.h"
 
 //! @brief Liberta todas las pociciones.
-void XC::ListRegiones::libera(void)
+void XC::ListRegiones::free_mem(void)
   {
     for(iterator i=begin();i!=end();i++)
       delete *i;
@@ -55,7 +55,7 @@ void XC::ListRegiones::libera(void)
 //! @brief Copy the regions from another container.
 void XC::ListRegiones::copia(const ListRegiones &otra)
   {
-    libera();
+    free_mem();
     for(const_iterator i=otra.begin();i!=otra.end();i++)
       push_back(*(*i)->getCopy());
   }
@@ -108,11 +108,11 @@ XC::RgSccCirc *XC::ListRegiones::newCircularRegion(const std::string &cod_mat)
 
 //! @brief Destructor.
 XC::ListRegiones::~ListRegiones(void)
-  { libera(); }
+  { free_mem(); }
 
 //! @brief Erases todas las regiones.
 void XC::ListRegiones::clear(void)
-  { libera(); }
+  { free_mem(); }
 
 //! @brief Adds a region to the container.
 XC::RegionSecc *XC::ListRegiones::push_back(const RegionSecc &reg)

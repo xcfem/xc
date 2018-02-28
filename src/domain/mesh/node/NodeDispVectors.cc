@@ -32,9 +32,9 @@
 
 
 
-void XC::NodeDispVectors::libera(void)
+void XC::NodeDispVectors::free_mem(void)
   {
-    NodeVectors::libera();
+    NodeVectors::free_mem();
     // delete anything that we created with new
     if(incrDisp) delete incrDisp;
     incrDisp= nullptr;
@@ -60,7 +60,7 @@ XC::NodeDispVectors &XC::NodeDispVectors::operator=(const NodeDispVectors &otro)
 
 //! @brief destructor
 XC::NodeDispVectors::~NodeDispVectors(void)
-  { libera(); }
+  { free_mem(); }
 
 //! @brief Returns displacement increment.
 //! @param nDOF: number of degrees of freedom

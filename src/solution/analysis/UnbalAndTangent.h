@@ -44,7 +44,7 @@ class UnbalAndTangent
     Vector *theResidual;
     Matrix *theTangent;
     UnbalAndTangentStorage &unbalAndTangentArray; //!< Reference to array of class wide vectors and matrices
-    bool libera(void);
+    bool free_mem(void);
     void alloc(void);
     void copia(const UnbalAndTangent &otro);
 

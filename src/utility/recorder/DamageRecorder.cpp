@@ -70,7 +70,7 @@
 #include <iomanip>
 #include <boost/lexical_cast.hpp>
 
-void XC::DamageRecorder::libera(void)
+void XC::DamageRecorder::free_mem(void)
   {
     if(!theResponses.empty())
       {
@@ -96,7 +96,7 @@ void XC::DamageRecorder::libera(void)
 
 void XC::DamageRecorder::alloc(const size_t &numSec, DamageModel *dmgPtr)
   {
-    libera();
+    free_mem();
     if(dmgPtr)
       {
         theDamageModels= std::vector<DamageModel *>(numSec,nullptr);
@@ -206,7 +206,7 @@ XC::DamageRecorder::~DamageRecorder(void)
     // close the file
     if(!theFile.bad())
       theFile.close();    
-    libera();
+    free_mem();
   }
 
 

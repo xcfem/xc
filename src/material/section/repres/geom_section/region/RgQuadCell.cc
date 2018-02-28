@@ -33,7 +33,7 @@
 #include <utility/matrix/Matrix.h>
 #include <utility/matrix/Vector.h>
 
-void XC::RgQuadCell::libera(void) const
+void XC::RgQuadCell::free_mem(void) const
   {
     if(rejilla) delete rejilla;
     rejilla= nullptr;
@@ -41,7 +41,7 @@ void XC::RgQuadCell::libera(void) const
 
 const Rejilla2d &XC::RgQuadCell::alloc(const Rejilla2d &ptos) const
   {
-    libera();
+    free_mem();
     rejilla= new Rejilla2d(ptos);
     return *rejilla;
   }
@@ -72,7 +72,7 @@ XC::RgQuadCell &XC::RgQuadCell::operator=(const RgQuadCell &otro)
   }
 
 XC::RgQuadCell::~RgQuadCell(void)
-  { libera(); }
+  { free_mem(); }
 
 //! @brief Sets the number of divisions on each direction.
 void XC::RgQuadCell::setDiscretization(int numSubdivIJ, int numSubdivJK)

@@ -75,7 +75,7 @@
 #include "domain/component/Parameter.h"
 #include "utility/actor/actor/ArrayCommMetaData.h"
 
-void XC::Truss::libera_material(void)
+void XC::Truss::free_material(void)
   {
     if(theMaterial)
       {
@@ -84,7 +84,7 @@ void XC::Truss::libera_material(void)
       }
   }
 
-void XC::Truss::libera_load_sens(void)
+void XC::Truss::free_load_sens(void)
   {
     if(theLoadSens)
       {
@@ -93,15 +93,15 @@ void XC::Truss::libera_load_sens(void)
       }
   }
 
-void XC::Truss::libera(void)
+void XC::Truss::free_mem(void)
   {
-    libera_material();
-    libera_load_sens();
+    free_material();
+    free_load_sens();
   }
 
 void XC::Truss::set_material(const UniaxialMaterial &mat)
   {
-    libera_material();
+    free_material();
     // get a copy of the material and check we obtained a valid copy
     theMaterial= mat.getCopy();
     if(!theMaterial)
@@ -114,7 +114,7 @@ void XC::Truss::set_material(const UniaxialMaterial &mat)
 
 void XC::Truss::set_load_sens(const Vector &v)
   {
-    libera_load_sens();
+    free_load_sens();
     // get a copy of the material and check we obtained a valid copy
     theLoadSens= new Vector(v);
     if(!theLoadSens)
@@ -197,7 +197,7 @@ XC::Element* XC::Truss::getCopy(void) const
 //!     delete must be invoked on any objects created by the object
 //!     and on the matertial object.
 XC::Truss::~Truss(void)
-  { libera(); }
+  { free_mem(); }
 
 //! method: setDomain()
 //!    to set a link to the enclosing XC::Domain and to set the node pointers.

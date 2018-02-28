@@ -94,7 +94,7 @@ class DamageRecorder: public DomainRecorderBase
     double deltaT;
     double nextTimeStampToRecord;
 
-    void libera(void);
+    void free_mem(void);
     void alloc(const size_t &,DamageModel *);
   public:
     DamageRecorder(int elemid, ID &secIDs, int dofid, DamageModel *dmgPtr, Domain &,

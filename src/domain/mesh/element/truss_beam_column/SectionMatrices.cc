@@ -42,7 +42,7 @@ void XC::SectionMatrices::alloc(const size_t &sz)
     SsrSubdivide.resize(sz);
   }
 
-//! @brief libera espacio.
+//! @brief Free memory.
 void XC::SectionMatrices::free(void)
   {
     vsSubdivide.clear();

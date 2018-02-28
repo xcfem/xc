@@ -86,9 +86,9 @@ class DriftRecorder: public HandlerRecorder
     Vector data;
     int numNodes;
   protected:
-    void libera_nodes(void);
+    void free_nodes(void);
     int alloc_nodes(const int &,const int &);
-    void libera_ndIJ(void);
+    void free_ndIJ(void);
     void alloc_ndIJ(const int &);
     void set_ndIJ(const ID &nI,const ID &);
     void setup_ndIJ(const int &);

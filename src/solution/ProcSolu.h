@@ -61,11 +61,11 @@ class ProcSolu: public EntCmd
   protected:
     friend class FEProblem;
 
-    void libera_analysis(void);
+    void free_analysis(void);
     bool alloc_analysis(const std::string &,const std::string &,const std::string &);
     void copia_analysis(Analysis *);
  
-    void libera(void);
+    void free_mem(void);
 
     void revertToStart(void);
     FEProblem *getFEProblem(void);

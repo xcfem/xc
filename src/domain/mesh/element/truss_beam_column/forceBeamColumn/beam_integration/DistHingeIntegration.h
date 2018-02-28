@@ -64,7 +64,7 @@ class DistHingeIntegration : public PlasticLengthsBeamIntegration
     BeamIntegration *beamInt;
 
     int parameterID;
-    void libera(void);
+    void free_mem(void);
     void copia(const BeamIntegration *bi);
   public:
     DistHingeIntegration(double lpI, double lpJ,const BeamIntegration &bi);

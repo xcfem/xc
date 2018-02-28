@@ -49,7 +49,7 @@ XC::Matrix XC::FiberSectionShear3d::fs(6,6);
 
 //! @brief Frees memory occupied by materials that define
 //! shear and torsion responses.
-void XC::FiberSectionShear3d::liberaRespVyVzT(void)
+void XC::FiberSectionShear3d::freeRespVyVzT(void)
   {
     if(respVy)
       {
@@ -69,8 +69,8 @@ void XC::FiberSectionShear3d::liberaRespVyVzT(void)
   }
 
 //! @brief Frees memory.
-void XC::FiberSectionShear3d::libera(void)
-  { liberaRespVyVzT(); }
+void XC::FiberSectionShear3d::free_mem(void)
+  { freeRespVyVzT(); }
 
 //! @brief Asigna el material que define la respuesta a cortante según «y».
 void XC::FiberSectionShear3d::setRespVy(const UniaxialMaterial *rvy)
@@ -98,7 +98,7 @@ void XC::FiberSectionShear3d::setRespT(const UniaxialMaterial *rt)
 
 void XC::FiberSectionShear3d::setRespVyVzT(const UniaxialMaterial *rvy,const UniaxialMaterial *rvz,const UniaxialMaterial *rt)
   {
-    liberaRespVyVzT();
+    freeRespVyVzT();
     if(rvy)
       respVy= rvy->getCopy();
     else
@@ -129,7 +129,7 @@ XC::FiberSectionShear3d::FiberSectionShear3d(const FiberSectionShear3d &otro)
 //! @brief Assignment operator.
 XC::FiberSectionShear3d &XC::FiberSectionShear3d::operator=(const FiberSectionShear3d &otro)
   {
-    libera();
+    free_mem();
     FiberSection3d::operator=(otro);
     setRespVyVzT(otro.respVy,otro.respVz,otro.respT);
     respVy->set_owner(this); respVz->set_owner(this); respT->set_owner(this);
@@ -217,7 +217,7 @@ void XC::FiberSectionShear3d::setRespVyVzTByName(const std::string &rvy,const st
 
 //! @brief destructor:
 XC::FiberSectionShear3d::~FiberSectionShear3d(void)
-  { libera(); }
+  { free_mem(); }
 
 //! @brief Asigna la initial strain.
 int XC::FiberSectionShear3d::setInitialSectionDeformation(const Vector &def)

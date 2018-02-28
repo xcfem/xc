@@ -56,7 +56,7 @@
 #include "material/nD/TipoMaterialND.h"
 
 
-void XC::FDdecoupledElastic3D::libera(void)
+void XC::FDdecoupledElastic3D::free_mem(void)
   {
     if(W) delete W;
     W= nullptr;
@@ -66,7 +66,7 @@ void XC::FDdecoupledElastic3D::alloc(const WEnergy *w)
   {
     if(w)
       {
-        libera();
+        free_mem();
         W= w->getCopy();
       }
     else
@@ -105,7 +105,7 @@ XC::FDdecoupledElastic3D::FDdecoupledElastic3D(const FDdecoupledElastic3D &fde3d
 
 //! @brief 
 XC::FDdecoupledElastic3D::~FDdecoupledElastic3D(void)
-  { libera(); }
+  { free_mem(); }
 
 //! @brief 
 double XC::FDdecoupledElastic3D::getRho(void) const

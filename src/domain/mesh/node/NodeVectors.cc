@@ -33,7 +33,7 @@
 
 #include <utility/actor/objectBroker/FEM_ObjectBroker.h>
 
-void XC::NodeVectors::libera(void)
+void XC::NodeVectors::free_mem(void)
   {
     // delete anything that we created with new
     if(commitData) delete commitData;
@@ -44,7 +44,7 @@ void XC::NodeVectors::libera(void)
 
 void XC::NodeVectors::copia(const NodeVectors &otro)
   {
-    libera();
+    free_mem();
     numVectors= otro.numVectors;
     if(otro.commitData)
       {
@@ -80,7 +80,7 @@ XC::NodeVectors &XC::NodeVectors::operator=(const NodeVectors &otro)
 
 //! @brief destructor
 XC::NodeVectors::~NodeVectors(void)
-  { libera(); }
+  { free_mem(); }
 
 //! @brief Return the number of node DOFs.
 size_t XC::NodeVectors::getVectorsSize(void) const
@@ -250,7 +250,7 @@ int XC::NodeVectors::revertToStart(const size_t &nDOF)
 //! values and the Vector objects for the committed and trial quantities.
 int XC::NodeVectors::createData(const size_t &nDOF)
   {
-    libera();
+    free_mem();
     // trial , committed, incr = (committed-trial)
     const size_t sz= numVectors*nDOF;
     values= Vector(sz);

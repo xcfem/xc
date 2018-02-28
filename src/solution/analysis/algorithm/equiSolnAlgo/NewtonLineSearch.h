@@ -88,7 +88,7 @@ class NewtonLineSearch: public EquiSolnAlgo
   protected:
     ~NewtonLineSearch(void);
     
-    void libera(void);
+    void free_mem(void);
     bool alloc(const std::string &);
     void copia(LineSearch *);
   public:

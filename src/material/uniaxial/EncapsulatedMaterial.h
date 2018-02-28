@@ -39,7 +39,7 @@ class EncapsulatedMaterial: public UniaxialMaterial
   protected:
     UniaxialMaterial *theMaterial;
 
-    void libera(void);
+    void free_mem(void);
     void copia(const UniaxialMaterial *otro);
   public:
     EncapsulatedMaterial(int tag, int classTag, UniaxialMaterial &material); 

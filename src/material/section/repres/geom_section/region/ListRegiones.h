@@ -58,8 +58,8 @@ class ListRegiones: protected std::list<RegionSecc *>, public SectionMassPropert
     typedef l_reg::iterator iterator;
     typedef l_reg::const_iterator const_iterator;
   private:
-    void libera(void);
-    void libera(const size_t i);
+    void free_mem(void);
+    void free_mem(const size_t i);
     void copia(const ListRegiones &otra);
   protected:
 

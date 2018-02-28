@@ -30,15 +30,15 @@
 #include <material/section/repres/cell/Cell.h> 
 
 //! @brief Frees memory for all the cells.
-void XC::VectorCells::libera(void)
+void XC::VectorCells::free_mem(void)
   {
     const size_t sz= size();
     for(size_t i= 0;i<sz;i++)
-      libera(i);
+      free_mem(i);
   }
 
 //! @brief Frees the memory reserved for the cell at i-th position.
-void XC::VectorCells::libera(const size_t i)
+void XC::VectorCells::free_mem(const size_t i)
   {
     if((*this)[i])
       delete (*this)[i];
@@ -48,7 +48,7 @@ void XC::VectorCells::libera(const size_t i)
 //! @brief Stores a copy of the cell at the i-th position.
 void XC::VectorCells::alloc(const size_t i,const Cell &c)
   {
-    libera(i);
+    free_mem(i);
     (*this)[i]= c.getCopy();
   }
 
@@ -85,13 +85,13 @@ XC::VectorCells &XC::VectorCells::operator=(const VectorCells &otro)
 
 //! @brief Destructor.
 XC::VectorCells::~VectorCells(void)
-  { libera(); }
+  { free_mem(); }
 
 
 //! @brief Destructor.
 void XC::VectorCells::resize(const size_t sz)
   {
-    libera();
+    free_mem();
     v_cell::resize(sz);
     for(size_t i= 0;i<sz;i++)
       (*this)[i]= nullptr;

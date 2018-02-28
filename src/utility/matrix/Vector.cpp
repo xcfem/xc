@@ -73,7 +73,7 @@
 
 double XC::Vector::VECTOR_NOT_VALID_ENTRY =0.0;
 
-void XC::Vector::libera(void)
+void XC::Vector::free_mem(void)
   {
     if(fromFree == 0)
       if(theData)
@@ -85,7 +85,7 @@ void XC::Vector::libera(void)
 
 void XC::Vector::alloc(const size_t &size)
   {
-    libera();
+    free_mem();
     if(size >=0)
       {
         sz= size;
@@ -193,11 +193,11 @@ XC::Vector::Vector(const Vector &other)
 
 //! @brief destructor, deletes the [] data
 XC::Vector::~Vector(void)
-  { libera(); }
+  { free_mem(); }
 
 int XC::Vector::setData(double *newData, int size)
   {
-    libera();
+    free_mem();
     sz= size;
     theData= newData;
     fromFree= 1;
@@ -227,7 +227,7 @@ int XC::Vector::resize(int newSize)
         return -1;
       } 
     else if(newSize == 0)
-      { libera(); } 
+      { free_mem(); } 
     else // otherwise if newSize is greater than oldSize free old space and get new_ space
       if(newSize > sz)
         {

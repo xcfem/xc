@@ -96,7 +96,7 @@ int XC::ShadowSubdomain::count = 0; // MHS
 int XC::ShadowSubdomain::numShadowSubdomains = 0;
 std::deque<XC::ShadowSubdomain *> XC::ShadowSubdomain::theShadowSubdomains;
 
-void XC::ShadowSubdomain::libera_vectors(void) const
+void XC::ShadowSubdomain::free_vectors(void) const
   {
     if(theVector)
       {
@@ -112,7 +112,7 @@ void XC::ShadowSubdomain::libera_vectors(void) const
 
 void XC::ShadowSubdomain::alloc_vectors(const size_t &numDOF) const
   {
-    libera_vectors();
+    free_vectors();
     theVector= new Vector(numDOF);
     theMatrix= new Matrix(numDOF,numDOF);
   }
@@ -126,7 +126,7 @@ void XC::ShadowSubdomain::resize_vectors(const size_t &numDOF) const
       alloc_vectors(numDOF);
   }
 
-void XC::ShadowSubdomain::libera_arrays(void)
+void XC::ShadowSubdomain::free_arrays(void)
   {
     if(theShadowSPs)
       {
@@ -147,7 +147,7 @@ void XC::ShadowSubdomain::libera_arrays(void)
 
 void XC::ShadowSubdomain::alloc_arrays(const size_t &sz1,const size_t &sz2)
   {
-    libera_arrays();
+    free_arrays();
     theShadowSPs=new ArrayOfTaggedObjects(static_cast<Domain *>(this),sz1,"SPs");
     theShadowMPs=new ArrayOfTaggedObjects(static_cast<Domain *>(this),sz1,"MPs");
     theShadowLPs=new ArrayOfTaggedObjects(static_cast<Domain *>(this),sz2,"LPs");
@@ -211,7 +211,7 @@ XC::ShadowSubdomain::~ShadowSubdomain()
     msgData(0) = ShadowActorSubdomain_DIE;
     this->sendID(msgData);
     this->recvID(msgData);
-    libera();
+    free_mem();
     std::cerr << "XC::ShadowSubdomain::~ShadowSubdomain()\n";
   }
 

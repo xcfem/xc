@@ -39,7 +39,7 @@ namespace XC {
 //! @brief Fiber container.
 class FiberContainer : public FiberDeque
   {
-    void libera(void);
+    void free_mem(void);
     void copy_fibers(const FiberContainer &otro);
     void copy_fibers(const fiber_list &);
 

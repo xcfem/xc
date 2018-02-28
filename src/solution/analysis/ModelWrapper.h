@@ -61,21 +61,21 @@ class ModelWrapper: public EntCmd
     ConstraintHandler *theHandler; //!< Constrainnt handler.
     DOF_Numberer *theDOFNumberer;  //!< DOF numberer.
 
-    void libera_analysis_model(void);
+    void free_analysis_model(void);
     void alloc_analysis_model(void);
     void copia_analysis_model(AnalysisModel *);
 
-    void libera_constraint_handler(void);
+    void free_constraint_handler(void);
     bool alloc_constraint_handler(const std::string &);
     void copia_constraint_handler(const ConstraintHandler *);
 
     bool setup_numerador(void);
-    void libera_numerador(void);
+    void free_numerador(void);
     bool alloc_numerador(const std::string &);
     void copia_numerador(const DOF_Numberer *);
 
     void copia(const ModelWrapper &otro);
-    void libera(void);
+    void free_mem(void);
 
     AnalysisAggregation *getAnalysisAggregation(void);
     const AnalysisAggregation *getAnalysisAggregation(void) const;

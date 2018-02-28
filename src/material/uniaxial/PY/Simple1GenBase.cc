@@ -33,7 +33,7 @@
 #include <utility/matrix/ID.h>
 
 //! @brief Free allocated memory
-void XC::Simple1GenBase::libera(void)
+void XC::Simple1GenBase::free_mem(void)
   {
     if(Nodex)
       {
@@ -185,7 +185,7 @@ XC::Simple1GenBase::Simple1GenBase(void)
 
 //! @brief Destructor deletes dynamically allocated arrays
 XC::Simple1GenBase::~Simple1GenBase(void)
-  { libera(); }
+  { free_mem(); }
 
 
 /////////////////////////////////////////////////////////////////////////

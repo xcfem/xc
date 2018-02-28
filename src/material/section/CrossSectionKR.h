@@ -47,7 +47,7 @@ class CrossSectionKR: public EntCmd
 
     static double value,vas1,vas2,vas1as2;//Para guardar resultados parciales.
   protected:
-    void libera(void);
+    void free_mem(void);
     void alloc(const size_t &dim);
     void copia(const CrossSectionKR &otra);
     inline void updateNMz(const double &f,const double &y)

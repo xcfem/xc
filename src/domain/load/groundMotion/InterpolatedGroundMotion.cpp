@@ -64,7 +64,7 @@
 #include <classTags.h>
 #include <utility/matrix/Vector.h>
 
-void XC::InterpolatedGroundMotion::libera(void)
+void XC::InterpolatedGroundMotion::free_mem(void)
   {
     if(factors)
       {
@@ -75,7 +75,7 @@ void XC::InterpolatedGroundMotion::libera(void)
 
 void XC::InterpolatedGroundMotion::copia(const Vector *v)
   {
-    libera();
+    free_mem();
     if(v)
       factors= new Vector(*v);
   }
@@ -112,7 +112,7 @@ XC::GroundMotion *XC::InterpolatedGroundMotion::getCopy(void) const
 
 
 XC::InterpolatedGroundMotion::~InterpolatedGroundMotion(void)
-  { libera(); }
+  { free_mem(); }
 
 double XC::InterpolatedGroundMotion::getDuration(void) const
   {

@@ -83,7 +83,7 @@ class FDdecoupledElastic3D: public FiniteDeformationElastic3D
      straintensor thisGreenStrain;
      stresstensor thisPK2Stress;
 
-     void libera(void);
+     void free_mem(void);
      void alloc(const WEnergy *);
   protected:
     int sendData(CommParameters &);

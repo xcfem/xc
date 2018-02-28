@@ -61,7 +61,7 @@
 #include "preprocessor/loaders/LoadLoader.h"
 
 //@brief Frees memory.
-void XC::ConstrContainer::libera(void)
+void XC::ConstrContainer::free_mem(void)
   {
     //delete the objects in the domain
     clearAll();
@@ -150,7 +150,7 @@ void XC::ConstrContainer::clearAll(void)
 
 //! @brief Destructor.
 XC::ConstrContainer::~ConstrContainer(void)
-  { libera(); }
+  { free_mem(); }
 
 
 //! @brief Appends a single freedom constraint.

@@ -64,7 +64,7 @@
 
 int XC::IntPtrWrapper::ID_NOT_VALID_ENTRY= 0;
 
-void XC::IntPtrWrapper::libera(void)
+void XC::IntPtrWrapper::free_mem(void)
   {
     if(data && (fromFree==0))
       {
@@ -177,11 +177,11 @@ XC::IntPtrWrapper::IntPtrWrapper(const IntPtrWrapper &other)
 //         destructor, deletes the [] data
 
 XC::IntPtrWrapper::~IntPtrWrapper(void)
- { libera(); }
+ { free_mem(); }
 
 int XC::IntPtrWrapper::setData(int *newData, int size, bool cleanIt)
   {
-    libera();
+    free_mem();
     sz = size;
     data = newData;
   

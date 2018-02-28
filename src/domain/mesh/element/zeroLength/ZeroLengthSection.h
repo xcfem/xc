@@ -100,7 +100,7 @@ class ZeroLengthSection: public Element0D
 
     void setup_section(const Material *sec);
     void inicAv(void);
-    void libera(void);
+    void free_mem(void);
   protected:
     int sendData(CommParameters &);
     int recvData(const CommParameters &);

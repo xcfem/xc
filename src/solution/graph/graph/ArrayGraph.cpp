@@ -69,7 +69,7 @@
 //! 
 //! Goes through \p theVertices and anywhere it finds a non-zero pointer,
 //! invokes the vertex destructor on that pointer. 
-void XC::ArrayGraph::libera(void)
+void XC::ArrayGraph::free_mem(void)
   {
     for(int i=0; i<numVertex; i++)
       if(theVertices[i])
@@ -92,7 +92,7 @@ XC::ArrayGraph::ArrayGraph(int arraySize)
 
 //! @brief Destructor.
 XC::ArrayGraph::~ArrayGraph(void)
-  { libera(); }
+  { free_mem(); }
 
 //! @brief Add a vertex to the graph.
 //!

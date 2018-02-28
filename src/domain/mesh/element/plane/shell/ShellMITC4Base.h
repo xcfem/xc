@@ -68,7 +68,7 @@ class ShellMITC4Base : public QuadBase4N<SectionFDPhysicalProperties>
 
     static ShellBData BData; //!< B-bar data
 
-    void libera(void);
+    void free_mem(void);
     void alloc(const ShellCrdTransf3dBase *);
 
     void setupInicDisp(void);

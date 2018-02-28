@@ -82,7 +82,7 @@ class InterpolatedGroundMotion: public GroundMotion
     Vector *factors;
     
     double deltaPeak;  // increment for determining a peak response
-    void libera(void);
+    void free_mem(void);
     void copia(const Vector *);
   public:
     InterpolatedGroundMotion(void);

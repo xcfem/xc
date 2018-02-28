@@ -34,7 +34,7 @@
 #include "frictionModel/FrictionModel.h"
 #include "utility/actor/actor/CommMetaData.h"
 
-void XC::FrictionElementBase::libera_friction_model(void)
+void XC::FrictionElementBase::free_friction_model(void)
   {
     if(theFrnMdl)
       delete theFrnMdl;
@@ -43,7 +43,7 @@ void XC::FrictionElementBase::libera_friction_model(void)
 
 void XC::FrictionElementBase::alloc_friction_model(const FrictionModel &thefrnmdl)
   {
-    libera_friction_model();
+    free_friction_model();
     theFrnMdl = thefrnmdl.getCopy();
     if(!theFrnMdl)
       {
@@ -105,7 +105,7 @@ XC::FrictionElementBase &XC::FrictionElementBase::operator=(const FrictionElemen
   }
 XC::FrictionElementBase::~FrictionElementBase()
   {
-    libera_friction_model();
+    free_friction_model();
   }
 
 

@@ -82,7 +82,7 @@ class MeshRegion : public ContinuaReprComponent
     int	currentGeoTag;
     int lastGeoSendTag;
 
-    void libera(void);
+    void free_mem(void);
     void copia(const MeshRegion &otra);
     int sendData(CommParameters &);
     int recvData(const CommParameters &);

@@ -50,7 +50,7 @@
 #include "domain/mesh/node/Node.h"
 #include "domain/mesh/element/Element.h"
 
-void XC::ProcSolu::libera_analysis(void)
+void XC::ProcSolu::free_analysis(void)
   {
     if(theAnalysis)
       {
@@ -61,7 +61,7 @@ void XC::ProcSolu::libera_analysis(void)
 
 bool XC::ProcSolu::alloc_analysis(const std::string &nmb,const std::string &analysis_aggregation_code,const std::string &cod_solu_eigenM)
   {
-    libera_analysis();
+    free_analysis();
     AnalysisAggregation *analysis_aggregation= solu_control.getAnalysisAggregation(analysis_aggregation_code);
     if(analysis_aggregation)
       {
@@ -105,7 +105,7 @@ void XC::ProcSolu::copia_analysis(Analysis *ptr)
   {
     if(ptr)
       {
-        libera_analysis();
+        free_analysis();
         theAnalysis= ptr->getCopy();
         theAnalysis->set_owner(this);
       }
@@ -121,9 +121,9 @@ XC::Analysis &XC::ProcSolu::newAnalysis(const std::string &nmb,const std::string
     return *theAnalysis;
   }
 
-void XC::ProcSolu::libera(void)
+void XC::ProcSolu::free_mem(void)
   {
-    libera_analysis();
+    free_analysis();
   }
 
 //! @brief Default constructor.
@@ -152,7 +152,7 @@ void XC::ProcSolu::revertToStart(void)
 void XC::ProcSolu::clearAll(void)
   {
     solu_control.clearAll();
-    libera_analysis();
+    free_analysis();
   }
 
 //! @brief Destructor.

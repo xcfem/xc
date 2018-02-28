@@ -68,7 +68,7 @@
 #include "preprocessor/loaders/MaterialLoader.h"
 #include "utility/actor/actor/MovableVector.h"
 
-void XC::UniaxialFiber::libera(void)
+void XC::UniaxialFiber::free_mem(void)
   {
     if(theMaterial)
       {
@@ -79,7 +79,7 @@ void XC::UniaxialFiber::libera(void)
 
 void XC::UniaxialFiber::alloc(const UniaxialMaterial &theMat)
   {
-    libera();
+    free_mem();
     theMaterial = theMat.getCopy();// get a copy of the MaterialModel
     if(!theMaterial)
       {
@@ -122,7 +122,7 @@ XC::UniaxialFiber &XC::UniaxialFiber::operator=(const UniaxialFiber &otra)
 
 // Destructor: 
 XC::UniaxialFiber::~UniaxialFiber(void)
-  { libera(); }
+  { free_mem(); }
 
 //! @brief Set the fiber material.
 void XC::UniaxialFiber::setMaterial(const UniaxialMaterial *theMat)
@@ -130,7 +130,7 @@ void XC::UniaxialFiber::setMaterial(const UniaxialMaterial *theMat)
     if(theMat)
       alloc(*theMat);
     else
-      libera();
+      free_mem();
   }
 
 //! @brief Sets the fiber material (identified by name).

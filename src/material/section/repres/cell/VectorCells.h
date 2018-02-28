@@ -48,8 +48,8 @@ class VectorCells: protected std::vector<Cell *>
     typedef v_cell::iterator iterator;
     typedef v_cell::const_iterator const_iterator;
   private:
-    void libera(void);
-    void libera(const size_t i);
+    void free_mem(void);
+    void free_mem(const size_t i);
     void alloc(const size_t i,const Cell &c);
     inline reference operator[](const size_t i)
       { return v_cell::operator[](i); }

@@ -98,23 +98,23 @@ class AnalysisAggregation: public EntCmd
     const Analysis *getAnalysis(void) const;    
   protected:
     friend class FEProblem;
-    void libera_soln_algo(void);
+    void free_soln_algo(void);
     bool alloc_soln_algo(const std::string &);
     void copia_soln_algo(SolutionAlgorithm *);
 
-    void libera_integrator(void);
+    void free_integrator(void);
     bool alloc_integrator(const std::string &,const Vector &);
     void copia_integrator(Integrator *);
 
-    void libera_system_of_equations(void);
+    void free_system_of_equations(void);
     bool alloc_system_of_equations(const std::string &,AnalysisModel *);
     void copia_system_of_equations(SystemOfEqn *);
 
-    void libera_conv_test(void);
+    void free_conv_test(void);
     bool alloc_conv_test(const std::string &);
     void copia_conv_test(ConvergenceTest *);
 
-    void libera(void);
+    void free_mem(void);
     void copia(const AnalysisAggregation &);
 
   public:

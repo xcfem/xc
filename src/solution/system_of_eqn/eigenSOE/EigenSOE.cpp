@@ -62,7 +62,7 @@
 XC::EigenSOE::EigenSOE(AnalysisAggregation *owr,int classTag)
   :SystemOfEqn(owr,classTag), size(0), factored(false), theSolver(nullptr) {}
 
-void XC::EigenSOE::libera(void)
+void XC::EigenSOE::free_mem(void)
   {
     if(theSolver)
       {
@@ -75,7 +75,7 @@ void XC::EigenSOE::copia(const EigenSolver *newSolver)
   {
     if(newSolver)
       {
-        libera();
+        free_mem();
         EigenSolver *tmp= newSolver->getCopy();
         if(tmp)
           setSolver(tmp);
@@ -91,7 +91,7 @@ bool XC::EigenSOE::setSolver(EigenSolver *newSolver)
     bool retval= false;
     if(newSolver)
       {
-        libera();
+        free_mem();
         theSolver= newSolver;
         theSolver->setEigenSOE(this);
         const int solverOK= theSolver->setSize();
@@ -132,7 +132,7 @@ XC::EigenSolver &XC::EigenSOE::newSolver(const std::string &tipo)
 
 //! @brief Destructor.
 XC::EigenSOE::~EigenSOE(void)
-  { libera(); }
+  { free_mem(); }
 
 void XC::EigenSOE::resize_mass_matrix_if_needed(const size_t &sz)
   {

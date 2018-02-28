@@ -55,8 +55,8 @@ class FiberSectionShear3d : public FiberSection3d
     void setRespT(const UniaxialMaterial *);
     void setRespVyVzT(const UniaxialMaterial *,const UniaxialMaterial *,const UniaxialMaterial *);
 
-    void liberaRespVyVzT(void);
-    void libera(void);
+    void freeRespVyVzT(void);
+    void free_mem(void);
   protected:
     int sendData(CommParameters &);
     int recvData(const CommParameters &);

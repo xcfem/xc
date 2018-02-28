@@ -40,7 +40,7 @@ class MaterialLoader;
 //! @brief Fiber of uniaxial material.
 class UniaxialFiber: public Fiber
   {
-    void libera(void);
+    void free_mem(void);
     void alloc(const UniaxialMaterial &theMat);
   protected:
     UniaxialMaterial *theMaterial; //!< pointer to a material

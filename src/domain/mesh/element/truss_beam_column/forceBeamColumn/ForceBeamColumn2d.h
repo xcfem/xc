@@ -77,7 +77,7 @@ class ForceBeamColumn2d: public NLForceBeamColumn2dBase
     // following are added for subdivision of displacement increment
     int maxSubdivisions;       // maximum number of subdivisons of dv for local iterations
 
-    void libera(void);
+    void free_mem(void);
     void alloc(const BeamIntegration &);
   
   protected:

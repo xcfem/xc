@@ -73,7 +73,7 @@ class FluidSolidPorousMaterial: public NDMaterial
     static Matrix workM3;
     static Matrix workM6;
 
-    void libera(void);
+    void free_mem(void);
     void alloc(const NDMaterial *);
   protected:
     int sendData(CommParameters &);

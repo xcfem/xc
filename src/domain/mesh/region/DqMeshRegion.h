@@ -46,7 +46,7 @@ class DqMeshRegion: protected std::deque<MeshRegion *>
     typedef dq_Reg::iterator iterator;
     typedef dq_Reg::const_iterator const_iterator;
   private:
-    void libera(void);
+    void free_mem(void);
     inline reference operator[](const size_t i)
       { return dq_Reg::operator[](i); }
   public:
@@ -66,7 +66,7 @@ class DqMeshRegion: protected std::deque<MeshRegion *>
       { return dq_Reg::operator[](i); }
 
     inline void clearAll(void)
-      { libera(); }
+      { free_mem(); }
 
     MeshRegion *getRegion(int tag);
 
