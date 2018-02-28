@@ -61,7 +61,7 @@ fiberSectionRepr.setGeomNamed("testQuadRegion") #We assign the geometry (regions
 quadFibers.setupFibers() #Create the fibers from the information contained in th
                            #geometry.
 fibras= quadFibers.getFibers() #Get the fiber container from the object.
-A= fibras.getSumaAreas(1.0) #Get the sum of the fiber areas.
+A= fibras.getArea(1.0) #Get the sum of the fiber areas.
 
 
 

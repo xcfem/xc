@@ -128,6 +128,8 @@ double XC::ElemPlano<NNODOS, PhysProp>::getPerimetro(bool initialGeometry) const
   { return getPolygon(initialGeometry).Perimetro(); }
 
 //! @brief Returns element area.
+//!
+//! @param initialGeometry: if true returns the area of the undeformed geometry.
 template <int NNODOS,class PhysProp>
 double XC::ElemPlano<NNODOS, PhysProp>::getArea(bool initialGeometry) const
   { return getPolygon(initialGeometry).Area(); }

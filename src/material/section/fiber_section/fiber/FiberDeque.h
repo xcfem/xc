@@ -213,7 +213,7 @@ class FiberDeque : public EntCmd, public std::deque<Fiber *>
     Pos2d GetPMax(void) const;
     Pos2d GetPMin(void) const;
     BND2d Bnd(void) const;
-    double getSumaAreas(const double &factor= 1.0) const;
+    double getArea(const double &factor= 1.0) const;
     double getAreaHomogenizedSection(const double &E0) const;
     const Vector &getCdgHomogenizedSection(const double &E0) const;
     //Moments of inertia.
@@ -246,10 +246,10 @@ class FiberDeque : public EntCmd, public std::deque<Fiber *>
       { return getIz(factor,yCDG)+getIy(factor,zCDG); }
     //! @brief Returns the radio de giro respecto al eje paralelo al z que pasa por el CDG.
     inline double getiz(const double factor= 1.0) const
-      { return getIz(factor,yCDG)/getSumaAreas(factor); }
+      { return getIz(factor,yCDG)/getArea(factor); }
     //! @brief Returns the radio de giro respecto al eje paralelo al y que pasa por el CDG.
     inline double getiy(const double factor= 1.0) const
-      { return getIy(factor,zCDG)/getSumaAreas(factor); }
+      { return getIy(factor,zCDG)/getArea(factor); }
     size_t nearest_fiber(const double &y,const double &z) const;
 
     void Print(std::ostream &s,const int &flag);

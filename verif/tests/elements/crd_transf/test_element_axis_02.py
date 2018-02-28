@@ -54,7 +54,7 @@ fiberSectionRepr= quadFibers.getFiberSectionRepr()
 fiberSectionRepr.setGeomNamed("quadFibersGeom")
 quadFibers.setupFibers()
 fibers= quadFibers.getFibers()
-A= fibers.getSumaAreas
+A= fibers.getArea
 
 
 # Elements definition

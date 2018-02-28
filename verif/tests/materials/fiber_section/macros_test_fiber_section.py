@@ -10,7 +10,7 @@ __email__= "l.pereztato@gmail.com"
 def extractFiberSectionProperties(fiberSec,scc):
   fibers= fiberSec.getFibers()
   global nFibers; nFibers= fibers.getNumFibers()
-  global sumAreas; sumAreas= fibers.getSumaAreas(1)
+  global sumAreas; sumAreas= fibers.getArea(1.0)
   global Iz; Iz= fibers.getIz
   global Iy; Iy= fibers.getIy 
   global Pyz; Pyz= fibers.getPyz

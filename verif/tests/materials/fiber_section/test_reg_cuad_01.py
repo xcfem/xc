@@ -67,7 +67,7 @@ rectang.setupFibers()
 fibras= rectang.getFibers()
 
 nfibras= fibras.getNumFibers()
-sumAreas= fibras.getSumaAreas(1)
+sumAreas= fibras.getArea(1.0)
 Iz= fibras.getIz(1.0,y0)
 Iy= fibras.getIy(1.0,z0)
 zCdg= fibras.getCdgZ()

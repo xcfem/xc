@@ -185,7 +185,7 @@ fibersSccEl1= sccEl1.getFibers()
 #Creation of two separate sets of fibers: concrete and reinforcement steel 
 setsRCEl1= createFiberSets.fiberSectionSetupRCSets(scc=sccEl1,concrMatTag=concrete.matTagK,concrSetName="concrSetFbEl1",reinfMatTag=rfSteel.matTagK,reinfSetName="reinfSetFbEl1")
 
-sumAreas= fibersSccEl1.getSumaAreas(1.0)  #total sum of the fibers area
+sumAreas= fibersSccEl1.getArea(1.0)  #total sum of the fibers area
                                     #that sum is multiplied by the coefficient
                                     #passed as a parameter
 

@@ -1028,7 +1028,7 @@ class CrackControl(lscb.CrackControlBaseParameters):
       self.eps2= max(concrFibers.getStrainMin(),0.0)
       self.k1= (self.eps1+self.eps2)/8/self.eps1
       self.E0= concrFibers[0].getMaterial().getInitialTangent()
-      self.concreteArea= concrFibers.getSumaAreas(1)
+      self.concreteArea= concrFibers.getArea(1.0)
       self.depthMecanico= scc.getLeverArm()
       self.mechanicLeverArm= scc.getMechanicLeverArm() # z
       self.widthMecanico= scc.getAnchoMecanico()

@@ -863,7 +863,7 @@ double XC::FiberSectionBase::getEffectiveDepth(void) const
 
 //! @brief Returns the section area.
 double XC::FiberSectionBase::getArea(void) const
-  { return fibers.getSumaAreas(); }
+  { return fibers.getArea(); }
 
 //! @brief Moment of inertia relative to bending axis.
 double XC::FiberSectionBase::getHomogenizedI(const double &E0) const

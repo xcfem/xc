@@ -128,6 +128,7 @@ class Fiber: public TaggedObject, public MovableObject
 
     virtual UniaxialMaterial *getMaterial(void) =0;
     virtual const UniaxialMaterial *getMaterial(void) const= 0;
+    //! @brief Return the area of the fiber.
     virtual double getArea(void) const=0;
     double getStrain(void) const;
     double getForce(void) const;

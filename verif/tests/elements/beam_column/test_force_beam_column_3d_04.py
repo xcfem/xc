@@ -65,7 +65,7 @@ quadFibers= materiales.newMaterial("fiber_section_3d","quadFibers")
 fiberSectionRepr= quadFibers.getFiberSectionRepr()
 fiberSectionRepr.setGeomNamed("testQuadRegion")
 quadFibers.setupFibers()
-A= quadFibers.getFibers().getSumaAreas
+A= quadFibers.getFibers().getArea
 
 agg= materiales.newMaterial("section_aggregator","agg")
 agg.setSection("quadFibers")

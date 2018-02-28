@@ -217,8 +217,8 @@ Pos2d XC::FiberDeque::GetPMin(void) const
 BND2d XC::FiberDeque::Bnd(void) const
   { return BND2d(GetPMin(),GetPMax()); }
 
-//! @brief Returns the sum of the fibers areas.
-double XC::FiberDeque::getSumaAreas(const double &factor) const
+//! @brief Returns the sum of the fibers areas multiplied by the factor.
+double XC::FiberDeque::getArea(const double &factor) const
   {
     double retval= 0.0;
     const size_t numFibers= getNumFibers();
