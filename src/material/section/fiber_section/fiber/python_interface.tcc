@@ -145,7 +145,6 @@ class_<XC::FiberDeque, bases<EntCmd,fiber_ptrs_dq>, boost::noncopyable >("FiberD
   .def("getPMax",&XC::FiberDeque::GetPMax)
   .def("getPMin",&XC::FiberDeque::GetPMin)
 //.def("Bnd",&XC::FiberDeque::Bnd)
-  .def("getSumaAreas",&XC::FiberDeque::getArea,"getArea(factor) return the area of the fibers multiplied by the factor.")
   .def("getArea",&XC::FiberDeque::getArea,"getArea(factor) return the area of the fibers multiplied by the factor.")
   .def("getAreaHomogenizedSection",&XC::FiberDeque::getAreaHomogenizedSection)
   .def("getCdgHomogenizedSection",make_function(&XC::FiberDeque::getCdgHomogenizedSection,return_internal_reference<>()))
