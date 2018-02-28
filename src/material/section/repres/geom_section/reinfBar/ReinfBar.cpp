@@ -93,10 +93,12 @@ void XC::ReinfBar::setArea(const double &barArea)
 void XC::ReinfBar::setPosition (const Vector &position)
   { posit = position; }
 
+//! @brief Return the bar diameter.
 double XC::ReinfBar::getDiameter(void) const
   { return diameter; }
 
-double XC::ReinfBar::getArea (void) const
+//! @brief Return the bar area.
+double XC::ReinfBar::getArea(void) const
   { return area; }
 
 //! @brief Returns the moment of inertia with respect to the axis paralelo al y por el centroid.

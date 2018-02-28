@@ -44,7 +44,7 @@ class_<XC::Fiber,XC::Fiber*, bases<XC::TaggedObject>, boost::noncopyable >("Fibe
   .def("getLocZ",&XC::Fiber::getLocZ)
   .def("getPos",&XC::Fiber::getPos)
 
-  .def("getArea",&XC::Fiber::getArea,"Returns fiber area.")
+  .def("getArea",&XC::Fiber::getArea,"Return the area of the fiber.")
   .def("getDeformacion",&XC::Fiber::getStrain,"DEPRECATED (change to getStrain); returns fiber strain.") //Change to getDeformation 
   .def("getStrain",&XC::Fiber::getStrain,"Returns fiber strain.")
   .def("getForce",&XC::Fiber::getForce,"Returns fiber internal force.")
@@ -145,8 +145,8 @@ class_<XC::FiberDeque, bases<EntCmd,fiber_ptrs_dq>, boost::noncopyable >("FiberD
   .def("getPMax",&XC::FiberDeque::GetPMax)
   .def("getPMin",&XC::FiberDeque::GetPMin)
 //.def("Bnd",&XC::FiberDeque::Bnd)
-  .def("getSumaAreas",&XC::FiberDeque::getSumaAreas)
-  .def("getArea",&XC::FiberDeque::getSumaAreas)
+  .def("getSumaAreas",&XC::FiberDeque::getSumaAreas,"Return the area of the fibers.")
+  .def("getArea",&XC::FiberDeque::getSumaAreas,"Return the area of the fibers.")
   .def("getAreaHomogenizedSection",&XC::FiberDeque::getAreaHomogenizedSection)
   .def("getCdgHomogenizedSection",make_function(&XC::FiberDeque::getCdgHomogenizedSection,return_internal_reference<>()))
   .def("getIz",&XC::FiberDeque::getIz)

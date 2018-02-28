@@ -105,6 +105,7 @@ class ReinfLayer: public DiscretBase
     double getCover(void) const;
     Vector getCdg(void) const;
 
+    //! @brief Return the area of the bars.
     inline double getArea(void) const
       { return area*nReinfBars; }
     VectorReinfBar &getReinfBars(void);  

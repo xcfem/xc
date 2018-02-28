@@ -74,7 +74,7 @@ class QuadCell: public Cell
     explicit QuadCell(const Matrix &vertexCoords);
     Cell *getCopy(void) const;
    
-    // reinforcing bar inquiring functions    
+    //inquiring functions    
     double getArea(void) const;
 
     void Print(std::ostream &s, int flag =0) const;   

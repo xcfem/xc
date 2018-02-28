@@ -69,6 +69,7 @@ class UniaxialFiber: public Fiber
       { return theMaterial; }
     inline const UniaxialMaterial *getMaterial(void) const
       { return theMaterial; }
+    //! @brief Return the fiber area.
     inline double getArea(void) const
       { return area; }
   };

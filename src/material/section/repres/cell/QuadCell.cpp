@@ -67,6 +67,7 @@ XC::QuadCell::QuadCell(const XC::Matrix &vertexCoords)
 XC::Cell *XC::QuadCell::getCopy(void) const
   { return new QuadCell(*this); }
 
+//! @brief Return the area of the cell.
 double XC::QuadCell::getArea(void) const
   {
     const double x0= vertCoord(0,0);

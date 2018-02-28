@@ -21,7 +21,9 @@
 //----------------------------------------------------------------------------
 //python_interface.tcc
 
-class_<XC::Cell, boost::noncopyable >("Cell", no_init);
+class_<XC::Cell, boost::noncopyable >("Cell", no_init)
+  .def("getArea",&XC::Cell::getArea,"Return the area of the cell.")
+;
 
 class_<XC::QuadCell, bases<XC::Cell>, boost::noncopyable >("QuadCell", no_init);
 

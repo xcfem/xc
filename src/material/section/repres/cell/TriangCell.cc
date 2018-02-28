@@ -41,7 +41,7 @@ XC::TriangCell::TriangCell(const XC::Matrix &vertexCoords)
 XC::Cell *XC::TriangCell::getCopy(void) const
   { return new TriangCell(*this); }
 
-//! @brief Returns the área de la celda.
+//! @brief Returns the area of the cell.
 double XC::TriangCell::getArea(void) const
   {
     const double x0= vertCoord(0,0);
