@@ -1065,7 +1065,7 @@ XC::BJtensor XC::TwentySevenNodeBrick::getStiffnessTensor(void) const
     //    Constitutive = (matpoint[where].p_matmodel)->getTangentTensor();
     //}
     //else {
-                 //   g3ErrorHandler->fatal("XC::TwentySevenNodeBrick::incremental_Update (tag: %d), could not getTangentTensor", this->getTag());
+                 //   std::cerr << "XC::TwentySevenNodeBrick::incremental_Update (tag: %d), could not getTangentTensor", this->getTag();
     //   exit(1);
     //}
 
@@ -1911,7 +1911,7 @@ XC::BJtensor XC::TwentySevenNodeBrick::nodal_forces(void) const
                //    stress_at_GP = (matpoint[where].getNDMat())->getStressTensor();
     //}
     //else {
-                 //   g3ErrorHandler->fatal("XC::TwentySevenNodeBrick::nodal_forces (tag: %d), could not getStress", this->getTag());
+                 //   std::cerr << "XC::TwentySevenNodeBrick::nodal_forces (tag: %d), could not getStress", this->getTag();
     //   exit(1);
     //}
 
@@ -2235,7 +2235,7 @@ XC::BJtensor XC::TwentySevenNodeBrick::linearized_nodal_forces(void) const
     //    Constitutive = (matpoint[where].p_matmodel)->getTangentTensor();
     //}
     //else {
-                 //   g3ErrorHandler->fatal("XC::TwentySevenNodeBrick::incremental_Update (tag: %d), could not getTangentTensor", this->getTag());
+                 //   std::cerr << "XC::TwentySevenNodeBrick::incremental_Update (tag: %d), could not getTangentTensor", this->getTag();
     //   exit(1);
     //}
 
@@ -3184,8 +3184,7 @@ int XC::TwentySevenNodeBrick::addLoad(ElementalLoad *theLoad, double loadFactor)
                 << std::endl;
     else
       {
-        //g3ErrorHandler->warning("XC::TwentySevenNodeBrick::addLoad - load type unknown for ele with tag: %d\n",
-        //                        this->getTag());
+        //std::clog << "XC::TwentySevenNodeBrick::addLoad - load type unknown for ele with tag: %d\n" << this->getTag() << std::endl;
 
         BrickSelfWeight *brkLoad= dynamic_cast<BrickSelfWeight *>(theLoad);
         if(brkLoad)

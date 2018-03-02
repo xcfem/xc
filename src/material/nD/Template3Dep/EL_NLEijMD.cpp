@@ -434,7 +434,7 @@ int XC::EvolutionLaw_NL_EijMD::updateEeDm(EPState *EPS, double st_vol, double dL
        XC::stresstensor F = EPS->getTensorVar( 3 );   // getting  F_ij from XC::EPState
        double D = getD();
        //if (D != EPS->getScalarVar(2)) {
-       //  g3ErrorHandler->warning("XC::EvolutionLaw_L_EijMD::updateEeDm  D values contradict:%f %f ", D, EPS->getScalarVar(2));
+       //  std::clog << "XC::EvolutionLaw_L_EijMD::updateEeDm  D values contradict:%f %f ", D, EPS->getScalarVar(2);
        //	 err += 1;
        //  //exit(-1);
        //}

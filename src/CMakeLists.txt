@@ -151,7 +151,7 @@ IF(ORACLE_FOUND)
 SET(database ${database} utility/database/OracleDatastore)
 ENDIF(ORACLE_FOUND)
 
-SET(handler utility/handler/ConsoleErrorHandler utility/handler/DataOutputDatabaseHandler utility/handler/DataOutputFileHandler utility/handler/DataOutputHandler utility/handler/DataOutputStreamHandler utility/handler/ErrorHandler utility/handler/FileStream utility/handler/OPS_Stream utility/handler/StandardStream)
+SET(handler utility/handler/DataOutputDatabaseHandler utility/handler/DataOutputFileHandler utility/handler/DataOutputHandler utility/handler/DataOutputStreamHandler utility/handler/FileStream utility/handler/OPS_Stream utility/handler/StandardStream)
 
 SET(package utility/package/packages)
 

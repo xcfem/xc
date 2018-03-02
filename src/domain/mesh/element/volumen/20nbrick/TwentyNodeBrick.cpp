@@ -785,7 +785,7 @@ void XC::TwentyNodeBrick::incremental_Update()
   //    Constitutive = (matpoint[where].p_matmodel)->getTangentTensor();
   //}
   //else {
-                //   g3ErrorHandler->fatal("XC::TwentyNodeBrick::incremental_Update (tag: %d), could not getTangentTensor", this->getTag());
+                //   std::cerr << "XC::TwentyNodeBrick::incremental_Update (tag: %d), could not getTangentTensor", this->getTag();
   //   exit(1);
   //}
 
@@ -1578,7 +1578,7 @@ XC::BJtensor XC::TwentyNodeBrick::nodal_forces(void) const
               //    stress_at_GP = (matpoint[where].getNDMat())->getStressTensor();
   //}
   //else {
-                //   g3ErrorHandler->fatal("XC::TwentyNodeBrick::nodal_forces (tag: %d), could not getStress", this->getTag());
+                //   std::cerr << "XC::TwentyNodeBrick::nodal_forces (tag: %d), could not getStress", this->getTag();
   //   exit(1);
   //}
 
@@ -1902,7 +1902,7 @@ XC::BJtensor XC::TwentyNodeBrick::linearized_nodal_forces(void) const
   //    Constitutive = (matpoint[where].p_matmodel)->getTangentTensor();
   //}
   //else {
-                //   g3ErrorHandler->fatal("XC::TwentyNodeBrick::incremental_Update (tag: %d), could not getTangentTensor", this->getTag());
+                //   std::cerr << "XC::TwentyNodeBrick::incremental_Update (tag: %d), could not getTangentTensor", this->getTag();
   //   exit(1);
   //}
 
@@ -2802,8 +2802,7 @@ const XC::Matrix &XC::TwentyNodeBrick::getMass(void) const
 //=============================================================================
 int XC::TwentyNodeBrick::addLoad(ElementalLoad *theLoad, double loadFactor)
   {
-    //g3ErrorHandler->warning("XC::TwentyNodeBrick::addLoad - load type unknown for ele with tag: %d\n",
-    //                        this->getTag());
+    //std::clog << "XC::TwentyNodeBrick::addLoad - load type unknown for ele with tag: " << this->getTag() << std::endl;
 
     if(isDead())
       std::cerr << getClassName() 

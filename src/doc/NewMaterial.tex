@@ -953,8 +953,8 @@ FedeasMaterial::FedeasMaterial(int tag, int classTag, int nhv, int ndata)
       // Allocate history array
       hstv = new double[2*numHstv];
       if (hstv == 0)
-         g3ErrorHandler->fatal("%s -- failed to allocate history array -- type %d",
-                               "FedeasMaterial::FedeasMaterial", this->getClassTag());
+         std::cerr << getClassName() << "::" << __FUNCTION__
+                   << "; failed to allocate history array.\n";
 
       // Initialize to zero
       for (int i = 0; i < 2*numHstv; i++)
@@ -968,8 +968,8 @@ FedeasMaterial::FedeasMaterial(int tag, int classTag, int nhv, int ndata)
       // Allocate material parameter array
       data = new double[numData];
       if (data == 0)
-         g3ErrorHandler->fatal("%s -- failed to allocate data array -- type %d",
-                               "FedeasMaterial::FedeasMaterial", this->getClassTag());
+         std::cerr << getClassName() << "::" << __FUNCTION__
+                   << "; failed to allocate data array.\n";
 
       // Initialize to zero
       for (int i = 0; i < numData; i++)
@@ -1281,8 +1281,8 @@ FedeasMaterial::invokeSubroutine(int ist)
    // Add more cases as needed
 
    default:
-      g3ErrorHandler->fatal("%s -- unknown material type",
-                            "FedeasMaterial::invokeSubroutine");
+      std::cerr << getClassName() << "::" << __FUNCTION__
+                << "; unknown material type.\n";
       return -1;
    }
      

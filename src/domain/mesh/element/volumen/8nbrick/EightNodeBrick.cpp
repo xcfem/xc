@@ -559,7 +559,7 @@ void XC::EightNodeBrick::incremental_Update()
     //else if( tmp_ndm )
     //  (matpoint[where].p_matmodel)->setTrialStrainIncr( incremental_strain );
     //else {
-                 //   g3ErrorHandler->fatal("XC::EightNodeBrick::incremental_Update (tag: %d), no strain or stress state vars", this->getTag());
+    //   std::cerr << "XC::EightNodeBrick::incremental_Update (tag: %d), no strain or stress state vars" << this->getTag() << std::endl;
     //   exit(1);
     //}
 
@@ -938,7 +938,7 @@ void XC::EightNodeBrick::incremental_Update()
     //    Constitutive= (matpoint[where].p_matmodel)->getTangentTensor();
     //}
     //else {
-                 //   g3ErrorHandler->fatal("XC::EightNodeBrick::incremental_Update (tag: %d), could not getTangentTensor", this->getTag());
+                 //   std::cerr << "XC::EightNodeBrick::incremental_Update (tag: %d), could not getTangentTensor", this->getTag();
     //   exit(1);
     //}
 
@@ -1661,7 +1661,7 @@ XC::BJtensor XC::EightNodeBrick::nodal_forces(void) const
                //    stress_at_GP= (matpoint[where].getNDMat())->getStressTensor();
     //}
     //else {
-                 //   g3ErrorHandler->fatal("XC::EightNodeBrick::nodal_forces (tag: %d), could not getStress", this->getTag());
+                 //   std::cerr << "XC::EightNodeBrick::nodal_forces (tag: %d), could not getStress", this->getTag();
     //   exit(1);
     //}
 
@@ -1993,7 +1993,7 @@ XC::BJtensor XC::EightNodeBrick::linearized_nodal_forces(void) const
     //    Constitutive= (matpoint[where].p_matmodel)->getTangentTensor();
     //}
     //else {
-                 //   g3ErrorHandler->fatal("XC::EightNodeBrick::incremental_Update (tag: %d), could not getTangentTensor", this->getTag());
+                 //   std::cerr << "XC::EightNodeBrick::incremental_Update (tag: %d), could not getTangentTensor", this->getTag();
     //   exit(1);
     //}
 

@@ -2746,7 +2746,7 @@ XC::EPState XC::Template3Dep::BackwardEulerEPState( const XC::straintensor &stra
         //// Update E_Young and e according to current stress state before evaluate ElasticStiffnessTensor
         if( step_counter >= MAX_STEP_COUNT  )
         {
-           //g3ErrorHandler->warning("Template3Dep::BackwardEulerEPState   Step_counter > MAX_STEP_COUNT %d iterations", MAX_STEP_COUNT );
+           //std::clog << "Template3Dep::BackwardEulerEPState   Step_counter > MAX_STEP_COUNT %d iterations", MAX_STEP_COUNT ;
            //Guanzhou
            std::cerr << "Template3Dep::BackwardEuler(), failed to converge in " << step_counter << "steps!!!" << '\n';
            EP_PredictorEPS.setConverged( false );
@@ -3065,7 +3065,7 @@ XC::EPState XC::Template3Dep::BESubIncrementation( const XC::straintensor & stra
           std::cerr << "Template3Dep::BESubIncrementation  failed to converge at " << steps << "th(of "
      << number_of_subincrements << "step sub-BackwardEuler Algor.\n";
     //exit(1);
-          //g3ErrorHandler->fatal("Template3Dep::BESubIncrementation  failed to converge using %d step sub-BackwardEuler Algor.", number_of_subincrements );
+          //std::cerr << "Template3Dep::BESubIncrementation  failed to converge using %d step sub-BackwardEuler Algor.", number_of_subincrements ;
     //exit(1);
 
         //back_stress = BESI_EPS.getStress();

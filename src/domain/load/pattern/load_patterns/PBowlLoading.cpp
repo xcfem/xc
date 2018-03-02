@@ -481,7 +481,7 @@ XC::PBowlLoading::sendSelf(CommParameters &cp)
   // now we send each motion
   for (int j=0; j<numMotions; j++)
     if (theMotions[j]->sendSelf(commitTag, theCh) < 0) {
-      g3ErrorHandler->warning("XC::PBowlLoading::sendSelf - motion no: %d failed in sendSelf", j);
+      std::clog << "XC::PBowlLoading::sendSelf - motion no: %d failed in sendSelf", j;
       return -1;
     }
 
@@ -525,7 +525,7 @@ XC::PBowlLoading::recvSelf(const CommParameters &cp)
     numMotions = theData[1];
     theMotions = new (GroundMotion *)[numMotions];
     if (theMotions == 0) {
-      g3ErrorHandler->warning("XC::PBowlLoading::recvSelf - out of memory creating motion array of size %d\n", numMotions);
+      std::clog << "XC::PBowlLoading::recvSelf - out of memory creating motion array of size %d\n", numMotions;
       numMotions = 0;
       return -1;
     }
@@ -533,13 +533,13 @@ XC::PBowlLoading::recvSelf(const CommParameters &cp)
     for (int i=0; i<numMotions; i++) {
       theMotions[i] = theBroker.getNewGroundMotion(theMotionsData[i]);
       if (theMotions[i] == 0) {
-  g3ErrorHandler->warning("XC::PBowlLoading::recvSelf - out of memory creating motion array of size %d\n", numMotions);
+  std::clog << "XC::PBowlLoading::recvSelf - out of memory creating motion array of size %d\n", numMotions;
   numMotions = 0;
   return -1;
       }
       theMotions[i]->setDbTag(theMotionsData[i+numMotions]);
       if (theMotions[i]->recvSelf(commitTag, theCh, theBroker) < 0) {
-  g3ErrorHandler->warning("XC::PBowlLoading::recvSelf - motion no: %d failed in recvSelf", i);
+  std::clog << "XC::PBowlLoading::recvSelf - motion no: %d failed in recvSelf", i;
   numMotions = 0;
   return -1;
       }
@@ -555,7 +555,7 @@ XC::PBowlLoading::recvSelf(const CommParameters &cp)
     for (int i=0; i<numMotions; i++) {
       if (theMotions[i]->getClassTag() == theMotionsData[i]) {
   if (theMotions[i]->recvSelf(commitTag, theCh, theBroker) < 0) {
-    g3ErrorHandler->warning("XC::PBowlLoading::recvSelf - motion no: %d failed in recvSelf", i);
+    std::clog << "XC::PBowlLoading::recvSelf - motion no: %d failed in recvSelf", i;
     return -1;
   }
       } else {
@@ -563,13 +563,13 @@ XC::PBowlLoading::recvSelf(const CommParameters &cp)
   delete theMotions[i];
   theMotions[i] = theBroker.getNewGroundMotion(theMotionsData[i]);
   if (theMotions[i] == 0) {
-    g3ErrorHandler->warning("XC::PBowlLoading::recvSelf - out of memory creating motion array of size %d\n", numMotions);
+    std::clog << "XC::PBowlLoading::recvSelf - out of memory creating motion array of size %d\n", numMotions;
     numMotions = 0;
     return -1;
   }
   theMotions[i]->setDbTag(theMotionsData[i+numMotions]);
   if (theMotions[i]->recvSelf(commitTag, theCh, theBroker) < 0) {
-    g3ErrorHandler->warning("XC::PBowlLoading::recvSelf - motion no: %d failed in recvSelf", i);
+    std::clog << "XC::PBowlLoading::recvSelf - motion no: %d failed in recvSelf", i;
     numMotions = 0;
     return -1;
   }

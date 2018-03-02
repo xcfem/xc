@@ -48,9 +48,9 @@
 //! the position in the array through which all previous cells are being
 //! used for pointers is \f$0\f$; (4) the number of components added to the
 //! container is \f$0\f$; and (5) all components have been added at the
-//! position given by their tag. If not enough space is available, the
-//! warning method is invoked on the global ErrorHandler and the integer
-//! outlining the array size is set to \f$0\f$. 
+//! position given by their tag. If not enough space is available, a
+//! warning is raised and the integer outlining the array size is set
+//! to \f$0\f$. 
 
 \noindent {\bf Destructor}
 \indent {\em ~ArrayOfTaggedObjects();} 
@@ -67,14 +67,13 @@
 //! size \f$>=\f$ position of last entry straight copy, otherwise we reset and
 //! add each again using addComponent(). Finally invokes the
 //! destructor on the old array. Returns \f$0\f$ if successful. If not
-//! successful, the warning method is invoked on the global ErrorHandler
-//! and a negative value is returned. 
+//! successful, a warning is raised and a negative value is returned. 
 
 
 \indent {\em bool addComponent(TaggedObject *newComponent);}
 //! To add the object \p newComponent to the container. First checks to
 //! see that an object with a similar tag does not already exist in the
-//! container, invokes the warning method on the global ErrorHandler and
+//! container, invokes a warning is raised and
 //! returns \p false if one does. It then checks to ensure that array
 //! is large enough to hold another pointer, if not setSize() is
 //! invoked with twice the size of the current array. (If setSize()

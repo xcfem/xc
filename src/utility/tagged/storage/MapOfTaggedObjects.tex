@@ -51,8 +51,8 @@
 \indent {\em int setSize(int newSize);}
 //! Checks to see that max size for the map (which is a built in value
 //! defined for the template class) is larger than \p newSize. Returns
-\f$0\f$ if successful. If not successful, the warning method is invoked
-//! on the global ErrorHandler and \f$-1\f$ is returned.
+//! \f$0\f$ if successful. If not successful, a warning is raised
+//! and \f$-1\f$ is returned.
 
 \indent {\em bool addComponent(TaggedObject *newComponent,
 //! bool allowMultiple);}
@@ -61,9 +61,8 @@
 //! not, the pointer to \p newElement is added to the map using the
 //! insert() method. A check is then made to ensure that the object
 //! has been added. (This is done as insert() returns no error flag).
-//! Returns \p true if successful. If not successful, the warning
-//! method is invoked on the global ErrorHandler and \p false is
-//! returned. Note that the map template does not allow items with
+//! Returns \p true if successful. If not successful, a warning is raised
+//! and false is returned. Note that the map template does not allow items with
 //! duplicate keys to be added. 
  
 \indent {\em TaggedObject *removeComponent(int tag);}
@@ -92,10 +91,9 @@
 \indent {\em TaggedObjectStorage *getEmptyCopy(void)}
 //! Returns a pointer to a new MapOfTaggedObjects which was created using
 //! new(). The new container that is returned is an empty container.
-//! If not enough memory is available to create this object the warning
-//! method on the global ErrorHandler is invoked and \f$0\f$ is returned.
-//! Note that it is the responsibility of the caller to invoke the destructor on the
-//! object that is returned.
+//! If not enough memory is available to create this object a warning
+//! is raised and \f$0\f$ is returned. Note that it is the responsibility of
+//! the caller to invoke the destructor on the object that is returned.
 
 
 \indent {\em void clearAll(void);}

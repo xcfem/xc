@@ -202,9 +202,7 @@ bool XC::Domain::addNode(Node * node)
 //! In addition the container always checks to ensure that no other
 //! constraint with a similar tag exists in the domain. The
 //! domain then invokes setDomain(this) on the 
-//! constraint and domainChange() on itself. The call returns true
-//! if the constraint was added, otherwise the warning() method of
-//! the global ErrorHandler is invoked and false is returned.
+//! constraint and domainChange() on itself. 
 bool XC::Domain::addSFreedom_Constraint(SFreedom_Constraint *spConstraint)
   {
     bool result= constraints.addSFreedom_Constraint(spConstraint);

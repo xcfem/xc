@@ -29,17 +29,15 @@
 //! Constructs a Domain where the Nodes, Elements, MP\_Constraints,
 //! SFreedom\_Constraint and LoadPattern objects will be
 //! stored in the storage objects provided. A check is made to ensure
-//! these container objects are empty is made; if not empty the warning()
-//! method of the global ErrorHandler is invoked and the objects are
-//! cleared. 
+//! these container objects are empty is made; if not empty a warning()
+//! is raised and the objects are cleared. 
 
 \indent {\em Domain(TaggedObjectStorage \&theStorageType); } 
 //! Constructs a Domain where the Nodes, Elements, MP\_Constraints,
 //! SFreedom\_Constraint and LoadPattern objects will be stored in the storage
 //! objects obtained by invoking getEmptyCopy() on the {\em
 //! theStorageType} object. A check is made to ensure that memory is
-//! allocated for these objects, if not the fatal() method of the
-//! global ErrorHandler is invoked.    
+//! allocated for these objects, an error is raised.
 
 \noindent {\bf Destructor}  
 \indent {\em virtual~ \f$\tilde{}\f$Domain();}  
@@ -76,8 +74,8 @@
 //! addComponent(theMPptr)} on the container for the MP\_Constraints. The
 //! domain then invokes {\em setDomain(this)} on the 
 //! constraint and domainChange() on itself. The call returns {\em
-//! true} if the constraint was added, otherwise the warning() method of
-//! the global ErrorHandler is invoked and \p false is returned.
+//! true} if the constraint was added, otherwise a warning is
+//! raised and \p false is returned.
 
 
 {\em virtual bool addLoadPattern(LoadPattern *thePattern);}   
@@ -85,9 +83,8 @@
 //! The load is added to domain by the domain invoking {\em
 //! addComponent(theLd)} on the container for the LoadPatterns. The domain
 //! is responsible for invoking {\em setDomain(this)} on the load. The
-//! call returns \p true if the load was added, otherwise the {\em
-//! warning()} method of the global ErrorHandler is invoked and {\em
-//! false} is returned. 
+//! call returns \p true if the load was added, otherwise a warning is
+//! raised and \p false is returned.
 
 {\em virtual bool addNodalLoad(NodalLoad *theLd, int loadPatternTag);}   
 //! To add the nodal load \p theld to the LoadPattern in the domain
@@ -97,9 +94,8 @@
 //! the LoadPattern container and the load is added to LoadPattern by
 //! invoking {\em addNodalLoad(theLd)} on the LoadPattern object. The
 //! domain is responsible for invoking {\em setDomain(this)} on the
-//! load. The call returns \p true if the load was added, otherwise the
-//! warning() method on the global ErrorHandler is invoked and {\em
-//! false} is returned. 
+//! load. The call returns \p true if the load was added, a warning
+//! is raised and and {\em false} is returned. 
 
 
 {\em virtual bool addElementalLoad(ElementalLoad *theLd, int loadPatternTag);}   
@@ -110,9 +106,8 @@
 //! the LoadPattern container and the load is added to LoadPattern by
 //! invoking {\em addElementalLoad(theLd)} on the LoadPattern object. The
 //! domain is responsible for invoking {\em setDomain(this)} on the
-//! load. The call returns \p true if the load was added, otherwise the
-//! warning() method on the global ErrorHandler is invoked and {\em
-//! false} is returned. 
+//! load. The call returns \p true if the load was added, otherwise a warning
+//! is raised and and {\em false} is returned. 
 
 
 {\em virtual bool addSFreedom\_Constraint(SFreedom\_Constraint *theConstraint, int
@@ -124,9 +119,8 @@
 //! the LoadPattern container and the load is added to LoadPattern by
 //! invoking {\em addSFreedom\_Constraint(theConstraint)} on the LoadPattern object. The
 //! domain is responsible for invoking {\em setDomain(this)} on the
-//! constraint. The call returns \p true if the load was added, otherwise the
-//! warning() method on the global ErrorHandler is invoked and {\em
-//! false} is returned. 
+//! constraint. The call returns \p true if the load was added, otherwise
+//! a warning is raised and and {\em false} is returned. 
 
 
 \noindent {\bf Public Methods to Depopulate the Domain}  
