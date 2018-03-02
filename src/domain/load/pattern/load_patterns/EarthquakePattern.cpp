@@ -63,7 +63,6 @@
 #include "domain/mesh/node/NodeIter.h"
 #include "domain/mesh/element/ElementIter.h"
 #include <cstdlib>
-#include <utility/handler/ErrorHandler.h>
 
 #include "utility/actor/actor/ArrayCommMetaData.h"
 

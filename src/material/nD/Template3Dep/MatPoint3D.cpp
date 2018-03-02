@@ -195,27 +195,27 @@ short int XC::MatPoint3D::GP_number_s(void) const
 short int XC::MatPoint3D::GP_number_t(void) const
   { return t_direction_point_number; }
 
-//! @brief Coordenada r.
+//! @brief r coordinate.
 double XC::MatPoint3D::r_coordinate() const
   { return r; }
 
-//! @brief Coordenada s.
+//! @brief s coordinate.
 double XC::MatPoint3D::s_coordinate() const
   { return s; }
 
-//! @brief Coordenada t.
+//! @brief t coordinate.
 double XC::MatPoint3D::t_coordinate() const
   { return t; }
 
-//! @brief Peso r.
+//! @brief r weight.
 double XC::MatPoint3D::r_weight() const
   { return rw; }
 
-//! @brief Peso s.
+//! @brief s weight.
 double XC::MatPoint3D::s_weight() const
   { return sw; }
 
-//! @brief Peso t.
+//! @brief t weight.
 double XC::MatPoint3D::t_weight() const
   { return tw; }
 
@@ -226,7 +226,7 @@ double XC::MatPoint3D::t_weight() const
 //        gpEPS = eps->newObj();
 //    else
 //        gpEPS = 0;
-//        //g3ErrorHandler->warning("MatPoint3D::setEPS  No initial values for XC::EPState, using default");
+//        //std::clog << "MatPoint3D::setEPS  No initial values for XC::EPState, using default";
 //
 //}
 

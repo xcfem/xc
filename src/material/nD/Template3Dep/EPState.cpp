@@ -154,7 +154,7 @@ XC::EPState::EPState(
       NTensorVar = NTensorp;
       //TensorVar = new stresstensor[ NTensorVar ];
       //if ( !TensorVar ) {
-      //   g3ErrorHandler->fatal("XC::EPState::EPState insufficient memory for XC::Tensor hardening vars");
+      //   std::cerr << "XC::EPState::EPState insufficient memory for XC::Tensor hardening vars";
       //   ::exit(1);
       //}
 
@@ -287,7 +287,7 @@ psi = psip;  //ZC
       NTensorVar = NTensorp;
       //TensorVar = new stresstensor[ NTensorVar ];
       //if ( !TensorVar ) {
-      //   g3ErrorHandler->fatal("XC::EPState::EPState insufficient memory for XC::Tensor hardening vars");
+      //   std::cerr << "XC::EPState::EPState insufficient memory for XC::Tensor hardening vars";
       //   ::exit(1);
       //}
 
@@ -382,7 +382,7 @@ XC::EPState::EPState(
       NScalarVar  =  NScalarp;
       //ScalarVar = new double[ NScalarVar ];
       //if ( !ScalarVar ) {
-      //   g3ErrorHandler->fatal("XC::EPState::EPState insufficient memory for Scalar hardening vars");
+      //   std::cerr << "XC::EPState::EPState insufficient memory for Scalar hardening vars";
       //   ::exit(1);
       //}
       if ( (!Scalarp) && (NScalarVar != 0) ) {
@@ -401,7 +401,7 @@ XC::EPState::EPState(
       NTensorVar = NTensorp;
       //TensorVar = new stresstensor[ NTensorVar ];
       //if ( !TensorVar ) {
-      //   g3ErrorHandler->fatal("XC::EPState::EPState insufficient memory for XC::Tensor hardening vars");
+      //   std::cerr << "XC::EPState::EPState insufficient memory for XC::Tensor hardening vars";
       //   ::exit(1);
       //}
       if ( (!Scalarp) && ( NTensorVar != 0 )) {
@@ -547,7 +547,7 @@ XC::EPState::EPState( const XC::EPState &rhs ) {
       NScalarVar  =  rhs.getNScalarVar();
       //ScalarVar = new double[ NScalarVar ];
       //if ( !ScalarVar ) {
-      //   g3ErrorHandler->fatal("XC::EPState::EPState insufficient memory for Scalar hardening vars");
+      //   std::cerr << "XC::EPState::EPState insufficient memory for Scalar hardening vars";
       //   ::exit(1);
       //}
       int i;
@@ -559,7 +559,7 @@ XC::EPState::EPState( const XC::EPState &rhs ) {
       NTensorVar = rhs.getNTensorVar();
       //TensorVar = new stresstensor[ NTensorVar ];
       //if ( !TensorVar ) {
-      //   g3ErrorHandler->fatal("XC::EPState::EPState insufficient memory for XC::Tensor hardening vars");
+      //   std::cerr << "XC::EPState::EPState insufficient memory for XC::Tensor hardening vars";
       //   ::exit(1);
       //}
       for (i = 0; i < NTensorVar; i++) {
@@ -647,7 +647,7 @@ const XC::EPState &XC::EPState::operator=(const XC::EPState &rhs ) {
          NScalarVar  =  rhs.getNScalarVar();
          //ScalarVar = new double[ NScalarVar ];
          //if ( !ScalarVar ) {
-         //   g3ErrorHandler->fatal("XC::EPState::operator= insufficient memory for Scalar hardening vars");
+         //   std::cerr << "XC::EPState::operator= insufficient memory for Scalar hardening vars";
          //   ::exit(1);
          //}
          int i;
@@ -660,7 +660,7 @@ const XC::EPState &XC::EPState::operator=(const XC::EPState &rhs ) {
          NTensorVar = rhs.getNTensorVar();
          //TensorVar = new stresstensor[ NTensorVar ];
          //if ( !TensorVar ) {
-         //   g3ErrorHandler->fatal("XC::EPState::operator= insufficient memory for XC::Tensor hardening vars");
+         //   std::cerr << "XC::EPState::operator= insufficient memory for XC::Tensor hardening vars";
          //   ::exit(1);
          //}
          for (i = 0; i < NTensorVar; i++) {

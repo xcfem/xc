@@ -56,7 +56,6 @@
 #include <domain/mesh/node/Node.h>
 #include <material/nD/NDMaterial.h>
 #include <domain/domain/Domain.h>
-#include <utility/handler/ErrorHandler.h>
 #include "utility/actor/actor/MatrixCommMetaData.h"
 #include "domain/mesh/element/utils/gauss_models/GaussModel.h"
 

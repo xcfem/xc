@@ -411,7 +411,7 @@ int XC::EvolutionLaw_NL_EijMD::updateEeDm(EPState *EPS, double st_vol, double dL
        // if (p < 0.0)
        // {
        //    //p = 0.1;
-       // 	  g3ErrorHandler->warning("XC::EvolutionLaw_NL_EijMD::updateEeDm   p < 0, Program exits.");
+       // 	  std::clog << "XC::EvolutionLaw_NL_EijMD::updateEeDm   p < 0, Program exits.";
        //    exit(-1);
        // }
        

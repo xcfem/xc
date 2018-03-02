@@ -62,7 +62,6 @@
 // values occured.
 
 
-#include <utility/handler/ErrorHandler.h>
 #include <material/damage/DamageModel.h>
 
 namespace XC {

@@ -112,7 +112,7 @@ double XC::MDYieldSurface::f(const XC::EPState *EPS) const
   //  n = r *(1.0 / norm );
   //}
   //else {
-  //  g3ErrorHandler->fatal("XC::MDYieldSurface::f  |n_ij| = 0, divide by zero! Program exits.");
+  //  std::cerr << "XC::MDYieldSurface::f  |n_ij| = 0, divide by zero! Program exits.";
   //  exit(-1);
   //}
   //EPS->setTensorVar( 2, n); //update n_ij//
@@ -163,7 +163,7 @@ XC::BJtensor XC::MDYieldSurface::dFods(const XC::EPState *EPS) const {
   //    n = r_bar *(1.0 / norm );
   //  }
   //  else {
-  //    g3ErrorHandler->fatal("XC::MDYieldSurface::dFods  |n_ij| = 0, divide by zero! Program exits.");
+  //    std::cerr << "XC::MDYieldSurface::dFods  |n_ij| = 0, divide by zero! Program exits.";
   //    exit(-1);
   //  }
   //EPS->setTensorVar( 3, n); //update n_ij//

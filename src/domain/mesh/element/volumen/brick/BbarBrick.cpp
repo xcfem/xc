@@ -59,7 +59,6 @@
 #include <domain/mesh/element/Element.h>
 #include <domain/mesh/node/Node.h>
 #include <domain/domain/Domain.h>
-#include <utility/handler/ErrorHandler.h>
 #include <domain/mesh/element/volumen/brick/BbarBrick.h>
 #include <domain/mesh/element/volumen/brick/shp3d.h>
 #include <utility/recorder/response/ElementResponse.h>

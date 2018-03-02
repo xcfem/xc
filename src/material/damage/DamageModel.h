@@ -66,7 +66,6 @@
 #include <utility/matrix/Vector.h>
 
 
-#include <utility/handler/ErrorHandler.h>
 namespace XC {
 class Response;
 class DamageResponse;

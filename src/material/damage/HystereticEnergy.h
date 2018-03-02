@@ -60,7 +60,6 @@
 // Cimbined damage model. It is a subclass of DamageModel
 //
 
-#include <utility/handler/ErrorHandler.h>
 #include <material/damage/DamageModel.h>
 
 namespace XC {

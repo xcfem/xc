@@ -457,7 +457,7 @@ XC::PBowlLoading::sendSelf(CommParameters &cp)
   theData(1) = numMotions;
 
   if (theCh.sendID(myDbTag, commitTag, theData) < 0) {
-    g3ErrorHandler->warning("XC::PBowlLoading::sendSelf - ch failed to send the initial XC::ID");
+    std::clog << "XC::PBowlLoading::sendSelf - ch failed to send the initial XC::ID";
     return -1;
   }
 
@@ -474,7 +474,7 @@ XC::PBowlLoading::sendSelf(CommParameters &cp)
   }
 
   if (theCh.sendID(myDbTag, commitTag, theMotionsData) < 0) {
-    g3ErrorHandler->warning("XC::PBowlLoading::sendSelf - ch failed to send the motions XC::ID");
+    std::clog << "XC::PBowlLoading::sendSelf - ch failed to send the motions XC::ID";
     return -1;
   }
 
@@ -496,7 +496,7 @@ XC::PBowlLoading::recvSelf(const CommParameters &cp)
   int myDbTag = this->getDbTag();
   ID theData(2);
   if (theCh.recvID(myDbTag, commitTag, theData) < 0) {
-    g3ErrorHandler->warning("XC::PBowlLoading::recvSelf - ch failed to recv the initial XC::ID");
+    std::clog << "XC::PBowlLoading::recvSelf - ch failed to recv the initial XC::ID";
     return -1;
   }
 
@@ -506,7 +506,7 @@ XC::PBowlLoading::recvSelf(const CommParameters &cp)
   // now get info about each ch
   ID theMotionsData (2*theData(1));
   if (theCh.recvID(myDbTag, commitTag, theMotionsData) < 0) {
-    g3ErrorHandler->warning("XC::PBowlLoading::recvSelf - ch failed to recv the motions XC::ID");
+    std::clog << "XC::PBowlLoading::recvSelf - ch failed to recv the motions XC::ID";
     return -1;
   }
 

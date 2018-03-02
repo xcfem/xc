@@ -62,7 +62,6 @@
 #include <domain/constraints/SFreedom_Constraint.h>
 #include <domain/constraints/SFreedom_ConstraintIter.h>
 #include <cstdlib>
-#include <utility/handler/ErrorHandler.h>
 
 XC::MultiSupportPattern::MultiSupportPattern(int tag, int _classTag)
   :EQBasePattern(tag, _classTag), theMotionTags(0,16), dbMotions(0)

@@ -64,7 +64,6 @@
 // functions which must be implemented in it's derived classes. 
 
 
-#include <utility/handler/ErrorHandler.h>
 #include <material/damage/DamageModel.h>
 
 namespace XC {
