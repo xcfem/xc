@@ -56,11 +56,6 @@
 //! of the data.
 
 \indent {\em  ID(int idSize);}
-//! To construct a ID of size \p idSize. The constructor creates an
-//! integer array of size \p idSize to store the data and zeroes this
-//! array by invoking Zero() on itself. If not enough memory is
-//! available an error message is printed and an ID of size \f$0\f$ is
-//! returned.  
 
 \indent {\em  ID(int idSize, int arraySize);}
 //! To construct a ID of size \p idSize. The constructor creates an
@@ -70,36 +65,11 @@
 //! available an error message is printed and the program is
 //! terminated. This constructor is provided to allow an ID to grow.  
 
-\indent {\em  \indent  ID(const ID \&M); }
-//! To construct an ID using another ID \p M. The new ID will be
-//! identical to the ID \f$M\f$, same order and same size of array to hold the
-//! integer values. If not enough memory is available a
-//! warning message is printed and both the order and arraySize of the ID
-//! are set to \f$0\f$.
 
-\noindent {\bf Destructor}
-\indent {\em virtual~ \f$\tilde{}\f$ID();} 
-//! Will invoke delete on the integer array used to store the components.
 
 \noindent {\bf Public Member Functions }
 \indent {\em virtual int Size() const;}
 //! Returns the order of the ID.
-
-\indent {\em virtual void Zero();}
-//! Zeros out the ID, i.e. sets all the components of the ID to
-\f$0\f$. This is accomplished by zeroing the first this.Size()
-//! components of the array.
-
-\indent {\em virtual int getLocation(int x) const;}
-//! Will return the location the first location in the ID of the integer
-\p x. If \p x is not in the ID a \f$-1\f$ is returned.
-
-\indent {\em virtual int removeValue(int x);}
-//! Will return the last location in the ID of the integer
-\p x. If \p x is not in the ID a \f$-1\f$ is returned. All the integer
-//! components \p x are removed from the ID and the length of the ID is
-//! reduced by the number of the removed components. The \p arraySize
-//! remains unchanged. 
 
 
 \noindent {\bf Overloaded Operator Functions}
@@ -124,28 +94,5 @@
 //! into the new array is made, with any new components set to \f$0\f$. If not
 //! enough space is available or \p x is less than \f$0\f$, a warning
 //! message is printed and the contents of ID\_ERROR returned.
-
-
-\indent {\em virtual ID \&operator=(const ID \&M);}
-//! Sets the current ID to be equal to the ID given by \p M. If the
-//! IDs are of different sizes, the current data is deallocated and
-//! more space allocated before the contents are copied. If not enough
-//! memory is available, the order and \p arraySize of the current ID
-//! is set to \f$0\f$ and the ID is returned without copying the components.
-
-
-{\em friend OPS_Stream \&operator\f$<<\f$(OPS_Stream \&s, const ID \&id);}
-//! A function to print out the contents of the ID \p id to the output stream
-\p s. Prints out the components into the stream and then sends a
-//! newline character.
-
-{\em friend istream \&operator\f$>>\f$(istream \&s, const ID \&id);}
-//! A function to read the contents of the ID \p id from the input
-//! stream \p s. Sets the components of \p id equal to the next {\em
-//! id.Size()} entries in the stream. 
-
-
-
-
 
 

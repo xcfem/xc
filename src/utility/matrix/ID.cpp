@@ -64,12 +64,18 @@
 
 int XC::ID::ID_NOT_VALID_ENTRY= 0;
 
-//! @brief Standard constructor, sets size = 0;
+//! @brief Default constructor, sets size = 0;
 XC::ID::ID(void)
   :EntCmd(), std::vector<int>(0) {}
 
 
 //! @brief Constructor used to allocate a ID of size size.
+//!
+//! To construct a ID of size \p idSize. The constructor creates an
+//! integer array of size \p idSize to store the data and zeroes this
+//! array by invoking Zero() on itself. If not enough memory is
+//! available an error message is printed and an ID of size \f$0\f$ is
+//! returned.  
 XC::ID::ID(const int &size)
   :EntCmd(), std::vector<int>(size,0) {}
 
@@ -98,11 +104,15 @@ XC::ID::ID(const std::set<int> &setInt)
       (*this)[count]= *i;
   }
 
-
+//! @brief Zeros out the ID, i.e. sets all the components of the ID to
+//! \f$0\f$. 
 void XC::ID::Zero(void)
   { std::fill(begin(),end(),0); }
 
 //! @brief Returns the position of 'value' in the vector.
+//!
+//! Will return the location the first location in the ID of the integer
+//! \p x. If \p x is not in the ID a \f$-1\f$ is returned.
 int XC::ID::getLocation(const int &value) const
   {
     const size_t sz= size();
@@ -140,6 +150,13 @@ int XC::ID::getLocationOrdered(const int &value) const
   }
 
 
+//! @brief Remove value from the array.
+//!
+//! Will return the last location in the ID of the integer
+//! \p x. If \p x is not in the ID a \f$-1\f$ is returned. All the integer
+//! components \p x are removed from the ID and the length of the ID is
+//! reduced by the number of the removed components. The \p arraySize
+//! remains unchanged. 
 int XC::ID::removeValue(const int &value)
   {
     int place = -1;
@@ -189,7 +206,8 @@ XC::ID XC::getIDFromIntPtr(const int *d,const int &size)
     ID retval(std::vector<int>(d,d+size));
     if(!d)
       {
-	std::cerr << "getIDFromIntPtr constructor can't copy from null pointer."
+	std::cerr << __FUNCTION__
+		  << "; can't copy from null pointer."
 	          << std::endl;
       }
     return retval;
