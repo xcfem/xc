@@ -160,10 +160,14 @@ int XC::ID::getLocationOrdered(const int &value) const
 int XC::ID::removeValue(const int &value)
   {
     int place = -1;
+    
     auto it = std::find(begin(), end(), value);
     if(it != end())
-      place= std::distance(begin(), it);
-      erase(it);
+      {
+        place= std::distance(begin(), it);
+        // really remove all elements equal to value
+        erase(std::remove(begin(), end(), value), end());
+      }
     return place;
   }    
 
