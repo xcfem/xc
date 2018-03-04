@@ -73,6 +73,7 @@
 
 double XC::Vector::VECTOR_NOT_VALID_ENTRY =0.0;
 
+//! @brief Free memory.
 void XC::Vector::free_mem(void)
   {
     if(fromFree == 0)
@@ -83,6 +84,7 @@ void XC::Vector::free_mem(void)
     fromFree= 0;
   }
 
+//! @brief Alloc memory.
 void XC::Vector::alloc(const size_t &size)
   {
     free_mem();
@@ -108,21 +110,26 @@ void XC::Vector::alloc(const size_t &size)
       }
   }
 
-// Vector():
-//! @brief Standard constructor, sets size= 0;
+//! @brief Default  constructor, sets size= 0;
 XC::Vector::Vector(void)
   : sz(0), theData(nullptr), fromFree(0) {}
 
-// Vector(int size):
-//! @brief Constructor used to allocate a vector of size size.
-XC::Vector::Vector(const int &szt, const double &valor)
+//! @brief Constructor used to allocate a vector of size szt.
+//!
+//! To construct a Vector of order \p size. The constructor creates an
+//! array to store the data and zeroes this array. If not enough memory is
+//! available a warning message is printed and a Vector of order \f$0\f$ is 
+//! returned. The Zero()  method is invoked on the new Vector before
+//! it is returned. 
+XC::Vector::Vector(const int &szt, const double &value)
   : sz(0), theData(nullptr), fromFree(0)
   {
     alloc(szt);
     for(register int i=0; i<sz; i++)
-      theData[i]= valor;
+      theData[i]= value;
   }
 
+//! @brief Copy from a std::vector.
 XC::Vector::Vector(const std::vector<double> &v)
   : sz(0), theData(nullptr), fromFree(0)
   {
@@ -132,7 +139,7 @@ XC::Vector::Vector(const std::vector<double> &v)
       theData[i]= v[i];
   }
 
-//! @brief Constructor (interfaz Python).
+//! @brief Constructor (Python interface).
 XC::Vector::Vector(const boost::python::list &l)
   :sz(0), theData(nullptr), fromFree(0)
   {
@@ -142,6 +149,7 @@ XC::Vector::Vector(const boost::python::list &l)
       theData[i]= boost::python::extract<double>(l[i]);
   }
 
+//! @brief Copy from Vector2d.
 XC::Vector::Vector(const Vector2d &v)
   : sz(0), theData(nullptr), fromFree(0)
   {
@@ -151,6 +159,7 @@ XC::Vector::Vector(const Vector2d &v)
     theData[1]= v.y();
   }
 
+//! @brief Copy from Vector2d.
 XC::Vector::Vector(const Vector3d &v)
   : sz(0), theData(nullptr), fromFree(0)
   {
@@ -161,6 +170,7 @@ XC::Vector::Vector(const Vector3d &v)
     theData[2]= v.z();
   }  
 
+//! @brief Create from x,y,z coordinates.
 XC::Vector::Vector(const double &x,const double &y,const double &z)
   : sz(0), theData(nullptr), fromFree(0)
   {
@@ -172,6 +182,8 @@ XC::Vector::Vector(const double &x,const double &y,const double &z)
   }
 
 //! @brief Constructor.
+//! To construct a Vector of order \p size whose data will be stored in the
+//! array pointed to by \p data. See setData method.
 XC::Vector::Vector(double *data, int size)
   : sz(0),theData(nullptr),fromFree(0)
   {
@@ -180,8 +192,7 @@ XC::Vector::Vector(double *data, int size)
  
 
 
-// Vector(const XC::Vector&):
-//! @brief Constructor to init a vector from another.
+//! @brief Copy constructor.
 XC::Vector::Vector(const Vector &other)
   : sz(0),theData(nullptr),fromFree(0)
   {
@@ -191,10 +202,16 @@ XC::Vector::Vector(const Vector &other)
       theData[i]= other.theData[i];
   }
 
-//! @brief destructor, deletes the [] data
+//! @brief Destructor, free memory.
 XC::Vector::~Vector(void)
   { free_mem(); }
 
+//! Help to construct a Vector of order \p size whose data will be stored in the
+//! array pointed to by \p data. The array pointed to by data is not set to
+//! zero by the constructor. Note that delete will not be called on this array
+//! in the destructor. It is up to the user to ensure that the array pointed to
+//! by \p data is at least as large as \p size, if this is not the case
+//! erroneous results or a segmentation fault may occur.
 int XC::Vector::setData(double *newData, int size)
   {
     free_mem();
@@ -244,11 +261,15 @@ int XC::Vector::resize(int newSize)
   }
 
 
-// Assemble(Vector &x, ID &y, double fact ):
-//! @brief Method to assemble into object the XC::Vector V using the XC::ID l.
-//! If XC::ID(x) does not exist program writes error message if
-//! VECTOR_CHECK defined, otherwise ignores it and goes on.
-int XC::Vector::Assemble(const XC::Vector &V, const XC::ID &l, double fact )
+//! @brief Method to assemble into object the Vector V using the ID l.
+//!
+//! Assembles into the current Vector the Vector \p V. The contents of the
+//! current Vector at location ({\em loc(i)}) is set equal to the current
+//! value plus \p fact times the value of the Vector \p V at
+//! location (\p i). returns \f$0\f$ if successful. A warning message is
+//! printed for each invalid location in the current Vector or \p V and a
+//! \f$-1\f$ is returned. 
+int XC::Vector::Assemble(const XC::Vector &V, const ID &l, double fact )
   {
     int result= 0;
     int pos;
@@ -332,6 +353,14 @@ XC::Vector XC::normalize(const Vector &v)
 XC::Vector XC::normalize_inf(const Vector &v)
   { return v.NormalizedInf(); }
 
+//! @brief To add a factor \p fact times the Vector \p other to the current
+//! Vector.
+//! 
+//! To add a factor \p fact times the Vector \p other to the current
+//! Vector. Returns \f$0\f$ if successful. An error message is printed and
+//! \f$-1\f$ is returned if Vectors are not of the same size. Checks are made
+//! to see if the number of operations can be reduced if \p fact is \f$0\f$
+//! or \f$1\f$. 
 int XC::Vector::addVector(double thisFact, const Vector &other, double otherFact )
   {
     // check if quick return
@@ -420,6 +449,15 @@ int XC::Vector::addVector(double thisFact, const Vector &other, double otherFact
   }
 	    
 	
+//! @brief To add a factor \p fact times the Vector formed by the product of
+//! the matrix \p m and the Vector \p v to the current Vector.
+//!
+//! To add a factor \p fact times the Vector formed by the product of
+//! the matrix \p m and the Vector \p v to the current Vector. No
+//! temporary Vector is created. Returns \f$0\f$ if successful. Prints a
+//! warning message and returns \f$-1\f$ if sizes are incompatible. Checks are
+//! made to see if the number of operations can be reduced if \p fact
+//! is \f$0\f$ or \f$1\f$. 
 int XC::Vector::addMatrixVector(double thisFact, const Matrix &m, const XC::Vector &v, double otherFact )
   {
     // see if quick return
@@ -709,7 +747,10 @@ int XC::Vector::addMatrixTransposeVector(double thisFact, const XC::Matrix &m, c
 	
 	
 
-//! @brief Returns the cuadrado del módulo del vector.
+//! @brief Returns the square of the vector modulus.
+//!
+//! Return the result of invoking the \f$\hat{ }\f$ operator on the current
+//! Vector with the current Vector as the argument.
 double XC::Vector::Norm2(void) const
   {
     double value= 0.0;
@@ -721,11 +762,15 @@ double XC::Vector::Norm2(void) const
     return value;
   }
 
-//! @brief Method to return the norm of  vector.
+//! @brief Return the norm of vector.
+//!
+//! Return the 2 norm of the Vector. Returns the sqrt() of the
+//! result of Norm2. 
 double XC::Vector::Norm(void) const
   { return sqrt(Norm2()); }
 
-//! @brief Returns the máximo de los valores absolutos de las componentes del vector (norma_infinito).
+//! @brief Returns the maximum of the absolute values of
+//! the components (infinite norm).
 double XC::Vector::NormInf(void) const
   {
     double retval= 0.0;
@@ -789,6 +834,10 @@ bool XC::Vector::CheckIndice0(const size_t &i) const
       return true;
   }
 
+//! If debug flag is on, safely set/get the data at location \p x in the Vector.
+//! Checks to ensure \p x is a valid location, i.e. \f$0 <= x \f$ order. If \p x
+//! is not a valid location a warning message is printed and
+//! VECTOR\_NOT\_VALID\_ENTRY (a static class variable) is returned. 
 double &XC::Vector::operator[](int x) 
   {
 #ifdef _G3DEBUG
@@ -799,6 +848,10 @@ double &XC::Vector::operator[](int x)
     return theData[x];
   }
 
+//! If debug flag is on, safely get the data at location \p x in the Vector.
+//! Checks to ensure \p x is a valid location, i.e. \f$0 <= x \f$ order. If \p x
+//! is not a valid location a warning message is printed and
+//! VECTOR\_NOT\_VALID\_ENTRY (a static class variable) is returned. 
 const double &XC::Vector::operator[](int x) const
   {
 #ifdef _G3DEBUG
@@ -810,19 +863,27 @@ const double &XC::Vector::operator[](int x) const
   }
 
 
-// operator()(const XC::ID &rows) const
 //! @brief Method to return a vector whose components are the components of the
-//! current vector located in positions given by the XC::ID rows.
-XC::Vector XC::Vector::operator()(const XC::ID &rows) const
+//! current vector located in positions given by the ID rows.
+//!
+//! Returns a Vector of order loc.Size(). The contents of the new
+//! Vector are given by the contents of the current Vector at the
+//! locations given by the \p loc. For example the contents of the new
+//! Vector at location \f$i\f$ are equal to the contents of the current Vector
+//! at location {\em loc(i)}. Creates a new Vector, copies the data from
+//! the current Vector and returns the new Vector. For each invalid
+//! location specified in \p loc for the current Vector, a warning
+//! message is printed.
+XC::Vector XC::Vector::operator()(const ID &rows) const
   {
     // create a new_ Vector to be returned
     Vector result(rows.Size());
 
-    // check if obtained VEctor of correct size
+    // check if obtained Vector of correct size
     if(result.Size() != rows.Size())
       {
         std::cerr << getClassName() << "::" << __FUNCTION__
-		  << "; new_ XC::Vector could not be constructed\n";
+		  << "; new_ vector could not be constructed\n";
         return result;
       }
 
@@ -866,7 +927,8 @@ XC::Vector &XC::Vector::operator=(const Vector &V)
 
 
 // Vector &operator+=(double fact):
-//! @brief The += operator adds fact to each element of the vector, data[i]= data[i]+fact.
+//! @brief The += operator adds fact to each element of the vector,
+//! data[i]= data[i]+fact.
 XC::Vector &XC::Vector::operator+=(double fact)
   {
   if(fact != 0.0)
@@ -878,7 +940,8 @@ XC::Vector &XC::Vector::operator+=(double fact)
 
 
 // Vector &operator-=(double fact)
-//! @brief The -= operator subtracts fact from each element of the vector, data[i]= data[i]-fact.
+//! @brief The -= operator subtracts fact from each element of the vector,
+//! data[i]= data[i]-fact.
 XC::Vector &XC::Vector::operator-=(double fact)
 {
   if(fact != 0.0)
@@ -886,8 +949,6 @@ XC::Vector &XC::Vector::operator-=(double fact)
       theData[i] -= fact;
   return *this;    
 }
-
-
 
 //! @brief The *= operator multiplies each element by the factor.
 XC::Vector &XC::Vector::operator*=(double fact)
@@ -900,9 +961,9 @@ XC::Vector &XC::Vector::operator*=(double fact)
 
 const double VECTOR_VERY_LARGE_VALUE= 1.0e200;
 
-// Vector &operator/=(double fact):
-//! @brief The /= operator divides each element of the vector by fact, theData[i]= theData[i]/fact.
-//! Program exits if divide-by-zero would occur with warning message.
+//! @brief The /= operator divides each element of the vector by fact,
+//! theData[i]= theData[i]/fact. If divide-by-zero would occur
+//! it puts a very large value on each component.
 XC::Vector &XC::Vector::operator/=(double fact)
   {
     if(fact == 0.0)
@@ -918,12 +979,8 @@ XC::Vector &XC::Vector::operator/=(double fact)
     return *this;
   }
 
-
-
-
-// Vector operator+(double fact):
-//! @brief The + operator returns a XC::Vector of the same size as current, whose components
-//! are return(i)= theData[i]+fact;
+//! @brief The + operator returns a Vector of the same size as current, whose
+//! components are: return(i)= theData[i]+fact.
 XC::Vector  XC::Vector::operator+(double fact) const
   {
     Vector result(*this);
@@ -934,10 +991,8 @@ XC::Vector  XC::Vector::operator+(double fact) const
     return result;
   }
 
-
-// Vector operator-(double fact):
-//! @brief The + operator returns a XC::Vector of the same size as current, whose components
-//! are return(i)= theData[i]-fact;
+//! @brief The + operator returns a Vector of the same size as current, whose
+//! components are: return(i)= theData[i]-fact.
 XC::Vector  XC::Vector::operator-(double fact) const
   {
     Vector result(*this);
@@ -951,13 +1006,13 @@ XC::Vector  XC::Vector::operator-(double fact) const
 
 
 //! @brief The + operator returns a vector of the same size as current,
-//! whose components are return(i)= theData[i]*fact;
+//! whose components are: return(i)= theData[i]*fact.
 XC::Vector  XC::Vector::operator*(double fact) const
   {
     Vector result(*this);
     if(result.Size() != sz) 
       std::cerr << getClassName() << "::" << __FUNCTION__
-		<< "; ran out of memory for new_ Vector\n";
+		<< "; ran out of memory for new Vector.\n";
     result*= fact;
     return result;
   }
@@ -965,8 +1020,9 @@ XC::Vector  XC::Vector::operator*(double fact) const
 
 // Vector operator/(double fact):
 //! @brief The + operator returns a vector of the same size as current,
-//! whose components are return(i)= theData[i]/fact;
-//! Exits if divide-by-zero error.
+//! whose components are return(i)= theData[i]/fact.
+//!
+//! Calls /= operator over the new vector.
 XC::Vector XC::Vector::operator/(double fact) const
   {
     if(fact == 0.0) 
@@ -990,9 +1046,8 @@ XC::Vector XC::Vector::operator-(void) const
     return retval;
   }
   
-// Vector &operator+=(const XC::Vector &V):
-//! @brief The += operator adds V's data to data, data[i]+=V(i). A check to see if
-//! vectors are of same size is performed if VECTOR_CHECK is defined.
+//! @brief The += operator adds V's data to data, data[i]+=V(i). A check to
+//! see if vectors are of same size is performed if _G3DEBUG is defined.
 XC::Vector &XC::Vector::operator+=(const Vector &other)
   {
 #ifdef _G3DEBUG
@@ -1011,31 +1066,32 @@ XC::Vector &XC::Vector::operator+=(const Vector &other)
 
 
 
-// Vector &operator-=(const XC::Vector &V):
-//! @brief The -= operator subtracts V's data from  data, data[i]+=V(i). A check 
-//! to see if vectors are of same size is performed if VECTOR_CHECK is defined.
-XC::Vector &XC::Vector::operator-=(const XC::Vector &other)
+//! @brief The -= operator subtracts V's data from  data, data[i]-=V(i). A
+//! check to see if vectors are of same size is performed if _G3DEBUG is
+//! defined.
+XC::Vector &XC::Vector::operator-=(const Vector &other)
   {
 #ifdef _G3DEBUG
-  if(sz != other.sz) {
-    std::cerr << getClassName() << "::" << __FUNCTION__
-	      << "; WARNING vectors not of same sizes: "
-	      << sz << " != " << other.sz << std::endl;
-    return *this;
-  }
+  if(sz != other.sz)
+    {
+      std::cerr << getClassName() << "::" << __FUNCTION__
+	        << "; WARNING vectors not of same sizes: "
+	        << sz << " != " << other.sz << std::endl;
+      return *this;
+    }
 #endif
   
-  for(int i=0; i<sz; i++)
-    theData[i] -= other.theData[i];
-  return *this;    
-}
+    for(int i=0; i<sz; i++)
+      theData[i]-= other.theData[i];
+    return *this;    
+  }
 
 
 
-// Vector operator+(const XC::Vector &V):
-//! The + operator checks the two vectors are of the same size if VECTOR_CHECK is defined.
-//! Then returns a XC::Vector whose components are the vector sum of current and V's data.
-XC::Vector  XC::Vector::operator+(const XC::Vector &b) const
+//! @brief The + operator checks the two vectors are of the same size if
+//! _G3DEBUG is defined. Then returns a Vector whose components are the
+//! vector sum of current and V's data.
+XC::Vector  XC::Vector::operator+(const Vector &b) const
   {
 #ifdef _G3DEBUG
     if(sz != b.sz)
@@ -1048,7 +1104,6 @@ XC::Vector  XC::Vector::operator+(const XC::Vector &b) const
 #endif
 
     Vector result(*this);
-
     // check new_ Vector of correct size
     if(result.Size() != sz)
       {
@@ -1061,10 +1116,10 @@ XC::Vector  XC::Vector::operator+(const XC::Vector &b) const
   }
 
 
-// Vector operator-(const XC::Vector &V):
-//! @brief The - operator checks the two vectors are of the same size and then returns a XC::Vector
-//! whose components are the vector difference of current and V's data.
-XC::Vector XC::Vector::operator-(const XC::Vector &b) const
+//! @brief The - operator checks the two vectors are of the same size  if
+//! _G3DEBUG is defined and then returns a Vector whose components are the
+//! vector difference of current and V's data.
+XC::Vector XC::Vector::operator-(const Vector &b) const
   {
 #ifdef _G3DEBUG
     if(sz!=b.sz)
@@ -1092,6 +1147,10 @@ XC::Vector XC::Vector::operator-(const XC::Vector &b) const
 
 
 //! @brief Method to perform (Vector)transposed * vector.
+//!
+//! A method to return the dot product of the current Vector and the
+//! Vector \p V. If the current Vector and \p V are not of the same
+//! size, a warning message is printed and \f$0\f$ returned. 
 double XC::Vector::operator^(const XC::Vector &V) const
   {
 #ifdef _G3DEBUG
@@ -1118,9 +1177,16 @@ double XC::Vector::dot(const Vector &v) const
 double XC::dot(const Vector &a,const Vector &b)
   { return a^b;}
 
-// Vector operator/(const XC::Matrix &M) const;    
 //! @brief Method to return inv(M)*this
-XC::Vector XC::Vector::operator/(const XC::Matrix &M) const
+//!
+//! A method to return a new Vector, \f$x\f$, equal to the solution of the
+//! matrix equation \f$Mx=\f$ the current Vector. A new Vector is created for
+//! the return of size M.noRows(). A new Matrix is created of order
+//! M.noRows()} x {\em M.noRows() and set equal to \p M if {\em
+//! M} is square, or \f$M^tM\f$ if \p M is not square. The new Vector is
+//! then set equal to the result of invoking {\em Solve(*this)} on the new
+//! Matrix. 
+XC::Vector XC::Vector::operator/(const Matrix &M) const
   {
     Vector res(M.noRows());
     if(M.noRows() != M.noCols())
@@ -1135,7 +1201,7 @@ XC::Vector XC::Vector::operator/(const XC::Matrix &M) const
     return res;
   }
 
-//! @brief Escribe el vector en un archivo binario.
+//! @brief Write vector on a binary file.
 void XC::Vector::write(std::ofstream &os)
   {
     const int sz= Size();
@@ -1146,7 +1212,7 @@ void XC::Vector::write(std::ofstream &os)
       os.write(reinterpret_cast<char *>(theData),nb);
   }
 
-//! @brief Lee el vector de un archivo binario.
+//! @brief Read vector from a binary file.
 void XC::Vector::read(std::ifstream &is)
   {
     int sz= 0;

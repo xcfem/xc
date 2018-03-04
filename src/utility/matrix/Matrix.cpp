@@ -83,6 +83,9 @@ XC::Matrix::Matrix(void)
 
 
 //! @brief Constructor.
+//!
+//! @param nRows: number of matrix rows.
+//! @param nCols: number of matrix columns.
 XC::Matrix::Matrix(int nRows,int nCols)
   :numRows(nRows), numCols(nCols), data(numRows*numCols)
   {
@@ -105,28 +108,33 @@ XC::Matrix::Matrix(int nRows,int nCols)
     data.Zero();
   }
 
-XC::Matrix::Matrix(double *theData, int row, int col) 
-  :numRows(row),numCols(col),data(theData,row*col)
+//! @brief Constructor.
+//!
+//! @param theData: values.
+//! @param nRows: number of matrix rows.
+//! @param nCols: number of matrix columns.
+XC::Matrix::Matrix(double *theData, int nRows, int nCols) 
+  :numRows(nRows),numCols(nCols), data(theData,nRows*nCols)
   {
 #ifdef _G3DEBUG
-    if(row < 0)
+    if(nRows < 0)
       {
         std::cerr << getClassName() << "::" << __FUNCTION__
 		  << "; WARNING: tried to init matrix with numRows: ";
-        std::cerr << row << " <0\n";
+        std::cerr << nRows << " <0\n";
         numRows= 0; numCols =0;
       }
-    if(col < 0)
+    if(nCols < 0)
       {
         std::cerr << getClassName() << "::" << __FUNCTION__
 		  << "; WARNING: tried to init matrix with numCols: ";
-        std::cerr << col << " <0\n";
+        std::cerr << nCols << " <0\n";
         numRows= 0; numCols =0;
       }    
 #endif
   }
 
-//! @brief Constructor (interfaz Python).
+//! @brief Constructor (Python interface).
 XC::Matrix::Matrix(const boost::python::list &l)
   :numRows(len(l)), numCols(0)
   {

@@ -85,7 +85,7 @@ XC::ID::ID(const std::vector<int> &v)
   : EntCmd(), std::vector<int>(v)
   {}
 
-//! @brief Constructor (interfaz Python).
+//! @brief Constructor (Python interface).
 XC::ID::ID(const boost::python::list &l)
   : EntCmd(), std::vector<int>(len(l))
   {
