@@ -77,17 +77,24 @@
 XC::AuxMatrix XC::Matrix::auxMatrix(MATRIX_WORK_AREA,INT_WORK_AREA);
 double XC::Matrix::MATRIX_NOT_VALID_ENTRY =0.0;
 
-//! @brief Constructor.
+//! @brief Default constructor.
 XC::Matrix::Matrix(void)
   :numRows(0), numCols(0) {}
 
 
 //! @brief Constructor.
 //!
+//! To construct a Matrix with nRows and nCols and all coefficients equal
+//! to \f$0\f$. Allocates memory for the storage of the data. If numRows
+//! \f$<\f$ \f$0\f$, numCols \f$<\f$ \f$0\f$ or not enough memory is available
+//! available, an error message is printed and a Matrix with numRows = \f$0\f$
+//! and numCols = \f$0\f$ is returned. Before the Matrix is returned, Zero() is
+//! called. 
+//!
 //! @param nRows: number of matrix rows.
 //! @param nCols: number of matrix columns.
 XC::Matrix::Matrix(int nRows,int nCols)
-  :numRows(nRows), numCols(nCols), data(numRows*numCols)
+  : numRows(nRows), numCols(nCols), data(nRows*nCols)
   {
 #ifdef _G3DEBUG
     if(nRows < 0)
@@ -108,7 +115,13 @@ XC::Matrix::Matrix(int nRows,int nCols)
     data.Zero();
   }
 
-//! @brief Constructor.
+//! @brief Constructor. Wrapper for values contained in theData.
+//!
+//! To construct a Matrix with nRow and nCols. The memory for storage of the
+//! data is found at the location pointed to by \p data. Note that this memory
+//! must have been previously allocated and it must be of appropriate size,
+//! erroneous results and segmentation faults can occur otherwise. No
+//! additional memory is allocated for the storage of the data. 
 //!
 //! @param theData: values.
 //! @param nRows: number of matrix rows.
@@ -162,6 +175,10 @@ int XC::Matrix::setData(double *theData, int row, int col)
     return data.setData(theData,row*col);
   }
 
+//! @brief Zero's out the Matrix.
+//!
+//! Zero's out the Matrix, i.e. sets all the components of the matrix to
+//! \f$0\f$.
 void XC::Matrix::Zero(void)
   { data.Zero(); }
 
@@ -210,7 +227,13 @@ int XC::Matrix::resize(int rows, int cols)
     return 0;
   }
 
-
+//! @brief Assembles the argument into the current Matrix.
+//!
+//! Assembles into the current Matrix the Matrix \p M. The contents of the
+//! current matrix at location ({\em rows(i),cols(j)}) is set equal to the
+//! current value plus \p fact times the value of the matrix \p M
+//! at location ({\em i,j }). A warning is printed for every {\em rows(i),
+//! cols(j)} specified which is outside the bounds of the matrix.
 int XC::Matrix::Assemble(const Matrix &V, const ID &rows, const ID &cols, double fact) 
   {
     int pos_Rows, pos_Cols;
@@ -271,33 +294,45 @@ extern "C" int dgerfs_(char *TRANS, int *N, int *NRHS, double *A, int *LDA,
 
 #endif
 
+//! @brief Solve the equation {\em \f$Ax=V\f$} for the Vector \p x, which is
+//! returned.
+//!
+//! Will solve the equation {\em \f$Ax=V\f$} for the Vector \p x, which is
+//! returned. At the moment the current matrix is assumed to be symmetric
+//! positive definite. THIS IS TO CHANGE. A Vector is created using
+//! \p V. If this Vector is not of the correct size or if an error occurs
+//! during factorization a warning message is printed and the Vector \p x
+//! is returned. 
 int XC::Matrix::Solve(const Vector &b, Vector &x) const
-{
+  {
 
     int n= numRows;
 
 #ifdef _G3DEBUG    
-    if(numRows != numCols) {
-      std::cerr << getClassName() << "::" << __FUNCTION__
-		<< "; the matrix of dimensions " 
-	        << numRows << ", " << numCols
+    if(numRows != numCols)
+      {
+        std::cerr << getClassName() << "::" << __FUNCTION__
+	  	  << "; the matrix of dimensions " 
+	          << numRows << ", " << numCols
 		<< " is not square " << std::endl;
-      return -1;
-    }
+        return -1;
+      }
 
-    if(n != x.Size()) {
-      std::cerr << getClassName() << "::" << __FUNCTION__
-		<< "; dimension of x, " << numRows
-		<< "is not same as matrix " <<  x.Size() << std::endl;
-      return -2;
-    }
+    if(n != x.Size())
+      {
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; dimension of x, " << numRows
+		  << "is not same as matrix " <<  x.Size() << std::endl;
+        return -2;
+      }
 
-    if(n != b.Size()) {
-      std::cerr << getClassName() << "::" << __FUNCTION__
-		<< ";- dimension of x, " << numRows
-		<< "is not same as matrix " <<  b.Size() << std::endl;
-      return -2;
-    }
+    if(n != b.Size())
+      {
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << ";- dimension of x, " << numRows
+		  << "is not same as matrix " <<  b.Size() << std::endl;
+        return -2;
+      }
 #endif
     
     // check work area can hold all the data
@@ -325,11 +360,8 @@ int XC::Matrix::Solve(const Vector &b, Vector &x) const
 #else
     dgesv_(&n,&nrhs,Aptr,&ldA,iPIV,Xptr,&ldB,&info);
 #endif
-
-    
-
     return 0;
-}
+  }
 
 
 int XC::Matrix::Solve(const Matrix &b, Matrix &x) const
@@ -339,33 +371,38 @@ int XC::Matrix::Solve(const Matrix &b, Matrix &x) const
     int nrhs= x.numCols;
 
 #ifdef _G3DEBUG    
-    if(numRows != numCols) {
-      std::cerr << getClassName() << "::" << __FUNCTION__
-		<< "; the matrix of dimensions ["
-		<< numRows << " " <<  numCols << "] is not square\n";
-      return -1;
-    }
+    if(numRows != numCols)
+      {
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; the matrix of dimensions ["
+		  << numRows << " " <<  numCols << "] is not square\n";
+        return -1;
+      }
 
-    if(n != x.numRows) {
-      std::cerr << getClassName() << "::" << __FUNCTION__
-		<< "; #rows of X, " << x.numRows
-		<< " is not same as the matrices: " << numRows << std::endl;
-      return -2;
-    }
+    if(n != x.numRows)
+      {
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; #rows of X, " << x.numRows
+		  << " is not same as the matrices: " << numRows << std::endl;
+        return -2;
+      }
 
-    if(n != b.numRows) {
-      std::cerr << getClassName() << "::" << __FUNCTION__
-		<< "; #rows of B, " << b.numRows
-		<< " is not same as the matrices: " << numRows << std::endl;
-      return -2;
-    }
+    if(n != b.numRows)
+      {
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; #rows of B, " << b.numRows
+		  << " is not same as the matrices: " << numRows << std::endl;
+        return -2;
+      }
 
-    if(x.numCols != b.numCols) {
-      std::cerr << getClassName() << "::" << __FUNCTION__
-		<< "; #cols of B, " << b.numCols
-		<< " , is not same as that of X, b " <<  x.numCols << std::endl;
-      return -3;
-    }
+    if(x.numCols != b.numCols)
+      {
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; #cols of B, " << b.numCols
+		  << " , is not same as that of X, b " <<  x.numCols
+		  << std::endl;
+        return -3;
+      }
 #endif
 
     // check work area can hold all the data
@@ -410,30 +447,32 @@ int XC::Matrix::Solve(const Matrix &b, Matrix &x) const
 #endif
 
     return info;
-}
+  }
 
 
 int XC::Matrix::Invert(Matrix &theInverse) const
-{
+  {
 
     int n= numRows;
     //int nrhs= theInverse.numCols;
 
 #ifdef _G3DEBUG    
-    if(numRows != numCols) {
-      std::cerr << getClassName() << "::" << __FUNCTION__
-		<< "; the matrix of dimensions ["
-		<< numRows << "," << numCols << "] is not square\n";
-      return -1;
-    }
+    if(numRows != numCols)
+      {
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; the matrix of dimensions ["
+		  << numRows << "," << numCols << "] is not square\n";
+        return -1;
+      }
 
-    if(n != theInverse.numRows) {
-      std::cerr << getClassName() << "::" << __FUNCTION__
-		<< "; #rows of X, " << numRows
-		<< ", is not same as matrix " << theInverse.numRows
-		<< std::endl;
-      return -2;
-    }
+    if(n != theInverse.numRows)
+      {
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; #rows of X, " << numRows
+		  << ", is not same as matrix " << theInverse.numRows
+		  << std::endl;
+        return -2;
+      }
 #endif
     const int dataSize= data.Size();
     auxMatrix.resize(dataSize,n);
@@ -462,10 +501,20 @@ int XC::Matrix::Invert(Matrix &theInverse) const
     dgetri_(&n,Aptr,&ldA,iPIV,Wptr,&workSize,&info);
     
     return info;
-}
+  }
     
 		    
 
+//! @brief Add a factor \p fact times the Matrix \p other to the current
+//! Matrix.
+//!
+//! To add a factor \p fact times the Matrix \p other to the current
+//! Matrix. The size of the other Matrix is first checked to see sizes are 
+//! compatible; if size are not compatible nothing is done and a warning
+//! message is printed. The method tests for the type of \p other, to see
+//! whether the performance can be improved by avoiding having to call
+//! \p other's overloaded (i,j) operators, if \p other is of type
+//! genMatrix. 
 int XC::Matrix::addMatrix(double factThis, const Matrix &other, double factOther)
   {
     if(factThis == 1.0 && factOther == 0.0)
@@ -724,6 +773,14 @@ int XC::Matrix::addMatrixTripleProduct(double thisFact,
 // OVERLOADED OPERATOR () to CONSTRUCT A NEW_ MATRIX
 //
 
+//! Returns a new Matrix of dimension (rows.Size(), {\em
+//! cols.Size()}). The contents of the new matrix are given by the
+//! contents of the current matrix at the locations given by the {\em
+//! rows} and \p cols objects. For example the contents of the new
+//! matrix at location ({\em i,j}) are equal to the contents of the
+//! current matrix at location ({\em rows(i),cols(j)}). Assumes ({\em
+//! row,col}) is a valid location in the Matrix, a segmentation fault or
+//! erroneous results can occur if this is not the case.
 XC::Matrix XC::Matrix::operator()(const ID &rows, const ID & cols) const
   {
     const int nRows= rows.Size();
@@ -736,7 +793,7 @@ XC::Matrix XC::Matrix::operator()(const ID &rows, const ID & cols) const
     return result;
   }
 
-//! @brief Return the fila which index being passed as parameter.
+//! @brief Return the row which index being passed as parameter.
 XC::Vector XC::Matrix::getRow(int row) const
   {
     Vector retval(numCols);
@@ -745,7 +802,7 @@ XC::Vector XC::Matrix::getRow(int row) const
     return retval;
   }
 
-//! @brief Return the columna which index being passed as parameter.
+//! @brief Return the column which index being passed as parameter.
 XC::Vector XC::Matrix::getCol(int col) const
   {
     Vector retval(numRows);
@@ -773,6 +830,13 @@ XC::Vector XC::Matrix::getCol(int col) const
 //	The above methods all modify the current matrix. If in
 //	derived matrices data kept in data and of sizeData no redef necessary.
 
+//! @brief A method to add \p fact to each component of the current Matrix.
+//! 
+//! A method to add \p fact to each component of the current Matrix. 
+//! The method tests for the type of the current Matrix, to see whether
+//! the performance can be improved by avoiding having to call the
+//! overloaded (i,j) operators, if the current Matrix is of type
+//! genMatrix. 
 XC::Matrix &XC::Matrix::operator+=(double fact)
   {
     if(fact != 0.0)
@@ -785,9 +849,14 @@ XC::Matrix &XC::Matrix::operator+=(double fact)
     return *this;
   }
 
-
-
-
+//! @brief A method to subtract \p fact from each component of the current
+//! Matrix.
+//!
+//! A method to subtract \p fact from each component of the current Matrix. 
+//! The method tests for the type of the current Matrix, to see whether
+//! the performance can be improved by avoiding having to call the
+//! overloaded (i,j) operators, if the current Matrix is of type
+//! genMatrix. 
 XC::Matrix &XC::Matrix::operator-=(double fact)
   {
 
@@ -801,7 +870,13 @@ XC::Matrix &XC::Matrix::operator-=(double fact)
     return *this;
   }
 
-
+//! @brief A method to multiply each component of the current Matrix by \p fact.
+//! 
+//! A method to multiply each component of the current Matrix by \p fact. 
+//! The method tests for the type of the current Matrix, to see whether
+//! the performance can be improved by avoiding having to call the
+//! overloaded (i,j) operators, if the current Matrix is of type
+//! genMatrix. 
 XC::Matrix &XC::Matrix::operator*=(double fact)
   {
     if(fact!=1.0)
@@ -814,6 +889,16 @@ XC::Matrix &XC::Matrix::operator*=(double fact)
     return *this;
   }
 
+//! @brief A method which will divide each component of the current Matrix
+//! by \p fact.
+//!
+//! A method which will divide each component of the current Matrix
+//! by \p fact. If \p fact is equal to zero, an error message is
+//! printed and the contents of the Matrix are set to
+//! MATRIX\_VERY\_LARGE\_VALUE (defined in \f$<\f$Matrix.h\f$>\f$). The method
+//! tests for the type of the current Matrix, to see whether the
+//! performance can be improved by avoiding having to call the overloaded
+//! (i,j) operators, if the current Matrix is of type genMatrix. 
 XC::Matrix &XC::Matrix::operator/=(double fact)
   {
     if(fact!=1.0)
@@ -847,6 +932,15 @@ XC::Matrix &XC::Matrix::operator/=(double fact)
 //    virtual Matrix operator/(double fact);
 //	The above methods all return a new_ full general matrix.
 
+//! @brief A method to return a new Matrix, whose components are equal to the
+//! components of the current Matrix plus the value \p fact.
+//!
+//! A method to return a new Matrix, whose components are equal to the
+//! components of the current Matrix plus the value \p fact. A new
+//! Matrix object is constructed, using the current Matrix as the
+//! argument to the constructor. The {\em +=} operator is then invoked 
+//! on this Matrix with \p fact as the argument, and the new Matrix is
+//! then returned. 
 XC::Matrix XC::Matrix::operator+(double fact) const
   {
     Matrix result(*this);
@@ -854,13 +948,31 @@ XC::Matrix XC::Matrix::operator+(double fact) const
     return result;
   }
 
+//! @brief A method to return a new Matrix, whose components are equal to the
+//! components of the current Matrix minus the value \p fact.
+//!
+//! A method to return a new Matrix, whose components are equal to the
+//! components of the current Matrix minus the value \p fact. A new
+//! Matrix object is constructed, using the current Matrix as the
+//! argument to the constructor. The {\em -=} operator is then invoked 
+//! on this Matrix with \p fact as the argument, and this new Matrix is
+//! then returned. 
 XC::Matrix XC::Matrix::operator-(double fact) const
-{
+  {
     Matrix result(*this);
     result-= fact;
     return result;
-}
+  }
 
+//! @brief A method to return a new Matrix, whose components are equal to the
+//! components of the current Matrix times the value \p fact.
+//!
+//! A method to return a new Matrix, whose components are equal to the
+//! components of the current Matrix times the value \p fact. A new
+//! Matrix object is constructed, using the current Matrix as the
+//! argument to the constructor. The {\em *=} operator is then invoked 
+//! on this Matrix with \p fact as the argument, and this new Matrix is
+//! then returned. 
 XC::Matrix XC::Matrix::operator*(double fact) const
   {
     Matrix result(*this);
@@ -868,23 +980,46 @@ XC::Matrix XC::Matrix::operator*(double fact) const
     return result;
   }
 
+//! @brief A method to return a new Matrix whose components are equal to the
+//! components of the current Matrix divided the value \p fact.
+//!
+//! A method to return a new Matrix whose components are equal to the
+//! components of the current Matrix divided the value \p fact. A new
+//! Matrix object is constructed by using the current Matrix as the
+//! argument to the constructor. The {\em /=} operator is then invoked 
+//! on this Matrix with \p fact as the argument, and this new Matrix is
+//! then returned. 
 XC::Matrix XC::Matrix::operator/(double fact) const
-{
-    if(fact == 0.0) {
+  {
+    if(fact == 0.0)
+      {
 	std::cerr << getClassName() << "::" << __FUNCTION__
 		  << "; ERROR divide-by-zero\n";
 	exit(0);
-    }
+      }
     Matrix result(*this);
-    result /= fact;
+    result/= fact;
     return result;
-}
+  }
 
 
 //
 // MATRIX_VECTOR OPERATIONS
 //
 
+//! @brief A method to return a new Vector, of size numRows, whose components
+//! are equal to the product of the current Matrix times the Vector {\em
+//! V}.
+//!
+//! A method to return a new Vector, of size numRows, whose components are
+//! equal to the product of the current Matrix times the Vector {\em
+//! V}. If the current Matrix and Vector \p V are not compatible,
+//! i.e. V.Size() is not equal to numCols, an error message is printed and 
+//! a zero Vector of size equal to the number of rows in the current
+//! Matrix is returned. The method tests for the type of the current
+//! Matrix, to see whether the performance can be improved by avoiding
+//! having to call the overloaded (i,j) operators, if the current Matrix
+//! is of type genMatrix. 
 XC::Vector XC::Matrix::operator*(const Vector &V) const
   {
     Vector result(numRows);
