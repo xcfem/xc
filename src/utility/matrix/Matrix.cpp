@@ -1054,6 +1054,19 @@ XC::Vector XC::Matrix::operator*(const Vector &V) const
     return result;
   }
 
+//! @brief A method to return a new Vector, of size numCols, whose components
+//! are equal to the product of the transpose of the current Matrix times the
+//! Vector \p V.
+//!
+//! A method to return a new Vector, of size numCols, whose components are
+//! equal to the product of the transpose of the current Matrix times the
+//! Vector \p V. If the current Matrix and Vector \p V are not
+//! compatible, i.e. V.Size() is not equal to numRows, an error message is
+//! printed and a zero Vector of size equal to the number of columns in
+//! the current Matrix is returned. The method tests for the type of the
+//! current Matrix, to see whether the performance can be improved by
+//! avoiding having to call the overloaded (i,j) operators, if the current
+//! Matrix is of type genMatrix. 
 XC::Vector XC::Matrix::operator^(const Vector &V) const
   {
     Vector result(numCols);
@@ -1086,6 +1099,14 @@ XC::Matrix XC::Matrix::operator-(void) const
 //
 	    
 
+//! @brief A method to return a new Matrix equal to the sum of the current
+//! Matrix and the Matrix \p M.
+//!
+//! A method to return a new Matrix equal to the sum of the current Matrix
+//! and the Matrix \p M. It does this by creating a new matrix passing
+//! itself as an argument to the constructor. The addMatrix() method
+//! is then invoked on this new Matrix with \f$M\f$ and \f$-1\f$ as the
+//! arguments. The new Matrix is then returned. 
 XC::Matrix XC::Matrix::operator+(const Matrix &M) const
   {
     Matrix result(*this);
@@ -1093,6 +1114,14 @@ XC::Matrix XC::Matrix::operator+(const Matrix &M) const
     return result;
   }
 	    
+//! @brief A method to return a new Matrix equal to the the current Matrix minus
+//! the Matrix \p M.
+//!
+//! A method to return a new Matrix equal to the the current Matrix minus
+//! the Matrix \p M. It does this by creating a new matrix passing
+//! itself as an argument to the constructor. The addMatrix() method
+//! is then invoked on this new Matrix with \f$M\f$ and \f$-1\f$ as the
+//! arguments. The new Matrix is then returned. 
 XC::Matrix XC::Matrix::operator-(const Matrix &M) const
   {
     Matrix result(*this);
@@ -1101,6 +1130,17 @@ XC::Matrix XC::Matrix::operator-(const Matrix &M) const
   }
 	    
     
+//! @brief A method to return a new Matrix equal to the product of the current
+//! Matrix and the Matrix \p M.
+//! A method to return a new Matrix equal to the product of the current
+//! Matrix and the Matrix \p M. It does this by first creating a new
+//! Matrix of size numRows and M.numCols. The contents of this new Matrix
+//! are then determined and the resulting Matrix is returned. If the two
+//! matrices are of incompatible sizes, a warning message is printed and a
+//! zeroed Matrix is returned. The method tests for the type of the
+//! current Matrix, to see whether the performance can be improved by
+//! avoiding having to call the overloaded (i,j) operators, if \p M 
+//! is of type genMatrix.
 XC::Matrix XC::Matrix::operator*(const Matrix &M) const
   {
     Matrix result(numRows,M.numCols);
@@ -1143,6 +1183,18 @@ XC::Matrix XC::Matrix::operator*(const Matrix &M) const
 //	We overload the * operator to perform matrix^t-matrix multiplication.
 //	results= (*this)transposed * M.
 
+//! @brief A method to return a new Matrix equal to the product of the transpose
+//! of the current Matrix and the Matrix \p M.
+//! 
+//! A method to return a new Matrix equal to the product of the transpose
+//! of the current Matrix and the Matrix \p M. It does this by first
+//! creating a new Matrix of size numRows and M.numRows. The contents of
+//! this new Matrix are then determined and the resulting Matrix is
+//! returned. If the two matrices are of incompatible sizes, a warning
+//! message is printed and a zeroed Matrix is returned. The method tests
+//! for the type of the current Matrix, to see whether the performance can
+//! be improved by avoiding having to call the overloaded (i,j) operators,
+//! if \p M is of type genMatrix.
 XC::Matrix XC::Matrix::operator^(const Matrix &M) const
   {
     Matrix result(numCols,M.numCols);
@@ -1174,17 +1226,16 @@ XC::Matrix XC::Matrix::operator^(const Matrix &M) const
     return result;
   }
     
-
-
-
+//! @brief += operator.
 XC::Matrix &XC::Matrix::operator+=(const Matrix &M)
   {
 #ifdef _G3DEBUG
-  if(numRows != M.numRows || numCols != M.numCols) {
-    std::cerr << getClassName() << "::" << __FUNCTION__
-	      << "; matrices incompatable\n";
-    return *this;
-  }
+  if(numRows != M.numRows || numCols != M.numCols)
+    {
+      std::cerr << getClassName() << "::" << __FUNCTION__
+	        << "; matrices incompatable\n";
+      return *this;
+    }
 #endif
 
     double *dblDataPtr= getDataPtr();
@@ -1195,19 +1246,19 @@ XC::Matrix &XC::Matrix::operator+=(const Matrix &M)
     return *this;
   }
 
+//! @brief -= operator.
 XC::Matrix &XC::Matrix::operator-=(const Matrix &M)
   {
 #ifdef _G3DEBUG
-  if(numRows != M.numRows || numCols != M.numCols) {
-    std::cerr << getClassName() << "::" << __FUNCTION__
-	      << ";  matrices incompatable [" << numRows << " "
-	      << numCols << "]" << "[" << M.numRows << "]"
-	      << M.numCols << "]\n";
-
-    return *this;
-  }
+  if(numRows != M.numRows || numCols != M.numCols)
+    {
+      std::cerr << getClassName() << "::" << __FUNCTION__
+	        << ";  matrices incompatable [" << numRows << " "
+	        << numCols << "]" << "[" << M.numRows << "]"
+	        << M.numCols << "]\n";
+      return *this;
+    }
 #endif
-
     double *dblDataPtr= getDataPtr();
     const double *otherData= M.getDataPtr();
     const int dataSize= data.Size();
@@ -1217,7 +1268,7 @@ XC::Matrix &XC::Matrix::operator-=(const Matrix &M)
   }
 
 
-//! @brief Output method.
+//! @brief Write to the argument stream.
 void XC::Matrix::Output(std::ostream &s) const
   {
     const int nr= noRows();
@@ -1238,7 +1289,7 @@ void XC::Matrix::Output(std::ostream &s) const
       }
   }
 
-//! @brief Convierte una matriz de tipo m_double otra de tipo Matrix.
+//! @brief Converts a matrix of type m_double into other of type Matrix.
 XC::Matrix XC::m_double_to_matrix(const m_double &m)
   {
     const size_t fls= m.getNumFilas();
@@ -1250,7 +1301,7 @@ XC::Matrix XC::m_double_to_matrix(const m_double &m)
     return retval;
   }
 
-//! @brief Convierte a una matriz de tipo m_double.
+//! @brief Converts a Matrix into an m_double.
 m_double XC::matrix_to_m_double(const Matrix &m)
   {
     const size_t fls= m.noRows();
@@ -1262,7 +1313,7 @@ m_double XC::matrix_to_m_double(const Matrix &m)
     return retval;
   }
 
-//! @brief Lectura desde cadena de caracteres.
+//! @brief Read from string.
 void XC::Matrix::Input(const std::string &s)
   {
     m_double tmp(1,1);
@@ -1271,7 +1322,7 @@ void XC::Matrix::Input(const std::string &s)
   }
 
 
-//! @brief Escribe la matriz en un archivo binario.
+//! @brief Write to a binary file.
 void XC::Matrix::write(std::ofstream &os)
   {
     os.write((char *) &numRows,sizeof numRows);
@@ -1279,7 +1330,7 @@ void XC::Matrix::write(std::ofstream &os)
     data.write(os);
   }
 
-//! @brief Lee la matriz de un archivo binario.
+//! @brief Read from a bynary file.
 void XC::Matrix::read(std::ifstream &is)
   {
     is.read((char *) &numRows,sizeof numRows);
@@ -1297,7 +1348,7 @@ std::string to_string(const XC::Matrix &V)
     return ss.str();
   }
 
-//! @brief Operador salida.
+//! @brief Output operator.
 std::ostream &XC::operator<<(std::ostream &s, const Matrix &m)
   {
     m.Output(s);
