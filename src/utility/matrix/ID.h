@@ -75,6 +75,21 @@ namespace XC {
 //! @ingroup Matrix
 //
 //! @brief Vector of integers.
+//!
+//! The ID class provides the abstraction for an integer Vector. 
+//! The class is introduced in addition to the Vector class, to save memory
+//! and casting when integer arrays are required. An ID of order {\em
+//! size} is an ordered 1d array of \p size integer values. For example
+//! an ID id of order 5:
+//! 
+//! \indent\indent \f$id = [id_0\f$ \f$id_1\f$ \f$id_2\f$ \f$id_3\f$ \f$id_4]\f$
+//! 
+//! In the ID class, the data is stored in a 1d integer array of length
+//! equal to arraySize, where order <= arraySize. Creating an ID with
+//! storage capacity greater than that required allows the ID object to
+//! grow without the need to deallocate and allocate more memory. At
+//! present time none of the methods are declared as being virtual. THIS
+//! MAY CHANGE.
 class ID: public EntCmd, public std::vector<int>
   {
   public:
@@ -105,7 +120,7 @@ class ID: public EntCmd, public std::vector<int>
     inline int *getDataPtr(void)
       { return &(*this)[0]; }
     //! @brief Returns true if the vector is empty.
-    inline bool Nulo(void) const
+    inline bool isEmpty(void) const
       { return empty(); }
     int resize(const int &newSize, const int &defaultValue= 0);
     const int &max(void) const;
@@ -114,10 +129,12 @@ class ID: public EntCmd, public std::vector<int>
     bool checkRange(const int &) const;
     int &operator()(const int &);
     const int &operator()(const int &) const;
-    //! @brief Returns a reference to the element at position i in the container (does range checking => slower than () operator).
+    //! @brief Returns a reference to the element at position i in
+    //! the container (does range checking => slower than () operator).
     inline int &operator[](const int &i)
       { return this->at(i); }
-    //! @brief Returns a reference to the element at position i in the container (does range checking => slower than () operator).
+    //! @brief Returns a reference to the element at position i in
+    //! the container (does range checking => slower than () operator).
     inline const int &operator[](const int &i) const
       { return this->at(i); }
   
@@ -154,7 +171,9 @@ inline bool ID::checkRange(const int &i) const
       return true;
   }
  
-//! @brief Returns a reference to the element at position i in the container (does not range checking => faster than [] operator).
+//! @brief Returns a reference to the element at position i in the
+//! container (does not range checking unless _G3DEBUG is set
+//! => faster than [] operator).
 inline int &ID::operator()(const int &i) 
   {
 #ifdef _G3DEBUG
@@ -165,7 +184,9 @@ inline int &ID::operator()(const int &i)
     return (*this)[i];
   }
 
-//! @brief Returns a const reference to the element at position i in the container (does not range checking => faster than [] operator).
+//! @brief Returns a const reference to the element at position i
+//! in the container (does not range checking unless _G3DEBUG is set
+//! => faster than [] operator).
 inline const int &ID::operator()(const int &i) const 
   {
 #ifdef _G3DEBUG

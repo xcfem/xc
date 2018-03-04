@@ -78,7 +78,18 @@ class Message;
 class SystemOfEqn;
 
 //! @ingroup Matrix
-//
+//!
+//! @brief Float vector abstraction.
+//!
+//! The Vector class provides the vector abstraction. A vector of
+//! order \p size is an ordered 1d array of \p size numbers. For
+//! example a vector of order 5:
+//!
+//! \indent\indent \f$ x = [x_0\f$ \f$x_1\f$ \f$x_2\f$  \f$x_3\f$ \f$x_4]\f$
+//!
+//! In the Vector class the data is stored in a 1d double array of length
+//! equal to the order of the Vector.  At present time none of the methods
+//! are declared as being virtual. THIS MAY CHANGE FOR PARALLEL.
 class Vector: public EntCmd
   {
   private:
@@ -91,7 +102,7 @@ class Vector: public EntCmd
   public:
     // constructors and destructor
     Vector(void);
-    explicit Vector(const int &, const double &valor= 0.0);
+    explicit Vector(const int &, const double &value= 0.0);
     explicit Vector(const std::vector<double> &v);
     explicit Vector(const Vector2d &v);
     explicit Vector(const Vector3d &v);
@@ -105,7 +116,7 @@ class Vector: public EntCmd
     int setData(double *newData, int size);
     const double *getDataPtr(void) const;
     double *getDataPtr(void);
-    bool Nulo(void) const;
+    bool isEmpty(void) const;
     int Assemble(const Vector &V, const ID &l, double fact = 1.0);
     double Norm2(void) const;
     double Norm(void) const;
@@ -205,27 +216,35 @@ Vector normalize_inf(const Vector &);
 
 
 /********* INLINED VECTOR FUNCTIONS ***********/
+//! @brief Returns the size of the Vector.
 inline int Vector::Size(void) const 
   { return sz; }
 
+//! @brief Number of bytes occupied by the vector.
 inline int Vector::getNumBytes(void) const
   { return Size()*sizeof(double); }
 
+//! @brief Return a pointer to the float date.
 inline const double *Vector::getDataPtr(void) const
   { return theData; }
 
+//! @brief Return a pointer to the float date.
 inline double *Vector::getDataPtr(void)
   { return theData; }
 
-inline bool Vector::Nulo(void) const
+//! @brief Return true if the vector has no data.
+inline bool Vector::isEmpty(void) const
   { return (theData== nullptr); }
 
+//! @brief Zeros out the Vector, i.e. sets all the components of the Vector to
+//! \f$0\f$.
 inline void Vector::Zero(void)
   {
     for(register int i=0; i<sz; i++)
       theData[i] = 0.0;
   }
 
+//! @brief Return true if one of the component is not a number.
 inline bool Vector::isnan(void) const
   {
     bool retval= false;
@@ -238,6 +257,7 @@ inline bool Vector::isnan(void) const
     return retval;
   }
 
+//! @brief Resize the vector and set all components equal to 0.
 inline int Vector::reset(const int &newSize)
   {
     const int retval= resize(newSize);
@@ -245,13 +265,19 @@ inline int Vector::reset(const int &newSize)
     return retval;
   }
 
+//! Returns the data at location \p x in the Vector. Assumes (\p x) 
+//! is a valid location in the Vector, i.e. \f$0 <= x \f$ order, a
+//! segmentation fault or erroneous results can occur if this is not the 
+//! case. 
 inline const double &Vector::operator()(int x) const
   {
 #ifdef _G3DEBUG
     // check if it is inside range [0,sz-1]
     if(x < 0 || x >= sz)
       {
-	std::cerr << "XC::Vector::(loc) - loc " << x << " outside range [0, " << sz-1 << endln;
+	std::cerr << getClassName() << "::" << __FUNCTION__
+	          << "; loc " << x << " outside range [0, "
+		  << sz-1 << std::endl;
         return VECTOR_NOT_VALID_ENTRY;
       }
 #endif
@@ -259,13 +285,19 @@ inline const double &Vector::operator()(int x) const
   }
 
 
+//! Used to set the data at location(\p x) in the Vector. Assumes (\p x)
+//! is a valid location in the Vector, i.e. \f$0 <= x < \f$ order, a
+//! segmentation fault or erroneous results can occur if this is not the
+//! case. 
 inline double &Vector::operator()(int x)
   {
 #ifdef _G3DEBUG
     // check if it is inside range [0,sz-1]
     if (x < 0 || x >= sz)
       {
-	std::cerr << "XC::Vector::(loc) - loc " << x << " outside range [0, " << sz-1 << std::endln;
+	std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; loc " << x << " outside range [0, " << sz-1
+		  << std::endl;
         return VECTOR_NOT_VALID_ENTRY;
       }
 #endif
