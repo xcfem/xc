@@ -368,30 +368,30 @@ const XC::Matrix &XC::PDeltaCrdTransf2d::getInitialGlobalStiffMatrix (const XC::
     const double sl= sinTheta*oneOverL;
     const double cl= cosTheta*oneOverL;
     
-    const bool nodeIOffsetNoNulo= (nodeIOffset.Norm2()>0.0);
-    const bool nodeJOffsetNoNulo= (nodeJOffset.Norm2()>0.0);
+    const bool nodeIOffsetNotZero= (nodeIOffset.Norm2()>0.0);
+    const bool nodeJOffsetNotZero= (nodeJOffset.Norm2()>0.0);
 
     static Matrix tmp(6,6);
     tmp(0,0) = -cosTheta*kb(0,0) - sl*(kb(0,1)+kb(0,2));
     tmp(0,1) = -sinTheta*kb(0,0) + cl*(kb(0,1)+kb(0,2));
-    tmp(0,2) = (nodeIOffsetNoNulo) ? t02*kb(0,0) + t12*kb(0,1) + t22*kb(0,2) : kb(0,1);
+    tmp(0,2) = (nodeIOffsetNotZero) ? t02*kb(0,0) + t12*kb(0,1) + t22*kb(0,2) : kb(0,1);
     tmp(0,3) = -tmp(0,0);
     tmp(0,4) = -tmp(0,1);
-    tmp(0,5) = (nodeJOffsetNoNulo) ? t05*kb(0,0) + t15*kb(0,1) + t25*kb(0,2) : kb(0,2);
+    tmp(0,5) = (nodeJOffsetNotZero) ? t05*kb(0,0) + t15*kb(0,1) + t25*kb(0,2) : kb(0,2);
     
     tmp(1,0) = -cosTheta*kb(1,0) - sl*(kb(1,1)+kb(1,2));
     tmp(1,1) = -sinTheta*kb(1,0) + cl*(kb(1,1)+kb(1,2));
-    tmp(1,2) = (nodeIOffsetNoNulo) ? t02*kb(1,0) + t12*kb(1,1) + t22*kb(1,2) : kb(1,1);
+    tmp(1,2) = (nodeIOffsetNotZero) ? t02*kb(1,0) + t12*kb(1,1) + t22*kb(1,2) : kb(1,1);
     tmp(1,3) = -tmp(1,0);
     tmp(1,4) = -tmp(1,1);
-    tmp(1,5) = (nodeJOffsetNoNulo) ? t05*kb(1,0) + t15*kb(1,1) + t25*kb(1,2) : kb(1,2);
+    tmp(1,5) = (nodeJOffsetNotZero) ? t05*kb(1,0) + t15*kb(1,1) + t25*kb(1,2) : kb(1,2);
     
     tmp(2,0) = -cosTheta*kb(2,0) - sl*(kb(2,1)+kb(2,2));
     tmp(2,1) = -sinTheta*kb(2,0) + cl*(kb(2,1)+kb(2,2));
-    tmp(2,2) = (nodeIOffsetNoNulo) ? t02*kb(2,0) + t12*kb(2,1) + t22*kb(2,2) : kb(2,1);
+    tmp(2,2) = (nodeIOffsetNotZero) ? t02*kb(2,0) + t12*kb(2,1) + t22*kb(2,2) : kb(2,1);
     tmp(2,3) = -tmp(2,0);
     tmp(2,4) = -tmp(2,1);
-    tmp(2,5) = (nodeJOffsetNoNulo) ? t05*kb(2,0) + t15*kb(2,1) + t25*kb(2,2) : kb(2,2);
+    tmp(2,5) = (nodeJOffsetNotZero) ? t05*kb(2,0) + t15*kb(2,1) + t25*kb(2,2) : kb(2,2);
     
     static Matrix kg(6,6);
     kg(0,0) = -cosTheta*tmp(0,0) - sl*(tmp(1,0)+tmp(2,0));

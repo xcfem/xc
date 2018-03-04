@@ -76,7 +76,7 @@ XC::Vector XC::CrdTransf3d::vectorJ(3);
 XC::Vector XC::CrdTransf3d::vectorK(3);
 XC::Vector XC::CrdTransf3d::vectorCoo(3);
 
-//! @brief Asigna el valor del vector contenido en el plano XZ local.
+//! @brief Asigna el value of the vector contenido en el plano XZ local.
 void XC::CrdTransf3d::set_xz_vector(const XC::Vector &vecInLocXZPlane)
   {
     for(register int i = 0; i < 2; i++)
@@ -361,7 +361,7 @@ Ref3d3d XC::CrdTransf3d::getLocalReference(void) const
     return Ref3d3d(getPosNodeI(),Vector3d(vI[0],vI[1],vI[2]),Vector3d(vJ[0],vJ[1],vJ[2]));
   }
 
-//! @brief Returns the local coordinates del point a partir de las globales.
+//! @brief Returns the local coordinates del point a partir of the globales.
 XC::Vector XC::CrdTransf3d::getPointLocalCoordFromGlobal(const Vector &xg) const
   {
     Ref3d3d ref= getLocalReference();
@@ -508,7 +508,8 @@ int XC::CrdTransf3d::recvData(const CommParameters &cp)
     int res= CrdTransf::recvData(cp);
     res+= cp.receiveMatrix(R,getDbTagData(),CommMetaData(9));
     if(res<0)
-      std::cerr << "CrdTransf::recvData - failed to receive data.\n";
+      std::cerr << getClassName() << "::" << __FUNCTION__
+              << "; failed to receive data.\n";
     return res;    
   }
 

@@ -51,7 +51,7 @@ class ConstraintLoader: public Loader
     friend class Node;
     friend class SetMeshComp;
     SFreedom_Constraint *addSFreedom_Constraint(const int &,const SFreedom_Constraint &);
-    SFreedom_Constraint *addSFreedom_Constraint(const int &,const int &,const double &valor);
+    SFreedom_Constraint *addSFreedom_Constraint(const int &,const int &,const double &);
   public:
     ConstraintLoader(Preprocessor *owr);
     virtual ~ConstraintLoader(void);

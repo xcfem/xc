@@ -67,7 +67,7 @@
 XC::DistributedBandSPDLinSOE::DistributedBandSPDLinSOE(AnalysisAggregation *owr)
   :BandSPDLinSOE(owr,LinSOE_TAGS_DistributedBandSPDLinSOE), DistributedBandLinSOE() {}
 
-//! @brief Calcula los valores de numSubD y numSuperD.
+//! @brief Compute the values of numSubD y numSuperD.
 void XC::DistributedBandSPDLinSOE::calcBand(Graph &theGraph)
   {
     size = theGraph.getNumVertex();

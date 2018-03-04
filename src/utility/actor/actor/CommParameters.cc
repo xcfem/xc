@@ -506,7 +506,7 @@ XC::Vector *XC::CommParameters::receiveVectorPtr(Vector* &ptr,DbTagData &dt, con
     return ptr;
   }
 
-//! @brief Envía los valores que contiene el array through the channel being passed as parameter.
+//! @brief Send the array data through the channel being passed as parameter.
 //! @param meta: index where the object dbTag and size are stored.
 int XC::CommParameters::sendDoublePtr(double *ptr,DbTagData &dt, const ArrayCommMetaData &meta)
   {
@@ -522,7 +522,7 @@ int XC::CommParameters::sendDoublePtr(double *ptr,DbTagData &dt, const ArrayComm
     return retval;
   }
 
-//! @brief Recib los valores que contiene el array through the channel being passed as parameter.
+//! @brief Receive the array data through the channel being passed as parameter.
 //! @param meta: index where the object dbTag and size are stored.
 double *XC::CommParameters::receiveDoublePtr(double* &ptr,DbTagData &dt, const ArrayCommMetaData &meta) const
   {

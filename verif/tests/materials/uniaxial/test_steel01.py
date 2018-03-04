@@ -150,19 +150,19 @@ Ax= elem1.getMaterial().getStrain() # Spring elongation
 
 ratio1= abs((F+R)/F)
 ratio2= abs((deltax-Ax)/Ax)
-#resta= ley-ley_modelo
-resta_x= []
-resta_y= []
+#diff= ley-ley_modelo
+diff_x= []
+diff_y= []
 def substract(x,y): return x-y
-resta_x= map(substract,x,x_modelo)
-resta_y= map(substract,y,y_modelo)
+diff_x= map(substract,x,x_modelo)
+diff_y= map(substract,y,y_modelo)
 
 ratio3= 0
-for d in resta_x:
+for d in diff_x:
   ratio3= ratio3+d**2
 ratio3= math.sqrt(ratio3)
 ratio4= 0
-for d in resta_y:
+for d in diff_y:
   ratio4= ratio4+d**2
 ratio4= math.sqrt(ratio4)
 
@@ -174,11 +174,11 @@ print "Ax= ",Ax
 print "ratio1= ",(ratio1)
 print "ratio2= ",(ratio2)
 print "x= ",x
-print "resta_x= ",resta_x
+print "diff_x= ",diff_x
 print "ratio3= ",ratio3
 print "y= ",y
 print "y_modelo= ",y_modelo
-print "resta_y= ",resta_y
+print "diff_y= ",diff_y
 print "ratio4= ",ratio4
 '''
 

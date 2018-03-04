@@ -130,8 +130,8 @@ modosTeor= numpy.matrix([[-0.731,0.271,-1],
 # modo1Teor= getCol(modosTeor,1)
 # modo2Teor= getCol(modosTeor,2)
 # modo3Teor= getCol(modosTeor,3)
-resta= (modos-modosTeor)
-ratio2= numpy.linalg.norm(resta)
+diff= (modos-modosTeor)
+ratio2= numpy.linalg.norm(diff)
 # This CQC coefficientes are taken from Solvia manual
 crossCQCCoefficientsTeor= xc.Matrix([[1,0.79280,0.005705],[0.79280,1,0.006383],[0.005705,0.006383,1]])
 ratio3= (crossCQCCoefficients-crossCQCCoefficientsTeor).Norm()
@@ -186,7 +186,7 @@ print "periodosTeor: ",periodosTeor
 print "ratio1= ",ratio1
 print "modos: ",modos
 print "modosTeor: ",modosTeor
-print "resta: ",resta
+print "diff: ",diff
 print "ratio2= ",ratio2
 print "coeficientes para CQC: ",crossCQCCoefficients
 print "coeficientes CQC: ",crossCQCCoefficients

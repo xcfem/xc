@@ -64,7 +64,7 @@ XC::HSConstraint::HSConstraint(AnalysisAggregation *owr,double arcLength, double
   :ProtoArcLength(owr,INTEGRATOR_TAGS_HSConstraint,arcLength),
    psi_u2(psi_u*psi_u), psi_f2(psi_f*psi_f), u_ref2(u_ref*u_ref) {}
 
-//! @brief Returns the valor de dLambda para el método newStep.
+//! @brief Returns the value of dLambda for the newStep method.
 double XC::HSConstraint::getDLambdaNewStep(void) const
   {
     const Vector &dUhat= vectors.getDeltaUhat();
@@ -81,7 +81,7 @@ double XC::HSConstraint::getDLambdaNewStep(void) const
     return retval;
   }
 
-//! @brief Returns the valor de dLambda para el método update.
+//! @brief Returns the value of dLambda para el método update.
 double XC::HSConstraint::getDLambdaUpdate(void) const
   {
     const double &dLStep= vectors.getDeltaLambdaStep();

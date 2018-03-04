@@ -23,7 +23,7 @@
 
 
 class_<XC::NodeLocker,XC::NodeLocker *, bases<XC::ForceReprComponent>, boost::noncopyable >("NodeLocker", no_init)
-  .def("newSPConstraint", &XC::NodeLocker::newSPConstraint,return_internal_reference<>(),"\n" "newSPConstraint(tag_nod,id_gdl,valor) \n" "Create a single-point boundary constraint by assigning a value=valor to the degree of freedom gdl of node whose ID is tag_nod.")
+  .def("newSPConstraint", &XC::NodeLocker::newSPConstraint,return_internal_reference<>(),"\n" "newSPConstraint(tag_nod,id_gdl,value) \n" "Create a single-point boundary constraint by assigning a value to the degree of freedom gdl of node whose ID is tag_nod.")
   .def("removeSPConstraint", &XC::NodeLocker::removeSFreedom_Constraint,"Remove a single-point boundary constraint.")
   .def("clearAll",&XC::NodeLocker::clearAll)
   ;
@@ -60,16 +60,16 @@ class_<XC::LoadPattern, bases<XC::NodeLocker>, boost::noncopyable >("LoadPattern
 
 #include "load_patterns/python_interface.tcc"
 
-XC::LoadCombination &(XC::LoadCombination::*suma)(const std::string &)= &XC::LoadCombination::suma;
-XC::LoadCombination &(XC::LoadCombination::*resta)(const std::string &)= &XC::LoadCombination::resta;
+XC::LoadCombination &(XC::LoadCombination::*add)(const std::string &)= &XC::LoadCombination::add;
+XC::LoadCombination &(XC::LoadCombination::*substract)(const std::string &)= &XC::LoadCombination::substract;
 class_<XC::LoadCombination, XC::LoadCombination *, bases<XC::ForceReprComponent>, boost::noncopyable >("LoadCombination", no_init)
   .add_property("getName", make_function( &XC::LoadCombination::getNombre, return_value_policy<return_by_value>() ), "Returns combination's name.")
   .def("addToDomain", &XC::LoadCombination::addToDomain,"Add combination to the domain.")
   .def("removeFromDomain", &XC::LoadCombination::removeFromDomain,"Eliminates combination from domain.")
   .def("getCombPrevia", &XC::LoadCombination::getPtrCombPrevia,return_internal_reference<>(),"Returns previous load combination.")
   .def("getDescomp", &XC::LoadCombination::getString,"Returns combination expression.")
-  .def("suma",suma,return_internal_reference<>())
-  .def("resta",resta,return_internal_reference<>())
+  .def("add",add,return_internal_reference<>())
+  .def("substract",substract,return_internal_reference<>())
   .def("multiplica",&XC::LoadCombination::multiplica,return_internal_reference<>())
   .def("divide",&XC::LoadCombination::divide,return_internal_reference<>())
   .def("asigna",&XC::LoadCombination::asigna,return_internal_reference<>())

@@ -80,11 +80,11 @@ XC::TaggedObject *XC::TaggedObject::getCopy(void) const
     return nullptr;
   }
 
-//! @brief Establece el valor del tag.
+//! @brief Sets del tag.
 void XC::TaggedObject::setTag(int newTag) 
   { theTag = newTag; }
 
-//! @brief Establece el valor del tag.
+//! @brief Sets del tag.
 void XC::TaggedObject::assignTag(int newTag) 
   {
     std::clog << "Call assignTag is not a good idea (usually)." << std::endl;

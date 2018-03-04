@@ -68,7 +68,7 @@
 XC::DistributedSparseGenColLinSOE::DistributedSparseGenColLinSOE(AnalysisAggregation *owr)
   :SparseGenColLinSOE(owr,LinSOE_TAGS_DistributedSparseGenColLinSOE), DistributedBandLinSOE() {}
 
-//! @brief Calcula el valor de nnz.
+//! @brief Compute the value of nnz.
 void XC::DistributedSparseGenColLinSOE::calcNonZeros(Graph &theGraph)
   {
     size= theGraph.getNumVertex();

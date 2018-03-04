@@ -205,13 +205,14 @@ void XC::PathTimeSeries::readFromFiles(const std::string &filePathName,const std
      }
   }
 
+//! @brief Returns the time increment at the pseudo-time.
 double XC::PathTimeSeries::getTimeIncr(double pseudoTime) const
   {
     // NEED TO FILL IN, FOR NOW return 1.0
     return 1.0;
   }
 
-//! @brief Returns the valor correspondiente al instante being passed as parameter.
+//! @brief Returns the value of the factor at the pseudo-time.
 double XC::PathTimeSeries::getFactor(double pseudoTime) const
   {
     // check for a quick return

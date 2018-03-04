@@ -136,7 +136,7 @@ int XC::NDMaterial::setTrialStrain(const Vector &v, const Vector &r)
     return -1;    
   }
 
-//! @brief Asigna el valor del incremento de la trial strain.
+//! @brief Set trial strain increment.
 int XC::NDMaterial::setTrialStrainIncr(const Vector &v)
   {
     std::cerr << getClassName() << "::" << __FUNCTION__
@@ -144,7 +144,7 @@ int XC::NDMaterial::setTrialStrainIncr(const Vector &v)
     return -1;    
   }
 
-//! @brief Asigna el valor del incremento de la trial strain.
+//! @brief Set trial strain increment.
 int XC::NDMaterial::setTrialStrainIncr(const Vector &v, const Vector &r)
   {
      std::cerr << getClassName() << "::" << __FUNCTION__
@@ -192,7 +192,7 @@ const XC::Vector &XC::NDMaterial::getInitialGeneralizedStrain(void) const
     return errVector;    
   }
 
-//! @brief Asigna el trial strain value.
+//! @brief Set trial strain value.
 int XC::NDMaterial::setTrialStrain(const Tensor &v)
   {
     std::cerr << getClassName() << "::" << __FUNCTION__
@@ -200,7 +200,7 @@ int XC::NDMaterial::setTrialStrain(const Tensor &v)
     return -1;    
   }
 
-//! @brief Asigna el trial strain value.
+//! @brief Set trial strain value.
 int XC::NDMaterial::setTrialStrain(const Tensor &v, const XC::Tensor &r)    
   {
     std::cerr << getClassName() << "::" << __FUNCTION__
@@ -208,7 +208,7 @@ int XC::NDMaterial::setTrialStrain(const Tensor &v, const XC::Tensor &r)
     return -1;    
   }
 
-//! @brief Asigna el valor del incremento de la trial strain.
+//! @brief Set trial strain increment.
 int XC::NDMaterial::setTrialStrainIncr(const Tensor &v)
   {
     std::cerr << getClassName() << "::" << __FUNCTION__
@@ -216,7 +216,7 @@ int XC::NDMaterial::setTrialStrainIncr(const Tensor &v)
     return -1;    
   }
 
-//! @brief Asigna el valor del incremento de la trial strain.
+//! @brief Set trial strain increment.
 int XC::NDMaterial::setTrialStrainIncr(const XC::Tensor &v, const XC::Tensor &r)
   {
     std::cerr << getClassName() << "::" << __FUNCTION__

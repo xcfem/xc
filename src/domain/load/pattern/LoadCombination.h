@@ -44,31 +44,31 @@ class LoadCombination: public ForceReprComponent
   {
     LoadLoader *loader; //!< Pointer to the load case manager.
     //! @brief Each of the terms (factor*LoadPattern) of the combination.
-    class sumando: public EntCmd
+    class summand: public EntCmd
       {
         float factor; //!< Factor that multiplies the load pattern effect.
         LoadPattern *lpattern; //!< Load pattern.
         void neg(void);
       public:
-        sumando(const float &f= 1.0,LoadPattern *lp= nullptr);
+        summand(const float &f= 1.0,LoadPattern *lp= nullptr);
         //! @brief Returns the factor that multiplies the load pattern.
         const float &Factor(void) const;
         const LoadPattern *Caso(void) const;
         LoadPattern *Caso(void);
 	const std::string &getNombreCaso(const MapLoadPatterns &lps) const;
 
-        sumando getNeg(void) const;
-        const sumando &suma(const sumando &otro);
-        const sumando &resta(const sumando &otro);
-        const sumando &multiplica(const float &otro);
-        const sumando &divide(const float &otro);
+        summand getNeg(void) const;
+        const summand &add(const summand &otro);
+        const summand &substract(const summand &otro);
+        const summand &multiplica(const float &otro);
+        const summand &divide(const float &otro);
 
 	std::string getString(const MapLoadPatterns &,const std::string &fmt) const;
         void Print(std::ostream &os) const;
     
       };
   public:
-    typedef std::deque<sumando> TDescomp; //!< Container type for the combination expression (1.5*PP+1.0*CP+1.6*SC ...).
+    typedef std::deque<summand> TDescomp; //!< Container type for the combination expression (1.5*PP+1.0*CP+1.6*SC ...).
     typedef TDescomp::iterator iterator;
     typedef TDescomp::const_iterator const_iterator;
   private:
@@ -81,7 +81,7 @@ class LoadCombination: public ForceReprComponent
     void set_domain(void);
     friend class Domain;
     friend class FEM_ObjectBroker;
-    void add_component(const sumando &);
+    void add_component(const summand &);
     void interpreta_descomp(const std::string &str);
     void limpia_ceros(void);
     void clear(void);
@@ -93,8 +93,8 @@ class LoadCombination: public ForceReprComponent
     iterator end(void)
       { return descomp.end(); }
 
-    LoadCombination &suma(const LoadCombination &otro);
-    LoadCombination &resta(const LoadCombination &otro);
+    LoadCombination &add(const LoadCombination &otro);
+    LoadCombination &substract(const LoadCombination &otro);
 
     DbTagData &getDbTagData(void) const;
     int sendData(CommParameters &cp);
@@ -138,13 +138,13 @@ class LoadCombination: public ForceReprComponent
 
     LoadCombination &multiplica(const float &otro);
     LoadCombination &divide(const float &otro);
-    LoadCombination &suma(const std::string &);
-    LoadCombination &resta(const std::string &);
+    LoadCombination &add(const std::string &);
+    LoadCombination &substract(const std::string &);
     LoadCombination &asigna(const std::string &);
     inline LoadCombination &operator+=(const LoadCombination &c)
-      { return suma(c); }
+      { return add(c); }
     LoadCombination &operator-=(const LoadCombination &c)
-      { return resta(c); }
+      { return substract(c); }
     LoadCombination &operator*=(const float &f)
       { return multiplica(f); }
     LoadCombination &operator/=(const float &f)

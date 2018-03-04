@@ -113,7 +113,7 @@ XC::DisplacementControl::~DisplacementControl(void)
 void XC::DisplacementControl::setIncrement(const double &d)
   {
     theIncrement= d;
-    //Actualizamos valores extremos.
+    //Update extrema.
     minIncrement= std::min(theIncrement,minIncrement);
     maxIncrement= std::max(theIncrement,maxIncrement);
   }

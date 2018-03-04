@@ -45,7 +45,7 @@ XC::ParticlePos3d::ParticlePos3d(const Pos2d &p)
 XC::ParticlePos3d::ParticlePos3d(const Pos3d &p)
   { set_coordinates(p); }
 
-//! @brief Asigna valores a las coordenadas.
+//! @brief Set coordinates.
 void XC::ParticlePos3d::set_coordinates(const double &r_coord,const double &s_coord,const double &t_coord)
   {
     r = r_coord;
@@ -53,11 +53,11 @@ void XC::ParticlePos3d::set_coordinates(const double &r_coord,const double &s_co
     t = t_coord;
   }
 
-//! @brief Asigna valores a las coordenadas.
+//! @brief Set coordinates.
 void XC::ParticlePos3d::set_coordinates(const Pos3d &p)
   { set_coordinates(p.x(),p.y(),p.z());}
 
-//! @brief Asigna valores a las coordenadas.
+//! @brief Set coordinates.
 void XC::ParticlePos3d::set_coordinates(const Pos2d &p)
   { set_coordinates(p.x(),p.y());}
 

@@ -186,7 +186,7 @@ void XC::Beam3dPointLoad::addReactionsInBasicSystem(const double &L,const double
 
     if(aOverL < 0.0 || aOverL > 1.0)
       {
-        std::cerr << "XC::Element1D::addReactionsInBasicSystem; el valor de x ("
+        std::cerr << "XC::Element1D::addReactionsInBasicSystem; el value of x ("
                   << aOverL << ") es incorrecto, debe estar entre 0 y 1. Load ignored." << std::endl;
         return;
       }
@@ -221,7 +221,7 @@ void XC::Beam3dPointLoad::addFixedEndForcesInBasicSystem(const double &L,const d
 
     if(aOverL < 0.0 || aOverL > 1.0)
       {
-        std::cerr << "XC::Element1D::fixedEndForcesInBasicSystem; el valor de x ("
+        std::cerr << "XC::Element1D::fixedEndForcesInBasicSystem; el value of x ("
                   << aOverL << ") es incorrecto, debe estar entre 0 y 1. Load ignored." << std::endl;
       }
     else
@@ -378,7 +378,7 @@ void XC::Beam3dPointLoad::addElasticDeformations(const double &L,const CrossSect
   }
 
 //! @brief Returns a vector para almacenar los dbTags
-//! de los miembros de la clase.
+//! de los miembros of the clase.
 XC::DbTagData &XC::Beam3dPointLoad::getDbTagData(void) const
   {
     static DbTagData retval(8);

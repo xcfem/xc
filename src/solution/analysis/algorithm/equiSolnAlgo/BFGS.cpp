@@ -136,7 +136,7 @@ int XC::BFGS::solveCurrentStep(void)
         int systemSize = theSysOfEqn->getNumEqn( );
 
         //temporary vector
-        if(temp.Nulo())
+        if(temp.isEmpty())
 	  temp= Vector(systemSize);
 
         //initial displacement increment
@@ -153,13 +153,13 @@ int XC::BFGS::solveCurrentStep(void)
             std::cerr << "the XC::Integrator failed in formUnbalance()\n";	
           }	    
 
-        if(residNew.Nulo()) 
+        if(residNew.isEmpty()) 
 	  residNew= Vector(systemSize);
  
-        if(du.Nulo()) 
+        if(du.isEmpty()) 
 	  du= Vector(systemSize);
 
-        if(b.Nulo())
+        if(b.isEmpty())
 	  b= Vector(systemSize);
 
         localTest->start();

@@ -740,7 +740,7 @@ bool XC::FiberDeque::hayMomento(const double &tol) const
       return false;
   }
 
-//! @brief Returns the resultante de las compresiones en las fibers.
+//! @brief Returns the resultante of the compresiones en las fibers.
 double XC::FiberDeque::ResultanteComp(void) const
   {
     register double retval= 0;
@@ -768,7 +768,7 @@ double XC::FiberDeque::getMzComp(const double &y0) const
     return retval;
   }
 
-//! @brief Returns the punto de paso de la resultante de tensiones menores
+//! @brief Returns the punto de paso of the resultante de tensiones menores
 //! que «ref» (por defecto cero) compresiones, si no hay returns (0,0).
 const XC::Vector &XC::FiberDeque::baricentroCompresiones(void) const
   {
@@ -829,7 +829,7 @@ double XC::FiberDeque::getMyComp(const double &z0) const
     return retval;
   }
 
-//! @brief Returns the resultante de las tracciones en las fibers.
+//! @brief Returns the resultante of the tracciones en las fibers.
 double XC::FiberDeque::ResultanteTracc(void) const
   {
     register double retval= 0;
@@ -971,7 +971,7 @@ size_t XC::FiberDeque::nearest_fiber(const double &y,const double &z) const
 //     retval.updateCDG();
 //   }
 
-//! Returns the subfiber set de éste cuyo material tiene por tag el que se
+//! Returns the subfiber set of this one which material tag is
 //! being passed as parameter.
 void XC::FiberDeque::SelMatTag(const int &matTag,FiberDeque &retval,bool clear)
   {
@@ -1424,7 +1424,7 @@ void XC::FiberDeque::computeCovers(const GeomSection &g) const
 void XC::FiberDeque::computeSpacement(void) const
   { seps= getPosiciones().GetSeparaciones(); }
 
-//! @brief Returns the value of concrete cover for the i-th fiber.
+//! @brief Returns the value of the concrete cover for the i-th fiber.
 const double &XC::FiberDeque::getFiberCover(const size_t &i) const
   {
     if(recubs.size()!=size())
@@ -1728,7 +1728,7 @@ XC::Fiber *XC::FiberDeque::addFiber(FiberSection3d &Section3d,Fiber &newFiber,Cr
     return retval;
   }
 
-//! @brief Establece los valores de las initial strains.
+//! @brief Set the initial strains.
 int XC::FiberDeque::setInitialSectionDeformation(const FiberSection3d &Section3d)
   {
     int retval= 0;
@@ -1746,7 +1746,7 @@ int XC::FiberDeque::setInitialSectionDeformation(const FiberSection3d &Section3d
     return retval;
   }
 
-//! @brief Establece los valores de las trial strains.
+//! @brief Set the trial strains.
 int XC::FiberDeque::setTrialSectionDeformation(FiberSection3d &Section3d,CrossSectionKR &kr3)
   {
     int retval= 0;
@@ -1891,7 +1891,7 @@ XC::Fiber *XC::FiberDeque::addFiber(FiberSectionGJ &SectionGJ,Fiber &newFiber,Cr
     return retval;
   }
 
-//! @brief Establece los valores de las initial strains.
+//! @brief Set the initial strains.
 int XC::FiberDeque::setInitialSectionDeformation(const FiberSectionGJ &SectionGJ)
   {
     int retval= 0;
@@ -2125,10 +2125,10 @@ XC::Response *XC::FiberDeque::setResponse(const std::vector<std::string> &argv, 
 //       }
 //     register size_t i= 0;
 //     (*this)[i]->interpreta(nmb_prop);
-//     boost::any valor_prop= InterpreteRPN::Pila().Pop();
-//     if(boost_any_is_number(valor_prop))
+//     boost::any propertyValue= InterpreteRPN::Pila().Pop();
+//     if(boost_any_is_number(propertyValue))
 //       {
-//         vmax= convert_to_double(valor_prop);
+//         vmax= convert_to_double(propertyValue);
 //         retval= i;
 //       }
 //     i++;
@@ -2137,10 +2137,10 @@ XC::Response *XC::FiberDeque::setResponse(const std::vector<std::string> &argv, 
 //       if((*this)[i])
 //         {
 //           (*this)[i]->interpreta(nmb_prop);
-//           boost::any valor_prop= InterpreteRPN::Pila().Pop();
-//           if(boost_any_is_number(valor_prop))
+//           boost::any propertyValue= InterpreteRPN::Pila().Pop();
+//           if(boost_any_is_number(propertyValue))
 //             {
-//               tmp= convert_to_double(valor_prop);
+//               tmp= convert_to_double(propertyValue);
 //               if(tmp>vmax)
 //                 {
 //                   retval= i;
@@ -2167,10 +2167,10 @@ XC::Response *XC::FiberDeque::setResponse(const std::vector<std::string> &argv, 
 //       }
 //     register size_t i= 0;
 //     (*this)[i]->interpreta(nmb_prop);
-//     boost::any valor_prop= InterpreteRPN::Pila().Pop();
-//     if(boost_any_is_number(valor_prop))
+//     boost::any propertyValue= InterpreteRPN::Pila().Pop();
+//     if(boost_any_is_number(propertyValue))
 //       {
-//         vmin= convert_to_double(valor_prop);
+//         vmin= convert_to_double(propertyValue);
 //         retval= i;
 //       }
 //     i++;
@@ -2179,10 +2179,10 @@ XC::Response *XC::FiberDeque::setResponse(const std::vector<std::string> &argv, 
 //       if((*this)[i])
 //         {
 //           (*this)[i]->interpreta(nmb_prop);
-//           valor_prop= InterpreteRPN::Pila().Pop();
-//           if(boost_any_is_number(valor_prop))
+//           propertyValue= InterpreteRPN::Pila().Pop();
+//           if(boost_any_is_number(propertyValue))
 //             {
-//               tmp= convert_to_double(valor_prop);
+//               tmp= convert_to_double(propertyValue);
 //               if(tmp<vmin)
 //                 {
 //                   retval= i;

@@ -192,7 +192,7 @@ int XC::DiscretizedRandomProcessSeries::setParameter(const std::vector<std::stri
 //         // The second argument tells when the random variable "kicks in".
 //         // Store this in a table...
 //         // In case the vector doesn't exist
-//         if(kickInTimes.Nulo()) {
+//         if(kickInTimes.isEmpty()) {
 //                 kickInTimes= Vector(rvNumber);
 //                 kickInTimes(rvNumber-1) = (double)atof(argv[0]);
 

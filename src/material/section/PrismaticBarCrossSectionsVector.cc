@@ -264,7 +264,7 @@ void XC::PrismaticBarCrossSectionsVector::zeroInitialSectionDeformations(void)
       (*this)[i]->zeroInitialSectionDeformation();
   }
 
-//! @brief Asigna valores a las initial strains.
+//! @brief Set initial strains.
 void XC::PrismaticBarCrossSectionsVector::setInitialSectionDeformations(const std::vector<Vector> &vs)
   {
     const size_t nSections= std::min(size(),vs.size());
@@ -274,7 +274,7 @@ void XC::PrismaticBarCrossSectionsVector::setInitialSectionDeformations(const st
       (*this)[i]->setInitialSectionDeformation(vs[i]);
   }
 
-//! @brief Asigna valores a las initial strains interpolando entre e1 y e2.
+//! @brief Set initial strains interpolating between e1 and e2.
 void XC::PrismaticBarCrossSectionsVector::addInitialSectionDeformations(const BeamStrainLoad &strainLoad,const double &loadFactor,const Matrix &xi, const double &L)
   {
     const size_t numAbcisas= xi.noRows();
@@ -295,7 +295,7 @@ void XC::PrismaticBarCrossSectionsVector::addInitialSectionDeformations(const Be
       }
   }
 
-//! @brief Asigna valores a las trial strains.
+//! @brief Set trial strains.
 void XC::PrismaticBarCrossSectionsVector::setTrialSectionDeformations(const std::vector<Vector> &vs)
   {
     const size_t nSections= std::min(size(),vs.size());

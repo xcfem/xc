@@ -298,7 +298,7 @@ bool XC::Domain::removeSFreedom_Constraint(int theNode, int theDOF, int loadPatt
     return retval;
   }
 
-//! @brief Elimina del domain la constraint monopunto cuyo tag being passed as parameter.
+//! @brief Elimina del domain la constraint monopunto which tag being passed as parameter.
 bool XC::Domain::removeSFreedom_Constraint(int tag)
   {
     bool retval= constraints.removeSFreedom_Constraint(tag);
@@ -307,7 +307,7 @@ bool XC::Domain::removeSFreedom_Constraint(int tag)
     return retval;
   }
 
-//! @brief Elimina del domain la constraint multipunto cuyo tag being passed as parameter.
+//! @brief Elimina del domain la constraint multipunto which tag being passed as parameter.
 bool XC::Domain::removeMFreedom_Constraint(int tag)
   {
     bool result = constraints.removeMFreedom_Constraint(tag);
@@ -317,7 +317,7 @@ bool XC::Domain::removeMFreedom_Constraint(int tag)
   }
 
 
-//! @brief Elimina del domain la constraint multi retained node cuyo tag being passed as parameter.
+//! @brief Elimina del domain la constraint multi retained node which tag being passed as parameter.
 bool XC::Domain::removeMRMFreedom_Constraint(int tag)
   {
     bool result = constraints.removeMRMFreedom_Constraint(tag);
@@ -377,7 +377,7 @@ bool XC::Domain::addLoadCombination(LoadCombination *comb)
     return retval;
   }
 
-//! @brief Elimina del domain el load pattern cuyo tag being passed as parameter.
+//! @brief Elimina del domain el load pattern which tag being passed as parameter.
 bool XC::Domain::removeLoadPattern(int tag)
   {
     int numSPs= 0;
@@ -477,7 +477,7 @@ bool XC::Domain::removeNodalLoad(int nodalLoadTag, int loadPattern)
 
 
 //! @brief Removes from domain the elemental load being passed as parameter.
-//! @param elemLoadTag: Identificador de the load over elements a eliminar.
+//! @param elemLoadTag: Identifier de the load over elements a eliminar.
 //! @param loadPattern: Load pattern identifier.
 bool XC::Domain::removeElementalLoad(int elemLoadTag, int loadPattern)
   { return constraints.removeElementalLoad(elemLoadTag,loadPattern); }
@@ -549,11 +549,11 @@ bool XC::Domain::existNode(int tag)
  { return mesh.existNode(tag); }
 
 
-//! @brief Returns a pointer to the nodo cuyo tag being passed as parameter.
+//! @brief Returns a pointer to the nodo which tag being passed as parameter.
 XC::Node *XC::Domain::getNode(int tag)
   { return mesh.getNode(tag); }
 
-//! @brief Returns a pointer to the nodo cuyo tag being passed as parameter.
+//! @brief Returns a pointer to the nodo which tag being passed as parameter.
 const XC::Node *XC::Domain::getNode(int tag) const
   { return mesh.getNode(tag); }
 
@@ -616,7 +616,7 @@ void XC::Domain::setLoadConstant(void)
 int XC::Domain::initialize(void)
   { return mesh.initialize(); }
 
-//! @brief Asigna valores a los coeficientes de amortiguamiento de Rayleigh.
+//! @brief Set Rayleigh damping factors.
 int XC::Domain::setRayleighDampingFactors(const RayleighDampingFactors &rF)
   { return mesh.setRayleighDampingFactors(rF); }
 
@@ -870,7 +870,7 @@ int XC::Domain::addRegion(MeshRegion &theRegion)
     return 0;
   }
 
-//! @brief Returns a pointer to the la región cuyo tag being passed as parameter.
+//! @brief Returns a pointer to the la región which tag being passed as parameter.
 XC::MeshRegion *XC::Domain::getRegion(int tag)
   {
     MeshRegion *retval= nullptr;
@@ -888,7 +888,7 @@ int XC::Domain::buildNodeGraph(Graph &theNodeGraph)
   { return mesh.buildNodeGraph(theNodeGraph); }
 
 //! @brief Returns a vector para almacenar los dbTags
-//! de los miembros de la clase.
+//! de los miembros of the clase.
 XC::DbTagData &XC::Domain::getDbTagData(void) const
   {
     static DbTagData retval(9);
@@ -992,14 +992,14 @@ int XC::Domain::recvSelf(const CommParameters &cp)
     return retval;
   }
   
-//! @brief Returns the value of dof component of displacement for the node with the tag being passed as parameter.
+//! @brief Returns the value of the dof component of displacement for the node with the tag being passed as parameter.
 //! @param nodeTag: node identifier.
 //! @param dof: component of the displacement.
 //! @param errorFlag: error indicator.
 double XC::Domain::getNodeDisp(int nodeTag, int dof,int &errorFlag)
   { return mesh.getNodeDisp(nodeTag,dof,errorFlag); }
 
-//! @brief Asigna la matriz de masas al nudo cuyo tag being passed as parameter.
+//! @brief Asigna la matriz de masas al nudo which tag being passed as parameter.
 int XC::Domain::setMass(const XC::Matrix &mass, int nodeTag)
   { return mesh.setMass(mass,nodeTag); }
 

@@ -174,7 +174,7 @@ int XC::ProfileSPDLinDirectSkypackSolver::solve(void)
     
 
     // check that work area invD has been created
-    if(invD.Nulo())
+    if(invD.isEmpty())
       {
 	std::cerr << getClassName() << "::" << __FUNCTION__
 		  << "; no space for invD - has setSize() been called?\n";

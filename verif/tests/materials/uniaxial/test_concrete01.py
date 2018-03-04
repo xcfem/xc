@@ -151,28 +151,28 @@ result= analysis.analyze(20)
 integ.dU1= 0.00012 #Unload
 result= analysis.analyze(17)
 
-#resta= ley-ley_modelo
-resta_x= []
-resta_y= []
+#diff= ley-ley_modelo
+diff_x= []
+diff_y= []
 def substract(x,y): return x-y
-resta_x= map(substract,x,x_modelo)
-resta_y= map(substract,y,y_modelo)
+diff_x= map(substract,x,x_modelo)
+diff_y= map(substract,y,y_modelo)
 
 ratio1= 0
-for d in resta_x:
+for d in diff_x:
   ratio1= ratio1+d**2
 ratio3= math.sqrt(ratio1)
 ratio2= 0
-for d in resta_y:
+for d in diff_y:
   ratio2= ratio2+d**2
 ratio4= math.sqrt(ratio2)
 
 #print "x= ",x
-#print "resta_x= ",resta_x
+#print "diff_x= ",diff_x
 #print "ratio3= ",ratio3
 #print "y= ",y
 #print "y_modelo= ",y_modelo
-#print "resta_y= ",resta_y
+#print "diff_y= ",diff_y
 #print "ratio4= ",ratio4
 
 import os

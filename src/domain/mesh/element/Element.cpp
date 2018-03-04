@@ -141,7 +141,7 @@ int XC::Element::update(void)
 int XC::Element::revertToStart(void)
   { return 0; }
 
-//! @brief Asigna valores a los coeficientes de amortiguamiento de Rayleigh.
+//! @brief Set Rayleigh damping factors.
 int XC::Element::setRayleighDampingFactors(const RayleighDampingFactors &rF) const
   {
     rayFactors= rF;
@@ -822,11 +822,11 @@ int XC::Element::setMaterialParameter(Material *theMaterial,const std::vector<st
 std::vector<int> XC::Element::getIdxNodes(void) const
   { return getNodePtrs().getIdx(); }
 
-//! @brief Returns the valor máximo de la coordenada i of the nodes of the element.
+//! @brief Returns the maximum value of the i coordinate of the element nodes.
 double XC::Element::MaxCooNod(int icoo) const
   { return getNodePtrs().MaxCooNod(icoo); }
 
-//! @brief Returns the minimum value de la coordenada i of the nodes of the element.
+//! @brief Returns the minimum value of the i coordinate of the element nodes.
 double XC::Element::MinCooNod(int icoo) const
   { return getNodePtrs().MinCooNod(icoo); }
 
@@ -951,7 +951,7 @@ void XC::Element::computeTributaryLengths(bool initialGeometry) const
 double XC::Element::getTributaryLength(const Node *) const
   { return 0; }
 
-//! @brief Returns the tributary length corresponding to the node cuyo tag se pasa
+//! @brief Returns the tributary length corresponding to the node which tag se pasa
 //! as parameter.
 double XC::Element::getTributaryLengthByTag(const int &tag) const
   {
@@ -992,7 +992,7 @@ void XC::Element::computeTributaryVolumes(bool initialGeometry) const
 double XC::Element::getTributaryVolume(const Node *) const
   { return 0; }
 
-//! @brief Returns the tributary volume corresponding to the node cuyo tag se pasa
+//! @brief Returns the tributary volume corresponding to the node which tag se pasa
 //! as parameter.
 double XC::Element::getTributaryVolumeByTag(const int &tag) const
   {

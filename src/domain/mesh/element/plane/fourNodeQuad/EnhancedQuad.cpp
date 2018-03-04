@@ -486,7 +486,7 @@ int XC::EnhancedQuad::addInertiaLoadToUnbalance(const XC::Vector &accel)
   }
 
   // create the load vector if one does not exist
-  if(load.Nulo())
+  if(load.isEmpty())
     load.reset(numberNodes*ndf);
 
   // add -M * RV(accel) to the load vector
@@ -502,7 +502,7 @@ const XC::Vector &XC::EnhancedQuad::getResistingForce(void) const
     int tang_flag = 0 ; //don't get the tangent
     formResidAndTangent( tang_flag ) ;
     // subtract external loads
-    if(!load.Nulo())
+    if(!load.isEmpty())
       resid-= load;
     if(isDead())
       resid*=dead_srf;
@@ -529,7 +529,7 @@ const XC::Vector &XC::EnhancedQuad::getResistingForceIncInertia(void) const
       res+= this->getRayleighDampingForces();
 
     // subtract external loads
-    if(!load.Nulo())
+    if(!load.isEmpty())
       res-= load;
     if(isDead())
       res*=dead_srf;

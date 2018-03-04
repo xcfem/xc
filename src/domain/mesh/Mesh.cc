@@ -451,7 +451,7 @@ const XC::Element *XC::Mesh::getNearestElement(const Pos3d &p) const
 bool XC::Mesh::existNode(int tag)
  { return theNodes->existComponent(tag); }
 
-//! @brief Returns a pointer to the nodo cuyo tag being passed as parameter.
+//! @brief Returns a pointer to the nodo which tag being passed as parameter.
 XC::Node *XC::Mesh::getNode(int tag)
   {
     TaggedObject *mc = theNodes->getComponentPtr(tag);
@@ -462,7 +462,7 @@ XC::Node *XC::Mesh::getNode(int tag)
     return result;
   }
 
-//! @brief Returns a pointer to the nodo cuyo tag being passed as parameter.
+//! @brief Returns a pointer to the nodo which tag being passed as parameter.
 const XC::Node *XC::Mesh::getNode(int tag) const
   {
     const TaggedObject *mc = theNodes->getComponentPtr(tag);
@@ -666,7 +666,7 @@ XC::Graph &XC::Mesh::getNodeGraph(void)
   }
 
 //! @brief Return the masa modal efectiva 
-//! correspondiente al modo i.
+//! corresponding to the mode i.
 const double XC::Mesh::getEffectiveModalMass(int mode) const
   {
     double retval= 0;
@@ -711,7 +711,7 @@ int XC::Mesh::initialize(void)
     return 0;
   }
 
-//! @brief Asigna valores a los coeficientes de amortiguamiento de Rayleigh.
+//! @brief Set Rayleigh damping factors.
 int XC::Mesh::setRayleighDampingFactors(const RayleighDampingFactors &rF)
   {
     int result = 0;
@@ -996,7 +996,7 @@ int XC::Mesh::buildNodeGraph(Graph &theNodeGraph)
   }
 
 //! @brief Returns a vector para almacenar los dbTags
-//! de los miembros de la clase.
+//! de los miembros of the clase.
 XC::DbTagData &XC::Mesh::getDbTagData(void) const
   {
     static DbTagData retval(5);
@@ -1036,7 +1036,8 @@ int XC::Mesh::sendSelf(CommParameters &cp)
     const int dataTag= getDbTag(cp);
     res+= cp.sendIdData(getDbTagData(),dataTag);
     if(res<0)
-      std::cerr << "Mesh::send - ch failed to send data.\n";
+      std::cerr << getClassName() << "::" << __FUNCTION__
+              << "; - ch failed to send data.\n";
     return res;
   }
 
@@ -1048,7 +1049,8 @@ int XC::Mesh::recvSelf(const CommParameters &cp)
     inicComm(5);
     int res= cp.receiveIdData(getDbTagData(),getDbTag());
     if(res<0)
-      std::cerr << "Mesh::recv - ch failed to recv the initial ID\n";
+      std::cerr << getClassName() << "::" << __FUNCTION__
+              << "; - ch failed to recv the initial ID\n";
     else
       res+= recvData(cp);
     return res;
@@ -1076,7 +1078,7 @@ double XC::Mesh::getNodeDisp(int nodeTag, int dof,int &errorFlag)
     return result;
   }
 
-//! @brief Asigna la matriz de masas al nudo cuyo tag being passed as parameter.
+//! @brief Asigna la matriz de masas al nudo which tag being passed as parameter.
 int XC::Mesh::setMass(const XC::Matrix &mass, int nodeTag)
   {
     Node *theNode = this->getNode(nodeTag);

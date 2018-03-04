@@ -146,7 +146,7 @@ int XC::SymSparseLinSOE::setSize(Graph &theGraph)
     nnz = newNNZ;
  
     colA= ID(newNNZ);	
-    if(colA.Nulo())
+    if(colA.isEmpty())
       {
         std::cerr << "WARNING SymSparseLinSOE::setSize :";
 	std::cerr << " ran out of memory for colA with nnz = ";

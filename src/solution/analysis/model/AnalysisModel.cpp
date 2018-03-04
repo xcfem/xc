@@ -762,12 +762,11 @@ void XC::AnalysisModel::setNumEigenvectors(int numEigenvectors)
         theNode->setNumEigenvectors(numEigenvectors);
   }
 
-//! @brief Comunica al domain el valor de los eigenvalues obtenidos.
+//! @brief Informs the domain of the obtained eigenvalues.
 void XC::AnalysisModel::setEigenvalues(const Vector &eigenvalues)
   { getDomainPtr()->setEigenvalues(eigenvalues); }        
 
-//! @brief Comunica al domain el valor de los factores
-//! de participación modal obtenidos.
+//! @brief Informs the domain of the obtained modal participation factors.
 void XC::AnalysisModel::setModalParticipationFactors(const Vector &values)
   { getDomainPtr()->setModalParticipationFactors(values); }        
 

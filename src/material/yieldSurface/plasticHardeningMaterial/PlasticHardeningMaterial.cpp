@@ -98,17 +98,18 @@ const XC::Vector &XC::PlasticHardeningMaterial::getGeneralizedStress(void) const
 const XC::Vector &XC::PlasticHardeningMaterial::getGeneralizedStrain(void) const
   {
     static Vector retval;
-    std::cerr << "PlasticHardeningMaterial::getGeneralizedStrain not implemented." << std::endl;
+    std::cerr << getClassName() << "::" << __FUNCTION__
+              << "; not implemented." << std::endl;
     return retval;
   }
 
-//! @brief Asigna to the initial strain el valor being passed as parameter.
+//! @brief Set initial strain.
 void XC::PlasticHardeningMaterial::setInitialGeneralizedStrain(const Vector &)
   {
     std::cerr << "PlasticHardeningMaterial::setInitialGeneralizedStrain not implemented." << std::endl;
   }
 
-//! @brief Adds to the initial strain el valor being passed as parameter.
+//! @brief Adds to the initial strain.
 const XC::Vector &XC::PlasticHardeningMaterial::getInitialGeneralizedStrain(void) const
   {
     static Vector retval;

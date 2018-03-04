@@ -166,7 +166,7 @@ int XC::DistributedProfileSPDLinSOE::setSize(Graph &theGraph)
 
     // now go through iDiagLoc, adding 1 for the diagonal element
     // and then adding previous entry to give current location.
-    if(!iDiagLoc.Nulo())
+    if(!iDiagLoc.isEmpty())
       iDiagLoc(0) = 1; // NOTE FORTRAN ARRAY LOCATION - 1 of solvers uses library
 
     for(int j=1; j<size; j++)

@@ -198,7 +198,8 @@ int XC::NormalizedPeak::setTrial (const Vector &trialVector)
 	  - 0.5* TrialVector(1) * TrialVector(1) / TrialVector(2);
         break;
       default:
-	std::cerr << "El valor de damagetype :" << damagetype << " es desconocido." << std::endl;
+	std::cerr << "Unknown value for damagetype :" << damagetype
+		  << " es desconocido." << std::endl;
         break;
       }
   

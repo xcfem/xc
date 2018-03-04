@@ -306,30 +306,30 @@ const XC::Matrix &XC::LinearCrdTransf2d::getGlobalStiffMatrix(const XC::Matrix &
     const double sl = sinTheta*oneOverL;
     const double cl = cosTheta*oneOverL;
 
-    const bool nodeIOffsetNoNulo= (nodeIOffset.Norm2()>0.0);
-    const bool nodeJOffsetNoNulo= (nodeJOffset.Norm2()>0.0);
+    const bool nodeIOffsetNotZero= (nodeIOffset.Norm2()>0.0);
+    const bool nodeJOffsetNotZero= (nodeJOffset.Norm2()>0.0);
 
     static Matrix tmp(6,6);
     tmp(0,0) = -cosTheta*kb(0,0) - sl*(kb(0,1)+kb(0,2));
     tmp(0,1) = -sinTheta*kb(0,0) + cl*(kb(0,1)+kb(0,2));
-    tmp(0,2) = (nodeIOffsetNoNulo) ? t02*kb(0,0) + t12*kb(0,1) + t22*kb(0,2) : kb(0,1);
+    tmp(0,2) = (nodeIOffsetNotZero) ? t02*kb(0,0) + t12*kb(0,1) + t22*kb(0,2) : kb(0,1);
     tmp(0,3) = -tmp(0,0);
     tmp(0,4) = -tmp(0,1);
-    tmp(0,5) = (nodeJOffsetNoNulo) ? t05*kb(0,0) + t15*kb(0,1) + t25*kb(0,2) : kb(0,2);
+    tmp(0,5) = (nodeJOffsetNotZero) ? t05*kb(0,0) + t15*kb(0,1) + t25*kb(0,2) : kb(0,2);
 
     tmp(1,0) = -cosTheta*kb(1,0) - sl*(kb(1,1)+kb(1,2));
     tmp(1,1) = -sinTheta*kb(1,0) + cl*(kb(1,1)+kb(1,2));
-    tmp(1,2) = (nodeIOffsetNoNulo) ? t02*kb(1,0) + t12*kb(1,1) + t22*kb(1,2) : kb(1,1);
+    tmp(1,2) = (nodeIOffsetNotZero) ? t02*kb(1,0) + t12*kb(1,1) + t22*kb(1,2) : kb(1,1);
     tmp(1,3) = -tmp(1,0);
     tmp(1,4) = -tmp(1,1);
-    tmp(1,5) = (nodeJOffsetNoNulo) ? t05*kb(1,0) + t15*kb(1,1) + t25*kb(1,2) : kb(1,2);
+    tmp(1,5) = (nodeJOffsetNotZero) ? t05*kb(1,0) + t15*kb(1,1) + t25*kb(1,2) : kb(1,2);
 
     tmp(2,0) = -cosTheta*kb(2,0) - sl*(kb(2,1)+kb(2,2));
     tmp(2,1) = -sinTheta*kb(2,0) + cl*(kb(2,1)+kb(2,2));
-    tmp(2,2) = (nodeIOffsetNoNulo) ? t02*kb(2,0) + t12*kb(2,1) + t22*kb(2,2) : kb(2,1);
+    tmp(2,2) = (nodeIOffsetNotZero) ? t02*kb(2,0) + t12*kb(2,1) + t22*kb(2,2) : kb(2,1);
     tmp(2,3) = -tmp(2,0);
     tmp(2,4) = -tmp(2,1);
-    tmp(2,5) = (nodeJOffsetNoNulo) ? t05*kb(2,0) + t15*kb(2,1) + t25*kb(2,2) : kb(2,2);
+    tmp(2,5) = (nodeJOffsetNotZero) ? t05*kb(2,0) + t15*kb(2,1) + t25*kb(2,2) : kb(2,2);
 
     static Matrix kg(6,6);
     kg(0,0) = -cosTheta*tmp(0,0) - sl*(tmp(1,0)+tmp(2,0));
@@ -346,7 +346,7 @@ const XC::Matrix &XC::LinearCrdTransf2d::getGlobalStiffMatrix(const XC::Matrix &
     kg(1,4) = -sinTheta*tmp(0,4) + cl*(tmp(1,4)+tmp(2,4));
     kg(1,5) = -sinTheta*tmp(0,5) + cl*(tmp(1,5)+tmp(2,5));
 
-    if(nodeIOffsetNoNulo)
+    if(nodeIOffsetNotZero)
       {
         kg(2,0) =  t02*tmp(0,0) + t12*tmp(1,0) + t22*tmp(2,0);
         kg(2,1) =  t02*tmp(0,1) + t12*tmp(1,1) + t22*tmp(2,1);
@@ -379,7 +379,7 @@ const XC::Matrix &XC::LinearCrdTransf2d::getGlobalStiffMatrix(const XC::Matrix &
     kg(4,4) = -kg(1,4);
     kg(4,5) = -kg(1,5);
 
-    if(nodeJOffsetNoNulo)
+    if(nodeJOffsetNotZero)
       {
         kg(5,0) =  t05*tmp(0,0) + t15*tmp(1,0) + t25*tmp(2,0);
         kg(5,1) =  t05*tmp(0,1) + t15*tmp(1,1) + t25*tmp(2,1);
@@ -417,30 +417,30 @@ const XC::Matrix &XC::LinearCrdTransf2d::getInitialGlobalStiffMatrix(const XC::M
     const double sl = sinTheta*oneOverL;
     const double cl = cosTheta*oneOverL;
 
-    const bool nodeIOffsetNoNulo= (nodeIOffset.Norm2()>0.0);
-    const bool nodeJOffsetNoNulo= (nodeJOffset.Norm2()>0.0);
+    const bool nodeIOffsetNotZero= (nodeIOffset.Norm2()>0.0);
+    const bool nodeJOffsetNotZero= (nodeJOffset.Norm2()>0.0);
 
     static Matrix tmp(6,6);
     tmp(0,0)= -cosTheta*kb(0,0) - sl*(kb(0,1)+kb(0,2));
     tmp(0,1)= -sinTheta*kb(0,0) + cl*(kb(0,1)+kb(0,2));
-    tmp(0,2)= (nodeIOffsetNoNulo) ? t02*kb(0,0) + t12*kb(0,1) + t22*kb(0,2) : kb(0,1);
+    tmp(0,2)= (nodeIOffsetNotZero) ? t02*kb(0,0) + t12*kb(0,1) + t22*kb(0,2) : kb(0,1);
     tmp(0,3)= -tmp(0,0);
     tmp(0,4)= -tmp(0,1);
-    tmp(0,5)= (nodeJOffsetNoNulo) ? t05*kb(0,0) + t15*kb(0,1) + t25*kb(0,2) : kb(0,2);
+    tmp(0,5)= (nodeJOffsetNotZero) ? t05*kb(0,0) + t15*kb(0,1) + t25*kb(0,2) : kb(0,2);
 
     tmp(1,0)= -cosTheta*kb(1,0) - sl*(kb(1,1)+kb(1,2));
     tmp(1,1)= -sinTheta*kb(1,0) + cl*(kb(1,1)+kb(1,2));
-    tmp(1,2)= (nodeIOffsetNoNulo) ? t02*kb(1,0) + t12*kb(1,1) + t22*kb(1,2) : kb(1,1);
+    tmp(1,2)= (nodeIOffsetNotZero) ? t02*kb(1,0) + t12*kb(1,1) + t22*kb(1,2) : kb(1,1);
     tmp(1,3)= -tmp(1,0);
     tmp(1,4)= -tmp(1,1);
-    tmp(1,5)= (nodeJOffsetNoNulo) ? t05*kb(1,0) + t15*kb(1,1) + t25*kb(1,2) : kb(1,2);
+    tmp(1,5)= (nodeJOffsetNotZero) ? t05*kb(1,0) + t15*kb(1,1) + t25*kb(1,2) : kb(1,2);
 
     tmp(2,0)= -cosTheta*kb(2,0) - sl*(kb(2,1)+kb(2,2));
     tmp(2,1)= -sinTheta*kb(2,0) + cl*(kb(2,1)+kb(2,2));
-    tmp(2,2)= (nodeIOffsetNoNulo) ? t02*kb(2,0) + t12*kb(2,1) + t22*kb(2,2) : kb(2,1);
+    tmp(2,2)= (nodeIOffsetNotZero) ? t02*kb(2,0) + t12*kb(2,1) + t22*kb(2,2) : kb(2,1);
     tmp(2,3)= -tmp(2,0);
     tmp(2,4)= -tmp(2,1);
-    tmp(2,5)= (nodeJOffsetNoNulo) ? t05*kb(2,0) + t15*kb(2,1) + t25*kb(2,2) : kb(2,2);
+    tmp(2,5)= (nodeJOffsetNotZero) ? t05*kb(2,0) + t15*kb(2,1) + t25*kb(2,2) : kb(2,2);
 
     static Matrix kg(6,6);
     kg(0,0)= -cosTheta*tmp(0,0) - sl*(tmp(1,0)+tmp(2,0));
@@ -457,7 +457,7 @@ const XC::Matrix &XC::LinearCrdTransf2d::getInitialGlobalStiffMatrix(const XC::M
     kg(1,4)= -sinTheta*tmp(0,4) + cl*(tmp(1,4)+tmp(2,4));
     kg(1,5)= -sinTheta*tmp(0,5) + cl*(tmp(1,5)+tmp(2,5));
 
-    if(nodeIOffsetNoNulo)
+    if(nodeIOffsetNotZero)
       {
         kg(2,0)=  t02*tmp(0,0) + t12*tmp(1,0) + t22*tmp(2,0);
         kg(2,1)=  t02*tmp(0,1) + t12*tmp(1,1) + t22*tmp(2,1);
@@ -490,7 +490,7 @@ const XC::Matrix &XC::LinearCrdTransf2d::getInitialGlobalStiffMatrix(const XC::M
     kg(4,4) = -kg(1,4);
     kg(4,5) = -kg(1,5);
 
-    if(nodeJOffsetNoNulo)
+    if(nodeJOffsetNotZero)
       {
         kg(5,0) =  t05*tmp(0,0) + t15*tmp(1,0) + t25*tmp(2,0);
         kg(5,1) =  t05*tmp(0,1) + t15*tmp(1,1) + t25*tmp(2,1);

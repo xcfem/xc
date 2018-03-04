@@ -123,7 +123,7 @@ const XC::Vector &XC::LinearBucklingAnalysis::getEigenvector(int mode)
     return retval;
   }
 
-//! @brief Returns the autovalor que corresponde al modo being passed as parameter.
+//! @brief Returns the eigenvalue que corresponde al modo being passed as parameter.
 const double &XC::LinearBucklingAnalysis::getEigenvalue(int mode) const
   {
     static double retval= 0.0;

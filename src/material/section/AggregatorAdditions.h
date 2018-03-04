@@ -57,7 +57,7 @@ class AggregatorAdditions: public DqUniaxialMaterial
     ~AggregatorAdditions(void);
 
     inline bool check_ptrs(void) const
-      { return !matCodes.Nulo(); }
+      { return !matCodes.isEmpty(); }
 
     void putMatCodes(const ResponseId &codes);
 

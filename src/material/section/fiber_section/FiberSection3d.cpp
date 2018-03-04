@@ -105,14 +105,14 @@ int XC::FiberSection3d::setInitialSectionDeformation(const Vector &deforms)
     return fibers.setInitialSectionDeformation(*this);
   }
 
-//! @brief Establece los valores de las trial strains.
+//! @brief Set trial strains.
 int XC::FiberSection3d::setTrialSectionDeformation(const Vector &deforms)
   {
     FiberSection3dBase::setTrialSectionDeformation(deforms);
     return fibers.setTrialSectionDeformation(*this,kr);
   }
 
-//! @brief Return the tangent stiffness matrix inicial.
+//! @brief Return the tangent initial stiffness matrix.
 const XC::Matrix &XC::FiberSection3d::getInitialTangent(void) const
   { return fibers.getInitialTangent(*this); }
 

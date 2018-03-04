@@ -181,7 +181,7 @@ int XC::DriftRecorder::record(int commitTag, double timeStamp)
           return -1;
         }
 
-    if(numNodes == 0 || data.Nulo())
+    if(numNodes == 0 || data.isEmpty())
       return 0;
 
     int timeOffset = 0;

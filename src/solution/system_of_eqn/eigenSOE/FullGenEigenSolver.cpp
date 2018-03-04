@@ -275,7 +275,7 @@ const XC::Vector& XC::FullGenEigenSolver::getEigenvector(int mode) const
     int size = theSOE->size;
     int index = size*sortingID(mode-1);
 
-    if(!eigenvector.Nulo())
+    if(!eigenvector.isEmpty())
       {
         for(int i=0; i<size; i++)
           { eigenV(i) = eigenvector[index++]; }	
@@ -301,7 +301,7 @@ const double &XC::FullGenEigenSolver::getEigenvalue(int mode) const
       }
     else
       {
-        if(!eigenvalue.Nulo())
+        if(!eigenvalue.isEmpty())
           { return eigenvalue[mode-1]; }
         else
           {

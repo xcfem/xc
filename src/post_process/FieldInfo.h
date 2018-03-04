@@ -45,7 +45,7 @@ class FieldInfo: public EntConNmb
     std::vector<std::string> componentNames; //!< Name of the field components.
     std::vector<std::string> componentDescriptions; //!< Field components description.
     std::vector<std::string> componentUnits; //!< Units for each component.
-    std::string componentsProperty; //!< Propiedad mediante la cual se obtienen los valores de las componentes.
+    std::string componentsProperty; //!< Property that gets the values of the components.
     std::string componentsType; //!< Component data type ("int", "double", "string",...)
     int iterationNumber; //!< Number of the iteration in which this values were obtained.
     int orderNumber; //!< Order number.

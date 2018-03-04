@@ -93,7 +93,7 @@ void XC::FiberSectionGJ::setupFibers(void)
 XC::Fiber *XC::FiberSectionGJ::addFiber(Fiber &newFiber)
   { return fibers.addFiber(*this,newFiber,kr); }
 
-//! @brief Establece los valores de las initial strains.
+//! @brief Set the initial strains.
 int XC::FiberSectionGJ::setInitialSectionDeformation(const Vector &deforms)
   {
     FiberSection3dBase::setInitialSectionDeformation(deforms);

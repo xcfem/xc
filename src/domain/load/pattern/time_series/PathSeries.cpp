@@ -113,7 +113,7 @@ void XC::PathSeries::readFromFile(const std::string &fileName)
       }
   }
 
-//! @brief Returns the valor correspondiente al instante being passed as parameter.
+//! @brief Returns the value of the factor at the pseudo-time.
 double XC::PathSeries::getFactor(double pseudoTime) const
   {
     double retval= 0.0;

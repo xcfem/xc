@@ -31,7 +31,7 @@
 #include "material/section/elastic_section/BaseElasticSection3d.h"
 #include "xc_utils/src/geom/pos_vec/Vector2d.h"
 
-//! @brief Asigna valores a los mechanical properties of the section.
+//! @brief Set values to section mass properties.
 void XC::ProtoBeam3d::set_material(const Material *m)
   {
     if(m)

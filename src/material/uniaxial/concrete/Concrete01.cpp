@@ -199,7 +199,7 @@ int XC::Concrete01::setTrialStrain(double strain, double strainRate)
     return 0;
   }
 
-//@ brief Establece los valores correspondientes al estado de prueba.
+//@ brief Set trial values.
 int XC::Concrete01::setTrial(double strain, double &stress, double &tangent, double strainRate)
   {
     // Reset trial state variables to last committed state

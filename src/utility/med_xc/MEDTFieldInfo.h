@@ -59,9 +59,9 @@ class MEDTFieldInfo: public MEDFieldInfo
   public:
     MEDTFieldInfo(const FieldInfo &,MEDGroupInfo *);
     ~MEDTFieldInfo(void);
-    void setValueIJ(int i, int j,const T &valor);
+    void setValueIJ(int i, int j,const T &);
     void defineGaussModels(const Set &);
-    void setValueIJK(int i, int j,int k,int t,const T &valor);
+    void setValueIJK(int i, int j,int k,int t,const T &);
     void to_med(void) const;
     void write(const std::string &) const;
 
@@ -106,7 +106,7 @@ void MEDTFieldInfo<T>::alloc(void) const
                 << "' tiene 0 componentes; se ignora." << std::endl;
   }
 
-//! @brief Crea la matriz para los valores del campo en los puntos de Gauss.
+//! @brief Create the matrix to store the field values at the Gauss points.
 template <class T>
 typename MEDTFieldInfo<T>::ArrayGauss *MEDTFieldInfo<T>::getArrayGauss(void) const
   {
@@ -131,12 +131,12 @@ typename MEDTFieldInfo<T>::ArrayGauss *MEDTFieldInfo<T>::getArrayGauss(void) con
 
 //! @brief Checks vector dimension.
 template <class T>
-  void XC::MEDTFieldInfo<T>::checkVectorDimension(const std::string &nmb_prop,const std::vector<T> &valor, const size_t &dim)
+  void XC::MEDTFieldInfo<T>::checkVectorDimension(const std::string &nmb_prop,const std::vector<T> &value, const size_t &dim)
   {
-     if(valor.size()!=dim)
+     if(value.size()!=dim)
        std::cerr << "The property: '" << nmb_prop
                  << "' returns a vector with dimension: "
-                 << valor.size() << "; a vector of dimension "
+                 << value.size() << "; a vector of dimension "
                  << dim << " was expected" << std::endl;
   }
  
@@ -173,7 +173,7 @@ void MEDTFieldInfo<T>::defineGaussModels(const Set &set)
 
 //! @brief Value of the field at indexes i,j.
 template <class T>
-void MEDTFieldInfo<T>::setValueIJ(int i, int j,const T &valor)
+void MEDTFieldInfo<T>::setValueIJ(int i, int j,const T &value)
   {
     const int nc= getXCFieldInfo().getNumberOfComponents();
     if(j>nc)
@@ -186,12 +186,12 @@ void MEDTFieldInfo<T>::setValueIJ(int i, int j,const T &valor)
                 << " out of range (1," << ne
                 << ").\n" << std::endl;
     assert(campo);
-    campo->setValueIJ(i,j,valor);
+    campo->setValueIJ(i,j,value);
   }
 
 //! @brief Value of the field at indexes i,j y k (punto de Gauss).
 template <class T>
-void MEDTFieldInfo<T>::setValueIJK(int i, int j,int k,int t,const T &valor)
+void MEDTFieldInfo<T>::setValueIJK(int i, int j,int k,int t,const T &value)
   {
     const int nc= getXCFieldInfo().getNumberOfComponents();
     if(j>nc)
@@ -209,7 +209,7 @@ void MEDTFieldInfo<T>::setValueIJK(int i, int j,int k,int t,const T &valor)
       std::cerr << "k index: " << k
                 << " out of range (1," << num_ptos_gauss
                 << ").\n" << std::endl;
-    campo->setValueIJK(i,j,k,valor);
+    campo->setValueIJK(i,j,k,value);
   }
 
 //! @brief Dumps the field definition into MEDMEM.
@@ -228,7 +228,7 @@ void MEDTFieldInfo<T>::to_med(void) const
     campo->setTime(getXCFieldInfo().getTime());
   }
 
-//! @brief Escribe el campo en el archivo cuyo nombre being passed as parameter.
+//! @brief Escribe el campo en el archivo which name being passed as parameter.
 template <class T>
 void MEDTFieldInfo<T>::write(const std::string &filename) const
   {

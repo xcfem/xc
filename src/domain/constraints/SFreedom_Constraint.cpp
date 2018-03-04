@@ -98,7 +98,7 @@ XC::SFreedom_Constraint::SFreedom_Constraint(int tag, int nodeTag, int ndof, int
 //! @param nodeTag: identifier of the node to constraint.
 //! @param ndof: DOF number to constraint.
 //! @param value: prescribed value for DOF.
-//! @param ISconstant: Verdadero si el valor impuesto no varía con el tiempo.
+//! @param ISconstant: True if the prescribed value is constant in time.
 XC::SFreedom_Constraint::SFreedom_Constraint(int tag, int nodeTag, int ndof, double value, bool ISconstant)
   :Constraint(tag, nodeTag, CNSTRNT_TAG_SFreedom_Constraint), dofNumber(ndof), valueR(value), valueC(value), isConstant(ISconstant),
  loadPatternTag(-1) {}
@@ -120,7 +120,7 @@ int XC::SFreedom_Constraint::getDOF_Number(void) const
   { return dofNumber; }
 
 
-//! @brief Returns the valor del desplazamiento impuesto.
+//! @brief Returns the value of the desplazamiento impuesto.
 double XC::SFreedom_Constraint::getValue(void) const
   { return valueC; }
 
@@ -155,7 +155,7 @@ int XC::SFreedom_Constraint::getLoadPatternTag(void) const
   { return loadPatternTag;  }
 
 //! @brief Returns a vector para almacenar los dbTags
-//! de los miembros de la clase.
+//! de los miembros of the clase.
 XC::DbTagData &XC::SFreedom_Constraint::getDbTagData(void) const
   {
     static DbTagData retval(7);

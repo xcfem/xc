@@ -74,7 +74,7 @@
 double XC::FourNodeQuad::matrixData[64];
 XC::Matrix XC::FourNodeQuad::K(matrixData, 8, 8);
 XC::Vector XC::FourNodeQuad::P(8);
-double XC::FourNodeQuad::shp[3][4]; //Valores de las funciones de forma.
+double XC::FourNodeQuad::shp[3][4]; //Values of shape functions.
 
 //! @brief Constructor.
 XC::FourNodeQuad::FourNodeQuad(int tag, int nd1, int nd2, int nd3, int nd4,
@@ -130,7 +130,7 @@ void XC::FourNodeQuad::setDomain(Domain *theDomain)
     this->setPressureLoadAtNodes();
   }
 
-//! @brief Actualiza los valores de las variables de estado.
+//! @brief Update the values of the state variables.
 int XC::FourNodeQuad::update(void)
   {
     const Vector &disp1 = theNodes[0]->getTrialDisp();

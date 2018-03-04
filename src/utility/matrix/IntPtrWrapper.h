@@ -59,7 +59,7 @@ class IntPtrWrapper: public EntCmd
       { return data; }
     inline int *getDataPtr(void)
       { return data; }
-    bool Nulo(void) const;
+    bool isEmpty(void) const;
     const int &max(void) const;
     const int &min(void) const;
 
@@ -91,7 +91,7 @@ std::ostream &operator<<(std::ostream &, const IntPtrWrapper &);
 
 std::vector<int> id_to_std_vector(const IntPtrWrapper &);
 
-inline bool IntPtrWrapper::Nulo(void) const
+inline bool IntPtrWrapper::isEmpty(void) const
   { return (data== nullptr); }
 
 //! @brief check if argument is inside range [0,sz-1]

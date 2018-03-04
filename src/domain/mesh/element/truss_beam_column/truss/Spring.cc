@@ -202,7 +202,7 @@ void XC::Spring::setDomain(Domain *theDomain)
             return;
           }
 
-        if(load.Nulo())
+        if(load.isEmpty())
           load.reset(numDOF);
         else
           if(load.Size() != numDOF)

@@ -141,8 +141,8 @@ exempleModes= xc.Matrix([[0.323,-0.764,-0.946,0.897],
                          [0.685,-0.700,0.672,-0.907],
                          [0.891,0.241,1.000,1.000],
                          [1.000,1.000,-0.849,-0.427]])
-resta_modos= (modos-exempleModes)
-ratio2= resta_modos.rowNorm()
+substract_modes= (modos-exempleModes)
+ratio2= substract_modes.rowNorm()
 
 ratio3= abs(totalMass-targetTotalMass)/targetTotalMass
 ''' The values of the first three distribution factors values (fist 3 columns)
@@ -154,8 +154,8 @@ factoresDistribEjemplo= xc.Matrix([[0.419,0.295,0.148,0.0966714],
                                    [0.889,0.27,-0.105,-0.0978747],
                                    [1.157,-0.093,-0.156,0.1078],
                                    [1.298,-0.386,0.133,-0.0461473]])
-resta_fdib= distributionFactors-factoresDistribEjemplo
-ratio4= resta_fdib.rowNorm()
+diff_fdib= distributionFactors-factoresDistribEjemplo
+ratio4= diff_fdib.rowNorm()
 
 '''
 print "kPlBaja= ",kPlBaja
@@ -164,7 +164,7 @@ print "kPl3a= ",kPl3a
 print "periods: ",periods
 print "ratio1= ",ratio1
 print "modos: ",modos
-print "resta_modos: ",resta_modos
+print "substract_modes: ",substract_modes
 print "ratio2= ",ratio2
 print "modalParticipationFactors: ",modalParticipationFactors
 print "effectiveModalMasses: ",effectiveModalMasses

@@ -171,10 +171,10 @@ XC::Pnt *XC::MapPuntos::New(const size_t &tag,const Pos3d &pos)
     return retval;
   }
 
-//! @brief Creates a new point, copia del being passed as parameter con
-//! el nombre que le toca según el valor del tag. Las coordenadas del
-//! new point serán las que resulten de sumar a las del primitivo el
-//! vector being passed as parameter.
+//! @brief Creates a new point, copy from the point argument with
+//! the corresponding name according to the value of the tag. The coordinates
+//! of the new point will be those obtained from the addition to the point
+//! the vector being passed as parameter.
 XC::Pnt *XC::MapPuntos::Copia(const Pnt *p,const Vector3d &v= Vector3d())
   {
     Pnt *retval= busca(getTag());
@@ -207,7 +207,7 @@ XC::Pnt *XC::MapPuntos::Copia(const Pnt *p,const Vector3d &v= Vector3d())
     return retval;
   }
 
-//! @brief Crea copias de los puntos cuyos identificadores being passed as parameters.
+//! @brief Crea copias de los puntos cuyos identifiers being passed as parameters.
 void XC::MapPuntos::Copia(const std::vector<Indice> &indices)
   {
     for(std::vector<Indice>::const_iterator i= indices.begin();i!=indices.end();i++)
@@ -236,7 +236,7 @@ void XC::MapPuntos::Transforma(const TrfGeom &trf,const std::vector<Indice> &ind
       }
   }
 
-//! @brief Return the distancia entre los puntos cuyos identificadores being passed as parameters.
+//! @brief Return the distancia entre los puntos cuyos identifiers being passed as parameters.
 double XC::MapPuntos::Dist(const Indice &i,const Indice &j) const
   {
     double retval(-1.0);

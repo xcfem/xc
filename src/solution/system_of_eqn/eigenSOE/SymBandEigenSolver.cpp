@@ -277,7 +277,7 @@ const XC::Vector &XC::SymBandEigenSolver::getEigenvector(int mode) const
     int size = theSOE->size;
     int index = (mode - 1) * size;
     Vector &vec = eigenV;
-    if(!eigenvector.Nulo())
+    if(!eigenvector.isEmpty())
       {
         for(int i = 0; i < size; i++)
           { vec(i) = eigenvector[index++]; }	
@@ -296,7 +296,7 @@ const double &XC::SymBandEigenSolver::getEigenvalue(int mode) const
     if(mode < 1 || mode > numModes)
       std::cerr << "SymBandEigenSolver::getEigenvalue() -- mode " 
                 << mode << " is out of range (1 - " << numModes << ")\n";
-    if(!eigenvalue.Nulo())
+    if(!eigenvalue.isEmpty())
       retval= eigenvalue[mode-1];
     else
       std::cerr << "SymBandEigenSolver::getEigenvalue() -- eigenvalues not yet computed\n";

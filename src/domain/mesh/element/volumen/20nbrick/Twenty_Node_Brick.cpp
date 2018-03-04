@@ -511,7 +511,7 @@ int XC::Twenty_Node_Brick::addInertiaLoadToUnbalance(const XC::Vector &accel)
         formInertiaTerms( tangFlag ) ;
 
         // create the load vector if one does not exist
-        if(load.Nulo())
+        if(load.isEmpty())
           load.reset(60);
 
         // add -M * RV(accel) to the load vector
@@ -596,7 +596,7 @@ const XC::Vector &XC::Twenty_Node_Brick::getResistingForce(void) const
         // Subtract other external nodal loads ... P_res = P_int - P_ext
 //        std::cerr<<"resid before:"<<resid<<std::endl;
 
-        if(!load.Nulo())
+        if(!load.isEmpty())
           resid-= load;
 
 //        std::cerr<<"resid "<<resid<<std::endl;

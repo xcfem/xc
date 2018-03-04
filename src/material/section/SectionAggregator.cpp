@@ -670,7 +670,8 @@ int XC::SectionAggregator::getResponse(int responseID, Information &info)
     return XC::PrismaticBarCrossSection::getResponse(responseID, info);
   }
 
-//! @brief Returns the identificador de la variable cuyo nombre being passed as parameter.
+//! @brief Returns the identifier of the variable which name
+//! is being passed as parameter.
 int XC::SectionAggregator::setVariable(const std::string &argv)
   {
     // Axial strain
@@ -684,7 +685,8 @@ int XC::SectionAggregator::setVariable(const std::string &argv)
       return -1;
   }
 
-//! @brief Returns the valor de la variable cuyo nombre being passed as parameter.
+//! @brief Returns the value of the variable which identifier
+//! is being passed as parameter.
 int XC::SectionAggregator::getVariable(int variableID, double &info)
   {
     int i;
@@ -692,8 +694,8 @@ int XC::SectionAggregator::getVariable(int variableID, double &info)
 
     const int order= getOrder();
 
-    const XC::Vector &e= getSectionDeformation();
-    const XC::ResponseId &code= this->getType();
+    const Vector &e= getSectionDeformation();
+    const ResponseId &code= this->getType();
 
     switch (variableID)
       {

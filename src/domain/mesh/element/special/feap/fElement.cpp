@@ -152,7 +152,7 @@ XC::fElement::fElement(int tag,
     connectedNodes= ID(NEN);
     d = new double[sizeD];
     feapData= Vector(d, sizeD);
-    if(d == 0 || feapData.Nulo()) {
+    if(d == 0 || feapData.isEmpty()) {
         std::cerr << "FATAL: XC::fElement::fElement() - eleTag: " << tag;
         std::cerr << " ran out of memory creating d of size " << sizeD << std::endl;
         exit(-1);
@@ -528,7 +528,7 @@ int XC::fElement::addInertiaLoadToUnbalance(const Vector &accel)
   }
 
   // create the load vector if one does not exist
-  if(load.Nulo())
+  if(load.isEmpty())
     load.reset(nstR);
 
   // add -M * RV(accel) to the load vector

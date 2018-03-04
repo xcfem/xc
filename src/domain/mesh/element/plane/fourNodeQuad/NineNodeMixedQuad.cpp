@@ -408,7 +408,7 @@ int XC::NineNodeMixedQuad::addInertiaLoadToUnbalance(const XC::Vector &accel)
       }
 
     // create the load vector if one does not exist
-    if(load.Nulo())
+    if(load.isEmpty())
       load.reset(numberNodes*ndf);
 
     // add -M * RV(accel) to the load vector
@@ -424,7 +424,7 @@ const XC::Vector &XC::NineNodeMixedQuad::getResistingForce(void) const
     formResidAndTangent( tang_flag );
 
     // subtract external loads
-    if(!load.Nulo())
+    if(!load.isEmpty())
       resid -= load;
     if(isDead())
       resid*=dead_srf;
@@ -452,7 +452,7 @@ const XC::Vector &XC::NineNodeMixedQuad::getResistingForceIncInertia(void) const
       res+= this->getRayleighDampingForces();
 
     // subtract external loads
-    if(!load.Nulo())
+    if(!load.isEmpty())
       res-= load;
 
     if(isDead())

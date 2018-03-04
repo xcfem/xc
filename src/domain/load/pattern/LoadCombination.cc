@@ -47,66 +47,68 @@
 std::map<int,std::string> XC::LoadCombination::map_str_descomp;
 
 //! @brief constructor.
-XC::LoadCombination::sumando::sumando(const float &f,LoadPattern *lp)
+XC::LoadCombination::summand::summand(const float &f,LoadPattern *lp)
   : factor(f), lpattern(lp) {}
 
-//! @brief Returns the factor que multiplica al sumando.
-const float &XC::LoadCombination::sumando::Factor(void) const
+//! @brief Returns the factor that multiplies the summand.
+const float &XC::LoadCombination::summand::Factor(void) const
   { return factor; }
 
-//! @brief Returns the LoadPattern al que se refiere el sumando.
-const XC::LoadPattern *XC::LoadCombination::sumando::Caso(void) const
+//! @brief Returns the LoadPattern corresponding to the summand.
+const XC::LoadPattern *XC::LoadCombination::summand::Caso(void) const
   { return lpattern; }
 
-//! @brief Returns the LoadPattern al que se refiere el sumando.
-XC::LoadPattern *XC::LoadCombination::sumando::Caso(void)
+//! @brief Returns the LoadPattern corresponding to the summand.
+XC::LoadPattern *XC::LoadCombination::summand::Caso(void)
   { return lpattern; }
 
-//! @brief Returns the name of the load case al que se refiere el sumando.
-const std::string &XC::LoadCombination::sumando::getNombreCaso(const MapLoadPatterns &casos) const
+//! @brief Returns the name of the load case corresponding to the summand.
+const std::string &XC::LoadCombination::summand::getNombreCaso(const MapLoadPatterns &casos) const
   { return casos.getLoadPatternName(lpattern); }
 
-//! @brief Cambia de signo el sumando.
-void XC::LoadCombination::sumando::neg(void)
+//! @brief Changes the sign of the summand.
+void XC::LoadCombination::summand::neg(void)
   { factor*=-1.0; }
 
-//! @brief Returns the sumando cambiado de signo.
-XC::LoadCombination::sumando XC::LoadCombination::sumando::getNeg(void) const
+//! @brief Returns the summand with sign changed.
+XC::LoadCombination::summand XC::LoadCombination::summand::getNeg(void) const
   {
-    sumando tmp(*this);
+    summand tmp(*this);
     tmp.neg();
     return tmp;
   }
 
-//! @brief Suma a éste sumando el being passed as parameter.
-const XC::LoadCombination::sumando &XC::LoadCombination::sumando::suma(const sumando &otro)
+//! @brief Add to this summand the argument.
+const XC::LoadCombination::summand &XC::LoadCombination::summand::add(const summand &other)
   {
-    if(lpattern==otro.lpattern)
-      factor+= otro.factor;
+    if(lpattern==other.lpattern)
+      factor+= other.factor;
     else
-      std::cerr << "Sumandos incompatibles en suma." << std::endl;
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; incompatible summands." << std::endl;
     return *this;
   }
 
-//! @brief Resta a éste sumando el being passed as parameter.
-const XC::LoadCombination::sumando &XC::LoadCombination::sumando::resta(const sumando &otro)
+//! @brief Substract from this summand the argument.
+const XC::LoadCombination::summand &XC::LoadCombination::summand::substract(const summand &other)
   {
-    if(lpattern==otro.lpattern)
-      factor-= otro.factor;
+    if(lpattern==other.lpattern)
+      factor-= other.factor;
     else
-      std::cerr << "Sumandos incompatibles en resta." << std::endl;
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; incompatible summands." << std::endl;
     return *this;
   }
 
-//! @brief Multiplica el sumando por el valor being passed as parameter.
-const XC::LoadCombination::sumando &XC::LoadCombination::sumando::multiplica(const float &f)
+//! @brief Multiplies the summand by the value being passed as parameter.
+const XC::LoadCombination::summand &XC::LoadCombination::summand::multiplica(const float &f)
   {
     factor*= f;
     return *this;
   }
 
-//! @brief Divide el sumando por el valor being passed as parameter.
-const XC::LoadCombination::sumando &XC::LoadCombination::sumando::divide(const float &f)
+//! @brief Divides the summand by the value being passed as parameter.
+const XC::LoadCombination::summand &XC::LoadCombination::summand::divide(const float &f)
   {
     factor/= f;
     return *this;
@@ -115,7 +117,7 @@ const XC::LoadCombination::sumando &XC::LoadCombination::sumando::divide(const f
 //! @brief Returns a string representation of the combination i.e. "1.35*G1".
 //! @arg \c casos: Load pattern container.
 //! @arg \c fmt: Format for the factor.
-std::string XC::LoadCombination::sumando::getString(const MapLoadPatterns &casos,const std::string &fmt) const
+std::string XC::LoadCombination::summand::getString(const MapLoadPatterns &casos,const std::string &fmt) const
   {
     std::string retval= "";
     if(fmt.empty())
@@ -127,7 +129,7 @@ std::string XC::LoadCombination::sumando::getString(const MapLoadPatterns &casos
   }
 
 //! @brief Imprime.
-void XC::LoadCombination::sumando::Print(std::ostream &os) const
+void XC::LoadCombination::summand::Print(std::ostream &os) const
   {
     os << factor << '*';
     if(lpattern)
@@ -223,14 +225,14 @@ void XC::LoadCombination::removeFromDomain(void)
   }
 
 //! @brief Adds a component to the combination.
-void XC::LoadCombination::add_component(const sumando &sum)
+void XC::LoadCombination::add_component(const summand &sum)
   {
     const LoadPattern *lp= sum.Caso();
     if((sum.Factor()!= 0.0) && lp)
       {
         iterator j= buscaCaso(lp);
         if(j!=end())
-          (*j).suma(sum);
+          (*j).add(sum);
         else
           descomp.push_back(sum);
       }
@@ -241,8 +243,8 @@ void XC::LoadCombination::interpreta_descomp(const std::string &str_descomp)
   {
     clear();
     typedef std::deque<std::string> dq_string;
-    dq_string str_sumandos= separa_cadena(str_descomp,"+-");
-    for(dq_string::iterator i= str_sumandos.begin();i!=str_sumandos.end();i++)
+    dq_string str_summands= separa_cadena(str_descomp,"+-");
+    for(dq_string::iterator i= str_summands.begin();i!=str_summands.end();i++)
       {
         const std::string &str_sum_i= *i;
         dq_string str_prod= separa_cadena(str_sum_i,"*");
@@ -257,14 +259,15 @@ void XC::LoadCombination::interpreta_descomp(const std::string &str_descomp)
               {
                 LoadPattern *lp= loader->getLoadPatterns().buscaLoadPattern(nmb_hipot);
                 if(lp)
-                  add_component(sumando(factor,lp));
+                  add_component(summand(factor,lp));
                 else
 	          std::cerr << getClassName() << "::" << __FUNCTION__
 		            << " load case identified by: '" 
                             << nmb_hipot << "' not found.\n";
               }
             else
-	      std::cerr << "LoadCombination::interpreta_descomp; se necesita a pointer to LoadLoader." << std::endl;
+	      std::cerr << getClassName() << "::" << __FUNCTION__
+			<< "; pointer to LoadLoader not set." << std::endl;
           } 
       }
   }
@@ -367,7 +370,7 @@ const std::string XC::LoadCombination::getDescompRestoSobrePrevia(void) const
     if(c)
       {
         LoadCombination dif(*this);
-        dif.resta(*c);
+        dif.substract(*c);
         retval= dif.getString();
       }
     return retval;
@@ -381,7 +384,7 @@ void XC::LoadCombination::LoadCombination::setDomain(Domain *theDomain)
   }
 
 //! @brief Returns a vector para almacenar los dbTags
-//! de los miembros de la clase.
+//! de los miembros of the clase.
 XC::DbTagData &XC::LoadCombination::getDbTagData(void) const
   {
     static DbTagData retval(4);
@@ -433,7 +436,8 @@ int XC::LoadCombination::sendSelf(CommParameters &cp)
     const int dataTag= getDbTag(cp);
     res+= cp.sendIdData(getDbTagData(),dataTag);
     if(res<0)
-      std::cerr << "LoadCombination::sendSelf() - failed to send data.\n";    
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; failed to send data.\n";    
     return res;
   }
 
@@ -444,29 +448,30 @@ int XC::LoadCombination::recvSelf(const CommParameters &cp)
     const int dataTag= getDbTag();
     int res= cp.receiveIdData(getDbTagData(),dataTag);
     if(res<0)
-      std::cerr << "LoadCombination::recvSelf() - data could not be received.\n" ;
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; data could not be received.\n" ;
     else
       res+= recvData(cp);
     return res;
   }
 
 //! @brief Sums the combination being passed as parameter.
-XC::LoadCombination &XC::LoadCombination::suma(const LoadCombination &otro)
+XC::LoadCombination &XC::LoadCombination::add(const LoadCombination &other)
   {
-    for(const_iterator i= otro.begin();i!=otro.end();i++)
+    for(const_iterator i= other.begin();i!=other.end();i++)
       add_component(*i);
     limpia_ceros();
     return *this;
   }
 
-//! @brief Suma the combination identified by the name being passed as parameter.
-XC::LoadCombination &XC::LoadCombination::suma(const std::string &nmbComb)
+//! @brief Add the combination identified by the name being passed as parameter.
+XC::LoadCombination &XC::LoadCombination::add(const std::string &nmbComb)
   {
     if(!nmbComb.empty())
       {
         const LoadCombination *cmb= loader->getLoadCombinations().buscaLoadCombination(nmbComb);
         if(cmb)
-          suma(*cmb);
+          add(*cmb);
         else
           std::cerr << getClassName() << "::" << __FUNCTION__
 	            << "; load combination identified by: '" 
@@ -477,22 +482,22 @@ XC::LoadCombination &XC::LoadCombination::suma(const std::string &nmbComb)
 
 
 //! @brief Substracts the combination being passed as parameter.
-XC::LoadCombination &XC::LoadCombination::resta(const LoadCombination &otro)
+XC::LoadCombination &XC::LoadCombination::substract(const LoadCombination &other)
   {
-    for(const_iterator i= otro.begin();i!=otro.end();i++)
+    for(const_iterator i= other.begin();i!=other.end();i++)
       add_component((*i).getNeg());
     limpia_ceros();
     return *this;
   }
 
 //! @brief Substracts the combination being passed as parameter.
-XC::LoadCombination &XC::LoadCombination::resta(const std::string &nmbComb)
+XC::LoadCombination &XC::LoadCombination::substract(const std::string &nmbComb)
   {
     if(!nmbComb.empty())
       {
         const LoadCombination *cmb= loader->getLoadCombinations().buscaLoadCombination(nmbComb);
         if(cmb)
-          resta(*cmb);
+          substract(*cmb);
         else
           std::cerr << getClassName() << "::" << __FUNCTION__
 	            << "; load combination identified by: '" 

@@ -127,7 +127,7 @@ int XC::CentralDifferenceAlternative::update(const Vector &X)
       }	
   
     // check domainChanged() has been called, i.e. Ut will not be zero
-    if(Ut.Nulo())
+    if(Ut.isEmpty())
       {
         std::cerr << "WARNING CentralDifferenceAlternative::update() - domainChange() failed or not called\n";
         return -2;

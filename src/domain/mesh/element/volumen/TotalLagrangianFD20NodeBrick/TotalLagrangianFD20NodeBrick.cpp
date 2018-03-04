@@ -536,7 +536,7 @@ int XC::TotalLagrangianFD20NodeBrick::addInertiaLoadToUnbalance(const XC::Vector
 
     this->getMass();
 
-    if(load.Nulo())
+    if(load.isEmpty())
       load.reset(NumElemDof);
 
     load.addMatrixVector(1.0, M, ra, -1.0);
@@ -559,7 +559,7 @@ const XC::Vector &XC::TotalLagrangianFD20NodeBrick::getResistingForce(void) cons
         for(j=0; j<NumDof; j++)
           { P(i*NumDof +j) = NodalForces_in.cval(i+1, j+1); }
       }
-    if(!load.Nulo())
+    if(!load.isEmpty())
       P.addVector(1.0, load, -1.0);
     if(isDead())
       P*=dead_srf;

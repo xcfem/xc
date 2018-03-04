@@ -43,18 +43,18 @@ while (j<=fin):
   y.append(epp.getStress())
   j= j+1
 
-resta_x= []
-resta_y= []
+diff_x= []
+diff_y= []
 def substract(x,y): return x-y
-resta_x= map(substract,x,x_modelo)
-resta_y= map(substract,y,y_modelo)
+diff_x= map(substract,x,x_modelo)
+diff_y= map(substract,y,y_modelo)
 
 ratio1= 0
-for d in resta_x:
+for d in diff_x:
     ratio1= ratio1+d**2
 ratio1= math.sqrt(ratio1)
 ratio2= 0
-for d in resta_y:
+for d in diff_y:
     ratio2= ratio2+d**2
 ratio2= math.sqrt(ratio2)
 

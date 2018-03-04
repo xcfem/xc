@@ -96,7 +96,7 @@ XC::BoucWenMaterial::~BoucWenMaterial(void)
       delete SHVs;
   }
 
-//! @brief Returns the signo del valor.
+//! @brief Returns the sign of the value.
 double XC::BoucWenMaterial::signum(double value)
   {
     if(value > 0.0)

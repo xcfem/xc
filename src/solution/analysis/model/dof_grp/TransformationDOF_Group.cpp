@@ -198,7 +198,7 @@ XC::TransformationDOF_Group::~TransformationDOF_Group()
 
 const XC::ID &XC::TransformationDOF_Group::getID(void) const
   {
-    if(!modID.Nulo())
+    if(!modID.isEmpty())
       return modID;
     else
       return this->DOF_Group::getID();
@@ -210,7 +210,7 @@ int XC::TransformationDOF_Group::getNumDOF(void) const
 
 int XC::TransformationDOF_Group::getNumFreeDOF(void) const
 {
-  if(!modID.Nulo())
+  if(!modID.isEmpty())
     {
       int numFreeDOF= modNumDOF;
       for(int i=0; i<modNumDOF; i++)
@@ -224,7 +224,7 @@ int XC::TransformationDOF_Group::getNumFreeDOF(void) const
 
 int XC::TransformationDOF_Group::getNumConstrainedDOF(void) const
   {   
-    if(!modID.Nulo())
+    if(!modID.isEmpty())
       {    
         int numConstr= 0;
         for(int i=0; i<modNumDOF; i++)
@@ -636,7 +636,7 @@ void XC::TransformationDOF_Group::addM_Force(const Vector &Udotdot, double fact)
   {
     const MFreedom_ConstraintBase *mfc= getMFreedomConstraint();
     // call base class method and return if no MFreedom_Constraint
-    if(!mfc || modID.Nulo())
+    if(!mfc || modID.isEmpty())
       this->DOF_Group::addM_Force(Udotdot, fact);
     else
       {
@@ -660,7 +660,7 @@ const XC::Vector &XC::TransformationDOF_Group::getM_Force(const XC::Vector &Udot
   {
     const MFreedom_ConstraintBase *mfc= getMFreedomConstraint();
     // call base class method and return if no MFreedom_Constraint
-    if(!mfc || modID.Nulo())
+    if(!mfc || modID.isEmpty())
       { return this->DOF_Group::getM_Force(Udotdot, fact); }
     else
       {
@@ -834,7 +834,7 @@ void XC::TransformationDOF_Group::addM_ForceSensitivity(const XC::Vector &Udotdo
   {
     const MFreedom_ConstraintBase *mfc= getMFreedomConstraint();
     // call base class method and return if no MFreedom_Constraint
-    if(!mfc || modID.Nulo())
+    if(!mfc || modID.isEmpty())
       { this->DOF_Group::addM_ForceSensitivity(Udotdot, fact); }
     else
       {
@@ -858,7 +858,7 @@ void XC::TransformationDOF_Group::addD_Force(const XC::Vector &Udot, double fact
   {
     const MFreedom_ConstraintBase *mfc= getMFreedomConstraint();
     // call base class method and return if no MFreedom_Constraint
-    if(!mfc || modID.Nulo())
+    if(!mfc || modID.isEmpty())
       { this->DOF_Group::addD_Force(Udot, fact); }
     else
       {
@@ -881,7 +881,7 @@ void XC::TransformationDOF_Group::addD_ForceSensitivity(const XC::Vector &Udot, 
   {
     const MFreedom_ConstraintBase *mfc= getMFreedomConstraint();
     // call base class method and return if no MFreedom_Constraint
-    if(!mfc || modID.Nulo())
+    if(!mfc || modID.isEmpty())
       { this->DOF_Group::addD_ForceSensitivity(Udot, fact); }
     else
       {

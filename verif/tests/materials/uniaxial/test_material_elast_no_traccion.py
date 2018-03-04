@@ -41,18 +41,18 @@ while(j<=sFin):
   j= j+incr 
 
 
-resta_strain= []
-resta_stress= []
+diff_strain= []
+diff_stress= []
 def substract(x,y): return x-y
-resta_strain= map(substract,lStrain,vStrainTeor)
-resta_stress= map(substract,lStress,vStressTeor)
+diff_strain= map(substract,lStrain,vStrainTeor)
+diff_stress= map(substract,lStress,vStressTeor)
 
 ratio1= 0
-for d in resta_strain:
+for d in diff_strain:
   ratio1= ratio1+d**2
 ratio3= math.sqrt(ratio1)
 ratio2= 0
-for d in resta_stress:
+for d in diff_stress:
   ratio2= ratio2+d**2
 ratio4= math.sqrt(ratio2)
 

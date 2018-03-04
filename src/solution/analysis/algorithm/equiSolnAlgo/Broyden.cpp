@@ -141,7 +141,7 @@ int XC::Broyden::solveCurrentStep(void)
         int systemSize= theSysOfEqn->getNumEqn( );
 
         //temporary vector
-        if(temp.Nulo())
+        if(temp.isEmpty())
           temp= Vector(systemSize);
 
         //initial displacement increment

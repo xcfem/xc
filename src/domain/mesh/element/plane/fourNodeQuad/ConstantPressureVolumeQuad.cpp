@@ -583,7 +583,7 @@ int XC::ConstantPressureVolumeQuad::addInertiaLoadToUnbalance(const XC::Vector &
       }
 
     // create the load vector if one does not exist
-    if(load.Nulo())
+    if(load.isEmpty())
       load.reset(numberNodes*ndf);
 
     // add -M * RV(accel) to the load vector
@@ -599,7 +599,7 @@ const XC::Vector& XC::ConstantPressureVolumeQuad::getResistingForce(void) const
     formResidAndTangent( tang_flag );
 
     // subtract external loads
-    if(!load.Nulo())
+    if(!load.isEmpty())
       resid-= load;
     if(isDead())
       resid*=dead_srf;
@@ -621,7 +621,7 @@ const XC::Vector& XC::ConstantPressureVolumeQuad::getResistingForceIncInertia(vo
     res = resid;
 
     // subtract external loads
-    if(!load.Nulo())
+    if(!load.isEmpty())
       res-= load;
 
     // add the damping forces if rayleigh damping

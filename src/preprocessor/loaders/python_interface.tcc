@@ -44,7 +44,7 @@ class_<XC::NodeLoader, bases<XC::Loader>, boost::noncopyable >("NodeLoader", no_
 
 class_<XC::MaterialLoader, bases<XC::Loader>, boost::noncopyable >("MaterialLoader", no_init)
   .def("newMaterial", &XC::MaterialLoader::newMaterial,return_internal_reference<>(),"Creates a new material.")
-  .def("getMaterial", &XC::MaterialLoader::getMaterial,return_internal_reference<>(),"Returns the material cuyo nombre being passed as parameter.")
+  .def("getMaterial", &XC::MaterialLoader::getMaterial,return_internal_reference<>(),"Returns the material which name being passed as parameter.")
   .def("materialExists",&XC::MaterialLoader::existeMaterial,"True if material is already defined.")
   .def("getName",&XC::MaterialLoader::getName,"Returns the name thats corresponds to the identifier.")
   .def("newSectionGeometry", &XC::MaterialLoader::newSectionGeometry,return_internal_reference<>())
@@ -93,7 +93,7 @@ class_<XC::ConstraintLoader, bases<XC::Loader>, boost::noncopyable >("Constraint
   .add_property("getNumSPs",&XC::ConstraintLoader::getNumSPs,"Number of single node constraints.")
   .add_property("getNumMPs",&XC::ConstraintLoader::getNumMPs,"Number of multiple node constraints.")
   .add_property("getNumLPs",&XC::ConstraintLoader::getNumMPs,"Number of load patterns.")
-  .def("newSPConstraint", &XC::ConstraintLoader::newSPConstraint,return_internal_reference<>(),"\n" "newSPConstraint(tag_nod,id_gdl,valor) \n" "Create a single-point boundary constraint by assigning a value=valor to the degree of freedom gdl of node whose ID is tag_nod.")
+  .def("newSPConstraint", &XC::ConstraintLoader::newSPConstraint,return_internal_reference<>(),"\n" "newSPConstraint(tag_nod,id_gdl,value) \n" "Create a single-point boundary constraint by assigning a value to the degree of freedom gdl of node whose ID is tag_nod.")
   .def("removeSPConstraint", &XC::ConstraintLoader::removeSPConstraint,return_internal_reference<>(),"Deletes a single freedom constraint.")
   .def("newMPConstraint", &XC::ConstraintLoader::newMPConstraint,return_internal_reference<>(),"New multi-freedom constraint.")
   .def("newEqualDOF", &XC::ConstraintLoader::newEqualDOF,return_internal_reference<>(),"Imposes the same displacements on two nodes for the components specified in the argument.")

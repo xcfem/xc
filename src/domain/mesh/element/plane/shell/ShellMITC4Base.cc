@@ -340,7 +340,7 @@ void XC::ShellMITC4Base::Print(std::ostream &s, int flag )
       }
   }
 
-//! @brief Actualiza los valores de las variables de estado.
+//! @brief Update state variables.
 int XC::ShellMITC4Base::update(void)
   {
     theCoordTransf->update();
@@ -693,7 +693,7 @@ int XC::ShellMITC4Base::addInertiaLoadToUnbalance(const Vector &accel)
       }
 
     formInertiaTerms(tangFlag);
-    if(load.Nulo())
+    if(load.isEmpty())
       load.reset(24);
     load.addMatrixVector(1.0, mass, resid, -1.0);
     return 0;
@@ -707,7 +707,7 @@ const XC::Vector &XC::ShellMITC4Base::getResistingForce(void) const
     const int tang_flag= 0; //don't get the tangent
     formResidAndTangent(tang_flag);
     // subtract external loads
-    if(!load.Nulo())
+    if(!load.isEmpty())
       resid-= load;
     resid+= theCoordTransf->getGlobalResistingForce(p0.getVector());
 

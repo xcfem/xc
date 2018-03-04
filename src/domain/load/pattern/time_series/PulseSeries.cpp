@@ -75,7 +75,7 @@ XC::PulseSeries::PulseSeries(double startTime, double finishTime,
 XC::PulseSeries::PulseSeries(void)
   : PeriodSeries(TSERIES_TAG_PulseSeries),pWidth(0.5) {}
 
-//! @brief Returns the valor del factor para el instante being passed as parameter.
+//! @brief Returns the value of the factor para el instante being passed as parameter.
 double XC::PulseSeries::getFactor(double pseudoTime) const
   {
     if(tStart <= pseudoTime && pseudoTime <= tFinish)

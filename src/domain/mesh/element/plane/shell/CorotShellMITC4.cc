@@ -47,7 +47,7 @@ XC::CorotShellMITC4::CorotShellMITC4(int tag,int node1,int node2,int node3,int n
 XC::Element* XC::CorotShellMITC4::getCopy(void) const
   { return new CorotShellMITC4(*this); }
 
-//! @brief Actualiza los valores de las variables de estado.
+//! @brief Update state variables.
 int XC::CorotShellMITC4::update(void)
   {
     ShellMITC4Base::update();
@@ -63,7 +63,7 @@ int XC::CorotShellMITC4::update(void)
   }
 
 //! @brief Returns a vector para almacenar los dbTags
-//! de los miembros de la clase.
+//! de los miembros of the clase.
 XC::DbTagData &XC::CorotShellMITC4::getDbTagData(void) const
   {
     static DbTagData retval(16);

@@ -91,17 +91,17 @@ previa= combs.getCombPrevia(combs.getComb("ELSCP001"))
 if previa!=None:
   nombrePrevia= previa.getName
 
-resta= combs.newLoadCombination("RESTA","")
-resta.asigna("ELSCP001")
-resta.resta(nombrePrevia)
-descompResta= resta.getDescomp("%3.1f")
+diff= combs.newLoadCombination("DIFF","")
+diff.asigna("ELSCP001")
+diff.substract(nombrePrevia)
+descompDiff= diff.getDescomp("%3.1f")
 
 ratio1= (nombrePrevia=="")
-ratio2= (descompResta=="1.0*G1+0.7*TC1V1")
+ratio2= (descompDiff=="1.0*G1+0.7*TC1V1")
 
 
 # print "nombrePrevia= ",nombrePrevia
-# print "descompResta= ",descompResta
+# print "descompDiff= ",descompDiff
 # print "ratio1= ",ratio1
 # print "ratio2= ",ratio2
 

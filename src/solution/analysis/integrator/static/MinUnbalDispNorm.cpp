@@ -78,7 +78,7 @@ XC::MinUnbalDispNorm::MinUnbalDispNorm(AnalysisAggregation *owr,double lambda1, 
 XC::Integrator *XC::MinUnbalDispNorm::getCopy(void) const
   { return new MinUnbalDispNorm(*this); }
 
-//! @brief Returns the valor de dLambda para el método newStep
+//! @brief Returns the value of dLambda for the newStep method
 double XC::MinUnbalDispNorm::getDLambdaNewStep(void) const
   {
     // determine delta lambda(1) == dlambda
@@ -161,7 +161,7 @@ int XC::MinUnbalDispNorm::newStep(void)
     return 0;
   }
 
-//! @brief Returns the valor de dLambda para el método update.
+//! @brief Returns the value of dLambda para el método update.
 double XC::MinUnbalDispNorm::getDLambdaUpdate(void) const
   {
     const Vector &dUhat= vectors.getDeltaUhat();

@@ -160,7 +160,7 @@ const XC::Matrix &XC::GenericSection1d::getSectionTangent(void) const
     return ks;
   }
 
-//! @brief Returns the valor inicial de la tangent stiffness matrix.
+//! @brief Returns the initial value of the tangent stiffness matrix.
 const XC::Matrix &XC::GenericSection1d::getInitialTangent(void) const
   {
     ks(0,0) = theModel->getInitialTangent();

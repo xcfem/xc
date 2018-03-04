@@ -229,7 +229,7 @@ int XC::NodeDispVectors::commitState(const size_t &nDOF)
 int XC::NodeDispVectors::revertToLastCommit(const size_t &nDOF)
   {
     // check disp exists, if does set trial = last commit, incr = 0
-    if(!values.Nulo())
+    if(!values.isEmpty())
       {
         for(size_t i=0;i<nDOF;i++)
           {

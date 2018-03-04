@@ -369,7 +369,7 @@ int XC::BbarBrick::addInertiaLoadToUnbalance(const XC::Vector &accel)
   }
 
   // create the load vector if one does not exist
-  if(load.Nulo())
+  if(load.isEmpty())
     load.reset(numberNodes*ndf);
 
   // add -M * RV(accel) to the load vector
@@ -384,7 +384,7 @@ const XC::Vector &XC::BbarBrick::getResistingForce(void) const
   {
     int tang_flag = 0 ;
     formResidAndTangent(tang_flag); //don't get the tangent
-    if(!load.Nulo())
+    if(!load.isEmpty())
       resid-= load;
     if(isDead())
       resid*=dead_srf;
@@ -407,7 +407,7 @@ const XC::Vector &XC::BbarBrick::getResistingForceIncInertia(void) const
     // add the damping forces if rayleigh damping
     if(!rayFactors.nullValues())
       res+= this->getRayleighDampingForces();
-    if(!load.Nulo())
+    if(!load.isEmpty())
       res -= load;
     if(isDead())
       resid*=dead_srf;

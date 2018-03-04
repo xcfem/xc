@@ -82,7 +82,7 @@ XC::ArcLength::ArcLength(AnalysisAggregation *owr,double arcLength, double alpha
 XC::Integrator *XC::ArcLength::getCopy(void) const
   { return new ArcLength(*this); }
 
-//! @brief Returns the valor de dLambda para el método update.
+//! @brief Returns the value of dLambda para el método update.
 double XC::ArcLength::getDLambdaUpdate(void) const
   {
     const double &dLStep= vectors.getDeltaLambdaStep();

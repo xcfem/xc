@@ -300,7 +300,7 @@ int XC::EightNodeBrick_u_p_U::addInertiaLoadToUnbalance(const XC::Vector &accel)
     ra(ik +6) = RA(6);
   }
 
-  if(load.Nulo())
+  if(load.isEmpty())
     load.reset(Num_ElemDof);
 
     load.addMatrixVector(1.0, M, ra, -1.0);
@@ -331,7 +331,7 @@ const XC::Vector &XC::EightNodeBrick_u_p_U::getResistingForce(void) const
     this->getTangentStiff();
     P.addMatrixVector(0.0, K, u, 1.0);
 
-    if(!load.Nulo())
+    if(!load.isEmpty())
       P.addVector(1.0, load, -1.0);
 
     if(eleQ != 0)

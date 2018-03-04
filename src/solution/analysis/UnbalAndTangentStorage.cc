@@ -46,7 +46,7 @@ XC::Vector &XC::UnbalAndTangentStorage::getUnbalance(const size_t &i)
 
 XC::Vector *XC::UnbalAndTangentStorage::setUnbalance(const size_t &i)
   {
-    if(theVectors[i].Nulo())
+    if(theVectors[i].isEmpty())
       { theVectors[i]= Vector(i); }
     return &theVectors[i];
   }

@@ -174,7 +174,7 @@ void XC::Beam2dPointLoad::addReactionsInBasicSystem(const double &L,const double
 
     if(aOverL < 0.0 || aOverL > 1.0)
       {
-        std::cerr << "XC::Beam2dPointLoad::addReactionsInBasicSystem; el valor de x ("
+        std::cerr << "XC::Beam2dPointLoad::addReactionsInBasicSystem; el value of x ("
                   << aOverL << ") es incorrecto, debe estar entre 0 y 1. Load ignored."
                   << std::endl;
         return;
@@ -203,7 +203,7 @@ void XC::Beam2dPointLoad::addFixedEndForcesInBasicSystem(const double &L,const d
 
     if(aOverL < 0.0 || aOverL > 1.0)
       {
-        std::cerr << "XC::Beam2dPointLoad::fixedEndForcesInBasicSystem; el valor de x ("
+        std::cerr << "XC::Beam2dPointLoad::fixedEndForcesInBasicSystem; el value of x ("
                   << aOverL << ") es incorrecto, debe estar entre 0 y 1. Load ignored." << std::endl;
       }
     else

@@ -68,11 +68,11 @@
 XC::Load::Load(int tag, int clasTag)
   : DomainComponent(tag, clasTag), loadPatternTag(-1) {}
 
-//! @brief Establece el valor del identificador de la hipótesis.
+//! @brief Sets del identifier of the hipótesis.
 void XC::Load::setLoadPatternTag(int tag)
   { loadPatternTag = tag; }
 
-//! @brief Returns the valor del identificador de la hipótesis.
+//! @brief Returns the value of the identifier of the hipótesis.
 int XC::Load::getLoadPatternTag(void) const
   { return loadPatternTag; }
 

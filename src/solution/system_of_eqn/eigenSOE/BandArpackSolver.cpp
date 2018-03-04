@@ -139,7 +139,7 @@ int XC::BandArpackSolver::solve(void)
         return -1;
       }
 
-    int n = theSOE->size; //Número de filas de la matriz (y de columnas ya que es cuadrada).
+    int n = theSOE->size; //Número de filas of the matriz (y de columnas ya que es cuadrada).
 
     // check iPiv is large enough
     if(iPiv.Size() < n)
@@ -343,7 +343,7 @@ int XC::BandArpackSolver::solve(int nModes)
     return solve();
   }
 
-//! @brief Calcula un valor adecuado para ncv.
+//! @brief Compute a suitable value for ncv.
 int XC::BandArpackSolver::getNCV(int n, int nev)
   { return std::min(std::min(2*nev,nev+8),n); }
 
@@ -401,7 +401,7 @@ bool XC::BandArpackSolver::setEigenSOE(EigenSOE *soe)
 bool XC::BandArpackSolver::setEigenSOE(BandArpackSOE &theBandSOE)
   { return setEigenSOE(&theBandSOE); }
 
-//! @brief Returns the autovector correspondiente al modo being passed as parameter.
+//! @brief Returns the autovector corresponding to the mode being passed as parameter.
 const XC::Vector &XC::BandArpackSolver::getEigenvector(int mode) const
   {
     if(mode <= 0 || mode > numModes)
@@ -414,7 +414,7 @@ const XC::Vector &XC::BandArpackSolver::getEigenvector(int mode) const
     const int size= theSOE->size;
     int index= (mode - 1) * size;
 
-    if(!eigenvector.Nulo())
+    if(!eigenvector.isEmpty())
       {
         for(int i=0; i<size; i++)
           eigenV(i)= eigenvector(index++);
@@ -428,7 +428,7 @@ const XC::Vector &XC::BandArpackSolver::getEigenvector(int mode) const
   }
 
 
-//! @brief Returns the autovalor correspondiente al modo being passed as parameter.
+//! @brief Return the eigenvalue corresponding to the mode being passed as parameter.
 const double &XC::BandArpackSolver::getEigenvalue(int mode) const
   {
     static double retval= 0.0;
@@ -437,7 +437,7 @@ const double &XC::BandArpackSolver::getEigenvalue(int mode) const
         std::cerr << "BandArpackSOE::getEigenvalue() - mode is out of range(1 - nev)";
         retval= -1.0;
       }
-    if(!value.Nulo())
+    if(!value.isEmpty())
       return value[mode-1];
     else
       {

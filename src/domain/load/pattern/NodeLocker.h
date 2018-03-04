@@ -75,7 +75,7 @@ class NodeLocker: public ForceReprComponent
     virtual void setDomain(Domain *theDomain);
 
     // methods to add loads
-    virtual SFreedom_Constraint *addSFreedom_Constraint(const int &tagNodo,const int &id_gdl,const double &valor);
+    virtual SFreedom_Constraint *addSFreedom_Constraint(const int &tagNodo,const int &id_gdl,const double &);
 
     virtual SFreedom_ConstraintIter &getSPs(void);
     int getNumSPs(void) const;

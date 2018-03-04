@@ -353,7 +353,7 @@ int XC::ShellNL::addInertiaLoadToUnbalance(const Vector &accel)
       }
 
     formInertiaTerms( tangFlag );
-    if(load.Nulo()) 
+    if(load.isEmpty()) 
       load.reset(54);
     load.addMatrixVector(1.0, mass, resid, -1.0);
     return 0;
@@ -365,7 +365,7 @@ const XC::Vector &XC::ShellNL::getResistingForce(void) const
     int tang_flag= 0; //don't get the tangent
     formResidAndTangent( tang_flag );
 
-    if(!load.Nulo())
+    if(!load.isEmpty())
       resid-= load;
     resid+= theCoordTransf.getGlobalResistingForce(p0.getVector());
     if(isDead())

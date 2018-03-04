@@ -31,14 +31,14 @@ comb1= combs.newLoadCombination("COMB1","1.33*A+1.5*B+0.5*B")
 comb2= combs.newLoadCombination("COMB2","1.33*A+1.5*B+1.0*C")
 comb4= combs.newLoadCombination("COMB4","1.33*A")
 comb3= combs.newLoadCombination("COMB3","1.33*A+0.5*B")
-resta= combs.newLoadCombination("RESTA","")
+difference= combs.newLoadCombination("DIFFERENCE","")
 nombrePrevia= combs.getCombPrevia(combs.getComb("COMB1")).getName
-resta.asigna("COMB1")
-resta.resta(nombrePrevia)
-descompResta= resta.getDescomp("%3.1f")
+difference.asigna("COMB1")
+difference.substract(nombrePrevia)
+descompDifference= difference.getDescomp("%3.1f")
 
 ratio1= (nombrePrevia=="COMB3")
-ratio2= (descompResta=="1.5*B")
+ratio2= (descompDifference=="1.5*B")
 
 
 # print "ratio1= ",ratio1

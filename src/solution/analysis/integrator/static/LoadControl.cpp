@@ -157,7 +157,7 @@ void XC::LoadControl::setDeltaLambda(const double &newValue)
     // we set the #incr at last step = #incr so get newValue incr
     numIncrLastStep = specNumIncrStep;
     deltaLambda = newValue;
-    if(deltaLambda<dLambdaMin) //Actualizamos valores extremos.
+    if(deltaLambda<dLambdaMin) //Update extrema.
       dLambdaMin= deltaLambda;
     if(deltaLambda>dLambdaMax)
       dLambdaMax= deltaLambda;

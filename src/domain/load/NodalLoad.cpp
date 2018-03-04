@@ -137,7 +137,7 @@ const XC::Vector &XC::NodalLoad::getForce(void) const
     retval.Zero();
     if(!myNodePtr)
       myNodePtr= const_cast<NodalLoad *>(this)->get_node_ptr();
-    if(!load.Nulo() && myNodePtr)
+    if(!load.isEmpty() && myNodePtr)
       {
         const size_t numGdl= myNodePtr->getNumberDOF();
         const size_t dim= myNodePtr->getCrds().Size();
@@ -175,7 +175,7 @@ const XC::Vector &XC::NodalLoad::getForce(void) const
       }
     else
       {
-        if(load.Nulo())
+        if(load.isEmpty())
           std::cerr << getClassName() << "::" << __FUNCTION__
 	            << "; load not defined." << std::endl;
         if(!myNodePtr)
@@ -192,7 +192,7 @@ const XC::Vector &XC::NodalLoad::getMoment(void) const
     retval.Zero();
     if(!myNodePtr)
       myNodePtr= const_cast<NodalLoad *>(this)->get_node_ptr();
-    if(!load.Nulo() && myNodePtr)
+    if(!load.isEmpty() && myNodePtr)
       {
         const size_t numGdl= myNodePtr->getNumberDOF();
         const size_t dim= myNodePtr->getCrds().Size();
@@ -214,7 +214,7 @@ const XC::Vector &XC::NodalLoad::getMoment(void) const
       }
     else
       {
-        if(load.Nulo())
+        if(load.isEmpty())
           std::cerr << "NodalLoad::getMoment; load not defined." << std::endl;
         if(!myNodePtr)
           std::cerr << "NodalLoad::getMoment; the pointer to node is NULL." << std::endl;

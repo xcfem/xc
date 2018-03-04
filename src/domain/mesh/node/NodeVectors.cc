@@ -129,7 +129,7 @@ const XC::Vector &XC::NodeVectors::getTrialData(const size_t &nDOF) const
     return *trialData;
   }
 
-//! @brief Returns the valores de prueba
+//! @brief Returns trial values.
 const XC::Vector &XC::NodeVectors::getTrialData(void) const
   {
     assert(trialData);
@@ -147,12 +147,12 @@ int XC::NodeVectors::setTrialData(const size_t &nDOF,const double &value,const s
 
     // perform the assignment .. we dont't go through Vector interface
     // as we are sure of size and this way is quicker
-    if(!values.Nulo())
+    if(!values.isEmpty())
       values[dof]= value;
     return 0;
   }
 
-//! @brief Asigna el valor being passed as parameter
+//! @brief Set trial values.
 int XC::NodeVectors::setTrialData(const size_t &nDOF,const Vector &newTrialData)
   {
     // check vector arg is of correct size
@@ -165,7 +165,7 @@ int XC::NodeVectors::setTrialData(const size_t &nDOF,const Vector &newTrialData)
     // construct memory and Vectors for trial and committed
     // accel on first call to this method, getTrialData(),
     // getData(), or incrTrialData()
-    if(values.Nulo())
+    if(values.isEmpty())
       {
         if(this->createData(nDOF) < 0)
           {
@@ -192,7 +192,7 @@ int XC::NodeVectors::incrTrialData(const size_t &nDOF,const Vector &incrData)
       }
 
     // create a copy if no trial exists andd add committed
-    if(values.Nulo())
+    if(values.isEmpty())
       {
         if(this->createData(nDOF) < 0)
           {
@@ -223,7 +223,7 @@ int XC::NodeVectors::commitState(const size_t &nDOF)
 int XC::NodeVectors::revertToLastCommit(const size_t &nDOF)
   {
     // check data exists, if does set trial = last commit, incr = 0
-    if(!values.Nulo())
+    if(!values.isEmpty())
       {
         for(size_t i=0;i<nDOF;i++)
           values[i] = values[nDOF+i];
@@ -237,7 +237,7 @@ int XC::NodeVectors::revertToStart(const size_t &nDOF)
   {
     // check data exists, if does set all to zero
     const size_t sz= numVectors*nDOF;
-    if(!values.Nulo())
+    if(!values.isEmpty())
       {
         for(size_t i=0;i<sz;i++)
           values[i]= 0.0;
@@ -255,7 +255,7 @@ int XC::NodeVectors::createData(const size_t &nDOF)
     const size_t sz= numVectors*nDOF;
     values= Vector(sz);
 
-    if(!values.Nulo())
+    if(!values.isEmpty())
       {
         for(size_t i=0;i<sz;i++)
           values[i]= 0.0;
@@ -279,7 +279,7 @@ int XC::NodeVectors::createData(const size_t &nDOF)
   }
 
 //! @brief Returns a vector para almacenar los dbTags
-//! de los miembros de la clase.
+//! de los miembros of the clase.
 XC::DbTagData &XC::NodeVectors::getDbTagData(void) const
   {
     static DbTagData retval(2);
@@ -325,7 +325,8 @@ int XC::NodeVectors::recvData(const CommParameters &cp)
         // recv the data
         if(cp.receiveVector(*commitData,dbTag1) < 0)
           {
-            std::cerr << "NodeVectors::recvSelf - failed to receive data\n";
+            std::cerr << getClassName() << "::" << __FUNCTION__
+                      << "; - failed to receive data\n";
             return res;
           }
 

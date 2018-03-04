@@ -428,13 +428,13 @@ XC::SFreedom_Constraint *XC::Node::fix(const SFreedom_Constraint &semilla)
   { return getPreprocessor()->getConstraintLoader().addSFreedom_Constraint(getTag(),semilla); }
 
 //! @brief Sets prescribed displacements on the DOFs being passed as parameter.
-void XC::Node::fix(const std::vector<int> &idDOFs,const std::vector<double> &valores)
+void XC::Node::fix(const std::vector<int> &idDOFs,const std::vector<double> &values)
   {
     if(getDomain())
       {
         ConstraintLoader &cl= getPreprocessor()->getConstraintLoader();
-        const int sz= std::min(idDOFs.size(),valores.size());
-        if(valores.size()<idDOFs.size())
+        const int sz= std::min(idDOFs.size(),values.size());
+        if(values.size()<idDOFs.size())
 	  std::cerr << getClassName() << "::" << __FUNCTION__
 		    << "; vector of prescribed displacements"
                     << " must be of " << idDOFs.size()
@@ -442,7 +442,7 @@ void XC::Node::fix(const std::vector<int> &idDOFs,const std::vector<double> &val
         if(sz)
           {
             for(int i= 0;i<sz;i++)
-              cl.addSFreedom_Constraint(getTag(),idDOFs[i],valores[i]);
+              cl.addSFreedom_Constraint(getTag(),idDOFs[i],values[i]);
           }
         else
           std::cerr << getClassName() << "::" << __FUNCTION__
@@ -454,9 +454,9 @@ void XC::Node::fix(const std::vector<int> &idDOFs,const std::vector<double> &val
   }
 
 //! @brief Sets prescribed displacements on the DOFs being passed as parameter.
-void XC::Node::fix(const ID &idDOFs,const Vector &valores)
+void XC::Node::fix(const ID &idDOFs,const Vector &values)
   {
-    std::vector<double> vs= vector_to_std_vector(valores);
+    std::vector<double> vs= vector_to_std_vector(values);
     fix(idDOFs,vs);
   }
 
@@ -1628,7 +1628,7 @@ XC::Vector XC::Node::getMaxModalAccelerationForDOFs(int mode,const double &accel
 
 
 //! @brief Returns a vector para almacenar los dbTags
-//! de los miembros de la clase.
+//! de los miembros of the clase.
 XC::DbTagData &XC::Node::getDbTagData(void) const
   {
     static DbTagData retval(22);
@@ -1853,7 +1853,7 @@ int XC::Node::updateParameter(int pparameterID, Information &info)
         {
           if(Crd(pparameterID-4) != info.theDouble)
             {
-              //Asigna el valor de la coordenada.
+              //Asigna el value of the coordenada.
               Crd(pparameterID-4) = info.theDouble;
 
               // Need to "setDomain" to make the change take effect.

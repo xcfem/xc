@@ -35,7 +35,7 @@
 XC::ElasticBaseMaterial::ElasticBaseMaterial(int tag, int classtag, double e,double e0)
   :UniaxialMaterial(tag,classtag), trialStrain(0.0),E(e),ezero(e0) {}
 
-//! @brief Establece el valor de la tensión inicial.
+//! @brief Sets initial stress.
 int XC::ElasticBaseMaterial::setInitialStrain(double strain)
   {
     ezero= strain;

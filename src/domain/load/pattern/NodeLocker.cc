@@ -146,9 +146,9 @@ void XC::NodeLocker::setDomain(Domain *theDomain)
   }
 
 //! @brief Adds the single freedom constraint being passed as parameter.
-XC::SFreedom_Constraint *XC::NodeLocker::addSFreedom_Constraint(const int &tagNodo,const int &id_gdl,const double &valor)
+XC::SFreedom_Constraint *XC::NodeLocker::addSFreedom_Constraint(const int &tagNodo,const int &id_gdl,const double &value)
   {
-    SFreedom_Constraint *theSPC= new SFreedom_Constraint(nextTag,tagNodo,id_gdl,valor);
+    SFreedom_Constraint *theSPC= new SFreedom_Constraint(nextTag,tagNodo,id_gdl,value);
     if(theSPC)
       addSFreedom_Constraint(theSPC);
     return theSPC;
@@ -196,8 +196,8 @@ void XC::NodeLocker::clearAll(void)
     currentGeoTag++;
   }
 
-XC::SFreedom_Constraint *XC::NodeLocker::newSPConstraint(const int &tag_nod,const int &id_gdl,const double &valor)
-  { return addSFreedom_Constraint(tag_nod,id_gdl,valor); }
+XC::SFreedom_Constraint *XC::NodeLocker::newSPConstraint(const int &tag_nod,const int &id_gdl,const double &value)
+  { return addSFreedom_Constraint(tag_nod,id_gdl,value); }
 
 //! @brief Erases the single freedom constraint identified by the argument.
 bool XC::NodeLocker::removeSFreedom_Constraint(int tag)
@@ -223,7 +223,7 @@ void XC::NodeLocker::applyLoad(const double &pseudoTime,const double &factor)
   }
 
 //! @brief Returns a vector para almacenar los dbTags
-//! de los miembros de la clase.
+//! de los miembros of the clase.
 XC::DbTagData &XC::NodeLocker::getDbTagData(void) const
   {
     static DbTagData retval(3);
