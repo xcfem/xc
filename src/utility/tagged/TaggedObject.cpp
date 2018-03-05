@@ -69,33 +69,43 @@
 
 
 //! @brief Constructor.
+//!
+//! Constructs a TaggedObject with a tag given by \p tag. The tag of
+//! a component is some unique means of identifying the component among
+//! like components, i.e. the tag of a node would be its unique node number.
+//!
+//! @param tag: object identifier.
+//! @param owr: object owner (this object is somewhat contained by).
 XC::TaggedObject::TaggedObject(int tag,EntCmd *owr)
   : EntCmd(owr), theTag(tag) {}
 
 //! @brief Virtual constructor.
 XC::TaggedObject *XC::TaggedObject::getCopy(void) const
   {
-    std::cerr << "No se ha definido getCopy para la clase: '"
-              << getClassName() << "'\n";
+    std::cerr << getClassName() << "::" << __FUNCTION__
+	      << "; not implemented yet." << std::endl;
     return nullptr;
   }
 
-//! @brief Sets del tag.
+//! @brief Set tag.
+//!
+//! Sets the tag of the object to be \p newTag. It is provided so that
+//! MovableObjects can set their tag in recvSelf().
 void XC::TaggedObject::setTag(int newTag) 
   { theTag = newTag; }
 
-//! @brief Sets del tag.
+//! @brief Set tag (to be called from Python interface).
 void XC::TaggedObject::assignTag(int newTag) 
   {
     std::clog << "Call assignTag is not a good idea (usually)." << std::endl;
     setTag(newTag);
   }
 
-//! @brief Imprime el objeto.
+//! @brief Print stuff.
 void XC::TaggedObject::Print(std::ostream &s, int flag)
   {
-    s << getClassName() << "::Print(std::ostream,flag) sin implementar."
-      << std::endl;
+    std::cerr << getClassName() << "::" << __FUNCTION__
+	      << "; not implemented yet." << std::endl;
   }
 
 //! @brief Inserta el objeto en el stream de salida.

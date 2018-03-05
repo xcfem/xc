@@ -67,6 +67,10 @@
 
 // some typedefs that will be useful
 
+//! @brief Creates the map object and an iter for iterating through the objects
+//! that are added to the map.
+//!
+//! @param owr: object owner (this object is somewhat contained by).
 XC::MapOfTaggedObjects::MapOfTaggedObjects(EntCmd *owr,const std::string &containerName)
   : TaggedObjectStorage(owr,containerName), myIter(*this) {}
 
@@ -88,14 +92,20 @@ XC::MapOfTaggedObjects &XC::MapOfTaggedObjects::operator=(const MapOfTaggedObjec
 XC::MapOfTaggedObjects::~MapOfTaggedObjects(void)
   { clearComponents(); }
 
-
+//! @brief Set the container size.
+//!
+//! Checks to see that max size for the map (which is a built in value
+//! defined for the template class) is larger than \p newSize. Returns
+//! \f$0\f$ if successful. If not successful, a warning is raised
+//! and \f$-1\f$ is returned.
 int XC::MapOfTaggedObjects::setSize(int newSize)
   {
     // no setSize for map template .. can only check enough space available
     int maxSize = theMap.max_size();
     if(newSize > maxSize)
       {
-        std::cerr << "XC::MapOfTaggedObjects::setSize - failed as map stl has a max size of " << maxSize << "\n";
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; failed as map stl has a max size of " << maxSize << "\n";
         return -1;
       } 
    
@@ -103,6 +113,15 @@ int XC::MapOfTaggedObjects::setSize(int newSize)
   }
 
 //! @brief Adds a component to the container.
+//!
+//! To add the object \p newComponent to the container. First checks to
+//! see if an element with a similar tag already exists in the map. If
+//! not, the pointer to \p newElement is added to the map using the
+//! insert() method. A check is then made to ensure that the object
+//! has been added. (This is done as insert() returns no error flag).
+//! Returns \p true if successful. If not successful, a warning is raised
+//! and false is returned. Note that the map template does not allow items with
+//! duplicate keys to be added. 
 bool XC::MapOfTaggedObjects::addComponent(TaggedObject *newComponent)
   {
     int tag = newComponent->getTag();
@@ -119,7 +138,8 @@ bool XC::MapOfTaggedObjects::addComponent(TaggedObject *newComponent)
 	theEle = theMap.find(tag);
 	if(theEle == theMap.end())
          {
-	   std::cerr << "MapOfTaggedObjects::addComponent - map STL failed to add object with tag : " << 
+	   std::cerr << getClassName() << "::" << __FUNCTION__
+		     << "; map STL failed to add object with tag : " << 
 	     newComponent->getTag() << "\n";
 	   return false;
 	 }
@@ -128,7 +148,8 @@ bool XC::MapOfTaggedObjects::addComponent(TaggedObject *newComponent)
     // as the map template does not allow multiple entries wih the same tag
     else
       {	
-        std::cerr << "MapOfTaggedObjects::addComponent - not adding as one with similar tag exists, tag: " <<
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; not adding as one with similar tag exists, tag: " <<
 	  newComponent->getTag() << "\n";
         return false;
       }
@@ -136,6 +157,13 @@ bool XC::MapOfTaggedObjects::addComponent(TaggedObject *newComponent)
   }
 
 //! @brief Adds a component to the container.
+//!
+//! To remove the component whose tag is given by \p tag from the
+//! container and return a pointer to the object. Invokes {\em find(tag)}
+//! on the map to first see if the element is there. If it is {\em
+//! erase(tag)} is invoked on the map to remove the item. \f$0\f$ is returned
+//! if the component is not in the map, otherwise a pointer to the component
+//! is returned.
 bool XC::MapOfTaggedObjects::removeComponent(int tag)
   {
     bool retval= false;
@@ -151,30 +179,35 @@ bool XC::MapOfTaggedObjects::removeComponent(int tag)
         transmitIDs= true; //Se elimina un componente.
 	if(ok != 1)
           { // ensure the map did remove the object
-	    std::cerr << "MapOfTaggedObjects::removeComponent - map STL failed to remove object with tag " << 
-	      tag << "\n";
+	    std::cerr << getClassName() << "::" << __FUNCTION__
+		      << "; map STL failed to remove object with tag "
+		      << tag << "\n";
 	  }
       }
     return retval;
   }
 
-
+//! @brief Returns the number of components currently stored in the
+//! container. This is found by invoking size() on the map object.
 int XC::MapOfTaggedObjects::getNumComponents(void) const
   { return theMap.size(); }
 
 
+//! @brief To return a pointer to the TaggedObject whose identifier is given by
+//! \p tag.
+//! 
+//! To return a pointer to the TaggedObject whose identifier is given by
+//! \p tag. Invokes {\em find(tag)} on the map to determine if the
+//! component is in the container. If it is a pointer to the component is
+//! returned. If it is not in the map \f$0\f$ is returned.
 XC::TaggedObject *XC::MapOfTaggedObjects::getComponentPtr(int tag)
   {
-    TaggedObject *retval= nullptr;
-    // return nullptr if component does not exist.
-    const_iterator theEle= theMap.find(tag);
-    if(theEle == end()) 
-      return nullptr;
-    else 
-      retval = (*theEle).second;
-    return retval;
+    const MapOfTaggedObjects *cthis= static_cast<const MapOfTaggedObjects *>(this);
+    return const_cast<TaggedObject *>(cthis->getComponentPtr(tag));
   }
 
+//! @brief To return a pointer to the TaggedObject whose identifier is given by
+//! \p tag. Const version of the method.
 const XC::TaggedObject *XC::MapOfTaggedObjects::getComponentPtr(int tag) const
   {
     TaggedObject *retval= nullptr;
@@ -194,15 +227,25 @@ XC::TaggedObjectIter &XC::MapOfTaggedObjects::getComponents(void)
   }
 
 
+//! @brief To return an iter for iterating through the objects that have been
+//! added to the container. Each MapOfTaggedObjects object has its own iter. This
+//! iter() is first reset and a reference to this iter is then returned. 
 XC::MapOfTaggedObjectsIter XC::MapOfTaggedObjects::getIter(void)
   { return XC::MapOfTaggedObjectsIter(*this); }
 
-
+//! @brief Get an empty copy of the method.
+//!
+//! Returns a pointer to a new MapOfTaggedObjects which was created using
+//! new(). The new container that is returned is an empty container.
+//! If not enough memory is available to create this object a warning
+//! is raised and \f$0\f$ is returned. Note that it is the responsibility of
+//! the caller to invoke the destructor on the object that is returned.
 XC::TaggedObjectStorage *XC::MapOfTaggedObjects::getEmptyCopy(void)
   {
     MapOfTaggedObjects *theCopy = new MapOfTaggedObjects(Owner(),containerName);  
     if(!theCopy)
-      std::cerr << "XC::MapOfTaggedObjects::getEmptyCopy-out of memory\n";
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; out of memory\n";
     return theCopy;
   }
 
@@ -218,6 +261,12 @@ void XC::MapOfTaggedObjects::clearComponents(void)
       }
   }
 
+//! @brief Remove all objects from the container.
+//!
+//! To remove all objects from the container and {\bf to invoke the
+//! destructor on these objects}. Goes through the container, invoking the
+//! destructor on any object in the map. It then invokes clear() on
+//! the map object to clear it.
 void XC::MapOfTaggedObjects::clearAll(bool invokeDestructor)
   {
     // invoke the destructor on all the tagged objects stored
@@ -228,6 +277,7 @@ void XC::MapOfTaggedObjects::clearAll(bool invokeDestructor)
     transmitIDs= true; //Se eliminan todos los componentes.
   }
 
+//! @brief Print stuff.
 void XC::MapOfTaggedObjects::Print(std::ostream &s, int flag)
   {
     // go through the array invoking Print on non-zero entries

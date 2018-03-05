@@ -73,6 +73,15 @@ namespace XC {
 //! @brief The class is responsible for holding and providing access
 //! to objects of type TaggedObject. A map template of the standard
 //! template class is used to store the pointers to these objects.
+//!
+//! A MapOfTaggedObjects object is used as a container to store and
+//! provide access to objects of type TaggedObject. A MapOfTaggedObjects
+//! creates a map object to store the pointers to these objects. A map is
+//! created using a template provided by the standard template
+//! library. The key used to identify the pointers stored in the map
+//! object is the TaggedObjects tag. Each MapOfTaggedObject object also contains
+//! a MapOfTaggedObjectsIter object to iterate through the objects which
+//! have been added. 
 class MapOfTaggedObjects : public TaggedObjectStorage
   {
     typedef std::map<int, TaggedObject *> tagged_map;

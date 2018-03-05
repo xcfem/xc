@@ -44,6 +44,9 @@ const int XC::TaggedObjectStorage::posDbTag2;
 const int XC::TaggedObjectStorage::posDbTag3;
 
 //! @brief Constructor.
+//!
+//! @param owr: object owner (this object is somewhat contained by).
+//! @param tag: name for this container.
 XC::TaggedObjectStorage::TaggedObjectStorage(EntCmd *owr,const std::string &contrName)
   : EntCmd(owr), MovableObject(0), containerName(contrName), transmitIDs(true) {}
 

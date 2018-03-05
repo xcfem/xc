@@ -74,10 +74,20 @@ namespace XC
 //! @brief ArrayOfTaggedObjects is a storage class. The class
 //! is responsible for holding and providing access to objects of type
 //! TaggedObject. The data structure used to hold the objects is a simple
-//! array of pointers. As a one dimensional array is used certain ideas are tried
-//! to improve performance: (1) if the array needs to be larger to hold more
-//! components, the array size is doubled and (2) when adding/retrieving components,
-//! the array location given by the components tag is first checked.
+//! array of pointers. As a one dimensional array is used certain ideas are
+//! tried to improve performance: (1) if the array needs to be larger to hold
+//! more components, the array size is doubled and (2) when adding/retrieving
+//! components, the array location given by the components tag is first checked.
+//!
+//! ArrayOfTaggedObjects is used as a container object to store and
+//! provide access to objects of type TaggedObject. A single one dimensional
+//! array is used to store the pointers to the objects. As a one dimensional
+//! array is used, certain ideas are tried to improve performance: (1) if
+//! the array needs to be larger to hold more components, the array size
+//! is doubled; (2) when adding/retrieving components, the array location
+//! given by the components tag is first checked; and (3) a boolean flag is
+//! used to keep track of whether all objects have been stored at the
+//! location given by the tags.
 class ArrayOfTaggedObjects : public TaggedObjectStorage
   {
     typedef std::vector<TaggedObject *> tagged_vector;

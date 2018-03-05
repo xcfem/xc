@@ -79,9 +79,18 @@ class FEM_ObjectBroker;
 //! @ingroup Tagged
 //
 //! @brief Object idenfied by an integer (tag).
+//!
+//! TaggedObject is used as a base class to represent all classes
+//! that may have a integer identifier, a tag, to identify the object. It
+//! is used in the framework as a base class for many classes, for example
+//! DomainComponent and Vertex. The class is provided so that container
+//! classes can be written to store objects and provide access to
+//! them. This saves us rewriting container classes for each type of 
+//! object. (templates will be able to provide this functionality when
+//! they are provided with all compilers). 
 class TaggedObject: public EntCmd
   {
-  private:    
+  private:
     int theTag; //!< object identifier.
   protected:
     friend class ElementLoader;
@@ -95,12 +104,13 @@ class TaggedObject: public EntCmd
     virtual ~TaggedObject(void) {}
 
     void assignTag(int newTag);
-    inline int getTag(void) const;
+    int getTag(void) const;
 
     virtual void Print(std::ostream &s, int flag =0);       
     friend std::ostream &operator<<(std::ostream &s, TaggedObject &m);        
   };
 
+//! @brief Returns the tag associated with the object.
 inline int TaggedObject::getTag(void) const
   { return theTag; }
 

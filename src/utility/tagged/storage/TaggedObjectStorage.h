@@ -73,6 +73,15 @@ class TaggedObjectIter;
 //! @brief TaggedObjectStorage. A TaggedObjectStorage object a container object
 //! used to hold objects of type TaggedObject; each object of which has
 //! some UNIQUE identifier.
+//!
+//! TaggedObjectStorage is used as a container object to store and
+//! provide access to objects of type TaggedObject. Each TaggedObject
+//! object stored in a TaggedObjectStorage object must have a unique
+//! integer tag to distinguish it from other the other objects stored. The
+//! TaggedObjectStorage class is an abstract base class, it just defines
+//! the interface all concrete subclasses must provide. The interface
+//! defines methods to add and to remove the components, and methods to
+//! obtain access to the components.
 class TaggedObjectStorage: public EntCmd, public MovableObject
   {
     static ID dbTags;
@@ -102,18 +111,40 @@ class TaggedObjectStorage: public EntCmd, public MovableObject
     virtual ~TaggedObjectStorage(void) {}
 
     // public methods to populate the container
+    //! @brief To provide an indication to the container object that \p newSize
+    //! components are likely to be added. This is only a hint, it should be
+    //! acceptable for more or less objects than \p newSize to be added to
+    //! the container.
     virtual int setSize(int newSize) =0;
+    //! @brief To add the object \p newComponent to the container. To return
+    //! \p true if the object was added to the container, \p false
+    //! otherwise. The object should not be added if another object with a
+    //! similar tag already exists in the container.
     virtual bool addComponent(TaggedObject *newComponent) =0;
+    //! @brief To remove the component whose tag is given by \p tag from the
+    //! container. To return a pointer to the removed object if successful,
+    //!\f$0\f$ if not.
     virtual bool removeComponent(int tag) =0;
-    //! @brief Returns the number of components.
+    //! @brief Returns the current number of components.
     virtual int getNumComponents(void) const =0;
 
     bool existComponent(int tag);
+    //! @brief To return a pointer to the TaggedObject whose identifier is
+    //! given by \p tag. If the object has not been added to the container
+    //! nullptr is to be returned.
     virtual TaggedObject *getComponentPtr(int tag) =0;
+    //! @brief To return a pointer to the TaggedObject whose identifier is
+    //! given by \p tag. If the object has not been added to the container
+    //! nullptr is to be returned.
     virtual const TaggedObject *getComponentPtr(int tag) const=0;
+    //! @brief To return an iter for iterating through the objects that have
+    //! been added to the container.
     virtual TaggedObjectIter &getComponents(void) =0;
 
+    //! To return an empty copy of the container.
     virtual TaggedObjectStorage *getEmptyCopy(void)=0;
+    //! @brief To remove all objects from the container and {\bf to invoke the
+    //! destructor on these objects} if \p invokeDestructor is \p true.
     virtual void clearAll(bool invokeDestructors = true) =0;
 
     const ID &getClassTags(void) const;
@@ -125,6 +156,8 @@ class TaggedObjectStorage: public EntCmd, public MovableObject
     int recibe(int dbTag,const CommParameters &,T *(FEM_ObjectBroker::*p)(int));
     int sendSelf(CommParameters &);
     int recvSelf(const CommParameters &);
+    //! Invoke {\em Print(s,flag)} on all objects which have been added to
+    //! the container. 
     virtual void Print(std::ostream &s, int flag =0) =0;
   };
 
@@ -147,7 +180,8 @@ int TaggedObjectStorage::createObjects(const CommParameters &cp,T *(FEM_ObjectBr
               {
                 if(!addComponent(ptr))
                   {
-                    std::cerr << "TaggedObjectStorag::recv - could not add node with tag "
+                    std::cerr << getClassName() << "::" << __FUNCTION__
+			      << "; could not add node with tag: "
                               << ptr->getTag() << " into mesh\n!";
                     retval= -3;
                     break;
@@ -155,7 +189,8 @@ int TaggedObjectStorage::createObjects(const CommParameters &cp,T *(FEM_ObjectBr
               }
             else
               {
-                std::cerr << "TaggedObjectStorag::recv - cannot create node with classTag " 
+                std::cerr << getClassName() << "::" << __FUNCTION__
+			  << "; cannot create node with classTag: " 
                           << classTags(loc) << std::endl;
                 retval= -2;
                 break;
@@ -194,7 +229,8 @@ int TaggedObjectStorage::recibe(int dbTag,const CommParameters &cp,T *(FEM_Objec
     setDbTag(dbTag);
     int res= cp.receiveIdData(getDbTagData(),getDbTag());
     if(res<0)
-      std::cerr << "TaggedObjectStorage::recvData - failed to recv the initial ID\n";
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; failed to recv the initial ID\n";
     else
       res+= TaggedObjectStorage::receiveData(cp,ptrFunc);
     return res;
