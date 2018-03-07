@@ -84,7 +84,10 @@ namespace XC {
 //!  @defgroup Utils Utilities.
 
 //! @ingroup Utils
-//
+//! @brief Measure of system resources.
+//!
+//!  A Timer object is an object which can be used to measure
+//! system resources, i.e. cpu time and memory usage.
 class Timer
   {
   private:

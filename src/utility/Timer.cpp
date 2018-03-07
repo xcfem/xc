@@ -61,7 +61,7 @@
 //
 // What: "@(#) Timer.h, revA"
 
-#include<utility/Timer.h>
+#include <utility/Timer.h>
 
 
 #ifdef NOW
@@ -72,122 +72,109 @@ extern "C" int getrusage(int who, struct rusage *rusage);
 #define CLK_TCK sysconf(_SC_CLK_TCK)
 #endif
 
+//! @brief Default constructor.
 XC::Timer::Timer() 
-{
-#ifdef _WIN32
-    // fill in later
-#else    
-    r1us = &r1usage;
-    r2us = &r2usage;
-#endif
-}
+  {
+    r1us= &r1usage;
+    r2us= &r2usage;
+  }
 
+//! @brief Sets the accounting variables to mark the start of accounting period
+//! using the unix functions times() and \p getrusage.
 void XC::Timer::start(void)
-{
-#ifdef _WIN32
-    // fill in later
-#else        
-    t1 = times(&tmsstart);
+  {
+    t1= times(&tmsstart);
     getrusage(0,r1us);
-#endif
-}
+  }
 
-void 
-XC::Timer::pause(void)
-{
-#ifdef _WIN32
-    // fill in later
-#else        
-    t2 = times(&tmsend);
+//! @brief Sets the accounting variables to mark the end of accounting period
+//! using the unix functions times() and \p getrusage.
+void XC::Timer::pause(void)
+  {
+    t2= times(&tmsend);
     getrusage(0,r2us);    
-#endif
-} 
+  } 
 
 
-double
-XC::Timer::getReal(void) const
-{
-#ifdef _WIN32
-    // fill in later
-    return 0.0;
-#else        
-    long clktck = CLK_TCK;    
-    double Real = (t2-t1)/(double) clktck;
+//! @brief Uses the difference between the starting and ending accounting
+//! variables to determine the elapsed real time between the last calls to
+//! start()} and {\em pause(). Returns this value in units of seconds.
+double XC::Timer::getReal(void) const
+  {
+    const long clktck= CLK_TCK;    
+    const double Real= (t2-t1)/(double) clktck;
     return Real;
-#endif
-}    
+  }    
 
-double
-XC::Timer::getCPU(void) const
-{
-#ifdef _WIN32
-    // fill in later
-    return 0.0;
-#else        
-    long clktck = CLK_TCK;
-    double CPU  = (tmsend.tms_utime - tmsstart.tms_utime)/(double) clktck;    
+//! @brief Uses the difference between the starting and ending accounting
+//! variables to determine the CPU time allocated the process between the
+//! last calls to start()} and {\em pause(). Returns this value in
+//! units of seconds.
+double XC::Timer::getCPU(void) const
+  {
+    const long clktck= CLK_TCK;
+    const double CPU= (tmsend.tms_utime - tmsstart.tms_utime)/(double) clktck;
     return CPU;
-#endif    
-}    
+  }    
 
-int
-XC::Timer::getNumPageFaults(void) const
-{
-#ifdef _WIN32
-    // fill in later
-    return 0;
-#else        
-    int r2yes = r2us->ru_majflt;
-    int r1yes = r1us->ru_majflt;
+//! @brief Uses the difference between the starting and ending accounting
+//! variables to determine the number of page faults that required reading
+//! of pages from disk between the last calls to start() and {\em
+//! pause()}. Returns this value.
+int XC::Timer::getNumPageFaults(void) const
+  {
+    const int r2yes= r2us->ru_majflt;
+    const int r1yes= r1us->ru_majflt;
     return r2yes-r1yes;
-#endif
-}    
+  }    
 
-
-
+//! @brief Uses the difference between the starting and ending accounting
+//! variables to determine the real time, CPU time, operating system time
+//! allocate the process, total number of page faults, number of page
+//! faults that required reading of pages from memory, and number of page
+//! faults that required no reading from disk between the last calls to
+//! start()} and {\em pause(). Send these values to \p s.
 void XC::Timer::Print(std::ostream &s) const
-{
-#ifdef _WIN32
-    // fill in later
-#else        
-    long clktck = CLK_TCK;
-    double Real = (t2-t1)/(double) clktck;
-    double CPU  = (tmsend.tms_utime - tmsstart.tms_utime)/(double) clktck;
-    double System  = (tmsend.tms_stime - tmsstart.tms_stime)/(double) clktck;
+  {
+    const double clktck= double(CLK_TCK);
+    const double Real= (t2-t1)/clktck;
+    const double CPU= (tmsend.tms_utime - tmsstart.tms_utime)/clktck;
+    const double System= (tmsend.tms_stime - tmsstart.tms_stime)/clktck;
     s << std::endl;
     s << "TIME(sec) Real: " << Real << "  CPU: " << CPU;
     s << "   System: " << System << std::endl;
 
-    int r2no = r2us->ru_minflt;
-    int r2yes = r2us->ru_majflt;
-    int r1no = r1us->ru_minflt;
-    int r1yes = r1us->ru_majflt;
-    int r1page = r1no + r1yes;
-    int r2page = r2no + r2yes;
+    int r2no= r2us->ru_minflt;
+    int r2yes= r2us->ru_majflt;
+    int r1no= r1us->ru_minflt;
+    int r1yes= r1us->ru_majflt;
+    int r1page= r1no + r1yes;
+    int r2page= r2no + r2yes;
     
     s << "PAGE FAULTS: " << r2page-r1page << " (NO i/o: ";
     s << r2no-r1no << " YES i/o " << r2yes-r1yes << ") ";
 
-    r2no = r2us->ru_nivcsw;
-    r2yes = r2us->ru_nvcsw;
-    r1no = r1us->ru_nivcsw;
-    r1yes = r1us->ru_nvcsw;
-    r1page = r1no + r1yes;
-    r2page = r2no + r2yes;
+    r2no= r2us->ru_nivcsw;
+    r2yes= r2us->ru_nvcsw;
+    r1no= r1us->ru_nivcsw;
+    r1yes= r1us->ru_nvcsw;
+    r1page= r1no + r1yes;
+    r2page= r2no + r2yes;
 
     s << "CONTEXT SWITCHES " << r2page-r1page << " (Invol: ";
     s << r2no-r1no << " Voluntary " << r2yes-r1yes << ") ";
 
-    r2no = r2us->ru_nswap;
-    r1no = r1us->ru_nswap;
-    r2yes = r2us->ru_maxrss;
+    r2no= r2us->ru_nswap;
+    r1no= r1us->ru_nswap;
+    r2yes= r2us->ru_maxrss;
     
-    s << "Swapped: " << r2no-r1no << " Max Res Set Size: " << r2yes << std::endl;
+    s << "Swapped: " << r2no-r1no << " Max Res Set Size: "
+      << r2yes << std::endl;
     s << std::endl;
-#endif    
-}    
+  }    
 
-std::ostream &XC::operator<<(std::ostream &s, const XC::Timer &E)
+//! Invokes {\em Print(s)} on the Timer object \p E. 
+std::ostream &XC::operator<<(std::ostream &s, const Timer &E)
   {
     E.Print(s);
     return s;
