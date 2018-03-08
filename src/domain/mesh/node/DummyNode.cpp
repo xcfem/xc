@@ -67,24 +67,32 @@ XC::DummyNode::DummyNode(Node &theNode)
   { theRealNode = &theNode; }
 
 
-
-XC::Node *XC::DummyNode::getNode() const
+//! @brief Return a pointer to the associated node.
+XC::Node *XC::DummyNode::getNode(void) const
   { return theRealNode; }
 
+//! Each DummyNode, when involved with a StaticCondensationAnalysis
+//! analysis, will be associated with a DOF\_Group object. It is the
+//! DOF\_Group that contains the ID of equation numbers. When invoked this
+//! method sets that link for the DummyNode object. 
 void XC::DummyNode::setDOF_GroupPtr(DOF_Group *theDOF_Grp)
   { theDOFGroup = theDOF_Grp; }
 
- XC::DOF_Group *XC::DummyNode::getDOF_GroupPtr(void)
+//! Method which returns a pointer to the DOF\_Group object that was set
+//! using {\em setDOF\_GroupPtr}. If no pointer has been set a \f$0\f$ is
+//! returned.
+XC::DOF_Group *XC::DummyNode::getDOF_GroupPtr(void)
   { return theDOFGroup; }
 
 
+//! @brief Invokes getNumberDOF() on its associated
+//! node object. 
 int XC::DummyNode::getNumberDOF(void) const
   { return theRealNode->getNumberDOF(); }
 
 
-
-
-
+//! @brief Returns the result of invoking getMass() on its associated
+//! node object. 
 const XC::Matrix &XC::DummyNode::getMass(void) 
   { return theRealNode->getMass(); }
 
@@ -96,78 +104,92 @@ int XC::DummyNode::setMass(const XC::Matrix &m)
 
 
 
+//! @brief Returns the result of invoking getCrds() on its associated
+//! node object. 
 const XC::Vector &XC::DummyNode::getCrds() const
   { return theRealNode->getCrds(); }
 
 
+//! @brief Returns the result of invoking getDisp() on its associated
+//! Node object. 
 const XC::Vector &XC::DummyNode::getDisp(void) const
   { return theRealNode->getDisp(); }
 
 
+//! @brief Returns the result of invoking getVel() on its associated
+//! node object. 
 const XC::Vector &XC::DummyNode::getVel(void) const
   { return theRealNode->getVel(); }
 
 
+//! @brief Returns the result of invoking getAccel() on its associated
+//! Node object. 
 const XC::Vector &XC::DummyNode::getAccel(void)  const
   { return theRealNode->getAccel(); }
 
 
+//! @brief Returns the result of invoking getTrialDisp() on its associated
+//! node object. 
 const XC::Vector &XC::DummyNode::getTrialDisp(void) const
   { return theRealNode->getTrialDisp(); }
 
-
-
+//! @brief Returns the result of invoking getTrialVel() on its associated
+//! Node object. 
 const XC::Vector &XC::DummyNode::getTrialVel(void) const
   { return theRealNode->getTrialVel(); }
 
-
-
+//! @brief Returns the result of invoking getTrialAccel() on its associated
+//! node object. 
 const XC::Vector &XC::DummyNode::getTrialAccel(void) const
   { return theRealNode->getTrialAccel(); }
 
-
-
-
-
-int XC::DummyNode::setTrialDisp(const XC::Vector &displ)
+//! @brief Does nothing.
+int XC::DummyNode::setTrialDisp(const Vector &)
   { return 0; }
 
-int XC::DummyNode::setTrialVel(const XC::Vector &vel)
-  { return 0; }
-
-
-int XC::DummyNode::setTrialAccel(const XC::Vector &accel)
+//! @brief Does nothing.
+int XC::DummyNode::setTrialVel(const Vector &)
   { return 0; }
 
 
-int XC::DummyNode::setIncrTrialDisp(const XC::Vector &incrDispl)
+//! @brief Does nothing.
+int XC::DummyNode::setTrialAccel(const Vector &)
   { return 0; }
 
 
-int XC::DummyNode::setIncrTrialVel(const XC::Vector &incrVel)
+//! @brief Does nothing.
+int XC::DummyNode::setIncrTrialDisp(const Vector &)
   { return 0; }
 
 
-int XC::DummyNode::setIncrTrialAccel(const XC::Vector &incrAccel)
+//! @brief Does nothing.
+int XC::DummyNode::setIncrTrialVel(const Vector &)
   { return 0; }
 
+//! @brief Does nothing.
+int XC::DummyNode::setIncrTrialAccel(const Vector &)
+  { return 0; }
 
+//! @brief Does nothing.
 int XC::DummyNode::commitState()
   { return 0; }
 
 
-void XC::DummyNode::addUnbalancedLoad(const XC::Vector &add)
-  { theRealNode->addUnbalancedLoad(add); }
+//! @brief Returns the result of invoking addUnbalancedLoad() on its associated
+//! node object. 
+void XC::DummyNode::addUnbalancedLoad(const Vector &load)
+  { theRealNode->addUnbalancedLoad(load); }
 
-
-
+//! @brief Returns the result of invoking getUnbalancedLoad() on its associated
+//! node object. 
 const XC::Vector &XC::DummyNode::getUnbalancedLoad(void) const
   { return theRealNode->getUnbalancedLoad(); }
 
-
+//! @brief Calls zeroUnbalancedLoad() on its associated node.
 void XC::DummyNode::zeroUnbalancedLoad(void)
   { theRealNode->zeroUnbalancedLoad(); }
 
+//! @brief Does nothing.
 int XC::DummyNode::addElementPtr(Element *elePtr)
   {
 //    return theRealNode->addElementPtr(elePtr);
@@ -175,12 +197,13 @@ int XC::DummyNode::addElementPtr(Element *elePtr)
   }
 
 
-
+//! @brief Does nothing.
 void XC::DummyNode::setColor(int newColor)
   {
 //    theRealNode->setColor(newColor);
   }
 
+//! @brief Does nothing.
 int XC::DummyNode::getColor(void) const
   {
 //    return theRealNode->getColor();
@@ -189,18 +212,21 @@ int XC::DummyNode::getColor(void) const
 
 int XC::DummyNode::sendSelf(CommParameters &cp)
   {
-    std::cerr << "XC::DummyNode::sendSelf - should never be called\n";
-    std::cerr << "sending actual node\n";    
+    std::cerr << getClassName() << "::" << __FUNCTION__
+              << ";should never be called\n"
+	      << "sending actual node\n";    
     
     return theRealNode->sendSelf(cp);
   }
 
 int XC::DummyNode::recvSelf(const CommParameters &cp)
   {
-    std::cerr << "XC::DummyNode::recvSelf - should never be called\n";
+    std::cerr << getClassName() << "::" << __FUNCTION__
+	      << "; should never be called\n";
     return 0;
   }    
 
+//! @brief Print stuff.
 void XC::DummyNode::Print(std::ostream &s) const
   { theRealNode->Print(s); }
   
