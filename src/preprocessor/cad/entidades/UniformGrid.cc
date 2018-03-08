@@ -78,7 +78,7 @@ BND3d XC::UniformGrid::Bnd(void) const
 Pos3d XC::UniformGrid::GetCentro(void) const
   { return Pos3d(org.x()+Lx/2,org.y()+Ly/2,org.z()+Lz/2); }
 
-//! @brief Returns the sets a los que pertenece este objeto.
+//! @brief Returns the sets to which this object belongs.
 std::set<XC::SetBase *> XC::UniformGrid::get_sets(void) const
   {
     std::set<SetBase *> retval;

@@ -54,7 +54,7 @@ XC::SectionMatrices::SectionMatrices(const size_t &sz)
   : MovableObject(0)
   { alloc(sz); }
 
-//! @brief Redimensiona los objetos.
+//! @brief Resize objects.
 void XC::SectionMatrices::resize(const size_t &sz)
   { alloc(sz); }
 

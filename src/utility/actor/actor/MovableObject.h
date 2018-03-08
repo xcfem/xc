@@ -154,7 +154,7 @@ T *getBrokedMovable(const int &dbTag,const int &classTag,const CommParameters &c
     if(retval)
       retval->setDbTag(dbTag);
     else
-      std::cerr << "getBrokedMovable; no se pudo crear el objeto con classTag: " 
+      std::cerr << "getBrokedMovable; can't create object con classTag: " 
                 << classTag << std::endl;
     return retval;
   }

@@ -183,7 +183,7 @@ int XC::PathSeries::recvSelf(const CommParameters &cp)
     return result;    
   }
 
-//! @brief Imprime el objeto.
+//! @brief Print stuff.
 void XC::PathSeries::Print(std::ostream &s, int flag) const
   {
     PathSeriesBase::Print(s,flag);

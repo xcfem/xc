@@ -133,7 +133,7 @@ class MapLoadPatterns: public LoadLoaderMember
 
   };
 
-//! @brief Crea un objeto TimeSeries.
+//! @brief Create a TimeSeries object.
 template <class TS>
 TimeSeries *XC::MapLoadPatterns::create_time_series(const std::string &cod_ts)
   {

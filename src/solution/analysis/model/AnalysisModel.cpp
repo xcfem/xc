@@ -239,7 +239,8 @@ XC::LagrangeSFreedom_FE *XC::AnalysisModel::createLagrangeSFreedom_FE(const int 
     return retval;    
   }
 
-//! @brief Método para crear un objeto LagrangeMFreedom_FE y agregarlo al modelo.
+//! @brief Method to create a LagrangeMFreedom_FE object and append it
+//! to the model.
 XC::LagrangeMFreedom_FE *XC::AnalysisModel::createLagrangeMFreedom_FE(const int &tag,MFreedom_Constraint &theMP,DOF_Group &theDofGrp,const double &alpha)
   {
     LagrangeMFreedom_FE *retval= new LagrangeMFreedom_FE(tag,*getDomainPtr(),theMP,theDofGrp,alpha);
@@ -252,7 +253,8 @@ XC::LagrangeMFreedom_FE *XC::AnalysisModel::createLagrangeMFreedom_FE(const int 
     return retval;    
   }
 
-//! @brief Método para crear un objeto LagrangeMRMFreedom_FE y agregarlo al modelo.
+//! @brief Method to create a LagrangeMRMFreedom_FE object and append it
+//! to the model.
 XC::LagrangeMRMFreedom_FE *XC::AnalysisModel::createLagrangeMRMFreedom_FE(const int &tag,MRMFreedom_Constraint &theMRMP,DOF_Group &theDofGrp,const double &alpha)
   {
     LagrangeMRMFreedom_FE *retval= new LagrangeMRMFreedom_FE(tag,*getDomainPtr(),theMRMP,theDofGrp,alpha);
@@ -265,7 +267,8 @@ XC::LagrangeMRMFreedom_FE *XC::AnalysisModel::createLagrangeMRMFreedom_FE(const 
     return retval;
   }
 
-//! @brief Método para crear un objeto PenaltySFreedom_FE y agregarlo al modelo.
+//! @brief Method to create a PenaltySFreedom_FE object and append it
+//! to the model.
 XC::PenaltySFreedom_FE *XC::AnalysisModel::createPenaltySFreedom_FE(const int &tag, SFreedom_Constraint &theSP, const double &alpha)
   {
     PenaltySFreedom_FE *retval=new PenaltySFreedom_FE(tag,*getDomainPtr(),theSP,alpha);
@@ -278,7 +281,7 @@ XC::PenaltySFreedom_FE *XC::AnalysisModel::createPenaltySFreedom_FE(const int &t
     return retval;    
   }
 
-//! @brief Método para crear un objeto PenaltyMFreedom_FE y agregarlo al modelo.
+//! @brief Create a PenaltyMFreedom_FE object and append it to the model.
 XC::PenaltyMFreedom_FE *XC::AnalysisModel::createPenaltyMFreedom_FE(const int &tag, MFreedom_Constraint &theMP, const double &alpha)
   {
     PenaltyMFreedom_FE *retval=new PenaltyMFreedom_FE(tag,*getDomainPtr(),theMP,alpha);
@@ -291,7 +294,7 @@ XC::PenaltyMFreedom_FE *XC::AnalysisModel::createPenaltyMFreedom_FE(const int &t
     return retval;    
   }
 
-//! @brief Método para crear un objeto PenaltyMRMFreedom_FE y agregarlo al modelo.
+//! @brief Create a PenaltyMRMFreedom_FE object and append it to the model.
 XC::PenaltyMRMFreedom_FE *XC::AnalysisModel::createPenaltyMRMFreedom_FE(const int &tag, MRMFreedom_Constraint &theMRMP, const double &alpha)
   {
     PenaltyMRMFreedom_FE *retval=new PenaltyMRMFreedom_FE(tag,*getDomainPtr(),theMRMP,alpha);
@@ -304,7 +307,7 @@ XC::PenaltyMRMFreedom_FE *XC::AnalysisModel::createPenaltyMRMFreedom_FE(const in
     return retval;    
   }
 
-//! @brief Método para crear un objeto TransformationFE_Element y agregarlo al modelo.
+//! @brief Create a TransformationFE_Element object and append it to the model.
 XC::FE_Element *XC::AnalysisModel::createTransformationFE(const int &tag, Element *elePtr, const std::set<int> &transformedEle, std::set<FE_Element *> &theFEset)
   {
     FE_Element *retval= nullptr;

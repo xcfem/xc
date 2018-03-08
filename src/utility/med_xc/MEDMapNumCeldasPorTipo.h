@@ -20,7 +20,7 @@
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
 //MEDMapNumCeldasPorTipo.h
-//Envoltorio para el objeto MESHING de MED (para exportar archivos a «salome»).
+//Wrapper for the MESHING object of MED (to export files to «salome»).
 
 #ifndef MEDMAPNUMCELDASPORTIPO_H
 #define MEDMAPNUMCELDASPORTIPO_H

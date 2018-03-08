@@ -113,10 +113,10 @@ int XC::DataOutputStreamHandler::write(Vector &data)
   return 0;
 }
 
-//! @brief Envía el objeto a través del canal definido en el argumento.
+//! @brief Send the object a través del canal definido en el argumento.
 int XC::DataOutputStreamHandler::sendSelf(CommParameters &cp)
   { return 0; }
 
-//! @brief Recibe el objeto a través del canal definido en el argumento.
+//! @brief Receive the object a través del canal definido en el argumento.
 int XC::DataOutputStreamHandler::recvSelf(const CommParameters &cp)
   { return 0; }

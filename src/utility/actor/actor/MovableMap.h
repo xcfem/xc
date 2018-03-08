@@ -139,7 +139,7 @@ int MovableMap<T>::recvData(const CommParameters &cp)
     return res;
   }
 
-//! @brief Envia el objeto through the channel being passed as parameter.
+//! @brief Send the object through the channel being passed as parameter.
 template <class T>
 int XC::MovableMap<T>::sendSelf(CommParameters &cp)
   {

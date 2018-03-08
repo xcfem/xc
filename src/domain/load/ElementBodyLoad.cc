@@ -79,7 +79,7 @@ int XC::ElementBodyLoad::removeElement(int tag)
     return numElements();
   }
 
-//! @brief Imprime el objeto.
+//! @brief Print stuff.
 void XC::ElementBodyLoad::Print(std::ostream &s, int flag) const
   {
     s << "  loaded elements: " << getElementTags();

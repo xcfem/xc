@@ -65,7 +65,7 @@ void XC::TaggedObjectStorage::copia(const TaggedObjectStorage &otro)
 bool XC::TaggedObjectStorage::existComponent(int tag)
   { return (getComponentPtr(tag)!=nullptr); }
 
-//! @brief Returns the DBTags de los objetos.
+//! @brief Returns the DBTags of the objects.
 const XC::ID &XC::TaggedObjectStorage::getDBTags(CommParameters &cp)
   {
     static ID retval;
@@ -87,7 +87,7 @@ const XC::ID &XC::TaggedObjectStorage::getDBTags(CommParameters &cp)
     return retval;
   }
 
-//! @brief Returns the classTags de los objetos.
+//! @brief Returns the classTags of the objects.
 const XC::ID &XC::TaggedObjectStorage::getClassTags(void) const
   {
     static ID retval;
@@ -110,7 +110,7 @@ const XC::ID &XC::TaggedObjectStorage::getClassTags(void) const
     return retval;
   }
 
-//! @brief Returns the tags de los objetos.
+//! @brief Returns the tags of the objects.
 const XC::ID &XC::TaggedObjectStorage::getObjTags(void) const
   {
     static ID retval;
@@ -141,7 +141,7 @@ XC::DbTagData &XC::TaggedObjectStorage::getDbTagData(void) const
     return retval;
   }
 
-//! @brief Returns the dbTags y classTags de los objetos through the channel being passed as parameter.
+//! @brief Returns the dbTags y classTags of the objects through the channel being passed as parameter.
 int XC::TaggedObjectStorage::sendObjectTags(CommParameters &cp)
   {
     const int size= getNumComponents();
@@ -160,7 +160,7 @@ int XC::TaggedObjectStorage::sendObjectTags(CommParameters &cp)
     return res;
   }
 
-//! @brief Recibe los dbTags o classTags de los objetos through the channel being passed as parameter.
+//! @brief Recibe los dbTags o classTags of the objects through the channel being passed as parameter.
 const XC::ID &XC::TaggedObjectStorage::receiveTags(int posDbTag,int sz,const CommParameters &cp)
   {
     static ID retVal;
@@ -175,7 +175,7 @@ const XC::ID &XC::TaggedObjectStorage::receiveTags(int posDbTag,int sz,const Com
     return retVal;
   }
 
-//! @brief Recibe los tags para los objetos through the channel being passed as parameter.
+//! @brief Receive object tags through the channel being passed as parameter.
 int XC::TaggedObjectStorage::recibeObjectTags(const int &sz,const CommParameters &cp)
   {
     int res= 0;
@@ -185,7 +185,7 @@ int XC::TaggedObjectStorage::recibeObjectTags(const int &sz,const CommParameters
     return res;
   }
 
-//! @brief Envía los objetos through the channel being passed as parameter.
+//! @brief Send objects through the channel being passed as parameter.
 int XC::TaggedObjectStorage::sendObjects(CommParameters &cp)
   {
     const int size= getNumComponents();
@@ -239,7 +239,8 @@ int XC::TaggedObjectStorage::receiveObjects(const CommParameters &cp)
               }
           }
         else
-	  std::cerr << "El objeto de tag: " << ptr->getTag() << " no es móvil." << std::endl;
+	  std::cerr << "The object with tag: " << ptr->getTag()
+		    << " is not movable." << std::endl;
       }
     return res;
   }

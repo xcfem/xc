@@ -50,7 +50,7 @@ namespace XC{
 
 //! @ingroup CadMR
 //! 
-//! @brief "Tritriz" de pointers to objetos.
+//! @brief "Tritriz" de pointers to objects.
 template <class MatrizPtr>
 class TritrizPtrBase: public std::vector<MatrizPtr>, public EntCmd
   {

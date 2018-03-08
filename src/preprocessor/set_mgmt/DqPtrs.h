@@ -235,7 +235,7 @@ bool DqPtrs<T>::push_front(T *t)
     return retval;
   }
 
-//! @brief Returns the Tags de los objetos.
+//! @brief Returns the tags of the objects.
 template <class T>
 const ID &DqPtrs<T>::getTags(void) const
   {

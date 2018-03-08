@@ -67,7 +67,7 @@ int XC::EnvelopeData::restart(void)
     return 0;
   }
 
-//! @brief Envía el objeto a través del comunicador que
+//! @brief Send the object a través del comunicador que
 //! being passed as parameter.
 int XC::EnvelopeData::sendData(CommParameters &cp)
   {
@@ -77,7 +77,7 @@ int XC::EnvelopeData::sendData(CommParameters &cp)
     return res;
   }
 
-//! @brief Recibe el objeto a través del comunicador que
+//! @brief Receive the object a través del comunicador que
 //! being passed as parameter.
 int XC::EnvelopeData::receiveData(const CommParameters &cp)
   {

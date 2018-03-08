@@ -102,11 +102,11 @@ int XC::DbTagData::receiveIdData(const CommParameters &cp,const int &dataTag)
 int XC::DbTagData::send(DbTagData &dt,CommParameters &cp, const CommMetaData &meta) const
   { return cp.sendID(data,dt,meta); }
 
-//! @brief Recibe el objeto.
+//! @brief Receive the object.
 int XC::DbTagData::receive(DbTagData &dt,const CommParameters &cp, const CommMetaData &meta)
   { return cp.receiveID(data,dt,meta); }
 
-//! @brief Imprime el objeto.
+//! @brief Print stuff.
 void XC::DbTagData::Print(std::ostream &os) const
   {
     os << "dbTags: [" << data << "] visitados: [";

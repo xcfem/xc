@@ -250,7 +250,8 @@ XC::TimeSeries *XC::MapLoadPatterns::newTimeSeries(const std::string &tipo, cons
     return ts;
   }
 
-//! @brief Define un objeto LoasPattern con el tipo y el nombre being passed as parameters.
+//! @brief Define a LoadPattern object withe the type and the
+//! name being passed as parameters.
 XC::LoadPattern *XC::MapLoadPatterns::newLoadPattern(const std::string &tipo,const std::string &cod_lp)
   {
     LoadPattern *retval= nullptr;

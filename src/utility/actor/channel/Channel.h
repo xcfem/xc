@@ -244,7 +244,7 @@ int Channel::sendObjs(int commitTag,const inputIterator &first,const inputIterat
     return retval;
   }
 
-//! @brief Recibe una serie de objetos.
+//! @brief Receive an object sequence.
 template <class inputIterator>
 int Channel::recvObjs(int commitTag,const inputIterator &first,const inputIterator &last, FEM_ObjectBroker &ob, ChannelAddress *theAddress)
   {

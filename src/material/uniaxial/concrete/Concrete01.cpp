@@ -427,7 +427,7 @@ int XC::Concrete01::recvSelf(const CommParameters &cp)
     return res;
   }
 
-//! @brief Imprime el objeto.
+//! @brief Print stuff.
 void XC::Concrete01::Print (std::ostream& s, int flag)
   {
     s << "Concrete01, tag: " << this->getTag() << std::endl;

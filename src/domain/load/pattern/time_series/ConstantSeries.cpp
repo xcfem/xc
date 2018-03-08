@@ -75,7 +75,7 @@ XC::ConstantSeries::ConstantSeries(double theFactor)
 XC::TimeSeries *XC::ConstantSeries::getCopy(void) const
   { return new ConstantSeries(*this); }
 
-//! @brief Imprime el objeto.
+//! @brief Print stuff.
 void XC::ConstantSeries::Print(std::ostream &s, int flag) const
   {
     s << "Constant Series: factor: " << cFactor << "\n";

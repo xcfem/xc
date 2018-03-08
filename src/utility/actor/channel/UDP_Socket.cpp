@@ -217,7 +217,7 @@ XC::UDP_Socket::setNextAddress(const XC::ChannelAddress &theAddress)
     }		    	
 }
 
-//! @brief Envía el objeto a través de éste canal.
+//! @brief Send the object a través de éste canal.
 int XC::UDP_Socket::sendObj(int commitTag, MovableObject &theObject, ChannelAddress *theAddress) 
   {
     // set the address of last_Addr
@@ -245,7 +245,7 @@ int XC::UDP_Socket::sendObj(int commitTag, MovableObject &theObject, ChannelAddr
   }
 
 
-//! @brief Recibe el objeto a través de éste canal.
+//! @brief Receive the object a través de éste canal.
 int XC::UDP_Socket::recvObj(int commitTag, MovableObject &theObject, FEM_ObjectBroker &theBroker, ChannelAddress *theAddress) 
   {
 

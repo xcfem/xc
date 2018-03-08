@@ -64,10 +64,9 @@ XC::SetEntities &XC::SetEntities::operator=(const SetEntities &other)
     return *this;
   }
 
-//! @brief Copia las listas de objetos of the set s.
+//! @brief Copy the object lists of the set s.
 //!
-//! Copia en ESTE objeto las listas de objetos of the set
-//! being passed as parameter.
+//! Append to this object the lists of objects from the argument.
 void XC::SetEntities::copia_listas(const SetEntities &other)
   {
     points= other.points;

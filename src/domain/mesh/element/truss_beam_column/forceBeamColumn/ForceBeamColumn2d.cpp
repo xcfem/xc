@@ -925,7 +925,7 @@ int XC::ForceBeamColumn2d::recvData(const CommParameters &cp)
     return res;
   }
 
-//! @brief Envía el objeto.
+//! @brief Send the object.
 int XC::ForceBeamColumn2d::sendSelf(CommParameters &cp)
   {
     inicComm(32);
@@ -939,7 +939,7 @@ int XC::ForceBeamColumn2d::sendSelf(CommParameters &cp)
   }
 
 
-//! @brief Envía el objeto.
+//! @brief Send the object.
 int XC::ForceBeamColumn2d::recvSelf(const CommParameters &cp)
   {
     inicComm(32);

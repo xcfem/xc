@@ -327,7 +327,7 @@ int XC::PathTimeSeries::recvSelf(const CommParameters &cp)
 
 
 
-//! @brief Imprime el objeto.
+//! @brief Print stuff.
 void XC::PathTimeSeries::Print(std::ostream &s, int flag) const
   {
     PathSeriesBase::Print(s,flag);

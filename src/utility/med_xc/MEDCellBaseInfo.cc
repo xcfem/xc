@@ -38,7 +38,7 @@ void XC::MEDCellBaseInfo::new_cell(size_t tag,const MED_EN::medGeometryElement &
 const XC::MEDMapNumCeldasPorTipo &XC::MEDCellBaseInfo::getMapCellTypes(void) const
   { return cell_types; }
 
-//! @brief Vuelca la las celdas en un objeto SUPPORT de MEDMEM.
+//! @brief Dump the cells into a SUPPORT object of MEDMEM.
 void XC::MEDCellBaseInfo::to_support_med(MEDMEM::SUPPORT &supp) const
   {
     const int NumberOfTypes= cell_types.getNumberOfTypes();

@@ -386,7 +386,7 @@ void XC::ShellCorotCrdTransf3d::getGlobalResidAndTangent(Vector &resid,Matrix &s
 const XC::Vector &XC::ShellCorotCrdTransf3d::getGlobalResistingForce(const Vector &p0) const
   { return local_to_global_resisting_force(p0); }
 
-//! @brief Envia el objeto through the channel being passed as parameter.
+//! @brief Send the object through the channel being passed as parameter.
 int XC::ShellCorotCrdTransf3d::sendSelf(CommParameters &cp)
   {
     inicComm(3);

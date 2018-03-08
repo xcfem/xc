@@ -958,7 +958,7 @@ int XC::CorotCrdTransf2d::recvData(const CommParameters &cp)
     return res;    
   }
 
-//! @brief Envia el objeto through the channel being passed as parameter.
+//! @brief Send the object through the channel being passed as parameter.
 int XC::CorotCrdTransf2d::sendSelf(CommParameters &cp)
   {
     static ID data(16);

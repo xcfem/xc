@@ -365,6 +365,6 @@ int XC::Steel02::recvSelf(const CommParameters &cp)
     return res;
   }
 
-//! @brief Imprime el objeto.
+//! @brief Print stuff.
 void XC::Steel02::Print(std::ostream &s, int flag)
   { s << "Steel02:(strain, stress, tangent) " << eps << " " << sig << " " << e << std::endl; }

@@ -39,7 +39,7 @@ XC::MeshCompRecorder::MeshCompRecorder(int classTag,Domain &theDom,
   :HandlerRecorder(classTag,theDom,theOutputHandler,timeFlag),
    deltaT(dT), nextTimeStampToRecord(0.0) {}
 
-//! @brief Envia el objeto mediante el comunicador
+//! @brief Send the object mediante el comunicador
 //! being passed as parameter.
 int XC::MeshCompRecorder::sendData(CommParameters &cp)
   {

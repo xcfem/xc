@@ -85,9 +85,9 @@ XC::Spot *XC::EntGeomSection::BuscaSpot(const size_t &id_punto)
         retval= getGeomSection()->busca_spot(id_punto);
       }
     else
-      std::cerr << "XC::EntGeomSection::BuscaSpot: el objeto: '"
-                << getName() << "' no tiene asignado GeomSection."
-                << std::endl;
+      std::cerr << getClassName() << "::" << __FUNCTION__
+	        << "; section geometry not set for the object: '"
+                << getName() << std::endl;
     return retval;
   }
 
@@ -100,7 +100,7 @@ const XC::Spot *XC::EntGeomSection::BuscaSpot(const size_t &id_punto) const
         retval= getGeomSection()->busca_spot(id_punto);
       }
     else
-      std::cerr << "XC::EntGeomSection::BuscaSpot: el objeto: '" 
+      std::cerr << "XC::EntGeomSection::BuscaSpot: the object: '" 
                 << getName() << "' no tiene asignado GeomSection."
                 << std::endl;
     return retval;
@@ -115,7 +115,7 @@ XC::Eje *XC::EntGeomSection::BuscaEje(const size_t &id_Eje)
         retval= getGeomSection()->busca_eje(id_Eje);
       }
     else
-      std::cerr << "XC::EntGeomSection::BuscaEje: el objeto: '"
+      std::cerr << "XC::EntGeomSection::BuscaEje: the object: '"
                 << getName() << "' no tiene asignado GeomSection."
                 << std::endl;
     return retval;
@@ -130,7 +130,7 @@ const XC::Eje *XC::EntGeomSection::BuscaEje(const size_t &id_Eje) const
         retval= getGeomSection()->busca_eje(id_Eje);
       }
     else
-      std::cerr << "XC::EntGeomSection::BuscaEje: el objeto: '" 
+      std::cerr << "XC::EntGeomSection::BuscaEje: the object: '" 
                 << getName() << "' no tiene asignado GeomSection."
                 << std::endl;
     return retval;

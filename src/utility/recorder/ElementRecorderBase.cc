@@ -69,7 +69,7 @@ XC::ElementRecorderBase::~ElementRecorderBase(void)
       }
   }
 
-//! @brief Envía el objeto a otro proceso.
+//! @brief Send the object a otro proceso.
 int XC::ElementRecorderBase::sendData(CommParameters &cp)
   {
     int res= MeshCompRecorder::sendData(cp);
@@ -78,7 +78,7 @@ int XC::ElementRecorderBase::sendData(CommParameters &cp)
     return res;
   }
 
-//! @brief Recibe el objeto desde otro proceso.
+//! @brief Receive the object desde otro proceso.
 int XC::ElementRecorderBase::receiveData(const CommParameters &cp)
   {
     int res= MeshCompRecorder::receiveData(cp);
@@ -87,7 +87,7 @@ int XC::ElementRecorderBase::receiveData(const CommParameters &cp)
     return res;
   }
 
-//! @brief Envía el objeto a otro proceso.
+//! @brief Send the object a otro proceso.
 int XC::ElementRecorderBase::sendSelf(CommParameters &cp)
   {
     int res= 0;
@@ -109,7 +109,7 @@ int XC::ElementRecorderBase::sendSelf(CommParameters &cp)
     return res;
   }
 
-//! @brief Recibe el objeto desde otro proceso.
+//! @brief Receive the object desde otro proceso.
 int XC::ElementRecorderBase::recvSelf(const CommParameters &cp)
   {
     int res= 0;

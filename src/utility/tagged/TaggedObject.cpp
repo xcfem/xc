@@ -108,7 +108,7 @@ void XC::TaggedObject::Print(std::ostream &s, int flag)
 	      << "; not implemented yet." << std::endl;
   }
 
-//! @brief Inserta el objeto en el stream de salida.
+//! @brief Inserts the object on the output stream argument.
 std::ostream &XC::operator<<(std::ostream &s, XC::TaggedObject &m)
   {
     m.Print(s);

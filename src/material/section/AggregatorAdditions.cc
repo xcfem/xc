@@ -69,7 +69,7 @@ void XC::AggregatorAdditions::getType(ResponseId &retval,const size_t &offset) c
       retval(offset+i)= matCodes(i);
   }
 
-//! @brief Imprime el objeto.
+//! @brief Print stuff.
 void XC::AggregatorAdditions::Print(std::ostream &s, int flag) const
   {
     DqUniaxialMaterial::Print(s,flag);

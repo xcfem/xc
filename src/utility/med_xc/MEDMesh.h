@@ -20,7 +20,7 @@
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
 //MEDMesh.h
-//Envoltorio para el objeto MESHING de MED (para exportar archivos a «salome»).
+//Wrapper for the MESHING object of MED (to export files to "salome").
 
 #ifndef MEDMESH_H
 #define MEDMESH_H
@@ -32,7 +32,7 @@ namespace XC {
   class Matrix;
 //! @ingroup MED
 //
-//!  @brief Envoltorio para el objeto MESHING de MED.
+//!  @brief Wrapper for the MESHING object of MED.
 class MEDMesh: public MEDObject
   {
     std::string meshName;

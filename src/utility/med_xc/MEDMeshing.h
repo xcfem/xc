@@ -20,7 +20,7 @@
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
 //MEDMeshing.h
-//Envoltorio para el objeto MESHING de MED (para exportar archivos a «salome»).
+//Wrapper for the MESHING object of MED (to export files to "salome").
 
 #ifndef MEDMESHING_H
 #define MEDMESHING_H
@@ -41,7 +41,7 @@ class FEProblem;
 
 //! @ingroup MED
 //
-//!  @brief Envoltorio para el objeto MESHING de MED.
+//!  @brief Wrapper for the MESHING object of MED.
 class MEDMeshing: public MEDObject
   {
     const MapSet &sets;

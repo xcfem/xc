@@ -77,7 +77,7 @@ double XC::LinearSeries::getFactor(double pseudoTime) const
   { return cFactor*pseudoTime; }
 
 
-//! @brief Imprime el objeto.
+//! @brief Print stuff.
 void XC::LinearSeries::Print(std::ostream &s, int flag) const
   {
     s << "Linear Series: constant factor: " << cFactor << "\n";

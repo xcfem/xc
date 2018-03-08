@@ -52,13 +52,13 @@ XC::Preprocessor::Preprocessor(const Preprocessor &otro)
     nodes(this), elements(this), loads(this), constraints(this),
     cad(this),sets(this)
   {
-    std::cerr << "No se puede copiar un objeto de clase Preprocessor." << std::endl;
+    std::cerr << "This object must no be copied." << std::endl;
   }
 
 //! @brief Assignment operator (prohibited).
 XC::Preprocessor &XC::Preprocessor::operator=(const Preprocessor &otro)
   {
-    std::cerr << "No se puede asignar un objeto de clase Preprocessor." << std::endl;
+    std::cerr << "Can't assign a preprocessor object." << std::endl;
     return *this;
   }
 

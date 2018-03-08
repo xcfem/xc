@@ -48,7 +48,7 @@ XC::NodeRecorderBase::~NodeRecorderBase(void)
     if(theNodalTags) delete theNodalTags;
   }
 
-//! @brief Envía el objeto a través del comunicador que
+//! @brief Send the object a través del comunicador que
 //! being passed as parameter.
 int XC::NodeRecorderBase::sendData(CommParameters &cp)
   {
@@ -59,7 +59,7 @@ int XC::NodeRecorderBase::sendData(CommParameters &cp)
     return res;
   }
 
-//! @brief Recibe el objeto a través del comunicador que
+//! @brief Receive the object a través del comunicador que
 //! being passed as parameter.
 int XC::NodeRecorderBase::receiveData(const CommParameters &cp)
   {

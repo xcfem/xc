@@ -127,7 +127,7 @@ int XC::PseudoTimeTracker::recvSelf(const CommParameters &cp)
     return res;
   }
 
-//! @brief Imprime el objeto.
+//! @brief Print stuff.
 void XC::PseudoTimeTracker::Print(std::ostream &s, int flag) const
   {
 

@@ -70,13 +70,13 @@ XC::BeamIntegratorLoader::BeamIntegratorLoader(Preprocessor *owr)
 
 //! @brief Copy constructor.
 XC::BeamIntegratorLoader::BeamIntegratorLoader(const BeamIntegratorLoader &otro) : Loader(otro)
-  { std::cerr << "No se debe copiar este objeto." << std::endl; }
+  { std::cerr << "This object must no be copied." << std::endl; }
 
 //! @brief Assignment operator.
 XC::BeamIntegratorLoader &XC::BeamIntegratorLoader::operator=(const BeamIntegratorLoader &otro)
   {
     Loader::operator=(otro);
-    std::cerr << "No se debe asignar este objeto." << std::endl;
+    std::cerr << "This object must not be assigned." << std::endl;
     return *this;
   }
 

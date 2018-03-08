@@ -113,7 +113,7 @@ XC::Pnt *XC::TritrizPtrPnt::buscaPunto(const int &tag)
     return retval;
   }
 
-//! @brief Returns a pointer to objeto Cad.
+//! @brief Returns a pointer to the Cad object.
 const XC::Cad *XC::TritrizPtrPnt::getCad(void) const
   {
     const Cad *retval= nullptr;
@@ -126,7 +126,7 @@ const XC::Cad *XC::TritrizPtrPnt::getCad(void) const
     return retval;
   }
 
-//! @brief Returns a pointer to objeto Cad.
+//! @brief Returns a pointer to the Cad object.
 XC::Cad *XC::TritrizPtrPnt::getCad(void)
   {
     Cad *retval= nullptr;

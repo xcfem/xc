@@ -96,7 +96,7 @@ int XC::PeriodSeries::recvData(const CommParameters &cp)
     return res;
   }
 
-//! @brief Imprime el objeto.
+//! @brief Print stuff.
 void XC::PeriodSeries::Print(std::ostream &s, int flag) const
   {
     s << "Period Series" << std::endl;

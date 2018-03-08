@@ -405,7 +405,7 @@ int XC::DqUniaxialMaterial::recvSelf(const CommParameters &cp)
     return res;
   }
 
-//! @brief Imprime el objeto.
+//! @brief Print stuff.
 void XC::DqUniaxialMaterial::Print(std::ostream &s, int flag) const
   {
     const size_t sz= size();

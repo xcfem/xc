@@ -36,7 +36,7 @@ XC::BidimLoad::BidimLoad(int tag,int classTag,const ID &theElementTags)
 XC::BidimLoad::BidimLoad(int tag,int classTag)
   :ElementBodyLoad(tag, classTag) {}
 
-//! @brief Imprime el objeto.
+//! @brief Print stuff.
 void XC::BidimLoad::Print(std::ostream &s, int flag) const
   {
     s << "BidimLoad - Reference load" << std::endl;

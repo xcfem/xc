@@ -20,7 +20,7 @@
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
 //MEDVertexInfo.h
-//Envoltorio para el objeto MESHING de MED (para exportar archivos a «salome»).
+//Wrapper for the MESHING object of MED (to export files to "salome").
 
 #ifndef MEDVERTEXINFO_H
 #define MEDVERTEXINFO_H

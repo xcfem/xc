@@ -436,7 +436,7 @@ int XC::FiberSectionShear3d::recvSelf(const CommParameters &cp)
     return res;
   }
 
-//! @brief Imprime el objeto.
+//! @brief Print stuff.
 void XC::FiberSectionShear3d::Print(std::ostream &s, int flag) const
   {
     if(flag == 2)

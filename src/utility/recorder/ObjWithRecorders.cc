@@ -72,7 +72,7 @@ XC::ObjWithRecorders::ObjWithRecorders(EntCmd *owr,DataOutputHandler::map_output
   : EntCmd(owr), theRecorders(), output_handlers(oh) {}
 
 
-//! @brief Lee un objeto Recorder desde archivo.
+//! @brief Read a Recorder object from file.
 XC::Recorder *XC::ObjWithRecorders::newRecorder(const std::string &cod,DataOutputHandler *output_handler)
   {
     Recorder *retval= nullptr;

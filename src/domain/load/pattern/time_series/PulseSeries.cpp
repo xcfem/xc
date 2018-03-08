@@ -137,7 +137,7 @@ int XC::PulseSeries::recvSelf(const CommParameters &cp)
     return result;    
   }
 
-//! @brief Imprime el objeto.
+//! @brief Print stuff.
 void XC::PulseSeries::Print(std::ostream &s, int flag) const
   {
     s << "Pulse Series" << std::endl;

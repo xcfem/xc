@@ -345,7 +345,7 @@ bool XC::ArrayOfTaggedObjects::removeComponent(int tag)
 int XC::ArrayOfTaggedObjects::getNumComponents(void) const
   { return numComponents; }
 
-//! @brief Returns a pointer to the objeto with the given tag.
+//! @brief Returns a pointer to the object with the given tag.
 //!
 //! To return a pointer to the TaggedObject whose identifier is given by
 //! \p tag. If tag is not too large and all components have been added nicely,

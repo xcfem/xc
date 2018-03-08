@@ -399,7 +399,7 @@ int XC::ClosedTriangleMesh::recvData(const CommParameters &cp)
     return res;
   }
 
-//! @brief Envia el objeto through the channel being passed as parameter.
+//! @brief Send the object through the channel being passed as parameter.
 int XC::ClosedTriangleMesh::sendSelf(CommParameters &cp)
   {
     inicComm(3);

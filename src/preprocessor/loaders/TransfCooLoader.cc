@@ -50,13 +50,13 @@ XC::TransfCooLoader::TransfCooLoader(Preprocessor *owr)
 //! @brief Copy constructor.
 XC::TransfCooLoader::TransfCooLoader(const TransfCooLoader &otro)
  : Loader(otro)
-  { std::cerr << "No se debe copiar este objeto." << std::endl; }
+  { std::cerr << "This object must no be copied." << std::endl; }
 
 //! @brief Assignment operator.
 XC::TransfCooLoader &XC::TransfCooLoader::operator=(const TransfCooLoader &otro)
   {
     Loader::operator=(otro);
-    std::cerr << "No se debe asignar este objeto." << std::endl;
+    std::cerr << "This object must not be assigned." << std::endl;
     return *this;
   }
 

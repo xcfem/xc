@@ -180,7 +180,7 @@ XC::DbTagData &XC::SmallDispCrdTransf2d::getDbTagData(void) const
     return retval;
   }
 
-//! @brief Envia el objeto through the channel being passed as parameter.
+//! @brief Send the object through the channel being passed as parameter.
 int XC::SmallDispCrdTransf2d::sendSelf(CommParameters &cp)
   {
     setDbTag(cp);

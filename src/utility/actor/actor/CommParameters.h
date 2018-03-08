@@ -326,7 +326,7 @@ T *CommParameters::getBrokedTagged(T* &ptr,const int &dbTag,const int &objTag,co
             ptr= retval;
           }
         else
-          std::cerr << "getBrokedTagged; no se pudo crear el objeto con classTag: " 
+          std::cerr << "getBrokedTagged; can't create object con classTag: " 
                     << classTag << std::endl;
       }
     return ptr;

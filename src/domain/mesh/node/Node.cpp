@@ -1680,7 +1680,7 @@ int XC::Node::recvData(const CommParameters &cp)
     return res;
   }
 
-//! @brief Envia el objeto through the channel being passed as parameter.
+//! @brief Send the object through the channel being passed as parameter.
 //!
 //! Causes the Node object to send the data needed to init itself on a
 //! remote machine to the CommParameters object \p cp. 
