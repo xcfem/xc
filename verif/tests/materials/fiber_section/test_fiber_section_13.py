@@ -16,7 +16,7 @@ __email__= "l.pereztato@gmail.com"
 
 
 from materials.ehe import EHE_materials
-from materials.sections.fiber_section import createFiberSets
+from materials.sections.fiber_section import fiber_sets
 from model import predefined_spaces
 from solution import predefined_solutions
 
@@ -93,13 +93,13 @@ esfMy= scc.getStressResultantComponent("My")
 esfMz= scc.getStressResultantComponent("Mz")
 defMz= scc.getSectionDeformationByName("defMz")
 defN= scc.getSectionDeformationByName("defN")
-concrFibers= createFiberSets.FiberSet(scc,'concrete',EHE_materials.HP45.matTagD)
+concrFibers= fiber_sets.FiberSet(scc,'concrete',EHE_materials.HP45.matTagD)
 fibraCEpsMin= concrFibers.getFiberWithMinStrain()
 epsCMin= fibraCEpsMin.getMaterial().getStrain() # Minumum concrete strain.
 yEpsCMin= fibraCEpsMin.getPos().x
 fibraCEpsMax= concrFibers.getFiberWithMaxStrain()
 epsCMax= fibraCEpsMax.getMaterial().getStrain() # Maximum concrete strain.
-reinfFibers= createFiberSets.FiberSet(scc,"reinforcement",EHE_materials.B500S.matTagD)
+reinfFibers= fiber_sets.FiberSet(scc,"reinforcement",EHE_materials.B500S.matTagD)
 fibraSEpsMax= reinfFibers.getFiberWithMaxStrain()
 epsSMax= fibraSEpsMax.getMaterial().getStrain() # Maximum steel strain
 yEpsCMax= fibraCEpsMax.getPos().x

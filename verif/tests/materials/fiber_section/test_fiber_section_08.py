@@ -21,7 +21,7 @@ from misc import scc3d_testing_bench
 from solution import predefined_solutions
 
 from materials.ehe import EHE_materials
-from materials.sections.fiber_section import createFiberSets
+from materials.sections.fiber_section import fiber_sets
 from materials.sections import section_properties
 from model import predefined_spaces
 
@@ -120,7 +120,7 @@ defN= scc.getSectionDeformationByName("defN")
 x= scc.getNeutralAxisDepth()
 Resul= scc.getStressResultant()
 Deform= scc.getSectionDeformation()
-setsRC= createFiberSets.fiberSectionSetupRCSets(scc,EHE_materials.HA25.matTagD,'concrete',EHE_materials.B500S.matTagD,"reinforcement")
+setsRC= fiber_sets.fiberSectionSetupRCSets(scc,EHE_materials.HA25.matTagD,'concrete',EHE_materials.B500S.matTagD,"reinforcement")
 
 
 fibraCEpsMin= -1

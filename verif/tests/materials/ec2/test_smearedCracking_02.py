@@ -26,7 +26,7 @@ from model import predefined_spaces
 from materials.ehe import EHE_materials
 from materials import concrete_base
 from materials import typical_materials
-from materials.sections.fiber_section import createFiberSets
+from materials.sections.fiber_section import fiber_sets
 import matplotlib.pyplot as plt
 import numpy as np
 
@@ -155,7 +155,7 @@ ele1= elements.getElement(1)
 sccEl1= ele1.getSection()         
 fibersSccEl1= sccEl1.getFibers()
 
-setsRCEl1= createFiberSets.fiberSectionSetupRCSets(scc=sccEl1,concrMatTag=concr.tag,concrSetName="concrSetFbEl1",reinfMatTag=rfSteel.matTagK,reinfSetName="reinfSetFbEl1")
+setsRCEl1= fiber_sets.fiberSectionSetupRCSets(scc=sccEl1,concrMatTag=concr.tag,concrSetName="concrSetFbEl1",reinfMatTag=rfSteel.matTagK,reinfSetName="reinfSetFbEl1")
 
 #Load modulation.
 ts= casos.newTimeSeries("constant_ts","ts")
