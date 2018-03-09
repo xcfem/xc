@@ -74,8 +74,12 @@
 // AddingSensitivity:END ///////////////////////////////////////
 
 //! @brief Constructor.
-XC::NodalLoad::NodalLoad(int tag, int theClassTag)
-  : Load(tag,theClassTag), myNode(0), myNodePtr(nullptr), load(), konstant(false)
+//!
+//! @param tag: nodal load identifier.
+//! @param classTag: identifier of the class.
+XC::NodalLoad::NodalLoad(int tag, int classTag)
+  : Load(tag,classTag), loadedNode(0), loadedNodePtr(nullptr),
+    load(), konstant(false)
   {
     // AddingSensitivity:BEGIN /////////////////////////////////////
     parameterID = 0;
@@ -83,8 +87,13 @@ XC::NodalLoad::NodalLoad(int tag, int theClassTag)
   }
 
 //! @brief Constructor.
-XC::NodalLoad::NodalLoad(int tag, int node, int theClassTag)
-  : Load(tag,theClassTag), myNode(node), myNodePtr(nullptr), load(), konstant(false)
+//!
+//! @param tag: nodal load identifier.
+//! @param nodeTag: identifier of the loaded node.
+//! @param classTag: identifier of the class.
+XC::NodalLoad::NodalLoad(int tag, int nodeTag, int classTag)
+  : Load(tag,classTag), loadedNode(nodeTag), loadedNodePtr(nullptr),
+    load(), konstant(false)
   {
     // AddingSensitivity:BEGIN /////////////////////////////////////
     parameterID = 0;
@@ -93,8 +102,26 @@ XC::NodalLoad::NodalLoad(int tag, int node, int theClassTag)
 
 
 //! @brief Constructor.
-XC::NodalLoad::NodalLoad(int tag, int node, const Vector &theLoad, bool isLoadConstant)
-  :Load(tag, LOAD_TAG_NodalLoad), myNode(node), myNodePtr(nullptr), load(theLoad), konstant(isLoadConstant)
+//!
+//! To create a NodalLoad object with tag \p tag acting on Node \p node with a
+//! reference load given by \p load. \p tag and {\em LOAD\_TAG\_NodalLoad}
+//! (defined in \f$<\f$classTags.h\f$>\f$)are passed to the Load constructor.
+//! A new vector object is created using
+//! the vector \p load as the argument. (THIS MAY CHANGE - may associate
+//! the load Vector with \p load, allowing identical loads on diff
+//! nodes to be created without the need for each to have its own
+//! vector) If no enough memory is available an error message is printed
+//! and the program terminates. The boolean \p isLoadConstant is used
+//! to indicate whether the value of the load applies to the Node is
+//! independent of the load factor.
+//!
+//! @param tag: nodal load identifier.
+//! @param nodeTag: identifier of the loaded node.
+//! @param theLoad: load value.
+//! @param isLoadConstant: true if load doesn't change with time.
+XC::NodalLoad::NodalLoad(int tag, int nodeTag, const Vector &theLoad, bool isLoadConstant)
+  : Load(tag, LOAD_TAG_NodalLoad), loadedNode(nodeTag), loadedNodePtr(nullptr),
+    load(theLoad), konstant(isLoadConstant)
   {
     // AddingSensitivity:BEGIN /////////////////////////////////////
     parameterID = 0;
@@ -102,45 +129,46 @@ XC::NodalLoad::NodalLoad(int tag, int node, const Vector &theLoad, bool isLoadCo
   }
 
 
+//! @brief To set the associated Domain object.
+//! 
+//! To set the associated Domain object.
 void  XC::NodalLoad::setDomain(Domain *newDomain)
   {
-    // first get myNodePtr
-    if(newDomain == 0)
-      return;
-
-    // invoke the ancestor class method
-    this->DomainComponent::setDomain(newDomain);    
+    // first get loadedNodePtr
+    if(newDomain)
+      this->DomainComponent::setDomain(newDomain); // invoke the ancestor class method.
 
     /*
     if(newDomain)
       {
-        myNodePtr = newDomain->getNode(myNode);
-        if(myNodePtr == 0)
+        loadedNodePtr = newDomain->getNode(loadedNode);
+        if(loadedNodePtr == 0)
           {
-            std::cerr << *newDomain;
-            std::cerr << "WARNING XC::NodalLoad::setDomain() - No associated XC::Node node " ;
-            std::cerr << " for XC::NodalLoad " << *this;
-            //        std::cerr << *newDomain;
+            std::cerr << getClassName() << "::" << __FUNCTION__
+                      << "; WARNING - No associated node " 
+                      << " for NodalLoad " << *this
+                      << *newDomain;
             return;
           }
       }
     */
   }
 
+//! Returns the identifier of the loaded node.
 int XC::NodalLoad::getNodeTag(void) const
-  { return myNode; }
+  { return loadedNode; }
 
 //! @brief Returns the componentes of the force vector.
 const XC::Vector &XC::NodalLoad::getForce(void) const
   {
     static Vector retval(3);
     retval.Zero();
-    if(!myNodePtr)
-      myNodePtr= const_cast<NodalLoad *>(this)->get_node_ptr();
-    if(!load.isEmpty() && myNodePtr)
+    if(!loadedNodePtr)
+      loadedNodePtr= const_cast<NodalLoad *>(this)->get_node_ptr();
+    if(!load.isEmpty() && loadedNodePtr)
       {
-        const size_t numGdl= myNodePtr->getNumberDOF();
-        const size_t dim= myNodePtr->getCrds().Size();
+        const size_t numGdl= loadedNodePtr->getNumberDOF();
+        const size_t dim= loadedNodePtr->getCrds().Size();
         switch(numGdl)
           {
           case 1:
@@ -169,7 +197,9 @@ const XC::Vector &XC::NodalLoad::getForce(void) const
             retval(2)= load(2);
             break;
           default:
-            std::cerr << "Error en BeamMecLoad::getForce." << std::endl;
+            std::cerr << getClassName() << "::" << __FUNCTION__
+		      << "; ERROR numGdl= " << numGdl
+	              << " out of range." << std::endl;
             break;
           }
       }
@@ -178,7 +208,7 @@ const XC::Vector &XC::NodalLoad::getForce(void) const
         if(load.isEmpty())
           std::cerr << getClassName() << "::" << __FUNCTION__
 	            << "; load not defined." << std::endl;
-        if(!myNodePtr)
+        if(!loadedNodePtr)
           std::cerr << getClassName() << "::" << __FUNCTION__
 		    << "; pointer to node is NULL." << std::endl;
       }
@@ -190,12 +220,12 @@ const XC::Vector &XC::NodalLoad::getMoment(void) const
   {
     static Vector retval(3);
     retval.Zero();
-    if(!myNodePtr)
-      myNodePtr= const_cast<NodalLoad *>(this)->get_node_ptr();
-    if(!load.isEmpty() && myNodePtr)
+    if(!loadedNodePtr)
+      loadedNodePtr= const_cast<NodalLoad *>(this)->get_node_ptr();
+    if(!load.isEmpty() && loadedNodePtr)
       {
-        const size_t numGdl= myNodePtr->getNumberDOF();
-        const size_t dim= myNodePtr->getCrds().Size();
+        const size_t numGdl= loadedNodePtr->getNumberDOF();
+        const size_t dim= loadedNodePtr->getCrds().Size();
         switch(numGdl)
           {
           case 3:
@@ -208,16 +238,20 @@ const XC::Vector &XC::NodalLoad::getMoment(void) const
             retval(2)= load(5);
             break;
           default:
-            std::cerr << "Error en BeamMecLoad::getMoment." << std::endl;
+            std::cerr << getClassName() << "::" << __FUNCTION__
+		      << "; ERROR numGdl= " << numGdl
+	              << " out of range." << std::endl;
             break;
           }
       }
     else
       {
         if(load.isEmpty())
-          std::cerr << "NodalLoad::getMoment; load not defined." << std::endl;
-        if(!myNodePtr)
-          std::cerr << "NodalLoad::getMoment; the pointer to node is NULL." << std::endl;
+          std::cerr << getClassName() << "::" << __FUNCTION__
+		    << "; load not defined." << std::endl;
+        if(!loadedNodePtr)
+          std::cerr << getClassName() << "::" << __FUNCTION__
+		    << "; the pointer to node is NULL." << std::endl;
       }
     return retval;
   }
@@ -228,15 +262,16 @@ const XC::Node *XC::NodalLoad::get_node_ptr(void) const
     const Node *retval= nullptr;
     Domain *theDomain= getDomain();
     if(!theDomain)
-      std::cerr << "NodalLoad::get_node_ptr(), pointer to domain nulo.";
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; domain not set.";
     else
       {
-        retval= theDomain->getNode(myNode);
+        retval= theDomain->getNode(loadedNode);
         if(!retval)
           {
             std::cerr << getClassName() << "::" << __FUNCTION__
 	              << "; node identified by: "
-                      << myNode << " not found." << std::endl;
+                      << loadedNode << " not found." << std::endl;
           }
       }
     return retval;
@@ -248,17 +283,22 @@ XC::Node *XC::NodalLoad::get_node_ptr(void)
     return const_cast<Node *>(static_cast<const NodalLoad*>(this)->getNode());
   }
 
-
+//! @brief Applies the load on the node.
+//! 
+//! To it's associated Node it invokes addUnbalancedLoad() with it's
+//! load and a factor of \p loadFactor if \p isLoadConstant was specified
+//! as \p false in the constructor or \f$1.0\f$ if it was specified
+//! as \p true. 
 void XC::NodalLoad::applyLoad(double loadFactor)
   {
-    if(!myNodePtr)
-      myNodePtr= get_node_ptr();
+    if(!loadedNodePtr)
+      loadedNodePtr= get_node_ptr();
 
     // add the load times the load factor to nodal unbalanced load
     if(konstant == false)
-      myNodePtr->addUnbalancedLoad(load,loadFactor);
+      loadedNodePtr->addUnbalancedLoad(load,loadFactor);
     else
-      myNodePtr->addUnbalancedLoad(load,1.0);
+      loadedNodePtr->addUnbalancedLoad(load,1.0);
   } 
 
 //! @brief Returns a vector para almacenar los dbTags
@@ -274,7 +314,7 @@ XC::DbTagData &XC::NodalLoad::getDbTagData(void) const
 int XC::NodalLoad::sendData(CommParameters &cp)
   {
     int res= Load::sendData(cp);
-    res+= cp.sendInts(myNode,parameterID,getDbTagData(),CommMetaData(2));
+    res+= cp.sendInts(loadedNode,parameterID,getDbTagData(),CommMetaData(2));
     res+= cp.sendVector(load,getDbTagData(),CommMetaData(3));
     res+= cp.sendBool(konstant,getDbTagData(),CommMetaData(4));
     return res;
@@ -285,12 +325,13 @@ int XC::NodalLoad::sendData(CommParameters &cp)
 int XC::NodalLoad::recvData(const CommParameters &cp)
   {
     int res= Load::recvData(cp);
-    res+= cp.receiveInts(myNode,parameterID,getDbTagData(),CommMetaData(2));
+    res+= cp.receiveInts(loadedNode,parameterID,getDbTagData(),CommMetaData(2));
     res+= cp.receiveVector(load,getDbTagData(),CommMetaData(3));
     res+= cp.receiveBool(konstant,getDbTagData(),CommMetaData(4));
     return res;
   }
 
+//! @brief Sends the object.
 int XC::NodalLoad::sendSelf(CommParameters &cp)
   {
     inicComm(7);
@@ -299,26 +340,29 @@ int XC::NodalLoad::sendSelf(CommParameters &cp)
     const int dataTag= getDbTag();
     result+= cp.sendIdData(getDbTagData(),dataTag);
     if(result < 0)
-      std::cerr << "NodalLoad::sendSelf - failed to send data\n";
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; failed to send data.\n";
     return result;
   }
 
+//! @brief Receives.
 int XC::NodalLoad::recvSelf(const CommParameters &cp)
   {        
     inicComm(7);
     const int dataTag= getDbTag();
     int res= cp.receiveIdData(getDbTagData(),dataTag);
     if(res<0)
-      std::cerr << "NodalLoad::recvSelf() - failed to recv data\n";
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; failed to recv data.\n";
     else
       res+= recvData(cp);
     return res;
   }
 
-
+//! @brief Print stuff.
 void XC::NodalLoad::Print(std::ostream &s, int flag)
   {
-     s << "Nodal Load: " << myNode;
+     s << "Nodal Load: " << loadedNode;
      s << " load : " << load;
   }
 

@@ -73,11 +73,17 @@ class Vector;
 //! @ingroup NodeLoads
 //
 //! @brief Load over a node.
+//!
+//! NodalLoads are loads acting on Nodes. The public methods are
+//! all declared as virtual to allow subclasses to be introduced for the
+//! provision of time varying loads. Each NodalLoad object is associated
+//! with a single Node object and has a Vector object corresponding to the
+//! load acting on this Node object as a result of the NodalLoad.
 class NodalLoad : public Load
   {
   private:
-    int  myNode; //!< tag of loaded node.
-    mutable Node *myNodePtr; //!< pointer to the loaded node
+    int  loadedNode; //!< tag of loaded node.
+    mutable Node *loadedNodePtr; //!< pointer to the loaded node
     Vector load;  //!< load vector.
     bool  konstant; //!< true if load is load factor independent (pushover analysis).
     // AddingSensitivity:BEGIN /////////////////////////////////////

@@ -57,18 +57,30 @@
 #include "domain/load/ElementalLoad.h"
 
 
+//! @brief Constructor.
+//!
+//! @param tag: elemental load identifier.
+//! @param classTag: identifier of the class.
 XC::ElementalLoad::ElementalLoad(int tag, int classTag)
-  :Load(tag, classTag) {}
+  : Load(tag, classTag) {}
 
+//! @brief Constructor.
+//!
+//! @param tag: elemental load identifier.
+//! @param classTag: identifier of the class.
+//! @param tags_elems: identifiers of the loaded elements.
 XC::ElementalLoad::ElementalLoad(int tag, int classTag,const ID &tags_elems)
   :Load(tag, classTag), elemTags(tags_elems) {}
 
+//! @brief Return the number of loaded elements.
 int XC::ElementalLoad::numElements(void) const
   { return elemTags.Size(); }
 
+//! @brief Return the identifiers of the loaded elements.
 const XC::ID &XC::ElementalLoad::getElementTags(void) const
   { return elemTags; }
 
+//! @brief Sets the identifiers of the loaded elements.
 int XC::ElementalLoad::setElementTags(const ID &theEleTags)
   {
     elemTags= theEleTags;

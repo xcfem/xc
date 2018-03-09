@@ -70,6 +70,10 @@ namespace XC {
 //! @ingroup ElemLoads
 //
 //! @brief Base class for loads over elements.
+//!
+//! The ElementalLoad class provides the interface that all
+//! ElementalLoad writers must provide when introducing new
+//! ElementalLoad classes. 
 class ElementalLoad: public Load
   {
   protected:

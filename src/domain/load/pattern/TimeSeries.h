@@ -75,7 +75,7 @@ namespace XC {
 //
 //! @ingroup TSeries
 //
-//! @brief Time variation of loads.A TimeSeries object is used to
+//! @brief Time variation of loads. A TimeSeries object is used to
 //! determine the load factor to be applied to the loads in a pettern.
 //! to the model. 
 class TimeSeries: public MovableObject, public EntCmd
@@ -85,9 +85,13 @@ class TimeSeries: public MovableObject, public EntCmd
     inline virtual ~TimeSeries(void)
       {}
 
+    //! @brief Virtual constructor.
     virtual TimeSeries *getCopy(void) const= 0;
 
     // pure virtual functions
+    //! To return the current load factor for the given value of {\em
+    //! pseudoTime} to be applied to the loads and single-point constraints in
+    //! a LoadPattern based on the value of \p pseudoTime.
     virtual double getFactor(double pseudoTime) const= 0;
     virtual double getDuration(void) const= 0;
     virtual double getPeakFactor(void) const= 0;
