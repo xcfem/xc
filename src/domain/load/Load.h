@@ -75,10 +75,14 @@ namespace XC {
 //! @ingroup Loads
 //
 //! @brief Base class for loads over nodes or elements.
+//!
+//! Load is an abstract base class. A Load object is used to add
+//! load to the domain. The Load class defines one method in its interface
+//! applyLoad(), a method all subclasses must implement.
 class Load: public DomainComponent
   {
   private:
-    int loadPatternTag; //!< Pattern identifier for the load.
+    int loadPatternTag; //!< Identifier of the pattern to which the load belongs.
   protected:
     int sendData(CommParameters &cp);
     int recvData(const CommParameters &cp);
@@ -87,6 +91,8 @@ class Load: public DomainComponent
     Load(int tag, int classTag);
 
     // pure virtual functions
+    //! @brief The load object is to add \p loadFactor times the load to the
+    //! corresponding residual value at its associated element(s) or node(s).
     virtual void applyLoad(double loadfactor) =0;
     
     virtual void setLoadPatternTag(int loadPaternTag);

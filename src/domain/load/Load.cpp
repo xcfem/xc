@@ -65,14 +65,18 @@
 #include "utility/matrix/ID.h"
 
 //! @brief Constructor.
-XC::Load::Load(int tag, int clasTag)
-  : DomainComponent(tag, clasTag), loadPatternTag(-1) {}
+//! 
+//! Constructs a load with a tag given by \p tag and a class tag is
+//! given by \p classTag. These are passed to the DomainComponent constructor.
+XC::Load::Load(int tag, int classTag)
+  : DomainComponent(tag, classTag), loadPatternTag(-1) {}
 
-//! @brief Sets del identifier of the hipótesis.
+//! @brief Sets the identifier of the pattern to which the load belongs.
 void XC::Load::setLoadPatternTag(int tag)
-  { loadPatternTag = tag; }
+  { loadPatternTag= tag; }
 
-//! @brief Returns the value of the identifier of the hipótesis.
+//! @brief Return the identifier of the pattern to which the load belongs. If no
+//! load pattern tag has been set \f$-1\f$ is returned.
 int XC::Load::getLoadPatternTag(void) const
   { return loadPatternTag; }
 
