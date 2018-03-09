@@ -70,6 +70,8 @@
 
 
 //! @brief Constructor.
+//! 
+//! @param classTag: class identifier.
 XC::TimeSeries::TimeSeries(int classTag)
   :MovableObject(classTag){}
 

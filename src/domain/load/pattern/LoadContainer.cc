@@ -82,8 +82,8 @@ void XC::LoadContainer::alloc_containers(void)
 
     if(!theNodalLoads || !theElementalLoads)
       {
-        std::cerr << "LoadContainer::" << __FUNCTION__
-	          << "; ran out of memory\n";
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; ran out of memory\n";
         exit(-1);
       }
   }
@@ -97,8 +97,8 @@ void XC::LoadContainer::alloc_iterators(void)
 
     if(theEleIter == 0 || theNodIter == 0)
       {
-        std::cerr << "LoadContainer::" << __FUNCTION__
-	          << "; ran out of memory\n";
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; ran out of memory\n";
         exit(-1);
       }
   }
@@ -120,9 +120,11 @@ XC::LoadContainer::LoadContainer(EntCmd *owr)
     alloc_iterators();
   }
 
+//! @brief Virtual constructor.
 XC::LoadContainer *XC::LoadContainer::getCopy(void)
   {
-    std::cerr << "LoadContainer::getCopy, not implemented." << std::endl;
+    std::cerr << getClassName() << "::" << __FUNCTION__
+	      << "; not implemented." << std::endl;
     return nullptr;
   }
 
@@ -221,15 +223,30 @@ void XC::LoadContainer::clearAll(void)
     clearLoads();
   }
 
-//! @brief Elimina the load sobre nodo cuyo tag being passed as parameter.
+//! @brief To remove the nodal load whose identifier is given by \p tag from
+//! the LoadPattern and sets the laods associated Domain object to
+//! \f$0\f$. Returns a pointer to the load if succesfully removed, otherwise
+// \f$0\f$ is returned. 
 bool XC::LoadContainer::removeNodalLoad(int tag)
   { return theNodalLoads->removeComponent(tag); }
 
-//! @brief Elimina the load over element cuyo tag being passed as parameter.
+//! @brief To remove the elemental load whose identifier is given by \p tag from
+//! the LoadPattern and set the loads associated Domain object to
+//! \f$0\f$. Returns a pointer to the load if succesfully removed, otherwise
+//! \f$0\f$ is returned. 
 bool XC::LoadContainer::removeElementalLoad(int tag)
   { return theElementalLoads->removeComponent(tag); }
 
 //! @brief Apply the load multiplied by the factor.
+//! 
+//! To apply the load for the pseudo time \p pseudoTime. From the
+//! associated TimeSeries object the LoadPattern will obtain a current
+//! load factor for the pseudo time. It will then invoke {\em
+//! applyLoad(load factor)} on the loads and {\em applyConstraint(load
+//! factor)} on the single-point constraints in the LoadPattern. If {\em
+//! setLoadConstant()} has been invoked, the saved load factor is used and
+//! no call is made to the TimeSeries object. If no TimeSeries is
+//! associated with the object a load factor of \f$0.0\f$ is used.
 void XC::LoadContainer::applyLoad(const double &factor)
   {
     NodalLoad *nodLoad= nullptr;
@@ -276,7 +293,7 @@ int XC::LoadContainer::sendSelf(CommParameters &cp)
     const int dataTag= getDbTag(cp);
     res+= cp.sendIdData(getDbTagData(),dataTag);
     if(res<0)
-      std::cerr << "LoadContainer::" << __FUNCTION__
+      std::cerr << getClassName() << "::" << __FUNCTION__
 	        << "; failed to send data.\n";    
     return res;
   }
@@ -289,7 +306,7 @@ int XC::LoadContainer::recvSelf(const CommParameters &cp)
     const int dataTag= getDbTag();
     int res= cp.receiveIdData(getDbTagData(),dataTag);
     if(res<0)
-      std::cerr << "LoadContainer::" << __FUNCTION__
+      std::cerr << getClassName() << "::" << __FUNCTION__
 	        << "; data could not be received.\n" ;
     else
       res+= recvData(cp);
@@ -300,9 +317,9 @@ int XC::LoadContainer::recvSelf(const CommParameters &cp)
 void XC::LoadContainer::Print(std::ostream &s, int flag)
   {
     s << "  Load container\n";
-    std::cerr << "    Nodal Loads: \n";
+    s << "    Nodal Loads: \n";
     theNodalLoads->Print(s,flag);
-    std::cerr << "\n    Elemental Loads: \n";
+    s << "\n    Elemental Loads: \n";
     theElementalLoads->Print(s, flag);
   }
 
@@ -357,7 +374,8 @@ int XC::LoadContainer::setParameter(const std::vector<std::string> &argv, Parame
       {
         if(argv.size() < 3)
           return -1;
-        std::cerr << "elementPointLoad not implemented." << std::endl;
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; elementPointLoad not implemented." << std::endl;
 //       RVisRandomProcessDiscretizer = false;
 
 //       int eleNumber = atoi(argv[1]);
@@ -467,8 +485,8 @@ int XC::LoadContainer::activateParameter(int parameterID)
               }
           }
         else
-          std::cerr << "LoadContainer::" << __FUNCTION__
-                    << "; error in identifier. " << std::endl;
+          std::cerr << getClassName() << "::" << __FUNCTION__
+		    << "; error in identifier. " << std::endl;
       }
     return 0;
   }

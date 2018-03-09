@@ -88,28 +88,26 @@ void XC::LoadPattern::free(void)
   }
 
 //! @brief Constructor
+//! 
+//! @param tag: load pattern identifier.
+//! @param classTag: class identifier.
 XC::LoadPattern::LoadPattern(int tag, int classTag)
   : NodeLocker(tag,classTag), loadFactor(0.0), gamma_f(1.0),
     theSeries(nullptr), theLoads(this), randomLoads(nullptr), isConstant(false)
   {}
 
 
-//! @brief Default constructor.
-XC::LoadPattern::LoadPattern(void)
-  :NodeLocker(0,PATTERN_TAG_LoadPattern), loadFactor(0.0), gamma_f(1.0),
-   theSeries(nullptr), theLoads(this), randomLoads(nullptr), isConstant(false)
-  {}
-
 //! @brief Constructor.
 XC::LoadPattern::LoadPattern(int tag)
-  :NodeLocker(tag,PATTERN_TAG_LoadPattern),loadFactor(0.0), gamma_f(1.0),
+  : NodeLocker(tag,PATTERN_TAG_LoadPattern),loadFactor(0.0), gamma_f(1.0),
    theSeries(nullptr), theLoads(this), randomLoads(nullptr), isConstant(false)
   {}
 
-
+//! @brief Virtual constructor.
 XC::LoadPattern *XC::LoadPattern::getCopy(void)
   {
-    std::cerr << "LoadPattern::getCopy, not implemented." << std::endl;
+    std::cerr << getClassName() << "::" << __FUNCTION__
+	      << "; not implemented." << std::endl;
     return nullptr;
   }
 
@@ -144,7 +142,7 @@ const std::string &XC::LoadPattern::getName(void) const
     return mloader->getLoadPatternName(this);
   }
 
-
+//! @brief Set the time series for the pattern.
 void XC::LoadPattern::setTimeSeries(TimeSeries *theTimeSeries)
   {
     // invoke the destructor on the old TimeSeries
@@ -253,7 +251,8 @@ bool XC::LoadPattern::addElementalLoad(ElementalLoad *load)
         currentGeoTag++;
       }
     else
-      std::cerr << "WARNING: LoadPattern::addElementalLoad() - load could not be added\n";
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; WARNING - load could not be added.\n";
     return result;
   }
 
@@ -270,7 +269,8 @@ bool XC::LoadPattern::newElementalLoad(ElementalLoad *load)
           map->setCurrentElementLoadTag(++nextTag); //increments by one the corresponding tag
       }
     else
-      std::cerr  << "MapLoadPatterns::newElementalLoad; the pointer a the load es nulo." << std::endl;
+      std::cerr  << getClassName() << "::" << __FUNCTION__
+		 << "; the pointer to the load es nulo." << std::endl;
     return result;
   }
 
@@ -339,6 +339,8 @@ void XC::LoadPattern::applyLoad(double pseudoTime)
     NodeLocker::applyLoad(pseudoTime,factor);
   }
 
+//! @brief Marks the LoadPattern as being constant. Subsequent calls to {\em
+//! applyLoad()} will use the current load factor.
 void XC::LoadPattern::setLoadConstant(void)
   { isConstant= true; }
 
@@ -446,7 +448,9 @@ void XC::LoadPattern::Print(std::ostream &s, int flag)
 
 int XC::LoadPattern::addMotion(GroundMotion &theMotion, int tag)
   {
-    std::cerr << "LoadPattern::addMotion() - cannot add GroundMotion - use MultiSupport Pattern instead\n";
+    std::cerr << getClassName() << "::" << __FUNCTION__
+	      << "; cannot add GroundMotion"
+              << "- use MultiSupport Pattern instead.\n";
     return -1;
   }
 
@@ -476,7 +480,9 @@ int XC::LoadPattern::setParameter(const std::vector<std::string> &argv, Paramete
     if(!theSeries)
       {
 	std::cerr << getClassName() << "::" << __FUNCTION__
-	          << "; set/update/activate parameter is illegaly called." << std::endl; }
+	          << "; set/update/activate parameter is illegaly called."
+		  << std::endl;
+      }
 
     //const int argc= argv.size();
     if(strstr(argv[0].c_str(),"randomProcessDiscretizer") != 0)

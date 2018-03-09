@@ -84,7 +84,12 @@ class MapLoadPatterns;
 //! @brief A LoadPattern object is used to 
 //! to store reference loads and single point constraints
 //! and a TimeSeries function which is used to determine
-//! the load factor given the pseudo-time to the model. 
+//! the load factor given the pseudo-time to the model.
+//!
+//! A LoadPattern is a container class for Load and SFreedom\_Constraint
+//! objects. Each LoadPattern object is associated with a TimeSeries
+//! object which, for a given pseudo time, will return the appropriate
+//! load factor to be applied to th load in the LoadPattern.
 class LoadPattern: public NodeLocker
   {
   private:
@@ -109,8 +114,7 @@ class LoadPattern: public NodeLocker
     int sendData(CommParameters &cp);
     int recvData(const CommParameters &cp);
   public:
-    LoadPattern(int tag);
-    LoadPattern(void);                  // for FEM_ObjectBroker
+    LoadPattern(int tag= 0);
     LoadPattern(int tag, int classTag); // for subclasses
     virtual ~LoadPattern(void);
 
@@ -131,12 +135,16 @@ class LoadPattern: public NodeLocker
     //! @brief Return the load container.
     inline LoadContainer &getLoads(void)
       { return theLoads; }
+    //! @brief Return the load container.
     inline const LoadContainer &getLoads(void) const
       { return theLoads; }
+    //! @brief Return the number of nodal loads.
     inline int getNumNodalLoads(void) const
       { return theLoads.getNumNodalLoads(); }
+    //! @brief Return the number of elemental loads.
     inline int getNumElementalLoads(void) const
       { return theLoads.getNumElementalLoads(); }
+    //! @brief Return the number of loads.
     inline int getNumLoads(void) const
       { return theLoads.getNumLoads(); }
 
