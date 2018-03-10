@@ -68,7 +68,7 @@ class CyclicModel : public TaggedObject, public MovableObject
     void update(double f, double d, bool yield);
     virtual CyclicModel *getCopy()=0;
 	
-    virtual double getFactor();
+    virtual double getFactor(void);
     // for now ignore
     virtual int sendSelf(CommParameters &)
       {return -1;}

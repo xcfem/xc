@@ -383,7 +383,7 @@ double XC::SectionForceDeformation::getSectionDeformationByName(const std::strin
       retval= getSectionDeformation(PLATE_RESPONSE_m12);
     else if(cod == "defn12")
       retval= getSectionDeformation(MEMBRANE_RESPONSE_n12);
-    else if(cod == "defP" || cod == "defN") //Esfuerzo axil (barra prismática).
+    else if(cod == "defP" || cod == "defN") //Axial force (prismatic bar).
       retval= getSectionDeformation(SECTION_RESPONSE_P);
     else if(cod == "defMz") //Giro en torno al eje z.
       retval= getSectionDeformation(SECTION_RESPONSE_MZ);

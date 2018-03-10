@@ -202,15 +202,19 @@ void XC::ZeroLengthSection::setDomain(Domain *theDomain)
     // if differing dof at the ends - print a warning message
     if(dofNd1 != dofNd2)
       {
-        std::cerr << "ZeroLengthSection::setDomain() -- nodes " << Nd1 << " and " << Nd2
-                  << "have differing dof at ends for XC::ZeroLengthSection " << this->getTag() << std::endl;
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; nodes " << Nd1 << " and " << Nd2
+                  << "have differing dof at ends for ZeroLengthSection: "
+		  << this->getTag() << std::endl;
         return;
       }
 
     numDOF = 2*dofNd1;
 
     if(numDOF != 6 && numDOF != 12)
-      std::cerr << "ZeroLengthSection::setDomain() -- el material sólo funciona con 3 (2d) ó 6 (3d) gdl por nodo.\n";
+      std::cerr << getClassName() << "::" << __FUNCTION__
+	        << "; material supports only with 3 (2D) or 6 (3D)"
+	        << " degrees of freedom by node.\n";
 
     // Set pointers to class wide objects
     if(numDOF == 6)

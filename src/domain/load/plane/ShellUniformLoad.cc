@@ -91,7 +91,7 @@ const XC::Matrix &XC::ShellUniformLoad::getLocalMoments(void) const
     return retval;
   }
 
-//! @brief Adds the load al consistent load vector (ver página 108 libro Eugenio Oñate).
+//! @brief Adds the load al consistent load vector (see page 108 libro Eugenio Oñate).
 //! @param area Area of the element.
 //! @param loadFactor Load factor.
 //! @param p0 element load vector.

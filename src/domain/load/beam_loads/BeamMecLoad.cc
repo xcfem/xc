@@ -51,7 +51,7 @@ const XC::Matrix &XC::BeamMecLoad::getAppliedSectionForces(const double &L,const
     return retval;
   }
 
-//! @brief Adds the load al consistent load vector (ver página 108 libro Eugenio Oñate).
+//! @brief Adds the load al consistent load vector (see page 108 libro Eugenio Oñate).
 //! @param L Length of the element.
 //! @param loadFactor Load factor.
 //! @param p0 element load vector.
@@ -154,7 +154,7 @@ const XC::Matrix &XC::BeamMecLoad::getGlobalVectors(const Matrix &localVectors) 
               }
             else
 	      std::cerr << "BeamMecLoad::getGlobalVectors; the element: "
-                        << elemTag << " no es unidimensional." << std::endl;
+                        << elemTag << " is not unidimensional." << std::endl;
           }
       }
     else

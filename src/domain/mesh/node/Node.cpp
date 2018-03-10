@@ -348,9 +348,9 @@ void XC::Node::freeze_if_dead(NodeLocker *locker)
     if(isDead())
       {
         const size_t nodeTag= getTag();
-        for(int id_gdl= 0;id_gdl<numberDOF;id_gdl++)
+        for(int dofId= 0;dofId<numberDOF;dofId++)
           {
-            SFreedom_Constraint *sp= locker->addSFreedom_Constraint(nodeTag,id_gdl,0.0);
+            SFreedom_Constraint *sp= locker->addSFreedom_Constraint(nodeTag,dofId,0.0);
             if(sp)
               freeze_constraints.insert(sp->getTag());
           }
@@ -1425,7 +1425,7 @@ XC::Vector XC::Node::getModalParticipationFactors(void) const
   }
 
 //! @brief Returns the modal participation factor
-//! corresponding to i-th mode. If the gdls argument
+//! corresponding to i-th mode. If the dofs argument
 //! is not empty it "projects" the i-th mode over
 //! the selected DOFs in the argument. It's written to allow
 //! expressing the participation with respect to a DOF
@@ -1433,11 +1433,11 @@ XC::Vector XC::Node::getModalParticipationFactors(void) const
 //! THE RESULTS OF THIS FUNCTION DOESN'T MATCH WITH THOSE
 //! OBTAINED FROM THE EIGENVALUE PROBLEM
 //! @param mode: index of the mode.
-//! @param gdls: degrees of freedom to project on.
-double XC::Node::getModalParticipationFactor(int mode,const std::set<int> &gdls) const
+//! @param dofs: degrees of freedom to project on.
+double XC::Node::getModalParticipationFactor(int mode,const std::set<int> &dofs) const
   {
     double retval= 0;
-    if(gdls.empty())
+    if(dofs.empty())
       { retval= getModalParticipationFactor(mode); }
     else
       {
@@ -1450,7 +1450,7 @@ double XC::Node::getModalParticipationFactor(int mode,const std::set<int> &gdls)
                     << " and the mass matrix has dimension " << mass.noRows()
                     << "x" << mass.noCols() << ".\n";
         Vector J(sz,0.0);
-        for(std::set<int>::const_iterator i= gdls.begin();i!=gdls.end();i++)
+        for(std::set<int>::const_iterator i= dofs.begin();i!=dofs.end();i++)
           J[*i]= 1;
         num= dot(ev,(mass*J));
         if(num!=0)
@@ -1462,20 +1462,20 @@ double XC::Node::getModalParticipationFactor(int mode,const std::set<int> &gdls)
     return retval;
   }
 
-//! @brief Returns the modal participation factors. If gdls argument
+//! @brief Returns the modal participation factors. If dofs argument
 //! is not empty it "projects" the i-th mode over
 //! the selected DOFs in the argument.
-//! @param gdls: degrees of freedom to project on.
-XC::Vector XC::Node::getModalParticipationFactors(const std::set<int> &gdls) const
+//! @param dofs: degrees of freedom to project on.
+XC::Vector XC::Node::getModalParticipationFactors(const std::set<int> &dofs) const
   {
     const int nm= getNumModes();
     Vector retval(nm);
     for(int i= 1;i<=nm;i++)
-      retval[i-1]= getModalParticipationFactor(i,gdls);
+      retval[i-1]= getModalParticipationFactor(i,dofs);
     return retval;
   }
 
-//! @brief Returns the modal participation factors. If gdls argument
+//! @brief Returns the modal participation factors. If dofs argument
 //! is not empty it "projects" the i-th mode over
 //! the selected DOFs in the argument.
 //! @param l: degrees of freedom to project on.
@@ -1490,13 +1490,13 @@ XC::Vector XC::Node::getDistributionFactor(int i) const
   { return getModalParticipationFactor(i)*getEigenvector(i); }
 
 //! @brief Returns the distribution factor corresponding to the mode
-//! being passed as parameter. If gdls argument
+//! being passed as parameter. If dofs argument
 //! is not it "projects" the i-th mode over
 //! the selected DOFs in the argument.
 //! @param mode: index of the mode.
-//! @param gdls: degrees of freedom to project on.
-XC::Vector XC::Node::getDistributionFactor(int mode,const std::set<int> &gdls) const
-  { return getModalParticipationFactor(mode,gdls)*getEigenvector(mode); }
+//! @param dofs: degrees of freedom to project on.
+XC::Vector XC::Node::getDistributionFactor(int mode,const std::set<int> &dofs) const
+  { return getModalParticipationFactor(mode,dofs)*getEigenvector(mode); }
 
 //! @brief Returns the matrix with the computed distribution factors
 //! placed by columns.
@@ -1576,53 +1576,53 @@ XC::Vector XC::Node::getMaxModalAcceleration(int mode,const double &accel_mode) 
 
 //! @brief Returns the maximal modal displacement on the DOFs and mode being passed
 //! as parameter and the acceleration corresponding to that mode.
-//! @param gdls: degrees of freedom to deal with.
-XC::Vector XC::Node::getMaxModalDisplacementForDOFs(int mode,const double &accel_mode,const std::set<int> &gdls) const
+//! @param dofs: degrees of freedom to deal with.
+XC::Vector XC::Node::getMaxModalDisplacementForDOFs(int mode,const double &accel_mode,const std::set<int> &dofs) const
   {
-    return getMaxModalAccelerationForDOFs(mode,accel_mode,gdls)/sqr(getAngularFrequency(mode));
+    return getMaxModalAccelerationForDOFs(mode,accel_mode,dofs)/sqr(getAngularFrequency(mode));
   }
 
 //! @brief Returns the maximal modal displacement on the DOFs and mode being passed
 //! as parameter and the acceleration corresponding to that mode.
-//! @param gdls: degrees of freedom to deal with.
-XC::Vector XC::Node::getMaxModalDisplacementForDOFs(int mode,const double &accel_mode,const boost::python::list &gdls) const
+//! @param dofs: degrees of freedom to deal with.
+XC::Vector XC::Node::getMaxModalDisplacementForDOFs(int mode,const double &accel_mode,const boost::python::list &dofs) const
   {
-    std::set<int> tmp= set_int_from_py_list(gdls);
+    std::set<int> tmp= set_int_from_py_list(dofs);
     return getMaxModalDisplacementForDOFs(mode,accel_mode,tmp);
   }
 
 
 //! @brief Returns the maximum modal velocity on the DOFs and mode being passed
 //! as parameter and the acceleration corresponding to that mode.
-//! @param gdls: degrees of freedom to deal with.
-XC::Vector XC::Node::getMaxModalVelocityForDOFs(int mode,const double &accel_mode,const std::set<int> &gdls) const
+//! @param dofs: degrees of freedom to deal with.
+XC::Vector XC::Node::getMaxModalVelocityForDOFs(int mode,const double &accel_mode,const std::set<int> &dofs) const
   {
-    return getMaxModalAccelerationForDOFs(mode,accel_mode,gdls)/getAngularFrequency(mode);
+    return getMaxModalAccelerationForDOFs(mode,accel_mode,dofs)/getAngularFrequency(mode);
   }
 
 //! @brief Returns the maximum modal velocity on the DOFs and mode being passed
 //! as parameter and the acceleration corresponding to that mode.
-//! @param gdls: degrees of freedom to deal with.
-XC::Vector XC::Node::getMaxModalVelocityForDOFs(int mode,const double &accel_mode,const boost::python::list &gdls) const
+//! @param dofs: degrees of freedom to deal with.
+XC::Vector XC::Node::getMaxModalVelocityForDOFs(int mode,const double &accel_mode,const boost::python::list &dofs) const
   {
-    std::set<int> tmp= set_int_from_py_list(gdls);
+    std::set<int> tmp= set_int_from_py_list(dofs);
     return getMaxModalVelocityForDOFs(mode,accel_mode,tmp);
   }
 
 //! @brief Return the maximal modal acceleration on the DOFs and mode being passed
 //! as parameter and the acceleration corresponding to that mode.
-//! @param gdls: degrees of freedom to deal with.
-XC::Vector XC::Node::getMaxModalAccelerationForDOFs(int mode,const double &accel_mode,const std::set<int> &gdls) const
+//! @param dofs: degrees of freedom to deal with.
+XC::Vector XC::Node::getMaxModalAccelerationForDOFs(int mode,const double &accel_mode,const std::set<int> &dofs) const
   {
-    return accel_mode*getDistributionFactor(mode,gdls);
+    return accel_mode*getDistributionFactor(mode,dofs);
   }
 
 //! @brief Return the maximal modal acceleration on the DOFs and mode being passed
 //! as parameter and the acceleration corresponding to that mode.
-//! @param gdls: degrees of freedom to deal with.
-XC::Vector XC::Node::getMaxModalAccelerationForDOFs(int mode,const double &accel_mode,const boost::python::list &gdls) const
+//! @param dofs: degrees of freedom to deal with.
+XC::Vector XC::Node::getMaxModalAccelerationForDOFs(int mode,const double &accel_mode,const boost::python::list &dofs) const
   {
-    std::set<int> tmp= set_int_from_py_list(gdls);
+    std::set<int> tmp= set_int_from_py_list(dofs);
     return getMaxModalAccelerationForDOFs(mode,accel_mode,tmp);
   }
 

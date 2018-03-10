@@ -189,7 +189,8 @@ int XC::CyclicModel::setCurrent(double f, double d)
       {
         if(createFullCycleTask() < 0)
           {
-            std::cerr << "WARNING - XC::CyclicModel::getFactor(), createFullCycleTask failed\n";
+            std::cerr << getClassName() << "::" << __FUNCTION__
+	              << "; WARNING. createFullCycleTask failed.\n";
             cycFactor= resFactor;
           }
         else

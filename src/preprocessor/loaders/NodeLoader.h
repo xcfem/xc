@@ -42,11 +42,11 @@ class Node;
 class NodeLoader: public Loader
   {
   private:
-    size_t ngdl_def_node; //!< Default number of DOFs for new nodes.
+    size_t ndof_def_node; //!< Default number of DOFs for new nodes.
     size_t ncoo_def_node; //!< Number of coordinates for new nodes (1,2 or 3).
     Node *seed_node; //!< Seed node for semi-automatic meshing.
     void free_mem(void);
-    Node *new_node(const int &tag,const size_t &dim,const int &ngdl,const double &x,const double &y=0.0,const double &z=0.0);
+    Node *new_node(const int &tag,const size_t &dim,const int &ndof,const double &x,const double &y=0.0,const double &z=0.0);
   public:
     NodeLoader(Preprocessor *);
     virtual ~NodeLoader(void);
@@ -68,10 +68,10 @@ class NodeLoader: public Loader
       { return ncoo_def_node; }
     void setDimEspacio(const size_t &dim)
       { ncoo_def_node= dim; }
-    void setNumDOFs(const size_t &ngdl)
-      { ngdl_def_node= ngdl; }
+    void setNumDOFs(const size_t &ndof)
+      { ndof_def_node= ndof; }
     size_t getNumDOFs(void) const
-      { return ngdl_def_node; }
+      { return ndof_def_node; }
     Node *getNode(const int &tag);
     int getDefaultTag(void) const;
     void setDefaultTag(const int &tag);

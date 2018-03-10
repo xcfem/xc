@@ -227,11 +227,12 @@ int XC::CrdTransf2d::computeElemtLengthAndOrient(void) const
         sinTheta= dx(1)/L;
       }
     else
-      std::cerr << getClassName() << "::" << __FUNCTION__ << "; pointer to nodo nulo." << std::endl;
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; pointer to node not set." << std::endl;
     return 0;
   }
 
-//! @brief Returns the desplazamientos expresados en el sistema básico.
+//! @brief Returns the displacements expresados on the basic system.
 const XC::Vector &XC::CrdTransf2d::getBasicTrialDisp(void) const
   {
     // determine global displacements
@@ -284,7 +285,7 @@ const XC::Vector &XC::CrdTransf2d::getBasicTrialDisp(void) const
     return ub;
   }
 
-//! @brief Returns the incrementos de desplazamiento expresados en el sistema básico.
+//! @brief Returns the incrementos de displacement expresados on the basic system.
 const XC::Vector &XC::CrdTransf2d::getBasicIncrDisp(void) const
   {
     // determine global displacements

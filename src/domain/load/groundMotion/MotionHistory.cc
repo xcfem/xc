@@ -220,6 +220,7 @@ double XC::MotionHistory::getPeakDisp(void) const
       return 0.0;
   }
 
+//! @brief Return acceleration at specified time.
 double XC::MotionHistory::getAccel(double time) const
   {
     if(time < 0.0)
@@ -241,6 +242,7 @@ double XC::MotionHistory::getAccelSensitivity(double time)
       return 0.0;
   }
 
+//! @brief Return velocity at specified time.
 double XC::MotionHistory::getVel(double time) const
   {
     if(time < 0.0)
@@ -252,6 +254,7 @@ double XC::MotionHistory::getVel(double time) const
       return 0.0;
   }
 
+//! @brief Return displacement at specified time.
 double XC::MotionHistory::getDisp(double time) const
   {
     if(time < 0.0)

@@ -582,7 +582,7 @@ int XC::TransientDomainDecompositionAnalysis::recvSelf(const CommParameters &cp)
     return 0;
   }
 
-//! @brief Sets the solution algorithm que se empleará en the analysis.
+//! @brief Sets the solution algorithm.
 int XC::TransientDomainDecompositionAnalysis::setAlgorithm(EquiSolnAlgo &theNewAlgorithm)
   {
     DomainDecompositionAnalysis::setAlgorithm(theNewAlgorithm);
@@ -592,7 +592,7 @@ int XC::TransientDomainDecompositionAnalysis::setAlgorithm(EquiSolnAlgo &theNewA
     return 0;
   }
 
-//! @brief Sets the integrator que se empleará en the analysis.
+//! @brief Sets the integrator to be used in the analysis.
 int XC::TransientDomainDecompositionAnalysis::setIntegrator(IncrementalIntegrator &theNewIntegrator) 
   {
     DomainDecompositionAnalysis::setIntegrator(theNewIntegrator);
@@ -601,7 +601,7 @@ int XC::TransientDomainDecompositionAnalysis::setIntegrator(IncrementalIntegrato
     return 0;
   }
 
-//! @brief Sets the linear system of equations que se empleará en the analysis.
+//! @brief Sets the linear system of equations to be used in the analysis.
 int XC::TransientDomainDecompositionAnalysis::setLinearSOE(LinearSOE &theNewSOE)
   {
     DomainDecompositionAnalysis::setLinearSOE(theNewSOE);

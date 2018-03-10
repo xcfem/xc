@@ -62,7 +62,7 @@ XC::MEDGroupInfo::MEDGroupInfo(MEDMeshing *mesh,const Set &set)
           nueva_celda((*i)->getTag(),(*i)->getMEDCellType());
       }
     else
-      std::cerr << "El grupo no puede conterner nodos y celdas simultáneamente."
+      std::cerr << "Group cannot contain nodes and cells at the same time."
                 << std::endl;
    }
 

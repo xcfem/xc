@@ -68,6 +68,8 @@
 #include "utility/matrix/ID.h"
 
 //! @brief Constructor.
+//!
+//! @param theFactor: factor used in the relation.
 XC::CFactorSeries::CFactorSeries(int classTag,double theFactor)
   :TimeSeries(classTag), cFactor(theFactor) {}
 

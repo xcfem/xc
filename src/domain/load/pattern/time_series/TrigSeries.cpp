@@ -74,6 +74,7 @@ XC::TrigSeries::TrigSeries(double startTime, double finishTime, double T, double
 XC::TrigSeries::TrigSeries(void)
   :PeriodSeries(TSERIES_TAG_TrigSeries) {}
 
+//! @brief Return load factor at specified time.
 double XC::TrigSeries::getFactor(double pseudoTime) const
   {
     static double twopi = 4*asin(1.0);

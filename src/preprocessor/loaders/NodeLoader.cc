@@ -46,7 +46,7 @@ void XC::NodeLoader::free_mem(void)
   }
 
 XC::NodeLoader::NodeLoader(Preprocessor *preprocessor)
-  : Loader(preprocessor), ngdl_def_node(2),ncoo_def_node(3),seed_node(nullptr) {}
+  : Loader(preprocessor), ndof_def_node(2),ncoo_def_node(3),seed_node(nullptr) {}
 
 //! @brief Destructor.
 XC::NodeLoader::~NodeLoader(void)
@@ -67,19 +67,19 @@ void XC::NodeLoader::clearAll(void)
     setDefaultTag(0);
   }
 
-XC::Node *XC::NodeLoader::new_node(const int &tag,const size_t &dim,const int &ngdl,const double &x,const double &y,const double &z)
+XC::Node *XC::NodeLoader::new_node(const int &tag,const size_t &dim,const int &ndof,const double &x,const double &y,const double &z)
   {
     Node *retval= nullptr;
     switch(dim)
       {
       case 1:
-        retval= new Node(tag,ngdl,x);
+        retval= new Node(tag,ndof,x);
         break;
       case 2:
-        retval= new Node(tag,ngdl,x,y);
+        retval= new Node(tag,ndof,x,y);
         break;
       default:
-        retval= new Node(tag,ngdl,x,y,z);
+        retval= new Node(tag,ndof,x,y,z);
         break;
       }
     return retval;
@@ -96,8 +96,8 @@ XC::Node *XC::NodeLoader::duplicateNode(const int &tagNodoOrg)
                 << tagNodoOrg << " not found." << std::endl;
     else
       {
-        const int ngdl= org_node_ptr->getNumberDOF();    
-        retval= new Node(getDefaultTag(),ngdl,org_node_ptr->getCrds());
+        const int ndof= org_node_ptr->getNumberDOF();    
+        retval= new Node(getDefaultTag(),ndof,org_node_ptr->getCrds());
         if(retval)
           {
             getDomain()->addNode(retval);
@@ -111,11 +111,11 @@ XC::Node *XC::NodeLoader::newNode(const double &x,const double &y,const double &
   {
     const int tg= getDefaultTag(); //Before seed node creation.
     if(!seed_node)
-      seed_node= new_node(0,ncoo_def_node,ngdl_def_node,0.0,0.0,0.0);
+      seed_node= new_node(0,ncoo_def_node,ndof_def_node,0.0,0.0,0.0);
 
     const size_t dim= seed_node->getDim();
-    const int ngdl= seed_node->getNumberDOF();
-    Node *retval= new_node(tg,dim,ngdl,x,y,z);
+    const int ndof= seed_node->getNumberDOF();
+    Node *retval= new_node(tg,dim,ndof,x,y,z);
     if(retval)
       {
         getDomain()->addNode(retval);
@@ -128,11 +128,11 @@ XC::Node *XC::NodeLoader::newNode(const double &x,const double &y)
   {
     const int tg= getDefaultTag(); //Before seed node creation.
     if(!seed_node)
-      seed_node= new_node(0,ncoo_def_node,ngdl_def_node,0.0,0.0);
+      seed_node= new_node(0,ncoo_def_node,ndof_def_node,0.0,0.0);
 
     const size_t dim= seed_node->getDim();
-    const int ngdl= seed_node->getNumberDOF();
-    Node *retval= new_node(tg,dim,ngdl,x,y);
+    const int ndof= seed_node->getNumberDOF();
+    Node *retval= new_node(tg,dim,ndof,x,y);
     if(retval)
       {
         getDomain()->addNode(retval);
@@ -146,11 +146,11 @@ XC::Node *XC::NodeLoader::newNode(const double &x)
   {
     const int tg= getDefaultTag(); //Before seed node creation.
     if(!seed_node)
-      seed_node= new_node(0,ncoo_def_node,ngdl_def_node,0.0);
+      seed_node= new_node(0,ncoo_def_node,ndof_def_node,0.0);
 
     const size_t dim= seed_node->getDim();
-    const int ngdl= seed_node->getNumberDOF();
-    Node *retval= new_node(tg,dim,ngdl,x);
+    const int ndof= seed_node->getNumberDOF();
+    Node *retval= new_node(tg,dim,ndof,x);
     if(retval)
       {
         getDomain()->addNode(retval);
@@ -188,7 +188,7 @@ XC::Node *XC::NodeLoader::newNode(const Vector &coo)
 XC::Node *XC::NodeLoader::newSeedNode(void)
   {
     free_mem();
-    seed_node= new_node(0,ncoo_def_node,ngdl_def_node,0.0,0.0,0.0);
+    seed_node= new_node(0,ncoo_def_node,ndof_def_node,0.0,0.0,0.0);
     return seed_node;
   }
 

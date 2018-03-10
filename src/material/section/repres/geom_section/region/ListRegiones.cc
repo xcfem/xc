@@ -184,7 +184,7 @@ XC::ListRegiones XC::ListRegiones::Intersection(const Semiplano2d &sp) const
     return retval;
   }
 
-//! @brief Returns the área de las regiones.
+//! @brief Returns the regions area.
 double XC::ListRegiones::getAreaGrossSection(void) const
   {
     double retval= 0.0;

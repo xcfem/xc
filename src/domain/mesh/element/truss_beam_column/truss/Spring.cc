@@ -331,7 +331,7 @@ const XC::Matrix &XC::Spring::getInitialStiff(void) const
     return *theMatrix;
   }
 
-//! @brief Returns the matriz de amortiguamiento.
+//! @brief Returns the matrix de amortiguamiento.
 const XC::Matrix &XC::Spring::getDamp(void) const
   {
     const double eta= theMaterial->getDampTangent();

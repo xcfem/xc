@@ -119,8 +119,8 @@ void XC::ElementLoader::clearAll(void)
     Element::getDefaultTag().setTag(0);
   }
 
-//! @brief Adds the element to asignándole primero el tag que corresponde,
-//! se emplea en la clase EntPMdlr.
+//! @brief Adds the element and set its identifier (tag),
+//! use in EntPMdlr class.
 void XC::ElementLoader::Add(Element *e)
   {
     if(e)

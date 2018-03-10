@@ -98,6 +98,7 @@ XC::SimulatedRandomProcessSeries::SimulatedRandomProcessSeries(
 
   }
 
+//! @brief Return load factor at specified time.
 double XC::SimulatedRandomProcessSeries::getFactor(double time) const
   {
 //static ofstream outputFile( "simulated_process.out" , ios::out );

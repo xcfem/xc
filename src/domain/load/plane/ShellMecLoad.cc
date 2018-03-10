@@ -42,7 +42,7 @@ XC::ShellMecLoad::ShellMecLoad(int tag,int classTag,const double &wt,const doubl
 XC::ShellMecLoad::ShellMecLoad(int tag,int classTag)
   :BidimMecLoad(tag, classTag) {}
 
-//! @brief Adds the load al consistent load vector (ver página 108 libro Eugenio Oñate).
+//! @brief Adds the load al consistent load vector (see page 108 libro Eugenio Oñate).
 //! @param area Area of the element.
 //! @param loadFactor Load factor.
 //! @param p0 element load vector.

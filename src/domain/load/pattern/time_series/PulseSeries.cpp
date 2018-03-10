@@ -75,12 +75,12 @@ XC::PulseSeries::PulseSeries(double startTime, double finishTime,
 XC::PulseSeries::PulseSeries(void)
   : PeriodSeries(TSERIES_TAG_PulseSeries),pWidth(0.5) {}
 
-//! @brief Returns the value of the factor para el instante being passed as parameter.
+//! @brief Return load factor at specified time.
 double XC::PulseSeries::getFactor(double pseudoTime) const
   {
     if(tStart <= pseudoTime && pseudoTime <= tFinish)
       {
-        const double k = (pseudoTime+shift)/period - floor((pseudoTime+shift)/period);
+        const double k= (pseudoTime+shift)/period - floor((pseudoTime+shift)/period);
         if(k < pWidth)
           return cFactor;
         else if(k < 1.00)

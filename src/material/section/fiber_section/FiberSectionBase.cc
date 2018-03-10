@@ -614,7 +614,7 @@ void XC::FiberSectionBase::getInteractionDiagramPointsForTheta(NMyMzPointCloud &
         const double recorr_eps_D4a= eps_D4a;
         if(recorr_eps_D4a>(eps_agot_A/200.0)) //Si el recorrido es positivo y "apreciable"
           {
-            const double inc_eps_D4a= diag_data.getIncEps(); //recorr_eps_D4a/n_div_domain; //Intervalos de cálculo.
+            const double inc_eps_D4a= diag_data.getIncEps(); //recorr_eps_D4a/n_div_domain; //Analysis intervals.
             for(double e= eps_D4a;e>=0.0;e-=inc_eps_D4a)
               {
                 P3= pivots.getPuntoD(e);
@@ -757,8 +757,7 @@ Segmento2d XC::FiberSectionBase::getSegmentoBrazoMecanico(void) const
     Segmento2d retval= fibers.getSegmentoBrazoMecanico();
     if(!retval.exists())
       {
-        //Calculamos el brazo mecánico como 0.8 veces
-        //el canto total.
+        //Lever arm as 0.8 times total depth.
         const Recta2d ejeX= getEjeEsfuerzos();
         const Pos2d cdg= getCdg();
         const Recta2d ejeY= ejeX.Perpendicular(cdg);

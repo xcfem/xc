@@ -67,7 +67,7 @@
 XC::FullGenEigenSOE::FullGenEigenSOE(AnalysisAggregation *owr)
   : EigenSOE(owr,EigenSOE_TAGS_FullGenEigenSOE) {}
 
-//! @brief Sets the solver que se empleará parto solve the eigenproblem.
+//! @brief Set the solver.
 bool XC::FullGenEigenSOE::setSolver(EigenSolver *newSolver)
   {
     bool retval= false;
@@ -78,7 +78,8 @@ bool XC::FullGenEigenSOE::setSolver(EigenSolver *newSolver)
         retval= EigenSOE::setSolver(tmp);
       }
     else
-      std::cerr << "BandArpackSOE::setSolver; solver incompatible con system of equations." << std::endl;
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; not a suitable solver." << std::endl;
     return retval;
   }
 

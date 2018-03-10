@@ -117,7 +117,7 @@ double XC::ReinfBar::Pyz(void) const
 double XC::ReinfBar::Ix(void) const
   { return Iy()+Iz(); }
 
-//! @brief Returns the ángulo que define un principal axis of inertia.
+//! @brief Returns the angle that defines a principal axis of inertia.
 double XC::ReinfBar::Theta_p(void) const
   { return 0.0; }
 

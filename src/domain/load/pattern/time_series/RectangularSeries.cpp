@@ -75,12 +75,12 @@ XC::RectangularSeries::RectangularSeries(double startTime, double finishTime,dou
 XC::RectangularSeries::RectangularSeries(void)
   :PulseBaseSeries(TSERIES_TAG_RectangularSeries) {}
 
-//! @brief Returns factor (zero if pseudoTime outside of [tStart,tFinish]).
+//! @brief Return load factor (zero if pseudoTime outside of [tStart,tFinish]).
 double XC::RectangularSeries::getFactor(double pseudoTime) const
   {	
     if(pseudoTime >= tStart && pseudoTime <= tFinish)
       return cFactor;
     else
-      return 0;
+      return 0.0;
   }
 

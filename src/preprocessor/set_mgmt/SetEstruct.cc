@@ -278,14 +278,15 @@ XC::Node *XC::SetEstruct::getNodeI(const size_t &i)
       return GetNodo(1,1,i);
     else
       {
-	std::cerr << "SetEstruct::getNodoI; node set is not one-dimensional." << std::endl;
+	std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; node set is not one-dimensional." << std::endl;
         return nullptr;
       }
   }
 
 XC::Node *XC::SetEstruct::getNodeIJ(const size_t &i,const size_t &j)
   {
-    //XXX Falta obtener la capa (no ncesariemente será la 1),
+    //XXX Must get the layer (it is not necessarily the first one),
     if(EsCapaICte())
       return GetNodo(1,i,j);
     else if(EsCapaJCte()) 
@@ -294,7 +295,8 @@ XC::Node *XC::SetEstruct::getNodeIJ(const size_t &i,const size_t &j)
       return GetNodo(i,j,1);
     else
       {
-	std::cerr << "SetEstruct::getNodoI; el node set no es bidimensional." << std::endl;
+	std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; the node set is not bidimensional." << std::endl;
         return nullptr;
       } 
   }

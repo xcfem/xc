@@ -44,7 +44,7 @@ XC::UniformGrid::UniformGrid(Preprocessor *m,const size_t &i)
 //! @brief Constructor.
 //! @param nombre: Object identifier.
 //! @param m: Pointer to preprocessor.
-//! @param i: Índice para gráficos.
+//! @param i: index for VTK routines.
 XC::UniformGrid::UniformGrid(const std::string &nombre,Preprocessor *m,const size_t &i)
   : EntMdlr(nombre,i,m),Lx(0.0),Ly(0.0),Lz(0.0),ndiv_x(0),ndiv_y(0),ndiv_z(0)
   {}

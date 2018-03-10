@@ -98,7 +98,7 @@ double XC::RegionSecc::Pyz(void) const
 double XC::RegionSecc::Ix(void) const
   { return Iy()+Iz(); }
 
-//! @brief Returns the ángulo que define un principal axis of inertia.
+//! @brief Returns the angle that defines a principal axis of inertia.
 double XC::RegionSecc::Theta_p(void) const
   { return getPolygon().Theta_p(); }
 

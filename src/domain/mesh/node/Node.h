@@ -291,12 +291,12 @@ class Node: public MeshComponent
     //Modal participation factors.
     virtual double getModalParticipationFactor(int mode) const;
     Vector getModalParticipationFactors(void) const;
-    virtual double getModalParticipationFactor(int mode,const std::set<int> &gdls) const;
-    Vector getModalParticipationFactors(const std::set<int> &gdls) const;
+    virtual double getModalParticipationFactor(int mode,const std::set<int> &dofs) const;
+    Vector getModalParticipationFactors(const std::set<int> &dofs) const;
     Vector getModalParticipationFactorsForDOFs(const boost::python::list &) const;
     //Distribution factors.
     Vector getDistributionFactor(int mode) const;
-    Vector getDistributionFactor(int mode,const std::set<int> &gdls) const;
+    Vector getDistributionFactor(int mode,const std::set<int> &dofs) const;
     Matrix getDistributionFactors(void) const;
 
     //Effective modal masses
@@ -310,12 +310,12 @@ class Node: public MeshComponent
     Vector getMaxModalDisplacement(int mode,const double &) const;
     Vector getMaxModalVelocity(int mode,const double &) const;
     Vector getMaxModalAcceleration(int mode,const double &) const;
-    Vector getMaxModalDisplacementForDOFs(int mode,const double &,const std::set<int> &gdls) const;
-    Vector getMaxModalVelocityForDOFs(int mode,const double &,const std::set<int> &gdls) const;
-    Vector getMaxModalAccelerationForDOFs(int mode,const double &,const std::set<int> &gdls) const;
-    Vector getMaxModalDisplacementForDOFs(int mode,const double &,const boost::python::list &gdls) const;
-    Vector getMaxModalVelocityForDOFs(int mode,const double &,const boost::python::list &gdls) const;
-    Vector getMaxModalAccelerationForDOFs(int mode,const double &,const boost::python::list &gdls) const;
+    Vector getMaxModalDisplacementForDOFs(int mode,const double &,const std::set<int> &dofs) const;
+    Vector getMaxModalVelocityForDOFs(int mode,const double &,const std::set<int> &dofs) const;
+    Vector getMaxModalAccelerationForDOFs(int mode,const double &,const std::set<int> &dofs) const;
+    Vector getMaxModalDisplacementForDOFs(int mode,const double &,const boost::python::list &dofs) const;
+    Vector getMaxModalVelocityForDOFs(int mode,const double &,const boost::python::list &dofs) const;
+    Vector getMaxModalAccelerationForDOFs(int mode,const double &,const boost::python::list &dofs) const;
 
     // public methods for output
     virtual int sendSelf(CommParameters &);

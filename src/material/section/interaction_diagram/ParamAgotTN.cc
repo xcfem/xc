@@ -32,17 +32,17 @@
 
 
 //! @brief Factor de cumplimiento para la max strain.
-//! válido si es mayor que uno.
+//! valid if greater than one.
 double XC::ParamAgotTN::fc_tracc(void) const
   { return agot_pivots.getDefAgotPivotA()/eps_c_max; }
 
 //! @brief Factor de cumplimiento para la min strain.
-//! válido si es mayor que uno.
+//! valid if greater than one.
 double XC::ParamAgotTN::fc_comp(void) const
   { return agot_pivots.getDefAgotPivotB()/eps_c_min; }
 
 //! @brief Factor de cumplimiento for C pivot strain.
-//! válido si es mayor que uno.
+//! valid if greater than one.
 double XC::ParamAgotTN::fc_pC(void) const
   { 
     if(eps_c_pC < 0)

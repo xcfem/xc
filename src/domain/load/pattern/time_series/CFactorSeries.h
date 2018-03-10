@@ -50,9 +50,9 @@ class CFactorSeries: public TimeSeries
     int sendSelf(CommParameters &);
     int recvSelf(const CommParameters &);
 
-    //! @brief Returns factor value.
-    double getFactor(double pseudoTime) const
-      {return cFactor;}
+    //! @brief Return load factor at specified time.
+    inline double getFactor(double pseudoTime) const
+      { return cFactor; }
     //! @brief Sets factor value.
     void setFactor(const double &d)
       { cFactor= d; }

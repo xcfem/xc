@@ -65,9 +65,9 @@ XC::SFreedom_Constraint *XC::ConstraintLoader::addSFreedom_Constraint(const int 
   }
 
 //! @grief Appends a single freedom constraint to the model.
-XC::SFreedom_Constraint *XC::ConstraintLoader::addSFreedom_Constraint(const int &tag_nod,const int &id_gdl,const double &value)
+XC::SFreedom_Constraint *XC::ConstraintLoader::addSFreedom_Constraint(const int &tag_nod,const int &dofId,const double &value)
   {
-    SFreedom_Constraint *sp= new SFreedom_Constraint(tag_sp_constraint,tag_nod,id_gdl, value);
+    SFreedom_Constraint *sp= new SFreedom_Constraint(tag_sp_constraint,tag_nod,dofId, value);
     tag_sp_constraint++;
     if(sp)
       {
@@ -81,8 +81,8 @@ XC::SFreedom_Constraint *XC::ConstraintLoader::addSFreedom_Constraint(const int 
   }
 
 //! @grief Defines a single freedom constraint.
-XC::SFreedom_Constraint *XC::ConstraintLoader::newSPConstraint(const int &tag_nod,const int &id_gdl,const double &value)
-  { return addSFreedom_Constraint(tag_nod,id_gdl,value); }
+XC::SFreedom_Constraint *XC::ConstraintLoader::newSPConstraint(const int &tag_nod,const int &dofId,const double &value)
+  { return addSFreedom_Constraint(tag_nod,dofId,value); }
 
 //! @grief Appends a multi-freedom constraint to the model.
 XC::MFreedom_Constraint *XC::ConstraintLoader::newMPConstraint(const int &masterNode, const int &slaveNode, const ID &constrainedDOF, const ID &retainedDOF)

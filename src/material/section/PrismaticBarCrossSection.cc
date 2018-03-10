@@ -147,7 +147,7 @@ const double &XC::PrismaticBarCrossSection::EIy(void) const
 const double &XC::PrismaticBarCrossSection::EIyz(void) const
   { return getSectionTangent()(1,2); }
 
-//! @brief Returns the ángulo que define un eje principal de inercia.
+//! @brief Returns the angle that defines un eje principal de inercia.
 double XC::PrismaticBarCrossSection::getTheta(void) const
   { return theta_inercia(EIy(),EIz(),EIyz()); }
 

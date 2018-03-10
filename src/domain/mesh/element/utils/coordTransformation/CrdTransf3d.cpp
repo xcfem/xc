@@ -97,18 +97,18 @@ XC::Vector XC::CrdTransf3d::get_xz_vector(void) const
     return retval;
   }
 
-//! brief Rellena el vector de desplazamiento globales of the nodes.
+//! brief Rellena el vector de displacement globales of the nodes.
 void XC::CrdTransf3d::inic_ug(const Vector &d1,const Vector &d2,double *ug)
   {
-    for(register int i=0;i<6;i++) //Desplazamiento obtenido del cálculo.
+    for(register int i=0;i<6;i++) //Displacement obtained from analysis.
       {
         ug[i]   = d1(i); //Nodo dorsal.
         ug[i+6] = d2(i); //Nodo frontal.
       }
   }
 
-//! brief Modifical el vector de desplazamiento globales of the nodes
-//! de acuerdo con los desplazamientos iniciales.
+//! brief Modifical el vector de displacement globales of the nodes
+//! de acuerdo con los displacements iniciales.
 void XC::CrdTransf3d::modif_ug_init_disp(double *ug) const
   {
     if(!nodeIInitialDisp.empty())
@@ -163,7 +163,7 @@ void XC::CrdTransf3d::calc_Wu(const double *ug,double *ul,double *Wu) const
     ul[8] += R(2,0)*Wu[0] + R(2,1)*Wu[1] + R(2,2)*Wu[2];
   }
 
-//! Sean dx1,dy1,dz1,gx1,gy1,gz1 los desplazamientos y giros del nodo dorsal y dx2,dy2,dz2,gx2,gy2,gz2
+//! Sean dx1,dy1,dz1,gx1,gy1,gz1 los displacements y giros del nodo dorsal y dx2,dy2,dz2,gx2,gy2,gz2
 //! los del nodo frontal expressed in local coordinates. This function gets the following displacements
 //! on the ul parameter and returns the following magnitudes on the ub vector:
 //! -ub(0)= dx2-dx1: element elongation.
@@ -260,7 +260,7 @@ int XC::CrdTransf3d::initialize(Node *nodeIPointer, Node *nodeJPointer)
             {
               nodeJInitialDisp.resize(6);
               for(int i=0; i<6; i++)
-                nodeJInitialDisp[i] = nodeJDisp(i); //Asignamos desplazamientos iniciales.
+                nodeJInitialDisp[i] = nodeJDisp(i); //Asignamos displacements iniciales.
               j = 6;
             }
         initialDispChecked = true;
@@ -400,7 +400,7 @@ const XC::Matrix &XC::CrdTransf3d::getPointsGlobalCoordFromBasic(const Vector &b
 //! @brief Returns the vector expressed in global coordinates.
 const XC::Vector &XC::CrdTransf3d::getVectorGlobalCoordFromLocal(const Vector &localCoords) const
   {
-    calculaEjesLocales(); //Actualiza la matriz R.
+    calculaEjesLocales(); //Actualiza la matrix R.
     // vectorCoo = Rlj'*localCoords (Multiplica el vector por R traspuesta).
     vectorCoo(0)= R(0,0)*localCoords(0) + R(1,0)*localCoords(1) + R(2,0)*localCoords(2);
     vectorCoo(1)= R(0,1)*localCoords(0) + R(1,1)*localCoords(1) + R(2,1)*localCoords(2);
@@ -413,7 +413,7 @@ const XC::Vector &XC::CrdTransf3d::getVectorGlobalCoordFromLocal(const Vector &l
 //! returned matrix.
 const XC::Matrix &XC::CrdTransf3d::getVectorGlobalCoordFromLocal(const Matrix &localCoords) const
   {
-    calculaEjesLocales(); //Actualiza la matriz R.
+    calculaEjesLocales(); //Actualiza la matrix R.
     static Matrix retval;
     const size_t numPts= localCoords.noRows(); //Number of vectors to transform
     retval.resize(numPts,3);
@@ -430,7 +430,7 @@ const XC::Matrix &XC::CrdTransf3d::getVectorGlobalCoordFromLocal(const Matrix &l
 //! @brief Returns the vector expresado en local coordinates.
 const XC::Vector &XC::CrdTransf3d::getVectorLocalCoordFromGlobal(const Vector &globalCoords) const
   {
-    calculaEjesLocales(); //Actualiza la matriz R.
+    calculaEjesLocales(); //Actualiza la matrix R.
     vectorCoo[0]= R(0,0)*globalCoords[0] + R(0,1)*globalCoords[1] + R(0,2)*globalCoords[2];
     vectorCoo[1]= R(1,0)*globalCoords[0] + R(1,1)*globalCoords[1] + R(1,2)*globalCoords[2];
     vectorCoo[2]= R(2,0)*globalCoords[0] + R(2,1)*globalCoords[1] + R(2,2)*globalCoords[2];
@@ -487,8 +487,8 @@ const XC::Vector &XC::CrdTransf3d::getCooPoint(const double &xrel) const
     return retval;
   }
 
-//! @brief Hace girar el la coordinate transformation en sentido
-//! antihorario el ángulo being passed as parameter.
+//! @brief Counterclockwise rotate the coordinate transformation
+//! by the specified angle.
 void XC::CrdTransf3d::gira(const double &theta)
   { set_xz_vector(m_double_to_matrix(GiroX(-theta))*get_xz_vector()); }
 

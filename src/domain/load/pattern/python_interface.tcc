@@ -23,7 +23,7 @@
 
 
 class_<XC::NodeLocker,XC::NodeLocker *, bases<XC::ForceReprComponent>, boost::noncopyable >("NodeLocker", no_init)
-  .def("newSPConstraint", &XC::NodeLocker::newSPConstraint,return_internal_reference<>(),"\n" "newSPConstraint(tag_nod,id_gdl,value) \n" "Create a single-point boundary constraint by assigning a value to the degree of freedom gdl of node whose ID is tag_nod.")
+  .def("newSPConstraint", &XC::NodeLocker::newSPConstraint,return_internal_reference<>(),"\n" "newSPConstraint(nodeTag,dofId,value) \n" "Create a single-point boundary constraint by assigning a value to the degree of freedom dofId of node whose ID is nodeTag.")
   .def("removeSPConstraint", &XC::NodeLocker::removeSFreedom_Constraint,"Remove a single-point boundary constraint.")
   .def("clearAll",&XC::NodeLocker::clearAll)
   ;
@@ -93,7 +93,7 @@ class_<XC::LoadCombinationGroup, bases<XC::LoadLoaderMember,XC::LoadCombinationM
   ;
 
 class_<XC::TimeSeries, bases<EntCmd,XC::MovableObject>, boost::noncopyable >("TimeSeries", no_init)
-  .def("getFactor", &XC::TimeSeries::getFactor)
+.def("getFactor", &XC::TimeSeries::getFactor,"getFactor(pseudoTime): get load factor.")
   .add_property("getDuration", &XC::TimeSeries::getDuration)
   .add_property("getPeakFactor", &XC::TimeSeries::getPeakFactor)
   .def("getTimeIncr", &XC::TimeSeries::getTimeIncr)

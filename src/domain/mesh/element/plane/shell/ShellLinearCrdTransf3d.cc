@@ -139,15 +139,15 @@ int XC::ShellLinearCrdTransf3d::revertToLastCommit(void)
 int XC::ShellLinearCrdTransf3d::revertToStart(void)
   { return 0; }
 
-//! @brief Returns the vector de desplazamientos expresado en el sistema básico.
+//! @brief Returns the vector de displacements expresado on the basic system.
 XC::Vector XC::ShellLinearCrdTransf3d::getBasicTrialDisp(const int &i) const
   { return (*theNodes)[i]->getTrialDisp(); }
 
-//! @brief Returns the vector de velocidades expresado en el sistema básico.
+//! @brief Returns the vector de velocidades expresado on the basic system.
 XC::Vector XC::ShellLinearCrdTransf3d::getBasicTrialVel(const int &i) const
   { return (*theNodes)[i]->getTrialVel(); }
 
-//! @brief Returns the vector de aceleraciones expresado en el sistema básico.
+//! @brief Returns the vector de aceleraciones expresado on the basic system.
 XC::Vector XC::ShellLinearCrdTransf3d::getBasicTrialAccel(const int &i) const
   { return (*theNodes)[i]->getTrialAccel(); }
 

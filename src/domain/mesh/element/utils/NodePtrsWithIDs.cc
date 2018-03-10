@@ -241,7 +241,7 @@ void XC::NodePtrsWithIDs::Print(std::ostream &os) const
     const size_t numNodes= NodePtrs::size();
     for(register size_t i= 0;i<numNodes;i++)
       os << " tag: " << (*this)[i]->getTag()
-         << " num gdls: " << (*this)[0]->getNumberDOF() << std::endl;
+         << " num dofs: " << (*this)[0]->getNumberDOF() << std::endl;
   }
 
 std::ostream &XC::operator<<(std::ostream &os,const XC::NodePtrsWithIDs &nodePtrs)

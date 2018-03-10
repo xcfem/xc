@@ -136,7 +136,7 @@ XC::Matrix XC::ShellCorotCrdTransf3d::getR(void) const
   }
 
 //! @brief Returns the vector expresado en coordinates
-//! locales a partir del desplazamiento expresado en globales.
+//! locales a partir del displacement expresado en globales.
 XC::Vector XC::ShellCorotCrdTransf3d::global_to_local(const Vector &di,const Vector &vi0) const
   {
     const Matrix R= getR();
@@ -223,15 +223,15 @@ int XC::ShellCorotCrdTransf3d::revertToStart(void)
     return 0;
   }
 
-//! @brief Returns the vector de desplazamientos expresado en el sistema básico.
+//! @brief Returns the vector de displacements expresado on the basic system.
 XC::Vector XC::ShellCorotCrdTransf3d::getBasicTrialDisp(const int &iNod) const
   { return global_to_local_disp_nod(iNod); }
 
-// ! @brief Returns the vector de velocidades expresado en el sistema básico.
+// ! @brief Returns the vector de velocidades expresado on the basic system.
 XC::Vector XC::ShellCorotCrdTransf3d::getBasicTrialVel(const int &iNod) const
   { return global_to_local_vel_nod(iNod); }
 
-//! @brief Returns the vector de aceleraciones expresado en el sistema básico.
+//! @brief Returns the vector de aceleraciones expresado on the basic system.
 XC::Vector XC::ShellCorotCrdTransf3d::getBasicTrialAccel(const int &iNod) const
   { return global_to_local_accel_nod(iNod); }
 

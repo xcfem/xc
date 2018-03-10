@@ -149,7 +149,7 @@ const XC::Matrix &XC::Beam2dUniformLoad::getAppliedSectionForces(const double &L
     return retval;
   }
 
-//! @brief Returns the consistent load vector (ver página 108 libro Eugenio Oñate).
+//! @brief Returns the consistent load vector (see page 108 libro Eugenio Oñate).
 //! @param L Length of the element edge.
 //! @param loadFactor Load factor.
 //! @param p0 element Load vector.
@@ -168,7 +168,7 @@ void XC::Beam2dUniformLoad::addReactionsInBasicSystem(const double &L,const doub
     p0[2]-= V; //Substracts the reaction at the front end.
   }
 
-//! @brief Returns the consistent load vector (ver página 108 libro Eugenio Oñate).
+//! @brief Returns the consistent load vector (see page 108 libro Eugenio Oñate).
 //! @param L Length of the element edge.
 //! @param loadFactor Load factor.
 //! @param q0 ??.

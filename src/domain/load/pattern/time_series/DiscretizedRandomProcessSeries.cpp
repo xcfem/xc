@@ -79,15 +79,17 @@ XC::TimeSeries *XC::DiscretizedRandomProcessSeries::getCopy(void) const
     return nullptr;
   }
 
-
+//! @brief Return load factor at specified time.
 double XC::DiscretizedRandomProcessSeries::getFactor(double time) const
   {
     if(time == 0.0)
       { return 0.0; }
     else if(kickInTimes.Size() != randomVariables.Size() )
       {
-        std::cerr << "ERROR in XC::DiscretizedRandomProcessSeries::getFactor(): " << std::endl
-                  << " number of random variables is not the same as kick-in times. " << std::endl;
+        std::cerr << getClassName() << "::" << __FUNCTION__
+	          << ";ERROR : " << std::endl
+                  << " number of random variables is not the same"
+	          << " as kick-in times. " << std::endl;
         return 0.0;
       }
     else
@@ -142,8 +144,10 @@ double XC::DiscretizedRandomProcessSeries::getFactorSensitivity(double time)
       { return 0.0; }
     else if(kickInTimes.Size() != randomVariables.Size() )
       {
-        std::cerr << "ERROR in XC::DiscretizedRandomProcessSeries::getFactorSensitivity(): " << std::endl
-                  << " number of random variables is not the same as kick-in times. " << std::endl;
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; ERROR : " << std::endl
+                  << " number of random variables is not the same"
+	          << " as kick-in times. " << std::endl;
         return 0.0;
       }
     else

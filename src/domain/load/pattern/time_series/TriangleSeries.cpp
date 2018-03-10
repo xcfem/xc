@@ -73,6 +73,7 @@ XC::TriangleSeries::TriangleSeries(double startTime, double finishTime,
 XC::TriangleSeries::TriangleSeries()
   : PeriodSeries(TSERIES_TAG_TriangleSeries) {}
 
+//! @brief Return load factor at specified time.
 double XC::TriangleSeries::getFactor(double pseudoTime) const
   {	
     if(tStart <= pseudoTime && pseudoTime <= tFinish)

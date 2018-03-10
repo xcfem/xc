@@ -176,7 +176,7 @@ const XC::Matrix &XC::Beam3dPointLoad::getAppliedSectionForces(const double &L,c
     return retval;
   }
 
-//! @brief Adds the load al consistent load vector (ver página 108 libro Eugenio Oñate).
+//! @brief Adds the load al consistent load vector (see page 108 libro Eugenio Oñate).
 //! @param L Length of the element.
 //! @param loadFactor Load factor.
 //! @param p0 element load vector.

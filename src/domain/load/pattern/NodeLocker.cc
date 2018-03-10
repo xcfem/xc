@@ -146,9 +146,9 @@ void XC::NodeLocker::setDomain(Domain *theDomain)
   }
 
 //! @brief Adds the single freedom constraint being passed as parameter.
-XC::SFreedom_Constraint *XC::NodeLocker::addSFreedom_Constraint(const int &tagNodo,const int &id_gdl,const double &value)
+XC::SFreedom_Constraint *XC::NodeLocker::addSFreedom_Constraint(const int &tagNodo,const int &dofId,const double &value)
   {
-    SFreedom_Constraint *theSPC= new SFreedom_Constraint(nextTag,tagNodo,id_gdl,value);
+    SFreedom_Constraint *theSPC= new SFreedom_Constraint(nextTag,tagNodo,dofId,value);
     if(theSPC)
       addSFreedom_Constraint(theSPC);
     return theSPC;
@@ -196,10 +196,17 @@ void XC::NodeLocker::clearAll(void)
     currentGeoTag++;
   }
 
-XC::SFreedom_Constraint *XC::NodeLocker::newSPConstraint(const int &tag_nod,const int &id_gdl,const double &value)
-  { return addSFreedom_Constraint(tag_nod,id_gdl,value); }
+//! @brief Creates a single freedom constraint.
+//!
+//! @param tag_nod: identifier of the constrained node.
+//! @param dofId: identifier of the degree of freedom.
+//! @param value: value of the prescribed displacement.
+XC::SFreedom_Constraint *XC::NodeLocker::newSPConstraint(const int &tag_nod,const int &dofId,const double &value)
+  { return addSFreedom_Constraint(tag_nod,dofId,value); }
 
 //! @brief Erases the single freedom constraint identified by the argument.
+//! 
+//! @param tag: single freedom constraint identifier.
 bool XC::NodeLocker::removeSFreedom_Constraint(int tag)
   {
     const bool retval= theSPs->removeComponent(tag);

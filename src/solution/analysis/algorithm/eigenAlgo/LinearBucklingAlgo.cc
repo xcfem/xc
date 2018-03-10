@@ -82,7 +82,7 @@ int XC::LinearBucklingAlgo::solveCurrentStep(int numModes)
     return 0;
   }
 
-//! @brief Dump the eigenvalues into the model (see Finite Element Procedures. Klaus Jurgen Bathe página 632).
+//! @brief Dump the eigenvalues into the model (see Finite Element Procedures. Klaus Jurgen Bathe page 632).
 void XC::LinearBucklingAlgo::eigen_to_model(int numModes)
   {
     AnalysisModel *theModel= getAnalysisModelPtr();

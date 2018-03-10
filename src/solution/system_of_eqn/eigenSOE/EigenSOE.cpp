@@ -85,7 +85,7 @@ void XC::EigenSOE::copia(const EigenSolver *newSolver)
       }
   }
 
-//! @brief Asigna the solver que se empleará para resolver the eigenproblem.
+//! @brief Set the solver.
 bool XC::EigenSOE::setSolver(EigenSolver *newSolver)
   {
     bool retval= false;
@@ -155,7 +155,7 @@ int XC::EigenSOE::solve(void)
 XC::EigenSolver *XC::EigenSOE::getSolver(void)
   { return theSolver; }
 
-//! @brief Anula la matriz M.
+//! @brief Anula la matrix M.
 void XC::EigenSOE::zeroM(void)
   {
     massMatrix.clear();
@@ -182,12 +182,12 @@ const XC::Vector &XC::EigenSOE::getEigenvector(int mode) const
 XC::Vector XC::EigenSOE::getNormalizedEigenvector(int mode) const
   { return theSolver->getNormalizedEigenvector(mode); }
 
-//! @brief Returns a matriz con los eigenvectors calculados colocados
+//! @brief Returns a matrix con los eigenvectors calculados colocados
 //! por columnas.
 XC::Matrix XC::EigenSOE::getEigenvectors(void) const
   { return theSolver->getEigenvectors(); }
 
-//! @brief Returns a matriz con los eigenvectors normalizados colocados
+//! @brief Returns a matrix con los eigenvectors normalizados colocados
 //! por columnas (norma_infinito).
 XC::Matrix XC::EigenSOE::getNormalizedEigenvectors(void) const
   { return theSolver->getNormalizedEigenvectors(); }

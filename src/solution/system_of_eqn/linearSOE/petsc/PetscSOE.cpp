@@ -295,7 +295,7 @@ void XC::PetscSOE::zeroA(void)
     MatZeroEntries(A);
   }
 
-//! @brief Asigna el solver que se empleará para resolver el sistema.	
+//! @brief Set the solver.
 bool XC::PetscSOE::setSolver(PetscSolver *newSolver)
   {    
     if(size != 0)

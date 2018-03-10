@@ -23,7 +23,7 @@
 
 
 class_<XC::CFactorSeries, bases<XC::TimeSeries>, boost::noncopyable >("CFactorSeries", no_init)
-  .def("getFactor",&XC::CFactorSeries::getFactor,"getFactor(time): return factor value at specified time.")
+  .def("getFactor",&XC::CFactorSeries::getFactor,"getFactor(time): return load factor value at specified time.")
   .def("setFactor",&XC::CFactorSeries::setFactor,"setFactor(factor): sets factor value.")
   ;
 
