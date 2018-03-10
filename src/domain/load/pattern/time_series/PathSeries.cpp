@@ -72,17 +72,34 @@
 #include "utility/actor/actor/MovableVector.h"
 #include "utility/matrix/ID.h"
 
-//! @brief Constructor.
+//! @brief Default constructor.
 XC::PathSeries::PathSeries(void)	
   :PathSeriesBase(TSERIES_TAG_PathSeries), pathTimeIncr(1.0) {}
 
 		   
 //! @brief Constructor.
+//! 
+//! Used to construct a PathSeries when the data points are specified in a
+//! Vector.
+//!
+//! @param theLoadPath: vector containing the data points which are
+//! specified at \p theTimeIncr time intervals.
+//! @param theTimeIncr: time step.
+//! @param theFactor:  constant factor used in the relation.
 XC::PathSeries::PathSeries(const Vector &theLoadPath, double theTimeIncr, double theFactor)
-  :PathSeriesBase(TSERIES_TAG_PathSeries,theLoadPath,theFactor), pathTimeIncr(theTimeIncr) {}
+  : PathSeriesBase(TSERIES_TAG_PathSeries,theLoadPath,theFactor),
+    pathTimeIncr(theTimeIncr) {}
 
 
 //! @brief Constructor.
+//! 
+//! Used to construct a PathSeries when the data points are specified in a
+//! file.
+//!
+//! @param fileName: name of the file containing the data points.
+//! specified at \p theTimeIncr time intervals.
+//! @param theTimeIncr: time step.
+//! @param theFactor:  constant factor used in the relation.
 XC::PathSeries::PathSeries(const std::string &fileName, double theTimeIncr, double theFactor)
   :PathSeriesBase(TSERIES_TAG_PathSeries,theFactor),pathTimeIncr(theTimeIncr)
   { readFromFile(fileName); }
@@ -114,6 +131,11 @@ void XC::PathSeries::readFromFile(const std::string &fileName)
   }
 
 //! @brief Returns the value of the factor at the pseudo-time.
+//!
+//! Determines the load factor based on the \p pseudoTime and the data
+//! points. Returns \f$0.0\f$ if \p pseudoTime is greater than time of last
+//! data point, otherwise returns a linear interpolation of the data
+//! points times the factor \p cFactor.
 double XC::PathSeries::getFactor(double pseudoTime) const
   {
     double retval= 0.0;
@@ -140,6 +162,7 @@ double XC::PathSeries::getFactor(double pseudoTime) const
 double XC::PathSeries::getDuration(void) const
   { return thePath.Size() * pathTimeIncr; }
 
+//! @brief Sends object data.
 int XC::PathSeries::sendData(CommParameters &cp)
   {
     int res= PathSeriesBase::sendData(cp);
@@ -147,6 +170,7 @@ int XC::PathSeries::sendData(CommParameters &cp)
     return res;
   }
 
+//! @brief Receives object data.
 int XC::PathSeries::recvData(const CommParameters &cp)
   {
     int res= PathSeriesBase::recvData(cp);

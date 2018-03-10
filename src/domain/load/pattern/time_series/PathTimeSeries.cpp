@@ -77,11 +77,19 @@ XC::PathTimeSeries::PathTimeSeries(void)
   :PathSeriesBase(TSERIES_TAG_PathTimeSeries), currentTimeLoc(0) {}
 
 //! @brief Constructor.
+//!
+//! @param theLoadPath: vector containing the data points.
+//! @param theTimePath: vector containing the time values (abscissae).
+//! @param theFactor:  constant factor used in the relation.
 XC::PathTimeSeries::PathTimeSeries(const Vector &theLoadPath, const Vector &theTimePath, double theFactor)
   :PathSeriesBase(TSERIES_TAG_PathTimeSeries,theLoadPath,theFactor),time(theTimePath), currentTimeLoc(0) {}
 
 
 //! @brief Constructor.
+//!
+//! @param fileName: name of the file containing the data points.
+//! @param fileTimeName: name of the file containing the time values.
+//! @param theFactor:  constant factor used in the relation.
 XC::PathTimeSeries::PathTimeSeries(const std::string &filePathName,const std::string &fileTimeName, double theFactor)
   :PathSeriesBase(TSERIES_TAG_PathTimeSeries, theFactor), currentTimeLoc(0)
   { readFromFiles(filePathName,fileTimeName); }
@@ -104,8 +112,9 @@ void XC::PathTimeSeries::readFromFile(const std::string &fileName)
     theFile.open(fileName.c_str(), std::ios::in);
     if(theFile.bad() || !theFile.is_open())
       {
-        std::cerr << "WARNING - PathTimeSeries::PathTimeSeries()";
-        std::cerr << " - could not open file " << fileName << std::endl;
+        std::cerr << getClassName() << "::" << __FUNCTION__
+	          << "; WARNING could not open file "
+		  << fileName << std::endl;
       }
     else
       {
@@ -129,17 +138,18 @@ void XC::PathTimeSeries::readFromFile(const std::string &fileName)
         theFile1.open(fileName.c_str(), std::ios::in);
         if(theFile1.bad() || !theFile1.is_open())
           {
-            std::cerr << "WARNING - PathTimeSeries::PathTimeSeries()";
-            std::cerr << " - could not open file " << fileName << std::endl;
+            std::cerr << getClassName() << "::" << __FUNCTION__
+		      << "; WARNING - could not open file "
+		      << fileName << std::endl;
           }
         else
           { // read in the time and then read the value
-            int count = 0;
+            int count= 0;
             while(theFile1 >> dataPoint)
               {
-                time(count) = dataPoint;
+                time(count)= dataPoint;
                 theFile1 >> dataPoint;
-                thePath(count) = dataPoint;
+                thePath(count)= dataPoint;
                 count++;
               }
 
@@ -161,8 +171,10 @@ void XC::PathTimeSeries::readFromFiles(const std::string &filePathName,const std
     // check number of data entries in both are the same
     if(numDataPoints1 != numDataPoints2)
       {
-        std::cerr << "WARNING XC::PathTimeSeries::PathTimeSeries() - files containing data ";
-        std::cerr << "points for path and time do not contain same number of points\n";
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; WARNING - files containing data "
+		  << "points for path and time do not contain "
+	          << "same number of points\n";
       }
     else
       {
@@ -178,8 +190,9 @@ void XC::PathTimeSeries::readFromFiles(const std::string &filePathName,const std
             theFile2.open(filePathName.c_str(), std::ios::in);
             if(theFile2.bad() || !theFile2.is_open())
               {
-                std::cerr << "WARNING - PathTimeSeries::PathTimeSeries()";
-                std::cerr << " - could not open file " << filePathName << std::endl;
+                std::cerr << getClassName() << "::" << __FUNCTION__
+			  << "; WARNING - could not open file "
+			  << filePathName << std::endl;
               }
             else
               { // read in the path data and then do the time
@@ -192,8 +205,9 @@ void XC::PathTimeSeries::readFromFiles(const std::string &filePathName,const std
                 theFile3.open(fileTimeName.c_str(), std::ios::in);
                 if(theFile3.bad() || !theFile3.is_open())
                   {
-                    std::cerr << "WARNING - PathTimeSeries::PathTimeSeries()";
-                    std::cerr << " - could not open file " << fileTimeName << std::endl;
+                    std::cerr << getClassName() << "::" << __FUNCTION__
+			      << "; WARNING  - could not open file "
+			      << fileTimeName << std::endl;
                   }
                 else
                   {
@@ -212,7 +226,12 @@ double XC::PathTimeSeries::getTimeIncr(double pseudoTime) const
     return 1.0;
   }
 
-//! @brief Returns the value of the factor at the pseudo-time.
+//! @brief Returns the value of the load factor at the specified time.
+//!
+//! Determines the load factor based on the \p pseudoTime and the data
+//! points. Returns \f$0.0\f$ if \p pseudoTime is greater than time of last
+//! data point, otherwise returns a linear interpolation of the data
+//! points times the factor \p cFactor.
 double XC::PathTimeSeries::getFactor(double pseudoTime) const
   {
     // check for a quick return
@@ -226,9 +245,9 @@ double XC::PathTimeSeries::getFactor(double pseudoTime) const
     if(pseudoTime == time1)
       return cFactor * thePath(currentTimeLoc);
 
-    const int size = time.Size();
-    const int sizem1 = size - 1;
-    const int sizem2 = size - 2;
+    const int size= time.Size();
+    const int sizem1= size - 1;
+    const int sizem2= size - 2;
 
     // check we are not at the end
     if(pseudoTime > time1 && currentTimeLoc == sizem1)
@@ -238,14 +257,14 @@ double XC::PathTimeSeries::getFactor(double pseudoTime) const
       return 0.0;
 
     // otherwise go find the current interval
-    double time2 = time(currentTimeLoc+1);
+    double time2= time(currentTimeLoc+1);
     if(pseudoTime > time2)
       {
         while((pseudoTime > time2) && (currentTimeLoc < sizem2))
           {
             currentTimeLoc++;
-            time1 = time2;
-            time2 = time(currentTimeLoc+1);
+            time1= time2;
+            time2= time(currentTimeLoc+1);
           }
         // if pseudo time greater than ending time reurn 0
         if(pseudoTime > time2)
@@ -256,14 +275,14 @@ double XC::PathTimeSeries::getFactor(double pseudoTime) const
         while((pseudoTime < time1) && (currentTimeLoc > 0))
           {
             currentTimeLoc--;
-            time2 = time1;
-            time1 = time(currentTimeLoc);
+            time2= time1;
+            time1= time(currentTimeLoc);
           }
         // if starting time less than initial starting time return 0
         if(pseudoTime < time1) return 0.0;
       }
-    double value1 = thePath(currentTimeLoc);
-    double value2 = thePath(currentTimeLoc+1);
+    const double value1= thePath(currentTimeLoc);
+    const double value2= thePath(currentTimeLoc+1);
     return cFactor*(value1 + (value2-value1)*(pseudoTime-time1)/(time2 - time1));
   }
 
@@ -272,10 +291,11 @@ double XC::PathTimeSeries::getDuration(void) const
   {
     if(thePath.Size()<1)
       {
-        std::cerr << "WARNING -- PathTimeSeries::getDuration() on empty Vector" << std::endl;
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; WARNING on empty vector" << std::endl;
         return 0.0;
       }
-    int lastIndex = time.Size(); // index to last entry in time vector
+    int lastIndex= time.Size(); // index to last entry in time vector
     return(time(lastIndex-1));
   }
 
@@ -306,7 +326,8 @@ int XC::PathTimeSeries::sendSelf(CommParameters &cp)
     const int dataTag= getDbTag();
     result+= cp.sendIdData(getDbTagData(),dataTag);
     if(result < 0)
-      std::cerr << "PathTimeSeries::sendSelf() - ch failed to send data\n";
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; ch failed to send data.\n";
     return result;
   }
 
@@ -316,10 +337,11 @@ int XC::PathTimeSeries::recvSelf(const CommParameters &cp)
   {
     inicComm(9);
 
-    const int dataTag = this->getDbTag();  
-    int result = cp.receiveIdData(getDbTagData(),dataTag);
+    const int dataTag= this->getDbTag();  
+    int result= cp.receiveIdData(getDbTagData(),dataTag);
     if(result<0)
-      std::cerr << "PathTimeSeries::sendSelf() - ch failed to receive data\n";
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; ch failed to receive data.\n";
     else
       result+= recvData(cp);
     return result;    

@@ -71,13 +71,15 @@ namespace XC {
 //! @ingroup TSeries
 //
 //! @brief Linear function over time.
+//!
+//! Objects of this class represent a linear relationship between
+//! the pseudo time and the load factor.
 class LinearSeries : public CFactorSeries
   {
-  protected:
-
   public:
     LinearSeries(double cFactor = 1.0);
 
+    //! @brief Virtual constructor.
     TimeSeries *getCopy(void) const
       { return new LinearSeries(*this); }
 

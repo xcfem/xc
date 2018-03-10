@@ -73,7 +73,12 @@ class Vector;
 //
 //! @brief Time-dependent function that linear interpolates the
 //! load factor using user specified control points provided in a vector object.
-//! the points in the vector are given at time points specified in another vector.
+//!
+//! The relationship between the pseudo time and the load factor follows
+//! a user specified path. The path points are specified at user specified
+//! time values. For a pseudo time not at a path point, linear interpolation
+//! is performed to determine the load factor. If the time specified is
+//! beyond the last path point a load factor of \f$0.0\f$ will be returned.
 class PathTimeSeries : public PathSeriesBase
   {
   private:

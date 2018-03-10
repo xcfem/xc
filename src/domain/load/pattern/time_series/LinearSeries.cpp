@@ -68,11 +68,14 @@
 
 
 //! @brief Constructor.
+//!
+//! @param theFactor: factor used in the relation.
 XC::LinearSeries::LinearSeries(double theFactor)
   :CFactorSeries(TSERIES_TAG_LinearSeries,theFactor)
   {}
 
-//! @brief Returns factor value at the time being passed as parameter.
+//! @brief Returns the load factor at the specified time
+//! (product of \p cFactor and \p pseudoTime).
 double XC::LinearSeries::getFactor(double pseudoTime) const
   { return cFactor*pseudoTime; }
 
@@ -80,5 +83,6 @@ double XC::LinearSeries::getFactor(double pseudoTime) const
 //! @brief Print stuff.
 void XC::LinearSeries::Print(std::ostream &s, int flag) const
   {
-    s << "Linear Series: constant factor: " << cFactor << "\n";
+    s << getClassName() << ": linear factor: "
+      << cFactor << "\n";
   }

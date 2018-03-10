@@ -73,10 +73,16 @@ class Vector;
 //! load factor using user specified control points provided in a vector object.
 //! the points in the vector are given at regular time increments pathTimeIncr
 //! apart.
+//!
+//! The relationship between the pseudo time and the load factor follows
+//! a user specified path. The path points are specified at constant time
+//! intervals. For a pseudo time not at a path point, linear interpolation
+//! is performed to determine the load factor. If the time specified is
+//! beyond the last path point a load factor of \f$0.0\f$ will be returned.
 class PathSeries : public PathSeriesBase
   {
   private:
-    double pathTimeIncr; //!< Incremento de tiempo.
+    double pathTimeIncr; //!< Time step.
   protected:
     int sendData(CommParameters &cp);
     int recvData(const CommParameters &cp);
@@ -86,6 +92,7 @@ class PathSeries : public PathSeriesBase
     PathSeries(const Vector &thePath,double pathTimeIncr = 1.0, double cf= 1.0);
     PathSeries(const std::string &fileName, double pathTimeIncr = 1.0, double cf= 1.0);
     PathSeries(void);
+    //! @brief Virtual constructor.
     TimeSeries *getCopy(void) const
       { return new PathSeries(*this); }
 
