@@ -24,7 +24,7 @@ from model import predefined_spaces
 from materials.ec2 import EC2_materials
 from materials import concrete_base
 from materials import typical_materials
-from materials.sections.fiber_section import createFiberSets
+from materials.sections.fiber_section import fiber_sets
 from materials.sections.fiber_section import sectionReport 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -188,7 +188,7 @@ sccEl1= ele1.getSection()
 fibersSccEl1= sccEl1.getFibers()
 
 #Creation of two separate sets of fibers: concrete and reinforcement steel 
-setsRCEl1= createFiberSets.fiberSectionSetupRCSets(scc=sccEl1,concrMatTag=concrete.matTagK,concrSetName="concrSetFbEl1",reinfMatTag=rfSteel.matTagK,reinfSetName="reinfSetFbEl1")
+setsRCEl1= fiber_sets.fiberSectionSetupRCSets(scc=sccEl1,concrMatTag=concrete.matTagK,concrSetName="concrSetFbEl1",reinfMatTag=rfSteel.matTagK,reinfSetName="reinfSetFbEl1")
 
 sumAreas= fibersSccEl1.getArea(1.0)  #total sum of the fibers area
                                     #that sum is multiplied by the coefficient

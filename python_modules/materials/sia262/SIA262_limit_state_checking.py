@@ -15,8 +15,7 @@ from rough_calculations import ng_simple_bending_reinforcement
 import math
 import xc_base
 import geom
-from materials.sections.fiber_section import createFiberSets
-from materials.sections.fiber_section import fiberUtils
+from materials.sections.fiber_section import fiber_sets
 from materials.sections import stressCalc as sc
 from miscUtils import LogMessages as lmsg
 
@@ -271,7 +270,7 @@ class CrackControlSIA262(lsc.CrackControlBaseParameters):
     concreteTag= section.concrType.matTagK
     reinfMatTag= section.reinfSteelType.matTagK
     if(not scc.hasProp("rcSets")):
-      scc.setProp("rcSets", createFiberSets.fiberSectionSetupRC3Sets(scc,concreteTag,self.concreteFibersSetName,reinfMatTag,self.rebarFibersSetName))
+      scc.setProp("rcSets", fiber_sets.fiberSectionSetupRC3Sets(scc,concreteTag,self.concreteFibersSetName,reinfMatTag,self.rebarFibersSetName))
     rcSets= scc.getProp("rcSets")
     concrFibers= rcSets.concrFibers.fSet
     reinfFibers= rcSets.reinfFibers.fSet

@@ -11,9 +11,9 @@ import xc
 # Macros
 from miscUtils import LogMessages as lmsg
 
-# TO ENHANCE: Interactions diagrams ("d" and "k") are calculated each time we call
-# the check routines. Maybe it's a good idea to calculate them once and write them
-# in a file to use them as needed.
+# TO ENHANCE: Interactions diagrams ("d" and "k") are calculated each time we 
+# call the checking routines. Maybe it's a good idea to calculate them once and
+# write them in a file to use them as needed.
 
 class SectionContainer(object):
 
@@ -37,13 +37,20 @@ class SectionContainer(object):
     return
   
   def search(self,nmb):
-    ''' Returnrs section named nmb (if founded) '''
+    ''' Return section named nmb (if founded) '''
     retval= None
     for s in self.sections:
       if(s.name==nmb):
         retval= s
     return retval
 
+  def createRCsections(self,preprocessor,matDiagType):
+    '''Creates for each element in the container the fiber sections 
+    (RCsimpleSections) associated with it.
+    '''
+    for s in self.sections:
+      for i in range(len(s.lstRCSects)):
+        s.lstRCSects[i].defRCSimpleSection(preprocessor,matDiagType)
 
   def calcInteractionDiagrams(self,preprocessor,matDiagType, diagramType= 'NMyMz'):
     '''Calculates 3D interaction diagrams for each section.
@@ -57,7 +64,7 @@ class SectionContainer(object):
     self.mapInteractionDiagrams= {}
     for s in self.sections:
       for i in range(len(s.lstRCSects)):
-        s.lstRCSects[i].defRCSimpleSection(preprocessor,matDiagType)
+#        s.lstRCSects[i].defRCSimpleSection(preprocessor,matDiagType)
         diag= None
         if(diagramType=='NMyMz'):
           diag= s.lstRCSects[i].defInteractionDiagram(preprocessor)

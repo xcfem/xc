@@ -112,11 +112,16 @@ class RCMaterialDistribution(object):
                            obtained for each element 
                            for the combinations analyzed and the
                            controller to use for the checking.
-    :param matDiagType: type of the material diagram (d: design, k: characteristic).
-    :param threeDim: true if it's 3D (Fx,Fy,Fz,Mx,My,Mz) false if it's 2D (Fx,Fy,Mz).
+    :param matDiagType: type of the material diagram (d: design, 
+           k: characteristic).
+    :param threeDim: true if it's 3D (Fx,Fy,Fz,Mx,My,Mz) 
+           false if it's 2D (Fx,Fy,Mz).
     '''
     feProblem= xc.FEProblem()
     preprocessor= feProblem.getPreprocessor
+    self.sectionDefinition.createRCsections(preprocessor,matDiagType) #creates
+                      #for each element in the container the fiber sections
+                      #(RCsimpleSections) associated with it.
     if(threeDim):
       self.sectionDefinition.calcInteractionDiagrams(preprocessor,matDiagType)
     else:
@@ -148,7 +153,8 @@ class RCMaterialDistribution(object):
                            obtained for each element 
                            for the combinations analyzed and the
                            controller to use for the checking.
-    :param matDiagType: type of the material diagram (d: design, k: characteristic).
+    :param matDiagType: type of the material diagram (d: design, 
+           k: characteristic).
     '''
     (tmp, retval)= self.runChecking(limitStateData,outputFileName, matDiagType,False)
     tmp.clearAll() #Free memory.

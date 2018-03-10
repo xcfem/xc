@@ -11,11 +11,11 @@
 #   (fiber models,...) is used for limit state checking at cross section 
 #   level (crack control, shear,...).
 
-__author__= "Luis C. Pérez Tato (LCPT)"
-__copyright__= "Copyright 2016,LCPT"
+__author__= "Luis C. Pérez Tato (LCPT) & Ana Ortega (AO_O)"
+__copyright__= "Copyright 2016,LCPT & AO_O"
 __license__= "GPL"
 __version__= "3.0"
-__email__= "l.pereztato@gmail.com"
+__email__= "l.pereztato@gmail.com  ana.ortega@ciccp.es"
 
 import csv
 import numpy
@@ -79,16 +79,17 @@ class PhantomModel(object):
     f.close()
 
   def createPhantomElement(self,idElem,sectionName,sectionDefinition,sectionIndex,interactionDiagram,fakeSection):
-    '''Creates a phantom element (that represents a section to check) and 
-       assigns to it the following properties:
+    '''Creates a phantom element (that represents a section to check) 
 
-       :param idElem: identifier of the element in the "true" model from which
-               this phantom element procedes -idElem-.
-       :param idSection: name of the section assigned to the phantom element
+    :param idElem: identifier of the element in the "true" model associated
+           with the phantom element to be created.
+    :param sectionName: name of the 3D fiber section to create the 
+           zero-length phantom element (default material)  
+    :param idSection: name of the section assigned to the phantom element
                   (the section to check) -sectionName-.
-       :param dir: index of the section in the "true" model element 
+    :param sectionIndex: index of the section in the "true" model element 
                  -sectionIndex-. To be renamed as sectionIndex.
-       :param interactionDiagram: interaction diagram that corresponds to 
+    :param interactionDiagram: interaction diagram that corresponds to 
                                   the section to check.
     '''
     nA= self.preprocessor.getNodeLoader.newNodeXYZ(0,0,0)
@@ -140,6 +141,7 @@ class PhantomModel(object):
           diagInt= None
           if(mapInteractionDiagrams != None):
             diagInt= mapInteractionDiagrams[sectionName]
+#          print 'tagElem =',tagElem,' sectionName=',sectionName,' elSecDef=',elementSectionDefinitions[i],' sectIndex=', i+1,' diagInt=', diagInt
           phantomElem= self.createPhantomElement(tagElem,sectionName,elementSectionDefinitions[i],i+1,diagInt,controller.fakeSection)
           retval.append(phantomElem)
           self.tagsNodesToLoad[tagElem].append(phantomElem.getNodes[1].tag) #Node to load

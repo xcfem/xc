@@ -24,7 +24,7 @@ from model import predefined_spaces
 from materials.ec2 import EC2_materials
 from materials import concrete_base
 from materials import typical_materials
-from materials.sections.fiber_section import createFiberSets
+from materials.sections.fiber_section import fiber_sets
 from materials.sections.fiber_section import sectionReport 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -183,7 +183,7 @@ sccEl1= ele1.getSection()
 fibersSccEl1= sccEl1.getFibers()
 
 #Creation of two separate sets of fibers: concrete and reinforcement steel 
-setsRCEl1= createFiberSets.fiberSectionSetupRCSets(scc=sccEl1,concrMatTag=concrete.matTagK,concrSetName="concrSetFbEl1",reinfMatTag=rfSteel.matTagK,reinfSetName="reinfSetFbEl1")
+setsRCEl1= fiber_sets.fiberSectionSetupRCSets(scc=sccEl1,concrMatTag=concrete.matTagK,concrSetName="concrSetFbEl1",reinfMatTag=rfSteel.matTagK,reinfSetName="reinfSetFbEl1")
 
 sumAreas= fibersSccEl1.getArea(1.0)  #total sum of the fibers area
                                     #that sum is multiplied by the coefficient
@@ -266,12 +266,12 @@ print "Z coordinate of the steel fiber with maximum strain: ",(ZepsSMax)
 
 #depth of the effective area:
 hceff=EC2_limit_state_checking.h_c_eff(depth_tot=depth,depht_eff=depth-coverInf-0.026/2.0,depth_neutral_axis=abs(x))
-# print 'depth of the effective area: ',hceff,' m'
+#print 'depth of the effective area: ',hceff,' m'
 #effective reinforcement ratio
 roseff=EC2_limit_state_checking.ro_eff(A_s=A_s,width=width,h_c_eff=hceff)
 # print 'effective reinforcement ratio: ',roseff
 #maximum crack spacing
-srmax=EC2_limit_state_checking.s_r_max(k1=0.8,k2=0.5,k3=3.4,k4=0.425,cover=coverInf,fiReinf=0.024,ro_eff=roseff)
+srmax=EC2_limit_state_checking.s_r_max(k1=0.8,k2=0.5,k3=3.4,k4=0.425,cover=coverInf,fiReinf=0.026,ro_eff=roseff)
 # print 'maximum crack spacing: ',srmax,' m'
 #mean strain in the concrete between cracks
 eps_cm=concrete.fctm()/concrete.E0()/2.0
@@ -279,7 +279,7 @@ eps_cm=concrete.fctm()/concrete.E0()/2.0
 eps_sm=epsSMax
 #crack withs
 w_k=srmax*(eps_sm-eps_cm)
-# print 'crack withs: ',w_k*1e3, ' mm'
+#print 'crack withs: ',w_k*1e3, ' mm'
 
 xComp= -0.178266877222
 epsCMinComp= -0.0006080494122
@@ -288,9 +288,9 @@ epsSMaxComp= 0.000949058858185
 sgSMaxComp= 189811771.637
 hceffComp= 0.107244374259
 roseffComp= 0.0643670127005
-srmaxComp= 0.233386505429
+srmaxComp= 0.23866871421493
 eps_cmComp= 4.67648930823e-05
-w_kComp= 0.000210583235385
+w_kComp= 0.00021534934049485558
 
 ratio1=(xComp-x)/xComp
 ratio2=(epsCMinComp- epsCMin)/epsCMinComp

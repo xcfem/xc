@@ -170,11 +170,16 @@ class BasicRecordRCSection(section_properties.RectangularSection):
     tangSteel= self.getSteelDiagram(preprocessor).getTangent()
     return tangSteel/tangHorm
 
-  def defDiagrams(self,preprocessor,matDiagType):
+  def defDiagrams(self,preprocessor,matDiagType,initConcrTensStif='N'):
     '''
     Stress-strain diagrams definition.
+
+    :param initConcrTensStif: if =='Y', a concrete02 material model 
+        is initialized with a tension capacity almost equal to 0 (equivalent to 
+        the concrete01 diagram). Defaults to 'N'
     '''
     self.diagType= matDiagType
+    self.concrType.initTensStiff=initConcrTensStif
     if(self.diagType=="d"):
       if(self.concrType.matTagD<0):
         concreteMatTag= self.concrType.defDiagD(preprocessor)
@@ -513,17 +518,22 @@ class setRCSections2SetElVerif(object):
   of the limit states.
 
   :ivar name:       name given to the list of reinforced concrete sections
-  :ivar lstRCSects: list of reinforced concrete sections that will be 
+  :ivar lstRCSects: list of reinforced concrete fiber-sections that will be 
                     associated to a set of elements in order to carry out their
                     LS verifications.
                     The items of the list are instances of the object 
                     RecordRCSimpleSection
                     lstRCSects[0]=section in 1 direction
                     lstRCSects[1]=section in 2 direction ...
+  :ivar lstRTSCSets: equivalent to lstRCSects list of RC fiber-sections but 
+                    the concrete is of type 02 (with tension-stiffening branch)
+                    This fiber-sections are those used to create the phantom 
+                    model employed to check the cracking SLS. 
 
   ''' 
   def __init__(self,name):
     self.lstRCSects=[]
+    self.lstRTSCSects=[]
     self.name=name
 
   def append_section(self,RCSimplSect):

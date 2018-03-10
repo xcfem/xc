@@ -6,7 +6,7 @@ import math
 import xc_base
 import geom
 from materials.ehe import EHE_materials
-from materials.sections.fiber_section import createFiberSets
+from materials.sections.fiber_section import fiber_sets
 from materials import limit_state_checking_base as lscb
 from postprocess import control_vars as cv
 from miscUtils import LogMessages as lmsg
@@ -745,7 +745,7 @@ class ShearController(lscb.LimitStateControllerBase):
     self.fydS= reinfSteel.fyd()
 
     if(not scc.hasProp("rcSets")):
-      scc.setProp("rcSets", createFiberSets.fiberSectionSetupRC3Sets(scc,self.concreteMatTag,self.concreteFibersSetName,self.reinfSteelMaterialTag,self.rebarFibersSetName))
+      scc.setProp("rcSets", fiber_sets.fiberSectionSetupRC3Sets(scc,self.concreteMatTag,self.concreteFibersSetName,self.reinfSteelMaterialTag,self.rebarFibersSetName))
     return scc.getProp("rcSets")
 
   def calcVuEHE08NoAt(self, scc, concrete, reinfSteel):
@@ -1012,7 +1012,7 @@ class CrackControl(lscb.CrackControlBaseParameters):
      :param fctm: average tensile strength of the concrete.
     '''
     if(self.rcSets == None):
-      self.rcSets= createFiberSets.fiberSectionSetupRC3Sets(scc,concreteMatTag,self.concreteFibersSetName,reinfSteelMaterialTag,self.rebarFibersSetName)
+      self.rcSets= fiber_sets.fiberSectionSetupRC3Sets(scc,concreteMatTag,self.concreteFibersSetName,reinfSteelMaterialTag,self.rebarFibersSetName)
     concrFibers= self.rcSets.concrFibers.fSet
     reinfFibers= self.rcSets.reinfFibers.fSet
     tensionedReinforcement= self.rcSets.tensionFibers
@@ -1066,7 +1066,8 @@ class CrackControl(lscb.CrackControlBaseParameters):
         MyCP= MyTmp
         MzCP= MzTmp
 
-      
+#class CrackControlTensStiff(lscb.CrackControlBase):
+  
 
 def printParamFisBarra():
   '''Prints crack control parameters of a bar.'''

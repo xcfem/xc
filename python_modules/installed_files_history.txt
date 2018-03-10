@@ -595,6 +595,8 @@
 /usr/local/lib/python2.7/dist-packages/materials/sections/fiber_section/defSeccionHASimple.pyc
 /usr/local/lib/python2.7/dist-packages/materials/sections/fiber_section/defSimpleRCSection.py
 /usr/local/lib/python2.7/dist-packages/materials/sections/fiber_section/defSimpleRCSection.pyc
+/usr/local/lib/python2.7/dist-packages/materials/sections/fiber_section/fiber_sets.py
+/usr/local/lib/python2.7/dist-packages/materials/sections/fiber_section/fiber_sets.pyc
 /usr/local/lib/python2.7/dist-packages/materials/sections/fiber_section/fiberUtils.py
 /usr/local/lib/python2.7/dist-packages/materials/sections/fiber_section/fiberUtils.pyc
 /usr/local/lib/python2.7/dist-packages/materials/sections/fiber_section/geomArmaduraSeccionesFibras.py
