@@ -87,29 +87,70 @@ XC::Vector XC::ZeroLength::ZeroLengthV4(4);
 XC::Vector XC::ZeroLength::ZeroLengthV6(6);
 XC::Vector XC::ZeroLength::ZeroLengthV12(12);
 
-//!  Constructor:
-//!  responsible for allocating the necessary space needed by each object
-//!  and storing the tags of the XC::ZeroLength end nodes.
+//!  @brief Constructor.
 //!
-//!  Construct element with one unidirectional material (numMaterials1d=1)
+//! Construct element with one unidirectional material (numMaterials1d=1)
+//! The force-deformation relationship for the element is given by a
+//! pointer \p theMaterial to a {\bf UniaxialMaterial} model acting in
+//! local \p direction.
+//! The local \p direction is 1, 2, 3, for translation in the local x, y, z
+//! axes or 4, 5, 6 for rotation about the local x, y, z axes. 
+//!
+//! @param tag: element identifier.
+//! @param dim: space dimension (1, 2 or 3).
+//! @param Nd1: identifier of the first node.
+//! @param Nd2: identifier of the second node.
+//! @param x: Vector that defines the local x-axis.
+//! @param yp: Vector that defines the local x-y plane.
+//! @param theMat: uniaxial material for the element.
+//! @param direction: local direction on which the material works.
 XC::ZeroLength::ZeroLength(int tag,int dim,int Nd1, int Nd2,const Vector &x, const Vector &yp,UniaxialMaterial &theMat, int direction)
-  :Element0D(tag,ELE_TAG_ZeroLength,Nd1,Nd2,dim,x,yp),
-   theMatrix(nullptr), theVector(nullptr),theMaterial1d(this,theMat,direction) {}
+  : Element0D(tag,ELE_TAG_ZeroLength,Nd1,Nd2,dim,x,yp),
+    theMatrix(nullptr), theVector(nullptr), theMaterial1d(this,theMat,direction)
+    {}
 
 
-//! @brief constructor:
+//! @brief Constructor.
+//!
+//! Construct element with one unidirectional material (numMaterials1d=1)
+//! The force-deformation relationship for the element is given by a
+//! pointer \p theMaterial to a {\bf UniaxialMaterial} model acting in
+//! local \p direction.
+//! The local \p direction is 1, 2, 3, for translation in the local x, y, z
+//! axes or 4, 5, 6 for rotation about the local x, y, z axes. 
+//!
+//! @param tag: element identifier.
+//! @param dim: space dimension (1, 2 or 3).
+//! @param ptr_mat: uniaxial material for the element.
+//! @param direction: local direction on which the material works.
 XC::ZeroLength::ZeroLength(int tag,int dim,const Material *ptr_mat,int direction)
   :Element0D(tag,ELE_TAG_ZeroLength,0,0,dim),
-   theMatrix(nullptr), theVector(nullptr),theMaterial1d(this,cast_material<UniaxialMaterial>(ptr_mat),direction) {}
+   theMatrix(nullptr), theVector(nullptr),
+   theMaterial1d(this,cast_material<UniaxialMaterial>(ptr_mat),direction) {}
 
 //! @brief Construct element with multiple unidirectional materials
+//!
+//! Construct a ZeroLength element with \p tag.
+//! The force-deformation relationship is given by the {\em n1dMat} pointers
+//! \p theMaterial to {\bf UniaxialMaterial} models. 
+//! \p direction is an {\bf ID}  of length {\em n1dMat} that gives
+//! the local direction for each corresponding entry in the array \p theMaterial
+//! The local \p direction is 1, 2, 3, for translation in the local x, y, z
+//! axes or 4, 5, 6  for rotation about the local x, y, z axes.
+//!
+//! @param tag: element identifier.
+//! @param dim: space dimension (1, 2 or 3).
+//! @param Nd1: identifier of the first node.
+//! @param Nd2: identifier of the second node.
+//! @param x: Vector that defines the local x-axis.
+//! @param yp: Vector that defines the local x-y plane.
+//! @param theMat: material container.
+//! @param direction: direction container.
 XC::ZeroLength::ZeroLength(int tag,int dim,int Nd1, int Nd2,const Vector& x, const Vector& yp,const DqUniaxialMaterial &theMat,const ID& direction )
   :Element0D(tag,ELE_TAG_ZeroLength,Nd1,Nd2,dim,x,yp), theMatrix(nullptr), theVector(nullptr), theMaterial1d(this,theMat,direction) {}
 
 
-//   Constructor:
-//   invoked by a FEM_ObjectBroker - blank object that recvSelf needs
-//   to be invoked upon
+//! @brief Default constructor:
 XC::ZeroLength::ZeroLength(void)
   :Element0D(0,ELE_TAG_ZeroLength,0,0,0),theMatrix(nullptr), theVector(nullptr),
    theMaterial1d(this) {}
@@ -149,7 +190,9 @@ void XC::ZeroLength::setMaterials(const std::deque<int> &dirs,const std::vector<
   {
     const size_t n= nmbMats.size();
     if(n!= dirs.size())
-    std::cerr << "Error in number of materials; number of directions: " << dirs.size()
+    std::cerr << getClassName() << "::" << __FUNCTION__
+	      << "; error in number of materials; number of directions: "
+	      << dirs.size()
               << " number of materials: " << n << std::endl;
     Preprocessor *preprocessor= getPreprocessor();
     if(preprocessor)
@@ -240,18 +283,20 @@ void XC::ZeroLength::setUpType(const size_t &numDOFsNodos)
       }
     else
       {
-        std::cerr << "WARNING ZeroLength::setUpType cannot handle " << dimension
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; WARNING cannot handle " << dimension
                   << " dofs at nodes in " << numDOFsNodos << " d problem\n";
         return;
       }
   }
 
-// method: setDomain()
-//    to set a link to the enclosing Domain and to set the node pointers.
-//    also determines the number of dof associated
-//    with the ZeroLength element, we set matrix and vector pointers,
-//    allocate space for t matrix and define it as the basic deformation-
-//    displacement transformation matrix.
+//! @brief Set the elemento domain.
+//!
+//! to set a link to the enclosing Domain and to set the node pointers.
+//! also determines the number of dof associated
+//! with the ZeroLength element, we set matrix and vector pointers,
+//! allocate space for t matrix and define it as the basic deformation-
+//! displacement transformation matrix.
 void XC::ZeroLength::setDomain(Domain *theDomain)
   {
     // call the base class method
@@ -269,8 +314,10 @@ void XC::ZeroLength::setDomain(Domain *theDomain)
     // if differing dof at the ends - print a warning message
     if(dofNd1 != dofNd2)
       {
-        std::cerr << "WARNING XC::ZeroLength::setDomain(): nodes " << theNodes[0]->getTag() << " and "
-                  << theNodes[1]->getTag() << "have differing dof at ends for XC::ZeroLength "
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; WARNING nodes " << theNodes[0]->getTag() << " and "
+                  << theNodes[1]->getTag()
+		  << "have differing dof at ends for ZeroLength "
                   << this->getTag() << std::endl;
         return;
       }
@@ -287,9 +334,11 @@ void XC::ZeroLength::setDomain(Domain *theDomain)
 
 
     if(L > lentol_vm)
-      std::cerr << "WARNING XC::ZeroLength::setDomain(): Element " 
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; WARNING element " 
                 << this->getTag() << " has L= " << L
-                << ", which is greater than the tolerance: " << lentol_vm << std::endl;
+                << ", which is greater than the tolerance: "
+		<< lentol_vm << std::endl;
 
 
     // set the number of dof for element and set matrix and vector pointer
@@ -301,25 +350,34 @@ void XC::ZeroLength::setDomain(Domain *theDomain)
       setTran1d(elemType,theMaterial1d.size());
   }
 
-
+//! @brief Commit state of element.
+//! 
+//! Commit state of element by commiting state of materials.
+//! Return 0 if successful, !0 otherwise.
 int XC::ZeroLength::commitState(void)
   {
     int code=0;
 
     // call element commitState to do any base class stuff
-    if((code = this->XC::Element::commitState()) != 0)
-      { std::cerr << "XC::ZeroLength::commitState () - failed in base class";  }
-
+    if((code = Element0D::commitState()) != 0)
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; failed in base class";
     // commit 1d materials
     theMaterial1d.commitState();
-
     return code;
   }
 
+//! Revert state of element to last commit.
+//! 
+//! Revert state of element to last commit by reverting to last committed
+//! state of materials. Return 0 if successful, !0 otherwise.
 int XC::ZeroLength::revertToLastCommit(void)
   { return theMaterial1d.revertToLastCommit(); }
 
-
+//! Revert state of element to initial.
+//! 
+//! Revert state of element to initial state by reverting to initial state
+//! its materials. Return 0 if successful, !0 otherwise.
 int XC::ZeroLength::revertToStart(void)
   { return theMaterial1d.revertToStart(); }
 
@@ -328,9 +386,13 @@ int XC::ZeroLength::update(void)
   {
     // get trial displacements and take difference
     if(!theNodes[0])
-      std::cerr << "ZeroLength::update; node 0 of element: " << getTag() << " is not set." << std::endl;
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; node 0 of element: " << getTag()
+		<< " is not set." << std::endl;
     if(!theNodes[1])
-      std::cerr << "ZeroLength::update; node 1 of element: " << getTag() << " is not set." << std::endl;
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; node 1 of element: "
+		<< getTag() << " is not set." << std::endl;
 
     int ret = 0;
     if(theNodes[0] && theNodes[1])
@@ -356,10 +418,12 @@ int XC::ZeroLength::update(void)
           }
       }
     else
-      std::cerr << "ZeroLength::update; no se pudo actualizar the element: " << getTag() << std::endl;
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; cannot update element: " << getTag() << std::endl;
     return ret;
   }
 
+//! @brief Return tangent stiffness matrix for element.
 const XC::Matrix &XC::ZeroLength::getTangentStiff(void) const
   {
     double E;
@@ -397,9 +461,10 @@ const XC::Matrix &XC::ZeroLength::getTangentStiff(void) const
     return stiff;
   }
 
+//! @brief Return initial stiffness matrix.
 const XC::Matrix &XC::ZeroLength::getInitialStiff(void) const
   {
-    double E;
+    double E= 0.0;
 
     // stiff is a reference to the matrix holding the stiffness matrix
     Matrix& stiff = *theMatrix;
@@ -429,11 +494,12 @@ const XC::Matrix &XC::ZeroLength::getInitialStiff(void) const
         stiff(j,i) = stiff(i,j);
 
     if(isDead())
-      stiff*=dead_srf;
+      stiff*= dead_srf;
     return stiff;
   }
 
 
+//! @brief Return the element damping matrix.
 const XC::Matrix &XC::ZeroLength::getDamp(void) const
   {
     double eta;
@@ -467,7 +533,7 @@ const XC::Matrix &XC::ZeroLength::getDamp(void) const
     return damp;
   }
 
-
+//! @brief Return a zero mass matrix.
 const XC::Matrix &XC::ZeroLength::getMass(void) const
   {
     // no mass
@@ -476,19 +542,25 @@ const XC::Matrix &XC::ZeroLength::getMass(void) const
   }
 
 
+//! @brief The element has no loads, so this operation has no effect
+//! and returns 0.
 int XC::ZeroLength::addLoad(ElementalLoad *theLoad, double loadFactor)
   {
-    std::cerr << "ZeroLength::addLoad - load type unknown for ZeroLength with tag: " << this->getTag() << std::endl;
+    std::cerr << getClassName() << "::" << __FUNCTION__
+	      << "; load type unknown for ZeroLength with tag: "
+	      << this->getTag() << std::endl;
     return -1;
   }
 
-int XC::ZeroLength::addInertiaLoadToUnbalance(const XC::Vector &accel)
+//! @brief The element has no mass, so this operation has no effect and
+//! returns 0.
+int XC::ZeroLength::addInertiaLoadToUnbalance(const Vector &accel)
   {
     // does nothing as element has no mass yet!
     return 0;
   }
 
-
+//! @brief Return resisting force vector.
 const XC::Vector &XC::ZeroLength::getResistingForce(void) const
   {
     double force;
@@ -511,7 +583,7 @@ const XC::Vector &XC::ZeroLength::getResistingForce(void) const
     return *theVector;
   }
 
-
+//! @brief Return resisting force vector with inertia included.
 const XC::Vector &XC::ZeroLength::getResistingForceIncInertia(void) const
   {
     // there is no mass, so return
@@ -554,7 +626,8 @@ int XC::ZeroLength::sendSelf(CommParameters &cp)
     const int dataTag= getDbTag();
     res += cp.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
-      std::cerr << "ZeroLength::sendSelf -- failed to send ID data\n";
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; failed to send ID data.\n";
     return res;
   }
 
@@ -566,13 +639,14 @@ int XC::ZeroLength::recvSelf(const CommParameters &cp)
     const int dataTag= getDbTag();
     int res= cp.receiveIdData(getDbTagData(),dataTag);
     if(res<0)
-      std::cerr << "ZeroLength::recvSelf -- failed to receive ID data\n";
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; failed to receive ID data.\n";
     else
       res+= recvData(cp);
     return res;
   }
 
-
+//! @brief Print information about element.
 void XC::ZeroLength::Print(std::ostream &s, int flag)
   {
     // compute the strain and axial force in the member
@@ -582,7 +656,8 @@ void XC::ZeroLength::Print(std::ostream &s, int flag)
     for(int i=0; i<numDOF; i++)
       (*theVector)(i) = t1d(0,i)*force;
 
-    if(flag == 0) { // print everything
+    if(flag == 0)
+      { // print everything
         s << "Element: " << this->getTag();
         s << " type: ZeroLength  iNode: " << theNodes.getTagNode(0);
         s << " jNode: " << theNodes.getTagNode(1) << std::endl;
@@ -592,11 +667,14 @@ void XC::ZeroLength::Print(std::ostream &s, int flag)
               << ", dir: " << theMaterial1d.getDir(j) << std::endl;
             s << *(theMaterial1d[j]);
           }
-    } else if(flag == 1) {
-        s << this->getTag() << "  " << strain << "  ";
-    }
+      }
+    else if(flag == 1)
+      { s << this->getTag() << "  " << strain << "  ";  }
   }
 
+//! Set response quantities as "force", "deformation", "material", or "stiff".
+//! Return response ID  or -1 if error.  Currently, only the one uniaxial
+//! material can be set.
 XC::Response *XC::ZeroLength::setResponse(const std::vector<std::string> &argv, Information &eleInformation)
   {
     if(argv[0] == "force" || argv[0] == "forces")
@@ -624,11 +702,13 @@ XC::Response *XC::ZeroLength::setResponse(const std::vector<std::string> &argv, 
       return 0;
   }
 
+//! @brief Get response information for \p responseID.  Return 0 if successful,
+//! -1 otherwise.
 int XC::ZeroLength::getResponse(int responseID, Information &eleInformation)
   {
-    const XC::Vector& disp1 = theNodes[0]->getTrialDisp();
-    const XC::Vector& disp2 = theNodes[1]->getTrialDisp();
-    const XC::Vector  diff  = disp2-disp1;
+    const Vector& disp1 = theNodes[0]->getTrialDisp();
+    const Vector& disp2 = theNodes[1]->getTrialDisp();
+    const Vector  diff  = disp2-disp1;
 
     switch (responseID)
       {
@@ -680,7 +760,9 @@ void XC::ZeroLength::checkDirection( ID &dir ) const
     for(int i=0; i<dir.Size(); i++)
       if(dir(i) < 0 || dir(i) > 5 )
         {
-          std::cerr << "WARNING XC::ZeroLength::checkDirection - incorrect direction " << dir(i) << " is set to 0\n";
+          std::cerr << getClassName() << "::" << __FUNCTION__
+		    << ";  incorrect direction "
+		    << dir(i) << " is set to 0\n";
           dir(i) = 0;
         }
   }
@@ -807,9 +889,8 @@ void XC::ZeroLength::setTran1d(Etype elemType,int numMat)
   }
 
 
-// Compute current strain for 1d material mat
-// dispDiff are the displacements of node 2 minus those
-// of node 1
+//! @brief Compute current strain for 1d material mat dispDiff are the
+//! displacements of node 2 minus those of node 1
 double XC::ZeroLength::computeCurrentStrain1d(int mat,const XC::Vector& dispDiff ) const
   {
     double strain = 0.0;

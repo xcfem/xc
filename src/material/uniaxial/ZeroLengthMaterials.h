@@ -44,6 +44,12 @@ class MaterialLoader;
 //! One or more material objects may be associated with the nodes to
 //! provide a force displacement relationship.
 //! ZeroLengthMaterials will work with 1d, 2d, or 3d material models.
+//! 
+//! The force-deformation relationship for the element is given by a
+//! pointer \p theMaterial to a {\bf UniaxialMaterial} model acting in
+//! local \p direction.
+//! The local \p direction is 1, 2, 3, for translation in the local x, y, z
+//! axes or 4, 5, 6 for rotation about the local x, y, z axes. 
 class ZeroLengthMaterials: public DqUniaxialMaterial
   {
   private:
@@ -51,7 +57,7 @@ class ZeroLengthMaterials: public DqUniaxialMaterial
     void checkDirection(void);
     
     // Storage for uniaxial material models
-    std::deque<int> directions; //!< array of directions 0-5 for 1d materials
+    std::deque<int> directions; //!< array of local directions 0-5 for 1d materials
 
   protected:
     MaterialLoader *get_material_loader(void);

@@ -85,7 +85,17 @@ class Response;
 
 //! \ingroup ElemZL
 //
-//! @brief Zero length material.
+//! @brief Zero length element.
+//!
+//! The ZeroLength class represents an element defined by two nodes at the
+//! same geometric location, hence it has zero length. The nodes are connected
+//! by of uniaxial materials to represent the force-deformation relationship
+//! for the element. ZeroLength elements are constructed with a \p tag in a
+//! domain of \p dimension 1, 2, or 3, connected by nodes {\em Nd1} and
+//! {\em Nd2}. The vector \p x defines the local x-axis for the element and
+//! the vector \p yprime lies in the local x-y plane for the element.  The
+//! local z-axis is the cross product between \p x and \p yprime, and the
+//! local y-axis is the cross product between the local z-axis and \p x.
 class ZeroLength: public Element0D
   {
   private:
@@ -95,7 +105,7 @@ class ZeroLength: public Element0D
     // Storage for uniaxial material models
     ZeroLengthMaterials theMaterial1d; //!< array of pointers to 1d materials y related directionss.
 
-    Matrix t1d;        // hold the transformation matrix
+    Matrix t1d; //!< hold the transformation matrix.
 
     // private methods
     void checkDirection(ID &dir) const;

@@ -54,7 +54,7 @@ const XC::NodePtrs &XC::NodePtrsWithIDs::getNodePtrs(void) const
 XC::NodePtrs &XC::NodePtrsWithIDs::getNodePtrs(void)
   { return *this; }
 
-//! @brief Reuturns external nodes identifiers.
+//! @brief Returns external nodes identifiers.
 const XC::ID &XC::NodePtrsWithIDs::getExternalNodes(void) const
   { return connectedExternalNodes; }
 

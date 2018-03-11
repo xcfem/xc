@@ -84,6 +84,11 @@ bool XC::Element0D::Vxy::check(void) const
   }
 
 //! Constructor.
+//!
+//! @param tag: element identifier.
+//! @param classTag: element class identifier.
+//! @param Nd1: identifier of the first node.
+//! @param Nd2: identifier of the second node.
 XC::Element0D::Element0D(int tag, int classTag,int Nd1,int Nd2)
   : ElementBase<2>(tag,classTag),dimension(1), numDOF(0), transformation(3,3)
   {
@@ -93,6 +98,12 @@ XC::Element0D::Element0D(int tag, int classTag,int Nd1,int Nd2)
   }
 
 //! Constructor.
+//!
+//! @param tag: element identifier.
+//! @param classTag: element class identifier.
+//! @param Nd1: identifier of the first node.
+//! @param Nd2: identifier of the second node.
+//! @param dim: space dimension (1, 2 or 3).
 XC::Element0D::Element0D(int tag, int classTag,int Nd1,int Nd2,int dim)
   : ElementBase<2>(tag,classTag),dimension(dim), numDOF(0), transformation(3,3)
   {
@@ -102,6 +113,14 @@ XC::Element0D::Element0D(int tag, int classTag,int Nd1,int Nd2,int dim)
   }
 
 //! Constructor.
+//!
+//! @param tag: element identifier.
+//! @param classTag: element class identifier.
+//! @param Nd1: identifier of the first node.
+//! @param Nd2: identifier of the second node.
+//! @param dim: space dimension (1, 2 or 3).
+//! @param x: Vector that defines the local x-axis.
+//! @param yprime: Vector that defines the local x-y plane.
 XC::Element0D::Element0D(int tag, int classTag,int Nd1,int Nd2,int dim, const Vector& x, const Vector& yprime)
   : ElementBase<2>(tag,classTag),dimension(dim), numDOF(0), transformation(3,3)
   {
@@ -113,6 +132,11 @@ XC::Element0D::Element0D(int tag, int classTag,int Nd1,int Nd2,int dim, const Ve
 size_t XC::Element0D::getDimension(void) const
   { return 0; }
 
+//! @brief Return the number of degrees of freedom.
+//!
+//! Return the number of degrees of freedom for the element, which depends on
+//! the dimension of the problem and the number of degrees of freedom
+//! associated with each node.
 int XC::Element0D::getNumDOF(void) const
   { return numDOF; }
 

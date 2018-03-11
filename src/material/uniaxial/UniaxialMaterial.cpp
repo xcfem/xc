@@ -86,7 +86,8 @@ int XC::UniaxialMaterial::setTrial(double strain, double &stress, double &tangen
       }
     else
       {
-        std::cerr << "XC::UniaxialMaterial::setTrial() - material failed in setTrialStrain()\n"; 
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; material failed in setTrialStrain().\n"; 
       }
     return res;
   }
@@ -127,7 +128,7 @@ const XC::Vector &XC::UniaxialMaterial::getInitialGeneralizedStrain(void) const
 double XC::UniaxialMaterial::getDampTangent(void) const
   { return 0.0; }
 
-//! @brief default operation for secant stiffness
+//! @brief Return secant secant stiffness of the material.
 double XC::UniaxialMaterial::getSecant(void) const
   {
     double strain = this->getStrain();
@@ -146,7 +147,8 @@ double XC::UniaxialMaterial::getFlexibility(void) const
     const double k= getTangent();
     if(k == 0.0)
       {
-        std::cerr << "DqUniaxialMaterial::getFlexibility; singular material stiffness.\n";
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; singular material stiffness.\n";
 	retval= 1.e14;
       }
     else
@@ -161,7 +163,8 @@ double XC::UniaxialMaterial::getInitialFlexibility(void) const
     const double k= getInitialTangent();
     if(k == 0.0)
       {
-        std::cerr << "DqUniaxialMaterial::getInitialFlexibility; singular material stiffness.\n";
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; singular material stiffness.\n";
 	retval= 1.e14;
       }
     else
@@ -273,8 +276,10 @@ int XC::UniaxialMaterial::commitSensitivity(double strainSensitivity, int gradNu
 
 double XC::UniaxialMaterial::getInitialTangent(void) const
   {
-    std::cerr << "XC::UniaxialMaterial::getInitialTangent() -- this mehtod " << std::endl
-              << " is not implemented for the selected material. " << std::endl;
+    std::cerr << getClassName() << "::" << __FUNCTION__
+	      << "; this method " << std::endl
+              << " is not implemented for the selected material. "
+	      << std::endl;
     return 0.0;
   }
 
@@ -307,8 +312,9 @@ XC::UniaxialMaterial *XC::receiveUniaxialMaterialPtr(UniaxialMaterial *ptr,DbTag
         retval= dynamic_cast<UniaxialMaterial *>(tmp);
         if(!retval)
           {
-            std::cerr <<"WARNING receiveUniaxialMaterialPtr - "
-                      << " failed to get material." << std::endl;
+            std::cerr << __FUNCTION__
+		      <<"; WARNING failed to get material."
+		      << std::endl;
             delete tmp;
           }
       }
