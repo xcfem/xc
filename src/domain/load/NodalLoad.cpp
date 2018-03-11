@@ -301,8 +301,8 @@ void XC::NodalLoad::applyLoad(double loadFactor)
       loadedNodePtr->addUnbalancedLoad(load,1.0);
   } 
 
-//! @brief Returns a vector para almacenar los dbTags
-//! de los miembros de la clase.
+//! @brief Returns a vector to store the dbTags
+//! of the class members.
 XC::DbTagData &XC::NodalLoad::getDbTagData(void) const
   {
     static DbTagData retval(7);

@@ -180,8 +180,8 @@ void XC::LoadCombinationGroup::clear(void)
 XC::LoadCombinationGroup::~LoadCombinationGroup(void)
   { clear(); }
 
-//! @brief Returns a vector para almacenar los dbTags
-//! de los miembros de la clase.
+//! @brief Returns a vector to store the dbTags
+//! of the class members.
 XC::DbTagData &XC::LoadCombinationGroup::getDbTagData(void) const
   {
     static DbTagData retval(1);

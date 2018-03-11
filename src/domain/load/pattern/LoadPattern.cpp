@@ -372,8 +372,8 @@ XC::LoadPattern &XC::LoadPattern::operator/=(const double &fact)
     return *this;
   }
 
-//! @brief Returns a vector para almacenar los dbTags
-//! de los miembros de la clase.
+//! @brief Returns a vector to store the dbTags
+//! of the class members.
 XC::DbTagData &XC::LoadPattern::getDbTagData(void) const
   {
     static DbTagData retval(15);

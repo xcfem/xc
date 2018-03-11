@@ -31,8 +31,8 @@
 XC::BodyForces::BodyForces(const size_t &sz)
   : MovableObject(-1), forces(sz) {} //XXX Definition of classTag pending.
 
-//! @brief Returns a vector para almacenar los dbTags
-//! de los miembros de la clase.
+//! @brief Returns a vector to store the dbTags
+//! of the class members.
 XC::DbTagData &XC::BodyForces::getDbTagData(void) const
   {
     static DbTagData retval(2); 

@@ -411,7 +411,7 @@ void XC::SetEntities::genMesh(const std::string &setName, meshing_dir dm)
 bool XC::SetEntities::In(const Pnt *p) const
   { return points.in(p); }
 
-//! @brief Return a new set that contains the points that lie inside the
+//! @brief Return a new set that contains the points that lie insiof the
 //! geometric object.
 //!
 //! @param geomObj: geometric object that must contain the nodes.
@@ -428,7 +428,7 @@ XC::SetEntities XC::SetEntities::pickPointsInside(const GeomObj3d &geomObj, cons
 bool XC::SetEntities::In(const Edge *e) const
   { return lines.in(e); }
 
-//! @brief Return a new set that contains the lines that lie inside the
+//! @brief Return a new set that contains the lines that lie insiof the
 //! geometric object.
 //!
 //! @param geomObj: geometric object that must contain the nodes.
@@ -445,7 +445,7 @@ XC::SetEntities XC::SetEntities::pickLinesInside(const GeomObj3d &geomObj, const
 bool XC::SetEntities::In(const Face *f) const
   { return surfaces.in(f); }
 
-//! @brief Return a new set that contains the surfaces that lie inside the
+//! @brief Return a new set that contains the surfaces that lie insiof the
 //! geometric object.
 //!
 //! @param geomObj: geometric object that must contain the nodes.
@@ -462,7 +462,7 @@ XC::SetEntities XC::SetEntities::pickSurfacesInside(const GeomObj3d &geomObj, co
 bool XC::SetEntities::In(const Body *b) const
   { return bodies.in(b); }
 
-//! @brief Return a new set that contains the bodies that lie inside the
+//! @brief Return a new set that contains the bodies that lie insiof the
 //! geometric object.
 //!
 //! @param geomObj: geometric object that must contain the nodes.
@@ -489,7 +489,7 @@ BND3d XC::SetEntities::Bnd(void) const
     return retval;
   }
 
-//! @brief Return a new set that contains the bodies that lie inside the
+//! @brief Return a new set that contains the bodies that lie insiof the
 //! geometric object.
 //!
 //! @param geomObj: geometric object that must contain the nodes.
@@ -586,8 +586,8 @@ void XC::SetEntities::sel_surfaces_lst(const ID &tags)
       }
   }
 
-//! @brief Returns a vector para almacenar los dbTags
-//! de los miembros de la clase.
+//! @brief Returns a vector to store the dbTags
+//! of the class members.
 XC::DbTagData &XC::SetEntities::getDbTagData(void) const
   {
     static DbTagData retval(19);

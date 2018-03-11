@@ -70,8 +70,8 @@ template <class T>
 XC::MovableMap<T>::MovableMap(const map_objects &map,T *(FEM_ObjectBroker::*pF)(int))
   :MovableObject(0), objects(map), ptrFunc(pF) {}
 
-//! @brief Returns a vector para almacenar los dbTags
-//! de los miembros de la clase.
+//! @brief Returns a vector to store the dbTags
+//! of the class members.
 template <class T>
 XC::DbTagData &XC::MovableMap<T>::getDbTagData(void) const
   {

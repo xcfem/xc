@@ -345,8 +345,8 @@ const XC::Vector &XC::ShellCrdTransf3dBase::getVectorLocalCoordFromGlobal(const 
     return vectorCoo;
   }
 
-//! @brief Returns a vector para almacenar los dbTags
-//! de los miembros de la clase.
+//! @brief Returns a vector to store the dbTags
+//! of the class members.
 XC::DbTagData &XC::ShellCrdTransf3dBase::getDbTagData(void) const
   {
     static DbTagData retval(3);

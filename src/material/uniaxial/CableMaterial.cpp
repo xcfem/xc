@@ -91,7 +91,7 @@ int XC::CableMaterial::setTrialStrain(double strain, double strainRate)
     trialStrain= strain;
     double derivE, derivG;
 
-    // Check if out side the range of inportance
+    // Check if out siof the range of inportance
     double dP, curstrain, e0;
     int i = 0;
 
@@ -197,11 +197,12 @@ int XC::CableMaterial::revertToStart(void)
     return 0;
   }
 
+//! @brief Virtual constructor.
 XC::UniaxialMaterial *XC::CableMaterial::getCopy(void) const
   { return new CableMaterial(*this); }
 
-//! @brief Returns a vector para almacenar los dbTags
-//! de los miembros de la clase.
+//! @brief Returns a vector to store the dbTags
+//! of the class members.
 XC::DbTagData &XC::CableMaterial::getDbTagData(void) const
   {
     static DbTagData retval(4);

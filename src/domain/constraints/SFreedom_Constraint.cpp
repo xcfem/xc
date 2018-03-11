@@ -154,7 +154,7 @@ void XC::SFreedom_Constraint::setLoadPatternTag(int tag)
 int XC::SFreedom_Constraint::getLoadPatternTag(void) const
   { return loadPatternTag;  }
 
-//! @brief Returns a vector para almacenar los dbTags
+//! @brief Returns a vector to store the dbTags
 //! de los miembros of the clase.
 XC::DbTagData &XC::SFreedom_Constraint::getDbTagData(void) const
   {

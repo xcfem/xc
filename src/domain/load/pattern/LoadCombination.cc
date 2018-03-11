@@ -383,7 +383,7 @@ void XC::LoadCombination::LoadCombination::setDomain(Domain *theDomain)
     set_domain();
   }
 
-//! @brief Returns a vector para almacenar los dbTags
+//! @brief Returns a vector to store the dbTags
 //! de los miembros of the clase.
 XC::DbTagData &XC::LoadCombination::getDbTagData(void) const
   {

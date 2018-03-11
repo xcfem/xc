@@ -189,7 +189,7 @@ void XC::Set::genMesh(meshing_dir dm)
 bool XC::Set::In(const Pnt *p) const
   { return entities.In(p); }
 
-//! @brief Return a new set that contains the points that lie inside the
+//! @brief Return a new set that contains the points that lie insiof the
 //! geometric object.
 //!
 //! @param newSetName: name for the new set.
@@ -206,7 +206,7 @@ XC::Set XC::Set::pickPointsInside(const std::string &newSetName, const GeomObj3d
 bool XC::Set::In(const Edge *e) const
   { return entities.In(e); }
 
-//! @brief Return a new set that contains the lines that lie inside the
+//! @brief Return a new set that contains the lines that lie insiof the
 //! geometric object.
 //!
 //! @param newSetName: name for the new set.
@@ -223,7 +223,7 @@ XC::Set XC::Set::pickLinesInside(const std::string &newSetName, const GeomObj3d 
 bool XC::Set::In(const Face *f) const
   { return entities.In(f); }
 
-//! @brief Return a new set that contains the surfaces that lie inside the
+//! @brief Return a new set that contains the surfaces that lie insiof the
 //! geometric object.
 //!
 //! @param newSetName: name for the new set.
@@ -240,7 +240,7 @@ XC::Set XC::Set::pickSurfacesInside(const std::string &newSetName, const GeomObj
 bool XC::Set::In(const Body *b) const
   { return entities.In(b); }
 
-//! @brief Return a new set that contains the bodies that lie inside the
+//! @brief Return a new set that contains the bodies that lie insiof the
 //! geometric object.
 //!
 //! @param newSetName: name for the new set.
@@ -268,7 +268,7 @@ BND3d XC::Set::Bnd(const double &factor) const
     return retval;
   }
 
-//! @brief Return a new set that contains the entities that lie inside the
+//! @brief Return a new set that contains the entities that lie insiof the
 //! geometric object.
 //!
 //! @param newSetName: name for the new set.
@@ -314,8 +314,8 @@ void XC::Set::sel_lineas_lista(const ID &tags)
 void XC::Set::sel_surfaces_lst(const ID &tags)
   { entities.sel_surfaces_lst(tags); }
 
-//! @brief Returns a vector para almacenar los dbTags
-//! de los miembros de la clase.
+//! @brief Returns a vector to store the dbTags
+//! of the class members.
 XC::DbTagData &XC::Set::getDbTagData(void) const
   {
     static DbTagData retval(19);

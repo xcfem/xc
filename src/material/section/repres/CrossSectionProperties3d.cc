@@ -262,8 +262,8 @@ int XC::CrossSectionProperties3d::updateParameter(int parameterID, Information &
       }
   }
 
-//! @brief Returns a vector para almacenar los dbTags
-//! de los miembros de la clase.
+//! @brief Returns a vector to store the dbTags
+//! of the class members.
 XC::DbTagData &XC::CrossSectionProperties3d::getDbTagData(void) const
   {
     static DbTagData retval(2);

@@ -213,8 +213,8 @@ void  XC::ElasticMembranePlateSection::Print( std::ostream &s, int flag )
     return;
   }
 
-//! @brief Returns a vector para almacenar los dbTags
-//! de los miembros de la clase.
+//! @brief Returns a vector to store the dbTags
+//! of the class members.
 XC::DbTagData &XC::ElasticMembranePlateSection::getDbTagData(void) const
   {
     static DbTagData retval(9);

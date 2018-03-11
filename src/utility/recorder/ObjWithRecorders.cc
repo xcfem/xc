@@ -219,7 +219,7 @@ void XC::ObjWithRecorders::setLinks(Domain *ptr_dom)
       std::cerr << "ObjWithRecorders::setLinks; domain no set." << std::endl;
   }
 
-//! @brief Asigna el almacén de gestores de salida.
+//! @brief Set the outputhandlers container.
 void XC::ObjWithRecorders::SetOutputHandlers(DataOutputHandler::map_output_handlers *oh)
   { output_handlers= oh; }
 

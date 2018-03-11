@@ -456,8 +456,8 @@ const XC::Matrix &XC::SmallDispCrdTransf3d::getInitialGlobalStiffMatrix(const XC
     return local_to_global_stiff_matrix(kl);
   }
 
-//! @brief Returns a vector para almacenar los dbTags
-//! de los miembros de la clase.
+//! @brief Returns a vector to store the dbTags
+//! of the class members.
 XC::DbTagData &XC::SmallDispCrdTransf3d::getDbTagData(void) const
   {
     static DbTagData retval(10);

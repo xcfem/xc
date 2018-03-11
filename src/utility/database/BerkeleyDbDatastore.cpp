@@ -159,8 +159,10 @@ DBTYPE XC::BerkeleyDbDatastore::get_type(const std::string &dbType)
         else if(dbType=="recno" || dbType=="RECNO")
           retval = DB_RECNO;
 	else
-	  std::cerr << "BerkeleyDbDatastore::getType; no se reconoce: '"
-                    << dbType << "' como tipo de almacenamiento." << std::endl;
+	  std::cerr << getClassName() << "::" << __FUNCTION__
+	            << "; type: '" << dbType
+		    << "' not recognized as storage type."
+		    << std::endl;
       }
     return retval;
   }

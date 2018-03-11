@@ -377,7 +377,7 @@ void XC::Beam3dPointLoad::addElasticDeformations(const double &L,const CrossSect
       }
   }
 
-//! @brief Returns a vector para almacenar los dbTags
+//! @brief Returns a vector to store the dbTags
 //! de los miembros of the clase.
 XC::DbTagData &XC::Beam3dPointLoad::getDbTagData(void) const
   {

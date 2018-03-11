@@ -482,8 +482,8 @@ void MaterialVector<MAT>::zeroInitialGeneralizedStrains(void)
       (*this)[i]->zeroInitialGeneralizedStrain();
   }
 
-//! @brief Returns a vector para almacenar los dbTags
-//! de los miembros de la clase.
+//! @brief Returns a vector to store the dbTags
+//! of the class members.
 template <class MAT>
 XC::DbTagData &MaterialVector<MAT>::getDbTagData(void) const
   {

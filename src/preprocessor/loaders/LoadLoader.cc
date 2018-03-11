@@ -87,8 +87,8 @@ void XC::LoadLoader::clearAll(void)
 XC::LoadLoader::~LoadLoader(void)
   { clearAll(); }
 
-//! @brief Returns a vector para almacenar los dbTags
-//! de los miembros de la clase.
+//! @brief Returns a vector to store the dbTags
+//! of the class members.
 XC::DbTagData &XC::LoadLoader::getDbTagData(void) const
   {
     static DbTagData retval(4);

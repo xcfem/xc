@@ -477,7 +477,7 @@ bool XC::Domain::removeNodalLoad(int nodalLoadTag, int loadPattern)
 
 
 //! @brief Removes from domain the elemental load being passed as parameter.
-//! @param elemLoadTag: Identifier de the load over elements a eliminar.
+//! @param elemLoadTag: Identifier of the load over elements a eliminar.
 //! @param loadPattern: Load pattern identifier.
 bool XC::Domain::removeElementalLoad(int elemLoadTag, int loadPattern)
   { return constraints.removeElementalLoad(elemLoadTag,loadPattern); }
@@ -887,7 +887,7 @@ int XC::Domain::buildEleGraph(Graph &theEleGraph)
 int XC::Domain::buildNodeGraph(Graph &theNodeGraph)
   { return mesh.buildNodeGraph(theNodeGraph); }
 
-//! @brief Returns a vector para almacenar los dbTags
+//! @brief Returns a vector to store the dbTags
 //! de los miembros of the clase.
 XC::DbTagData &XC::Domain::getDbTagData(void) const
   {

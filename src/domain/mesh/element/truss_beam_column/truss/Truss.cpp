@@ -626,7 +626,7 @@ const XC::Vector &XC::Truss::getResistingForceIncInertia(void) const
     this->getResistingForce();
 
     const double rho= getRho();
-    // now include the mass portion
+    // now incluof the mass portion
     if(L != 0.0 && rho != 0.0)
       {
 
@@ -656,8 +656,8 @@ const XC::Vector &XC::Truss::getResistingForceIncInertia(void) const
     return *theVector;
   }
 
-//! @brief Returns a vector para almacenar los dbTags
-//! de los miembros de la clase.
+//! @brief Returns a vector to store the dbTags
+//! of the class members.
 XC::DbTagData &XC::Truss::getDbTagData(void) const
   {
     static DbTagData retval(28);

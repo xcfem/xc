@@ -250,8 +250,8 @@ std::ostream &XC::operator<<(std::ostream &os,const XC::NodePtrsWithIDs &nodePtr
     return os;
   }
 
-//! @brief Returns a vector para almacenar los dbTags
-//! de los miembros de la clase.
+//! @brief Returns a vector to store the dbTags
+//! of the class members.
 XC::DbTagData &XC::NodePtrsWithIDs::getDbTagData(void) const
   {
     static DbTagData retval(1);

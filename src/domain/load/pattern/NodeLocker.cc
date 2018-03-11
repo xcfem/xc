@@ -229,7 +229,7 @@ void XC::NodeLocker::applyLoad(const double &pseudoTime,const double &factor)
       sp->applyConstraint(factor);
   }
 
-//! @brief Returns a vector para almacenar los dbTags
+//! @brief Returns a vector to store the dbTags
 //! de los miembros of the clase.
 XC::DbTagData &XC::NodeLocker::getDbTagData(void) const
   {

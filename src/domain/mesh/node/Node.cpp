@@ -620,7 +620,7 @@ Pos3d XC::Node::getCurrentPosition3d(const double &factor) const
   }
 
 //! @brief Returns true if the current position of the node scaled by
-//! factor: return initPos+ factor * nodDisplacement lies inside the
+//! factor: return initPos+ factor * nodDisplacement lies insiof the
 //! geometric object.
 bool XC::Node::In(const GeomObj3d &geomObj,const double &factor, const double &tol) const
   {
@@ -629,7 +629,7 @@ bool XC::Node::In(const GeomObj3d &geomObj,const double &factor, const double &t
   }
 
 //! @brief Returns true if the current position of the node scaled by
-//! factor: return initPos+ factor * nodDisplacement lies inside the
+//! factor: return initPos+ factor * nodDisplacement lies insiof the
 //! geometric object.
 bool XC::Node::In(const GeomObj2d &geomObj,const double &factor, const double &tol) const
   {
@@ -638,7 +638,7 @@ bool XC::Node::In(const GeomObj2d &geomObj,const double &factor, const double &t
   }
 
 //! @brief Returns true if the current position of the node scaled by
-//! factor: return initPos+ factor * nodDisplacement lies outside the
+//! factor: return initPos+ factor * nodDisplacement lies outsiof the
 //! geometric object.
 bool XC::Node::Out(const GeomObj3d &geomObj,const double &factor, const double &tol) const
   {
@@ -647,7 +647,7 @@ bool XC::Node::Out(const GeomObj3d &geomObj,const double &factor, const double &
   }
 
 //! @brief Returns true if the current position of the node scaled by
-//! factor: return initPos+ factor * nodDisplacement lies outside the
+//! factor: return initPos+ factor * nodDisplacement lies outsiof the
 //! geometric object.
 bool XC::Node::Out(const GeomObj2d &geomObj,const double &factor, const double &tol) const
   {
@@ -1627,7 +1627,7 @@ XC::Vector XC::Node::getMaxModalAccelerationForDOFs(int mode,const double &accel
   }
 
 
-//! @brief Returns a vector para almacenar los dbTags
+//! @brief Returns a vector to store the dbTags
 //! de los miembros of the clase.
 XC::DbTagData &XC::Node::getDbTagData(void) const
   {

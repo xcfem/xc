@@ -172,8 +172,8 @@ const XC::Vector &XC::SmallDispCrdTransf2d::getPointGlobalDisplFromBasic(double 
     
     return uxg;
   }
-//! @brief Returns a vector para almacenar los dbTags
-//! de los miembros de la clase.
+//! @brief Returns a vector to store the dbTags
+//! of the class members.
 XC::DbTagData &XC::SmallDispCrdTransf2d::getDbTagData(void) const
   {
     static DbTagData retval(10);

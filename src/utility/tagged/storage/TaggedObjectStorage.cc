@@ -133,8 +133,8 @@ const XC::ID &XC::TaggedObjectStorage::getObjTags(void) const
     return retval;
   }
 
-//! @brief Returns a vector para almacenar los dbTags
-//! de los miembros de la clase.
+//! @brief Returns a vector to store the dbTags
+//! of the class members.
 XC::DbTagData &XC::TaggedObjectStorage::getDbTagData(void) const
   {
     static DbTagData retval(5);

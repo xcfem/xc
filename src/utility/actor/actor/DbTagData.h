@@ -39,7 +39,7 @@ class CommMetaData;
 
 //! @ingroup IPComm
 //
-//! @brief Vector que almacena los dbTags de los miembros de la clase.
+//! @brief Vector that stores the dbTags of the class members.
 class DbTagData
   {
   private:

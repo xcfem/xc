@@ -278,7 +278,7 @@ int XC::NodeVectors::createData(const size_t &nDOF)
       }
   }
 
-//! @brief Returns a vector para almacenar los dbTags
+//! @brief Returns a vector to store the dbTags
 //! de los miembros of the clase.
 XC::DbTagData &XC::NodeVectors::getDbTagData(void) const
   {

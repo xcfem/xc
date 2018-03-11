@@ -990,8 +990,8 @@ XC::Matrix XC::ShellNL::transpose( int dim1,int dim2,const Matrix &M )
     return Mtran;
   }
 
-//! @brief Returns a vector para almacenar los dbTags
-//! de los miembros de la clase.
+//! @brief Returns a vector to store the dbTags
+//! of the class members.
 XC::DbTagData &XC::ShellNL::getDbTagData(void) const
   {
     static DbTagData retval(19);

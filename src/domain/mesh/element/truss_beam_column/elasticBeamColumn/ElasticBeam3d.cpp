@@ -616,8 +616,8 @@ const XC::Vector &XC::ElasticBeam3d::getVDirWeakAxisGlobalCoord(bool initialGeom
       }
   }
 
-//! @brief Returns a vector para almacenar los dbTags
-//! de los miembros de la clase.
+//! @brief Returns a vector to store the dbTags
+//! of the class members.
 XC::DbTagData &XC::ElasticBeam3d::getDbTagData(void) const
   {
     static DbTagData retval(17);

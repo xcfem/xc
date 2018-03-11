@@ -46,8 +46,8 @@ XC::MovableVector::MovableVector(const Vector &v)
 void XC::MovableVector::setVector(const Vector &v)
   { Vector::operator=(v); }
 
-//! @brief Returns a vector para almacenar los dbTags
-//! de los miembros de la clase.
+//! @brief Returns a vector to store the dbTags
+//! of the class members.
 XC::DbTagData &XC::MovableVector::getDbTagData(void) const
   {
     static DbTagData retval(2);

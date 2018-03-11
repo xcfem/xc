@@ -62,7 +62,7 @@ int XC::CorotShellMITC4::update(void)
     return 0;
   }
 
-//! @brief Returns a vector para almacenar los dbTags
+//! @brief Returns a vector to store the dbTags
 //! de los miembros of the clase.
 XC::DbTagData &XC::CorotShellMITC4::getDbTagData(void) const
   {

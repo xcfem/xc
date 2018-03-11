@@ -995,7 +995,7 @@ int XC::Mesh::buildNodeGraph(Graph &theNodeGraph)
     return 0;
   }
 
-//! @brief Returns a vector para almacenar los dbTags
+//! @brief Returns a vector to store the dbTags
 //! de los miembros of the clase.
 XC::DbTagData &XC::Mesh::getDbTagData(void) const
   {

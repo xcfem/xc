@@ -473,7 +473,7 @@ void XC::SetMeshComp::sel_nodes_from_list(const ID &tags)
       }
   }
 
-//! @brief Return a new set that contains the nodes that lie inside the
+//! @brief Return a new set that contains the nodes that lie insiof the
 //! geometric object.
 //!
 //! @param newSetName: name for the new set.
@@ -516,7 +516,7 @@ void XC::SetMeshComp::sel_elements_from_list(const ID &tags)
       }
   }
 
-//! @brief Return a new set that contains the elements that lie inside the
+//! @brief Return a new set that contains the elements that lie insiof the
 //! geometric object.
 //!
 //! @param newSetName: name for the new set.
@@ -594,8 +594,8 @@ void XC::SetMeshComp::sel_constraints_from_list(const ID &tags)
       }
   }
 
-//! @brief Returns a vector para almacenar los dbTags
-//! de los miembros de la clase.
+//! @brief Returns a vector to store the dbTags
+//! of the class members.
 XC::DbTagData &XC::SetMeshComp::getDbTagData(void) const
   {
     static DbTagData retval(19);

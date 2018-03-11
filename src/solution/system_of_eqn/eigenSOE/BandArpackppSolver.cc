@@ -116,7 +116,7 @@ int XC::BandArpackppSolver::solve(int nModes)
             dprob.FindEigenvectors();
 
             //dprob.NoTrace();
-            // Almacenamos la solucion.
+            // Store the solution.
             const size_t nconv= dprob.ConvergedEigenvalues();
             if(nconv>0)
               {

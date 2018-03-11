@@ -184,8 +184,8 @@ int XC::DamageModelVector::revertToStart(void)
     return retVal;
   }
 
-//! @brief Returns a vector para almacenar los dbTags
-//! de los miembros de la clase.
+//! @brief Returns a vector to store the dbTags
+//! of the class members.
 XC::DbTagData &XC::DamageModelVector::getDbTagData(void) const
   {
     static DbTagData retval(2);
