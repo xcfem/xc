@@ -73,7 +73,13 @@ class Renderer;
 class Information;
 class Preprocessor;
 
-//! @brief Base class for domain components (nodes, elements, loads,...).
+//! @brief Base class for domain components (nodes, elements, constraints,
+//! loads,...).
+//!
+//! Base class for the different components of a domain.
+//! Each object of these types is a component of an enclosing Domain object.
+//! The DomainComponent class provides methods to set and retrieve a pointer
+//! to the enclosing domain object.
 class DomainComponent: public TaggedObject, public MovableObject
   {
   private:    
@@ -93,7 +99,7 @@ class DomainComponent: public TaggedObject, public MovableObject
     const Preprocessor *getPreprocessor(void) const;
     Preprocessor *getPreprocessor(void);
 
-    void set_indice(const size_t &i);
+    void set_index(const size_t &i);
 
   };
 } // end of XC namespace

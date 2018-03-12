@@ -68,6 +68,14 @@
 #include "domain/mesh/element/Element.h"
 
 //! @brief Constructor.
+//!
+//! Constructs a DomainComponent. The tag of a component is some unique
+//! means of identifying the component among like components, i.e. the tag of
+//! a node would be its unique node number.
+//! No domain is associated with the object.
+//!
+//! @param tag: object identifier.
+//! @param classTag: class identifier.
 XC::DomainComponent::DomainComponent(int tag, int classTag)
   :TaggedObject(tag), MovableObject(classTag), theDomain(nullptr), idx(0)
   {}
@@ -76,16 +84,25 @@ XC::DomainComponent::DomainComponent(int tag, int classTag)
 XC::DomainComponent::~DomainComponent(void)
   { setDomain(nullptr); }
 
-//! @brief Sets the pointer to the domain. 
+//! @brief Sets the pointer to the domain.
+//!
+//! Sets the encompassing domain of the component to that given by {\em
+//! theDomain}. This method is invoked by \p theDomain when the component is
+//! being added to the domain, in an {\em addDomain..} invocation (see
+//! interface for Domain).
 void XC::DomainComponent::setDomain(Domain *model)
   { theDomain = model; }
 
 //! @brief Set the index for the object (see numera in Set). This index
 //! is used on VTK arrays.
-void XC::DomainComponent::set_indice(const size_t &i)
+void XC::DomainComponent::set_index(const size_t &i)
   { idx= i; }
 
-//! @brief Returns a pointer to the domain.
+//! @brief Returns a pointer to the enclosing domain.
+//! 
+//! Returns a pointer to the Domain to which the component was added,
+//! or \f$0\f$ if the setDomain() command was never called on the
+//! object.
 XC::Domain *XC::DomainComponent::getDomain(void) const
   { return theDomain; }
 
@@ -98,7 +115,7 @@ const XC::Preprocessor *XC::DomainComponent::getPreprocessor(void) const
     return retval;
   }
 
-//! @brief Returns (if possible) a pointer to the preprocessor.
+//! @brief Return (if possible) a pointer to the preprocessor.
 XC::Preprocessor *XC::DomainComponent::getPreprocessor(void)
   {
     Preprocessor *retval= nullptr;
@@ -115,7 +132,7 @@ int XC::DomainComponent::sendData(CommParameters &cp)
     return res;
   }
 
-//! @brief Receives object members through the channel being passed as parameter.
+//! @brief Receive object members through the channel being passed as parameter.
 int XC::DomainComponent::recvData(const CommParameters &cp)
   {
     setTag(getDbTagDataPos(0));
