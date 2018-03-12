@@ -137,7 +137,7 @@ void XC::DqPtrsElem::numera(void)
     for(iterator i= begin();i!=end();i++,idx++)
       {
 	Element *ptr= *i;
-        ptr->set_indice(idx);
+        ptr->set_index(idx);
       }
   }
 

@@ -159,7 +159,7 @@ void XC::DqPtrsNode::numera(void)
     for(iterator i= begin();i!=end();i++,idx++)
       {
 	Node *ptr= *i;
-        ptr->set_indice(idx);
+        ptr->set_index(idx);
       }
   }
 

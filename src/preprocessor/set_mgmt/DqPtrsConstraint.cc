@@ -98,7 +98,7 @@ void XC::DqPtrsConstraint::numera(void)
     for(iterator i= begin();i!=end();i++,idx++)
       {
 	Constraint *ptr= *i;
-        ptr->set_indice(idx);
+        ptr->set_index(idx);
       }
   }
 

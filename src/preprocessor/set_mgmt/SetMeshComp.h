@@ -242,7 +242,7 @@ void XC::SetMeshComp::numera_lista(L &l)
     for(iterator i= l.begin();i!=l.end();i++,idx++)
       {
 	reference ptr= *i;
-        ptr->set_indice(idx);
+        ptr->set_index(idx);
       }
   }
 

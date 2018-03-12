@@ -73,7 +73,7 @@ XC::EntMdlr &XC::EntMdlr::operator=(const EntMdlr &otro)
 
 //! @brief Assigns the objects index for its use in
 //! VTK arrays(see numera in Set).
-void XC::EntMdlr::set_indice(const size_t &i)
+void XC::EntMdlr::set_index(const size_t &i)
   { idx= i; }
 
 //! @brief Interfaz con VTK.

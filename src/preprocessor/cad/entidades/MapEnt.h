@@ -119,7 +119,7 @@ void MapEnt<T>::numera(void)
     for(iterator i= this->begin();i!=this->end();i++,idx++)
       {
         EntMdlr *ptr= (*i).second;
-        ptr->set_indice(idx);
+        ptr->set_index(idx);
       }
   }
 

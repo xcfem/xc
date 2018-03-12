@@ -77,7 +77,7 @@ class EntMdlr: public SetEstruct
     EntMdlr(const EntMdlr &otro);
     EntMdlr &operator=(const EntMdlr &otro);
 
-    virtual void set_indice(const size_t &i);
+    virtual void set_index(const size_t &i);
     //! @brief Returns the index of the object for it use in VTK arrays.
     inline size_t getIdx(void) const
       { return idx; }
