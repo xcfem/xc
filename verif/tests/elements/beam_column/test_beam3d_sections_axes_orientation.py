@@ -83,10 +83,11 @@ fi16s75r30=defSimpleRCSection.MainReinfLayer(rebarsDiam=16e-3,areaRebar= areaFi1
 #reinforcement directions of a slab or the front and back ending sections
 #of a beam element
 beamRCsect=defSimpleRCSection.RecordRCSlabBeamSection(name='beamRCsect',sectionDescr='beam section',concrType=concrete, reinfSteelType=reinfSteel,width=wbeam,depth=hbeam)
-beamRCsect.lstRCSects[0].positvRebarRows=[fi10s75r30]
-beamRCsect.lstRCSects[0].negatvRebarRows=[fi16s75r30]
-beamRCsect.lstRCSects[1].positvRebarRows=[fi10s75r30]
-beamRCsect.lstRCSects[1].negatvRebarRows=[fi16s75r30]
+beamRCsect.dir1PositvRebarRows=[fi10s75r30]
+beamRCsect.dir1NegatvRebarRows=[fi16s75r30]
+beamRCsect.dir2PositvRebarRows=[fi10s75r30]
+beamRCsect.dir2NegatvRebarRows=[fi16s75r30]
+beamRCsect.creaTwoSections()
 sections.append(beamRCsect)
 
 feProblem= xc.FEProblem()
