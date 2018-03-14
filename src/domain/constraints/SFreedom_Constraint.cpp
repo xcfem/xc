@@ -69,21 +69,35 @@
 #include "vtkCellType.h"
 
 //! @brief Default constructor.
+//! 
+//! Provided for the FEM\_ObjectBroker to be able to instantiate an
+//! object; the data for this object will be read from a Channel object
+//! when recvSelf() is invoked.
+//!
+//! @param classTag: class identifier.
 XC::SFreedom_Constraint::SFreedom_Constraint(int classTag)
   : Constraint(classTag), dofNumber(0), valueR(0.0), valueC(0.0), isConstant(true), loadPatternTag(-1) {}
 
 //! @brief Constructor.
+//!
 //! @param tag: Constraint identifier.
 //! @param nodeTag: identifier of the node to constraint tag.
 XC::SFreedom_Constraint::SFreedom_Constraint(int tag, int nodeTag)
-  : Constraint(tag, nodeTag,CNSTRNT_TAG_SFreedom_Constraint),dofNumber(0), valueR(0.0), valueC(0.0),
+  : Constraint(tag, nodeTag,CNSTRNT_TAG_SFreedom_Constraint), dofNumber(0), valueR(0.0), valueC(0.0),
     isConstant(true), loadPatternTag(-1) {}
 
-// constructor for a subclass to use
-//! @brief Constructor.
+//! @brief Constructor for a subclass to use.
+//! 
+//! Provided for subclasses to use. The subclasses can vary the value of the
+//! imposed displacement when getValue() is invoked. If this
+//! constructor is used the isHomogeneous() method will always
+//! return \p false. The integer value \p tag is used to identify
+//! the SFreedom\_Constraint among all other SFreedom\_Constraints.
+//!
 //! @param tag: Constraint identifier.
 //! @param nodeTag: identifier of the node to constraint.
 //! @param ndof: DOF number to constraint.
+//! @param classTag: class identifier.
 XC::SFreedom_Constraint::SFreedom_Constraint(int tag, int nodeTag, int ndof, int classTag)
   :Constraint(tag, nodeTag,classTag), dofNumber(ndof), valueR(0.0), valueC(0.0), isConstant(true), 
    loadPatternTag(-1)
@@ -92,8 +106,15 @@ XC::SFreedom_Constraint::SFreedom_Constraint(int tag, int nodeTag, int ndof, int
  // not be used if it is a homogeneous constraint.
   {}
 
-// constructor for object of type XC::SFreedom_Constraint
 //! @brief Constructor.
+//!
+//! To construct a single point constraint to constrain the trial
+//! displacement of the \p ndof'th dof at node \p node to the value
+//! given by \p value. The integer value \p tag is used to identify
+//! the SFreedom\_Constraint among all other SFreedom\_Constraints. If
+//! \p value is equal to \f$0.0\f$ the method isHomogeneous() will
+//! always return \p true, otherwise \p false. 
+//!
 //! @param tag: Constraint identifier.
 //! @param nodeTag: identifier of the node to constraint.
 //! @param ndof: DOF number to constraint.
@@ -107,7 +128,8 @@ XC::SFreedom_Constraint::SFreedom_Constraint(int tag, int nodeTag, int ndof, dou
 XC::SFreedom_Constraint *XC::SFreedom_Constraint::getCopy(void) const
   { return new SFreedom_Constraint(*this); }
 
-//! @brief Returns a copy of the contraint with a different tag, it's used in ConstraintLoader::addSFreedom_Constraint(nodeTag,seed).
+//! @brief Returns a copy of the contraint with a different tag,
+//! it's used in ConstraintLoader::addSFreedom_Constraint(nodeTag,seed).
 XC::SFreedom_Constraint *XC::SFreedom_Constraint::getCopy(const int &spTag) const
   { 
     SFreedom_Constraint *retval= new SFreedom_Constraint(*this);
@@ -120,12 +142,21 @@ int XC::SFreedom_Constraint::getDOF_Number(void) const
   { return dofNumber; }
 
 
-//! @brief Returns the value of the desplazamiento impuesto.
+//! @brief Returns the value of the prescribed displacement.
+//! 
+//! To return the value of the constraint determined in the last call to
+//! applyConstraint(). This base class returns \p value passed in
+//! the constructor. 
 double XC::SFreedom_Constraint::getValue(void) const
   { return valueC; }
 
 //! @brief Applies the constraint with the load factor
 //! being passed as parameter.
+//!
+//! To set the value of the constraint for the load factor given by {\em
+//! loadFactor}. The constraint is set equal to \p loadFactor * {\em
+//! value} if the constraint is not constant, or \p value if the
+//! constraint was identified as constant in the constructor.
 int XC::SFreedom_Constraint::applyConstraint(double loadFactor)
   {
     // as SFreedom_Constraint objects are time invariant nothing is done
@@ -136,6 +167,12 @@ int XC::SFreedom_Constraint::applyConstraint(double loadFactor)
 
 //! @brief Returns true if it's an homogeneous constraint
 //! (prescribed value for the DOF is zero).
+//!
+//! To return a boolean indicating whether or not the constraint is a
+//! homogeneous constraint. A homogeneous constraint is one where the value
+//! of the constraint, \p value, is always \f$0\f$. This information can be
+//! used by the ConstraintHandler to reduce the number of equations in the
+//! system.
 bool XC::SFreedom_Constraint::isHomogeneous(void) const
   {
     if(valueR == 0.0)
@@ -145,17 +182,16 @@ bool XC::SFreedom_Constraint::isHomogeneous(void) const
   }
 
 //! @brief Sets the load pattern tag for the constraint.
+//!
 //! @param tag: load pattern identifier.
 void XC::SFreedom_Constraint::setLoadPatternTag(int tag)
   { loadPatternTag = tag; }
 
-//! @brief Returns the load pattern tag of the constraint.
-//! @param tag: load pattern identifier.
+//! @brief Return the load pattern tag of the constraint.
 int XC::SFreedom_Constraint::getLoadPatternTag(void) const
   { return loadPatternTag;  }
 
-//! @brief Returns a vector to store the dbTags
-//! de los miembros of the clase.
+//! @brief Returns a vector to store the dbTags of the object members.
 XC::DbTagData &XC::SFreedom_Constraint::getDbTagData(void) const
   {
     static DbTagData retval(7);
@@ -190,7 +226,8 @@ int XC::SFreedom_Constraint::sendSelf(CommParameters &cp)
     const int dbTag= getDbTag();
     result+= cp.sendIdData(getDbTagData(),dbTag);
     if(result < 0)
-      std::cerr << "SFreedom_Constraint::sendSelf() - failed to send extra data\n";
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; failed to send extra data.\n";
     return result;
   }
 
@@ -201,7 +238,8 @@ int XC::SFreedom_Constraint::recvSelf(const CommParameters &cp)
     const int dataTag= getDbTag();
     int res= cp.receiveIdData(getDbTagData(),dataTag);
     if(res<0)
-      std::cerr << "SFreedom_Constraint::recvSelf() - data could not be received\n" ;
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; data could not be received.\n" ;
     else
       res+= recvData(cp);
     return res;

@@ -76,6 +76,11 @@ namespace XC {
 //! @ingroup CContSP
 //
 //! @brief Single freedom constraint.
+//!
+//! An SFreedom\_Constraint represents a single degree of freedom constraint in
+//! the domain. A single point constraint specifies the response of a particular
+//! degree-of-freedom at a node. The declaration that all methods are
+//! virtual allows for time varying constraints to be introduced.
 class SFreedom_Constraint: public Constraint
   {
   protected:
