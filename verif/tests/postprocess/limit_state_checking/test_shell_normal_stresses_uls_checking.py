@@ -49,10 +49,11 @@ sepL= 1.0/numReinfBarsL
 sections= reinfConcreteSections.sectionDefinition
 
 deckSections= defSimpleRCSection.RecordRCSlabBeamSection("deck","RC deck.",concrete, reinfSteel,0.3)
-deckSections.lstRCSects[1].positvRebarRows= [defSimpleRCSection.MainReinfLayer(rebarsDiam=12e-3,areaRebar=areaFi12,rebarsSpacing=sepT,nominalCover=basicCover)]
-deckSections.lstRCSects[1].negatvRebarRows= [defSimpleRCSection.MainReinfLayer(rebarsDiam=12e-3,areaRebar=areaFi12,rebarsSpacing=sepT,nominalCover=basicCover)]
-deckSections.lstRCSects[0].positvRebarRows= [defSimpleRCSection.MainReinfLayer(rebarsDiam=20e-3,areaRebar=areaFi20,rebarsSpacing=sepL,nominalCover=basicCover+12e-3)]
-deckSections.lstRCSects[0].negatvRebarRows= [defSimpleRCSection.MainReinfLayer(rebarsDiam=20e-3,areaRebar=areaFi20,rebarsSpacing=sepL,nominalCover=basicCover+12e-3)]
+deckSections.dir2PositvRebarRows= [defSimpleRCSection.MainReinfLayer(rebarsDiam=12e-3,areaRebar=areaFi12,rebarsSpacing=sepT,nominalCover=basicCover)]
+deckSections.dir2NegatvRebarRows= [defSimpleRCSection.MainReinfLayer(rebarsDiam=12e-3,areaRebar=areaFi12,rebarsSpacing=sepT,nominalCover=basicCover)]
+deckSections.dir1PositvRebarRows= [defSimpleRCSection.MainReinfLayer(rebarsDiam=20e-3,areaRebar=areaFi20,rebarsSpacing=sepL,nominalCover=basicCover+12e-3)]
+deckSections.dir1NegatvRebarRows= [defSimpleRCSection.MainReinfLayer(rebarsDiam=20e-3,areaRebar=areaFi20,rebarsSpacing=sepL,nominalCover=basicCover+12e-3)]
+deckSections.creaTwoSections()
 sections.append(deckSections)
 
 
