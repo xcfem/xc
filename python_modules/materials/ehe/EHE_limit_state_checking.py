@@ -871,8 +871,15 @@ class ShearController(lscb.LimitStateControllerBase):
 
 
   def check(self,elements,nmbComb):
-    ''' Check section shear strength.
-       XXX Rebar orientation not taken into account yet.
+    ''' For each element in the set 'elememts' passed as first parameter and 
+    the resulting internal forces for the load combination 'nmbComb'  
+    passed as second parameter, this method calculates all the variables 
+    involved in the shear checking and obtains the capacity factor.
+    In the case that the calculated capacity factor is smaller than the 
+    smallest obtained for the element in previous load combinations, this value
+    is saved in the element results record.  
+
+    XXX Rebar orientation not taken into account yet.
     '''
     lmsg.log("Postprocessing combination: "+nmbComb)
     secHAParamsTorsion= None # XXX Ignore torsional deformation.
