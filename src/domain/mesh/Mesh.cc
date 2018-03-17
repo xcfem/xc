@@ -132,9 +132,9 @@ XC::Mesh::Mesh(EntCmd *owr,TaggedObjectStorage &theNodesStorage,TaggedObjectStor
     if(!check_containers()) exit(-1);
 
     // check that the containers are empty
-    if(theElements->getNumComponents() != 0 ||
-       theNodes->getNumComponents() != 0 )
-      { std::cerr << ("Mesh::Mesh(&, & ...) - out of memory\n"); }
+    if(theElements->getNumComponents()!=0 || theNodes->getNumComponents()!=0)
+       std::cerr << getClassName() << "::" << __FUNCTION__
+		 << "(&, & ...) - out of memory.\n";
     init_bounds();
     tagNodeCheckReactionException= -1;
   }
@@ -244,7 +244,7 @@ bool XC::Mesh::addElement(Element *element)
       {
         std::clog << getClassName() << "::" << __FUNCTION__
 		  << "; element with tag " << eleTag
-		  << " already exists in model\n";
+		  << " already exists in model.\n";
         return false;
       }
 
@@ -256,7 +256,7 @@ bool XC::Mesh::addElement(Element *element)
     else
       std::cerr << getClassName() << "::" << __FUNCTION__
 		<< "; element " << eleTag
-		<< " could not be added to container\n";
+		<< " could not be added to container.\n";
     return result;
   }
 
@@ -328,7 +328,7 @@ bool XC::Mesh::addNode(Node * node)
       {
         std::clog << getClassName() << "::" << __FUNCTION__
 	          << "; node with tag " << nodTag
-		  << " already exists in model\n";
+		  << " already exists in model.\n";
         return false;
       }
     bool result= theNodes->addComponent(node);
@@ -337,12 +337,21 @@ bool XC::Mesh::addNode(Node * node)
     else
       std::cerr << getClassName() << "::" << __FUNCTION__
 	        << "; node with tag " << nodTag
-		<< " could not be added to container\n";
+		<< " could not be added to container.\n";
     return result;
   }
 
 
 //! @brief Deletes the element identified by the tag being passed as parameter.
+//!
+//! To remove the element whose tag is given by \p tag from the
+//! mesh. This is achieved by invoking {\em removeComponent(tag)} on the
+//! container for the elements. 
+//! Returns \f$0\f$ if no such element exists in the domain. Otherwise 
+//! the domain invokes {\em setDomain(nullptr)} on the element (using a cast to
+//! go from a TaggedObject to an Element, which is safe as only an
+//! Element objects are added to this container) and {\em
+//! domainChange()} on itself before a pointer to the element is returned. 
 bool XC::Mesh::removeElement(int tag)
   {
     // remove the object from the container
@@ -355,13 +364,19 @@ bool XC::Mesh::removeElement(int tag)
         Element *elem= dom->getElement(tag);
         if(elem) kdtreeElements.erase(*elem);
 
-        dom->domainChange(); //mark the mesh as having changed
+        dom->domainChange(); //mark the domain as having changed
       }
     return res;
   }
 
-//! @brief Removes from domain the node identified by
-//! the tag being passed as parameter.
+//! @brief Remove from mesh the node identified by the argument.
+//!
+//! To remove the node whose tag is given by \p tag from the domain. 
+//! This is achieved ty by invoking {\em removeComponent(tag)} on the container
+//! for the nodes. 
+//! Returns \f$0\f$ if no such node exists in the domain. If the node is to be
+//! removed the domain invokes {\em setDomain(nullptr)} on the node and {\em
+//! domainChange()} on itself before a pointer to the Node is returned. 
 bool XC::Mesh::removeNode(int tag)
   {
 
@@ -503,7 +518,8 @@ void XC::Mesh::freeze_dead_nodes(const std::string &nmbLocker)
         getDomain()->addNodeLocker(locker);
       }
     else
-      std::cerr << "Mesh::freeze_dead_nodes; can't find locker: '"
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; can't find locker: '"
 		<< nmbLocker << "'\n";
   }
 
@@ -522,7 +538,8 @@ void XC::Mesh::melt_alive_nodes(const std::string &nmbLocker)
         lockers.borraNodeLocker(nmbLocker);
       }
     else
-      std::cerr << "Mesh::freeze_dead_nodes; can't find locker: '"
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; can't find locker: '"
 		<< nmbLocker << "'\n";
   }
 
@@ -624,11 +641,25 @@ size_t XC::Mesh::getNumFreeNodes(void) const
     return retval;
   }
 
-//! @brief Returns the BND del modelo.
+//! @brief Returns the boundary of the finite element model.
+//!
+//! To return the bounding rectangle for the mesh. The information is
+//! contained in a Vector of size 6 containing in the following order
+//! \{xmin, ymin, zmin, xmax, ymax, zmax\}. This information is built up
+//! as nodes are added to the domain, initially all are set to \f$0\f$ in the
+//! constructor. 
 const XC::Vector &XC::Mesh::getPhysicalBounds(void)
   { return theBounds; }
 
-//! @brief Builds the elements graph of the mesh (if not builded yet) and returns a reference to it.
+//! @brief Builds the elements graph of the mesh (if not builded yet) and
+//! returns a reference to it.
+//! 
+//! Returns the current element graph (the connectivity of the elements
+//! in the mesh). If the \p eleChangeFlag has been set
+//! to \p true the method will invoke {\em buildEleGraph(theEleGraph)}
+//! on itself before returning the graph. The vertices in the element
+//! graph are to be labeled \f$0\f$ through \f$numEle-1\f$. The vertices
+//! references contain the elemental tags.  
 XC::Graph &XC::Mesh::getElementGraph(void)
   {
     if(!eleGraphBuiltFlag)
@@ -640,7 +671,8 @@ XC::Graph &XC::Mesh::getElementGraph(void)
         if(this->buildEleGraph(theElementGraph) == 0)
           eleGraphBuiltFlag = true;
         else
-          std::cerr << "Mesh::getElementGraph() - failed to build the element graph\n";
+          std::cerr << getClassName() << "::" << __FUNCTION__
+		    << "; failed to build the element graph.\n";
       }
     // return the Graph
     return theElementGraph;
@@ -649,6 +681,13 @@ XC::Graph &XC::Mesh::getElementGraph(void)
 
 //! @brief Builds (if needed) the graph of the domain nodes and
 //! returns a reference to it.
+//!
+//! Returns the current node graph (the connectivity of the nodes in
+//! the domain). If the \p nodeChangeFlag has been set to \p true the
+//! will invoke {\em buildNodeGraph(theNodeGraph)} on itself before
+//! returning the graph. The vertices in the node graph are to be labeled
+//! \f$0\f$ through \f$numNode-1\f$. The Vertices references contain the nodal
+//! tags.
 XC::Graph &XC::Mesh::getNodeGraph(void)
   {
     if(!nodeGraphBuiltFlag)
@@ -659,7 +698,8 @@ XC::Graph &XC::Mesh::getNodeGraph(void)
         if(this->buildNodeGraph(theNodeGraph) == 0)
             nodeGraphBuiltFlag = true;
         else
-            std::cerr << "Mesh::getNodeGraph() - failed to build the node graph\n";
+            std::cerr << getClassName() << "::" << __FUNCTION__
+		      << "; failed to build the node graph.\n";
       }
     // return the XC::Graph
     return theNodeGraph;
@@ -786,6 +826,9 @@ int XC::Mesh::revertToStart(void)
   }
 
 //! @brief Update the element's state.
+//! 
+//! Called by the domain to update the state of the
+//! mesh. Iterates over all the elements and invokes {\em update()}. 
 int XC::Mesh::update(void)
   {
     int ok = 0;
@@ -797,7 +840,8 @@ int XC::Mesh::update(void)
       { ok += theEle->update(); }
 
     if(ok != 0)
-      std::cerr << "XC::Mesh::update - mesh failed in update\n";
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; mesh failed in update.\n";
     return ok;
   }
 
@@ -814,7 +858,7 @@ void XC::Mesh::setGraphBuiltFlags(const bool &f)
 void XC::Mesh::Print(std::ostream &s, int flag)
   {
 
-    s << "Current Mesh Information\n";
+    s << "Current Mesh Information:\n";
 
     s << "\nNODE DATA: NumNodes: " << theNodes->getNumComponents() << "\n";
     theNodes->Print(s, flag);
@@ -830,6 +874,11 @@ std::ostream &XC::operator<<(std::ostream &s, Mesh &M)
   }
 
 //! @brief Builds the element's graph.
+//!
+//! A method which will cause the mesh to discard the current element
+//! graph and build a new one based on the element connectivity. Returns
+//! \f$0\f$ if successful otherwise \f$-1\f$ is returned along with an error
+//! message. 
 int XC::Mesh::buildEleGraph(Graph &theEleGraph)
   {
     int numVertex = this->getNumElements();
@@ -852,7 +901,9 @@ int XC::Mesh::buildEleGraph(Graph &theEleGraph)
 
     for(int j=0; j<=maxEleNum; j++)
       theElementTagVertices[j] = -1;
-    std::clog << "buildEleGraph numVertex maxEleNum " << numVertex << " " << maxEleNum << std::endl;
+    std::clog << getClassName() << "::" << __FUNCTION__
+	      << "; buildEleGraph numVertex maxEleNum " << numVertex
+	      << " " << maxEleNum << std::endl;
     // now create the vertices with a reference equal to the element number.
     // and a tag which ranges from 0 through numVertex-1
 
@@ -933,7 +984,12 @@ int XC::Mesh::buildEleGraph(Graph &theEleGraph)
     return 0;
   }
 
-//! @brief Construye el grafo de nodos.
+//! @brief Builds the node graph.
+//!
+//! A method which will cause the mesh to discard the current node
+//! graph and build a new one based on the node connectivity. Returns
+//! \f$0\f$ if successful otherwise \f$-1\f$ is returned along with an error
+//! message. 
 int XC::Mesh::buildNodeGraph(Graph &theNodeGraph)
   {
     int numVertex = this->getNumNodes();
@@ -1037,7 +1093,7 @@ int XC::Mesh::sendSelf(CommParameters &cp)
     res+= cp.sendIdData(getDbTagData(),dataTag);
     if(res<0)
       std::cerr << getClassName() << "::" << __FUNCTION__
-              << "; - ch failed to send data.\n";
+              << "; channel failed to send data.\n";
     return res;
   }
 
@@ -1050,7 +1106,7 @@ int XC::Mesh::recvSelf(const CommParameters &cp)
     int res= cp.receiveIdData(getDbTagData(),getDbTag());
     if(res<0)
       std::cerr << getClassName() << "::" << __FUNCTION__
-              << "; - ch failed to recv the initial ID\n";
+              << "; channel failed to recv the initial ID.\n";
     else
       res+= recvData(cp);
     return res;

@@ -115,6 +115,8 @@ void XC::Domain::free_mem(void)
 //!
 //! Constructs an empty domain. The storage for the DomainComponents uses
 //! ArrayOfTaggedObjects objects for each type of object to be stored.
+//!
+//! @param owr: object that contains this one.
 XC::Domain::Domain(EntCmd *owr,DataOutputHandler::map_output_handlers *oh)
   :ObjWithRecorders(owr,oh),timeTracker(),CallbackCommit(""), dbTag(0),
    currentGeoTag(0), hasDomainChangedFlag(false), commitTag(0),
@@ -125,18 +127,36 @@ XC::Domain::Domain(EntCmd *owr,DataOutputHandler::map_output_handlers *oh)
 //!
 //! Constructs an empty Domain. The initial sizes specified
 //! for these objects are no more needed (so ignored)
+//!
+//! @param owr: object that contains this one.
+//! @param numNodes: number of nodes.
+//! @param numElements: number of elements.
+//! @param numSPs: number of single freedom constraints.
+//! @param numMPs: number of multi-freedom constraintes.
+//! @param numLoadPatterns: number of load patterns.
+//! @param numNodeLockers: number of node lockers.
 XC::Domain::Domain(EntCmd *owr,int numNodes, int numElements, int numSPs, int numMPs, int numLoadPatterns,int numNodeLockers,DataOutputHandler::map_output_handlers *oh)
   :ObjWithRecorders(owr,oh),timeTracker(), CallbackCommit(""), dbTag(0),
    currentGeoTag(0), hasDomainChangedFlag(false), commitTag(0), mesh(this),
    constraints(this), theRegions(nullptr), nmbCombActual(""), lastChannel(0),
    lastGeoSendTag(-1) {}
 
-//! @brief Removes all components from domain (nodes, elements, loads & constraints).
+//! @brief Removes all components from domain (nodes, elements, loads &
+//! constraints).
+//! 
+//! To remove all the components from the model and invoke the destructor
+//! on these objects. First clearAll() is invoked on all the
+//! LoadPattern objects. Then the domain object invokes {\em
+//! clearAll()} on its container objects. In addition the destructor for
+//! each Recorder object that has been added to the domain is invoked. In
+//! addition the current time and load factor are set to \f$0\f$, and the box
+//! bounding the domain is set to the box enclosing the origin. 
+//!
 //! GENERAL NOTE ON REMOVAL OF COMPONENTS:
-//!   downward casts (while bad) are o.k. as only the type
-//!  of components can be added to the storage objects, e.g.
-//!  only elements can be added to theElements therefore
-//!  casting a XC::DomainComponent from theElements to an XC::Element is o.k.
+//! downward casts (while bad) are o.k. as only the type
+//! of components can be added to the storage objects, e.g.
+//! only elements can be added to theElements therefore
+//! casting a DomainComponent from theElements to an Element is o.k.
 void XC::Domain::clearAll(void)
   {
     constraints.clearAll();
@@ -200,9 +220,8 @@ bool XC::Domain::addNode(Node * node)
 //! To add the single point constraint pointed to by spConstraint to the
 //! domain. 
 //! In addition the container always checks to ensure that no other
-//! constraint with a similar tag exists in the domain. The
-//! domain then invokes setDomain(this) on the 
-//! constraint and domainChange() on itself. 
+//! constraint with a similar tag exists in the domain. The domain then invokes
+//! setDomain(this) on the constraint and domainChange() on itself. 
 bool XC::Domain::addSFreedom_Constraint(SFreedom_Constraint *spConstraint)
   {
     bool result= constraints.addSFreedom_Constraint(spConstraint);
@@ -214,7 +233,18 @@ bool XC::Domain::addSFreedom_Constraint(SFreedom_Constraint *spConstraint)
     return true;
   }
 
-//! @brief Adds to the domain una constraint multipunto.
+//! @brief Adds to the domain a multi-freedom constraint.
+//! 
+//! To add the multiple point constraint pointed to by theMPptr, to the
+//! domain.  
+//! In addition the domain always checks to ensure that no other
+//! MP\_Constraint with a similar tag exists in the domain. If the checks are
+//! successful, the constraint is added to domain by the domain invoking {\em
+//! addComponent(theMPptr)} on the container for the MP\_Constraints. The
+//! domain then invokes {\em setDomain(this)} on the 
+//! constraint and domainChange() on itself. The call returns {\em
+//! true} if the constraint was added, otherwise a warning is
+//! raised and \p false is returned.
 bool XC::Domain::addMFreedom_Constraint(MFreedom_Constraint *mpConstraint)
   {
     bool result= constraints.addMFreedom_Constraint(mpConstraint);
@@ -226,7 +256,7 @@ bool XC::Domain::addMFreedom_Constraint(MFreedom_Constraint *mpConstraint)
     return result;
   }
 
-//! @brief Adds to the domain una constraint multi retained node.
+//! @brief Adds to the domain a multi-freedom multi-retained node constraint.
 bool XC::Domain::addMRMFreedom_Constraint(MRMFreedom_Constraint *mrmpConstraint)
   {
     bool result= constraints.addMRMFreedom_Constraint(mrmpConstraint);
@@ -244,8 +274,9 @@ bool XC::Domain::addSFreedom_Constraint(SFreedom_Constraint *spConstraint, int p
     bool result= constraints.addSFreedom_Constraint(spConstraint,pattern);
     if(!result)
       {
-        std::cerr << "Domain::addSFreedom_Constraint - " << pattern
-                  << " pattern could not add the XC::SFreedom_Constraint\n";
+        std::cerr << getClassName() << "::" << __FUNCTION__
+	          << "; " << pattern
+                  << " pattern could not add the SFreedom_Constraint\n";
         return false;
       }
 
@@ -255,6 +286,19 @@ bool XC::Domain::addSFreedom_Constraint(SFreedom_Constraint *spConstraint, int p
   }
 
 //! @brief Appends a nodal load to the pattern being passed as parameter.
+//! 
+//! To add the nodal load \p theld to the LoadPattern in the domain
+//! whose tag is given by \p loadPatternTag.
+//! If {\em \_DEBUG} is defines, checks to see that corresponding node
+//! exists in the domain. A pointer to the LoadPattern is obtained from
+//! the LoadPattern container and the load is added to LoadPattern by
+//! invoking {\em addNodalLoad(theLd)} on the LoadPattern object. The
+//! domain is responsible for invoking {\em setDomain(this)} on the
+//! load. The call returns \p true if the load was added, a warning
+//! is raised and and {\em false} is returned. 
+//!
+//! @param load: load over node.
+//! @param pattern: load pattern identifier.
 bool XC::Domain::addNodalLoad(NodalLoad *load, int pattern)
   {
     bool result= constraints.addNodalLoad(load,pattern);
@@ -266,14 +310,30 @@ bool XC::Domain::addNodalLoad(NodalLoad *load, int pattern)
     return result;
   }
 
-//! @brief Adds to the caso being passed as parameter una load over elements.
+//! @brief Adds a load over element to the pattern.
+//! 
+//! To add the elemental load \p theld to the LoadPattern in the domain
+//! whose tag is given by \p loadPatternTag.
+//! If {\em \_DEBUG} is defines, checks to see that corresponding element
+//! exists in the domain. A pointer to the LoadPattern is obtained from
+//! the LoadPattern container and the load is added to LoadPattern by
+//! invoking {\em addElementalLoad(theLd)} on the LoadPattern object. The
+//! domain is responsible for invoking {\em setDomain(this)} on the
+//! load. The call returns \p true if the load was added, otherwise a warning
+//! is raised and and {\em false} is returned.
+//!
+//! @param load: load over element.
+//! @param pattern: load pattern identifier.
 bool XC::Domain::addElementalLoad(ElementalLoad *load, int pattern)
   {
     bool result= constraints.addElementalLoad(load,pattern);
     if(result == false)
       {
-        std::cerr << "Domain::addElementalLoad() - no pattern with tag " <<
-        pattern << " in  the model, not adding the ele load" << *load << std::endl;
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; no pattern with tag "
+		  << pattern
+		  << " in the model, not adding the ele load"
+		  << *load << std::endl;
         return false;
       }
 
@@ -282,14 +342,30 @@ bool XC::Domain::addElementalLoad(ElementalLoad *load, int pattern)
     return result;
   }
 
-//! @brief Clears the element identified by the tag being passed as parameter.
+//! @brief Remove the element identified by the argument.
 bool XC::Domain::removeElement(int tag)
   { return mesh.removeElement(tag); }
 
-//! @brief Elimina the node identified by the tag being passed as parameter.
+//! @brief Remove the node identified by the argument.
 bool XC::Domain::removeNode(int tag)
   { return mesh.removeNode(tag); }
 
+//! @brief Remove the single freedom constraint from the load pattern
+//! identified by the argument.
+//!
+//! To remove the SFreedom\_Constraint whose tag is given by \p tag from the
+//! domain. The domain achieves this by invoking {\em
+//! removeComponent(tag)} on the container for the single point
+//! constraints. Returns \f$0\f$ if the constraint was not in the domain,
+//! otherwise the domain invokes {\em setDomain(nullptr)} on the constraint and
+//! domainChange() on itself before a pointer to the constraint is
+//! returned. Note this will only remove SFreedom\_Constraints which have been
+//! added to the domain and not directly to LoadPatterns.
+//!
+//! @param theNode: node identifier.
+//! @param theDOF: degree of freedom identifier.
+//! @param loadPatternTag: load pattern identifier (if -1 then remove from
+//! domain).
 bool XC::Domain::removeSFreedom_Constraint(int theNode, int theDOF, int loadPatternTag)
   {
     bool retval= constraints.removeSFreedom_Constraint(theNode,theDOF,loadPatternTag);
@@ -298,7 +374,10 @@ bool XC::Domain::removeSFreedom_Constraint(int theNode, int theDOF, int loadPatt
     return retval;
   }
 
-//! @brief Elimina del domain la constraint monopunto which tag being passed as parameter.
+//! @brief Removes from domain the single freedom constraint identified by the
+//! argument.
+//!
+//! @param tag: identifier of the single freedom constraint.
 bool XC::Domain::removeSFreedom_Constraint(int tag)
   {
     bool retval= constraints.removeSFreedom_Constraint(tag);
@@ -307,7 +386,18 @@ bool XC::Domain::removeSFreedom_Constraint(int tag)
     return retval;
   }
 
-//! @brief Elimina del domain la constraint multipunto which tag being passed as parameter.
+//! @brief Removes from domain the multi-freedom constraint identified by
+//! the argument.
+//!
+//! To remove the MP\_Constraint whose tag is given by \p tag from the
+//! domain. The domain achieves this by invoking {\em
+//! removeComponent(tag)} on the container for the multi point
+//! constraints. Returns \f$0\f$ if the constraint was not in the domain,
+//! otherwise the domain invokes {\em setDomain(nullptr)} on the constraint and
+//! domainChange() on itself before a pointer to the constraint is
+//! returned.   
+//!
+//! @param tag: identifier of the constraint.
 bool XC::Domain::removeMFreedom_Constraint(int tag)
   {
     bool result = constraints.removeMFreedom_Constraint(tag);
@@ -317,7 +407,10 @@ bool XC::Domain::removeMFreedom_Constraint(int tag)
   }
 
 
-//! @brief Elimina del domain la constraint multi retained node which tag being passed as parameter.
+//! @brief Removes from domain the multi-freedom multi-retained node constraint
+//! identified by the argument.
+//!
+//! @param tag: identifier of the constraint.
 bool XC::Domain::removeMRMFreedom_Constraint(int tag)
   {
     bool result = constraints.removeMRMFreedom_Constraint(tag);
@@ -326,7 +419,14 @@ bool XC::Domain::removeMRMFreedom_Constraint(int tag)
     return result;
   }
 
-//! @brief Adds al modelo la hipótesis simple being passed as parameter.
+//! @brief Appends the load pattern to the domain.
+//!
+//! To add the LoadPattern \p thePattern to the domain.
+//! The load is added to domain by the domain invoking {\em
+//! addComponent(theLd)} on the container for the LoadPatterns. The domain
+//! is responsible for invoking {\em setDomain(this)} on the load. The
+//! call returns \p true if the load was added, otherwise a warning is
+//! raised and \p false is returned.
 bool XC::Domain::addLoadPattern(LoadPattern *load)
   {
     bool result= constraints.addLoadPattern(load);
@@ -345,7 +445,7 @@ bool XC::Domain::addLoadPattern(LoadPattern *load)
     return result;
   }
 
-//! @brief Adds al modelo 
+//! @brief Appends the node locker object to the domain. 
 bool XC::Domain::addNodeLocker(NodeLocker *nl)
   {
     bool result= constraints.addNodeLocker(nl);
@@ -364,7 +464,7 @@ bool XC::Domain::addLoadCombination(LoadCombination *comb)
     if(comb)
       {
         if(nmbCombActual!= "")
-	  std::clog << getClassName() << __FUNCTION__
+	  std::clog << getClassName() << "::" << __FUNCTION__
 	            << "; warning! "
                     << "adding combination: " << comb->getNombre()
                     << " without removing: " << nmbCombActual
@@ -377,7 +477,19 @@ bool XC::Domain::addLoadCombination(LoadCombination *comb)
     return retval;
   }
 
-//! @brief Elimina del domain el load pattern which tag being passed as parameter.
+//! @brief Remove from domain el load pattern identified by the argument.
+//!
+//! To remove the LoadPattern whose tag is given by \p tag from the
+//! domain. The domain achieves this by invoking {\em
+//! removeComponent(tag, numSPs)} on the container for the constraints. 
+//! If the LoadPattern exists, the domain then iterates through the loads
+//! and constraints of the LoadPattern invoking {\em setDomain(nullptr)} on
+//! these objects. Returns
+//! \f$0\f$ if the load was not in the domain, otherwise returns a pointer to
+//! the load that was removed. Invokes {\em setDomain(0)} on the load case
+//! before it is returned. 
+//!
+//! @param tag: identifier of the load pattern.
 bool XC::Domain::removeLoadPattern(int tag)
   {
     int numSPs= 0;
@@ -393,7 +505,7 @@ bool XC::Domain::removeLoadPattern(int tag)
     return result;
   }
 
-//! @brief Elimina del domain el 
+//! @brief Remove from domain el 
 bool XC::Domain::removeNodeLocker(int tag)
   {
     int numSPs= 0;
@@ -409,7 +521,7 @@ bool XC::Domain::removeNodeLocker(int tag)
     return result;
   }
 
-//! @brief Elimina del domain el load pattern being passed as parameter.
+//! @brief Remove from domain el load pattern being passed as parameter.
 bool XC::Domain::removeLoadPattern(LoadPattern *lp)
   {
     bool retval= false;
@@ -418,7 +530,7 @@ bool XC::Domain::removeLoadPattern(LoadPattern *lp)
     return retval;
   }
 
-//! @brief Elimina del domain el load pattern being passed as parameter.
+//! @brief Remove from domain el load pattern being passed as parameter.
 bool XC::Domain::removeNodeLocker(NodeLocker *nl)
   {
     bool retval= false;
@@ -438,7 +550,8 @@ void XC::Domain::removeLoadCombination(LoadCombination *comb)
     if(comb)
       {
         if((nmbCombActual!= comb->getNombre())&& (!nmbCombActual.empty()))
-	  std::clog << "Domain::removeLoadCombination; ¡ojo! "
+	  std::clog << getClassName() << "::" << __FUNCTION__
+		    << "; WARNING - "
                     << "removing load combination: " << comb->getNombre()
                     << " without removing: " << nmbCombActual
                     << ".\n";
@@ -449,7 +562,7 @@ void XC::Domain::removeLoadCombination(LoadCombination *comb)
       }
   }
 
-//! @brief Elimina del domain todos los load patterns.
+//! @brief Remove from domain todos los load patterns.
 void XC::Domain::removeLPs(void)
   {
     int numSPs= constraints.removeLPs();
@@ -459,7 +572,7 @@ void XC::Domain::removeLPs(void)
       domainChange();
   }
 
-//! @brief Elimina del domain todos los bloqueos de nodos.
+//! @brief Remove from domain todos los bloqueos de nodos.
 void XC::Domain::removeNLs(void)
   {
     int numSPs= constraints.removeNLs();
@@ -477,7 +590,7 @@ bool XC::Domain::removeNodalLoad(int nodalLoadTag, int loadPattern)
 
 
 //! @brief Removes from domain the elemental load being passed as parameter.
-//! @param elemLoadTag: Identifier of the load over elements a eliminar.
+//! @param elemLoadTag: Identifier of the load over elements to remove.
 //! @param loadPattern: Load pattern identifier.
 bool XC::Domain::removeElementalLoad(int elemLoadTag, int loadPattern)
   { return constraints.removeElementalLoad(elemLoadTag,loadPattern); }
@@ -501,7 +614,7 @@ void XC::Domain::clearDOF_GroupPtr(void)
 XC::ElementIter &XC::Domain::getElements()
   { return mesh.getElements(); }
 
-//! @brief Returns an iterator a los nodos del domain.
+//! @brief Returns an iterator to the node container.
 XC::NodeIter &XC::Domain::getNodes()
   { return mesh.getNodes(); }
 
@@ -533,27 +646,37 @@ XC::ConstrContainer &XC::Domain::getConstraints(void)
 bool XC::Domain::existElement(int tag)
  { return mesh.existElement(tag); }
 
-//! @brief Returns a pointer to the element identified
-//! by the tag being passed as parameter.
+//! @brief Return a pointer to the element identified
+//! by the argument.
+//!
+//! @param tag: element identifier.
 XC::Element *XC::Domain::getElement(int tag)
   { return mesh.getElement(tag); }
 
 //! @brief Returns a const pointer to the element identified
-//! by the tag being passed as parameter.
+//! by the argument.
+//!
+//! @param tag: element identifier.
 const XC::Element *XC::Domain::getElement(int tag) const
   { return mesh.getElement(tag); }
 
 
-//! @brief Returns true if the mesh has a node with the tag being passed as parameter.
+//! @brief Return true if the mesh has a node with this tag.
+//!
+//! @param tag: node identifier.
 bool XC::Domain::existNode(int tag)
  { return mesh.existNode(tag); }
 
 
-//! @brief Returns a pointer to the nodo which tag being passed as parameter.
+//! @brief Return a pointer to the node identified by the argument.
+//!
+//! @param tag: node identifier.
 XC::Node *XC::Domain::getNode(int tag)
   { return mesh.getNode(tag); }
 
-//! @brief Returns a pointer to the nodo which tag being passed as parameter.
+//! @brief Return a pointer to the node identified by the argument.
+//!
+//! @param tag: node identifier.
 const XC::Node *XC::Domain::getNode(int tag) const
   { return mesh.getNode(tag); }
 
@@ -564,30 +687,53 @@ int XC::Domain::getCommitTag(void) const
 int XC::Domain::getNumElements(void) const
   { return mesh.getNumElements(); }
 
-//! @brief Returns the número de nodos.
+//! @brief Returns the number of nodes.
 int XC::Domain::getNumNodes(void) const
   { return mesh.getNumNodes(); }
 
-//! @brief Returns the BND of the model.
+//! @brief Returns the boundary of the finite element model.
+//!
+//! To return the bounding rectangle for the mesh. The information is
+//! contained in a Vector of size 6 containing in the following order
+//! \{xmin, ymin, zmin, xmax, ymax, zmax\}. This information is built up
+//! as nodes are added to the domain, initially all are set to \f$0\f$ in the
+//! constructor. 
 const XC::Vector &XC::Domain::getPhysicalBounds(void)
   { return mesh.getPhysicalBounds(); }
 
 //! @brief Builds (if necessary) the domain elements graph and
 //! returns a reference to it.
+//! 
+//! Returns the current element graph (the connectivity of the elements
+//! in the mesh). If the \p eleChangeFlag has been set
+//! to \p true the method will invoke {\em buildEleGraph(theEleGraph)}
+//! on itself before returning the graph. The vertices in the element
+//! graph are to be labeled \f$0\f$ through \f$numEle-1\f$. The vertices
+//! references contain the elemental tags.  
 XC::Graph &XC::Domain::getElementGraph(void)
   { return mesh.getElementGraph(); }
 
-//! @brief Builds (if necessary) the domain nodes graph and
+//! @brief Builds (if necessary) the domain node graph and
 //! returns a reference to it.
+//!
+//! Returns the current node graph (the connectivity of the nodes in
+//! the mesh). If the \p nodeChangeFlag has been set to \p true the
+//! will invoke {\em buildNodeGraph(theNodeGraph)} on itself before
+//! returning the graph. The vertices in the node graph are to be labeled
+//! \f$0\f$ through \f$numNode-1\f$. The Vertices references contain the nodal
+//! tags.
 XC::Graph &XC::Domain::getNodeGraph(void)
   { return mesh.getNodeGraph(); }
 
+//! @brief Set the committed tag to \p newTag. 
 void XC::Domain::setCommitTag(int newTag)
   { commitTag = newTag; }
 
+//! @brief Set the current time to \p newTime. 
 void XC::Domain::setCurrentTime(double newTime)
   { timeTracker.setCurrentTime(newTime); }
 
+//! @brief Set the committed time to \p newTime. 
 void XC::Domain::setCommittedTime(double newTime)
   { timeTracker.setCommittedTime(newTime); }
 
@@ -597,6 +743,17 @@ void XC::Domain::setTime(double newTime)
     setCommittedTime(newTime);
   }
 
+//! @brief Apply the loads for the given time \p pseudoTime.
+//!
+//! To apply the loads for the given time \p pseudoTime. The domain
+//! first clears the current load at all nodes and elements, done by
+//! invoking zeroUnbalancedLoad()} on each node and {\em zeroLoad()
+//! on each element. The domain then invokes {\em applyLoad(pseudoTime)}
+//! on all LoadPatterns which have been added to the domain. The domain
+//! will then invoke {\em applyConstraint(pseudoTime)} on all the
+//! constraints in the single and multi point constraint
+//! containers. Finally the domain sets its current time to be {\em
+//! pseudoTime}.  
 void XC::Domain::applyLoad(double timeStep)
   {
     // set the current pseudo time in the domain to be newTime
@@ -609,6 +766,12 @@ void XC::Domain::applyLoad(double timeStep)
   }
 
 //! @brief Set all the loads as constant.
+//!
+//! To set the loads in the LoadPatterns to be constant. The domain
+//! achieves this by invoking setLoadConstant() on all the
+//! LoadPatterns which have been added to the domain. Note that
+//! LoadPatterns added after this method has been invoked will not be
+//! constant until this method is invoked again. 
 void XC::Domain::setLoadConstant(void)
   { constraints.setLoadConstant(); }
 
@@ -622,6 +785,14 @@ int XC::Domain::setRayleighDampingFactors(const RayleighDampingFactors &rF)
 
 //! @brief Commits domain state and triggers "record" method
 //! for all defined recorders.
+//!
+//! To commit the state of the domain , that is to accept the current
+//! state as being ion the solution path. The domain invokes {\em
+//! commit()} on all nodes in the domain and then {\em 
+//! commit()} on all elements of the domain. These are calls for the nodes
+//! and elements to set there committed state as given by their current
+//! state. The domain will then set its committed time variable to be
+//! equal to the current time and lastly increments its commit tag by \f$1\f$.  
 int XC::Domain::commit(void)
   {
     //
@@ -643,6 +814,13 @@ int XC::Domain::commit(void)
   }
 
 //! @brief Returns the domain to its last commited state.
+//!
+//! To return the domain to the state it was in at the last commit. The
+//! domain invokes revertToLastCommit() on all nodes and elements in
+//! the domain. The domain sets its current loadFactor and time
+//! stamp to be equal to the last committed values. The domain decrements
+//! the current commitTag by \f$1\f$. Finally it invokes applyLoad()
+//! on itself with the current time.
 int XC::Domain::revertToLastCommit(void)
   {
     //
@@ -683,7 +861,11 @@ int XC::Domain::revertToStart(void)
     return update();
   }
 
-//! @brief Updates the state of the mesh.
+//! @brief Updates the state of the domain.
+//! 
+//! Called by the AnalysisModel to update the state of the
+//! domain. Iterates over all the elements of the Domain and invokes {\em
+//! update()}. 
 int XC::Domain::update(void)
   {
     // set the global constants
@@ -805,15 +987,29 @@ double XC::Domain::getTotalMass(void) const
     return retval;
   }
 
+//! @brief Set the domain stamp to be \p newStamp. Domain stamp is the
+//! integer returned by hasDomainChanged(). 
 void XC::Domain::setDomainChangeStamp(int newStamp)
   { currentGeoTag= newStamp; }
 
 
-//! @brief Establece que the model ha cambiado.
+//! @brief Sets a flag indicating that the integer returned in the next call to 
+//! hasDomainChanged() must be incremented by \f$1\f$.
+//! 
+//! Sets a flag indicating that the integer returned in the next call to 
+//! hasDomainChanged() must be incremented by \f$1\f$. This method is
+//! invoked whenever a Node, Element or Constraint object is added to the
+//! domain.  
 void XC::Domain::domainChange(void)
   { hasDomainChangedFlag= true; }
 
-//! @brief Returns true if the modelo ha cambiado.
+//! @brief Returns true if the model has changed.
+//!
+//! To return an integer stamp indicating the state of the
+//! domain. Initially \f$0\f$, this integer is incremented by \f$1\f$ if  {\em
+//! domainChange()} has been invoked since the last invocation of the
+//! method. If the domain has changed it marks the element and node graph
+//! flags as not having been built.  
 int XC::Domain::hasDomainChanged(void)
   {
     // if the flag indicating the domain has changed since the
@@ -831,7 +1027,10 @@ int XC::Domain::hasDomainChanged(void)
     return currentGeoTag;
   }
 
-//! @brief Imprime el domain.
+//! @brief Print stuff.
+//!
+//! To print the state of the domain. The domain invokes {\em Print(s,flag)} on
+//! all it's container objects. 
 void XC::Domain::Print(std::ostream &s, int flag)
   {
 
@@ -842,6 +1041,7 @@ void XC::Domain::Print(std::ostream &s, int flag)
     constraints.Print(s,flag);
   }
 
+//! @brief Insertion in an output stream.
 std::ostream &XC::operator<<(std::ostream &s, XC::Domain &M)
   {
     M.Print(s);
@@ -849,11 +1049,17 @@ std::ostream &XC::operator<<(std::ostream &s, XC::Domain &M)
   }
 
 //! @brief Adds a recorder to the model.
+//!
+//! To add a recorder object \p theRecorder to the domain. {\em
+//! record(commitTag)} is invoked on each commit(). The pointers to
+//! the recorders are stored in an array which is resized on each
+//! invocation of this method.  
 int XC::Domain::addRecorder(Recorder &theRecorder)
   {
     if(theRecorder.setDomain(*this) != 0)
       {
-        std::cerr << "Domain::addRecorder() - recorder could not be added\n";
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; recorder could not be added.\n";
         return -1;
       }
     else
@@ -870,7 +1076,7 @@ int XC::Domain::addRegion(MeshRegion &theRegion)
     return 0;
   }
 
-//! @brief Returns a pointer to the la región which tag being passed as parameter.
+//! @brief Returns a pointer to the la región identified by the argument.
 XC::MeshRegion *XC::Domain::getRegion(int tag)
   {
     MeshRegion *retval= nullptr;
@@ -880,10 +1086,20 @@ XC::MeshRegion *XC::Domain::getRegion(int tag)
   }
 
 //! @brief Builds the element graph.
+//!
+//! A method which will cause the domain to discard the current element
+//! graph and build a new one based on the element connectivity. Returns
+//! \f$0\f$ if successful otherwise \f$-1\f$ is returned along with an error
+//! message. 
 int XC::Domain::buildEleGraph(Graph &theEleGraph)
   { return mesh.buildEleGraph(theEleGraph); }
 
 //! @brief Builds the node graph.
+//!
+//! A method which will cause the domain to discard the current node
+//! graph and build a new one based on the node connectivity. Returns
+//! \f$0\f$ if successful otherwise \f$-1\f$ is returned along with an error
+//! message. 
 int XC::Domain::buildNodeGraph(Graph &theNodeGraph)
   { return mesh.buildNodeGraph(theNodeGraph); }
 
@@ -967,7 +1183,8 @@ int XC::Domain::sendSelf(CommParameters &cp)
       dbTag = cp.getChannel()->getDbTag();
     retval+= cp.sendIdData(getDbTagData(),dbTag);
     if(retval < 0)
-      std::cerr << "Domain::sendSelf() - ch failed to send data.\n";
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; channel failed to send data.\n";
     return retval;
   }
 
@@ -984,11 +1201,13 @@ int XC::Domain::recvSelf(const CommParameters &cp)
 
     int retval= cp.receiveIdData(getDbTagData(),dbTag);
     if(retval < 0)
-      std::cerr << "Domain::recvSelf() - ch failed to recv the initial ID\n";
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; channel failed to recv the initial ID.\n";
     else
       retval+= recvData(cp);
     if(retval<0)
-      std::cerr << "Domain::recvSelf() - data could not be received.\n" ;
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; data could not be received.\n" ;
     return retval;
   }
   
@@ -999,7 +1218,7 @@ int XC::Domain::recvSelf(const CommParameters &cp)
 double XC::Domain::getNodeDisp(int nodeTag, int dof,int &errorFlag)
   { return mesh.getNodeDisp(nodeTag,dof,errorFlag); }
 
-//! @brief Asigna la matriz de masas al nudo which tag being passed as parameter.
+//! @brief Asigna la matriz de masas al nudo identified by the argument.
 int XC::Domain::setMass(const XC::Matrix &mass, int nodeTag)
   { return mesh.setMass(mass,nodeTag); }
 
@@ -1053,6 +1272,7 @@ int XC::receiveDomain(Domain &dom,int posDbTag,DbTagData &dt,const CommParameter
     int res= cp.receiveInt(dom.dbTag,dt,CommMetaData(posDbTag));
     res+= dom.recvSelf(cp);
     if(res < 0)
-      std::cerr << "receiveDomain - failed to receive vector data\n";
+      std::cerr << __FUNCTION__
+		<< "; failed to receive vector data.\n";
     return res;
   }

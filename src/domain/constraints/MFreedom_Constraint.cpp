@@ -87,25 +87,32 @@ void XC::MFreedom_Constraint::set_constrained_retained_dofs(const ID &constraine
   }
 
 //! !@brief Constructor. //Arash
+//!
+//! @param tag: constraint identifier.
+//! @param classTag: constraint class identifier.
 XC::MFreedom_Constraint::MFreedom_Constraint(int tag,int classTag)		
  : MFreedom_ConstraintBase(tag,0,classTag),
    retainedNodeTag(0) {}
 
 //! Constructor. // LCPT
+//!
+//! @param tag: constraint identifier.
 XC::MFreedom_Constraint::MFreedom_Constraint(int tag)		
  : MFreedom_ConstraintBase(tag, 0,CNSTRNT_TAG_MFreedom_Constraint),
    retainedNodeTag(0) {}
 
 //! Constructor to be called from subclasses.
-//! @param tag: tag for the multi-freedom constraint.
+//!
+//! @param tag: multi-freedom constraint identifier.
 //! @param nodeRetain: identifier of the retained node.
 //! @param nodeConstr: identifier of the constrained node.
-//! @param classTag: identifief for the class.
+//! @param classTag: constraint class identifier.
 XC::MFreedom_Constraint::MFreedom_Constraint(int tag, int nodeRetain, int nodeConstr, int classTag)
  : MFreedom_ConstraintBase(tag, nodeConstr, classTag), retainedNodeTag(nodeRetain) {}
 
 //! Constructor to be called from subclasses.
-//! @param tag: tag for the multi-freedom constraint.
+//!
+//! @param tag: identifier for the multi-freedom constraint.
 //! @param nodeRetain: identifier of the retained node.
 //! @param nodeConstr: identifier of the constrained node.
 //! @param constrainedDOF: constrained degrees of freedom.
@@ -116,7 +123,8 @@ XC::MFreedom_Constraint::MFreedom_Constraint(int tag, int nodeRetain, int nodeCo
   { set_constrained_retained_dofs(constrainedDOF,retainedDOF); }
 
 //! Constructor to be called from subclasses.
-//! @param tag: tag for the multi-freedom constraint.
+//!
+//! @param tag: identifier for the multi-freedom constraint.
 //! @param nodeRetain: identifier of the retained node.
 //! @param nodeConstr: identifier of the constrained node.
 //! @param constrainedDOF: constrained degrees of freedom.
@@ -127,7 +135,8 @@ XC::MFreedom_Constraint::MFreedom_Constraint(int tag, int nodeRetain, int nodeCo
 
 
 //! @brief Constructor.
-//! @param tag: tag for the multi-freedom constraint.
+//!
+//! @param tag: identifier for the multi-freedom constraint.
 //! @param nodeRetain: identifier of the retained node.
 //! @param nodeConstr: identifier of the constrained node.
 //! @param constr: constraint matrix.
@@ -167,9 +176,13 @@ std::vector<XC::Node *> XC::MFreedom_Constraint::getPointersToRetainedNodes(void
 
 
 //! @brief Applies the constraint at the pseudo-time being passed as parameter.
+//!
+//! A method to invoked to inform the MFreedom\_Constraint to determine
+//! \f$C_{cr}\f$, for the time \p timeStamp. {\bf The base class will do
+//! nothing, as Matrix is assumed to be constant.}
 int XC::MFreedom_Constraint::applyConstraint(double timeStamp)
   {
-    // does nothing XC::MFreedom_Constraint objects are time invariant
+    // does nothing MFreedom_Constraint objects are time invariant
     return 0;
   }
 
@@ -199,7 +212,8 @@ int XC::MFreedom_Constraint::sendSelf(CommParameters &cp)
     const int dataTag= getDbTag();
     result = cp.sendIdData(getDbTagData(),dataTag);
     if(result < 0)
-      std::cerr << "WARNING MFreedom_Constraint::sendSelf - error sending XC::ID data\n";
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; WARNING - error sending ID data\n";
     return result;
   }
 
@@ -211,7 +225,8 @@ int XC::MFreedom_Constraint::recvSelf(const CommParameters &cp)
     const int dataTag= getDbTag();
     int res= cp.receiveIdData(getDbTagData(),dataTag);
     if(res<0)
-      std::cerr << "MFreedom_Constraint::recvSelf() - data could not be received\n" ;
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; data could not be received.\n" ;
     else
       res+= recvData(cp);
     return res;
@@ -271,7 +286,8 @@ void XC::MFreedom_Constraint::Print(std::ostream &s, int flag)
 //! @brief Interfaz con VTK.
 int XC::MFreedom_Constraint::getVtkCellType(void) const
   {
-    std::cerr << "MFreedom_Constraint::getVtkCellType; not implemented." << std::endl;
+    std::cerr << getClassName() << "::" << __FUNCTION__
+	      << "; not implemented." << std::endl;
     return VTK_EMPTY_CELL;
   }
 
