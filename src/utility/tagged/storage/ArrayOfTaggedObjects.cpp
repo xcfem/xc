@@ -337,7 +337,7 @@ bool XC::ArrayOfTaggedObjects::removeComponent(int tag)
                 numComponents--;
               }
       }
-    transmitIDs= retval; //Se elimina un componente.
+    transmitIDs= retval; //Removes a component.
     return retval;
   }
 

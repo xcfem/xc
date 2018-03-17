@@ -109,8 +109,8 @@ class_<XC::LoadLoader, bases<XC::Loader>, boost::noncopyable >("LoadLoader", no_
   .add_property("getLoadPatterns", make_function( getLoadPatternsRef, return_internal_reference<>() ))
   .add_property("getLoadCombinations", make_function( getLoadCombinationsRef, return_internal_reference<>() ))
   .def("addToDomain", &XC::LoadLoader::addToDomain,return_internal_reference<>(),"Add combination to the domain.")
-  .def("removeFromDomain", &XC::LoadLoader::removeFromDomain,return_internal_reference<>(),"Eliminates combination from domain.")
-  .def("removeAllFromDomain", &XC::LoadLoader::removeAllFromDomain,return_internal_reference<>(),"Eliminates all loads cases from domain.")
+  .def("removeFromDomain", &XC::LoadLoader::removeFromDomain,return_internal_reference<>(),"Removes the combination from the domain.")
+  .def("removeAllFromDomain", &XC::LoadLoader::removeAllFromDomain,return_internal_reference<>(),"Removes all loads cases from the domain.")
     ;
 
 XC::CrdTransf *(XC::TransfCooLoader::*getCoordTransf)(const std::string &)= &XC::TransfCooLoader::find_ptr;

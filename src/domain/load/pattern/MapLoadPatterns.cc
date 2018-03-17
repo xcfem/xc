@@ -192,7 +192,7 @@ void XC::MapLoadPatterns::addToDomain(const std::string &lp_code)
                 << lp_code << "' not found." << std::endl;
   }
 
-//! @brief Elimina el load pattern del domain.
+//! @brief Remove the load pattern del domain.
 void XC::MapLoadPatterns::removeFromDomain(const std::string &lp_code)
   {
     LoadPattern *lp= buscaLoadPattern(lp_code);
@@ -204,7 +204,7 @@ void XC::MapLoadPatterns::removeFromDomain(const std::string &lp_code)
                 << lp_code << "' not found." << std::endl;
   }
 
-//! @brief Elimina las loadpatterns del domain.
+//! @brief Remove the loadpatterns del domain.
 void XC::MapLoadPatterns::removeAllFromDomain(void)
   {
     Domain *dom= getDomain();

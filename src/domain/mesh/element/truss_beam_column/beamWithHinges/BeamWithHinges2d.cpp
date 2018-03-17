@@ -680,7 +680,7 @@ int XC::BeamWithHinges2d::update(void)
     theCoordTransf->update();
 
     // Convert to basic system from local coord's (eliminate rb-modes)
-    static XC::Vector v(3);                                // basic system deformations
+    static Vector v(3); // basic system deformations
     v = theCoordTransf->getBasicTrialDisp();
 
     static XC::Vector dv(3);
