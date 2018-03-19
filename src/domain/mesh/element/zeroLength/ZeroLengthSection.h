@@ -72,8 +72,22 @@ class Response;
 //! @defgroup ElemZL Zero length elements.
 //
 //! \ingroup ElemZL
-//! @brief Zero length element with
-//! SectionForceDeformation material.
+//! @brief Zero length element with SectionForceDeformation material.
+//!
+//! The ZeroLengthSection class represents an element defined by two nodes at
+//! the same geometric location, hence it has zero length.
+//! The nodes are connected by a SectionForceDeformation material which
+//! represents the force-deformation relationship for the element. 
+//! ZeroLengthSection elements are constructed in a domain of \p dimension 2 or
+//! 3, connected by nodes {\em Nd1} and {\em Nd2}. 
+//! The vector \p x defines the local x-axis for the element and the vector \p
+//! yprime lies in the local x-y plane for the element.  The local z-axis is
+//! the cross product between \p x and \p yprime, and the local y-axis is the
+//! cross product between the local z-axis and \p x.
+//! The section model acts in the local space defined by the \p x and
+//! \p yprime vectors. The section axial force-deformation acts along the 
+//! element local x-axis and the section y-z axes directly corresponsd to the
+//! local element y-z axes.
 class ZeroLengthSection: public Element0D
   {
   private:

@@ -82,19 +82,22 @@ void XC::ZeroLengthSection::setup_section(const Material *sec)
   {
     free_mem();
     if(!sec)
-      std::cerr << "ZeroLengthSection::setup_section; pointer to material is null." << std::endl;
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; pointer to material is null." << std::endl;
     else
       {
         const SectionForceDeformation *ptr= dynamic_cast<const SectionForceDeformation *>(sec);
         if(!ptr)
-          std::cerr << "ZeroLengthSection::setup_section; material type is not valid."
+          std::cerr << getClassName() << "::" << __FUNCTION__
+		    << "; material type is not valid."
                     << std::endl;
         else
           {
             theSection = ptr->getCopy();// Obtain copy of section model
             if(!theSection)
               {
-                std::cerr << "ZeroLengthSection::ZeroLengthSection -- failed to get copy of section\n";
+                std::cerr << getClassName() << "::" << __FUNCTION__
+			  << "; failed to get copy of section.\n";
                 exit(-1);
               }
             // Get the section order
@@ -120,7 +123,15 @@ void XC::ZeroLengthSection::free_mem(void)
     theSection=nullptr;
   }
 
-//! @brief Constructor:
+//! @brief Constructor.
+//!
+//! @param tag: element identifier.
+//! @param dim: space dimension (1, 2 or 3).
+//! @param Nd1: identifier of the first node.
+//! @param Nd2: identifier of the second node.
+//! @param x: Vector that defines the local x-axis.
+//! @param yprime: Vector that defines the local x-y plane.
+//! @param sec: SectionForceDeformation material for the element.
 XC::ZeroLengthSection::ZeroLengthSection(int tag, int dim, int Nd1, int Nd2,
                                          const Vector &x, const Vector &yprime,
                                          SectionForceDeformation& sec)
@@ -129,8 +140,12 @@ XC::ZeroLengthSection::ZeroLengthSection(int tag, int dim, int Nd1, int Nd2,
   { setup_section(&sec); }
 
 //! @brief Constructor:
-XC::ZeroLengthSection::ZeroLengthSection(int tag, int dimension,const Material *sec)
-  : Element0D(tag, ELE_TAG_ZeroLengthSection,0,0,dimension),
+//!
+//! @param tag: element identifier.
+//! @param dim: space dimension (1, 2 or 3).
+//! @param sec: SectionForceDeformation material for the element.
+XC::ZeroLengthSection::ZeroLengthSection(int tag, int dim,const Material *sec)
+  : Element0D(tag, ELE_TAG_ZeroLengthSection,0,0,dim),
     K(nullptr), P(nullptr), theSection(nullptr), order(0)
   {
     if(sec)
@@ -170,11 +185,13 @@ XC::ZeroLengthSection::~ZeroLengthSection(void)
   { free_mem(); }
 
 // method: setDomain()
-//    to set a link to the enclosing XC::Domain and to set the node pointers.
-//    also determines the number of dof associated
-//    with the XC::ZeroLengthSection element, we set matrix and vector pointers,
-//    allocate space for t matrix and define it as the basic deformation-
-//    displacement transformation matrix.
+//! @brief Set the enclosing domain.
+//!
+//! Set a link to the enclosing Domain and to set the node pointers.
+//! also determines the number of dof associated
+//! with the XC::ZeroLengthSection element, we set matrix and vector pointers,
+//! allocate space for t matrix and define it as the basic deformation-
+//! displacement transformation matrix.
 void XC::ZeroLengthSection::setDomain(Domain *theDomain)
   {
     Element0D::setDomain(theDomain);
@@ -185,13 +202,17 @@ void XC::ZeroLengthSection::setDomain(Domain *theDomain)
     int Nd2 = theNodes.getTagNode(1);
 
     // if can't find both - send a warning message
-    if(theNodes[0] == 0 || theNodes[1] == 0)
+    if(theNodes[0] == nullptr || theNodes[1] == nullptr)
       {
-        if(theNodes[0] == 0)
-          std::cerr << "ZeroLengthSection::setDomain() -- Nd2: " << Nd2 << " does not exist in ";
+        if(theNodes[0] == nullptr)
+          std::cerr << getClassName() << "::" << __FUNCTION__
+		    << "; Nd1: " << Nd1 << " does not exist in ";
         else
-          std::cerr << "ZeroLengthSection::setDomain() -- Nd2: " << Nd2 << " does not exist in ";
-        std::cerr << "model for XC::ZeroLengthSection with id " << this->getTag() << std::endl;
+          std::cerr << getClassName() << "::" << __FUNCTION__
+		    << "; Nd2: " << Nd2 << " does not exist in ";
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "model for ZeroLengthSection with id " << this->getTag()
+		  << std::endl;
         return;
       }
 
@@ -204,7 +225,7 @@ void XC::ZeroLengthSection::setDomain(Domain *theDomain)
       {
         std::cerr << getClassName() << "::" << __FUNCTION__
 		  << "; nodes " << Nd1 << " and " << Nd2
-                  << "have differing dof at ends for ZeroLengthSection: "
+                  << " have differing dof at ends for ZeroLengthSection: "
 		  << this->getTag() << std::endl;
         return;
       }
@@ -240,7 +261,8 @@ void XC::ZeroLengthSection::setDomain(Domain *theDomain)
     vm = (v1<v2) ? v2 : v1;
 
     if(L > LenTol*vm)
-      std::cerr << "ZeroLengthSection::setDomain() -- Element " << this->getTag()
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; Element " << this->getTag()
                 << "has L= " << L << ", which is greater than the tolerance\n";
 
     // call the base class method
@@ -249,6 +271,8 @@ void XC::ZeroLengthSection::setDomain(Domain *theDomain)
     setTransformation(); // Set up the A matrix
   }
 
+//! @brief Commit state of element by commiting state of the section.
+//! Return 0 if successful, !0 otherwise.
 int XC::ZeroLengthSection::commitState()
   {
     int retVal=0;
@@ -256,19 +280,24 @@ int XC::ZeroLengthSection::commitState()
     // call element commitState to do any base class stuff
     if((retVal = this->XC::Element::commitState()) != 0)
       {
-        std::cerr << "ZeroLength::commitState () - failed in base class\n";
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; failed in base class.\n";
       }
     // Commit the section
     retVal += theSection->commitState();
     return retVal;
   }
 
+//! @brief Revert state of element to last commit by reverting to last committed
+//! state of the section. Return 0 if successful, !0 otherwise.
 int XC::ZeroLengthSection::revertToLastCommit()
   {
     // Revert the section
     return theSection->revertToLastCommit();
   }
 
+//! @brief Revert state of element to initial sate by reverting to initial state
+//! of the section. Return 0 if successful, !0 otherwise.
 int XC::ZeroLengthSection::revertToStart()
   {
     // Revert the section to start
@@ -294,6 +323,9 @@ const XC::Matrix &XC::ZeroLengthSection::getTangentStiff(void) const
     return *K;
   }
 
+//! @brief Return tangent stiffness matrix for element.  The element tangent
+//! is computed from the section tangent matrix,
+//! \f$k_b\f$, as \f$K_e = A^T k_b A\f$.
 const XC::Matrix &XC::ZeroLengthSection::getInitialStiff(void) const
   {
     // Get section tangent stiffness, the element basic stiffness
@@ -305,20 +337,26 @@ const XC::Matrix &XC::ZeroLengthSection::getInitialStiff(void) const
     return *K;
   }
 
+//! @brief The element has no loads, so this operation has no effect and returns 0.
 int XC::ZeroLengthSection::addLoad(ElementalLoad *theLoad, double loadFactor)
   {
-    std::cerr << "ZeroLengthSection::addLoad - load type unknown for truss with tag: "
+    std::cerr << getClassName() << "::" << __FUNCTION__
+	      << "; load type unknown for zero length section element with tag: "
               << this->getTag() << std::endl;
     return -1;
   }
 
 
+//! @brief The element has no mass, so this operation has no effect and returns 0.
 int XC::ZeroLengthSection::addInertiaLoadToUnbalance(const Vector &accel)
   {
     // does nothing as element has no mass yet!
     return 0;
   }
 
+//! @brief Return resisting force vector for element.  The element resisting force
+//! is computed from the section stress resultants, \f$s\f$, as \f$P_e = A^T s\f$.
+//! The section stress resulant is obtained by calling getStressResultant().
 const XC::Vector &XC::ZeroLengthSection::getResistingForce(void) const
   {
     // Compute section deformation vector
@@ -338,7 +376,7 @@ const XC::Vector &XC::ZeroLengthSection::getResistingForce(void) const
     return *P;
   }
 
-
+//! @brief Returns the result of getResistingForce() as there is no element mass.
 const XC::Vector &XC::ZeroLengthSection::getResistingForceIncInertia(void) const
   {
     this->getResistingForce();
@@ -363,7 +401,9 @@ XC::Vector XC::ZeroLengthSection::getVDirStrongAxisLocalCoord(void) const
         retval(0)= 0.0; retval(1)= sectionStrongAxis.x(); retval(2)= sectionStrongAxis.y();
       }
     else
-      std::cerr << "Element's section doesn't returns inertia axis." << std::endl;
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; Element's section doesn't returns inertia axis."
+		<< std::endl;
     return retval;
   }
 
@@ -379,7 +419,9 @@ XC::Vector XC::ZeroLengthSection::getVDirWeakAxisLocalCoord(void) const
         retval(0)= 0.0; retval(1)= sectionWeakAxis.x(); retval(2)= sectionWeakAxis.y();
       }
     else
-      std::cerr << "Element's section doesn't returns inertia axis." << std::endl;
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; element's section doesn't returns inertia axis."
+		<< std::endl;
     return retval;
   }
 //! @brief Returns the angle between element strong axis
@@ -459,7 +501,8 @@ int XC::ZeroLengthSection::sendSelf(CommParameters &cp)
     const int dataTag= getDbTag();
     res += cp.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
-      std::cerr << "ZeroLength::sendSelf -- failed to send ID data\n";
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; failed to send ID data\n";
     return res;
   }
 
@@ -471,17 +514,20 @@ int XC::ZeroLengthSection::recvSelf(const CommParameters &cp)
     int res= cp.receiveIdData(getDbTagData(),dataTag);
 
     if(res<0)
-      std::cerr << getClassName() << "::recvSelf - failed to receive ids.\n";
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; failed to receive ids.\n";
     else
       {
         setTag(getDbTagDataPos(0));
         res+= recvData(cp);
         if(res<0)
-          std::cerr << getClassName() << "::recvSelf - failed to receive data.\n";
+          std::cerr << getClassName() << "::" << __FUNCTION__
+		    << "; failed to receive data.\n";
       }
     return res;
   }
 
+//! @brief Prints the element node tags and section model to the stream {em s}.
 void XC::ZeroLengthSection::Print(std::ostream &s, int flag)
   {
     s << "ZeroLengthSection, tag: " << this->getTag() << std::endl;
