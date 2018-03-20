@@ -53,7 +53,7 @@ XC::Vector *XC::UnbalAndTangentStorage::setUnbalance(const size_t &i)
 
 XC::Matrix *XC::UnbalAndTangentStorage::setTangent(const size_t &i)
   {
-    if(theMatrices[i].Nula())
+    if(theMatrices[i].isEmpty())
       { theMatrices[i]= Matrix(i,i); }
     return &theMatrices[i];
   }

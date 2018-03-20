@@ -407,7 +407,7 @@ const XC::Matrix XC::ShellMITC4Base::calculateG(void) const
 //! @brief return secant matrix
 const XC::Matrix &XC::ShellMITC4Base::getInitialStiff(void) const
   {
-    if(!Ki.Nula())
+    if(!Ki.isEmpty())
       return Ki;
 
     static const int ndf= 6; //two membrane plus three bending plus one drill

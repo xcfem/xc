@@ -180,7 +180,7 @@ XC::MFreedom_Joint2D::MFreedom_Joint2D(Domain *domain, int tag, int nodeRetain, 
         constraintMatrix(2,AuxDOF) = 1.0 ;
       }
  
-    if(constraintMatrix.Nula())
+    if(constraintMatrix.isEmpty())
        {
          std::cerr << getClassName() << "::" << __FUNCTION__
 	           << "; ran out of memory \ncan not generate the constraint matrix";
@@ -273,7 +273,7 @@ int XC::MFreedom_Joint2D::recvSelf(const CommParameters &cp)
 
 const XC::Matrix &XC::MFreedom_Joint2D::getConstraint(void) const
   {
-    if(constraintMatrix.Nula())
+    if(constraintMatrix.isEmpty())
       {
         std::cerr << getClassName() << "::" << __FUNCTION__
                   << "; no matrix was set\n";

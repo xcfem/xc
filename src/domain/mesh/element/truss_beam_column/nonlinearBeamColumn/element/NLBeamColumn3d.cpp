@@ -275,7 +275,7 @@ const XC::Matrix &XC::NLBeamColumn3d::getInitialStiff(void) const
   {
 
     // check for quick return
-    if(!Ki.Nula())
+    if(!Ki.isEmpty())
       return Ki;
 
     // get integration point positions and weights
@@ -528,7 +528,7 @@ int XC::NLBeamColumn3d::update(void)
               }
 
             // Add the effects of element loads, if present
-	    if(!sp.Nula())
+	    if(!sp.isEmpty())
              {
                const XC::Matrix &s_p= sp;
                for(ii = 0; ii < order; ii++)
@@ -881,7 +881,7 @@ int XC::NLBeamColumn3d::addLoad(ElementalLoad *theLoad, double loadFactor)
             const XC::Matrix &xi_pt = quadRule.getIntegrPointCoords(nSections);
             const double L = theCoordTransf->getInitialLength();
 
-            if(sp.Nula())
+            if(sp.isEmpty())
               sp= Matrix(5,nSections);
             sp+= beamMecLoad->getAppliedSectionForces(L,xi_pt,loadFactor); // Accumulate applied section forces due to element loads
             beamMecLoad->addReactionsInBasicSystem(L,loadFactor,p0); // Accumulate reactions in basic system

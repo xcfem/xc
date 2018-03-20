@@ -1007,7 +1007,7 @@ int XC::Node::addUnbalancedLoad(const Vector &add, double fact)
 int XC::Node::addInertiaLoadToUnbalance(const Vector &accelG, double fact)
   {
     // simply return if node has no mass or R matrix
-    if(R.Nula() || isDead())
+    if(R.isEmpty() || isDead())
       return 0;
 
     // otherwise we must determine MR accelG
@@ -1031,7 +1031,7 @@ int XC::Node::addInertiaLoadToUnbalance(const Vector &accelG, double fact)
 int XC::Node::addInertiaLoadSensitivityToUnbalance(const XC::Vector &accelG, double fact, bool somethingRandomInMotions)
   {
     // simply return if node has no R matrix
-    if(R.Nula())
+    if(R.isEmpty())
       return 0;
 
     // otherwise we must determine MR accelG
@@ -1077,7 +1077,7 @@ const XC::Vector &XC::Node::getUnbalancedLoadIncInertia(void)
   {
     unbalLoadWithInertia= this->getUnbalancedLoad();
 
-    if(!mass.Nula())
+    if(!mass.isEmpty())
       {
         const Vector &theAccel= getTrialAccel(); // in case accel not created
         unbalLoadWithInertia.addMatrixVector(1.0, mass, theAccel, -1.0);
@@ -1279,7 +1279,7 @@ const XC::Vector &XC::Node::getRV(const Vector &V)
     // we store the product of RV in unbalLoadWithInertia
 
     // see if quick return , i.e. R == 0
-    if(R.Nula())
+    if(R.isEmpty())
       unbalLoadWithInertia.Zero();
     else if(R.noCols() != V.Size()) // check dimesions of R and V
       {
@@ -1885,13 +1885,13 @@ int XC::Node::saveSensitivity(Vector *v,Vector *vdot,Vector *vdotdot, int gradNu
     int i;
 
     // If the sensitivity matrices are not already created:
-    if(dispSensitivity.Nula())
+    if(dispSensitivity.isEmpty())
       { dispSensitivity= Matrix(numberDOF,numGrads ); }
     if((vdot!=0) && (vdotdot!=0) )
       {
-        if(velSensitivity.Nula())
+        if(velSensitivity.isEmpty())
           { velSensitivity= Matrix(numberDOF,numGrads ); }
-        if(accSensitivity.Nula())
+        if(accSensitivity.isEmpty())
           { accSensitivity= Matrix(numberDOF,numGrads ); }
       }
 
@@ -1912,7 +1912,7 @@ int XC::Node::saveSensitivity(Vector *v,Vector *vdot,Vector *vdotdot, int gradNu
 double XC::Node::getDispSensitivity(int dof, int gradNum)
   {
     double result= 0.0;
-    if(!dispSensitivity.Nula())
+    if(!dispSensitivity.isEmpty())
       result= dispSensitivity(dof-1,gradNum-1);
     return result;
   }
@@ -1920,7 +1920,7 @@ double XC::Node::getDispSensitivity(int dof, int gradNum)
 double XC::Node::getVelSensitivity(int dof, int gradNum)
   {
     double result= 0.0;
-    if(!velSensitivity.Nula())
+    if(!velSensitivity.isEmpty())
       result= velSensitivity(dof-1,gradNum-1);
     return result;
   }
@@ -1928,7 +1928,7 @@ double XC::Node::getVelSensitivity(int dof, int gradNum)
 double XC::Node::getAccSensitivity(int dof, int gradNum)
   {
     double result= 0.0;
-    if(!accSensitivity.Nula())
+    if(!accSensitivity.isEmpty())
       return accSensitivity(dof-1,gradNum-1);
     return result;
   }

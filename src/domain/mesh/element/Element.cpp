@@ -118,7 +118,7 @@ int XC::Element::getNumEdges(void) const
 //! sucessfull, a negative number if not.
 int XC::Element::commitState(void)
   {
-    if(!Kc.Nula())
+    if(!Kc.isEmpty())
       Kc= getTangentStiff();
     return 0;
   }

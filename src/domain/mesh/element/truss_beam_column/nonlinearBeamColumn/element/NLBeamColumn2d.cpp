@@ -295,7 +295,7 @@ int XC::NLBeamColumn2d::revertToStart()
 const XC::Matrix &XC::NLBeamColumn2d::getInitialStiff(void) const
   {
     // check for quick return
-    if(Ki.Nula())
+    if(Ki.isEmpty())
       {
         const size_t nSections= getNumSections();
         const Matrix &xi_pt  = quadRule.getIntegrPointCoords(nSections);
@@ -419,7 +419,7 @@ int XC::NLBeamColumn2d::update()
     vin = v;
     vin -= dv;
 
-    if(initialFlag != 0 && dv.Norm() <= DBL_EPSILON && sp.Nula())
+    if(initialFlag != 0 && dv.Norm() <= DBL_EPSILON && sp.isEmpty())
       return 0;
 
     const size_t nSections= getNumSections();
@@ -541,7 +541,7 @@ int XC::NLBeamColumn2d::update()
 			}
 
 		      // Add the effects of element loads, if present
-		      if(!sp.Nula())
+		      if(!sp.isEmpty())
 			{
 			  const Matrix &s_p= sp;
 			  for(int ii = 0; ii < order; ii++)
@@ -904,7 +904,7 @@ int XC::NLBeamColumn2d::addLoad(ElementalLoad *theLoad, double loadFactor)
             const size_t nSections= getNumSections();
             const XC::Matrix &xi_pt = quadRule.getIntegrPointCoords(nSections);
             const double L = theCoordTransf->getInitialLength();
-            if(sp.Nula())
+            if(sp.isEmpty())
               sp= Matrix(3,nSections);
             sp+= beamMecLoad->getAppliedSectionForces(L,xi_pt,loadFactor); // Accumulate applied section forces due to element loads
             beamMecLoad->addReactionsInBasicSystem(L,loadFactor,p0); // Accumulate reactions in basic system

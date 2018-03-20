@@ -503,7 +503,7 @@ double XC::Concrete01::getStressSensitivity(int gradNumber, bool conditional)
     // Pick up sensitivity history variables
     UniaxialHistoryVars convergedHistorySensitivity;
     UniaxialStateVars convergedStateSensitivity;
-    if(!SHVs.Nula())
+    if(!SHVs.isEmpty())
       {
         convergedHistorySensitivity.MinStrain()= SHVs(0,(gradNumber-1));
         convergedHistorySensitivity.UnloadSlope()= SHVs(1,(gradNumber-1));
@@ -624,7 +624,7 @@ int XC::Concrete01::commitSensitivity(const double &strainGradient, int gradNumb
     UniaxialHistoryVars convergedHistorySensitivity;
     UniaxialStateVars convergedStateSensitivity;
 
-    if(SHVs.Nula())
+    if(SHVs.isEmpty())
       {
         SHVs= Matrix(5,numGrads);
         convergedHistorySensitivity.UnloadSlope()= (2.0*fpcSensitivity*epsc0-2.0*fpc*epsc0Sensitivity) / (epsc0*epsc0);

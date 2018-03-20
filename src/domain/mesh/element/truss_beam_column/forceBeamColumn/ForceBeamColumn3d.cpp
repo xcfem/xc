@@ -287,7 +287,7 @@ int XC::ForceBeamColumn3d::revertToStart(void)
 const XC::Matrix &XC::ForceBeamColumn3d::getInitialStiff(void) const
   {
     // check for quick return
-    if(Ki.Nula())
+    if(Ki.isEmpty())
       {
         static Matrix f(NEBD,NEBD);   // element flexibility matrix
         this->getInitialFlexibility(f);
@@ -324,7 +324,7 @@ int XC::ForceBeamColumn3d::update(void)
     static Vector dv(NEBD);
     dv = theCoordTransf->getBasicIncrDeltaDisp();
 
-    if(initialFlag != 0 && dv.Norm() <= DBL_EPSILON && sp.Nula())
+    if(initialFlag != 0 && dv.Norm() <= DBL_EPSILON && sp.isEmpty())
       return 0;
 
     static Vector vin(NEBD);
@@ -479,7 +479,7 @@ int XC::ForceBeamColumn3d::update(void)
                           }
 
                         // Add the effects of element loads, if present
-                        if(!sp.Nula())
+                        if(!sp.isEmpty())
                           {
                             const Matrix &s_p= sp;
                             for(int ii = 0; ii < order; ii++)
@@ -907,7 +907,7 @@ int XC::ForceBeamColumn3d::addLoad(ElementalLoad *theLoad, double loadFactor)
         if(BeamMecLoad *beamMecLoad= dynamic_cast<BeamMecLoad *>(theLoad))
           {
             const size_t numSections= getNumSections();
-            if(sp.Nula())
+            if(sp.isEmpty())
               sp= Matrix(5,numSections);
             const Matrix &xi= beamIntegr->getIntegrPointCoords(numSections,L);
             sp+= beamMecLoad->getAppliedSectionForces(L,xi,loadFactor); // Accumulate applied section forces due to element loads
