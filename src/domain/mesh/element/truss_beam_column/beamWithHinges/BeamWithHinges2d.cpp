@@ -73,30 +73,48 @@ XC::Matrix XC::BeamWithHinges2d::theMatrix(6,6);
 XC::Vector XC::BeamWithHinges2d::theVector(6);
 double XC::BeamWithHinges2d::workArea[100];
 
+//! @brief Default Constructor.
+//!
+//! @param tag: element identifier.
 XC::BeamWithHinges2d::BeamWithHinges2d(int tag)
   :BeamColumnWithSectionFDTrf2d(tag, ELE_TAG_BeamWithHinges2d,2),
    ctes_scc(0.0,0.0,0.0),
    beta1(0.0), beta2(0.0), rho(0.0),
    kb(3,3), q(3), kbCommit(3,3), qCommit(3),
-   initialFlag(0), maxIter(0), tolerance(0.0), sp(0)
+   initialFlag(0), maxIter(0), tolerance(0.0), sp()
   {
     load.reset(6);
     p0.zero();
     v0.zero();
   }
 
+//! @brief Constructor.
+//!
+//! @param tag: element identifier.
 XC::BeamWithHinges2d::BeamWithHinges2d(int tag,const Material *mat,const CrdTransf *coordTransf)
   :BeamColumnWithSectionFDTrf2d(tag, ELE_TAG_BeamWithHinges2d,2,mat,coordTransf),
    ctes_scc(0.0,0.0,0.0),
    beta1(0.0), beta2(0.0), rho(0.0),
    kb(3,3), q(3), kbCommit(3,3), qCommit(3),
-   initialFlag(0), maxIter(0), tolerance(0.0), sp(0)
+   initialFlag(0), maxIter(0), tolerance(0.0), sp()
   {
     load.reset(6);
     p0.zero();
     v0.zero();
   }
 
+//! @brief Constructor.
+//!
+//! @param tag: element identifier.
+//! @param nodeI: identifier of the back end node.
+//! @param nodeJ: identifier of the front end node.
+//! @param E: modulus of elasticity of the interior beam region.
+//! @param A: cross-section area of the interior beam region.
+//! @param I: second moment area of the interior beam region.
+//! @param sectionRefI: section material for the back end hinge.
+//! @param lpi: length ratio of the back end hinge.
+//! @param sectionRefJ: section material for the front end hinge.
+//! @param lpj: length ratio of the front end hinge.
 XC::BeamWithHinges2d::BeamWithHinges2d(int tag, int nodeI, int nodeJ,
                                        double e, double a, double i,
                                        PrismaticBarCrossSection &sectionRefI, double lpi,
@@ -107,7 +125,7 @@ XC::BeamWithHinges2d::BeamWithHinges2d(int tag, int nodeI, int nodeJ,
    ctes_scc(e,a,i),
    beta1(lpi), beta2(lpj), rho(r),
    kb(3,3), q(3), kbCommit(3,3), qCommit(3),
-   initialFlag(0), maxIter(max), tolerance(tol), sp(0)
+   initialFlag(0), maxIter(max), tolerance(tol), sp()
   {
     load.reset(6);
 
@@ -126,11 +144,8 @@ XC::BeamWithHinges2d::BeamWithHinges2d(int tag, int nodeI, int nodeJ,
 XC::Element* XC::BeamWithHinges2d::getCopy(void) const
   { return new BeamWithHinges2d(*this); }
 
-XC::BeamWithHinges2d::~BeamWithHinges2d(void)
-  {
-    if(sp) delete sp;
-  }
 
+//! @brief Returns 6, the number of degrees of freedom for this element. 
 int XC::BeamWithHinges2d::getNumDOF(void) const
   { return 6; }
 
@@ -146,7 +161,8 @@ void XC::BeamWithHinges2d::setDomain(Domain *theDomain)
         const double L = theCoordTransf->getInitialLength();
         if(L == 0.0)
           {
-            std::cerr << "XC::BeamWithHinges2d::setDomain() -- element has zero length\n";
+            std::cerr << getClassName() << "::" << __FUNCTION__
+		      << "; element has zero length.\n";
             exit(-1);
           }
         if(initialFlag == 2)
@@ -156,6 +172,8 @@ void XC::BeamWithHinges2d::setDomain(Domain *theDomain)
       }
   }
 
+//! @brief Invokes commitState() on each section and returns the sum of the
+//! result of these invocations.
 int XC::BeamWithHinges2d::commitState(void)
   {
     int err = 0;
@@ -163,7 +181,8 @@ int XC::BeamWithHinges2d::commitState(void)
     // call element commitState to do any base class stuff
     if((err = this->XC::BeamColumnWithSectionFDTrf2d::commitState()) != 0)
       {
-        std::cerr << "XC::BeamWithHinges2d::commitState () - failed in base class";
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; failed in base class.";
       }
 
     for(int i = 0; i < 2; i++)
@@ -178,13 +197,15 @@ int XC::BeamWithHinges2d::commitState(void)
     qCommit = q;
 
 
-    eCommit[0] = e[0];
-    eCommit[1] = e[1];
+    eCommit[0]= e[0];
+    eCommit[1]= e[1];
 
     //initialFlag = 0;
     return err;
   }
 
+//! @brief Invokes revertToLastCommit() on each section and returns the sum of
+//! the result of these invocations.
 int XC::BeamWithHinges2d::revertToLastCommit(void)
   {
     int err = 0;
@@ -215,6 +236,8 @@ int XC::BeamWithHinges2d::revertToLastCommit(void)
     return err;
   }
 
+//! @brief Invokes revertToStart() on each section and returns the sum of the
+//! result of these invocations.
 int XC::BeamWithHinges2d::revertToStart(void)
   {
     int err = 0;
@@ -240,15 +263,88 @@ int XC::BeamWithHinges2d::revertToStart(void)
     return err;
   }
 
+
+//! @brief Computes the element flexibility matrix, then returns its inverse.
+//!
+//! Computes the element flexibility matrix, then returns its inverse, the
+//! element stiffness matrix. The element flexibility is the sum of the hinge
+//! flexibilities,
+//! \f$\mathbf{f}_I\f$ and \f$\mathbf{f}_J\f$, and the elastic flexibility of
+//! the beam interior, \f$\mathbf{f}_{mid}\f$.
+//!
+//! \begin{equation}
+//! \label{eq:fele}
+//! \fbas := \int_{0}^{L}{bint^T fsec bint \: dx} = \mathbf{f}_I + \mathbf{f}_{mid} + \mathbf{f}_J
+//! \end{equation}
+//! 
+//! The flexibility of the beam interior is obtained in closed form,
+//! 
+//! \begin{equation}
+//! \mathbf{f}_{mid} = \int_{l_I}^{L-l_J}{bint^T fsec_{mid} bint \: dx}
+//! \end{equation}
+//! 
+//! where \f$bint\f$ is the force interpolation matrix,
+//! 
+//! \begin{equation}
+//! bint := \left[
+//!    \begin{array}{c c c}
+//!       1 &           0 &               0
+//!       0 & \frac{x}{L} & \frac{x}{L} - 1
+//!       0 & \frac{1}{L} &     \frac{1}{L}
+//!    \end{array} 
+//!  \right]
+//! \end{equation}
+//! 
+//! //! and \f$fsec\f$ is the elastic section flexibility of the beam interior.
+//! 
+//! \begin{equation}
+//! fsec_{mid} = \left[
+//!    \begin{array}{c c c}
+//!       \frac{1}{EA} &            0 &                   0
+//!                  0 & \frac{1}{EI} &                   0
+//!                  0 &            0 & \frac{1}{\alpha GA}
+//!    \end{array}
+//!  \right]
+//! \end{equation}
+//! 
+//! The hinge flexibilities, \f$\mathbf{f}_I\f$ and \f$\mathbf{f}_J\f$, are
+//! obtained by the midpoint integration rule,
+//! 
+//! \begin{equation}
+//! {\mathbf{f}}_i = bint(x_i)^T fsec_i bint(x_i) * l_i, \:\: i=I,J
+//! \end{equation}
+//! 
+//! where \f$x_i\f$ is the midpoint of hinge \f$i\f$, measured along the length
+//! of the beam, and is the point at which the force interpolation matrix,
+//! \f$bint\f$ is evaluated.  The flexiblity, \f$fsec_i\f$, is obtained from
+//! the constitutive relation for section \f$i\f$.
+//! 
+//! The element stiffness is then obtained by inversion of the element
+//! flexibility, given by Equation \ref{eq:fele}.
+//! 
+//! \begin{equation}
+//! \label{eq:kele}
+//! kbas = \fbas^{-1}
+//! \end{equation}
+//! 
+//! The element then obtains the matrix, \f$\mathbf{A}\f$, which transforms
+//! the element basic
+//! stiffness from its corotating frame to the global frame of reference.  The
+//! transformed
+//! stiffness matrix, \f$kele\f$, is then assembled into the structural system
+//! of equations.
+//! 
+//! \begin{equation}
+//! kele = \mathbf{A}^T kbas \mathbf{A}
+//! \end{equation}
 const XC::Matrix &XC::BeamWithHinges2d::getTangentStiff(void) const
   {
     static Matrix K;
     K= theCoordTransf->getGlobalStiffMatrix(kb, q);
     if(isDead())
-      K*=dead_srf;
+      K*= dead_srf;
     return K;
   }
-
 
 const XC::Matrix &XC::BeamWithHinges2d::getInitialStiff(void) const
   {
@@ -397,7 +493,8 @@ const XC::Matrix &XC::BeamWithHinges2d::getInitialStiff(void) const
     //invert3by3Matrix(f, kb);
     static Matrix kbInit(3,3);
     if(f.Solve(Iden,kbInit) < 0)
-      std::cerr << "BeamWithHinges2d::update() -- could not invert flexibility\n";
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; could not invert flexibility.\n";
     static Matrix K;
     K= theCoordTransf->getInitialGlobalStiffMatrix(kbInit);
     if(isDead())
@@ -405,7 +502,25 @@ const XC::Matrix &XC::BeamWithHinges2d::getInitialStiff(void) const
     return K;
   }
 
-
+//! @brief Return the element lumped mass matrix.
+//!
+//! Returns the element lumped mass matrix, \f$mele\f$. It is assumed that the
+//! mass density per unit length, \f$\rho\f$, is constant along the entire
+//! element, including the hinge regions.
+//! 
+//! \begin{equation}
+//! \label{eq:mele}
+//! mele = \left[
+//!    \begin{array}{c c c c c c}
+//!       \frac{\rho L}{2} & 0 & 0 & 0 & 0 & 0
+//!       0 & \frac{\rho L}{2} & 0 & 0 & 0 & 0
+//!       0 & 0 & 0 & 0 & 0 & 0
+//!       0 & 0 & 0 & \frac{\rho L}{2} & 0 & 0
+//!       0 & 0 & 0 & 0 & \frac{\rho L}{2} & 0
+//!       0 & 0 & 0 & 0 & 0 & 0
+//!    \end{array}
+//!  \right]
+//! \end{equation}
 const XC::Matrix &XC::BeamWithHinges2d::getMass(void) const
   {
     theMatrix.Zero();
@@ -420,11 +535,12 @@ const XC::Matrix &XC::BeamWithHinges2d::getMass(void) const
     return theMatrix;
   }
 
+//! @brief Zero the element load contributions to the residual. 
 void  XC::BeamWithHinges2d::zeroLoad(void)
   {
     BeamColumnWithSectionFDTrf2d::zeroLoad();
-    if(sp)
-      sp->Zero();
+    if(!sp.isEmpty())
+      sp.Zero();
     p0.zero();
     v0.zero();
   }
@@ -433,7 +549,7 @@ void  XC::BeamWithHinges2d::zeroLoad(void)
 int XC::BeamWithHinges2d::addLoad(ElementalLoad *theLoad, double loadFactor)
   {
     if(isDead())
-      std::cerr << getClassName() 
+      std::cerr << getClassName() << "::" << __FUNCTION__
                 << "; load over inactive element: "
                 << getTag()  
                 << std::endl;
@@ -452,22 +568,17 @@ int XC::BeamWithHinges2d::addLoad(ElementalLoad *theLoad, double loadFactor)
 
             const Matrix xi_pt(xi,2,1);
 
-            if(!sp)
-              {
-                sp= new Matrix(3,2);
-                if(!sp)
-                  {
-                    std::cerr << "BeamWithHinges2d::addLoad  -- out of memory\n";
-                    exit(-1);
-                  }
-              }
-            (*sp)+= beamMecLoad->getAppliedSectionForces(L,xi_pt,loadFactor); // Accumulate applied section forces due to element loads
+            if(sp.isEmpty())
+              sp= Matrix(3,2);
+            sp+= beamMecLoad->getAppliedSectionForces(L,xi_pt,loadFactor); // Accumulate applied section forces due to element loads
             beamMecLoad->addReactionsInBasicSystem(L,loadFactor,p0); // Accumulate reactions in basic system
             beamMecLoad->addElasticDeformations(L,ctes_scc,lp1,lp2,loadFactor,v0);
           }
         else
           {
-            std::cerr << "XC::BeamWithHinges2d::addLoad() -- load type unknown for element with tag: " << this->getTag() << std::endl;
+            std::cerr << getClassName() << "::" << __FUNCTION__
+		      << "; load type unknown for element with tag: "
+		      << this->getTag() << std::endl;
             return -1;
           }
       }
@@ -494,6 +605,26 @@ int XC::BeamWithHinges2d::addInertiaLoadToUnbalance(const XC::Vector &accel)
     return 0;
   }
 
+//! Returns the element resisting force vector.
+//!
+//! Returns the element resisting force vector.  The basic element force vector
+//! is obtained as the product of the basic element stiffness, \f$kbas\f$,
+//! given by Equation \ref{eq:kele}, and the basic element deformations,
+//! \f$vbas\f$.
+//! 
+//! \begin{equation}
+//! \qbas = kbas vbas
+//! \end{equation}
+//! 
+//! The basic element force vector is then transformed from the corotating
+//! frame to the global frame
+//! of reference.  The transformed force vector is then assembled into the
+//! structural system of equations.
+//!
+//! \begin{equation}
+//! \label{eq:qele}
+//! qele = \mathbf{A}^T \qbas
+//! \end{equation}
 const XC::Vector &XC::BeamWithHinges2d::getResistingForce(void) const
   {
     Vector p0Vec= p0.getVector();
@@ -504,6 +635,18 @@ const XC::Vector &XC::BeamWithHinges2d::getResistingForce(void) const
     return retval;
   }
 
+//! Returns the element resisting force vector.
+//!
+//! Returns the element resisting force vector, \f$\tilde{qele}\f$ with
+//! inertia forces included,
+//! 
+//! \begin{equation}
+//! \tilde{qele} = qele - mele \ddot{\mathbf u}
+//! \end{equation}
+//! 
+//! where \f$qele\f$ and \f$mele\f$ are obtained from Equations \ref{eq:qele}
+//! and \ref{eq:mele}, respectively, and \f$\ddot{\mathbf u}\f$ is the vector
+//! of trial nodal accelerations for the element.
 const XC::Vector &XC::BeamWithHinges2d::getResistingForceIncInertia(void) const
   {
     theVector=  this->getResistingForce();
@@ -568,9 +711,9 @@ int XC::BeamWithHinges2d::sendData(CommParameters &cp)
     res+= cp.sendVector(eCommit[1],getDbTagData(),CommMetaData(25));
     res+= cp.sendInts(initialFlag,maxIter,getDbTagData(),CommMetaData(26));
     res+= cp.sendDouble(tolerance,getDbTagData(),CommMetaData(27));
-    res+= cp.sendMatrixPtr(sp,getDbTagData(),MatrixCommMetaData(28,29,30,31));
-    res+= p0.sendData(cp,getDbTagData(),CommMetaData(32));
-    res+= v0.sendData(cp,getDbTagData(),CommMetaData(33));
+    res+= cp.sendMatrix(sp,getDbTagData(),CommMetaData(28));
+    res+= p0.sendData(cp,getDbTagData(),CommMetaData(29));
+    res+= v0.sendData(cp,getDbTagData(),CommMetaData(30));
     return res;
   }
 
@@ -594,9 +737,9 @@ int XC::BeamWithHinges2d::recvData(const CommParameters &cp)
     res+= cp.receiveVector(eCommit[1],getDbTagData(),CommMetaData(25));
     res+= cp.receiveInts(initialFlag,maxIter,getDbTagData(),CommMetaData(26));
     res+= cp.receiveDouble(tolerance,getDbTagData(),CommMetaData(27));
-    sp= cp.receiveMatrixPtr(sp,getDbTagData(),MatrixCommMetaData(28,29,30,31));
-    res+= p0.receiveData(cp,getDbTagData(),CommMetaData(32));
-    res+= v0.receiveData(cp,getDbTagData(),CommMetaData(33));
+    res+= cp.receiveMatrix(sp,getDbTagData(),CommMetaData(28));
+    res+= p0.receiveData(cp,getDbTagData(),CommMetaData(29));
+    res+= v0.receiveData(cp,getDbTagData(),CommMetaData(30));
     return res;
   }
 
@@ -610,7 +753,8 @@ int XC::BeamWithHinges2d::sendSelf(CommParameters &cp)
 
     res+= cp.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
-      std::cerr << getClassName() << "sendSelf() - failed to send data\n";
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; failed to send data.\n";
     return res;
   }
 
@@ -622,13 +766,15 @@ int XC::BeamWithHinges2d::recvSelf(const CommParameters &cp)
     int res= cp.receiveIdData(getDbTagData(),dataTag);
 
     if(res<0)
-      std::cerr << getClassName() << "::recvSelf - failed to receive ids.\n";
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; failed to receive ids.\n";
     else
       {
         setTag(getDbTagDataPos(0));
         res+= recvData(cp);
         if(res<0)
-          std::cerr << getClassName() << "::recvSelf - failed to receive data.\n";
+          std::cerr << getClassName() << "::" << __FUNCTION__
+		    << "; failed to receive data.\n";
       }
     return res;
   }
@@ -804,21 +950,20 @@ int XC::BeamWithHinges2d::update(void)
               }
 
             // Add the effects of element loads, if present
-            if(sp != 0)
+            if(!sp.isEmpty())
               {
-                const XC::Matrix &s_p = *sp;
                 for(ii = 0; ii < order; ii++)
                   {
                     switch(code(ii))
                       {
                       case SECTION_RESPONSE_P:
-                        s(ii) += s_p(0,i);
+                        s(ii) += sp(0,i);
                         break;
                       case SECTION_RESPONSE_MZ:
-                        s(ii) += s_p(1,i);
+                        s(ii) += sp(1,i);
                         break;
                       case SECTION_RESPONSE_VY:
-                        s(ii) += s_p(2,i);
+                        s(ii) += sp(2,i);
                         break;
                       default:
                         break;
@@ -944,7 +1089,8 @@ int XC::BeamWithHinges2d::update(void)
         // calculate element stiffness matrix
         //invert3by3Matrix(f, kb);
         if(f.Solve(Iden,kb) < 0)
-          std::cerr << "XC::BeamWithHinges2d::update() -- could not invert flexibility\n";
+          std::cerr << getClassName() << "::" << __FUNCTION__
+		    << "; could not invert flexibility.\n";
 
 
         // dv = v - vr;
@@ -991,27 +1137,29 @@ void XC::BeamWithHinges2d::setHinges(void)
 
 void XC::BeamWithHinges2d::getForceInterpMatrix(Matrix &b, double x, const XC::ID &code)
   {
-  b.Zero();
+    b.Zero();
 
-  const double L = theCoordTransf->getInitialLength();
-  double xi = x/L;
+    const double L = theCoordTransf->getInitialLength();
+    double xi = x/L;
 
-  for(int i = 0; i < code.Size(); i++) {
-    switch (code(i)) {
-    case SECTION_RESPONSE_MZ:                // Moment, Mz, interpolation
-      b(i,1) = xi - 1.0;
-      b(i,2) = xi;
-      break;
-    case SECTION_RESPONSE_P:                // Axial, P, interpolation
-      b(i,0) = 1.0;
-      break;
-    case SECTION_RESPONSE_VY:                // Shear, Vy, interpolation
-      b(i,1) = b(i,2) = 1.0/L;
-      break;
-    default:
-      break;
-    }
-  }
+    for(int i = 0; i < code.Size(); i++)
+      {
+	switch (code(i))
+	  {
+	  case SECTION_RESPONSE_MZ: // Moment, Mz, interpolation
+	    b(i,1) = xi - 1.0;
+	    b(i,2) = xi;
+	    break;
+	  case SECTION_RESPONSE_P: // Axial, P, interpolation
+	    b(i,0) = 1.0;
+	    break;
+	  case SECTION_RESPONSE_VY: // Shear, Vy, interpolation
+	    b(i,1) = b(i,2) = 1.0/L;
+	    break;
+	  default:
+	    break;
+	  }
+      }
   }
 
 void XC::BeamWithHinges2d::getDistrLoadInterpMatrix(Matrix &bp, double x, const XC::ID & code)
@@ -1023,21 +1171,21 @@ void XC::BeamWithHinges2d::getDistrLoadInterpMatrix(Matrix &bp, double x, const 
 
     for(int i = 0; i < code.Size(); i++)
       {
-      switch (code(i))
-        {
-        case SECTION_RESPONSE_MZ:                // Moment, Mz, interpolation
-          bp(i,1) = 0.5*xi*(xi-1);
-          break;
-    case SECTION_RESPONSE_P:                // Axial, P, interpolation
-      bp(i,0) = 1.0-xi;
-      break;
-    case SECTION_RESPONSE_VY:                // Shear, Vy, interpolation
-      bp(i,1) = xi-0.5;
-      break;
-    default:
-      break;
-    }
-  }
+	switch (code(i))
+	  {
+	  case SECTION_RESPONSE_MZ:                // Moment, Mz, interpolation
+	    bp(i,1) = 0.5*xi*(xi-1);
+	    break;
+	  case SECTION_RESPONSE_P:                // Axial, P, interpolation
+	    bp(i,0) = 1.0-xi;
+	    break;
+	  case SECTION_RESPONSE_VY:                // Shear, Vy, interpolation
+	    bp(i,1) = xi-0.5;
+	    break;
+	  default:
+	    break;
+	  }
+      }
   }
 
 XC::Response* XC::BeamWithHinges2d::setResponse(const std::vector<std::string> &argv, Information &info)
