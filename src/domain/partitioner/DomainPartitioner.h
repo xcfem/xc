@@ -61,6 +61,7 @@
 #define DomainPartitioner_h
 
 #include <utility/matrix/ID.h>
+#include "xc_utils/src/nucleo/EntCmd.h"
 
 namespace XC {
 class GraphPartitioner;
@@ -70,7 +71,14 @@ class Vector;
 class Graph;
 class TaggedObjectStorage;
 
-class DomainPartitioner
+//! @brief Object that can partition and load balance a PartitionedDomain.
+//!
+//! A DomainPartitioner is an object used to partition and load balance
+//! a PartitionedDomain. The DomainPartitioner uses the element graph of
+//! the domain to partition and load balance. Derived types can use the
+//! node graph of the domain. The partitioner uses a GraphPartitioner and
+//! a LoadBalancingAlgo to partition and load balance the domain. 
+class DomainPartitioner: public EntCmd
   {
   private:
     PartitionedDomain *myDomain; 
