@@ -68,21 +68,36 @@
 #include <solution/graph/graph/Vertex.h>
 #include <utility/matrix/ID.h> 
 
-
-XC::SwapHeavierToLighterNeighbours::SwapHeavierToLighterNeighbours()
+//! @brief Default constructor.
+XC::SwapHeavierToLighterNeighbours::SwapHeavierToLighterNeighbours(void)
  :LoadBalancer() {}
 
+//! @brief Constructor.
+//!
+//! Sets the parameters used in the balance() method.
+//!
+//! @param fG: factor greater.
+//! @param rels: number of releases. 
 XC::SwapHeavierToLighterNeighbours::SwapHeavierToLighterNeighbours(double fG, int rels)
- :LoadBalancer(fG,rels){}
+  : LoadBalancer(fG,rels){}
 
+//! For \p numRelease times the Vertices of \p theWeightedGraph are
+//! iterated through. For each Vertex, \f$i\f$, the weight of the Vertex is
+//! compared to those of it's adjacent Vertices, \f$other\f$, (this is done by
+//! looping through the adjacency ID of the Vertex), if the vertex weight is
+//! {\em factorGreater} times greater than the other Vertices load then {\em
+//! swapBoundary(i, other)} is invoked on the DomainPartitioner. Returns
+//! \f$0\f$ if successfull, otherwise a negative number and a warning message
+//! are returned if either no link has been set to the DomainPartitioner
+//! or swapBoundary() returns a negative number.
 int XC::SwapHeavierToLighterNeighbours::balance(Graph &theWeightedGraph)
   {
     // check to see a domain partitioner has been set
     DomainPartitioner *thePartitioner = this->getDomainPartitioner();
     if(!thePartitioner)
       {
-        std::cerr << "SwapHeavierToLighterNeighbours::balance";
-        std::cerr << "- No XC::DomainPartitioner has been set\n"; 
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; no DomainPartitioner has been set.\n"; 
         return -1;
       }
 
@@ -101,7 +116,7 @@ int XC::SwapHeavierToLighterNeighbours::balance(Graph &theWeightedGraph)
               {
                 const int otherVertexTag= *j;
                 Vertex *otherVertexPtr= theWeightedGraph.getVertexPtr(otherVertexTag);
-                double otherVertexLoad= otherVertexPtr->getWeight();
+                const double otherVertexLoad= otherVertexPtr->getWeight();
                 
                 if(vertexLoad > otherVertexLoad && otherVertexLoad != 0) 
                   if(vertexLoad/otherVertexLoad > factorGreater)
@@ -109,9 +124,10 @@ int XC::SwapHeavierToLighterNeighbours::balance(Graph &theWeightedGraph)
                       res = thePartitioner->swapBoundary(vertexTag,otherVertexTag);
                         if(res < 0)
                           {
-                            std::cerr << "WARNING XC::SwapHeavierToLighterNeighbours";
-                            std::cerr << "::balance - DomainPartitioner returned ";
-                            std::cerr << res << std::endl;
+                            std::cerr << getClassName() << "::" << __FUNCTION__
+				      << "; WARNING, "
+			              << "DomainPartitioner returned: "
+				      << res << std::endl;
                             return res;
                           }
                     }
@@ -121,9 +137,10 @@ int XC::SwapHeavierToLighterNeighbours::balance(Graph &theWeightedGraph)
                     res= thePartitioner->swapBoundary(vertexTag,otherVertexTag); 
                     if(res < 0)
                       {
-                        std::cerr << "WARNING XC::SwapHeavierToLighterNeighbours";
-                        std::cerr << "::balance - DomainPartitioner returned ";
-                        std::cerr << res << std::endl;
+                        std::cerr << getClassName() << "::" << __FUNCTION__
+				  << "; WARNING, "
+				  << " DomainPartitioner returned: "
+				  << res << std::endl;
                         return res;
                       }
                   }

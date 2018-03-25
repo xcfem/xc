@@ -57,9 +57,6 @@
 //
 // Description: This file contains the class definition for SwapHeavierToLighterNeighbours.
 // A SwapHeavierToLighterNeighbours is an object used to balance the partition.
-// It will go thought the weigted partition graph and shed load from a heavier
-// to its lighter neighbours if the ratio between the two is greater than a 
-// certain percent. It repaets this process a number of times.
 //
 // What: "@(#) SwapHeavierToLighterNeighbours.h, revA"
 
@@ -70,12 +67,19 @@
 
 namespace XC{
 
+//! @ingroup LoadBalancers
+//
+//! @brief A SwapHeavierToLighterNeighbours is an object used to balance a
+//! PartitionedDomain.
+//!
+//! A SwapHeavierToLighterNeighbours is an object used to balance a
+//! PartitionedDomain. It does this by shedding the boundary vertices on
+//! the heaviest loaded partition (subdomain).
+//! It will go thought the weigted partition graph and shed load from a heavier
+//! to its lighter neighbours if the ratio between the two is greater than a 
+//! certain percent. It repaets this process a number of times.
 class SwapHeavierToLighterNeighbours: public LoadBalancer
   {
-  private:
-    int numReleases;
-    double factorGreater;
-    bool disallowDisconnectedGraphs;            
   public:
     SwapHeavierToLighterNeighbours();
     SwapHeavierToLighterNeighbours(double factorGreater, int numReleases);

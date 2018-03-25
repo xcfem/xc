@@ -66,12 +66,13 @@
 #include "LoadBalancer.h"
 
 namespace XC {
+//! @ingroup LoadBalancers
+//
+//! A ShedHeaviest is an object used to balance a
+//! PartitionedDomain. It does this by shedding the boundary vertices on
+//! the heaviest loaded partition (subdomain).
 class ShedHeaviest: public LoadBalancer
   {
-  private:
-    int numReleases;
-    double factorGreater;
-    bool disallowDisconnectedGraphs;    
   public:
     ShedHeaviest();
     ShedHeaviest(double factorGreater, int numReleases, bool disallowDissconnectedGraph);    

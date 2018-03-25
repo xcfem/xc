@@ -71,6 +71,12 @@ class Vector;
 class Graph;
 class TaggedObjectStorage;
 
+//! @ingroup Dom
+//
+//! @defgroup Partitioner Domain partitioners.
+//
+//! @ingroup Partitioner
+//
 //! @brief Object that can partition and load balance a PartitionedDomain.
 //!
 //! A DomainPartitioner is an object used to partition and load balance

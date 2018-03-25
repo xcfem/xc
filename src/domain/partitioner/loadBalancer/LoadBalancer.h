@@ -63,17 +63,26 @@
 #ifndef LoadBalancer_h
 #define LoadBalancer_h
 
+#include "xc_utils/src/nucleo/EntCmd.h"
+
 namespace XC {
 class Vector;
 class DomainPartitioner;
 class Graph;
 
-class LoadBalancer
+//! @ingroup Partitioner
+//
+//! @defgroup LoadBalancers Partitioned domains balancers.
+//
+//! A LoadBalancer is an object used to balance a
+//! PartitionedDomain. The LoadBalancer does this by invoking methods in
+//! the DomainPartitioner object with which it is associated.
+class LoadBalancer: public EntCmd
   {
   private:
     DomainPartitioner *theDomainPartitioner;    
   protected:
-    int numReleases;
+    int numReleases; //! number of releases.
     double factorGreater;
     bool disallowDisconnectedGraphs;
 
@@ -83,6 +92,13 @@ class LoadBalancer
     LoadBalancer(double factGreater, int releases, bool disallowDisconnected= true);
 
     virtual void setLinks(DomainPartitioner &thePartitioner);
+    
+    //! Each subclass must provide an implementation of this method. This
+    //! method is invoked to balance the PartitionedDomain. The Graph {\em
+    //! theWeightedGraph} is a weighted graph in which the vertices represent
+    //! the Subdomains, the edges Subdomains sharing common boundary nodes and
+    //! the weight the cost of the previous Subdomain calculations (determined
+    //! by invoking getCost() on the Subdomains).
     virtual int balance(Graph &theWeightedGraph) =0;
   };
 } // end of XC namespace

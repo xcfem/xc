@@ -65,22 +65,35 @@
 #include "solution/graph/graph/Graph.h"
 #include <solution/graph/graph/VertexIter.h>
 #include <solution/graph/graph/Vertex.h>
- 
+
+//! @brief Default constructor.
 XC::ReleaseHeavierToLighterNeighbours::ReleaseHeavierToLighterNeighbours(void)
   : LoadBalancer() {}
 
+//! @brief Constructor.
+//!
+//!
+//! @param fG: factor greater.
+//! @param rels: number of releases. 
 XC::ReleaseHeavierToLighterNeighbours::ReleaseHeavierToLighterNeighbours(double fG, int rels, bool disallowDisconnected)
   : LoadBalancer(fG,rels,disallowDisconnected){}
 
 
+//! For \p numRelease times the Vertices of \p theWeightedGraph are
+//! iterated through. For each Vertex, \f$i\f$, {\em releaseBoundary(i,
+//! theWeightedGraph, true, factorGreater)} is invoked on
+//! the DomainPartitioner. Returns \f$0\f$ if succesfull, otherwise a negative
+//! number and a warning message are returned if either no link has been
+//! set to the DomainPartitioner or releaseBoundary() returns a
+//! negative number. 
 int XC::ReleaseHeavierToLighterNeighbours::balance(Graph &theWeightedGraph)
   {
     // check to see a domain partitioner has been set
     DomainPartitioner *thePartitioner = getDomainPartitioner();    
     if(!thePartitioner)
       {
-	std::cerr << "ReleaseHeavierToLighterNeighbours::balance ";
-	std::cerr << "- No domainPartitioner has been set\n";
+	std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; no domainPartitioner has been set.\n";
 	return -1;
       }
     else
@@ -92,9 +105,9 @@ int XC::ReleaseHeavierToLighterNeighbours::balance(Graph &theWeightedGraph)
 	    res = thePartitioner->releaseBoundary(i,theWeightedGraph,true,factorGreater);  
             if(res<0)
               {
-                std::cerr << "WARNING XC::ReleaseHeavierToLighterNeighbours";
-	        std::cerr << "::balance - DomainPartitioner returned ";
-	        std::cerr << res << std::endl;
+                std::cerr << getClassName() << "::" << __FUNCTION__
+			  << "; WARNING, DomainPartitioner returned: "
+			  << res << std::endl;
 	        return res;    
 	      }
           }

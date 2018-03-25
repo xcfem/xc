@@ -33,6 +33,8 @@
 #include "utility/matrix/ID.h"
 
 namespace XC{
+//! @ingroup Partitioner
+//
 class NodeLocations: public TaggedObject
   {
   public:

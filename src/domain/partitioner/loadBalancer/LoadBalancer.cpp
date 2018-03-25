@@ -63,25 +63,38 @@
 #include "LoadBalancer.h"
 #include "domain/partitioner/DomainPartitioner.h"
 
+//! @brief Default constructor.
 XC::LoadBalancer::LoadBalancer(void)
-  :theDomainPartitioner(nullptr), numReleases(1), factorGreater(1.0), disallowDisconnectedGraphs(true){}
+  : theDomainPartitioner(nullptr),
+    numReleases(1), factorGreater(1.0), disallowDisconnectedGraphs(true){}
 
+//! @brief Constructor.
+//!
+//! Sets the parameters used in the balance() method.
+//!
+//! @param factGreater: factor greater.
+//! @param releases: number of releases.
 XC::LoadBalancer::LoadBalancer(double factGreater, int releases, bool disallowDisconnected)
  :theDomainPartitioner(nullptr),numReleases(releases),factorGreater(factGreater), disallowDisconnectedGraphs(disallowDisconnected)  
   {
     if(releases < 0)
-      numReleases = 0;
+      numReleases= 0;
   }
 
+//! @brief Sets the pointer to the DomainPartitioner object associated with the
+//! LoadBalancer to point to \p thePartitioner.
 void XC::LoadBalancer::setLinks(DomainPartitioner &thePartitioner)
   { theDomainPartitioner = &thePartitioner; }
 
+//! @brief Returns a pointer to the DomainPartitioner. If no DomainPartitioner
+//! has been set, a warning message is printed and \f$0\f$ returned.
 XC::DomainPartitioner *XC::LoadBalancer::getDomainPartitioner(void)
   {
     if(!theDomainPartitioner)
       {
-	std::cerr << "WARNING XC::LoadBalancer::getDomainPartitioner() ";
-	std::cerr << " no XC::DomainPartitioner is set - has setLinks() been called?\n";
+	std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; WARNING, no DomainPartitioner is set,"
+	          << " has setLinks() been called?\n";
       }
     return theDomainPartitioner;
   }
