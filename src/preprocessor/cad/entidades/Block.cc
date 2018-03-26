@@ -376,18 +376,18 @@ void XC::Block::create_nodes(void)
         const size_t capas= NDivK()+1;
         const size_t filas= NDivJ()+1;
         const size_t cols= NDivI()+1;
-        ttzNodes = TritrizPtrNod(capas,filas,cols); //Punteros a nodo.
+        ttzNodes = TritrizPtrNod(capas,filas,cols); //Pointers to node.
         TritrizPos3d pos_nodes= get_posiciones(); //Posiciones of the nodes.
 
         //Vertices.
-	ttzNodes(1,1,1)= GetVertice(1)->GetNodo();
-        ttzNodes(1,filas,1)= GetVertice(2)->GetNodo();
-	ttzNodes(1,filas,cols)= GetVertice(3)->GetNodo();
-        ttzNodes(1,1,cols)= GetVertice(4)->GetNodo();
-	ttzNodes(capas,1,1)= GetVertice(5)->GetNodo();
-        ttzNodes(capas,filas,1)= GetVertice(6)->GetNodo();
-	ttzNodes(capas,filas,cols)= GetVertice(7)->GetNodo();
-        ttzNodes(capas,1,cols)= GetVertice(8)->GetNodo();
+	ttzNodes(1,1,1)= GetVertice(1)->getNode();
+        ttzNodes(1,filas,1)= GetVertice(2)->getNode();
+	ttzNodes(1,filas,cols)= GetVertice(3)->getNode();
+        ttzNodes(1,1,cols)= GetVertice(4)->getNode();
+	ttzNodes(capas,1,1)= GetVertice(5)->getNode();
+        ttzNodes(capas,filas,1)= GetVertice(6)->getNode();
+	ttzNodes(capas,filas,cols)= GetVertice(7)->getNode();
+        ttzNodes(capas,1,cols)= GetVertice(8)->getNode();
 
         const Node *n1= ttzNodes(1,1,1);
         const Node *n2= ttzNodes(1,filas,1);
@@ -426,9 +426,9 @@ void XC::Block::create_nodes(void)
               size_t J= (IJK2[ind_i]-IJK1[ind_i])/(nf-1)*(i-1)+IJK1[ind_i];
               size_t K= (IJK4[ind_j]-IJK1[ind_j])/(nc-1)*(j-1)+IJK1[ind_j];
               if(ind_i<ind_j)
-                ttzNodes(1,J,K)= base.GetNodo(i,j);
+                ttzNodes(1,J,K)= base.getNode(i,j);
               else
-                ttzNodes(1,J,K)= base.GetNodo(j,i);
+                ttzNodes(1,J,K)= base.getNode(j,i);
               d2= dist2(ttzNodes(1,J,K)->getInitialPosition3d(),pos_nodes(1,J,K));
               if(d2>1e-4)
 		std::cerr << "Block::create_nodes; error while linking node: ("
@@ -446,7 +446,7 @@ void XC::Block::create_nodes(void)
             {
               size_t J= (IJK2[1]-IJK1[1])/(filas-1)*(i-1)+IJK1[1];
               size_t K= (IJK2[2]-IJK1[2])/(cols-1)*(j-1)+IJK1[2];
-              ttzNodes(capas,J,K)= tapa.GetNodo(i,j);
+              ttzNodes(capas,J,K)= tapa.getNode(i,j);
             }
 
         //Lateral izquierdo j=1.
@@ -457,7 +457,7 @@ void XC::Block::create_nodes(void)
             {
               size_t J= (IJK2[1]-IJK1[1])/(filas-1)*(j-1)+IJK1[1];
               size_t K= (IJK2[2]-IJK1[2])/(filas-1)*(j-1)+IJK1[2];
-              ttzNodes(capas,J,K)= tapa.GetNodo(i,j);
+              ttzNodes(capas,J,K)= tapa.getNode(i,j);
             }
 	*/
 

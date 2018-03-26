@@ -490,8 +490,8 @@ def displayEigenResults(preprocessor,eigenMode, setToDisplay=None,defShapeScale=
     defDisplay.defineMeshScene(None,defShapeScale,eigenMode) 
     if equLoadVctScale not in [None,0]:
         vField=vf.VectorField(name='modo'+str(eigenMode),fUnitConv=unitsScale,scaleFactor=equLoadVctScale,showPushing= True)
-        setNodos= setToDisplay.getNodes
-        for n in setNodos:
+        setNodes= setToDisplay.getNodes
+        for n in setNodes:
             pos= n.getEigenPos3d(defShapeScale,eigenMode)
             vEqLoad=n.getEquivalentStaticLoad(eigenMode,accelMode)
             vField.data.insertNextPair(pos.x,pos.y,pos.z,vEqLoad[0],vEqLoad[1],vEqLoad[2],unitsScale,pushing= True)

@@ -161,8 +161,8 @@ class Element: public MeshComponent
     //! setDomain()} method. 
     virtual int getNumDOF(void) const= 0;
     virtual size_t getDimension(void) const;
-    virtual void setIdNodos(const std::vector<int> &inodos);
-    virtual void setIdNodos(const ID &inodos);
+    virtual void setIdNodes(const std::vector<int> &inodes);
+    virtual void setIdNodes(const ID &inodes);
     void setDomain(Domain *theDomain);
 
     // methods dealing with committed state and update

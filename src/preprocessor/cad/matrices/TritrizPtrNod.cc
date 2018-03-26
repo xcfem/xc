@@ -53,15 +53,15 @@ XC::TritrizPtrNod::TritrizPtrNod(const size_t capas,const size_t filas,const siz
   }
 
 //! @brief Returns (if it exists) a pointer to the node
-//! cuyo tag is being passed as parameter.
-XC::Node *XC::TritrizPtrNod::buscaNodo(const int &tag)
+//! which tag is being passed as parameter.
+XC::Node *XC::TritrizPtrNod::findNode(const int &tag)
   {
     Node *retval= nullptr;
     const size_t ncapas= GetCapas();
     for(size_t i=1;i<=ncapas;i++)
       {
         MatrizPtrNod &capa= operator()(i);
-        retval= capa.buscaNodo(tag);
+        retval= capa.findNode(tag);
         if(retval) break;
       }
     return retval;
@@ -82,7 +82,7 @@ XC::Node *XC::TritrizPtrNod::getNearestNode(const Pos3d &p)
     double d= DBL_MAX;
     double tmp= 0;
     if(ncapas>100)
-      std::clog << "La «tritriz» de nodos es tiene "
+      std::clog << "La «tritriz» de nodes es tiene "
                 << ncapas << " capas "
                 << " es mejor buscar por coordenadas en the set asociado."
                 << std::endl;
@@ -125,15 +125,15 @@ XC::ID XC::TritrizPtrNod::getNodeIndices(const Node *n) const
   }
 
 //! @brief Returns (if it exists) a pointer to the node
-//! cuyo tag is being passed as parameter.
-const XC::Node *XC::TritrizPtrNod::buscaNodo(const int &tag) const
+//! which tag is being passed as parameter.
+const XC::Node *XC::TritrizPtrNod::findNode(const int &tag) const
   {
     const Node *retval= nullptr;
     const size_t ncapas= GetCapas();
     for(size_t i=1;i<=ncapas;i++)
       {
         const MatrizPtrNod &capa= operator()(i);
-        retval= capa.buscaNodo(tag);
+        retval= capa.findNode(tag);
         if(retval) break;
       }
     return retval;
@@ -174,7 +174,7 @@ XC::Vector XC::TritrizPtrNod::IntegSimpsonFilaK(const size_t &capa,const size_t 
     return retval;
   }
 
-//! @brief Impone desplazamiento nulo en los nodos de this set.
+//! @brief Impone desplazamiento nulo en the nodes de this set.
 void XC::TritrizPtrNod::fix(const SFreedom_Constraint &spc) const
   {
     if(Null()) return;
@@ -253,60 +253,60 @@ void XC::fix(const XC::TritrizPtrNod::var_ref_caja &ref_caja,const XC::SFreedom_
   }
 
 //! @brief Returns the indexes of the nodes (j,k),(j+1,k),(j+1,k+1),(j,k+1). 
-std::vector<int> XC::getIdNodosQuad4N(const XC::TritrizPtrNod::const_ref_capa_i_cte &nodos,const size_t &j,const size_t &k)
+std::vector<int> XC::getNodeIdsQuad4N(const XC::TritrizPtrNod::const_ref_capa_i_cte &nodes,const size_t &j,const size_t &k)
   {
     std::vector<int> retval(4,-1);
-    const size_t nfilas= nodos.getNumFilas();
-    const size_t ncols= nodos.getNumCols();
+    const size_t nfilas= nodes.getNumFilas();
+    const size_t ncols= nodes.getNumCols();
     if(j>=nfilas)
       {
-        std::cerr << "getIdNodosQuad; row index j= " << j << " out of range.\n";
+        std::cerr << "getNodeIdsQuad; row index j= " << j << " out of range.\n";
         return retval;
       }
     if(k>=ncols)
       {
-        std::cerr << "getIdNodosQuad; column index k= " << k << " out of range.\n";
+        std::cerr << "getNodeIdsQuad; column index k= " << k << " out of range.\n";
         return retval;
       }
 
 
     Pos3d p1;
-    const Node *ptr= nodos(j,k);
+    const Node *ptr= nodes(j,k);
     if(ptr)
       {
         retval[0]= ptr->getTag();
         if(retval[0]<0)
-          std::cerr << "getIdNodosQuad; error al obtener el identificador de nodo (" << j << ',' << k << ").\n";
+          std::cerr << "getNodeIdsQuad; error al obtener el node identifier (" << j << ',' << k << ").\n";
         p1= ptr->getInitialPosition3d();
       }
 
     Pos3d p2;
-    ptr= nodos(j,k+1);
+    ptr= nodes(j,k+1);
     if(ptr)
       {
         retval[1]= ptr->getTag();
         if(retval[1]<0)
-          std::cerr << "getIdNodosQuad; error al obtener el identificador de nodo (" << j << ',' << k+1 << ").\n";
+          std::cerr << "getNodeIdsQuad; error al obtener el node identifier (" << j << ',' << k+1 << ").\n";
         p2= ptr->getInitialPosition3d();
       }
 
     Pos3d p3;
-    ptr= nodos(j+1,k+1);
+    ptr= nodes(j+1,k+1);
     if(ptr)
       {
         retval[2]= ptr->getTag();
         if(retval[2]<0)
-          std::cerr << "getIdNodosQuad; error al obtener el identificador de nodo (" << j+1 << ',' << k+1 << ").\n";
+          std::cerr << "getNodeIdsQuad; error al obtener el node identifier (" << j+1 << ',' << k+1 << ").\n";
         p3= ptr->getInitialPosition3d();
       }
 
     Pos3d p4;
-    ptr= nodos(j+1,k);
+    ptr= nodes(j+1,k);
     if(ptr)
       {
         retval[3]=ptr->getTag();
         if(retval[3]<0)
-          std::cerr << "getIdNodosQuad; error al obtener el identificador de nodo (" << j+1 << ',' << k << ").\n";
+          std::cerr << "getNodeIdsQuad; error al obtener el node identifier (" << j+1 << ',' << k << ").\n";
         p4= ptr->getInitialPosition3d();
       }
 
@@ -347,9 +347,9 @@ std::vector<int> XC::getIdNodosQuad4N(const XC::TritrizPtrNod::const_ref_capa_i_
   }
 
 //! @brief Returns the indexes of the nodes (j,k),(j+1,k),(j+1,k+1),(j,k+1). 
-std::vector<int> XC::getIdNodosQuad9N(const XC::TritrizPtrNod::const_ref_capa_i_cte &nodos,const size_t &j,const size_t &k)
+std::vector<int> XC::getNodeIdsQuad9N(const XC::TritrizPtrNod::const_ref_capa_i_cte &nodes,const size_t &j,const size_t &k)
   {
     std::vector<int> retval(9,-1);
-    std::cerr << "getIdNodosQuad9N not implemented." << std::endl;
+    std::cerr << "getNodeIdsQuad9N not implemented." << std::endl;
     return retval;
   }

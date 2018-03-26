@@ -32,34 +32,34 @@ def defLineaEsquema2d(preprocessor, idEsquema, i1, j1, i2, j2, nDivL, setName):
   st.selEdge(tagL)
 
 '''
-Fija los grados de libertad de un nodo
+Fija los grados de libertad de un node
 idEsquema: Identificador del esquema a emplear.
-i,j: Índices i y j del punto al que pertenece el nodo.
+i,j: Índices i y j del punto al que pertenece el node.
 gdls: Grados de libertad a eliminar.
 '''
-def fijaNodoEsquema2d(preprocessor, idEsquema, i, j, gdls):
+def fixNodeEsquema2d(preprocessor, idEsquema, i, j, gdls):
   esq2d= preprocessor.getCad.get2DScheme(idEsquema)
   n= esq2d.getPnt(i,j).getNode()
   n.fix(gdls)
 
 '''
-Carga sobre un nodo
+Carga sobre un node
 idEsquema: Identificador del esquema a emplear.
-i,j: Índices i y j del punto al que pertenece el nodo.
+i,j: Índices i y j del punto al que pertenece el node.
 carga: Carga a aplicar.
 '''
-def cargaNodoEsquema2d(preprocessor,idEsquema, i, j, carga):
+def loadNodeEsquema2d(preprocessor,idEsquema, i, j, carga):
   esq2d= preprocessor.getCad.get2DScheme(idEsquema)
   n= esq2d.getPnt(i,j).getNode()
   n.load(carga)
 
 '''
-Fija los grados de libertad de un nodo
+Fija los grados de libertad de un node
 idEsquema: Identificador del esquema a emplear.
-i,j: Índices i y j del punto al que pertenece el nodo.
+i,j: Índices i y j del punto al que pertenece el node.
 gdls: Grados de libertad a eliminar.
 '''
-def vectorDesplazNodoEsquema2d(idEsquema, i, j):
+def nodeDisplacementVectorEsquema2d(idEsquema, i, j):
   esq2d= preprocessor.getCad.get2DScheme(idEsquema)
   n= esq2d.getPnt(i,j).getNode()
   return n.getDisp()

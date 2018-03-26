@@ -76,7 +76,7 @@ XC::Vector XC::CrdTransf3d::vectorJ(3);
 XC::Vector XC::CrdTransf3d::vectorK(3);
 XC::Vector XC::CrdTransf3d::vectorCoo(3);
 
-//! @brief Asigna el value of the vector contenido en el plano XZ local.
+//! @brief Set el value of the vector contenido en el plano XZ local.
 void XC::CrdTransf3d::set_xz_vector(const XC::Vector &vecInLocXZPlane)
   {
     for(register int i = 0; i < 2; i++)
@@ -102,8 +102,8 @@ void XC::CrdTransf3d::inic_ug(const Vector &d1,const Vector &d2,double *ug)
   {
     for(register int i=0;i<6;i++) //Displacement obtained from analysis.
       {
-        ug[i]   = d1(i); //Nodo dorsal.
-        ug[i+6] = d2(i); //Nodo frontal.
+        ug[i]   = d1(i); //Back end node.
+        ug[i+6] = d2(i); //Front end node.
       }
   }
 
@@ -163,8 +163,8 @@ void XC::CrdTransf3d::calc_Wu(const double *ug,double *ul,double *Wu) const
     ul[8] += R(2,0)*Wu[0] + R(2,1)*Wu[1] + R(2,2)*Wu[2];
   }
 
-//! Sean dx1,dy1,dz1,gx1,gy1,gz1 los displacements y giros del nodo dorsal y dx2,dy2,dz2,gx2,gy2,gz2
-//! los del nodo frontal expressed in local coordinates. This function gets the following displacements
+//! Sean dx1,dy1,dz1,gx1,gy1,gz1 los displacements y giros of the node dorsal y dx2,dy2,dz2,gx2,gy2,gz2
+//! los of the node frontal expressed in local coordinates. This function gets the following displacements
 //! on the ul parameter and returns the following magnitudes on the ub vector:
 //! -ub(0)= dx2-dx1: element elongation.
 //! -ub(1)= (dy1-dy2)/L+gz1: rotation of node 1 about z axis.

@@ -24,9 +24,9 @@ def listaLineasSet(setName, nmbArchivo):
     nmbArchivo.write(l.tag," & ",l.ndiv," & ",l.kPts,"\\\\\n")
   cierraSupertabular(nmbArchivo)
 
-# Obtiene un listado de los nodos del conjunto cuyo nombre se pasa como parámetro.
-def listaNodosSet(preprocessor, setName, nmbArchivo, fmt):
-  caption= "Nodos del conjunto: "+setName
+# Obtiene un listado of the nodes del conjunto cuyo nombre se pasa como parámetro.
+def listSetNodes(preprocessor, setName, nmbArchivo, fmt):
+  caption= "Nodes from set: "+setName
   defCampos= "|r|r|r|r|"
   idsCampos= "Id & x & y & z"
   cabeceraSupertabular(nmbArchivo,4,defCampos,idsCampos,caption) 
@@ -84,7 +84,7 @@ def listaEntidadesSet(preprocessor, setName, nmbArchivo, nmbProcLstElementos, fm
   nmbArchivo.write("\\",encab,"{",tit,"}\n")
   listaKPtsSet(preprocessor, setName,nmbArchivo,fmt) 
   listaLineasSet(preprocessor, setName,nmbArchivo) 
-  listaNodosSet(preprocessor, setName,nmbArchivo,fmt) 
+  listSetNodes(preprocessor, setName,nmbArchivo,fmt) 
   nmbArchivo.write("\\onecolumn\n")
   nmbProcLstElementos(preprocessor, setName,nmbArchivo,fmt) 
 
@@ -92,6 +92,6 @@ def listaEntidadesSet(preprocessor, setName, nmbArchivo, nmbProcLstElementos, fm
 # Obtiene un listado de las entidades de la linea cuyo nombre se pasa como parámetro.
 def listaEntidadesLinea(preprocessor, setName, nmbArchivo, nmbProcLstElementos, fmt, encab, tit):
   nmbArchivo.write("\\",encab,"{",tit,"}\n")
-  listaNodosSet(preprocessor, setName,nmbArchivo,fmt)
+  listSetNodes(preprocessor, setName,nmbArchivo,fmt)
   nmbProcLstElementos(setName,nmbArchivo,fmt) 
 

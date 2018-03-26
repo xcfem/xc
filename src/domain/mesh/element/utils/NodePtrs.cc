@@ -461,7 +461,7 @@ const XC::Node *XC::NodePtrs::getNearestNode(const Pos3d &p,bool initialGeometry
   }
 
 //! @brief Return the index of the node pointer in the array.
-int XC::NodePtrs::getIndiceNodo(const Node *ptrNod) const
+int XC::NodePtrs::getNodeIndex(const Node *ptrNod) const
   {
     int retval= -1;
     const size_t sz= size();

@@ -34,7 +34,7 @@
 
 //! @brief Constructor.
 XC::ZeroLengthContact::ZeroLengthContact(int tag, int classTag, int dim, int Nd1, int Nd2,double Knormal, double Ktangent, double frictionRatio)
-  :Element0D(tag,classTag,Nd1,Nd2,dim), N(dim*numNodos())
+  :Element0D(tag,classTag,Nd1,Nd2,dim), N(dim*numNodes())
   {
     // assign Kn, Kt, fs
     Kn = Knormal;
@@ -51,7 +51,7 @@ XC::ZeroLengthContact::ZeroLengthContact(int tag, int classTag, int dim, int Nd1
 //! @brief Default constructor.
 XC::ZeroLengthContact::ZeroLengthContact(int tag,int classTag, int dim)
   :Element0D(tag,classTag,0,0,dim),
-   N(dim*numNodos())
+   N(dim*numNodes())
   {}
 
 int XC::ZeroLengthContact::addLoad(ElementalLoad *theLoad, double loadFactor)

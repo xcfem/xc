@@ -44,7 +44,7 @@ class EntMdlr;
 //!  @brief Objects in a row.
 //! 
 //!  A SetFilaJ objects contains 0 or more:
-//!  - Nodoe.
+//!  - Nodes.
 //!  - Finite elements.
 //!  that correspond to a row of an EntMdlr object.
 class SetFilaJ: public SetFila<TritrizPtrNod::var_ref_fila_j,TritrizPtrElem::var_ref_fila_j>

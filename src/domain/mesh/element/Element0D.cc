@@ -236,8 +236,8 @@ void XC::Element0D::setUpVectors(const Vector &x, const Vector &yp)
   }
 
 //! @brief Establish the external nodes and set up the transformation matrix for orientation
-//! @param Nd1: Tag del nodo dorsal.
-//! @param Nd2: Tag del nodo frontal.
+//! @param Nd1: Tag of the node dorsal.
+//! @param Nd2: Tag of the node frontal.
 //! @param x: Componentes del eje x local, expresadas en coordenadas globales.
 //! @param y: Componentes de un vector contenido en el plano xy local, expresadas en coordenadas globales.
 void XC::Element0D::setUp(int Nd1, int Nd2, const Vector &x, const Vector &yp)
@@ -279,8 +279,8 @@ XC::TritrizPtrElem XC::Element0D::cose(const SetEstruct &f1,const SetEstruct &f2
                 for(size_t i=1;i<=n;i++)
                   {
                     Element *tmp= getCopy();
-                    const int Nd1= f1.GetNodo(i,1,1)->getTag();
-                    const int Nd2= f2.GetNodo(i,1,1)->getTag();
+                    const int Nd1= f1.getNode(i,1,1)->getTag();
+                    const int Nd2= f2.getNode(i,1,1)->getTag();
                     tmp->getNodePtrs().set_id_nodes(Nd1,Nd2);
                     retval(i,1,1)= tmp;
                   }
@@ -291,8 +291,8 @@ XC::TritrizPtrElem XC::Element0D::cose(const SetEstruct &f1,const SetEstruct &f2
                 for(size_t i=1;i<=n;i++)
                   {
                     Element *tmp= getCopy();
-                    const int Nd1= f1.GetNodo(i,1,1)->getTag();
-                    const int Nd2= f2.GetNodo(1,i,1)->getTag();
+                    const int Nd1= f1.getNode(i,1,1)->getTag();
+                    const int Nd2= f2.getNode(1,i,1)->getTag();
                     tmp->getNodePtrs().set_id_nodes(Nd1,Nd2);
                     retval(i,1,1)= tmp;
                   }
@@ -303,8 +303,8 @@ XC::TritrizPtrElem XC::Element0D::cose(const SetEstruct &f1,const SetEstruct &f2
                 for(size_t i=1;i<=n;i++)
                   {
                     Element *tmp= getCopy();
-                    const int Nd1= f1.GetNodo(i,1,1)->getTag();
-                    const int Nd2= f2.GetNodo(1,1,i)->getTag();
+                    const int Nd1= f1.getNode(i,1,1)->getTag();
+                    const int Nd2= f2.getNode(1,1,i)->getTag();
                     tmp->getNodePtrs().set_id_nodes(Nd1,Nd2);
                     retval(i,1,1)= tmp;
                   }
@@ -318,8 +318,8 @@ XC::TritrizPtrElem XC::Element0D::cose(const SetEstruct &f1,const SetEstruct &f2
                 for(size_t i=1;i<=n;i++)
                   {
                     Element *tmp= getCopy();
-                    const int Nd1= f1.GetNodo(1,i,1)->getTag();
-                    const int Nd2= f2.GetNodo(i,1,1)->getTag();
+                    const int Nd1= f1.getNode(1,i,1)->getTag();
+                    const int Nd2= f2.getNode(i,1,1)->getTag();
                     tmp->getNodePtrs().set_id_nodes(Nd1,Nd2);
                     retval(1,i,1)= tmp;
                   }
@@ -330,8 +330,8 @@ XC::TritrizPtrElem XC::Element0D::cose(const SetEstruct &f1,const SetEstruct &f2
                 for(size_t i=1;i<=n;i++)
                   {
                     Element *tmp= getCopy();
-                    const int Nd1= f1.GetNodo(1,i,1)->getTag();
-                    const int Nd2= f2.GetNodo(1,i,1)->getTag();
+                    const int Nd1= f1.getNode(1,i,1)->getTag();
+                    const int Nd2= f2.getNode(1,i,1)->getTag();
                     tmp->getNodePtrs().set_id_nodes(Nd1,Nd2);
                     retval(1,i,1)= tmp;
                   }
@@ -342,8 +342,8 @@ XC::TritrizPtrElem XC::Element0D::cose(const SetEstruct &f1,const SetEstruct &f2
                 for(size_t i=1;i<=n;i++)
                   {
                     Element *tmp= getCopy();
-                    const int Nd1= f1.GetNodo(1,i,1)->getTag();
-                    const int Nd2= f2.GetNodo(1,1,i)->getTag();
+                    const int Nd1= f1.getNode(1,i,1)->getTag();
+                    const int Nd2= f2.getNode(1,1,i)->getTag();
                     tmp->getNodePtrs().set_id_nodes(Nd1,Nd2);
                     retval(1,i,1)= tmp;
                   }
@@ -357,8 +357,8 @@ XC::TritrizPtrElem XC::Element0D::cose(const SetEstruct &f1,const SetEstruct &f2
                 for(size_t i=1;i<=n;i++)
                   {
                     Element *tmp= getCopy();
-                    const int Nd1= f1.GetNodo(1,1,i)->getTag();
-                    const int Nd2= f2.GetNodo(i,1,1)->getTag();
+                    const int Nd1= f1.getNode(1,1,i)->getTag();
+                    const int Nd2= f2.getNode(i,1,1)->getTag();
                     tmp->getNodePtrs().set_id_nodes(Nd1,Nd2);
                     retval(1,1,i)= tmp;
                   }
@@ -369,8 +369,8 @@ XC::TritrizPtrElem XC::Element0D::cose(const SetEstruct &f1,const SetEstruct &f2
                 for(size_t i=1;i<=n;i++)
                   {
                     Element *tmp= getCopy();
-                    const int Nd1= f1.GetNodo(1,1,i)->getTag();
-                    const int Nd2= f2.GetNodo(1,i,1)->getTag();
+                    const int Nd1= f1.getNode(1,1,i)->getTag();
+                    const int Nd2= f2.getNode(1,i,1)->getTag();
                     tmp->getNodePtrs().set_id_nodes(Nd1,Nd2);
                     retval(1,1,i)= tmp;
                   }
@@ -381,8 +381,8 @@ XC::TritrizPtrElem XC::Element0D::cose(const SetEstruct &f1,const SetEstruct &f2
                 for(size_t i=1;i<=n;i++)
                   {
                     Element *tmp= getCopy();
-                    const int Nd1= f1.GetNodo(1,1,i)->getTag();
-                    const int Nd2= f2.GetNodo(1,1,i)->getTag();
+                    const int Nd1= f1.getNode(1,1,i)->getTag();
+                    const int Nd2= f2.getNode(1,1,i)->getTag();
                     tmp->getNodePtrs().set_id_nodes(Nd1,Nd2);
                     retval(1,1,i)= tmp;
                   }

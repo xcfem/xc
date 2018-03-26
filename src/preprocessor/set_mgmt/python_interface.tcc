@@ -98,17 +98,17 @@ class_<XC::DqPtrsConstraint, bases<dq_ptrs_constraint>, boost::noncopyable >("Dq
    .def(self * self)
    ;
 
-XC::DqPtrsNode &(XC::SetMeshComp::*GetNodosRef)(void)= &XC::SetMeshComp::GetNodos;
+XC::DqPtrsNode &(XC::SetMeshComp::*getNodesRef)(void)= &XC::SetMeshComp::getNodes;
 XC::DqPtrsElem &(XC::SetMeshComp::*getElementsRef)(void)= &XC::SetMeshComp::getElements;
 XC::DqPtrsConstraint &(XC::SetMeshComp::*GetConstraintsRef)(void)= &XC::SetMeshComp::GetConstraints;
 XC::Node *(XC::SetMeshComp::*getNearestNodeSetMeshComp)(const Pos3d &)= &XC::SetMeshComp::getNearestNode;
 XC::Element *(XC::SetMeshComp::*getNearestElementSetMeshComp)(const Pos3d &)= &XC::SetMeshComp::getNearestElement;
 void (XC::SetMeshComp::*transforms)(const XC::TrfGeom &)= &XC::SetMeshComp::Transforma;
 class_<XC::SetMeshComp, bases<XC::SetBase>>("SetMeshComp",no_init)
-  .add_property("getNodes", make_function(GetNodosRef, return_internal_reference<>() ),"return the nodes of the set.")
+  .add_property("getNodes", make_function(getNodesRef, return_internal_reference<>() ),"return the nodes of the set.")
   .add_property("getElements", make_function(getElementsRef, return_internal_reference<>() ),"return the elements of the set.")
   .add_property("getConstraints", make_function(GetConstraintsRef, return_internal_reference<>() ),"return the constraints of the set.")
-  .add_property("nodes", make_function(GetNodosRef, return_internal_reference<>() ),&XC::SetMeshComp::setNodes,"nodes of the set.")
+  .add_property("nodes", make_function(getNodesRef, return_internal_reference<>() ),&XC::SetMeshComp::setNodes,"nodes of the set.")
   .add_property("elements", make_function(getElementsRef, return_internal_reference<>() ),&XC::SetMeshComp::setElements,"elements of the set.")
   .add_property("constraints", make_function(GetConstraintsRef, return_internal_reference<>() ),&XC::SetMeshComp::setConstraints,"constraints of the set.")
   .def("getNearestNode",make_function(getNearestNodeSetMeshComp, return_internal_reference<>() ),"Returns nearest node.")

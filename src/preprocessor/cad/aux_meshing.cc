@@ -33,18 +33,18 @@
 #include "preprocessor/cad/matrices/TritrizPtrElem.h"
 
 //! @ brief Mesh one layer (i= constant) of 4-nodes quadrangles.
-void meshing_quad4N_on_jk(const XC::Element &e,const XC::TritrizPtrNod::const_ref_capa_i_cte &nodos,XC::TritrizPtrElem::var_ref_capa_i_cte &elements)
+void meshing_quad4N_on_jk(const XC::Element &e,const XC::TritrizPtrNod::const_ref_capa_i_cte &nodes,XC::TritrizPtrElem::var_ref_capa_i_cte &elements)
   {
-    const size_t nfilas= nodos.getNumFilas();
-    const size_t ncols= nodos.getNumCols();
+    const size_t nfilas= nodes.getNumFilas();
+    const size_t ncols= nodes.getNumCols();
 
     for(size_t j=1;j<nfilas;j++)
       for(size_t k=1;k<ncols;k++)
         {
 	  XC::Element *tmp= e.getCopy();
-          const std::vector<int> indices= getIdNodosQuad4N(nodos,j,k);
+          const std::vector<int> indices= getNodeIdsQuad4N(nodes,j,k);
           if((indices[0]>=0) && (indices[1]>=0) && (indices[2]>=0)  && (indices[3]>=0))
-            tmp->setIdNodos(indices);
+            tmp->setIdNodes(indices);
           else
             {
               delete tmp;
@@ -55,68 +55,68 @@ void meshing_quad4N_on_jk(const XC::Element &e,const XC::TritrizPtrNod::const_re
   }
 
 //! @ brief Mesh one row (j= constant) of 4-nodes quadrangles.
-void meshing_quad4N_on_ik(const XC::Element &e,const XC::TritrizPtrNod::const_ref_capa_j_cte &nodos,XC::TritrizPtrElem::var_ref_capa_j_cte &elements)
+void meshing_quad4N_on_ik(const XC::Element &e,const XC::TritrizPtrNod::const_ref_capa_j_cte &nodes,XC::TritrizPtrElem::var_ref_capa_j_cte &elements)
   {
-    const size_t ncapas= nodos.GetCapas();
-    const size_t ncols= nodos.getNumCols();
+    const size_t ncapas= nodes.GetCapas();
+    const size_t ncols= nodes.getNumCols();
     std::vector<int> in(4);
     for(size_t i=1;i<ncapas;i++)
       for(size_t k=1;k<ncols;k++)
         {
 	  XC::Element *tmp= e.getCopy();
-          in[0]= nodos(i,k)->getTag();
-          in[1]= nodos(i,k+1)->getTag();
-          in[2]= nodos(i+1,k+1)->getTag();
-          in[3]= nodos(i+1,k)->getTag();
-          tmp->setIdNodos(in);
+          in[0]= nodes(i,k)->getTag();
+          in[1]= nodes(i,k+1)->getTag();
+          in[2]= nodes(i+1,k+1)->getTag();
+          in[3]= nodes(i+1,k)->getTag();
+          tmp->setIdNodes(in);
           elements(i,k)= tmp;
         }
   }
 
 //! @ brief Mesh one column (k= constant)  of 4-nodes quadrangles.
-void meshing_quad4N_on_ij(const XC::Element &e,const XC::TritrizPtrNod::const_ref_capa_k_cte &nodos,XC::TritrizPtrElem::var_ref_capa_k_cte &elements)
+void meshing_quad4N_on_ij(const XC::Element &e,const XC::TritrizPtrNod::const_ref_capa_k_cte &nodes,XC::TritrizPtrElem::var_ref_capa_k_cte &elements)
   {
-    const size_t ncapas= nodos.GetCapas();
-    const size_t nfilas= nodos.getNumFilas();
+    const size_t ncapas= nodes.GetCapas();
+    const size_t nfilas= nodes.getNumFilas();
     std::vector<int> in(4);
     for(size_t i=1;i<ncapas;i++)
       for(size_t j=1;j<nfilas;j++)
         {
 	  XC::Element *tmp= e.getCopy();
-          in[0]= nodos(i,j)->getTag();
-          in[1]= nodos(i,j+1)->getTag();
-          in[2]= nodos(i+1,j+1)->getTag();
-          in[3]= nodos(i+1,j)->getTag();
-          tmp->setIdNodos(in);
+          in[0]= nodes(i,j)->getTag();
+          in[1]= nodes(i,j+1)->getTag();
+          in[2]= nodes(i+1,j+1)->getTag();
+          in[3]= nodes(i+1,j)->getTag();
+          tmp->setIdNodes(in);
           elements(i,j)= tmp;
         }
   }
 
 //! @ brief Mesh a quadrangle with 4-node elements
-void meshing_quad4N_bidimensional(const XC::Element &e,const XC::TritrizPtrNod &nodos,XC::TritrizPtrElem &elements)
+void meshing_quad4N_bidimensional(const XC::Element &e,const XC::TritrizPtrNod &nodes,XC::TritrizPtrElem &elements)
   {
-    const size_t ncapas= nodos.GetCapas();
-    const size_t nfilas= nodos.getNumFilas();
-    const size_t ncols= nodos.getNumCols();
-    if(!nodos.HasNull()) //No hay pointers nulos.
+    const size_t ncapas= nodes.GetCapas();
+    const size_t nfilas= nodes.getNumFilas();
+    const size_t ncols= nodes.getNumCols();
+    if(!nodes.HasNull()) //No hay pointers nulos.
       {
-        if(nodos.EsCapaICte())
+        if(nodes.EsCapaICte())
           {
             elements= XC::TritrizPtrElem(ncapas,XC::MatrizPtrElem(nfilas-1,ncols-1));
             XC::TritrizPtrElem::var_ref_capa_i_cte capa_elem= elements.GetVarRefCapaICte(1);
-            meshing_quad4N_on_jk(e,nodos.GetConstRefCapaICte(1),capa_elem);
+            meshing_quad4N_on_jk(e,nodes.GetConstRefCapaICte(1),capa_elem);
           }
-        else if(nodos.EsCapaJCte())
+        else if(nodes.EsCapaJCte())
           {
             elements= XC::TritrizPtrElem(ncapas-1,XC::MatrizPtrElem(nfilas,ncols-1));
             XC::TritrizPtrElem::var_ref_capa_j_cte capa_elem= elements.GetVarRefCapaJCte(1);
-            meshing_quad4N_on_ik(e,nodos.GetConstRefCapaJCte(1),capa_elem);
+            meshing_quad4N_on_ik(e,nodes.GetConstRefCapaJCte(1),capa_elem);
           }
-        else if(nodos.EsCapaKCte())
+        else if(nodes.EsCapaKCte())
           {
             elements= XC::TritrizPtrElem(ncapas-1,XC::MatrizPtrElem(nfilas-1,ncols));
             XC::TritrizPtrElem::var_ref_capa_k_cte capa_elem= elements.GetVarRefCapaKCte(1);
-            meshing_quad4N_on_ij(e,nodos.GetConstRefCapaKCte(1),capa_elem);
+            meshing_quad4N_on_ij(e,nodes.GetConstRefCapaKCte(1),capa_elem);
           }
       }
     else  //There are null pointers.
@@ -124,12 +124,12 @@ void meshing_quad4N_bidimensional(const XC::Element &e,const XC::TritrizPtrNod &
   }
 
 //! @brief Place the elements on the mesh passed as parameter.
-XC::TritrizPtrElem XC::put_quad4N_on_mesh(const Element &e,const TritrizPtrNod &nodos,meshing_dir dm)
+XC::TritrizPtrElem XC::put_quad4N_on_mesh(const Element &e,const TritrizPtrNod &nodes,meshing_dir dm)
   {
-    const size_t ncapas= nodos.GetCapas();
-    const size_t nfilas= nodos.getNumFilas();
-    const size_t ncols= nodos.getNumCols();
-    const size_t mesh_dim= nodos.GetDim();
+    const size_t ncapas= nodes.GetCapas();
+    const size_t nfilas= nodes.getNumFilas();
+    const size_t ncols= nodes.getNumCols();
+    const size_t mesh_dim= nodes.GetDim();
 
 
     TritrizPtrElem retval;
@@ -140,7 +140,7 @@ XC::TritrizPtrElem XC::put_quad4N_on_mesh(const Element &e,const TritrizPtrNod &
     else
       {
         if(mesh_dim<3) //Bidimensional mesh
-          meshing_quad4N_bidimensional(e,nodos,retval);
+          meshing_quad4N_bidimensional(e,nodes,retval);
         else
           {
             switch(dm)
@@ -156,7 +156,7 @@ XC::TritrizPtrElem XC::put_quad4N_on_mesh(const Element &e,const TritrizPtrNod &
                     for(size_t i=1;i<=ncapas;i++)
                       {
                         TritrizPtrElem::var_ref_capa_i_cte capa_elem= retval.GetVarRefCapaICte(i);
-                        meshing_quad4N_on_jk(e,nodos.GetConstRefCapaICte(i),capa_elem);
+                        meshing_quad4N_on_jk(e,nodes.GetConstRefCapaICte(i),capa_elem);
                       }
                   }
                 break;
@@ -171,7 +171,7 @@ XC::TritrizPtrElem XC::put_quad4N_on_mesh(const Element &e,const TritrizPtrNod &
                     for(size_t j=1;j<=nfilas;j++)
                       {
                         TritrizPtrElem::var_ref_capa_j_cte capa_elem= retval.GetVarRefCapaJCte(j);
-                        meshing_quad4N_on_ik(e,nodos.GetConstRefCapaJCte(j),capa_elem);
+                        meshing_quad4N_on_ik(e,nodes.GetConstRefCapaJCte(j),capa_elem);
                       }
                   }
                 break;
@@ -186,7 +186,7 @@ XC::TritrizPtrElem XC::put_quad4N_on_mesh(const Element &e,const TritrizPtrNod &
                     for(size_t k=1;k<=ncols;k++)
                       {
                         TritrizPtrElem::var_ref_capa_k_cte capa_elem= retval.GetVarRefCapaKCte(k);
-                        meshing_quad4N_on_ij(e,nodos.GetConstRefCapaKCte(k),capa_elem);
+                        meshing_quad4N_on_ij(e,nodes.GetConstRefCapaKCte(k),capa_elem);
                       }
                   }
                 break;
@@ -199,48 +199,48 @@ XC::TritrizPtrElem XC::put_quad4N_on_mesh(const Element &e,const TritrizPtrNod &
   }
 
 //! @ brief Mesh one layer (i= constant) with 9-nodes elements.
-void meshing_quad9N_on_jk(const XC::Element &e,const XC::TritrizPtrNod::const_ref_capa_i_cte &nodos,XC::TritrizPtrElem::var_ref_capa_i_cte &elements)
+void meshing_quad9N_on_jk(const XC::Element &e,const XC::TritrizPtrNod::const_ref_capa_i_cte &nodes,XC::TritrizPtrElem::var_ref_capa_i_cte &elements)
   {
     std::cerr << "meshing_quad9N_on_jk not implemented." << std::endl;
   }
 
 //! @ brief Mesh one row (j= constant)  with 9-nodes elements.
-void meshing_quad9N_on_ik(const XC::Element &e,const XC::TritrizPtrNod::const_ref_capa_j_cte &nodos,XC::TritrizPtrElem::var_ref_capa_j_cte &elements)
+void meshing_quad9N_on_ik(const XC::Element &e,const XC::TritrizPtrNod::const_ref_capa_j_cte &nodes,XC::TritrizPtrElem::var_ref_capa_j_cte &elements)
   {
     std::cerr << "meshing_quad9N_on_ik not implemented." << std::endl;
   }
 
 //! @ brief Mesh one column (k= constant) with 9-nodes elements.
-void meshing_quad9N_on_ij(const XC::Element &e,const XC::TritrizPtrNod::const_ref_capa_k_cte &nodos,XC::TritrizPtrElem::var_ref_capa_k_cte &elements)
+void meshing_quad9N_on_ij(const XC::Element &e,const XC::TritrizPtrNod::const_ref_capa_k_cte &nodes,XC::TritrizPtrElem::var_ref_capa_k_cte &elements)
   {
     std::cerr << "meshing_quad9N_on_ij not implemented." << std::endl;
   }
 
 //! @ brief Mesh one quadrangle  with 9-nodes elements.
-void meshing_quad9N_bidimensional(const XC::Element &e,const XC::TritrizPtrNod &nodos,XC::TritrizPtrElem &elements)
+void meshing_quad9N_bidimensional(const XC::Element &e,const XC::TritrizPtrNod &nodes,XC::TritrizPtrElem &elements)
   {
-    const size_t ncapas= nodos.GetCapas();
-    const size_t nfilas= nodos.getNumFilas();
-    const size_t ncols= nodos.getNumCols();
-    if(!nodos.HasNull()) //No hay pointers nulos.
+    const size_t ncapas= nodes.GetCapas();
+    const size_t nfilas= nodes.getNumFilas();
+    const size_t ncols= nodes.getNumCols();
+    if(!nodes.HasNull()) //No hay pointers nulos.
       {
-        if(nodos.EsCapaICte())
+        if(nodes.EsCapaICte())
           {
             elements= XC::TritrizPtrElem(ncapas,XC::MatrizPtrElem(nfilas-1,ncols-1));
             XC::TritrizPtrElem::var_ref_capa_i_cte capa_elem= elements.GetVarRefCapaICte(1);
-            meshing_quad9N_on_jk(e,nodos.GetConstRefCapaICte(1),capa_elem);
+            meshing_quad9N_on_jk(e,nodes.GetConstRefCapaICte(1),capa_elem);
           }
-        else if(nodos.EsCapaJCte())
+        else if(nodes.EsCapaJCte())
           {
             elements= XC::TritrizPtrElem(ncapas-1,XC::MatrizPtrElem(nfilas,ncols-1));
             XC::TritrizPtrElem::var_ref_capa_j_cte capa_elem= elements.GetVarRefCapaJCte(1);
-            meshing_quad9N_on_ik(e,nodos.GetConstRefCapaJCte(1),capa_elem);
+            meshing_quad9N_on_ik(e,nodes.GetConstRefCapaJCte(1),capa_elem);
           }
-        else if(nodos.EsCapaKCte())
+        else if(nodes.EsCapaKCte())
           {
             elements= XC::TritrizPtrElem(ncapas-1,XC::MatrizPtrElem(nfilas-1,ncols));
             XC::TritrizPtrElem::var_ref_capa_k_cte capa_elem= elements.GetVarRefCapaKCte(1);
-            meshing_quad9N_on_ij(e,nodos.GetConstRefCapaKCte(1),capa_elem);
+            meshing_quad9N_on_ij(e,nodes.GetConstRefCapaKCte(1),capa_elem);
           }
       }
     else  //There are null pointers.
@@ -249,12 +249,12 @@ void meshing_quad9N_bidimensional(const XC::Element &e,const XC::TritrizPtrNod &
   }
 
 //! @brief Places the elements on the mesh passed as parameter.
-XC::TritrizPtrElem XC::put_quad9N_on_mesh(const Element &e,const TritrizPtrNod &nodos,meshing_dir dm)
+XC::TritrizPtrElem XC::put_quad9N_on_mesh(const Element &e,const TritrizPtrNod &nodes,meshing_dir dm)
   {
-    const size_t ncapas= nodos.GetCapas();
-    const size_t nfilas= nodos.getNumFilas();
-    const size_t ncols= nodos.getNumCols();
-    const size_t mesh_dim= nodos.GetDim();
+    const size_t ncapas= nodes.GetCapas();
+    const size_t nfilas= nodes.getNumFilas();
+    const size_t ncols= nodes.getNumCols();
+    const size_t mesh_dim= nodes.GetDim();
 
 
     TritrizPtrElem retval;
@@ -265,7 +265,7 @@ XC::TritrizPtrElem XC::put_quad9N_on_mesh(const Element &e,const TritrizPtrNod &
     else
       {
         if(mesh_dim<3) //Bidimensional mesh
-          meshing_quad9N_bidimensional(e,nodos,retval);
+          meshing_quad9N_bidimensional(e,nodes,retval);
         else
           {
             switch(dm)
@@ -281,7 +281,7 @@ XC::TritrizPtrElem XC::put_quad9N_on_mesh(const Element &e,const TritrizPtrNod &
                     for(size_t i=1;i<=ncapas;i++)
                       {
                         TritrizPtrElem::var_ref_capa_i_cte capa_elem= retval.GetVarRefCapaICte(i);
-                        meshing_quad9N_on_jk(e,nodos.GetConstRefCapaICte(i),capa_elem);
+                        meshing_quad9N_on_jk(e,nodes.GetConstRefCapaICte(i),capa_elem);
                       }
                   }
                 break;
@@ -296,7 +296,7 @@ XC::TritrizPtrElem XC::put_quad9N_on_mesh(const Element &e,const TritrizPtrNod &
                     for(size_t j=1;j<=nfilas;j++)
                       {
                         TritrizPtrElem::var_ref_capa_j_cte capa_elem= retval.GetVarRefCapaJCte(j);
-                        meshing_quad9N_on_ik(e,nodos.GetConstRefCapaJCte(j),capa_elem);
+                        meshing_quad9N_on_ik(e,nodes.GetConstRefCapaJCte(j),capa_elem);
                       }
                   }
                 break;
@@ -311,7 +311,7 @@ XC::TritrizPtrElem XC::put_quad9N_on_mesh(const Element &e,const TritrizPtrNod &
                     for(size_t k=1;k<=ncols;k++)
                       {
                         TritrizPtrElem::var_ref_capa_k_cte capa_elem= retval.GetVarRefCapaKCte(k);
-                        meshing_quad9N_on_ij(e,nodos.GetConstRefCapaKCte(k),capa_elem);
+                        meshing_quad9N_on_ij(e,nodes.GetConstRefCapaKCte(k),capa_elem);
                       }
                   }
                 break;

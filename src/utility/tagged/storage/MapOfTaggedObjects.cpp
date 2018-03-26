@@ -176,7 +176,7 @@ bool XC::MapOfTaggedObjects::removeComponent(int tag)
 	int ok= theMap.erase(tag);
         delete tmp;
         retval= true;
-        transmitIDs= true; //Se elimina un componente.
+        transmitIDs= true; //Component removed.
 	if(ok != 1)
           { // ensure the map did remove the object
 	    std::cerr << getClassName() << "::" << __FUNCTION__
@@ -274,7 +274,7 @@ void XC::MapOfTaggedObjects::clearAll(bool invokeDestructor)
       clearComponents();
     // now clear the map of all entries
     theMap.clear();
-    transmitIDs= true; //Se eliminan todos los componentes.
+    transmitIDs= true; //All component removed.
   }
 
 //! @brief Print stuff.

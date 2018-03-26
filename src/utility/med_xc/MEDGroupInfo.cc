@@ -49,9 +49,9 @@ XC::MEDGroupInfo::MEDGroupInfo(MEDMeshing *mesh,const Set &set)
     if(numElements==0) //node set.
       {
         tipo_entidad= MED_EN::MED_NODE;
-	const DqPtrsNode nodos= set.GetNodos();
+	const DqPtrsNode nodes= set.getNodes();
         const MEDMapIndices &node_indexes= mesh->getMapIndicesVertices();
-        for(Set::nod_const_iterator i= nodos.begin();i!=nodos.end();i++)
+        for(Set::nod_const_iterator i= nodes.begin();i!=nodes.end();i++)
           new_vertice((*i)->getTag(),node_indexes);
       }
     else if(numNodes==0) //element set.

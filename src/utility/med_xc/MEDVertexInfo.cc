@@ -110,12 +110,12 @@ void XC::MEDVertexInfo::setUnitNames(const boost::python::list &l)
 //! @brief Dumps cells definition on MED mesh
 void XC::MEDVertexInfo::to_med(MEDMEM::MESHING &mesh) const
   {
-    const int numNodos= getNumVertices();
+    const int numNodes= getNumVertices();
     const std::vector<double> &coo= getCoordenadas();
     const size_t &sd= getSpaceDimension();
     if(sd>0)
       {
-        mesh.setCoordinates(getSpaceDimension(),numNodos,&coo[0],getTipoCoordenadas(),::MED_FULL_INTERLACE);
+        mesh.setCoordinates(getSpaceDimension(),numNodes,&coo[0],getTipoCoordenadas(),::MED_FULL_INTERLACE);
         if(nombresCoordenadas.size()<sd)
           std::cerr << "No se han especificado los nombres de las coordenadas."
                     << std::endl;

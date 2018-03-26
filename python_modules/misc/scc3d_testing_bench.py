@@ -9,7 +9,7 @@ def sectionModel(preprocessor,sectionName):
   nodes= preprocessor.getNodeLoader
 
   modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
-  nodes.defaultTag= 1 #El número del próximo nodo será 1.
+  nodes.defaultTag= 1 # Next node tag will be 1.
   nodA= nodes.newNodeXYZ(1,0,0)
   nodB= nodes.newNodeXYZ(1,0,0)
 

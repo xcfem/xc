@@ -244,37 +244,37 @@ XC::ZeroLength::~ZeroLength(void)
 
 //! @brief Sets the element type and matrix dimensions from
 //! element dimension and the number of DOF of the connected nodes.
-void XC::ZeroLength::setUpType(const size_t &numDOFsNodos)
+void XC::ZeroLength::setUpType(const size_t &numDOFsNodes)
   {
-    if(dimension == 1 && numDOFsNodos == 1)
+    if(dimension == 1 && numDOFsNodes == 1)
       {
         numDOF = 2;
         theMatrix = &ZeroLengthM2;
         theVector = &ZeroLengthV2;
         elemType  = D1N2;
       }
-    else if(dimension == 2 && numDOFsNodos == 2)
+    else if(dimension == 2 && numDOFsNodes == 2)
       {
         numDOF = 4;
         theMatrix = &ZeroLengthM4;
         theVector = &ZeroLengthV4;
         elemType  = D2N4;
       }
-    else if(dimension == 2 && numDOFsNodos == 3)
+    else if(dimension == 2 && numDOFsNodes == 3)
       {
         numDOF = 6;
         theMatrix = &ZeroLengthM6;
         theVector = &ZeroLengthV6;
         elemType  = D2N6;
       }
-    else if(dimension == 3 && numDOFsNodos == 3)
+    else if(dimension == 3 && numDOFsNodes == 3)
       {
         numDOF = 6;
         theMatrix = &ZeroLengthM6;
         theVector = &ZeroLengthV6;
         elemType  = D3N6;
       }
-    else if(dimension == 3 && numDOFsNodos == 6)
+    else if(dimension == 3 && numDOFsNodes == 6)
       {
         numDOF = 12;
         theMatrix = &ZeroLengthM12;
@@ -285,7 +285,7 @@ void XC::ZeroLength::setUpType(const size_t &numDOFsNodos)
       {
         std::cerr << getClassName() << "::" << __FUNCTION__
 		  << "; WARNING cannot handle " << dimension
-                  << " dofs at nodes in " << numDOFsNodos << " d problem\n";
+                  << " dofs at nodes in " << numDOFsNodes << " d problem\n";
         return;
       }
   }

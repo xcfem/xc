@@ -78,7 +78,15 @@ class PartitionedDomainSubIter;
 class PartitionedDomainEleIter;
 class SingleDomEleIter;
 
-//! @brief Partitioned domain.
+//! @brief Partitioned domain (aggregation of subdomains).
+//! 
+//! PartitionedDomain is an extension of Domain. A partitioned
+//! domain is an aggregation of subdomains. All elements, nodes, loadcases
+//! are added to the PartitionedDomain. The components can be moved among 
+//! subdomains (keeping in mind that subdomains are themselves subclasses
+//! of domain and therefore must obey the requirements for adding and
+//! removing elements specified in the interface for Domain) by invoking
+//! the remove..() and add...() methods on the subdomain.
 class PartitionedDomain: public Domain
   {
   private:
@@ -115,6 +123,8 @@ class PartitionedDomain: public Domain
     virtual  bool addLoadPattern(LoadPattern *);            
     virtual  bool addSFreedom_Constraint(SFreedom_Constraint *); 
     virtual  bool addSFreedom_Constraint(SFreedom_Constraint *, int loadPatternTag); 
+    virtual  bool addMFreedom_Constraint(MFreedom_Constraint *);
+    virtual  bool addMRMFreedom_Constraint(MRMFreedom_Constraint *);
     virtual  bool addNodalLoad(NodalLoad *, int loadPatternTag);
     virtual  bool addElementalLoad(ElementalLoad *, int loadPatternTag);
 

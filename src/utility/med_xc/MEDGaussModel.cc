@@ -35,8 +35,8 @@ XC::MEDGaussModel::MEDGaussModel(const std::string &nmb,const MED_EN::medGeometr
   { 
     const size_t dim= tp/100; //Dimension of the space in which the element is defined.
     ref_nodes_coo.resize(num_nodes*dim,0);
-    const std::deque<Pos3d> &nodos= gm.getReferenceNodesPositions(); size_t conta= 0;
-    for(std::deque<Pos3d>::const_iterator i=nodos.begin();i!=nodos.end();i++)
+    const std::deque<Pos3d> &nodes= gm.getReferenceNodesPositions(); size_t conta= 0;
+    for(std::deque<Pos3d>::const_iterator i=nodes.begin();i!=nodes.end();i++)
       {
         ref_nodes_coo[conta]= i->x(); conta++;
         if(dim>1) 

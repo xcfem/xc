@@ -21,7 +21,7 @@ class RecordDefGrid(object):
   '''Provide the variables involved in the VTK grid representation
   
   :ivar xcSet:     set to be represented
-  :ivar entToLabel:  entities to be labeled (defaults to "nodos")
+  :ivar entToLabel:  entities to be labeled (defaults to "nodes")
   :ivar cellType:    specifies the type of data cells (defaults to "nil"). 
         Data cells are simple topological elements like points, lines, 
         polygons and tetrahedra of which visualization data sets are composed.
@@ -34,7 +34,7 @@ class RecordDefGrid(object):
   '''
   def __init__(self):
     self.xcSet= None
-    self.entToLabel= "nodos"
+    self.entToLabel= "nodes"
     self.cellType= "nil"
     self.uGrid= None
 

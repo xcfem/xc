@@ -74,13 +74,13 @@ class SetEstruct: public SetBase
     size_t Dimension(void) const;
     std::string GetStrTipo(void) const;
 
-    virtual Node *GetNodo(const size_t &i=1,const size_t &j=1,const size_t &k=1)= 0;
-    virtual const Node *GetNodo(const size_t &i=1,const size_t &j=1,const size_t &k=1) const= 0;
+    virtual Node *getNode(const size_t &i=1,const size_t &j=1,const size_t &k=1)= 0;
+    virtual const Node *getNode(const size_t &i=1,const size_t &j=1,const size_t &k=1) const= 0;
 
     Node *getNodeI(const size_t &i);
     Node *getNodeIJ(const size_t &i,const size_t &j);
     inline Node *getNodeIJK(const size_t &i,const size_t &j,const size_t &k)
-      { return GetNodo(i,j,k); }
+      { return getNode(i,j,k); }
 
     virtual Element *getElement(const size_t &i=1,const size_t &j=1,const size_t &k=1)= 0;
     virtual const Element *getElement(const size_t &i=1,const size_t &j=1,const size_t &k=1) const= 0;

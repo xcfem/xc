@@ -173,7 +173,7 @@ XC::Matrix XC::ShellCrdTransf3dBase::getTrfMatrix(void) const
 XC::Vector XC::ShellCrdTransf3dBase::local_to_global(const Matrix &R,const Vector &pl) const
   {
     Vector retval(24);
-    //Nodo 1.
+    //Node 1.
     retval(0)= R(0,0)*pl[0] + R(1,0)*pl[1] + R(2,0)*pl[2];
     retval(1)= R(0,1)*pl[0] + R(1,1)*pl[1] + R(2,1)*pl[2];
     retval(2)= R(0,2)*pl[0] + R(1,2)*pl[1] + R(2,2)*pl[2];
@@ -182,7 +182,7 @@ XC::Vector XC::ShellCrdTransf3dBase::local_to_global(const Matrix &R,const Vecto
     retval(4)= R(0,1)*pl[3] + R(1,1)*pl[4] + R(2,1)*pl[5];
     retval(5)= R(0,2)*pl[3] + R(1,2)*pl[4] + R(2,2)*pl[5];
 
-    //Nodo 2.
+    //Node 2.
     retval(6)= R(0,0)*pl[6] + R(1,0)*pl[7] + R(2,0)*pl[8];
     retval(7)= R(0,1)*pl[6] + R(1,1)*pl[7] + R(2,1)*pl[8];
     retval(8)= R(0,2)*pl[6] + R(1,2)*pl[7] + R(2,2)*pl[8];
@@ -191,7 +191,7 @@ XC::Vector XC::ShellCrdTransf3dBase::local_to_global(const Matrix &R,const Vecto
     retval(10)= R(0,1)*pl[9] + R(1,1)*pl[10] + R(2,1)*pl[11];
     retval(11)= R(0,2)*pl[9] + R(1,2)*pl[10] + R(2,2)*pl[11];
 
-    //Nodo 3.
+    //Node 3.
     retval(12)= R(0,0)*pl[12] + R(1,0)*pl[13] + R(2,0)*pl[14];
     retval(13)= R(0,1)*pl[12] + R(1,1)*pl[13] + R(2,1)*pl[14];
     retval(14)= R(0,2)*pl[12] + R(1,2)*pl[13] + R(2,2)*pl[14];
@@ -200,7 +200,7 @@ XC::Vector XC::ShellCrdTransf3dBase::local_to_global(const Matrix &R,const Vecto
     retval(16)= R(0,1)*pl[15] + R(1,1)*pl[16] + R(2,1)*pl[17];
     retval(17)= R(0,2)*pl[15] + R(1,2)*pl[16] + R(2,2)*pl[17];
 
-    //Nodo 4.
+    //Node 4.
     retval(18)= R(0,0)*pl[18] + R(1,0)*pl[19] + R(2,0)*pl[20];
     retval(19)= R(0,1)*pl[18] + R(1,1)*pl[19] + R(2,1)*pl[20];
     retval(20)= R(0,2)*pl[18] + R(1,2)*pl[19] + R(2,2)*pl[20];

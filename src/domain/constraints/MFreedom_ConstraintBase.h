@@ -76,8 +76,10 @@ class MFreedom_ConstraintBase: public Constraint
     MFreedom_ConstraintBase(int tag, int nodeConstr, const Matrix &, const ID &, int classTag);
 
     // method to get information about the constraint
+    //! @brief Return the identifier of the constrained node.
     virtual inline const int &getNodeConstrained(void) const
       { return constrNodeTag; }
+    //! @brief Return the identifier of the constrained node.
     virtual inline int &getNodeConstrained(void)
       { return constrNodeTag; }
     bool affectsNode(int ) const;

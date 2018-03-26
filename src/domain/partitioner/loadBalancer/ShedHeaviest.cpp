@@ -66,19 +66,35 @@
 #include <solution/graph/graph/VertexIter.h>
 #include <solution/graph/graph/Vertex.h>
  
+//! @brief Default constructor.
 XC::ShedHeaviest::ShedHeaviest(void)
  : LoadBalancer() {}
 
+//! @brief Constructor.
+//!
+//! Sets the parameters used in the balance() method.
+//!
+//! @param fG: factor greater.
+//! @param rels: number of releases. 
 XC::ShedHeaviest::ShedHeaviest(double fG, int rels, bool disallowDisconnected)
  :LoadBalancer(fG,rels,disallowDisconnected){}
 
+//! The heaviest loaded partition, \p max, is first determined by
+//! iterating through the Graph \p theWeightedGraph looking at the
+//! vertex weights. Then {\em releaseBoundary(max, theWieightedGraph,
+//! true, factorGreater)} is invoked on the
+//! DomainPartitioner \p numRelease times. Returns \f$0\f$ if successfull,
+//! otherwise a negative number and a warning message are returned if
+//! either no link has been set to the DomainPartitioner or {\em
+//! releaseBoundary()} returns a negative number.
 int XC::ShedHeaviest::balance(Graph &theWeightedGraph)
   {
     // check to see a domain partitioner has been set
     DomainPartitioner *thePartitioner = this->getDomainPartitioner();
     if(!thePartitioner)
       {
-	std::cerr << "ShedHeaviest::balance - No XC::DomainPartitioner has been set\n";
+	std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; no DomainPartitioner has been set.\n";
 	return -1;
       }
 
@@ -101,9 +117,9 @@ int XC::ShedHeaviest::balance(Graph &theWeightedGraph)
 	res= thePartitioner->releaseBoundary(maxPartition,theWeightedGraph,true,factorGreater);  
 	if(res < 0)
           {
-	    std::cerr << "WARNING XC::ShedHeaviest::balance() ";
-	    std::cerr << " - XC::DomainPartitioner::releaseBoundary returned ";
-	    std::cerr << res << std::endl;
+	    std::cerr << getClassName() << "::" << __FUNCTION__
+		      << "WARNING; releaseBoundary returned: "
+		      << res << std::endl;
 	    j = numReleases;
 	  }
       }

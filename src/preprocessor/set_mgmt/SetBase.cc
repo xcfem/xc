@@ -48,7 +48,7 @@ void XC::SetBase::genMesh(meshing_dir dm)
     std::cerr << "Método genMesh() no implementado." << std::endl;
   }
 
-//! @brief Impone desplazamiento nulo en los nodos de this set.
+//! @brief Impone desplazamiento nulo en the nodes de this set.
 void XC::SetBase::fix(const SFreedom_Constraint &)
   {
     std::cerr << "Método fix() no implementado." << std::endl;

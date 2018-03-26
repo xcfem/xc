@@ -70,10 +70,16 @@ class Renderer;
 //! \ingroup OneDimensionalElem
 //
 //! @brief 2D beam with hinges in both ends.
+//!
+//! BeamWithHinges2D is a beam-column element which uses the force
+//! based formulation for its state determination.  This element has
+//! material non-linear hinges at both ends and exhibits linear elastic
+//! behavior through its interior region, including linear elastic shear
+//! effects.
 class BeamWithHinges2d: public BeamColumnWithSectionFDTrf2d
   {
   private:
-    CrossSectionProperties2d ctes_scc; //Section mechanical properties E,A,Iy,...
+    CrossSectionProperties2d ctes_scc; //!< Section mechanical properties E,A,Iy,...
     double beta1, beta2;
     double rho;
 
@@ -93,7 +99,7 @@ class BeamWithHinges2d: public BeamColumnWithSectionFDTrf2d
     int maxIter;
     double tolerance;
 
-    Matrix *sp;  // Applied section forces due to element loads, 3 x nSections
+    Matrix sp;  //!< Applied section forces due to element loads, 3 x nSections
     FVectorBeamColumn2d p0; //!< Reactions in the basic system due to element loads
     FVectorBeamColumn2d v0; //!< Basic deformations due to element loads on the interior
   
@@ -118,7 +124,6 @@ class BeamWithHinges2d: public BeamColumnWithSectionFDTrf2d
     BeamWithHinges2d(int tag= 0);
     BeamWithHinges2d(int tag,const Material *theSection,const CrdTransf *coordTransf);
     Element *getCopy(void) const;
-    ~BeamWithHinges2d(void);
   
     double getRho(void) const
       { return rho; }

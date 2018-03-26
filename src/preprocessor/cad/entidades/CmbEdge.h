@@ -77,19 +77,19 @@ class CmbEdge: public Edge
         size_t NDiv(void) const;
         size_t GetTag(void) const;
         MatrizPos3d get_posiciones(void) const;
-        std::vector<int> GetTagsNodosDir(void) const;
-        std::vector<int> GetTagsNodosInv(void) const;
-        MatrizPos3d GetPosNodosDir(void) const;
-        MatrizPos3d GetPosNodosInv(void) const;
+        std::vector<int> getTagsNodesDir(void) const;
+        std::vector<int> getTagsNodesInv(void) const;
+        MatrizPos3d getNodePosDir(void) const;
+        MatrizPos3d getNodePosInv(void) const;
         double getLongitud(void) const;
         Pos3d getCentroid(void) const;	
         bool In(const GeomObj3d &, const double &tol= 0.0) const;
         bool Out(const GeomObj3d &, const double &tol= 0.0) const;
         const Vector &getTang(const double &) const;
-        Node *GetNodoDir(const size_t &i);
-        Node *GetNodoInv(const size_t &i);
-        Node *GetNodo(const size_t &i);
-        const Node *GetNodo(const size_t &i) const;
+        Node *getNodeDir(const size_t &i);
+        Node *getNodeInv(const size_t &i);
+        Node *getNode(const size_t &i);
+        const Node *getNode(const size_t &i) const;
         void genMesh(meshing_dir dm);
         friend bool operator==(const Lado &il1,const Lado &il2);
     

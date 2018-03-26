@@ -67,8 +67,8 @@ class DqPtrsNode: public DqPtrsKDTree<Node,KDTreeNodes>
     DqPtrsNode pickNodesInside(const GeomObj3d &, const double &tol= 0.0);
     BND3d Bnd(const double &) const;
 
-    Node *buscaNodo(const int &tag);
-    const Node *buscaNodo(const int &tag) const;
+    Node *findNode(const int &tag);
+    const Node *findNode(const int &tag) const;
     void numera(void);
   };
 

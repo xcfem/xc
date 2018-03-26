@@ -23,7 +23,7 @@
 
 XC::TritrizPtrNod &(XC::EntMdlr::*getTtzNodes)(void)= &XC::EntMdlr::getTtzNodes;
 XC::TritrizPtrElem &(XC::EntMdlr::*getTtzElements)(void)= &XC::EntMdlr::getTtzElements;
-XC::Node *(XC::EntMdlr::*getNodeEntMdlr)(const size_t &i,const size_t &,const size_t &)= &XC::EntMdlr::GetNodo;
+XC::Node *(XC::EntMdlr::*getNodeEntMdlr)(const size_t &i,const size_t &,const size_t &)= &XC::EntMdlr::getNode;
 XC::Node *(XC::EntMdlr::*getNearestNodeEntMdlr)(const Pos3d &)= &XC::EntMdlr::getNearestNode;
 XC::Element *(XC::EntMdlr::*getElementEntMdlr)(const size_t &i,const size_t &,const size_t &)= &XC::EntMdlr::getElement; 
 
@@ -43,12 +43,13 @@ class_<XC::EntMdlr, bases<XC::SetEstruct>, boost::noncopyable >("EntMdlr", no_in
   .def("Out", &XC::EntMdlr::Out,"\n""Out(geomObject,tolerance) \n""Return true if this object lies outside the geometric object.")
    ;
 
+XC::Node *(XC::Pnt::*getNodePnt)(void)= &XC::Pnt::getNode;
 class_<XC::Pnt, XC::Pnt *, bases<XC::EntMdlr>, boost::noncopyable >("Pnt", no_init)
   .add_property("getPos", make_function( &XC::Pnt::GetPos, return_internal_reference<>() ),&XC::Pnt::setPos)
   .def("getVectorPos", &XC::Pnt::VectorPos,"Returns the position vector of the point.")
-  .add_property("hasNode",&XC::Pnt::tieneNodo,"True if the point has a node.")
+  .add_property("hasNode",&XC::Pnt::hasNode,"True if the point has a node.")
   .add_property("getTagNode",&XC::Pnt::getTagNode,"Returns node's tag.")
-  .def("getNode",make_function(&XC::Pnt::getNode, return_internal_reference<>() ),"Returns point's node.")
+  .def("getNode",make_function(getNodePnt, return_internal_reference<>() ),"Returns point's node.")
   .add_property("getNLines",&XC::Pnt::getNLines,"Returns number of lines that touch the point.")
    ;
 

@@ -84,7 +84,7 @@ class_<matriz_ptr_nodes, bases<matriz_t_ptr_nodes,EntCmd>, boost::noncopyable >(
   ;
 
 XC::Node *(XC::MatrizPtrNod::*getNearestNodMatrizPtrNod)(const Pos3d &)= &XC::MatrizPtrNod::getNearestNode;
-XC::Node *(XC::MatrizPtrNod::*getNodWithTagMatrizPtrNod)(const int &)= &XC::MatrizPtrNod::buscaNodo;
+XC::Node *(XC::MatrizPtrNod::*getNodWithTagMatrizPtrNod)(const int &)= &XC::MatrizPtrNod::findNode;
 class_<XC::MatrizPtrNod, bases<matriz_ptr_nodes>, boost::noncopyable >("MatrizPtrNod", no_init)
   .def("getNode", getNod, return_internal_reference<>())
   .def("getNearestNode",make_function(getNearestNodMatrizPtrNod, return_internal_reference<>() ),"Returns nearest node.")
@@ -93,10 +93,10 @@ class_<XC::MatrizPtrNod, bases<matriz_ptr_nodes>, boost::noncopyable >("MatrizPt
 
 
 typedef std::vector<XC::MatrizPtrNod> vector_mp_nodes;
-XC::MatrizPtrNod &(vector_mp_nodes::*getCapaNodos)(size_t )= &vector_mp_nodes::at;
+XC::MatrizPtrNod &(vector_mp_nodes::*getNodeLayer)(size_t )= &vector_mp_nodes::at;
 class_<vector_mp_nodes, boost::noncopyable >("vector_mp_nodes", no_init)
   .def(vector_indexing_suite<vector_mp_nodes>() )
-  .def("getLayer", getCapaNodos, return_internal_reference<>(), "returns node layer." )
+  .def("getLayer", getNodeLayer, return_internal_reference<>(), "returns node layer." )
   ;
 
 typedef XC::TritrizPtrBase<XC::MatrizPtrNod> tritriz_nodes;
@@ -106,7 +106,7 @@ class_<tritriz_nodes, bases<vector_mp_nodes,EntCmd>, boost::noncopyable >("tritr
   ;
 
 XC::Node *(XC::TritrizPtrNod::*getNearestNodeTritrizPtrNod)(const Pos3d &)= &XC::TritrizPtrNod::getNearestNode;
-XC::Node *(XC::TritrizPtrNod::*getNodeWithTagTritrizPtrNod)(const int &)= &XC::TritrizPtrNod::buscaNodo;
+XC::Node *(XC::TritrizPtrNod::*getNodeWithTagTritrizPtrNod)(const int &)= &XC::TritrizPtrNod::findNode;
 class_<XC::TritrizPtrNod, bases<tritriz_nodes>, boost::noncopyable >("TritrizPtrNod", no_init)
   .def("getNearestNode",make_function(getNearestNodeTritrizPtrNod, return_internal_reference<>() ),"Returns nearest node.")
   .def("getNodeWithTag",make_function(getNodeWithTagTritrizPtrNod, return_internal_reference<>() ),"Returns node by tag.")

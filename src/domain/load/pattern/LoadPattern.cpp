@@ -304,7 +304,7 @@ void XC::LoadPattern::clearAll(void)
     setTimeSeries(nullptr);
   }
 
-//! @brief Elimina the load sobre nodo cuyo tag being passed as parameter.
+//! @brief Remove the nodal load which tag is being passed as parameter.
 bool XC::LoadPattern::removeNodalLoad(int tag)
   {
     bool result= theLoads.removeNodalLoad(tag);
@@ -312,7 +312,7 @@ bool XC::LoadPattern::removeNodalLoad(int tag)
     return result;
   }
 
-//! @brief Elimina the load over element cuyo tag being passed as parameter.
+//! @brief Remove the load over element which tag is being passed as parameter.
 bool XC::LoadPattern::removeElementalLoad(int tag)
   {
     bool result= theLoads.removeElementalLoad(tag);

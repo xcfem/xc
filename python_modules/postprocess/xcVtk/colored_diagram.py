@@ -188,9 +188,9 @@ class ColoredDiagram(vtk_lut_field.LUTField):
                   by this factor. (Defaults to 0.0, i.e. display of 
                   initial/undeformed shape)
     '''
-    posNodo0= elem.getNodes[0].getCurrentPos3d(defFScale)
-    posNodo1= elem.getNodes[1].getCurrentPos3d(defFScale)
-    return self.creaTramoDiagrama(indxDiagrama,posNodo0,v0,posNodo1,v1)
+    posNode0= elem.getNodes[0].getCurrentPos3d(defFScale)
+    posNode1= elem.getNodes[1].getCurrentPos3d(defFScale)
+    return self.creaTramoDiagrama(indxDiagrama,posNode0,v0,posNode1,v1)
 
 
   def appendDataFromElementEnds(self,vDir,elem,indxDiagram,value1,value2):

@@ -19,7 +19,7 @@ class RecordDefDisplayEF(vtk_grafico_base.RecordDefDisplay):
     '''
     def __init__(self):
         super(RecordDefDisplayEF,self).__init__()
-        self.nodos= None
+        self.nodes= None
         self.gridMapper= None
     def VtkDefineElementsActor(self, reprType,field):
         ''' Define the actor to display elements
@@ -61,18 +61,18 @@ class RecordDefDisplayEF(vtk_grafico_base.RecordDefDisplay):
         sphereSource.SetThetaResolution(5)
         sphereSource.SetPhiResolution(5)
 
-        markNodos= vtk.vtkGlyph3D()
-        markNodos.SetInput(self.gridRecord.uGrid)
-        markNodos.SetSource(sphereSource.GetOutput())
-        markNodos.ScalingOff()
-        markNodos.OrientOff()
+        markNodes= vtk.vtkGlyph3D()
+        markNodes.SetInput(self.gridRecord.uGrid)
+        markNodes.SetSource(sphereSource.GetOutput())
+        markNodes.ScalingOff()
+        markNodes.OrientOff()
 
-        mappNodos= vtk.vtkPolyDataMapper()
-        mappNodos.SetInput(markNodos.GetOutput())
-        visNodos= vtk.vtkActor()
-        visNodos.SetMapper(mappNodos)
-        visNodos.GetProperty().SetColor(.7, .5, .5)
-        self.renderer.AddActor(visNodos)
+        mappNodes= vtk.vtkPolyDataMapper()
+        mappNodes.SetInput(markNodes.GetOutput())
+        visNodes= vtk.vtkActor()
+        visNodes.SetMapper(mappNodes)
+        visNodes.GetProperty().SetColor(.7, .5, .5)
+        self.renderer.AddActor(visNodes)
 
     def VtkLoadElemMesh(self,field,defFScale=0.0,eigenMode=None):
         '''Load the element mesh
@@ -90,9 +90,9 @@ class RecordDefDisplayEF(vtk_grafico_base.RecordDefDisplay):
                  Defaults to None: no modal analysis.
         '''
         # Define grid
-        self.nodos= vtk.vtkPoints()
+        self.nodes= vtk.vtkPoints()
         self.gridRecord.uGrid= vtk.vtkUnstructuredGrid()
-        self.gridRecord.uGrid.SetPoints(self.nodos)
+        self.gridRecord.uGrid.SetPoints(self.nodes)
         eSet= self.gridRecord.xcSet
         eSet.numerate()
         self.gridRecord.uGrid.name= eSet.name+'_grid'
@@ -102,15 +102,15 @@ class RecordDefDisplayEF(vtk_grafico_base.RecordDefDisplay):
           arr= field.fillArray(nodeSet)
           field.creaLookUpTable()      
         # Load nodes in vtk
-        setNodos= eSet.getNodes
+        setNodes= eSet.getNodes
         if eigenMode==None:
-            for n in setNodos:
+            for n in setNodes:
               pos= n.getCurrentPos3d(defFScale)
-              self.nodos.InsertPoint(n.getIdx,pos.x,pos.y,pos.z)
+              self.nodes.InsertPoint(n.getIdx,pos.x,pos.y,pos.z)
         else:
-            for n in setNodos:
+            for n in setNodes:
               pos= n.getEigenPos3d(defFScale,eigenMode)
-              self.nodos.InsertPoint(n.getIdx,pos.x,pos.y,pos.z)
+              self.nodes.InsertPoint(n.getIdx,pos.x,pos.y,pos.z)
          # Load elements in vtk
         setElems= eSet.getElements
         for e in setElems:
@@ -148,8 +148,8 @@ class RecordDefDisplayEF(vtk_grafico_base.RecordDefDisplay):
           #Implement labels.
           # if(self.gridRecord.entToLabel=="elementos"):
           #   VtkDibujaIdsElementos(self.renderer)
-          # elif(self.gridRecord.entToLabel=="nodos"):
-          #   vtk_define_mesh_nodes.VtkDibujaIdsNodos(self.renderer)
+          # elif(self.gridRecord.entToLabel=="nodes"):
+          #   vtk_define_mesh_nodes.VtkDibujaIdsNodes(self.renderer)
           # else:
           #   print "Entity: ", self.gridRecord.entToLabel, " unknown."
 
@@ -212,7 +212,7 @@ class RecordDefDisplayEF(vtk_grafico_base.RecordDefDisplay):
                     by this factor. (Defaults to 0.0, i.e. display of 
                     initial/undeformed shape)
           '''
-          #actorName= baseName+"%04d".format(nod.tag) # Tag nodo.
+          #actorName= baseName+"%04d".format(nod.tag) # Node tag.
           pos= nod.getCurrentPos3d(defFScale)
           absForce= force.Norm()
           if(absForce>1e-6):

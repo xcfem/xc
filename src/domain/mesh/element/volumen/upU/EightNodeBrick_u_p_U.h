@@ -70,7 +70,7 @@ namespace XC {
 
 //! \ingroup ElemVol
 //
-//! @brief Hexaedro de ocho nodos.
+//! @brief Eight node exahedron.
 class EightNodeBrick_u_p_U: public BrickBase
   {
   private:

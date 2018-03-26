@@ -4,13 +4,13 @@ import xc
 
 def nodal_load_on_point(preprocessor, load_pattern, id_point, load):
   '''create a point load on the node associated with a point'''
-  tagNodo= preprocessor.getCad.getPoints.get(id_point).getTagNode
-  load_pattern.newNodalLoad(tagNodo,xc.Vector([load[0],load[1],load[2],load[3],load[4],load[5]]))
+  nodeTag= preprocessor.getCad.getPoints.get(id_point).getTagNode
+  load_pattern.newNodalLoad(nodeTag,xc.Vector([load[0],load[1],load[2],load[3],load[4],load[5]]))
 
 
-def nodal_load_on_lstNodes(load_pattern, tagNodos, load):
+def nodal_load_on_lstNodes(load_pattern, nodeTags, load):
   '''create a point load on each node in a list of node-tags'''
-  for i in tagNodos:
+  for i in nodeTags:
     load_pattern.newNodalLoad(i,xc.Vector([load[0],load[1],load[2],load[3],load[4],load[5]]))
 
 def nodal_load_on_lstPoints(preprocessor, load_pattern,lst_points, load):

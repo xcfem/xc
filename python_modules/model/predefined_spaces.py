@@ -71,9 +71,9 @@ class PredefinedSpace(object):
     :param   nodeTagA: tag of the master node.
     :param   nodeTagB: tag of the pivot (slave node).
     '''
-    nodos= self.preprocessor.getNodeLoader
-    coordNodoB= nodos.getNode(pivotNode).getCoo
-    fulcrumNode= nodos.newNodeFromVector(coordNodoB)
+    nodes= self.preprocessor.getNodeLoader
+    coordNodeB= nodes.getNode(pivotNode).getCoo
+    fulcrumNode= nodes.newNodeFromVector(coordNodeB)
     rb= self.constraints.newRigidBeam(nodeTagA,fulcrumNode.tag)
     ed= self.constraints.newEqualDOF(fulcrumNode.tag,pivotNode,xc.ID(self.getDisplacementDOFs()))
 
@@ -119,8 +119,8 @@ class PredefinedSpace(object):
         Returns:
             :rtype: (int, int) new node tag, new element tag.
     '''
-    nodos= self.preprocessor.getNodeLoader
-    newNode= nodos.duplicateNode(iNod) # new node.
+    nodes= self.preprocessor.getNodeLoader
+    newNode= nodes.duplicateNode(iNod) # new node.
 
     # Element definition
     newElement= self.setBearingBetweenNodes(newNode.tag,iNod,bearingMaterialNames,orientation)

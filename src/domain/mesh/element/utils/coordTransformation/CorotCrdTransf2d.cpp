@@ -325,7 +325,8 @@ int XC::CorotCrdTransf2d::compElemtLengthAndOrientWRTLocalSystem(const Vector &u
 
 void XC::CorotCrdTransf2d::transfLocalDisplsToBasic(const Vector &ul)
   {
-    // Eliminate rigid body modes, determining displacements wrt the basic system    
+    // Eliminate rigid body modes, determining displacements
+    // wrt the basic system    
     const double alpha = atan2(sinAlpha, cosAlpha);
     ub(0) = Ln - L;
     ub(1) = ul(2) - alpha;

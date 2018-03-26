@@ -326,10 +326,22 @@ bool XC::ConstrContainer::addElementalLoad(ElementalLoad *load, int loadPatternT
   }
 
 
-//! @brief Removes a single freedom constraint from this container or from a load pattern.
+//! @brief Removes a single freedom constraint from this container or from
+//! a load pattern.
+//!
+//! To remove the SFreedom\_Constraint whose tag is given by \p tag from the
+//! domain. The domain achieves this by invoking {\em
+//! removeComponent(tag)} on the container for the single point
+//! constraints. Returns \f$0\f$ if the constraint was not in the domain,
+//! otherwise the domain invokes {\em setDomain(nullptr)} on the constraint and
+//! domainChange() on itself before a pointer to the constraint is
+//! returned. Note this will only remove SFreedom\_Constraints which have been
+//! added to the domain and not directly to LoadPatterns.
+//!
 //! @param theNode: node tag.
 //! @param theDOF: degree of freedom identifier.
-//! @param loadPatternTag: load pattern identifier (if -1 then remove from domain).
+//! @param loadPatternTag: load pattern identifier (if -1 then remove from
+//! domain).
 bool XC::ConstrContainer::removeSFreedom_Constraint(int theNode, int theDOF, int loadPatternTag)
   {
     SFreedom_Constraint *theSP= nullptr;
@@ -353,7 +365,9 @@ bool XC::ConstrContainer::removeSFreedom_Constraint(int theNode, int theDOF, int
     return 0;
   }
 
-//! @brief Removes the single freedom constraint whose identifier is being passed as parameter.
+//! @brief Removes the single freedom constraint identified by the argument.
+//!
+//! @param tag: identifier of the single freedom constraint.
 bool XC::ConstrContainer::removeSFreedom_Constraint(int tag)
   {
     SFreedom_Constraint *theSP= dynamic_cast<SFreedom_Constraint *>(theSPs->getComponentPtr(tag));
@@ -363,6 +377,14 @@ bool XC::ConstrContainer::removeSFreedom_Constraint(int tag)
   }
 
 //! @brief Removes the multi-freedom constraint whose identifier is being passed as parameter.
+//! 
+//! To remove the MFreedom\_Constraint whose tag is given by \p tag from the
+//! domain. The domain achieves this by invoking {\em
+//! removeComponent(tag)} on the container for the multi point
+//! constraints. Returns \f$0\f$ if the constraint was not in the domain,
+//! otherwise the domain invokes {\em setDomain(nullptr)} on the constraint.
+//!
+//! @param tag: identifier of the constraint.
 bool XC::ConstrContainer::removeMFreedom_Constraint(int tag)
   {
     MFreedom_Constraint *theMP= dynamic_cast<MFreedom_Constraint *>(theMPs->getComponentPtr(tag));
@@ -371,7 +393,10 @@ bool XC::ConstrContainer::removeMFreedom_Constraint(int tag)
     return theMPs->removeComponent(tag);
   }
 
-//! @brief Removes the multi-row multi-freedom constraint whose identifier is being passed as parameter.
+//! @brief Removes the multi-row multi-freedom constraint identified by
+//! the argument.
+//!
+//! @param tag: identifier of the constraint.
 bool XC::ConstrContainer::removeMRMFreedom_Constraint(int tag)
   {
     MRMFreedom_Constraint *theMRMP= dynamic_cast<MRMFreedom_Constraint *>(theMRMPs->getComponentPtr(tag));
@@ -380,7 +405,10 @@ bool XC::ConstrContainer::removeMRMFreedom_Constraint(int tag)
     return theMRMPs->removeComponent(tag);
   }
 
-//! @brief Removes the load pattern whose identifier is being passed as parameter.
+//! @brief Removes the load pattern identified by the argument.
+//!
+//! @param tag: identifier of the load pattern.
+//! @param numSPs: number of single freedom constrains on the load pattern.
 bool XC::ConstrContainer::removeLoadPattern(int tag,int &numSPs)
   { 
     MapCasosActivos<LoadPattern>::iterator i= activeLoadPatterns.find(tag);
@@ -400,7 +428,8 @@ bool XC::ConstrContainer::removeLoadPattern(int tag,int &numSPs)
             retval= true;
           }
         else
-	  std::cerr << "error en ConstrContainer::removeLoadPattern" << std::endl;
+	  std::cerr << getClassName() << "::" << __FUNCTION__
+		    << "; ERROR load pattern not found." << std::endl;
       }
     // finally return the load pattern
     return retval;
@@ -427,7 +456,8 @@ bool XC::ConstrContainer::removeNodeLocker(int tag,int &numSPs)
             retval= true;
           }
         else
-	  std::cerr << "error en ConstrContainer::removeNodeLocker" << std::endl;
+	  std::cerr << getClassName() << "::" << __FUNCTION__
+		    << "; ERROR - node locker not found." << std::endl;
       }
     return retval;
   }
@@ -501,7 +531,7 @@ bool XC::ConstrContainer::removeSFreedom_Constraint(int tag, int loadPattern)
     return retval;
   }
 
-//! @brief Domain single freedom constraints iterator.
+//! @brief Return an iterator to the single freedom constraints.
 XC::SFreedom_ConstraintIter &XC::ConstrContainer::getSPs(void)
   {
     theSFreedom_Iter->reset();
@@ -515,14 +545,14 @@ XC::SFreedom_ConstraintIter &XC::ConstrContainer::getDomainAndLoadPatternSPs(voi
     return *allSFreedom_Iter;
   }
 
-//! @brief Domain multi-freedom constraints iterator.
+//! @brief Return an iterator to the multi-freedom constraints.
 XC::MFreedom_ConstraintIter &XC::ConstrContainer::getMPs(void)
   {
     theMFreedom_Iter->reset();
     return *theMFreedom_Iter;
   }
 
-//! @brief Domain multi-row multi-freedom constraints iterator.
+//! @brief Return an iterator to the multi-row multi-freedom constraints.
 XC::MRMFreedom_ConstraintIter &XC::ConstrContainer::getMRMPs(void)
   {
     theMRMFreedom_Iter->reset();
@@ -554,6 +584,8 @@ const std::map<int,XC::NodeLocker *> &XC::ConstrContainer::getNodeLockers(void) 
 */
 
 //! @brief Returns a pointer to the single freedom constraint whose identifier is being passed as parameter.
+//!
+//! @param tag: constraint identifier.
 XC::SFreedom_Constraint *XC::ConstrContainer::getSFreedom_Constraint(int tag)
   {
     TaggedObject *mc= theSPs->getComponentPtr(tag);
@@ -563,7 +595,10 @@ XC::SFreedom_Constraint *XC::ConstrContainer::getSFreedom_Constraint(int tag)
     return result;
   }
 
-//! @brief Returns a pointer to the multi-freedom constraint whose identifier is being passed as parameter.
+//! @brief Returns a pointer to the multi-freedom constraint identified by
+//! the argument.
+//!
+//! @param tag: constraint identifier.
 XC::MFreedom_Constraint *XC::ConstrContainer::getMFreedom_Constraint(int tag)
   {
     TaggedObject *mc= theMPs->getComponentPtr(tag);
@@ -573,7 +608,10 @@ XC::MFreedom_Constraint *XC::ConstrContainer::getMFreedom_Constraint(int tag)
     return result;
   }
 
-//! @brief Returns a pointer to the multi-row multi-freedom constraint whose identifier is being passed as parameter.
+//! @brief Returns a pointer to the multi-row multi-freedom constraint
+//! identified by the argument.
+//!
+//! @param tag: constraint identifier.
 XC::MRMFreedom_Constraint *XC::ConstrContainer::getMRMFreedom_Constraint(int tag)
   {
     TaggedObject *mc= theMRMPs->getComponentPtr(tag);
@@ -583,7 +621,10 @@ XC::MRMFreedom_Constraint *XC::ConstrContainer::getMRMFreedom_Constraint(int tag
     return result;
   }
 
-//! @brief Returns a pointer to the load pattern whose identifier is being passed as parameter.
+//! @brief Returns a pointer to the load pattern identified by
+//! the argument.
+//!
+//! @param tag: load pattern identifier.
 XC::LoadPattern *XC::ConstrContainer::getLoadPattern(const int &tag)
   {
     LoadPattern *retval= nullptr;
@@ -596,7 +637,10 @@ XC::LoadPattern *XC::ConstrContainer::getLoadPattern(const int &tag)
     return retval;
   }
 
-//! @brief Returns a pointer to the load pattern whose identifier is being passed as parameter.
+//! @brief Returns a pointer to the load pattern identified by
+//! the argument.
+//!
+//! @param tag: load pattern identifier.
 const XC::LoadPattern *XC::ConstrContainer::getLoadPattern(const int &tag) const
   {
     const LoadPattern *retval= nullptr;
@@ -610,7 +654,10 @@ const XC::LoadPattern *XC::ConstrContainer::getLoadPattern(const int &tag) const
     return retval;
   }
 
-//! @brief Returns a pointer to the node locker whose identifier is being passed as parameter.
+//! @brief Returns a pointer to the node locker identified by
+//! the argument.
+//!
+//! @param tag: node locker identifier.
 XC::NodeLocker *XC::ConstrContainer::getNodeLocker(const int &tag)
   {
     NodeLocker *retval= nullptr;
@@ -624,7 +671,10 @@ XC::NodeLocker *XC::ConstrContainer::getNodeLocker(const int &tag)
     return retval;
   }
 
-//! @brief Returns a pointer to the node locker whose identifier is being passed as parameter.
+//! @brief Returns a pointer to the node locker identified by
+//! the argument.
+//!
+//! @param tag: node locker identifier.
 const XC::NodeLocker *XC::ConstrContainer::getNodeLocker(const int &tag) const
   {
     const NodeLocker *retval= nullptr;
@@ -712,7 +762,8 @@ std::deque<int> XC::ConstrContainer::getTagsMPsNode(int theNode, int theDOF) con
   {
     std::deque<int> retval; 
 
-    std::cerr << "XC::ConstrContainer::getTagsMPsNode not implemented." << std::endl;
+    std::cerr << getClassName() << "::" << __FUNCTION__
+	      << "; not implemented." << std::endl;
     return retval;
   }
 
@@ -721,7 +772,8 @@ std::deque<int> XC::ConstrContainer::getTagsMPsNode(int theNode) const
   {
     std::deque<int> retval; 
 
-    std::cerr << "XC::ConstrContainer::getTagsMPsNode not implemented." << std::endl;
+    std::cerr << getClassName() << "::" << __FUNCTION__
+	      << ";  not implemented." << std::endl;
     return retval;
   }
 

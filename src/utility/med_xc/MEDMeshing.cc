@@ -96,7 +96,7 @@ void XC::MEDMeshing::defineMEDGroups(void)
                 set_nodes.Nombre()= nmb+str_node_group;
                 med_groups.push_back(MEDGroupInfo(this,set_nodes));
                 Set set_elements(*set);
-                set_elements.clearNodos();
+                set_elements.clearNodes();
                 set_elements.Nombre()= nmb+str_element_group;
                 med_groups.push_back(MEDGroupInfo(this,set_elements));
               }

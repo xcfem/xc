@@ -85,27 +85,27 @@ XC::TriBase3N<PhysProp>::TriBase3N(int tag, int classTag, int node1, int node2, 
 
 //! @brief Put the element on the mesh being passed as parameter.
 template <class PhysProp>
-XC::TritrizPtrElem XC::TriBase3N<PhysProp>::put_on_mesh(const XC::TritrizPtrNod &nodos,meshing_dir dm) const
+XC::TritrizPtrElem XC::TriBase3N<PhysProp>::put_on_mesh(const XC::TritrizPtrNod &nodes,meshing_dir dm) const
   {
     std::cerr << "TritrizPtrElem XC::TriBase3N<PhysProp>::put_on_mesh not implemented" << std::endl; 
     TritrizPtrElem retval;
     return retval;
   }
 
-//! @brief Returns the nodos de un lado of the element.
+//! @brief Returns the nodes de un lado of the element.
 template <class PhysProp>
 XC::Element::NodesEdge XC::TriBase3N<PhysProp>::getNodesEdge(const size_t &i) const
   {
     Element::NodesEdge retval(2,static_cast<Node *>(nullptr));
-    const NodePtrsWithIDs &nodos= ElemPlano<3,PhysProp>::getNodePtrs();
-    const size_t sz= nodos.size();
+    const NodePtrsWithIDs &nodes= ElemPlano<3,PhysProp>::getNodePtrs();
+    const size_t sz= nodes.size();
     if(i<sz)
       {
-        retval[0]= nodos(i);
+        retval[0]= nodes(i);
         if(i<(sz-1))
-          retval[1]= nodos(i+1);
+          retval[1]= nodes(i+1);
         else
-          retval[1]= nodos(0);
+          retval[1]= nodes(0);
       }
     return retval;    
   }
@@ -116,9 +116,9 @@ template <class PhysProp>
 int XC::TriBase3N<PhysProp>::getEdgeNodes(const Node *n1,const Node *n2) const
   {
     int retval= -1;
-    const NodePtrsWithIDs &nodos= ElemPlano<3,PhysProp>::getNodePtrs();
-    const int i1= nodos.find(n1);
-    const int i2= nodos.find(n2);
+    const NodePtrsWithIDs &nodes= ElemPlano<3,PhysProp>::getNodePtrs();
+    const int i1= nodes.find(n1);
+    const int i2= nodes.find(n2);
     if((i1>=0) && (i2>=0))
       {
         const int dif= i2-i1;
@@ -139,8 +139,8 @@ template <class PhysProp>
 ID XC::TriBase3N<PhysProp>::getLocalIndexNodesEdge(const size_t &i) const
   {
     ID retval(2);
-    const NodePtrsWithIDs &nodos= ElemPlano<3,PhysProp>::getNodePtrs();
-    const size_t sz= nodos.size();
+    const NodePtrsWithIDs &nodes= ElemPlano<3,PhysProp>::getNodePtrs();
+    const size_t sz= nodes.size();
     if(i<sz)
       {
         retval[0]= i;

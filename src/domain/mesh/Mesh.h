@@ -72,7 +72,7 @@ class Mesh: public MeshComponentContainer
 
     TaggedObjectStorage *theNodes; //!< Node container.
     SingleDomNodIter *theNodIter; //!< Node iterator.
-    KDTreeNodes kdtreeNodos; //!< space-partitioning data structure for organizing nodes.
+    KDTreeNodes kdtreeNodes; //!< space-partitioning data structure for organizing nodes.
     std::vector<std::string> nombresCoordenadas; //!< Coordinate names ("X","Y","Z",...).
     std::string nombreUnidades; //!< Units names ("cm","m","in",...).
 

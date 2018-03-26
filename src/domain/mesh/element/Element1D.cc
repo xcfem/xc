@@ -314,83 +314,83 @@ void XC::Element1D::strainLoad(const DeformationPlane &p1,const DeformationPlane
 size_t XC::Element1D::getDimension(void) const
   { return 1; }
 
-void meshing_on_i(const XC::Element1D &e,const XC::TritrizPtrNod::const_ref_fila_i &nodos,XC::TritrizPtrElem::var_ref_fila_i &elements)
+void meshing_on_i(const XC::Element1D &e,const XC::TritrizPtrNod::const_ref_fila_i &nodes,XC::TritrizPtrElem::var_ref_fila_i &elements)
   {
-    const size_t ncapas= nodos.GetCapas();
+    const size_t ncapas= nodes.GetCapas();
     for(size_t i=1;i<ncapas;i++)
       {
 	XC::Element *tmp= e.getCopy();
-        const int Nd1= nodos(i)->getTag();
-        const int Nd2= nodos(i+1)->getTag();
+        const int Nd1= nodes(i)->getTag();
+        const int Nd2= nodes(i+1)->getTag();
         tmp->getNodePtrs().set_id_nodes(Nd1,Nd2);
         elements(i)= tmp;
       }
   }
 
-void meshing_on_j(const XC::Element1D &e,const XC::TritrizPtrNod::const_ref_fila_j &nodos,XC::TritrizPtrElem::var_ref_fila_j &elements)
+void meshing_on_j(const XC::Element1D &e,const XC::TritrizPtrNod::const_ref_fila_j &nodes,XC::TritrizPtrElem::var_ref_fila_j &elements)
   {
-    const size_t nfilas= nodos.getNumFilas();
+    const size_t nfilas= nodes.getNumFilas();
     for(size_t j=1;j<nfilas;j++)
       {
 	XC::Element *tmp= e.getCopy();
-        const int Nd1= nodos(j)->getTag();
-        const int Nd2= nodos(j+1)->getTag();
+        const int Nd1= nodes(j)->getTag();
+        const int Nd2= nodes(j+1)->getTag();
         tmp->getNodePtrs().set_id_nodes(Nd1,Nd2);
         elements(j)= tmp;
       }
   }
 
-void meshing_on_k(const XC::Element1D &e,const XC::TritrizPtrNod::const_ref_fila_k &nodos,XC::TritrizPtrElem::var_ref_fila_k &elements)
+void meshing_on_k(const XC::Element1D &e,const XC::TritrizPtrNod::const_ref_fila_k &nodes,XC::TritrizPtrElem::var_ref_fila_k &elements)
   {
-    const size_t ncols= nodos.getNumCols();
+    const size_t ncols= nodes.getNumCols();
     for(size_t k=1;k<ncols;k++)
       {
 	XC::Element *tmp= e.getCopy();
-        const int Nd1= nodos(k)->getTag();
-        const int Nd2= nodos(k+1)->getTag();
+        const int Nd1= nodes(k)->getTag();
+        const int Nd2= nodes(k+1)->getTag();
         tmp->getNodePtrs().set_id_nodes(Nd1,Nd2);
         elements(k)= tmp;
       }
   }
 
-void XC::Element1D::unidimensional_meshing(const XC::TritrizPtrNod &nodos,XC::TritrizPtrElem &elements) const
+void XC::Element1D::unidimensional_meshing(const XC::TritrizPtrNod &nodes,XC::TritrizPtrElem &elements) const
   {
-    const size_t ncapas= nodos.GetCapas();
-    const size_t nfilas= nodos.getNumFilas();
-    const size_t ncols= nodos.getNumCols();
-    if(nodos.EsFilaI())
+    const size_t ncapas= nodes.GetCapas();
+    const size_t nfilas= nodes.getNumFilas();
+    const size_t ncols= nodes.getNumCols();
+    if(nodes.EsFilaI())
       {
         elements= TritrizPtrElem(ncapas-1,MatrizPtrElem(1,1));
         TritrizPtrElem::var_ref_fila_i fila_elem= elements.GetVarRefFilaI(1,1);
-        meshing_on_i(*this,nodos.GetConstRefFilaI(1,1),fila_elem);
+        meshing_on_i(*this,nodes.GetConstRefFilaI(1,1),fila_elem);
       }
-    else if(nodos.EsFilaJ())
+    else if(nodes.EsFilaJ())
       {
         elements= TritrizPtrElem(ncapas,MatrizPtrElem(nfilas-1,ncols));
         TritrizPtrElem::var_ref_fila_j fila_elem= elements.GetVarRefFilaJ(1,1);
-        meshing_on_j(*this,nodos.GetConstRefFilaJ(1,1),fila_elem);
+        meshing_on_j(*this,nodes.GetConstRefFilaJ(1,1),fila_elem);
       }
-    else if(nodos.EsFilaK())
+    else if(nodes.EsFilaK())
       {
         elements= TritrizPtrElem(ncapas,MatrizPtrElem(nfilas,ncols-1));
         TritrizPtrElem::var_ref_fila_k fila_elem= elements.GetVarRefFilaK(1,1);
-        meshing_on_k(*this,nodos.GetConstRefFilaK(1,1),fila_elem);
+        meshing_on_k(*this,nodes.GetConstRefFilaK(1,1),fila_elem);
       }
   }
 
-XC::TritrizPtrElem XC::Element1D::put_on_mesh(const TritrizPtrNod &nodos,meshing_dir dm) const
+XC::TritrizPtrElem XC::Element1D::put_on_mesh(const TritrizPtrNod &nodes,meshing_dir dm) const
   {
-    const size_t ncapas= nodos.GetCapas();
-    const size_t nfilas= nodos.getNumFilas();
-    const size_t ncols= nodos.getNumCols();
-    const size_t mesh_dim= nodos.GetDim();
+    const size_t ncapas= nodes.GetCapas();
+    const size_t nfilas= nodes.getNumFilas();
+    const size_t ncols= nodes.getNumCols();
+    const size_t mesh_dim= nodes.GetDim();
     TritrizPtrElem retval;
     if(mesh_dim<1)
       std::cerr << "There is only one node, can't create elements." << std::endl;
     else
       {
        if(mesh_dim<2) //Bidimensional mesh
-          unidimensional_meshing(nodos,retval);
+          unidimensional_meshing(nodes,retval);
         else
           {
             switch(dm)
@@ -407,7 +407,7 @@ XC::TritrizPtrElem XC::Element1D::put_on_mesh(const TritrizPtrNod &nodos,meshing
                       for(size_t k=1;k<=ncols;k++)
                         {
                           TritrizPtrElem::var_ref_fila_i fila_elem= retval.GetVarRefFilaI(j,k);
-                          meshing_on_i(*this,nodos.GetConstRefFilaI(j,k),fila_elem);
+                          meshing_on_i(*this,nodes.GetConstRefFilaI(j,k),fila_elem);
                         }
                   }
                 break;
@@ -423,7 +423,7 @@ XC::TritrizPtrElem XC::Element1D::put_on_mesh(const TritrizPtrNod &nodos,meshing
                       for(size_t k=1;k<=ncols;k++)
                         {
                           XC::TritrizPtrElem::var_ref_fila_j fila_elem= retval.GetVarRefFilaJ(i,k);
-                          meshing_on_j(*this,nodos.GetConstRefFilaJ(i,k),fila_elem);
+                          meshing_on_j(*this,nodes.GetConstRefFilaJ(i,k),fila_elem);
                         }
                   }
                 break;
@@ -439,7 +439,7 @@ XC::TritrizPtrElem XC::Element1D::put_on_mesh(const TritrizPtrNod &nodos,meshing
 	              for(size_t j=1;j<=nfilas;j++)
                         {
                           XC::TritrizPtrElem::var_ref_fila_k fila_elem= retval.GetVarRefFilaK(i,j);
-                          meshing_on_k(*this,nodos.GetConstRefFilaK(i,j),fila_elem);
+                          meshing_on_k(*this,nodes.GetConstRefFilaK(i,j),fila_elem);
                         }
                   }
                 break;
@@ -463,8 +463,8 @@ XC::TritrizPtrElem XC::Element1D::cose(const SetEstruct &f1,const SetEstruct &f2
         for(size_t k=1;k<=ncols;k++)
           {
             Element *tmp= getCopy();
-            const int Nd1= f1.GetNodo(i,j,k)->getTag();
-            const int Nd2= f2.GetNodo(i,j,k)->getTag();
+            const int Nd1= f1.getNode(i,j,k)->getTag();
+            const int Nd2= f2.getNode(i,j,k)->getTag();
             tmp->getNodePtrs().set_id_nodes(Nd1,Nd2);
             retval(i,1,1)= tmp;
           }
@@ -707,8 +707,8 @@ int XC::Element1D::getMEDCellType(void) const
   { return MED_SEG2; }
 
 
-//! @brief Calcula the tributary lengths that corresponds to cada
-//! nodo of the element
+//! @brief Calcula the tributary lengths that corresponds to each
+//! node of the element
 void XC::Element1D::computeTributaryLengths(bool initialGeometry) const
   {
     const double lt= getLineSegment(initialGeometry).Longitud()/2.0;

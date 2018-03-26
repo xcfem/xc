@@ -125,6 +125,10 @@ int XC::MFreedom_ConstraintBase::addResistingForceToNodalReaction(bool inclInert
   }
 
 //! @brief Returns the constraint matrix.
+//!
+//! Returns the current constraint Matrix, that determined in the last
+//! call to applyConstraint(). For the MFreedom\_Constraint class, \f$C_{cr}\f$
+//! determined in the constructor is returned.
 const XC::Matrix &XC::MFreedom_ConstraintBase::getConstraint(void) const
   { return constraintMatrix; }
 
@@ -147,6 +151,9 @@ int XC::MFreedom_ConstraintBase::recvData(const CommParameters &cp)
   }
 
 //! @brief Printing.
+//!
+//! Prints out the MFreedom\_Constraints tag, then the tags of the constrained
+//! and retained nodes, then the two ID's and finally the constraint Matrix.
 void XC::MFreedom_ConstraintBase::Print(std::ostream &s, int flag)
   {     
     s << "MFreedom_ConstraintBase: " << this->getTag() << "\n";

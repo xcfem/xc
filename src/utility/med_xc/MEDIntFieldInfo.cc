@@ -34,7 +34,7 @@ XC::MEDIntFieldInfo::MEDIntFieldInfo(const FieldInfo &fi,MEDGroupInfo *grp)
 //! @brief Set the field values at the nodes.
 void XC::MEDIntFieldInfo::populateOnNodes(const Set &set,const FieldInfo &fi)
   {
-    const DqPtrsNode &nodos= set.GetNodos();
+    const DqPtrsNode &nodes= set.getNodes();
     const size_t dim= fi.getNumberOfComponents();
     int conta= 1; std::vector<int> value(dim);
     const std::string nmb_prop= fi.getComponentsProperty();
@@ -42,7 +42,7 @@ void XC::MEDIntFieldInfo::populateOnNodes(const Set &set,const FieldInfo &fi)
       std::cerr << "Components property name is empty" << std::endl;
     else
       {
-        for(DqPtrsNode::const_iterator j= nodos.begin();j!=nodos.end();j++,conta++)
+        for(DqPtrsNode::const_iterator j= nodes.begin();j!=nodes.end();j++,conta++)
           {
             boost::python::object pyObj(boost::ref(*j));
             boost::python::object tmp= EntCmd_eval(pyObj,nmb_prop);
@@ -54,9 +54,9 @@ void XC::MEDIntFieldInfo::populateOnNodes(const Set &set,const FieldInfo &fi)
                   setValueIJ(conta,k,value[k-1]);
               }
             else
-	      std::cerr << "MEDIntFieldInfo::populateOnNodes; el nodo: "
+	      std::cerr << "MEDIntFieldInfo::populateOnNodes; the node: "
                         << (*j)->getTag()
-                        << " no pudo devolver la propiedad: '"
+                        << " can't return property: '"
                         << nmb_prop << "'\n";
           }
       }

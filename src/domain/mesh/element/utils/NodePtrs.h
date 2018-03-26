@@ -110,7 +110,7 @@ class NodePtrs: public EntCmd, public std::vector<Node *>
     void dumpTributaries(const std::vector<double> &) const;
 
     const std::vector<int> &getTags(void) const;
-    int getIndiceNodo(const Node *) const;
+    int getNodeIndex(const Node *) const;
   };
 } // end of XC namespace
 

@@ -134,7 +134,7 @@ class Matrix: public EntCmd
     int setData(double *newData, int nRows, int nCols);
     const double *getDataPtr(void) const;
     double *getDataPtr(void);
-    bool Nula(void) const;
+    bool isEmpty(void) const;
     int getDataSize(void) const;
     int getNumBytes(void) const;
     int noRows() const;
@@ -241,7 +241,7 @@ Matrix identity(const Matrix &m);
 
 
 /********* INLINED MATRIX FUNCTIONS ***********/
-inline bool Matrix::Nula(void) const
+inline bool Matrix::isEmpty(void) const
    { return data.isEmpty(); }
 
 inline int Matrix::getDataSize() const

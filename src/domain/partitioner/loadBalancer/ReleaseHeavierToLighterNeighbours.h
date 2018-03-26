@@ -66,6 +66,11 @@
 #include "LoadBalancer.h"
 
 namespace XC {
+//! @ingroup LoadBalancers
+//
+//! A ReleaseHeavierToLighterNeighbours is an object used to balance a
+//! PartitionedDomain. It does this by shedding the boundary vertices on
+//! the heaviest loaded partition (subdomain).
 class ReleaseHeavierToLighterNeighbours: public LoadBalancer
   {
   public:

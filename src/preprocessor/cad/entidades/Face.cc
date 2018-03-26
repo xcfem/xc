@@ -175,31 +175,31 @@ void XC::Face::add_to_sets(std::set<SetBase *> &sets)
 //! @param i: index of the layer.
 //! @param j: index of the row.
 //! @param k: index of the column.
-XC::Node *XC::Face::GetNodo(const size_t &i,const size_t &j,const size_t &k)
-  { return CmbEdge::GetNodo(i,j,k); }
+XC::Node *XC::Face::getNode(const size_t &i,const size_t &j,const size_t &k)
+  { return CmbEdge::getNode(i,j,k); }
 
 //! @brief Returns a pointer to node which indices are being passed as parameters.
 //!
 //! @param i: index of the layer.
 //! @param j: index of the row.
 //! @param k: index of the column.
-const XC::Node *XC::Face::GetNodo(const size_t &i,const size_t &j,const size_t &k) const
-  { return CmbEdge::GetNodo(i,j,k); }
+const XC::Node *XC::Face::getNode(const size_t &i,const size_t &j,const size_t &k) const
+  { return CmbEdge::getNode(i,j,k); }
 
 //! @brief Returns a pointer to node which indices are is being passed as parameter.
-XC::Node *XC::Face::GetNodo(const size_t &i,const size_t &j)
-  { return const_cast<Node *>(static_cast<const Face &>(*this).GetNodo(i,j)); }
+XC::Node *XC::Face::getNode(const size_t &i,const size_t &j)
+  { return const_cast<Node *>(static_cast<const Face &>(*this).getNode(i,j)); }
 
 //! @brief Returns a pointer to node which indices are is being passed as parameter.
-const XC::Node *XC::Face::GetNodo(const size_t &i,const size_t &j) const
+const XC::Node *XC::Face::getNode(const size_t &i,const size_t &j) const
   {
     const Node *retval= nullptr;
     if(ttzNodes.EsCapaICte())
-      retval= CmbEdge::GetNodo(1,i,j);
+      retval= CmbEdge::getNode(1,i,j);
     else if(ttzNodes.EsCapaJCte())
-      retval= CmbEdge::GetNodo(i,1,j);
+      retval= CmbEdge::getNode(i,1,j);
     else if(ttzNodes.EsCapaKCte())
-      retval= CmbEdge::GetNodo(i,j,1);
+      retval= CmbEdge::getNode(i,j,1);
     else
       std::cerr << getClassName() << "::" << __FUNCTION__
 	        << "; the node set is not one-dimensional." << std::endl;
@@ -207,7 +207,7 @@ const XC::Node *XC::Face::GetNodo(const size_t &i,const size_t &j) const
   }
 
 //! @brief Returns a pointer to node which index is being passed as parameter.
-XC::Node *XC::Face::GetNodo(const size_t &i)
+XC::Node *XC::Face::getNode(const size_t &i)
   {
     std::cerr << getClassName() << __FUNCTION__
               << "; must not be called with only one index." << std::endl; 
@@ -215,8 +215,8 @@ XC::Node *XC::Face::GetNodo(const size_t &i)
   }
 
 //! @brief Returns a pointer to node which index is being passed as parameter.
-const XC::Node *XC::Face::GetNodo(const size_t &i) const
-  { return const_cast<Node *>(static_cast<const Face &>(*this).GetNodo(i)); }
+const XC::Node *XC::Face::getNode(const size_t &i) const
+  { return const_cast<Node *>(static_cast<const Face &>(*this).getNode(i)); }
 
 //! @brief Interfaz con VTK.
 int XC::Face::getVtkCellType(void) const

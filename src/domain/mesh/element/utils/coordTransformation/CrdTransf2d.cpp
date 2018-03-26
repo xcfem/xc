@@ -214,9 +214,9 @@ int XC::CrdTransf2d::computeElemtLengthAndOrient(void) const
           {
             std::cerr << "CrdTransf2d::computeElemtLengthAndOrien: longitud nula. "
                       << std::endl
-                      << " Nodo I: " << nodeIPtr->getTag() << " coords: " << ndICoords
+                      << " Node I: " << nodeIPtr->getTag() << " coords: " << ndICoords
                       << std::endl
-                      << " nodo J: " << nodeJPtr->getTag() << " coords: " << ndJCoords
+                      << " node J: " << nodeJPtr->getTag() << " coords: " << ndJCoords
                       << std::endl;
             return -2;  
           }

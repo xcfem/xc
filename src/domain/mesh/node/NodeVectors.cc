@@ -232,7 +232,7 @@ int XC::NodeVectors::revertToLastCommit(const size_t &nDOF)
   }
 
 
-//! @brief Returns the nodo a su estado inicial.
+//! @brief Returns the node a su estado inicial.
 int XC::NodeVectors::revertToStart(const size_t &nDOF)
   {
     // check data exists, if does set all to zero

@@ -146,9 +146,9 @@ void XC::NodeLocker::setDomain(Domain *theDomain)
   }
 
 //! @brief Adds the single freedom constraint being passed as parameter.
-XC::SFreedom_Constraint *XC::NodeLocker::addSFreedom_Constraint(const int &tagNodo,const int &dofId,const double &value)
+XC::SFreedom_Constraint *XC::NodeLocker::addSFreedom_Constraint(const int &nodeTag,const int &dofId,const double &value)
   {
-    SFreedom_Constraint *theSPC= new SFreedom_Constraint(nextTag,tagNodo,dofId,value);
+    SFreedom_Constraint *theSPC= new SFreedom_Constraint(nextTag,nodeTag,dofId,value);
     if(theSPC)
       addSFreedom_Constraint(theSPC);
     return theSPC;
@@ -335,14 +335,14 @@ std::deque<int> XC::NodeLocker::getTagsSPsNode(int theNode) const
 
 //! @brief Returns true if the single freedom constraints affect the node
 //! which identifier is being passed as parameter.
-bool XC::NodeLocker::nodeAffectedBySPs(int tagNodo) const
+bool XC::NodeLocker::nodeAffectedBySPs(int nodeTag) const
   {
     bool retval= false;
     NodeLocker *this_no_const= const_cast<NodeLocker *>(this);
     SFreedom_ConstraintIter &theSPs = this_no_const->getSPs();
     SFreedom_Constraint *theSP;
     while((theSP = theSPs()) != 0)
-      if(theSP->getNodeTag() == tagNodo)
+      if(theSP->getNodeTag() == nodeTag)
         {
           retval= true;
           break;

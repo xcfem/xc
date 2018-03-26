@@ -82,7 +82,7 @@ const XC::Element *XC::MatrizPtrElem::findElement(const int &tag) const
     return retval;
   }
 
-//! @brief Returns the nodo closest to the point being passed as parameter.
+//! @brief Returns the node closest to the point being passed as parameter.
 XC::Element *XC::MatrizPtrElem::getNearestElement(const Pos3d &p)
   {
     Element *retval= nullptr, *ptrElem= nullptr;

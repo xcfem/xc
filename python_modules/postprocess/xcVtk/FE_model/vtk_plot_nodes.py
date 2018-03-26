@@ -1,19 +1,19 @@
-def VtkDibujaNodos(nmbActor):
+def VtkDibujaNodes(nmbActor):
    # Define el actor a emplear para dibujar kpoints.
-   sphereNodos= vtk.vtkSphereSource()
-   sphereNodos.SetRadius(0.05)
-   sphereNodos.SetThetaResolution(5)
-   sphereNodos.SetPhiResolution(5)
+   sphereNodes= vtk.vtkSphereSource()
+   sphereNodes.SetRadius(0.05)
+   sphereNodes.SetThetaResolution(5)
+   sphereNodes.SetPhiResolution(5)
         
-   markNodos= vtk.vtkGlyph3D()
-   markNodos.SetInput(ugrid)
-   markNodos.SetSource(sphereNodos)
-   markNodos.ScalingOff()
-   markNodos.OrientOff()
+   markNodes= vtk.vtkGlyph3D()
+   markNodes.SetInput(ugrid)
+   markNodes.SetSource(sphereNodes)
+   markNodes.ScalingOff()
+   markNodes.OrientOff()
         
-   mappNodos= vtk.vtkPolyDataMapper().SetInput(markNodos)
+   mappNodes= vtk.vtkPolyDataMapper().SetInput(markNodes)
    nmbActor= vtk.vtkActor()
-   nmbActor.SetMapper(mappNodos)
+   nmbActor.SetMapper(mappNodes)
    nmbActor.GetProperty().SetColor(.7, .5, .5)
    renderer.AddActor(nmbActor)
 

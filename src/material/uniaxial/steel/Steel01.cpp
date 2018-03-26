@@ -233,7 +233,7 @@ int XC::Steel01::revertToStart(void)
   {
     SteelBase0103::revertToStart();
 // AddingSensitivity:BEGIN /////////////////////////////////
-    if(!SHVs.Nula()) SHVs.Zero();
+    if(!SHVs.isEmpty()) SHVs.Zero();
 // AddingSensitivity:END //////////////////////////////////
     return 0;
   }
@@ -387,7 +387,7 @@ double XC::Steel01::getStressSensitivity(int gradNumber, bool conditional)
     // Pick up sensitivity history variables
     double CstrainSensitivity = 0.0;
     double CstressSensitivity = 0.0;
-    if(!SHVs.Nula())
+    if(!SHVs.isEmpty())
       {
         CstrainSensitivity= (SHVs)(0,(gradNumber-1));
         CstressSensitivity= (SHVs)(1,(gradNumber-1));
@@ -453,7 +453,7 @@ double XC::Steel01::getInitialTangentSensitivity(int gradNumber)
 
 int XC::Steel01::commitSensitivity(double TstrainSensitivity, int gradNumber, int numGrads)
   {
-    if(SHVs.Nula())
+    if(SHVs.isEmpty())
       SHVs= Matrix(2,numGrads);
 
     // Initialize unconditaional stress sensitivity
@@ -462,7 +462,7 @@ int XC::Steel01::commitSensitivity(double TstrainSensitivity, int gradNumber, in
     // Pick up sensitivity history variables
     double CstrainSensitivity = 0.0;
     double CstressSensitivity         = 0.0;
-    if(!SHVs.Nula())
+    if(!SHVs.isEmpty())
       {
         CstrainSensitivity= SHVs(0,(gradNumber-1));
         CstressSensitivity= SHVs(1,(gradNumber-1));

@@ -118,7 +118,7 @@ int XC::Element::getNumEdges(void) const
 //! sucessfull, a negative number if not.
 int XC::Element::commitState(void)
   {
-    if(!Kc.Nula())
+    if(!Kc.isEmpty())
       Kc= getTangentStiff();
     return 0;
   }
@@ -177,13 +177,13 @@ size_t XC::Element::getDimension(void) const
     return 0;
   }
 
-//! @brief Asigna los nodos.
-void XC::Element::setIdNodos(const std::vector<int> &inodos)
-  { getNodePtrs().set_id_nodes(inodos); }
+//! @brief Set the nodes.
+void XC::Element::setIdNodes(const std::vector<int> &inodes)
+  { getNodePtrs().set_id_nodes(inodes); }
 
-//! @brief Asigna los nodos.
-void XC::Element::setIdNodos(const ID &inodos)
-  { getNodePtrs().set_id_nodes(inodos); }
+//! @brief Set the nodes.
+void XC::Element::setIdNodes(const ID &inodes)
+  { getNodePtrs().set_id_nodes(inodes); }
 
 //! @brief Sets the domain for the element.
 void XC::Element::setDomain(Domain *theDomain)
@@ -352,18 +352,18 @@ const XC::Vector &XC::Element::getNodeResistingForceIncInertia(const size_t &iNo
 //! of the element over the node identified by the argument.
 const XC::Vector &XC::Element::getNodeResistingForce(const Node *ptrNod) const
   {
-    const int iNodo= getNodePtrs().getIndiceNodo(ptrNod);
-    assert(iNodo>=0);
-    return getNodeResistingForce(iNodo);
+    const int iNode= getNodePtrs().getNodeIndex(ptrNod);
+    assert(iNode>=0);
+    return getNodeResistingForce(iNode);
   }
 
 //! @brief Returns the generalized force (including inertia forces)
 //! of the element over the node identified by the argument.
 const XC::Vector &XC::Element::getNodeResistingForceIncInertia(const Node *ptrNod) const
   {
-    const int iNodo= getNodePtrs().getIndiceNodo(ptrNod);
-    assert(iNodo>=0);
-    return getNodeResistingForceIncInertia(iNodo);
+    const int iNode= getNodePtrs().getNodeIndex(ptrNod);
+    assert(iNode>=0);
+    return getNodeResistingForceIncInertia(iNode);
   }
 
 //! @brief Returns the equivalent static load for the mode
@@ -731,18 +731,18 @@ XC::ID XC::Element::getEdgesNode(const Node *) const
 
 //! @brief Returns the element edges that have both ends
 //! in the node set being passed as parameter.
-std::set<int> XC::Element::getEdgesNodes(const NodePtrSet &nodos) const
+std::set<int> XC::Element::getEdgesNodes(const NodePtrSet &nodes) const
   {
     std::set<int> retval;
-    for(NodePtrSet::const_iterator i= nodos.begin();i!=nodos.end();i++)
+    for(NodePtrSet::const_iterator i= nodes.begin();i!=nodes.end();i++)
       {
-        const Node *nodo= *i;
-        const ID edgeIds= getEdgesNode(nodo);
+        const Node *node= *i;
+        const ID edgeIds= getEdgesNode(node);
         const int sz= edgeIds.Size();
         for(int i=0;i<sz;i++)
           {
-            NodesEdge nodosEdge= getNodesEdge(edgeIds(i));
-            if(in(nodos,nodosEdge))
+            NodesEdge nodesEdge= getNodesEdge(edgeIds(i));
+            if(in(nodes,nodesEdge))
               retval.insert(edgeIds(i));
           }
       }

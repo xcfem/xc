@@ -59,7 +59,7 @@
 namespace XC {
 //! \ingroup ElemVol
 //
-//! @brief Hexaedro de ocho nodos.
+//! @brief Eight node exahedron.
 class Brick : public BrickBase
   {
   private : 

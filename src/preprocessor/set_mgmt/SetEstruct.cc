@@ -125,7 +125,7 @@ XC::NodePtrSet XC::SetEstruct::getNodePtrSet(void)
     for(size_t i= 1;i<=ncapas;i++)
       for(size_t j= 1;j<=nfilas;j++)
         for(size_t k= 1;k<=ncols;k++)
-          retval.insert(GetNodo(i,j,k));
+          retval.insert(getNode(i,j,k));
     return retval;    
   }
 
@@ -133,8 +133,8 @@ XC::NodePtrSet XC::SetEstruct::getNodePtrSet(void)
 //! belong to the nodes of the set.
 XC::ElementEdges XC::SetEstruct::getElementEdges(void)
   {
-    const NodePtrSet nodos= getNodePtrSet();
-    return getElementEdgesEntreNodos(nodos);
+    const NodePtrSet nodes= getNodePtrSet();
+    return getElementEdgesBetweenNodes(nodes);
   }
 
 //! @brief Adds to the model the elements being passed as parameters.
@@ -162,7 +162,7 @@ std::set<int> XC::SetEstruct::getNodeTags(void) const
         for(size_t i= 1;i<=ncapas;i++)
           for(size_t j= 1;j<=nfilas;j++)
             for(size_t k= 1;k<=ncols;k++)
-              retval.insert(GetNodo(i,j,k)->getTag());
+              retval.insert(getNode(i,j,k)->getTag());
       }
     return retval;
   }
@@ -179,7 +179,7 @@ boost::python::list XC::SetEstruct::getNodes(void)
           for(size_t j= 1;j<=nfilas;j++)
             for(size_t k= 1;k<=ncols;k++)
               {
-                Node *tmp= GetNodo(i,j,k);
+                Node *tmp= getNode(i,j,k);
                 boost::python::object pyObj(boost::ref(*tmp));
                 retval.append(pyObj);
               }
@@ -225,7 +225,7 @@ boost::python::list XC::SetEstruct::getElements(void)
     return retval;
   }
 
-//! @brief Returns true if the nodo belongs to the set.
+//! @brief Returns true if the node belongs to the set.
 bool XC::SetEstruct::In(const Node *n) const
   {
     bool retval= false;
@@ -237,7 +237,7 @@ bool XC::SetEstruct::In(const Node *n) const
         for(size_t i= 1;i<=ncapas;i++)
           for(size_t j= 1;j<=nfilas;j++)
             for(size_t k= 1;k<=ncols;k++)
-              if(GetNodo(i,j,k)==n)
+              if(getNode(i,j,k)==n)
                 {
                   retval= true;
                   break;
@@ -271,11 +271,11 @@ bool XC::SetEstruct::In(const Element *e) const
 XC::Node *XC::SetEstruct::getNodeI(const size_t &i)
   {
     if(EsFilaI())
-      return GetNodo(i,1,1);
+      return getNode(i,1,1);
     else if(EsFilaJ())
-      return GetNodo(1,i,1);
+      return getNode(1,i,1);
     else if(EsFilaK())
-      return GetNodo(1,1,i);
+      return getNode(1,1,i);
     else
       {
 	std::cerr << getClassName() << "::" << __FUNCTION__
@@ -288,11 +288,11 @@ XC::Node *XC::SetEstruct::getNodeIJ(const size_t &i,const size_t &j)
   {
     //XXX Must get the layer (it is not necessarily the first one),
     if(EsCapaICte())
-      return GetNodo(1,i,j);
+      return getNode(1,i,j);
     else if(EsCapaJCte()) 
-      return GetNodo(i,1,j);
+      return getNode(i,1,j);
     else if(EsCapaKCte()) 
-      return GetNodo(i,j,1);
+      return getNode(i,j,1);
     else
       {
 	std::cerr << getClassName() << "::" << __FUNCTION__

@@ -171,11 +171,11 @@ void XC::Pnt::genMesh(meshing_dir dm)
   }
 
 //! @brief Returns true if the point owns a node (is meshed).
-bool XC::Pnt::tieneNodo(void) const
+bool XC::Pnt::hasNode(void) const
   {
     bool retval= false;
     if(getNumberOfNodes()>0)
-      retval= (GetNodo()!= nullptr);
+      retval= (getNode()!= nullptr);
     return retval;      
   }
 
@@ -183,7 +183,7 @@ bool XC::Pnt::tieneNodo(void) const
 int XC::Pnt::getTagNode(void) const
   {
     int retval= -1;
-    const Node *nod= GetNodo();
+    const Node *nod= getNode();
     if(nod)
       retval= nod->getTag();
     else
@@ -196,9 +196,21 @@ int XC::Pnt::getTagNode(void) const
 //! @brief Return point's node.
 XC::Node *XC::Pnt::getNode(void)
   {
-    Node *nod= GetNodo();
+    Node *nod= EntMdlr::getNode();
     if(!nod)
-      std::cerr << getClassName() << "::" << __FUNCTION__ << "; the point: '" << getName()
+      std::cerr << getClassName() << "::" << __FUNCTION__ << "; the point: '"
+		<< getName()
+                << "' has not a node (is not meshed)." << std::endl;
+    return nod;
+  }
+
+//! @brief Return point's node.
+const XC::Node *XC::Pnt::getNode(void) const
+  {
+    const Node *nod= EntMdlr::getNode();
+    if(!nod)
+      std::cerr << getClassName() << "::" << __FUNCTION__ << "; the point: '"
+		<< getName()
                 << "' has not a node (is not meshed)." << std::endl;
     return nod;
   }

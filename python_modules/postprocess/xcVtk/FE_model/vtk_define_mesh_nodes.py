@@ -2,18 +2,18 @@
 
 import vtk
 
-def VtkCargaIdsNodos(recordGrid):
-  VtkCreaStrArraySetData(recordGrid.setName,"nodos","etiqNod","tag")()
+def VtkCargaIdsNodes(recordGrid):
+  VtkCreaStrArraySetData(recordGrid.setName,"nodes","etiqNod","tag")()
   nmbUGrid.GetPointData().SetStrings(etiqNod)
 
-def VtkDibujaIdsNodos(recordGrid, renderer):
+def VtkDibujaIdsNodes(recordGrid, renderer):
   '''Display node labels'''
   ids= vtk.vtkIdFilter()
   ids.SetInput(recordGrid.uGrid)
   ids.CellIdsOff()
   ids.PointIdsOff()
 
-  VtkCargaIdsNodos(recordGrid)
+  VtkCargaIdsNodes(recordGrid)
     
   visPts= vtk.vtkSelectVisiblePoints()
   visPts.SetInput("ids")

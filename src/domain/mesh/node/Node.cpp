@@ -422,7 +422,7 @@ XC::Node::~Node(void)
 XC::DefaultTag &XC::Node::getDefaultTag(void)
   { return defaultTag; }
 
-//! @brief Introduce en el nodo una constraint
+//! @brief Introduce en the node una constraint
 //! como la being passed as parameter.
 XC::SFreedom_Constraint *XC::Node::fix(const SFreedom_Constraint &semilla)
   { return getPreprocessor()->getConstraintLoader().addSFreedom_Constraint(getTag(),semilla); }
@@ -1007,7 +1007,7 @@ int XC::Node::addUnbalancedLoad(const Vector &add, double fact)
 int XC::Node::addInertiaLoadToUnbalance(const Vector &accelG, double fact)
   {
     // simply return if node has no mass or R matrix
-    if(R.Nula() || isDead())
+    if(R.isEmpty() || isDead())
       return 0;
 
     // otherwise we must determine MR accelG
@@ -1031,7 +1031,7 @@ int XC::Node::addInertiaLoadToUnbalance(const Vector &accelG, double fact)
 int XC::Node::addInertiaLoadSensitivityToUnbalance(const XC::Vector &accelG, double fact, bool somethingRandomInMotions)
   {
     // simply return if node has no R matrix
-    if(R.Nula())
+    if(R.isEmpty())
       return 0;
 
     // otherwise we must determine MR accelG
@@ -1077,7 +1077,7 @@ const XC::Vector &XC::Node::getUnbalancedLoadIncInertia(void)
   {
     unbalLoadWithInertia= this->getUnbalancedLoad();
 
-    if(!mass.Nula())
+    if(!mass.isEmpty())
       {
         const Vector &theAccel= getTrialAccel(); // in case accel not created
         unbalLoadWithInertia.addMatrixVector(1.0, mass, theAccel, -1.0);
@@ -1148,7 +1148,7 @@ int XC::Node::revertToStart(void)
     return 0;
   }
 
-//! @brief Return the matriz de masas del nodo.
+//! @brief Return the matriz de masas of the node.
 //!
 //! Returns the mass matrix set for the node, which is a matrix of size
 //! ndof,ndof. This matrix is equal to that set in setMass()
@@ -1167,7 +1167,7 @@ int XC::Node::setRayleighDampingFactor(double alpham)
   }
 
 
-//! @brief Return the matriz de amortiguamiento del nodo.
+//! @brief Return the matriz de amortiguamiento of the node.
 const XC::Matrix &XC::Node::getDamp(void)
   {
     // make sure it was created before we return it
@@ -1216,7 +1216,7 @@ const XC::Matrix &XC::Node::getDampSensitivity(void)
       }
   }
 
-//! @brief Asigna la matriz de masas to the node.
+//! @brief Set la matriz de masas to the node.
 //!
 //! Sets the value of the mass at the node. A check is made to ensure that
 //! the \p mass has the same dimensions of the mass matrix associated with the
@@ -1279,7 +1279,7 @@ const XC::Vector &XC::Node::getRV(const Vector &V)
     // we store the product of RV in unbalLoadWithInertia
 
     // see if quick return , i.e. R == 0
-    if(R.Nula())
+    if(R.isEmpty())
       unbalLoadWithInertia.Zero();
     else if(R.noCols() != V.Size()) // check dimesions of R and V
       {
@@ -1315,7 +1315,7 @@ int XC::Node::setNumEigenvectors(int numVectorsToStore)
     return 0;
   }
 
-//! @brief Asigna el eigenvector eigenvector al modo mode.
+//! @brief Set el eigenvector eigenvector al modo mode.
 int XC::Node::setEigenvector(int mode, const Vector &eigenvector)
   {
     int retval= 0;
@@ -1730,7 +1730,7 @@ int XC::Node::recvSelf(const CommParameters &cp)
     return res;
   }
 
-//! @brief Returns the sets a los que pertenece este nodo.
+//! @brief Returns the sets that include this node.
 std::set<XC::SetBase *> XC::Node::get_sets(void) const
   {
     std::set<SetBase *> retval;
@@ -1853,7 +1853,7 @@ int XC::Node::updateParameter(int pparameterID, Information &info)
         {
           if(Crd(pparameterID-4) != info.theDouble)
             {
-              //Asigna el value of the coordenada.
+              //Set el value of the coordenada.
               Crd(pparameterID-4) = info.theDouble;
 
               // Need to "setDomain" to make the change take effect.
@@ -1885,13 +1885,13 @@ int XC::Node::saveSensitivity(Vector *v,Vector *vdot,Vector *vdotdot, int gradNu
     int i;
 
     // If the sensitivity matrices are not already created:
-    if(dispSensitivity.Nula())
+    if(dispSensitivity.isEmpty())
       { dispSensitivity= Matrix(numberDOF,numGrads ); }
     if((vdot!=0) && (vdotdot!=0) )
       {
-        if(velSensitivity.Nula())
+        if(velSensitivity.isEmpty())
           { velSensitivity= Matrix(numberDOF,numGrads ); }
-        if(accSensitivity.Nula())
+        if(accSensitivity.isEmpty())
           { accSensitivity= Matrix(numberDOF,numGrads ); }
       }
 
@@ -1912,7 +1912,7 @@ int XC::Node::saveSensitivity(Vector *v,Vector *vdot,Vector *vdotdot, int gradNu
 double XC::Node::getDispSensitivity(int dof, int gradNum)
   {
     double result= 0.0;
-    if(!dispSensitivity.Nula())
+    if(!dispSensitivity.isEmpty())
       result= dispSensitivity(dof-1,gradNum-1);
     return result;
   }
@@ -1920,7 +1920,7 @@ double XC::Node::getDispSensitivity(int dof, int gradNum)
 double XC::Node::getVelSensitivity(int dof, int gradNum)
   {
     double result= 0.0;
-    if(!velSensitivity.Nula())
+    if(!velSensitivity.isEmpty())
       result= velSensitivity(dof-1,gradNum-1);
     return result;
   }
@@ -1928,7 +1928,7 @@ double XC::Node::getVelSensitivity(int dof, int gradNum)
 double XC::Node::getAccSensitivity(int dof, int gradNum)
   {
     double result= 0.0;
-    if(!accSensitivity.Nula())
+    if(!accSensitivity.isEmpty())
       return accSensitivity(dof-1,gradNum-1);
     return result;
   }

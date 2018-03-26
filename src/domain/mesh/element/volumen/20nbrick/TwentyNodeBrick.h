@@ -65,7 +65,7 @@ class Node;
 
 //! \ingroup ElemVol
 //
-//! @brief Hexaedro de veinte nodos.
+//! @brief Twenty node exahedron.
 class TwentyNodeBrick: public ElementBase<20>
   {
   private:

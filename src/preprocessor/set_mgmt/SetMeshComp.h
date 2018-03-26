@@ -109,16 +109,16 @@ class SetMeshComp: public SetBase
     //! @brief Appends a node.
     void addNode(Node *nPtr);
     //! @brief Return the node container.
-    virtual const DqPtrsNode &GetNodos(void) const
+    virtual const DqPtrsNode &getNodes(void) const
       { return nodes; }
     //! @brief Return the nodes container.
-    virtual DqPtrsNode &GetNodos(void)
+    virtual DqPtrsNode &getNodes(void)
       { return nodes; }
     //! @brief Sets the nodes.
     void setNodes(const DqPtrsNode &nds)
       { nodes= nds; }
     //! @brief Clears out the nodes.
-    void clearNodos(void)
+    void clearNodes(void)
       { nodes.clearAll(); }
     void sel_nodes_from_list(const ID &);
     bool In(const Node *) const;
@@ -175,12 +175,12 @@ class SetMeshComp: public SetBase
 
     void fix(const SFreedom_Constraint &);
 
-    //nod_iterator nodos_begin(void);
-    nod_const_iterator nodos_begin(void) const;
-    //nod_iterator nodos_end(void);
-    nod_const_iterator nodos_end(void) const;
-    Node *buscaNodo(const int &tag);
-    const Node *buscaNodo(const int &tag) const;
+    //nod_iterator nodes_begin(void);
+    nod_const_iterator nodes_begin(void) const;
+    //nod_iterator nodes_end(void);
+    nod_const_iterator nodes_end(void) const;
+    Node *findNode(const int &tag);
+    const Node *findNode(const int &tag) const;
     bool InNodeTag(const int) const;
     bool InNodeTags(const ID &) const;
     std::set<int> getNodeTags(void) const;

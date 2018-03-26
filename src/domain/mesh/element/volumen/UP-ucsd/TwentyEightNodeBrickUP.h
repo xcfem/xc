@@ -56,7 +56,7 @@
 namespace XC {
 //! \ingroup ElemVol
 //
-//! @brief Hexaedro de veintiocho nodos.
+//! @brief Twenty eight node exahedron.
 class TwentyEightNodeBrickUP : public ElemWithMaterial<20,NDMaterialPhysicalProperties>
   {
   private:

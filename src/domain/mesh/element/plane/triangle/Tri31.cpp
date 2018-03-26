@@ -168,7 +168,7 @@ int XC::Tri31::update()
         //eps = B*u;
         //eps.addMatrixVector(0.0, B, u, 1.0);
         eps.Zero();
-        for(int beta = 0; beta < numNodos(); beta++)
+        for(int beta = 0; beta < numNodes(); beta++)
           {
             eps(0) += shp[0][beta]*u[0][beta];
             eps(1) += shp[1][beta]*u[1][beta];
@@ -211,9 +211,9 @@ const XC::Matrix &XC::Tri31::getTangentStiff(void) const
          //   beta < 4;
          //   beta++, ib += 2, colIb += 16, colIbP1 += 16) {
         
-         for(int alpha = 0, ia = 0; alpha < numNodos(); alpha++, ia += 2)
+         for(int alpha = 0, ia = 0; alpha < numNodes(); alpha++, ia += 2)
            {
-             for(int beta = 0, ib = 0; beta < numNodos(); beta++, ib += 2)
+             for(int beta = 0, ib = 0; beta < numNodes(); beta++, ib += 2)
                {
                  DB[0][0]= dvol * (D00 * shp[0][beta] + D02 * shp[1][beta]);
                  DB[1][0]= dvol * (D10 * shp[0][beta] + D12 * shp[1][beta]);
@@ -266,12 +266,12 @@ const XC::Matrix &XC::Tri31::getInitialStiff(void) const
            // Perform numerical integration
            //K = K + (B^ D * B) * intWt(i)*intWt(j) * detJ;
            //K.addMatrixTripleProduct(1.0, B, D, intWt(i)*intWt(j)*detJ);
-           //for(int beta = 0, ib = 0, colIb =0, colIbP1 = 2*numNodos(); beta < numNodos(); beta++, ib += 2, colIb += numNodos()*numNodos(), colIbP1 += numNodos()*numNodos()) {
-            //    for(int alpha = 0, ia = 0; alpha < numNodos(); alpha++, ia += 2) {
+           //for(int beta = 0, ib = 0, colIb =0, colIbP1 = 2*numNodes(); beta < numNodes(); beta++, ib += 2, colIb += numNodes()*numNodes(), colIbP1 += numNodes()*numNodes()) {
+            //    for(int alpha = 0, ia = 0; alpha < numNodes(); alpha++, ia += 2) {
 
-            for(int alpha = 0, ia = 0; alpha < numNodos(); alpha++, ia += 2)
+            for(int alpha = 0, ia = 0; alpha < numNodes(); alpha++, ia += 2)
               {
-                for(int beta = 0, ib = 0; beta < numNodos(); beta++, ib += 2)
+                for(int beta = 0, ib = 0; beta < numNodes(); beta++, ib += 2)
                   {
                     DB[0][0] = dvol * (D00 * shp[0][beta] + D02 * shp[1][beta]);
                     DB[1][0] = dvol * (D10 * shp[0][beta] + D12 * shp[1][beta]);
@@ -324,7 +324,7 @@ const XC::Matrix &XC::Tri31::getMass(void) const
         // Element plus material density ... MAY WANT TO REMOVE ELEMENT DENSITY
         rhodvol *= (rhoi[i]*physicalProperties.getThickness()*gp.weight());
 
-        for(int alpha = 0, ia = 0; alpha < numNodos(); alpha++, ia++)
+        for(int alpha = 0, ia = 0; alpha < numNodes(); alpha++, ia++)
            {
               Nrho = shp[2][alpha]*rhodvol;
               K(ia,ia) += Nrho;
@@ -380,7 +380,7 @@ int XC::Tri31::addInertiaLoadToUnbalance(const Vector &accel)
 
     // Want to add ( - fact * M R * accel ) to unbalance
     // Take advantage of lumped mass matrix
-    for(int i= 0; i < 2*numNodos(); i++)
+    for(int i= 0; i < 2*numNodes(); i++)
       load(i)+= -K(i,i)*ra[i];
     return 0;
  }
@@ -405,7 +405,7 @@ const XC::Vector &XC::Tri31::getResistingForce(void) const
         // Perform numerical integration on internal force
         //P = P + (B^ sigma) * intWt(i)*intWt(j) * detJ;
         //P.addMatrixTransposeVector(1.0, B, sigma, intWt(i)*intWt(j)*detJ);
-        for(int alpha = 0, ia = 0; alpha < numNodos(); alpha++, ia += 2) {                                    
+        for(int alpha = 0, ia = 0; alpha < numNodes(); alpha++, ia += 2) {                                    
                
                 P(ia) += dvol*(shp[0][alpha]*sigma(0) + shp[1][alpha]*sigma(2));
                
@@ -472,7 +472,7 @@ const XC::Vector &XC::Tri31::getResistingForceIncInertia() const
     this->getMass();
 
     // Take advantage of lumped mass matrix
-    for(int i = 0; i < 2*numNodos(); i++) P(i) += K(i,i)*a[i];
+    for(int i = 0; i < 2*numNodes(); i++) P(i) += K(i,i)*a[i];
 
     // add the damping forces if rayleigh damping
     if(!rayFactors.nullValues())
@@ -543,7 +543,7 @@ void XC::Tri31::Print(std::ostream &s, int flag)
 
             const int nstress = physicalProperties.size();
 
-        for(int i=0; i<numNodos(); i++)
+        for(int i=0; i<numNodes(); i++)
           {
             const XC::Vector &nodeCrd = theNodes[i]->getCrds();
             //const XC::Vector &nodeDisp = theNodes[i]->getDisp();

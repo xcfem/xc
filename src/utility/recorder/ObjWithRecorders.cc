@@ -194,7 +194,7 @@ void XC::ObjWithRecorders::restart(void)
       (*i)->restart();
   }
 
-//! @brief Elimina los recorders.
+//! @brief Remove the recorders.
 int XC::ObjWithRecorders::removeRecorders(void)
   {
     for(lista_recorders::iterator i= theRecorders.begin();i!= theRecorders.end(); i++)

@@ -280,7 +280,7 @@ int XC::MFreedom_Joint3D::recvSelf(const CommParameters &cp)
 //! @brief Returns the constraint matrix.
 const XC::Matrix &XC::MFreedom_Joint3D::getConstraint(void)
   {
-    if(constraintMatrix.Nula())
+    if(constraintMatrix.isEmpty())
       {
         std::cerr << getClassName() << "::" << __FUNCTION__
 		  << "; no matrix was set\n";

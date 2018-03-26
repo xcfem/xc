@@ -140,7 +140,7 @@ void XC::EntMdlr::BorraPtrNodElem(void)
 //! @param i: index of the layer.
 //! @param j: index of the row.
 //! @param k: index of the column.
-XC::Node *XC::EntMdlr::GetNodo(const size_t &i,const size_t &j,const size_t &k)
+XC::Node *XC::EntMdlr::getNode(const size_t &i,const size_t &j,const size_t &k)
   {
     if(!ttzNodes.Null())
       return ttzNodes(i,j,k);
@@ -154,7 +154,7 @@ XC::Node *XC::EntMdlr::GetNodo(const size_t &i,const size_t &j,const size_t &k)
 //! @param i: index of the layer.
 //! @param j: index of the row.
 //! @param k: index of the column.
-const XC::Node *XC::EntMdlr::GetNodo(const size_t &i,const size_t &j,const size_t &k) const
+const XC::Node *XC::EntMdlr::getNode(const size_t &i,const size_t &j,const size_t &k) const
   {
     if(!ttzNodes.Null())
       return ttzNodes(i,j,k);
@@ -176,10 +176,6 @@ const XC::Node *XC::EntMdlr::getNearestNode(const Pos3d &p) const
 //! @brief Returns the indexes of the node being passed as parameter.
 XC::ID XC::EntMdlr::getNodeIndices(const Node *n) const
   { return ttzNodes.getNodeIndices(n); }
-
-//! @brief Returns the tags of the nodes.
-std::vector<int> XC::EntMdlr::getTagsNodos(void) const
-  { return ttzNodes.getTags(); }
 
 //! @brief Returns a pointer to the element which indexes
 //! are being passed as paremeters.
@@ -220,12 +216,12 @@ const XC::Element *XC::EntMdlr::getNearestElement(const Pos3d &p) const
   }
 
 //! @brief Returns a pointer to the node cuyo identificador is being passed as parameter.
-XC::Node *XC::EntMdlr::buscaNodo(const int &tag)
-  { return ttzNodes.buscaNodo(tag); }
+XC::Node *XC::EntMdlr::findNode(const int &tag)
+  { return ttzNodes.findNode(tag); }
 
 //! @brief Returns a pointer to the node cuyo identificador is being passed as parameter.
-const XC::Node *XC::EntMdlr::buscaNodo(const int &tag) const
-  { return ttzNodes.buscaNodo(tag); }
+const XC::Node *XC::EntMdlr::findNode(const int &tag) const
+  { return ttzNodes.findNode(tag); }
 
 //! @brief Returns a pointer to the element
 //! identified by the tag being passed as parameter.
