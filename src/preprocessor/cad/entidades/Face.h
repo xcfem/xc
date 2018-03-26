@@ -45,8 +45,8 @@ class Face: public CmbEdge
     std::set<const Body *> cuerpos_sup; //!< Bodies that touch this surface (neighbors).
 
     void inserta_body(Body *b);
-    Node *GetNodo(const size_t &i);
-    const Node *GetNodo(const size_t &i) const;
+    Node *getNode(const size_t &i);
+    const Node *getNode(const size_t &i) const;
   protected:
     size_t ndivj; //number of divisions en el eje j.
     virtual const Edge *get_lado_homologo(const Edge *l) const= 0;
@@ -79,10 +79,10 @@ class Face: public CmbEdge
     bool Toca(const Body &b) const;
     virtual bool checkNDivs(void) const= 0;
 
-    virtual Node *GetNodo(const size_t &i1,const size_t &j,const size_t &k);
-    virtual const Node *GetNodo(const size_t &i,const size_t &j,const size_t &k) const;
-    virtual Node *GetNodo(const size_t &i,const size_t &j);
-    virtual const Node *GetNodo(const size_t &i,const size_t &j) const;
+    virtual Node *getNode(const size_t &i1,const size_t &j,const size_t &k);
+    virtual const Node *getNode(const size_t &i,const size_t &j,const size_t &k) const;
+    virtual Node *getNode(const size_t &i,const size_t &j);
+    virtual const Node *getNode(const size_t &i,const size_t &j) const;
 
     std::set<SetBase *> get_sets(void) const;
     void add_to_sets(std::set<SetBase *> &);

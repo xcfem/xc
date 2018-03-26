@@ -417,8 +417,8 @@ XC::Element *XC::ProtoElementLoader::create_element(const std::string &cmd,int t
 
 //! @brief Create a new element.
 //! @param tipo: type of element. Available types:'Truss','TrussSection','CorotTruss','CorotTrussSection','Spring', 'Beam2d02', 'Beam2d03',  'Beam2d04', 'Beam3d01', 'Beam3d02', 'ElasticBeam2d', 'ElasticBeam3d', 'BeamWithHinges2d', 'BeamWithHinges3d', 'NlBeamColumn2d', 'NlBeamColumn3d','ForceBeamColumn2d', 'ForceBeamColumn3d', 'ShellMitc4', ' shellNl', 'Quad4n', 'Tri31', 'Brick', 'ZeroLength', 'ZeroLengthContact2d', 'ZeroLengthContact3d', 'ZeroLengthSection'.
-//! @param iNodos: nodes ID, e.g. xc.ID([1,2]) to create a linear element from node 1 to node 2.
-XC::Element *XC::ProtoElementLoader::newElement(const std::string &tipo,const ID &iNodos)
+//! @param iNodes: nodes ID, e.g. xc.ID([1,2]) to create a linear element from node 1 to node 2.
+XC::Element *XC::ProtoElementLoader::newElement(const std::string &tipo,const ID &iNodes)
   {
     const int tag_elem= getDefaultTag();
     Element *retval= getPreprocessor()->getDomain()->getElement(tag_elem);
@@ -427,7 +427,7 @@ XC::Element *XC::ProtoElementLoader::newElement(const std::string &tipo,const ID
         retval= create_element(tipo,tag_elem);
         if(retval)
           {
-            retval->setIdNodos(iNodos);
+            retval->setIdNodes(iNodes);
             add(retval);
           }
       }

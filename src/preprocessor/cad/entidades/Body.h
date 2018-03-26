@@ -88,7 +88,7 @@ class Body: public EntMdlr
         virtual MatrizPos3d get_posiciones(void) const;
         void create_nodes(void);
         bool checkNDivs(void) const;
-        Node *GetNodo(const size_t &,const size_t &);
+        Node *getNode(const size_t &,const size_t &);
       };
 
     void set_surf(Face *s);

@@ -85,7 +85,7 @@ class EntMdlr: public SetEstruct
     virtual bool In(const GeomObj3d &, const double &tol= 0.0) const;
     virtual bool Out(const GeomObj3d &, const double &tol= 0.0) const;
 
-    inline bool TieneNodos(void) const
+    inline bool hasNodes(void) const
       { return !ttzNodes.empty(); }
     virtual size_t getNumNodeLayers(void) const
       { return ttzNodes.GetCapas(); }
@@ -100,16 +100,16 @@ class EntMdlr: public SetEstruct
     virtual size_t getNumElementColumns(void) const
       { return ttzElements.getNumCols(); }
 
-    virtual Node *GetNodo(const size_t &i=1,const size_t &j=1,const size_t &k=1);
-    virtual const Node *GetNodo(const size_t &i=1,const size_t &j=1,const size_t &k=1) const;
+    virtual Node *getNode(const size_t &i=1,const size_t &j=1,const size_t &k=1);
+    virtual const Node *getNode(const size_t &i=1,const size_t &j=1,const size_t &k=1) const;
     Node *getNearestNode(const Pos3d &p);
     const Node *getNearestNode(const Pos3d &p) const;
     ID getNodeIndices(const Node *) const;
     virtual Element *getElement(const size_t &i=1,const size_t &j=1,const size_t &k=1);
     virtual const Element *getElement(const size_t &i=1,const size_t &j=1,const size_t &k=1) const;
-    Node *buscaNodo(const int &tag);
-    const Node *buscaNodo(const int &tag) const;
-    std::vector<int> getTagsNodos(void) const;
+    Node *findNode(const int &tag);
+    const Node *findNode(const int &tag) const;
+    //std::vector<int> getNodeTags(void) const;
 
     Element *findElement(const int &);
     const Element *findElement(const int &) const;

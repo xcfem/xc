@@ -82,8 +82,8 @@ XC::QuadBase9N<PhysProp>::QuadBase9N(int tag,int classTag,const PhysProp &pp)
 
 //! @brief Put the element on the mesh being passed as parameter.
 template <class PhysProp>
-XC::TritrizPtrElem XC::QuadBase9N<PhysProp>::put_on_mesh(const TritrizPtrNod &nodos,meshing_dir dm) const
-  { return put_quad9N_on_mesh(*this,nodos,dm); }
+XC::TritrizPtrElem XC::QuadBase9N<PhysProp>::put_on_mesh(const TritrizPtrNod &nodes,meshing_dir dm) const
+  { return put_quad9N_on_mesh(*this,nodes,dm); }
 
 //! @brief Returns the element contour as a polygon.
 template <class PhysProp>

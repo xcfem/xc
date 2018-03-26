@@ -48,7 +48,7 @@ size_t calc_ndiv(const XC::Edge *edgeA,const XC::Edge *edgeB,const size_t &ndj)
     size_t retval= 0;
     const size_t ndA= edgeA->NDiv();
     const size_t ndB= edgeB->NDiv();
-    if(edgeA->TieneNodos() && edgeB->TieneNodos())
+    if(edgeA->hasNodes() && edgeB->hasNodes())
       {
         if(ndA==ndB)
           retval= ndA;
@@ -58,7 +58,7 @@ size_t calc_ndiv(const XC::Edge *edgeA,const XC::Edge *edgeB,const size_t &ndj)
                     << " are already meshed, and they have different number of divisions ("
                     << ndA << " y " << ndB << std::endl;
       }
-    else if(edgeA->TieneNodos()) //A edge already meshed.
+    else if(edgeA->hasNodes()) //A edge already meshed.
       {
         if(ndA!=ndj)
           {
@@ -69,7 +69,7 @@ size_t calc_ndiv(const XC::Edge *edgeA,const XC::Edge *edgeB,const size_t &ndj)
             retval= ndA;
           }
       }
-    else if(edgeB->TieneNodos()) //B edge already meshed.
+    else if(edgeB->hasNodes()) //B edge already meshed.
       {
         if(ndB!=ndj)
           {
@@ -371,10 +371,10 @@ MatrizPos3d XC::QuadSurface::get_posiciones(void) const
         return retval;
       }
 
-    MatrizPos3d ptos_l1= lineas[0].GetPosNodosDir();
-    MatrizPos3d ptos_l2= lineas[1].GetPosNodosDir();
-    MatrizPos3d ptos_l3= lineas[2].GetPosNodosInv(); //Ordenados al revés.
-    MatrizPos3d ptos_l4= lineas[3].GetPosNodosInv(); //Ordenados al revés.
+    MatrizPos3d ptos_l1= lineas[0].getNodePosDir();
+    MatrizPos3d ptos_l2= lineas[1].getNodePosDir();
+    MatrizPos3d ptos_l3= lineas[2].getNodePosInv(); //Ordenados al revés.
+    MatrizPos3d ptos_l4= lineas[3].getNodePosInv(); //Ordenados al revés.
     retval= MatrizPos3d(ptos_l1,ptos_l2,ptos_l3,ptos_l4);
     retval.Trn();
     return retval;
@@ -431,21 +431,21 @@ void XC::QuadSurface::create_nodes(void)
         for(size_t k=1;k<=cols;k++)
           {
             Lado &ll= lineas[0];
-            Node *nn= ll.GetNodo(k);
+            Node *nn= ll.getNode(k);
             ttzNodes(1,1,k)= nn;
           }
 
         //j=filas.
         for(size_t k=1;k<=cols;k++) //En sentido inverso.
-          ttzNodes(1,filas,k)= lineas[2].GetNodoInv(k);
+          ttzNodes(1,filas,k)= lineas[2].getNodeInv(k);
 
 
         //k=1
         for(size_t j=2;j<filas;j++) //En sentido inverso.
-          ttzNodes(1,j,1)= lineas[3].GetNodoInv(j);
+          ttzNodes(1,j,1)= lineas[3].getNodeInv(j);
         //k=cols.
         for(size_t j=2;j<filas;j++)
-          ttzNodes(1,j,cols)= lineas[1].GetNodo(j);
+          ttzNodes(1,j,cols)= lineas[1].getNode(j);
 
 
         MatrizPos3d pos_nodes= get_posiciones(); //Posiciones of the nodes.

@@ -78,7 +78,7 @@ class BJtensor;
 
 //! \ingroup ElemVol
 //
-//! @brief Hexaedro de ocho nodos.
+//! @brief Eight node exahedron.
 class EightNodeBrick: public ElementBase<8>
   {
   private:

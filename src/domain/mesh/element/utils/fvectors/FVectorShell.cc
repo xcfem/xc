@@ -247,10 +247,10 @@ XC::FVectorShell &XC::FVectorShell::operator-=(const FVectorShell &otro)
 void XC::FVectorShell::addForce(const size_t &inod,const double &P1,const double &P2,const double &P3)
   {
     if(inod>3)
-      std::cerr << "FVectorShell::addForce; nodo: "
-                << inod << "fuera de rango (0..3)." << std::endl;
+      std::cerr << "FVectorShell::addForce; node: "
+                << inod << "out of range (0..3)." << std::endl;
     const size_t i= inod*6;
-    p[i]-= P1;  //Nodo 1: i=0. Nodo 2: i=6. Nodo 3: i= 12. Nodo 4: i= 18
+    p[i]-= P1;  //Node 1: i=0. Node 2: i=6. Node 3: i= 12. Node 4: i= 18
     p[i+1]-= P2;
     p[i+2]-= P3;
   }
@@ -259,10 +259,10 @@ void XC::FVectorShell::addForce(const size_t &inod,const double &P1,const double
 void XC::FVectorShell::addMoment(const size_t &inod,const double &M1,const double &M2,const double &M3)
   {
     if(inod>3)
-      std::cerr << "FVectorShell::addMoment; nodo: "
-                << inod << "fuera de rango (0..3)." << std::endl;
+      std::cerr << "FVectorShell::addMoment; node: "
+                << inod << "out of range (0..3)." << std::endl;
     const size_t i= inod*6+3;
-    p[i]-= M1;  //Nodo 1: i=3. Nodo 2: i=9. Nodo 3: i= 15. Nodo 4: i= 21
+    p[i]-= M1;  //Node 1: i=3. Node 2: i=9. Node 3: i= 15. Node 4: i= 21
     p[i+1]-= M2;
     p[i+2]-= M3;
   }

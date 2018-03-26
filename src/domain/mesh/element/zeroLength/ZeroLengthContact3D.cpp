@@ -64,16 +64,16 @@
 
  
 // static data for 3D
-XC::Matrix  XC::ZeroLengthContact3D::stiff(3*XC::ZeroLengthContact3D::numNodos(),3*XC::ZeroLengthContact3D::numNodos()) ;
-XC::Vector  XC::ZeroLengthContact3D::resid(3*XC::ZeroLengthContact3D::numNodos()) ;
-XC::Matrix  XC::ZeroLengthContact3D::zeroMatrix(3*XC::ZeroLengthContact3D::numNodos(),3*XC::ZeroLengthContact3D::numNodos()) ;
+XC::Matrix  XC::ZeroLengthContact3D::stiff(3*XC::ZeroLengthContact3D::numNodes(),3*XC::ZeroLengthContact3D::numNodes()) ;
+XC::Vector  XC::ZeroLengthContact3D::resid(3*XC::ZeroLengthContact3D::numNodes()) ;
+XC::Matrix  XC::ZeroLengthContact3D::zeroMatrix(3*XC::ZeroLengthContact3D::numNodes(),3*XC::ZeroLengthContact3D::numNodes()) ;
 
 //*********************************************************************
 //  Full Constructor:
 
 XC::ZeroLengthContact3D::ZeroLengthContact3D(int tag,int Nd1, int Nd2, int direction, double Knormal, double Ktangent, double frictionRatio, double c, double origX, double origY )
   :ZeroLengthContact(tag,ELE_TAG_ZeroLengthContact3D,3,Nd1,Nd2,Knormal,Ktangent,frictionRatio), directionID(direction), 
-  stickPt(2), xi(2), origin(2), T1(3*numNodos()), T2(3*numNodos())
+  stickPt(2), xi(2), origin(2), T1(3*numNodes()), T2(3*numNodes())
   {
   
     if( direction < 0 || direction > 3)
@@ -98,7 +98,7 @@ XC::ZeroLengthContact3D::ZeroLengthContact3D(int tag,int Nd1, int Nd2, int direc
 //! @brief Default constructor.
 XC::ZeroLengthContact3D::ZeroLengthContact3D(int tag)
   :ZeroLengthContact(ELE_TAG_ZeroLengthContact3D,3),     
-  stickPt(2),  xi(2), origin(2) ,T1(3*numNodos()), T2(3*numNodos())
+  stickPt(2),  xi(2), origin(2) ,T1(3*numNodes()), T2(3*numNodes())
   {}
 
 //! @brief Virtual constructor.

@@ -240,7 +240,7 @@ XC::Vector XC::ShellCorotCrdTransf3d::getBasicTrialAccel(const int &iNod) const
 XC::Vector XC::ShellCorotCrdTransf3d::local_to_global(const Matrix &R,const Matrix &Rd,const Vector &displ) const
   {
     Vector retval(24);
-    //Nodo 1.
+    //Node 1.
     retval(0)= R(0,0)*displ[0] + R(1,0)*displ[1] + R(2,0)*displ[2];
     retval(1)= R(0,1)*displ[0] + R(1,1)*displ[1] + R(2,1)*displ[2];
     retval(2)= R(0,2)*displ[0] + R(1,2)*displ[1] + R(2,2)*displ[2];
@@ -249,7 +249,7 @@ XC::Vector XC::ShellCorotCrdTransf3d::local_to_global(const Matrix &R,const Matr
     retval(4)= Rd(0,1)*displ[3] + Rd(1,1)*displ[4] + Rd(2,1)*displ[5];
     retval(5)= Rd(0,2)*displ[3] + Rd(1,2)*displ[4] + Rd(2,2)*displ[5];
 
-    //Nodo 2.
+    //Node 2.
     retval(6)= R(0,0)*displ[6] + R(1,0)*displ[7] + R(2,0)*displ[8];
     retval(7)= R(0,1)*displ[6] + R(1,1)*displ[7] + R(2,1)*displ[8];
     retval(8)= R(0,2)*displ[6] + R(1,2)*displ[7] + R(2,2)*displ[8];
@@ -258,7 +258,7 @@ XC::Vector XC::ShellCorotCrdTransf3d::local_to_global(const Matrix &R,const Matr
     retval(10)= Rd(0,1)*displ[9] + Rd(1,1)*displ[10] + Rd(2,1)*displ[11];
     retval(11)= Rd(0,2)*displ[9] + Rd(1,2)*displ[10] + Rd(2,2)*displ[11];
 
-    //Nodo 3.
+    //Node 3.
     retval(12)= R(0,0)*displ[12] + R(1,0)*displ[13] + R(2,0)*displ[14];
     retval(13)= R(0,1)*displ[12] + R(1,1)*displ[13] + R(2,1)*displ[14];
     retval(14)= R(0,2)*displ[12] + R(1,2)*displ[13] + R(2,2)*displ[14];
@@ -267,7 +267,7 @@ XC::Vector XC::ShellCorotCrdTransf3d::local_to_global(const Matrix &R,const Matr
     retval(16)= Rd(0,1)*displ[15] + Rd(1,1)*displ[16] + Rd(2,1)*displ[17];
     retval(17)= Rd(0,2)*displ[15] + Rd(1,2)*displ[16] + Rd(2,2)*displ[17];
 
-    //Nodo 4.
+    //Node 4.
     retval(18)= R(0,0)*displ[18] + R(1,0)*displ[19] + R(2,0)*displ[20];
     retval(19)= R(0,1)*displ[18] + R(1,1)*displ[19] + R(2,1)*displ[20];
     retval(20)= R(0,2)*displ[18] + R(1,2)*displ[19] + R(2,2)*displ[20];

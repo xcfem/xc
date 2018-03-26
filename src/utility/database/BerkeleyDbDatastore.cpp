@@ -215,8 +215,8 @@ bool XC::BerkeleyDbDatastore::create_aux_entities(void)
         const Domain *dom= preprocessor->getDomain();
         if(dom)
           {
-            const int numNodos= dom->getNumNodes();
-            const int nBytes= std::max(numNodos*21,256)*1024; //21 KB por nodo.
+            const int numNodes= dom->getNumNodes();
+            const int nBytes= std::max(numNodes*21,256)*1024; //21 KB per node.
             ret= dbenv->set_cachesize(dbenv,0,nBytes,0);
             if(ret!= 0)
               {

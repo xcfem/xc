@@ -84,7 +84,7 @@ void XC::DqPtrsNode::transforma(const TrfGeom &trf)
 
 //! @brief Returns (if it exists) a pointer to the node
 //! cuyo tag is being passed as parameter.
-XC::Node *XC::DqPtrsNode::buscaNodo(const int &tag)
+XC::Node *XC::DqPtrsNode::findNode(const int &tag)
   {
     Node *retval= nullptr;
     Node *tmp= nullptr;
@@ -105,7 +105,7 @@ XC::Node *XC::DqPtrsNode::buscaNodo(const int &tag)
 
 //! @brief Returns (if it exists) a pointer to the node
 //! cuyo tag is being passed as parameter.
-const XC::Node *XC::DqPtrsNode::buscaNodo(const int &tag) const
+const XC::Node *XC::DqPtrsNode::findNode(const int &tag) const
   {
     const Node *retval= nullptr;
     const Node *tmp= nullptr;

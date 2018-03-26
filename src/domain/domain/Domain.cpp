@@ -211,7 +211,7 @@ void XC::Domain::setDeadSRF(const double &d)
 bool XC::Domain::addElement(Element *element)
   { return mesh.addElement(element); }
 
-//! @brief Adds to the domain el nodo being passed as parameter.
+//! @brief Adds to the domain the node being passed as parameter.
 bool XC::Domain::addNode(Node * node)
   { return mesh.addNode(node); }
 
@@ -572,7 +572,7 @@ void XC::Domain::removeLPs(void)
       domainChange();
   }
 
-//! @brief Remove from domain todos los bloqueos de nodos.
+//! @brief Remove all node lockers from domain.
 void XC::Domain::removeNLs(void)
   {
     int numSPs= constraints.removeNLs();
@@ -1218,7 +1218,7 @@ int XC::Domain::recvSelf(const CommParameters &cp)
 double XC::Domain::getNodeDisp(int nodeTag, int dof,int &errorFlag)
   { return mesh.getNodeDisp(nodeTag,dof,errorFlag); }
 
-//! @brief Asigna la matriz de masas al nudo identified by the argument.
+//! @brief Set la matriz de masas al nudo identified by the argument.
 int XC::Domain::setMass(const XC::Matrix &mass, int nodeTag)
   { return mesh.setMass(mass,nodeTag); }
 

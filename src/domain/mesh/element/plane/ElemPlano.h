@@ -44,8 +44,8 @@ namespace XC {
 //
 //! \ingroup ElemPlanos
 //! @brief Base class for plane elements.
-template <int NNODOS,class PhysProp>
-class ElemPlano : public ElemWithMaterial<NNODOS, PhysProp>
+template <int NNODES,class PhysProp>
+class ElemPlano : public ElemWithMaterial<NNODES, PhysProp>
   {
   protected:
     mutable std::vector<double> tributaryAreas;
@@ -72,14 +72,14 @@ class ElemPlano : public ElemWithMaterial<NNODOS, PhysProp>
   };
 
 //! @brief Constructor.
-template <int NNODOS,class PhysProp>
-XC::ElemPlano<NNODOS, PhysProp>::ElemPlano(int tag,int classTag,const PhysProp &physProp)
-  :ElemWithMaterial<NNODOS, PhysProp>(tag,classTag,physProp), tributaryAreas(NNODOS,0.0)
+template <int NNODES,class PhysProp>
+XC::ElemPlano<NNODES, PhysProp>::ElemPlano(int tag,int classTag,const PhysProp &physProp)
+  :ElemWithMaterial<NNODES, PhysProp>(tag,classTag,physProp), tributaryAreas(NNODES,0.0)
   {}
 
 //! @brief Sets nodes and checks the element.
-template <int NNODOS,class PhysProp>
-void XC::ElemPlano<NNODOS, PhysProp>::checkElem(void)
+template <int NNODES,class PhysProp>
+void XC::ElemPlano<NNODES, PhysProp>::checkElem(void)
   {
     if(this->getNodePtrs().hasNull())
       std::cerr << "the element: " << this->getTag()
@@ -90,11 +90,11 @@ void XC::ElemPlano<NNODOS, PhysProp>::checkElem(void)
         if(area<1e-3)
           {
             std::cerr << "Element: " << this->getTag() << " with nodes: [";
-            const std::vector<int> inodos= this->getNodePtrs().getTags();
-            std::vector<int>::const_iterator i= inodos.begin();
+            const std::vector<int> inodes= this->getNodePtrs().getTags();
+            std::vector<int>::const_iterator i= inodes.begin();
             std::cerr << *i;
             i++;
-            for(;i!=inodos.end();i++)
+            for(;i!=inodes.end();i++)
 	      std::cerr << "," << *i;
             std::cerr << "] has a very little area (" << area << ").\n";
           }
@@ -102,10 +102,10 @@ void XC::ElemPlano<NNODOS, PhysProp>::checkElem(void)
   }
 
 //! @brief Sets the element domain.
-template <int NNODOS,class PhysProp>
-void XC::ElemPlano<NNODOS, PhysProp>::setDomain(Domain *theDomain)
+template <int NNODES,class PhysProp>
+void XC::ElemPlano<NNODES, PhysProp>::setDomain(Domain *theDomain)
   {
-    ElemWithMaterial<NNODOS, PhysProp>::setDomain(theDomain);
+    ElemWithMaterial<NNODES, PhysProp>::setDomain(theDomain);
     if(theDomain)
       checkElem();
     else
@@ -113,38 +113,38 @@ void XC::ElemPlano<NNODOS, PhysProp>::setDomain(Domain *theDomain)
   }
 
 //! @brief Return the position of the element centroid.
-template <int NNODOS,class PhysProp>
-Pos3d XC::ElemPlano<NNODOS, PhysProp>::getPosCdg(bool initialGeometry) const
+template <int NNODES,class PhysProp>
+Pos3d XC::ElemPlano<NNODES, PhysProp>::getPosCdg(bool initialGeometry) const
   { return getPolygon(initialGeometry).Cdg(); }
 
 //! @brief Return the element dimension (0, 1, 2 o3 3).
-template <int NNODOS,class PhysProp>
-size_t XC::ElemPlano<NNODOS, PhysProp>::getDimension(void) const
+template <int NNODES,class PhysProp>
+size_t XC::ElemPlano<NNODES, PhysProp>::getDimension(void) const
   { return 2; }
 
 //! @brief Returns the perimeter of the element.
-template <int NNODOS,class PhysProp>
-double XC::ElemPlano<NNODOS, PhysProp>::getPerimetro(bool initialGeometry) const
+template <int NNODES,class PhysProp>
+double XC::ElemPlano<NNODES, PhysProp>::getPerimetro(bool initialGeometry) const
   { return getPolygon(initialGeometry).Perimetro(); }
 
 //! @brief Returns element area.
 //!
 //! @param initialGeometry: if true returns the area of the undeformed geometry.
-template <int NNODOS,class PhysProp>
-double XC::ElemPlano<NNODOS, PhysProp>::getArea(bool initialGeometry) const
+template <int NNODES,class PhysProp>
+double XC::ElemPlano<NNODES, PhysProp>::getArea(bool initialGeometry) const
   { return getPolygon(initialGeometry).Area(); }
 
 //! @brief Computes tributary areas that correspond to each node.
-template <int NNODOS,class PhysProp>
-void XC::ElemPlano<NNODOS, PhysProp>::computeTributaryAreas(bool initialGeometry) const
+template <int NNODES,class PhysProp>
+void XC::ElemPlano<NNODES, PhysProp>::computeTributaryAreas(bool initialGeometry) const
   {
     tributaryAreas= getPolygon(initialGeometry).getAreasTributarias();
     this->dumpTributaries(tributaryAreas);
   }
 
 //! @brief Returns tributary area for the node being passed as parameter.
-template <int NNODOS,class PhysProp>
-double XC::ElemPlano<NNODOS, PhysProp>::getTributaryArea(const Node *nod) const
+template <int NNODES,class PhysProp>
+double XC::ElemPlano<NNODES, PhysProp>::getTributaryArea(const Node *nod) const
   {
     double retval= 0.0;
     const int i= this->theNodes.find(nod);
@@ -154,8 +154,8 @@ double XC::ElemPlano<NNODOS, PhysProp>::getTributaryArea(const Node *nod) const
   }
 
 //! @brief Returns the element contour as a polygon.
-template <int NNODOS,class PhysProp>
-Poligono3d XC::ElemPlano<NNODOS, PhysProp>::getPolygon(bool initialGeometry) const
+template <int NNODES,class PhysProp>
+Poligono3d XC::ElemPlano<NNODES, PhysProp>::getPolygon(bool initialGeometry) const
   {
     const std::list<Pos3d> posiciones= this->getPosNodes(initialGeometry);
     return Poligono3d(posiciones.begin(),posiciones.end());
@@ -163,45 +163,45 @@ Poligono3d XC::ElemPlano<NNODOS, PhysProp>::getPolygon(bool initialGeometry) con
 
 //! @brief Returns a lado of the element. 
 // Redefine for elements with more than two nodes by face.
-template <int NNODOS,class PhysProp>
-Segmento3d XC::ElemPlano<NNODOS, PhysProp>::getLado(const size_t &i,bool initialGeometry) const
+template <int NNODES,class PhysProp>
+Segmento3d XC::ElemPlano<NNODES, PhysProp>::getLado(const size_t &i,bool initialGeometry) const
   {
     Segmento3d retval;
-    const NodePtrsWithIDs &nodos= this->getNodePtrs();
-    const size_t sz= nodos.size();
+    const NodePtrsWithIDs &nodes= this->getNodePtrs();
+    const size_t sz= nodes.size();
     if(i<sz)
       {
-        const Pos3d p1= nodos.getPosNode(i,initialGeometry);
+        const Pos3d p1= nodes.getPosNode(i,initialGeometry);
         if(i<(sz-1))
-          retval= Segmento3d(p1,nodos.getPosNode(i+1,initialGeometry));
+          retval= Segmento3d(p1,nodes.getPosNode(i+1,initialGeometry));
         else
-          retval= Segmento3d(p1,nodos.getPosNode(0,initialGeometry));
+          retval= Segmento3d(p1,nodes.getPosNode(0,initialGeometry));
       }
     return retval;
   }
 
 //! @brief Returns the squared distance from the element to the point
 //! being passed as parameter.
-template <int NNODOS,class PhysProp>
-double XC::ElemPlano<NNODOS, PhysProp>::getDist2(const Pos2d &p,bool initialGeometry) const
+template <int NNODES,class PhysProp>
+double XC::ElemPlano<NNODES, PhysProp>::getDist2(const Pos2d &p,bool initialGeometry) const
   { return getDist2(To3dXY2d(p),initialGeometry); }
 
 //! @brief Return the distance from the element to the point
 //! being passed as parameter.
-template <int NNODOS,class PhysProp>
-double XC::ElemPlano<NNODOS, PhysProp>::getDist(const Pos2d &p,bool initialGeometry) const
+template <int NNODES,class PhysProp>
+double XC::ElemPlano<NNODES, PhysProp>::getDist(const Pos2d &p,bool initialGeometry) const
   { return getDist(To3dXY2d(p),initialGeometry); }
 
 //! @brief Returns the squared distance from the element to the point
 //! being passed as parameter.
-template <int NNODOS,class PhysProp>
-double XC::ElemPlano<NNODOS, PhysProp>::getDist2(const Pos3d &p,bool initialGeometry) const
+template <int NNODES,class PhysProp>
+double XC::ElemPlano<NNODES, PhysProp>::getDist2(const Pos3d &p,bool initialGeometry) const
   { return getPolygon(initialGeometry).dist2(p); }
 
 //! @brief Return the distance from the element to the point
 //! being passed as parameter.
-template <int NNODOS,class PhysProp>
-double XC::ElemPlano<NNODOS, PhysProp>::getDist(const Pos3d &p,bool initialGeometry) const
+template <int NNODES,class PhysProp>
+double XC::ElemPlano<NNODES, PhysProp>::getDist(const Pos3d &p,bool initialGeometry) const
   { return getPolygon(initialGeometry).dist(p); }
 
 } // end of XC namespace

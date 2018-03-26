@@ -39,8 +39,8 @@ typedef std::set<Node *> NodePtrSet;
 
 std::set<Element *> getElementsBetweenNodes(Node &, Node &);
 std::set<Element *> getConnectedElements(const NodePtrSet &);
-ElementEdges getElementEdgesEntreNodos(Node *, Node *);
-ElementEdges getElementEdgesEntreNodos(const NodePtrSet &);
+ElementEdges getElementEdgesBetweenNodes(Node *, Node *);
+ElementEdges getElementEdgesBetweenNodes(const NodePtrSet &);
 bool in(const NodePtrSet &,const std::vector<const Node *> &);
 
 } // end of XC namespace

@@ -54,12 +54,12 @@ size_t XC::BrickBase::getDimension(void) const
   { return 3; }
 
 //Put the element on the mesh being passed as parameter.
-XC::TritrizPtrElem XC::BrickBase::put_on_mesh(const XC::TritrizPtrNod &nodos,meshing_dir dm) const
+XC::TritrizPtrElem XC::BrickBase::put_on_mesh(const XC::TritrizPtrNod &nodes,meshing_dir dm) const
   {
-    const size_t ncapas= nodos.GetCapas();
-    const size_t nfilas= nodos.getNumFilas();
-    const size_t ncols= nodos.getNumCols();
-    const size_t mesh_dim= nodos.GetDim();
+    const size_t ncapas= nodes.GetCapas();
+    const size_t nfilas= nodes.getNumFilas();
+    const size_t ncols= nodes.getNumCols();
+    const size_t mesh_dim= nodes.GetDim();
     TritrizPtrElem retval(ncapas-1,nfilas-1,ncols-1);
     if(mesh_dim<3)
       std::cerr << "BrickBase::put_on_mesh; three-dimensional mesh needed, can't create elements." << std::endl;
@@ -70,14 +70,14 @@ XC::TritrizPtrElem XC::BrickBase::put_on_mesh(const XC::TritrizPtrNod &nodos,mes
             for(size_t k=1;k<ncols;k++)
               {
 	        XC::Element *tmp= this->getCopy();
-                const int &Nd1= nodos(i,j,k)->getTag();
-                const int &Nd2= nodos(i,j,k+1)->getTag();
-                const int &Nd3= nodos(i,j+1,k+1)->getTag();
-                const int &Nd4= nodos(i,j+1,k)->getTag();
-                const int &Nd5= nodos(i+1,j,k)->getTag();
-                const int &Nd6= nodos(i+1,j,k+1)->getTag();
-                const int &Nd7= nodos(i+1,j+1,k+1)->getTag();
-                const int &Nd8= nodos(i+1,j+1,k)->getTag();
+                const int &Nd1= nodes(i,j,k)->getTag();
+                const int &Nd2= nodes(i,j,k+1)->getTag();
+                const int &Nd3= nodes(i,j+1,k+1)->getTag();
+                const int &Nd4= nodes(i,j+1,k)->getTag();
+                const int &Nd5= nodes(i+1,j,k)->getTag();
+                const int &Nd6= nodes(i+1,j,k+1)->getTag();
+                const int &Nd7= nodes(i+1,j+1,k+1)->getTag();
+                const int &Nd8= nodes(i+1,j+1,k)->getTag();
                 tmp->getNodePtrs().set_id_nodes(Nd1,Nd2,Nd3,Nd4,Nd5,Nd6,Nd7,Nd8);
                 retval(i,j,k)= tmp;
               }

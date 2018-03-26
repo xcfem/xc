@@ -523,7 +523,7 @@ int XC::MapSet::recvSelf(const CommParameters &cp)
     return res;
   }
 
-//! @brief Returns the sets que contienen the pointer a nodo
+//! @brief Returns the sets que contienen the pointer to node
 //! being passed as parameter.
 std::set<XC::SetBase *> XC::MapSet::get_sets(const Node *n)
   {

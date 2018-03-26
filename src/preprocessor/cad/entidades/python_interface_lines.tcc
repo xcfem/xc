@@ -21,8 +21,8 @@
 //----------------------------------------------------------------------------
 //python_interface_lines.tcc
 
-XC::Node *(XC::Edge::*getFirstNodePtr)(void)= &XC::Edge::GetPrimerNodo;
-XC::Node *(XC::Edge::*getLastNodePtr)(void)= &XC::Edge::GetUltimoNodo;
+XC::Node *(XC::Edge::*getFirstNodePtr)(void)= &XC::Edge::getFirstNode;
+XC::Node *(XC::Edge::*getLastNodePtr)(void)= &XC::Edge::getLastNode;
 class_<XC::Edge, bases<XC::EntMdlr>, boost::noncopyable >("Edge","Base class for one-dimensional geometry objects." ,no_init)
   .add_property("nDiv", &XC::Edge::NDiv, &XC::Edge::SetNDiv,"Number of divisions.")
   .def("setElemSize",&XC::Edge::SetElemSize,"Set the element size")
@@ -35,8 +35,8 @@ class_<XC::Edge, bases<XC::EntMdlr>, boost::noncopyable >("Edge","Base class for
   .def("getTang", &XC::Edge::getTang, return_internal_reference<>(),"Return a vector tangent to the edge.")
   .def("divide",&XC::Edge::divide,"Create points along the line.")
   .def("getKPoints",&XC::Edge::getKPoints,"Return the end points of the edge.")
-  .def("getTagsNodes",&XC::Edge::GetTagsNodosDir,"Return node tags in forward order.")
-  .def("getTagsNodesReverse",&XC::Edge::GetTagsNodosInv,"Return node tags in reverse order.")
+  .def("getTagsNodes",&XC::Edge::getTagsNodesDir,"Return node tags in forward order.")
+  .def("getTagsNodesReverse",&XC::Edge::getTagsNodesInv,"Return node tags in reverse order.")
    ;
 
 class_<XC::LineBase, bases<XC::Edge>, boost::noncopyable >("LineBase", no_init)

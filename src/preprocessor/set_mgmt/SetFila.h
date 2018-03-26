@@ -60,16 +60,16 @@ class SetFila: public SetEstruct
     SetFila(const SetFila &otro);
     SetFila &operator=(const SetFila &otro);
     virtual SetEstruct *getCopy(void) const;
-    reference_nod Nodo(const size_t &i)
+    reference_nod Node(const size_t &i)
       { return fila_nod(i); }
-    const reference_nod Nodo(const size_t &i) const
+    const reference_nod Node(const size_t &i) const
       { return fila_nod(i); }
     reference_elem Element(const size_t &i)
       { return fila_elem(i); }
     const reference_elem Element(const size_t &i) const
       { return fila_elem(i); }
 
-    RangoTritriz RangoNodos(void) const
+    RangoTritriz NodeRange(void) const
       { return RangoTritriz(fila_nod); }
     RangoTritriz ElementRange(void) const
       { return RangoTritriz(fila_elem); }
@@ -87,9 +87,9 @@ class SetFila: public SetEstruct
     virtual size_t getNumElementColumns(void) const
       { return fila_elem.getNumCols(); }
 
-    virtual XC::Node *GetNodo(const size_t &i=1,const size_t &j=1,const size_t &k=1)
+    virtual XC::Node *getNode(const size_t &i=1,const size_t &j=1,const size_t &k=1)
       { return fila_nod(i,j,k); }
-    virtual const XC::Node *GetNodo(const size_t &i=1,const size_t &j=1,const size_t &k=1) const
+    virtual const XC::Node *getNode(const size_t &i=1,const size_t &j=1,const size_t &k=1) const
       { return fila_nod(i,j,k); }
     virtual XC::Element *getElement(const size_t &i=1,const size_t &j=1,const size_t &k=1)
       { return fila_elem(i,j,k); }
@@ -124,7 +124,7 @@ SetEstruct *XC::SetFila<FILATTZNOD,FILATTZELEM>::getCopy(void) const
   { return new SetFila<FILATTZNOD,FILATTZELEM>(*this); }
 
 
-/* //! @brief Impone desplazamiento nulo en los nodos de this set. */
+/* //! @brief Impone desplazamiento nulo en the nodes de this set. */
 /* template <class FILATTZNOD,class FILATTZELEM> */
 /* void XC::SetFila<FILATTZNOD,FILATTZELEM>::fix(const SFreedom_Constraint &spc) */
 /*   { fix(fila_nod,spc); } */

@@ -135,10 +135,10 @@ XC::Pnt *XC::Body::BodyFace::GetVertice(const size_t &i)
   { return const_cast<Pnt *>(static_cast<const BodyFace &>(*this).GetVertice(i)); }
 
 //! @brief Return a pointer to the (i,j) node of the face.
-XC::Node *XC::Body::BodyFace::GetNodo(const size_t &i,const size_t &j)
+XC::Node *XC::Body::BodyFace::getNode(const size_t &i,const size_t &j)
   {
     assert(surface);
-    return surface->GetNodo(i,j);
+    return surface->getNode(i,j);
   }
 
 //! @brief Return the positions for the nodes on a face.
@@ -172,10 +172,10 @@ MatrizPos3d XC::Body::BodyFace::get_posiciones(void) const
         std::cerr << "Lines 2 and 4 have different number of divisions. Can't generate mesh." << std::endl;
         return MatrizPos3d();
       }
-    MatrizPos3d ptos_l1= l1->GetPosNodosDir();
-    MatrizPos3d ptos_l2= l2->GetPosNodosDir();
-    MatrizPos3d ptos_l3= l3->GetPosNodosInv(); //Reverse order.
-    MatrizPos3d ptos_l4= l4->GetPosNodosInv(); //Reverse order.
+    MatrizPos3d ptos_l1= l1->getNodePosDir();
+    MatrizPos3d ptos_l2= l2->getNodePosDir();
+    MatrizPos3d ptos_l3= l3->getNodePosInv(); //Reverse order.
+    MatrizPos3d ptos_l4= l4->getNodePosInv(); //Reverse order.
     return MatrizPos3d(ptos_l1,ptos_l2,ptos_l3,ptos_l4);
   }
 

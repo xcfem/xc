@@ -157,10 +157,10 @@ XC::Matrix XC::MEDMesh::getCoordinates(void)
     if(mesh)
       {
         const double *coordenadas= mesh->getCoordinates(::MED_FULL_INTERLACE);
-        const size_t numNodos= mesh->getNumberOfNodes();
+        const size_t numNodes= mesh->getNumberOfNodes();
         const size_t spaceDim= mesh->getSpaceDimension();
-        retval= Matrix(numNodos,spaceDim);
-        for(size_t i=0;i<numNodos;i++)
+        retval= Matrix(numNodes,spaceDim);
+        for(size_t i=0;i<numNodes;i++)
           for(size_t j=0;j<spaceDim;j++)
             retval(i,j)= coordenadas[i*spaceDim+j];
       }
@@ -222,16 +222,16 @@ size_t XC::MEDMesh::getNumCellsOfType(int tipo)
 XC::Matrix XC::MEDMesh::getConnectivityCellsOfType(int tipo)
   {
     Matrix retval;
-    size_t numNodosCeldaTipo= tipo%100;
+    size_t numNodesCellType= tipo%100;
     size_t numCeldasTipo= 0;
     if(mesh)
       {
         numCeldasTipo= mesh->getNumberOfElements(MED_EN::MED_CELL,tipo);
-        retval= Matrix(numCeldasTipo,numNodosCeldaTipo);
+        retval= Matrix(numCeldasTipo,numNodesCellType);
         const int *conectividad= mesh->getConnectivity(MED_EN::MED_NODAL,MED_EN::MED_CELL,tipo);
         for(size_t i= 0;i<numCeldasTipo;i++)
-          for(size_t j= 0;j<numNodosCeldaTipo;j++)
-            retval(i,j)= conectividad[i*numNodosCeldaTipo+j];
+          for(size_t j= 0;j<numNodesCellType;j++)
+            retval(i,j)= conectividad[i*numNodesCellType+j];
       }
     else
       std::cerr << "MEDMesh::getConnectivityCellsOfType(); mesh not readed." << std::endl;

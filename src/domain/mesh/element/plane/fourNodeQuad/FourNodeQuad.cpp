@@ -314,7 +314,7 @@ const XC::Matrix &XC::FourNodeQuad::getMass(void) const
             double tmp = physicalProperties.getRho() + rhoi[i];
             rhodvol*= (tmp*physicalProperties.getThickness()*gp.weight());
 
-            for(int alpha = 0, ia = 0; alpha<numNodos(); alpha++, ia++)
+            for(int alpha = 0, ia = 0; alpha<numNodes(); alpha++, ia++)
               {
                 Nrho = shp[2][alpha]*rhodvol;
                 K(ia,ia) += Nrho;
@@ -379,7 +379,7 @@ int XC::FourNodeQuad::addInertiaLoadToUnbalance(const XC::Vector &accel)
 
     // Want to add ( - fact * M R * accel ) to unbalance
     // Take advantage of lumped mass matrix
-    for(int i= 0; i < 2*numNodos(); i++)
+    for(int i= 0; i < 2*numNodes(); i++)
       load(i)+= -K(i,i)*ra[i];
     return 0;
   }
@@ -405,7 +405,7 @@ const XC::Vector &XC::FourNodeQuad::getResistingForce(void) const
         // Perform numerical integration on internal force
         //P = P + (B^ sigma) * intWt(i)*intWt(j) * detJ;
         //P.addMatrixTransposeVector(1.0, B, sigma, intWt(i)*intWt(j)*detJ);
-        for(int alpha = 0,ia = 0;alpha<numNodos(); alpha++,ia += 2)
+        for(int alpha = 0,ia = 0;alpha<numNodes(); alpha++,ia += 2)
           {
 
             P(ia)+= dvol*(shp[0][alpha]*sigma(0) + shp[1][alpha]*sigma(2));
@@ -553,7 +553,7 @@ void XC::FourNodeQuad::Print(std::ostream &s, int flag)
         //const int numNodes = 4;
         const int nstress = 3 ;
 
-        for(int i=0; i<numNodos(); i++)
+        for(int i=0; i<numNodes(); i++)
           {
             const XC::Vector &nodeCrd = theNodes[i]->getCrds();
             //const XC::Vector &nodeDisp = theNodes[i]->getDisp();

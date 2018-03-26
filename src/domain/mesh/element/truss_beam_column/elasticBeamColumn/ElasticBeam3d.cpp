@@ -543,7 +543,7 @@ const XC::Vector &XC::ElasticBeam3d::getResistingForce(void) const
     const double EIy4= 2.0*EIy2; // 4EIy
     const double GJ= ctes_scc.GJ(); // GJ
 
-    //Element internal forces debidos a las acciones de la estructura sobre sus nodos.
+    //Element internal forces due to the actions of the structure over its nodes.
     q.N()= EA*v(0); //axial force in the element.
     q.Mz1()= EIz4*v(1) + EIz2*v(2); //z bending moment in node 1: 4EI/L*v(1)+2EI/L*v(2).
     q.Mz2()= EIz2*v(1) + EIz4*v(2); //z bending moment in node 2: 2EI/L*v(1)+4EI/L*v(2).

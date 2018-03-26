@@ -131,97 +131,97 @@ MatrizPos3d XC::CmbEdge::Lado::get_posiciones(void) const
   }
 
 //! @brief Returns the identificadores of the nodes en sentido directo.
-std::vector<int> XC::CmbEdge::Lado::GetTagsNodosDir(void) const
+std::vector<int> XC::CmbEdge::Lado::getTagsNodesDir(void) const
   {
     if(directo)
-      return edge->GetTagsNodosDir();
+      return edge->getTagsNodesDir();
     else
-      return edge->GetTagsNodosInv();
+      return edge->getTagsNodesInv();
   }
 
-std::vector<int> XC::CmbEdge::Lado::GetTagsNodosInv(void) const
+std::vector<int> XC::CmbEdge::Lado::getTagsNodesInv(void) const
   {
     if(directo)
-      return edge->GetTagsNodosInv();
+      return edge->getTagsNodesInv();
     else
-      return edge->GetTagsNodosDir();
+      return edge->getTagsNodesDir();
   }
 
 //! @brief Returns the posiciones of the nodes en sentido directo.
-MatrizPos3d XC::CmbEdge::Lado::GetPosNodosDir(void) const
+MatrizPos3d XC::CmbEdge::Lado::getNodePosDir(void) const
   {
     if(directo)
-      return edge->GetPosNodosDir();
+      return edge->getNodePosDir();
     else
-      return edge->GetPosNodosInv();
+      return edge->getNodePosInv();
   }
 
 //! @brief Returns the posiciones of the nodes en sentido inverso.
-MatrizPos3d XC::CmbEdge::Lado::GetPosNodosInv(void) const
+MatrizPos3d XC::CmbEdge::Lado::getNodePosInv(void) const
   {
     if(directo)
-      return edge->GetPosNodosInv();
+      return edge->getNodePosInv();
     else
-      return edge->GetPosNodosDir();
+      return edge->getNodePosDir();
   }
 
-//! @brief Returns the nodo which index is being passed as parameter empezando por el principio.
-XC::Node *XC::CmbEdge::Lado::GetNodoDir(const size_t &i)
+//! @brief Returns the node which index is being passed as parameter empezando por el principio.
+XC::Node *XC::CmbEdge::Lado::getNodeDir(const size_t &i)
   {
     if(!edge)
       return nullptr;
     else
       if(directo)
-        return edge->GetNodoDir(i);
+        return edge->getNodeDir(i);
       else
-        return edge->GetNodoInv(i);
+        return edge->getNodeInv(i);
   }
 
-//! @brief Returns the nodo which index is being passed as parameter empezando por el final.
-XC::Node *XC::CmbEdge::Lado::GetNodoInv(const size_t &i)
+//! @brief Returns the node which index is being passed as parameter empezando por el final.
+XC::Node *XC::CmbEdge::Lado::getNodeInv(const size_t &i)
   {
     if(!edge)
       return nullptr;
     else
       if(directo)
-        return edge->GetNodoInv(i);
+        return edge->getNodeInv(i);
       else
-        return edge->GetNodoDir(i);
+        return edge->getNodeDir(i);
   }
 
-//! @brief Returns the nodo which index is being passed as parameter.
-XC::Node *XC::CmbEdge::Lado::GetNodo(const size_t &i)
+//! @brief Returns the node which index is being passed as parameter.
+XC::Node *XC::CmbEdge::Lado::getNode(const size_t &i)
   {
     XC::Node *retval= nullptr;
     if(edge)
       {
         if(directo)
-          retval=  edge->GetNodo(i);
+          retval=  edge->getNode(i);
         else
           {
             const size_t n= edge->getNumberOfNodes();
-            retval=  edge->GetNodo(n-i+1);
+            retval=  edge->getNode(n-i+1);
           }
       }
     return retval;
   }
 
-//! @brief Returns the nodo which index is being passed as parameter.
-const XC::Node *XC::CmbEdge::Lado::GetNodo(const size_t &i) const
+//! @brief Returns the node which index is being passed as parameter.
+const XC::Node *XC::CmbEdge::Lado::getNode(const size_t &i) const
   {
     if(!edge) return nullptr;
     const size_t n= edge->getNumberOfNodes();
     if(directo)
-      return edge->GetNodo(i);
+      return edge->getNode(i);
     else
-      return edge->GetNodo(n-i);
+      return edge->getNode(n-i);
   }
 
 //! @brief Genertes a mesh from the corresponding line.
 void XC::CmbEdge::Lado::genMesh(meshing_dir dm)
   { edge->genMesh(dm); }
 
-//! @brief Asigna el number of divisions of the line.
+//! @brief Set el number of divisions of the line.
 void XC::CmbEdge::Lado::SetNDiv(const size_t &nd)
   { edge->SetNDiv(nd); }
 

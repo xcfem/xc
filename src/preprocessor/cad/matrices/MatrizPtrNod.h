@@ -54,8 +54,8 @@ class MatrizPtrNod: public MatrizPtrBase<Node>
     m_int getTags(void) const;
     void fix(const SFreedom_Constraint &) const;
 
-    Node *buscaNodo(const int &tag);
-    const Node *buscaNodo(const int &tag) const;
+    Node *findNode(const int &tag);
+    const Node *findNode(const int &tag) const;
     Node *getNearestNode(const Pos3d &p);
     const Node *getNearestNode(const Pos3d &p) const;
 

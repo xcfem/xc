@@ -36,13 +36,13 @@ XC::MEDDblFieldInfo::MEDDblFieldInfo(const FieldInfo &fi,MEDGroupInfo *grp)
 //! @brief Set the field values at the nodes.
 void XC::MEDDblFieldInfo::populateOnNodes(const Set &set,const FieldInfo &fi)
   {
-    const DqPtrsNode &nodos= set.GetNodos();
+    const DqPtrsNode &nodes= set.getNodes();
     const size_t dim= fi.getNumberOfComponents();
     int conta= 1; std::vector<double> value(dim);
     const std::string nmb_prop= fi.getComponentsProperty();
     if(!nmb_prop.empty())
       {
-        for(DqPtrsNode::const_iterator j= nodos.begin();j!=nodos.end();j++,conta++)
+        for(DqPtrsNode::const_iterator j= nodes.begin();j!=nodes.end();j++,conta++)
           {
             boost::python::object pyObj(boost::ref(*j));
             boost::python::object tmp= EntCmd_eval(pyObj,nmb_prop);
@@ -54,9 +54,9 @@ void XC::MEDDblFieldInfo::populateOnNodes(const Set &set,const FieldInfo &fi)
                   setValueIJ(conta,k,value[k-1]);
               }
             else
-	      std::cerr << "MEDDblFieldInfo::populateOnNodes; el nodo: "
+	      std::cerr << "MEDDblFieldInfo::populateOnNodes; the node: "
                         << (*j)->getTag()
-                        << " no pudo devolver la propiedad: '"
+                        << " can't return the property: '"
                         << nmb_prop << "'\n";
           }
       }

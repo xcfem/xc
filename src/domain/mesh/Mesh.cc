@@ -291,7 +291,7 @@ void XC::Mesh::add_node_to_domain(Node *node)
     node->setDomain(dom);
     dom->domainChange();
     update_bounds(node->getCrds());
-    kdtreeNodos.insert(*node);
+    kdtreeNodes.insert(*node);
   }
 
 //! @brief Sólo debe llamarse desde recvSelf.
@@ -305,7 +305,7 @@ void XC::Mesh::add_nodes_to_domain(void)
         nodePtr->setDomain(dom);
         dom->domainChange();
         update_bounds(nodePtr->getCrds());
-        kdtreeNodos.insert(*nodePtr);
+        kdtreeNodes.insert(*nodePtr);
       }
   }
 
@@ -388,7 +388,7 @@ bool XC::Mesh::removeNode(int tag)
         Domain *dom= getDomain();
 
         Node *nod= dom->getNode(tag);
-        if(nod) kdtreeNodos.erase(*nod);
+        if(nod) kdtreeNodes.erase(*nod);
 
         // mark the domain has having changed
         dom->domainChange();
@@ -412,7 +412,7 @@ XC::ElementIter &XC::Mesh::getElements()
     return *theEleIter;
   }
 
-//! @brief Returns an iterator a los nodos del domain.
+//! @brief Returns an iterator a the nodes del domain.
 XC::NodeIter &XC::Mesh::getNodes()
   {
     theNodIter->reset();
@@ -466,7 +466,7 @@ const XC::Element *XC::Mesh::getNearestElement(const Pos3d &p) const
 bool XC::Mesh::existNode(int tag)
  { return theNodes->existComponent(tag); }
 
-//! @brief Returns a pointer to the nodo which tag being passed as parameter.
+//! @brief Returns a pointer to the node which tag being passed as parameter.
 XC::Node *XC::Mesh::getNode(int tag)
   {
     TaggedObject *mc = theNodes->getComponentPtr(tag);
@@ -477,7 +477,7 @@ XC::Node *XC::Mesh::getNode(int tag)
     return result;
   }
 
-//! @brief Returns a pointer to the nodo which tag being passed as parameter.
+//! @brief Returns a pointer to the node which tag being passed as parameter.
 const XC::Node *XC::Mesh::getNode(int tag) const
   {
     const TaggedObject *mc = theNodes->getComponentPtr(tag);
@@ -488,14 +488,14 @@ const XC::Node *XC::Mesh::getNode(int tag) const
     return result;
   }
 
-//! @brief Returns the nodo closest to the point being passed as parameter.
+//! @brief Returns the node closest to the point being passed as parameter.
 XC::Node *XC::Mesh::getNearestNode(const Pos3d &p)
   {
-    Node *retval= const_cast<Node *>(kdtreeNodos.getNearest(p));
+    Node *retval= const_cast<Node *>(kdtreeNodes.getNearest(p));
     return retval;
   }
 
-//! @brief Returns the nodo closest to the point being passed as parameter.
+//! @brief Returns the node closest to the point being passed as parameter.
 const XC::Node *XC::Mesh::getNearestNode(const Pos3d &p) const
   {
     Mesh *this_no_const= const_cast<Mesh *>(this);
@@ -547,7 +547,7 @@ void XC::Mesh::melt_alive_nodes(const std::string &nmbLocker)
 int XC::Mesh::getNumElements(void) const
   { return theElements->getNumComponents(); }
 
-//! @brief Returns the número de nodos.
+//! @brief Returns the number of nodes.
 int XC::Mesh::getNumNodes(void) const
   { return theNodes->getNumComponents(); }
 
@@ -1134,7 +1134,7 @@ double XC::Mesh::getNodeDisp(int nodeTag, int dof,int &errorFlag)
     return result;
   }
 
-//! @brief Asigna la matriz de masas al nudo which tag being passed as parameter.
+//! @brief Set la matriz de masas al nudo which tag being passed as parameter.
 int XC::Mesh::setMass(const XC::Matrix &mass, int nodeTag)
   {
     Node *theNode = this->getNode(nodeTag);

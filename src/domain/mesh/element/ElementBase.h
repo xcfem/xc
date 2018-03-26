@@ -42,7 +42,7 @@ class Node;
 //
 //! @brief Base class for finite element with
 //! pointer to nodes container
-template <int NNODOS>
+template <int NNODES>
 class ElementBase: public Element
   {
   protected:
@@ -60,8 +60,8 @@ class ElementBase: public Element
     ElementBase &operator=(const ElementBase &otro);
 
     //! @brief Returns the element number of nodes.
-    static inline const int numNodos(void)
-      { return NNODOS; }
+    static inline const int numNodes(void)
+      { return NNODES; }
     // public methods to obtain inforrmation about dof & connectivity    
     int getNumExternalNodes(void) const;
     NodePtrsWithIDs &getNodePtrs(void);
@@ -72,19 +72,19 @@ class ElementBase: public Element
 
 
 //! @brief Default constructor.
-template <int NNODOS>
-XC::ElementBase<NNODOS>::ElementBase(int tag, int classTag)
-  : Element(tag,classTag), theNodes(this,NNODOS) {}
+template <int NNODES>
+XC::ElementBase<NNODES>::ElementBase(int tag, int classTag)
+  : Element(tag,classTag), theNodes(this,NNODES) {}
 
 //! @brief Constructor.
-template <int NNODOS>
-XC::ElementBase<NNODOS>::ElementBase(const ElementBase<NNODOS> &otro)
+template <int NNODES>
+XC::ElementBase<NNODES>::ElementBase(const ElementBase<NNODES> &otro)
   : Element(otro), theNodes(otro.theNodes) 
   { theNodes.set_owner(this); }
 
 //! @brief Assignment operator.
-template <int NNODOS>
-XC::ElementBase<NNODOS> &XC::ElementBase<NNODOS>::operator=(const ElementBase &otro)
+template <int NNODES>
+XC::ElementBase<NNODES> &XC::ElementBase<NNODES>::operator=(const ElementBase &otro)
   {
     Element::operator=(otro);
     theNodes= otro.theNodes;
@@ -93,23 +93,23 @@ XC::ElementBase<NNODOS> &XC::ElementBase<NNODOS>::operator=(const ElementBase &o
   }
 
 //! @brief Return the number of external nodes.
-template <int NNODOS>
-int XC::ElementBase<NNODOS>::getNumExternalNodes(void) const
+template <int NNODES>
+int XC::ElementBase<NNODES>::getNumExternalNodes(void) const
   { return theNodes.size(); }
 
-//! @brief Returns a pointer to the vector de nodos.
-template <int NNODOS>
-const XC::NodePtrsWithIDs &XC::ElementBase<NNODOS>::getNodePtrs(void) const
+//! @brief Returns a pointer to the node vector.
+template <int NNODES>
+const XC::NodePtrsWithIDs &XC::ElementBase<NNODES>::getNodePtrs(void) const
   { return theNodes; }
 
-//! @brief Returns a pointer to the vector de nodos.
-template <int NNODOS>
-XC::NodePtrsWithIDs &XC::ElementBase<NNODOS>::getNodePtrs(void)
+//! @brief Returns a pointer to the node vector.
+template <int NNODES>
+XC::NodePtrsWithIDs &XC::ElementBase<NNODES>::getNodePtrs(void)
   { return theNodes; }
 
 //! @brief Casts the material pointer to a suitable type.
-template <int NNODOS> template <class TIPOMAT>
-TIPOMAT *ElementBase<NNODOS>::cast_material(const Material *ptr_mat)
+template <int NNODES> template <class TIPOMAT>
+TIPOMAT *ElementBase<NNODES>::cast_material(const Material *ptr_mat)
   {
     TIPOMAT *retval= nullptr;
     const TIPOMAT *tmp = dynamic_cast<const TIPOMAT *>(ptr_mat);
@@ -135,8 +135,8 @@ TIPOMAT *ElementBase<NNODOS>::cast_material(const Material *ptr_mat)
   }
 
 //! @brief Send members through the channel being passed as parameter.
-template <int NNODOS>
-int XC::ElementBase<NNODOS>::sendData(CommParameters &cp)
+template <int NNODES>
+int XC::ElementBase<NNODES>::sendData(CommParameters &cp)
   {
     int res= Element::sendData(cp);
     res+= cp.sendMovable(theNodes,getDbTagData(),CommMetaData(6));
@@ -144,8 +144,8 @@ int XC::ElementBase<NNODOS>::sendData(CommParameters &cp)
   }
 
 //! @brief Receives members through the channel being passed as parameter.
-template <int NNODOS>
-int XC::ElementBase<NNODOS>::recvData(const CommParameters &cp)
+template <int NNODES>
+int XC::ElementBase<NNODES>::recvData(const CommParameters &cp)
   {
     int res= Element::recvData(cp);
     res+= cp.receiveMovable(theNodes,getDbTagData(),CommMetaData(6));
@@ -153,8 +153,8 @@ int XC::ElementBase<NNODOS>::recvData(const CommParameters &cp)
   }
 
 //! @brief Return position of the element centroid.
-template <int NNODOS>
-Pos3d XC::ElementBase<NNODOS>::getPosCdg(bool initialGeometry) const
+template <int NNODES>
+Pos3d XC::ElementBase<NNODES>::getPosCdg(bool initialGeometry) const
   { return theNodes.getPosCdg(initialGeometry); }
 
 } //end of XC namespace

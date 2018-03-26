@@ -220,144 +220,144 @@ void XC::Edge::divide(void)
 //! @param i: index of the layer.
 //! @param j: index of the row.
 //! @param k: index of the column.
-XC::Node *XC::Edge::GetNodo(const size_t &i,const size_t &j,const size_t &k)
-  { return EntMdlr::GetNodo(i,j,k); }
+XC::Node *XC::Edge::getNode(const size_t &i,const size_t &j,const size_t &k)
+  { return EntMdlr::getNode(i,j,k); }
 
 //! @brief Return a pointer to node whose indices are passed as parameters.
 //!
 //! @param i: index of the layer.
 //! @param j: index of the row.
 //! @param k: index of the column.
-const XC::Node *XC::Edge::GetNodo(const size_t &i,const size_t &j,const size_t &k) const
-  { return EntMdlr::GetNodo(i,j,k); }
+const XC::Node *XC::Edge::getNode(const size_t &i,const size_t &j,const size_t &k) const
+  { return EntMdlr::getNode(i,j,k); }
 
 //! @brief Return a pointer to node whose index is passed as parameter.
 //!
 //! @param i: index of the layer.
-XC::Node *XC::Edge::GetNodo(const size_t &i)
-  {  return const_cast<Node *>(static_cast<const Edge &>(*this).GetNodo(i)); }
+XC::Node *XC::Edge::getNode(const size_t &i)
+  {  return const_cast<Node *>(static_cast<const Edge &>(*this).getNode(i)); }
 
 //! @brief Return a pointer to node whose index is passed as parameter.
 //!
 //! @param i: index of the layer.
-const XC::Node *XC::Edge::GetNodo(const size_t &i) const
+const XC::Node *XC::Edge::getNode(const size_t &i) const
   { return ttzNodes.getAtI(i); }
 
 //! @brief Returns the node whose ordinal index is passed as
 //! parameter, starting from the beginning.
-XC::Node *XC::Edge::GetNodoDir(const size_t &i)
-  { return GetNodo(i); }
+XC::Node *XC::Edge::getNodeDir(const size_t &i)
+  { return getNode(i); }
 
 //! @brief Return the node whose ordinal index is passed as parameter,
 //! starting from the beginning.
 //!
 //! @param i: index of the layer.
-const XC::Node *XC::Edge::GetNodoDir(const size_t &i) const
-  { return GetNodo(i); }
+const XC::Node *XC::Edge::getNodeDir(const size_t &i) const
+  { return getNode(i); }
 
 //! @brief Return the node whose ordinal index is passed as parameter,
 //! starting from the end.
 //!
 //! @param i: index of the layer.
-XC::Node *XC::Edge::GetNodoInv(const size_t &i)
-  { return GetNodo(getNumberOfNodes()-i+1); }
+XC::Node *XC::Edge::getNodeInv(const size_t &i)
+  { return getNode(getNumberOfNodes()-i+1); }
 
 //! @brief Return the node whose ordinal index is passed as parameter,
 //! starting from the end.
 //!
 //! @param i: index of the layer.
-const XC::Node *XC::Edge::GetNodoInv(const size_t &i) const
-  { return GetNodo(getNumberOfNodes()-i+1); }
+const XC::Node *XC::Edge::getNodeInv(const size_t &i) const
+  { return getNode(getNumberOfNodes()-i+1); }
 
 //! @brief Return the first node of the line.
-const XC::Node *XC::Edge::GetPrimerNodo(void) const
+const XC::Node *XC::Edge::getFirstNode(void) const
   { 
-    const Node *retval= GetNodo(1);
+    const Node *retval= getNode(1);
     if(!retval)
       {
         const Pnt *p1= P1();
         if(p1)
-          retval= p1->GetNodo();
+          retval= p1->getNode();
       }
     return retval;
   }
 
 //! @brief Return the first node of the line.
-XC::Node *XC::Edge::GetPrimerNodo(void)
+XC::Node *XC::Edge::getFirstNode(void)
   { 
-    Node *retval= GetNodo(1);
+    Node *retval= getNode(1);
     if(!retval)
       {
         Pnt *p1= P1();
         if(p1)
-          retval= p1->GetNodo();
+          retval= p1->getNode();
       }
     return retval;
   }
 
 //! @brief Return the last node of the line.
-const XC::Node *XC::Edge::GetUltimoNodo(void) const
+const XC::Node *XC::Edge::getLastNode(void) const
   { 
-    const Node *retval= GetNodoInv(1);
+    const Node *retval= getNodeInv(1);
     if(!retval)
       {
         const Pnt *p2= P2();
         if(p2)
-          retval= p2->GetNodo();
+          retval= p2->getNode();
       }
     return retval;
   }
 
 //! @brief Return the last node of the line.
-XC::Node *XC::Edge::GetUltimoNodo(void)
+XC::Node *XC::Edge::getLastNode(void)
   { 
-    Node *retval= GetNodoInv(1);
+    Node *retval= getNodeInv(1);
     if(!retval)
       {
         Pnt *p2= P2();
         if(p2)
-          retval= p2->GetNodo();
+          retval= p2->getNode();
       }
     return retval;
   }
 
 //! @brief Return the IDs of the nodes in forward order.
-std::vector<int> XC::Edge::GetTagsNodosDir(void) const
+std::vector<int> XC::Edge::getTagsNodesDir(void) const
   {
     const size_t nn= getNumberOfNodes();
     std::vector<int> retval(nn);
     for(size_t i=1;i<=nn;i++)
-      retval[i-1]= GetNodo(i)->getTag();
+      retval[i-1]= getNode(i)->getTag();
     return retval;
   }
 
 //! @brief Return the IDs of the nodes in reverse order.
-std::vector<int> XC::Edge::GetTagsNodosInv(void) const
+std::vector<int> XC::Edge::getTagsNodesInv(void) const
   {
     const size_t nn= getNumberOfNodes();
     std::vector<int> retval(nn);
     for(size_t i=1;i<=nn;i++)
-      retval[i-1]= GetNodo(nn-i+1)->getTag();
+      retval[i-1]= getNode(nn-i+1)->getTag();
     return retval;
   }
 
 //! @brief Return the positions of the nodes in forward order.
-MatrizPos3d XC::Edge::GetPosNodosDir(void) const
+MatrizPos3d XC::Edge::getNodePosDir(void) const
   {
     const size_t nn= getNumberOfNodes();
     MatrizPos3d retval(nn);
     for(size_t i=1;i<=nn;i++)
-      retval(i,1)= pos_node(*GetNodo(i));
+      retval(i,1)= pos_node(*getNode(i));
     return retval;
   }
 
 //! @brief Return the positions of the nodes in reverse order.
-MatrizPos3d XC::Edge::GetPosNodosInv(void) const
+MatrizPos3d XC::Edge::getNodePosInv(void) const
   {
     const size_t nn= getNumberOfNodes();
     MatrizPos3d retval(nn);
     for(size_t i=1;i<=nn;i++)
-      retval(i,1)= pos_node(*GetNodo(nn-i+1));
+      retval(i,1)= pos_node(*getNode(nn-i+1));
     return retval;
   }
 
@@ -462,9 +462,9 @@ void XC::Edge::create_nodes_en_extremos(void)
     else
       P1()->create_nodes();
 
-    Node *node_p1= P1()->GetNodo(1,1,1);
+    Node *node_p1= P1()->getNode();
     assert(node_p1);
-    ttzNodes(1,1,1)= node_p1; //Nodo del start point.
+    ttzNodes(1,1,1)= node_p1; //Node of the start point.
       
     if(!P2())
       {
@@ -475,11 +475,11 @@ void XC::Edge::create_nodes_en_extremos(void)
     else
       P2()->create_nodes();
 
-    Node *node_p2= P2()->GetNodo(1,1,1);
+    Node *node_p2= P2()->getNode();
     assert(node_p2);
     const size_t filas= ttzNodes.getNumFilas();
     const size_t cols= ttzNodes.getNumCols();
-    ttzNodes(1,filas,cols)= node_p2; //Node of end point.
+    ttzNodes(1,filas,cols)= node_p2; //Node of the end point.
 
     if(verbosity>4)
       std::cerr << getClassName() << "::" << __FUNCTION__

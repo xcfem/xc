@@ -55,9 +55,9 @@ class NodePtrsWithIDs: public NodePtrs, public MovableObject
     friend class Element;
     void set_node_ptrs(Domain *domain);
   public:
-    NodePtrsWithIDs(Element *owr,size_t numNodos);
+    NodePtrsWithIDs(Element *owr,size_t numNodes);
 
-    inline const size_t numNodos(void)
+    inline const size_t numNodes(void)
       { return NodePtrs::size(); }
     // public methods to obtain information about dof & connectivity    
     int getNumExternalNodes(void) const;
@@ -82,8 +82,8 @@ class NodePtrsWithIDs: public NodePtrs, public MovableObject
                                            int nd14,int nd15,int nd16,int nd17,int nd18,int nd19,
                                            int nd20, int nd21, int nd22,int nd23, int nd24, int nd25,
 		      int nd26,int nd27);
-    void set_id_nodes(const std::vector<int> &inodos);
-    void set_id_nodes(const ID &inodos);
+    void set_id_nodes(const std::vector<int> &inodes);
+    void set_id_nodes(const ID &inodes);
     void Print(std::ostream &os) const;
     int sendSelf(CommParameters &);
     int recvSelf(const CommParameters &);

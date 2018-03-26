@@ -64,14 +64,14 @@
 #include "domain/mesh/node/Node.h"
 
 // static data for 2D
-XC::Matrix  XC::ZeroLengthContact2D::stiff(2*XC::ZeroLengthContact2D::numNodos(),2*XC::ZeroLengthContact2D::numNodos()) ;
-XC::Vector  XC::ZeroLengthContact2D::resid(2*XC::ZeroLengthContact2D::numNodos()) ;
-XC::Matrix  XC::ZeroLengthContact2D::zeroMatrix(2*XC::ZeroLengthContact2D::numNodos(),2*XC::ZeroLengthContact2D::numNodos()) ;
+XC::Matrix  XC::ZeroLengthContact2D::stiff(2*XC::ZeroLengthContact2D::numNodes(),2*XC::ZeroLengthContact2D::numNodes()) ;
+XC::Vector  XC::ZeroLengthContact2D::resid(2*XC::ZeroLengthContact2D::numNodes()) ;
+XC::Matrix  XC::ZeroLengthContact2D::zeroMatrix(2*XC::ZeroLengthContact2D::numNodes(),2*XC::ZeroLengthContact2D::numNodes()) ;
 
 //! @brief Constructor.
 XC::ZeroLengthContact2D::ZeroLengthContact2D(int tag,int Nd1, int Nd2,double Knormal, double Ktangent, double frictionRatio,  const Vector& normal )
   :ZeroLengthContact(tag,ELE_TAG_ZeroLengthContact2D,2,Nd1,Nd2,Knormal,Ktangent,frictionRatio),
-   lambda(0.0), T(2*numNodos()), ContactNormal(2), stickPt(0.0), xi(0.0)
+   lambda(0.0), T(2*numNodes()), ContactNormal(2), stickPt(0.0), xi(0.0)
   {
     // assign outward contact normal of master block
     ContactNormal(0) = normal(0)/normal.Norm();
@@ -80,7 +80,7 @@ XC::ZeroLengthContact2D::ZeroLengthContact2D(int tag,int Nd1, int Nd2,double Kno
 
 //! @brief Default constructor.
 XC::ZeroLengthContact2D::ZeroLengthContact2D(int tag)
-  :ZeroLengthContact(tag,ELE_TAG_ZeroLengthContact2D,2), lambda(0.0), T(2*numNodos()), ContactNormal(2), stickPt(0.0), xi(0.0)
+  :ZeroLengthContact(tag,ELE_TAG_ZeroLengthContact2D,2), lambda(0.0), T(2*numNodes()), ContactNormal(2), stickPt(0.0), xi(0.0)
   {}
 
 //! @brief Virtual constructor.

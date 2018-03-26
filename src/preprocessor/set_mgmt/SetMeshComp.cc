@@ -203,7 +203,7 @@ void XC::SetMeshComp::Transforma(const size_t &indice_trf)
 void XC::SetMeshComp::fix(const SFreedom_Constraint &spc)
   {
     ConstraintLoader &cl= getPreprocessor()->getConstraintLoader();
-    for(nod_const_iterator i= nodos_begin();i!=nodos_end();i++)
+    for(nod_const_iterator i= nodes_begin();i!=nodes_end();i++)
       {
         const int tag_nod= (*i)->getTag();
         cl.addSFreedom_Constraint(tag_nod,spc);
@@ -211,27 +211,27 @@ void XC::SetMeshComp::fix(const SFreedom_Constraint &spc)
   }
 
 // //! @brief Returns an iterator that points to the first item of the node container.
-// XC::SetMeshComp::nod_iterator XC::SetMeshComp::nodos_begin(void)
+// XC::SetMeshComp::nod_iterator XC::SetMeshComp::nodes_begin(void)
 //   { return nodes.begin(); }
 //! @brief Returns an iterator that points to the first item of the node container.
-XC::SetMeshComp::nod_const_iterator XC::SetMeshComp::nodos_begin(void) const
+XC::SetMeshComp::nod_const_iterator XC::SetMeshComp::nodes_begin(void) const
   { return nodes.begin(); }
 // //! @brief Returns an iterator that points to the past-the-end item in the node container.
-// XC::SetMeshComp::nod_iterator XC::SetMeshComp::nodos_end(void)
+// XC::SetMeshComp::nod_iterator XC::SetMeshComp::nodes_end(void)
 //   { return nodes.end(); }
 //! @brief Returns an iterator that points to the past-the-end item in the node container.
-XC::SetMeshComp::nod_const_iterator XC::SetMeshComp::nodos_end(void) const
+XC::SetMeshComp::nod_const_iterator XC::SetMeshComp::nodes_end(void) const
   { return nodes.end(); }
 
 //! @brief Returns (if it exists) a pointer to the node
-//! cuyo tag is being passed as parameter.
-XC::Node *XC::SetMeshComp::buscaNodo(const int &tag)
-  { return nodes.buscaNodo(tag); }
+//! which tag is being passed as parameter.
+XC::Node *XC::SetMeshComp::findNode(const int &tag)
+  { return nodes.findNode(tag); }
 
 //! @brief Returns (if it exists) a pointer to the node
-//! cuyo tag is being passed as parameter.
-const XC::Node *XC::SetMeshComp::buscaNodo(const int &tag) const
-  { return nodes.buscaNodo(tag); }
+//! which tag is being passed as parameter.
+const XC::Node *XC::SetMeshComp::findNode(const int &tag) const
+  { return nodes.findNode(tag); }
 
 // //! @brief Returns an iterator which points to principio de la lista de elements.
 // XC::SetMeshComp::elem_iterator XC::SetMeshComp::elem_begin(void)
@@ -350,7 +350,7 @@ SVD3d XC::SetMeshComp::getResistingSVD3d(const Plano3d &plano,const Pos3d &centr
     const double tol2= tol*tol;
     const Node *ptrNod= nullptr;
     const SemiEspacio3d se(plano);
-    std::set<const Node *> nodos_plano;
+    std::set<const Node *> nodes_on_plane;
     std::set<const Element *> connected_to_node;
     std::set<const Element *> connected_elements;
     for(DqPtrsNode::const_iterator i= nodes.begin();i!=nodes.end();i++)
@@ -364,7 +364,7 @@ SVD3d XC::SetMeshComp::getResistingSVD3d(const Plano3d &plano,const Pos3d &centr
                   connected_to_node= ptrNod->getConnectedElements();
                   if(!connected_to_node.empty())
                     {
-                      nodos_plano.insert(ptrNod); //Nodo sobre el plano.
+                      nodes_on_plane.insert(ptrNod); //Node on the plane.
                       for(std::set<const Element *>::const_iterator j= connected_to_node.begin();
                           j!=connected_to_node.end();j++)
                         {
@@ -378,7 +378,7 @@ SVD3d XC::SetMeshComp::getResistingSVD3d(const Plano3d &plano,const Pos3d &centr
             }
       }
     SVD3d retval(centro);
-    for(std::set<const Node *>::const_iterator i= nodos_plano.begin();i!=nodos_plano.end();i++)
+    for(std::set<const Node *>::const_iterator i= nodes_on_plane.begin();i!=nodes_on_plane.end();i++)
       retval+= (*i)->getResistingSVD3d(connected_elements,inc_inertia);
     return retval;    
   }

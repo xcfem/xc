@@ -85,15 +85,15 @@ XC::Node *XC::NodeLoader::new_node(const int &tag,const size_t &dim,const int &n
     return retval;
   }
 
-//! @brief Create a duplicate copy of node whose tag is passed as parameter
-XC::Node *XC::NodeLoader::duplicateNode(const int &tagNodoOrg)
+//! @brief Create a duplicate copy of the node whose tag is passed as parameter
+XC::Node *XC::NodeLoader::duplicateNode(const int &orgNodeTag)
   {
     Node *retval= nullptr;
-    Node *org_node_ptr= getDomain()->getNode(tagNodoOrg);
+    Node *org_node_ptr= getDomain()->getNode(orgNodeTag);
     if(!org_node_ptr)
       std::cerr << getClassName() << "::" << __FUNCTION__
 	        << "; node identified by:"
-                << tagNodoOrg << " not found." << std::endl;
+                << orgNodeTag << " not found." << std::endl;
     else
       {
         const int ndof= org_node_ptr->getNumberDOF();    

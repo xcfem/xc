@@ -65,9 +65,10 @@ class Pnt: public EntMdlr
     inline virtual unsigned short int GetDimension(void) const
       { return 0; }
     BND3d Bnd(void) const;
-    bool tieneNodo(void) const;
+    bool hasNode(void) const;
     int getTagNode(void) const;
     Node *getNode(void);
+    const Node *getNode(void) const;
     virtual void genMesh(meshing_dir dm);
 
     //! @brief Returns the object position.

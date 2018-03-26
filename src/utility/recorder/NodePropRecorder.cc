@@ -38,13 +38,13 @@ XC::NodePropRecorder::NodePropRecorder(Domain *ptr_dom)
   :PropRecorder(RECORDER_TAGS_NodePropRecorder,ptr_dom) {}
 
 //! @brief Asigns nodes to recorder.
-void XC::NodePropRecorder::setNodes(const ID &iNodos)
+void XC::NodePropRecorder::setNodes(const ID &iNodes)
   {
-    const int sz= iNodos.Size();
+    const int sz= iNodes.Size();
     if(sz)
       {
         for(int i= 0;i<sz;i++)
-          nodes.push_back(theDomain->getNode(iNodos(i)));
+          nodes.push_back(theDomain->getNode(iNodes(i)));
       }
     else
       std::cerr << "Error; " << getClassName() << "::" << __FUNCTION__

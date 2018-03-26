@@ -30,14 +30,14 @@
 #include "domain/mesh/node/Node.h"
 
 //! @ brief Default constructor.
-XC::NodePtrsWithIDs::NodePtrsWithIDs(Element *owr,size_t numNodos)
-  : NodePtrs(owr,numNodos), MovableObject(0), connectedExternalNodes(numNodos)
+XC::NodePtrsWithIDs::NodePtrsWithIDs(Element *owr,size_t numNodes)
+  : NodePtrs(owr,numNodes), MovableObject(0), connectedExternalNodes(numNodes)
   {
     // ensure the connectedExternalNode XC::ID is of correct size & set values
-    if(size_t(connectedExternalNodes.Size()) != numNodos)
+    if(size_t(connectedExternalNodes.Size()) != numNodes)
       {
         std::cerr << "FATAL NodePtrsWithIDs::NodePtrsWithIDs - " <<
-          "failed to create an ID of size " << numNodos << "\n";
+          "failed to create an ID of size " << numNodes << "\n";
         exit(-1);
       }
   }
@@ -46,11 +46,11 @@ XC::NodePtrsWithIDs::NodePtrsWithIDs(Element *owr,size_t numNodos)
 int XC::NodePtrsWithIDs::getNumExternalNodes(void) const
   { return connectedExternalNodes.Size(); }
 
-//! @brief Returns a pointer to the vector de nodos.
+//! @brief Returns a pointer to the node vector.
 const XC::NodePtrs &XC::NodePtrsWithIDs::getNodePtrs(void) const
   { return *this; }
 
-//! @brief Returns a pointer to the vector de nodos.
+//! @brief Returns a pointer to the node vector.
 XC::NodePtrs &XC::NodePtrsWithIDs::getNodePtrs(void)
   { return *this; }
 
@@ -63,30 +63,30 @@ int XC::NodePtrsWithIDs::getTagNode(const int &i) const
   { return connectedExternalNodes(i); }
 
 //! @brief Sets the node identifiers (tags).
-void XC::NodePtrsWithIDs::set_id_nodes(const std::vector<int> &inodos)
+void XC::NodePtrsWithIDs::set_id_nodes(const std::vector<int> &inodes)
   {
     const size_t numNodes= getNumExternalNodes();
-    if(numNodes != inodos.size())
+    if(numNodes != inodes.size())
       std::cerr << getClassName() << "::" << __FUNCTION__
 	        << "; " 
                 << numNodes << " node indexes were expected." << std::endl;
     for(register size_t i= 0;i<numNodes;i++)
-      connectedExternalNodes(i)= inodos[i];
+      connectedExternalNodes(i)= inodes[i];
   }
 
 //! @brief Sets the node identifiers (tags).
-void XC::NodePtrsWithIDs::set_id_nodes(const ID &inodos)
+void XC::NodePtrsWithIDs::set_id_nodes(const ID &inodes)
   {
     const int numNodes= getNumExternalNodes();
-    if(numNodes != inodos.Size())
+    if(numNodes != inodes.Size())
       std::cerr << getClassName() << "::" << __FUNCTION__
 	        << "; " 
                 << numNodes << " node indexes were expected." << std::endl;
     for(register int i= 0;i<numNodes;i++)
-      connectedExternalNodes(i) = inodos(i);
+      connectedExternalNodes(i) = inodes(i);
   }
 
-//! @brief Asigna los pointers to los nodos.
+//! @brief Set los pointers to the nodes.
 void XC::NodePtrsWithIDs::set_node_ptrs(Domain *domain)
   {
     if(domain)

@@ -57,8 +57,8 @@ class TritrizPtrNod: public TritrizPtrBase<MatrizPtrNod>
     TritrizPtrNod(const size_t capas= 0);
     TritrizPtrNod(const size_t ,const size_t ,const size_t );
 
-    Node *buscaNodo(const int &tag);
-    const Node *buscaNodo(const int &tag) const;
+    Node *findNode(const int &tag);
+    const Node *findNode(const int &tag) const;
     Node *getNearestNode(const Pos3d &p);
     const Node *getNearestNode(const Pos3d &p) const;
     ID getNodeIndices(const Node *) const;
@@ -111,8 +111,8 @@ inline void fix(const TritrizPtrNod &ttz,const SFreedom_Constraint &spc)
   { ttz.fix(spc); }
 void fix(const TritrizPtrNod::var_ref_caja &ref_caja,const SFreedom_Constraint &spc);
 
-std::vector<int> getIdNodosQuad4N(const TritrizPtrNod::const_ref_capa_i_cte &nodos,const size_t &j,const size_t &k);
-std::vector<int> getIdNodosQuad9N(const TritrizPtrNod::const_ref_capa_i_cte &nodos,const size_t &j,const size_t &k);
+std::vector<int> getNodeIdsQuad4N(const TritrizPtrNod::const_ref_capa_i_cte &nodes,const size_t &j,const size_t &k);
+std::vector<int> getNodeIdsQuad9N(const TritrizPtrNod::const_ref_capa_i_cte &nodes,const size_t &j,const size_t &k);
 
 } //end of XC namespace.
 

@@ -37,7 +37,7 @@ class Element;
 class TritrizPtrNod;
 class TritrizPtrElem;
 
-//void mesh_quad4N_bidimensional(const Element &e,const TritrizPtrNod &nodos,TritrizPtrElem &);
+//void mesh_quad4N_bidimensional(const Element &e,const TritrizPtrNod &nodes,TritrizPtrElem &);
 TritrizPtrElem put_quad4N_on_mesh(const Element &e,const TritrizPtrNod &,meshing_dir dm);
 TritrizPtrElem put_quad9N_on_mesh(const Element &e,const TritrizPtrNod &,meshing_dir dm);
 
