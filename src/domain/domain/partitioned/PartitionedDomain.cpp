@@ -98,6 +98,7 @@ void XC::PartitionedDomain::free_mem(void)
     theEleIter= nullptr;
   }
 
+//! @brief Allocates memory.
 void XC::PartitionedDomain::alloc(void)
   {
     free_mem();
@@ -119,25 +120,50 @@ void XC::PartitionedDomain::alloc(void)
       }
   }
 
+//! @brief Constructor.
+//!
+//! @param owr: object that encloses this one.
+//! @param oh: to DEPRECATE.
 XC::PartitionedDomain::PartitionedDomain(EntCmd *owr,DataOutputHandler::map_output_handlers *oh)
   :Domain(owr,oh), theSubdomains(nullptr),theDomainPartitioner(nullptr),
    theSubdomainIter(nullptr), mySubdomainGraph()
   { alloc(); }
 
 
+//! @brief Constructor.
+//!
+//! Constructs an empty PartitionedDomain. A link with the domain
+//! partitioner \p thePartitioner is set up. The \p thePartitioner
+//! is used by the domain to partition and load balance the partitioned domain.
+//! 
+//! @param owr: object that encloses this one.
+//! @param thePartitioner: object that make the partition.
+//! @param oh: to DEPRECATE.
 XC::PartitionedDomain::PartitionedDomain(EntCmd *owr,DomainPartitioner &thePartitioner,DataOutputHandler::map_output_handlers *oh)
   :Domain(owr,oh), theSubdomains(nullptr),theDomainPartitioner(&thePartitioner),
  theSubdomainIter(nullptr), mySubdomainGraph()
   { alloc(); }
 
 
+//! @brief Constructor.
+//!
+//! Constructs an empty PartitionedDomain, storage is allocated for the components
+//! that are to be added using the estimated number of components passed
+//! as arguments. A link with the domain partitioner \p thePartitioner
+//! is set up. The \p thePartitioner is used by the domain to partition
+//! and load balance the partitioned domain.
+//! 
+//! @param owr: object that encloses this one.
+//! @param thePartitioner: object that make the partition.
+//! @param oh: to DEPRECATE.
 XC::PartitionedDomain::PartitionedDomain(EntCmd *owr,int numNodes, int numElements,
                                      int numSPs, int numMPs, int numLoadPatterns, int numNodeLockers,
                                      int numSubdomains,
                                      DomainPartitioner &thePartitioner,DataOutputHandler::map_output_handlers *oh)
 
-  :Domain(owr,numNodes,0,numSPs,numMPs,numLoadPatterns,numNodeLockers,oh),
- theSubdomains(nullptr),theDomainPartitioner(&thePartitioner),theSubdomainIter(nullptr), mySubdomainGraph()
+  : Domain(owr,numNodes,0,numSPs,numMPs,numLoadPatterns,numNodeLockers,oh),
+    theSubdomains(nullptr),theDomainPartitioner(&thePartitioner),theSubdomainIter(nullptr),
+    mySubdomainGraph()
   { alloc(); }
 
 //! @brief Destructor.
@@ -161,6 +187,15 @@ void XC::PartitionedDomain::clearAll(void)
 
 
 
+//! To add the element pointed to by theElementPtr to the domain.
+//!
+//! To add the element pointed to by theElementPtr to the domain. If \p check
+//! is \p true the domain is responsible for checking to see that: 1)
+//! no other element with a similar tag, element number, exists in any of
+//! the subdomains. If check is successfull the partitioned domain
+//! attempts to add the element to the storage arrey. The call returns
+//! \p false if the element was not added, otherwise \p true is 
+//! returned.   
 bool XC::PartitionedDomain::addElement(Element *elePtr)
   {
     if(elePtr->isSubdomain() == true)
@@ -215,7 +250,14 @@ bool XC::PartitionedDomain::addElement(Element *elePtr)
   }
 
 
-
+//! Adds the node pointed to by theNodePtr to the domain.
+//!
+//! Adds the node pointed to by theNodePtr to the domain. If \p check
+//! is \p true the domain is responsible for checking that no other
+//! node with a similar tag, node number, exists in any of the
+//! subdomains. If successfull the partition domain attempts to add the
+//! node by invoking {\em Domain::addNode}. The call returns \p false if
+//! the node was not added, otherwise \p true is returned.  
 bool XC::PartitionedDomain::addNode(Node *nodePtr)
   {
 #ifdef _DEBUG
@@ -231,11 +273,19 @@ bool XC::PartitionedDomain::addNode(Node *nodePtr)
 
 
 
+//! @brief Adds the single point constraint pointed to by theSPptr to the
+//! domain.
+//! 
+//! Adds the single point constraint pointed to by theSPptr to the 
+//! domain. The domain performs some checks is \p check is true. If
+//! successful the domain adds the constraint using {\em
+//! Domain::addSFreedom\_Constraint()}. The call returns \p false if
+//! the constraint was not added, otherwise \p true is returned.  
 bool XC::PartitionedDomain::addSFreedom_Constraint(SFreedom_Constraint *load)
   {
     int nodeTag= load->getNodeTag();
 
-    // check the XC::Node exists in the XC::Domain or one of Subdomains
+    // check the XC::Node exists in the Domain or one of Subdomains
 
     // if in XC::Domain add it as external .. ignore Subdomains
     Node *nodePtr= this->getNode(nodeTag);
@@ -288,6 +338,201 @@ bool XC::PartitionedDomain::addSFreedom_Constraint(SFreedom_Constraint *load, in
     return false;
   }
 
+//! Adds the multiple freedom constraint pointed to by the argument.
+//!
+//! Adds the multiple freedom constraint pointed to by the argument, to the
+//! domain. The domain performs some checks is \p check is true. If
+//! successful the domain adds the constraint using {\em
+//! Domain::addMP\_Constraint()}. The call returns \p false if
+//! the constraint was not added, otherwise \p true is returned.  
+bool XC::PartitionedDomain::addMFreedom_Constraint(MFreedom_Constraint *load)
+  {
+    bool res = false;
+    bool getRetained = false;
+    bool addedMain = false;
+
+    // to every domain with the constrained node we must
+    // 1. add the retained node if not already there & any sp constraints on that node
+    // 2. add the constraint.
+
+    int retainedNodeTag = load->getNodeRetained();
+    int constrainedNodeTag = load->getNodeConstrained();
+
+    //
+    // first we check the main domain
+    // if has the constrained but not retained we mark as needing retained
+    //
+
+    Node *retainedNodePtr = this->Domain::getNode(retainedNodeTag);
+    Node *constrainedNodePtr = this->Domain::getNode(constrainedNodeTag);
+    if(constrainedNodePtr)
+      {
+	if (retainedNodePtr != 0)
+	  {
+	    res = this->Domain::addMFreedom_Constraint(load);    
+	    if (res == false)
+	      {
+		std::cerr << getClassName() << "::" << __FUNCTION__
+			  << "; problems adding to main domain.\n";
+		return res;
+	      }
+	    else
+	      { addedMain = true; } 
+	  }
+	else
+	  { getRetained = true; }
+      }
+
+    //
+    // now we check all subdomains
+    // if a subdomain has both nodes we add the constraint, if only the
+    // constrained node we mark as needing retained
+    //
+
+    SubdomainIter &theSubdomains = this->getSubdomains();
+    Subdomain *theSub;
+    while((theSub = theSubdomains())!=nullptr)
+      {
+        bool hasConstrained = theSub->hasNode(constrainedNodeTag);
+        if(hasConstrained == true)
+	  {
+  	    bool hasRestrained = theSub->hasNode(retainedNodeTag);
+
+	    if(hasRestrained == true)
+	      {
+                res = theSub->addMFreedom_Constraint(load);
+
+	        if(res == false)
+		  {
+	            std::cerr << getClassName() << "::" << __FUNCTION__
+			      << "; problems adding to subdomain with retained.\n";
+	            return res;
+	          }
+		else
+		  {;}
+	      }
+	    else
+	      { getRetained = true; }
+          }
+      }
+
+    //
+    // if getRetained is true, a subdomain or main domain has the constrained node
+    // but no retained node .. we must go get it && SP constraints as well
+    // 1. we first go get it
+    // 2. then we add to main domain
+    // 3. then we add to any subdomain
+    // 
+    if(getRetained == true)
+      {
+	// we get a copy of the retained Node, set mass equal 0 (don't want to double it)
+	if (retainedNodePtr == 0)
+	  {
+	    SubdomainIter &theSubdomains2 = this->getSubdomains();
+	    while ((theSub = theSubdomains2()) != 0 && retainedNodePtr == 0)
+	      {
+		bool hasRestrained = theSub->hasNode(retainedNodeTag);
+
+		if (hasRestrained == true)
+		  {
+		    retainedNodePtr = theSub->getNode(retainedNodeTag);
+
+		    Matrix mass(retainedNodePtr->getNumberDOF(), retainedNodePtr->getNumberDOF());
+		    mass.Zero();
+		    retainedNodePtr->setMass(mass);
+		  }
+	      }
+	  }
+	else
+	  {
+	    // get a copy & zero the mass
+	    retainedNodePtr = new Node(*retainedNodePtr, false);
+	  }
+
+	if(retainedNodePtr == nullptr)
+	  {
+	    std::cerr << getClassName() << "::" << __FUNCTION__
+		      << "; can't find retained node anywhere!\n";
+	    return false;
+	  }
+	else
+	  {;}
+
+	//
+	// if main has it we add the retained to main & constraint
+	//
+
+	if (constrainedNodePtr != 0 && addedMain == false)
+	  {
+	    res = this->Domain::addNode(retainedNodePtr);
+
+	    if(res == false)
+	      {
+		std::cerr << getClassName() << "::" << __FUNCTION__
+			  << "; problems adding retained to main domain.\n";
+		return res;
+	      } 
+	    res = this->Domain::addMFreedom_Constraint(load);
+
+	    if(res == false)
+	      {
+		std::cerr << getClassName() << "::" << __FUNCTION__
+			  << "; problems adding constraint to main domain after adding node.\n";
+		return res;
+	      } 
+	  }
+
+	//
+	// to subdmains that have the constrained but no retained
+	// 1. we add a copy of retained
+	// 2. we add the constraint
+	//
+
+	SubdomainIter &theSubdomains3 = this->getSubdomains();
+	while((theSub = theSubdomains3()) != nullptr)
+	  {
+	    bool hasConstrained = theSub->hasNode(constrainedNodeTag);
+	    if (hasConstrained == true)
+	      {
+		bool hasRestrained = theSub->hasNode(retainedNodeTag);
+		if (hasRestrained == false)
+		  {
+		    res = theSub->addExternalNode(retainedNodePtr);
+
+		    if (res == false)
+		      {
+			std::cerr << getClassName() << "::" << __FUNCTION__
+				  << "; problems adding retained to subdomain.\n";
+			return res;
+		      } 
+
+		    res = theSub->addMFreedom_Constraint(load);
+
+		    if(res == false)
+		      {
+			std::cerr << getClassName() << "::" << __FUNCTION__
+				  << "; problems adding constraint to subdomain"
+			          << " after adding node.\n";
+			return res;
+		      } 
+		  }
+	      }
+	  }
+	// clean up memory
+	if (addedMain == true && getRetained == true) 
+	  delete retainedNodePtr;
+      }
+    return res;
+  }
+
+bool XC::PartitionedDomain::addMRMFreedom_Constraint(MRMFreedom_Constraint *)
+  {
+    std::cerr << getClassName() << "::" << __FUNCTION__
+              << "not implemented yet." << std::endl;
+    return false;
+  }
+
+//! @brief Add the load pattern to the domain.
 bool XC::PartitionedDomain::addLoadPattern(LoadPattern *loadPattern)
   {
     bool result= true;
@@ -339,7 +584,8 @@ bool XC::PartitionedDomain::addNodalLoad(NodalLoad *load, int pattern)
         bool res= theSub->hasNode(nodeTag);
         if(res)
          {
-          // std::cerr << getClassName() << "::" << __FUNCTION__ << "(LoadPattern *loadPattern) SUB " << theSub->getTag() << *load;
+          // std::cerr << getClassName() << "::" << __FUNCTION__
+	  //           << "(LoadPattern *loadPattern) SUB " << theSub->getTag() << *load;
           return theSub->addNodalLoad(load, pattern);
          }
       }
@@ -358,6 +604,13 @@ bool XC::PartitionedDomain::addElementalLoad(ElementalLoad *load, int pattern)
     return false;
   }
 
+//! @brief Remove the element whose tag is given by \p tag.
+//!
+//! To remove the element whose tag is given by \p tag from the
+//! domain. The method Returns \f$0\f$ if no such element exists in the domain.
+//! Otherwise the domain invokes {\em setDomain(0)} on the element and {\em
+//! setDomainChange(true,true,false)} on itself before a pointer to the
+//! element is returned.
 bool XC::PartitionedDomain::removeElement(int tag)
   {
     // we first see if its in the original domain
@@ -383,7 +636,16 @@ bool XC::PartitionedDomain::removeElement(int tag)
   }
 
 
-//! @brief Remove the nodo cuyo tag being passed as parameter.
+//! @brief Remove the node whose tag is given by \p tag.
+//!
+//! To remove the node whose tag is given by \p tag from the domain. 
+//! Returns \f$0\f$ if no such node exists in the domain. Otherwise
+//! if the \p checkNeeded is \p true before the node is removed a
+//! check is made to see that the node is not referenced by any element,
+//! constraint or load. If it is referenced the Node will not be
+//! removed and \f$0\f$ is returned. If the node is to be removed the domain
+//! invokes {\em setDomain(0)} on the node and {\em
+//! setDomainChange(true,false,true)} on itself.
 bool XC::PartitionedDomain::removeNode(int tag)
   {
     // we first remove it form the original domain (in case on boundary)
@@ -405,7 +667,14 @@ bool XC::PartitionedDomain::removeNode(int tag)
       this->domainChange();
     return result;
   }
-
+//! @brief To remove the SFreedom\_Constraint whose tag is given by \p tag from
+//! the domain.
+//!
+//! To remove the SFreedom\_Constraint whose tag is given by \p tag from the
+//! domain. Returns \f$0\f$ if the constraint was not in the domain, otherwise
+//! the domain invokes {\em setDomain(0)} on the constraint and {\em
+//! setDomainChange(true,false,false)} on itself before a pointer to the
+//! constraint is returned.  
 bool XC::PartitionedDomain::removeSFreedom_Constraint(int tag)
   {
     // we first see if its in the original domain
@@ -427,7 +696,13 @@ bool XC::PartitionedDomain::removeSFreedom_Constraint(int tag)
     return retval;
   }
 
-
+//! To remove the MFreedom\_Constraint whose tag is given by \p tag.
+//!
+//! To remove the MFreedom\_Constraint whose tag is given by \p tag from the
+//! domain. Returns \f$0\f$ if the constraint was not in the domain, otherwise
+//! the domain invokes {\em setDomain(0)} on the constraint and {\em
+//! setDomainChange(true,false,false)} on itself before a pointer to the
+//! constraint is returned.  
 bool XC::PartitionedDomain::removeMFreedom_Constraint(int tag)
   {
     // we first see if its in the original domain
@@ -455,6 +730,12 @@ bool XC::PartitionedDomain::removeMFreedom_Constraint(int tag)
   }
 
 
+//! @brief To remove the load case whose tag is given by \p tag. 
+//!
+//! To remove the load case whose tag is given by \p tag from the domain. 
+//! Returns \f$0\f$ if the load case was not in the domain, otherwise
+//! returns a pointer to the load case that was removed. Invokes {\em
+//! setDomain(0)} on the load case before it is returned.
 bool XC::PartitionedDomain::removeLoadPattern(int tag)
   {
     // we first see if its in the original domain
@@ -480,63 +761,85 @@ bool XC::PartitionedDomain::removeLoadPattern(int tag)
   }
 
 // public member functions which have to be modified
+
+//! @brief Return an iterator to the element container.
+//!
+//! It returns an \p PartionedDomEleIter for the elements of the domain. This
+//! is an iter which goes through all the subdomains, invoking {\em
+//! getElements()} on the subdomain to get an ElementIter. The
+//! PartitionedDomEleIter uses this iter to go through the elements of the
+//! subdomain until it begins returning \f$0\f$; at which point it goes on to
+//! the next subdomain.
 XC::ElementIter &XC::PartitionedDomain::getElements()
   {
     theEleIter->reset();
     return *theEleIter;
   }
 
-
- XC::Element  *XC::PartitionedDomain::getElement(int tag)
-{
+//! @brief Return the element identified by the argument.
+//!
+//! Returns a pointer to the element whose tag is given by \p tag. If
+//! no such element exists \f$0\f$ is returned. This is done by invoking {\em
+//! getElement(tag)} on the subdomains until the element is found or no
+//! more subdomains exist; in which case a \f$0\f$ is returned.
+XC::Element  *XC::PartitionedDomain::getElement(int tag)
+  {
     // we first see if its in the original domain
     TaggedObject *res= elements->getComponentPtr(tag);
-    Element *result =0;
-    if(res != 0) {
-        result= (Element *)res;
+    Element *result= nullptr;
+    if(res)
+      {
+        result= dynamic_cast<Element *>(res);
         return result;
-    }
+      }
 
     // go through the other subdomains until we find it or we run out of subdomains
-    if(theSubdomains != 0) {
+    if(theSubdomains != 0)
+      {
         ArrayOfTaggedObjectsIter theSubsIter(*theSubdomains);
         TaggedObject *theObject;
-        while((theObject= theSubsIter()) != 0) {
-          Subdomain *theSub= dynamic_cast<Subdomain *>(theObject);
+        while((theObject= theSubsIter()) != 0)
+	  {
+            Subdomain *theSub= dynamic_cast<Subdomain *>(theObject);
             result= theSub->getElement(tag);
             if(result != 0)
                 return result;
-        }
-    }
-
+          }
+      }
     // its not there
     return 0;
-}
+  }
 
-
+//! @brief Return the number of elements.
 int XC::PartitionedDomain::getNumElements(void) const
-{
+  {
     int result= elements->getNumComponents();
 
     // add the number of subdomains
     result +=  theSubdomains->getNumComponents();
     return result;
-}
+  }
 
+//! @brief Applies the load to all the subdomains.
+//!
+//! The partioned domain iterates through all the subdomains invoking {\em
+//! applyLoad(double timeStamp)} on them.
 void XC::PartitionedDomain::applyLoad(double timeStep)
-{
+  {
     this->XC::Domain::applyLoad(timeStep);
 
     // do the same for all the subdomains
-    if(theSubdomains != 0) {
+    if(theSubdomains != 0)
+      {
         ArrayOfTaggedObjectsIter theSubsIter(*theSubdomains);
         TaggedObject *theObject;
-        while((theObject= theSubsIter()) != 0) {
-          Subdomain *theSub= dynamic_cast<Subdomain *>(theObject);
+        while((theObject= theSubsIter()) != 0)
+	  {
+            Subdomain *theSub= dynamic_cast<Subdomain *>(theObject);
             theSub->applyLoad(timeStep);
-        }
-    }
-}
+          }
+      }
+  }
 
 
 void XC::PartitionedDomain::setCommitTag(int newTag)
@@ -556,20 +859,27 @@ void XC::PartitionedDomain::setCommitTag(int newTag)
 
 
 
+//! @brief Sets the current pseudo-time of the domain.
+//!
+//! Sets the current pseudo-time of the domain to be that whose tag is given
+//! by \p newTime. It iterates through all the subdomains invoking the
+//! same operation on them.
 void XC::PartitionedDomain::setCurrentTime(double newTime)
-{
+  {
     this->XC::Domain::setCurrentTime(newTime);
 
     // do the same for all the subdomains
-    if(theSubdomains != 0) {
+    if(theSubdomains != 0)
+      {
         ArrayOfTaggedObjectsIter theSubsIter(*theSubdomains);
         TaggedObject *theObject;
-        while((theObject= theSubsIter()) != 0) {
+        while((theObject= theSubsIter()) != 0)
+	  {
             Subdomain *theSub= dynamic_cast<Subdomain *>(theObject);
             theSub->setCurrentTime(newTime);
-        }
-    }
-}
+          }
+      }
+  }
 
 
 void XC::PartitionedDomain::setCommittedTime(double newTime)
@@ -709,42 +1019,45 @@ int XC::PartitionedDomain::newStep(double dT)
     return res;
   }
 
-
-
-
+//! @brief The partioned domain iterates through all the subdomains invoking
+//! {\em commit()} on them.
 int XC::PartitionedDomain::commit(void)
-{
-  int result= this->XC::Domain::commit();
-  if(result < 0) {
-    std::cerr << getClassName() << "::" << __FUNCTION__
-	      << "; failed in Domain::commit().\n";
-    return result;
-  }
-
-  // do the same for all the subdomains
-  if(theSubdomains != 0) {
-    ArrayOfTaggedObjectsIter theSubsIter(*theSubdomains);
-    TaggedObject *theObject;
-    while((theObject= theSubsIter()) != 0) {
-      Subdomain *theSub= dynamic_cast<Subdomain *>(theObject);
-      int res= theSub->commit();
-      if(res < 0) {
+  {
+    int result= this->XC::Domain::commit();
+    if(result < 0)
+      {
         std::cerr << getClassName() << "::" << __FUNCTION__
-		  << "(void); failed in Subdomain::commit().\n";
-        return res;
+	  	  << "; failed in Domain::commit().\n";
+        return result;
       }
-    }
-  }
 
-  // now we load balance if we have subdomains and a partitioner
-  int numSubdomains= this->getNumSubdomains();
-  if(numSubdomains != 0 && theDomainPartitioner != 0)  {
-    Graph &theSubGraphs= this->getSubdomainGraph();
-    theDomainPartitioner->balance(theSubGraphs);
-  }
+    // do the same for all the subdomains
+    if(theSubdomains != 0)
+      {
+        ArrayOfTaggedObjectsIter theSubsIter(*theSubdomains);
+	TaggedObject *theObject;
+	while((theObject= theSubsIter()) != 0)
+	  {
+	    Subdomain *theSub= dynamic_cast<Subdomain *>(theObject);
+	    int res= theSub->commit();
+	    if(res < 0)
+	      {
+	        std::cerr << getClassName() << "::" << __FUNCTION__
+		          << "(void); failed in Subdomain::commit().\n";
+	        return res;
+	      }
+	  }
+      }
 
-  return 0;
-}
+    // now we load balance if we have subdomains and a partitioner
+    int numSubdomains= this->getNumSubdomains();
+    if(numSubdomains != 0 && theDomainPartitioner != 0)
+      {
+        Graph &theSubGraphs= this->getSubdomainGraph();
+        theDomainPartitioner->balance(theSubGraphs);
+      }
+    return 0;
+  }
 
 
 int
@@ -889,7 +1202,14 @@ int XC::PartitionedDomain::setPartitioner(DomainPartitioner *thePartitioner)
     return 0;
   }
 
-
+//! @brief Triggers the partition of the domain.
+//! 
+//! Method which first checks that subdomains with tags 1 through \p
+//! numPartitions exist in the PartitionedDomain. Then it invokes
+//! {\em setPartitionedDomain(*this)} on the DomainPartitioner
+//! and finally it returns the result of invoking {\em partition(numPartitions}
+//! on the DomainPartitioner, which will return 0 if succesfull, a negative
+//! number if not.
 int XC::PartitionedDomain::partition(int numPartitions, bool usingMain, int mainPartitionID)
   {
     int result= 0;
@@ -941,7 +1261,15 @@ int XC::PartitionedDomain::partition(int numPartitions, bool usingMain, int main
     return result;
   }
 
-
+//! @brief Adds the subdomain pointed to by theSubdomainPtr to the domain.
+//!
+//! Adds the subdomain pointed to by theSubdomainPtr to the domain. The domain
+//! is responsible for checking that no other subdomain with a similar tag,
+//! has been previously added to the domain. If successfull
+//! the domain is responsible for invoking {\em setDomain(this)} on the
+//! Subdomain. The domain is also responsible for invoking {\em
+//! domainChange()}. The call returns \p false if the subdomain was not added, 
+//! otherwise \p true is returned.  
 bool XC::PartitionedDomain::addSubdomain(Subdomain *theSubdomain)
   {
     int eleTag= theSubdomain->getTag();
@@ -958,11 +1286,13 @@ bool XC::PartitionedDomain::addSubdomain(Subdomain *theSubdomain)
     return result;
   }
 
+//! @brief Return the number of Subdomains (partitions).
 int XC::PartitionedDomain::getNumSubdomains(void)
   {
     return theSubdomains->getNumComponents();
   }
 
+//! @brief Return the Subdomain whose tag is given by \p tag.
 XC::Subdomain *XC::PartitionedDomain::getSubdomainPtr(int tag)
   {
     TaggedObject *mc= theSubdomains->getComponentPtr(tag);
@@ -971,6 +1301,7 @@ XC::Subdomain *XC::PartitionedDomain::getSubdomainPtr(int tag)
     return result;
   }
 
+//! @brief Return an iterator for the Subdomains of the PartitionedDomain.
 XC::SubdomainIter &XC::PartitionedDomain::getSubdomains(void)
   {
     theSubdomainIter->reset();
@@ -978,12 +1309,21 @@ XC::SubdomainIter &XC::PartitionedDomain::getSubdomains(void)
   }
 
 
+//! @brief Return a pointer to the DomainPartitioner object associated with the
+//! PartitionedDomain.
 XC::DomainPartitioner *XC::PartitionedDomain::getPartitioner(void) const
   { return theDomainPartitioner; }
 
 
 
 
+//! @brief A method which will cause the domain to discard the current element
+//! graph and build a new one based on the element connectivity.
+//! 
+//! A method which will cause the domain to discard the current element
+//! graph and build a new one based on the element connectivity. Returns
+//! \f$0\f$ if successfull otherwise \f$-1\f$ is returned along with an error
+//! message to std::cerr.
 int XC::PartitionedDomain::buildEleGraph(Graph &theEleGraph)
   {
     const int numVertex= elements->getNumComponents();
@@ -1093,13 +1433,21 @@ int XC::PartitionedDomain::buildEleGraph(Graph &theEleGraph)
 
 
 
-// a method which will only remove a node from the partitioned domain
-// it does not touch the subdomains .. can be dangerous to use.
+//! @brief a method which will only remove a node from the partitioned domain
+//! it does not touch the subdomains .. can be dangerous to use.
+//!
+//! A method to remove a Node whose tag is given by \p tag from the
+//! PartitionedDomain, but will not remove the Node from any Subdomains.
 bool XC::PartitionedDomain::removeExternalNode(int tag)
   {
     return (this->Domain::removeNode(tag));
   }
 
+//! This will create a new graph each time it is invoked; deleting the old
+//! graph. THIS WILL BE CHANGED.  A vertex is created for each Subdomain, with
+//! an edge to each Subdomain the Subdomain is connected to, a tag equal to the
+//! Subdomain tag,  and a weight equal to the result of invoking getCost() on
+//! the Subdomain.
 XC::Graph &XC::PartitionedDomain::getSubdomainGraph(void)
   {
     // delete the old always - only object that will
@@ -1216,29 +1564,30 @@ XC::Graph &XC::PartitionedDomain::getSubdomainGraph(void)
 
 
 double XC::PartitionedDomain::getNodeDisp(int nodeTag, int dof, int &errorFlag)
-{
-  double result= this->XC::Domain::getNodeDisp(nodeTag, dof, errorFlag);
+  {
+    double result= this->XC::Domain::getNodeDisp(nodeTag, dof, errorFlag);
 
-  if(errorFlag != 0) {
-
-    // do the same for all the subdomains
-    if(theSubdomains != 0) {
-        ArrayOfTaggedObjectsIter theSubsIter(*theSubdomains);
-        TaggedObject *theObject;
-        while((theObject= theSubsIter()) != 0 && errorFlag != 0) {
-            Subdomain *theSub= dynamic_cast<Subdomain *>(theObject);
-            result= theSub->getNodeDisp(nodeTag, dof, errorFlag);
-            if(errorFlag == 0)
-              return result;
-        }
-    }
+    if(errorFlag != 0)
+      {
+	// do the same for all the subdomains
+	if(theSubdomains != 0)
+	  {
+	    ArrayOfTaggedObjectsIter theSubsIter(*theSubdomains);
+	    TaggedObject *theObject;
+	    while((theObject= theSubsIter()) != 0 && errorFlag != 0)
+	      {
+		Subdomain *theSub= dynamic_cast<Subdomain *>(theObject);
+		result= theSub->getNodeDisp(nodeTag, dof, errorFlag);
+		if(errorFlag == 0)
+		  return result;
+	      }
+	  }
+      }
+    return result;
   }
 
-  return result;
-}
 
-
-int XC::PartitionedDomain::setMass(const XC::Matrix &mass, int nodeTag)
+int XC::PartitionedDomain::setMass(const Matrix &mass, int nodeTag)
   {
     int result= Domain::setMass(mass, nodeTag);
     if(result != 0)
