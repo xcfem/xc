@@ -318,8 +318,8 @@ def get_reaction_on_pot(preprocessor,iElem,inclInertia= False):
             :iElem: (int) new zero length elem identifier (tag).
             :inclInertia: (bool) true if the reaction must include inertia forces.
     '''
-    nodos= preprocessor.getNodeLoader
-    nodos.calculateNodalReactions(inclInertia)
+    nodes= preprocessor.getNodeLoader
+    nodes.calculateNodalReactions(inclInertia)
   
     elem= preprocessor.getElementLoader.getElement(iElem)
     reac0= elem.getNodes[0].getReaction

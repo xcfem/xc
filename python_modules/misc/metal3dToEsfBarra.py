@@ -2,7 +2,7 @@
 
 import os
 
-multINodo= "*10000+"
+multINode= "*10000+"
 
 def getNombreAccion(str):
   # Devuelve el nombre de la acción.
@@ -56,7 +56,7 @@ def metal3DcreaTablaEsfBarra(nmbArch, nmbDBase, nmbTabla):
         csv= replace(eliminaCar(str1SB," "),"|",",")
         if(re.match(",[0-9]+/[0-9]+.*",csv)):
           lst=separaCsv(csv)
-          idElem= tonum(replaceAll(lst[1],"/",multINodo))
+          idElem= tonum(replaceAll(lst[1],"/",multINode))
           numSec= lst.size-4
   listado.close()
 
@@ -104,7 +104,7 @@ def metal3DToEsfBarra(nmbArch, nmbDBase, nmbTabla):
         csv= replace(eliminaCar(str1SB," "),"|",",")
         if(re.match(",[0-9]+/[0-9]+.*",csv)):
           lstXSec=separaCsv(csv)
-          idElem= tonum(replaceAll(lstXSec[1],"/",multINodo))
+          idElem= tonum(replaceAll(lstXSec[1],"/",multINode))
           numSec= lstXSec.size-4
         else:
           if(re.match(",,[MNT].*",csv)):

@@ -177,10 +177,6 @@ const XC::Node *XC::EntMdlr::getNearestNode(const Pos3d &p) const
 XC::ID XC::EntMdlr::getNodeIndices(const Node *n) const
   { return ttzNodes.getNodeIndices(n); }
 
-// //! @brief Returns the tags of the nodes.
-// std::vector<int> XC::EntMdlr::getNodeTags(void) const
-//   { return ttzNodes.getTags(); }
-
 //! @brief Returns a pointer to the element which indexes
 //! are being passed as paremeters.
 //!

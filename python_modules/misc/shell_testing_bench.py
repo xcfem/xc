@@ -11,7 +11,7 @@ def nuevosZeroLengthShell(nmbS, tagElem, offset):
 # Define el modelo para probar las dos secciones de un elemento shell.
   '''
     nmbS: Nombre del material.
-    tagNodo: Identificador del nodo.
+    nodeTag: node identifier.
     tagElem: Identificador del elemento.
   '''
   if(tagElem>=offset):
@@ -24,15 +24,25 @@ def nuevosZeroLengthShell(nmbS, tagElem, offset):
   idNod3= idSecc2
   idNod4= idSecc2+1
 
-  nodos= preprocessor.getNodeLoader
-  nod1= nodos.newNodeIDZYZ(idNod1,idNod1,0,0)
-  nod2= nodos.newNodeIDZYZ(idNod2,idNod1,0,0)
-  nod3= nodos.newNodeIDZYZ(idNod3,0,idNod3,0)
-  nod4= nodos.newNodeIDZYZ(idNod4,0,idNod3,0)
+  nodes= preprocessor.getNodeLoader
+  nod1= nodes.newNodeIDZYZ(idNod1,idNod1,0,0)
+  nod2= nodes.newNodeIDZYZ(idNod2,idNod1,0,0)
+  nod3= nodes.newNodeIDZYZ(idNod3,0,idNod3,0)
+  nod4= nodes.newNodeIDZYZ(idNod4,0,idNod3,0)
 
   constraints= preprocessor.getConstraintLoader  # Boundary conditions.
-  fijaNodo6GDL(constraints,idNod1)
-  fijaNodo6GDL(constraints,idNod3)
+  constraints.newSPConstraint(idNod1,0,0.0) # idNod1, DOF, constrValue
+  constraints.newSPConstraint(idNod1,1,0.0)
+  constraints.newSPConstraint(idNod1,2,0.0)
+  constraints.newSPConstraint(idNod1,3,0.0)
+  constraints.newSPConstraint(idNod1,4,0.0)
+  constraints.newSPConstraint(idNod1,5,0.0)
+  constraints.newSPConstraint(idNod2,0,0.0) # idNod2, DOF, constrValue
+  constraints.newSPConstraint(idNod2,1,0.0)
+  constraints.newSPConstraint(idNod2,2,0.0)
+  constraints.newSPConstraint(idNod2,3,0.0)
+  constraints.newSPConstraint(idNod2,4,0.0)
+  constraints.newSPConstraint(idNod2,5,0.0)
 
   # Definimos elementos
   elems= preprocessor.getElementLoader

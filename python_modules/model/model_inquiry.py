@@ -6,7 +6,7 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "ana.ortega@ciccp.es, l.pereztato@ciccp.es"
 
-# Devuelve los identificadores de las lineas de un conjunto.
+# Return the identificadores de las lineas de un conjunto.
 def getIdsLineasSet(preprocessor, setName):
   retvalIdsLineasSet= [] 
   # Formamos la lista de identificadores de línea.
@@ -16,17 +16,17 @@ def getIdsLineasSet(preprocessor, setName):
     retvalIdsLineasSet.append(l.codigo)
   return retvalIdsLineasSet
 
-# Devuelve los tags de los nodos de un conjunto.
-def getTagsNodosSet(preprocessor, setName):
-  retvalTagsNodosSet= [] 
+def getTagsNodesFromSet(preprocessor, setName):
+  '''Return the tags of the nodes from a set.'''
+  retvalSetNodeTags= [] 
   st= preprocessor.getSets.getSet(setName)
-  nodos= st.getNodes()
-  for n in nodos:
-    retvalTagsNodosSet.append(n.tag)
-  return retvalTagsNodosSet
+  nodes= st.getNodes()
+  for n in nodes:
+    retvalSetNodeTags.append(n.tag)
+  return retvalSetNodeTags
 
 
-# Devuelve los tags de los elementos de un conjunto.
+# Return the tags de los elementos de un conjunto.
 def getTagsElementosSet(preprocessor,setName):
   retvalTagsElementosSet= []
   st= preprocessor.getSets.getSet(setName)

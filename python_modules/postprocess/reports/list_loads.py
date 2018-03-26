@@ -31,12 +31,12 @@ def ListaCargasElementos(loadPattern, archivo, fmt):
       ListaCargaPuntual(loadPattern,archivo,carga,fmt)
   cierraSupertabular(archivo) 
 
-def ListaCargasNodos(loadPattern, archivo, fmt):
-  caption= "Cargas sobre nodos"
+def listNodalLoads(loadPattern, archivo, fmt):
+  caption= "Nodal loads"
   defCampos= "|r|c|c|r|r|r|r|"
   idsCampos= "Id & Acc. & Tipo & x & Fx & Fy &Fz \\\\\n - & - & - &  & kN & kN & kN "
   cabeceraSupertabular(archivo,7,defCampos,idsCampos,caption) 
-  print "Número de cargas en nodos: ", loadPattern.getNumNodalLoads()
+  print "Number of nodal loads: ", loadPattern.getNumNodalLoads()
   nodalLoads= loadPattern.getNodalLoads()
   for l in nodalLoads:
     carga= l.load

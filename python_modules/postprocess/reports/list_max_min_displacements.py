@@ -1,23 +1,23 @@
 # -*- coding: utf-8 -*-
 
 '''
-Imprime valores extremos de los desplazamientos de los nodos del conjunto
+Imprime valores extremos de los desplazamientos of the nodes del conjunto
 cuyo nombre se pasa como parámetro.
 '''
-def listaUMaxUMinNodos(preprocessor,setName, tit, fmt, fName):
+def listNodeUMaxUMin(preprocessor,setName, tit, fmt, fName):
   caption= tit
   defCampos= "|l|r|r|r|r|"
   idsCampos= "IdN & $U_{max}$ & Comb. & $U_{min}$ & Comb. \\\\\n - & mm & - & mm & - \\\\\n"
   cabeceraSupertabular(fName,5,defCampos,idsCampos,caption)
   s= preprocessor.getSetLoader.getSet(setName)
-  nodos= s.getNodos()
+  nodes= s.getNodes()
   tagUMaxMax= 0
   UMaxMax= 0
   CombUMaxMax= None
   tagUMinMin= 0
   UMinMin= 0
   CombUMinMin= None 
-  for n in nodos:
+  for n in nodes:
     fName.write(tag," & ",fmt.format(UMax*1e3)," & ",CombUMax," & ",fmt.format(UMin*1e3)," & ",CombUMin,"\\\\\n")
     if(UMax>UMaxMax): 
       UMaxMax= UMax
@@ -37,10 +37,10 @@ def listaUMaxUMinNodos(preprocessor,setName, tit, fmt, fName):
 
 
 '''
-Imprime valores extremos de los desplazamientos de los nodos del conjunto
+Imprime valores extremos de los desplazamientos of the nodes del conjunto
 cuyo nombre se pasa como parámetro.
 '''
-def listaVMaxVMinNodos(setName, tit, fmt, fName):
+def listNodeVMaxVMin(setName, tit, fmt, fName):
   caption= tit
   defCampos= "|l|r|r|r|r|"
   idsCampos= "IdN & $V_{max}$ & Comb. & $V_{min}$ & Comb. \\\\\n - & mm & - & mm & - \\\\\n"
@@ -53,8 +53,8 @@ def listaVMaxVMinNodos(setName, tit, fmt, fName):
   CombVMinMin= None
  
   s= preprocessor.getSetLoader.getSet(setName)
-  nodos= s.getNodos()
-  for n in nodos:
+  nodes= s.getNodes()
+  for n in nodes:
     fName.write(tag," & ",fmt.format(VMax*1e3)," & ",CombVMax," & ",fmt.format(VMin*1e3)," & ",CombVMin,"\\\\\n")
     if(VMax>VMaxMax):
       VMaxMax= VMax
@@ -73,10 +73,10 @@ def listaVMaxVMinNodos(setName, tit, fmt, fName):
   cierraSupertabular(fName) 
 
 '''
-Imprime valores extremos de los desplazamientos de los nodos del conjunto
+Imprime valores extremos de los desplazamientos of the nodes del conjunto
 cuyo nombre se pasa como parámetro.
 '''
-def listaWMaxWMinNodos(preprocessor, setName, tit, fmt, fName):
+def listNodeWMaxWMin(preprocessor, setName, tit, fmt, fName):
   caption= tit
   defCampos= "|l|r|r|r|r|"
   idsCampos= "IdN & $W_{max}$ & Comb. & $W_{min}$ & Comb. \\\\\n - & mm & - & mm & - \\\\\n"
@@ -89,8 +89,8 @@ def listaWMaxWMinNodos(preprocessor, setName, tit, fmt, fName):
   CombWMinMin= None
  
   s= preprocessor.getSetLoader.getSet(setName)
-  nodos= s.getNodos()
-  for n in nodos:
+  nodes= s.getNodes()
+  for n in nodes:
     fName.write(tag," & ",fmt.format(WMax*1e3)," & ",CombWMax," & ",fmt.format(WMin*1e3)," & ",CombWMin,"\\\\\n")
     if(WMax>WMaxMax):
        WMaxMax= WMax

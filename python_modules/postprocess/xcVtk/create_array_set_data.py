@@ -15,7 +15,7 @@ def VtkCreaStrArraySetData(setToDraw, entTypeName, attr):
   Parameters:
     setToDraw:   set of entities to be displayed
     entTypeName: type of entities to be displayed 
-                 ("pnts", "lines", "nodos", "elementos")
+                 ("pnts", "lines", "nodes", "elementos")
     attr:        attribute to be stored in the array
   '''
   # Definimos la matriz
@@ -26,7 +26,7 @@ def VtkCreaStrArraySetData(setToDraw, entTypeName, attr):
     container= setToDraw.getPoints
   elif(entTypeName=="lines"):
     container= setToDraw.getLines
-  elif(entTypeName=="nodos"):
+  elif(entTypeName=="nodes"):
     container= setToDraw.getNodes
   elif(entTypeName=="elementos"):
     container= setToDraw.getElements

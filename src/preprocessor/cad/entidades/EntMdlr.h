@@ -109,7 +109,6 @@ class EntMdlr: public SetEstruct
     virtual const Element *getElement(const size_t &i=1,const size_t &j=1,const size_t &k=1) const;
     Node *findNode(const int &tag);
     const Node *findNode(const int &tag) const;
-    //std::vector<int> getNodeTags(void) const;
 
     Element *findElement(const int &);
     const Element *findElement(const int &) const;

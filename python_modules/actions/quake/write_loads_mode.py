@@ -17,7 +17,7 @@ def write_loads_mode(preprocessor,fName, iModo, aceleraciones):
   for e in elementos:
     if(e.tag>0):
       numNodes= e.getNumExternalNodes
-      tagsNodes= e.getTagsNodos
+      tagsNodes= e.getNodeTags
       forces= getEquivalentStaticNodalLoads(iModo,aceleraciones[iModo-1])
       node_force= 0
       for iNod in range(0,Nod<numNodes):
