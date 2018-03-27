@@ -90,7 +90,16 @@
 
 XC::Matrix XC::Subdomain::badResult(1,1); // for returns from getStiff, getMass and getDamp
 
-
+//! @brief Constructor.
+//!
+//! Constructs an empty Subdomain with a number given by \p tag. The
+//! storage of the Elements, constraints and loads are handled by the base
+//! Domain class, the storage of the internal and external nodes are
+//! handle by the Subdomain class. For storage of the Nodes objects of
+//! type ArrayOfTaggedObjects are used. The constructors for these objects
+//! take initial sizes of the arrays, the sizes used are:
+//! InternalNodeArray = 8024, ExternalNodeArray = 256. The initial sizes
+//! are not upperbounds on the number of components that can be added.
 XC::Subdomain::Subdomain(int tag,DataOutputHandler::map_output_handlers *oh,EntCmd *owr)
  :Element(tag,ELE_TAG_Subdomain),
   Domain(owr,oh),
@@ -109,16 +118,18 @@ XC::Subdomain::Subdomain(int tag,DataOutputHandler::map_output_handlers *oh,EntC
     theNodIter = new SubdomainNodIter(*this);
 
     // check that space was available
-    if(internalNodes == 0 || externalNodes == 0 ||
-        internalNodeIter == 0 || externalNodeIter == 0 ||
-        theNodIter == 0) {
+    if(internalNodes == nullptr || externalNodes == nullptr ||
+        internalNodeIter == nullptr || externalNodeIter == nullptr ||
+        theNodIter == nullptr)
+      {
 
-        std::cerr << "XC::Subdomain::Subdomain() - ran out of memory\n";
+        std::cerr << Domain::getClassName() << "::" << __FUNCTION__
+		  << "; ran out of memory\n";
         exit(-1);
-    }
-}
+      }
+  }
 
-
+//! @brief Destructor.
 XC::Subdomain::~Subdomain(void)
   {
     if(internalNodes) delete internalNodes;
@@ -151,14 +162,20 @@ int XC::Subdomain::buildSubdomain(int numSubdomains, PartitionedModelBuilder &th
 
 
 
-//! @brief Method to add a Node to the model.
+//! @brief Method to add a node to the subdomain.
+//!
+//! A Method to add the node pointed to by \p node to the
+//! Subdomain. This node is an internal node to the domain and is
+//! returned in calls to getNodes()} and {\em getInternalNodes(). 
+//! Invokes setDomain(this)} on the Node and {\em domainChanged() on
+//! itself. 
 bool XC::Subdomain::addNode(Node *node)
   {
 #ifdef _G3DEBUG
 //  int nodTag = node->getTag();
 //  // check no other node exists with same tag
 //  Node *nodePtr = this->getNodePtr(nodTag);
-//  if(nodePtr != 0)
+//  if(nodePtr != nullptr)
 //    return false;
 //
 //      // MISSING CODE
@@ -173,6 +190,15 @@ bool XC::Subdomain::addNode(Node *node)
     return result;
   }
 
+//! A Method to add the node pointed to by the argument.
+//!
+//! A Method to add the node pointed to by \p thePtr to the
+//! Subdomain. This node is an external node to the subdomain and is
+//! returned in calls to getExternalNodes() and {\em
+//! getNodes()}. A DummyNode is created and added to the external nodes
+//! storage object. 
+//! Invokes setDomain(this)} on the DummyNode and {\em domainChanged() on
+//! itself.
 bool XC::Subdomain::addExternalNode(Node *thePtr)
   {
 #ifdef _G3DEBUG
@@ -180,17 +206,17 @@ bool XC::Subdomain::addExternalNode(Node *thePtr)
 
     int nodTag = thePtr->getTag();
     TaggedObject *other = externalNodes->getComponentPtr(nodTag);
-    if(other != 0)
+    if(other != nullptr)
       return false;
 
     other = internalNodes->getComponentPtr(nodTag);
-    if(other != 0)
+    if(other != nullptr)
       return false;
 
 #endif
       // create a dummy XC::Node & try adding it to the external nodes
       Node *newDummy = new Node(*thePtr, false);
-      if(newDummy == 0)
+      if(newDummy == nullptr)
         return false;
 
       bool result = externalNodes->addComponent(newDummy);
@@ -203,7 +229,14 @@ bool XC::Subdomain::addExternalNode(Node *thePtr)
       return result;
   }
 
-
+//! @brief Remove a node from the subdomain.
+//!
+//! To remove a Node whose tag is given by \p tag from the
+//! Subdomain. Returns \f$0\f$ if the Node is not in the Subdoamin, otherwise
+//! it removes the pointer to the node from the storage object, invokes
+//! domainChange() on itself, and returns the pointer to the
+//! Node. If the Node is external, the destructor is called on the
+//! DummyNode. Invokes domainChanged() on itself. 
 bool XC::Subdomain::removeNode(int tag)
   {
     bool result= internalNodes->removeComponent(tag);
@@ -218,6 +251,7 @@ bool XC::Subdomain::removeNode(int tag)
     return result;
   }
 
+//! @brief Return an iter to all nodes that have been added to the subdomain.
 XC::NodeIter &XC::Subdomain::getNodes(void)
   {
     theNodIter->reset();
@@ -226,18 +260,26 @@ XC::NodeIter &XC::Subdomain::getNodes(void)
 
 XC::NodePtrsWithIDs &XC::Subdomain::getNodePtrs(void)
   {
-    std::cerr << "Subdomain::getNodePtrs() - should not be called\n";
+    std::cerr << Domain::getClassName() << "::" << __FUNCTION__
+	      << "; should not be called.\n";
     static NodePtrsWithIDs retval(this,1);
     return retval;
   }
 
 const XC::NodePtrsWithIDs &XC::Subdomain::getNodePtrs(void) const
   {
-    std::cerr << "Subdomain::getNodePtrs() - should not be called\n";
+    std::cerr << Domain::getClassName() << "::" << __FUNCTION__
+	      << "; should not be called.\n";
     static NodePtrsWithIDs retval(const_cast<Subdomain *>(this),1);
     return retval;
   }
 
+//! @brief Return a pointer to the node identified by the argument.
+//!
+//! To return a pointer to the node whose tag is given by \p tag from
+//! the Subdomain. Returns \f$0\f$ if the Node is not in the Subdoamin,
+//! otherwise returns a pointer to the Node, if external a pointer to the
+//! DummyNode is returned. 
 const XC::Node *XC::Subdomain::getNode(int tag) const
   {
     const TaggedObject *object = internalNodes->getComponentPtr(tag);
@@ -255,7 +297,7 @@ const XC::Node *XC::Subdomain::getNode(int tag) const
         const Node *result = dynamic_cast<const Node *>(object);
         return result;
       }
-    return 0;
+    return nullptr;
   }
 
 XC::Node *XC::Subdomain::getNode(int tag)
@@ -275,12 +317,12 @@ XC::Node *XC::Subdomain::getNode(int tag)
         Node *result = dynamic_cast<Node *>(object);
         return result;
       }
-    return 0;
+    return nullptr;
   }
 
 bool XC::Subdomain::hasNode(int tag)
   {
-    if(this->getNode(tag) != 0)
+    if(this->getNode(tag) != nullptr)
       return true;
     else
       return false;
@@ -288,23 +330,26 @@ bool XC::Subdomain::hasNode(int tag)
 
 bool XC::Subdomain::hasElement(int tag)
   {
-    if(this->getElement(tag) != 0)
+    if(this->getElement(tag) != nullptr)
       return true;
     else
       return false;
   }
 
 
+//! @brief Returns the number of external and internal Nodes.
 int XC::Subdomain::getNumNodes(void) const
   { return internalNodes->getNumComponents() + externalNodes->getNumComponents(); }
 
+//! @brief invokes the base Domain classes commit() method. It then goes through
+//! all the Nodes in the Subdomain, invoking commitState() on the Nodes.
 int XC::Subdomain::commit(void)
   {
     Domain::commit();
 
     NodeIter &theNodes = this->getNodes();
     Node *nodePtr;
-    while ((nodePtr = theNodes()) != 0)
+    while ((nodePtr = theNodes()) != nullptr)
       nodePtr->commitState();
     return 0;
   }
@@ -315,7 +360,7 @@ int XC::Subdomain::revertToLastCommit(void)
 
     NodeIter &theNodes = this->getNodes();
     Node *nodePtr;
-    while ((nodePtr = theNodes()) != 0)
+    while ((nodePtr = theNodes()) != nullptr)
         nodePtr->revertToLastCommit();
     return 0;
   }
@@ -326,7 +371,7 @@ int XC::Subdomain::revertToStart(void)
 
     NodeIter &theNodes = this->getNodes();
     Node *nodePtr;
-    while ((nodePtr = theNodes()) != 0)
+    while ((nodePtr = theNodes()) != nullptr)
       nodePtr->revertToStart();
     return 0;
   }
@@ -337,25 +382,28 @@ int XC::Subdomain::update(void)
 int XC::Subdomain::update(double newTime, double dT)
   { return Domain::update(newTime, dT); }
 
-void XC::Subdomain::Print(std::ostream &s, int flag)
+//! @brief Print stuff.
+void XC::Subdomain::Print(std::ostream &os, int flag)
   {
-    s << "Current XC::Subdomain XC::Information for XC::Subdomain: ";
-    s << this->getTag() << "\n";
+    os << "Current Subdomain Information for Subdomain: ";
+    os << this->getTag() << ".\n";
 
-    s << "\nINTERNAL NODE DATA: NumNodes: ";
-    s << internalNodes->getNumComponents() << "\n";
-    internalNodes->Print(s);
+    os << "\nINTERNAL NODE DATA: NumNodes: ";
+    os << internalNodes->getNumComponents() << "\n";
+    internalNodes->Print(os);
 
-    s << "\nEXTERNAL NODE DATA: NumNodes: ";
-    s << externalNodes->getNumComponents() << "\n";
-    externalNodes->Print(s);
+    os << "\nEXTERNAL NODE DATA: NumNodes: ";
+    os << externalNodes->getNumComponents() << "\n";
+    externalNodes->Print(os);
 
-    this->XC::Domain::Print(s);
-    s << "\nEnd XC::Subdomain XC::Information\n";
+    this->Domain::Print(os);
+    os << "\nEnd Subdomain Information\n";
   }
 
 
 
+//! @brief Return an iterator to the internal nodes of the subdomain, nodes
+//! that are added using the addNode() command.
 XC::NodeIter &XC::Subdomain::getInternalNodeIter(void)
   {
     internalNodeIter->reset();
@@ -363,6 +411,8 @@ XC::NodeIter &XC::Subdomain::getInternalNodeIter(void)
   }
 
 
+//! @brief Return an itertor to the external nodes of the subdomain, nodes
+//! that have been added using the {\em addExternalNode(Node *)} method.
 XC::NodeIter &XC::Subdomain::getExternalNodeIter(void) const
   {
     externalNodeIter->reset();
@@ -380,9 +430,11 @@ void XC::Subdomain::wipeAnalysis(void)
       }
   }
 
+//! @brief Sets the corresponding DomainDecompositionAnalysis object to be {\em
+//! theAnalysis}.
 void XC::Subdomain::setDomainDecompAnalysis(DomainDecompositionAnalysis &theNewAnalysis)
   {
-    theAnalysis = &theNewAnalysis;
+    theAnalysis= &theNewAnalysis;
     //    this->XC::Domain::setAnalysis(theNewAnalysis);
   }
 
@@ -426,9 +478,14 @@ int XC::Subdomain::invokeChangeOnAnalysis(void)
   }
 
 
+//! @brief Returns the number of external nodes that have been successfully
+//! added to the subdomain as external nodes and have yet to be removed from the
+//! subdomain. 
 int XC::Subdomain::getNumExternalNodes(void) const
   { return externalNodes->getNumComponents(); }
 
+//! @brief Returns an ID containing the tags of all nodes added to the subdomain
+//! as external nodes and have yet to be removed from the subdomain.
 const XC::ID &XC::Subdomain::getExternalNodes(void) const
   {
     // first we check that extNodes exists and is of correct size
@@ -438,8 +495,9 @@ const XC::ID &XC::Subdomain::getExternalNodes(void) const
         extNodes= new ID(numExt);
         if(extNodes == 0 || extNodes->Size() != numExt)
           {
-            std::cerr << "XC::Subdomain::getExternalNodes(): ";
-            std::cerr << " - ran out of memory for size " << numExt <<std::endl;
+            std::cerr << Domain::getClassName() << "::" << __FUNCTION__
+		      << "; ran out of memory for size "
+		      << numExt << std::endl;
             exit(-1);
           }
       }
@@ -450,8 +508,9 @@ const XC::ID &XC::Subdomain::getExternalNodes(void) const
         extNodes = new ID(numExt);
         if(extNodes == 0 || extNodes->Size() != numExt)
           {
-            std::cerr << "XC::Subdomain::getExternalNodes(): ";
-            std::cerr << " - ran out of memory for size " << numExt <<std::endl;
+            std::cerr << Domain::getClassName() << "::" << __FUNCTION__
+		      << "; ran out of memory for size: "
+		      << numExt << std::endl;
             exit(-1);
           }
       }
@@ -463,7 +522,7 @@ const XC::ID &XC::Subdomain::getExternalNodes(void) const
     Node *nodPtr;
     int cnt = 0;
 
-    while ((nodPtr = theExtNodes()) != 0)
+    while ((nodPtr = theExtNodes()) != nullptr)
       (*extNodes)(cnt++) = nodPtr->getTag();
 
     // done
@@ -473,45 +532,66 @@ const XC::ID &XC::Subdomain::getExternalNodes(void) const
 
 
 
+//! @brief Returns the num of external dof associated with the subdomain.
+//!
+//! Returns the num of external dof associated with the subdomain, the number
+//! returned is the result of invoking getNumExternalEqn() on
+//! the DomainDecompAnalysis object assocaited with the Subdomain. If
+//! no Analysis yet associated with the Subdomain \f$0\f$ is returned.
 int XC::Subdomain::getNumDOF(void) const
   {
     if(theAnalysis)
       return theAnalysis->getNumExternalEqn();
     else
       {
-        //   std::cerr << "XC::Subdomain::getNumDOF() - no XC::StaticAnalysis has been set\n";
+        //   std::cerr << Domain::getClassName() << "::" << __FUNCTION__
+	//             << "; no XC::StaticAnalysis has been set.\n";
         return 0;
       }
   }
 
+//! @brief Invokes commit() on itself.
 int XC::Subdomain::commitState(void)
   { return this->commit(); }
 
 const XC::Matrix &XC::Subdomain::getTangentStiff(void)
   {
-    std::cerr << "XC::Subdomain::getTangentStiff(void)";
-    std::cerr << "DOES NOT DO ANYTHING";
+    std::cerr << Domain::getClassName() << "::" << __FUNCTION__
+	      << "; DOES NOT DO ANYTHING";
     return badResult;
   }
 
+//! @brief For this class does nothing but print an error message. Subtypes may
+//! provide a condensed stiffness matrix, \f$T^tKT\f$ corresponding to
+//! external nodes. Returns a zero matrix of dimensions (1x1).
 const XC::Matrix &XC::Subdomain::getInitialStiff(void)
   {
-    std::cerr << "XC::Subdomain::getSecantStiff(void)";
-    std::cerr << "DOES NOT DO ANYTHING";
+    std::cerr << Domain::getClassName() << "::" << __FUNCTION__
+	      << "; DOES NOT DO ANYTHING."
+              << " Must be overloaded in derived classes.";
     return badResult;
   }
 
+//! For this class does nothing but print an error message. Subtypes may
+//! provide a condensed damping matrix, \f$T^tDT\f$ or a damping matrix
+//! corresponding to some comination of the condensed stifffness and mass
+//! matrices. Returns a zero matrix of dimensions (1x1).
 const XC::Matrix &XC::Subdomain::getDamp(void)
   {
-    std::cerr << "XC::Subdomain::getDamp(void)";
-    std::cerr << "DOES NOT DO ANYTHING";
+    std::cerr << Domain::getClassName() << "::" << __FUNCTION__
+	      << "; DOES NOT DO ANYTHING"
+              << " Must be overloaded in derived classes.";
     return badResult;
   }
 
+//! For this class does nothing but print an error message. Subtypes may
+//! provide a condensed mass matrix, \f$T^tMT\f$ or a mass matrix with zero
+//! diag elements. Returns a zero matrix of dimensions (1x1).
 const XC::Matrix &XC::Subdomain::getMass(void)
   {
-    std::cerr << "XC::Subdomain::getMass(void)";
-    std::cerr << "DOES NOT DO ANYTHING";
+    std::cerr << Domain::getClassName() << "::" << __FUNCTION__
+	      << "; DOES NOT DO ANYTHING"
+              << " Must be overloaded in derived classes.";
     return badResult;
   }
 
@@ -520,13 +600,15 @@ const XC::Matrix &XC::Subdomain::getMass(void)
 
 void XC::Subdomain::zeroLoad(void)
   {
-    std::cerr << "XC::Subdomain::zeroLoad() - should not be called\n";
+    std::cerr << Domain::getClassName() << "::" << __FUNCTION__
+	      << "; should not be called.\n";
   }
 
 
 int XC::Subdomain::addLoad(ElementalLoad *theLoad, double loadFactor)
   {
-    std::cerr << "XC::Subdomain::addLoad() - should not be called\n";
+    std::cerr << Domain::getClassName() << "::" << __FUNCTION__
+	      << "; should not be called.\n";
     return 0;
   }
 
@@ -534,12 +616,14 @@ int XC::Subdomain::addInertiaLoadToUnbalance(const XC::Vector &accel)
   { return 0; }
 
 
+//! @brief Return the Vector obtained from invoking getCondensedRHS() on
+//! the DomainDecompositionAnalysis object.
 const XC::Vector &XC::Subdomain::getResistingForce(void) const
   {
     if(!theAnalysis)
       {
-        std::cerr << "XC::Subdomain::getResistingForce() ";
-        std::cerr << " - no StaticCondensationAnalysis has been set\n";
+        std::cerr << Domain::getClassName() << "::" << __FUNCTION__
+		  << "; no StaticCondensationAnalysis has been set.\n";
         exit(-1);
       }
 
@@ -547,25 +631,32 @@ const XC::Vector &XC::Subdomain::getResistingForce(void) const
       this->buildMap();
 
     ID &theMap = *map;
-    const XC::Vector &anaResidual = theAnalysis->getResidual();
+    const Vector &anaResidual = theAnalysis->getResidual();
     int numDOF = this->getNumDOF();
     for(int i=0; i<numDOF; i++)
       (*mappedVect)(i) = anaResidual(theMap(i));
-    //std::cerr << "XC::Subdomain::getResidual() : " << *mappedVect;
+    //std::cerr << Domain::getClassName() << "::" << __FUNCTION__
+    //          << ": " << *mappedVect;
     return *mappedVect;
   }
 
 
 const XC::Vector &XC::Subdomain::getResistingForceIncInertia(void) const
   {
-    std::cerr << "XC::Subdomain::getResistingForceWithInertia() ";
-    std::cerr << " - should not be called\n";
+    std::cerr << Domain::getClassName() << "::" << __FUNCTION__
+	      << "; should not be called.\n";
 
     return this->getResistingForce();
   }
 
 
 
+//! Return \p true.
+//! 
+//! Return \p true. Subtypes can change this. The result of changing
+//! this will be that the corresponding FE\_Elements will ask for the
+//! stiffness, mass and damping matrices to form the tangent and will ask
+//! for the residual to form the residual for the system of equations.
 bool XC::Subdomain::isSubdomain(void)
   { return true; }
 
@@ -573,6 +664,10 @@ bool XC::Subdomain::isSubdomain(void)
 int XC::Subdomain::setRayleighDampingFactors(const RayleighDampingFactors &rF)
   { return Domain::setRayleighDampingFactors(rF); }
 
+//! The method first starts a Timer object running. formTang(), 
+//! is then invoked on the DomainDecompositionAnalysis object. The
+//! Timer is then stopped and the real time is added to the \p realCost. 
+//! Returns the result of invoking \p formTang.
 int XC::Subdomain::computeTang(void)
   {
     if(theAnalysis)
@@ -585,12 +680,16 @@ int XC::Subdomain::computeTang(void)
       }
     else
       {
-        std::cerr << "XC::Subdomain::getcomputeTang() ";
-        std::cerr << " - no StaticCondensationAnalysis has been set\n";
+        std::cerr << Domain::getClassName() << "::" << __FUNCTION__
+		  << "; no StaticCondensationAnalysis has been set.\n";
         return 0;
       }
   }
 
+//! The method first starts a Timer object running. formResidual(), 
+//! is then invoked on the DomainDecompositionAnalysis object. The
+//! Timer is then stopped and the real time is added to the \p realCost. 
+//! Returns the result of invoking \p formResidual.
 int XC::Subdomain::computeResidual(void)
   {
     if(theAnalysis)
@@ -609,18 +708,20 @@ int XC::Subdomain::computeResidual(void)
       }
     else
       {
-        std::cerr << "XC::Subdomain::computeResidual() ";
-        std::cerr << " - no StaticCondensationAnalysis has been set\n";
+        std::cerr << Domain::getClassName() << "::" << __FUNCTION__
+		  << "; no StaticCondensationAnalysis has been set.\n";
         return 0;
       }
   }
 
+//! @brief Return the Matrix obtained from invoking getTangent() on
+//! the DomainDecompositionAnalysis object.
 const XC::Matrix &XC::Subdomain::getTang(void)
   {
     if(!theAnalysis)
       {
-        std::cerr << "XC::Subdomain::getTang() ";
-        std::cerr << " - no StaticCondensationAnalysis has been set\n";
+        std::cerr << Domain::getClassName() << "::" << __FUNCTION__
+		  << "; no StaticCondensationAnalysis has been set.\n";
         exit(-1);
       }
 
@@ -637,22 +738,30 @@ const XC::Matrix &XC::Subdomain::getTang(void)
   }
 
 
+//! @brief Set the corresponding {\em FE\_Element} to be that poited to by {\em
+//! theFEelePtr}.
 void XC::Subdomain::setFE_ElementPtr(FE_Element *theFE_Ele)
   { theFEele = theFE_Ele; }
 
 
+//! @brief Return a pointer to the last FE\_Element set using {\em
+//! setFE\_ElementPtr}. If no FE\_Element has been set nullptr
+//! is returned.
 XC::FE_Element *XC::Subdomain::getFE_ElementPtr(void)
   { return theFEele; }
 
 
-
+//! @brief Return the Vector obtained by calling getLastSysResponse() on
+//! the associated FE\_Element.
 const XC::Vector &XC::Subdomain::getLastExternalSysResponse(void)
   {
     if(!theFEele)
       {
-        std::cerr << "FATAL ERROR: XC::Subdomain::getLastExternalSysResponse() :";
-        std::cerr << " - no XC::FE_Element *exists for a subdomain\n";
-        std::cerr << " This is the responsibilty of the FE_ELement constructor\n";
+        std::cerr << Domain::getClassName() << "::" << __FUNCTION__
+		  << "; FATAL ERROR: "
+		  << "; no FE_Element *exists for a subdomain.\n"
+		  << " This is the responsibilty of the"
+	          << " FE_ELement constructor.\n";
         exit(0);
       }
 
@@ -671,20 +780,20 @@ const XC::Vector &XC::Subdomain::getLastExternalSysResponse(void)
   }
 
 
+//! @brief Set the nodal responses for the nodes in the subdomain.
+//! 
+//! To set the nodal responses for the nodes in the subdomain. Returns the
+//! result of invoking computeInternalResponse() on the DomainDecomposition
+//! analysis object associated with the subdomain. 
 int XC::Subdomain::computeNodalResponse(void)
   {
     int res =0;
     if(theAnalysis)
-      {
-        res = theAnalysis->computeInternalResponse();
-        return res;
-      }
+      res= theAnalysis->computeInternalResponse();
     else
-      {
-        std::cerr << "XC::Subdomain::computeNodalResponse() ";
-        std::cerr << "- no XC::StaticAnalysis has been set\n";
-        return 0;
-      }
+      std::cerr << Domain::getClassName() << "::" << __FUNCTION__
+	        << "; no analysis has been set.\n";
+    return res;
   }
 
 
@@ -698,13 +807,13 @@ int XC::Subdomain::newStep(double dT)
 
 bool XC::Subdomain::doesIndependentAnalysis(void)
   {
-    if(theAnalysis != 0)
+    if(theAnalysis != nullptr)
       return theAnalysis->doesIndependentAnalysis();
     else
       return true;
   }
 
-
+//! @brief Send itself.
 int XC::Subdomain::sendSelf(CommParameters &cp)
   {
     int dataTag = this->getDbTag();
@@ -718,10 +827,12 @@ int XC::Subdomain::sendSelf(CommParameters &cp)
         return theAnalysis->sendSelf(cp);
       }
     else
-      { std::cerr << "XC::Subdomain::sendSelf - no analysis set\n"; }
+      std::cerr << Domain::getClassName() << "::" << __FUNCTION__
+		<< "; no analysis set.\n";
     return -1;
   }
 
+//! @brief Receive itself.
 int XC::Subdomain::recvSelf(const CommParameters &cp)
   {
     int dataTag = this->getDbTag();
@@ -736,9 +847,14 @@ int XC::Subdomain::recvSelf(const CommParameters &cp)
     return -1;
   }
 
+//! Return the current value of \p realCost.
+//!
+//! Returns the current value of \p realCost, resetting the value of \p
+//! realCost to be 0.0. The value of \p realCost is added to when
+//! computeTang() and \p computeREsidual are invoked on the Subdomain.
 double XC::Subdomain::getCost(void)
   {
-    double lastRealCost = realCost;
+    double lastRealCost= realCost;
     realCost = 0.0;
     cpuCost = 0.0;
     pageCost = 0;
@@ -752,7 +868,7 @@ int XC::Subdomain::buildMap(void) const
       {
         // determine the mapping between local dof and subdomain ana dof
         int numDOF = this->getNumDOF();
-        if(map == 0)
+        if(map == nullptr)
           map = new ID(numDOF);
         if(map->Size() != numDOF)
           {
@@ -781,14 +897,14 @@ int XC::Subdomain::buildMap(void) const
           }
         mapBuilt = true;
 
-        if(mappedVect == 0)
+        if(mappedVect == nullptr)
           mappedVect = new Vector(numDOF);
         if(mappedVect->Size() != numDOF)
           {
             delete mappedVect;
             mappedVect = new Vector(numDOF);
           }
-        if(mappedMatrix == 0)
+        if(mappedMatrix == nullptr)
           mappedMatrix = new Matrix(numDOF,numDOF);
         if(mappedMatrix->noRows() != numDOF)
           {
