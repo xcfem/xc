@@ -28,7 +28,7 @@
 
 #include "MatrizPtrPnt.h"
 #include "TritrizPtrPnt.h"
-#include "preprocessor/cad/entidades/Pnt.h"
+#include "preprocessor/cad/entities/Pnt.h"
 #include "domain/domain/Domain.h"
 #include "domain/constraints/SFreedom_Constraint.h"
 

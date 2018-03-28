@@ -24,13 +24,13 @@
 // along with this program.
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
-//MapSisRef.h
+//ReferenceFrameMap.h
 
-#ifndef MAPSisRef_H
-#define MAPSisRef_H
+#ifndef ReferenceFrameMap_H
+#define ReferenceFrameMap_H
 
 #include "preprocessor/cad/MapCadMember.h"
-#include "SisRef.h"
+#include "ReferenceFrame.h"
 #include "boost/lexical_cast.hpp"
 
 
@@ -39,15 +39,15 @@ namespace XC {
 //! @ingroup Cad
 //
 //! @brief Reference systems container.
-class MapSisRef: public MapCadMember<SisRef>
+class ReferenceFrameMap: public MapCadMember<ReferenceFrame>
   {
   protected:
 
 
   public:
-    MapSisRef(Cad *cad= nullptr);
+    ReferenceFrameMap(Cad *cad= nullptr);
 
-    SisRef *New(const std::string &);
+    ReferenceFrame *New(const std::string &);
 
   };
 

@@ -24,9 +24,9 @@
 // along with this program.
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
-//MapPuntos.cc
+//PntMap.cc
 
-#include "MapPuntos.h"
+#include "PntMap.h"
 #include "preprocessor/Preprocessor.h"
 #include "xc_utils/src/geom/pos_vec/Vector3d.h"
 #include "xc_utils/src/geom/d2/Plano3d.h"
@@ -34,18 +34,18 @@
 #include "domain/mesh/node/Node.h"
 #include "domain/mesh/element/Element.h"
 
-#include "preprocessor/cad/entidades/Pnt.h"
+#include "preprocessor/cad/entities/Pnt.h"
 #include "preprocessor/set_mgmt/Set.h"
 
 
 
 //! @brief Constructor.
-XC::MapPuntos::MapPuntos(Cad *cad)
+XC::PntMap::PntMap(Cad *cad)
   : MapEnt<Pnt>(cad) {}
 
 
 //! @brief Inserta el new point en the set total y the opened sets.
-void XC::MapPuntos::UpdateSets(Pnt *new_point) const
+void XC::PntMap::UpdateSets(Pnt *new_point) const
   {
     Cad *cad= const_cast<Cad *>(dynamic_cast<const Cad *>(Owner()));
     Preprocessor *preprocessor= cad->getPreprocessor();
@@ -61,7 +61,7 @@ void XC::MapPuntos::UpdateSets(Pnt *new_point) const
   }
 
 //! @brief Returns the vector defined by the points which indices are being passed as parameters.
-Vector3d XC::MapPuntos::getVector(const Indice &i,const Indice &j) const
+Vector3d XC::PntMap::getVector(const Indice &i,const Indice &j) const
   {
     Vector3d retval;
     const Pnt *pA= busca(i);
@@ -78,7 +78,7 @@ Vector3d XC::MapPuntos::getVector(const Indice &i,const Indice &j) const
   }
 
 //! @brief Return the line defined by the points which indices are being passed as parameters.
-Recta3d XC::MapPuntos::getRecta(const Indice &i,const Indice &j) const
+Recta3d XC::PntMap::getRecta(const Indice &i,const Indice &j) const
   {
     Recta3d retval;
     const Pnt *pA= busca(i);
@@ -95,7 +95,7 @@ Recta3d XC::MapPuntos::getRecta(const Indice &i,const Indice &j) const
   }
 
 //! @brief Returns the plane defined by the points which indices are being passed as parameters.
-Plano3d XC::MapPuntos::getPlano(const Indice &i,const Indice &j,const Indice &k) const
+Plano3d XC::PntMap::getPlano(const Indice &i,const Indice &j,const Indice &k) const
   {
     Plano3d retval;
     const Pnt *pA= busca(i);
@@ -117,7 +117,7 @@ Plano3d XC::MapPuntos::getPlano(const Indice &i,const Indice &j,const Indice &k)
 
 
 //! @brief Creates a new point.
-XC::Pnt *XC::MapPuntos::Crea(void)
+XC::Pnt *XC::PntMap::Crea(void)
   {
     Preprocessor *preprocessor= getPreprocessor();
     assert(preprocessor);
@@ -129,7 +129,7 @@ XC::Pnt *XC::MapPuntos::Crea(void)
   }
 
 //! @brief Creates a new point.
-XC::Pnt *XC::MapPuntos::New(void)
+XC::Pnt *XC::PntMap::New(void)
   {
     Pnt *retval= busca(getTag());
     if(!retval) //The point is new.
@@ -139,7 +139,7 @@ XC::Pnt *XC::MapPuntos::New(void)
 
 
 //! @brief Creates a new point at the position being passed as parameter.
-XC::Pnt *XC::MapPuntos::New(const Pos3d &pos)
+XC::Pnt *XC::PntMap::New(const Pos3d &pos)
   {
     Pnt *retval= busca(getTag());
     if(retval)
@@ -154,7 +154,7 @@ XC::Pnt *XC::MapPuntos::New(const Pos3d &pos)
   }
 
 //! @brief Creates a new point with the tag being passed as parameter.
-XC::Pnt *XC::MapPuntos::New(const size_t &tag,const Pos3d &pos)
+XC::Pnt *XC::PntMap::New(const size_t &tag,const Pos3d &pos)
   {
     bool isNew= true;
     size_t old_tag= getTag();
@@ -175,7 +175,7 @@ XC::Pnt *XC::MapPuntos::New(const size_t &tag,const Pos3d &pos)
 //! the corresponding name according to the value of the tag. The coordinates
 //! of the new point will be those obtained from the addition to the point
 //! the vector being passed as parameter.
-XC::Pnt *XC::MapPuntos::Copia(const Pnt *p,const Vector3d &v= Vector3d())
+XC::Pnt *XC::PntMap::Copia(const Pnt *p,const Vector3d &v= Vector3d())
   {
     Pnt *retval= busca(getTag());
     if(!p)
@@ -208,7 +208,7 @@ XC::Pnt *XC::MapPuntos::Copia(const Pnt *p,const Vector3d &v= Vector3d())
   }
 
 //! @brief Crea copias de los puntos cuyos identifiers being passed as parameters.
-void XC::MapPuntos::Copia(const std::vector<Indice> &indices)
+void XC::PntMap::Copia(const std::vector<Indice> &indices)
   {
     for(std::vector<Indice>::const_iterator i= indices.begin();i!=indices.end();i++)
       {
@@ -223,7 +223,7 @@ void XC::MapPuntos::Copia(const std::vector<Indice> &indices)
 
 //! @brief Applies the transformation to the points
 //! identified by the indices being passed as parameter.
-void XC::MapPuntos::Transforma(const TrfGeom &trf,const std::vector<Indice> &indices)
+void XC::PntMap::Transforma(const TrfGeom &trf,const std::vector<Indice> &indices)
   {
     for(std::vector<Indice>::const_iterator i= indices.begin();i!=indices.end();i++)
       {
@@ -237,7 +237,7 @@ void XC::MapPuntos::Transforma(const TrfGeom &trf,const std::vector<Indice> &ind
   }
 
 //! @brief Return the distancia entre los puntos cuyos identifiers being passed as parameters.
-double XC::MapPuntos::Dist(const Indice &i,const Indice &j) const
+double XC::PntMap::Dist(const Indice &i,const Indice &j) const
   {
     double retval(-1.0);
     const Pnt *pA= busca(i);

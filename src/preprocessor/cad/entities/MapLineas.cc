@@ -31,12 +31,12 @@
 #include "domain/mesh/node/Node.h"
 #include "domain/mesh/element/Element.h"
 
-#include "preprocessor/cad/entidades/Edge.h"
-#include "preprocessor/cad/entidades/Pnt.h"
-#include "preprocessor/cad/entidades/Linea.h"
-#include "preprocessor/cad/entidades/DividedLine.h"
-#include "preprocessor/cad/entidades/CmbEdge.h"
-#include "preprocessor/cad/entidades/ArcoCircunf.h"
+#include "preprocessor/cad/entities/Edge.h"
+#include "preprocessor/cad/entities/Pnt.h"
+#include "preprocessor/cad/entities/Linea.h"
+#include "preprocessor/cad/entities/DividedLine.h"
+#include "preprocessor/cad/entities/CmbEdge.h"
+#include "preprocessor/cad/entities/ArcoCircunf.h"
 #include "preprocessor/set_mgmt/Set.h"
 
 

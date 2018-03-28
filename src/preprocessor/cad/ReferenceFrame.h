@@ -24,7 +24,7 @@
 // along with this program.
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
-//SisRef.h
+//ReferenceFrame.h
 
 #ifndef SISREF_H
 #define SISREF_H
@@ -44,17 +44,17 @@ namespace XC {
 //!
 //! @brief Reference system to be used for simpliflying the definition
 //! of point positions.
-class SisRef: public EntMdlrBase
+class ReferenceFrame: public EntMdlrBase
   {
   protected:
 
   public:
     //! @brief Constructor.
-    SisRef(Preprocessor *m)
+    ReferenceFrame(Preprocessor *m)
       : EntMdlrBase("",m) {}
-    SisRef(const std::string &nombre= "",Preprocessor *m= nullptr)
+    ReferenceFrame(const std::string &nombre= "",Preprocessor *m= nullptr)
       : EntMdlrBase(nombre,m) {}
-    inline virtual ~SisRef(void)
+    inline virtual ~ReferenceFrame(void)
       {}
     //! @brief Returns the i-th axis unit vector
     //! for the position being passed as parameter.

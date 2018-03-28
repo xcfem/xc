@@ -38,7 +38,7 @@
 #include "xc_utils/src/geom/pos_vec/TritrizPos3d.h"
 #include "domain/mesh/node/Node.h"
 #include "domain/mesh/element/Element.h"
-#include "preprocessor/cad/SisRef.h"
+#include "preprocessor/cad/ReferenceFrame.h"
 
 
 //! @brief Constructor.

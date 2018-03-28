@@ -28,8 +28,8 @@
 
 #include "EntMdlrBase.h"
 #include "preprocessor/Preprocessor.h"
-#include "preprocessor/cad/entidades/Pnt.h"
-#include "preprocessor/cad/entidades/Edge.h"
+#include "preprocessor/cad/entities/Pnt.h"
+#include "preprocessor/cad/entities/Edge.h"
 
 #include "utility/actor/actor/MovableID.h"
 #include "utility/actor/actor/MovableVector.h"

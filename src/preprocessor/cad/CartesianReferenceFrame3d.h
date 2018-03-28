@@ -24,56 +24,46 @@
 // along with this program.
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
-//MapPuntos.h
+//CartesianReferenceFrame3d.h
+//Sistema de coordenadas cartesianas.
 
-#ifndef MAPPUNTOS_H
-#define MAPPUNTOS_H
+#ifndef SISREFCARTESIANAS3D_H
+#define SISREFCARTESIANAS3D_H
 
-#include "MapEnt.h"
-#include <map>
-
-class Pos3d;
-class Recta3d;
-class Plano3d;
-class Vector3d;
+#include "ReferenceFrame.h"
+#include "xc_utils/src/geom/sis_ref/Ref3d3d.h"
 
 namespace XC {
 
-class Preprocessor;
-class Cad;
-class Pnt;
-class SetEstruct;
-class TrfGeom;
-
-//! @ingroup Cad
-//
-//! @brief Point container.
-class MapPuntos: public MapEnt<Pnt>
+//! @ingroup CadSR
+//!
+//! @brief Three-dimensional reference system.
+class CartesianReferenceFrame3d: public ReferenceFrame
   {
-  private:
-    void UpdateSets(Pnt *) const;
+    Ref3d3d ref;//!< Reference system.
   protected:
 
-
-    Pnt *Crea(void);
   public:
-    MapPuntos(Cad *cad= nullptr);
+    //! @brief Constructor.
+    CartesianReferenceFrame3d(Preprocessor *m)
+      : ReferenceFrame(m) {}
+    CartesianReferenceFrame3d(const std::string &nombre= "",Preprocessor *m= nullptr)
+      : ReferenceFrame(nombre,m) {}
 
-    Vector3d getVector(const Indice &i,const Indice &j) const;
-    Recta3d getRecta(const Indice &i,const Indice &j) const;
-    Plano3d getPlano(const Indice &i,const Indice &j,const Indice &k) const;
+    Vector3d GetVDirEje(const size_t &,const Pos3d &) const;
 
-    Pnt *New(void);
-    Pnt *New(const Pos3d &);
-    Pnt *New(const size_t &,const Pos3d &);
+    Pos3d getOrg(void) const;
+    void setOrg(const Pos3d &);
+    void TresPuntos(const Pos3d &,const Pos3d &, const Pos3d &);
 
-    Pnt *Copia(const Pnt *,const Vector3d &v);
-    void Copia(const std::vector<MapPuntos::Indice> &);
-    void Transforma(const TrfGeom &trf,const std::vector<MapPuntos::Indice> &);
-    double Dist(const Indice &i,const Indice &j) const;
+    Pos3d GetPosGlobal(const Pos3d &p) const;
+    Vector3d GetCooGlobales(const Vector3d &v) const;
+    Pos3d GetPosLocal(const Pos3d &p) const;
+    Vector3d GetCooLocales(const Vector3d &v) const;
 
 
   };
 
 } //end of XC namespace
+
 #endif

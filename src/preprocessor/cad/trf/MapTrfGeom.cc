@@ -32,7 +32,7 @@
 #include "domain/mesh/element/Element.h"
 
 #include "preprocessor/cad/trf/TrfGeom.h"
-#include "preprocessor/cad/entidades/Pnt.h"
+#include "preprocessor/cad/entities/Pnt.h"
 #include "preprocessor/set_mgmt/Set.h"
 
 

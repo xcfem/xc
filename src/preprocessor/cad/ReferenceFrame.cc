@@ -24,40 +24,25 @@
 // along with this program.
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
-//MapSisRef.cc
+//ReferenceFrame.cc
 
-#include "MapSisRef.h"
-#include "preprocessor/Preprocessor.h"
-#include "domain/mesh/node/Node.h"
-#include "domain/mesh/element/Element.h"
-
-#include "preprocessor/cad/SisRef.h"
-#include "preprocessor/set_mgmt/Set.h"
+#include "ReferenceFrame.h"
+#include "xc_utils/src/geom/pos_vec/Vector3d.h"
 
 
-#include "SisRefCartesianas3d.h"
+//! @brief Return the $\vec{i}$ unit vector expressed in the global coordinate
+//! system for the position passed as parameter.
+Vector3d XC::ReferenceFrame::GetI(const Pos3d &p) const
+  { return GetVDirEje(1,p); }
 
-//! @brief Constructor.
-XC::MapSisRef::MapSisRef(Cad *cad)
-  : MapCadMember<SisRef>(cad) {}
+//! @brief Return the $\vec{j}$ unit vector expressed in the global coordinate
+//! system for the position being passed as parameter.
+Vector3d XC::ReferenceFrame::GetJ(const Pos3d &p) const
+  { return GetVDirEje(2,p); }
 
-//! @brief Creates a new reference system of the type passed as paramenter.
-XC::SisRef *XC::MapSisRef::New(const std::string &tipo)
-  {
-    SisRef *retval= busca(getTag());
-    if(!retval) //New reference system.
-      {
-        if(tipo == "cartesianas")
-          {
-            Preprocessor *preprocessor= getPreprocessor();
-            retval= new SisRefCartesianas3d("r"+boost::lexical_cast<std::string>(getTag()),preprocessor);
-            (*this)[getTag()]= retval;
-            tag++;
-          }
-        else
-	  std::cerr << getClassName() << "::" << __FUNCTION__
-	            << "; reference system type: '" << tipo
-                    << "' unknown." << std::endl;
-      }
-    return retval;
-  }
+//! @brief Return the $\vec{k}$ unit vector expressed in the global coordinate
+//! system for the position being passed as parameter.
+Vector3d XC::ReferenceFrame::GetK(const Pos3d &p) const
+  { return GetVDirEje(3,p); }
+
+

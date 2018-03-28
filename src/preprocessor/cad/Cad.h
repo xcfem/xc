@@ -32,13 +32,13 @@
 #include "preprocessor/PreprocessorContainer.h"
 #include <map>
 #include "boost/lexical_cast.hpp"
-#include "preprocessor/cad/entidades/MapPuntos.h"
-#include "preprocessor/cad/entidades/MapLineas.h"
-#include "preprocessor/cad/entidades/MapSurfaces.h"
-#include "preprocessor/cad/entidades/MapCuerpos.h"
-#include "preprocessor/cad/entidades/MapUniformGrids.h"
+#include "preprocessor/cad/entities/PntMap.h"
+#include "preprocessor/cad/entities/MapLineas.h"
+#include "preprocessor/cad/entities/MapSurfaces.h"
+#include "preprocessor/cad/entities/MapCuerpos.h"
+#include "preprocessor/cad/entities/MapUniformGrids.h"
 #include "preprocessor/cad/trf/MapTrfGeom.h"
-#include "preprocessor/cad/MapSisRef.h"
+#include "preprocessor/cad/ReferenceFrameMap.h"
 #include "preprocessor/cad/matrices/MapEsquemas2d.h"
 #include "preprocessor/cad/matrices/MapEsquemas3d.h"
 
@@ -52,7 +52,7 @@ namespace XC {
 class Pnt;
 class UniformGrid;
 class SetEstruct;
-class SisRef;
+class ReferenceFrame;
 
 //! @ingroup Preprocessor
 //
@@ -72,10 +72,10 @@ class Cad: public PreprocessorContainer
     template <class L>
     static void numera_lista(L &l);
     void numera(void);
-    MapSisRef reference_systems; //!< Reference systems container.
+    ReferenceFrameMap reference_systems; //!< Reference systems container.
     MapTrfGeom transformaciones_geometricas; //!< Geometric transformations container.
 
-    MapPuntos puntos; //!< Points container.
+    PntMap puntos; //!< Points container.
     MapLineas edges; //!< Edges container.
     MapSurfaces faces; //!< Surfaces container.
     MapCuerpos cuerpos; //!< Bodys container.
@@ -90,8 +90,8 @@ class Cad: public PreprocessorContainer
     //! @brief Constructor.
     Cad(Preprocessor *mod= nullptr);
 
-    Edge *busca_edge_extremos(const MapPuntos::Indice &,const MapPuntos::Indice &);
-    const Edge *busca_edge_extremos(const MapPuntos::Indice &,const MapPuntos::Indice &) const;
+    Edge *busca_edge_extremos(const PntMap::Indice &,const PntMap::Indice &);
+    const Edge *busca_edge_extremos(const PntMap::Indice &,const PntMap::Indice &) const;
     
     void conciliaNDivs(void);
 
@@ -99,9 +99,9 @@ class Cad: public PreprocessorContainer
     //! @brief Destructor.
     virtual ~Cad(void);
 
-    inline const MapPuntos &getPuntos(void) const
+    inline const PntMap &getPuntos(void) const
       { return puntos; }
-    inline MapPuntos &getPuntos(void)
+    inline PntMap &getPuntos(void)
       { return puntos; }
     inline const MapLineas &getLineas(void) const
       { return edges; }
@@ -115,9 +115,9 @@ class Cad: public PreprocessorContainer
       { return transformaciones_geometricas; }
     inline MapTrfGeom &getTransformacionesGeometricas(void)
       { return transformaciones_geometricas; }
-    inline const MapSisRef &getReferenceSystems(void) const
+    inline const ReferenceFrameMap &getReferenceSystems(void) const
       { return reference_systems; }
-    inline MapSisRef &getReferenceSystems(void)
+    inline ReferenceFrameMap &getReferenceSystems(void)
       { return reference_systems; }
     inline const MapEsquemas2d &getEsquemas2d(void) const
       { return esquemas2d; }

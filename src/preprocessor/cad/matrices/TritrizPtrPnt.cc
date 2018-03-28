@@ -27,7 +27,7 @@
 //TritrizPtrPnt.cc
 
 #include "TritrizPtrPnt.h"
-#include "preprocessor/cad/entidades/Pnt.h"
+#include "preprocessor/cad/entities/Pnt.h"
 #include "xc_basic/src/funciones/algebra/integ_num.h"
 
 #include <boost/any.hpp>

@@ -72,7 +72,7 @@ class Preprocessor: public EntCmd, public MovableObject
 
     Cad cad; //!< Geometric entities: points, lines,...
 
-    MapSet sets; //!< Sets of entidades.
+    MapSet sets; //!< Sets of entities.
 
     friend class Cad;
     friend class SetMeshComp;

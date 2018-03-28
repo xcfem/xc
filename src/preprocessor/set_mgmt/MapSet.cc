@@ -29,7 +29,7 @@
 #include "MapSet.h"
 #include "Set.h"
 #include "SetEstruct.h"
-#include "preprocessor/cad/entidades/EntMdlr.h"
+#include "preprocessor/cad/entities/EntMdlr.h"
 #include "preprocessor/Preprocessor.h"
 
 
@@ -49,8 +49,8 @@ XC::SetBase *XC::MapSet::busca_set(const std::string &nmb)
   {
     if(exists(nmb))
       return sets[nmb];
-    else if(entidades.find(nmb)!=entidades.end())
-      return entidades[nmb];
+    else if(entities.find(nmb)!=entities.end())
+      return entities[nmb];
     else
       return nullptr;
   }
@@ -63,8 +63,8 @@ const XC::SetBase *XC::MapSet::busca_set(const std::string &nmb) const
       return (*i).second;
     else
       {
-    	map_ent_mdlr::const_iterator j= entidades.find(nmb);
-        if(j != entidades.end())
+    	map_ent_mdlr::const_iterator j= entities.find(nmb);
+        if(j != entities.end())
           return (*j).second;
         else
           return nullptr;
@@ -198,7 +198,7 @@ XC::EntMdlr *XC::MapSet::inserta_ent_mdlr(EntMdlr *ent_mdlr)
       }
     else //the set is new.
       {
-        entidades[nmb]= ent_mdlr;
+        entities[nmb]= ent_mdlr;
         return ent_mdlr;
       }
   }
@@ -275,7 +275,7 @@ void XC::MapSet::clearSets(void)
 void XC::MapSet::clearAll(void)
   {
     total= nullptr;
-    entidades.clear();
+    entities.clear();
     clearSets();
   }
 

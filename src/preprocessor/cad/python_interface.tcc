@@ -21,14 +21,14 @@
 //----------------------------------------------------------------------------
 //python_interface.tcc
 
-#include "entidades/python_interface.tcc"
+#include "entities/python_interface.tcc"
 #include "matrices/python_interface.tcc"
 #include "trf/python_interface.tcc"
 
-class_<XC::SisRef, bases<XC::EntMdlrBase>, boost::noncopyable >("SisRef", no_init);
+class_<XC::ReferenceFrame, bases<XC::EntMdlrBase>, boost::noncopyable >("ReferenceFrame", no_init);
 
-class_<XC::SisRefCartesianas3d, bases<XC::SisRef>, boost::noncopyable >("SisRefCartesianas3d", no_init)
-.add_property("org",&XC::SisRefCartesianas3d::getOrg,&XC::SisRefCartesianas3d::setOrg,"Origin of the 3D cartesian coordinate system")
+class_<XC::CartesianReferenceFrame3d, bases<XC::ReferenceFrame>, boost::noncopyable >("CartesianReferenceFrame3d", no_init)
+.add_property("org",&XC::CartesianReferenceFrame3d::getOrg,&XC::CartesianReferenceFrame3d::setOrg,"Origin of the 3D cartesian coordinate system")
   ;
 
 class_<XC::MapCadMemberBase, bases<EntCmd>, boost::noncopyable >("MapCadMemberBase", no_init)
@@ -37,29 +37,29 @@ class_<XC::MapCadMemberBase, bases<EntCmd>, boost::noncopyable >("MapCadMemberBa
 
 //class_<XC::MapCadMember, bases<XC::MapCadMemberBase>, boost::noncopyable >("MapCadMember", no_init);
 
-typedef XC::MapCadMember<XC::SisRef> MapCadSisRef;
-class_<MapCadSisRef, bases<XC::MapCadMemberBase>, boost::noncopyable >("MapCadSisRef", no_init);
+typedef XC::MapCadMember<XC::ReferenceFrame> MapCadReferenceFrame;
+class_<MapCadReferenceFrame, bases<XC::MapCadMemberBase>, boost::noncopyable >("MapCadReferenceFrame", no_init);
 
 
-XC::SisRef *(XC::MapSisRef::*newReferenceSystem)(const std::string &)= &XC::MapSisRef::New;
-class_<XC::MapSisRef, bases<MapCadSisRef>, boost::noncopyable >("MapSisRef", no_init)
+XC::ReferenceFrame *(XC::ReferenceFrameMap::*newReferenceSystem)(const std::string &)= &XC::ReferenceFrameMap::New;
+class_<XC::ReferenceFrameMap, bases<MapCadReferenceFrame>, boost::noncopyable >("ReferenceFrameMap", no_init)
 .def("newReferenceSystem", make_function(newReferenceSystem,return_internal_reference<>() ))
   ;
 
 
-XC::MapSisRef &(XC::Cad::*getReferenceSystems)(void)= &XC::Cad::getReferenceSystems;
+XC::ReferenceFrameMap &(XC::Cad::*getReferenceSystems)(void)= &XC::Cad::getReferenceSystems;
 XC::MapTrfGeom &(XC::Cad::*getGeometricTransformations)(void)= &XC::Cad::getTransformacionesGeometricas;
-XC::MapPuntos &(XC::Cad::*getMapPuntosRef)(void)= &XC::Cad::getPuntos;
+XC::PntMap &(XC::Cad::*getPntMapRef)(void)= &XC::Cad::getPuntos;
 XC::MapLineas &(XC::Cad::*getMapLineasRef)(void)= &XC::Cad::getLineas;
 XC::MapSurfaces &(XC::Cad::*getMapSurfacesRef)(void)= &XC::Cad::getSurfaces;
 XC::MapEsquemas2d &(XC::Cad::*getEsquemas2dRef)(void)= &XC::Cad::getEsquemas2d;
 XC::MapEsquemas3d &(XC::Cad::*getEsquemas3dRef)(void)= &XC::Cad::getEsquemas3d;
 XC::MapUniformGrids &(XC::Cad::*getUniformGridsRef)(void)= &XC::Cad::getUniformGrids;
-XC::Edge *(XC::Cad::*getLineWithEndPoints)(const XC::MapPuntos::Indice &,const XC::MapPuntos::Indice &) = &XC::Cad::busca_edge_extremos;
+XC::Edge *(XC::Cad::*getLineWithEndPoints)(const XC::PntMap::Indice &,const XC::PntMap::Indice &) = &XC::Cad::busca_edge_extremos;
 class_<XC::Cad, bases<XC::PreprocessorContainer>, boost::noncopyable >("Cad", no_init)
   .add_property("getReferenceSystems", make_function( getReferenceSystems, return_internal_reference<>() ))
   .add_property("getGeometricTransformations", make_function( getGeometricTransformations, return_internal_reference<>() ))
-  .add_property("getPoints", make_function( getMapPuntosRef, return_internal_reference<>() ))
+  .add_property("getPoints", make_function( getPntMapRef, return_internal_reference<>() ))
   .add_property("getLines", make_function( getMapLineasRef, return_internal_reference<>() ))
   .add_property("getSurfaces", make_function( getMapSurfacesRef, return_internal_reference<>() ))
   .add_property("get2DNets", make_function( getEsquemas2dRef, return_internal_reference<>() ))

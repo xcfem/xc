@@ -24,25 +24,40 @@
 // along with this program.
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
-//SisRef.cc
+//ReferenceFrameMap.cc
 
-#include "SisRef.h"
-#include "xc_utils/src/geom/pos_vec/Vector3d.h"
+#include "ReferenceFrameMap.h"
+#include "preprocessor/Preprocessor.h"
+#include "domain/mesh/node/Node.h"
+#include "domain/mesh/element/Element.h"
 
-
-//! @brief Return the $\vec{i}$ unit vector expressed in the global coordinate
-//! system for the position passed as parameter.
-Vector3d XC::SisRef::GetI(const Pos3d &p) const
-  { return GetVDirEje(1,p); }
-
-//! @brief Return the $\vec{j}$ unit vector expressed in the global coordinate
-//! system for the position being passed as parameter.
-Vector3d XC::SisRef::GetJ(const Pos3d &p) const
-  { return GetVDirEje(2,p); }
-
-//! @brief Return the $\vec{k}$ unit vector expressed in the global coordinate
-//! system for the position being passed as parameter.
-Vector3d XC::SisRef::GetK(const Pos3d &p) const
-  { return GetVDirEje(3,p); }
+#include "preprocessor/cad/ReferenceFrame.h"
+#include "preprocessor/set_mgmt/Set.h"
 
 
+#include "CartesianReferenceFrame3d.h"
+
+//! @brief Constructor.
+XC::ReferenceFrameMap::ReferenceFrameMap(Cad *cad)
+  : MapCadMember<ReferenceFrame>(cad) {}
+
+//! @brief Creates a new reference system of the type passed as paramenter.
+XC::ReferenceFrame *XC::ReferenceFrameMap::New(const std::string &tipo)
+  {
+    ReferenceFrame *retval= busca(getTag());
+    if(!retval) //New reference system.
+      {
+        if(tipo == "cartesianas")
+          {
+            Preprocessor *preprocessor= getPreprocessor();
+            retval= new CartesianReferenceFrame3d("r"+boost::lexical_cast<std::string>(getTag()),preprocessor);
+            (*this)[getTag()]= retval;
+            tag++;
+          }
+        else
+	  std::cerr << getClassName() << "::" << __FUNCTION__
+	            << "; reference system type: '" << tipo
+                    << "' unknown." << std::endl;
+      }
+    return retval;
+  }

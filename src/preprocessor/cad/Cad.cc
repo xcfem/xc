@@ -28,14 +28,14 @@
 
 #include "Cad.h"
 
-#include "preprocessor/cad/entidades/Pnt.h"
-#include "preprocessor/cad/entidades/Linea.h"
-#include "preprocessor/cad/entidades/DividedLine.h"
-#include "preprocessor/cad/entidades/CmbEdge.h"
-#include "preprocessor/cad/entidades/ArcoCircunf.h"
-#include "preprocessor/cad/entidades/QuadSurface.h"
-#include "preprocessor/cad/entidades/Block.h"
-#include "preprocessor/cad/entidades/UniformGrid.h"
+#include "preprocessor/cad/entities/Pnt.h"
+#include "preprocessor/cad/entities/Linea.h"
+#include "preprocessor/cad/entities/DividedLine.h"
+#include "preprocessor/cad/entities/CmbEdge.h"
+#include "preprocessor/cad/entities/ArcoCircunf.h"
+#include "preprocessor/cad/entities/QuadSurface.h"
+#include "preprocessor/cad/entities/Block.h"
+#include "preprocessor/cad/entities/UniformGrid.h"
 #include "preprocessor/cad/matrices/MatrizPtrPnt.h"
 #include "preprocessor/cad/matrices/TritrizPtrPnt.h"
 #include "trf/Rotation.h"
@@ -75,7 +75,7 @@ void XC::Cad::numera(void)
 
 //! @brief Return the «edge» that has as end points those
 //! whose indices are passed as parameters.
-XC::Edge *XC::Cad::busca_edge_extremos(const MapPuntos::Indice &pA,const MapPuntos::Indice &pB)
+XC::Edge *XC::Cad::busca_edge_extremos(const PntMap::Indice &pA,const PntMap::Indice &pB)
   {
     Edge *retval= nullptr;
     const Pnt *p1= puntos.busca(pA);
@@ -98,7 +98,7 @@ XC::Edge *XC::Cad::busca_edge_extremos(const MapPuntos::Indice &pA,const MapPunt
 
 //! @brief Returs the «edge» that has as end points those
 //! whose indices are passed as parameter.
-const XC::Edge *XC::Cad::busca_edge_extremos(const MapPuntos::Indice &pA,const MapPuntos::Indice &pB) const
+const XC::Edge *XC::Cad::busca_edge_extremos(const PntMap::Indice &pA,const PntMap::Indice &pB) const
   {
     const Edge *retval= nullptr;
     const Pnt *p1= puntos.busca(pA);

@@ -32,7 +32,7 @@
 #include "domain/mesh/node/Node.h"
 #include "domain/mesh/element/Element.h"
 
-#include "preprocessor/cad/entidades/Pnt.h"
+#include "preprocessor/cad/entities/Pnt.h"
 #include "preprocessor/set_mgmt/Set.h"
 
 

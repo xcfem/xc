@@ -24,42 +24,42 @@
 // along with this program.
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
-//SisRefCartesianas3d.cc
+//CartesianReferenceFrame3d.cc
 
-#include "SisRefCartesianas3d.h"
+#include "CartesianReferenceFrame3d.h"
 #include "preprocessor/Preprocessor.h"
-#include "preprocessor/cad/entidades/Pnt.h"
+#include "preprocessor/cad/entities/Pnt.h"
 #include "xc_utils/src/geom/pos_vec/Vector3d.h"
 
 #include "domain/mesh/element/Element.h"
 #include "domain/mesh/node/Node.h"
 
 //! @brief Origin of the 3D cartesian coordinate system
-Pos3d XC::SisRefCartesianas3d::getOrg(void) const
+Pos3d XC::CartesianReferenceFrame3d::getOrg(void) const
   { return ref.Org(); }
 
 //! @brief Origin of the 3D cartesian coordinate system
-void XC::SisRefCartesianas3d::setOrg(const Pos3d &p)
+void XC::CartesianReferenceFrame3d::setOrg(const Pos3d &p)
   { ref.Org()= p; }
 
 //! @brief 3D cartesian coordinate system by three points
-void XC::SisRefCartesianas3d::TresPuntos(const Pos3d &p1,const Pos3d &p2, const Pos3d &p3)
+void XC::CartesianReferenceFrame3d::TresPuntos(const Pos3d &p1,const Pos3d &p2, const Pos3d &p3)
   { ref= Ref3d3d(p1,p2,p3); }
 
 //! @brief Return the i-th axis unit vector expressed in the global coordinate
 //! system for the position passed as parameter.
-Vector3d XC::SisRefCartesianas3d::GetVDirEje(const size_t &i,const Pos3d &) const
+Vector3d XC::CartesianReferenceFrame3d::GetVDirEje(const size_t &i,const Pos3d &) const
   { return ref.GetVDirEje(i); }
 
 //! @brief Return the global coordinates of point p. 
-Pos3d XC::SisRefCartesianas3d::GetPosGlobal(const Pos3d &p) const
+Pos3d XC::CartesianReferenceFrame3d::GetPosGlobal(const Pos3d &p) const
   { return ref.GetPosGlobal(p); }
 //! @brief Return the global coordinates of vector v.
-Vector3d XC::SisRefCartesianas3d::GetCooGlobales(const Vector3d &v) const
+Vector3d XC::CartesianReferenceFrame3d::GetCooGlobales(const Vector3d &v) const
   { return ref.GetCooGlobales(v); }
 //! @brief Return the local coordinates of point p.
-Pos3d XC::SisRefCartesianas3d::GetPosLocal(const Pos3d &p) const
+Pos3d XC::CartesianReferenceFrame3d::GetPosLocal(const Pos3d &p) const
   { return ref.GetPosLocal(p); }
 //! @brief Return the local coordinates of vector v.
-Vector3d XC::SisRefCartesianas3d::GetCooLocales(const Vector3d &v) const
+Vector3d XC::CartesianReferenceFrame3d::GetCooLocales(const Vector3d &v) const
   { return ref.GetCooLocales(v); }

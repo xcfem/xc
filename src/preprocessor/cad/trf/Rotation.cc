@@ -29,7 +29,7 @@
 #include "Rotation.h"
 #include "preprocessor/cad/Cad.h"
 #include "preprocessor/Preprocessor.h"
-#include "preprocessor/cad/entidades/Pnt.h"
+#include "preprocessor/cad/entities/Pnt.h"
 #include "xc_utils/src/geom/pos_vec/Pos3d.h"
 #include "xc_utils/src/geom/pos_vec/Vector3d.h"
 #include "xc_utils/src/geom/d1/Recta3d.h"
