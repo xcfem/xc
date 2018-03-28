@@ -60,9 +60,7 @@
 // Revision: B 03/98 - revised to allow parallel model generation
 //
 // Description: This file contains the class definition for Subdomain.
-// Subdomain is a container class. The class is responsible for holding
-// and providing access to the Elements, Nodes, LoadCases, SFreedom_Constraints
-// and MFreedom_Constraints that have been added to the subdomain.
+// Subdomain is a container class.
 //
 // What: "@(#) Subdomain.h, revA"
 
@@ -83,7 +81,17 @@ class LinearSOE;
 class ConvergenceTest;
 class FE_Element;
 
-
+//! Domain enclosed in another domain.
+//!
+//! A Subdomain is a Domain that can be an Element in an
+//! enclosing Domain. For this reason, it inherits from both Domain and
+//! Element. It also extends the Domain interface to deal with the
+//! distinction between whether Nodes in the Subdomain are internal to the
+//! Subdomain, or external. An external Node is a Node shared by two
+//! Elements residing in different Subdomains.
+//! The class is responsible for holding and providing access to the Elements,
+//! Nodes, LoadCases, SFreedom_Constraints, and MFreedom_Constraints, and
+//! MRMFreedom_Constraints that have been added to the subdomain.
 class Subdomain: public Element, public Domain
   {
   private:
@@ -95,11 +103,9 @@ class Subdomain: public Element, public Domain
     mutable ID *extNodes;
     FE_Element *theFEele;
 
-    //    TaggedObjectStorage  *realExternalNodes;
-
-    SingleDomNodIter   *internalNodeIter;
-    SingleDomNodIter   *externalNodeIter;
-    SubdomainNodIter   *theNodIter;
+    SingleDomNodIter *internalNodeIter;
+    SingleDomNodIter *externalNodeIter;
+    SubdomainNodIter *theNodIter;
 
     PartitionedModelBuilder *thePartitionedModelBuilder;
     static Matrix badResult;
@@ -112,7 +118,7 @@ class Subdomain: public Element, public Domain
 
 
     FE_Element *getFE_ElementPtr(void);
-    TaggedObjectStorage  *internalNodes;
+    TaggedObjectStorage *internalNodes;
     TaggedObjectStorage *externalNodes;
 
     DomainDecompositionAnalysis *getDDAnalysis(void);
