@@ -57,6 +57,8 @@
 //
 // What: "@(#) ShadowSubdomain.h, revA"
 namespace XC {
+//! @ingroup SubDom
+//
 static const int ShadowActorSubdomain_setTag = 72;
 static const int ShadowActorSubdomain_newStep = 73;
 static const int ShadowActorSubdomain_buildSubdomain = 70;

@@ -53,8 +53,7 @@
 // Purpose: This file contains the class definition for Domain
 // Domain is a container class. The class is responsible for holding
 // and providing access to the Elements, Nodes, LoadCases, SFreedom_Constraints
-// and MFreedom_Constraints. These objects are all added to the Domain by a
-// ModelBuilder.
+// and MFreedom_Constraints.
 //
 // What: "@(#) Domain.C, revA"
 

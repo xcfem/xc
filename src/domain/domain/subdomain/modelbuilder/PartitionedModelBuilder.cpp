@@ -61,65 +61,82 @@
 #include "domain/domain/subdomain/Subdomain.h"
 #include "domain/domain/SubdomainIter.h"
 
-//  PartitionedModelBuilderModel(Domain &theDomain, int theClassTag);
-//	constructor
-XC::PartitionedModelBuilder::PartitionedModelBuilder(PartitionedDomain &aPartitionedDomain,
-						 int theClassTag)
-:ModelBuilder(aPartitionedDomain), MovableObject(theClassTag),
-thePartitionedDomain(&aPartitionedDomain)
-{
+//! @brief Constructor.
+//!
+//! Typically, a PartitionedModelBuilder is associated with a PartitionedDomain,
+//! this constructor sets up a link for the PartitionedModelBuilder and the
+//! domain, setting its link to the Domain object \p domain. The Domain {\em
+//! domain} is passed to the constructor for ModelBuilder, and the integer
+//! \p classTag is passed to the MovableObject classes constructor.
+XC::PartitionedModelBuilder::PartitionedModelBuilder(PartitionedDomain &aPartitionedDomain, int theClassTag)
+  : ModelBuilder(aPartitionedDomain), MovableObject(theClassTag),
+    thePartitionedDomain(&aPartitionedDomain)
+  {}
 
-}
+//! This is the constructor that is called when a PartitionedModelBuilder
+//! is to be created by an FE\_ObjectBroker. The only method that can be
+//! invoked on such an object is buildSubdomain().
+//!
+//! @param classTag: identifier of the class.
+XC::PartitionedModelBuilder::PartitionedModelBuilder(Subdomain &aSubdomain, int classTag)
+  : ModelBuilder(aSubdomain), MovableObject(classTag),
+    thePartitionedDomain(nullptr)
+  {}
 
-XC::PartitionedModelBuilder::PartitionedModelBuilder(Subdomain &aSubdomain,
-						 int theClassTag)
-:ModelBuilder(aSubdomain), MovableObject(theClassTag),
-thePartitionedDomain(0)
-{
-
-}
-
+//! The PartitionedModelBuilder will first check that the
+//! PartitionedModelBuilder was constructed with a PartitioneDomain, if
+//! not a warning message is printed and a \f$-1\f$ is returned. If o.k. the
+//! object then determines the number of Subdomains, \p numSub in the
+//! PartitionedDomain. It then invokes {\em buildInterface(numSub)} on 
+//! itself. Then for each Subdomain in the PartitionedDomain it invokes
+//! {\em buildSubdomain(numSub, *this)}. If building the interface or any
+//! of the subdomains fails, a warning message is printed and a negative
+//! number is returned. Returns \f$0\f$ if sucessfull.
 int XC::PartitionedModelBuilder::buildFE_Model(void)
-{
-  int result;
+  {
+    int result;
 
-  if (thePartitionedDomain == 0) {
-    std::cerr << "XC::PartitionedModelBuilder::buildFE_Model(void) -";
-    std::cerr << "No XC::PartitionedDomain associated with this object\n";
-    return -1;
+    if(thePartitionedDomain == 0)
+      {
+	std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "(void); "
+	          << "no PartitionedDomain associated with this object.\n";
+        return -1;
+      }
+
+    // we build the interface, i.e. nodes on boundaries and any constraints and loads
+    int numSubdomains = thePartitionedDomain->getNumSubdomains();
+    result = this->buildInterface(numSubdomains);
+    if (result != 0)
+      {
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "(void); buildInterface failed.\n";
+        return result;
+      }
+
+    // now build the subdomains, stopping if an error in building any subdomain
+    SubdomainIter &theSubs = thePartitionedDomain->getSubdomains();
+    Subdomain *theSubdomain= nullptr;
+    while((theSubdomain = theSubs()) != 0)
+      {
+        result = theSubdomain->buildSubdomain(numSubdomains, *this);
+        if(result != 0)
+	  {
+	    std::cerr << getClassName() << "::" << __FUNCTION__
+		      << "(void); "
+		      << "buildSubdomain failed for subdomain: "
+		      << theSubdomain->getTag()
+		      << std::endl;
+	    return result;
+          }
+      }
+
+    // if got here a PartitiondDomain has been populated
+    return 0;
   }
 
-  // we build the interface, i.e. nodes on boundaries and any constraints and loads
-  int numSubdomains = thePartitionedDomain->getNumSubdomains();
-  result = this->buildInterface(numSubdomains);
-  if (result != 0) {
-    std::cerr << "XC::PartitionedModelBuilder::buildFE_Model(void) -";
-    std::cerr << "buildInterface failed\n";
-    return result;
-  }
-
-  // now build the subdomains, stopping if an error in building any subdomain
-  SubdomainIter &theSubs = thePartitionedDomain->getSubdomains();
-  Subdomain *theSubdomain;
-  while ((theSubdomain = theSubs()) != 0) {
-    result = theSubdomain->buildSubdomain(numSubdomains, *this);
-    if (result != 0) {
-	std::cerr << "XC::PartitionedModelBuilder::buildFE_Model(void) -";
-	std::cerr << "buildSubdomain failed for XC::Subdomain " << theSubdomain->getTag();
-	std::cerr << std::endl;
-	return result;
-    }
-
-  }
-
-  // if got here a PartitiondDomain has been populated
-  return 0;
-}
-
- XC::PartitionedDomain *
-XC::PartitionedModelBuilder::getPartitionedDomainPtr(void) const 
-{
-    return thePartitionedDomain;
-}
+//! @brief Return a pointer to the PartitionedDomain object.
+XC::PartitionedDomain *XC::PartitionedModelBuilder::getPartitionedDomainPtr(void) const 
+  { return thePartitionedDomain; }
     
 

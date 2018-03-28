@@ -81,7 +81,13 @@ class LinearSOE;
 class ConvergenceTest;
 class FE_Element;
 
-//! Domain enclosed in another domain.
+//! @ingroup Dom
+//
+//! @defgroup SubDom sub domains of the finite element model.
+//!
+//! @ingroup SubDom
+//
+//! @brief Domain enclosed in another domain.
 //!
 //! A Subdomain is a Domain that can be an Element in an
 //! enclosing Domain. For this reason, it inherits from both Domain and

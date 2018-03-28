@@ -91,7 +91,7 @@ class FEM_ObjectBroker;
 class RayleighDampingFactors;
 
 //!  @defgroup Dom Domain for the finite element problem.
-
+//
 //! @ingroup Dom
 //
 //! @brief Domain (mesh and boundary conditions) of the finite element model.

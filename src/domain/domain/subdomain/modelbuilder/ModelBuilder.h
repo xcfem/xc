@@ -65,10 +65,22 @@
 #ifndef ModelBuilder_h
 #define ModelBuilder_h
 
+#include "xc_utils/src/nucleo/EntCmd.h"
+
 namespace XC {
 class Domain;
 
-class ModelBuilder
+//! @ingroup SubDom
+//
+//! 
+//! @brief Base class for model builders.
+//! 
+//! The ModelBuilder class is an abstract base class. A subclass
+//! of ModelBuilder is a class which creates the finite element
+//! discretization of a structure: that is it discretizes the structure to
+//! be modeled into Elements, Nodes, Constraints, etc. and adds these
+//! components to the Domain.
+ class ModelBuilder: public EntCmd
   {
   private:
     Domain *myDomain;
@@ -77,6 +89,9 @@ class ModelBuilder
   public:
     ModelBuilder(Domain &theDomain);
     
+    //! @brief The ModelBuilder will construct the Element, Node, Load and
+    //! Constraint objects and add them to the Domain object associated with
+    //! the ModelBuilder.
     virtual int buildFE_Model(void) = 0;    
   };
 } // end of XC namespace

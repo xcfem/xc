@@ -67,6 +67,9 @@
 #include "utility/matrix/ID.h"
 
 namespace XC {
+//! @ingroup SubDom
+//
+//! @brief Local representation of a remote subdomain.
 class ShadowSubdomain: public Shadow, public Subdomain
   {
   private:

@@ -58,7 +58,7 @@
 // and MFreedom_Constraints just like a normal domain. In addition the domain provides
 // a method to partition the domain into Subdomains.
 //
-// ModelBuilder. There are no partitions in a XC::PartitionedDomain.
+// ModelBuilder. There are no partitions in a PartitionedDomain.
 //
 // What: "@(#) PartitionedDomain.C, revA"
 
