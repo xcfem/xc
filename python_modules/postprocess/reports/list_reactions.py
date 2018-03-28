@@ -1,6 +1,15 @@
 # -*- coding: utf-8 -*-
-# Imprime las reacciones of the nodes de la lista que se pasa como parámetro.
-def listNodeReacciones(preprocessor,nmbComb,nodeListArranque, fmt, fName, encab, tit):
+
+'''Generation of reactions repports.'''
+
+__author__= "Luis C. Pérez Tato (LCPT), Ana Ortega(AO_O)"
+__copyright__= "Copyright 2016,LCPT, AO_O"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@ciccp.es, ana.Ortega@ciccp.es"
+
+def listNodeReactions(preprocessor,nmbComb,nodeListArranque, fmt, fName, encab, tit):
+  '''Prints reactions for each of the nodes from the list.'''
   fName.write("\\",encab,"{",tit,"}\n")
   caption= tit
   defCampos= "|l|r|r|r|r|r|r|r|"
@@ -20,11 +29,11 @@ def listNodeReacciones(preprocessor,nmbComb,nodeListArranque, fmt, fName, encab,
       fName.write("\\multicolumn{6}{|l|}{undefined node.}\\\\\n")
   cierraSupertabular(fName)
 
-'''
-Imprime las reacciones of the nodes asociados a la lista de puntos
-   que se pasa como parámetro.
-'''
-def listaReaccionesPuntos(nmbComb,lstPuntosArranque, fmt, fName, encab, tit):
+def listPointReactions(nmbComb,pointList, fmt, fName, encab, tit):
+   '''
+      Print the reactions associated with the nodes associated to the
+      points from the list.
+   '''
   fName.write("\\",encab,"{",tit,"}\n")
   caption= tit
   defCampos= "|l|r|r|r|r|r|r|r|r|"
@@ -33,10 +42,10 @@ def listaReaccionesPuntos(nmbComb,lstPuntosArranque, fmt, fName, encab, tit):
   nodes= preprocessor.getNodeLoader
   nodes.calculateNodalReactions()
 
-  for iArranque in lstPuntosArranque:
+  for iArranque in pointList:
     pto= preprocessor.getCad.getPunto(iArranque)
     iNode= pto.getNodeTag()
-    fName.write(nmbComb," & ",lstPuntosArranque[i]," & ",iNode," & ")
+    fName.write(nmbComb," & ",pointList[i]," & ",iNode," & ")
     if(iNode>=0):
       nod= nodes.getNode(iNode)
       reac= nod.getReaction()
@@ -46,21 +55,20 @@ def listaReaccionesPuntos(nmbComb,lstPuntosArranque, fmt, fName, encab, tit):
       fName.write("\\multicolumn{6}{|l|}{undefined node.}\\\\\n")
   cierraSupertabular(fName)
 
-'''
-Imprime en formato CSV (comma separated values) las reacciones of the nodes asociados a la lista de puntos
-   que se pasa como parámetro .
-'''
-def listaReaccionesPuntosCSV(preprocessor,nmbComb,lstPuntosArranque, fmt, fName):
+def listPointReactionsCSV(preprocessor,nmbComb,pointList, fmt, fName):
+  '''
+     Prints the reactions in CSV (comma separated values) format.
+  '''
   fName.write("Caso ; IdP ; IdN ; Fx ; Fy ; Fz ; Mx ; My ; Mz\n")
   fName.write(" - ; - ; - ; kN ; kN ; kN ; kN m ; kN m ; kN m \n")
 
   nodes= preprocessor.getNodeLoader
   nodes.calculateNodalReactions()
 
-  for iArranque in lstPuntosArranque:
+  for iArranque in pointList:
     pto= preprocessor.getCad.getPunto(iArranque)
     iNode= pto.getNodeTag()
-    fName.write(nmbComb," ; ",lstPuntosArranque[i]," ; ",iNode," ; ")
+    fName.write(nmbComb," ; ",pointList[i]," ; ",iNode," ; ")
     if(iNode>=0):
       nod= nodes.getNode(iNode)
       reac= nod.getReaction()
@@ -69,18 +77,18 @@ def listaReaccionesPuntosCSV(preprocessor,nmbComb,lstPuntosArranque, fmt, fName)
     else:
       fName.write("undefined node.\n")
 
-class RecordListadoReacciones(object):
+class ReactionsListRecord(object):
   formato= '{:7.2f}'
   sectionHeadingA= "subsection"
-  titulo= "Reacciones"
+  titulo= "Reactions"
   sectionHeadingB= "subsubsection"
   nodeLists= []
   listaCabeceras= []
 
-  def generaListadoReacciones(self,nmbComb, fName):
+  def write(self,nmbComb, fName):
     fName.write("\\",self.sectionHeadingA,"{",titulo,"}\n")
     j= 0
     for l in self.nodeLists:
-      listNodeReacciones(nmbComb,l,'{:7.2f}',fName,sectionHeadingB,self.listaCabeceras[j])
+      listNodeReactions(nmbComb,l,'{:7.2f}',fName,sectionHeadingB,self.listaCabeceras[j])
       j+= 1
 
