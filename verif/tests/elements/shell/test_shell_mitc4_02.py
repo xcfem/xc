@@ -21,7 +21,7 @@ import math
 
 feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
-nodes= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeHandler
 
 # Problem type
 modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
@@ -34,7 +34,7 @@ nodes.newNodeIDXYZ(4,0,1,1)
 # Materials definition
 memb1= typical_materials.defElasticPlateSection(preprocessor, "memb1",E,nu,0,h)
 
-elements= preprocessor.getElementLoader
+elements= preprocessor.getElementHandler
 elements.defaultMaterial= "memb1"
 elem= elements.newElement("ShellMITC4",xc.ID([1,2,3,4]))
 

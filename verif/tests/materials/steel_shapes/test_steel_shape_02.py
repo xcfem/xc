@@ -37,7 +37,7 @@ matHE400B=typical_materials.MaterialData(name='S275JR',E=S275JR.E,nu=S275JR.nu,r
 # Problem type
 feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor   
-nodes= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeHandler
 modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
 nodes.defaultTag= 1 #First node number.
 nod= nodes.newNodeXYZ(0,0.0,0.0)
@@ -48,7 +48,7 @@ lin= modelSpace.newLinearCrdTransf("lin",xc.Vector([0,0,1]))
 shape= HE400B.defElasticShearSection3d(preprocessor,matHE400B)
 
 # Elements definition
-elements= preprocessor.getElementLoader
+elements= preprocessor.getElementHandler
 elements.defaultTransformation= "lin"
 elements.defaultMaterial= HE400B.sectionName
 elem= elements.newElement("ElasticBeam3d",xc.ID([1,2]))
@@ -65,7 +65,7 @@ recorder.callbackRecord= cc.controTensRecElastico3d()
 modelSpace.fixNode000_000(1)
 
 # Loads definition
-cargas= preprocessor.getLoadLoader
+cargas= preprocessor.getLoadHandler
 casos= cargas.getLoadPatterns
 #Load modulation.
 ts= casos.newTimeSeries("constant_ts","ts")
@@ -80,11 +80,11 @@ analisis= predefined_solutions.simple_static_linear(feProblem)
 result= analisis.analyze(1)
 
 
-nodes= preprocessor.getNodeLoader 
+nodes= preprocessor.getNodeHandler 
 nod2= nodes.getNode(2)
 delta= nod2.getDisp[2]  # Node 2 yAxis displacement
 
-elements= preprocessor.getElementLoader
+elements= preprocessor.getElementHandler
 
 elem0= elements.getElement(0)
 elem0.getResistingForce()

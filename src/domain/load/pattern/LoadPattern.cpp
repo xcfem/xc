@@ -72,7 +72,7 @@
 
 #include "utility/actor/actor/ArrayCommMetaData.h"
 
-#include "preprocessor/loaders/LoadLoader.h"
+#include "preprocessor/prep_handlers/LoadHandler.h"
 
 void XC::LoadPattern::free(void)
   {
@@ -138,8 +138,8 @@ XC::MapLoadPatterns *XC::LoadPattern::getMapLoadPatterns(void)
 //! @brief Returns the name of this load pattern.
 const std::string &XC::LoadPattern::getName(void) const
   {
-    const MapLoadPatterns *mloader= getMapLoadPatterns();
-    return mloader->getLoadPatternName(this);
+    const MapLoadPatterns *mhandler= getMapLoadPatterns();
+    return mhandler->getLoadPatternName(this);
   }
 
 //! @brief Set the time series for the pattern.

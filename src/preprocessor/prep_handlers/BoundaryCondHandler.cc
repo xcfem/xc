@@ -24,9 +24,9 @@
 // along with this program.
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
-//ConstraintLoader.cc
+//BoundaryCondHandler.cc
 
-#include "ConstraintLoader.h"
+#include "BoundaryCondHandler.h"
 #include "domain/domain/Domain.h"
 #include "domain/constraints/SFreedom_Constraint.h"
 #include "domain/constraints/MFreedom_Constraint.h"
@@ -44,11 +44,11 @@
 
 
 //! @brief Default constructor.
-XC::ConstraintLoader::ConstraintLoader(Preprocessor *owr)
-  : Loader(owr), tag_sp_constraint(0), tag_mp_constraint(0) {}
+XC::BoundaryCondHandler::BoundaryCondHandler(Preprocessor *owr)
+  : PrepHandler(owr), tag_sp_constraint(0), tag_mp_constraint(0) {}
 
 //! @grief Appends a single freedom constraint to the model.
-XC::SFreedom_Constraint *XC::ConstraintLoader::addSFreedom_Constraint(const int &tag_nod,const SFreedom_Constraint &semilla)
+XC::SFreedom_Constraint *XC::BoundaryCondHandler::addSFreedom_Constraint(const int &tag_nod,const SFreedom_Constraint &semilla)
   {
     SFreedom_Constraint *sp= semilla.getCopy(tag_sp_constraint);
     tag_sp_constraint++;
@@ -65,7 +65,7 @@ XC::SFreedom_Constraint *XC::ConstraintLoader::addSFreedom_Constraint(const int 
   }
 
 //! @grief Appends a single freedom constraint to the model.
-XC::SFreedom_Constraint *XC::ConstraintLoader::addSFreedom_Constraint(const int &tag_nod,const int &dofId,const double &value)
+XC::SFreedom_Constraint *XC::BoundaryCondHandler::addSFreedom_Constraint(const int &tag_nod,const int &dofId,const double &value)
   {
     SFreedom_Constraint *sp= new SFreedom_Constraint(tag_sp_constraint,tag_nod,dofId, value);
     tag_sp_constraint++;
@@ -81,11 +81,11 @@ XC::SFreedom_Constraint *XC::ConstraintLoader::addSFreedom_Constraint(const int 
   }
 
 //! @grief Defines a single freedom constraint.
-XC::SFreedom_Constraint *XC::ConstraintLoader::newSPConstraint(const int &tag_nod,const int &dofId,const double &value)
+XC::SFreedom_Constraint *XC::BoundaryCondHandler::newSPConstraint(const int &tag_nod,const int &dofId,const double &value)
   { return addSFreedom_Constraint(tag_nod,dofId,value); }
 
 //! @grief Appends a multi-freedom constraint to the model.
-XC::MFreedom_Constraint *XC::ConstraintLoader::newMPConstraint(const int &masterNode, const int &slaveNode, const ID &constrainedDOF, const ID &retainedDOF)
+XC::MFreedom_Constraint *XC::BoundaryCondHandler::newMPConstraint(const int &masterNode, const int &slaveNode, const ID &constrainedDOF, const ID &retainedDOF)
   {
     MFreedom_Constraint *mp= new MFreedom_Constraint(tag_mp_constraint,masterNode,slaveNode,constrainedDOF,retainedDOF);
     tag_mp_constraint++;
@@ -105,7 +105,7 @@ XC::MFreedom_Constraint *XC::ConstraintLoader::newMPConstraint(const int &master
 //! @param masterNode: tag of the master node.
 //! @param slaveNode: tag of the slave node.
 //! @param dofs: degrees of freedom to impose the constraint on.
-XC::MFreedom_Constraint *XC::ConstraintLoader::newEqualDOF(const int &masterNode, const int &slaveNode, const ID &dofs)
+XC::MFreedom_Constraint *XC::BoundaryCondHandler::newEqualDOF(const int &masterNode, const int &slaveNode, const ID &dofs)
   {
     EqualDOF *mp= new EqualDOF(tag_mp_constraint,masterNode,slaveNode,dofs);
     tag_mp_constraint++;
@@ -121,7 +121,7 @@ XC::MFreedom_Constraint *XC::ConstraintLoader::newEqualDOF(const int &masterNode
     return mp;
   }
 
-XC::MFreedom_Constraint *XC::ConstraintLoader::newRigidBeam(const int &masterNode, const int &slaveNode)
+XC::MFreedom_Constraint *XC::BoundaryCondHandler::newRigidBeam(const int &masterNode, const int &slaveNode)
   {
     RigidBeam *mp= new RigidBeam(tag_mp_constraint,masterNode,slaveNode);
     tag_mp_constraint++;
@@ -137,7 +137,7 @@ XC::MFreedom_Constraint *XC::ConstraintLoader::newRigidBeam(const int &masterNod
     return mp;
   }
 
-XC::MFreedom_Constraint *XC::ConstraintLoader::newRigidRod(const int &masterNode, const int &slaveNode)
+XC::MFreedom_Constraint *XC::BoundaryCondHandler::newRigidRod(const int &masterNode, const int &slaveNode)
   {
     RigidRod *mp= new RigidRod(tag_mp_constraint,masterNode,slaveNode);
     tag_mp_constraint++;
@@ -154,7 +154,7 @@ XC::MFreedom_Constraint *XC::ConstraintLoader::newRigidRod(const int &masterNode
   }
 
 //! @grief Appends a multi-row, multi-freedom constraint to the model.
-XC::MRMFreedom_Constraint *XC::ConstraintLoader::newMRMPConstraint(const ID &retainedNodes, const int &constrainedNode, const ID &constrainedDOF)
+XC::MRMFreedom_Constraint *XC::BoundaryCondHandler::newMRMPConstraint(const ID &retainedNodes, const int &constrainedNode, const ID &constrainedDOF)
   {
     MRMFreedom_Constraint *mrmp= new MRMFreedom_Constraint(tag_mrmp_constraint,retainedNodes,constrainedNode,constrainedDOF);
     tag_mrmp_constraint++;
@@ -169,7 +169,7 @@ XC::MRMFreedom_Constraint *XC::ConstraintLoader::newMRMPConstraint(const ID &ret
     return mrmp;
   }
 
-XC::MRMFreedom_Constraint *XC::ConstraintLoader::newGlueNodeToElement(const Node &constrainedNode, const Element &e, const ID &constrainedDOF)
+XC::MRMFreedom_Constraint *XC::BoundaryCondHandler::newGlueNodeToElement(const Node &constrainedNode, const Element &e, const ID &constrainedDOF)
   {
     GlueNodeToElement *mrmp= new GlueNodeToElement(tag_mrmp_constraint,constrainedNode,e,constrainedDOF);
     tag_mrmp_constraint++;
@@ -186,7 +186,7 @@ XC::MRMFreedom_Constraint *XC::ConstraintLoader::newGlueNodeToElement(const Node
 
 
 //! @brief Removes the constraint from domain.
-void XC::ConstraintLoader::removeSPConstraint(const int &tagC)
+void XC::BoundaryCondHandler::removeSPConstraint(const int &tagC)
   {
     bool sp= getDomain()->removeSFreedom_Constraint(tagC);
     if(!sp)
@@ -194,30 +194,30 @@ void XC::ConstraintLoader::removeSPConstraint(const int &tagC)
 	        << "; could not remove constraint." << std::endl;
   }
 
-XC::ConstraintLoader::~ConstraintLoader(void)
+XC::BoundaryCondHandler::~BoundaryCondHandler(void)
   { clearAll(); }
 
 //! @brief Clears all the objects.
-void XC::ConstraintLoader::clearAll(void)
+void XC::BoundaryCondHandler::clearAll(void)
   {
     tag_sp_constraint= 0;
     tag_mp_constraint= 0;
   }
 
 //! @brief returns number of single node constraints.
-int XC::ConstraintLoader::getNumSPs(void) const
+int XC::BoundaryCondHandler::getNumSPs(void) const
   { return getDomain()->getConstraints().getNumSPs(); }
 
 //! @brief returns numbr of multiple node constraints.
-int XC::ConstraintLoader::getNumMPs(void) const
+int XC::BoundaryCondHandler::getNumMPs(void) const
   { return getDomain()->getConstraints().getNumMPs(); }
 
 //! @brief returns numbr of multiple retained node constraints.
-int XC::ConstraintLoader::getNumMRMPs(void) const
+int XC::BoundaryCondHandler::getNumMRMPs(void) const
   { return getDomain()->getConstraints().getNumMRMPs(); }
 
 //! @brief returns number of load patterns.
-int XC::ConstraintLoader::getNumLPs(void) const
+int XC::BoundaryCondHandler::getNumLPs(void) const
   { return getDomain()->getConstraints().getNumLoadPatterns(); }
 
 

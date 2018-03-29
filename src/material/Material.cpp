@@ -60,7 +60,7 @@
 // What: "@(#) MaterialModel.C, revA"
 
 #include "Material.h"
-#include "preprocessor/loaders/MaterialLoader.h"
+#include "preprocessor/prep_handlers/MaterialHandler.h"
 #include "utility/matrix/Vector.h"
 #include "utility/matrix/ID.h"
 
@@ -74,9 +74,9 @@ XC::Material::Material(int tag, int clasTag)
   :TaggedObject(tag), MovableObject(clasTag) {}
 
 //! @brief Returns (if possible) a pointer to the material handler (owner).
-const XC::MaterialLoader *XC::Material::GetMaterialLoader(void) const
+const XC::MaterialHandler *XC::Material::getMaterialHandler(void) const
   {
-    const MaterialLoader *retval= dynamic_cast<const MaterialLoader *>(Owner());
+    const MaterialHandler *retval= dynamic_cast<const MaterialHandler *>(Owner());
     if(!retval)
       std::cerr << "Material::" << __FUNCTION__
 	        << "; material handler not defined." << std::endl;
@@ -84,9 +84,9 @@ const XC::MaterialLoader *XC::Material::GetMaterialLoader(void) const
   }
 
 //! @brief Returs a pointer to the material handler (if possible).
-XC::MaterialLoader *XC::Material::GetMaterialLoader(void)
+XC::MaterialHandler *XC::Material::getMaterialHandler(void)
   {
-    XC::MaterialLoader *retval= dynamic_cast<MaterialLoader *>(Owner());
+    XC::MaterialHandler *retval= dynamic_cast<MaterialHandler *>(Owner());
     if(!retval)
       std::cerr << "Material::" << __FUNCTION__
 	        << "; material handler not defined." << std::endl;
@@ -96,8 +96,8 @@ XC::MaterialLoader *XC::Material::GetMaterialLoader(void)
 //! @brief Returns the name of the material.
 std::string XC::Material::getName(void) const
   {
-    const MaterialLoader *mloader= GetMaterialLoader();
-    return mloader->getName(getTag());
+    const MaterialHandler *mhandler= getMaterialHandler();
+    return mhandler->getName(getTag());
   }
 
 int XC::Material::setVariable(const std::string &argv)

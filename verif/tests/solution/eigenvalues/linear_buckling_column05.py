@@ -38,7 +38,7 @@ NumDiv= 4
 # Problem type
 feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
-nodes= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeHandler
 modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
 
 # Materials definition
@@ -48,11 +48,11 @@ nodes.newSeedNode()
 # Geometric transformation(s)
 lin= modelSpace.newPDeltaCrdTransf("lin",xc.Vector([0,1,0]))
 # Seed element definition
-seedElemLoader= preprocessor.getElementLoader.seedElemLoader
-seedElemLoader.defaultMaterial= "scc"
-seedElemLoader.defaultTransformation= "lin"
-seedElemLoader.defaultTag= 1 #Tag for the next element.
-beam3d= seedElemLoader.newElement("ElasticBeam3d",xc.ID([0,0]))
+seedElemHandler= preprocessor.getElementHandler.seedElemHandler
+seedElemHandler.defaultMaterial= "scc"
+seedElemHandler.defaultTransformation= "lin"
+seedElemHandler.defaultTag= 1 #Tag for the next element.
+beam3d= seedElemHandler.newElement("ElasticBeam3d",xc.ID([0,0]))
 beam3d.rho= 0.0
 
 
@@ -68,7 +68,7 @@ l.nDiv= NumDiv
 setTotal= preprocessor.getSets.getSet("total")
 setTotal.genMesh(xc.meshDir.I)
 # Constraints
-constraints= preprocessor.getConstraintLoader
+constraints= preprocessor.getBoundaryCondHandler
 
 #
 spc= constraints.newSPConstraint(1,0,0.0) # Node 2,gdl 0 # Back end node.
@@ -79,7 +79,7 @@ spc= constraints.newSPConstraint(2,0,0.0) # Node 2,gdl 0 # Front end node.
 spc= constraints.newSPConstraint(2,1,0.0) # Node 2,gdl 1
 
 # Loads definition
-cargas= preprocessor.getLoadLoader
+cargas= preprocessor.getLoadHandler
 
 casos= cargas.getLoadPatterns
 

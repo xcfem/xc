@@ -21,7 +21,7 @@ preprocessor=  feProblem.getPreprocessor
 
 
 #Load modulation.
-cargas= preprocessor.getLoadLoader
+cargas= preprocessor.getLoadHandler
 casos= cargas.getLoadPatterns
 ts= casos.newTimeSeries("constant_ts","ts")
 gm= casos.newLoadPattern("uniform_excitation","gm")

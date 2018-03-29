@@ -84,9 +84,9 @@ class FiberSectionBase: public PrismaticBarCrossSection
     const NMyMzPointCloud &getInteractionDiagramPoints(const InteractionDiagramData &);
     const NMPointCloud &getInteractionDiagramPointsForPlane(const InteractionDiagramData &, const double &);
   public:
-    FiberSectionBase(int classTag,int dim,MaterialLoader *mat_ldr= nullptr); 
-    FiberSectionBase(int tag, int classTag,int dim,MaterialLoader *mat_ldr= nullptr);
-    FiberSectionBase(int tag, int classTag, int numFibers,int dim,MaterialLoader *mat_ldr= nullptr);
+    FiberSectionBase(int classTag,int dim,MaterialHandler *mat_ldr= nullptr); 
+    FiberSectionBase(int tag, int classTag,int dim,MaterialHandler *mat_ldr= nullptr);
+    FiberSectionBase(int tag, int classTag, int numFibers,int dim,MaterialHandler *mat_ldr= nullptr);
     FiberSectionBase(const FiberSectionBase &otro);
     FiberSectionBase &operator=(const FiberSectionBase &otro);
     ~FiberSectionBase(void);
@@ -97,7 +97,7 @@ class FiberSectionBase: public PrismaticBarCrossSection
     inline FiberContainer &getFibers(void)
       { return fibers; }
     virtual Fiber *addFiber(Fiber &)= 0;
-    virtual Fiber *addFiber(int tag,const MaterialLoader &,const std::string &nmbMat,const double &, const Vector &position)= 0;
+    virtual Fiber *addFiber(int tag,const MaterialHandler &,const std::string &nmbMat,const double &, const Vector &position)= 0;
     Fiber *addFiber(const std::string &nmbMat,const double &area,const Vector &coo);
     int setInitialSectionDeformation(const Vector &deforms); 
     int setTrialSectionDeformation(const Vector &deforms);

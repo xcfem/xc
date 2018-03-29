@@ -40,7 +40,7 @@
 
 #include "utility/actor/actor/ArrayCommMetaData.h"
 
-#include "preprocessor/loaders/LoadLoader.h"
+#include "preprocessor/prep_handlers/LoadHandler.h"
 
 //! @brief Frees memory.
 void XC::LoadContainer::free_containers(void)

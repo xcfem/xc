@@ -29,14 +29,14 @@ L=10 # Length of bars
 # Problem type
 feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
-nodes= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeHandler
 modelSpace= predefined_spaces.StructuralMechanics2D(nodes)
 
 nodes.defaultTag= 1
 nodes.newSeedNode()
 # Geometric transformation(s)
 lin= modelSpace.newLinearCrdTransf("lin")
-elements= preprocessor.getElementLoader
+elements= preprocessor.getElementHandler
 elements.defaultTransformation= "lin"
  
 
@@ -85,7 +85,7 @@ modelSpace.fixNodesLine(line= l1)
 
 
 # Casos de carga
-cargas= preprocessor.getLoadLoader
+cargas= preprocessor.getLoadHandler
 #Load pattern container:
 casos= cargas.getLoadPatterns
 #Load modulation.
@@ -130,7 +130,7 @@ for i in range(1,nNodes+1):
 
 errDisp= math.sqrt(errDisp)
 
-constraints= preprocessor.getConstraintLoader
+constraints= preprocessor.getBoundaryCondHandler
 numSPs= constraints.getNumSPs
 nNodes= setTotal.getNumNodes
 elements= setTotal.getElements

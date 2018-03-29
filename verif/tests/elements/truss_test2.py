@@ -28,7 +28,7 @@ b= l*math.sin(theta) #Distance between nodes extremos}
 
 feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
-nodes= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeHandler
 
 # Problem type
 modelSpace= predefined_spaces.SolidMechanics2D(nodes)
@@ -44,7 +44,7 @@ elast.E= E
 
 
 # Element definition.
-elements= preprocessor.getElementLoader
+elements= preprocessor.getElementHandler
 elements.dimElem= 2 #Bidimensional space.
 elements.defaultMaterial= "elast"
 elements.defaultTag= 1 #Next element number.
@@ -53,7 +53,7 @@ truss.area= A
 truss= elements.newElement("Truss",xc.ID([2,3]))
 truss.area= A
 
-constraints= preprocessor.getConstraintLoader
+constraints= preprocessor.getBoundaryCondHandler
 #Zerp movement for node 1.
 spc= constraints.newSPConstraint(1,0,0.0)
 spc= constraints.newSPConstraint(1,1,0.0)
@@ -61,7 +61,7 @@ spc= constraints.newSPConstraint(1,1,0.0)
 spc= constraints.newSPConstraint(3,0,0.0)
 spc= constraints.newSPConstraint(3,1,0.0)
 
-cargas= preprocessor.getLoadLoader
+cargas= preprocessor.getLoadHandler
 #Load case container:
 casos= cargas.getLoadPatterns
 #Load modulation.

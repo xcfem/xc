@@ -74,7 +74,7 @@ class Response;
 class Vector;
 class Matrix;
 class ResponseId;
-class MaterialLoader;
+class MaterialHandler;
 
 //! \ingroup Mat
 //
@@ -87,18 +87,18 @@ class SectionForceDeformation: public Material
   {
   protected:
     mutable Matrix *fDefault; //!< Default flexibility matrix.
-    MaterialLoader *material_loader; //!< Material definition handler (search,...).
+    MaterialHandler *material_handler; //!< Material definition handler (search,...).
 
     int sendData(CommParameters &cp);
     int recvData(const CommParameters &cp);
   public:
-    SectionForceDeformation(int tag,int classTag,MaterialLoader *mat_ldr= nullptr);
+    SectionForceDeformation(int tag,int classTag,MaterialHandler *mat_ldr= nullptr);
     SectionForceDeformation(const SectionForceDeformation &otro);
     SectionForceDeformation &operator=(const SectionForceDeformation &otro);
     virtual ~SectionForceDeformation(void);
 
-    inline MaterialLoader *getMaterialLoader(void)
-      { return material_loader; }
+    inline MaterialHandler *getMaterialHandler(void)
+      { return material_handler; }
 
     virtual void zeroInitialSectionDeformation(void)= 0;
     virtual int setInitialSectionDeformation(const Vector &)= 0;

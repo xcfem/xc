@@ -24,12 +24,12 @@
 // along with this program.
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
-//BeamIntegratorLoader.h
+//BeamIntegratorHandler.h
 
 #ifndef BEAMINTEGRATORLOADER_H
 #define BEAMINTEGRATORLOADER_H
 
-#include "Loader.h"
+#include "PrepHandler.h"
 #include <map>
 
 namespace XC {
@@ -38,7 +38,7 @@ class BeamIntegration;
 //! \ingroup Ldrs
 //! 
 //! @brief Beam integrators handler.
-class BeamIntegratorLoader: public Loader
+class BeamIntegratorHandler: public PrepHandler
   {
   public:
     typedef std::map<std::string,BeamIntegration *> map_beam_integrators;
@@ -47,12 +47,12 @@ class BeamIntegratorLoader: public Loader
   private:
     map_beam_integrators beam_integrators;
     void free_mem(void);
-    BeamIntegratorLoader(const BeamIntegratorLoader &otro);
-    BeamIntegratorLoader &operator=(const BeamIntegratorLoader &otro);
+    BeamIntegratorHandler(const BeamIntegratorHandler &otro);
+    BeamIntegratorHandler &operator=(const BeamIntegratorHandler &otro);
   protected:
-    friend class ElementLoader;
+    friend class ElementHandler;
   public:
-    BeamIntegratorLoader(Preprocessor *owr);
+    BeamIntegratorHandler(Preprocessor *owr);
     const map_beam_integrators &Map(void) const;
     const_iterator begin(void) const;
     const_iterator end(void) const;
@@ -70,7 +70,7 @@ class BeamIntegratorLoader: public Loader
     BeamIntegration *newBI(const std::string &,const std::string &);
     BeamIntegration &get(const std::string &);
 
-    ~BeamIntegratorLoader(void);
+    ~BeamIntegratorHandler(void);
     inline void clearAll(void)
       { free_mem(); }
   };

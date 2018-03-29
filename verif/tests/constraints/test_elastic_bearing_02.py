@@ -17,7 +17,7 @@ from materials import typical_materials
 # Model definition
 feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
-nodes= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeHandler
 modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
 nodes.defaultTag= 1 #First node number.
 nod= nodes.newNodeXYZ(1,1,1)
@@ -31,7 +31,7 @@ ky= typical_materials.defElasticMaterial(preprocessor, "ky",KY)
 fixedNode, newElement= modelSpace.setBearingOnXYRigZ(nod.tag,["kx","ky"])
 
 # Constraints
-constraints= preprocessor.getConstraintLoader
+constraints= preprocessor.getBoundaryCondHandler
 
 #
 spc= constraints.newSPConstraint(nod.tag,3,0.0) # nod1 Rx= 0,Ry= 0 and Rz= 0
@@ -40,7 +40,7 @@ spc= constraints.newSPConstraint(nod.tag,5,0.0)
 
 
 # Loads definition
-cargas= preprocessor.getLoadLoader
+cargas= preprocessor.getLoadHandler
 
 casos= cargas.getLoadPatterns
 
@@ -60,7 +60,7 @@ result= analisis.analyze(1)
 
 
 nodes.calculateNodalReactions(False)
-nodes= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeHandler
 
 deltax= nod.getDisp[0]
 deltay= nod.getDisp[1]

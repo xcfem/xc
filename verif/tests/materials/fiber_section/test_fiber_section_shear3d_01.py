@@ -53,11 +53,11 @@ respVy= typical_materials.defElasticMaterial(preprocessor, "respVy",1e6) # Shear
 respVz= typical_materials.defElasticMaterial(preprocessor, "respVz",1e3) # Shear response in y direction.
 # Section geometry
 #creation
-geomRectang= preprocessor.getMaterialLoader.newSectionGeometry("geomRectang")
+geomRectang= preprocessor.getMaterialHandler.newSectionGeometry("geomRectang")
 #generation of a quadrilateral region of the scc10x20 sizes and number of
 #divisions made of material nmbMat
 reg= scc10x20.getRegion(gm=geomRectang,nmbMat="epp")
-sa= preprocessor.getMaterialLoader.newMaterial("fiberSectionShear3d","sa")
+sa= preprocessor.getMaterialHandler.newMaterial("fiberSectionShear3d","sa")
 fiberSectionRepr= sa.getFiberSectionRepr()
 fiberSectionRepr.setGeomNamed("geomRectang")
 sa.setupFibers()
@@ -73,7 +73,7 @@ modelSpace= predefined_spaces.getStructuralMechanics3DSpace(preprocessor)
 modelSpace.fixNode000_000(1)
 
 # Loads definition
-cargas= preprocessor.getLoadLoader
+cargas= preprocessor.getLoadHandler
 
 casos= cargas.getLoadPatterns
 
@@ -102,7 +102,7 @@ if(analOk!=0):
 
 
 
-nodes= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeHandler
 nodes.calculateNodalReactions(True)
 n1= nodes.getNode(1)
 RVy= n1.getReaction[1] 
@@ -110,7 +110,7 @@ RVz= n1.getReaction[2]
 RMx= n1.getReaction[3] 
 RMz= n1.getReaction[5] 
 
-elements= preprocessor.getElementLoader
+elements= preprocessor.getElementHandler
 ele1= elements.getElement(1)
 scc= ele1.getSection()
 esfVy= scc.getStressResultantComponent("Vy")

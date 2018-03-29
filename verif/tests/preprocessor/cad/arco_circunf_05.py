@@ -27,18 +27,18 @@ sin675= math.sin(math.radians(67.5))
 # Problem type
 feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
-nodes= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeHandler
 modelSpace= predefined_spaces.SolidMechanics3D(nodes)
 # Define materials
 elast= typical_materials.defElasticMaterial(preprocessor, "elast",3000)
 
 nodes.newSeedNode()
 
-seedElemLoader= preprocessor.getElementLoader.seedElemLoader
-seedElemLoader.defaultMaterial= "elast"
-seedElemLoader.dimElem= 3 # Dimension of element space
-seedElemLoader.defaultTag= 1 #Tag for the next element.
-truss= seedElemLoader.newElement("Truss",xc.ID([0,0]));
+seedElemHandler= preprocessor.getElementHandler.seedElemHandler
+seedElemHandler.defaultMaterial= "elast"
+seedElemHandler.dimElem= 3 # Dimension of element space
+seedElemHandler.defaultTag= 1 #Tag for the next element.
+truss= seedElemHandler.newElement("Truss",xc.ID([0,0]));
 truss.area= 10.0
 points= preprocessor.getMultiBlockTopology.getPoints
 pt= points.newPntIDPos3d(1,geom.Pos3d(R,0.0,0.0))
@@ -74,7 +74,7 @@ l2.genMesh(xc.meshDir.I)
 
 
 nnodes= l1.getNumNodes+l2.getNumNodes-1
-nodes= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeHandler
 nod3= nodes.getNode(3)
 x3= nod3.get3dCoo[0]
 y3= nod3.get3dCoo[1]

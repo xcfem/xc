@@ -22,7 +22,7 @@ n= 1e6 # Carga uniforme axial.
 
 feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor   
-nodes= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeHandler
 
 sectionTest= section_properties.RectangularSection("sectionTest",b=.20,h=.30) # Section geometry.
 sectionTestMaterial= typical_materials.MaterialData("sectionTestMaterial",E=7E9,nu=0.3,rho=2500) # Section material.
@@ -43,7 +43,7 @@ lin= modelSpace.newLinearCrdTransf("lin")
 scc= typical_materials.defElasticSection2d(preprocessor, "scc",sectionTest.A(),sectionTestMaterial.E,sectionTest.Iz())
 
 # Elements definition
-elements= preprocessor.getElementLoader
+elements= preprocessor.getElementHandler
 elements.defaultTransformation= "lin"
 elements.defaultMaterial= "scc" 
 elements.defaultMaterial= sectionTest.sectionName
@@ -52,12 +52,12 @@ elements.defaultTag= 1
 beam2d= elements.newElement("ForceBeamColumn2d",xc.ID([1,2]))
     
 # Constraints
-constraints= preprocessor.getConstraintLoader
+constraints= preprocessor.getBoundaryCondHandler
 modelSpace.fixNode000(1)
 
 
 # Loads definition
-cargas= preprocessor.getLoadLoader
+cargas= preprocessor.getLoadHandler
 casos= cargas.getLoadPatterns
 ts= casos.newTimeSeries("constant_ts","ts")
 casos.currentTimeSeries= "ts"

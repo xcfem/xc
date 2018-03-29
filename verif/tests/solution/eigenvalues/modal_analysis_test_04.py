@@ -44,7 +44,7 @@ kPl4a= kPl3a
 feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
 
-nodes= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeHandler
 modelSpace= predefined_spaces.StructuralMechanics2D(nodes)
 nodes.defaultTag= 0; 
 nod= nodes.newNodeXY(0,0) 
@@ -81,7 +81,7 @@ sccPl4a= typical_materials.defElasticSection2d(preprocessor, "sccPl4a",20*B3a*B3
 lin= modelSpace.newLinearCrdTransf("lin")
 
 # Elements definition
-elements= preprocessor.getElementLoader
+elements= preprocessor.getElementHandler
 elements.defaultTransformation= "lin"
 elements.defaultMaterial= "sccPlBaja"
 elements.defaultTag= 1 #Tag for next element.

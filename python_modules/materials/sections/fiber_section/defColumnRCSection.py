@@ -76,7 +76,7 @@ class RecordRCColumnSection(defSimpleRCSection.BasicRecordRCSection):
     '''
     self.defDiagrams(preprocessor,matDiagType)
 
-    geomSection= preprocessor.getMaterialLoader.newSectionGeometry(self.gmSectionName())
+    geomSection= preprocessor.getMaterialHandler.newSectionGeometry(self.gmSectionName())
     self.defConcreteRegion(geomSection)
 
     reinforcement= sectionGeom.getReinfLayers

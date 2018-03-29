@@ -35,7 +35,7 @@ F= 1.5e3 # Load magnitude (kN)
 
 feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
-nodes= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeHandler
 
 # Problem type
 modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
@@ -52,7 +52,7 @@ sectionProperties.A= A; sectionProperties.E= E; sectionProperties.G= G;
 sectionProperties.Iz= Iz; sectionProperties.Iy= Iy; sectionProperties.J= J
 seccion= typical_materials.defElasticSectionFromMechProp3d(preprocessor, "seccion",sectionProperties)
 
-elements= preprocessor.getElementLoader
+elements= preprocessor.getElementHandler
 elements.defaultTransformation= "lin"
 elements.defaultMaterial= "seccion"
 elements.defaultTag= 1 #Tag for next element.
@@ -60,7 +60,7 @@ beam3d= elements.newElement("ElasticBeam3d",xc.ID([1,2]));
 
 modelSpace.fixNode000_000(1)
 
-cargas= preprocessor.getLoadLoader
+cargas= preprocessor.getLoadHandler
 casos= cargas.getLoadPatterns
 #Load modulation.
 ts= casos.newTimeSeries("constant_ts","ts")

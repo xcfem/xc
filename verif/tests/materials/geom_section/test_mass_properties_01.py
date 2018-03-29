@@ -23,7 +23,7 @@ preprocessor=  feProblem.getPreprocessor
 
 concrete= typical_materials.defElasticMaterial(preprocessor, 'concrete',Ec)
 
-sectionGeometryTest= preprocessor.getMaterialLoader.newSectionGeometry("sectionGeometryTest")
+sectionGeometryTest= preprocessor.getMaterialHandler.newSectionGeometry("sectionGeometryTest")
 regiones= sectionGeometryTest.getRegions
 concrete= regiones.newQuadRegion('concrete')
 concrete.pMin= geom.Pos2d(0.0,0.0)

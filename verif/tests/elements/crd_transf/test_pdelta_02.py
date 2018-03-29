@@ -34,7 +34,7 @@ from materials import typical_materials
 
 feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
-nodes= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeHandler
 modelSpace= predefined_spaces.StructuralMechanics2D(nodes)
 nodes.newSeedNode()
 
@@ -43,11 +43,11 @@ pd= modelSpace.newPDeltaCrdTransf("pd")
 # Materials definition
 scc= typical_materials.defElasticSection2d(preprocessor, "scc",area,Es,Iz)
 
-seedElemLoader= preprocessor.getElementLoader.seedElemLoader
-seedElemLoader.defaultMaterial= "scc"
-seedElemLoader.defaultTransformation= "pd"
-seedElemLoader.defaultTag= 1 #Tag for next element.
-beam2d= seedElemLoader.newElement("ElasticBeam2d",xc.ID([1,2]))
+seedElemHandler= preprocessor.getElementHandler.seedElemHandler
+seedElemHandler.defaultMaterial= "scc"
+seedElemHandler.defaultTransformation= "pd"
+seedElemHandler.defaultTag= 1 #Tag for next element.
+beam2d= seedElemHandler.newElement("ElasticBeam2d",xc.ID([1,2]))
 
 points= preprocessor.getMultiBlockTopology.getPoints
 pt1= points.newPntIDPos3d(1, geom.Pos3d(0.0,0.0,0))
@@ -110,7 +110,7 @@ tagElem6= mesh.getNearestElement(geom.Pos3d(offset+B,H/(10*nDivLines),0.0)).tag
 
 
 # Loads definition
-cargas= preprocessor.getLoadLoader
+cargas= preprocessor.getLoadHandler
 casos= cargas.getLoadPatterns
 #Load modulation.
 ts= casos.newTimeSeries("constant_ts","ts")
@@ -172,7 +172,7 @@ M52Teor= -6153.0 # Theoretical value of bending moment
 ratioM52= 0.0
 
 
-nodes= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeHandler
 nodT2= nodes.getNode(nodeTag2)
 theta2= nodT2.getDisp[2]
 nodT6= nodes.getNode(nodeTag6)
@@ -181,7 +181,7 @@ theta6= nodT6.getDisp[2]
 nodT8= nodes.getNode(nodeTag8)
 theta8= nodT8.getDisp[2]
 
-elements= preprocessor.getElementLoader
+elements= preprocessor.getElementHandler
 eletagElem1= elements.getElement(tagElem1)
 eletagElem1.getResistingForce()
 Q= eletagElem1.getV1

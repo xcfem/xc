@@ -70,7 +70,7 @@
 #include "utility/matrix/ID.h"
 #include "utility/actor/actor/MovableVector.h"
 #include "utility/actor/actor/ArrayCommMetaData.h"
-#include "preprocessor/loaders/TransfCooLoader.h"
+#include "preprocessor/prep_handlers/TransfCooHandler.h"
 
 
 //! @brief Constructor.
@@ -84,28 +84,28 @@ XC::CrdTransf::~CrdTransf(void)
   {}
 
 //! @brief Returns (if possible) a pointer to the coordinate transformation handler (owner).
-const XC::TransfCooLoader *XC::CrdTransf::GetTransfCooLoader(void) const
+const XC::TransfCooHandler *XC::CrdTransf::GetTransfCooHandler(void) const
   {
-    const XC::TransfCooLoader *retval= dynamic_cast<const TransfCooLoader *>(Owner());
+    const XC::TransfCooHandler *retval= dynamic_cast<const TransfCooHandler *>(Owner());
     if(!retval)
-      std::cerr << "CrdTransf::GetTransfCooLoader; coordinate transformation handler not defined." << std::endl;
+      std::cerr << "CrdTransf::GetTransfCooHandler; coordinate transformation handler not defined." << std::endl;
     return retval;
   }
 
 //! @brief Returs a pointer to the coordinate transformation handler (if possible).
-XC::TransfCooLoader *XC::CrdTransf::GetTransfCooLoader(void)
+XC::TransfCooHandler *XC::CrdTransf::GetTransfCooHandler(void)
   {
-    XC::TransfCooLoader *retval= dynamic_cast<TransfCooLoader *>(Owner());
+    XC::TransfCooHandler *retval= dynamic_cast<TransfCooHandler *>(Owner());
     if(!retval)
-      std::cerr << "CrdTransf::GetTransfCooLoader; coordinate transformation handler not defined." << std::endl;
+      std::cerr << "CrdTransf::GetTransfCooHandler; coordinate transformation handler not defined." << std::endl;
     return retval;
   }
 
 //! @brief Returns the name of the coordinate transformation.
 std::string XC::CrdTransf::getName(void) const
   {
-    const TransfCooLoader *ctloader= GetTransfCooLoader();
-    return ctloader->getName(getTag());
+    const TransfCooHandler *cthandler= GetTransfCooHandler();
+    return cthandler->getName(getTag());
   }
 
 

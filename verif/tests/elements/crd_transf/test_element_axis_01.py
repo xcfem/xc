@@ -29,7 +29,7 @@ L= 1 # Element length expressed in meters.
 # Problem type
 feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
-nodes= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeHandler
 modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
 nodes.defaultTag= 1 #First node number.
 nod= nodes.newNodeXYZ(0.0,0.0,0.0)
@@ -44,7 +44,7 @@ sectionProperties.Iz= Iz; sectionProperties.Iy= Iy; sectionProperties.J= J
 seccion= typical_materials.defElasticSectionFromMechProp3d(preprocessor, "seccion",sectionProperties)
 
 # Elements definition
-elements= preprocessor.getElementLoader
+elements= preprocessor.getElementHandler
 elements.defaultTransformation= "lin"
 elements.defaultTag= 1 #Tag for the next element.
 elements.defaultMaterial= "seccion"

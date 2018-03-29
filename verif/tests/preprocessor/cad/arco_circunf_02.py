@@ -25,14 +25,14 @@ preprocessor=  feProblem.getPreprocessor
 # Define materials
 elast= typical_materials.defElasticMaterial(preprocessor, "elast",3000)
 
-nodes= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeHandler
 modelSpace= predefined_spaces.SolidMechanics3D(nodes)
 nodes.newSeedNode()
-seedElemLoader= preprocessor.getElementLoader.seedElemLoader
-seedElemLoader.defaultMaterial= "elast"
-seedElemLoader.dimElem= 3 # Dimension of element space
-seedElemLoader.defaultTag= 1 #Tag for the next element.
-truss= seedElemLoader.newElement("Truss",xc.ID([0,0]));
+seedElemHandler= preprocessor.getElementHandler.seedElemHandler
+seedElemHandler.defaultMaterial= "elast"
+seedElemHandler.dimElem= 3 # Dimension of element space
+seedElemHandler.defaultTag= 1 #Tag for the next element.
+truss= seedElemHandler.newElement("Truss",xc.ID([0,0]));
 truss.area= 10.0
 
 points= preprocessor.getMultiBlockTopology.getPoints
@@ -61,7 +61,7 @@ l1.genMesh(xc.meshDir.I)
 nnodes= l1.getNumNodes
 '''
 print "number of nodes: ", nnod
-nodes= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeHandler
 
 for_each
   print "  node: ",tag," x= ",coord[0],", y= ",coord[1],", z= ",coord[2]

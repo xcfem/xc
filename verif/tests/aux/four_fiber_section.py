@@ -38,7 +38,7 @@ elast= typical_materials.defElasticMaterial(preprocessor, "elast",E)
 # Fibers
 y1= -depthOverY/2.0
 z1= -widthOverZ/2.0
-fourFibersSection= preprocessor.getMaterialLoader.newMaterial("fiber_section_3d","fourFibersSection")
+fourFibersSection= preprocessor.getMaterialHandler.newMaterial("fiber_section_3d","fourFibersSection")
 
 f1= fourFibersSection.addFiber("elast",fiberArea,xc.Vector([y1,z1]))
 f2= fourFibersSection.addFiber("elast",fiberArea,xc.Vector([-y1,z1]))

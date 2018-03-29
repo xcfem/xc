@@ -162,9 +162,9 @@ class BasicRecordRCSection(section_properties.RectangularSection):
     return self.sectionName+"RespVz"
 
   def getConcreteDiagram(self,preprocessor):
-    return preprocessor.getMaterialLoader.getMaterial(self.concrDiagName)
+    return preprocessor.getMaterialHandler.getMaterial(self.concrDiagName)
   def getSteelDiagram(self,preprocessor):
-    return preprocessor.getMaterialLoader.getMaterial(self.reinfDiagName)
+    return preprocessor.getMaterialHandler.getMaterial(self.reinfDiagName)
   def getSteelEquivalenceCoefficient(self,preprocessor):
     tangHorm= self.getConcreteDiagram(preprocessor).getTangent()
     tangSteel= self.getSteelDiagram(preprocessor).getTangent()
@@ -416,7 +416,7 @@ class RecordRCSimpleSection(BasicRecordRCSection):
     '''
     self.defDiagrams(preprocessor,matDiagType)
 
-    geomSection= preprocessor.getMaterialLoader.newSectionGeometry(self.gmSectionName())
+    geomSection= preprocessor.getMaterialHandler.newSectionGeometry(self.gmSectionName())
     self.defConcreteRegion(geomSection)
 
     reinforcement= geomSection.getReinfLayers
@@ -448,7 +448,7 @@ class RecordRCSimpleSection(BasicRecordRCSection):
     return typical_materials.defElasticMaterial(preprocessor,self.respVzName(),5/6.0*self.b*self.h*self.concrType.Gcm())
 
   def defFiberSection(self,preprocessor):
-    self.fs= preprocessor.getMaterialLoader.newMaterial("fiberSectionShear3d",self.sectionName)
+    self.fs= preprocessor.getMaterialHandler.newMaterial("fiberSectionShear3d",self.sectionName)
     self.fiberSectionRepr= self.fs.getFiberSectionRepr()
     self.fiberSectionRepr.setGeomNamed(self.gmSectionName())
     self.fs.setupFibers()
@@ -491,21 +491,21 @@ class RecordRCSimpleSection(BasicRecordRCSection):
     if(not self.fiberSectionRepr):
       sys.stderr.write("defInteractionDiagram: fiber section representation for section: "+ self.sectionName + ";  not defined use defFiberSection.\n")
     self.defInteractionDiagramParameters(preprocessor)
-    return preprocessor.getMaterialLoader.calcInteractionDiagram(self.sectionName,self.param)
+    return preprocessor.getMaterialHandler.calcInteractionDiagram(self.sectionName,self.param)
 
   def defInteractionDiagramNMy(self,preprocessor):
     'Defines N-My interaction diagram.'
     if(not self.fiberSectionRepr):
       sys.stderr.write("defInteractionDiagramNMy: fiber section representation for section: "+ self.sectionName + ";  not defined use defFiberSection.\n")
     self.defInteractionDiagramParameters(preprocessor)
-    return preprocessor.getMaterialLoader.calcInteractionDiagramNMy(self.sectionName,self.param)
+    return preprocessor.getMaterialHandler.calcInteractionDiagramNMy(self.sectionName,self.param)
 
   def defInteractionDiagramNMz(self,preprocessor):
     'Defines N-My interaction diagram.'
     if(not self.fiberSectionRepr):
       sys.stderr.write("defInteractionDiagramNMz: fiber section representation for section: "+ self.sectionName + ";  not defined use defFiberSection.\n")
     self.defInteractionDiagramParameters(preprocessor)
-    return preprocessor.getMaterialLoader.calcInteractionDiagramNMz(self.sectionName,self.param)
+    return preprocessor.getMaterialHandler.calcInteractionDiagramNMz(self.sectionName,self.param)
 
   def getStressCalculator(self):
     Ec= self.concrType.Ecm()

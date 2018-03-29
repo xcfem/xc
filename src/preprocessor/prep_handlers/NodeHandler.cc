@@ -24,9 +24,9 @@
 // along with this program.
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
-//NodeLoader.cc
+//NodeHandler.cc
 
-#include "NodeLoader.h"
+#include "NodeHandler.h"
 #include "preprocessor/multi_block_topology/ReferenceFrame.h"
 #include "domain/domain/Domain.h"
 #include "domain/mesh/node/Node.h"
@@ -39,35 +39,35 @@
 #include "domain/mesh/element/Element.h"
 #include "utility/tagged/DefaultTag.h"
 
-void XC::NodeLoader::free_mem(void)
+void XC::NodeHandler::free_mem(void)
   {
     if(seed_node) delete seed_node;
     seed_node= nullptr; 
   }
 
-XC::NodeLoader::NodeLoader(Preprocessor *preprocessor)
-  : Loader(preprocessor), ndof_def_node(2),ncoo_def_node(3),seed_node(nullptr) {}
+XC::NodeHandler::NodeHandler(Preprocessor *preprocessor)
+  : PrepHandler(preprocessor), ndof_def_node(2),ncoo_def_node(3),seed_node(nullptr) {}
 
 //! @brief Destructor.
-XC::NodeLoader::~NodeLoader(void)
+XC::NodeHandler::~NodeHandler(void)
   { free_mem(); }
 
 //! @brief Return the default value for next node.
-int XC::NodeLoader::getDefaultTag(void) const
+int XC::NodeHandler::getDefaultTag(void) const
   { return Node::getDefaultTag().getTag(); }
 
 //! @brief Set the default value for next node.
-void XC::NodeLoader::setDefaultTag(const int &tag)
+void XC::NodeHandler::setDefaultTag(const int &tag)
   { Node::getDefaultTag().setTag(tag); }
 
 //! @brief Clear all nodes.
-void XC::NodeLoader::clearAll(void)
+void XC::NodeHandler::clearAll(void)
   {
     free_mem();
     setDefaultTag(0);
   }
 
-XC::Node *XC::NodeLoader::new_node(const int &tag,const size_t &dim,const int &ndof,const double &x,const double &y,const double &z)
+XC::Node *XC::NodeHandler::new_node(const int &tag,const size_t &dim,const int &ndof,const double &x,const double &y,const double &z)
   {
     Node *retval= nullptr;
     switch(dim)
@@ -86,7 +86,7 @@ XC::Node *XC::NodeLoader::new_node(const int &tag,const size_t &dim,const int &n
   }
 
 //! @brief Create a duplicate copy of the node whose tag is passed as parameter
-XC::Node *XC::NodeLoader::duplicateNode(const int &orgNodeTag)
+XC::Node *XC::NodeHandler::duplicateNode(const int &orgNodeTag)
   {
     Node *retval= nullptr;
     Node *org_node_ptr= getDomain()->getNode(orgNodeTag);
@@ -107,7 +107,7 @@ XC::Node *XC::NodeLoader::duplicateNode(const int &orgNodeTag)
     return retval;
   }
 
-XC::Node *XC::NodeLoader::newNode(const double &x,const double &y,const double &z)
+XC::Node *XC::NodeHandler::newNode(const double &x,const double &y,const double &z)
   {
     const int tg= getDefaultTag(); //Before seed node creation.
     if(!seed_node)
@@ -124,7 +124,7 @@ XC::Node *XC::NodeLoader::newNode(const double &x,const double &y,const double &
     return retval;
   }
 
-XC::Node *XC::NodeLoader::newNode(const double &x,const double &y)
+XC::Node *XC::NodeHandler::newNode(const double &x,const double &y)
   {
     const int tg= getDefaultTag(); //Before seed node creation.
     if(!seed_node)
@@ -142,7 +142,7 @@ XC::Node *XC::NodeLoader::newNode(const double &x,const double &y)
   }
 
 
-XC::Node *XC::NodeLoader::newNode(const double &x)
+XC::Node *XC::NodeHandler::newNode(const double &x)
   {
     const int tg= getDefaultTag(); //Before seed node creation.
     if(!seed_node)
@@ -160,15 +160,15 @@ XC::Node *XC::NodeLoader::newNode(const double &x)
   }
 
 //! @brief Create a nede at the position passed as parameter.
-XC::Node *XC::NodeLoader::newNode(const Pos3d &p)
+XC::Node *XC::NodeHandler::newNode(const Pos3d &p)
   { return newNode(p.x(),p.y(),p.z()); }
 
 //! @brief Creates a nede at the position passed as parameter.
-XC::Node *XC::NodeLoader::newNode(const Pos2d &p)
+XC::Node *XC::NodeHandler::newNode(const Pos2d &p)
   { return newNode(p.x(),p.y()); }
 
 //! @brief Create a node at the position pointed by the vector passed as parameter.
-XC::Node *XC::NodeLoader::newNode(const Vector &coo)
+XC::Node *XC::NodeHandler::newNode(const Vector &coo)
   {
     int sz= coo.Size();
     Node *retval= nullptr;
@@ -185,28 +185,28 @@ XC::Node *XC::NodeLoader::newNode(const Vector &coo)
   }
 
 //! @brief Defines the seed node.
-XC::Node *XC::NodeLoader::newSeedNode(void)
+XC::Node *XC::NodeHandler::newSeedNode(void)
   {
     free_mem();
     seed_node= new_node(0,ncoo_def_node,ndof_def_node,0.0,0.0,0.0);
     return seed_node;
   }
 
-XC::Node *XC::NodeLoader::newNodeIDV(const int &tag,const Vector &coo)
+XC::Node *XC::NodeHandler::newNodeIDV(const int &tag,const Vector &coo)
   { 
     setDefaultTag(tag);
     return newNode(coo);
   } 
 
 //! @brief Create a node whose ID=tag from global coordinates (x,y,z).
-XC::Node *XC::NodeLoader::newNodeIDXYZ(const int &tag,const double &x,const double &y,const double &z)
+XC::Node *XC::NodeHandler::newNodeIDXYZ(const int &tag,const double &x,const double &y,const double &z)
   { 
     setDefaultTag(tag);
     Node *retval= newNode(x,y,z);
     return retval;
   } 
 
-XC::Node *XC::NodeLoader::newNodeIDXY(const int &tag,const double &x,const double &y)
+XC::Node *XC::NodeHandler::newNodeIDXY(const int &tag,const double &x,const double &y)
   {
     setDefaultTag(tag);
     return newNode(x,y);
@@ -214,12 +214,12 @@ XC::Node *XC::NodeLoader::newNodeIDXY(const int &tag,const double &x,const doubl
 
 
 //! @brief Get the node whose ID is passed as parameter.
-XC::Node *XC::NodeLoader::getNode(const int &tag)
+XC::Node *XC::NodeHandler::getNode(const int &tag)
   { return getDomain()->getNode(tag); }
 
 //! @brief Calculate nodal reaction forces and moments.
 //! @param inclInertia: if True, the unbalance load vector for each node is calculated including inertial forces.
-void XC::NodeLoader::calculateNodalReactions(bool inclInertia)
+void XC::NodeHandler::calculateNodalReactions(bool inclInertia)
   {
     getDomain()->calculateNodalReactions(inclInertia,1e-4);
   }

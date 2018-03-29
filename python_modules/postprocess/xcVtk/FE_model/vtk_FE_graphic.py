@@ -240,7 +240,7 @@ class RecordDefDisplayEF(vtk_grafico_base.RecordDefDisplay):
         while not(load is None):
             actorName= "flecha"+loadPatternName+"%04d".format(load.tag) # Tag force.
             nodeTag= load.getNodeTag
-            node= preprocessor.getNodeLoader.getNode(nodeTag)
+            node= preprocessor.getNodeHandler.getNode(nodeTag)
             force= load.getForce
             moment= load.getMoment
             self.displayLoadOnNode(node, color,force,moment,fScale)    
@@ -256,7 +256,7 @@ class RecordDefDisplayEF(vtk_grafico_base.RecordDefDisplay):
         loadPatternName= loadPattern.getProp("dispName")
         actorName= "flechaP"+loadPatternName+"%04d".format(tag) # Tag force.
         for tag in eleTags:
-          ele= preprocessor.getElementLoader.getElement(tag)
+          ele= preprocessor.getElementHandler.getElement(tag)
           actorName+= "%04d".format(tag) # Tag elemento.
           pos= ele.punto(xForce)
           utilsVtk.drawVtkSymb('arrow',self.renderer,color,pos,force,fScale)
@@ -266,7 +266,7 @@ class RecordDefDisplayEF(vtk_grafico_base.RecordDefDisplay):
         actorName= "flechaU"+loadPatternName+"%04d".format(unifLoad.tag)
         eleTags= unifLoad.elementTags
         for tag in eleTags:
-          ele= preprocessor.getElementLoader.getElement(tag)
+          ele= preprocessor.getElementHandler.getElement(tag)
           actorName+= "%04d".format(tag) # Tag elemento.
           lmsg.error('displayElementUniformLoad not implemented.')
           # puntos= ele.getPoints(3,1,1,True)

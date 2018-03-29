@@ -20,13 +20,13 @@ def getMomentCurvatureDiagram3D(preprocessor, nmbSecc, esfAxil, maxK, numIncr):
   :param maxK: Maximum curvature to reach in the analysis.
   :param numIncr: Number of increments.
   '''
-  nodes= preprocessor.getNodeLoader
+  nodes= preprocessor.getNodeHandler
 
   modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
   nod1= nodes.newNodeIDXYZ(1001,1,0,0)
 
   nod2= nodes.newNodeIDXYZ(1002,1,0,0)
-  elementos= preprocessor.getElementLoader
+  elementos= preprocessor.getElementHandler
   elementos.defaultMaterial= nmbSecc
   elementos.defaultTag= 2001 #Tag for the next element.
   zls= elementos.newElement("ZeroLengthSection",xc.ID([nod1.tag,nod2.tag]));
@@ -35,7 +35,7 @@ def getMomentCurvatureDiagram3D(preprocessor, nmbSecc, esfAxil, maxK, numIncr):
   modelSpace.constraints.newSPConstraint(nod2.tag,1,0.0)
   modelSpace.constraints.newSPConstraint(nod2.tag,2,0.0)
 
-  cargas= preprocessor.getLoadLoader
+  cargas= preprocessor.getLoadHandler
   casos= cargas.getLoadPatterns
   #Load modulation.
   ts= casos.newTimeSeries("constant_ts","ts")

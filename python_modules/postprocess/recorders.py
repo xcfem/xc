@@ -13,7 +13,7 @@ def installNodeDisplacementRecorder(recorderName, nodeSet):
   def_vars_control.defVarsControlMovModulus(nodeSet)
 
   preprocessor= nodeSet.owner.getPreprocessor
-  nodes= preprocessor.getNodeLoader
+  nodes= preprocessor.getNodeHandler
   domain= preprocessor.getDomain
   recorder= domain.newRecorder(recorderName,None);
   recorder.setNodes(nodeSet.getTags())

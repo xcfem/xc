@@ -93,7 +93,7 @@ class UniaxialFiber3d: public UniaxialFiber
   public:
     UniaxialFiber3d(int classTag= FIBER_TAG_Uniaxial3d);    
     UniaxialFiber3d(int tag,const UniaxialMaterial &theMat,const double &Area, const Vector &position,int classTag= FIBER_TAG_Uniaxial3d);
-    UniaxialFiber3d(int tag,const MaterialLoader &,const std::string &nmbMat,const double &, const Vector &position,int classTag= FIBER_TAG_Uniaxial3d);
+    UniaxialFiber3d(int tag,const MaterialHandler &,const std::string &nmbMat,const double &, const Vector &position,int classTag= FIBER_TAG_Uniaxial3d);
 
     int setTrialFiberStrain(const Vector &vs);
     Vector &getFiberStressResultants(void);

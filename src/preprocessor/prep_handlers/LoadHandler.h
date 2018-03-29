@@ -24,12 +24,12 @@
 // along with this program.
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
-//LoadLoader.h
+//LoadHandler.h
 
 #ifndef LOADLOADER_H
 #define LOADLOADER_H
 
-#include "Loader.h"
+#include "PrepHandler.h"
 #include "domain/load/pattern/MapLoadPatterns.h"
 #include "domain/load/pattern/LoadCombinationGroup.h"
 
@@ -41,7 +41,7 @@ class LoadCombination;
 //! 
 //! @brief Lee load patterns desde archivo.
 //! Load definition manager.
-class LoadLoader: public Loader
+class LoadHandler: public PrepHandler
   {
     typedef std::map<std::string,GroundMotion *> map_ground_motions;
     map_ground_motions ground_motions; //!< Movimientos del terreno.
@@ -59,8 +59,8 @@ class LoadLoader: public Loader
     int sendData(CommParameters &);
     int recvData(const CommParameters &);
   public:
-    LoadLoader(Preprocessor *owr);
-    ~LoadLoader(void);
+    LoadHandler(Preprocessor *owr);
+    ~LoadHandler(void);
 
     void addToDomain(const std::string &);
     void removeFromDomain(const std::string &);

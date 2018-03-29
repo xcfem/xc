@@ -30,7 +30,7 @@ from materials import typical_materials
 # Problem type
 feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
-nodes= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeHandler
 
 modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
 # Define materials
@@ -42,10 +42,10 @@ nmb1= typical_materials.defElasticMembranePlateSection(preprocessor, "memb1",E,n
 
 
 
-seedElemLoader= preprocessor.getElementLoader.seedElemLoader
-seedElemLoader.defaultMaterial= "memb1"
-seedElemLoader.defaultTag= 1
-elem= seedElemLoader.newElement("ShellMITC4",xc.ID([0,0,0,0]))
+seedElemHandler= preprocessor.getElementHandler.seedElemHandler
+seedElemHandler.defaultMaterial= "memb1"
+seedElemHandler.defaultTag= 1
+elem= seedElemHandler.newElement("ShellMITC4",xc.ID([0,0,0,0]))
 
 
 
@@ -64,7 +64,7 @@ s.nDivJ= NumDivJ
 
 f1= preprocessor.getSets.getSet("f1")
 f1.genMesh(xc.meshDir.I)
-constraints= preprocessor.getConstraintLoader
+constraints= preprocessor.getBoundaryCondHandler
 
 lados= s.getEdges
 for l in lados:
@@ -72,7 +72,7 @@ for l in lados:
     modelSpace.fixNode000_FFF(i)
 
 # Loads definition
-cargas= preprocessor.getLoadLoader
+cargas= preprocessor.getLoadHandler
 casos= cargas.getLoadPatterns
 #Load modulation.
 ts= casos.newTimeSeries("constant_ts","ts")

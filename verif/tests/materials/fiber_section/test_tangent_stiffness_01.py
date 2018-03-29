@@ -25,7 +25,7 @@ ela= typical_materials.defElasticMaterial(preprocessor, "ela",E)
 
 # Section geometry
 # setting up
-geomScc= preprocessor.getMaterialLoader.newSectionGeometry("geomScc")
+geomScc= preprocessor.getMaterialHandler.newSectionGeometry("geomScc")
 #filling with regions
 regiones= geomScc.getRegions
 #generation of a quadrilateral region with the specified size and number of
@@ -36,7 +36,7 @@ regEla.nDivJK= 11
 regEla.pMin= geom.Pos2d(-depth/2.0,-width/2.0)
 regEla.pMax= geom.Pos2d(depth/2.0,width/2.0)
 
-scc= preprocessor.getMaterialLoader.newMaterial("fiber_section_3d","scc")
+scc= preprocessor.getMaterialHandler.newMaterial("fiber_section_3d","scc")
 fiberSectionRepr= scc.getFiberSectionRepr()
 fiberSectionRepr.setGeomNamed("geomScc")
 scc.setupFibers()

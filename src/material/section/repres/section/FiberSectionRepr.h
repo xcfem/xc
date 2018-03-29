@@ -86,7 +86,7 @@ class FiberSectionRepr: public SectionRepres
     void copy_fibers(const FiberSectionRepr &otro);
   public:
     // constructor and destructor
-    FiberSectionRepr(int sectionID,MaterialLoader *ml);
+    FiberSectionRepr(int sectionID,MaterialHandler *ml);
     FiberSectionRepr(const FiberSectionRepr &otro);
     FiberSectionRepr &operator=(const FiberSectionRepr &otro);
     virtual FiberSectionRepr *getCopy(void) const;

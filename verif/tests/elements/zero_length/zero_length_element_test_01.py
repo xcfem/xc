@@ -21,7 +21,7 @@ from materials import typical_materials
 # Model definition
 feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
-nodes= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeHandler
 nodes.dimSpace= 1 # One coordinate for each node.
 nodes.numDOFs= 1 # One degree of freedom for each node.
 
@@ -33,19 +33,19 @@ nod= nodes.newNodeXY(1.0+l,0)
 elast= typical_materials.defElasticMaterial(preprocessor, "elast",K)
 
 # Elements definition
-elements= preprocessor.getElementLoader
+elements= preprocessor.getElementHandler
 elements.defaultMaterial= "elast"
 elements.dimElem= 1 #Element dimension.
 elements.defaultTag= 1
 zl= elements.newElement("ZeroLength",xc.ID([1,2]))
 
 # Constraints
-constraints= preprocessor.getConstraintLoader
+constraints= preprocessor.getBoundaryCondHandler
 spc= constraints.newSPConstraint(1,0,0.0) # Node 1
 
 
 # Loads definition
-cargas= preprocessor.getLoadLoader
+cargas= preprocessor.getLoadHandler
 casos= cargas.getLoadPatterns
 #Load modulation.
 ts= casos.newTimeSeries("constant_ts","ts")
@@ -64,13 +64,13 @@ result= analisis.analyze(1)
 
 
 nodes.calculateNodalReactions(True)
-nodes= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeHandler
 nod2= nodes.getNode(2)
 deltax= nod2.getDisp[0] 
 nod1= nodes.getNode(1)
 R= nod1.getReaction[0] 
 
-elements= preprocessor.getElementLoader
+elements= preprocessor.getElementHandler
 
 elem1= elements.getElement(1)
 elem1.getResistingForce()

@@ -58,7 +58,7 @@
 #include "utility/actor/actor/MovableID.h"
 
 #include "preprocessor/Preprocessor.h"
-#include "preprocessor/loaders/LoadLoader.h"
+#include "preprocessor/prep_handlers/LoadHandler.h"
 
 //@brief Frees memory.
 void XC::ConstrContainer::free_mem(void)
@@ -145,7 +145,7 @@ void XC::ConstrContainer::clearAll(void)
     if(theSPs) theSPs->clearAll();
     if(theMPs) theMPs->clearAll();
     activeNodeLockers.clear();
-    activeLoadPatterns.clear(); //y estos en LoadLoader::clearAll
+    activeLoadPatterns.clear(); //y estos en LoadHandler::clearAll
   }
 
 //! @brief Destructor.
@@ -800,8 +800,8 @@ std::string XC::ConstrContainer::getLoadPatternsNames(void) const
             const Preprocessor *preprocessor= dom->getPreprocessor();
             if(preprocessor)
               {
-                const LoadLoader &loadLoader= preprocessor->getLoadLoader();
-                const MapLoadPatterns &casos= loadLoader.getLoadPatterns();
+                const LoadHandler &loadHandler= preprocessor->getLoadHandler();
+                const MapLoadPatterns &casos= loadHandler.getLoadPatterns();
                 for(MapCasosActivos<LoadPattern>::const_iterator i= activeLoadPatterns.begin();
                     i!= activeLoadPatterns.end();i++)
                   retval+= casos.getLoadPatternName((*i).second) + " ";
@@ -969,12 +969,12 @@ int XC::ConstrContainer::recvLPatternsTags(const int &posFlag,const int &posDbTa
         Preprocessor *preprocessor= dom->getPreprocessor();
         if(preprocessor)
           {
-            LoadLoader &loadLoader= preprocessor->getLoadLoader();
+            LoadHandler &loadHandler= preprocessor->getLoadHandler();
             LoadPattern *load= nullptr;
             const size_t sz= loadPatternsTags.Size();
             for(size_t i=0;i<sz;i++)
               {
-                load= loadLoader.getLoadPatterns().buscaLoadPattern(loadPatternsTags[i]);
+                load= loadHandler.getLoadPatterns().buscaLoadPattern(loadPatternsTags[i]);
                 if(load)
                   {
                     if(addLoadPattern(load))
@@ -983,7 +983,7 @@ int XC::ConstrContainer::recvLPatternsTags(const int &posFlag,const int &posDbTa
                       {
                         if(verbosity>3)
                           {
-                            const MapLoadPatterns &casos= loadLoader.getLoadPatterns();
+                            const MapLoadPatterns &casos= loadHandler.getLoadPatterns();
 	                    std::cerr << getClassName() << "::" << __FUNCTION__
 			              << "; could not add load pattern: '"
                                       << casos.getLoadPatternName(load)

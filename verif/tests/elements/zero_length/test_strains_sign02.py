@@ -51,14 +51,14 @@ My= 0.0
 Mz= -4*F*depthOverY/2.0 #Mz positive is in the opposite direction with respecto to the positive y-axis.
 
 fourFibersSection.revertToStart()
-nodes= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeHandler
 modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
 nodes.defaultTag= 1 #First node number.
 nod= nodes.newNodeXYZ(0.0,0.0,0.0)
 nod= nodes.newNodeXYZ(0.0,0.0,0.0)
 
 # Elements definition
-elements= preprocessor.getElementLoader
+elements= preprocessor.getElementHandler
 elements.defaultMaterial= "fourFibersSection"
 elements.dimElem= 1 # Dimension of element space
 zl= elements.newElement("ZeroLengthSection",xc.ID([1,2]))
@@ -71,7 +71,7 @@ spc= modelSpace.constraints.newSPConstraint(2,3,0.0)
 
 
 # Loads definition
-cargas= preprocessor.getLoadLoader
+cargas= preprocessor.getLoadHandler
 casos= cargas.getLoadPatterns
 #Load modulation.
 ts= casos.newTimeSeries("constant_ts","ts")

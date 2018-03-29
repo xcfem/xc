@@ -64,7 +64,7 @@
 
 #include <material/section/elastic_section/ElasticSection2d.h>
 #include "material/section/repres/geom_section/GeomSection.h"
-#include "preprocessor/loaders/MaterialLoader.h"
+#include "preprocessor/prep_handlers/MaterialHandler.h"
 #include <utility/matrix/Matrix.h>
 #include <utility/matrix/Vector.h>
 
@@ -77,7 +77,7 @@ XC::Vector XC::ElasticSection2d::s(2);
 //!
 //! @param tag: identifier for the object.
 //! @param mat_ldr: manager of the material objects.
-XC::ElasticSection2d::ElasticSection2d(int tag, MaterialLoader *mat_ldr)
+XC::ElasticSection2d::ElasticSection2d(int tag, MaterialHandler *mat_ldr)
   : BaseElasticSection2d(tag,SEC_TAG_Elastic2d,2,mat_ldr) {}
 
 //! @breif Default constructor.

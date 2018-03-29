@@ -30,7 +30,7 @@ n= 1e6 # Carga uniforme axial.
 # Problem type
 feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor   
-nodes= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeHandler
 modelSpace= predefined_spaces.StructuralMechanics2D(nodes)
 nodes.defaultTag= 1 #First node number.
 nod= nodes.newNodeXY(0,0)
@@ -44,7 +44,7 @@ scc= typical_materials.defElasticSection2d(preprocessor, "scc",A,E,I)
 
 
 # Elements definition
-elements= preprocessor.getElementLoader
+elements= preprocessor.getElementHandler
 elements.defaultTransformation= "lin"
 elements.defaultMaterial= "scc"
 #  sintaxis: beam2d_02[<tag>] 
@@ -53,12 +53,12 @@ beam2d= elements.newElement("ElasticBeam2d",xc.ID([1,2]))
 beam2d.h= h
     
 # Constraints
-constraints= preprocessor.getConstraintLoader
+constraints= preprocessor.getBoundaryCondHandler
 modelSpace.fixNode000(1)
 
 
 # Loads definition
-cargas= preprocessor.getLoadLoader
+cargas= preprocessor.getLoadHandler
 casos= cargas.getLoadPatterns
 #Load modulation.
 ts= casos.newTimeSeries("constant_ts","ts")
@@ -78,7 +78,7 @@ analisis= predefined_solutions.simple_static_linear(feProblem)
 result= analisis.analyze(1)
 
 
-nodes= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeHandler
 nod2= nodes.getNode(2)
 delta0= nod2.getDisp[0] 
 delta1= nod2.getDisp[1] 

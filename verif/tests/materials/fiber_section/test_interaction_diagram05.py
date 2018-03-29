@@ -37,7 +37,7 @@ Ec= concr.getDiagD(preprocessor).getTangent
 tagB500S= EHE_materials.B500S.defDiagD(preprocessor)
 Es= EHE_materials.B500S.getDiagD(preprocessor).getTangent
 
-pileGeometry= preprocessor.getMaterialLoader.newSectionGeometry("pileGeometry")
+pileGeometry= preprocessor.getMaterialHandler.newSectionGeometry("pileGeometry")
 regiones= pileGeometry.getRegions
 concrete= regiones.newCircularRegion(EHE_materials.HA30.nmbDiagD)
 concrete.nDivCirc= 20
@@ -55,7 +55,7 @@ reinforcement.initAngle= 0.0
 reinforcement.finalAngle= 2*math.pi
 reinforcement.radius= concrete.extRad-cover
 
-materiales= preprocessor.getMaterialLoader
+materiales= preprocessor.getMaterialHandler
 secHA= materiales.newMaterial("fiber_section_3d","secHA")
 fiberSectionRepr= secHA.getFiberSectionRepr()
 fiberSectionRepr.setGeomNamed("pileGeometry")

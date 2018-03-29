@@ -45,7 +45,7 @@ sectionProperties.Iz= Iz; sectionProperties.Iy= Iy; sectionProperties.J= J
 seccion= typical_materials.defElasticSectionFromMechProp3d(preprocessor, "seccion",sectionProperties)
 
 #Nodes
-nodes= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeHandler
 modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
 nodes.defaultTag= 1 #First node number.
 nod1= nodes.newNodeXYZ(0,0.0,0.0)
@@ -54,7 +54,7 @@ nod3= nodes.newNodeXYZ(L,0.0,0.0)
 
 lin= modelSpace.newLinearCrdTransf("lin",xc.Vector([0,1,0]))
 
-elements= preprocessor.getElementLoader
+elements= preprocessor.getElementHandler
 elements.defaultTransformation= "lin"
 elements.defaultMaterial= "seccion"
 elements.defaultTag= 1 #Tag for next element.
@@ -64,11 +64,11 @@ beam3d= elements.newElement("ElasticBeam3d",xc.ID([nod1.tag,nod2.tag]));
 
 modelSpace.fixNode000_000(1)
 
-rr= preprocessor.getConstraintLoader.newRigidBeam(nod2.tag,nod3.tag)
+rr= preprocessor.getBoundaryCondHandler.newRigidBeam(nod2.tag,nod3.tag)
 
 
 # Loads definition
-cargas= preprocessor.getLoadLoader
+cargas= preprocessor.getLoadHandler
 
 casos= cargas.getLoadPatterns
 

@@ -30,7 +30,7 @@ P= 1e3 # punctual load.
 # Problem type
 feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor   
-nodes= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeHandler
 modelSpace= predefined_spaces.StructuralMechanics2D(nodes)
 
 nodes.defaultTag= 1 #First node number.
@@ -45,7 +45,7 @@ scc= typical_materials.defElasticSection2d(preprocessor, "scc",A,E,I)
 
 
 # Elements definition
-elements= preprocessor.getElementLoader
+elements= preprocessor.getElementHandler
 elements.defaultTransformation= "lin"
 elements.defaultMaterial= "scc"
 #  sintaxis: beam2d_02[<tag>] 
@@ -54,12 +54,12 @@ beam2d= elements.newElement("ElasticBeam2d",xc.ID([nod1.tag,nod2.tag]))
 beam2d.sectionProperties.h= h
     
 # Constraints
-constraints= preprocessor.getConstraintLoader
+constraints= preprocessor.getBoundaryCondHandler
 modelSpace.fixNode000(nod1.tag)
 
 
 # Loads definition
-cargas= preprocessor.getLoadLoader
+cargas= preprocessor.getLoadHandler
 casos= cargas.getLoadPatterns
 #Load modulation.
 ts= casos.newTimeSeries("constant_ts","ts")

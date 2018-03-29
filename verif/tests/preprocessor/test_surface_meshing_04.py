@@ -29,13 +29,13 @@ preprocessor=  feProblem.getPreprocessor
 elast= typical_materials.defElasticMaterial(preprocessor, "elast",3000)
 matPrb= typical_materials.defElasticMembranePlateSection(preprocessor, "matPrb",E,nu,rho,0.25)
 
-nodes= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeHandler
 nodes.newSeedNode()
 
-seedElemLoader= preprocessor.getElementLoader.seedElemLoader
-seedElemLoader.defaultMaterial= "matPrb"
-seedElemLoader.defaultTag= 1
-elem= seedElemLoader.newElement("ShellMITC4",xc.ID([0,0,0,0]))
+seedElemHandler= preprocessor.getElementHandler.seedElemHandler
+seedElemHandler.defaultMaterial= "matPrb"
+seedElemHandler.defaultTag= 1
+elem= seedElemHandler.newElement("ShellMITC4",xc.ID([0,0,0,0]))
 
 
 points= preprocessor.getMultiBlockTopology.getPoints

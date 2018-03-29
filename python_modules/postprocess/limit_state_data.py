@@ -64,7 +64,7 @@ class LimitStateData(object):
     if fConvIntForc != 1.0:
       lmsg.warning('fConvIntForc= ' + fConvIntForc + 'conversion factor between units is DEPRECATED' )
     preprocessor= feProblem.getPreprocessor
-    loadCombinations= preprocessor.getLoadLoader.getLoadCombinations
+    loadCombinations= preprocessor.getLoadHandler.getLoadCombinations
     #Putting combinations inside XC.
     loadCombinations= self.dumpCombinations(combContainer,loadCombinations)
     elemSet= setCalc.getElements

@@ -43,7 +43,7 @@ numElementGroups= None
 feProblem= xc.FEProblem()
 feProblem.logFileName= "/tmp/borrar.log" # Ignore warning messages
 preprocessor=  feProblem.getPreprocessor
-nodes= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeHandler
 modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
 
 nodes.newNodeIDXYZ(1,0,0,0)
@@ -57,7 +57,7 @@ nodes.newNodeIDXYZ(6,3,1,0)
 # Materials definition
 memb1= typical_materials.defElasticMembranePlateSection(preprocessor, "memb1",E,nu,dens,h)
 # Elements definition
-elements= preprocessor.getElementLoader
+elements= preprocessor.getElementHandler
 elements.defaultMaterial= "memb1"
 elem= elements.newElement("ShellMITC4",xc.ID([1,2,3,4]))
 elem= elements.newElement("ShellMITC4",xc.ID([2,5,6,3]))

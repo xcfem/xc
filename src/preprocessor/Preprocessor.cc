@@ -130,7 +130,7 @@ XC::SetEstruct *XC::Preprocessor::busca_set_estruct(const std::string &nmb)
 //! @brief Domain setup to solve for a new load pattern.
 void XC::Preprocessor::resetLoadCase(void)
   { 
-    getLoadLoader().removeAllFromDomain();
+    getLoadHandler().removeAllFromDomain();
     if(domain)
       domain->resetLoadCase();
     else

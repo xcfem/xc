@@ -31,13 +31,13 @@
 
 #include "xc_utils/src/nucleo/EntCmd.h"
 #include "utility/actor/actor/MovableObject.h"
-#include "loaders/MaterialLoader.h"
-#include "loaders/BeamIntegratorLoader.h"
-#include "loaders/TransfCooLoader.h"
-#include "loaders/NodeLoader.h"
-#include "loaders/ElementLoader.h"
-#include "loaders/LoadLoader.h"
-#include "loaders/ConstraintLoader.h"
+#include "prep_handlers/MaterialHandler.h"
+#include "prep_handlers/BeamIntegratorHandler.h"
+#include "prep_handlers/TransfCooHandler.h"
+#include "prep_handlers/NodeHandler.h"
+#include "prep_handlers/ElementHandler.h"
+#include "prep_handlers/LoadHandler.h"
+#include "prep_handlers/BoundaryCondHandler.h"
 #include "set_mgmt/MapSet.h"
 #include "multi_block_topology/MultiBlockTopology.h"
 #include "utility/handler/DataOutputHandler.h"
@@ -62,13 +62,13 @@ class Preprocessor: public EntCmd, public MovableObject
 
     Domain *domain; //!< Proble domain.
 
-    MaterialLoader materialHandler; //!< Material creation tools.
-    TransfCooLoader transf; //!< Coordinate transformation.
-    BeamIntegratorLoader beamIntegrators; //!< Beam integrator schemes.
-    NodeLoader nodes; //! Node creation tools.
-    ElementLoader elements; //!< Element creation tools.
-    LoadLoader loads; //!< Load creation tools.
-    ConstraintLoader constraints; //! Constraint creation tools.
+    MaterialHandler materialHandler; //!< Material creation tools.
+    TransfCooHandler transf; //!< Coordinate transformation.
+    BeamIntegratorHandler beamIntegrators; //!< Beam integrator schemes.
+    NodeHandler nodes; //! Node creation tools.
+    ElementHandler elements; //!< Element creation tools.
+    LoadHandler loads; //!< Load creation tools.
+    BoundaryCondHandler constraints; //! Constraint creation tools.
 
     MultiBlockTopology mbt; //!< Geometric entities: points, lines,...
 
@@ -88,9 +88,9 @@ class Preprocessor: public EntCmd, public MovableObject
     friend class EntMdlr;
     friend class MapSet;
     friend class SetEstruct;
-    friend class ProtoElementLoader;
-    friend class ElementLoader;
-    friend class ConstraintLoader;
+    friend class ProtoElementHandler;
+    friend class ElementHandler;
+    friend class BoundaryCondHandler;
     friend class FEProblem;
     void UpdateSets(Element *);
     void UpdateSets(Constraint *);
@@ -110,33 +110,33 @@ class Preprocessor: public EntCmd, public MovableObject
       { return sets; }
     const MapSet &get_sets(void) const
       { return sets; }
-    MaterialLoader &getMaterialLoader(void)
+    MaterialHandler &getMaterialHandler(void)
       { return materialHandler; }
-    const MaterialLoader &getMaterialLoader(void) const
+    const MaterialHandler &getMaterialHandler(void) const
       { return materialHandler; }
-    inline NodeLoader &getNodeLoader(void)
+    inline NodeHandler &getNodeHandler(void)
       { return nodes; }
-    inline const NodeLoader &getNodeLoader(void) const
+    inline const NodeHandler &getNodeHandler(void) const
       { return nodes; }
-    ElementLoader &getElementLoader(void)
+    ElementHandler &getElementHandler(void)
       { return elements; }
-    const ElementLoader &getElementLoader(void) const
+    const ElementHandler &getElementHandler(void) const
       { return elements; }
-    LoadLoader &getLoadLoader(void)
+    LoadHandler &getLoadHandler(void)
       { return loads; }
-    const LoadLoader &getLoadLoader(void) const
+    const LoadHandler &getLoadHandler(void) const
       { return loads; }
-    ConstraintLoader &getConstraintLoader(void)
+    BoundaryCondHandler &getBoundaryCondHandler(void)
       { return constraints; }
-    const ConstraintLoader &getConstraintLoader(void) const
+    const BoundaryCondHandler &getBoundaryCondHandler(void) const
       { return constraints; }
-    TransfCooLoader &getTransfCooLoader(void)
+    TransfCooHandler &getTransfCooHandler(void)
       { return transf; }
-    const TransfCooLoader &getTransfCooLoader(void) const
+    const TransfCooHandler &getTransfCooHandler(void) const
       { return transf; }
-    BeamIntegratorLoader &getBeamIntegratorLoader(void)
+    BeamIntegratorHandler &getBeamIntegratorHandler(void)
       { return beamIntegrators; }
-    const BeamIntegratorLoader &getBeamIntegratorLoader(void) const
+    const BeamIntegratorHandler &getBeamIntegratorHandler(void) const
       { return beamIntegrators; }
 
     const MultiBlockTopology &getMultiBlockTopology(void) const

@@ -24,12 +24,12 @@
 // along with this program.
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
-//MaterialLoader.h
+//MaterialHandler.h
 
 #ifndef MATERIALLOADER_H
 #define MATERIALLOADER_H
 
-#include "Loader.h"
+#include "PrepHandler.h"
 #include <map>
 
 namespace XC {
@@ -42,7 +42,7 @@ class InteractionDiagramData;
 //!  \ingroup Ldrs
 //! 
 //! @brief Material handler (definition, searching,...).
-class MaterialLoader: public Loader
+class MaterialHandler: public PrepHandler
   {
   public:
     typedef std::map<std::string,Material *> map_materials;
@@ -67,9 +67,9 @@ class MaterialLoader: public Loader
     map_interaction_diagram interaction_diagrams; //!< 3D interaction diagrams.
     map_interaction_diagram2d interaction_diagrams2D; //!< 2D interaction diagrams.
   protected:
-    friend class ElementLoader;
+    friend class ElementHandler;
   public:
-    MaterialLoader(Preprocessor *owr);
+    MaterialHandler(Preprocessor *owr);
     const map_materials &Map(void) const;
     const_iterator begin(void) const;
     const_iterator end(void) const;
@@ -103,7 +103,7 @@ class MaterialLoader: public Loader
     InteractionDiagram2d *calcInteractionDiagramNMy(const std::string &,const InteractionDiagramData &diag_data);
     InteractionDiagram2d *calcInteractionDiagramNMz(const std::string &,const InteractionDiagramData &diag_data);
     InteractionDiagram2d &getNMzInteractionDiagram(const std::string &);
-    ~MaterialLoader(void);
+    ~MaterialHandler(void);
     void clearAll(void);
 
   };

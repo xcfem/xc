@@ -25,10 +25,10 @@ class PointRecord(me.NodeRecord):
       self.labels= labels
     else:
       self.labels= list()
-  def getStrXCCommand(self,pointLoaderName):
+  def getStrXCCommand(self,pointHandlerName):
     strId= str(self.id)
     strCommand= '.newPntIDPos3d(' + strId + ',geom.Pos3d(' + str(self.coords[0]) + ',' + str(self.coords[1]) +','+ str(self.coords[2])+'))'
-    return 'pt' + strId + '= ' + pointLoaderName + strCommand
+    return 'pt' + strId + '= ' + pointHandlerName + strCommand
 
 class PointDict(me.NodeDict):
   ''' Node container.'''
@@ -44,7 +44,7 @@ class PointDict(me.NodeDict):
   def writeToXCFile(self,f,xcImportExportData):
     ''' Write the XC commands that define nodes.'''
     for key in self:
-      strCommand= self[key].getStrXCCommand(xcImportExportData.pointLoaderName)
+      strCommand= self[key].getStrXCCommand(xcImportExportData.pointHandlerName)
       f.write(strCommand+'\n')
       if(self.labels):
         pointName= strCommand.split('= ')[0]
@@ -74,14 +74,14 @@ class BlockRecord(me.CellRecord):
     return tmp[tmp.index("[") + 1:tmp.rindex("]")]
   def getStrXCCommand(self,xcImportExportData):
     strId= str(self.id)
-    loaderName= xcImportExportData.getBlockLoaderName(self.getType())
+    handlerName= xcImportExportData.getBlockHandlerName(self.getType())
     strCommand= None
     if(self.cellType=='line'):
       strId= 'l'+strId
-      strCommand= strId + '= ' + loaderName + '.newLine(' + self.getStrKeyPointsIds() +')'
+      strCommand= strId + '= ' + handlerName + '.newLine(' + self.getStrKeyPointsIds() +')'
     elif(self.cellType=='face'):
       strId= 'f'+strId
-      strCommand= strId + '= ' + loaderName + '.newQuadSurfacePts(' + self.getStrKeyPointsIds()  +')'
+      strCommand= strId + '= ' + handlerName + '.newQuadSurfacePts(' + self.getStrKeyPointsIds()  +')'
     else:
       lmsg.error('BlockRecord::getStrXCCommand not implemented for blocks of type: '+ self.cellType)
     if(self.labels):
@@ -215,7 +215,7 @@ class BlockData(object):
   def writeToXCFile(self,xcImportExportData):
     f= xcImportExportData.outputFile
     for key in self.points:
-      strCommand= self.points[key].getStrXCCommand(xcImportExportData.pointLoaderName)
+      strCommand= self.points[key].getStrXCCommand(xcImportExportData.pointHandlerName)
       f.write(strCommand+'\n')
     for key in self.blocks:
       block= self.blocks[key]

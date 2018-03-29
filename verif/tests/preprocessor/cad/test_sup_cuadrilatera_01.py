@@ -16,7 +16,7 @@ __email__= "l.pereztato@gmail.com"
 
 feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
-nodes= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeHandler
 
 feProblem.logFileName= "/tmp/borrar.log" # Nicely avoid warning messages.
 NumDivI= 3
@@ -34,9 +34,9 @@ nodes.newSeedNode()
 elast= typical_materials.defElasticMaterial(preprocessor, "elast",3000)
 elast2d= typical_materials.defElasticIsotropicPlaneStress(preprocessor, "elast2d",E,nu,rho)
 
-seedElemLoader= preprocessor.getElementLoader.seedElemLoader
-seedElemLoader.defaultMaterial= "elast2d"
-quad4n= seedElemLoader.newElement("FourNodeQuad",xc.ID([0,0,0,0]))
+seedElemHandler= preprocessor.getElementHandler.seedElemHandler
+seedElemHandler.defaultMaterial= "elast2d"
+quad4n= seedElemHandler.newElement("FourNodeQuad",xc.ID([0,0,0,0]))
 
 points= preprocessor.getMultiBlockTopology.getPoints
 pt= points.newPntIDPos3d(1,geom.Pos3d(0.0,0.0,0.0))

@@ -42,7 +42,7 @@ def listaFactorCapacidad(preprocessor,setName, fName, titulo):
   elment set whose material is a steel shape.
   '''
   printCabeceraListadoFactorCapacidad(fName,titulo)
-  st= preprocessor.getSetLoader.getSet(setName)
+  st= preprocessor.getSets.getSet(setName)
   elems= st.getElements()
   tagFCCPCP= 0
   FCCPCP= 0

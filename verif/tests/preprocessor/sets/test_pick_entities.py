@@ -10,7 +10,7 @@ from miscUtils import LogMessages as lmsg
 
 feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor   
-nodes= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeHandler
 modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
 nod0= nodes.newNodeXYZ(0.0,0.0,0.0)
 nod1= nodes.newNodeXYZ(0.5,0.5,0.5)
@@ -23,7 +23,7 @@ lin= modelSpace.newLinearCrdTransf("lin",xc.Vector([0,1,1]))
 # Materials
 seccion= typical_materials.defElasticSection3d(preprocessor, "seccion",1,1,1,1,1,1)
 
-elements= preprocessor.getElementLoader
+elements= preprocessor.getElementHandler
 elements.defaultTransformation= "lin" # Coord. transformation.
 elements.defaultMaterial= "seccion"
 ele0= elements.newElement("ElasticBeam3d",xc.ID([nod0.tag,nod1.tag]))

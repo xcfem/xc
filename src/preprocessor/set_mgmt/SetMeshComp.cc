@@ -202,7 +202,7 @@ void XC::SetMeshComp::Transforma(const size_t &indice_trf)
 //! @brief Applies the single freedom constraint being passed as parameter to the nodes.
 void XC::SetMeshComp::fix(const SFreedom_Constraint &spc)
   {
-    ConstraintLoader &cl= getPreprocessor()->getConstraintLoader();
+    BoundaryCondHandler &cl= getPreprocessor()->getBoundaryCondHandler();
     for(nod_const_iterator i= nodes_begin();i!=nodes_end();i++)
       {
         const int tag_nod= (*i)->getTag();

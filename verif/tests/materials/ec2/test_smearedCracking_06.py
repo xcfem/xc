@@ -62,7 +62,7 @@ l= 1e-7     # Distance between nodes
 problem=xc.FEProblem()              #necesary to create this instance of
                                      #the class xc.FEProblem()
 preprocessor=problem.getPreprocessor
-nodes= preprocessor.getNodeLoader     #nodes container
+nodes= preprocessor.getNodeHandler     #nodes container
 modelSpace= predefined_spaces.StructuralMechanics3D(nodes)  #Defines the dimension of nodes  three coordinates (x,y,z) and six DOF for each node (Ux,Uy,Uz,thetaX,thetaY,thetaZ)
 
 
@@ -84,7 +84,7 @@ concrete.tensionStiffparam=paramTS           #parameters for tension stiffening 
 concrDiagram=concrete.defDiagK(preprocessor) #Definition of concrete stress-strain diagram in XC.
 
 # Section geometry (rectangular 0.3x0.5, 20x20 cells)
-geomSectFibers= preprocessor.getMaterialLoader.newSectionGeometry("geomSectFibers")
+geomSectFibers= preprocessor.getMaterialHandler.newSectionGeometry("geomSectFibers")
 y1= width/2.0
 z1= depth/2.0
 #concrete region
@@ -110,7 +110,7 @@ reinfBottLayer.p2= geom.Pos2d(yBotL,zBotL) # center point position of the starti
 #it is a generic section created to be assigned to the elements specified
 #its stress and strain state is neutral (if we ask this section for stress or strain
 #values the result is always 0)
-materiales= preprocessor.getMaterialLoader
+materiales= preprocessor.getMaterialHandler
 sctFibers= materiales.newMaterial("fiber_section_3d","sctFibers")
 fiberSectionRepr= sctFibers.getFiberSectionRepr()
 fiberSectionRepr.setGeomNamed("geomSectFibers")
@@ -118,7 +118,7 @@ sctFibers.setupFibers()
 
 
 # Elements definition
-elements= preprocessor.getElementLoader
+elements= preprocessor.getElementHandler
 elements.defaultMaterial='sctFibers'
 elements.dimElem= 1 # Dimension of element space
 elements.defaultTag= 1
@@ -129,7 +129,7 @@ modelSpace.fixNode000_000(1)
 modelSpace.fixNodeF00_0F0(2)
 
 # Loads definition
-cargas= preprocessor.getLoadLoader   #loads container
+cargas= preprocessor.getLoadHandler   #loads container
 
 casos= cargas.getLoadPatterns
 
@@ -151,7 +151,7 @@ analOk= analisis.analyze(1)
 
 
 #printing results
-nodes= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeHandler
 nodes.calculateNodalReactions(True)
 
 '''
@@ -173,7 +173,7 @@ RMZ2= nodes.getNode(2).getReaction[5]   #Bending moment Mz reaction at node 2
 print 'Rnode1= (',nodes.getNode(1).getReaction[0],',',nodes.getNode(1).getReaction[1],',',nodes.getNode(1).getReaction[2],',',nodes.getNode(1).getReaction[3],',',nodes.getNode(1).getReaction[4],',',nodes.getNode(1).getReaction[5],')'
 print 'Rnode2= (',nodes.getNode(2).getReaction[0],',',nodes.getNode(2).getReaction[1],',',nodes.getNode(2).getReaction[2],',',nodes.getNode(2).getReaction[3],',',nodes.getNode(2).getReaction[4],',',nodes.getNode(2).getReaction[5],')'
 '''
-elements= preprocessor.getElementLoader
+elements= preprocessor.getElementHandler
 ele1= elements.getElement(1)
 #section of element 1: it's the copy of the material section 'sctFibers' assigned
 #to element 1 and specific of this element. It has the tensional state of the element

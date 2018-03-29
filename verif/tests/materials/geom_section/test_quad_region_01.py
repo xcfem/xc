@@ -21,7 +21,7 @@ feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
 
 elast= typical_materials.defElasticMaterial(preprocessor, "elast",1.0)
-sectionGeometryTest= preprocessor.getMaterialLoader.newSectionGeometry("sectionGeometryTest")
+sectionGeometryTest= preprocessor.getMaterialHandler.newSectionGeometry("sectionGeometryTest")
 regiones= sectionGeometryTest.getRegions
 elast= regiones.newQuadRegion("elast")
 elast.nDivIJ= n1

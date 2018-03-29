@@ -26,7 +26,7 @@ from materials import typical_materials
 # Problem type
 feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor   
-nodes= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeHandler
 modelSpace= predefined_spaces.StructuralMechanics2D(nodes)
 nodes.defaultTag= 1 #First node number.
 nod= nodes.newNodeXY(0,0)
@@ -43,7 +43,7 @@ scc= typical_materials.defElasticSection2d(preprocessor, "scc",A,E,I)
 
 
 # Elements definition
-elements= preprocessor.getElementLoader
+elements= preprocessor.getElementHandler
 elements.defaultTransformation= "lin"
 elements.defaultMaterial= "scc"
 #  sintaxis: beam2d_02[<tag>] 
@@ -61,7 +61,7 @@ beam2d= elements.newElement("ElasticBeam2d",xc.ID([4,5]))
 beam2d.h= h
     
 # Constraints
-constraints= preprocessor.getConstraintLoader
+constraints= preprocessor.getBoundaryCondHandler
 #
 spc= constraints.newSPConstraint(2,0,0.0) # Node 2
 spc= constraints.newSPConstraint(2,1,0.0)
@@ -69,7 +69,7 @@ spc= constraints.newSPConstraint(4,1,0.0) # Node 4
 
 
 # Loads definition
-cargas= preprocessor.getLoadLoader
+cargas= preprocessor.getLoadHandler
 casos= cargas.getLoadPatterns
 #Load modulation.
 ts= casos.newTimeSeries("constant_ts","ts")

@@ -56,23 +56,23 @@
 
 #include <material/section/repres/section/SectionRepres.h>
 #include <material/section/repres/geom_section/GeomSection.h>
-#include "preprocessor/loaders/MaterialLoader.h"
+#include "preprocessor/prep_handlers/MaterialHandler.h"
 
 
 
 
-XC::SectionRepres::SectionRepres(int tag,MaterialLoader *ml)
-  : TaggedObject(tag), material_loader(ml), gmSecc(nullptr) {}
+XC::SectionRepres::SectionRepres(int tag,MaterialHandler *ml)
+  : TaggedObject(tag), material_handler(ml), gmSecc(nullptr) {}
 
 //! @brief Copy constructor.
 XC::SectionRepres::SectionRepres(const SectionRepres &otro)
-  : TaggedObject(otro), material_loader(otro.material_loader), gmSecc(otro.gmSecc) {}
+  : TaggedObject(otro), material_handler(otro.material_handler), gmSecc(otro.gmSecc) {}
 
 //! @brief Assignment operator.
 XC::SectionRepres &XC::SectionRepres::operator=(const SectionRepres &otro)
   {
     SectionRepres::operator=(otro);
-    material_loader= otro.material_loader;
+    material_handler= otro.material_handler;
     gmSecc= otro.gmSecc;
     return *this;
   }
@@ -88,13 +88,13 @@ int XC::SectionRepres::getNumCells(void) const
 
 void XC::SectionRepres::setGeomNamed(const std::string &nmbGeom)
   {
-    const GeomSection *tmp= material_loader->find_ptr_geom_section(nmbGeom);
+    const GeomSection *tmp= material_handler->find_ptr_geom_section(nmbGeom);
     if(tmp)
       gmSecc= tmp;
     else
-     std::cerr << "(SectionRepres::setGeom;" 
-                    << " section geometry: '"
-                    << nmbGeom << "' not found.\n";
+     std::cerr << getClassName() << __FUNCTION__
+	       << " section geometry: '"
+               << nmbGeom << "' not found.\n";
   }
 
 //! @brief Sets section geometry.

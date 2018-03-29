@@ -62,7 +62,7 @@ class FiberSectionShear3d : public FiberSection3d
     int recvData(const CommParameters &);
 
   public:
-    FiberSectionShear3d(int tag= 0,MaterialLoader *mat_ldr= nullptr);
+    FiberSectionShear3d(int tag= 0,MaterialHandler *mat_ldr= nullptr);
     FiberSectionShear3d(const FiberSectionShear3d &otro);
     XC::FiberSectionShear3d &operator=(const FiberSectionShear3d &otro);
     ~FiberSectionShear3d(void);

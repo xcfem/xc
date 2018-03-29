@@ -78,14 +78,14 @@ class FiberSection3dBase : public FiberSectionBase
     friend class FiberContainer;
     double get_strain(const double &y,const double &z) const;
   public:
-    FiberSection3dBase(int classTag, int dim,MaterialLoader *mat_ldr= nullptr);
-    FiberSection3dBase(int tag, int classTag, int dim,MaterialLoader *mat_ldr= nullptr);
-    FiberSection3dBase(int tag, int classTag, int dim,const fiber_list &fibers,MaterialLoader *mat_ldr= nullptr);
+    FiberSection3dBase(int classTag, int dim,MaterialHandler *mat_ldr= nullptr);
+    FiberSection3dBase(int tag, int classTag, int dim,MaterialHandler *mat_ldr= nullptr);
+    FiberSection3dBase(int tag, int classTag, int dim,const fiber_list &fibers,MaterialHandler *mat_ldr= nullptr);
     FiberSection3dBase(const FiberSection3dBase &otro);
     FiberSection3dBase &operator=(const FiberSection3dBase &otro);
 
     Fiber *addFiber(Fiber &)= 0;
-    Fiber *addFiber(int tag,const MaterialLoader &,const std::string &nmbMat,const double &, const Vector &position);
+    Fiber *addFiber(int tag,const MaterialHandler &,const std::string &nmbMat,const double &, const Vector &position);
 
     virtual double getStrain(const double &y,const double &z) const;
 

@@ -18,14 +18,14 @@ E= 2e6 # Elastic modulus
 
 feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor   
-nodes= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeHandler
 
 sectionTest= section_properties.RectangularSection("sectionTest",b,h) # Section geometry.
 sectionTestMaterial=typical_materials.MaterialData(name='sectionTestMaterial',E=E,nu=0.3,rho=2500) # Section material.
 
 # Define materials
 defSeccAggregation.defSeccAggregation2d(preprocessor, sectionTest,sectionTestMaterial)
-tang= preprocessor.getMaterialLoader.getMaterial("sectionTest").getTangentStiffness()
+tang= preprocessor.getMaterialHandler.getMaterial("sectionTest").getTangentStiffness()
 EI= tang.at(1,1)
 EA= tang.at(0,0)
 

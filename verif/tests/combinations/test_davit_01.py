@@ -38,7 +38,7 @@ __email__= "l.pereztato@gmail.com"
 # Problem type
 feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
-nodes= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeHandler
 modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
 nodes.defaultTag= 1 #First node number.
 nod= nodes.newNodeXYZ(2.0,0.0,0.0)
@@ -53,7 +53,7 @@ scc= typical_materials.defElasticSection3d(preprocessor, "scc",A,E,G,Iz,Iy,J)
 
 
 # Elements definition
-elements= preprocessor.getElementLoader
+elements= preprocessor.getElementHandler
 elements.defaultTransformation= "lin"
 elements.defaultMaterial= "scc"
 elements.defaultTag= 1
@@ -70,7 +70,7 @@ beam3.rho= densHorm*A
 modelSpace.fixNode000_000(1)
 
 # Loads definition
-cargas= preprocessor.getLoadLoader
+cargas= preprocessor.getLoadHandler
 
 casos= cargas.getLoadPatterns
 
@@ -120,7 +120,7 @@ NMin1= 6.023e23
 NMin2= 6.023e23
 
 def procesResultVerif(nmbComb):
-  elements= preprocessor.getElementLoader
+  elements= preprocessor.getElementHandler
   elem1= elements.getElement(1)
   elem1.getResistingForce()
   N1= elem1.getN1

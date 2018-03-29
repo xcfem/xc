@@ -52,7 +52,7 @@ Flist=np.arange(0e3,650e3,25e3)     # axial force [N]
 # Model definition
 feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
-nodes= preprocessor.getNodeLoader     #nodes container
+nodes= preprocessor.getNodeHandler     #nodes container
 modelSpace= predefined_spaces.StructuralMechanics2D(nodes)  #Defines the dimension of nodes  three coordinates (x,y,z) and six DOF for each node (Ux,Uy,theta)
 
 
@@ -89,7 +89,7 @@ concr= typical_materials.defConcrete02(preprocessor=preprocessor,name='concr',ep
 
 
 # Section geometry (rectangular 0.3x0.5, 20x20 cells)
-geomSectFibers= preprocessor.getMaterialLoader.newSectionGeometry("geomSectFibers")
+geomSectFibers= preprocessor.getMaterialHandler.newSectionGeometry("geomSectFibers")
 y1= width/2.0
 z1= depth/2.0
 #concrete region
@@ -112,21 +112,21 @@ reinforcementA.p1= geom.Pos2d(0.0,0.0) # 1 single rebar, centered in the cross-s
 #it is a generic section created to be assigned to the elements specified
 #its stress and strain state is neutral (if we ask this section for stress or strain
 #values the result is always 0)
-materiales= preprocessor.getMaterialLoader
+materiales= preprocessor.getMaterialHandler
 sctFibers= materiales.newMaterial("fiber_section_3d","sctFibers")
 fiberSectionRepr= sctFibers.getFiberSectionRepr()
 fiberSectionRepr.setGeomNamed("geomSectFibers")
 sctFibers.setupFibers()
 
 # Elements definition
-elements= preprocessor.getElementLoader
+elements= preprocessor.getElementHandler
 elements.defaultMaterial='sctFibers'
 elements.dimElem= 1 # Dimension of element space
 elements.defaultTag= 1
 elem= elements.newElement("ZeroLengthSection",xc.ID([1,2]))
 
 # Constraints
-constraints= preprocessor.getConstraintLoader
+constraints= preprocessor.getBoundaryCondHandler
 #newSPConstraint(nodeTag,DOF,value)
 spc= constraints.newSPConstraint(1,0,0.0) # Node 1, ux=0
 spc= constraints.newSPConstraint(1,1,0.0) # Node 1, uy=0
@@ -136,12 +136,12 @@ spc= constraints.newSPConstraint(2,1,0.0) # Node 2, uy=0
 
 
 # Loads definition
-cargas= preprocessor.getLoadLoader   #loads container
+cargas= preprocessor.getLoadHandler   #loads container
 
 casos= cargas.getLoadPatterns
 
 
-elements= preprocessor.getElementLoader
+elements= preprocessor.getElementHandler
 ele1= elements.getElement(1)
 #section of element 1: it's the copy of the material section 'sctFibers' assigned
 #to element 1 and specific of this element. It has the tensional state of the element

@@ -39,7 +39,7 @@ tagElemLado= 0
 feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
 feProblem.logFileName= "/tmp/borrar.log" # Don't pring warnings
-nodes= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeHandler
 
 modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
 nodes.newSeedNode()
@@ -53,10 +53,10 @@ nmb1= typical_materials.defElasticMembranePlateSection(preprocessor, "memb1",E,n
 
 
 
-seedElemLoader= preprocessor.getElementLoader.seedElemLoader
-seedElemLoader.defaultMaterial= "memb1"
-seedElemLoader.defaultTag= 1
-elem= seedElemLoader.newElement("ShellMITC4",xc.ID([0,0,0,0]))
+seedElemHandler= preprocessor.getElementHandler.seedElemHandler
+seedElemHandler.defaultMaterial= "memb1"
+seedElemHandler.defaultTag= 1
+elem= seedElemHandler.newElement("ShellMITC4",xc.ID([0,0,0,0]))
 
 
 
@@ -81,7 +81,7 @@ for l in lados:
     modelSpace.fixNode000_000(i)
 
 # Loads definition
-cargas= preprocessor.getLoadLoader
+cargas= preprocessor.getLoadHandler
 casos= cargas.getLoadPatterns
 ts= casos.newTimeSeries("constant_ts","ts")
 # \constant_ts["ts"]{ \factor{1.0} } # Time series: constant_ts[nombre]{factor}
@@ -94,7 +94,7 @@ f1= preprocessor.getSets.getSet("f1")
 
 tagElemCentro= f1.getNearestElement(geom.Pos3d(xMidP,yMidP,0.0)).tag
 tagElemLado= f1.getNearestElement(geom.Pos3d(xMidL,yMidL,0.0)).tag
-nodes= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeHandler
 
 nNodes= f1.getNumNodes
 
@@ -111,7 +111,7 @@ m1Centro= 0.0
 m2CentroLado= 0.0
 f1= preprocessor.getSets.getSet("f1")
 
-nodes= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeHandler
 
 node= f1.getNodeIJK(1,NumDivI/2+1,NumDivJ/2+1)
 
@@ -121,10 +121,10 @@ node= f1.getNodeIJK(1,NumDivI/2+1,NumDivJ/2+1)
 UZ= node.getDisp[2]
 
 
-elemCentro= preprocessor.getElementLoader.getElement(tagElemCentro)
+elemCentro= preprocessor.getElementHandler.getElement(tagElemCentro)
 elemCentro.getResistingForce()
 m1Centro= elemCentro.getMeanInternalForce("m1")
-elemLado= preprocessor.getElementLoader.getElement(tagElemLado)
+elemLado= preprocessor.getElementHandler.getElement(tagElemLado)
 elemLado.getResistingForce()
 m2CentroLado= elemLado.getMeanInternalForce("m2")
 

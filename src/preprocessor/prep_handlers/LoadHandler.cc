@@ -24,9 +24,9 @@
 // along with this program.
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
-//LoadLoader.cc
+//LoadHandler.cc
 
-#include "LoadLoader.h"
+#include "LoadHandler.h"
 #include "domain/domain/Domain.h"
 
 //Ground motions.
@@ -41,11 +41,11 @@
 #include "utility/actor/actor/MovableMap.h"
 
 //! @brief Default constructor.
-XC::LoadLoader::LoadLoader(Preprocessor *owr)
-  : Loader(owr), lpatterns(this), tag_lp(0), combinations(this) {}
+XC::LoadHandler::LoadHandler(Preprocessor *owr)
+  : PrepHandler(owr), lpatterns(this), tag_lp(0), combinations(this) {}
 
 //! @brief Adds the load pattern to the domain.
-void XC::LoadLoader::addToDomain(const std::string &lp_code)
+void XC::LoadHandler::addToDomain(const std::string &lp_code)
   {
     LoadPattern *lp= lpatterns.buscaLoadPattern(lp_code);
     if(lp)
@@ -61,7 +61,7 @@ void XC::LoadLoader::addToDomain(const std::string &lp_code)
   }
 
 //! @brief Remove load pattern from domain.
-void XC::LoadLoader::removeFromDomain(const std::string &lp_code)
+void XC::LoadHandler::removeFromDomain(const std::string &lp_code)
   {
     LoadPattern *lp= lpatterns.buscaLoadPattern(lp_code);
     if(lp)
@@ -70,33 +70,33 @@ void XC::LoadLoader::removeFromDomain(const std::string &lp_code)
       combinations.removeFromDomain(lp_code);
   }
 
-void XC::LoadLoader::removeAllFromDomain(void)
+void XC::LoadHandler::removeAllFromDomain(void)
   {
     combinations.removeAllFromDomain();
     lpatterns.removeAllFromDomain();
   }
 
 //! @brief Clears all the objects.
-void XC::LoadLoader::clearAll(void)
+void XC::LoadHandler::clearAll(void)
   {
     combinations.clear();
     lpatterns.clear();
   }
 
 //! @brief Destructor.
-XC::LoadLoader::~LoadLoader(void)
+XC::LoadHandler::~LoadHandler(void)
   { clearAll(); }
 
 //! @brief Returns a vector to store the dbTags
 //! of the class members.
-XC::DbTagData &XC::LoadLoader::getDbTagData(void) const
+XC::DbTagData &XC::LoadHandler::getDbTagData(void) const
   {
     static DbTagData retval(4);
     return retval;
   }
 
 //! @brief Send members through the channel being passed as parameter.
-int XC::LoadLoader::sendData(CommParameters &cp)
+int XC::LoadHandler::sendData(CommParameters &cp)
   {
     int res= sendMap(ground_motions,cp,getDbTagData(),CommMetaData(0));
     res+= cp.sendMovable(lpatterns,getDbTagData(),CommMetaData(1));
@@ -106,7 +106,7 @@ int XC::LoadLoader::sendData(CommParameters &cp)
   }
 
 //! @brief Send members through the channel being passed as parameter.
-int XC::LoadLoader::recvData(const CommParameters &cp)
+int XC::LoadHandler::recvData(const CommParameters &cp)
   {
     int res= receiveMap(ground_motions,cp,getDbTagData(),CommMetaData(0),&FEM_ObjectBroker::getNewGroundMotion);
     res+= cp.receiveMovable(lpatterns,getDbTagData(),CommMetaData(1));
@@ -116,7 +116,7 @@ int XC::LoadLoader::recvData(const CommParameters &cp)
   }
 
 //! @brief Sends object through the channel being passed as parameter.
-int XC::LoadLoader::sendSelf(CommParameters &cp)
+int XC::LoadHandler::sendSelf(CommParameters &cp)
   {
     setDbTag(cp);
     const int dataTag= getDbTag();
@@ -131,7 +131,7 @@ int XC::LoadLoader::sendSelf(CommParameters &cp)
 
 
 //! @brief Receives object through the channel being passed as parameter.
-int XC::LoadLoader::recvSelf(const CommParameters &cp)
+int XC::LoadHandler::recvSelf(const CommParameters &cp)
   {
     inicComm(4);
     const int dataTag= getDbTag();

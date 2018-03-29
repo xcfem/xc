@@ -35,7 +35,7 @@
 namespace XC {
 class UniaxialMaterial;
 class ZeroLength;
-class MaterialLoader;
+class MaterialHandler;
 
 //! @ingroup MatUnx
 //
@@ -60,7 +60,7 @@ class ZeroLengthMaterials: public DqUniaxialMaterial
     std::deque<int> directions; //!< array of local directions 0-5 for 1d materials
 
   protected:
-    MaterialLoader *get_material_loader(void);
+    MaterialHandler *get_material_handler(void);
 
   public:
     // Constructor for a single 1d material model

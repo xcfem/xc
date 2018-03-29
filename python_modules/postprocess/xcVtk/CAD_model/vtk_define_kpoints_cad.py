@@ -6,7 +6,7 @@ def VtkCargaIdsKPts(recordGrid):
 
 # Dibuja las etiquetas de los puntos
 def VtkDibujaIdsKPts(nmbUGrid,setName,renderer):
-  st= preprocessor.getSetLoader.getSet(setName)
+  st= preprocessor.getSets.getSet(setName)
   numKPtsDI= st.size
 
   if(numKPtsDI>0):

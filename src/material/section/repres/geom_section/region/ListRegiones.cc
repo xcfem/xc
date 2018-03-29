@@ -31,7 +31,7 @@
 #include <material/section/repres/geom_section/region/RgSccCirc.h>
 #include <material/section/repres/geom_section/region/RgSccPoligono.h>
 #include "material/uniaxial/UniaxialMaterial.h" 
-#include "preprocessor/loaders/MaterialLoader.h"
+#include "preprocessor/prep_handlers/MaterialHandler.h"
 #include "utility/matrix/Vector.h"
 #include "xc_utils/src/geom/pos_vec/Dir2d.h"
 #include "xc_utils/src/geom/pos_vec/Vector2d.h"
@@ -61,19 +61,19 @@ void XC::ListRegiones::copia(const ListRegiones &otra)
   }
 
 //! @brief Constructor.
-XC::ListRegiones::ListRegiones(MaterialLoader *ml)
-  : l_reg(), material_loader(ml) {}
+XC::ListRegiones::ListRegiones(MaterialHandler *ml)
+  : l_reg(), material_handler(ml) {}
 
 //! @brief Copy constructor.
 XC::ListRegiones::ListRegiones(const ListRegiones  &otro)
-  : l_reg(), material_loader(otro.material_loader)
+  : l_reg(), material_handler(otro.material_handler)
   { copia(otro); }
 
 //! @brief Assignment operator.
 XC::ListRegiones &XC::ListRegiones::operator=(const ListRegiones &otro)
   {
     SectionMassProperties::operator=(otro);
-    material_loader= otro.material_loader;
+    material_handler= otro.material_handler;
     copia(otro);
     return *this;
   }
@@ -81,7 +81,7 @@ XC::ListRegiones &XC::ListRegiones::operator=(const ListRegiones &otro)
 //! @brief Aggregates a new quadrilateral region.
 XC::RgSccQuad *XC::ListRegiones::newQuadRegion(const std::string &cod_mat)
   {
-    Material *mat= material_loader->find_ptr(cod_mat);
+    Material *mat= material_handler->find_ptr(cod_mat);
     if(!mat)
       std::cerr << getClassName() << __FUNCTION__
 	        << "; warning!, material: '"
@@ -95,7 +95,7 @@ XC::RgSccQuad *XC::ListRegiones::newQuadRegion(const std::string &cod_mat)
 //! @brief Aggregates a new circularl region.
 XC::RgSccCirc *XC::ListRegiones::newCircularRegion(const std::string &cod_mat)
   {
-    Material *mat= material_loader->find_ptr(cod_mat);
+    Material *mat= material_handler->find_ptr(cod_mat);
     if(!mat)
       std::cerr << getClassName() << __FUNCTION__
 	        << "; warning!, material: '"
@@ -172,13 +172,14 @@ BND2d XC::ListRegiones::getBnd(void) const
       }
     else
       std::cerr << getClassName() << "::" << __FUNCTION__
-	        << "; region container is empty. Boundary has no sense." << std::endl;
+	        << "; region container is empty. Boundary has no sense."
+		<< std::endl;
     return retval;
   }
 
 XC::ListRegiones XC::ListRegiones::Intersection(const Semiplano2d &sp) const
   {
-    ListRegiones retval(material_loader);
+    ListRegiones retval(material_handler);
     for(const_iterator i= begin();i!=end();i++)
       retval.push_back((*i)->Intersection(sp));
     return retval;
@@ -277,7 +278,8 @@ double XC::ListRegiones::getPyzGrossSection(void) const
 double XC::ListRegiones::getAreaHomogenizedSection(const double &E0) const
   {
     if(fabs(E0)<1e-6)
-      std::clog << "homogenization reference modulus too small; E0= " << E0 << std::endl; 
+      std::clog << "homogenization reference modulus too small; E0= "
+		<< E0 << std::endl; 
     double retval= 0.0;
     double n= 0.0;
     for(const_iterator i= begin();i!=end();i++)
@@ -298,7 +300,8 @@ double XC::ListRegiones::getAreaHomogenizedSection(const double &E0) const
 XC::Vector XC::ListRegiones::getCdgHomogenizedSection(const double &E0) const
   {
     if(fabs(E0)<1e-6)
-      std::clog << "homogenization reference modulus too small; E0= " << E0 << std::endl; 
+      std::clog << "homogenization reference modulus too small; E0= "
+		<< E0 << std::endl; 
     Vector retval(2);
     double weight= 0.0;
     double divisor= 0.0;
@@ -332,7 +335,8 @@ XC::Vector XC::ListRegiones::getCdgHomogenizedSection(const double &E0) const
 double XC::ListRegiones::getIyHomogenizedSection(const double &E0) const
   {
     if(fabs(E0)<1e-6)
-      std::clog << "homogenization reference modulus too small; E0= " << E0 << std::endl; 
+      std::clog << "homogenization reference modulus too small; E0= "
+		<< E0 << std::endl; 
     double retval= 0.0;
     double n= 0.0;
     double d= 0.0;
@@ -358,7 +362,8 @@ double XC::ListRegiones::getIyHomogenizedSection(const double &E0) const
 double XC::ListRegiones::getIzHomogenizedSection(const double &E0) const
   {
     if(fabs(E0)<1e-6)
-      std::clog << "homogenization reference modulus too small; E0= " << E0 << std::endl; 
+      std::clog << "homogenization reference modulus too small; E0= "
+		<< E0 << std::endl; 
     double retval= 0.0;
     double n= 0.0;
     double d= 0.0;
@@ -384,7 +389,8 @@ double XC::ListRegiones::getIzHomogenizedSection(const double &E0) const
 double XC::ListRegiones::getPyzHomogenizedSection(const double &E0) const
   {
     if(fabs(E0)<1e-6)
-      std::clog << "homogenization reference modulus too small; E0= " << E0 << std::endl; 
+      std::clog << "homogenization reference modulus too small; E0= "
+		<< E0 << std::endl; 
     double retval= 0.0;
     double n= 0.0;
     double d2= 0.0;

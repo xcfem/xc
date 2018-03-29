@@ -35,7 +35,7 @@ A= h # Suponemos width unidad
 # Problem type
 feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
-nodes= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeHandler
 modelSpace= predefined_spaces.StructuralMechanics2D(nodes)
 
 # Define materials
@@ -46,11 +46,11 @@ lin= modelSpace.newLinearCrdTransf("lin")
 scc= typical_materials.defElasticSection2d(preprocessor, "scc",A,E,I)
 
 
-seedElemLoader= preprocessor.getElementLoader.seedElemLoader
-seedElemLoader.defaultTransformation= "lin"
-seedElemLoader.defaultMaterial= "scc"
-seedElemLoader.defaultTag= 1 #Tag for next element.
-beam2d= seedElemLoader.newElement("ElasticBeam2d",xc.ID([0,0]))
+seedElemHandler= preprocessor.getElementHandler.seedElemHandler
+seedElemHandler.defaultTransformation= "lin"
+seedElemHandler.defaultMaterial= "scc"
+seedElemHandler.defaultTag= 1 #Tag for next element.
+beam2d= seedElemHandler.newElement("ElasticBeam2d",xc.ID([0,0]))
 beam2d.h= h
 
 
@@ -81,7 +81,7 @@ idCentralNode= 0
 
 
 # Fix end nodes.
-constraints= preprocessor.getConstraintLoader
+constraints= preprocessor.getBoundaryCondHandler
 modelSpace.fixNode00F(pt1.getTagNode)
 modelSpace.fixNode00F(pt3.getTagNode)
 
@@ -100,7 +100,7 @@ for n in l2InteriorNodes:
 
 
 # Loads definition
-cargas= preprocessor.getLoadLoader
+cargas= preprocessor.getLoadHandler
 casos= cargas.getLoadPatterns
 #Load modulation.
 ts= casos.newTimeSeries("constant_ts","ts")

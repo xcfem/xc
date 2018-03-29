@@ -37,7 +37,7 @@ if(not pth):
 #print "pth= ", pth
 execfile(pth+"/prestressed_concrete_section_02.py")
 
-materiales= preprocessor.getMaterialLoader
+materiales= preprocessor.getMaterialHandler
 secHP= materiales.newMaterial("fiber_section_3d","secHP")
 fiberSectionRepr= secHP.getFiberSectionRepr()
 fiberSectionRepr.setGeomNamed("prestressedConcretSectionGeom02")
@@ -51,7 +51,7 @@ modelSpace.fixNode000_000(1)
 modelSpace.fixNodeF00_00F(2)
 
 # Loads definition
-cargas= preprocessor.getLoadLoader
+cargas= preprocessor.getLoadHandler
 
 casos= cargas.getLoadPatterns
 
@@ -78,14 +78,14 @@ if(analOk!=0):
   exit()
 
 
-nodes= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeHandler
 nodes.calculateNodalReactions(True)
 
 RN= nodes.getNode(1).getReaction[0] 
 RM= nodes.getNode(1).getReaction[5] 
 RN2= nodes.getNode(2).getReaction[0] 
 
-elements= preprocessor.getElementLoader
+elements= preprocessor.getElementHandler
 ele1= elements.getElement(1)
 scc= ele1.getSection()
 esfN= scc.getStressResultantComponent("N")

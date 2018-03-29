@@ -24,12 +24,12 @@
 // along with this program.
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
-//TransfCooLoader.h
+//TransfCooHandler.h
 
 #ifndef TRANSFCOOLOADER_H
 #define TRANSFCOOLOADER_H
 
-#include "Loader.h"
+#include "PrepHandler.h"
 #include <map>
 
 namespace XC {
@@ -46,7 +46,7 @@ class CorotCrdTransf3d;
 //! @ingroup Ldrs
 //! 
 //! @brief Manager for the creation/deletion of coordinate transformations
-class TransfCooLoader: public Loader
+class TransfCooHandler: public PrepHandler
   {
   public:
     typedef std::map<std::string,CrdTransf *> map_transfcoo;
@@ -57,10 +57,10 @@ class TransfCooLoader: public Loader
     int tag_trf; //!< Tag de la coordinate transformation.
   protected:
     void free_mem(void);
-    TransfCooLoader(const TransfCooLoader &otro);
-    TransfCooLoader &operator=(const TransfCooLoader &otro);
+    TransfCooHandler(const TransfCooHandler &otro);
+    TransfCooHandler &operator=(const TransfCooHandler &otro);
   public:
-    TransfCooLoader(Preprocessor *owr);
+    TransfCooHandler(Preprocessor *owr);
     const map_transfcoo &Map(void) const;
 
     template<class T>
@@ -84,13 +84,13 @@ class TransfCooLoader: public Loader
     const CrdTransf *find_ptr(const int &tag) const;
     std::string getName(const int &tag) const;
     
-    ~TransfCooLoader(void);
+    ~TransfCooHandler(void);
 
     void clearAll(void);
   };
 
 template<class T>
-T *TransfCooLoader::newCrdTransf(const std::string &trfName)
+T *TransfCooHandler::newCrdTransf(const std::string &trfName)
   {
     T *retval= nullptr;
     CrdTransf *ptr= find_ptr(trfName);

@@ -34,7 +34,7 @@ AT= 10 # Temperature increment (Celsius degrees)
 # Problem type
 feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
-nodes= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeHandler
 modelSpace= predefined_spaces.StructuralMechanics2D(nodes)
 
 nodes.defaultTag= 1 #First node number.
@@ -49,7 +49,7 @@ lin= modelSpace.newLinearCrdTransf("lin")
 seccion= typical_materials.defElasticShearSection2d(preprocessor, "seccion",A,E,G,Iz,1.0)
 
 # Elements definition
-elements= preprocessor.getElementLoader
+elements= preprocessor.getElementHandler
 elements.defaultTransformation= "lin" # Coordinate transformation for the new elements
 elements.defaultMaterial= "seccion"
 elements.defaultTag= 1
@@ -58,12 +58,12 @@ beam2= elements.newElement("ForceBeamColumn2d",xc.ID([2,3]));
 
     
 # Constraints
-constraints= preprocessor.getConstraintLoader
+constraints= preprocessor.getBoundaryCondHandler
 modelSpace.fixNode000(1)
 modelSpace.fixNode000(3)
 
 # Loads definition
-cargas= preprocessor.getLoadLoader
+cargas= preprocessor.getLoadHandler
 casos= cargas.getLoadPatterns
 ts= casos.newTimeSeries("linear_ts","ts")
 casos.currentTimeSeries= "ts"

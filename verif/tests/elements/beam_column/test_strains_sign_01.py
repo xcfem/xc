@@ -67,7 +67,7 @@ elast= typical_materials.defElasticMaterial(preprocessor, "elast",E)
 # Fibers
 y1= -depth/2.0
 z1= -width/2.0
-fourFibersSection= preprocessor.getMaterialLoader.newMaterial("fiber_section_3d","fourFibersSection")
+fourFibersSection= preprocessor.getMaterialHandler.newMaterial("fiber_section_3d","fourFibersSection")
 
 f1= fourFibersSection.addFiber("elast",fiberArea,xc.Vector([y1,z1]))
 f2= fourFibersSection.addFiber("elast",fiberArea,xc.Vector([-y1,z1]))
@@ -89,7 +89,7 @@ RR= fourFibersSection.getStressResultant()
 R0= xc.Vector([RR[0],RR[2],RR[1]])
 
 fourFibersSection.revertToStart()
-nodes= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeHandler
 modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
 nodes.defaultTag= 1 #First node number.
 nod= nodes.newNodeXYZ(0.0,0.0,0.0)
@@ -98,7 +98,7 @@ nod= nodes.newNodeXYZ(L,0.0,0.0)
 lin= modelSpace.newLinearCrdTransf("lin",xc.Vector([0,1,0]))
 
 # Elements definition
-elements= preprocessor.getElementLoader
+elements= preprocessor.getElementHandler
 elements.defaultTransformation= "lin"
 elements.defaultMaterial= "fourFibersSection"
 zl= elements.newElement("ForceBeamColumn3d",xc.ID([1,2]))
@@ -111,7 +111,7 @@ spc= modelSpace.constraints.newSPConstraint(2,3,0.0)
 
 
 # Loads definition
-cargas= preprocessor.getLoadLoader
+cargas= preprocessor.getLoadHandler
 casos= cargas.getLoadPatterns
 #Load modulation.
 ts= casos.newTimeSeries("constant_ts","ts")

@@ -27,7 +27,7 @@ F= 100/NumDiv # Carga vertical
 
 feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
-nodes= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeHandler
 
 # Problem type
 modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
@@ -44,11 +44,11 @@ typical_materials.defCableMaterial(preprocessor, "cable",E,sigmaPret,0.0)
     cross section of unit area.'''
     
 # Seed element definition
-seedElemLoader= preprocessor.getElementLoader.seedElemLoader
-seedElemLoader.defaultMaterial= "cable"
-seedElemLoader.dimElem= 3 # Dimension of element space
-seedElemLoader.defaultTag= 1 #Number for the next element will be 1.
-truss= seedElemLoader.newElement("CorotTruss",xc.ID([1,2]))
+seedElemHandler= preprocessor.getElementHandler.seedElemHandler
+seedElemHandler.defaultMaterial= "cable"
+seedElemHandler.dimElem= 3 # Dimension of element space
+seedElemHandler.defaultTag= 1 #Number for the next element will be 1.
+truss= seedElemHandler.newElement("CorotTruss",xc.ID([1,2]))
 truss.area= area
 # seed element definition ends
 
@@ -64,12 +64,12 @@ l1= preprocessor.getSets.getSet("l1")
 l1.genMesh(xc.meshDir.I)
     
 # Constraints
-constraints= preprocessor.getConstraintLoader
+constraints= preprocessor.getBoundaryCondHandler
 predefined_spaces.ConstraintsForLineExtremeNodes(l,modelSpace.fixNode000_000)
 predefined_spaces.ConstraintsForLineInteriorNodes(l,modelSpace.fixNodeFFF_000)
 
 # Loads definition
-cargas= preprocessor.getLoadLoader
+cargas= preprocessor.getLoadHandler
 casos= cargas.getLoadPatterns
 #Load modulation.
 ts= casos.newTimeSeries("constant_ts","ts")
@@ -114,7 +114,7 @@ tagN3= l.getNodeI(index).tag
 
 
 nodes.calculateNodalReactions(True)
-nodes= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeHandler
 R1X= nodes.getNode(tagN2).getReaction[0]
 R1Y= nodes.getNode(tagN2).getReaction[1] 
 R2X= nodes.getNode(tagN1).getReaction[0]

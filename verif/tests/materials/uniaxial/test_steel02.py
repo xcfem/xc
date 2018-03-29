@@ -31,7 +31,7 @@ y_modelo= [420,839.99999756,1259.9983975,1679.84023129,2094.43925811,2439.744850
 # Model definition
 feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
-nodes= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeHandler
 
 # Problem type
 modelSpace= predefined_spaces.SolidMechanics2D(nodes)
@@ -49,21 +49,21 @@ mat= typical_materials.defSteel02(preprocessor, "steel",E,fy,0.001,0.0)
     cross section of unit area.'''
     
 # Elements definition
-elements= preprocessor.getElementLoader
+elements= preprocessor.getElementHandler
 elements.defaultMaterial= "steel"
 elements.dimElem= 2 # Dimension of element space
 elements.defaultTag= 1 #Tag for the next element.
 spring= elements.newElement("Spring",xc.ID([1,2]));
     
 # Constraints
-constraints= preprocessor.getConstraintLoader
+constraints= preprocessor.getBoundaryCondHandler
 #
 spc= constraints.newSPConstraint(1,0,0.0) # Node 1
 spc= constraints.newSPConstraint(1,1,0.0)
 spc= constraints.newSPConstraint(2,1,0.0) # Node 2
 
 # Loads definition
-cargas= preprocessor.getLoadLoader
+cargas= preprocessor.getLoadHandler
 casos= cargas.getLoadPatterns
 ts= casos.newTimeSeries("trig_ts","ts")
 ts.factor= 1
@@ -90,7 +90,7 @@ recorder.callbackRestart= "print \"Restart method called.\""
 ''' 
         \prop_recorder
 
-nodes= preprocessor.getNodeLoader{2
+nodes= preprocessor.getNodeHandler{2
             \callback_record
 
                 

@@ -32,7 +32,7 @@ P= 1e3 # punctual load.
 # Problem type
 feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor   
-nodes= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeHandler
 
 sectionTest= section_properties.RectangularSection("sectionTest",b,h) # Section geometry.
 sectionTestMaterial=typical_materials.MaterialData(name='sectionTestMaterial',E=E,nu=0.3,rho=2500) # Section material.
@@ -52,19 +52,19 @@ scc= typical_materials.defElasticSection2d(preprocessor, "scc",A,E,I)
 
 
 # Elements definition
-elements= preprocessor.getElementLoader
+elements= preprocessor.getElementHandler
 elements.defaultTransformation= "lin"# Coordinate transformation for the new elements
 elements.defaultMaterial= sectionTest.sectionName
 elements.defaultTag= 1 #Tag for next element.
 beam2d= elements.newElement("ForceBeamColumn2d",xc.ID([1,2]))
     
 # Constraints
-constraints= preprocessor.getConstraintLoader
+constraints= preprocessor.getBoundaryCondHandler
 modelSpace.fixNode000(1)
 
 
 # Loads definition
-cargas= preprocessor.getLoadLoader
+cargas= preprocessor.getLoadHandler
 casos= cargas.getLoadPatterns
 #Load modulation.
 ts= casos.newTimeSeries("constant_ts","ts")

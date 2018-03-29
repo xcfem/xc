@@ -33,7 +33,7 @@ n= 1e6 # Axial load.
 
 feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor   
-nodes= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeHandler
 
 # Problem type
 modelSpace= predefined_spaces.StructuralMechanics2D(nodes)
@@ -50,7 +50,7 @@ scc= typical_materials.defElasticSection2d(preprocessor, "scc",A,E,I)
 
 
 # Elements definition
-elements= preprocessor.getElementLoader
+elements= preprocessor.getElementHandler
 elements.defaultTransformation= "lin"
 elements.defaultMaterial= "scc"
 elements.defaultTag= 1 #Tag for next element.
@@ -60,12 +60,12 @@ beam2d.h= h
 # end of element definition
     
 # Constraints
-constraints= preprocessor.getConstraintLoader
+constraints= preprocessor.getBoundaryCondHandler
 modelSpace.fixNode000(1)
 
 
 # Loads definition
-cargas= preprocessor.getLoadLoader
+cargas= preprocessor.getLoadHandler
 casos= cargas.getLoadPatterns
 #Load modulation.
 ts= casos.newTimeSeries("constant_ts","ts")
@@ -81,7 +81,7 @@ while not(elem is None):
   elem.vector2dPointByRelDistLoadLocal(xRelPtoAplic,xc.Vector([n,-P]))
   elem= eIter.next()
 
-cargas= preprocessor.getLoadLoader
+cargas= preprocessor.getLoadHandler
 #We add the load case to domain.
 casos.addToDomain("0")
 

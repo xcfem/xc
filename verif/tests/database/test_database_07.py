@@ -23,7 +23,7 @@ q= -2
 # Problem type
 feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
-nodes= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeHandler
 modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
 nodes.newNodeIDXYZ(1,0,0,0)
 nodes.newNodeIDXYZ(2,1,0,0)
@@ -36,13 +36,13 @@ nodes.newNodeIDXYZ(4,0,1,0)
 memb1= typical_materials.defElasticMembranePlateSection(preprocessor, "memb1",E,nu,dens,h)
 
 
-elements= preprocessor.getElementLoader
+elements= preprocessor.getElementHandler
 elements.defaultMaterial= "memb1"
 elem= elements.newElement("ShellMITC4",xc.ID([1,2,3,4]))
 
 
 # Constraints
-constraints= preprocessor.getConstraintLoader
+constraints= preprocessor.getBoundaryCondHandler
 
 modelSpace.fixNode000_FFF(1)
 modelSpace.fixNode000_FFF(2)
@@ -50,7 +50,7 @@ modelSpace.fixNode000_FFF(3)
 modelSpace.fixNode000_FFF(4)
 
 # Loads definition
-cargas= preprocessor.getLoadLoader
+cargas= preprocessor.getLoadHandler
 
 casos= cargas.getLoadPatterns
 
@@ -79,7 +79,7 @@ result= analisis.analyze(1)
 
 
 nodes.calculateNodalReactions(True)
-nodes= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeHandler
 
 RN1= nodes.getNode(1).getReaction[2] 
 RN2= nodes.getNode(2).getReaction[2] 
@@ -95,13 +95,13 @@ ratio4= (abs((RN4+(q/4.0))/(q/4.0)))
 
 
 ''' 
-elements= preprocessor.getElementLoader
+elements= preprocessor.getElementHandler
         \for_each
 
             print "G3= ",getCoordTransf.getG3Vector
 
 
-nodes= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeHandler
 
              \node[1]{print "reac= ",reac} 
              \node[2]{print "reac= ",reac} 

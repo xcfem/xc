@@ -31,7 +31,7 @@
 #include "material/uniaxial/UniaxialMaterial.h"
 
 #include "preprocessor/Preprocessor.h"
-#include "preprocessor/loaders/MaterialLoader.h"
+#include "preprocessor/prep_handlers/MaterialHandler.h"
 #include "domain/mesh/node/Node.h"
 
 
@@ -68,16 +68,17 @@ XC::ZeroLengthMaterials::ZeroLengthMaterials(ZeroLength *owner,const DqUniaxialM
 XC::ZeroLengthMaterials::ZeroLengthMaterials(ZeroLength *owner)
   :DqUniaxialMaterial(owner), directions() {}
 
-
+//! @brief Free memory.
 void XC::ZeroLengthMaterials::clear(void)
   {
     DqUniaxialMaterial::clear();
     directions.clear();
   }
 
-XC::MaterialLoader *XC::ZeroLengthMaterials::get_material_loader(void)
+//! @brief Return the material handler.
+XC::MaterialHandler *XC::ZeroLengthMaterials::get_material_handler(void)
   {
-    MaterialLoader *retval= nullptr;
+    MaterialHandler *retval= nullptr;
     EntCmd *owr= Owner();
     if(owr)
       {
@@ -86,7 +87,7 @@ XC::MaterialLoader *XC::ZeroLengthMaterials::get_material_loader(void)
           {
             Preprocessor *preprocessor= elem->getPreprocessor();
             if(preprocessor)
-              retval= &preprocessor->getMaterialLoader();
+              retval= &preprocessor->getMaterialHandler();
             else
               std::cerr << getClassName() << __FUNCTION__
 		        << "; null pointer to preprocessor." << std::endl;
@@ -104,7 +105,8 @@ XC::MaterialLoader *XC::ZeroLengthMaterials::get_material_loader(void)
 void XC::ZeroLengthMaterials::push_back(const int &dir,const UniaxialMaterial *t)
   {
     if(!t)
-      std::cerr << "XC::DqUniaxialMaterial::push_back; material pointer is null." << std::endl;
+      std::cerr << getClassName() << __FUNCTION__
+		<< "; material pointer is null." << std::endl;
     else
       {
         UniaxialMaterial *tmp= nullptr;
@@ -202,7 +204,9 @@ void XC::ZeroLengthMaterials::checkDirection(void)
     for(size_t i=0; i<directions.size(); i++)
       if(directions[i] < 0 || directions[i] > 5 )
         {
-          std::cerr << "WARNING XC::ZeroLengthMaterials::checkDirection - incorrect direction " << directions[i] << " is set to 0\n";
+          std::cerr << getClassName() << __FUNCTION__
+		    << "; WARNING - incorrect direction "
+		    << directions[i] << " is set to 0\n";
           directions[i]= 0;
         }
   }

@@ -15,7 +15,7 @@ __email__= "l.pereztato@gmail.com"
 feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor  
 
-cargas= preprocessor.getLoadLoader
+cargas= preprocessor.getLoadHandler
 casos= cargas.getLoadPatterns
 #Load modulation.
 ts= casos.newTimeSeries("constant_ts","ts")

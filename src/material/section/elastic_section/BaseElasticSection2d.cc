@@ -28,13 +28,13 @@
 
 #include <material/section/elastic_section/BaseElasticSection2d.h>
 #include "material/section/repres/geom_section/GeomSection.h"
-#include "preprocessor/loaders/MaterialLoader.h"
+#include "preprocessor/prep_handlers/MaterialHandler.h"
 #include <utility/matrix/Matrix.h>
 #include <utility/matrix/Vector.h>
 
 
 
-XC::BaseElasticSection2d::BaseElasticSection2d(int tag, int classTag, const size_t &dim, MaterialLoader *mat_ldr)
+XC::BaseElasticSection2d::BaseElasticSection2d(int tag, int classTag, const size_t &dim, MaterialHandler *mat_ldr)
   : BaseElasticSection(tag, classTag,dim,mat_ldr), ctes_scc() {}
 
 XC::BaseElasticSection2d::BaseElasticSection2d(int classTag,const size_t &dim)
@@ -45,7 +45,7 @@ XC::BaseElasticSection2d::BaseElasticSection2d(int tag, int classTag, const size
 
 void XC::BaseElasticSection2d::sectionGeometry(const std::string &cod_geom)
   {
-    const MaterialLoader *ldr= getMaterialLoader();
+    const MaterialHandler *ldr= getMaterialHandler();
     if(ldr)
       {
         const GeomSection *geom= ldr->find_ptr_geom_section(cod_geom);

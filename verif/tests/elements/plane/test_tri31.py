@@ -30,7 +30,7 @@ F=1000
 feProblem= xc.FEProblem()
 feProblem.logFileName= "/tmp/borrar.log" # Don't pring warnings
 preprocessor=  feProblem.getPreprocessor
-nodes= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeHandler
 modelSpace= predefined_spaces.SolidMechanics2D(nodes)
 
 
@@ -42,7 +42,7 @@ n4= nodes.newNodeIDXY(4,0,1)
 
 elast2d= typical_materials.defElasticIsotropicPlaneStress(preprocessor, "elast2d",E,nu,rho)
 # Elements definition
-elements= preprocessor.getElementLoader
+elements= preprocessor.getElementHandler
 elements.defaultMaterial= "elast2d"
 tri31= elements.newElement("tri31",xc.ID([1,2,3]))
 tri31.thickness= t
@@ -50,7 +50,7 @@ tri31= elements.newElement("tri31",xc.ID([3,4,1]))
 tri31.thickness= t
 
 # Constraints
-constraints= preprocessor.getConstraintLoader
+constraints= preprocessor.getBoundaryCondHandler
 
 spc= constraints.newSPConstraint(1,0,0.0)
 spc= constraints.newSPConstraint(1,1,0.0)
@@ -58,7 +58,7 @@ spc= constraints.newSPConstraint(4,0,0.0)
 spc= constraints.newSPConstraint(4,1,0.0)
 
 # Loads definition
-cargas= preprocessor.getLoadLoader
+cargas= preprocessor.getLoadHandler
 
 casos= cargas.getLoadPatterns
 
@@ -79,7 +79,7 @@ analOk= analisis.analyze(1)
 
 
 nodes.calculateNodalReactions(True)
-nodes= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeHandler
  
 # print "reac node 1: ",reac
 R1x= n1.getReaction[0]

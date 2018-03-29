@@ -42,7 +42,7 @@ Lz= 1
 # Problem type
 feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
-nodes= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeHandler
 modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
 nod0= nodes.newNodeIDXYZ(0,0,0,0)
 nod1= nodes.newNodeXYZ(0,-Ly,0)
@@ -50,7 +50,7 @@ nod2= nodes.newNodeXYZ(0,-Ly,-Lz)
 nod3= nodes.newNodeXYZ(Lx,-Ly,-Lz)
 nod3.mass= nodeMassMatrix
 
-constraints= preprocessor.getConstraintLoader
+constraints= preprocessor.getBoundaryCondHandler
 nod0.fix(xc.ID([0,1,2,3,4,5]),xc.Vector([0,0,0,0,0,0]))
 
 # Materials definition
@@ -61,7 +61,7 @@ linX= modelSpace.newLinearCrdTransf("linX",xc.Vector([1,0,0]))
 linY= modelSpace.newLinearCrdTransf("linY",xc.Vector([0,1,0]))
 
 # Elements definition
-elements= preprocessor.getElementLoader
+elements= preprocessor.getElementHandler
 elements.defaultTransformation= "linX"
 elements.defaultMaterial= "scc"
 beam3d= elements.newElement("ElasticBeam3d",xc.ID([0,1]))

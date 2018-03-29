@@ -48,9 +48,9 @@ respVz= typical_materials.defElasticMaterial(preprocessor, "respVz",1e6) # Shear
 
 # Section geometry
 #creation
-geomRectang= preprocessor.getMaterialLoader.newSectionGeometry("geomRectang")
+geomRectang= preprocessor.getMaterialHandler.newSectionGeometry("geomRectang")
 reg= scc1x1.getRegion(geomRectang,"elast")
-sa= preprocessor.getMaterialLoader.newMaterial("fiberSectionShear3d","sa")
+sa= preprocessor.getMaterialHandler.newMaterial("fiberSectionShear3d","sa")
 fiberSectionRepr= sa.getFiberSectionRepr()
 fiberSectionRepr.setGeomNamed("geomRectang")
 sa.setupFibers()
@@ -65,7 +65,7 @@ modelSpace= predefined_spaces.getStructuralMechanics3DSpace(preprocessor)
 modelSpace.fixNode000_000(1)
 
 # Loads definition
-cargas= preprocessor.getLoadLoader
+cargas= preprocessor.getLoadHandler
 
 casos= cargas.getLoadPatterns
 
@@ -94,13 +94,13 @@ if(analOk!=0):
   print "Error!; failed to converge."
   exit()
 
-nodes= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeHandler
 nodes.calculateNodalReactions(True)
-nodes= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeHandler
 n1= nodes.getNode(1)
 reacN1= n1.getReaction
 
-elements= preprocessor.getElementLoader
+elements= preprocessor.getElementHandler
 ele1= elements.getElement(1)
 scc= ele1.getSection()
 N= scc.getStressResultantComponent("N")

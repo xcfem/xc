@@ -45,7 +45,7 @@ class Spot;
 class Segment;
 class RegionSecc;
 class ReinfLayer;
-class MaterialLoader;
+class MaterialHandler;
 class Material;
 class Vector;
 class Matrix;
@@ -68,7 +68,7 @@ class GeomSection: public SectionMassProperties
     typedef std::map<size_t,Eje *> lst_ejes; //!< line container.
 
   protected:
-    MaterialLoader *material_loader; //!< Material handler (searching,...).
+    MaterialHandler *material_handler; //!< Material handler (searching,...).
 
     ListRegiones regiones; //!< Region container.
     ListReinfLayer capas_armado; //!< Rebar layers container.
@@ -83,7 +83,7 @@ class GeomSection: public SectionMassProperties
 
   public:
     //Constructores
-    GeomSection(MaterialLoader *ml);    
+    GeomSection(MaterialHandler *ml);    
     inline virtual ~GeomSection(void) {}
 
     inline int getTagSisRef(void) const
@@ -176,7 +176,7 @@ Eje *XC::GeomSection::creaEje(void)
             tag_eje++;
 	  }
         else
-	  std::cerr << "No se pudo crear el eje de tag: "
+	  std::cerr << "Can't create axis with tag: "
                     << tag_eje << ".\n";
       }
     return retval;

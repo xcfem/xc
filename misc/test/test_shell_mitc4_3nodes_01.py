@@ -20,7 +20,7 @@ v3= xc.Vector([0,0,1])
 
 prueba= xc.ProblemaEF()
 mdlr= prueba.getModelador
-nodos= mdlr.getNodeLoader
+nodos= mdlr.getNodeHandler
 
 # Problem type
 predefined_spaces.gdls_resist_materiales3D(nodos)
@@ -32,7 +32,7 @@ nodos.newNodeIDXYZ(4,0,1,0)
 # Materials definition
 memb1= typical_materials.defElasticMembranePlateSection(mdlr,"memb1",E,nu,dens,h)
 
-elementos= mdlr.getElementLoader
+elementos= mdlr.getElementHandler
 elementos.defaultMaterial= "memb1"
 elem= elementos.newElement("shell_mitc4",xc.ID([1,2,3,1]))
 

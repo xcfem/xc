@@ -13,7 +13,7 @@ areaCordones= 140e-6 # Área de los cordones expressed in square meters.
 
 def gmSecHP01(nmbGeomSecc,concrDiagName,prestressingSteelDiagramName):
   # Concrete
-  geomSecc= preprocessor.getMaterialLoader.newSectionGeometry(nmbGeomSecc)
+  geomSecc= preprocessor.getMaterialHandler.newSectionGeometry(nmbGeomSecc)
   regiones= geomSecc.getRegions
   horm= regiones.newQuadRegion(concrDiagName)
   horm.nDivIJ= 11

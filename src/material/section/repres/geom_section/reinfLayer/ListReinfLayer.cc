@@ -30,7 +30,7 @@
 #include "material/section/repres/geom_section/reinfLayer/SingleBar.h"
 #include "material/section/repres/geom_section/reinfLayer/StraightReinfLayer.h"
 #include "material/section/repres/geom_section/reinfLayer/CircReinfLayer.h"
-#include "preprocessor/loaders/MaterialLoader.h"
+#include "preprocessor/prep_handlers/MaterialHandler.h"
 
 #include "utility/matrix/Vector.h"
 #include "utility/matrix/Matrix.h"
@@ -58,28 +58,29 @@ void XC::ListReinfLayer::copia(const ListReinfLayer &otra)
   }
 
 //! @brief Constructor.
-XC::ListReinfLayer::ListReinfLayer(GeomSection *owr,MaterialLoader *ml)
-  :  l_reg(), SectionMassProperties(owr), material_loader(ml) {}
+XC::ListReinfLayer::ListReinfLayer(GeomSection *owr,MaterialHandler *ml)
+  :  l_reg(), SectionMassProperties(owr), material_handler(ml) {}
 
 //! @brief Copy constructor.
 XC::ListReinfLayer::ListReinfLayer(const ListReinfLayer  &otro)
-  : l_reg(), material_loader(otro.material_loader)
+  : l_reg(), material_handler(otro.material_handler)
   { copia(otro); }
 
 //! @brief Assignment operator.
 XC::ListReinfLayer &XC::ListReinfLayer::operator=(const ListReinfLayer &otro)
   {
     SectionMassProperties::operator=(otro);
-    material_loader= otro.material_loader;
+    material_handler= otro.material_handler;
     copia(otro);
     return *this;
   }
 
 XC::StraightReinfLayer *XC::ListReinfLayer::newStraightReinfLayer(const std::string &cod_mat)
   {
-    XC::Material *materialPtr= material_loader->find_ptr(cod_mat);
+    XC::Material *materialPtr= material_handler->find_ptr(cod_mat);
     if(!materialPtr)
-      std::clog << "ListReinfLayer::newStraightReinfLayer WARNING; material: '"
+      std::clog << getClassName() << __FUNCTION__
+		<< "; WARNING, material: '"
 	        << cod_mat << "' not found." << std::endl;
     StraightReinfLayer tmp(this, materialPtr);
     ReinfLayer *ptr= push_back(tmp);
@@ -89,7 +90,7 @@ XC::StraightReinfLayer *XC::ListReinfLayer::newStraightReinfLayer(const std::str
 
 XC::CircReinfLayer *XC::ListReinfLayer::newCircReinfLayer(const std::string &cod_mat)
   {
-    CircReinfLayer tmp(this,material_loader->find_ptr(cod_mat));
+    CircReinfLayer tmp(this,material_handler->find_ptr(cod_mat));
     ReinfLayer *ptr= push_back(tmp);
     ptr->set_owner(this);
     return dynamic_cast<CircReinfLayer *>(ptr);
@@ -99,7 +100,7 @@ XC::CircReinfLayer *XC::ListReinfLayer::newCircReinfLayer(const std::string &cod
 //! as parameter.
 XC::SingleBar *XC::ListReinfLayer::newReinfBar(const std::string &cod_mat)
   {
-    SingleBar tmp(this,material_loader->find_ptr(cod_mat));
+    SingleBar tmp(this,material_handler->find_ptr(cod_mat));
     ReinfLayer *ptr= push_back(tmp);
     ptr->set_owner(this);
     return dynamic_cast<SingleBar *>(ptr);

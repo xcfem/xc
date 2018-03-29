@@ -23,18 +23,18 @@ cooCentroElemTeor= xc.Vector([1.36603,1.36603,0])
 # Problem type
 feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
-nodes= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeHandler
 modelSpace= predefined_spaces.SolidMechanics3D(nodes)
 
 # Materials definition
 elast= typical_materials.defElasticMaterial(preprocessor, "elast",3000)
 
 nodes.newSeedNode()
-seedElemLoader= preprocessor.getElementLoader.seedElemLoader
-seedElemLoader.defaultMaterial= "elast"
-seedElemLoader.dimElem= 3 # Dimension of element space
-seedElemLoader.defaultTag= 1 #Tag for the next element.
-truss= seedElemLoader.newElement("Truss",xc.ID([0,0]));
+seedElemHandler= preprocessor.getElementHandler.seedElemHandler
+seedElemHandler.defaultMaterial= "elast"
+seedElemHandler.dimElem= 3 # Dimension of element space
+seedElemHandler.defaultTag= 1 #Tag for the next element.
+truss= seedElemHandler.newElement("Truss",xc.ID([0,0]));
 truss.area= 10.0
 
 points= preprocessor.getMultiBlockTopology.getPoints
@@ -62,7 +62,7 @@ l1.genMesh(xc.meshDir.I)
 
 nnodes= l1.getNumNodes
 
-elements= preprocessor.getElementLoader
+elements= preprocessor.getElementHandler
 ele2= elements.getElement(2)
 points= ele2.getCooPoints(2) #Two divisions-> Three points.
 cooCentroElem= points.getRow(1)

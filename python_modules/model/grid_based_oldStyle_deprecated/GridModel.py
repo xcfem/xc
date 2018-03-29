@@ -190,9 +190,9 @@ class MaterialSurface(MaterialBase):
     for s in self.lstSup:
        s.setElemSizeIJ(self.elemSize,self.elemSize)
 
-  def generateMesh(self, seedElementLoader):
-    seedElementLoader.defaultMaterial= self.material.name
-    elem= seedElementLoader.newElement(self.elemType,xc.ID([0,0,0,0]))
+  def generateMesh(self, seedElementHandler):
+    seedElementHandler.defaultMaterial= self.material.name
+    elem= seedElementHandler.newElement(self.elemType,xc.ID([0,0,0,0]))
     for s in self.lstSup:
       s.genMesh(xc.meshDir.I)
 
@@ -250,9 +250,9 @@ class MaterialLine(MaterialBase):
     for s in self.lstLines:
        s.setElemSize(self.elemSize)
 
-  def generateMesh(self, seedElementLoader):
-    seedElementLoader.defaultMaterial= self.material.name
-    elem= seedElementLoader.newElement(self.elemType,xc.ID([0,0]))
+  def generateMesh(self, seedElementHandler):
+    seedElementHandler.defaultMaterial= self.material.name
+    elem= seedElementHandler.newElement(self.elemType,xc.ID([0,0]))
     for l in self.lstLines:
       l.genMesh(xc.meshDir.I)
 
@@ -291,10 +291,10 @@ class MaterialSurfacesMap(NamedObjectsMap):
   def generateMesh(self, preprocessor, dicQuadSurf, firstElementTag= 1):
     self.generateSurfaces()
     preprocessor.getMultiBlockTopology.getSurfaces.conciliaNDivs()
-    seedElemLoader= preprocessor.getElementLoader.seedElemLoader
-    seedElemLoader.defaultTag= firstElementTag
+    seedElemHandler= preprocessor.getElementHandler.seedElemHandler
+    seedElemHandler.defaultTag= firstElementTag
     for key in self:
-      self[key].generateMesh(seedElemLoader)
+      self[key].generateMesh(seedElemHandler)
 
 class MaterialLinesMap(NamedObjectsMap):
   '''MaterialLines dictionary.'''
@@ -304,14 +304,14 @@ class MaterialLinesMap(NamedObjectsMap):
     for key in self:
       self[key].generateLines()
   def generateMesh(self, preprocessor, dicLin):
-    trfs= preprocessor.getTransfCooLoader
+    trfs= preprocessor.getTransfCooHandler
     self.trYGlobal=trfs.newPDeltaCrdTransf3d('trYGlobal')
     self.generateLines()
-    seedElemLoader= preprocessor.getElementLoader.seedElemLoader
+    seedElemHandler= preprocessor.getElementHandler.seedElemHandler
     for key in self:
       self.trYGlobal.xzVector=self[key].vDirLAxZ
-      seedElemLoader.defaultTransformation= 'trYGlobal'
-      self[key].generateMesh(seedElemLoader)
+      seedElemHandler.defaultTransformation= 'trYGlobal'
+      self[key].generateMesh(seedElemHandler)
 
 class ConstrainedRanges(IJKRangeList):
   '''Constraints in the nodes belonging to the lines in a range-region
@@ -328,7 +328,7 @@ class ConstrainedRanges(IJKRangeList):
     super(ConstrainedRanges,self).__init__(name,grid,list())
     self.constraints= constraints
   def generateContraintsInLines(self):
-    constrLoader= self.grid.prep.getConstraintLoader
+    constrHandler= self.grid.prep.getBoundaryCondHandler
     for rng in self.ranges:
       lstLin= self.grid.getLstLinRange(rng)
       for l in lstLin:
@@ -337,7 +337,7 @@ class ConstrainedRanges(IJKRangeList):
           for i in range(0,6):
             coac= self.constraints[i]
             if(coac <> 'free'):
-              constrLoader.newSPConstraint(n.tag,i,coac) 
+              constrHandler.newSPConstraint(n.tag,i,coac) 
 
 
 class ConstrainedRangesMap(NamedObjectsMap):
@@ -726,7 +726,7 @@ class LoadState(object):
     if(not self.lPattern):
       self.lPattern= lPatterns.newLoadPattern("default",self.name)
       lPatterns.currentLoadPattern= self.name
-      self.appendLoadsToLoadPattern(dictGeomEnt,preprocessor.getNodeLoader)
+      self.appendLoadsToLoadPattern(dictGeomEnt,preprocessor.getNodeHandler)
     else:
       lmsg.error('Error load pattern: '+ self.name+ ' already generated.')
     return self.lPattern
@@ -741,8 +741,8 @@ class LoadStateMap(NamedObjectsMap):
 
   def generateLoadPatterns(self,preprocessor,dicQuadSurf):
     ''' generate a load pattern for each one of the load states. '''
-    loadLoader= preprocessor.getLoadLoader
-    lPatterns= loadLoader.getLoadPatterns
+    loadHandler= preprocessor.getLoadHandler
+    lPatterns= loadHandler.getLoadPatterns
     ts= lPatterns.newTimeSeries("constant_ts","ts")   #Load modulation.
     lPatterns.currentTimeSeries= "ts"
     retval= dict()
@@ -924,7 +924,7 @@ class GridModel(object):
   def generateMesh(self):
     self.grid.generatePoints() #Key points generation.
     self.materialData.setup(self.getPreprocessor()) #Material definition.
-    nodes= self.getPreprocessor().getNodeLoader
+    nodes= self.getPreprocessor().getNodeHandler
     modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
     nodes.newSeedNode()
 #    self.dicQuadSurf= dict() #Surfaces dictionary.

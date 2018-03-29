@@ -24,53 +24,53 @@
 // along with this program.
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
-//ElementLoader.h
+//ElementHandler.h
 
-#ifndef ELEMENTLOADER_H
-#define ELEMENTLOADER_H
+#ifndef ELEMENTHANDLER_H
+#define ELEMENTHANDLER_H
 
-#include "preprocessor/loaders/ProtoElementLoader.h"
+#include "preprocessor/prep_handlers/ProtoElementHandler.h"
 
 namespace XC {
 
 //!  \ingroup Ldrs
 //! 
 //! @brief Element creation manager.
-class ElementLoader: public ProtoElementLoader
+class ElementHandler: public ProtoElementHandler
   {
   public:
-    class SeedElemLoader: public ProtoElementLoader
+    class SeedElemHandler: public ProtoElementHandler
       {
         Element *semilla;
-        SeedElemLoader(const SeedElemLoader &otro);
-        SeedElemLoader &operator=(const SeedElemLoader &otro);
+        SeedElemHandler(const SeedElemHandler &otro);
+        SeedElemHandler &operator=(const SeedElemHandler &otro);
         void free_mem(void);
       protected:
         void add(Element *);
       public:
-        SeedElemLoader(Preprocessor *preprocessor)
-          : ProtoElementLoader(preprocessor), semilla(nullptr) {}
+        SeedElemHandler(Preprocessor *preprocessor)
+          : ProtoElementHandler(preprocessor), semilla(nullptr) {}
 	Element *GetSeedElement(void)
           { return semilla; }
 	const Element *GetSeedElement(void) const
           { return semilla; }
         int getDefaultTag(void) const;
         void clearAll(void);
-        ~SeedElemLoader(void);
+        ~SeedElemHandler(void);
       };
   private:
-    SeedElemLoader seed_elem_loader; //!< Seed element for meshing.
+    SeedElemHandler seed_elem_handler; //!< Seed element for meshing.
   protected:
     virtual void add(Element *);
   public:
-    ElementLoader(Preprocessor *);
+    ElementHandler(Preprocessor *);
     Element *getElement(int tag);
 
     void new_element(Element *e);
-    inline SeedElemLoader &getSeedElemLoader(void)
-      { return seed_elem_loader; }
+    inline SeedElemHandler &getSeedElemHandler(void)
+      { return seed_elem_handler; }
     const Element *get_seed_element(void) const
-      { return seed_elem_loader.GetSeedElement(); }
+      { return seed_elem_handler.GetSeedElement(); }
 
     virtual void Add(Element *);
 

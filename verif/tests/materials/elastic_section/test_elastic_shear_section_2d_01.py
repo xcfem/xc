@@ -35,7 +35,7 @@ modelSpace= predefined_spaces.getStructuralMechanics2DSpace(preprocessor)
 modelSpace.fixNode000(1)
 
 # Loads definition
-cargas= preprocessor.getLoadLoader
+cargas= preprocessor.getLoadHandler
 casos= cargas.getLoadPatterns
 #Load modulation.
 ts= casos.newTimeSeries("constant_ts","ts")
@@ -55,11 +55,11 @@ analisis= predefined_solutions.simple_static_linear(feProblem)
 result= analisis.analyze(1)
 
 
-nodes= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeHandler
 nodes.calculateNodalReactions(True)
 RM= nodes.getNode(1).getReaction[2] 
 
-elements= preprocessor.getElementLoader
+elements= preprocessor.getElementHandler
 ele1= elements.getElement(1)
 ele1.getResistingForce()
 scc0= ele1.getSection()

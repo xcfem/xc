@@ -31,7 +31,7 @@ AT= 10.0 # Temperature increment (Celsius degrees)
 
 feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
-nodes= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeHandler
 nodes.dimSpace= 3 # coord. for each node (x,y,z).
 nodes.numDOFs= 6 # DOF for each node (Ux,Uy,Uz,ThX,ThY,ThZ).
 nodes.defaultTag= 1 #First node number.
@@ -45,14 +45,14 @@ nod4= nodes.newNodeXYZ(0,h,0.0)
 memb1= typical_materials.defElasticMembranePlateSection(preprocessor, "memb1",E,0.3,0.0,h)
 
 # Elements definition
-elements= preprocessor.getElementLoader
+elements= preprocessor.getElementHandler
 elements.defaultMaterial= "memb1"
 elements.defaultTag= 1
 elem1= elements.newElement("ShellMITC4",xc.ID([nod1.tag,nod2.tag,nod3.tag,nod4.tag]))
 
 
 # Constraints
-constraints= preprocessor.getConstraintLoader
+constraints= preprocessor.getBoundaryCondHandler
 
 spc= constraints.newSPConstraint(nod1.tag,0,0.0)
 spc= constraints.newSPConstraint(nod2.tag,0,0.0)
@@ -66,7 +66,7 @@ spc= constraints.newSPConstraint(nod1.tag,1,0.0)
 spc= constraints.newSPConstraint(nod2.tag,1,0.0)
 
 # Loads definition
-cargas= preprocessor.getLoadLoader
+cargas= preprocessor.getLoadHandler
 
 casos= cargas.getLoadPatterns
 ts= casos.newTimeSeries("linear_ts","ts")

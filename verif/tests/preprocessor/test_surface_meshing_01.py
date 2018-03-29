@@ -29,7 +29,7 @@ feProblem= xc.FEProblem()
 feProblem.logFileName= "/tmp/borrar.log" # Ignore warning messages
 feProblem.errFileName= "/tmp/borrar.err" # Ignore warning messages
 preprocessor=  feProblem.getPreprocessor
-nodes= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeHandler
 
 modelSpace= predefined_spaces.SolidMechanics2D(nodes)# Materials definition
 elast= typical_materials.defElasticMaterial(preprocessor, "elast",3000)
@@ -38,9 +38,9 @@ nodes.newSeedNode()
 
 elast2d= typical_materials.defElasticIsotropicPlaneStress(preprocessor, "elast2d",E,nu,rho)
 
-seedElemLoader= preprocessor.getElementLoader.seedElemLoader
-seedElemLoader.defaultMaterial= "elast2d"
-elem= seedElemLoader.newElement("FourNodeQuad",xc.ID([0,0,0,0]))
+seedElemHandler= preprocessor.getElementHandler.seedElemHandler
+seedElemHandler.defaultMaterial= "elast2d"
+elem= seedElemHandler.newElement("FourNodeQuad",xc.ID([0,0,0,0]))
 
 
 

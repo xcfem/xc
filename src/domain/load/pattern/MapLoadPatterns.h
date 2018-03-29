@@ -29,20 +29,20 @@
 #ifndef MAPLOADPATTERNS_H
 #define MAPLOADPATTERNS_H
 
-#include "preprocessor/loaders/LoadLoaderMember.h"
+#include "preprocessor/prep_handlers/LoadHandlerMember.h"
 #include "domain/load/pattern/LoadPattern.h"
 #include "domain/load/pattern/TimeSeries.h"
 #include <map>
 
 namespace XC {
 class TimeSeries;
-class LoadLoader;
+class LoadHandler;
 class Domain;
 
 //! @ingroup LPatterns
 //
 //! @brief Load pattern container.
-class MapLoadPatterns: public LoadLoaderMember
+class MapLoadPatterns: public LoadHandlerMember
   {
     typedef std::map<std::string,TimeSeries *> map_timeseries;
     map_timeseries tseries; //!< Load/displacement time variation.
@@ -63,14 +63,14 @@ class MapLoadPatterns: public LoadLoaderMember
     typedef map_loadpatterns::iterator iterator;
     typedef map_loadpatterns::const_iterator const_iterator;
   protected:
-    friend class LoadLoader;
+    friend class LoadHandler;
     void clear_time_series(void);
 
     DbTagData &getDbTagData(void) const;
     int sendData(CommParameters &cp);
     int recvData(const CommParameters &cp);
   public:
-    MapLoadPatterns(LoadLoader *owr);
+    MapLoadPatterns(LoadHandler *owr);
     ~MapLoadPatterns(void);
 
     void clear(void);

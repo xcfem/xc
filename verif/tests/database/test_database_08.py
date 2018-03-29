@@ -34,7 +34,7 @@ F= 1.5e3 # Load magnitude (kN)
 
 feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor   
-nodes= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeHandler
 
 # Problem type
 modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
@@ -48,7 +48,7 @@ lin= modelSpace.newLinearCrdTransf("lin",xc.Vector([0,1,0]))
 scc= typical_materials.defElasticSection3d(preprocessor, "scc",A,E,G,Iz,Iy,J)
 
 
-elements= preprocessor.getElementLoader
+elements= preprocessor.getElementHandler
 elements.defaultTransformation= "lin"
 elements.defaultMaterial= "scc"
 #  sintaxis: ElasticBeam3d[<tag>] 
@@ -59,7 +59,7 @@ beam3d= elements.newElement("ElasticBeam3d",xc.ID([1,2]));
 
 modelSpace.fixNode000_000(1)
 
-cargas= preprocessor.getLoadLoader
+cargas= preprocessor.getLoadHandler
 
 casos= cargas.getLoadPatterns
 
@@ -87,12 +87,12 @@ db.restore(100)
 feProblem.setVerbosityLevel(1) #Print warnings again 
 
 
-nodes= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeHandler
  
 nod2= nodes.getNode(2)
 delta= nod2.getDisp[0]  # x displacement of node 2
 
-elements= preprocessor.getElementLoader
+elements= preprocessor.getElementHandler
 
 elem1= elements.getElement(1)
 elem1.getResistingForce()

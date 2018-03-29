@@ -67,7 +67,7 @@ modelSpace.fixNode000_000(1)
 modelSpace.fixNodeF00_0F0(2)
 
 # Loads definition
-cargas= preprocessor.getLoadLoader
+cargas= preprocessor.getLoadHandler
 
 casos= cargas.getLoadPatterns
 
@@ -91,7 +91,7 @@ analOk= analisis.analyze(10)
 secHAParamsFis= SIA262_limit_state_checking.CrackControlSIA262('SLS_crack',400e6)
 
 
-elements= preprocessor.getElementLoader
+elements= preprocessor.getElementHandler
 ele1= elements.getElement(1)
 scc= ele1.getSection()
 sigma_s= secHAParamsFis.calcRebarStress(scc)

@@ -24,12 +24,12 @@
 // along with this program.
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
-//ConstraintLoader.h
+//BoundaryCondHandler.h
 
 #ifndef CONSTRAINTLOADER_H
 #define CONSTRAINTLOADER_H
 
-#include "Loader.h"
+#include "PrepHandler.h"
 
 namespace XC {
 
@@ -41,7 +41,7 @@ class MRMFreedom_Constraint;
 //! 
 //! @brief Constraint cration tools
 //!  
-class ConstraintLoader: public Loader
+class BoundaryCondHandler: public PrepHandler
   {
     int tag_sp_constraint; //!< Default value for next single freedom constraint tag.
     int tag_mp_constraint; //!< Default value for next multiple freedom constraint tag.
@@ -53,8 +53,8 @@ class ConstraintLoader: public Loader
     SFreedom_Constraint *addSFreedom_Constraint(const int &,const SFreedom_Constraint &);
     SFreedom_Constraint *addSFreedom_Constraint(const int &,const int &,const double &);
   public:
-    ConstraintLoader(Preprocessor *owr);
-    virtual ~ConstraintLoader(void);
+    BoundaryCondHandler(Preprocessor *owr);
+    virtual ~BoundaryCondHandler(void);
     inline const int &getTagNextSPConstraint(void) const
       { return tag_sp_constraint; }
     inline const int &getTagNextMPConstraint(void) const

@@ -47,7 +47,7 @@ print "numBarras= ",numBarras
 feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
 # Materials definition
-materiales= preprocessor.getMaterialLoader
+materiales= preprocessor.getMaterialHandler
 
 concr= EHE_materials.HA25
 concr.alfacc=0.85    #f_maxd= 0.85*fcd concrete long term compressive strength factor (normally alfacc=1)
@@ -57,7 +57,7 @@ tagB500S= EHE_materials.B500S.defDiagD(preprocessor)
 respT= typical_materials.defElasticMaterial(preprocessor, "respT",1e10) # Torsion response.
 respVy= typical_materials.defElasticMaterial(preprocessor, "respVy",1e6) # Shear response in y direction.
 respVz= typical_materials.defElasticMaterial(preprocessor, "respVz",1e3) # Shear response in y direction.
-geomSecHA= preprocessor.getMaterialLoader.newSectionGeometry("geomSecHA")
+geomSecHA= preprocessor.getMaterialHandler.newSectionGeometry("geomSecHA")
 regiones= geomSecHA.getRegions
 rg= regiones.newQuadRegion(EHE_materials.HA25.nmbDiagD)
 rg.nDivIJ= 10
@@ -92,7 +92,7 @@ modelSpace= predefined_spaces.getStructuralMechanics3DSpace(preprocessor)
 modelSpace.fixNode000_000(1)
 
 # Loads definition
-cargas= preprocessor.getLoadLoader
+cargas= preprocessor.getLoadHandler
 
 casos= cargas.getLoadPatterns
 
@@ -124,7 +124,7 @@ secHAParamsCortante= EHE_limit_state_checking.ShearController('ULS_shear')
 
 
 
-elements= preprocessor.getElementLoader
+elements= preprocessor.getElementHandler
 ele1= elements.getElement(1)
 scc= ele1.getSection()
 secHAParamsCortante.calcVuEHE08(scc,"",EHE_materials.HA25,EHE_materials.B500S,NDato,math.sqrt(MyDato**2+MzDato**2),0,0)
@@ -133,9 +133,9 @@ secHAParamsCortante.calcVuEHE08(scc,"",EHE_materials.HA25,EHE_materials.B500S,ND
 Vu2A= secHAParamsCortante.Vu2
 
 
-cargas= preprocessor.getLoadLoader.removeFromDomain("0") # Quitamos la carga.
+cargas= preprocessor.getLoadHandler.removeFromDomain("0") # Quitamos la carga.
 preprocessor.resetLoadCase()
-cargas= preprocessor.getLoadLoader.addToDomain("1") # Añadimos la otra carga.
+cargas= preprocessor.getLoadHandler.addToDomain("1") # Añadimos la otra carga.
 
 
 analOk= analisis.analyze(10)
@@ -149,9 +149,9 @@ secHAParamsCortante.calcVuEHE08(scc,"",EHE_materials.HA25,EHE_materials.B500S, 0
 Vu2B= secHAParamsCortante.Vu2
 
 
-cargas= preprocessor.getLoadLoader.removeFromDomain("1") # Quitamos la carga.
+cargas= preprocessor.getLoadHandler.removeFromDomain("1") # Quitamos la carga.
 preprocessor.resetLoadCase()
-cargas= preprocessor.getLoadLoader.addToDomain("2") # Añadimos la otra carga.
+cargas= preprocessor.getLoadHandler.addToDomain("2") # Añadimos la otra carga.
 
 
 analOk= analisis.analyze(10)

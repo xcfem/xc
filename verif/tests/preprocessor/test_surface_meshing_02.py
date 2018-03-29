@@ -27,7 +27,7 @@ numElem= 0
 # Problem type
 feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
-nodes= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeHandler
 
 modelSpace= predefined_spaces.SolidMechanics2D(nodes)
 nodes.newSeedNode()
@@ -36,9 +36,9 @@ elast= typical_materials.defElasticMaterial(preprocessor, "elast",3000)
 elast2d= typical_materials.defElasticIsotropicPlaneStress(preprocessor, "elast2d",E,nu,rho)
 
 
-seedElemLoader= preprocessor.getElementLoader.seedElemLoader
-seedElemLoader.defaultMaterial= "elast2d"
-elem= seedElemLoader.newElement("FourNodeQuad",xc.ID([0,0,0,0]))
+seedElemHandler= preprocessor.getElementHandler.seedElemHandler
+seedElemHandler.defaultMaterial= "elast2d"
+elem= seedElemHandler.newElement("FourNodeQuad",xc.ID([0,0,0,0]))
 
 
 points= preprocessor.getMultiBlockTopology.getPoints

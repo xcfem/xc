@@ -3,14 +3,14 @@
 def ListaCargaUniforme(preprocessor,loadPattern, archivo, carga, fmt):
   elemTags= loadPattern.getElementTags()
   for i in elemTags:
-    e= preprocessor.getElementLoader.getElement(i)
+    e= preprocessor.getElementHandler.getElement(i)
     archivo.write(e.tag," & ",loadPattern," & unif. & & ",fmt.format(carga[0]/1e3)," & ",fmt.format(carga[1]/1e3)," & ",fmt.format(carga[2]/1e3),"\\\\\n")
 
 def ListaCargaPuntual(preprocessor,loadPattern, archivo, carga, fmt):
   xCarga= x
   elemTags= loadPattern.getElementTags()
   for i in elemTags:
-    e= preprocessor.getElementLoader.getElement(i)
+    e= preprocessor.getElementHandler.getElement(i)
     archivo.write(e.tag," & ",loadPattern," & punt. & ",xCarga," & ",fmt.format(carga[0]/1e3)," & ",fmt.format(carga[1]/1e3)," & ",fmt.format(carga[2]/1e3),"\\\\\n")
 
 def ListaCargasElementos(loadPattern, archivo, fmt):

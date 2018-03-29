@@ -70,15 +70,15 @@
 #include "xc_utils/src/geom/d2/poligonos2d/Poligono2d.h"
 
 //! @brief Constructor.
-XC::FiberSectionGJ::FiberSectionGJ(int tag,const fiber_list &fiberList, double gj,XC::MaterialLoader *mat_ldr): 
+XC::FiberSectionGJ::FiberSectionGJ(int tag,const fiber_list &fiberList, double gj,XC::MaterialHandler *mat_ldr): 
   FiberSection3dBase(tag, SEC_TAG_FiberSectionGJ,4,fiberList,mat_ldr), GJ(gj)
   { fibers.setup(*this,fiberList,kr); }
 
-XC::FiberSectionGJ::FiberSectionGJ(int tag,MaterialLoader *mat_ldr): 
+XC::FiberSectionGJ::FiberSectionGJ(int tag,MaterialHandler *mat_ldr): 
   FiberSection3dBase(tag, SEC_TAG_FiberSectionGJ,4,mat_ldr),GJ(1.0) {}
 
 //! @brief Constructor for blank object that recvSelf needs to be invoked upon
-XC::FiberSectionGJ::FiberSectionGJ(MaterialLoader *mat_ldr):
+XC::FiberSectionGJ::FiberSectionGJ(MaterialHandler *mat_ldr):
   FiberSection3dBase(0,SEC_TAG_FiberSectionGJ,4,mat_ldr), GJ(1.0) {}
 
 void XC::FiberSectionGJ::setupFibers(void)

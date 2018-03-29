@@ -19,17 +19,17 @@
 // along with this program.
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
-//export_preprocessor_loaders.cxx
+//export_preprocessor_prep_handlers.cxx
 
 #include "python_interface.h"
 
-void export_preprocessor_loaders(void)
+void export_preprocessor_prep_handlers(void)
   {
     using namespace boost::python;
     docstring_options doc_options;
 
 
-#include "preprocessor/loaders/python_interface.tcc"
+#include "preprocessor/prep_handlers/python_interface.tcc"
 
   }
 

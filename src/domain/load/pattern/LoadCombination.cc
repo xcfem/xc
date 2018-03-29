@@ -31,7 +31,7 @@
 #include "domain/domain/Domain.h"
 #include "xc_basic/src/texto/cadena_carac.h"
 #include "xc_basic/src/texto/StringFormatter.h"
-#include "preprocessor/loaders/LoadLoader.h"
+#include "preprocessor/prep_handlers/LoadHandler.h"
 #include "boost/lexical_cast.hpp"
 
 
@@ -140,13 +140,13 @@ void XC::LoadCombination::summand::Print(std::ostream &os) const
 
 
 //! @brief Constructor
-XC::LoadCombination::LoadCombination(LoadCombinationGroup *owr,const std::string &nmb,int tag,LoadLoader *ll)
-  :ForceReprComponent(tag,LOAD_TAG_LoadCombination), loader(ll), nombre(nmb) 
+XC::LoadCombination::LoadCombination(LoadCombinationGroup *owr,const std::string &nmb,int tag,LoadHandler *ll)
+  :ForceReprComponent(tag,LOAD_TAG_LoadCombination), handler(ll), nombre(nmb) 
   { set_owner(owr); }
 
 //! @brief Destructor
 XC::LoadCombination::~LoadCombination(void)
-  { loader= nullptr; }
+  { handler= nullptr; }
 
 //! @brief Assigns the weightings for each load case of the combination.
 void XC::LoadCombination::LoadCombination::set_gamma_f(void)
@@ -193,7 +193,7 @@ bool XC::LoadCombination::addToDomain(void)
             bool result= dom->addLoadPattern(lp);
             if((!result) && (verbosity>3))
               {
-                const MapLoadPatterns &casos= loader->getLoadPatterns();
+                const MapLoadPatterns &casos= handler->getLoadPatterns();
 	        std::cerr << "Can't add load case: '"
                           << i->getNombreCaso(casos)
                           << "' when activating combination: '"
@@ -255,9 +255,9 @@ void XC::LoadCombination::interpreta_descomp(const std::string &str_descomp)
           {
             const float factor= boost::lexical_cast<float>(q_blancos(str_prod[0]));
             const std::string nmb_hipot= q_blancos(str_prod[1]);
-            if(loader)
+            if(handler)
               {
-                LoadPattern *lp= loader->getLoadPatterns().buscaLoadPattern(nmb_hipot);
+                LoadPattern *lp= handler->getLoadPatterns().buscaLoadPattern(nmb_hipot);
                 if(lp)
                   add_component(summand(factor,lp));
                 else
@@ -267,7 +267,7 @@ void XC::LoadCombination::interpreta_descomp(const std::string &str_descomp)
               }
             else
 	      std::cerr << getClassName() << "::" << __FUNCTION__
-			<< "; pointer to LoadLoader not set." << std::endl;
+			<< "; pointer to LoadHandler not set." << std::endl;
           } 
       }
   }
@@ -410,17 +410,17 @@ int XC::LoadCombination::recvData(const CommParameters &cp)
     res+= cp.receiveString(tmp,getDbTagData(),CommMetaData(3));
     map_str_descomp[getDbTag()]= tmp;
     //Decomposition is established later (in LoadCombinationGroup::recvData),
-    //after setting up the object's owner and the pointer to LoadLoader.
+    //after setting up the object's owner and the pointer to LoadHandler.
     return res;
   }
 
 //! @brief Returns the combination decomposition
 //! (it must be called only after setting un the object's owner
-//! and the pointer to the load handler -LoadLoader-).
+//! and the pointer to the load handler -LoadHandler-).
 int XC::LoadCombination::recvDescomp(void)
   {
     assert(Owner());
-    assert(loader);
+    assert(handler);
     const int dataTag= getDbTag();
     const std::string &desc= map_str_descomp[dataTag];
     interpreta_descomp(desc);
@@ -469,7 +469,7 @@ XC::LoadCombination &XC::LoadCombination::add(const std::string &nmbComb)
   {
     if(!nmbComb.empty())
       {
-        const LoadCombination *cmb= loader->getLoadCombinations().buscaLoadCombination(nmbComb);
+        const LoadCombination *cmb= handler->getLoadCombinations().buscaLoadCombination(nmbComb);
         if(cmb)
           add(*cmb);
         else
@@ -495,7 +495,7 @@ XC::LoadCombination &XC::LoadCombination::substract(const std::string &nmbComb)
   {
     if(!nmbComb.empty())
       {
-        const LoadCombination *cmb= loader->getLoadCombinations().buscaLoadCombination(nmbComb);
+        const LoadCombination *cmb= handler->getLoadCombinations().buscaLoadCombination(nmbComb);
         if(cmb)
           substract(*cmb);
         else
@@ -511,7 +511,7 @@ XC::LoadCombination &XC::LoadCombination::asigna(const std::string &nmbComb)
   {
     if(!nmbComb.empty())
       {
-        const LoadCombination *cmb= loader->getLoadCombinations().buscaLoadCombination(nmbComb);
+        const LoadCombination *cmb= handler->getLoadCombinations().buscaLoadCombination(nmbComb);
         if(cmb)
           (*this)= *cmb;
         else
@@ -663,7 +663,7 @@ bool XC::LoadCombination::dominaA(const LoadCombination &otra) const
 std::string XC::LoadCombination::getString(const std::string &fmt) const
   {
     std::string retval= "";
-    const MapLoadPatterns &casos= loader->getLoadPatterns();
+    const MapLoadPatterns &casos= handler->getLoadPatterns();
     if(!empty())
       {
         const_iterator i= begin();

@@ -82,9 +82,9 @@ class FiberSection2d: public FiberSectionBase
   protected:
 
   public:
-    FiberSection2d(MaterialLoader *mat_ldr= nullptr); 
-    FiberSection2d(int tag,MaterialLoader *mat_ldr= nullptr); 
-    FiberSection2d(int tag,const fiber_list &fibers,MaterialLoader *mat_ldr= nullptr);
+    FiberSection2d(MaterialHandler *mat_ldr= nullptr); 
+    FiberSection2d(int tag,MaterialHandler *mat_ldr= nullptr); 
+    FiberSection2d(int tag,const fiber_list &fibers,MaterialHandler *mat_ldr= nullptr);
 
     int setInitialSectionDeformation(const Vector &deforms); 
     int setTrialSectionDeformation(const Vector &deforms); 
@@ -108,7 +108,7 @@ class FiberSection2d: public FiberSectionBase
     int getResponse(int responseID, Information &info);
 
     Fiber *addFiber(Fiber &theFiber);
-    Fiber *addFiber(int tag,const MaterialLoader &,const std::string &nmbMat,const double &, const Vector &position);
+    Fiber *addFiber(int tag,const MaterialHandler &,const std::string &nmbMat,const double &, const Vector &position);
 
     // AddingSensitivity:BEGIN //////////////////////////////////////////
     int setParameter(const std::vector<std::string> &argv, Parameter &param);

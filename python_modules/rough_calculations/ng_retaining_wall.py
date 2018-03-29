@@ -450,17 +450,17 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
     self.defineWireframeModel(nodes)
     nodes.newSeedNode()
     preprocessor= self.modelSpace.preprocessor    
-    trfs= preprocessor.getTransfCooLoader
+    trfs= preprocessor.getTransfCooHandler
     transformationName= self.name+'LinearTrf'
     self.trf= trfs.newLinearCrdTransf2d(transformationName)
     wallMatData= typical_materials.MaterialData(name=self.name+'Concrete',E=self.concrete.getEcm(),nu=0.2,rho=2500)
     foundationSection= section_properties.RectangularSection(self.name+"FoundationSection",self.b,self.footingThickness)
     foundationMaterial= foundationSection.defElasticShearSection2d(preprocessor,wallMatData) #Foundation elements material.
     elementSize= 0.2
-    seedElemLoader= preprocessor.getElementLoader.seedElemLoader
-    seedElemLoader.defaultMaterial= foundationSection.sectionName
-    seedElemLoader.defaultTransformation= transformationName
-    seedElem= seedElemLoader.newElement("ElasticBeam2d",xc.ID([0,0]))
+    seedElemHandler= preprocessor.getElementHandler.seedElemHandler
+    seedElemHandler.defaultMaterial= foundationSection.sectionName
+    seedElemHandler.defaultTransformation= transformationName
+    seedElem= seedElemHandler.newElement("ElasticBeam2d",xc.ID([0,0]))
     self.wallSet= preprocessor.getSets.defSet("wallSet")
     self.heelSet= preprocessor.getSets.defSet("heelSet")
     self.toeSet= preprocessor.getSets.defSet("toeSet")
@@ -484,7 +484,7 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
     for lineName in ['stem']:
       l= self.wireframeModelLines[lineName]
       l.setElemSize(elementSize)
-      seedElemLoader.defaultMaterial= stemSection.sectionName
+      seedElemHandler.defaultMaterial= stemSection.sectionName
       l.genMesh(xc.meshDir.I)
       for e in l.getElements():
         y= -e.getPosCentroid(True).y
@@ -718,13 +718,13 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
     '''Solution and result retrieval routine.'''
     preprocessor= self.feProblem.getPreprocessor   
     preprocessor.resetLoadCase()
-    preprocessor.getLoadLoader.getLoadCombinations.addToDomain(nmbComb)
+    preprocessor.getLoadHandler.getLoadCombinations.addToDomain(nmbComb)
     #Solution
     solution= predefined_solutions.SolutionProcedure()
     analysis= solution.simpleStaticLinear(self.feProblem)
     result= analysis.analyze(1)
     reactions= self.getReactions()
-    preprocessor.getLoadLoader.getLoadCombinations.removeFromDomain(nmbComb)
+    preprocessor.getLoadHandler.getLoadCombinations.removeFromDomain(nmbComb)
     return reactions
   
   def performStabilityAnalysis(self,combinations,foundationSoilModel): 

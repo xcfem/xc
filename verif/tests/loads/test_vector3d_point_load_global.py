@@ -41,7 +41,7 @@ ptoAplic= xc.Vector([1+x*L*math.sqrt(2)/2.0,3+x*L*math.sqrt(2)/2.0,0])
 # Problem type
 feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor   
-nodes= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeHandler
 modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
 
 nodes.defaultTag= 1 #First node number.
@@ -55,7 +55,7 @@ scc= typical_materials.defElasticSection3d(preprocessor, "scc",A,E,G,Iz,Iy,J)
 
 
 # Elements definition
-elements= preprocessor.getElementLoader
+elements= preprocessor.getElementHandler
 elements.defaultTransformation= "lin"
 elements.defaultMaterial= "scc"
 elements.defaultTag= 1 #Tag for next element.
@@ -67,7 +67,7 @@ modelSpace.fixNode000_000(1)
 
 
 # Loads definition
-cargas= preprocessor.getLoadLoader
+cargas= preprocessor.getLoadHandler
 casos= cargas.getLoadPatterns
 #Load modulation.
 ts= casos.newTimeSeries("constant_ts","ts")
@@ -97,7 +97,7 @@ analisis= predefined_solutions.simple_static_linear(feProblem)
 result= analisis.analyze(1)
 
 
-nodes= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeHandler
 nod2= nodes.getNode(2)
 tmp= nod2.getDisp
 vDispUVW= xc.Vector([tmp[0],tmp[1],tmp[2]])

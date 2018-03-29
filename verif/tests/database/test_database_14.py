@@ -24,7 +24,7 @@ F= 1000.0 # Force
 # Problem type
 feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor   
-nodes= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeHandler
 
 modelSpace= predefined_spaces.StructuralMechanics2D(nodes)
 nodes.defaultTag= 1 #First node number.
@@ -42,7 +42,7 @@ scc= typical_materials.defElasticSection2d(preprocessor, "scc",A,E,I)
 
 
 # Elements definition
-elements= preprocessor.getElementLoader
+elements= preprocessor.getElementHandler
 elements.defaultTransformation= "lin"
 elements.defaultMaterial= "scc"
 #  sintaxis: beam2d_02[<tag>] 
@@ -54,7 +54,7 @@ beam2d= elements.newElement("ElasticBeam2d",xc.ID([3,4]))
 beam2d.h= h
     
 # Constraints
-constraints= preprocessor.getConstraintLoader
+constraints= preprocessor.getBoundaryCondHandler
 #
 spc= constraints.newSPConstraint(1,0,0.0) # Node 1
 spc= constraints.newSPConstraint(1,1,0.0)
@@ -72,7 +72,7 @@ mesh.setDeadSRF(0.0)
 mesh.freezeDeadNodes("congela") # Constraint inactive nodes.
 
 # Loads definition
-cargas= preprocessor.getLoadLoader
+cargas= preprocessor.getLoadHandler
 casos= cargas.getLoadPatterns
 #Load modulation.
 ts= casos.newTimeSeries("constant_ts","ts")
@@ -100,7 +100,7 @@ result= analisis.analyze(1)
 
 
 nodes.calculateNodalReactions(True)
-nodes= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeHandler
 nod1= nodes.getNode(1)
 deltax1= nod1.getDisp[0] 
 deltay1= nod1.getDisp[1] 
@@ -130,7 +130,7 @@ feProblem.setVerbosityLevel(1) #Print warnings again
 
 
 nodes.calculateNodalReactions(True)
-nodes= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeHandler
 nod1= nodes.getNode(1)
 deltaxB1= nod1.getDisp[0] 
 deltayB1= nod1.getDisp[1] 

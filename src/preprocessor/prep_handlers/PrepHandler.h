@@ -24,35 +24,34 @@
 // along with this program.
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
-//Loader.cc
+//PrepHandler.h
 
-#include "Loader.h"
-#include "preprocessor/Preprocessor.h"
-#include "domain/domain/Domain.h"
+#ifndef LOADER_H
+#define LOADER_H
 
-#include "domain/mesh/node/Node.h"
-#include "domain/mesh/element/Element.h"
+#include "preprocessor/PreprocessorContainer.h"
+#include "utility/actor/actor/MovableObject.h"
+#include <map>
 
+namespace XC {
 
-//! @brief Default constructor.
-XC::Loader::Loader(Preprocessor *owr)
-  : PreprocessorContainer(owr), MovableObject(0)
-  {}
-
-//! @brief Sends object through the channel being passed as parameter.
-int XC::Loader::sendSelf(CommParameters &cp)
+//! @ingroup Preprocessor
+//
+//! @defgroup Ldrs Utilities for model definition.
+//
+//! \ingroup Ldrs
+//! 
+//! @brief Base class for the preprocessor objects that
+//! create model entities: nodes, elements, loads, etc.
+class PrepHandler: public PreprocessorContainer, public MovableObject
   {
-    std::cerr << getClassName() << "::" << __FUNCTION__
-              << "; not implemented.\n";    
-    return -1;
-  }
+  public:
+    PrepHandler(Preprocessor *owr);
 
+    virtual int sendSelf(CommParameters &);
+    virtual int recvSelf(const CommParameters &);
+  };
 
-//! @brief Receives object through the channel being passed as parameter.
-int XC::Loader::recvSelf(const CommParameters &cp)
-  {
-    std::cerr << getClassName() << "::" << __FUNCTION__
-              << "; not implemented.\n";    
-    return -1;
-  }
+} // end of XC namespace
 
+#endif

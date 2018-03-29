@@ -70,7 +70,7 @@
 #include "xc_utils/src/geom/d2/poligonos2d/Poligono2d.h"
 
 // constructors:
-XC::FiberSection2d::FiberSection2d(int tag,const fiber_list &fiberList,XC::MaterialLoader *mat_ldr)
+XC::FiberSection2d::FiberSection2d(int tag,const fiber_list &fiberList,XC::MaterialHandler *mat_ldr)
   : FiberSectionBase(tag, SEC_TAG_FiberSection2d,fibers.size(),mat_ldr)
   {
     fibers.setup(*this,fiberList,kr);
@@ -80,7 +80,7 @@ XC::FiberSection2d::FiberSection2d(int tag,const fiber_list &fiberList,XC::Mater
   }
 
 //! @brief Constructor.
-XC::FiberSection2d::FiberSection2d(int tag,XC::MaterialLoader *mat_ldr)
+XC::FiberSection2d::FiberSection2d(int tag,XC::MaterialHandler *mat_ldr)
   : FiberSectionBase(tag, SEC_TAG_FiberSection2d,mat_ldr)
   {
 // AddingSensitivity:BEGIN ////////////////////////////////////
@@ -89,7 +89,7 @@ XC::FiberSection2d::FiberSection2d(int tag,XC::MaterialLoader *mat_ldr)
   }
 
 // constructor for blank object that recvSelf needs to be invoked upon
-XC::FiberSection2d::FiberSection2d(XC::MaterialLoader *mat_ldr)
+XC::FiberSection2d::FiberSection2d(XC::MaterialHandler *mat_ldr)
   : FiberSectionBase(0, SEC_TAG_FiberSection2d,mat_ldr)
   {
 // AddingSensitivity:BEGIN ////////////////////////////////////
@@ -102,7 +102,7 @@ XC::Fiber *XC::FiberSection2d::addFiber(Fiber &newFiber)
   { return fibers.addFiber(*this,newFiber,kr); }
 
 //! @brief Adds a fiber to the section.
-XC::Fiber *XC::FiberSection2d::addFiber(int tag,const MaterialLoader &ldr,const std::string &nmbMat,const double &Area, const Vector &position)
+XC::Fiber *XC::FiberSection2d::addFiber(int tag,const MaterialHandler &ldr,const std::string &nmbMat,const double &Area, const Vector &position)
   {
     Fiber *retval= fibers.findFiber(tag);
     if(retval)

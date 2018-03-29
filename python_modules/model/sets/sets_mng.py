@@ -238,7 +238,7 @@ def get_lstNod_from_lst3DPos(preprocessor,lst3DPos):
     '''return the set of the nearest nodes to the points passed as a list of
     points (expressed as geom.Pos3d(x,y,z))
     '''
-    msNod=preprocessor.getNodeLoader.getDomain.getMesh
+    msNod=preprocessor.getNodeHandler.getDomain.getMesh
     return[msNod.getNearestNode(pnt) for pnt in lst3DPos]
     
 

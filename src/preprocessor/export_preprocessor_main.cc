@@ -46,24 +46,24 @@ enum_<XC::meshing_dir>("meshDir")
   .value("K", XC::dirm_k)
    ;
 
-XC::NodeLoader &(XC::Preprocessor::*getNodeLoaderRef)(void)= &XC::Preprocessor::getNodeLoader;
-XC::MaterialLoader &(XC::Preprocessor::*getMaterialLoaderRef)(void)= &XC::Preprocessor::getMaterialLoader;
-XC::BeamIntegratorLoader &(XC::Preprocessor::*getBeamIntegratorLoaderRef)(void)= &XC::Preprocessor::getBeamIntegratorLoader;
-XC::ElementLoader &(XC::Preprocessor::*getElementLoaderRef)(void)= &XC::Preprocessor::getElementLoader;
-XC::ConstraintLoader &(XC::Preprocessor::*getConstraintLoaderRef)(void)= &XC::Preprocessor::getConstraintLoader;
-XC::LoadLoader &(XC::Preprocessor::*getLoadLoaderRef)(void)= &XC::Preprocessor::getLoadLoader;
-XC::TransfCooLoader &(XC::Preprocessor::*getTransfCooLoaderRef)(void)= &XC::Preprocessor::getTransfCooLoader;
+XC::NodeHandler &(XC::Preprocessor::*getNodeHandlerRef)(void)= &XC::Preprocessor::getNodeHandler;
+XC::MaterialHandler &(XC::Preprocessor::*getMaterialHandlerRef)(void)= &XC::Preprocessor::getMaterialHandler;
+XC::BeamIntegratorHandler &(XC::Preprocessor::*getBeamIntegratorHandlerRef)(void)= &XC::Preprocessor::getBeamIntegratorHandler;
+XC::ElementHandler &(XC::Preprocessor::*getElementHandlerRef)(void)= &XC::Preprocessor::getElementHandler;
+XC::BoundaryCondHandler &(XC::Preprocessor::*getBoundaryCondHandlerRef)(void)= &XC::Preprocessor::getBoundaryCondHandler;
+XC::LoadHandler &(XC::Preprocessor::*getLoadHandlerRef)(void)= &XC::Preprocessor::getLoadHandler;
+XC::TransfCooHandler &(XC::Preprocessor::*getTransfCooHandlerRef)(void)= &XC::Preprocessor::getTransfCooHandler;
 XC::MultiBlockTopology &(XC::Preprocessor::*getMultiBlockTopologyRef)(void)= &XC::Preprocessor::getMultiBlockTopology;
 XC::MapSet &(XC::Preprocessor::*getSetsRef)(void)= &XC::Preprocessor::get_sets;
 XC::Domain *(XC::Preprocessor::*getDomainRf)(void)= &XC::Preprocessor::getDomain;
 class_<XC::Preprocessor, bases<EntCmd>, boost::noncopyable >("Preprocessor", no_init)
-  .add_property("getNodeLoader", make_function( getNodeLoaderRef, return_internal_reference<>() ))
-  .add_property("getMaterialLoader", make_function( getMaterialLoaderRef, return_internal_reference<>() ))
-  .add_property("getBeamIntegratorLoader", make_function( getBeamIntegratorLoaderRef, return_internal_reference<>() ))
-  .add_property("getElementLoader", make_function( getElementLoaderRef, return_internal_reference<>() ))
-  .add_property("getConstraintLoader", make_function( getConstraintLoaderRef, return_internal_reference<>() ))
-  .add_property("getLoadLoader", make_function( getLoadLoaderRef, return_internal_reference<>() ))
-  .add_property("getTransfCooLoader", make_function( getTransfCooLoaderRef, return_internal_reference<>() ))
+  .add_property("getNodeHandler", make_function( getNodeHandlerRef, return_internal_reference<>() ))
+  .add_property("getMaterialHandler", make_function( getMaterialHandlerRef, return_internal_reference<>() ))
+  .add_property("getBeamIntegratorHandler", make_function( getBeamIntegratorHandlerRef, return_internal_reference<>() ))
+  .add_property("getElementHandler", make_function( getElementHandlerRef, return_internal_reference<>() ))
+  .add_property("getBoundaryCondHandler", make_function( getBoundaryCondHandlerRef, return_internal_reference<>() ))
+  .add_property("getLoadHandler", make_function( getLoadHandlerRef, return_internal_reference<>() ))
+  .add_property("getTransfCooHandler", make_function( getTransfCooHandlerRef, return_internal_reference<>() ))
   .add_property("getMultiBlockTopology", make_function( getMultiBlockTopologyRef, return_internal_reference<>() ))
   .add_property("getSets", make_function( getSetsRef, return_internal_reference<>() ))
   .add_property("getDomain", make_function( getDomainRf, return_internal_reference<>() ))

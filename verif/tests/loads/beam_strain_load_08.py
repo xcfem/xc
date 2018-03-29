@@ -33,7 +33,7 @@ gammaF= 1.5
 # Problem type
 feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
-nodes= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeHandler
 modelSpace= predefined_spaces.StructuralMechanics2D(nodes)
 
 nodes.defaultTag= 1 #First node number.
@@ -49,7 +49,7 @@ scc= typical_materials.defElasticSection2d(preprocessor, "scc",A,E,I)
 
 
 # Elements definition
-elements= preprocessor.getElementLoader
+elements= preprocessor.getElementHandler
 elements.defaultTransformation= "lin"
 elements.defaultMaterial= "scc"
 elements.dimElem= 2 # Dimension of element space
@@ -58,7 +58,7 @@ beam2d= elements.newElement("ElasticBeam2d",xc.ID([1,2]))
 
     
 # Constraints
-constraints= preprocessor.getConstraintLoader
+constraints= preprocessor.getBoundaryCondHandler
 
 #
 spc= constraints.newSPConstraint(1,0,0.0)
@@ -69,7 +69,7 @@ spc= constraints.newSPConstraint(2,1,0.0)
 spc= constraints.newSPConstraint(2,2,0.0)
 
 # Loads definition
-cargas= preprocessor.getLoadLoader
+cargas= preprocessor.getLoadHandler
 
 casos= cargas.getLoadPatterns
 ts= casos.newTimeSeries("linear_ts","ts")

@@ -30,7 +30,7 @@ y_modelo= [-29.1, -56.4, -81.9, -105.6, -127.5, -147.6, -165.9, -182.4, -197.1, 
 # Model definition
 feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
-nodes= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeHandler
 
 # Problem type
 modelSpace= predefined_spaces.SolidMechanics2D(nodes)
@@ -68,21 +68,21 @@ print "TunloadSlope= ",TunloadSlope
     cross section of unit area.'''
     
 # Elements definition
-elements= preprocessor.getElementLoader
+elements= preprocessor.getElementHandler
 elements.defaultMaterial= "horm"
 elements.dimElem= 2 # Dimension of element space
 #  sintaxis: Spring[<tag>] 
 spring= elements.newElement("Spring",xc.ID([1,2]));
     
 # Constraints
-constraints= preprocessor.getConstraintLoader
+constraints= preprocessor.getBoundaryCondHandler
 #
 spc= constraints.newSPConstraint(1,0,0.0) # Node 1
 spc= constraints.newSPConstraint(1,1,0.0)
 spc= constraints.newSPConstraint(2,1,0.0) # Node 2
 
 # Loads definition
-cargas= preprocessor.getLoadLoader
+cargas= preprocessor.getLoadHandler
 casos= cargas.getLoadPatterns
 ts= casos.newTimeSeries("trig_ts","ts")
 ts.factor= 1
@@ -107,7 +107,7 @@ recorder.callbackRestart= "print \"Restart method called.\""
 '''
         \prop_recorder
 
-nodes= preprocessor.getNodeLoader{2}
+nodes= preprocessor.getNodeHandler{2}
             \callback_record
 
                 

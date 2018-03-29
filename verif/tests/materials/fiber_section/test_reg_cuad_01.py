@@ -36,7 +36,7 @@ steel= typical_materials.defSteel01(preprocessor=preprocessor,name="steel",E=E,f
 
 # Section geometry
 # creation
-geomRectang= preprocessor.getMaterialLoader.newSectionGeometry("geomRectang")
+geomRectang= preprocessor.getMaterialHandler.newSectionGeometry("geomRectang")
 y1= width/2.0
 z1= depth/2.0
 #filling with regions
@@ -59,7 +59,7 @@ for_each_region
   print "num. teselas: ",numCells
 '''
            
-materiales= preprocessor.getMaterialLoader
+materiales= preprocessor.getMaterialHandler
 rectang= materiales.newMaterial("fiber_section_3d","rectang")
 fiberSectionRepr= rectang.getFiberSectionRepr()
 fiberSectionRepr.setGeomNamed("geomRectang")

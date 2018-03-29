@@ -14,7 +14,7 @@ class PredefinedSpace(object):
     '''Defines the dimension of the space and the number 
        of DOFs for each node.
 
-       :param nodes: preprocessor nodes loader
+       :param nodes: preprocessor nodes handler
        :param dimSpace: dimension of the space (1, 2 or 3)
        :param numDOFs: number of degrees of freedom for each node.
     '''
@@ -29,7 +29,7 @@ class PredefinedSpace(object):
        :param preprocessor: preprocessor of the finite element problem.
     '''
     self.preprocessor= preprocessor
-    self.constraints= self.preprocessor.getConstraintLoader
+    self.constraints= self.preprocessor.getBoundaryCondHandler
 
   def setPrescribedDisplacements(self,nodeTag,prescDisplacements):
     '''Prescribe displacement for node DOFs.
@@ -38,7 +38,7 @@ class PredefinedSpace(object):
     :param prescDisplacements: (list) values of the displacements.
     '''
 
-    numDOFs= self.preprocessor.getNodeLoader.numDOFs
+    numDOFs= self.preprocessor.getNodeHandler.numDOFs
     numDisp= len(prescDisplacements)
     if(numDisp<numDOFs):
       lmsg.warning('prescribed '+str(numDisp)+' displacements, nDOFS= '+str(numDOFs))
@@ -71,7 +71,7 @@ class PredefinedSpace(object):
     :param   nodeTagA: tag of the master node.
     :param   nodeTagB: tag of the pivot (slave node).
     '''
-    nodes= self.preprocessor.getNodeLoader
+    nodes= self.preprocessor.getNodeHandler
     coordNodeB= nodes.getNode(pivotNode).getCoo
     fulcrumNode= nodes.newNodeFromVector(coordNodeB)
     rb= self.constraints.newRigidBeam(nodeTagA,fulcrumNode.tag)
@@ -92,8 +92,8 @@ class PredefinedSpace(object):
             
     '''
     # Element definition
-    elems= self.preprocessor.getElementLoader
-    elems.dimElem= self.preprocessor.getNodeLoader.dimSpace # space dimension.
+    elems= self.preprocessor.getElementHandler
+    elems.dimElem= self.preprocessor.getNodeHandler.dimSpace # space dimension.
     elems.defaultMaterial= next((item for item in bearingMaterialNames if item is not None), 'All are Nones')
     zl= elems.newElement("ZeroLength",xc.ID([iNodA,iNodB]))
     zl.clearMaterials()
@@ -119,14 +119,14 @@ class PredefinedSpace(object):
         Returns:
             :rtype: (int, int) new node tag, new element tag.
     '''
-    nodes= self.preprocessor.getNodeLoader
+    nodes= self.preprocessor.getNodeHandler
     newNode= nodes.duplicateNode(iNod) # new node.
 
     # Element definition
     newElement= self.setBearingBetweenNodes(newNode.tag,iNod,bearingMaterialNames,orientation)
     # Boundary conditions
-    constraints= self.preprocessor.getConstraintLoader
-    numDOFs= self.preprocessor.getNodeLoader.numDOFs
+    constraints= self.preprocessor.getBoundaryCondHandler
+    numDOFs= self.preprocessor.getNodeHandler.numDOFs
     for i in range(0,numDOFs):
       spc= constraints.newSPConstraint(newNode.tag,i,0.0)
     return newNode, newElement
@@ -164,12 +164,12 @@ class PredefinedSpace(object):
         Returns:
             :rtype: (int, int) new node tag, new element tag.
     '''
-    nodes= self.preprocessor.getNodeLoader
+    nodes= self.preprocessor.getNodeHandler
     newNode= nodes.duplicateNode(iNod) # new node.
 
     # Element definition
-    elems= self.preprocessor.getElementLoader
-    elems.dimElem= self.preprocessor.getNodeLoader.dimSpace # space dimension.
+    elems= self.preprocessor.getElementHandler
+    elems.dimElem= self.preprocessor.getNodeHandler.dimSpace # space dimension.
     if(elems.dimElem>2):
       lmsg.warning("Not a bi-dimensional space.")
     elems.defaultMaterial= bearingMaterial
@@ -178,7 +178,7 @@ class PredefinedSpace(object):
     zl.clearMaterials()
     zl.setMaterial(0,bearingMaterial)
     # Boundary conditions
-    numDOFs= self.preprocessor.getNodeLoader.numDOFs
+    numDOFs= self.preprocessor.getNodeHandler.numDOFs
     for i in range(0,numDOFs):
       spc= self.constraints.newSPConstraint(newNode.tag,i,0.0)
     return newNode.tag, zl.tag
@@ -189,7 +189,7 @@ def getModelSpace(preprocessor):
 
        :param preprocessor: preprocessor of the finite element problem.
     '''
-    nodes= preprocessor.getNodeLoader
+    nodes= preprocessor.getNodeHandler
     dimSpace= nodes.dimSpace
     numDOFs= nodes.numDOFs
     return PredefinedSpace(nodes,dimSpace,numDOFs)
@@ -200,7 +200,7 @@ class SolidMechanics2D(PredefinedSpace):
     '''Defines the dimension of the space: nodes by two coordinates (x,y) 
        and two DOF for each node (Ux,Uy)
 
-       :param nodes: preprocessor nodes loader
+       :param nodes: preprocessor nodes handler
     '''
     super(SolidMechanics2D,self).__init__(nodes,2,2)
     self.Ux= 0
@@ -215,14 +215,14 @@ class SolidMechanics2D(PredefinedSpace):
 
   def getDisplacementVector(self,nodeTag):
     ''' Return a vector with the displacement components of the node motion.'''
-    nod= self.preprocessor.getNodeLoader.getNode(nodeTag)
+    nod= self.preprocessor.getNodeHandler.getNode(nodeTag)
     disp= nod.getDisp
     return xc.Vector([disp[self.Ux],disp[self.Uy]])
 
 def gdls_elasticidad2D(nodes):
   '''Defines the dimension of the space: nodes by two coordinates (x,y) and two DOF for each node (Ux,Uy)
 
-  :param nodes: nodes loader
+  :param nodes: nodes handler
   '''
   lmsg.warning('gdls_elasticidad2D DEPRECATED; use SolidMechanics2D.')
   return SolidMechanics2D(nodes)
@@ -232,7 +232,7 @@ class StructuralMechanics2D(PredefinedSpace):
     '''Defines the dimension of the space: nodes by two coordinates (x,y) 
        and three DOF for each node (Ux,Uy,theta)
 
-       :param nodes: preprocessor nodes loader
+       :param nodes: preprocessor nodes handler
     '''
     super(StructuralMechanics2D,self).__init__(nodes,2,3)
     self.Ux= 0
@@ -248,7 +248,7 @@ class StructuralMechanics2D(PredefinedSpace):
 
   def getDisplacementVector(self,nodeTag):
     ''' Return a vector with the displacement components of the node motion.'''
-    nod= self.preprocessor.getNodeLoader.getNode(nodeTag)
+    nod= self.preprocessor.getNodeHandler.getNode(nodeTag)
     disp= nod.getDisp
     return xc.Vector([disp[self.Ux],disp[self.Uy]])
 
@@ -257,7 +257,7 @@ class StructuralMechanics2D(PredefinedSpace):
 
         :param trfName: name for the new transformation.
     '''
-    trfs= self.preprocessor.getTransfCooLoader
+    trfs= self.preprocessor.getTransfCooHandler
     retval= trfs.newLinearCrdTransf2d(trfName)
     return retval
 
@@ -266,7 +266,7 @@ class StructuralMechanics2D(PredefinedSpace):
 
         :param trfName: name for the new transformation.
     '''
-    trfs= self.preprocessor.getTransfCooLoader
+    trfs= self.preprocessor.getTransfCooHandler
     retval= trfs.newPDeltaCrdTransf2d(trfName)
     return retval
 
@@ -275,7 +275,7 @@ class StructuralMechanics2D(PredefinedSpace):
 
         :param trfName: name for the new transformation.
     '''
-    trfs= self.preprocessor.getTransfCooLoader
+    trfs= self.preprocessor.getTransfCooHandler
     retval= trfs.newCorotCrdTransf2d(trfName)
     return retval
 
@@ -309,21 +309,21 @@ class StructuralMechanics2D(PredefinedSpace):
 
        :param nodeTag: node identifier.
     '''
-    self.preprocessor.getConstraintLoader.newSPConstraint(nodeTag,0,0.0) 
+    self.preprocessor.getBoundaryCondHandler.newSPConstraint(nodeTag,0,0.0) 
 
   def fixNodeF0F(self, nodeTag):
     '''Restrain only Y displacement DOF (i. e. Uy= 0).
 
        :param nodeTag: node identifier.
     '''
-    self.preprocessor.getConstraintLoader.newSPConstraint(nodeTag,1,0.0) 
+    self.preprocessor.getBoundaryCondHandler.newSPConstraint(nodeTag,1,0.0) 
 
   def fixNodeFF0(self, nodeTag):
     '''Restrain only rotation DOF (i. e. Theta= 0).
 
        :param nodeTag: node identifier.
     '''
-    self.preprocessor.getConstraintLoader.newSPConstraint(nodeTag,2,0.0)
+    self.preprocessor.getBoundaryCondHandler.newSPConstraint(nodeTag,2,0.0)
 
   def fixNodesLine(self, line):
     '''Restrain all DOFs of the line nodes.'''  
@@ -338,7 +338,7 @@ def getStructuralMechanics2DSpace(preprocessor):
 
        :param preprocessor: preprocessor of the finite element problem.
     '''
-    nodes= preprocessor.getNodeLoader
+    nodes= preprocessor.getNodeHandler
     assert(nodes.dimSpace==2)
     assert(nodes.numDOFs==3)
     return StructuralMechanics2D(nodes)
@@ -346,7 +346,7 @@ def getStructuralMechanics2DSpace(preprocessor):
 def gdls_resist_materiales2D(nodes):
   '''Defines the dimension of the space: nodes by two coordinates (x,y) and three DOF for each node (Ux,Uy,theta)
 
-  :param nodes: preprocessor nodes loader
+  :param nodes: preprocessor nodes handler
   '''
   lmsg.warning('gdls_resist_materiales2D DEPRECATED; use StructuralMechanics2D.')
   return StructuralMechanics2D(nodes)
@@ -356,7 +356,7 @@ class SolidMechanics3D(PredefinedSpace):
     '''Defines the dimension of the space: nodes by three coordinates (x,y,z) 
        and two DOF for each node (Ux,Uy,Uz)
 
-       :param nodes: preprocessor nodes loader
+       :param nodes: preprocessor nodes handler
     '''
     super(SolidMechanics3D,self).__init__(nodes,3,3)
     self.Ux= 0
@@ -376,7 +376,7 @@ class SolidMechanics3D(PredefinedSpace):
 
         :param nodeTag: node identifier.
     '''
-    nod= self.preprocessor.getNodeLoader.getNode(nodeTag)
+    nod= self.preprocessor.getNodeHandler.getNode(nodeTag)
     disp= nod.getDisp
     return xc.Vector([disp[self.Ux],disp[self.Uy],disp[self.Uz]])
 
@@ -393,7 +393,7 @@ def gdls_elasticidad3D(nodes):
   '''Defines the dimension of the space: nodes by three coordinates (x,y,z) 
      and three DOF for each node (Ux,Uy,Uz)
 
-  :param nodes: preprocessor nodes loader
+  :param nodes: preprocessor nodes handler
   '''
   lmsg.warning('gdls_elasticidad3D DEPRECATED; use SolidMechanics3D.')
   return SolidMechanics3D(nodes)
@@ -404,7 +404,7 @@ class StructuralMechanics3D(PredefinedSpace):
     '''Define the dimension of the space: nodes by three coordinates (x,y,z) 
     and six DOF for each node (Ux,Uy,Uz,thetaX,thetaY,thetaZ)
 
-    :param nodes: preprocessor nodes loader
+    :param nodes: preprocessor nodes handler
     '''
     super(StructuralMechanics3D,self).__init__(nodes,3,6)
     self.Ux= 0
@@ -426,7 +426,7 @@ class StructuralMechanics3D(PredefinedSpace):
 
         :param nodeTag: node identifier.
     '''
-    nod= self.preprocessor.getNodeLoader.getNode(nodeTag)
+    nod= self.preprocessor.getNodeHandler.getNode(nodeTag)
     disp= nod.getDisp
     return xc.Vector([disp[self.Ux],disp[self.Uy],disp[self.Uz]])
 
@@ -436,7 +436,7 @@ class StructuralMechanics3D(PredefinedSpace):
         :param trfName: name for the new transformation.
         :param xzVector: vector defining transformation XZ plane.
     '''
-    trfs= self.preprocessor.getTransfCooLoader
+    trfs= self.preprocessor.getTransfCooHandler
     retval= trfs.newLinearCrdTransf3d(trfName)
     retval.xzVector= xzVector
     return retval
@@ -447,7 +447,7 @@ class StructuralMechanics3D(PredefinedSpace):
         :param trfName: name for the new transformation.
         :param xzVector: vector defining transformation XZ plane.
     '''
-    trfs= self.preprocessor.getTransfCooLoader
+    trfs= self.preprocessor.getTransfCooHandler
     retval= trfs.newPDeltaCrdTransf3d(trfName)
     retval.xzVector= xzVector
     return retval
@@ -458,7 +458,7 @@ class StructuralMechanics3D(PredefinedSpace):
         :param trfName: name for the new transformation.
         :param xzVector: vector defining transformation XZ plane.
     '''
-    trfs= self.preprocessor.getTransfCooLoader
+    trfs= self.preprocessor.getTransfCooHandler
     retval= trfs.newCorotCrdTransf3d(trfName)
     retval.xzVector= xzVector
     return retval
@@ -660,7 +660,7 @@ class StructuralMechanics3D(PredefinedSpace):
     :param   nodeTagB: tag of bar's to node.
     :param   nmbTransf: name of the coordinate transformation to use for the new bar.
     '''
-    elementos= preprocessor.getElementLoader
+    elementos= preprocessor.getElementHandler
     elementos.defaultTransformation= nmbTransf
     # Material definition
     matName= 'bar' + str(nodeTagA) + str(nodeTagB) + nmbTransf
@@ -686,7 +686,7 @@ def getStructuralMechanics3DSpace(preprocessor):
 
        :param preprocessor: preprocessor of the finite element problem.
     '''
-    nodes= preprocessor.getNodeLoader
+    nodes= preprocessor.getNodeHandler
     assert(nodes.dimSpace==3)
     assert(nodes.numDOFs==6)
     return StructuralMechanics3D(nodes)
@@ -694,7 +694,7 @@ def getStructuralMechanics3DSpace(preprocessor):
 def gdls_resist_materiales3D(nodes):
   '''Define the dimension of the space: nodes by three coordinates (x,y,z) and six DOF for each node (Ux,Uy,Uz,thetaX,thetaY,thetaZ)
 
-  :param nodes: preprocessor nodes loader
+  :param nodes: preprocessor nodes handler
   '''
   lmsg.warning('gdls_resist_materiales3D DEPRECATED; use StructuralMechanics3D.')
   return StructuralMechanics3D(nodes)

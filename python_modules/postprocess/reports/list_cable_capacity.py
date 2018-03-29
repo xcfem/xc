@@ -38,7 +38,7 @@ def listTieStrength(preprocessor,setName, fName, titulo):
   a set of elements that represent a tie.
   '''
   printCabeceraListadoTirante(fName,titulo)
-  st= preprocessor.getSetLoader.getSet(setName)
+  st= preprocessor.getSets.getSet(setName)
   elems= st.getElements()
   tagFCTNCPCP= 0
   FCTNCPCP= 0

@@ -22,7 +22,7 @@ n= 1e6 # Carga uniforme axial.
 
 feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor   
-nodes= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeHandler
 
 sectionTest= section_properties.RectangularSection("sectionTest",b=.20,h=.30) # Section geometry.
 sectionTestMaterial= typical_materials.MaterialData("sectionTestMaterial",E=7E9,nu=0.3,rho=2500) # Section material.
@@ -41,7 +41,7 @@ nod= nodes.newNodeXYZ(L,0,0)
 # Geometric transformations
 lin= modelSpace.newLinearCrdTransf("lin",xc.Vector([0,0,1]))    
 # Elements definition
-elements= preprocessor.getElementLoader
+elements= preprocessor.getElementHandler
 elements.defaultTransformation= "lin"
 elements.defaultMaterial= sectionTest.sectionName
 elements.numSections= 3 # Number of sections along the element.
@@ -54,7 +54,7 @@ modelSpace.fixNode000_000(1)
 
 
 # Loads definition
-cargas= preprocessor.getLoadLoader
+cargas= preprocessor.getLoadHandler
 casos= cargas.getLoadPatterns
 ts= casos.newTimeSeries("constant_ts","ts")
 casos.currentTimeSeries= "ts"

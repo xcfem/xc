@@ -30,7 +30,7 @@ NumDiv= 10
 # Problem type
 feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
-nodes= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeHandler
 modelSpace= predefined_spaces.StructuralMechanics2D(nodes)
 
 # Materials definition
@@ -42,13 +42,13 @@ nodes.newSeedNode()
 # Geometric transformation(s)
 lin= modelSpace.newLinearCrdTransf("lin")
 
-elements= preprocessor.getElementLoader
+elements= preprocessor.getElementHandler
 # Seed element definition
-seedElemLoader= preprocessor.getElementLoader.seedElemLoader
-seedElemLoader.defaultTransformation= "lin"
-seedElemLoader.defaultMaterial= "scc"
-seedElemLoader.defaultTag= 1 #Tag for next element.
-beam2d= seedElemLoader.newElement("ElasticBeam2d",xc.ID([0,0]))
+seedElemHandler= preprocessor.getElementHandler.seedElemHandler
+seedElemHandler.defaultTransformation= "lin"
+seedElemHandler.defaultMaterial= "scc"
+seedElemHandler.defaultTag= 1 #Tag for next element.
+beam2d= seedElemHandler.newElement("ElasticBeam2d",xc.ID([0,0]))
 beam2d.h= h
 beam2d.rho= m
 
@@ -63,7 +63,7 @@ l.nDiv= NumDiv
 
 
 # Constraints
-constraints= preprocessor.getConstraintLoader
+constraints= preprocessor.getBoundaryCondHandler
 
 #
 spc= constraints.newSPConstraint(1,0,0.0) # Node 2,gdl 0

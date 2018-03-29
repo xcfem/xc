@@ -40,10 +40,10 @@ class NodeRecord(object):
      return self.coords[1]
   def getZ(self):
      return self.coords[2]
-  def getStrXCCommand(self,nodeLoaderName):
+  def getStrXCCommand(self,nodeHandlerName):
     strId= str(self.id)
     strCommand= '.newNodeIDXYZ(' + strId + ',' + self.coords[0] + ',' + self.coords[1] +','+ self.coords[2]+')'
-    return 'n' + strId + '= ' + nodeLoaderName + strCommand
+    return 'n' + strId + '= ' + nodeHandlerName + strCommand
   def writeDxf(self,drawing,layerName):
     drawing.add(dxfEngine.point((self.coords[0], self.coords[1], self.coords[2]), color=0, layer=layerName))
 
@@ -81,7 +81,7 @@ class NodeDict(dict):
   def writeToXCFile(self,f,xcImportExportData):
     ''' Write the XC commands that define nodes.'''
     for key in self:
-      strCommand= self[key].getStrXCCommand(xcImportExportData.nodeLoaderName)
+      strCommand= self[key].getStrXCCommand(xcImportExportData.nodeHandlerName)
       f.write(strCommand+'\n')
   def getTags(self):
     retval= list()
@@ -114,8 +114,8 @@ class CellRecord(object):
     strId= str(self.id)
     type= xcImportExportData.convertCellType(self.cellType)
     strType= "'"+type+"'"
-    strCommand= xcImportExportData.cellLoaderName + ".defaultTag= "+ strId +'; '
-    strCommand+= 'e' + strId + '= ' + xcImportExportData.cellLoaderName + '.newElement(' + strType + ',' + self.getStrXCNodes() +')'
+    strCommand= xcImportExportData.cellHandlerName + ".defaultTag= "+ strId +'; '
+    strCommand+= 'e' + strId + '= ' + xcImportExportData.cellHandlerName + '.newElement(' + strType + ',' + self.getStrXCNodes() +')'
     return strCommand
   def writeDxf(self,nodeDict,drawing,layerName):
     numNodes= len(self.nodeIds)

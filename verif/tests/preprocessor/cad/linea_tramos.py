@@ -21,17 +21,17 @@ raiz3= math.sqrt(3)
 # Problem type
 feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
-nodes= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeHandler
 modelSpace= predefined_spaces.SolidMechanics3D(nodes)
 # Materials definition
 elast= typical_materials.defElasticMaterial(preprocessor, "elast",3000)
 
 nodes.newSeedNode()
-seedElemLoader= preprocessor.getElementLoader.seedElemLoader
-seedElemLoader.dimElem= 3 #Bars defined in a three dimensional space.
-seedElemLoader.defaultMaterial= "elast"
-seedElemLoader.defaultTag= 1 #Number for the next element will be 1.
-truss= seedElemLoader.newElement("Truss",xc.ID([0,0]))
+seedElemHandler= preprocessor.getElementHandler.seedElemHandler
+seedElemHandler.dimElem= 3 #Bars defined in a three dimensional space.
+seedElemHandler.defaultMaterial= "elast"
+seedElemHandler.defaultTag= 1 #Number for the next element will be 1.
+truss= seedElemHandler.newElement("Truss",xc.ID([0,0]))
 truss.area= 10
 
 points= preprocessor.getMultiBlockTopology.getPoints
@@ -48,7 +48,7 @@ setTotal.genMesh(xc.meshDir.I)
 
 ''' 
 print "number of nodes: ",nnod
-nodes= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeHandler
 for_each
   print "  node: ",tag," x= ",coord[0],", y= ",coord[1],", z= ",coord[2]
 

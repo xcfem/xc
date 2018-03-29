@@ -34,7 +34,7 @@ F= 1.5e3 # Load magnitude (kN)
 # Problem type
 feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor   
-nodes= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeHandler
 modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
 nodes.defaultTag= 1 #First node number.
 nod= nodes.newNodeXYZ(0,0.0,0.0)
@@ -50,7 +50,7 @@ sectionProperties.Iz= Iz; sectionProperties.Iy= Iy; sectionProperties.J= J
 seccion= typical_materials.defElasticSectionFromMechProp3d(preprocessor, "seccion",sectionProperties)
 
 # Elements definition
-elements= preprocessor.getElementLoader
+elements= preprocessor.getElementHandler
 elements.defaultTransformation= "lin"
 elements.defaultMaterial= "seccion"
 elements.defaultTag= 1 #Tag for the next element.
@@ -63,7 +63,7 @@ spcTag= spc.tag
 # \fix[2,1,20]{ \valor{0.0} }
 
 # Loads definition
-cargas= preprocessor.getLoadLoader
+cargas= preprocessor.getLoadHandler
 casos= cargas.getLoadPatterns
 #Load modulation.
 ts= casos.newTimeSeries("constant_ts","ts")
@@ -79,7 +79,7 @@ analisis= predefined_solutions.simple_static_linear(feProblem)
 result= analisis.analyze(1)
 
 
-nodes= preprocessor.getNodeLoader 
+nodes= preprocessor.getNodeHandler 
 nod2= nodes.getNode(2)
 delta0= nod2.getDisp[1]  # Node 2 yAxis displacement
 
@@ -97,7 +97,7 @@ result= analisis.analyze(1)
 
 
 
-nodes= preprocessor.getNodeLoader 
+nodes= preprocessor.getNodeHandler 
 nod2= nodes.getNode(2)
 delta= nod2.getDisp[1]  # Node 2 yAxis displacement
 

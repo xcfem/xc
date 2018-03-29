@@ -24,7 +24,7 @@ from model.boundary_cond import spring_bound_cond as springs
 # Model definition
 feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
-nodes= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeHandler
 # Problem type
 modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
 nodes.defaultTag= 1 #First node number.
@@ -47,7 +47,7 @@ fixedNodZ=[nodes.getNode(10),nodes.getNode(11),nodes.getNode(12)] #fixed nodes
 
 
 # Constraints
-constraints= preprocessor.getConstraintLoader
+constraints= preprocessor.getBoundaryCondHandler
 for n in range(1,7):
     constraints.newSPConstraint(n,3,0.0)
     constraints.newSPConstraint(n,4,0.0)
@@ -58,7 +58,7 @@ for n in range(4,7):
 
 
 # Loads definition
-cargas= preprocessor.getLoadLoader
+cargas= preprocessor.getLoadHandler
 
 casos= cargas.getLoadPatterns
 

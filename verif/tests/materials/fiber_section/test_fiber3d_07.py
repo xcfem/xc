@@ -30,7 +30,7 @@ eps= F/(Area*Es)
 # Problem type
 feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
-nodes= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeHandler
 modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
 nodes.defaultTag= 1 #First node number.
 nod= nodes.newNodeXYZ(1,0,0)
@@ -51,7 +51,7 @@ TK31= 0.0; TK32= 0.0; TEIz= 0.0
 
 elast0= typical_materials.defElasticMaterial(preprocessor, "elast0",Es)
 # Secciones
-fiberSectionTest= preprocessor.getMaterialLoader.newMaterial("fiber_section_3d","fiberSectionTest")
+fiberSectionTest= preprocessor.getMaterialHandler.newMaterial("fiber_section_3d","fiberSectionTest")
 
 fiberSectionTest.addFiber("elast0",Area/4.0,xc.Vector([yF+lado/4,zF+lado/4]))
 fiberSectionTest.addFiber("elast0",Area/4.0,xc.Vector([yF-lado/4,zF+lado/4]))
@@ -82,13 +82,13 @@ TEIz= fiberSectionTest.getTangentStiffness().at(3,3)
 
 
 # Elements definition
-elements= preprocessor.getElementLoader
+elements= preprocessor.getElementHandler
 elements.defaultMaterial= "fiberSectionTest"
 elements.defaultTag= 1
 zl= elements.newElement("ZeroLengthSection",xc.ID([1,2]))
 
 # Constraints
-constraints= preprocessor.getConstraintLoader
+constraints= preprocessor.getBoundaryCondHandler
 #
 spc= constraints.newSPConstraint(1,0,0.0) # Node 1
 spc= constraints.newSPConstraint(1,1,0.0)
@@ -102,7 +102,7 @@ spc= constraints.newSPConstraint(2,2,0.0)
 spc= constraints.newSPConstraint(2,3,0.0)
 
 # Loads definition
-cargas= preprocessor.getLoadLoader
+cargas= preprocessor.getLoadHandler
 casos= cargas.getLoadPatterns
 #Load modulation.
 ts= casos.newTimeSeries("constant_ts","ts")
@@ -126,7 +126,7 @@ deltax= nod2.getDisp[0]
 nod1= nodes.getNode(1)
 Reac= nod1.getReaction 
 
-elements= preprocessor.getElementLoader
+elements= preprocessor.getElementHandler
 
 elem1= elements.getElement(1)
 elem1.getResistingForce()

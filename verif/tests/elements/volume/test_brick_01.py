@@ -26,7 +26,7 @@ preprocessor=  feProblem.getPreprocessor
 # Materials definition
 elast= typical_materials.defElasticIsotropic3d(preprocessor, "elast3d",200000,0.3,0.0)
 
-nodes= preprocessor.getNodeLoader 
+nodes= preprocessor.getNodeHandler 
 modelSpace= predefined_spaces.SolidMechanics3D(nodes)
 nodes.defaultTag= 1 #Next node number.
 nod1= nodes.newNodeXYZ(100,0,100)
@@ -52,7 +52,7 @@ nod18= nodes.newNodeXYZ(100,300,0)
 nod19= nodes.newNodeXYZ(0,300,0)
 nod20= nodes.newNodeXYZ(0,200,0)
 
-elements= preprocessor.getElementLoader
+elements= preprocessor.getElementHandler
 elements.defaultMaterial= "elast3d"
 elements.defaultTag= 1 #Tag for the next element.
 
@@ -67,7 +67,7 @@ nod19.fix(xc.ID([0,1,2]),xc.Vector([0,0,0]))
 nod20.fix(xc.ID([0,1,2]),xc.Vector([0,0,0]))
 
 # Loads definition
-cargas= preprocessor.getLoadLoader
+cargas= preprocessor.getLoadHandler
 casos= cargas.getLoadPatterns
 #Load modulation.
 ts= casos.newTimeSeries("constant_ts","ts")
@@ -83,7 +83,7 @@ analisis= predefined_solutions.simple_static_linear(feProblem)
 result= analisis.analyze(1)
 
 dN1Teor= xc.Vector([-2.1569e-2,-3.7891e-3,-4.0982e-1])
-nodes= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeHandler
 dN1= nodes.getNode(1).getDisp
 
 ratio= (dN1-dN1Teor).Norm()

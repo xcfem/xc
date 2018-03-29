@@ -24,9 +24,9 @@
 // along with this program.
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
-//ElementLoader.cc
+//ElementHandler.cc
 
-#include "ElementLoader.h"
+#include "ElementHandler.h"
 #include "domain/domain/Domain.h"
 #include "domain/mesh/element/Element.h"
 #include "preprocessor/Preprocessor.h"
@@ -36,26 +36,26 @@
 #include "domain/mesh/node/Node.h"
 #include "utility/tagged/DefaultTag.h"
 
-void XC::ElementLoader::SeedElemLoader::free_mem(void)
+void XC::ElementHandler::SeedElemHandler::free_mem(void)
   {
     if(semilla) delete semilla;
     semilla= nullptr;
   }
 
 //! @brief Copy constructor.
-XC::ElementLoader::SeedElemLoader::SeedElemLoader(const SeedElemLoader &otro)
-  : ProtoElementLoader(otro), semilla(otro.semilla->getCopy()) {}
+XC::ElementHandler::SeedElemHandler::SeedElemHandler(const SeedElemHandler &otro)
+  : ProtoElementHandler(otro), semilla(otro.semilla->getCopy()) {}
 
 //! @brief Assignment operator.
-XC::ElementLoader::SeedElemLoader &XC::ElementLoader::SeedElemLoader::operator=(const SeedElemLoader &otro)
+XC::ElementHandler::SeedElemHandler &XC::ElementHandler::SeedElemHandler::operator=(const SeedElemHandler &otro)
   {
-    ProtoElementLoader::operator=(otro);
+    ProtoElementHandler::operator=(otro);
     semilla= otro.semilla->getCopy();
     return *this;
   }
 
 //! @brief Defines seed element.
-void XC::ElementLoader::SeedElemLoader::add(XC::Element *e)
+void XC::ElementHandler::SeedElemHandler::add(XC::Element *e)
   {
     free_mem();
     assert(e);
@@ -63,38 +63,38 @@ void XC::ElementLoader::SeedElemLoader::add(XC::Element *e)
   }
 
 //! @brief Destructor.
-XC::ElementLoader::SeedElemLoader::~SeedElemLoader(void)
+XC::ElementHandler::SeedElemHandler::~SeedElemHandler(void)
   { free_mem(); }
 
-void XC::ElementLoader::SeedElemLoader::clearAll(void)
+void XC::ElementHandler::SeedElemHandler::clearAll(void)
   { free_mem(); }
 
-int XC::ElementLoader::SeedElemLoader::getDefaultTag(void) const
+int XC::ElementHandler::SeedElemHandler::getDefaultTag(void) const
   {
     int retval= -1;
-    const ProtoElementLoader *ldr= dynamic_cast<const ProtoElementLoader *>(Owner());
+    const ProtoElementHandler *ldr= dynamic_cast<const ProtoElementHandler *>(Owner());
     if(ldr)
       retval= ldr->getDefaultTag();
     else
-      std::cerr << "Error en SeedElemLoader::getTagElem." << std::endl;
+      std::cerr << "Error en SeedElemHandler::getTagElem." << std::endl;
     return retval;
   }
 
-XC::ElementLoader::ElementLoader(Preprocessor *preprocessor)
-  : ProtoElementLoader(preprocessor), seed_elem_loader(preprocessor) 
-  { seed_elem_loader.set_owner(this); }
+XC::ElementHandler::ElementHandler(Preprocessor *preprocessor)
+  : ProtoElementHandler(preprocessor), seed_elem_handler(preprocessor) 
+  { seed_elem_handler.set_owner(this); }
 
 //! @brief Returns the default tag for next element.
-int XC::ElementLoader::getDefaultTag(void) const
+int XC::ElementHandler::getDefaultTag(void) const
   { return Element::getDefaultTag().getTag(); }
 
 //! @brief Sets the default tag for next element.
-void XC::ElementLoader::setDefaultTag(const int &tag)
+void XC::ElementHandler::setDefaultTag(const int &tag)
   { Element::getDefaultTag().setTag(tag); }
 
 //! @brief Returns a pointer to the element identified
 //! by the tag being passed as parameter.
-XC::Element *XC::ElementLoader::getElement(int tag)
+XC::Element *XC::ElementHandler::getElement(int tag)
   {
     Element *retval= nullptr;
     Domain *tmp= getDomain();
@@ -107,21 +107,21 @@ XC::Element *XC::ElementLoader::getElement(int tag)
   }
 
 //! @brief Adds the element to the model.
-void XC::ElementLoader::add(Element *e)
+void XC::ElementHandler::add(Element *e)
   {
     if(e)
       new_element(e);
   }
 
-void XC::ElementLoader::clearAll(void)
+void XC::ElementHandler::clearAll(void)
   {
-    seed_elem_loader.clearAll();
+    seed_elem_handler.clearAll();
     Element::getDefaultTag().setTag(0);
   }
 
 //! @brief Adds the element and set its identifier (tag),
 //! use in EntPMdlr class.
-void XC::ElementLoader::Add(Element *e)
+void XC::ElementHandler::Add(Element *e)
   {
     if(e)
       {
@@ -133,7 +133,7 @@ void XC::ElementLoader::Add(Element *e)
 
 
 //! @brief Adds a new element to the model.
-void XC::ElementLoader::new_element(Element *e)
+void XC::ElementHandler::new_element(Element *e)
   {
     getDomain()->addElement(e);
     getPreprocessor()->UpdateSets(e);

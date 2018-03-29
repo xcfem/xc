@@ -24,9 +24,9 @@
 // along with this program.
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
-//MaterialLoader.cc
+//MaterialHandler.cc
 
-#include "MaterialLoader.h"
+#include "MaterialHandler.h"
 #include "domain/domain/Domain.h"
 
 
@@ -149,8 +149,8 @@
 #include "material/yieldSurface/plasticHardeningMaterial/NullPlasticMaterial.h"
 
 //! @brief Default constructor.
-XC::MaterialLoader::MaterialLoader(Preprocessor *owr)
-  : Loader(owr), tag_mat(0) {}
+XC::MaterialHandler::MaterialHandler(Preprocessor *owr)
+  : PrepHandler(owr), tag_mat(0) {}
 
 XC::Material *load_uniaxial_py_material(int tag_mat,const std::string &cmd)
   {
@@ -361,7 +361,7 @@ XC::Material *load_nD_soil_material(int tag_mat,const std::string &cmd)
 //! Interprets the following commands:
 //! - elastic_membrane_plate_section: Elastic material for membrane elements.
 //! - elastic_plate_section: Elastic material for plate elements.
-XC::Material *load_plate_section_material(int tag_mat,const std::string &cmd,XC::MaterialLoader *mloader)
+XC::Material *load_plate_section_material(int tag_mat,const std::string &cmd,XC::MaterialHandler *mhandler)
   {
     XC::Material *retval= nullptr;
     if(cmd == "elastic_membrane_plate_section")
@@ -385,33 +385,33 @@ XC::Material *load_plate_section_material(int tag_mat,const std::string &cmd,XC:
 //! - fiber_section_3d: Cross-section fiber model for 1D elements in 3D problems.
 //! - fiber_section_GJ: Cross-section fiber model for 1D elements with shear and torsion stiffness (3D problems).
 //! - section_aggregator: Agreggation of cross-section mechanical properties.
-XC::Material *load_section_material(int tag_mat,const std::string &cmd,XC::MaterialLoader *mloader)
+XC::Material *load_section_material(int tag_mat,const std::string &cmd,XC::MaterialHandler *mhandler)
   {
     XC::Material *retval= nullptr;
     if(cmd == "bidirectional_section")
       retval= new XC::Bidirectional(tag_mat);
     else if(cmd == "elastic_section_2d")
-      retval= new XC::ElasticSection2d(tag_mat,mloader);
+      retval= new XC::ElasticSection2d(tag_mat,mhandler);
     else if(cmd == "elasticShearSection2d")
-      retval= new XC::ElasticShearSection2d(tag_mat,mloader);
+      retval= new XC::ElasticShearSection2d(tag_mat,mhandler);
     else if(cmd == "elastic_section_3d")
-      retval= new XC::ElasticSection3d(tag_mat,mloader);
+      retval= new XC::ElasticSection3d(tag_mat,mhandler);
     else if(cmd == "elasticShearSection3d")
-      retval= new XC::ElasticShearSection3d(tag_mat,mloader);
+      retval= new XC::ElasticShearSection3d(tag_mat,mhandler);
     else if(cmd == "fiber_section_2d")
-      retval= new XC::FiberSection2d(tag_mat,mloader);
+      retval= new XC::FiberSection2d(tag_mat,mhandler);
     else if(cmd == "fiber_section_3d")
-      retval= new XC::FiberSection3d(tag_mat,mloader);
+      retval= new XC::FiberSection3d(tag_mat,mhandler);
     else if(cmd == "fiber_section_GJ")
-      retval= new XC::FiberSectionGJ(tag_mat,mloader);
+      retval= new XC::FiberSectionGJ(tag_mat,mhandler);
     else if(cmd == "fiberSectionShear3d")
-      retval= new XC::FiberSectionShear3d(tag_mat,mloader);
+      retval= new XC::FiberSectionShear3d(tag_mat,mhandler);
     else if(cmd == "generic_section_1d")
       retval= new XC::GenericSection1d(tag_mat);
     else if(cmd == "isolator2spring")
       retval= new XC::Isolator2spring(tag_mat);
     else if(cmd == "section_aggregator")
-      retval= new XC::SectionAggregator(tag_mat,mloader);
+      retval= new XC::SectionAggregator(tag_mat,mhandler);
     else if(cmd == "ys_section_2d_02")
       retval= new XC::YS_Section2D02(tag_mat);
     else if(cmd == "ys_section_2d_01")
@@ -430,7 +430,7 @@ XC::Material *load_yield_surf_plastic_hardening(int tag_mat,const std::string &c
       retval= new XC::NullPlasticMaterial(tag_mat);
     return retval;
   }
-XC::Material *load_material(int tag_mat,const std::string &cmd,XC::MaterialLoader *mloader)
+XC::Material *load_material(int tag_mat,const std::string &cmd,XC::MaterialHandler *mhandler)
   {
     XC::Material *retval= load_uniaxial_material(tag_mat,cmd);
     if(retval)
@@ -456,10 +456,10 @@ XC::Material *load_material(int tag_mat,const std::string &cmd,XC::MaterialLoade
     retval= load_nD_soil_material(tag_mat,cmd);
     if(retval)
       return retval;
-    retval= load_section_material(tag_mat,cmd,mloader);
+    retval= load_section_material(tag_mat,cmd,mhandler);
     if(retval)
       return retval;
-    retval= load_plate_section_material(tag_mat,cmd,mloader);
+    retval= load_plate_section_material(tag_mat,cmd,mhandler);
     if(retval)
       return retval;
     retval= load_yield_surf_plastic_hardening(tag_mat,cmd);
@@ -469,7 +469,7 @@ XC::Material *load_material(int tag_mat,const std::string &cmd,XC::MaterialLoade
   }
 
 //! @brief Defines a new material.
-XC::Material *XC::MaterialLoader::newMaterial(const std::string &cmd,const std::string &cod_mat)
+XC::Material *XC::MaterialHandler::newMaterial(const std::string &cmd,const std::string &cod_mat)
   {
     Material *retval= load_material(tag_mat,cmd,this);
     if(retval)
@@ -489,7 +489,7 @@ XC::Material *XC::MaterialLoader::newMaterial(const std::string &cmd,const std::
   }
 
 //! @brief Defines a new material.
-XC::GeomSection *XC::MaterialLoader::newSectionGeometry(const std::string &cod)
+XC::GeomSection *XC::MaterialHandler::newSectionGeometry(const std::string &cod)
   {
     XC::GeomSection *retval= nullptr;
     if(sections_geometry.find(cod)!=sections_geometry.end()) //Section geometry already exists.
@@ -509,7 +509,7 @@ XC::GeomSection *XC::MaterialLoader::newSectionGeometry(const std::string &cod)
   }
 
 //! @brief New interaction diagram
-XC::InteractionDiagram *XC::MaterialLoader::newInteractionDiagram(const std::string &cod_diag)
+XC::InteractionDiagram *XC::MaterialHandler::newInteractionDiagram(const std::string &cod_diag)
   {
     InteractionDiagram *retval= nullptr;
     if(interaction_diagrams.find(cod_diag)!=interaction_diagrams.end()) //Diagrams exists.
@@ -528,7 +528,7 @@ XC::InteractionDiagram *XC::MaterialLoader::newInteractionDiagram(const std::str
   }
 
 //! @brief New 2d interaction diagram
-XC::InteractionDiagram2d *XC::MaterialLoader::new2DInteractionDiagram(const std::string &cod_diag)
+XC::InteractionDiagram2d *XC::MaterialHandler::new2DInteractionDiagram(const std::string &cod_diag)
   {
     InteractionDiagram2d *retval= nullptr;
     if(interaction_diagrams2D.find(cod_diag)!=interaction_diagrams2D.end()) //Diagram already exists.
@@ -547,7 +547,7 @@ XC::InteractionDiagram2d *XC::MaterialLoader::new2DInteractionDiagram(const std:
   }
 
 //! @brief New interaction diagram
-XC::InteractionDiagram *XC::MaterialLoader::calcInteractionDiagram(const std::string &cod_scc,const InteractionDiagramData &diag_data)
+XC::InteractionDiagram *XC::MaterialHandler::calcInteractionDiagram(const std::string &cod_scc,const InteractionDiagramData &diag_data)
   {
     iterator mat= materials.find(cod_scc);
     InteractionDiagram *diagI= nullptr;
@@ -559,7 +559,7 @@ XC::InteractionDiagram *XC::MaterialLoader::calcInteractionDiagram(const std::st
             const std::string cod_diag= "diagInt"+cod_scc;
             if(interaction_diagrams.find(cod_diag)!=interaction_diagrams.end()) //Diagram exists.
               {
-	        std::clog << "MaterialLoader::calcInteractionDiagram; ¡ojo! se redefine el interaction diagram de nombre: '"
+	        std::clog << "MaterialHandler::calcInteractionDiagram; ¡ojo! se redefine el interaction diagram de nombre: '"
                           << cod_diag << "'." << std::endl;
                 delete interaction_diagrams[cod_diag];
               }
@@ -580,7 +580,7 @@ XC::InteractionDiagram *XC::MaterialLoader::calcInteractionDiagram(const std::st
   }
 
 //! @brief New 2D interaction diagram (N-My)
-XC::InteractionDiagram2d *XC::MaterialLoader::calcInteractionDiagramNMy(const std::string &cod_scc,const InteractionDiagramData &diag_data)
+XC::InteractionDiagram2d *XC::MaterialHandler::calcInteractionDiagramNMy(const std::string &cod_scc,const InteractionDiagramData &diag_data)
   {
     iterator mat= materials.find(cod_scc);
     InteractionDiagram2d *diagI= nullptr;
@@ -614,7 +614,7 @@ XC::InteractionDiagram2d *XC::MaterialLoader::calcInteractionDiagramNMy(const st
   }
 
 //! @brief New 2D interaction diagram (N-Mz)
-XC::InteractionDiagram2d *XC::MaterialLoader::calcInteractionDiagramNMz(const std::string &cod_scc,const InteractionDiagramData &diag_data)
+XC::InteractionDiagram2d *XC::MaterialHandler::calcInteractionDiagramNMz(const std::string &cod_scc,const InteractionDiagramData &diag_data)
   {
     iterator mat= materials.find(cod_scc);
     InteractionDiagram2d *diagI= nullptr;
@@ -626,7 +626,7 @@ XC::InteractionDiagram2d *XC::MaterialLoader::calcInteractionDiagramNMz(const st
             const std::string cod_diag= "diagIntNMz"+cod_scc;
             if(interaction_diagrams2D.find(cod_diag)!=interaction_diagrams2D.end()) //Diagram exists.
               {
-	        std::clog << "MaterialLoader::calcInteractionDiagramNMz; ¡ojo! se redefine el interaction diagram de nombre: '"
+	        std::clog << "MaterialHandler::calcInteractionDiagramNMz; ¡ojo! se redefine el interaction diagram de nombre: '"
                           << cod_diag << "'." << std::endl;
                 delete interaction_diagrams2D[cod_diag];
               }
@@ -646,7 +646,7 @@ XC::InteractionDiagram2d *XC::MaterialLoader::calcInteractionDiagramNMz(const st
     return diagI;     
   }
 
-void XC::MaterialLoader::clearAll(void)
+void XC::MaterialHandler::clearAll(void)
   {
     for(iterator i= begin();i!= end();i++)
       delete (*i).second;
@@ -657,39 +657,39 @@ void XC::MaterialLoader::clearAll(void)
     tag_mat= 0;
   }
 
-XC::MaterialLoader::~MaterialLoader(void)
+XC::MaterialHandler::~MaterialHandler(void)
   { clearAll(); }
 
 //! @brief Returns a reference to the material container.
-const XC::MaterialLoader::map_materials &XC::MaterialLoader::Map(void) const
+const XC::MaterialHandler::map_materials &XC::MaterialHandler::Map(void) const
   { return materials; }
 
 //! @brief Returns an iterator which points to principio de la lista.
-XC::MaterialLoader::const_iterator XC::MaterialLoader::begin(void) const
+XC::MaterialHandler::const_iterator XC::MaterialHandler::begin(void) const
   { return materials.begin(); }
 //! @brief Returns an iterator apuntando después of the final de la lista.
-XC::MaterialLoader::const_iterator XC::MaterialLoader::end(void) const
+XC::MaterialHandler::const_iterator XC::MaterialHandler::end(void) const
   { return materials.end(); }
 //! @brief Returns an iterator which points to principio de la lista.
-XC::MaterialLoader::iterator XC::MaterialLoader::begin(void)
+XC::MaterialHandler::iterator XC::MaterialHandler::begin(void)
   { return materials.begin(); }
 //! @brief Returns an iterator apuntando después of the final de la lista.
-XC::MaterialLoader::iterator XC::MaterialLoader::end(void)
+XC::MaterialHandler::iterator XC::MaterialHandler::end(void)
   { return materials.end(); }
 
 //! @brief Si encuentra el material cuyo nombre se pasa as parameter returns an iterator which points to mismo.
-XC::MaterialLoader::const_iterator XC::MaterialLoader::find(const std::string &nmb) const
+XC::MaterialHandler::const_iterator XC::MaterialHandler::find(const std::string &nmb) const
   { return materials.find(nmb); }
 
 //! @brief Si encuentra el material cuyo nombre se pasa as parameter returns an iterator which points to mismo.
-XC::MaterialLoader::iterator XC::MaterialLoader::find(const std::string &nmb)
+XC::MaterialHandler::iterator XC::MaterialHandler::find(const std::string &nmb)
   { return materials.find(nmb); }
 
 //! @brief Si encuentra el material cuyo nombre se pasa as parameter returns a pointer al mismo,
 //! otherwise it returns nullptr.
-XC::Material *XC::MaterialLoader::find_ptr(const std::string &nmb)
+XC::Material *XC::MaterialHandler::find_ptr(const std::string &nmb)
   {
-    XC::MaterialLoader::iterator i= find(nmb);
+    XC::MaterialHandler::iterator i= find(nmb);
     if(i!= materials.end())
       return (*i).second;
     else
@@ -698,9 +698,9 @@ XC::Material *XC::MaterialLoader::find_ptr(const std::string &nmb)
 
 //! @brief Si encuentra el material cuyo nombre se pasa as parameter returns a pointer al mismo,
 //! otherwise it returns nullptr.
-const XC::Material *XC::MaterialLoader::find_ptr(const std::string &nmb) const
+const XC::Material *XC::MaterialHandler::find_ptr(const std::string &nmb) const
   {
-    XC::MaterialLoader::const_iterator i= find(nmb);
+    XC::MaterialHandler::const_iterator i= find(nmb);
     if(i!= materials.end())
       return (*i).second;
     else
@@ -709,7 +709,7 @@ const XC::Material *XC::MaterialLoader::find_ptr(const std::string &nmb) const
 
 //! @brief Si encuentra el material cuyo nombre se pasa as parameter returns a pointer al mismo,
 //! otherwise it returns nullptr.
-XC::Material *XC::MaterialLoader::find_ptr(const int &tag)
+XC::Material *XC::MaterialHandler::find_ptr(const int &tag)
   {
     Material *retval= nullptr;
     iterator i= begin();
@@ -724,7 +724,7 @@ XC::Material *XC::MaterialLoader::find_ptr(const int &tag)
 
 //! @brief Si encuentra el material cuyo nombre se pasa as parameter returns a pointer al mismo,
 //! otherwise it returns nullptr.
-const XC::Material *XC::MaterialLoader::find_ptr(const int &tag) const
+const XC::Material *XC::MaterialHandler::find_ptr(const int &tag) const
   {
     const Material *retval= nullptr;
     const_iterator i= begin();
@@ -738,7 +738,7 @@ const XC::Material *XC::MaterialLoader::find_ptr(const int &tag) const
   }
 
 //! @brief Returns the name that corresponds to the material tag being passed as parameter.
-std::string XC::MaterialLoader::getName(const int &tag) const
+std::string XC::MaterialHandler::getName(const int &tag) const
   {
     std::string retval= "";
     const_iterator i= begin();
@@ -753,7 +753,7 @@ std::string XC::MaterialLoader::getName(const int &tag) const
 
 //! @brief Si encuentra el material cuyo nombre se pasa as parameter returns a pointer al mismo,
 //! otherwise it returns nullptr.
-XC::GeomSection *XC::MaterialLoader::find_ptr_geom_section(const std::string &nmb)
+XC::GeomSection *XC::MaterialHandler::find_ptr_geom_section(const std::string &nmb)
   {
     geom_secc_iterator i= sections_geometry.find(nmb);
     if(i!= sections_geometry.end())
@@ -764,7 +764,7 @@ XC::GeomSection *XC::MaterialLoader::find_ptr_geom_section(const std::string &nm
 
 //! @brief Si encuentra el material cuyo nombre se pasa as parameter returns a pointer al mismo,
 //! otherwise it returns nullptr.
-const XC::GeomSection *XC::MaterialLoader::find_ptr_geom_section(const std::string &nmb) const
+const XC::GeomSection *XC::MaterialHandler::find_ptr_geom_section(const std::string &nmb) const
   {
     const_geom_secc_iterator i= sections_geometry.find(nmb);
     if(i!= sections_geometry.end())
@@ -775,7 +775,7 @@ const XC::GeomSection *XC::MaterialLoader::find_ptr_geom_section(const std::stri
 
 //! @brief Si encuentra el material cuyo nombre se pasa as parameter returns a pointer al mismo,
 //! otherwise it returns nullptr.
-XC::InteractionDiagram *XC::MaterialLoader::find_ptr_interaction_diagram(const std::string &nmb)
+XC::InteractionDiagram *XC::MaterialHandler::find_ptr_interaction_diagram(const std::string &nmb)
   {
     diag_interacc_iterator i= interaction_diagrams.find(nmb);
     if(i!= interaction_diagrams.end())
@@ -786,7 +786,7 @@ XC::InteractionDiagram *XC::MaterialLoader::find_ptr_interaction_diagram(const s
 
 //! @brief Si encuentra el material cuyo nombre se pasa as parameter returns a pointer al mismo,
 //! otherwise it returns nullptr.
-const XC::InteractionDiagram *XC::MaterialLoader::find_ptr_interaction_diagram(const std::string &nmb) const
+const XC::InteractionDiagram *XC::MaterialHandler::find_ptr_interaction_diagram(const std::string &nmb) const
   {
     const_diag_interacc_iterator i= interaction_diagrams.find(nmb);
     if(i!= interaction_diagrams.end())
@@ -797,7 +797,7 @@ const XC::InteractionDiagram *XC::MaterialLoader::find_ptr_interaction_diagram(c
 
 //! @brief Si encuentra el material cuyo nombre se pasa as parameter returns a pointer al mismo,
 //! otherwise it returns nullptr.
-XC::InteractionDiagram2d *XC::MaterialLoader::find_ptr_interaction_diagram2d(const std::string &nmb)
+XC::InteractionDiagram2d *XC::MaterialHandler::find_ptr_interaction_diagram2d(const std::string &nmb)
   {
     diag_interacc2d_iterator i= interaction_diagrams2D.find(nmb);
     if(i!= interaction_diagrams2D.end())
@@ -808,7 +808,7 @@ XC::InteractionDiagram2d *XC::MaterialLoader::find_ptr_interaction_diagram2d(con
 
 //! @brief Si encuentra el material cuyo nombre se pasa as parameter returns a pointer al mismo,
 //! otherwise it returns nullptr.
-const XC::InteractionDiagram2d *XC::MaterialLoader::find_ptr_interaction_diagram2d(const std::string &nmb) const
+const XC::InteractionDiagram2d *XC::MaterialHandler::find_ptr_interaction_diagram2d(const std::string &nmb) const
   {
     const_diag_interacc2d_iterator i= interaction_diagrams2D.find(nmb);
     if(i!= interaction_diagrams2D.end())
@@ -819,7 +819,7 @@ const XC::InteractionDiagram2d *XC::MaterialLoader::find_ptr_interaction_diagram
 
 //! @brief Returns a reference to the material which identifier
 //! is being passed as parameter.
-XC::Material &XC::MaterialLoader::getMaterial(const std::string &nmb)
+XC::Material &XC::MaterialHandler::getMaterial(const std::string &nmb)
   {
     Material *retval= find_ptr(nmb);
     assert(retval);
@@ -828,7 +828,7 @@ XC::Material &XC::MaterialLoader::getMaterial(const std::string &nmb)
 
 //! @brief Returns a reference to the section geometry which identifier
 //! is being passed as parameter. 
-XC::GeomSection &XC::MaterialLoader::getGeomSection(const std::string &nmb)
+XC::GeomSection &XC::MaterialHandler::getGeomSection(const std::string &nmb)
   {
     GeomSection *retval= find_ptr_geom_section(nmb);
     assert(retval);
@@ -837,7 +837,7 @@ XC::GeomSection &XC::MaterialLoader::getGeomSection(const std::string &nmb)
 
 //! @brief Returns a reference to the interaction diagram which identifier
 //! is being passed as parameter.
-XC::InteractionDiagram &XC::MaterialLoader::getInteractionDiagram(const std::string &nmb)
+XC::InteractionDiagram &XC::MaterialHandler::getInteractionDiagram(const std::string &nmb)
   {
     InteractionDiagram *retval= find_ptr_interaction_diagram(nmb);
     assert(retval);
@@ -845,21 +845,21 @@ XC::InteractionDiagram &XC::MaterialLoader::getInteractionDiagram(const std::str
   }
 
 //! @brief True if material exists.
-bool XC::MaterialLoader::existeMaterial(const std::string &nmb) const
+bool XC::MaterialHandler::existeMaterial(const std::string &nmb) const
   { return (materials.find(nmb)!=materials.end()); }
 
 //! @brief Returns true if the section geometry identified by
 //! the string being passed as parameter exists.
-bool XC::MaterialLoader::existeGeomSection(const std::string &nmb) const
+bool XC::MaterialHandler::existeGeomSection(const std::string &nmb) const
   { return (sections_geometry.find(nmb)!=sections_geometry.end()); }
 
 //! @brief Returns true if the 3D interaction diagram identified by
 //! the string being passed as parameter exists.
-bool XC::MaterialLoader::InteractionDiagramExists(const std::string &nmb) const
+bool XC::MaterialHandler::InteractionDiagramExists(const std::string &nmb) const
   { return (interaction_diagrams.find(nmb)!=interaction_diagrams.end()); }
 
 //! @brief Returns true if the 2D interaction diagram identified by
 //! the string being passed as parameter exists.
-bool XC::MaterialLoader::InteractionDiagramExists2d(const std::string &nmb) const
+bool XC::MaterialHandler::InteractionDiagramExists2d(const std::string &nmb) const
   { return (interaction_diagrams2D.find(nmb)!=interaction_diagrams2D.end()); }
 

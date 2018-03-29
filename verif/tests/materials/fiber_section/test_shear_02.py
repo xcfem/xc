@@ -50,7 +50,7 @@ numRamas= 4
 feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
 # Materials definition
-materiales= preprocessor.getMaterialLoader
+materiales= preprocessor.getMaterialHandler
 
 # Materials definition
 concr= EHE_materials.HA30
@@ -66,7 +66,7 @@ respVz= typical_materials.defElasticMaterial(preprocessor, "respVz",1e3) # Shear
 
 # Section geometry
 # setting up
-geomSecHA= preprocessor.getMaterialLoader.newSectionGeometry("geomSecHA")
+geomSecHA= preprocessor.getMaterialHandler.newSectionGeometry("geomSecHA")
 regiones= geomSecHA.getRegions
 #filling with regions
 rg= regiones.newQuadRegion(concr.nmbDiagD)  #the name assigned to the region is the string concr.nmbDiagD
@@ -101,7 +101,7 @@ modelSpace= predefined_spaces.getStructuralMechanics3DSpace(preprocessor)
 modelSpace.fixNode000_000(1)
 
 # Loads definition
-cargas= preprocessor.getLoadLoader
+cargas= preprocessor.getLoadHandler
 
 casos= cargas.getLoadPatterns
 
@@ -131,7 +131,7 @@ secHAParamsCortante.alpha= math.radians(90)
 secHAParamsTorsion= EHE_limit_state_checking.computeEffectiveHollowSectionParameters(geomSecHA,depth/2.0,cover)
 
 
-elements= preprocessor.getElementLoader
+elements= preprocessor.getElementHandler
 ele1= elements.getElement(1)
 scc= ele1.getSection()
 N= scc.getStressResultantComponent("N")

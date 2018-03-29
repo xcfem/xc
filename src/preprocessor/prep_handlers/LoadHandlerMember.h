@@ -24,7 +24,7 @@
 // along with this program.
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
-//LoadLoaderMember.h
+//LoadHandlerMember.h
 
 #ifndef LOADLOADERMEMBER_H
 #define LOADLOADERMEMBER_H
@@ -33,18 +33,18 @@
 #include "utility/actor/actor/MovableObject.h"
 
 namespace XC {
-class LoadLoader;
+class LoadHandler;
 class Domain;
 
 //! \ingroup Ldrs
 //! 
 //! @brief ??.
-class LoadLoaderMember: public EntCmd, public MovableObject
+class LoadHandlerMember: public EntCmd, public MovableObject
   {
   public:
-    LoadLoaderMember(LoadLoader *owr);
-    const LoadLoader *getLoadLoader(void) const;
-    LoadLoader *getLoadLoader(void);
+    LoadHandlerMember(LoadHandler *owr);
+    const LoadHandler *getLoadHandler(void) const;
+    LoadHandler *getLoadHandler(void);
     const Domain *getDomain(void) const;
     Domain *getDomain(void);
     int &getTagLP(void);

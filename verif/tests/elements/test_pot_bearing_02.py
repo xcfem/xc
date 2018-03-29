@@ -33,7 +33,7 @@ preprocessor=  feProblem.getPreprocessor
 pot= bridge_bearings.PTFEPotBearing(diamPot)
 pot.defineMaterials(preprocessor)
 
-nodes= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeHandler
 modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
 nodes.defaultTag= 1 #First node number.
 nod1= nodes.newNodeXYZ(1,1,1)
@@ -51,7 +51,7 @@ spc= modelSpace.constraints.newSPConstraint(nod2.tag,5,0.0)
 
 
 # Loads definition
-cargas= preprocessor.getLoadLoader
+cargas= preprocessor.getLoadHandler
 
 casos= cargas.getLoadPatterns
 

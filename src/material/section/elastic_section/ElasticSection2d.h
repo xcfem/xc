@@ -87,7 +87,7 @@ class ElasticSection2d: public BaseElasticSection2d
   public:
     ElasticSection2d(int tag, double E, double A, double I);
     ElasticSection2d(int tag, double EA, double EI);
-    ElasticSection2d(int tag,MaterialLoader *mat_ldr= nullptr);    
+    ElasticSection2d(int tag,MaterialHandler *mat_ldr= nullptr);    
     ElasticSection2d(void);    
 
     const Vector &getStressResultant(void) const;

@@ -6,7 +6,7 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
-testQuadRegion= preprocessor.getMaterialLoader.newSectionGeometry("testQuadRegion")
+testQuadRegion= preprocessor.getMaterialHandler.newSectionGeometry("testQuadRegion")
 y1= width/2.0
 z1= depth/2.0
 regiones= testQuadRegion.getRegions

@@ -69,7 +69,7 @@
 #include "domain/load/plane/ShellUniformLoad.h"
 #include "domain/load/plane/ShellStrainLoad.h"
 #include "preprocessor/Preprocessor.h"
-#include "preprocessor/loaders/LoadLoader.h"
+#include "preprocessor/prep_handlers/LoadHandler.h"
 #include "utility/actor/actor/MatrixCommMetaData.h"
 #include "domain/mesh/element/utils/gauss_models/GaussModel.h"
 
@@ -146,7 +146,7 @@ const XC::ShellUniformLoad *XC::ShellMITC4Base::vector3dUniformLoadLocal(const V
     Preprocessor *preprocessor= getPreprocessor();
     if(preprocessor)
       {
-        MapLoadPatterns &casos= preprocessor->getLoadLoader().getLoadPatterns();
+        MapLoadPatterns &casos= preprocessor->getLoadHandler().getLoadPatterns();
         static ID eTags(1);
         eTags[0]= getTag(); //Load for this element.
         const int &loadTag= casos.getCurrentElementLoadTag(); //Load identifier.
@@ -198,7 +198,7 @@ void XC::ShellMITC4Base::strainLoad(const Matrix &strains)
     Preprocessor *preprocessor= getPreprocessor();
     if(preprocessor)
       {
-        MapLoadPatterns &casos= preprocessor->getLoadLoader().getLoadPatterns();
+        MapLoadPatterns &casos= preprocessor->getLoadHandler().getLoadPatterns();
         static ID eTags(1);
         eTags[0]= getTag(); //Load for this element.
         const int &loadTag= casos.getCurrentElementLoadTag(); //Load identifier.

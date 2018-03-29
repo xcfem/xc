@@ -29,7 +29,7 @@ F= 1.0e3 # Load magnitude (kN)
 # Problem type
 feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
-nodes= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeHandler
 modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
 nodes.defaultTag= 1 #First node number.
 nod= nodes.newNodeXYZ(0.0,0.0,0.0)
@@ -45,7 +45,7 @@ seccion= typical_materials.defElasticSectionFromMechProp3d(preprocessor, "seccio
 lin= modelSpace.newLinearCrdTransf("lin",xc.Vector([0,1,0]))
 
 # Elements definition
-elements= preprocessor.getElementLoader
+elements= preprocessor.getElementHandler
 elements.defaultTransformation= "lin"
 elements.defaultMaterial= "seccion"
 elements.defaultTag= 1 #Tag for the next element.
@@ -66,7 +66,7 @@ ratio2= ((fuerte[0])**2+(fuerte[1])**2)
 modelSpace.fixNode000_000(1)
 
 # Loads definition
-cargas= preprocessor.getLoadLoader
+cargas= preprocessor.getLoadHandler
 
 casos= cargas.getLoadPatterns
 
@@ -84,7 +84,7 @@ result= analisis.analyze(1)
 deltaYTeor= (-F*L**3/(3*E*Iz))
 deltaZTeor= (F*L**3/(3*E*Iy))
 
-nodes= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeHandler
 
 nod2= nodes.getNode(2)
 deltaY= nod2.getDisp[1]

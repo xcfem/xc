@@ -28,7 +28,7 @@ IPE200= arcelor_metric_shapes.IPEShape(S355JR,'IPE_200')
 fs3d= IPE200.getFiberSection3d(preprocessor,'epp')
 
 L= 1.0
-nodes= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeHandler
 modelSpace= predefined_spaces.StructuralMechanics2D(nodes)
 nodes.defaultTag= 10 #First node number.
 nod1= nodes.newNodeXY(0,0.0)
@@ -37,20 +37,20 @@ nod2= nodes.newNodeXY(L,0.0)
 # Geometric transformations
 lin= modelSpace.newLinearCrdTransf("lin")
 # Elements definition
-elements= preprocessor.getElementLoader
+elements= preprocessor.getElementHandler
 elements.defaultTransformation= "lin" # Coordinate transformation for the new elements
 elements.defaultMaterial= IPE200.fiberSection3dName
 beam2d= elements.newElement("ForceBeamColumn2d",xc.ID([nod1.tag,nod2.tag]));
 
 # Constraints
-constraints= preprocessor.getConstraintLoader
+constraints= preprocessor.getBoundaryCondHandler
 modelSpace.fixNode000(nod1.tag)
 
 # Loads definition
 WzplTeor= IPE200.get('Wzpl')
 M0Teor= -WzplTeor*S355JR.fyd()
 F= M0Teor*0.87
-cargas= preprocessor.getLoadLoader
+cargas= preprocessor.getLoadHandler
 casos= cargas.getLoadPatterns
 #Load modulation.
 ts= casos.newTimeSeries("constant_ts","ts")

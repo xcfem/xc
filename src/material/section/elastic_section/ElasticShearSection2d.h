@@ -76,7 +76,7 @@ class ElasticShearSection2d: public BaseElasticSection2d
   public:
     //ElasticShearSection2d(int tag, double E, double A, double I,double G, double alpha);
     ElasticShearSection2d(void);
-    ElasticShearSection2d(int tag,MaterialLoader *mat_ldr= nullptr);    
+    ElasticShearSection2d(int tag,MaterialHandler *mat_ldr= nullptr);    
   
     const Vector &getStressResultant(void) const;
     const Matrix &getSectionTangent(void) const;

@@ -74,7 +74,7 @@
 namespace XC {
 class Information;
 class Response;
-class MaterialLoader;
+class MaterialHandler;
 class ID;
 
 //!  @defgroup Mat Material models (constitutive equations).
@@ -93,8 +93,8 @@ class Material: public TaggedObject, public MovableObject
   public:
     Material(int tag, int classTag);
 
-    const MaterialLoader *GetMaterialLoader(void) const;
-    MaterialLoader *GetMaterialLoader(void);
+    const MaterialHandler *getMaterialHandler(void) const;
+    MaterialHandler *getMaterialHandler(void);
     std::string getName(void) const;
 
     virtual int setVariable(const std::string &argv);

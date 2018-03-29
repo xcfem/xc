@@ -33,7 +33,7 @@ from materials import typical_materials
 # Problem type
 feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
-nodes= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeHandler
 modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
 nodes.defaultTag= 1 #First node number.
 nod1= nodes.newNodeXYZ(0,0,0)
@@ -56,7 +56,7 @@ hLosa= typical_materials.defElasticMembranePlateSection(preprocessor, "hLosa",Ec
 
 typical_materials.defSteel02(preprocessor, "prestressingSteel",Ep,fy,0.001,tInic)
 
-elements= preprocessor.getElementLoader
+elements= preprocessor.getElementHandler
 # Reinforced concrete deck
 elements.defaultMaterial= "hLosa"
 elements.defaultTag= 1
@@ -97,7 +97,7 @@ modelSpace.fixNode000_000(5)
 modelSpace.fixNode000_000(9)
 
 # Loads definition
-cargas= preprocessor.getLoadLoader
+cargas= preprocessor.getLoadHandler
 
 casos= cargas.getLoadPatterns
 

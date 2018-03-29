@@ -33,7 +33,7 @@
 #include <material/section/repres/geom_section/Spot.h>
 #include <material/section/repres/geom_section/Segment.h>
 
-#include "preprocessor/loaders/MaterialLoader.h"
+#include "preprocessor/prep_handlers/MaterialHandler.h"
 #include "material/section/repres/CrossSectionProperties3d.h"
 #include "material/section/repres/CrossSectionProperties2d.h"
 
@@ -53,14 +53,14 @@
 
 #include "boost/lexical_cast.hpp"
 
-XC::GeomSection::GeomSection(MaterialLoader *ml)
-  : SectionMassProperties(),material_loader(ml), regiones(ml), capas_armado(this,ml), tag_sis_ref(0),tag_spot(0) {}
+XC::GeomSection::GeomSection(MaterialHandler *ml)
+  : SectionMassProperties(),material_handler(ml), regiones(ml), capas_armado(this,ml), tag_sis_ref(0),tag_spot(0) {}
 
 //! @brief Returns a geometry that contains only the regions
 //! defined in this object.
 XC::GeomSection XC::GeomSection::getGMRegiones(void) const
   {
-    GeomSection retval(material_loader);
+    GeomSection retval(material_handler);
     retval.regiones= regiones;
     return retval;
   }
@@ -69,7 +69,7 @@ XC::GeomSection XC::GeomSection::getGMRegiones(void) const
 //! defined in this object.
 XC::GeomSection XC::GeomSection::getGMCapasArmado(void) const
   {
-    GeomSection retval(material_loader);
+    GeomSection retval(material_handler);
     retval.capas_armado= capas_armado;
     return retval;
   }
@@ -164,7 +164,8 @@ XC::SisRefScc *XC::GeomSection::creaSisRef(const std::string &tipo)
             tag_sis_ref++;
           }
         else
-	  std::cerr << "XC::GeomSection::creaSisRef; type: '" << tipo
+	  std::cerr << getClassName() << __FUNCTION__
+		    << "; type: '" << tipo
                     << "' unknown." << std::endl;
       }
     return retval;
@@ -194,7 +195,8 @@ XC::Spot *XC::GeomSection::newSpot(const Pos2d &p)
         if(sr)
           trfP= sr->GetPosGlobal(p); //Pasa a coordenadas globales.
         else
-	  std::cerr << "Reference system with identifier: " << tag_sis_ref << " not found.\n";
+	  std::cerr << "Reference system with identifier: "
+		    << tag_sis_ref << " not found.\n";
        }
     Spot *retval= creaSpot(trfP);
     return retval;
@@ -208,7 +210,8 @@ XC::Segment *XC::GeomSection::newSegment(size_t p1,size_t p2)
     if(s)
       s->setEndPoints(p1,p2);
     else
-      std::cerr << getClassName() << "::" << __FUNCTION__ << "; can't assign endpoints."
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; can't assign endpoints."
                 << std::endl;
     return s;
   }

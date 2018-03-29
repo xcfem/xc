@@ -887,7 +887,7 @@ def concreteDesignDiagramTest(preprocessor, concreteRecord):
        theoretical law defined in Python (see sigmac()).
     '''
     tag= concreteRecord.defDiagD(preprocessor)
-    diagConcrete= preprocessor.getMaterialLoader.getMaterial(concreteRecord.nmbDiagD)
+    diagConcrete= preprocessor.getMaterialHandler.getMaterial(concreteRecord.nmbDiagD)
     incr= concreteRecord.epsilonU()/20
     errMax= 0.0
     e=  -0.1e-8
@@ -908,7 +908,7 @@ def concreteDesignTangentTest(preprocessor, concreteRecord):
      theoretical law defined in Python (see tangc()).
     '''
     tag= concreteRecord.defDiagD(preprocessor)
-    diagConcrete= preprocessor.getMaterialLoader.getMaterial(concreteRecord.nmbDiagD)
+    diagConcrete= preprocessor.getMaterialHandler.getMaterial(concreteRecord.nmbDiagD)
     incr= concreteRecord.epsilonU()/20
     errMax= 0.0
     e=-0.1e-8
@@ -1029,7 +1029,7 @@ def testReinfSteelCharacteristicDiagram(preprocessor, matRecord):
   steelDiagram= defReinfSteelCharacteristicDiagram(preprocessor, matRecord)
   ##30160925 was:
 #  tag= defReinfSteelCharacteristicDiagram(preprocessor, matRecord)
-#  steelDiagram= preprocessor.getMaterialLoader.getMaterial(matRecord.nmbDiagK)
+#  steelDiagram= preprocessor.getMaterialHandler.getMaterial(matRecord.nmbDiagK)
   incr= matRecord.emax/20
   errMax= 0.0
   e= 0.1e-8
@@ -1049,7 +1049,7 @@ def testReinfSteelDesignDiagram(preprocessor, matRecord):
   steelDiagram= defReinfSteelDesignDiagram(preprocessor, matRecord)
   ##30160925 was:
 #  tag= defReinfSteelDesignDiagram(preprocessor, matRecord)
-#  steelDiagram= preprocessor.getMaterialLoader.getMaterial(matRecord.nmbDiagD)
+#  steelDiagram= preprocessor.getMaterialHandler.getMaterial(matRecord.nmbDiagD)
   incr= matRecord.emax/20
   errMax= 0.0
   e= 0.1e-8

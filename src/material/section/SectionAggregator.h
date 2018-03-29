@@ -100,11 +100,11 @@ class SectionAggregator : public PrismaticBarCrossSection
     int recvData(const CommParameters &);
 
   public:
-    SectionAggregator(MaterialLoader *mat_ldr= nullptr); 
-    SectionAggregator(int tag,MaterialLoader *mat_ldr= nullptr);
-    SectionAggregator(int tag, PrismaticBarCrossSection &theSection,const AggregatorAdditions &theAdditions,MaterialLoader *mat_ldr= nullptr); 
-    SectionAggregator(int tag, const AggregatorAdditions &theAdditions,MaterialLoader *mat_ldr= nullptr); 
-    SectionAggregator(int tag, PrismaticBarCrossSection &thesection,UniaxialMaterial &theAddition, int c,MaterialLoader *mat_ldr= nullptr);
+    SectionAggregator(MaterialHandler *mat_ldr= nullptr); 
+    SectionAggregator(int tag,MaterialHandler *mat_ldr= nullptr);
+    SectionAggregator(int tag, PrismaticBarCrossSection &theSection,const AggregatorAdditions &theAdditions,MaterialHandler *mat_ldr= nullptr); 
+    SectionAggregator(int tag, const AggregatorAdditions &theAdditions,MaterialHandler *mat_ldr= nullptr); 
+    SectionAggregator(int tag, PrismaticBarCrossSection &thesection,UniaxialMaterial &theAddition, int c,MaterialHandler *mat_ldr= nullptr);
     SectionAggregator(const SectionAggregator &otro);
     XC::SectionAggregator &operator=(const SectionAggregator &otro);
     ~SectionAggregator(void);

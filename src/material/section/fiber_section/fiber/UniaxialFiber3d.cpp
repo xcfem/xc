@@ -98,7 +98,7 @@ XC::UniaxialFiber3d::UniaxialFiber3d(int tag,const UniaxialMaterial &theMat,cons
 
 
 //! @brief Constructor.
-XC::UniaxialFiber3d::UniaxialFiber3d(int tag,const MaterialLoader &ldr,const std::string &nmbMat, const double &Area,const Vector &position,int classTag)
+XC::UniaxialFiber3d::UniaxialFiber3d(int tag,const MaterialHandler &ldr,const std::string &nmbMat, const double &Area,const Vector &position,int classTag)
   : UniaxialFiber(tag, classTag,ldr,nmbMat,Area)
   { set_position(position); }
 

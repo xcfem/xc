@@ -334,11 +334,11 @@ SET(preprocessor_mbt_matrices preprocessor/multi_block_topology/matrices/MatrizP
 
 SET(preprocessor_mbt preprocessor/multi_block_topology/ModelComponentContainerBase preprocessor/multi_block_topology/ReferenceFrame preprocessor/multi_block_topology/ReferenceFrameMap preprocessor/multi_block_topology/CartesianReferenceFrame3d preprocessor/multi_block_topology/MultiBlockTopology preprocessor/multi_block_topology/aux_meshing ${preprocessor_mbt_trf} ${preprocessor_mbt_entities} ${preprocessor_mbt_matrices} )
 
-SET(preprocessor_loaders preprocessor/PreprocessorContainer preprocessor/loaders/Loader preprocessor/loaders/NodeLoader preprocessor/loaders/ElementLoader preprocessor/loaders/ProtoElementLoader preprocessor/loaders/MaterialLoader preprocessor/loaders/BeamIntegratorLoader preprocessor/loaders/TransfCooLoader preprocessor/loaders/LoadLoaderMember preprocessor/loaders/LoadLoader preprocessor/loaders/ConstraintLoader)
+SET(preprocessor_prep_handlers preprocessor/PreprocessorContainer preprocessor/prep_handlers/PrepHandler preprocessor/prep_handlers/NodeHandler preprocessor/prep_handlers/ElementHandler preprocessor/prep_handlers/ProtoElementHandler preprocessor/prep_handlers/MaterialHandler preprocessor/prep_handlers/BeamIntegratorHandler preprocessor/prep_handlers/TransfCooHandler preprocessor/prep_handlers/LoadHandlerMember preprocessor/prep_handlers/LoadHandler preprocessor/prep_handlers/BoundaryCondHandler)
 
 SET(preprocessor_set_mgmt  preprocessor/set_mgmt/DqPtrsKDTree preprocessor/set_mgmt/DqPtrsNode preprocessor/set_mgmt/DqPtrsElem preprocessor/set_mgmt/DqPtrsConstraint preprocessor/set_mgmt/SetMeshComp preprocessor/set_mgmt/SetBase preprocessor/set_mgmt/SetEstruct preprocessor/set_mgmt/SetEntities preprocessor/set_mgmt/Set preprocessor/set_mgmt/SetFilaI preprocessor/set_mgmt/SetFilaJ preprocessor/set_mgmt/SetFilaK preprocessor/set_mgmt/MapSet)
 
-SET(preprocessor preprocessor/EntMdlrBase preprocessor/MeshingParams ${preprocessor_mbt} ${preprocessor_set_mgmt} ${preprocessor_loaders} preprocessor/Preprocessor)
+SET(preprocessor preprocessor/EntMdlrBase preprocessor/MeshingParams ${preprocessor_mbt} ${preprocessor_set_mgmt} ${preprocessor_prep_handlers} preprocessor/Preprocessor)
 
 SET(solution solution/analysis/ModelWrapper solution/AnalysisAggregation solution/AnalysisAggregationMap solution/analysis/MapModelWrapper solution/ProcSoluControl solution/ProcSolu)
 
@@ -350,7 +350,7 @@ TARGET_LINK_LIBRARIES(XcBib xc_utils xc_basic ${VTK_BIB} ${CGAL_LIBRARIES} ${Plo
 LINK_DIRECTORIES("/usr/lib/python2.7") # Not needed?
 add_definitions(-fno-strict-aliasing)
 # Define the wrapper library that wraps our library
-add_library(xc SHARED utility/export_utility material/export_material_base material/uniaxial/export_material_uniaxial material/nD/export_material_nD material/section/export_material_section material/section/export_material_fiber_section domain/export_domain domain/mesh/export_domain_mesh preprocessor/export_preprocessor_loaders preprocessor/export_preprocessor_build_model  preprocessor/export_preprocessor_sets preprocessor/export_preprocessor_main solution/export_solution python_interface)
+add_library(xc SHARED utility/export_utility material/export_material_base material/uniaxial/export_material_uniaxial material/nD/export_material_nD material/section/export_material_section material/section/export_material_fiber_section domain/export_domain domain/mesh/export_domain_mesh preprocessor/export_preprocessor_handlers preprocessor/export_preprocessor_build_model  preprocessor/export_preprocessor_sets preprocessor/export_preprocessor_main solution/export_solution python_interface)
 target_link_libraries(xc ${Boost_LIBRARIES} XcBib)
 # don't prepend wrapper library name with lib
 set_target_properties(xc PROPERTIES PREFIX "" )

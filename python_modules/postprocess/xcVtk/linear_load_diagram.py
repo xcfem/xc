@@ -23,7 +23,7 @@ class LinearLoadDiagram(cd.ColoredDiagram):
       tags= eLoad.elementTags
       for i in range(0,len(tags)):
         eTag= tags[i]
-        elem= preprocessor.getElementLoader.getElement(eTag)
+        elem= preprocessor.getElementHandler.getElement(eTag)
         if(self.component=='axialComponent'):
           self.vDir= elem.getJVector3d(True)
           indxDiagram= self.agregaDatosADiagrama(elem,indxDiagram,eLoad.axialComponent,eLoad.axialComponent)
@@ -41,7 +41,7 @@ class LinearLoadDiagram(cd.ColoredDiagram):
       eLoad= lIter.next()
   def dumpLoads(self, preprocessor, indxDiagram):
     preprocessor.resetLoadCase()
-    loadPatterns= preprocessor.getLoadLoader.getLoadPatterns
+    loadPatterns= preprocessor.getLoadHandler.getLoadPatterns
     loadPatterns.addToDomain(self.lpName)
     lp= loadPatterns[self.lpName]
     #Iterate over loaded elements.

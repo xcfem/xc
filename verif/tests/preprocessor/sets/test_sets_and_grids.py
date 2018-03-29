@@ -24,8 +24,8 @@ from model.sets import sets_mng as sets
 # *** PROBLEM
 FEcase= xc.FEProblem()
 prep=FEcase.getPreprocessor
-nodes= prep.getNodeLoader
-elements= prep.getElementLoader
+nodes= prep.getNodeHandler
+elements= prep.getElementHandler
 elements.dimElem= 3
 modelSpace= predefined_spaces.StructuralMechanics3D(nodes) #defines dimension of
                   #the space: nodes by three coordinates (x,y,z) and 

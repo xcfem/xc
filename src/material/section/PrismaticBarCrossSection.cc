@@ -37,7 +37,7 @@
 
 
 #include "material/section/ResponseId.h"
-#include "preprocessor/loaders/MaterialLoader.h"
+#include "preprocessor/prep_handlers/MaterialHandler.h"
 #include "material/section/interaction_diagram/InteractionDiagram.h"
 #include "xc_utils/src/geom/d1/Recta3d.h"
 #include "xc_utils/src/geom/d1/Recta2d.h"
@@ -48,7 +48,7 @@
 #include "xc_basic/src/util/inercia.h"
 
 //! @brief Constructor.
-XC::PrismaticBarCrossSection::PrismaticBarCrossSection(int tag, int classTag,MaterialLoader *mat_ldr)
+XC::PrismaticBarCrossSection::PrismaticBarCrossSection(int tag, int classTag,MaterialHandler *mat_ldr)
   : SectionForceDeformation(tag,classTag,mat_ldr) {}
 
 //! @brief Copy constructor.

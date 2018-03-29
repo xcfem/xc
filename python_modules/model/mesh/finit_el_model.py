@@ -43,12 +43,12 @@ class RawLineSetToMesh(SetToMesh):
 
     def getSeedElement(self, preprocessor):
         '''Return the element that will be use to mesh the set.'''
-        seedElemLoader= preprocessor.getElementLoader.seedElemLoader
-        seedElemLoader.defaultMaterial= self.matSect.name
-        seedElemLoader.dimElem= self.dimElemSpace
+        seedElemHandler= preprocessor.getElementHandler.seedElemHandler
+        seedElemHandler.defaultMaterial= self.matSect.name
+        seedElemHandler.dimElem= self.dimElemSpace
         #print 'name= ', self.coordinateTransformation.getName()
-        seedElemLoader.defaultTransformation= self.coordinateTransformation.getName()
-        return seedElemLoader.newElement(self.elemType,xc.ID([0,0]))
+        seedElemHandler.defaultTransformation= self.coordinateTransformation.getName()
+        return seedElemHandler.newElement(self.elemType,xc.ID([0,0]))
 
     def generateMesh(self, preprocessor):
         '''Generate the mesh for the line set. '''
@@ -61,7 +61,7 @@ class RawLineSetToMesh(SetToMesh):
 
 def getDefaultCoordinateTransformation(preprocessor,coordTransfName,coordTransfType,vDir):
     '''Creates a default coordinate transformation.''' 
-    trfs= preprocessor.getTransfCooLoader
+    trfs= preprocessor.getTransfCooHandler
     if coordTransfType.lower()=='pdelta':
         retval= trfs.newPDeltaCrdTransf3d(coordTransfName)
     elif coordTransfType.lower()=='corot':
@@ -121,9 +121,9 @@ class SurfSetToMesh(SetToMesh):
 
     def getSeedElement(self, preprocessor):
         '''Return the element that will be use to mesh the set.'''
-        seedElemLoader= preprocessor.getElementLoader.seedElemLoader
-        seedElemLoader.defaultMaterial= self.matSect.name
-        return seedElemLoader.newElement(self.elemType,xc.ID([0,0,0,0]))
+        seedElemHandler= preprocessor.getElementHandler.seedElemHandler
+        seedElemHandler.defaultMaterial= self.matSect.name
+        return seedElemHandler.newElement(self.elemType,xc.ID([0,0,0,0]))
 
     def generateMesh(self, preprocessor):
         '''Generate the mesh for the surface set.'''

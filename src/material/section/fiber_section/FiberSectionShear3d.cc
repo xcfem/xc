@@ -31,7 +31,7 @@
 #include <utility/matrix/Vector.h>
 #include <utility/matrix/Matrix.h>
 #include <utility/recorder/response/MaterialResponse.h>
-#include "preprocessor/loaders/MaterialLoader.h"
+#include "preprocessor/prep_handlers/MaterialHandler.h"
 
 
 #include "classTags.h"
@@ -117,7 +117,7 @@ void XC::FiberSectionShear3d::setRespVyVzT(const UniaxialMaterial *rvy,const Uni
   }
 
 //! @brief Constructor.
-XC::FiberSectionShear3d::FiberSectionShear3d(int tag, MaterialLoader *mat_ldr)
+XC::FiberSectionShear3d::FiberSectionShear3d(int tag, MaterialHandler *mat_ldr)
   : FiberSection3d(tag, SEC_TAG_FiberSectionShear3d,mat_ldr),
     respVy(nullptr), respVz(nullptr), respT(nullptr) {}
 
@@ -139,7 +139,7 @@ XC::FiberSectionShear3d &XC::FiberSectionShear3d::operator=(const FiberSectionSh
 //! @brief Asigna el material que define la respuesta a cortante según «y».
 void XC::FiberSectionShear3d::setRespVyByName(const std::string &nmb_mat)
   {
-    const Material *ptr_mat= material_loader->find_ptr(nmb_mat);
+    const Material *ptr_mat= material_handler->find_ptr(nmb_mat);
     if(ptr_mat)
       {
         const UniaxialMaterial *tmp= dynamic_cast<const UniaxialMaterial *>(ptr_mat);
@@ -163,7 +163,7 @@ XC::UniaxialMaterial *XC::FiberSectionShear3d::getRespVy(void)
 //! @brief Asigna el material que define la respuesta a cortante según «y».
 void XC::FiberSectionShear3d::setRespVzByName(const std::string &nmb_mat)
   {
-    const Material *ptr_mat= material_loader->find_ptr(nmb_mat);
+    const Material *ptr_mat= material_handler->find_ptr(nmb_mat);
     if(ptr_mat)
       {
         const UniaxialMaterial *tmp= dynamic_cast<const UniaxialMaterial *>(ptr_mat);
@@ -187,7 +187,7 @@ XC::UniaxialMaterial *XC::FiberSectionShear3d::getRespVz(void)
 //! @brief Asigna el material que define la respuesta a cortante según «y».
 void XC::FiberSectionShear3d::setRespTByName(const std::string &nmb_mat)
   {
-    const Material *ptr_mat= material_loader->find_ptr(nmb_mat);
+    const Material *ptr_mat= material_handler->find_ptr(nmb_mat);
     if(ptr_mat)
       {
         const UniaxialMaterial *tmp= dynamic_cast<const UniaxialMaterial *>(ptr_mat);

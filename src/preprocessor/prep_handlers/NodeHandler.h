@@ -24,12 +24,12 @@
 // along with this program.
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
-//NodeLoader.h
+//NodeHandler.h
 
 #ifndef NODELOADER_H
 #define NODELOADER_H
 
-#include "Loader.h"
+#include "PrepHandler.h"
 #include "xc_utils/src/geom/pos_vec/Pos3d.h"
 
 namespace XC {
@@ -39,7 +39,7 @@ class Node;
 //!  \ingroup Lodrs
 //! 
 //! @brief Node creation manager.
-class NodeLoader: public Loader
+class NodeHandler: public PrepHandler
   {
   private:
     size_t ndof_def_node; //!< Default number of DOFs for new nodes.
@@ -48,8 +48,8 @@ class NodeLoader: public Loader
     void free_mem(void);
     Node *new_node(const int &tag,const size_t &dim,const int &ndof,const double &x,const double &y=0.0,const double &z=0.0);
   public:
-    NodeLoader(Preprocessor *);
-    virtual ~NodeLoader(void);
+    NodeHandler(Preprocessor *);
+    virtual ~NodeHandler(void);
     const Node *get_seed_node(void) const
       { return seed_node; }
     Node *newNode(const double &x,const double &y,const double &z);

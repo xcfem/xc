@@ -47,7 +47,7 @@ F= 1e3 # Load magnitude (kN)
 # Problem type
 feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor   
-nodes= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeHandler
 modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
 nodes.defaultTag= 1 #First node number.
 nod= nodes.newNodeXYZ(0,0.0,0.0)
@@ -60,7 +60,7 @@ respT= typical_materials.defElasticMaterial(preprocessor, "respT",E) # Torsion r
 respVy= typical_materials.defElasticMaterial(preprocessor, "respVy",E) # Shear response in y direction.
 respVz= typical_materials.defElasticMaterial(preprocessor, "respVz",E) # Shear response in y direction.
 # Secciones
-testQuadRegion= preprocessor.getMaterialLoader.newSectionGeometry("testQuadRegion")
+testQuadRegion= preprocessor.getMaterialHandler.newSectionGeometry("testQuadRegion")
 y1= width/2.0
 z1= depth/2.0
 regiones= testQuadRegion.getRegions
@@ -69,7 +69,7 @@ elast.nDivIJ= nDivIJ
 elast.nDivJK= nDivJK
 elast.pMin= geom.Pos2d(y0-y1,z0-z1)
 elast.pMax= geom.Pos2d(y0+y1,z0+z1)
-materiales= preprocessor.getMaterialLoader
+materiales= preprocessor.getMaterialHandler
 quadFibers= materiales.newMaterial("fiber_section_3d","quadFibers")
 fiberSectionRepr= quadFibers.getFiberSectionRepr()
 fiberSectionRepr.setGeomNamed("testQuadRegion")
@@ -80,7 +80,7 @@ sa.setSection("quadFibers")
 sa.setAdditions(["T","Vy","Vz"],["respT","respVy","respVz"])
 
 # Elements definition
-elements= preprocessor.getElementLoader
+elements= preprocessor.getElementHandler
 elements.defaultMaterial= "sa"
 elements.dimElem= 1 # Dimension of element space
 elements.defaultTag= 1
@@ -91,7 +91,7 @@ zl= elements.newElement("ZeroLengthSection",xc.ID([1,2]))
 modelSpace.fixNode000_000(1)
 
 # Loads definition
-cargas= preprocessor.getLoadLoader
+cargas= preprocessor.getLoadHandler
 casos= cargas.getLoadPatterns
 #Load modulation.
 ts= casos.newTimeSeries("constant_ts","ts")
@@ -174,7 +174,7 @@ vJ= xc.Vector([0,0,0])
 vK= xc.Vector([0,0,0])
 
 for hip in listaHipotesis:
-  cargas= preprocessor.getLoadLoader
+  cargas= preprocessor.getLoadHandler
   cargas.addToDomain(hip)
   ok= solve()
   if(ok==0):

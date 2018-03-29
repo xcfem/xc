@@ -53,7 +53,7 @@ class BaseElasticSection: public PrismaticBarCrossSection
 
 
   public:
-    BaseElasticSection(int tag,int classTag,const size_t &dim,MaterialLoader *mat_ldr= nullptr);    
+    BaseElasticSection(int tag,int classTag,const size_t &dim,MaterialHandler *mat_ldr= nullptr);    
 
     int commitState(void);
     int revertToLastCommit (void);

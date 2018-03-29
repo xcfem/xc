@@ -27,7 +27,7 @@ rho= 0.0 # Densidad
 feProblem= xc.FEProblem()
 feProblem.logFileName= "/tmp/borrar.log" # Ignore warning messages
 preprocessor=  feProblem.getPreprocessor
-nodes= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeHandler
 
 modelSpace= predefined_spaces.SolidMechanics2D(nodes)# Materials definition
 
@@ -36,9 +36,9 @@ elast2d= typical_materials.defElasticIsotropicPlaneStress(preprocessor, "elast2d
 
 nodes.newSeedNode()
 
-seedElemLoader= preprocessor.getElementLoader.seedElemLoader
-seedElemLoader.defaultMaterial= "elast2d"
-elem= seedElemLoader.newElement("FourNodeQuad",xc.ID([0,0,0,0]))
+seedElemHandler= preprocessor.getElementHandler.seedElemHandler
+seedElemHandler.defaultMaterial= "elast2d"
+elem= seedElemHandler.newElement("FourNodeQuad",xc.ID([0,0,0,0]))
 
 
 points= preprocessor.getMultiBlockTopology.getPoints
@@ -100,7 +100,7 @@ nnodDom= mesh.getNumNodes()
 
 ''' 
 print "number of nodes: ",nnod
-nodes= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeHandler
 
 for_each
   print "  node: ",tag," x= ",coord[0],", y= ",coord[1]

@@ -31,7 +31,7 @@ fPret= sigmaPret*area # Prestressing force (pounds)
 # Model definition
 feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
-nodes= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeHandler
 # Problem type
 modelSpace= predefined_spaces.StructuralMechanics2D(nodes)
 nodes.newSeedNode()
@@ -44,11 +44,11 @@ typical_materials.defCableMaterial(preprocessor, "cable",E,sigmaPret,Mass)
     cross section of unit area.'''
     
 # Seed element definition
-seedElemLoader= preprocessor.getElementLoader.seedElemLoader
-seedElemLoader.defaultMaterial= "cable"
-seedElemLoader.dimElem= 2 # Dimension of element space
-seedElemLoader.defaultTag= 1 #Tag for the next element.
-truss= seedElemLoader.newElement("CorotTruss",xc.ID([0,0]))
+seedElemHandler= preprocessor.getElementHandler.seedElemHandler
+seedElemHandler.defaultMaterial= "cable"
+seedElemHandler.dimElem= 2 # Dimension of element space
+seedElemHandler.defaultTag= 1 #Tag for the next element.
+truss= seedElemHandler.newElement("CorotTruss",xc.ID([0,0]))
 truss.area= area
 # seed element definition ends
 
@@ -90,7 +90,7 @@ solver= soe.newSolver("band_gen_lin_lapack_solver")
 analysis= solu.newAnalysis("static_analysis","analysisAggregation","")
 result= analysis.analyze(Nstep)
 
-elements= preprocessor.getElementLoader
+elements= preprocessor.getElementHandler
 ele1= elements.getElement(1)
 traccion= ele1.getN()
 sigma= ele1.getMaterial().getStress()

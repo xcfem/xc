@@ -33,7 +33,7 @@
 
 #include "preprocessor/multi_block_topology/matrices/TritrizPtrElem.h"
 #include "preprocessor/multi_block_topology/aux_meshing.h"
-#include "preprocessor/loaders/LoadLoader.h"
+#include "preprocessor/prep_handlers/LoadHandler.h"
 #include "domain/load/plane/BidimStrainLoad.h"
 #include "med.h"
 #include "vtkCellType.h"

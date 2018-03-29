@@ -29,7 +29,7 @@ class LoadCase(object):
     def create(self):
         '''Create the load case and set it as current
         '''
-        lPatterns=self.preprocessor.getLoadLoader.getLoadPatterns
+        lPatterns=self.preprocessor.getLoadHandler.getLoadPatterns
         lPatterns.newTimeSeries(self.timeSType,self.timeSName)
         lPatterns.currentTimeSeries=self.timeSName
         lPatterns.newLoadPattern(self.loadPType,self.name)
@@ -46,8 +46,8 @@ class LoadCaseManager(object):
     '''Manager for XC load cases.'''
     def __init__(self,preprocessor):
        self.prep= preprocessor
-       self.loadLoader= preprocessor.getLoadLoader
-       self.loadPatterns= self.loadLoader.getLoadPatterns
+       self.loadHandler= preprocessor.getLoadHandler
+       self.loadPatterns= self.loadHandler.getLoadPatterns
        self.timeSeries= dict()
        self.loadCases= dict()
 
@@ -83,10 +83,10 @@ def resetAccionesConstantTS(preprocessor,tipoTimeSeries, nmbTimeSeries, fct):
     :param  nmbTimeSeries: time series name.
     :param  fct: Factor
     '''
-    constraints= preprocessor.getConstraintLoader
+    constraints= preprocessor.getBoundaryCondHandler
     lps= constraints.getActiveLoadPatterns
     lps.clearrAll()
-    loads= preprocessor.getLoadLoader
+    loads= preprocessor.getLoadHandler
     casos= loads.getLoadPatterns
     loads.clearAll()
     ts= casos.newTimeSeries(tipoTimeSeries,nmbTimeSeries)

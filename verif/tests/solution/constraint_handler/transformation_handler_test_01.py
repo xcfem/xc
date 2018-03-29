@@ -26,7 +26,7 @@ from materials import typical_materials
 # Model definition
 feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
-nodes= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeHandler
 # Problem type
 modelSpace= predefined_spaces.SolidMechanics2D(nodes)
 
@@ -44,7 +44,7 @@ elast= typical_materials.defElasticMaterial(preprocessor, "elast",E)
     cross section of unit area.'''
     
 # Elements definition
-elements= preprocessor.getElementLoader
+elements= preprocessor.getElementHandler
 elements.defaultMaterial= "elast"
 elements.dimElem= 2 # Dimension of element space
 #  sintaxis: truss[<tag>] 
@@ -57,7 +57,7 @@ truss= elements.newElement("Truss",xc.ID([3,4]));
 truss.area= 1
     
 # Constraints
-constraints= preprocessor.getConstraintLoader
+constraints= preprocessor.getBoundaryCondHandler
 #
 spc= constraints.newSPConstraint(1,0,0.0) # Node 1
 spc= constraints.newSPConstraint(1,1,0.0)
@@ -68,7 +68,7 @@ spc= constraints.newSPConstraint(3,0,0.0) # Node 3
 
 
 # Loads definition
-cargas= preprocessor.getLoadLoader
+cargas= preprocessor.getLoadHandler
 casos= cargas.getLoadPatterns
 #Load modulation.
 ts= casos.newTimeSeries("constant_ts","ts")
@@ -91,7 +91,7 @@ execfile(pth+"/../../aux/solu_transf_handler.py")
 
 
 nodes.calculateNodalReactions(True)
-nodes= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeHandler
 R1= nodes.getNode(4).getReaction[1] 
 R2= nodes.getNode(1).getReaction[1] 
 

@@ -283,7 +283,7 @@ XC::Vector XC::EntMdlr::getSimpsonWeights(const std::string &ijk,const std::stri
 //! @brief Creates a node at the position being passed as parameter.
 XC::Node *XC::EntMdlr::create_node(const Pos3d &pos,size_t i,size_t j, size_t k)
   {
-    Node *retval= getPreprocessor()->getNodeLoader().newNode(pos);
+    Node *retval= getPreprocessor()->getNodeHandler().newNode(pos);
     ttzNodes(i,j,k)= retval;
     return retval;
   }
@@ -335,7 +335,7 @@ bool XC::EntMdlr::create_elements(meshing_dir dm)
                   if(verbosity>4)
                     std::clog << "Creating elements of entity: '"
 			      << getName() << "'...";   
-                  const Element *smll= getPreprocessor()->getElementLoader().get_seed_element();
+                  const Element *smll= getPreprocessor()->getElementHandler().get_seed_element();
                   if(smll)
                     {
                       ttzElements= smll->put_on_mesh(ttzNodes,dm);

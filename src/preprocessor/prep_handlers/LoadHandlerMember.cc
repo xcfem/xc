@@ -24,60 +24,60 @@
 // along with this program.
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
-//LoadLoaderMember.cc
+//LoadHandlerMember.cc
 
-#include "LoadLoaderMember.h"
-#include "preprocessor/loaders/LoadLoader.h"
+#include "LoadHandlerMember.h"
+#include "preprocessor/prep_handlers/LoadHandler.h"
 
 
 //! @brief Default constructor.
-XC::LoadLoaderMember::LoadLoaderMember(LoadLoader *owr)
+XC::LoadHandlerMember::LoadHandlerMember(LoadHandler *owr)
   : EntCmd(owr), MovableObject(0) {}
 
 
 //! @brief Returns the owner.
-const XC::LoadLoader *XC::LoadLoaderMember::getLoadLoader(void) const
+const XC::LoadHandler *XC::LoadHandlerMember::getLoadHandler(void) const
   {
-    const LoadLoader *loader= dynamic_cast<const LoadLoader *>(Owner());
-    if(!loader)
-      std::cerr << "(LoadLoaderMember) need an owner." << std::endl;
-    return loader;
+    const LoadHandler *handler= dynamic_cast<const LoadHandler *>(Owner());
+    if(!handler)
+      std::cerr << "(LoadHandlerMember) need an owner." << std::endl;
+    return handler;
   }
 
 //! @brief Returns the owner.
-XC::LoadLoader *XC::LoadLoaderMember::getLoadLoader(void)
+XC::LoadHandler *XC::LoadHandlerMember::getLoadHandler(void)
   {
-    LoadLoader *loader= dynamic_cast<LoadLoader *>(Owner());
-    if(!loader)
-      std::cerr << "(LoadLoaderMember) need an owner." << std::endl;
-    return loader;
+    LoadHandler *handler= dynamic_cast<LoadHandler *>(Owner());
+    if(!handler)
+      std::cerr << "(LoadHandlerMember) need an owner." << std::endl;
+    return handler;
   }
 
 //! @brief Returns the domain.
-const XC::Domain *XC::LoadLoaderMember::getDomain(void) const
+const XC::Domain *XC::LoadHandlerMember::getDomain(void) const
   {
     const Domain *retval= nullptr;
-    const LoadLoader *loader= getLoadLoader();
-    if(loader)
-      retval= loader->getDomain();
+    const LoadHandler *handler= getLoadHandler();
+    if(handler)
+      retval= handler->getDomain();
     return retval;
   }
 
 //! @brief Returns the domain.
-XC::Domain *XC::LoadLoaderMember::getDomain(void)
+XC::Domain *XC::LoadHandlerMember::getDomain(void)
   {
     Domain *retval= nullptr;
-    LoadLoader *loader= getLoadLoader();
-    if(loader)
-      retval= loader->getDomain();
+    LoadHandler *handler= getLoadHandler();
+    if(handler)
+      retval= handler->getDomain();
     return retval;
   }
 
 //! @brief Returns the tag para el siguiente load pattern.
-int &XC::LoadLoaderMember::getTagLP(void)
-  { return getLoadLoader()->getTagLP(); }
+int &XC::LoadHandlerMember::getTagLP(void)
+  { return getLoadHandler()->getTagLP(); }
 
 //! @brief Returns the tag para el siguiente load pattern.
-const int &XC::LoadLoaderMember::getTagLP(void) const
-  { return getLoadLoader()->getTagLP(); }
+const int &XC::LoadHandlerMember::getTagLP(void) const
+  { return getLoadHandler()->getTagLP(); }
 

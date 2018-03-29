@@ -24,13 +24,13 @@ def nuevosZeroLengthShell(nmbS, tagElem, offset):
   idNod3= idSecc2
   idNod4= idSecc2+1
 
-  nodes= preprocessor.getNodeLoader
+  nodes= preprocessor.getNodeHandler
   nod1= nodes.newNodeIDZYZ(idNod1,idNod1,0,0)
   nod2= nodes.newNodeIDZYZ(idNod2,idNod1,0,0)
   nod3= nodes.newNodeIDZYZ(idNod3,0,idNod3,0)
   nod4= nodes.newNodeIDZYZ(idNod4,0,idNod3,0)
 
-  constraints= preprocessor.getConstraintLoader  # Boundary conditions.
+  constraints= preprocessor.getBoundaryCondHandler  # Boundary conditions.
   constraints.newSPConstraint(idNod1,0,0.0) # idNod1, DOF, constrValue
   constraints.newSPConstraint(idNod1,1,0.0)
   constraints.newSPConstraint(idNod1,2,0.0)
@@ -45,7 +45,7 @@ def nuevosZeroLengthShell(nmbS, tagElem, offset):
   constraints.newSPConstraint(idNod2,5,0.0)
 
   # Definimos elementos
-  elems= preprocessor.getElementLoader
+  elems= preprocessor.getElementHandler
   elems.dimElem= 3 # Tridimensional space.
   elems.defaultMaterial= nmbS
   elems.defaultTag= idSecc1 #Next element number.
@@ -61,9 +61,9 @@ def simulaShellElemFromTable(preprocessor,nmbDBase, nmbTablaElem, sectionName, o
      nmbTableElem: Nombre de la tabla que contiene los índices de elemento.
      sectionName: Nombre de la sección que se asigna a cada elemento.
   '''
-  nodes= preprocessor.getNodeLoader
+  nodes= preprocessor.getNodeHandler
   modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
-  elements= preprocessor.getElementLoader
+  elements= preprocessor.getElementHandler
   elements.dimElem= 1
   elements.defaultMaterial= sectionName
 
@@ -89,7 +89,7 @@ def simulaCargasXYFromTable(nmbQuery, nmbTbEsf, idElem, offset):
   idSecc2= offset+idSecc1
   iNod2= idSecc2+1
 
-  cargas= preprocessor.getLoadLoader
+  cargas= preprocessor.getLoadHandler
   casos= cargas.getLoadPatterns
 
   lmsg.info("Cargando elemento: ",int(idElem),"\n")

@@ -24,15 +24,15 @@
 // along with this program.
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
-//ProtoElementLoader.h
+//ProtoElementHandler.h
 
-#ifndef PROTOELEMENTLOADER_H
-#define PROTOELEMENTLOADER_H
+#ifndef PROTOELEMENTHANDLER_H
+#define PROTOELEMENTHANDLER_H
 
-#include "Loader.h"
-#include "MaterialLoader.h"
-#include "TransfCooLoader.h"
-#include "BeamIntegratorLoader.h"
+#include "PrepHandler.h"
+#include "MaterialHandler.h"
+#include "TransfCooHandler.h"
+#include "BeamIntegratorHandler.h"
 #include <map>
 
 namespace XC {
@@ -46,7 +46,7 @@ class Element;
 //! directly (specifiying the finite element type, material, nodes,...) creating
 //! one element after another or you can specify a "seed element" that will be
 //! used by the meshing routines.
-class ProtoElementLoader: public Loader
+class ProtoElementHandler: public PrepHandler
   {
     Element *create_element(const std::string &cmd,int tag_elem);
 
@@ -58,20 +58,20 @@ class ProtoElementLoader: public Loader
     int dir; //!< If required (i.e. for zero length elements), direction of the element material.
   protected:
     virtual void add(Element *)= 0;
-    const MaterialLoader &get_material_loader(void) const;
-    MaterialLoader::const_iterator get_iter_material(void) const;
+    const MaterialHandler &get_material_handler(void) const;
+    MaterialHandler::const_iterator get_iter_material(void) const;
     const Material *get_ptr_material(void) const;
-    const TransfCooLoader &get_transf_coo_loader(void) const;
-    TransfCooLoader::const_iterator get_iter_transf_coo(void) const;
+    const TransfCooHandler &get_transf_coo_handler(void) const;
+    TransfCooHandler::const_iterator get_iter_transf_coo(void) const;
     const CrdTransf *get_ptr_transf_coo(void) const;
-    const BeamIntegratorLoader &get_beam_integrator_loader(void) const;
-    BeamIntegratorLoader::const_iterator get_iter_beam_integrator(void) const;
+    const BeamIntegratorHandler &get_beam_integrator_handler(void) const;
+    BeamIntegratorHandler::const_iterator get_iter_beam_integrator(void) const;
     const BeamIntegration *get_ptr_beam_integrator(void) const;
 
     friend class Preprocessor;
 
   public:
-    ProtoElementLoader(Preprocessor *preprocessor);
+    ProtoElementHandler(Preprocessor *preprocessor);
     virtual int getDefaultTag(void) const= 0;
 
     void setDefaultMaterial(const std::string &);

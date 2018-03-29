@@ -3,7 +3,7 @@
 def VtkCreaStrArraySetData(preprocessor,setName,entTypeName,nmbArray,data):
   # Crea una matriz de cadenas de caracteres con datos de los puntos definidas en el conjunto.
   #Creamos el actor para las líneas.
-  st= preprocessor.getSetLoader.getSet(setName)
+  st= preprocessor.getSets.getSet(setName)
   
     # \preprocessor{\cad{\sets{\@setName
     #   {

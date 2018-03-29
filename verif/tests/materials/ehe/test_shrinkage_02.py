@@ -49,7 +49,7 @@ from materials import typical_materials
 # Problem type
 feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
-nodes= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeHandler
 modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
 nodes.defaultTag= 1 #First node number.
 nod1= nodes.newNodeXYZ(0,0,0)
@@ -72,7 +72,7 @@ hLosa= typical_materials.defElasticMembranePlateSection(preprocessor, "hLosa",Ec
 
 prestressingSteel= typical_materials.defSteel02(preprocessor, "prestressingSteel",Ep,fy,0.001,tInic)
 
-elements= preprocessor.getElementLoader
+elements= preprocessor.getElementHandler
 # Reinforced concrete deck
 elements.defaultMaterial= "hLosa"
 elements.defaultTag= 1
@@ -113,7 +113,7 @@ modelSpace.fixNode000_000(5)
 modelSpace.fixNode000_000(9)
 
 # Loads definition
-cargas= preprocessor.getLoadLoader
+cargas= preprocessor.getLoadHandler
 
 casos= cargas.getLoadPatterns
 
@@ -129,7 +129,7 @@ lpSC= casos.newLoadPattern("default","SC")
 lpVT= casos.newLoadPattern("default","VT")
 lpNV= casos.newLoadPattern("default","NV")
 
-nodes= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeHandler
 nod4= nodes.getNode(4)
 nod8= nodes.getNode(8)
 nod12= nodes.getNode(12)
@@ -211,7 +211,7 @@ dXMin=1e9
 dXMax=-1e9
 
 def procesResultVerif(tagComb, nmbComb):
-  nodes= preprocessor.getNodeLoader
+  nodes= preprocessor.getNodeHandler
   nod8= nodes.getNode(8)
   deltaX= nod8.getDisp[0] # x displacement of node 8
   global dXMin; dXMin= min(dXMin,deltaX)

@@ -33,7 +33,7 @@
 
 namespace XC {
 class UniaxialMaterial;
-class MaterialLoader;
+class MaterialHandler;
 
 //! \ingroup MATSCCFibers
 //
@@ -53,13 +53,13 @@ class UniaxialFiber: public Fiber
     UniaxialFiber(int classTag);
     UniaxialFiber(int tag, int classTag,double Area);
     UniaxialFiber(int tag, int classTag,const UniaxialMaterial &,const double &);
-    UniaxialFiber(int tag, int classTag,const MaterialLoader &,const std::string &,const double &);
+    UniaxialFiber(int tag, int classTag,const MaterialHandler &,const std::string &,const double &);
     UniaxialFiber(const UniaxialFiber &);
     UniaxialFiber &operator=(const UniaxialFiber &);
     ~UniaxialFiber(void);
 
     void setMaterial(const UniaxialMaterial *theMat);
-    void setMaterial(const MaterialLoader &ldr,const std::string &nmbMat);
+    void setMaterial(const MaterialHandler &ldr,const std::string &nmbMat);
 
     int commitState(void);
     int revertToLastCommit(void);    

@@ -26,7 +26,7 @@ L= 1 # Element length expressed in meters.
 # Problem type
 feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
-nodes= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeHandler
 modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
 nodes.defaultTag= 1 #First node number.
 nod= nodes.newNodeXYZ(0.0,0.0,0.0)
@@ -40,7 +40,7 @@ E= 210e9 # Young modulus of the steel.
 steel= typical_materials.defSteel01(preprocessor, "steel",E,fy,0.001)
 
 # Secciones
-quadFibersGeom= preprocessor.getMaterialLoader.newSectionGeometry("quadFibersGeom")
+quadFibersGeom= preprocessor.getMaterialHandler.newSectionGeometry("quadFibersGeom")
 y1= h/2.0
 z1= b/2.0
 regiones= quadFibersGeom.getRegions
@@ -49,7 +49,7 @@ steel.nDivIJ= nDivIJ
 steel.nDivJK= nDivJK
 steel.pMin= geom.Pos2d(y0-y1,z0-z1)
 steel.pMax= geom.Pos2d(y0+y1,z0+z1)
-quadFibers= preprocessor.getMaterialLoader.newMaterial("fiber_section_3d","quadFibers")
+quadFibers= preprocessor.getMaterialHandler.newMaterial("fiber_section_3d","quadFibers")
 fiberSectionRepr= quadFibers.getFiberSectionRepr()
 fiberSectionRepr.setGeomNamed("quadFibersGeom")
 quadFibers.setupFibers()
@@ -58,7 +58,7 @@ A= fibers.getArea
 
 
 # Elements definition
-elements= preprocessor.getElementLoader
+elements= preprocessor.getElementHandler
 elements.defaultTransformation= "lin"
 elements.defaultMaterial= "quadFibers"
 beam3d= elements.newElement("ForceBeamColumn3d",xc.ID([1,2]));

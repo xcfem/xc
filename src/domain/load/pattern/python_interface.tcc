@@ -79,7 +79,7 @@ class_<XC::LoadCombinationMap, boost::noncopyable>("LoadCombinationMap")
 //.def(map_indexing_suite<XC::LoadCombinationMap>() )
   ;
 
-class_<XC::LoadCombinationGroup, bases<XC::LoadLoaderMember,XC::LoadCombinationMap>, boost::noncopyable >("LoadCombinationGroup", no_init)
+class_<XC::LoadCombinationGroup, bases<XC::LoadHandlerMember,XC::LoadCombinationMap>, boost::noncopyable >("LoadCombinationGroup", no_init)
   .def("newLoadCombination", &XC::LoadCombinationGroup::newLoadCombination,return_internal_reference<>(),"Creates a new load combination.")
   .def("addToDomain", &XC::LoadCombinationGroup::addToDomain,return_internal_reference<>(),"Add combination to the domain.")
   .def("remove", &XC::LoadCombinationGroup::remove,"Remove combination.")
@@ -108,7 +108,7 @@ class_<XC::TimeSeriesIntegrator , bases<XC::MovableObject>, boost::noncopyable >
 const XC::LoadPattern *(XC::MapLoadPatterns::*buscaLoadPatternByName)(const std::string &) const= &XC::MapLoadPatterns::buscaLoadPattern;
 XC::MapLoadPatterns::const_iterator (XC::MapLoadPatterns::*cBegin)(void) const= &XC::MapLoadPatterns::begin;
 XC::MapLoadPatterns::const_iterator (XC::MapLoadPatterns::*cEnd)(void) const= &XC::MapLoadPatterns::end;
-class_<XC::MapLoadPatterns, bases<XC::LoadLoaderMember>, boost::noncopyable >("MapLoadPatterns", no_init)
+class_<XC::MapLoadPatterns, bases<XC::LoadHandlerMember>, boost::noncopyable >("MapLoadPatterns", no_init)
   .add_property("defaultElementLoadTag", make_function( &XC::MapLoadPatterns::getCurrentElementLoadTag, return_value_policy<copy_const_reference>() ), &XC::MapLoadPatterns::setCurrentElementLoadTag)
   .add_property("defaultNodeLoadTag", make_function( &XC::MapLoadPatterns::getCurrentElementLoadTag, return_value_policy<copy_const_reference>() ), &XC::MapLoadPatterns::setCurrentElementLoadTag)
   .add_property("currentTimeSeries", make_function( &XC::MapLoadPatterns::getCurrentTimeSeries, return_internal_reference<>() ), &XC::MapLoadPatterns::setCurrentTimeSeries)

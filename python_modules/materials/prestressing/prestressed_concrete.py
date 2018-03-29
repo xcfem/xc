@@ -132,9 +132,9 @@ class PrestressTendon(object):
             tendonSet=setsMng.getSet(setName)
         else:
             tendonSet=setsMng.defSet(setName)
-        nodes= preprocessor.getNodeLoader
-        elems= preprocessor.getElementLoader
-        elems.dimElem= preprocessor.getNodeLoader.dimSpace
+        nodes= preprocessor.getNodeHandler
+        elems= preprocessor.getElementHandler
+        elems.dimElem= preprocessor.getNodeHandler.dimSpace
         elems.defaultMaterial=materialName
         elems.defaultTransformation=crdTransfName
         nEnd2=nodes.newNodeXYZ(self.fineCoordMtr[0][0],self.fineCoordMtr[1][0],self.fineCoordMtr[2][0])

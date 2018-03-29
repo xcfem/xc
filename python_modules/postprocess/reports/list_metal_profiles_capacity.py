@@ -41,7 +41,7 @@ def listSteelShapeTNStrengthElasticRange(setName, fName, titulo):
   whose material is a steel shape.
   '''
   printTNListingHeaderSteelShape(fName,titulo) 
-  st= preprocessor.getSetLoader.getSet(setName)
+  st= preprocessor.getSets.getSet(setName)
   elems= st.getElements()
   tagFCTNCPCP= 0
   FCTNCPCP= 0
@@ -94,7 +94,7 @@ def listSteelShapeVStrength(setName, fName, titulo):
   whose material is a steel shape.
   '''
   printVListingHeaderSteelShape(fName,titulo) 
-  st= preprocessor.getSetLoader.getSet(setName)
+  st= preprocessor.getSets.getSet(setName)
   elems= st.getElements()
   tagFCTNCPCP= 0
   FCTNCPCP= 0

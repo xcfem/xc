@@ -7,7 +7,7 @@ def listNodeDisplacements(preprocessor,nmbComb,nodeList, fmt, fName, encab, tit)
   idsCampos= "Caso & IdN & Ux & Uy & Uz & Rx & Ry & Rz \\\\\n - & - & mm & mm & mm & rad & rad & rad "
   cabeceraSupertabular(fName,8,defCampos,idsCampos,caption)
 
-  nodes= preprocessor.getNodeLoader
+  nodes= preprocessor.getNodeHandler
   for iNode in nodeList:
     fName.write(nmbComb," & ",iNode," & ")
     nod= nodes.getNode(iNode)

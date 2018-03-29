@@ -32,7 +32,7 @@ NumDiv= 10
 # Problem type
 feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
-nodes= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeHandler
 
 modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
 # Define materials
@@ -52,10 +52,10 @@ s.nDivJ= NumDiv
 
 nodes.newSeedNode()
 
-seedElemLoader= preprocessor.getElementLoader.seedElemLoader
-seedElemLoader.defaultMaterial= "elast"
-seedElemLoader.defaultTag= 1
-elem= seedElemLoader.newElement("ShellMITC4",xc.ID([0,0,0,0]))
+seedElemHandler= preprocessor.getElementHandler.seedElemHandler
+seedElemHandler.defaultMaterial= "elast"
+seedElemHandler.defaultTag= 1
+elem= seedElemHandler.newElement("ShellMITC4",xc.ID([0,0,0,0]))
 
 f1= preprocessor.getSets.getSet("f1")
 f1.genMesh(xc.meshDir.I)

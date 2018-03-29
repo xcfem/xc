@@ -36,7 +36,7 @@ numElementGroups= None
 feProblem= xc.FEProblem()
 feProblem.logFileName= "/tmp/borrar.log" # Para no imprimir mensajes de advertencia
 preprocessor=  feProblem.getPreprocessor
-nodes= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeHandler
 modelSpace= predefined_spaces.SolidMechanics2D(nodes)
 
 
@@ -54,7 +54,7 @@ nod4= nodes.newNodeXY(0,1)
 
 elast2d= typical_materials.defElasticIsotropicPlaneStress(preprocessor, "elast2d",E,nu,rho)
 # Elements definition
-elements= preprocessor.getElementLoader
+elements= preprocessor.getElementHandler
 elements.defaultMaterial= "elast2d"
 quad4n= elements.newElement("FourNodeQuad",xc.ID([101,102,103,104]))
 quad4n.commitState()

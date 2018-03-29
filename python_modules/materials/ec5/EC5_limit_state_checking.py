@@ -48,7 +48,7 @@ class EC5TimberRectCrossSection(section_properties.RectangularSection):
 
   def installElementElasticStressesControlRecorder(self,recorderName, elemSet):
     preprocessor= elemSet.owner.getPreprocessor
-    nodes= preprocessor.getNodeLoader
+    nodes= preprocessor.getNodeHandler
     domain= preprocessor.getDomain
     recorder= domain.newRecorder(recorderName,None);
     recorder.setElements(elemSet.getTags())

@@ -24,9 +24,9 @@
 // along with this program.
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
-//ProtoElementLoader.cc
+//ProtoElementHandler.cc
 
-#include "ProtoElementLoader.h"
+#include "ProtoElementHandler.h"
 #include "create_elem.h"
 
 #include "domain/mesh/element/truss_beam_column/truss/CorotTruss.h"
@@ -90,46 +90,46 @@
 
 
 //! @brief Default constructor.
-XC::ProtoElementLoader::ProtoElementLoader(Preprocessor *preprocessor)
-  : Loader(preprocessor), nmb_mat("nil"), num_sec(3), dim_elem(0), nmb_transf("nil"), nmb_integ("Lobatto"), dir(0)
+XC::ProtoElementHandler::ProtoElementHandler(Preprocessor *preprocessor)
+  : PrepHandler(preprocessor), nmb_mat("nil"), num_sec(3), dim_elem(0), nmb_transf("nil"), nmb_integ("Lobatto"), dir(0)
  {}
 
 //! @brief Returns a reference to the material handler.
-const XC::MaterialLoader &XC::ProtoElementLoader::get_material_loader(void) const
-  { return getPreprocessor()->getMaterialLoader(); }
+const XC::MaterialHandler &XC::ProtoElementHandler::get_material_handler(void) const
+  { return getPreprocessor()->getMaterialHandler(); }
 
 //! @brief Returns an iterator al material que se especifica en nmb_mat.
-XC::MaterialLoader::const_iterator XC::ProtoElementLoader::get_iter_material(void) const
-  { return getPreprocessor()->getMaterialLoader().find(nmb_mat); }
+XC::MaterialHandler::const_iterator XC::ProtoElementHandler::get_iter_material(void) const
+  { return getPreprocessor()->getMaterialHandler().find(nmb_mat); }
 
 //! @brief Returns a pointer to material que se especifica en nmb_mat.
-const XC::Material *XC::ProtoElementLoader::get_ptr_material(void) const
+const XC::Material *XC::ProtoElementHandler::get_ptr_material(void) const
   {
     Material *retval= nullptr;
-    MaterialLoader::const_iterator imat= get_iter_material();
-    if(imat!= get_material_loader().end())
+    MaterialHandler::const_iterator imat= get_iter_material();
+    if(imat!= get_material_handler().end())
       retval= imat->second;
     else 
-      std::cerr << "ProtoElementLoader - material: '" 
+      std::cerr << "ProtoElementHandler - material: '" 
                 << nmb_mat << "' not found.\n";
     return retval;
   }
 
 //! @brief Returns a reference to de integrator handler.
-const XC::BeamIntegratorLoader &XC::ProtoElementLoader::get_beam_integrator_loader(void) const
-  { return getPreprocessor()->getBeamIntegratorLoader(); }
+const XC::BeamIntegratorHandler &XC::ProtoElementHandler::get_beam_integrator_handler(void) const
+  { return getPreprocessor()->getBeamIntegratorHandler(); }
 
 //! @brief Returns an iterator al integrator que se especifica en nmb_integ.
-XC::BeamIntegratorLoader::const_iterator XC::ProtoElementLoader::get_iter_beam_integrator(void) const
-  { return getPreprocessor()->getBeamIntegratorLoader().find(nmb_integ); }
+XC::BeamIntegratorHandler::const_iterator XC::ProtoElementHandler::get_iter_beam_integrator(void) const
+  { return getPreprocessor()->getBeamIntegratorHandler().find(nmb_integ); }
 
 
 //! @brief Returns a pointer to integrator que se especifica en nmb_integ.
-const XC::BeamIntegration *XC::ProtoElementLoader::get_ptr_beam_integrator(void) const
+const XC::BeamIntegration *XC::ProtoElementHandler::get_ptr_beam_integrator(void) const
   {
     BeamIntegration *retval= nullptr;
-    BeamIntegratorLoader::const_iterator iInteg= get_iter_beam_integrator();
-    if(iInteg!= get_beam_integrator_loader().end())
+    BeamIntegratorHandler::const_iterator iInteg= get_iter_beam_integrator();
+    if(iInteg!= get_beam_integrator_handler().end())
       retval= iInteg->second;
     else
       if(verbosity>0)
@@ -139,20 +139,20 @@ const XC::BeamIntegration *XC::ProtoElementLoader::get_ptr_beam_integrator(void)
     return retval;
   }
 
-//! @brief Returns a reference to the coordinate transformation loader.
-const XC::TransfCooLoader &XC::ProtoElementLoader::get_transf_coo_loader(void) const
-  { return getPreprocessor()->getTransfCooLoader(); }
+//! @brief Returns a reference to the coordinate transformation handler.
+const XC::TransfCooHandler &XC::ProtoElementHandler::get_transf_coo_handler(void) const
+  { return getPreprocessor()->getTransfCooHandler(); }
 
 //! @brief Returns an iterator to the coordinate transformation with the name being passed as parameter.
-XC::TransfCooLoader::const_iterator XC::ProtoElementLoader::get_iter_transf_coo(void) const
-  { return getPreprocessor()->getTransfCooLoader().find(nmb_transf); }
+XC::TransfCooHandler::const_iterator XC::ProtoElementHandler::get_iter_transf_coo(void) const
+  { return getPreprocessor()->getTransfCooHandler().find(nmb_transf); }
 
 //! @brief Returns a pointer to the coordinate transformation with the name being passed as parameter (nullptr if not found).
-const XC::CrdTransf *XC::ProtoElementLoader::get_ptr_transf_coo(void) const
+const XC::CrdTransf *XC::ProtoElementHandler::get_ptr_transf_coo(void) const
   {
     CrdTransf *retval= nullptr;
-    TransfCooLoader::const_iterator itrf= get_iter_transf_coo();
-    if(itrf!= this->get_transf_coo_loader().end())
+    TransfCooHandler::const_iterator itrf= get_iter_transf_coo();
+    if(itrf!= this->get_transf_coo_handler().end())
       retval= itrf->second;
     else
       if(verbosity>0)
@@ -212,7 +212,7 @@ void materialNotSuitableMsg(const std::string &errHeader, const std::string &mat
 //!   para solid analysis.
 //! - ZeroLength: Defines a zero length element (ZeroLength).
 //! - ZeroLengthSection: Defines a zero length element with section type material (ZeroLengthSection).
-XC::Element *XC::ProtoElementLoader::create_element(const std::string &cmd,int tag_elem)
+XC::Element *XC::ProtoElementHandler::create_element(const std::string &cmd,int tag_elem)
   {
     Element *retval= nullptr;
     const std::string errHeader= getClassName() + "::" + __FUNCTION__;
@@ -418,7 +418,7 @@ XC::Element *XC::ProtoElementLoader::create_element(const std::string &cmd,int t
 //! @brief Create a new element.
 //! @param tipo: type of element. Available types:'Truss','TrussSection','CorotTruss','CorotTrussSection','Spring', 'Beam2d02', 'Beam2d03',  'Beam2d04', 'Beam3d01', 'Beam3d02', 'ElasticBeam2d', 'ElasticBeam3d', 'BeamWithHinges2d', 'BeamWithHinges3d', 'NlBeamColumn2d', 'NlBeamColumn3d','ForceBeamColumn2d', 'ForceBeamColumn3d', 'ShellMitc4', ' shellNl', 'Quad4n', 'Tri31', 'Brick', 'ZeroLength', 'ZeroLengthContact2d', 'ZeroLengthContact3d', 'ZeroLengthSection'.
 //! @param iNodes: nodes ID, e.g. xc.ID([1,2]) to create a linear element from node 1 to node 2.
-XC::Element *XC::ProtoElementLoader::newElement(const std::string &tipo,const ID &iNodes)
+XC::Element *XC::ProtoElementHandler::newElement(const std::string &tipo,const ID &iNodes)
   {
     const int tag_elem= getDefaultTag();
     Element *retval= getPreprocessor()->getDomain()->getElement(tag_elem);
@@ -439,42 +439,42 @@ XC::Element *XC::ProtoElementLoader::newElement(const std::string &tipo,const ID
   }
 
 //! @brief Sets the default material name for new elements.
-void XC::ProtoElementLoader::setDefaultMaterial(const std::string &nmb)
+void XC::ProtoElementHandler::setDefaultMaterial(const std::string &nmb)
   { nmb_mat= nmb; }
 
 //! @brief Returns the default material name for new elements.
-const std::string &XC::ProtoElementLoader::getDefaultMaterial(void) const
+const std::string &XC::ProtoElementHandler::getDefaultMaterial(void) const
   { return nmb_mat; }
 
 //! @brief Default number of sections for new elements.
-void XC::ProtoElementLoader::setNumSections(const int &ns)
+void XC::ProtoElementHandler::setNumSections(const int &ns)
   { num_sec= ns; }
 
 //! @brief Returns the default number of sections for new elements.
-int XC::ProtoElementLoader::getNumSections(void) const
+int XC::ProtoElementHandler::getNumSections(void) const
   { return num_sec; }
 
 //! @brief Sets the default dimension (0D,1D,2D or 3D) for new elements.
-void XC::ProtoElementLoader::setDimElem(const int &dim)
+void XC::ProtoElementHandler::setDimElem(const int &dim)
   { dim_elem= dim; }
 
 //! @brief Returns the default dimension (0D,1D,2D or 3D) for new elements.
-int XC::ProtoElementLoader::getDimElem(void) const
+int XC::ProtoElementHandler::getDimElem(void) const
   { return dim_elem; }
 
 //! @brief Sets the name of the default coordinate transformation for new elements.
-void XC::ProtoElementLoader::setDefaultTransf(const std::string &nmb)
+void XC::ProtoElementHandler::setDefaultTransf(const std::string &nmb)
   { nmb_transf= nmb; }
 
 //! @brief Returns the name of the default coordinate transformation for new elements.
-const std::string &XC::ProtoElementLoader::getDefaultTransf(void) const
+const std::string &XC::ProtoElementHandler::getDefaultTransf(void) const
   { return nmb_transf; }
 
 //! @brief Sets the name of the default integrator for new elements.
-void XC::ProtoElementLoader::setDefaultIntegrator(const std::string &nmb)
+void XC::ProtoElementHandler::setDefaultIntegrator(const std::string &nmb)
   { nmb_integ= nmb; }
 
 //! @brief Returns the name of the default integrator for new elements.
-const std::string &XC::ProtoElementLoader::getDefaultIntegrator(void) const
+const std::string &XC::ProtoElementHandler::getDefaultIntegrator(void) const
   { return nmb_integ; }
 
