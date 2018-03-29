@@ -30,10 +30,10 @@ def listNodeReactions(preprocessor,nmbComb,nodeListArranque, fmt, fName, encab, 
   cierraSupertabular(fName)
 
 def listPointReactions(nmbComb,pointList, fmt, fName, encab, tit):
-   '''
-      Print the reactions associated with the nodes associated to the
-      points from the list.
-   '''
+  '''
+     Print the reactions associated with the nodes associated to the
+     points from the list.
+  '''
   fName.write("\\",encab,"{",tit,"}\n")
   caption= tit
   defCampos= "|l|r|r|r|r|r|r|r|r|"
