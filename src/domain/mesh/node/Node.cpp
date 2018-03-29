@@ -78,7 +78,7 @@
 #include "xc_utils/src/geom/pos_vec/SVD3d.h"
 #include "xc_utils/src/geom/d2/GeomObj2d.h"
 #include "xc_utils/src/geom/d3/GeomObj3d.h"
-#include "preprocessor/cad/trf/TrfGeom.h"
+#include "preprocessor/multi_block_topology/trf/TrfGeom.h"
 #include "preprocessor/Preprocessor.h"
 #include "preprocessor/loaders/LoadLoader.h"
 #include "preprocessor/set_mgmt/SetMeshComp.h"

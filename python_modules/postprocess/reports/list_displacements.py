@@ -29,7 +29,7 @@ def listaDesplazamientosPuntos(preprocessor,nmbComb,lstPuntos, fmt, fName, encab
 
   # Formamos la lista de nodes de arranque.
   for iPunto in lstPuntos:
-    pnt= preprocessor.getCad.getPoint(iPunto)
+    pnt= preprocessor.getMultiBlockTopology.getPoint(iPunto)
     iNode= pnt.getNodeTag()
     fName.write(nmbComb," & ",iPunto," & ",iNode," & ")
     nod= nodes.getNode(iNode)

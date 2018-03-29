@@ -111,7 +111,7 @@ const XC::SisRefScc *XC::GeomSection::get_reference_system(const size_t &id) con
     return retval;
   }
 
-//! @brief Returns a pointer to the punto cuyo identificador being passed as parameter.
+//! @brief Returns a pointer to the punto cuyo identifier being passed as parameter.
 XC::Spot *XC::GeomSection::busca_spot(const size_t &id)
   {
     Spot *retval= nullptr;
@@ -121,7 +121,7 @@ XC::Spot *XC::GeomSection::busca_spot(const size_t &id)
     return retval;
   }
 
-//! @brief Returns a pointer to the punto cuyo identificador being passed as parameter.
+//! @brief Returns a pointer to the punto cuyo identifier being passed as parameter.
 const XC::Spot *XC::GeomSection::busca_spot(const size_t &id) const
   {
     Spot *retval= nullptr;
@@ -214,7 +214,7 @@ XC::Segment *XC::GeomSection::newSegment(size_t p1,size_t p2)
   }
 
 
-//! @brief Return the distancia entre los puntos cuyos identificadores being passed as parameters.
+//! @brief Return the distancia entre los puntos cuyos identifiers being passed as parameters.
 double XC::GeomSection::DistSpots(const size_t &i,const size_t &j) const
   {
     double retval(-1.0);

@@ -202,7 +202,7 @@ class ijkGrid(object):
     self.gridCoo.append(zList)
     self.rangesToMove= list()
     self.prep= prep
-    self.indices= self.prep.getCad.get3DNets.new3DNet()
+    self.indices= self.prep.getMultiBlockTopology.get3DNets.new3DNet()
     self.indices.dim(len(self.gridCoo[0]),len(self.gridCoo[1]),len(self.gridCoo[2]))
     self.pointCounter=0
     self.dicQuadSurf=dict()
@@ -279,7 +279,7 @@ class ijkGrid(object):
     
   def generatePoints(self):
     '''Point generation.'''
-    points= self.prep.getCad.getPoints
+    points= self.prep.getMultiBlockTopology.getPoints
     inicTag=points.defaultTag
     lstPt=[(i+1,j+1,k+1,self.gridCoo[0][i],self.gridCoo[1][j],self.gridCoo[2][k]) for i in range(len(self.gridCoo[0])) for j in range(len(self.gridCoo[1])) for k in range(len(self.gridCoo[2])) ]
     for p in lstPt:
@@ -307,9 +307,9 @@ class ijkGrid(object):
     :param surfName: name given to the grid surface
     return the quadrangle surface
     '''
-    points= self.prep.getCad.getPoints
+    points= self.prep.getMultiBlockTopology.getPoints
     (tgPt1,tgPt2,tgPt3,tgPt4)=(int(surfName[1:5]),int(surfName[5:9]),int(surfName[9:13]),int(surfName[13:17]))
-    surfaces= self.prep.getCad.getSurfaces
+    surfaces= self.prep.getMultiBlockTopology.getSurfaces
     qs= surfaces.newQuadSurfacePts(tgPt1,tgPt2,tgPt3,tgPt4)
     qs.name= surfName
     qs.nDivI=1 #initialization values of number of divisions
@@ -347,9 +347,9 @@ class ijkGrid(object):
     :param linName: name given to the grid line
     return the line
     '''
-    points= self.prep.getCad.getPoints
+    points= self.prep.getMultiBlockTopology.getPoints
     (tgPt1,tgPt2)=(int(linName[1:5]),int(linName[5:9]))
-    lines= self.prep.getCad.getLines
+    lines= self.prep.getMultiBlockTopology.getLines
     ln= lines.newLine(tgPt1,tgPt2)
     ln.name= linName
     ln.nDiv=1 #initialization value
@@ -505,7 +505,7 @@ class ijkGrid(object):
     (imin,jmin,kmin)=ijkRange.ijkMin
     (imax,jmax,kmax)=ijkRange.ijkMax
     lstTagPnt=[elf.getTagPntGrid(indPnt=(i,j,k)) for i in range(imin,imax+1) for j in range(jmin,jmax+1) for k in range(kmin,kmax+1)] #list of point tags to include in the set
-    points= self.prep.getCad.getPoints
+    points= self.prep.getMultiBlockTopology.getPoints
     retval= self.prep.getSets.defSet(setName)
     pntsSet=retval.getPoints
     for tg in lstTagPnt:

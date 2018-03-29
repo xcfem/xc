@@ -150,7 +150,7 @@ class PointSupportDict(dict):
     nodeSupportsTags= nodeSupports.getNodeTags()
     supportId= 0
     for k in points:
-      p= preprocessor.getCad.getPoints.get(k)
+      p= preprocessor.getMultiBlockTopology.getPoints.get(k)
       pointTag= p.tag
       node= p.getNode()
       if(node):

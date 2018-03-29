@@ -20,10 +20,10 @@ zOrg= 3
 feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
 
-points= preprocessor.getCad.getPoints
+points= preprocessor.getMultiBlockTopology.getPoints
 pt= points.newPntIDPos3d(1,geom.Pos3d(0.0,0.0,0.0))
 pt= points.newPntIDPos3d(2,geom.Pos3d(CooMax,CooMax,CooMax))
-rsMap= preprocessor.getCad.getReferenceSystems
+rsMap= preprocessor.getMultiBlockTopology.getReferenceSystems
 
 rs= rsMap.newReferenceSystem("cartesianas")
 rs.org= geom.Pos3d(xOrg,yOrg,zOrg)

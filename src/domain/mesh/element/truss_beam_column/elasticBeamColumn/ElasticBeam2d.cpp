@@ -394,11 +394,11 @@ const XC::Matrix &XC::ElasticBeam2d::getMass(void) const
 
         K(0,0)= m;
         K(1,1)= m;
-        K(2,2)= mpeq; //Modificado por LCPT para evitar matriz M singular.
+        K(2,2)= mpeq; //Modified by LCPT para evitar matriz M singular.
 
         K(3,3)= m;
         K(4,4)= m;
-        K(5,5)= mpeq; //Modificado por LCPT para evitar matriz M singular.
+        K(5,5)= mpeq; //Modified by LCPT para evitar matriz M singular.
       }
     if(isDead())
       K*=dead_srf;

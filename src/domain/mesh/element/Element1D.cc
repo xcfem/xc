@@ -27,8 +27,8 @@
 //Element1D.cc
 
 #include "Element1D.h"
-#include "preprocessor/cad/matrices/TritrizPtrNod.h"
-#include "preprocessor/cad/matrices/TritrizPtrElem.h"
+#include "preprocessor/multi_block_topology/matrices/TritrizPtrNod.h"
+#include "preprocessor/multi_block_topology/matrices/TritrizPtrElem.h"
 #include "preprocessor/Preprocessor.h"
 #include "preprocessor/loaders/LoadLoader.h"
 #include "preprocessor/set_mgmt/SetEstruct.h"

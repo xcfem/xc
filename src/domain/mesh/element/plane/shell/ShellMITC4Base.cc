@@ -52,8 +52,8 @@
 #include "ShellMITC4Base.h"
 #include "utility/matrix/ID.h"
 #include "utility/actor/actor/MovableVector.h"
-#include "preprocessor/cad/matrices/TritrizPtrElem.h"
-#include "preprocessor/cad/aux_meshing.h"
+#include "preprocessor/multi_block_topology/matrices/TritrizPtrElem.h"
+#include "preprocessor/multi_block_topology/aux_meshing.h"
 #include <domain/mesh/node/Node.h>
 #include <material/section/SectionForceDeformation.h>
 #include <domain/domain/Domain.h>

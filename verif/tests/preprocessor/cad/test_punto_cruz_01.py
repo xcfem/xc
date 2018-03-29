@@ -40,12 +40,12 @@ elements= preprocessor.getElementLoader
 elements.defaultTransformation= "lin"
  
 
-points= preprocessor.getCad.getPoints
+points= preprocessor.getMultiBlockTopology.getPoints
 pt1= points.newPntIDPos3d(1,geom.Pos3d(0.0,0.0,0.0))
 pt2= points.newPntIDPos3d(2,geom.Pos3d(CooMax,0.0,0.0))
 pt3= points.newPntIDPos3d(3,geom.Pos3d(0.0,L,0.0))
 pt4= points.newPntIDPos3d(4,geom.Pos3d(CooMax,L,0.0))
-lines= preprocessor.getCad.getLines
+lines= preprocessor.getMultiBlockTopology.getLines
 lines.defaultTag= 1
 l1= lines.newLine(1,2)
 l1.nDiv= NumDiv

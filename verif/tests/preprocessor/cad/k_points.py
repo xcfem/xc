@@ -18,7 +18,7 @@ __email__= "l.pereztato@gmail.com"
 feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
 
-points= preprocessor.getCad.getPoints
+points= preprocessor.getMultiBlockTopology.getPoints
 points.defaultTag= 1
 pt= points.newPntFromPos3d(geom.Pos3d(0,0,0))
 pt= points.newPntFromPos3d(geom.Pos3d(1,1,1))

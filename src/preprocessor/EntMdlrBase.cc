@@ -28,8 +28,8 @@
 
 #include "EntMdlrBase.h"
 #include "preprocessor/Preprocessor.h"
-#include "preprocessor/cad/entities/Pnt.h"
-#include "preprocessor/cad/entities/Edge.h"
+#include "preprocessor/multi_block_topology/entities/Pnt.h"
+#include "preprocessor/multi_block_topology/entities/Edge.h"
 
 #include "utility/actor/actor/MovableID.h"
 #include "utility/actor/actor/MovableVector.h"
@@ -102,8 +102,8 @@ XC::Pnt *XC::EntMdlrBase::BuscaPnt(const size_t &id_punto)
     Pnt *retval= nullptr;
     if(check_preprocessor())
       {
-        Cad &cad= getPreprocessor()->getCad();
-        retval= cad.getPuntos().busca(id_punto);
+        MultiBlockTopology &mbt= getPreprocessor()->getMultiBlockTopology();
+        retval= mbt.getPuntos().busca(id_punto);
       }
     return retval;
   }
@@ -115,8 +115,8 @@ const XC::Pnt *XC::EntMdlrBase::BuscaPnt(const size_t &id_punto) const
     const Pnt *retval= nullptr;
     if(check_preprocessor())
       {
-        const Cad &cad= getPreprocessor()->getCad();
-        retval= cad.getPuntos().busca(id_punto);
+        const MultiBlockTopology &mbt= getPreprocessor()->getMultiBlockTopology();
+        retval= mbt.getPuntos().busca(id_punto);
       }
     return retval;
   }
@@ -128,8 +128,8 @@ XC::Edge *XC::EntMdlrBase::BuscaEdge(const size_t &id_edge)
     Edge *retval= nullptr;
     if(check_preprocessor())
       {
-        Cad &cad= getPreprocessor()->getCad();
-        retval= cad.getLineas().busca(id_edge);
+        MultiBlockTopology &mbt= getPreprocessor()->getMultiBlockTopology();
+        retval= mbt.getLineas().busca(id_edge);
       }
     return retval;
   }
@@ -141,8 +141,8 @@ const XC::Edge *XC::EntMdlrBase::BuscaEdge(const size_t &id_edge) const
     const Edge *retval= nullptr;
     if(check_preprocessor())
       {
-        const Cad &cad= getPreprocessor()->getCad();
-        retval= cad.getLineas().busca(id_edge);
+        const MultiBlockTopology &mbt= getPreprocessor()->getMultiBlockTopology();
+        retval= mbt.getLineas().busca(id_edge);
       }
     return retval;
   }
@@ -154,8 +154,8 @@ XC::Face *XC::EntMdlrBase::BuscaFace(const size_t &id_face)
     Face *retval= nullptr;
     if(check_preprocessor())
       {
-        Cad &cad= getPreprocessor()->getCad();
-        retval= cad.getSurfaces().busca(id_face);
+        MultiBlockTopology &mbt= getPreprocessor()->getMultiBlockTopology();
+        retval= mbt.getSurfaces().busca(id_face);
       }
     return retval;
   }
@@ -167,8 +167,8 @@ const XC::Face *XC::EntMdlrBase::BuscaFace(const size_t &id_face) const
     const Face *retval= nullptr;
     if(check_preprocessor())
       {
-        const Cad &cad= getPreprocessor()->getCad();
-        retval= cad.getSurfaces().busca(id_face);
+        const MultiBlockTopology &mbt= getPreprocessor()->getMultiBlockTopology();
+        retval= mbt.getSurfaces().busca(id_face);
       }
     return retval;
   }

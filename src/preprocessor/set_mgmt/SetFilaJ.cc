@@ -27,7 +27,7 @@
 //SetFilaJ.cc
 
 #include "SetFilaJ.h"
-#include "preprocessor/cad/entities/EntMdlr.h"
+#include "preprocessor/multi_block_topology/entities/EntMdlr.h"
 #include <boost/any.hpp>
 #include "domain/mesh/node/Node.h"
 #include "domain/mesh/element/Element.h"

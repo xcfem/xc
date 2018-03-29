@@ -20,18 +20,18 @@ CooMax= NumDiv
 feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
 
-points= preprocessor.getCad.getPoints
+points= preprocessor.getMultiBlockTopology.getPoints
 pt= points.newPntIDPos3d(1,geom.Pos3d(0.0,0.0,0.0))
 pt= points.newPntIDPos3d(2,geom.Pos3d(CooMax,CooMax,CooMax))
 points.defaultTag= 100
 
-lines= preprocessor.getCad.getLines
+lines= preprocessor.getMultiBlockTopology.getLines
 lines.defaultTag= 1
 l1= lines.newLine(1,2)
 l1.nDiv= NumDiv
 l1.divide()
 
-trfs= preprocessor.getCad.getGeometricTransformations
+trfs= preprocessor.getMultiBlockTopology.getGeometricTransformations
 transl= trfs.newTransformation("translation")
 transl.setVector(geom.Vector3d(dx,dy,dz))
 

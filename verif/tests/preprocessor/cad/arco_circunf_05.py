@@ -40,14 +40,14 @@ seedElemLoader.dimElem= 3 # Dimension of element space
 seedElemLoader.defaultTag= 1 #Tag for the next element.
 truss= seedElemLoader.newElement("Truss",xc.ID([0,0]));
 truss.area= 10.0
-points= preprocessor.getCad.getPoints
+points= preprocessor.getMultiBlockTopology.getPoints
 pt= points.newPntIDPos3d(1,geom.Pos3d(R,0.0,0.0))
 pt= points.newPntIDPos3d(2,geom.Pos3d(R*cos225,R*sin225,0.0))
 pt= points.newPntIDPos3d(3,geom.Pos3d((R*cos45),(R*sin45),0.0))
 pt= points.newPntIDPos3d(4,geom.Pos3d((R*cos675),(R*sin675),0.0))
 pt= points.newPntIDPos3d(5,geom.Pos3d(0.0,R,0.0))
 
-lines= preprocessor.getCad.getLines
+lines= preprocessor.getMultiBlockTopology.getLines
 lines.defaultTag= 1
 l1= lines.newCircleArc(1,2,3)
 l1.nDiv= NumDiv

@@ -53,7 +53,7 @@ XC::ElementLoader &(XC::Preprocessor::*getElementLoaderRef)(void)= &XC::Preproce
 XC::ConstraintLoader &(XC::Preprocessor::*getConstraintLoaderRef)(void)= &XC::Preprocessor::getConstraintLoader;
 XC::LoadLoader &(XC::Preprocessor::*getLoadLoaderRef)(void)= &XC::Preprocessor::getLoadLoader;
 XC::TransfCooLoader &(XC::Preprocessor::*getTransfCooLoaderRef)(void)= &XC::Preprocessor::getTransfCooLoader;
-XC::Cad &(XC::Preprocessor::*getCadRef)(void)= &XC::Preprocessor::getCad;
+XC::MultiBlockTopology &(XC::Preprocessor::*getMultiBlockTopologyRef)(void)= &XC::Preprocessor::getMultiBlockTopology;
 XC::MapSet &(XC::Preprocessor::*getSetsRef)(void)= &XC::Preprocessor::get_sets;
 XC::Domain *(XC::Preprocessor::*getDomainRf)(void)= &XC::Preprocessor::getDomain;
 class_<XC::Preprocessor, bases<EntCmd>, boost::noncopyable >("Preprocessor", no_init)
@@ -64,7 +64,7 @@ class_<XC::Preprocessor, bases<EntCmd>, boost::noncopyable >("Preprocessor", no_
   .add_property("getConstraintLoader", make_function( getConstraintLoaderRef, return_internal_reference<>() ))
   .add_property("getLoadLoader", make_function( getLoadLoaderRef, return_internal_reference<>() ))
   .add_property("getTransfCooLoader", make_function( getTransfCooLoaderRef, return_internal_reference<>() ))
-  .add_property("getCad", make_function( getCadRef, return_internal_reference<>() ))
+  .add_property("getMultiBlockTopology", make_function( getMultiBlockTopologyRef, return_internal_reference<>() ))
   .add_property("getSets", make_function( getSetsRef, return_internal_reference<>() ))
   .add_property("getDomain", make_function( getDomainRf, return_internal_reference<>() ))
   .def("resetLoadCase",&XC::Preprocessor::resetLoadCase)

@@ -39,7 +39,7 @@
 #include "loaders/LoadLoader.h"
 #include "loaders/ConstraintLoader.h"
 #include "set_mgmt/MapSet.h"
-#include "cad/Cad.h"
+#include "multi_block_topology/MultiBlockTopology.h"
 #include "utility/handler/DataOutputHandler.h"
 
 
@@ -70,11 +70,11 @@ class Preprocessor: public EntCmd, public MovableObject
     LoadLoader loads; //!< Load creation tools.
     ConstraintLoader constraints; //! Constraint creation tools.
 
-    Cad cad; //!< Geometric entities: points, lines,...
+    MultiBlockTopology mbt; //!< Geometric entities: points, lines,...
 
     MapSet sets; //!< Sets of entities.
 
-    friend class Cad;
+    friend class MultiBlockTopology;
     friend class SetMeshComp;
     friend class Set;
 
@@ -139,10 +139,10 @@ class Preprocessor: public EntCmd, public MovableObject
     const BeamIntegratorLoader &getBeamIntegratorLoader(void) const
       { return beamIntegrators; }
 
-    const Cad &getCad(void) const
-      { return cad; }
-    Cad &getCad(void)
-      { return cad; }
+    const MultiBlockTopology &getMultiBlockTopology(void) const
+      { return mbt; }
+    MultiBlockTopology &getMultiBlockTopology(void)
+      { return mbt; }
 
     void resetLoadCase(void);
     void clearAll(void);

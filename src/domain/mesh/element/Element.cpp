@@ -69,7 +69,7 @@
 #include "domain/mesh/node/NodeTopology.h"
 #include <domain/domain/Domain.h>
 #include "utility/matrix/nDarray/basics.h"
-#include "preprocessor/cad/matrices/TritrizPtrElem.h"
+#include "preprocessor/multi_block_topology/matrices/TritrizPtrElem.h"
 #include "preprocessor/Preprocessor.h"
 #include "preprocessor/set_mgmt/SetMeshComp.h"
 #include "boost/any.hpp"

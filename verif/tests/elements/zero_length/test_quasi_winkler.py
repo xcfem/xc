@@ -54,12 +54,12 @@ beam2d= seedElemLoader.newElement("ElasticBeam2d",xc.ID([0,0]))
 beam2d.h= h
 
 
-points= preprocessor.getCad.getPoints
+points= preprocessor.getMultiBlockTopology.getPoints
 pt1= points.newPntIDPos3d(1,geom.Pos3d(0.0,0.0,0.0))
 pt2= points.newPntIDPos3d(2,geom.Pos3d(L/2,0.0,0.0))
 pt3= points.newPntIDPos3d(3,geom.Pos3d(L,0.0,0.0))
 
-lines= preprocessor.getCad.getLines
+lines= preprocessor.getMultiBlockTopology.getLines
 lines.defaultTag= 1
 l1= lines.newLine(1,2)
 l1.nDiv= int(numDiv/2)

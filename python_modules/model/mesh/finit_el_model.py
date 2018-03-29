@@ -130,7 +130,7 @@ class SurfSetToMesh(SetToMesh):
         for s in self.primitiveSet.getSurfaces:
             if(self.elemSize): #If elemSize= None don't touch the number of divisions.
                 s.setElemSizeIJ(self.elemSize,self.elemSize)
-        preprocessor.getCad.getSurfaces.conciliaNDivs()
+        preprocessor.getMultiBlockTopology.getSurfaces.conciliaNDivs()
         elem= self.getSeedElement(preprocessor)
         for s in self.primitiveSet.getSurfaces:
             s.genMesh(xc.meshDir.I)

@@ -33,7 +33,7 @@
 #include "domain/mesh/element/Element.h"
 #include "preprocessor/set_mgmt/SetEstruct.h"
 #include "preprocessor/set_mgmt/Set.h"
-#include "preprocessor/cad/matrices/TritrizPtrElem.h"
+#include "preprocessor/multi_block_topology/matrices/TritrizPtrElem.h"
 #include "boost/lexical_cast.hpp"
 
 
@@ -43,14 +43,14 @@
 XC::Preprocessor::Preprocessor(EntCmd *owr,DataOutputHandler::map_output_handlers *oh)
   : EntCmd(owr), MovableObject(0), domain(nullptr), materialHandler(this), transf(this), beamIntegrators(this), 
     nodes(this), elements(this), loads(this), constraints(this),
-    cad(this),sets(this)
+    mbt(this),sets(this)
   { domain= new Domain(this,oh); }
 
 //! @brief Copy constructor (prohibited).
 XC::Preprocessor::Preprocessor(const Preprocessor &otro)
   : EntCmd(otro), MovableObject(otro), domain(nullptr), materialHandler(this), transf(this), beamIntegrators(this),
     nodes(this), elements(this), loads(this), constraints(this),
-    cad(this),sets(this)
+    mbt(this),sets(this)
   {
     std::cerr << "This object must no be copied." << std::endl;
   }
@@ -107,7 +107,7 @@ void XC::Preprocessor::UpdateSets(Constraint *new_constraint)
 //! @brief Destructor.
 XC::Preprocessor::~Preprocessor(void)
   {
-    cad.clearAll();
+    mbt.clearAll();
     if(domain) delete domain;
     domain= nullptr;
   }
@@ -123,7 +123,7 @@ XC::SetEstruct *XC::Preprocessor::busca_set_estruct(const std::string &nmb)
   {
     SetEstruct *retval= sets.busca_set_estruct(nmb);
     if(!retval)
-      retval= cad.busca_set_estruct(boost::lexical_cast<size_t>(nmb));
+      retval= mbt.busca_set_estruct(boost::lexical_cast<size_t>(nmb));
     return retval;
   }
 
@@ -143,7 +143,7 @@ void XC::Preprocessor::resetLoadCase(void)
 void XC::Preprocessor::clearAll(void)
   {
     sets.reset();
-    cad.clearAll();
+    mbt.clearAll();
     transf.clearAll();
     beamIntegrators.clearAll();
     nodes.clearAll();
@@ -183,7 +183,7 @@ int XC::Preprocessor::sendData(CommParameters &cp)
     //res+= cp.sendMovable(elements,getDbTagData(),CommMetaData(4));
     int res= cp.sendMovable(loads,getDbTagData(),CommMetaData(5));
     //res+= cp.sendMovable(constraints,getDbTagData(),CommMetaData(6));
-    //res+= cp.sendMovable(cad,getDbTagData(),CommMetaData(7));
+    //res+= cp.sendMovable(mbt,getDbTagData(),CommMetaData(7));
     assert(domain);
     res+= sendDomain(*domain,8,getDbTagData(),cp);
     res+= cp.sendMovable(sets,getDbTagData(),CommMetaData(9));
@@ -200,7 +200,7 @@ int XC::Preprocessor::recvData(const CommParameters &cp)
     //res+= cp.receiveMovable(elements,getDbTagData(),CommMetaData(4));
     int res= cp.receiveMovable(loads,getDbTagData(),CommMetaData(5));
     //res+= cp.receiveMovable(constraints,getDbTagData(),CommMetaData(6));
-    //res+= cp.receiveMovable(cad,getDbTagData(),CommMetaData(7));
+    //res+= cp.receiveMovable(mbt,getDbTagData(),CommMetaData(7));
     assert(domain);
     res+= receiveDomain(*domain,8,getDbTagData(),cp);
     res+= cp.receiveMovable(sets,getDbTagData(),CommMetaData(9));

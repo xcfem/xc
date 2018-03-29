@@ -297,7 +297,7 @@ int XC::Graph::getNumVertex(void) const
 int XC::Graph::getNumEdge(void) const
   { return numEdge; }
 
-//! @brief Returns the siguiente identificador (tag) libre.
+//! @brief Returns the siguiente identifier (tag) libre.
 int XC::Graph::getFreeTag(void)
   { return nextFreeTag; }
 

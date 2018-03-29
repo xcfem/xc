@@ -28,7 +28,7 @@ seedElemLoader.dimElem= 3 # Dimension of element space
 seedElemLoader.defaultTag= 1 #Tag for the next element.
 truss= seedElemLoader.newElement("Truss",xc.ID([0,0]));
 truss.area= 10.0
-unifGrids= preprocessor.getCad.getUniformGrids
+unifGrids= preprocessor.getMultiBlockTopology.getUniformGrids
 uGrid= unifGrids.newUniformGrid()
 
 uGrid.org= geom.Pos3d(0.0,3.0,0.0)

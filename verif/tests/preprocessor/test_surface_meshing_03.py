@@ -42,7 +42,7 @@ elem= seedElemLoader.newElement("ShellMITC4",xc.ID([0,0,0,0]))
 
 
 
-points= preprocessor.getCad.getPoints
+points= preprocessor.getMultiBlockTopology.getPoints
 pt= points.newPntIDPos3d(1,geom.Pos3d(1,0,0))
 pt= points.newPntIDPos3d(2,geom.Pos3d(1,1,0))
 pt= points.newPntIDPos3d(3,geom.Pos3d(1,1,1))
@@ -52,7 +52,7 @@ pt= points.newPntIDPos3d(6,geom.Pos3d(0,1,1))
 pt= points.newPntIDPos3d(7,geom.Pos3d(0,0,1))
 pt= points.newPntIDPos3d(8,geom.Pos3d(0,0,0))
 
-surfaces= preprocessor.getCad.getSurfaces
+surfaces= preprocessor.getMultiBlockTopology.getSurfaces
 surfaces.defaultTag= 1
 s= surfaces.newQuadSurfacePts(1,2,3,4)
 s.nDivI= 1

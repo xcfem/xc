@@ -36,12 +36,12 @@ seedElemLoader.defaultTag= 1 #Number for the next element will be 1.
 truss= seedElemLoader.newElement("Truss",xc.ID([1,2]));
 truss.area= 10
 
-points= preprocessor.getCad.getPoints
+points= preprocessor.getMultiBlockTopology.getPoints
 points.defaultTag= 1
 pt= points.newPntFromPos3d(geom.Pos3d(0,0,0))
 pt= points.newPntFromPos3d(geom.Pos3d(CooMax,CooMax,CooMax))
 
-lines= preprocessor.getCad.getLines
+lines= preprocessor.getMultiBlockTopology.getLines
 lines.defaultTag= 1
 l= lines.newLine(1,2)
 l.nDiv= NumDiv

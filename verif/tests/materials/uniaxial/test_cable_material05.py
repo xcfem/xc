@@ -52,10 +52,10 @@ truss= seedElemLoader.newElement("CorotTruss",xc.ID([1,2]))
 truss.area= area
 # seed element definition ends
 
-points= preprocessor.getCad.getPoints
+points= preprocessor.getMultiBlockTopology.getPoints
 pt= points.newPntIDPos3d(1,geom.Pos3d(0.0,0.0,0.0))
 pt= points.newPntIDPos3d(2,geom.Pos3d(lng,0.0,0.0))
-lines= preprocessor.getCad.getLines
+lines= preprocessor.getMultiBlockTopology.getLines
 lines.defaultTag= 1
 l= lines.newLine(1,2)
 l.nDiv= NumDiv

@@ -290,7 +290,7 @@ class MaterialSurfacesMap(NamedObjectsMap):
       self[key].generateSurfaces()
   def generateMesh(self, preprocessor, dicQuadSurf, firstElementTag= 1):
     self.generateSurfaces()
-    preprocessor.getCad.getSurfaces.conciliaNDivs()
+    preprocessor.getMultiBlockTopology.getSurfaces.conciliaNDivs()
     seedElemLoader= preprocessor.getElementLoader.seedElemLoader
     seedElemLoader.defaultTag= firstElementTag
     for key in self:

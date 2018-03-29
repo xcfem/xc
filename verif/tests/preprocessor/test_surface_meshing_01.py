@@ -44,7 +44,7 @@ elem= seedElemLoader.newElement("FourNodeQuad",xc.ID([0,0,0,0]))
 
 
 
-points= preprocessor.getCad.getPoints
+points= preprocessor.getMultiBlockTopology.getPoints
 pt= points.newPntIDPos3d(1,geom.Pos3d(0.0,0.0,0.0))
 pt= points.newPntIDPos3d(2,geom.Pos3d(CooMaxX/2,0.0,0.0))
 pt= points.newPntIDPos3d(3,geom.Pos3d(CooMaxX,0.0,0.0))
@@ -52,7 +52,7 @@ pt= points.newPntIDPos3d(4,geom.Pos3d(0.0,CooMaxY,0.0))
 pt= points.newPntIDPos3d(5,geom.Pos3d(CooMaxX/2,CooMaxY,0.0))
 pt= points.newPntIDPos3d(6,geom.Pos3d(CooMaxX,CooMaxY,0.0))
 
-surfaces= preprocessor.getCad.getSurfaces
+surfaces= preprocessor.getMultiBlockTopology.getSurfaces
 surfaces.defaultTag= 1
 s1= surfaces.newQuadSurfacePts(1,2,5,4)
 s1.nDivI= 1
@@ -65,7 +65,7 @@ s1.genMesh(xc.meshDir.I)
 
 
 
-surfaces= preprocessor.getCad.getSurfaces
+surfaces= preprocessor.getMultiBlockTopology.getSurfaces
 surfaces.defaultTag= 2
 s2= surfaces.newQuadSurfacePts(2,3,6,5)
 s2.nDivI= 2

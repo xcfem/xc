@@ -35,7 +35,7 @@ seedElemLoader.dimElem= 3 # Dimension of element space
 seedElemLoader.defaultTag= 1 #Tag for the next element.
 brick= seedElemLoader.newElement("Brick",xc.ID([0,0,0,0,0,0,0,0]));
 
-unifGrids= preprocessor.getCad.getUniformGrids
+unifGrids= preprocessor.getMultiBlockTopology.getUniformGrids
 uGrid= unifGrids.newUniformGrid()
 
 uGrid.Lx= 10

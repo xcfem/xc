@@ -80,7 +80,7 @@ class MapSet: public PreprocessorContainer, public MovableObject
     void clearSets(void);
     void clearAll(void);
     void reset(void);
-    friend class Cad;
+    friend class MultiBlockTopology;
     friend class SetMeshComp;
     friend class SetEntities;
     friend class Set;

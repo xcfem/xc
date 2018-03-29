@@ -43,10 +43,10 @@ class GroupRecord(object):
         strCommand= self.name + '.getElements.append(e' + str(e) + ')'
         f.write(strCommand+'\n')
       for p in self.pointIds:
-        strCommand= self.name + '.getCad.getPoints.append(' + str(p) + ')'
+        strCommand= self.name + '.getMultiBlockTopology.getPoints.append(' + str(p) + ')'
         f.write(strCommand+'\n')
       for l in self.lineIds:
-        strCommand= self.name + '.getCad.getLines.append(' + str(l) + ')'
+        strCommand= self.name + '.getMultiBlockTopology.getLines.append(' + str(l) + ')'
         f.write(strCommand+'\n')
 
 
@@ -121,13 +121,13 @@ class XCImportExportData(object):
     self.outputFile.write(strCommand+'\n')
     strCommand= self.cellLoaderName + '= preprocessor.getElementLoader'
     self.outputFile.write(strCommand+'\n')
-    strCommand= self.pointLoaderName + '= preprocessor.getCad.getPoints'
+    strCommand= self.pointLoaderName + '= preprocessor.getMultiBlockTopology.getPoints'
     self.outputFile.write(strCommand+'\n')
-    strCommand= self.lineLoaderName + '= preprocessor.getCad.getLines'
+    strCommand= self.lineLoaderName + '= preprocessor.getMultiBlockTopology.getLines'
     self.outputFile.write(strCommand+'\n')
-    strCommand= self.surfaceLoaderName + '= preprocessor.getCad.getSurfaces'
+    strCommand= self.surfaceLoaderName + '= preprocessor.getMultiBlockTopology.getSurfaces'
     self.outputFile.write(strCommand+'\n')
-    #strCommand= self.lineLoaderName + '= preprocessor.getCad.getLines'
+    #strCommand= self.lineLoaderName + '= preprocessor.getMultiBlockTopology.getLines'
     #self.outputFile.write(strCommand+'\n')
     strCommand= self.setLoaderName + '= preprocessor.getSets'
     self.outputFile.write(strCommand+'\n')

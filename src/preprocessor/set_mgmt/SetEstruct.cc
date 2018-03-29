@@ -28,7 +28,7 @@
 
 #include "SetEstruct.h"
 #include "preprocessor/Preprocessor.h"
-#include "preprocessor/cad/matrices/TritrizPtrElem.h"
+#include "preprocessor/multi_block_topology/matrices/TritrizPtrElem.h"
 #include "domain/mesh/node/Node.h"
 #include "domain/mesh/element/Element.h"
 #include "domain/mesh/element/utils/ElementEdges.h"

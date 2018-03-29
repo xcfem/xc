@@ -31,8 +31,8 @@
 #ifndef TriBase3N_h
 #define TriBase3N_h
 
-#include "preprocessor/cad/matrices/TritrizPtrElem.h"
-#include "preprocessor/cad/aux_meshing.h"
+#include "preprocessor/multi_block_topology/matrices/TritrizPtrElem.h"
+#include "preprocessor/multi_block_topology/aux_meshing.h"
 #include "preprocessor/loaders/LoadLoader.h"
 #include "domain/load/plane/BidimStrainLoad.h"
 #include "med.h"

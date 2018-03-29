@@ -8,7 +8,7 @@ def pre_stress_elem_line(preprocessor,tag_line, tension):
   :param tag_line: line number
   :param tension: tension value
   '''
-  line= preprocessor.getCad.getLine(tag_line)
+  line= preprocessor.getMultiBlockTopology.getLine(tag_line)
   elems= line.getElems()
   for e in elems:
     e.getMaterial().prestress(tension)
@@ -21,7 +21,7 @@ def post_stress_elem_line(preprocessor,tag_line, tension):
   :param tension: tension value
   '''
   
-  line= preprocessor.getCad.getLine(tag_line)
+  line= preprocessor.getMultiBlockTopology.getLine(tag_line)
   elems= linea.getElems()
   for e in elems:
     pret= e.getPrestress

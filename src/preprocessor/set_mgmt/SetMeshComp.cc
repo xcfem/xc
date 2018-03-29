@@ -30,8 +30,8 @@
 #include "Set.h"
 #include "domain/domain/Domain.h"
 #include "preprocessor/Preprocessor.h"
-#include "preprocessor/cad/matrices/TritrizPtrElem.h"
-#include "preprocessor/cad/trf/TrfGeom.h"
+#include "preprocessor/multi_block_topology/matrices/TritrizPtrElem.h"
+#include "preprocessor/multi_block_topology/trf/TrfGeom.h"
 #include "domain/constraints/SFreedom_Constraint.h"
 #include "domain/constraints/MFreedom_Constraint.h"
 #include "domain/mesh/element/Element.h"
@@ -194,7 +194,7 @@ void XC::SetMeshComp::Transforma(const TrfGeom &trf)
 //! @brief Applies to the set the transformation with the identifier being passed as parameter.
 void XC::SetMeshComp::Transforma(const size_t &indice_trf)
   {
-    TrfGeom *trf= getPreprocessor()->getCad().getTransformacionesGeometricas().busca(indice_trf);
+    TrfGeom *trf= getPreprocessor()->getMultiBlockTopology().getTransformacionesGeometricas().busca(indice_trf);
     if(trf)
       Transforma(*trf);
   }
@@ -336,7 +336,7 @@ void XC::SetMeshComp::kill_elements(void)
 void XC::SetMeshComp::alive_elements(void)
   { elements.alive_elements(); }
 
-//! @brief Calcula los esfuerzos en cada uno de los elements.
+//! @brief Calcula los esfuerzos on each uno de los elements.
 void XC::SetMeshComp::calc_resisting_force(void)
   { elements.calc_resisting_force(); }
 

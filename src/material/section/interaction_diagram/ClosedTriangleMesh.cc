@@ -316,7 +316,7 @@ void XC::ClosedTriangleMesh::Print(std::ostream &os) const
   }
 
 //! @brief Returns a matriz con las coordenadas de los puntos
-//! que definen cada uno de los triedros.
+//! que definen each uno de los triedros.
 void XC::ClosedTriangleMesh::getMatrizPosiciones(Matrix &m)
   {
     const int sz= size();
@@ -339,7 +339,7 @@ void XC::ClosedTriangleMesh::getMatrizPosiciones(Matrix &m)
 
 //! @brief Crea los triedros que definen el diagrama a partir
 //! de una matriz con las coordenadas de los puntos
-//! que definen cada uno de los triedros.
+//! que definen each uno de los triedros.
 void XC::ClosedTriangleMesh::setMatrizPosiciones(const Matrix &m)
   {
     const int nfilas= m.noRows();

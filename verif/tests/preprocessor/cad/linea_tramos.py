@@ -34,11 +34,11 @@ seedElemLoader.defaultTag= 1 #Number for the next element will be 1.
 truss= seedElemLoader.newElement("Truss",xc.ID([0,0]))
 truss.area= 10
 
-points= preprocessor.getCad.getPoints
+points= preprocessor.getMultiBlockTopology.getPoints
 pt= points.newPntIDPos3d(1,geom.Pos3d(0.0,0.0,0.0))
 pt= points.newPntIDPos3d(2,geom.Pos3d(CooMax,CooMax,CooMax))
 
-lines= preprocessor.getCad.getLines
+lines= preprocessor.getMultiBlockTopology.getLines
 lines.defaultTag= 1
 l= lines.newDividedLine(1,2)
 l.setLongs(xc.Vector([raiz3,raiz3,raiz3,raiz3,raiz3,raiz3,raiz3,raiz3,raiz3,raiz3]))
