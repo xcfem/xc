@@ -57,8 +57,6 @@ template <class T>
 
     void clearAll(void);
     virtual ~ModelComponentContainer(void);
-
-
   };
 
 //! @brief Constructor.
