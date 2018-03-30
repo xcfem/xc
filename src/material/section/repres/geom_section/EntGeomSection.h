@@ -33,7 +33,7 @@
 
 namespace XC {
 class GeomSection;
-class SisRefScc;
+class SectionReferenceFrame;
 class Spot;
 class Eje;
 
@@ -64,8 +64,8 @@ class EntGeomSection: public EntConNmb
     virtual int getMEDCellType(void) const;
 
 
-    SisRefScc *SisRefSccActual(void);    
-    const SisRefScc *SisRefSccActual(void) const;
+    SectionReferenceFrame *SectionReferenceFrameActual(void);    
+    const SectionReferenceFrame *SectionReferenceFrameActual(void) const;
 
     Spot *BuscaSpot(const size_t &id_punto);    
     const Spot *BuscaSpot(const size_t &id_punto) const;

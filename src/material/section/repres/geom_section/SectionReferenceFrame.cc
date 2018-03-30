@@ -24,19 +24,19 @@
 // along with this program.
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
-//SisRefScc.cc
+//SectionReferenceFrame.cc
 
-#include "SisRefScc.h"
+#include "SectionReferenceFrame.h"
 #include "xc_utils/src/geom/pos_vec/Vector2d.h"
 
 
 //! @brief Returns the $\vec{i}$ unit vector expressed in global coordinates
 //! for the position being passed as parameter.
-Vector2d XC::SisRefScc::GetI(const Pos2d &p) const
+Vector2d XC::SectionReferenceFrame::GetI(const Pos2d &p) const
   { return GetVDirEje(1,p); }
 
 //! @brief Returns the $\vec{j}$ unit vector expressed in global coordinates
 //! for the position being passed as parameter.
-Vector2d XC::SisRefScc::GetJ(const Pos2d &p) const
+Vector2d XC::SectionReferenceFrame::GetJ(const Pos2d &p) const
   { return GetVDirEje(2,p); }
 

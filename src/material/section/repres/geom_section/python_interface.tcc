@@ -27,7 +27,7 @@
 
 class_<XC::EntGeomSection, bases<EntConNmb>, boost::noncopyable >("EntGeomSection", no_init);
 
-class_<XC::SisRefScc, bases<XC::EntGeomSection>, boost::noncopyable >("SisRefScc", no_init);
+class_<XC::SectionReferenceFrame, bases<XC::EntGeomSection>, boost::noncopyable >("SectionReferenceFrame", no_init);
 
 XC::Spot *(XC::Eje::*getSpot1)(void)= &XC::Eje::P1;
 XC::Spot *(XC::Eje::*getSpot2)(void)= &XC::Eje::P2;
@@ -64,5 +64,5 @@ class_<XC::GeomSection, XC::GeomSection *, bases<XC::SectionMassProperties>, boo
   ;
 
 
-class_<XC::SisRefSccCartesianas2d, bases<XC::SisRefScc>, boost::noncopyable >("SisRefSccCartesianas2d", no_init);
+class_<XC::SectionCartesianReferenceFrame, bases<XC::SectionReferenceFrame>, boost::noncopyable >("SectionCartesianReferenceFrame", no_init);
 

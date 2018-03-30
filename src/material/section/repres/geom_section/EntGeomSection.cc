@@ -59,18 +59,18 @@ XC::EntGeomSection &XC::EntGeomSection::operator=(const EntGeomSection &otro)
   }
 
 //! @brief Returns current reference system.
-XC::SisRefScc *XC::EntGeomSection::SisRefSccActual(void)
+XC::SectionReferenceFrame *XC::EntGeomSection::SectionReferenceFrameActual(void)
   {
-    SisRefScc *retval= nullptr;
+    SectionReferenceFrame *retval= nullptr;
     if(sccGeom)
       retval= getGeomSection()->current_reference_system();
     return retval;
   }
 
 //! @brief Returns current reference system.
-const XC::SisRefScc *XC::EntGeomSection::SisRefSccActual(void) const
+const XC::SectionReferenceFrame *XC::EntGeomSection::SectionReferenceFrameActual(void) const
   {
-    const SisRefScc *retval= nullptr;
+    const SectionReferenceFrame *retval= nullptr;
     if(sccGeom)
       retval= getGeomSection()->current_reference_system();
     return retval;

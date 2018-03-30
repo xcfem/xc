@@ -24,31 +24,43 @@
 // along with this program.
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
-//SisRefSccCartesianas2d.cc
+//SectionCartesianReferenceFrame.h
+//Sistema de coordenadas cartesianas.
 
-#include "SisRefSccCartesianas2d.h"
-#include "Spot.h"
-#include "xc_utils/src/geom/pos_vec/Vector2d.h"
+#ifndef SISREFSCCCARTESIANAS2D_H
+#define SISREFSCCCARTESIANAS2D_H
+
+#include "SectionReferenceFrame.h"
+#include "xc_utils/src/geom/sis_ref/Ref2d2d.h"
+
+namespace XC {
+
+//! @ingroup MATSCCEntGeom
+//
+//! @brief Bidimensional reference system for a section.
+class SectionCartesianReferenceFrame: public SectionReferenceFrame
+  {
+    Ref2d2d ref;//!< Reference system.
+  protected:
+
+  public:
+    //! @brief Constructor.
+    SectionCartesianReferenceFrame(GeomSection *m)
+      : SectionReferenceFrame(m) {}
+    SectionCartesianReferenceFrame(const std::string &nombre= "",GeomSection *m= nullptr)
+      : SectionReferenceFrame(nombre,m) {}
+
+    Vector2d GetVDirEje(const size_t &,const Pos2d &) const;
 
 
-//! @brief Returns the i-th axis unit vector expressed in global coordinates
-//! for the position being passed as parameter.
-Vector2d XC::SisRefSccCartesianas2d::GetVDirEje(const size_t &i,const Pos2d &) const
-  { return ref.GetVDirEje(i); }
+    Pos2d GetPosGlobal(const Pos2d &p) const;
+    Vector2d GetCooGlobales(const Vector2d &v) const;
+    Pos2d GetPosLocal(const Pos2d &p) const;
+    Vector2d GetCooLocales(const Vector2d &v) const;
 
-//! @brief Return the posicion del punto p expresado en locales
-//! expresada en coordenadas globales.
-Pos2d XC::SisRefSccCartesianas2d::GetPosGlobal(const Pos2d &p) const
-  { return ref.GetPosGlobal(p); }
-//! @brief Returns the vector v expresado en locales
-//! expresado en coordenadas globales.
-Vector2d XC::SisRefSccCartesianas2d::GetCooGlobales(const Vector2d &v) const
-  { return ref.GetCooGlobales(v); }
-//! @brief Return the posicion del punto p expresado en globales
-//! expresada en coordenadas locales.
-Pos2d XC::SisRefSccCartesianas2d::GetPosLocal(const Pos2d &p) const
-  { return ref.GetPosLocal(p); }
-//! @brief Returns the vector v expresado en globales
-//! expresado en coordenadas locales.
-Vector2d XC::SisRefSccCartesianas2d::GetCooLocales(const Vector2d &v) const
-  { return ref.GetCooLocales(v); }
+
+  };
+
+} //end of XC namespace
+
+#endif

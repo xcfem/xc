@@ -24,7 +24,7 @@
 // along with this program.
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
-//SisRefScc.h
+//SectionReferenceFrame.h
 
 #ifndef SISREFSCC_H
 #define SISREFSCC_H
@@ -39,15 +39,15 @@ namespace XC {
 //! @ingroup MATSCCEntGeom
 //
 //! @brief Reference system used for make easier definining point positions.
-class SisRefScc: public EntGeomSection
+class SectionReferenceFrame: public EntGeomSection
   {
   protected:
 
   public:
     //! @brief Constructor.
-    SisRefScc(GeomSection *m)
+    SectionReferenceFrame(GeomSection *m)
       : EntGeomSection("",m) {}
-    SisRefScc(const std::string &nombre= "",GeomSection *m= nullptr)
+    SectionReferenceFrame(const std::string &nombre= "",GeomSection *m= nullptr)
       : EntGeomSection(nombre,m) {}
 
     //! @brief Returns the i-th axis unit vector 

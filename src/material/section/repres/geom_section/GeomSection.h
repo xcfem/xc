@@ -40,7 +40,7 @@ class Semiplano2d;
 class Segmento2d;
 
 namespace XC {
-class SisRefScc;
+class SectionReferenceFrame;
 class Spot;
 class Segment;
 class RegionSecc;
@@ -63,7 +63,7 @@ class GeomSection: public SectionMassProperties
   {
   public:
 
-    typedef std::map<size_t,SisRefScc *> lst_sis_ref;//!< reference systems container.
+    typedef std::map<size_t,SectionReferenceFrame *> lst_sis_ref;//!< reference systems container.
     typedef std::map<size_t,Spot *> lst_spots; //!< point container.
     typedef std::map<size_t,Eje *> lst_ejes; //!< line container.
 
@@ -86,17 +86,17 @@ class GeomSection: public SectionMassProperties
     GeomSection(MaterialHandler *ml);    
     inline virtual ~GeomSection(void) {}
 
-    inline int getTagSisRef(void) const
+    inline int getReferenceFrameTag(void) const
       { return tag_sis_ref; }
-    void setTagSisRef(int i)
+    void setReferenceFrameTag(int i)
       { tag_sis_ref= i; }
-    SisRefScc *get_reference_system(const size_t &id);
-    const SisRefScc *get_reference_system(const size_t &id) const;
-    inline SisRefScc *current_reference_system(void)
+    SectionReferenceFrame *get_reference_system(const size_t &id);
+    const SectionReferenceFrame *get_reference_system(const size_t &id) const;
+    inline SectionReferenceFrame *current_reference_system(void)
       { return get_reference_system(tag_sis_ref); }
-    const SisRefScc *current_reference_system(void) const
+    const SectionReferenceFrame *current_reference_system(void) const
       { return get_reference_system(tag_sis_ref); }
-    SisRefScc *creaSisRef(const std::string &); 
+    SectionReferenceFrame *createReferenceFrame(const std::string &); 
 
     // Section edition functions
     inline int getTagSpot(void) const

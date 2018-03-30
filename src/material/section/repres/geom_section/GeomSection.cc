@@ -28,8 +28,8 @@
 
 #include <material/section/repres/geom_section/GeomSection.h>
 
-#include <material/section/repres/geom_section/SisRefScc.h>
-#include <material/section/repres/geom_section/SisRefSccCartesianas2d.h>
+#include <material/section/repres/geom_section/SectionReferenceFrame.h>
+#include <material/section/repres/geom_section/SectionCartesianReferenceFrame.h>
 #include <material/section/repres/geom_section/Spot.h>
 #include <material/section/repres/geom_section/Segment.h>
 
@@ -86,9 +86,9 @@ size_t XC::GeomSection::getNumFiberData(void) const
   { return (regiones.getNumCells() + capas_armado.getNumReinfBars()); }
 
 //! @brief Returns a pointer to the reference system which identifier is being passed as parameter.
-XC::SisRefScc *XC::GeomSection::get_reference_system(const size_t &id)
+XC::SectionReferenceFrame *XC::GeomSection::get_reference_system(const size_t &id)
   {
-    SisRefScc *retval= nullptr;
+    SectionReferenceFrame *retval= nullptr;
     if(id>0) //0 is reserved for the universal coordinate system.
       {
         lst_sis_ref::iterator i= reference_systems.find(id);
@@ -99,9 +99,9 @@ XC::SisRefScc *XC::GeomSection::get_reference_system(const size_t &id)
   }
 
 //! @brief Returns a const pointer to the reference system which identifier is being passed as parameter.
-const XC::SisRefScc *XC::GeomSection::get_reference_system(const size_t &id) const
+const XC::SectionReferenceFrame *XC::GeomSection::get_reference_system(const size_t &id) const
   {
-    SisRefScc *retval= nullptr;
+    SectionReferenceFrame *retval= nullptr;
     if(id>0) //0 is reserved for the universal coordinate system.
       {
         lst_sis_ref::const_iterator i= reference_systems.find(id);
@@ -151,21 +151,21 @@ const XC::Eje *XC::GeomSection::busca_eje(const size_t &id) const
     return retval;
   }
 
-//! @brief Creates a new reference system of the type being passed as parameter.
-XC::SisRefScc *XC::GeomSection::creaSisRef(const std::string &tipo)
+//! @brief Creates a new reference frame of the type being passed as parameter.
+XC::SectionReferenceFrame *XC::GeomSection::createReferenceFrame(const std::string &type)
   {
-    SisRefScc *retval= get_reference_system(tag_sis_ref);
+    SectionReferenceFrame *retval= get_reference_system(tag_sis_ref);
     if(!retval) //New reference system.
       {
-        if(tipo == "cartesianas")
+        if((type == "cartesian") || (type == "cartesianas"))
           {
-            retval= new SisRefSccCartesianas2d("r"+boost::lexical_cast<std::string>(tag_sis_ref),this);
+            retval= new SectionCartesianReferenceFrame("r"+boost::lexical_cast<std::string>(tag_sis_ref),this);
             reference_systems[tag_sis_ref]= retval;
             tag_sis_ref++;
           }
         else
 	  std::cerr << getClassName() << __FUNCTION__
-		    << "; type: '" << tipo
+		    << "; type: '" << type
                     << "' unknown." << std::endl;
       }
     return retval;
@@ -191,7 +191,7 @@ XC::Spot *XC::GeomSection::newSpot(const Pos2d &p)
     Pos2d trfP(p);
     if(tag_sis_ref != 0) //El sistema de coordenadas no es el global.
       {
-        SisRefScc *sr= get_reference_system(tag_sis_ref);
+        SectionReferenceFrame *sr= get_reference_system(tag_sis_ref);
         if(sr)
           trfP= sr->GetPosGlobal(p); //Pasa a coordenadas globales.
         else
