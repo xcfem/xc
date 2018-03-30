@@ -20,7 +20,7 @@ lapso= 0
 i= 1
 feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor   
-nodes= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeHandler
 nodes.defaultTag= 1
 for i in range(1,1001):
   n= nodes.newNodeXYZ(i,0,0)
@@ -28,7 +28,7 @@ for i in range(1,1001):
 # Materials definition
 elast= typical_materials.defElasticMaterial(preprocessor, "elast",2.1e6)
 
-elements= preprocessor.getElementLoader
+elements= preprocessor.getElementHandler
 elements.defaultMaterial= "elast"
 elements.dimElem= 2 # Dimension of element space
 elements.defaultTag= 1 #Tag for the next element.

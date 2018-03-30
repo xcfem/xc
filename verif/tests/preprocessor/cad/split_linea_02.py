@@ -21,24 +21,24 @@ CooMax= 10
 # Problem type
 feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
-nodes= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeHandler
 modelSpace= predefined_spaces.SolidMechanics3D(nodes)
 # Define materials
 elast= typical_materials.defElasticMaterial(preprocessor, "elast",3000)
 
 nodes.newSeedNode()
-seedElemLoader= preprocessor.getElementLoader.seedElemLoader
-seedElemLoader.defaultMaterial= "elast"
-seedElemLoader.dimElem= 3 # Dimension of element space
-seedElemLoader.defaultTag= 1 #Tag for the next element.
-truss= seedElemLoader.newElement("Truss",xc.ID([0,0]));
+seedElemHandler= preprocessor.getElementHandler.seedElemHandler
+seedElemHandler.defaultMaterial= "elast"
+seedElemHandler.dimElem= 3 # Dimension of element space
+seedElemHandler.defaultTag= 1 #Tag for the next element.
+truss= seedElemHandler.newElement("Truss",xc.ID([0,0]));
 truss.area= 10.0
 
-points= preprocessor.getCad.getPoints
+points= preprocessor.getMultiBlockTopology.getPoints
 pt= points.newPntIDPos3d(1,geom.Pos3d(0.0,0.0,0.0))
 pt= points.newPntIDPos3d(2,geom.Pos3d(CooMax,CooMax,CooMax))
 
-lines= preprocessor.getCad.getLines
+lines= preprocessor.getMultiBlockTopology.getLines
 lines.defaultTag= 1
 l1= lines.newLine(1,2)
 l1.nDiv= NumDiv

@@ -9,7 +9,7 @@ def listNodeUMaxUMin(preprocessor,setName, tit, fmt, fName):
   defCampos= "|l|r|r|r|r|"
   idsCampos= "IdN & $U_{max}$ & Comb. & $U_{min}$ & Comb. \\\\\n - & mm & - & mm & - \\\\\n"
   cabeceraSupertabular(fName,5,defCampos,idsCampos,caption)
-  s= preprocessor.getSetLoader.getSet(setName)
+  s= preprocessor.getSets.getSet(setName)
   nodes= s.getNodes()
   tagUMaxMax= 0
   UMaxMax= 0
@@ -52,7 +52,7 @@ def listNodeVMaxVMin(setName, tit, fmt, fName):
   VMinMin= 0
   CombVMinMin= None
  
-  s= preprocessor.getSetLoader.getSet(setName)
+  s= preprocessor.getSets.getSet(setName)
   nodes= s.getNodes()
   for n in nodes:
     fName.write(tag," & ",fmt.format(VMax*1e3)," & ",CombVMax," & ",fmt.format(VMin*1e3)," & ",CombVMin,"\\\\\n")
@@ -88,7 +88,7 @@ def listNodeWMaxWMin(preprocessor, setName, tit, fmt, fName):
   WMinMin= 0
   CombWMinMin= None
  
-  s= preprocessor.getSetLoader.getSet(setName)
+  s= preprocessor.getSets.getSet(setName)
   nodes= s.getNodes()
   for n in nodes:
     fName.write(tag," & ",fmt.format(WMax*1e3)," & ",CombWMax," & ",fmt.format(WMin*1e3)," & ",CombWMin,"\\\\\n")

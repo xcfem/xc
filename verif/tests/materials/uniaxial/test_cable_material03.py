@@ -26,7 +26,7 @@ F= 100 # Prestressing force (pounds)
 # Model definition
 feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
-nodes= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeHandler
 
 # Problem type
 modelSpace= predefined_spaces.SolidMechanics2D(nodes)
@@ -45,7 +45,7 @@ mat= typical_materials.defCableMaterial(preprocessor, "cable",E,sigmaPret,0.0)
     cross section of unit area.'''
     
 # Elements definition
-elements= preprocessor.getElementLoader
+elements= preprocessor.getElementHandler
 elements.defaultMaterial= "cable"
 elements.dimElem= 2 # Dimension of element space
 elements.defaultTag= 1 #First node number.
@@ -55,7 +55,7 @@ truss2= elements.newElement("CorotTruss",xc.ID([2,3]));
 truss2.area= area
     
 # Constraints
-constraints= preprocessor.getConstraintLoader
+constraints= preprocessor.getBoundaryCondHandler
 #
 spc= constraints.newSPConstraint(1,0,0.0) # Node 1
 spc= constraints.newSPConstraint(1,1,0.0)
@@ -63,7 +63,7 @@ spc= constraints.newSPConstraint(3,0,0.0) # Node 3
 spc= constraints.newSPConstraint(3,1,0.0)
 
 # Loads definition
-cargas= preprocessor.getLoadLoader
+cargas= preprocessor.getLoadHandler
 casos= cargas.getLoadPatterns
 #Load modulation.
 ts= casos.newTimeSeries("constant_ts","ts")
@@ -80,7 +80,7 @@ result= analisis.analyze(10)
 
 
 nodes.calculateNodalReactions(True)
-nodes= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeHandler
 nod3= nodes.getNode(3)
 R1X= nod3.getReaction[0]
 R1Y= nod3.getReaction[1] 

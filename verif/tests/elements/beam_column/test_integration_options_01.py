@@ -14,24 +14,24 @@ import xc
 feProblem= xc.FEProblem()
 prep= feProblem.getPreprocessor
 
-numIntegratorsA= len(prep.getBeamIntegratorLoader)
+numIntegratorsA= len(prep.getBeamIntegratorHandler)
 
-lobattoBeamIntegration= prep.getBeamIntegratorLoader.newBeamIntegrator('Lobatto','Lobatto01')
-legendreBeamIntegration= prep.getBeamIntegratorLoader.newBeamIntegrator('Legendre','Legendre01')
-radauBeamIntegration= prep.getBeamIntegratorLoader.newBeamIntegrator('Radau','Radau01')
-newtonCotesBeamIntegration= prep.getBeamIntegratorLoader.newBeamIntegrator('NewtonCotes','NewtonCotes01')
-trapezoidalBeamIntegration= prep.getBeamIntegratorLoader.newBeamIntegrator('Trapezoidal','Trapezoidal01')
-compositeSimpsonBeamIntegration= prep.getBeamIntegratorLoader.newBeamIntegrator('CompositeSimpson','CompositeSimpson01')
-userDefinedBeamIntegration= prep.getBeamIntegratorLoader.newBeamIntegrator('UserDefined','UserDefined01')
-fixedLocationBeamIntegration= prep.getBeamIntegratorLoader.newBeamIntegrator('FixedLocation','FixedLocation01')
-lowOrderBeamIntegration= prep.getBeamIntegratorLoader.newBeamIntegrator('LowOrder','LowOrder01')
-midDistanceBeamIntegration= prep.getBeamIntegratorLoader.newBeamIntegrator('MidDistance','MidDistance01')
-hingeMidpointBeamIntegration= prep.getBeamIntegratorLoader.newBeamIntegrator('HingeMidpoint','HingeMidpoint01')
-hingeRadauBeamIntegration= prep.getBeamIntegratorLoader.newBeamIntegrator('HingeRadau','HingeRadau01')
-hingeRadauTwoBeamIntegration= prep.getBeamIntegratorLoader.newBeamIntegrator('HingeRadauTwo','HingeRadauTwo01')
-hingeEndpointBeamIntegration= prep.getBeamIntegratorLoader.newBeamIntegrator('HingeEndpoint','HingeEndpoint01')
+lobattoBeamIntegration= prep.getBeamIntegratorHandler.newBeamIntegrator('Lobatto','Lobatto01')
+legendreBeamIntegration= prep.getBeamIntegratorHandler.newBeamIntegrator('Legendre','Legendre01')
+radauBeamIntegration= prep.getBeamIntegratorHandler.newBeamIntegrator('Radau','Radau01')
+newtonCotesBeamIntegration= prep.getBeamIntegratorHandler.newBeamIntegrator('NewtonCotes','NewtonCotes01')
+trapezoidalBeamIntegration= prep.getBeamIntegratorHandler.newBeamIntegrator('Trapezoidal','Trapezoidal01')
+compositeSimpsonBeamIntegration= prep.getBeamIntegratorHandler.newBeamIntegrator('CompositeSimpson','CompositeSimpson01')
+userDefinedBeamIntegration= prep.getBeamIntegratorHandler.newBeamIntegrator('UserDefined','UserDefined01')
+fixedLocationBeamIntegration= prep.getBeamIntegratorHandler.newBeamIntegrator('FixedLocation','FixedLocation01')
+lowOrderBeamIntegration= prep.getBeamIntegratorHandler.newBeamIntegrator('LowOrder','LowOrder01')
+midDistanceBeamIntegration= prep.getBeamIntegratorHandler.newBeamIntegrator('MidDistance','MidDistance01')
+hingeMidpointBeamIntegration= prep.getBeamIntegratorHandler.newBeamIntegrator('HingeMidpoint','HingeMidpoint01')
+hingeRadauBeamIntegration= prep.getBeamIntegratorHandler.newBeamIntegrator('HingeRadau','HingeRadau01')
+hingeRadauTwoBeamIntegration= prep.getBeamIntegratorHandler.newBeamIntegrator('HingeRadauTwo','HingeRadauTwo01')
+hingeEndpointBeamIntegration= prep.getBeamIntegratorHandler.newBeamIntegrator('HingeEndpoint','HingeEndpoint01')
 
-numIntegratorsB= len(prep.getBeamIntegratorLoader)
+numIntegratorsB= len(prep.getBeamIntegratorHandler)
 ratio1= numIntegratorsB-14-numIntegratorsA
 
 #print 'numIntegrators= ', numIntegrators

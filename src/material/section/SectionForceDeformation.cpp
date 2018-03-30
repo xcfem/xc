@@ -69,7 +69,7 @@
 
 
 #include "material/section/ResponseId.h"
-#include "preprocessor/loaders/MaterialLoader.h"
+#include "preprocessor/prep_handlers/MaterialHandler.h"
 #include "utility/actor/actor/MovableMatrix.h"
 #include "utility/actor/actor/MatrixCommMetaData.h"
 
@@ -82,12 +82,12 @@ const XC::Matrix *ptr_initial_tangent= nullptr;
 //! @param tag: object identifier.
 //! @param classTag: object class identifier.
 //! @param mat_ldr: model wide material objects manager.
-XC::SectionForceDeformation::SectionForceDeformation(int tag, int classTag,MaterialLoader *mat_ldr)
-  : Material(tag,classTag), fDefault(nullptr), material_loader(mat_ldr) {}
+XC::SectionForceDeformation::SectionForceDeformation(int tag, int classTag,MaterialHandler *mat_ldr)
+  : Material(tag,classTag), fDefault(nullptr), material_handler(mat_ldr) {}
 
 //! @brief Copy constructor.
 XC::SectionForceDeformation::SectionForceDeformation(const SectionForceDeformation &otro)
-  : Material(otro), fDefault(nullptr), material_loader(otro.material_loader)
+  : Material(otro), fDefault(nullptr), material_handler(otro.material_handler)
   {
     if(otro.fDefault)
       fDefault= new Matrix(*otro.fDefault);
@@ -99,7 +99,7 @@ XC::SectionForceDeformation &XC::SectionForceDeformation::operator=(const Sectio
     Material::operator=(otro);
     if(fDefault) delete fDefault;
     if(otro.fDefault) fDefault= new Matrix(*otro.fDefault);
-    material_loader= otro.material_loader;
+    material_handler= otro.material_handler;
     return *this;
   }
 

@@ -28,7 +28,7 @@ L= 5 # Element length expressed in meters.
 # Problem type
 feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
-nodes= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeHandler
 modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
 nodes.defaultTag= 1 #First node number.
 nod= nodes.newNodeXYZ(1.0,2.0,0.0)
@@ -38,7 +38,7 @@ nod= nodes.newNodeXYZ(1.0,2.0,L)
 lin= modelSpace.newLinearCrdTransf("lin",xc.Vector([0,1,0]))
 
 # Elements definition
-elements= preprocessor.getElementLoader
+elements= preprocessor.getElementHandler
 
 # Materials
 sectionProperties= xc.CrossSectionProperties3d()

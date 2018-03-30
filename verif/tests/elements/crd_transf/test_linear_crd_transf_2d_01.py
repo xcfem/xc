@@ -18,7 +18,7 @@ __email__= "l.pereztato@gmail.com"
 # Problem type
 feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor   
-nodes= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeHandler
 modelSpace= predefined_spaces.StructuralMechanics2D(nodes)
 nodes.defaultTag= 1 #First node number.
 nod= nodes.newNodeXY(0,0)
@@ -31,7 +31,7 @@ seccion= typical_materials.defElasticSection2d(preprocessor, "seccion",1,1,1)
     
 
 # Elements definition
-elements= preprocessor.getElementLoader
+elements= preprocessor.getElementHandler
 elements.defaultTransformation= "lin" # Coordinate transformation for the new elements
 elements.defaultMaterial= "seccion"
 elements.defaultTag= 1 #Tag for next element.

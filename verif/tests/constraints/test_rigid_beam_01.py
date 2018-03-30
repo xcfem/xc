@@ -19,7 +19,7 @@ F= 1.5e3 # Load magnitude (kN)
 # Problem type
 feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor   
-nodes= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeHandler
 modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
 nodes.defaultTag= 1 #First node number.
 nod= nodes.newNodeXYZ(0,0.0,0.0)
@@ -29,11 +29,11 @@ nod= nodes.newNodeXYZ(L,0.0,0.0)
 # Constraints
 
 modelSpace.fixNode000_000(1)
-rr= preprocessor.getConstraintLoader.newRigidBeam(1,2)
+rr= preprocessor.getBoundaryCondHandler.newRigidBeam(1,2)
 
 
 # Loads definition
-cargas= preprocessor.getLoadLoader
+cargas= preprocessor.getLoadHandler
 
 casos= cargas.getLoadPatterns
 

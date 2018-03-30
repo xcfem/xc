@@ -26,7 +26,7 @@ F= 10 # Load magnitude en kips
 # Problem type
 feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
-nodes= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeHandler
 modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
 nodes.defaultTag= 1 #First node number.
 nod= nodes.newNodeXYZ(0,0,0)
@@ -42,7 +42,7 @@ nod= nodes.newNodeXYZ(L,h,0)
 # Materials definition
 nmb1= typical_materials.defElasticMembranePlateSection(preprocessor, "memb1",E,nu,0.0,h)
 
-elements= preprocessor.getElementLoader
+elements= preprocessor.getElementHandler
 elements.defaultMaterial= "memb1"
 elements.defaultTag= 1
 elem= elements.newElement("CorotShellMITC4",xc.ID([1,2,6,5]))
@@ -60,7 +60,7 @@ spc= modelSpace.constraints.newSPConstraint(7,2,0.0)
 spc= modelSpace.constraints.newSPConstraint(8,2,0.0)
 
 # Loads definition
-cargas= preprocessor.getLoadLoader
+cargas= preprocessor.getLoadHandler
 
 casos= cargas.getLoadPatterns
 
@@ -82,7 +82,7 @@ result= analisis.analyze(1)
 
 
 
-nodes= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeHandler
 nod8= nodes.getNode(8)
 UX8= nod8.getDisp[0] # Node 8 xAxis displacement
 UY8= nod8.getDisp[1] # Node 8 yAxis displacement

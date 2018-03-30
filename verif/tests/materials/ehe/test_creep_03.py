@@ -47,7 +47,7 @@ from solution import database_helper as dbHelper
 # Problem type
 feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
-nodes= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeHandler
 modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
 nodes.defaultTag= 1 #First node number.
 nod= nodes.newNodeXYZ(0,0,0)
@@ -70,7 +70,7 @@ hLosa= typical_materials.defElasticMembranePlateSection(preprocessor, "hLosa",Ec
 
 typical_materials.defSteel02(preprocessor, "prestressingSteel",Ep,fy,0.001,tInic)
 
-elements= preprocessor.getElementLoader
+elements= preprocessor.getElementHandler
 # Reinforced concrete deck
 elements.defaultMaterial= "hLosa"
 elements.defaultTag= 1
@@ -111,7 +111,7 @@ modelSpace.fixNode000_000(5)
 modelSpace.fixNode000_000(9)
 
 # Loads definition
-cargas= preprocessor.getLoadLoader
+cargas= preprocessor.getLoadHandler
 
 casos= cargas.getLoadPatterns
 
@@ -211,7 +211,7 @@ dYMax=-1e9
 def procesResultVerif(preprocessor,  comb):
   tagComb= comb.tag
   nmbComb= comb.getName
-  nodes= preprocessor.getNodeLoader
+  nodes= preprocessor.getNodeHandler
   nod8= nodes.getNode(8)
   global deltaX
   deltaX= nod8.getDisp[0]
@@ -261,7 +261,7 @@ for e in setShells.getElements:
   espMedio= 2*Ac/u
   e.setProp("epsRetracc",concrHA30.getShrEpscs(tFin,tS,Hrel*100,espMedio*1000))
 
-cargas= preprocessor.getLoadLoader
+cargas= preprocessor.getLoadHandler
 casos= cargas.getLoadPatterns
 #casos.setCurrentLoadPattern("RETRACC")
 
@@ -300,7 +300,7 @@ for e in setShells.getElements:
   epsFluencia2=concrHA30.getCreepDeformation(tFin,t0,Hrel*100,espMedio*1000,tension2Media)
 
 
-cargas= preprocessor.getLoadLoader
+cargas= preprocessor.getLoadHandler
 casos= cargas.getLoadPatterns
 #cargas.setCurrentLoadPattern("FLU")
 for e in setShells.getElements:
@@ -316,7 +316,7 @@ for e in setShells.getElements:
   eleLoad.setStrainComp(3,1,epsFluencia2)
 
 preprocessor.resetLoadCase()
-cargas= preprocessor.getLoadLoader
+cargas= preprocessor.getLoadHandler
 
 comb= combs.newLoadCombination("FASE0","1.00*FLU")
 comb.tagSaveFase0= comb.tag*100

@@ -32,7 +32,7 @@ class MaterialWithDKDiagrams(object):
     return self.materialName
 
   def getDiagK(self,preprocessor):
-    return preprocessor.getMaterialLoader.getMaterial(self.nmbDiagK)
+    return preprocessor.getMaterialHandler.getMaterial(self.nmbDiagK)
   def getDiagD(self,preprocessor):
-    return preprocessor.getMaterialLoader.getMaterial(self.nmbDiagD)
+    return preprocessor.getMaterialHandler.getMaterial(self.nmbDiagD)
 

@@ -27,7 +27,7 @@ rho= 0.0 # Densidad
 feProblem= xc.FEProblem()
 feProblem.logFileName= "/tmp/borrar.log" # Ignore warning messages
 preprocessor=  feProblem.getPreprocessor
-nodes= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeHandler
 
 modelSpace= predefined_spaces.SolidMechanics2D(nodes)# Materials definition
 
@@ -36,12 +36,12 @@ elast2d= typical_materials.defElasticIsotropicPlaneStress(preprocessor, "elast2d
 
 nodes.newSeedNode()
 
-seedElemLoader= preprocessor.getElementLoader.seedElemLoader
-seedElemLoader.defaultMaterial= "elast2d"
-elem= seedElemLoader.newElement("FourNodeQuad",xc.ID([0,0,0,0]))
+seedElemHandler= preprocessor.getElementHandler.seedElemHandler
+seedElemHandler.defaultMaterial= "elast2d"
+elem= seedElemHandler.newElement("FourNodeQuad",xc.ID([0,0,0,0]))
 
 
-points= preprocessor.getCad.getPoints
+points= preprocessor.getMultiBlockTopology.getPoints
 pt= points.newPntIDPos3d(1,geom.Pos3d(0.0,0.0,0.0))
 pt= points.newPntIDPos3d(2,geom.Pos3d(CooMax,0.0,0.0))
 pt= points.newPntIDPos3d(3,geom.Pos3d(CooMax,CooMax,0.0))
@@ -55,7 +55,7 @@ pt= points.newPntIDPos3d(4,geom.Pos3d(0.0,CooMax,0.0))
 #  1 +--------------------+ 2
 #
 
-lines= preprocessor.getCad.getLines
+lines= preprocessor.getMultiBlockTopology.getLines
 lines.defaultTag= 3
 l3= lines.newLine(1,2)
 lines.defaultTag= 2
@@ -65,7 +65,7 @@ l1= lines.newLine(2,3)
 lines.defaultTag= 4
 l1= lines.newLine(4,1)
 
-surfaces= preprocessor.getCad.getSurfaces
+surfaces= preprocessor.getMultiBlockTopology.getSurfaces
 surfaces.defaultTag= 1
 s= surfaces.newQuadSurfaceLines(1,2,3,4)
 s.nDivI= NumDivI
@@ -100,7 +100,7 @@ nnodDom= mesh.getNumNodes()
 
 ''' 
 print "number of nodes: ",nnod
-nodes= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeHandler
 
 for_each
   print "  node: ",tag," x= ",coord[0],", y= ",coord[1]

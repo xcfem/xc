@@ -4,7 +4,7 @@
 def listaEsfuerzosBarrasSet(preprocessor,nmbComb, setName, fmt, fName):
   str= "" 
   k= 0
-  s= preprocessor.getSetLoader.getSet(setName)
+  s= preprocessor.getSets.getSet(setName)
   elems= s.getElements()
   for e in elements:
     str= nmbComb+" & "+e.tag+" & "
@@ -25,7 +25,7 @@ def listaEsfuerzosBarrasLineas(preprocessor, nmbComb, setNameLineas, fmt, fName,
   idsCampos= "Caso & Id & Secc. & N & Vy & Vz & Mx & My & Mz \\\\\n - & - & - & kN & kN & kN & kN m & kN m & kN m "
   cabeceraSupertabular(fName,9,defCampos,idsCampos,caption) 
 
-  s= preprocessor.getSetLoader.getSet(setNameLineas)
+  s= preprocessor.getSets.getSet(setNameLineas)
   lines= s.getLines()
   for l in lines:
     nmb= l.getName() 
@@ -39,7 +39,7 @@ def listaEsfuerzosBarrasLineas(preprocessor, nmbComb, setNameLineas, fmt, fName,
 def listaEsfuerzosFCBarrasSet(preprocessor, nmbComb, setName, fmt, fName, nmbDiag):
   str= "" 
   k= 0
-  s= preprocessor.getSetLoader.getSet(setName)
+  s= preprocessor.getSets.getSet(setName)
   elems= s.getElements()
   for e in elements:
     str= nmbComb+" & "+e.tag+" & "
@@ -59,7 +59,7 @@ def listaEsfuerzosFCBarrasLineas(nmbComb, setNameLineas, fmt, fName, encab, tit,
   idsCampos= "Caso & Id & Secc. & N & Vy & Vz & Mx & My & Mz & FC \\\\\n - & - & - & kN & kN & kN & kN m & kN m & kN m & - "
   cabeceraSupertabular(fName,10,defCampos,idsCampos,caption) 
 
-  s= preprocessor.getSetLoader.getSet(setNameLineas)
+  s= preprocessor.getSets.getSet(setNameLineas)
   lines= s.getLines()
   for l in lines:
     nmb= l.getName()
@@ -72,7 +72,7 @@ def listaEsfuerzosFCBarrasLineas(nmbComb, setNameLineas, fmt, fName, encab, tit,
 
 # Imprime los esfuerzos de los elementos contenidos en el conjunto que se pasa como parámetro.
 def listaDatosEsfuerzosTrussSet(nmbComb, setName, fmt, fName):
-  s= preprocessor.getSetLoader.getSet(setName)
+  s= preprocessor.getSets.getSet(setName)
   elems= s.getElements()
   for e in elements:
     fName.write(nmbComb," & ",e.tag," & ",fmt.format(e.getStrain()*1e2)," & ",fmt.format(e.getStress()/1e6)," & ",fmt.format(e.getN()/1e3),"\\\\\n")
@@ -95,7 +95,7 @@ def listaEsfuerzosTrussLineas(nmbComb, setNameLineas, fmt, fName, encab, tit):
   idsCampos= "Caso & Id & $\\epsilon$ & $\\sigma$ & axil \\\\\n - & - & \\% & MPa & kN "
   cabeceraSupertabular(fName,5,defCampos,idsCampos,caption) 
 
-  s= preprocessor.getSetLoader.getSet(setNameLineas)
+  s= preprocessor.getSets.getSet(setNameLineas)
   lines= s.getLines()
   for l in lines:
     nmb= l.getName()
@@ -122,7 +122,7 @@ def listaEsfuerzosZeroLenghtSet(nmbComb, setName, fmt, fName, encab, tit):
   T= 0
   momY= 0
   momZ= 0
-  s= preprocessor.getSetLoader.getSet(setName)
+  s= preprocessor.getSets.getSet(setName)
   elems= s.getElements()
   for e in elements:
     str= nmbComb+" & "+e.tag+" & "
@@ -141,7 +141,7 @@ def listaEsfuerzosZeroLenghtSet(nmbComb, setName, fmt, fName, encab, tit):
 
 # Imprime los esfuerzos de los elementos contenidos en el conjunto que se pasa como parámetro.
 def listaEsfuerzosElasticBeam3dSet(preprocessor, nmbComb, setName, fmt, fName):
-  s= preprocessor.getSetLoader.getSet(setName)
+  s= preprocessor.getSets.getSet(setName)
   elems= s.getElements()
   for e in elements:
     str= nmbComb+" & "+e.tag+" & "

@@ -6,7 +6,7 @@ def listaKPtsSet(preprocessor,setName, nmbArchivo, fmt):
   defCampos= "|r|r|r|r|"
   idsCampos= "Id & x & y & z"
   cabeceraSupertabular(nmbArchivo,4,defCampos,idsCampos,caption)
-  setPuntos= preprocessor.getSetLoader.getSet(setName)
+  setPuntos= preprocessor.getSets.getSet(setName)
   puntos= setPuntos.getPoints()
   for p in puntos:
     nmbArchivo.write(p.tag," & ",fmt.format(p.pos.x)," & ",fmt.format(p.pos.y)," & ",fmt.format(p.pos.z),"\\\\\n")
@@ -18,7 +18,7 @@ def listaLineasSet(setName, nmbArchivo):
   defCampos= "|r|r|c|"
   idsCampos= "Id & nDiv & Puntos"
   cabeceraSupertabular(nmbArchivo,3,defCampos,idsCampos,caption) 
-  setLineas= preprocessor.getSetLoader.getSet(setName)
+  setLineas= preprocessor.getSets.getSet(setName)
   lineas= setLineas.getLines()
   for l in lineas:
     nmbArchivo.write(l.tag," & ",l.ndiv," & ",l.kPts,"\\\\\n")
@@ -30,7 +30,7 @@ def listSetNodes(preprocessor, setName, nmbArchivo, fmt):
   defCampos= "|r|r|r|r|"
   idsCampos= "Id & x & y & z"
   cabeceraSupertabular(nmbArchivo,4,defCampos,idsCampos,caption) 
-  s= preprocessor.getSetLoader.getSet(setName)
+  s= preprocessor.getSets.getSet(setName)
   nodes= s.getNodes()
   for n in nodes:
     pos= n.getPos()
@@ -40,7 +40,7 @@ def listSetNodes(preprocessor, setName, nmbArchivo, fmt):
 # Obtiene un listado de los elementos del conjunto cuyo nombre se pasa como parámetro.
 def listaElementosSet(preprocessor, setName, nmbArchivo):
   nmbArchivo.write("Elementos del conjunto: ",setName,"\n")
-  s= preprocessor.getSetLoader.getSet(setName)
+  s= preprocessor.getSets.getSet(setName)
   elems= s.getElements()
   for e in elems:
     nmbArchivo.write(e.tag," & ",e.nod(0).tag," & ",e.nod(1).tag,"\\\\\n")
@@ -51,7 +51,7 @@ def listaElementosTrussSet(preprocessor, setName, nmbArchivo, fmt):
   defCampos= "|r|r|r|r|"
   idsCampos= "Id & nI & nJ & Mater."
   cabeceraSupertabular(nmbArchivo,4,defCampos,idsCampos,caption) 
-  s= preprocessor.getSetLoader.getSet(setName)
+  s= preprocessor.getSets.getSet(setName)
   elems= s.getElements()
   for e in elems:
     nmbArchivo.write(e.tag," & ",e.nod(0).tag," & ",e.nod(1).tag," & ",e,getMaterial().tag,"\\\\\n")
@@ -63,7 +63,7 @@ def listaElementosBarraSet(preprocessor, setName, fName, fmt):
   defCampos= "|r|r|r|r|r|r|r|r|r|r|r|"
   idsCampos= " Id & nI  & nJ  &Sc.&  E     &  G     & Area   & alpha &    J     &   Iy    &    Iz  \\\\\n -  &     &  -  & - & GPa    & GPa    &  cm2   &   -   &   cm4    &  cm4    &   cm4"
   cabeceraSupertabular(nmbArchivo,11,defCampos,idsCampos,caption) 
-  s= preprocessor.getSetLoader.getSet(setName)
+  s= preprocessor.getSets.getSet(setName)
   elems= s.getElements()
   for e in elems:
     str= str(e.tag)+" & "+str(e.nod(0).tag)+" & "+str(e.nod(1).tag)+" & "

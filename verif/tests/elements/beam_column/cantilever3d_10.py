@@ -38,7 +38,7 @@ Q2= 0.9e2 # Load magnitude (kN)
 # Problem type
 feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor   
-nodes= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeHandler
 modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
 nodes.defaultTag= 1 #First node number.
 nod= nodes.newNodeXYZ(0,0.0,0.0)
@@ -55,7 +55,7 @@ sectionProperties.Iz= Iz; sectionProperties.Iy= Iy; sectionProperties.J= J
 seccion= typical_materials.defElasticSectionFromMechProp3d(preprocessor, "seccion",sectionProperties)
 
 # Elements definition
-elements= preprocessor.getElementLoader
+elements= preprocessor.getElementHandler
 elements.defaultTransformation= "lin"
 elements.defaultMaterial= "seccion"
 elements.defaultTag= 1 #Tag for the next element.
@@ -65,7 +65,7 @@ beam3d= elements.newElement("ElasticBeam3d",xc.ID([1,2]));
 modelSpace.fixNode000_000(1)
 
 # Loads definition
-cargas= preprocessor.getLoadLoader
+cargas= preprocessor.getLoadHandler
 casos= cargas.getLoadPatterns
 #Load modulation.
 ts= casos.newTimeSeries("constant_ts","ts")
@@ -88,13 +88,13 @@ analisis= predefined_solutions.simple_static_linear(feProblem)
 result= analisis.analyze(1)
 
 
-nodes= preprocessor.getNodeLoader 
+nodes= preprocessor.getNodeHandler 
 nod2= nodes.getNode(2)
 deltax= nod2.getDisp[0] 
 deltay= nod2.getDisp[2]
 deltaz= -(nod2.getDisp[1])
 
-elements= preprocessor.getElementLoader
+elements= preprocessor.getElementHandler
 elem1= elements.getElement(1)
 
 elem1.getResistingForce()

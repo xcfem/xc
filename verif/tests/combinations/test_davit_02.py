@@ -38,7 +38,7 @@ densHorm= 2500 # Reinforced concrete density.
 # Problem type
 feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
-nodes= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeHandler
 modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
 nodes.defaultTag= 1 #First node number.
 nod1= nodes.newNodeXYZ(2.0,0.0,0.0)
@@ -54,7 +54,7 @@ scc= typical_materials.defElasticSection3d(preprocessor, "scc",A,E,G,Iz,Iy,J)
 
 
 # Elements definition
-elements= preprocessor.getElementLoader
+elements= preprocessor.getElementHandler
 elements.defaultTransformation= "lin"
 elements.defaultMaterial= "scc"
 #  sintaxis: ElasticBeam3d[<tag>] 
@@ -71,7 +71,7 @@ beam3.rho= densHorm*A
 modelSpace.fixNode000_000(1)
 
 # Loads definition
-cargas= preprocessor.getLoadLoader
+cargas= preprocessor.getLoadHandler
 
 casos= cargas.getLoadPatterns
 
@@ -144,7 +144,7 @@ def resuelveCombEstatLin(comb):
 def procesResultVerif(comb):
   tagSave= comb.tag*100
   db.save(tagSave)
-  elements= preprocessor.getElementLoader
+  elements= preprocessor.getElementHandler
   elem1= elements.getElement(1)
   elem1.getResistingForce()
   global NMin1

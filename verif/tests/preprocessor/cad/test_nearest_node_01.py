@@ -17,7 +17,7 @@ tg= 0
 lapso= 0
 feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor   
-nodes= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeHandler
 for i in range(1,1000):
   n= nodes.newNodeXYZ(i,0,0)
 

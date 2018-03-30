@@ -37,7 +37,7 @@ L= 1.0 # Bar length (m)
 
 feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
-nodes= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeHandler
 
 # Materials
 sectionGeometry= section_properties.RectangularSection("test",b=.3,h=.4)
@@ -55,7 +55,7 @@ n3= nodes.newNodeXYZ(L,0.0,0.0)
 
 lin= modelSpace.newLinearCrdTransf("lin",xc.Vector([0,1,0]))
 
-elements= preprocessor.getElementLoader
+elements= preprocessor.getElementHandler
 elements.defaultTransformation= "lin"
 elements.defaultMaterial= section.name
 e1= elements.newElement("ElasticBeam3d",xc.ID([n1.tag,n2.tag]));
@@ -68,7 +68,7 @@ modelSpace.fixNode000_000(n1.tag)
 Fx= -400e3 # Axial force for shear checking.
 Fz= 1e3 # Bending moment force for shear checking.
 Fy= 1e5 # Bending moment force for shear checking.
-cargas= preprocessor.getLoadLoader
+cargas= preprocessor.getLoadHandler
 casos= cargas.getLoadPatterns
 #Load modulation.
 ts= casos.newTimeSeries("constant_ts","ts")

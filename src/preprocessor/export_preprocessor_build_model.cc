@@ -84,7 +84,7 @@ class_<XC::SetEstruct, bases<XC::SetBase>, boost::noncopyable >("SetEstruct", no
   .def("getElementIJK", &XC::SetEstruct::getElementIJK, return_internal_reference<>(), "Return element in position (i,j,k)." )
    ;
 
-#include "preprocessor/cad/python_interface.tcc"
+#include "preprocessor/multi_block_topology/python_interface.tcc"
 
   }
 

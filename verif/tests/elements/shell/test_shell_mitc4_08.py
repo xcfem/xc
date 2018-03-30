@@ -31,7 +31,7 @@ from materials import typical_materials
 # Problem type
 feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
-nodes= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeHandler
 
 modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
 # Define materials
@@ -44,19 +44,19 @@ nmb1= typical_materials.defElasticMembranePlateSection(preprocessor, "memb1",E,n
 
 
 
-seedElemLoader= preprocessor.getElementLoader.seedElemLoader
-seedElemLoader.defaultMaterial= "memb1"
-seedElemLoader.defaultTag= 1
-elem= seedElemLoader.newElement("ShellMITC4",xc.ID([0,0,0,0]))
+seedElemHandler= preprocessor.getElementHandler.seedElemHandler
+seedElemHandler.defaultMaterial= "memb1"
+seedElemHandler.defaultTag= 1
+elem= seedElemHandler.newElement("ShellMITC4",xc.ID([0,0,0,0]))
 
 
 
-points= preprocessor.getCad.getPoints
+points= preprocessor.getMultiBlockTopology.getPoints
 pt= points.newPntIDPos3d(1,geom.Pos3d(0.0,0.0,0.0))
 pt= points.newPntIDPos3d(2,geom.Pos3d(CooMaxX,0.0,0.0))
 pt= points.newPntIDPos3d(3,geom.Pos3d(CooMaxX,CooMaxY,0.0))
 pt= points.newPntIDPos3d(4,geom.Pos3d(0.0,CooMaxY,0.0))
-surfaces= preprocessor.getCad.getSurfaces
+surfaces= preprocessor.getMultiBlockTopology.getSurfaces
 surfaces.defaultTag= 1
 s= surfaces.newQuadSurfacePts(1,2,3,4)
 s.nDivI= NumDivI
@@ -66,7 +66,7 @@ s.nDivJ= NumDivJ
 
 f1= preprocessor.getSets.getSet("f1")
 f1.genMesh(xc.meshDir.I)
-constraints= preprocessor.getConstraintLoader
+constraints= preprocessor.getBoundaryCondHandler
 lados= s.getEdges
 #Edge iterator
 for l in lados:
@@ -74,7 +74,7 @@ for l in lados:
     modelSpace.fixNode000_FFF(i)
 
 # Loads definition
-cargas= preprocessor.getLoadLoader
+cargas= preprocessor.getLoadHandler
 casos= cargas.getLoadPatterns
 #Load modulation.
 ts= casos.newTimeSeries("constant_ts","ts")
@@ -104,7 +104,7 @@ analOk= analisis.analyze(1)
 
 f1= preprocessor.getSets.getSet("f1")
 
-nodes= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeHandler
 
 node= f1.getNodeIJK(1,NumDivI/2+1,NumDivJ/2+1)
 # print "Central node: ", node.tag

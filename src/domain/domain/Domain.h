@@ -91,7 +91,7 @@ class FEM_ObjectBroker;
 class RayleighDampingFactors;
 
 //!  @defgroup Dom Domain for the finite element problem.
-
+//
 //! @ingroup Dom
 //
 //! @brief Domain (mesh and boundary conditions) of the finite element model.
@@ -117,7 +117,7 @@ class Domain: public ObjWithRecorders, public DistributedBase
   {
   private:
     PseudoTimeTracker timeTracker;//!< pseudo time
-    std::string CallbackCommit; //!< Instrucciones que se ejecutan en cada llamada a commit.
+    std::string CallbackCommit; //!< Instrucciones que se ejecutan on each llamada a commit.
 
     int dbTag; //!< Tag for the database.
     int currentGeoTag; //!< an integer used to mark if domain has changed

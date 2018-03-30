@@ -46,16 +46,16 @@
 #include "xc_utils/src/geom/d2/poligonos2d/Poligono2d.h"
 
 //! @brief Constructor.
-XC::FiberSection3dBase::FiberSection3dBase(int tag, int classTag, int dim, const fiber_list &fiberList,XC::MaterialLoader *mat_ldr)
+XC::FiberSection3dBase::FiberSection3dBase(int tag, int classTag, int dim, const fiber_list &fiberList,XC::MaterialHandler *mat_ldr)
   : FiberSectionBase(tag,classTag, fiberList.size(),dim,mat_ldr)
   {}
 
 //! @brief Constructor.
-XC::FiberSection3dBase::FiberSection3dBase(int tag, int classTag, int dim,XC::MaterialLoader *mat_ldr):
+XC::FiberSection3dBase::FiberSection3dBase(int tag, int classTag, int dim,XC::MaterialHandler *mat_ldr):
   FiberSectionBase(tag, classTag,dim,mat_ldr) {}
 
 //! @brief constructor for blank object that recvSelf needs to be invoked upon
-XC::FiberSection3dBase::FiberSection3dBase(int classTag, int dim,XC::MaterialLoader *mat_ldr):
+XC::FiberSection3dBase::FiberSection3dBase(int classTag, int dim,XC::MaterialHandler *mat_ldr):
   FiberSectionBase(0, classTag,dim,mat_ldr) {}
 
 //! @brief Copy constructor.
@@ -77,7 +77,7 @@ double XC::FiberSection3dBase::get_strain(const double &y,const double &z) const
   }
 
 //! @brief Adds a fiber to the section.
-XC::Fiber *XC::FiberSection3dBase::addFiber(int tag,const MaterialLoader &ldr,const std::string &nmbMat,const double &Area, const Vector &position)
+XC::Fiber *XC::FiberSection3dBase::addFiber(int tag,const MaterialHandler &ldr,const std::string &nmbMat,const double &Area, const Vector &position)
   {
     Fiber *retval= fibers.findFiber(tag);
     if(retval)

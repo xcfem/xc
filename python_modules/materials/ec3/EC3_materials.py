@@ -253,7 +253,7 @@ class EC3Shape(object):
   def installULSControlRecorder(self,recorderType, elems,sectionClass= 1, chiLT=1.0):
     '''Installs recorder for verification of ULS criterion. Preprocessor obtained from the set of elements.'''
     preprocessor= elems.owner.getPreprocessor
-    nodes= preprocessor.getNodeLoader
+    nodes= preprocessor.getNodeHandler
     domain= preprocessor.getDomain
     recorder= domain.newRecorder(recorderType,None);
     recorder.setElements(elems.getTags())

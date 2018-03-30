@@ -27,10 +27,10 @@
 //Element1D.cc
 
 #include "Element1D.h"
-#include "preprocessor/cad/matrices/TritrizPtrNod.h"
-#include "preprocessor/cad/matrices/TritrizPtrElem.h"
+#include "preprocessor/multi_block_topology/matrices/TritrizPtrNod.h"
+#include "preprocessor/multi_block_topology/matrices/TritrizPtrElem.h"
 #include "preprocessor/Preprocessor.h"
-#include "preprocessor/loaders/LoadLoader.h"
+#include "preprocessor/prep_handlers/LoadHandler.h"
 #include "preprocessor/set_mgmt/SetEstruct.h"
 #include "domain/mesh/node/Node.h"
 #include "domain/load/beam_loads/Beam3dUniformLoad.h"
@@ -72,7 +72,7 @@ void XC::Element1D::vector2dUniformLoadGlobal(const Vector &v)
 void XC::Element1D::vector2dUniformLoadLocal(const Vector &v)
   {
     Preprocessor *preprocessor= getPreprocessor();
-    MapLoadPatterns &casos= preprocessor->getLoadLoader().getLoadPatterns();
+    MapLoadPatterns &casos= preprocessor->getLoadHandler().getLoadPatterns();
     static ID eTags(1);
     eTags[0]= getTag(); //Load for this element.
     const int &loadTag= casos.getCurrentElementLoadTag(); //Load identifier.
@@ -123,7 +123,7 @@ void XC::Element1D::vector2dPointByRelDistLoadLocal(const double &x,const Vector
     if(sz>1)
       {
         Preprocessor *preprocessor= getPreprocessor();
-        MapLoadPatterns &casos= preprocessor->getLoadLoader().getLoadPatterns();
+        MapLoadPatterns &casos= preprocessor->getLoadHandler().getLoadPatterns();
         static ID eTags(1);
         eTags[0]= getTag(); //Load for this element.
         const int &loadTag= casos.getCurrentElementLoadTag(); //Load identifier.
@@ -195,7 +195,7 @@ void XC::Element1D::vector3dUniformLoadLocal(const Vector &v)
     if(sz>2)
       {
         Preprocessor *preprocessor= getPreprocessor();
-        MapLoadPatterns &casos= preprocessor->getLoadLoader().getLoadPatterns();
+        MapLoadPatterns &casos= preprocessor->getLoadHandler().getLoadPatterns();
         static ID eTags(1);
         eTags[0]= getTag(); //Load for this element.
         const int &loadTag= casos.getCurrentElementLoadTag(); //Load identifier.
@@ -239,7 +239,7 @@ void XC::Element1D::vector3dPointByRelDistLoadLocal(const double &x,const Vector
     if(sz>2)
       {
         Preprocessor *preprocessor= getPreprocessor();
-        MapLoadPatterns &casos= preprocessor->getLoadLoader().getLoadPatterns();
+        MapLoadPatterns &casos= preprocessor->getLoadHandler().getLoadPatterns();
         static ID eTags(1);
         eTags[0]= getTag(); //Load for this element.
         const int &loadTag= casos.getCurrentElementLoadTag(); //Load identifier.
@@ -290,7 +290,7 @@ void XC::Element1D::vector3dPointLoadLocal(const Vector &p,const Vector &v)
 void XC::Element1D::strainLoad(const DeformationPlane &p1,const DeformationPlane &p2)
   {
     Preprocessor *preprocessor= getPreprocessor();
-    MapLoadPatterns &casos= preprocessor->getLoadLoader().getLoadPatterns();
+    MapLoadPatterns &casos= preprocessor->getLoadHandler().getLoadPatterns();
     static ID eTags(1);
     eTags[0]= getTag(); //Load for this element.
     const int &loadTag= casos.getCurrentElementLoadTag(); //Load identifier.

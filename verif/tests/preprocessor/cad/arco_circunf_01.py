@@ -19,12 +19,12 @@ sin45= cos45
 feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
 
-points= preprocessor.getCad.getPoints
+points= preprocessor.getMultiBlockTopology.getPoints
 pt= points.newPntIDPos3d(1,geom.Pos3d(R,0.0,0.0))
 points.newPntFromPos3d(geom.Pos3d((R*cos45),(R*sin45),0.0))
 points.newPntFromPos3d(geom.Pos3d(0.0,R,0.0))
 
-lines= preprocessor.getCad.getLines
+lines= preprocessor.getMultiBlockTopology.getLines
 lines.defaultTag= 1
 l= lines.newCircleArc(1,2,3)
 angc= l.getAngle()

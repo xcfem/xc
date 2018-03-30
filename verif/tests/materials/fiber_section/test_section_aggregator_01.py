@@ -52,16 +52,16 @@ respVz= typical_materials.defElasticMaterial(preprocessor, "respVz",1e3) # Shear
 
 # Section geometry
 #creation
-geomRectang= preprocessor.getMaterialLoader.newSectionGeometry("geomRectang")
+geomRectang= preprocessor.getMaterialHandler.newSectionGeometry("geomRectang")
 
 reg= scc10x20.getRegion(geomRectang,"epp")
-rectang= preprocessor.getMaterialLoader.newMaterial("fiber_section_3d","rectang")
+rectang= preprocessor.getMaterialHandler.newMaterial("fiber_section_3d","rectang")
 fiberSectionRepr= rectang.getFiberSectionRepr()
 fiberSectionRepr.setGeomNamed("geomRectang")
 rectang.setupFibers()
 extractFiberSectionProperties(rectang,scc10x20)
 
-materiales= preprocessor.getMaterialLoader
+materiales= preprocessor.getMaterialHandler
 agg= materiales.newMaterial("section_aggregator","sa")
 agg.setSection("rectang")
 agg.setAdditions(["T","Vy","Vz"],["respT","respVy","respVz"])
@@ -72,7 +72,7 @@ modelSpace= predefined_spaces.getStructuralMechanics3DSpace(preprocessor)
 modelSpace.fixNode000_000(1)
 
 # Loads definition
-cargas= preprocessor.getLoadLoader
+cargas= preprocessor.getLoadHandler
 
 casos= cargas.getLoadPatterns
 
@@ -112,7 +112,7 @@ analysis= solution.simpleNewtonRaphsonBandGen(feProblem)
 
 analOk= analysis.analyze(1)
 
-nodes= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeHandler
 nodes.calculateNodalReactions(True)
 
 RVy= nodes.getNode(1).getReaction[1] 
@@ -120,7 +120,7 @@ RVz= nodes.getNode(1).getReaction[2]
 RMx= nodes.getNode(1).getReaction[3] 
 RMz= nodes.getNode(1).getReaction[5] 
 
-elements= preprocessor.getElementLoader
+elements= preprocessor.getElementHandler
 ele1= elements.getElement(1)
 scc= ele1.getSection()
 esfVy= scc.getStressResultantComponent("Vy")

@@ -27,7 +27,7 @@
 //LoadCombinationGroup.cc
 
 #include "LoadCombinationGroup.h"
-#include "preprocessor/loaders/LoadLoader.h"
+#include "preprocessor/prep_handlers/LoadHandler.h"
 
 #include "domain/load/pattern/LoadCombination.h"
 #include "domain/domain/Domain.h"
@@ -39,8 +39,8 @@
 
 
 //! @brief Default constructor.
-XC::LoadCombinationGroup::LoadCombinationGroup(LoadLoader *owr)
-  : LoadLoaderMember(owr) {}
+XC::LoadCombinationGroup::LoadCombinationGroup(LoadHandler *owr)
+  : LoadHandlerMember(owr) {}
 
 
 //! @brief Returns a pointer to the load combination identified by the
@@ -133,7 +133,7 @@ void XC::LoadCombinationGroup::removeAllFromDomain(void)
 
 XC::LoadCombination *XC::LoadCombinationGroup::newLoadCombination(const std::string &code,const std::string &descomp)
   {
-    int tag_comb= getLoadLoader()->getTagLP();
+    int tag_comb= getLoadHandler()->getTagLP();
     LoadCombination *comb= find_combination(code);
     if(comb) //Load combination already exists.
       {
@@ -143,8 +143,8 @@ XC::LoadCombination *XC::LoadCombinationGroup::newLoadCombination(const std::str
       }
     else //New combination
       {
-        comb= new LoadCombination(this,code,tag_comb,getLoadLoader());
-        getLoadLoader()->setTagLP(tag_comb+1);
+        comb= new LoadCombination(this,code,tag_comb,getLoadHandler());
+        getLoadHandler()->setTagLP(tag_comb+1);
         if(comb)
           {
             comb->setDomain(getDomain());
@@ -200,7 +200,7 @@ int XC::LoadCombinationGroup::recvData(const CommParameters &cp)
     for(iterator i= begin();i!= end();i++)
       {
         (*i).second->set_owner(this);
-        (*i).second->setLoader(getLoadLoader());
+        (*i).second->setHandler(getLoadHandler());
         (*i).second->recvDescomp();
       }
     return res;

@@ -30,7 +30,7 @@ F= 1.5e3 # Load magnitude en N
 
 feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor   
-nodes= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeHandler
 # Problem type
 modelSpace= predefined_spaces.StructuralMechanics2D(nodes)
 nodes.defaultTag= 1 #First node number.
@@ -45,17 +45,17 @@ lin= modelSpace.newLinearCrdTransf("lin")
 seccion= typical_materials.defElasticShearSection2d(preprocessor, "seccion",A,E,G,I,1.0)
 
 # Elements definition
-elements= preprocessor.getElementLoader
+elements= preprocessor.getElementHandler
 elements.defaultTransformation= "lin" # Coordinate transformation for the new elements
 elements.defaultMaterial= "seccion"
 beam2d= elements.newElement("ForceBeamColumn2d",xc.ID([1,2]));
 
 # Constraints
-constraints= preprocessor.getConstraintLoader
+constraints= preprocessor.getBoundaryCondHandler
 modelSpace.fixNode000(1)
 
 # Loads definition
-cargas= preprocessor.getLoadLoader
+cargas= preprocessor.getLoadHandler
 casos= cargas.getLoadPatterns
 #Load modulation.
 ts= casos.newTimeSeries("constant_ts","ts")
@@ -77,7 +77,7 @@ nod1= nodes.getNode(1)
 Ry= nod1.getReaction[1] 
 RMz= nod1.getReaction[2] 
 
-elements= preprocessor.getElementLoader
+elements= preprocessor.getElementHandler
 
 elem1= elements.getElement(0)
 elem1.getResistingForce()

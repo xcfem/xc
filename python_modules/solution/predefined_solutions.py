@@ -262,9 +262,9 @@ def frequency_analysis(prb):
 
 def resuelveComb(preprocessor,nmbComb,analysis,numSteps):
   preprocessor.resetLoadCase()
-  preprocessor.getLoadLoader.addToDomain(nmbComb)
+  preprocessor.getLoadHandler.addToDomain(nmbComb)
   analOk= analysis.analyze(numSteps)
-  preprocessor.getLoadLoader.removeFromDomain(nmbComb)
+  preprocessor.getLoadHandler.removeFromDomain(nmbComb)
   # print "Resuelta combinación: ",nmbComb,"\n"
 
 def resuelveCombEstatLin(preprocessor,nmbComb,analysis,numSteps):
@@ -274,10 +274,10 @@ def resuelveCombEstatLin(preprocessor,nmbComb,analysis,numSteps):
 
 def resuelveCombEstat2ndOrderLin(preprocessor,nmbComb,analysis,numSteps):
   preprocessor.resetLoadCase()
-  preprocessor.getLoadLoader.addToDomain(nmbComb)
+  preprocessor.getLoadHandler.addToDomain(nmbComb)
   analOk= analysis.analyze(numSteps)
   analOk= analysis.analyze(numSteps)
-  preprocessor.getLoadLoader.removeFromDomain(nmbComb)
+  preprocessor.getLoadHandler.removeFromDomain(nmbComb)
   # print "Resuelta combinación: ",nmbComb,"\n"
 
 def resuelveCasoEstatNoLin(nmbComb):

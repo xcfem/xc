@@ -37,7 +37,7 @@ f= 1.5e3 # Load magnitude en N/m.
 # Problem type
 feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
-nodes= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeHandler
 modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
 nodes.defaultTag= 1 #First node number.
 nod= nodes.newNodeXYZ(0,0.0,0.0)
@@ -62,7 +62,7 @@ if(not pth):
   pth= "."
 execfile(pth+"/../aux/testQuadRegion.py")
 
-materiales= preprocessor.getMaterialLoader
+materiales= preprocessor.getMaterialHandler
 quadFibers= materiales.newMaterial("fiber_section_3d","quadFibers")
 fiberSectionRepr= quadFibers.getFiberSectionRepr()
 fiberSectionRepr.setGeomNamed("testQuadRegion")
@@ -77,7 +77,7 @@ agg.setAdditions(["T","Vy","Vz"],["respT","respVy","respVz"])
 
 
 # Elements definition
-elements= preprocessor.getElementLoader
+elements= preprocessor.getElementHandler
 elements.defaultTransformation= "lin"
 elements.defaultMaterial= "quadFibers"
 elements.numSections= 2 # Number of sections along the element.
@@ -90,7 +90,7 @@ el= elements.newElement("ForceBeamColumn3d",xc.ID([1,2]))
 modelSpace.fixNode000_000(1)
 
 # Loads definition
-cargas= preprocessor.getLoadLoader
+cargas= preprocessor.getLoadHandler
 casos= cargas.getLoadPatterns
 #Load modulation.
 ts= casos.newTimeSeries("constant_ts","ts")
@@ -101,7 +101,7 @@ casos.currentLoadPattern= "0"
 el.vector3dUniformLoadGlobal(xc.Vector([f*math.sqrt(2)/2,f*math.sqrt(2)/2,0]))
 
 
-cargas= preprocessor.getLoadLoader
+cargas= preprocessor.getLoadHandler
 
 #We add the load case to domain.
 casos.addToDomain("0")

@@ -28,7 +28,7 @@ feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
 concrete= typical_materials.defElasticMaterial(preprocessor, 'concrete',Ec)
 steel= typical_materials.defElasticMaterial(preprocessor, "steel",Es)
-sectionGeometryTest= preprocessor.getMaterialLoader.newSectionGeometry("sectionGeometryTest")
+sectionGeometryTest= preprocessor.getMaterialHandler.newSectionGeometry("sectionGeometryTest")
 
 regiones= sectionGeometryTest.getRegions
 flange= regiones.newQuadRegion('concrete')# Flange

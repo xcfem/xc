@@ -24,7 +24,7 @@ F= 1000 # Force
 
 feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor   
-nodes= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeHandler
 
 # Problem type
 modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
@@ -44,7 +44,7 @@ nod= nodes.newNodeXYZ(0,L,L)
 memb1= typical_materials.defElasticMembranePlateSection(preprocessor, "memb1",E,nu,dens,h)
 
 # Elements definition
-elements= preprocessor.getElementLoader
+elements= preprocessor.getElementHandler
 elements.defaultMaterial= "memb1"
 elem= elements.newElement("ShellMITC4",xc.ID([1,2,3,4]))
 elem= elements.newElement("ShellMITC4",xc.ID([5,6,7,8]))
@@ -64,7 +64,7 @@ mesh.freezeDeadNodes("bloquea") # Constraint inactive nodes.
 
 
 # Loads definition
-cargas= preprocessor.getLoadLoader
+cargas= preprocessor.getLoadHandler
 casos= cargas.getLoadPatterns
 #Load modulation.
 ts= casos.newTimeSeries("constant_ts","ts")
@@ -91,7 +91,7 @@ db.restore(100)
 
 
 nodes.calculateNodalReactions(True)
-nodes= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeHandler
 nod1= nodes.getNode(1)
 deltax1= nod1.getDisp[0] 
 deltay1= nod1.getDisp[1] 
@@ -128,7 +128,7 @@ analisis= predefined_solutions.simple_static_linear(feProblem)
 result= analisis.analyze(1)
 
 nodes.calculateNodalReactions(True)
-nodes= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeHandler
 nod1= nodes.getNode(1)
 deltaxB1= nod1.getDisp[0] 
 deltayB1= nod1.getDisp[1] 

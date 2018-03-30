@@ -19,7 +19,7 @@ areaBarra= 2.01e-4 # Rebars area expressed in square meters.
   )
 
 def gmSecHA01(nmbGeomSecc,defSec,concrDiagName,reinfSteelDiagramName):
-  geomSecc= preprocessor.getMaterialLoader.newSectionGeometry(nmbGeomSecc)
+  geomSecc= preprocessor.getMaterialHandler.newSectionGeometry(nmbGeomSecc)
   regions= geomSecc.getRegions
   concrete= regions.newQuadRegion(concrDiagName)
   concrete.nDivIJ= defSec['nIJ']

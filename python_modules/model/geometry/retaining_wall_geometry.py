@@ -84,7 +84,7 @@ class CantileverRetainingWallGeometry(object):
   def defineWireframeModel(self,nodes):
     self.modelSpace= predefined_spaces.StructuralMechanics2D(nodes)
     preprocessor= self.modelSpace.preprocessor
-    points= preprocessor.getCad.getPoints
+    points= preprocessor.getMultiBlockTopology.getPoints
     self.wireframeModelPoints= dict()
     pos= self.getWFStemTopPosition()
     self.wireframeModelPoints['stemTop']= points.newPntFromPos3d(geom.Pos3d(pos.x,pos.y,0.0))
@@ -95,7 +95,7 @@ class CantileverRetainingWallGeometry(object):
     pos= self.getWFHeelEndPosition()
     self.wireframeModelPoints['heelEnd']= points.newPntFromPos3d(geom.Pos3d(pos.x,pos.y,0.0))
     
-    lines= preprocessor.getCad.getLines
+    lines= preprocessor.getMultiBlockTopology.getLines
     self.wireframeModelLines= dict()
     self.wireframeModelLines['stem']= lines.newLine(self.wireframeModelPoints['stemBottom'].tag,self.wireframeModelPoints['stemTop'].tag)
     self.wireframeModelLines['toe']= lines.newLine(self.wireframeModelPoints['stemBottom'].tag,self.wireframeModelPoints['toeEnd'].tag)

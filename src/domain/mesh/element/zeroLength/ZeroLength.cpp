@@ -74,7 +74,7 @@
 #include <utility/recorder/response/ElementResponse.h>
 
 #include "preprocessor/Preprocessor.h"
-#include "preprocessor/loaders/MaterialLoader.h"
+#include "preprocessor/prep_handlers/MaterialHandler.h"
 #include "utility/actor/actor/MatrixCommMetaData.h"
 
 // initialise the class wide variables
@@ -160,8 +160,8 @@ void XC::ZeroLength::setMaterial(const int &dir,const std::string &nmbMat)
     Preprocessor *preprocessor= getPreprocessor();
     if(preprocessor)
       {
-        const MaterialLoader &material_loader= getPreprocessor()->getMaterialLoader();
-        const Material *ptr_mat= material_loader.find_ptr(nmbMat);
+        const MaterialHandler &material_handler= getPreprocessor()->getMaterialHandler();
+        const Material *ptr_mat= material_handler.find_ptr(nmbMat);
         if(ptr_mat)
           {
             const UniaxialMaterial *tmp= dynamic_cast<const UniaxialMaterial *>(ptr_mat);
@@ -197,10 +197,10 @@ void XC::ZeroLength::setMaterials(const std::deque<int> &dirs,const std::vector<
     Preprocessor *preprocessor= getPreprocessor();
     if(preprocessor)
       {
-        const MaterialLoader &material_loader= getPreprocessor()->getMaterialLoader();
+        const MaterialHandler &material_handler= getPreprocessor()->getMaterialHandler();
         for(size_t i= 0;i<n;i++)
           {
-            const Material *ptr_mat= material_loader.find_ptr(nmbMats[i]);
+            const Material *ptr_mat= material_handler.find_ptr(nmbMats[i]);
             if(ptr_mat)
               {
                 const UniaxialMaterial *tmp= dynamic_cast<const UniaxialMaterial *>(ptr_mat);

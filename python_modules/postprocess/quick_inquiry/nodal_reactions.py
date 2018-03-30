@@ -9,7 +9,7 @@ def vectorReacUVW(preprocessor,idNode):
   Parameters:
   :param idNode: node tag.
   '''
-  nod= preprocessor.getNodeLoader.getNode(idNode)
+  nod= preprocessor.getNodeHandler.getNode(idNode)
   reac= nod.getReaction
   return xc.Vector([reac[0],reac[1],reac[2]])
 

@@ -62,7 +62,7 @@
 #include <material/section/fiber_section/FiberSection3dBase.h>
 
 namespace XC {
-class MaterialLoader;
+class MaterialHandler;
 class FiberSectionRepr;
 
 //! \ingroup MATSCCFiberModel
@@ -76,11 +76,11 @@ class FiberSection3d: public FiberSection3dBase
     friend class FiberContainer;
   protected:
 
-    FiberSection3d(int tag, int classTag, MaterialLoader *mat_ldr= nullptr);
+    FiberSection3d(int tag, int classTag, MaterialHandler *mat_ldr= nullptr);
   public:
-    FiberSection3d(MaterialLoader *mat_ldr= nullptr);
-    FiberSection3d(int tag,MaterialLoader *mat_ldr= nullptr);
-    FiberSection3d(int tag,const fiber_list &,MaterialLoader *mat_ldr= nullptr);
+    FiberSection3d(MaterialHandler *mat_ldr= nullptr);
+    FiberSection3d(int tag,MaterialHandler *mat_ldr= nullptr);
+    FiberSection3d(int tag,const fiber_list &,MaterialHandler *mat_ldr= nullptr);
 
     virtual void setupFibers(void);
     Fiber *addFiber(Fiber &theFiber);

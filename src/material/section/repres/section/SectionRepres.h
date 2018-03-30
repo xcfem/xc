@@ -71,7 +71,7 @@
 
 namespace XC {
 class GeomSection;
-class MaterialLoader;
+class MaterialHandler;
 class Material;
 
 //! @ingroup MATSCCRepresGeom
@@ -81,12 +81,12 @@ class SectionRepres: public TaggedObject
   {
 
   protected:
-    MaterialLoader *material_loader; //!< Material handler (searching,...).
+    MaterialHandler *material_handler; //!< Material handler (searching,...).
     const GeomSection *gmSecc; //!< Section geometry.
 
   public:
     //Constructores
-    SectionRepres(int tag,MaterialLoader *ml);
+    SectionRepres(int tag,MaterialHandler *ml);
     SectionRepres(const SectionRepres &otro);
 
     SectionRepres &operator=(const SectionRepres &otro);

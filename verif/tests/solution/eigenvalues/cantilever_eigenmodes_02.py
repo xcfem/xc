@@ -32,7 +32,7 @@ NumDiv= 10
 # Problem type
 feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
-nodes= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeHandler
 
 modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
 # Define materials
@@ -44,18 +44,18 @@ nodes.newSeedNode()
 # Geometric transformation(s)
 lin= modelSpace.newLinearCrdTransf("lin",xc.Vector([0,0,1]))
 # Seed element definition
-seedElemLoader= preprocessor.getElementLoader.seedElemLoader
-seedElemLoader.defaultMaterial= "scc"
-seedElemLoader.defaultTransformation= "lin"
-seedElemLoader.defaultTag= 1 #Tag for the next element.
-beam3d= seedElemLoader.newElement("ElasticBeam3d",xc.ID([0,0]))
+seedElemHandler= preprocessor.getElementHandler.seedElemHandler
+seedElemHandler.defaultMaterial= "scc"
+seedElemHandler.defaultTransformation= "lin"
+seedElemHandler.defaultTag= 1 #Tag for the next element.
+beam3d= seedElemHandler.newElement("ElasticBeam3d",xc.ID([0,0]))
 beam3d.rho= m
 
 
-points= preprocessor.getCad.getPoints
+points= preprocessor.getMultiBlockTopology.getPoints
 pt1= points.newPntIDPos3d(1,geom.Pos3d(0.0,0.0,0.0))
 pt2= points.newPntIDPos3d(2,geom.Pos3d(L*math.cos(theta),L*math.sin(theta),0.0))
-lines= preprocessor.getCad.getLines
+lines= preprocessor.getMultiBlockTopology.getLines
 lines.defaultTag= 1
 l= lines.newLine(1,2)
 l.nDiv= NumDiv
@@ -68,7 +68,7 @@ tagN1= pt1.getNode().tag
 tagN2= pt2.getNode().tag
 
 # Constraints
-constraints= preprocessor.getConstraintLoader
+constraints= preprocessor.getBoundaryCondHandler
 
 spc= constraints.newSPConstraint(tagN1,0,0.0) # gdl 0
 spc= constraints.newSPConstraint(tagN1,1,0.0) # gdl 1

@@ -30,7 +30,7 @@ F= 1.5e3 # Load magnitude en N
 # Problem type
 feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor   
-nodes= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeHandler
 modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
 feProblem.logFileName= "/tmp/borrar.log" # Ignore warning messages
 nodes.defaultTag= 1 #First node number.
@@ -57,7 +57,7 @@ if(not pth):
   pth= "."
 execfile(pth+"/../aux/testQuadRegion.py")
 
-materiales= preprocessor.getMaterialLoader
+materiales= preprocessor.getMaterialHandler
 quadFibers= materiales.newMaterial("fiber_section_3d","quadFibers")
 fiberSectionRepr= quadFibers.getFiberSectionRepr()
 fiberSectionRepr.setGeomNamed("testQuadRegion")
@@ -70,7 +70,7 @@ agg.setAdditions(["T","Vy","Vz"],["respT","respVy","respVz"])
 # Shear and torsion responses.
 
 # Elements definition
-elements= preprocessor.getElementLoader
+elements= preprocessor.getElementHandler
 elements.defaultTransformation= "lin"
 elements.defaultMaterial= "agg"
 elements.numSections= 3 # Number of sections along the element.
@@ -85,7 +85,7 @@ spc= modelSpace.constraints.newSPConstraint(2,1,0.0)
 spcTag= spc.tag
 
 # Loads definition
-cargas= preprocessor.getLoadLoader
+cargas= preprocessor.getLoadHandler
 casos= cargas.getLoadPatterns
 #Load modulation.
 ts= casos.newTimeSeries("constant_ts","ts")
@@ -100,7 +100,7 @@ analisis= predefined_solutions.simple_static_modified_newton(feProblem)
 result= analisis.analyze(10)
 
 
-nodes= preprocessor.getNodeLoader 
+nodes= preprocessor.getNodeHandler 
 nod2= nodes.getNode(2)
 delta0= nod2.getDisp[1]  # Node 2 yAxis displacement
 

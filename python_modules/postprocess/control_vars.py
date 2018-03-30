@@ -95,7 +95,7 @@ class ControlVarsBase(object):
     :param nmbProp: name of the element property
     :param factor:  factor for units (default 1e-3 -> kN)
     '''
-    retval= 'preprocessor.getElementLoader.getElement('
+    retval= 'preprocessor.getElementHandler.getElement('
     retval+= str(eTag)
     retval+= ").setProp("
     retval+= '"' + nmbProp + '"'
@@ -676,7 +676,7 @@ def extrapolate_control_var(elemSet,propName,argument,initialValue= 0.0):
   #Divide by number of elements in the set that touch the node.
   preprocessor= elemSet.owner.getPreprocessor
   for tag in nodeTags:
-    n= preprocessor.getNodeLoader.getNode(tag)
+    n= preprocessor.getNodeHandler.getNode(tag)
     denom= nodeTags[tag]
     n.setProp(nodePropName,n.getProp(nodePropName)/denom)
   return nodePropName

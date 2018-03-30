@@ -89,7 +89,7 @@ class UniaxialFiber2d: public UniaxialFiber
   public:
     UniaxialFiber2d(void);   
     UniaxialFiber2d(int tag, UniaxialMaterial &, const double &,const double &);
-    UniaxialFiber2d(int tag,const MaterialLoader &,const std::string &nmbMat,const double &, const double &);
+    UniaxialFiber2d(int tag,const MaterialHandler &,const std::string &nmbMat,const double &, const double &);
     
     int setTrialFiberStrain(const Vector &vs);
     Vector &getFiberStressResultants(void);

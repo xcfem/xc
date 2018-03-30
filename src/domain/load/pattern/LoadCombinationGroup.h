@@ -29,13 +29,13 @@
 #ifndef LOADCOMBINATIONGROUP_H
 #define LOADCOMBINATIONGROUP_H
 
-#include "preprocessor/loaders/LoadLoaderMember.h"
+#include "preprocessor/prep_handlers/LoadHandlerMember.h"
 #include <map>
 #include "boost/python/list.hpp"
 
 namespace XC {
 class LoadCombination;
-class LoadLoader;
+class LoadHandler;
 class Domain;
 
 typedef std::map<std::string,LoadCombination *> LoadCombinationMap; //!< LoadCombinations.
@@ -43,18 +43,18 @@ typedef std::map<std::string,LoadCombination *> LoadCombinationMap; //!< LoadCom
 //! @ingroup LPatterns
 //
 //! @brief Load combination container.
-class LoadCombinationGroup: public LoadLoaderMember, public LoadCombinationMap
+class LoadCombinationGroup: public LoadHandlerMember, public LoadCombinationMap
   {
   protected:
     LoadCombination *find_combination(const std::string &);
-    friend class LoadLoader;
+    friend class LoadHandler;
 
     DbTagData &getDbTagData(void) const;
     int sendData(CommParameters &cp);
     int recvData(const CommParameters &cp);
 
   public:
-    LoadCombinationGroup(LoadLoader *owr);
+    LoadCombinationGroup(LoadHandler *owr);
     ~LoadCombinationGroup(void);
 
     boost::python::list getKeys(void) const;

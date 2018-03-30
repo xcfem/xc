@@ -511,7 +511,7 @@ XC::Vector XC::NodePtrs::getDistributionFactor(int mode) const
     return retval;
   }
 
-//! @brief Returns the vectors correspondientes a cada node colocados por filas.
+//! @brief Returns the vectors correspondientes a each node colocados por filas.
 XC::Matrix XC::NodePtrs::getNodeVectors(const Vector &v) const
   {
     const int numNodes= size();

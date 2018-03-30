@@ -3,8 +3,8 @@
 import geom
 
 def net2DfromXYlists(preprocessor,abscissae,ordinates):
-  puntos= preprocessor.getCad.getPoints
-  nets= preprocessor.getCad.get2DNets
+  puntos= preprocessor.getMultiBlockTopology.getPoints
+  nets= preprocessor.getMultiBlockTopology.get2DNets
   retval= nets.new2DNet()
   retval.dim(len(ordinates),len(abscissae))
 
@@ -20,7 +20,7 @@ def net2DfromXYlists(preprocessor,abscissae,ordinates):
 
 
 def createSurfacesNet2D(preprocessor,net2D,iSize,jSize):
-  surfaces= preprocessor.getCad.getSurfaces
+  surfaces= preprocessor.getMultiBlockTopology.getSurfaces
   m= net2D.nRow
   n= net2D.nCol
   for i in range(1,m):

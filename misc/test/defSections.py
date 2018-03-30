@@ -18,7 +18,7 @@ def getDiagIntSection2(mdlr):
   canto = 0.3
   recpos = 0.06 + 0.008
   recneg = 0.06 + 0.008
-  geomSecHA1 = mdlr.getMaterialLoader.newSectionGeometry('geomSecHA1')
+  geomSecHA1 = mdlr.getMaterialHandler.newSectionGeometry('geomSecHA1')
   regiones = geomSecHA1.getRegions
   concrete= regiones.newQuadRegion(EHE_materials.HA30.nmbDiagD)
   concrete.nDivIJ = 10
@@ -36,7 +36,7 @@ def getDiagIntSection2(mdlr):
   armaduraSup.barArea = areaFi12
   armaduraSup.p1 = geom.Pos2d(-ancho / 2 + recpos, canto / 2 - recpos)
   armaduraSup.p2 = geom.Pos2d(ancho / 2 - recpos, canto / 2 - recpos)
-  materiales = mdlr.getMaterialLoader
+  materiales = mdlr.getMaterialHandler
   secHA1 = materiales.newMaterial('fiber_section_3d', 'secHA1')
   fiberSectionRepr = secHA1.getFiberSectionRepr()
   fiberSectionRepr.setGeomNamed('geomSecHA1')
@@ -53,7 +53,7 @@ def getDiagIntSection1(mdlr):
   canto = 0.3
   recpos = 0.076 + 0.008
   recneg = 0.076 + 0.008
-  geomSecHA2 = mdlr.getMaterialLoader.newSectionGeometry('geomSecHA2')
+  geomSecHA2 = mdlr.getMaterialHandler.newSectionGeometry('geomSecHA2')
   regiones = geomSecHA2.getRegions
   concrete= regiones.newQuadRegion(EHE_materials.HA30.nmbDiagD)
   concrete.nDivIJ = 10
@@ -71,7 +71,7 @@ def getDiagIntSection1(mdlr):
   armaduraSup.barArea = areaFi20
   armaduraSup.p1 = geom.Pos2d(-ancho / 2 + recpos, canto / 2 - recpos)
   armaduraSup.p2 = geom.Pos2d(ancho / 2 - recpos, canto / 2 - recpos)
-  materiales = mdlr.getMaterialLoader
+  materiales = mdlr.getMaterialHandler
   secHA2 = materiales.newMaterial('fiber_section_3d', 'secHA2')
   fiberSectionRepr = secHA2.getFiberSectionRepr()
   fiberSectionRepr.setGeomNamed('geomSecHA2')

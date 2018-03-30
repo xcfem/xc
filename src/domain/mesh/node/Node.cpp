@@ -78,9 +78,9 @@
 #include "xc_utils/src/geom/pos_vec/SVD3d.h"
 #include "xc_utils/src/geom/d2/GeomObj2d.h"
 #include "xc_utils/src/geom/d3/GeomObj3d.h"
-#include "preprocessor/cad/trf/TrfGeom.h"
+#include "preprocessor/multi_block_topology/trf/TrfGeom.h"
 #include "preprocessor/Preprocessor.h"
-#include "preprocessor/loaders/LoadLoader.h"
+#include "preprocessor/prep_handlers/LoadHandler.h"
 #include "preprocessor/set_mgmt/SetMeshComp.h"
 #include "domain/load/NodalLoad.h"
 #include "domain/load/pattern/NodeLocker.h"
@@ -425,14 +425,14 @@ XC::DefaultTag &XC::Node::getDefaultTag(void)
 //! @brief Introduce en the node una constraint
 //! como la being passed as parameter.
 XC::SFreedom_Constraint *XC::Node::fix(const SFreedom_Constraint &semilla)
-  { return getPreprocessor()->getConstraintLoader().addSFreedom_Constraint(getTag(),semilla); }
+  { return getPreprocessor()->getBoundaryCondHandler().addSFreedom_Constraint(getTag(),semilla); }
 
 //! @brief Sets prescribed displacements on the DOFs being passed as parameter.
 void XC::Node::fix(const std::vector<int> &idDOFs,const std::vector<double> &values)
   {
     if(getDomain())
       {
-        ConstraintLoader &cl= getPreprocessor()->getConstraintLoader();
+        BoundaryCondHandler &cl= getPreprocessor()->getBoundaryCondHandler();
         const int sz= std::min(idDOFs.size(),values.size());
         if(values.size()<idDOFs.size())
 	  std::cerr << getClassName() << "::" << __FUNCTION__
@@ -934,7 +934,7 @@ const XC::NodalLoad *XC::Node::newLoad(const Vector &v)
     Preprocessor *preprocessor= getPreprocessor();
     if(preprocessor)
       {
-        MapLoadPatterns &casos= preprocessor->getLoadLoader().getLoadPatterns();
+        MapLoadPatterns &casos= preprocessor->getLoadHandler().getLoadPatterns();
         const int nodeTag= getTag(); //Load over this node.
 
         const size_t sz= v.Size();

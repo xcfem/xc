@@ -60,7 +60,7 @@
 // for the XC::ElasticSection3d class.
 
 #include "material/section/elastic_section/ElasticSection3d.h"
-#include "preprocessor/loaders/MaterialLoader.h"
+#include "preprocessor/prep_handlers/MaterialHandler.h"
 #include <utility/matrix/Matrix.h>
 #include <utility/matrix/Vector.h>
 
@@ -73,7 +73,7 @@ XC::Vector XC::ElasticSection3d::s(4);
 //!
 //! Construct an elastic section for three-dimensional elements with an
 //! integer identifier \p tag, and the mass properties \p ctes.
-XC::ElasticSection3d::ElasticSection3d(int tag, MaterialLoader *mat_ldr,const CrossSectionProperties3d &ctes)
+XC::ElasticSection3d::ElasticSection3d(int tag, MaterialHandler *mat_ldr,const CrossSectionProperties3d &ctes)
   :BaseElasticSection3d(tag, SEC_TAG_Elastic3d,4,ctes,mat_ldr) {}
 
 //! @brief Constructor.

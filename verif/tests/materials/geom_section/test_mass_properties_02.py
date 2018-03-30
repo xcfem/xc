@@ -18,7 +18,7 @@ preprocessor=  feProblem.getPreprocessor
 
 steel= typical_materials.defElasticMaterial(preprocessor, "steel",Es)
 
-sectionGeometryTest= preprocessor.getMaterialLoader.newSectionGeometry("sectionGeometryTest")
+sectionGeometryTest= preprocessor.getMaterialHandler.newSectionGeometry("sectionGeometryTest")
 reinforcement= sectionGeometryTest.getReinfLayers
 reinforcementA= reinforcement.newStraightReinfLayer("steel")
 reinforcementA.numReinfBars= 2

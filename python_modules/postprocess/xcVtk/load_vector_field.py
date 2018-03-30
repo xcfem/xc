@@ -42,7 +42,7 @@ class LoadVectorField(vf.VectorField):
       tags= elementLoad.elementTags
       for i in range(0,len(tags)):
         eTag= tags[i]
-        elem= preprocessor.getElementLoader.getElement(eTag)
+        elem= preprocessor.getElementHandler.getElement(eTag)
         if(elem.getDimension==2):
           vLoad= elem.getCoordTransf.getVectorGlobalCoordFromLocal(elementLoad.getLocalForce())
           if(self.multiplyByElementArea):
@@ -62,7 +62,7 @@ class LoadVectorField(vf.VectorField):
     ''' Iterate over cumulated loads dumping its loads into the graphic.'''
     loadValues= self.sumElementalLoads(preprocessor,lp)
     for eTag in loadValues.keys():
-      elem= preprocessor.getElementLoader.getElement(eTag)
+      elem= preprocessor.getElementHandler.getElement(eTag)
       if(elem.getDimension==2):
         vLoad= loadValues[eTag]
         p= elem.getPosCentroid(True)
@@ -81,7 +81,7 @@ class LoadVectorField(vf.VectorField):
     retval= dict()
     while(nl):
       nTag= nl.getNodeTag
-      node= preprocessor.getNodeLoader.getNode(nTag)
+      node= preprocessor.getNodeHandler.getNode(nTag)
       vLoad= nl.getForce
       v= xc.Vector([vLoad[0], vLoad[1], vLoad[2]])
       if nTag in retval:
@@ -102,7 +102,7 @@ class LoadVectorField(vf.VectorField):
     '''
     loadValues= self.sumNodalLoads(preprocessor,lp)
     for nTag in loadValues.keys():
-      node= preprocessor.getNodeLoader.getNode(nTag)
+      node= preprocessor.getNodeHandler.getNode(nTag)
       p= node.getCurrentPos3d(defFScale)
       vLoad= loadValues[nTag]
       self.data.insertNextPair(p.x,p.y,p.z,vLoad[0],vLoad[1],vLoad[2],self.fUnitConv,self.showPushing)
@@ -110,7 +110,7 @@ class LoadVectorField(vf.VectorField):
 
   def dumpLoads(self, preprocessor,defFScale):
     preprocessor.resetLoadCase()
-    loadPatterns= preprocessor.getLoadLoader.getLoadPatterns
+    loadPatterns= preprocessor.getLoadHandler.getLoadPatterns
     loadPatterns.addToDomain(self.lpName)
     lp= loadPatterns[self.lpName]
     if(lp):

@@ -44,7 +44,7 @@ from materials import typical_materials
 
 feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
-nodes= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeHandler
 modelSpace= predefined_spaces.StructuralMechanics2D(nodes)
 nodes.newSeedNode()
 
@@ -53,13 +53,13 @@ scc= typical_materials.defElasticSection2d(preprocessor, "scc",area,Es,Iz)
 
 pd= modelSpace.newPDeltaCrdTransf("pd")
 
-seedElemLoader= preprocessor.getElementLoader.seedElemLoader
-seedElemLoader.defaultTransformation= "pd"
-seedElemLoader.defaultMaterial= "scc"
-seedElemLoader.defaultTag= 1 #Tag for next element.
-beam2d= seedElemLoader.newElement("ElasticBeam2d",xc.ID([0,0]))
+seedElemHandler= preprocessor.getElementHandler.seedElemHandler
+seedElemHandler.defaultTransformation= "pd"
+seedElemHandler.defaultMaterial= "scc"
+seedElemHandler.defaultTag= 1 #Tag for next element.
+beam2d= seedElemHandler.newElement("ElasticBeam2d",xc.ID([0,0]))
 
-points= preprocessor.getCad.getPoints
+points= preprocessor.getMultiBlockTopology.getPoints
 pt1= points.newPntIDPos3d(1, geom.Pos3d(0.0,0.0,0) )
 pt2= points.newPntIDPos3d(2, geom.Pos3d(0.0,H,0) )
 pt3= points.newPntIDPos3d(3, geom.Pos3d(B,0.0,0) )
@@ -69,7 +69,7 @@ pt6= points.newPntIDPos3d(6, geom.Pos3d(offset,H,0) )
 pt7= points.newPntIDPos3d(7, geom.Pos3d(offset+B,0.0,0) )
 pt8= points.newPntIDPos3d(8, geom.Pos3d(offset+B,H,0) )
 
-lines= preprocessor.getCad.getLines
+lines= preprocessor.getMultiBlockTopology.getLines
 l= lines.newLine(1,2)
 l.nDiv= nDivLines
 l= lines.newLine(2,4)
@@ -86,7 +86,7 @@ l.nDiv= nDivLines
 setTotal= preprocessor.getSets.getSet("total")
 setTotal.genMesh(xc.meshDir.I)
 
-constraints= preprocessor.getConstraintLoader
+constraints= preprocessor.getBoundaryCondHandler
 pt1.getNode().fix(xc.ID([0,1,2]),xc.Vector([0.0,0.0,0.0]))
 pt3.getNode().fix(xc.ID([0,1,2]),xc.Vector([0.0,0.0,0.0]))
 pt5.getNode().fix(xc.ID([0,1,2]),xc.Vector([0.0,0.0,0.0]))
@@ -122,7 +122,7 @@ tagElem6= mesh.getNearestElement(geom.Pos3d(offset+B,H/(10*nDivLines),0.0)).tag
 
 
 # Loads definition
-cargas= preprocessor.getLoadLoader
+cargas= preprocessor.getLoadHandler
 casos= cargas.getLoadPatterns
 #Load modulation.
 ts= casos.newTimeSeries("constant_ts","ts")
@@ -183,14 +183,14 @@ M52Teor= -6153.0 # Theoretical value of bending moment acting
 ratioM52= 0.0
 
 
-nodes= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeHandler
 
 theta2= nodes.getNode(nodeTag2).getDisp[2]
 delta6= nodes.getNode(nodeTag6).getDisp[0]
 theta6= nodes.getNode(nodeTag6).getDisp[2]
 theta8= nodes.getNode(nodeTag8).getDisp[2]
 
-elements= preprocessor.getElementLoader
+elements= preprocessor.getElementHandler
 eletagElem1= elements.getElement(tagElem1)
 eletagElem1.getResistingForce()
 Q= eletagElem1.getV1

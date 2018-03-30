@@ -34,7 +34,7 @@ n= 1e6 # Carga uniforme axial.
 
 feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor   
-nodes= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeHandler
 
 # Problem type
 modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
@@ -49,7 +49,7 @@ lin= modelSpace.newLinearCrdTransf("lin",xc.Vector([0,0,1]))
 scc= typical_materials.defElasticSection3d(preprocessor, "scc",A,E,G,Iz,Iy,J)
 
 # Elements definition
-elements= preprocessor.getElementLoader
+elements= preprocessor.getElementHandler
 elements.defaultTransformation= "lin"
 elements.defaultMaterial= "scc"
 elements.defaultTag= 1 #Tag for next element.
@@ -59,7 +59,7 @@ beam3d= elements.newElement("ElasticBeam3d",xc.ID([1,2]));
 modelSpace.fixNode000_000(1)
 
  # Loads definition
-cargas= preprocessor.getLoadLoader
+cargas= preprocessor.getLoadHandler
 casos= cargas.getLoadPatterns
 
 #Load modulation.

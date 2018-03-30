@@ -23,7 +23,7 @@ __email__= "l.pereztato@gmail.com"
 # Model definition
 feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
-nodes= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeHandler
 nodes.dimSpace= 1 # One coordinate for each node.
 nodes.numDOFs= 1 # One degree of freedom for each node.
 
@@ -37,7 +37,7 @@ concr=typical_materials.defConcrete02(preprocessor=preprocessor,name='concr25',e
 
 
 # Elements definition
-elements= preprocessor.getElementLoader
+elements= preprocessor.getElementHandler
 elements.defaultMaterial='concr25'
 elements.dimElem= 1 # Dimension of element space
 elements.defaultTag= 1
@@ -45,12 +45,12 @@ elem1= elements.newElement("ZeroLength",xc.ID([1,2]))
 
    
 # Constraints
-constraints= preprocessor.getConstraintLoader
+constraints= preprocessor.getBoundaryCondHandler
 spc= constraints.newSPConstraint(1,0,0.0) # Node 1
 
 
 # Loads definition
-cargas= preprocessor.getLoadLoader
+cargas= preprocessor.getLoadHandler
 casos= cargas.getLoadPatterns
 #Load modulation.
 ts= casos.newTimeSeries("constant_ts","ts")

@@ -49,7 +49,7 @@
 // $Source: /usr/local/cvs/OpenSees/SRC/material/section/ElasticShearSection3d.cpp,v $
 
 #include "material/section/elastic_section/ElasticShearSection3d.h"
-#include "preprocessor/loaders/MaterialLoader.h"
+#include "preprocessor/prep_handlers/MaterialHandler.h"
 #include "utility/matrix/Matrix.h"
 
 
@@ -62,7 +62,7 @@ XC::Matrix XC::ElasticShearSection3d::ks(6,6);
 XC::ElasticShearSection3d::ElasticShearSection3d(void)
   :BaseElasticSection3d(0, SEC_TAG_Elastic3d,6) {}
 
-XC::ElasticShearSection3d::ElasticShearSection3d(int tag, MaterialLoader *mat_ldr)
+XC::ElasticShearSection3d::ElasticShearSection3d(int tag, MaterialHandler *mat_ldr)
   :BaseElasticSection3d(tag, SEC_TAG_Elastic3d,6,mat_ldr) {}
 
 const XC::Vector &XC::ElasticShearSection3d::getStressResultant(void) const

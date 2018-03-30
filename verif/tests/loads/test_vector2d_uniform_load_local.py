@@ -38,7 +38,7 @@ p= 1000 # Carga uniforme transversal.
 # Problem type
 feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
-nodes= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeHandler
 modelSpace= predefined_spaces.StructuralMechanics2D(nodes)
 
 nodes.defaultTag= 1 #First node number.
@@ -63,7 +63,7 @@ if(not pth):
   pth= "."
 execfile(pth+"/../aux/testQuadRegion.py")
 
-materiales= preprocessor.getMaterialLoader
+materiales= preprocessor.getMaterialHandler
 quadFibers= materiales.newMaterial("fiber_section_3d","quadFibers")
 fiberSectionRepr= quadFibers.getFiberSectionRepr()
 fiberSectionRepr.setGeomNamed("testQuadRegion")
@@ -77,7 +77,7 @@ agg.setAdditions(["T","Vy","Vz"],["respT","respVy","respVz"]) # Torsion and shea
 
 
 # Elements definition
-elements= preprocessor.getElementLoader
+elements= preprocessor.getElementHandler
 elements.defaultTransformation= "lin" # Coordinate transformation for the new elements
 elements.defaultMaterial= "agg"
 elements.numSections= 3 # Number of sections along the element.
@@ -87,11 +87,11 @@ el= elements.newElement("ForceBeamColumn2d",xc.ID([1,2]))
 
 
 # Constraints
-constraints= preprocessor.getConstraintLoader
+constraints= preprocessor.getBoundaryCondHandler
 modelSpace.fixNode000(1)
 
 # Loads definition
-cargas= preprocessor.getLoadLoader
+cargas= preprocessor.getLoadHandler
 casos= cargas.getLoadPatterns
 #Load modulation.
 ts= casos.newTimeSeries("constant_ts","ts")
@@ -118,7 +118,7 @@ RN= nod1.getReaction[0]
 nod2= nodes.getNode(2)
 RN2= nod2.getReaction[0] 
 
-elements= preprocessor.getElementLoader
+elements= preprocessor.getElementHandler
 
 elem1= elements.getElement(1)
 elem1.getResistingForce()

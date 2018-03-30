@@ -28,7 +28,7 @@ rotacion= xc.Matrix([[1,0,0],[0,math.cos(angRotacion),math.sin(angRotacion)],[0,
 feProblem= xc.FEProblem()
 feProblem.logFileName= "/tmp/borrar.log" # Ignore warning messages
 preprocessor=  feProblem.getPreprocessor
-nodes= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeHandler
 modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
 nod1= nodes.newNodeIDXYZ(1,0,0,0)
 nod2= nodes.newNodeIDXYZ(2,2,0,0)
@@ -44,7 +44,7 @@ movN3= rotacion*vPosN3-vPosN3
 movN4= rotacion*vPosN4-vPosN4
 # Materials definition
 memb1= typical_materials.defElasticMembranePlateSection(preprocessor, "memb1",E,nu,dens,h)
-elements= preprocessor.getElementLoader
+elements= preprocessor.getElementHandler
 elements.defaultMaterial= "memb1"
 elem= elements.newElement("CorotShellMITC4",xc.ID([1,2,3,4]))
 

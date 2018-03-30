@@ -19,7 +19,7 @@ FCs= []
 feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
 # Define materials
-materiales= preprocessor.getMaterialLoader
+materiales= preprocessor.getMaterialHandler
 diagInteg= materiales.newInteractionDiagram("diagInteg")
 diagInteg.readFrom("/tmp/interaction_diagram_test_02.dat")
 

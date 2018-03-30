@@ -23,7 +23,7 @@ rho= 0.0 # Densidad
 feProblem= xc.FEProblem()
 feProblem.logFileName= "/tmp/borrar.log" # Para no imprimir mensajes de advertencia
 preprocessor=  feProblem.getPreprocessor
-nodes= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeHandler
 modelSpace= predefined_spaces.SolidMechanics2D(nodes)
 
 # This is the element set:
@@ -48,7 +48,7 @@ n8= nodes.newNodeIDXY(8,1,2)
 
 elast2d= typical_materials.defElasticIsotropicPlaneStress(preprocessor, "elast2d",E,nu,rho)
 # Elements definition
-elements= preprocessor.getElementLoader
+elements= preprocessor.getElementHandler
 elements.defaultMaterial= "elast2d"
 a= elements.newElement("FourNodeQuad",xc.ID([1,2,3,4]))
 b= elements.newElement("FourNodeQuad",xc.ID([2,5,6,3]))

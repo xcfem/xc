@@ -59,7 +59,7 @@ xRelPtoAplic= 0.5 # x relative (compared to the total length) of the
 
 feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
-nodes= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeHandler
 # Problem type
 modelSpace= predefined_spaces.StructuralMechanics2D(nodes)
 nodes.defaultTag= 1 #First node number.
@@ -74,7 +74,7 @@ sectionProperties.I= Iz;
 seccion= typical_materials.defElasticSectionFromMechProp2d(preprocessor, "seccion",sectionProperties)
 
 # Elements definition
-elements= preprocessor.getElementLoader
+elements= preprocessor.getElementHandler
 elements.defaultTransformation= "lin"
 elements.defaultMaterial= "seccion"
 elements.defaultTag= 1 #Tag for the next element.
@@ -82,10 +82,10 @@ beam2d= elements.newElement("ElasticBeam2d",xc.ID([1,2]));
 
 
 
-constraints= preprocessor.getConstraintLoader
+constraints= preprocessor.getBoundaryCondHandler
 modelSpace.fixNode000(1)
 
-cargas= preprocessor.getLoadLoader
+cargas= preprocessor.getLoadHandler
 casos= cargas.getLoadPatterns
 #Load modulation.
 ts= casos.newTimeSeries("constant_ts","ts")

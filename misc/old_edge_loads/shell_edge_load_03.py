@@ -20,7 +20,7 @@ p= 10
 # Tipo de problema
 prueba= xc.ProblemaEF()
 mdlr= prueba.getModelador
-nodos= mdlr.getNodeLoader
+nodos= mdlr.getNodeHandler
 predefined_spaces.gdls_resist_materiales3D(nodos)
 nodos.defaultTag= 1; nodos.newNodeXY(0,0,0})
 nodos.defaultTag= 2; nodos.newNodeXY(L,0,0})
@@ -33,20 +33,20 @@ nodos.defaultTag= 4; nodos.newNodeXY(0,L,0})
         memb1= typical_materials.defElasticMembranePlateSection(mdlr,"memb1",E,nu,dens,h)
 
 
-elementos= mdlr.getElementLoader
+elementos= mdlr.getElementHandler
 elementos.defaultMaterial= "memb1"
 elem= elementos.newElement("shell_mitc4",xc.ID([1,2,3,4]))
 
 
 # Condiciones de contorno
-coacciones= mdlr.getConstraintLoader
+coacciones= mdlr.getBoundaryCondHandler
 
 fix_node_6dof.fixNode6DOF(coacciones,1)
 fix_node_6dof.fixNode6DOF(coacciones,2)
 
 
 # Definimos cargas
-cargas= mdlr.getLoadLoader
+cargas= mdlr.getLoadHandler
 
 casos= cargas.getLoadPatterns
 
@@ -58,13 +58,13 @@ lp0= casos.newLoadPattern("default","0")
 #casos.currentLoadPattern= "0"
 
 
-elementos= mdlr.getElementLoader
+elementos= mdlr.getElementHandler
         \for_each
 
             \vector3d_edge_load_global[3,4]{[0,0,p]
 
 
-cargas= mdlr.getLoadLoader
+cargas= mdlr.getLoadHandler
 
 casos= cargas.getLoadPatterns{#We add the load case to domain.
 casos.addToDomain("0")
@@ -76,7 +76,7 @@ result= analisis.analyze(1)
 
 
         nodos.calculateNodalReactions(True)
-nodos= mdlr.getNodeLoader
+nodos= mdlr.getNodeHandler
 
  RNX1= .getReaction[0] RNY1= nodos.getNode(1).getReaction[1] RNZ1= .getReaction[2] \expr{MX1= .getReaction[3] 
  RNX2= .getReaction[0] RNY2= nodos.getNode(2).getReaction[1] RNZ2= .getReaction[2] \expr{MX2= .getReaction[3] 

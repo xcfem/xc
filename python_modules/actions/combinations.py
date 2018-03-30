@@ -17,9 +17,9 @@ class CombinationRecord(object):
   def __init__(self,name,expr):
     self.name= name
     self.expr= expr
-  def createCombination(self,xcCombLoader):
-    '''Create combination and insert it into the XC combination loader.'''
-    xcCombLoader.newLoadCombination(self.name,self.expr)
+  def createCombination(self,xcCombHandler):
+    '''Create combination and insert it into the XC combination handler.'''
+    xcCombHandler.newLoadCombination(self.name,self.expr)
   def getRecordLoadCaseDisp(self,setsToDispLoads,setsToDispDspRot,setsToDispIntForc):
     '''Return a suitable RecordLoadCaseDisp for the combination.
 
@@ -47,10 +47,10 @@ class SituationCombs(dict):
       retval[comb.name]= nld.LoadComb(counter,comb.name,self.description,typ,nld.getComponentsFromStr(comb.expr,mapLoadCases))
       counter+=1
     return retval
-  def dumpCombinations(self,xcCombLoader):
-    '''Introduces the combinations into the XC combination loader.'''
+  def dumpCombinations(self,xcCombHandler):
+    '''Introduces the combinations into the XC combination handler.'''
     for key in self:
-      self[key].createCombination(xcCombLoader)
+      self[key].createCombination(xcCombHandler)
   def getRecordLoadCaseDisp(self,combName,setsToDispLoads,setsToDispDspRot,setsToDispIntForc):
     '''Returns a suitable RecordLoadCaseDisp for the combination.
 
@@ -78,10 +78,10 @@ class SituationsSet(object):
     for s in self.situations:
       retval.extend(s.getNames())
     return retval
-  def dumpCombinations(self,xcCombLoader):
-    '''Introduces the combinations into the XC combination loader.'''
+  def dumpCombinations(self,xcCombHandler):
+    '''Introduces the combinations into the XC combination handler.'''
     for s in self.situations:
-      s.dumpCombinations(xcCombLoader)
+      s.dumpCombinations(xcCombHandler)
   def getRecordLoadCaseDisp(self,combName,setsToDispLoads,setsToDispDspRot,setsToDispIntForc):
     '''Returns a suitable RecordLoadCaseDisp for the combination.
 
@@ -164,10 +164,10 @@ class CombContainer(object):
     retval.update(self.ULS.getNeutralFormat(counter+len(retval), mapLoadCases))
     return retval
   def dumpCombinations(self,preprocessor):
-    '''Introduces the combinations into the XC combination loader.'''
-    xcCombLoader= preprocessor.getLoadLoader.getLoadCombinations
+    '''Introduces the combinations into the XC combination handler.'''
+    xcCombHandler= preprocessor.getLoadHandler.getLoadCombinations
     for ls in self.limitStates:
-      ls.dumpCombinations(xcCombLoader)
+      ls.dumpCombinations(xcCombHandler)
   def getRecordLoadCaseDisp(self,combName,setsToDispLoads,setsToDispDspRot,setsToDispIntForc):
     '''Returns a suitable RecordLoadCaseDisp for the combination.
 

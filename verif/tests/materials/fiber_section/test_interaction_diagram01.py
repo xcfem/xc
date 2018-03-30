@@ -35,7 +35,7 @@ Ec= concr.getDiagD(preprocessor).getTangent
 tagB500S= EHE_materials.B500S.defDiagD(preprocessor)
 Es= EHE_materials.B500S.getDiagD(preprocessor).getTangent
 
-geomSecHA= preprocessor.getMaterialLoader.newSectionGeometry("geomSecHA")
+geomSecHA= preprocessor.getMaterialHandler.newSectionGeometry("geomSecHA")
 regiones= geomSecHA.getRegions
 concrete= regiones.newQuadRegion(EHE_materials.HA25.nmbDiagD)
 concrete.nDivIJ= 10
@@ -54,7 +54,7 @@ reinforcementSup.barArea= areaFi16
 reinforcementSup.p1= geom.Pos2d(depth/2.0-cover,width/2.0-cover) # Armadura superior.
 reinforcementSup.p2= geom.Pos2d(depth/2.0-cover,cover-width/2.0)
 
-materiales= preprocessor.getMaterialLoader
+materiales= preprocessor.getMaterialHandler
 secHA= materiales.newMaterial("fiber_section_3d","secHA")
 fiberSectionRepr= secHA.getFiberSectionRepr()
 fiberSectionRepr.setGeomNamed("geomSecHA")

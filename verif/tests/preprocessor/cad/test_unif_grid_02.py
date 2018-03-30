@@ -23,18 +23,18 @@ feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
 elast2d= typical_materials.defElasticIsotropicPlaneStress(preprocessor, "elast2d",30e6,0.3,0.0)
 
-nodes= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeHandler
 
 nodes.dimSpace= 3 # 3 coordinates for each node.
 nodes.numDOFs= 2 # Two degrees of freedom for each node.
 nodes.newSeedNode()
-seedElemLoader= preprocessor.getElementLoader.seedElemLoader
-seedElemLoader.defaultMaterial= "elast2d"
-seedElemLoader.dimElem= 3 # Dimension of element space
-seedElemLoader.defaultTag= 1 #Tag for the next element.
-quad4n= seedElemLoader.newElement("FourNodeQuad",xc.ID([0,0,0,0]));
+seedElemHandler= preprocessor.getElementHandler.seedElemHandler
+seedElemHandler.defaultMaterial= "elast2d"
+seedElemHandler.dimElem= 3 # Dimension of element space
+seedElemHandler.defaultTag= 1 #Tag for the next element.
+quad4n= seedElemHandler.newElement("FourNodeQuad",xc.ID([0,0,0,0]));
 
-unifGrids= preprocessor.getCad.getUniformGrids
+unifGrids= preprocessor.getMultiBlockTopology.getUniformGrids
 uGrid= unifGrids.newUniformGrid()
 
 uGrid.Lx= 10

@@ -27,7 +27,7 @@ C= xc.Vector([1,0.5,0.5])
 # Problem type
 feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
-nodes= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeHandler
 modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
 nodes.newNodeIDXYZ(1,0,0,0)
 nodes.newNodeIDXYZ(2,2,0,0)
@@ -40,7 +40,7 @@ nodes.newNodeIDXYZ(4,0,1,1)
 memb1= typical_materials.defElasticMembranePlateSection(preprocessor, "memb1",E,nu,dens,h)
 
 
-elements= preprocessor.getElementLoader
+elements= preprocessor.getElementHandler
 elements.defaultMaterial= "memb1"
 elem= elements.newElement("CorotShellMITC4",xc.ID([1,2,3,4]))
 

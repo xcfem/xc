@@ -64,7 +64,7 @@
 #include <classTags.h>
 #include <material/section/SectionAggregator.h>
 #include <utility/recorder/response/MaterialResponse.h>
-#include "preprocessor/loaders/MaterialLoader.h"
+#include "preprocessor/prep_handlers/MaterialHandler.h"
 
 
 #include "xc_utils/src/nucleo/python_utils.h"
@@ -192,7 +192,7 @@ void XC::SectionAggregator::copy_section(const SectionForceDeformation *theSec)
   }
 
 //! @brief Constructor.
-XC::SectionAggregator::SectionAggregator(int tag, PrismaticBarCrossSection &theSec,const AggregatorAdditions &theAdds,MaterialLoader *mat_ldr)
+XC::SectionAggregator::SectionAggregator(int tag, PrismaticBarCrossSection &theSec,const AggregatorAdditions &theAdds,MaterialHandler *mat_ldr)
   : PrismaticBarCrossSection(tag, SEC_TAG_Aggregator,mat_ldr), theSection(nullptr),
     theAdditions(theAdds,this), def(nullptr), defzero(nullptr), s(nullptr), ks(nullptr), fs(nullptr), theCode(nullptr)
   {
@@ -210,12 +210,12 @@ XC::SectionAggregator::SectionAggregator(const SectionAggregator &otro)
    }
 
 //! @brief Constructor.
-XC::SectionAggregator::SectionAggregator(int tag, const AggregatorAdditions &theAdds,MaterialLoader *mat_ldr)
+XC::SectionAggregator::SectionAggregator(int tag, const AggregatorAdditions &theAdds,MaterialHandler *mat_ldr)
   : PrismaticBarCrossSection(tag, SEC_TAG_Aggregator,mat_ldr), theSection(nullptr), theAdditions(theAdds,this),
     def(nullptr), defzero(nullptr), s(nullptr), ks(nullptr), fs(nullptr), theCode(nullptr)
   { alloc_storage_ptrs(); }
 
-XC::SectionAggregator::SectionAggregator(int tag, PrismaticBarCrossSection &theSec, UniaxialMaterial &theAddition, int c,MaterialLoader *mat_ldr)
+XC::SectionAggregator::SectionAggregator(int tag, PrismaticBarCrossSection &theSec, UniaxialMaterial &theAddition, int c,MaterialHandler *mat_ldr)
   : PrismaticBarCrossSection(tag, SEC_TAG_Aggregator,mat_ldr), theSection(nullptr), theAdditions(this,theAddition,c),
     def(nullptr), defzero(nullptr), s(nullptr), ks(nullptr), fs(nullptr), theCode(nullptr)
   {
@@ -223,12 +223,12 @@ XC::SectionAggregator::SectionAggregator(int tag, PrismaticBarCrossSection &theS
     alloc_storage_ptrs();
   }
 
-XC::SectionAggregator::SectionAggregator(int tag,MaterialLoader *mat_ldr)
+XC::SectionAggregator::SectionAggregator(int tag,MaterialHandler *mat_ldr)
   : PrismaticBarCrossSection(tag, SEC_TAG_Aggregator,mat_ldr), theSection(nullptr), theAdditions(this), 
     def(nullptr), defzero(nullptr), s(nullptr), ks(nullptr), fs(nullptr), theCode(nullptr){}
 
 //! @brief Default constructor.
-XC::SectionAggregator::SectionAggregator(MaterialLoader *mat_ldr)
+XC::SectionAggregator::SectionAggregator(MaterialHandler *mat_ldr)
   : PrismaticBarCrossSection(0, SEC_TAG_Aggregator,mat_ldr), theSection(nullptr), theAdditions(this),
     def(nullptr), defzero(nullptr), s(nullptr), ks(nullptr), fs(nullptr), theCode(nullptr) {}
 
@@ -259,8 +259,8 @@ XC::SectionAggregator &XC::SectionAggregator::operator=(const SectionAggregator 
 //! @brief Assigns the section.
 void XC::SectionAggregator::setSection(const std::string &sectionName)
   {
-    assert(material_loader);
-    const Material *ptr_mat= material_loader->find_ptr(sectionName);
+    assert(material_handler);
+    const Material *ptr_mat= material_handler->find_ptr(sectionName);
     if(ptr_mat)
       {
         const PrismaticBarCrossSection *tmp= dynamic_cast<const PrismaticBarCrossSection *>(ptr_mat);
@@ -290,7 +290,7 @@ void XC::SectionAggregator::setAddtions(const std::vector<std::string> &response
                 << " number of materials: " << n << std::endl;
     for(size_t i= 0;i<n;i++)
       {
-        const Material *ptr_mat= material_loader->find_ptr(nmbMats[i]);
+        const Material *ptr_mat= material_handler->find_ptr(nmbMats[i]);
         if(ptr_mat)
           {
             const UniaxialMaterial *tmp= dynamic_cast<const UniaxialMaterial *>(ptr_mat);

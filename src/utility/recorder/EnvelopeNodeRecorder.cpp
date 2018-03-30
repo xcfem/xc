@@ -369,7 +369,7 @@ int XC::EnvelopeNodeRecorder::record(int commitTag, double timeStamp)
 int XC::EnvelopeNodeRecorder::restart(void)
   { return envelope.restart(); }
 
-//! @brief Send the object a través del comunicador que
+//! @brief Send the object a través del communicator que
 //! being passed as parameter.
 int XC::EnvelopeNodeRecorder::sendData(CommParameters &cp)
   {
@@ -378,7 +378,7 @@ int XC::EnvelopeNodeRecorder::sendData(CommParameters &cp)
     return res;
   }
 
-//! @brief Receive the object a través del comunicador que
+//! @brief Receive the object a través del communicator que
 //! being passed as parameter.
 int XC::EnvelopeNodeRecorder::receiveData(const CommParameters &cp)
   {
@@ -387,7 +387,7 @@ int XC::EnvelopeNodeRecorder::receiveData(const CommParameters &cp)
     return res;
   }
 
-//! @brief Send the object a través del comunicador que
+//! @brief Send the object a través del communicator que
 //! being passed as parameter.
 int XC::EnvelopeNodeRecorder::sendSelf(CommParameters &cp)
   {
@@ -410,7 +410,7 @@ int XC::EnvelopeNodeRecorder::sendSelf(CommParameters &cp)
     return res;
   }
 
-//! @brief Receive the object a través del comunicador que
+//! @brief Receive the object a través del communicator que
 //! being passed as parameter.
 int XC::EnvelopeNodeRecorder::recvSelf(const CommParameters &cp)
   {

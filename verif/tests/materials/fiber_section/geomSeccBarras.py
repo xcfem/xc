@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-geomSecBarras= preprocessor.getMaterialLoader.newSectionGeometry("geomSecBarras")
+geomSecBarras= preprocessor.getMaterialHandler.newSectionGeometry("geomSecBarras")
 reinforcement= geomSecBarras.getReinfLayers
 reinforcementInf= reinforcement.newStraightReinfLayer(EHE_materials.B500S.nmbDiagD)
 reinforcementInf.numReinfBars= 2

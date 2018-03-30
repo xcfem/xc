@@ -27,7 +27,7 @@ centroidB= None # Basic coordinates of the centroid.
 
 feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor   
-nodes= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeHandler
 modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
 nodes.defaultTag= 1 #First node number.
 nod= nodes.newNodeXYZ(0,0,0)
@@ -38,7 +38,7 @@ seccion= typical_materials.defElasticSection3d(preprocessor, "seccion",1,1,1,1,1
     
 lin= modelSpace.newLinearCrdTransf("lin",xc.Vector([0,-1,0]))    
 # Elements definition
-elements= preprocessor.getElementLoader
+elements= preprocessor.getElementHandler
 
 elements.defaultTransformation= "lin"
 elements.defaultMaterial= "seccion"

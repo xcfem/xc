@@ -67,7 +67,7 @@ dgDB500S= EHE_materials.B500S.getDiagD(preprocessor)
 
 # Section geometry
 #creation
-geomSecHA= preprocessor.getMaterialLoader.newSectionGeometry("geomSecHA")
+geomSecHA= preprocessor.getMaterialHandler.newSectionGeometry("geomSecHA")
 #filling with regions
 regiones= geomSecHA.getRegions
 #generation of a quadrilateral region of the specified sizes and number of
@@ -93,7 +93,7 @@ reinforcementSup.barArea= areaFi16
 reinforcementSup.p1= geom.Pos2d(depth/2-cover,width/2-cover) # Armadura superior.
 reinforcementSup.p2= geom.Pos2d(depth/2-cover,cover-width/2)
 
-materiales= preprocessor.getMaterialLoader
+materiales= preprocessor.getMaterialHandler
 secHA= materiales.newMaterial("fiber_section_3d","secHA")
 fiberSectionRepr= secHA.getFiberSectionRepr()
 fiberSectionRepr.setGeomNamed("geomSecHA")

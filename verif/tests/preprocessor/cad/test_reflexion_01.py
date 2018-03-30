@@ -16,12 +16,12 @@ feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
 # Defining nodes
 
-points= preprocessor.getCad.getPoints
+points= preprocessor.getMultiBlockTopology.getPoints
 pt1= points.newPntIDPos3d(1, geom.Pos3d(1.0, 0.0, 0.0) )
 pt2= points.newPntIDPos3d(2, geom.Pos3d(0.0, 1.0, 0.0) )
 pt3= points.newPntIDPos3d(3, geom.Pos3d(0.0, 0.0, 1.0) )
 plano= geom.Plane3d(pt1.getPos,pt2.getPos,pt3.getPos)
-trfs= preprocessor.getCad.getGeometricTransformations
+trfs= preprocessor.getMultiBlockTopology.getGeometricTransformations
 reflex1= trfs.newTransformation("reflection")
 reflex1.setPlane(plano)
 

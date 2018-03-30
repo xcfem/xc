@@ -17,8 +17,8 @@ numPorticos= len(abcisas)
 feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
 
-points= preprocessor.getCad.getPoints
-nets= preprocessor.getCad.get3DNets
+points= preprocessor.getMultiBlockTopology.getPoints
+nets= preprocessor.getMultiBlockTopology.get3DNets
 porticoLateral= nets.new3DNet()
 porticoLateral.dim(1,2,numPorticos)
 ordenada= 8.2

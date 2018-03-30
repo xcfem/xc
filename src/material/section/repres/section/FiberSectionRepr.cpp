@@ -79,7 +79,7 @@ void XC::FiberSectionRepr::copy_fibers(const FiberSectionRepr &otro)
   }
 
 //! @brief Constructor.
-XC::FiberSectionRepr::FiberSectionRepr(int sectionID,MaterialLoader *ml)
+XC::FiberSectionRepr::FiberSectionRepr(int sectionID,MaterialHandler *ml)
   :SectionRepres(sectionID, ml), sectID(sectionID) {}
 
 //! @brief Copy constructor.
@@ -145,7 +145,7 @@ XC::FiberData XC::FiberSectionRepr::getFiberData(void) const
 XC::fiber_list XC::FiberSectionRepr::get2DFibers(void) const
   {
     fiber_list retval;
-    if(!material_loader)
+    if(!material_handler)
       {
         std::cerr << getClassName() << "::" << __FUNCTION__
 		  << "; material handler not defined.\n";
@@ -163,7 +163,7 @@ XC::fiber_list XC::FiberSectionRepr::get2DFibers(void) const
 XC::fiber_list XC::FiberSectionRepr::get3DFibers(void) const
   {
     fiber_list retval;
-    if(!material_loader)
+    if(!material_handler)
       {
         std::cerr << getClassName() << "::" << __FUNCTION__
 	          << "; material handler not defined.\n";
@@ -178,11 +178,11 @@ XC::fiber_list XC::FiberSectionRepr::get3DFibers(void) const
   }
 
 XC::FiberSection2d XC::FiberSectionRepr::getFiberSection2d(int secTag) const
-  { return FiberSection2d(secTag,fibers,material_loader); }
+  { return FiberSection2d(secTag,fibers,material_handler); }
 
 XC::FiberSection3d XC::FiberSectionRepr::getFiberSection3d(int secTag) const
-  { return FiberSection3d(secTag,fibers,material_loader); }
+  { return FiberSection3d(secTag,fibers,material_handler); }
 
 XC::FiberSectionGJ XC::FiberSectionRepr::getFiberSectionGJ(int secTag,const double &GJ) const
-  { return FiberSectionGJ(secTag,fibers,GJ,material_loader); }
+  { return FiberSectionGJ(secTag,fibers,GJ,material_handler); }
 

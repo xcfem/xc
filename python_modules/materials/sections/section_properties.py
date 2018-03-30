@@ -98,7 +98,7 @@ class SectionProperties(object):
     :param  preprocessor: preprocessor object.
     :param material:      material (for which E is the Young's modulus and G() the shear modulus)  
     '''
-    materiales= preprocessor.getMaterialLoader
+    materiales= preprocessor.getMaterialHandler
     if(materiales.materialExists(self.sectionName)):
       sys.stderr.write("Section: "+self.sectionName+" is already defined.")
     else:
@@ -110,7 +110,7 @@ class SectionProperties(object):
     :param  preprocessor: preprocessor object.
     :param material:      material (for which E is the Young's modulus and G() the shear modulus)  
     '''
-    materiales= preprocessor.getMaterialLoader
+    materiales= preprocessor.getMaterialHandler
     if(materiales.materialExists(self.sectionName)):
       sys.stderr.write("Section: "+self.sectionName+" is already defined.")
     else:
@@ -125,7 +125,7 @@ class SectionProperties(object):
                          E is the Young's modulus)
     '''
 
-    materiales= preprocessor.getMaterialLoader
+    materiales= preprocessor.getMaterialHandler
     if(materiales.materialExists(self.sectionName)):
       sys.stderr.write("Section: "+self.sectionName+" is already defined.")
     else:
@@ -138,7 +138,7 @@ class SectionProperties(object):
     :param material: material constitutive model (for which 
                      E is the Young's modulus and G() the shear modulus).
     '''
-    materiales= preprocessor.getMaterialLoader
+    materiales= preprocessor.getMaterialHandler
     if(materiales.materialExists(self.sectionName)):
       sys.stderr.write("Section: "+self.sectionName+" is already defined.")
     else:

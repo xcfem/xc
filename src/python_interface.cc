@@ -33,7 +33,7 @@ void export_material_section(void);
 void export_material_fiber_section(void);
 void export_domain(void);
 void export_domain_mesh(void);
-void export_preprocessor_loaders(void);
+void export_preprocessor_prep_handlers(void);
 void export_preprocessor_build_model(void);
 void export_preprocessor_sets(void);
 void export_preprocessor_main(void);
@@ -70,7 +70,7 @@ BOOST_PYTHON_MODULE(xc)
     export_material_fiber_section(); //Materials exposition.
     export_domain_mesh(); //Mesh exposition.
     export_domain(); //Domain exposition.
-    export_preprocessor_loaders();//Preprocessor exposition.
+    export_preprocessor_prep_handlers();//Preprocessor exposition.
     export_preprocessor_build_model();
     export_preprocessor_sets();
     export_preprocessor_main();

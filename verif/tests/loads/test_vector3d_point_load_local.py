@@ -35,7 +35,7 @@ n= 1e6 # Carga uniforme axial.
 
 feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor   
-nodes= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeHandler
 
 # Problem type
 modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
@@ -51,7 +51,7 @@ scc= typical_materials.defElasticSection3d(preprocessor, "scc",A,E,G,Iz,Iy,J)
 
 
 # Elements definition
-elements= preprocessor.getElementLoader
+elements= preprocessor.getElementHandler
 elements.defaultTransformation= "lin"
 elements.defaultMaterial= "scc"
 elements.defaultTag= 1 #Tag for next element.
@@ -63,7 +63,7 @@ modelSpace.fixNode000_000(1)
 
 
 # Loads definition
-cargas= preprocessor.getLoadLoader
+cargas= preprocessor.getLoadHandler
 casos= cargas.getLoadPatterns
 #Load modulation.
 ts= casos.newTimeSeries("constant_ts","ts")
@@ -78,7 +78,7 @@ while not(elem is None):
   elem.vector3dPointByRelDistLoadLocal(x,xc.Vector([n,-P,0]))
   elem= eIter.next()
 
-cargas= preprocessor.getLoadLoader
+cargas= preprocessor.getLoadHandler
 
 #We add the load case to domain.
 casos.addToDomain("0")
@@ -88,7 +88,7 @@ analisis= predefined_solutions.simple_static_linear(feProblem)
 result= analisis.analyze(1)
 
 
-nodes= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeHandler
 nod2= nodes.getNode(2)
 delta0= nod2.getDisp[0] 
 nod2= nodes.getNode(2)

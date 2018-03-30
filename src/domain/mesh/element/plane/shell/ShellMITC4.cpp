@@ -58,8 +58,8 @@
 #include "ShellMITC4.h"
 #include "utility/matrix/ID.h"
 #include "utility/actor/actor/MovableVector.h"
-#include "preprocessor/cad/matrices/TritrizPtrElem.h"
-#include "preprocessor/cad/aux_meshing.h"
+#include "preprocessor/multi_block_topology/matrices/TritrizPtrElem.h"
+#include "preprocessor/multi_block_topology/aux_meshing.h"
 #include <domain/mesh/node/Node.h>
 #include <material/section/SectionForceDeformation.h>
 #include <domain/domain/Domain.h>
@@ -75,7 +75,7 @@
 #include "xc_utils/src/geom/d2/Poligono3d.h"
 #include "domain/load/plane/ShellUniformLoad.h"
 #include "preprocessor/Preprocessor.h"
-#include "preprocessor/loaders/LoadLoader.h"
+#include "preprocessor/prep_handlers/LoadHandler.h"
 #include "utility/actor/actor/MatrixCommMetaData.h"
 #include "domain/mesh/element/utils/gauss_models/GaussModel.h"
 

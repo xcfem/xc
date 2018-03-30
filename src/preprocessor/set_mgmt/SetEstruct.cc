@@ -28,7 +28,7 @@
 
 #include "SetEstruct.h"
 #include "preprocessor/Preprocessor.h"
-#include "preprocessor/cad/matrices/TritrizPtrElem.h"
+#include "preprocessor/multi_block_topology/matrices/TritrizPtrElem.h"
 #include "domain/mesh/node/Node.h"
 #include "domain/mesh/element/Element.h"
 #include "domain/mesh/element/utils/ElementEdges.h"
@@ -147,7 +147,7 @@ void XC::SetEstruct::add_elements(const TritrizPtrElem &elements)
     for(register size_t i= 1;i<=capas;i++)
       for(register size_t j= 1;j<=filas;j++)
         for(register size_t k= 1;k<=cols;k++)
-          getPreprocessor()->getElementLoader().Add(elements(i,j,k));
+          getPreprocessor()->getElementHandler().Add(elements(i,j,k));
   }
 
 //! @brief Returns the tags of the nodes.

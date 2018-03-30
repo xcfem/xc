@@ -29,7 +29,7 @@ F= 1.5e3 # Load magnitude en N
 
 feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor   
-nodes= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeHandler
 # Problem type
 modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
 nodes.defaultTag= 1 #First node number.
@@ -52,7 +52,7 @@ if(not pth):
 execfile(pth+"/../../aux/testQuadRegion.py") #Definition of section geometry (regions and rebars)
 # Definition of a new empty fiber section named 'quadFibers' and stored in a
 # Python variable of the same name (surprisingly enough).
-quadFibers= preprocessor.getMaterialLoader.newMaterial("fiber_section_3d","quadFibers")
+quadFibers= preprocessor.getMaterialHandler.newMaterial("fiber_section_3d","quadFibers")
 fiberSectionRepr= quadFibers.getFiberSectionRepr() #Fiber section representation
                                                      # of 'quadFibers'
 fiberSectionRepr.setGeomNamed("testQuadRegion") #We assign the geometry (regions and rebars)
@@ -66,7 +66,7 @@ A= fibras.getArea(1.0) #Get the sum of the fiber areas.
 
 
 # Elements definition
-elements= preprocessor.getElementLoader
+elements= preprocessor.getElementHandler
 elements.defaultTransformation= "lin"
 elements.defaultMaterial= "quadFibers" #Material name for the element (the fiber section).
 beam3d= elements.newElement("ForceBeamColumn3d",xc.ID([1,2]));
@@ -75,7 +75,7 @@ beam3d= elements.newElement("ForceBeamColumn3d",xc.ID([1,2]));
 modelSpace.fixNode000_000(1)
 
 # Loads definition
-cargas= preprocessor.getLoadLoader
+cargas= preprocessor.getLoadHandler
 casos= cargas.getLoadPatterns
 #Load modulation.
 ts= casos.newTimeSeries("constant_ts","ts")
@@ -89,11 +89,11 @@ casos.addToDomain("0")
 analisis= predefined_solutions.simple_static_modified_newton(feProblem)
 result= analisis.analyze(10)
 
-nodes= preprocessor.getNodeLoader 
+nodes= preprocessor.getNodeHandler 
 nod2= nodes.getNode(2)
 delta= nod2.getDisp[0]  # Node 2 xAxis displacement
 
-elements= preprocessor.getElementLoader
+elements= preprocessor.getElementHandler
 
 elem1= elements.getElement(0)
 elem1.getResistingForce()

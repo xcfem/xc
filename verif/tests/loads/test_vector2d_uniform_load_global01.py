@@ -37,7 +37,7 @@ p= 1000 # Transverse uniform load.
 
 feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
-nodes= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeHandler
 
 # Problem type
 modelSpace= predefined_spaces.StructuralMechanics2D(nodes)
@@ -63,7 +63,7 @@ if(not pth):
   pth= "."
 execfile(pth+"/../aux/testQuadRegion.py")
 
-materiales= preprocessor.getMaterialLoader
+materiales= preprocessor.getMaterialHandler
 quadFibers= materiales.newMaterial("fiber_section_3d","quadFibers")
 fiberSectionRepr= quadFibers.getFiberSectionRepr()
 fiberSectionRepr.setGeomNamed("testQuadRegion")
@@ -78,7 +78,7 @@ agg.setAdditions(["T","Vy","Vz"],["respT","respVy","respVz"])
 
 
 # Elements definition
-elements= preprocessor.getElementLoader
+elements= preprocessor.getElementHandler
 elements.defaultTransformation= "lin" # Coordinate transformation for the new elements
 elements.defaultMaterial= "agg"
 elements.numSections= 3 # Number of sections along the element.
@@ -88,11 +88,11 @@ el= elements.newElement("ForceBeamColumn2d",xc.ID([1,2]))
 
 
 # Constraints
-constraints= preprocessor.getConstraintLoader
+constraints= preprocessor.getBoundaryCondHandler
 modelSpace.fixNode000(1)
 
 # Loads definition
-cargas= preprocessor.getLoadLoader
+cargas= preprocessor.getLoadHandler
 casos= cargas.getLoadPatterns
 #Load modulation.
 ts= casos.newTimeSeries("constant_ts","ts")
@@ -107,7 +107,7 @@ vCarga= f*vIElem-p*vJElem
 el.vector2dUniformLoadGlobal(vCarga)
 
 
-cargas= preprocessor.getLoadLoader
+cargas= preprocessor.getLoadHandler
 cargas.addToDomain("0") # Append load pattern to domain.
 
 # Solution procedure
@@ -122,7 +122,7 @@ vReac1= xc.Vector([nod1.getReaction[0],nod1.getReaction[1]])
 nod2= nodes.getNode(2)
 vReac2= xc.Vector([nod2.getReaction[0],nod2.getReaction[1]])
 
-elements= preprocessor.getElementLoader
+elements= preprocessor.getElementHandler
 
 elem1= elements.getElement(1)
 elem1.getResistingForce()

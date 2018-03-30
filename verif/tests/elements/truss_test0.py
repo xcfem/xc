@@ -21,7 +21,7 @@ l= 10 #Bar length
 
 feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
-nodes= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeHandler
 
 modelSpace= predefined_spaces.SolidMechanics2D(nodes)
 n1= nodes.newNodeXYZ(0,0,0)
@@ -33,7 +33,7 @@ elast= typical_materials.defElasticMaterial(preprocessor, "elast",E)
     We will not compute stresses so we can use an arbitrary
     cross section of unit area.'''
 
-elements= preprocessor.getElementLoader
+elements= preprocessor.getElementHandler
 elements.dimElem= 2 #Bars defined in a two dimensional space.
 elements.defaultMaterial= "elast"
 elements.defaultTag= 1 #Tag for the next element.

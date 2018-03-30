@@ -73,22 +73,43 @@ namespace XC {
 class PartitionedDomain;
 class Subdomain;
 
+
+//! The PartitionedModelBuilder class is an abstract class. A subclass
+//! of PartitionedModelBuilder is a class which creates a partitioned finite
+//! element discretization of a structure: that is it discretizes the structure
+//! to be modeled into Elements, Nodes, Constraints, etc. and adds these
+//! components to the Subdomains of a PartitionedDomain.
+//! PartitionedModelBuilders can be used for creating models for analysis
+//! involving domain decomposition methods where there exist natural
+//! partitions or where a model has previously been partitioned and this
+//! information has been saved.
 class PartitionedModelBuilder: public ModelBuilder, public MovableObject
-{
+  {
   public:
     PartitionedModelBuilder(PartitionedDomain &aPartitionedDomain, int classTag);
     PartitionedModelBuilder(Subdomain &aSubdomain, int classTag);
 
     virtual int buildFE_Model(void);
+    //! This method must be provided by the subclasses. It is used to add any
+    //! boundary nodes, nodal loads and constraints to the PartitionedDomain
+    //! object. The integer \p numSubdomains is passed to provide information
+    //! about the number of subdomains in the PartitionedDomain. To return
+    //! \f$0\f$ if successfull, a negative number if not.
     virtual int buildInterface(int numSubdomains) =0;
-    virtual int buildSubdomain(int partition, int numPartitions, Subdomain &theSubdomain) =0;
+    //! This method must be provided by the subclasses. It is used to add
+    //! nodes, elements, loads and constraints to the subdomain {\em
+    //! theSubdomain}. The integers \p partition and \p numPartitions
+    //! are used to identify which partition is being built and the total
+    //! number of partitions. To return \f$0\f$ if succesfull, a negative number
+    //! if not.
+    virtual int buildSubdomain(int partition, int numPartitions, Subdomain &) =0;
     
   protected:
     PartitionedDomain *getPartitionedDomainPtr(void) const;
     
   private:
     PartitionedDomain *thePartitionedDomain;
-};
+  };
 } // end of XC namespace
 
 #endif

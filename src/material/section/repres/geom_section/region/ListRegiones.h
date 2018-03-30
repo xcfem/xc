@@ -42,7 +42,7 @@ namespace XC {
 class RegionSecc;
 class RgSccQuad;
 class RgSccCirc;
-class MaterialLoader;
+class MaterialHandler;
 class Vector;
 class Matrix;
 
@@ -63,10 +63,10 @@ class ListRegiones: protected std::list<RegionSecc *>, public SectionMassPropert
     void copia(const ListRegiones &otra);
   protected:
 
-    MaterialLoader *material_loader; //!< Material definition handler (searching,...).
+    MaterialHandler *material_handler; //!< Material definition handler (searching,...).
   public:
 
-    ListRegiones(MaterialLoader *ml);
+    ListRegiones(MaterialHandler *ml);
     ListRegiones(const ListRegiones  &otro);
     ListRegiones &operator=(const ListRegiones  &otro);
     ~ListRegiones(void);

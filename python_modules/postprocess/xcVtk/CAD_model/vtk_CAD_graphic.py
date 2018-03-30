@@ -60,8 +60,8 @@ class RecordDefDisplayCAD(vtk_grafico_base.RecordDefDisplay):
         self.defineMeshScene(None)
         self.displayScene(caption,fName)
 
-    def plotCadModel(self, xcSet, field, fName, caption= ''):
-        lmsg.warning('plotCadMOdel DEPRECATED; use displayBlocks.')
+    def plotMultiBlockModel(self, xcSet, field, fName, caption= ''):
+        lmsg.warning('plotMultiBlockModel DEPRECATED; use displayBlocks.')
         self.displayBlocks(xcSet,fName,caption)
 
 

@@ -26,7 +26,7 @@ fPretA= fPret/2 # Force magnitude de tesado parcial
 # Model definition
 feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
-nodes= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeHandler
 # Problem type
 modelSpace= predefined_spaces.SolidMechanics2D(nodes)
 
@@ -44,7 +44,7 @@ mat= typical_materials.defCableMaterial(preprocessor, "cable",E,sigmaPretA,0.0)
     cross section of unit area.'''
 
 # Elements definition
-elements= preprocessor.getElementLoader
+elements= preprocessor.getElementHandler
 elements.defaultMaterial= "cable"
 elements.dimElem= 2 # Dimension of element space
 #  sintaxis: truss[<tag>] 
@@ -53,7 +53,7 @@ truss= elements.newElement("Truss",xc.ID([1,2]));
 truss.area= area
     
 # Constraints
-constraints= preprocessor.getConstraintLoader
+constraints= preprocessor.getBoundaryCondHandler
 #
 spc= constraints.newSPConstraint(1,0,0.0) # Node 1
 spc= constraints.newSPConstraint(1,1,0.0)
@@ -69,7 +69,7 @@ result= analisis.analyze(1)
 
 
 nodes.calculateNodalReactions(True)
-nodes= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeHandler
 R1A= nodes.getNode(2).getReaction[0] 
 R2A= nodes.getNode(1).getReaction[0] 
 
@@ -79,7 +79,7 @@ R2A= nodes.getNode(1).getReaction[0]
 ratio1A= ((R1A-fPretA)/fPretA)
 ratio2A= ((R2A+fPretA)/fPretA)
 
-elements= preprocessor.getElementLoader
+elements= preprocessor.getElementHandler
 elem1= elements.getElement(1)
 elem1.getMaterial().prestress= sigmaPret
 #            \material{\prestress{sigmaPret}}

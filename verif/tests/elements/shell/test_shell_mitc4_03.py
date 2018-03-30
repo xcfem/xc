@@ -25,7 +25,7 @@ import math
 
 feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
-nodes= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeHandler
 
 # Problem type
 modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
@@ -43,7 +43,7 @@ nod= nodes.newNodeXYZ(L,h,0)
 # Materials definition
 nmb1= typical_materials.defElasticMembranePlateSection(preprocessor, "memb1",E,nu,0.0,h)
 
-elements= preprocessor.getElementLoader
+elements= preprocessor.getElementHandler
 elements.defaultMaterial= "memb1"
 elements.defaultTag= 1
 elem= elements.newElement("ShellMITC4",xc.ID([1,2,6,5]))
@@ -62,7 +62,7 @@ spc= modelSpace.constraints.newSPConstraint(7,2,0.0)
 spc= modelSpace.constraints.newSPConstraint(8,2,0.0)
 
 # Loads definition
-cargas= preprocessor.getLoadLoader
+cargas= preprocessor.getLoadHandler
 casos= cargas.getLoadPatterns
 
 #Load modulation.

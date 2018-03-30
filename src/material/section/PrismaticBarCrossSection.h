@@ -50,7 +50,7 @@ class DeformationPlane;
 class PrismaticBarCrossSection: public SectionForceDeformation
   {
   public:
-    PrismaticBarCrossSection(int tag,int classTag,MaterialLoader *mat_ldr= nullptr);
+    PrismaticBarCrossSection(int tag,int classTag,MaterialHandler *mat_ldr= nullptr);
     PrismaticBarCrossSection(const PrismaticBarCrossSection &otro);
     PrismaticBarCrossSection &operator=(const PrismaticBarCrossSection &otro);
 

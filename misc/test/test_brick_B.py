@@ -20,7 +20,7 @@ preprocessor=  feProblem.getPreprocessor
 # Materials definition
 elast= typical_materials.defElasticIsotropic3d(preprocessor, "elast3d",1e6,0.25,0.0)
 
-nodes= preprocessor.getNodeLoader 
+nodes= preprocessor.getNodeHandler 
 modelSpace= predefined_spaces.SolidMechanics3D(nodes)
 nod1= nodes.newNodeXYZ(0.249,0.342,0.192)
 nod2= nodes.newNodeXYZ(0.826,0.288,0.288)
@@ -39,7 +39,7 @@ nod14= nodes.newNodeXYZ(1,0,1)
 nod15= nodes.newNodeXYZ(1,1,1)
 nod16= nodes.newNodeXYZ(0,1,1)
 
-elements= preprocessor.getElementLoader
+elements= preprocessor.getElementHandler
 elements.defaultMaterial= "elast3d"
 brick1= elements.newElement("Brick",xc.ID([nod16.tag,nod13.tag,nod9.tag,nod12.tag,nod8.tag,nod5.tag,nod1.tag,nod4.tag]))
 brick2= elements.newElement("Brick",xc.ID([nod13.tag,nod14.tag,nod10.tag,nod9.tag,nod5.tag,nod6.tag,nod2.tag,nod1.tag]))
@@ -52,7 +52,7 @@ brick7= elements.newElement("Brick",xc.ID([nod2.tag,nod3.tag,nod4.tag,nod1.tag,n
 # elements= preprocessor.getSets.getSet('total').getElements
 # for e in elements:
 #     print e.tag, 'K= ', e.getTangentStiff().Norm()
-constraints= preprocessor.getConstraintLoader
+constraints= preprocessor.getBoundaryCondHandler
 
 nod1.fix(xc.ID([0,1,2]),xc.Vector([0,0,0]) )
 nod2.fix(xc.ID([0,1,2]),xc.Vector([0,0,0]) )

@@ -30,7 +30,7 @@ F= 1000 # Force magnitude
 # Problem type
 feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
-nodes= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeHandler
 modelSpace= predefined_spaces.StructuralMechanics2D(nodes)
 
 # Node definition
@@ -52,7 +52,7 @@ pth= os.path.dirname(__file__)
 if(not pth):
   pth= "."
 execfile(pth+"/../../aux/testQuadRegion.py")
-quadFibers= preprocessor.getMaterialLoader.newMaterial("fiber_section_3d","quadFibers")
+quadFibers= preprocessor.getMaterialHandler.newMaterial("fiber_section_3d","quadFibers")
 fiberSectionRepr= quadFibers.getFiberSectionRepr()
 fiberSectionRepr.setGeomNamed("testQuadRegion")
 quadFibers.setupFibers()
@@ -72,14 +72,14 @@ print "fibra: ",tag, " mat. tag:", getMaterial.tag
 
 
 # Elements definition
-elements= preprocessor.getElementLoader
+elements= preprocessor.getElementHandler
 elements.defaultMaterial= "quadFibers"
 elements.dimElem= 1 # Dimension of element space
 elements.defaultTag= 1
 zl= elements.newElement("ZeroLengthSection",xc.ID([1,2]))
 
 # Constraints
-constraints= preprocessor.getConstraintLoader
+constraints= preprocessor.getBoundaryCondHandler
 #
 spc= constraints.newSPConstraint(1,0,0.0) # Node 1
 spc= constraints.newSPConstraint(1,1,0.0)
@@ -88,7 +88,7 @@ spc= constraints.newSPConstraint(2,1,0.0)
 spc= constraints.newSPConstraint(2,2,0.0)
 
 # Loads definition
-cargas= preprocessor.getLoadLoader
+cargas= preprocessor.getLoadHandler
 casos= cargas.getLoadPatterns
 #Load modulation.
 ts= casos.newTimeSeries("constant_ts","ts")
@@ -112,7 +112,7 @@ deltax= nod2.getDisp[0]
 nod1= nodes.getNode(1)
 R= nod1.getReaction[0] 
 
-elements= preprocessor.getElementLoader
+elements= preprocessor.getElementHandler
 
 elem1= elements.getElement(1)
 elem1.getResistingForce()

@@ -51,7 +51,7 @@
 #include "ElasticShearSection2d.h"
 #include "material/section/repres/geom_section/GeomSection.h"
 #include "material/section/ResponseId.h"
-#include "preprocessor/loaders/MaterialLoader.h"
+#include "preprocessor/prep_handlers/MaterialHandler.h"
 #include <utility/matrix/Matrix.h>
 
 
@@ -60,7 +60,7 @@
 
 XC::Vector XC::ElasticShearSection2d::s(3);
 
-XC::ElasticShearSection2d::ElasticShearSection2d(int tag, MaterialLoader *mat_ldr)
+XC::ElasticShearSection2d::ElasticShearSection2d(int tag, MaterialHandler *mat_ldr)
   : BaseElasticSection2d(tag,SEC_TAG_ElasticShear2d,3,mat_ldr) {}
 
 XC::ElasticShearSection2d::ElasticShearSection2d(void)

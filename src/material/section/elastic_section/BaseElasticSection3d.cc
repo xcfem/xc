@@ -28,25 +28,25 @@
 
 #include <material/section/elastic_section/BaseElasticSection3d.h>
 #include "material/section/repres/geom_section/GeomSection.h"
-#include "preprocessor/loaders/MaterialLoader.h"
+#include "preprocessor/prep_handlers/MaterialHandler.h"
 #include <utility/matrix/Matrix.h>
 #include <utility/matrix/Vector.h>
 
 
 
-XC::BaseElasticSection3d::BaseElasticSection3d(int tag, int classTag, const size_t &dim, MaterialLoader *mat_ldr)
+XC::BaseElasticSection3d::BaseElasticSection3d(int tag, int classTag, const size_t &dim, MaterialHandler *mat_ldr)
   : BaseElasticSection(tag, classTag,dim,mat_ldr), ctes_scc() {}
 
 //! Construct an elastic section for three-dimensional elements with an
 //! integer identifier \p tag, and the mass properties \p ctes.
-XC::BaseElasticSection3d::BaseElasticSection3d(int tag,int classTag,const size_t &dim,const CrossSectionProperties3d &ctes,MaterialLoader *mat_ldr)
+XC::BaseElasticSection3d::BaseElasticSection3d(int tag,int classTag,const size_t &dim,const CrossSectionProperties3d &ctes,MaterialHandler *mat_ldr)
   : BaseElasticSection(tag, classTag,dim,mat_ldr), ctes_scc(ctes) {}
 
 //! @brief Set the mass properties of the section from the section geometry
 //! identified by the argument.
 void XC::BaseElasticSection3d::sectionGeometry(const std::string &cod_geom)
   {
-    const MaterialLoader *ldr= getMaterialLoader();
+    const MaterialHandler *ldr= getMaterialHandler();
     if(ldr)
       {
         const GeomSection *geom= ldr->find_ptr_geom_section(cod_geom);

@@ -31,13 +31,13 @@
 #include "domain/mesh/node/Node.h"
 #include "domain/mesh/element/Element.h"
 #include "preprocessor/Preprocessor.h"
-#include "preprocessor/cad/entidades/Pnt.h"
-#include "preprocessor/cad/entidades/Edge.h"
-#include "preprocessor/cad/entidades/Face.h"
-#include "preprocessor/cad/entidades/Body.h"
-#include "preprocessor/cad/entidades/UniformGrid.h"
-#include "preprocessor/cad/matrices/TritrizPtrElem.h"
-#include "preprocessor/cad/trf/TrfGeom.h"
+#include "preprocessor/multi_block_topology/entities/Pnt.h"
+#include "preprocessor/multi_block_topology/entities/Edge.h"
+#include "preprocessor/multi_block_topology/entities/Face.h"
+#include "preprocessor/multi_block_topology/entities/Body.h"
+#include "preprocessor/multi_block_topology/entities/UniformGrid.h"
+#include "preprocessor/multi_block_topology/matrices/TritrizPtrElem.h"
+#include "preprocessor/multi_block_topology/trf/TrfGeom.h"
 #include "utility/matrix/ID.h"
 
 #include "xc_utils/src/geom/pos_vec/SVD3d.h"
@@ -152,7 +152,7 @@ void XC::Set::Transforma(const TrfGeom &trf)
 //! @brief Aplica to the set the transformation with the index being passed as parameter.
 void XC::Set::Transforma(const size_t &indice_trf)
   {
-    TrfGeom *trf= getPreprocessor()->getCad().getTransformacionesGeometricas().busca(indice_trf);
+    TrfGeom *trf= getPreprocessor()->getMultiBlockTopology().getTransformacionesGeometricas().busca(indice_trf);
     if(trf)
       Transforma(*trf);
   }

@@ -95,12 +95,12 @@ class PhantomModel(object):
            of type 'xc.ElasticShearSection3d', if False, generates a true 
            fiber model of the section (xc.FiberSectionShear3d)
     '''
-    nA= self.preprocessor.getNodeLoader.newNodeXYZ(0,0,0)
-    nB= self.preprocessor.getNodeLoader.newNodeXYZ(0,0,0)
+    nA= self.preprocessor.getNodeHandler.newNodeXYZ(0,0,0)
+    nB= self.preprocessor.getNodeHandler.newNodeXYZ(0,0,0)
     self.modelSpace.fixNode000_000(nA.tag)
     if(not fakeSection):
-      self.preprocessor.getElementLoader.defaultMaterial= sectionName
-    phantomElement= self.preprocessor.getElementLoader.newElement("ZeroLengthSection",xc.ID([nA.tag,nB.tag]))
+      self.preprocessor.getElementHandler.defaultMaterial= sectionName
+    phantomElement= self.preprocessor.getElementHandler.newElement("ZeroLengthSection",xc.ID([nA.tag,nB.tag]))
     phantomElement.setProp("idElem", idElem) #Element to check
     phantomElement.setProp("idSection", sectionName) #Section to check
     phantomElement.setProp("dir",sectionIndex) #Section index in the element.
@@ -122,10 +122,10 @@ class PhantomModel(object):
     self.setupForElementsAndCombinations(intForcCombFileName)
 
     retval= []
-    nodes= self.preprocessor.getNodeLoader
+    nodes= self.preprocessor.getNodeHandler
     self.modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
-    elements= self.preprocessor.getElementLoader
-    constraints= self.preprocessor.getConstraintLoader
+    elements= self.preprocessor.getElementHandler
+    constraints= self.preprocessor.getBoundaryCondHandler
     # Definimos materiales
     fkSection= sccFICT.defElasticShearSection3d(self.preprocessor,matSccFICT) # The problem is isostatic, so the section is not a matter
     elements.dimElem= 1
@@ -164,7 +164,7 @@ class PhantomModel(object):
                            section definition and checks the limit state.
 
     '''
-    cargas= self.preprocessor.getLoadLoader
+    cargas= self.preprocessor.getLoadHandler
     casos= cargas.getLoadPatterns
     #Load modulation.
     ts= casos.newTimeSeries("constant_ts","ts")
@@ -202,7 +202,7 @@ class PhantomModel(object):
     :param analysis: type of analysis
     :param controller: object that controls limit state in elements.
     '''
-    combs= self.preprocessor.getLoadLoader.getLoadPatterns #Here each load pattern represents a combination.
+    combs= self.preprocessor.getLoadHandler.getLoadPatterns #Here each load pattern represents a combination.
     elements= self.preprocessor.getSets.getSet("total").getElements
     for key in combs.getKeys():
       comb= combs[key]

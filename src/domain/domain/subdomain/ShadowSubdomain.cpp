@@ -218,7 +218,7 @@ XC::ShadowSubdomain::~ShadowSubdomain()
 
 int XC::ShadowSubdomain::buildSubdomain(int numSubdomains, PartitionedModelBuilder &theBuilder)
   {
-    // send a message identify setting XC::ModelBuilder and it's class tag
+    // send a message identify setting ModelBuilder and it's class tag
     buildRemote = true;
     gotRemoteData = false;
 

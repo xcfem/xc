@@ -20,7 +20,7 @@ preprocessor=  feProblem.getPreprocessor
 # Materials definition
 elast= typical_materials.defElasticIsotropic3d(preprocessor, "elast3d",1e6,0.25,0.0)
 
-nodes= preprocessor.getNodeLoader 
+nodes= preprocessor.getNodeHandler 
 modelSpace= predefined_spaces.SolidMechanics3D(nodes)
 nod9= nodes.newNodeIDXYZ(9,0,0,0)
 nod10= nodes.newNodeIDXYZ(10,1,0,0)
@@ -32,12 +32,12 @@ nod15= nodes.newNodeIDXYZ(15,1,1,1)
 nod16= nodes.newNodeIDXYZ(16,0,1,1)
 
 
-elements= preprocessor.getElementLoader
+elements= preprocessor.getElementHandler
 elements.defaultMaterial= "elast3d"
 elements.defaultTag= 1 #Tag for the next element.
 brick= elements.newElement("Brick",xc.ID([9,10,11,12,13,14,15,16]));
 
-constraints= preprocessor.getConstraintLoader
+constraints= preprocessor.getBoundaryCondHandler
 #Constrain the displacement of node 1.
 
 nod9.fix(xc.ID([0,1,2]),xc.Vector([0,0,0]))
@@ -46,7 +46,7 @@ nod11.fix(xc.ID([0,1,2]),xc.Vector([0,0,0]))
 nod12.fix(xc.ID([0,1,2]),xc.Vector([0,0,0]))
 
 # Loads definition
-cargas= preprocessor.getLoadLoader
+cargas= preprocessor.getLoadHandler
 casos= cargas.getLoadPatterns
 #Load modulation.
 ts= casos.newTimeSeries("constant_ts","ts")
@@ -66,7 +66,7 @@ analisis= predefined_solutions.simple_static_linear(feProblem)
 result= analisis.analyze(1)
 
 nodes.calculateNodalReactions(True)
-nodes= preprocessor.getNodeLoader 
+nodes= preprocessor.getNodeHandler 
 R9= nod9.getReaction
 R10= nod10.getReaction
 R11= nod11.getReaction

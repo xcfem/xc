@@ -93,7 +93,7 @@ class TaggedObject: public EntCmd
   private:
     int theTag; //!< object identifier.
   protected:
-    friend class ElementLoader;
+    friend class ElementHandler;
     friend class CommParameters;
     template <class T> friend T *getBrokedTagged(const int &,const int &,const int &,FEM_ObjectBroker &,T *(FEM_ObjectBroker::*ptrFunc)(int));
     void setTag(int newTag);  // CAUTION: this is a dangerous method to call

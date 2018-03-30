@@ -28,7 +28,7 @@
 
 #include <material/section/elastic_section/BaseElasticSection.h>
 #include "material/section/repres/geom_section/GeomSection.h"
-#include "preprocessor/loaders/MaterialLoader.h"
+#include "preprocessor/prep_handlers/MaterialHandler.h"
 #include <utility/matrix/Matrix.h>
 #include <utility/matrix/Vector.h>
 
@@ -39,7 +39,7 @@
 //! @param classTag: identifier for the object class.
 //! @param dim: dimension (2 or 3).
 //! @param mat_ldr: manager of the material objects.
-XC::BaseElasticSection::BaseElasticSection(int tag, int classTag, const size_t &dim, MaterialLoader *mat_ldr)
+XC::BaseElasticSection::BaseElasticSection(int tag, int classTag, const size_t &dim, MaterialHandler *mat_ldr)
   : PrismaticBarCrossSection(tag, classTag,mat_ldr), eTrial(dim), eInic(dim), eCommit(dim) {}
 
 //! @brief Commits the section state.

@@ -30,8 +30,8 @@
 #define SETFILAI_H
 
 #include "SetFila.h"
-#include "preprocessor/cad/matrices/TritrizPtrNod.h"
-#include "preprocessor/cad/matrices/TritrizPtrElem.h"
+#include "preprocessor/multi_block_topology/matrices/TritrizPtrNod.h"
+#include "preprocessor/multi_block_topology/matrices/TritrizPtrElem.h"
 
 class RangoIndice;
 

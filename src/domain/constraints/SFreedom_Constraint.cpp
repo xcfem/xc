@@ -129,7 +129,7 @@ XC::SFreedom_Constraint *XC::SFreedom_Constraint::getCopy(void) const
   { return new SFreedom_Constraint(*this); }
 
 //! @brief Returns a copy of the contraint with a different tag,
-//! it's used in ConstraintLoader::addSFreedom_Constraint(nodeTag,seed).
+//! it's used in BoundaryCondHandler::addSFreedom_Constraint(nodeTag,seed).
 XC::SFreedom_Constraint *XC::SFreedom_Constraint::getCopy(const int &spTag) const
   { 
     SFreedom_Constraint *retval= new SFreedom_Constraint(*this);

@@ -34,7 +34,7 @@ elast= typical_materials.defElasticMaterial(preprocessor, "elast",E)
 
 # Section geometry
 # setting up
-geomSCC= preprocessor.getMaterialLoader.newSectionGeometry("geomSCC")
+geomSCC= preprocessor.getMaterialHandler.newSectionGeometry("geomSCC")
 y1= width/2.0
 z1= depth/2.0
 #filling with regions
@@ -50,7 +50,7 @@ rg.pMax= geom.Pos2d(y0+y1,z0+z1)
 
 
 import os
-fiberModel= preprocessor.getMaterialLoader.newMaterial("fiber_section_3d","fiberModel")
+fiberModel= preprocessor.getMaterialHandler.newMaterial("fiber_section_3d","fiberModel")
 fiberSectionRepr= fiberModel.getFiberSectionRepr()
 fiberSectionRepr.setGeomNamed("geomSCC")
 fiberModel.setupFibers()

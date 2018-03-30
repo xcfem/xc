@@ -118,7 +118,7 @@ class UniformLoadOnLines(BaseVectorLoad):
 
     def appendLoadToCurrentLoadPattern(self):
         prep=self.xcSet.getPreprocessor
-        pointsCont=prep.getCad.getPoints
+        pointsCont=prep.getMultiBlockTopology.getPoints
         for l in self.xcSet.getLines:
             ptExt1tag=l.getKPoints()[0]
             ext1=pointsCont.get(ptExt1tag).getPos

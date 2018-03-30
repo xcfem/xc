@@ -54,17 +54,17 @@
 
 
 //! @brief Constructor.
-XC::FiberSectionBase::FiberSectionBase(int tag,int num,int classTag,int dim,MaterialLoader *mat_ldr)
+XC::FiberSectionBase::FiberSectionBase(int tag,int num,int classTag,int dim,MaterialHandler *mat_ldr)
   : PrismaticBarCrossSection(tag, classTag,mat_ldr), eTrial(dim), eInic(dim), eCommit(dim), kr(dim), fibers(num), fiberTag(num+1), section_repres(nullptr)
   {}
 
 //! @brief Constructor.
-XC::FiberSectionBase::FiberSectionBase(int tag, int classTag,int dim,MaterialLoader *mat_ldr)
+XC::FiberSectionBase::FiberSectionBase(int tag, int classTag,int dim,MaterialHandler *mat_ldr)
   : PrismaticBarCrossSection(tag, classTag,mat_ldr), eTrial(dim), eInic(dim), eCommit(dim), kr(dim), fibers(0), fiberTag(0), section_repres(nullptr)
   {}
 
 // constructor for blank object that recvSelf needs to be invoked upon
-XC::FiberSectionBase::FiberSectionBase(int classTag,int dim,MaterialLoader *mat_ldr)
+XC::FiberSectionBase::FiberSectionBase(int classTag,int dim,MaterialHandler *mat_ldr)
   : PrismaticBarCrossSection(0, classTag,mat_ldr), eTrial(dim), eInic(dim), eCommit(dim), kr(dim),fibers(0), fiberTag(0), section_repres(nullptr)
   {}
 
@@ -101,7 +101,7 @@ void XC::FiberSectionBase::setup_repres(void)
   {
     if(!section_repres)
       {
-        section_repres= new FiberSectionRepr(0,getMaterialLoader());
+        section_repres= new FiberSectionRepr(0,getMaterialHandler());
         section_repres->set_owner(this);
       }
   }
@@ -179,7 +179,7 @@ XC::FiberSectionBase::~FiberSectionBase(void)
 XC::Fiber *XC::FiberSectionBase::addFiber(const std::string &nmbMat,const double &area,const Vector &coo)
   {
     fiberTag++;
-    return addFiber(fiberTag,*GetMaterialLoader(),nmbMat,area,coo);
+    return addFiber(fiberTag,*getMaterialHandler(),nmbMat,area,coo);
   }
 
 

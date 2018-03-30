@@ -16,7 +16,7 @@ __email__= "l.pereztato@gmail.com"
 # Problem type
 feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor   
-nodes= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeHandler
 modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
 nodes.defaultTag= 1 #First node number.
 nod= nodes.newNodeXYZ(0.0,0.0,0.0)
@@ -34,7 +34,7 @@ lin= modelSpace.newLinearCrdTransf("lin",xc.Vector([0,1,1]))
 # Materials
 seccion= typical_materials.defElasticSection3d(preprocessor, "seccion",1,1,1,1,1,1)
 
-elements= preprocessor.getElementLoader
+elements= preprocessor.getElementHandler
 elements.defaultTransformation= "lin" # Coord. transformation.
 elements.defaultMaterial= "seccion"
 elements.defaultTag= 1 #Tag for next element.

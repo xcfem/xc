@@ -73,6 +73,9 @@ class Subdomain;
 class ArrayOfTaggedObjectsIter;
 class Subdomain;
 
+//! @ingroup SubDom
+//
+//! @brief Iterator on the subdomain nodes.
 class SubdomainNodIter: public NodeIter
   {
   private:

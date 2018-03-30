@@ -17,11 +17,11 @@ feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
 # Defining nodes
 
-pts= preprocessor.getCad.getPoints
+pts= preprocessor.getMultiBlockTopology.getPoints
 ptA= pts.newPntIDPos3d(1,geom.Pos3d(0.0,0.0,3.0))
 ptB= pts.newPntIDPos3d(2,geom.Pos3d(0.0,0.0,4.0))
 
-trfs= preprocessor.getCad.getGeometricTransformations
+trfs= preprocessor.getMultiBlockTopology.getGeometricTransformations
 transl= trfs.newTransformation("translation")
 v= ptB.getPos-ptA.getPos
 transl.setVector(v)

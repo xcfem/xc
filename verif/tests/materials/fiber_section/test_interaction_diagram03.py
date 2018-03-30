@@ -16,7 +16,7 @@ __email__= "l.pereztato@gmail.com"
 
 feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
-materiales= preprocessor.getMaterialLoader
+materiales= preprocessor.getMaterialHandler
 diagInteg= materiales.newInteractionDiagram("diagInteg")
 diagInteg.readFrom("/tmp/interaction_diagram_test_01.dat")
 

@@ -55,7 +55,7 @@ if(not pth):
   pth= "."
 #print "pth= ", pth
 execfile(pth+"/concrete_section_01.py")
-secHA= preprocessor.getMaterialLoader.newMaterial("fiber_section_3d","secHA")
+secHA= preprocessor.getMaterialHandler.newMaterial("fiber_section_3d","secHA")
 fiberSectionRepr= secHA.getFiberSectionRepr()
 fiberSectionRepr.setGeomNamed("concreteSectionGeom01")
 secHA.setupFibers()
@@ -68,7 +68,7 @@ modelSpace.fixNode000_000(1)
 modelSpace.fixNodeF00_00F(2)
 
 # Loads definition
-cargas= preprocessor.getLoadLoader
+cargas= preprocessor.getLoadHandler
 
 casos= cargas.getLoadPatterns
 
@@ -93,15 +93,15 @@ TEIz= 0.0
 TEIy= 0.0
 x= 0.0
 
-nodes= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeHandler
 nodes.calculateNodalReactions(True)
-nodes= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeHandler
 
 RN= nodes.getNode(1).getReaction[0] 
 RM= nodes.getNode(1).getReaction[5] 
 RN2= nodes.getNode(2).getReaction[0] 
 
-elements= preprocessor.getElementLoader
+elements= preprocessor.getElementHandler
 ele1= elements.getElement(1)
 scc= ele1.getSection()
 fibras= scc.getFibers()

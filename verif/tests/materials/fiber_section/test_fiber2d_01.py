@@ -25,7 +25,7 @@ eps= F/(Area*Es)
 feProblem= xc.FEProblem()
 feProblem.logFileName= "/tmp/borrar.log" # Ignore warning messages
 preprocessor=  feProblem.getPreprocessor
-nodes= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeHandler
 modelSpace= predefined_spaces.StructuralMechanics2D(nodes)
 
 # Defining nodes
@@ -46,7 +46,7 @@ TK21= 0.0 ; TEIy= 0.0
 
 elast0= typical_materials.defElasticMaterial(preprocessor, "elast0",Es)
 # Secciones
-materiales= preprocessor.getMaterialLoader
+materiales= preprocessor.getMaterialHandler
 fiberSectionTest= materiales.newMaterial("fiber_section_2d","fiberSectionTest")
 fiber= fiberSectionTest.addFiber("elast0",Area,xc.Vector([yF]))
 

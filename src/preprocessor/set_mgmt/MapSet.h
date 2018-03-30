@@ -64,7 +64,7 @@ class MapSet: public PreprocessorContainer, public MovableObject
     typedef std::map<std::string,EntMdlr *> map_ent_mdlr;
   private:
     map_sets sets; //!< Sets that contain pointers to entities.
-    map_ent_mdlr entidades; //! Geometric entities (points, lines, surfaces,...).
+    map_ent_mdlr entities; //! Geometric entities (points, lines, surfaces,...).
     Set *total; //!< Pointer to total set (Created in constructor).
     map_sets abiertos; //!< Opened sets (those for wich each new entity will be added to).
 
@@ -80,7 +80,7 @@ class MapSet: public PreprocessorContainer, public MovableObject
     void clearSets(void);
     void clearAll(void);
     void reset(void);
-    friend class Cad;
+    friend class MultiBlockTopology;
     friend class SetMeshComp;
     friend class SetEntities;
     friend class Set;

@@ -65,8 +65,8 @@ class DxfReader(object):
   def read(self,dxf_file_name,xc_preprocessor,layers):
     self.dxf= dxfgrabber.readfile(dxf_file_name)
     self.preprocessor= xc_preprocessor
-    self.pointHandler= self.preprocessor.getCad.getPoints
-    self.lineHandler= self.preprocessor.getCad.getLines
+    self.pointHandler= self.preprocessor.getMultiBlockTopology.getPoints
+    self.lineHandler= self.preprocessor.getMultiBlockTopology.getLines
     self.pointsInLayer= {}
     self.blocksInLayer= {}
     for l in layers:

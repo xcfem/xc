@@ -33,7 +33,7 @@ AT= 10 # Temperature increment (Celsius degrees)
 
 feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
-nodes= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeHandler
 
 # Problem type
 modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
@@ -47,7 +47,7 @@ lin= modelSpace.newLinearCrdTransf("lin",xc.Vector([0,1,0]))
 scc= typical_materials.defElasticSection3d(preprocessor, "scc",A,E,G,Iz,Iy,J)
 
 # Elements definition
-elements= preprocessor.getElementLoader
+elements= preprocessor.getElementHandler
 elements.defaultTransformation= "lin"
 elements.defaultMaterial= "scc"
 elements.dimElem= 2 # Dimension of element space
@@ -59,7 +59,7 @@ modelSpace.fixNode000_000(1)
 modelSpace.fixNode000_000(2)
 
     # Loads definition
-cargas= preprocessor.getLoadLoader
+cargas= preprocessor.getLoadHandler
 casos= cargas.getLoadPatterns
 ts= casos.newTimeSeries("linear_ts","ts")
 casos.currentTimeSeries= "ts"

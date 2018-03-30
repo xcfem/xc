@@ -81,6 +81,6 @@ def extrapolate_elem_function_attr(elemSet,attributeName,function, argument,init
     #Divide by number of elements in the set that touch the node.
     preprocessor= elemSet.owner.getPreprocessor
     for tag in nodeTags:
-      n= preprocessor.getNodeLoader.getNode(tag)
+      n= preprocessor.getNodeHandler.getNode(tag)
       denom= nodeTags[tag]
       n.setProp(attributeName,n.getProp(attributeName)/denom)

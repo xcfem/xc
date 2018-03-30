@@ -65,7 +65,7 @@
 
 #include "UniaxialFiber.h"
 #include <material/uniaxial/UniaxialMaterial.h>
-#include "preprocessor/loaders/MaterialLoader.h"
+#include "preprocessor/prep_handlers/MaterialHandler.h"
 #include "utility/actor/actor/MovableVector.h"
 
 void XC::UniaxialFiber::free_mem(void)
@@ -102,7 +102,7 @@ XC::UniaxialFiber::UniaxialFiber(int tag, int classTag,const UniaxialMaterial &t
   { alloc(theMat); }
 
 //! @brief Constructor.
-XC::UniaxialFiber::UniaxialFiber(int tag, int classTag,const MaterialLoader &ldr,const std::string &nmbMat,const double &Area)
+XC::UniaxialFiber::UniaxialFiber(int tag, int classTag,const MaterialHandler &ldr,const std::string &nmbMat,const double &Area)
   : Fiber(tag, classTag), theMaterial(nullptr), area(Area)
   { setMaterial(ldr,nmbMat); }
 
@@ -134,7 +134,7 @@ void XC::UniaxialFiber::setMaterial(const UniaxialMaterial *theMat)
   }
 
 //! @brief Sets the fiber material (identified by name).
-void XC::UniaxialFiber::setMaterial(const MaterialLoader &ldr,const std::string &nmbMat)
+void XC::UniaxialFiber::setMaterial(const MaterialHandler &ldr,const std::string &nmbMat)
   {
     const UniaxialMaterial *theMat= dynamic_cast<const UniaxialMaterial *>(ldr.find_ptr(nmbMat));
     setMaterial(theMat);

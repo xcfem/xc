@@ -28,7 +28,7 @@ from materials import typical_materials
 # Problem type
 feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
-nodes= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeHandler
 
 modelSpace= predefined_spaces.SolidMechanics2D(nodes)
 nodes.defaultTag= 1 #First node number.
@@ -40,7 +40,7 @@ nod= nodes.newNodeXY(L,0.0)
 mat= typical_materials.defSteel02(preprocessor, "prestressingSteel",E,fy,0.001,tInic)
     
 # Elements definition
-elements= preprocessor.getElementLoader
+elements= preprocessor.getElementHandler
 elements.defaultMaterial= "prestressingSteel"
 elements.dimElem= 2 # Dimension of element space
 elements.defaultTag= 1 #Tag for the next element.
@@ -49,7 +49,7 @@ truss.area= A
 
     
 # Constraints
-constraints= preprocessor.getConstraintLoader
+constraints= preprocessor.getBoundaryCondHandler
 
 #
 spc= constraints.newSPConstraint(1,0,0.0)
@@ -124,7 +124,7 @@ analysis= solu.newAnalysis("static_analysis","analysisAggregation","")
 result= analysis.analyze(1)
 
 
-elements= preprocessor.getElementLoader
+elements= preprocessor.getElementHandler
 
 elem1= elements.getElement(1)
 elem1.getResistingForce()

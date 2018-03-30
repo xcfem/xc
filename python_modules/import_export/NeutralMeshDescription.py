@@ -34,7 +34,7 @@ class GroupRecord(object):
     ''' writes the XC commands to define the group in a file.'''
     if(not self.empty()):
       f= xcImportExportData.outputFile
-      strCommand= self.name + '= ' + xcImportExportData.setLoaderName + '.defSet("' + self.name +'")'
+      strCommand= self.name + '= ' + xcImportExportData.setHandlerName + '.defSet("' + self.name +'")'
       f.write(strCommand+'\n')
       for n in self.nodeIds:
         strCommand= self.name + '.getNodes.append(n' + str(n) + ')'
@@ -43,10 +43,10 @@ class GroupRecord(object):
         strCommand= self.name + '.getElements.append(e' + str(e) + ')'
         f.write(strCommand+'\n')
       for p in self.pointIds:
-        strCommand= self.name + '.getCad.getPoints.append(' + str(p) + ')'
+        strCommand= self.name + '.getMultiBlockTopology.getPoints.append(' + str(p) + ')'
         f.write(strCommand+'\n')
       for l in self.lineIds:
-        strCommand= self.name + '.getCad.getLines.append(' + str(l) + ')'
+        strCommand= self.name + '.getMultiBlockTopology.getLines.append(' + str(l) + ')'
         f.write(strCommand+'\n')
 
 
@@ -58,12 +58,12 @@ class XCImportExportData(object):
     self.dxfLayers= []
     self.outputFileName= 'xc_mesh' 
     self.problemName= None
-    self.nodeLoaderName= "nodes"
-    self.cellLoaderName= "elements"
-    self.setLoaderName= "groups"
-    self.pointLoaderName= "points"
-    self.lineLoaderName= "lines"
-    self.surfaceLoaderName= "surfaces"
+    self.nodeHandlerName= "nodes"
+    self.cellHandlerName= "elements"
+    self.setHandlerName= "groups"
+    self.pointHandlerName= "points"
+    self.lineHandlerName= "lines"
+    self.surfaceHandlerName= "surfaces"
     self.cellConversion= {}
     self.outputFile= None
     self.meshDesc= None
@@ -75,7 +75,7 @@ class XCImportExportData(object):
   def getDxfFileName(self):
     return self.outputFileName+'.dxf'
 
-  def getBlockLoaderName(self,blockType):
+  def getBlockHandlerName(self,blockType):
     if(blockType=='line'):
       return 'lines'
     elif(blockType=='face'):
@@ -117,19 +117,19 @@ class XCImportExportData(object):
     self.outputFile= open(self.getXCFileName(),"w")
     strCommand= 'preprocessor= ' + self.problemName + '.getPreprocessor'
     self.outputFile.write(strCommand+'\n')
-    strCommand= self.nodeLoaderName + '= preprocessor.getNodeLoader'
+    strCommand= self.nodeHandlerName + '= preprocessor.getNodeHandler'
     self.outputFile.write(strCommand+'\n')
-    strCommand= self.cellLoaderName + '= preprocessor.getElementLoader'
+    strCommand= self.cellHandlerName + '= preprocessor.getElementHandler'
     self.outputFile.write(strCommand+'\n')
-    strCommand= self.pointLoaderName + '= preprocessor.getCad.getPoints'
+    strCommand= self.pointHandlerName + '= preprocessor.getMultiBlockTopology.getPoints'
     self.outputFile.write(strCommand+'\n')
-    strCommand= self.lineLoaderName + '= preprocessor.getCad.getLines'
+    strCommand= self.lineHandlerName + '= preprocessor.getMultiBlockTopology.getLines'
     self.outputFile.write(strCommand+'\n')
-    strCommand= self.surfaceLoaderName + '= preprocessor.getCad.getSurfaces'
+    strCommand= self.surfaceHandlerName + '= preprocessor.getMultiBlockTopology.getSurfaces'
     self.outputFile.write(strCommand+'\n')
-    #strCommand= self.lineLoaderName + '= preprocessor.getCad.getLines'
+    #strCommand= self.lineHandlerName + '= preprocessor.getMultiBlockTopology.getLines'
     #self.outputFile.write(strCommand+'\n')
-    strCommand= self.setLoaderName + '= preprocessor.getSets'
+    strCommand= self.setHandlerName + '= preprocessor.getSets'
     self.outputFile.write(strCommand+'\n')
     if(self.blockData):
       self.blockData.writeToXCFile(self)

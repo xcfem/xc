@@ -29,13 +29,13 @@
 #include "SetEntities.h"
 #include "domain/domain/Domain.h"
 #include "preprocessor/Preprocessor.h"
-#include "preprocessor/cad/entidades/Pnt.h"
-#include "preprocessor/cad/entidades/Edge.h"
-#include "preprocessor/cad/entidades/Face.h"
-#include "preprocessor/cad/entidades/Body.h"
-#include "preprocessor/cad/entidades/UniformGrid.h"
-#include "preprocessor/cad/matrices/TritrizPtrElem.h"
-#include "preprocessor/cad/trf/TrfGeom.h"
+#include "preprocessor/multi_block_topology/entities/Pnt.h"
+#include "preprocessor/multi_block_topology/entities/Edge.h"
+#include "preprocessor/multi_block_topology/entities/Face.h"
+#include "preprocessor/multi_block_topology/entities/Body.h"
+#include "preprocessor/multi_block_topology/entities/UniformGrid.h"
+#include "preprocessor/multi_block_topology/matrices/TritrizPtrElem.h"
+#include "preprocessor/multi_block_topology/trf/TrfGeom.h"
 #include "utility/matrix/ID.h"
 
 #include "xc_utils/src/geom/pos_vec/SVD3d.h"
@@ -274,7 +274,7 @@ void XC::SetEntities::Transforma(const TrfGeom &trf)
 //! @brief Aplica to the set the transformation with the index being passed as parameter.
 void XC::SetEntities::Transforma(const size_t &indice_trf)
   {
-    TrfGeom *trf= getPreprocessor()->getCad().getTransformacionesGeometricas().busca(indice_trf);
+    TrfGeom *trf= getPreprocessor()->getMultiBlockTopology().getTransformacionesGeometricas().busca(indice_trf);
     if(trf)
       Transforma(*trf);
   }
@@ -298,7 +298,7 @@ XC::SetEntities XC::SetEntities::create_copy(const std::string &name,const Vecto
 	  {
 	    const std::string oldName= (*i)->getName();
 	    const std::string new_name= name+oldName;
-	    Pnt *new_point= preprocessor->getCad().getPuntos().Copia(*i,v);
+	    Pnt *new_point= preprocessor->getMultiBlockTopology().getPuntos().Copia(*i,v);
 	    new_point->BorraPtrNodElem();
 	    retval.points.push_back(new_point);
 	    new_points_names[oldName]= new_name;
@@ -309,7 +309,7 @@ XC::SetEntities XC::SetEntities::create_copy(const std::string &name,const Vecto
 	  {
 	    const std::string oldName= (*i)->getName();
 	    const std::string new_name= name+oldName;
-	    Edge *new_edge= preprocessor->getCad().getLineas().createCopy(*i);
+	    Edge *new_edge= preprocessor->getMultiBlockTopology().getLineas().createCopy(*i);
 	    new_edge->BorraPtrNodElem();
 	    retval.lines.push_back(new_edge);
 	    new_lines_names[oldName]= new_name;
@@ -516,10 +516,10 @@ void XC::SetEntities::sel_points_lista(const ID &tags)
         Preprocessor *preprocessor= getPreprocessor();
         if(preprocessor)
           {
-            Cad &cad= getPreprocessor()->getCad();
+            MultiBlockTopology &mbt= getPreprocessor()->getMultiBlockTopology();
             for(size_t i= 0;i<sz;i++)
               {
-	        Pnt *ipt= cad.getPuntos().busca(tags(i)); 
+	        Pnt *ipt= mbt.getPuntos().busca(tags(i)); 
                 if(ipt)
                   points.push_back(ipt);
                 else
@@ -544,10 +544,10 @@ void XC::SetEntities::sel_lineas_lista(const ID &tags)
         Preprocessor *preprocessor= getPreprocessor();
         if(preprocessor)
           {
-            Cad &cad= getPreprocessor()->getCad();
+            MultiBlockTopology &mbt= getPreprocessor()->getMultiBlockTopology();
             for(size_t i= 0;i<sz;i++)
               {
-	        Edge *iedge= cad.getLineas().busca(tags(i)); 
+	        Edge *iedge= mbt.getLineas().busca(tags(i)); 
                 if(iedge)
                   lines.push_back(iedge);
                 else
@@ -570,10 +570,10 @@ void XC::SetEntities::sel_surfaces_lst(const ID &tags)
         Preprocessor *preprocessor= getPreprocessor();
         if(preprocessor)
           {
-            Cad &cad= getPreprocessor()->getCad();
+            MultiBlockTopology &mbt= getPreprocessor()->getMultiBlockTopology();
             for(size_t i= 0;i<sz;i++)
               {
-	        Face *iface= cad.getSurfaces().busca(tags(i)); 
+	        Face *iface= mbt.getSurfaces().busca(tags(i)); 
                 if(iface)
                   surfaces.push_back(iface);
                 else

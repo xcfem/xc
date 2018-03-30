@@ -17,7 +17,7 @@ from solution import predefined_solutions
 
 feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
-nodes= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeHandler
 
 
 p1= geom.Pos3d(0,0,0)
@@ -37,12 +37,12 @@ n10= nodes.newNodeXYZ(p10.x,p10.y,p10.z)
 
 # Materials definition
 memb1= typical_materials.defElasticMembranePlateSection(preprocessor, "memb1",E,nu,dens,h)
-elements= preprocessor.getElementLoader
+elements= preprocessor.getElementHandler
 elements.defaultMaterial= "memb1"
 elem= elements.newElement("ShellMITC4",xc.ID([n1.tag,n2.tag,n3.tag,n4.tag]))
 
 # Constraints
-constraints= preprocessor.getConstraintLoader
+constraints= preprocessor.getBoundaryCondHandler
 modelSpace.fixNode000_FFF(n1.tag)
 modelSpace.fixNode000_FFF(n2.tag)
 modelSpace.fixNode000_FFF(n3.tag)
@@ -64,7 +64,7 @@ for i in range(0,6):
 glue= modelSpace.constraints.newGlueNodeToElement(n10,elem,xc.ID(gluedDOFs))
 
 # Loads definition
-cargas= preprocessor.getLoadLoader
+cargas= preprocessor.getLoadHandler
 
 casos= cargas.getLoadPatterns
 

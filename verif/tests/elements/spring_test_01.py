@@ -22,7 +22,7 @@ from materials import typical_materials
 # Model definition
 feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
-nodes= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeHandler
 # Problem type
 modelSpace= predefined_spaces.SolidMechanics2D(nodes)
 
@@ -38,7 +38,7 @@ elast= typical_materials.defElasticMaterial(preprocessor, "elast",K)
     cross section of unit area.'''
     
 # Elements definition
-elements= preprocessor.getElementLoader
+elements= preprocessor.getElementHandler
 elements.defaultMaterial= "elast"
 elements.dimElem= 2 # Dimension of element space
 elements.defaultTag= 1
@@ -46,7 +46,7 @@ elements.defaultTag= 1
 spring= elements.newElement("Spring",xc.ID([1,2]));
     
 # Constraints
-constraints= preprocessor.getConstraintLoader
+constraints= preprocessor.getBoundaryCondHandler
 #
 spc= constraints.newSPConstraint(1,0,0.0) # Node 1
 spc= constraints.newSPConstraint(1,1,0.0)
@@ -54,7 +54,7 @@ spc= constraints.newSPConstraint(2,1,0.0) # Node 2
 
 
 # Loads definition
-cargas= preprocessor.getLoadLoader
+cargas= preprocessor.getLoadHandler
 casos= cargas.getLoadPatterns
 #Load modulation.
 ts= casos.newTimeSeries("constant_ts","ts")
@@ -73,14 +73,14 @@ result= analisis.analyze(1)
 
 
 nodes.calculateNodalReactions(True)
-nodes= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeHandler
 nod2= nodes.getNode(2)
 deltax= nod2.getDisp[0] 
 deltay= nod2.getDisp[1] 
 nod1= nodes.getNode(1)
 R= nod1.getReaction[0] 
 
-elements= preprocessor.getElementLoader
+elements= preprocessor.getElementHandler
 elem1= elements.getElement(1)
 elem1.getResistingForce()
 Ax= elem1.getMaterial().getStrain() # Spring elongation

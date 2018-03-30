@@ -1077,7 +1077,7 @@ class IPEShape(structural_steel.SteelShape):
 
   def discretization(self,preprocessor,matModelName):
     self.sectionGeometryName= 'gm'+self.get('nmb')
-    self.gm= preprocessor.getMaterialLoader.newSectionGeometry(self.sectionGeometryName)
+    self.gm= preprocessor.getMaterialHandler.newSectionGeometry(self.sectionGeometryName)
     regions= self.gm.getRegions
     for r in self.getShapeRegions():
       reg= regions.newQuadRegion(matModelName)
@@ -1089,7 +1089,7 @@ class IPEShape(structural_steel.SteelShape):
   def getFiberSection3d(self,preprocessor,matModelName):
     reg= self.discretization(preprocessor,matModelName)
     self.fiberSection3dName= 'fs3d'+self.get('nmb')
-    self.fiberSection3d= preprocessor.getMaterialLoader.newMaterial("fiber_section_3d",self.fiberSection3dName)
+    self.fiberSection3d= preprocessor.getMaterialHandler.newMaterial("fiber_section_3d",self.fiberSection3dName)
     fiberSectionRepr= self.fiberSection3d.getFiberSectionRepr()
     fiberSectionRepr.setGeomNamed(self.sectionGeometryName)
     self.fiberSection3d.setupFibers()
@@ -1136,7 +1136,7 @@ class HEShape(structural_steel.SteelShape):
 
   def discretization(self,preprocessor,matModelName):
     self.sectionGeometryName= 'gm'+self.get('nmb')
-    self.gm= preprocessor.getMaterialLoader.newSectionGeometry(self.sectionGeometryName)
+    self.gm= preprocessor.getMaterialHandler.newSectionGeometry(self.sectionGeometryName)
     regions= self.gm.getRegions
     for r in self.getShapeRegions():
       reg= regions.newQuadRegion(matModelName)
@@ -1148,7 +1148,7 @@ class HEShape(structural_steel.SteelShape):
   def getFiberSection3d(self,preprocessor,matModelName):
     reg= self.discretization(preprocessor,matModelName)
     self.fiberSection3dName= 'fs3d'+self.get('nmb')
-    self.fiberSection3d= preprocessor.getMaterialLoader.newMaterial("fiber_section_3d",self.fiberSection3dName)
+    self.fiberSection3d= preprocessor.getMaterialHandler.newMaterial("fiber_section_3d",self.fiberSection3dName)
     fiberSectionRepr= self.fiberSection3d.getFiberSectionRepr()
     fiberSectionRepr.setGeomNamed(self.sectionGeometryName)
     self.fiberSection3d.setupFibers()

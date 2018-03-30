@@ -43,7 +43,7 @@ if(not pth):
 #print "pth= ", pth
 execfile(pth+"/geomSeccBarras.py")
 
-secBarras= preprocessor.getMaterialLoader.newMaterial("fiber_section_3d","secBarras")
+secBarras= preprocessor.getMaterialHandler.newMaterial("fiber_section_3d","secBarras")
 fiberSectionRepr= secBarras.getFiberSectionRepr()
 fiberSectionRepr.setGeomNamed("geomSecBarras")
 secBarras.setupFibers()
@@ -56,7 +56,7 @@ modelSpace.fixNode000_000(1)
 modelSpace.fixNodeF00_00F(2)
 
 # Loads definition
-cargas= preprocessor.getLoadLoader
+cargas= preprocessor.getLoadHandler
 
 casos= cargas.getLoadPatterns
 
@@ -75,14 +75,14 @@ casos.addToDomain("0")
 analisis= predefined_solutions.simple_newton_raphson(feProblem)
 analOk= analisis.analyze(1)
 
-nodes= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeHandler
 nodes.calculateNodalReactions(True)
 
 RN= nodes.getNode(1).getReaction[0] 
 RM= nodes.getNode(1).getReaction[5] 
 RN2= nodes.getNode(2).getReaction[0] 
 
-elements= preprocessor.getElementLoader
+elements= preprocessor.getElementHandler
 ele1= elements.getElement(1)
 scc= ele1.getSection()
 esfN= scc.getFibers().getResultant()

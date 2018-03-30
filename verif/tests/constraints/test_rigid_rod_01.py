@@ -18,7 +18,7 @@ F= 1.5e3 # Load magnitude (kN)
 # Problem type
 feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor   
-nodes= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeHandler
 modelSpace= predefined_spaces.SolidMechanics3D(nodes)
 nodes.defaultTag= 1 #First node number.
 nod= nodes.newNodeXYZ(0,0.0,0.0)
@@ -26,14 +26,14 @@ nod= nodes.newNodeXYZ(L,0.0,0.0)
 
 
 # Constraints
-constraints= preprocessor.getConstraintLoader
+constraints= preprocessor.getBoundaryCondHandler
 
 modelSpace.fixNode000(1)
-rr= preprocessor.getConstraintLoader.newRigidRod(1,2)
+rr= preprocessor.getBoundaryCondHandler.newRigidRod(1,2)
 
 
 # Loads definition
-cargas= preprocessor.getLoadLoader
+cargas= preprocessor.getLoadHandler
 
 casos= cargas.getLoadPatterns
 
@@ -52,7 +52,7 @@ analisis= predefined_solutions.simple_static_linear(feProblem)
 result= analisis.analyze(1)
 
 
-nodes= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeHandler
  
 nod2= nodes.getNode(2)
 deltaX= nod2.getDisp[0]

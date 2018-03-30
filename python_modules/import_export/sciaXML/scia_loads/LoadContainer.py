@@ -45,7 +45,7 @@ class LoadContainerBase(object):
     self.mapLoadCases[loadCaseName]= newLoadCase
     return newLoadCase 
   def loads2Neutral(self,preprocessor,permanentLoadCaseNames):
-    loadPatterns= preprocessor.getLoadLoader.getLoadPatterns
+    loadPatterns= preprocessor.getLoadHandler.getLoadPatterns
     lc= self.loads.loadCases
     counter= 1
     for lpName in loadPatterns.getKeys():

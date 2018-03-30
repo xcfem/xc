@@ -231,7 +231,7 @@ class SectionInfoHASimple(SectionInfo):
     rfSteel=sectHASimple.reinfSteelType
     concrDiag=sectHASimple.getConcreteDiagram(preprocessor)
     rfStDiag=sectHASimple.getSteelDiagram(preprocessor)
-    geomSection= preprocessor.getMaterialLoader.getSectionGeometry(sectName)
+    geomSection= preprocessor.getMaterialHandler.getSectionGeometry(sectName)
     width=sectHASimple.b
     depth=sectHASimple.h
     super(SectionInfoHASimple,self).__init__(preprocessor,sectName,sectDescr,concrete,rfSteel,concrDiag,rfStDiag,geomSection,width,depth)

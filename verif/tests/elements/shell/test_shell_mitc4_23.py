@@ -24,7 +24,7 @@ from solution import predefined_solutions
 # Problem type
 feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
-nodes= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeHandler
 modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
 nodes.newNodeIDXYZ(1,0,0,0)
 nodes.newNodeIDXYZ(2,L,0,0)
@@ -35,14 +35,14 @@ nodes.newNodeIDXYZ(4,0,L,0)
 # Materials definition
 nmb1= typical_materials.defElasticMembranePlateSection(preprocessor, "memb1",E,nu,0.0,t)
 
-elements= preprocessor.getElementLoader
+elements= preprocessor.getElementHandler
 elements.defaultMaterial= "memb1"
 elements.defaultTag= 1
 elem= elements.newElement("ShellMITC4",xc.ID([1,2,3,4]))
 
 
 # Constraints
-constraints= preprocessor.getConstraintLoader
+constraints= preprocessor.getBoundaryCondHandler
 
 modelSpace.fixNode000_FFF(1)
 spc= modelSpace.constraints.newSPConstraint(2,2,0.0)
@@ -51,7 +51,7 @@ spc= modelSpace.constraints.newSPConstraint(4,0,0.0)
 spc= modelSpace.constraints.newSPConstraint(4,2,0.0)
 
 # Loads definition
-cargas= preprocessor.getLoadLoader
+cargas= preprocessor.getLoadHandler
 
 casos= cargas.getLoadPatterns
 

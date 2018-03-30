@@ -62,7 +62,7 @@ modelSpace.fixNode000_000(1)
 modelSpace.fixNodeF00_0F0(2)
 
 # Loads definition
-cargas= preprocessor.getLoadLoader
+cargas= preprocessor.getLoadHandler
 
 casos= cargas.getLoadPatterns
 
@@ -86,7 +86,7 @@ analOk= analisis.analyze(10)
 secHAParamsFis= EHE_limit_state_checking.CrackControl('SLS_crack')
 
 
-elements= preprocessor.getElementLoader
+elements= preprocessor.getElementHandler
 ele1= elements.getElement(1)
 scc= ele1.getSection()
 secHAParamsFis.computeWk(scc,EHE_materials.HA25.matTagK,EHE_materials.B500S.matTagK,EHE_materials.HA25.fctm())

@@ -68,8 +68,8 @@ class BaseElasticSection3d: public BaseElasticSection
 
 
   public:
-    BaseElasticSection3d(int tag,int classTag,const size_t &dim,const CrossSectionProperties3d &ctes,MaterialLoader *mat_ldr= nullptr);    
-    BaseElasticSection3d(int tag,int classTag,const size_t &dim,MaterialLoader *mat_ldr= nullptr);    
+    BaseElasticSection3d(int tag,int classTag,const size_t &dim,const CrossSectionProperties3d &ctes,MaterialHandler *mat_ldr= nullptr);    
+    BaseElasticSection3d(int tag,int classTag,const size_t &dim,MaterialHandler *mat_ldr= nullptr);    
 
     const CrossSectionProperties3d &getCrossSectionProperties(void) const;
     void setCrossSectionProperties(const CrossSectionProperties3d &);  

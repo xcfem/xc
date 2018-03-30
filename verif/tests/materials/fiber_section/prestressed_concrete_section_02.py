@@ -10,7 +10,7 @@ areaCordones= 140e-6 # Strands area expressed in square meters.
 areaFiLong= 0.5e-4 # Fi8 longitudinal reinforcement area expressed in square meters.
 def gmSecHP02(nmbGeomSecc,concrDiagName,reinfSteelDiagramName,prestressingSteelDiagramName):
   # Concrete
-  geomSecc= preprocessor.getMaterialLoader.newSectionGeometry(nmbGeomSecc)
+  geomSecc= preprocessor.getMaterialHandler.newSectionGeometry(nmbGeomSecc)
   regiones= geomSecc.getRegions
 
   horm= regiones.newQuadRegion(concrDiagName)

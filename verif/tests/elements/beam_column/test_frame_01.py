@@ -31,7 +31,7 @@ P= 1000 # Load (force-pounds).
 
 feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
-nodes= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeHandler
 modelSpace= predefined_spaces.StructuralMechanics2D(nodes)
 nodes.defaultTag= 1
 nodes.newNodeXY(0,0) # First frame
@@ -51,7 +51,7 @@ sectionProperties.I= Iz;
 seccion= typical_materials.defElasticSectionFromMechProp2d(preprocessor, "seccion",sectionProperties)
 
 # Elements definition
-elements= preprocessor.getElementLoader
+elements= preprocessor.getElementHandler
 elements.defaultTransformation= "lin"
 elements.defaultMaterial= "seccion"
 elements.defaultTag= 1 #Tag for next element.
@@ -63,14 +63,14 @@ beam2d= elements.newElement("ElasticBeam2d",xc.ID([6,8]))
 beam2d= elements.newElement("ElasticBeam2d",xc.ID([8,7]))
 
 # Constraints
-constraints= preprocessor.getConstraintLoader
+constraints= preprocessor.getBoundaryCondHandler
 modelSpace.fixNode000(1)
 modelSpace.fixNode000(3)
 modelSpace.fixNode000(5)
 modelSpace.fixNode000(7)
 
 # Loads definition
-cargas= preprocessor.getLoadLoader
+cargas= preprocessor.getLoadHandler
 casos= cargas.getLoadPatterns
 #Load modulation.
 ts= casos.newTimeSeries("constant_ts","ts")
@@ -136,7 +136,7 @@ M52Teor= -5580.4 # Theoretical value of bending moment acting
 ratioM52= 0.0
 
 
-nodes= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeHandler
 
 nod2= nodes.getNode(2)
 theta2= nod2.getDisp[2]
@@ -146,7 +146,7 @@ theta6= nod6.getDisp[2]
 nod8= nodes.getNode(8)
 theta8= nod8.getDisp[2]
 
-elements= preprocessor.getElementLoader
+elements= preprocessor.getElementHandler
 
 elem1= elements.getElement(1)
 elem1.getResistingForce()

@@ -4,7 +4,7 @@ import xc
 
 def nodal_load_on_point(preprocessor, load_pattern, id_point, load):
   '''create a point load on the node associated with a point'''
-  nodeTag= preprocessor.getCad.getPoints.get(id_point).getTagNode
+  nodeTag= preprocessor.getMultiBlockTopology.getPoints.get(id_point).getTagNode
   load_pattern.newNodalLoad(nodeTag,xc.Vector([load[0],load[1],load[2],load[3],load[4],load[5]]))
 
 

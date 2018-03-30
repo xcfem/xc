@@ -53,11 +53,11 @@ class Bearing(object):
     _ids = count(0) #Object counter.
     def __init__(self):
       self.materials= list()
-      self.materialLoader= None
+      self.materialHandler= None
       self.id= self._ids.next() #Object identifier.
     def getMaterial(self,i):
         ''' Returns the i-th uniaxial material that modelizes the response in the i-th direction.'''
-        return self.materialLoader.getMaterial(self.materials[i])
+        return self.materialHandler.getMaterial(self.materials[i])
     def getMaterialNames(self):
         '''Return material names for each DOF in a list.'''
         return self.materials
@@ -186,7 +186,7 @@ class ElastomericBearing(Bearing):
         Args:
             :preprocessor: (:obj:'Preprocessor') preprocessor to use.
         '''
-        self.materialLoader= preprocessor.getMaterialLoader
+        self.materialHandler= preprocessor.getMaterialHandler
         # Material names.
         nameRoot= 'neop'+str(self.id)
         self.matXName= nameRoot+'X'
@@ -261,7 +261,7 @@ class PTFEPotBearing(Bearing):
             :matKX: (str) name for the uniaxial material in direction X.
             :matKY: (str) name for the uniaxial material in direction Y.
         '''
-        self.materialLoader= preprocessor.getMaterialLoader
+        self.materialHandler= preprocessor.getMaterialHandler
         # Material names.
         nameRoot= 'pot'+str(self.id)
         self.matXName= nameRoot+'X'
@@ -318,9 +318,9 @@ def get_reaction_on_pot(preprocessor,iElem,inclInertia= False):
             :iElem: (int) new zero length elem identifier (tag).
             :inclInertia: (bool) true if the reaction must include inertia forces.
     '''
-    nodes= preprocessor.getNodeLoader
+    nodes= preprocessor.getNodeHandler
     nodes.calculateNodalReactions(inclInertia)
   
-    elem= preprocessor.getElementLoader.getElement(iElem)
+    elem= preprocessor.getElementHandler.getElement(iElem)
     reac0= elem.getNodes[0].getReaction
     return xc.Vector([reac0[0],reac0[1],reac0[2]])

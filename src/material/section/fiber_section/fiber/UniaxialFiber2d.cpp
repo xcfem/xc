@@ -87,7 +87,7 @@ XC::UniaxialFiber2d::UniaxialFiber2d(int tag, UniaxialMaterial &theMat,const dou
   : UniaxialFiber(tag, FIBER_TAG_Uniaxial2d,theMat,Area), y(-position) //Sign of Y coordinate is changed.
   {}
 //! @brief Constructor.
-XC::UniaxialFiber2d::UniaxialFiber2d(int tag,const MaterialLoader &ldr,const std::string &nmbMat, const double &Area,const double &position)
+XC::UniaxialFiber2d::UniaxialFiber2d(int tag,const MaterialHandler &ldr,const std::string &nmbMat, const double &Area,const double &position)
   : UniaxialFiber(tag, FIBER_TAG_Uniaxial2d,ldr,nmbMat,Area), y(-position) //Sign of Y coordinate is changed.
   {}
 

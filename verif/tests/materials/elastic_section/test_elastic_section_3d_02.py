@@ -56,7 +56,7 @@ modelSpace.fixNode000_000(1)
 modelSpace.fixNodeF00_00F(2)
 
 # Loads definition
-cargas= preprocessor.getLoadLoader
+cargas= preprocessor.getLoadHandler
 
 casos= cargas.getLoadPatterns
 
@@ -77,13 +77,13 @@ casos.addToDomain("0")
 analisis= predefined_solutions.simple_static_linear(feProblem)
 result= analisis.analyze(1)
 
-nodes= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeHandler
 nodes.calculateNodalReactions(True)
-nodes= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeHandler
 
 RM= nodes.getNode(1).getReaction[5] 
 
-elements= preprocessor.getElementLoader
+elements= preprocessor.getElementHandler
 ele1= elements.getElement(1)
 ele1.getResistingForce()
 scc0= ele1.getSection()

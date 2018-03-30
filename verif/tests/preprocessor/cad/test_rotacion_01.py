@@ -18,14 +18,14 @@ preprocessor=  feProblem.getPreprocessor
 # Defining nodes
 
 
-points= preprocessor.getCad.getPoints
+points= preprocessor.getMultiBlockTopology.getPoints
 pt1= points.newPntIDPos3d(1,geom.Pos3d(0,0,0))
 pt2= points.newPntIDPos3d(2,geom.Pos3d(0,0,1))
 pt3= points.newPntIDPos3d(3,geom.Pos3d(1,0,0))
 
 eje= geom.Recta3d(pt1.getPos,pt2.getPos)
 ang= math.pi/2.0
-trfs= preprocessor.getCad.getGeometricTransformations
+trfs= preprocessor.getMultiBlockTopology.getGeometricTransformations
 rot1= trfs.newTransformation("rotation")
 rot1.setAxisAng(eje,-ang)
 

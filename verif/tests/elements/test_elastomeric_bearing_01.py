@@ -38,7 +38,7 @@ preprocessor=  feProblem.getPreprocessor
 neop= bridge_bearings.ElastomericBearing(G,a,b,e)
 neop.defineMaterials(preprocessor)
 
-materiales= preprocessor.getMaterialLoader
+materiales= preprocessor.getMaterialHandler
 KX= neop.getMaterial(0).E
 KY= neop.getMaterial(1).E
 KZ= neop.getMaterial(2).E
@@ -46,7 +46,7 @@ KTHX= neop.getMaterial(3).E
 KTHY= neop.getMaterial(4).E
 KTHZ= neop.getMaterial(5).E
 
-nodes= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeHandler
 # Problem type
 modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
 nodes.defaultTag= 1 #First node number.
@@ -62,7 +62,7 @@ zl= neop.putBetweenNodes(modelSpace, nod1.tag,nod2.tag)
     cross section of unit area.'''
     
 # Constraints
-constraints= preprocessor.getConstraintLoader
+constraints= preprocessor.getBoundaryCondHandler
 #
 spc= constraints.newSPConstraint(nod1.tag,0,0.0) # Node 1
 spc= constraints.newSPConstraint(nod1.tag,1,0.0)
@@ -73,7 +73,7 @@ spc= constraints.newSPConstraint(nod1.tag,5,0.0)
 
 
 # Loads definition
-cargas= preprocessor.getLoadLoader
+cargas= preprocessor.getLoadHandler
 casos= cargas.getLoadPatterns
 #Load modulation.
 ts= casos.newTimeSeries("constant_ts","ts")
@@ -91,7 +91,7 @@ result= analisis.analyze(1)
 
 
 nodes.calculateNodalReactions(True)
-nodes= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeHandler
 deltax= nod2.getDisp[0]
 deltay= nod2.getDisp[1]
 deltaz= nod2.getDisp[2] 
@@ -100,7 +100,7 @@ RY= nod1.getReaction[1]
 RZ= nod1.getReaction[2] 
 
 
-elements= preprocessor.getElementLoader
+elements= preprocessor.getElementHandler
 
 
 VX= zl.getMaterials()[0].getStress()

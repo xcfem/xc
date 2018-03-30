@@ -27,7 +27,7 @@
 
 #include "DqPtrsConstraint.h"
 #include "domain/constraints/Constraint.h"
-#include "preprocessor/cad/trf/TrfGeom.h"
+#include "preprocessor/multi_block_topology/trf/TrfGeom.h"
 #include "xc_basic/src/funciones/algebra/ExprAlgebra.h"
 
 

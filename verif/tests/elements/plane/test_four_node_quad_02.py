@@ -26,7 +26,7 @@ from materials import typical_materials
 # Problem type
 feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
-nodes= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeHandler
 
 modelSpace= predefined_spaces.SolidMechanics2D(nodes)
 
@@ -43,7 +43,7 @@ nodes.defaultTag= 8; nodes.newNodeXY(L,h)
 # Materials definition
 elast2d= typical_materials.defElasticIsotropicPlaneStress(preprocessor, "elast2d",E,nu,0.0)
 
-elements= preprocessor.getElementLoader
+elements= preprocessor.getElementHandler
 elements.defaultMaterial= "elast2d"
 quad1= elements.newElement("FourNodeQuad",xc.ID([1,2,6,5]))
 quad1.thickness= t
@@ -53,7 +53,7 @@ quad3= elements.newElement("FourNodeQuad",xc.ID([3,4,8,7]))
 quad3.thickness= t
 
 # Constraints
-constraints= preprocessor.getConstraintLoader
+constraints= preprocessor.getBoundaryCondHandler
 
 spc= constraints.newSPConstraint(1,0,0.0)
 spc= constraints.newSPConstraint(1,1,0.0)
@@ -61,7 +61,7 @@ spc= constraints.newSPConstraint(5,0,0.0)
 spc= constraints.newSPConstraint(5,1,0.0)
 
 # Loads definition
-cargas= preprocessor.getLoadLoader
+cargas= preprocessor.getLoadHandler
 
 casos= cargas.getLoadPatterns
 
@@ -82,7 +82,7 @@ analOk= analisis.analyze(1)
 
 
 nodes.calculateNodalReactions(True)
-nodes= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeHandler
  
 nod1= nodes.getNode(1)
 

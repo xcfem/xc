@@ -65,11 +65,19 @@
 #include "ModelBuilder.h"
 #include "domain/domain/Domain.h"
 
-//  ModelBuilderModel(Domain &theDomain);
-//	constructor
+//! @brief Constructor.
+//!
+//! All models are associated with a single domain, this constructor
+//! sets up the link between the model and the domain, setting its link
+//! to the Domain object \p theDomain.
 XC::ModelBuilder::ModelBuilder(Domain &theDomain)
   :myDomain(&theDomain) {}
 
+//! @brief Return a pointer to the domain.
+//!
+//! Returns a pointer to the Domain object passed in the constructor. This
+//! method can be used in the subclasses to get a pointer the Domain object
+//! to which to add the domain components.
 XC::Domain *XC::ModelBuilder::getDomainPtr(void) const 
   { return myDomain; }
     

@@ -27,7 +27,7 @@
 
 #include "DqPtrsElem.h"
 #include "domain/mesh/element/Element.h"
-#include "preprocessor/cad/trf/TrfGeom.h"
+#include "preprocessor/multi_block_topology/trf/TrfGeom.h"
 #include "xc_utils/src/geom/d1/Polilinea3d.h"
 #include "domain/mesh/node/Node.h"
 #include "domain/mesh/MeshEdges.h"
@@ -165,7 +165,7 @@ void XC::DqPtrsElem::alive_elements(void)
       }
   }
 
-//! @brief Calcula los esfuerzos en cada uno of the elements.
+//! @brief Calcula los esfuerzos on each uno of the elements.
 void XC::DqPtrsElem::calc_resisting_force(void)
   {
     Element *tmp= nullptr;

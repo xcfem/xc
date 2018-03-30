@@ -35,7 +35,7 @@ class EC3Beam(lu.LineWrapper):
   def installULSControlRecorder(self,recorderType,sectionClass= 1, chiLT=1.0):
     '''Installs recorder for verification of ULS criterion.'''
     preprocessor= self.line.getPreprocessor
-    nodes= preprocessor.getNodeLoader
+    nodes= preprocessor.getNodeHandler
     domain= preprocessor.getDomain
     recorder= domain.newRecorder(recorderType,None)
     elems= self.getElements()

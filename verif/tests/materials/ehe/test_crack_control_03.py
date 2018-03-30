@@ -36,7 +36,7 @@ concr= EHE_materials.HA25
 concrMatTag25= concr.defDiagK(preprocessor)
 tagB500S= EHE_materials.B500S.defDiagK(preprocessor)
 
-geomSecHA= preprocessor.getMaterialLoader.newSectionGeometry("geomSecHA")
+geomSecHA= preprocessor.getMaterialHandler.newSectionGeometry("geomSecHA")
 regiones= geomSecHA.getRegions
 concrete= regiones.newQuadRegion(concr.nmbDiagK)
 concrete.nDivIJ= 10
@@ -55,7 +55,7 @@ reinforcementSup.barArea= areaFi25
 reinforcementSup.p1= geom.Pos2d(cover-width/2.0,depth/2.0-cover) # Armadura superior.
 reinforcementSup.p2= geom.Pos2d(width/2.0-cover,depth/2.0-cover)
 
-materiales= preprocessor.getMaterialLoader
+materiales= preprocessor.getMaterialHandler
 secHA= materiales.newMaterial("fiber_section_3d","secHA")
 fiberSectionRepr= secHA.getFiberSectionRepr()
 fiberSectionRepr.setGeomNamed("geomSecHA")
@@ -68,7 +68,7 @@ modelSpace.fixNode000_000(1)
 modelSpace.fixNodeF00_0FF(2)
 
 # Loads definition
-cargas= preprocessor.getLoadLoader
+cargas= preprocessor.getLoadHandler
 
 casos= cargas.getLoadPatterns
 
@@ -92,7 +92,7 @@ analOk= analisis.analyze(10)
 secHAParamsFis= EHE_limit_state_checking.CrackControl('SLS_crack')
 
 
-elements= preprocessor.getElementLoader
+elements= preprocessor.getElementHandler
 ele1= elements.getElement(1)
 scc= ele1.getSection()
 secHAParamsFis.computeWk(scc,concr.matTagK,EHE_materials.B500S.matTagK,concr.fctm())

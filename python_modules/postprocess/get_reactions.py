@@ -15,7 +15,7 @@ class Reactions(object):
     self.moments= dict()
     self.positions= dict()
     self.svdReac= geom.SVD3d()
-    meshNodes= preprocessor.getNodeLoader
+    meshNodes= preprocessor.getNodeHandler
     meshNodes.calculateNodalReactions(True)
     f3d= geom.Vector3d(0.0,0.0,0.0)
     m3d= geom.Vector3d(0.0,0.0,0.0)

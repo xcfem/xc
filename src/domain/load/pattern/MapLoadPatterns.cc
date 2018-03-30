@@ -27,7 +27,7 @@
 //MapLoadPatterns.cc
 
 #include "MapLoadPatterns.h"
-#include "preprocessor/loaders/LoadLoader.h"
+#include "preprocessor/prep_handlers/LoadHandler.h"
 
 //Time series.
 #include "domain/load/pattern/TimeSeries.h"
@@ -63,8 +63,8 @@
 
 
 //! @brief Default constructor.
-XC::MapLoadPatterns::MapLoadPatterns(LoadLoader *owr)
-  : LoadLoaderMember(owr), nmb_ts("nil"), lpcode("nil"), tag_el(0), tag_nl(0), tag_spc(0) {}
+XC::MapLoadPatterns::MapLoadPatterns(LoadHandler *owr)
+  : LoadHandlerMember(owr), nmb_ts("nil"), lpcode("nil"), tag_el(0), tag_nl(0), tag_spc(0) {}
 
 //! @brief Returns a pointer to the TS cuyo dbTag being passed as parameter.
 //! se usa en LoadPattern::recvData.

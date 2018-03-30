@@ -25,7 +25,7 @@ F2= 1000/2 #Force magnitude 2 (pounds)
 
 feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
-nodes= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeHandler
 
 modelSpace= predefined_spaces.SolidMechanics2D(nodes)
 nodes.defaultTag= 1 #Number for next node will be 1.
@@ -40,7 +40,7 @@ elast= typical_materials.defElasticMaterial(preprocessor, "elast",E)
     We will not compute stresses so we can use an arbitrary
     cross section of unit area.'''
 
-elements= preprocessor.getElementLoader
+elements= preprocessor.getElementHandler
 elements.dimElem= 2 #Bars defined ina a two dimensional space.
 elements.defaultMaterial= "elast"
 elements.defaultTag= 1 #Tag for the next element.
@@ -51,7 +51,7 @@ truss.area= 1
 truss= elements.newElement("Truss",xc.ID([3,4]));
 truss.area= 1
 
-constraints= preprocessor.getConstraintLoader
+constraints= preprocessor.getBoundaryCondHandler
 #Constrain the displacement of node 1.
 spc= constraints.newSPConstraint(1,0,0.0)
 spc= constraints.newSPConstraint(1,1,0.0)
@@ -63,7 +63,7 @@ spc= constraints.newSPConstraint(2,0,0.0)
 #Constrain the displacement of node 3 in X axis (gdl 0).
 spc= constraints.newSPConstraint(3,0,0.0)
 
-cargas= preprocessor.getLoadLoader
+cargas= preprocessor.getLoadHandler
 #Load pattern container:
 casos= cargas.getLoadPatterns
 #time series for the load pattern:

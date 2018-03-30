@@ -108,14 +108,14 @@ class ElasticFoundation(object):
         preprocessor= self.foundationSet.getPreprocessor
         modelSpace= predefined_spaces.getStructuralMechanics3DSpace(preprocessor)
         self.createMaterials(preprocessor,self.foundationSet.name)
-        idElem= preprocessor.getElementLoader.defaultTag
+        idElem= preprocessor.getElementHandler.defaultTag
         for n in sNod:
             arTribNod=n.getTributaryArea()
             self.xSpring.E= self.cRoz*self.wModulus*arTribNod
             self.ySpring.E= self.cRoz*self.wModulus*arTribNod
             self.zSpring.E= self.wModulus*arTribNod
             nn= modelSpace.setBearing(n.tag,[self.xSpringName,self.ySpringName,self.zSpringName])
-            self.springs.append(preprocessor.getElementLoader.getElement(idElem))
+            self.springs.append(preprocessor.getElementHandler.getElement(idElem))
             idElem+= 1
     def getCentroid(self):
         '''Returns the geometric baricenter of the springs.'''

@@ -28,7 +28,7 @@ rho= 0.0 # Densidad
 feProblem= xc.FEProblem()
 feProblem.logFileName= "/tmp/borrar.log" # Don't pring warnings
 preprocessor=  feProblem.getPreprocessor
-nodes= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeHandler
 modelSpace= predefined_spaces.SolidMechanics2D(nodes)
 
 
@@ -42,7 +42,7 @@ n4= nodes.newNodeIDXY(4,0,1)
 
 elast2d= typical_materials.defElasticIsotropicPlaneStress(preprocessor, "elast2d",E,nu,rho)
 # Elements definition
-elements= preprocessor.getElementLoader
+elements= preprocessor.getElementHandler
 elements.defaultMaterial= "elast2d"
 quad4n= elements.newElement("FourNodeQuad",xc.ID([1,2,3,4]))
 

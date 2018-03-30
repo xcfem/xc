@@ -41,7 +41,7 @@ class QuickGraphics(object):
         self.loadCaseName=loadCaseName
         self.loadCaseExpr=loadCaseExpr
         preprocessor= self.feProblem.getPreprocessor
-        combs=preprocessor.getLoadLoader.getLoadCombinations
+        combs=preprocessor.getLoadHandler.getLoadCombinations
         lCase=combs.newLoadCombination(self.loadCaseName,self.loadCaseExpr)
         preprocessor.resetLoadCase()
         combs.addToDomain(self.loadCaseName)
@@ -246,7 +246,7 @@ class QuickGraphics(object):
           lmsg.warning('QuickGraphics::displayLoadCaseBeamEl; set to display not defined; using previously defined set (total if None).')
       print 'xcSet', self.xcSet.name
       preprocessor= self.feProblem.getPreprocessor
-      loadPatterns= preprocessor.getLoadLoader.getLoadPatterns
+      loadPatterns= preprocessor.getLoadHandler.getLoadPatterns
       loadPatterns.addToDomain(loadCaseName)
       defDisplay= self.getDisplay(vwName=viewName,hCamF= hCamFct)
       grid= defDisplay.setupGrid(self.xcSet)
@@ -261,7 +261,7 @@ class QuickGraphics(object):
           orNodalLBar='V'
       # nodal loads
       vField=lvf.LoadVectorField(loadPatternName=loadCaseName,fUnitConv=fUnitConv,scaleFactor=nodLoadScaleF,showPushing= True)
-  #    loadPatterns= preprocessor.getLoadLoader.getLoadPatterns
+  #    loadPatterns= preprocessor.getLoadHandler.getLoadPatterns
       lPattern= loadPatterns[loadCaseName]
       count= 0
       if(lPattern):

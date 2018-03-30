@@ -67,6 +67,8 @@
 #include "utility/matrix/ID.h"
 
 namespace XC {
+//! @ingroup SubDom
+//
 class ActorSubdomain: public Subdomain, public Actor
   {
   private:

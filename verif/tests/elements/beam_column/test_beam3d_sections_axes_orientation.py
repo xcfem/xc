@@ -93,7 +93,7 @@ sections.append(beamRCsect)
 feProblem= xc.FEProblem()
 feProblem.errFileName= "/tmp/borrar.err" # Don't print errors.
 preprocessor=  feProblem.getPreprocessor   
-nodes= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeHandler
 # Problem type
 modelSpace= predefined_spaces.StructuralMechanics3D(nodes) #Defines the dimension of
                   #the space: nodes by three coordinates (x,y,z) and six
@@ -108,7 +108,7 @@ nod= nodes.newNodeXYZ(0.0,0.0,Lbeam)
 
 
 # Geometric transformations
-trfs= preprocessor.getTransfCooLoader
+trfs= preprocessor.getTransfCooHandler
 # Coord. trasformation for beam in global X direction
 #local Z axis of the element
 # parallel to global -Y (it matches
@@ -147,7 +147,7 @@ scc= typical_materials.defElasticSection3d(preprocessor=preprocessor, name="scc"
 
 
 # Elements definition
-elements= preprocessor.getElementLoader
+elements= preprocessor.getElementHandler
 elements.defaultMaterial= "scc"
 elements.defaultTag= 1 #Tag for next element.
 
@@ -160,7 +160,7 @@ beam3dZ= elements.newElement("ElasticBeam3d",xc.ID([0,3]))
 
     
 # Constraints
-constraints= preprocessor.getConstraintLoader
+constraints= preprocessor.getBoundaryCondHandler
 #
 spc= constraints.newSPConstraint(0,0,0.0) # Node 0
 spc= constraints.newSPConstraint(0,1,0.0)
@@ -170,7 +170,7 @@ spc= constraints.newSPConstraint(0,4,0.0)
 spc= constraints.newSPConstraint(0,5,0.0)
 
 # Loads definition
-cargas= preprocessor.getLoadLoader
+cargas= preprocessor.getLoadHandler
 casos= cargas.getLoadPatterns
 #Load modulation.
 ts= casos.newTimeSeries("constant_ts","ts")
@@ -310,15 +310,15 @@ ratio2=(Rsec2beamX-Rsec2beamY).sum()+(Rsec2beamX-Rsec2beamZ).sum()+(Rsec2beamY-R
 execfile('/tmp/resVerif.py')
 
 sec1MzTeor=(M+F*Lbeam)*1e-3 # expressed in mkN
-sec1beamXMz=preprocessor.getElementLoader.getElement(1).getProp("ULS_normalStressesResistanceSect1").Mz
-sec1beamYMz=preprocessor.getElementLoader.getElement(2).getProp("ULS_normalStressesResistanceSect1").Mz
-sec1beamZMz=preprocessor.getElementLoader.getElement(3).getProp("ULS_normalStressesResistanceSect1").Mz
+sec1beamXMz=preprocessor.getElementHandler.getElement(1).getProp("ULS_normalStressesResistanceSect1").Mz
+sec1beamYMz=preprocessor.getElementHandler.getElement(2).getProp("ULS_normalStressesResistanceSect1").Mz
+sec1beamZMz=preprocessor.getElementHandler.getElement(3).getProp("ULS_normalStressesResistanceSect1").Mz
 ratio3=(sec1beamXMz-sec1MzTeor)+(sec1beamYMz-sec1MzTeor)+(sec1beamZMz-sec1MzTeor)
 
 sec2MzTeor=M*1e-3 # expressed in mkN
-sec2beamXMz=preprocessor.getElementLoader.getElement(1).getProp("ULS_normalStressesResistanceSect2").Mz
-sec2beamYMz=preprocessor.getElementLoader.getElement(2).getProp("ULS_normalStressesResistanceSect2").Mz
-sec2beamZMz=preprocessor.getElementLoader.getElement(3).getProp("ULS_normalStressesResistanceSect2").Mz
+sec2beamXMz=preprocessor.getElementHandler.getElement(1).getProp("ULS_normalStressesResistanceSect2").Mz
+sec2beamYMz=preprocessor.getElementHandler.getElement(2).getProp("ULS_normalStressesResistanceSect2").Mz
+sec2beamZMz=preprocessor.getElementHandler.getElement(3).getProp("ULS_normalStressesResistanceSect2").Mz
 ratio4=(sec2beamXMz-sec2MzTeor)+(sec2beamYMz-sec2MzTeor)+(sec2beamZMz-sec2MzTeor)
 
 ratios=[ratio1_0,ratio1_1,ratio2_0,ratio2_1,ratio3_0,ratio3_1,ratio1,ratio2,ratio3,ratio4]

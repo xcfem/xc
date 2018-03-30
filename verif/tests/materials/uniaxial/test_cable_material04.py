@@ -25,7 +25,7 @@ F= 100 # Prestressing force (pounds)
 
 feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
-nodes= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeHandler
 
 # Problem type
 modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
@@ -44,7 +44,7 @@ typical_materials.defCableMaterial(preprocessor, "cable",E,sigmaPret,0.0)
     cross section of unit area.'''
     
 # Elements definition
-elements= preprocessor.getElementLoader
+elements= preprocessor.getElementHandler
 elements.defaultMaterial= "cable"
 elements.dimElem= 3 # Dimension of element space
 truss1= elements.newElement("CorotTruss",xc.ID([1,2]));
@@ -53,13 +53,13 @@ truss2= elements.newElement("CorotTruss",xc.ID([2,3]));
 truss2.area= area
      
 # Constraints
-constraints= preprocessor.getConstraintLoader
+constraints= preprocessor.getBoundaryCondHandler
 modelSpace.fixNode000_000(1)
 modelSpace.fixNodeFFF_000(2)
 modelSpace.fixNode000_000(3)
 
 # Loads definition
-cargas= preprocessor.getLoadLoader
+cargas= preprocessor.getLoadHandler
 casos= cargas.getLoadPatterns
 #Load modulation.
 ts= casos.newTimeSeries("constant_ts","ts")

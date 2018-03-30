@@ -42,7 +42,7 @@ class ReinfLayer;
 class CircReinfLayer;
 class StraightReinfLayer;
 class SingleBar;
-class MaterialLoader;
+class MaterialHandler;
 class Vector;
 class Matrix;
 class GeomSection;
@@ -64,10 +64,10 @@ class ListReinfLayer: public std::list<ReinfLayer *>, public SectionMassProperti
     void copia(const ListReinfLayer &otra);
   protected:
 
-    MaterialLoader *material_loader; //!< Material definition handler (searching,...).
+    MaterialHandler *material_handler; //!< Material definition handler (searching,...).
 
     friend class GeomSection;
-    ListReinfLayer(GeomSection *,MaterialLoader *ml);
+    ListReinfLayer(GeomSection *,MaterialHandler *ml);
     ListReinfLayer(const ListReinfLayer  &otro);
     ListReinfLayer &operator=(const ListReinfLayer  &otro);
   public:

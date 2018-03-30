@@ -26,7 +26,7 @@ v2= xc.Vector([0,-math.sqrt(2)/2,math.sqrt(2)/2])
 # Problem type
 feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
-nodes= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeHandler
 modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
 nodes.newNodeIDXYZ(1,0,0,0)
 nodes.newNodeIDXYZ(2,2,0,0)
@@ -39,7 +39,7 @@ nodes.newNodeIDXYZ(4,0,1,1)
 memb1= typical_materials.defElasticMembranePlateSection(preprocessor, "memb1",E,nu,dens,h)
 
 
-elements= preprocessor.getElementLoader
+elements= preprocessor.getElementHandler
 elements.defaultMaterial= "memb1"
 elem= elements.newElement("ShellMITC4",xc.ID([1,2,3,4]))
 
@@ -50,7 +50,7 @@ db.save(100)
 feProblem.clearAll()
 db.restore(100)
 
-elements= preprocessor.getElementLoader
+elements= preprocessor.getElementHandler
 elem= elements.getElement(0)
 ratio1= (elem.getCoordTransf.getG2Vector-v1).Norm()
 ratio2= (elem.getCoordTransf.getG3Vector-v2).Norm()

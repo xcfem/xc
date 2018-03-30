@@ -13,7 +13,7 @@ def listaNombresLoadPatterns(preprocessor):
 
   :param preprocessor: preprocessor name
   '''
-  return preprocessor.loadLoader.getLoadPatterns.getKeys()
+  return preprocessor.loadHandler.getLoadPatterns.getKeys()
 
 
 def staggeredPatternType1(lIndX,lIndY,indZ):

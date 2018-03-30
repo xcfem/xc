@@ -88,7 +88,7 @@ def distance_2points(preprocessor,tagPt1,tagPt2):
   :param tagPt1: tag that identifies the first point 
   :param tagPt2: tag that identifies the second point 
   '''
-  points= preprocessor.getCad.getPoints
+  points= preprocessor.getMultiBlockTopology.getPoints
   pA= points.get(tagPt1).getPos
   pB= points.get(tagPt2).getPos
   return pA.distPos3d(pB)

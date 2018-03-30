@@ -28,7 +28,7 @@ F= 1000.0 # Force magnitude
 # Problem type
 feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
-nodes= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeHandler
 modelSpace= predefined_spaces.StructuralMechanics2D(nodes)
 
 nodes.defaultTag= 1 #First node number.
@@ -42,7 +42,7 @@ b=0.001    # strain-hardening ratio: ratio between post-yield tangent and initia
 steel= typical_materials.defSteel01(preprocessor=preprocessor,name="steel",E=E,fy=fy,b=b)
 
 
-quadFibersGeom= preprocessor.getMaterialLoader.newSectionGeometry("quadFibersGeom")
+quadFibersGeom= preprocessor.getMaterialHandler.newSectionGeometry("quadFibersGeom")
 y1= width/2.0
 z1= depth/2.0
 
@@ -59,7 +59,7 @@ reinforcementB.barArea= As
 reinforcementB.p1= geom.Pos2d(y0-depth/2.0,z0+width/2.0)
 reinforcementB.p2= geom.Pos2d(y0+depth/2.0,z0+width/2.0)
 
-materiales= preprocessor.getMaterialLoader
+materiales= preprocessor.getMaterialHandler
 # Secciones
 quadFibers= materiales.newMaterial("fiber_section_3d","quadFibers")
 fiberSectionRepr= quadFibers.getFiberSectionRepr()
@@ -82,14 +82,14 @@ for_each_fiber
 
 
 # Elements definition
-elements= preprocessor.getElementLoader
+elements= preprocessor.getElementHandler
 elements.defaultMaterial= "quadFibers"
 elements.dimElem= 1 # Dimension of element space
 elements.defaultTag= 1
 elem= elements.newElement("ZeroLengthSection",xc.ID([1,2]))
 
 # Constraints
-constraints= preprocessor.getConstraintLoader
+constraints= preprocessor.getBoundaryCondHandler
 #
 spc= constraints.newSPConstraint(1,0,0.0) # Node 1
 spc= constraints.newSPConstraint(1,1,0.0)
@@ -98,7 +98,7 @@ spc= constraints.newSPConstraint(2,1,0.0)
 spc= constraints.newSPConstraint(2,2,0.0)
 
 # Loads definition
-cargas= preprocessor.getLoadLoader
+cargas= preprocessor.getLoadHandler
 casos= cargas.getLoadPatterns
 #Load modulation.
 ts= casos.newTimeSeries("constant_ts","ts")

@@ -51,11 +51,11 @@ epp= typical_materials.defElasticPPMaterial(preprocessor, "epp",E,fy,-fy)
 
 # Section geometry
 # creation
-geomRectang= preprocessor.getMaterialLoader.newSectionGeometry("geomRectang")
+geomRectang= preprocessor.getMaterialHandler.newSectionGeometry("geomRectang")
 #generation of a quadrilateral region of the scc10x20 sizes and number of
 #divisions made of material nmbMat
 reg= scc10x20.getRegion(gm=geomRectang,nmbMat="epp")
-rectang= preprocessor.getMaterialLoader.newMaterial("fiber_section_3d","rectang")
+rectang= preprocessor.getMaterialHandler.newMaterial("fiber_section_3d","rectang")
 fiberSectionRepr= rectang.getFiberSectionRepr()
 fiberSectionRepr.setGeomNamed("geomRectang")
 rectang.setupFibers()
@@ -68,7 +68,7 @@ modelSpace.fixNode000_000(1)
 modelSpace.fixNodeF00_00F(2)
 
 # Loads definition
-cargas= preprocessor.getLoadLoader
+cargas= preprocessor.getLoadHandler
 
 casos= cargas.getLoadPatterns
 
@@ -90,12 +90,12 @@ analisis= predefined_solutions.simple_newton_raphson(feProblem)
 analOk= analisis.analyze(1)
 
 
-nodes= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeHandler
 nodes.calculateNodalReactions(True)
 
 RM= nodes.getNode(1).getReaction[5] 
 
-elements= preprocessor.getElementLoader
+elements= preprocessor.getElementHandler
 ele1= elements.getElement(1)
 scc= ele1.getSection()
 esfMz= scc.getFibers().getMz(0.0)

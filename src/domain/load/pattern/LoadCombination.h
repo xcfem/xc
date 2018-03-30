@@ -34,7 +34,7 @@
 namespace XC {
 class MapLoadPatterns;
 class LoadPattern;
-class LoadLoader;
+class LoadHandler;
 class LoadCombinationGroup;
 
 //! @ingroup LPatterns
@@ -42,7 +42,7 @@ class LoadCombinationGroup;
 //! @brief Load pattern combination (1.5*PP+1.0*CP+1.6*SC ...).
 class LoadCombination: public ForceReprComponent
   {
-    LoadLoader *loader; //!< Pointer to the load case manager.
+    LoadHandler *handler; //!< Pointer to the load case manager.
     //! @brief Each of the terms (factor*LoadPattern) of the combination.
     class summand: public EntCmd
       {
@@ -103,11 +103,11 @@ class LoadCombination: public ForceReprComponent
 
 
     friend class LoadCombinationGroup;
-    LoadCombination(LoadCombinationGroup *owr= nullptr,const std::string &nmb= "",int tag= 0,LoadLoader *ll= nullptr);
+    LoadCombination(LoadCombinationGroup *owr= nullptr,const std::string &nmb= "",int tag= 0,LoadHandler *ll= nullptr);
     inline void setNombre(const std::string &nmb)
       { nombre= nmb;}
-    inline void setLoader(LoadLoader *ll)
-      { loader= ll; }
+    inline void setHandler(LoadHandler *ll)
+      { handler= ll; }
 
   public:
     ~LoadCombination(void);

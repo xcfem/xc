@@ -40,10 +40,10 @@ kPl4a= kPl3a
 # Problem type
 feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
-nodes= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeHandler
 modelSpace= predefined_spaces.StructuralMechanics2D(nodes)
 
-nodes= preprocessor.getNodeLoader
+nodes= preprocessor.getNodeHandler
 nodes.defaultTag= 0; 
 nod0= nodes.newNodeXY(0,0) 
 nod0.mass= nodeMassMatrix
@@ -69,7 +69,7 @@ for n in nodes:
   n.fix(n.getProp("gdlsCoartados"),xc.Vector([0,0,0]))
 
 # Materials definition
-materiales= preprocessor.getMaterialLoader
+materiales= preprocessor.getMaterialHandler
 #scc= typical_materials.defElasticSection2d(preprocessor, "scc",A,E,I)
 
 sccPlBaja= typical_materials.defElasticSection2d(preprocessor, "sccPlBaja",20*Bbaja*Bbaja,Ehorm,20*Ibaja)
@@ -83,7 +83,7 @@ sccPl4a= typical_materials.defElasticSection2d(preprocessor, "sccPl4a",20*B3a*B3
 lin= modelSpace.newLinearCrdTransf("lin")
 
 # Elements definition
-elements= preprocessor.getElementLoader
+elements= preprocessor.getElementHandler
 elements.defaultTransformation= "lin"
 elements.defaultMaterial= "sccPlBaja"
 elements.defaultTag= 1 #Tag for next element.

@@ -63,7 +63,7 @@
 #include <utility/matrix/Matrix.h>
 
 namespace XC {
-class MaterialLoader;
+class MaterialHandler;
 class FiberSectionRepr;
 
 //! \ingroup MATSCCFiberModel
@@ -77,9 +77,9 @@ class FiberSectionGJ: public FiberSection3dBase
     friend class FiberDeque;
  
   public:
-    FiberSectionGJ(MaterialLoader *mat_ldr= nullptr);
-    FiberSectionGJ(int tag,MaterialLoader *mat_ldr= nullptr);
-    FiberSectionGJ(int tag,const fiber_list &, double GJ = 1.0e10,MaterialLoader *mat_ldr= nullptr);
+    FiberSectionGJ(MaterialHandler *mat_ldr= nullptr);
+    FiberSectionGJ(int tag,MaterialHandler *mat_ldr= nullptr);
+    FiberSectionGJ(int tag,const fiber_list &, double GJ = 1.0e10,MaterialHandler *mat_ldr= nullptr);
 
     Fiber *addFiber(Fiber &theFiber);
 
