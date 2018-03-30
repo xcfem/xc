@@ -119,6 +119,9 @@ class RCMaterialDistribution(object):
     '''
     feProblem= xc.FEProblem()
     preprocessor= feProblem.getPreprocessor
+    if 'straight' in str(limitStateData.controller).lower():
+       for s in self.sectionDefinition.sections:
+         s.concrType.initTensStiff='Y'
     self.sectionDefinition.createRCsections(preprocessor,matDiagType) #creates
                       #for each element in the container the fiber sections
                       #(RCsimpleSections) associated with it.

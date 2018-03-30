@@ -91,6 +91,9 @@ class PhantomModel(object):
                  -sectionIndex-. To be renamed as sectionIndex.
     :param interactionDiagram: interaction diagram that corresponds to 
                                   the section to check.
+    :param fakeSection: if True (default value) generates a fake section 
+           of type 'xc.ElasticShearSection3d', if False, generates a true 
+           fiber model of the section (xc.FiberSectionShear3d)
     '''
     nA= self.preprocessor.getNodeHandler.newNodeXYZ(0,0,0)
     nB= self.preprocessor.getNodeHandler.newNodeXYZ(0,0,0)
@@ -205,6 +208,7 @@ class PhantomModel(object):
       comb= combs[key]
       #print "Resolving load combination: ",key
       predefined_solutions.resuelveComb(self.preprocessor,key,controller.analysis,1)
+      controller.preprocessor=self.preprocessor
       controller.check(elements,key)
 
   def write(self,controller,outputFileName):
