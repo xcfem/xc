@@ -419,6 +419,10 @@ class CrackControlVars(ControlVarsBase):
     retval+= ', crackControlBaseVarsNeg= ' + self.crackControlVarsNeg.getStrConstructor(factor)
     return retval
 
+class RCCrackStraightControlVars():
+    def __init__(self,wk=0.0):
+      self.wk=wk
+  
 class FatigueControlBaseVars(NMyMz):
   '''Biaxial bending. Fatigue limit state variables.
 

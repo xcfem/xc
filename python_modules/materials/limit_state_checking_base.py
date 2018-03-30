@@ -21,13 +21,19 @@ class LimitStateControllerBase(object):
         '''
         :param limitStateLabel: property name in the check results file 
                (something like 'ULS_shear' or 'SLS_crack_freq' or ...).
-        :param fakeSection:    true if a fiber section model of the section is 
-                            not needed to perform control.
+        :param fakeSection: true if a fiber section model of the section is 
+               not needed to perform control. In that case a fake section 
+               of type 'xc.ElasticShearSection3d' is generated for each 
+               element of the phantom model. Otherwise, when fakeSection 
+               is set to False (shear and cracking LS checking), a true fiber 
+               section of type 'xc.FiberSectionShear3d' is generated. 
+        :param preprocessor: only used to perform the crack straight control.
         '''
         self.limitStateLabel= limitStateLabel
         self.fakeSection= fakeSection
         #Linear analysis by default.
         self.analysisToPerform= predefined_solutions.simple_static_linear
+        self.preprocessor=None   
 
     def check(self,elements,nmbComb):
         '''Crack control.'''

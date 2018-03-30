@@ -290,7 +290,6 @@ class Concrete(matWDKD.MaterialWithDKDiagrams):
             # Etsdiag=-self.tensionStiffparam.slopeRegresLineFixedPoint()
             # self.materialDiagramK= typical_materials.defConcrete02(preprocessor=preprocessor,name=self.nmbDiagK,epsc0=self.epsilon0(),fpc=self.fmaxK(),fpcu=0.85*self.fmaxK(),epscu=self.epsilonU(),ratioSlope=0.1,ft=ftdiag,Ets=Etsdiag)
         elif self.initTensStiff[0].lower()=='y':
-            print 'aquí 0'
             ftdiag=self.fctk()/10.
 #            self.ft=ftdiag
             ectdiag=ftdiag/self.E0()

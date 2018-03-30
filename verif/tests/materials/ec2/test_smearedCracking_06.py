@@ -26,7 +26,6 @@ from materials import concrete_base
 from materials import typical_materials
 from materials.sections.fiber_section import fiber_sets
 from materials.sections.fiber_section import sectionReport 
-import matplotlib.pyplot as plt
 import numpy as np
 from materials.ec2 import EC2_limit_state_checking
 

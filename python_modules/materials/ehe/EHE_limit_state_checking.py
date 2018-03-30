@@ -1,6 +1,11 @@
 # -*- coding: utf-8 -*-
 from __future__ import division
 ''' Limit state checking according to structural concrete spanish standard EHE-08.'''
+__author__= "Luis C. Pérez Tato (LCPT) , Ana Ortega (AO_O) "
+__copyright__= "Copyright 2016, LCPT, AO_O"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@ciccp.es, ana.ortega@ciccp.es "
 
 import math
 import xc_base
@@ -11,6 +16,9 @@ from materials import limit_state_checking_base as lscb
 from postprocess import control_vars as cv
 from miscUtils import LogMessages as lmsg
 import scipy.interpolate
+from solution import predefined_solutions
+from materials import concrete_base
+
 
 # Reinforced concrete section shear checking.
 
@@ -743,7 +751,6 @@ class ShearController(lscb.LimitStateControllerBase):
     self.gammaC= concrete.gmmC
     self.reinfSteelMaterialTag= reinfSteel.matTagD
     self.fydS= reinfSteel.fyd()
-
     if(not scc.hasProp("rcSets")):
       scc.setProp("rcSets", fiber_sets.fiberSectionSetupRC3Sets(scc,self.concreteMatTag,self.concreteFibersSetName,self.reinfSteelMaterialTag,self.rebarFibersSetName))
     return scc.getProp("rcSets")
@@ -874,17 +881,23 @@ class ShearController(lscb.LimitStateControllerBase):
     ''' For each element in the set 'elememts' passed as first parameter and 
     the resulting internal forces for the load combination 'nmbComb'  
     passed as second parameter, this method calculates all the variables 
-    involved in the shear checking and obtains the capacity factor.
+    involved in the shear-ULS checking and obtains the capacity factor.
     In the case that the calculated capacity factor is smaller than the 
     smallest obtained for the element in previous load combinations, this value
     is saved in the element results record.  
+
+
+    Elements processed are those belonging to the phantom model, that is to 
+    say, of type xc.ZeroLengthSection. As we have defined the variable 
+    fakeSection as False, a reinfoced concrete fiber section is generated
+    for each of these elements. 
 
     XXX Rebar orientation not taken into account yet.
     '''
     lmsg.log("Postprocessing combination: "+nmbComb)
     secHAParamsTorsion= None # XXX Ignore torsional deformation.
     for e in elements:
-      e.getResistingForce()
+      R=e.getResistingForce()
       scc= e.getSection()
       idSection= e.getProp("idSection")
       section= scc.getProp("datosSecc")
@@ -938,6 +951,141 @@ class ShearController(lscb.LimitStateControllerBase):
         e.setProp(self.limitStateLabel,cv.RCShearControlVars(idSection,nmbComb,FCtmp,NTmp,MyTmp,MzTmp,Mu,VyTmp,VzTmp,self.theta,self.Vcu,self.Vsu,VuTmp)) # Worst case
 
 
+class CrackStraightController(lscb.LimitStateControllerBase):
+  '''Definition of variables involved in the verification of the cracking
+  serviceability limit state according to EHE-08
+  '''
+  def __init__(self,limitStateLabel):
+    super(CrackStraightController,self).__init__(limitStateLabel,fakeSection= False)
+    self.concreteFibersSetName= "concrete" #Name of the concrete fibers set.
+    self.rebarFibersSetName= "reinforcement" #Name of the rebar fibers set.
+
+  def initControlVars(self,elements):
+    ''' Initialize control variables over elements.
+
+      :param elements: elements to define control variables in
+    '''
+    for e in elements:
+      e.setProp(self.limitStateLabel,cv.RCCrackStraightControlVars())
+
+  def check(self,elements,nmbComb):
+    ''' For each element in the set 'elememts' passed as first parameter and 
+    the resulting internal forces for the load combination 'nmbComb'  
+    passed as second parameter, this method calculates all the variables 
+    involved in the crack-SLS checking and obtains the crack width.
+    In the case that the calculated crack width is greater than the 
+    biggest obtained for the element in previous load combinations, this value
+    is saved in the element results record. 
+
+    Elements processed are those belonging to the phantom model, that is to 
+    say, of type xc.ZeroLengthSection. As we have defined the variable 
+    fakeSection as False, a reinfoced concrete fiber section is generated
+    for each of these elements. 
+    '''
+    lmsg.log("Postprocessing combination: "+nmbComb)
+    for e in elements:
+      Aceff=0  #init. value
+      R=e.getResistingForce()
+      ####Borrar
+      print 'Resisting force: [', R[0] , ',', R[1] , ',', R[2] , ',', R[3] , ',', R[4] , ',', R[5], ',',R[6],']'
+      ###
+      scc=e.getSection()
+      x= scc.getNeutralAxisDepth()
+      d=scc.getEffectiveDepth()
+      h=scc.getLeverArm()
+      hceff=min(2.5*abs(h-d),abs(h+x)/3.0,abs(h)/2.0)
+      sccProp=scc.getProp("datosSecc")
+      concrTag=sccProp.concrType.matTagK
+      rsteelTag=sccProp.reinfSteelType.matTagK
+      ####Borrar
+     # print 'mat=',concr
+      # print 'fpc= ',concr.fpc
+      ###
+      setsRC= fiber_sets.fiberSectionSetupRCSets(scc=scc,concrMatTag=concrTag,concrSetName="concrSetFb",reinfMatTag=rsteelTag,reinfSetName="reinfSetFb")
+      setsRC.reselTensionFibers(scc=scc,tensionFibersSetName='tensSetFb')
+      ####Borrar
+#      print 'AsTens=' , setTfib.getArea(1.0), 'nFibers= ', setTfib.getNumFibers()
+      # setCfib=setsRC.concrFibers.fSet
+      # print 'Ac= ', setCfib.getArea(1), 'nFibers= ', setCfib.getNumFibers()
+      # setRfib=setsRC.reinfFibers.fSet
+      # print 'As= ', setRfib.getArea(1), 'nFibers= ', setRfib.getNumFibers()
+      ###
+#      Aceff=scc.getNetEffectiveConcreteArea(hceff,"reinfSetFb",15.0)
+      Acgross=scc.getGrossEffectiveConcreteArea(hceff)
+      Aceff=scc.getNetEffectiveConcreteArea(hceff,"tensSetFb",15.0)
+      ###Borrar
+      # fib=scc.getFibers()
+      # if fib.enCompresion():
+      #   print 'compression'
+      # elif fib.enTraccion():
+      #   print 'tension'
+      # elif fib.enFlexion():
+      #   print 'bending'
+      ###
+      print 'x= ', x, 'd= ',d, 'h= ', h
+      print 'hceff= ',hceff
+      print 'Acgross= ',Acgross
+      print 'Aceff= ',Aceff
+      mats=self.preprocessor.getMaterialLoader
+      concrete=mats.getMaterial(mats.getName(concrTag))
+      rfSteel=mats.getMaterial(mats.getName(rsteelTag))
+      As=setsRC.tensionFibers.getArea(1.0)
+      print 'As= ', As
+      ro_s_eff=As/Aceff      #effective ratio of reinforcement
+      print 'effective ratio of reinforcement=', ro_s_eff
+      #Parameters for tension stiffening of concrete
+      paramTS= concrete_base.paramTensStiffness(concrMat=concrete,reinfMat=rfSteel,reinfRatio=ro_s_eff,diagType='K')
+      concrete.tensionStiffparam=paramTS #parameters for tension stiffening
+                                         #are assigned to concrete
+      ftdiag=concrete.tensionStiffparam.pointOnsetCracking()['ft']      #stress at the adopted point for concrete onset cracking
+      Etsdiag=abs(concrete.tensionStiffparam.regresLine()['slope'])
+      print 'ft=',ftdiag*1e-6
+      print 'Ets0=', Etsdiag*1e-6
+
+      fiber_sets.redefTensStiffConcr(setOfTenStffConcrFibSect=setsRC.concrFibers,ft=ftdiag,Ets=Etsdiag)
+
+      '''
+      if Aceff >0:
+        # mats=self.preprocessor.getMaterialLoader
+        # concrete=mats.getMaterial(mats.getName(concrTag))
+        # rfSteel=mats.getMaterial(mats.getName(rsteelTag))
+        concrete=sccProp.concrType
+        rfSteel=sccProp.reinfSteelType
+        AsTens=setTfib.getArea(1.0)
+        ro_s_eff=AsTens/Aceff
+        paramTS= concrete_base.paramTensStiffness(concrMat=concrete,reinfMat=rfSteel,reinfRatio=ro_s_eff,diagType='K')
+        concrete.tensionStiffparam=paramTS
+        ftdiag=concrete.tensionStiffparam.pointOnsetCracking()['ft']      #stress at the adopted point for concrete onset cracking
+        Etsdiag=abs(concrete.tensionStiffparam.regresLine()['slope'])
+        fiber_sets.redefTensStiffConcr(setOfTenStffConcrFibSect=setsRC.concrFibers,ft=ftdiag,Ets=Etsdiag)
+        self.preprocessor.getDomain.revertToStart()
+        predefined_solutions.resuelveComb(self.preprocessor,nmbComb,self.analysis,1)
+        x= scc.getNeutralAxisDepth()
+        d=scc.getEffectiveDepth()
+        h=scc.getLeverArm()
+        print 'Step 2: x= ', x, 'd= ',d, 'h= ', h
+      '''
+
+  def extractFiberData(self, scc, concrete, reinfSteel):
+    ''' Extract basic parameters from the fiber model of the section
+
+     :param scc: fiber model of the section.
+     :param concrete: parameters to modelize concrete.
+     :param reinfSteel: parameters to modelize reinforcement steel.
+    '''
+    self.concreteMatTag= concrete.matTagD
+    self.fckH= abs(concrete.fck)
+    self.fcdH= abs(concrete.fcd())
+    self.fctdH= concrete.fctd()
+    self.gammaC= concrete.gmmC
+    self.reinfSteelMaterialTag= reinfSteel.matTagD
+    self.fydS= reinfSteel.fyd()
+
+    print 'extractFiberData scc=', scc
+    if(not scc.hasProp("rcSets")):
+      scc.setProp("rcSets", fiber_sets.fiberSectionSetupRC3Sets(scc,self.concreteMatTag,self.concreteFibersSetName,self.reinfSteelMaterialTag,self.rebarFibersSetName))
+    return scc.getProp("rcSets")
+      
 class CrackControl(lscb.CrackControlBaseParameters):
   '''
   Define the properties that will be needed for crack control checking
