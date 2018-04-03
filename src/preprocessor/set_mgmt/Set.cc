@@ -307,8 +307,8 @@ void XC::Set::sel_points_lista(const ID &tags)
 //! @brief Select the lines identified by the tags in the parameter.
 //!
 //! @param tags: identifiers of the points to select.
-void XC::Set::sel_lineas_lista(const ID &tags)
-  { entities.sel_lineas_lista(tags); }
+void XC::Set::sel_lines_list(const ID &tags)
+  { entities.sel_lines_list(tags); }
 
 //! @brief Selects the surfaces with the identifiers being passed as parameter.
 void XC::Set::sel_surfaces_lst(const ID &tags)

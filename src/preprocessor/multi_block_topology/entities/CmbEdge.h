@@ -48,7 +48,7 @@ class CmbEdge: public Edge
     //!
     //! @brief Component of a compound line.
     //!
-    //! A compound line is a sequence of pointers to lines (Linea) (we
+    //! A compound line is a sequence of pointers to lines (Line) (we
     //! call them lados here), such that the end of one of them is the origin
     //! of the edge that follows. Since the orientation of the line defined
     //! in the model, can not coincide with the orientation needed here, each
@@ -95,13 +95,13 @@ class CmbEdge: public Edge
     
       };
   protected:
-    std::deque<Lado> lineas; //!< Lines that compose the object.
+    std::deque<Lado> lines; //!< Lines that compose the object.
     MatrizPos3d get_posiciones(void) const;
 
-    Lado *primera_linea(void);
-    const Lado *primera_linea(void) const;
-    Lado *ultima_linea(void);
-    const Lado *ultima_linea(void) const;
+    Lado *first_line(void);
+    const Lado *first_line(void) const;
+    Lado *last_line(void);
+    const Lado *last_line(void) const;
 
 
     const Pnt *first_point(void) const;
@@ -109,11 +109,11 @@ class CmbEdge: public Edge
 
   protected:
 
-    void create_nodes_lineas(void);
+    void create_line_nodes(void);
     void line_meshing(meshing_dir dm);
     Pnt *P1(void);
     Pnt *P2(void);
-    void cierra(void); 
+    void close(void); 
   public:
     CmbEdge(void);
     CmbEdge(Preprocessor *m,const size_t &nd= 4);
@@ -121,18 +121,18 @@ class CmbEdge: public Edge
     virtual SetEstruct *getCopy(void) const;
     virtual void inserta(Edge *l);
     void inserta(const size_t &i);
-    Edge *NuevaLinea(Pnt *,Pnt *);
-    Edge *NuevaLinea(Pnt *,Pnt *,Pnt *);
+    Edge *newLine(Pnt *,Pnt *);
+    Edge *newLine(Pnt *,Pnt *,Pnt *);
     void addPoints(const ID &);
     void addLines(const ID &);
     size_t NDiv(void) const;
     void SetNDiv(const size_t &nd);
 
     //! @brief Return the number of edges.
-    size_t NumEdges(void) const
-      { return lineas.size(); }
+    size_t getNumberOfEdges(void) const
+      { return lines.size(); }
     inline std::deque<Lado> &getLados(void)
-      { return lineas; }
+      { return lines; }
     void reverse(void);
     bool In(const GeomObj3d &, const double &tol= 0.0) const;
     bool Out(const GeomObj3d &, const double &tol= 0.0) const;
@@ -141,8 +141,8 @@ class CmbEdge: public Edge
     Pos3d getCentroid(void) const;	
 
     //! @brief Return the number of vertices.
-    virtual size_t NumVertices(void) const
-      { return NumEdges()+1; }
+    virtual size_t getNumberOfVertices(void) const
+      { return getNumberOfEdges()+1; }
 
     const Pnt *P1(void) const;
     const Pnt *P2(void) const;

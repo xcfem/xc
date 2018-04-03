@@ -79,8 +79,8 @@ class Body: public EntMdlr
 
         const std::string &getName(void) const;
         bool Vacia(void) const;
-        size_t NumLineas(void) const;
-        size_t NumVertices(void) const;
+        size_t getNumberOfLines(void) const;
+        size_t getNumberOfVertices(void) const;
         const CmbEdge::Lado *GetLado(const size_t &) const;
         CmbEdge::Lado *GetLado(const size_t &);
         const Pnt *GetVertice(const size_t &) const;
@@ -100,11 +100,11 @@ class Body: public EntMdlr
     inline virtual unsigned short int GetDimension(void) const
       { return 3; }
     //! @brief Return the number of lines in the object.
-    virtual size_t NumLineas(void) const= 0;
+    virtual size_t getNumberOfLines(void) const= 0;
     //! @brief Return the number of vertices in the object.
-    virtual size_t NumVertices(void) const= 0;
+    virtual size_t getNumberOfVertices(void) const= 0;
     //! @brief Return the number of faces in the object.
-    virtual size_t NumFaces(void) const= 0;
+    virtual size_t getNumberOfFaces(void) const= 0;
     virtual std::set<const Face *> getSurfaces(void)= 0;
     virtual const BodyFace *GetFace(const size_t &i) const= 0;
     virtual const CmbEdge::Lado *GetArista(const size_t &i) const= 0;

@@ -50,7 +50,7 @@ class_<XC::ReferenceFrameMap, bases<MapMultiBlockTopologyReferenceFrame>, boost:
 XC::ReferenceFrameMap &(XC::MultiBlockTopology::*getReferenceSystems)(void)= &XC::MultiBlockTopology::getReferenceSystems;
 XC::MapTrfGeom &(XC::MultiBlockTopology::*getGeometricTransformations)(void)= &XC::MultiBlockTopology::getTransformacionesGeometricas;
 XC::PntMap &(XC::MultiBlockTopology::*getPntMapRef)(void)= &XC::MultiBlockTopology::getPuntos;
-XC::LineMap &(XC::MultiBlockTopology::*getLineMapRef)(void)= &XC::MultiBlockTopology::getLineas;
+XC::LineMap &(XC::MultiBlockTopology::*getLineMapRef)(void)= &XC::MultiBlockTopology::getLines;
 XC::SurfaceMap &(XC::MultiBlockTopology::*getSurfaceMapRef)(void)= &XC::MultiBlockTopology::getSurfaces;
 XC::MapEsquemas2d &(XC::MultiBlockTopology::*getEsquemas2dRef)(void)= &XC::MultiBlockTopology::getEsquemas2d;
 XC::MapEsquemas3d &(XC::MultiBlockTopology::*getEsquemas3dRef)(void)= &XC::MultiBlockTopology::getEsquemas3d;

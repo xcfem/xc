@@ -217,7 +217,7 @@ void XC::SetEntities::fillDownwards(SetMeshComp &mc)
     for(lin_iterator i=lines.begin();i!=lines.end();i++)
       {
         //Points.
-        const size_t nv= (*i)->NumVertices();
+        const size_t nv= (*i)->getNumberOfVertices();
         for(register size_t j=1;j<=nv;j++)
           points.push_back(const_cast<Pnt *>((*i)->GetVertice(j)));
 
@@ -241,7 +241,7 @@ void XC::SetEntities::fillUpwards(const SetMeshComp &mc)
               << "; work in progress." << std::endl;
     for(pnt_iterator i=points.begin();i!=points.end();i++)
       {
-        std::set<const Edge *> ll= GetLineasTocan(**i);
+        std::set<const Edge *> ll= getLinesThatTouch(**i);
         for(std::set<const Edge *>::const_iterator j= ll.begin();j!=ll.end();j++)
           lines.push_back(const_cast<Edge *>(*j));
       }
@@ -309,11 +309,11 @@ XC::SetEntities XC::SetEntities::create_copy(const std::string &name,const Vecto
 	  {
 	    const std::string oldName= (*i)->getName();
 	    const std::string new_name= name+oldName;
-	    Edge *new_edge= preprocessor->getMultiBlockTopology().getLineas().createCopy(*i);
+	    Edge *new_edge= preprocessor->getMultiBlockTopology().getLines().createCopy(*i);
 	    new_edge->BorraPtrNodElem();
 	    retval.lines.push_back(new_edge);
 	    new_lines_names[oldName]= new_name;
-	    const size_t nv= new_edge->NumVertices();
+	    const size_t nv= new_edge->getNumberOfVertices();
 	    for(size_t i= 0;i<nv;i++)
 	      {
 		const Pnt *vertice_viejo= new_edge->GetVertice(i);
@@ -536,7 +536,7 @@ void XC::SetEntities::sel_points_lista(const ID &tags)
 //! @brief Select the lines identified by the tags in the parameter.
 //!
 //! @param tags: identifiers of the points to select.
-void XC::SetEntities::sel_lineas_lista(const ID &tags)
+void XC::SetEntities::sel_lines_list(const ID &tags)
   {
     const size_t sz= tags.Size();
     if(sz>0)
@@ -547,7 +547,7 @@ void XC::SetEntities::sel_lineas_lista(const ID &tags)
             MultiBlockTopology &mbt= getPreprocessor()->getMultiBlockTopology();
             for(size_t i= 0;i<sz;i++)
               {
-	        Edge *iedge= mbt.getLineas().busca(tags(i)); 
+	        Edge *iedge= mbt.getLines().busca(tags(i)); 
                 if(iedge)
                   lines.push_back(iedge);
                 else
@@ -618,7 +618,7 @@ int XC::SetEntities::recvData(const CommParameters &cp)
 //     tmp= points.receiveTags(9,10,getDbTagData(),cp);
 //     sel_points_lista(tmp);
 //     tmp= lines.receiveTags(11,12,getDbTagData(),cp);
-//     sel_lineas_lista(tmp);
+//     sel_lines_list(tmp);
 //     tmp= surfaces.receiveTags(13,14,getDbTagData(),cp);
 //     sel_surfaces_lst(tmp);
 //     tmp= bodies.receiveTags(15,16,getDbTagData(),cp);

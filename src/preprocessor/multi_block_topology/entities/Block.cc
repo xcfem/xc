@@ -94,15 +94,15 @@ bool XC::Block::checkNDivs(void) const
   }
 
 //! @brief Return the number of edges.
-size_t XC::Block::NumLineas(void) const
+size_t XC::Block::getNumberOfLines(void) const
   { return 12; }
 
 //! @brief Return the number of vertices.
-size_t XC::Block::NumVertices(void) const
+size_t XC::Block::getNumberOfVertices(void) const
   { return 8; }
 
 //! @brief Return the number of faces.
-size_t XC::Block::NumFaces(void) const
+size_t XC::Block::getNumberOfFaces(void) const
   { return 6; }
 
 //! @brief Return the face with the index passed as parameter.
@@ -205,7 +205,7 @@ size_t XC::Block::indice(Face *s) const
     else //Base is already set.
       {
         const Face *base= sups[0].Surface();
-        size_t primero= base->CommonEdge(*s); //Linea comun de "s" con la base.
+        size_t primero= base->CommonEdge(*s); //Line shared by "s" and the base.
         if(primero)
           retval= primero; //Is a side face.
         else

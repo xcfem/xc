@@ -402,7 +402,7 @@
 #include "preprocessor/multi_block_topology/ReferenceFrame.h"
 #include "preprocessor/multi_block_topology/CartesianReferenceFrame3d.h"
 #include "preprocessor/multi_block_topology/entities/Pnt.h"
-#include "preprocessor/multi_block_topology/entities/Linea.h"
+#include "preprocessor/multi_block_topology/entities/Line.h"
 #include "preprocessor/multi_block_topology/entities/DividedLine.h"
 #include "preprocessor/multi_block_topology/entities/CircularArc.h"
 #include "preprocessor/multi_block_topology/entities/QuadSurface.h"

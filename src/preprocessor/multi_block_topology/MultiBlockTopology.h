@@ -26,8 +26,8 @@
 //----------------------------------------------------------------------------
 //MultiBlockTopology.h
 
-#ifndef CAD_H
-#define CAD_H
+#ifndef MULTIBLOCKTOPOLOGY_H
+#define MULTIBLOCKTOPOLOGY_H
 
 #include "preprocessor/PreprocessorContainer.h"
 #include <map>
@@ -103,9 +103,9 @@ class MultiBlockTopology: public PreprocessorContainer
       { return puntos; }
     inline PntMap &getPuntos(void)
       { return puntos; }
-    inline const LineMap &getLineas(void) const
+    inline const LineMap &getLines(void) const
       { return edges; }
-    inline LineMap &getLineas(void)
+    inline LineMap &getLines(void)
       { return edges; }
     inline const SurfaceMap &getSurfaces(void) const
       { return faces; }

@@ -95,13 +95,13 @@ const XC::Edge *XC::QuadSurface::get_lado_homologo(const Edge *l) const
         const size_t ind0= indice-1;
         assert(ind0<4);
         if(ind0==0)
-          retval= lineas[2].getEdge();
+          retval= lines[2].getEdge();
         else if(ind0==2)
-          retval= lineas[0].getEdge();
+          retval= lines[0].getEdge();
         else if(ind0==1)
-          retval= lineas[3].getEdge();
+          retval= lines[3].getEdge();
         else if(ind0==3)
-          retval= lineas[1].getEdge();
+          retval= lines[1].getEdge();
       }
     else //No la encuentra.
       std::cerr << getClassName() << "::" << __FUNCTION__
@@ -115,14 +115,14 @@ const XC::Edge *XC::QuadSurface::get_lado_homologo(const Edge *l) const
 //! @brief Asigna el number of divisions en el eje i.
 void XC::QuadSurface::SetNDivI(const size_t &ndi)
   {
-    if(lineas.size()<4)
+    if(lines.size()<4)
       std::cerr << getClassName() << "::" << __FUNCTION__
 		<< "; not a quadrilateral surface, it has " 
-                << lineas.size() << " sides." << std::endl;
+                << lines.size() << " sides." << std::endl;
     else
       {
-        Edge *edge0= lineas[0].getEdge();
-        Edge *edge2= lineas[2].getEdge();
+        Edge *edge0= lines[0].getEdge();
+        Edge *edge2= lines[2].getEdge();
         const size_t ndc= calc_ndiv(edge0,edge2,ndi);
         if(ndc>0)
           {
@@ -136,13 +136,13 @@ void XC::QuadSurface::SetNDivI(const size_t &ndi)
 //! @brief Asigna el number of divisions en el eje j.
 void XC::QuadSurface::SetNDivJ(const size_t &ndj)
   {
-    if(lineas.size()<4)
+    if(lines.size()<4)
       std::cerr << "XC::QuadSurface::SetNDivJ, surface is not a quadrilateral, it has " 
-                << lineas.size() << " sides." << std::endl;
+                << lines.size() << " sides." << std::endl;
     else
       {
-        Edge *edge1= lineas[1].getEdge();
-        Edge *edge3= lineas[3].getEdge();
+        Edge *edge1= lines[1].getEdge();
+        Edge *edge3= lines[3].getEdge();
         const size_t ndc= calc_ndiv(edge1,edge3,ndj);
         if(ndc>0)
           {
@@ -159,8 +159,8 @@ void XC::QuadSurface::ConciliaNDivIJ(void)
   {
     if(checkNDivs())
       {
-	Face::SetNDivI(lineas[0].getEdge()->NDiv());
-	Face::SetNDivJ(lineas[1].getEdge()->NDiv());
+	Face::SetNDivI(lines[0].getEdge()->NDiv());
+	Face::SetNDivJ(lines[1].getEdge()->NDiv());
       }
   }
 
@@ -168,14 +168,14 @@ void XC::QuadSurface::ConciliaNDivIJ(void)
 //! compatible.
 bool XC::QuadSurface::checkNDivs(const size_t &i,const size_t &j) const
   {
-    const size_t ndivA= lineas[i].getEdge()->NDiv();
-    const size_t ndivB= lineas[j].getEdge()->NDiv();
+    const size_t ndivA= lines[i].getEdge()->NDiv();
+    const size_t ndivB= lines[j].getEdge()->NDiv();
     if(ndivA!=ndivB)
       {
         std::cerr << getClassName() << "::" << __FUNCTION__
 		  << "; lines: "
-                  << lineas[i].getEdge()->getName() << " and "
-                  << lineas[j].getEdge()->getName() 
+                  << lines[i].getEdge()->getName() << " and "
+                  << lines[j].getEdge()->getName() 
                   << " of surface: " << getName()
                   << " have different number of divisions ("
                   << ndivA << " y " << ndivB << ')' << std::endl;
@@ -195,8 +195,8 @@ bool XC::QuadSurface::checkNDivs(void) const
 //! size being passed as parameter.
 void XC::QuadSurface::SetElemSizeI(const double &sz)
   {
-    const double l1= lineas[0].getLongitud();
-    const double l2= lineas[2].getLongitud();
+    const double l1= lines[0].getLongitud();
+    const double l2= lines[2].getLongitud();
     const size_t n= ceil(std::max(l1,l2)/sz);
     SetNDivI(n);
   }
@@ -206,8 +206,8 @@ void XC::QuadSurface::SetElemSizeI(const double &sz)
 //! size being passed as parameter.
 void XC::QuadSurface::SetElemSizeJ(const double &sz)
   {
-    const double l1= lineas[1].getLongitud();
-    const double l2= lineas[3].getLongitud();
+    const double l1= lines[1].getLongitud();
+    const double l2= lines[3].getLongitud();
     const size_t n= ceil(std::max(l1,l2)/sz);
     SetNDivJ(n);
   }
@@ -224,25 +224,25 @@ void XC::QuadSurface::SetElemSizeIJ(const double &szI,const double &szJ)
 
 //! @brief Creates and inserts the lines from the points identified
 //! by the indexes being passed as parameter.
-void XC::QuadSurface::setPuntos(const ID &indices_ptos)
+void XC::QuadSurface::setPuntos(const ID &point_indexes)
   {
-    const size_t np= indices_ptos.Size(); //Number of indexes.
+    const size_t np= point_indexes.Size(); //Number of indexes.
     if(np!=4)
       std::cerr << getClassName() << __FUNCTION__
 	        << "; surface definition needs "
                 << 4 << " points, we got: " << np << ".\n";
     else
       {
-        if(NumEdges()>0)
+        if(getNumberOfEdges()>0)
           std::cerr << getClassName() << __FUNCTION__
 	            << "; warning redefinition of surface: '"
                     << getName() << "'.\n";
 
-	Face::addPoints(indices_ptos);
-        cierra();
+	Face::addPoints(point_indexes);
+        close();
       }
     int tagV1= GetVertice(1)->GetTag();
-    if(tagV1!=indices_ptos(0))
+    if(tagV1!=point_indexes(0))
       std::cerr << getClassName() << "::" << __FUNCTION__
 		<< "; surface: " << GetTag()
                 << "is inverted." << std::endl;
@@ -269,34 +269,34 @@ void XC::QuadSurface::setPuntos(const MatrizPtrPnt &pntPtrs)
       {
         if(nc==2)
           {
-            NuevaLinea(pntPtrs(1,1),pntPtrs(1,2));
-            NuevaLinea(pntPtrs(1,2),pntPtrs(2,2));
-            NuevaLinea(pntPtrs(2,2),pntPtrs(2,1));
-            NuevaLinea(pntPtrs(2,1),pntPtrs(1,1));
+            newLine(pntPtrs(1,1),pntPtrs(1,2));
+            newLine(pntPtrs(1,2),pntPtrs(2,2));
+            newLine(pntPtrs(2,2),pntPtrs(2,1));
+            newLine(pntPtrs(2,1),pntPtrs(1,1));
           }
         else //nc>= 3
           {
-            NuevaLinea(pntPtrs(1,1),pntPtrs(1,2),pntPtrs(1,3));
-            NuevaLinea(pntPtrs(1,3),pntPtrs(2,3));
-            NuevaLinea(pntPtrs(2,3),pntPtrs(2,2),pntPtrs(2,1));
-            NuevaLinea(pntPtrs(2,1),pntPtrs(1,1));
+            newLine(pntPtrs(1,1),pntPtrs(1,2),pntPtrs(1,3));
+            newLine(pntPtrs(1,3),pntPtrs(2,3));
+            newLine(pntPtrs(2,3),pntPtrs(2,2),pntPtrs(2,1));
+            newLine(pntPtrs(2,1),pntPtrs(1,1));
           }
       }
     else //nf>=3
       {
         if(nc==2)
           {
-            NuevaLinea(pntPtrs(1,1),pntPtrs(1,2));
-            NuevaLinea(pntPtrs(1,2),pntPtrs(2,2),pntPtrs(3,2));
-            NuevaLinea(pntPtrs(3,2),pntPtrs(3,1));
-            NuevaLinea(pntPtrs(3,1),pntPtrs(2,1),pntPtrs(1,1));
+            newLine(pntPtrs(1,1),pntPtrs(1,2));
+            newLine(pntPtrs(1,2),pntPtrs(2,2),pntPtrs(3,2));
+            newLine(pntPtrs(3,2),pntPtrs(3,1));
+            newLine(pntPtrs(3,1),pntPtrs(2,1),pntPtrs(1,1));
           }
         else //nc>= 3
           {
-            NuevaLinea(pntPtrs(1,1),pntPtrs(1,2),pntPtrs(1,3));
-            NuevaLinea(pntPtrs(1,3),pntPtrs(2,3),pntPtrs(3,3));
-            NuevaLinea(pntPtrs(3,3),pntPtrs(3,2),pntPtrs(3,1));
-            NuevaLinea(pntPtrs(3,1),pntPtrs(2,1),pntPtrs(1,1));
+            newLine(pntPtrs(1,1),pntPtrs(1,2),pntPtrs(1,3));
+            newLine(pntPtrs(1,3),pntPtrs(2,3),pntPtrs(3,3));
+            newLine(pntPtrs(3,3),pntPtrs(3,2),pntPtrs(3,1));
+            newLine(pntPtrs(3,1),pntPtrs(2,1),pntPtrs(1,1));
           }
       }
   }
@@ -304,21 +304,21 @@ void XC::QuadSurface::setPuntos(const MatrizPtrPnt &pntPtrs)
 //! @brief Creates and inserts the lines from the points being passed as parameter.
 //! If some of the indices is negative it means that this position is not needed
 //! to define the surface.
-void XC::QuadSurface::setPuntos(const m_int &indices_ptos)
+void XC::QuadSurface::setPuntos(const m_int &point_indexes)
   {
-    const size_t nf= indices_ptos.getNumFilas(); //No. de filas de puntos.
-    const size_t nc= indices_ptos.getNumCols(); //No. de columnas de puntos.
+    const size_t nf= point_indexes.getNumFilas(); //No. de filas de puntos.
+    const size_t nc= point_indexes.getNumCols(); //No. de columnas de puntos.
     if(nf<2)
       {
         std::cerr << "Matrix of indexes: '"
-                  << indices_ptos 
+                  << point_indexes 
                   << "' must have at least two rows." << std::endl;
         return;
       }
     if(nc<2)
       {
         std::cerr << "Matrix of indexes: '"
-                  << indices_ptos 
+                  << point_indexes 
                   << "' must have at least two columns." << std::endl;
         return;
       }
@@ -326,7 +326,7 @@ void XC::QuadSurface::setPuntos(const m_int &indices_ptos)
     for(size_t i= 1;i<=nf;i++)
       for(size_t j= 1;j<=nc;j++)
         {
-          const int iPunto= indices_ptos(i,j);
+          const int iPunto= point_indexes(i,j);
           if(iPunto>=0)
             {
               Pnt *p= BuscaPnt(iPunto);
@@ -362,7 +362,7 @@ void XC::QuadSurface::defGridPoints(const boost::python::list &l)
 MatrizPos3d XC::QuadSurface::get_posiciones(void) const
   {
     MatrizPos3d retval;
-    const int numEdges= NumEdges();
+    const int numEdges= getNumberOfEdges();
     if(numEdges!=4)
       {
         std::cerr << getClassName() << "::" << __FUNCTION__
@@ -371,10 +371,10 @@ MatrizPos3d XC::QuadSurface::get_posiciones(void) const
         return retval;
       }
 
-    MatrizPos3d ptos_l1= lineas[0].getNodePosDir();
-    MatrizPos3d ptos_l2= lineas[1].getNodePosDir();
-    MatrizPos3d ptos_l3= lineas[2].getNodePosInv(); //Ordenados al revés.
-    MatrizPos3d ptos_l4= lineas[3].getNodePosInv(); //Ordenados al revés.
+    MatrizPos3d ptos_l1= lines[0].getNodePosDir();
+    MatrizPos3d ptos_l2= lines[1].getNodePosDir();
+    MatrizPos3d ptos_l3= lines[2].getNodePosInv(); //Ordenados al revés.
+    MatrizPos3d ptos_l4= lines[3].getNodePosInv(); //Ordenados al revés.
     retval= MatrizPos3d(ptos_l1,ptos_l2,ptos_l3,ptos_l4);
     retval.Trn();
     return retval;
@@ -420,7 +420,7 @@ void XC::QuadSurface::create_nodes(void)
     checkNDivs();
     if(ttzNodes.Null())
       {
-        create_nodes_lineas();
+        create_line_nodes();
 
         const size_t filas= NDivJ()+1;
         const size_t cols= NDivI()+1;
@@ -430,22 +430,22 @@ void XC::QuadSurface::create_nodes(void)
         //j=1
         for(size_t k=1;k<=cols;k++)
           {
-            Lado &ll= lineas[0];
+            Lado &ll= lines[0];
             Node *nn= ll.getNode(k);
             ttzNodes(1,1,k)= nn;
           }
 
         //j=filas.
         for(size_t k=1;k<=cols;k++) //En sentido inverso.
-          ttzNodes(1,filas,k)= lineas[2].getNodeInv(k);
+          ttzNodes(1,filas,k)= lines[2].getNodeInv(k);
 
 
         //k=1
         for(size_t j=2;j<filas;j++) //En sentido inverso.
-          ttzNodes(1,j,1)= lineas[3].getNodeInv(j);
+          ttzNodes(1,j,1)= lines[3].getNodeInv(j);
         //k=cols.
         for(size_t j=2;j<filas;j++)
-          ttzNodes(1,j,cols)= lineas[1].getNode(j);
+          ttzNodes(1,j,cols)= lines[1].getNode(j);
 
 
         MatrizPos3d pos_nodes= get_posiciones(); //Posiciones of the nodes.

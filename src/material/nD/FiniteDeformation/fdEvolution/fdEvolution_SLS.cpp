@@ -93,7 +93,7 @@ std::ostream& XC::operator<< (std::ostream& os, const XC::fdEvolution_SLS & fdes
 {
    os.precision(5);
    os.width(10);
-   os << "Linear & Saturate Scalar XC::Linear Evolution Law's Modulus: " << "\n";
+   os << "Linear & Saturate Scalar Linear Evolution Law's Modulus: " << "\n";
    os << "H_linear = " << fdesl.H_linear << "; " << "\n";
    os << "H_initial = " << fdesl.q_saturated << "; " << "\n";
    os << "Delta= " << fdesl.delta << "; " << "\n";

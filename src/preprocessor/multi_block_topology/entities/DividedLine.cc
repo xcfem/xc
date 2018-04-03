@@ -36,7 +36,7 @@
 
 //! @brief Constructor.
 XC::DividedLine::DividedLine(Preprocessor *m,const size_t &nd)
-  : Linea(m,nd), longs(nd,1.0){}
+  : Line(m,nd), longs(nd,1.0){}
 
 //! @brief Virtual constructor.
 XC::SetEstruct *XC::DividedLine::getCopy(void) const

@@ -26,8 +26,8 @@
 //----------------------------------------------------------------------------
 //LineMap.h
 
-#ifndef MAPLineas_H
-#define MAPLineas_H
+#ifndef LINEMAP_H
+#define LINEMAP_H
 
 #include "EntityMap.h"
 #include "Edge.h"
@@ -38,7 +38,7 @@ class Plano3d;
 namespace XC {
 
 class Edge;
-class Linea;
+class Line;
 class DividedLine;
 class CmbEdge;
 class CircularArc;
@@ -63,14 +63,14 @@ class LineMap: public EntityMap<Edge>
     Plano3d getPlano(const Indice &i,const Indice &j,const Indice &k) const;
 
     template <class E>
-    Edge *Nueva(void);
+    Edge *New(void);
     Edge *createLine(Pnt *,Pnt *);
     Edge *createDividedLine(Pnt *,Pnt *);
     Edge *createArc(Pnt *,Pnt *,Pnt *);
     Edge *createLineSequence(void);
     Edge *createCopy(const Edge *l);
  
-    Linea *newLine(const size_t &, const size_t &);
+    Line *newLine(const size_t &, const size_t &);
     DividedLine *newDividedLine(const size_t &, const size_t &);
     CircularArc *newCircleArc(const size_t &, const size_t &, const size_t &);
     CmbEdge *newLineSequence(void);
@@ -92,7 +92,7 @@ Edge *XC::LineMap::Crea(void)
 
 //! @brief Creates a new Edge.
 template <class E>
-Edge *LineMap::Nueva(void)
+Edge *LineMap::New(void)
   {
     Edge *retval= busca(getTag());
     if(!retval) //El edge is new.

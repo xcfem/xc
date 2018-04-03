@@ -265,7 +265,7 @@ XC::BJtensor XC::EvolutionLaw_NL_EijMD::h_t( EPState *EPS, PotentialSurface *PS)
 
 
 //================================================================================
-//  Print vars defined in XC::Linear Evolution Law
+//  Print vars defined in Linear Evolution Law
 //================================================================================
 void XC::EvolutionLaw_NL_EijMD::print()
 {

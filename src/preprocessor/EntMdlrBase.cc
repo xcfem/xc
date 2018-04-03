@@ -129,7 +129,7 @@ XC::Edge *XC::EntMdlrBase::BuscaEdge(const size_t &id_edge)
     if(check_preprocessor())
       {
         MultiBlockTopology &mbt= getPreprocessor()->getMultiBlockTopology();
-        retval= mbt.getLineas().busca(id_edge);
+        retval= mbt.getLines().busca(id_edge);
       }
     return retval;
   }
@@ -142,7 +142,7 @@ const XC::Edge *XC::EntMdlrBase::BuscaEdge(const size_t &id_edge) const
     if(check_preprocessor())
       {
         const MultiBlockTopology &mbt= getPreprocessor()->getMultiBlockTopology();
-        retval= mbt.getLineas().busca(id_edge);
+        retval= mbt.getLines().busca(id_edge);
       }
     return retval;
   }

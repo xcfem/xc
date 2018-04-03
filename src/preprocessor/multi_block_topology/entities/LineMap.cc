@@ -33,7 +33,7 @@
 
 #include "preprocessor/multi_block_topology/entities/Edge.h"
 #include "preprocessor/multi_block_topology/entities/Pnt.h"
-#include "preprocessor/multi_block_topology/entities/Linea.h"
+#include "preprocessor/multi_block_topology/entities/Line.h"
 #include "preprocessor/multi_block_topology/entities/DividedLine.h"
 #include "preprocessor/multi_block_topology/entities/CmbEdge.h"
 #include "preprocessor/multi_block_topology/entities/CircularArc.h"
@@ -46,14 +46,14 @@ XC::LineMap::LineMap(MultiBlockTopology *mbt)
   : EntityMap<Edge>(mbt) {}
 
 //! @brief Line segment.
-XC::Linea *XC::LineMap::newLine(const size_t &id_p1, const size_t &id_p2)
+XC::Line *XC::LineMap::newLine(const size_t &id_p1, const size_t &id_p2)
   {
     Preprocessor *preprocessor= getPreprocessor();
     assert(preprocessor);
     MultiBlockTopology &mbt= preprocessor->getMultiBlockTopology();
     Pnt *p1= mbt.getPuntos().busca(id_p1);
     Pnt *p2= mbt.getPuntos().busca(id_p2);
-    Linea *retval= dynamic_cast<Linea *>(createLine(p1,p2));
+    Line *retval= dynamic_cast<Line *>(createLine(p1,p2));
     assert(retval);
     return retval;
   }
@@ -94,7 +94,7 @@ XC::CmbEdge *XC::LineMap::newLineSequence(void)
     return retval;
   }
 
-//! @brief Inserta la nueva linea en the set total and the opened sets.
+//! @brief Inserta la nueva line en the set total and the opened sets.
 void XC::LineMap::UpdateSets(Edge *nueva_linea) const
   {
     MultiBlockTopology *mbt= const_cast<MultiBlockTopology *>(dynamic_cast<const MultiBlockTopology *>(Owner()));
@@ -129,7 +129,7 @@ XC::Edge *XC::LineMap::createLine(Pnt *pA,Pnt *pB)
         if(!tmp)
           {
             assert(getPreprocessor());
-            tmp= Nueva<Linea>();
+            tmp= New<Line>();
             assert(tmp);
             tmp->SetVertice(1,pA);
             tmp->SetVertice(2,pB);
@@ -166,7 +166,7 @@ XC::Edge *XC::LineMap::createDividedLine(Pnt *pA,Pnt *pB)
         if(!tmp)
           {
             assert(getPreprocessor());
-            tmp= Nueva<DividedLine>();
+            tmp= New<DividedLine>();
             assert(tmp);
             tmp->SetVertice(1,pA);
             tmp->SetVertice(2,pB);
@@ -195,7 +195,7 @@ XC::Edge *XC::LineMap::createArc(Pnt *pA,Pnt *pB,Pnt *pC)
         if(!tmp)
           {
             assert(getPreprocessor());
-            tmp= Nueva<CircularArc>();
+            tmp= New<CircularArc>();
             assert(tmp);
             tmp->SetVertice(1,pA);
             tmp->SetVertice(2,pC);
@@ -218,7 +218,7 @@ XC::Edge *XC::LineMap::createArc(Pnt *pA,Pnt *pB,Pnt *pC)
 //! passed as parameters and inserts it in the edge set.
 XC::Edge *XC::LineMap::createLineSequence(void)
   {
-    Edge *tmp= Nueva<CmbEdge>();
+    Edge *tmp= New<CmbEdge>();
     assert(tmp);
     return tmp;
   }

@@ -99,7 +99,7 @@ int XC::EvolutionLaw_T::updateEeDm( EPState *EPS, double st_vol, double dLamda)
 
 
 //================================================================================
-//  Print vars defined in XC::Linear Evolution Law_T
+//  Print vars defined in Linear Evolution Law_T
 //================================================================================
 void XC::EvolutionLaw_T::print()
   { std::cerr << (*this); }

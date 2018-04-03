@@ -1184,7 +1184,7 @@ XC::IncrementalIntegrator *XC::FEM_ObjectBroker::getNewIncrementalIntegrator(int
 #endif
       default:
         std::cerr << "FEM_ObjectBroker::getNewIncrementalIntegrator - ";
-        std::cerr << " - no XC::IncrementalIntegrator type exists for class tag ";
+        std::cerr << " - no IncrementalIntegrator type exists for class tag ";
         std::cerr << classTag << std::endl;
         return nullptr;
       }

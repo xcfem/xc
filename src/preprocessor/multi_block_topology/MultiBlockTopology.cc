@@ -29,7 +29,7 @@
 #include "MultiBlockTopology.h"
 
 #include "preprocessor/multi_block_topology/entities/Pnt.h"
-#include "preprocessor/multi_block_topology/entities/Linea.h"
+#include "preprocessor/multi_block_topology/entities/Line.h"
 #include "preprocessor/multi_block_topology/entities/DividedLine.h"
 #include "preprocessor/multi_block_topology/entities/CmbEdge.h"
 #include "preprocessor/multi_block_topology/entities/CircularArc.h"

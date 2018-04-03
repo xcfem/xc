@@ -144,7 +144,7 @@ double XC::EvolutionLaw_L_Eeq::h_s( EPState *EPS, PotentialSurface *PS){
 
 
 //================================================================================
-//  Print vars defined in XC::Linear Evolution Law
+//  Print vars defined in Linear Evolution Law
 //================================================================================
 void XC::EvolutionLaw_L_Eeq::print()
   { std::cerr << (*this); }

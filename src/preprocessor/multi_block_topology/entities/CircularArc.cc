@@ -72,12 +72,12 @@ void XC::CircularArc::SetVertice(const size_t &i,Pnt *p)
       LineBase::SetVertice(i,p);
     else
       {
-        if(p3) p3->borra_linea(this);
+        if(p3) p3->erase_line(this);
         p3= p;
         if(p3)
           {
             p3->setGenMesh(false); //Intermediate point of the line.
-            p3->inserta_linea(this);
+            p3->insert_line(this);
           }
       }
   }
@@ -207,7 +207,7 @@ double XC::CircularArc::getRadio(void) const
 void XC::CircularArc::actualiza_topologia(void)
   {
     LineBase::actualiza_topologia();
-    if(P3()) P3()->inserta_linea(this);
+    if(P3()) P3()->insert_line(this);
   }
 
 //! @brief Returns object boundary.

@@ -24,10 +24,10 @@
 // along with this program.
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
-//Linea.h
+//Line.h
 
-#ifndef LINEA_H
-#define LINEA_H
+#ifndef LINE_H
+#define LINE_H
 
 #include "LineBase.h"
 
@@ -38,15 +38,15 @@ namespace XC {
 //! \ingroup MultiBlockTopologyEnt
 //!
 //! @brief Segmento de recta entre dos puntos.
-class Linea: public LineBase
+class Line: public LineBase
   {
   protected:
 
     MatrizPos3d get_posiciones(void) const;
     Edge *split_at(Pnt *,const double &,const double &);
   public:
-    Linea(Preprocessor *m,const size_t &ndiv= 4);
-    Linea(const std::string &nombre= "",Preprocessor *m= nullptr,const size_t &ndiv= 4);
+    Line(Preprocessor *m,const size_t &ndiv= 4);
+    Line(const std::string &nombre= "",Preprocessor *m= nullptr,const size_t &ndiv= 4);
     virtual SetEstruct *getCopy(void) const;
 
     double getLongitud(void) const;
@@ -58,7 +58,7 @@ class Linea: public LineBase
     double getLambda(const Pos3d &) const;
     
     //! @brief Returns the number of vertices.
-    inline virtual size_t NumVertices(void) const
+    inline virtual size_t getNumberOfVertices(void) const
       { return 2; }
     virtual BND3d Bnd(void) const;
     double DistanciaA2(const Pos3d &pt) const;

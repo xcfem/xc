@@ -49,7 +49,7 @@ class Edge: public EntMdlr
     friend class Face;
   private:
     size_t ndiv; //!< number of divisions
-    std::set<const Face *> sups_linea; //!< Surface neighbors (topology).
+    std::set<const Face *> surfaces_line; //!< Surface neighbors (topology).
   protected:
 
     void inserta_surf(Face *s);
@@ -70,7 +70,7 @@ class Edge: public EntMdlr
     bool Out(const GeomObj3d &, const double &tol= 0.0) const;
     bool ExtremosEn(const Pnt *,const Pnt *) const;
     //! @brief Return the number of vertices.
-    virtual size_t NumVertices(void) const= 0;
+    virtual size_t getNumberOfVertices(void) const= 0;
 
     virtual double getLongitud(void) const= 0;
     virtual Pos3d getCentroid(void) const= 0;
@@ -89,7 +89,7 @@ class Edge: public EntMdlr
 
     //! @brief Return the surfaces that touch the line.
     const std::set<const Face *> &SupsTocan(void) const
-      { return sups_linea; }
+      { return surfaces_line; }
     //! @brief Return the surface names that touch the line.
     const std::string &NombresSupsTocan(void) const;
     bool Toca(const Face &s) const;
@@ -128,7 +128,7 @@ class Edge: public EntMdlr
 
   };
 
-std::set<const Edge *> GetLineasTocan(const Pnt &p);
+std::set<const Edge *> getLinesThatTouch(const Pnt &p);
 size_t calcula_ndiv_lados(const std::set<const XC::Edge *> &);
 
 } //end of XC namespace

@@ -103,7 +103,7 @@ class Set: public SetMeshComp
     //! @brief Assigns the edge set.
     void setLines(const SetEntities::lst_line_pointers &lns)
       { entities.setLines(lns); }
-    void sel_lineas_lista(const ID &);
+    void sel_lines_list(const ID &);
     bool In(const Edge *) const;
     Set pickLinesInside(const std::string &, const GeomObj3d &, const double &tol= 0.0);
 

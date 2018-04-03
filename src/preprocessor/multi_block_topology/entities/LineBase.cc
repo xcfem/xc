@@ -79,12 +79,12 @@ void XC::LineBase::SetVertice(const size_t &i,Pnt *p)
   {
     if((i==1) && (p1!=p))
       {
-        if(p1) p1->borra_linea(this);
+        if(p1) p1->erase_line(this);
         p1= p;
       }
     else if(p2!=p)
       {
-        if(p2) p2->borra_linea(this);
+        if(p2) p2->erase_line(this);
         p2= p;
       }
     actualiza_topologia();

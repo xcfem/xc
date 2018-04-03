@@ -93,7 +93,7 @@ std::ostream& XC::operator<< (std::ostream& os, const XC::fdEvolution_TL & fdetl
 {
    os.precision(5);
    os.width(10);
-   os << "XC::Tensor XC::Linear Evolution Law's Modulus: " << "\n";
+   os << "XC::Tensor Linear Evolution Law's Modulus: " << "\n";
    
    return os;
 }

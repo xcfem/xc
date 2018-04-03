@@ -89,7 +89,7 @@ const XC::Spot *XC::Eje::P2(void) const
   }
 
 //! @brief Returns the set of lines that touch the point being passed as parameter.
-std::set<const XC::Eje *> XC::GetLineasTocan(const XC::Spot &p)
+std::set<const XC::Eje *> XC::getLinesThatTouch(const XC::Spot &p)
   {
     std::set<const Eje *> retval;
     const std::set<const Eje *> &tocan= p.EjesTocan();

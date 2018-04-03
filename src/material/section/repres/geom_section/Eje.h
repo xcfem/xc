@@ -60,7 +60,7 @@ class Eje: public EntGeomSection
     virtual Spot *P2(void);
     virtual const Spot *P2(void) const;
     //! @brief Returns the number of vertices.
-    virtual size_t NumVertices(void) const= 0;
+    virtual size_t getNumberOfVertices(void) const= 0;
 
     virtual const Spot *GetVertice(const size_t &i) const= 0;
     virtual Spot *GetVertice(const size_t &i)= 0;
@@ -77,7 +77,7 @@ class Eje: public EntGeomSection
 
   };
 
-std::set<const Eje *> GetLineasTocan(const Spot &p);
+std::set<const Eje *> getLinesThatTouch(const Spot &p);
 
 } //end of XC namespace
 #endif

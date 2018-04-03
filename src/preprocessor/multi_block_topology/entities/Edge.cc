@@ -56,13 +56,13 @@ XC::Edge::Edge(const std::string &nombre,Preprocessor *m,const size_t &nd)
 //! @brief Insert a surface in contact with the line (neighbour).
 //! @param s: surface to insert.
 void XC::Edge::inserta_surf(Face *s)
-  { sups_linea.insert(s); }
+  { surfaces_line.insert(s); }
 
 //! @brief Update topology.
 void XC::Edge::actualiza_topologia(void)
   {
-    if(P1()) P1()->inserta_linea(this);
-    if(P2()) P2()->inserta_linea(this);
+    if(P1()) P1()->insert_line(this);
+    if(P2()) P2()->insert_line(this);
   }
 
 //! @brief Return a pointer to the edge's start point.
@@ -173,7 +173,7 @@ void XC::Edge::SetNDiv(const size_t &nd)
       {
         if(ttzNodes.empty()) //Not meshed.
           {
-            const size_t ns= sups_linea.size();
+            const size_t ns= surfaces_line.size();
             if(ns>1)
               {
 // 	        std::clog << getClassName() << "::" << __FUNCTION__
@@ -366,12 +366,12 @@ const std::string &XC::Edge::NombresSupsTocan(void) const
   {
     static std::string retval;
     retval= "";
-    if(!sups_linea.empty())
+    if(!surfaces_line.empty())
       {
-        std::set<const Face *>::const_iterator i= sups_linea.begin();
+        std::set<const Face *>::const_iterator i= surfaces_line.begin();
         retval+= (*i)->getName();
         i++;
-        for(;i!=sups_linea.end();i++)
+        for(;i!=surfaces_line.end();i++)
           retval+= "," + (*i)->getName();
       }
     return retval;
@@ -383,9 +383,9 @@ std::set<const XC::Edge *> XC::Edge::GetLadosHomologos(const std::set<const XC::
     std::set<const Edge *> retval;
     std::set<const Edge *> new_adyacentes;
 
-    if(!sups_linea.empty())
+    if(!surfaces_line.empty())
       {
-        for(std::set<const Face *>::const_iterator i= sups_linea.begin();i!=sups_linea.end();i++)
+        for(std::set<const Face *>::const_iterator i= surfaces_line.begin();i!=surfaces_line.end();i++)
           {
             const Edge *h= (*i)->get_lado_homologo(this);
             if(h!=this)
@@ -424,14 +424,14 @@ size_t XC::calcula_ndiv_lados(const std::set<const XC::Edge *> &lados)
 //! @brief Return true if the line touches the surface (neighbor).
 bool XC::Edge::Toca(const Face &s) const
   {
-    std::set<const Face *>::const_iterator i= sups_linea.find(&s);
-    return (i!=sups_linea.end());
+    std::set<const Face *>::const_iterator i= surfaces_line.find(&s);
+    return (i!=surfaces_line.end());
   }
 
 //! @brief Return true if the line touches the body.
 bool XC::Edge::Toca(const Body &b) const
   {
-    for(std::set<const Face *>::const_iterator i= sups_linea.begin(); i!=sups_linea.end();i++)
+    for(std::set<const Face *>::const_iterator i= surfaces_line.begin(); i!=surfaces_line.end();i++)
       { if((*i)->Toca(b)) return true; }
     return false;
   }
@@ -441,7 +441,7 @@ bool XC::Edge::Extremo(const Pnt &p) const
   { return ((&p == P1()) || (&p == P2()));  }
 
 //! @brief Return the list of edges that have this point as starting or ending point.
-std::set<const XC::Edge *> XC::GetLineasTocan(const Pnt &p)
+std::set<const XC::Edge *> XC::getLinesThatTouch(const Pnt &p)
   { return p.EdgesTocan(); }
 
 //! @brief Return a matrix of positions along the line.
@@ -588,7 +588,7 @@ void XC::Edge::add_to_sets(std::set<SetBase *> &sets)
 //! Return indices of the vertices.
 std::vector<int> XC::Edge::getIndicesVertices(void) const
   {
-    const size_t nv= NumVertices();
+    const size_t nv= getNumberOfVertices();
     std::vector<int> retval(nv);
     if(nv>=1)
       {

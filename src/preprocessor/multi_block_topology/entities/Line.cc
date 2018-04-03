@@ -24,9 +24,9 @@
 // along with this program.
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
-//Linea.cc
+//Line.cc
 
-#include "Linea.h"
+#include "Line.h"
 #include "preprocessor/Preprocessor.h"
 #include "Pnt.h"
 #include "xc_utils/src/geom/d3/BND3d.h"
@@ -40,19 +40,19 @@
 #include "vtkCellType.h"
 
 //! @brief Constructor.
-XC::Linea::Linea(Preprocessor *m,const size_t &nd)
+XC::Line::Line(Preprocessor *m,const size_t &nd)
   : LineBase(m,nd) {}
 
 //! @brief Constructor.
-XC::Linea::Linea(const std::string &nombre,Preprocessor *m,const size_t &nd)
+XC::Line::Line(const std::string &nombre,Preprocessor *m,const size_t &nd)
   : LineBase(nombre,m,nd) {}
 
 //! @brief Virtual constructor.
-XC::SetEstruct *XC::Linea::getCopy(void) const
-  { return new Linea(*this); }
+XC::SetEstruct *XC::Line::getCopy(void) const
+  { return new Line(*this); }
 
 //! @brief Return the line length.
-double XC::Linea::getLongitud(void) const
+double XC::Line::getLongitud(void) const
   {
     double retval= 0;
     if(check_points())
@@ -61,7 +61,7 @@ double XC::Linea::getLongitud(void) const
   }
 
 //! @brief Return the centroid of the line.
-Pos3d XC::Linea::getCentroid(void) const
+Pos3d XC::Line::getCentroid(void) const
   {
     Pos3d retval(0.0,0.0,0.0);
     if(check_points())
@@ -70,7 +70,7 @@ Pos3d XC::Linea::getCentroid(void) const
   }
 
 //! @brief Returns the parameter of the point in the line (distance to the line's first point measured over the line)
-double XC::Linea::getLambda(const Pos3d &p) const
+double XC::Line::getLambda(const Pos3d &p) const
   {
     double retval= 0;
     if(check_points())
@@ -79,7 +79,7 @@ double XC::Linea::getLambda(const Pos3d &p) const
   }
 
 //! @brief Returns the segment than links the line ends.
-Segmento3d XC::Linea::getLineSegment(void) const
+Segmento3d XC::Line::getLineSegment(void) const
   {
     Segmento3d retval;
     if(check_points())
@@ -89,24 +89,24 @@ Segmento3d XC::Linea::getLineSegment(void) const
 
 //! @brief Returns the squared distance to the
 //! position being passed as parameter.
-double XC::Linea::DistanciaA2(const Pos3d &pt) const
+double XC::Line::DistanciaA2(const Pos3d &pt) const
   { return getLineSegment().dist2(pt); }
 
 //! @brief Divides the line by the point being passed as parameter.
-XC::Edge *XC::Linea::split_at(Pnt *p,const double &lambda,const double &longitud)
+XC::Edge *XC::Line::split_at(Pnt *p,const double &lambda,const double &longitud)
   {
     MultiBlockTopology &mbt= getPreprocessor()->getMultiBlockTopology();
     Edge *tmp= nullptr;
     if(lambda<0)
-      tmp= mbt.getLineas().createLine(p,P1());
+      tmp= mbt.getLines().createLine(p,P1());
     else if(lambda>longitud)
-      tmp= mbt.getLineas().createLine(P2(),p);
+      tmp= mbt.getLines().createLine(P2(),p);
     else
       {
-        tmp= mbt.getLineas().createLine(p,p2);
+        tmp= mbt.getLines().createLine(p,p2);
         SetVertices(p1,p);
       }
-    Linea *retval= dynamic_cast<Linea *>(tmp);
+    Line *retval= dynamic_cast<Line *>(tmp);
     assert(retval);
     //Settint the number of divisions so
     //the element size remains almost constant.
@@ -120,7 +120,7 @@ XC::Edge *XC::Linea::split_at(Pnt *p,const double &lambda,const double &longitud
   }
 
 //! @brief Divides the line by the point being passed as parameter.
-XC::Edge *XC::Linea::splitAtPoint(Pnt *p)
+XC::Edge *XC::Line::splitAtPoint(Pnt *p)
   {
     Edge *retval= nullptr;
     if(p)
@@ -141,7 +141,7 @@ XC::Edge *XC::Linea::splitAtPoint(Pnt *p)
   }
 
 //! @brief Divides the line by the point obtained by: p1+lambda*VDir().
-XC::Edge *XC::Linea::splitAtLambda(const double &lambda)
+XC::Edge *XC::Line::splitAtLambda(const double &lambda)
   {
     Edge *retval= nullptr;
     const Segmento3d s= getLineSegment();
@@ -153,7 +153,7 @@ XC::Edge *XC::Linea::splitAtLambda(const double &lambda)
   }
 
 //! @brief Divides the line by the point obtained by: p1+lambda*VDir().
-XC::Edge *XC::Linea::splitAtCooNatural(const double &chi)
+XC::Edge *XC::Line::splitAtCooNatural(const double &chi)
   {
     Edge *retval= nullptr;
     const Segmento3d s= getLineSegment();
@@ -164,7 +164,7 @@ XC::Edge *XC::Linea::splitAtCooNatural(const double &chi)
   }
 
 //! @brief Returns the line boundary.
-BND3d XC::Linea::Bnd(void) const
+BND3d XC::Line::Bnd(void) const
   {
     BND3d retval;
     if(p1) retval+= p1->GetPos();
@@ -173,7 +173,7 @@ BND3d XC::Linea::Bnd(void) const
   }
 
 //! @brief Returns ndiv+1 positions equally spaced along the line.
-MatrizPos3d XC::Linea::get_posiciones(void) const
+MatrizPos3d XC::Line::get_posiciones(void) const
   {
     MatrizPos3d retval;
     if(check_points())
@@ -182,7 +182,7 @@ MatrizPos3d XC::Linea::get_posiciones(void) const
   }
 
 //! @brief Returns the vector that goes for back end to front end.
-const XC::Vector &XC::Linea::getVector(void) const
+const XC::Vector &XC::Line::getVector(void) const
   {
     static XC::Vector retval(3);
     if(check_points())
@@ -193,7 +193,7 @@ const XC::Vector &XC::Linea::getVector(void) const
 //! @brief Returns a unit vector in the tangent direction in the point
 //! defined by s.
 //! @param s: parameter that defines the point of tangency.
-const XC::Vector &XC::Linea::getTang(const double &s) const
+const XC::Vector &XC::Line::getTang(const double &s) const
   {
     static Vector retval(3);
     retval= getVector();
@@ -202,10 +202,10 @@ const XC::Vector &XC::Linea::getTang(const double &s) const
   }
 
 //! @brief VTK interface.
-int XC::Linea::getVtkCellType(void) const
+int XC::Line::getVtkCellType(void) const
   { return VTK_LINE; }
 
 
 //! @brief Salome MED interface.
-int XC::Linea::getMEDCellType(void) const
+int XC::Line::getMEDCellType(void) const
   { return MED_SEG2; }

@@ -28,7 +28,7 @@
 
 #include "CmbEdge.h"
 #include "Pnt.h"
-#include "Linea.h"
+#include "Line.h"
 #include "CircularArc.h"
 #include "preprocessor/Preprocessor.h"
 #include "xc_utils/src/geom/d3/BND3d.h"
@@ -121,7 +121,7 @@ Pos3d XC::CmbEdge::Lado::getCentroid(void) const
 const XC::Vector &XC::CmbEdge::Lado::getTang(const double &s) const
   { return edge->getTang(s); }
 
-//! @brief Returns the posiciones de la linea.
+//! @brief Return the positions on the line.
 MatrizPos3d XC::CmbEdge::Lado::get_posiciones(void) const
   {
     if(edge)
@@ -243,18 +243,18 @@ bool XC::operator==(const XC::CmbEdge::Lado &il1,const XC::CmbEdge::Lado &il2)
 
 //! @brief Constructor.
 XC::CmbEdge::CmbEdge(void)
-  : Edge(),lineas(0) {}
+  : Edge(),lines(0) {}
 
 //! @brief Constructor.
 XC::CmbEdge::CmbEdge(Preprocessor *m,const size_t &nd)
-  : Edge(m,nd), lineas(0) {}
+  : Edge(m,nd), lines(0) {}
 
 //! @brief Constructor.
 //! @param nombre: Object identifier.
 //! @param m: Pointer to preprocessor.
 //! @param nd: number of divisions.
 XC::CmbEdge::CmbEdge(const std::string &nombre,Preprocessor *m,const size_t &nd)
-  : Edge(nombre,m,nd), lineas(0) {}
+  : Edge(nombre,m,nd), lines(0) {}
 
 //! @brief Virtual constructor.
 XC::SetEstruct *XC::CmbEdge::getCopy(void) const
@@ -262,42 +262,42 @@ XC::SetEstruct *XC::CmbEdge::getCopy(void) const
 
 
 //! @brief Returns a pointer to the first lado.
-XC::CmbEdge::Lado *XC::CmbEdge::primera_linea(void)
+XC::CmbEdge::Lado *XC::CmbEdge::first_line(void)
   {
-    if(lineas.empty())
+    if(lines.empty())
       return nullptr;
     else
-      return &(*lineas.begin());
+      return &(*lines.begin());
   }
 //! @brief Returns a pointer to the first lado.
-const XC::CmbEdge::Lado *XC::CmbEdge::primera_linea(void) const
+const XC::CmbEdge::Lado *XC::CmbEdge::first_line(void) const
   {
-    if(lineas.empty())
+    if(lines.empty())
       return nullptr;
     else
-      return &(*lineas.begin());
+      return &(*lines.begin());
   }
 //! @brief Returns a pointer to the last edge.
-XC::CmbEdge::Lado *XC::CmbEdge::ultima_linea(void)
+XC::CmbEdge::Lado *XC::CmbEdge::last_line(void)
   {
-    if(lineas.empty())
+    if(lines.empty())
       return nullptr;
     else
-      return &(*lineas.rbegin());
+      return &(*lines.rbegin());
   }
 //! @brief Returns a pointer to the last edge.
-const XC::CmbEdge::Lado *XC::CmbEdge::ultima_linea(void) const
+const XC::CmbEdge::Lado *XC::CmbEdge::last_line(void) const
   {
-    if(lineas.empty())
+    if(lines.empty())
       return nullptr;
     else
-      return &(*lineas.rbegin());
+      return &(*lines.rbegin());
   }
 
 //! @brief Returns a pointer to the first punto.
 const XC::Pnt *XC::CmbEdge::first_point(void) const
   {
-    const Lado *pl= primera_linea();
+    const Lado *pl= first_line();
     if(pl)
       return pl->P1();
     else
@@ -307,7 +307,7 @@ const XC::Pnt *XC::CmbEdge::first_point(void) const
 //! @brief Returns a pointer to the last point.
 const XC::Pnt *XC::CmbEdge::last_point(void) const
   {
-    const Lado *ul= ultima_linea();
+    const Lado *ul= last_line();
     if(ul)
       return ul->P2();
     else
@@ -328,7 +328,7 @@ XC::Pnt *XC::CmbEdge::P2(void)
 
 void XC::CmbEdge::reverse(void)
   {
-    for(std::deque<Lado>::iterator i=lineas.begin();i!=lineas.end();i++)
+    for(std::deque<Lado>::iterator i=lines.begin();i!=lines.end();i++)
       (*i).reverse();
   }
 
@@ -336,7 +336,7 @@ void XC::CmbEdge::reverse(void)
 double XC::CmbEdge::getLongitud(void) const
   {
     double retval= 0;
-    for(std::deque<Lado>::const_iterator i=lineas.begin();i!=lineas.end();i++)
+    for(std::deque<Lado>::const_iterator i=lines.begin();i!=lines.end();i++)
       retval+= (*i).getLongitud();
     return retval;
   }
@@ -347,7 +347,7 @@ Pos3d XC::CmbEdge::getCentroid(void) const
     Pos3d retval(0.0,0.0,0.0);
     Vector3d v(0.0,0.0,0.0);
     double totalLength= 0.0;
-    for(std::deque<Lado>::const_iterator i=lineas.begin();i!=lineas.end();i++)
+    for(std::deque<Lado>::const_iterator i=lines.begin();i!=lines.end();i++)
       {
 	const double l= (*i).getLongitud();
 	v+= l*(*i).getCentroid().VectorPos();
@@ -365,7 +365,7 @@ Pos3d XC::CmbEdge::getCentroid(void) const
 bool XC::CmbEdge::In(const GeomObj3d &geomObj, const double &tol) const
   {
     bool retval= true;
-    for(std::deque<Lado>::const_iterator i=lineas.begin();i!=lineas.end();i++)
+    for(std::deque<Lado>::const_iterator i=lines.begin();i!=lines.end();i++)
       if(!(*i).In(geomObj,tol))
         { retval= false; break; }
     return retval;
@@ -384,7 +384,7 @@ size_t XC::CmbEdge::NDiv(void) const
   {
     size_t &nd= const_cast<size_t &>(ndiv);
     nd= 0;
-    for(std::deque<Lado>::const_iterator i=lineas.begin();i!=lineas.end();i++)
+    for(std::deque<Lado>::const_iterator i=lines.begin();i!=lines.end();i++)
       nd+= (*i).NDiv();
     return ndiv;
   }
@@ -394,7 +394,7 @@ size_t XC::CmbEdge::NDiv(void) const
 //! @param nd: number of divisions.
 void XC::CmbEdge::SetNDiv(const size_t &nd)
   {
-    const size_t nl= NumEdges();
+    const size_t nl= getNumberOfEdges();
     if(nl>0)
       {
         const size_t resto= nd % nl;
@@ -404,7 +404,7 @@ void XC::CmbEdge::SetNDiv(const size_t &nd)
                     << nd << ") is not a multiple of the number of segments ("
                     << nl << ")." << std::endl;
         const size_t q= nd/nl;
-        for(std::deque<Lado>::iterator i=lineas.begin();i!=lineas.end();i++)
+        for(std::deque<Lado>::iterator i=lines.begin();i!=lines.end();i++)
           (*i).SetNDiv(q);
       }
     else
@@ -417,10 +417,10 @@ MatrizPos3d XC::CmbEdge::get_posiciones(void) const
   {
     const size_t npos= NDiv()+1; //Number of positions.
     MatrizPos3d retval(npos);
-    if(!lineas.empty())
+    if(!lines.empty())
       {
         size_t cont= 1;
-        for(std::deque<Lado>::const_iterator i=lineas.begin();i!=lineas.end();i++)
+        for(std::deque<Lado>::const_iterator i=lines.begin();i!=lines.end();i++)
           {
             const Edge *e= (*i).getEdge();
             MatrizPos3d tmp= e->get_posiciones();
@@ -438,16 +438,16 @@ MatrizPos3d XC::CmbEdge::get_posiciones(void) const
 
 
 //! @brief Triggers node creation on the edges.
-void XC::CmbEdge::create_nodes_lineas(void)
+void XC::CmbEdge::create_line_nodes(void)
   {
-    for(std::deque<Lado>::iterator i=lineas.begin();i!=lineas.end();i++)
+    for(std::deque<Lado>::iterator i=lines.begin();i!=lines.end();i++)
       (*i).getEdge()->create_nodes();
   }
 
 //! @brief Triggers meshing of lines.
 void XC::CmbEdge::line_meshing(meshing_dir dm)
   {
-    for(std::deque<Lado>::iterator i=lineas.begin();i!=lineas.end();i++)
+    for(std::deque<Lado>::iterator i=lines.begin();i!=lines.end();i++)
       (*i).genMesh(dm);
   }
 
@@ -461,7 +461,7 @@ void XC::CmbEdge::genMesh(meshing_dir dm)
     //pointers to nodes.
     ttzNodes= TritrizPtrNod(1,NDiv()+1,1);
     size_t offset_j= 0;// Columna inicial.
-    for(std::deque<Lado>::const_iterator i=lineas.begin();i!=lineas.end();i++)
+    for(std::deque<Lado>::const_iterator i=lines.begin();i!=lines.end();i++)
       {
         ttzNodes.PutCaja(0,offset_j,0,(*i).getEdge()->getTtzNodes());
         offset_j+= (*i).getEdge()->getNumNodeRows()-1;
@@ -469,7 +469,7 @@ void XC::CmbEdge::genMesh(meshing_dir dm)
     //pointers to elements.
     ttzElements= TritrizPtrElem(1,NDiv(),1);
     offset_j= 0;// Columna inicial.
-    for(std::deque<Lado>::const_iterator i=lineas.begin();i!=lineas.end();i++)
+    for(std::deque<Lado>::const_iterator i=lines.begin();i!=lines.end();i++)
       {
         ttzElements.PutCaja(0,offset_j,0,(*i).getEdge()->getTtzElements());
         offset_j+= (*i).getEdge()->getNumElementRows()-1;
@@ -480,44 +480,44 @@ void XC::CmbEdge::genMesh(meshing_dir dm)
 
 //! @brief Creates and inserts the edges from the indexes
 //! being passed as parameter.
-void XC::CmbEdge::addLines(const ID &indices_lineas)
+void XC::CmbEdge::addLines(const ID &line_indexes)
   {
-    const size_t nl= indices_lineas.Size(); //Number of indexes.
+    const size_t nl= line_indexes.Size(); //Number of indexes.
     for(size_t i= 0;i<nl;i++)
-      inserta(indices_lineas(i));
+      inserta(line_indexes(i));
   }
  
 //! @brief Creates and inserts the the edges that link the points
 //! from the indexes being passed as parameter.
-void XC::CmbEdge::addPoints(const ID &indices_ptos)
+void XC::CmbEdge::addPoints(const ID &point_indexes)
   {
-    const size_t np= indices_ptos.Size(); //Number of indexes.
+    const size_t np= point_indexes.Size(); //Number of indexes.
     if(np>=2)
       for(size_t i= 1;i<np;i++)
         {
-          Pnt *pA= BuscaPnt(indices_ptos(i-1));
+          Pnt *pA= BuscaPnt(point_indexes(i-1));
           if(!pA)
 	    std::cerr << getClassName() << "::" << __FUNCTION__
-	              << "; point: " << indices_ptos(i-1)
+	              << "; point: " << point_indexes(i-1)
 		      << " not found in definition of surface: '"
                       << getName() << "'" << std::endl;
-          Pnt *pB= BuscaPnt(indices_ptos(i));
+          Pnt *pB= BuscaPnt(point_indexes(i));
           if(!pB)
 	    std::cerr << getClassName() << "::" << __FUNCTION__
-		      << "; point: " << indices_ptos(i)
+		      << "; point: " << point_indexes(i)
 		      << " not found in definition of surface: '"
                       << getName() << "'" << std::endl;
-          NuevaLinea(pA,pB);
+          newLine(pA,pB);
         }
     else
       std::cerr << getClassName() << "::" << __FUNCTION__
 		<< "; at least two points are needed." << std::endl;
   }
 
-//! @brief Closes the line.
-void XC::CmbEdge::cierra(void)
+//! @brief Close the line.
+void XC::CmbEdge::close(void)
   {
-    //Cierra la polilinea.
+    //Closes the polyline.
     Pnt *pA= P2();
     if(!pA)
       std::cerr << getClassName() << "::" << __FUNCTION__
@@ -527,7 +527,7 @@ void XC::CmbEdge::cierra(void)
       std::cerr << getClassName() << "::" << __FUNCTION__
 	        << "; first point not found." << std::endl;
     if(pA!=pB)
-      NuevaLinea(pA,pB);
+      newLine(pA,pB);
     else
       std::cerr << getClassName() << "::" << __FUNCTION__
 	        << "; line is already closed." << std::endl;
@@ -535,18 +535,18 @@ void XC::CmbEdge::cierra(void)
 
 //! @brief Creates a new line between the points being passed as parameters
 //! and inserts it on the edge set set.
-XC::Edge *XC::CmbEdge::NuevaLinea(Pnt *pA,Pnt *pB)
+XC::Edge *XC::CmbEdge::newLine(Pnt *pA,Pnt *pB)
   {
-    Linea *retval= nullptr;
+    Line *retval= nullptr;
     assert(getPreprocessor());
-    retval= dynamic_cast<Linea *>(getPreprocessor()->getMultiBlockTopology().getLineas().createLine(pA,pB));
+    retval= dynamic_cast<Line *>(getPreprocessor()->getMultiBlockTopology().getLines().createLine(pA,pB));
     if(retval)
       {
         inserta(retval);
-        if(lineas.size()==1) //Is the first one.
+        if(lines.size()==1) //Is the first one.
           {
-            if(pA!=lineas[0].P1())
-              lineas[0].reverse();
+            if(pA!=lines[0].P1())
+              lines[0].reverse();
           }
       }    
     else
@@ -560,11 +560,11 @@ XC::Edge *XC::CmbEdge::NuevaLinea(Pnt *pA,Pnt *pB)
 
 //! @brief Creates a new circle arc between the points being passed
 //! as parameters and put it in the edge set.
-XC::Edge *XC::CmbEdge::NuevaLinea(Pnt *pA,Pnt *pB,Pnt *pC)
+XC::Edge *XC::CmbEdge::newLine(Pnt *pA,Pnt *pB,Pnt *pC)
   {
     CircularArc *retval= nullptr;
     assert(getPreprocessor());
-    retval= dynamic_cast<CircularArc *>(getPreprocessor()->getMultiBlockTopology().getLineas().createArc(pA,pB,pC));
+    retval= dynamic_cast<CircularArc *>(getPreprocessor()->getMultiBlockTopology().getLines().createArc(pA,pB,pC));
     if(retval)
       inserta(retval);
     else
@@ -597,18 +597,18 @@ void XC::CmbEdge::inserta(Edge *l)
 		<< "; line already belongs to the set, insertion ignored.\n";
     else
       {
-        if(lineas.empty())
-          lineas.push_back(Lado(l,true));
+        if(lines.empty())
+          lines.push_back(Lado(l,true));
         else
           {
             if(l->P1()== P2()) //directo.
-              lineas.push_back(Lado(l,true));
+              lines.push_back(Lado(l,true));
             else if(l->P2()== P2()) //inverso.
-              lineas.push_back(Lado(l,false));
+              lines.push_back(Lado(l,false));
             else if(l->P1()== P1()) //inverso
-              lineas.push_front(Lado(l,false));
+              lines.push_front(Lado(l,false));
             else if(l->P2()== P1()) //directo
-              lineas.push_front(Lado(l,true));
+              lines.push_front(Lado(l,true));
             else
               std::cerr << getClassName() << "::" << __FUNCTION__
 			<< "; line: '" << l->getName()
@@ -627,7 +627,7 @@ void XC::CmbEdge::inserta(Edge *l)
 size_t XC::CmbEdge::IndiceEdge(const Edge *l) const
   {
     size_t retval= 1;
-    for(std::deque<Lado>::const_iterator i=lineas.begin();i!=lineas.end();i++)
+    for(std::deque<Lado>::const_iterator i=lines.begin();i!=lines.end();i++)
       {
         if((*i).getEdge() == l)
           return retval;
@@ -639,18 +639,18 @@ size_t XC::CmbEdge::IndiceEdge(const Edge *l) const
 
 //! @brief Returns a lado of the line compuesta.
 const XC::CmbEdge::Lado *XC::CmbEdge::GetLado(const size_t &i) const
-  { return &lineas[i-1]; }
+  { return &lines[i-1]; }
 
 //! @brief Returns a lado of the line compuesta.
 XC::CmbEdge::Lado *XC::CmbEdge::GetLado(const size_t &i)
-  { return &lineas[i-1]; }
+  { return &lines[i-1]; }
 
 //! @brief Returns the lado que tiene por extremos los puntos
 //! being passed as parameters.
 const XC::CmbEdge::Lado *XC::CmbEdge::GetLadoPorPuntos(const Pnt *p1,const Pnt *p2) const
   {
     const Lado *retval= nullptr;
-    for(std::deque<Lado>::const_iterator i=lineas.begin();i!=lineas.end();i++)
+    for(std::deque<Lado>::const_iterator i=lines.begin();i!=lines.end();i++)
       if((*i).ExtremosEn(p1,p2))
         {
           retval= &(*i);
@@ -664,7 +664,7 @@ const XC::CmbEdge::Lado *XC::CmbEdge::GetLadoPorPuntos(const Pnt *p1,const Pnt *
 XC::CmbEdge::Lado *XC::CmbEdge::GetLadoPorPuntos(const Pnt *p1,const Pnt *p2)
   {
     Lado *retval= nullptr;
-    for(std::deque<Lado>::iterator i=lineas.begin();i!=lineas.end();i++)
+    for(std::deque<Lado>::iterator i=lines.begin();i!=lines.end();i++)
       if((*i).ExtremosEn(p1,p2))
         {
           retval= &(*i);
@@ -695,7 +695,7 @@ XC::CmbEdge::Lado *XC::CmbEdge::GetLadoPorPuntos(const size_t &idP1,const size_t
 std::deque<XC::Edge *> XC::CmbEdge::GetEdges(void)
   {
     std::deque<XC::Edge *> retval;
-    for(std::deque<Lado>::iterator i=lineas.begin();i!=lineas.end();i++)
+    for(std::deque<Lado>::iterator i=lines.begin();i!=lines.end();i++)
       retval.push_back((*i).getEdge());
     return retval;
   }
@@ -703,7 +703,7 @@ std::deque<XC::Edge *> XC::CmbEdge::GetEdges(void)
 //! @brief Returns the i-th vertex.
 const XC::Pnt *XC::CmbEdge::GetVertice(const size_t &i) const
   {
-    if(i<NumVertices())
+    if(i<getNumberOfVertices())
       return GetLado(i)->P1();
     else
       return P2();
@@ -720,7 +720,7 @@ void XC::CmbEdge::SetVertice(const size_t &,Pnt *)
 //! @brief Returns object k-points.
 XC::ID XC::CmbEdge::getKPoints(void) const
   {
-    const size_t numVertices= NumVertices();
+    const size_t numVertices= getNumberOfVertices();
     ID retval(numVertices);
     for(size_t i= 0;i<numVertices;i++)
       retval[i]= GetLado(i+1)->P1()->GetTag();
@@ -732,7 +732,7 @@ Polilinea3d XC::CmbEdge::getPolyline(void) const
   {
     Polilinea3d retval;
     retval.push_back(P1()->GetPos());
-    for(std::deque<Lado>::const_iterator i=lineas.begin();i!=lineas.end();i++)
+    for(std::deque<Lado>::const_iterator i=lines.begin();i!=lines.end();i++)
       retval.push_back((*i).P2()->GetPos());
     return retval;
   }
@@ -742,7 +742,7 @@ Polilinea3d XC::CmbEdge::getPolyline(void) const
 BND3d XC::CmbEdge::Bnd(void) const
   { 
     BND3d retval;
-    const size_t nv= NumVertices();
+    const size_t nv= getNumberOfVertices();
     if(nv<1) //the set is empty.
       {
 	std::cerr << getClassName() << "::" << __FUNCTION__

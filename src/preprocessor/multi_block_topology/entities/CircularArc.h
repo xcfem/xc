@@ -69,7 +69,7 @@ class CircularArc: public LineBase
     double getLambda(const Pos3d &) const;
 
     //! @brief Return the number of vertices.
-    inline virtual size_t NumVertices(void) const
+    inline virtual size_t getNumberOfVertices(void) const
       { return 3; }
     virtual const Pnt *GetVertice(const size_t &i) const;
     virtual void SetVertice(const size_t &,Pnt *);

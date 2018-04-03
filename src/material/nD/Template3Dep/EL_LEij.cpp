@@ -139,7 +139,7 @@ XC::BJtensor XC::EvolutionLaw_L_Eij::h_t( EPState *EPS, PotentialSurface *PS){
 
 
 //================================================================================
-//  Print vars defined in XC::Linear Evolution Law
+//  Print vars defined in Linear Evolution Law
 //================================================================================
 void XC::EvolutionLaw_L_Eij::print()
   { std::cerr << (*this); }

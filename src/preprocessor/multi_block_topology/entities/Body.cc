@@ -79,11 +79,11 @@ const std::string &XC::Body::BodyFace::getName(void) const
 bool XC::Body::BodyFace::Vacia(void) const
   { return (surface==nullptr); }
 //! @brief Return the number of edges on the surface.
-size_t XC::Body::BodyFace::NumLineas(void) const
-  { return surface->NumEdges(); }
+size_t XC::Body::BodyFace::getNumberOfLines(void) const
+  { return surface->getNumberOfEdges(); }
 //! @brief Return the number of vertices on the surface.
-size_t XC::Body::BodyFace::NumVertices(void) const
-  { return surface->NumVertices(); }
+size_t XC::Body::BodyFace::getNumberOfVertices(void) const
+  { return surface->getNumberOfVertices(); }
 
 //! @brief Return the pointer to the side face whose index is passed as parameter.
 const XC::CmbEdge::Lado *XC::Body::BodyFace::GetLado(const size_t &i) const
@@ -149,7 +149,7 @@ MatrizPos3d XC::Body::BodyFace::get_posiciones(void) const
         std::cerr << "Pointer to surface is null." << std::endl;
         return MatrizPos3d(); 
       }
-    const int numEdges= surface->NumEdges();
+    const int numEdges= surface->getNumberOfEdges();
     if(numEdges!=4)
       {
         std::cerr << "Can't mesh " << numEdges
@@ -201,7 +201,7 @@ XC::Body::Body(Preprocessor *m,const std::string &nombre)
 BND3d XC::Body::Bnd(void) const
   { 
     BND3d retval;
-    const size_t nv= NumVertices();
+    const size_t nv= getNumberOfVertices();
     if(nv<1) //the set is empty.
       {
 	std::cerr << getClassName() << "::" << __FUNCTION__
@@ -226,7 +226,7 @@ BND3d XC::Body::Bnd(void) const
 bool XC::Body::In(const GeomObj3d &geomObj, const double &tol) const
   {
     bool retval= false;
-    const size_t nv= NumVertices();
+    const size_t nv= getNumberOfVertices();
     if(nv<1) //the set is empty.
       {
 	std::cerr << getClassName() << "::" << __FUNCTION__
@@ -294,7 +294,7 @@ void XC::Body::set_surf(Face *s)
 //! Return indices of the vertices.
 std::vector<int> XC::Body::getIndicesVertices(void) const
   {
-    const size_t nv= NumVertices();
+    const size_t nv= getNumberOfVertices();
     std::vector<int> retval(nv);
     if(nv>=1)
       {

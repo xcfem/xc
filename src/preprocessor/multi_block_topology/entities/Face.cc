@@ -73,7 +73,7 @@ void XC::Face::inserta_body(Body *b)
 //! @brief Updates topology.
 void XC::Face::actualiza_topologia(void)
   {
-    for(std::deque<Lado>::iterator i=lineas.begin();i!=lineas.end();i++)
+    for(std::deque<Lado>::iterator i=lines.begin();i!=lines.end();i++)
       (*i).getEdge()->inserta_surf(this);
   }
 
@@ -83,7 +83,7 @@ size_t XC::Face::CommonEdge(const Face &otra) const
   {
     size_t cont= 1;
     if(this == &otra) return cont; //Son la misma todos los bordes son comunes.
-    for(std::deque<Lado>::const_iterator i=lineas.begin();i!=lineas.end();i++,cont++)
+    for(std::deque<Lado>::const_iterator i=lines.begin();i!=lines.end();i++,cont++)
       {
         if((*i).getEdge()->Toca(otra))
           return cont;
@@ -222,7 +222,7 @@ const XC::Node *XC::Face::getNode(const size_t &i) const
 int XC::Face::getVtkCellType(void) const
   {
     int retval= VTK_EMPTY_CELL;
-    const size_t nl= NumEdges();
+    const size_t nl= getNumberOfEdges();
     switch(nl)
       {
       case 1:
@@ -242,7 +242,7 @@ int XC::Face::getVtkCellType(void) const
 //! @brief Interfaz con el formato MED de Salome.
 int XC::Face::getMEDCellType(void) const
   {
-    const size_t nl= NumEdges();
+    const size_t nl= getNumberOfEdges();
     int retval= -1;
     switch(nl)
       {

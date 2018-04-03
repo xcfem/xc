@@ -53,9 +53,9 @@ class Block: public Body
     Block(Preprocessor *m,const std::string &nombre= "");
     SetEstruct *getCopy(void) const;
     //! @brief Returns the number of lines of the object.
-    virtual size_t NumLineas(void) const;
-    virtual size_t NumVertices(void) const;
-    virtual size_t NumFaces(void) const;
+    virtual size_t getNumberOfLines(void) const;
+    virtual size_t getNumberOfVertices(void) const;
+    virtual size_t getNumberOfFaces(void) const;
     void actualiza_topologia(void);
     virtual std::set<const Face *> getSurfaces(void);
     const BodyFace *GetFace(const size_t &i) const;

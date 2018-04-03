@@ -35,7 +35,7 @@ class_<XC::Eje, bases<XC::EntGeomSection>, boost::noncopyable >("Eje", no_init)
   .add_property("p1",make_function(getSpot1,return_internal_reference<>()))
   .add_property("p2",make_function(getSpot2,return_internal_reference<>()))
   .add_property("nDiv",&XC::Eje::NDiv,&XC::Eje::SetNDiv)
-  .add_property("numVertices",&XC::Eje::NumVertices)
+  .add_property("numVertices",&XC::Eje::getNumberOfVertices)
   ;
 
 const Pos2d &(XC::Spot::*getPosSpot)(void) const= &XC::Spot::GetPos;

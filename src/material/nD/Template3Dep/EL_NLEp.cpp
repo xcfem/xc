@@ -146,7 +146,7 @@ double XC::EvolutionLaw_NL_Ep::h_s( EPState *EPS, PotentialSurface *PS){
 
 
 //================================================================================
-//  Print vars defined in XC::Linear Evolution Law
+//  Print vars defined in Linear Evolution Law
 //================================================================================
 void XC::EvolutionLaw_NL_Ep::print()
   { std::cerr << (*this); }

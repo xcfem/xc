@@ -135,7 +135,7 @@ class SetEntities: public PreprocessorContainer, public MovableObject
     //! @brief Assigns the edge set.
     void setLines(const lst_line_pointers &lns)
       { lines= lns; }
-    void sel_lineas_lista(const ID &);
+    void sel_lines_list(const ID &);
     bool In(const Edge *) const;
     SetEntities pickLinesInside(const GeomObj3d &, const double &tol= 0.0) const;
 

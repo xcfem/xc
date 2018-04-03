@@ -129,14 +129,14 @@ XC::AlgorithmIncrements::~AlgorithmIncrements(void)
 }
     
 int XC::AlgorithmIncrements::record(int cTag, double timeStamp)
-{
+  {
   LinearSOE *theSOE = theAlgo->getLinearSOEPtr();
   if(theSOE == 0)
     return 0;
 
 
-  const XC::Vector &B = theSOE->getB();
-  const XC::Vector &X = theSOE->getX();
+  const Vector &B = theSOE->getB();
+  const Vector &X = theSOE->getX();
 
   if (fileName != 0) {
     if (cTag == 0) {

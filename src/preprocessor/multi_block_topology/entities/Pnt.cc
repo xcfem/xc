@@ -55,16 +55,16 @@ XC::SetEstruct *XC::Pnt::getCopy(void) const
 
 //! Inserts the line being passed as parameter in the list of lines
 //! that begin or end in the point.
-void XC::Pnt::inserta_linea(Edge *l) const
-  { lineas_pt.insert(l); }
+void XC::Pnt::insert_line(Edge *l) const
+  { lines_pt.insert(l); }
 
 //! Erases the line being passed as parameter in the list of lines
 //! that begin or end in the point.
-void XC::Pnt::borra_linea(Edge *l) const
+void XC::Pnt::erase_line(Edge *l) const
   {
-    std::set<const Edge *>::iterator i= lineas_pt.find(l);
-    if(i!= lineas_pt.end()) //La ha encontrado.
-      lineas_pt.erase(i);
+    std::set<const Edge *>::iterator i= lines_pt.find(l);
+    if(i!= lines_pt.end()) //La ha encontrado.
+      lines_pt.erase(i);
   }
 
 //! Returns the position vector of the point.
@@ -83,10 +83,10 @@ BND3d XC::Pnt::Bnd(void) const
 std::set<const XC::Edge *> XC::Pnt::EdgesExtremo(void) const
   {
     std::set<const Edge *> retval;
-    if(!lineas_pt.empty())
+    if(!lines_pt.empty())
       {
-        std::set<const Edge *>::const_iterator i= lineas_pt.begin();
-        for(;i!=lineas_pt.end();i++)
+        std::set<const Edge *>::const_iterator i= lines_pt.begin();
+        for(;i!=lines_pt.end();i++)
           {
             const Edge *l= *i;
             if(Extremo(*l))
@@ -96,16 +96,16 @@ std::set<const XC::Edge *> XC::Pnt::EdgesExtremo(void) const
     return retval;
   }
 
-//! @brief Returns the nombres de las lineas que tocan al punto.
+//! @brief Return the names of the lines that touch the point.
 const std::string &XC::Pnt::NombresEdgesTocan(void) const
   {
     static std::string retval;
     retval= "";
-    if(!lineas_pt.empty())
+    if(!lines_pt.empty())
       {
-        std::set<const Edge *>::const_iterator i= lineas_pt.begin();
+        std::set<const Edge *>::const_iterator i= lines_pt.begin();
         retval+= (*i)->getName();
-        for(;i!=lineas_pt.end();i++)
+        for(;i!=lines_pt.end();i++)
           retval+= "," + (*i)->getName();
       }
     return retval;
@@ -114,8 +114,8 @@ const std::string &XC::Pnt::NombresEdgesTocan(void) const
 //! @brief Returns true if the line starts or ends in this point.
 bool XC::Pnt::Toca(const Edge &l) const
   {
-    std::set<const Edge *>::const_iterator i= lineas_pt.find(&l);
-    return (i!=lineas_pt.end());
+    std::set<const Edge *>::const_iterator i= lines_pt.find(&l);
+    return (i!=lines_pt.end());
   }
 
 //! @brief Returns true if the point is an end of the edge.
@@ -125,7 +125,7 @@ bool XC::Pnt::Extremo(const Edge &l) const
 //! @brief Returns true if the points touches the surface.
 bool XC::Pnt::Toca(const Face &s) const
   {
-    for(std::set<const Edge *>::const_iterator i= lineas_pt.begin(); i!=lineas_pt.end();i++)
+    for(std::set<const Edge *>::const_iterator i= lines_pt.begin(); i!=lines_pt.end();i++)
       { if((*i)->Toca(s)) return true; }
     return false;
   }
@@ -133,7 +133,7 @@ bool XC::Pnt::Toca(const Face &s) const
 //! @brief Returns true if the punto toca al cuerpo.
 bool XC::Pnt::Toca(const Body &b) const
   {
-    for(std::set<const Edge *>::const_iterator i= lineas_pt.begin(); i!=lineas_pt.end();i++)
+    for(std::set<const Edge *>::const_iterator i= lines_pt.begin(); i!=lines_pt.end();i++)
       { if((*i)->Toca(b)) return true; }
     return false;
   }
@@ -277,8 +277,8 @@ XC::Vector &XC::operator-(const Pnt &b,const Pnt &a)
 const XC::Edge *XC::busca_edge_const_ptr_toca(const Pnt &pA,const Pnt &pB)
   {
     const Edge *retval= nullptr;
-    const std::set<const Edge *> lineasPA= pA.EdgesTocan();
-    for(std::set<const Edge *>::const_iterator i= lineasPA.begin();i!=lineasPA.end();i++)
+    const std::set<const Edge *> pA_lines= pA.EdgesTocan();
+    for(std::set<const Edge *>::const_iterator i= pA_lines.begin();i!=pA_lines.end();i++)
       if(pB.Toca(**i))
         {
           retval= *i;
@@ -291,8 +291,8 @@ const XC::Edge *XC::busca_edge_const_ptr_toca(const Pnt &pA,const Pnt &pB)
 const XC::Edge *XC::busca_edge_const_ptr_toca(const Pnt &pA,const Pnt &pB, const Pnt &pC)
   {
     const Edge *retval= nullptr;
-    const std::set<const Edge *> lineasPA= pA.EdgesTocan();
-    for(std::set<const Edge *>::const_iterator i= lineasPA.begin();i!=lineasPA.end();i++)
+    const std::set<const Edge *> pA_lines= pA.EdgesTocan();
+    for(std::set<const Edge *>::const_iterator i= pA_lines.begin();i!=pA_lines.end();i++)
       if(pB.Toca(**i) && pC.Toca(**i))
         {
           retval= *i;
@@ -305,8 +305,8 @@ const XC::Edge *XC::busca_edge_const_ptr_toca(const Pnt &pA,const Pnt &pB, const
 XC::Edge *XC::busca_edge_ptr_toca(const Pnt &pA,const Pnt &pB)
   {
     Edge *retval= nullptr;
-    std::set<const Edge *> lineasPA= pA.EdgesTocan();
-    for(std::set<const Edge *>::iterator i= lineasPA.begin();i!=lineasPA.end();i++)
+    std::set<const Edge *> pA_lines= pA.EdgesTocan();
+    for(std::set<const Edge *>::iterator i= pA_lines.begin();i!=pA_lines.end();i++)
       if(pB.Toca(**i))
         {
           retval= const_cast<Edge *>(*i);
@@ -319,8 +319,8 @@ XC::Edge *XC::busca_edge_ptr_toca(const Pnt &pA,const Pnt &pB)
 XC::Edge *XC::busca_edge_ptr_toca(const Pnt &pA,const Pnt &pB, const Pnt &pC)
   {
     Edge *retval= nullptr;
-    std::set<const Edge *> lineasPA= pA.EdgesTocan();
-    for(std::set<const Edge *>::iterator i= lineasPA.begin();i!=lineasPA.end();i++)
+    std::set<const Edge *> pA_lines= pA.EdgesTocan();
+    for(std::set<const Edge *>::iterator i= pA_lines.begin();i!=pA_lines.end();i++)
       if(pB.Toca(**i) && pC.Toca(**i))
         {
           retval= const_cast<Edge *>(*i);
@@ -333,8 +333,8 @@ XC::Edge *XC::busca_edge_ptr_toca(const Pnt &pA,const Pnt &pB, const Pnt &pC)
 XC::Edge *XC::busca_edge_ptr_extremos(const Pnt &pA,const Pnt &pB)
   {
     Edge *retval= nullptr;
-    std::set<const Edge *> lineasPA= pA.EdgesExtremo();
-    for(std::set<const Edge *>::iterator i= lineasPA.begin();i!=lineasPA.end();i++)
+    std::set<const Edge *> pA_lines= pA.EdgesExtremo();
+    for(std::set<const Edge *>::iterator i= pA_lines.begin();i!=pA_lines.end();i++)
       if(pB.Extremo(**i))
         {
           retval= const_cast<Edge *>(*i);
@@ -347,8 +347,8 @@ XC::Edge *XC::busca_edge_ptr_extremos(const Pnt &pA,const Pnt &pB)
 XC::Edge *XC::busca_edge_ptr_extremos(const Pnt &pA,const Pnt &pB, const Pnt &pC)
   {
     Edge *retval= nullptr;
-    std::set<const Edge *> lineasPA= pA.EdgesExtremo();
-    for(std::set<const Edge *>::iterator i= lineasPA.begin();i!=lineasPA.end();i++)
+    std::set<const Edge *> pA_lines= pA.EdgesExtremo();
+    for(std::set<const Edge *>::iterator i= pA_lines.begin();i!=pA_lines.end();i++)
       if(pB.Toca(**i) && pC.Extremo(**i))
         {
           retval= const_cast<Edge *>(*i);
@@ -361,8 +361,8 @@ XC::Edge *XC::busca_edge_ptr_extremos(const Pnt &pA,const Pnt &pB, const Pnt &pC
 const XC::Edge *XC::busca_edge_const_ptr_extremos(const Pnt &pA,const Pnt &pB)
   {
     const Edge *retval= nullptr;
-    std::set<const Edge *> lineasPA= pA.EdgesExtremo();
-    for(std::set<const Edge *>::iterator i= lineasPA.begin();i!=lineasPA.end();i++)
+    std::set<const Edge *> pA_lines= pA.EdgesExtremo();
+    for(std::set<const Edge *>::iterator i= pA_lines.begin();i!=pA_lines.end();i++)
       if(pB.Extremo(**i))
         {
           retval= *i;
@@ -375,8 +375,8 @@ const XC::Edge *XC::busca_edge_const_ptr_extremos(const Pnt &pA,const Pnt &pB)
 const XC::Edge *XC::busca_edge_const_ptr_extremos(const Pnt &pA,const Pnt &pB, const Pnt &pC)
   {
     const Edge *retval= nullptr;
-    std::set<const Edge *> lineasPA= pA.EdgesExtremo();
-    for(std::set<const Edge *>::iterator i= lineasPA.begin();i!=lineasPA.end();i++)
+    std::set<const Edge *> pA_lines= pA.EdgesExtremo();
+    for(std::set<const Edge *>::iterator i= pA_lines.begin();i!=pA_lines.end();i++)
       if(pB.Toca(**i) && pC.Extremo(**i))
         {
           retval= (*i);

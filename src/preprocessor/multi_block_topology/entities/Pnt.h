@@ -51,7 +51,7 @@ class Pnt: public EntMdlr
     friend class Edge;
   private:
     Pos3d p; //!< Position of the point.
-    mutable std::set<const Edge *> lineas_pt; //!< Lines that begin or end in this point (topology).
+    mutable std::set<const Edge *> lines_pt; //!< Lines that begin or end in this point (topology).
   protected:
 
     virtual void actualiza_topologia(void);
@@ -85,12 +85,12 @@ class Pnt: public EntMdlr
 
     Vector3d VectorPos(void) const;
 
-    void inserta_linea(Edge *l) const;
-    void borra_linea(Edge *l) const;
+    void insert_line(Edge *l) const;
+    void erase_line(Edge *l) const;
 
     //! @brief Return the list of the lines that begin or end at the point.
     const std::set<const Edge *> &EdgesTocan(void) const
-      { return lineas_pt; }
+      { return lines_pt; }
     const size_t getNLines(void) const
       { return EdgesTocan().size(); }
     std::set<const Edge *> EdgesExtremo(void) const;

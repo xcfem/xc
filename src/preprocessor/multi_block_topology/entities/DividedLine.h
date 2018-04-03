@@ -29,14 +29,14 @@
 #ifndef DIVIDEDLINE_H
 #define DIVIDEDLINE_H
 
-#include "Linea.h"
+#include "Line.h"
 
 namespace XC {
 
 //! \ingroup MultiBlockTopologyEnt
 //!
 //! @brief Line segment between two points.
-class DividedLine: public Linea
+class DividedLine: public Line
   {
     std::vector<double> longs; //!< Lenght of the line segments.
   protected:
