@@ -29,7 +29,7 @@
 #ifndef INTERACTION_DIAGRAM_H
 #define INTERACTION_DIAGRAM_H
 
-#include "xc_utils/src/geom/d2/Triedro3d.h"
+#include "xc_utils/src/geom/d2/Trihedron.h"
 #include <set>
 #include <deque>
 #include "ClosedTriangleMesh.h"
@@ -48,13 +48,13 @@ class InteractionDiagramData;
 class InteractionDiagram: public ClosedTriangleMesh
   {
   protected:
-    typedef std::set<const Triedro3d *> set_ptr_triedros;
+    typedef std::set<const Trihedron *> set_ptr_trihedrons;
 
     
-    set_ptr_triedros triedros_cuadrante[8];
+    set_ptr_trihedrons quadrant_trihedrons[8];
 
-    void clasifica_triedro(const Triedro3d &tdro);
-    void clasifica_triedros(void);
+    void classify_trihedron(const Trihedron &tdro);
+    void classify_trihedrons(void);
     void setMatrizPosiciones(const Matrix &);
     GeomObj::list_Pos3d get_intersection(const Pos3d &p) const;
   public:
@@ -64,7 +64,7 @@ class InteractionDiagram: public ClosedTriangleMesh
     InteractionDiagram &operator=(const InteractionDiagram &otro);
     virtual InteractionDiagram *clon(void) const;
 
-    const Triedro3d *BuscaPtrTriedro(const Pos3d &p) const;
+    const Trihedron *findTrihedronPtr(const Pos3d &p) const;
     Pos3d getIntersection(const Pos3d &) const;
     double FactorCapacidad(const Pos3d &) const;
     Vector FactorCapacidad(const GeomObj::list_Pos3d &) const;

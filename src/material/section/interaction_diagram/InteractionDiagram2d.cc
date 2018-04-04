@@ -66,7 +66,7 @@ XC::InteractionDiagram2d *XC::InteractionDiagram2d::clon(void) const
 Pos2d XC::InteractionDiagram2d::get_intersection(const Pos2d &p) const
   {
     const Pos2d O= Pos2d(0.0,0.0);
-    //Buscamos el triedro que contiene a p.
+    //Search for the trihedron that contains p.
     SemiRecta2d Op(O,p);
     const Segmento2d sg= Clip(Op);
     const Pos2d p1= sg.Origen();
@@ -132,7 +132,8 @@ XC::Vector XC::InteractionDiagram2d::FactorCapacidad(const GeomObj::list_Pos2d &
 
 void XC::InteractionDiagram2d::Print(std::ostream &os) const
   {
-    std::cerr << "InteractionDiagram2d::Print not implemented." << std::endl;
+    std::cerr << getClassName() << "::" << __FUNCTION__
+	      << "; not implemented." << std::endl;
   }
 
 XC::InteractionDiagram2d XC::calcPlaneInteractionDiagram(const FiberSectionBase &scc,const InteractionDiagramData &data, const double &theta)
@@ -145,7 +146,8 @@ XC::InteractionDiagram2d XC::calcPlaneInteractionDiagram(const FiberSectionBase 
         delete tmp;
       }
     else
-      std::cerr << "XC::calcPlaneInteractionDiagram, can't get a copy of the section."
+      std::cerr << __FUNCTION__
+		<< "; can't get a copy of the section."
                 << std::endl;
     return retval;
   }
@@ -160,7 +162,8 @@ XC::InteractionDiagram2d XC::calcNMyInteractionDiagram(const FiberSectionBase &s
         delete tmp;
       }
     else
-      std::cerr << "XC::calcNMyInteractionDiagram, can't get a copy of the section."
+      std::cerr << __FUNCTION__
+		<< "; can't get a copy of the section."
                 << std::endl;
     return retval;
   }
@@ -175,7 +178,8 @@ XC::InteractionDiagram2d XC::calcNMzInteractionDiagram(const FiberSectionBase &s
         delete tmp;
       }
     else
-      std::cerr << "XC::calcNMzInteractionDiagram, can't get a copy of the section."
+      std::cerr << __FUNCTION__
+		<< "; can't get a copy of the section."
                 << std::endl;
     return retval;
   }

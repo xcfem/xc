@@ -192,7 +192,7 @@ Pos2d XC::DeformationPlane::getPointOnTensionedHalfPlane(void) const
     return retval;
   }
 
-//! @brief Returns (if possible) un punto en el que las tensiones son de compresion.
+//! @brief Returns (if possible) a point in the compressed zone.
 Pos2d XC::DeformationPlane::getPointOnCompressedHalfPlane(void) const
   {
     Pos2d retval(0,0);

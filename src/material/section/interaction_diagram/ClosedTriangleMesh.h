@@ -29,7 +29,7 @@
 #ifndef CLOSEDTRIANGLEMESH_H
 #define CLOSEDTRIANGLEMESH_H
 
-#include "xc_utils/src/geom/d2/Triedro3d.h"
+#include "xc_utils/src/geom/d2/Trihedron.h"
 #include <set>
 #include <deque>
 #include "utility/actor/actor/MovableObject.h"
@@ -48,11 +48,11 @@ class FiberSectionBase;
 class ClosedTriangleMesh: public GeomObj3d, public MovableObject
   {
   protected:
-    typedef std::vector<Triedro3d> v_triedros;
-    typedef v_triedros::iterator iterator;
-    typedef v_triedros::const_iterator const_iterator;
+    typedef std::vector<Trihedron> v_trihedrons;
+    typedef v_trihedrons::iterator iterator;
+    typedef v_trihedrons::const_iterator const_iterator;
     
-    v_triedros triedros;
+    v_trihedrons trihedrons;
     double tol;
     double rMax; //! Radius of the convex-hull circunscribed sphere.
     double rMin; //! Radius of the sphere that passes through the nearest vertex.
@@ -92,8 +92,8 @@ class ClosedTriangleMesh: public GeomObj3d, public MovableObject
     const_iterator end() const;
     size_t size(void) const;
     
-    const_iterator BuscaTriedro(const Pos3d &p) const;
-    const Triedro3d *BuscaPtrTriedro(const Pos3d &p) const;
+    const_iterator findTrihedron(const Pos3d &p) const;
+    const Trihedron *findTrihedronPtr(const Pos3d &p) const;
 
     int sendSelf(CommParameters &);
     int recvSelf(const CommParameters &);

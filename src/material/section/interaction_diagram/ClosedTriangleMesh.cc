@@ -37,21 +37,21 @@
 #include "utility/matrix/Matrix.h"
 #include "xc_utils/src/gnu_gts/TriangleMap.h"
 
-XC::ClosedTriangleMesh::iterator XC::ClosedTriangleMesh::begin(void) { return triedros.begin(); }
-XC::ClosedTriangleMesh::iterator XC::ClosedTriangleMesh::end(void) { return triedros.end(); }
-XC::ClosedTriangleMesh::const_iterator XC::ClosedTriangleMesh::begin() const { return triedros.begin(); }
-XC::ClosedTriangleMesh::const_iterator XC::ClosedTriangleMesh::end() const { return triedros.end(); }
-size_t XC::ClosedTriangleMesh::size(void) const { return triedros.size(); }
+XC::ClosedTriangleMesh::iterator XC::ClosedTriangleMesh::begin(void) { return trihedrons.begin(); }
+XC::ClosedTriangleMesh::iterator XC::ClosedTriangleMesh::end(void) { return trihedrons.end(); }
+XC::ClosedTriangleMesh::const_iterator XC::ClosedTriangleMesh::begin() const { return trihedrons.begin(); }
+XC::ClosedTriangleMesh::const_iterator XC::ClosedTriangleMesh::end() const { return trihedrons.end(); }
+size_t XC::ClosedTriangleMesh::size(void) const { return trihedrons.size(); }
 
 size_t XC::ClosedTriangleMesh::GetNumFacetas(void) const { return size(); }
 
 
 //! @brief Default constructor.
 XC::ClosedTriangleMesh::ClosedTriangleMesh(void)
-  : GeomObj3d(), MovableObject(0), triedros(0), tol(0.0), rMax(0.0),rMin(0.0) {}
+  : GeomObj3d(), MovableObject(0), trihedrons(0), tol(0.0), rMax(0.0),rMin(0.0) {}
 
 XC::ClosedTriangleMesh::ClosedTriangleMesh(const Pos3d &org,const Triang3dMesh &mll)
-  : GeomObj3d(), MovableObject(0), triedros(mll.GetNumCaras(),Triedro3d()), tol(0.0), rMax(0.0), rMin(0.0)
+  : GeomObj3d(), MovableObject(0), trihedrons(mll.GetNumCaras(),Trihedron()), tol(0.0), rMax(0.0), rMin(0.0)
   {
     const size_t nf= mll.GetNumCaras();
     static const Pos3d org3d;
@@ -68,7 +68,7 @@ XC::ClosedTriangleMesh::ClosedTriangleMesh(const Pos3d &org,const Triang3dMesh &
     for(Triang3dMesh::Facet_const_iterator i= mll.facets_begin();i!=mll.facets_end();i++)
       {
         const Triangulo3d tf= mll.GetTrianguloCara(i);
-        triedros[cont]= Triedro3d(org,tf);
+        trihedrons[cont]= Trihedron(org,tf);
         cont++;
       }
     //const double longDiagonalBND= Abs(Bnd().Diagonal());
@@ -77,14 +77,14 @@ XC::ClosedTriangleMesh::ClosedTriangleMesh(const Pos3d &org,const Triang3dMesh &
 
 //! @brief Copy constructor.
 XC::ClosedTriangleMesh::ClosedTriangleMesh(const ClosedTriangleMesh &otro)
-  : GeomObj3d(otro), MovableObject(otro), triedros(otro.triedros), tol(otro.tol), rMax(otro.rMax),rMin(otro.rMin)
+  : GeomObj3d(otro), MovableObject(otro), trihedrons(otro.trihedrons), tol(otro.tol), rMax(otro.rMax),rMin(otro.rMin)
   {}
 
 //! @brief Assignment operator.
 XC::ClosedTriangleMesh &XC::ClosedTriangleMesh::operator=(const ClosedTriangleMesh &otro)
   {
     GeomObj3d::operator=(otro);
-    triedros= otro.triedros;
+    trihedrons= otro.trihedrons;
     tol= otro.tol;
     rMax= otro.rMax;
     rMin= otro.rMin;
@@ -108,7 +108,8 @@ void XC::ClosedTriangleMesh::readFrom(const std::string &fName)
         input.close();
       }
     else
-      std::cerr << "No se pudo abrir el archivo: '"
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; can't open file: '"
                 << fName << "'\n";
   }
   
@@ -121,10 +122,10 @@ double XC::ClosedTriangleMesh::GetMax(short unsigned int i) const
   {
     double retval= NAN;
     if(size()<1) return retval;
-    v_triedros::const_iterator j= triedros.begin();
+    v_trihedrons::const_iterator j= trihedrons.begin();
     retval= j->GetMax(i);
     j++;
-    for(;j!=triedros.end();j++)
+    for(;j!=trihedrons.end();j++)
       retval= std::max(retval,j->GetMax(i));
     return retval;
   }
@@ -132,10 +133,10 @@ double XC::ClosedTriangleMesh::GetMin(short unsigned int i) const
   {
     double retval= NAN;
     if(size()<1) return retval;
-    v_triedros::const_iterator j= triedros.begin();
+    v_trihedrons::const_iterator j= trihedrons.begin();
     retval= j->GetMin(i);
     j++;
-    for(;j!=triedros.end();j++)
+    for(;j!=trihedrons.end();j++)
       retval= std::min(retval,j->GetMin(i));
     return retval;
   }
@@ -164,7 +165,7 @@ TriangleMap XC::ClosedTriangleMesh::getTriangleMap(void) const
     TriangleFaces &faces= retval.getFaces();
     //Vertices.
     int counter= 0;
-    for(v_triedros::const_iterator i= triedros.begin();i!=triedros.end();i++)
+    for(v_trihedrons::const_iterator i= trihedrons.begin();i!=trihedrons.end();i++)
       {
         const Pos3d p1= i->Vertice(1);
         int nearest1= kdtree.getNearestBallPoint(p1,tol);
@@ -198,8 +199,9 @@ TriangleMap XC::ClosedTriangleMesh::getTriangleMap(void) const
     return retval;
   }
 
-//! @brief Busca el triedro que contiene al punto being passed as parameter.
-XC::ClosedTriangleMesh::const_iterator XC::ClosedTriangleMesh::BuscaTriedro(const Pos3d &p) const
+//! @brief Search for the trihedron that contains the point
+//! being passed as parameter.
+XC::ClosedTriangleMesh::const_iterator XC::ClosedTriangleMesh::findTrihedron(const Pos3d &p) const
   {
     XC::ClosedTriangleMesh::const_iterator retval= end();
     for(XC::ClosedTriangleMesh::const_iterator i= begin();i!=end();i++)
@@ -213,13 +215,15 @@ XC::ClosedTriangleMesh::const_iterator XC::ClosedTriangleMesh::BuscaTriedro(cons
     return retval;
   }
 
-//! @brief Busca el triedro que contiene al punto being passed as parameter.
-const Triedro3d *XC::ClosedTriangleMesh::BuscaPtrTriedro(const Pos3d &p) const
+//! @brief Search for the trihedron that contains the point
+//! being passed as parameter.
+const Trihedron *XC::ClosedTriangleMesh::findTrihedronPtr(const Pos3d &p) const
   {
-    const Triedro3d *retval= nullptr;
-    if(triedros.empty())
+    const Trihedron *retval= nullptr;
+    if(trihedrons.empty())
       {
-	std::cerr << "ClosedTriangleMesh::BuscaPtrTriedro; trihedron list is emplty."
+	std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; trihedron list is emplty."
                   << std::endl;
         return retval;
       }
@@ -236,7 +240,7 @@ const Triedro3d *XC::ClosedTriangleMesh::BuscaPtrTriedro(const Pos3d &p) const
         if(!retval) //Not found, we search the one with the nearest axis.
           {
 	    ClosedTriangleMesh::const_iterator i= begin();
-            const Triedro3d *tr= &(*i);
+            const Trihedron *tr= &(*i);
             SemiRecta3d rayo(tr->Cuspide(),p);
             Recta3d eje= tr->Eje();
             double angEjeRayo= angulo(eje,rayo);
@@ -278,8 +282,8 @@ GeomObj::list_Pos3d XC::ClosedTriangleMesh::get_intersection(const Pos3d &p) con
   {
     GeomObj::list_Pos3d lst_intersec;
     const Pos3d O= Pos3d(0.0,0.0,0.0);
-    //Buscamos el triedro que contiene a p.
-    const Triedro3d *i= BuscaPtrTriedro(p);
+    //Search for the trihedron that contains p.
+    const Trihedron *i= findTrihedronPtr(p);
     if(!i)
       {
 	std::cerr << getClassName() << "::" << __FUNCTION__
@@ -298,7 +302,8 @@ GeomObj::list_Pos3d XC::ClosedTriangleMesh::get_intersection(const Pos3d &p) con
         if(lst_intersec.empty())
           {
             
-	    std::cerr << "Doesn't intersect. " << std::endl
+	    std::cerr << getClassName() << "::" << __FUNCTION__
+		      << "; doesn't intersect. " << std::endl
                       << " Triangle area: " << triang.Area() << std::endl
                       << " vertex 1: " << i->Vertice(1)
                       << " vertex 2: " << i->Vertice(2)
@@ -312,11 +317,12 @@ GeomObj::list_Pos3d XC::ClosedTriangleMesh::get_intersection(const Pos3d &p) con
 
 void XC::ClosedTriangleMesh::Print(std::ostream &os) const
   {
-    std::cerr << "ClosedTriangleMesh::Print not implemented." << std::endl;
+    std::cerr << getClassName() << "::" << __FUNCTION__
+	      << "; not implemented." << std::endl;
   }
 
 //! @brief Returns a matriz con las coordenadas de los puntos
-//! que definen each uno de los triedros.
+//! que definen each uno de los trihedrons.
 void XC::ClosedTriangleMesh::getMatrizPosiciones(Matrix &m)
   {
     const int sz= size();
@@ -324,7 +330,7 @@ void XC::ClosedTriangleMesh::getMatrizPosiciones(Matrix &m)
     m= Matrix(sz,12);
     for(const_iterator i= begin();i!=end();i++,fila++)
       {
-        const Triedro3d &t= *i;
+        const Trihedron &t= *i;
         const Pos3d &c= t.Cuspide();
         const Triangulo3d &b= t.Base();
         const Pos3d p1= b.Vertice(1);
@@ -337,21 +343,20 @@ void XC::ClosedTriangleMesh::getMatrizPosiciones(Matrix &m)
       }
   }
 
-//! @brief Crea los triedros que definen el diagrama a partir
-//! de una matriz con las coordenadas de los puntos
-//! que definen each uno de los triedros.
+//! @brief Create the trihedrons that define the diagram from the matrix
+//! that contains the points that define each trihedron.
 void XC::ClosedTriangleMesh::setMatrizPosiciones(const Matrix &m)
   {
     const int nfilas= m.noRows();
     assert(m.noCols()==12);
-    triedros.resize(nfilas);
+    trihedrons.resize(nfilas);
     for(int i= 0;i<nfilas;i++)
       {
         const Pos3d c(m(i,0),m(i,1),m(i,2));
         const Pos3d p1(m(i,3),m(i,4),m(i,5));
         const Pos3d p2(m(i,6),m(i,7),m(i,8));
         const Pos3d p3(m(i,9),m(i,10),m(i,11));
-        triedros[i]= Triedro3d(c,p1,p2,p3);
+        trihedrons[i]= Trihedron(c,p1,p2,p3);
       }
   }
 
@@ -408,7 +413,8 @@ int XC::ClosedTriangleMesh::sendSelf(CommParameters &cp)
     const int dataTag= getDbTag();
     res+= cp.sendIdData(getDbTagData(),dataTag);
     if(res<0)
-      std::cerr << "ClosedTriangleMesh::sendSelf() - failed to send ID data\n";
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; failed to send ID data\n";
     return res;
   }
 
@@ -419,7 +425,8 @@ int XC::ClosedTriangleMesh::recvSelf(const CommParameters &cp)
     inicComm(3);
     int res = cp.receiveIdData(getDbTagData(),dataTag);
     if(res < 0)
-      std::cerr << "ClosedTriangleMesh::recvSelf() - failed to receive ID data\n";
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; failed to receive ID data\n";
     else
       res+= recvData(cp);
     return res;

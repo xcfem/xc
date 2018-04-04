@@ -39,19 +39,19 @@
 #include "material/section/interaction_diagram/InteractionDiagramData.h"
 
 
-
-void XC::InteractionDiagram::clasifica_triedro(const Triedro3d &tdro)
+//! @brier We classify the trihedron by its quadrant.
+void XC::InteractionDiagram::classify_trihedron(const Trihedron &tdro)
   {
-    //Clasificamos el triedro por cuadrantes.
     for(int i= 0;i<8;i++)
-      if(tdro.TocaCuadrante(i+1)) triedros_cuadrante[i].insert(&tdro);
+      if(tdro.TocaCuadrante(i+1)) quadrant_trihedrons[i].insert(&tdro);
   }
 
-void XC::InteractionDiagram::clasifica_triedros(void)
+//! @brier We classify the trihedrons by its quadrants.
+void XC::InteractionDiagram::classify_trihedrons(void)
   {
-    //Clasificamos los triedros por cuadrantes.
+    //Clasificamos los trihedrons por cuadrantes.
     for(XC::InteractionDiagram::const_iterator i= begin();i!=end();i++)
-      clasifica_triedro(*i);
+      classify_trihedron(*i);
   }
 
 //! @brief Default constructor.
@@ -61,21 +61,21 @@ XC::InteractionDiagram::InteractionDiagram(void)
 XC::InteractionDiagram::InteractionDiagram(const Pos3d &org,const Triang3dMesh &mll)
   : ClosedTriangleMesh(org,mll)
   {
-    clasifica_triedros();
+    classify_trihedrons();
   }
 
 //! @brief Copy constructor.
 XC::InteractionDiagram::InteractionDiagram(const InteractionDiagram &otro)
   : ClosedTriangleMesh(otro)
   {
-    clasifica_triedros();
+    classify_trihedrons();
   }
 
 //! @brief Assignment operator.
 XC::InteractionDiagram &XC::InteractionDiagram::operator=(const InteractionDiagram &otro)
   {
     ClosedTriangleMesh::operator=(otro);
-    clasifica_triedros();
+    classify_trihedrons();
     return *this;
   }
 
@@ -83,19 +83,20 @@ XC::InteractionDiagram &XC::InteractionDiagram::operator=(const InteractionDiagr
 XC::InteractionDiagram *XC::InteractionDiagram::clon(void) const
   { return new InteractionDiagram(*this); }
 
-//! @brief Busca el triedro que contiene al punto being passed as parameter.
-const Triedro3d *XC::InteractionDiagram::BuscaPtrTriedro(const Pos3d &p) const
+//! @brief Search for the trihedron that contains the point being passed as parameter.
+const Trihedron *XC::InteractionDiagram::findTrihedronPtr(const Pos3d &p) const
   {
-    const Triedro3d *retval= nullptr;
-    if(triedros.empty())
+    const Trihedron *retval= nullptr;
+    if(trihedrons.empty())
       {
-	std::cerr << "InteractionDiagram::BuscaPtrTriedro; trihedron list empty."
+	std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; trihedron list empty."
                   << std::endl;
         return retval;
       }
     const int cuadrante= p.Cuadrante();
-    const set_ptr_triedros &set_triedros= triedros_cuadrante[cuadrante-1];
-    for(set_ptr_triedros::const_iterator i= set_triedros.begin();i!=set_triedros.end();i++)
+    const set_ptr_trihedrons &set_trihedrons= quadrant_trihedrons[cuadrante-1];
+    for(set_ptr_trihedrons::const_iterator i= set_trihedrons.begin();i!=set_trihedrons.end();i++)
       if((*i)->In(p,tol))
         {
           retval= *i;
@@ -115,7 +116,7 @@ const Triedro3d *XC::InteractionDiagram::BuscaPtrTriedro(const Pos3d &p) const
     // if(!retval) //Not found, we try even harder.
     //   {
     // 	InteractionDiagram::const_iterator i= begin();
-    //     const Triedro3d *tr= &(*i);
+    //     const Trihedron *tr= &(*i);
     //     retval= tr;
     //     double distMin= tr->PseudoDist(p);
     //     double dist= distMin;
@@ -136,7 +137,7 @@ const Triedro3d *XC::InteractionDiagram::BuscaPtrTriedro(const Pos3d &p) const
     if(!retval) //Not found, we search the one with the nearest axis.
       {
 	InteractionDiagram::const_iterator i= begin();
-        const Triedro3d *tr= &(*i);
+        const Trihedron *tr= &(*i);
         SemiRecta3d rayo(tr->Cuspide(),p);
         Recta3d eje= tr->Eje();
         double angMin= angulo(eje,rayo);
@@ -177,12 +178,14 @@ GeomObj::list_Pos3d XC::InteractionDiagram::get_intersection(const Pos3d &p) con
   {
     GeomObj::list_Pos3d lst_intersec;
     const Pos3d O= Pos3d(0.0,0.0,0.0);
-    //Buscamos el triedro que contiene a p.
-    const Triedro3d *i= BuscaPtrTriedro(p);
+    //Search for the trihedron thant contains p.
+    const Trihedron *i= findTrihedronPtr(p);
     if(!i)
       {
-	std::cerr << "InteractionDiagram::get_intersection: bounding trihedron for: "
-                  << p << " not found. Quadrant: " << p.Cuadrante() << std::endl;
+	std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; bounding trihedron for: "
+                  << p << " not found. Quadrant: "
+		  << p.Cuadrante() << std::endl;
       }
     else
       {
@@ -220,7 +223,8 @@ GeomObj::list_Pos3d XC::InteractionDiagram::get_intersection(const Pos3d &p) con
         if(lst_intersec.empty())
           {
             
-	    std::cerr << "Doesn't intersect. " << std::endl
+	    std::cerr << getClassName() << "::" << __FUNCTION__
+		      << "; doesn't intersect. " << std::endl
                       << " Triangle area: " << triang.Area() << std::endl
                       << " vertex 1: " << i->Vertice(1)
                       << " vertex 2: " << i->Vertice(2)
@@ -242,7 +246,9 @@ Pos3d XC::InteractionDiagram::getIntersection(const Pos3d &esf_d) const
       retval= *(lst_intersec.begin());
     else
       {
-	std::cerr << getClassName() << "::" << __FUNCTION__ << "; intersection for triplet (N,My,Mz): " << esf_d << " not found." << std::endl;
+	std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; intersection for triplet (N,My,Mz): "
+		  << esf_d << " not found." << std::endl;
       }
     return retval;    
   }
@@ -294,13 +300,14 @@ XC::Vector XC::InteractionDiagram::FactorCapacidad(const GeomObj::list_Pos3d &lp
 
 void XC::InteractionDiagram::Print(std::ostream &os) const
   {
-    std::cerr << "InteractionDiagram::Print not implemented." << std::endl;
+    std::cerr << getClassName() << "::" << __FUNCTION__
+	      << "; not implemented." << std::endl;
   }
 
 void XC::InteractionDiagram::setMatrizPosiciones(const Matrix &m)
   {
     ClosedTriangleMesh::setMatrizPosiciones(m);
-    clasifica_triedros();   
+    classify_trihedrons();   
   }
 
 XC::InteractionDiagram XC::calc_interaction_diagram(const FiberSectionBase &scc,const InteractionDiagramData &data= InteractionDiagramData())
@@ -313,7 +320,8 @@ XC::InteractionDiagram XC::calc_interaction_diagram(const FiberSectionBase &scc,
         delete tmp;
       }
     else
-      std::cerr << "XC::calcInteractionDiagram, can't get a copy of the section."
+      std::cerr << __FUNCTION__
+		<< "; can't get a copy of the section."
                 << std::endl;
     return retval;
   }
