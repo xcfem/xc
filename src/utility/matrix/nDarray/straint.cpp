@@ -125,7 +125,7 @@ XC::straintensor::straintensor(const XC::nDarray & x)
 
 // IT IS NOT INHERITED so must be defined in all derived classes
 // See ARM page 306.
-//! @brief Operador de asignación.
+//! @brief Assignment operator.
 XC::straintensor XC::straintensor::operator=( const straintensor & rval)
 {
     rval.pc_nDarray_rep->n++;  // tell the rval it has another reference
@@ -168,7 +168,7 @@ XC::straintensor XC::straintensor::operator=( const straintensor & rval)
 
 // IT IS NOT INHERITED so must be defined in all derived classes
 // See ARM page 306.
-//! @brief Operador de asignación.
+//! @brief Assignment operator.
 XC::straintensor XC::straintensor::operator=( const XC::BJtensor & rval)
 {
     rval.pc_nDarray_rep->n++;  // tell the rval it has another reference
@@ -207,7 +207,7 @@ XC::straintensor XC::straintensor::operator=( const XC::BJtensor & rval)
 
 // IT IS NOT INHERITED so must be defined in all derived classes
 // See ARM page 306.
-//! @brief Operador de asignación.
+//! @brief Assignment operator.
 XC::straintensor XC::straintensor::operator=( const XC::nDarray & rval)
 {
     rval.pc_nDarray_rep->n++;  // tell the rval it has another reference

@@ -185,11 +185,11 @@ const XC::LinearSOE *XC::ConvergenceTest::getLinearSOEPtr(void) const
     return sm->getLinearSOEPtr();
   }
 
-//! @brief Returns the vector de incógnitas.
+//! @brief Returns the vector of unknowns.
 const XC::Vector &XC::ConvergenceTest::getX(void) const
   { return getLinearSOEPtr()->getX(); }
 
-//! @brief Return the norma del vector de incógnitas.
+//! @brief Return the norma del vector of unknowns.
 double XC::ConvergenceTest::getNormX(void) const
   { return getLinearSOEPtr()->getX().pNorm(nType); }
 

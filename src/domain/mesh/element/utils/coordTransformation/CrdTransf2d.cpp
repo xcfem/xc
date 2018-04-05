@@ -232,7 +232,7 @@ int XC::CrdTransf2d::computeElemtLengthAndOrient(void) const
     return 0;
   }
 
-//! @brief Returns the displacements expresados on the basic system.
+//! @brief Return the displacements expresados on the basic system.
 const XC::Vector &XC::CrdTransf2d::getBasicTrialDisp(void) const
   {
     // determine global displacements
@@ -285,7 +285,7 @@ const XC::Vector &XC::CrdTransf2d::getBasicTrialDisp(void) const
     return ub;
   }
 
-//! @brief Returns the incrementos de displacement expresados on the basic system.
+//! @brief Return the incrementos de displacement expresados on the basic system.
 const XC::Vector &XC::CrdTransf2d::getBasicIncrDisp(void) const
   {
     // determine global displacements
@@ -435,7 +435,7 @@ const XC::Vector &XC::CrdTransf2d::getBasicTrialAccel(void) const
     return ab;
   }
 
-//! @brief Returns the $\vec{i}$ unit vector of the local axis
+//! @brief Return the $\vec{i}$ unit vector of the local axis
 //! expressed in global coordinates for the initial (undeformed) geometry.
 const XC::Vector &XC::CrdTransf2d::getInitialI(void) const
   {
@@ -446,13 +446,13 @@ const XC::Vector &XC::CrdTransf2d::getInitialI(void) const
     return vectorI;
   }
 
-//! @brief Returns the $\vec{i}$ unit vector of the local axis
+//! @brief Return the $\vec{i}$ unit vector of the local axis
 //! expressed in global coordinates for the current geometry.
 const XC::Vector &XC::CrdTransf2d::getI(void) const
   { return getInitialI(); }
 
 
-//! @brief Returns the $\vec{j}$ unit vector of the local axis
+//! @brief Return the $\vec{j}$ unit vector of the local axis
 //! expressed in global coordinates for the initial (undeformed) geometry.
 const XC::Vector &XC::CrdTransf2d::getInitialJ(void) const
   {
@@ -463,12 +463,12 @@ const XC::Vector &XC::CrdTransf2d::getInitialJ(void) const
     return vectorJ;
   }
 
-//! @brief Returns the $\vec{j}$ unit vector of the local axis
+//! @brief Return the $\vec{j}$ unit vector of the local axis
 //! expressed in global coordinates for the current geometry.
 const XC::Vector &XC::CrdTransf2d::getJ(void) const
   { return getInitialJ(); }
 
-//| @brief Returns the $\vec{i}$ and $\vec{j}$ unit vector of the local
+//| @brief Return the $\vec{i}$ and $\vec{j}$ unit vector of the local
 //! axis for the initial (undeformed) geometry.
 int XC::CrdTransf2d::getInitialLocalAxes(Vector &XAxis, Vector &YAxis) const
   {
@@ -477,7 +477,7 @@ int XC::CrdTransf2d::getInitialLocalAxes(Vector &XAxis, Vector &YAxis) const
     return 0;
   }
 
-//| @brief Returns the direction vectors of local axis in the element
+//| @brief Return the direction vectors of local axis in the element
 //! current position.
 int XC::CrdTransf2d::getLocalAxes(Vector &XAxis, Vector &YAxis) const
   { return getInitialLocalAxes(XAxis,YAxis); }
@@ -498,7 +498,7 @@ XC::Matrix XC::CrdTransf2d::getLocalAxes(bool initialGeometry) const
     return retval;
   }
 
-//! @brief Returns the punto expresado en global coordinates.
+//! @brief Return the global coordinates of the point.
 const XC::Vector &XC::CrdTransf2d::getPointGlobalCoordFromBasic(const double &xi) const
   {
     static Vector local_coord(2),global_coord(2);
@@ -528,14 +528,14 @@ Pos2d XC::CrdTransf2d::getPosNodeJ(void) const
     return retval;
   }
 
-//! @brief Returns the local reference system.
+//! @brief Return the local reference system.
 Ref2d2d XC::CrdTransf2d::getLocalReference(void) const
   {
     const Vector vI= getI();
     return Ref2d2d(getPosNodeI(),Vector2d(vI[0],vI[1]));
   }
 
-//! @brief Returns the local coordinates del punto a partir de las globales.
+//! @brief Return the local coordinates of the point from the local ones.
 XC::Vector XC::CrdTransf2d::getPointLocalCoordFromGlobal(const Vector &xg) const
   {
     Ref2d2d ref= getLocalReference();
@@ -545,11 +545,11 @@ XC::Vector XC::CrdTransf2d::getPointLocalCoordFromGlobal(const Vector &xg) const
     return retval;  
   }
 
-//! @brief Returns the puntos expresados en global coordinates.
+//! @brief Return the global coordinates of the points.
 const XC::Matrix &XC::CrdTransf2d::getPointsGlobalCoordFromBasic(const Vector &basicCoords) const
   {
     static Matrix retval;
-    const size_t numPts= basicCoords.Size(); //Número de puntos a transformar.
+    const size_t numPts= basicCoords.Size(); //Number of points to transform.
     retval.resize(numPts,2);
     Vector xg(2);
     for(size_t i= 0;i<numPts;i++)
@@ -561,7 +561,7 @@ const XC::Matrix &XC::CrdTransf2d::getPointsGlobalCoordFromBasic(const Vector &b
     return retval;
   }
 
-//! @brief Returns the vector expresado en global coordinates.
+//! @brief Return the vector expressed in global coordinates.
 const XC::Vector &XC::CrdTransf2d::getVectorGlobalCoordFromLocal(const Vector &localCoords) const
   {
     static XC::Vector retval(2);
@@ -571,7 +571,7 @@ const XC::Vector &XC::CrdTransf2d::getVectorGlobalCoordFromLocal(const Vector &l
     return retval;
   }
 
-//! @brief Returns the vectors expressed in global coordinates.
+//! @brief Return the vectors expressed in global coordinates.
 const XC::Matrix &XC::CrdTransf2d::getVectorGlobalCoordFromLocal(const Matrix &localCoords) const
   {
     static Matrix retval;
@@ -586,7 +586,7 @@ const XC::Matrix &XC::CrdTransf2d::getVectorGlobalCoordFromLocal(const Matrix &l
     return retval;
   }
 
-//! @brief Returns the vector expresado en local coordinates.
+//! @brief Return the vector expressed in local coordinates.
 const XC::Vector &XC::CrdTransf2d::getVectorLocalCoordFromGlobal(const Vector &globalCoords) const
   {
     static XC::Vector retval(2);

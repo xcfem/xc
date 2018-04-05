@@ -90,7 +90,7 @@ XC::DeformationPlane::DeformationPlane( const Pos2d &yz1, const double &e_1,
     const Pos3d p2(e_2,yz2.x(),yz2.y());
     const Pos3d p3(e_3,yz3.x(),yz3.y());
     check_positions(p1,p2,p3);
-    TresPuntos(p1,p2,p3);
+    ThreePoints(p1,p2,p3);
   }
 
 //! Constant strain over the section.
@@ -109,7 +109,7 @@ XC::DeformationPlane::DeformationPlane(const Vector &e)
     const Pos3d p1(e_1,0.0,0.0);
     const Pos3d p2(e_2,1.0,0.0);
     const Pos3d p3(e_3,0.0,1.0);
-    TresPuntos(p1,p2,p3);
+    ThreePoints(p1,p2,p3);
   }
 
 void XC::DeformationPlane::ConstantStrain(const double &e)
@@ -117,7 +117,7 @@ void XC::DeformationPlane::ConstantStrain(const double &e)
     const Pos3d p1(e,0.0,0.0);
     const Pos3d p2(e,100.0,0.0);
     const Pos3d p3(e,0.0,100.0);
-    TresPuntos(p1,p2,p3);
+    ThreePoints(p1,p2,p3);
   }
 
 //! @brief Return the strain of the fiber at the position
@@ -180,7 +180,7 @@ Pos2d XC::DeformationPlane::getPointOnTensionedHalfPlane(void) const
     const double a= angulo(*this,PlanoYZ3d);
     if(exists && (a>mchne_eps_dbl)) //Neutral axis exists.
       {
-        const Pos2d p0(fn.Punto());
+        const Pos2d p0(fn.Point());
         //const Vector2d v(getMaximumSlopeLineYZ().YZ2DProjection().VDir());
         const Vector2d v= fn.VDir().Normal();
         retval= p0+1000*v;
@@ -201,7 +201,7 @@ Pos2d XC::DeformationPlane::getPointOnCompressedHalfPlane(void) const
     const double a= angulo(*this,PlanoYZ3d);
     if(exists && (a>mchne_eps_dbl)) //Neutral axis exists.
       {
-        const Pos2d p0(fn.Punto());
+        const Pos2d p0(fn.Point());
         //const Vector2d v(getMaximumSlopeLineYZ().YZ2DProjection().VDir());
         const Vector2d v= fn.VDir().Normal();
         retval= p0+1000*v;
@@ -219,7 +219,7 @@ Semiplano2d XC::DeformationPlane::getTensionedHalfPlane(const Recta2d &r) const
   {
     const Semiplano2d spt= getTensionedHalfPlane();
     assert(spt.exists());
-    const Pos2d p0(r.Punto());
+    const Pos2d p0(r.Point());
     const Vector2d v= r.VDir().Normal();
   
     Pos2d p(p0+1000*v);
@@ -248,7 +248,7 @@ Semiplano2d XC::DeformationPlane::getTensionedHalfPlane(void) const
     Pos2d tmp(0,0);
     if(exists && (a>mchne_eps_dbl)) //Neutral axis exists.
       {
-        const Pos2d p0(fn.Punto());
+        const Pos2d p0(fn.Point());
         const Vector2d v= fn.VDir().Normal();
         tmp= p0+1000*v;
         if(Strain(tmp)<0) //Lado compresiones.
@@ -272,7 +272,7 @@ Semiplano2d XC::DeformationPlane::getCompressedHalfPlane(const Recta2d &r) const
     Pos2d tmp(0,0);
     if(exists && (a>mchne_eps_dbl)) //Neutral axis exists.
       {
-        const Pos2d p0(fn.Punto());
+        const Pos2d p0(fn.Point());
         const Vector2d v= fn.VDir().Normal();
         tmp= p0+1000*v;
         if(Strain(tmp)>0) //Tensioned side.

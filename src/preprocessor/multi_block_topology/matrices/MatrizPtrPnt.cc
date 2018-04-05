@@ -54,7 +54,7 @@ void XC::MatrizPtrPnt::setPnt(const size_t &j,const size_t &k,const int &id_poin
                     << j << "," << k 
                     << ") is already assigned to point: "
                     << tmp->getName() << std::endl;
-        at(j,k)= c->getPuntos().busca(id_point);
+        at(j,k)= c->getPoints().busca(id_point);
      }
    else
      std::cerr << "(MatrizPtrPnt::setPnt): '"
@@ -72,9 +72,9 @@ XC::Pnt *XC::MatrizPtrPnt::getPnt(const size_t &j,const size_t &k)
     return retval;
   }
 
-//! @brief Returns (if it exists) a pointer to punto
-//! cuyo tag is being passed as parameter.
-XC::Pnt *XC::MatrizPtrPnt::buscaPunto(const size_t &tag)
+//! @brief Returns (if it exists) a pointer to point
+//! identified by the tag is being passed as parameter.
+XC::Pnt *XC::MatrizPtrPnt::findPoint(const size_t &tag)
   {
     Pnt *retval= nullptr;
     Pnt *tmp= nullptr;
@@ -132,9 +132,9 @@ XC::MultiBlockTopology *XC::MatrizPtrPnt::getMultiBlockTopology(void)
     return retval;
   }
 
-//! @brief Returns (if it exists) a pointer to punto
-//! cuyo tag is being passed as parameter.
-const XC::Pnt *XC::MatrizPtrPnt::buscaPunto(const size_t &tag) const
+//! @brief Returns (if it exists) a pointer to the point
+//! identified by the tag passed as parameter.
+const XC::Pnt *XC::MatrizPtrPnt::findPoint(const size_t &tag) const
   {
     const Pnt *retval= nullptr;
     const Pnt *tmp= nullptr;
@@ -156,7 +156,7 @@ const XC::Pnt *XC::MatrizPtrPnt::buscaPunto(const size_t &tag) const
     return retval;
   }
 
-//! @brief Returns the point closest to the point being passed as parameter.
+//! @brief Return the point closest to the point being passed as parameter.
 XC::Pnt *XC::MatrizPtrPnt::getNearestPnt(const Pos3d &p)
   {
     Pnt *retval= nullptr, *ptrPnt= nullptr;
@@ -181,14 +181,14 @@ XC::Pnt *XC::MatrizPtrPnt::getNearestPnt(const Pos3d &p)
     return retval;
   }
 
-//! @brief Returns the ppoint closest to the point being passed as parameter.
+//! @brief Return the ppoint closest to the point being passed as parameter.
 const XC::Pnt *XC::MatrizPtrPnt::getNearestPnt(const Pos3d &p) const
   {
     MatrizPtrPnt *this_no_const= const_cast<MatrizPtrPnt *>(this);
     return this_no_const->getNearestPnt(p);
   }
 
-//! @brief Returns a matriz con los identifiers de los puntos.
+//! @brief Returns a matriz with the point identifiers.
 m_int XC::MatrizPtrPnt::getTags(void) const
   {
     const size_t nfilas= getNumFilas();
@@ -204,7 +204,7 @@ m_int XC::MatrizPtrPnt::getTags(void) const
     return retval;
   }
 
-//! @brief Returns the centroide del esquema.
+//! @brief Return the centroide del esquema.
 Pos3d XC::MatrizPtrPnt::getCentroide(void) const
   {
     Pos3d retval;
@@ -234,7 +234,7 @@ Pos3d XC::MatrizPtrPnt::getCentroide(void) const
 //! indexes of the point the values of the offsetIndices vector; i.e.:
 //! (i,j)->(i+offsetIndices[0],j+offsetIndices[1])
 //! and moving the by the vectorOffset vector.
-std::deque<size_t> XC::MatrizPtrPnt::CopiaPuntos(const RangoMatriz &rango,const std::vector<size_t> &offsetIndices,const Vector3d &vectorOffset= Vector3d())
+std::deque<size_t> XC::MatrizPtrPnt::copyPoints(const RangoMatriz &rango,const std::vector<size_t> &offsetIndices,const Vector3d &vectorOffset= Vector3d())
   {
     MultiBlockTopology *mbt= getMultiBlockTopology();
     std::deque<size_t> retval;
@@ -246,7 +246,7 @@ std::deque<size_t> XC::MatrizPtrPnt::CopiaPuntos(const RangoMatriz &rango,const 
           const Pnt *p= operator()(i,j);
           if(p)
             {
-              Pnt *newPt= mbt->getPuntos().Copia(p,vectorOffset);
+              Pnt *newPt= mbt->getPoints().Copia(p,vectorOffset);
               (*this)(i+offsetIndices[0],j+offsetIndices[1])= newPt;
               retval.push_back(newPt->GetTag());
             }

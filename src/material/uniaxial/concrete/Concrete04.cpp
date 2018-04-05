@@ -121,7 +121,7 @@ XC::Concrete04::Concrete04(int tag)
    CmaxStrain(0.0), CcompStrain(0.0), CUtenStress(0.0), CUtenSlope(0.0)
   { setup_parameters(); }
 
-//! @brief Asigna la tensión de prueba.
+//! @brief Set the trial stress.
 int XC::Concrete04::setTrialStrain(double strain, double strainRate)
   {
     // Reset trial history variables to last committed state

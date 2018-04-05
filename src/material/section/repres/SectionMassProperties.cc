@@ -133,17 +133,17 @@ double XC::SectionMassProperties::getIHomogenizedSection(const double &E0,const 
     return retval;
   }
 
-//! @brief Returns the moment of inertia with respect to the axis that passes through O with the direction of e.
+//! @brief Return the moment of inertia with respect to the axis that passes through O with the direction of e.
 double XC::SectionMassProperties::getIHomogenizedSection(const double &E0,const Pos2d &O,const Vector &e) const
   {
     const Matrix Io(getIHomogenizedSection(E0,O));
     return dot(e,Io*e)/e.Norm2();
   }
 
-//! @brief Returns the moment of inertia respecto a la recta being passed
+//! @brief Return the moment of inertia respecto a la recta being passed
 //! as parameter.
 double XC::SectionMassProperties::getIHomogenizedSection(const double &E0,const Recta2d &r) const
-  { return getIHomogenizedSection(E0,r.Punto(),Vector(r.VDir()));  }
+  { return getIHomogenizedSection(E0,r.Point(),Vector(r.VDir()));  }
 
 //! @brief Return the i,j component of the tensor of inertia computed with respect to the point "o".
 double XC::SectionMassProperties::getIHomogenizedSection(const double &E0,const unsigned short int &i,const unsigned short int &j,const Pos2d &o) const
@@ -157,12 +157,12 @@ double XC::SectionMassProperties::getIHomogenizedSection(const double &E0,const 
     return Iij + getAreaHomogenizedSection(E0) * pos_local(i) * pos_local(j);
   }
 
-//! @brief Returns the polar moment of inertia with respect to the point o.
+//! @brief Return the polar moment of inertia with respect to the point o.
 double XC::SectionMassProperties::getIOHomogenizedSection(const double &E0,const Pos2d &o) const
   { return (getIHomogenizedSection(E0,1,1,o)+getIHomogenizedSection(E0,2,2,o)+getIHomogenizedSection(E0,3,3,o))/2; }
 
 
-//! @brief Returns the tensor of inertia computed with respect to the object centroid.
+//! @brief Return the tensor of inertia computed with respect to the object centroid.
 XC::Matrix XC::SectionMassProperties::getIHomogenizedSection(const double &E0) const
   {
     Matrix i(2,2);
@@ -171,7 +171,7 @@ XC::Matrix XC::SectionMassProperties::getIHomogenizedSection(const double &E0) c
     return i;
   }
 
-//! @brief Returns the tensor of inertia respector al punto o.
+//! @brief Return the tensor of inertia with respect to the point o.
 XC::Matrix XC::SectionMassProperties::getIHomogenizedSection(const double &E0,const Pos2d &o) const
   {
     Matrix retval(2,2);
@@ -290,17 +290,17 @@ double XC::SectionMassProperties::getIGrossSection(const unsigned short int &i,c
     return retval;
   }
 
-//! @brief Returns the moment of inertia with respect to the axis that passes through O with the direction of e.
+//! @brief Return the moment of inertia with respect to the axis that passes through O with the direction of e.
 double XC::SectionMassProperties::getIGrossSection(const Pos2d &O,const Vector &e) const
   {
     const Matrix Io(getIGrossSection(O));
     return dot(e,Io*e)/e.Norm2();
   }
 
-//! @brief Returns the moment of inertia respecto a la recta being passed
+//! @brief Return the moment of inertia respecto a la recta being passed
 //! as parameter.
 double XC::SectionMassProperties::getIGrossSection(const Recta2d &r) const
-  { return getIGrossSection(r.Punto(),Vector(r.VDir()));  }
+  { return getIGrossSection(r.Point(),Vector(r.VDir()));  }
 
 //! @brief Return the i,j component of the tensor of inertia computed with respect to the point "o".
 double XC::SectionMassProperties::getIGrossSection(const unsigned short int &i,const unsigned short int &j,const Pos2d &o) const
@@ -314,12 +314,12 @@ double XC::SectionMassProperties::getIGrossSection(const unsigned short int &i,c
     return Iij + getAreaGrossSection() * pos_local(i) * pos_local(j);
   }
 
-//! @brief Returns the polar moment of inertia with respect to the point o.
+//! @brief Return the polar moment of inertia with respect to the point o.
 double XC::SectionMassProperties::getIOGrossSection(const Pos2d &o) const
   { return (getIGrossSection(1,1,o)+getIGrossSection(2,2,o)+getIGrossSection(3,3,o))/2; }
 
 
-//! @brief Returns the tensor of inertia computed with respect to the object centroid.
+//! @brief Return the tensor of inertia computed with respect to the object centroid.
 XC::Matrix XC::SectionMassProperties::getIGrossSection(void) const
   {
     Matrix i(2,2);
@@ -328,7 +328,7 @@ XC::Matrix XC::SectionMassProperties::getIGrossSection(void) const
     return i;
   }
 
-//! @brief Returns the tensor of inertia respector al punto o.
+//! @brief Return the tensor of inertia with respect to the point o.
 XC::Matrix XC::SectionMassProperties::getIGrossSection(const Pos2d &o) const
   {
     Matrix retval(2,2);

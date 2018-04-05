@@ -97,26 +97,26 @@ bool XC::EntMdlrBase::check_preprocessor(void) const
 
 //! @brief Return a pointer to the point identified by
 //! the tag being passed as parameter.
-XC::Pnt *XC::EntMdlrBase::BuscaPnt(const size_t &id_punto)
+XC::Pnt *XC::EntMdlrBase::BuscaPnt(const size_t &id_point)
   {
     Pnt *retval= nullptr;
     if(check_preprocessor())
       {
         MultiBlockTopology &mbt= getPreprocessor()->getMultiBlockTopology();
-        retval= mbt.getPuntos().busca(id_punto);
+        retval= mbt.getPoints().busca(id_point);
       }
     return retval;
   }
 
 //! @brief Return a const pointer to the point identified by
 //! the tag being passed as parameter.
-const XC::Pnt *XC::EntMdlrBase::BuscaPnt(const size_t &id_punto) const
+const XC::Pnt *XC::EntMdlrBase::BuscaPnt(const size_t &id_point) const
   {
     const Pnt *retval= nullptr;
     if(check_preprocessor())
       {
         const MultiBlockTopology &mbt= getPreprocessor()->getMultiBlockTopology();
-        retval= mbt.getPuntos().busca(id_punto);
+        retval= mbt.getPoints().busca(id_point);
       }
     return retval;
   }

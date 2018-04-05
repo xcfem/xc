@@ -57,7 +57,7 @@ void XC::UniformGrid::actualiza_topologia(void)
   {
   }
 
-//! @brief Returns mesh dimension (1,2 ó 3).
+//! @brief Returns mesh dimension (1,2 or 3).
 unsigned short int XC::UniformGrid::GetDimension(void) const
   {
     unsigned short int retval= 0;

@@ -43,7 +43,7 @@ def listPointReactions(nmbComb,pointList, fmt, fName, encab, tit):
   nodes.calculateNodalReactions()
 
   for iArranque in pointList:
-    pto= preprocessor.getMultiBlockTopology.getPunto(iArranque)
+    pto= preprocessor.getMultiBlockTopology.getPoint(iArranque)
     iNode= pto.getNodeTag()
     fName.write(nmbComb," & ",pointList[i]," & ",iNode," & ")
     if(iNode>=0):
@@ -66,7 +66,7 @@ def listPointReactionsCSV(preprocessor,nmbComb,pointList, fmt, fName):
   nodes.calculateNodalReactions()
 
   for iArranque in pointList:
-    pto= preprocessor.getMultiBlockTopology.getPunto(iArranque)
+    pto= preprocessor.getMultiBlockTopology.getPoint(iArranque)
     iNode= pto.getNodeTag()
     fName.write(nmbComb," ; ",pointList[i]," ; ",iNode," ; ")
     if(iNode>=0):

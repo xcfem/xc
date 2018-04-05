@@ -42,7 +42,7 @@ XC::SteelBase::SteelBase(int tag,int classTag)
 void XC::SteelBase::setInitialTangent(const double &d)
   {
     E0= d;
-    setup_parameters(); //Inicializa las variables históricas.
+    setup_parameters(); //Initialize history variables.
   }
 
 //! @brief Returns intial Young's modulus.
@@ -53,7 +53,7 @@ double XC::SteelBase::getInitialTangent(void) const
 void XC::SteelBase::setFy(const double &d)
   {
     fy= d;
-    setup_parameters(); //Inicializa las variables históricas.
+    setup_parameters(); //Initialize history variables.
   }
 
 //! @brief Returns yield stress.

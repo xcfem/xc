@@ -25,7 +25,7 @@
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
 //MatrizPtrNod.h
-//Matriz de puntos
+//Node matrix
 
 #ifndef MATRIZPTRNOD_H
 #define MATRIZPTRNOD_H

@@ -65,7 +65,7 @@ void XC::TritrizPtrPnt::setPnt(const size_t &i,const size_t &j,const size_t &k,c
                     << i << "," << j << "," << k 
                     << ") is already assigned to point: "
                     << tmp->getName() << std::endl;
-        TritrizPtrPnt::operator()(i,j,k)= c->getPuntos().busca(id_point);
+        TritrizPtrPnt::operator()(i,j,k)= c->getPoints().busca(id_point);
       }
     else
      std::cerr << "(MatrizPtrPnt::setPnt): '"
@@ -78,7 +78,7 @@ void XC::TritrizPtrPnt::setPnt(const size_t &i,const size_t &j,const size_t &k,c
 XC::Pnt *XC::TritrizPtrPnt::getPnt(const size_t &i,const size_t &j,const size_t &k)
   { return getAtIJK(i,j,k); }
 
-//! @brief Returns the centroide del esquema.
+//! @brief Return the centroide del esquema.
 Pos3d XC::TritrizPtrPnt::getCentroide(void) const
   {
     Pos3d retval;
@@ -100,14 +100,14 @@ Pos3d XC::TritrizPtrPnt::getCentroide(void) const
 
 //! @brief Returns (if it exists) a pointer to the point
 //! identified by the tag being passed as parameter.
-XC::Pnt *XC::TritrizPtrPnt::buscaPunto(const int &tag)
+XC::Pnt *XC::TritrizPtrPnt::findPoint(const int &tag)
   {
     Pnt *retval= nullptr;
     const size_t ncapas= GetCapas();
     for(size_t i=1;i<=ncapas;i++)
       {
         MatrizPtrPnt &capa= operator()(i);
-        retval= capa.buscaPunto(tag);
+        retval= capa.findPoint(tag);
         if(retval) break;
       }
     return retval;
@@ -139,14 +139,14 @@ XC::MultiBlockTopology *XC::TritrizPtrPnt::getMultiBlockTopology(void)
     return retval;
   }
 
-//! @brief Returns the point closest to the one being passed as parameter.
+//! @brief Return the point closest to the one being passed as parameter.
 const XC::Pnt *XC::TritrizPtrPnt::getNearestPnt(const Pos3d &p) const
   {
     TritrizPtrPnt *this_no_const= const_cast<TritrizPtrPnt *>(this);
     return this_no_const->getNearestPnt(p);
   }
 
-//! @brief Returns the point closest to the one being passed as parameter.
+//! @brief Return the point closest to the one being passed as parameter.
 XC::Pnt *XC::TritrizPtrPnt::getNearestPnt(const Pos3d &p)
   {
     Pnt *retval= nullptr, *ptrPnt= nullptr;
@@ -172,14 +172,14 @@ XC::Pnt *XC::TritrizPtrPnt::getNearestPnt(const Pos3d &p)
 
 //! @brief Returns (if it exists) a pointer to the point
 //! identified by the tag being passed as parameter.
-const XC::Pnt *XC::TritrizPtrPnt::buscaPunto(const int &tag) const
+const XC::Pnt *XC::TritrizPtrPnt::findPoint(const int &tag) const
   {
     const Pnt *retval= nullptr;
     const size_t ncapas= GetCapas();
     for(size_t i=1;i<=ncapas;i++)
       {
         const MatrizPtrPnt &capa= operator()(i);
-        retval= capa.buscaPunto(tag);
+        retval= capa.findPoint(tag);
         if(retval) break;
       }
     return retval;
@@ -190,7 +190,7 @@ const XC::Pnt *XC::TritrizPtrPnt::buscaPunto(const int &tag) const
 //! indexes of the point the values of the offsetIndices vector; i.e.:
 //! (i,j,k)->(i+offsetIndices[0],j+offsetIndices[1],k+offsetIndices[2])
 //! and moving the by the vectorOffset vector.
-std::deque<size_t> XC::TritrizPtrPnt::CopiaPuntos(const RangoTritriz &rango,const std::vector<size_t> &offsetIndices,const Vector3d &vectorOffset= Vector3d())
+std::deque<size_t> XC::TritrizPtrPnt::copyPoints(const RangoTritriz &rango,const std::vector<size_t> &offsetIndices,const Vector3d &vectorOffset= Vector3d())
   {
     MultiBlockTopology *mbt= getMultiBlockTopology();
     std::deque<size_t> retval;
@@ -204,7 +204,7 @@ std::deque<size_t> XC::TritrizPtrPnt::CopiaPuntos(const RangoTritriz &rango,cons
             const Pnt *p= operator()(i,j,k);
             if(p)
               {
-                Pnt *newPt= mbt->getPuntos().Copia(p,vectorOffset);
+                Pnt *newPt= mbt->getPoints().Copia(p,vectorOffset);
                 (*this)(i+offsetIndices[0],j+offsetIndices[1],k+offsetIndices[2])= newPt;
                 retval.push_back(newPt->GetTag());
               }
@@ -212,8 +212,8 @@ std::deque<size_t> XC::TritrizPtrPnt::CopiaPuntos(const RangoTritriz &rango,cons
     return retval;
   }  
 
-//! @brief Returns the points del rango being passed as parameter.
-XC::TritrizPtrPnt XC::TritrizPtrPnt::getRangoPuntos(const RangoTritriz &rango)
+//! @brief Return the points del rango being passed as parameter.
+XC::TritrizPtrPnt XC::TritrizPtrPnt::getPointsOnRange(const RangoTritriz &rango)
   {
     TritrizPtrPnt retval(rango.NumCapas(),rango.NumFilas(),rango.NumCols());
     const RangoIndice &rcapas= rango.GetRangoCapas();
@@ -233,24 +233,24 @@ XC::TritrizPtrPnt XC::TritrizPtrPnt::getRangoPuntos(const RangoTritriz &rango)
     return retval;
   }
 
-//! @brief Returns the points which indices are being passed as parameter.
-XC::Pnt *XC::TritrizPtrPnt::getPunto(const VIndices &iPunto)
+//! @brief Return the points which indices are being passed as parameter.
+XC::Pnt *XC::TritrizPtrPnt::getPoint(const VIndices &iPoint)
   {
     Pnt *retval= nullptr;
-    if(iPunto.size()>2)
+    if(iPoint.size()>2)
       {
-        if((iPunto[0]>0) && (iPunto[1]>0) && (iPunto[2]>0))
-          { retval= (*this)(iPunto[0],iPunto[1],iPunto[2]); }
+        if((iPoint[0]>0) && (iPoint[1]>0) && (iPoint[2]>0))
+          { retval= (*this)(iPoint[0],iPoint[1],iPoint[2]); }
       }
     else
       std::cerr  << "::" << __FUNCTION__
 		<< "; vector of indexes: "
-                << iPunto << " is not valid." << std::endl;
+                << iPoint << " is not valid." << std::endl;
     return retval;    
   }
 
-//! @brief Returns the points which indices are being passed as parameter.
-XC::TritrizPtrPnt XC::TritrizPtrPnt::getPuntos(const TritrizIndices &indices)
+//! @brief Return the points which indices are being passed as parameter.
+XC::TritrizPtrPnt XC::TritrizPtrPnt::getPoints(const TritrizIndices &indices)
   {
     const size_t nCapas= indices.GetCapas();
     const size_t nFilas= indices.getNumFilas();
@@ -260,19 +260,19 @@ XC::TritrizPtrPnt XC::TritrizPtrPnt::getPuntos(const TritrizIndices &indices)
       for(size_t j= 1;j<= nFilas;j++)
         for(size_t k= 1;k<= nCapas;k++)
           {
-            const VIndices iPunto= indices(i,j,k);
-            if(iPunto.size()>2)
-              { retval(i,j,k)= getPunto(iPunto); }
+            const VIndices iPoint= indices(i,j,k);
+            if(iPoint.size()>2)
+              { retval(i,j,k)= getPoint(iPoint); }
             else
 	      std::cerr  << "::" << __FUNCTION__
 			<< "; vector of indexes: "
-                        << iPunto << " is not valid." << std::endl;
+                        << iPoint << " is not valid." << std::endl;
           }
     return retval;
   }
 
-//! @brief Returns the points which indices are being passed as parameters.
-XC::MatrizPtrPnt XC::TritrizPtrPnt::getPuntos(const MatrizIndices &indices)
+//! @brief Return the points which indices are being passed as parameters.
+XC::MatrizPtrPnt XC::TritrizPtrPnt::getPoints(const MatrizIndices &indices)
   {
     const size_t nFilas= indices.getNumFilas();
     const size_t nCols= indices.getNumCols();
@@ -280,13 +280,13 @@ XC::MatrizPtrPnt XC::TritrizPtrPnt::getPuntos(const MatrizIndices &indices)
     for(size_t i= 1;i<= nFilas;i++)
       for(size_t j= 1;j<= nCols;j++)
         {
-          const VIndices iPunto= indices(i,j);
-          if(iPunto.size()>2)
-            { retval(i,j)= getPunto(iPunto); }
+          const VIndices iPoint= indices(i,j);
+          if(iPoint.size()>2)
+            { retval(i,j)= getPoint(iPoint); }
           else
             std::cerr  << "::" << __FUNCTION__
 		      << "; vector of indexes: "
-                      << iPunto << " is not valid." << std::endl;
+                      << iPoint << " is not valid." << std::endl;
         }
     return retval;
   }
@@ -295,26 +295,26 @@ XC::MatrizPtrPnt XC::TritrizPtrPnt::getPuntos(const MatrizIndices &indices)
 //! of the tritrix that result for adding to the indexex (i,j,k) of each point
 //! the values of the vector offsetIndices i. e.:
 //! Point (i,j,k): (i+offsetIndices(i,j,k)[0],j+offsetIndices(i,j,k)[1],k+offsetIndices(i,j,k)[2])
-XC::TritrizPtrPnt XC::TritrizPtrPnt::getCeldaPuntos(const size_t &i,const size_t &j,const size_t &k,const TritrizIndices &offsetIndices)
+XC::TritrizPtrPnt XC::TritrizPtrPnt::getCellPoints(const size_t &i,const size_t &j,const size_t &k,const TritrizIndices &offsetIndices)
   {
     VIndices org(3);
     org[0]= i;org[1]= j;org[2]= k;
     TritrizIndices tmp(offsetIndices);
     tmp.Offset(org);
-    return getPuntos(tmp);
+    return getPoints(tmp);
   }
 
 //! @brief Return the cell builded by the points obtained from the positions
 //! of the tritrix that result for adding to the indexes (i,j) of each point
 //! the values of the vector offsetIndices i. e.:
 //! Point (i,j): (i+offsetIndices(i,j)[0],j+offsetIndices(i,j)[1])
-XC::MatrizPtrPnt XC::TritrizPtrPnt::getCeldaPuntos(const size_t &i,const size_t &j,const MatrizIndices &offsetIndices)
+XC::MatrizPtrPnt XC::TritrizPtrPnt::getCellPoints(const size_t &i,const size_t &j,const MatrizIndices &offsetIndices)
   {
     VIndices org(2);
     org[0]= i;org[1]= j;
     MatrizIndices tmp(offsetIndices);
     tmp.Offset(org);
-    return getPuntos(tmp);
+    return getPoints(tmp);
   }
 
 // //! @brief Creates quad surfaces between the point range passed as paramete, it places them
@@ -340,7 +340,7 @@ XC::MatrizPtrPnt XC::TritrizPtrPnt::getCeldaPuntos(const size_t &i,const size_t 
 //             const Pnt *p= operator()(i,j,k);
 //             if(p)
 //               {
-//                 Pnt *newPt= mbt->getPuntos().Copia(p,vectorOffset);
+//                 Pnt *newPt= mbt->getPoints().Copia(p,vectorOffset);
 //                 (*this)(i+offsetIndices[0],j+offsetIndices[1],k+offsetIndices[2])= newPt;
 //                 retval.push_back(newPt->GetTag());
 //               }
@@ -371,12 +371,12 @@ std::ostream &XC::operator<<(std::ostream &os, const TritrizPtrPnt &t)
     return os;
   }
 
-//! @brief Returns the indexes of the points (j,k),(j+1,k),(j+1,k+1),(j,k+1). 
-std::vector<size_t> XC::getIdPuntosQuad(const TritrizPtrPnt::const_ref_capa_i_cte &puntos,const size_t &j,const size_t &k)
+//! @brief Return the indexes of the points (j,k),(j+1,k),(j+1,k+1),(j,k+1). 
+std::vector<size_t> XC::getIdPointsQuad(const TritrizPtrPnt::const_ref_capa_i_cte &points,const size_t &j,const size_t &k)
   {
     std::vector<size_t> retval(4,-1);
-    const size_t nfilas= puntos.getNumFilas();
-    const size_t ncols= puntos.getNumCols();
+    const size_t nfilas= points.getNumFilas();
+    const size_t ncols= points.getNumCols();
     if(j>=nfilas)
       {
         std::cerr  << __FUNCTION__
@@ -392,42 +392,50 @@ std::vector<size_t> XC::getIdPuntosQuad(const TritrizPtrPnt::const_ref_capa_i_ct
 
 
     Pos3d p1;
-    const Pnt *ptr= puntos(j,k);
+    const Pnt *ptr= points(j,k);
     if(ptr)
       {
         retval[0]= ptr->GetTag();
         if(retval[0]<0)
-          std::cerr << "getIdPuntosQuad; error al obtener el identifier de punto (" << j << ',' << k << ").\n";
+          std::cerr << __FUNCTION__
+		    << "error when obtaining the point identifier ("
+		    << j << ',' << k << ").\n";
         p1= ptr->GetPos();
       }
 
     Pos3d p2;
-    ptr= puntos(j,k+1);
+    ptr= points(j,k+1);
     if(ptr)
       {
         retval[1]= ptr->GetTag();
         if(retval[1]<0)
-          std::cerr << "getIdPuntosQuad; error al obtener el identifier de punto (" << j << ',' << k+1 << ").\n";
+          std::cerr << __FUNCTION__
+		    << "error when obtaining the point identifier ("
+		    << j << ',' << k+1 << ").\n";
         p2= ptr->GetPos();
       }
 
     Pos3d p3;
-    ptr= puntos(j+1,k+1);
+    ptr= points(j+1,k+1);
     if(ptr)
       {
         retval[2]= ptr->GetTag();
         if(retval[2]<0)
-          std::cerr << "getIdPuntosQuad; error al obtener el identifier de punto (" << j+1 << ',' << k+1 << ").\n";
+          std::cerr << __FUNCTION__
+		    << "error when obtaining the point identifier ("
+		    << j+1 << ',' << k+1 << ").\n";
         p3= ptr->GetPos();
       }
 
     Pos3d p4;
-    ptr= puntos(j+1,k);
+    ptr= points(j+1,k);
     if(ptr)
       {
         retval[3]=ptr->GetTag();
         if(retval[3]<0)
-          std::cerr << "getIdPuntosQuad; error al obtener el identifier de punto (" << j+1 << ',' << k << ").\n";
+          std::cerr << __FUNCTION__
+		    << "error when obtaining the point identifier ("
+		    << j+1 << ',' << k << ").\n";
         p4= ptr->GetPos();
       }
 

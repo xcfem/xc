@@ -25,7 +25,7 @@
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
 //MatrizPtrElem.h
-//Matriz de puntos
+//Point matrix
 
 #ifndef MATRIZPTRELEM_H
 #define MATRIZPTRELEM_H

@@ -43,7 +43,7 @@ class Block: public Body
     void coloca(const size_t &i,Face *s);
   protected:
     void inserta(const size_t &);
-    //XXX void add_puntos(const std::vector<size_t> &);
+    //XXX void add_points(const std::vector<size_t> &);
     void add_caras(const std::vector<size_t> &);
     void create_nodes_caras(void);
     TritrizPos3d get_posiciones(void) const;
@@ -52,7 +52,7 @@ class Block: public Body
   public:
     Block(Preprocessor *m,const std::string &nombre= "");
     SetEstruct *getCopy(void) const;
-    //! @brief Returns the number of lines of the object.
+    //! @brief Return the number of lines of the object.
     virtual size_t getNumberOfLines(void) const;
     virtual size_t getNumberOfVertices(void) const;
     virtual size_t getNumberOfFaces(void) const;

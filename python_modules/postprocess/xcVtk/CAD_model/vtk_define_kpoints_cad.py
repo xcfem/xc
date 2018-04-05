@@ -4,8 +4,8 @@ def VtkCargaIdsKPts(recordGrid):
   etiqKPt= VtkCreaStrArraySetData(recordGrid.setName,"pnts","codigo")
   recordGrid.uGrid.PointData.SetStrings(etiqKPt)
 
-# Dibuja las etiquetas de los puntos
 def VtkDibujaIdsKPts(nmbUGrid,setName,renderer):
+  '''Draw the points labels.'''
   st= preprocessor.getSets.getSet(setName)
   numKPtsDI= st.size
 

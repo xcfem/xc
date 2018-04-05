@@ -276,7 +276,7 @@ const Trihedron *XC::ClosedTriangleMesh::findTrihedronPtr(const Pos3d &p) const
     return retval;
   }
 
-//! @brief Returns the intersection of triangle mesh with the ray
+//! @brief Return the intersection of triangle mesh with the ray
 //! from origin (0,0,0) to p.
 GeomObj::list_Pos3d XC::ClosedTriangleMesh::get_intersection(const Pos3d &p) const
   {
@@ -321,9 +321,9 @@ void XC::ClosedTriangleMesh::Print(std::ostream &os) const
 	      << "; not implemented." << std::endl;
   }
 
-//! @brief Returns a matriz con las coordenadas de los puntos
-//! que definen each uno de los trihedrons.
-void XC::ClosedTriangleMesh::getMatrizPosiciones(Matrix &m)
+//! @brief Return a matrix with the coordinates of the points
+//! that define each one of the trihedrons.
+void XC::ClosedTriangleMesh::getPositionsMatrix(Matrix &m)
   {
     const int sz= size();
     size_t fila= 0;
@@ -367,7 +367,7 @@ void XC::ClosedTriangleMesh::write(std::ofstream &os)
     os.write((char *) &rMax,sizeof rMax);
     os.write((char *) &rMin,sizeof rMin); 
     Matrix m;
-    getMatrizPosiciones(m);
+    getPositionsMatrix(m);
     m.write(os);
   }
 
@@ -388,7 +388,7 @@ int XC::ClosedTriangleMesh::sendData(CommParameters &cp)
     int res= 0; //MovableObject::sendData(cp);
     res+= cp.sendDoubles(tol,rMax,rMin,getDbTagData(),CommMetaData(1));
     Matrix m;
-    getMatrizPosiciones(m);
+    getPositionsMatrix(m);
     res+= cp.sendMatrix(m,getDbTagData(),CommMetaData(2));
     return res;
   }

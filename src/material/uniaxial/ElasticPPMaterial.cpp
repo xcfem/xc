@@ -83,7 +83,7 @@ void XC::ElasticPPMaterial::set_fyp(const double &f)
 void XC::ElasticPPMaterial::set_eyp(const double &eyp)
   { set_fyp(E*eyp); }
 
-//! @brief Asigna el yield stress a compresión value.
+//! @brief Set the yield stress a compression value.
 void XC::ElasticPPMaterial::set_fyn(const double &f)
   {
     fyn= f;
@@ -94,7 +94,7 @@ void XC::ElasticPPMaterial::set_fyn(const double &f)
       }  
   }
 
-//! @brief Asigna el yield stress a compresión value.
+//! @brief Asigna el yield stress a compression value.
 void XC::ElasticPPMaterial::set_eyn(const double &eyn)
   { set_fyn(E*eyn); }
 

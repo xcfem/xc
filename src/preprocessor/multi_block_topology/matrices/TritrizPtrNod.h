@@ -25,7 +25,7 @@
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
 //TritrizPtrNod.h
-//Vector de matrices de puntos
+//Pointers to nodes in an array of matrices.
 
 #ifndef TRITRIZPTRNOD_H
 #define TRITRIZPTRNOD_H

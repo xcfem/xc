@@ -404,7 +404,7 @@ extern "C" int steel_2__(double *matpar, double *hstvP, double *hstv,
 
 int XC::FedeasMaterial::invokeSubroutine(int ist)
   {
-    std::cerr << "Este material sólo funciona en Windows." << std::endl;
+    std::cerr << "This material works only on Windows." << std::endl;
     return 0;
   }
 

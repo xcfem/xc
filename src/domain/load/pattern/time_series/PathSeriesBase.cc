@@ -45,11 +45,11 @@ XC::PathSeriesBase::PathSeriesBase(int classTag,const Vector &theLoadPath,const 
    thePath(theLoadPath), lastSendCommitTag(-1)
   {}
 
-//! @brief Returns the número de puntos que definen el path.
+//! @brief Return the number of points that define the path.
 size_t XC::PathSeriesBase::getNumDataPoints(void) const
   { return thePath.Size(); }
 
-//! @brief Returns the number of data en on the file with the name being passed as parameter.
+//! @brief Return the number of data en on the file with the name being passed as parameter.
 size_t XC::PathSeriesBase::getNumDataPointsOnFile(const std::string &fName) const
   {
     double dataPoint;
@@ -84,7 +84,7 @@ size_t XC::PathSeriesBase::load_vector_from_file(Vector &v,std::istream &is)
     return count;
   }
 
-//! @brief Returns the peak value of the factor.
+//! @brief Return the peak value of the factor.
 double XC::PathSeriesBase::getPeakFactor(void) const
   {
     double peak = fabs(thePath(0));

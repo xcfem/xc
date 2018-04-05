@@ -31,7 +31,7 @@
 #define ModalAnalysis_h
 
 #include "EigenAnalysis.h"
-#include "xc_utils/src/geom/d1/func_por_puntos/FuncPorPuntosR_R.h"
+#include "xc_utils/src/geom/d1/function_from_points/FunctionFromPointsR_R.h"
 
 namespace XC {
 class Matrix;
@@ -42,14 +42,14 @@ class Matrix;
 class ModalAnalysis : public EigenAnalysis
   {
   protected:
-    FuncPorPuntosR_R espectro;
+    FunctionFromPointsR_R espectro;
 
     friend class ProcSolu;
     ModalAnalysis(AnalysisAggregation *analysis_aggregation);
   public:
-    inline const FuncPorPuntosR_R &getSpectrum(void) const
+    inline const FunctionFromPointsR_R &getSpectrum(void) const
       { return espectro; }
-    inline void setSpectrum(const FuncPorPuntosR_R &s)
+    inline void setSpectrum(const FunctionFromPointsR_R &s)
       { espectro= s; }
     //Aceleraciones.
     double getAcceleration(const double &) const;

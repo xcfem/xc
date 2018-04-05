@@ -101,7 +101,7 @@ XC::TransfCooHandler *XC::CrdTransf::GetTransfCooHandler(void)
     return retval;
   }
 
-//! @brief Returns the name of the coordinate transformation.
+//! @brief Return the name of the coordinate transformation.
 std::string XC::CrdTransf::getName(void) const
   {
     const TransfCooHandler *cthandler= GetTransfCooHandler();
@@ -136,8 +136,8 @@ double XC::CrdTransf::getLength(bool initialGeometry) const
 const XC::Matrix &XC::CrdTransf::getPointsGlobalCoordFromLocal(const Matrix &localCoords) const
   {
     static Matrix retval;
-    const size_t numPts= localCoords.noRows(); //Número de puntos a transformar.
-    const size_t dim= localCoords.noCols(); //Dimensión del espacio.
+    const size_t numPts= localCoords.noRows(); //Number of points to transform.
+    const size_t dim= localCoords.noCols(); //Space dimension.
     retval.resize(numPts,dim);
     Vector xl(dim);
     Vector xg(dim);

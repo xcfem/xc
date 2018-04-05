@@ -54,7 +54,7 @@ class TrfGeom: public EntMdlrBase
       : EntMdlrBase("",m) {}
     inline virtual ~TrfGeom(void)
       {}
-    //! @brief Applies the transformation al punto.
+    //! @brief Applies the transformation to the point.
     virtual Pos3d Transforma(const Pos3d &p) const= 0;
     virtual Vector3d Transforma(const Vector3d &v) const= 0;
     const MatrizPos3d &Transforma(const MatrizPos3d &m) const;

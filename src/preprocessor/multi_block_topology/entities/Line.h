@@ -37,7 +37,7 @@ namespace XC {
 
 //! \ingroup MultiBlockTopologyEnt
 //!
-//! @brief Segmento de recta entre dos puntos.
+//! @brief Line: base class for 1D objects.
 class Line: public LineBase
   {
   protected:
@@ -57,7 +57,7 @@ class Line: public LineBase
 
     double getLambda(const Pos3d &) const;
     
-    //! @brief Returns the number of vertices.
+    //! @brief Return the number of vertices.
     inline virtual size_t getNumberOfVertices(void) const
       { return 2; }
     virtual BND3d Bnd(void) const;

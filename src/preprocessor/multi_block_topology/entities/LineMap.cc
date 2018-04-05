@@ -51,8 +51,8 @@ XC::Line *XC::LineMap::newLine(const size_t &id_p1, const size_t &id_p2)
     Preprocessor *preprocessor= getPreprocessor();
     assert(preprocessor);
     MultiBlockTopology &mbt= preprocessor->getMultiBlockTopology();
-    Pnt *p1= mbt.getPuntos().busca(id_p1);
-    Pnt *p2= mbt.getPuntos().busca(id_p2);
+    Pnt *p1= mbt.getPoints().busca(id_p1);
+    Pnt *p2= mbt.getPoints().busca(id_p2);
     Line *retval= dynamic_cast<Line *>(createLine(p1,p2));
     assert(retval);
     return retval;
@@ -64,8 +64,8 @@ XC::DividedLine *XC::LineMap::newDividedLine(const size_t &id_p1, const size_t &
     Preprocessor *preprocessor= getPreprocessor();
     assert(preprocessor);
     MultiBlockTopology &mbt= preprocessor->getMultiBlockTopology();
-    Pnt *p1= mbt.getPuntos().busca(id_p1);
-    Pnt *p2= mbt.getPuntos().busca(id_p2);
+    Pnt *p1= mbt.getPoints().busca(id_p1);
+    Pnt *p2= mbt.getPoints().busca(id_p2);
     DividedLine *retval= dynamic_cast<DividedLine *>(createDividedLine(p1,p2));
     assert(retval);
     return retval;
@@ -77,9 +77,9 @@ XC::CircularArc *XC::LineMap::newCircleArc(const size_t &id_p1, const size_t &id
     Preprocessor *preprocessor= getPreprocessor();
     assert(preprocessor);
     MultiBlockTopology &mbt= preprocessor->getMultiBlockTopology();
-    Pnt *p1= mbt.getPuntos().busca(id_p1);
-    Pnt *p2= mbt.getPuntos().busca(id_p2);
-    Pnt *p3= mbt.getPuntos().busca(id_p3);
+    Pnt *p1= mbt.getPoints().busca(id_p1);
+    Pnt *p2= mbt.getPoints().busca(id_p2);
+    Pnt *p3= mbt.getPoints().busca(id_p3);
     CircularArc *retval= dynamic_cast<CircularArc *>(createArc(p1,p2,p3));
     assert(retval);
     return retval;
@@ -110,7 +110,7 @@ void XC::LineMap::UpdateSets(Edge *nueva_linea) const
       }
   }
 
-//! @brief Creates a new line entre los puntos being passed as parameters
+//! @brief Creates a new line between the points being passed as parameters
 //! and inserts it on the container
 //! @param pA: pointer to back end of the line.
 //! @param pB: pointer to front end of the line.
@@ -199,7 +199,7 @@ XC::Edge *XC::LineMap::createArc(Pnt *pA,Pnt *pB,Pnt *pC)
             assert(tmp);
             tmp->SetVertice(1,pA);
             tmp->SetVertice(2,pC);
-            tmp->SetVertice(3,pB); //Punto intermedio.
+            tmp->SetVertice(3,pB); //intermediate point.
           }
         if(!tmp)
 	  std::cerr << getClassName() << __FUNCTION__
@@ -210,7 +210,8 @@ XC::Edge *XC::LineMap::createArc(Pnt *pA,Pnt *pB,Pnt *pC)
       }
     else
       std::cerr << getClassName() << __FUNCTION__
-		<< "; error, null pointer to point (A, B and/or C)." << std::endl;
+		<< "; error, null pointer to point (A, B and/or C)."
+		<< std::endl;
     return tmp;
   }
 

@@ -46,7 +46,7 @@ class_<XC::EntMdlr, bases<XC::SetEstruct>, boost::noncopyable >("EntMdlr", no_in
 XC::Node *(XC::Pnt::*getNodePnt)(void)= &XC::Pnt::getNode;
 class_<XC::Pnt, XC::Pnt *, bases<XC::EntMdlr>, boost::noncopyable >("Pnt", no_init)
   .add_property("getPos", make_function( &XC::Pnt::GetPos, return_internal_reference<>() ),&XC::Pnt::setPos)
-  .def("getVectorPos", &XC::Pnt::VectorPos,"Returns the position vector of the point.")
+  .def("getVectorPos", &XC::Pnt::VectorPos,"Return the position vector of the point.")
   .add_property("hasNode",&XC::Pnt::hasNode,"True if the point has a node.")
   .add_property("getTagNode",&XC::Pnt::getTagNode,"Returns node's tag.")
   .def("getNode",make_function(getNodePnt, return_internal_reference<>() ),"Returns point's node.")
@@ -58,7 +58,7 @@ class_<XC::Pnt, XC::Pnt *, bases<XC::EntMdlr>, boost::noncopyable >("Pnt", no_in
 class_<XC::Face, XC::Face *,bases<XC::CmbEdge>, boost::noncopyable >("Face", no_init)
   .add_property("nDivI", &XC::Face::NDivI, &XC::Face::SetNDivI)
   .add_property("nDivJ", &XC::Face::NDivJ, &XC::Face::SetNDivJ)
-  .def("getContour",&XC::Face::getContour,"Returns the face contour as a 3D polyline.")
+  .def("getContour",&XC::Face::getContour,"Return the face contour as a 3D polyline.")
    ;
 
 class_<XC::QuadSurface, XC::QuadSurface *, bases<XC::Face>, boost::noncopyable >("QuadSurface", no_init)
@@ -66,9 +66,9 @@ class_<XC::QuadSurface, XC::QuadSurface *, bases<XC::Face>, boost::noncopyable >
   .def("setElemSizeI",&XC::QuadSurface::SetElemSizeI)
   .def("setElemSizeJ",&XC::QuadSurface::SetElemSizeJ)
   .def("setElemSizeIJ",&XC::QuadSurface::SetElemSizeIJ)
-  .add_property("getIVector", &XC::QuadSurface::getIVector,"Returns the local x vector.")
-  .add_property("getJVector", &XC::QuadSurface::getJVector,"Returns the local x vector.")
-  .add_property("getKVector", &XC::QuadSurface::getKVector,"Returns the local x vector.")
+  .add_property("getIVector", &XC::QuadSurface::getIVector,"Return the local x vector.")
+  .add_property("getJVector", &XC::QuadSurface::getJVector,"Return the local x vector.")
+  .add_property("getKVector", &XC::QuadSurface::getKVector,"Return the local x vector.")
    ;
 
 
@@ -93,29 +93,29 @@ class_<XC::ModelComponentContainerBase, bases<EntCmd>, boost::noncopyable >("Mod
    .add_property("defaultTag", &XC::ModelComponentContainerBase::getTag, &XC::ModelComponentContainerBase::setTag)
    ;
 
-typedef XC::ModelComponentContainer<XC::Pnt> map_cm_puntos;
-class_<map_cm_puntos, bases<XC::ModelComponentContainerBase>, boost::noncopyable >("MapCMPuntos", no_init)
-//.def("__iter__", boost::python::iterator<map_cm_puntos>())
-  .add_property("size", &map_cm_puntos::size)
-  .def("exists", &map_cm_puntos::exists)
-  .def("get", make_function(&map_cm_puntos::get,return_internal_reference<>()))
-  .def("getKeys", &map_cm_puntos::getKeys)
+typedef XC::ModelComponentContainer<XC::Pnt> cm_point_map;
+class_<cm_point_map, bases<XC::ModelComponentContainerBase>, boost::noncopyable >("CMPointMap", no_init)
+//.def("__iter__", boost::python::iterator<cm_point_map>())
+  .add_property("size", &cm_point_map::size)
+  .def("exists", &cm_point_map::exists)
+  .def("get", make_function(&cm_point_map::get,return_internal_reference<>()))
+  .def("getKeys", &cm_point_map::getKeys)
    ;
 
-typedef XC::EntityMap<XC::Pnt> map_puntos;
-XC::Pnt *(map_puntos::*getNearestPoint)(const Pos3d &)= &map_puntos::getNearest;
-class_<map_puntos, bases<map_cm_puntos>, boost::noncopyable >("map_puntos", no_init)
-  .def("getNearest", getNearestPoint, return_internal_reference<>(),"Returns the nearest point.")
+typedef XC::EntityMap<XC::Pnt> point_map;
+XC::Pnt *(point_map::*getNearestPoint)(const Pos3d &)= &point_map::getNearest;
+class_<point_map, bases<cm_point_map>, boost::noncopyable >("point_map", no_init)
+  .def("getNearest", getNearestPoint, return_internal_reference<>(),"Return the nearest point.")
    ;
 
 XC::Pnt *(XC::PntMap::*newPoint)(void)= &XC::PntMap::New;
 XC::Pnt *(XC::PntMap::*newPointFromPos3d)(const Pos3d &)= &XC::PntMap::New;
 XC::Pnt *(XC::PntMap::*newPointIDPos3d)(const size_t &,const Pos3d &)= &XC::PntMap::New;
-class_<XC::PntMap, bases<map_puntos>, boost::noncopyable >("PntMap", no_init)
+class_<XC::PntMap, bases<point_map>, boost::noncopyable >("PntMap", no_init)
   .def("newPnt", newPoint, return_internal_reference<>(),"Creates a point.")
   .def("newPntFromPos3d", newPointFromPos3d, return_internal_reference<>(),"Creates a point in the position.")
   .def("newPntIDPos3d", newPointIDPos3d, return_internal_reference<>(),"Creates a point with the ID and the the position provided.")
-   .def("get", &XC::PntMap::get, return_internal_reference<>(),"Returns the i-th point.")
+   .def("get", &XC::PntMap::get, return_internal_reference<>(),"Return the i-th point.")
    ;
 
 typedef XC::ModelComponentContainer<XC::Edge> map_cm_edges;
@@ -136,7 +136,7 @@ class_<XC::LineMap, bases<map_edges>, boost::noncopyable >("LineMap", no_init)
    .def("newDividedLine", &XC::LineMap::newDividedLine, return_internal_reference<>(),"Creates a line.")
    .def("newCircleArc", &XC::LineMap::newCircleArc, return_internal_reference<>(),"Creates a circle arc.")
    .def("newLineSequence", &XC::LineMap::newLineSequence, return_internal_reference<>(),"Creates a line sequence (polyline).")
-   .def("get", &XC::LineMap::get, return_internal_reference<>(),"Returns the i-th line.")
+   .def("get", &XC::LineMap::get, return_internal_reference<>(),"Return the i-th line.")
    ;
 
 typedef XC::ModelComponentContainer<XC::Face> map_cm_faces;

@@ -59,7 +59,7 @@ class ClosedTriangleMesh: public GeomObj3d, public MovableObject
 
     GeomObj::list_Pos3d get_intersection(const Pos3d &p) const;
   protected:
-    void getMatrizPosiciones(Matrix &);
+    void getPositionsMatrix(Matrix &);
     virtual void setMatrizPosiciones(const Matrix &);
     int sendData(CommParameters &);
     int recvData(const CommParameters &);

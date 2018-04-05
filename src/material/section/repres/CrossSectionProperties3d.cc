@@ -110,7 +110,7 @@ const XC::Matrix &XC::CrossSectionProperties3d::getSectionTangent4x4(void) const
   {
     ks4(0,0)= EA(); //Axial stiffness.
     ks4(1,1)= EIz(); //z bending stiffness.
-    ks4(1,2)= ks4(2,1)= -EIyz(); //Colaboración del producto de inercia.
+    ks4(1,2)= ks4(2,1)= -EIyz(); //Contribution of the product of inertia.
     ks4(2,2)= EIy(); //y bending stiffness.
     ks4(3,3)= GJ(); //Torsional stiffness.
     return ks4;
@@ -155,7 +155,7 @@ const XC::Matrix &XC::CrossSectionProperties3d::getSectionTangent6x6(void) const
   {
     ks6(0,0) = EA(); //Axial stiffness.
     ks6(1,1) = EIz(); //z bending stiffness.
-    ks4(1,3)= ks4(3,1)= -EIyz(); //Colaboración del producto de inercia.
+    ks4(1,3)= ks4(3,1)= -EIyz(); //Contribution of the product of inertia.
     ks6(3,3) = EIy(); //y bending stiffness.
     ks6(5,5) = GJ(); //Torsional stiffness.
 

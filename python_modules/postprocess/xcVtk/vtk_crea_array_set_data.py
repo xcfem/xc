@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 
 def VtkCreaStrArraySetData(preprocessor,setName,entTypeName,nmbArray,data):
-  # Crea una matriz de cadenas de caracteres con datos de los puntos definidas en el conjunto.
+  ''' Creates an array of character strings with the data of the
+      points defined in the set.'''
   #Creamos el actor para las líneas.
   st= preprocessor.getSets.getSet(setName)
   

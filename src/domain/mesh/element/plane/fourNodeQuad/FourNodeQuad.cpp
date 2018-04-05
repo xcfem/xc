@@ -157,7 +157,7 @@ int XC::FourNodeQuad::update(void)
     for(size_t i= 0;i<physicalProperties.size();i++)
       {
         //Determine Jacobian for this integration point
-        const GaussPoint &gp= getGaussModel().getPuntosGauss()[i];
+        const GaussPoint &gp= getGaussModel().getGaussPoints()[i];
         this->shapeFunction(gp);
 
         // Interpolate strains
@@ -188,7 +188,7 @@ const XC::Matrix &XC::FourNodeQuad::getTangentStiff(void) const
     for(size_t i = 0;i<physicalProperties.size();i++)
       {
         // Determine Jacobian for this integration point
-        const GaussPoint &gp= getGaussModel().getPuntosGauss()[i];
+        const GaussPoint &gp= getGaussModel().getGaussPoints()[i];
         dvol= this->shapeFunction(gp);
         dvol*= (physicalProperties.getThickness()*gp.weight());
 
@@ -249,7 +249,7 @@ const XC::Matrix &XC::FourNodeQuad::getInitialStiff(void) const
     for(size_t i= 0;i<physicalProperties.size();i++)
       {
         // Determine Jacobian for this integration point
-        const GaussPoint &gp= getGaussModel().getPuntosGauss()[i];
+        const GaussPoint &gp= getGaussModel().getGaussPoints()[i];
         dvol= this->shapeFunction(gp);
         dvol*= (physicalProperties.getThickness()*gp.weight());
 
@@ -307,7 +307,7 @@ const XC::Matrix &XC::FourNodeQuad::getMass(void) const
         for(size_t i= 0;i<physicalProperties.size();i++)
           {
             // Determine Jacobian for this integration point
-            const GaussPoint &gp= getGaussModel().getPuntosGauss()[i];
+            const GaussPoint &gp= getGaussModel().getGaussPoints()[i];
             rhodvol = this->shapeFunction(gp);
 
             // Element plus material density ... MAY WANT TO REMOVE ELEMENT DENSITY
@@ -328,7 +328,7 @@ const XC::Matrix &XC::FourNodeQuad::getMass(void) const
     return K;
   }
 
-//! @brief Returns the puntos de Gauss of the element.
+//! @brief Return the Gauss points of the element.
 const XC::GaussModel &XC::FourNodeQuad::getGaussModel(void) const
   { return gauss_model_quad4; }
 
@@ -395,7 +395,7 @@ const XC::Vector &XC::FourNodeQuad::getResistingForce(void) const
     for(size_t i= 0;i<physicalProperties.size();i++)
       {
         // Determine Jacobian for this integration point
-        const GaussPoint &gp= getGaussModel().getPuntosGauss()[i];
+        const GaussPoint &gp= getGaussModel().getGaussPoints()[i];
         dvol= this->shapeFunction(gp);
         dvol*= (physicalProperties.getThickness()*gp.weight());
 
@@ -689,7 +689,7 @@ int XC::FourNodeQuad::updateParameter(int parameterID, Information &info)
       }
   }
 
-//! @brief Returns the determinante del jacobiano en las coordenadas being passed as parameters.
+//! @brief Return the determinante del jacobiano en las coordenadas being passed as parameters.
 double XC::FourNodeQuad::shapeFunction(const GaussPoint &gp) const
   {
     const double &xi= gp.r_coordinate();

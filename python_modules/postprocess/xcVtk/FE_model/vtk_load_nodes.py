@@ -1,5 +1,5 @@
 def VtkLoadNodes(setName, nmbContndr):
-  nmbContndr= vtk.vtkPoints() # Definimos el conjunto de puntos a dibujar
+  nmbContndr= vtk.vtkPoints() # Define the point set to be drawn
   nSet= preprocessor.getSets.getSet(setName)
   nSet.numerate()
   print "nombre set: ",nSet.nombre

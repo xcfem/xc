@@ -46,7 +46,7 @@ XC::MEDGaussModel::MEDGaussModel(const std::string &nmb,const MED_EN::medGeometr
       }
     coo_gauss_pt.resize(num_gauss_pt*dim,0);
     gauss_weights.resize(num_gauss_pt,0);
-    const std::deque<GaussPoint> &pts_gauss= gm.getPuntosGauss(); conta= 0; size_t iw= 0;
+    const std::deque<GaussPoint> &pts_gauss= gm.getGaussPoints(); conta= 0; size_t iw= 0;
     for(std::deque<GaussPoint>::const_iterator i=pts_gauss.begin();i!=pts_gauss.end();i++)
       {
         coo_gauss_pt[conta]= i->r_coordinate(); conta++;

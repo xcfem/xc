@@ -52,19 +52,19 @@ class Pivots
   public:
     Pivots(const Pos3d &a,const Pos3d &b,const Pos3d &c,const Pos3d &d);
     Pivots(const ComputePivots &cp);
-    inline const Pos3d &getPuntoD(void) const
+    inline const Pos3d &getDPoint(void) const
       { return D; }
-    inline const Pos3d &getPivotA(void) const
+    inline const Pos3d &getAPivot(void) const
       { return A; }
-    inline const Pos3d &getPivotB(void) const
+    inline const Pos3d &getBPivot(void) const
       { return B; }
-    inline const Pos3d &getPivotC(void) const
+    inline const Pos3d &getCPivot(void) const
       { return C; }
-    inline Pos3d getPuntoA(const double &epsilon)
+    inline Pos3d getAPoint(const double &epsilon)
       { return Pos3d(epsilon,A.y(),A.z()); }
-    inline Pos3d getPuntoB(const double &epsilon)
+    inline Pos3d getBPoint(const double &epsilon)
       { return Pos3d(epsilon,B.y(),B.z()); }
-    inline Pos3d getPuntoD(const double &epsilon)
+    inline Pos3d getDPoint(const double &epsilon)
       { return Pos3d(epsilon,D.y(),D.z()); }
     inline double getEpsilonA(void) const
       { return A.x(); }
@@ -74,13 +74,13 @@ class Pivots
       { return C.x(); }
     inline double getEpsilonD(void) const
       { return B.x(); }
-    inline Pos2d getPosPivotA(void) const
+    inline Pos2d getAPivotPosition(void) const
       { return Pos2d(A.y(),A.z()); }
-    inline Pos2d getPosPivotB(void) const
+    inline Pos2d getBPivotPosition(void) const
       { return Pos2d(B.y(),B.z()); }
-    inline Pos2d getPosPivotC(void) const
+    inline Pos2d getCPivotPosition(void) const
       { return Pos2d(C.y(),C.z()); }
-    inline Pos2d getPosPuntoD(void) const
+    inline Pos2d getPointDPosition(void) const
       { return Pos2d(D.y(),D.z()); }
     inline bool Ok(void) const
       { return ok; }

@@ -205,19 +205,19 @@ GeomObj::list_Pos2d XC::FiberDeque::getPosiciones(void) const
     return retval;
   }
 
-//! @brief Returns the upper right corner of the bounding rectangle.
+//! @brief Return the upper right corner of the bounding rectangle.
 Pos2d XC::FiberDeque::GetPMax(void) const
   { return Pos2d(GetYMax(),GetZMax()); }
 
-//! @brief Returns the lower left corner of the bounding rectangle.
+//! @brief Return the lower left corner of the bounding rectangle.
 Pos2d XC::FiberDeque::GetPMin(void) const
   { return Pos2d(GetYMin(),GetZMin()); }
 
-//! @brief Returns the bounding rectangle.
+//! @brief Return the bounding rectangle.
 BND2d XC::FiberDeque::Bnd(void) const
   { return BND2d(GetPMin(),GetPMax()); }
 
-//! @brief Returns the sum of the fibers areas multiplied by the factor.
+//! @brief Return the sum of the fibers areas multiplied by the factor.
 double XC::FiberDeque::getArea(const double &factor) const
   {
     double retval= 0.0;
@@ -227,7 +227,7 @@ double XC::FiberDeque::getArea(const double &factor) const
     return factor*retval;
   }
 
-//! @brief Returns the moment of inertia respecto al paralelo al z a una
+//! @brief Return the moment of inertia respecto al paralelo al z a una
 //! distancia y0 del origen.
 double XC::FiberDeque::getIz(const double &factor,const double &y0) const
   {
@@ -242,7 +242,7 @@ double XC::FiberDeque::getIz(const double &factor,const double &y0) const
     return retval;
   }
 
-//! @brief Returns the moment of inertia respecto al eje paralelo al y a una
+//! @brief Return the moment of inertia respecto al eje paralelo al y a una
 //! distancia z0 del origen.
 double XC::FiberDeque::getIy(const double &factor,const double &z0) const
   {
@@ -257,7 +257,7 @@ double XC::FiberDeque::getIy(const double &factor,const double &z0) const
     return retval;
   }
 
-//! @brief Returns the producto de inercia respecto a los ejes paralelos aa una
+//! @brief Return the producto de inercia respecto a los ejes paralelos aa una
 //! distancias (y0,z0) del origen.
 double XC::FiberDeque::getPyz(const double &factor,const double &y0,const double &z0) const
   {
@@ -290,7 +290,7 @@ double XC::FiberDeque::getAreaHomogenizedSection(const double &E0) const
     return retval;
   }
 
-//! @brief Returns the coordinates of the homogenized section centroid.
+//! @brief Return the coordinates of the homogenized section centroid.
 const XC::Vector &XC::FiberDeque::getCdgHomogenizedSection(const double &E0) const
   {
     if(fabs(E0)<1e-6)
@@ -400,7 +400,7 @@ double XC::FiberDeque::getPyzHomogenizedSection(const double &E0) const
     return retval;
   }
 
-//! @brief Returns the i,j component of the tensor of inertia calculado respecto al CDG.
+//! @brief Return the i,j component of the tensor of inertia calculado respecto al CDG.
 double XC::FiberDeque::getIHomogenizedSection(const double &E0,const unsigned short int &i,const unsigned short int &j) const
   {
     unsigned short int k= i + (j-1)*2;
@@ -421,7 +421,7 @@ double XC::FiberDeque::getIHomogenizedSection(const double &E0,const unsigned sh
     return retval;
   }
 
-//! @brief Returns the tensor of inertia computed with respect to the object centroid.
+//! @brief Return the tensor of inertia computed with respect to the object centroid.
 XC::Matrix &XC::FiberDeque::getIHomogenizedSection(const double &E0) const
   {
     static Matrix i(2,2);
@@ -430,7 +430,7 @@ XC::Matrix &XC::FiberDeque::getIHomogenizedSection(const double &E0) const
     return i;
   }
 
-//! @brief Returns the tensor of inertia respector al punto o.
+//! @brief Return the tensor of inertia with respect to the point o.
 XC::Matrix &XC::FiberDeque::getIHomogenizedSection(const double &E0,const Pos2d &o) const
   {
     static Matrix retval(2,2);
@@ -442,7 +442,7 @@ XC::Matrix &XC::FiberDeque::getIHomogenizedSection(const double &E0,const Pos2d 
     return retval;
   }
 
-//! @brief Returns the moment of inertia of the homogenized section
+//! @brief Return the moment of inertia of the homogenized section
 //! with respect to the axis parallel to vector e through the point O.
 //! @param E0: reference elastic modulus.
 //! @param O: point for axis definition.
@@ -453,12 +453,12 @@ double XC::FiberDeque::getIHomogenizedSection(const double &E0,const Pos2d &O,co
     return dot(e,Io*e)/e.Norm2();
   }
 
-//! @brief Returns the moment of inertia with respect to the line being passed
+//! @brief Return the moment of inertia with respect to the line being passed
 //! as parameter.
 double XC::FiberDeque::getIHomogenizedSection(const double &E0,const Recta2d &r) const
-  { return getIHomogenizedSection(E0,r.Punto(),Vector(r.VDir())); }
+  { return getIHomogenizedSection(E0,r.Point(),Vector(r.VDir())); }
 
-//! @brief Returns the static moment of the cell areas that rely
+//! @brief Return the static moment of the cell areas that rely
 //! above yf (y_fiber-yf > 0) with respect to the axis parallel to z
 //! at the y coordinate being passed as parameter (lever arm= y_fiber-y0).
 double XC::FiberDeque::getSzPos(const double &yf,const double &y0,const double &factor) const
@@ -482,7 +482,7 @@ double XC::FiberDeque::getSzPos(const double &yf,const double &y0,const double &
     return retval;
   }
 
-//! @brief Returns the static moment of the cell areas that rely
+//! @brief Return the static moment of the cell areas that rely
 //! below yf (y_fiber-yf < 0) with respect to the axis parallel to z
 //! at the y coordinate being passed as parameter (lever arm= y_fiber-y0).
 double XC::FiberDeque::getSzNeg(const double &yf,const double &y0,const double &factor) const
@@ -506,7 +506,7 @@ double XC::FiberDeque::getSzNeg(const double &yf,const double &y0,const double &
     return retval;
   }
 
-//! @brief Returns the static moment of the cell areas that rely
+//! @brief Return the static moment of the cell areas that rely
 //! above zf (z_fiber-zf > 0) with respect to the axis parallel to y
 //! at the z coordinate being passed as parameter (lever arm= z_fiber-z0).
 double XC::FiberDeque::getSyPos(const double &zf,const double &z0,const double &factor) const
@@ -527,7 +527,7 @@ double XC::FiberDeque::getSyPos(const double &zf,const double &z0,const double &
     return retval;
   }
 
-//! @brief Returns the static moment of the cell areas that rely
+//! @brief Return the static moment of the cell areas that rely
 //! below zf (z_fiber-zf < 0) with respect to the axis parallel to y
 //! at the z coordinate being passed as parameter (lever arm= z_fiber-z0).
 double XC::FiberDeque::getSyNeg(const double &zf,const double &z0,const double &factor) const
@@ -548,7 +548,7 @@ double XC::FiberDeque::getSyNeg(const double &zf,const double &z0,const double &
     return retval;
   }
 
-//! @brief Returns the static moments of the fiber areas inside the halfplane
+//! @brief Return the static moments of the fiber areas inside the halfplane
 //! being passed as parameter.
 double XC::FiberDeque::getSPosHomogenizedSection(const double &E0,const Semiplano2d &sp) const
   {
@@ -572,7 +572,7 @@ double XC::FiberDeque::getSPosHomogenizedSection(const double &E0,const Semiplan
   }
 
 
-//! @brief Returns the static moments of the fiber areas outside the halfplane
+//! @brief Return the static moments of the fiber areas outside the halfplane
 //! being passed as parameter.
 double XC::FiberDeque::getSNegHomogenizedSection(const double &E0,const Semiplano2d &sp) const
   {
@@ -599,7 +599,7 @@ double XC::FiberDeque::getSNegHomogenizedSection(const double &E0,const Semiplan
 inline double R(const double &Iy,const double &Iz,const double Pyz)
   { return sqrt(sqr((Iy-Iz)/2)+sqr(Pyz)); }
 
-//! @brief Returns the major principal moment of inertia.
+//! @brief Return the major principal moment of inertia.
 double XC::FiberDeque::getI1(const double &factor,const double &y0,const double &z0) const
   {
     const double iy= getIy(factor,z0);
@@ -610,7 +610,7 @@ double XC::FiberDeque::getI1(const double &factor,const double &y0,const double 
   }
 
 
-//! @brief Returns the moment of inertia principal menor.
+//! @brief Return the moment of inertia principal menor.
 double XC::FiberDeque::getI2(const double &factor,const double &y0,const double &z0) const
   {
     const double iy= getIy(factor,z0);
@@ -620,11 +620,11 @@ double XC::FiberDeque::getI2(const double &factor,const double &y0,const double 
     return suma-R(iy,iz,pyz);
   }
 
-//! @brief Returns the angle of the principal axis of inertia.
+//! @brief Return the angle of the principal axis of inertia.
 inline double theta_p(const double &Iy,const double &Iz,const double &Pyz)
   { return (atan(-2*Pyz/(Iy-Iz)))/2.0; }
 
-//! @brief Returns the angle between major principal axis and the y axis.
+//! @brief Return the angle between major principal axis and the y axis.
 double XC::FiberDeque::getTh1(const double &y0,const double &z0) const
   {
     const double Iy= getIy(1.0,z0);
@@ -646,7 +646,7 @@ double XC::FiberDeque::getTh1(const double &y0,const double &z0) const
     return th1;
   }
 
-//! @brief Returns the direction of the major axis.
+//! @brief Return the direction of the major axis.
 XC::Vector XC::FiberDeque::getEje1(const double &y0,const double &z0) const
   {
     Vector retval(2);
@@ -656,7 +656,7 @@ XC::Vector XC::FiberDeque::getEje1(const double &y0,const double &z0) const
     return retval;
   }
 
-//! @brief Returns the direction of the minor axis.
+//! @brief Return the direction of the minor axis.
 XC::Vector XC::FiberDeque::getEje2(const double &y0,const double &z0) const
   {
     Vector retval(2);
@@ -666,7 +666,7 @@ XC::Vector XC::FiberDeque::getEje2(const double &y0,const double &z0) const
     return retval;
   }
 
-//! @brief Returns the resultante de tensiones.
+//! @brief Return the resultante de tensiones.
 double XC::FiberDeque::Resultante(void) const
   {
     register double retval= 0;
@@ -676,7 +676,7 @@ double XC::FiberDeque::Resultante(void) const
     return retval;
   }
 
-//! @brief Returns the moment of the fibers forces
+//! @brief Return the moment of the fibers forces
 //! with respect to the axis parallel to "z" that passes through (y0,0).
 double XC::FiberDeque::getMz(const double &y0) const
   {
@@ -687,7 +687,7 @@ double XC::FiberDeque::getMz(const double &y0) const
     return retval;
   }
 
-//! @brief Returns the moment of the fibers forces
+//! @brief Return the moment of the fibers forces
 //! with respect to the axis parallel to "y" that passes through (0,z0).
 double XC::FiberDeque::getMy(const double &z0) const
   {
@@ -698,27 +698,27 @@ double XC::FiberDeque::getMy(const double &z0) const
     return retval;
   }
 
-//! @brief Returns the eccentricity of Mz (see getMz).
+//! @brief Return the eccentricity of Mz (see getMz).
 double XC::FiberDeque::getExcentricidadMz(const double &y0) const
   { return getMz(y0)/Resultante(); }
 
-//! @brief Returns the eccentricity of My (see getMy).
+//! @brief Return the eccentricity of My (see getMy).
 double XC::FiberDeque::getExcentricidadMy(const double &z0) const
   { return getMy(z0)/Resultante(); }
 
-//! @brief Returns the moment vector of the fibers forces
+//! @brief Return the moment vector of the fibers forces
 //! with respect to the axis parallel to "y" and z that passes through (y0,z0).
 Vector2d XC::FiberDeque::getMomentVector(const double &y0,const double &z0) const
   { return Vector2d(getMy(y0),getMz(y0)); }
 
-//! @brief Returns the position of the fibers forces resultant.
+//! @brief Return the position of the fibers forces resultant.
 Pos2d XC::FiberDeque::getPosResultante(const double &y0,const double &z0) const
   {
     const double R= Resultante();
     return Pos2d(getMz(y0)/R,getMy(z0)/R);
   }
 
-//! @brief Returns the neutral axis.
+//! @brief Return the neutral axis.
 Recta2d XC::FiberDeque::getNeutralAxis(void) const
   {
     const double R= Resultante();
@@ -740,7 +740,7 @@ bool XC::FiberDeque::hayMomento(const double &tol) const
       return false;
   }
 
-//! @brief Returns the resultante of the compresiones en las fibers.
+//! @brief Return the resultante of the compresiones en las fibers.
 double XC::FiberDeque::ResultanteComp(void) const
   {
     register double retval= 0;
@@ -757,7 +757,7 @@ double XC::FiberDeque::ResultanteComp(void) const
     return retval;
   }
 
-//! @brief Returns the moment of the compressed fibers
+//! @brief Return the moment of the compressed fibers
 //! with respect to the z axis.
 double XC::FiberDeque::getMzComp(const double &y0) const
   {
@@ -768,7 +768,7 @@ double XC::FiberDeque::getMzComp(const double &y0) const
     return retval;
   }
 
-//! @brief Returns the punto de paso of the resultante de tensiones menores
+//! @brief Return the passing point of the resultante de tensiones menores
 //! que «ref» (por defecto cero) compresiones, si no hay returns (0,0).
 const XC::Vector &XC::FiberDeque::baricentroCompresiones(void) const
   {
@@ -793,7 +793,7 @@ const XC::Vector &XC::FiberDeque::baricentroCompresiones(void) const
     return retval;
   }
 
-//! @brief Returns the centroid of the fibers whose strain is less than
+//! @brief Return the centroid of the fibers whose strain is less than
 //! the value passed as parameter.
 const XC::Vector &XC::FiberDeque::baricentroDefMenores(const double &defRef) const
   {
@@ -818,7 +818,7 @@ const XC::Vector &XC::FiberDeque::baricentroDefMenores(const double &defRef) con
     return retval;
   }
 
-//! @brief Returns the moment of the compressed fibers
+//! @brief Return the moment of the compressed fibers
 //! with respect to the y axis.
 double XC::FiberDeque::getMyComp(const double &z0) const
   {
@@ -829,7 +829,7 @@ double XC::FiberDeque::getMyComp(const double &z0) const
     return retval;
   }
 
-//! @brief Returns the resultante of the tracciones en las fibers.
+//! @brief Return the resultante of the tracciones en las fibers.
 double XC::FiberDeque::ResultanteTracc(void) const
   {
     register double retval= 0;
@@ -846,7 +846,7 @@ double XC::FiberDeque::ResultanteTracc(void) const
     return retval;
   }
 
-//! @brief Returns the moment of the tensioned fibers
+//! @brief Return the moment of the tensioned fibers
 //! with respect to the z axis.
 double XC::FiberDeque::getMzTracc(const double &y0) const
   {
@@ -857,7 +857,7 @@ double XC::FiberDeque::getMzTracc(const double &y0) const
     return retval;
   }
 
-//! @brief Returns the moment of the tensioned fibers
+//! @brief Return the moment of the tensioned fibers
 //! with respect to the y axis.
 double XC::FiberDeque::getMyTracc(const double &z0) const
   {
@@ -868,7 +868,7 @@ double XC::FiberDeque::getMyTracc(const double &z0) const
     return retval;
   }
 
-//! @brief Returns the centroid of the tensioned fibers, si
+//! @brief Return the centroid of the tensioned fibers, si
 //! no hay tracciones returns (0,0).
 const XC::Vector &XC::FiberDeque::baricentroTracciones(void) const
   {
@@ -893,7 +893,7 @@ const XC::Vector &XC::FiberDeque::baricentroTracciones(void) const
     return retval;
   }
 
-//! @brief Returns the centroid of the fibers whose strain is greater than
+//! @brief Return the centroid of the fibers whose strain is greater than
 //! the value being passed as parameter.
 const XC::Vector &XC::FiberDeque::baricentroDefMayores(const double &defRef) const
   {
@@ -918,7 +918,7 @@ const XC::Vector &XC::FiberDeque::baricentroDefMayores(const double &defRef) con
     return retval;
   }
 
-//! @brief Returns the fiber that is closest to the given position.
+//! @brief Return the fiber that is closest to the given position.
 size_t XC::FiberDeque::nearest_fiber(const double &y,const double &z) const
   {
     size_t retval= 0;
@@ -954,7 +954,7 @@ size_t XC::FiberDeque::nearest_fiber(const double &y,const double &z) const
     return retval;
   }
 
-// //! Returns the fiber set that fulfill the condition
+// //! Return the fiber set that fulfill the condition
 // //! being passed as parameter.
 // void XC::FiberDeque::Cumplen(const std::string &cond,FiberDeque &retval,bool clear)
 //   {
@@ -971,7 +971,7 @@ size_t XC::FiberDeque::nearest_fiber(const double &y,const double &z) const
 //     retval.updateCDG();
 //   }
 
-//! Returns the subfiber set of this one which material tag is
+//! Return the subfiber set of this one which material tag is
 //! being passed as parameter.
 void XC::FiberDeque::SelMatTag(const int &matTag,FiberDeque &retval,bool clear)
   {
@@ -992,7 +992,7 @@ void XC::FiberDeque::SelMatTag(const int &matTag,FiberDeque &retval,bool clear)
         std::cerr << "FiberDeque::SelMatTag; Pointer to fiber is null." << std::endl;
   }
 
-//! @brief Returns the min strain.
+//! @brief Return the min strain.
 double XC::FiberDeque::getStrainMin(void) const
   {
     double retval= 0.0;
@@ -1007,7 +1007,7 @@ double XC::FiberDeque::getStrainMin(void) const
     return retval;
   }
 
-//! @brief Returns the max strain.
+//! @brief Return the max strain.
 double XC::FiberDeque::getStrainMax(void) const
   {
     double retval= 0.0;
@@ -1022,7 +1022,7 @@ double XC::FiberDeque::getStrainMax(void) const
     return retval;
   }
 
-//! @brief Returns the average strain.
+//! @brief Return the average strain.
 double XC::FiberDeque::getStrainMed(void) const
   {
     double retval= 0.0;
@@ -1039,31 +1039,32 @@ double XC::FiberDeque::getStrainMed(void) const
     return retval;
   }
 
-//! @brief Returns the deformation plane (least squares adjustment).
+//! @brief Return the deformation plane (least squares adjustment).
 XC::DeformationPlane XC::FiberDeque::getDeformationPlane(void) const
   {
-    GeomObj::list_Pos3d puntos;
+    GeomObj::list_Pos3d points;
     if(!empty())
       {
         for(std::deque<Fiber *>::const_iterator i= begin();i!= end();i++)
           if(*i)
-            puntos.push_back(Pos3d((*i)->getMaterial()->getStrain(),(*i)->getLocY(),(*i)->getLocZ()));
+            points.push_back(Pos3d((*i)->getMaterial()->getStrain(),(*i)->getLocY(),(*i)->getLocZ()));
           else
-            std::cerr << "FiberDeque::getDeformationPlane; Pointer to fiber is null." << std::endl;
+            std::cerr << getClassName() << "::" << __FUNCTION__
+		      << "; pointer to fiber is null." << std::endl;
       }
     DeformationPlane retval;
-    retval.AjusteMinimosCuadrados(puntos);
+    retval.AjusteMinimosCuadrados(points);
     return retval;
   }
 
-//! @brief Returns the generalized strain vector.
+//! @brief Return the generalized strain vector.
 const XC::Vector &XC::FiberDeque::getDeformation(void) const
   {
     const DeformationPlane pDef= getDeformationPlane();
     return pDef.getDeformation();
   }
 
-//! @brief Returns the minimal stress.
+//! @brief Return the minimal stress.
 double XC::FiberDeque::getStressMin(void) const
   {
     double retval= 0.0;
@@ -1078,7 +1079,7 @@ double XC::FiberDeque::getStressMin(void) const
     return retval;
   }
 
-//! @brief Returns the minimal stress.
+//! @brief Return the minimal stress.
 double XC::FiberDeque::getStressMax(void) const
   {
     double retval= 0.0;
@@ -1093,7 +1094,7 @@ double XC::FiberDeque::getStressMax(void) const
     return retval;
   }
 
-//! @brief Returns the average stress.
+//! @brief Return the average stress.
 double XC::FiberDeque::getStressMed(void) const
   {
     double retval= 0.0;
@@ -1185,7 +1186,7 @@ std::string XC::FiberDeque::getStrClaseEsfuerzo(const double &tol) const
     return retval;
   }
 
-//! @brief Returns the position of the centroid.
+//! @brief Return the position of the centroid.
 Pos2d XC::FiberDeque::getCdg(void) const
   { return Pos2d(getYCdg(),getZCdg()); }
 
@@ -1255,12 +1256,12 @@ Segmento2d XC::FiberDeque::getSegmentoBrazoMecanico(void) const
     return retval;
   }
 
-//! @brief Returns the intercept of the bending plane with
+//! @brief Return the intercept of the bending plane with
 //! the plane that contains the section.
 Recta2d XC::FiberDeque::getTrazaPlanoFlexion(void) const
   { return getSegmentoBrazoMecanico().RectaSoporte(); }
 
-//! @brief Returns the intercept of a plane perpendicular to the
+//! @brief Return the intercept of a plane perpendicular to the
 //! bending plane through the tensions centroid with the plane
 //! that contains the section.
 Recta2d XC::FiberDeque::getTrazaPlanoTraccion(void) const
@@ -1276,7 +1277,7 @@ Recta2d XC::FiberDeque::getTrazaPlanoTraccion(void) const
     return trazaFlexion.Perpendicular(pt);
   }
 
-//! @brief Returns the intercept of a plane perpendicular to the
+//! @brief Return the intercept of a plane perpendicular to the
 //! bending plane through the compressions centroid with the plane
 //! that contains the section.
 Recta2d XC::FiberDeque::getTrazaPlanoCompresion(void) const
@@ -1292,11 +1293,11 @@ Recta2d XC::FiberDeque::getTrazaPlanoCompresion(void) const
     return trazaFlexion.Perpendicular(pt);
   }
 
-//! @brief Returns the lever arm of forces in the section.
+//! @brief Return the lever arm of forces in the section.
 double XC::FiberDeque::getMechanicLeverArm(void) const
   { return getVectorBrazoMecanico().Norm(); }
 
-//! @brief Returns the distancia media entre fibers.
+//! @brief Return the distancia media entre fibers.
 double XC::FiberDeque::getAverageDistanceBetweenFibers(void) const
   {
     double retval= 0;
@@ -1377,12 +1378,12 @@ double XC::FiberDeque::computeFibersEffectiveConcreteArea(const std::list<Poligo
     return retval;
   }
 
-//! @brief Returns the contours of the effective area of the fiber which index
+//! @brief Return the contours of the effective area of the fiber which index
 //! is being passed as parameter.
 const std::list<Poligono2d> &XC::FiberDeque::getFiberEffectiveConcretAreaContour(const size_t &i) const
   { return dq_ac_effective[i]; }
 
-//! @brief Returns the effective area value of the fiber which index
+//! @brief Return the effective area value of the fiber which index
 //! is being passed as parameter.
 double XC::FiberDeque::getFiberEffectiveConcreteArea(const size_t &i) const
   {
@@ -1393,7 +1394,7 @@ double XC::FiberDeque::getFiberEffectiveConcreteArea(const size_t &i) const
     return area(dq_ac_effective[i].begin(),dq_ac_effective[i].end());
   }
 
-//! @brief Returns the sum of fibers effective areas.
+//! @brief Return the sum of fibers effective areas.
 double XC::FiberDeque::getFibersEffectiveConcreteArea(void) const
   {
     const size_t sz= dq_ac_effective.size();
@@ -1424,7 +1425,7 @@ void XC::FiberDeque::computeCovers(const GeomSection &g) const
 void XC::FiberDeque::computeSpacement(void) const
   { seps= getPosiciones().GetSeparaciones(); }
 
-//! @brief Returns the value of the concrete cover for the i-th fiber.
+//! @brief Return the value of the concrete cover for the i-th fiber.
 const double &XC::FiberDeque::getFiberCover(const size_t &i) const
   {
     if(recubs.size()!=size())
@@ -1434,7 +1435,7 @@ const double &XC::FiberDeque::getFiberCover(const size_t &i) const
     return recubs[i];
   }
 
-//! @brief Returns the spacing of the i-th fiber.
+//! @brief Return the spacing of the i-th fiber.
 const double &XC::FiberDeque::getFiberSpacing(const size_t &i) const
   {
     if(seps.size()!=size())
@@ -1444,14 +1445,14 @@ const double &XC::FiberDeque::getFiberSpacing(const size_t &i) const
     return seps[i];
   }
 
-//! @brief Returns the diameter of the circle that has the same area
+//! @brief Return the diameter of the circle that has the same area
 //! of the fiber which index is being passed as parameter.
 double XC::FiberDeque::getEquivalentDiameterOfFiber(const size_t &i) const
   { return 2.0*sqrt((*this)[i]->getArea()/M_PI); }
 
 
 
-//! @brief Returns the stress on the i-th fiber when cracking occurs
+//! @brief Return the stress on the i-th fiber when cracking occurs
 //! in its effective area.
 double XC::FiberDeque::getSigmaSRAtFiber(const size_t &i,const double &Ec,const double &Es,const double &fctm) const
   {
@@ -1591,7 +1592,7 @@ int XC::FiberDeque::setTrialSectionDeformation(const FiberSection2d &Section2d,C
     return retval;
   }
 
-//! @brief Returns the fibers to its last commited state.
+//! @brief Return the fibers to its last commited state.
 int XC::FiberDeque::revertToLastCommit(FiberSection2d &Section2d,CrossSectionKR &kr2)
   {
     int err= 0;
@@ -1603,7 +1604,7 @@ int XC::FiberDeque::revertToLastCommit(FiberSection2d &Section2d,CrossSectionKR 
     return err;
   }
 
-//! @brief Returns the fibers to its initial state.
+//! @brief Return the fibers to its initial state.
 int XC::FiberDeque::revertToStart(FiberSection2d &Section2d,CrossSectionKR &kr2)
   {
     int err= 0;
@@ -1615,7 +1616,7 @@ int XC::FiberDeque::revertToStart(FiberSection2d &Section2d,CrossSectionKR &kr2)
     return err;
   }
 
-//! @brief Returns the initial tangent stiffness matrix.
+//! @brief Return the initial tangent stiffness matrix.
 const XC::Matrix &XC::FiberDeque::getInitialTangent(const FiberSection2d &Section2d) const
   {
     static double kInitial[4];
@@ -1805,7 +1806,7 @@ int XC::FiberDeque::revertToStart(FiberSection3d &Section3d,CrossSectionKR &kr3)
     return err;
   }
 
-//! @brief Returns the tangent stiffness matrix inicial.
+//! @brief Return the tangent stiffness matrix inicial.
 const XC::Matrix &XC::FiberDeque::getInitialTangent(const FiberSection3d &Section3d) const
   {
     static double kInitialData[9];
@@ -1971,7 +1972,7 @@ int XC::FiberDeque::revertToStart(FiberSectionGJ &SectionGJ,CrossSectionKR &krGJ
     return err;
   }
 
-//! @brief Returns the initial tangent stiffness matrix.
+//! @brief Return the initial tangent stiffness matrix.
 const XC::Matrix &XC::FiberDeque::getInitialTangent(const FiberSectionGJ &SectionGJ) const
   {
     static double kInitialData[16];
@@ -2111,7 +2112,7 @@ XC::Response *XC::FiberDeque::setResponse(const std::vector<std::string> &argv, 
       return 0;
   }
 
-// //! Returns the max value of the property being passed as parameter over the fiber set.
+// //! Return the max value of the property being passed as parameter over the fiber set.
 // //! being passed as parameter.
 // size_t XC::FiberDeque::IMaxProp(const std::string &nmb_prop) const
 //   {
@@ -2153,7 +2154,7 @@ XC::Response *XC::FiberDeque::setResponse(const std::vector<std::string> &argv, 
 //     return retval;
 //   }
 
-// //! Returns the index of the fiber that presents the minimal value
+// //! Return the index of the fiber that presents the minimal value
 // //! of the property which name is being passed as parameter.
 // size_t XC::FiberDeque::IMinProp(const std::string &nmb_prop) const
 //   {
@@ -2195,7 +2196,7 @@ XC::Response *XC::FiberDeque::setResponse(const std::vector<std::string> &argv, 
 //     return retval;
 //   }
 
-//! @brief Returns the identifier of the fiber with maximum value for the iCoo
+//! @brief Return the identifier of the fiber with maximum value for the iCoo
 //! coordinate with respect to the system being passed as parameter.
 size_t XC::FiberDeque::getFiberWithMaxCoord(const Ref3d3d &r,const size_t &iCoo) const
   {
@@ -2226,7 +2227,7 @@ size_t XC::FiberDeque::getFiberWithMaxCoord(const Ref3d3d &r,const size_t &iCoo)
     return retval;
   }
 
-//! @brief Returns the identifier of the fiber with minimum value for the iCoo
+//! @brief Return the identifier of the fiber with minimum value for the iCoo
 //! coordinate with respect to the system being passed as parameter.
 size_t XC::FiberDeque::getFiberWithMinCoord(const Ref3d3d &r,const size_t &iCoo) const
   {

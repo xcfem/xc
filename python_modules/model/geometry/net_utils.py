@@ -3,7 +3,7 @@
 import geom
 
 def net2DfromXYlists(preprocessor,abscissae,ordinates):
-  puntos= preprocessor.getMultiBlockTopology.getPoints
+  points= preprocessor.getMultiBlockTopology.getPoints
   nets= preprocessor.getMultiBlockTopology.get2DNets
   retval= nets.new2DNet()
   retval.dim(len(ordinates),len(abscissae))
@@ -12,7 +12,7 @@ def net2DfromXYlists(preprocessor,abscissae,ordinates):
   for x in abscissae:
     j= 1
     for y in ordinates:
-      pnt= puntos.newPntFromPos3d(geom.Pos3d(x,y,0.0))
+      pnt= points.newPntFromPos3d(geom.Pos3d(x,y,0.0))
       retval.setPnt(j,i,pnt.tag)
       j+= 1
     i+= 1

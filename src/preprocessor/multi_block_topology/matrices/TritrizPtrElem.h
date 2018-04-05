@@ -25,7 +25,7 @@
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
 //TritrizPtrElem.h
-//Vector de matrices de puntos
+//Pointers to element in an array of matrices
 
 #ifndef TRITRIZPTRELEM_H
 #define TRITRIZPTRELEM_H

@@ -63,7 +63,7 @@ XC::ShellNL::ShellNL(void)
   :QuadBase9N<SectionFDPhysicalProperties>( 0, ELE_TAG_ShellNL, SectionFDPhysicalProperties(9,nullptr)), Ktt(0.0),theCoordTransf(), Ki(nullptr)
   { }
 
-//! @brief Returns the puntos de Gauss of the element.
+//! @brief Return the Gauss points of the element.
 const XC::GaussModel &XC::ShellNL::getGaussModel(void) const
   { return gauss_model_quad9; }
 
@@ -186,7 +186,7 @@ const XC::Matrix &XC::ShellNL::getInitialStiff(void) const
     for(int i= 0;i<ngauss;i++)
       {
         //get shape functions
-        const GaussPoint &gp= getGaussModel().getPuntosGauss()[i];
+        const GaussPoint &gp= getGaussModel().getGaussPoints()[i];
         shape2d(gp.r_coordinate(), gp.s_coordinate(),xl,shp,xsj);
 
         //volume element to also be saved
@@ -415,7 +415,7 @@ void XC::ShellNL::formInertiaTerms(int tangFlag) const
     for(int i= 0; i < numberGauss; i++ )
       {
         //get shape functions
-        const GaussPoint &gp= getGaussModel().getPuntosGauss()[i];
+        const GaussPoint &gp= getGaussModel().getGaussPoints()[i];
         shape2d(gp.r_coordinate(),gp.s_coordinate(), xl, shp, xsj );
         //volume element to also be saved
         dvol= gp.weight() * xsj;
@@ -549,7 +549,7 @@ void XC::ShellNL::formResidAndTangent(int tang_flag) const
     for(int i= 0; i < ngauss; i++ )
       {
         //get shape functions
-        const GaussPoint &gp= getGaussModel().getPuntosGauss()[i];
+        const GaussPoint &gp= getGaussModel().getGaussPoints()[i];
         shape2d( gp.r_coordinate(), gp.s_coordinate(), xl, shp, xsj );
 
         //volume element to also be saved

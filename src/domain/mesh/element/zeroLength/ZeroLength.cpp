@@ -208,7 +208,7 @@ void XC::ZeroLength::setMaterials(const std::deque<int> &dirs,const std::vector<
                   theMaterial1d.push_back(dirs[i],tmp);
                 else
 	      std::cerr << getClassName() << "::" << __FUNCTION__ << "; "
-                            << "el material de código: '" << nmbMats[i]
+                            << "el material de code: '" << nmbMats[i]
                             << "' no corresponde a un material uniaxial.\n";
               }
             else

@@ -91,7 +91,7 @@ const XC::Vector &XC::SmallDispCrdTransf2d::local_to_global_resisting_force(cons
     return pg;
   }
 
-//! @brief Returns the coordenadas globales del punto a partir de las locales.
+//! @brief Return the global coordinates of the point from the local ones.
 const XC::Vector &XC::SmallDispCrdTransf2d::getPointGlobalCoordFromLocal(const XC::Vector &xl) const
   {
     static Vector xg(2);
@@ -110,7 +110,7 @@ const XC::Vector &XC::SmallDispCrdTransf2d::getPointGlobalCoordFromLocal(const X
     return xg;  
   }
 
-//! @brief Returns the vector desplazamiento expresado en coordenadas globales
+//! @brief Return the vector desplazamiento expressed in global coordinates
 const XC::Vector &XC::SmallDispCrdTransf2d::getPointGlobalDisplFromBasic(double xi, const Vector &uxb) const
   {
     // determine global displacements

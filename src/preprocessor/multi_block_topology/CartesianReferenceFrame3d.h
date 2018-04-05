@@ -54,7 +54,7 @@ class CartesianReferenceFrame3d: public ReferenceFrame
 
     Pos3d getOrg(void) const;
     void setOrg(const Pos3d &);
-    void TresPuntos(const Pos3d &,const Pos3d &, const Pos3d &);
+    void ThreePoints(const Pos3d &,const Pos3d &, const Pos3d &);
 
     Pos3d GetPosGlobal(const Pos3d &p) const;
     Vector3d GetCooGlobales(const Vector3d &v) const;

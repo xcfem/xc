@@ -190,7 +190,7 @@ XC::ElasticBeam3d::ElasticBeam3d(const XC::ElasticBeam3d &otro)
     p0= otro.p0;
   }
 
-//! @brief Oparador asignación.
+//! @brief Assignment operator.
 XC::ElasticBeam3d &XC::ElasticBeam3d::operator=(const XC::ElasticBeam3d &otro)
   {
     ProtoBeam3d::operator=(otro);

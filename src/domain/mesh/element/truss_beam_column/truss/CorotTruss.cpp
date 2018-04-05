@@ -103,7 +103,7 @@ XC::CorotTruss::CorotTruss(const CorotTruss &otro)
       theMaterial= otro.theMaterial->getCopy();
   }
 
-//! @brief Operador de asignación.
+//! @brief Assignment operator.
 XC::CorotTruss &XC::CorotTruss::operator=(const CorotTruss &otro)
   {
     CorotTrussBase::operator=(otro);

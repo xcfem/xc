@@ -23,21 +23,21 @@
 
 //Point pointers arrays
 
-typedef MatrizT<XC::Pnt *,std::vector<XC::Pnt *> > matriz_t_ptr_puntos;
-matriz_t_ptr_puntos::reference (matriz_t_ptr_puntos::*getPnt)(size_t,size_t)= &matriz_t_ptr_puntos::at;
-class_<matriz_t_ptr_puntos, bases<ProtoMatriz>, boost::noncopyable >("matriz_t_ptr_puntos", no_init)
+typedef MatrizT<XC::Pnt *,std::vector<XC::Pnt *> > matriz_t_point_ptr;
+matriz_t_point_ptr::reference (matriz_t_point_ptr::*getPnt)(size_t,size_t)= &matriz_t_point_ptr::at;
+class_<matriz_t_point_ptr, bases<ProtoMatriz>, boost::noncopyable >("matriz_t_point_ptr", no_init)
   .def("getPoint", make_function( getPnt, return_internal_reference<>() ))  ;
 
-typedef XC::MatrizPtrBase<XC::Pnt> matriz_ptr_puntos;
-class_<matriz_ptr_puntos, bases<matriz_t_ptr_puntos,EntCmd>, boost::noncopyable >("matriz_ptr_puntos", no_init)
-  .def("dim",&matriz_ptr_puntos::dim,"assings matrix dimensions.")
-  .add_property("nRow",&matriz_ptr_puntos::getNumFilas,"returns number of rows.")
-  .add_property("nCol",&matriz_ptr_puntos::getNumCols,"returns number of columns.")
+typedef XC::MatrizPtrBase<XC::Pnt> matriz_point_ptr;
+class_<matriz_point_ptr, bases<matriz_t_point_ptr,EntCmd>, boost::noncopyable >("matriz_point_ptr", no_init)
+  .def("dim",&matriz_point_ptr::dim,"assings matrix dimensions.")
+  .add_property("nRow",&matriz_point_ptr::getNumFilas,"returns number of rows.")
+  .add_property("nCol",&matriz_point_ptr::getNumCols,"returns number of columns.")
   ;
 
 XC::Pnt *(XC::MatrizPtrPnt::*getNearestPntMatrizPtrPnt)(const Pos3d &)= &XC::MatrizPtrPnt::getNearestPnt;
-XC::Pnt *(XC::MatrizPtrPnt::*getPntWithTagMatrizPtrPnt)(const size_t &)= &XC::MatrizPtrPnt::buscaPunto;
-class_<XC::MatrizPtrPnt, bases<matriz_ptr_puntos>, boost::noncopyable >("MatrizPtrPnt", no_init)
+XC::Pnt *(XC::MatrizPtrPnt::*getPntWithTagMatrizPtrPnt)(const size_t &)= &XC::MatrizPtrPnt::findPoint;
+class_<XC::MatrizPtrPnt, bases<matriz_point_ptr>, boost::noncopyable >("MatrizPtrPnt", no_init)
   .def("getNearestPnt",make_function(getNearestPntMatrizPtrPnt, return_internal_reference<>() ),"Returns nearest point.")
   .def("getPntWithTag",make_function(getPntWithTagMatrizPtrPnt, return_internal_reference<>() ),"Returns point by tag.")
   .def("setPnt", &XC::MatrizPtrPnt::setPnt)
@@ -45,22 +45,22 @@ class_<XC::MatrizPtrPnt, bases<matriz_ptr_puntos>, boost::noncopyable >("MatrizP
   .def("getCentroid",&XC::MatrizPtrPnt::getCentroide)
   ;
 
-typedef std::vector<XC::MatrizPtrPnt> vector_mp_puntos;
-XC::MatrizPtrPnt &(vector_mp_puntos::*getCapaPuntos)(size_t )= &vector_mp_puntos::at;
-class_<vector_mp_puntos, boost::noncopyable >("vector_mp_puntos", no_init)
-  .def(vector_indexing_suite<vector_mp_puntos>() )
-  .def("getLayer", getCapaPuntos, return_internal_reference<>(), "returns point layer." )
+typedef std::vector<XC::MatrizPtrPnt> vector_mp_points;
+XC::MatrizPtrPnt &(vector_mp_points::*getPointLayer)(size_t )= &vector_mp_points::at;
+class_<vector_mp_points, boost::noncopyable >("vector_mp_points", no_init)
+  .def(vector_indexing_suite<vector_mp_points>() )
+  .def("getLayer", getPointLayer, return_internal_reference<>(), "returns point layer." )
   ;
 
-typedef XC::TritrizPtrBase<XC::MatrizPtrPnt> tritriz_puntos;
-class_<tritriz_puntos, bases<vector_mp_puntos,EntCmd>, boost::noncopyable >("tritriz_puntos", no_init)
-  .def("dim",&tritriz_puntos::dim,"assings dimensions.")
-  .def("getAtIJK", &tritriz_puntos::getAtIJK, return_internal_reference<>(),"Returns reference to value at (i,j,k) position.")
+typedef XC::TritrizPtrBase<XC::MatrizPtrPnt> tritriz_points;
+class_<tritriz_points, bases<vector_mp_points,EntCmd>, boost::noncopyable >("tritriz_points", no_init)
+  .def("dim",&tritriz_points::dim,"assings dimensions.")
+  .def("getAtIJK", &tritriz_points::getAtIJK, return_internal_reference<>(),"Returns reference to value at (i,j,k) position.")
   ;
 
 XC::Pnt *(XC::TritrizPtrPnt::*getNearestPntTritrizPtrPnt)(const Pos3d &)= &XC::TritrizPtrPnt::getNearestPnt;
-XC::Pnt *(XC::TritrizPtrPnt::*getPntWithTagTritrizPtrPnt)(const int &)= &XC::TritrizPtrPnt::buscaPunto;
-class_<XC::TritrizPtrPnt, bases<tritriz_puntos>, boost::noncopyable >("TritrizPtrPnt", no_init)
+XC::Pnt *(XC::TritrizPtrPnt::*getPntWithTagTritrizPtrPnt)(const int &)= &XC::TritrizPtrPnt::findPoint;
+class_<XC::TritrizPtrPnt, bases<tritriz_points>, boost::noncopyable >("TritrizPtrPnt", no_init)
   .def("getNearestPnt",make_function(getNearestPntTritrizPtrPnt, return_internal_reference<>() ),"Returns nearest point.")
   .def("getPntWithTag",make_function(getPntWithTagTritrizPtrPnt, return_internal_reference<>() ),"Returns point by tag.")
   .def("setPnt", &XC::TritrizPtrPnt::setPnt)
@@ -157,16 +157,16 @@ class_<XC::TritrizPtrElem, bases<tritriz_elements>, boost::noncopyable >("Tritri
 
 //schemes 
 
-typedef XC::ModelComponentContainer<XC::MatrizPtrPnt> map_cm_m_puntos;
-class_<map_cm_m_puntos, bases<XC::ModelComponentContainerBase>, boost::noncopyable >("map_cm_m_puntos", no_init);
+typedef XC::ModelComponentContainer<XC::MatrizPtrPnt> map_cm_m_points;
+class_<map_cm_m_points, bases<XC::ModelComponentContainerBase>, boost::noncopyable >("map_cm_m_points", no_init);
 
-class_<XC::MapEsquemas2d, bases<map_cm_m_puntos>, boost::noncopyable >("MapEsquemas2d", no_init)
+class_<XC::MapEsquemas2d, bases<map_cm_m_points>, boost::noncopyable >("MapEsquemas2d", no_init)
   .def("new2DNet",make_function(&XC::MapEsquemas2d::makeNew, return_internal_reference<>() ),"Creates a 2D net.")
    ;
 
-typedef XC::ModelComponentContainer<XC::TritrizPtrPnt> map_cm_t_puntos;
-class_<map_cm_t_puntos, bases<XC::ModelComponentContainerBase>, boost::noncopyable >("map_cm_t_puntos", no_init);
+typedef XC::ModelComponentContainer<XC::TritrizPtrPnt> map_cm_t_points;
+class_<map_cm_t_points, bases<XC::ModelComponentContainerBase>, boost::noncopyable >("map_cm_t_points", no_init);
 
-class_<XC::MapEsquemas3d, bases<map_cm_t_puntos>, boost::noncopyable >("MapEsquemas3d", no_init)
+class_<XC::MapEsquemas3d, bases<map_cm_t_points>, boost::noncopyable >("MapEsquemas3d", no_init)
   .def("new3DNet",make_function(&XC::MapEsquemas3d::makeNew, return_internal_reference<>() ),"Creates a 3D net.")
    ;

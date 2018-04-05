@@ -216,7 +216,7 @@ BND3d XC::CircularArc::Bnd(void) const
 
 //! @brief Return ndiv+1 equally-sapaced positions along the arc.
 MatrizPos3d XC::CircularArc::get_posiciones(void) const
-{ return get_sector_circular3d().PuntosArco(NDiv()+1); }
+{ return get_sector_circular3d().getArcPoints(NDiv()+1); }
 
 //! @brief Interface with VTK.
 int XC::CircularArc::getVtkCellType(void) const

@@ -109,7 +109,8 @@ XC::PrismaticBarCrossSectionsVector::PrismaticBarCrossSectionsVector(const Prism
 //! @brief Assignment operator.
 XC::PrismaticBarCrossSectionsVector &XC::PrismaticBarCrossSectionsVector::operator=(const PrismaticBarCrossSectionsVector &)
   {
-    std::cerr << "PrismaticBarCrossSectionsVector: No se debe llamar al operador de asignación."
+    std::cerr << getClassName() << "::" << __FUNCTION__
+	      << ": assignment operator must not be called."
               << std::endl;
     return *this;
   }

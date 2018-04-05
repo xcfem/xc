@@ -919,7 +919,7 @@ Pos3d XC::Element::getPosNode(const size_t &i,bool initialGeometry) const
   { return getNodePtrs().getPosNode(i,initialGeometry); }
 
 //! @brief Returns a grid of points distributed along the line.
-TritrizPos3d XC::Element::getPuntos(const size_t &ni,const size_t &nj,const size_t &nk,bool initialGeometry)
+TritrizPos3d XC::Element::getPoints(const size_t &ni,const size_t &nj,const size_t &nk,bool initialGeometry)
   {
     TritrizPos3d retval;
     std::cerr << getClassName() << "::" << __FUNCTION__

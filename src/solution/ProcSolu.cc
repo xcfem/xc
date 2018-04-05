@@ -79,7 +79,7 @@ bool XC::ProcSolu::alloc_analysis(const std::string &nmb,const std::string &anal
                 if(eigenM)
                   theAnalysis= new LinearBucklingAnalysis(analysis_aggregation,eigenM);
               }
-            else if(nmb=="linear_buckling_eigen_analysis") //Sólo se usa dentro de LinearBucklingAnalysis.
+            else if(nmb=="linear_buckling_eigen_analysis") //Used only inside LinearBucklingAnalysis.
               theAnalysis= new LinearBucklingEigenAnalysis(analysis_aggregation);
             else if(nmb=="static_analysis")
               theAnalysis= new StaticAnalysis(analysis_aggregation);

@@ -77,12 +77,12 @@ const XC::SectionReferenceFrame *XC::EntGeomSection::SectionReferenceFrameActual
   }
 
 //! @brief Returns a pointer to the point with the identifier being passed as parameter.
-XC::Spot *XC::EntGeomSection::BuscaSpot(const size_t &id_punto)
+XC::Spot *XC::EntGeomSection::BuscaSpot(const size_t &id_point)
   {
     Spot *retval= nullptr;
     if(sccGeom)
       {
-        retval= getGeomSection()->busca_spot(id_punto);
+        retval= getGeomSection()->busca_spot(id_point);
       }
     else
       std::cerr << getClassName() << "::" << __FUNCTION__
@@ -92,12 +92,12 @@ XC::Spot *XC::EntGeomSection::BuscaSpot(const size_t &id_punto)
   }
 
 //! @brief Returns a const pointer to the point with the identifier being passed as parameter.
-const XC::Spot *XC::EntGeomSection::BuscaSpot(const size_t &id_punto) const
+const XC::Spot *XC::EntGeomSection::BuscaSpot(const size_t &id_point) const
   {
     const Spot *retval= nullptr;
     if(sccGeom)
       {
-        retval= getGeomSection()->busca_spot(id_punto);
+        retval= getGeomSection()->busca_spot(id_point);
       }
     else
       std::cerr << "XC::EntGeomSection::BuscaSpot: the object: '" 

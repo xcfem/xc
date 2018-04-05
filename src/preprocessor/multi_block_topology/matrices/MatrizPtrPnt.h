@@ -25,7 +25,7 @@
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
 //MatrizPtrPnt.h
-//Matriz de puntos
+//Point matrix.
 
 #ifndef MATRIZPTRPNT_H
 #define MATRIZPTRPNT_H
@@ -45,7 +45,7 @@ class MultiBlockTopology;
 
 //! \ingroup MultiBlockTopologyMR
 //! 
-//! @brief Matriz de pointers to puntos.
+//! @brief Pointers to points in a matrix structure.
 class MatrizPtrPnt: public MatrizPtrBase<Pnt>
   {
   protected:
@@ -64,11 +64,11 @@ class MatrizPtrPnt: public MatrizPtrBase<Pnt>
     void setPnt(const size_t &,const size_t &,const int &);
     Pnt *getPnt(const size_t &,const size_t &);
 
-    Pnt *buscaPunto(const size_t &);
-    const Pnt *buscaPunto(const size_t &) const;
+    Pnt *findPoint(const size_t &);
+    const Pnt *findPoint(const size_t &) const;
     Pnt *getNearestPnt(const Pos3d &p);
     const Pnt *getNearestPnt(const Pos3d &p) const;
-    std::deque<size_t> CopiaPuntos(const RangoMatriz &,const std::vector<size_t> &,const Vector3d &);
+    std::deque<size_t> copyPoints(const RangoMatriz &,const std::vector<size_t> &,const Vector3d &);
 
     Pos3d getCentroide(void) const;
 

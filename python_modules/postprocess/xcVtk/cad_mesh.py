@@ -68,8 +68,8 @@ def VtkCargaIdsCells(uGrid, setToDraw, entTypeName):
   etiqCells= create_array_set_data.VtkCreaStrArraySetData(setToDraw,entTypeName,'nombre')
   uGrid.GetCellData().AddArray(etiqCells)
 
-# Dibuja las etiquetas de los puntos
 def VtkDibujaIdsKPts(uGrid, setToDraw, renderer):
+  '''Draw the point labels.'''
   numKPtsDI= setToDraw.getPoints.size
   if(numKPtsDI>0):
     ids= vtk.vtkIdFilter()

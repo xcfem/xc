@@ -162,18 +162,18 @@ const XC::Node *XC::EntMdlr::getNode(const size_t &i,const size_t &j,const size_
       return nullptr;
   }
 
-//! @brief Returns the node closest to the point being passed as parameter.
+//! @brief Return the node closest to the point being passed as parameter.
 XC::Node *XC::EntMdlr::getNearestNode(const Pos3d &p)
   { return ttzNodes.getNearestNode(p); }
 
-//! @brief Returns the node closest to the point being passed as parameter.
+//! @brief Return the node closest to the point being passed as parameter.
 const XC::Node *XC::EntMdlr::getNearestNode(const Pos3d &p) const
   {
     EntMdlr *this_no_const= const_cast<EntMdlr *>(this);
     return this_no_const->getNearestNode(p);
   }
 
-//! @brief Returns the indexes of the node being passed as parameter.
+//! @brief Return the indexes of the node being passed as parameter.
 XC::ID XC::EntMdlr::getNodeIndices(const Node *n) const
   { return ttzNodes.getNodeIndices(n); }
 
@@ -204,11 +204,11 @@ const XC::Element *XC::EntMdlr::getElement(const size_t &i,const size_t &j,const
       return nullptr;
   }
 
-//! @brief Returns the element closest to the point being passed as parameter.
+//! @brief Return the element closest to the point being passed as parameter.
 XC::Element *XC::EntMdlr::getNearestElement(const Pos3d &p)
   { return ttzElements.getNearestElement(p); }
 
-//! @brief Returns the element closest to the point being passed as parameter.
+//! @brief Return the element closest to the point being passed as parameter.
 const XC::Element *XC::EntMdlr::getNearestElement(const Pos3d &p) const
   {
     EntMdlr *this_no_const= const_cast<EntMdlr *>(this);
@@ -375,13 +375,13 @@ const bool &XC::EntMdlr::getGenMesh(void) const
 
 //! @brief Creates a point at the position being passed as parameter.
 XC::Pnt *XC::EntMdlr::create_point(const Pos3d &pos)
-  { return getPreprocessor()->getMultiBlockTopology().getPuntos().New(pos); }
+  { return getPreprocessor()->getMultiBlockTopology().getPoints().New(pos); }
 
 //! @brief Creates points at the positions being passed as parameters.
 void XC::EntMdlr::create_points(const MatrizPos3d &posiciones)
   {
     if(verbosity>4)
-      std::clog << "Creando puntos linea: '" << getName() << "'...";   
+      std::clog << "Creating points for line: '" << getName() << "'...";   
     const size_t filas= posiciones.getNumFilas();
     const size_t cols= posiciones.getNumCols();
 
@@ -423,7 +423,7 @@ XC::SetFilaK XC::EntMdlr::GetVarRefFilaK(size_t capa,size_t f,const RangoIndice 
 XC::SetFilaK XC::EntMdlr::GetVarRefFilaK(const RangoTritriz &rango,const std::string &nmb)
   { return GetVarRefFilaK(rango.GetRangoCapas().Inf(),rango.GetRangoFilas().Inf(),rango.GetRangoCols(),nmb); }
 
-//! @brief Returns the squared distance to
+//! @brief Return the squared distance to
 //! the position being passed as parameter.
 double XC::EntMdlr::DistanciaA2(const Pos3d &pt) const
   {
@@ -432,7 +432,7 @@ double XC::EntMdlr::DistanciaA2(const Pos3d &pt) const
     return 0.0;
   }
 
-//! @brief Returns the distance to the position being passed as parameter.
+//! @brief Return the distance to the position being passed as parameter.
 double XC::EntMdlr::DistanciaA(const Pos3d &pt) const
   { return sqrt(DistanciaA2(pt)); }
 

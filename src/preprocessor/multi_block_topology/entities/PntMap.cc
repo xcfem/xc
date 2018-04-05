@@ -60,7 +60,7 @@ void XC::PntMap::UpdateSets(Pnt *new_point) const
       }
   }
 
-//! @brief Returns the vector defined by the points which indices are being passed as parameters.
+//! @brief Return the vector defined by the points which indices are being passed as parameters.
 Vector3d XC::PntMap::getVector(const Indice &i,const Indice &j) const
   {
     Vector3d retval;
@@ -94,7 +94,7 @@ Recta3d XC::PntMap::getRecta(const Indice &i,const Indice &j) const
     return retval;
   }
 
-//! @brief Returns the plane defined by the points which indices are being passed as parameters.
+//! @brief Return the plane defined by the points which indices are being passed as parameters.
 Plano3d XC::PntMap::getPlano(const Indice &i,const Indice &j,const Indice &k) const
   {
     Plano3d retval;
@@ -207,7 +207,8 @@ XC::Pnt *XC::PntMap::Copia(const Pnt *p,const Vector3d &v= Vector3d())
     return retval;
   }
 
-//! @brief Crea copias de los puntos cuyos identifiers being passed as parameters.
+//! @brief Create copies of the points which identifiers are being passed as
+//! parameters.
 void XC::PntMap::Copia(const std::vector<Indice> &indices)
   {
     for(std::vector<Indice>::const_iterator i= indices.begin();i!=indices.end();i++)
@@ -236,7 +237,8 @@ void XC::PntMap::Transforma(const TrfGeom &trf,const std::vector<Indice> &indice
       }
   }
 
-//! @brief Return the distancia entre los puntos cuyos identifiers being passed as parameters.
+//! @brief Return the distance between the points which identifiers are being
+//! passed as parameters.
 double XC::PntMap::Dist(const Indice &i,const Indice &j) const
   {
     double retval(-1.0);

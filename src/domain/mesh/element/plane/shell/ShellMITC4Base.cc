@@ -483,7 +483,7 @@ const XC::Matrix &XC::ShellMITC4Base::getInitialStiff(void) const
     //gauss loop 
     for(i=0;i<ngauss;i++)
       {
-        const GaussPoint &gp= getGaussModel().getPuntosGauss()[i];
+        const GaussPoint &gp= getGaussModel().getGaussPoints()[i];
         r1= Cx + gp.r_coordinate()*Bx;
         r3= Cy + gp.r_coordinate()*By;
         r1= r1*r1 + r3*r3;
@@ -638,7 +638,7 @@ const XC::Matrix& XC::ShellMITC4Base::getMass(void) const
     return mass;
   }
 
-//! @brief Returns the element Gauss points.
+//! @brief Return the element Gauss points.
 const XC::GaussModel &XC::ShellMITC4Base::getGaussModel(void) const
   { return gauss_model_quad4; }
 
@@ -753,7 +753,7 @@ int XC::ShellMITC4Base::revertToLastCommit(void)
     return retval;
   }
 
-//! @brief Returns the initial state.
+//! @brief Return the initial state.
 int XC::ShellMITC4Base::revertToStart(void)
   {
     zeroLoad();
@@ -873,7 +873,7 @@ void XC::ShellMITC4Base::formInertiaTerms( int tangFlag ) const
     for(int i= 0; i < numberGauss; i++ )
       {
         //get shape functions
-        const GaussPoint &gp= getGaussModel().getPuntosGauss()[i];
+        const GaussPoint &gp= getGaussModel().getGaussPoints()[i];
         shape2d(gp.r_coordinate(), gp.s_coordinate(), xl, shp, xsj );
 
         //volume element to also be saved
@@ -886,7 +886,7 @@ void XC::ShellMITC4Base::formInertiaTerms( int tangFlag ) const
           //momentum += ( shp[massIndex][j] * theNodes[j]->getTrialAccel() );
           momentum.addVector(1.0, theCoordTransf->getBasicTrialAccel(j), shp[massIndex][j] );
 
-        //densidad en el punto de Gauss i.
+        //density on the Gauss point i.
         rhoH= physicalProperties[i]->getRho();
 
         //multiply acceleration by density to form momentum
@@ -1046,7 +1046,7 @@ void XC::ShellMITC4Base::formResidAndTangent(int tang_flag) const
     //gauss loop 
     for(i= 0;i<ngauss;i++)
       {
-        const GaussPoint &gp= getGaussModel().getPuntosGauss()[i];
+        const GaussPoint &gp= getGaussModel().getGaussPoints()[i];
         r1= Cx + gp.r_coordinate()*Bx;
         r3= Cy + gp.r_coordinate()*By;
         r1= r1*r1 + r3*r3;

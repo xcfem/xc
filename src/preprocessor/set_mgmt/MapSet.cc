@@ -71,7 +71,7 @@ const XC::SetBase *XC::MapSet::busca_set(const std::string &nmb) const
       }
   }
 
-//! @brief Returns the set which name is being passed as parameter.
+//! @brief Return the set which name is being passed as parameter.
 XC::SetBase &XC::MapSet::getSet(const std::string &nmb)
   {
     SetBase *retval= busca_set(nmb);
@@ -290,7 +290,7 @@ void XC::MapSet::reset(void)
 XC::MapSet::~MapSet(void)
   { clearAll(); }
 
-//! @brief Returns the DBTags of the sets.
+//! @brief Return the DBTags of the sets.
 const XC::ID &XC::MapSet::getSetsDBTags(CommParameters &cp)
   {
     static ID retval;
@@ -309,7 +309,7 @@ const XC::ID &XC::MapSet::getSetsDBTags(CommParameters &cp)
     return retval;
   }
 
-//! @brief Returns the nombres de clase of the sets.
+//! @brief Return the nombres de clase of the sets.
 const std::deque<std::string> &XC::MapSet::getSetsClassNames(void)
   {
     const int size= sets.size();
@@ -523,7 +523,7 @@ int XC::MapSet::recvSelf(const CommParameters &cp)
     return res;
   }
 
-//! @brief Returns the sets que contienen the pointer to node
+//! @brief Return the sets que contienen the pointer to node
 //! being passed as parameter.
 std::set<XC::SetBase *> XC::MapSet::get_sets(const Node *n)
   {
@@ -533,7 +533,7 @@ std::set<XC::SetBase *> XC::MapSet::get_sets(const Node *n)
     return retval;
   }
 
-//! @brief Returns the sets that containt the element pointer
+//! @brief Return the sets that containt the element pointer
 //! being passed as parameter.
 std::set<XC::SetBase *> XC::MapSet::get_sets(const Element *e)
   {
@@ -543,7 +543,7 @@ std::set<XC::SetBase *> XC::MapSet::get_sets(const Element *e)
     return retval;
   }
 
-//! @brief Returns the sets que contienen the pointer a punto
+//! @brief Return the sets that contain the pointer to the ponint
 //! being passed as parameter.
 std::set<XC::SetBase *> XC::MapSet::get_sets(const Pnt *p)
   {
@@ -553,7 +553,7 @@ std::set<XC::SetBase *> XC::MapSet::get_sets(const Pnt *p)
     return retval;
   }
 
-//! @brief Returns the sets que contienen the pointer a «edge»
+//! @brief Return the sets que contienen the pointer a «edge»
 //! being passed as parameter.
 std::set<XC::SetBase *> XC::MapSet::get_sets(const Edge *e)
   {
@@ -563,7 +563,7 @@ std::set<XC::SetBase *> XC::MapSet::get_sets(const Edge *e)
     return retval;
   }
 
-//! @brief Returns the sets than contain a pointer to the face
+//! @brief Return the sets than contain a pointer to the face
 //! being passed as parameter.
 std::set<XC::SetBase *> XC::MapSet::get_sets(const Face *f)
   {
@@ -573,7 +573,7 @@ std::set<XC::SetBase *> XC::MapSet::get_sets(const Face *f)
     return retval;
   }
 
-//! @brief Returns the sets que contienen the pointer a cuerpo
+//! @brief Return the sets que contienen the pointer a cuerpo
 //! being passed as parameter.
 std::set<XC::SetBase *> XC::MapSet::get_sets(const Body *b)
   {
@@ -583,7 +583,7 @@ std::set<XC::SetBase *> XC::MapSet::get_sets(const Body *b)
     return retval;
   }
 
-//! @brief Returns the sets que contienen the pointer a «uniform grid»
+//! @brief Return the sets que contienen the pointer a «uniform grid»
 //! being passed as parameter.
 std::set<XC::SetBase *> XC::MapSet::get_sets(const UniformGrid *ug)
   {

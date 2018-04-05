@@ -65,8 +65,8 @@ def ParamZ(gae):
       
 def ParamF(gae,z):
     '''
-    Parámetro F en función del grado de aspereza del entorno
-    y de la cota del punto according to CTE (expresión D.3).
+    F parameter en función del grado de aspereza del entorno
+    and of the height of the point according to CTE (expression D.3).
     '''
     k= ParamK(gae)
     L= ParamL(gae)
@@ -81,10 +81,11 @@ def ParamF(gae,z):
 def CoefExp(gae,z):
     '''
     Coeficiente de exposición en función del grado de aspereza del entorno
-    y de la cota del punto sobre el terreno according to CTE (expresión D.2).
+    and of the height of the point over the terrain according 
+    to CTE (expression D.2).
     '''
     if z>200:
-        print "Expresión no válida para cotas sobre el terreno superiores a 200 m."
+        print "Expression no válida para cotas sobre el terreno superiores a 200 m."
     k= ParamK(gae)
     F= ParamF(gae,z)
     return F*(F+7*k)

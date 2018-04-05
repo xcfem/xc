@@ -31,24 +31,24 @@
 #include "xc_utils/src/geom/pos_vec/Vector2d.h"
 
 
-//! @brief Returns the i-th axis unit vector expressed in global coordinates
+//! @brief Return the i-th axis unit vector expressed in global coordinates
 //! for the position being passed as parameter.
 Vector2d XC::SectionCartesianReferenceFrame::GetVDirEje(const size_t &i,const Pos2d &) const
   { return ref.GetVDirEje(i); }
 
-//! @brief Return the posicion del punto p expresado en locales
-//! expresada en coordenadas globales.
+//! @brief Return the position of point p expressed in local coordinates
+//! expresada en global coordinates.
 Pos2d XC::SectionCartesianReferenceFrame::GetPosGlobal(const Pos2d &p) const
   { return ref.GetPosGlobal(p); }
-//! @brief Returns the vector v expresado en locales
-//! expresado en coordenadas globales.
+//! @brief Return the vector v expressed in local coordinates
+//! expressed in global coordinates.
 Vector2d XC::SectionCartesianReferenceFrame::GetCooGlobales(const Vector2d &v) const
   { return ref.GetCooGlobales(v); }
-//! @brief Return the posicion del punto p expresado en globales
-//! expresada en coordenadas locales.
+//! @brief Return the position of point p expressed in global coordinates
+//! expresada en local coordinates.
 Pos2d XC::SectionCartesianReferenceFrame::GetPosLocal(const Pos2d &p) const
   { return ref.GetPosLocal(p); }
-//! @brief Returns the vector v expresado en globales
-//! expresado en coordenadas locales.
+//! @brief Return the vector v expressed in global coordinates
+//! expressed in local coordinates.
 Vector2d XC::SectionCartesianReferenceFrame::GetCooLocales(const Vector2d &v) const
   { return ref.GetCooLocales(v); }

@@ -50,24 +50,24 @@ class SectionReferenceFrame: public EntGeomSection
     SectionReferenceFrame(const std::string &nombre= "",GeomSection *m= nullptr)
       : EntGeomSection(nombre,m) {}
 
-    //! @brief Returns the i-th axis unit vector 
+    //! @brief Return the i-th axis unit vector 
     //! expressed in global coordinates 
     //! for the position being passed as parameter.
     virtual Vector2d GetVDirEje(const size_t &,const Pos2d &) const= 0;
     Vector2d GetI(const Pos2d &) const;
     Vector2d GetJ(const Pos2d &) const;
 
-    //! @brief Return the posicion del punto p expresado en locales
-    //! expresada en coordenadas globales.
+    //! @brief Return the position of point p expressed in local coordinates
+    //! expresada en global coordinates.
     virtual Pos2d GetPosGlobal(const Pos2d &p) const= 0;
-    //! @brief Returns the vector v expresado en locales
-    //! expresado en coordenadas globales.
+    //! @brief Return the vector v expressed in local coordinates
+    //! expressed in global coordinates.
     virtual Vector2d GetCooGlobales(const Vector2d &v) const= 0;
-    //! @brief Return the posicion del punto p expresado en globales
-    //! expresada en coordenadas locales.
+    //! @brief Return the position of point p expressed in global coordinates
+    //! expresada en local coordinates.
     virtual Pos2d GetPosLocal(const Pos2d &p) const= 0;
-    //! @brief Returns the vector v expresado en globales
-    //! expresado en coordenadas locales.
+    //! @brief Return the vector v expressed in global coordinates
+    //! expressed in local coordinates.
     virtual Vector2d GetCooLocales(const Vector2d &v) const= 0;
 
 

@@ -189,7 +189,7 @@ void MEDTFieldInfo<T>::setValueIJ(int i, int j,const T &value)
     campo->setValueIJ(i,j,value);
   }
 
-//! @brief Value of the field at indexes i,j y k (punto de Gauss).
+//! @brief Value of the field at indexes i,j y k (Gauss point).
 template <class T>
 void MEDTFieldInfo<T>::setValueIJK(int i, int j,int k,int t,const T &value)
   {

@@ -140,7 +140,8 @@ XC::ForceBeamColumn2d &XC::ForceBeamColumn2d::operator=(const ForceBeamColumn2d 
 //       alloc(*otro.beamIntegr);
 //     v0= otro.v0;
 //     maxSubdivisions= otro.maxSubdivisions;
-    std::cerr << "ForceBeamColumn2d: No se debe llamar al operador de asignación."
+    std::cerr << getClassName() << "::" << __FUNCTION__
+	      << "; assignement operator must not be called."
               << std::endl;
     return *this;    
   }

@@ -150,10 +150,10 @@ class CmbEdge: public Edge
     size_t IndiceEdge(const Edge *l) const;
     const Lado *GetLado(const size_t &i) const;
     Lado *GetLado(const size_t &i);
-    const Lado *GetLadoPorPuntos(const Pnt *,const Pnt *) const;
-    Lado *GetLadoPorPuntos(const Pnt *,const Pnt *);
-    const Lado *GetLadoPorPuntos(const size_t &,const size_t &) const;
-    Lado *GetLadoPorPuntos(const size_t &,const size_t &);
+    const Lado *getSideByPoints(const Pnt *,const Pnt *) const;
+    Lado *getSideByPoints(const Pnt *,const Pnt *);
+    const Lado *getSideByPoints(const size_t &,const size_t &) const;
+    Lado *getSideByPoints(const size_t &,const size_t &);
     std::deque<Edge *> GetEdges(void);
     virtual const Pnt *GetVertice(const size_t &i) const;
     virtual void SetVertice(const size_t &,Pnt *);

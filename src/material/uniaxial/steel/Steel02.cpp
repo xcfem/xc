@@ -123,7 +123,7 @@ XC::Steel02::Steel02(void)
 void XC::Steel02::setInitialStress(const double &d)
   {
     sigini= d;
-    setup_parameters(); //Inicializa las variables históricas.
+    setup_parameters(); //Initialize history variables.
   }
 
 XC::UniaxialMaterial *XC::Steel02::getCopy(void) const

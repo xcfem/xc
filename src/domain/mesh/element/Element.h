@@ -263,7 +263,7 @@ class Element: public MeshComponent
     std::list<Pos3d> getPosNodes(bool initialGeometry= true) const;
     virtual Pos3d getPosCdg(bool initialGeometry= true) const;
     Vector getCooCdg(bool initialGeometry= true) const;
-    TritrizPos3d getPuntos(const size_t &ni,const size_t &nj,const size_t &nk,bool initialGeometry= true);
+    TritrizPos3d getPoints(const size_t &ni,const size_t &nj,const size_t &nk,bool initialGeometry= true);
     bool In(const GeomObj3d &,const double &factor= 1.0, const double &tol= 0.0) const;
     bool Out(const GeomObj3d &,const double &factor= 1.0, const double &tol= 0.0) const;
     bool In(const GeomObj2d &,const double &factor= 1.0, const double &tol= 0.0) const;

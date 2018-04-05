@@ -67,7 +67,7 @@ void XC::Pnt::erase_line(Edge *l) const
       lines_pt.erase(i);
   }
 
-//! Returns the position vector of the point.
+//! Return the position vector of the point.
 Vector3d XC::Pnt::VectorPos(void) const
   { return p.VectorPos();  }
 
@@ -75,11 +75,11 @@ Vector3d XC::Pnt::VectorPos(void) const
 void XC::Pnt::actualiza_topologia(void)
   {}
 
-//! @brief Returns the object BND.
+//! @brief Return the object BND.
 BND3d XC::Pnt::Bnd(void) const
   { return BND3d(p,p);  }
 
-//! @brief Returns the lines that start o finish in this point.
+//! @brief Return the lines that start o finish in this point.
 std::set<const XC::Edge *> XC::Pnt::EdgesExtremo(void) const
   {
     std::set<const Edge *> retval;
@@ -130,7 +130,7 @@ bool XC::Pnt::Toca(const Face &s) const
     return false;
   }
 
-//! @brief Returns true if the punto toca al cuerpo.
+//! @brief Returns true if the points touch the body.
 bool XC::Pnt::Toca(const Body &b) const
   {
     for(std::set<const Edge *>::const_iterator i= lines_pt.begin(); i!=lines_pt.end();i++)
@@ -138,7 +138,7 @@ bool XC::Pnt::Toca(const Body &b) const
     return false;
   }
 
-//! @brief Returns the squared distance to the position
+//! @brief Return the squared distance to the position
 //! being passed as parameter.
 double XC::Pnt::DistanciaA2(const Pos3d &pt) const
   { return dist2(p,pt);  }
@@ -215,7 +215,7 @@ const XC::Node *XC::Pnt::getNode(void) const
     return nod;
   }
 
-//! @brief Returns the sets a los que pertenece este punto.
+//! @brief Return the sets to which this point belongs.
 std::set<XC::SetBase *> XC::Pnt::get_sets(void) const
   {
     std::set<SetBase *> retval;

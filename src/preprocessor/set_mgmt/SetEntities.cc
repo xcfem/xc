@@ -298,7 +298,7 @@ XC::SetEntities XC::SetEntities::create_copy(const std::string &name,const Vecto
 	  {
 	    const std::string oldName= (*i)->getName();
 	    const std::string new_name= name+oldName;
-	    Pnt *new_point= preprocessor->getMultiBlockTopology().getPuntos().Copia(*i,v);
+	    Pnt *new_point= preprocessor->getMultiBlockTopology().getPoints().Copia(*i,v);
 	    new_point->BorraPtrNodElem();
 	    retval.points.push_back(new_point);
 	    new_points_names[oldName]= new_name;
@@ -519,7 +519,7 @@ void XC::SetEntities::sel_points_lista(const ID &tags)
             MultiBlockTopology &mbt= getPreprocessor()->getMultiBlockTopology();
             for(size_t i= 0;i<sz;i++)
               {
-	        Pnt *ipt= mbt.getPuntos().busca(tags(i)); 
+	        Pnt *ipt= mbt.getPoints().busca(tags(i)); 
                 if(ipt)
                   points.push_back(ipt);
                 else

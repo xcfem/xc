@@ -41,7 +41,7 @@
 XC::MapEsquemas2d::MapEsquemas2d(MultiBlockTopology *mbt)
   : ModelComponentContainer<MatrizPtrPnt>(mbt) {}
 
-//! @brief Creates a new punto.
+//! @brief Creates a new point.
 XC::MatrizPtrPnt *XC::MapEsquemas2d::Crea(void)
   {
     MatrizPtrPnt *retval= new MatrizPtrPnt();

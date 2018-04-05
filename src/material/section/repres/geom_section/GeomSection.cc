@@ -111,7 +111,7 @@ const XC::SectionReferenceFrame *XC::GeomSection::get_reference_system(const siz
     return retval;
   }
 
-//! @brief Returns a pointer to the punto cuyo identifier being passed as parameter.
+//! @brief Returns a pointer to the point identified by the argument.
 XC::Spot *XC::GeomSection::busca_spot(const size_t &id)
   {
     Spot *retval= nullptr;
@@ -121,7 +121,7 @@ XC::Spot *XC::GeomSection::busca_spot(const size_t &id)
     return retval;
   }
 
-//! @brief Returns a pointer to the punto cuyo identifier being passed as parameter.
+//! @brief Returns a pointer to the point identified by the argument.
 const XC::Spot *XC::GeomSection::busca_spot(const size_t &id) const
   {
     Spot *retval= nullptr;
@@ -193,7 +193,7 @@ XC::Spot *XC::GeomSection::newSpot(const Pos2d &p)
       {
         SectionReferenceFrame *sr= get_reference_system(tag_sis_ref);
         if(sr)
-          trfP= sr->GetPosGlobal(p); //Pasa a coordenadas globales.
+          trfP= sr->GetPosGlobal(p); //Pass to global coordinates.
         else
 	  std::cerr << "Reference system with identifier: "
 		    << tag_sis_ref << " not found.\n";
@@ -217,7 +217,8 @@ XC::Segment *XC::GeomSection::newSegment(size_t p1,size_t p2)
   }
 
 
-//! @brief Return the distancia entre los puntos cuyos identifiers being passed as parameters.
+//! @brief Return the distance between the points identified by the
+//! arguments.
 double XC::GeomSection::DistSpots(const size_t &i,const size_t &j) const
   {
     double retval(-1.0);
@@ -250,7 +251,7 @@ Poligono2d XC::GeomSection::getRegionsContour(void) const
     return retval;
   }
 
-//! @brief Returns the contour of the compressed part of the regions.
+//! @brief Return the contour of the compressed part of the regions.
 Poligono2d XC::GeomSection::getCompressedZoneContour(const Semiplano2d &sp_compresiones) const
   {
     Poligono2d retval;
@@ -267,7 +268,7 @@ Poligono2d XC::GeomSection::getCompressedZoneContour(const Semiplano2d &sp_compr
     return retval;
   }
 
-//! @brief Returns the working cross-section lever arm from the position
+//! @brief Return the working cross-section lever arm from the position
 //! of the half-plane being passed as parameter.
 //! @param trazaPF: Intersection of the bending plane with the plane that
 //! contains the cross section.
@@ -289,7 +290,7 @@ double XC::GeomSection::getLeverArm(const Recta2d &trazaPF) const
     return dpos-dneg;
   }
 
-//! @brief Returns the section depth from the border of the half-plane
+//! @brief Return the section depth from the border of the half-plane
 //! being passed as parameter to the most compressed fiber.
 double XC::GeomSection::getCompressedZoneLeverArm(const Semiplano2d &sp_compresiones) const
   {
@@ -305,7 +306,7 @@ double XC::GeomSection::getCompressedZoneLeverArm(const Semiplano2d &sp_compresi
     return dneg;
   }
 
-//! @brief Returns the section depth from the border of the half-plane
+//! @brief Return the section depth from the border of the half-plane
 //! being passed as parameter to the most tensioned fiber.
 double XC::GeomSection::getTensionedZoneLeverArm(const Semiplano2d &sp_compresiones) const
   {
@@ -321,19 +322,19 @@ double XC::GeomSection::getTensionedZoneLeverArm(const Semiplano2d &sp_compresio
     return dpos;
   }
 
-//! @brief Returns the lengths of the segments that results of
+//! @brief Return the lengths of the segments that results of
 //! cutting the line being passed as parameter with the section
 //! contour.
 double XC::GeomSection::getLongCorte(const Recta2d &r) const
   {
     double retval= 0.0;
-    Poligono2d contour= agrega_puntos_medios(getRegionsContour());
+    Poligono2d contour= append_mid_points(getRegionsContour());
     if(contour.Overlap(r))
       retval= contour.Clip(r).Longitud();
     return retval;
   }
 
-//! @brief Returns the lengths of the segments that results of
+//! @brief Return the lengths of the segments that results of
 //! cutting the line being passed as parameter with the section
 //! contour.
 std::vector<double> XC::GeomSection::getLongsCorte(const std::list<Recta2d> &lr) const
@@ -342,7 +343,7 @@ std::vector<double> XC::GeomSection::getLongsCorte(const std::list<Recta2d> &lr)
     std::vector<double> retval;
     if(sz>0)
       {
-        Poligono2d contour= agrega_puntos_medios(getRegionsContour());
+        Poligono2d contour= append_mid_points(getRegionsContour());
         int conta= 0;
         for(std::list<Recta2d>::const_iterator i= lr.begin();i!=lr.end();i++,conta++)
           {
@@ -354,11 +355,11 @@ std::vector<double> XC::GeomSection::getLongsCorte(const std::list<Recta2d> &lr)
     return retval;
   }
 
-//! @brief Returns the section width for the bending plane intersect
+//! @brief Return the section width for the bending plane intersect
 //! being passed as parameter.
 double XC::GeomSection::getAnchoMecanico(const Recta2d &traza_plano_flexion) const
   {
-    const Poligono2d contour= agrega_puntos_medios(getRegionsContour());
+    const Poligono2d contour= append_mid_points(getRegionsContour());
     const size_t num_vertices= contour.GetNumVertices();
     double d= 0.0,dmax= 0.0;
     Recta2d perp;
@@ -375,15 +376,15 @@ double XC::GeomSection::getAnchoMecanico(const Recta2d &traza_plano_flexion) con
     return dmax;
   }
 
-//! @brief Returns the width «b0» of the compressed strut
+//! @brief Return the width «b0» of the compressed strut
 //! that corresponds to the arm lever represented by the segment being passed as parameter.
 double XC::GeomSection::getCompressedStrutWidth(const Segmento2d &brazo_mecanico) const
   {
-    const Poligono2d contour= agrega_puntos_medios(getRegionsContour());
+    const Poligono2d contour= append_mid_points(getRegionsContour());
     const size_t num_vertices= contour.GetNumVertices();
     Recta2d perp= brazo_mecanico.Mediatriz();
     Segmento2d ancho= contour.Clip(perp);
-    Pos2d p= punto_interseccion(ancho,brazo_mecanico);
+    Pos2d p= intersection_point(ancho,brazo_mecanico);
     assert(p.exists());
     double b2= std::min(dist2(p,ancho.Origen()),dist2(p,ancho.Destino()));
     double bmin2= b2;
@@ -395,7 +396,7 @@ double XC::GeomSection::getCompressedStrutWidth(const Segmento2d &brazo_mecanico
         if(intersecaBrazo)
           {
             ancho= contour.Clip(perp);
-            p= punto_interseccion(ancho,brazo_mecanico);
+            p= intersection_point(ancho,brazo_mecanico);
             if(p.exists())
               {
                 b2= std::min(dist2(p,ancho.Origen()),dist2(p,ancho.Destino()));
@@ -408,7 +409,7 @@ double XC::GeomSection::getCompressedStrutWidth(const Segmento2d &brazo_mecanico
     return 2*sqrt(bmin2);
   }
 
-//! @brief Returns the cover for the position being passed as parameter.
+//! @brief Return the cover for the position being passed as parameter.
 double XC::GeomSection::getCover(const Pos2d &p) const
   {
     const double retval= -getRegionsContour().DistSigno(p);
@@ -418,7 +419,7 @@ double XC::GeomSection::getCover(const Pos2d &p) const
     return retval;
   }
 
-//! @brief Returns the homogenized area of the regions.
+//! @brief Return the homogenized area of the regions.
 double XC::GeomSection::getAreaHomogenizedSection(const double &E0) const
   {
     double retval= 0.0;

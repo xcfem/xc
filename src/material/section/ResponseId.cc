@@ -153,8 +153,8 @@ std::string XC::ResponseId::RespIdToString(const int &code)
         return "q23";
         break;
       default:
-        std::cerr << "El código: '" << code
-                  << "' no corresponde a nigún esfuerzo."
+        std::cerr << "Unknown code: '" << code
+                  << "'."
                   << std::endl;
         return "nil";
         break;

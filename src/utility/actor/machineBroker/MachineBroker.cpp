@@ -171,7 +171,7 @@ XC::Channel *XC::MachineBroker::startActor(int actorType, int compDemand)
               }
           }
       }
-    //No hay conexión disponible, establece una nueva.
+    //No connexion available, set a new one.
     if(!theChannel)
       {
         theChannel= this->getRemoteProcess();

@@ -25,7 +25,7 @@
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
 //TritrizPtrBase.h
-//Vector de matrices de puntos
+//Pointers in an array of matrices
 
 #ifndef TRITRIZPTRBASE_H
 #define TRITRIZPTRBASE_H
@@ -258,7 +258,7 @@ size_t TritrizPtrBase<MatrizPtr>::GetDim(void) const
     return retval;
   }
 
-//! @brief Returns the number of elements de la tritriz.
+//! @brief Return the number of elements de la tritriz.
 template <class MatrizPtr>
 size_t TritrizPtrBase<MatrizPtr>::NumPtrs(void) const
   {
@@ -532,12 +532,12 @@ void TritrizPtrBase<MatrizPtr>::PutCaja(size_t offset_capa,size_t offset_fila,si
   }
 
 
-//! @brief Returns the identifiers of the objects in the layer.
+//! @brief Return the identifiers of the objects in the layer.
 template <class MatrizPtr>
 std::vector<int> TritrizPtrBase<MatrizPtr>::getTagsObjsCapa(const size_t &c)
   { return (*this)(c).getTagsObjs(); }
 
-//! @brief Returns the identifiers of the objects in the row.
+//! @brief Return the identifiers of the objects in the row.
 template <class MatrizPtr>
 std::vector<int> TritrizPtrBase<MatrizPtr>::getTagsObjsFila(const size_t &c,const size_t &f)
   {
@@ -548,7 +548,7 @@ std::vector<int> TritrizPtrBase<MatrizPtr>::getTagsObjsFila(const size_t &c,cons
     return retval;
   }
 
-//! @brief Returns the identifiers of the objects in the f-th rows.
+//! @brief Return the identifiers of the objects in the f-th rows.
 template <class MatrizPtr>
 std::vector<int> TritrizPtrBase<MatrizPtr>::getTagsObjsFilas(const size_t &f)
   {
@@ -561,7 +561,7 @@ std::vector<int> TritrizPtrBase<MatrizPtr>::getTagsObjsFilas(const size_t &f)
     return retval.getVector();
   }
 
-//! @brief Returns the identifiers of the objects in the column.
+//! @brief Return the identifiers of the objects in the column.
 template <class MatrizPtr>
 std::vector<int> TritrizPtrBase<MatrizPtr>::getTagsObjsColumna(const size_t &capa,const size_t &c)
   {
@@ -572,7 +572,7 @@ std::vector<int> TritrizPtrBase<MatrizPtr>::getTagsObjsColumna(const size_t &cap
     return retval;
   }
 
-//! @brief Returns the identifiers of the objects in the c-th columns.
+//! @brief Return the identifiers of the objects in the c-th columns.
 template <class MatrizPtr>
 std::vector<int> TritrizPtrBase<MatrizPtr>::getTagsObjsColumnas(const size_t &c)
   {
@@ -585,12 +585,12 @@ std::vector<int> TritrizPtrBase<MatrizPtr>::getTagsObjsColumnas(const size_t &c)
     return retval.getVector();
   }
 
-//! @brief Returns the identifiers of the objects in the layer interior.
+//! @brief Return the identifiers of the objects in the layer interior.
 template <class MatrizPtr>
 std::vector<int> TritrizPtrBase<MatrizPtr>::getTagsObjsInterioresCapa(const size_t &c)
   { return (*this)(c).getObjsInteriores(); }
 
-//! @brief Returns the identifiers of the objects in the row interior.
+//! @brief Return the identifiers of the objects in the row interior.
 template <class MatrizPtr>
 std::vector<int> TritrizPtrBase<MatrizPtr>::getTagsObjsInterioresFila(const size_t &c,const size_t &f)
   {
@@ -601,7 +601,7 @@ std::vector<int> TritrizPtrBase<MatrizPtr>::getTagsObjsInterioresFila(const size
     return retval;
   }
 
-//! @brief Returns the identifiers of the objects in the c-th rows interior.
+//! @brief Return the identifiers of the objects in the c-th rows interior.
 template <class MatrizPtr>
 std::vector<int> TritrizPtrBase<MatrizPtr>::getTagsObjsInterioresFilas(const size_t &f)
   {
@@ -614,7 +614,7 @@ std::vector<int> TritrizPtrBase<MatrizPtr>::getTagsObjsInterioresFilas(const siz
     return retval.getVector();
   }
 
-//! @brief Returns the identifiers of the objects in the c-th column interior.
+//! @brief Return the identifiers of the objects in the c-th column interior.
 template <class MatrizPtr>
 std::vector<int> TritrizPtrBase<MatrizPtr>::getTagsObjsInterioresColumna(const size_t &capa,const size_t &c)
   {
@@ -625,7 +625,7 @@ std::vector<int> TritrizPtrBase<MatrizPtr>::getTagsObjsInterioresColumna(const s
     return retval;
   }
 
-//! @brief Returns the identifiers of the objects in the c-th columns interior.
+//! @brief Return the identifiers of the objects in the c-th columns interior.
 template <class MatrizPtr>
 std::vector<int> TritrizPtrBase<MatrizPtr>::getTagsObjsInterioresColumnas(const size_t &c)
   {
@@ -638,7 +638,7 @@ std::vector<int> TritrizPtrBase<MatrizPtr>::getTagsObjsInterioresColumnas(const 
     return retval.getVector();
   }
 
-//! @brief Returns the tabs of the inerior elements.
+//! @brief Return the tabs of the inerior elements.
 template <class MatrizPtr>
 std::vector<int> TritrizPtrBase<MatrizPtr>::getTagsInteriorObjs(void)
   {

@@ -130,7 +130,7 @@ const XC::Matrix &XC::Beam2dPointLoad::getLocalMoments(void) const
 const XC::Matrix &XC::Beam2dPointLoad::getAppliedSectionForces(const double &L,const XC::Matrix &xi,const double &loadFactor) const
   {
     const size_t nSections= xi.noCols();
-    static Matrix retval(3,nSections); //Sólo se ejecuta una vez.
+    static Matrix retval(3,nSections); //Executed only once.
     retval.resize(3,nSections);
     retval.Zero();
     const double aOverL= X();

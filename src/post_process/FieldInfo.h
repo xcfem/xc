@@ -41,7 +41,7 @@ class FieldInfo: public EntConNmb
   protected:
     std::string nmb_set; //!< name of the set.
     bool on_nodes; //!< True if defined over the nodes of the set.
-    bool on_gauss_points; //!< Verdadero si se define sobre puntos de Gauss of the elements.
+    bool on_gauss_points; //!< True if defined over Gauss points of the elements.
     std::vector<std::string> componentNames; //!< Name of the field components.
     std::vector<std::string> componentDescriptions; //!< Field components description.
     std::vector<std::string> componentUnits; //!< Units for each component.

@@ -79,7 +79,8 @@ XC::NLForceBeamColumn3dBase::NLForceBeamColumn3dBase(const NLForceBeamColumn3dBa
 //! @brief Assignment operator.
 XC::NLForceBeamColumn3dBase &XC::NLForceBeamColumn3dBase::operator=(const NLForceBeamColumn3dBase &)
   {
-    std::cerr << "NLForceBeamColumn3dBase: No se debe llamar al operador de asignación."
+    std::cerr << getClassName() << "::" << __FUNCTION__
+	      << "; assigment operator must not be called."
               << std::endl;
     return *this;
   }

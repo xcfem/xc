@@ -75,7 +75,7 @@ class MultiBlockTopology: public PreprocessorContainer
     ReferenceFrameMap reference_systems; //!< Reference systems container.
     MapTrfGeom transformaciones_geometricas; //!< Geometric transformations container.
 
-    PntMap puntos; //!< Points container.
+    PntMap points; //!< Points container.
     LineMap edges; //!< Edges container.
     SurfaceMap faces; //!< Surfaces container.
     BodyMap cuerpos; //!< Bodys container.
@@ -99,10 +99,10 @@ class MultiBlockTopology: public PreprocessorContainer
     //! @brief Destructor.
     virtual ~MultiBlockTopology(void);
 
-    inline const PntMap &getPuntos(void) const
-      { return puntos; }
-    inline PntMap &getPuntos(void)
-      { return puntos; }
+    inline const PntMap &getPoints(void) const
+      { return points; }
+    inline PntMap &getPoints(void)
+      { return points; }
     inline const LineMap &getLines(void) const
       { return edges; }
     inline LineMap &getLines(void)

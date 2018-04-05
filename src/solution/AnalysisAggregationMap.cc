@@ -67,7 +67,7 @@ XC::AnalysisAggregation *XC::AnalysisAggregationMap::getAnalysisAggregation(cons
     return retval;
   }
 
-//! @brief Creates a new solution method con el código being passed as parameter.
+//! @brief Creates a new solution method with the code being passed as parameter.
 //! @brief Si ya existe returns a pointer al mismo.
 XC::AnalysisAggregation &XC::AnalysisAggregationMap::createAnalysisAggregation(const std::string &cod,ModelWrapper *sm)
   {
@@ -79,7 +79,7 @@ XC::AnalysisAggregation &XC::AnalysisAggregationMap::createAnalysisAggregation(c
     return *retval;
   }
 
-//! @brief Creates a new solution method con el código being passed as parameter.
+//! @brief Creates a new solution method with the code being passed as parameter.
 XC::AnalysisAggregation &XC::AnalysisAggregationMap::newAnalysisAggregation(const std::string &cod_solu_method,const std::string &cod_solu_model)
   {
     ProcSoluControl *sc= dynamic_cast<ProcSoluControl *>(Owner());

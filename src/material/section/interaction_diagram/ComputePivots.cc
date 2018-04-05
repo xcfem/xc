@@ -72,7 +72,7 @@ const XC::Fiber *XC::ComputePivots::getFiberCMaxY(void) const
 
 
 //! @brief Returns the points with zero strain in concrete (XXX enhance explanation).
-Pos3d XC::ComputePivots::GetPuntoD(void) const
+Pos3d XC::ComputePivots::getDPoint(void) const
   {
     Pos3d retval;
     const Fiber *t= getFiberCMinY();
@@ -92,10 +92,10 @@ Pos3d XC::ComputePivots::calcPositionPivotA(void) const
         if(v_min_s<0) //Cell is in tension zone.
           retval= pos_t;
         else //Cell is in compression zone.
-          retval= GetPuntoD();
+          retval= getDPoint();
       }
     else //no hay armadura.
-      retval= GetPuntoD();
+      retval= getDPoint();
     return retval;
   }
 
@@ -110,7 +110,7 @@ Pos3d XC::ComputePivots::calcPositionPivotB(void) const
 //! @brief Intersection of uniform strain (typically 2%) line and line BD 
 Pos3d XC::ComputePivots::calcPositionPivotC(void) const
   {
-    const Pos3d D= GetPuntoD();
+    const Pos3d D= getDPoint();
     const Pos3d B= calcPositionPivotB();
     const Recta3d s(D,B);
     GeomObj::list_Pos3d lp= s.Interseccion(1,agot_pivots.getDefAgotPivotC());

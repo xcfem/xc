@@ -32,7 +32,7 @@ rejilla= elast.genGrid()
 points= rejilla.getPoints()
 
 numQuads= points.getNumQuads()
-numPuntos= points.getNumPoints()
+numPoints= points.getNumPoints()
 numFilas= points.nRow
 numCols= points.nCol
 area= points.getArea()
@@ -59,7 +59,7 @@ for  \inicio{i=1} \continua{i<=numFilas} \incremento{i=(i+1)
 numQuadsTeor= n1*n2
 numFilasTeor= (n2+1)
 numColsTeor= (n1+1)
-numPuntosTeor= numFilasTeor*numColsTeor
+theorNumPoints= numFilasTeor*numColsTeor
 areaTeor= lado*lado
 xGTeor= lado/2.0
 yGTeor= lado/2.0
@@ -70,7 +70,7 @@ deltaYTeor= lado/n2
 ratio1= ((numQuads-numQuadsTeor)/numQuadsTeor)
 ratio2= ((numFilas-numFilasTeor)/numFilasTeor)
 ratio3= ((numCols-numColsTeor)/numColsTeor)
-ratio4= ((numPuntos-numPuntosTeor)/numPuntosTeor)
+ratio4= ((numPoints-theorNumPoints)/theorNumPoints)
 ratio5= ((area-areaTeor)/areaTeor)
 ratio6= ((G.x-xGTeor)/xGTeor)
 ratio7= ((G.y-yGTeor)/yGTeor)
@@ -82,7 +82,7 @@ ratio11= ((deltaY-deltaYTeor)/deltaYTeor)
 ''' 
 print "area= ",area
 print "numQuads= ",numQuads
-print "numPuntos= ",numPuntos
+print "numPoints= ",numPoints
 print "numFilas= ",numFilas
 print "numCols= ",numCols
 print "area= ",area

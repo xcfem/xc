@@ -267,7 +267,7 @@ bool XC::Domain::addMRMFreedom_Constraint(MRMFreedom_Constraint *mrmpConstraint)
     return result;
   }
 
-//! @brief Adds to the domain una constraint monopunto.
+//! @brief Adds to the domain a single freedom constraint.
 bool XC::Domain::addSFreedom_Constraint(SFreedom_Constraint *spConstraint, int pattern)
   {
     bool result= constraints.addSFreedom_Constraint(spConstraint,pattern);
@@ -538,7 +538,7 @@ bool XC::Domain::removeNodeLocker(NodeLocker *nl)
     return retval;
   }
 
-//! @brief Returns the name of the current load combination.
+//! @brief Return the name of the current load combination.
 const std::string &XC::Domain::getCurrentCombinationName(void) const
   { return nmbCombActual; }
 
@@ -682,15 +682,15 @@ const XC::Node *XC::Domain::getNode(int tag) const
 int XC::Domain::getCommitTag(void) const
   { return commitTag; }
 
-//! @brief Returns the number of elements.
+//! @brief Return the number of elements.
 int XC::Domain::getNumElements(void) const
   { return mesh.getNumElements(); }
 
-//! @brief Returns the number of nodes.
+//! @brief Return the number of nodes.
 int XC::Domain::getNumNodes(void) const
   { return mesh.getNumNodes(); }
 
-//! @brief Returns the boundary of the finite element model.
+//! @brief Return the boundary of the finite element model.
 //!
 //! To return the bounding rectangle for the mesh. The information is
 //! contained in a Vector of size 6 containing in the following order
@@ -703,7 +703,7 @@ const XC::Vector &XC::Domain::getPhysicalBounds(void)
 //! @brief Builds (if necessary) the domain elements graph and
 //! returns a reference to it.
 //! 
-//! Returns the current element graph (the connectivity of the elements
+//! Return the current element graph (the connectivity of the elements
 //! in the mesh). If the \p eleChangeFlag has been set
 //! to \p true the method will invoke {\em buildEleGraph(theEleGraph)}
 //! on itself before returning the graph. The vertices in the element
@@ -715,7 +715,7 @@ XC::Graph &XC::Domain::getElementGraph(void)
 //! @brief Builds (if necessary) the domain node graph and
 //! returns a reference to it.
 //!
-//! Returns the current node graph (the connectivity of the nodes in
+//! Return the current node graph (the connectivity of the nodes in
 //! the mesh). If the \p nodeChangeFlag has been set to \p true the
 //! will invoke {\em buildNodeGraph(theNodeGraph)} on itself before
 //! returning the graph. The vertices in the node graph are to be labeled
@@ -812,7 +812,7 @@ int XC::Domain::commit(void)
     return 0;
   }
 
-//! @brief Returns the domain to its last commited state.
+//! @brief Return the domain to its last commited state.
 //!
 //! To return the domain to the state it was in at the last commit. The
 //! domain invokes revertToLastCommit() on all nodes and elements in
@@ -836,7 +836,7 @@ int XC::Domain::revertToLastCommit(void)
     return update();
   }
 
-//! @brief Returns the domain to its initial state and
+//! @brief Return the domain to its initial state and
 //! triggers the "restart" method for all the recorders.
 int XC::Domain::revertToStart(void)
   {
@@ -895,7 +895,7 @@ int XC::Domain::setEigenvalues(const Vector &theValues)
     return 0;
   }
 
-//! @brief Returns the eigenvalue of the i-th mode.
+//! @brief Return the eigenvalue of the i-th mode.
 const double &XC::Domain::getEigenvalue(int i) const
   { return theEigenvalues(i-1); }
 
@@ -903,7 +903,7 @@ const double &XC::Domain::getEigenvalue(int i) const
 double XC::Domain::getAngularFrequency(int i) const
   { return sqrt(getEigenvalue(i)); }
 
-//! @brief Returns the period of the i-th mode.
+//! @brief Return the period of the i-th mode.
 double XC::Domain::getPeriodo(int i) const
   { return 2.0*M_PI/getAngularFrequency(i); }
 
@@ -911,7 +911,7 @@ double XC::Domain::getPeriodo(int i) const
 double XC::Domain::getFrecuencia(int i) const
 { return 1./getPeriodo(i); }
 
-//! @brief Returns the eigenvalues vector.
+//! @brief Return the eigenvalues vector.
 const XC::Vector &XC::Domain::getEigenvalues(void) const
   { return theEigenvalues; }
 
@@ -945,7 +945,7 @@ XC::Vector XC::Domain::getFrecuencias(void) const
     return retval;
   }
 
-//! @brief Returns the number of computed eigenvalues.
+//! @brief Return the number of computed eigenvalues.
 int XC::Domain::getNumModes(void) const
   { return getEigenvalues().Size(); }
 
@@ -956,11 +956,11 @@ int XC::Domain::setModalParticipationFactors(const Vector &theValues)
     return 0;
   }
 
-//! @brief Returns the modal participation factor of the i-th mode.
+//! @brief Return the modal participation factor of the i-th mode.
 const double &XC::Domain::getModalParticipationFactor(int i) const
   { return modalParticipationFactors(i-1); }
 
-//! @brief Returns the modal participation factors.
+//! @brief Return the modal participation factors.
 const XC::Vector &XC::Domain::getModalParticipationFactors(void) const
   { return modalParticipationFactors; }
 
@@ -968,7 +968,7 @@ const XC::Vector &XC::Domain::getModalParticipationFactors(void) const
 const double XC::Domain::getEffectiveModalMass(int i) const
   { return mesh.getEffectiveModalMass(i); }
 
-//! @brief Returns the effective modal masses for each mode.
+//! @brief Return the effective modal masses for each mode.
 XC::Vector XC::Domain::getEffectiveModalMasses(void) const
   {
     const int nm= getNumModes();
@@ -1075,7 +1075,7 @@ int XC::Domain::addRegion(MeshRegion &theRegion)
     return 0;
   }
 
-//! @brief Returns a pointer to the la región identified by the argument.
+//! @brief Returns a pointer to the region identified by the argument.
 XC::MeshRegion *XC::Domain::getRegion(int tag)
   {
     MeshRegion *retval= nullptr;
@@ -1210,7 +1210,7 @@ int XC::Domain::recvSelf(const CommParameters &cp)
     return retval;
   }
   
-//! @brief Returns the value of the dof component of displacement for the node with the tag being passed as parameter.
+//! @brief Return the value of the dof component of displacement for the node with the tag being passed as parameter.
 //! @param nodeTag: node identifier.
 //! @param dof: component of the displacement.
 //! @param errorFlag: error indicator.

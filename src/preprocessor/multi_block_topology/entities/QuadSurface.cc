@@ -85,7 +85,8 @@ size_t calc_ndiv(const XC::Edge *edgeA,const XC::Edge *edgeB,const size_t &ndj)
     return retval;
   }
 
-//! @brief Returns the lado homólogo al being passed as parameter.
+//! @brief Return the homologous side with respect to the one
+//! being passed as parameter.
 const XC::Edge *XC::QuadSurface::get_lado_homologo(const Edge *l) const
   {
     const Edge *retval= nullptr;   
@@ -224,7 +225,7 @@ void XC::QuadSurface::SetElemSizeIJ(const double &szI,const double &szJ)
 
 //! @brief Creates and inserts the lines from the points identified
 //! by the indexes being passed as parameter.
-void XC::QuadSurface::setPuntos(const ID &point_indexes)
+void XC::QuadSurface::setPoints(const ID &point_indexes)
   {
     const size_t np= point_indexes.Size(); //Number of indexes.
     if(np!=4)
@@ -249,20 +250,22 @@ void XC::QuadSurface::setPuntos(const ID &point_indexes)
   }
 
 //! @brief Creates and inserts the lines from the points being passed as parameter.
-void XC::QuadSurface::setPuntos(const MatrizPtrPnt &pntPtrs)
+void XC::QuadSurface::setPoints(const MatrizPtrPnt &pntPtrs)
   {
-    const size_t nf= pntPtrs.getNumFilas(); //No. de filas de puntos.
+    const size_t nf= pntPtrs.getNumFilas(); //No. de rows of points.
     if(nf<2)
       {
         std::cerr << getClassName() << "::" << __FUNCTION__
-		  << "; pointer matrix must have at least two rows." << std::endl;
+		  << "; pointer matrix must have at least two rows."
+		  << std::endl;
         return;
       }
-    const size_t nc= pntPtrs.getNumCols(); //No. de columnas de puntos.
+    const size_t nc= pntPtrs.getNumCols(); //No. de columns of points.
     if(nc<2)
       {
         std::cerr << getClassName() << "::" << __FUNCTION__
-		  << "; pointer matrix must have at least two columns." << std::endl;
+		  << "; pointer matrix must have at least two columns."
+		  << std::endl;
         return;
       }
     if(nf==2)
@@ -304,10 +307,10 @@ void XC::QuadSurface::setPuntos(const MatrizPtrPnt &pntPtrs)
 //! @brief Creates and inserts the lines from the points being passed as parameter.
 //! If some of the indices is negative it means that this position is not needed
 //! to define the surface.
-void XC::QuadSurface::setPuntos(const m_int &point_indexes)
+void XC::QuadSurface::setPoints(const m_int &point_indexes)
   {
-    const size_t nf= point_indexes.getNumFilas(); //No. de filas de puntos.
-    const size_t nc= point_indexes.getNumCols(); //No. de columnas de puntos.
+    const size_t nf= point_indexes.getNumFilas(); //No. de rows of points.
+    const size_t nc= point_indexes.getNumCols(); //No. de columns of points.
     if(nf<2)
       {
         std::cerr << "Matrix of indexes: '"
@@ -322,16 +325,16 @@ void XC::QuadSurface::setPuntos(const m_int &point_indexes)
                   << "' must have at least two columns." << std::endl;
         return;
       }
-    MatrizPtrPnt puntos(nf,nc);
+    MatrizPtrPnt points(nf,nc);
     for(size_t i= 1;i<=nf;i++)
       for(size_t j= 1;j<=nc;j++)
         {
-          const int iPunto= point_indexes(i,j);
-          if(iPunto>=0)
+          const int iPoint= point_indexes(i,j);
+          if(iPoint>=0)
             {
-              Pnt *p= BuscaPnt(iPunto);
+              Pnt *p= BuscaPnt(iPoint);
               if(p)
-                puntos(i,j)= p;
+                points(i,j)= p;
               else
 	        std::cerr << getClassName() << "::" << __FUNCTION__
 			  << "; NULL pointer to point in position: ("
@@ -339,7 +342,7 @@ void XC::QuadSurface::setPuntos(const m_int &point_indexes)
                           << getName() << "'" << std::endl;
             }
         }
-    setPuntos(puntos);
+    setPoints(points);
   }
 
 void XC::QuadSurface::defGridPoints(const boost::python::list &l)
@@ -355,7 +358,7 @@ void XC::QuadSurface::defGridPoints(const boost::python::list &l)
         for(int j= 1; j<=nCols;j++)
           tmp(i,j)= boost::python::extract<double>(rowI[j-1]);
       }
-    setPuntos(tmp);
+    setPoints(tmp);
   }
 
 //! @brief Returns (ndivI+1)*(ndivJ+1) positions to place the nodes.

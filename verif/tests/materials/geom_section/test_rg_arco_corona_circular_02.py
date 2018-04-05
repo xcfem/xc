@@ -41,7 +41,7 @@ points= rejilla.getPoints()
 numFilas= points.nRow
 numCols= points.nCol
 numQuads= points.getNumQuads()
-numPuntos= points.getNumPoints()
+numPoints= points.getNumPoints()
 area= points.getArea()
 G= points.getCdg()
 Iy= points.Iy()
@@ -69,7 +69,7 @@ def sqr(x):
 numQuadsTeor= n1*n2
 numFilasTeor= n2+1
 numColsTeor= n1+1
-numPuntosTeor= numFilasTeor*numColsTeor
+theorNumPoints= numFilasTeor*numColsTeor
 areaTeor= alpha*((R)**2-(r)**2)
 areaAcad= 14.1372
 yGAcad= 5.7532
@@ -91,7 +91,7 @@ deltaYTeor= math.pi*r/n2/math.sqrt(2)/2.0
 ratio1= ((numQuads-numQuadsTeor)/numQuadsTeor)
 ratio2= ((numFilas-numFilasTeor)/numFilasTeor)
 ratio3= ((numCols-numColsTeor)/numColsTeor)
-ratio4= ((numPuntos-numPuntosTeor)/numPuntosTeor)
+ratio4= ((numPoints-theorNumPoints)/theorNumPoints)
 ratio5= ((area-areaTeor)/areaTeor)
 ratio6= ((G.y-yGTeor)/yGTeor)
 ratio7= (G.x-zGTeor)
@@ -102,7 +102,7 @@ ratio11= ((deltaY-deltaYTeor)/deltaYTeor)
 
 '''
 print "numQuads= ",numQuads
-print "numPuntos= ",numPuntos
+print "numPoints= ",numPoints
 print "numFilas= ",numFilas
 print "numCols= ",numCols
 print "area= ",area

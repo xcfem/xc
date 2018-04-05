@@ -25,7 +25,7 @@
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
 //TritrizPtrPnt.h
-//Vector de matrices de puntos
+//Vector of point matrices
 
 #ifndef TRITRIZPTRPNT_H
 #define TRITRIZPTRPNT_H
@@ -58,21 +58,21 @@ class TritrizPtrPnt: public TritrizPtrBase<MatrizPtrPnt>
     TritrizPtrPnt(const size_t ,const size_t ,const size_t );
   public:
     inline virtual ~TritrizPtrPnt(void) {}
-    Pnt *buscaPunto(const int &tag);
-    const Pnt *buscaPunto(const int &tag) const;
+    Pnt *findPoint(const int &tag);
+    const Pnt *findPoint(const int &tag) const;
     Pnt *getNearestPnt(const Pos3d &p);
     const Pnt *getNearestPnt(const Pos3d &p) const;
 
     const MultiBlockTopology *getMultiBlockTopology(void) const;
     MultiBlockTopology *getMultiBlockTopology(void);
 
-    std::deque<size_t> CopiaPuntos(const RangoTritriz &,const std::vector<size_t> &,const Vector3d &);
-    TritrizPtrPnt getRangoPuntos(const RangoTritriz &);
-    Pnt *getPunto(const VIndices &i);
-    TritrizPtrPnt getPuntos(const TritrizIndices &);
-    MatrizPtrPnt getPuntos(const MatrizIndices &);
-    TritrizPtrPnt getCeldaPuntos(const size_t &,const size_t &,const size_t &,const TritrizIndices &);
-    MatrizPtrPnt getCeldaPuntos(const size_t &,const size_t &,const MatrizIndices &);
+    std::deque<size_t> copyPoints(const RangoTritriz &,const std::vector<size_t> &,const Vector3d &);
+    TritrizPtrPnt getPointsOnRange(const RangoTritriz &);
+    Pnt *getPoint(const VIndices &i);
+    TritrizPtrPnt getPoints(const TritrizIndices &);
+    MatrizPtrPnt getPoints(const MatrizIndices &);
+    TritrizPtrPnt getCellPoints(const size_t &,const size_t &,const size_t &,const TritrizIndices &);
+    MatrizPtrPnt getCellPoints(const size_t &,const size_t &,const MatrizIndices &);
 
     Pos3d getCentroide(void) const;
 
@@ -86,7 +86,7 @@ class TritrizPtrPnt: public TritrizPtrBase<MatrizPtrPnt>
 
 std::ostream &operator<<(std::ostream &os,const TritrizPtrPnt &);
 
-std::vector<size_t> getIdPuntosQuad(const TritrizPtrPnt::const_ref_capa_i_cte &,const size_t &j,const size_t &k);
+std::vector<size_t> getIdPointsQuad(const TritrizPtrPnt::const_ref_capa_i_cte &,const size_t &j,const size_t &k);
 
 } //end of XC namespace.
 

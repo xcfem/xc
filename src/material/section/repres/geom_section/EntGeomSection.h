@@ -67,10 +67,10 @@ class EntGeomSection: public EntConNmb
     SectionReferenceFrame *SectionReferenceFrameActual(void);    
     const SectionReferenceFrame *SectionReferenceFrameActual(void) const;
 
-    Spot *BuscaSpot(const size_t &id_punto);    
-    const Spot *BuscaSpot(const size_t &id_punto) const;
-    Eje *BuscaEje(const size_t &id_edge);    
-    const Eje *BuscaEje(const size_t &id_edge) const;
+    Spot *BuscaSpot(const size_t &);    
+    const Spot *BuscaSpot(const size_t &) const;
+    Eje *BuscaEje(const size_t &);    
+    const Eje *BuscaEje(const size_t &) const;
   };
 
 } //end of XC namespace

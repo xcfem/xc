@@ -580,7 +580,7 @@ const XC::Vector &XC::Element1D::getCooPoint(const double &xrel) const
     return retval;
   }
 
-//! @brief Returns the segment defined by the element.
+//! @brief Return the segment defined by the element.
 Segmento3d XC::Element1D::getLineSegment(bool initialGeometry) const
   {
     if(initialGeometry)
@@ -589,17 +589,17 @@ Segmento3d XC::Element1D::getLineSegment(bool initialGeometry) const
       return Segmento3d(theNodes[0]->getCurrentPosition3d(),theNodes[1]->getCurrentPosition3d());
   }
 
-//! @brief Returns the squared distance from the element to the point que
+//! @brief Return the squared distance from the element to the point que
 //! is being passed as parameter.
 double XC::Element1D::getDist2(const Pos2d &p,bool initialGeometry) const
   { return getDist2(To3dXY2d(p),initialGeometry); }
 
-//! @brief Return the the distance from the element to punto que
-//! is being passed as parameter.
+//! @brief Return the the distance from the element to the point
+//! being passed as parameter.
 double XC::Element1D::getDist(const Pos2d &p,bool initialGeometry) const
   { return getDist(To3dXY2d(p),initialGeometry); }
 
-//! @brief Returns the squared distance from the element to the point que
+//! @brief Return the squared distance from the element to the point que
 //! is being passed as parameter.
 double XC::Element1D::getDist2(const Pos3d &p,bool initialGeometry) const
   {
@@ -607,8 +607,8 @@ double XC::Element1D::getDist2(const Pos3d &p,bool initialGeometry) const
     return sg.dist2(p);
   }
 
-//! @brief Return the the distance from the element to punto que
-//! is being passed as parameter.
+//! @brief Return the the distance from the element to the point
+//! being passed as parameter.
 double XC::Element1D::getDist(const Pos3d &p,bool initialGeometry) const
   {
     const Segmento3d sg(getLineSegment(initialGeometry));

@@ -43,7 +43,7 @@ void XC::CartesianReferenceFrame3d::setOrg(const Pos3d &p)
   { ref.Org()= p; }
 
 //! @brief 3D cartesian coordinate system by three points
-void XC::CartesianReferenceFrame3d::TresPuntos(const Pos3d &p1,const Pos3d &p2, const Pos3d &p3)
+void XC::CartesianReferenceFrame3d::ThreePoints(const Pos3d &p1,const Pos3d &p2, const Pos3d &p3)
   { ref= Ref3d3d(p1,p2,p3); }
 
 //! @brief Return the i-th axis unit vector expressed in the global coordinate

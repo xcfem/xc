@@ -101,23 +101,23 @@ double XC::ReinfBar::getDiameter(void) const
 double XC::ReinfBar::getArea(void) const
   { return area; }
 
-//! @brief Returns the moment of inertia with respect to the axis paralelo al y por el centroid.
+//! @brief Return the moment of inertia with respect to the axis paralelo al y por el centroid.
 double XC::ReinfBar::Iy(void) const
   { return M_PI/4.0*pow((diameter/2.0),4.0); }
 
-//! @brief Returns the moment of inertia with respect to the axis paralelo al z por el centroid.
+//! @brief Return the moment of inertia with respect to the axis paralelo al z por el centroid.
 double XC::ReinfBar::Iz(void) const
   { return Iy(); }
 
-//! @brief Returns the producto de inercia respecto a los ejes paralelos por el centroid.
+//! @brief Return the producto de inercia respecto a los ejes paralelos por el centroid.
 double XC::ReinfBar::Pyz(void) const
   { return 0.0; }
 
-//! @brief Returns the moment of inertia polar with respect to centroid en ejes locales.
+//! @brief Return the moment of inertia polar with respect to centroid en ejes locales.
 double XC::ReinfBar::Ix(void) const
   { return Iy()+Iz(); }
 
-//! @brief Returns the angle that defines a principal axis of inertia.
+//! @brief Return the angle that defines a principal axis of inertia.
 double XC::ReinfBar::Theta_p(void) const
   { return 0.0; }
 
@@ -146,16 +146,16 @@ const XC::Vector &XC::ReinfBar::DirEjeI_b(void) const
 //     //Returns a principal axis of inertia (we don't know yet if it's
 //     //the major one or the minor one).
 //     Recta2d EjeI_b(void) const;
-//     //Returns the otro principal axis of inertia (we don't know yet if it's
+//     //Return the otro principal axis of inertia (we don't know yet if it's
 //     //the major one or the minor one).
 //     Ref2d2d EjesPrincipalesInercia(void) const;
-//     //Returns the ejes principales de inercia.
+//     //Return the ejes principales de inercia.
 
-//! @brief Returns the principal major axis of inertia.
+//! @brief Return the principal major axis of inertia.
 double XC::ReinfBar::getI1(void) const
   { return Iy(); }
 
-//! @brief Returns the principal minor axis of inertia.
+//! @brief Return the principal minor axis of inertia.
 double XC::ReinfBar::getI2(void) const
   { return Iz(); }
 
@@ -171,7 +171,7 @@ double XC::ReinfBar::getI(const unsigned short int &i,const unsigned short int &
       return Iy();
   }
 
-//! @brief Returns the moment of inertia with respect to the axis
+//! @brief Return the moment of inertia with respect to the axis
 //! that passes through O with the direction of e.
 double XC::ReinfBar::getI(const Pos2d &O,const Vector &e) const
   {
@@ -191,11 +191,11 @@ double XC::ReinfBar::getI(const unsigned short int i,const unsigned short int j,
     return Iij + getArea() * pos_local(i) * pos_local(j);
   }
 
-//! @brief Returns the polar moment of inertia with respect to the point o.
+//! @brief Return the polar moment of inertia with respect to the point o.
 double XC::ReinfBar::getIO(const Pos2d &o) const
   { return (getI(1,1,o)+getI(2,2,o)+getI(3,3,o))/2; }
 
-//! @brief Returns the inertia tensor computed with respect to the object centroid.
+//! @brief Return the inertia tensor computed with respect to the object centroid.
 XC::Matrix &XC::ReinfBar::getI(void) const
   {
     static Matrix i(2,2);
@@ -204,7 +204,7 @@ XC::Matrix &XC::ReinfBar::getI(void) const
     return i;
   }
 
-//! @brief Returns the inertia tensor respector al punto o.
+//! @brief Return the inertia tensor with respect to the point o.
 XC::Matrix &XC::ReinfBar::getI(const Pos2d &o) const
   {
     static Matrix retval(2,2);

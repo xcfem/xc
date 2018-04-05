@@ -49,9 +49,9 @@ XC::MapTrfGeom::MapTrfGeom(MultiBlockTopology *mbt)
 XC::TrfGeom *XC::MapTrfGeom::newTransformation(const std::string &type)
   {
     TrfGeom *retval= nullptr;
-    if(type == "rotation") //Crea una nueva rotación.
+    if(type == "rotation") //Creates a new rotation.
       retval= Nueva<Rotation>();
-    else if(type == "reflection") //Crea una nueva reflexión.
+    else if(type == "reflection") //Creates a new reflection.
       retval= Nueva<Reflection>();
     else if(type == "scaling") //Creates a new scaling.
       retval= Nueva<Scaling>();

@@ -150,7 +150,7 @@ int XC::EigenAnalysis::domainChanged(void)
         return -1;
       }
 
-    //Asignamos números de ecuación.
+    //Set equation numbers.
     result= getDOF_NumbererPtr()->numberDOF();
     if(result < 0)
       {
@@ -334,8 +334,7 @@ int XC::EigenAnalysis::getNumModes(void) const
     return retval;
   }
 
-//! @brief Returns the factor de participación modal
-//! correspondiente al modo i.
+//! @brief Returns the modal participation factor corresponding to i mode.
 double XC::EigenAnalysis::getModalParticipationFactor(int mode) const
   {
     double retval= 0.0;
@@ -348,7 +347,7 @@ double XC::EigenAnalysis::getModalParticipationFactor(int mode) const
     return retval;
   }
 
-//! @brief Returns the factores de participación modal.
+//! @brief Returns the modal participation factors.
 XC::Vector XC::EigenAnalysis::getModalParticipationFactors(void) const
   {
     Vector retval;
@@ -360,7 +359,7 @@ XC::Vector XC::EigenAnalysis::getModalParticipationFactors(void) const
                 << "the pointer al system of equations es nulo." << std::endl;
     return retval;
   }
-//! @brief Returns the factor de distribución correspondiente al modo
+//! @brief Returns the distribution factor correspondint to the mode
 //! being passed as parameter.
 XC::Vector XC::EigenAnalysis::getDistributionFactor(int mode) const
   {
@@ -371,8 +370,8 @@ XC::Vector XC::EigenAnalysis::getDistributionFactor(int mode) const
     return retval;
   }
 
-//! @brief Returns a matrix con los factores de distribución
-//! calculados colocados por columnas.
+//! @brief Returns a matrix with the distribution factors
+//! by columns.
 XC::Matrix XC::EigenAnalysis::getDistributionFactors(void) const
   {
     Matrix retval;

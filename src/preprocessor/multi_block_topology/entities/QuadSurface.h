@@ -49,9 +49,9 @@ class QuadSurface: public Face
     inline virtual size_t getNumberOfVertices(void) const
       { return 4; }
 
-    void setPuntos(const ID &);
-    void setPuntos(const MatrizPtrPnt &pntPtrs);
-    void setPuntos(const m_int &);
+    void setPoints(const ID &);
+    void setPoints(const MatrizPtrPnt &pntPtrs);
+    void setPoints(const m_int &);
     void defGridPoints(const boost::python::list &);
 
     Vector3d getIVector(void) const;

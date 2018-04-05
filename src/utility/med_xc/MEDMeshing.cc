@@ -126,8 +126,10 @@ XC::MEDGroupInfo *XC::MEDMeshing::getGroupInfo(const Set &set,const FieldInfo &f
       nmb_grupo= set.getName()+str_element_group;
     retval= getGroupInfo(nmb_grupo);
     if(!retval)
-      std::cerr << "MEDMeshing::getGroupInfo; no se encotró el grupo: "
-                << nmb_grupo << std::endl;
+      std::cerr << getClassName() << "::" << __FUNCTION__
+	        << "; group: '"
+                << nmb_grupo
+		<< "' not found." << std::endl;
     return retval;  
   }
 

@@ -47,7 +47,7 @@ XC::CorotTrussBase::CorotTrussBase(const CorotTrussBase &otro)
   : ProtoTruss(otro), Lo(otro.Lo), Ln(otro.Ln), R(otro.R)
   {}
 
-//! @brief Operador de asignación.
+//! @brief Assignment operator.
 XC::CorotTrussBase &XC::CorotTrussBase::operator=(const CorotTrussBase &otro)
   {
     ProtoTruss::operator=(otro);

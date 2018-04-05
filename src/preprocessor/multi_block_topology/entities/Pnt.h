@@ -45,7 +45,7 @@ class TrfGeom;
 //
 //! @ingroup MultiBlockTopologyEnt
 //!
-//! @brief Punto (KPoint).
+//! @brief Point (KPoint).
 class Pnt: public EntMdlr
   {
     friend class Edge;

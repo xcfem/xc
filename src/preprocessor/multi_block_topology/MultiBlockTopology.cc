@@ -60,14 +60,14 @@
 XC::MultiBlockTopology::MultiBlockTopology(Preprocessor *prep)
   : PreprocessorContainer(prep), reference_systems(this),
     transformaciones_geometricas(this),
-    puntos(this), edges(this), faces(this), cuerpos(this), unif_grid(this),
+    points(this), edges(this), faces(this), cuerpos(this), unif_grid(this),
     esquemas2d(this), esquemas3d(this) {}
 
 //! @brief Assign indexes to the objects (nodes,elements,points,...)
 //! to be used in VTK arrays.
 void XC::MultiBlockTopology::numera(void)
   {
-    puntos.numera();
+    points.numera();
     edges.numera();
     faces.numera();
     cuerpos.numera();
@@ -78,8 +78,8 @@ void XC::MultiBlockTopology::numera(void)
 XC::Edge *XC::MultiBlockTopology::busca_edge_extremos(const PntMap::Indice &pA,const PntMap::Indice &pB)
   {
     Edge *retval= nullptr;
-    const Pnt *p1= puntos.busca(pA);
-    const Pnt *p2= puntos.busca(pB);
+    const Pnt *p1= points.busca(pA);
+    const Pnt *p2= points.busca(pB);
     if(p1 && p2)
       { retval= busca_edge_ptr_extremos(*p1,*p2); }
     else
@@ -101,8 +101,8 @@ XC::Edge *XC::MultiBlockTopology::busca_edge_extremos(const PntMap::Indice &pA,c
 const XC::Edge *XC::MultiBlockTopology::busca_edge_extremos(const PntMap::Indice &pA,const PntMap::Indice &pB) const
   {
     const Edge *retval= nullptr;
-    const Pnt *p1= puntos.busca(pA);
-    const Pnt *p2= puntos.busca(pB);
+    const Pnt *p1= points.busca(pA);
+    const Pnt *p2= points.busca(pB);
     if(p1 && p2)
       { retval= busca_edge_ptr_extremos(*p1,*p2); }
     else
@@ -157,7 +157,7 @@ void XC::MultiBlockTopology::conciliaNDivs(void)
 //! @brief Search for the entity whose name is passed as a parameter.
 XC::SetEstruct *XC::MultiBlockTopology::busca_set_estruct(const UniformGridMap::Indice &id)
   {
-    SetEstruct *retval= puntos.busca(id);
+    SetEstruct *retval= points.busca(id);
     if(!retval)
       retval= unif_grid.busca(id);
     return retval;
@@ -175,7 +175,7 @@ void XC::MultiBlockTopology::clearAll(void)
     cuerpos.clearAll();
     faces.clearAll();
     edges.clearAll();
-    puntos.clearAll();
+    points.clearAll();
   }
 
 XC::MultiBlockTopology::~MultiBlockTopology(void)

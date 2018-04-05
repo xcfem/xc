@@ -16,11 +16,17 @@ def listNodeDisplacements(preprocessor,nmbComb,nodeList, fmt, fName, encab, tit)
     fName.write(fmt.format(disp[3])," & ",fmt.format(disp[4])," & ",fmt.format(disp[5]),"\\\\\n")
   cierraSupertabular(fName)
 
-'''
-Imprime los desplazamientos de los nodes asociados a la lista de puntos
-   que se pasa como parámetro.
-'''
-def listaDesplazamientosPuntos(preprocessor,nmbComb,lstPuntos, fmt, fName, encab, tit):
+def listPointsDisplacements(preprocessor,nmbComb,pointList, fmt, fName, encab, tit):
+  ''' Writes a list of the displacements of the nodes associated to the points.
+
+      :param nmbComb: name of the combination for which the displacements
+                      were obtained.
+      :param pointList: list of points.
+      :param fmt: format for numbers.
+      :param fName: output file name.
+      :param encab: header.
+      :param tit: title.
+  '''
   fName.write("\\",encab,"{",tit,"}\n")
   caption= tit
   defCampos= "|l|r|r|r|r|r|r|r|r|"
@@ -28,10 +34,10 @@ def listaDesplazamientosPuntos(preprocessor,nmbComb,lstPuntos, fmt, fName, encab
   cabeceraSupertabular(fName,9,defCampos,idsCampos,caption)
 
   # Formamos la lista de nodes de arranque.
-  for iPunto in lstPuntos:
-    pnt= preprocessor.getMultiBlockTopology.getPoint(iPunto)
+  for iPoint in pointList:
+    pnt= preprocessor.getMultiBlockTopology.getPoint(iPoint)
     iNode= pnt.getNodeTag()
-    fName.write(nmbComb," & ",iPunto," & ",iNode," & ")
+    fName.write(nmbComb," & ",iPoint," & ",iNode," & ")
     nod= nodes.getNode(iNode)
     disp= nod.getDisp()
     fName.write(fmt.format(disp[0]*1e3)," & ",fmt.format(disp[1]*1e3)," & ",fmt.format(disp[2]*1e3)," & ")
@@ -85,13 +91,13 @@ class RecordListadoDesplazamientos(object):
   sectionHeadingA= "subsection"
   titulo= "Desplazamientos"
   sectionHeadingB= "subsubsection"
-  listasPuntos= [] 
+  pointsLists= [] 
   listaCabeceras= [] 
 
   def generaListadoDesplazamientos(self, nmbComb, fName):
     fName.write("\\",sectionHeadingA,"{",titulo,"}\n")
     j= 0
-    for l in listasPuntos:
-      listaDesplazamientosPuntos(nmbComb,l,'{:7.3f}',fName,sectionHeadingB,listaCabeceras[j])
+    for l in pointsLists:
+      listPointsDisplacements(nmbComb,l,'{:7.3f}',fName,sectionHeadingB,listaCabeceras[j])
       j+= 1
 

@@ -71,7 +71,8 @@ void XC::FDdecoupledElastic3D::alloc(const WEnergy *w)
       }
     else
       {
-        std::cerr << "FDdecoupledElastic3D::alloc pasó a null pointer.\n";
+        std::cerr << getClassName() << "::" << __FUNCTION__
+	          << " null pointer received.\n";
         exit(-1);
       }
   }

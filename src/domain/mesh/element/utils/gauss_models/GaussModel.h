@@ -61,7 +61,7 @@ class GaussModel
       { return coo_ref_nodes; }
     inline size_t getNumGaussPoints(void) const
       { return gauss_points.size(); }
-    const std::deque<GaussPoint> &getPuntosGauss(void) const
+    const std::deque<GaussPoint> &getGaussPoints(void) const
       { return gauss_points; }
 
   };

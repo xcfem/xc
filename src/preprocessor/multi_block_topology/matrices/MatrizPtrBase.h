@@ -25,7 +25,7 @@
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
 //MatrizPtrBase.h
-//Matriz de puntos
+//Pointers in a matrix structure.
 
 #ifndef MATRIZPTRBASE_H
 #define MATRIZPTRBASE_H

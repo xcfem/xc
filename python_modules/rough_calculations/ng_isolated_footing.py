@@ -72,8 +72,8 @@ class IsolatedFooting(object):
 #  \erase           # Borra todo
 #  xini=(0.25*self.Lzapata)
 #  yini=(1*depth)
-#  \moveTo{xini,yini}       # mueve la pluma levantada al punto especificado (x,y)
-#  \cont{xini+self.Lzapata,yini} # traza con la pluma hasta el punto especificado (x,y)
+#  \moveTo{xini,yini}       # moves the pen un to specified point (x,y)
+#  \cont{xini+self.Lzapata,yini} # plots with the pen to the specified point (x,y)
 #  \cont{xini+self.Lzapata,yini+depth}
 #  \cont{xini+self.Lzapata-vuelo,yini+depth}
 #  \cont{xini+self.Lzapata-vuelo,yini+depth+depth/2}

@@ -82,7 +82,7 @@ XC::QuadSurface *XC::SurfaceMap::newQuadSurfacePts(const size_t &id_p1, const si
     assert(retval);
     ID tmp(4);
     tmp[0]= id_p1; tmp[1]= id_p2; tmp[2]= id_p3; tmp[3]= id_p4;
-    retval->setPuntos(tmp);
+    retval->setPoints(tmp);
     return retval;
   }
 

@@ -332,7 +332,7 @@ void XC::LoadPattern::applyLoad(double pseudoTime)
       std::cerr << getClassName() << "::" << __FUNCTION__
 	        << "; ERROR: time series not defined. Using load factor: "
 	        << loadFactor << std::endl;
-    const double factor= loadFactor*gamma_f; //Ponderación de la hipótesis.
+    const double factor= loadFactor*gamma_f; //Weighting of the case.
 
     theLoads.applyLoad(factor);
 
@@ -344,7 +344,7 @@ void XC::LoadPattern::applyLoad(double pseudoTime)
 void XC::LoadPattern::setLoadConstant(void)
   { isConstant= true; }
 
-//! @brief Returns the factor de ponderación obtenido of the TimeSeries object.
+//! @brief Returns the weighting factor obtained from the TimeSeries object.
 const double &XC::LoadPattern::getLoadFactor(void) const
   { return loadFactor; }
 

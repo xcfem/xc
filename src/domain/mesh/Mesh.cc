@@ -200,7 +200,7 @@ void XC::Mesh::add_element_to_domain(Element *element)
     dom->domainChange();
     kdtreeElements.insert(*element);
   }
-//! @brief Sólo debe llamarse desde recvSelf.
+//! @brief Must only to be called from recvSelf.
 void XC::Mesh::add_elements_to_domain(void)
   {
     Domain *dom= getDomain();
@@ -294,7 +294,7 @@ void XC::Mesh::add_node_to_domain(Node *node)
     kdtreeNodes.insert(*node);
   }
 
-//! @brief Sólo debe llamarse desde recvSelf.
+//! @brief Must only to be called from recvSelf.
 void XC::Mesh::add_nodes_to_domain(void)
   {
     Domain *dom= getDomain();
@@ -507,7 +507,7 @@ const XC::Node *XC::Mesh::getNearestNode(const Pos3d &p) const
 void XC::Mesh::freeze_dead_nodes(const std::string &nmbLocker)
   {
     NodeLocker *locker= lockers.busca_node_locker(nmbLocker);
-    if(!locker) //Hipótesis nueva.
+    if(!locker) //New case.
       locker= lockers.newNodeLocker(nmbLocker);
     if(locker)
       {

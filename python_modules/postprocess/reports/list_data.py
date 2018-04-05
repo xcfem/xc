@@ -1,68 +1,96 @@
 # -*- coding: utf-8 -*-
 
-# Obtiene un listado de los puntos del conjunto cuyo nombre se pasa como parámetro.
-def listaKPtsSet(preprocessor,setName, nmbArchivo, fmt):
-  caption= "Puntos del conjunto: "+setName
+def listaKPtsSet(preprocessor,setName, fileName, fmt):
+  ''' Writes a list of the points from the set
+
+     :param setName: name of the set.
+     :param fileName: file name.
+     :param fmt: format for coordinates.
+  '''
+  caption= "Points of the set: "+setName
   defCampos= "|r|r|r|r|"
   idsCampos= "Id & x & y & z"
-  cabeceraSupertabular(nmbArchivo,4,defCampos,idsCampos,caption)
-  setPuntos= preprocessor.getSets.getSet(setName)
-  puntos= setPuntos.getPoints()
-  for p in puntos:
-    nmbArchivo.write(p.tag," & ",fmt.format(p.pos.x)," & ",fmt.format(p.pos.y)," & ",fmt.format(p.pos.z),"\\\\\n")
-  cierraSupertabular(nmbArchivo) 
+  cabeceraSupertabular(fileName,4,defCampos,idsCampos,caption)
+  pointSet= preprocessor.getSets.getSet(setName)
+  points= pointSet.getPoints()
+  for p in points:
+    fileName.write(p.tag," & ",fmt.format(p.pos.x)," & ",fmt.format(p.pos.y)," & ",fmt.format(p.pos.z),"\\\\\n")
+  cierraSupertabular(fileName) 
 
-# Obtiene un listado de los elementos del conjunto cuyo nombre se pasa como parámetro.
-def listaLineasSet(setName, nmbArchivo):
+def listaLineasSet(setName, fileName):
+  ''' Writes a list of the lines from the set
+
+     :param setName: name of the set.
+     :param fileName: file name.
+  '''
   caption= "Lineas del conjunto: "+setName
   defCampos= "|r|r|c|"
-  idsCampos= "Id & nDiv & Puntos"
-  cabeceraSupertabular(nmbArchivo,3,defCampos,idsCampos,caption) 
+  idsCampos= "Id & nDiv & Points"
+  cabeceraSupertabular(fileName,3,defCampos,idsCampos,caption) 
   setLineas= preprocessor.getSets.getSet(setName)
   lineas= setLineas.getLines()
   for l in lineas:
-    nmbArchivo.write(l.tag," & ",l.ndiv," & ",l.kPts,"\\\\\n")
-  cierraSupertabular(nmbArchivo)
+    fileName.write(l.tag," & ",l.ndiv," & ",l.kPts,"\\\\\n")
+  cierraSupertabular(fileName)
 
-# Obtiene un listado of the nodes del conjunto cuyo nombre se pasa como parámetro.
-def listSetNodes(preprocessor, setName, nmbArchivo, fmt):
+def listSetNodes(preprocessor, setName, fileName, fmt):
+  ''' Writes a list of the nodes from the set
+
+     :param setName: name of the set.
+     :param fileName: file name.
+     :param fmt: format for coordinates.
+  '''
   caption= "Nodes from set: "+setName
   defCampos= "|r|r|r|r|"
   idsCampos= "Id & x & y & z"
-  cabeceraSupertabular(nmbArchivo,4,defCampos,idsCampos,caption) 
+  cabeceraSupertabular(fileName,4,defCampos,idsCampos,caption) 
   s= preprocessor.getSets.getSet(setName)
   nodes= s.getNodes()
   for n in nodes:
     pos= n.getPos()
-    nmbArchivo.write(n.tag," & ",fmt.format(pos.x)," & ",fmt.format(pos.y)," & ",fmt.format(pos.z),"\\\\\n")
-  cierraSupertabular(nmbArchivo) 
+    fileName.write(n.tag," & ",fmt.format(pos.x)," & ",fmt.format(pos.y)," & ",fmt.format(pos.z),"\\\\\n")
+  cierraSupertabular(fileName) 
 
-# Obtiene un listado de los elementos del conjunto cuyo nombre se pasa como parámetro.
-def listaElementosSet(preprocessor, setName, nmbArchivo):
-  nmbArchivo.write("Elementos del conjunto: ",setName,"\n")
+def listaElementosSet(preprocessor, setName, fileName):
+  ''' Writes a list of the nodes from the set
+
+     :param setName: name of the set.
+     :param fileName: file name.
+  '''
+  fileName.write("Elementos del conjunto: ",setName,"\n")
   s= preprocessor.getSets.getSet(setName)
   elems= s.getElements()
   for e in elems:
-    nmbArchivo.write(e.tag," & ",e.nod(0).tag," & ",e.nod(1).tag,"\\\\\n")
+    fileName.write(e.tag," & ",e.nod(0).tag," & ",e.nod(1).tag,"\\\\\n")
 
-# Obtiene un listado de los elementos del conjunto cuyo nombre se pasa como parámetro.
-def listaElementosTrussSet(preprocessor, setName, nmbArchivo, fmt):
+def listaElementosTrussSet(preprocessor, setName, fileName, fmt):
+  ''' Writes a list of the truss elements from the set
+
+     :param setName: name of the set.
+     :param fileName: file name.
+     :param fmt: format for coordinates.
+  '''
   caption= "Elementos del conjunto: "+setName
   defCampos= "|r|r|r|r|"
   idsCampos= "Id & nI & nJ & Mater."
-  cabeceraSupertabular(nmbArchivo,4,defCampos,idsCampos,caption) 
+  cabeceraSupertabular(fileName,4,defCampos,idsCampos,caption) 
   s= preprocessor.getSets.getSet(setName)
   elems= s.getElements()
   for e in elems:
-    nmbArchivo.write(e.tag," & ",e.nod(0).tag," & ",e.nod(1).tag," & ",e,getMaterial().tag,"\\\\\n")
-  cierraSupertabular(nmbArchivo) 
+    fileName.write(e.tag," & ",e.nod(0).tag," & ",e.nod(1).tag," & ",e,getMaterial().tag,"\\\\\n")
+  cierraSupertabular(fileName) 
 
-# Obtiene un listado de los elementos del conjunto cuyo nombre se pasa como parámetro.
-def listaElementosBarraSet(preprocessor, setName, fName, fmt):
+def listaElementosBarraSet(preprocessor, setName, fileName, fmt):
+  ''' Writes a list of the bar elements from the set
+
+     :param setName: name of the set.
+     :param fileName: file name.
+     :param fmt: format for coordinates.
+  '''
   caption= "Elementos del conjunto: "+setName
   defCampos= "|r|r|r|r|r|r|r|r|r|r|r|"
   idsCampos= " Id & nI  & nJ  &Sc.&  E     &  G     & Area   & alpha &    J     &   Iy    &    Iz  \\\\\n -  &     &  -  & - & GPa    & GPa    &  cm2   &   -   &   cm4    &  cm4    &   cm4"
-  cabeceraSupertabular(nmbArchivo,11,defCampos,idsCampos,caption) 
+  cabeceraSupertabular(fileName,11,defCampos,idsCampos,caption) 
   s= preprocessor.getSets.getSet(setName)
   elems= s.getElements()
   for e in elems:
@@ -75,23 +103,33 @@ def listaElementosBarraSet(preprocessor, setName, fName, fmt):
       fName.write(fmt.format(s.getJ()*1e6)," & ",fmt.format(s.getIy()*1e6)," & ",fmt.format(s.getIz()*1e6),"\\\\\n")
       k+=1
 
-  cierraSupertabular(nmbArchivo) 
+  cierraSupertabular(fileName) 
 
 
-# Obtiene un listado de las entidades del conjunto cuyo nombre se pasa como parámetro.
-def listaEntidadesSet(preprocessor, setName, nmbArchivo, nmbProcLstElementos, fmt, encab, tit):
-  nmbArchivo.write("\\twocolumn\n")
-  nmbArchivo.write("\\",encab,"{",tit,"}\n")
-  listaKPtsSet(preprocessor, setName,nmbArchivo,fmt) 
-  listaLineasSet(preprocessor, setName,nmbArchivo) 
-  listSetNodes(preprocessor, setName,nmbArchivo,fmt) 
-  nmbArchivo.write("\\onecolumn\n")
-  nmbProcLstElementos(preprocessor, setName,nmbArchivo,fmt) 
+def listaEntidadesSet(preprocessor, setName, fileName, nmbProcLstElementos, fmt, encab, tit):
+  ''' Writes a list of the entities from the set
+
+     :param setName: name of the set.
+     :param fileName: file name.
+     :param fmt: format for coordinates.
+  '''
+  fileName.write("\\twocolumn\n")
+  fileName.write("\\",encab,"{",tit,"}\n")
+  listaKPtsSet(preprocessor, setName,fileName,fmt) 
+  listaLineasSet(preprocessor, setName,fileName) 
+  listSetNodes(preprocessor, setName,fileName,fmt) 
+  fileName.write("\\onecolumn\n")
+  nmbProcLstElementos(preprocessor, setName,fileName,fmt) 
 
 
-# Obtiene un listado de las entidades de la linea cuyo nombre se pasa como parámetro.
-def listaEntidadesLinea(preprocessor, setName, nmbArchivo, nmbProcLstElementos, fmt, encab, tit):
-  nmbArchivo.write("\\",encab,"{",tit,"}\n")
-  listSetNodes(preprocessor, setName,nmbArchivo,fmt)
-  nmbProcLstElementos(setName,nmbArchivo,fmt) 
+def listaEntidadesLinea(preprocessor, lineName, fileName, nmbProcLstElementos, fmt, encab, tit):
+  ''' Writes a list of the entities from the line
+
+     :param lineName: name of the line.
+     :param fileName: file name.
+     :param fmt: format for coordinates.
+  '''
+  fileName.write("\\",encab,"{",tit,"}\n")
+  listSetNodes(preprocessor, lineName,fileName,fmt)
+  nmbProcLstElementos(lineName,fileName,fmt) 
 

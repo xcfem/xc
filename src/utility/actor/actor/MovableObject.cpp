@@ -84,7 +84,7 @@ XC::MovableObject::MovableObject(int theTag)
 XC::MovableObject::MovableObject(const MovableObject &otro)
   :classTag(otro.classTag), dbTag(0) {}
 
-//! @brief Operacdor asignación. Doesn't copy the dbTag.
+//! @brief Assignment operator. Doesn't copy the dbTag.
 XC::MovableObject &XC::MovableObject::operator=(const MovableObject &otro)
   {
     classTag= otro.classTag;

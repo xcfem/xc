@@ -161,7 +161,7 @@ int XC::Tri31::update()
       {
 
         // Determine Jacobian for this integration point
-        const GaussPoint &gp= getGaussModel().getPuntosGauss()[i];
+        const GaussPoint &gp= getGaussModel().getGaussPoints()[i];
         this->shapeFunction(gp);
 
         // Interpolate strains
@@ -192,7 +192,7 @@ const XC::Matrix &XC::Tri31::getTangentStiff(void) const
      for(size_t i = 0; i < physicalProperties.size(); i++)
        {
          // Determine Jacobian for this integration point
-        const GaussPoint &gp= getGaussModel().getPuntosGauss()[i];
+        const GaussPoint &gp= getGaussModel().getGaussPoints()[i];
          dvol= this->shapeFunction(gp);
          dvol*= (physicalProperties.getThickness()*gp.weight());
          
@@ -252,7 +252,7 @@ const XC::Matrix &XC::Tri31::getInitialStiff(void) const
         for(size_t i = 0; i < physicalProperties.size(); i++)
           {
             // Determine Jacobian for this integration point
-            const GaussPoint &gp= getGaussModel().getPuntosGauss()[i];
+            const GaussPoint &gp= getGaussModel().getGaussPoints()[i];
             dvol = this->shapeFunction(gp);
             dvol *= (physicalProperties.getThickness()*gp.weight());
    
@@ -318,7 +318,7 @@ const XC::Matrix &XC::Tri31::getMass(void) const
       {
        
         // Determine Jacobian for this integration point
-        const GaussPoint &gp= getGaussModel().getPuntosGauss()[i];
+        const GaussPoint &gp= getGaussModel().getGaussPoints()[i];
         rhodvol = this->shapeFunction(gp);
 
         // Element plus material density ... MAY WANT TO REMOVE ELEMENT DENSITY
@@ -335,7 +335,7 @@ const XC::Matrix &XC::Tri31::getMass(void) const
     return K;
   }
 
-//! @brief Returns the puntos de Gauss of the element.
+//! @brief Return the Gauss points of the element.
 const XC::GaussModel &XC::Tri31::getGaussModel(void) const
   { return gauss_model_tria1; }
 
@@ -395,7 +395,7 @@ const XC::Vector &XC::Tri31::getResistingForce(void) const
     for(size_t i = 0; i < physicalProperties.size(); i++)
       {
         // Determine Jacobian for this integration point
-        const GaussPoint &gp= getGaussModel().getPuntosGauss()[i];
+        const GaussPoint &gp= getGaussModel().getGaussPoints()[i];
         dvol = this->shapeFunction(gp);
         dvol *= (physicalProperties.getThickness()*gp.weight());
 

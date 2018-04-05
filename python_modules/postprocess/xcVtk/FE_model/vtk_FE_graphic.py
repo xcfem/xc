@@ -258,7 +258,7 @@ class RecordDefDisplayEF(vtk_grafico_base.RecordDefDisplay):
         for tag in eleTags:
           ele= preprocessor.getElementHandler.getElement(tag)
           actorName+= "%04d".format(tag) # Tag elemento.
-          pos= ele.punto(xForce)
+          pos= ele.point(xForce)
           utilsVtk.drawVtkSymb('arrow',self.renderer,color,pos,force,fScale)
 
     def displayElementUniformLoad(self, preprocessor, unifLoad,loadPattern, color, force, fScale):
@@ -269,9 +269,9 @@ class RecordDefDisplayEF(vtk_grafico_base.RecordDefDisplay):
           ele= preprocessor.getElementHandler.getElement(tag)
           actorName+= "%04d".format(tag) # Tag elemento.
           lmsg.error('displayElementUniformLoad not implemented.')
-          # puntos= ele.getPoints(3,1,1,True)
+          # points= ele.getPoints(3,1,1,True)
           # i= 0
-          # for capa in puntos:
+          # for capa in points:
           #   for pos in capa: 
           #     print pos
           #     utilsVtk.drawArrow(self.renderer,color,pos,force,fScale*force.Norm())

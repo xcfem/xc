@@ -85,7 +85,7 @@ int XC::Beam3dUniformLoad::getType(void)
 const XC::Matrix &XC::Beam3dUniformLoad::getAppliedSectionForces(const double &L,const Matrix &xi_pt,const double &loadFactor) const
   {
     const size_t nSections=  xi_pt.noRows();
-    static Matrix retval(5,nSections); //Sólo se ejecuta una vez.
+    static Matrix retval(5,nSections); //Executed only once.
     retval.resize(5,nSections);
     retval.Zero();
     const double wy = Wy()*loadFactor;  // Transverse
