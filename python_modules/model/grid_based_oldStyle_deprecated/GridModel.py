@@ -390,7 +390,7 @@ class ElasticFoundationRangesMap(NamedObjectsMap):
     super(ElasticFoundationRangesMap,self).__init__(efranges)
   def generateSprings(self, prep):
     #Apoyo elástico en el terreno
-    #Materiales elásticos (los incializamos aquí para luego aplicar el módulo elástico que corresponda a cada nudo)
+    #elastic materials (los incializamos aquí para luego aplicar el módulo elástico que corresponda a cada nudo)
     for key in self.keys():
       apel= self[key]
       apel.generateSprings()

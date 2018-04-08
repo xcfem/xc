@@ -91,7 +91,7 @@ class ElasticFoundation(object):
         self.wModulus= wModulus
         self.cRoz= cRoz
     def createMaterials(self,preprocessor,name):
-        #Materiales elásticos (los incializamos aquí para luego aplicar el módulo elástico que corresponda a cada nudo)
+        #elastic materials (los incializamos aquí para luego aplicar el módulo elástico que corresponda a cada nudo)
         self.xSpringName= name + '_xSpring'
         self.xSpring=typical_materials.defElasticMaterial(preprocessor,self.xSpringName,0.1)
         self.ySpringName= name + '_ySpring'
