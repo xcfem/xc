@@ -60,7 +60,7 @@ class QuadBase9N : public ElemPlano<9,PhysProp>
     ID getLocalIndexNodesEdge(const size_t &i) const;
     int getEdgeNodes(const Node *,const Node *) const;
     Poligono3d getPolygon(bool initialGeometry= true) const;
-    Segmento3d getLado(const size_t &i,bool initialGeometry= true) const;
+    Segmento3d getSide(const size_t &i,bool initialGeometry= true) const;
 
     int getVtkCellType(void) const;
     int getMEDCellType(void) const;
@@ -97,7 +97,7 @@ Poligono3d XC::QuadBase9N<PhysProp>::getPolygon(bool initialGeometry) const
 
 //! @brief Returns the element edge.
 template <class PhysProp>
-Segmento3d XC::QuadBase9N<PhysProp>::getLado(const size_t &i,bool initialGeometry) const
+Segmento3d XC::QuadBase9N<PhysProp>::getSide(const size_t &i,bool initialGeometry) const
   {
     Segmento3d retval;
     std::cerr << this->getClassName() << "::" << __FUNCTION__

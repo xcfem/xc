@@ -62,8 +62,8 @@ class Eje: public EntGeomSection
     //! @brief Returns the number of vertices.
     virtual size_t getNumberOfVertices(void) const= 0;
 
-    virtual const Spot *GetVertice(const size_t &i) const= 0;
-    virtual Spot *GetVertice(const size_t &i)= 0;
+    virtual const Spot *getVertex(const size_t &i) const= 0;
+    virtual Spot *getVertex(const size_t &i)= 0;
     virtual void SetVertice(const size_t &,Spot *)= 0;
 
     virtual void SetNDiv(const size_t &nd)

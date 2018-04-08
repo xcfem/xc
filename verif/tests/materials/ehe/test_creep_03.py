@@ -253,11 +253,11 @@ for e in setTotal.getElements:
     setShells.getElements.append(e)
 
 for e in setShells.getElements:
-  ladoMedio= e.getPerimeter(True)/4.0
+  averageSideLength= e.getPerimeter(True)/4.0
   mat= e.getPhysicalProperties.getVectorMaterials[0]
   grueso= mat.h
-  Ac= ladoMedio*grueso
-  u= 2*ladoMedio+grueso
+  Ac= averageSideLength*grueso
+  u= 2*averageSideLength+grueso
   espMedio= 2*Ac/u
   e.setProp("epsRetracc",concrHA30.getShrEpscs(tFin,tS,Hrel*100,espMedio*1000))
 

@@ -139,15 +139,15 @@ int XC::ShellLinearCrdTransf3d::revertToLastCommit(void)
 int XC::ShellLinearCrdTransf3d::revertToStart(void)
   { return 0; }
 
-//! @brief Returns the vector de displacements expresado on the basic system.
+//! @brief Returns the displacements vector expressed on the basic system.
 XC::Vector XC::ShellLinearCrdTransf3d::getBasicTrialDisp(const int &i) const
   { return (*theNodes)[i]->getTrialDisp(); }
 
-//! @brief Returns the vector de velocidades expresado on the basic system.
+//! @brief Returns the velocities vector expressed on the basic system.
 XC::Vector XC::ShellLinearCrdTransf3d::getBasicTrialVel(const int &i) const
   { return (*theNodes)[i]->getTrialVel(); }
 
-//! @brief Returns the vector de aceleraciones expresado on the basic system.
+//! @brief Returns the accelerations vector expressed on the basic system.
 XC::Vector XC::ShellLinearCrdTransf3d::getBasicTrialAccel(const int &i) const
   { return (*theNodes)[i]->getTrialAccel(); }
 
@@ -162,7 +162,7 @@ const XC::Vector &XC::ShellLinearCrdTransf3d::local_to_global_resisting_force(co
     return pg;
   }
 
-//! @brief Returns the stiffenes matrix in global coordinates.
+//! @brief Returns the stiffness matrix in global coordinates.
 const XC::Matrix &XC::ShellLinearCrdTransf3d::local_to_global_stiff_matrix(const Matrix &kl) const
   {
     static Matrix kg(24,24);
@@ -172,7 +172,8 @@ const XC::Matrix &XC::ShellLinearCrdTransf3d::local_to_global_stiff_matrix(const
     return kg;
   }
 
-//! @brief Returns the load vector expresado en el sistema global of the element.
+//! @brief Returns the load vector expresado en el sistema global of
+//! the element.
 const XC::Vector &XC::ShellLinearCrdTransf3d::getGlobalResistingForce(const Vector &p0) const
   { return local_to_global_resisting_force(p0); }
 

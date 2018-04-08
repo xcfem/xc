@@ -56,8 +56,8 @@ class Segment: public Eje
     //! @brief Return the number of vertices.
     inline virtual size_t getNumberOfVertices(void) const
       { return 2; }
-    virtual const Spot *GetVertice(const size_t &i) const;
-    virtual Spot *GetVertice(const size_t &i);
+    virtual const Spot *getVertex(const size_t &i) const;
+    virtual Spot *getVertex(const size_t &i);
     virtual void SetVertice(const size_t &,Spot *);
     virtual BND2d Bnd(void) const;
     double getLong(void) const;

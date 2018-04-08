@@ -55,7 +55,7 @@ class ElemPlano : public ElemWithMaterial<NNODES, PhysProp>
     void setDomain(Domain *theDomain);
 
     virtual Poligono3d getPolygon(bool initialGeometry= true) const;
-    virtual Segmento3d getLado(const size_t &i,bool initialGeometry= true) const;
+    virtual Segmento3d getSide(const size_t &i,bool initialGeometry= true) const;
     Pos3d getPosCdg(bool initialGeometry= true) const;
     double getPerimetro(bool initialGeometry= true) const;
     double getArea(bool initialGeometry= true) const;
@@ -164,7 +164,7 @@ Poligono3d XC::ElemPlano<NNODES, PhysProp>::getPolygon(bool initialGeometry) con
 //! @brief Returns a lado of the element. 
 // Redefine for elements with more than two nodes by face.
 template <int NNODES,class PhysProp>
-Segmento3d XC::ElemPlano<NNODES, PhysProp>::getLado(const size_t &i,bool initialGeometry) const
+Segmento3d XC::ElemPlano<NNODES, PhysProp>::getSide(const size_t &i,bool initialGeometry) const
   {
     Segmento3d retval;
     const NodePtrsWithIDs &nodes= this->getNodePtrs();

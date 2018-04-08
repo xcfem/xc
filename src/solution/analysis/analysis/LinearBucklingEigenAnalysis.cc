@@ -77,7 +77,8 @@ int XC::LinearBucklingEigenAnalysis::setIntegrator(LinearBucklingIntegrator &the
 int XC::LinearBucklingEigenAnalysis::setEigenSOE(ArpackSOE &theSOE)
   { return EigenAnalysis::setEigenSOE(theSOE); }
 
-//! @brief Returns the eigenvalue que corresponde al modo being passed as parameter.
+//! @brief Returns the eigenvalue that corresponds to the mode
+//! being passed as parameter.
 const double &XC::LinearBucklingEigenAnalysis::getEigenvalue(int mode) const
   {
     const double &gamma= EigenAnalysis::getEigenvalue(mode);

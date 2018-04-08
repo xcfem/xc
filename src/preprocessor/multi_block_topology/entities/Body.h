@@ -44,7 +44,7 @@ class Pnt;
 //! \ingroup MultiBlockTopologyEnt
 //!
 //! @brief Order in edges of an hexaedron face.
-struct SecuenciaLados
+struct SideSequence
   {
     size_t l1; //!< Index edge 1.
     size_t l2; //!< Index edge 2.
@@ -52,7 +52,7 @@ struct SecuenciaLados
     size_t l4; //!< Index edge 4.
     bool dirt; //!< Direct or reverse.
 
-    SecuenciaLados(const size_t primero= 1,const bool &directo= true);
+    SideSequence(const size_t primero= 1,const bool &directo= true);
     //! @brief Return true if the edge sequence is direct (edge1 -> edge4).
     const bool &Directo(void) const
       { return dirt; }
@@ -70,7 +70,7 @@ class Body: public EntMdlr
     class BodyFace
       {
         Face *surface; //!< Face geometry.
-        SecuenciaLados sec_lados; //!< Edge sequence.
+        SideSequence sec_lados; //!< Edge sequence.
       public:
         BodyFace(Face *ptr= nullptr,const size_t &p=1,const bool &d=true);
 	Face *Surface(void);
@@ -81,10 +81,10 @@ class Body: public EntMdlr
         bool Vacia(void) const;
         size_t getNumberOfLines(void) const;
         size_t getNumberOfVertices(void) const;
-        const CmbEdge::Lado *GetLado(const size_t &) const;
-        CmbEdge::Lado *GetLado(const size_t &);
-        const Pnt *GetVertice(const size_t &) const;
-        Pnt *GetVertice(const size_t &);
+        const CmbEdge::Side *getSide(const size_t &) const;
+        CmbEdge::Side *getSide(const size_t &);
+        const Pnt *getVertex(const size_t &) const;
+        Pnt *getVertex(const size_t &);
         virtual MatrizPos3d get_posiciones(void) const;
         void create_nodes(void);
         bool checkNDivs(void) const;
@@ -93,7 +93,7 @@ class Body: public EntMdlr
 
     void set_surf(Face *s);
 
-    virtual BodyFace *GetFace(const size_t &i)= 0;
+    virtual BodyFace *getFace(const size_t &i)= 0;
   public:
     Body(Preprocessor *m,const std::string &nombre= "");
     //! @brief Return the object dimension.
@@ -106,9 +106,9 @@ class Body: public EntMdlr
     //! @brief Return the number of faces in the object.
     virtual size_t getNumberOfFaces(void) const= 0;
     virtual std::set<const Face *> getSurfaces(void)= 0;
-    virtual const BodyFace *GetFace(const size_t &i) const= 0;
-    virtual const CmbEdge::Lado *GetArista(const size_t &i) const= 0;
-    virtual const Pnt *GetVertice(const size_t &i) const= 0;
+    virtual const BodyFace *getFace(const size_t &i) const= 0;
+    virtual const CmbEdge::Side *getEdge(const size_t &i) const= 0;
+    virtual const Pnt *getVertex(const size_t &i) const= 0;
     std::vector<int> getIndicesVertices(void) const;
     virtual BND3d Bnd(void) const;
     bool In(const GeomObj3d &, const double &tol= 0.0) const;

@@ -20,7 +20,7 @@ from solution import predefined_solutions
 prueba= xc.ProblemaEF()
 prueba.logFileName= "/tmp/borrar.log" # Para no imprimir mensajes de advertencia
 #prueba.errFileName= "/tmp/borrar.err" # Para no imprimir mensajes de advertencia sobre error máximo en cálculo del diagrama de interacción.
-mdlr= prueba.getModelador
+prep= prueba.getPreprocessor
 # Definimos el procedimiento de solución.
 analysis= predefined_solutions.simple_static_linear(prueba)
 
@@ -83,7 +83,7 @@ sections= sc.SectionContainer()
 sections.append(datosGenericPiles)
 
 
-meanFCs= sections.internalForcesVerification3D(mdlr,analysis,csvFile,outputFileName,mapSectionsForEveryElement, "d")
+meanFCs= sections.internalForcesVerification3D(prep,analysis,csvFile,outputFileName,mapSectionsForEveryElement, "d")
 
 
 print "mean FCs: ", meanFCs

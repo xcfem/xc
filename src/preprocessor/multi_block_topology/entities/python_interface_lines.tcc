@@ -64,16 +64,16 @@ class_<XC::CircularArc, bases<XC::LineBase>, boost::noncopyable >("CircleArc", "
   .def("getRadio",&XC::CircularArc::getRadio,"Return the radius of the circumference.")
    ;
 
-XC::Edge *(XC::CmbEdge::Lado::*getEdge)(void)= &XC::CmbEdge::Lado::getEdge;
-class_<XC::CmbEdge::Lado,bases<EntCmd> >("Lado", no_init)
-  .add_property("isDirect", &XC::CmbEdge::Lado::esDirecto)
+XC::Edge *(XC::CmbEdge::Side::*getEdge)(void)= &XC::CmbEdge::Side::getEdge;
+class_<XC::CmbEdge::Side,bases<EntCmd> >("Side", no_init)
+  .add_property("isDirect", &XC::CmbEdge::Side::esDirecto)
   .add_property("getEdge", make_function(getEdge, return_internal_reference<>()))
-  .def("getLong", &XC::CmbEdge::Lado::getLongitud,"Return edge's length.")
-  .def("getCentroid", &XC::CmbEdge::Lado::getCentroid,"Return edge's centroid.")
-  .def("getTang", &XC::CmbEdge::Lado::getTang, return_internal_reference<>(),"Return a vector tangent to the edge.")
+  .def("getLong", &XC::CmbEdge::Side::getLongitud,"Return edge's length.")
+  .def("getCentroid", &XC::CmbEdge::Side::getCentroid,"Return edge's centroid.")
+  .def("getTang", &XC::CmbEdge::Side::getTang, return_internal_reference<>(),"Return a vector tangent to the edge.")
   ;
 
-typedef std::deque<XC::CmbEdge::Lado> dq_lados;
+typedef std::deque<XC::CmbEdge::Side> dq_lados;
 class_<dq_lados, boost::noncopyable >("DqEdges", no_init)
   .def("__iter__", boost::python::iterator<dq_lados>())
   .add_property("size", &dq_lados::size)
@@ -83,7 +83,7 @@ class_<dq_lados, boost::noncopyable >("DqEdges", no_init)
 class_<XC::CmbEdge, bases<XC::Edge>, boost::noncopyable >("CmbEdge","Compound line",no_init)
   .add_property("getNumVertices", &XC::CmbEdge::getNumberOfVertices,"Return the number of vertices.")
   .add_property("getNumEdges", &XC::CmbEdge::getNumberOfEdges,"Return the number of edges.")
-  .add_property("getEdges", make_function( &XC::CmbEdge::getLados, return_internal_reference<>()))
+  .add_property("getEdges", make_function( &XC::CmbEdge::getSides, return_internal_reference<>()))
   .def("addLines",&XC::CmbEdge::addLines, return_internal_reference<>(),"Add lines to the sequence.")
   .def("addPoints",&XC::CmbEdge::addPoints, return_internal_reference<>(),"Add points to the sequence.")
    ;

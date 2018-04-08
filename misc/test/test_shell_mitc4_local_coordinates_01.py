@@ -14,8 +14,8 @@ from materials import typical_materials
 import math
 
 prueba= xc.ProblemaEF()
-mdlr= prueba.getModelador
-nodos= mdlr.getNodeHandler
+prep= prueba.getPreprocessor
+nodos= prep.getNodeHandler
 
 # Problem type
 predefined_spaces.gdls_resist_materiales3D(nodos)
@@ -26,9 +26,9 @@ nodos.newNodeIDXYZ(3,1+delta,1+delta,0)
 nodos.newNodeIDXYZ(4,0+delta,1+delta,0)
 
 # Materials definition
-memb1= typical_materials.defElasticMembranePlateSection(mdlr,"memb1",E,nu,dens,h)
+memb1= typical_materials.defElasticMembranePlateSection(prep,"memb1",E,nu,dens,h)
 
-elementos= mdlr.getElementHandler
+elementos= prep.getElementHandler
 elementos.defaultMaterial= "memb1"
 elem= elementos.newElement("shell_mitc4",xc.ID([1,2,3,4]))
 

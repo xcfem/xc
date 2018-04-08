@@ -66,9 +66,9 @@ s.nDivJ= NumDivJ
 f1= preprocessor.getSets.getSet("f1")
 f1.genMesh(xc.meshDir.I)
 
-lados= f1.getEdges
+sides= f1.getEdges
 #Edge iterator
-for l in lados:
+for l in sides:
   for i in l.getEdge.getNodeTags():
     modelSpace.fixNode000_FFF(i)
 

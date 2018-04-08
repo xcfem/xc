@@ -83,7 +83,8 @@ XC::SetEstruct *XC::Block::getCopy(void) const
 int XC::Block::getVtkCellType(void) const
   { return VTK_HEXAHEDRON; }
 
-//! @brief Interface with MED format of Salome.
+//! @brief Interface with Salome MED format
+//! (http://www.salome-platform.org/user-section/about/med).
 int XC::Block::getMEDCellType(void) const
   { return MED_HEXA8; }
 
@@ -106,36 +107,36 @@ size_t XC::Block::getNumberOfFaces(void) const
   { return 6; }
 
 //! @brief Return the face with the index passed as parameter.
-const XC::Block::BodyFace *XC::Block::GetFace(const size_t &i) const
+const XC::Block::BodyFace *XC::Block::getFace(const size_t &i) const
   { return &sups[i-1]; }
 
 //! @brief Return the face with the index passed as parameter.
-XC::Block::BodyFace *XC::Block::GetFace(const size_t &i)
+XC::Block::BodyFace *XC::Block::getFace(const size_t &i)
   { return &sups[i-1]; }
 
 //! @brief Return the i-th edge of the solid.
-const XC::CmbEdge::Lado *XC::Block::GetArista(const size_t &i) const
+const XC::CmbEdge::Side *XC::Block::getEdge(const size_t &i) const
   {
-    const CmbEdge::Lado *retval(nullptr);
+    const CmbEdge::Side *retval(nullptr);
     switch(i)
       {
         case 1:
         case 2:
         case 3:
         case 4:
-          retval=sups[0].GetLado(i);
+          retval=sups[0].getSide(i);
           break;
         case 5:
         case 6:
         case 7:
         case 8:
-          retval= sups[i-4].GetLado(4);
+          retval= sups[i-4].getSide(4);
           break;
         case 9:
         case 10:
         case 11:
         case 12:
-          retval= sups[5].GetLado(i-8);
+          retval= sups[5].getSide(i-8);
           break;
         default:
           retval= nullptr;
@@ -145,23 +146,23 @@ const XC::CmbEdge::Lado *XC::Block::GetArista(const size_t &i) const
   }
 
 //! @brief Return the i-th vertex of the solid.
-const XC::Pnt *XC::Block::GetVertice(const size_t &i) const
+const XC::Pnt *XC::Block::getVertex(const size_t &i) const
   {
     if(i<=4)
-      return sups[0].GetVertice(i);
+      return sups[0].getVertex(i);
     else if(i<=8)
-      return sups[5].GetVertice(i-4);
+      return sups[5].getVertex(i-4);
     else
       return nullptr;
   }
 
 //! @brief Return the i-th vertex of the solid.
-XC::Pnt *XC::Block::GetVertice(const size_t &i)
+XC::Pnt *XC::Block::getVertex(const size_t &i)
   {
     if(i<=4)
-      return sups[0].GetVertice(i);
+      return sups[0].getVertex(i);
     else if(i<=8)
-      return sups[5].GetVertice(i-4);
+      return sups[5].getVertex(i-4);
     else
       return nullptr;
   }
@@ -223,7 +224,7 @@ void XC::Block::coloca(const size_t &i,Face *s)
       {
         const Face *base= sups[0].Surface();
         primero= s->CommonEdge(*base); //Index of the line in common with the base.
-        const Edge *linea= base->GetLado(i)->getEdge();
+        const Edge *linea= base->getSide(i)->getEdge();
         sentido= base->SenseOfEdge(linea,*s);
       }
     if(i == 5) //Is the top face
@@ -243,7 +244,7 @@ void XC::Block::coloca(const size_t &i,Face *s)
             primero= cara->CommonEdge(*s); //Index of the line in common of s with the face.
             if(primero) //They have a common edge.
               {
-                const Edge *linea= cara->GetLado(primero)->getEdge();
+                const Edge *linea= cara->getSide(primero)->getEdge();
                 sentido= -cara->SenseOfEdge(linea,*s);
               }
             else //They don't share a common edge.
@@ -330,14 +331,14 @@ TritrizPos3d XC::Block::get_posiciones(void) const
     const size_t ndiv_12= NDivI();
     const size_t ndiv_23= NDivJ();
     const size_t ndiv_15= NDivK();
-    const Pos3d p1= GetVertice(1)->GetPos();
-    const Pos3d p2= GetVertice(2)->GetPos();
-    const Pos3d p3= GetVertice(3)->GetPos();
-    const Pos3d p4= GetVertice(4)->GetPos();
-    const Pos3d p5= GetVertice(5)->GetPos();
-    const Pos3d p6= GetVertice(6)->GetPos();
-    const Pos3d p7= GetVertice(7)->GetPos();
-    const Pos3d p8= GetVertice(8)->GetPos();
+    const Pos3d p1= getVertex(1)->GetPos();
+    const Pos3d p2= getVertex(2)->GetPos();
+    const Pos3d p3= getVertex(3)->GetPos();
+    const Pos3d p4= getVertex(4)->GetPos();
+    const Pos3d p5= getVertex(5)->GetPos();
+    const Pos3d p6= getVertex(6)->GetPos();
+    const Pos3d p7= getVertex(7)->GetPos();
+    const Pos3d p8= getVertex(8)->GetPos();
     const MatrizPos3d ptos_l5= MatrizPos3d(p1,p5,ndiv_15);
     const MatrizPos3d ptos_l6= MatrizPos3d(p2,p6,ndiv_15);
     const MatrizPos3d ptos_l7= MatrizPos3d(p3,p7,ndiv_15);
@@ -348,15 +349,15 @@ TritrizPos3d XC::Block::get_posiciones(void) const
 
 //! @brief Return the number of divisions along the edge 1->2.
 size_t XC::Block::NDivI(void) const
-  { return GetArista(1)->NDiv(); }
+  { return getEdge(1)->NDiv(); }
 
 //! @brief Return the number of divisions along the edge 2->3.
 size_t XC::Block::NDivJ(void) const
-  { return GetArista(2)->NDiv(); }
+  { return getEdge(2)->NDiv(); }
 
 //! @brief Return the number of divisions along the edge 1->5.
 size_t XC::Block::NDivK(void) const
-  { return GetArista(5)->NDiv(); }
+  { return getEdge(5)->NDiv(); }
 
 //! @brief Create nodes for the block.
 void XC::Block::create_nodes(void)
@@ -380,14 +381,14 @@ void XC::Block::create_nodes(void)
         TritrizPos3d pos_nodes= get_posiciones(); //Posiciones of the nodes.
 
         //Vertices.
-	ttzNodes(1,1,1)= GetVertice(1)->getNode();
-        ttzNodes(1,filas,1)= GetVertice(2)->getNode();
-	ttzNodes(1,filas,cols)= GetVertice(3)->getNode();
-        ttzNodes(1,1,cols)= GetVertice(4)->getNode();
-	ttzNodes(capas,1,1)= GetVertice(5)->getNode();
-        ttzNodes(capas,filas,1)= GetVertice(6)->getNode();
-	ttzNodes(capas,filas,cols)= GetVertice(7)->getNode();
-        ttzNodes(capas,1,cols)= GetVertice(8)->getNode();
+	ttzNodes(1,1,1)= getVertex(1)->getNode();
+        ttzNodes(1,filas,1)= getVertex(2)->getNode();
+	ttzNodes(1,filas,cols)= getVertex(3)->getNode();
+        ttzNodes(1,1,cols)= getVertex(4)->getNode();
+	ttzNodes(capas,1,1)= getVertex(5)->getNode();
+        ttzNodes(capas,filas,1)= getVertex(6)->getNode();
+	ttzNodes(capas,filas,cols)= getVertex(7)->getNode();
+        ttzNodes(capas,1,cols)= getVertex(8)->getNode();
 
         const Node *n1= ttzNodes(1,1,1);
         const Node *n2= ttzNodes(1,filas,1);

@@ -73,7 +73,7 @@ s.nDivJ= NumDivJ
 
 
 ''' 
-            for_each_lado
+            for_each_side
 
                  print "linea: ", edge.nombre," directo: ",directo
                  edge{print "    p1: ",p1.nombre," p2: ",p2.nombre }

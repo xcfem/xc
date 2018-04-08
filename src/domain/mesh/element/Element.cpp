@@ -688,7 +688,7 @@ XC::MEDGaussModel XC::Element::getMEDGaussModel(void) const
     return retval;
   }
 
-//! @brief Returns the nodes of the edge (o arista) of the element.
+//! @brief Returns the nodes of the element edge.
 XC::Element::NodesEdge XC::Element::getNodesEdge(const size_t &) const
   {
     NodesEdge retval;

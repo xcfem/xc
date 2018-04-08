@@ -242,7 +242,7 @@ void XC::QuadSurface::setPoints(const ID &point_indexes)
 	Face::addPoints(point_indexes);
         close();
       }
-    int tagV1= GetVertice(1)->GetTag();
+    int tagV1= getVertex(1)->GetTag();
     if(tagV1!=point_indexes(0))
       std::cerr << getClassName() << "::" << __FUNCTION__
 		<< "; surface: " << GetTag()
@@ -387,10 +387,10 @@ MatrizPos3d XC::QuadSurface::get_posiciones(void) const
 //! X axis.
 Vector3d XC::QuadSurface::getIVector(void) const
   {
-    const Pos3d p1= GetVertice(1)->GetPos();
-    const Pos3d p2= GetVertice(2)->GetPos();
-    const Pos3d p3= GetVertice(3)->GetPos();
-    const Pos3d p4= GetVertice(4)->GetPos();
+    const Pos3d p1= getVertex(1)->GetPos();
+    const Pos3d p2= getVertex(2)->GetPos();
+    const Pos3d p3= getVertex(3)->GetPos();
+    const Pos3d p4= getVertex(4)->GetPos();
     const Vector3d retval= 0.5*((p2-p1)+(p3-p4));
     return retval;
   }
@@ -399,10 +399,10 @@ Vector3d XC::QuadSurface::getIVector(void) const
 //! Y axis.
 Vector3d XC::QuadSurface::getJVector(void) const
   {
-    const Pos3d p1= GetVertice(1)->GetPos();
-    const Pos3d p2= GetVertice(2)->GetPos();
-    const Pos3d p3= GetVertice(3)->GetPos();
-    const Pos3d p4= GetVertice(4)->GetPos();
+    const Pos3d p1= getVertex(1)->GetPos();
+    const Pos3d p2= getVertex(2)->GetPos();
+    const Pos3d p3= getVertex(3)->GetPos();
+    const Pos3d p4= getVertex(4)->GetPos();
     const Vector3d retval= 0.5*((p4-p1)+(p3-p2));
     return retval;
   }
@@ -433,7 +433,7 @@ void XC::QuadSurface::create_nodes(void)
         //j=1
         for(size_t k=1;k<=cols;k++)
           {
-            Lado &ll= lines[0];
+            Side &ll= lines[0];
             Node *nn= ll.getNode(k);
             ttzNodes(1,1,k)= nn;
           }

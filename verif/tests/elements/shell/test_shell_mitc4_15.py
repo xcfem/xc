@@ -64,9 +64,9 @@ s.nDivJ= NumDivJ
 # Constraints
 f1= preprocessor.getSets.getSet("f1")
 f1.genMesh(xc.meshDir.I)
-lados= s.getEdges
+sides= s.getEdges
 
-for l in lados:
+for l in sides:
   for i in l.getEdge.getNodeTags():
     modelSpace.fixNode000_000(i)
 

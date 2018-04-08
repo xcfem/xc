@@ -75,7 +75,7 @@ class Edge: public EntMdlr
     virtual double getLongitud(void) const= 0;
     virtual Pos3d getCentroid(void) const= 0;
 
-    virtual const Pnt *GetVertice(const size_t &i) const= 0;
+    virtual const Pnt *getVertex(const size_t &i) const= 0;
     virtual void SetVertice(const size_t &,Pnt *)= 0;
     std::vector<int> getIndicesVertices(void) const;
     virtual ID getKPoints(void) const;
@@ -84,7 +84,7 @@ class Edge: public EntMdlr
     inline virtual size_t NDiv(void) const
       { return ndiv; }
     void SetElemSize(const double &sz);
-    std::set<const XC::Edge *> GetLadosHomologos(const std::set<const XC::Edge *> &) const;
+    std::set<const XC::Edge *> getHomologousSides(const std::set<const XC::Edge *> &) const;
     void actualiza_topologia(void);
 
     //! @brief Return the surfaces that touch the line.

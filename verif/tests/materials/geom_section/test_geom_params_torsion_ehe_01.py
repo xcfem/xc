@@ -15,7 +15,7 @@ __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
 Ec= 20e9
-lado= 1.0
+sideLength= 1.0
 
 
 feProblem= xc.FEProblem()

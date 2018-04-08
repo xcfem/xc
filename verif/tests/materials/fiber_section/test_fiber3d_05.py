@@ -24,7 +24,7 @@ MomYFibersDq= 0.0
 MomZFibersDq= 0.0
 Es= 2.1e6
 Area= 1.0
-lado= math.sqrt(Area)
+sideLength= math.sqrt(Area)
 eps= F/(Area*Es)
 
 # Problem type
@@ -53,10 +53,10 @@ elast0= typical_materials.defElasticMaterial(preprocessor, "elast0",Es)
 # Secciones
 fiberSectionTest= preprocessor.getMaterialHandler.newMaterial("fiber_section_3d","fiberSectionTest")
 
-fiberSectionTest.addFiber("elast0",Area/4.0,xc.Vector([yF+lado/4,zF+lado/4]))
-fiberSectionTest.addFiber("elast0",Area/4.0,xc.Vector([yF-lado/4,zF+lado/4]))
-fiberSectionTest.addFiber("elast0",Area/4.0,xc.Vector([yF-lado/4,zF-lado/4]))
-fiberSectionTest.addFiber("elast0",Area/4.0,xc.Vector([yF+lado/4,zF-lado/4]))
+fiberSectionTest.addFiber("elast0",Area/4.0,xc.Vector([yF+sideLength/4,zF+sideLength/4]))
+fiberSectionTest.addFiber("elast0",Area/4.0,xc.Vector([yF-sideLength/4,zF+sideLength/4]))
+fiberSectionTest.addFiber("elast0",Area/4.0,xc.Vector([yF-sideLength/4,zF-sideLength/4]))
+fiberSectionTest.addFiber("elast0",Area/4.0,xc.Vector([yF+sideLength/4,zF-sideLength/4]))
 A= fiberSectionTest.getArea
 yG= fiberSectionTest.getCdgY()
 zG= fiberSectionTest.getCdgZ()

@@ -75,8 +75,8 @@ XC::DeformationPlane XC::PrismaticBarCrossSection::getInitialDeformationPlane(vo
   { return DeformationPlane(getInitialSectionDeformation()); }
 
 
-//! @brief Returns the generalized strains vector que corresponde
-//! al deformation plane being passed as parameter.
+//! @brief Return the generalized strains vector that corresponds
+//! to the deformation plane being passed as parameter.
 const XC::Vector &XC::PrismaticBarCrossSection::getGeneralizedStrainVector(const DeformationPlane &plano) const
   {
     const int order= getOrder();

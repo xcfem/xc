@@ -16,7 +16,7 @@ __email__= "l.pereztato@gmail.com"
 Es= 2.1e11
 n= 15
 Ec= Es/n
-lado= 1.0
+sideLength= 1.0
 
 feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
@@ -35,10 +35,10 @@ Iy= sectionGeometryTest.getIyHomogenizedSection(Ec)
 Iz= sectionGeometryTest.getIzHomogenizedSection(Ec)
 Pyz= sectionGeometryTest.getPyzHomogenizedSection(Ec)
 
-areaTeor= lado*lado
-yGTeor= lado/2.0
-zGTeor= lado/2.0
-iTeor= (lado)**4/12.0
+areaTeor= sideLength*sideLength
+yGTeor= sideLength/2.0
+zGTeor= sideLength/2.0
+iTeor= (sideLength)**4/12.0
 
 ratio1= ((area-areaTeor)/areaTeor)
 ratio2= ((G[0]-yGTeor)/yGTeor)

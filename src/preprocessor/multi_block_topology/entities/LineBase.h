@@ -58,7 +58,7 @@ class LineBase: public Edge
 
     virtual double getLambda(const Pos3d &) const= 0;
 
-    virtual const Pnt *GetVertice(const size_t &i) const;
+    virtual const Pnt *getVertex(const size_t &i) const;
     virtual void SetVertice(const size_t &,Pnt *);
     void SetVertice(const size_t &,const size_t &);
     void SetVertices(Pnt *,Pnt *);

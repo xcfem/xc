@@ -48,7 +48,7 @@ class Block: public Body
     void create_nodes_caras(void);
     TritrizPos3d get_posiciones(void) const;
 
-    virtual BodyFace *GetFace(const size_t &i);
+    virtual BodyFace *getFace(const size_t &i);
   public:
     Block(Preprocessor *m,const std::string &nombre= "");
     SetEstruct *getCopy(void) const;
@@ -58,10 +58,10 @@ class Block: public Body
     virtual size_t getNumberOfFaces(void) const;
     void actualiza_topologia(void);
     virtual std::set<const Face *> getSurfaces(void);
-    const BodyFace *GetFace(const size_t &i) const;
-    const CmbEdge::Lado *GetArista(const size_t &i) const;
-    Pnt *GetVertice(const size_t &i);
-    const Pnt *GetVertice(const size_t &i) const;
+    const BodyFace *getFace(const size_t &i) const;
+    const CmbEdge::Side *getEdge(const size_t &i) const;
+    Pnt *getVertex(const size_t &i);
+    const Pnt *getVertex(const size_t &i) const;
     int getVtkCellType(void) const;
     int getMEDCellType(void) const;
 
@@ -71,11 +71,7 @@ class Block: public Body
     bool checkNDivs(void) const;
     void create_nodes(void);
     void genMesh(meshing_dir dm);
-
-
   };
-
-
 } //end of XC namespace
 
 #endif

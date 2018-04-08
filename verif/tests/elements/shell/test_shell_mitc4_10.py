@@ -67,9 +67,9 @@ s.nDivJ= NumDivJ
 f1= preprocessor.getSets.getSet("f1")
 f1.genMesh(xc.meshDir.I)
 
-lados= s.getEdges
+sides= s.getEdges
 #Edge iterator
-for l in lados:
+for l in sides:
   vTang= l.getEdge.getTang(0)
   listTagNodes= l.getEdge.getNodeTags()
   if(abs(vTang[1])<1e-6) & (abs(vTang[2])<1e-6):# Edge parrallel to X axis

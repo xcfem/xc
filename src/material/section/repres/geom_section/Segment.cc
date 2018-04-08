@@ -72,7 +72,7 @@ void XC::Segment::setEndPoints(size_t idP1, size_t idP2)
   }
 
 //! @brief Returns the i-th vertex.
-const XC::Spot *XC::Segment::GetVertice(const size_t &i) const
+const XC::Spot *XC::Segment::getVertex(const size_t &i) const
   {
     if(i==1)
       return p1;
@@ -81,7 +81,7 @@ const XC::Spot *XC::Segment::GetVertice(const size_t &i) const
   }
 
 //! @brief Returns the i-th vertex.
-XC::Spot *XC::Segment::GetVertice(const size_t &i)
+XC::Spot *XC::Segment::getVertex(const size_t &i)
   {
     if(i==1)
       return p1;

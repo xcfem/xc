@@ -59,7 +59,7 @@ l4.addLines(xc.ID([1,2,3]))
 l4.nDiv= NumDiv
 
 ''' 
-for_each_lado
+for_each_side
 
   print "nombre: ",edge.nombre," directo:",edge.directo
   edge{print " p1:",p1.nombre," p2:",p2.nombre 

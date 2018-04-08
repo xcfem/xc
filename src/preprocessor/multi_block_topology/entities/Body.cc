@@ -40,7 +40,7 @@
 #include "xc_utils/src/geom/pos_vec/MatrizPos3d.h"
 
 //! @brief Constructor
-XC::SecuenciaLados::SecuenciaLados(const size_t primero,const bool &directo)
+XC::SideSequence::SideSequence(const size_t primero,const bool &directo)
   : dirt(directo)
   {
     if(dirt)
@@ -86,24 +86,24 @@ size_t XC::Body::BodyFace::getNumberOfVertices(void) const
   { return surface->getNumberOfVertices(); }
 
 //! @brief Return the pointer to the side face whose index is passed as parameter.
-const XC::CmbEdge::Lado *XC::Body::BodyFace::GetLado(const size_t &i) const
+const XC::CmbEdge::Side *XC::Body::BodyFace::getSide(const size_t &i) const
   {
     if(!surface) return nullptr;
-    const CmbEdge::Lado *retval(nullptr);
+    const CmbEdge::Side *retval(nullptr);
     const size_t idx= (i-1)%4+1;
     switch(idx)
       {
         case 1:
-          retval= surface->GetLado(sec_lados.l1);
+          retval= surface->getSide(sec_lados.l1);
           break;
         case 2:
-          retval= surface->GetLado(sec_lados.l2);
+          retval= surface->getSide(sec_lados.l2);
           break;
         case 3:
-          retval= surface->GetLado(sec_lados.l3);
+          retval= surface->getSide(sec_lados.l3);
           break;
         case 4:
-          retval= surface->GetLado(sec_lados.l4);
+          retval= surface->getSide(sec_lados.l4);
           break;
         default:
           retval= nullptr;
@@ -113,13 +113,13 @@ const XC::CmbEdge::Lado *XC::Body::BodyFace::GetLado(const size_t &i) const
   }
 
 //! @brief Return a pointer to the i-th edge of the face.
-XC::CmbEdge::Lado *XC::Body::BodyFace::GetLado(const size_t &i)
-  { return const_cast<CmbEdge::Lado *>(static_cast<const BodyFace &>(*this).GetLado(i)); }
+XC::CmbEdge::Side *XC::Body::BodyFace::getSide(const size_t &i)
+  { return const_cast<CmbEdge::Side *>(static_cast<const BodyFace &>(*this).getSide(i)); }
 
 //! @brief Return a pointer to the i-th vertex of the face.
-const XC::Pnt *XC::Body::BodyFace::GetVertice(const size_t &i) const
+const XC::Pnt *XC::Body::BodyFace::getVertex(const size_t &i) const
   {
-    const CmbEdge::Lado *l= GetLado(i);
+    const CmbEdge::Side *l= getSide(i);
     if(l)
       {
         if(sec_lados.Directo())
@@ -131,8 +131,8 @@ const XC::Pnt *XC::Body::BodyFace::GetVertice(const size_t &i) const
   }
 
 //! @brief Return a pointer to the i-th vertex of the face.
-XC::Pnt *XC::Body::BodyFace::GetVertice(const size_t &i)
-  { return const_cast<Pnt *>(static_cast<const BodyFace &>(*this).GetVertice(i)); }
+XC::Pnt *XC::Body::BodyFace::getVertex(const size_t &i)
+  { return const_cast<Pnt *>(static_cast<const BodyFace &>(*this).getVertex(i)); }
 
 //! @brief Return a pointer to the (i,j) node of the face.
 XC::Node *XC::Body::BodyFace::getNode(const size_t &i,const size_t &j)
@@ -156,10 +156,10 @@ MatrizPos3d XC::Body::BodyFace::get_posiciones(void) const
 	          << " edges surfaces." << std::endl;
         return MatrizPos3d();
       }
-    const CmbEdge::Lado *l1= GetLado(1);
-    const CmbEdge::Lado *l2= GetLado(2);
-    const CmbEdge::Lado *l3= GetLado(3);
-    const CmbEdge::Lado *l4= GetLado(4);
+    const CmbEdge::Side *l1= getSide(1);
+    const CmbEdge::Side *l2= getSide(2);
+    const CmbEdge::Side *l3= getSide(3);
+    const CmbEdge::Side *l4= getSide(4);
     //Rows of points quasi-parllels to l2 and l4 and increasing index from l4 to l2.
     //Columns of point quasi.parallels to l1 and l3 and increasing index from l1 to l3.
     if(l1->NDiv()!=l3->NDiv())
@@ -212,12 +212,12 @@ BND3d XC::Body::Bnd(void) const
       {
 	std::cerr << getClassName() << "::" << __FUNCTION__
 		  << "; body has only one point." << std::endl;
-        retval= BND3d(GetVertice(1)->GetPos(),GetVertice(1)->GetPos());
+        retval= BND3d(getVertex(1)->GetPos(),getVertex(1)->GetPos());
         return retval;
       }
-    retval= BND3d(GetVertice(1)->GetPos(),GetVertice(2)->GetPos());
+    retval= BND3d(getVertex(1)->GetPos(),getVertex(2)->GetPos());
     for(size_t i=3;i<=nv;i++)
-      retval+= GetVertice(i)->GetPos();
+      retval+= getVertex(i)->GetPos();
     return retval;
   }
 
@@ -236,12 +236,12 @@ bool XC::Body::In(const GeomObj3d &geomObj, const double &tol) const
       {
 	std::cerr << getClassName() << "::" << __FUNCTION__
 		  << "; body has only one point." << std::endl;
-	retval= geomObj.In(GetVertice(1)->GetPos(),tol);
+	retval= geomObj.In(getVertex(1)->GetPos(),tol);
       }
     else
       for(size_t i=1;i<=nv;i++)
 	{
-	  Pos3d pos(GetVertice(i)->GetPos());
+	  Pos3d pos(getVertex(i)->GetPos());
           if(!geomObj.In(pos,tol))
             { retval= false; break; }
 	}
@@ -299,7 +299,7 @@ std::vector<int> XC::Body::getIndicesVertices(void) const
     if(nv>=1)
       {
         for(size_t i=0;i<nv;i++)
-          retval[i]= GetVertice(i+1)->getIdx();
+          retval[i]= getVertex(i+1)->getIdx();
       }
     return retval;
   }

@@ -66,8 +66,8 @@ f1= preprocessor.getSets.getSet("f1")
 f1.genMesh(xc.meshDir.I)
 constraints= preprocessor.getBoundaryCondHandler
 
-lados= s.getEdges
-for l in lados:
+sides= s.getEdges
+for l in sides:
   for i in l.getEdge.getNodeTags():
     modelSpace.fixNode000_FFF(i)
 

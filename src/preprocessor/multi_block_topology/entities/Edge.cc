@@ -378,7 +378,7 @@ const std::string &XC::Edge::NombresSupsTocan(void) const
   }
 
 //! @brief Return the homologous sides to that passed as a parameter.
-std::set<const XC::Edge *> XC::Edge::GetLadosHomologos(const std::set<const XC::Edge *> &lh) const
+std::set<const XC::Edge *> XC::Edge::getHomologousSides(const std::set<const XC::Edge *> &lh) const
   {
     std::set<const Edge *> retval;
     std::set<const Edge *> new_adyacentes;
@@ -402,7 +402,7 @@ std::set<const XC::Edge *> XC::Edge::GetLadosHomologos(const std::set<const XC::
       {
         for(std::set<const XC::Edge *>::const_iterator i= new_adyacentes.begin();i!=new_adyacentes.end();i++)
           {
-            std::set<const XC::Edge *> tmp= (*i)->GetLadosHomologos(retval);
+            std::set<const XC::Edge *> tmp= (*i)->getHomologousSides(retval);
             for(std::set<const XC::Edge *>::const_iterator j= tmp.begin();j!=tmp.end();j++)
               if(this!=*j) retval.insert(*j);
           }
@@ -593,7 +593,7 @@ std::vector<int> XC::Edge::getIndicesVertices(void) const
     if(nv>=1)
       {
         for(size_t i=0;i<nv;i++)
-          retval[i]= GetVertice(i+1)->getIdx();
+          retval[i]= getVertex(i+1)->getIdx();
       }
     return retval;
   }

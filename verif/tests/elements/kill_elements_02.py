@@ -17,7 +17,7 @@ from materials import typical_materials
 E= 2.1e9 # Young modulus of the steel.
 nu= 0.3 # Poisson's ratio.
 h= .1 # Thickness.
-L= 1.0 # Lado.
+L= 1.0 # Side length.
 I= 1/12.0*L*h**3 # Cross section moment of inertia (m4)
 dens= 1.33 # Density kg/m2.
 F= 1000 # Force

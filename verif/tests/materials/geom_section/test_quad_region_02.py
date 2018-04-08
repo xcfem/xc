@@ -13,7 +13,7 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
-lado= 1.0
+sideLength= 1.0
 
 feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
@@ -23,17 +23,17 @@ sectionGeometryTest= preprocessor.getMaterialHandler.newSectionGeometry("section
 regiones= sectionGeometryTest.getRegions
 elast= regiones.newQuadRegion("elast")
 elast.pMin= geom.Pos2d(0.0,0.0)
-elast.pMax= geom.Pos2d(lado,lado)
+elast.pMax= geom.Pos2d(sideLength,sideLength)
 area= elast.getArea()
 G= elast.getCdg()
 Iy= elast.getIy()
 Iz= elast.getIz()
 Pyz= elast.getPyz()
 
-areaTeor= lado*lado
-yGTeor= lado/2.0
-zGTeor= lado/2.0
-iTeor= (lado)**4/12.0
+areaTeor= sideLength*sideLength
+yGTeor= sideLength/2.0
+zGTeor= sideLength/2.0
+iTeor= (sideLength)**4/12.0
 
 ratio1= ((area-areaTeor)/areaTeor)
 ratio2= ((G[0]-yGTeor)/yGTeor)

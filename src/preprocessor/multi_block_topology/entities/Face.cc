@@ -73,7 +73,7 @@ void XC::Face::inserta_body(Body *b)
 //! @brief Updates topology.
 void XC::Face::actualiza_topologia(void)
   {
-    for(std::deque<Lado>::iterator i=lines.begin();i!=lines.end();i++)
+    for(std::deque<Side>::iterator i=lines.begin();i!=lines.end();i++)
       (*i).getEdge()->inserta_surf(this);
   }
 
@@ -83,7 +83,7 @@ size_t XC::Face::CommonEdge(const Face &otra) const
   {
     size_t cont= 1;
     if(this == &otra) return cont; //Son la misma todos los bordes son comunes.
-    for(std::deque<Lado>::const_iterator i=lines.begin();i!=lines.end();i++,cont++)
+    for(std::deque<Side>::const_iterator i=lines.begin();i!=lines.end();i++,cont++)
       {
         if((*i).getEdge()->Toca(otra))
           return cont;
@@ -117,8 +117,8 @@ int XC::Face::SenseOfEdge(const Edge *l,const Face &otra) const
         return 0;
       }
     //Search the edges on each surface;
-    const Lado *l_esta= GetLado(ind_l_esta);
-    const Lado *l_otra= otra.GetLado(ind_l_otra);
+    const Side *l_esta= getSide(ind_l_esta);
+    const Side *l_otra= otra.getSide(ind_l_otra);
     if(l_esta->P2() == l_otra->P2())
       return 1;
     else
@@ -126,8 +126,8 @@ int XC::Face::SenseOfEdge(const Edge *l,const Face &otra) const
   }
 
 //! @brief Returns the i-th vertex.
-const XC::Pnt *XC::Face::GetVertice(const size_t &i) const
-  { return GetLado(i)->P1(); }
+const XC::Pnt *XC::Face::getVertex(const size_t &i) const
+  { return getSide(i)->P1(); }
 
 //! @brief Returns the contour of the face as a 3D polyline.
 Polilinea3d XC::Face::getContour(void) const

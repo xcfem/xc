@@ -33,8 +33,8 @@ thickness= 0.2 # Cross section depth expressed in meters.
 unifLoad= 20e3 # Uniform load in N/m2.
 nLoad= unifLoad*CooMaxX*CooMaxY/NumDivI/NumDivJ # Tributary load on each node
 
-tagElemCentro= 0
-tagElemLado= 0
+centerElemTag= 0
+sideElemTag= 0
 
 feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
@@ -74,9 +74,9 @@ s.nDivJ= NumDivJ
 # Constraints
 f1= preprocessor.getSets.getSet("f1")
 f1.genMesh(xc.meshDir.I)
-lados= s.getEdges
+sides= s.getEdges
 #Edge iterator
-for l in lados:
+for l in sides:
   for i in l.getEdge.getNodeTags():
     modelSpace.fixNode000_000(i)
 
@@ -92,8 +92,8 @@ lp0= casos.newLoadPattern("default","0")
 nodal_loads.load_on_nodes_in_face(f1,lp0,[0,0,-nLoad,0,0,0])
 f1= preprocessor.getSets.getSet("f1")
 
-tagElemCentro= f1.getNearestElement(geom.Pos3d(xMidP,yMidP,0.0)).tag
-tagElemLado= f1.getNearestElement(geom.Pos3d(xMidL,yMidL,0.0)).tag
+centerElemTag= f1.getNearestElement(geom.Pos3d(xMidP,yMidP,0.0)).tag
+sideElemTag= f1.getNearestElement(geom.Pos3d(xMidL,yMidL,0.0)).tag
 nodes= preprocessor.getNodeHandler
 
 nNodes= f1.getNumNodes
@@ -107,8 +107,8 @@ casos.addToDomain("0")
 analisis= predefined_solutions.simple_static_linear(feProblem)
 analOk= analisis.analyze(1)
 
-m1Centro= 0.0
-m2CentroLado= 0.0
+m1Center= 0.0
+m2SideCenter= 0.0
 f1= preprocessor.getSets.getSet("f1")
 
 nodes= preprocessor.getNodeHandler
@@ -121,25 +121,25 @@ node= f1.getNodeIJK(1,NumDivI/2+1,NumDivJ/2+1)
 UZ= node.getDisp[2]
 
 
-elemCentro= preprocessor.getElementHandler.getElement(tagElemCentro)
-elemCentro.getResistingForce()
-m1Centro= elemCentro.getMeanInternalForce("m1")
-elemLado= preprocessor.getElementHandler.getElement(tagElemLado)
-elemLado.getResistingForce()
-m2CentroLado= elemLado.getMeanInternalForce("m2")
+centerElem= preprocessor.getElementHandler.getElement(centerElemTag)
+centerElem.getResistingForce()
+m1Center= centerElem.getMeanInternalForce("m1")
+sideElem= preprocessor.getElementHandler.getElement(sideElemTag)
+sideElem.getResistingForce()
+m2SideCenter= sideElem.getMeanInternalForce("m2")
 
 UZTeor= -1.821e-2
 ratio1= (abs((UZ-UZTeor)/UZTeor))
 ratio2= (abs((nElems-1600)/1600))
-ratio3= (abs((m1Centro+35.20e3)/35.20e3))
-ratio4= (abs((m2CentroLado-103.09e3)/103.09e3))
+ratio3= (abs((m1Center+35.20e3)/35.20e3))
+ratio4= (abs((m2SideCenter-103.09e3)/103.09e3))
 
 ''' 
-print "tagElemCentro= ",tagElemCentro
-print "tagElemLado= ",tagElemLado
+print "centerElemTag= ",centerElemTag
+print "sideElemTag= ",sideElemTag
 print "UZ= ",UZ
-print "m1Centro= ",m1Centro/1e3," kN \n"
-print "m2CentroLado= ",m2CentroLado/1e3," kN \n"
+print "m1Center= ",m1Center/1e3," kN \n"
+print "m2SideCenter= ",m2SideCenter/1e3," kN \n"
 print "Number of nodes: ",nNodes
 print "Number of elements: ",nElems
 print "ratio1: ",ratio1

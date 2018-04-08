@@ -13,7 +13,7 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
-lado= 1.0
+sideLength= 1.0
 n1= 3
 n2= 2
 
@@ -27,7 +27,7 @@ elast= regiones.newQuadRegion("elast")
 elast.nDivIJ= n1
 elast.nDivJK= n2
 elast.pMin= geom.Pos2d(0.0,0.0)
-elast.pMax= geom.Pos2d(lado,lado)
+elast.pMax= geom.Pos2d(sideLength,sideLength)
 rejilla= elast.genGrid()
 points= rejilla.getPoints()
 
@@ -60,12 +60,12 @@ numQuadsTeor= n1*n2
 numFilasTeor= (n2+1)
 numColsTeor= (n1+1)
 theorNumPoints= numFilasTeor*numColsTeor
-areaTeor= lado*lado
-xGTeor= lado/2.0
-yGTeor= lado/2.0
-iTeor= (lado)**4/12.0
-deltaXTeor= lado/n1
-deltaYTeor= lado/n2
+areaTeor= sideLength*sideLength
+xGTeor= sideLength/2.0
+yGTeor= sideLength/2.0
+iTeor= (sideLength)**4/12.0
+deltaXTeor= sideLength/n1
+deltaYTeor= sideLength/n2
 
 ratio1= ((numQuads-numQuadsTeor)/numQuadsTeor)
 ratio2= ((numFilas-numFilasTeor)/numFilasTeor)

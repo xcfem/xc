@@ -69,7 +69,7 @@ class Face: public CmbEdge
     //! @brief Returns the number of vertices.
     size_t getNumberOfVertices(void) const
       { return getNumberOfEdges(); }
-    virtual const Pnt *GetVertice(const size_t &i) const;
+    virtual const Pnt *getVertex(const size_t &i) const;
     Polilinea3d getContour(void) const;
     //! @brief Return the bodies that touch this surface (neighbors).
     const std::set<const Body *> &CuerposTocan(void) const

@@ -217,7 +217,8 @@ int XC::EigenAnalysis::setEigenSOE(EigenSOE &theSOE)
     return 0;
   }
 
-//! @brief Returns the autovector que corresponde al modo being passed as parameter.
+//! @brief Returns the autovector that corresponds to the mode
+//! being passed as parameter.
 const XC::Vector &XC::EigenAnalysis::getEigenvector(int mode) const
   {
     static Vector retval(1);
@@ -228,8 +229,9 @@ const XC::Vector &XC::EigenAnalysis::getEigenvector(int mode) const
     return retval;
   }
 
-//! @brief Returns the autovector que corresponde al modo being passed as parameter
-//! normalizado de modo que la componente máxima valga 1 (norma_infinito).
+//! @brief Returns the normalized autovector that correspond to the mode being
+//! passed as parameter. The vector is normalized to make the maximum of the
+//! absolute values of its components to be 1 (infinity_norm(v)= 1).
 XC::Vector XC::EigenAnalysis::getNormalizedEigenvector(int mode) const
   {
     static Vector retval(1);
@@ -240,8 +242,8 @@ XC::Vector XC::EigenAnalysis::getNormalizedEigenvector(int mode) const
     return retval;
   }
 
-//! @brief Returns a matrix con los eigenvectors calculados colocados
-//! por columnas.
+//! @brief Returns a matrix with the computed eigenvectors as
+//! columns of the matrix.
 XC::Matrix XC::EigenAnalysis::getEigenvectors(void) const
   {
     Matrix retval;
@@ -251,8 +253,8 @@ XC::Matrix XC::EigenAnalysis::getEigenvectors(void) const
     return retval;
   }
 
-//! @brief Returns a matrix con los eigenvectors normalizados colocados
-//! por columnas (norma_infinito).
+//! @brief Returns a matrix con los eigenvectors normalizados
+//! (infinity norm) as columns of the matrix.
 XC::Matrix XC::EigenAnalysis::getNormalizedEigenvectors(void) const
   {
     Matrix retval;
@@ -262,7 +264,8 @@ XC::Matrix XC::EigenAnalysis::getNormalizedEigenvectors(void) const
     return retval;
   }
 
-//! @brief Returns the eigenvalue que corresponde al modo being passed as parameter.
+//! @brief Returns the eigenvalue that corresponds to the mode
+//! being passed as parameter.
 const double &XC::EigenAnalysis::getEigenvalue(int mode) const
   {
     static double retval= 0.0;

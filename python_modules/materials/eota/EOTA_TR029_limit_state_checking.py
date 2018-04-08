@@ -55,7 +55,7 @@ def getScrNp(d, hEf, tauRkUcr):
   return min(20e3*d*math.sqrt(tauRkUcr/7.5e6),3*hEf)
 
 def getCcrNp(d, hEf, tauRkUcr):
-  '''  Semi-lado del área de influencia (distancia crítica al borde) de un anclaje individual according to clause 5.2.2.3 b) (ecuación 5.2d) of EOTA TR029.
+  '''  half-side del área de influencia (distancia crítica al borde) de un anclaje individual according to clause 5.2.2.3 b) (ecuación 5.2d) of EOTA TR029.
 
    :param d: anchor diameter (m).
    :param hEf: effective anchorage depth (m).
@@ -72,12 +72,12 @@ def getA0pN(d,anchorPosition, hEf, tauRkUcr):
      :param hEf: effective anchorage depth (m).
      :param tauRkUcr: Characteristic bond resistance for non-cracked concrete (must be taken from relevant ETA) (Pa).
     '''   
-    semiLadoA0pN= getCcrNp(d,hEf,tauRkUcr)
+    halfSideA0pN= getCcrNp(d,hEf,tauRkUcr)
     retval= geom.Poligono2d()
-    retval.agregaVertice(geom.Pos2d(anchorPosition.x-semiLadoA0pN,anchorPosition.y-semiLadoA0pN))
-    retval.agregaVertice(geom.Pos2d(anchorPosition.x+semiLadoA0pN,anchorPosition.y-semiLadoA0pN))
-    retval.agregaVertice(geom.Pos2d(anchorPosition.x+semiLadoA0pN,anchorPosition.y+semiLadoA0pN))
-    retval.agregaVertice(geom.Pos2d(anchorPosition.x-semiLadoA0pN,anchorPosition.y+semiLadoA0pN))
+    retval.agregaVertice(geom.Pos2d(anchorPosition.x-halfSideA0pN,anchorPosition.y-halfSideA0pN))
+    retval.agregaVertice(geom.Pos2d(anchorPosition.x+halfSideA0pN,anchorPosition.y-halfSideA0pN))
+    retval.agregaVertice(geom.Pos2d(anchorPosition.x+halfSideA0pN,anchorPosition.y+halfSideA0pN))
+    retval.agregaVertice(geom.Pos2d(anchorPosition.x-halfSideA0pN,anchorPosition.y+halfSideA0pN))
     return retval
 
 def getFactor2pN(A0pN, ApN):
@@ -94,13 +94,13 @@ def getFactor1N(C, CcrN):
     Factor que introduce en el cálculo la influencia en la distribución de tensiones de la distancia al borde de la pieza soporte, according to expression 5.2e of clause 5.2.2.3 c).
 
      :param C: edge distance.
-     :param CcrN: Semi-lado del área de influencia (distancia crítica al borde).
+     :param CcrN: half-side del área de influencia (distancia crítica al borde).
     '''
     return min(0.7+0.3*C/CcrN,1)
 
 def getScrN(hEf):
   '''
-  Lado del área de influencia de un anclaje individual
+  SideLength del área de influencia de un anclaje individual
    according to clause 5.2.2.4 b) (ecuación 5.3b) del
    clause 5.2.2.4 b) of EOTA TR029.
 
@@ -115,12 +115,12 @@ def getA0cN(anchorPosition, hEf):
     :param anchorPosition: anchor position.
     :param hEf: effective anchorage depth (m).
     '''
-    semiLadoA0cN= getScrN(hEf)/2
+    halfSideA0cN= getScrN(hEf)/2
     retval= geom.Poligono2d()
-    retval.agregaVertice(geom.Pos2d(anchorPosition.x-semiLadoA0cN,anchorPosition.y-semiLadoA0cN))
-    retval.agregaVertice(geom.Pos2d(anchorPosition.x+semiLadoA0cN,anchorPosition.y-semiLadoA0cN))
-    retval.agregaVertice(geom.Pos2d(anchorPosition.x+semiLadoA0cN,anchorPosition.y+semiLadoA0cN))
-    retval.agregaVertice(geom.Pos2d(anchorPosition.x-semiLadoA0cN,anchorPosition.y+semiLadoA0cN))
+    retval.agregaVertice(geom.Pos2d(anchorPosition.x-halfSideA0cN,anchorPosition.y-halfSideA0cN))
+    retval.agregaVertice(geom.Pos2d(anchorPosition.x+halfSideA0cN,anchorPosition.y-halfSideA0cN))
+    retval.agregaVertice(geom.Pos2d(anchorPosition.x+halfSideA0cN,anchorPosition.y+halfSideA0cN))
+    retval.agregaVertice(geom.Pos2d(anchorPosition.x-halfSideA0cN,anchorPosition.y+halfSideA0cN))
     return retval
 
 def getFactor2cN(A0cN, AcN):
@@ -136,7 +136,7 @@ def getFactor2cN(A0cN, AcN):
 
 def getCcrSpHiltiHY150(h, hEf):
   '''
-  Semi-lado del área de influencia (distancia crítica al borde)
+  half-side del área de influencia (distancia crítica al borde)
      de un anclaje individual according to 
      table 7 of ETA-05/0051 (page 19).
 
@@ -224,7 +224,7 @@ def shearResistanceConcretePryOut(NRkp, NRkc, hEf):
 
 def psiReVFactor(descr):
   '''
-  Coeficiente que introduce la influencia del tipo de refuerzo empleado en cracked concrete  en la expresión 5.8 of EOTA TR029, calculado according to apartado g) of clause 5.2.3.4 of EOTA TR029.
+  Coeficiente que introduce la influencia del tipo de refuerzo empleado en cracked concrete  en la expresión 5.8 of EOTA TR029, computed according to apartado g) of clause 5.2.3.4 of EOTA TR029.
 
   :param descr: Descriptor que puede tomar los valores:
     1: anclaje en cracked concrete o no fisurado sin reinforcement de refuerzo en el borde.
@@ -235,7 +235,7 @@ def psiReVFactor(descr):
 
 def psiEcVFactor(ev, c1):
   '''
-  Coeficiente que introduce la influencia de la variación de los cortantes en los distintos pernos de un grupo, calculado according to expression 5.8h del apartado f) of clause 5.2.3.4 of EOTA TR029.
+  Coeficiente que introduce la influencia de la variación de los cortantes en los distintos pernos de un grupo, computed according to expression 5.8h del apartado f) of clause 5.2.3.4 of EOTA TR029.
 
    :param ev: Excentricidad de la resultante de esfuerzos cortantes respecto al centro de gravedad del grupo.
    :param c1: Distancia desde el centro de gravedad del grupo al borde situado frente al cortante.

@@ -54,8 +54,8 @@ XC::Vector XC::ModalAnalysis::getAccelerations(const Vector &periodos) const
     return retval;
   }
 
-//! @brief Returns the aceleraciones que corresponden a los modos
-//! calculados.
+//! @brief Returns the accelerations that correspond to the
+//! computed modes.
 XC::Vector XC::ModalAnalysis::getModalAccelerations(void) const
   { return getAccelerations(getPeriodos()); }
 

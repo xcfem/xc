@@ -173,12 +173,15 @@ void XC::EigenSOE::identityM(void)
     massMatrix= boost::numeric::ublas::identity_matrix<double>(std::min(sz1,sz2));
   }
 
-//! @brief Returns the autovector que corresponde al modo passed as parameter.
+//! @brief Return the autovector that correspond to the mode
+//! being passed as parameter.
 const XC::Vector &XC::EigenSOE::getEigenvector(int mode) const
   { return theSolver->getEigenvector(mode); }
 
-//! @brief Returns the autovector que corresponde al modo passed as parameter
-//! normalizado de modo que la componente máxima valga 1 (norma_infinito).
+//! @brief Returns the normalized autovector that correspond to the
+//! mode being passed as parameter. The vector is normalized to make
+//! the maximum of the absolute values of its components to be
+//! 1 (infinity_norm(v)= 1).
 XC::Vector XC::EigenSOE::getNormalizedEigenvector(int mode) const
   { return theSolver->getNormalizedEigenvector(mode); }
 

@@ -219,7 +219,7 @@ void XC::SetEntities::fillDownwards(SetMeshComp &mc)
         //Points.
         const size_t nv= (*i)->getNumberOfVertices();
         for(register size_t j=1;j<=nv;j++)
-          points.push_back(const_cast<Pnt *>((*i)->GetVertice(j)));
+          points.push_back(const_cast<Pnt *>((*i)->getVertex(j)));
 
         //Elements.
         TritrizPtrElem &ttz_elements= (*i)->getTtzElements();
@@ -316,7 +316,7 @@ XC::SetEntities XC::SetEntities::create_copy(const std::string &name,const Vecto
 	    const size_t nv= new_edge->getNumberOfVertices();
 	    for(size_t i= 0;i<nv;i++)
 	      {
-		const Pnt *vertice_viejo= new_edge->GetVertice(i);
+		const Pnt *vertice_viejo= new_edge->getVertex(i);
 		const std::string oldName= vertice_viejo->getName();
 		const std::string new_name= new_lines_names[oldName];
 		Pnt *new_point= retval.points.searchName(new_name);

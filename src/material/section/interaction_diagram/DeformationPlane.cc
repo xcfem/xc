@@ -184,7 +184,7 @@ Pos2d XC::DeformationPlane::getPointOnTensionedHalfPlane(void) const
         //const Vector2d v(getMaximumSlopeLineYZ().YZ2DProjection().VDir());
         const Vector2d v= fn.VDir().Normal();
         retval= p0+1000*v;
-        if(Strain(retval)<0) //Lado compresiones.
+        if(Strain(retval)<0) //Compressed zone.
           retval= p0-1000*v;
       }
     else //Degenerated neutral axis.
@@ -251,7 +251,7 @@ Semiplano2d XC::DeformationPlane::getTensionedHalfPlane(void) const
         const Pos2d p0(fn.Point());
         const Vector2d v= fn.VDir().Normal();
         tmp= p0+1000*v;
-        if(Strain(tmp)<0) //Lado compresiones.
+        if(Strain(tmp)<0) //Compressed zone.
           tmp= p0-1000*v;
       }
     else //Degenerated neutral axis.

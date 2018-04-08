@@ -53,7 +53,7 @@ const XC::Pnt *XC::LineBase::P2(void) const
   { return p2; }
 
 //! @brief Return the i-th vertex.
-const XC::Pnt *XC::LineBase::GetVertice(const size_t &i) const
+const XC::Pnt *XC::LineBase::getVertex(const size_t &i) const
   {
     if(i==1)
       return p1;
@@ -94,7 +94,7 @@ void XC::LineBase::SetVertice(const size_t &i,Pnt *p)
 void XC::LineBase::SetVertice(const size_t &i,const size_t &id_point)
   {
     SetVertice(i,BuscaPnt(id_point));
-    if(!GetVertice(i))
+    if(!getVertex(i))
       std::cerr << getClassName() << "::" << __FUNCTION__
 	        << "; point: '" << id_point << "' not found \n";
   }

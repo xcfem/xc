@@ -243,11 +243,11 @@ for e in elements:
 
 shellElems= shells.getElements
 for e in shellElems:
-  ladoMedio= e.getPerimeter(True)/4.0
+  averageSideLength= e.getPerimeter(True)/4.0
   material= e.getPhysicalProperties.getVectorMaterials[0]
   grueso= material.h
-  Ac= ladoMedio*grueso
-  u= 2*ladoMedio+grueso
+  Ac= averageSideLength*grueso
+  u= 2*averageSideLength+grueso
   espMedio= 2.0*Ac/u
   RH=Hrel*100
   h0mm=espMedio*1e3

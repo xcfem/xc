@@ -54,14 +54,14 @@ class CmbEdge: public Edge
     //! in the model, can not coincide with the orientation needed here, each
     //! pointer to line is accompanied by a boolean that indicates if the 
     //! line must be taken with its reversed direction or not.
-    class Lado: public EntCmd
+    class Side: public EntCmd
       {
         Edge *edge; //!< Pointer to line.
         bool directo; //!< true: direct (P1->P2), false: reversed (P2->P1)
       protected:
     
       public:
-        Lado(Edge *ptr= nullptr,const bool &s=true);
+        Side(Edge *ptr= nullptr,const bool &s=true);
         Edge *getEdge(void);
         const Edge *getEdge(void) const;
         void SetEdge(Edge *l);
@@ -91,17 +91,17 @@ class CmbEdge: public Edge
         Node *getNode(const size_t &i);
         const Node *getNode(const size_t &i) const;
         void genMesh(meshing_dir dm);
-        friend bool operator==(const Lado &il1,const Lado &il2);
+        friend bool operator==(const Side &il1,const Side &il2);
     
       };
   protected:
-    std::deque<Lado> lines; //!< Lines that compose the object.
+    std::deque<Side> lines; //!< Lines that compose the object.
     MatrizPos3d get_posiciones(void) const;
 
-    Lado *first_line(void);
-    const Lado *first_line(void) const;
-    Lado *last_line(void);
-    const Lado *last_line(void) const;
+    Side *first_line(void);
+    const Side *first_line(void) const;
+    Side *last_line(void);
+    const Side *last_line(void) const;
 
 
     const Pnt *first_point(void) const;
@@ -131,7 +131,7 @@ class CmbEdge: public Edge
     //! @brief Return the number of edges.
     size_t getNumberOfEdges(void) const
       { return lines.size(); }
-    inline std::deque<Lado> &getLados(void)
+    inline std::deque<Side> &getSides(void)
       { return lines; }
     void reverse(void);
     bool In(const GeomObj3d &, const double &tol= 0.0) const;
@@ -148,14 +148,14 @@ class CmbEdge: public Edge
     const Pnt *P2(void) const;
 
     size_t IndiceEdge(const Edge *l) const;
-    const Lado *GetLado(const size_t &i) const;
-    Lado *GetLado(const size_t &i);
-    const Lado *getSideByPoints(const Pnt *,const Pnt *) const;
-    Lado *getSideByPoints(const Pnt *,const Pnt *);
-    const Lado *getSideByPoints(const size_t &,const size_t &) const;
-    Lado *getSideByPoints(const size_t &,const size_t &);
+    const Side *getSide(const size_t &i) const;
+    Side *getSide(const size_t &i);
+    const Side *getSideByPoints(const Pnt *,const Pnt *) const;
+    Side *getSideByPoints(const Pnt *,const Pnt *);
+    const Side *getSideByPoints(const size_t &,const size_t &) const;
+    Side *getSideByPoints(const size_t &,const size_t &);
     std::deque<Edge *> GetEdges(void);
-    virtual const Pnt *GetVertice(const size_t &i) const;
+    virtual const Pnt *getVertex(const size_t &i) const;
     virtual void SetVertice(const size_t &,Pnt *);
     virtual ID getKPoints(void) const;
     Polilinea3d getPolyline(void) const;
@@ -163,12 +163,12 @@ class CmbEdge: public Edge
     BND3d Bnd(void) const;
     void genMesh(meshing_dir dm);
 
-    friend bool operator==(const Lado &il1,const Lado &il2);
+    friend bool operator==(const Side &il1,const Side &il2);
  
 
  };
 
-bool operator==(const CmbEdge::Lado &il1,const CmbEdge::Lado &il2);
+bool operator==(const CmbEdge::Side &il1,const CmbEdge::Side &il2);
 
 } //end of XC namespace
 
