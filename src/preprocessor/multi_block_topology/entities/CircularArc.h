@@ -46,7 +46,7 @@ class CircularArc: public LineBase
   protected:
 
     const SectorCircular3d get_sector_circular3d(void) const;
-    MatrizPos3d get_posiciones(void) const;
+    MatrizPos3d get_positions(void) const;
     bool check_points(void) const;
   public:
     CircularArc(Preprocessor *m);

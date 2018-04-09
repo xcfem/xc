@@ -122,10 +122,10 @@ const XC::Vector &XC::CmbEdge::Side::getTang(const double &s) const
   { return edge->getTang(s); }
 
 //! @brief Return the positions on the line.
-MatrizPos3d XC::CmbEdge::Side::get_posiciones(void) const
+MatrizPos3d XC::CmbEdge::Side::get_positions(void) const
   {
     if(edge)
-      return edge->get_posiciones();
+      return edge->get_positions();
     else
       return MatrizPos3d();
   }
@@ -147,7 +147,7 @@ std::vector<int> XC::CmbEdge::Side::getTagsNodesInv(void) const
       return edge->getTagsNodesDir();
   }
 
-//! @brief Return the posiciones of the nodes en sentido directo.
+//! @brief Return the positions of the nodes en sentido directo.
 MatrizPos3d XC::CmbEdge::Side::getNodePosDir(void) const
   {
     if(directo)
@@ -156,7 +156,7 @@ MatrizPos3d XC::CmbEdge::Side::getNodePosDir(void) const
       return edge->getNodePosInv();
   }
 
-//! @brief Return the posiciones of the nodes en sentido inverso.
+//! @brief Return the positions of the nodes en sentido inverso.
 MatrizPos3d XC::CmbEdge::Side::getNodePosInv(void) const
   {
     if(directo)
@@ -413,7 +413,7 @@ void XC::CmbEdge::SetNDiv(const size_t &nd)
   }
 
 //! @brief Return positions along the object.
-MatrizPos3d XC::CmbEdge::get_posiciones(void) const
+MatrizPos3d XC::CmbEdge::get_positions(void) const
   {
     const size_t npos= NDiv()+1; //Number of positions.
     MatrizPos3d retval(npos);
@@ -423,7 +423,7 @@ MatrizPos3d XC::CmbEdge::get_posiciones(void) const
         for(std::deque<Side>::const_iterator i=lines.begin();i!=lines.end();i++)
           {
             const Edge *e= (*i).getEdge();
-            MatrizPos3d tmp= e->get_posiciones();
+            MatrizPos3d tmp= e->get_positions();
             const size_t sz= tmp.size()-1; //The last one is not added.
             for(size_t i=1;i<sz;i++)
               {

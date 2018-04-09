@@ -99,8 +99,8 @@ class Edge: public EntMdlr
     virtual void create_nodes(void);
     virtual void genMesh(meshing_dir dm);
 
-    virtual MatrizPos3d get_posiciones(void) const= 0;
-    virtual MatrizPos3d get_pos_nodes(void) const;
+    virtual MatrizPos3d get_positions(void) const= 0;
+    virtual MatrizPos3d get_nodes_pos(void) const;
 
     virtual Node *getNode(const size_t &i1,const size_t &j,const size_t &k=1);
     virtual const Node *getNode(const size_t &i,const size_t &j,const size_t &k=1) const;

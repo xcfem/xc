@@ -55,7 +55,7 @@ class InteractionDiagram: public ClosedTriangleMesh
 
     void classify_trihedron(const Trihedron &tdro);
     void classify_trihedrons(void);
-    void setMatrizPosiciones(const Matrix &);
+    void setPositionsMatrix(const Matrix &);
     GeomObj::list_Pos3d get_intersection(const Pos3d &p) const;
   public:
     InteractionDiagram(void);

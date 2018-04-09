@@ -173,7 +173,7 @@ BND3d XC::Line::Bnd(void) const
   }
 
 //! @brief Returns ndiv+1 positions equally spaced along the line.
-MatrizPos3d XC::Line::get_posiciones(void) const
+MatrizPos3d XC::Line::get_positions(void) const
   {
     MatrizPos3d retval;
     if(check_points())

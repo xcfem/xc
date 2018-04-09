@@ -79,7 +79,7 @@ class_<XC::FiberDeque, bases<EntCmd,fiber_ptrs_dq>, boost::noncopyable >("FiberD
   .def("getYRelativa",&XC::FiberDeque::getYRelativa)
   .def("getZRelativa",&XC::FiberDeque::getZRelativa)
 
-//.def("getPosiciones",&XC::FiberDeque::getPosiciones)
+//.def("getPositions",&XC::FiberDeque::getPositions)
 
   .def("hayMomento",&XC::FiberDeque::hayMomento)
   .def("getResultant",&XC::FiberDeque::Resultante)

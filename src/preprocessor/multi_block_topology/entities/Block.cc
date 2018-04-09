@@ -326,7 +326,7 @@ void XC::Block::create_nodes_caras(void)
 //! - Edge 10 has indices (ncapas,nfil,k=1..ncol) 
 //! - Edge 11 has indices (ncapas,j=1..nfil,ncol) 
 //! - Edge 12 has indices (ncapas,1,k=1..ncol) 
-TritrizPos3d XC::Block::get_posiciones(void) const
+TritrizPos3d XC::Block::get_positions(void) const
   {
     const size_t ndiv_12= NDivI();
     const size_t ndiv_23= NDivJ();
@@ -378,7 +378,7 @@ void XC::Block::create_nodes(void)
         const size_t filas= NDivJ()+1;
         const size_t cols= NDivI()+1;
         ttzNodes = TritrizPtrNod(capas,filas,cols); //Pointers to node.
-        TritrizPos3d pos_nodes= get_posiciones(); //Posiciones of the nodes.
+        TritrizPos3d node_pos= get_positions(); //Node positions.
 
         //Vertices.
 	ttzNodes(1,1,1)= getVertex(1)->getNode();
@@ -430,7 +430,7 @@ void XC::Block::create_nodes(void)
                 ttzNodes(1,J,K)= base.getNode(i,j);
               else
                 ttzNodes(1,J,K)= base.getNode(j,i);
-              d2= dist2(ttzNodes(1,J,K)->getInitialPosition3d(),pos_nodes(1,J,K));
+              d2= dist2(ttzNodes(1,J,K)->getInitialPosition3d(),node_pos(1,J,K));
               if(d2>1e-4)
 		std::cerr << "Block::create_nodes; error while linking node: ("
                           << i << "," << j << ") in face." << std::endl;
@@ -465,7 +465,7 @@ void XC::Block::create_nodes(void)
         for(size_t k= 2;k<capas;k++) //Capas interiores.
           for(size_t j= 2;j<filas;j++) //Filas interiores.
             for(size_t i= 2;i<cols;i++) //Columnas interiores.
-              create_node(pos_nodes(i,j,k),i,j,k);
+              create_node(node_pos(i,j,k),i,j,k);
       }
     else
       if(verbosity>2)

@@ -46,7 +46,7 @@ class Block: public Body
     //XXX void add_points(const std::vector<size_t> &);
     void add_caras(const std::vector<size_t> &);
     void create_nodes_caras(void);
-    TritrizPos3d get_posiciones(void) const;
+    TritrizPos3d get_positions(void) const;
 
     virtual BodyFace *getFace(const size_t &i);
   public:

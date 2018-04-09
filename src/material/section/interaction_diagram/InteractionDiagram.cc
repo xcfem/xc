@@ -304,9 +304,9 @@ void XC::InteractionDiagram::Print(std::ostream &os) const
 	      << "; not implemented." << std::endl;
   }
 
-void XC::InteractionDiagram::setMatrizPosiciones(const Matrix &m)
+void XC::InteractionDiagram::setPositionsMatrix(const Matrix &m)
   {
-    ClosedTriangleMesh::setMatrizPosiciones(m);
+    ClosedTriangleMesh::setPositionsMatrix(m);
     classify_trihedrons();   
   }
 

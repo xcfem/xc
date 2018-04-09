@@ -345,7 +345,7 @@ void XC::ClosedTriangleMesh::getPositionsMatrix(Matrix &m)
 
 //! @brief Create the trihedrons that define the diagram from the matrix
 //! that contains the points that define each trihedron.
-void XC::ClosedTriangleMesh::setMatrizPosiciones(const Matrix &m)
+void XC::ClosedTriangleMesh::setPositionsMatrix(const Matrix &m)
   {
     const int nfilas= m.noRows();
     assert(m.noCols()==12);
@@ -379,7 +379,7 @@ void XC::ClosedTriangleMesh::read(std::ifstream &is)
     is.read((char *) &rMin,sizeof rMin); 
     Matrix m;
     m.read(is);
-    setMatrizPosiciones(m);
+    setPositionsMatrix(m);
   }
 
 //! @brief Sends object members through the channel being passed as parameter.
@@ -400,7 +400,7 @@ int XC::ClosedTriangleMesh::recvData(const CommParameters &cp)
     res+= cp.receiveDoubles(tol,rMax,rMin,getDbTagData(),CommMetaData(1));
     Matrix m;
     res+= cp.receiveMatrix(m,getDbTagData(),CommMetaData(2));
-    setMatrizPosiciones(m);
+    setPositionsMatrix(m);
     return res;
   }
 

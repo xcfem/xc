@@ -327,12 +327,12 @@ std::vector<int> XC::getNodeIdsQuad4N(const XC::TritrizPtrNod::const_ref_capa_i_
 //         std::swap(retval[2],retval[3]);
 //       }
 
-    std::list<Pos3d> posiciones;
-    posiciones.push_back(p1);
-    posiciones.push_back(p2);
-    posiciones.push_back(p3);
-    posiciones.push_back(p4);
-    Poligono3d tmp(posiciones.begin(),posiciones.end());
+    std::list<Pos3d> positions;
+    positions.push_back(p1);
+    positions.push_back(p2);
+    positions.push_back(p3);
+    positions.push_back(p4);
+    Poligono3d tmp(positions.begin(),positions.end());
     const double area= tmp.Area();
     if(area<1e-3)
       {

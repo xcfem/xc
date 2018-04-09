@@ -41,7 +41,7 @@ class DividedLine: public Line
     std::vector<double> longs; //!< Lenght of the line segments.
   protected:
 
-    MatrizPos3d get_posiciones(void) const;
+    MatrizPos3d get_positions(void) const;
   public:
     DividedLine(Preprocessor *m,const size_t &ndiv= 4);
     DividedLine(const std::string &nombre= "",Preprocessor *m= nullptr,const size_t &ndiv= 4);

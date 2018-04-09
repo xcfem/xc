@@ -107,7 +107,7 @@ class FiberDeque : public EntCmd, public std::deque<Fiber *>
     inline double getZRelativa(const double &z) const
       { return z-zCDG; }
 
-    GeomObj::list_Pos2d getPosiciones(void) const;
+    GeomObj::list_Pos2d getPositions(void) const;
 
     bool hayMomento(const double &tol=1e-4) const;
     double Resultante(void) const;

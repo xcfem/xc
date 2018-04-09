@@ -191,7 +191,7 @@ double XC::FiberDeque::GetZMax(void) const
   }
 
 //! @brief Returns fibers positions.
-GeomObj::list_Pos2d XC::FiberDeque::getPosiciones(void) const
+GeomObj::list_Pos2d XC::FiberDeque::getPositions(void) const
   {
     GeomObj::list_Pos2d retval;
     if(!empty())
@@ -1411,19 +1411,19 @@ double XC::FiberDeque::getFibersEffectiveConcreteArea(void) const
 //! @brief Computes the cover of the fibers.
 void XC::FiberDeque::computeCovers(const GeomSection &g) const
   {
-    const GeomObj::list_Pos2d posiciones= getPosiciones();
+    const GeomObj::list_Pos2d positions= getPositions();
     const Poligono2d contour= g.getRegionsContour();
-    recubs= getRecubrimientos(posiciones,contour);
+    recubs= getRecubrimientos(positions,contour);
     const size_t sz= recubs.size();
     for(size_t i= 0;i<sz;i++)
       if(recubs[i]<0)
-        std::clog << "Warning! position: " << posiciones[i]
+        std::clog << "Warning! position: " << positions[i]
                   << " is outside the section." << std::endl;
   }
 
 //! @brief Computes the distance from each fiber to the nearest one.
 void XC::FiberDeque::computeSpacement(void) const
-  { seps= getPosiciones().GetSeparaciones(); }
+  { seps= getPositions().GetSeparaciones(); }
 
 //! @brief Return the value of the concrete cover for the i-th fiber.
 const double &XC::FiberDeque::getFiberCover(const size_t &i) const

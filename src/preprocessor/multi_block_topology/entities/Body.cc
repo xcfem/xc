@@ -142,7 +142,7 @@ XC::Node *XC::Body::BodyFace::getNode(const size_t &i,const size_t &j)
   }
 
 //! @brief Return the positions for the nodes on a face.
-MatrizPos3d XC::Body::BodyFace::get_posiciones(void) const
+MatrizPos3d XC::Body::BodyFace::get_positions(void) const
   {
     if(!surface)
       {
