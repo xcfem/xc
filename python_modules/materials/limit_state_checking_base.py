@@ -35,10 +35,75 @@ class LimitStateControllerBase(object):
         self.analysisToPerform= predefined_solutions.simple_static_linear
         self.preprocessor=None   
 
+    def extractFiberData(self, scc, concrete, reinfSteel):
+        ''' Extract basic parameters from the fiber model of the section
+
+         :param scc: fiber model of the section.
+         :param concrete: parameters to modelize concrete.
+         :param reinfSteel: parameters to modelize reinforcement steel.
+        '''
+        self.concreteMatTag= concrete.matTagD
+        self.fckH= abs(concrete.fck)
+        self.fcdH= abs(concrete.fcd())
+        self.fctdH= concrete.fctd()
+        self.gammaC= concrete.gmmC
+        self.reinfSteelMaterialTag= reinfSteel.matTagD
+        self.fydS= reinfSteel.fyd()
+        if(not scc.hasProp("rcSets")):
+              scc.setProp("rcSets", fiber_sets.fiberSectionSetupRC3Sets(scc,self.concreteMatTag,self.concreteFibersSetName,self.reinfSteelMaterialTag,self.rebarFibersSetName))
+        return scc.getProp("rcSets")
+
     def check(self,elements,nmbComb):
         '''Crack control.'''
         lmsg.error('limit state check not implemented.')
 
+
+
+class fibSectLSProperties(object):
+    '''Class that sets up basic properties associatted to a fiber section
+    in order to be used in the checking of different limit states.
+    '''
+    def __init__(self,sct):
+        self.sct=sct
+        self.sctProp=sct.getProp("datosSecc")
+        self.concrTagK=self.sctProp.concrType.matTagK
+        self.rsteelTagK=self.sctProp.reinfSteelType.matTagK
+        self.concrName=str(self.sctProp.concrType)
+        self.rsteelName=str(self.sctProp.reinfSteelType)
+        self.cover=0 #init  concrete cover
+        self.fiEqu=0 #init equivalent diameter
+        
+    def setupSets(self):
+        self.setsRC= fiber_sets.fiberSectionSetupRCSets(scc=self.sct,concrMatTag=self.concrTagK,concrSetName="concrSetFb",reinfMatTag=self.rsteelTagK,reinfSetName="reinfSetFb")
+        self.tensSetFb=self.setsRC.reselTensionFibers(scc=self.sct,tensionFibersSetName='tensSetFb')
+        
+    def setupStrghCrackDist(self):
+        '''Set some parameters that are going to be used to calculate the 
+        tension stiffening properties of concrete and the cracking distance. 
+        '''
+        self.setupSets()
+        self.x=self.sct.getNeutralAxisDepth()
+        self.d=self.sct.getEffectiveDepth()
+        self.h=self.sct.getLeverArm()
+        self.As=self.setsRC.tensionFibers.getArea(1.0)
+        self.eps1=self.setsRC.concrFibers.fSet.getStrainMax()
+        self.eps2= max(self.setsRC.concrFibers.fSet.getStrainMin(),0.0)
+        self.sct.computeSpacement('tensSetFb')
+        self.spacing= self.tensSetFb.getAverageDistanceBetweenFibers()
+        nmbFi=self.tensSetFb.getNumFibers()
+        if nmbFi>0:
+            self.fiEqu=math.sqrt(4/math.pi*self.As/nmbFi)
+        if len(self.tensSetFb) > 0:
+            self.cover=self.calcCover(self.tensSetFb,'tensSetFb')
+
+    def calcCover(self,setSteelFibers,setSteelFibersName):
+        '''Return the mean concrete cover in the set of reinforcing steel 
+        fibers setSteelFibers
+        '''
+        self.sct.computeCovers(setSteelFibersName)
+        covers = [setSteelFibers.getFiberCover(i) for i in range(len(setSteelFibers))]
+        return sum(covers) / float(len(covers))
+        
 class TensionedRebarsBasicProperties(object):
     '''Basic properties of tensioned rebars (used in shear checking).
 
@@ -80,6 +145,7 @@ class TensionedRebarsProperties(TensionedRebarsBasicProperties):
         self.maxDiameter= 2*math.sqrt(tensionedReinforcement[self.iAreaMaxima].getArea()/math.pi) 
         self.E= tensionedReinforcement[0].getMaterial().getInitialTangent()
 
+ 
     def printParams(self):
         print "Number of tensioned bars: ",self.number,"\n"
         print "Spacement of tensioned bars; s= ",self.spacing," m\n"
@@ -104,4 +170,4 @@ class CrackControlBaseParameters(LimitStateControllerBase):
         print "Clase esfuerzo: ",self.claseEsfuerzo,"\n"
         self.tensionedRebars.printParams()
 
-
+        

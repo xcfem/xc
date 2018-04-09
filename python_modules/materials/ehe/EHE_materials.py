@@ -204,6 +204,7 @@ HA100= EHEConcrete(nmbConcrete="HA100",fck=-100e6,gammaC=1.5)
 HP45= EHEConcrete(nmbConcrete="HP45",fck=-55e6,gammaC=1.5)
 HP50= EHEConcrete(nmbConcrete="HP50",fck=-50e6,gammaC=1.5)
 
+concrOfName={"HA20":HA20,"HA25":HA25,"HA30":HA30,"HA35":HA35,"HA40":HA40,"HA45":HA45,"HA50":HA50,"HA55":HA55,"HA60":HA60,"HA70":HA70,"HA80":HA80,"HA90":HA90,"HA100":HA100,"HP45":HP45,"HP50":HP50}
 
 '''
 Factor that multiplies the characteristic value of concrete compressive strength from its age in days for normal hardening concrete (table 30.4.b EHE)
@@ -238,6 +239,7 @@ factorRTraccJDiasNormal= scipy.interpolate.interp1d(x,y)
 B400S= concrete_base.ReinforcingSteel(steelName="B400S", fyk=400e6, emax=0.08,gammaS=1.15)
 B500S= concrete_base.ReinforcingSteel(steelName="B500S", fyk=500e6, emax=0.05,gammaS=1.15)
 
+steelOfName={"B400S":B400S,"B500S":B500S}
 # Bar areas in square meters.
 Fi6=0.28e-4
 Fi8=0.50e-4
