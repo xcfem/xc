@@ -737,23 +737,6 @@ class ShearController(lscb.LimitStateControllerBase):
     for e in elements:
       e.setProp(self.limitStateLabel,cv.RCShearControlVars())
 
-  def extractFiberData(self, scc, concrete, reinfSteel):
-    ''' Extract basic parameters from the fiber model of the section
-
-     :param scc: fiber model of the section.
-     :param concrete: parameters to modelize concrete.
-     :param reinfSteel: parameters to modelize reinforcement steel.
-    '''
-    self.concreteMatTag= concrete.matTagD
-    self.fckH= abs(concrete.fck)
-    self.fcdH= abs(concrete.fcd())
-    self.fctdH= concrete.fctd()
-    self.gammaC= concrete.gmmC
-    self.reinfSteelMaterialTag= reinfSteel.matTagD
-    self.fydS= reinfSteel.fyd()
-    if(not scc.hasProp("rcSets")):
-      scc.setProp("rcSets", fiber_sets.fiberSectionSetupRC3Sets(scc,self.concreteMatTag,self.concreteFibersSetName,self.reinfSteelMaterialTag,self.rebarFibersSetName))
-    return scc.getProp("rcSets")
 
   def calcVuEHE08NoAt(self, scc, concrete, reinfSteel):
     ''' Compute the shear strength at failure without shear reinforcement
@@ -953,12 +936,12 @@ class ShearController(lscb.LimitStateControllerBase):
 
 class CrackStraightController(lscb.LimitStateControllerBase):
   '''Definition of variables involved in the verification of the cracking
-  serviceability limit state according to EHE-08
+  serviceability limit state according to EHE-08 when considering a concrete
+  stress-strain diagram that takes account of the effects of tension stiffening.
   '''
   def __init__(self,limitStateLabel):
     super(CrackStraightController,self).__init__(limitStateLabel,fakeSection= False)
-    self.concreteFibersSetName= "concrete" #Name of the concrete fibers set.
-    self.rebarFibersSetName= "reinforcement" #Name of the rebar fibers set.
+    self.beta=1.7    #if only indirect actions beta must be =1.3
 
   def initControlVars(self,elements):
     ''' Initialize control variables over elements.
@@ -967,6 +950,34 @@ class CrackStraightController(lscb.LimitStateControllerBase):
     '''
     for e in elements:
       e.setProp(self.limitStateLabel,cv.RCCrackStraightControlVars())
+
+  def EHE_hceff(self,width,h,x):
+    '''Return the maximum height to be considered in the calculation of the 
+    concrete effective area in tension.
+    
+    :param width: section width
+    :param h: lever arm
+    :param x: depth of the neutral fiber.
+
+    '''
+    if width>2*h:   #slab, flat beam
+      hceff=min(abs(h+x),h/4.)
+    else:
+      hceff=min(abs(h+x),h/2.)
+    return hceff
+
+  def EHE_k1(self,eps1,eps2):
+    '''Return the coefficient k1 involved in the calculation of the mean 
+    crack distance according to EHE. This coefficient represents the effect of 
+    the tension diagram in the section.
+
+    :param eps1: maximum deformation calculated in the section at the limits 
+           of the tension zone
+    :param eps2: minimum deformation calculated in the section at the limits 
+           of the tension zone
+    '''
+    k1= (eps1+eps2)/(8*eps1)
+    return k1
 
   def check(self,elements,nmbComb):
     ''' For each element in the set 'elememts' passed as first parameter and 
@@ -986,105 +997,75 @@ class CrackStraightController(lscb.LimitStateControllerBase):
     for e in elements:
       Aceff=0  #init. value
       R=e.getResistingForce()
-      ####Borrar
+      sct=e.getSection()
+      sctCrkProp=lscb.fibSectLSProperties(sct)
+      sctCrkProp.setupStrghCrackDist()
+      hceff=self.EHE_hceff(sct.getAnchoMecanico(),sctCrkProp.h,sctCrkProp.x)
+      Acgross=sct.getGrossEffectiveConcreteArea(hceff)
+      Aceff=sct.getNetEffectiveConcreteArea(hceff,"tensSetFb",15.0)
+      concrete=EHE_materials.concrOfName[sctCrkProp.concrName]
+      rfSteel=EHE_materials.steelOfName[sctCrkProp.rsteelName]
+      k1=self.EHE_k1(sctCrkProp.eps1,sctCrkProp.eps2)
+      
+      '''
+      print 'element= ', e.tag
       print 'Resisting force: [', R[0] , ',', R[1] , ',', R[2] , ',', R[3] , ',', R[4] , ',', R[5], ',',R[6],']'
-      ###
-      scc=e.getSection()
-      x= scc.getNeutralAxisDepth()
-      d=scc.getEffectiveDepth()
-      h=scc.getLeverArm()
-      hceff=min(2.5*abs(h-d),abs(h+x)/3.0,abs(h)/2.0)
-      sccProp=scc.getProp("datosSecc")
-      concrTag=sccProp.concrType.matTagK
-      rsteelTag=sccProp.reinfSteelType.matTagK
-      ####Borrar
-     # print 'mat=',concr
-      # print 'fpc= ',concr.fpc
-      ###
-      setsRC= fiber_sets.fiberSectionSetupRCSets(scc=scc,concrMatTag=concrTag,concrSetName="concrSetFb",reinfMatTag=rsteelTag,reinfSetName="reinfSetFb")
-      setsRC.reselTensionFibers(scc=scc,tensionFibersSetName='tensSetFb')
-      ####Borrar
-#      print 'AsTens=' , setTfib.getArea(1.0), 'nFibers= ', setTfib.getNumFibers()
-      # setCfib=setsRC.concrFibers.fSet
-      # print 'Ac= ', setCfib.getArea(1), 'nFibers= ', setCfib.getNumFibers()
-      # setRfib=setsRC.reinfFibers.fSet
-      # print 'As= ', setRfib.getArea(1), 'nFibers= ', setRfib.getNumFibers()
-      ###
-#      Aceff=scc.getNetEffectiveConcreteArea(hceff,"reinfSetFb",15.0)
-      Acgross=scc.getGrossEffectiveConcreteArea(hceff)
-      Aceff=scc.getNetEffectiveConcreteArea(hceff,"tensSetFb",15.0)
-      ###Borrar
-      # fib=scc.getFibers()
-      # if fib.enCompresion():
-      #   print 'compression'
-      # elif fib.enTraccion():
-      #   print 'tension'
-      # elif fib.enFlexion():
-      #   print 'bending'
-      ###
-      print 'x= ', x, 'd= ',d, 'h= ', h
+      print 'N= ', sct.getStressResultantComponent("N")
+      print 'My= ',sct.getStressResultantComponent("My")
+      print 'Mz= ',sct.getStressResultantComponent("Mz")
       print 'hceff= ',hceff
       print 'Acgross= ',Acgross
       print 'Aceff= ',Aceff
-      mats=self.preprocessor.getMaterialLoader
-      concrete=mats.getMaterial(mats.getName(concrTag))
-      rfSteel=mats.getMaterial(mats.getName(rsteelTag))
-      As=setsRC.tensionFibers.getArea(1.0)
-      print 'As= ', As
-      ro_s_eff=As/Aceff      #effective ratio of reinforcement
-      print 'effective ratio of reinforcement=', ro_s_eff
-      #Parameters for tension stiffening of concrete
-      paramTS= concrete_base.paramTensStiffness(concrMat=concrete,reinfMat=rfSteel,reinfRatio=ro_s_eff,diagType='K')
-      concrete.tensionStiffparam=paramTS #parameters for tension stiffening
-                                         #are assigned to concrete
-      ftdiag=concrete.tensionStiffparam.pointOnsetCracking()['ft']      #stress at the adopted point for concrete onset cracking
-      Etsdiag=abs(concrete.tensionStiffparam.regresLine()['slope'])
-      print 'ft=',ftdiag*1e-6
-      print 'Ets0=', Etsdiag*1e-6
-
-      fiber_sets.redefTensStiffConcr(setOfTenStffConcrFibSect=setsRC.concrFibers,ft=ftdiag,Ets=Etsdiag)
-
+      print 'concrete=',concrete
+      print 'eps1=',sctCrkProp.eps1
+      print 'eps2=',sctCrkProp.eps2
+      print 'As= ', sctCrkProp.As
+      print 'cover= ',sctCrkProp.cover
+      print 'spacing= ',sctCrkProp.spacing
+      print 'fiEqu= ',sctCrkProp.fiEqu
+      rfset=sct.getFiberSets()["reinfSetFb"]
+      eps_sm=rfset.getStrainMax()
+      print 'max. strain= ', eps_sm
       '''
-      if Aceff >0:
-        # mats=self.preprocessor.getMaterialLoader
-        # concrete=mats.getMaterial(mats.getName(concrTag))
-        # rfSteel=mats.getMaterial(mats.getName(rsteelTag))
-        concrete=sccProp.concrType
-        rfSteel=sccProp.reinfSteelType
-        AsTens=setTfib.getArea(1.0)
-        ro_s_eff=AsTens/Aceff
+      if Aceff<=0:
+        s_rmax=0
+      else:
+        ro_s_eff=sctCrkProp.As/Aceff      #effective ratio of reinforcement
+        sm=2*sctCrkProp.cover+0.2*sctCrkProp.spacing+0.4*k1*sctCrkProp.fiEqu/ro_s_eff
+        s_rmax=self.beta*sm
+        #Parameters for tension stiffening of concrete
         paramTS= concrete_base.paramTensStiffness(concrMat=concrete,reinfMat=rfSteel,reinfRatio=ro_s_eff,diagType='K')
-        concrete.tensionStiffparam=paramTS
+        concrete.tensionStiffparam=paramTS #parameters for tension stiffening
+                                         #are assigned to concrete
         ftdiag=concrete.tensionStiffparam.pointOnsetCracking()['ft']      #stress at the adopted point for concrete onset cracking
         Etsdiag=abs(concrete.tensionStiffparam.regresLine()['slope'])
-        fiber_sets.redefTensStiffConcr(setOfTenStffConcrFibSect=setsRC.concrFibers,ft=ftdiag,Ets=Etsdiag)
-        self.preprocessor.getDomain.revertToStart()
-        predefined_solutions.resuelveComb(self.preprocessor,nmbComb,self.analysis,1)
-        x= scc.getNeutralAxisDepth()
-        d=scc.getEffectiveDepth()
-        h=scc.getLeverArm()
-        print 'Step 2: x= ', x, 'd= ',d, 'h= ', h
+        '''
+        print 'effective ratio of reinforcement=', ro_s_eff
+        print 'ft=',ftdiag*1e-6
+        print 'Ets0=', Etsdiag*1e-6
+        '''
+        fiber_sets.redefTensStiffConcr(setOfTenStffConcrFibSect=sctCrkProp.setsRC.concrFibers,ft=ftdiag,Ets=Etsdiag)
+      e.setProp('ResF',R)   #vector resisting force
+      e.setProp('s_rmax',s_rmax)  #maximum crack distance
+    self.preprocessor.getDomain.revertToStart()
+    predefined_solutions.resuelveComb(self.preprocessor,nmbComb,self.analysis,1)
+    for e in elements:
+      sct=e.getSection()
+      rfset=sct.getFiberSets()["reinfSetFb"]
+      eps_sm=rfset.getStrainMax()
+      srmax=e.getProp("s_rmax")
+      wk=srmax*eps_sm
+      if (wk>e.getProp(self.limitStateLabel).wk):
+#        e.setProp(self.limitStateLabel,cv.RCCrackStraightControlVars(idSection,nmbComb,NTmp,MyTmp,MzTmp,srmax,eps_sm,wk))
+        R=e.getProp('ResF')
+        e.setProp(self.limitStateLabel,cv.RCCrackStraightControlVars(idSection=e.getProp("idSection"),combName=nmbComb,N=-R[0],My=-R[4],Mz=-R[5],s_rmax=srmax,eps_sm=eps_sm,wk=wk))
       '''
-
-  def extractFiberData(self, scc, concrete, reinfSteel):
-    ''' Extract basic parameters from the fiber model of the section
-
-     :param scc: fiber model of the section.
-     :param concrete: parameters to modelize concrete.
-     :param reinfSteel: parameters to modelize reinforcement steel.
-    '''
-    self.concreteMatTag= concrete.matTagD
-    self.fckH= abs(concrete.fck)
-    self.fcdH= abs(concrete.fcd())
-    self.fctdH= concrete.fctd()
-    self.gammaC= concrete.gmmC
-    self.reinfSteelMaterialTag= reinfSteel.matTagD
-    self.fydS= reinfSteel.fyd()
-
-    print 'extractFiberData scc=', scc
-    if(not scc.hasProp("rcSets")):
-      scc.setProp("rcSets", fiber_sets.fiberSectionSetupRC3Sets(scc,self.concreteMatTag,self.concreteFibersSetName,self.reinfSteelMaterialTag,self.rebarFibersSetName))
-    return scc.getProp("rcSets")
+      print 'element= ', e.tag
+      print 'max. strain= ', eps_sm
+      print 'crack widths: ',wk*1e3, ' mm'
+      R=e.getResistingForce()
+      print 'Resisting force: [', R[0] , ',', R[1] , ',', R[2] , ',', R[3] , ',', R[4] , ',', R[5], ',',R[6],']'
+      '''
       
 class CrackControl(lscb.CrackControlBaseParameters):
   '''

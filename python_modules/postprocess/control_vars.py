@@ -419,9 +419,42 @@ class CrackControlVars(ControlVarsBase):
     retval+= ', crackControlBaseVarsNeg= ' + self.crackControlVarsNeg.getStrConstructor(factor)
     return retval
 
-class RCCrackStraightControlVars():
-    def __init__(self,wk=0.0):
-      self.wk=wk
+class RCCrackStraightControlVars(NMyMz):
+  '''Control variables for cracking serviacebility limit state verification
+  when when considering a concrete stress-strain diagram that takes account of 
+  the effects of tension stiffening.
+
+  :ivar idSection:section identifier
+  :ivar combName: name of the load combinations to deal with
+  :ivar N:        axial force
+  :ivar My:       bending moment about Y axis
+  :ivar Mz:       bending moment about Z axis
+  :ivar s_rmax:   maximum distance between cracks (otherwise a new crack 
+                  could occur in-between
+  :ivar eps_sm:   mean strain in the reinforcement when taking into account 
+                  the effects of tension stiffening
+  :ivar wk:       crack width
+  '''
+  def __init__(self,idSection=-1,combName= 'nil',CF=-1,N= 0.0, My= 0.0, Mz= 0.0, s_rmax=0.0,eps_sm=0.0,wk=0.0):
+    super(RCCrackStraightControlVars,self).__init__(combName,N,My,Mz)
+    self.idSection=idSection
+    self.s_rmax=s_rmax
+    self.eps_sm= eps_sm
+    self.wk=wk
+    
+  def getLaTeXFields(self,factor= 1e-3):
+    ''' Returns a string with the intermediate fields of the LaTeX string.
+
+    :param factor: factor for units (default 1e-3 -> kN)'''
+    retval= super(NMyMz,self).getLaTeXFields(factor)+' & '+fmt.Esf.format(self.s_rmax)+' & '+fmt.Esf.format(self.eps_sm)+' & '+fmt.Esf.format(self.wk)
+    return retval
+  def getStrArguments(self,factor):
+    '''Returns a string for a 'copy' (kind of) constructor.'''
+    retval= super(RCCrackStraightControlVars,self).getStrArguments(factor)
+    retval+= ',s_rmax= ' + str(self.s_rmax)
+    retval+= ',eps_sm= ' + str(self.eps_sm)
+    retval+= ',wk= ' + str(self.wk)
+    return retval
   
 class FatigueControlBaseVars(NMyMz):
   '''Biaxial bending. Fatigue limit state variables.
