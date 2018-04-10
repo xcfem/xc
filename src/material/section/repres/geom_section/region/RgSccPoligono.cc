@@ -29,7 +29,7 @@
 #include <material/section/repres/geom_section/region/RgSccPoligono.h>
 #include <material/section/repres/cell/QuadCell.h>
 
-#include "xc_basic/src/texto/cadena_carac.h"
+#include "xc_basic/src/text/text_string.h"
 #include "xc_utils/src/geom/d2/Rejilla2d.h"
 #include "xc_utils/src/geom/d2/poligonos2d/Poligono2d.h"
 #include <utility/matrix/Matrix.h>

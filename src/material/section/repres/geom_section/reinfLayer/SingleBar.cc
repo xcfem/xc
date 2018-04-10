@@ -32,7 +32,7 @@
 #include <material/section/repres/geom_section/reinfLayer/SingleBar.h>
 #include <material/section/repres/geom_section/reinfBar/ReinfBar.h>
 
-#include "xc_basic/src/texto/cadena_carac.h"
+#include "xc_basic/src/text/text_string.h"
 
 
 //! @brief Constructor.

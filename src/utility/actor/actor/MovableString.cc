@@ -31,7 +31,7 @@
 #include "utility/actor/objectBroker/FEM_ObjectBroker.h"
 #include "utility/matrix/ID.h"
 
-//! @brief Envía la cadena de caracteres through the channel being passed as parameter.
+//! @brief Envía la text string through the channel being passed as parameter.
 const XC::ID &stringToId(const std::string &str)
   {
     static XC::ID retval;
@@ -42,7 +42,7 @@ const XC::ID &stringToId(const std::string &str)
     return retval;
   }
 
-//! @brief Recibe la cadena de caracteres through the channel being passed as parameter.
+//! @brief Recibe la text string through the channel being passed as parameter.
 const std::string &idToString(const XC::ID &id)
   {
     static std::string retval;
@@ -62,7 +62,7 @@ XC::MovableString::MovableString(const std::string &v)
   :MovableID(1) 
   { setString(v); }
 
-//! @brief Asigna la cadena de caracteres.
+//! @brief Asigna la text string.
 void XC::MovableString::setString(const std::string &v)
   { setID(stringToId(v)); }
 

@@ -311,7 +311,7 @@ int XC::CommParameters::receiveMatrices(std::vector<Matrix> &matrices,DbTagData 
     return res;
   }
 
-//! @brief Envía la cadena de caracteres through the channel being passed as parameter.
+//! @brief Envía la text string through the channel being passed as parameter.
 //! @param meta: index where the object dbTag is stored.
 int XC::CommParameters::sendString(const std::string &str,DbTagData &dt, const CommMetaData &meta)
   {
@@ -319,7 +319,7 @@ int XC::CommParameters::sendString(const std::string &str,DbTagData &dt, const C
     return sendMovable(mv,dt,meta);
   }
 
-//! @brief Receives la cadena de caracteres through the channel being passed as parameter.
+//! @brief Receives la text string through the channel being passed as parameter.
 //! @param meta: index where the object dbTag is stored.
 int XC::CommParameters::receiveString(std::string &str,DbTagData &dt, const CommMetaData &meta) const
   {

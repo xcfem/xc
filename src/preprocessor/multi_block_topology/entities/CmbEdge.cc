@@ -36,7 +36,7 @@
 #include "xc_utils/src/geom/d1/Polilinea3d.h"
 
 #include "xc_utils/src/geom/pos_vec/MatrizPos3d.h"
-#include "xc_basic/src/texto/cadena_carac.h"
+#include "xc_basic/src/text/text_string.h"
 #include "domain/mesh/node/Node.h"
 #include "domain/mesh/element/Element.h"
 

@@ -71,7 +71,7 @@
 #include <cstdlib>
 #include <cstdio>
 #include <deque>
-#include "xc_basic/src/texto/cadena_carac.h"
+#include "xc_basic/src/text/text_string.h"
 #include "boost/lexical_cast.hpp"
 
 //! @brief store copy of dof's to be recorder, verifying dof are valid, i.e. >= 0

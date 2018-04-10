@@ -44,8 +44,8 @@ class Block: public Body
   protected:
     void inserta(const size_t &);
     //XXX void add_points(const std::vector<size_t> &);
-    void add_caras(const std::vector<size_t> &);
-    void create_nodes_caras(void);
+    void append_faces(const std::vector<size_t> &);
+    void create_face_nodes(void);
     TritrizPos3d get_positions(void) const;
 
     virtual BodyFace *getFace(const size_t &i);

@@ -33,7 +33,7 @@
 #include <material/section/repres/geom_section/region/RgSccQuad.h>
 #include <material/section/repres/cell/QuadCell.h>
 
-#include "xc_basic/src/texto/cadena_carac.h"
+#include "xc_basic/src/text/text_string.h"
 #include "xc_utils/src/geom/d1/Segmento2d.h"
 #include "xc_utils/src/geom/d2/Rejilla2d.h"
 #include "xc_utils/src/geom/d2/poligonos2d/Cuadrilatero2d.h"

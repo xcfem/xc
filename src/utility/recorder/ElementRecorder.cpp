@@ -69,7 +69,7 @@
 #include <utility/actor/message/Message.h>
 #include <utility/actor/channel/Channel.h>
 #include <utility/actor/objectBroker/FEM_ObjectBroker.h>
-#include "xc_basic/src/texto/cadena_carac.h"
+#include "xc_basic/src/text/text_string.h"
 #include "boost/lexical_cast.hpp"
 
 XC::ElementRecorder::ElementRecorder()
