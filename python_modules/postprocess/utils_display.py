@@ -64,8 +64,12 @@ class FigureBase(object):
   def getFileName(self):
     return su.slugify(self.partLabel+self.limitStateLabel+self.attributeName)
   def insertIntoLatex(self, fichLatexFigs, fichLatexList, fichFig, labelText):
-    #fichLatexFigs: fichero latex donde insertar el gráfico
-    #fichFig: nombre del fichero que contiene el gráfico (sin extensión y sin path)
+    '''
+    
+    :param fichLatexFigs: latex file to insert graphic into
+    :param fichFig: name of the file that contains the graphic
+                    (complete path without extension).
+    '''
     fichLatexFigs.write('\\begin{figure}\n' )
     fichLatexFigs.write('\\centering\n' )
     fichLatexFigs.write('\\includegraphics[width=' + self.figSize + ']{' + fichFig + '}\n' )
@@ -147,8 +151,12 @@ class TakePhotos(object):
     self.fichLatexList= None #Latex file with figures list.
 
   def insertFigureLatex(self, figDef, conta, fichFig,labelText):
-    #fichLatexFigs: fichero latex donde insertar el gráfico
-    #fichFig: nombre del fichero que contiene el gráfico (sin extensión y con path completo)
+    '''
+    
+    :param fichLatexFigs: latex file to insert graphic into
+    :param fichFig: name of the file that contains the graphic
+                    (complete path without extension).
+    '''
     figDef.insertIntoLatex(self.fichLatexFigs,self.fichLatexList,fichFig,labelText)
     if((conta>0) & (conta % 10==0)):
       self.fichLatexFigs.write('\\clearpage\n' )

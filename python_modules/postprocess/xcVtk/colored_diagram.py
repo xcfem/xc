@@ -43,11 +43,13 @@ class ColoredDiagram(vtk_lut_field.LUTField):
   def creaTramoDiagramaSignoCte(self, offset,org, valOrg, dest, valDest):
     ''' Crea un tramo de diagrama en el que la función a representar
        no cambia de signo.
-       offset: Offset para el índice de los valores a insertar.
-       org: Extremo dorsal del elemento lineal.
-       dest: Extremo frontal del elemento lineal.
-       valOrg: Valor del campo escalar en el extremo dorsal.
-       valDest: Valor del campo escalar en el extremo frontal.'''
+
+       :param offset: Offset for the index of the values to insert.
+       :param org: Back end of the 1D element.
+       :param dest: Front end of the 1D element.
+       :param valOrg: Value of the field at the back end.
+       :param valDest: Value of the field at the front end.
+    '''
 
     self.updateMinMax(valOrg)
     self.updateMinMax(valDest)
@@ -90,12 +92,13 @@ class ColoredDiagram(vtk_lut_field.LUTField):
   def creaTramoDiagramaCambioSigno(self, offset, org, valOrg, dest, valDest):
     ''' Crea un tramo de diagrama en el que la función a representar
      cambia de signo.
-     offset: Offset para el índice de los valores a insertar.
-     org: Extremo dorsal del elemento lineal.
-     dest: Extremo frontal del elemento lineal.
-     valOrg: Valor del campo escalar en el extremo dorsal.
-     valDest: Valor del campo escalar en el extremo frontal.'''
 
+       :param offset: Offset for the index of the values to insert.
+       :param org: Back end of the 1D element.
+       :param dest: Front end of the 1D element.
+       :param valOrg: Value of the field at the back end.
+       :param valDest: Value of the field at the front end.
+    '''
     self.updateMinMax(valOrg)
     self.updateMinMax(valDest)
     org2= org+(valOrg*self.escala)*self.vDir
