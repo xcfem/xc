@@ -55,8 +55,8 @@ XC::Eje::~Eje(void)
 //! @brief Updates topology.
 void XC::Eje::actualiza_topologia(void)
   {
-    if(P1()) P1()->inserta_linea(this);
-    if(P2()) P2()->inserta_linea(this);
+    if(P1()) P1()->insert_linea(this);
+    if(P2()) P2()->insert_linea(this);
   }
 
 //! @brief Returns a pointer to start point.

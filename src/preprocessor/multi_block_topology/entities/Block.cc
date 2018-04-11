@@ -272,7 +272,7 @@ void XC::Block::coloca(const size_t &i,Face *s)
 
 //! @brief Insert the surface with the identifier passed as parameter
 //! (if found).
-void XC::Block::inserta(const size_t &i)
+void XC::Block::insert(const size_t &i)
   {
     Face *s= BuscaFace(i);
     if(s)
@@ -289,7 +289,7 @@ void XC::Block::append_faces(const std::vector<size_t> &face_indexes)
   {
     const size_t nc= face_indexes.size(); //Number of indices.
     for(size_t i= 0;i<nc;i++)
-      inserta(face_indexes[i]);
+      insert(face_indexes[i]);
   }
 
 //! @brief Trigger the creation of nodes on faces.

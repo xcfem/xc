@@ -52,7 +52,7 @@ class Edge: public EntMdlr
     std::set<const Face *> surfaces_line; //!< Surface neighbors (topology).
   protected:
 
-    void inserta_surf(Face *s);
+    void insert_surf(Face *s);
 
     virtual Pnt *P1(void);
     virtual Pnt *P2(void);

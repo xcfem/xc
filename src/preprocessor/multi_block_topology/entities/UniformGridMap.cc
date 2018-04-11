@@ -42,12 +42,12 @@
 XC::UniformGridMap::UniformGridMap(MultiBlockTopology *mbt)
   : EntityMap<UniformGrid>(mbt) {}
 
-//! @brief Inserta la nueva linea en the set total y the opened sets.
+//! @brief Insert the new line in the total and the opened sets.
 void XC::UniformGridMap::UpdateSets(UniformGrid *new_unif_grid) const
   {
     Preprocessor *preprocessor= const_cast<Preprocessor *>(getPreprocessor());
     preprocessor->get_sets().get_set_total()->getUniformGrids().push_back(new_unif_grid);
-    preprocessor->get_sets().inserta_ent_mdlr(new_unif_grid);
+    preprocessor->get_sets().insert_ent_mdlr(new_unif_grid);
     MapSet::map_sets &abiertos= preprocessor->get_sets().get_sets_abiertos();
     for(MapSet::map_sets::iterator i= abiertos.begin();i!= abiertos.end();i++)
       {

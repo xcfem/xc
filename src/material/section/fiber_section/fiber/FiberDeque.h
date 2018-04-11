@@ -76,7 +76,7 @@ class FiberDeque : public EntCmd, public std::deque<Fiber *>
     mutable std::deque<double> recubs; //! Cover for each fiber.
     mutable std::deque<double> seps; //! Spacing for each fiber.
 
-    Fiber *inserta(const Fiber &f);
+    Fiber *insert(const Fiber &f);
     inline void resize(const size_t &nf)
       { fiber_ptrs_dq::resize(nf,nullptr); }
 

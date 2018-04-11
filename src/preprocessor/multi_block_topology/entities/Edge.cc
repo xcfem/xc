@@ -55,7 +55,7 @@ XC::Edge::Edge(const std::string &nombre,Preprocessor *m,const size_t &nd)
 
 //! @brief Insert a surface in contact with the line (neighbour).
 //! @param s: surface to insert.
-void XC::Edge::inserta_surf(Face *s)
+void XC::Edge::insert_surf(Face *s)
   { surfaces_line.insert(s); }
 
 //! @brief Update topology.

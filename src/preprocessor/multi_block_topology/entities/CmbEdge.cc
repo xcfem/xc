@@ -484,7 +484,7 @@ void XC::CmbEdge::addLines(const ID &line_indexes)
   {
     const size_t nl= line_indexes.Size(); //Number of indexes.
     for(size_t i= 0;i<nl;i++)
-      inserta(line_indexes(i));
+      insert(line_indexes(i));
   }
  
 //! @brief Creates and inserts the the edges that link the points
@@ -542,7 +542,7 @@ XC::Edge *XC::CmbEdge::newLine(Pnt *pA,Pnt *pB)
     retval= dynamic_cast<Line *>(getPreprocessor()->getMultiBlockTopology().getLines().createLine(pA,pB));
     if(retval)
       {
-        inserta(retval);
+        insert(retval);
         if(lines.size()==1) //Is the first one.
           {
             if(pA!=lines[0].P1())
@@ -566,7 +566,7 @@ XC::Edge *XC::CmbEdge::newLine(Pnt *pA,Pnt *pB,Pnt *pC)
     assert(getPreprocessor());
     retval= dynamic_cast<CircularArc *>(getPreprocessor()->getMultiBlockTopology().getLines().createArc(pA,pB,pC));
     if(retval)
-      inserta(retval);
+      insert(retval);
     else
       std::cerr << getClassName() << "::" << __FUNCTION__
 	        << "; arc between points: "
@@ -578,7 +578,7 @@ XC::Edge *XC::CmbEdge::newLine(Pnt *pA,Pnt *pB,Pnt *pC)
   }
 
 //! @brief Inserts (if found) the line which index is being passed as parameter.
-void XC::CmbEdge::inserta(const size_t &i)
+void XC::CmbEdge::insert(const size_t &i)
   {
     Edge *tmp= BuscaEdge(i);
     if(!tmp)
@@ -586,11 +586,11 @@ void XC::CmbEdge::inserta(const size_t &i)
 		<< "; line identified by: '" 
                 << i << "' not found.\n";
     else
-      inserta(tmp);
+      insert(tmp);
   }
 
 //! @brief Inserts the line which pointer is being passed as parameter.
-void XC::CmbEdge::inserta(Edge *l)
+void XC::CmbEdge::insert(Edge *l)
   {
     if(IndiceEdge(l)!= 0) //Line already belongs to the set.
       std::cerr << getClassName() << "::" << __FUNCTION__

@@ -113,7 +113,7 @@ class MapSet: public PreprocessorContainer, public MovableObject
 
     virtual ~MapSet(void);
 
-    EntMdlr *inserta_ent_mdlr(EntMdlr *ent_mdlr);
+    EntMdlr *insert_ent_mdlr(EntMdlr *ent_mdlr);
 
     bool exists(const std::string &nmb) const;
     Set *get_set_total(void)

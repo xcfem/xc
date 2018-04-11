@@ -44,13 +44,13 @@ XC::PntMap::PntMap(MultiBlockTopology *mbt)
   : EntityMap<Pnt>(mbt) {}
 
 
-//! @brief Inserta el new point en the set total y the opened sets.
+//! @brief Insert the new point in the total and the opened sets.
 void XC::PntMap::UpdateSets(Pnt *new_point) const
   {
     MultiBlockTopology *mbt= const_cast<MultiBlockTopology *>(dynamic_cast<const MultiBlockTopology *>(Owner()));
     Preprocessor *preprocessor= mbt->getPreprocessor();
     preprocessor->get_sets().get_set_total()->getPoints().push_back(new_point);
-    preprocessor->get_sets().inserta_ent_mdlr(new_point);
+    preprocessor->get_sets().insert_ent_mdlr(new_point);
     MapSet::map_sets &abiertos= preprocessor->get_sets().get_sets_abiertos();
     for(MapSet::map_sets::iterator i= abiertos.begin();i!= abiertos.end();i++)
       {

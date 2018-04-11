@@ -185,7 +185,7 @@ XC::SetBase *XC::MapSet::broke_set(const std::string &nmb,const std::string &nmb
   }
 
 //! @bref Inserts, as a set, a preprocessor entity.
-XC::EntMdlr *XC::MapSet::inserta_ent_mdlr(EntMdlr *ent_mdlr)
+XC::EntMdlr *XC::MapSet::insert_ent_mdlr(EntMdlr *ent_mdlr)
   {
     assert(ent_mdlr);
     const std::string nmb= ent_mdlr->getName();

@@ -288,7 +288,7 @@ void XC::Body::add_to_sets(std::set<SetBase *> &sets)
 void XC::Body::set_surf(Face *s)
   {
     if(s)
-     { s->inserta_body(this); }
+     { s->insert_body(this); }
   }
 
 //! Return indices of the vertices.

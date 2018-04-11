@@ -67,14 +67,14 @@ void XC::Face::SetNDivJ(const size_t &ndj)
 
 //! @brief Inserts the body being passed as parameter neighbors
 //! container of this surface.
-void XC::Face::inserta_body(Body *b)
+void XC::Face::insert_body(Body *b)
   { cuerpos_sup.insert(b); }
 
 //! @brief Updates topology.
 void XC::Face::actualiza_topologia(void)
   {
     for(std::deque<Side>::iterator i=lines.begin();i!=lines.end();i++)
-      (*i).getEdge()->inserta_surf(this);
+      (*i).getEdge()->insert_surf(this);
   }
 
 //! @brief Returns the index of the edge in common with the surface

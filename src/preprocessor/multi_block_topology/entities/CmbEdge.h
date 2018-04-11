@@ -119,8 +119,8 @@ class CmbEdge: public Edge
     CmbEdge(Preprocessor *m,const size_t &nd= 4);
     CmbEdge(const std::string &nombre,Preprocessor *m,const size_t &nd);
     virtual SetEstruct *getCopy(void) const;
-    virtual void inserta(Edge *l);
-    void inserta(const size_t &i);
+    virtual void insert(Edge *l);
+    void insert(const size_t &i);
     Edge *newLine(Pnt *,Pnt *);
     Edge *newLine(Pnt *,Pnt *,Pnt *);
     void addPoints(const ID &);

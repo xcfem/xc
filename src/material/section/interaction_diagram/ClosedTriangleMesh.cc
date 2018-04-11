@@ -173,7 +173,7 @@ TriangleMap XC::ClosedTriangleMesh::getTriangleMap(void) const
           {
             nearest1= counter;
             kdtree.insert(nearest1,p1);
-            vertices.Inserta(nearest1,p1);
+            vertices.insert(nearest1,p1);
             counter++;
           }
         const Pos3d p2= i->Vertice(2);
@@ -182,7 +182,7 @@ TriangleMap XC::ClosedTriangleMesh::getTriangleMap(void) const
           {
             nearest2= counter;
             kdtree.insert(nearest2,p2);
-            vertices.Inserta(nearest2,p2);
+            vertices.insert(nearest2,p2);
             counter++;
           }
         const Pos3d p3= i->Vertice(3);
@@ -191,7 +191,7 @@ TriangleMap XC::ClosedTriangleMesh::getTriangleMap(void) const
           {
             nearest3= counter;
             kdtree.insert(nearest3,p3);
-            vertices.Inserta(nearest3,p3);
+            vertices.insert(nearest3,p3);
             counter++;
           }
         faces.Append(nearest1,nearest2,nearest3);

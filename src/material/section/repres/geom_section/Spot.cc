@@ -39,7 +39,7 @@ XC::Spot::Spot(const Pos2d &pto)
 
 //! Inserts the line being passed as parameter in the list
 //! of the lines that begin or end in this point.
-void XC::Spot::inserta_linea(Eje *l)
+void XC::Spot::insert_linea(Eje *l)
   { ejes_pt.insert(l); }
 
 //! Erases the line being passed as parameter from the list
