@@ -74,7 +74,7 @@ XC::FiberDeque &XC::FiberDeque::operator=(const FiberDeque &otro)
   }
 
 //! @brief Adds the fiber to the container.
-XC::Fiber *XC::FiberDeque::inserta(const Fiber &f)
+XC::Fiber *XC::FiberDeque::insert(const Fiber &f)
   {
     Fiber *retval= f.getCopy();
     push_back(retval);
@@ -191,7 +191,7 @@ double XC::FiberDeque::GetZMax(void) const
   }
 
 //! @brief Returns fibers positions.
-GeomObj::list_Pos2d XC::FiberDeque::getPosiciones(void) const
+GeomObj::list_Pos2d XC::FiberDeque::getPositions(void) const
   {
     GeomObj::list_Pos2d retval;
     if(!empty())
@@ -1411,19 +1411,19 @@ double XC::FiberDeque::getFibersEffectiveConcreteArea(void) const
 //! @brief Computes the cover of the fibers.
 void XC::FiberDeque::computeCovers(const GeomSection &g) const
   {
-    const GeomObj::list_Pos2d posiciones= getPosiciones();
+    const GeomObj::list_Pos2d positions= getPositions();
     const Poligono2d contour= g.getRegionsContour();
-    recubs= getRecubrimientos(posiciones,contour);
+    recubs= getRecubrimientos(positions,contour);
     const size_t sz= recubs.size();
     for(size_t i= 0;i<sz;i++)
       if(recubs[i]<0)
-        std::clog << "Warning! position: " << posiciones[i]
+        std::clog << "Warning! position: " << positions[i]
                   << " is outside the section." << std::endl;
   }
 
 //! @brief Computes the distance from each fiber to the nearest one.
 void XC::FiberDeque::computeSpacement(void) const
-  { seps= getPosiciones().GetSeparaciones(); }
+  { seps= getPositions().GetSeparaciones(); }
 
 //! @brief Return the value of the concrete cover for the i-th fiber.
 const double &XC::FiberDeque::getFiberCover(const size_t &i) const
@@ -1530,7 +1530,7 @@ int XC::FiberDeque::updateKRCDG(FiberSection2d &Section2d,CrossSectionKR &kr2)
 //! @brief Adds a fiber XXX Enhance parameter updating.
 XC::Fiber *XC::FiberDeque::addFiber(FiberSection2d &Section2d,Fiber &newFiber,CrossSectionKR &kr2)
   {
-    Fiber *retval= inserta(newFiber);
+    Fiber *retval= insert(newFiber);
     updateKRCDG(Section2d,kr2);
     return retval;
   }
@@ -1724,7 +1724,7 @@ int XC::FiberDeque::updateKRCDG(FiberSection3d &Section3d,CrossSectionKR &kr3)
 //! @brief Adds a fiber to the section XXX Enhance parameter updating.
 XC::Fiber *XC::FiberDeque::addFiber(FiberSection3d &Section3d,Fiber &newFiber,CrossSectionKR &kr3)
   {
-    Fiber *retval= inserta(newFiber);
+    Fiber *retval= insert(newFiber);
     updateKRCDG(Section3d,kr3);
     return retval;
   }
@@ -1887,7 +1887,7 @@ int XC::FiberDeque::updateKRCDG(FiberSectionGJ &SectionGJ,CrossSectionKR &krGJ)
 //! @brief Adds a fiber to the container. XXX Enhance parameter updating.
 XC::Fiber *XC::FiberDeque::addFiber(FiberSectionGJ &SectionGJ,Fiber &newFiber,CrossSectionKR &krGJ)
   {
-    Fiber *retval= inserta(newFiber);
+    Fiber *retval= insert(newFiber);
     updateKRCDG(SectionGJ,krGJ);
     return retval;
   }

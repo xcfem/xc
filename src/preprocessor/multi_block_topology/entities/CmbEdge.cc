@@ -36,7 +36,7 @@
 #include "xc_utils/src/geom/d1/Polilinea3d.h"
 
 #include "xc_utils/src/geom/pos_vec/MatrizPos3d.h"
-#include "xc_basic/src/texto/cadena_carac.h"
+#include "xc_basic/src/text/text_string.h"
 #include "domain/mesh/node/Node.h"
 #include "domain/mesh/element/Element.h"
 
@@ -122,10 +122,10 @@ const XC::Vector &XC::CmbEdge::Side::getTang(const double &s) const
   { return edge->getTang(s); }
 
 //! @brief Return the positions on the line.
-MatrizPos3d XC::CmbEdge::Side::get_posiciones(void) const
+MatrizPos3d XC::CmbEdge::Side::get_positions(void) const
   {
     if(edge)
-      return edge->get_posiciones();
+      return edge->get_positions();
     else
       return MatrizPos3d();
   }
@@ -147,7 +147,7 @@ std::vector<int> XC::CmbEdge::Side::getTagsNodesInv(void) const
       return edge->getTagsNodesDir();
   }
 
-//! @brief Return the posiciones of the nodes en sentido directo.
+//! @brief Return the positions of the nodes en sentido directo.
 MatrizPos3d XC::CmbEdge::Side::getNodePosDir(void) const
   {
     if(directo)
@@ -156,7 +156,7 @@ MatrizPos3d XC::CmbEdge::Side::getNodePosDir(void) const
       return edge->getNodePosInv();
   }
 
-//! @brief Return the posiciones of the nodes en sentido inverso.
+//! @brief Return the positions of the nodes en sentido inverso.
 MatrizPos3d XC::CmbEdge::Side::getNodePosInv(void) const
   {
     if(directo)
@@ -413,7 +413,7 @@ void XC::CmbEdge::SetNDiv(const size_t &nd)
   }
 
 //! @brief Return positions along the object.
-MatrizPos3d XC::CmbEdge::get_posiciones(void) const
+MatrizPos3d XC::CmbEdge::get_positions(void) const
   {
     const size_t npos= NDiv()+1; //Number of positions.
     MatrizPos3d retval(npos);
@@ -423,7 +423,7 @@ MatrizPos3d XC::CmbEdge::get_posiciones(void) const
         for(std::deque<Side>::const_iterator i=lines.begin();i!=lines.end();i++)
           {
             const Edge *e= (*i).getEdge();
-            MatrizPos3d tmp= e->get_posiciones();
+            MatrizPos3d tmp= e->get_positions();
             const size_t sz= tmp.size()-1; //The last one is not added.
             for(size_t i=1;i<sz;i++)
               {
@@ -484,7 +484,7 @@ void XC::CmbEdge::addLines(const ID &line_indexes)
   {
     const size_t nl= line_indexes.Size(); //Number of indexes.
     for(size_t i= 0;i<nl;i++)
-      inserta(line_indexes(i));
+      insert(line_indexes(i));
   }
  
 //! @brief Creates and inserts the the edges that link the points
@@ -542,7 +542,7 @@ XC::Edge *XC::CmbEdge::newLine(Pnt *pA,Pnt *pB)
     retval= dynamic_cast<Line *>(getPreprocessor()->getMultiBlockTopology().getLines().createLine(pA,pB));
     if(retval)
       {
-        inserta(retval);
+        insert(retval);
         if(lines.size()==1) //Is the first one.
           {
             if(pA!=lines[0].P1())
@@ -566,7 +566,7 @@ XC::Edge *XC::CmbEdge::newLine(Pnt *pA,Pnt *pB,Pnt *pC)
     assert(getPreprocessor());
     retval= dynamic_cast<CircularArc *>(getPreprocessor()->getMultiBlockTopology().getLines().createArc(pA,pB,pC));
     if(retval)
-      inserta(retval);
+      insert(retval);
     else
       std::cerr << getClassName() << "::" << __FUNCTION__
 	        << "; arc between points: "
@@ -578,7 +578,7 @@ XC::Edge *XC::CmbEdge::newLine(Pnt *pA,Pnt *pB,Pnt *pC)
   }
 
 //! @brief Inserts (if found) the line which index is being passed as parameter.
-void XC::CmbEdge::inserta(const size_t &i)
+void XC::CmbEdge::insert(const size_t &i)
   {
     Edge *tmp= BuscaEdge(i);
     if(!tmp)
@@ -586,11 +586,11 @@ void XC::CmbEdge::inserta(const size_t &i)
 		<< "; line identified by: '" 
                 << i << "' not found.\n";
     else
-      inserta(tmp);
+      insert(tmp);
   }
 
 //! @brief Inserts the line which pointer is being passed as parameter.
-void XC::CmbEdge::inserta(Edge *l)
+void XC::CmbEdge::insert(Edge *l)
   {
     if(IndiceEdge(l)!= 0) //Line already belongs to the set.
       std::cerr << getClassName() << "::" << __FUNCTION__

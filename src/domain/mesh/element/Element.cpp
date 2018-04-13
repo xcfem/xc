@@ -836,7 +836,7 @@ const XC::Matrix &XC::Element::getCooNodes(void) const
 
 //! @brief Returns the coordinates of the nodes.
 std::list<Pos3d> XC::Element::getPosNodes(bool initialGeometry) const
-  { return getNodePtrs().getPosiciones(initialGeometry); }
+  { return getNodePtrs().getPositions(initialGeometry); }
 
 bool XC::Element::In(const GeomObj3d &obj,const double &factor, const double &tol) const
   { return getNodePtrs().In(obj,factor,tol); }

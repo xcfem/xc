@@ -44,7 +44,7 @@ class Face: public CmbEdge
     friend class Body;
     std::set<const Body *> cuerpos_sup; //!< Bodies that touch this surface (neighbors).
 
-    void inserta_body(Body *b);
+    void insert_body(Body *b);
     Node *getNode(const size_t &i);
     const Node *getNode(const size_t &i) const;
   protected:

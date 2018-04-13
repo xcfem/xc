@@ -51,7 +51,7 @@ void XC::DividedLine::setLongs(const Vector &ls)
 
 //! @brief Return ndiv+1 positions along the line spaced
 //! according to the lengths specifiend in the longs member.
-MatrizPos3d XC::DividedLine::get_posiciones(void) const
+MatrizPos3d XC::DividedLine::get_positions(void) const
   {
     static MatrizPos3d retval;
     if(P1() && P2())

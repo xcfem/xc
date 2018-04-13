@@ -173,7 +173,7 @@ TriangleMap XC::ClosedTriangleMesh::getTriangleMap(void) const
           {
             nearest1= counter;
             kdtree.insert(nearest1,p1);
-            vertices.Inserta(nearest1,p1);
+            vertices.insert(nearest1,p1);
             counter++;
           }
         const Pos3d p2= i->Vertice(2);
@@ -182,7 +182,7 @@ TriangleMap XC::ClosedTriangleMesh::getTriangleMap(void) const
           {
             nearest2= counter;
             kdtree.insert(nearest2,p2);
-            vertices.Inserta(nearest2,p2);
+            vertices.insert(nearest2,p2);
             counter++;
           }
         const Pos3d p3= i->Vertice(3);
@@ -191,7 +191,7 @@ TriangleMap XC::ClosedTriangleMesh::getTriangleMap(void) const
           {
             nearest3= counter;
             kdtree.insert(nearest3,p3);
-            vertices.Inserta(nearest3,p3);
+            vertices.insert(nearest3,p3);
             counter++;
           }
         faces.Append(nearest1,nearest2,nearest3);
@@ -345,7 +345,7 @@ void XC::ClosedTriangleMesh::getPositionsMatrix(Matrix &m)
 
 //! @brief Create the trihedrons that define the diagram from the matrix
 //! that contains the points that define each trihedron.
-void XC::ClosedTriangleMesh::setMatrizPosiciones(const Matrix &m)
+void XC::ClosedTriangleMesh::setPositionsMatrix(const Matrix &m)
   {
     const int nfilas= m.noRows();
     assert(m.noCols()==12);
@@ -379,7 +379,7 @@ void XC::ClosedTriangleMesh::read(std::ifstream &is)
     is.read((char *) &rMin,sizeof rMin); 
     Matrix m;
     m.read(is);
-    setMatrizPosiciones(m);
+    setPositionsMatrix(m);
   }
 
 //! @brief Sends object members through the channel being passed as parameter.
@@ -400,7 +400,7 @@ int XC::ClosedTriangleMesh::recvData(const CommParameters &cp)
     res+= cp.receiveDoubles(tol,rMax,rMin,getDbTagData(),CommMetaData(1));
     Matrix m;
     res+= cp.receiveMatrix(m,getDbTagData(),CommMetaData(2));
-    setMatrizPosiciones(m);
+    setPositionsMatrix(m);
     return res;
   }
 

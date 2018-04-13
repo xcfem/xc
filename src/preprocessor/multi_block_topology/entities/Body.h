@@ -85,7 +85,7 @@ class Body: public EntMdlr
         CmbEdge::Side *getSide(const size_t &);
         const Pnt *getVertex(const size_t &) const;
         Pnt *getVertex(const size_t &);
-        virtual MatrizPos3d get_posiciones(void) const;
+        virtual MatrizPos3d get_positions(void) const;
         void create_nodes(void);
         bool checkNDivs(void) const;
         Node *getNode(const size_t &,const size_t &);

@@ -76,7 +76,7 @@ class CmbEdge: public Edge
         void SetNDiv(const size_t &nd);
         size_t NDiv(void) const;
         size_t GetTag(void) const;
-        MatrizPos3d get_posiciones(void) const;
+        MatrizPos3d get_positions(void) const;
         std::vector<int> getTagsNodesDir(void) const;
         std::vector<int> getTagsNodesInv(void) const;
         MatrizPos3d getNodePosDir(void) const;
@@ -96,7 +96,7 @@ class CmbEdge: public Edge
       };
   protected:
     std::deque<Side> lines; //!< Lines that compose the object.
-    MatrizPos3d get_posiciones(void) const;
+    MatrizPos3d get_positions(void) const;
 
     Side *first_line(void);
     const Side *first_line(void) const;
@@ -119,8 +119,8 @@ class CmbEdge: public Edge
     CmbEdge(Preprocessor *m,const size_t &nd= 4);
     CmbEdge(const std::string &nombre,Preprocessor *m,const size_t &nd);
     virtual SetEstruct *getCopy(void) const;
-    virtual void inserta(Edge *l);
-    void inserta(const size_t &i);
+    virtual void insert(Edge *l);
+    void insert(const size_t &i);
     Edge *newLine(Pnt *,Pnt *);
     Edge *newLine(Pnt *,Pnt *,Pnt *);
     void addPoints(const ID &);

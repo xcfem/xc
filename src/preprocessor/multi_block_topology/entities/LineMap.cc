@@ -94,13 +94,13 @@ XC::CmbEdge *XC::LineMap::newLineSequence(void)
     return retval;
   }
 
-//! @brief Inserta la nueva line en the set total and the opened sets.
+//! @brief Insert the new line in the total and the opened sets.
 void XC::LineMap::UpdateSets(Edge *nueva_linea) const
   {
     MultiBlockTopology *mbt= const_cast<MultiBlockTopology *>(dynamic_cast<const MultiBlockTopology *>(Owner()));
     Preprocessor *preprocessor= mbt->getPreprocessor();
     preprocessor->get_sets().get_set_total()->getLines().push_back(nueva_linea);
-    preprocessor->get_sets().inserta_ent_mdlr(nueva_linea);
+    preprocessor->get_sets().insert_ent_mdlr(nueva_linea);
     MapSet::map_sets &abiertos= preprocessor->get_sets().get_sets_abiertos();
     for(MapSet::map_sets::iterator i= abiertos.begin();i!= abiertos.end();i++)
       {

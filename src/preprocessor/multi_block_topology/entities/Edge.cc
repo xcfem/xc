@@ -55,7 +55,7 @@ XC::Edge::Edge(const std::string &nombre,Preprocessor *m,const size_t &nd)
 
 //! @brief Insert a surface in contact with the line (neighbour).
 //! @param s: surface to insert.
-void XC::Edge::inserta_surf(Face *s)
+void XC::Edge::insert_surf(Face *s)
   { surfaces_line.insert(s); }
 
 //! @brief Update topology.
@@ -211,8 +211,8 @@ void XC::Edge::SetElemSize(const double &sz)
 //! @brief Create points along the line.
 void XC::Edge::divide(void)
   {
-    const MatrizPos3d posiciones= get_posiciones();
-    create_points(posiciones);
+    const MatrizPos3d positions= get_positions();
+    create_points(positions);
   }
 
 //! @brief Return a pointer to node whose indices are passed as parameters.
@@ -445,8 +445,8 @@ std::set<const XC::Edge *> XC::getLinesThatTouch(const Pnt &p)
   { return p.EdgesTocan(); }
 
 //! @brief Return a matrix of positions along the line.
-MatrizPos3d XC::Edge::get_pos_nodes(void) const
-  { return get_posiciones(); }
+MatrizPos3d XC::Edge::get_nodes_pos(void) const
+  { return get_positions(); }
 
 //! @brief Create the nodes for both end points of the edge.
 void XC::Edge::create_nodes_en_extremos(void)
@@ -500,9 +500,9 @@ void XC::Edge::create_nodes(void)
 	            << "; preprocessor undefined." << std::endl;
         else
           {
-            const MatrizPos3d posiciones= get_pos_nodes();
-            const size_t filas= posiciones.getNumFilas();
-            const size_t cols= posiciones.getNumCols();
+            const MatrizPos3d positions= get_nodes_pos();
+            const size_t filas= positions.getNumFilas();
+            const size_t cols= positions.getNumCols();
             ttzNodes= TritrizPtrNod(1,filas,cols);
 
             create_nodes_en_extremos();
@@ -516,7 +516,7 @@ void XC::Edge::create_nodes(void)
                 const size_t col_ini= (col_fin == 1 ? 1 : 2);
                 for(register size_t j= fila_ini;j<=fila_fin;j++)
                   for(register size_t k= col_ini;k<=col_fin;k++)
-                    create_node(posiciones(j,k),1,j,k);
+                    create_node(positions(j,k),1,j,k);
               }
           }
         if(verbosity>4)

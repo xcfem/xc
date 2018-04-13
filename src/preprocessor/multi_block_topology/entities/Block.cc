@@ -230,22 +230,22 @@ void XC::Block::coloca(const size_t &i,Face *s)
     if(i == 5) //Is the top face
       {
         //Seek for an assigned face.
-        size_t icara= 1;
-        Face *cara= sups[1].Surface();
-        if(!cara) { icara=2; cara= sups[icara].Surface(); }
-        if(!cara) { icara=3; cara= sups[icara].Surface(); }
-        if(!cara) { icara=4; cara= sups[icara].Surface(); }
-        if(!cara)
+        size_t iFace= 1;
+        Face *face= sups[1].Surface();
+        if(!face) { iFace=2; face= sups[iFace].Surface(); }
+        if(!face) { iFace=3; face= sups[iFace].Surface(); }
+        if(!face) { iFace=4; face= sups[iFace].Surface(); }
+        if(!face)
           std::cerr << getClassName() << "::" << __FUNCTION__
 		    << "; error before introducing face 5 you must introduce"
 	            << " either the 1 , 2 , 3 or 4 faces." << std::endl;
         else
           {
-            primero= cara->CommonEdge(*s); //Index of the line in common of s with the face.
+            primero= face->CommonEdge(*s); //Index of the line in common of s with the face.
             if(primero) //They have a common edge.
               {
-                const Edge *linea= cara->getSide(primero)->getEdge();
-                sentido= -cara->SenseOfEdge(linea,*s);
+                const Edge *linea= face->getSide(primero)->getEdge();
+                sentido= -face->SenseOfEdge(linea,*s);
               }
             else //They don't share a common edge.
               {
@@ -253,7 +253,7 @@ void XC::Block::coloca(const size_t &i,Face *s)
 			  << "; error: Block(" << getName() << "); the face "
 			  << s->getName() 
                           << " does not share a common edge with face "
-			  << cara->getName() << '.' << std::endl;
+			  << face->getName() << '.' << std::endl;
               }
           }
       }
@@ -272,7 +272,7 @@ void XC::Block::coloca(const size_t &i,Face *s)
 
 //! @brief Insert the surface with the identifier passed as parameter
 //! (if found).
-void XC::Block::inserta(const size_t &i)
+void XC::Block::insert(const size_t &i)
   {
     Face *s= BuscaFace(i);
     if(s)
@@ -285,15 +285,15 @@ void XC::Block::inserta(const size_t &i)
 
 //! @brief Create and insert the faces from the indices passed
 //! as parameter.
-void XC::Block::add_caras(const std::vector<size_t> &indices_caras)
+void XC::Block::append_faces(const std::vector<size_t> &face_indexes)
   {
-    const size_t nc= indices_caras.size(); //Number of indices.
+    const size_t nc= face_indexes.size(); //Number of indices.
     for(size_t i= 0;i<nc;i++)
-      inserta(indices_caras[i]);
+      insert(face_indexes[i]);
   }
 
 //! @brief Trigger the creation of nodes on faces.
-void XC::Block::create_nodes_caras(void)
+void XC::Block::create_face_nodes(void)
   {
     sups[0].create_nodes();
     sups[1].create_nodes();
@@ -326,7 +326,7 @@ void XC::Block::create_nodes_caras(void)
 //! - Edge 10 has indices (ncapas,nfil,k=1..ncol) 
 //! - Edge 11 has indices (ncapas,j=1..nfil,ncol) 
 //! - Edge 12 has indices (ncapas,1,k=1..ncol) 
-TritrizPos3d XC::Block::get_posiciones(void) const
+TritrizPos3d XC::Block::get_positions(void) const
   {
     const size_t ndiv_12= NDivI();
     const size_t ndiv_23= NDivJ();
@@ -366,19 +366,19 @@ void XC::Block::create_nodes(void)
     checkNDivs();
     if(ttzNodes.Null())
       {
-        create_nodes_caras();
+        create_face_nodes();
         BodyFace &base= sups[0];
         BodyFace &tapa= sups[5];
         BodyFace &latIzdo= sups[1];
         BodyFace &latDcho= sups[3];
-        BodyFace &caraFrontal= sups[2];
-        BodyFace &caraDorsal= sups[4];
+        BodyFace &frontFace= sups[2];
+        BodyFace &backFace= sups[4];
 
         const size_t capas= NDivK()+1;
         const size_t filas= NDivJ()+1;
         const size_t cols= NDivI()+1;
         ttzNodes = TritrizPtrNod(capas,filas,cols); //Pointers to node.
-        TritrizPos3d pos_nodes= get_posiciones(); //Posiciones of the nodes.
+        TritrizPos3d node_pos= get_positions(); //Node positions.
 
         //Vertices.
 	ttzNodes(1,1,1)= getVertex(1)->getNode();
@@ -430,7 +430,7 @@ void XC::Block::create_nodes(void)
                 ttzNodes(1,J,K)= base.getNode(i,j);
               else
                 ttzNodes(1,J,K)= base.getNode(j,i);
-              d2= dist2(ttzNodes(1,J,K)->getInitialPosition3d(),pos_nodes(1,J,K));
+              d2= dist2(ttzNodes(1,J,K)->getInitialPosition3d(),node_pos(1,J,K));
               if(d2>1e-4)
 		std::cerr << "Block::create_nodes; error while linking node: ("
                           << i << "," << j << ") in face." << std::endl;
@@ -465,7 +465,7 @@ void XC::Block::create_nodes(void)
         for(size_t k= 2;k<capas;k++) //Capas interiores.
           for(size_t j= 2;j<filas;j++) //Filas interiores.
             for(size_t i= 2;i<cols;i++) //Columnas interiores.
-              create_node(pos_nodes(i,j,k),i,j,k);
+              create_node(node_pos(i,j,k),i,j,k);
       }
     else
       if(verbosity>2)

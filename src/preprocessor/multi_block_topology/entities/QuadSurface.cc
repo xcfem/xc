@@ -362,7 +362,7 @@ void XC::QuadSurface::defGridPoints(const boost::python::list &l)
   }
 
 //! @brief Returns (ndivI+1)*(ndivJ+1) positions to place the nodes.
-MatrizPos3d XC::QuadSurface::get_posiciones(void) const
+MatrizPos3d XC::QuadSurface::get_positions(void) const
   {
     MatrizPos3d retval;
     const int numEdges= getNumberOfEdges();
@@ -451,10 +451,10 @@ void XC::QuadSurface::create_nodes(void)
           ttzNodes(1,j,cols)= lines[1].getNode(j);
 
 
-        MatrizPos3d pos_nodes= get_posiciones(); //Posiciones of the nodes.
+        MatrizPos3d node_pos= get_positions(); //Node positions.
         for(size_t j= 2;j<filas;j++) //Filas interiores.
           for(size_t k= 2;k<cols;k++) //Columnas interiores.
-            create_node(pos_nodes(j,k),1,j,k);
+            create_node(node_pos(j,k),1,j,k);
       }
     else
       if(verbosity>2)

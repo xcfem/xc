@@ -46,7 +46,7 @@ class Spot: public EntGeomSection
     Pos2d p; //!< Position of the point.
     std::set<const Eje *> ejes_pt; //!< Edges that begin or end in this point (topology).
     friend class Eje;
-    void inserta_linea(Eje *l);
+    void insert_linea(Eje *l);
     void borra_linea(Eje *l);
   protected:
 

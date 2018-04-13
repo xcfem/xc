@@ -142,8 +142,7 @@ int XC::BerkeleyDbDatastore::open(const DBTYPE &type)
     return retval;
   }
 
-//! @brief Returns the tipo de acceso a emplear a partir
-//! de la cadena de caracteres being passed as parameter.
+//! @brief Returns the access type to use from the string argument.
 DBTYPE XC::BerkeleyDbDatastore::get_type(const std::string &dbType)
   {
     // set the database storage type

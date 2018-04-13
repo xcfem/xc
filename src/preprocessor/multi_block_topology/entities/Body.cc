@@ -142,7 +142,7 @@ XC::Node *XC::Body::BodyFace::getNode(const size_t &i,const size_t &j)
   }
 
 //! @brief Return the positions for the nodes on a face.
-MatrizPos3d XC::Body::BodyFace::get_posiciones(void) const
+MatrizPos3d XC::Body::BodyFace::get_positions(void) const
   {
     if(!surface)
       {
@@ -288,7 +288,7 @@ void XC::Body::add_to_sets(std::set<SetBase *> &sets)
 void XC::Body::set_surf(Face *s)
   {
     if(s)
-     { s->inserta_body(this); }
+     { s->insert_body(this); }
   }
 
 //! Return indices of the vertices.

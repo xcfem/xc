@@ -76,7 +76,7 @@ class FiberDeque : public EntCmd, public std::deque<Fiber *>
     mutable std::deque<double> recubs; //! Cover for each fiber.
     mutable std::deque<double> seps; //! Spacing for each fiber.
 
-    Fiber *inserta(const Fiber &f);
+    Fiber *insert(const Fiber &f);
     inline void resize(const size_t &nf)
       { fiber_ptrs_dq::resize(nf,nullptr); }
 
@@ -107,7 +107,7 @@ class FiberDeque : public EntCmd, public std::deque<Fiber *>
     inline double getZRelativa(const double &z) const
       { return z-zCDG; }
 
-    GeomObj::list_Pos2d getPosiciones(void) const;
+    GeomObj::list_Pos2d getPositions(void) const;
 
     bool hayMomento(const double &tol=1e-4) const;
     double Resultante(void) const;

@@ -49,7 +49,7 @@ void XC::BodyMap::UpdateSets(Body *newBody) const
   {
     Preprocessor *preprocessor= const_cast<Preprocessor *>(getPreprocessor());
     preprocessor->get_sets().get_set_total()->getBodies().push_back(newBody);
-    preprocessor->get_sets().inserta_ent_mdlr(newBody);
+    preprocessor->get_sets().insert_ent_mdlr(newBody);
     MapSet::map_sets &abiertos= preprocessor->get_sets().get_sets_abiertos();
     for(MapSet::map_sets::iterator i= abiertos.begin();i!= abiertos.end();i++)
       {

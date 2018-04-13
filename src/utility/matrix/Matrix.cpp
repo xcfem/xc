@@ -1484,7 +1484,7 @@ int XC::Matrix::Extract(const Matrix &V, int init_row, int init_col, double fact
 XC::Matrix XC::operator*(double a, const Matrix &V)
   { return V * a; }
 
-// //! @brief Convierte en matriz la cadena de caracteres being passed as parameter.
+// //! @brief Convierte en matriz la text string being passed as parameter.
 // void XC::Matrix::from_string(const std::string &str)
 //   {
 //     MatrizAny tmp= interpretaMatrizAny(str);
@@ -1499,7 +1499,7 @@ XC::Matrix XC::operator*(double a, const Matrix &V)
 //       }
 //   }
 
-// //! @brief Return the matriz que resulta de interpretar la cadena de caracteres being passed as parameter.
+// //! @brief Return the matriz que resulta de interpretar la text string being passed as parameter.
 // XC::Matrix XC::interpreta_xc_matriz(const std::string &str)
 //   {
 //     Matrix retval(1,1);

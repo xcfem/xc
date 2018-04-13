@@ -289,21 +289,21 @@ XC::Node *XC::EntMdlr::create_node(const Pos3d &pos,size_t i,size_t j, size_t k)
   }
 
 //! @brief Creates nodes at the positions being passed as parameters.
-void XC::EntMdlr::create_nodes(const TritrizPos3d &posiciones)
+void XC::EntMdlr::create_nodes(const TritrizPos3d &positions)
   {
-    const size_t capas= posiciones.GetCapas();
+    const size_t capas= positions.GetCapas();
     if(capas<1) return;
     if(ttzNodes.Null())
       {
-        const size_t filas= posiciones(1).getNumFilas();
-        const size_t cols= posiciones(1).getNumCols();
+        const size_t filas= positions(1).getNumFilas();
+        const size_t cols= positions(1).getNumCols();
         ttzNodes = TritrizPtrNod(capas,filas,cols);
 
         if(!getPreprocessor()) return;
         for(register size_t i= 1;i<=capas;i++)
           for(register size_t j= 1;j<=filas;j++)
             for(register size_t k= 1;k<=cols;k++)
-              create_node(posiciones(i,j,k),i,j,k);
+              create_node(positions(i,j,k),i,j,k);
         if(verbosity>5)
 	  std::cerr << getClassName() << "::" << __FUNCTION__
 		    << "; created " << ttzNodes.NumPtrs() << " node(s)."
@@ -378,12 +378,12 @@ XC::Pnt *XC::EntMdlr::create_point(const Pos3d &pos)
   { return getPreprocessor()->getMultiBlockTopology().getPoints().New(pos); }
 
 //! @brief Creates points at the positions being passed as parameters.
-void XC::EntMdlr::create_points(const MatrizPos3d &posiciones)
+void XC::EntMdlr::create_points(const MatrizPos3d &positions)
   {
     if(verbosity>4)
       std::clog << "Creating points for line: '" << getName() << "'...";   
-    const size_t filas= posiciones.getNumFilas();
-    const size_t cols= posiciones.getNumCols();
+    const size_t filas= positions.getNumFilas();
+    const size_t cols= positions.getNumCols();
 
     if(getPreprocessor())
       {
@@ -391,7 +391,7 @@ void XC::EntMdlr::create_points(const MatrizPos3d &posiciones)
         for(size_t i= 1;i<=filas;i++)
           for(size_t j= 1;j<=cols;j++)
             {
-              create_point(posiciones(i,j));
+              create_point(positions(i,j));
               cont++;
             }
       }

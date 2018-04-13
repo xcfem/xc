@@ -42,12 +42,12 @@
 XC::SurfaceMap::SurfaceMap(MultiBlockTopology *mbt)
   : EntityMap<Face>(mbt) {}
 
-//! @brief Inserta la nueva linea en the set total y the opened sets.
+//! @brief Insert the new line in the total and the sets that are open.
 void XC::SurfaceMap::UpdateSets(Face *nueva_face) const
   {
     Preprocessor *preprocessor= const_cast<Preprocessor *>(getPreprocessor());
     preprocessor->get_sets().get_set_total()->getSurfaces().push_back(nueva_face);
-    preprocessor->get_sets().inserta_ent_mdlr(nueva_face);
+    preprocessor->get_sets().insert_ent_mdlr(nueva_face);
     MapSet::map_sets &abiertos= preprocessor->get_sets().get_sets_abiertos();
     for(MapSet::map_sets::iterator i= abiertos.begin();i!= abiertos.end();i++)
       {

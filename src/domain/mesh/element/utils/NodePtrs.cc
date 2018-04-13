@@ -353,8 +353,8 @@ Pos3d XC::NodePtrs::getPosNode(const size_t &i,bool initialGeometry) const
       return (*this)[i]->getCurrentPosition3d();
   }
 
-//! @brief Returns a matriz con las posiciones of the nodes.
-std::list<Pos3d> XC::NodePtrs::getPosiciones(bool initialGeometry) const
+//! @brief Returns a list with the node positions.
+std::list<Pos3d> XC::NodePtrs::getPositions(bool initialGeometry) const
   {
     std::list<Pos3d> retval;
     const size_t sz= size();
@@ -363,7 +363,7 @@ std::list<Pos3d> XC::NodePtrs::getPosiciones(bool initialGeometry) const
     return retval;
   }
 
-//! @brief Returns the centro de gravedad de las posiciones of the nodes.
+//! @brief Returns the centroid of the node positions.
 Pos3d XC::NodePtrs::getPosCdg(bool initialGeometry) const
   {
     Pos3d retval;

@@ -40,7 +40,7 @@ namespace XC {
 class QuadSurface: public Face
   {
   protected:
-    MatrizPos3d get_posiciones(void) const;
+    MatrizPos3d get_positions(void) const;
     const Edge *get_lado_homologo(const Edge *l) const;
   public:
     QuadSurface(Preprocessor *m,const size_t &ndivI= 4, const size_t &ndivJ= 4);

@@ -157,8 +157,8 @@ double XC::ElemPlano<NNODES, PhysProp>::getTributaryArea(const Node *nod) const
 template <int NNODES,class PhysProp>
 Poligono3d XC::ElemPlano<NNODES, PhysProp>::getPolygon(bool initialGeometry) const
   {
-    const std::list<Pos3d> posiciones= this->getPosNodes(initialGeometry);
-    return Poligono3d(posiciones.begin(),posiciones.end());
+    const std::list<Pos3d> positions= this->getPosNodes(initialGeometry);
+    return Poligono3d(positions.begin(),positions.end());
   }
 
 //! @brief Returns a lado of the element. 
