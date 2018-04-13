@@ -35,23 +35,6 @@ class LimitStateControllerBase(object):
         self.analysisToPerform= predefined_solutions.simple_static_linear
         self.preprocessor=None   
 
-    def extractFiberData(self, scc, concrete, reinfSteel):
-        ''' Extract basic parameters from the fiber model of the section
-
-         :param scc: fiber model of the section.
-         :param concrete: parameters to modelize concrete.
-         :param reinfSteel: parameters to modelize reinforcement steel.
-        '''
-        self.concreteMatTag= concrete.matTagD
-        self.fckH= abs(concrete.fck)
-        self.fcdH= abs(concrete.fcd())
-        self.fctdH= concrete.fctd()
-        self.gammaC= concrete.gmmC
-        self.reinfSteelMaterialTag= reinfSteel.matTagD
-        self.fydS= reinfSteel.fyd()
-        if(not scc.hasProp("rcSets")):
-              scc.setProp("rcSets", fiber_sets.fiberSectionSetupRC3Sets(scc,self.concreteMatTag,self.concreteFibersSetName,self.reinfSteelMaterialTag,self.rebarFibersSetName))
-        return scc.getProp("rcSets")
 
     def check(self,elements,nmbComb):
         '''Crack control.'''

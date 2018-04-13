@@ -157,6 +157,8 @@ C60= EC2Concrete("C60-75",-60e6,1.5)
 C70= EC2Concrete("C70-85",-70e6,1.5)
 C80= EC2Concrete("C80-95",-80e6,1.5)
 C90= EC2Concrete("C90-105",-90e6,1.5)
+concrOfName={"C12-15":C12,"C16-20":C16,"C20-25":C20,"C25-30":C25,"C30-37":C30,"C35-45":C35,"C40-50":C40,"C45-55":C45,"C50-60":C50,"C55-67":C55,"C60-75":C60,"C70-85":C70,"C80-95":C80,"C90-105":C90}
+
 
 # EC2 reinforcing steel.
 
@@ -185,6 +187,8 @@ S550C= concrete_base.ReinforcingSteel(steelName="S550C", fyk=550e6, emax=0.075,g
 S600A= concrete_base.ReinforcingSteel(steelName="S600A", fyk=600e6, emax=0.025,gammaS=1.15,k=1.05)
 S600B= concrete_base.ReinforcingSteel(steelName="S600B", fyk=600e6, emax=0.05,gammaS=1.15,k=1.08)
 S600C= concrete_base.ReinforcingSteel(steelName="S600C", fyk=600e6, emax=0.075,gammaS=1.15,k=1.15)
+
+steelOfName={"S400A":S400A,"S400B":S400B,"S400C":S400C,"S450A":S450A,"S450B":S450B,"S450C":S450C,"S500A":S500A,"S500B":S500B,"S500C":S500C,"S550A":S550A,"S550B":S550B,"S550C":S550C,"S600A":S600A,"S600B":S600B,"S600C":S600C}
 
 # rebars as defined in Eurocode 2.
 rebarsEC2={}

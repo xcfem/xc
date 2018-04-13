@@ -738,6 +738,24 @@ class ShearController(lscb.LimitStateControllerBase):
       e.setProp(self.limitStateLabel,cv.RCShearControlVars())
 
 
+  def extractFiberData(self, scc, concrete, reinfSteel):
+    ''' Extract basic parameters from the fiber model of the section
+
+     :param scc: fiber model of the section.
+     :param concrete: parameters to modelize concrete.
+     :param reinfSteel: parameters to modelize reinforcement steel.
+    '''
+    self.concreteMatTag= concrete.matTagD
+    self.fckH= abs(concrete.fck)
+    self.fcdH= abs(concrete.fcd())
+    self.fctdH= concrete.fctd()
+    self.gammaC= concrete.gmmC
+    self.reinfSteelMaterialTag= reinfSteel.matTagD
+    self.fydS= reinfSteel.fyd()
+    if(not scc.hasProp("rcSets")):
+        scc.setProp("rcSets", fiber_sets.fiberSectionSetupRC3Sets(scc,self.concreteMatTag,self.concreteFibersSetName,self.reinfSteelMaterialTag,self.rebarFibersSetName))
+    return scc.getProp("rcSets")
+  
   def calcVuEHE08NoAt(self, scc, concrete, reinfSteel):
     ''' Compute the shear strength at failure without shear reinforcement
      according to clause 44.2.3.2.1 of EHE-08.
@@ -976,7 +994,7 @@ class CrackStraightController(lscb.LimitStateControllerBase):
     :param eps2: minimum deformation calculated in the section at the limits 
            of the tension zone
     '''
-    k1= (eps1+eps2)/(8*eps1)
+    k1= (eps1+eps2)/(8.0*eps1)
     return k1
 
   def check(self,elements,nmbComb):
