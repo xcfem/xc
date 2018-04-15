@@ -185,13 +185,13 @@ const XC::Vector &XC::EigenSOE::getEigenvector(int mode) const
 XC::Vector XC::EigenSOE::getNormalizedEigenvector(int mode) const
   { return theSolver->getNormalizedEigenvector(mode); }
 
-//! @brief Returns a matrix con los eigenvectors calculados colocados
-//! por columnas.
+//! @brief Returns a matrix with the computed eigenvectors disposed
+//! by columns.
 XC::Matrix XC::EigenSOE::getEigenvectors(void) const
   { return theSolver->getEigenvectors(); }
 
-//! @brief Returns a matrix con los eigenvectors normalizados colocados
-//! por columnas (norma_infinito).
+//! @brief Returns a matrix whit the normalized eigenvectors disposed
+//! by columns (infinity norm).
 XC::Matrix XC::EigenSOE::getNormalizedEigenvectors(void) const
   { return theSolver->getNormalizedEigenvectors(); }
 
@@ -278,14 +278,14 @@ XC::Matrix XC::EigenSOE::getDistributionFactors(void) const
     if(nm>0)
       {
         Vector distribFactor= getDistributionFactor(1);
-        const int nFilas= distribFactor.Size();
-        retval= Matrix(nFilas,nm);
-        for(int i= 0;i<nFilas;i++)
+        const int n_rows= distribFactor.Size();
+        retval= Matrix(n_rows,nm);
+        for(int i= 0;i<n_rows;i++)
           retval(i,0)= distribFactor(i);
         for(int j= 2;j<=nm;j++)
           {
             distribFactor= getDistributionFactor(j);
-            for(int i= 0;i<nFilas;i++)
+            for(int i= 0;i<n_rows;i++)
               retval(i,j-1)= distribFactor(i);
           }
       }

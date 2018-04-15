@@ -42,14 +42,14 @@
 #include "boost/lexical_cast.hpp"
 
 //! @brief Default constructor.
-XC::TritrizPtrNod::TritrizPtrNod(const size_t capas)
-  : TritrizPtrBase<MatrizPtrNod>(capas) {}
+XC::TritrizPtrNod::TritrizPtrNod(const size_t n_layers)
+  : TritrizPtrBase<MatrizPtrNod>(n_layers) {}
 //! @brief Constructor.
-XC::TritrizPtrNod::TritrizPtrNod(const size_t capas,const size_t filas,const size_t cols)
-  : TritrizPtrBase<MatrizPtrNod>(capas)
+XC::TritrizPtrNod::TritrizPtrNod(const size_t n_layers,const size_t n_rows,const size_t cols)
+  : TritrizPtrBase<MatrizPtrNod>(n_layers)
   {
-    for(size_t i=0;i<capas;i++)
-      (*this)[i]= MatrizPtrNod(filas,cols);
+    for(size_t i=0;i<n_layers;i++)
+      (*this)[i]= MatrizPtrNod(n_rows,cols);
   }
 
 //! @brief Returns (if it exists) a pointer to the node
@@ -57,8 +57,8 @@ XC::TritrizPtrNod::TritrizPtrNod(const size_t capas,const size_t filas,const siz
 XC::Node *XC::TritrizPtrNod::findNode(const int &tag)
   {
     Node *retval= nullptr;
-    const size_t ncapas= GetCapas();
-    for(size_t i=1;i<=ncapas;i++)
+    const size_t numberOfLayers= getNumberOfLayers();
+    for(size_t i=1;i<=numberOfLayers;i++)
       {
         MatrizPtrNod &capa= operator()(i);
         retval= capa.findNode(tag);
@@ -78,15 +78,15 @@ const XC::Node *XC::TritrizPtrNod::getNearestNode(const Pos3d &p) const
 XC::Node *XC::TritrizPtrNod::getNearestNode(const Pos3d &p)
   {
     Node *retval= nullptr, *ptrNod= nullptr;
-    const size_t ncapas= GetCapas();
+    const size_t numberOfLayers= getNumberOfLayers();
     double d= DBL_MAX;
     double tmp= 0;
-    if(ncapas>100)
+    if(numberOfLayers>100)
       std::clog << "La «tritriz» de nodes es tiene "
-                << ncapas << " capas "
+                << numberOfLayers << " n_layers "
                 << " es mejor buscar por coordenadas en the set asociado."
                 << std::endl;
-    for(size_t i=1;i<=ncapas;i++)
+    for(size_t i=1;i<=numberOfLayers;i++)
       {
         MatrizPtrNod &capa= operator()(i);
         ptrNod= capa.getNearestNode(p);
@@ -106,13 +106,13 @@ XC::ID XC::TritrizPtrNod::getNodeIndices(const Node *n) const
   {
     ID retval(3);
     retval[0]= -1; retval[1]= -1; retval[2]= -1;
-    const size_t ncapas= GetCapas();
-    const size_t nfilas= getNumFilas();
-    const size_t ncols= getNumCols();
+    const size_t numberOfLayers= getNumberOfLayers();
+    const size_t numberOfRows= getNumberOfRows();
+    const size_t numberOfColumns= getNumberOfColumns();
     Node *ptrNod= nullptr;
-    for(size_t i=1;i<=ncapas;i++)
-      for(size_t j=1;j<=nfilas;j++)
-        for(size_t k=1;k<=ncols;k++)
+    for(size_t i=1;i<=numberOfLayers;i++)
+      for(size_t j=1;j<=numberOfRows;j++)
+        for(size_t k=1;k<=numberOfColumns;k++)
           {
             ptrNod= (*this)(i,j,k);
             if(ptrNod==n)
@@ -129,8 +129,8 @@ XC::ID XC::TritrizPtrNod::getNodeIndices(const Node *n) const
 const XC::Node *XC::TritrizPtrNod::findNode(const int &tag) const
   {
     const Node *retval= nullptr;
-    const size_t ncapas= GetCapas();
-    for(size_t i=1;i<=ncapas;i++)
+    const size_t numberOfLayers= getNumberOfLayers();
+    for(size_t i=1;i<=numberOfLayers;i++)
       {
         const MatrizPtrNod &capa= operator()(i);
         retval= capa.findNode(tag);
@@ -141,10 +141,10 @@ const XC::Node *XC::TritrizPtrNod::findNode(const int &tag) const
 
 
 
-XC::Vector XC::TritrizPtrNod::IntegSimpsonFilaI(const size_t &f,const size_t &c,const ExprAlgebra &e,const size_t &n) const
+XC::Vector XC::TritrizPtrNod::IRowSimpsonIntegration(const size_t &f,const size_t &c,const ExprAlgebra &e,const size_t &n) const
   {
-    const_ref_fila_i fila= GetConstRefFilaI(f,c);
-    const std::deque<double> dq_retval= IntegSimpsonFila(fila,"z",2,e,n);
+    const_ref_i_row iRow= getIRowConstRef(f,c);
+    const std::deque<double> dq_retval= RowSimpsonIntegration(iRow,"z",2,e,n);
     const size_t szr= dq_retval.size();
     Vector retval(szr);
     for(size_t i= 0;i<szr;i++)
@@ -152,10 +152,10 @@ XC::Vector XC::TritrizPtrNod::IntegSimpsonFilaI(const size_t &f,const size_t &c,
     return retval;
   }
 
-XC::Vector XC::TritrizPtrNod::IntegSimpsonFilaJ(const size_t &capa, const size_t &c,const ExprAlgebra &e,const size_t &n) const
+XC::Vector XC::TritrizPtrNod::JRowSimpsonIntegration(const size_t &capa, const size_t &c,const ExprAlgebra &e,const size_t &n) const
   {
-    const_ref_fila_j fila= GetConstRefFilaJ(capa,c);
-    const std::deque<double> dq_retval= IntegSimpsonFila(fila,"x",0,e,n);
+    const_ref_j_row iRow= getJRowConstRef(capa,c);
+    const std::deque<double> dq_retval= RowSimpsonIntegration(iRow,"x",0,e,n);
     const size_t szr= dq_retval.size();
     Vector retval(szr);
     for(size_t i= 0;i<szr;i++)
@@ -163,10 +163,10 @@ XC::Vector XC::TritrizPtrNod::IntegSimpsonFilaJ(const size_t &capa, const size_t
     return retval;
   }
 
-XC::Vector XC::TritrizPtrNod::IntegSimpsonFilaK(const size_t &capa,const size_t &f,const ExprAlgebra &e,const size_t &n) const
+XC::Vector XC::TritrizPtrNod::KRowSimpsonIntegration(const size_t &capa,const size_t &f,const ExprAlgebra &e,const size_t &n) const
   {
-    const_ref_fila_k fila= GetConstRefFilaK(capa,f);
-    const std::deque<double> dq_retval= IntegSimpsonFila(fila,"y",1,e,n);
+    const_ref_k_row iRow= getKRowConstRef(capa,f);
+    const std::deque<double> dq_retval= RowSimpsonIntegration(iRow,"y",1,e,n);
     const size_t szr= dq_retval.size();
     Vector retval(szr);
     for(size_t i= 0;i<szr;i++)
@@ -178,8 +178,8 @@ XC::Vector XC::TritrizPtrNod::IntegSimpsonFilaK(const size_t &capa,const size_t 
 void XC::TritrizPtrNod::fix(const SFreedom_Constraint &spc) const
   {
     if(Null()) return;
-    const size_t ncapas= GetCapas();
-    for(size_t i=1;i<=ncapas;i++)
+    const size_t numberOfLayers= getNumberOfLayers();
+    for(size_t i=1;i<=numberOfLayers;i++)
       {
         const MatrizPtrNod &capa= operator()(i);
         capa.fix(spc);
@@ -188,28 +188,28 @@ void XC::TritrizPtrNod::fix(const SFreedom_Constraint &spc) const
 
 std::vector<int> XC::TritrizPtrNod::getTags(void) const
   {
-    const size_t ncapas= GetCapas();
-    const size_t nfilas= getNumFilas();
-    const size_t ncols= getNumCols();
-    std::vector<int> retval(ncapas*nfilas*ncols,-1);
+    const size_t numberOfLayers= getNumberOfLayers();
+    const size_t numberOfRows= getNumberOfRows();
+    const size_t numberOfColumns= getNumberOfColumns();
+    std::vector<int> retval(numberOfLayers*numberOfRows*numberOfColumns,-1);
     size_t conta= 0;
-    for(size_t i=1;i<=ncapas;i++)
-      for(size_t j=1;j<=nfilas;j++)
-        for(size_t k=1;k<=ncols;k++)
+    for(size_t i=1;i<=numberOfLayers;i++)
+      for(size_t j=1;j<=numberOfRows;j++)
+        for(size_t k=1;k<=numberOfColumns;k++)
           retval[conta++]= (*this)(i,j,k)->getTag();
     return retval;
   }
 
 void XC::TritrizPtrNod::Print(std::ostream &os) const
   {
-    const size_t ncapas= GetCapas();
-    const size_t nfilas= getNumFilas();
-    const size_t ncols= getNumCols();
-    for(size_t i=1;i<=ncapas;i++)
+    const size_t numberOfLayers= getNumberOfLayers();
+    const size_t numberOfRows= getNumberOfRows();
+    const size_t numberOfColumns= getNumberOfColumns();
+    for(size_t i=1;i<=numberOfLayers;i++)
       {
-        for(size_t j=1;j<=nfilas;j++)
+        for(size_t j=1;j<=numberOfRows;j++)
           {
-            for(size_t k=1;k<=ncols;k++)
+            for(size_t k=1;k<=numberOfColumns;k++)
 	      os << (*this)(i,j,k)->getTag() << " ";
 	    os << std::endl;
           }
@@ -226,9 +226,9 @@ std::ostream &XC::operator<<(std::ostream &os, const TritrizPtrNod &t)
 void XC::fix(const XC::TritrizPtrNod::var_ref_caja &ref_caja,const XC::SFreedom_Constraint &spc)
   {
     if(ref_caja.Empty()) return;
-    const size_t ncapas= ref_caja.GetCapas();
-    const size_t nfilas= ref_caja.getNumFilas();
-    const size_t ncols= ref_caja.getNumCols();
+    const size_t numberOfLayers= ref_caja.getNumberOfLayers();
+    const size_t numberOfRows= ref_caja.getNumberOfRows();
+    const size_t numberOfColumns= ref_caja.getNumberOfColumns();
 
     // Obtenemos el domain.
     const Node *n= ref_caja(1,1,1);
@@ -236,9 +236,9 @@ void XC::fix(const XC::TritrizPtrNod::var_ref_caja &ref_caja,const XC::SFreedom_
     dom= n->getDomain();
     if(dom)
       {
-        for(size_t i=1;i<=ncapas;i++)
-          for(size_t j=1;j<=nfilas;j++)
-            for(size_t k=1;k<=ncols;k++)
+        for(size_t i=1;i<=numberOfLayers;i++)
+          for(size_t j=1;j<=numberOfRows;j++)
+            for(size_t k=1;k<=numberOfColumns;k++)
               {
                 const Node *nod= ref_caja(i,j,k);
                 if(nod)
@@ -253,17 +253,17 @@ void XC::fix(const XC::TritrizPtrNod::var_ref_caja &ref_caja,const XC::SFreedom_
   }
 
 //! @brief Returns the indexes of the nodes (j,k),(j+1,k),(j+1,k+1),(j,k+1). 
-std::vector<int> XC::getNodeIdsQuad4N(const XC::TritrizPtrNod::const_ref_capa_i_cte &nodes,const size_t &j,const size_t &k)
+std::vector<int> XC::getNodeIdsQuad4N(const XC::TritrizPtrNod::constant_i_layer_const_ref &nodes,const size_t &j,const size_t &k)
   {
     std::vector<int> retval(4,-1);
-    const size_t nfilas= nodes.getNumFilas();
-    const size_t ncols= nodes.getNumCols();
-    if(j>=nfilas)
+    const size_t numberOfRows= nodes.getNumberOfRows();
+    const size_t numberOfColumns= nodes.getNumberOfColumns();
+    if(j>=numberOfRows)
       {
         std::cerr << "getNodeIdsQuad; row index j= " << j << " out of range.\n";
         return retval;
       }
-    if(k>=ncols)
+    if(k>=numberOfColumns)
       {
         std::cerr << "getNodeIdsQuad; column index k= " << k << " out of range.\n";
         return retval;
@@ -347,7 +347,7 @@ std::vector<int> XC::getNodeIdsQuad4N(const XC::TritrizPtrNod::const_ref_capa_i_
   }
 
 //! @brief Returns the indexes of the nodes (j,k),(j+1,k),(j+1,k+1),(j,k+1). 
-std::vector<int> XC::getNodeIdsQuad9N(const XC::TritrizPtrNod::const_ref_capa_i_cte &nodes,const size_t &j,const size_t &k)
+std::vector<int> XC::getNodeIdsQuad9N(const XC::TritrizPtrNod::constant_i_layer_const_ref &nodes,const size_t &j,const size_t &k)
   {
     std::vector<int> retval(9,-1);
     std::cerr << "getNodeIdsQuad9N not implemented." << std::endl;

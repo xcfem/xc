@@ -24,10 +24,10 @@
 // along with this program.
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
-//SetFila.h
+//RowSet.h
 
-#ifndef SETFILA_H
-#define SETFILA_H
+#ifndef ROWSET_H
+#define ROWSET_H
 
 #include "SetEstruct.h"
 #include "xc_utils/src/geom/pos_vec/RangoTritriz.h"
@@ -40,94 +40,94 @@ class SFreedom_Constraint;
 //! 
 //!  @brief Set of objects in a row.
 //! 
-//!  A SetFila object contains 0 or more:
+//!  A RowSet object contains 0 or more:
 //!  - Nodes.
 //!  - Elements.
 //!  that correspond to a row_[ijk] of an EntMdlr object.
-template <class FILATTZNOD,class FILATTZELEM>
-class SetFila: public SetEstruct
+template <class ROWTTZNOD,class ROWTTZELEM>
+class RowSet: public SetEstruct
   {
-    FILATTZNOD fila_nod; //!< Reference to the nodes of a row.
-    FILATTZELEM fila_elem; //!< Reference to the elements of a row.
+    ROWTTZNOD node_row; //!< Reference to the nodes of a row.
+    ROWTTZELEM element_row; //!< Reference to the elements of a row.
   public:
-    typedef typename FILATTZNOD::reference reference_nod;
-    typedef typename FILATTZNOD::const_reference const_reference_nod; 
+    typedef typename ROWTTZNOD::reference reference_nod;
+    typedef typename ROWTTZNOD::const_reference const_reference_nod; 
 
-    typedef typename FILATTZELEM::reference reference_elem;
-    typedef typename FILATTZELEM::const_reference const_reference_elem; 
+    typedef typename ROWTTZELEM::reference reference_elem;
+    typedef typename ROWTTZELEM::const_reference const_reference_elem; 
   public:
-    SetFila(const FILATTZNOD &fn,const FILATTZELEM &fe,const std::string &nmb="",Preprocessor *preprocessor= nullptr);
-    SetFila(const SetFila &otro);
-    SetFila &operator=(const SetFila &otro);
+    RowSet(const ROWTTZNOD &fn,const ROWTTZELEM &fe,const std::string &nmb="",Preprocessor *preprocessor= nullptr);
+    RowSet(const RowSet &otro);
+    RowSet &operator=(const RowSet &otro);
     virtual SetEstruct *getCopy(void) const;
     reference_nod Node(const size_t &i)
-      { return fila_nod(i); }
+      { return node_row(i); }
     const reference_nod Node(const size_t &i) const
-      { return fila_nod(i); }
+      { return node_row(i); }
     reference_elem Element(const size_t &i)
-      { return fila_elem(i); }
+      { return element_row(i); }
     const reference_elem Element(const size_t &i) const
-      { return fila_elem(i); }
+      { return element_row(i); }
 
     RangoTritriz NodeRange(void) const
-      { return RangoTritriz(fila_nod); }
+      { return RangoTritriz(node_row); }
     RangoTritriz ElementRange(void) const
-      { return RangoTritriz(fila_elem); }
+      { return RangoTritriz(element_row); }
 
     virtual size_t getNumNodeLayers(void) const
-      { return fila_nod.GetCapas(); }
+      { return node_row.getNumberOfLayers(); }
     virtual size_t getNumNodeRows(void) const
-      { return fila_nod.getNumFilas(); }
+      { return node_row.getNumberOfRows(); }
     virtual size_t getNumNodeColumns(void) const
-      { return fila_nod.getNumCols(); }
+      { return node_row.getNumberOfColumns(); }
     virtual size_t getNumElementLayers(void) const
-      { return fila_elem.GetCapas(); }
+      { return element_row.getNumberOfLayers(); }
     virtual size_t getNumElementRows(void) const
-      { return fila_elem.getNumFilas(); }
+      { return element_row.getNumberOfRows(); }
     virtual size_t getNumElementColumns(void) const
-      { return fila_elem.getNumCols(); }
+      { return element_row.getNumberOfColumns(); }
 
     virtual XC::Node *getNode(const size_t &i=1,const size_t &j=1,const size_t &k=1)
-      { return fila_nod(i,j,k); }
+      { return node_row(i,j,k); }
     virtual const XC::Node *getNode(const size_t &i=1,const size_t &j=1,const size_t &k=1) const
-      { return fila_nod(i,j,k); }
+      { return node_row(i,j,k); }
     virtual XC::Element *getElement(const size_t &i=1,const size_t &j=1,const size_t &k=1)
-      { return fila_elem(i,j,k); }
+      { return element_row(i,j,k); }
     virtual const XC::Element *getElement(const size_t &i=1,const size_t &j=1,const size_t &k=1) const
-      { return fila_elem(i,j,k); }
+      { return element_row(i,j,k); }
 
     //void fix(int &tag_fix,const SFreedom_Constraint &);
 
   };
 
-template <class FILATTZNOD,class FILATTZELEM>
-SetFila<FILATTZNOD,FILATTZELEM>::SetFila(const FILATTZNOD &fn,const FILATTZELEM &fe,const std::string &nmb,Preprocessor *preprocessor)
-  : SetEstruct(nmb,preprocessor), fila_nod(fn), fila_elem(fe) {}
+template <class ROWTTZNOD,class ROWTTZELEM>
+RowSet<ROWTTZNOD,ROWTTZELEM>::RowSet(const ROWTTZNOD &fn,const ROWTTZELEM &fe,const std::string &nmb,Preprocessor *preprocessor)
+  : SetEstruct(nmb,preprocessor), node_row(fn), element_row(fe) {}
 
-template <class FILATTZNOD,class FILATTZELEM>
-SetFila<FILATTZNOD,FILATTZELEM>::SetFila(const SetFila &otro)
-  : SetEstruct(otro), fila_nod(otro.fila_nod), fila_elem(otro.fila_elem) {}
+template <class ROWTTZNOD,class ROWTTZELEM>
+RowSet<ROWTTZNOD,ROWTTZELEM>::RowSet(const RowSet &otro)
+  : SetEstruct(otro), node_row(otro.node_row), element_row(otro.element_row) {}
 
   //! @brief Assignment operator.
-template <class FILATTZNOD,class FILATTZELEM>
-SetFila<FILATTZNOD,FILATTZELEM> &XC::SetFila<FILATTZNOD,FILATTZELEM>::operator=(const SetFila &otro)
+template <class ROWTTZNOD,class ROWTTZELEM>
+RowSet<ROWTTZNOD,ROWTTZELEM> &XC::RowSet<ROWTTZNOD,ROWTTZELEM>::operator=(const RowSet &otro)
   {
     SetEstruct::operator=(otro);
-    fila_nod= otro.fila_nod;
-    fila_elem= otro.fila_elem;
+    node_row= otro.node_row;
+    element_row= otro.element_row;
     return *this;
   }
 
 //! @brief Virtual constructor.
-template <class FILATTZNOD,class FILATTZELEM>
-SetEstruct *XC::SetFila<FILATTZNOD,FILATTZELEM>::getCopy(void) const
-  { return new SetFila<FILATTZNOD,FILATTZELEM>(*this); }
+template <class ROWTTZNOD,class ROWTTZELEM>
+SetEstruct *XC::RowSet<ROWTTZNOD,ROWTTZELEM>::getCopy(void) const
+  { return new RowSet<ROWTTZNOD,ROWTTZELEM>(*this); }
 
 
 /* //! @brief Impone desplazamiento nulo en the nodes de this set. */
-/* template <class FILATTZNOD,class FILATTZELEM> */
-/* void XC::SetFila<FILATTZNOD,FILATTZELEM>::fix(const SFreedom_Constraint &spc) */
-/*   { fix(fila_nod,spc); } */
+/* template <class ROWTTZNOD,class ROWTTZELEM> */
+/* void XC::RowSet<ROWTTZNOD,ROWTTZELEM>::fix(const SFreedom_Constraint &spc) */
+/*   { fix(node_row,spc); } */
 
 
 } //end of XC namespace

@@ -49,7 +49,7 @@ class UniformGrid: public EntMdlr
     size_t ndiv_z; //! Number of divisions on z axis.
   protected:
 
-    void actualiza_topologia(void);
+    void update_topology(void);
     void create_nodes(void);
   public:
     UniformGrid(Preprocessor *m,const size_t &i= 0);

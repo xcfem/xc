@@ -59,7 +59,7 @@ void XC::Edge::insert_surf(Face *s)
   { surfaces_line.insert(s); }
 
 //! @brief Update topology.
-void XC::Edge::actualiza_topologia(void)
+void XC::Edge::update_topology(void)
   {
     if(P1()) P1()->insert_line(this);
     if(P2()) P2()->insert_line(this);
@@ -477,9 +477,9 @@ void XC::Edge::create_nodes_en_extremos(void)
 
     Node *node_p2= P2()->getNode();
     assert(node_p2);
-    const size_t filas= ttzNodes.getNumFilas();
-    const size_t cols= ttzNodes.getNumCols();
-    ttzNodes(1,filas,cols)= node_p2; //Node of the end point.
+    const size_t n_rows= ttzNodes.getNumberOfRows();
+    const size_t cols= ttzNodes.getNumberOfColumns();
+    ttzNodes(1,n_rows,cols)= node_p2; //Node of the end point.
 
     if(verbosity>4)
       std::cerr << getClassName() << "::" << __FUNCTION__
@@ -501,21 +501,21 @@ void XC::Edge::create_nodes(void)
         else
           {
             const MatrizPos3d positions= get_nodes_pos();
-            const size_t filas= positions.getNumFilas();
-            const size_t cols= positions.getNumCols();
-            ttzNodes= TritrizPtrNod(1,filas,cols);
+            const size_t n_rows= positions.getNumberOfRows();
+            const size_t cols= positions.getNumberOfColumns();
+            ttzNodes= TritrizPtrNod(1,n_rows,cols);
 
             create_nodes_en_extremos();
 
 
-            if((filas*cols)>2) //If it has intermediate nodes...
+            if((n_rows*cols)>2) //If it has intermediate nodes...
               {
-                const size_t fila_fin= std::max(filas-1,size_t(1));
-                const size_t fila_ini= (fila_fin == 1 ? 1 : 2);
-                const size_t col_fin= std::max(cols-1,size_t(1));
-                const size_t col_ini= (col_fin == 1 ? 1 : 2);
-                for(register size_t j= fila_ini;j<=fila_fin;j++)
-                  for(register size_t k= col_ini;k<=col_fin;k++)
+                const size_t end_row= std::max(n_rows-1,size_t(1));
+                const size_t begin_row= (end_row == 1 ? 1 : 2);
+                const size_t end_column= std::max(cols-1,size_t(1));
+                const size_t begin_column= (end_column == 1 ? 1 : 2);
+                for(register size_t j= begin_row;j<=end_row;j++)
+                  for(register size_t k= begin_column;k<=end_column;k++)
                     create_node(positions(j,k),1,j,k);
               }
           }

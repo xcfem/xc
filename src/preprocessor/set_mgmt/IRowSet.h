@@ -24,12 +24,12 @@
 // along with this program.
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
-//SetFilaK.h
+//IRowSet.h
 
-#ifndef SETFILAK_H
-#define SETFILAK_H
+#ifndef IROWSET_H
+#define IROWSET_H
 
-#include "SetFila.h"
+#include "RowSet.h"
 #include "preprocessor/multi_block_topology/matrices/TritrizPtrNod.h"
 #include "preprocessor/multi_block_topology/matrices/TritrizPtrElem.h"
 
@@ -41,19 +41,19 @@ class EntMdlr;
 
 //!  @ingroup Set
 //! 
-//!  @brief Set of objects in a row.
+//!  @brief Set of objecst in a row.
 //! 
-//!  A SetFilaK object contains zero o more:
+//!  An IRowSet objects contains zero or more:
 //!  - Nodes.
 //!  - Finite elements.
-//!  that correspond to a fila_k of an EntMdlr object.
-class SetFilaK: public SetFila<TritrizPtrNod::var_ref_fila_k,TritrizPtrElem::var_ref_fila_k>
+//!  that correspond to a i_row of an EntMdlr object.
+class IRowSet: public RowSet<TritrizPtrNod::var_ref_i_row,TritrizPtrElem::var_ref_i_row>
   {
   public:
-    typedef TritrizPtrNod::var_ref_fila_k tfilanod;
-    typedef TritrizPtrElem::var_ref_fila_k tfilaelem;
-    SetFilaK(EntMdlr &e,const size_t &f=1,const size_t &c=1,const std::string &nmb="",Preprocessor *preprocessor= nullptr);
-    SetFilaK(EntMdlr &e,const size_t &capa,const size_t &f,const RangoIndice &,const std::string &nmb="",Preprocessor *preprocessor= nullptr);
+    typedef TritrizPtrNod::var_ref_i_row tNodeRow;
+    typedef TritrizPtrElem::var_ref_i_row tElemRow;
+    IRowSet(EntMdlr &e,const size_t &f=1,const size_t &c=1,const std::string &nmb="",Preprocessor *preprocessor= nullptr);
+    IRowSet(EntMdlr &e,const RangoIndice &layer_range,const size_t &f,const size_t &c,const std::string &nmb="",Preprocessor *preprocessor= nullptr);
   };
 } //end of XC namespace
 #endif

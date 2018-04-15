@@ -54,7 +54,7 @@ class CircularArc: public LineBase
     virtual SetEstruct *getCopy(void) const;
     const Pnt *P3(void) const;
 
-    void actualiza_topologia(void);
+    void update_topology(void);
 
     double getLongitud(void) const;
     Pos3d getCentroid(void) const;

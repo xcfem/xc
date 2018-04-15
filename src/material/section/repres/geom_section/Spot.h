@@ -50,7 +50,7 @@ class Spot: public EntGeomSection
     void borra_linea(Eje *l);
   protected:
 
-    virtual void actualiza_topologia(void);
+    virtual void update_topology(void);
 
     friend class GeomSection;
     //! @brief Constructor.

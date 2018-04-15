@@ -46,7 +46,7 @@ class TritrizPtrElem: public TritrizPtrBase<MatrizPtrElem>
 
   public:
 
-    TritrizPtrElem(const size_t capas= 0,const MatrizPtrElem &m= MatrizPtrElem());
+    TritrizPtrElem(const size_t n_layers= 0,const MatrizPtrElem &m= MatrizPtrElem());
     TritrizPtrElem(const size_t ,const size_t ,const size_t );
 
     Element *findElement(const int &);

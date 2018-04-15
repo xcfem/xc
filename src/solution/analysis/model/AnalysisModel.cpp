@@ -134,7 +134,7 @@ XC::AnalysisModel &XC::AnalysisModel::operator=(const AnalysisModel &otro)
     theDOFGroups= otro.theDOFGroups;
     myDOFGraph= DOF_Graph(*this);
     myGroupGraph= DOF_GroupGraph(*this);
-    updateGraphs= false; //Los acabamos de actualizar
+    updateGraphs= false; //Update just finished
     return *this;
   }
 

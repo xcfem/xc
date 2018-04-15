@@ -56,18 +56,18 @@ size_t XC::BrickBase::getDimension(void) const
 //Put the element on the mesh being passed as parameter.
 XC::TritrizPtrElem XC::BrickBase::put_on_mesh(const XC::TritrizPtrNod &nodes,meshing_dir dm) const
   {
-    const size_t ncapas= nodes.GetCapas();
-    const size_t nfilas= nodes.getNumFilas();
-    const size_t ncols= nodes.getNumCols();
+    const size_t numberOfLayers= nodes.getNumberOfLayers();
+    const size_t numberOfRows= nodes.getNumberOfRows();
+    const size_t numberOfColumns= nodes.getNumberOfColumns();
     const size_t mesh_dim= nodes.GetDim();
-    TritrizPtrElem retval(ncapas-1,nfilas-1,ncols-1);
+    TritrizPtrElem retval(numberOfLayers-1,numberOfRows-1,numberOfColumns-1);
     if(mesh_dim<3)
       std::cerr << "BrickBase::put_on_mesh; three-dimensional mesh needed, can't create elements." << std::endl;
     else
       {
-        for(size_t i=1;i<ncapas;i++)
-          for(size_t j=1;j<nfilas;j++)
-            for(size_t k=1;k<ncols;k++)
+        for(size_t i=1;i<numberOfLayers;i++)
+          for(size_t j=1;j<numberOfRows;j++)
+            for(size_t k=1;k<numberOfColumns;k++)
               {
 	        XC::Element *tmp= this->getCopy();
                 const int &Nd1= nodes(i,j,k)->getTag();

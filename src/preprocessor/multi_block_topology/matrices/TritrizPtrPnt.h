@@ -54,7 +54,7 @@ class TritrizPtrPnt: public TritrizPtrBase<MatrizPtrPnt>
 
 
     friend class MapEsquemas3d;
-    TritrizPtrPnt(const size_t capas= 0);
+    TritrizPtrPnt(const size_t n_layers= 0);
     TritrizPtrPnt(const size_t ,const size_t ,const size_t );
   public:
     inline virtual ~TritrizPtrPnt(void) {}
@@ -86,7 +86,7 @@ class TritrizPtrPnt: public TritrizPtrBase<MatrizPtrPnt>
 
 std::ostream &operator<<(std::ostream &os,const TritrizPtrPnt &);
 
-std::vector<size_t> getIdPointsQuad(const TritrizPtrPnt::const_ref_capa_i_cte &,const size_t &j,const size_t &k);
+std::vector<size_t> getIdPointsQuad(const TritrizPtrPnt::constant_i_layer_const_ref &,const size_t &j,const size_t &k);
 
 } //end of XC namespace.
 

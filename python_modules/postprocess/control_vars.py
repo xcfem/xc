@@ -599,8 +599,8 @@ def writeControlVarsFromElements(controlVarName,preprocessor,outputFileName):
   texOutput2= open("/tmp/texOutput2.tmp","w")
   texOutput2.write("Section 2\n")
   xcOutput= open(outputFileName+".py","w")
-  #printCabeceraListadoFactorCapacidad("texOutput1","1 ("+ sectionName1 +")")
-  #printCabeceraListadoFactorCapacidad("texOutput2","2 ("+ sectionName2 +")")
+  #printCabeceraListadoCapacityFactor("texOutput1","1 ("+ sectionName1 +")")
+  #printCabeceraListadoCapacityFactor("texOutput2","2 ("+ sectionName2 +")")
   fcs1= [] #Capacity factors at section 1.
   fcs2= [] #Capacity factors at section 2.
   elementos= preprocessor.getSets["total"].getElements
@@ -618,8 +618,8 @@ def writeControlVarsFromElements(controlVarName,preprocessor,outputFileName):
       texOutput2.write(outStr)
       xcOutput.write(controlVar.strElementProp(eTag,controlVarName+'Sect2',1e-3))
 
-  #printCierreListadoFactorCapacidad("texOutput1")
-  #printCierreListadoFactorCapacidad("texOutput2")
+  #printCierreListadoCapacityFactor("texOutput1")
+  #printCierreListadoCapacityFactor("texOutput2")
   texOutput1.close()
   texOutput2.close()
   xcOutput.close()
@@ -644,8 +644,8 @@ def writeControlVarsFromElementsForAnsys(controlVarName,preprocessor,outputFileN
   texOutput2.write("Section 2\n")
   ansysOutput1= open(outputFileName+".mac","w")
   ansysOutput2= open(outputFileName+"esf.mac","w")
-  #printCabeceraListadoFactorCapacidad("texOutput1","1 ("+ sectionName1 +")")
-  #printCabeceraListadoFactorCapacidad("texOutput2","2 ("+ sectionName2 +")")
+  #printCabeceraListadoCapacityFactor("texOutput1","1 ("+ sectionName1 +")")
+  #printCabeceraListadoCapacityFactor("texOutput2","2 ("+ sectionName2 +")")
   fcs1= [] #Capacity factors at section 1.
   fcs2= [] #Capacity factors at section 2.
   elementos= preprocessor.getSets["total"].getElements
@@ -666,8 +666,8 @@ def writeControlVarsFromElementsForAnsys(controlVarName,preprocessor,outputFileN
       for s in ansOut:
         ansysOutput2.write(s)
   
-  #printCierreListadoFactorCapacidad("texOutput1")
-  #printCierreListadoFactorCapacidad("texOutput2")
+  #printCierreListadoCapacityFactor("texOutput1")
+  #printCierreListadoCapacityFactor("texOutput2")
   texOutput1.close()
   texOutput2.close()
   ansysOutput1.close()

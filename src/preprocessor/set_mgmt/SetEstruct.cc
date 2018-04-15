@@ -58,47 +58,47 @@ size_t XC::SetEstruct::getNumberOfElements(void) const
   { return getNumElementLayers()*getNumElementRows()*getNumElementColumns(); }
 
 //! @brief Returns true if only the I index varies.
-bool XC::SetEstruct::EsFilaI(void) const
+bool XC::SetEstruct::isIRow(void) const
   {
     if((getNumNodeRows()>1) || (getNumNodeColumns()>1)) return false;
     return true;
   }
 
 //! @brief Returns true if only the J index varies.
-bool XC::SetEstruct::EsFilaJ(void) const
+bool XC::SetEstruct::isJRow(void) const
   {
     if((getNumNodeLayers()>1) || (getNumNodeColumns()>1)) return false;
     return true;
   }
 
 //! @brief Returns true if only the K index varies.
-bool XC::SetEstruct::EsFilaK(void) const
+bool XC::SetEstruct::isKRow(void) const
   {
     if((getNumNodeLayers()>1) || (getNumNodeRows()>1)) return false;
     return true;
   }
 
 //! @brief Returns true if only J and K indices varies.
-bool XC::SetEstruct::EsCapaICte(void) const
+bool XC::SetEstruct::isIConstantLayer(void) const
   { return (getNumNodeLayers()==1); }
 
 //! @brief Returns true if only J and K indices varies.
-bool XC::SetEstruct::EsCapaJCte(void) const
+bool XC::SetEstruct::isJConstantLayer(void) const
   { return (getNumNodeRows()==1); }
 
 //! @brief Returns true if only I and J indices varies.
-bool XC::SetEstruct::EsCapaKCte(void) const
+bool XC::SetEstruct::isKConstantLayer(void) const
   { return (getNumNodeColumns()==1); }
 
-//! @brief Returns the set type filaI, filaJ, filaK, capaICte,...
+//! @brief Returns the set type i_row, j_row, k_row, capaICte,...
 std::string XC::SetEstruct::GetStrTipo(void) const
   {
-    if(EsFilaI()) return "filaI";
-    if(EsFilaJ()) return "filaJ";
-    if(EsFilaK()) return "filaK";
-    if(EsCapaICte()) return "capaICte";
-    if(EsCapaJCte()) return "capaJCte";
-    if(EsCapaKCte()) return "capaKCte";
+    if(isIRow()) return "i_row";
+    if(isJRow()) return "j_row";
+    if(isKRow()) return "k_row";
+    if(isIConstantLayer()) return "capaICte";
+    if(isJConstantLayer()) return "capaJCte";
+    if(isKConstantLayer()) return "capaKCte";
     return "bloqueIJK";
   }
 
@@ -119,12 +119,12 @@ size_t XC::SetEstruct::Dimension(void) const
 XC::NodePtrSet XC::SetEstruct::getNodePtrSet(void)
   {
     NodePtrSet retval;
-    const size_t ncapas= getNumNodeLayers();
-    const size_t nfilas= getNumNodeRows();
-    const size_t ncols= getNumNodeColumns();
-    for(size_t i= 1;i<=ncapas;i++)
-      for(size_t j= 1;j<=nfilas;j++)
-        for(size_t k= 1;k<=ncols;k++)
+    const size_t numberOfLayers= getNumNodeLayers();
+    const size_t numberOfRows= getNumNodeRows();
+    const size_t numberOfColumns= getNumNodeColumns();
+    for(size_t i= 1;i<=numberOfLayers;i++)
+      for(size_t j= 1;j<=numberOfRows;j++)
+        for(size_t k= 1;k<=numberOfColumns;k++)
           retval.insert(getNode(i,j,k));
     return retval;    
   }
@@ -140,12 +140,12 @@ XC::ElementEdges XC::SetEstruct::getElementEdges(void)
 //! @brief Adds to the model the elements being passed as parameters.
 void XC::SetEstruct::add_elements(const TritrizPtrElem &elements)
   {
-    const size_t capas= elements.GetCapas();
-    if(capas<1) return;
-    const size_t filas= elements(1).getNumFilas();
-    const size_t cols= elements(1).getNumCols();
-    for(register size_t i= 1;i<=capas;i++)
-      for(register size_t j= 1;j<=filas;j++)
+    const size_t n_layers= elements.getNumberOfLayers();
+    if(n_layers<1) return;
+    const size_t numberOfRows= elements(1).getNumberOfRows();
+    const size_t cols= elements(1).getNumberOfColumns();
+    for(register size_t i= 1;i<=n_layers;i++)
+      for(register size_t j= 1;j<=numberOfRows;j++)
         for(register size_t k= 1;k<=cols;k++)
           getPreprocessor()->getElementHandler().Add(elements(i,j,k));
   }
@@ -154,14 +154,14 @@ void XC::SetEstruct::add_elements(const TritrizPtrElem &elements)
 std::set<int> XC::SetEstruct::getNodeTags(void) const
   {
     std::set<int> retval;
-    const size_t ncapas= getNumNodeLayers();
-    if(ncapas>0)
+    const size_t numberOfLayers= getNumNodeLayers();
+    if(numberOfLayers>0)
       {
-        const size_t nfilas= getNumNodeRows();
-        const size_t ncols= getNumNodeColumns();
-        for(size_t i= 1;i<=ncapas;i++)
-          for(size_t j= 1;j<=nfilas;j++)
-            for(size_t k= 1;k<=ncols;k++)
+        const size_t numberOfRows= getNumNodeRows();
+        const size_t numberOfColumns= getNumNodeColumns();
+        for(size_t i= 1;i<=numberOfLayers;i++)
+          for(size_t j= 1;j<=numberOfRows;j++)
+            for(size_t k= 1;k<=numberOfColumns;k++)
               retval.insert(getNode(i,j,k)->getTag());
       }
     return retval;
@@ -170,14 +170,14 @@ std::set<int> XC::SetEstruct::getNodeTags(void) const
 boost::python::list XC::SetEstruct::getNodes(void)
   {
     boost::python::list retval;
-    const size_t ncapas= getNumNodeLayers();
-    if(ncapas>0)
+    const size_t numberOfLayers= getNumNodeLayers();
+    if(numberOfLayers>0)
       {
-        const size_t nfilas= getNumNodeRows();
-        const size_t ncols= getNumNodeColumns();
-        for(size_t i= 1;i<=ncapas;i++)
-          for(size_t j= 1;j<=nfilas;j++)
-            for(size_t k= 1;k<=ncols;k++)
+        const size_t numberOfRows= getNumNodeRows();
+        const size_t numberOfColumns= getNumNodeColumns();
+        for(size_t i= 1;i<=numberOfLayers;i++)
+          for(size_t j= 1;j<=numberOfRows;j++)
+            for(size_t k= 1;k<=numberOfColumns;k++)
               {
                 Node *tmp= getNode(i,j,k);
                 boost::python::object pyObj(boost::ref(*tmp));
@@ -192,14 +192,14 @@ boost::python::list XC::SetEstruct::getNodes(void)
 std::set<int> XC::SetEstruct::getElementTags(void) const
   {
     std::set<int> retval;
-    const size_t ncapas= getNumElementLayers();
-    if(ncapas>0)
+    const size_t numberOfLayers= getNumElementLayers();
+    if(numberOfLayers>0)
       {
-        const size_t nfilas= getNumElementRows();
-        const size_t ncols= getNumElementColumns();
-        for(size_t i= 1;i<=ncapas;i++)
-          for(size_t j= 1;j<=nfilas;j++)
-            for(size_t k= 1;k<=ncols;k++)
+        const size_t numberOfRows= getNumElementRows();
+        const size_t numberOfColumns= getNumElementColumns();
+        for(size_t i= 1;i<=numberOfLayers;i++)
+          for(size_t j= 1;j<=numberOfRows;j++)
+            for(size_t k= 1;k<=numberOfColumns;k++)
               retval.insert(getElement(i,j,k)->getTag());
       }
     return retval;
@@ -208,14 +208,14 @@ std::set<int> XC::SetEstruct::getElementTags(void) const
 boost::python::list XC::SetEstruct::getElements(void)
   {
     boost::python::list retval;
-    const size_t ncapas= getNumElementLayers();
-    if(ncapas>0)
+    const size_t numberOfLayers= getNumElementLayers();
+    if(numberOfLayers>0)
       {
-        const size_t nfilas= getNumElementRows();
-        const size_t ncols= getNumElementColumns();
-        for(size_t i= 1;i<=ncapas;i++)
-          for(size_t j= 1;j<=nfilas;j++)
-            for(size_t k= 1;k<=ncols;k++)
+        const size_t numberOfRows= getNumElementRows();
+        const size_t numberOfColumns= getNumElementColumns();
+        for(size_t i= 1;i<=numberOfLayers;i++)
+          for(size_t j= 1;j<=numberOfRows;j++)
+            for(size_t k= 1;k<=numberOfColumns;k++)
               {
                 Element *tmp= getElement(i,j,k);
                 boost::python::object pyObj(boost::ref(*tmp));
@@ -229,14 +229,14 @@ boost::python::list XC::SetEstruct::getElements(void)
 bool XC::SetEstruct::In(const Node *n) const
   {
     bool retval= false;
-    const size_t ncapas= getNumNodeLayers();
-    if(ncapas>0)
+    const size_t numberOfLayers= getNumNodeLayers();
+    if(numberOfLayers>0)
       {
-        const size_t nfilas= getNumNodeRows();
-        const size_t ncols= getNumNodeColumns();
-        for(size_t i= 1;i<=ncapas;i++)
-          for(size_t j= 1;j<=nfilas;j++)
-            for(size_t k= 1;k<=ncols;k++)
+        const size_t numberOfRows= getNumNodeRows();
+        const size_t numberOfColumns= getNumNodeColumns();
+        for(size_t i= 1;i<=numberOfLayers;i++)
+          for(size_t j= 1;j<=numberOfRows;j++)
+            for(size_t k= 1;k<=numberOfColumns;k++)
               if(getNode(i,j,k)==n)
                 {
                   retval= true;
@@ -250,14 +250,14 @@ bool XC::SetEstruct::In(const Node *n) const
 bool XC::SetEstruct::In(const Element *e) const
   {
     bool retval= false;
-    const size_t ncapas= getNumElementLayers();
-    if(ncapas>0)
+    const size_t numberOfLayers= getNumElementLayers();
+    if(numberOfLayers>0)
       {
-        const size_t nfilas= getNumElementRows();
-        const size_t ncols= getNumElementColumns();
-        for(size_t i= 1;i<=ncapas;i++)
-          for(size_t j= 1;j<=nfilas;j++)
-            for(size_t k= 1;k<=ncols;k++)
+        const size_t numberOfRows= getNumElementRows();
+        const size_t numberOfColumns= getNumElementColumns();
+        for(size_t i= 1;i<=numberOfLayers;i++)
+          for(size_t j= 1;j<=numberOfRows;j++)
+            for(size_t k= 1;k<=numberOfColumns;k++)
               if(getElement(i,j,k)==e)
                 {
                   retval= true;
@@ -270,11 +270,11 @@ bool XC::SetEstruct::In(const Element *e) const
 
 XC::Node *XC::SetEstruct::getNodeI(const size_t &i)
   {
-    if(EsFilaI())
+    if(isIRow())
       return getNode(i,1,1);
-    else if(EsFilaJ())
+    else if(isJRow())
       return getNode(1,i,1);
-    else if(EsFilaK())
+    else if(isKRow())
       return getNode(1,1,i);
     else
       {
@@ -287,11 +287,11 @@ XC::Node *XC::SetEstruct::getNodeI(const size_t &i)
 XC::Node *XC::SetEstruct::getNodeIJ(const size_t &i,const size_t &j)
   {
     //XXX Must get the layer (it is not necessarily the first one),
-    if(EsCapaICte())
+    if(isIConstantLayer())
       return getNode(1,i,j);
-    else if(EsCapaJCte()) 
+    else if(isJConstantLayer()) 
       return getNode(i,1,j);
-    else if(EsCapaKCte()) 
+    else if(isKConstantLayer()) 
       return getNode(i,j,1);
     else
       {

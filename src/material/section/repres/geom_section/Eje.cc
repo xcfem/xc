@@ -53,7 +53,7 @@ XC::Eje::~Eje(void)
   }
 
 //! @brief Updates topology.
-void XC::Eje::actualiza_topologia(void)
+void XC::Eje::update_topology(void)
   {
     if(P1()) P1()->insert_linea(this);
     if(P2()) P2()->insert_linea(this);

@@ -63,14 +63,14 @@ bool XC::NDMaterialPhysicalProperties::check_material_elast_plana(const std::str
 //! @brief returns commited strains at each Gauss point.
 XC::Matrix XC::NDMaterialPhysicalProperties::getCommittedStrain(void) const
   {
-    const size_t nfilas= theMaterial.size();
-    std::vector<Vector> strains(nfilas);
-    for(size_t i= 0;i<nfilas;i++)
+    const size_t numberOfRows= theMaterial.size();
+    std::vector<Vector> strains(numberOfRows);
+    for(size_t i= 0;i<numberOfRows;i++)
       strains[i]= getCommittedStrain(i);
-    const size_t ncols= strains[0].Size();
-    Matrix retval(nfilas,ncols);
-    for(size_t i= 0;i<nfilas;i++)
-      for(size_t j= 0;j<ncols;j++)
+    const size_t numberOfColumns= strains[0].Size();
+    Matrix retval(numberOfRows,numberOfColumns);
+    for(size_t i= 0;i<numberOfRows;i++)
+      for(size_t j= 0;j<numberOfColumns;j++)
         retval(i,j)= strains[i](j);
     return retval;
   }   
@@ -78,14 +78,14 @@ XC::Matrix XC::NDMaterialPhysicalProperties::getCommittedStrain(void) const
 //! @brief returns commited stresses at each Gauss point.
 XC::Matrix XC::NDMaterialPhysicalProperties::getCommittedStress(void) const
   {
-    const size_t nfilas= theMaterial.size();
-    std::vector<Vector> stresses(nfilas);
-    for(size_t i= 0;i<nfilas;i++)
+    const size_t numberOfRows= theMaterial.size();
+    std::vector<Vector> stresses(numberOfRows);
+    for(size_t i= 0;i<numberOfRows;i++)
       stresses[i]= getCommittedStress(i);
-    const size_t ncols= stresses[0].Size();
-    Matrix retval(nfilas,ncols);
-    for(size_t i= 0;i<nfilas;i++)
-      for(size_t j= 0;j<ncols;j++)
+    const size_t numberOfColumns= stresses[0].Size();
+    Matrix retval(numberOfRows,numberOfColumns);
+    for(size_t i= 0;i<numberOfRows;i++)
+      for(size_t j= 0;j<numberOfColumns;j++)
         retval(i,j)= stresses[i](j);
     return retval;
   }   

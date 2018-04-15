@@ -88,7 +88,7 @@ void XC::RgQuadCell::getDiscretization(int &numSubdivIJ, int &numSubdivJK) const
      numSubdivJK = nDivJK;
   }
 
-//! @brief Return the número de celdas.
+//! @brief Return the number of celdas.
 int XC::RgQuadCell::getNumCells (void) const
   { return nDivIJ * nDivJK; }
 

@@ -64,19 +64,19 @@ class_<XC::ClosedTriangleMesh, bases<GeomObj3d>, boost::noncopyable >("ClosedTri
   .def("getTriangleMap",&XC::ClosedTriangleMesh::getTriangleMap)
   ;
 
-double (XC::InteractionDiagram::*getFactorCapacidad)(const Pos3d &esf_d) const= &XC::InteractionDiagram::FactorCapacidad;
+double (XC::InteractionDiagram::*getCF)(const Pos3d &esf_d) const= &XC::InteractionDiagram::getCapacityFactor;
 class_<XC::InteractionDiagram, bases<XC::ClosedTriangleMesh>, boost::noncopyable >("InteractionDiagram", no_init)
   .def("centroid",&XC::InteractionDiagram::Cdg)
   .def("getLength",&XC::InteractionDiagram::Longitud)
   .def("getIntersection",&XC::InteractionDiagram::getIntersection,"Returns the intersection of the ray O->point(N,My,Mz) with the interaction diagram.")
-  .def("getCapacityFactor",getFactorCapacidad)
+  .def("getCapacityFactor",getCF)
   .def("writeTo",&XC::InteractionDiagram::writeTo)
   .def("readFrom",&XC::InteractionDiagram::readFrom)
   ;
 
-double (XC::InteractionDiagram2d::*getFactorCapacidad2d)(const Pos2d &esf_d) const= &XC::InteractionDiagram2d::FactorCapacidad;
+double (XC::InteractionDiagram2d::*getCF2d)(const Pos2d &esf_d) const= &XC::InteractionDiagram2d::getCapacityFactor;
 class_<XC::InteractionDiagram2d, bases<Poligono2d>, boost::noncopyable >("InteractionDiagram2d", no_init)
   .def("getIntersection",&XC::InteractionDiagram2d::getIntersection,"Returns the intersection of the ray O->point(N,My,Mz) with the interaction diagram.")
-  .def("getCapacityFactor",getFactorCapacidad2d)
+  .def("getCapacityFactor",getCF2d)
   .def("simplify",&XC::InteractionDiagram2d::Simplify)
   ;

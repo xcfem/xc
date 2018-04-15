@@ -1227,8 +1227,8 @@ void XC::Vector::read(std::ifstream &is)
   }
 
 //! @brief Producto tensorial de dos tensores de primer orden.
-//! @param u: vector fila.
-//! @param v: vector columna.
+//! @param u: row vector.
+//! @param v: column vector.
 XC::Matrix XC::prod_tensor(const Vector &u,const Vector &v)
   {
     const size_t sz_u= u.Size();

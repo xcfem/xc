@@ -34,10 +34,10 @@ const MatrizPos3d &XC::TrfGeom::Transforma(const MatrizPos3d &m) const
   {
     static MatrizPos3d retval;
     retval= m;
-    const size_t nfilas= retval.getNumFilas();
-    const size_t ncols= retval.getNumCols();
-    for(size_t j= 1;j<=nfilas;j++)
-      for(size_t k= 1;k<=ncols;k++)
+    const size_t numberOfRows= retval.getNumberOfRows();
+    const size_t numberOfColumns= retval.getNumberOfColumns();
+    for(size_t j= 1;j<=numberOfRows;j++)
+      for(size_t k= 1;k<=numberOfColumns;k++)
         retval(j,k)= Transforma(retval(j,k));
     return retval;
   }
@@ -45,12 +45,12 @@ const TritrizPos3d &XC::TrfGeom::Transforma(const TritrizPos3d &m) const
   {
     static TritrizPos3d retval;
     retval= m;
-    const size_t ncapas= retval.GetCapas();
-    const size_t nfilas= retval.getNumFilas();
-    const size_t ncols= retval.getNumCols();
-    for(size_t i= 1;i<=ncapas;i++)
-      for(size_t j= 1;j<=nfilas;j++)
-        for(size_t k= 1;k<=ncols;k++)
+    const size_t numberOfLayers= retval.getNumberOfLayers();
+    const size_t numberOfRows= retval.getNumberOfRows();
+    const size_t numberOfColumns= retval.getNumberOfColumns();
+    for(size_t i= 1;i<=numberOfLayers;i++)
+      for(size_t j= 1;j<=numberOfRows;j++)
+        for(size_t k= 1;k<=numberOfColumns;k++)
           retval(i,j,k)= Transforma(retval(i,j,k));
     return retval;
   }

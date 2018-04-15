@@ -54,7 +54,7 @@ class Pnt: public EntMdlr
     mutable std::set<const Edge *> lines_pt; //!< Lines that begin or end in this point (topology).
   protected:
 
-    virtual void actualiza_topologia(void);
+    virtual void update_topology(void);
     void create_nodes(void);
   public:
     Pnt(Preprocessor *m,const Pos3d &pto= Pos3d());

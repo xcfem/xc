@@ -48,15 +48,15 @@ ARbdNonSymMatrix<double, double> creaARbdNonSymMatrix(const msp_double &m,XC::Ve
   {
     const size_t ndiagL= m.ndiagL();
     const size_t ndiagU= m.ndiagU();
-    const size_t ncols= m.getNumCols();
-    assert(m.getNumFilas()==ncols);
+    const size_t n_columns= m.getNumberOfColumns();
+    assert(m.getNumberOfRows()==n_columns);
     const size_t sizeCol= (ndiagL+ndiagU+1);
-    const size_t sizeV= sizeCol*ncols;
+    const size_t sizeV= sizeCol*n_columns;
     v.resize(sizeV);
     v.Zero();
     
     m.FillVectorBanda(v.getDataPtr());
-    return ARbdNonSymMatrix<double, double>(ncols,ndiagL,ndiagU,v.getDataPtr());
+    return ARbdNonSymMatrix<double, double>(n_columns,ndiagL,ndiagU,v.getDataPtr());
   }
 
 void XC::BandArpackppSolver::setup_autos(const size_t &nmodos,const size_t &n)

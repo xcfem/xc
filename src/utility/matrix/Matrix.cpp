@@ -84,7 +84,7 @@ XC::Matrix::Matrix(void)
 
 //! @brief Constructor.
 //!
-//! To construct a Matrix with nRows and nCols and all coefficients equal
+//! To construct a Matrix with nRows and numberOfColumns and all coefficients equal
 //! to \f$0\f$. Allocates memory for the storage of the data. If numRows
 //! \f$<\f$ \f$0\f$, numCols \f$<\f$ \f$0\f$ or not enough memory is available
 //! available, an error message is printed and a Matrix with numRows = \f$0\f$
@@ -92,9 +92,9 @@ XC::Matrix::Matrix(void)
 //! called. 
 //!
 //! @param nRows: number of matrix rows.
-//! @param nCols: number of matrix columns.
-XC::Matrix::Matrix(int nRows,int nCols)
-  : numRows(nRows), numCols(nCols), data(nRows*nCols)
+//! @param numberOfColumns: number of matrix columns.
+XC::Matrix::Matrix(int nRows,int numberOfColumns)
+  : numRows(nRows), numCols(numberOfColumns), data(nRows*numberOfColumns)
   {
 #ifdef _G3DEBUG
     if(nRows < 0)
@@ -104,11 +104,11 @@ XC::Matrix::Matrix(int nRows,int nCols)
         std::cerr << "with num rows: " << nRows << " <0\n";
         numRows= 0; numCols =0;
       }
-    if(nCols < 0)
+    if(numberOfColumns < 0)
       {
         std::cerr << getClassName() << "::" << __FUNCTION__
 		  << "; WARNING: tried to init matrix";
-        std::cerr << "with num cols: " << nCols << " <0\n";
+        std::cerr << "with num cols: " << numberOfColumns << " <0\n";
         numRows= 0; numCols =0;
       }
 #endif
@@ -117,7 +117,7 @@ XC::Matrix::Matrix(int nRows,int nCols)
 
 //! @brief Constructor. Wrapper for values contained in theData.
 //!
-//! To construct a Matrix with nRow and nCols. The memory for storage of the
+//! To construct a Matrix with nRow and numberOfColumns. The memory for storage of the
 //! data is found at the location pointed to by \p data. Note that this memory
 //! must have been previously allocated and it must be of appropriate size,
 //! erroneous results and segmentation faults can occur otherwise. No
@@ -125,9 +125,9 @@ XC::Matrix::Matrix(int nRows,int nCols)
 //!
 //! @param theData: values.
 //! @param nRows: number of matrix rows.
-//! @param nCols: number of matrix columns.
-XC::Matrix::Matrix(double *theData, int nRows, int nCols) 
-  :numRows(nRows),numCols(nCols), data(theData,nRows*nCols)
+//! @param numberOfColumns: number of matrix columns.
+XC::Matrix::Matrix(double *theData, int nRows, int numberOfColumns) 
+  :numRows(nRows),numCols(numberOfColumns), data(theData,nRows*numberOfColumns)
   {
 #ifdef _G3DEBUG
     if(nRows < 0)
@@ -137,11 +137,11 @@ XC::Matrix::Matrix(double *theData, int nRows, int nCols)
         std::cerr << nRows << " <0\n";
         numRows= 0; numCols =0;
       }
-    if(nCols < 0)
+    if(numberOfColumns < 0)
       {
         std::cerr << getClassName() << "::" << __FUNCTION__
 		  << "; WARNING: tried to init matrix with numCols: ";
-        std::cerr << nCols << " <0\n";
+        std::cerr << numberOfColumns << " <0\n";
         numRows= 0; numCols =0;
       }    
 #endif
@@ -193,36 +193,36 @@ void XC::Matrix::Identity(void)
       (*this)(i,i)= 1.0;
   }
 
-int XC::Matrix::resize(int rows, int cols)
+int XC::Matrix::resize(int n_rows, int n_columns)
   {
 
-    const int newSize= rows*cols;
+    const int newSize= n_rows*n_columns;
 
     if(newSize<0)
       {
         std::cerr << getClassName() << "::" << __FUNCTION__
-		  << "; rows " << rows << " or cols " << cols
+		  << "; rows " << n_rows << " or cols " << n_columns
 		  << " specified <= 0\n";
         return -1;
       }
     else if(newSize == 0)
       {
         data.resize(0);
-        numRows= rows;
-        numCols= cols;
+        numRows= n_rows;
+        numCols= n_columns;
       }
     else if(newSize > data.Size())
       {
         data.resize(newSize);
-        numRows= rows;
-        numCols= cols;
+        numRows= n_rows;
+        numCols= n_columns;
       }
     else
       {
         // just reset the cols and rows - save two memory calls at expense of holding 
         // onto extra memory
-        numRows= rows;
-        numCols= cols;
+        numRows= n_rows;
+        numCols= n_columns;
       }
     return 0;
   }
@@ -784,10 +784,10 @@ int XC::Matrix::addMatrixTripleProduct(double thisFact,
 XC::Matrix XC::Matrix::operator()(const ID &rows, const ID & cols) const
   {
     const int nRows= rows.Size();
-    const int nCols= cols.Size();
-    Matrix result(nRows,nCols);
+    const int numberOfColumns= cols.Size();
+    Matrix result(nRows,numberOfColumns);
     double *dblDataPtr= result.getDataPtr();
-    for(int i=0; i<nCols; i++)
+    for(int i=0; i<numberOfColumns; i++)
       for(int j=0; j<nRows; j++)
 	*dblDataPtr++= (*this)(rows(j),cols(i));
     return result;
@@ -1158,8 +1158,8 @@ XC::Matrix XC::Matrix::operator*(const Matrix &M) const
     double *resDataPtr= result.data;	    
 
     int innerDim= numCols;
-    int nCols= result.numCols;
-    for(int i=0; i<nCols; i++) {
+    int numberOfColumns= result.numCols;
+    for(int i=0; i<numberOfColumns; i++) {
       double *aStartRowDataPtr= data;
       double *bStartColDataPtr= &(M.data[i*innerDim]);
       for(int j=0; j<numRows; j++) {
@@ -1209,8 +1209,8 @@ XC::Matrix XC::Matrix::operator^(const Matrix &M) const
     double *resDataPtr= result.getDataPtr();	    
 
     int innerDim= numRows;
-    int nCols= result.numCols;
-    for(int i=0; i<nCols; i++)
+    int numberOfColumns= result.numCols;
+    for(int i=0; i<numberOfColumns; i++)
       {
         const double *aDataPtr= getDataPtr();
         const double *bStartColDataPtr= &(M.data(i*innerDim));
@@ -1292,8 +1292,8 @@ void XC::Matrix::Output(std::ostream &s) const
 //! @brief Converts a matrix of type m_double into other of type Matrix.
 XC::Matrix XC::m_double_to_matrix(const m_double &m)
   {
-    const size_t fls= m.getNumFilas();
-    const size_t cls= m.getNumCols();
+    const size_t fls= m.getNumberOfRows();
+    const size_t cls= m.getNumberOfColumns();
     Matrix retval(fls,cls);
     for(register size_t i=1;i<=fls;i++)
       for(register size_t j=1;j<=cls;j++)
@@ -1490,11 +1490,11 @@ XC::Matrix XC::operator*(double a, const Matrix &V)
 //     MatrizAny tmp= interpretaMatrizAny(str);
 //     if(!tmp.empty())
 //       {
-//         const size_t nfilas= tmp.getNumFilas(); //Número de filas.
-//         const size_t ncols= tmp.getNumCols(); //Número de columnas.
-//         resize(nfilas,ncols);
-//         for(size_t i= 0;i<nfilas;i++)
-//           for(size_t j= 0;j<ncols;j++)
+//         const size_t numberOfRows= tmp.getNumberOfRows(); //number of rows.
+//         const size_t numberOfColumns= tmp.getNumberOfColumns(); //number of columns.
+//         resize(numberOfRows,numberOfColumns);
+//         for(size_t i= 0;i<numberOfRows;i++)
+//           for(size_t j= 0;j<numberOfColumns;j++)
 //             XC::Matrix::operator()(i,j)= convert_to_double(tmp(i+1,j+1));
 //       }
 //   }
@@ -1536,9 +1536,9 @@ double XC::Matrix::columnSum(int j) const
 double XC::Matrix::Norm2(void) const
   {
     double r= 0.0;
-    int ncols= this->noCols();
+    int numberOfColumns= this->noCols();
     int nrows= this->noRows();
-    if(ncols==nrows)
+    if(numberOfColumns==nrows)
       {
         const Matrix trn= transposed(*this);
         const Matrix prod= (*this)*trn;

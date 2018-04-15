@@ -33,13 +33,13 @@
 #include "preprocessor/multi_block_topology/matrices/TritrizPtrElem.h"
 
 //! @ brief Mesh one layer (i= constant) of 4-nodes quadrangles.
-void meshing_quad4N_on_jk(const XC::Element &e,const XC::TritrizPtrNod::const_ref_capa_i_cte &nodes,XC::TritrizPtrElem::var_ref_capa_i_cte &elements)
+void meshing_quad4N_on_jk(const XC::Element &e,const XC::TritrizPtrNod::constant_i_layer_const_ref &nodes,XC::TritrizPtrElem::constant_i_layer_variable_ref &elements)
   {
-    const size_t nfilas= nodes.getNumFilas();
-    const size_t ncols= nodes.getNumCols();
+    const size_t numberOfRows= nodes.getNumberOfRows();
+    const size_t numberOfColumns= nodes.getNumberOfColumns();
 
-    for(size_t j=1;j<nfilas;j++)
-      for(size_t k=1;k<ncols;k++)
+    for(size_t j=1;j<numberOfRows;j++)
+      for(size_t k=1;k<numberOfColumns;k++)
         {
 	  XC::Element *tmp= e.getCopy();
           const std::vector<int> indices= getNodeIdsQuad4N(nodes,j,k);
@@ -55,13 +55,13 @@ void meshing_quad4N_on_jk(const XC::Element &e,const XC::TritrizPtrNod::const_re
   }
 
 //! @ brief Mesh one row (j= constant) of 4-nodes quadrangles.
-void meshing_quad4N_on_ik(const XC::Element &e,const XC::TritrizPtrNod::const_ref_capa_j_cte &nodes,XC::TritrizPtrElem::var_ref_capa_j_cte &elements)
+void meshing_quad4N_on_ik(const XC::Element &e,const XC::TritrizPtrNod::constant_j_layer_const_ref &nodes,XC::TritrizPtrElem::constant_j_layer_variable_ref &elements)
   {
-    const size_t ncapas= nodes.GetCapas();
-    const size_t ncols= nodes.getNumCols();
+    const size_t numberOfLayers= nodes.getNumberOfLayers();
+    const size_t numberOfColumns= nodes.getNumberOfColumns();
     std::vector<int> in(4);
-    for(size_t i=1;i<ncapas;i++)
-      for(size_t k=1;k<ncols;k++)
+    for(size_t i=1;i<numberOfLayers;i++)
+      for(size_t k=1;k<numberOfColumns;k++)
         {
 	  XC::Element *tmp= e.getCopy();
           in[0]= nodes(i,k)->getTag();
@@ -74,13 +74,13 @@ void meshing_quad4N_on_ik(const XC::Element &e,const XC::TritrizPtrNod::const_re
   }
 
 //! @ brief Mesh one column (k= constant)  of 4-nodes quadrangles.
-void meshing_quad4N_on_ij(const XC::Element &e,const XC::TritrizPtrNod::const_ref_capa_k_cte &nodes,XC::TritrizPtrElem::var_ref_capa_k_cte &elements)
+void meshing_quad4N_on_ij(const XC::Element &e,const XC::TritrizPtrNod::constant_k_layer_const_ref &nodes,XC::TritrizPtrElem::constant_k_layer_variable_ref &elements)
   {
-    const size_t ncapas= nodes.GetCapas();
-    const size_t nfilas= nodes.getNumFilas();
+    const size_t numberOfLayers= nodes.getNumberOfLayers();
+    const size_t numberOfRows= nodes.getNumberOfRows();
     std::vector<int> in(4);
-    for(size_t i=1;i<ncapas;i++)
-      for(size_t j=1;j<nfilas;j++)
+    for(size_t i=1;i<numberOfLayers;i++)
+      for(size_t j=1;j<numberOfRows;j++)
         {
 	  XC::Element *tmp= e.getCopy();
           in[0]= nodes(i,j)->getTag();
@@ -95,28 +95,28 @@ void meshing_quad4N_on_ij(const XC::Element &e,const XC::TritrizPtrNod::const_re
 //! @ brief Mesh a quadrangle with 4-node elements
 void meshing_quad4N_bidimensional(const XC::Element &e,const XC::TritrizPtrNod &nodes,XC::TritrizPtrElem &elements)
   {
-    const size_t ncapas= nodes.GetCapas();
-    const size_t nfilas= nodes.getNumFilas();
-    const size_t ncols= nodes.getNumCols();
+    const size_t numberOfLayers= nodes.getNumberOfLayers();
+    const size_t numberOfRows= nodes.getNumberOfRows();
+    const size_t numberOfColumns= nodes.getNumberOfColumns();
     if(!nodes.HasNull()) //No hay pointers nulos.
       {
-        if(nodes.EsCapaICte())
+        if(nodes.isIConstantLayer())
           {
-            elements= XC::TritrizPtrElem(ncapas,XC::MatrizPtrElem(nfilas-1,ncols-1));
-            XC::TritrizPtrElem::var_ref_capa_i_cte capa_elem= elements.GetVarRefCapaICte(1);
-            meshing_quad4N_on_jk(e,nodes.GetConstRefCapaICte(1),capa_elem);
+            elements= XC::TritrizPtrElem(numberOfLayers,XC::MatrizPtrElem(numberOfRows-1,numberOfColumns-1));
+            XC::TritrizPtrElem::constant_i_layer_variable_ref elem_layer= elements.getConstantILayerVarRef(1);
+            meshing_quad4N_on_jk(e,nodes.getConstantILayerConstRef(1),elem_layer);
           }
-        else if(nodes.EsCapaJCte())
+        else if(nodes.isJConstantLayer())
           {
-            elements= XC::TritrizPtrElem(ncapas-1,XC::MatrizPtrElem(nfilas,ncols-1));
-            XC::TritrizPtrElem::var_ref_capa_j_cte capa_elem= elements.GetVarRefCapaJCte(1);
-            meshing_quad4N_on_ik(e,nodes.GetConstRefCapaJCte(1),capa_elem);
+            elements= XC::TritrizPtrElem(numberOfLayers-1,XC::MatrizPtrElem(numberOfRows,numberOfColumns-1));
+            XC::TritrizPtrElem::constant_j_layer_variable_ref elem_layer= elements.getConstantJLayerVarRef(1);
+            meshing_quad4N_on_ik(e,nodes.getConstantJLayerConstRef(1),elem_layer);
           }
-        else if(nodes.EsCapaKCte())
+        else if(nodes.isKConstantLayer())
           {
-            elements= XC::TritrizPtrElem(ncapas-1,XC::MatrizPtrElem(nfilas-1,ncols));
-            XC::TritrizPtrElem::var_ref_capa_k_cte capa_elem= elements.GetVarRefCapaKCte(1);
-            meshing_quad4N_on_ij(e,nodes.GetConstRefCapaKCte(1),capa_elem);
+            elements= XC::TritrizPtrElem(numberOfLayers-1,XC::MatrizPtrElem(numberOfRows-1,numberOfColumns));
+            XC::TritrizPtrElem::constant_k_layer_variable_ref elem_layer= elements.getConstantKLayerVarRef(1);
+            meshing_quad4N_on_ij(e,nodes.getConstantKLayerConstRef(1),elem_layer);
           }
       }
     else  //There are null pointers.
@@ -126,9 +126,9 @@ void meshing_quad4N_bidimensional(const XC::Element &e,const XC::TritrizPtrNod &
 //! @brief Place the elements on the mesh passed as parameter.
 XC::TritrizPtrElem XC::put_quad4N_on_mesh(const Element &e,const TritrizPtrNod &nodes,meshing_dir dm)
   {
-    const size_t ncapas= nodes.GetCapas();
-    const size_t nfilas= nodes.getNumFilas();
-    const size_t ncols= nodes.getNumCols();
+    const size_t numberOfLayers= nodes.getNumberOfLayers();
+    const size_t numberOfRows= nodes.getNumberOfRows();
+    const size_t numberOfColumns= nodes.getNumberOfColumns();
     const size_t mesh_dim= nodes.GetDim();
 
 
@@ -146,47 +146,47 @@ XC::TritrizPtrElem XC::put_quad4N_on_mesh(const Element &e,const TritrizPtrNod &
             switch(dm)
               {
               case dirm_i:
-                if(ncapas<2)
+                if(numberOfLayers<2)
 		  std::cerr << __FUNCTION__
 			    << "Not enough nodes in 'i' direction."
 		            << " Elements were not created." << std::endl;
                 else
                   {
-                    retval= TritrizPtrElem(ncapas,MatrizPtrElem(nfilas-1,ncols-1));
-                    for(size_t i=1;i<=ncapas;i++)
+                    retval= TritrizPtrElem(numberOfLayers,MatrizPtrElem(numberOfRows-1,numberOfColumns-1));
+                    for(size_t i=1;i<=numberOfLayers;i++)
                       {
-                        TritrizPtrElem::var_ref_capa_i_cte capa_elem= retval.GetVarRefCapaICte(i);
-                        meshing_quad4N_on_jk(e,nodes.GetConstRefCapaICte(i),capa_elem);
+                        TritrizPtrElem::constant_i_layer_variable_ref elem_layer= retval.getConstantILayerVarRef(i);
+                        meshing_quad4N_on_jk(e,nodes.getConstantILayerConstRef(i),elem_layer);
                       }
                   }
                 break;
               case dirm_j:
-                if(nfilas<2)
+                if(numberOfRows<2)
 		  std::cerr <<  __FUNCTION__
 			    << "Not enough nodes in 'j' direction."
 		            << " Elements were not created." << std::endl;
                 else
                   {
-                    retval= TritrizPtrElem(ncapas-1,MatrizPtrElem(nfilas,ncols-1));
-                    for(size_t j=1;j<=nfilas;j++)
+                    retval= TritrizPtrElem(numberOfLayers-1,MatrizPtrElem(numberOfRows,numberOfColumns-1));
+                    for(size_t j=1;j<=numberOfRows;j++)
                       {
-                        TritrizPtrElem::var_ref_capa_j_cte capa_elem= retval.GetVarRefCapaJCte(j);
-                        meshing_quad4N_on_ik(e,nodes.GetConstRefCapaJCte(j),capa_elem);
+                        TritrizPtrElem::constant_j_layer_variable_ref elem_layer= retval.getConstantJLayerVarRef(j);
+                        meshing_quad4N_on_ik(e,nodes.getConstantJLayerConstRef(j),elem_layer);
                       }
                   }
                 break;
               case dirm_k:
-                if(ncols<2)
+                if(numberOfColumns<2)
 		  std::cerr <<  __FUNCTION__
 			    << "Not enough nodes in 'k' direction."
 		            << " Elements were not created." << std::endl;
                 else
                   {
-                    retval= TritrizPtrElem(ncapas-1,MatrizPtrElem(nfilas-1,ncols));
-                    for(size_t k=1;k<=ncols;k++)
+                    retval= TritrizPtrElem(numberOfLayers-1,MatrizPtrElem(numberOfRows-1,numberOfColumns));
+                    for(size_t k=1;k<=numberOfColumns;k++)
                       {
-                        TritrizPtrElem::var_ref_capa_k_cte capa_elem= retval.GetVarRefCapaKCte(k);
-                        meshing_quad4N_on_ij(e,nodes.GetConstRefCapaKCte(k),capa_elem);
+                        TritrizPtrElem::constant_k_layer_variable_ref elem_layer= retval.getConstantKLayerVarRef(k);
+                        meshing_quad4N_on_ij(e,nodes.getConstantKLayerConstRef(k),elem_layer);
                       }
                   }
                 break;
@@ -199,19 +199,19 @@ XC::TritrizPtrElem XC::put_quad4N_on_mesh(const Element &e,const TritrizPtrNod &
   }
 
 //! @ brief Mesh one layer (i= constant) with 9-nodes elements.
-void meshing_quad9N_on_jk(const XC::Element &e,const XC::TritrizPtrNod::const_ref_capa_i_cte &nodes,XC::TritrizPtrElem::var_ref_capa_i_cte &elements)
+void meshing_quad9N_on_jk(const XC::Element &e,const XC::TritrizPtrNod::constant_i_layer_const_ref &nodes,XC::TritrizPtrElem::constant_i_layer_variable_ref &elements)
   {
     std::cerr << "meshing_quad9N_on_jk not implemented." << std::endl;
   }
 
 //! @ brief Mesh one row (j= constant)  with 9-nodes elements.
-void meshing_quad9N_on_ik(const XC::Element &e,const XC::TritrizPtrNod::const_ref_capa_j_cte &nodes,XC::TritrizPtrElem::var_ref_capa_j_cte &elements)
+void meshing_quad9N_on_ik(const XC::Element &e,const XC::TritrizPtrNod::constant_j_layer_const_ref &nodes,XC::TritrizPtrElem::constant_j_layer_variable_ref &elements)
   {
     std::cerr << "meshing_quad9N_on_ik not implemented." << std::endl;
   }
 
 //! @ brief Mesh one column (k= constant) with 9-nodes elements.
-void meshing_quad9N_on_ij(const XC::Element &e,const XC::TritrizPtrNod::const_ref_capa_k_cte &nodes,XC::TritrizPtrElem::var_ref_capa_k_cte &elements)
+void meshing_quad9N_on_ij(const XC::Element &e,const XC::TritrizPtrNod::constant_k_layer_const_ref &nodes,XC::TritrizPtrElem::constant_k_layer_variable_ref &elements)
   {
     std::cerr << "meshing_quad9N_on_ij not implemented." << std::endl;
   }
@@ -219,28 +219,28 @@ void meshing_quad9N_on_ij(const XC::Element &e,const XC::TritrizPtrNod::const_re
 //! @ brief Mesh one quadrangle  with 9-nodes elements.
 void meshing_quad9N_bidimensional(const XC::Element &e,const XC::TritrizPtrNod &nodes,XC::TritrizPtrElem &elements)
   {
-    const size_t ncapas= nodes.GetCapas();
-    const size_t nfilas= nodes.getNumFilas();
-    const size_t ncols= nodes.getNumCols();
+    const size_t numberOfLayers= nodes.getNumberOfLayers();
+    const size_t numberOfRows= nodes.getNumberOfRows();
+    const size_t numberOfColumns= nodes.getNumberOfColumns();
     if(!nodes.HasNull()) //No hay pointers nulos.
       {
-        if(nodes.EsCapaICte())
+        if(nodes.isIConstantLayer())
           {
-            elements= XC::TritrizPtrElem(ncapas,XC::MatrizPtrElem(nfilas-1,ncols-1));
-            XC::TritrizPtrElem::var_ref_capa_i_cte capa_elem= elements.GetVarRefCapaICte(1);
-            meshing_quad9N_on_jk(e,nodes.GetConstRefCapaICte(1),capa_elem);
+            elements= XC::TritrizPtrElem(numberOfLayers,XC::MatrizPtrElem(numberOfRows-1,numberOfColumns-1));
+            XC::TritrizPtrElem::constant_i_layer_variable_ref elem_layer= elements.getConstantILayerVarRef(1);
+            meshing_quad9N_on_jk(e,nodes.getConstantILayerConstRef(1),elem_layer);
           }
-        else if(nodes.EsCapaJCte())
+        else if(nodes.isJConstantLayer())
           {
-            elements= XC::TritrizPtrElem(ncapas-1,XC::MatrizPtrElem(nfilas,ncols-1));
-            XC::TritrizPtrElem::var_ref_capa_j_cte capa_elem= elements.GetVarRefCapaJCte(1);
-            meshing_quad9N_on_ik(e,nodes.GetConstRefCapaJCte(1),capa_elem);
+            elements= XC::TritrizPtrElem(numberOfLayers-1,XC::MatrizPtrElem(numberOfRows,numberOfColumns-1));
+            XC::TritrizPtrElem::constant_j_layer_variable_ref elem_layer= elements.getConstantJLayerVarRef(1);
+            meshing_quad9N_on_ik(e,nodes.getConstantJLayerConstRef(1),elem_layer);
           }
-        else if(nodes.EsCapaKCte())
+        else if(nodes.isKConstantLayer())
           {
-            elements= XC::TritrizPtrElem(ncapas-1,XC::MatrizPtrElem(nfilas-1,ncols));
-            XC::TritrizPtrElem::var_ref_capa_k_cte capa_elem= elements.GetVarRefCapaKCte(1);
-            meshing_quad9N_on_ij(e,nodes.GetConstRefCapaKCte(1),capa_elem);
+            elements= XC::TritrizPtrElem(numberOfLayers-1,XC::MatrizPtrElem(numberOfRows-1,numberOfColumns));
+            XC::TritrizPtrElem::constant_k_layer_variable_ref elem_layer= elements.getConstantKLayerVarRef(1);
+            meshing_quad9N_on_ij(e,nodes.getConstantKLayerConstRef(1),elem_layer);
           }
       }
     else  //There are null pointers.
@@ -251,9 +251,9 @@ void meshing_quad9N_bidimensional(const XC::Element &e,const XC::TritrizPtrNod &
 //! @brief Places the elements on the mesh passed as parameter.
 XC::TritrizPtrElem XC::put_quad9N_on_mesh(const Element &e,const TritrizPtrNod &nodes,meshing_dir dm)
   {
-    const size_t ncapas= nodes.GetCapas();
-    const size_t nfilas= nodes.getNumFilas();
-    const size_t ncols= nodes.getNumCols();
+    const size_t numberOfLayers= nodes.getNumberOfLayers();
+    const size_t numberOfRows= nodes.getNumberOfRows();
+    const size_t numberOfColumns= nodes.getNumberOfColumns();
     const size_t mesh_dim= nodes.GetDim();
 
 
@@ -271,47 +271,47 @@ XC::TritrizPtrElem XC::put_quad9N_on_mesh(const Element &e,const TritrizPtrNod &
             switch(dm)
               {
               case dirm_i:
-                if(ncapas<2)
+                if(numberOfLayers<2)
 		  std::cerr <<  __FUNCTION__
 			    << "Not enough nodes in 'i' direction."
 		            << " Elements were not created." << std::endl;
                 else
                   {
-                    retval= TritrizPtrElem(ncapas,MatrizPtrElem(nfilas-1,ncols-1));
-                    for(size_t i=1;i<=ncapas;i++)
+                    retval= TritrizPtrElem(numberOfLayers,MatrizPtrElem(numberOfRows-1,numberOfColumns-1));
+                    for(size_t i=1;i<=numberOfLayers;i++)
                       {
-                        TritrizPtrElem::var_ref_capa_i_cte capa_elem= retval.GetVarRefCapaICte(i);
-                        meshing_quad9N_on_jk(e,nodes.GetConstRefCapaICte(i),capa_elem);
+                        TritrizPtrElem::constant_i_layer_variable_ref elem_layer= retval.getConstantILayerVarRef(i);
+                        meshing_quad9N_on_jk(e,nodes.getConstantILayerConstRef(i),elem_layer);
                       }
                   }
                 break;
               case dirm_j:
-                if(nfilas<2)
+                if(numberOfRows<2)
 		  std::cerr <<  __FUNCTION__
 			    << "Not enough nodes in 'j' direction."
 		            << " Elements were not created." << std::endl;
                 else
                   {
-                    retval= TritrizPtrElem(ncapas-1,MatrizPtrElem(nfilas,ncols-1));
-                    for(size_t j=1;j<=nfilas;j++)
+                    retval= TritrizPtrElem(numberOfLayers-1,MatrizPtrElem(numberOfRows,numberOfColumns-1));
+                    for(size_t j=1;j<=numberOfRows;j++)
                       {
-                        TritrizPtrElem::var_ref_capa_j_cte capa_elem= retval.GetVarRefCapaJCte(j);
-                        meshing_quad9N_on_ik(e,nodes.GetConstRefCapaJCte(j),capa_elem);
+                        TritrizPtrElem::constant_j_layer_variable_ref elem_layer= retval.getConstantJLayerVarRef(j);
+                        meshing_quad9N_on_ik(e,nodes.getConstantJLayerConstRef(j),elem_layer);
                       }
                   }
                 break;
               case dirm_k:
-                if(ncols<2)
+                if(numberOfColumns<2)
 		  std::cerr <<  __FUNCTION__
 			    << "Not enough nodes in 'k' direction."
 		            << " Elements were not created." << std::endl;
                 else
                   {
-                    retval= TritrizPtrElem(ncapas-1,MatrizPtrElem(nfilas-1,ncols));
-                    for(size_t k=1;k<=ncols;k++)
+                    retval= TritrizPtrElem(numberOfLayers-1,MatrizPtrElem(numberOfRows-1,numberOfColumns));
+                    for(size_t k=1;k<=numberOfColumns;k++)
                       {
-                        TritrizPtrElem::var_ref_capa_k_cte capa_elem= retval.GetVarRefCapaKCte(k);
-                        meshing_quad9N_on_ij(e,nodes.GetConstRefCapaKCte(k),capa_elem);
+                        TritrizPtrElem::constant_k_layer_variable_ref elem_layer= retval.getConstantKLayerVarRef(k);
+                        meshing_quad9N_on_ij(e,nodes.getConstantKLayerConstRef(k),elem_layer);
                       }
                   }
                 break;

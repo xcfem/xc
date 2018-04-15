@@ -66,8 +66,8 @@ class InteractionDiagram: public ClosedTriangleMesh
 
     const Trihedron *findTrihedronPtr(const Pos3d &p) const;
     Pos3d getIntersection(const Pos3d &) const;
-    double FactorCapacidad(const Pos3d &) const;
-    Vector FactorCapacidad(const GeomObj::list_Pos3d &) const;
+    double getCapacityFactor(const Pos3d &) const;
+    Vector getCapacityFactor(const GeomObj::list_Pos3d &) const;
 
     void Print(std::ostream &os) const;
   };

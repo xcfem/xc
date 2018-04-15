@@ -65,12 +65,12 @@ class SetEstruct: public SetBase
     bool In(const Node *) const;
     bool In(const Element *) const;
 
-    bool EsFilaI(void) const;
-    bool EsFilaJ(void) const;
-    bool EsFilaK(void) const;
-    bool EsCapaICte(void) const;
-    bool EsCapaJCte(void) const;
-    bool EsCapaKCte(void) const;
+    bool isIRow(void) const;
+    bool isJRow(void) const;
+    bool isKRow(void) const;
+    bool isIConstantLayer(void) const;
+    bool isJConstantLayer(void) const;
+    bool isKConstantLayer(void) const;
     size_t Dimension(void) const;
     std::string GetStrTipo(void) const;
 

@@ -40,7 +40,7 @@ class Recorder;
 
 //! @ingroup Recorder
 //
-//! @brief Objeto capaz de gestionar Recorders.
+//! @brief Object that can manage Recorders.
 class ObjWithRecorders: public EntCmd
   {
   public:

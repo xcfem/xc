@@ -699,7 +699,7 @@ XC::InteractionDiagram XC::FiberSectionBase::GetInteractionDiagram(const Interac
     if(!lp.empty())
       {
         retval= InteractionDiagram(Pos3d(0,0,0),Triang3dMesh(get_convex_hull(lp)));
-        const double error= fabs(retval.FactorCapacidad(lp).Norm2()-lp.size())/lp.size();
+        const double error= fabs(retval.getCapacityFactor(lp).Norm2()-lp.size())/lp.size();
         if(error>0.005)
 	  std::cerr << getClassName() << "::" << __FUNCTION__
 	            << "; error in computation of interaction diagram ("
@@ -716,7 +716,7 @@ XC::InteractionDiagram2d XC::FiberSectionBase::GetInteractionDiagramForPlane(con
     if(!lp.empty())
       {
         retval= InteractionDiagram2d(get_convex_hull2d(lp));
-        const double error= fabs(retval.FactorCapacidad(lp).Norm2()-lp.size())/lp.size();
+        const double error= fabs(retval.getCapacityFactor(lp).Norm2()-lp.size())/lp.size();
         if(error>0.005)
 	  std::cerr << getClassName() << "::" << __FUNCTION__
 	            << "; error in computation of interaction diagram ("

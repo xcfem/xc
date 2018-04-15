@@ -256,10 +256,10 @@ void XC::Element0D::setUp(int Nd1, int Nd2, const Vector &x, const Vector &yp)
 
 XC::TritrizPtrElem XC::Element0D::cose(const SetEstruct &f1,const SetEstruct &f2) const
   {
-    const size_t ncapas= f1.getNumNodeLayers();
-    const size_t nfilas= f1.getNumNodeRows();
-    const size_t ncols= f1.getNumNodeColumns();
-    TritrizPtrElem retval(ncapas,nfilas,ncols);
+    const size_t numberOfLayers= f1.getNumNodeLayers();
+    const size_t numberOfRows= f1.getNumNodeRows();
+    const size_t numberOfColumns= f1.getNumNodeColumns();
+    TritrizPtrElem retval(numberOfLayers,numberOfRows,numberOfColumns);
     const size_t dimf1= f1.Dimension();
     const size_t dimf2= f2.Dimension();
     if(dimf1!=dimf2)
@@ -271,11 +271,11 @@ XC::TritrizPtrElem XC::Element0D::cose(const SetEstruct &f1,const SetEstruct &f2
       }
     if(dimf1==1)
       {
-        if(f1.EsFilaI())
+        if(f1.isIRow())
           {
-            if(f2.EsFilaI())
+            if(f2.isIRow())
               {
-                const size_t n= std::min(ncapas,f2.getNumNodeLayers());
+                const size_t n= std::min(numberOfLayers,f2.getNumNodeLayers());
                 for(size_t i=1;i<=n;i++)
                   {
                     Element *tmp= getCopy();
@@ -285,9 +285,9 @@ XC::TritrizPtrElem XC::Element0D::cose(const SetEstruct &f1,const SetEstruct &f2
                     retval(i,1,1)= tmp;
                   }
               }
-            if(f2.EsFilaJ())
+            if(f2.isJRow())
               {
-                const size_t n= std::min(ncapas,f2.getNumNodeRows());
+                const size_t n= std::min(numberOfLayers,f2.getNumNodeRows());
                 for(size_t i=1;i<=n;i++)
                   {
                     Element *tmp= getCopy();
@@ -297,9 +297,9 @@ XC::TritrizPtrElem XC::Element0D::cose(const SetEstruct &f1,const SetEstruct &f2
                     retval(i,1,1)= tmp;
                   }
               }
-            if(f2.EsFilaK())
+            if(f2.isKRow())
               {
-                const size_t n= std::min(ncapas,f2.getNumNodeColumns());
+                const size_t n= std::min(numberOfLayers,f2.getNumNodeColumns());
                 for(size_t i=1;i<=n;i++)
                   {
                     Element *tmp= getCopy();
@@ -310,11 +310,11 @@ XC::TritrizPtrElem XC::Element0D::cose(const SetEstruct &f1,const SetEstruct &f2
                   }
               }
           }
-        if(f1.EsFilaJ())
+        if(f1.isJRow())
           {
-            if(f2.EsFilaI())
+            if(f2.isIRow())
               {
-                const size_t n= std::min(nfilas,f2.getNumNodeLayers());
+                const size_t n= std::min(numberOfRows,f2.getNumNodeLayers());
                 for(size_t i=1;i<=n;i++)
                   {
                     Element *tmp= getCopy();
@@ -324,9 +324,9 @@ XC::TritrizPtrElem XC::Element0D::cose(const SetEstruct &f1,const SetEstruct &f2
                     retval(1,i,1)= tmp;
                   }
               }
-            if(f2.EsFilaJ())
+            if(f2.isJRow())
               {
-                const size_t n= std::min(nfilas,f2.getNumNodeRows());
+                const size_t n= std::min(numberOfRows,f2.getNumNodeRows());
                 for(size_t i=1;i<=n;i++)
                   {
                     Element *tmp= getCopy();
@@ -336,9 +336,9 @@ XC::TritrizPtrElem XC::Element0D::cose(const SetEstruct &f1,const SetEstruct &f2
                     retval(1,i,1)= tmp;
                   }
               }
-            if(f2.EsFilaK())
+            if(f2.isKRow())
               {
-                const size_t n= std::min(nfilas,f2.getNumNodeColumns());
+                const size_t n= std::min(numberOfRows,f2.getNumNodeColumns());
                 for(size_t i=1;i<=n;i++)
                   {
                     Element *tmp= getCopy();
@@ -349,11 +349,11 @@ XC::TritrizPtrElem XC::Element0D::cose(const SetEstruct &f1,const SetEstruct &f2
                   }
               }
           }
-        if(f1.EsFilaK())
+        if(f1.isKRow())
           {
-            if(f2.EsFilaI())
+            if(f2.isIRow())
               {
-                const size_t n= std::min(ncols,f2.getNumNodeLayers());
+                const size_t n= std::min(numberOfColumns,f2.getNumNodeLayers());
                 for(size_t i=1;i<=n;i++)
                   {
                     Element *tmp= getCopy();
@@ -363,9 +363,9 @@ XC::TritrizPtrElem XC::Element0D::cose(const SetEstruct &f1,const SetEstruct &f2
                     retval(1,1,i)= tmp;
                   }
               }
-            if(f2.EsFilaJ())
+            if(f2.isJRow())
               {
-                const size_t n= std::min(ncols,f2.getNumNodeRows());
+                const size_t n= std::min(numberOfColumns,f2.getNumNodeRows());
                 for(size_t i=1;i<=n;i++)
                   {
                     Element *tmp= getCopy();
@@ -375,9 +375,9 @@ XC::TritrizPtrElem XC::Element0D::cose(const SetEstruct &f1,const SetEstruct &f2
                     retval(1,1,i)= tmp;
                   }
               }
-            if(f2.EsFilaK())
+            if(f2.isKRow())
               {
-                const size_t n= std::min(ncols,f2.getNumNodeColumns());
+                const size_t n= std::min(numberOfColumns,f2.getNumNodeColumns());
                 for(size_t i=1;i<=n;i++)
                   {
                     Element *tmp= getCopy();

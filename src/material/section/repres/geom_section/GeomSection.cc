@@ -54,7 +54,7 @@
 #include "boost/lexical_cast.hpp"
 
 XC::GeomSection::GeomSection(MaterialHandler *ml)
-  : SectionMassProperties(),material_handler(ml), regiones(ml), capas_armado(this,ml), tag_sis_ref(0),tag_spot(0) {}
+  : SectionMassProperties(),material_handler(ml), regiones(ml), reinforcement_layers(this,ml), tag_sis_ref(0),tag_spot(0) {}
 
 //! @brief Returns a geometry that contains only the regions
 //! defined in this object.
@@ -67,23 +67,23 @@ XC::GeomSection XC::GeomSection::getGMRegiones(void) const
 
 //! @brief Returns a geometry that contains only the regions
 //! defined in this object.
-XC::GeomSection XC::GeomSection::getGMCapasArmado(void) const
+XC::GeomSection XC::GeomSection::getGMReinforcementLayers(void) const
   {
     GeomSection retval(material_handler);
-    retval.capas_armado= capas_armado;
+    retval.reinforcement_layers= reinforcement_layers;
     return retval;
   }
 
 //! @brief Return a section with only the compressed regions of the section.
 XC::GeomSection XC::GeomSection::getCrackedSection(const Semiplano2d &sp_compresiones) const
   {
-    GeomSection retval(getGMCapasArmado());
+    GeomSection retval(getGMReinforcementLayers());
     retval.regiones= regiones.Intersection(sp_compresiones);
     return retval;
   }
 
 size_t XC::GeomSection::getNumFiberData(void) const
-  { return (regiones.getNumCells() + capas_armado.getNumReinfBars()); }
+  { return (regiones.getNumCells() + reinforcement_layers.getNumReinfBars()); }
 
 //! @brief Returns a pointer to the reference system which identifier is being passed as parameter.
 XC::SectionReferenceFrame *XC::GeomSection::get_reference_system(const size_t &id)
@@ -425,8 +425,8 @@ double XC::GeomSection::getAreaHomogenizedSection(const double &E0) const
     double retval= 0.0;
     if(!regiones.empty())
       retval+= regiones.getAreaHomogenizedSection(E0);
-    if(!capas_armado.empty())
-      retval+= capas_armado.getAreaHomogenizedSection(E0);
+    if(!reinforcement_layers.empty())
+      retval+= reinforcement_layers.getAreaHomogenizedSection(E0);
     return retval;
   }
 
@@ -438,8 +438,8 @@ XC::Vector XC::GeomSection::getCdgHomogenizedSection(const double &E0) const
     weight= regiones.getAreaHomogenizedSection(E0);
     retval+= weight*regiones.getCdgHomogenizedSection(E0);
     divisor+= weight;
-    weight= capas_armado.getAreaHomogenizedSection(E0);
-    retval+= weight*capas_armado.getCdgHomogenizedSection(E0);
+    weight= reinforcement_layers.getAreaHomogenizedSection(E0);
+    retval+= weight*reinforcement_layers.getCdgHomogenizedSection(E0);
     divisor+= weight;
     retval/= divisor;
     return retval;
@@ -458,10 +458,10 @@ double XC::GeomSection::getIyHomogenizedSection(const double &E0) const
         d= regiones.getCdgHomogenizedSection(E0)[1]-zCdg;
         retval+= regiones.getIyHomogenizedSection(E0)+regiones.getAreaHomogenizedSection(E0)*sqr(d);
       }
-    if(!capas_armado.empty())
+    if(!reinforcement_layers.empty())
       {
-        d= capas_armado.getCdgHomogenizedSection(E0)[1]-zCdg;
-        retval+= capas_armado.getIyHomogenizedSection(E0)+capas_armado.getAreaHomogenizedSection(E0)*sqr(d);
+        d= reinforcement_layers.getCdgHomogenizedSection(E0)[1]-zCdg;
+        retval+= reinforcement_layers.getIyHomogenizedSection(E0)+reinforcement_layers.getAreaHomogenizedSection(E0)*sqr(d);
       }
     return retval;
   }
@@ -479,10 +479,10 @@ double XC::GeomSection::getIzHomogenizedSection(const double &E0) const
         d= regiones.getCdgHomogenizedSection(E0)[0]-yCdg;
         retval+= regiones.getIzHomogenizedSection(E0)+regiones.getAreaHomogenizedSection(E0)*sqr(d);
       }
-    if(!capas_armado.empty())
+    if(!reinforcement_layers.empty())
       {
-        d= capas_armado.getCdgHomogenizedSection(E0)[0]-yCdg;
-        retval+= capas_armado.getIzHomogenizedSection(E0)+capas_armado.getAreaHomogenizedSection(E0)*sqr(d);
+        d= reinforcement_layers.getCdgHomogenizedSection(E0)[0]-yCdg;
+        retval+= reinforcement_layers.getIzHomogenizedSection(E0)+reinforcement_layers.getAreaHomogenizedSection(E0)*sqr(d);
       }
     return retval;
   }
@@ -501,10 +501,10 @@ double XC::GeomSection::getPyzHomogenizedSection(const double &E0) const
         d2= (regiones.getCdgHomogenizedSection(E0)[0]-yCdg)*(regiones.getCdgHomogenizedSection(E0)[1]-zCdg);
         retval+= regiones.getPyzHomogenizedSection(E0)+regiones.getAreaHomogenizedSection(E0)*d2;
       }
-    if(!capas_armado.empty())
+    if(!reinforcement_layers.empty())
       {
-        d2= (capas_armado.getCdgHomogenizedSection(E0)[0]-yCdg)*(capas_armado.getCdgHomogenizedSection(E0)[1]-zCdg);
-        retval+= capas_armado.getPyzHomogenizedSection(E0)+capas_armado.getAreaHomogenizedSection(E0)*d2;
+        d2= (reinforcement_layers.getCdgHomogenizedSection(E0)[0]-yCdg)*(reinforcement_layers.getCdgHomogenizedSection(E0)[1]-zCdg);
+        retval+= reinforcement_layers.getPyzHomogenizedSection(E0)+reinforcement_layers.getAreaHomogenizedSection(E0)*d2;
       }
     return retval;
   }
@@ -515,8 +515,8 @@ double XC::GeomSection::getAreaGrossSection(void) const
     double retval= 0.0;
     if(!regiones.empty())
       retval+= regiones.getAreaGrossSection();
-    // if(!capas_armado.empty())
-    //   retval+= capas_armado.getAreaGrossSection();
+    // if(!reinforcement_layers.empty())
+    //   retval+= reinforcement_layers.getAreaGrossSection();
     return retval;
   }
 
@@ -536,10 +536,10 @@ double XC::GeomSection::getIyGrossSection(void) const
         d= regiones.getCdgGrossSection()[1]-zCdg;
         retval+= regiones.getIyGrossSection()+regiones.getAreaGrossSection()*sqr(d);
       }
-    // if(!capas_armado.empty())
+    // if(!reinforcement_layers.empty())
     //   {
-    //     d= capas_armado.getCdgGrossSection()[1]-zCdg;
-    //     retval+= capas_armado.getIyGrossSection()+capas_armado.getAreaGrossSection()*sqr(d);
+    //     d= reinforcement_layers.getCdgGrossSection()[1]-zCdg;
+    //     retval+= reinforcement_layers.getIyGrossSection()+reinforcement_layers.getAreaGrossSection()*sqr(d);
     //   }
     return retval;
   }
@@ -556,10 +556,10 @@ double XC::GeomSection::getIzGrossSection(void) const
         d= regiones.getCdgGrossSection()[0]-yCdg;
         retval+= regiones.getIzGrossSection()+regiones.getAreaGrossSection()*sqr(d);
       }
-    // if(!capas_armado.empty())
+    // if(!reinforcement_layers.empty())
     //   {
-    //     d= capas_armado.getCdgGrossSection()[0]-yCdg;
-    //     retval+= capas_armado.getIzGrossSection()+capas_armado.getAreaGrossSection()*sqr(d);
+    //     d= reinforcement_layers.getCdgGrossSection()[0]-yCdg;
+    //     retval+= reinforcement_layers.getIzGrossSection()+reinforcement_layers.getAreaGrossSection()*sqr(d);
     //   }
     return retval;
   }
@@ -578,10 +578,10 @@ double XC::GeomSection::getPyzGrossSection(void) const
         d2= (regiones.getCdgGrossSection()[0]-yCdg)*(regiones.getCdgGrossSection()[1]-zCdg);
         retval+= regiones.getPyzGrossSection()+regiones.getAreaGrossSection()*d2;
       }
-    // if(!capas_armado.empty())
+    // if(!reinforcement_layers.empty())
     //   {
-    //     d2= (capas_armado.getCdgGrossSection()[0]-yCdg)*(capas_armado.getCdgGrossSection()[1]-zCdg);
-    //     retval+= capas_armado.getPyzGrossSection()+capas_armado.getAreaGrossSection()*d2;
+    //     d2= (reinforcement_layers.getCdgGrossSection()[0]-yCdg)*(reinforcement_layers.getCdgGrossSection()[1]-zCdg);
+    //     retval+= reinforcement_layers.getPyzGrossSection()+reinforcement_layers.getAreaGrossSection()*d2;
     //   }
     return retval;
   }
@@ -590,8 +590,8 @@ double XC::GeomSection::getPyzGrossSection(void) const
 //! @brief Printing.
 void XC::GeomSection::Print(std::ostream &s, int flag)
   {
-    s << "\nCurrent Número de regiones: "       << regiones.size();
-    s << "\nCurrent Número de capas de refuerzo: " << capas_armado.size();
+    s << "\nCurrent number of regiones: "       << regiones.size();
+    s << "\nCurrent number of reinforcement layers: " << reinforcement_layers.size();
   }
 
 

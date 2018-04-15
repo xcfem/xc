@@ -319,7 +319,7 @@ size_t XC::SetMeshComp::getNumLiveElements(void) const
 size_t XC::SetMeshComp::getNumDeadElements(void) const
   { return elements.getNumDeadElements(); }
 
-//! @brief Returns the número de active nodes.
+//! @brief Returns the number of active nodes.
 size_t XC::SetMeshComp::getNumLiveNodes(void) const
   { return nodes.getNumLiveNodes(); }
 

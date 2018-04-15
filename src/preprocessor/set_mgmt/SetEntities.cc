@@ -205,12 +205,12 @@ void XC::SetEntities::fillDownwards(SetMeshComp &mc)
 
         //Elements.
         TritrizPtrElem &ttz_elements= (*i)->getTtzElements();
-        const size_t ncapas= ttz_elements.GetCapas();
-        const size_t nfilas= ttz_elements.getNumFilas();
-        const size_t ncols= ttz_elements.getNumCols();
-        for(size_t i=1;i<=ncapas;i++)
-          for(size_t j=1;j<=nfilas;j++)
-            for(size_t k=1;k<=ncols;k++)
+        const size_t numberOfLayers= ttz_elements.getNumberOfLayers();
+        const size_t numberOfRows= ttz_elements.getNumberOfRows();
+        const size_t numberOfColumns= ttz_elements.getNumberOfColumns();
+        for(size_t i=1;i<=numberOfLayers;i++)
+          for(size_t j=1;j<=numberOfRows;j++)
+            for(size_t k=1;k<=numberOfColumns;k++)
               mc.addElement(ttz_elements(i,j,k));
 
       }
@@ -223,12 +223,12 @@ void XC::SetEntities::fillDownwards(SetMeshComp &mc)
 
         //Elements.
         TritrizPtrElem &ttz_elements= (*i)->getTtzElements();
-        const size_t ncapas= ttz_elements.GetCapas();
-        const size_t nfilas= ttz_elements.getNumFilas();
-        const size_t ncols= ttz_elements.getNumCols();
-        for(size_t i=1;i<=ncapas;i++)
-          for(size_t j=1;j<=nfilas;j++)
-            for(size_t k=1;k<=ncols;k++)
+        const size_t numberOfLayers= ttz_elements.getNumberOfLayers();
+        const size_t numberOfRows= ttz_elements.getNumberOfRows();
+        const size_t numberOfColumns= ttz_elements.getNumberOfColumns();
+        for(size_t i=1;i<=numberOfLayers;i++)
+          for(size_t j=1;j<=numberOfRows;j++)
+            for(size_t k=1;k<=numberOfColumns;k++)
               mc.addElement(ttz_elements(i,j,k));
       }
   }

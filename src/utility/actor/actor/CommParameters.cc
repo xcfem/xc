@@ -215,8 +215,8 @@ int XC::CommParameters::sendMatrixPtr(Matrix *ptr,DbTagData &dt, const MatrixCom
     else
       {
         dt.setDbTagDataPos(posFlag, 0);
-        dt.setDbTagDataPos(meta.getPosNumFilas(), ptr->noRows());
-        dt.setDbTagDataPos(meta.getPosNumCols(), ptr->noCols());
+        dt.setDbTagDataPos(meta.getPositionNumberOfRows(), ptr->noRows());
+        dt.setDbTagDataPos(meta.getPositionNumberOfColumns(), ptr->noCols());
         MovableMatrix mov(*ptr);
         retval= sendMovable(mov,dt,meta);
       }
@@ -232,8 +232,8 @@ XC::Matrix *XC::CommParameters::receiveMatrixPtr(Matrix* &ptr,DbTagData &dt, con
         // make some room and read in the ID
         if(!ptr)
           {
-            const int nr= dt.getDbTagDataPos(meta.getPosNumFilas());
-            const int nc= dt.getDbTagDataPos(meta.getPosNumCols());
+            const int nr= dt.getDbTagDataPos(meta.getPositionNumberOfRows());
+            const int nc= dt.getDbTagDataPos(meta.getPositionNumberOfColumns());
             ptr= new Matrix(nr,nc);
             if(!ptr)
               std::cerr << "receiveMatrixPtr -- ran out of memory\n";

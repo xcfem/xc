@@ -40,10 +40,10 @@ XC::Element *XC::MatrizPtrElem::findElement(const int &tag)
   {
     Element *retval= nullptr;
     Element *tmp= nullptr;
-    const size_t nfilas= getNumFilas();
-    const size_t ncols= getNumCols();
-    for(size_t j= 1;j<=nfilas;j++)
-      for(size_t k= 1;k<=ncols;k++)
+    const size_t numberOfRows= getNumberOfRows();
+    const size_t numberOfColumns= getNumberOfColumns();
+    for(size_t j= 1;j<=numberOfRows;j++)
+      for(size_t k= 1;k<=numberOfColumns;k++)
         {
           tmp= operator()(j,k);
           if(tmp)
@@ -64,10 +64,10 @@ const XC::Element *XC::MatrizPtrElem::findElement(const int &tag) const
   {
     const Element *retval= nullptr;
     const Element *tmp= nullptr;
-    const size_t nfilas= getNumFilas();
-    const size_t ncols= getNumCols();
-    for(size_t j= 1;j<=nfilas;j++)
-      for(size_t k= 1;k<=ncols;k++)
+    const size_t numberOfRows= getNumberOfRows();
+    const size_t numberOfColumns= getNumberOfColumns();
+    for(size_t j= 1;j<=numberOfRows;j++)
+      for(size_t k= 1;k<=numberOfColumns;k++)
         {
           tmp= operator()(j,k);
           if(tmp)
@@ -88,15 +88,15 @@ XC::Element *XC::MatrizPtrElem::getNearestElement(const Pos3d &p)
     Element *retval= nullptr, *ptrElem= nullptr;
     double d= DBL_MAX;
     double tmp;
-    const size_t nfilas= getNumFilas();
-    const size_t ncols= getNumCols();
-    if(nfilas*ncols>500)
+    const size_t numberOfRows= getNumberOfRows();
+    const size_t numberOfColumns= getNumberOfColumns();
+    if(numberOfRows*numberOfColumns>500)
       std::clog << "The element matrix has "
-                << nfilas*ncols << " components "
+                << numberOfRows*numberOfColumns << " components "
                 << " is better to search by coordinates in the associated set."
                 << std::endl;
-    for(size_t j= 1;j<=nfilas;j++)
-      for(size_t k= 1;k<=ncols;k++)
+    for(size_t j= 1;j<=numberOfRows;j++)
+      for(size_t k= 1;k<=numberOfColumns;k++)
         {
           ptrElem= operator()(j,k);
           tmp= ptrElem->getDist2(p);

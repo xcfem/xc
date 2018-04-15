@@ -24,16 +24,16 @@
 // along with this program.
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
-//SetFilaI.cc
+//IRowSet.cc
 
-#include "SetFilaI.h"
+#include "IRowSet.h"
 #include "preprocessor/multi_block_topology/entities/EntMdlr.h"
 #include <boost/any.hpp>
 #include "domain/mesh/node/Node.h"
 #include "domain/mesh/element/Element.h"
 
-XC::SetFilaI::SetFilaI(EntMdlr &e,const size_t &f,const size_t &c,const std::string &nmb,XC::Preprocessor *preprocessor)
-  : SetFila<tfilanod,tfilaelem>(e.getTtzNodes().GetVarRefFilaI(f,c),e.getTtzElements().GetVarRefFilaI(f,c),nmb,preprocessor) {}
+XC::IRowSet::IRowSet(EntMdlr &e,const size_t &f,const size_t &c,const std::string &nmb,XC::Preprocessor *preprocessor)
+  : RowSet<tNodeRow,tElemRow>(e.getTtzNodes().getVarRefIRow(f,c),e.getTtzElements().getVarRefIRow(f,c),nmb,preprocessor) {}
 
-XC::SetFilaI::SetFilaI(EntMdlr &e,const RangoIndice &rango_capas,const size_t &f,const size_t &c,const std::string &nmb,Preprocessor *preprocessor)
-  : SetFila<tfilanod,tfilaelem>(e.getTtzNodes().GetVarRefFilaI(rango_capas,f,c),e.getTtzElements().GetVarRefFilaI(rango_capas,f,c),nmb,preprocessor) {}
+XC::IRowSet::IRowSet(EntMdlr &e,const RangoIndice &layer_range,const size_t &f,const size_t &c,const std::string &nmb,Preprocessor *preprocessor)
+  : RowSet<tNodeRow,tElemRow>(e.getTtzNodes().getVarRefIRow(layer_range,f,c),e.getTtzElements().getVarRefIRow(layer_range,f,c),nmb,preprocessor) {}

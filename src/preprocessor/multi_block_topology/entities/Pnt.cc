@@ -72,7 +72,7 @@ Vector3d XC::Pnt::VectorPos(void) const
   { return p.VectorPos();  }
 
 //! @brief Updates topology.
-void XC::Pnt::actualiza_topologia(void)
+void XC::Pnt::update_topology(void)
   {}
 
 //! @brief Return the object BND.
@@ -187,7 +187,8 @@ int XC::Pnt::getTagNode(void) const
     if(nod)
       retval= nod->getTag();
     else
-      std::cerr << getClassName() << "::" << __FUNCTION__ << "; the point: '" << getName()
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; the point: '" << getName()
                 << "' has not a node (is not meshed)." << std::endl;
     return retval;
   }

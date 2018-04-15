@@ -24,16 +24,36 @@
 // along with this program.
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
-//SetFilaK.cc
+//KRowSet.h
 
-#include "SetFilaK.h"
-#include "preprocessor/multi_block_topology/entities/EntMdlr.h"
-#include <boost/any.hpp>
-#include "domain/mesh/node/Node.h"
-#include "domain/mesh/element/Element.h"
+#ifndef KROWSET_H
+#define KROWSET_H
 
-XC::SetFilaK::SetFilaK(EntMdlr &e,const size_t &f,const size_t &c,const std::string &nmb,XC::Preprocessor *preprocessor)
-  : SetFila<tfilanod,tfilaelem>(e.getTtzNodes().GetVarRefFilaK(f,c),e.getTtzElements().GetVarRefFilaK(f,c),nmb,preprocessor) {}
+#include "RowSet.h"
+#include "preprocessor/multi_block_topology/matrices/TritrizPtrNod.h"
+#include "preprocessor/multi_block_topology/matrices/TritrizPtrElem.h"
 
-XC::SetFilaK::SetFilaK(EntMdlr &e,const size_t &capa,const size_t &f,const RangoIndice &rango_cols,const std::string &nmb,Preprocessor *preprocessor)
-  : SetFila<tfilanod,tfilaelem>(e.getTtzNodes().GetVarRefFilaK(capa,f,rango_cols),e.getTtzElements().GetVarRefFilaK(capa,f,rango_cols),nmb,preprocessor) {}
+class RangoIndice;
+
+namespace XC {
+
+class EntMdlr;
+
+//!  @ingroup Set
+//! 
+//!  @brief Set of objects in a row.
+//! 
+//!  A KRowSet object contains zero o more:
+//!  - Nodes.
+//!  - Finite elements.
+//!  that correspond to a k_row of an EntMdlr object.
+class KRowSet: public RowSet<TritrizPtrNod::var_ref_k_row,TritrizPtrElem::var_ref_k_row>
+  {
+  public:
+    typedef TritrizPtrNod::var_ref_k_row tNodeRow;
+    typedef TritrizPtrElem::var_ref_k_row tElemRow;
+    KRowSet(EntMdlr &e,const size_t &f=1,const size_t &c=1,const std::string &nmb="",Preprocessor *preprocessor= nullptr);
+    KRowSet(EntMdlr &e,const size_t &capa,const size_t &f,const RangoIndice &,const std::string &nmb="",Preprocessor *preprocessor= nullptr);
+  };
+} //end of XC namespace
+#endif

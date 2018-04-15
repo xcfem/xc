@@ -87,7 +87,7 @@ void XC::LineBase::SetVertice(const size_t &i,Pnt *p)
         if(p2) p2->erase_line(this);
         p2= p;
       }
-    actualiza_topologia();
+    update_topology();
   }
 
 //! @brief Sets the i-th vertex.
@@ -112,5 +112,5 @@ void XC::LineBase::SetVertices(Pnt *pA,Pnt *pB)
       std::cerr << getClassName() << "::" << __FUNCTION__
 		<< " degenerated line (starts and end in the same point): '"
                 << getName() << "'." << std::endl;
-    actualiza_topologia();
+    update_topology();
   }

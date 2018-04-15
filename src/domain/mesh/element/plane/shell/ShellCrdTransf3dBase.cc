@@ -67,7 +67,7 @@ int XC::ShellCrdTransf3dBase::initialize(const NodePtrs &ptrs)
     return 0;
   }
 
-//! @brief actualiza las local coordinates of the nodes.
+//! @brief Update local coordinates of the nodes.
 int XC::ShellCrdTransf3dBase::setup_nodal_local_coordinates(double xl[2][4]) const
   {
     //local nodal coordinates in plane of shell

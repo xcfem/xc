@@ -31,8 +31,8 @@ class_<matriz_t_point_ptr, bases<ProtoMatriz>, boost::noncopyable >("matriz_t_po
 typedef XC::MatrizPtrBase<XC::Pnt> matriz_point_ptr;
 class_<matriz_point_ptr, bases<matriz_t_point_ptr,EntCmd>, boost::noncopyable >("matriz_point_ptr", no_init)
   .def("dim",&matriz_point_ptr::dim,"assings matrix dimensions.")
-  .add_property("nRow",&matriz_point_ptr::getNumFilas,"returns number of rows.")
-  .add_property("nCol",&matriz_point_ptr::getNumCols,"returns number of columns.")
+  .add_property("nRow",&matriz_point_ptr::getNumberOfRows,"returns number of rows.")
+  .add_property("nCol",&matriz_point_ptr::getNumberOfColumns,"returns number of columns.")
   ;
 
 XC::Pnt *(XC::MatrizPtrPnt::*getNearestPntMatrizPtrPnt)(const Pos3d &)= &XC::MatrizPtrPnt::getNearestPnt;
@@ -78,8 +78,8 @@ class_<matriz_t_ptr_nodes, bases<ProtoMatriz>, boost::noncopyable >("matriz_t_pt
 typedef XC::MatrizPtrBase<XC::Node> matriz_ptr_nodes;
 class_<matriz_ptr_nodes, bases<matriz_t_ptr_nodes,EntCmd>, boost::noncopyable >("matriz_ptr_nodes", no_init)
   .def("getTagsInteriorNodes",&matriz_ptr_nodes::getTagsInteriorObjs,"return interior node tags.")
-  .add_property("nRow",&matriz_ptr_nodes::getNumFilas,"returns number of rows.")
-  .add_property("nCol",&matriz_ptr_nodes::getNumCols,"returns number of columns.")
+  .add_property("nRow",&matriz_ptr_nodes::getNumberOfRows,"returns number of rows.")
+  .add_property("nCol",&matriz_ptr_nodes::getNumberOfColumns,"returns number of columns.")
   .def("dim",&matriz_ptr_nodes::dim,"assings matrix dimensions.")
   ;
 
@@ -121,8 +121,8 @@ class_<matriz_t_ptr_elements, bases<ProtoMatriz>, boost::noncopyable >("matriz_t
 
 typedef XC::MatrizPtrBase<XC::Element *> matriz_ptr_elements;
 class_<matriz_ptr_elements, bases<matriz_t_ptr_elements,EntCmd>, boost::noncopyable >("matriz_ptr_elements", no_init)
-  .add_property("nRow",&matriz_ptr_elements::getNumFilas,"returns number of rows.")
-  .add_property("nCol",&matriz_ptr_elements::getNumCols,"returns number of columns.")
+  .add_property("nRow",&matriz_ptr_elements::getNumberOfRows,"returns number of rows.")
+  .add_property("nCol",&matriz_ptr_elements::getNumberOfColumns,"returns number of columns.")
   .def("dim",&matriz_ptr_elements::dim,"assings matrix dimensions.")
   ;
 
@@ -142,7 +142,7 @@ class_<vector_mp_elements, boost::noncopyable >("vector_mp_elements", no_init)
 
 typedef XC::TritrizPtrBase<XC::MatrizPtrElem> tritriz_elements;
 class_<tritriz_elements, bases<vector_mp_elements,EntCmd>, boost::noncopyable >("tritriz_elements", no_init)
-  .def("getTagsElementsCapa",&tritriz_elements::getTagsObjsCapa,"return layer elements tags.")
+  .def("getLayerElementsTags",&tritriz_elements::getLayerObjectsTags,"return layer elements tags.")
   .def("dim",&tritriz_elements::dim,"assings dimensions.")
   .def("getAtIJK", &tritriz_elements::getAtIJK, return_internal_reference<>(),"Returns reference to value at (i,j,k) position.")
   ;

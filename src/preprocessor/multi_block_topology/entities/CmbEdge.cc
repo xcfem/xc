@@ -460,7 +460,7 @@ void XC::CmbEdge::genMesh(meshing_dir dm)
     
     //pointers to nodes.
     ttzNodes= TritrizPtrNod(1,NDiv()+1,1);
-    size_t offset_j= 0;// Columna inicial.
+    size_t offset_j= 0;// initial column.
     for(std::deque<Side>::const_iterator i=lines.begin();i!=lines.end();i++)
       {
         ttzNodes.PutCaja(0,offset_j,0,(*i).getEdge()->getTtzNodes());
@@ -468,7 +468,7 @@ void XC::CmbEdge::genMesh(meshing_dir dm)
       }
     //pointers to elements.
     ttzElements= TritrizPtrElem(1,NDiv(),1);
-    offset_j= 0;// Columna inicial.
+    offset_j= 0;// initial column.
     for(std::deque<Side>::const_iterator i=lines.begin();i!=lines.end();i++)
       {
         ttzElements.PutCaja(0,offset_j,0,(*i).getEdge()->getTtzElements());
@@ -619,7 +619,7 @@ void XC::CmbEdge::insert(Edge *l)
                         << P2()->getName() 
                         << " because they don't have shared ends." << std::endl;
           }
-        actualiza_topologia();
+        update_topology();
       }
   }
 

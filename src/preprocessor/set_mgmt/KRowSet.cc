@@ -24,35 +24,16 @@
 // along with this program.
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
-//SetFilaJ.h
+//KRowSet.cc
 
-#ifndef SETFILAJ_H
-#define SETFILAJ_H
+#include "KRowSet.h"
+#include "preprocessor/multi_block_topology/entities/EntMdlr.h"
+#include <boost/any.hpp>
+#include "domain/mesh/node/Node.h"
+#include "domain/mesh/element/Element.h"
 
-#include "SetFila.h"
-#include "preprocessor/multi_block_topology/matrices/TritrizPtrNod.h"
-#include "preprocessor/multi_block_topology/matrices/TritrizPtrElem.h"
+XC::KRowSet::KRowSet(EntMdlr &e,const size_t &f,const size_t &c,const std::string &nmb,XC::Preprocessor *preprocessor)
+  : RowSet<tNodeRow,tElemRow>(e.getTtzNodes().getVarRefKRow(f,c),e.getTtzElements().getVarRefKRow(f,c),nmb,preprocessor) {}
 
-class RangoIndice;
-
-namespace XC {
-
-class EntMdlr;
-
-//!  @ingroup Set
-//! 
-//!  @brief Objects in a row.
-//! 
-//!  A SetFilaJ objects contains 0 or more:
-//!  - Nodes.
-//!  - Finite elements.
-//!  that correspond to a row of an EntMdlr object.
-class SetFilaJ: public SetFila<TritrizPtrNod::var_ref_fila_j,TritrizPtrElem::var_ref_fila_j>
-  {
-  public:
-    typedef TritrizPtrNod::var_ref_fila_j tfilanod;
-    typedef TritrizPtrElem::var_ref_fila_j tfilaelem;
-    SetFilaJ(EntMdlr &e,const size_t &f=1,const size_t &c=1,const std::string &nmb="",Preprocessor *preprocessor= nullptr);
-    SetFilaJ(EntMdlr &e,const size_t &capa,const RangoIndice &,const size_t &c,const std::string &nmb="",Preprocessor *preprocessor= nullptr);  };
-} //end of XC namespace
-#endif
+XC::KRowSet::KRowSet(EntMdlr &e,const size_t &capa,const size_t &f,const RangoIndice &rango_cols,const std::string &nmb,Preprocessor *preprocessor)
+  : RowSet<tNodeRow,tElemRow>(e.getTtzNodes().getVarRefKRow(capa,f,rango_cols),e.getTtzElements().getVarRefKRow(capa,f,rango_cols),nmb,preprocessor) {}

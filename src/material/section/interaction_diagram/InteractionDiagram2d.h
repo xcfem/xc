@@ -51,8 +51,8 @@ class InteractionDiagram2d: public Poligono2d
 
     void Simplify(void);
     Pos2d getIntersection(const Pos2d &) const;
-    double FactorCapacidad(const Pos2d &esf_d) const;
-    Vector FactorCapacidad(const GeomObj::list_Pos2d &lp) const;
+    double getCapacityFactor(const Pos2d &esf_d) const;
+    Vector getCapacityFactor(const GeomObj::list_Pos2d &lp) const;
 
     void Print(std::ostream &os) const;
   };

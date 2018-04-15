@@ -50,7 +50,7 @@ XC::FiberData::FiberData(const GeomSection &gmSecc)
   : fibersMaterial(gmSecc.getNumFiberData()),fibersPosition(2,gmSecc.getNumFiberData()),fibersArea(gmSecc.getNumFiberData())
   {
     int k= PutCells(0,gmSecc.getRegiones());
-    k= PutCapasArmadura(k,gmSecc.getCapasArmadura());
+    k= putReinforcementLayers(k,gmSecc.getReinforcementLayers());
   }
 
 //! @brief Coloca las celdas being passed as parameters.
@@ -110,11 +110,11 @@ size_t XC::FiberData::PutCells(const size_t &offset,const ListRegiones &regiones
   }
 
 //! @brief Coloca las barras de la lista being passed as parameter.
-size_t XC::FiberData::PutCapasArmadura(const size_t &offset,const ListReinfLayer &capas_armado)
+size_t XC::FiberData::putReinforcementLayers(const size_t &offset,const ListReinfLayer &reinforcement_layers)
   {
     Material *matPtr= nullptr;
     int k= offset;
-    for(ListReinfLayer::const_iterator i= capas_armado.begin();i!=capas_armado.end();i++)
+    for(ListReinfLayer::const_iterator i= reinforcement_layers.begin();i!=reinforcement_layers.end();i++)
       {
         matPtr= (*i)->getMaterialPtr();
         const ReinfLayer *capa= *i;

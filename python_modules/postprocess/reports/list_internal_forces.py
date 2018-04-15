@@ -35,8 +35,9 @@ def listaEsfuerzosBarrasLineas(preprocessor, nmbComb, setNameLineas, fmt, fName,
     listaEsfuerzosBarrasSet(nmbComb,nmb,fmt,fName) 
   cierraSupertabular(fName)
 
-# Imprime los esfuerzos y el factor de capacidad de los elementos contenidos en el conjunto que se pasa como parámetro.
 def listaEsfuerzosFCBarrasSet(preprocessor, nmbComb, setName, fmt, fName, nmbDiag):
+  '''Print internal forces and capacity factor of the elements contained in the
+     argument set.'''
   str= "" 
   k= 0
   s= preprocessor.getSets.getSet(setName)
@@ -48,11 +49,12 @@ def listaEsfuerzosFCBarrasSet(preprocessor, nmbComb, setName, fmt, fName, nmbDia
     for s in secciones:
       fName.write(str,k," & ")
       fName.write(fmt.format(e.getProp("N")/1e3)," & ",fmt.format(e.getProp("Vy")/1e3)," & ",fmt.format(e.getProp("Vz")/1e3)," & ")
-      fName.write(fmt.format(e.getProp("Mx")/1e3)," & ",fmt.format(e.getProp("My")/1e3)," & ",fmt.format(e.getProp("Mz")/1e3)," & ",fmt.format(getFactorCapacidad(nmbDiag)),"\\\\\n")
+      fName.write(fmt.format(e.getProp("Mx")/1e3)," & ",fmt.format(e.getProp("My")/1e3)," & ",fmt.format(e.getProp("Mz")/1e3)," & ",fmt.format(getCapacityFactor(nmbDiag)),"\\\\\n")
       k=k+1
 
-# Imprime los esfuerzos y el factor de capacidad de los elementos contenidos en las lineas del conjunto que se pasa como parámetro.
 def listaEsfuerzosFCBarrasLineas(nmbComb, setNameLineas, fmt, fName, encab, tit, nmbDiag):
+  '''Print internal forces and capacity factor of the elements contained in the
+     lines of the argument set.'''
   fName.write("\\",encab,"{",tit,"}\n")
   caption= "Barras del conjunto: "+setNameLineas
   defCampos= "|l|r|r|r|r|r|r|r|r|r|"

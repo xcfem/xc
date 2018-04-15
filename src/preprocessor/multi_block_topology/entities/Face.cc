@@ -71,7 +71,7 @@ void XC::Face::insert_body(Body *b)
   { cuerpos_sup.insert(b); }
 
 //! @brief Updates topology.
-void XC::Face::actualiza_topologia(void)
+void XC::Face::update_topology(void)
   {
     for(std::deque<Side>::iterator i=lines.begin();i!=lines.end();i++)
       (*i).getEdge()->insert_surf(this);
@@ -194,11 +194,11 @@ XC::Node *XC::Face::getNode(const size_t &i,const size_t &j)
 const XC::Node *XC::Face::getNode(const size_t &i,const size_t &j) const
   {
     const Node *retval= nullptr;
-    if(ttzNodes.EsCapaICte())
+    if(ttzNodes.isIConstantLayer())
       retval= CmbEdge::getNode(1,i,j);
-    else if(ttzNodes.EsCapaJCte())
+    else if(ttzNodes.isJConstantLayer())
       retval= CmbEdge::getNode(i,1,j);
-    else if(ttzNodes.EsCapaKCte())
+    else if(ttzNodes.isKConstantLayer())
       retval= CmbEdge::getNode(i,j,1);
     else
       std::cerr << getClassName() << "::" << __FUNCTION__

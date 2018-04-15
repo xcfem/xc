@@ -181,7 +181,7 @@ std::set<const XC::Face *> XC::Block::getSurfaces(void)
   }
 
 //! @brief Update topology of the enclosing surface (neighbors).
-void XC::Block::actualiza_topologia(void)
+void XC::Block::update_topology(void)
   {
     if(!sups[0].Vacia()) set_surf(sups[0].Surface());
     if(!sups[1].Vacia()) set_surf(sups[1].Surface());
@@ -215,8 +215,8 @@ size_t XC::Block::indice(Face *s) const
     return retval;
   }
 
-//! @brief Set the surface as solid limit.
-void XC::Block::coloca(const size_t &i,Face *s)
+//! @brief Put the sur!face as solid limit.
+void XC::Block::put(const size_t &i,Face *s)
   {
     size_t primero= 1;
     int sentido= 1;
@@ -276,7 +276,7 @@ void XC::Block::insert(const size_t &i)
   {
     Face *s= BuscaFace(i);
     if(s)
-      coloca(indice(s),s);
+      put(indice(s),s);
     else
       std::cerr << getClassName() << "::" << __FUNCTION__
 		<< "; surface: " << i
@@ -307,8 +307,8 @@ void XC::Block::create_face_nodes(void)
 //!
 //! The returned 3D-matrix of points is organized as follows:
 //! - The point (0,1,1) (layer,row,column) corresponds to vertex  1.
-//! - The layer index ranges from 0 for face 1 to ncapas for face 6.
-//! - The row index ranges from 1 for face 5 to nfilas for face 3.
+//! - The layer index ranges from 0 for face 1 to numberOfLayers for face 6.
+//! - The row index ranges from 1 for face 5 to numberOfRows for face 3.
 //! - The column index rangess from 1 for face 2 to ncol for face 4.
 //!
 //! So:
@@ -317,15 +317,15 @@ void XC::Block::create_face_nodes(void)
 //! - Edge 3 has indices (0,j=1..nfil,ncol)
 //! - Edge 4 has indices (0,1,k=1..ncol)
 
-//! - Edge 5 has indices (i=0..ncapas,1,1) 
-//! - Edge 6 has indices (i=0..ncapas,nfil,1) 
-//! - Edge 7 has indices (i=0..ncapas,nfil,ncol) 
-//! - Edge 8 has indices (i=0..ncapas,1,ncol) 
+//! - Edge 5 has indices (i=0..numberOfLayers,1,1) 
+//! - Edge 6 has indices (i=0..numberOfLayers,nfil,1) 
+//! - Edge 7 has indices (i=0..numberOfLayers,nfil,ncol) 
+//! - Edge 8 has indices (i=0..numberOfLayers,1,ncol) 
 
-//! - Edge 9 has indices (ncapas,j=1..nfil,1) 
-//! - Edge 10 has indices (ncapas,nfil,k=1..ncol) 
-//! - Edge 11 has indices (ncapas,j=1..nfil,ncol) 
-//! - Edge 12 has indices (ncapas,1,k=1..ncol) 
+//! - Edge 9 has indices (numberOfLayers,j=1..nfil,1) 
+//! - Edge 10 has indices (numberOfLayers,nfil,k=1..ncol) 
+//! - Edge 11 has indices (numberOfLayers,j=1..nfil,ncol) 
+//! - Edge 12 has indices (numberOfLayers,1,k=1..ncol) 
 TritrizPos3d XC::Block::get_positions(void) const
   {
     const size_t ndiv_12= NDivI();
@@ -374,33 +374,33 @@ void XC::Block::create_nodes(void)
         BodyFace &frontFace= sups[2];
         BodyFace &backFace= sups[4];
 
-        const size_t capas= NDivK()+1;
-        const size_t filas= NDivJ()+1;
+        const size_t n_layers= NDivK()+1;
+        const size_t n_rows= NDivJ()+1;
         const size_t cols= NDivI()+1;
-        ttzNodes = TritrizPtrNod(capas,filas,cols); //Pointers to node.
+        ttzNodes = TritrizPtrNod(n_layers,n_rows,cols); //Pointers to node.
         TritrizPos3d node_pos= get_positions(); //Node positions.
 
         //Vertices.
 	ttzNodes(1,1,1)= getVertex(1)->getNode();
-        ttzNodes(1,filas,1)= getVertex(2)->getNode();
-	ttzNodes(1,filas,cols)= getVertex(3)->getNode();
+        ttzNodes(1,n_rows,1)= getVertex(2)->getNode();
+	ttzNodes(1,n_rows,cols)= getVertex(3)->getNode();
         ttzNodes(1,1,cols)= getVertex(4)->getNode();
-	ttzNodes(capas,1,1)= getVertex(5)->getNode();
-        ttzNodes(capas,filas,1)= getVertex(6)->getNode();
-	ttzNodes(capas,filas,cols)= getVertex(7)->getNode();
-        ttzNodes(capas,1,cols)= getVertex(8)->getNode();
+	ttzNodes(n_layers,1,1)= getVertex(5)->getNode();
+        ttzNodes(n_layers,n_rows,1)= getVertex(6)->getNode();
+	ttzNodes(n_layers,n_rows,cols)= getVertex(7)->getNode();
+        ttzNodes(n_layers,1,cols)= getVertex(8)->getNode();
 
         const Node *n1= ttzNodes(1,1,1);
-        const Node *n2= ttzNodes(1,filas,1);
-        const Node *n3= ttzNodes(1,filas,cols);
+        const Node *n2= ttzNodes(1,n_rows,1);
+        const Node *n3= ttzNodes(1,n_rows,cols);
         const Node *n4= ttzNodes(1,1,cols);
-        const Node *n5= ttzNodes(capas,1,1);
-        const Node *n6= ttzNodes(capas,filas,1);
-        const Node *n7= ttzNodes(capas,filas,cols);
-        const Node *n8= ttzNodes(capas,1,cols);
+        const Node *n5= ttzNodes(n_layers,1,1);
+        const Node *n6= ttzNodes(n_layers,n_rows,1);
+        const Node *n7= ttzNodes(n_layers,n_rows,cols);
+        const Node *n8= ttzNodes(n_layers,1,cols);
 
-    std::cout << "capas= " << capas << std::endl;
-    std::cout << "filas= " << filas << std::endl;
+    std::cout << "n_layers= " << n_layers << std::endl;
+    std::cout << "n_rows= " << n_rows << std::endl;
     std::cout << "cols= " << cols << std::endl;
 
     std::cout << "base" << std::endl;
@@ -432,39 +432,41 @@ void XC::Block::create_nodes(void)
                 ttzNodes(1,J,K)= base.getNode(j,i);
               d2= dist2(ttzNodes(1,J,K)->getInitialPosition3d(),node_pos(1,J,K));
               if(d2>1e-4)
-		std::cerr << "Block::create_nodes; error while linking node: ("
+		std::cerr << getClassName() << "::" << __FUNCTION__
+			  << "; error while linking node: ("
                           << i << "," << j << ") in face." << std::endl;
-	      std::cout << "i= " << i << " j= " << j << " J= " << J << " K= " << K 
-                        << " dist2= " << d2 << std::endl;
+		std::cout << "i= " << i << " j= " << j
+			  << " J= " << J << " K= " << K 
+			  << " dist2= " << d2 << std::endl;
             }
 	/*
     std::cout << "tapa" << std::endl;
-        //Tapa i=capas
+        //Tapa i=n_layers
         IJK1= tapa.Surface()->getNodeIndices(n5);
         IJK2= tapa.Surface()->getNodeIndices(n7);
-        for(size_t i=1;i<=filas;i++)
+        for(size_t i=1;i<=n_rows;i++)
           for(size_t j=1;j<=cols;j++)
             {
-              size_t J= (IJK2[1]-IJK1[1])/(filas-1)*(i-1)+IJK1[1];
+              size_t J= (IJK2[1]-IJK1[1])/(n_rows-1)*(i-1)+IJK1[1];
               size_t K= (IJK2[2]-IJK1[2])/(cols-1)*(j-1)+IJK1[2];
-              ttzNodes(capas,J,K)= tapa.getNode(i,j);
+              ttzNodes(n_layers,J,K)= tapa.getNode(i,j);
             }
 
         //Lateral izquierdo j=1.
         IJK1= latIzdo.Surface()->getNodeIndices(n1);
         IJK2= latIzdo.Surface()->getNodeIndices(n6);
-        for(size_t i=1;i<=filas;i++)
+        for(size_t i=1;i<=n_rows;i++)
           for(size_t j=1;j<=cols;j++)
             {
-              size_t J= (IJK2[1]-IJK1[1])/(filas-1)*(j-1)+IJK1[1];
-              size_t K= (IJK2[2]-IJK1[2])/(filas-1)*(j-1)+IJK1[2];
-              ttzNodes(capas,J,K)= tapa.getNode(i,j);
+              size_t J= (IJK2[1]-IJK1[1])/(n_rows-1)*(j-1)+IJK1[1];
+              size_t K= (IJK2[2]-IJK1[2])/(n_rows-1)*(j-1)+IJK1[2];
+              ttzNodes(n_layers,J,K)= tapa.getNode(i,j);
             }
 	*/
 
-        for(size_t k= 2;k<capas;k++) //Capas interiores.
-          for(size_t j= 2;j<filas;j++) //Filas interiores.
-            for(size_t i= 2;i<cols;i++) //Columnas interiores.
+        for(size_t k= 2;k<n_layers;k++) //interior layers.
+          for(size_t j= 2;j<n_rows;j++) //interior rows.
+            for(size_t i= 2;i<cols;i++) //interior columns.
               create_node(node_pos(i,j,k),i,j,k);
       }
     else

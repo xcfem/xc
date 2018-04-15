@@ -76,7 +76,7 @@ class FiberData
       { return fibersArea.Size(); }
 
     size_t PutCells(const size_t &,const ListRegiones &);
-    size_t PutCapasArmadura(const size_t &,const ListReinfLayer &);
+    size_t putReinforcementLayers(const size_t &,const ListReinfLayer &);
     void get2DFibers(fiber_list &) const;
     void get3DFibers(fiber_list &) const;
   };

@@ -35,9 +35,9 @@
 #include "domain/domain/Domain.h"
 #include "domain/mesh/element/Element.h"
 #include "preprocessor/Preprocessor.h"
-#include "preprocessor/set_mgmt/SetFilaI.h"
-#include "preprocessor/set_mgmt/SetFilaJ.h"
-#include "preprocessor/set_mgmt/SetFilaK.h"
+#include "preprocessor/set_mgmt/IRowSet.h"
+#include "preprocessor/set_mgmt/JRowSet.h"
+#include "preprocessor/set_mgmt/KRowSet.h"
 
 
 
@@ -234,24 +234,24 @@ const XC::Element *XC::EntMdlr::findElement(const int &tag) const
   { return ttzElements.findElement(tag); }
 
 //! @brief Creates a set that corresponds to a row of nodes and elements.
-XC::SetEstruct *XC::EntMdlr::create_set_fila(const RangoTritriz &rango,const std::string &nmb)
+XC::SetEstruct *XC::EntMdlr::create_row_set(const RangoTritriz &rango,const std::string &nmb)
   {
     SetEstruct *retval= nullptr;
     if(getPreprocessor())
       {
         MapSet &map_set= getPreprocessor()->get_sets();
-        if(rango.EsFilaI())
+        if(rango.isIRow())
           {
-            retval= map_set.create_set_estruct(GetVarRefFilaI(rango,nmb));
+            retval= map_set.create_set_estruct(getVarRefIRow(rango,nmb));
           }
-        else if(rango.EsFilaJ())
+        else if(rango.isJRow())
           {
-            XC::SetFilaJ fj= GetVarRefFilaJ(rango,nmb);
+            XC::JRowSet fj= getVarRefJRow(rango,nmb);
             retval= map_set.create_set_estruct(fj);
           }
-        else if(rango.EsFilaK())
+        else if(rango.isKRow())
           {
-            retval= map_set.create_set_estruct(GetVarRefFilaK(rango,nmb));
+            retval= map_set.create_set_estruct(getVarRefKRow(rango,nmb));
           }
         else
 	  std::cerr << getClassName() << "::" << __FUNCTION__
@@ -272,11 +272,11 @@ XC::Vector XC::EntMdlr::getSimpsonWeights(const std::string &ijk,const std::stri
     Vector retval;
     const ExprAlgebra e(strExpr);
     if(ijk=="i")
-      retval= ttzNodes.IntegSimpsonFilaI(f,c,e,n);
+      retval= ttzNodes.IRowSimpsonIntegration(f,c,e,n);
     else if(ijk=="j")
-      retval= ttzNodes.IntegSimpsonFilaJ(f,c,e,n);
+      retval= ttzNodes.JRowSimpsonIntegration(f,c,e,n);
     else if(ijk=="k")
-      retval= ttzNodes.IntegSimpsonFilaK(f,c,e,n);
+      retval= ttzNodes.KRowSimpsonIntegration(f,c,e,n);
     return retval;
   }
 
@@ -291,17 +291,17 @@ XC::Node *XC::EntMdlr::create_node(const Pos3d &pos,size_t i,size_t j, size_t k)
 //! @brief Creates nodes at the positions being passed as parameters.
 void XC::EntMdlr::create_nodes(const TritrizPos3d &positions)
   {
-    const size_t capas= positions.GetCapas();
-    if(capas<1) return;
+    const size_t n_layers= positions.getNumberOfLayers();
+    if(n_layers<1) return;
     if(ttzNodes.Null())
       {
-        const size_t filas= positions(1).getNumFilas();
-        const size_t cols= positions(1).getNumCols();
-        ttzNodes = TritrizPtrNod(capas,filas,cols);
+        const size_t n_rows= positions(1).getNumberOfRows();
+        const size_t cols= positions(1).getNumberOfColumns();
+        ttzNodes = TritrizPtrNod(n_layers,n_rows,cols);
 
         if(!getPreprocessor()) return;
-        for(register size_t i= 1;i<=capas;i++)
-          for(register size_t j= 1;j<=filas;j++)
+        for(register size_t i= 1;i<=n_layers;i++)
+          for(register size_t j= 1;j<=n_rows;j++)
             for(register size_t k= 1;k<=cols;k++)
               create_node(positions(i,j,k),i,j,k);
         if(verbosity>5)
@@ -382,13 +382,13 @@ void XC::EntMdlr::create_points(const MatrizPos3d &positions)
   {
     if(verbosity>4)
       std::clog << "Creating points for line: '" << getName() << "'...";   
-    const size_t filas= positions.getNumFilas();
-    const size_t cols= positions.getNumCols();
+    const size_t n_rows= positions.getNumberOfRows();
+    const size_t cols= positions.getNumberOfColumns();
 
     if(getPreprocessor())
       {
         size_t cont= 0;
-        for(size_t i= 1;i<=filas;i++)
+        for(size_t i= 1;i<=n_rows;i++)
           for(size_t j= 1;j<=cols;j++)
             {
               create_point(positions(i,j));
@@ -402,26 +402,26 @@ void XC::EntMdlr::create_points(const MatrizPos3d &positions)
       std::clog << "creados." << std::endl;
   }
 
-XC::SetFilaI XC::EntMdlr::GetVarRefFilaI(size_t f,size_t c,const std::string &nmb)
-  { return SetFilaI(*this,f,c,nmb,getPreprocessor()); }
-XC::SetFilaI XC::EntMdlr::GetVarRefFilaI(const RangoIndice &rango_capas,size_t f,size_t c,const std::string &nmb)
-  { return SetFilaI(*this,rango_capas,f,c,nmb,getPreprocessor()); }
-XC::SetFilaI XC::EntMdlr::GetVarRefFilaI(const RangoTritriz &rango,const std::string &nmb)
-  { return GetVarRefFilaI(rango.GetRangoCapas(),rango.GetRangoFilas().Inf(),rango.GetRangoCols().Inf(),nmb); }
+XC::IRowSet XC::EntMdlr::getVarRefIRow(size_t f,size_t c,const std::string &nmb)
+  { return IRowSet(*this,f,c,nmb,getPreprocessor()); }
+XC::IRowSet XC::EntMdlr::getVarRefIRow(const RangoIndice &layer_range,size_t f,size_t c,const std::string &nmb)
+  { return IRowSet(*this,layer_range,f,c,nmb,getPreprocessor()); }
+XC::IRowSet XC::EntMdlr::getVarRefIRow(const RangoTritriz &rango,const std::string &nmb)
+  { return getVarRefIRow(rango.getLayerRange(),rango.getRowRange().Inf(),rango.getColumnRange().Inf(),nmb); }
 
-XC::SetFilaJ XC::EntMdlr::GetVarRefFilaJ(size_t capa,size_t c,const std::string &nmb)
-  { return SetFilaJ(*this,capa,c,nmb,getPreprocessor()); }
-XC::SetFilaJ XC::EntMdlr::GetVarRefFilaJ(size_t capa,const RangoIndice &rango_filas,size_t c,const std::string &nmb)
-  { return SetFilaJ(*this,capa,rango_filas,c,nmb,getPreprocessor()); }
-XC::SetFilaJ XC::EntMdlr::GetVarRefFilaJ(const RangoTritriz &rango,const std::string &nmb)
-  { return GetVarRefFilaJ(rango.GetRangoCapas().Inf(),rango.GetRangoFilas(),rango.GetRangoCols().Inf(),nmb); }
+XC::JRowSet XC::EntMdlr::getVarRefJRow(size_t capa,size_t c,const std::string &nmb)
+  { return JRowSet(*this,capa,c,nmb,getPreprocessor()); }
+XC::JRowSet XC::EntMdlr::getVarRefJRow(size_t capa,const RangoIndice &row_range,size_t c,const std::string &nmb)
+  { return JRowSet(*this,capa,row_range,c,nmb,getPreprocessor()); }
+XC::JRowSet XC::EntMdlr::getVarRefJRow(const RangoTritriz &rango,const std::string &nmb)
+  { return getVarRefJRow(rango.getLayerRange().Inf(),rango.getRowRange(),rango.getColumnRange().Inf(),nmb); }
 
-XC::SetFilaK XC::EntMdlr::GetVarRefFilaK(size_t capa,size_t f,const std::string &nmb)
-  { return SetFilaK(*this,capa,f,nmb,getPreprocessor()); }
-XC::SetFilaK XC::EntMdlr::GetVarRefFilaK(size_t capa,size_t f,const RangoIndice &rango_cols,const std::string &nmb)
-  { return SetFilaK(*this,capa,f,rango_cols,nmb,getPreprocessor()); }
-XC::SetFilaK XC::EntMdlr::GetVarRefFilaK(const RangoTritriz &rango,const std::string &nmb)
-  { return GetVarRefFilaK(rango.GetRangoCapas().Inf(),rango.GetRangoFilas().Inf(),rango.GetRangoCols(),nmb); }
+XC::KRowSet XC::EntMdlr::getVarRefKRow(size_t capa,size_t f,const std::string &nmb)
+  { return KRowSet(*this,capa,f,nmb,getPreprocessor()); }
+XC::KRowSet XC::EntMdlr::getVarRefKRow(size_t capa,size_t f,const RangoIndice &column_range,const std::string &nmb)
+  { return KRowSet(*this,capa,f,column_range,nmb,getPreprocessor()); }
+XC::KRowSet XC::EntMdlr::getVarRefKRow(const RangoTritriz &rango,const std::string &nmb)
+  { return getVarRefKRow(rango.getLayerRange().Inf(),rango.getRowRange().Inf(),rango.getColumnRange(),nmb); }
 
 //! @brief Return the squared distance to
 //! the position being passed as parameter.

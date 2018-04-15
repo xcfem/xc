@@ -60,7 +60,7 @@ void XC::ElementBodyLoad::applyLoad(double loadFactor)
   {
     const int sz= theElements.size();
     if(sz!=numElements())
-      std::cerr << "ElementBodyLoad::applyLoad; el número de pointers no coincide con el de identifiers." << std::endl;
+      std::cerr << "ElementBodyLoad::applyLoad; el number of pointers no coincide con el de identifiers." << std::endl;
     for(int i=0; i<sz; i++)
       if(theElements[i])
         theElements[i]->addLoad(this, loadFactor);

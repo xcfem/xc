@@ -187,7 +187,7 @@ XC::ElementalLoadIter &XC::LoadContainer::getElementalLoads(void)
     return *theEleIter;
   }
 
-//! @brief Returns the número de nodal loadss.
+//! @brief Returns the number of nodal loadss.
 int XC::LoadContainer::getNumNodalLoads(void) const
   {
     int retval= 0;
@@ -196,7 +196,7 @@ int XC::LoadContainer::getNumNodalLoads(void) const
     return retval;
   }
 
-//! @brief Returns the número de elemental loadss.
+//! @brief Returns the number of elemental loadss.
 int XC::LoadContainer::getNumElementalLoads(void) const
   {
     int retval= 0;

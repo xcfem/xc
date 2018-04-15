@@ -253,8 +253,8 @@ Pos3d XC::InteractionDiagram::getIntersection(const Pos3d &esf_d) const
     return retval;    
   }
 
-//! @brief Returns the capacity factor for the internal forces triplet being passed as parameters.
-double XC::InteractionDiagram::FactorCapacidad(const Pos3d &esf_d) const
+//! @brief Return the capacity factor for the internal forces triplet being passed as parameters.
+double XC::InteractionDiagram::getCapacityFactor(const Pos3d &esf_d) const
   {
     double retval= 1e6;
     assert(rMax>0.0);
@@ -288,12 +288,12 @@ double XC::InteractionDiagram::FactorCapacidad(const Pos3d &esf_d) const
     return retval;
   }
 
-XC::Vector XC::InteractionDiagram::FactorCapacidad(const GeomObj::list_Pos3d &lp) const
+XC::Vector XC::InteractionDiagram::getCapacityFactor(const GeomObj::list_Pos3d &lp) const
   {
     Vector retval(lp.size());
     int i= 0;
     for(GeomObj::list_Pos3d::const_iterator j= lp.begin();j!=lp.end(); j++, i++)
-      retval[i]= FactorCapacidad(*j);
+      retval[i]= getCapacityFactor(*j);
     return retval;
   }
 

@@ -424,9 +424,9 @@
 #include "preprocessor/multi_block_topology/trf/Rotation.h"
 #include "preprocessor/multi_block_topology/trf/MapTrfGeom.h"
 #include "preprocessor/set_mgmt/Set.h"
-#include "preprocessor/set_mgmt/SetFilaI.h"
-#include "preprocessor/set_mgmt/SetFilaJ.h"
-#include "preprocessor/set_mgmt/SetFilaK.h"
+#include "preprocessor/set_mgmt/IRowSet.h"
+#include "preprocessor/set_mgmt/JRowSet.h"
+#include "preprocessor/set_mgmt/KRowSet.h"
 
 
 #ifdef _PARALLEL_PROCESSING

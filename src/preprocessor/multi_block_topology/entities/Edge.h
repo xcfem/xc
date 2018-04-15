@@ -85,7 +85,7 @@ class Edge: public EntMdlr
       { return ndiv; }
     void SetElemSize(const double &sz);
     std::set<const XC::Edge *> getHomologousSides(const std::set<const XC::Edge *> &) const;
-    void actualiza_topologia(void);
+    void update_topology(void);
 
     //! @brief Return the surfaces that touch the line.
     const std::set<const Face *> &SupsTocan(void) const

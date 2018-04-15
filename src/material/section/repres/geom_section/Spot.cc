@@ -54,8 +54,8 @@ void XC::Spot::borra_linea(Eje *l)
 Vector2d XC::Spot::VectorPos(void) const
   { return p.VectorPos();  }
 
-//! @brief Updates topology.
-void XC::Spot::actualiza_topologia(void)
+//! @brief Update topology.
+void XC::Spot::update_topology(void)
   {}
 
 //! @brief Returns the object BND.

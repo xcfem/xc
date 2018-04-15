@@ -252,7 +252,7 @@ void XC::QuadSurface::setPoints(const ID &point_indexes)
 //! @brief Creates and inserts the lines from the points being passed as parameter.
 void XC::QuadSurface::setPoints(const MatrizPtrPnt &pntPtrs)
   {
-    const size_t nf= pntPtrs.getNumFilas(); //No. de rows of points.
+    const size_t nf= pntPtrs.getNumberOfRows(); //No. de rows of points.
     if(nf<2)
       {
         std::cerr << getClassName() << "::" << __FUNCTION__
@@ -260,7 +260,7 @@ void XC::QuadSurface::setPoints(const MatrizPtrPnt &pntPtrs)
 		  << std::endl;
         return;
       }
-    const size_t nc= pntPtrs.getNumCols(); //No. de columns of points.
+    const size_t nc= pntPtrs.getNumberOfColumns(); //No. de columns of points.
     if(nc<2)
       {
         std::cerr << getClassName() << "::" << __FUNCTION__
@@ -309,8 +309,8 @@ void XC::QuadSurface::setPoints(const MatrizPtrPnt &pntPtrs)
 //! to define the surface.
 void XC::QuadSurface::setPoints(const m_int &point_indexes)
   {
-    const size_t nf= point_indexes.getNumFilas(); //No. de rows of points.
-    const size_t nc= point_indexes.getNumCols(); //No. de columns of points.
+    const size_t nf= point_indexes.getNumberOfRows(); //No. de rows of points.
+    const size_t nc= point_indexes.getNumberOfColumns(); //No. de columns of points.
     if(nf<2)
       {
         std::cerr << "Matrix of indexes: '"
@@ -349,13 +349,13 @@ void XC::QuadSurface::defGridPoints(const boost::python::list &l)
   {
     int nRows= len(l);
     boost::python::list row0= boost::python::extract<boost::python::list>(l[0]);
-    int nCols= len(row0);
+    int numberOfColumns= len(row0);
     // copy the components
-    m_int tmp(nRows,nCols);
+    m_int tmp(nRows,numberOfColumns);
     for(int i=1; i<=nRows; i++)
       {
         boost::python::list rowI= boost::python::extract<boost::python::list>(l[i-1]);
-        for(int j= 1; j<=nCols;j++)
+        for(int j= 1; j<=numberOfColumns;j++)
           tmp(i,j)= boost::python::extract<double>(rowI[j-1]);
       }
     setPoints(tmp);
@@ -425,9 +425,9 @@ void XC::QuadSurface::create_nodes(void)
       {
         create_line_nodes();
 
-        const size_t filas= NDivJ()+1;
+        const size_t n_rows= NDivJ()+1;
         const size_t cols= NDivI()+1;
-        ttzNodes = TritrizPtrNod(1,filas,cols);
+        ttzNodes = TritrizPtrNod(1,n_rows,cols);
 
 
         //j=1
@@ -438,22 +438,22 @@ void XC::QuadSurface::create_nodes(void)
             ttzNodes(1,1,k)= nn;
           }
 
-        //j=filas.
+        //j=n_rows.
         for(size_t k=1;k<=cols;k++) //En sentido inverso.
-          ttzNodes(1,filas,k)= lines[2].getNodeInv(k);
+          ttzNodes(1,n_rows,k)= lines[2].getNodeInv(k);
 
 
         //k=1
-        for(size_t j=2;j<filas;j++) //En sentido inverso.
+        for(size_t j=2;j<n_rows;j++) //En sentido inverso.
           ttzNodes(1,j,1)= lines[3].getNodeInv(j);
         //k=cols.
-        for(size_t j=2;j<filas;j++)
+        for(size_t j=2;j<n_rows;j++)
           ttzNodes(1,j,cols)= lines[1].getNode(j);
 
 
         MatrizPos3d node_pos= get_positions(); //Node positions.
-        for(size_t j= 2;j<filas;j++) //Filas interiores.
-          for(size_t k= 2;k<cols;k++) //Columnas interiores.
+        for(size_t j= 2;j<n_rows;j++) //interior rows.
+          for(size_t k= 2;k<cols;k++) //interior columns.
             create_node(node_pos(j,k),1,j,k);
       }
     else

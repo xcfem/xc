@@ -326,9 +326,9 @@ void XC::ClosedTriangleMesh::Print(std::ostream &os) const
 void XC::ClosedTriangleMesh::getPositionsMatrix(Matrix &m)
   {
     const int sz= size();
-    size_t fila= 0;
+    size_t row= 0;
     m= Matrix(sz,12);
-    for(const_iterator i= begin();i!=end();i++,fila++)
+    for(const_iterator i= begin();i!=end();i++,row++)
       {
         const Trihedron &t= *i;
         const Pos3d &c= t.Cuspide();
@@ -336,10 +336,10 @@ void XC::ClosedTriangleMesh::getPositionsMatrix(Matrix &m)
         const Pos3d p1= b.Vertice(1);
         const Pos3d p2= b.Vertice(2);
         const Pos3d p3= b.Vertice(3);
-        m(fila,0)= c.x(); m(fila,1)= c.y(); m(fila,2)= c.z();
-        m(fila,3)= p1.x(); m(fila,4)= p1.y(); m(fila,5)= p1.z();
-        m(fila,6)= p2.x(); m(fila,7)= p2.y(); m(fila,8)= p2.z();
-        m(fila,9)= p3.x(); m(fila,10)= p3.y(); m(fila,11)= p3.z();
+        m(row,0)= c.x(); m(row,1)= c.y(); m(row,2)= c.z();
+        m(row,3)= p1.x(); m(row,4)= p1.y(); m(row,5)= p1.z();
+        m(row,6)= p2.x(); m(row,7)= p2.y(); m(row,8)= p2.z();
+        m(row,9)= p3.x(); m(row,10)= p3.y(); m(row,11)= p3.z();
       }
   }
 
@@ -347,10 +347,10 @@ void XC::ClosedTriangleMesh::getPositionsMatrix(Matrix &m)
 //! that contains the points that define each trihedron.
 void XC::ClosedTriangleMesh::setPositionsMatrix(const Matrix &m)
   {
-    const int nfilas= m.noRows();
+    const int numberOfRows= m.noRows();
     assert(m.noCols()==12);
-    trihedrons.resize(nfilas);
-    for(int i= 0;i<nfilas;i++)
+    trihedrons.resize(numberOfRows);
+    for(int i= 0;i<numberOfRows;i++)
       {
         const Pos3d c(m(i,0),m(i,1),m(i,2));
         const Pos3d p1(m(i,3),m(i,4),m(i,5));

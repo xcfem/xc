@@ -54,7 +54,7 @@ class TritrizPtrNod: public TritrizPtrBase<MatrizPtrNod>
 
   public:
 
-    TritrizPtrNod(const size_t capas= 0);
+    TritrizPtrNod(const size_t n_layers= 0);
     TritrizPtrNod(const size_t ,const size_t ,const size_t );
 
     Node *findNode(const int &tag);
@@ -64,10 +64,10 @@ class TritrizPtrNod: public TritrizPtrBase<MatrizPtrNod>
     ID getNodeIndices(const Node *) const;
 
     template <class F>
-    std::deque<double> IntegSimpsonFila(const F &,const std::string &,const size_t &,const ExprAlgebra &,const size_t &) const;
-    Vector IntegSimpsonFilaI(const size_t &,const size_t &,const ExprAlgebra &,const size_t &n= 10) const;
-    Vector IntegSimpsonFilaJ(const size_t &,const size_t &,const ExprAlgebra &,const size_t &n= 10) const;
-    Vector IntegSimpsonFilaK(const size_t &,const size_t &,const ExprAlgebra &,const size_t &n= 10) const;
+    std::deque<double> RowSimpsonIntegration(const F &,const std::string &,const size_t &,const ExprAlgebra &,const size_t &) const;
+    Vector IRowSimpsonIntegration(const size_t &,const size_t &,const ExprAlgebra &,const size_t &n= 10) const;
+    Vector JRowSimpsonIntegration(const size_t &,const size_t &,const ExprAlgebra &,const size_t &n= 10) const;
+    Vector KRowSimpsonIntegration(const size_t &,const size_t &,const ExprAlgebra &,const size_t &n= 10) const;
 
     void fix(const SFreedom_Constraint &) const;
 
@@ -81,7 +81,7 @@ class TritrizPtrNod: public TritrizPtrBase<MatrizPtrNod>
 std::ostream &operator<<(std::ostream &os,const TritrizPtrNod &);
 
 template <class F>
-std::deque<double> TritrizPtrNod::IntegSimpsonFila(const F &f,const std::string &nmb_coo,const size_t &num_coo,const ExprAlgebra &e,const size_t &n) const
+std::deque<double> TritrizPtrNod::RowSimpsonIntegration(const F &f,const std::string &nmb_coo,const size_t &num_coo,const ExprAlgebra &e,const size_t &n) const
   {
     const size_t sz= f.Size();
     std::deque<double> retval;
@@ -111,8 +111,8 @@ inline void fix(const TritrizPtrNod &ttz,const SFreedom_Constraint &spc)
   { ttz.fix(spc); }
 void fix(const TritrizPtrNod::var_ref_caja &ref_caja,const SFreedom_Constraint &spc);
 
-std::vector<int> getNodeIdsQuad4N(const TritrizPtrNod::const_ref_capa_i_cte &nodes,const size_t &j,const size_t &k);
-std::vector<int> getNodeIdsQuad9N(const TritrizPtrNod::const_ref_capa_i_cte &nodes,const size_t &j,const size_t &k);
+std::vector<int> getNodeIdsQuad4N(const TritrizPtrNod::constant_i_layer_const_ref &nodes,const size_t &j,const size_t &k);
+std::vector<int> getNodeIdsQuad9N(const TritrizPtrNod::constant_i_layer_const_ref &nodes,const size_t &j,const size_t &k);
 
 } //end of XC namespace.
 

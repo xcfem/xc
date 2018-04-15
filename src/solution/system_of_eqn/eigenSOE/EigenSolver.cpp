@@ -105,34 +105,34 @@ XC::Vector XC::EigenSolver::getFrecuencias(void) const
   }
 
 //! @brief Returns the autovector of the i-th mode
-//! normalized so the maximal component is 1 (norma_infinito).
+//! normalized so the maximal component is 1 (infinity norm).
 XC::Vector XC::EigenSolver::getNormalizedEigenvector(int i) const
   { return normalize_inf(getEigenvector(i)); }
 
-//! @brief Returns a matrix of eigenvectors placed in columns.
+//! @brief Returns a matrix of eigenvectors disposed in columns.
 XC::Matrix XC::EigenSolver::getEigenvectors(void) const
   {
-    const int nFilas= getSize();
-    Matrix retval(nFilas,numModes);
+    const int n_rows= getSize();
+    Matrix retval(n_rows,numModes);
     for(int j= 1;j<=numModes;j++)
       {
         const Vector &eigenVector= getEigenvector(j);
-        for(int i= 0;i<nFilas;i++)
+        for(int i= 0;i<n_rows;i++)
           retval(i,j-1)= eigenVector(i);
       }
     return retval;
   }
 
-//! @brief Returns a matriz con los eigenvectors normalizados colocados
-//! por columnas (norma_infinito).
+//! @brief Returns a matriz con los eigenvectors normalizados disposed
+//! in columns (infinity norm).
 XC::Matrix XC::EigenSolver::getNormalizedEigenvectors(void) const
   {
-    const int nFilas= getSize();
-    Matrix retval(nFilas,numModes);
+    const int n_rows= getSize();
+    Matrix retval(n_rows,numModes);
     for(int j= 0;j<numModes;j++)
       {
         const Vector &eigenVector= getNormalizedEigenvector(j+1);
-        for(int i= 0;i<nFilas;i++)
+        for(int i= 0;i<n_rows;i++)
           retval(i,j)= eigenVector(i);
       }
     return retval;

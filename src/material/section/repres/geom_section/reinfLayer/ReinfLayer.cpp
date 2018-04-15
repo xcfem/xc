@@ -167,7 +167,7 @@ XC::VectorReinfBar &XC::ReinfLayer::getReinfBars(void)
     return const_cast<VectorReinfBar&>(const_cast<const ReinfLayer&>(*this).getReinfBars());
   } 
 
-//! @brief Returns the número de barras de la capa.
+//! @brief Returns the number of barras de la capa.
 int XC::ReinfLayer::getNumReinfBars(void) const
   { return nReinfBars; }
 

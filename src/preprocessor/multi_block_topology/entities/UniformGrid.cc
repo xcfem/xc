@@ -53,7 +53,7 @@ XC::UniformGrid::UniformGrid(const std::string &nombre,Preprocessor *m,const siz
 XC::SetEstruct *XC::UniformGrid::getCopy(void) const
   { return new UniformGrid(*this); }
 
-void XC::UniformGrid::actualiza_topologia(void)
+void XC::UniformGrid::update_topology(void)
   {
   }
 

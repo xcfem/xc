@@ -42,10 +42,10 @@ XC::Node *XC::MatrizPtrNod::findNode(const int &tag)
   {
     Node *retval= nullptr;
     Node *tmp= nullptr;
-    const size_t nfilas= getNumFilas();
-    const size_t ncols= getNumCols();
-    for(size_t j= 1;j<=nfilas;j++)
-      for(size_t k= 1;k<=ncols;k++)
+    const size_t numberOfRows= getNumberOfRows();
+    const size_t numberOfColumns= getNumberOfColumns();
+    for(size_t j= 1;j<=numberOfRows;j++)
+      for(size_t k= 1;k<=numberOfColumns;k++)
         {
           tmp= operator()(j,k);
           if(tmp)
@@ -66,10 +66,10 @@ const XC::Node *XC::MatrizPtrNod::findNode(const int &tag) const
   {
     const Node *retval= nullptr;
     const Node *tmp= nullptr;
-    const size_t nfilas= getNumFilas();
-    const size_t ncols= getNumCols();
-    for(size_t j= 1;j<=nfilas;j++)
-      for(size_t k= 1;k<=ncols;k++)
+    const size_t numberOfRows= getNumberOfRows();
+    const size_t numberOfColumns= getNumberOfColumns();
+    for(size_t j= 1;j<=numberOfRows;j++)
+      for(size_t k= 1;k<=numberOfColumns;k++)
         {
           tmp= operator()(j,k);
           if(tmp)
@@ -90,15 +90,15 @@ XC::Node *XC::MatrizPtrNod::getNearestNode(const Pos3d &p)
     Node *retval= nullptr, *ptrNod= nullptr;
     double d= DBL_MAX;
     double tmp;
-    const size_t nfilas= getNumFilas();
-    const size_t ncols= getNumCols();
-    if(nfilas*ncols>500)
+    const size_t numberOfRows= getNumberOfRows();
+    const size_t numberOfColumns= getNumberOfColumns();
+    if(numberOfRows*numberOfColumns>500)
       std::clog << "Node matrix has "
-                << nfilas*ncols << " elements "
+                << numberOfRows*numberOfColumns << " elements "
                 << " better to look by coordinates in the associated set."
                 << std::endl;
-    for(size_t j= 1;j<=nfilas;j++)
-      for(size_t k= 1;k<=ncols;k++)
+    for(size_t j= 1;j<=numberOfRows;j++)
+      for(size_t k= 1;k<=numberOfColumns;k++)
         {
           ptrNod= operator()(j,k);
           tmp= ptrNod->getDist2(p);
@@ -122,21 +122,21 @@ const XC::Node *XC::MatrizPtrNod::getNearestNode(const Pos3d &p) const
 void XC::MatrizPtrNod::fix(const SFreedom_Constraint &semilla) const
   {
     if(Null()) return;
-    const size_t nfilas= getNumFilas();
-    const size_t ncols= getNumCols();
-    for(size_t j= 1;j<=nfilas;j++)
-      for(size_t k= 1;k<=ncols;k++)
+    const size_t numberOfRows= getNumberOfRows();
+    const size_t numberOfColumns= getNumberOfColumns();
+    for(size_t j= 1;j<=numberOfRows;j++)
+      for(size_t k= 1;k<=numberOfColumns;k++)
         operator()(j,k)->fix(semilla);
   }
 
 //! @brief Returns a matriz con los identifiers of the nodes.
 m_int XC::MatrizPtrNod::getTags(void) const
   {
-    const size_t nfilas= getNumFilas();
-    const size_t ncols= getNumCols();
-    m_int retval(nfilas,ncols,-1);
-    for(size_t j= 1;j<=nfilas;j++)
-      for(size_t k= 1;k<=ncols;k++)
+    const size_t numberOfRows= getNumberOfRows();
+    const size_t numberOfColumns= getNumberOfColumns();
+    m_int retval(numberOfRows,numberOfColumns,-1);
+    for(size_t j= 1;j<=numberOfRows;j++)
+      for(size_t k= 1;k<=numberOfColumns;k++)
         {
           const Node *ptr= operator()(j,k);
           if(ptr)

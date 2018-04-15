@@ -36,14 +36,14 @@
 #include "boost/lexical_cast.hpp"
 
 //! @brief Default constructor.
-XC::TritrizPtrElem::TritrizPtrElem(const size_t capas,const MatrizPtrElem &m)
-  : TritrizPtrBase<MatrizPtrElem>(capas,m) {}
+XC::TritrizPtrElem::TritrizPtrElem(const size_t n_layers,const MatrizPtrElem &m)
+  : TritrizPtrBase<MatrizPtrElem>(n_layers,m) {}
 //! @brief Constructor.
-XC::TritrizPtrElem::TritrizPtrElem(const size_t capas,const size_t filas,const size_t cols)
-  : TritrizPtrBase<MatrizPtrElem>(capas)
+XC::TritrizPtrElem::TritrizPtrElem(const size_t n_layers,const size_t iRows,const size_t cols)
+  : TritrizPtrBase<MatrizPtrElem>(n_layers)
   {
-    for(size_t i=0;i<capas;i++)
-      (*this)[i]= MatrizPtrElem(filas,cols);
+    for(size_t i=0;i<n_layers;i++)
+      (*this)[i]= MatrizPtrElem(iRows,cols);
   }
 
 //! @brief Returns (if it exists) a pointer to the element
@@ -51,8 +51,8 @@ XC::TritrizPtrElem::TritrizPtrElem(const size_t capas,const size_t filas,const s
 XC::Element *XC::TritrizPtrElem::findElement(const int &tag)
   {
     Element *retval= nullptr;
-    const size_t ncapas= GetCapas();
-    for(size_t i=1;i<=ncapas;i++)
+    const size_t numberOfLayers= getNumberOfLayers();
+    for(size_t i=1;i<=numberOfLayers;i++)
       {
         MatrizPtrElem &capa= operator()(i);
         retval= capa.findElement(tag);
@@ -66,8 +66,8 @@ XC::Element *XC::TritrizPtrElem::findElement(const int &tag)
 const XC::Element *XC::TritrizPtrElem::findElement(const int &tag) const
   {
     const Element *retval= nullptr;
-    const size_t ncapas= GetCapas();
-    for(size_t i=1;i<=ncapas;i++)
+    const size_t numberOfLayers= getNumberOfLayers();
+    for(size_t i=1;i<=numberOfLayers;i++)
       {
         const MatrizPtrElem &capa= operator()(i);
         retval= capa.findElement(tag);
@@ -80,15 +80,15 @@ const XC::Element *XC::TritrizPtrElem::findElement(const int &tag) const
 XC::Element *XC::TritrizPtrElem::getNearestElement(const Pos3d &p)
   {
     Element *retval= nullptr, *ptrElem= nullptr;
-    const size_t ncapas= GetCapas();
+    const size_t numberOfLayers= getNumberOfLayers();
     double d= DBL_MAX;
     double tmp;
-    if(ncapas>100)
+    if(numberOfLayers>100)
       std::clog << "The element «tritriz» has"
-                << ncapas << " layers "
+                << numberOfLayers << " layers "
                 << " is better to search by coordinates in the associated set."
                 << std::endl;
-    for(size_t i=1;i<=ncapas;i++)
+    for(size_t i=1;i<=numberOfLayers;i++)
       {
         MatrizPtrElem &capa= operator()(i);
         ptrElem= capa.getNearestElement(p);

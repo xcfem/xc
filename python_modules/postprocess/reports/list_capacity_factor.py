@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
-# Imprime el encabezamiento para el listado de factores de capacidad.
-def printCabeceraListadoFactorCapacidad(archivo, nmbSecc):
+# Imprime el encabezamiento para el listado de capacity factors.
+def printCabeceraListadoCapacityFactor(archivo, nmbSecc):
   archivo.write("\\begin{center}\n")
   archivo.write("\\begin{footnotesize}\n")
   archivo.write("\\tablefirsthead{%\n")
@@ -29,19 +29,19 @@ def printCabeceraListadoFactorCapacidad(archivo, nmbSecc):
   archivo.write("\\tablelasttail{\hline}\n")
   archivo.write("\\begin{supertabular}{|l|r|r|r|r|r|}\n")
 
-# Imprime el cierre del listado de factores de capacidad.
-def printCierreListadoFactorCapacidad(archivo):
+# Imprime el cierre del listado de capacity factors.
+def printCierreListadoCapacityFactor(archivo):
   archivo.write("\\end{supertabular}\n")
   archivo.write("\\end{footnotesize}\n")
   archivo.write("\\end{center}\n")
 
 
-def listaFactorCapacidad(preprocessor,setName, fName, titulo):
+def listaCapacityFactor(preprocessor,setName, fName, titulo):
   '''
   Print results of normal stresses in elastic range checking for an
   elment set whose material is a steel shape.
   '''
-  printCabeceraListadoFactorCapacidad(fName,titulo)
+  printCabeceraListadoCapacityFactor(fName,titulo)
   st= preprocessor.getSets.getSet(setName)
   elems= st.getElements()
   tagFCCPCP= 0
@@ -55,5 +55,5 @@ def listaFactorCapacidad(preprocessor,setName, fName, titulo):
       tagFCCPCP= e.tag
   fName.write("\\hline\n")
   fName.write(tagFCCPCP," & ",HIPCPCP," &  &  &  & ",'{:3.2f}'.format(FCCPCP),"\\\\\n")
-  printCierreListadoFactorCapacidad(fName) 
+  printCierreListadoCapacityFactor(fName) 
 

@@ -45,16 +45,16 @@ class MatrixCommMetaData: public ArrayCommMetaData
     MatrixCommMetaData(const int &pos,const int &flag,const size_t &nf,const size_t &nc);
 
     //! @brief Return a const reference to the the index of the row number.
-    inline const size_t &getPosNumFilas(void) const
+    inline const size_t &getPositionNumberOfRows(void) const
       { return posSz; }
     //! @brief Return a const reference to the the index of the column number.
-    inline const size_t &getPosNumCols(void) const
+    inline const size_t &getPositionNumberOfColumns(void) const
       { return posNc; }
     //! @brief Return a reference to the the index of the row number.
-    inline const size_t &getNumFilas(void) const
+    inline const size_t &getNumberOfRows(void) const
       { return posSz; }
     //! @brief Return a reference to the the index of the column number.
-    inline const size_t &getNumCols(void) const
+    inline const size_t &getNumberOfColumns(void) const
       { return posNc; }
   };
 

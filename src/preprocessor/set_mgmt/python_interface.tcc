@@ -239,17 +239,17 @@ class_<XC::Set, bases<XC::SetMeshComp> >("Set")
   .def(self * self)
    ;
 
-typedef XC::SetFila<XC::TritrizPtrNod::var_ref_fila_i,XC::TritrizPtrElem::var_ref_fila_i> set_fila_i;
-class_<set_fila_i, bases<XC::SetEstruct>, boost::noncopyable >("set_fila_i", no_init);
-class_<XC::SetFilaI, bases<set_fila_i>, boost::noncopyable >("SetFilaI", no_init);
+typedef XC::RowSet<XC::TritrizPtrNod::var_ref_i_row,XC::TritrizPtrElem::var_ref_i_row> set_i_row;
+class_<set_i_row, bases<XC::SetEstruct>, boost::noncopyable >("set_i_row", no_init);
+class_<XC::IRowSet, bases<set_i_row>, boost::noncopyable >("IRowSet", no_init);
 
-typedef XC::SetFila<XC::TritrizPtrNod::var_ref_fila_j,XC::TritrizPtrElem::var_ref_fila_j> set_fila_j;
-class_<set_fila_j, bases<XC::SetEstruct>, boost::noncopyable >("set_fila_j", no_init);
-class_<XC::SetFilaJ, bases<set_fila_j>, boost::noncopyable >("SetFilaJ", no_init);
+typedef XC::RowSet<XC::TritrizPtrNod::var_ref_j_row,XC::TritrizPtrElem::var_ref_j_row> set_j_row;
+class_<set_j_row, bases<XC::SetEstruct>, boost::noncopyable >("set_j_row", no_init);
+class_<XC::JRowSet, bases<set_j_row>, boost::noncopyable >("JRowSet", no_init);
 
-typedef XC::SetFila<XC::TritrizPtrNod::var_ref_fila_k,XC::TritrizPtrElem::var_ref_fila_k> set_fila_k;
-class_<set_fila_k, bases<XC::SetEstruct>, boost::noncopyable >("set_fila_k", no_init);
-class_<XC::SetFilaK, bases<set_fila_k>, boost::noncopyable >("SetFilaK", no_init);
+typedef XC::RowSet<XC::TritrizPtrNod::var_ref_k_row,XC::TritrizPtrElem::var_ref_k_row> set_k_row;
+class_<set_k_row, bases<XC::SetEstruct>, boost::noncopyable >("set_k_row", no_init);
+class_<XC::KRowSet, bases<set_k_row>, boost::noncopyable >("KRowSet", no_init);
 
 
 

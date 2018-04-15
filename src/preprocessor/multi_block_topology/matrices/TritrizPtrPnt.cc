@@ -47,12 +47,12 @@
 
 
 //! @brief Default constructor.
-XC::TritrizPtrPnt::TritrizPtrPnt(const size_t capas)
-  : TritrizPtrBase<MatrizPtrPnt>(capas) {}
+XC::TritrizPtrPnt::TritrizPtrPnt(const size_t n_layers)
+  : TritrizPtrBase<MatrizPtrPnt>(n_layers) {}
 
 //! @brief Constructor.
-XC::TritrizPtrPnt::TritrizPtrPnt(const size_t capas,const size_t filas,const size_t cols)
-  : TritrizPtrBase<MatrizPtrPnt>(capas,filas,cols) {}
+XC::TritrizPtrPnt::TritrizPtrPnt(const size_t n_layers,const size_t n_rows,const size_t cols)
+  : TritrizPtrBase<MatrizPtrPnt>(n_layers,n_rows,cols) {}
 
 void XC::TritrizPtrPnt::setPnt(const size_t &i,const size_t &j,const size_t &k,const int &id_point)
   {
@@ -71,7 +71,7 @@ void XC::TritrizPtrPnt::setPnt(const size_t &i,const size_t &j,const size_t &k,c
      std::cerr << "(MatrizPtrPnt::setPnt): '"
                << "'; indices: ("
                << i << ','  << j << ',' << k << ") out of range;"
-               << " number of layers: " << GetCapas() << " number of rows: " << getNumFilas() << " number of columns: " << getNumCols()
+               << " number of layers: " << getNumberOfLayers() << " number of rows: " << getNumberOfRows() << " number of columns: " << getNumberOfColumns()
                << std::endl;
   }
 
@@ -82,9 +82,9 @@ XC::Pnt *XC::TritrizPtrPnt::getPnt(const size_t &i,const size_t &j,const size_t 
 Pos3d XC::TritrizPtrPnt::getCentroide(void) const
   {
     Pos3d retval;
-    const size_t ncapas= GetCapas();
+    const size_t numberOfLayers= getNumberOfLayers();
     GEOM_FT x= 0.0, y= 0.0, z= 0.0;
-    for(size_t i=1;i<=ncapas;i++)
+    for(size_t i=1;i<=numberOfLayers;i++)
       {
         const MatrizPtrPnt &capa= operator()(i);
         Pos3d p= capa.getCentroide();
@@ -92,7 +92,7 @@ Pos3d XC::TritrizPtrPnt::getCentroide(void) const
         y+= p.y();
         z+= p.z(); 
       }
-    x/=ncapas; y/=ncapas; z/=ncapas;
+    x/=numberOfLayers; y/=numberOfLayers; z/=numberOfLayers;
     retval= Pos3d(x,y,z);
     return retval;
   }
@@ -103,8 +103,8 @@ Pos3d XC::TritrizPtrPnt::getCentroide(void) const
 XC::Pnt *XC::TritrizPtrPnt::findPoint(const int &tag)
   {
     Pnt *retval= nullptr;
-    const size_t ncapas= GetCapas();
-    for(size_t i=1;i<=ncapas;i++)
+    const size_t numberOfLayers= getNumberOfLayers();
+    for(size_t i=1;i<=numberOfLayers;i++)
       {
         MatrizPtrPnt &capa= operator()(i);
         retval= capa.findPoint(tag);
@@ -150,10 +150,10 @@ const XC::Pnt *XC::TritrizPtrPnt::getNearestPnt(const Pos3d &p) const
 XC::Pnt *XC::TritrizPtrPnt::getNearestPnt(const Pos3d &p)
   {
     Pnt *retval= nullptr, *ptrPnt= nullptr;
-    const size_t ncapas= GetCapas();
+    const size_t numberOfLayers= getNumberOfLayers();
     double d= DBL_MAX;
     double tmp;
-    for(size_t i=1;i<=ncapas;i++)
+    for(size_t i=1;i<=numberOfLayers;i++)
       {
         MatrizPtrPnt &capa= operator()(i);
         ptrPnt= capa.getNearestPnt(p);
@@ -175,8 +175,8 @@ XC::Pnt *XC::TritrizPtrPnt::getNearestPnt(const Pos3d &p)
 const XC::Pnt *XC::TritrizPtrPnt::findPoint(const int &tag) const
   {
     const Pnt *retval= nullptr;
-    const size_t ncapas= GetCapas();
-    for(size_t i=1;i<=ncapas;i++)
+    const size_t numberOfLayers= getNumberOfLayers();
+    for(size_t i=1;i<=numberOfLayers;i++)
       {
         const MatrizPtrPnt &capa= operator()(i);
         retval= capa.findPoint(tag);
@@ -194,11 +194,11 @@ std::deque<size_t> XC::TritrizPtrPnt::copyPoints(const RangoTritriz &rango,const
   {
     MultiBlockTopology *mbt= getMultiBlockTopology();
     std::deque<size_t> retval;
-    const RangoIndice &rcapas= rango.GetRangoCapas();
-    const RangoIndice &rfilas= rango.GetRangoFilas();
-    const RangoIndice &rcols= rango.GetRangoCols();
-    for(size_t i= rcapas.Inf();i<=rcapas.Sup();i++)
-      for(size_t j= rfilas.Inf();j<=rfilas.Sup();j++)
+    const RangoIndice &layer_range= rango.getLayerRange();
+    const RangoIndice &row_range= rango.getRowRange();
+    const RangoIndice &rcols= rango.getColumnRange();
+    for(size_t i= layer_range.Inf();i<=layer_range.Sup();i++)
+      for(size_t j= row_range.Inf();j<=row_range.Sup();j++)
         for(size_t k= rcols.Inf();k<=rcols.Sup();k++)
           {
             const Pnt *p= operator()(i,j,k);
@@ -215,20 +215,20 @@ std::deque<size_t> XC::TritrizPtrPnt::copyPoints(const RangoTritriz &rango,const
 //! @brief Return the points del rango being passed as parameter.
 XC::TritrizPtrPnt XC::TritrizPtrPnt::getPointsOnRange(const RangoTritriz &rango)
   {
-    TritrizPtrPnt retval(rango.NumCapas(),rango.NumFilas(),rango.NumCols());
-    const RangoIndice &rcapas= rango.GetRangoCapas();
-    const RangoIndice &rfilas= rango.GetRangoFilas();
-    const RangoIndice &rcols= rango.GetRangoCols();
-    const size_t rcapas_inf= rcapas.Inf();
-    const size_t rfilas_inf= rfilas.Inf();
+    TritrizPtrPnt retval(rango.getNumberOfLayers(),rango.getNumberOfRows(),rango.getNumberOfColumns());
+    const RangoIndice &layer_range= rango.getLayerRange();
+    const RangoIndice &row_range= rango.getRowRange();
+    const RangoIndice &rcols= rango.getColumnRange();
+    const size_t layer_range_inf= layer_range.Inf();
+    const size_t row_range_inf= row_range.Inf();
     const size_t rcols_inf= rcols.Inf();
-    for(size_t i= rcapas_inf;i<=rcapas.Sup();i++)
-      for(size_t j= rfilas_inf;j<=rfilas.Sup();j++)
+    for(size_t i= layer_range_inf;i<=layer_range.Sup();i++)
+      for(size_t j= row_range_inf;j<=row_range.Sup();j++)
         for(size_t k= rcols_inf;k<=rcols.Sup();k++)
           {
             Pnt *p= operator()(i,j,k);
             if(p)
-              retval(i-rcapas_inf+1,j-rfilas_inf+1,k-rcols_inf+1)= p;
+              retval(i-layer_range_inf+1,j-row_range_inf+1,k-rcols_inf+1)= p;
           }
     return retval;
   }
@@ -252,13 +252,13 @@ XC::Pnt *XC::TritrizPtrPnt::getPoint(const VIndices &iPoint)
 //! @brief Return the points which indices are being passed as parameter.
 XC::TritrizPtrPnt XC::TritrizPtrPnt::getPoints(const TritrizIndices &indices)
   {
-    const size_t nCapas= indices.GetCapas();
-    const size_t nFilas= indices.getNumFilas();
-    const size_t nCols= indices.getNumCols();
-    TritrizPtrPnt retval(nCapas,nFilas,nCols);
-    for(size_t i= 1;i<= nCapas;i++)
-      for(size_t j= 1;j<= nFilas;j++)
-        for(size_t k= 1;k<= nCapas;k++)
+    const size_t numberOfLayers= indices.getNumberOfLayers();
+    const size_t numberOfRows= indices.getNumberOfRows();
+    const size_t numberOfColumns= indices.getNumberOfColumns();
+    TritrizPtrPnt retval(numberOfLayers,numberOfRows,numberOfColumns);
+    for(size_t i= 1;i<= numberOfLayers;i++)
+      for(size_t j= 1;j<= numberOfRows;j++)
+        for(size_t k= 1;k<= numberOfLayers;k++)
           {
             const VIndices iPoint= indices(i,j,k);
             if(iPoint.size()>2)
@@ -274,11 +274,11 @@ XC::TritrizPtrPnt XC::TritrizPtrPnt::getPoints(const TritrizIndices &indices)
 //! @brief Return the points which indices are being passed as parameters.
 XC::MatrizPtrPnt XC::TritrizPtrPnt::getPoints(const MatrizIndices &indices)
   {
-    const size_t nFilas= indices.getNumFilas();
-    const size_t nCols= indices.getNumCols();
-    MatrizPtrPnt retval(nFilas,nCols);
-    for(size_t i= 1;i<= nFilas;i++)
-      for(size_t j= 1;j<= nCols;j++)
+    const size_t numberOfRows= indices.getNumberOfRows();
+    const size_t numberOfColumns= indices.getNumberOfColumns();
+    MatrizPtrPnt retval(numberOfRows,numberOfColumns);
+    for(size_t i= 1;i<= numberOfRows;i++)
+      for(size_t j= 1;j<= numberOfColumns;j++)
         {
           const VIndices iPoint= indices(i,j);
           if(iPoint.size()>2)
@@ -330,11 +330,11 @@ XC::MatrizPtrPnt XC::TritrizPtrPnt::getCellPoints(const size_t &i,const size_t &
 //   {
 //     MultiBlockTopology *mbt= getMultiBlockTopology();
 //     std::deque<size_t> retval;
-//     const RangoIndice &rcapas= rango.GetRangoCapas();
-//     const RangoIndice &rfilas= rango.GetRangoFilas();
-//     const RangoIndice &rcols= rango.GetRangoCols();
-//     for(size_t i= rcapas.Inf();i<=rcapas.Sup();i++)
-//       for(size_t j= rfilas.Inf();j<=rfilas.Sup();j++)
+//     const RangoIndice &layer_range= rango.getLayerRange();
+//     const RangoIndice &row_range= rango.getRowRange();
+//     const RangoIndice &rcols= rango.getColumnRange();
+//     for(size_t i= layer_range.Inf();i<=layer_range.Sup();i++)
+//       for(size_t j= row_range.Inf();j<=row_range.Sup();j++)
 //         for(size_t k= rcols.Inf();k<=rcols.Sup();k++)
 //           {
 //             const Pnt *p= operator()(i,j,k);
@@ -350,14 +350,14 @@ XC::MatrizPtrPnt XC::TritrizPtrPnt::getCellPoints(const size_t &i,const size_t &
 
 void XC::TritrizPtrPnt::Print(std::ostream &os) const
   {
-    const size_t ncapas= GetCapas();
-    const size_t nfilas= getNumFilas();
-    const size_t ncols= getNumCols();
-    for(size_t i=1;i<=ncapas;i++)
+    const size_t numberOfLayers= getNumberOfLayers();
+    const size_t numberOfRows= getNumberOfRows();
+    const size_t numberOfColumns= getNumberOfColumns();
+    for(size_t i=1;i<=numberOfLayers;i++)
       {
-        for(size_t j=1;j<=nfilas;j++)
+        for(size_t j=1;j<=numberOfRows;j++)
           {
-            for(size_t k=1;k<=ncols;k++)
+            for(size_t k=1;k<=numberOfColumns;k++)
 	      os << (*this)(i,j,k)->GetTag() << " ";
 	    os << std::endl;
           }
@@ -372,18 +372,18 @@ std::ostream &XC::operator<<(std::ostream &os, const TritrizPtrPnt &t)
   }
 
 //! @brief Return the indexes of the points (j,k),(j+1,k),(j+1,k+1),(j,k+1). 
-std::vector<size_t> XC::getIdPointsQuad(const TritrizPtrPnt::const_ref_capa_i_cte &points,const size_t &j,const size_t &k)
+std::vector<size_t> XC::getIdPointsQuad(const TritrizPtrPnt::constant_i_layer_const_ref &points,const size_t &j,const size_t &k)
   {
     std::vector<size_t> retval(4,-1);
-    const size_t nfilas= points.getNumFilas();
-    const size_t ncols= points.getNumCols();
-    if(j>=nfilas)
+    const size_t numberOfRows= points.getNumberOfRows();
+    const size_t numberOfColumns= points.getNumberOfColumns();
+    if(j>=numberOfRows)
       {
         std::cerr  << __FUNCTION__
 	          << "; row index j= " << j << " out of range.\n";
         return retval;
       }
-    if(k>=ncols)
+    if(k>=numberOfColumns)
       {
         std::cerr  << __FUNCTION__
 	          << "; column index k= " << k << " out of range.\n";

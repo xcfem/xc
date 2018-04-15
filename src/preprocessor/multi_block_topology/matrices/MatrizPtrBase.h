@@ -67,18 +67,18 @@ class MatrizPtrBase: public MatrizT<T *,std::vector<T *> >, public EntCmd
 
     void dim(const size_t &,const size_t &);
 
-    std::vector<int> getTagsObjsFila(const size_t &);
-    std::vector<int> getTagsObjsColumna(const size_t &);
-    std::vector<int> getTagsObjsInterioresFila(const size_t &);
-    std::vector<int> getTagsObjsInterioresColumna(const size_t &);
+    std::vector<int> getRowObjectsTags(const size_t &);
+    std::vector<int> getColumnObjectsTags(const size_t &);
+    std::vector<int> getRowInteriorObjectsTags(const size_t &);
+    std::vector<int> getColumnInteriorObjectsTags(const size_t &);
     std::vector<int> getTagsInteriorObjs(void);
     std::vector<int> getTagsObjs(void);
   };
 
 //! @brief Matrix dimensions.
 template <class T>
-void XC::MatrizPtrBase<T>::dim(const size_t &nRows,const size_t &nCols)
-  { this->resize(nRows,nCols,nullptr); }
+void XC::MatrizPtrBase<T>::dim(const size_t &nRows,const size_t &numberOfColumns)
+  { this->resize(nRows,numberOfColumns,nullptr); }
 
 //! @brief Returns true if it's empty or the pointers are NULL.
 template <class T>
@@ -99,10 +99,10 @@ bool MatrizPtrBase<T>::HasNull(void) const
       retval= true;
     else
       {
-        const size_t nfilas= this->getNumFilas();
-        const size_t ncols= this->getNumCols();
-        for(size_t j= 1;j<=nfilas;j++)
-          for(size_t k= 1;k<=ncols;k++)
+        const size_t numberOfRows= this->getNumberOfRows();
+        const size_t numberOfColumns= this->getNumberOfColumns();
+        for(size_t j= 1;j<=numberOfRows;j++)
+          for(size_t k= 1;k<=numberOfColumns;k++)
             if(this->operator()(j,k)== nullptr)
               {
                 retval= true;
@@ -115,10 +115,10 @@ bool MatrizPtrBase<T>::HasNull(void) const
 //! @brief Asks each of the objects in the row to execute
 //! the code being passed as parameter.
 template <class T>
-std::vector<int> XC::MatrizPtrBase<T>::getTagsObjsFila(const size_t &f)
+std::vector<int> XC::MatrizPtrBase<T>::getRowObjectsTags(const size_t &f)
   {
     const std::string nmbBlq= getClassName()+":row_objects:"+boost::lexical_cast<std::string>(f);
-    const size_t numCols= this->getNumCols();
+    const size_t numCols= this->getNumberOfColumns();
     std::vector<int> retval(numCols);
     for(size_t i= 1;i<=numCols;i++)
       retval[i-1]= (*this)(f,i)->getTag();
@@ -128,12 +128,12 @@ std::vector<int> XC::MatrizPtrBase<T>::getTagsObjsFila(const size_t &f)
 //! @brief Asks each of the objects in the column to execute
 //! the code being passed as parameter.
 template <class T>
-std::vector<int>  XC::MatrizPtrBase<T>::getTagsObjsColumna(const size_t &c)
+std::vector<int>  XC::MatrizPtrBase<T>::getColumnObjectsTags(const size_t &c)
   {
     const std::string nmbBlq= getClassName()+":column_objects:"+boost::lexical_cast<std::string>(c);
-    const size_t numFilas= this->getNumFilas();
-    std::vector<int> retval(numFilas);
-    for(size_t i= 1;i<=numFilas;i++)
+    const size_t n_rows= this->getNumberOfRows();
+    std::vector<int> retval(n_rows);
+    for(size_t i= 1;i<=n_rows;i++)
       retval[i-1]= (*this)(i,c)->getTag();
     return retval;
   }
@@ -141,10 +141,10 @@ std::vector<int>  XC::MatrizPtrBase<T>::getTagsObjsColumna(const size_t &c)
 //! @brief Asks each of the objects at the interior of the row to execute
 //! the code being passed as parameter.
 template <class T>
-std::vector<int> XC::MatrizPtrBase<T>::getTagsObjsInterioresFila(const size_t &f)
+std::vector<int> XC::MatrizPtrBase<T>::getRowInteriorObjectsTags(const size_t &f)
   {
     const std::string nmbBlq= getClassName()+":row_interior_objects:"+boost::lexical_cast<std::string>(f);
-    const size_t numCols= this->getNumCols();
+    const size_t numCols= this->getNumberOfColumns();
     std::vector<int> retval(numCols-2);
     for(size_t i= 2;i<numCols;i++)
       retval[i-2]= (*this)(f,i)->getTag();
@@ -154,12 +154,12 @@ std::vector<int> XC::MatrizPtrBase<T>::getTagsObjsInterioresFila(const size_t &f
 //! @brief Asks each of the objects at the interior of the column to execute
 //! the code being passed as parameter.
 template <class T>
-std::vector<int> XC::MatrizPtrBase<T>::getTagsObjsInterioresColumna(const size_t &c)
+std::vector<int> XC::MatrizPtrBase<T>::getColumnInteriorObjectsTags(const size_t &c)
   {
     const std::string nmbBlq= getClassName()+":column_interior_objects:"+boost::lexical_cast<std::string>(c);
-    const size_t numFilas= this->getNumFilas();
-    std::vector<int> retval(numFilas-2);
-    for(size_t i= 2;i<numFilas;i++)
+    const size_t n_rows= this->getNumberOfRows();
+    std::vector<int> retval(n_rows-2);
+    for(size_t i= 2;i<n_rows;i++)
       retval[i-2]= (*this)(i,c)->getTag();
     return retval;
   }
@@ -169,17 +169,17 @@ std::vector<int> XC::MatrizPtrBase<T>::getTagsObjsInterioresColumna(const size_t
 template <class T>
 std::vector<int> XC::MatrizPtrBase<T>::getTagsInteriorObjs(void)
   {
-    const size_t numFilas= this->getNumFilas();
-    const size_t numCols= this->getNumCols();
-    std::vector<int> retval((numFilas-1)*(numCols-1));
-    if(numFilas==1)
-      retval= this->getTagsObjsInterioresFila(1);
+    const size_t n_rows= this->getNumberOfRows();
+    const size_t numCols= this->getNumberOfColumns();
+    std::vector<int> retval((n_rows-1)*(numCols-1));
+    if(n_rows==1)
+      retval= this->getRowInteriorObjectsTags(1);
     if(numCols==1)
-      retval= this->getTagsObjsInterioresColumna(1);
+      retval= this->getColumnInteriorObjectsTags(1);
     else
       {
-        m_int tmp(numFilas-2,numCols-2);
-        for(size_t i= 2;i<numFilas;i++)
+        m_int tmp(n_rows-2,numCols-2);
+        for(size_t i= 2;i<n_rows;i++)
           for(size_t j= 2;j<numCols;j++)
     	    tmp(i-1,j-1)= (*this)(i,j)->getTag();
         retval= tmp.getVector();
@@ -190,11 +190,11 @@ std::vector<int> XC::MatrizPtrBase<T>::getTagsInteriorObjs(void)
 template <class T>
 std::vector<int> XC::MatrizPtrBase<T>::getTagsObjs(void)
   {
-    const size_t numFilas= this->getNumFilas();
-    const size_t numCols= this->getNumCols();
-    std::vector<int> retval(numFilas*numCols);
-    m_int tmp(numFilas,numCols);
-    for(size_t i= 1;i<=numFilas;i++)
+    const size_t n_rows= this->getNumberOfRows();
+    const size_t numCols= this->getNumberOfColumns();
+    std::vector<int> retval(n_rows*numCols);
+    m_int tmp(n_rows,numCols);
+    for(size_t i= 1;i<=n_rows;i++)
       for(size_t j= 1;j<=numCols;j++)
         tmp(i,j)= (*this)(i,j)->getTag();
     retval= tmp.getVector();

@@ -70,7 +70,7 @@ class Eje: public EntGeomSection
       { ndiv= nd; }
     virtual size_t NDiv(void) const
       { return ndiv; }
-    void actualiza_topologia(void);
+    void update_topology(void);
  
     virtual BND2d Bnd(void) const= 0;
 

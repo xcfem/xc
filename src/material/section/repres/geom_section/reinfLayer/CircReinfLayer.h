@@ -66,7 +66,7 @@ class ReinfBar;
 
 //! @ingroup MATSCCArmaduras
 //
-//! @brief Capa de armaduras en forma de arco de circulo.
+//! @brief Arc of a circle shaped reinforcement layer.
 class CircReinfLayer : public ReinfLayer
   {
   private:

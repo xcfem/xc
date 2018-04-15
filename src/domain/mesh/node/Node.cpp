@@ -1377,13 +1377,13 @@ XC::Vector XC::Node::getNormalizedEigenvector(int mode) const
 //! @brief Returns a matrix with the eigenvectors as columns.
 XC::Matrix XC::Node::getNormalizedEigenvectors(void) const
   {
-    const int nFilas= theEigenvectors.noRows();
+    const int n_rows= theEigenvectors.noRows();
     const int nm= getNumModes();
-    Matrix retval(nFilas,nm);
+    Matrix retval(n_rows,nm);
     for(int j= 0;j<nm;j++)
       {
         const Vector eigenvector= getNormalizedEigenvector(j+1);
-        for(int i= 0;i<nFilas;i++)
+        for(int i= 0;i<n_rows;i++)
           retval(i,j)= eigenvector(i);
       }
     return retval;
@@ -1507,14 +1507,14 @@ XC::Matrix XC::Node::getDistributionFactors(void) const
     if(nm>0)
       {
         Vector distribFactor= getDistributionFactor(1);
-        const int nFilas= distribFactor.Size();
-        retval= Matrix(nFilas,nm);
-        for(int i= 0;i<nFilas;i++)
+        const int n_rows= distribFactor.Size();
+        retval= Matrix(n_rows,nm);
+        for(int i= 0;i<n_rows;i++)
           retval(i,0)= distribFactor(i);
         for(int j= 2;j<=nm;j++)
           {
             distribFactor= getDistributionFactor(j);
-            for(int i= 0;i<nFilas;i++)
+            for(int i= 0;i<n_rows;i++)
               retval(i,j-1)= distribFactor(i);
           }
       }

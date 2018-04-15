@@ -24,12 +24,12 @@
 // along with this program.
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
-//SetFilaI.h
+//JRowSet.h
 
-#ifndef SETFILAI_H
-#define SETFILAI_H
+#ifndef JROWSET_H
+#define JROWSET_H
 
-#include "SetFila.h"
+#include "RowSet.h"
 #include "preprocessor/multi_block_topology/matrices/TritrizPtrNod.h"
 #include "preprocessor/multi_block_topology/matrices/TritrizPtrElem.h"
 
@@ -41,19 +41,18 @@ class EntMdlr;
 
 //!  @ingroup Set
 //! 
-//!  @brief Set of objecst in a row.
+//!  @brief Objects in a row.
 //! 
-//!  An SetFilaI objects contains zero or more:
+//!  A JRowSet objects contains 0 or more:
 //!  - Nodes.
 //!  - Finite elements.
-//!  that correspond to a fila_i of an EntMdlr object.
-class SetFilaI: public SetFila<TritrizPtrNod::var_ref_fila_i,TritrizPtrElem::var_ref_fila_i>
+//!  that correspond to a row of an EntMdlr object.
+class JRowSet: public RowSet<TritrizPtrNod::var_ref_j_row,TritrizPtrElem::var_ref_j_row>
   {
   public:
-    typedef TritrizPtrNod::var_ref_fila_i tfilanod;
-    typedef TritrizPtrElem::var_ref_fila_i tfilaelem;
-    SetFilaI(EntMdlr &e,const size_t &f=1,const size_t &c=1,const std::string &nmb="",Preprocessor *preprocessor= nullptr);
-    SetFilaI(EntMdlr &e,const RangoIndice &rango_capas,const size_t &f,const size_t &c,const std::string &nmb="",Preprocessor *preprocessor= nullptr);
-  };
+    typedef TritrizPtrNod::var_ref_j_row tNodeRow;
+    typedef TritrizPtrElem::var_ref_j_row tElemRow;
+    JRowSet(EntMdlr &e,const size_t &f=1,const size_t &c=1,const std::string &nmb="",Preprocessor *preprocessor= nullptr);
+    JRowSet(EntMdlr &e,const size_t &capa,const RangoIndice &,const size_t &c,const std::string &nmb="",Preprocessor *preprocessor= nullptr);  };
 } //end of XC namespace
 #endif

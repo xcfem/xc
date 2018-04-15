@@ -40,7 +40,7 @@ class Block: public Body
   {
     BodyFace sups[6];
     size_t indice(Face *s) const;
-    void coloca(const size_t &i,Face *s);
+    void put(const size_t &i,Face *s);
   protected:
     void insert(const size_t &);
     //XXX void add_points(const std::vector<size_t> &);
@@ -56,7 +56,7 @@ class Block: public Body
     virtual size_t getNumberOfLines(void) const;
     virtual size_t getNumberOfVertices(void) const;
     virtual size_t getNumberOfFaces(void) const;
-    void actualiza_topologia(void);
+    void update_topology(void);
     virtual std::set<const Face *> getSurfaces(void);
     const BodyFace *getFace(const size_t &i) const;
     const CmbEdge::Side *getEdge(const size_t &i) const;

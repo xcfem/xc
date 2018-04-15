@@ -58,7 +58,7 @@ class Face: public CmbEdge
      //! @brief Returns the dimension of the object.
     inline virtual unsigned short int GetDimension(void) const
       { return 2; }
-    void actualiza_topologia(void);
+    void update_topology(void);
     inline size_t NDivI(void) const
       { return ndiv; }
     virtual void SetNDivI(const size_t &ndi);

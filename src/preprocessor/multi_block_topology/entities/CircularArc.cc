@@ -204,9 +204,9 @@ double XC::CircularArc::getRadio(void) const
   }
 
 //! @brief Updates topology
-void XC::CircularArc::actualiza_topologia(void)
+void XC::CircularArc::update_topology(void)
   {
-    LineBase::actualiza_topologia();
+    LineBase::update_topology();
     if(P3()) P3()->insert_line(this);
   }
 

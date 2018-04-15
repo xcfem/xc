@@ -24,16 +24,16 @@
 // along with this program.
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
-//SetFilaJ.cc
+//JRowSet.cc
 
-#include "SetFilaJ.h"
+#include "JRowSet.h"
 #include "preprocessor/multi_block_topology/entities/EntMdlr.h"
 #include <boost/any.hpp>
 #include "domain/mesh/node/Node.h"
 #include "domain/mesh/element/Element.h"
 
-XC::SetFilaJ::SetFilaJ(EntMdlr &e,const size_t &f,const size_t &c,const std::string &nmb,XC::Preprocessor *preprocessor)
-  : SetFila<tfilanod,tfilaelem>(e.getTtzNodes().GetVarRefFilaJ(f,c),e.getTtzElements().GetVarRefFilaJ(f,c),nmb,preprocessor) {}
+XC::JRowSet::JRowSet(EntMdlr &e,const size_t &f,const size_t &c,const std::string &nmb,XC::Preprocessor *preprocessor)
+  : RowSet<tNodeRow,tElemRow>(e.getTtzNodes().getVarRefJRow(f,c),e.getTtzElements().getVarRefJRow(f,c),nmb,preprocessor) {}
 
-XC::SetFilaJ::SetFilaJ(EntMdlr &e,const size_t &capa,const RangoIndice &rango_filas,const size_t &c,const std::string &nmb,Preprocessor *preprocessor)
-  : SetFila<tfilanod,tfilaelem>(e.getTtzNodes().GetVarRefFilaJ(capa,rango_filas,c),e.getTtzElements().GetVarRefFilaJ(capa,rango_filas,c),nmb,preprocessor) {}
+XC::JRowSet::JRowSet(EntMdlr &e,const size_t &capa,const RangoIndice &row_range,const size_t &c,const std::string &nmb,Preprocessor *preprocessor)
+  : RowSet<tNodeRow,tElemRow>(e.getTtzNodes().getVarRefJRow(capa,row_range,c),e.getTtzElements().getVarRefJRow(capa,row_range,c),nmb,preprocessor) {}

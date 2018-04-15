@@ -71,7 +71,7 @@ class GeomSection: public SectionMassProperties
     MaterialHandler *material_handler; //!< Material handler (searching,...).
 
     ListRegiones regiones; //!< Region container.
-    ListReinfLayer capas_armado; //!< Rebar layers container.
+    ListReinfLayer reinforcement_layers; //!< Rebar layers container.
 
     lst_sis_ref reference_systems; //!< Spatial reference systems.
     size_t tag_sis_ref; //!< Default identifier for next spatial reference system.
@@ -136,12 +136,12 @@ class GeomSection: public SectionMassProperties
       { return regiones; }
     inline ListRegiones &getRegiones(void)
       { return regiones; }
-    inline const ListReinfLayer &getCapasArmadura(void) const
-      { return capas_armado; }
-    inline ListReinfLayer &getCapasArmadura(void)
-      { return capas_armado; }
+    inline const ListReinfLayer &getReinforcementLayers(void) const
+      { return reinforcement_layers; }
+    inline ListReinfLayer &getReinforcementLayers(void)
+      { return reinforcement_layers; }
     GeomSection getGMRegiones(void) const;
-    GeomSection getGMCapasArmado(void) const;
+    GeomSection getGMReinforcementLayers(void) const;
     GeomSection getCrackedSection(const Semiplano2d &) const;
     size_t getNumFiberData(void) const;
 

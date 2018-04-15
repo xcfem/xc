@@ -63,12 +63,12 @@ void XC::Segment::setEndPoints(size_t idP1, size_t idP2)
     if(!p1)
       std::cerr << "Segment::setEndPoints, point: '" 
                 << idP1 << "' not found \n";
-    actualiza_topologia();
+    update_topology();
     p2= BuscaSpot(idP2);
     if(!p2)
       std::cerr << "Segment::setEndPoints, point: '" 
                 << idP2 << "' not found \n";
-    actualiza_topologia();
+    update_topology();
   }
 
 //! @brief Returns the i-th vertex.

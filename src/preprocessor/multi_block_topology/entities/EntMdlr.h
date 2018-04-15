@@ -44,9 +44,9 @@ class RangoTritriz;
 class GeomObj3d;
 
 namespace XC {
-class SetFilaI;
-class SetFilaJ;
-class SetFilaK;
+class IRowSet;
+class JRowSet;
+class KRowSet;
 
 //!  \ingroup MultiBlockTopology
 //! 
@@ -62,13 +62,13 @@ class EntMdlr: public SetEstruct
     friend class Set;
     friend class SetMeshComp;
     friend class MultiBlockTopology;
-    virtual void actualiza_topologia(void)= 0;
+    virtual void update_topology(void)= 0;
     void create_nodes(const TritrizPos3d &);
     Node *create_node(const Pos3d &pos,size_t i=1,size_t j=1, size_t k=1);
     bool create_elements(meshing_dir dm);
     Pnt *create_point(const Pos3d &);
     void create_points(const MatrizPos3d &);
-    SetEstruct *create_set_fila(const RangoTritriz &,const std::string &);
+    SetEstruct *create_row_set(const RangoTritriz &,const std::string &);
 
     void clearAll(void);
   public:
@@ -88,17 +88,17 @@ class EntMdlr: public SetEstruct
     inline bool hasNodes(void) const
       { return !ttzNodes.empty(); }
     virtual size_t getNumNodeLayers(void) const
-      { return ttzNodes.GetCapas(); }
+      { return ttzNodes.getNumberOfLayers(); }
     virtual size_t getNumNodeRows(void) const
-      { return ttzNodes.getNumFilas(); }
+      { return ttzNodes.getNumberOfRows(); }
     virtual size_t getNumNodeColumns(void) const
-      { return ttzNodes.getNumCols(); }
+      { return ttzNodes.getNumberOfColumns(); }
     virtual size_t getNumElementLayers(void) const
-      { return ttzElements.GetCapas(); }
+      { return ttzElements.getNumberOfLayers(); }
     virtual size_t getNumElementRows(void) const
-      { return ttzElements.getNumFilas(); }
+      { return ttzElements.getNumberOfRows(); }
     virtual size_t getNumElementColumns(void) const
-      { return ttzElements.getNumCols(); }
+      { return ttzElements.getNumberOfColumns(); }
 
     virtual Node *getNode(const size_t &i=1,const size_t &j=1,const size_t &k=1);
     virtual const Node *getNode(const size_t &i=1,const size_t &j=1,const size_t &k=1) const;
@@ -127,17 +127,17 @@ class EntMdlr: public SetEstruct
     virtual unsigned short int GetDimension(void) const= 0;
     virtual BND3d Bnd(void) const= 0;
 
-    SetFilaI GetVarRefFilaI(size_t f=1,size_t c=1,const std::string &nmb="tmp");
-    SetFilaI GetVarRefFilaI(const RangoIndice &rango_capas,size_t f,size_t c,const std::string &nmb="tmp");
-    SetFilaI GetVarRefFilaI(const RangoTritriz &rango,const std::string &nmb="tmp");
+    IRowSet getVarRefIRow(size_t f=1,size_t c=1,const std::string &nmb="tmp");
+    IRowSet getVarRefIRow(const RangoIndice &layer_range,size_t f,size_t c,const std::string &nmb="tmp");
+    IRowSet getVarRefIRow(const RangoTritriz &rango,const std::string &nmb="tmp");
 
-    SetFilaJ GetVarRefFilaJ(size_t capa=1,size_t c=1,const std::string &nmb="tmp");
-    SetFilaJ GetVarRefFilaJ(size_t capa,const RangoIndice &rango_filas,size_t c,const std::string &nmb="tmp");
-    SetFilaJ GetVarRefFilaJ(const RangoTritriz &rango,const std::string &nmb="tmp");
+    JRowSet getVarRefJRow(size_t capa=1,size_t c=1,const std::string &nmb="tmp");
+    JRowSet getVarRefJRow(size_t capa,const RangoIndice &row_range,size_t c,const std::string &nmb="tmp");
+    JRowSet getVarRefJRow(const RangoTritriz &rango,const std::string &nmb="tmp");
 
-    SetFilaK GetVarRefFilaK(size_t capa=1,size_t f=1,const std::string &nmb="tmp");
-    SetFilaK GetVarRefFilaK(size_t capa,size_t f,const RangoIndice &rango_cols,const std::string &nmb="tmp");
-    SetFilaK GetVarRefFilaK(const RangoTritriz &rango,const std::string &nmb="tmp");
+    KRowSet getVarRefKRow(size_t capa=1,size_t f=1,const std::string &nmb="tmp");
+    KRowSet getVarRefKRow(size_t capa,size_t f,const RangoIndice &rango_cols,const std::string &nmb="tmp");
+    KRowSet getVarRefKRow(const RangoTritriz &rango,const std::string &nmb="tmp");
 
     void fix(const SFreedom_Constraint &);
 
