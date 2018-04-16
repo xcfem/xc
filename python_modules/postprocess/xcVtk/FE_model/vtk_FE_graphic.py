@@ -13,6 +13,7 @@ from miscUtils import LogMessages as lmsg
 import xc_base
 from vtkUtils import utilsVtk
 from postprocess.xcVtk import vtk_grafico_base
+import random as rd 
 
 class RecordDefDisplayEF(vtk_grafico_base.RecordDefDisplay):
     ''' Define the parameters to configure the output device.
@@ -36,7 +37,8 @@ class RecordDefDisplayEF(vtk_grafico_base.RecordDefDisplay):
           field.setupOnMapper(self.gridMapper)
         elemActor= vtk.vtkActor()
         elemActor.SetMapper(self.gridMapper)
-        elemActor.GetProperty().SetColor(1,1,0)
+#        elemActor.GetProperty().SetColor(1,1,0)
+        elemActor.GetProperty().SetColor(rd.random(),rd.random(),rd.random())
 
         if(reprType=="points"):
           elemActor.GetProperty().SetRepresentationToPoints()
@@ -71,7 +73,8 @@ class RecordDefDisplayEF(vtk_grafico_base.RecordDefDisplay):
         mappNodes.SetInput(markNodes.GetOutput())
         visNodes= vtk.vtkActor()
         visNodes.SetMapper(mappNodes)
-        visNodes.GetProperty().SetColor(.7, .5, .5)
+#        visNodes.GetProperty().SetColor(.7, .5, .5)
+        visNodes.GetProperty().SetColor(rd.random(),rd.random(),rd.random())
         self.renderer.AddActor(visNodes)
 
     def VtkLoadElemMesh(self,field,defFScale=0.0,eigenMode=None):
@@ -172,10 +175,10 @@ class RecordDefDisplayEF(vtk_grafico_base.RecordDefDisplay):
           self.displayGrid(caption)
 
 
-    def displayMesh(self, xcSet, field= None, diagrams= None, fName= None, caption= '',defFScale=0.0):
+    def displayMesh(self, xcSets, field= None, diagrams= None, fName= None, caption= '',defFScale=0.0,nodeSize=0.01,scaleConstr=0.2):
           '''Display the finite element mesh 
 
-          :param xcSet: set to be displayed
+          :param xcSets: list of sets to be displayed
           :param field: scalar field to show (optional)
           :param diagrams: diagrams to show (optional)
           :param fName: name of the graphic file to create (if None -> screen window).
@@ -185,13 +188,23 @@ class RecordDefDisplayEF(vtk_grafico_base.RecordDefDisplay):
                     the initial position plus its displacement multiplied
                     by this factor. (Defaults to 0.0, i.e. display of 
                     initial/undeformed shape)
+          :param nodeSize: size of the points that represent nodes (defaults to
+                    0.01)
+          :param scaleConstr: scale of SPContraints symbols (defaults to 0.2)
           '''
-          self.setupGrid(xcSet)
-          self.defineMeshScene(field,defFScale)
+          self.renderer= vtk.vtkRenderer()
+          self.renderer.SetBackground(self.bgRComp,self.bgGComp,self.bgBComp)
+          for s in xcSets:
+              self.setupGrid(s)
+              self.VtkLoadElemMesh(field=None,defFScale=1.0,eigenMode=None)
+              self.VtkDefineNodesActor(nodeSize)
+              self.VtkDefineElementsActor("surface",field=None)
+          self.renderer.ResetCamera()
           if(diagrams):
             for d in diagrams:
               self.appendDiagram(d)
-          self.displaySPconstraints(xcSet)
+          for s in xcSets:
+              self.displaySPconstraints(s,scaleConstr)
           self.displayScene(caption,fName)
 
     def displayScalarField(self, preprocessor, xcSet, field, fName= None):
@@ -300,7 +313,7 @@ class RecordDefDisplayEF(vtk_grafico_base.RecordDefDisplay):
     def appendDiagram(self,diagram):
         diagram.addDiagramToScene(self)
 
-    def displaySPconstraints(self, xcSet):
+    def displaySPconstraints(self, xcSet,scale):
         prep=xcSet.getPreprocessor
         nodInSet=xcSet.nodes.getTags()
         #direction vectors for each DOF
@@ -313,9 +326,9 @@ class RecordDefDisplayEF(vtk_grafico_base.RecordDefDisplay):
             if nod.tag in nodInSet:
                 dof=sp.getDOFNumber
                 if dof < 3:
-                    utilsVtk.drawVtkSymb(symbType='cone',renderer=self.renderer, RGBcolor=[0,0,1], vPos=nod.getCoo, vDir=DOFdirVct[dof], scale=0.2)
+                    utilsVtk.drawVtkSymb(symbType='cone',renderer=self.renderer, RGBcolor=[0,0,1], vPos=nod.getCoo, vDir=DOFdirVct[dof], scale=scale)
                 else:
-                    utilsVtk.drawVtkSymb(symbType='doubleCone',renderer=self.renderer, RGBcolor=[0,1,0], vPos=nod.getCoo, vDir=DOFdirVct[dof], scale=0.2)
+                    utilsVtk.drawVtkSymb(symbType='doubleCone',renderer=self.renderer, RGBcolor=[0,1,0], vPos=nod.getCoo, vDir=DOFdirVct[dof], scale=scale)
             sp= spIter.next()
         return
                     

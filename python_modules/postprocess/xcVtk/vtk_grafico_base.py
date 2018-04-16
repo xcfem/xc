@@ -222,8 +222,8 @@ class RecordDefDisplay(object):
     if(fName):
       self.plot(fName)
     else:
-      iren= self.setupWindowInteractor()
-      iren.Start()
+      iren= self.setupWindowInteractor() 
+      iren.Start()   
 
   def muestraEscena(self):
     lmsg.warning('muestraEscena is deprecated. Use displayScene')
