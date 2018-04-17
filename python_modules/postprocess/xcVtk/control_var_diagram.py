@@ -58,10 +58,10 @@ class ControlVarDiagram(cd.ColoredDiagram):
             elif (self.component == 'getMaxSteelStress'):
               value1=elem.getProp(attributeNameSect1).getMaxSteelStress()
               value2=elem.getProp(attributeNameSect2).getMaxSteelStress()
-#            elif (self.component == 's_rmax'):
-                
             else:
-              print 'component ',self.component,' not implemented'
+              value1= getattr(elem.getProp(attributeNameSect1), self.component)
+              value2= getattr(elem.getProp(attributeNameSect2), self.component)
+#              print 'component ',self.component,' not implemented'
           else:
             value1= getattr(elem.getProp(attributeNameSect1), self.component)
             value2= getattr(elem.getProp(attributeNameSect2), self.component)
