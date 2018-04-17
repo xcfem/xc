@@ -141,7 +141,6 @@ class RecordDefDisplayEF(vtk_grafico_base.RecordDefDisplay):
                     by this factor. (Defaults to 0.0, i.e. display of 
                     initial/undeformed shape)
         '''
-        print 'aquí 1'
         self.VtkLoadElemMesh(field,defFScale,eigenMode)
         self.renderer= vtk.vtkRenderer()
         self.renderer.SetBackground(self.bgRComp,self.bgGComp,self.bgBComp)
