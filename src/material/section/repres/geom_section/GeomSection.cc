@@ -292,9 +292,12 @@ double XC::GeomSection::getLeverArm(const Recta2d &trazaPF) const
 
 //! @brief Return the section depth from the border of the half-plane
 //! being passed as parameter to the most compressed fiber.
-double XC::GeomSection::getCompressedZoneLeverArm(const Semiplano2d &sp_compresiones) const
-  {
+double XC::GeomSection::getCompressedZoneDepth(const Semiplano2d &sp_compresiones) const
+  {    
+    std::cout << getClassName() << "::" << __FUNCTION__
+	      << " argument: " << sp_compresiones << std::endl;
     Poligono2d contour= getRegionsContour();
+    std::cout << " contour: " << contour << std::endl;
     const size_t num_vertices= contour.GetNumVertices();
     double d= 0.0,dneg= 0.0;    
     for(register size_t i=1;i<=num_vertices;i++)
@@ -303,12 +306,14 @@ double XC::GeomSection::getCompressedZoneLeverArm(const Semiplano2d &sp_compresi
         if(d<dneg) dneg= d;
       }
     assert(dneg<=0);
+    std::cout << getClassName() << "::" << __FUNCTION__
+	      << " returns: " << dneg << std::endl;
     return dneg;
   }
 
 //! @brief Return the section depth from the border of the half-plane
 //! being passed as parameter to the most tensioned fiber.
-double XC::GeomSection::getTensionedZoneLeverArm(const Semiplano2d &sp_compresiones) const
+double XC::GeomSection::getTensionedZoneDepth(const Semiplano2d &sp_compresiones) const
   {
     Poligono2d contour= getRegionsContour();
     const size_t num_vertices= contour.GetNumVertices();

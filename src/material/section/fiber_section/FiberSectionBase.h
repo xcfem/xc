@@ -111,10 +111,10 @@ class FiberSectionBase: public PrismaticBarCrossSection
     GeomSection *getGeomSection(void);
     const GeomSection *getGeomSection(void) const;
     Poligono2d getRegionsContour(void) const;
-    double getCompressedZoneLeverArm(const Recta2d &) const;
-    double getCompressedZoneLeverArm(void) const;
-    double getTensionedZoneLeverArm(const Recta2d &) const;
-    double getTensionedZoneLeverArm(void) const;
+    double getCompressedZoneDepth(const Recta2d &) const;
+    double getCompressedZoneDepth(void) const;
+    double getTensionedZoneDepth(const Recta2d &) const;
+    double getTensionedZoneDepth(void) const;
     double getLeverArm(void) const;
     double getNeutralAxisDepth(void) const;
     double getNeutralAxisDist(const double &y,const double &z) const;

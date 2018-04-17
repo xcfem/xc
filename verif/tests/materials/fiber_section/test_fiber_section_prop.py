@@ -250,6 +250,26 @@ zEffConcA=sccEl1.getEffectiveConcreteAreaLimitLine(heffmax_EC2).getParamB()
 zEffConcATeor=-(depth/2.-heffmax_EC2)
 ratio13=(zEffConcA-zEffConcATeor)/zEffConcA
 
+print 'x= ', x
+print 'xTeor= ', xTeor
+print 'ratio1= ', ratio1
+print 'zNA=', zNA
+print 'zNATeor=', zNATeor
+print 'ratio2= ', ratio2
+'''
+print 'ratio3= ', ratio3
+print 'ratio4= ', ratio4
+print 'ratio5= ', ratio5
+print 'ratio6= ', ratio6
+print 'ratio7= ', ratio7
+print 'ratio8= ', ratio8
+print 'ratio9= ', ratio9
+print 'ratio10= ', ratio10
+print 'ratio11= ', ratio11
+print 'ratio12= ', ratio12
+print 'ratio13= ', ratio13
+'''
+
 import os
 from miscUtils import LogMessages as lmsg
 fname= os.path.basename(__file__)

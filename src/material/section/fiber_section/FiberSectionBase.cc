@@ -213,11 +213,13 @@ const XC::GeomSection *XC::FiberSectionBase::getGeomSection(void) const
       {
         retval= section_repres->getGeom();
         if(!retval)
-	  std::cerr << "FiberSectionBase::getGeomSection; section geometry not defined."
+	  std::cerr << getClassName() << "::" << __FUNCTION__
+		    << "; section geometry not defined."
                     << std::endl;
       }
     else
-      std::cerr << "FiberSectionBase::getGeomSection; fiber section representation not defined."
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; fiber section representation not defined."
                 << std::endl;
     return retval;
   }
@@ -251,7 +253,7 @@ double XC::FiberSectionBase::getLeverArm(void) const
 
 //! @brief Returns section depth from the line being passed as parameter
 //! to the most compressed fiber.
-double XC::FiberSectionBase::getCompressedZoneLeverArm(const Recta2d &r) const
+double XC::FiberSectionBase::getCompressedZoneDepth(const Recta2d &r) const
   {
     double retval= 0.0;
     const GeomSection *geom= getGeomSection();
@@ -259,7 +261,7 @@ double XC::FiberSectionBase::getCompressedZoneLeverArm(const Recta2d &r) const
       {
         const Semiplano2d comp= getCompressedHalfPlane(r);
         if(comp.exists())
-          retval= geom->getCompressedZoneLeverArm(comp);
+          retval= geom->getCompressedZoneDepth(comp);
         else
           {
             retval= NAN;
@@ -273,15 +275,17 @@ double XC::FiberSectionBase::getCompressedZoneLeverArm(const Recta2d &r) const
 
 //! @brief Returns section depth from the neutral axis to the
 //! most compressed fiber.
-double XC::FiberSectionBase::getCompressedZoneLeverArm(void) const
+double XC::FiberSectionBase::getCompressedZoneDepth(void) const
   {
     double retval= 0.0;
+    std::cout << getClassName() << "::" << __FUNCTION__
+	      << " retval: " << retval << std::endl;
     const GeomSection *geom= getGeomSection();
     if(geom)
       {
         const Semiplano2d comp= getCompressedHalfPlane();
         if(comp.exists())
-          retval= geom->getCompressedZoneLeverArm(comp);
+          retval= geom->getCompressedZoneDepth(comp);
         else
           {
             retval= NAN;
@@ -290,12 +294,14 @@ double XC::FiberSectionBase::getCompressedZoneLeverArm(void) const
                       << std::endl;
           }
        }
+    std::cout << getClassName() << "::" << __FUNCTION__
+	      << " returns: " << retval << std::endl;
     return retval;
   }
 
 //! @brief Returns section depth from the neutral axis to the
 //! most tensioned fiber.
-double XC::FiberSectionBase::getTensionedZoneLeverArm(void) const
+double XC::FiberSectionBase::getTensionedZoneDepth(void) const
   {
     double retval= 0.0;
     const GeomSection *geom= getGeomSection();
@@ -303,7 +309,7 @@ double XC::FiberSectionBase::getTensionedZoneLeverArm(void) const
       {
         const Semiplano2d comp= getCompressedHalfPlane();
         if(comp.exists())
-          retval= geom->getTensionedZoneLeverArm(comp);
+          retval= geom->getTensionedZoneDepth(comp);
         else //Full section is in tension.
           retval= geom->getLeverArm(getTrazaPlanoFlexion());
       }
@@ -312,7 +318,7 @@ double XC::FiberSectionBase::getTensionedZoneLeverArm(void) const
 
 //! @brief Returns section depth from the line being passed as parameter
 //! to the most tensioned fiber.
-double XC::FiberSectionBase::getTensionedZoneLeverArm(const Recta2d &r) const
+double XC::FiberSectionBase::getTensionedZoneDepth(const Recta2d &r) const
   {
     double retval= 0.0;
     const GeomSection *geom= getGeomSection();
@@ -320,11 +326,12 @@ double XC::FiberSectionBase::getTensionedZoneLeverArm(const Recta2d &r) const
       {
         const Semiplano2d comp= getCompressedHalfPlane(r);
         if(comp.exists())
-          retval= geom->getTensionedZoneLeverArm(comp);
+          retval= geom->getTensionedZoneDepth(comp);
         else
           {
             retval= NAN;
-            std::cerr << "FiberSectionBase::getTensionedZoneLeverArm; no se ha podido obtener el half-plane comprimido."
+            std::cerr << getClassName() << "::" << __FUNCTION__
+	              << "; can't get the compressed half-plane."
                       << std::endl;
           }
       }
@@ -334,7 +341,7 @@ double XC::FiberSectionBase::getTensionedZoneLeverArm(const Recta2d &r) const
 //! @brief Returns neutral axis depth.
 double XC::FiberSectionBase::getNeutralAxisDepth(void) const
   {
-    return getCompressedZoneLeverArm();
+    return getCompressedZoneDepth();
   }
 
 //! @brief Returns the distance from the neutral axis
@@ -360,7 +367,7 @@ Recta2d XC::FiberSectionBase::getEffectiveConcreteAreaLimitLine(const double &hE
       fn= fibers.getNeutralAxis(); //Neutral axis computed from fiber model. 
     if(fn.exists())
       {
-        const double hef= getTensionedZoneLeverArm(); //Lever arm of cross-section tensioned zone.
+        const double hef= getTensionedZoneDepth(); //Lever arm of cross-section tensioned zone.
         assert(!std::isnan(hef));
         if(hef<hEfMax)
           retval= fn;
@@ -643,12 +650,15 @@ const XC::NMPointCloud &XC::FiberSectionBase::getInteractionDiagramPointsForPlan
     retval.setUmbral(diag_data.getUmbral());
     const FiberDeque &fsC= sel_mat_tag(diag_data.getConcreteSetName(),diag_data.getConcreteTag())->second;
     if(fsC.empty())
-      std::cerr << "Fibers for concrete material, identified by tag: "
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; fibers for concrete material, identified by tag: "
 		<< diag_data.getConcreteTag()
                 << ", not found." << std::endl;
     const FiberDeque &fsS= sel_mat_tag(diag_data.getNmbSetArmadura(),diag_data.getTagArmadura())->second;
     if(fsS.empty())
-      std::cerr << "Fibers for steel material, identified by tag: " << diag_data.getTagArmadura()
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; fibers for steel material, identified by tag: "
+		<< diag_data.getTagArmadura()
                 << ", not found." << std::endl;
     if(!fsC.empty() && !fsS.empty())
       {
@@ -661,7 +671,8 @@ const XC::NMPointCloud &XC::FiberSectionBase::getInteractionDiagramPointsForPlan
         revertToStart();
       }
     else
-      std::cerr << "Can't compute interaction diagram." << std::endl;
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; can't compute interaction diagram." << std::endl;
     return retval;
   }
 
@@ -673,12 +684,15 @@ const XC::NMyMzPointCloud &XC::FiberSectionBase::getInteractionDiagramPoints(con
     lista_esfuerzos.setUmbral(diag_data.getUmbral());
     const FiberDeque &fsC= sel_mat_tag(diag_data.getConcreteSetName(),diag_data.getConcreteTag())->second;
     if(fsC.empty())
-      std::cerr << "Fibers for concrete material, identified by tag: "
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; fibers for concrete material, identified by tag: "
 		<< diag_data.getConcreteTag()
                 << ", not found." << std::endl;
     const FiberDeque &fsS= sel_mat_tag(diag_data.getNmbSetArmadura(),diag_data.getTagArmadura())->second;
     if(fsS.empty())
-      std::cerr << "Fibers for steel material, identified by tag: " << diag_data.getTagArmadura()
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; fibers for steel material, identified by tag: "
+		<< diag_data.getTagArmadura()
                 << ", not found." << std::endl;
     if(!fsC.empty() && !fsS.empty())
       {
@@ -687,7 +701,8 @@ const XC::NMyMzPointCloud &XC::FiberSectionBase::getInteractionDiagramPoints(con
         revertToStart();
       }
     else
-      std::cerr << "Can't compute interaction diagram." << std::endl;
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; can't compute interaction diagram." << std::endl;
     return lista_esfuerzos;
   }
 
@@ -816,7 +831,9 @@ Recta2d XC::FiberSectionBase::getTrazaPlanoCompresion(void) const
   {
     Recta2d retval= fibers.getTrazaPlanoCompresion();
     if(!retval.exists())
-      std::cerr << "Intercept of the compression plane not found." << std::endl;
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; intercept of the compression plane not found."
+		<< std::endl;
     return retval;
   }
 
