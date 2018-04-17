@@ -87,7 +87,9 @@ const XC::Vector &XC::PrismaticBarCrossSection::getGeneralizedStrainVector(const
 //! @brief Returns the generalized strains vector of the cross-section.
 XC::DeformationPlane XC::PrismaticBarCrossSection::getDeformationPlane(void) const
   {
-    DeformationPlane retval= DeformationPlane(getSectionDeformation());
+    const Vector df= getSectionDeformation();
+    std::cout << "   section deformation: " << df << std::endl; 
+    DeformationPlane retval= DeformationPlane(df);
     return retval;
   }
 

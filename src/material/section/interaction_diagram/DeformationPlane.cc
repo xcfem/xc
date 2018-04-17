@@ -157,16 +157,22 @@ const XC::Vector &XC::DeformationPlane::getDeformation(const size_t &order,const
 //! @brief Return the neutral axis.
 Recta2d XC::DeformationPlane::getNeutralAxis(void)const
   {
+    std::cout << getClassName() << "::" << __FUNCTION__
+	      << " starts." << std::endl;
     const double a= angulo(*this,PlanoYZ3d);
+    std::cout << "a= " << a << std::endl;
     Recta2d retval;
     if(a>1e-4)
       {
         Recta3d traza= TrazaYZ();
+	std::cout << "traza= " << traza << std::endl;
         if(traza.exists())
           retval= traza.YZ2DProjection();
       }
     else //Almost parallel: can't find intersection.
       retval.setExists(false);
+    std::cout << getClassName() << "::" << __FUNCTION__
+	      << " returns:" << retval << std::endl;
     return retval;
   }
 
@@ -290,11 +296,15 @@ Semiplano2d XC::DeformationPlane::getCompressedHalfPlane(const Recta2d &r) const
 //! @brief Returns the compressed half plane.
 Semiplano2d XC::DeformationPlane::getCompressedHalfPlane(void) const
   {
+    std::cout << getClassName() << "::" << __FUNCTION__
+	      << " starts." << std::endl;
     const Recta2d fn= getNeutralAxis();
     bool exists= fn.exists();
     Semiplano2d retval;
     if(exists)
       retval= getCompressedHalfPlane(fn);
+    std::cout << getClassName() << "::" << __FUNCTION__
+	      << " returns: " << retval << std::endl;
     return retval;
   }
 

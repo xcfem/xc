@@ -279,7 +279,7 @@ double XC::FiberSectionBase::getCompressedZoneDepth(void) const
   {
     double retval= 0.0;
     std::cout << getClassName() << "::" << __FUNCTION__
-	      << " retval: " << retval << std::endl;
+	      << " starts." << std::endl;
     const GeomSection *geom= getGeomSection();
     if(geom)
       {
