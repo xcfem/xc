@@ -30,28 +30,28 @@ class RecordDefDisplayEF(vtk_grafico_base.RecordDefDisplay):
         :param field: field to be repreresented
         '''
         if(field):
-          field.setupOnGrid(self.gridRecord.uGrid)
+            field.setupOnGrid(self.gridRecord.uGrid)
         self.gridMapper= vtk.vtkDataSetMapper()
         self.gridMapper.SetInput(self.gridRecord.uGrid)
         if(field):
-          field.setupOnMapper(self.gridMapper)
+            field.setupOnMapper(self.gridMapper)
         elemActor= vtk.vtkActor()
         elemActor.SetMapper(self.gridMapper)
 #        elemActor.GetProperty().SetColor(1,1,0)
         elemActor.GetProperty().SetColor(rd.random(),rd.random(),rd.random())
 
         if(reprType=="points"):
-          elemActor.GetProperty().SetRepresentationToPoints()
+            elemActor.GetProperty().SetRepresentationToPoints()
         elif(reprType=="wireframe"):
-          elemActor.GetProperty().SetRepresentationToWireFrame()
+            elemActor.GetProperty().SetRepresentationToWireFrame()
         elif(reprType=="surface"):
-          elemActor.GetProperty().SetRepresentationToSurface()
+            elemActor.GetProperty().SetRepresentationToSurface()
         else:
-          lmsg.error("Representation type: '"+ reprType+ "' unknown.")
+            lmsg.error("Representation type: '"+ reprType+ "' unknown.")
         self.renderer.AddActor(elemActor)
         if(field):
-          field.creaColorScaleBar()
-          self.renderer.AddActor2D(field.scalarBar)
+            field.creaColorScaleBar()
+            self.renderer.AddActor2D(field.scalarBar)
 
     def VtkDefineNodesActor(self, radius):
         '''Define the actor to display nodes.
@@ -102,136 +102,142 @@ class RecordDefDisplayEF(vtk_grafico_base.RecordDefDisplay):
         # Scalar values.
         nodeSet= eSet.getNodes
         if(field):
-          arr= field.fillArray(nodeSet)
-          field.creaLookUpTable()      
+            arr= field.fillArray(nodeSet)
+            field.creaLookUpTable()      
         # Load nodes in vtk
         setNodes= eSet.getNodes
         if eigenMode==None:
             for n in setNodes:
-              pos= n.getCurrentPos3d(defFScale)
-              self.nodes.InsertPoint(n.getIdx,pos.x,pos.y,pos.z)
+                pos= n.getCurrentPos3d(defFScale)
+                self.nodes.InsertPoint(n.getIdx,pos.x,pos.y,pos.z)
         else:
             for n in setNodes:
-              pos= n.getEigenPos3d(defFScale,eigenMode)
-              self.nodes.InsertPoint(n.getIdx,pos.x,pos.y,pos.z)
+                pos= n.getEigenPos3d(defFScale,eigenMode)
+                self.nodes.InsertPoint(n.getIdx,pos.x,pos.y,pos.z)
          # Load elements in vtk
         setElems= eSet.getElements
         for e in setElems:
-          vertices= xc_base.vector_int_to_py_list(e.getIdxNodes)
-          vtx= vtk.vtkIdList()
-          for vIndex in vertices:
-            vtx.InsertNextId(vIndex)
-          if(e.getVtkCellType!= vtk.VTK_VERTEX):
-            self.gridRecord.uGrid.InsertNextCell(e.getVtkCellType,vtx)
+            vertices= xc_base.vector_int_to_py_list(e.getIdxNodes)
+            vtx= vtk.vtkIdList()
+            for vIndex in vertices:
+                vtx.InsertNextId(vIndex)
+            if(e.getVtkCellType!= vtk.VTK_VERTEX):
+                self.gridRecord.uGrid.InsertNextCell(e.getVtkCellType,vtx)
         #Load constraints (FAILS)
         setConstraints= eSet.getConstraints
         for c in setConstraints:
-          vtx= vtk.vtkIdList()
-          vtx.InsertNextId(c.getNodeIdx)
-          if(c.getVtkCellType!= vtk.VTK_LINE):
-            self.gridRecord.uGrid.InsertNextCell(c.getVtkCellType,vtx)
+            vtx= vtk.vtkIdList()
+            vtx.InsertNextId(c.getNodeIdx)
+            if(c.getVtkCellType!= vtk.VTK_LINE):
+                self.gridRecord.uGrid.InsertNextCell(c.getVtkCellType,vtx)
 
     def defineMeshScene(self, field,defFScale=0.0,eigenMode=None):
-          '''Define the scene for the mesh
+        '''Define the scene for the mesh
 
-          :param field: scalar field to be represented
-          :param defFScale: factor to apply to current displacement of nodes 
+        :param field: scalar field to be represented
+        :param defFScale: factor to apply to current displacement of nodes 
                     so that the display position of each node equals to
                     the initial position plus its displacement multiplied
                     by this factor. (Defaults to 0.0, i.e. display of 
                     initial/undeformed shape)
-          '''
-          self.VtkLoadElemMesh(field,defFScale,eigenMode)
-          self.renderer= vtk.vtkRenderer()
-          self.renderer.SetBackground(self.bgRComp,self.bgGComp,self.bgBComp)
-          self.VtkDefineNodesActor(0.002)
-          self.VtkDefineElementsActor("surface",field)
-          self.renderer.ResetCamera()
+        '''
+        self.VtkLoadElemMesh(field,defFScale,eigenMode)
+        self.renderer= vtk.vtkRenderer()
+        self.renderer.SetBackground(self.bgRComp,self.bgGComp,self.bgBComp)
+        self.VtkDefineNodesActor(0.002)
+        self.VtkDefineElementsActor("surface",field)
+        self.renderer.ResetCamera()
 
-          #Implement labels.
-          # if(self.gridRecord.entToLabel=="elementos"):
-          #   VtkDibujaIdsElementos(self.renderer)
-          # elif(self.gridRecord.entToLabel=="nodes"):
-          #   vtk_define_mesh_nodes.VtkDibujaIdsNodes(self.renderer)
-          # else:
-          #   print "Entity: ", self.gridRecord.entToLabel, " unknown."
+        #Implement labels.
+        # if(self.gridRecord.entToLabel=="elementos"):
+        #   VtkDibujaIdsElementos(self.renderer)
+        # elif(self.gridRecord.entToLabel=="nodes"):
+        #   vtk_define_mesh_nodes.VtkDibujaIdsNodes(self.renderer)
+        # else:
+        #   print "Entity: ", self.gridRecord.entToLabel, " unknown."
 
     def FEmeshGraphic(self,xcSet,caption= '',viewNm='XYZPos',defFScale=0.0):
-          ''' Graphic of the FE mesh
+        ''' Graphic of the FE mesh
 
-          :param xcSet:   XC set of elements to be displayed
-          :param caption: text to write in the graphic
-          :param viewNm:  name of the view to use for the representation
-                 predefined view names: 'XYZPos','XNeg','XPos','YNeg','YPos',
-                 'ZNeg','ZPos'  (defaults to 'XYZPos')
-          :param defFScale: factor to apply to current displacement of nodes 
-                    so that the display position of each node equals to
-                    the initial position plus its displacement multiplied
-                    by this factor. (Defaults to 0.0, i.e. display of 
-                    initial/undeformed shape)
-          '''
-          self.viewName=viewNm
-          self.setupGrid(xcSet)
-          self.displayGrid(caption)
+        :param xcSet:   XC set of elements to be displayed
+        :param caption: text to write in the graphic
+        :param viewNm:  name of the view to use for the representation
+                predefined view names: 'XYZPos','XNeg','XPos','YNeg','YPos',
+                'ZNeg','ZPos'  (defaults to 'XYZPos')
+        :param defFScale: factor to apply to current displacement of nodes 
+                   so that the display position of each node equals to
+                   the initial position plus its displacement multiplied
+                   by this factor. (Defaults to 0.0, i.e. display of 
+                   initial/undeformed shape)
+        '''
+        self.viewName=viewNm
+        self.setupGrid(xcSet)
+        self.displayGrid(caption)
 
+    def defineMeshActorsSet(self,elemSet,field,defFScale,nodeSize):
+        self.setupGrid(elemSet)
+        self.VtkLoadElemMesh(field,defFScale,eigenMode=None)
+        self.VtkDefineNodesActor(nodeSize)
+        self.VtkDefineElementsActor("surface",field)
 
     def displayMesh(self, xcSets, field= None, diagrams= None, fName= None, caption= '',defFScale=0.0,nodeSize=0.01,scaleConstr=0.2):
-          '''Display the finite element mesh 
+        '''Display the finite element mesh 
 
-          :param xcSets: list of sets to be displayed
-          :param field: scalar field to show (optional)
-          :param diagrams: diagrams to show (optional)
-          :param fName: name of the graphic file to create (if None -> screen window).
-          :param caption: text to display in the graphic.
-          :param defFScale: factor to apply to current displacement of nodes 
+        :param xcSets: set or list of sets to be displayed
+        :param field: scalar field to show (optional)
+        :param diagrams: diagrams to show (optional)
+        :param fName: name of the graphic file to create (if None -> screen window).
+        :param caption: text to display in the graphic.
+        :param defFScale: factor to apply to current displacement of nodes 
                     so that the display position of each node equals to
                     the initial position plus its displacement multiplied
                     by this factor. (Defaults to 0.0, i.e. display of 
                     initial/undeformed shape)
-          :param nodeSize: size of the points that represent nodes (defaults to
+        :param nodeSize: size of the points that represent nodes (defaults to
                     0.01)
-          :param scaleConstr: scale of SPContraints symbols (defaults to 0.2)
-          '''
-          self.renderer= vtk.vtkRenderer()
-          self.renderer.SetBackground(self.bgRComp,self.bgGComp,self.bgBComp)
-          for s in xcSets:
-              self.setupGrid(s)
-              self.VtkLoadElemMesh(field=None,defFScale=1.0,eigenMode=None)
-              self.VtkDefineNodesActor(nodeSize)
-              self.VtkDefineElementsActor("surface",field=None)
-          self.renderer.ResetCamera()
-          if(diagrams):
+        :param scaleConstr: scale of SPContraints symbols (defaults to 0.2)
+        '''
+        print 'aquí 0'
+        self.renderer= vtk.vtkRenderer()
+        self.renderer.SetBackground(self.bgRComp,self.bgGComp,self.bgBComp)
+        if type(xcSets) ==list:
+            for s in xcSets:
+                self.defineMeshActorsSet(s,field,defFScale,nodeSize)
+                self.displaySPconstraints(s,scaleConstr)
+        else:
+            self.defineMeshActorsSet(xcSets,field,defFScale,nodeSize)
+            self.displaySPconstraints(xcSets,scaleConstr)
+        self.renderer.ResetCamera()
+        if(diagrams):
             for d in diagrams:
-              self.appendDiagram(d)
-          for s in xcSets:
-              self.displaySPconstraints(s,scaleConstr)
-          self.displayScene(caption,fName)
+                self.appendDiagram(d)
+        self.displayScene(caption,fName)
 
     def displayScalarField(self, preprocessor, xcSet, field, fName= None):
-          lmsg.warning('displayScalarField DEPRECATED; use displayMesh.')
-          self.displayMesh(xcSet, field, None, fName)
+        lmsg.warning('displayScalarField DEPRECATED; use displayMesh.')
+        self.displayMesh(xcSet, field, None, fName)
 
     def displayLoadOnNode(self, nod, color, force, moment, fScale,defFScale=0.0):
-          '''Display loads on one node
+        '''Display loads on one node
 
-          :param nod: node instance
-          :param color: color
-          :param force: force (displayed as a single arrow)
-          :param moment: moment (displayed as a double arrow)
-          :param fScale: scaling factor (forces and moments)
-          :param defFScale: factor to apply to current displacement of nodes 
+         :param nod: node instance
+         :param color: color
+         :param force: force (displayed as a single arrow)
+         :param moment: moment (displayed as a double arrow)
+         :param fScale: scaling factor (forces and moments)
+         :param defFScale: factor to apply to current displacement of nodes 
                     so that the display position of each node equals to
                     the initial position plus its displacement multiplied
                     by this factor. (Defaults to 0.0, i.e. display of 
                     initial/undeformed shape)
-          '''
-          #actorName= baseName+"%04d".format(nod.tag) # Node tag.
-          pos= nod.getCurrentPos3d(defFScale)
-          absForce= force.Norm()
-          if(absForce>1e-6):
+         '''
+        #actorName= baseName+"%04d".format(nod.tag) # Node tag.
+        pos= nod.getCurrentPos3d(defFScale)
+        absForce= force.Norm()
+        if(absForce>1e-6):
             utilsVtk.drawVtkSymb('arrow',self.renderer,color,pos,force,fScale*absForce)
-          absMoment= moment.Norm()
-          if(absMoment>1e-6):
+        absMoment= moment.Norm()
+        if(absMoment>1e-6):
             utilsVtk.drawVtkSymb('doubleArrow',self.renderer,color,pos,moment,fScale*absMoment)
 
     def displayNodalLoads(self, preprocessor, loadPattern, color, fScale):
@@ -269,26 +275,26 @@ class RecordDefDisplayEF(vtk_grafico_base.RecordDefDisplay):
         loadPatternName= loadPattern.getProp("dispName")
         actorName= "flechaP"+loadPatternName+"%04d".format(tag) # Tag force.
         for tag in eleTags:
-          ele= preprocessor.getElementHandler.getElement(tag)
-          actorName+= "%04d".format(tag) # Tag elemento.
-          pos= ele.point(xForce)
-          utilsVtk.drawVtkSymb('arrow',self.renderer,color,pos,force,fScale)
+            ele= preprocessor.getElementHandler.getElement(tag)
+            actorName+= "%04d".format(tag) # Tag elemento.
+            pos= ele.point(xForce)
+            utilsVtk.drawVtkSymb('arrow',self.renderer,color,pos,force,fScale)
 
     def displayElementUniformLoad(self, preprocessor, unifLoad,loadPattern, color, force, fScale):
         loadPatternName= loadPattern.getProp("dispName")
         actorName= "flechaU"+loadPatternName+"%04d".format(unifLoad.tag)
         eleTags= unifLoad.elementTags
         for tag in eleTags:
-          ele= preprocessor.getElementHandler.getElement(tag)
-          actorName+= "%04d".format(tag) # Tag elemento.
-          lmsg.error('displayElementUniformLoad not implemented.')
-          # points= ele.getPoints(3,1,1,True)
-          # i= 0
-          # for capa in points:
-          #   for pos in capa: 
-          #     print pos
-          #     utilsVtk.drawArrow(self.renderer,color,pos,force,fScale*force.Norm())
-          #     i+= 1
+            ele= preprocessor.getElementHandler.getElement(tag)
+            actorName+= "%04d".format(tag) # Tag elemento.
+            lmsg.error('displayElementUniformLoad not implemented.')
+            # points= ele.getPoints(3,1,1,True)
+            # i= 0
+            # for capa in points:
+            #   for pos in capa: 
+            #     print pos
+            #     utilsVtk.drawArrow(self.renderer,color,pos,force,fScale*force.Norm())
+            #     i+= 1
 
     def displayElementalLoads(self, preprocessor,loadPattern, color, fScale):
         loadPattern.addToDomain()
