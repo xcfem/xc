@@ -53,21 +53,24 @@ bool XC::DeformationPlane::check_positions(const Pos2d &p1,const Pos2d &p2, cons
     if(d12<tol2)
       {
         retval= false;
-        std::clog << "DeformationPlane; points p1= " << p1 << " and p2= " 
+        std::clog << getClassName() << "::" << __FUNCTION__
+		  << "; points p1= " << p1 << " and p2= " 
                   << p2 << " are too close d= " << sqrt(d12) << std::endl;
       }
     const GEOM_FT d13= p1.dist2(p3);
     if(d13<tol2)
       {
         retval= false;
-        std::clog << "DeformationPlane; points p1= " << p1 << " and p3= " 
+        std::clog << getClassName() << "::" << __FUNCTION__
+		  << "; points p1= " << p1 << " and p3= " 
                   << p3 << " are too close d= " << sqrt(d13) << std::endl;
       }
     const GEOM_FT d23= p2.dist2(p3);
     if(d23<tol2)
       {
         retval= false;
-        std::clog << "DeformationPlane; points p2= " << p2 << " and p3= " 
+        std::clog << getClassName() << "::" << __FUNCTION__
+		  << "; points p2= " << p2 << " and p3= " 
                   << p3 << " are too close d= " << sqrt(d23) << std::endl;
       }
     return retval;
@@ -171,13 +174,23 @@ Recta2d XC::DeformationPlane::getNeutralAxis(void)const
       }
     else //Almost parallel: can't find intersection.
       retval.setExists(false);
+    //Testing begins LCPT 21042018
+    const Pos2d p1= retval.PtoParametricas(0.0);
+    std::cout << "Strain(" << p1 << ")= " << Strain(p1) << std::endl;
+    const Pos2d p2= retval.PtoParametricas(1.0);
+    std::cout << "Strain(" << p2 << ")= " << Strain(p2) << std::endl;
+    const Pos2d p3= Pos2d(1.0,1.0);
+    std::cout << "Strain(" << p3 << ")= " << Strain(p3) << std::endl;
+    
+    //Testing ends LCPT 21042018
     std::cout << getClassName() << "::" << __FUNCTION__
 	      << " returns:" << retval << std::endl;
     return retval;
   }
 
 
-//! @brief Returns (if possible) a pont in the tensioned side of the cross-section.
+//! @brief Returns (if possible) a point in the tensioned side of the
+//! cross-section.
 Pos2d XC::DeformationPlane::getPointOnTensionedHalfPlane(void) const
   {
     Pos2d retval(0,0);
@@ -340,7 +353,8 @@ int XC::DeformationPlane::sendSelf(CommParameters &cp)
 
     res+= cp.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
-      std::cerr << getClassName() << "sendSelf() - failed to send data\n";
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; failed to send data.\n";
     return res;
   }
 
@@ -352,13 +366,15 @@ int XC::DeformationPlane::recvSelf(const CommParameters &cp)
     int res= cp.receiveIdData(getDbTagData(),dataTag);
 
     if(res<0)
-      std::cerr << getClassName() << "::recvSelf - failed to receive ids.\n";
+      std::cerr << getClassName() << "::" << __FUNCTION__
+	        << "; failed to receive ids.\n";
     else
       {
         //setTag(getDbTagDataPos(0));
         res+= recvData(cp);
         if(res<0)
-          std::cerr << getClassName() << "::recvSelf - failed to receive data.\n";
+          std::cerr << getClassName() << "::" << __FUNCTION__
+		    << "; failed to receive data.\n";
       }
     return res;
   }
