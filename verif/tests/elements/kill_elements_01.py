@@ -89,8 +89,7 @@ result= analisis.analyze(1)
     
 
 
-nodes.calculateNodalReactions(True)
-nodes= preprocessor.getNodeHandler
+nodes.calculateNodalReactions(True,1e-7)
 nod1= nodes.getNode(1)
 deltax1= nod1.getDisp[0] 
 deltay1= nod1.getDisp[1] 
@@ -111,8 +110,7 @@ analisis= predefined_solutions.simple_static_linear(feProblem)
 result= analisis.analyze(1)
 
 
-nodes.calculateNodalReactions(True)
-nodes= preprocessor.getNodeHandler
+nodes.calculateNodalReactions(True,1e-7)
 nod1= nodes.getNode(1)
 deltaxB1= nod1.getDisp[0] 
 deltayB1= nod1.getDisp[1] 

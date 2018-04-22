@@ -91,7 +91,7 @@ execfile(pth+"/../aux/sol_superlu.py")
 
 
 
-nodes.calculateNodalReactions(True)
+nodes.calculateNodalReactions(True,1e-7)
 R1= nodes.getNode(4).getReaction[1] 
 R2= nodes.getNode(1).getReaction[1] 
 

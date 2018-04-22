@@ -1152,12 +1152,12 @@ bool XC::Mesh::checkNodalReactions(const double &tol)
   {
     bool retval= true;
     const Node *theNode= nullptr;
-    double max_norm_reac= 0.0;
+    double max_norm_reac= 0.1; //Small enough.
     NodeIter &theNodes = this->getNodes();
     while((theNode = theNodes()) != 0)
       if(theNode->getTag()!=tagNodeCheckReactionException)
         max_norm_reac= std::max(max_norm_reac,theNode->getReaction().Norm2()); 
-    
+
     theNode= nullptr;
     NodeIter &theNodes2 = this->getNodes();
     while((theNode = theNodes2()) != 0)

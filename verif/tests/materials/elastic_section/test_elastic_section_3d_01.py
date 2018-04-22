@@ -57,8 +57,7 @@ analisis= predefined_solutions.simple_static_linear(feProblem)
 result= analisis.analyze(1)
 
 nodes= preprocessor.getNodeHandler
-nodes.calculateNodalReactions(True)
-nodes= preprocessor.getNodeHandler
+nodes.calculateNodalReactions(True,1e-7)
 
 RM= nodes.getNode(1).getReaction[5] 
 

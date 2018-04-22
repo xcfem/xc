@@ -132,8 +132,7 @@ result= analysis.analyze(16)
 integ.dU1= 0.0002 #Reload
 result= analysis.analyze(16)
 
-nodes.calculateNodalReactions(True)
-nodes= preprocessor.getNodeHandler
+nodes.calculateNodalReactions(True,1e-7)
 nod2= nodes.getNode(2)
 deltax= nod2.getDisp[0] 
 deltay= nod2.getDisp[1] 

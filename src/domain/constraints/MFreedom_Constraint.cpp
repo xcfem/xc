@@ -164,7 +164,7 @@ bool XC::MFreedom_Constraint::affectsNodeAndDOF(int nodeTag, int theDOF) const
       if(nodeTag== getNodeRetained())
 	{
 	  int loc= getRetainedDOFs().getLocation(theDOF);
-	  if(loc>0)
+	  if(loc>=0)
 	    retval= true;
 	}
     return retval;

@@ -82,7 +82,7 @@ solver= predefined_solutions.SolutionProcedure()
 analisis= solver.simpleTransformationStaticLinear(feProblem)
 result= analisis.analyze(1)
 
-nodes.calculateNodalReactions(False)
+nodes.calculateNodalReactions(False,1e-7)
 
 reactionNode10= n10.getReaction
 ratio1= reactionNode10.Norm()

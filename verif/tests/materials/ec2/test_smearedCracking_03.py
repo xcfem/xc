@@ -160,14 +160,15 @@ lp0.newNodalLoad(2,pointLoad)    #applies the point load on node 2
 casos.addToDomain("0")           #reads load pattern "0" and adds it to the domain
 
 # Solve
-analisis= predefined_solutions.simple_static_modified_newton(problem)
-analOk= analisis.analyze(1)
+solution=  predefined_solutions.SolutionProcedure()
+solution.convergenceTestTol= 1e-3
+analysis= solution.simpleStaticModifiedNewton(problem)
+analOk= analysis.analyze(1)
 
 
 #printing results
 nodes= preprocessor.getNodeHandler
-nodes.calculateNodalReactions(True)
-nodes= preprocessor.getNodeHandler
+nodes.calculateNodalReactions(True,1e-7)
 
 '''
 RN1= nodes.getNode(1).getReaction[0]   #Axial FX reaction (constrained DOF: ux) at node 1
@@ -293,16 +294,16 @@ eps_sm=epsSMax
 w_k=srmax*(eps_sm-eps_cm)
 # print 'crack widths: ',w_k*1e3, ' mm'
 
-xComp= -0.210831899341
-epsCMinComp= -0.000528438250794
-sgCMinComp= -13758795.1371
-epsSMaxComp= 0.000909823792422
-sgSMaxComp= 181964758.484
-hceffComp= 0.12972270022
-roseffComp= 0.0522653320392
-srmaxComp= 0.214063217831
+xComp= -0.206563714084
+epsCMinComp= -0.000534072629205
+sgCMinComp= -13882927.0767
+epsSMaxComp= 0.000951911878497
+sgSMaxComp= 190382375.699
+hceffComp= 0.13
+roseffComp= 0.052153846153
+srmaxComp= 0.214230088496
 eps_cmComp= 4.82744692303e-05
-w_kComp= 0.000184426020443
+w_kComp= 0.000193586322155 # 22-04-2018 to Ana to look: 0.000184426020443
 
 ratio1=(xComp-x)/xComp
 ratio2=(epsCMinComp- epsCMin)/epsCMinComp
@@ -314,6 +315,39 @@ ratio7=(roseffComp-roseff)/roseffComp
 ratio8=(srmaxComp-srmax)/srmaxComp
 ratio9=(eps_cmComp-eps_cm)/eps_cmComp
 ratio10=(w_kComp-w_k)/w_kComp
+
+'''
+print 'x= ', x
+print 'xComp= ', xComp
+print 'ratio1= ', ratio1
+print 'epsCMin= ', epsCMin
+print 'epsCMinComp= ', epsCMinComp
+print 'ratio2= ', ratio2
+print 'sgCMin= ', sgCMin
+print 'sgCMinComp= ', sgCMinComp
+print 'ratio3= ', ratio3
+print 'epsSMax= ', epsSMax
+print 'epsSMaxComp= ', epsSMaxComp
+print 'ratio4= ', ratio4
+print 'sgSMax= ', sgSMax
+print 'sgSMaxComp= ', sgSMaxComp
+print 'ratio5= ', ratio5
+print 'hceff= ', hceff
+print 'hceffComp= ', hceffComp
+print 'ratio6= ', ratio6
+print 'roseff= ', roseff
+print 'roseffComp= ', roseffComp
+print 'ratio7= ', ratio7
+print 'srmax= ', srmax
+print 'srmaxComp= ', srmaxComp
+print 'ratio8= ', ratio8
+print 'eps_cm= ', eps_cm
+print 'eps_cmComp= ', eps_cmComp
+print 'ratio9= ', ratio9
+print 'w_k= ', w_k
+print 'w_kComp= ', w_kComp
+print 'ratio10= ', ratio10
+'''
 
 import os
 from miscUtils import LogMessages as lmsg

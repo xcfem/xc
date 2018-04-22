@@ -94,8 +94,7 @@ TEIy= 0.0
 x= 0.0
 
 nodes= preprocessor.getNodeHandler
-nodes.calculateNodalReactions(True)
-nodes= preprocessor.getNodeHandler
+nodes.calculateNodalReactions(True,1e-7)
 
 RN= nodes.getNode(1).getReaction[0] 
 RM= nodes.getNode(1).getReaction[5] 

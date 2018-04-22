@@ -15,7 +15,7 @@ vI= element_vectors.getVectorIElem(preprocessor, 1) # Vector I of element 1
 vProj= movN2.dot(vI)
 delta= abs(vProj)
 
-nodes.calculateNodalReactions(True)
+nodes.calculateNodalReactions(True,1e-7)
 reacN1= nodal_reactions.vectorReacUVW(preprocessor, 1) # Node 1 reaction
 vReacProj= reacN1.dot(vI)
 RN= abs(vReacProj)

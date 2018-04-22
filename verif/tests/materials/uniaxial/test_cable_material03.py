@@ -79,8 +79,8 @@ analisis= predefined_solutions.simple_newton_raphson(feProblem)
 result= analisis.analyze(10)
 
 
-nodes.calculateNodalReactions(True)
-nodes= preprocessor.getNodeHandler
+nodes.calculateNodalReactions(True,1e-7)
+
 nod3= nodes.getNode(3)
 R1X= nod3.getReaction[0]
 R1Y= nod3.getReaction[1] 

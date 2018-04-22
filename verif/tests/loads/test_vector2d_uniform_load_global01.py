@@ -114,7 +114,7 @@ cargas.addToDomain("0") # Append load pattern to domain.
 analisis= predefined_solutions.simple_newton_raphson(feProblem)
 result= analisis.analyze(1)
 
-nodes.calculateNodalReactions(True) 
+nodes.calculateNodalReactions(True,1e-7) 
 nod2= nodes.getNode(2)
 vDisp= xc.Vector([nod2.getDisp[0],nod2.getDisp[1]])
 nod1= nodes.getNode(1)

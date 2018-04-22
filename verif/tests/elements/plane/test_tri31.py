@@ -78,8 +78,7 @@ analisis= predefined_solutions.simple_static_linear(feProblem)
 analOk= analisis.analyze(1)
 
 
-nodes.calculateNodalReactions(True)
-nodes= preprocessor.getNodeHandler
+nodes.calculateNodalReactions(True,1e-7)
  
 # print "reac node 1: ",reac
 R1x= n1.getReaction[0]

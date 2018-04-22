@@ -2099,9 +2099,10 @@ bool XC::Node::checkReactionForce(const double &tol) const
 				      << " it has a reaction with value: "
 				      << r 
 				      << " on this degree of freedom, it seems "
-				      << "that the solution method or "
+				      << "that the solution method and/or "
 				      << "tolerances are not well suited"
-				      << " to the problem." << std::endl;
+				      << " to the problem."
+				      << " (tol= " << tol << std::endl;
 			  }
 			retval= false;
 		      }

@@ -80,7 +80,7 @@ casos.addToDomain("0")
 analisis= predefined_solutions.simple_static_linear(feProblem)
 result= analisis.analyze(1)
 
-nodes.calculateNodalReactions(True)
+nodes.calculateNodalReactions(True,1e-7)
 
 deltX_nodXYZ=[nodXYZ[i].getDisp[0] for i in range(3)]
 deltY_nodXYZ=[nodXYZ[i].getDisp[1] for i in range(3)]

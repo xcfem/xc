@@ -81,7 +81,7 @@ casos.addToDomain("0")
 analisis= predefined_solutions.simple_static_linear(feProblem)
 result= analisis.analyze(1)
 
-nodes.calculateNodalReactions(True)
+nodes.calculateNodalReactions(True,1e-7)
 R1= nodes.getNode(4).getReaction[1]
 R2= nodes.getNode(1).getReaction[1]
 

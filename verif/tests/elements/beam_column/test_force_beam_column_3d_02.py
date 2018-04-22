@@ -99,7 +99,7 @@ analisis= predefined_solutions.simple_static_modified_newton(feProblem)
 result= analisis.analyze(10)
 
 
-nodes.calculateNodalReactions(True) 
+nodes.calculateNodalReactions(True,1e-7) 
 nod2= nodes.getNode(2)
 delta= nod2.getDisp[1]  # Node 2 xAxis displacement
 nod1= nodes.getNode(1)

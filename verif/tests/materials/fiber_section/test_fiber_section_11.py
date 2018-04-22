@@ -72,7 +72,7 @@ analisis= predefined_solutions.simple_newton_raphson(feProblem)
 analOk= analisis.analyze(10)
 
 nodes= preprocessor.getNodeHandler
-nodes.calculateNodalReactions(True)
+nodes.calculateNodalReactions(True,1e-7)
 
 RN= nodes.getNode(1).getReaction[0] 
 RM= nodes.getNode(1).getReaction[5] 

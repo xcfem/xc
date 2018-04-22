@@ -107,8 +107,7 @@ tagN2= l.lastNode.tag
 index= int(NumDiv/2)+1
 tagN3= l.getNodeI(index).tag
 
-nodes.calculateNodalReactions(True)
-nodes= preprocessor.getNodeHandler
+nodes.calculateNodalReactions(True,1e-7)
 R1X= nodes.getNode(tagN2).getReaction[0]
 R1Y= nodes.getNode(tagN2).getReaction[1] 
 R2X= nodes.getNode(tagN1).getReaction[0]

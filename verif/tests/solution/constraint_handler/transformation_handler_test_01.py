@@ -90,8 +90,7 @@ execfile(pth+"/../../aux/solu_transf_handler.py")
 
 
 
-nodes.calculateNodalReactions(True)
-nodes= preprocessor.getNodeHandler
+nodes.calculateNodalReactions(True,1e-7)
 R1= nodes.getNode(4).getReaction[1] 
 R2= nodes.getNode(1).getReaction[1] 
 

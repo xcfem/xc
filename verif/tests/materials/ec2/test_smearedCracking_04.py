@@ -151,14 +151,18 @@ lp0.newNodalLoad(2,pointLoad)    #applies the point load on node 2
 casos.addToDomain("0")           #reads load pattern "0" and adds it to the domain
 
 # Solve
-#analisis= predefined_solutions.simple_newton_raphson(problem)
-analisis= predefined_solutions.simple_static_modified_newton(problem)
-analOk= analisis.analyze(1)
+solution=  predefined_solutions.SolutionProcedure()
+solution.convergenceTestTol= 1e-2
+analysis= solution.simpleStaticModifiedNewton(problem)
+analOk= analysis.analyze(1)
+# #analisis= predefined_solutions.simple_newton_raphson(problem)
+# analisis= predefined_solutions.simple_static_modified_newton(problem)
+# analOk= analisis.analyze(1)
 
 
 #printing results
 nodes= preprocessor.getNodeHandler
-nodes.calculateNodalReactions(True)
+nodes.calculateNodalReactions(True,1e-6)
 
 '''
 RN1= nodes.getNode(1).getReaction[0]   #Axial FX reaction (constrained DOF: ux) at node 1

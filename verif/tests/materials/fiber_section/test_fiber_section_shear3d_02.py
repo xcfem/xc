@@ -95,8 +95,8 @@ if(analOk!=0):
   exit()
 
 nodes= preprocessor.getNodeHandler
-nodes.calculateNodalReactions(True)
-nodes= preprocessor.getNodeHandler
+nodes.calculateNodalReactions(True,1e-7)
+
 n1= nodes.getNode(1)
 reacN1= n1.getReaction
 

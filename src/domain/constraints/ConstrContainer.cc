@@ -926,11 +926,13 @@ bool XC::ConstrContainer::isDOFAffectedByMPs(int nodeTag, int theDOF) const
     MFreedom_ConstraintIter &theMPs= this_no_const->getMPs();
     MFreedom_Constraint *theMP= nullptr;
     while((theMP= theMPs()) != 0)
-      if(theMP->affectsNodeAndDOF(nodeTag,theDOF))
-        {
-          retval= true;
-          break;
-        }
+      {
+        if(theMP->affectsNodeAndDOF(nodeTag,theDOF))
+          {
+            retval= true;
+            break;
+          }
+      }
     return retval;
   }
 

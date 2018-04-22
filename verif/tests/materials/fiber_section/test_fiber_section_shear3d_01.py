@@ -103,7 +103,7 @@ if(analOk!=0):
 
 
 nodes= preprocessor.getNodeHandler
-nodes.calculateNodalReactions(True)
+nodes.calculateNodalReactions(True,1e-7)
 n1= nodes.getNode(1)
 RVy= n1.getReaction[1] 
 RVz= n1.getReaction[2] 

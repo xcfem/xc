@@ -113,7 +113,7 @@ result= analisis.analyze(10)
 
 
 
-nodes.calculateNodalReactions(True) 
+nodes.calculateNodalReactions(True,1e-7) 
 nod2= nodes.getNode(2)
 delta= nod2.getDisp[0]  # Node 2 xAxis displacement
 nod1= nodes.getNode(1)

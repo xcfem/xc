@@ -16,7 +16,7 @@ def listNodeReactions(preprocessor,nmbComb,nodeListArranque, fmt, fName, encab, 
   idsCampos= "Caso & IdN & Fx & Fy & Fz & Mx & My & Mz \\\\\n - & - & kN & kN & kN & kN m & kN m & kN m "
   cabeceraSupertabular(fName,8,defCampos,idsCampos,caption)
   nodes= preprocessor.getNodeHandler
-  nodes.calculateNodalReactions()
+  nodes.calculateNodalReactions(True,1e-7)
 
   for iNode in nodeListArranque:
     fName.write(nmbComb," & ",iNode," & ")
@@ -40,7 +40,7 @@ def listPointReactions(nmbComb,pointList, fmt, fName, encab, tit):
   idsCampos= "Caso & IdP & IdN & Fx & Fy & Fz & Mx & My & Mz \\\\\n - & - & - & kN & kN & kN & kN m & kN m & kN m "
   cabeceraSupertabular(fName,9,defCampos,idsCampos,caption)
   nodes= preprocessor.getNodeHandler
-  nodes.calculateNodalReactions()
+  nodes.calculateNodalReactions(True,1e-7)
 
   for iArranque in pointList:
     pto= preprocessor.getMultiBlockTopology.getPoint(iArranque)
@@ -63,7 +63,7 @@ def listPointReactionsCSV(preprocessor,nmbComb,pointList, fmt, fName):
   fName.write(" - ; - ; - ; kN ; kN ; kN ; kN m ; kN m ; kN m \n")
 
   nodes= preprocessor.getNodeHandler
-  nodes.calculateNodalReactions()
+  nodes.calculateNodalReactions(True,1e-7)
 
   for iArranque in pointList:
     pto= preprocessor.getMultiBlockTopology.getPoint(iArranque)

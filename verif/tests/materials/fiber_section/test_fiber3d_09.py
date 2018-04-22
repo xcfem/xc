@@ -119,7 +119,7 @@ analisis= predefined_solutions.simple_static_linear(feProblem)
 result= analisis.analyze(1)
 
 
-nodes.calculateNodalReactions(True)
+nodes.calculateNodalReactions(True,1e-7)
 nod2= nodes.getNode(2)
 deltax= nod2.getDisp[0] 
 nod1= nodes.getNode(1)

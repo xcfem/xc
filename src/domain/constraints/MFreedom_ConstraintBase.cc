@@ -109,7 +109,7 @@ bool XC::MFreedom_ConstraintBase::affectsNodeAndDOF(int nodeTag, int theDOF) con
     if(nodeTag== getNodeConstrained())
       {
 	int loc= getConstrainedDOFs().getLocation(theDOF);
-	if(loc>0)
+	if(loc>=0)
 	  retval= true;
       }
     return retval;

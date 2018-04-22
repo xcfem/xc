@@ -164,7 +164,7 @@ bool XC::MRMFreedom_Constraint::affectsNodeAndDOF(int nodeTag, int theDOF) const
           if(nodeTag==rNodes(i))
             {
 	      int loc= getRetainedDOFs().getLocation(theDOF);
-	      if(loc>0)
+	      if(loc>=0)
 		{
 		  retval= true;
                   break;

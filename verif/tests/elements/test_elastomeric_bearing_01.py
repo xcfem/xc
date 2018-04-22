@@ -90,8 +90,7 @@ result= analisis.analyze(1)
 
 
 
-nodes.calculateNodalReactions(True)
-nodes= preprocessor.getNodeHandler
+nodes.calculateNodalReactions(True,1e-7)
 deltax= nod2.getDisp[0]
 deltay= nod2.getDisp[1]
 deltaz= nod2.getDisp[2] 

@@ -184,7 +184,7 @@ analOk= analysis.analyze(1)
 
 
 nodes= preprocessor.getNodeHandler
-nodes.calculateNodalReactions(True)
+nodes.calculateNodalReactions(True,1e-7)
 #nodB.checkReactionForce(0.5)
 
 #section of element 1: it's the copy of the material section 'sctFibers' assigned

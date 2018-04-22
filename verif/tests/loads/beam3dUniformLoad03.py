@@ -74,7 +74,7 @@ analisis= predefined_solutions.simple_static_modified_newton(feProblem)
 result= analisis.analyze(1)
 
 
-nodes.calculateNodalReactions(True)
+nodes.calculateNodalReactions(True,1e-7)
 nod3= nodes.getNode(3)
 delta0= nod3.getDisp[0] 
 delta1= nod3.getDisp[1] 

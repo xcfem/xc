@@ -88,8 +88,7 @@ solver= predefined_solutions.SolutionProcedure()
 analisis= solver.simpleLagrangeStaticLinear(feProblem)
 result= analisis.analyze(1)
 
-nodes.calculateNodalReactions(True)
-nodes= preprocessor.getNodeHandler
+nodes.calculateNodalReactions(True,1e-7)
 R1= nodes.getNode(4).getReaction[1] 
 R2= nodes.getNode(1).getReaction[1] 
 

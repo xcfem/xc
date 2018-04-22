@@ -65,8 +65,8 @@ result= analisis.analyze(1)
 
 
 
-nodes.calculateNodalReactions(True)
-nodes= preprocessor.getNodeHandler
+nodes.calculateNodalReactions(True,1e-7)
+
 R1= nodes.getNode(2).getReaction[0] 
 R2= nodes.getNode(1).getReaction[0] 
 

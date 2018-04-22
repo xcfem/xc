@@ -71,7 +71,7 @@ void XC::ElementBodyLoad::applyLoad(double loadFactor)
 int XC::ElementBodyLoad::removeElement(int tag) 
   {
     int loc = elemTags.getLocation(tag);
-    if(loc >= 0)
+    if(loc>=0)
       {
         elemTags(loc) = -1;
         theElements.removeElement(tag);

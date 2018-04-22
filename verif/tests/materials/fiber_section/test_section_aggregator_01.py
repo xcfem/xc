@@ -113,7 +113,7 @@ analysis= solution.simpleNewtonRaphsonBandGen(feProblem)
 analOk= analysis.analyze(1)
 
 nodes= preprocessor.getNodeHandler
-nodes.calculateNodalReactions(True)
+nodes.calculateNodalReactions(True,1e-7)
 
 RVy= nodes.getNode(1).getReaction[1] 
 RVz= nodes.getNode(1).getReaction[2] 

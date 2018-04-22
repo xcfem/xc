@@ -65,8 +65,7 @@ result= analisis.analyze(1)
 
 
 
-nodes.calculateNodalReactions(True)
-nodes= preprocessor.getNodeHandler
+nodes.calculateNodalReactions(True,1e-7)
 
 nod1= nodes.getNode(1)
 deltax= nod1.getDisp[0]

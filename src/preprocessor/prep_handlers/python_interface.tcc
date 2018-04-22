@@ -30,7 +30,7 @@ class_<XC::NodeHandler, bases<XC::PrepHandler>, boost::noncopyable >("NodeHandle
   .add_property("numDOFs", &XC::NodeHandler::getNumDOFs, &XC::NodeHandler::setNumDOFs,"Number of degrees of freedom per node.")
   .add_property("dimSpace", &XC::NodeHandler::getDimEspacio, &XC::NodeHandler::setDimEspacio, "Espace dimension.")
   .add_property("defaultTag", &XC::NodeHandler::getDefaultTag, &XC::NodeHandler::setDefaultTag,"Starting ID number to apply to the next creation of nodes ")
-  .def("calculateNodalReactions", &XC::NodeHandler::calculateNodalReactions,"\n""calculateNodalReactions(inclInertia)\n""Calculate nodal reaction forces and moments.\n""If inclInertia is True, the unbalance load vector for each node is calculated including inertial forces.\n" "A tolerance of 1e-4 is taken as default value for the checking of the reaction forces and moments. \n")
+  .def("calculateNodalReactions", &XC::NodeHandler::calculateNodalReactions,"\n""calculateNodalReactions(inclInertia, tolerance)\n""Calculate nodal reaction forces and moments.\n""If inclInertia is True, the unbalance load vector for each node is calculated including inertial forces.\n" "A tolerance of 1e-4 is taken as default value for the checking of the reaction forces and moments. \n")
   .def("getNode", &XC::NodeHandler::getNode,return_internal_reference<>(),"\n""getNode(tag)\n""Return the node whose ID is the value tag passed as parameter.")
   .def("newNodeXYZ", newNodeFromXYZ,return_internal_reference<>(),"\n""newNodeXYZ(x,y,z)\n""Create a node from global coordinates (x,y,z).")
   .def("newNodeFromVector", newNodeFromVector,return_internal_reference<>(),"Create a node at the position pointed by the vector passed as parameter.")

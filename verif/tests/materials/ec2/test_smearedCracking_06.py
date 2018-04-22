@@ -151,7 +151,7 @@ analOk= analisis.analyze(1)
 
 #printing results
 nodes= preprocessor.getNodeHandler
-nodes.calculateNodalReactions(True)
+nodes.calculateNodalReactions(True,1e-6)
 
 '''
 RN1= nodes.getNode(1).getReaction[0]   #Axial FX reaction (constrained DOF: ux) at node 1

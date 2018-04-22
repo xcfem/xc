@@ -68,8 +68,8 @@ result= analisis.analyze(1)
 
 
 
-nodes.calculateNodalReactions(True)
-nodes= preprocessor.getNodeHandler
+nodes.calculateNodalReactions(True,1e-7)
+
 R1A= nodes.getNode(2).getReaction[0] 
 R2A= nodes.getNode(1).getReaction[0] 
 
@@ -93,7 +93,7 @@ result= analisis.analyze(1)
 
 
 
-nodes.calculateNodalReactions(True)
+nodes.calculateNodalReactions(True,1e-7)
 R1B= nodes.getNode(2).getReaction[0] 
 R2B= nodes.getNode(1).getReaction[0]
 
