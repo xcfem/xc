@@ -29,13 +29,15 @@
 #include "material/section/repres/DiscretBase.h" 
 #include "material/Material.h" 
 
-
+//! @brief Constructor.
 XC::DiscretBase::DiscretBase(Material *m)
   : mat(m) {}
 
+//! @brief Set the material.
 void XC::DiscretBase::setMaterialPtr(Material *m)
   { mat = m; }
 
+//! @brief Get a pointer to the material.
 XC::Material *XC::DiscretBase::getMaterialPtr(void) const
   { return mat; }
 

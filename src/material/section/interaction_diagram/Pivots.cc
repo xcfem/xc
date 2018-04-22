@@ -41,15 +41,17 @@ bool XC::Pivots::checkPositions(void) const
     const double dAB= dist(pA,pB);
     if(dAB<dMin)
       {
-        std::cerr << "Pivots A= " << pA << " and B= " 
-                  << pB << " too close d= " << dAB << std::endl;
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; pivots A= " << pA << " and B= " 
+                  << pB << " too close; d= " << dAB << std::endl;
         retval= false;
       }
     const double dAC= dist(pA,pC);
     if(dAC<dMin)
       {
-        std::cerr << "Pivots A= " << pA << " and C= " 
-                  << pC << " too close d= " << dAC << std::endl;
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; pivots A= " << pA << " and C= " 
+                  << pC << " too close; d= " << dAC << std::endl;
         retval= false;
       }
     // const double dAD= dist(pA,pD); 
@@ -57,22 +59,25 @@ bool XC::Pivots::checkPositions(void) const
     const double dBC= dist(pB,pC);
     if(dBC<dMin)
       {
-        std::cerr << "Pivots B= " << pB << " and C= " 
-                  << pC << " too close d= " << dBC << std::endl;
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; pivots B= " << pB << " and C= " 
+                  << pC << " too close; d= " << dBC << std::endl;
         retval= false;
       }
     const double dBD= dist(pB,pD);
     if(dBD<dMin)
       {
-        std::cerr << "Pivot B= " << pB << " and point D= " 
-                  << pD << " too close d= " << dBD << std::endl;
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; pivot B= " << pB << " and point D= " 
+                  << pD << " too close; d= " << dBD << std::endl;
         retval= false;
       }
     const double dCD= dist(pC,pD);
     if(dCD<dMin)
       {
-        std::cerr << "Pivot C= " << pC << " and point D= " 
-                  << pD << " too close d= " << dCD << std::endl;
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; pivot C= " << pC << " and point D= " 
+                  << pD << " too close; d= " << dCD << std::endl;
         retval= false;
       }
     return retval;
@@ -91,8 +96,12 @@ XC::Pivots::Pivots(const ComputePivots &cp)
 //! @brief Print pivots definition
 void XC::Pivots::print(std::ostream &os) const
   {
-    os << "pos(A): " << getAPivotPosition() << " epsilon(A)= " << getEpsilonA() << std::endl;
-    os << "pos(B): " << getBPivotPosition() << " epsilon(B)= " << getEpsilonB() << std::endl;
-    os << "pos(C): " << getCPivotPosition() << " epsilon(C)= " << getEpsilonC() << std::endl;
-    os << "pos(D): " << getPointDPosition() << " epsilon(D)= " << getEpsilonD() << std::endl;
+    os << "pos(A): " << getAPivotPosition() << " epsilon(A)= "
+       << getEpsilonA() << std::endl;
+    os << "pos(B): " << getBPivotPosition() << " epsilon(B)= "
+       << getEpsilonB() << std::endl;
+    os << "pos(C): " << getCPivotPosition() << " epsilon(C)= "
+       << getEpsilonC() << std::endl;
+    os << "pos(D): " << getPointDPosition() << " epsilon(D)= "
+       << getEpsilonD() << std::endl;
   }

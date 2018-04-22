@@ -28,22 +28,22 @@
 
 #include <material/section/plate_section/PlateBase.h>
 
-//! @brief Constuctor.
+//! @brief Constructor.
 XC::PlateBase::PlateBase(int tag,int classTag)
   : XC::SectionForceDeformation(tag, classTag), h(0.0) {}
 
-//null constructor
+//! @brief null constructor
 XC::PlateBase::PlateBase(int classTag)
   :XC::SectionForceDeformation( 0, classTag), h(0.0) { }
 
-//full constructor
+//! @brief full constructor
 XC::PlateBase::PlateBase(int tag, int classTag, double thickness)
   :XC::SectionForceDeformation(tag,classTag), h(thickness) {}
 
 //! @brief Returns strain at position being passed as parameter.
 double XC::PlateBase::getStrain(const double &,const double &) const
   {
-    std::cerr << "getStrain not implemented for class: "
-              << getClassName() << std::endl;
+    std::cerr << getClassName() << "::" << __FUNCTION__
+	      << "; not implemented." << std::endl;
     return 0.0;
   }

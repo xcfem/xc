@@ -62,33 +62,38 @@ void XC::Eje::update_topology(void)
 //! @brief Returns a pointer to start point.
 XC::Spot *XC::Eje::P1(void)
   {
-    std::cerr << "Eje::P1; this function must be redefined on derived"
+    std::cerr << getClassName() << "::" << __FUNCTION__
+	      << "; this function must be redefined on derived"
               << " classes, nullptr returned;" << std::endl;
     return nullptr;
   }
 //! @brief Returns a constant pointer to start point.
 const XC::Spot *XC::Eje::P1(void) const
   {
-    std::cerr << "Eje::P1; this function must be redefined on derived"
+    std::cerr << getClassName() << "::" << __FUNCTION__
+	      << "; this function must be redefined on derived"
               << " classes, nullptr returned;" << std::endl;
     return nullptr;
   }
 //! @brief Returns a pointer to end point.
 XC::Spot *XC::Eje::P2(void)
   {
-    std::cerr << "Eje::P2; this function must be redefined on derived"
+    std::cerr << getClassName() << "::" << __FUNCTION__
+	      << "; this function must be redefined on derived"
               << " classes, nullptr returned;" << std::endl;
     return nullptr;
   }
 //! @brief Returns a constant pointer to end point.
 const XC::Spot *XC::Eje::P2(void) const
   {
-    std::cerr << "Eje::P2; his function must be redefined on derived"
+    std::cerr << getClassName() << "::" << __FUNCTION__
+	      << "; his function must be redefined on derived"
               << " classes, nullptr returned;" << std::endl;
     return nullptr;
   }
 
-//! @brief Returns the set of lines that touch the point being passed as parameter.
+//! @brief Return the set of lines that touch the point being passed as
+//! parameter.
 std::set<const XC::Eje *> XC::getLinesThatTouch(const XC::Spot &p)
   {
     std::set<const Eje *> retval;

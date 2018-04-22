@@ -88,15 +88,15 @@ class fibSectFeaturesToplot(object):
             ax2d.plot(y,z,self.colorNeutralAxis,label='Neutral axis')
         #Bending plane
         if self.colorBendingPlane != None:
-            (y,z)=data_axis_to_pyplot(self.fiberSection.getTrazaPlanoFlexion(),self.contour)
+            (y,z)=data_axis_to_pyplot(self.fiberSection.getBendingPlaneTrace(),self.contour)
             ax2d.plot(y,z,self.colorBendingPlane,label='Bending plane')
         #Compression plane
         if self.colorCompressionPlane != None:
-            (y,z)=data_axis_to_pyplot(self.fiberSection.getTrazaPlanoCompresion(),self.contour)
+            (y,z)=data_axis_to_pyplot(self.fiberSection.getCompressedPlaneTrace(),self.contour)
             ax2d.plot(y,z,self.colorCompressionPlane,label='Compression plane')
         #Tension plane
         if self.colorTensionPlane != None:
-            (y,z)=data_axis_to_pyplot(self.fiberSection.getTrazaPlanoTraccion(),self.contour)
+            (y,z)=data_axis_to_pyplot(self.fiberSection.getTensionedPlaneTrace(),self.contour)
             ax2d.plot(y,z,self.colorTensionPlane,label='Tension plane')
         #Internal forces axis
         if self.colorIntForcAxis != None:

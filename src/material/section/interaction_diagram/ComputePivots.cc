@@ -34,8 +34,12 @@
 #include "utility/matrix/Vector.h"
 #include "material/uniaxial/UniaxialMaterial.h"
 
-inline Pos3d getPos3d(const XC::Fiber *t,const double &strain= 0.0)
-  { return Pos3d(strain,t->getLocY(),t->getLocZ()); }
+//! @brief Return a 3D point with coordinates (strain,f.y,f.z) where
+//! f.y and f.z are the coordinates of the centroid of the fiber.
+//! @param f: material fiber.
+//! @param strain: strain at the fiber position.
+inline Pos3d getPos3d(const XC::Fiber *f,const double &strain= 0.0)
+  { return Pos3d(strain,f->getLocY(),f->getLocZ()); }
 
 //! @brief Center for the local reference system
 inline Pos3d getCDG(const XC::FiberDeque &fs)
@@ -52,18 +56,24 @@ Ref3d3d getRef3d(const XC::FiberDeque &fs, const double &theta)
 XC::ComputePivots::ComputePivots(const PivotsUltimateStrains &ap,const FiberContainer &fs,const FiberDeque &fsC,const FiberDeque &fsS,const double &theta)
   : Ref3d3d(getRef3d(fs, theta)), agot_pivots(ap), fibers(fs),CFibers(fsC),SFibers(fsS) {}
 
+//! @brief Return a pointer to the fiber with the minimal y coordinate
+//! from those of the SFibers (steel fibers) set.
 const XC::Fiber *XC::ComputePivots::getFiberSMinY(void) const
   {
     const size_t i= SFibers.getFiberWithMinCoord(*this,2);
     return SFibers[i];
   }
 
+//! @brief Return a pointer to the fiber with the minimal y coordinate
+//! from those of the CFibers (concrete fibers) set.
 const XC::Fiber *XC::ComputePivots::getFiberCMinY(void) const
   {
     const size_t i= CFibers.getFiberWithMinCoord(*this,2);
     return CFibers[i];
   }
 
+//! @brief Return a pointer to the fiber with the maximum y coordinate
+//! from those of the CFibers (concrete fibers) set.
 const XC::Fiber *XC::ComputePivots::getFiberCMaxY(void) const
   {
     const size_t i= CFibers.getFiberWithMaxCoord(*this,2);
@@ -71,7 +81,7 @@ const XC::Fiber *XC::ComputePivots::getFiberCMaxY(void) const
   }
 
 
-//! @brief Returns the points with zero strain in concrete (XXX enhance explanation).
+//! @brief Returns the point with zero strain in concrete (XXX enhance explanation).
 Pos3d XC::ComputePivots::getDPoint(void) const
   {
     Pos3d retval;

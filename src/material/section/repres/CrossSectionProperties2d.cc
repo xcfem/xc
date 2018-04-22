@@ -46,31 +46,36 @@ bool XC::CrossSectionProperties2d::check_values(void)
     bool retval= true;
     if(e <= 0.0)
       {
-        std::clog << "CrossSectionProperties2d::check_values -- Input E <= 0.0 ... setting E to 1.0\n";
+        std::clog << getClassName() << "::" << __FUNCTION__
+		  << "; Input E <= 0.0 ... setting E to 1.0\n";
         e= 1.0;
         retval= false;
       }
     if(g <= 0.0)
       {
-        std::clog << "CrossSectionProperties2d::check_values -- Input G <= 0.0 ... setting G to 1.0\n";
+        std::clog << getClassName() << "::" << __FUNCTION__
+		  << "; Input G <= 0.0 ... setting G to 1.0\n";
         g= 1.0;
         retval= false;
       }
     if(a <= 0.0)
       {
-        std::clog << "CrossSectionProperties2d::check_values -- Input A <= 0.0 ... setting A to 1.0\n";
+        std::clog << getClassName() << "::" << __FUNCTION__
+		  << "; Input A <= 0.0 ... setting A to 1.0\n";
         a= 1.0;
         retval= false;
       }
     if(i <= 0.0)
       {
-        std::clog << "CrossSectionProperties2d::check_values -- Input I <= 0.0 ... setting I to 1.0\n";
+        std::clog << getClassName() << "::" << __FUNCTION__
+		  << "; Input I <= 0.0 ... setting I to 1.0\n";
         i= 1.0;
         retval= false;
       }
     if(alpha <= 0.0)
       {
-        std::clog << "CrossSectionProperties2d::check_values -- Input alpha <= 0.0 ... setting alpha to 1.0\n";
+        std::clog << getClassName() << "::" << __FUNCTION__
+		  << "; Input alpha <= 0.0 ... setting alpha to 1.0\n";
         alpha= 1.0;
         retval= false;
       }
@@ -247,7 +252,8 @@ int XC::CrossSectionProperties2d::sendSelf(CommParameters &cp)
 
     res+= cp.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
-      std::cerr << getClassName() << "sendSelf() - failed to send data\n";
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; failed to send data.\n";
     return res;
   }
 
@@ -259,13 +265,15 @@ int XC::CrossSectionProperties2d::recvSelf(const CommParameters &cp)
     int res= cp.receiveIdData(getDbTagData(),dataTag);
 
     if(res<0)
-      std::cerr << getClassName() << "::recvSelf - failed to receive ids.\n";
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; failed to receive ids.\n";
     else
       {
         //setTag(getDbTagDataPos(0));
         res+= recvData(cp);
         if(res<0)
-          std::cerr << getClassName() << "::recvSelf - failed to receive data.\n";
+          std::cerr << getClassName() << "::" << __FUNCTION__
+		    << "; failed to receive data.\n";
       }
     return res;
   }
@@ -277,6 +285,7 @@ const XC::Matrix& XC::CrossSectionProperties2d::getInitialTangentSensitivity3x3(
     return ks3;
   }
 
+//! @brief Print stuff.
 void XC::CrossSectionProperties2d::Print(std::ostream &s, int flag) const
   {
     if(flag == 2)
@@ -290,6 +299,7 @@ void XC::CrossSectionProperties2d::Print(std::ostream &s, int flag) const
       }
   }
 
+//! @brief Insertion on an output stream.
 std::ostream &XC::operator<<(std::ostream &os,const XC::CrossSectionProperties2d &c)
   {
     c.Print(os);

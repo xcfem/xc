@@ -98,6 +98,7 @@ void XC::ClosedTriangleMesh::writeTo(const std::string &fName)
     out.close();
   }
 
+//! @brief Read from file.
 void XC::ClosedTriangleMesh::readFrom(const std::string &fName)
   {
     std::ifstream input(fName.c_str(), std::ios::in | std::ios::binary);
@@ -315,6 +316,7 @@ GeomObj::list_Pos3d XC::ClosedTriangleMesh::get_intersection(const Pos3d &p) con
     return lst_intersec;
   }
 
+//! @brief Print stuff.
 void XC::ClosedTriangleMesh::Print(std::ostream &os) const
   {
     std::cerr << getClassName() << "::" << __FUNCTION__

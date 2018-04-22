@@ -103,12 +103,14 @@ void XC::Cell::calcCentroidPosition(void)
     Centroid(1)= CGz;
   }
 
+//! @brief Return the coordinates of the centroid.
 const XC::Vector &XC::Cell::getCentroidPosition(void)
   {
     calcCentroidPosition();
     return Centroid;
   }
 
+//! @brief Insertion on an output stream.
 std::ostream &XC::operator<<(std::ostream &s, const XC::Cell &cell)
   {
     cell.Print(s);

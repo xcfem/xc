@@ -149,7 +149,7 @@ const XC::ResponseId &XC::MembranePlateFiberSection::getType(void) const
 
 
 
-//swap history variables
+//! @brief Swap history variables.
 int XC::MembranePlateFiberSection::commitState(void) 
   {
     int success = 0;
@@ -160,7 +160,7 @@ int XC::MembranePlateFiberSection::commitState(void)
 
 
 
-//revert to last saved state
+//! @brief Revert to last commited state.
 int XC::MembranePlateFiberSection::revertToLastCommit(void)
   {
     int success = 0;
@@ -170,7 +170,7 @@ int XC::MembranePlateFiberSection::revertToLastCommit(void)
     return success;
   }
 
-//revert to start
+//! @brief Revert to start.
 int XC::MembranePlateFiberSection::revertToStart(void)
   {
     int success = 0;
@@ -180,7 +180,7 @@ int XC::MembranePlateFiberSection::revertToStart(void)
   }
 
 
-//mass per unit area
+//! @brief Return mass per unit area.
 double XC::MembranePlateFiberSection::getRho(void) const
   {
     double weight;
@@ -193,30 +193,35 @@ double XC::MembranePlateFiberSection::getRho(void) const
     return rhoH;
   }
 
-
+//! @brief Set initial values for deformation.
 int XC::MembranePlateFiberSection::setInitialSectionDeformation(const Vector &strainResultant_from_element)
   {
-    std::cerr << "MembranePlateFiberSection::setInitialSectionDeformation not implemented." << std::endl;
+    std::cerr << getClassName() << "::" << __FUNCTION__
+	      << "; not implemented." << std::endl;
     return 0;
   }
 
+//! @brief Zero initial deformation.
 void XC::MembranePlateFiberSection::zeroInitialSectionDeformation(void)
   {
-    std::cerr << "MembranePlateFiberSection::zeroInitialSectionDeformation not implemented." << std::endl;
+    std::cerr << getClassName() << "::" << __FUNCTION__
+	      << "; not implemented." << std::endl;
   }
 
+//! @brief Return initial deformation.
 const XC::Vector &XC::MembranePlateFiberSection::getInitialSectionDeformation(void) const
   {
-    std::cerr << "MembranePlateFiberSection::getInitialSectionDeformation not implemented." << std::endl;
+    std::cerr << getClassName() << "::" << __FUNCTION__
+	      << "; not implemented." << std::endl;
     return strainResultant;
   }
 
-//receive the strainResultant 
-int XC::MembranePlateFiberSection::setTrialSectionDeformation( const XC::Vector &strainResultant_from_element)
+//! @brief Set trial deformation. 
+int XC::MembranePlateFiberSection::setTrialSectionDeformation(const Vector &strainResultant_from_element)
   {
     this->strainResultant = strainResultant_from_element;
 
-    static XC::Vector strain(5);
+    static Vector strain(5);
 
     int success= 0;
     double z;
@@ -224,60 +229,59 @@ int XC::MembranePlateFiberSection::setTrialSectionDeformation( const XC::Vector 
     for(int i = 0; i < 5; i++ )
       {
         z= ( 0.5*h ) * sg[i];
-        strain(0) =  strainResultant(0)  - z*strainResultant(3);
-        strain(1) =  strainResultant(1)  - z*strainResultant(4);
-        strain(2) =  strainResultant(2)  - z*strainResultant(5);
-        strain(3) =  root56*strainResultant(6);
-        strain(4) =  root56*strainResultant(7);
+        strain(0)=  strainResultant(0)  - z*strainResultant(3);
+        strain(1)=  strainResultant(1)  - z*strainResultant(4);
+        strain(2)=  strainResultant(2)  - z*strainResultant(5);
+        strain(3)=  root56*strainResultant(6);
+        strain(4)=  root56*strainResultant(7);
         success += theFibers[i]->setTrialStrain( strain );
       } //end for i
     return success;
   }
 
 
-//! @brief Returns material's trial generalized deformation.
-const XC::Vector& XC::MembranePlateFiberSection::getSectionDeformation(void) const
+//! @brief Returns section deformation.
+const XC::Vector &XC::MembranePlateFiberSection::getSectionDeformation(void) const
   { return strainResultant; }
 
 
-//send back the stressResultant 
-const XC::Vector&  XC::MembranePlateFiberSection::getStressResultant(void) const
+//! @brief Return stress resultant.
+const XC::Vector &XC::MembranePlateFiberSection::getStressResultant(void) const
   {
-    static XC::Vector stress(5);
-    int i;
-    double z, weight;
+    static Vector stress(5);
+    double z= 0.0, weight= 0.0;
     stressResultant.Zero( );
 
-    for( i = 0; i < 5; i++ )
+    for(int i = 0; i < 5; i++ )
       {
-        z = ( 0.5*h ) * sg[i];
-        weight = ( 0.5*h ) * wg[i];
-        stress = theFibers[i]->getStress( );
+        z= ( 0.5*h ) * sg[i];
+        weight= ( 0.5*h ) * wg[i];
+        stress= theFibers[i]->getStress( );
         //membrane
-        stressResultant(0)  +=  stress(0)*weight;
-        stressResultant(1)  +=  stress(1)*weight;
-        stressResultant(2)  +=  stress(2)*weight;
+        stressResultant(0)+= stress(0)*weight;
+        stressResultant(1)+= stress(1)*weight;
+        stressResultant(2)+= stress(2)*weight;
         //bending moments
-        stressResultant(3)  +=  ( z*stress(0) ) * weight;
-        stressResultant(4)  +=  ( z*stress(1) ) * weight;
-        stressResultant(5)  +=  ( z*stress(2) ) * weight;
+        stressResultant(3)+= ( z*stress(0) ) * weight;
+        stressResultant(4)+= ( z*stress(1) ) * weight;
+        stressResultant(5)+= ( z*stress(2) ) * weight;
         //shear
-        stressResultant(6)  += stress(3)*weight;
-        stressResultant(7)  += stress(4)*weight;
+        stressResultant(6)+= stress(3)*weight;
+        stressResultant(7)+= stress(4)*weight;
       } //end for i
     //modify shear 
-    stressResultant(6) *= root56;  
-    stressResultant(7) *= root56;
+    stressResultant(6)*= root56;  
+    stressResultant(7)*= root56;
     return this->stressResultant;
   }
 
 
 //! @brief Return the tangent stiffness matrix.
-const XC::Matrix&  XC::MembranePlateFiberSection::getSectionTangent(void) const
+const XC::Matrix &XC::MembranePlateFiberSection::getSectionTangent(void) const
   {
-    static XC::Matrix dd(5,5);
-    static XC::Matrix Aeps(5,8);
-    static XC::Matrix Asig(8,5);
+    static Matrix dd(5,5);
+    static Matrix Aeps(5,8);
+    static Matrix Asig(8,5);
 
     double z, weight;
     tangent.Zero( );
@@ -291,33 +295,33 @@ const XC::Matrix&  XC::MembranePlateFiberSection::getSectionTangent(void) const
 
       Aeps.Zero( );
 
-      Aeps(0,0) = 1.0;
-      Aeps(0,3) = -z;
+      Aeps(0,0)= 1.0;
+      Aeps(0,3)= -z;
 
-      Aeps(1,1) = 1.0;
-      Aeps(1,4) = -z;
+      Aeps(1,1)= 1.0;
+      Aeps(1,4)= -z;
 
-      Aeps(2,2) = 1.0;
-      Aeps(2,5) = -z;
+      Aeps(2,2)= 1.0;
+      Aeps(2,5)= -z;
 
-      Aeps(3,6) = root56;
-      Aeps(4,7) = root56;
+      Aeps(3,6)= root56;
+      Aeps(4,7)= root56;
 
       //compute Asig
 
       Asig.Zero( );
 
-      Asig(0,0) = 1.0;
-      Asig(3,0) = z;
+      Asig(0,0)= 1.0;
+      Asig(3,0)= z;
 
-      Asig(1,1) = 1.0;
-      Asig(4,1) = z;
+      Asig(1,1)= 1.0;
+      Asig(4,1)= z;
 
-      Asig(2,2) = 1.0;
-      Asig(5,2) = z;
+      Asig(2,2)= 1.0;
+      Asig(5,2)= z;
 
-      Asig(6,3) = root56;
-      Asig(7,4) = root56;
+      Asig(6,3)= root56;
+      Asig(7,4)= root56;
 */
       //compute the tangent
       dd = theFibers[i]->getTangent( );
@@ -428,7 +432,7 @@ const XC::Matrix&  XC::MembranePlateFiberSection::getSectionTangent(void) const
   return this->tangent;
 }
 
-//print out data
+//! @brief Print out data
 void  XC::MembranePlateFiberSection::Print( std::ostream &s, int flag )
   {
     s << "MembranePlateFiberSection: \n ";
@@ -465,6 +469,7 @@ int XC::MembranePlateFiberSection::recvData(const CommParameters &cp)
     return res;
   }
 
+//! @brief Send object itself through the communicator argument.
 int XC::MembranePlateFiberSection::sendSelf(CommParameters &cp)
   {
     setDbTag(cp);
@@ -474,11 +479,13 @@ int XC::MembranePlateFiberSection::sendSelf(CommParameters &cp)
 
     res+= cp.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
-      std::cerr << getClassName() << "sendSelf() - failed to send data\n";
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; failed to send data.\n";
     return res;
   }
 
 
+//! @brief Receive object itself through the communicator argument.
 int XC::MembranePlateFiberSection::recvSelf(const CommParameters &cp)
   {
     inicComm(3);
@@ -486,13 +493,15 @@ int XC::MembranePlateFiberSection::recvSelf(const CommParameters &cp)
     int res= cp.receiveIdData(getDbTagData(),dataTag);
 
     if(res<0)
-      std::cerr << getClassName() << "::recvSelf - failed to receive ids.\n";
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; failed to receive ids.\n";
     else
       {
         setTag(getDbTagDataPos(0));
         res+= recvData(cp);
         if(res<0)
-          std::cerr << getClassName() << "::recvSelf - failed to receive data.\n";
+          std::cerr << getClassName() << "::" << __FUNCTION__
+		    << "; failed to receive data.\n";
       }
     return res;
   }

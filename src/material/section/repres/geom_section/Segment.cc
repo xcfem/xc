@@ -61,13 +61,13 @@ void XC::Segment::setEndPoints(size_t idP1, size_t idP2)
   {
     p1= BuscaSpot(idP1);
     if(!p1)
-      std::cerr << "Segment::setEndPoints, point: '" 
-                << idP1 << "' not found \n";
+      std::cerr << getClassName() << "::" << __FUNCTION__
+	        << "; point: '" << idP1 << "' not found \n";
     update_topology();
     p2= BuscaSpot(idP2);
     if(!p2)
-      std::cerr << "Segment::setEndPoints, point: '" 
-                << idP2 << "' not found \n";
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; point: '" << idP2 << "' not found \n";
     update_topology();
   }
 
@@ -98,7 +98,7 @@ void XC::Segment::SetVertice(const size_t &i,Spot *p)
       p2= p;    
   }
 
-//! @brief Returns the intervalo 2D ocupado por el segmento.
+//! @brief Returns the 2D interval occupied by the segment.
 BND2d XC::Segment::Bnd(void) const
   {
     BND2d retval;
@@ -107,21 +107,23 @@ BND2d XC::Segment::Bnd(void) const
     return retval;
   }
 
-//! @brief Interfaz con VTK.
+//! @brief VTK interface.
 int XC::Segment::getVtkCellType(void) const
   { return VTK_LINE; }
 
-//! @brief Interfaz con el formato MED de Salome.
+//! @brief MED interface.
 int XC::Segment::getMEDCellType(void) const
   { return MED_SEG2; }
 
+//! @brief Return segment length.
 double XC::Segment::getLong(void) const
   {
     double retval= -1;
     if(p1 && p2)
       retval= dist(p1->GetPos(),p2->GetPos());
     else
-      std::cerr << "Endpoint not defined in line: '" << getName()
-                 << std::endl;
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; endpoint not defined in line: '" << getName()
+                << std::endl;
     return retval;
   }

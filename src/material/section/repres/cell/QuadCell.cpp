@@ -55,11 +55,11 @@
 
 #include <material/section/repres/cell/QuadCell.h>
 
-//! @briet Constructor
+//! @brief Constructor
 XC::QuadCell::QuadCell(void)
   : Cell(4) {}
 
-//! @briet Constructor
+//! @brief Constructor
 XC::QuadCell::QuadCell(const XC::Matrix &vertexCoords)
   : Cell(vertexCoords) {}
 
@@ -83,6 +83,7 @@ double XC::QuadCell::getArea(void) const
 	     (x0-x3)*(y2-y3) - (x2-x3)*(y0-y3)) / 2.0);
   }
 
+//! @brief Print stuff.
 void XC::QuadCell::Print(std::ostream &s, int flag) const
   {
     s << "\nCell Type: QuadCell";

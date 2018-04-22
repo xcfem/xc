@@ -1258,15 +1258,15 @@ Segmento2d XC::FiberDeque::getSegmentoBrazoMecanico(void) const
 
 //! @brief Return the intercept of the bending plane with
 //! the plane that contains the section.
-Recta2d XC::FiberDeque::getTrazaPlanoFlexion(void) const
+Recta2d XC::FiberDeque::getBendingPlaneTrace(void) const
   { return getSegmentoBrazoMecanico().RectaSoporte(); }
 
 //! @brief Return the intercept of a plane perpendicular to the
 //! bending plane through the tensions centroid with the plane
 //! that contains the section.
-Recta2d XC::FiberDeque::getTrazaPlanoTraccion(void) const
+Recta2d XC::FiberDeque::getTensionedPlaneTrace(void) const
   { 
-    const Recta2d trazaFlexion= getTrazaPlanoFlexion();
+    const Recta2d bendingTrace= getBendingPlaneTrace();
     Pos2d pt(getYCdg(),getZCdg());
     const double epsMax= getStrainMax();
     if(epsMax>0) //There are tractions.
@@ -1274,15 +1274,15 @@ Recta2d XC::FiberDeque::getTrazaPlanoTraccion(void) const
         const Vector &T= baricentroTracciones();
         pt= Pos2d(T[0],T[1]);
       }
-    return trazaFlexion.Perpendicular(pt);
+    return bendingTrace.Perpendicular(pt);
   }
 
 //! @brief Return the intercept of a plane perpendicular to the
 //! bending plane through the compressions centroid with the plane
 //! that contains the section.
-Recta2d XC::FiberDeque::getTrazaPlanoCompresion(void) const
+Recta2d XC::FiberDeque::getCompressedPlaneTrace(void) const
   { 
-    const Recta2d trazaFlexion= getTrazaPlanoFlexion();
+    const Recta2d bendingTrace= getBendingPlaneTrace();
     Pos2d pt(getYCdg(),getZCdg());
     const double epsMin= getStrainMin();
     if(epsMin<0) //There are compresions.
@@ -1290,7 +1290,7 @@ Recta2d XC::FiberDeque::getTrazaPlanoCompresion(void) const
         const Vector &C= baricentroCompresiones();
         pt= Pos2d(C[0],C[1]);
       }
-    return trazaFlexion.Perpendicular(pt);
+    return bendingTrace.Perpendicular(pt);
   }
 
 //! @brief Return the lever arm of forces in the section.

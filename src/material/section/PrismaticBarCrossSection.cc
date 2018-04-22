@@ -90,6 +90,13 @@ XC::DeformationPlane XC::PrismaticBarCrossSection::getDeformationPlane(void) con
     const Vector df= getSectionDeformation();
     std::cout << "   section deformation: " << df << std::endl; 
     DeformationPlane retval= DeformationPlane(df);
+    std::cout << "   deformation plane: " << retval << std::endl;
+    const Pos2d p0(0.0,0.0);
+    const Pos2d p1(1.0,0.0);
+    const Pos2d p2(0.0,1.0);
+    std::cout << "   p0: " << retval.x(p0) << std::endl;
+    std::cout << "   p1: " << retval.x(p1) << std::endl;
+    std::cout << "   p2: " << retval.x(p2) << std::endl;
     return retval;
   }
 

@@ -213,13 +213,13 @@ checkNA=zNA-x
 ratio3=(checkNA-depth/2.)/(depth/2.)
 
 #Bending plane (parallel to section's Z-axis)
-slopeBP=sccEl1.getTrazaPlanoFlexion().getParamA()
+slopeBP=sccEl1.getBendingPlaneTrace().getParamA()
 #Compression plane (parallel to section's Y-axis)
-zCP=sccEl1.getTrazaPlanoCompresion().getParamB()
+zCP=sccEl1.getCompressedPlaneTrace().getParamB()
 zCPTeor=0.2357870029282825
 ratio4=(zCP-zCPTeor)/zCP
 #Tension plane (parallel to section's Y-axis)
-zTP=sccEl1.getTrazaPlanoTraccion().getParamB()
+zTP=sccEl1.getTensionedPlaneTrace().getParamB()
 zTPTeor=-0.248
 ratio5=(zTP-zTPTeor)/zTP
 #Internal forces axis (uniaxial bending, parallel to section's Y-axis)

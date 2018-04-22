@@ -100,13 +100,15 @@ const XC::Spot *XC::EntGeomSection::BuscaSpot(const size_t &id_point) const
         retval= getGeomSection()->busca_spot(id_point);
       }
     else
-      std::cerr << "XC::EntGeomSection::BuscaSpot: the object: '" 
-                << getName() << "' no tiene asignado GeomSection."
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; geometry of the section not set for the object: '" 
+                << getName() << "'."
                 << std::endl;
     return retval;
   }
 
-//! @brief Returns a pointer to the Eje indentified by the tag being passed as parameter.
+//! @brief Returns a pointer to the Eje indentified by the tag being passed
+//! as parameter.
 XC::Eje *XC::EntGeomSection::BuscaEje(const size_t &id_Eje)
   {
     Eje *retval= nullptr;
@@ -115,8 +117,9 @@ XC::Eje *XC::EntGeomSection::BuscaEje(const size_t &id_Eje)
         retval= getGeomSection()->busca_eje(id_Eje);
       }
     else
-      std::cerr << "XC::EntGeomSection::BuscaEje: the object: '"
-                << getName() << "' no tiene asignado GeomSection."
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; geometry of the section not set for the object: '" 
+                << getName() << "'."
                 << std::endl;
     return retval;
   }
@@ -130,19 +133,21 @@ const XC::Eje *XC::EntGeomSection::BuscaEje(const size_t &id_Eje) const
         retval= getGeomSection()->busca_eje(id_Eje);
       }
     else
-      std::cerr << "XC::EntGeomSection::BuscaEje: the object: '" 
-                << getName() << "' no tiene asignado GeomSection."
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; geometry of the section not set for the object: '" 
+                << getName() << "'."
                 << std::endl;
     return retval;
   }
 
-//! @brief Interfaz con VTK.
+//! @brief VTK interface.
 int XC::EntGeomSection::getVtkCellType(void) const
   {
-    std::cerr << "EntGeomSection::getVtkCellType: function getVtkCellType must be overloaded on derived classes." << std::endl;
+    std::cerr << getClassName() << "::" << __FUNCTION__
+	      << " must be overloaded on derived classes." << std::endl;
     return VTK_EMPTY_CELL;
   } 
 
-//! @brief Interfaz con el formato MED de Salome.
+//! @brief MED interface.
 int XC::EntGeomSection::getMEDCellType(void) const
   { return MED_NONE; }

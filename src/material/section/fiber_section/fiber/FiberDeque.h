@@ -150,9 +150,9 @@ class FiberDeque : public EntCmd, public std::deque<Fiber *>
     Vector getVectorBrazoMecanico(void) const;
     Segmento2d getSegmentoBrazoMecanico(void) const;
     double getMechanicLeverArm(void) const;
-    Recta2d getTrazaPlanoFlexion(void) const;
-    Recta2d getTrazaPlanoTraccion(void) const;
-    Recta2d getTrazaPlanoCompresion(void) const;
+    Recta2d getBendingPlaneTrace(void) const;
+    Recta2d getTensionedPlaneTrace(void) const;
+    Recta2d getCompressedPlaneTrace(void) const;
     double computeFibersEffectiveConcreteArea(const std::list<Poligono2d> &,const double &factor= 15) const;
     const std::list<Poligono2d> &getFiberEffectiveConcretAreaContour(const size_t &i) const;
     double getFiberEffectiveConcreteArea(const size_t &i) const;

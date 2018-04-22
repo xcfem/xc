@@ -247,7 +247,7 @@ double XC::FiberSectionBase::getLeverArm(void) const
     double retval= 0.0;
     const GeomSection *geom= getGeomSection();
     if(geom)
-      retval= geom->getLeverArm(getTrazaPlanoFlexion());
+      retval= geom->getLeverArm(getBendingPlaneTrace());
     return retval;
   }
 
@@ -311,7 +311,7 @@ double XC::FiberSectionBase::getTensionedZoneDepth(void) const
         if(comp.exists())
           retval= geom->getTensionedZoneDepth(comp);
         else //Full section is in tension.
-          retval= geom->getLeverArm(getTrazaPlanoFlexion());
+          retval= geom->getLeverArm(getBendingPlaneTrace());
       }
     return retval;
   }
@@ -800,9 +800,9 @@ Segmento2d XC::FiberSectionBase::getSegmentoCantoUtil(void) const
 
 //! @brief Returns the intercept of the bending plane with the
 //! plane that contains the cross section.
-Recta2d XC::FiberSectionBase::getTrazaPlanoFlexion(void) const
+Recta2d XC::FiberSectionBase::getBendingPlaneTrace(void) const
   {
-    Recta2d retval= fibers.getTrazaPlanoFlexion();
+    Recta2d retval= fibers.getBendingPlaneTrace();
     if(!retval.exists())
       {
         Recta2d eje= getEjeEsfuerzos();
@@ -815,9 +815,9 @@ Recta2d XC::FiberSectionBase::getTrazaPlanoFlexion(void) const
 //! @brief Returns the intercept of a plane perpendicular to the bending
 //! plane through the centroid of the tensioned fibers with the
 //! plane that contains the cross section.
-Recta2d XC::FiberSectionBase::getTrazaPlanoTraccion(void) const
+Recta2d XC::FiberSectionBase::getTensionedPlaneTrace(void) const
   {
-    Recta2d retval= fibers.getTrazaPlanoTraccion();
+    Recta2d retval= fibers.getTensionedPlaneTrace();
     if(!retval.exists())
       std::cerr << getClassName() << "::" << __FUNCTION__
 		<< "; intercept of the tension plane not found." << std::endl;
@@ -827,9 +827,9 @@ Recta2d XC::FiberSectionBase::getTrazaPlanoTraccion(void) const
 //! @brief Returns the intercept of a plane perpendicular to the bending
 //! plane through the centroid of the compressed fibers with the
 //! plane that contains the cross section.
-Recta2d XC::FiberSectionBase::getTrazaPlanoCompresion(void) const
+Recta2d XC::FiberSectionBase::getCompressedPlaneTrace(void) const
   {
-    Recta2d retval= fibers.getTrazaPlanoCompresion();
+    Recta2d retval= fibers.getCompressedPlaneTrace();
     if(!retval.exists())
       std::cerr << getClassName() << "::" << __FUNCTION__
 		<< "; intercept of the compression plane not found."
@@ -844,7 +844,7 @@ double XC::FiberSectionBase::getAnchoMecanico(void) const
     double retval= 0.0;
     const GeomSection *geom= getGeomSection();
     if(geom)
-      retval= geom->getAnchoMecanico(getTrazaPlanoFlexion());
+      retval= geom->getAnchoMecanico(getBendingPlaneTrace());
     return retval;
   }
 

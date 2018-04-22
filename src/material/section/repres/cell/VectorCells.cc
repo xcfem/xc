@@ -97,9 +97,13 @@ void XC::VectorCells::resize(const size_t sz)
       (*this)[i]= nullptr;
   }
 
+//! @brief Put the cell in the i-th position.
+//! @param i: cell index.
+//! @param c: cell value.
 void XC::VectorCells::put(const size_t i,const Cell &c)
   { alloc(i,c); }
 
+//! @brief Print stuff.
 void XC::VectorCells::Print(std::ostream &os) const
   {
     for(const_iterator i= begin();i!=end();i++)

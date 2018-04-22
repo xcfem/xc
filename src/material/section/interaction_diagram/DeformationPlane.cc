@@ -167,10 +167,10 @@ Recta2d XC::DeformationPlane::getNeutralAxis(void)const
     Recta2d retval;
     if(a>1e-4)
       {
-        Recta3d traza= TrazaYZ();
-	std::cout << "traza= " << traza << std::endl;
-        if(traza.exists())
-          retval= traza.YZ2DProjection();
+        Recta3d trace= YZTrace();
+	std::cout << "trace= " << trace << std::endl;
+        if(trace.exists())
+          retval= trace.YZ2DProjection();
       }
     else //Almost parallel: can't find intersection.
       retval.setExists(false);
@@ -179,9 +179,14 @@ Recta2d XC::DeformationPlane::getNeutralAxis(void)const
     std::cout << "Strain(" << p1 << ")= " << Strain(p1) << std::endl;
     const Pos2d p2= retval.PtoParametricas(1.0);
     std::cout << "Strain(" << p2 << ")= " << Strain(p2) << std::endl;
-    const Pos2d p3= Pos2d(1.0,1.0);
+    const Pos2d p3(1.0,1.0);
     std::cout << "Strain(" << p3 << ")= " << Strain(p3) << std::endl;
-    
+
+    const Pos2d pA(1,0.132635); //= -6.90366e-05
+    std::cout << "Strain(" << pA << ")= " << Strain(pA) << std::endl;
+    const Pos2d pB(26,0.132635); //= -6.90366e-05
+    std::cout << "Strain(" << pB << ")= " << Strain(pB) << std::endl;
+    //const Strain(x= 1,y= 1)= -0.00268892
     //Testing ends LCPT 21042018
     std::cout << getClassName() << "::" << __FUNCTION__
 	      << " returns:" << retval << std::endl;

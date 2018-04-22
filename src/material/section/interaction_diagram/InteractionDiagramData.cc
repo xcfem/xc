@@ -36,7 +36,9 @@ XC::InteractionDiagramData::InteractionDiagramData(void)
   {
     inc_eps= agot_pivots.getIncEpsAB(); //Strain increment.
     if(inc_eps<=1e-6)
-      std::cerr << "Strain increment too small (or negative): " << inc_eps << std::endl; 
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; strain increment too small (or negative): "
+		<< inc_eps << std::endl; 
   }
 
 XC::InteractionDiagramData::InteractionDiagramData(const double &u,const double &inc_e,const double &inc_theta,const PivotsUltimateStrains &agot)

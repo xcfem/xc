@@ -54,7 +54,7 @@ double XC::TriangCell::getArea(void) const
     return (((x2-x1)*(y0-y1) - (x0-x1)*(y2-y1)) / 2.0);
   }
 
-//! @brief Imprime la celda.
+//! @brief Print stuff.
 void XC::TriangCell::Print(std::ostream &s, int flag) const
   {
     s << "\nCell Type: TriangCell";

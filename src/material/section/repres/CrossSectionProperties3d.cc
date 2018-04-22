@@ -45,17 +45,19 @@ bool XC::CrossSectionProperties3d::check_values(void)
     bool retval= true;
     if(iy <= 0.0)
       {
-        std::cerr << "CrossSectionProperties3d::check_values -- Input Iy <= 0.0 ... setting Iy to 1.0\n";
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; Input Iy <= 0.0 ... setting Iy to 1.0\n";
         iy= 1.0;
         retval= false;
       }
     if(j <= 0.0)
       {
-        std::cerr << "CrossSectionProperties3d::check_values -- Input J <= 0.0 ... setting J to 1.0\n";
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; Input J <= 0.0 ... setting J to 1.0\n";
         j= 1.0;
         retval= false;
       }
-    if(retval) //Hasta ahora cumple.
+    if(retval) //it's ok so far.
       retval= CrossSectionProperties2d::check_values();
     return retval;
   }
@@ -296,7 +298,8 @@ int XC::CrossSectionProperties3d::sendSelf(CommParameters &cp)
 
     res+= cp.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
-      std::cerr << getClassName() << "sendSelf() - failed to send data\n";
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; failed to send data.\n";
     return res;
   }
 
@@ -308,17 +311,20 @@ int XC::CrossSectionProperties3d::recvSelf(const CommParameters &cp)
     int res= cp.receiveIdData(getDbTagData(),dataTag);
 
     if(res<0)
-      std::cerr << getClassName() << "::recvSelf - failed to receive ids.\n";
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; failed to receive ids.\n";
     else
       {
         //setTag(getDbTagDataPos(0));
         res+= recvData(cp);
         if(res<0)
-          std::cerr << getClassName() << "::recvSelf - failed to receive data.\n";
+          std::cerr << getClassName() << "::" << __FUNCTION__
+		    << "; failed to receive data.\n";
       }
     return res;
   }
 
+//! @brief Print stuff.
 void XC::CrossSectionProperties3d::Print(std::ostream &s, int flag) const
   {
     if(flag == 2)

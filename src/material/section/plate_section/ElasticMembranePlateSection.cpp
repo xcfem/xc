@@ -76,29 +76,29 @@
 // strain(7): shear 2nd axis. 
 
 
-//null constructor
+//! @brief Constructor
 XC::ElasticMembranePlateSection::ElasticMembranePlateSection(int tag)
   : ElasticPlateProto<8>(tag, SEC_TAG_ElasticMembranePlateSection) {}
 
-//null constructor
+//! @brief Constructor.
 XC::ElasticMembranePlateSection::ElasticMembranePlateSection(void)
   : ElasticPlateProto<8>(0,SEC_TAG_ElasticMembranePlateSection) {}
 
 
-//full constructor
+//! @brief Constructor
 XC::ElasticMembranePlateSection::ElasticMembranePlateSection(int tag,double young,double poisson,double thickness,double r )
   : ElasticPlateProto<8>(tag, SEC_TAG_ElasticMembranePlateSection,young,poisson,thickness), rhoH(r*thickness)
   {}
 
-//! @brief make a clone of this material
+//! @brief Make a clone of this material
 XC::SectionForceDeformation*  XC::ElasticMembranePlateSection::getCopy(void) const
   { return new ElasticMembranePlateSection(*this); }
 
-//! @brief density per unit area
+//! @brief Density per unit area
 double XC::ElasticMembranePlateSection::getRho(void) const
   { return rhoH; }
 
-//! @brief assigns density per unit area
+//! @brief Asigns density per unit area
 void XC::ElasticMembranePlateSection::setRho(const double &r)
   { rhoH= r; }
 
@@ -237,6 +237,7 @@ int XC::ElasticMembranePlateSection::recvData(const CommParameters &cp)
     return res;
   }
 
+//! @brief Send the object itself through the communicator argument.
 int XC::ElasticMembranePlateSection::sendSelf(CommParameters &cp) 
   {
     setDbTag(cp);
@@ -246,11 +247,12 @@ int XC::ElasticMembranePlateSection::sendSelf(CommParameters &cp)
 
     res+= cp.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
-      std::cerr << getClassName() << "sendSelf() - failed to send data\n";
+      std::cerr << getClassName() << "::" << __FUNCTION__
+	        << "; failed to send data.\n";
     return res;
   }
 
-
+//! @brief Receive the object itself through the communicator argument.
 int XC::ElasticMembranePlateSection::recvSelf(const CommParameters &cp)
   {
     inicComm(9);
@@ -258,12 +260,14 @@ int XC::ElasticMembranePlateSection::recvSelf(const CommParameters &cp)
     int res= cp.receiveIdData(getDbTagData(),dataTag);
 
     if(res<0)
-      std::cerr << getClassName() << "::recvSelf - failed to receive ids.\n";
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; failed to receive ids.\n";
     else
       {
         res+= recvData(cp);
         if(res<0)
-          std::cerr << getClassName() << "::recvSelf - failed to receive data.\n";
+          std::cerr << getClassName() << "::" << __FUNCTION__
+		    << "; failed to receive data.\n";
       }
     return res;
   }

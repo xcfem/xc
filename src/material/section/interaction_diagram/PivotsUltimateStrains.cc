@@ -28,25 +28,32 @@
 
 #include "PivotsUltimateStrains.h"
 
-
+//! @brief Constructor.
 XC::PivotsUltimateStrains::PivotsUltimateStrains(const double &eA,const double &eB,const double &eC)
  : eps_agot_A(eA), eps_agot_B(eB), eps_agot_C(eC) {}
 
+//! @brief Return ultimate strain for the A pivot.
 const double &XC::PivotsUltimateStrains::getDefAgotPivotA(void) const
   { return eps_agot_A; }
 
+//! @brief Return ultimate strain for the B pivot.
 const double &XC::PivotsUltimateStrains::getDefAgotPivotB(void) const
   { return eps_agot_B; }
 
+//! @brief Return ultimate strain for the C pivot.
 const double &XC::PivotsUltimateStrains::getDefAgotPivotC(void) const
   { return eps_agot_C; }
 
+//! @brief Set ultimate strain for the A pivot.
 void XC::PivotsUltimateStrains::setDefAgotPivotA(const double &v)
   { eps_agot_A= v; }
+//! @brief Set ultimate strain for the B pivot.
 void XC::PivotsUltimateStrains::setDefAgotPivotB(const double &v)
   { eps_agot_B= v; }
+//! @brief Set ultimate strain for the C pivot.
 void XC::PivotsUltimateStrains::setDefAgotPivotC(const double &v)
   { eps_agot_C= v; }
 
+//! @brief Return the strain increment between A end B pivots.
 const double XC::PivotsUltimateStrains::getIncEpsAB(const double &ndiv) const
   { return (eps_agot_A-eps_agot_B)/ndiv; }

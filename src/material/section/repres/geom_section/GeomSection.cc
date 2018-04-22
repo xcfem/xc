@@ -195,7 +195,8 @@ XC::Spot *XC::GeomSection::newSpot(const Pos2d &p)
         if(sr)
           trfP= sr->GetPosGlobal(p); //Pass to global coordinates.
         else
-	  std::cerr << "Reference system with identifier: "
+	  std::cerr << getClassName() << "::" << __FUNCTION__
+		    << "; reference system with identifier: "
 		    << tag_sis_ref << " not found.\n";
        }
     Spot *retval= creaSpot(trfP);
@@ -270,13 +271,13 @@ Poligono2d XC::GeomSection::getCompressedZoneContour(const Semiplano2d &sp_compr
 
 //! @brief Return the working cross-section lever arm from the position
 //! of the half-plane being passed as parameter.
-//! @param trazaPF: Intersection of the bending plane with the plane that
+//! @param PFtrace: Trace of the bending plane with over plane that
 //! contains the cross section.
-double XC::GeomSection::getLeverArm(const Recta2d &trazaPF) const
+double XC::GeomSection::getLeverArm(const Recta2d &PFtrace) const
   {
     Poligono2d contour= getRegionsContour();
     Pos2d C= contour.Cdg();
-    Semiplano2d sp(trazaPF.Perpendicular(C));
+    Semiplano2d sp(PFtrace.Perpendicular(C));
     const size_t num_vertices= contour.GetNumVertices();
     double d= 0.0,dpos= 0.0,dneg=0.0;    
     for(register size_t i=1;i<=num_vertices;i++)
@@ -362,7 +363,7 @@ std::vector<double> XC::GeomSection::getLongsCorte(const std::list<Recta2d> &lr)
 
 //! @brief Return the section width for the bending plane intersect
 //! being passed as parameter.
-double XC::GeomSection::getAnchoMecanico(const Recta2d &traza_plano_flexion) const
+double XC::GeomSection::getAnchoMecanico(const Recta2d &bending_plane_trace) const
   {
     const Poligono2d contour= append_mid_points(getRegionsContour());
     const size_t num_vertices= contour.GetNumVertices();
@@ -371,7 +372,7 @@ double XC::GeomSection::getAnchoMecanico(const Recta2d &traza_plano_flexion) con
     Segmento2d ancho;
     for(register size_t i=1;i<=num_vertices;i++)
       {
-        perp= traza_plano_flexion.Perpendicular(contour.Vertice(i));
+        perp= bending_plane_trace.Perpendicular(contour.Vertice(i));
         ancho= contour.Clip(perp);
         d= ancho.Longitud();
         if(d>dmax)
