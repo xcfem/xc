@@ -124,7 +124,7 @@ class QuickGraphics(object):
           n.setProp('propToDisp',n.getDisp[vCompDisp])
       field= Fields.ScalarField('propToDisp',"getProp",None,fConvUnits)
       defDisplay= self.getDisplay(vwName=viewName,hCamF= hCamFct)
-      defDisplay.displayMesh(xcSet=self.xcSet,field=field,diagrams= None, fName=fileName,caption=self.loadCaseName+' '+itemToDisp+' '+unitDescription+' '+self.xcSet.description,defFScale=defFScale)
+      defDisplay.displayMesh(xcSets=self.xcSet,field=field,diagrams= None, fName=fileName,caption=self.loadCaseName+' '+itemToDisp+' '+unitDescription+' '+self.xcSet.description,defFScale=defFScale)
 
     def displayIntForc(self,itemToDisp='',setToDisplay=None,fConvUnits=1.0,unitDescription= '',viewName='XYZPos',hCamFct=1.0,fileName=None,defFScale=0.0):
       '''displays the component of internal forces in the 
