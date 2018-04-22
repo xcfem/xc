@@ -123,7 +123,6 @@ class RecordDefDisplayEF(vtk_grafico_base.RecordDefDisplay):
                 vtx.InsertNextId(vIndex)
             if(e.getVtkCellType!= vtk.VTK_VERTEX):
                 self.gridRecord.uGrid.InsertNextCell(e.getVtkCellType,vtx)
-        #Load constraints (FAILS)
         setConstraints= eSet.getConstraints
         for c in setConstraints:
             vtx= vtk.vtkIdList()
@@ -180,7 +179,7 @@ class RecordDefDisplayEF(vtk_grafico_base.RecordDefDisplay):
         self.VtkDefineNodesActor(nodeSize)
         self.VtkDefineElementsActor("surface",field)
 
-    def displayMesh(self, xcSets, field= None, diagrams= None, fName= None, caption= '',defFScale=0.0,nodeSize=0.01,scaleConstr=0.2):
+    def displayMesh(self, xcSets, field= None, diagrams= None, fName= None, caption= '',defFScale=0.0,nodeSize=0.01,scaleConstr=0.2,viewName="XYZPos"):
         '''Display the finite element mesh 
 
         :param xcSets: set or list of sets to be displayed
@@ -195,11 +194,14 @@ class RecordDefDisplayEF(vtk_grafico_base.RecordDefDisplay):
                     initial/undeformed shape)
         :param nodeSize: size of the points that represent nodes (defaults to
                     0.01)
-        :param scaleConstr: scale of SPContraints symbols (defaults to 0.2)
+        :param scaleConstr: scale of SPConstraints symbols (defaults to 0.2)
+        :param viewName: name of the view that contains the renderer 
+                         (defaults to "XYZPos")
         '''
-        print 'aquí 0'
+        
         self.renderer= vtk.vtkRenderer()
         self.renderer.SetBackground(self.bgRComp,self.bgGComp,self.bgBComp)
+        self.viewName=viewName
         if type(xcSets) ==list:
             for s in xcSets:
                 self.defineMeshActorsSet(s,field,defFScale,nodeSize)

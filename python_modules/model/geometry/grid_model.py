@@ -316,6 +316,63 @@ class GridModel(object):
           p.getPos.z+= slopeX*(p.getPos.x-xZeroSlope)+slopeY*(p.getPos.y-yZeroSlope)
         sPtMove.clear()
 
+    def scaleCoorXPointsRange(self,ijkRange,xOrig,scale):
+        '''Applies a scale in X with origin xOrig (fixed axis: X=xOrig) 
+        to the points in a 3D grid-region limited by 
+        ijkRange.ijkMin=(indXmin,indYmin,indZmin) and
+        ijkRange.ijkMax=(indXmax,indYmax,indZmax). Only X coordinate
+        of points is modified in the following way:
+        x_scaled=xOrig+scale*(x_inic-xOrig)
+
+        :param ijkRange: range for the search.
+        :param xOrig: origin X to apply scale (point in axis X=xOrig)
+                      are not affected by the transformation 
+        :param scale: scale to apply to X coordinate
+
+        '''
+        sPtXscale=self.getSetPntRange(ijkRange,'sPtXscale')
+        for p in sPtXscale.getPoints:
+            xpt=p.getPos.x
+            p.getPos.x= xOrig+scale*(xpt-xOrig)
+        sPtXscale.clear()
+
+    def scaleCoorYPointsRange(self,ijkRange,yOrig,scale):
+        '''Applies a scale in Y with origin yOrig (fixed axis: y=yOrig) 
+        to the points in a 3D grid-region limited by 
+        ijkRange.ijkMin=(indXmin,indYmin,indZmin) and
+        ijkRange.ijkMax=(indXmax,indYmax,indZmax). Only Y coordinate
+        of points is modified in the following way:
+        y_scaled=yOrig+scale*(y_inic-yOrig)
+
+        :param ijkRange: range for the search.
+        :param yOrig: origin Y to apply scale (point in axis Y=yOrig)
+                      are not affected by the transformation 
+        :param scale: scale to apply to Y coordinate
+        '''
+        sPtYscale=self.getSetPntRange(ijkRange,'sPtYscale')
+        for p in sPtYscale.getPoints:
+            ypt=p.getPos.y
+            p.getPos.y= yOrig+scale*(ypt-yOrig)
+        sPtYscale.clear()
+
+    def scaleCoorZPointsRange(self,ijkRange,zOrig,scale):
+        '''Applies a scale in Z with origin zOrig (fixed axis: z=zOrig) 
+        to the points in a 3D grid-region limited by 
+        ijkRange.ijkMin=(indXmin,indYmin,indZmin) and
+        ijkRange.ijkMax=(indXmax,indYmax,indZmax). Only Z coordinate
+        of points is modified in the following way:
+        z_scaled=zOrig+scale*(z_inic-zOrig)
+
+        :param ijkRange: range for the search.
+        :param zOrig: origin Z to apply scale (point in axis Z=zOrig)
+                      are not affected by the transformation 
+        :param scale: scale to apply to Z coordinate
+        '''
+        sPtZscale=self.getSetPntRange(ijkRange,'sPtZscale')
+        for p in sPtZscale.getPoints:
+            zpt=p.getPos.z
+            p.getPos.z= zOrig+scale*(zpt-zOrig)
+        sPtZscale.clear()
 
     def newQuadGridSurface(self,surfName):
         '''Generate the quadrangle surface defined by the 4 vertex whose tags
