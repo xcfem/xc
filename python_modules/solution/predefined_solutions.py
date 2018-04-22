@@ -163,7 +163,7 @@ class SolutionProcedure(object):
     self.solAlgo= self.analysisAggregation.newSolutionAlgorithm("modified_newton_soln_algo")
     self.integ= self.analysisAggregation.newIntegrator("load_control_integrator",xc.Vector([]))
     self.ctest= self.analysisAggregation.newConvergenceTest("relative_total_norm_disp_incr_conv_test")
-    self.ctest.tol= 0.01 #Make this configurable
+    self.ctest.tol= self.convergenceTestTol
     self.ctest.maxNumIter= 150 #Make this configurable
     self.soe= self.analysisAggregation.newSystemOfEqn("sparse_gen_col_lin_soe")
     self.solver= self.soe.newSolver("super_lu_solver")
@@ -250,6 +250,7 @@ def simple_newton_raphson_band_gen(prb):
 
 def simple_static_modified_newton(prb):
   solution= SolutionProcedure()
+  solution.convergenceTestTol=  0.01 #Make this configurable
   return solution.simpleStaticModifiedNewton(prb)
 
 def penalty_newton_raphson(prb):

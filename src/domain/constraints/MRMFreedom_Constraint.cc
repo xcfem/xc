@@ -152,6 +152,28 @@ bool XC::MRMFreedom_Constraint::affectsNode(int nodeTag) const
     return retval;
   }
 
+//! @brief Returns true if the constraint affects the node and DOF arguments.
+bool XC::MRMFreedom_Constraint::affectsNodeAndDOF(int nodeTag, int theDOF) const
+  {
+    bool retval= MFreedom_ConstraintBase::affectsNodeAndDOF(nodeTag,theDOF);
+    if(!retval)
+      {
+        const ID &rNodes= getRetainedNodeTags();
+        const size_t sz= rNodes.Size();
+        for(size_t i= 0;i<sz;i++)
+          if(nodeTag==rNodes(i))
+            {
+	      int loc= getRetainedDOFs().getLocation(theDOF);
+	      if(loc>0)
+		{
+		  retval= true;
+                  break;
+		}
+            }
+      }
+    return retval;
+  }
+
 //! @brief Returns a vector with the pointers to the retained nodes.
 std::vector<XC::Node *> XC::MRMFreedom_Constraint::getPointersToRetainedNodes(void) const
   {

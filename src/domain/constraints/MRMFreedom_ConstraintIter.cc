@@ -24,58 +24,35 @@
 // along with this program.
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
-//SFreedom_ConstraintIter.cc
+//MRMFreedom_ConstraintIter.cc
 
 
-#include "SFreedom_ConstraintIter.h"
-#include <domain/constraints/SFreedom_Constraint.h>
-
-//! @brief Search on the container the constraint with the node and degree
-//! of freedom being passed as parameter.
-XC::SFreedom_Constraint *XC::SFreedom_ConstraintIter::search(int theNode, int theDOF)
-  {
-    SFreedom_Constraint *retval= nullptr;
-    SFreedom_Constraint *theSP= nullptr;
-    bool found= false;
-    int spTag= 0;
-    while((found == false) && ((theSP= (*this)()) != nullptr))
-      {
-        int nodeTag= theSP->getNodeTag();
-        int dof= theSP->getDOF_Number();
-        if(nodeTag == theNode && dof == theDOF)
-          {
-            spTag= theSP->getTag();
-	    retval= theSP;
-            found= true;
-          }
-      }
-    return retval;
-  }
-
+#include "MRMFreedom_ConstraintIter.h"
+#include "domain/constraints/MRMFreedom_Constraint.h"
 
 //! @brief Search on the container all the constraints with the node and
 //! degree of freedom being passed as parameter.
-std::deque<int> XC::SFreedom_ConstraintIter::searchAll(int theNode, int theDOF) const  
+std::deque<int> XC::MRMFreedom_ConstraintIter::searchAll(int theNode, int theDOF) const  
   {
     std::deque<int> retval;
 
-    SFreedom_Constraint *theSP= nullptr;
-    SFreedom_ConstraintIter *this_no_const= const_cast<SFreedom_ConstraintIter *>(this);
-    while(((theSP= (*this_no_const)()) != nullptr))
-      if(theSP->affectsNodeAndDOF(theNode,theDOF))
-        retval.push_back(theSP->getTag());
+    MRMFreedom_Constraint *theMRMFreedom= nullptr;
+    MRMFreedom_ConstraintIter *this_no_const= const_cast<MRMFreedom_ConstraintIter *>(this);
+    while(((theMRMFreedom= (*this_no_const)()) != nullptr))
+      if(theMRMFreedom->affectsNodeAndDOF(theNode,theDOF))
+        retval.push_back(theMRMFreedom->getTag());
     return retval;
   }
 
 //! @brief Search on the container all the constraints that affect the node being passed as parameter.
-std::deque<int> XC::SFreedom_ConstraintIter::searchAll(int theNode) const
+std::deque<int> XC::MRMFreedom_ConstraintIter::searchAll(int theNode) const
   {
     std::deque<int> retval;
 
-    SFreedom_Constraint *theSP= nullptr;
-    SFreedom_ConstraintIter *this_no_const= const_cast<SFreedom_ConstraintIter *>(this);
-    while(((theSP= (*this_no_const)()) != nullptr))
-      if(theSP->affectsNode(theNode))
-        retval.push_back(theSP->getTag());
+    MRMFreedom_Constraint *theMRMFreedom= nullptr;
+    MRMFreedom_ConstraintIter *this_no_const= const_cast<MRMFreedom_ConstraintIter *>(this);
+    while(((theMRMFreedom= (*this_no_const)()) != nullptr))
+      if(theMRMFreedom->affectsNode(theNode))
+        retval.push_back(theMRMFreedom->getTag());
     return retval;
   }

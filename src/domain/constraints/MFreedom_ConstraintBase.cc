@@ -102,6 +102,19 @@ bool XC::MFreedom_ConstraintBase::affectsNode(int nodeTag) const
     return (nodeTag== getNodeConstrained());
   }
 
+//! @brief Returns true if the constraint affects the node and DOF arguments.
+bool XC::MFreedom_ConstraintBase::affectsNodeAndDOF(int nodeTag, int theDOF) const
+  {
+    bool retval= false;
+    if(nodeTag== getNodeConstrained())
+      {
+	int loc= getConstrainedDOFs().getLocation(theDOF);
+	if(loc>0)
+	  retval= true;
+      }
+    return retval;
+  }
+
 //! @brief Returns the identifiers of the constrained degrees of fredom.
 const XC::ID &XC::MFreedom_ConstraintBase::getConstrainedDOFs(void) const
   {

@@ -45,4 +45,5 @@ class_<XC::Domain, bases<XC::ObjWithRecorders>, boost::noncopyable >("Domain", n
   .def("setTime",&XC::Domain::setTime,"sets the time on the time tracker.")  
   .def("setRayleighDampingFactors",&XC::Domain::setRayleighDampingFactors,"sets the Rayleigh damping factors.")  
   .def("calculateNodalReactions",&XC::Domain::calculateNodalReactions,"triggers nodal reaction calculation.")  
+  .def("checkNodalReactions",&XC::Domain::checkNodalReactions,"checkNodalReactions(tolerande): check that reactions at nodes correspond to constrained degrees of freedom.")  
   ;

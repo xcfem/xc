@@ -2058,23 +2058,58 @@ int XC::Node::addReactionForce(const Vector &add, double factor)
     return 0;
   }
 
-//! @brief Checks reaction on the node.
-void XC::Node::checkReactionForce(const double &tol)
+//! @brief Checks that reactions on the node correspond to
+//! constrained degrees of freedom.
+bool XC::Node::checkReactionForce(const double &tol) const
   {
+    bool retval= true;
     const ConstrContainer &cc= getDomain()->getConstraints();
     const double norm2= reaction.Norm2();
     if(norm2>tol)
       {
-        if(!cc.nodeAffectedBySPsOMPs(getTag()) && !isFrozen())
-          std::cerr << getClassName() << "::" << __FUNCTION__
-		    << "the node: " << getTag()
-                    << " has not constraints and however"
-                    << " is has a reaction with value: " << reaction 
-                    << " and norm: " << sqrt(norm2)
-                    << " it seems that the solution method "
-	            << "is not well suited to the problem."
-                    << std::endl;
+	const std::string errHeader= getClassName() + "::" + __FUNCTION__;
+	if(!isFrozen())
+	  {
+	    const int nTag= getTag();
+	    if(!cc.nodeAffectedByConstraints(nTag))
+	      {
+		std::cerr << errHeader << "; the node: " << getTag()
+			  << " has not constraints and however"
+			  << " is has a reaction with value: " << reaction 
+			  << " and norm: " << sqrt(norm2)
+			  << " it seems that the solution method"
+			  << " is not well suited to the problem."
+			  << std::endl;
+		retval= false;
+	      }
+	    else
+	      {
+		const size_t sz= reaction.Size();
+                for(size_t nDOF= 0;nDOF<sz;nDOF++)
+		  {
+		    const double r= fabs(reaction[nDOF]);
+		    if(r>tol)
+		      {
+			const bool affectedDOF= cc.isDOFAffectedByConstraints(nTag,nDOF);
+			if(!affectedDOF)
+			  {
+			    std::cerr << errHeader << "; the node: " << getTag()
+				      << " has not constraints on DOF: "
+				      << nDOF << " and, however,"
+				      << " it has a reaction with value: "
+				      << r 
+				      << " on this degree of freedom, it seems "
+				      << "that the solution method or "
+				      << "tolerances are not well suited"
+				      << " to the problem." << std::endl;
+			  }
+			retval= false;
+		      }
+		  }// for
+	      }
+	  }
       }
+    return retval;
   }
 
 //! @brief Calculate the reactions in this node (used in en Domain::calculateNodalReactions).

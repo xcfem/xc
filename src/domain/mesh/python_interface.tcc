@@ -45,6 +45,8 @@ class_<XC::Mesh, bases<XC::MeshComponentContainer>, boost::noncopyable >("Mesh",
   .def("getNumFreeNodes", &XC::Mesh::getNumFreeNodes,"Returns the number of free nodes.")
   .def("freezeDeadNodes",&XC::Mesh::freeze_dead_nodes,"Restrain movement of dead nodes. Syntax: freezeDeadNodes(lockerName)")
   .def("meltAliveNodes",&XC::Mesh::melt_alive_nodes,"Allows movement of melted nodes.")
+  .def("calculateNodalReactions",&XC::Mesh::calculateNodalReactions,"triggers nodal reaction calculation.")
+  .def("checkNodalReactions",&XC::Mesh::checkNodalReactions,"checkNodalReactions(tolerande): check that reactions at nodes correspond to constrained degrees of freedom.")
   .add_property("getElementIter", make_function( &XC::Mesh::getElements, return_internal_reference<>() ),"returns an iterator over the elements of the mesh.")
   .def("getElement", make_function(getElementPtr, return_internal_reference<>() ),"Returns an element from its identifier.")
   .def("getNumElements", &XC::Mesh::getNumElements,"Returns the number of elements.")

@@ -96,6 +96,7 @@ class MRMFreedom_Constraint: public MFreedom_ConstraintBase
     int getNumConstrainedDofs(void) const;           
     int getNumLagrangeDofs(void) const;
     bool affectsNode(int ) const;
+    bool affectsNodeAndDOF(int , int ) const;
     virtual int applyConstraint(double pseudoTime);
 
     int addResistingForceToNodalReaction(bool inclInertia);

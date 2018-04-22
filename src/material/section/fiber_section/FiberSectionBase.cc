@@ -201,14 +201,7 @@ int XC::FiberSectionBase::setTrialSectionDeformation(const Vector &deforms)
 const XC::Vector &XC::FiberSectionBase::getSectionDeformation(void) const
   {
     static Vector retval;
-    std::cout << getClassName() << "::" << __FUNCTION__
-              << " starts." << std::endl;
-    
     retval= eTrial-eInic;
-    std::cout << "  eTrial= " << eTrial << std::endl;
-    std::cout << "  eInic= " << eInic << std::endl;
-    std::cout << getClassName() << "::" << __FUNCTION__
-              << " retval= " << retval << std::endl;
     return retval;
   }
 
@@ -285,8 +278,6 @@ double XC::FiberSectionBase::getCompressedZoneDepth(const Recta2d &r) const
 double XC::FiberSectionBase::getCompressedZoneDepth(void) const
   {
     double retval= 0.0;
-    std::cout << getClassName() << "::" << __FUNCTION__
-	      << " starts." << std::endl;
     const GeomSection *geom= getGeomSection();
     if(geom)
       {
@@ -301,8 +292,6 @@ double XC::FiberSectionBase::getCompressedZoneDepth(void) const
                       << std::endl;
           }
        }
-    std::cout << getClassName() << "::" << __FUNCTION__
-	      << " returns: " << retval << std::endl;
     return retval;
   }
 

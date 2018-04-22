@@ -160,36 +160,16 @@ const XC::Vector &XC::DeformationPlane::getDeformation(const size_t &order,const
 //! @brief Return the neutral axis.
 Recta2d XC::DeformationPlane::getNeutralAxis(void)const
   {
-    std::cout << getClassName() << "::" << __FUNCTION__
-	      << " starts." << std::endl;
     const double a= angulo(*this,PlanoYZ3d);
-    std::cout << "a= " << a << std::endl;
     Recta2d retval;
     if(a>1e-4)
       {
         Recta3d trace= YZTrace();
-	std::cout << "trace= " << trace << std::endl;
         if(trace.exists())
           retval= trace.YZ2DProjection();
       }
     else //Almost parallel: can't find intersection.
       retval.setExists(false);
-    //Testing begins LCPT 21042018
-    const Pos2d p1= retval.PtoParametricas(0.0);
-    std::cout << "Strain(" << p1 << ")= " << Strain(p1) << std::endl;
-    const Pos2d p2= retval.PtoParametricas(1.0);
-    std::cout << "Strain(" << p2 << ")= " << Strain(p2) << std::endl;
-    const Pos2d p3(1.0,1.0);
-    std::cout << "Strain(" << p3 << ")= " << Strain(p3) << std::endl;
-
-    const Pos2d pA(1,0.132635); //= -6.90366e-05
-    std::cout << "Strain(" << pA << ")= " << Strain(pA) << std::endl;
-    const Pos2d pB(26,0.132635); //= -6.90366e-05
-    std::cout << "Strain(" << pB << ")= " << Strain(pB) << std::endl;
-    //const Strain(x= 1,y= 1)= -0.00268892
-    //Testing ends LCPT 21042018
-    std::cout << getClassName() << "::" << __FUNCTION__
-	      << " returns:" << retval << std::endl;
     return retval;
   }
 
@@ -314,15 +294,11 @@ Semiplano2d XC::DeformationPlane::getCompressedHalfPlane(const Recta2d &r) const
 //! @brief Returns the compressed half plane.
 Semiplano2d XC::DeformationPlane::getCompressedHalfPlane(void) const
   {
-    std::cout << getClassName() << "::" << __FUNCTION__
-	      << " starts." << std::endl;
     const Recta2d fn= getNeutralAxis();
     bool exists= fn.exists();
     Semiplano2d retval;
     if(exists)
       retval= getCompressedHalfPlane(fn);
-    std::cout << getClassName() << "::" << __FUNCTION__
-	      << " returns: " << retval << std::endl;
     return retval;
   }
 

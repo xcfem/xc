@@ -82,7 +82,6 @@ class MFreedom_ConstraintBase: public Constraint
     //! @brief Return the identifier of the constrained node.
     virtual inline int &getNodeConstrained(void)
       { return constrNodeTag; }
-    bool affectsNode(int ) const;
     virtual const ID &getRetainedDOFs(void) const= 0;            
     virtual const ID &getConstrainedDOFs(void) const;        
     virtual const Matrix &getConstraint(void) const;
@@ -91,6 +90,8 @@ class MFreedom_ConstraintBase: public Constraint
 
     bool isTimeVarying(void) const;
 
+    bool affectsNode(int ) const;
+    bool affectsNodeAndDOF(int theNode, int theDOF) const;
     int addResistingForceToNodalReaction(bool inclInertia);
 
     virtual void Print(std::ostream &s, int flag =0);

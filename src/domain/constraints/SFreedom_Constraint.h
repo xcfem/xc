@@ -104,6 +104,7 @@ class SFreedom_Constraint: public Constraint
     SFreedom_Constraint *getCopy(const int &) const;
 
     virtual int getDOF_Number(void) const;
+    virtual bool affectsNodeAndDOF(int , int ) const;
     virtual int applyConstraint(double loadFactor);    
     virtual double getValue(void) const;
     virtual bool isHomogeneous(void) const;

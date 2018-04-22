@@ -141,6 +141,14 @@ XC::SFreedom_Constraint *XC::SFreedom_Constraint::getCopy(const int &spTag) cons
 int XC::SFreedom_Constraint::getDOF_Number(void) const
   { return dofNumber; }
 
+//! @brief Returns true if the constraint affects the node and DOF arguments.
+bool XC::SFreedom_Constraint::affectsNodeAndDOF(int nodeTag, int theDOF) const
+  {
+    bool retval= false;
+    if(affectsNode(nodeTag))
+      retval= (theDOF==dofNumber);
+    return retval;
+  }
 
 //! @brief Returns the value of the prescribed displacement.
 //! 

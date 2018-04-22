@@ -218,9 +218,10 @@ XC::Node *XC::NodeHandler::getNode(const int &tag)
   { return getDomain()->getNode(tag); }
 
 //! @brief Calculate nodal reaction forces and moments.
-//! @param inclInertia: if True, the unbalance load vector for each node is calculated including inertial forces.
+//! @param inclInertia: if True, the unbalance load vector for each node
+//! is calculated including inertial forces.
 void XC::NodeHandler::calculateNodalReactions(bool inclInertia)
   {
-    getDomain()->calculateNodalReactions(inclInertia,1e-4);
+    getDomain()->calculateNodalReactions(inclInertia,1e-7);
   }
 

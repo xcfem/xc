@@ -156,6 +156,20 @@ XC::MFreedom_Constraint::MFreedom_Constraint(int tag, int nodeRetain, int nodeCo
 bool XC::MFreedom_Constraint::affectsNode(int nodeTag) const
   { return ( (nodeTag== getNodeConstrained()) || (nodeTag== getNodeRetained()));}
 
+//! @brief Returns true if the constraint affects the node and DOF arguments.
+bool XC::MFreedom_Constraint::affectsNodeAndDOF(int nodeTag, int theDOF) const
+  {
+    bool retval= MFreedom_ConstraintBase::affectsNodeAndDOF(nodeTag,theDOF);
+    if(!retval)
+      if(nodeTag== getNodeRetained())
+	{
+	  int loc= getRetainedDOFs().getLocation(theDOF);
+	  if(loc>0)
+	    retval= true;
+	}
+    return retval;
+  }
+
 //! @brief Returns the identifiers of the retained degrees of freedom.
 const XC::ID &XC::MFreedom_Constraint::getRetainedDOFs(void) const
   {

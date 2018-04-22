@@ -42,7 +42,6 @@ from materials import typical_materials
 from materials.sections.fiber_section import fiber_sets
 from materials.sections.fiber_section import sectionReport 
 import matplotlib.pyplot as plt
-import numpy as np
 from materials.ec2 import EC2_limit_state_checking
 
 #Data from the experiment
@@ -62,7 +61,6 @@ ro_s_eff=0.05215      #effective ratio of reinforcement
 
 
 M_y=-300e3      #bending moment [Nm]
-M_z=-50e3      #bending moment [Nm]
 
 
 
@@ -85,9 +83,8 @@ nodes= preprocessor.getNodeHandler     #nodes container
 modelSpace= predefined_spaces.StructuralMechanics3D(nodes)  #Defines the dimension of nodes  three coordinates (x,y,z) and six DOF for each node (Ux,Uy,Uz,thetaX,thetaY,thetaZ)
 
 
-nodes.defaultTag= 1 #First node number.
-nod= nodes.newNodeXYZ(1.0,0,0)     #node 1 defined by its (x,y,z) global coordinates
-nod= nodes.newNodeXYZ(1.0+l,0,0)   #node 2 defined by its (x,y,z) global coordinates
+nodA= nodes.newNodeXYZ(1.0,0.0,0.0)     #node A defined by its (x,y) global coordinates
+nodB= nodes.newNodeXYZ(1.0+l,0.0,0.0)   #node B defined by its (x,y) global coordinates
 
 # Materials definition
 concrete=EC2_materials.C30 #concrete according to EC2 fck=30 MPa      
@@ -154,13 +151,12 @@ sctFibers.setupFibers()
 elements= preprocessor.getElementHandler
 elements.defaultMaterial='sctFibers'
 elements.dimElem= 3 # Dimension of element space
-elements.defaultTag= 1
-elem= elements.newElement("ZeroLengthSection",xc.ID([1,2]))
+ele1= elements.newElement("ZeroLengthSection",xc.ID([nodA.tag,nodB.tag]))
 
 # Constraints
 constraints= preprocessor.getBoundaryCondHandler      #constraints container
-modelSpace.fixNode000_000(1)
-modelSpace.fixNodeF00_0FF(2)
+modelSpace.fixNode000_000(nodA.tag)
+modelSpace.fixNodeF00_0FF(nodB.tag)
 # Loads definition
 cargas= preprocessor.getLoadHandler   #loads container
 
@@ -172,27 +168,25 @@ casos.currentTimeSeries= "ts"
 #Load case definition
 lp0= casos.newLoadPattern("default","0")
 
-pointLoad=xc.Vector([0,0,0,0,M_y,0])  #flexión simple
-#pointLoad=xc.Vector([0,0,0,0,M_y,M_z])  #flexión esviada
+pointLoad= xc.Vector([0.0,0.0,0.0,0,M_y,0.0])  #flexión simple recta
 
-lp0.newNodalLoad(2,pointLoad)    #applies the point load on node 2 
+lp0.newNodalLoad(nodB.tag,pointLoad)    #applies the point load on node B 
 
 #We add the load case to domain.
 casos.addToDomain("0")           #reads load pattern "0" and adds it to the domain
 
 # Solve
-analisis= predefined_solutions.simple_static_modified_newton(problem)
-analOk= analisis.analyze(1)
+solution=  predefined_solutions.SolutionProcedure()
+solution.convergenceTestTol= 1e-7
+analysis= solution.simpleStaticModifiedNewton(problem)
+#analysis= predefined_solutions.simple_static_modified_newton(problem)
+analOk= analysis.analyze(1)
 
 
-#printing results
 nodes= preprocessor.getNodeHandler
 nodes.calculateNodalReactions(True)
-nodes= preprocessor.getNodeHandler
+#nodB.checkReactionForce(0.5)
 
-
-elements= preprocessor.getElementHandler
-ele1= elements.getElement(1)
 #section of element 1: it's the copy of the material section 'sctFibers' assigned
 #to element 1 and specific of this element. It has the tensional state of the element
 sccEl1= ele1.getSection()         
@@ -200,13 +194,19 @@ fibersSccEl1= sccEl1.getFibers()
 
 #Creation of two separate sets of fibers: concrete and reinforcement steel 
 setsRCEl1= fiber_sets.fiberSectionSetupRCSets(scc=sccEl1,concrMatTag=concrete.matTagK,concrSetName="concrSetFbEl1",reinfMatTag=rfSteel.matTagK,reinfSetName="reinfSetFbEl1")
+
+#Equilibrium.
+RNA= nodA.getReaction[0]
+RNB= nodB.getReaction[0]
+ratio0= math.sqrt(RNA**2+RNB**2)/(width*depth*f_ck)
+
 #Neutral axis depth
 x= sccEl1.getNeutralAxisDepth()
-xTeor=-0.16736546757622459
+xTeor= -0.184594790641
 ratio1=(x-xTeor)/x
 #Neutral axis plane (parallel to section's Y-axis)
 zNA=sccEl1.getNeutralAxis().getParamB()
-zNATeor=0.13263453242377543
+zNATeor= 0.115405209359 #0.13263453242377543
 ratio2=(zNA-zNATeor)/zNA
 #checking neutral axis depth vs. neutral axis plane calculations
 checkNA=zNA-x
@@ -216,7 +216,7 @@ ratio3=(checkNA-depth/2.)/(depth/2.)
 slopeBP=sccEl1.getBendingPlaneTrace().getParamA()
 #Compression plane (parallel to section's Y-axis)
 zCP=sccEl1.getCompressedPlaneTrace().getParamB()
-zCPTeor=0.2357870029282825
+zCPTeor= 0.237277791614
 ratio4=(zCP-zCPTeor)/zCP
 #Tension plane (parallel to section's Y-axis)
 zTP=sccEl1.getTensionedPlaneTrace().getParamB()
@@ -228,7 +228,7 @@ zIFATeor=0.0
 ratio6=zIFA-zIFATeor
 #Lever arm
 levArm=sccEl1.getSegmentoBrazoMecanico().getLongitud()
-levArmTeor=0.4837870029282826
+levArmTeor= 0.485277791614
 ratio7=(levArm-levArmTeor)/levArm
 #Lever arm
 levArm2=sccEl1.getMechanicLeverArm()
@@ -250,17 +250,22 @@ zEffConcA=sccEl1.getEffectiveConcreteAreaLimitLine(heffmax_EC2).getParamB()
 zEffConcATeor=-(depth/2.-heffmax_EC2)
 ratio13=(zEffConcA-zEffConcATeor)/zEffConcA
 
+'''
+print 'ratio0= ', ratio0
 print 'x= ', x
 print 'xTeor= ', xTeor
 print 'ratio1= ', ratio1
 print 'zNA=', zNA
 print 'zNATeor=', zNATeor
 print 'ratio2= ', ratio2
-'''
 print 'ratio3= ', ratio3
+print 'zCP=', zCP
+print 'zCPTeor=', zCPTeor
 print 'ratio4= ', ratio4
 print 'ratio5= ', ratio5
 print 'ratio6= ', ratio6
+print 'levArm=', levArm
+print 'levArmTeor=', levArmTeor
 print 'ratio7= ', ratio7
 print 'ratio8= ', ratio8
 print 'ratio9= ', ratio9
@@ -273,7 +278,7 @@ print 'ratio13= ', ratio13
 import os
 from miscUtils import LogMessages as lmsg
 fname= os.path.basename(__file__)
-if((abs(ratio1)<1e-5) & (abs(slopeBP)>1e15) & (abs(ratio3)<1e-5) & (abs(ratio4)<1e-5) & (abs(ratio5)<1e-5) & (abs(ratio6)<1e-5) & (abs(ratio7)<1e-5) & (abs(ratio8)<1e-5) & (abs(ratio9)<1e-5) & (abs(ratio10)<1e-5) & (abs(ratio11)<1e-5) & (abs(ratio12)<1e-5)  & (abs(ratio13)<1e-5)  )  :
+if((abs(ratio0)<1e-7) & (abs(ratio1)<1e-5) & (abs(slopeBP)>1e15) & (abs(ratio3)<1e-5) & (abs(ratio4)<1e-5) & (abs(ratio5)<1e-5) & (abs(ratio6)<1e-5) & (abs(ratio7)<1e-5) & (abs(ratio8)<1e-5) & (abs(ratio9)<1e-5) & (abs(ratio10)<1e-5) & (abs(ratio11)<1e-5) & (abs(ratio12)<1e-5)  & (abs(ratio13)<1e-5)  )  :
   print "test ",fname,": ok."
 else:
   lmsg.error(fname+' ERROR.')

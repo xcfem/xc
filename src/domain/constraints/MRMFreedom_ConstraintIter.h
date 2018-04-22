@@ -64,6 +64,8 @@
 #ifndef MRMFreedom_ConstraintIter_h
 #define MRMFreedom_ConstraintIter_h
 
+#include <deque>
+
 namespace XC {
 class MRMFreedom_Constraint;
 
@@ -76,6 +78,8 @@ class MRMFreedom_ConstraintIter
     MRMFreedom_ConstraintIter() {};
     virtual ~MRMFreedom_ConstraintIter() {};  
     virtual MRMFreedom_Constraint *operator()(void) =0;
+    std::deque<int> searchAll(int theNode, int theDOF) const;
+    std::deque<int> searchAll(int theNode) const;
   };
 } // end of XC namespace
 

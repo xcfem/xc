@@ -28,9 +28,8 @@ nodes= preprocessor.getNodeHandler
 # Problem type
 modelSpace= predefined_spaces.SolidMechanics2D(nodes)
 
-nodes.defaultTag= 1 #First node number.
-nod= nodes.newNodeXY(0,0)
-nod= nodes.newNodeXY(l,0.0)
+nodA= nodes.newNodeXY(0,0)
+nodB= nodes.newNodeXY(l,0.0)
 
 # Materials definition
 elast= typical_materials.defElasticMaterial(preprocessor, "elast",K)
@@ -44,14 +43,14 @@ elements= preprocessor.getElementHandler
 elements.defaultMaterial= "elast"
 elements.dimElem= 2 # Dimension of element space
 elements.defaultTag= 1 #First node number.
-spring= elements.newElement("Spring",xc.ID([1,2]));
+spring= elements.newElement("Spring",xc.ID([nodA.tag,nodB.tag]));
     
 # Constraints
 constraints= preprocessor.getBoundaryCondHandler
 #
-spc= constraints.newSPConstraint(1,0,0.0) # Node 1
-spc= constraints.newSPConstraint(1,1,0.0)
-spc= constraints.newSPConstraint(2,1,0.0) # Node 2
+spc= constraints.newSPConstraint(nodA.tag,0,0.0) # Node 1
+spc= constraints.newSPConstraint(nodA.tag,1,0.0)
+spc= constraints.newSPConstraint(nodB.tag,1,0.0) # Node 2
 
 # Loads definition
 cargas= preprocessor.getLoadHandler
@@ -62,7 +61,7 @@ casos.currentTimeSeries= "ts"
 #Load case definition
 lp0= casos.newLoadPattern("default","0")
 #casos.currentLoadPattern= "0"
-lp0.newSPConstraint(2,0,D)
+lp0.newSPConstraint(nodB.tag,0,D)
 
 #We add the load case to domain.
 casos.addToDomain("0")
@@ -73,17 +72,12 @@ result= analisis.analyze(1)
 
 
 nodes.calculateNodalReactions(True)
-nodes= preprocessor.getNodeHandler
-nod2= nodes.getNode(2)
-deltax= nod2.getDisp[0] 
-deltay= nod2.getDisp[1] 
-nod1= nodes.getNode(1)
-R= nod1.getReaction[0] 
+deltax= nodB.getDisp[0] 
+deltay= nodB.getDisp[1] 
+R= nodA.getReaction[0] 
 
-elements= preprocessor.getElementHandler
-elem1= elements.getElement(1)
-elem1.getResistingForce()
-Ax= elem1.getMaterial().getStrain() # Spring elongation
+spring.getResistingForce()
+Ax= spring.getMaterial().getStrain() # Spring elongation
 
 ratio1= (F+R)/F
 ratio2= (F-(K*deltax))/F

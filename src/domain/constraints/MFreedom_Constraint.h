@@ -142,6 +142,7 @@ class MFreedom_Constraint: public MFreedom_ConstraintBase
       { return 1; }
     std::vector<XC::Node *> getPointersToRetainedNodes(void) const;
     bool affectsNode(int ) const;
+    bool affectsNodeAndDOF(int , int ) const;
     virtual const ID &getRetainedDOFs(void) const;            
     virtual int applyConstraint(double pseudoTime);
 

@@ -118,7 +118,7 @@ class Mesh: public MeshComponentContainer
     virtual void clearAll(void);
 
     void setNodeReactionException(const int &);
-    void checkNodalReactions(const double &);
+    bool checkNodalReactions(const double &);
 
     void clearDOF_GroupPtr(void);
 

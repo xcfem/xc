@@ -594,6 +594,15 @@ class StructuralMechanics3D(PredefinedSpace):
     self.constraints.newSPConstraint(nodeTag,2,0.0)
     self.constraints.newSPConstraint(nodeTag,3,0.0)
 
+  def fixNodeF00_FFF(self, nodeTag):
+    '''Restrain all DOFs except for X displacement and the
+       rotations about Y and Z axis.
+
+       :param nodeTag: node identifier.
+    '''
+    self.constraints.newSPConstraint(nodeTag,1,0.0) # nodeTag, DOF, constrValue
+    self.constraints.newSPConstraint(nodeTag,2,0.0)
+
   def fixNodeFFF_000(self, nodeTag):
     '''Restrain only rotations (i. e. ThetaX= 0, ThetaY= 0 and ThetaZ= 0).
 

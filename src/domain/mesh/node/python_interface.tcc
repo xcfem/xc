@@ -53,7 +53,8 @@ class_<XC::Node, XC::Node *, bases<XC::MeshComponent>, boost::noncopyable >("Nod
   // if we do so we obtain always last calculated value and that makes imposible
   // to put history results in a Python list for example. That's why we use
   // copy_const_reference instead. 
-  .add_property("getReaction", make_function( &XC::Node::getReaction, return_value_policy<copy_const_reference>() ))
+  .add_property("getReaction", make_function( &XC::Node::getReaction, return_value_policy<copy_const_reference>() ), "Return the reaction at this node.")
+  .def("checkReactionForce", &XC::Node::checkReactionForce, "checkReactionForce(tolerance): return true if reactions correspond to constrained degrees of freedom, false otherwise.")
   .add_property("getDisp", make_function( &XC::Node::getDisp, return_value_policy<copy_const_reference>() ),"Return the displacement vector.")
   .add_property("getDispXYZ", &XC::Node::getDispXYZ, "Return the translational components of the displacement.")
   .add_property("getRotXYZ", &XC::Node::getRotXYZ, "Return the rotational components of the displacement.")

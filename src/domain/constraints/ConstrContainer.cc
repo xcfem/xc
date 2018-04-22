@@ -338,17 +338,17 @@ bool XC::ConstrContainer::addElementalLoad(ElementalLoad *load, int loadPatternT
 //! returned. Note this will only remove SFreedom\_Constraints which have been
 //! added to the domain and not directly to LoadPatterns.
 //!
-//! @param theNode: node tag.
+//! @param nodeTag: node tag.
 //! @param theDOF: degree of freedom identifier.
 //! @param loadPatternTag: load pattern identifier (if -1 then remove from
 //! domain).
-bool XC::ConstrContainer::removeSFreedom_Constraint(int theNode, int theDOF, int loadPatternTag)
+bool XC::ConstrContainer::removeSFreedom_Constraint(int nodeTag, int theDOF, int loadPatternTag)
   {
     SFreedom_Constraint *theSP= nullptr;
 
     if(loadPatternTag == -1)
       {
-	theSP= getSPs().search(theNode,theDOF);
+	theSP= getSPs().search(nodeTag,theDOF);
 	if(theSP)
 	  this->removeSFreedom_Constraint(theSP->getTag());
       }
@@ -357,7 +357,7 @@ bool XC::ConstrContainer::removeSFreedom_Constraint(int theNode, int theDOF, int
         LoadPattern *thePattern= this->getLoadPattern(loadPatternTag);
         if(thePattern)
           {
-  	    theSP= thePattern->getSPs().search(theNode,theDOF);
+  	    theSP= thePattern->getSPs().search(nodeTag,theDOF);
 	    if(theSP)
 	      thePattern->removeSFreedom_Constraint(theSP->getTag());
           }
@@ -744,37 +744,58 @@ void XC::ConstrContainer::applyLoad(double timeStep)
   }
 
 //! @brief Search on the container all the single freedom constraints with the node and degree of freedom being passed as parameter.
-std::deque<int> XC::ConstrContainer::getTagsSPsNode(int theNode, int theDOF) const
+std::deque<int> XC::ConstrContainer::getTagsSPsNode(int nodeTag, int theDOF) const
   {
     ConstrContainer *this_no_const= const_cast<ConstrContainer *>(this);
-    return this_no_const->getSPs().searchAll(theNode,theDOF); 
-  }
-
-//! @brief Search on the container all the single freedom constraints that affect the node whose tag is being passed as parameter.
-std::deque<int> XC::ConstrContainer::getTagsSPsNode(int theNode) const
-  {
-    ConstrContainer *this_no_const= const_cast<ConstrContainer *>(this);
-    return this_no_const->getSPs().searchAll(theNode); 
-  }
-
-//! @brief Search on the container all the multi-freedom constraints with the node and degree of freedom being passed as parameter.
-std::deque<int> XC::ConstrContainer::getTagsMPsNode(int theNode, int theDOF) const
-  {
-    std::deque<int> retval; 
-
-    std::cerr << getClassName() << "::" << __FUNCTION__
-	      << "; not implemented." << std::endl;
+    std::deque<int> retval= this_no_const->getSPs().searchAll(nodeTag,theDOF);
+    for(MapCasosActivos<LoadPattern>::const_iterator i= activeLoadPatterns.begin(); i!= activeLoadPatterns.end(); i++)
+      {
+	const LoadPattern *lp= i->second;
+	const std::deque<int> lp_constr= lp->getTagsSPsNode(nodeTag,theDOF); 
+        retval.insert(retval.end(),lp_constr.begin(),lp_constr.end());
+      }
     return retval;
   }
 
-//! @brief Search on the container all the multi-freedom constraints that affect the node whose tag is being passed as parameter.
-std::deque<int> XC::ConstrContainer::getTagsMPsNode(int theNode) const
+//! @brief Search on the container all the single freedom constraints that
+//! affect the node whose tag is being passed as parameter.
+std::deque<int> XC::ConstrContainer::getTagsSPsNode(int nodeTag) const
   {
-    std::deque<int> retval; 
+    ConstrContainer *this_no_const= const_cast<ConstrContainer *>(this);
+    return this_no_const->getSPs().searchAll(nodeTag); 
+  }
 
-    std::cerr << getClassName() << "::" << __FUNCTION__
-	      << ";  not implemented." << std::endl;
-    return retval;
+//! @brief Search on the container all the multi-freedom constraints that
+//! affect the node and degree of freedom being passed as parameter.
+std::deque<int> XC::ConstrContainer::getTagsMPsNode(int nodeTag, int theDOF) const
+  {
+    ConstrContainer *this_no_const= const_cast<ConstrContainer *>(this);
+    return this_no_const->getMPs().searchAll(nodeTag,theDOF); 
+  }
+
+//! @brief Search on the container all the multi-freedom constraints that
+//! affect the node whose tag is being passed as parameter.
+std::deque<int> XC::ConstrContainer::getTagsMPsNode(int nodeTag) const
+  {
+    ConstrContainer *this_no_const= const_cast<ConstrContainer *>(this);
+    return this_no_const->getMPs().searchAll(nodeTag); 
+  }
+
+//! @brief Search on the container all the multi retained multi-freedom
+//! constraints that affect the node and degree of freedom being passed
+//! as parameter.
+std::deque<int> XC::ConstrContainer::getTagsMRMPsNode(int nodeTag, int theDOF) const
+  {
+    ConstrContainer *this_no_const= const_cast<ConstrContainer *>(this);
+    return this_no_const->getMRMPs().searchAll(nodeTag,theDOF); 
+  }
+
+//! @brief Search on the container all the multi retained multi-freedom
+//! constraints that affect the node whose tag is being passed as parameter.
+std::deque<int> XC::ConstrContainer::getTagsMRMPsNode(int nodeTag) const
+  {
+    ConstrContainer *this_no_const= const_cast<ConstrContainer *>(this);
+    return this_no_const->getMRMPs().searchAll(nodeTag); 
   }
 
 //! @brief Loop over all the load patterns that are currently added to the domain getting their tag.
@@ -829,7 +850,8 @@ std::deque<int> XC::ConstrContainer::getTagsNLs(void) const
     return retval;
   }
 
-//! @brief Returns true if the node is affected by one or more single freedom constraints.
+//! @brief Returns true if the node is affected by one or more single freedom
+//! constraints.
 bool XC::ConstrContainer::nodeAffectedBySPs(int nodeTag) const
   {
     bool retval= false;
@@ -838,6 +860,23 @@ bool XC::ConstrContainer::nodeAffectedBySPs(int nodeTag) const
     SFreedom_Constraint *theSP= nullptr;
     while((theSP= theSPs()) != 0)
       if(theSP->getNodeTag() == nodeTag)
+        {
+          retval= true;
+          break;
+        }
+    return retval;
+  }
+
+//! @brief Returns true if the DOF is affected by one or more single freedom
+//! constraints.
+bool XC::ConstrContainer::isDOFAffectedBySPs(int nodeTag, int theDOF) const
+  {
+    bool retval= false;
+    ConstrContainer *this_no_const= const_cast<ConstrContainer *>(this);
+    SFreedom_ConstraintIter &theSPs= this_no_const->getDomainAndLoadPatternSPs();
+    SFreedom_Constraint *theSP= nullptr;
+    while((theSP= theSPs()) != 0)
+      if(theSP->affectsNodeAndDOF(nodeTag,theDOF))
         {
           retval= true;
           break;
@@ -861,7 +900,8 @@ std::set<int> XC::ConstrContainer::getTagsNodesffectedBySPs(int theDOF) const
     return retval;
   }
 
-//! @brief Returns true if the node is affected by one or more multi-freedom constraints.
+//! @brief Returns true if the node is affected by one or more multi-freedom
+//! constraints.
 bool XC::ConstrContainer::nodeAffectedByMPs(int nodeTag) const
   {
     bool retval= false;
@@ -877,7 +917,25 @@ bool XC::ConstrContainer::nodeAffectedByMPs(int nodeTag) const
     return retval;
   }
 
-//! @brief Returns true if the node is affected by one or more multi-row multi-freedom constraints.
+//! @brief Returns true if the DOF is affected by one or more multi-freedom
+//! constraints.
+bool XC::ConstrContainer::isDOFAffectedByMPs(int nodeTag, int theDOF) const
+  {
+    bool retval= false;
+    ConstrContainer *this_no_const= const_cast<ConstrContainer *>(this);
+    MFreedom_ConstraintIter &theMPs= this_no_const->getMPs();
+    MFreedom_Constraint *theMP= nullptr;
+    while((theMP= theMPs()) != 0)
+      if(theMP->affectsNodeAndDOF(nodeTag,theDOF))
+        {
+          retval= true;
+          break;
+        }
+    return retval;
+  }
+
+//! @brief Returns true if the node is affected by one or more multi-row
+//! multi-freedom constraints.
 bool XC::ConstrContainer::nodeAffectedByMRMPs(int nodeTag) const
   {
     bool retval= false;
@@ -893,14 +951,42 @@ bool XC::ConstrContainer::nodeAffectedByMRMPs(int nodeTag) const
     return retval;
   }
 
+//! @brief Returns true if the DOF is affected by one or more multi-row
+//! multi-freedom constraints.
+bool XC::ConstrContainer::isDOFAffectedByMRMPs(int nodeTag, int theDOF) const
+  {
+    bool retval= false;
+    ConstrContainer *this_no_const= const_cast<ConstrContainer *>(this);
+    MRMFreedom_ConstraintIter &theMRMPs= this_no_const->getMRMPs();
+    MRMFreedom_Constraint *theMRMP;
+    while((theMRMP= theMRMPs()) != 0)
+      if(theMRMP->affectsNodeAndDOF(nodeTag,theDOF))
+        {
+          retval= true;
+          break;
+        }
+    return retval;
+  }
+
 //! @brief Returns true if the node is affected by any constraint.
-bool XC::ConstrContainer::nodeAffectedBySPsOMPs(int nodeTag) const
+bool XC::ConstrContainer::nodeAffectedByConstraints(int nodeTag) const
   {
     bool retval= nodeAffectedBySPs(nodeTag);
     if(!retval)
       retval= nodeAffectedByMPs(nodeTag);
     if(!retval)
       retval= nodeAffectedByMRMPs(nodeTag);
+    return retval;
+  }
+
+//! @brief Returns true if the DOF is affected by any constraint.
+bool XC::ConstrContainer::isDOFAffectedByConstraints(int nodeTag, int theDOF) const
+  { 
+    bool retval= isDOFAffectedBySPs(nodeTag,theDOF);
+    if(!retval)
+      retval= isDOFAffectedByMPs(nodeTag,theDOF);
+    if(!retval)
+      retval= isDOFAffectedByMRMPs(nodeTag,theDOF);
     return retval;
   }
 

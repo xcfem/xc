@@ -160,7 +160,7 @@ class Domain: public ObjWithRecorders, public DistributedBase
     virtual bool addLoadCombination(LoadCombination *);
 
     void setNodeReactionException(const int &);
-    void checkNodalReactions(const double &);
+    bool checkNodalReactions(const double &);
 
     // methods to add components to a LoadPattern object
     virtual bool addSFreedom_Constraint(SFreedom_Constraint *, int loadPatternTag);

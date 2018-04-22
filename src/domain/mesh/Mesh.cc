@@ -1148,9 +1148,10 @@ void XC::Mesh::setNodeReactionException(const int &n)
   { tagNodeCheckReactionException= n; }
 
 //! @brief Checks that all free nodes have zero reactions.
-void XC::Mesh::checkNodalReactions(const double &tol)
+bool XC::Mesh::checkNodalReactions(const double &tol)
   {
-    Node *theNode= nullptr;
+    bool retval= true;
+    const Node *theNode= nullptr;
     double max_norm_reac= 0.0;
     NodeIter &theNodes = this->getNodes();
     while((theNode = theNodes()) != 0)
@@ -1161,7 +1162,12 @@ void XC::Mesh::checkNodalReactions(const double &tol)
     NodeIter &theNodes2 = this->getNodes();
     while((theNode = theNodes2()) != 0)
       if(theNode->getTag()!=tagNodeCheckReactionException)
-        { theNode->checkReactionForce(max_norm_reac*tol); }
+        {
+	  const bool tmp= theNode->checkReactionForce(max_norm_reac*tol);
+	  if(retval) //if it's already false there is no need to check.
+	    retval= tmp;
+	}
+    return retval;
   }
 
 //! @brief Calculate nodal reaction forces and moments.

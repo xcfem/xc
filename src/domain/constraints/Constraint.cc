@@ -112,6 +112,19 @@ int XC::Constraint::getNodeIdx(void) const
     return retval;
   }
 
+//! @brief Returns true ifafecta to the node cuyo tag being passed as parameter.
+bool XC::Constraint::affectsNode(int nodeTag) const
+  { return (nodeTag== constrNodeTag); }
+
+//! @brief Returns true if the constraint affects the node and DOF arguments.
+bool XC::Constraint::affectsNodeAndDOF(int nodeTag, int theDOF) const
+  {
+    bool retval= false;
+    std::cerr << getClassName() << "::" << __FUNCTION__
+              << " not implemented." << std::endl;
+    return retval;
+  }
+
 //! @brief Send members through the channel being passed as parameter.
 //! @param cp: definition of the communication parameters.
 int XC::Constraint::sendData(CommParameters &cp)

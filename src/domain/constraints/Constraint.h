@@ -64,6 +64,8 @@ class Constraint: public ContinuaReprComponent
     virtual const Node *getNode(void) const;
     virtual int getNodeIdx(void) const;
     virtual int applyConstraint(double loadFactor)= 0;    
+    virtual bool affectsNode(int ) const;
+    virtual bool affectsNodeAndDOF(int , int ) const;
 
     void setDomain(Domain *);
 
