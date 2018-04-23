@@ -58,6 +58,8 @@ class_<XC::SetBase, bases<XC::EntMdlrBase>, boost::noncopyable >("SetBase", no_i
   .def("isUniformGridIn",isUniformGridIn,"True if sets contains uniform grid.")
   .add_property("getNumNodes",&XC::SetBase::getNumberOfNodes,"Returns the number or nodes.")
   .add_property("getNumElements",&XC::SetBase::getNumberOfElements,"Returns the number or elements.")
+  .add_property("color", make_function(&XC::SetBase::getColor, return_internal_reference<>() ),&XC::SetBase::setColor,"stores a color for the objects of the set.")
+  .def("setColorComponents",make_function(&XC::SetBase::setColorComponents, return_internal_reference<>() ),"set the components of the color for the objects of the set.")
    ;
 
 class_<XC::SetEstruct, bases<XC::SetBase>, boost::noncopyable >("SetEstruct", no_init)

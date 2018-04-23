@@ -275,6 +275,13 @@ print 'ratio12= ', ratio12
 print 'ratio13= ', ratio13
 '''
 
+# Results in the computation of neutral axis depth and neutral axis plane (zNA)
+# are different in different machines (difference about 10%). This is an error
+# that we must catch but it will be necessary to have some way to transfer
+# partial results between machines quickly and accurately. This way we can
+# compare results step by step to find the problem. A possible solution is to
+# use 'pickle' with XC
+# classes: https://www.boost.org/doc/libs/1_46_1/libs/python/doc/v2/pickle.html
 import os
 from miscUtils import LogMessages as lmsg
 fname= os.path.basename(__file__)

@@ -40,18 +40,43 @@
 
 //! @brief Constructor.
 XC::SetBase::SetBase(const std::string &nmb,Preprocessor *md)
-  : EntMdlrBase(nmb,md) {}
+  : EntMdlrBase(nmb,md), color(3)
+  { setColorComponents(0,0,0); }
+
+//! @brief Set the color of the object (red,green,blue) as
+//! integers from 0 to 255.
+void XC::SetBase::setColorComponents(const int &r, const int &g, const int &b)
+  { color[0]= r; color[1]= g; color[2]= b; }
+
+//! @brief Set the color of the object [red,green,blue] as
+//! integers from 0 to 255.
+void XC::SetBase::setColor(const ID &rgb)
+  {
+    if(rgb.Size()>2)
+      { color[0]= rgb[0]; color[1]= rgb[1]; color[2]= rgb[2]; }
+    else
+      std::cerr << getClassName() << "::" << __FUNCTION__
+                << " three components needed ([red,green,blue])."
+		<< std::endl;
+  }
+
+//! @brief Return the color of the object [red,green,blue] as
+//! integers from 0 to 255.
+const XC::ID &XC::SetBase::getColor(void) const
+  { return color; }
 
 //! @brief Generates a finite element mesh from the set components.
 void XC::SetBase::genMesh(meshing_dir dm)
   {
-    std::cerr << "Método genMesh() no implementado." << std::endl;
+    std::cerr << getClassName() << "::" << __FUNCTION__
+              << " not implemented." << std::endl;
   }
 
-//! @brief Impone desplazamiento nulo en the nodes de this set.
+//! @brief Impone desplazamiento nulo for all the nodes of this set.
 void XC::SetBase::fix(const SFreedom_Constraint &)
   {
-    std::cerr << "Método fix() no implementado." << std::endl;
+    std::cerr << getClassName() << "::" << __FUNCTION__
+              << " not implemented." << std::endl;
   }
 
 //! @brief Returns the tags of the nodes en un vector de enteros.
@@ -127,7 +152,7 @@ void XC::SetBase::resetTributaries(void) const
           }
       }
     else
-      std::cerr << "Undefined domain." << std::endl;    
+      std::cerr << "domain not set." << std::endl;    
   }
  
 //! @brief Computes the tributary lengths that correspond to each
@@ -151,7 +176,7 @@ void XC::SetBase::computeTributaryLengths(bool initialGeometry) const
           }
       }
     else
-      std::cerr << "Undefined domain." << std::endl;
+      std::cerr << "domain not set." << std::endl;
   }
 
 //! @brief Computes the tributary areas that correspond to each
@@ -175,7 +200,7 @@ void XC::SetBase::computeTributaryAreas(bool initialGeometry) const
           }
       }
     else
-      std::cerr << "Undefined domain." << std::endl;
+      std::cerr << "domain not set." << std::endl;
   }
 
 //! @brief Computes the tributary volumes that correspond to each
@@ -199,7 +224,7 @@ void XC::SetBase::computeTributaryVolumes(bool initialGeometry) const
           }
       }
     else
-      std::cerr << "Undefined domain." << std::endl;
+      std::cerr << "domain not set." << std::endl;
   }
 
 

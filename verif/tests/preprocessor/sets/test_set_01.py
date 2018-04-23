@@ -55,6 +55,14 @@ beam3d= elements.newElement("ElasticBeam3d",xc.ID([6,8]))
 # Trial set definition
 trialSet1= preprocessor.getSets.defSet("trialSet1")
 
+#Color property get/set test.
+colorA= trialSet1.color
+ratioA= colorA[0]**2+colorA[1]**2+colorA[2]**2
+trialSet1.color= xc.ID([1,2,3])
+colorB= trialSet1.color
+ratioB= (colorB[0]-1)**2+(colorB[1]-2)**2+(colorB[2]-3)**2
+
+
 nodes= preprocessor.getSets.getSet("total").getNodes
 for n in nodes:
   coord= n.getCoo
@@ -75,6 +83,8 @@ for e in elements:
     trialSet1.getElements.append(e)
 
 ''' 
+print 'ratioA= ', ratioA
+print 'ratioB= ', ratioB
 elements= trialSet1.getElements
 for e in elements:
   print "tag= ",e.tag," node I:",e.nod[0].tag," node J:",e.nod[1].tag
@@ -82,7 +92,7 @@ for e in elements:
 import os
 from miscUtils import LogMessages as lmsg
 fname= os.path.basename(__file__)
-if(abs(trialSet1.getNumNodes-4)<1e-5) & (abs(trialSet1.getNumElements-2)<1e-5):
+if (ratioA==0) & (ratioB==0) & (abs(trialSet1.getNumNodes-4)<1e-15) & (abs(trialSet1.getNumElements-2)<1e-15):
   print "test ",fname,": ok."
 else:
   lmsg.error(fname+' ERROR.')
