@@ -594,4 +594,5 @@ class GridModel(object):
           pnt=points.get(tg)
           pntsSet.append(pnt)
         return retval
- 
+
+
