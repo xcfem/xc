@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import division
 
 
 __author__= "Ana Ortega (AO_O)"
@@ -7,8 +8,11 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "ana.Ortega@ciccp.es"
 
-from actions.earth_pressure import earth_pressure as ep
 import xc
+from actions.earth_pressure import earth_pressure as ep
+from model.sets import sets_mng as sets
+from miscUtils import LogMessages as lmsg
+import numpy as np
 
 class BaseVectorLoad(object):
     '''Base class for loads introduced using a load as an xcVector 
@@ -160,13 +164,51 @@ class UniformLoadOnSurfaces(BaseVectorLoad):
                 load=e.vector3dUniformLoadLocal(self.loadVector)
             else:
                 load=e.vector3dUniformLoadGlobal(self.loadVector)
-        # for s in self.xcSet.getSurfaces:
-        #     for e in s.getElements():
-        #         if self.refSystem=='Local':
-        #             e.vector3dUniformLoadLocal(self.loadVector)
-        #         else:
-        #             e.vector3dUniformLoadGlobal(self.loadVector)
 
+class PointLoadOverShellElems(BaseVectorLoad):
+    '''Point load distributed over the shell elements in xcSet whose 
+    centroids are inside the prism defined by the 2D polygon prismBase
+    and one global axis.
+
+    :ivar name: name identifying the load
+    :ivar xcSet: set that contains the shell elements
+    :ivar loadVector: xc vector with the six components of the point load:
+                      xc.Vector([Fx,Fy,Fz,Mx,My,Mz]).
+    :ivar prismBase: 2D polygon that defines the n-sided base of the prism.
+                      The vertices of the polygon are defined in global 
+                      coordinates in the following way:
+                         - for X-axis-prism: (y,z)
+                         - for Y-axis-prism: (x,z)
+                         - for Z-axis-prism: (x,y)
+    :ivar prismAxis: axis of the prism (can be equal to 'X', 'Y', 'Z')
+                      (defaults to 'Z')
+    :ivar refSystem:  reference system in which loadVector is defined:
+                      'Local': element local coordinate system
+                      'Global': global coordinate system (defaults to 'Global')
+    '''
+    def __init__(self,name, xcSet, loadVector,prismBase,prismAxis='Z',refSystem='Global'):
+        super(PointLoadOverShellElems,self).__init__(name,loadVector)
+        self.xcSet=xcSet
+        self.prismBase=prismBase
+        self.prismAxis=prismAxis
+        self.refSystem=refSystem
+
+    def appendLoadToCurrentLoadPattern(self):
+        ''' Append load to the current load pattern.'''
+        prep=self.xcSet.getPreprocessor
+        aux_set=sets.set_included_in_orthoPrism(preprocessor=prep,setInit=self.xcSet,prismBase=self.prismBase,prismAxis=self.prismAxis,setName='aux_set'+self.name)
+        if aux_set.getNumElements==0:
+            lmsg.warning('Can\'t distribute load: '+self.name+'(Elements in set = 0)')
+        else:
+            areaSet=float(np.sum([e.getArea(False) for e in aux_set.getElements]))
+            factor=1.0/areaSet
+            v= factor*self.loadVector#*factor
+            for e in aux_set.getElements:
+                if self.refSystem=='Local':
+                    load=e.vector3dUniformLoadLocal(factor*self.loadVector)
+                else:
+                    load=e.vector3dUniformLoadGlobal(factor*self.loadVector)
+            
 class EarthPressLoad(BaseVectorLoad):
     '''Earth pressure applied on the elements (shell or beams)
     included in the set xcSet. 

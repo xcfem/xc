@@ -11,6 +11,7 @@ from miscUtils import LogMessages as lmsg
 from postprocess import extrapolate_elem_attr as extrap
 import numpy as np
 import math
+import geom
 
 class LineWrapper(object):
   def __init__(self,line):
@@ -125,3 +126,14 @@ def eq_points_parabola(startS,stopS,numPts,a,b,c,angSX):
     y_parab=np.linspace(startS*math.sin(angSX),stopS*math.sin(angSX),numPts)
     z_parab=a*s_parab**2+b*s_parab+c
     return x_parab,y_parab,z_parab
+
+def rect2DPolygon(xCent,yCent,Lx,Ly):
+    '''Rectangular polygon
+    '''
+    pol=geom.Poligono2d()
+    pol.agregaVertice(geom.Pos2d(xCent-Lx/2.0,yCent-Ly/2.0))
+    pol.agregaVertice(geom.Pos2d(xCent-Lx/2.0,yCent+Ly/2.0))
+    pol.agregaVertice(geom.Pos2d(xCent+Lx/2.0,yCent+Ly/2.0))
+    pol.agregaVertice(geom.Pos2d(xCent+Lx/2.0,yCent-Ly/2.0))
+    return pol
+    

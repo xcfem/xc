@@ -297,7 +297,7 @@ int XC::Vector::Assemble(const XC::Vector &V, const ID &l, double fact )
     return result;
   }
     
-//! @brief Normalizes the vector with the euclidean norm.
+//! @brief Normalizes the vector using the euclidean norm.
 int XC::Vector::Normalize(void)
   {
     double length= 0.0;
@@ -313,7 +313,7 @@ int XC::Vector::Normalize(void)
     return 0;
   }
 
-//! @brief Normaliza el vector con la norma_infinito.
+//! @brief Normaliza el vector using the infinity norm.
 int XC::Vector::NormalizeInf(void)
   {
     int retval= 0;
@@ -329,7 +329,7 @@ int XC::Vector::NormalizeInf(void)
     return 0;
   }
 
-//! @brief Returns the normalized vector con la norma euclidea.
+//! @brief Returns the normalized vector (euclidean norm).
 XC::Vector XC::Vector::Normalized(void) const
   {
     Vector retval(*this);
@@ -337,7 +337,7 @@ XC::Vector XC::Vector::Normalized(void) const
     return retval;
   }
 
-//! @brief Returns the normalized vector con la norma_infinito.
+//! @brief Returns the normalized vector (infinity norm).
 XC::Vector XC::Vector::NormalizedInf(void) const
   {
     Vector retval(*this);
@@ -349,7 +349,7 @@ XC::Vector XC::Vector::NormalizedInf(void) const
 XC::Vector XC::normalize(const Vector &v)
   { return v.Normalized(); }
 
-//! @brief Returns the normalized vector (infinite norm).
+//! @brief Returns the normalized vector (infinity norm).
 XC::Vector XC::normalize_inf(const Vector &v)
   { return v.NormalizedInf(); }
 
@@ -810,7 +810,11 @@ double &XC::Vector::at(const size_t &f)
     if(CheckIndice0(f))
       return theData[f];
     else
-      return VECTOR_NOT_VALID_ENTRY;
+      {
+        std::cerr << getClassName() << "::" << __FUNCTION__
+	          << " index out of range." << std::endl;
+        return VECTOR_NOT_VALID_ENTRY;
+      }
   }
 //! @brief Returns the number at the row being passed as parameter.
 const double &XC::Vector::at(const size_t &f) const
@@ -818,7 +822,11 @@ const double &XC::Vector::at(const size_t &f) const
     if(CheckIndice0(f))
       return theData[f];
     else
-      return VECTOR_NOT_VALID_ENTRY;
+      {
+        std::cerr << getClassName() << "::" << __FUNCTION__
+	          << " index out of range." << std::endl;
+        return VECTOR_NOT_VALID_ENTRY;
+      }
   }
 //! @brief Checks the renge for the index being passed as parameter.
 bool XC::Vector::CheckIndice0(const size_t &i) const
@@ -827,7 +835,9 @@ bool XC::Vector::CheckIndice0(const size_t &i) const
       {
         std::cerr << getClassName() << "::" << __FUNCTION__
 	          << "; index: " << i
-		  << " out of range: 0 - << " << sz-1 << std::endl;
+		  << " out of range: 0 - " << sz-1 << std::endl;
+	if(i>=10*size_t(sz))
+	  exit(-1);
         return false;
       }
     else
@@ -954,7 +964,7 @@ XC::Vector &XC::Vector::operator-=(double fact)
 XC::Vector &XC::Vector::operator*=(double fact)
   {
     for(int i=0; i<sz; i++)
-      theData[i] *= fact;
+      theData[i]*= fact;
     return *this;
   }
 
@@ -1245,7 +1255,7 @@ XC::Matrix XC::operator&(const Vector &u,const Vector &v)
   { return prod_tensor(u,v); }
 
 //! @brief Returns a string that represents the vector.
-std::string XC::to_string(const XC::Vector &V)
+std::string XC::to_string(const Vector &V)
   {
     //Doing this way clients will be able to manage the formatting
     //with things like 'std::scientific << std::setprecision(10)' 
@@ -1255,7 +1265,8 @@ std::string XC::to_string(const XC::Vector &V)
   }
 
 
-//! @brief A function is defined to allow user to print the vectors using std::ostream.
+//! @brief A function is defined to allow user to print the vectors
+//! using std::ostream.
 std::ostream &XC::operator<<(std::ostream &s, const Vector &V)
   {
     for(int i=0; i<V.Size(); i++) 
@@ -1264,10 +1275,10 @@ std::ostream &XC::operator<<(std::ostream &s, const Vector &V)
   }
 
 //! @brief * operator.
-XC::Vector XC::operator*(double a, const XC::Vector &V)
-  { return V * a; }
+XC::Vector XC::operator*(double a, const Vector &V)
+  { return V*a; }
 
-int XC::Vector::Assemble(const XC::Vector &V, int init_pos, double fact) 
+int XC::Vector::Assemble(const Vector &V, int init_pos, double fact) 
   {
     int res= 0;
     int cur_pos  = init_pos;  
@@ -1319,7 +1330,8 @@ XC::Vector XC::Vector::getComponents(const ID &idx) const
     return retval;
   }
 
-//! @brief Assigns the specified values to the specified set of vecto's components
+//! @brief Assigns the specified values to the specified set of vector's
+//! components
 void XC::Vector::putComponents(const Vector &v,const ID &idx)
   {
     const int sz= idx.Size();
@@ -1327,7 +1339,8 @@ void XC::Vector::putComponents(const Vector &v,const ID &idx)
       (*this)(idx(i))= v(i);
   }
 
-//! @brief Sums the specified values to the specified set of vecto's components
+//! @brief Sums the specified values to the specified set of vector's
+//! components
 void XC::Vector::addComponents(const Vector &v,const ID &idx)
   {
     const int sz= idx.Size();
@@ -1356,7 +1369,7 @@ m_double XC::vector_to_m_double(const XC::Vector &v)
     return retval;
   }
 
-// //! @brief Convierte en vector la text string being passed as parameter.
+// //! @brief Convert the text string into a vector.
 // void XC::Vector::from_string(const std::string &str)
 //   {
 //     std::vector<double> tmp= create_vector_double(str);
@@ -1373,7 +1386,7 @@ m_double XC::vector_to_m_double(const XC::Vector &v)
 //     return retval;
 //   }
 
-// //! @brief Intenta, por todos los medios, convertir el argumento en un vector.
+// //! @brief Try, by all means, to convert the argument into a vector.
 // XC::Vector XC::convert_to_vector(const boost::any &operand)
 //   {
 //     const std::vector<double> tmp= convert_to_vector_double(operand);
