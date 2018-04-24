@@ -262,18 +262,6 @@ double XC::ListRegiones::getPyzGrossSection(void) const
     return retval;
   }
 
-// //! Returns the regions subset that satisfy the condition
-// //! being passed as parameter.
-// void XC::ListRegiones::Cumplen(const std::string &cond,ListRegiones &retval,bool clear)
-//   {
-//     if(clear) retval.clear();
-//     const_iterator i= begin();
-//     for(;i!= end();i++)
-//       if((*i)->verdadero(cond))
-//         retval.push_back(**i);
-//   }
-
-
 //! @brief Returns the homogenized area de las regiones.
 double XC::ListRegiones::getAreaHomogenizedSection(const double &E0) const
   {

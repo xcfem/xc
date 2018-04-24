@@ -194,7 +194,6 @@ class FiberDeque : public EntCmd, public std::deque<Fiber *>
 
     Response *setResponse(const std::vector<std::string> &argv, Information &sectInfo);
 
-    //void Cumplen(const std::string &cond,FiberDeque &,bool clear= true);
     void SelMatTag(const int &matTag,FiberDeque &,bool clear= true);
 
     //size_t IMaxProp(const std::string &nmb_prop) const;

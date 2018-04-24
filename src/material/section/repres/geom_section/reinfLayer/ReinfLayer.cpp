@@ -123,19 +123,6 @@ XC::Vector XC::ReinfLayer::getCdg(void) const
     return barras.getCdgGrossSection();
   }
 
-// //! @brief Returns the rebar subset of the layer that fulfill the condition
-// //! being passed as parameter.
-// void XC::ReinfLayer::Cumplen(const std::string &cond,ListReinfLayer &retval,bool clear)
-//   {
-//     if(clear) retval.clear();
-//     const VectorReinfBar &barras= getReinfBars();  
-
-//     VectorReinfBar::const_iterator i= barras.begin();
-//     for(;i!= barras.end();i++)
-//       if((*i)->verdadero(cond))
-//         retval.push_back(SingleBar(**i));
-//   }
-
 //! @brief Returns the barras contenidas total o parcialmente en el polígono.
 void XC::ReinfLayer::getBarrasIn(const Poligono2d &plg,ListReinfLayer &retval,bool clear)
   {

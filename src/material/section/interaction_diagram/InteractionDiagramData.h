@@ -64,9 +64,9 @@ class InteractionDiagramData: public EntCmd
       { return inc_t; }
     inline void setIncTheta(const double &v)
       { inc_t= v; }
-    inline const PivotsUltimateStrains &getDefsAgotPivots(void) const
+    inline const PivotsUltimateStrains &getPivotsUltimateStrains(void) const
       { return agot_pivots; }
-    inline void setDefsAgotPivots(const PivotsUltimateStrains &v)
+    inline void setPivotsUltimateStrains(const PivotsUltimateStrains &v)
       { agot_pivots= v; }
     inline const std::string &getConcreteSetName(void) const
       { return concrete_set_name; }

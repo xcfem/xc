@@ -24,42 +24,42 @@
 // along with this program.
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
-//ParamAgotTN.cc
+//NormalStressStrengthParameters.cc
 
-#include "ParamAgotTN.h"
+#include "NormalStressStrengthParameters.h"
 #include "PivotsUltimateStrains.h"
 #include "xc_basic/src/util/matem.h"
 
 
 //! @brief Factor de cumplimiento para la max strain.
 //! valid if greater than one.
-double XC::ParamAgotTN::fc_tracc(void) const
-  { return agot_pivots.getDefAgotPivotA()/eps_c_max; }
+double XC::NormalStressStrengthParameters::fc_tracc(void) const
+  { return agot_pivots.getUltimateStrainAPivot()/eps_c_max; }
 
 //! @brief Factor de cumplimiento para la min strain.
 //! valid if greater than one.
-double XC::ParamAgotTN::fc_comp(void) const
-  { return agot_pivots.getDefAgotPivotB()/eps_c_min; }
+double XC::NormalStressStrengthParameters::fc_comp(void) const
+  { return agot_pivots.getUltimateStrainBPivot()/eps_c_min; }
 
 //! @brief Factor de cumplimiento for C pivot strain.
 //! valid if greater than one.
-double XC::ParamAgotTN::fc_pC(void) const
+double XC::NormalStressStrengthParameters::fc_pC(void) const
   { 
     if(eps_c_pC < 0)
-      return agot_pivots.getDefAgotPivotC()/eps_c_pC;
+      return agot_pivots.getUltimateStrainCPivot()/eps_c_pC;
     else
       return 1.0+eps_c_pC;
   }
 
 //! @brief Minimal factor de cumplimiento.
-double XC::ParamAgotTN::fc_min(void) const
+double XC::NormalStressStrengthParameters::fc_min(void) const
   { return std::min(fabs(fc_tracc()),std::min(fabs(fc_comp()),fabs(fc_pC()))); }
 
-XC::ParamAgotTN::ParamAgotTN(const PivotsUltimateStrains &ap,const double &emx,const double &emn,const double &ec)
+XC::NormalStressStrengthParameters::NormalStressStrengthParameters(const PivotsUltimateStrains &ap,const double &emx,const double &emn,const double &ec)
   : agot_pivots(ap), eps_c_max(emx), eps_c_min(emn), eps_c_pC(ec) {}
 
-bool XC::ParamAgotTN::Cumple(void) const
+bool XC::NormalStressStrengthParameters::OK(void) const
   { return (fc_min()>=1.0); }
 
-bool XC::ParamAgotTN::Agotada(void) const
-  { return !Cumple(); }
+bool XC::NormalStressStrengthParameters::KO(void) const
+  { return !OK(); }

@@ -24,10 +24,10 @@
 // along with this program.
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
-//ParamAgotTN
+//NormalStressStrengthParameters
 
-#ifndef PARAMAGOTTN_H
-#define PARAMAGOTTN_H
+#ifndef NORMALSTRESSSTRENGTHPARAMETERS_H
+#define NORMALSTRESSSTRENGTHPARAMETERS_H
 
 namespace XC {
 
@@ -37,7 +37,7 @@ class PivotsUltimateStrains;
 //
 //! @brief Parameter that define the ultimate limit states of a RC
 //! section under normal stresses.
-class ParamAgotTN
+class NormalStressStrengthParameters
   {
     const PivotsUltimateStrains &agot_pivots; //!< Ultimate strain at pivots.
     double eps_c_max; //!< concrete max strain (most tensioned fiber).
@@ -50,10 +50,10 @@ class ParamAgotTN
     double fc_pC(void) const;
     double fc_min(void) const;
   public:
-    ParamAgotTN(const PivotsUltimateStrains &ap,const double &emx= 0.0,const double &emn= 0.0,const double &ec= 0.0);
+    NormalStressStrengthParameters(const PivotsUltimateStrains &ap,const double &emx= 0.0,const double &emn= 0.0,const double &ec= 0.0);
     
-    bool Cumple(void) const;
-    bool Agotada(void) const;
+    bool OK(void) const;
+    bool KO(void) const;
   };
 
 } // end of XC namespace

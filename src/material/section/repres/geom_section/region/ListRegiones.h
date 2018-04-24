@@ -94,8 +94,6 @@ class ListRegiones: protected std::list<RegionSecc *>, public SectionMassPropert
     BND2d getBnd(void) const;
     ListRegiones Intersection(const Semiplano2d &) const;
 
-    //void Cumplen(const std::string &,ListRegiones &,bool );
-
     double getAreaGrossSection(void) const;
     Vector getCdgGrossSection(void) const;
     double getIyGrossSection(void) const;

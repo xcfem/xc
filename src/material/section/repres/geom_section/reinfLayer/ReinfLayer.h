@@ -97,7 +97,6 @@ class ReinfLayer: public DiscretBase
     virtual const double &getReinfBarArea(void) const;
 
     // reinforcing layer inquiring functions
-    //void Cumplen(const std::string &,ListReinfLayer &,bool );
     void getBarrasIn(const Poligono2d &,ListReinfLayer &,bool );
     void getBarrasIn(const Semiplano2d &,ListReinfLayer &,bool );
     
