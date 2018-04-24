@@ -97,7 +97,7 @@ Pos3d XC::ComputePivots::calcPositionPivotA(void) const
     if(!SFibers.empty()) //Hay armadura.
       {
         const Fiber *t= getFiberSMinY();
-        const Pos3d pos_t= getPos3d(t,agot_pivots.getDefAgotPivotA()); //Yield strain in A pivot.
+        const Pos3d pos_t= getPos3d(t,agot_pivots.getUltimateStrainAPivot()); //Yield strain in A pivot.
         const double v_min_s= GetPosLocal(pos_t)(2);
         if(v_min_s<0) //Cell is in tension zone.
           retval= pos_t;
@@ -113,7 +113,7 @@ Pos3d XC::ComputePivots::calcPositionPivotA(void) const
 Pos3d XC::ComputePivots::calcPositionPivotB(void) const
   {
     const Fiber *t= getFiberCMaxY();
-    Pos3d retval= getPos3d(t,agot_pivots.getDefAgotPivotB());
+    Pos3d retval= getPos3d(t,agot_pivots.getUltimateStrainBPivot());
     return retval;
   }
 
@@ -123,7 +123,7 @@ Pos3d XC::ComputePivots::calcPositionPivotC(void) const
     const Pos3d D= getDPoint();
     const Pos3d B= calcPositionPivotB();
     const Recta3d s(D,B);
-    GeomObj::list_Pos3d lp= s.Interseccion(1,agot_pivots.getDefAgotPivotC());
+    GeomObj::list_Pos3d lp= s.Interseccion(1,agot_pivots.getUltimateStrainCPivot());
     assert(lp.size()>0); //List must not be empty.
     const Pos3d retval= *lp.begin();
     return retval;

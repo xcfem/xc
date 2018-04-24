@@ -154,16 +154,6 @@ size_t XC::ListReinfLayer::getNumReinfBars(void) const
     return nbars;
   }
 
-// //! Returns the rebar subset that fulfills the condition
-// //! being passed as parameter.
-// void XC::ListReinfLayer::Cumplen(const std::string &cond,ListReinfLayer &retval,bool clear)
-//   {
-//     if(clear) retval.clear();
-//     const_iterator i= begin();
-//     for(;i!= end();i++)
-//       (*i)->Cumplen(cond,retval,false);
-//   }
-
 //! Returns the rebar subset which center lies inside the polygon.
 //! @param plg: 2D polygon.
 //! @param retval: rebars which centers lies inside the polygon.

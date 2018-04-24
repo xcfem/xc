@@ -46,12 +46,12 @@ class PivotsUltimateStrains: public EntCmd
   public:
     PivotsUltimateStrains(const double &eA= 0.01,const double &eB= -0.0035,const double &eC= -0.002);
 
-    const double &getDefAgotPivotA(void) const;
-    const double &getDefAgotPivotB(void) const;
-    const double &getDefAgotPivotC(void) const;
-    void setDefAgotPivotA(const double &);
-    void setDefAgotPivotB(const double &);
-    void setDefAgotPivotC(const double &);
+    const double &getUltimateStrainAPivot(void) const;
+    const double &getUltimateStrainBPivot(void) const;
+    const double &getUltimateStrainCPivot(void) const;
+    void setUltimateStrainAPivot(const double &);
+    void setUltimateStrainBPivot(const double &);
+    void setUltimateStrainCPivot(const double &);
     const double getIncEpsAB(const double &ndiv= 25) const;
 
   };

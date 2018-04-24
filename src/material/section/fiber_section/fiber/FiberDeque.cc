@@ -954,23 +954,6 @@ size_t XC::FiberDeque::nearest_fiber(const double &y,const double &z) const
     return retval;
   }
 
-// //! Return the fiber set that fulfill the condition
-// //! being passed as parameter.
-// void XC::FiberDeque::Cumplen(const std::string &cond,FiberDeque &retval,bool clear)
-//   {
-//     if(clear) retval.clear();
-//     std::deque<Fiber *>::iterator i= begin();
-//     for(;i!= end();i++)
-//       if(*i)
-//         {
-//           if((*i)->verdadero(cond))
-//             retval.push_back(*i);
-//         }
-//       else
-//         std::cerr << "FiberDeque::Cumplen; Pointer to fiber is null." << std::endl;
-//     retval.updateCDG();
-//   }
-
 //! Return the subfiber set of this one which material tag is
 //! being passed as parameter.
 void XC::FiberDeque::SelMatTag(const int &matTag,FiberDeque &retval,bool clear)

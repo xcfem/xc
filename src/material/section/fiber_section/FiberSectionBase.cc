@@ -35,7 +35,7 @@
 #include "material/section/repres/section/FiberSectionRepr.h"
 #include "material/section/repres/geom_section/GeomSection.h"
 #include "material/section/interaction_diagram/DeformationPlane.h"
-#include "material/section/interaction_diagram/ParamAgotTN.h"
+#include "material/section/interaction_diagram/NormalStressStrengthParameters.h"
 #include "material/section/interaction_diagram/InteractionDiagramData.h"
 #include "material/section/interaction_diagram/ComputePivots.h"
 #include "material/section/interaction_diagram/Pivots.h"
@@ -121,34 +121,6 @@ void XC::FiberSectionBase::create_fiber_set(const std::string &nmb)
 XC::FiberSectionBase::fiber_set_iterator XC::FiberSectionBase::get_fiber_set(const std::string &nmb_set)
   { return fiber_sets.get_fiber_set(nmb_set); }
 
-
-// //! @brief Creates a fiber set with those that fulfill the condition
-// //! being passed as parameter.
-// XC::FiberSectionBase::fiber_set_iterator XC::FiberSectionBase::sel(const std::string &nmb_set,const std::string &cond)
-//   {
-//     fiber_set_iterator i= get_fiber_set(nmb_set);
-//     fibers.Cumplen(cond,(*i).second);
-//     return i;
-//   }
-
-// //! @brief Creates a fiber set that belongs to the set with the name nmb_set_org, and satisfy the contition being passed as parameter.
-// XC::FiberSectionBase::fiber_set_iterator XC::FiberSectionBase::resel(const std::string &nmb_set,const std::string &nmb_set_org,const std::string &cond)
-//   {
-//     fiber_set_iterator i= fiber_sets.end();
-//     if(nmb_set != nmb_set_org)
-//       {
-//         i= get_fiber_set(nmb_set);
-//         fiber_set_iterator j= fiber_sets.find(nmb_set_org);
-//         if(j == fiber_sets.end())
-//           {
-//             std::clog << "Origin fibers set: '" << nmb_set_org
-//                       << "' doesn't exists; command ignored." << std::endl;
-//           }
-//         else
-//           (*j).second.Cumplen(cond,(*i).second);
-//       }
-//     return i;
-//   }
 
 //! @brief Creates a fiber set which material has the tag being passed as parameter.
 XC::FiberSectionBase::fiber_set_iterator XC::FiberSectionBase::sel_mat_tag(const std::string &nmb_set,const int &matTag)
@@ -581,7 +553,7 @@ Pos3d XC::FiberSectionBase::getNMyMz(const DeformationPlane &def)
 //! of the section for an angle \f$\theta\f$ with respect to the z axis.
 void XC::FiberSectionBase::getInteractionDiagramPointsForTheta(NMyMzPointCloud &lista_esfuerzos,const InteractionDiagramData &diag_data,const FiberDeque &fsC,const FiberDeque &fsS,const double &theta)
   {
-    ComputePivots cp(diag_data.getDefsAgotPivots(),fibers,fsC,fsS,theta);
+    ComputePivots cp(diag_data.getPivotsUltimateStrains(),fibers,fsC,fsS,theta);
     Pivots pivots(cp);
     if(pivots.Ok())
       {
@@ -591,8 +563,8 @@ void XC::FiberSectionBase::getInteractionDiagramPointsForTheta(NMyMzPointCloud &
         Pos3d P3;
         DeformationPlane def;
         const double inc_eps_B= diag_data.getIncEps();
-        const double eps_agot_A= diag_data.getDefsAgotPivots().getDefAgotPivotA();
-        const double eps_agot_B= diag_data.getDefsAgotPivots().getDefAgotPivotB();
+        const double eps_agot_A= diag_data.getPivotsUltimateStrains().getUltimateStrainAPivot();
+        const double eps_agot_B= diag_data.getPivotsUltimateStrains().getUltimateStrainBPivot();
         for(double e= eps_agot_A;e>=eps_agot_B;e-=inc_eps_B)
           {
             P3= pivots.getBPoint(e);
@@ -627,7 +599,7 @@ void XC::FiberSectionBase::getInteractionDiagramPointsForTheta(NMyMzPointCloud &
         //Domain 5
         P1= pivots.getCPivot(); //Pivot
         P2= P1+100.0*cp.GetK(); 
-        const double eps_agot_C= diag_data.getDefsAgotPivots().getDefAgotPivotC();
+        const double eps_agot_C= diag_data.getPivotsUltimateStrains().getUltimateStrainCPivot();
         const double inc_eps_D= diag_data.getIncEps();
         for(double e= 0.0;e>=eps_agot_C;e-=inc_eps_D)
           {

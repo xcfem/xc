@@ -35,16 +35,16 @@ class_<XC::ComputePivots, bases<Ref3d3d>, boost::noncopyable >("ComputePivots", 
   ;
 
 class_<XC::PivotsUltimateStrains, bases<EntCmd>, boost::noncopyable >("PivotsUltimateStrains", no_init)
-  .add_property("defAgotPivotA",make_function(&XC::PivotsUltimateStrains::getDefAgotPivotA,return_value_policy<copy_const_reference>()),&XC::PivotsUltimateStrains::setDefAgotPivotA)
-  .add_property("defAgotPivotB",make_function(&XC::PivotsUltimateStrains::getDefAgotPivotB,return_value_policy<copy_const_reference>()),&XC::PivotsUltimateStrains::setDefAgotPivotB)
-  .add_property("defAgotPivotC",make_function(&XC::PivotsUltimateStrains::getDefAgotPivotC,return_value_policy<copy_const_reference>()),&XC::PivotsUltimateStrains::setDefAgotPivotC)
+  .add_property("ultimateStrainAPivot",make_function(&XC::PivotsUltimateStrains::getUltimateStrainAPivot,return_value_policy<copy_const_reference>()),&XC::PivotsUltimateStrains::setUltimateStrainAPivot)
+  .add_property("ultimateStrainBPivot",make_function(&XC::PivotsUltimateStrains::getUltimateStrainBPivot,return_value_policy<copy_const_reference>()),&XC::PivotsUltimateStrains::setUltimateStrainBPivot)
+  .add_property("ultimateStrainCPivot",make_function(&XC::PivotsUltimateStrains::getUltimateStrainCPivot,return_value_policy<copy_const_reference>()),&XC::PivotsUltimateStrains::setUltimateStrainCPivot)
   ;
 
 class_<XC::InteractionDiagramData, bases<EntCmd>>("InteractionDiagramParameters")
   .add_property("umbral",make_function(&XC::InteractionDiagramData::getUmbral,return_value_policy<copy_const_reference>()),&XC::InteractionDiagramData::setUmbral)
   .add_property("incEps",make_function(&XC::InteractionDiagramData::getIncEps,return_value_policy<copy_const_reference>()),&XC::InteractionDiagramData::setIncEps)
   .add_property("incTheta",make_function(&XC::InteractionDiagramData::getIncTheta,return_value_policy<copy_const_reference>()),&XC::InteractionDiagramData::setIncTheta)
-  .add_property("defsAgotPivots",make_function(&XC::InteractionDiagramData::getDefsAgotPivots,return_internal_reference<>()),&XC::InteractionDiagramData::setDefsAgotPivots)
+  .add_property("pivotsUltimateStrains",make_function(&XC::InteractionDiagramData::getPivotsUltimateStrains,return_internal_reference<>()),&XC::InteractionDiagramData::setPivotsUltimateStrains)
   .add_property("concreteSetName",make_function(&XC::InteractionDiagramData::getConcreteSetName,return_internal_reference<>()),&XC::InteractionDiagramData::setConcreteSetName)
   .add_property("concreteTag",make_function(&XC::InteractionDiagramData::getConcreteTag,return_value_policy<copy_const_reference>()),&XC::InteractionDiagramData::setConcreteTag)
   .add_property("nmbSetArmadura",make_function(&XC::InteractionDiagramData::getNmbSetArmadura,return_internal_reference<>()),&XC::InteractionDiagramData::setNmbSetArmadura)

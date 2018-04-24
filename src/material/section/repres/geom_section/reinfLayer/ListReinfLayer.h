@@ -87,7 +87,6 @@ class ListReinfLayer: public std::list<ReinfLayer *>, public SectionMassProperti
 
     size_t getNumReinfBars(void) const;
 
-    //void Cumplen(const std::string &,ListReinfLayer &,bool );
     void getBarrasIn(const Poligono2d &,ListReinfLayer &,bool );
     void getBarrasIn(const Semiplano2d &,ListReinfLayer &,bool );
 
