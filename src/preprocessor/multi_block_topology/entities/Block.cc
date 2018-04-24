@@ -198,7 +198,7 @@ void XC::Block::update_topology(void)
 //! - If one or more of the faces are already defined, we search for the index
 //!  on the base of the line in common with it.
 //! If this line exists, that index corresponds to the surface in the solid.
-size_t XC::Block::indice(Face *s) const
+size_t XC::Block::index(Face *s) const
   {
     size_t retval= 0;
     if(sups[0].Vacia())
@@ -276,7 +276,7 @@ void XC::Block::insert(const size_t &i)
   {
     Face *s= BuscaFace(i);
     if(s)
-      put(indice(s),s);
+      put(index(s),s);
     else
       std::cerr << getClassName() << "::" << __FUNCTION__
 		<< "; surface: " << i

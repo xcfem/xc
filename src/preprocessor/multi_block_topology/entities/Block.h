@@ -39,7 +39,7 @@ namespace XC {
 class Block: public Body
   {
     BodyFace sups[6];
-    size_t indice(Face *s) const;
+    size_t index(Face *s) const;
     void put(const size_t &i,Face *s);
   protected:
     void insert(const size_t &);
