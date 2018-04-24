@@ -202,12 +202,12 @@ class PointLoadOverShellElems(BaseVectorLoad):
         else:
             areaSet=float(np.sum([e.getArea(False) for e in aux_set.getElements]))
             factor=1.0/areaSet
-            v= factor*self.loadVector#*factor
             for e in aux_set.getElements:
                 if self.refSystem=='Local':
                     load=e.vector3dUniformLoadLocal(factor*self.loadVector)
                 else:
                     load=e.vector3dUniformLoadGlobal(factor*self.loadVector)
+            aux_set.clear()
             
 class EarthPressLoad(BaseVectorLoad):
     '''Earth pressure applied on the elements (shell or beams)
