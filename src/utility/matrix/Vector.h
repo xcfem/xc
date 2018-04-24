@@ -100,6 +100,8 @@ class Vector: public EntCmd
     void free_mem(void);
     void alloc(const size_t &sz);
   public:
+    typedef double* iterator;
+    
     // constructors and destructor
     Vector(void);
     explicit Vector(const int &, const double &value= 0.0);
@@ -112,6 +114,8 @@ class Vector: public EntCmd
     Vector(const boost::python::list &);
     virtual ~Vector(void);
 
+    iterator begin(void);
+    iterator end(void);
     // utility methods
     int setData(double *newData, int size);
     const double *getDataPtr(void) const;
@@ -231,6 +235,13 @@ inline const double *Vector::getDataPtr(void) const
 //! @brief Return a pointer to the float date.
 inline double *Vector::getDataPtr(void)
   { return theData; }
+
+//! @brief Iterator that points to the first vector component.
+inline Vector::iterator Vector::begin(void)
+  { return theData; }
+//! @brief Iterator that points one past the last vector component.
+inline Vector::iterator Vector::end(void)
+  { return theData + sz; }
 
 //! @brief Return true if the vector has no data.
 inline bool Vector::isEmpty(void) const

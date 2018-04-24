@@ -43,6 +43,7 @@ double &(XC::Vector::*getItemVector)(const size_t &)= &XC::Vector::at;
 class_<XC::Vector, bases<EntCmd> >("Vector")
   .def(init<boost::python::list>())
   .def("__getitem__",getItemVector, return_value_policy<return_by_value>())
+  .def("__iter__",range(&XC::Vector::begin, &XC::Vector::end))
 //  .def( "__getitem__", getItemVector, boost::python::arg( "index" ), boost::python::return_internal_reference<>() )
   .def(self * double())
   .def(double() * self)
