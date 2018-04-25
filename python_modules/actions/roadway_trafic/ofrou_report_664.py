@@ -6,11 +6,11 @@ from __future__ import division
    "Charges de trafic actualisées pour les dalles de roulement en béton
    des ponts existants".'''
 
-__author__= "Luis C. Pérez Tato (LCPT) Ana Ortega (A_OO)"
-__copyright__= "Copyright 2018, A_OO LCPT"
+__author__= "Luis C. Pérez Tato (LCPT)"
+__copyright__= "Copyright 2018, LCPT"
 __license__= "GPL"
 __version__= "3.0"
-__email__= "l.pereztato@gmail.com ana.Ortega.Ort@gmail.com"
+__email__= "l.pereztato@gmail.com"
 
 import xc_base
 import geom

@@ -35,6 +35,7 @@
 
 #include "preprocessor/EntMdlrBase.h"
 #include "preprocessor/MeshingParams.h"
+#include "utility/matrix/Vector.h"
 
 class Lista;
 
@@ -49,14 +50,14 @@ class UniformGrid;
 //!  \brief Base de las clases Set y SetEstruct.
 class SetBase: public EntMdlrBase
   {
-    ID color;
+    Vector color;
   public:
     SetBase(const std::string &nmb="",Preprocessor *preprocessor= nullptr);
     inline virtual ~SetBase(void)
       {}
-    void setColorComponents(const int &, const int &, const int &);
-    void setColor(const ID &);
-    const ID &getColor(void) const;
+    void setColorComponents(const double &, const double &, const double &);
+    void setColor(const Vector &);
+    const Vector &getColor(void) const;
     virtual void genMesh(meshing_dir dm);
     virtual void fix(const SFreedom_Constraint &);
 
