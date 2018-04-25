@@ -109,11 +109,11 @@ double XC::ReinfBar::Iy(void) const
 double XC::ReinfBar::Iz(void) const
   { return Iy(); }
 
-//! @brief Return the producto de inercia respecto a los ejes paralelos por el centroid.
+//! @brief Return the product of inertia respecto a the parallel axes por el centroid.
 double XC::ReinfBar::Pyz(void) const
   { return 0.0; }
 
-//! @brief Return the moment of inertia polar with respect to centroid en ejes locales.
+//! @brief Return the moment of inertia polar with respect to centroid in local coordinates.
 double XC::ReinfBar::Ix(void) const
   { return Iy()+Iz(); }
 
@@ -123,7 +123,7 @@ double XC::ReinfBar::Theta_p(void) const
 
 //! @brief Return the direcction of one of the principal axis of inertia
 //! (we don't know yet if it's the major one or the minor one).
-const XC::Vector &XC::ReinfBar::DirEjeI_a(void) const
+const XC::Vector &XC::ReinfBar::IAxisDir_a(void) const
   {
     static Vector retval(2);
     retval[0]= 1.0;
@@ -131,10 +131,10 @@ const XC::Vector &XC::ReinfBar::DirEjeI_a(void) const
     return retval;
   }
 
-//! @brief Return the direcction of the other (with respect to DirEjeI_a)
+//! @brief Return the direcction of the other (with respect to IAxisDir_a)
 //! principal axis of inertia (we don't know yet if it's the major
 //! one or the minor one).
-const XC::Vector &XC::ReinfBar::DirEjeI_b(void) const
+const XC::Vector &XC::ReinfBar::IAxisDir_b(void) const
   {
     static Vector retval(2);
     retval[0]= 0.0;
@@ -142,14 +142,14 @@ const XC::Vector &XC::ReinfBar::DirEjeI_b(void) const
     return retval;
   }
 
-//     Recta2d EjeI_a(void) const;
+//     Recta2d IAxis_a(void) const;
 //     //Returns a principal axis of inertia (we don't know yet if it's
 //     //the major one or the minor one).
-//     Recta2d EjeI_b(void) const;
+//     Recta2d IAxis_b(void) const;
 //     //Return the otro principal axis of inertia (we don't know yet if it's
 //     //the major one or the minor one).
-//     Ref2d2d EjesPrincipalesInercia(void) const;
-//     //Return the ejes principales de inercia.
+//     Ref2d2d principalAxesOfInertia(void) const;
+//     //Return the principal axes of inertia.
 
 //! @brief Return the principal major axis of inertia.
 double XC::ReinfBar::getI1(void) const
@@ -186,8 +186,8 @@ double XC::ReinfBar::getI(const unsigned short int i,const unsigned short int j,
     const Vector cdg= getPosition();
 
     Pos2d pp(cdg[0],cdg[1]);
-    Ref2d2d ejes(pp);
-    Pos2d pos_local= ejes.GetPosLocal(o);
+    Ref2d2d axes(pp);
+    Pos2d pos_local= axes.GetPosLocal(o);
     return Iij + getArea() * pos_local(i) * pos_local(j);
   }
 

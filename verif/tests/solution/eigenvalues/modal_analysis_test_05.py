@@ -147,12 +147,12 @@ ratio2= (diff_modes).rowNorm()
 
 
 ratio3= abs(totalMass-targetTotalMass)/targetTotalMass
-factoresDistribEjemplo= xc.Matrix([[0.419,0.295,0.148],
+exampleDistribFactors= xc.Matrix([[0.419,0.295,0.148],
                                    [0.676,0.363,0.059],
                                    [0.889,0.27,-0.105],
                                    [1.157,-0.093,-0.156],
                                    [1.298,-0.386,0.133]])
-diff_fdib= distributionFactors-factoresDistribEjemplo
+diff_fdib= distributionFactors-exampleDistribFactors
 ratio4= (diff_fdib).rowNorm()
 
 '''

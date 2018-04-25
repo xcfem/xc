@@ -223,7 +223,7 @@ zTP=sccEl1.getTensionedPlaneTrace().getParamB()
 zTPTeor=-0.248
 ratio5=(zTP-zTPTeor)/zTP
 #Internal forces axis (uniaxial bending, parallel to section's Y-axis)
-zIFA=sccEl1.getInternalForcesAxis().getParamB()
+zIFA=sccEl1.getInternalForcesAxes().getParamB()
 zIFATeor=0.0
 ratio6=zIFA-zIFATeor
 #Lever arm

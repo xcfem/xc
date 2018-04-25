@@ -139,8 +139,8 @@ const Trihedron *XC::InteractionDiagram::findTrihedronPtr(const Pos3d &p) const
 	InteractionDiagram::const_iterator i= begin();
         const Trihedron *tr= &(*i);
         SemiRecta3d rayo(tr->Cuspide(),p);
-        Recta3d eje= tr->Eje();
-        double angMin= angulo(eje,rayo);
+        Recta3d axis= tr->Axis();
+        double angMin= angulo(axis,rayo);
         double angTmp= angMin;
         retval= tr;
         i++;
@@ -148,7 +148,7 @@ const Trihedron *XC::InteractionDiagram::findTrihedronPtr(const Pos3d &p) const
           {
             tr= &(*i);
             rayo= SemiRecta3d(tr->Cuspide(),p);
-            angTmp= angulo(tr->Eje(),rayo);
+            angTmp= angulo(tr->Axis(),rayo);
             if(angTmp<angMin)
               {
                 angMin= angTmp;

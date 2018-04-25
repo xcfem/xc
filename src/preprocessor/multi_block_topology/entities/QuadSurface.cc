@@ -113,7 +113,7 @@ const XC::Edge *XC::QuadSurface::get_lado_homologo(const Edge *l) const
   }
 
 
-//! @brief Asigna el number of divisions en el eje i.
+//! @brief Set the number of divisions on the i axis.
 void XC::QuadSurface::SetNDivI(const size_t &ndi)
   {
     if(lines.size()<4)
@@ -134,7 +134,7 @@ void XC::QuadSurface::SetNDivI(const size_t &ndi)
       }
   }
 
-//! @brief Asigna el number of divisions en el eje j.
+//! @brief Set the number of divisions on the j axis.
 void XC::QuadSurface::SetNDivJ(const size_t &ndj)
   {
     if(lines.size()<4)

@@ -200,21 +200,21 @@ class ElasticBeam3d : public ProtoBeam3d
       }
     inline double getAVy1(void)
       { //¡Warning! call "calc_resisting_force" before calling this method.
-        return q.Vy(theCoordTransf->getInitialLength())+p0[1]; //Cortante y que se ejerce sobre la barra en su extremo dorsal.
+        return q.Vy(theCoordTransf->getInitialLength())+p0[1]; //Cortante y drived over the bar in its back end.
       }
     inline double getAVy2(void)
       { //¡Warning! call "calc_resisting_force" before calling this method.
-        return -q.Vy(theCoordTransf->getInitialLength())+p0[2]; //Cortante y que se ejerce sobre la barra en su extremo frontal.
+        return -q.Vy(theCoordTransf->getInitialLength())+p0[2]; //Cortante y drived over the bar in its front end.
       }
     //! @brief Internal shear force at the back end.
     inline double getVy1(void)
       { //¡Warning! call "calc_resisting_force" before calling this method.
-        return -q.Vy(theCoordTransf->getInitialLength())-p0[1]; //Cortante y en su extremo dorsal.
+        return -q.Vy(theCoordTransf->getInitialLength())-p0[1]; //Cortante y in its back end.
       }
     //! @brief Internal shear force at the front end.
     inline double getVy2(void)
       {  //¡Warning! call "calc_resisting_force" before calling this method.
-        return p0[2]-q.Vy(theCoordTransf->getInitialLength()); //Cortante y en su extremo frontal.
+        return p0[2]-q.Vy(theCoordTransf->getInitialLength()); //Cortante y in its front end.
       }
     //! @brief Internal shear force in the middle of the element.
     inline double getVz(void)
@@ -223,21 +223,21 @@ class ElasticBeam3d : public ProtoBeam3d
       }
     inline double getAVz1(void)
       { //¡Warning! call "calc_resisting_force" before calling this method.
-        return q.Vz(theCoordTransf->getInitialLength())+p0[3]; //Cortante z que se ejerce sobre la barra en su extremo dorsal.
+        return q.Vz(theCoordTransf->getInitialLength())+p0[3]; //Cortante z drived over the bar in its back end.
       }
     inline double getAVz2(void)
       { //¡Warning! call "calc_resisting_force" before calling this method.
-        return -q.Vz(theCoordTransf->getInitialLength())+p0[4]; //Cortante z que se ejerce sobre la barra en su extremo frontal.
+        return -q.Vz(theCoordTransf->getInitialLength())+p0[4]; //Cortante z drived over the bar in its front end.
       }
     //! @brief Internal shear force at the back end.
     inline double getVz1(void)
       { //¡Warning! call "calc_resisting_force" before calling this method.
-        return -q.Vz(theCoordTransf->getInitialLength())-p0[3]; //Cortante z en su extremo dorsal.
+        return -q.Vz(theCoordTransf->getInitialLength())-p0[3]; //Cortante z in its back end.
       }
     //! @brief Internal shear force at the front end.
     inline double getVz2(void)
       { //¡Warning! call "calc_resisting_force" before calling this method.
-        return p0[4]-q.Vz(theCoordTransf->getInitialLength()); //Cortante z en su extremo frontal.
+        return p0[4]-q.Vz(theCoordTransf->getInitialLength()); //Cortante z in its front end.
       }
     //! @brief Internal bending moment at the back end.   
     inline double getMy1(void)

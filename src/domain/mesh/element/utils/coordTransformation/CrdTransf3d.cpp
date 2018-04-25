@@ -284,7 +284,7 @@ int XC::CrdTransf3d::initialize(Node *nodeIPointer, Node *nodeJPointer)
 //! expressed in global coordinates for the current geometry.
 const XC::Vector &XC::CrdTransf3d::getI(void) const
   {
-    calculaEjesLocales();
+    computeLocalAxis();
     return vectorI;
   }
 
@@ -292,7 +292,7 @@ const XC::Vector &XC::CrdTransf3d::getI(void) const
 //! expressed in global coordinates for the current geometry.
 const XC::Vector &XC::CrdTransf3d::getJ(void) const
   {
-    calculaEjesLocales();
+    computeLocalAxis();
     return vectorJ;
   }
 
@@ -300,14 +300,14 @@ const XC::Vector &XC::CrdTransf3d::getJ(void) const
 //! expressed in global coordinates for the current geometry.
 const XC::Vector &XC::CrdTransf3d::getK(void) const
   {
-    calculaEjesLocales();
+    computeLocalAxis();
     return vectorK;
   }
 
 //| @brief Returns of the directions vectors of the local axis.
 int XC::CrdTransf3d::getLocalAxes(Vector &XAxis, Vector &YAxis, Vector &ZAxis) const
   {
-    int retval= calculaEjesLocales();
+    int retval= computeLocalAxis();
     if(retval==0)
       {
         XAxis(0)= vectorI(0); XAxis(1)= vectorI(1); XAxis(2)= vectorI(2);
@@ -322,7 +322,7 @@ int XC::CrdTransf3d::getLocalAxes(Vector &XAxis, Vector &YAxis, Vector &ZAxis) c
 XC::Matrix XC::CrdTransf3d::getLocalAxes(bool initialGeometry) const
   {
     Matrix retval(3,3);
-    int err= calculaEjesLocales();
+    int err= computeLocalAxis();
     if(err==0)
       {
         retval(0,0)= vectorI(0); retval(0,1)= vectorI(1); retval(0,2)= vectorI(2);
@@ -400,7 +400,7 @@ const XC::Matrix &XC::CrdTransf3d::getPointsGlobalCoordFromBasic(const Vector &b
 //! @brief Returns the vector expressed in global coordinates.
 const XC::Vector &XC::CrdTransf3d::getVectorGlobalCoordFromLocal(const Vector &localCoords) const
   {
-    calculaEjesLocales(); //Actualiza la matrix R.
+    computeLocalAxis(); //Actualiza la matrix R.
     // vectorCoo = Rlj'*localCoords (Multiplica el vector por R traspuesta).
     vectorCoo(0)= R(0,0)*localCoords(0) + R(1,0)*localCoords(1) + R(2,0)*localCoords(2);
     vectorCoo(1)= R(0,1)*localCoords(0) + R(1,1)*localCoords(1) + R(2,1)*localCoords(2);
@@ -413,7 +413,7 @@ const XC::Vector &XC::CrdTransf3d::getVectorGlobalCoordFromLocal(const Vector &l
 //! returned matrix.
 const XC::Matrix &XC::CrdTransf3d::getVectorGlobalCoordFromLocal(const Matrix &localCoords) const
   {
-    calculaEjesLocales(); //Actualiza la matrix R.
+    computeLocalAxis(); //Actualiza la matrix R.
     static Matrix retval;
     const size_t numPts= localCoords.noRows(); //Number of vectors to transform
     retval.resize(numPts,3);
@@ -430,7 +430,7 @@ const XC::Matrix &XC::CrdTransf3d::getVectorGlobalCoordFromLocal(const Matrix &l
 //! @brief Returns the vector expresado en local coordinates.
 const XC::Vector &XC::CrdTransf3d::getVectorLocalCoordFromGlobal(const Vector &globalCoords) const
   {
-    calculaEjesLocales(); //Actualiza la matrix R.
+    computeLocalAxis(); //Actualiza la matrix R.
     vectorCoo[0]= R(0,0)*globalCoords[0] + R(0,1)*globalCoords[1] + R(0,2)*globalCoords[2];
     vectorCoo[1]= R(1,0)*globalCoords[0] + R(1,1)*globalCoords[1] + R(1,2)*globalCoords[2];
     vectorCoo[2]= R(2,0)*globalCoords[0] + R(2,1)*globalCoords[1] + R(2,2)*globalCoords[2];

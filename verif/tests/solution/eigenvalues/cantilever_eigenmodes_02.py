@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Tomado del Ejemplo A47 del SOLVIA Verification Manual
+# Tomado del example A47 del SOLVIA Verification Manual
 import xc_base
 import geom
 import xc

@@ -741,11 +741,11 @@ Segmento2d XC::FiberSectionBase::getSegmentoBrazoMecanico(void) const
     if(!retval.exists())
       {
         //Lever arm as 0.8 times total depth.
-        const Recta2d ejeX= getEjeEsfuerzos();
+        const Recta2d Xaxis= getInternalForcesAxis();
         const Pos2d cdg= getCdg();
-        const Recta2d ejeY= ejeX.Perpendicular(cdg);
+        const Recta2d Yaxis= Xaxis.Perpendicular(cdg);
         const Poligono2d contour= getRegionsContour();
-        retval= contour.Clip(ejeY);
+        retval= contour.Clip(Yaxis);
         Pos2d org= retval.Origen()+0.1*retval.GetVector();
         Pos2d dest= retval.Destino()-0.1*retval.GetVector();
         retval= Segmento2d(org,dest);
@@ -773,9 +773,9 @@ Recta2d XC::FiberSectionBase::getBendingPlaneTrace(void) const
     Recta2d retval= fibers.getBendingPlaneTrace();
     if(!retval.exists())
       {
-        Recta2d eje= getEjeEsfuerzos();
+        Recta2d axis= getInternalForcesAxis();
         Pos2d cdg= getCdg();
-        retval= eje.Perpendicular(cdg);
+        retval= axis.Perpendicular(cdg);
       } 
     return retval;
   }
@@ -854,8 +854,8 @@ double XC::FiberSectionBase::getHomogenizedI(const double &E0) const
   {
     if(fabs(E0)<1e-6)
       std::clog << "homogenization reference modulus too small; E0= " << E0 << std::endl; 
-    const Recta2d eje= getEjeEsfuerzos();
-    return fibers.getIHomogenizedSection(E0,eje);
+    const Recta2d axis= getInternalForcesAxis();
+    return fibers.getIHomogenizedSection(E0,axis);
   }
 
 //! @brief Static moment relative to bending axis of area that rests over this axis.
@@ -863,8 +863,8 @@ double XC::FiberSectionBase::getSPosHomogeneizada(const double &E0) const
   {
     if(fabs(E0)<1e-6)
       std::clog << "homogenization reference modulus too small; E0= " << E0 << std::endl; 
-    const Recta2d eje= getEjeEsfuerzos();
-    return fibers.getSPosHomogenizedSection(E0,Semiplano2d(eje));
+    const Recta2d axis= getInternalForcesAxis();
+    return fibers.getSPosHomogenizedSection(E0,Semiplano2d(axis));
   }
 
 std::string XC::FiberSectionBase::getStrClaseEsfuerzo(const double &tol) const

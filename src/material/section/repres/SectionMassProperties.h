@@ -59,14 +59,14 @@ class SectionMassProperties: public EntCmd
 
     double getIxGrossSection(void) const;
     double getTheta_pGrossSection(void) const;
-    Vector getDirEjeI_aGrossSection(void) const;
-    Vector getDirEjeI_bGrossSection(void) const;
+    Vector getIAxisDir_aGrossSection(void) const;
+    Vector getIAxisDir_bGrossSection(void) const;
     double getI1GrossSection(void) const;
     double getI2GrossSection(void) const;
-    PrincipalAxesOfInertia2D getEjesInerciaGrossSection(void) const;
-    Vector2d getVDirEje1GrossSection(void) const;
+    PrincipalAxesOfInertia2D getInertiaAxesGrossSection(void) const;
+    Vector2d getAxis1VDirGrossSection(void) const;
     Vector2d getVDirStrongAxisGrossSection(void) const;
-    Vector2d getVDirEje2GrossSection(void) const;
+    Vector2d getAxis2VDirGrossSection(void) const;
     Vector2d getVDirWeakAxisGrossSection(void) const;
     double getIGrossSection(const unsigned short int &,const unsigned short int &) const;
     double getIGrossSection(const unsigned short int &,const unsigned short int &,const Pos2d &) const;
@@ -84,14 +84,14 @@ class SectionMassProperties: public EntCmd
 
     double getIxHomogenizedSection(const double &) const;
     double getTheta_pHomogenizedSection(void) const;
-    Vector getDirEjeI_aHomogenizedSection(void) const;
-    Vector getDirEjeI_bHomogenizedSection(void) const;
+    Vector getIAxisDir_aHomogenizedSection(void) const;
+    Vector getIAxisDir_bHomogenizedSection(void) const;
     double getI1HomogenizedSection(const double &) const;
     double getI2HomogenizedSection(const double &) const;
-    PrincipalAxesOfInertia2D getEjesInerciaHomogenizedSection(const double &) const;
-    Vector2d getVDirEje1HomogenizedSection(const double &) const;
+    PrincipalAxesOfInertia2D getInertiaAxesHomogenizedSection(const double &) const;
+    Vector2d getAxis1VDirHomogenizedSection(const double &) const;
     Vector2d getVDirStrongAxisHomogenizedSection(const double &) const;
-    Vector2d getVDirEje2HomogenizedSection(const double &) const;
+    Vector2d getAxis2VDirHomogenizedSection(const double &) const;
     Vector2d getVDirWeakAxisHomogenizedSection(const double &) const;
     double getIHomogenizedSection(const double &,const unsigned short int &,const unsigned short int &) const;
     double getIHomogenizedSection(const double &,const unsigned short int &,const unsigned short int &,const Pos2d &) const;

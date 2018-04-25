@@ -33,7 +33,7 @@
 #include "material/section/repres/geom_section/reinfLayer/ListReinfLayer.h"
 #include <list>
 #include "boost/lexical_cast.hpp"
-#include "Eje.h"
+#include "Axis.h"
 #include "material/section/repres/SectionMassProperties.h"
 
 class Semiplano2d;
@@ -65,7 +65,7 @@ class GeomSection: public SectionMassProperties
 
     typedef std::map<size_t,SectionReferenceFrame *> lst_sis_ref;//!< reference systems container.
     typedef std::map<size_t,Spot *> lst_spots; //!< point container.
-    typedef std::map<size_t,Eje *> lst_ejes; //!< line container.
+    typedef std::map<size_t,Axis *> axes_container; //!< line container.
 
   protected:
     MaterialHandler *material_handler; //!< Material handler (searching,...).
@@ -78,8 +78,8 @@ class GeomSection: public SectionMassProperties
 
     lst_spots spots; //!< Point container.
     size_t tag_spot; //!< Default identifier for next point.
-    lst_ejes ejes; //!< Axis container.
-    size_t tag_eje; //!< Default identifier for next axis.
+    axes_container axes; //!< Axis container.
+    size_t axis_tag; //!< Default identifier for next axis.
 
   public:
     //Constructores
@@ -108,14 +108,14 @@ class GeomSection: public SectionMassProperties
     Spot *creaSpot(const Pos2d &);
     Spot *newSpot(const Pos2d &);
 
-    inline int getTagEje(void) const
-      { return tag_eje; }
-    void setTagEje(int i)
-      { tag_eje= i; }
-    Eje *busca_eje(const size_t &);
-    const Eje *busca_eje(const size_t &) const;
+    inline int getAxisTag(void) const
+      { return axis_tag; }
+    void setAxisTag(int i)
+      { axis_tag= i; }
+    Axis *find_axis(const size_t &);
+    const Axis *find_axis(const size_t &) const;
     template <class E>
-    Eje *creaEje(void);
+    Axis *createAxis(void);
     Segment *newSegment(size_t, size_t);
     
     // Section inquiring functions
@@ -163,21 +163,21 @@ class GeomSection: public SectionMassProperties
 
 //! @brief Creates a new axis.
 template <class E>
-Eje *XC::GeomSection::creaEje(void)
+Axis *XC::GeomSection::createAxis(void)
   {
-    Eje *retval= busca_eje(tag_eje);
+    Axis *retval= find_axis(axis_tag);
     if(!retval) //It doesn't already exist
       {
         retval= new E(this);
         if(retval)
           {
-            retval->Nombre()= "l"+boost::lexical_cast<std::string>(tag_eje);
-            ejes[tag_eje]= retval;
-            tag_eje++;
+            retval->Nombre()= "l"+boost::lexical_cast<std::string>(axis_tag);
+            axes[axis_tag]= retval;
+            axis_tag++;
 	  }
         else
 	  std::cerr << "Can't create axis with tag: "
-                    << tag_eje << ".\n";
+                    << axis_tag << ".\n";
       }
     return retval;
   }

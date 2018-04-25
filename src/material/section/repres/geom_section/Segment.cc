@@ -36,11 +36,11 @@
 
 //! @brief Constructor.
 XC::Segment::Segment(GeomSection *m,const size_t &ndiv)
-  : Eje(m,ndiv), p1(nullptr), p2(nullptr) {}
+  : Axis(m,ndiv), p1(nullptr), p2(nullptr) {}
 
 //! @brief Constructor.
 XC::Segment::Segment(const std::string &nombre,GeomSection *m,const size_t &ndiv)
-  : Eje(nombre,m,ndiv), p1(nullptr), p2(nullptr) {}
+  : Axis(nombre,m,ndiv), p1(nullptr), p2(nullptr) {}
 
 //! @brief Returns a pointer to start point.
 XC::Spot *XC::Segment::P1(void)

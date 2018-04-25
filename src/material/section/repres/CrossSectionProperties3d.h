@@ -95,10 +95,10 @@ class CrossSectionProperties3d: public CrossSectionProperties2d
     double getTheta(void) const;
     double getI1(void) const;
     double getI2(void) const;
-    PrincipalAxesOfInertia2D getEjesInercia(void) const;
-    Vector2d getVDirEje1(void) const;
+    PrincipalAxesOfInertia2D getInertiaAxes(void) const;
+    Vector2d getAxis1VDir(void) const;
     Vector2d getVDirStrongAxis(void) const;
-    Vector2d getVDirEje2(void) const;
+    Vector2d getAxis2VDir(void) const;
     Vector2d getVDirWeakAxis(void) const;
 
     const Matrix &getSectionTangent4x4(void) const;

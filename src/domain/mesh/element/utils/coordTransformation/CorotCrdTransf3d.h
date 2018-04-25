@@ -123,7 +123,7 @@ class CorotCrdTransf3d: public CrdTransf3d
   protected:    
     int sendData(CommParameters &);
     int recvData(const CommParameters &);
-    virtual int calculaEjesLocales(void) const;
+    virtual int computeLocalAxis(void) const;
   public:
     CorotCrdTransf3d(int tag= 0);
     CorotCrdTransf3d(int tag, const Vector &vecInLocXZPlane,const Vector &rigJntOffsetI, const Vector &rigJntOffsetJ);

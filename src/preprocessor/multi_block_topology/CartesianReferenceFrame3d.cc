@@ -48,8 +48,8 @@ void XC::CartesianReferenceFrame3d::ThreePoints(const Pos3d &p1,const Pos3d &p2,
 
 //! @brief Return the i-th axis unit vector expressed in the global coordinate
 //! system for the position passed as parameter.
-Vector3d XC::CartesianReferenceFrame3d::GetVDirEje(const size_t &i,const Pos3d &) const
-  { return ref.GetVDirEje(i); }
+Vector3d XC::CartesianReferenceFrame3d::getAxisVDir(const size_t &i,const Pos3d &) const
+  { return ref.getAxisVDir(i); }
 
 //! @brief Return the global coordinates of point p. 
 Pos3d XC::CartesianReferenceFrame3d::GetPosGlobal(const Pos3d &p) const

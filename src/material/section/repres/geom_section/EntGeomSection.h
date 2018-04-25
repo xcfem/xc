@@ -35,7 +35,7 @@ namespace XC {
 class GeomSection;
 class SectionReferenceFrame;
 class Spot;
-class Eje;
+class Axis;
 
 //! @ingroup MATSCCRepresGeom
 //
@@ -69,8 +69,8 @@ class EntGeomSection: public EntConNmb
 
     Spot *BuscaSpot(const size_t &);    
     const Spot *BuscaSpot(const size_t &) const;
-    Eje *BuscaEje(const size_t &);    
-    const Eje *BuscaEje(const size_t &) const;
+    Axis *findAxis(const size_t &);    
+    const Axis *findAxis(const size_t &) const;
   };
 
 } //end of XC namespace

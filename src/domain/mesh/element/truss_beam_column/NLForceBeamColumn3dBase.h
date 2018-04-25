@@ -126,19 +126,19 @@ class NLForceBeamColumn3dBase: public BeamColumnWithSectionFDTrf3d
       }
     inline double getAMz1(void)
       {                 //¡Warning! call "calc_resisting_force" before calling this method.
-        return Secommit.Mz1(); //Momento z que se ejerce sobre la barra en su extremo dorsal.
+        return Secommit.Mz1(); //Momento z drived over the bar in its back end.
       }
     inline double getAMz2(void)
       {                 //¡Warning! call "calc_resisting_force" before calling this method.
-        return Secommit.Mz2(); //Momento z que se ejerce sobre la barra en su extremo frontal.
+        return Secommit.Mz2(); //Momento z drived over the bar in its front end.
       }
     inline double getMz1(void)
       {                 //¡Warning! call "calc_resisting_force" before calling this method.
-        return -Secommit.Mz1(); //Momento z en su extremo dorsal.
+        return -Secommit.Mz1(); //Momento z in its back end.
       }
     inline double getMz2(void)
       {                 //¡Warning! call "calc_resisting_force" before calling this method.
-        return -Secommit.Mz2(); //Momento z en su extremo frontal.
+        return -Secommit.Mz2(); //Momento z in its front end.
       }
     inline double getVy(void)
       {                 //¡Warning! call "calc_resisting_force" before calling this method.
@@ -146,19 +146,19 @@ class NLForceBeamColumn3dBase: public BeamColumnWithSectionFDTrf3d
       }
     inline double getAVy1(void)
       {                 //¡Warning! call "calc_resisting_force" before calling this method.
-        return Secommit.Vy(theCoordTransf->getInitialLength())+p0[1]; //Cortante y que se ejerce sobre la barra en su extremo dorsal.
+        return Secommit.Vy(theCoordTransf->getInitialLength())+p0[1]; //Cortante y drived over the bar in its back end.
       }
     inline double getAVy2(void)
       {                 //¡Warning! call "calc_resisting_force" before calling this method.
-        return -Secommit.Vy(theCoordTransf->getInitialLength())+p0[2]; //Cortante y que se ejerce sobre la barra en su extremo frontal.
+        return -Secommit.Vy(theCoordTransf->getInitialLength())+p0[2]; //Cortante y drived over the bar in its front end.
       }
     inline double getVy1(void)
       {                 //¡Warning! call "calc_resisting_force" before calling this method.
-        return -Secommit.Vy(theCoordTransf->getInitialLength())-p0[1]; //Cortante y en su extremo dorsal.
+        return -Secommit.Vy(theCoordTransf->getInitialLength())-p0[1]; //Cortante y in its back end.
       }
     inline double getVy2(void)
       {                 //¡Warning! call "calc_resisting_force" before calling this method.
-        return Secommit.Vy(theCoordTransf->getInitialLength())-p0[2]; //Cortante y en su extremo frontal.
+        return Secommit.Vy(theCoordTransf->getInitialLength())-p0[2]; //Cortante y in its front end.
       }
     inline double getVz(void)
       {                 //¡Warning! call "calc_resisting_force" before calling this method.
@@ -166,19 +166,19 @@ class NLForceBeamColumn3dBase: public BeamColumnWithSectionFDTrf3d
       }
     inline double getAVz1(void)
       { //¡Warning! call "calc_resisting_force" before calling this method.
-        return Secommit.Vz(theCoordTransf->getInitialLength())+p0[3]; //Cortante z que se ejerce sobre la barra en su extremo dorsal.
+        return Secommit.Vz(theCoordTransf->getInitialLength())+p0[3]; //Cortante z drived over the bar in its back end.
       }
     inline double getAVz2(void)
       { //¡Warning! call "calc_resisting_force" before calling this method.
-        return -Secommit.Vz(theCoordTransf->getInitialLength())+p0[4]; //Cortante z que se ejerce sobre la barra en su extremo frontal.
+        return -Secommit.Vz(theCoordTransf->getInitialLength())+p0[4]; //Cortante z drived over the bar in its front end.
       }
     inline double getVz1(void)
       {                 //¡Warning! call "calc_resisting_force" before calling this method.
-        return -Secommit.Vz(theCoordTransf->getInitialLength())-p0[3]; //Cortante z en su extremo dorsal.
+        return -Secommit.Vz(theCoordTransf->getInitialLength())-p0[3]; //Cortante z in its back end.
       }
     inline double getVz2(void)
       {                 //¡Warning! call "calc_resisting_force" before calling this method.
-        return Secommit.Vz(theCoordTransf->getInitialLength())-p0[4]; //Cortante z en su extremo frontal.
+        return Secommit.Vz(theCoordTransf->getInitialLength())-p0[4]; //Cortante z in its front end.
       }
     inline double getMy1(void)
       {                 //¡Warning! call "calc_resisting_force" before calling this method.

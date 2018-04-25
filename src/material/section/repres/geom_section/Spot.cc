@@ -27,7 +27,7 @@
 //Spot.cc
 
 #include "Spot.h"
-#include "Eje.h"
+#include "Axis.h"
 #include "SectionReferenceFrame.h"
 #include "xc_utils/src/geom/pos_vec/Vector2d.h"
 #include "xc_utils/src/geom/d2/BND2d.h"
@@ -39,16 +39,16 @@ XC::Spot::Spot(const Pos2d &pto)
 
 //! Inserts the line being passed as parameter in the list
 //! of the lines that begin or end in this point.
-void XC::Spot::insert_linea(Eje *l)
-  { ejes_pt.insert(l); }
+void XC::Spot::insert_linea(Axis *l)
+  { pt_axes.insert(l); }
 
 //! Erases the line being passed as parameter from the list
 //! of the lines that begin or end in this point.
-void XC::Spot::borra_linea(Eje *l)
+void XC::Spot::borra_linea(Axis *l)
   {
-    std::set<const Eje *>::iterator i= find(ejes_pt.begin(),ejes_pt.end(),l);
-    if(i!= ejes_pt.end()) //La ha encontrado.
-      ejes_pt.erase(i);
+    std::set<const Axis *>::iterator i= find(pt_axes.begin(),pt_axes.end(),l);
+    if(i!= pt_axes.end()) //La ha encontrado.
+      pt_axes.erase(i);
   }
 //! Returns position vector of the point.
 Vector2d XC::Spot::VectorPos(void) const
@@ -63,12 +63,12 @@ BND2d XC::Spot::Bnd(void) const
   { return BND2d(p,p);  }
 
 //! @brief Returns true if the point is an end of the line.
-bool XC::Spot::Toca(const Eje &l) const
+bool XC::Spot::Toca(const Axis &l) const
   {
-    std::set<const Eje *>::const_iterator i= ejes_pt.find(&l);
-//     for(std::set<const Eje *>::const_iterator i= ejes_pt.begin(); i!=ejes_pt.end();i++)
+    std::set<const Axis *>::const_iterator i= pt_axes.find(&l);
+//     for(std::set<const Axis *>::const_iterator i= pt_axes.begin(); i!=pt_axes.end();i++)
 //       { if(&l == (*i)) return true; }
-    return (i != ejes_pt.end());
+    return (i != pt_axes.end());
   }
 
 

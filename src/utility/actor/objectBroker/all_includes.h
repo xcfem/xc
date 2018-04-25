@@ -76,7 +76,7 @@
 #include "material/section/repres/geom_section/GeomSection.h"
 #include "material/section/repres/geom_section/Segment.h"
 #include "material/section/repres/geom_section/Spot.h"
-#include "material/section/repres/geom_section/Eje.h"
+#include "material/section/repres/geom_section/Axis.h"
 #include "material/section/repres/geom_section/SectionReferenceFrame.h"
 #include "material/section/repres/geom_section/SectionCartesianReferenceFrame.h"
 #include "material/section/repres/geom_section/region/RgQuadCell.h"

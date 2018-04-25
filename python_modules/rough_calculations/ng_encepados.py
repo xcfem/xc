@@ -48,9 +48,9 @@ def getCantoMinimoEncepado(diam,D):
     return max((15*diam*diam)*100,max(D,0.4))
   
 
-def getDistMinEjesPilotes(D):
+def getMinimalDistBetweenPileAxes(D):
     '''
-    Devuelve la distancia mínima entre ejes de pilotes.
+    Return the minimal distance between pile axes.
 
     :param D: Diámetro del pilote.
     '''

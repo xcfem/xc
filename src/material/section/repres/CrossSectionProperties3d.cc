@@ -89,23 +89,23 @@ double XC::CrossSectionProperties3d::getI2(void) const
   { return I2_inercia(Iy(),Iz(),Iyz()); }
 
 //! @brief Returns the principal axis of inertia.
-PrincipalAxesOfInertia2D XC::CrossSectionProperties3d::getEjesInercia(void) const
+PrincipalAxesOfInertia2D XC::CrossSectionProperties3d::getInertiaAxes(void) const
   {
     const Pos2d cdg(0,0);
     return PrincipalAxesOfInertia2D(cdg,Iy(),Iz(),Iyz());
   }
 //! @brief Returns principal axis I (strong).
-Vector2d XC::CrossSectionProperties3d::getVDirEje1(void) const
-  { return getEjesInercia().getVDirEje1(); }
+Vector2d XC::CrossSectionProperties3d::getAxis1VDir(void) const
+  { return getInertiaAxes().getAxis1VDir(); }
 //! @brief Returns principal axis I (strong).
 Vector2d XC::CrossSectionProperties3d::getVDirStrongAxis(void) const
-  { return getEjesInercia().getVDirEje1(); }
+  { return getInertiaAxes().getAxis1VDir(); }
 //! @brief Returns principal axis II (weak).
-Vector2d XC::CrossSectionProperties3d::getVDirEje2(void) const
-  { return getEjesInercia().getVDirEje2(); }
+Vector2d XC::CrossSectionProperties3d::getAxis2VDir(void) const
+  { return getInertiaAxes().getAxis2VDir(); }
 //! @brief Returns principal axis II (weak).
 Vector2d XC::CrossSectionProperties3d::getVDirWeakAxis(void) const
-  { return getEjesInercia().getVDirEje2(); }
+  { return getInertiaAxes().getAxis2VDir(); }
 
 //! @brief Returns the tangent stiffness matrix.
 const XC::Matrix &XC::CrossSectionProperties3d::getSectionTangent4x4(void) const
@@ -127,14 +127,14 @@ const XC::Matrix &XC::CrossSectionProperties3d::getSectionFlexibility4x4(void) c
   {
     const double eiyz= EIyz();
     const double eimax= std::max(EIz(),EIy());
-    if(std::abs(eiyz/eimax)<1e-5) //Producto de inercia nulo.
+    if(std::abs(eiyz/eimax)<1e-5) //product of inertia nulo.
       {
         ks4(0,0)= 1.0/(EA());
         ks4(1,1)= 1.0/EIz();
         ks4(2,2)= 1.0/(EIy());
         ks4(3,3)= 1.0/(GJ());
       }
-    else //Producto de inercia NO nulo.
+    else //product of inertia NO nulo.
       {
         getSectionTangent4x4();
         ks4(0,0)= 1.0/ks4(0,0);
@@ -176,7 +176,7 @@ const XC::Matrix &XC::CrossSectionProperties3d::getSectionFlexibility6x6(void) c
   {
     const double eiyz= EIyz();
     const double eimax= std::max(EIz(),EIy());
-    if(std::abs(eiyz/eimax)<1e-5) //Producto de inercia nulo.
+    if(std::abs(eiyz/eimax)<1e-5) //product of inertia nulo.
       {
         ks6(0,0)= 1.0/(EA());
         ks6(1,1)= 1.0/EIz();
@@ -187,7 +187,7 @@ const XC::Matrix &XC::CrossSectionProperties3d::getSectionFlexibility6x6(void) c
         ks6(2,2)= 1/GA;
         ks6(4,4)= 1/GA;
       }
-    else //Producto de inercia NO nulo.
+    else //product of inertia NO nulo.
       {
         getSectionTangent6x6();
         ks6(0,0)= 1.0/ks6(0,0);

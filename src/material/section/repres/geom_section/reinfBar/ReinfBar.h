@@ -101,8 +101,8 @@ class ReinfBar: public DiscretBase
     double Pyz(void) const;
     double Ix(void) const;
     double Theta_p(void) const;
-    const Vector &DirEjeI_a(void) const;
-    const Vector &DirEjeI_b(void) const;
+    const Vector &IAxisDir_a(void) const;
+    const Vector &IAxisDir_b(void) const;
     double getI1(void) const;
     double getI2(void) const;
     double getI(const unsigned short int &i,const unsigned short int &j) const;

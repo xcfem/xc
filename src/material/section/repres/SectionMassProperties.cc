@@ -57,7 +57,7 @@ double XC::SectionMassProperties::getTheta_pHomogenizedSection(void) const
 //! @brief Direction of a principal axis of inertia of the homogenized section
 //! with respect of current axis.
 //! @param E0: Elastic modulus used as reference.
-XC::Vector XC::SectionMassProperties::getDirEjeI_aHomogenizedSection(void) const
+XC::Vector XC::SectionMassProperties::getIAxisDir_aHomogenizedSection(void) const
   {
     const Dir2d p(getTheta_pHomogenizedSection());
     Vector retval(2);
@@ -69,7 +69,7 @@ XC::Vector XC::SectionMassProperties::getDirEjeI_aHomogenizedSection(void) const
 //! @brief Direction of the other axis of inertia of the homogenized section
 //! with respect of current axis.
 //! @param E0: Elastic modulus used as reference.
-XC::Vector XC::SectionMassProperties::getDirEjeI_bHomogenizedSection(void) const
+XC::Vector XC::SectionMassProperties::getIAxisDir_bHomogenizedSection(void) const
   {
     const Dir2d p= Dir2d(getTheta_pHomogenizedSection()).Perpendicular();
     Vector retval(2);
@@ -97,7 +97,7 @@ double XC::SectionMassProperties::getI2HomogenizedSection(const double &E0) cons
   }
 
 //! @brief Principal axis of inertia of the homogenized section.
-PrincipalAxesOfInertia2D XC::SectionMassProperties::getEjesInerciaHomogenizedSection(const double &E0) const
+PrincipalAxesOfInertia2D XC::SectionMassProperties::getInertiaAxesHomogenizedSection(const double &E0) const
   {
     const Vector v= getCdgHomogenizedSection(E0);
     const Pos2d cdg(v[0],v[1]);
@@ -105,20 +105,20 @@ PrincipalAxesOfInertia2D XC::SectionMassProperties::getEjesInerciaHomogenizedSec
   }
 //! @brief Direction of the major principal axis of inertia of the homogenized
 //! section.
-Vector2d XC::SectionMassProperties::getVDirEje1HomogenizedSection(const double &E0) const
-  { return getEjesInerciaHomogenizedSection(E0).getVDirEje1(); }
+Vector2d XC::SectionMassProperties::getAxis1VDirHomogenizedSection(const double &E0) const
+  { return getInertiaAxesHomogenizedSection(E0).getAxis1VDir(); }
 //! @brief Direction of the major principal axis of inertia of the homogenized
 //! section.
 Vector2d XC::SectionMassProperties::getVDirStrongAxisHomogenizedSection(const double &E0) const
-  { return getEjesInerciaHomogenizedSection(E0).getVDirEje1(); }
+  { return getInertiaAxesHomogenizedSection(E0).getAxis1VDir(); }
 //! @brief Direction of the minor principal axis of inertia of the homogenized
 //! section.
-Vector2d XC::SectionMassProperties::getVDirEje2HomogenizedSection(const double &E0) const
-  { return getEjesInerciaHomogenizedSection(E0).getVDirEje2(); }
+Vector2d XC::SectionMassProperties::getAxis2VDirHomogenizedSection(const double &E0) const
+  { return getInertiaAxesHomogenizedSection(E0).getAxis2VDir(); }
 //! @brief Direction of the minor principal axis of inertia of the homogenized
 //! section.
 Vector2d XC::SectionMassProperties::getVDirWeakAxisHomogenizedSection(const double &E0) const
-  { return getEjesInerciaHomogenizedSection(E0).getVDirEje2(); }
+  { return getInertiaAxesHomogenizedSection(E0).getAxis2VDir(); }
 
 //! @brief tensor of inertia (i,j) component of the homogenized section.
 double XC::SectionMassProperties::getIHomogenizedSection(const double &E0,const unsigned short int &i,const unsigned short int &j) const
@@ -162,8 +162,8 @@ double XC::SectionMassProperties::getIHomogenizedSection(const double &E0,const 
     const Vector cdg= getCdgHomogenizedSection(E0);
 
     Pos2d pp(cdg[0],cdg[1]);
-    Ref2d2d ejes(pp);
-    Pos2d pos_local= ejes.GetPosLocal(o);
+    Ref2d2d axes(pp);
+    Pos2d pos_local= axes.GetPosLocal(o);
     return Iij + getAreaHomogenizedSection(E0) * pos_local(i) * pos_local(j);
   }
 
@@ -228,7 +228,7 @@ double XC::SectionMassProperties::getTheta_pGrossSection(void) const
 
 //! @brief Direction of a principal axis of inertia of the gross section with
 //! respect of current axis.
-XC::Vector XC::SectionMassProperties::getDirEjeI_aGrossSection(void) const
+XC::Vector XC::SectionMassProperties::getIAxisDir_aGrossSection(void) const
   {
     const Dir2d p(getTheta_pGrossSection());
     Vector retval(2);
@@ -239,7 +239,7 @@ XC::Vector XC::SectionMassProperties::getDirEjeI_aGrossSection(void) const
 
 //! @brief Direction of the other principal axis of inertia of the gross section
 //! with respect of current axis.
-XC::Vector XC::SectionMassProperties::getDirEjeI_bGrossSection(void) const
+XC::Vector XC::SectionMassProperties::getIAxisDir_bGrossSection(void) const
   {
     const Dir2d p= Dir2d(getTheta_pGrossSection()).Perpendicular();
     Vector retval(2);
@@ -267,7 +267,7 @@ double XC::SectionMassProperties::getI2GrossSection(void) const
   }
 
 //! @brief Principal axis of inertia of the gross section.
-PrincipalAxesOfInertia2D XC::SectionMassProperties::getEjesInerciaGrossSection(void) const
+PrincipalAxesOfInertia2D XC::SectionMassProperties::getInertiaAxesGrossSection(void) const
   {
     const Vector v= getCdgGrossSection();
     const Pos2d cdg(v[0],v[1]);
@@ -275,20 +275,20 @@ PrincipalAxesOfInertia2D XC::SectionMassProperties::getEjesInerciaGrossSection(v
   }
 //! @brief Direction of the major principal axis of inertia of the gross
 //! section.
-Vector2d XC::SectionMassProperties::getVDirEje1GrossSection(void) const
-  { return getEjesInerciaGrossSection().getVDirEje1(); }
+Vector2d XC::SectionMassProperties::getAxis1VDirGrossSection(void) const
+  { return getInertiaAxesGrossSection().getAxis1VDir(); }
 //! @brief Direction of the major principal axis of inertia of the gross
 //! section.
 Vector2d XC::SectionMassProperties::getVDirStrongAxisGrossSection(void) const
-  { return getEjesInerciaGrossSection().getVDirEje1(); }
+  { return getInertiaAxesGrossSection().getAxis1VDir(); }
 //! @brief Direction of the minor principal axis of inertia of the gross
 //! section.
-Vector2d XC::SectionMassProperties::getVDirEje2GrossSection(void) const
-  { return getEjesInerciaGrossSection().getVDirEje2(); }
+Vector2d XC::SectionMassProperties::getAxis2VDirGrossSection(void) const
+  { return getInertiaAxesGrossSection().getAxis2VDir(); }
 //! @brief Direction of the minor principal axis of inertia of the gross
 //! section.
 Vector2d XC::SectionMassProperties::getVDirWeakAxisGrossSection(void) const
-  { return getEjesInerciaGrossSection().getVDirEje2(); }
+  { return getInertiaAxesGrossSection().getAxis2VDir(); }
 
 //! @brief Return the i,j component of the tensor of inertia computed with
 //! respect to centroid.
@@ -333,8 +333,8 @@ double XC::SectionMassProperties::getIGrossSection(const unsigned short int &i,c
     const Vector cdg= getCdgGrossSection();
 
     Pos2d pp(cdg[0],cdg[1]);
-    Ref2d2d ejes(pp);
-    Pos2d pos_local= ejes.GetPosLocal(o);
+    Ref2d2d axes(pp);
+    Pos2d pos_local= axes.GetPosLocal(o);
     return Iij + getAreaGrossSection() * pos_local(i) * pos_local(j);
   }
 

@@ -246,7 +246,7 @@ int XC::DirectIntegrationAnalysis::analyze(int numSteps, double dT)
     return result;
   }
 
-//! @brief Ejecuta los cambios que implica un cambio en el domain del problema.
+//! @brief Execute the changes following a change in the domain.
 //!
 //! This is a method invoked by a domain which indicates to the analysis
 //! that the domain has changed. The method invokes the following:

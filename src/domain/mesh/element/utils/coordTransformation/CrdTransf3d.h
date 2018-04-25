@@ -95,7 +95,7 @@ class CrdTransf3d: public CrdTransf
     static Vector vectorK;
     static Vector vectorCoo;
     virtual int computeElemtLengthAndOrient(void) const= 0;
-    virtual int calculaEjesLocales(void) const= 0;
+    virtual int computeLocalAxis(void) const= 0;
 
     int sendData(CommParameters &cp);
     int recvData(const CommParameters &cp);

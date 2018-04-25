@@ -41,7 +41,7 @@ class SmallDispCrdTransf3d: public CrdTransf3d
     const Matrix &computeRW(const Vector &nodeOffset) const;
   protected:
     virtual int computeElemtLengthAndOrient(void) const;
-    virtual int calculaEjesLocales(void) const;
+    virtual int computeLocalAxis(void) const;
     Vector &basic_to_local_resisting_force(const Vector &pb, const Vector &p0) const;
     const Vector &local_to_global_resisting_force(const Vector &pl) const;
     Matrix &basic_to_local_stiff_matrix(const Matrix &KB) const;

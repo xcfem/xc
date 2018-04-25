@@ -218,7 +218,7 @@ XC::Vector XC::ListRegiones::getCdgGrossSection(void) const
     return retval;
   }
 
-//! @brief Returns the moment of inertia of the gross cross-section with respecto to the axis parallel to y passing through the centroid.
+//! @brief Returns the moment of inertia of the gross cross-section with respect to the axis parallel to y passing through the centroid.
 double XC::ListRegiones::getIyGrossSection(void) const
   {
     double retval= 0.0;
@@ -246,7 +246,7 @@ double XC::ListRegiones::getIzGrossSection(void) const
     return retval;
   }
 
-//! @brief Returns the producto de inercia of the gross cross-section respecto a los ejes paralelos al y y al z por el centroid.
+//! @brief Returns the producto de inercia of the gross cross-section respecto a los axis parallel to the y y al z por el centroid.
 double XC::ListRegiones::getPyzGrossSection(void) const
   {
     double retval= 0.0;
@@ -318,7 +318,7 @@ XC::Vector XC::ListRegiones::getCdgHomogenizedSection(const double &E0) const
     return retval;
   }
 
-//! @brief Returns homogenized moment of inertia of the cross-section with respecto to the axis parallel to y passing through the centroid.
+//! @brief Returns homogenized moment of inertia of the cross-section with respect to the axis parallel to y passing through the centroid.
 //! @param E0: Reference elastic modulus.
 double XC::ListRegiones::getIyHomogenizedSection(const double &E0) const
   {
@@ -345,7 +345,7 @@ double XC::ListRegiones::getIyHomogenizedSection(const double &E0) const
     return retval;
   }
 
-//! @brief Returns homogenized moment of inertia of the cross-section with respecto to the axis parallel to z passing through the centroid.
+//! @brief Returns homogenized moment of inertia of the cross-section with respect to the axis parallel to z passing through the centroid.
 //! @param E0: Reference elastic modulus.
 double XC::ListRegiones::getIzHomogenizedSection(const double &E0) const
   {
@@ -372,7 +372,7 @@ double XC::ListRegiones::getIzHomogenizedSection(const double &E0) const
     return retval;
   }
 
-//! @brief Returns homogenized product of inertia of the cross-section with respecto to the axis parallel to y and z passing through the centroid.
+//! @brief Returns homogenized product of inertia of the cross-section with respect to the axis parallel to y and z passing through the centroid.
 //! @param E0: Reference elastic modulus.
 double XC::ListRegiones::getPyzHomogenizedSection(const double &E0) const
   {

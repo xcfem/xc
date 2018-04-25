@@ -222,8 +222,8 @@ class FiberDeque : public EntCmd, public std::deque<Fiber *>
     double getI1(const double &factor= 1.0,const double &y0= 0.0,const double &z0= 0.0) const;
     double getI2(const double &factor= 1.0,const double &y0= 0.0,const double &z0= 0.0) const;
     double getTh1(const double &y0= 0.0,const double &z0= 0.0) const;
-    Vector getEje1(const double &y0= 0.0,const double &z0= 0.0) const;
-    Vector getEje2(const double &y0= 0.0,const double &z0= 0.0) const;
+    Vector getAxis1(const double &y0= 0.0,const double &z0= 0.0) const;
+    Vector getAxis2(const double &y0= 0.0,const double &z0= 0.0) const;
     double getIyHomogenizedSection(const double &) const;
     double getIzHomogenizedSection(const double &) const;
     double getPyzHomogenizedSection(const double &) const;
@@ -240,13 +240,13 @@ class FiberDeque : public EntCmd, public std::deque<Fiber *>
     double getSPosHomogenizedSection(const double &E0,const Semiplano2d &sp) const;
     double getSNegHomogenizedSection(const double &E0,const Semiplano2d &sp) const;
     
-    //! @brief Returns the polar moment of inertia with respecto to G.
+    //! @brief Returns the polar moment of inertia with respect to G.
     inline double getIpolar(const double &factor= 1.0) const
       { return getIz(factor,yCDG)+getIy(factor,zCDG); }
-    //! @brief Returns the radio de giro respecto al eje paralelo al z que pasa por el CDG.
+    //! @brief Returns the radio de giro with respect to the axis parallel to z que passes through the centroid.
     inline double getiz(const double factor= 1.0) const
       { return getIz(factor,yCDG)/getArea(factor); }
-    //! @brief Returns the radio de giro respecto al eje paralelo al y que pasa por el CDG.
+    //! @brief Returns the radio de giro with respect to the axis parallel to y que passes through the centroid.
     inline double getiy(const double factor= 1.0) const
       { return getIy(factor,zCDG)/getArea(factor); }
     size_t nearest_fiber(const double &y,const double &z) const;

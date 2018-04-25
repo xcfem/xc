@@ -27,27 +27,27 @@ scc.sectionProperties.rotate(math.radians(45))
 
 I1= scc.sectionProperties.getI1()
 I2= scc.sectionProperties.getI2()
-ejeI1= scc.sectionProperties.getVDirEje1()
-ejeI2= scc.sectionProperties.getVDirEje2()
-ejeFuerte= scc.sectionProperties.getVDirStrongAxis()
-ejeDebil= scc.sectionProperties.getVDirWeakAxis()
+I1axis= scc.sectionProperties.getAxis1VDir()
+I2axis= scc.sectionProperties.getAxis2VDir()
+strongAxis= scc.sectionProperties.getVDirStrongAxis()
+weakAxis= scc.sectionProperties.getVDirWeakAxis()
 
-ejeFuerteTeor= geom.Vector2d(math.sqrt(2)/2,math.sqrt(2)/2)
-ratio0= (ejeFuerte-ejeFuerteTeor).getModulo()
-ratio1= (ejeI1-ejeFuerteTeor).getModulo()
-ejeDebilTeor= geom.Vector2d(-math.sqrt(2)/2,math.sqrt(2)/2)
-ratio2= (ejeDebil-ejeDebilTeor).getModulo()
-ratio3= (ejeI2-ejeDebilTeor).getModulo()
+strongAxisTeor= geom.Vector2d(math.sqrt(2)/2,math.sqrt(2)/2)
+ratio0= (strongAxis-strongAxisTeor).getModulo()
+ratio1= (I1axis-strongAxisTeor).getModulo()
+weakAxisTeor= geom.Vector2d(-math.sqrt(2)/2,math.sqrt(2)/2)
+ratio2= (weakAxis-weakAxisTeor).getModulo()
+ratio3= (I2axis-weakAxisTeor).getModulo()
 
 ''' 
 print "Iz: ",Iz
 print "I1: ",I1
-print "Eje 1: ",ejeI1
-print "Eje fuerte: ",ejeFuerte
+print "Axis 1: ",I1axis
+print "Strong axis: ",strongAxis
 print "Iy: ",Iy
 print "I2: ",I2
-print "Eje 2: ",ejeI2
-print "Eje debil: ",ejeDebil
+print "Axis 2: ",I2axis
+print "Weak axis: ",weakAxis
 print "ratio0= ",ratio0
 print "ratio1= ",ratio1
 print "ratio2= ",ratio2

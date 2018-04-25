@@ -109,23 +109,23 @@ double XC::CrossSectionProperties2d::getI2(void) const
   { return 0.0; }
 
 //! @brief Returns the principal axis of inertia.
-PrincipalAxesOfInertia2D XC::CrossSectionProperties2d::getEjesInercia(void) const
+PrincipalAxesOfInertia2D XC::CrossSectionProperties2d::getInertiaAxes(void) const
   {
     const Pos2d cdg(0,0);
     return PrincipalAxesOfInertia2D(cdg,0.0,I(),0.0);
   }
 //! @brief Returns principal axis I (strong).
-Vector2d XC::CrossSectionProperties2d::getVDirEje1(void) const
-  { return getEjesInercia().getVDirEje1(); }
+Vector2d XC::CrossSectionProperties2d::getAxis1VDir(void) const
+  { return getInertiaAxes().getAxis1VDir(); }
 //! @brief Returns principal axis I (strong).
 Vector2d XC::CrossSectionProperties2d::getVDirStrongAxis(void) const
-  { return getEjesInercia().getVDirEje1(); }
+  { return getInertiaAxes().getAxis1VDir(); }
 //! @brief Returns principal axis II (weak).
-Vector2d XC::CrossSectionProperties2d::getVDirEje2(void) const
-  { return getEjesInercia().getVDirEje2(); }
+Vector2d XC::CrossSectionProperties2d::getAxis2VDir(void) const
+  { return getInertiaAxes().getAxis2VDir(); }
 //! @brief Returns principal axis II (weak).
 Vector2d XC::CrossSectionProperties2d::getVDirWeakAxis(void) const
-  { return getEjesInercia().getVDirEje2(); }
+  { return getInertiaAxes().getAxis2VDir(); }
 
 //! @brief Returns the tangent stiffness matrix.
 const XC::Matrix &XC::CrossSectionProperties2d::getSectionTangent2x2(void) const

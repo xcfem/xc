@@ -53,7 +53,7 @@ class SectionReferenceFrame: public EntGeomSection
     //! @brief Return the i-th axis unit vector 
     //! expressed in global coordinates 
     //! for the position being passed as parameter.
-    virtual Vector2d GetVDirEje(const size_t &,const Pos2d &) const= 0;
+    virtual Vector2d getAxisVDir(const size_t &,const Pos2d &) const= 0;
     Vector2d GetI(const Pos2d &) const;
     Vector2d GetJ(const Pos2d &) const;
 

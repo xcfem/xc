@@ -18,8 +18,8 @@ def extractFiberSectionProperties(fiberSec,scc):
   global yCdg; yCdg= fibers.getCdgY()
   global I1; I1= fibers.getI1(1,0,0)
   global I2; I2= fibers.getI2(1,0,0)
-  global i1; i1= math.sqrt(I1/sumAreas)  # Radio de giro eje principal mayor
-  global i2; i2= math.sqrt(I2/sumAreas); # Radio de giro eje principal menor
+  global i1; i1= math.sqrt(I1/sumAreas)  # major principal axis radius of giration.
+  global i2; i2= math.sqrt(I2/sumAreas); # minor principal axis radius of giration.
   # th1= th1; 
   global Me1; Me1= 2*fy/scc.h*I1; # Elastic moment of the section around its principal major axis.
   global Me2; Me2= 2*fy/scc.b*I2; # Elastic moment of the section around its principal minor axis.

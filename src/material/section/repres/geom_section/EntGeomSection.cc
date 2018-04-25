@@ -29,7 +29,7 @@
 #include "EntGeomSection.h"
 #include "GeomSection.h"
 #include "Spot.h"
-#include "Eje.h"
+#include "Axis.h"
 
 #include "med.h"
 #include "vtkCellType.h"
@@ -107,14 +107,14 @@ const XC::Spot *XC::EntGeomSection::BuscaSpot(const size_t &id_point) const
     return retval;
   }
 
-//! @brief Returns a pointer to the Eje indentified by the tag being passed
+//! @brief Returns a pointer to the axis indentified by the tag being passed
 //! as parameter.
-XC::Eje *XC::EntGeomSection::BuscaEje(const size_t &id_Eje)
+XC::Axis *XC::EntGeomSection::findAxis(const size_t &id_Axis)
   {
-    Eje *retval= nullptr;
+    Axis *retval= nullptr;
     if(sccGeom)
       {
-        retval= getGeomSection()->busca_eje(id_Eje);
+        retval= getGeomSection()->find_axis(id_Axis);
       }
     else
       std::cerr << getClassName() << "::" << __FUNCTION__
@@ -124,13 +124,13 @@ XC::Eje *XC::EntGeomSection::BuscaEje(const size_t &id_Eje)
     return retval;
   }
 
-//! @brief Returns a pointer to the Eje indentified by the tag being passed as parameter.
-const XC::Eje *XC::EntGeomSection::BuscaEje(const size_t &id_Eje) const
+//! @brief Returns a pointer to the Axis indentified by the tag being passed as parameter.
+const XC::Axis *XC::EntGeomSection::findAxis(const size_t &id_Axis) const
   {
-    const Eje *retval= nullptr;
+    const Axis *retval= nullptr;
     if(sccGeom)
       {
-        retval= getGeomSection()->busca_eje(id_Eje);
+        retval= getGeomSection()->find_axis(id_Axis);
       }
     else
       std::cerr << getClassName() << "::" << __FUNCTION__

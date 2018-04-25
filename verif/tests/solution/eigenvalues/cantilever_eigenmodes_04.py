@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Tomado del Ejemplo B46 del SOLVIA Verification Manual
+# Tomado del example B46 del SOLVIA Verification Manual
 from __future__ import division
 import xc_base
 import geom

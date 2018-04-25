@@ -1405,7 +1405,7 @@ const XC::Matrix &XC::CorotCrdTransf3d::getInitialGlobalStiffMatrix(const Matrix
     return kg;
   }
 
-int XC::CorotCrdTransf3d::calculaEjesLocales(void) const
+int XC::CorotCrdTransf3d::computeLocalAxis(void) const
   {
     // element projection
     
@@ -1491,7 +1491,7 @@ const XC::Vector &XC::CorotCrdTransf3d::getVectorGlobalCoordFromLocal(const Vect
 //! R matrix.
 const XC::Matrix &XC::CorotCrdTransf3d::getVectorGlobalCoordFromLocal(const Matrix &localCoords) const
   {
-    calculaEjesLocales(); //Updates R matrix.
+    computeLocalAxis(); //Updates R matrix.
     static Matrix retval;
     const size_t numPts= localCoords.noRows(); //Number of vectors to transform.
     retval.resize(numPts,3);

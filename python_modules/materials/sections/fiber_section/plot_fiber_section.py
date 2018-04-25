@@ -50,7 +50,7 @@ def plotGeomSeccion(geomSection, path):
     ctx.set_line_width(trf.scale/300000)
     reinforcement= geomSection.getReinfLayers
     plotArmaduras(reinforcement,ctx)
-    trf.plotEjesYZ(ctx)
+    trf.plotYZAxes(ctx)
     surface.set_eps(True)
     ctx.show_page()
     surface.finish()
@@ -100,7 +100,7 @@ class fibSectFeaturesToplot(object):
             ax2d.plot(y,z,self.colorTensionPlane,label='Tension plane')
         #Internal forces axis
         if self.colorIntForcAxis != None:
-            (y,z)=data_axis_to_pyplot(self.fiberSection.getInternalForcesAxis(),self.contour)
+            (y,z)=data_axis_to_pyplot(self.fiberSection.getInternalForcesAxes(),self.contour)
             ax2d.plot(y,z,self.colorIntForcAxis ,label='Internal forces axis')
         #Lever arm
         if self.colorLeverArm != None:

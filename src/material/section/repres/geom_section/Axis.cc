@@ -24,9 +24,9 @@
 // along with this program.
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
-//Eje.cc
+//Axis.cc
 
-#include "Eje.h"
+#include "Axis.h"
 #include "Spot.h"
 #include "xc_basic/src/matrices/m_int.h"
 #include "xc_utils/src/geom/d2/BND2d.h"
@@ -35,32 +35,32 @@
 #include "boost/any.hpp"
 
 //! @brief Constructor.
-XC::Eje::Eje(GeomSection *sr,const size_t &nd)
+XC::Axis::Axis(GeomSection *sr,const size_t &nd)
   : EntGeomSection("",sr), ndiv(nd) {}
 
 //! @brief Constructor.
 //! @param name: object identifier.
 //! @param sr: pointer to section geometry.
 //! @param nd: number of divisions.
-XC::Eje::Eje(const std::string &name,GeomSection *sr,const size_t &nd)
+XC::Axis::Axis(const std::string &name,GeomSection *sr,const size_t &nd)
   : EntGeomSection(name,sr), ndiv(nd) {}
 
 //! @brief Destructor.
-XC::Eje::~Eje(void)
+XC::Axis::~Axis(void)
   {
     if(P1()) P1()->borra_linea(this);
     if(P2()) P2()->borra_linea(this);
   }
 
 //! @brief Updates topology.
-void XC::Eje::update_topology(void)
+void XC::Axis::update_topology(void)
   {
     if(P1()) P1()->insert_linea(this);
     if(P2()) P2()->insert_linea(this);
   }
 
 //! @brief Returns a pointer to start point.
-XC::Spot *XC::Eje::P1(void)
+XC::Spot *XC::Axis::P1(void)
   {
     std::cerr << getClassName() << "::" << __FUNCTION__
 	      << "; this function must be redefined on derived"
@@ -68,7 +68,7 @@ XC::Spot *XC::Eje::P1(void)
     return nullptr;
   }
 //! @brief Returns a constant pointer to start point.
-const XC::Spot *XC::Eje::P1(void) const
+const XC::Spot *XC::Axis::P1(void) const
   {
     std::cerr << getClassName() << "::" << __FUNCTION__
 	      << "; this function must be redefined on derived"
@@ -76,7 +76,7 @@ const XC::Spot *XC::Eje::P1(void) const
     return nullptr;
   }
 //! @brief Returns a pointer to end point.
-XC::Spot *XC::Eje::P2(void)
+XC::Spot *XC::Axis::P2(void)
   {
     std::cerr << getClassName() << "::" << __FUNCTION__
 	      << "; this function must be redefined on derived"
@@ -84,7 +84,7 @@ XC::Spot *XC::Eje::P2(void)
     return nullptr;
   }
 //! @brief Returns a constant pointer to end point.
-const XC::Spot *XC::Eje::P2(void) const
+const XC::Spot *XC::Axis::P2(void) const
   {
     std::cerr << getClassName() << "::" << __FUNCTION__
 	      << "; his function must be redefined on derived"
@@ -94,11 +94,11 @@ const XC::Spot *XC::Eje::P2(void) const
 
 //! @brief Return the set of lines that touch the point being passed as
 //! parameter.
-std::set<const XC::Eje *> XC::getLinesThatTouch(const XC::Spot &p)
+std::set<const XC::Axis *> XC::getLinesThatTouch(const XC::Spot &p)
   {
-    std::set<const Eje *> retval;
-    const std::set<const Eje *> &tocan= p.EjesTocan();
-    for(std::set<const Eje *>::const_iterator i= tocan.begin(); i!=tocan.end();i++)
+    std::set<const Axis *> retval;
+    const std::set<const Axis *> &tocan= p.axesThatTouch();
+    for(std::set<const Axis *>::const_iterator i= tocan.begin(); i!=tocan.end();i++)
       retval.insert(*i);
     return retval;
   }

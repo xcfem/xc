@@ -331,15 +331,15 @@ double XC::SectionForceDeformation::getStressResultant(const int &defID) const
 double XC::SectionForceDeformation::getStressResultantByName(const std::string &cod) const
   {
     double retval= 0.0;
-    if(cod == "n1") //Esfuerzo axil por unidad de longitud, paralelo al eje 1.
+    if(cod == "n1") //Esfuerzo axil por unidad de longitud, parallel to the axis 1.
       retval= getStressResultant(MEMBRANE_RESPONSE_n1);
-    else if(cod == "n2") //Esfuerzo axil por unidad de longitud, paralelo al eje 2.
+    else if(cod == "n2") //Esfuerzo axil por unidad de longitud, parallel to the axis 2.
       retval= getStressResultant(MEMBRANE_RESPONSE_n2);
     else if(cod == "n12")
       retval= getStressResultant(MEMBRANE_RESPONSE_n12);
-    else if(cod == "m1") //Flector por unidad de longitud, en torno al eje 1.
+    else if(cod == "m1") //Flector por unidad de longitud, around the axis 1.
       retval= getStressResultant(PLATE_RESPONSE_m1);
-    else if(cod == "m2") //Flector por unidad de longitud, en torno al eje 2.
+    else if(cod == "m2") //Flector por unidad de longitud, around the axis 2.
       retval= getStressResultant(PLATE_RESPONSE_m2);
     else if(cod == "m12")
       retval= getStressResultant(PLATE_RESPONSE_m12);
@@ -349,9 +349,9 @@ double XC::SectionForceDeformation::getStressResultantByName(const std::string &
       retval= getStressResultant(PLATE_RESPONSE_q23);
     else if(cod == "P" || cod == "N") //Esfuerzo axil (barra prinsmatica).
       retval= getStressResultant(SECTION_RESPONSE_P);
-    else if(cod == "Mz") //Flector en torno al eje z.
+    else if(cod == "Mz") //Bending around the z axis.
       retval= getStressResultant(SECTION_RESPONSE_MZ);
-    else if(cod == "My") //Flector en torno al eje y.
+    else if(cod == "My") //Bending around the y axis.
       retval= getStressResultant(SECTION_RESPONSE_MY);
     else if(cod == "Vz")
       retval= getStressResultant(SECTION_RESPONSE_VZ);
@@ -371,9 +371,9 @@ double XC::SectionForceDeformation::getSectionDeformationByName(const std::strin
       retval= getSectionDeformation(MEMBRANE_RESPONSE_n1);
     else if(cod == "defn2")
       retval= getSectionDeformation(MEMBRANE_RESPONSE_n2);
-    else if(cod == "defm1") //Flector en torno al eje 1.
+    else if(cod == "defm1") //Bending around the 1 axis.
       retval= getSectionDeformation(PLATE_RESPONSE_m1);
-    else if(cod == "defm2") //Flector en torno al eje 2.
+    else if(cod == "defm2") //Bending around the 2 axis.
       retval= getSectionDeformation(PLATE_RESPONSE_m2);
     else if(cod == "defq13")
       retval= getSectionDeformation(PLATE_RESPONSE_q13);
@@ -385,9 +385,9 @@ double XC::SectionForceDeformation::getSectionDeformationByName(const std::strin
       retval= getSectionDeformation(MEMBRANE_RESPONSE_n12);
     else if(cod == "defP" || cod == "defN") //Axial force (prismatic bar).
       retval= getSectionDeformation(SECTION_RESPONSE_P);
-    else if(cod == "defMz") //Giro en torno al eje z.
+    else if(cod == "defMz") //Giro around the axis z.
       retval= getSectionDeformation(SECTION_RESPONSE_MZ);
-    else if(cod == "defMy") //Giro en torno al eje y.
+    else if(cod == "defMy") //Giro around the axis y.
       retval= getSectionDeformation(SECTION_RESPONSE_MY);
     else if(cod == "defVz")
       retval= getSectionDeformation(SECTION_RESPONSE_VZ);

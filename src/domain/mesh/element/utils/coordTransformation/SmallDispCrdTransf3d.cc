@@ -92,7 +92,7 @@ int XC::SmallDispCrdTransf3d::computeElemtLengthAndOrient(void) const
     return 0;
   }
 
-int XC::SmallDispCrdTransf3d::calculaEjesLocales(void) const
+int XC::SmallDispCrdTransf3d::computeLocalAxis(void) const
   {
     // Compute y = v cross x
     // Note: v(i) is stored in R(2,i)

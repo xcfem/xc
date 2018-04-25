@@ -50,7 +50,7 @@ class SectionCartesianReferenceFrame: public SectionReferenceFrame
     SectionCartesianReferenceFrame(const std::string &nombre= "",GeomSection *m= nullptr)
       : SectionReferenceFrame(nombre,m) {}
 
-    Vector2d GetVDirEje(const size_t &,const Pos2d &) const;
+    Vector2d getAxisVDir(const size_t &,const Pos2d &) const;
 
 
     Pos2d GetPosGlobal(const Pos2d &p) const;

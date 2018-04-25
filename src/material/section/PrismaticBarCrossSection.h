@@ -69,7 +69,7 @@ class PrismaticBarCrossSection: public SectionForceDeformation
     virtual double getCdgZ(void) const;
     Pos2d getCdg(void) const;
     Recta2d getNeutralAxis(void) const;
-    Recta2d getEjeEsfuerzos(void) const;
+    Recta2d getInternalForcesAxis(void) const;
     Pos2d getPointOnTensionedHalfPlane(void) const;
     Pos2d getPointOnCompressedHalfPlane(void) const;
     Semiplano2d getTensionedHalfPlane(void) const;
@@ -84,10 +84,10 @@ class PrismaticBarCrossSection: public SectionForceDeformation
     double getTheta(void) const;
     double getEI1(void) const;
     double getEI2(void) const;
-    PrincipalAxesOfInertia2D getEjesInercia(void) const;
-    Vector2d getVDirEje1(void) const;
+    PrincipalAxesOfInertia2D getInertiaAxes(void) const;
+    Vector2d getAxis1VDir(void) const;
     Vector2d getVDirStrongAxis(void) const;
-    Vector2d getVDirEje2(void) const;
+    Vector2d getAxis2VDir(void) const;
     Vector2d getVDirWeakAxis(void) const;
 
     bool hayAxil(const double &tol=1e-4) const;

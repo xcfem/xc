@@ -131,22 +131,22 @@ const XC::Spot *XC::GeomSection::busca_spot(const size_t &id) const
     return retval;
   }
 
-//! @brief Returns a pointer to the eje cuyo nombre being passed as parameter.
-XC::Eje *XC::GeomSection::busca_eje(const size_t &id)
+//! @brief Returns a pointer to the axis which name is being passed as parameter.
+XC::Axis *XC::GeomSection::find_axis(const size_t &id)
   {
-    Eje *retval= nullptr;
-    lst_ejes::iterator i= ejes.find(id);
-    if(i!= ejes.end()) //Point exists.
+    Axis *retval= nullptr;
+    axes_container::iterator i= axes.find(id);
+    if(i!= axes.end()) //Point exists.
       retval= (*i).second;
     return retval;
   }
 
-//! @brief Returns a pointer to the eje cuyo nombre being passed as parameter.
-const XC::Eje *XC::GeomSection::busca_eje(const size_t &id) const
+//! @brief Returns a pointer to the axis which name is being passed as parameter.
+const XC::Axis *XC::GeomSection::find_axis(const size_t &id) const
   {
-    const Eje *retval= nullptr;
-    lst_ejes::const_iterator i= ejes.find(id);
-    if(i!= ejes.end()) //Point exists..
+    const Axis *retval= nullptr;
+    axes_container::const_iterator i= axes.find(id);
+    if(i!= axes.end()) //Point exists..
       retval= (*i).second;
     return retval;
   }
@@ -206,7 +206,7 @@ XC::Spot *XC::GeomSection::newSpot(const Pos2d &p)
 //! @brief New segment.
 XC::Segment *XC::GeomSection::newSegment(size_t p1,size_t p2)
   {
-    Eje *e= creaEje<Segment>();
+    Axis *e= createAxis<Segment>();
     Segment *s= dynamic_cast<Segment *>(e);
     if(s)
       s->setEndPoints(p1,p2);

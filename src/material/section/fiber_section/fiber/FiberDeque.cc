@@ -227,7 +227,7 @@ double XC::FiberDeque::getArea(const double &factor) const
     return factor*retval;
   }
 
-//! @brief Return the moment of inertia respecto al paralelo al z a una
+//! @brief Return the moment of inertia with respect to the paralelo al z a una
 //! distancia y0 del origen.
 double XC::FiberDeque::getIz(const double &factor,const double &y0) const
   {
@@ -242,7 +242,7 @@ double XC::FiberDeque::getIz(const double &factor,const double &y0) const
     return retval;
   }
 
-//! @brief Return the moment of inertia respecto al eje paralelo al y a una
+//! @brief Return the moment of inertia with respect to the axis parallel to y a una
 //! distancia z0 del origen.
 double XC::FiberDeque::getIy(const double &factor,const double &z0) const
   {
@@ -257,8 +257,8 @@ double XC::FiberDeque::getIy(const double &factor,const double &z0) const
     return retval;
   }
 
-//! @brief Return the producto de inercia respecto a los ejes paralelos aa una
-//! distancias (y0,z0) del origen.
+//! @brief Return the product of inertia with respect to the parallel axes
+//! a distancias (y0,z0) del origen.
 double XC::FiberDeque::getPyz(const double &factor,const double &y0,const double &z0) const
   {
     double retval= 0.0;
@@ -323,7 +323,7 @@ const XC::Vector &XC::FiberDeque::getCdgHomogenizedSection(const double &E0) con
     return retval;
   }
 
-//! @brief Returns homogenized moment of inertia of the cross-section with respecto to the axis parallel to y passing through the centroid.
+//! @brief Returns homogenized moment of inertia of the cross-section with respect to the axis parallel to y passing through the centroid.
 //! @param E0: Reference elastic modulus.
 double XC::FiberDeque::getIyHomogenizedSection(const double &E0) const
   {
@@ -348,7 +348,7 @@ double XC::FiberDeque::getIyHomogenizedSection(const double &E0) const
     return retval;
   }
 
-//! @brief Returns homogenized moment of inertia of the cross-section with respecto to the axis parallel to z passing through the centroid.
+//! @brief Returns homogenized moment of inertia of the cross-section with respect to the axis parallel to z passing through the centroid.
 //! @param E0: Reference elastic modulus.
 double XC::FiberDeque::getIzHomogenizedSection(const double &E0) const
   {
@@ -375,7 +375,7 @@ double XC::FiberDeque::getIzHomogenizedSection(const double &E0) const
     return retval;
   }
 
-//! @brief Returns homogenized product of inertia of the cross-section with respecto to the axis parallel to y and z passing through the centroid.
+//! @brief Returns homogenized product of inertia of the cross-section with respect to the axis parallel to y and z passing through the centroid.
 //! @param E0: Reference elastic modulus.
 double XC::FiberDeque::getPyzHomogenizedSection(const double &E0) const
   {
@@ -400,7 +400,7 @@ double XC::FiberDeque::getPyzHomogenizedSection(const double &E0) const
     return retval;
   }
 
-//! @brief Return the i,j component of the tensor of inertia calculado respecto al CDG.
+//! @brief Return the i,j component of the tensor of inertia calculado with respect to the CDG.
 double XC::FiberDeque::getIHomogenizedSection(const double &E0,const unsigned short int &i,const unsigned short int &j) const
   {
     unsigned short int k= i + (j-1)*2;
@@ -647,7 +647,7 @@ double XC::FiberDeque::getTh1(const double &y0,const double &z0) const
   }
 
 //! @brief Return the direction of the major axis.
-XC::Vector XC::FiberDeque::getEje1(const double &y0,const double &z0) const
+XC::Vector XC::FiberDeque::getAxis1(const double &y0,const double &z0) const
   {
     Vector retval(2);
     const double th1= getTh1(y0,z0);
@@ -657,7 +657,7 @@ XC::Vector XC::FiberDeque::getEje1(const double &y0,const double &z0) const
   }
 
 //! @brief Return the direction of the minor axis.
-XC::Vector XC::FiberDeque::getEje2(const double &y0,const double &z0) const
+XC::Vector XC::FiberDeque::getAxis2(const double &y0,const double &z0) const
   {
     Vector retval(2);
     const double th1= getTh1(y0,z0);

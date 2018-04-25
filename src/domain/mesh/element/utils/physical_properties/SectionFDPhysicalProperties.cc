@@ -73,15 +73,15 @@ void XC::SectionFDPhysicalProperties::Print(std::ostream &s, int flag )
 double XC::SectionFDPhysicalProperties::getMeanInternalForce(const std::string &cod) const
   {
     double retval= 0.0;
-    if(cod == "n1") //Esfuerzo axil medio por unidad de longitud, paralelo al eje 1.
+    if(cod == "n1") //Esfuerzo axil medio por unidad de longitud, parallel to the axis 1.
       retval= theMaterial.getMeanGeneralizedStress(MEMBRANE_RESPONSE_n1);
-    else if(cod == "n2") //Esfuerzo axil medio por unidad de longitud, paralelo al eje 2.
+    else if(cod == "n2") //Esfuerzo axil medio por unidad de longitud, parallel to the axis 2.
       retval= theMaterial.getMeanGeneralizedStress(MEMBRANE_RESPONSE_n2);
     else if(cod == "n12")
       retval= theMaterial.getMeanGeneralizedStress(MEMBRANE_RESPONSE_n12);
-    else if(cod == "m1") //Flector medio por unidad de longitud, en torno al eje 1.
+    else if(cod == "m1") //Flector medio por unidad de longitud, around the axis 1.
       retval= theMaterial.getMeanGeneralizedStress(PLATE_RESPONSE_m1);
-    else if(cod == "m2") //Flector medio por unidad de longitud, en torno al eje 2.
+    else if(cod == "m2") //Flector medio por unidad de longitud, around the axis 2.
       retval= theMaterial.getMeanGeneralizedStress(PLATE_RESPONSE_m2);
     else if(cod == "m12")
       retval= theMaterial.getMeanGeneralizedStress(PLATE_RESPONSE_m12);
@@ -99,15 +99,15 @@ double XC::SectionFDPhysicalProperties::getMeanInternalForce(const std::string &
 double XC::SectionFDPhysicalProperties::getMeanInternalDeformation(const std::string &cod) const
   {
     double retval= 0.0;
-    if(cod == "n1") //Esfuerzo axil medio por unidad de longitud, paralelo al eje 1.
+    if(cod == "n1") //Esfuerzo axil medio por unidad de longitud, parallel to the axis 1.
       retval= theMaterial.getMeanGeneralizedStrain(MEMBRANE_RESPONSE_n1);
-    else if(cod == "n2") //Esfuerzo axil medio por unidad de longitud, paralelo al eje 2.
+    else if(cod == "n2") //Esfuerzo axil medio por unidad de longitud, parallel to the axis 2.
       retval= theMaterial.getMeanGeneralizedStrain(MEMBRANE_RESPONSE_n2);
     else if(cod == "n12")
       retval= theMaterial.getMeanGeneralizedStrain(MEMBRANE_RESPONSE_n12);
-    else if(cod == "m1") //Flector medio por unidad de longitud, en torno al eje 1.
+    else if(cod == "m1") //Flector medio por unidad de longitud, around the axis 1.
       retval= theMaterial.getMeanGeneralizedStrain(PLATE_RESPONSE_m1);
-    else if(cod == "m2") //Flector medio por unidad de longitud, en torno al eje 2.
+    else if(cod == "m2") //Flector medio por unidad de longitud, around the axis 2.
       retval= theMaterial.getMeanGeneralizedStrain(PLATE_RESPONSE_m2);
     else if(cod == "m12")
       retval= theMaterial.getMeanGeneralizedStrain(PLATE_RESPONSE_m12);

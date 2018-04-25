@@ -24,10 +24,10 @@
 // along with this program.
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
-//Eje.h
+//Axis.h
 
-#ifndef EJE_H
-#define EJE_H
+#ifndef AXIS_H
+#define AXIS_H
 
 #include "EntGeomSection.h"
 
@@ -40,17 +40,17 @@ class Spot;
 //! @ingroup MATSCCEntGeom
 //
 //! @brief Base class for 1D entities in section definition.
-class Eje: public EntGeomSection
+class Axis: public EntGeomSection
   {
-    friend class CmbEje;
+    //friend class CmbAxis;
   protected:
     size_t ndiv; //!< Number of divisions.
 
     friend class GeomSection;
-    Eje(GeomSection *sr,const size_t &nd= 4);
-    Eje(const std::string &nombre= "",GeomSection *m= nullptr,const size_t &nd= 4);
+    Axis(GeomSection *sr,const size_t &nd= 4);
+    Axis(const std::string &nombre= "",GeomSection *m= nullptr,const size_t &nd= 4);
   public:
-    ~Eje(void);
+    ~Axis(void);
     //! @brief Returns the object dimension (0, 1, 2 or 3).
     inline virtual unsigned short int GetDimension(void) const
       { return 1; }
@@ -77,7 +77,7 @@ class Eje: public EntGeomSection
 
   };
 
-std::set<const Eje *> getLinesThatTouch(const Spot &p);
+std::set<const Axis *> getLinesThatTouch(const Spot &p);
 
 } //end of XC namespace
 #endif

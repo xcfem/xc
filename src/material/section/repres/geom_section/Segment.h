@@ -29,7 +29,7 @@
 #ifndef SEGMENT_H
 #define SEGMENT_H
 
-#include "Eje.h"
+#include "Axis.h"
 
 
 namespace XC {
@@ -37,7 +37,7 @@ namespace XC {
 //! @ingroup MATSCCEntGeom
 //
 //! @brief Line segment.
-class Segment: public Eje
+class Segment: public Axis
   {
     Spot *p1; //!< Extremo dorsal del segment.
     Spot *p2; //!< Extremo frontal del segment.

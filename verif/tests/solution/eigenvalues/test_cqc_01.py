@@ -190,19 +190,19 @@ print "diff: ",diff
 print "ratio2= ",ratio2
 print "coeficientes para CQC: ",crossCQCCoefficients
 print "coeficientes CQC: ",crossCQCCoefficients
-print "coeficientes CQC ejemplo: ",crossCQCCoefficientsTeor
+print "coeficientes CQC example: ",crossCQCCoefficientsTeor
 print "ratio3= ",ratio3
 print "factoresParticipacionModalX: ",factoresParticipacionModalX
 print "factoresParticipacionModalXTeor: ",factoresParticipacionModalXTeor
 print "ratio4= ",ratio4
 print "********** maximum displacement mode 1: ",maxDispMod1*1000
-print "********** maximum displacement mode 1 (ejemplo): ",maxDispMod1Teor*1000
+print "********** maximum displacement mode 1 (example): ",maxDispMod1Teor*1000
 print "ratioM1= ",ratioM1
 print "********** maximum displacement mode 2: ",maxDispMod2*1000
-print "********** maximum displacement mode 2 (ejemplo): ",maxDispMod2Teor*1000
+print "********** maximum displacement mode 2 (example): ",maxDispMod2Teor*1000
 print "ratioM2= ",ratioM2
 print "********** maximum displacement mode 3: ",maxDispMod3*1000
-print "********** maximum displacement mode 3 (ejemplo): ",maxDispMod3Teor*1000
+print "********** maximum displacement mode 3 (example): ",maxDispMod3Teor*1000
 print "ratioM3= ",ratioM3
 #print "maxDispCQC= ",maxDispCQC*1e3
 #print "maxDispCQCTeor= ",maxDispCQCTeor*1e3

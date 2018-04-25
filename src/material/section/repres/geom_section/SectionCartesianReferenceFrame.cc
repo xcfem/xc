@@ -33,8 +33,8 @@
 
 //! @brief Return the i-th axis unit vector expressed in global coordinates
 //! for the position being passed as parameter.
-Vector2d XC::SectionCartesianReferenceFrame::GetVDirEje(const size_t &i,const Pos2d &) const
-  { return ref.GetVDirEje(i); }
+Vector2d XC::SectionCartesianReferenceFrame::getAxisVDir(const size_t &i,const Pos2d &) const
+  { return ref.getAxisVDir(i); }
 
 //! @brief Return the position of point p expressed in local coordinates
 //! expresada en global coordinates.

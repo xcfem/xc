@@ -344,9 +344,9 @@ double MaterialVector<MAT>::getMeanGeneralizedStrainByName(const std::string &co
       retval= this->getMeanGeneralizedStrain(MEMBRANE_RESPONSE_n1);
     else if(cod == "n2")
       retval= this->getMeanGeneralizedStrain(MEMBRANE_RESPONSE_n2);
-    else if(cod == "m1") //Flector en torno al eje 1.
+    else if(cod == "m1") //Bending around the axis 1.
       retval= this->getMeanGeneralizedStrain(PLATE_RESPONSE_m1);
-    else if(cod == "m2") //Flector en torno al eje 2.
+    else if(cod == "m2") //Bending around the axis 2.
       retval= this->getMeanGeneralizedStrain(PLATE_RESPONSE_m2);
     else if(cod == "q13")
       retval= this->getMeanGeneralizedStrain(PLATE_RESPONSE_q13);
@@ -383,15 +383,15 @@ template <class MAT>
 double MaterialVector<MAT>::getMeanGeneralizedStressByName(const std::string &cod) const
   {
     double retval= 0.0;
-    if(cod == "n1") //Esfuerzo axil medio por unidad de longitud, paralelo al eje 1.
+    if(cod == "n1") //Esfuerzo axil medio por unidad de longitud, parallel to the axis 1.
       retval= this->getMeanGeneralizedStress(MEMBRANE_RESPONSE_n1);
-    else if(cod == "n2") //Esfuerzo axil medio por unidad de longitud, paralelo al eje 2.
+    else if(cod == "n2") //Esfuerzo axil medio por unidad de longitud, parallel to the axis 2.
       retval= this->getMeanGeneralizedStress(MEMBRANE_RESPONSE_n2);
     else if(cod == "n12")
       retval= this->getMeanGeneralizedStress(MEMBRANE_RESPONSE_n12);
-    else if(cod == "m1") //Flector medio por unidad de longitud, en torno al eje 1.
+    else if(cod == "m1") //Flector medio por unidad de longitud, around the axis 1.
       retval= this->getMeanGeneralizedStress(PLATE_RESPONSE_m1);
-    else if(cod == "m2") //Flector medio por unidad de longitud, en torno al eje 2.
+    else if(cod == "m2") //Flector medio por unidad de longitud, around the axis 2.
       retval= this->getMeanGeneralizedStress(PLATE_RESPONSE_m2);
     else if(cod == "m12")
       retval= this->getMeanGeneralizedStress(PLATE_RESPONSE_m12);

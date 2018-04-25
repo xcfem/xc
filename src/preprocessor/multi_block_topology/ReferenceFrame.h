@@ -58,7 +58,7 @@ class ReferenceFrame: public EntMdlrBase
       {}
     //! @brief Returns the i-th axis unit vector
     //! for the position being passed as parameter.
-    virtual Vector3d GetVDirEje(const size_t &,const Pos3d &) const= 0;
+    virtual Vector3d getAxisVDir(const size_t &,const Pos3d &) const= 0;
     Vector3d GetI(const Pos3d &) const;
     Vector3d GetJ(const Pos3d &) const;
     Vector3d GetK(const Pos3d &) const;

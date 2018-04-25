@@ -190,12 +190,12 @@ ratio3= abs(totalMass-5*storeyMass)/5/storeyMass
    were taken from the reference example. The two others (which are not given
 in the example) are those obtained from the program (they can always get
 wrong because of some error). ''' 
-factoresDistribEjemplo= xc.Matrix([[0.419,0.295,0.148,0.0966714,0.0429946],
+exampleDistribFactors= xc.Matrix([[0.419,0.295,0.148,0.0966714,0.0429946],
                          [0.676,0.363,0.059,-0.0270432,-0.0689994],
                          [0.889,0.27,-0.105,-0.0978747,0.0453662],
                          [1.157,-0.093,-0.156,0.1078,-0.0134259],
                          [1.298,-0.386,0.133,-0.0461473,0.00292086]])
-diff= distributionFactors-factoresDistribEjemplo
+diff= distributionFactors-exampleDistribFactors
 ratio4= diff.Norm()
 ratio5= math.sqrt((cargaModo1[0]-273523)**2+(cargaModo2[0]-31341)**2+(cargaModo3[0]-6214)**2)/273523.0
 

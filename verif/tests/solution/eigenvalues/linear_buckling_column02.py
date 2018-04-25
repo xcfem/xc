@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Tomado del Ejemplo B46 del SOLVIA Verification Manual
+# Tomado del example B46 del SOLVIA Verification Manual
 
 ''' NO SE PORQUÉ, NO DA MUY BUENOS RESULTADOS
 

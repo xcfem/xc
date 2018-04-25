@@ -136,46 +136,46 @@ double XC::PrismaticBarCrossSection::getMz(void) const
 //! @brief Returns the section axial stiffness.
 const double &XC::PrismaticBarCrossSection::EA(void) const
   { return getSectionTangent()(0,0); }
-//! @brief Returns the bending stiffness of the cross-section en torno al eje z.
+//! @brief Returns the bending stiffness of the cross-section en torno the z axis.
 const double &XC::PrismaticBarCrossSection::EIz(void) const
   { return getSectionTangent()(1,1); }
-//! @brief Returns the bending stiffness of the cross-section en torno al eje y.
+//! @brief Returns the bending stiffness of the cross-section en torno the y axis.
 const double &XC::PrismaticBarCrossSection::EIy(void) const
   { return getSectionTangent()(2,2); }
-//! @brief Returns the producto de inercia multiplicado por el
+//! @brief Returns the product of inertia multiplicado por el
 //! Young's modulus.
 const double &XC::PrismaticBarCrossSection::EIyz(void) const
   { return getSectionTangent()(1,2); }
 
-//! @brief Returns the angle that defines un eje principal de inercia.
+//! @brief Returns the angle that defines un principal axis of inertia.
 double XC::PrismaticBarCrossSection::getTheta(void) const
   { return theta_inercia(EIy(),EIz(),EIyz()); }
 
-//! @brief Returns the bending stiffness en
-//! torno al eje de inercia principal mayor.
+//! @brief Returns the bending stiffness around
+//! the major principal axis of inertia.
 double XC::PrismaticBarCrossSection::getEI1(void) const
   { return I1_inercia(EIy(),EIz(),EIyz()); }
 
 //! @brief Returns the bending stiffness en
-//! torno al eje de inercia principal menor.
+//! torno al principal axis of inertia menor.
 double XC::PrismaticBarCrossSection::getEI2(void) const
   { return I2_inercia(EIy(),EIz(),EIyz()); }
 
-//! @brief Returns the ejes principales de inercia of the cross-section.
-PrincipalAxesOfInertia2D XC::PrismaticBarCrossSection::getEjesInercia(void) const
+//! @brief Returns the principal axes of inertia of the cross-section.
+PrincipalAxesOfInertia2D XC::PrismaticBarCrossSection::getInertiaAxes(void) const
   { return PrincipalAxesOfInertia2D(getCdg(),EIy(),EIz(),EIyz());  }
-//! @brief Returns the vector del eje principal I.
-Vector2d XC::PrismaticBarCrossSection::getVDirEje1(void) const
-  { return getEjesInercia().getVDirEje1(); }
-//! @brief Returns the vector del eje principal I.
+//! @brief Returns the vector of the principal axis I.
+Vector2d XC::PrismaticBarCrossSection::getAxis1VDir(void) const
+  { return getInertiaAxes().getAxis1VDir(); }
+//! @brief Returns the vector of the principal axis I.
 Vector2d XC::PrismaticBarCrossSection::getVDirStrongAxis(void) const
-  { return getVDirEje1(); }
-//! @brief Returns the vector del eje principal II.
-Vector2d XC::PrismaticBarCrossSection::getVDirEje2(void) const
-  { return getEjesInercia().getVDirEje2(); }
-//! @brief Returns the vector del eje principal II.
+  { return getAxis1VDir(); }
+//! @brief Returns the vector of the principal axis II.
+Vector2d XC::PrismaticBarCrossSection::getAxis2VDir(void) const
+  { return getInertiaAxes().getAxis2VDir(); }
+//! @brief Returns the vector of the principal axis II.
 Vector2d XC::PrismaticBarCrossSection::getVDirWeakAxis(void) const
-  { return getVDirEje2(); }
+  { return getAxis2VDir(); }
 
 //! @brief Returns true if the section is subjected to a bending moment.
 bool XC::PrismaticBarCrossSection::hayMomento(const double &tol) const
@@ -217,7 +217,7 @@ Recta2d XC::PrismaticBarCrossSection::getNeutralAxis(void) const
 
 //! @brief Returns the axis that is aligned with the
 //! cross-section internal forces.
-Recta2d XC::PrismaticBarCrossSection::getEjeEsfuerzos(void) const
+Recta2d XC::PrismaticBarCrossSection::getInternalForcesAxis(void) const
   {
     Recta2d retval(getCdg(),Vector2d(1,0));
     const ResponseId &code= getType();

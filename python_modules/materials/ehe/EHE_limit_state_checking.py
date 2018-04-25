@@ -796,9 +796,9 @@ class ShearController(lscb.LimitStateControllerBase):
         self.Vsu= 0.0
         self.Vu1= -1.0
       else: # Uncracked section
-        axis= scc.getInternalForcesAxis()
-        self.I= scc.getFibers().getHomogenizedSectionIRelToLine(self.E0,axis)
-        self.S= scc.getFibers().getSPosHomogenizedSection(self.E0,geom.HalfPlane2d(axis))
+        axes= scc.getInternalForcesAxes()
+        self.I= scc.getFibers().getHomogenizedSectionIRelToLine(self.E0,axes)
+        self.S= scc.getFibers().getSPosHomogenizedSection(self.E0,geom.HalfPlane2d(axes))
         self.strutWidth= scc.getCompressedStrutWidth() # b0
         self.Vu2= getVu2EHE08NoAtNoFis(self.fctdH,self.I,self.S,self.strutWidth,self.alphaL,self.concreteAxialForce,self.concreteArea)
       self.Vcu= self.Vu2

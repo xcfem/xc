@@ -50,7 +50,7 @@ class CartesianReferenceFrame3d: public ReferenceFrame
     CartesianReferenceFrame3d(const std::string &nombre= "",Preprocessor *m= nullptr)
       : ReferenceFrame(nombre,m) {}
 
-    Vector3d GetVDirEje(const size_t &,const Pos3d &) const;
+    Vector3d getAxisVDir(const size_t &,const Pos3d &) const;
 
     Pos3d getOrg(void) const;
     void setOrg(const Pos3d &);

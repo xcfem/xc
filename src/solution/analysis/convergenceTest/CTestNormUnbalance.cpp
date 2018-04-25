@@ -127,8 +127,7 @@ int XC::CTestNormUnbalance::test(void)
 	if(printFlag)
           std::clog << getStatusMsg(printFlag) << std::endl;
     
-        //if(Bloque().size()>0) EjecutaBloque(Bloque(),getNombre()); //DEPRECATED Informa de los resultados.
-        //check if the algorithm converged
+         //check if the algorithm converged
             
         // if converged - print & return ok
         if(calculatedNormB <= tol)

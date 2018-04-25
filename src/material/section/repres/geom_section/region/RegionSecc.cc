@@ -90,11 +90,12 @@ double XC::RegionSecc::Iy(void) const
 double XC::RegionSecc::Iz(void) const
   { return getPolygon().Iy(); }
 
-//! @brief Return the producto de inercia respecto a los ejes paralelos por el centroid.
+//! @brief Return the product of inertia respecto a the parallel axes por el centroid.
 double XC::RegionSecc::Pyz(void) const
   { return getPolygon().Pxy(); }
 
-//! @brief Return the moment of inertia polar with respect to centroid en ejes locales.
+//! @brief Return the moment of inertia polar with respect to centroid
+//! in local coordinates.
 double XC::RegionSecc::Ix(void) const
   { return Iy()+Iz(); }
 
@@ -104,35 +105,35 @@ double XC::RegionSecc::Theta_p(void) const
 
 //! @brief Return the direction of a principal axis of inertia
 //! (we don't know yet if it's the major one or the minor one).
-const XC::Vector &XC::RegionSecc::DirEjeI_a(void) const
+const XC::Vector &XC::RegionSecc::IAxisDir_a(void) const
   {
-    const Dir2d p= getPolygon().DirEjeI_a();
+    const Dir2d p= getPolygon().IAxisDir_a();
     static Vector retval(2);
     retval[0]= p.dx();
     retval[1]= p.dy();
     return retval;
   }
 
-//! @brief Return the direction of the other (with respect to DirEjeI_a)
+//! @brief Return the direction of the other (with respect to IAxisDir_a)
 //! principal axis of inertia (we don't know yet if it's the major
 //! one or the minor one).
-const XC::Vector &XC::RegionSecc::DirEjeI_b(void) const
+const XC::Vector &XC::RegionSecc::IAxisDir_b(void) const
   {
-    const Dir2d p= getPolygon().DirEjeI_b();
+    const Dir2d p= getPolygon().IAxisDir_b();
     static Vector retval(2);
     retval[0]= p.dx();
     retval[1]= p.dy();
     return retval;
   }
 
-//     Recta2d EjeI_a(void) const;
+//     Recta2d IAxis_a(void) const;
 //     //Returns a principal axis of inertia (we don't know yet
 //     //the major one or the minor one).
-//     Recta2d EjeI_b(void) const;
+//     Recta2d IAxis_b(void) const;
 //     //Return the otro principal axis of inertia (we don't know yet
 //     //the major one or the minor one).
-//     Ref2d2d EjesPrincipalesInercia(void) const;
-//     //Return the ejes principales de inercia.
+//     Ref2d2d principalAxesOfInertia(void) const;
+//     //Return the principal axes of inertia.
 
 //! @brief Return the principal major axis of inertia.
 double XC::RegionSecc::getI1(void) const

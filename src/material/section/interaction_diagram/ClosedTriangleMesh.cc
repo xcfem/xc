@@ -243,19 +243,19 @@ const Trihedron *XC::ClosedTriangleMesh::findTrihedronPtr(const Pos3d &p) const
 	    ClosedTriangleMesh::const_iterator i= begin();
             const Trihedron *tr= &(*i);
             SemiRecta3d rayo(tr->Cuspide(),p);
-            Recta3d eje= tr->Eje();
-            double angEjeRayo= angulo(eje,rayo);
-            double angTmp= angEjeRayo;
+            Recta3d axis= tr->Axis();
+            double rayAxisAngle= angulo(axis,rayo);
+            double angTmp= rayAxisAngle;
             retval= tr;
             i++;
             for(;i!=end();i++)
               {
                 tr= &(*i);
                 rayo= SemiRecta3d(tr->Cuspide(),p);
-                angTmp= angulo(tr->Eje(),rayo);
-                if(angTmp<angEjeRayo)
+                angTmp= angulo(tr->Axis(),rayo);
+                if(angTmp<rayAxisAngle)
                   {
-                    angEjeRayo= angTmp;
+                    rayAxisAngle= angTmp;
                     retval= tr;
                   }
               }

@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Tomado del Ejemplo VM66 del Ansys Verification Manual Release 9.0
+# Tomado del example VM66 del Ansys Verification Manual Release 9.0
 import xc_base
 import geom
 import xc

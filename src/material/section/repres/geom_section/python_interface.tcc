@@ -29,13 +29,13 @@ class_<XC::EntGeomSection, bases<EntConNmb>, boost::noncopyable >("EntGeomSectio
 
 class_<XC::SectionReferenceFrame, bases<XC::EntGeomSection>, boost::noncopyable >("SectionReferenceFrame", no_init);
 
-XC::Spot *(XC::Eje::*getSpot1)(void)= &XC::Eje::P1;
-XC::Spot *(XC::Eje::*getSpot2)(void)= &XC::Eje::P2;
-class_<XC::Eje, bases<XC::EntGeomSection>, boost::noncopyable >("Eje", no_init)
+XC::Spot *(XC::Axis::*getSpot1)(void)= &XC::Axis::P1;
+XC::Spot *(XC::Axis::*getSpot2)(void)= &XC::Axis::P2;
+class_<XC::Axis, bases<XC::EntGeomSection>, boost::noncopyable >("Axis", no_init)
   .add_property("p1",make_function(getSpot1,return_internal_reference<>()))
   .add_property("p2",make_function(getSpot2,return_internal_reference<>()))
-  .add_property("nDiv",&XC::Eje::NDiv,&XC::Eje::SetNDiv)
-  .add_property("numVertices",&XC::Eje::getNumberOfVertices)
+  .add_property("nDiv",&XC::Axis::NDiv,&XC::Axis::SetNDiv)
+  .add_property("numVertices",&XC::Axis::getNumberOfVertices)
   ;
 
 const Pos2d &(XC::Spot::*getPosSpot)(void) const= &XC::Spot::GetPos;
@@ -44,7 +44,7 @@ class_<XC::Spot, bases<XC::EntGeomSection>, boost::noncopyable >("Spot", no_init
   .add_property("numLines",&XC::Spot::nLines)
   ;
 
-class_<XC::Segment, bases<XC::Eje>, boost::noncopyable >("Segment", no_init)
+class_<XC::Segment, bases<XC::Axis>, boost::noncopyable >("Segment", no_init)
   .def("getLong",&XC::Segment::getLong)
   ;
 
@@ -59,7 +59,7 @@ class_<XC::GeomSection, XC::GeomSection *, bases<XC::SectionMassProperties>, boo
   .add_property("tagSpot",&XC::GeomSection::getTagSpot,&XC::GeomSection::setTagSpot)
   .def("newSpot",make_function(&XC::GeomSection::newSpot,return_internal_reference<>()))
   .def("distSpots",&XC::GeomSection::DistSpots)
-  .add_property("tagLine",&XC::GeomSection::getTagEje,&XC::GeomSection::setTagEje)
+  .add_property("tagLine",&XC::GeomSection::getAxisTag,&XC::GeomSection::setAxisTag)
   .def("newSegment",make_function(&XC::GeomSection::newSegment,return_internal_reference<>()))
   ;
 

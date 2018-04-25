@@ -41,7 +41,7 @@ class_<XC::FiberSectionBase, bases<XC::PrismaticBarCrossSection>, boost::noncopy
 //.def("getCompressedZoneDepth",&XC::FiberSectionBase::getCompressedZoneDepth)
 //.def("getTensionedZoneDepth",&XC::FiberSectionBase::getTensionedZoneDepth)
 //.def("getTensionedZoneDepth",&XC::FiberSectionBase::getTensionedZoneDepth)
-  .def("getInternalForcesAxis",&XC::FiberSectionBase::getEjeEsfuerzos)
+  .def("getInternalForcesAxes",&XC::FiberSectionBase::getInternalForcesAxis)
 .def("getLeverArm",&XC::FiberSectionBase::getLeverArm,"Return the length of the segment intersection of the bending plane with the fiber section")
 .def("getNeutralAxisDepth",&XC::FiberSectionBase::getNeutralAxisDepth,"Return the distance from the most compressed fiber in the section to the neutral axis")
 .def("getNeutralAxisDist",&XC::FiberSectionBase::getNeutralAxisDist,"Return the distance from the point of coordinates (y,z) to the neutral axis. Syntax: getNeutralAxisDist(y,z)")

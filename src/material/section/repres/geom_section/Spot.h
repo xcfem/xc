@@ -35,7 +35,7 @@
 class BND2d;
 
 namespace XC {
-class Eje;
+class Axis;
 
 //! @ingroup MATSCCEntGeom
 //
@@ -44,10 +44,10 @@ class Spot: public EntGeomSection
   {
   private:
     Pos2d p; //!< Position of the point.
-    std::set<const Eje *> ejes_pt; //!< Edges that begin or end in this point (topology).
-    friend class Eje;
-    void insert_linea(Eje *l);
-    void borra_linea(Eje *l);
+    std::set<const Axis *> pt_axes; //!< Edges that begin or end in this point (topology).
+    friend class Axis;
+    void insert_linea(Axis *l);
+    void borra_linea(Axis *l);
   protected:
 
     virtual void update_topology(void);
@@ -79,11 +79,11 @@ class Spot: public EntGeomSection
     Vector2d VectorPos(void) const;
 
     //! @brief Return the list of lines that begin or end in this point.
-    const std::set<const Eje *> &EjesTocan(void) const
-      { return ejes_pt; }
-    bool Toca(const Eje &l) const;
+    const std::set<const Axis *> &axesThatTouch(void) const
+      { return pt_axes; }
+    bool Toca(const Axis &l) const;
     inline size_t nLines(void) const
-      { return ejes_pt.size(); }
+      { return pt_axes.size(); }
 
     double DistanciaA(const Pos2d &pt) const;
 

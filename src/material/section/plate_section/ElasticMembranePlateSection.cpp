@@ -64,8 +64,8 @@
 //Strains.
 
 // Membrane.
-// strain(0): epsilon_1 (Longitudinal eje 1)
-// strain(1): epsilon_2 (Lontitudinal eje 2)
+// strain(0): epsilon_1 (Longitudinal axis 1)
+// strain(1): epsilon_2 (Lontitudinal axis 2)
 // strain(2): epsilon_12 (Cortante contenido en plano 12)
 
 // Plate.

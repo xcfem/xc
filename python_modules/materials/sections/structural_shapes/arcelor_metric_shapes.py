@@ -609,7 +609,7 @@ for item in AU:
 
 # En este caso al ser secciones con tensor de inercia esférico en su 
 # plano los valores en
-# ambos ejes son iguales y no es necesario intercambiarlos.
+# both axes are equal so no need to exchange.
 
 
 SHS={}

@@ -109,10 +109,10 @@ class CrossSectionProperties2d: public EntCmd, public MovableObject
     virtual double getTheta(void) const;
     virtual double getI1(void) const;
     virtual double getI2(void) const;
-    virtual PrincipalAxesOfInertia2D getEjesInercia(void) const;
-    virtual Vector2d getVDirEje1(void) const;
+    virtual PrincipalAxesOfInertia2D getInertiaAxes(void) const;
+    virtual Vector2d getAxis1VDir(void) const;
     virtual Vector2d getVDirStrongAxis(void) const;
-    virtual Vector2d getVDirEje2(void) const;
+    virtual Vector2d getAxis2VDir(void) const;
     virtual Vector2d getVDirWeakAxis(void) const;
 
     const Matrix &getSectionTangent2x2(void) const;
