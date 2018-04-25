@@ -41,16 +41,16 @@
 //! @brief Constructor.
 XC::SetBase::SetBase(const std::string &nmb,Preprocessor *md)
   : EntMdlrBase(nmb,md), color(3)
-  { setColorComponents(0,0,0); }
+  { setColorComponents(0.0,0.0,0.0); }
 
 //! @brief Set the color of the object (red,green,blue) as
 //! integers from 0 to 255.
-void XC::SetBase::setColorComponents(const int &r, const int &g, const int &b)
+void XC::SetBase::setColorComponents(const double &r, const double &g, const double &b)
   { color[0]= r; color[1]= g; color[2]= b; }
 
 //! @brief Set the color of the object [red,green,blue] as
 //! integers from 0 to 255.
-void XC::SetBase::setColor(const ID &rgb)
+void XC::SetBase::setColor(const Vector &rgb)
   {
     if(rgb.Size()>2)
       { color[0]= rgb[0]; color[1]= rgb[1]; color[2]= rgb[2]; }
@@ -62,7 +62,7 @@ void XC::SetBase::setColor(const ID &rgb)
 
 //! @brief Return the color of the object [red,green,blue] as
 //! integers from 0 to 255.
-const XC::ID &XC::SetBase::getColor(void) const
+const XC::Vector &XC::SetBase::getColor(void) const
   { return color; }
 
 //! @brief Generates a finite element mesh from the set components.

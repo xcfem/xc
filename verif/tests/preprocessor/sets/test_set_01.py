@@ -58,7 +58,7 @@ trialSet1= preprocessor.getSets.defSet("trialSet1")
 #Color property get/set test.
 colorA= trialSet1.color
 ratioA= colorA[0]**2+colorA[1]**2+colorA[2]**2
-trialSet1.color= xc.ID([1,2,3])
+trialSet1.color= xc.Vector([1.0,2.0,3.0])
 colorB= trialSet1.color
 ratioB= (colorB[0]-1)**2+(colorB[1]-2)**2+(colorB[2]-3)**2
 
