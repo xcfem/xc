@@ -21,6 +21,8 @@ from postprocess.xcVtk import load_vector_field as lvf
 from postprocess.xcVtk import node_property_diagram as npd
 from postprocess.xcVtk import local_axes_vector_field as lavf
 from postprocess.xcVtk import vector_field as vf
+import xc
+import random as rd 
 
 class QuickGraphics(object):
     '''This class is aimed at providing the user with a quick and easy way to 
@@ -200,13 +202,15 @@ class QuickGraphics(object):
       '''
       if(setToDisplay):
           self.xcSet= setToDisplay
+          if self.xcSet.color.Norm()==0:
+              self.xcSet.color=xc.Vector([rd.random(),rd.random(),rd.random()])
       else:
           lmsg.warning('QuickGraphics::displayIntForc; set to display not defined; using previously defined set (total if None).')
       diagram= cvd.ControlVarDiagram(scaleFactor= scaleFactor,fUnitConv= fConvUnits,sets=[self.xcSet],attributeName= "intForce",component= itemToDisp)
       diagram.addDiagram()
       defDisplay= self.getDisplay(vwName=viewName,hCamF= hCamFct)
       defDisplay.setupGrid(self.xcSet)
-      defDisplay.defineMeshScene(None,defFScale)
+      defDisplay.defineMeshScene(None,defFScale,color=self.xcSet.color)
       defDisplay.appendDiagram(diagram) #Append diagram to the scene.
 
       caption= self.loadCaseName+' '+itemToDisp+' '+unitDescription +' '+self.xcSet.description
@@ -242,6 +246,8 @@ class QuickGraphics(object):
       '''
       if(setToDisplay):
           self.xcSet= setToDisplay
+          if self.xcSet.color.Norm()==0:
+              self.xcSet.color=xc.Vector([rd.random(),rd.random(),rd.random()])
       else:
           lmsg.warning('QuickGraphics::displayLoadCaseBeamEl; set to display not defined; using previously defined set (total if None).')
       print 'xcSet', self.xcSet.name
@@ -250,7 +256,7 @@ class QuickGraphics(object):
       loadPatterns.addToDomain(loadCaseName)
       defDisplay= self.getDisplay(vwName=viewName,hCamF= hCamFct)
       grid= defDisplay.setupGrid(self.xcSet)
-      defDisplay.defineMeshScene(None,defFScale)
+      defDisplay.defineMeshScene(None,defFScale,color=self.xcSet.color)
       orNodalLBar='H'  #default orientation of scale bar for nodal loads
       # element loads
       print 'scale=',elLoadScaleF,'fUnitConv=',fUnitConv,'loadPatternName=',loadCaseName,'component=',elLoadComp
@@ -302,13 +308,15 @@ class QuickGraphics(object):
        '''
       if(setToDisplay):
           self.xcSet= setToDisplay
+          if self.xcSet.color.Norm()==0:
+              self.xcSet.color=xc.Vector([rd.random(),rd.random(),rd.random()])
       else:
           lmsg.warning('QuickGraphics::displayNodeValueDiagram; set to display not defined; using previously defined set (total if None).')
       diagram= npd.NodePropertyDiagram(scaleFactor= scaleFactor,fUnitConv= fConvUnits,sets=[self.xcSet],attributeName= itemToDisp)
       diagram.addDiagram()
       defDisplay= self.getDisplay(vwName=viewName,hCamF= hCamFct)
       defDisplay.setupGrid(self.xcSet)
-      defDisplay.defineMeshScene(None,defFScale)
+      defDisplay.defineMeshScene(None,defFScale,color=self.xcSet.color)
       defDisplay.appendDiagram(diagram) #Append diagram to the scene.
 
       caption= self.loadCaseName+' '+itemToDisp+' '+unitDescription +' '+self.xcSet.description
@@ -435,6 +443,8 @@ def displayLoad(preprocessor,setToDisplay=None,loadCaseNm='',unitsScale=1.0,vect
         setToDisplay.fillDownwards()
         lmsg.warning('set to display not defined; using total set.')
 
+    if setToDisplay.color.Norm()==0:
+        setToDisplay.color=xc.Vector([rd.random(),rd.random(),rd.random()])
     defDisplay= vtk_FE_graphic.RecordDefDisplayEF()
     defDisplay.setupGrid(setToDisplay)
     vField=lvf.LoadVectorField(loadCaseNm,unitsScale,vectorScale)
@@ -442,7 +452,7 @@ def displayLoad(preprocessor,setToDisplay=None,loadCaseNm='',unitsScale=1.0,vect
     vField.dumpLoads(preprocessor,defFScale)
     defDisplay.viewName= viewNm
     defDisplay.hCamFct=hCamFct
-    defDisplay.defineMeshScene(None,defFScale) 
+    defDisplay.defineMeshScene(None,defFScale,color=setToDisplay.color) 
     vField.addToDisplay(defDisplay)
     defDisplay.displayScene(caption,fileName)
     return defDisplay
@@ -483,11 +493,13 @@ def displayEigenResults(preprocessor,eigenMode, setToDisplay=None,defShapeScale=
     if equLoadVctScale not in [None,0] and accelMode==None:
         lmsg.warning("Can't display equivalent static loads. Parameter accelMode should not be null ")
         equLoadVctScale=None
+    if setToDisplay.color.Norm()==0:
+        setToDisplay.color=xc.Vector([rd.random(),rd.random(),rd.random()])
     defDisplay= vtk_FE_graphic.RecordDefDisplayEF()
     defDisplay.setupGrid(setToDisplay)
     defDisplay.viewName= viewNm
     defDisplay.hCamFct=hCamFct
-    defDisplay.defineMeshScene(None,defShapeScale,eigenMode) 
+    defDisplay.defineMeshScene(None,defShapeScale,eigenMode,color=setToDisplay.color) 
     if equLoadVctScale not in [None,0]:
         vField=vf.VectorField(name='modo'+str(eigenMode),fUnitConv=unitsScale,scaleFactor=equLoadVctScale,showPushing= True)
         setNodes= setToDisplay.getNodes
