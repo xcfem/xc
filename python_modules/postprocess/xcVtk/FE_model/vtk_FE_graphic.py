@@ -14,6 +14,7 @@ import xc_base
 from vtkUtils import utilsVtk
 from postprocess.xcVtk import vtk_grafico_base
 import random as rd 
+import xc
 
 class RecordDefDisplayEF(vtk_grafico_base.RecordDefDisplay):
     ''' Define the parameters to configure the output device.
@@ -22,12 +23,14 @@ class RecordDefDisplayEF(vtk_grafico_base.RecordDefDisplay):
         super(RecordDefDisplayEF,self).__init__()
         self.nodes= None
         self.gridMapper= None
-    def VtkDefineElementsActor(self, reprType,field):
+    def VtkDefineElementsActor(self, reprType,field,color=xc.Vector([rd.random(),rd.random(),rd.random()])):
         ''' Define the actor to display elements
 
         :param reprType: type of representation ("points", "wireframe" or
                "surface")
         :param field: field to be repreresented
+        :param color: RGB color to represent the elements (defaults to random
+                      color)
         '''
         if(field):
             field.setupOnGrid(self.gridRecord.uGrid)
@@ -37,8 +40,7 @@ class RecordDefDisplayEF(vtk_grafico_base.RecordDefDisplay):
             field.setupOnMapper(self.gridMapper)
         elemActor= vtk.vtkActor()
         elemActor.SetMapper(self.gridMapper)
-#        elemActor.GetProperty().SetColor(1,1,0)
-        elemActor.GetProperty().SetColor(rd.random(),rd.random(),rd.random())
+        elemActor.GetProperty().SetColor(color[0],color[1],color[2])
 
         if(reprType=="points"):
             elemActor.GetProperty().SetRepresentationToPoints()
@@ -130,7 +132,7 @@ class RecordDefDisplayEF(vtk_grafico_base.RecordDefDisplay):
             if(c.getVtkCellType!= vtk.VTK_LINE):
                 self.gridRecord.uGrid.InsertNextCell(c.getVtkCellType,vtx)
 
-    def defineMeshScene(self, field,defFScale=0.0,eigenMode=None):
+    def defineMeshScene(self, field,defFScale=0.0,eigenMode=None,color=xc.Vector([rd.random(),rd.random(),rd.random()])):
         '''Define the scene for the mesh
 
         :param field: scalar field to be represented
@@ -144,7 +146,7 @@ class RecordDefDisplayEF(vtk_grafico_base.RecordDefDisplay):
         self.renderer= vtk.vtkRenderer()
         self.renderer.SetBackground(self.bgRComp,self.bgGComp,self.bgBComp)
         self.VtkDefineNodesActor(0.002)
-        self.VtkDefineElementsActor("surface",field)
+        self.VtkDefineElementsActor("surface",field,color)
         self.renderer.ResetCamera()
 
         #Implement labels.
@@ -175,9 +177,11 @@ class RecordDefDisplayEF(vtk_grafico_base.RecordDefDisplay):
 
     def defineMeshActorsSet(self,elemSet,field,defFScale,nodeSize):
         self.setupGrid(elemSet)
+        if elemSet.color.Norm()==0:
+            elemSet.color=xc.Vector([rd.random(),rd.random(),rd.random()])
         self.VtkLoadElemMesh(field,defFScale,eigenMode=None)
         self.VtkDefineNodesActor(nodeSize)
-        self.VtkDefineElementsActor("surface",field)
+        self.VtkDefineElementsActor("surface",field,elemSet.color)
 
     def displayMesh(self, xcSets, field= None, diagrams= None, fName= None, caption= '',defFScale=0.0,nodeSize=0.01,scaleConstr=0.2,viewName="XYZPos"):
         '''Display the finite element mesh 

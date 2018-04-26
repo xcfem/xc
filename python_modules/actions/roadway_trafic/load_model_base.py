@@ -153,6 +153,7 @@ class VehicleDistrLoad(object):
         self.yCentr=yCentr
         self.hDistr=hDistr
         self.slopeDistr=slopeDistr
+        self.ldsWheels=self.genLstLoadDef()
 
     def genLstLoadDef(self):
         '''generates a list with the definition of all the wheel loads 
@@ -169,15 +170,23 @@ class VehicleDistrLoad(object):
             ldWheels.append(loads.PointLoadOverShellElems(nm,self.xcSet,lVect,basePrism,'Z','Global'))
             cont+=1
         return ldWheels
-            
 
     def appendLoadToCurrentLoadPattern(self):
         ''' Append load to the current load pattern.'''
-        ldW=self.genLstLoadDef()
-        for l in ldW:
+#        ldW=self.genLstLoadDef()
+#        for l in ldW:
+        for l in self.ldsWheels:
             l.appendLoadToCurrentLoadPattern()
         
-    
+    def __mul__(self,factor):
+        '''Apply the factor to the load and append it to the current load pattern'''
+        for l in self.ldsWheels:
+            l.__mul__(factor)
+        
+    def __rmul__(self,factor):
+        '''Apply the factor to the load and append it to the current load pattern'''
+        for l in self.ldsWheels:
+            l.__mul__(factor)
     
 class VehicleLoad(object):
     '''Position of a load model in the structure.

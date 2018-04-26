@@ -996,11 +996,13 @@ class GridModel(object):
 
     defDisplay= vtk_FE_graphic.RecordDefDisplayEF()
     defDisplay.setupGrid(setToDisplay)
+    if setToDisplay.color.Norm()==0:
+      setToDisplay.color=xc.Vector([rd.random(),rd.random(),rd.random()])
     vField=lavf.LocalAxesVectorField(setToDisplay.name+'_localAxes',vectorScale)
     vField.dumpVectors(setToDisplay)
     defDisplay.viewName= viewNm
     defDisplay.hCamFct=hCamFct
-    defDisplay.defineMeshScene(None,defFScale) 
+    defDisplay.defineMeshScene(None,defFScale,color=setToDisplay.color) 
     vField.addToDisplay(defDisplay)
     defDisplay.displayScene(caption,fileName)
     return defDisplay
@@ -1032,6 +1034,8 @@ class GridModel(object):
 
     defDisplay= vtk_FE_graphic.RecordDefDisplayEF()
     defDisplay.setupGrid(setToDisplay)
+    if setToDisplay.color.Norm()==0:
+      setToDisplay.color=xc.Vector([rd.random(),rd.random(),rd.random()])
     vField=lvf.LoadVectorField(loadCaseNm,unitsScale,vectorScale)
     vField.multiplyByElementArea=multByElemArea
     vField.dumpLoads(self.getPreprocessor(),defFScale)
@@ -1039,7 +1043,7 @@ class GridModel(object):
     defDisplay.hCamFct=hCamFct
     defDisplay.defineMeshScene(None,defFScale) 
     vField.addToDisplay(defDisplay)
-    defDisplay.displayScene(caption,fileName)
+    defDisplay.displayScene(caption,fileName,color=setToDisplay.color)
     return defDisplay
 
 #QuickGraphics class definition.
