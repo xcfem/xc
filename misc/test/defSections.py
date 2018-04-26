@@ -19,8 +19,8 @@ def getDiagIntSection2(mdlr):
   recpos = 0.06 + 0.008
   recneg = 0.06 + 0.008
   geomSecHA1 = mdlr.getMaterialHandler.newSectionGeometry('geomSecHA1')
-  regiones = geomSecHA1.getRegions
-  concrete= regiones.newQuadRegion(EHE_materials.HA30.nmbDiagD)
+  regions = geomSecHA1.getRegions
+  concrete= regions.newQuadRegion(EHE_materials.HA30.nmbDiagD)
   concrete.nDivIJ = 10
   concrete.nDivJK = 10
   concrete.pMin = geom.Pos2d(-ancho / 2, -canto / 2)
@@ -54,8 +54,8 @@ def getDiagIntSection1(mdlr):
   recpos = 0.076 + 0.008
   recneg = 0.076 + 0.008
   geomSecHA2 = mdlr.getMaterialHandler.newSectionGeometry('geomSecHA2')
-  regiones = geomSecHA2.getRegions
-  concrete= regiones.newQuadRegion(EHE_materials.HA30.nmbDiagD)
+  regions = geomSecHA2.getRegions
+  concrete= regions.newQuadRegion(EHE_materials.HA30.nmbDiagD)
   concrete.nDivIJ = 10
   concrete.nDivJK = 10
   concrete.pMin = geom.Pos2d(-ancho / 2, -canto / 2)

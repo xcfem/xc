@@ -38,10 +38,10 @@ geomSCC= preprocessor.getMaterialHandler.newSectionGeometry("geomSCC")
 y1= width/2.0
 z1= depth/2.0
 #filling with regions
-regiones= geomSCC.getRegions
+regions= geomSCC.getRegions
 #generation of a quadrilateral region of the specified sizes and number of
 #divisions for the cells (fibers) generation
-rg= regiones.newQuadRegion("elast")
+rg= regions.newQuadRegion("elast")
 rg.nDivIJ= 1
 rg.nDivJK= 23
 nFibTeor= rg.nDivIJ*rg.nDivJK

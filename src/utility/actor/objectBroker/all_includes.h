@@ -83,7 +83,7 @@
 #include "material/section/repres/geom_section/region/RgSccQuad.h"
 #include "material/section/repres/geom_section/region/RgSccCirc.h"
 #include "material/section/repres/geom_section/region/RgSccPoligono.h"
-#include "material/section/repres/geom_section/region/ListRegiones.h"
+#include "material/section/repres/geom_section/region/RegionContainer.h"
 #include "material/section/repres/geom_section/reinfBar/ReinfBar.h"
 #include "material/section/repres/geom_section/reinfBar/VectorReinfBar.h"
 #include "material/section/repres/geom_section/reinfLayer/SingleBar.h"

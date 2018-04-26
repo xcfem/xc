@@ -195,8 +195,8 @@ class BasicRecordRCSection(section_properties.RectangularSection):
       self.reinfDiagName= self.reinfSteelType.nmbDiagK
 
   def defConcreteRegion(self,geomSection):
-    regiones= geomSection.getRegions
-    rg= regiones.newQuadRegion(self.concrDiagName) 
+    regions= geomSection.getRegions
+    rg= regions.newQuadRegion(self.concrDiagName) 
     rg.nDivIJ= self.nDivIJ
     rg.nDivJK= self.nDivJK
     rg.pMin= geom.Pos2d(-self.b/2,-self.h/2)

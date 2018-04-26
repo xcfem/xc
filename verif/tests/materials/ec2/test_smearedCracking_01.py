@@ -93,8 +93,8 @@ geomSectFibers= preprocessor.getMaterialHandler.newSectionGeometry("geomSectFibe
 y1= width/2.0
 z1= depth/2.0
 #concrete region
-regiones= geomSectFibers.getRegions
-concrSect= regiones.newQuadRegion('concr')
+regions= geomSectFibers.getRegions
+concrSect= regions.newQuadRegion('concr')
 concrSect.nDivIJ= nDivIJ
 concrSect.nDivJK= nDivJK
 concrSect.pMin= geom.Pos2d(-y1,-z1)

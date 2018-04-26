@@ -37,7 +37,7 @@ class Rejilla2d;
 
 namespace XC {
 
-//! @ingroup MATSCCRegiones
+//! @ingroup MATSCCRegions
 //
 //! @brief Region of a section that creates quadrilateral cells.
 //

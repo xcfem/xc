@@ -67,9 +67,9 @@ respVz= typical_materials.defElasticMaterial(preprocessor, "respVz",1e3) # Shear
 # Section geometry
 # setting up
 geomSecHA= preprocessor.getMaterialHandler.newSectionGeometry("geomSecHA")
-regiones= geomSecHA.getRegions
+regions= geomSecHA.getRegions
 #filling with regions
-rg= regiones.newQuadRegion(concr.nmbDiagD)  #the name assigned to the region is the string concr.nmbDiagD
+rg= regions.newQuadRegion(concr.nmbDiagD)  #the name assigned to the region is the string concr.nmbDiagD
 rg.nDivIJ= 10
 rg.nDivJK= 10
 rg.pMin= geom.Pos2d(-width/2.0,-depth/2.0)

@@ -38,8 +38,8 @@ tagB500S= EHE_materials.B500S.defDiagD(preprocessor)
 Es= EHE_materials.B500S.getDiagD(preprocessor).getTangent
 
 pileGeometry= preprocessor.getMaterialHandler.newSectionGeometry("pileGeometry")
-regiones= pileGeometry.getRegions
-concrete= regiones.newCircularRegion(EHE_materials.HA30.nmbDiagD)
+regions= pileGeometry.getRegions
+concrete= regions.newCircularRegion(EHE_materials.HA30.nmbDiagD)
 concrete.nDivCirc= 20
 concrete.nDivRad= 5
 concrete.extRad= radius

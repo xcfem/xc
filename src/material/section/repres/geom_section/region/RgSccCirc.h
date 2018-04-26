@@ -39,7 +39,7 @@ class SectorAnilloCircular2d;
 namespace XC {
 class Matrix;
 
-//! @ingroup MATSCCRegiones
+//! @ingroup MATSCCRegions
 //
 //! @brief Circular shaped patch.
 class RgSccCirc: public RgQuadCell

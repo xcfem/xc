@@ -29,7 +29,7 @@
 #ifndef GeomSection_h 
 #define GeomSection_h 
 
-#include "material/section/repres/geom_section/region/ListRegiones.h"
+#include "material/section/repres/geom_section/region/RegionContainer.h"
 #include "material/section/repres/geom_section/reinfLayer/ListReinfLayer.h"
 #include <list>
 #include "boost/lexical_cast.hpp"
@@ -70,7 +70,7 @@ class GeomSection: public SectionMassProperties
   protected:
     MaterialHandler *material_handler; //!< Material handler (searching,...).
 
-    ListRegiones regiones; //!< Region container.
+    RegionContainer regions; //!< Region container.
     ListReinfLayer reinforcement_layers; //!< Rebar layers container.
 
     lst_sis_ref reference_systems; //!< Spatial reference systems.
@@ -132,15 +132,15 @@ class GeomSection: public SectionMassProperties
     double getCompressedStrutWidth(const Segmento2d &) const;
 
     //Access to containers.
-    inline const ListRegiones &getRegiones(void) const
-      { return regiones; }
-    inline ListRegiones &getRegiones(void)
-      { return regiones; }
+    inline const RegionContainer &getRegions(void) const
+      { return regions; }
+    inline RegionContainer &getRegions(void)
+      { return regions; }
     inline const ListReinfLayer &getReinforcementLayers(void) const
       { return reinforcement_layers; }
     inline ListReinfLayer &getReinforcementLayers(void)
       { return reinforcement_layers; }
-    GeomSection getGMRegiones(void) const;
+    GeomSection getGMRegions(void) const;
     GeomSection getGMReinforcementLayers(void) const;
     GeomSection getCrackedSection(const Semiplano2d &) const;
     size_t getNumFiberData(void) const;
@@ -176,7 +176,8 @@ Axis *XC::GeomSection::createAxis(void)
             axis_tag++;
 	  }
         else
-	  std::cerr << "Can't create axis with tag: "
+	  std::cerr << getClassName() << __FUNCTION__
+		    << "Can't create axis with tag: "
                     << axis_tag << ".\n";
       }
     return retval;

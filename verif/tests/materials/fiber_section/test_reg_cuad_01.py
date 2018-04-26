@@ -40,17 +40,17 @@ geomRectang= preprocessor.getMaterialHandler.newSectionGeometry("geomRectang")
 y1= width/2.0
 z1= depth/2.0
 #filling with regions
-regiones= geomRectang.getRegions
+regions= geomRectang.getRegions
 #generation of a quadrilateral region of the specified sizes and number of
 #divisions for the cells (fibers) generation
-steelRegion= regiones.newQuadRegion("steel")   
+steelRegion= regions.newQuadRegion("steel")   
 steelRegion.nDivIJ= nDivIJ
 steelRegion.nDivJK= nDivJK
 steelRegion.pMin= geom.Pos2d(y0-y1,z0-z1)
 steelRegion.pMax= geom.Pos2d(y0+y1,z0+z1)
 
 '''
-print "num. regiones: ",numRegiones
+print "num. regions: ",numRegions
 print "num. capas armado: ",numReinfLayers 
 print "num. barras armado: ",getNumReinfBars
 print "num. teselas: ",numCells

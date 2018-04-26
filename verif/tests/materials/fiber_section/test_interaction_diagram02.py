@@ -41,11 +41,11 @@ Es= EHE_materials.B500S.getDiagD(preprocessor).getTangent
 # setting up
 geomSecHA= preprocessor.getMaterialHandler.newSectionGeometry("geomSecHA")
 #filling with regions
-regiones= geomSecHA.getRegions
+regions= geomSecHA.getRegions
 
 #generation of a quadrilateral region with the specified sizes and number of
 #divisions for the cells (fibers) generation
-concrete= regiones.newQuadRegion(EHE_materials.HA25.nmbDiagD)  #name of the region: EHE_materials.HA25.nmbDiagD
+concrete= regions.newQuadRegion(EHE_materials.HA25.nmbDiagD)  #name of the region: EHE_materials.HA25.nmbDiagD
 concrete.nDivIJ= 10
 concrete.nDivJK= 10
 concrete.pMin= geom.Pos2d(-depth/2.0,-width/2.0)

@@ -15,8 +15,8 @@ def gmSquareSection(geomSection, fiberMatName, ld, nD):
     nD:           number of divisions to be used along the edges
                   of the square
   '''
-  regiones= geomSection.getRegions
-  rg= regiones.newQuadRegion(fiberMatName)
+  regions= geomSection.getRegions
+  rg= regions.newQuadRegion(fiberMatName)
   rg.nDivIJ= nD
   rg.nDivJK= nD
   rg.pMin= geom.Pos2d(-ld/2,-ld/2)
@@ -35,8 +35,8 @@ def gmRectangSection(geomSection,fiberMatName, h, b, nDIJ, nDIK):
     nDJK:         number of divisions to be used along the JK (height)
                   direction
   '''
-  regiones= geomSection.getRegions
-  rg= regiones.newQuadRegion(fiberMatName)
+  regions= geomSection.getRegions
+  rg= regions.newQuadRegion(fiberMatName)
   rg.nDivIJ= nDIJ
   rg.nDivJK= nDIK
   rg.pMin= geom.Pos2d(-b/2,-h/2)

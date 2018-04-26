@@ -24,10 +24,10 @@
 // along with this program.
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
-//ListRegiones.h
+//RegionContainer.h
 
-#ifndef ListRegiones_h 
-#define ListRegiones_h 
+#ifndef RegionContainer_h 
+#define RegionContainer_h 
 
 #include <list>
 #include "material/section/repres/SectionMassProperties.h"
@@ -46,10 +46,10 @@ class MaterialHandler;
 class Vector;
 class Matrix;
 
-//! @ingroup MATSCCRegiones
+//! @ingroup MATSCCRegions
 //
 //! @brief Section composed of some regions.
-class ListRegiones: protected std::list<RegionSecc *>, public SectionMassProperties
+class RegionContainer: protected std::list<RegionSecc *>, public SectionMassProperties
   {
   public:
     typedef std::list<RegionSecc *> l_reg;
@@ -60,16 +60,16 @@ class ListRegiones: protected std::list<RegionSecc *>, public SectionMassPropert
   private:
     void free_mem(void);
     void free_mem(const size_t i);
-    void copia(const ListRegiones &otra);
+    void copia(const RegionContainer &otra);
   protected:
 
     MaterialHandler *material_handler; //!< Material definition handler (searching,...).
   public:
 
-    ListRegiones(MaterialHandler *ml);
-    ListRegiones(const ListRegiones  &otro);
-    ListRegiones &operator=(const ListRegiones  &otro);
-    ~ListRegiones(void);
+    RegionContainer(MaterialHandler *ml);
+    RegionContainer(const RegionContainer  &otro);
+    RegionContainer &operator=(const RegionContainer  &otro);
+    ~RegionContainer(void);
 
     XC::RegionSecc *push_back(const RegionSecc &reg);
     inline size_t size(void) const
@@ -92,7 +92,7 @@ class ListRegiones: protected std::list<RegionSecc *>, public SectionMassPropert
     std::list<Poligono2d> getRegionsContours(void) const;
     std::list<Poligono2d> getContours(void) const;
     BND2d getBnd(void) const;
-    ListRegiones Intersection(const Semiplano2d &) const;
+    RegionContainer Intersection(const Semiplano2d &) const;
 
     double getAreaGrossSection(void) const;
     Vector getCdgGrossSection(void) const;
@@ -109,7 +109,7 @@ class ListRegiones: protected std::list<RegionSecc *>, public SectionMassPropert
     void Print(std::ostream &s) const;
   };
 
- std::ostream &operator<<(std::ostream &os,const ListRegiones &lr);
+ std::ostream &operator<<(std::ostream &os,const RegionContainer &lr);
 
 } // end of XC namespace
 

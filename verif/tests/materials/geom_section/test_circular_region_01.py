@@ -25,8 +25,8 @@ feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
 steel= typical_materials.defElasticMaterial(preprocessor, "steel",Es)
 geomTuberia= preprocessor.getMaterialHandler.newSectionGeometry("geomTuberia")
-regiones= geomTuberia.getRegions
-steelRegion= regiones.newCircularRegion("steel")
+regions= geomTuberia.getRegions
+steelRegion= regions.newCircularRegion("steel")
 
 steelRegion.nDivCirc= 1000
 steelRegion.centro= geom.Pos2d(0.0,0.0)

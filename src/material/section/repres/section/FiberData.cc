@@ -29,7 +29,7 @@
 #include <material/section/repres/section/FiberData.h>
 #include <material/section/repres/cell/VectorCells.h>
 #include <material/section/repres/cell/Cell.h>
-#include "material/section/repres/geom_section/region/ListRegiones.h"
+#include "material/section/repres/geom_section/region/RegionContainer.h"
 #include <material/section/repres/geom_section/region/RegionSecc.h>
 #include <material/section/repres/geom_section/reinfBar/VectorReinfBar.h>
 #include <material/section/repres/geom_section/reinfBar/ReinfBar.h>
@@ -49,11 +49,11 @@ XC::FiberData::FiberData(const int &sz)
 XC::FiberData::FiberData(const GeomSection &gmSecc)
   : fibersMaterial(gmSecc.getNumFiberData()),fibersPosition(2,gmSecc.getNumFiberData()),fibersArea(gmSecc.getNumFiberData())
   {
-    int k= PutCells(0,gmSecc.getRegiones());
+    int k= PutCells(0,gmSecc.getRegions());
     k= putReinforcementLayers(k,gmSecc.getReinforcementLayers());
   }
 
-//! @brief Coloca las celdas being passed as parameters.
+//! @brief Coloca the cells being passed as parameters.
 size_t XC::FiberData::put_cells(const size_t &offset,const VectorCells &cells,Material *matPtr)
   {
     const size_t numCells= cells.size();
@@ -95,12 +95,12 @@ size_t XC::FiberData::put_reinf_bars(const size_t &offset,const VectorReinfBar &
     return k;
   }
 
-//! @brief Coloca las celdas de las regiones being passed as parameters.
-size_t XC::FiberData::PutCells(const size_t &offset,const ListRegiones &regiones)
+//! @brief Put the cells of the regions being passed as parameters.
+size_t XC::FiberData::PutCells(const size_t &offset,const RegionContainer &regions)
   {
     Material *matPtr= nullptr;
     int k= offset;
-    for(XC::ListRegiones::const_iterator i= regiones.begin();i!=regiones.end();i++)
+    for(XC::RegionContainer::const_iterator i= regions.begin();i!=regions.end();i++)
       {
         matPtr= (*i)->getMaterialPtr();
         const VectorCells &cells= (*i)->getCells();

@@ -26,8 +26,8 @@ preprocessor=  feProblem.getPreprocessor
 
 elast= typical_materials.defElasticMaterial(preprocessor, "elast",1.0)
 sectionGeometryTest= preprocessor.getMaterialHandler.newSectionGeometry("sectionGeometryTest")
-regiones= sectionGeometryTest.getRegions
-elast= regiones.newCircularRegion("elast")
+regions= sectionGeometryTest.getRegions
+elast= regions.newCircularRegion("elast")
 elast.nDivRad= n1
 elast.nDivCirc= n2
 elast.center= geom.Pos2d(0,0)

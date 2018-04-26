@@ -37,8 +37,8 @@ concrMatTag25= concr.defDiagK(preprocessor)
 tagB500S= EHE_materials.B500S.defDiagK(preprocessor)
 
 geomSecHA= preprocessor.getMaterialHandler.newSectionGeometry("geomSecHA")
-regiones= geomSecHA.getRegions
-concrete= regiones.newQuadRegion(concr.nmbDiagK)
+regions= geomSecHA.getRegions
+concrete= regions.newQuadRegion(concr.nmbDiagK)
 concrete.nDivIJ= 10
 concrete.nDivJK= 10
 concrete.pMin= geom.Pos2d(-width/2.0,-depth/2.0)

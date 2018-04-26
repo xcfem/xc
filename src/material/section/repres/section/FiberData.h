@@ -39,7 +39,7 @@ namespace XC {
 class Material;
 class VectorCells;
 class VectorReinfBar;
-class ListRegiones;
+class RegionContainer;
 class ListReinfLayer;
  class GeomSection;
 
@@ -75,7 +75,7 @@ class FiberData
     inline size_t size(void) const
       { return fibersArea.Size(); }
 
-    size_t PutCells(const size_t &,const ListRegiones &);
+    size_t PutCells(const size_t &,const RegionContainer &);
     size_t putReinforcementLayers(const size_t &,const ListReinfLayer &);
     void get2DFibers(fiber_list &) const;
     void get3DFibers(fiber_list &) const;

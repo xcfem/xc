@@ -30,11 +30,11 @@ concrete= typical_materials.defElasticMaterial(preprocessor, 'concrete',Ec)
 steel= typical_materials.defElasticMaterial(preprocessor, "steel",Es)
 sectionGeometryTest= preprocessor.getMaterialHandler.newSectionGeometry("sectionGeometryTest")
 
-regiones= sectionGeometryTest.getRegions
-flange= regiones.newQuadRegion('concrete')# Flange
+regions= sectionGeometryTest.getRegions
+flange= regions.newQuadRegion('concrete')# Flange
 flange.pMin= geom.Pos2d(d-hf,0.0)
 flange.pMax= geom.Pos2d(d,b)
-web= regiones.newQuadRegion('concrete')# Web
+web= regions.newQuadRegion('concrete')# Web
 web.pMin= geom.Pos2d(0.0,b/2-bw/2)
 web.pMax= geom.Pos2d(d-hf,b/2+bw/2)
 

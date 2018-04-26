@@ -69,10 +69,10 @@ dgDB500S= EHE_materials.B500S.getDiagD(preprocessor)
 #creation
 geomSecHA= preprocessor.getMaterialHandler.newSectionGeometry("geomSecHA")
 #filling with regions
-regiones= geomSecHA.getRegions
+regions= geomSecHA.getRegions
 #generation of a quadrilateral region of the specified sizes and number of
 #divisions for the cells (fibers) generation
-rg= regiones.newQuadRegion(EHE_materials.HA25.nmbDiagD)  #name of the quadrilateral region ==(EHE_materials.HA25.nmbDiagD
+rg= regions.newQuadRegion(EHE_materials.HA25.nmbDiagD)  #name of the quadrilateral region ==(EHE_materials.HA25.nmbDiagD
 rg.nDivIJ= 10
 rg.nDivJK= 10
 rg.pMin= geom.Pos2d(-depth/2,-width/2)

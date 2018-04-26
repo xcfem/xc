@@ -54,14 +54,14 @@
 #include "boost/lexical_cast.hpp"
 
 XC::GeomSection::GeomSection(MaterialHandler *ml)
-  : SectionMassProperties(),material_handler(ml), regiones(ml), reinforcement_layers(this,ml), tag_sis_ref(0),tag_spot(0) {}
+  : SectionMassProperties(),material_handler(ml), regions(ml), reinforcement_layers(this,ml), tag_sis_ref(0),tag_spot(0) {}
 
 //! @brief Returns a geometry that contains only the regions
 //! defined in this object.
-XC::GeomSection XC::GeomSection::getGMRegiones(void) const
+XC::GeomSection XC::GeomSection::getGMRegions(void) const
   {
     GeomSection retval(material_handler);
-    retval.regiones= regiones;
+    retval.regions= regions;
     return retval;
   }
 
@@ -78,12 +78,12 @@ XC::GeomSection XC::GeomSection::getGMReinforcementLayers(void) const
 XC::GeomSection XC::GeomSection::getCrackedSection(const Semiplano2d &sp_compresiones) const
   {
     GeomSection retval(getGMReinforcementLayers());
-    retval.regiones= regiones.Intersection(sp_compresiones);
+    retval.regions= regions.Intersection(sp_compresiones);
     return retval;
   }
 
 size_t XC::GeomSection::getNumFiberData(void) const
-  { return (regiones.getNumCells() + reinforcement_layers.getNumReinfBars()); }
+  { return (regions.getNumCells() + reinforcement_layers.getNumReinfBars()); }
 
 //! @brief Returns a pointer to the reference system which identifier is being passed as parameter.
 XC::SectionReferenceFrame *XC::GeomSection::get_reference_system(const size_t &id)
@@ -240,7 +240,7 @@ double XC::GeomSection::DistSpots(const size_t &i,const size_t &j) const
 Poligono2d XC::GeomSection::getRegionsContour(void) const
   {
     Poligono2d retval;
-    const std::list<Poligono2d> tmp= regiones.getContours();
+    const std::list<Poligono2d> tmp= regions.getContours();
     if(!tmp.empty())
       {
         if(tmp.size()>1)
@@ -415,7 +415,8 @@ double XC::GeomSection::getCover(const Pos2d &p) const
   {
     const double retval= -getRegionsContour().DistSigno(p);
     if(retval<0)
-      std::clog << "Warning! position: " << p
+      std::clog << getClassName() << __FUNCTION__
+		<< "; warning! position: " << p
                 << " is outside the section." << std::endl;
     return retval;
   }
@@ -424,8 +425,8 @@ double XC::GeomSection::getCover(const Pos2d &p) const
 double XC::GeomSection::getAreaHomogenizedSection(const double &E0) const
   {
     double retval= 0.0;
-    if(!regiones.empty())
-      retval+= regiones.getAreaHomogenizedSection(E0);
+    if(!regions.empty())
+      retval+= regions.getAreaHomogenizedSection(E0);
     if(!reinforcement_layers.empty())
       retval+= reinforcement_layers.getAreaHomogenizedSection(E0);
     return retval;
@@ -436,8 +437,8 @@ XC::Vector XC::GeomSection::getCdgHomogenizedSection(const double &E0) const
     Vector retval(2);
     double weight= 0.0;
     double divisor= 0.0;
-    weight= regiones.getAreaHomogenizedSection(E0);
-    retval+= weight*regiones.getCdgHomogenizedSection(E0);
+    weight= regions.getAreaHomogenizedSection(E0);
+    retval+= weight*regions.getCdgHomogenizedSection(E0);
     divisor+= weight;
     weight= reinforcement_layers.getAreaHomogenizedSection(E0);
     retval+= weight*reinforcement_layers.getCdgHomogenizedSection(E0);
@@ -454,10 +455,10 @@ double XC::GeomSection::getIyHomogenizedSection(const double &E0) const
     double d= 0.0;
     const double zCdg= getCdgHomogenizedSection(E0)[1];
 
-    if(!regiones.empty())
+    if(!regions.empty())
       {
-        d= regiones.getCdgHomogenizedSection(E0)[1]-zCdg;
-        retval+= regiones.getIyHomogenizedSection(E0)+regiones.getAreaHomogenizedSection(E0)*sqr(d);
+        d= regions.getCdgHomogenizedSection(E0)[1]-zCdg;
+        retval+= regions.getIyHomogenizedSection(E0)+regions.getAreaHomogenizedSection(E0)*sqr(d);
       }
     if(!reinforcement_layers.empty())
       {
@@ -475,10 +476,10 @@ double XC::GeomSection::getIzHomogenizedSection(const double &E0) const
     double d= 0.0;
     const double yCdg= getCdgHomogenizedSection(E0)[0];
 
-    if(!regiones.empty())
+    if(!regions.empty())
       {
-        d= regiones.getCdgHomogenizedSection(E0)[0]-yCdg;
-        retval+= regiones.getIzHomogenizedSection(E0)+regiones.getAreaHomogenizedSection(E0)*sqr(d);
+        d= regions.getCdgHomogenizedSection(E0)[0]-yCdg;
+        retval+= regions.getIzHomogenizedSection(E0)+regions.getAreaHomogenizedSection(E0)*sqr(d);
       }
     if(!reinforcement_layers.empty())
       {
@@ -497,10 +498,10 @@ double XC::GeomSection::getPyzHomogenizedSection(const double &E0) const
     const double zCdg= getCdgHomogenizedSection(E0)[0];
     const double yCdg= getCdgHomogenizedSection(E0)[0];
 
-    if(!regiones.empty())
+    if(!regions.empty())
       {
-        d2= (regiones.getCdgHomogenizedSection(E0)[0]-yCdg)*(regiones.getCdgHomogenizedSection(E0)[1]-zCdg);
-        retval+= regiones.getPyzHomogenizedSection(E0)+regiones.getAreaHomogenizedSection(E0)*d2;
+        d2= (regions.getCdgHomogenizedSection(E0)[0]-yCdg)*(regions.getCdgHomogenizedSection(E0)[1]-zCdg);
+        retval+= regions.getPyzHomogenizedSection(E0)+regions.getAreaHomogenizedSection(E0)*d2;
       }
     if(!reinforcement_layers.empty())
       {
@@ -514,8 +515,8 @@ double XC::GeomSection::getPyzHomogenizedSection(const double &E0) const
 double XC::GeomSection::getAreaGrossSection(void) const
   {
     double retval= 0.0;
-    if(!regiones.empty())
-      retval+= regiones.getAreaGrossSection();
+    if(!regions.empty())
+      retval+= regions.getAreaGrossSection();
     // if(!reinforcement_layers.empty())
     //   retval+= reinforcement_layers.getAreaGrossSection();
     return retval;
@@ -523,7 +524,7 @@ double XC::GeomSection::getAreaGrossSection(void) const
 
 //! @brief Returns gross section centroid position.
 XC::Vector XC::GeomSection::getCdgGrossSection(void) const
-  { return regiones.getCdgGrossSection(); }
+  { return regions.getCdgGrossSection(); }
 
 //! @brief Inertia of the gross section about an axis parallel to y through its centroid.
 double XC::GeomSection::getIyGrossSection(void) const
@@ -532,10 +533,10 @@ double XC::GeomSection::getIyGrossSection(void) const
     double d= 0.0;
     const double zCdg= getCdgGrossSection()[1];
 
-    if(!regiones.empty())
+    if(!regions.empty())
       {
-        d= regiones.getCdgGrossSection()[1]-zCdg;
-        retval+= regiones.getIyGrossSection()+regiones.getAreaGrossSection()*sqr(d);
+        d= regions.getCdgGrossSection()[1]-zCdg;
+        retval+= regions.getIyGrossSection()+regions.getAreaGrossSection()*sqr(d);
       }
     // if(!reinforcement_layers.empty())
     //   {
@@ -552,10 +553,10 @@ double XC::GeomSection::getIzGrossSection(void) const
     double d= 0.0;
     const double yCdg= getCdgGrossSection()[0];
 
-    if(!regiones.empty())
+    if(!regions.empty())
       {
-        d= regiones.getCdgGrossSection()[0]-yCdg;
-        retval+= regiones.getIzGrossSection()+regiones.getAreaGrossSection()*sqr(d);
+        d= regions.getCdgGrossSection()[0]-yCdg;
+        retval+= regions.getIzGrossSection()+regions.getAreaGrossSection()*sqr(d);
       }
     // if(!reinforcement_layers.empty())
     //   {
@@ -574,10 +575,10 @@ double XC::GeomSection::getPyzGrossSection(void) const
     const double zCdg= posCdg[1];
     const double yCdg= posCdg[0];
 
-    if(!regiones.empty())
+    if(!regions.empty())
       {
-        d2= (regiones.getCdgGrossSection()[0]-yCdg)*(regiones.getCdgGrossSection()[1]-zCdg);
-        retval+= regiones.getPyzGrossSection()+regiones.getAreaGrossSection()*d2;
+        d2= (regions.getCdgGrossSection()[0]-yCdg)*(regions.getCdgGrossSection()[1]-zCdg);
+        retval+= regions.getPyzGrossSection()+regions.getAreaGrossSection()*d2;
       }
     // if(!reinforcement_layers.empty())
     //   {
@@ -591,7 +592,7 @@ double XC::GeomSection::getPyzGrossSection(void) const
 //! @brief Printing.
 void XC::GeomSection::Print(std::ostream &s, int flag)
   {
-    s << "\nCurrent number of regiones: "       << regiones.size();
+    s << "\nCurrent number of regions: "       << regions.size();
     s << "\nCurrent number of reinforcement layers: " << reinforcement_layers.size();
   }
 

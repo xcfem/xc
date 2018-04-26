@@ -37,7 +37,7 @@ class Poligono2d;
 
 namespace XC {
 
-//! @ingroup MATSCCRegiones
+//! @ingroup MATSCCRegions
 //
 //! Poligonal patch for cross-section discretization.
 class RgSccPoligono: public RgQuadCell

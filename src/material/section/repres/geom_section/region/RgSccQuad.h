@@ -47,7 +47,7 @@ namespace XC {
 // I +---+---+---+---+ J
 //         nDivIJ= 4
 
-//! @ingroup MATSCCRegiones
+//! @ingroup MATSCCRegions
 //
 //! @brief Quad that discretizes in quad cells.
 class RgSccQuad: public RgQuadCell

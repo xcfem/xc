@@ -38,13 +38,13 @@ def plotGeomSeccion(geomSection, path):
     WIDTH, HEIGHT = 256, 256
     surface = cairo.PSSurface(path, WIDTH, HEIGHT)
     ctx = cairo.Context(surface)
-    regiones= geomSection.getRegions
-    bnd= regiones.getBnd
+    regions= geomSection.getRegions
+    bnd= regions.getBnd
     trf= auxCairoPlot.TransformParams(WIDTH, HEIGHT,auxCairoPlot.Boundary(bnd.getXMin,bnd.getYMin,bnd.getXMax,bnd.getYMax))
     trf.applyTransform(ctx)# Normalizing the canvas
     ctx.set_line_width(trf.scale/100000)
     ctx.set_source_rgb(0.0, 0.0, 0.0) # Black solid color
-    for r in regiones:
+    for r in regions:
         trf.plotPolygon(r.getPolygon(),ctx)
     ctx.stroke()
     ctx.set_line_width(trf.scale/300000)

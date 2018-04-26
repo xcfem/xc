@@ -48,7 +48,7 @@ class_<XC::Segment, bases<XC::Axis>, boost::noncopyable >("Segment", no_init)
   .def("getLong",&XC::Segment::getLong)
   ;
 
-XC::ListRegiones &(XC::GeomSection::*getRegionContainer)(void)= &XC::GeomSection::getRegiones;
+XC::RegionContainer &(XC::GeomSection::*getRegionContainer)(void)= &XC::GeomSection::getRegions;
 XC::ListReinfLayer &(XC::GeomSection::*getReinfLayerContainer)(void)= &XC::GeomSection::getReinforcementLayers;
 class_<XC::GeomSection, XC::GeomSection *, bases<XC::SectionMassProperties>, boost::noncopyable >("GeomSection", no_init)
   .add_property("getRegions",make_function(getRegionContainer,return_internal_reference<>()))

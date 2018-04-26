@@ -77,12 +77,12 @@ XC::SectionRepres &XC::SectionRepres::operator=(const SectionRepres &otro)
     return *this;
   }
 
-//! @brief Returns the número total de celdas.
+//! @brief Returns the total number of cells.
 int XC::SectionRepres::getNumCells(void) const
   {
     int ncells= 0;
     if(gmSecc)
-      ncells= gmSecc->getRegiones().getNumCells();
+      ncells= gmSecc->getRegions().getNumCells();
     return ncells;
   }
 

@@ -24,9 +24,9 @@
 // along with this program.
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
-//ListRegiones.cc
+//RegionContainer.cc
 
-#include "ListRegiones.h"
+#include "RegionContainer.h"
 #include <material/section/repres/geom_section/region/RgSccQuad.h>
 #include <material/section/repres/geom_section/region/RgSccCirc.h>
 #include <material/section/repres/geom_section/region/RgSccPoligono.h>
@@ -45,7 +45,7 @@
 #include "xc_utils/src/geom/d2/poligonos2d/bool_op_poligono2d.h"
 
 //! @brief Liberta todas las pociciones.
-void XC::ListRegiones::free_mem(void)
+void XC::RegionContainer::free_mem(void)
   {
     for(iterator i=begin();i!=end();i++)
       delete *i;
@@ -53,7 +53,7 @@ void XC::ListRegiones::free_mem(void)
   }
 
 //! @brief Copy the regions from another container.
-void XC::ListRegiones::copia(const ListRegiones &otra)
+void XC::RegionContainer::copia(const RegionContainer &otra)
   {
     free_mem();
     for(const_iterator i=otra.begin();i!=otra.end();i++)
@@ -61,16 +61,16 @@ void XC::ListRegiones::copia(const ListRegiones &otra)
   }
 
 //! @brief Constructor.
-XC::ListRegiones::ListRegiones(MaterialHandler *ml)
+XC::RegionContainer::RegionContainer(MaterialHandler *ml)
   : l_reg(), material_handler(ml) {}
 
 //! @brief Copy constructor.
-XC::ListRegiones::ListRegiones(const ListRegiones  &otro)
+XC::RegionContainer::RegionContainer(const RegionContainer  &otro)
   : l_reg(), material_handler(otro.material_handler)
   { copia(otro); }
 
 //! @brief Assignment operator.
-XC::ListRegiones &XC::ListRegiones::operator=(const ListRegiones &otro)
+XC::RegionContainer &XC::RegionContainer::operator=(const RegionContainer &otro)
   {
     SectionMassProperties::operator=(otro);
     material_handler= otro.material_handler;
@@ -79,7 +79,7 @@ XC::ListRegiones &XC::ListRegiones::operator=(const ListRegiones &otro)
   }
 
 //! @brief Aggregates a new quadrilateral region.
-XC::RgSccQuad *XC::ListRegiones::newQuadRegion(const std::string &cod_mat)
+XC::RgSccQuad *XC::RegionContainer::newQuadRegion(const std::string &cod_mat)
   {
     Material *mat= material_handler->find_ptr(cod_mat);
     if(!mat)
@@ -93,7 +93,7 @@ XC::RgSccQuad *XC::ListRegiones::newQuadRegion(const std::string &cod_mat)
   }
 
 //! @brief Aggregates a new circularl region.
-XC::RgSccCirc *XC::ListRegiones::newCircularRegion(const std::string &cod_mat)
+XC::RgSccCirc *XC::RegionContainer::newCircularRegion(const std::string &cod_mat)
   {
     Material *mat= material_handler->find_ptr(cod_mat);
     if(!mat)
@@ -107,32 +107,32 @@ XC::RgSccCirc *XC::ListRegiones::newCircularRegion(const std::string &cod_mat)
   }
 
 //! @brief Destructor.
-XC::ListRegiones::~ListRegiones(void)
+XC::RegionContainer::~RegionContainer(void)
   { free_mem(); }
 
-//! @brief Erases todas las regiones.
-void XC::ListRegiones::clear(void)
+//! @brief Erases all regions.
+void XC::RegionContainer::clear(void)
   { free_mem(); }
 
 //! @brief Adds a region to the container.
-XC::RegionSecc *XC::ListRegiones::push_back(const RegionSecc &reg)
+XC::RegionSecc *XC::RegionContainer::push_back(const RegionSecc &reg)
   {
     RegionSecc *tmp= reg.getCopy();
     l_reg::push_back(tmp);
     return tmp;
   }
 
-XC::ListRegiones::const_iterator XC::ListRegiones::begin(void) const
+XC::RegionContainer::const_iterator XC::RegionContainer::begin(void) const
   { return l_reg::begin(); }
-XC::ListRegiones::const_iterator XC::ListRegiones::end(void) const
+XC::RegionContainer::const_iterator XC::RegionContainer::end(void) const
   { return l_reg::end(); }
-XC::ListRegiones::iterator XC::ListRegiones::begin(void)
+XC::RegionContainer::iterator XC::RegionContainer::begin(void)
   { return l_reg::begin(); }
-XC::ListRegiones::iterator XC::ListRegiones::end(void)
+XC::RegionContainer::iterator XC::RegionContainer::end(void)
   { return l_reg::end(); }
 
 //! @brief Returns the número total de celdas.
-size_t XC::ListRegiones::getNumCells(void) const
+size_t XC::RegionContainer::getNumCells(void) const
   {
     size_t ncells= 0;
     for(const_iterator i=begin();i!=end();i++)
@@ -144,7 +144,7 @@ size_t XC::ListRegiones::getNumCells(void) const
   }
 
 //! @brief Returns a list with the regions contours.
-std::list<Poligono2d> XC::ListRegiones::getRegionsContours(void) const
+std::list<Poligono2d> XC::RegionContainer::getRegionsContours(void) const
   {
     std::list<Poligono2d> retval;
     for(const_iterator i= begin();i!=end();i++)
@@ -153,13 +153,13 @@ std::list<Poligono2d> XC::ListRegiones::getRegionsContours(void) const
   }
 
 //! @brief Return the regions contours.
-std::list<Poligono2d> XC::ListRegiones::getContours(void) const
+std::list<Poligono2d> XC::RegionContainer::getContours(void) const
   {
     std::list<Poligono2d> retval= join(getRegionsContours());
     return retval;
   }
 
-BND2d XC::ListRegiones::getBnd(void) const
+BND2d XC::RegionContainer::getBnd(void) const
   {
     BND2d retval;
     if(!empty())
@@ -177,16 +177,16 @@ BND2d XC::ListRegiones::getBnd(void) const
     return retval;
   }
 
-XC::ListRegiones XC::ListRegiones::Intersection(const Semiplano2d &sp) const
+XC::RegionContainer XC::RegionContainer::Intersection(const Semiplano2d &sp) const
   {
-    ListRegiones retval(material_handler);
+    RegionContainer retval(material_handler);
     for(const_iterator i= begin();i!=end();i++)
       retval.push_back((*i)->Intersection(sp));
     return retval;
   }
 
 //! @brief Returns the regions area.
-double XC::ListRegiones::getAreaGrossSection(void) const
+double XC::RegionContainer::getAreaGrossSection(void) const
   {
     double retval= 0.0;
     for(const_iterator i= begin();i!=end();i++)
@@ -195,7 +195,7 @@ double XC::ListRegiones::getAreaGrossSection(void) const
   }
 
 //! @brief Returns the centro de gravedad of the gross cross-section.
-XC::Vector XC::ListRegiones::getCdgGrossSection(void) const
+XC::Vector XC::RegionContainer::getCdgGrossSection(void) const
   {
     Vector retval(2);
     double weight= 0.0;
@@ -219,7 +219,7 @@ XC::Vector XC::ListRegiones::getCdgGrossSection(void) const
   }
 
 //! @brief Returns the moment of inertia of the gross cross-section with respect to the axis parallel to y passing through the centroid.
-double XC::ListRegiones::getIyGrossSection(void) const
+double XC::RegionContainer::getIyGrossSection(void) const
   {
     double retval= 0.0;
     double d= 0.0;
@@ -233,7 +233,7 @@ double XC::ListRegiones::getIyGrossSection(void) const
   }
 
 //! @brief Returns the moment of inertia of the gross cross-section with respect to the axis paralelo al z por el centroid.
-double XC::ListRegiones::getIzGrossSection(void) const
+double XC::RegionContainer::getIzGrossSection(void) const
   {
     double retval= 0.0;
     double d= 0.0;
@@ -247,7 +247,7 @@ double XC::ListRegiones::getIzGrossSection(void) const
   }
 
 //! @brief Returns the producto de inercia of the gross cross-section respecto a los axis parallel to the y y al z por el centroid.
-double XC::ListRegiones::getPyzGrossSection(void) const
+double XC::RegionContainer::getPyzGrossSection(void) const
   {
     double retval= 0.0;
     double d2= 0.0;
@@ -262,8 +262,8 @@ double XC::ListRegiones::getPyzGrossSection(void) const
     return retval;
   }
 
-//! @brief Returns the homogenized area de las regiones.
-double XC::ListRegiones::getAreaHomogenizedSection(const double &E0) const
+//! @brief Returns the homogenized area of the regions.
+double XC::RegionContainer::getAreaHomogenizedSection(const double &E0) const
   {
     if(fabs(E0)<1e-6)
       std::clog << "homogenization reference modulus too small; E0= "
@@ -285,7 +285,7 @@ double XC::ListRegiones::getAreaHomogenizedSection(const double &E0) const
     return retval;
   }
 
-XC::Vector XC::ListRegiones::getCdgHomogenizedSection(const double &E0) const
+XC::Vector XC::RegionContainer::getCdgHomogenizedSection(const double &E0) const
   {
     if(fabs(E0)<1e-6)
       std::clog << "homogenization reference modulus too small; E0= "
@@ -320,7 +320,7 @@ XC::Vector XC::ListRegiones::getCdgHomogenizedSection(const double &E0) const
 
 //! @brief Returns homogenized moment of inertia of the cross-section with respect to the axis parallel to y passing through the centroid.
 //! @param E0: Reference elastic modulus.
-double XC::ListRegiones::getIyHomogenizedSection(const double &E0) const
+double XC::RegionContainer::getIyHomogenizedSection(const double &E0) const
   {
     if(fabs(E0)<1e-6)
       std::clog << "homogenization reference modulus too small; E0= "
@@ -347,7 +347,7 @@ double XC::ListRegiones::getIyHomogenizedSection(const double &E0) const
 
 //! @brief Returns homogenized moment of inertia of the cross-section with respect to the axis parallel to z passing through the centroid.
 //! @param E0: Reference elastic modulus.
-double XC::ListRegiones::getIzHomogenizedSection(const double &E0) const
+double XC::RegionContainer::getIzHomogenizedSection(const double &E0) const
   {
     if(fabs(E0)<1e-6)
       std::clog << "homogenization reference modulus too small; E0= "
@@ -374,7 +374,7 @@ double XC::ListRegiones::getIzHomogenizedSection(const double &E0) const
 
 //! @brief Returns homogenized product of inertia of the cross-section with respect to the axis parallel to y and z passing through the centroid.
 //! @param E0: Reference elastic modulus.
-double XC::ListRegiones::getPyzHomogenizedSection(const double &E0) const
+double XC::RegionContainer::getPyzHomogenizedSection(const double &E0) const
   {
     if(fabs(E0)<1e-6)
       std::clog << "homogenization reference modulus too small; E0= "
@@ -401,13 +401,14 @@ double XC::ListRegiones::getPyzHomogenizedSection(const double &E0) const
     return retval;
   }
 
-void XC::ListRegiones::Print(std::ostream &os) const
+//! @brief Print stuff.
+void XC::RegionContainer::Print(std::ostream &os) const
   {
     for(const_iterator i= begin();i!=end();i++)
       (*i)->Print(os);
   }
 
-std::ostream &XC::operator<<(std::ostream &os,const ListRegiones &lr)
+std::ostream &XC::operator<<(std::ostream &os,const RegionContainer &lr)
   {
     lr.Print(os);
     return os;

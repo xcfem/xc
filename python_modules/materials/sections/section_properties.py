@@ -271,8 +271,8 @@ class RectangularSection(SectionProperties):
     :param gm: object of type section_geometry
     :param nmbMat: name of the material (string)
     '''
-    regiones= gm.getRegions
-    reg= regiones.newQuadRegion(nmbMat)
+    regions= gm.getRegions
+    reg= regions.newQuadRegion(nmbMat)
     reg.nDivIJ= self.nDivIJ
     reg.nDivJK= self.nDivJK
     reg.pMin= geom.Pos2d(-self.h/2.0,-self.b/2.0)
