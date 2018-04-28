@@ -93,8 +93,11 @@ class_<XC::Matrix, bases<EntCmd> >("Matrix")
   .def("columnSum",&XC::Matrix::columnSum,"Returns the sum of the columns.")
   .def("rowNorm",&XC::Matrix::rowNorm,"Row norm.")
   .def("columnNorm",&XC::Matrix::columnNorm,"Column norm.")
-  .def("Norm2",&XC::Matrix::Norm2,"Returns squared value of euclidean norm.")
-  .def("Norm",&XC::Matrix::Norm,"Returns euclidean norm.")
+  .def("Norm2",&XC::Matrix::Norm2,"Return squared value of euclidean norm.")
+  .def("Norm",&XC::Matrix::Norm,"Return the value of the euclidean norm.")
+  .def("OneNorm",&XC::Matrix::OneNorm,"Return the value of the one norm.")
+  .def("RCond",&XC::Matrix::RCond,".Return an estimation of the reciprocal of the condition number using the 1-norm.")
+  .def("getInverse",&XC::Matrix::getInverse,"Return the inverse of the matrix-")
    ;
 
 

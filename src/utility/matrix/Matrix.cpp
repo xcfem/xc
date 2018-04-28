@@ -270,6 +270,10 @@ extern "C" int dgetrs_(char *TRANS, int *N, int *NRHS, double *A, int *LDA,
 extern "C" int dgetrf_(int *M, int *N, double *A, int *LDA, 
 		       int *iPiv, int *INFO);
 
+extern "C" double dlange_(const char *norm, const int *m, const int *n,
+			  const double *a, const int *lda, double *work,
+			  const int norm_len);
+
 extern "C" int dgecon_(const char *norm, const int *n, double *a,
 		       const int *lda, const double *anorm, double *rcond,
 		       double *work, int *iwork, int *info, int len);
@@ -434,7 +438,7 @@ int XC::Matrix::Solve(const Matrix &b, Matrix &x) const
     return info;
   }
 
-
+//! @brief Return the inverse matrix in the argument.
 int XC::Matrix::Invert(Matrix &theInverse) const
   {
 
@@ -488,7 +492,12 @@ int XC::Matrix::Invert(Matrix &theInverse) const
     return info;
   }
     
-		    
+XC::Matrix XC::Matrix::getInverse(void) const
+  {
+    Matrix retval(*this);
+    Invert(retval);
+    return retval;
+  }     	    
 
 //! @brief Add a factor \p fact times the Matrix \p other to the current
 //! Matrix.
@@ -1559,4 +1568,103 @@ double XC::Matrix::columnNorm(void) const
     double maximo= columnSum(0);
     for(register int j=1;j<this->noCols();j++) maximo= std::max(maximo,columnSum(j));
     return maximo;
+  }
+
+//! @brief Returns the value of the one norm.
+double XC::Matrix::OneNorm(void) const
+  {
+    double retval= 0.0;
+
+#ifdef _G3DEBUG    
+    if(numRows != numCols)
+      {
+        std::cerr << getClassName() << "::" << __FUNCTION__
+	  	  << "; the matrix of dimensions " 
+	          << numRows << ", " << numCols
+		<< " is not square " << std::endl;
+        return -1;
+      }
+
+#endif
+    
+    // check work area can hold all the data
+    int n= numRows;
+    const int dataSize= data.Size();
+    auxMatrix.resize(dataSize,n);
+
+    double *matrixWork= auxMatrix.getMatrixWork();
+    for(int i=0; i<dataSize; i++)
+      matrixWork[i]= data(i);
+
+
+    int ldA= n;
+    double *Aptr= matrixWork;
+
+    //Computes the norm of the matrix.
+    Vector wrk(n);
+    double *wrkPtr= wrk.getDataPtr();
+    retval= dlange_("1", &n, &n, Aptr, &ldA, wrkPtr, 1);
+    return retval;
+  }
+
+//! @brief Return an estimation of the reciprocal of the condition number.
+//!
+//! estimates the reciprocal of the condition number of the matrix
+//! using the 1-norm. An estimate is obtained for norm(inv(A)), and
+//! the reciprocal of the condition number is computed as
+//!    RCond = 1 / ( norm(A) * norm(inv(A)) ).
+double XC::Matrix::RCond(void) const
+  {
+    double retval= 0.0;
+
+#ifdef _G3DEBUG    
+    if(numRows != numCols)
+      {
+        std::cerr << getClassName() << "::" << __FUNCTION__
+	  	  << "; the matrix of dimensions " 
+	          << numRows << ", " << numCols
+		<< " is not square " << std::endl;
+        return -1;
+      }
+
+#endif
+    
+    // check work area can hold all the data
+    int n= numRows;
+    const int dataSize= data.Size();
+    auxMatrix.resize(dataSize,n);
+
+    double *matrixWork= auxMatrix.getMatrixWork();
+    for(int i=0; i<dataSize; i++)
+      matrixWork[i]= data(i);
+
+
+    int ldA= n;
+    int info;
+    double *Aptr= matrixWork;
+
+    //Computes the norm of the matrix.
+    Vector wrk(n);
+    double *wrkPtr= wrk.getDataPtr();
+    const double anorm= dlange_("1", &n, &n, Aptr, &ldA, wrkPtr, 1);
+
+    //Modifies matrixWork in place with a LU decomposition.
+    int *iPIV= auxMatrix.getIntWork();
+    dgetrf_(&n, &n, Aptr, &ldA, iPIV, &info);
+    if(info != 0)
+      std::cerr << getClassName() << "::" << __FUNCTION__
+    	        << "; LaPack dgtrf_ failure with error: " << info
+    	        << std::endl;
+    else
+      {
+	//Computes the reciprocal norm.
+	wrk.resize(4*n);
+        wrkPtr= wrk.getDataPtr();
+	dgecon_("1", &n, Aptr, &ldA, &anorm, &retval, wrkPtr, iPIV, &info, 1);
+	if(info != 0)
+	  std::cerr << getClassName() << "::" << __FUNCTION__
+		    << "; LaPack dgecon_ failure with error: " << info
+		    << std::endl;
+      }
+    return retval;
   }

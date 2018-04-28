@@ -149,6 +149,7 @@ class Matrix: public EntCmd
     int Solve(const Vector &V, Vector &res) const;
     int Solve(const Matrix &M, Matrix &res) const;
     int Invert(Matrix &res) const;
+    Matrix getInverse(void) const;
 
     double rowSum(int i) const;
     double columnSum(int j) const;
@@ -156,6 +157,8 @@ class Matrix: public EntCmd
     double columnNorm(void) const;
     double Norm2(void) const;
     double Norm(void) const;
+    double OneNorm(void) const;
+    double RCond(void) const;
 
     int addMatrix(double factThis, const Matrix &other, double factOther);
     int addMatrixProduct(double factThis, const Matrix &A, const Matrix &B, double factOther); // AB
