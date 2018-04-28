@@ -24,28 +24,34 @@
 // along with this program.
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
-//MapEsquemas3d.h
+//Framework3d.cc
 
-#ifndef MAPEsquemas3d_H
-#define MAPEsquemas3d_H
+#include "Framework3d.h"
+#include "TritrizPtrPnt.h"
+#include "preprocessor/Preprocessor.h"
+#include "domain/mesh/node/Node.h"
+#include "domain/mesh/element/Element.h"
 
-#include "preprocessor/multi_block_topology/ModelComponentContainer.h"
-#include "boost/lexical_cast.hpp"
+#include "preprocessor/multi_block_topology/entities/Pnt.h"
+#include "preprocessor/set_mgmt/Set.h"
 
 
-namespace XC {
-class TritrizPtrPnt;
 
-//! @ingroup MultiBlockTopology
-//
-//! @brief Three dimensional scheme container.
-class MapEsquemas3d: public ModelComponentContainer<TritrizPtrPnt>
+//! @brief Constructor.
+XC::Framework3d::Framework3d(MultiBlockTopology *mbt)
+  : ModelComponentContainer<TritrizPtrPnt>(mbt) {}
+
+//! @brief Creates a new three dimensional framework.
+XC::TritrizPtrPnt *XC::Framework3d::makeNew(void)
   {
-  public:
-    MapEsquemas3d(MultiBlockTopology *mbt= nullptr);
-
-    TritrizPtrPnt *makeNew(void);
-  };
-
-} //end of XC namespace
-#endif
+    TritrizPtrPnt *retval= busca(getTag());
+    if(!retval) //New grid.
+      {
+        retval= new TritrizPtrPnt();
+        retval->set_owner(this);
+        (*this)[getTag()]= retval;
+        //UpdateSets(retval);
+        tag++;
+      }
+    return retval;
+  }

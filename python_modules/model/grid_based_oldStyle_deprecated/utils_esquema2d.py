@@ -7,7 +7,7 @@ def setupEsquema2dXZ(preprocessor, idEsquema, abcisas, ordenadas):
   '''
   ncol= size(abcisas)
   nfil= size(ordenadas)
-  esq2d= preprocessor.getMultiBlockTopology.new2dScheme(idEsquema,nfil,ncol)
+  esq2d= preprocessor.getMultiBlockTopology.new2DNet(idEsquema,nfil,ncol)
   for i in range(1,nfil+1):
     for j in range(1,ncol+1):
       pnt= preprocessor.getMultiBlockTopology.newPnt(abcisas[j-1],0.0,ordenadas[i-1])
@@ -24,7 +24,7 @@ def defLineaEsquema2d(preprocessor, idEsquema, i1, j1, i2, j2, nDivL, setName):
   nDivL: Número de divisiones para las líneas.
   setName: Set en el que incluiremos la línea.
   '''
-  esq2d= preprocessor.getMultiBlockTopology.get2DScheme(idEsquema)
+  esq2d= preprocessor.getMultiBlockTopology.get2DNet(idEsquema)
   tagP1= esq2d.getPnt(i1,j1)
   tagP2= esq2d.getPnt(i2,j2)
   ln= preprocessor.getMultiBlockTopology.newLine(tagP1,tagP2)
@@ -41,7 +41,7 @@ def fixNodeEsquema2d(preprocessor, idEsquema, i, j, gdls):
   i,j: indices i and j of the point to which the node belongs.
   gdls: Grados de libertad a eliminar.
   '''
-  esq2d= preprocessor.getMultiBlockTopology.get2DScheme(idEsquema)
+  esq2d= preprocessor.getMultiBlockTopology.get2DNet(idEsquema)
   n= esq2d.getPnt(i,j).getNode()
   n.fix(gdls)
 
@@ -53,7 +53,7 @@ def loadNodeEsquema2d(preprocessor,idEsquema, i, j, carga):
   i,j: indices i and j of the point to which the node belongs.
   carga: Carga a aplicar.
   '''
-  esq2d= preprocessor.getMultiBlockTopology.get2DScheme(idEsquema)
+  esq2d= preprocessor.getMultiBlockTopology.get2DNet(idEsquema)
   n= esq2d.getPnt(i,j).getNode()
   n.load(carga)
 
@@ -65,7 +65,7 @@ def nodeDisplacementVectorEsquema2d(idEsquema, i, j):
   i,j: indices i and j of the point to which the node belongs.
   gdls: Grados de libertad a eliminar.
   '''
-  esq2d= preprocessor.getMultiBlockTopology.get2DScheme(idEsquema)
+  esq2d= preprocessor.getMultiBlockTopology.get2DNet(idEsquema)
   n= esq2d.getPnt(i,j).getNode()
   return n.getDisp()
 

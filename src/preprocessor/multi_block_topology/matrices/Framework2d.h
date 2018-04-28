@@ -24,34 +24,30 @@
 // along with this program.
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
-//MapEsquemas3d.cc
+//Framework2d.h
 
-#include "MapEsquemas3d.h"
-#include "TritrizPtrPnt.h"
-#include "preprocessor/Preprocessor.h"
-#include "domain/mesh/node/Node.h"
-#include "domain/mesh/element/Element.h"
+#ifndef FRAMEWORK2D_H
+#define FRAMEWORK2D_H
 
-#include "preprocessor/multi_block_topology/entities/Pnt.h"
-#include "preprocessor/set_mgmt/Set.h"
+#include "preprocessor/multi_block_topology/ModelComponentContainer.h"
+#include "boost/lexical_cast.hpp"
 
 
+namespace XC {
+class MatrizPtrPnt;
 
-//! @brief Constructor.
-XC::MapEsquemas3d::MapEsquemas3d(MultiBlockTopology *mbt)
-  : ModelComponentContainer<TritrizPtrPnt>(mbt) {}
-
-//! @brief Creates a new esquema bidimensional.
-XC::TritrizPtrPnt *XC::MapEsquemas3d::makeNew(void)
+//! @ingroup MultiBlockTopology
+//
+//! @brief Bidimensional framework container.
+class Framework2d: public ModelComponentContainer<MatrizPtrPnt>
   {
-    TritrizPtrPnt *retval= busca(getTag());
-    if(!retval) //New grid.
-      {
-        retval= new TritrizPtrPnt();
-        retval->set_owner(this);
-        (*this)[getTag()]= retval;
-        //UpdateSets(retval);
-        tag++;
-      }
-    return retval;
-  }
+  protected:
+    MatrizPtrPnt *Crea(void);
+  public:
+    Framework2d(MultiBlockTopology *mbt= nullptr);
+
+    MatrizPtrPnt *makeNew(void);
+  };
+
+} //end of XC namespace
+#endif

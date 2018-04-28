@@ -53,7 +53,7 @@ class TritrizPtrPnt: public TritrizPtrBase<MatrizPtrPnt>
   protected:
 
 
-    friend class MapEsquemas3d;
+    friend class Framework3d;
     TritrizPtrPnt(const size_t n_layers= 0);
     TritrizPtrPnt(const size_t ,const size_t ,const size_t );
   public:

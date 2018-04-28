@@ -102,7 +102,7 @@ const XC::MultiBlockTopology *XC::MatrizPtrPnt::getMultiBlockTopology(void) cons
     const MultiBlockTopology *retval= nullptr;
     const EntCmd *ptr= Owner();
     assert(ptr);
-    const MapEsquemas2d *e2d= dynamic_cast<const MapEsquemas2d *>(ptr);
+    const Framework2d *e2d= dynamic_cast<const Framework2d *>(ptr);
     if(e2d)
       retval= e2d->getMultiBlockTopology();
     else //Tritriz.
@@ -120,7 +120,7 @@ XC::MultiBlockTopology *XC::MatrizPtrPnt::getMultiBlockTopology(void)
     MultiBlockTopology *retval= nullptr;
     EntCmd *ptr= Owner();
     assert(ptr);
-    MapEsquemas2d *e2d= dynamic_cast<MapEsquemas2d *>(ptr);
+    Framework2d *e2d= dynamic_cast<Framework2d *>(ptr);
     if(e2d)
       retval= e2d->getMultiBlockTopology();
     else //Tritriz.
@@ -204,7 +204,7 @@ m_int XC::MatrizPtrPnt::getTags(void) const
     return retval;
   }
 
-//! @brief Return the centroide del esquema.
+//! @brief Return the framework centroid.
 Pos3d XC::MatrizPtrPnt::getCentroide(void) const
   {
     Pos3d retval;

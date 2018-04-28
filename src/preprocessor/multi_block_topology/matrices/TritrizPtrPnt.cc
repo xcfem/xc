@@ -78,7 +78,7 @@ void XC::TritrizPtrPnt::setPnt(const size_t &i,const size_t &j,const size_t &k,c
 XC::Pnt *XC::TritrizPtrPnt::getPnt(const size_t &i,const size_t &j,const size_t &k)
   { return getAtIJK(i,j,k); }
 
-//! @brief Return the centroide del esquema.
+//! @brief Return the framework centroid.
 Pos3d XC::TritrizPtrPnt::getCentroide(void) const
   {
     Pos3d retval;
@@ -119,7 +119,7 @@ const XC::MultiBlockTopology *XC::TritrizPtrPnt::getMultiBlockTopology(void) con
     const MultiBlockTopology *retval= nullptr;
     const EntCmd *ptr= Owner();
     assert(ptr);
-    const MapEsquemas3d *e3d= dynamic_cast<const MapEsquemas3d *>(ptr);
+    const Framework3d *e3d= dynamic_cast<const Framework3d *>(ptr);
     if(e3d)
       retval= e3d->getMultiBlockTopology();
     assert(retval);
@@ -132,7 +132,7 @@ XC::MultiBlockTopology *XC::TritrizPtrPnt::getMultiBlockTopology(void)
     MultiBlockTopology *retval= nullptr;
     EntCmd *ptr= Owner();
     assert(ptr);
-    MapEsquemas3d *e3d= dynamic_cast<MapEsquemas3d *>(ptr);
+    Framework3d *e3d= dynamic_cast<Framework3d *>(ptr);
     if(e3d)
       retval= e3d->getMultiBlockTopology();
     assert(retval);

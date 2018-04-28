@@ -61,7 +61,7 @@ XC::MultiBlockTopology::MultiBlockTopology(Preprocessor *prep)
   : PreprocessorContainer(prep), reference_systems(this),
     transformaciones_geometricas(this),
     points(this), edges(this), faces(this), cuerpos(this), unif_grid(this),
-    esquemas2d(this), esquemas3d(this) {}
+    framework2d(this), framework3d(this) {}
 
 //! @brief Assign indexes to the objects (nodes,elements,points,...)
 //! to be used in VTK arrays.
@@ -168,8 +168,8 @@ void XC::MultiBlockTopology::clearAll(void)
   {
     reference_systems.clearAll();
 
-    esquemas2d.clearAll();
-    esquemas3d.clearAll();
+    framework2d.clearAll();
+    framework3d.clearAll();
 
     unif_grid.clearAll();
     cuerpos.clearAll();

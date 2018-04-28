@@ -52,8 +52,8 @@ XC::MapTrfGeom &(XC::MultiBlockTopology::*getGeometricTransformations)(void)= &X
 XC::PntMap &(XC::MultiBlockTopology::*getPntMapRef)(void)= &XC::MultiBlockTopology::getPoints;
 XC::LineMap &(XC::MultiBlockTopology::*getLineMapRef)(void)= &XC::MultiBlockTopology::getLines;
 XC::SurfaceMap &(XC::MultiBlockTopology::*getSurfaceMapRef)(void)= &XC::MultiBlockTopology::getSurfaces;
-XC::MapEsquemas2d &(XC::MultiBlockTopology::*getEsquemas2dRef)(void)= &XC::MultiBlockTopology::getEsquemas2d;
-XC::MapEsquemas3d &(XC::MultiBlockTopology::*getEsquemas3dRef)(void)= &XC::MultiBlockTopology::getEsquemas3d;
+XC::Framework2d &(XC::MultiBlockTopology::*getRefToFramework2d)(void)= &XC::MultiBlockTopology::getFramework2d;
+XC::Framework3d &(XC::MultiBlockTopology::*getRefToFramework3d)(void)= &XC::MultiBlockTopology::getFramework3d;
 XC::UniformGridMap &(XC::MultiBlockTopology::*getUniformGridsRef)(void)= &XC::MultiBlockTopology::getUniformGrids;
 XC::Edge *(XC::MultiBlockTopology::*getLineWithEndPoints)(const XC::PntMap::Indice &,const XC::PntMap::Indice &) = &XC::MultiBlockTopology::busca_edge_extremos;
 class_<XC::MultiBlockTopology, bases<XC::PreprocessorContainer>, boost::noncopyable >("MultiBlockTopology", no_init)
@@ -62,8 +62,8 @@ class_<XC::MultiBlockTopology, bases<XC::PreprocessorContainer>, boost::noncopya
   .add_property("getPoints", make_function( getPntMapRef, return_internal_reference<>() ))
   .add_property("getLines", make_function( getLineMapRef, return_internal_reference<>() ))
   .add_property("getSurfaces", make_function( getSurfaceMapRef, return_internal_reference<>() ))
-  .add_property("get2DNets", make_function( getEsquemas2dRef, return_internal_reference<>() ))
-  .add_property("get3DNets", make_function( getEsquemas3dRef, return_internal_reference<>() ))
+  .add_property("get2DNets", make_function( getRefToFramework2d, return_internal_reference<>() ))
+  .add_property("get3DNets", make_function( getRefToFramework3d, return_internal_reference<>() ))
   .add_property("getUniformGrids", make_function( getUniformGridsRef, return_internal_reference<>() ))
   .def("conciliaNDivs", &XC::MultiBlockTopology::conciliaNDivs)
   .def("getLineWithEndPoints",make_function( getLineWithEndPoints, return_internal_reference<>() ))

@@ -24,9 +24,9 @@
 // along with this program.
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
-//MapEsquemas2d.cc
+//Framework2d.cc
 
-#include "MapEsquemas2d.h"
+#include "Framework2d.h"
 #include "MatrizPtrPnt.h"
 #include "preprocessor/Preprocessor.h"
 #include "domain/mesh/node/Node.h"
@@ -38,11 +38,11 @@
 
 
 //! @brief Constructor.
-XC::MapEsquemas2d::MapEsquemas2d(MultiBlockTopology *mbt)
+XC::Framework2d::Framework2d(MultiBlockTopology *mbt)
   : ModelComponentContainer<MatrizPtrPnt>(mbt) {}
 
 //! @brief Creates a new point.
-XC::MatrizPtrPnt *XC::MapEsquemas2d::Crea(void)
+XC::MatrizPtrPnt *XC::Framework2d::Crea(void)
   {
     MatrizPtrPnt *retval= new MatrizPtrPnt();
     retval->set_owner(this);
@@ -52,11 +52,11 @@ XC::MatrizPtrPnt *XC::MapEsquemas2d::Crea(void)
     return retval;
   }
 
-//! @brief Creates a new esquema bidimensional.
-XC::MatrizPtrPnt *XC::MapEsquemas2d::makeNew(void)
+//! @brief Creates a new bi-dimensional framework.
+XC::MatrizPtrPnt *XC::Framework2d::makeNew(void)
   {
     MatrizPtrPnt *retval= busca(getTag());
-    if(!retval) //El esquema is new.
+    if(!retval) //The framework is new.
       retval= Crea();
     return retval;
   }

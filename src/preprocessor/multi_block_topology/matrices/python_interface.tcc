@@ -155,18 +155,18 @@ class_<XC::TritrizPtrElem, bases<tritriz_elements>, boost::noncopyable >("Tritri
   ;
 
 
-//schemes 
+//Frameworks 
 
 typedef XC::ModelComponentContainer<XC::MatrizPtrPnt> map_cm_m_points;
 class_<map_cm_m_points, bases<XC::ModelComponentContainerBase>, boost::noncopyable >("map_cm_m_points", no_init);
 
-class_<XC::MapEsquemas2d, bases<map_cm_m_points>, boost::noncopyable >("MapEsquemas2d", no_init)
-  .def("new2DNet",make_function(&XC::MapEsquemas2d::makeNew, return_internal_reference<>() ),"Creates a 2D net.")
+class_<XC::Framework2d, bases<map_cm_m_points>, boost::noncopyable >("Framework2d", no_init)
+  .def("new2DNet",make_function(&XC::Framework2d::makeNew, return_internal_reference<>() ),"Creates a 2D net.")
    ;
 
 typedef XC::ModelComponentContainer<XC::TritrizPtrPnt> map_cm_t_points;
 class_<map_cm_t_points, bases<XC::ModelComponentContainerBase>, boost::noncopyable >("map_cm_t_points", no_init);
 
-class_<XC::MapEsquemas3d, bases<map_cm_t_points>, boost::noncopyable >("MapEsquemas3d", no_init)
-  .def("new3DNet",make_function(&XC::MapEsquemas3d::makeNew, return_internal_reference<>() ),"Creates a 3D net.")
+class_<XC::Framework3d, bases<map_cm_t_points>, boost::noncopyable >("Framework3d", no_init)
+  .def("new3DNet",make_function(&XC::Framework3d::makeNew, return_internal_reference<>() ),"Creates a 3D net.")
    ;

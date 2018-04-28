@@ -24,31 +24,27 @@
 // along with this program.
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
-//MapEsquemas2d.h
+//Framework3d.h
 
-#ifndef MAPEsquemas2d_H
-#define MAPEsquemas2d_H
+#ifndef FRAMEWORK3D_H
+#define FRAMEWORK3D_H
 
 #include "preprocessor/multi_block_topology/ModelComponentContainer.h"
 #include "boost/lexical_cast.hpp"
 
 
 namespace XC {
-class MatrizPtrPnt;
+class TritrizPtrPnt;
 
 //! @ingroup MultiBlockTopology
 //
-//! @brief Bidimensional scheme container.
-class MapEsquemas2d: public ModelComponentContainer<MatrizPtrPnt>
+//! @brief Three dimensional framework container.
+class Framework3d: public ModelComponentContainer<TritrizPtrPnt>
   {
-  protected:
-    MatrizPtrPnt *Crea(void);
-
-
   public:
-    MapEsquemas2d(MultiBlockTopology *mbt= nullptr);
+    Framework3d(MultiBlockTopology *mbt= nullptr);
 
-    MatrizPtrPnt *makeNew(void);
+    TritrizPtrPnt *makeNew(void);
   };
 
 } //end of XC namespace

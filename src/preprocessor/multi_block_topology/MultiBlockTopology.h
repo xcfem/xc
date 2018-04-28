@@ -39,8 +39,8 @@
 #include "preprocessor/multi_block_topology/entities/UniformGridMap.h"
 #include "preprocessor/multi_block_topology/trf/MapTrfGeom.h"
 #include "preprocessor/multi_block_topology/ReferenceFrameMap.h"
-#include "preprocessor/multi_block_topology/matrices/MapEsquemas2d.h"
-#include "preprocessor/multi_block_topology/matrices/MapEsquemas3d.h"
+#include "preprocessor/multi_block_topology/matrices/Framework2d.h"
+#include "preprocessor/multi_block_topology/matrices/Framework3d.h"
 
 class Pos3d;
 class Recta3d;
@@ -80,8 +80,8 @@ class MultiBlockTopology: public PreprocessorContainer
     SurfaceMap faces; //!< Surfaces container.
     BodyMap cuerpos; //!< Bodys container.
     UniformGridMap unif_grid; //!< Uniform grids container.
-    MapEsquemas2d esquemas2d; //!< Bi-dimensional schemes container.
-    MapEsquemas3d esquemas3d; //!< Three-dimensional schemes container.
+    Framework2d framework2d; //!< Bi-dimensional framework container.
+    Framework3d framework3d; //!< Three-dimensional framework container.
 
   protected:
 
@@ -119,14 +119,14 @@ class MultiBlockTopology: public PreprocessorContainer
       { return reference_systems; }
     inline ReferenceFrameMap &getReferenceSystems(void)
       { return reference_systems; }
-    inline const MapEsquemas2d &getEsquemas2d(void) const
-      { return esquemas2d; }
-    inline MapEsquemas2d &getEsquemas2d(void)
-      { return esquemas2d; }
-    inline const MapEsquemas3d &getEsquemas3d(void) const
-      { return esquemas3d; }
-    inline MapEsquemas3d &getEsquemas3d(void)
-      { return esquemas3d; }
+    inline const Framework2d &getFramework2d(void) const
+      { return framework2d; }
+    inline Framework2d &getFramework2d(void)
+      { return framework2d; }
+    inline const Framework3d &getFramework3d(void) const
+      { return framework3d; }
+    inline Framework3d &getFramework3d(void)
+      { return framework3d; }
     inline const UniformGridMap &getUniformGrids(void) const
       { return unif_grid; }
     inline UniformGridMap &getUniformGrids(void)
