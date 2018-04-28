@@ -261,21 +261,6 @@ int XC::Matrix::Assemble(const Matrix &V, const ID &rows, const ID &cols, double
     return res;
   }
 
-#ifdef _WIN32
-extern "C" int  DGESV(int *N, int *NRHS, double *A, int *LDA, 
-			      int *iPiv, double *B, int *LDB, int *INFO);
-
-extern "C" int  DGETRF(int *M, int *N, double *A, int *LDA, 
-			      int *iPiv, int *INFO);
-
-extern "C" int  DGETRS(char *TRANS, unsigned int sizeT,
-			       int *N, int *NRHS, double *A, int *LDA, 
-			       int *iPiv, double *B, int *LDB, int *INFO);
-
-extern "C" int  DGETRI(int *N, double *A, int *LDA, 
-			      int *iPiv, double *Work, int *WORKL, int *INFO);
-
-#else
 extern "C" int dgesv_(int *N, int *NRHS, double *A, int *LDA, int *iPiv, 
 		      double *B, int *LDB, int *INFO);
 
@@ -285,6 +270,10 @@ extern "C" int dgetrs_(char *TRANS, int *N, int *NRHS, double *A, int *LDA,
 extern "C" int dgetrf_(int *M, int *N, double *A, int *LDA, 
 		       int *iPiv, int *INFO);
 
+extern "C" int dgecon_(const char *norm, const int *n, double *a,
+		       const int *lda, const double *anorm, double *rcond,
+		       double *work, int *iwork, int *info, int len);
+
 extern "C" int dgetri_(int *N, double *A, int *LDA, 
 		       int *iPiv, double *Work, int *WORKL, int *INFO);
 extern "C" int dgerfs_(char *TRANS, int *N, int *NRHS, double *A, int *LDA, 
@@ -292,7 +281,6 @@ extern "C" int dgerfs_(char *TRANS, int *N, int *NRHS, double *A, int *LDA,
 		       double *X, int *LDX, double *FERR, double *BERR, 
 		       double *WORK, int *IWORK, int *INFO);
 
-#endif
 
 //! @brief Solve the equation {\em \f$Ax=V\f$} for the Vector \p x, which is
 //! returned.
@@ -355,11 +343,8 @@ int XC::Matrix::Solve(const Vector &b, Vector &x) const
     int *iPIV= auxMatrix.getIntWork();
     
 
-#ifdef _WIN32
-    DGESV(&n,&nrhs,Aptr,&ldA,iPIV,Xptr,&ldB,&info);
-#else
     dgesv_(&n,&nrhs,Aptr,&ldA,iPIV,Xptr,&ldB,&info);
-#endif
+
     return 0;
   }
 

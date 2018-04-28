@@ -93,8 +93,8 @@ int XC::FullGenLinLapackSolver::solve(void)
   {
     if(!theSOE)
       {
-	std::cerr << "WARNING XC::FullGenLinLapackSolver::solve(void)- ";
-	std::cerr << " No XC::LinearSOE object has been set\n";
+	std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; WARNING, no LinearSOE object has been set\n";
 	return -1;
       }
     
