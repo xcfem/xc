@@ -531,10 +531,10 @@ echo "$ROSE" "  MED tests are in quarantine (some debugging pending)." "$NORMAL"
 #python tests/utility/med_xc/test_exporta_med02.py
 
 
-echo "$BLEU" "Verifiyng misc. utilities." "$NORMAL
+echo "$BLEU" "Verifiyng misc. utilities." "$NORMAL"
 python tests/utility/rcond.py
 
-echo "$BLEU" "Verifiying routines for rough calculations,...)." "$NORMAL"
+echo "$BLEU" "Verifiying routines for rough calculations,..." "$NORMAL"
 python tests/rough_calculations/test_punzo01.py
 python tests/rough_calculations/test_punzo02.py
 python tests/rough_calculations/test_min_dim_abut_support.py
