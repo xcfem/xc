@@ -166,7 +166,7 @@ XC::BeamIntegration *load_beam_integration(const std::string &cmd)
     return retval;
   }
 
-//! @brief Defines a new beam integrator scheme.
+//! @brief Defines a new beam integrator framework.
 XC::BeamIntegration *XC::BeamIntegratorHandler::newBI(const std::string &cmd,const std::string &cod)
   {
     XC::BeamIntegration *retval= load_beam_integration(cmd);
@@ -184,7 +184,8 @@ XC::BeamIntegration *XC::BeamIntegratorHandler::newBI(const std::string &cmd,con
     return retval;
 
     if(!retval)
-      std::cerr << "Integration scheme: " << cmd << " unknown." << std::endl;
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; integration scheme: " << cmd << " unknown." << std::endl;
     return retval;
   }
 
