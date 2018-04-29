@@ -6,6 +6,7 @@ bridge bearings. For now they are modelized as linear joints that connect
 two nodes with springs that introduce translational and/or rotational stiffness
 that are approximately equal to those of the real bearing.
 
+
 Examples\:
     Examples of the use of these classes are given in the following verification tests\:
         * ./verif/tests/elements/test_elastomeric_bearing_01.py
@@ -98,8 +99,8 @@ class ElastomericBearing(Bearing):
     Attributes:
 
         :ivar G: (float) Elastomer shear modulus.
-        :ivar a: (float) Width of the bearing (parallel to lintel axis).
-        :ivar b: (float) Length of the bearing (parallel to bridge axis).
+        :ivar a: (float) Width of the bearing (parallel to bridge axis).
+        :ivar b: (float) Length of the bearing (parallel to lintel axis).
         :ivar e: (float) Net thickness of the bearing (without
                    steel plates).
 
@@ -152,7 +153,12 @@ class ElastomericBearing(Bearing):
         ''' Return the elastic modulus with respect to the vertical
         displacement.
         '''
-        return 3*self.G*(self.a/self.e)**2*self.getV3()
+#        return 3*self.G*(self.a/self.e)**2*self.getV3() #29/04/2018
+#       this formula was extracted from Manterola book but is wrong
+#       We adopt a more rational value of E_vertical=600e6 Pa until we
+#       find a better approximation
+        return 600e6
+    
     def getKvert(self):
         ''' Return the vertical stiffness.'''
         return self.getEbearing()*self.a*self.b/self.e

@@ -168,7 +168,7 @@ class RecordDefDisplay(object):
     length= offset
     axes.SetTotalLength(length,length,length)
 
-    textSize= 10*offset
+    textSize= 6*offset
     axes.GetXAxisCaptionActor2D().GetTextActor().SetTextScaleMode(False)
     axes.GetXAxisCaptionActor2D().GetTextActor().GetTextProperty().SetFontSize(textSize)
     axes.GetYAxisCaptionActor2D().GetTextActor().SetTextScaleMode(False)
