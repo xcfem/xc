@@ -2,7 +2,7 @@
 
 Open source finite element analysis program.
 
-You can see some screenshots <a href="https://github.com/lcpt/xc/tree/master/doc/screenshots" target="_new">here.</a>.
+You can see some screenshots <a href="https://github.com/lcpt/xc/tree/master/doc/screenshots" target="_new">here</a>.
 
 The objective is to develop a robust structural analysis tool, which is owned by the community, and allows the users to improve and adapt it for their own needs.
 
