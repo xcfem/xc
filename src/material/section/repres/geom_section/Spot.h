@@ -79,9 +79,9 @@ class Spot: public EntGeomSection
     Vector2d VectorPos(void) const;
 
     //! @brief Return the list of lines that begin or end in this point.
-    const std::set<const Axis *> &axesThatTouch(void) const
+    const std::set<const Axis *> &getConnectedAxes(void) const
       { return pt_axes; }
-    bool Toca(const Axis &l) const;
+    bool isConnectedTo(const Axis &l) const;
     inline size_t nLines(void) const
       { return pt_axes.size(); }
 

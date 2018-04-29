@@ -89,17 +89,17 @@ class Pnt: public EntMdlr
     void erase_line(Edge *l) const;
 
     //! @brief Return the list of the lines that begin or end at the point.
-    const std::set<const Edge *> &EdgesTocan(void) const
+    const std::set<const Edge *> &getConnectedEdges(void) const
       { return lines_pt; }
     const size_t getNLines(void) const
-      { return EdgesTocan().size(); }
+      { return getConnectedEdges().size(); }
     std::set<const Edge *> EdgesExtremo(void) const;
-    //! @brief Returns the names of the surfaces that touch the line (neighbors).
-    const std::string &NombresEdgesTocan(void) const;
-    bool Toca(const Edge &l) const;
+
+    const std::string &getConnectedEdgesNames(void) const;
+    bool isConnectedTo(const Edge &l) const;
     bool Extremo(const Edge &l) const;
-    bool Toca(const Face &s) const;
-    bool Toca(const Body &b) const;
+    bool isConnectedTo(const Face &s) const;
+    bool isConnectedTo(const Body &b) const;
     double DistanciaA2(const Pos3d &pt) const;
 
     void Mueve(const Vector3d &);
@@ -113,10 +113,10 @@ class Pnt: public EntMdlr
   };
 
 Vector &operator-(const Pnt &b,const Pnt &a);
-const Edge *busca_edge_const_ptr_toca(const Pnt &,const Pnt &);
-const Edge *busca_edge_const_ptr_toca(const Pnt &,const Pnt &,const Pnt &);
-Edge *busca_edge_ptr_toca(const Pnt &,const Pnt &);
-Edge *busca_edge_ptr_toca(const Pnt &,const Pnt &,const Pnt &);
+const Edge *find_connected_edge_const_ptr(const Pnt &,const Pnt &);
+const Edge *find_connected_edge_const_ptr(const Pnt &,const Pnt &,const Pnt &);
+Edge *find_connected_edge_ptr(const Pnt &,const Pnt &);
+Edge *find_connected_edge_ptr(const Pnt &,const Pnt &,const Pnt &);
 
 Edge *busca_edge_ptr_extremos(const Pnt &pA,const Pnt &pB);
 Edge *busca_edge_ptr_extremos(const Pnt &,const Pnt &,const Pnt &);

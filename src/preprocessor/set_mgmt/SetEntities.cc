@@ -241,18 +241,18 @@ void XC::SetEntities::fillUpwards(const SetMeshComp &mc)
               << "; work in progress." << std::endl;
     for(pnt_iterator i=points.begin();i!=points.end();i++)
       {
-        std::set<const Edge *> ll= getLinesThatTouch(**i);
+        std::set<const Edge *> ll= getConnectedLines(**i);
         for(std::set<const Edge *>::const_iterator j= ll.begin();j!=ll.end();j++)
           lines.push_back(const_cast<Edge *>(*j));
       }
     for(lin_iterator i=lines.begin();i!=lines.end();i++)
       {
-        lst_surface_ptrs ss(GetSupsTocan(**i));
+        lst_surface_ptrs ss(getConnectedSurfaces(**i));
         surfaces.insert(surfaces.end(),ss.begin(),ss.end());
       }
 //     for(lst_surfaces::iterator i=surfaces.begin();i!=surfaces.end();i++)
 //       {
-//         lst_cuerpos bb= GetCuerposTocan(**i);
+//         lst_cuerpos bb= getConnectedBodies(**i);
 //         bodies.insert(bodies.end(),bb.begin(),bb.end());
 //       }
   }

@@ -179,7 +179,7 @@ void XC::Edge::SetNDiv(const size_t &nd)
 // 	        std::clog << getClassName() << "::" << __FUNCTION__
 //		          << "; " << getName()
 //                           << " is an edge of the surfaces: "
-//                           << NombresSupsTocan()
+//                           << getConnectedSurfacesNames()
 //                           << ". Number of divisions"
 //                           << " was " << ndiv
 //                           << " we adopt: " << nd << std::endl;
@@ -361,8 +361,8 @@ MatrizPos3d XC::Edge::getNodePosInv(void) const
     return retval;
   }
 
-//! @brief Return the surface names that touch the line (neighbors).
-const std::string &XC::Edge::NombresSupsTocan(void) const
+//! @brief Return names of the surfaces that touch the line (neighbors).
+const std::string &XC::Edge::getConnectedSurfacesNames(void) const
   {
     static std::string retval;
     retval= "";
@@ -422,17 +422,17 @@ size_t XC::calcula_ndiv_lados(const std::set<const XC::Edge *> &lados)
   }
 
 //! @brief Return true if the line touches the surface (neighbor).
-bool XC::Edge::Toca(const Face &s) const
+bool XC::Edge::isConnectedTo(const Face &s) const
   {
     std::set<const Face *>::const_iterator i= surfaces_line.find(&s);
     return (i!=surfaces_line.end());
   }
 
 //! @brief Return true if the line touches the body.
-bool XC::Edge::Toca(const Body &b) const
+bool XC::Edge::isConnectedTo(const Body &b) const
   {
     for(std::set<const Face *>::const_iterator i= surfaces_line.begin(); i!=surfaces_line.end();i++)
-      { if((*i)->Toca(b)) return true; }
+      { if((*i)->isConnectedTo(b)) return true; }
     return false;
   }
 
@@ -441,8 +441,8 @@ bool XC::Edge::Extremo(const Pnt &p) const
   { return ((&p == P1()) || (&p == P2()));  }
 
 //! @brief Return the list of edges that have this point as starting or ending point.
-std::set<const XC::Edge *> XC::getLinesThatTouch(const Pnt &p)
-  { return p.EdgesTocan(); }
+std::set<const XC::Edge *> XC::getConnectedLines(const Pnt &p)
+  { return p.getConnectedEdges(); }
 
 //! @brief Return a matrix of positions along the line.
 MatrizPos3d XC::Edge::get_nodes_pos(void) const

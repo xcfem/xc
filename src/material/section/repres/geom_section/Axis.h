@@ -77,7 +77,7 @@ class Axis: public EntGeomSection
 
   };
 
-std::set<const Axis *> getLinesThatTouch(const Spot &p);
+std::set<const Axis *> getConnectedLines(const Spot &p);
 
 } //end of XC namespace
 #endif

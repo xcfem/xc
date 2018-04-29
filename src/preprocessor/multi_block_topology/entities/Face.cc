@@ -85,7 +85,7 @@ size_t XC::Face::CommonEdge(const Face &otra) const
     if(this == &otra) return cont; //Son la misma todos los bordes son comunes.
     for(std::deque<Side>::const_iterator i=lines.begin();i!=lines.end();i++,cont++)
       {
-        if((*i).getEdge()->Toca(otra))
+        if((*i).getEdge()->isConnectedTo(otra))
           return cont;
       }
     return 0;
@@ -134,11 +134,11 @@ Polilinea3d XC::Face::getContour(void) const
   { return getPolyline(); }
 
 //! @brief Return the surfaces that touch the line.
-std::set<const XC::Face *> XC::GetSupsTocan(const Edge &p)
-  { return p.SupsTocan(); }
+std::set<const XC::Face *> XC::getConnectedSurfaces(const Edge &p)
+  { return p.getConnectedSurfaces(); }
 
 //! @brief Returns true if the lines touches the body (neighbor).
-bool XC::Face::Toca(const XC::Body &b) const
+bool XC::Face::isConnectedTo(const XC::Body &b) const
   {
     std::set<const Body *>::const_iterator i= cuerpos_sup.find(&b);
     return (i!=cuerpos_sup.end());

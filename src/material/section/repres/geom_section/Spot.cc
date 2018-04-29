@@ -63,7 +63,7 @@ BND2d XC::Spot::Bnd(void) const
   { return BND2d(p,p);  }
 
 //! @brief Returns true if the point is an end of the line.
-bool XC::Spot::Toca(const Axis &l) const
+bool XC::Spot::isConnectedTo(const Axis &l) const
   {
     std::set<const Axis *>::const_iterator i= pt_axes.find(&l);
 //     for(std::set<const Axis *>::const_iterator i= pt_axes.begin(); i!=pt_axes.end();i++)

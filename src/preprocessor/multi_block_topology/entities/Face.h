@@ -72,11 +72,11 @@ class Face: public CmbEdge
     virtual const Pnt *getVertex(const size_t &i) const;
     Polilinea3d getContour(void) const;
     //! @brief Return the bodies that touch this surface (neighbors).
-    const std::set<const Body *> &CuerposTocan(void) const
+    const std::set<const Body *> &getConnectedBodies(void) const
       { return cuerpos_sup; }
     size_t CommonEdge(const Face &otra) const;
     int SenseOfEdge(const Edge *l,const Face &otra) const;
-    bool Toca(const Body &b) const;
+    bool isConnectedTo(const Body &b) const;
     virtual bool checkNDivs(void) const= 0;
 
     virtual Node *getNode(const size_t &i1,const size_t &j,const size_t &k);
@@ -91,7 +91,7 @@ class Face: public CmbEdge
     int getMEDCellType(void) const;
   };
 
-std::set<const Face *> GetSupsTocan(const Edge &l);
+std::set<const Face *> getConnectedSurfaces(const Edge &l);
 
 } //end of XC namespace.
 

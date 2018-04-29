@@ -122,7 +122,7 @@ class Body: public EntMdlr
 
   };
 
-std::set<const Body *> GetCuerposTocan(const Face &s);
+std::set<const Body *> getConnectedBodies(const Face &s);
 
 } //end of XC namespace
 

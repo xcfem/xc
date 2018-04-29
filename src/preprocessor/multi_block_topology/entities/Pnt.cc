@@ -97,7 +97,7 @@ std::set<const XC::Edge *> XC::Pnt::EdgesExtremo(void) const
   }
 
 //! @brief Return the names of the lines that touch the point.
-const std::string &XC::Pnt::NombresEdgesTocan(void) const
+const std::string &XC::Pnt::getConnectedEdgesNames(void) const
   {
     static std::string retval;
     retval= "";
@@ -112,7 +112,7 @@ const std::string &XC::Pnt::NombresEdgesTocan(void) const
   }
 
 //! @brief Returns true if the line starts or ends in this point.
-bool XC::Pnt::Toca(const Edge &l) const
+bool XC::Pnt::isConnectedTo(const Edge &l) const
   {
     std::set<const Edge *>::const_iterator i= lines_pt.find(&l);
     return (i!=lines_pt.end());
@@ -123,18 +123,18 @@ bool XC::Pnt::Extremo(const Edge &l) const
   { return l.Extremo(*this); }
 
 //! @brief Returns true if the points touches the surface.
-bool XC::Pnt::Toca(const Face &s) const
+bool XC::Pnt::isConnectedTo(const Face &s) const
   {
     for(std::set<const Edge *>::const_iterator i= lines_pt.begin(); i!=lines_pt.end();i++)
-      { if((*i)->Toca(s)) return true; }
+      { if((*i)->isConnectedTo(s)) return true; }
     return false;
   }
 
 //! @brief Returns true if the points touch the body.
-bool XC::Pnt::Toca(const Body &b) const
+bool XC::Pnt::isConnectedTo(const Body &b) const
   {
     for(std::set<const Edge *>::const_iterator i= lines_pt.begin(); i!=lines_pt.end();i++)
-      { if((*i)->Toca(b)) return true; }
+      { if((*i)->isConnectedTo(b)) return true; }
     return false;
   }
 
@@ -275,12 +275,12 @@ XC::Vector &XC::operator-(const Pnt &b,const Pnt &a)
   }
 
 //! @brief Search for a line that connects the points.
-const XC::Edge *XC::busca_edge_const_ptr_toca(const Pnt &pA,const Pnt &pB)
+const XC::Edge *XC::find_connected_edge_const_ptr(const Pnt &pA,const Pnt &pB)
   {
     const Edge *retval= nullptr;
-    const std::set<const Edge *> pA_lines= pA.EdgesTocan();
+    const std::set<const Edge *> pA_lines= pA.getConnectedEdges();
     for(std::set<const Edge *>::const_iterator i= pA_lines.begin();i!=pA_lines.end();i++)
-      if(pB.Toca(**i))
+      if(pB.isConnectedTo(**i))
         {
           retval= *i;
           break;
@@ -289,12 +289,12 @@ const XC::Edge *XC::busca_edge_const_ptr_toca(const Pnt &pA,const Pnt &pB)
   }
 
 //! @brief Search for a line that connects the points.
-const XC::Edge *XC::busca_edge_const_ptr_toca(const Pnt &pA,const Pnt &pB, const Pnt &pC)
+const XC::Edge *XC::find_connected_edge_const_ptr(const Pnt &pA,const Pnt &pB, const Pnt &pC)
   {
     const Edge *retval= nullptr;
-    const std::set<const Edge *> pA_lines= pA.EdgesTocan();
+    const std::set<const Edge *> pA_lines= pA.getConnectedEdges();
     for(std::set<const Edge *>::const_iterator i= pA_lines.begin();i!=pA_lines.end();i++)
-      if(pB.Toca(**i) && pC.Toca(**i))
+      if(pB.isConnectedTo(**i) && pC.isConnectedTo(**i))
         {
           retval= *i;
           break;
@@ -303,12 +303,12 @@ const XC::Edge *XC::busca_edge_const_ptr_toca(const Pnt &pA,const Pnt &pB, const
   }
 
 //! @brief Search for a line that connects the points.
-XC::Edge *XC::busca_edge_ptr_toca(const Pnt &pA,const Pnt &pB)
+XC::Edge *XC::find_connected_edge_ptr(const Pnt &pA,const Pnt &pB)
   {
     Edge *retval= nullptr;
-    std::set<const Edge *> pA_lines= pA.EdgesTocan();
+    std::set<const Edge *> pA_lines= pA.getConnectedEdges();
     for(std::set<const Edge *>::iterator i= pA_lines.begin();i!=pA_lines.end();i++)
-      if(pB.Toca(**i))
+      if(pB.isConnectedTo(**i))
         {
           retval= const_cast<Edge *>(*i);
           break;
@@ -317,12 +317,12 @@ XC::Edge *XC::busca_edge_ptr_toca(const Pnt &pA,const Pnt &pB)
   }
 
 //! @brief Search for a line that connects the points.
-XC::Edge *XC::busca_edge_ptr_toca(const Pnt &pA,const Pnt &pB, const Pnt &pC)
+XC::Edge *XC::find_connected_edge_ptr(const Pnt &pA,const Pnt &pB, const Pnt &pC)
   {
     Edge *retval= nullptr;
-    std::set<const Edge *> pA_lines= pA.EdgesTocan();
+    std::set<const Edge *> pA_lines= pA.getConnectedEdges();
     for(std::set<const Edge *>::iterator i= pA_lines.begin();i!=pA_lines.end();i++)
-      if(pB.Toca(**i) && pC.Toca(**i))
+      if(pB.isConnectedTo(**i) && pC.isConnectedTo(**i))
         {
           retval= const_cast<Edge *>(*i);
           break;
@@ -350,7 +350,7 @@ XC::Edge *XC::busca_edge_ptr_extremos(const Pnt &pA,const Pnt &pB, const Pnt &pC
     Edge *retval= nullptr;
     std::set<const Edge *> pA_lines= pA.EdgesExtremo();
     for(std::set<const Edge *>::iterator i= pA_lines.begin();i!=pA_lines.end();i++)
-      if(pB.Toca(**i) && pC.Extremo(**i))
+      if(pB.isConnectedTo(**i) && pC.Extremo(**i))
         {
           retval= const_cast<Edge *>(*i);
           break;
@@ -378,7 +378,7 @@ const XC::Edge *XC::busca_edge_const_ptr_extremos(const Pnt &pA,const Pnt &pB, c
     const Edge *retval= nullptr;
     std::set<const Edge *> pA_lines= pA.EdgesExtremo();
     for(std::set<const Edge *>::iterator i= pA_lines.begin();i!=pA_lines.end();i++)
-      if(pB.Toca(**i) && pC.Extremo(**i))
+      if(pB.isConnectedTo(**i) && pC.Extremo(**i))
         {
           retval= (*i);
           break;

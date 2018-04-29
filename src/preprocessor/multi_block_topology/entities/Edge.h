@@ -88,12 +88,12 @@ class Edge: public EntMdlr
     void update_topology(void);
 
     //! @brief Return the surfaces that touch the line.
-    const std::set<const Face *> &SupsTocan(void) const
+    const std::set<const Face *> &getConnectedSurfaces(void) const
       { return surfaces_line; }
     //! @brief Return the surface names that touch the line.
-    const std::string &NombresSupsTocan(void) const;
-    bool Toca(const Face &s) const;
-    bool Toca(const Body &b) const;
+    const std::string &getConnectedSurfacesNames(void) const;
+    bool isConnectedTo(const Face &s) const;
+    bool isConnectedTo(const Body &b) const;
     bool Extremo(const Pnt &) const;
     virtual BND3d Bnd(void) const= 0;
     virtual void create_nodes(void);
@@ -128,7 +128,7 @@ class Edge: public EntMdlr
 
   };
 
-std::set<const Edge *> getLinesThatTouch(const Pnt &p);
+std::set<const Edge *> getConnectedLines(const Pnt &p);
 size_t calcula_ndiv_lados(const std::set<const XC::Edge *> &);
 
 } //end of XC namespace

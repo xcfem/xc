@@ -94,11 +94,11 @@ const XC::Spot *XC::Axis::P2(void) const
 
 //! @brief Return the set of lines that touch the point being passed as
 //! parameter.
-std::set<const XC::Axis *> XC::getLinesThatTouch(const XC::Spot &p)
+std::set<const XC::Axis *> XC::getConnectedLines(const XC::Spot &p)
   {
     std::set<const Axis *> retval;
-    const std::set<const Axis *> &tocan= p.axesThatTouch();
-    for(std::set<const Axis *>::const_iterator i= tocan.begin(); i!=tocan.end();i++)
+    const std::set<const Axis *> &connected= p.getConnectedAxes();
+    for(std::set<const Axis *>::const_iterator i= connected.begin(); i!=connected.end();i++)
       retval.insert(*i);
     return retval;
   }
