@@ -35,8 +35,8 @@ class_<XC::Edge, bases<XC::EntMdlr>, boost::noncopyable >("Edge","Base class for
   .def("getTang", &XC::Edge::getTang, return_internal_reference<>(),"Return a vector tangent to the edge.")
   .def("divide",&XC::Edge::divide,"Create points along the line.")
   .def("getKPoints",&XC::Edge::getKPoints,"Return the end points of the edge.")
-  .def("getTagsNodes",&XC::Edge::getTagsNodesDir,"Return node tags in forward order.")
-  .def("getTagsNodesReverse",&XC::Edge::getTagsNodesInv,"Return node tags in reverse order.")
+  .def("getTagsNodes",&XC::Edge::getTagsNodesForward,"Return node tags in forward order.")
+  .def("getTagsNodesReverse",&XC::Edge::getTagsNodesReverse,"Return node tags in reverse order.")
    ;
 
 class_<XC::LineBase, bases<XC::Edge>, boost::noncopyable >("LineBase", no_init)
@@ -66,7 +66,7 @@ class_<XC::CircularArc, bases<XC::LineBase>, boost::noncopyable >("CircleArc", "
 
 XC::Edge *(XC::CmbEdge::Side::*getEdge)(void)= &XC::CmbEdge::Side::getEdge;
 class_<XC::CmbEdge::Side,bases<EntCmd> >("Side", no_init)
-  .add_property("isDirect", &XC::CmbEdge::Side::esDirecto)
+  .add_property("isDirect", &XC::CmbEdge::Side::isDirect)
   .add_property("getEdge", make_function(getEdge, return_internal_reference<>()))
   .def("getLong", &XC::CmbEdge::Side::getLongitud,"Return edge's length.")
   .def("getCentroid", &XC::CmbEdge::Side::getCentroid,"Return edge's centroid.")

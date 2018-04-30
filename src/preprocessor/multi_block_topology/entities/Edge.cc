@@ -245,28 +245,30 @@ const XC::Node *XC::Edge::getNode(const size_t &i) const
 
 //! @brief Returns the node whose ordinal index is passed as
 //! parameter, starting from the beginning.
-XC::Node *XC::Edge::getNodeDir(const size_t &i)
+//!
+//! @param i: index of the layer.
+XC::Node *XC::Edge::getNodeForward(const size_t &i)
   { return getNode(i); }
 
 //! @brief Return the node whose ordinal index is passed as parameter,
 //! starting from the beginning.
 //!
 //! @param i: index of the layer.
-const XC::Node *XC::Edge::getNodeDir(const size_t &i) const
+const XC::Node *XC::Edge::getNodeForward(const size_t &i) const
   { return getNode(i); }
 
 //! @brief Return the node whose ordinal index is passed as parameter,
 //! starting from the end.
 //!
 //! @param i: index of the layer.
-XC::Node *XC::Edge::getNodeInv(const size_t &i)
+XC::Node *XC::Edge::getNodeReverse(const size_t &i)
   { return getNode(getNumberOfNodes()-i+1); }
 
 //! @brief Return the node whose ordinal index is passed as parameter,
 //! starting from the end.
 //!
 //! @param i: index of the layer.
-const XC::Node *XC::Edge::getNodeInv(const size_t &i) const
+const XC::Node *XC::Edge::getNodeReverse(const size_t &i) const
   { return getNode(getNumberOfNodes()-i+1); }
 
 //! @brief Return the first node of the line.
@@ -298,7 +300,7 @@ XC::Node *XC::Edge::getFirstNode(void)
 //! @brief Return the last node of the line.
 const XC::Node *XC::Edge::getLastNode(void) const
   { 
-    const Node *retval= getNodeInv(1);
+    const Node *retval= getNodeReverse(1);
     if(!retval)
       {
         const Pnt *p2= P2();
@@ -311,7 +313,7 @@ const XC::Node *XC::Edge::getLastNode(void) const
 //! @brief Return the last node of the line.
 XC::Node *XC::Edge::getLastNode(void)
   { 
-    Node *retval= getNodeInv(1);
+    Node *retval= getNodeReverse(1);
     if(!retval)
       {
         Pnt *p2= P2();
@@ -322,7 +324,7 @@ XC::Node *XC::Edge::getLastNode(void)
   }
 
 //! @brief Return the IDs of the nodes in forward order.
-std::vector<int> XC::Edge::getTagsNodesDir(void) const
+std::vector<int> XC::Edge::getTagsNodesForward(void) const
   {
     const size_t nn= getNumberOfNodes();
     std::vector<int> retval(nn);
@@ -332,7 +334,7 @@ std::vector<int> XC::Edge::getTagsNodesDir(void) const
   }
 
 //! @brief Return the IDs of the nodes in reverse order.
-std::vector<int> XC::Edge::getTagsNodesInv(void) const
+std::vector<int> XC::Edge::getTagsNodesReverse(void) const
   {
     const size_t nn= getNumberOfNodes();
     std::vector<int> retval(nn);
@@ -342,7 +344,7 @@ std::vector<int> XC::Edge::getTagsNodesInv(void) const
   }
 
 //! @brief Return the positions of the nodes in forward order.
-MatrizPos3d XC::Edge::getNodePosDir(void) const
+MatrizPos3d XC::Edge::getNodePosForward(void) const
   {
     const size_t nn= getNumberOfNodes();
     MatrizPos3d retval(nn);
@@ -352,7 +354,7 @@ MatrizPos3d XC::Edge::getNodePosDir(void) const
   }
 
 //! @brief Return the positions of the nodes in reverse order.
-MatrizPos3d XC::Edge::getNodePosInv(void) const
+MatrizPos3d XC::Edge::getNodePosReverse(void) const
   {
     const size_t nn= getNumberOfNodes();
     MatrizPos3d retval(nn);
@@ -570,7 +572,7 @@ std::set<XC::SetBase *> XC::Edge::get_sets(void) const
         retval= sets.get_sets(this);
       }
     else
-      std::cerr << getClassName() << __FUNCTION__
+      std::cerr << getClassName() << "::" << __FUNCTION__
 	        << "; preprocessor needed." << std::endl;
     return retval;
   }

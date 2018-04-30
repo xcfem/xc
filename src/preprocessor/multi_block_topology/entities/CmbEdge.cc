@@ -42,7 +42,7 @@
 
 //! @brief Constructor.
 XC::CmbEdge::Side::Side(Edge *ptr,const bool &s)
-  : edge(ptr), directo(s) {}
+  : edge(ptr), forward(s) {}
 
 //! @brief Returns a pointer to the edge.
 XC::Edge *XC::CmbEdge::Side::getEdge(void)
@@ -57,7 +57,7 @@ void XC::CmbEdge::Side::SetEdge(Edge *l)
 const XC::Pnt *XC::CmbEdge::Side::P1(void) const
   {
     if(!edge) return nullptr;
-    if(directo)
+    if(forward)
       return edge->P1();
     else
       return edge->P2();
@@ -66,7 +66,7 @@ const XC::Pnt *XC::CmbEdge::Side::P1(void) const
 const XC::Pnt *XC::CmbEdge::Side::P2(void) const
   {
     if(!edge) return nullptr;
-    if(directo)
+    if(forward)
       return edge->P2();
     else
       return edge->P1();
@@ -130,63 +130,64 @@ MatrizPos3d XC::CmbEdge::Side::get_positions(void) const
       return MatrizPos3d();
   }
 
-//! @brief Return the identifiers of the nodes en sentido directo.
-std::vector<int> XC::CmbEdge::Side::getTagsNodesDir(void) const
+//! @brief Return the identifiers of the nodes of the forward sequence.
+std::vector<int> XC::CmbEdge::Side::getTagsNodesForward(void) const
   {
-    if(directo)
-      return edge->getTagsNodesDir();
+    if(forward)
+      return edge->getTagsNodesForward();
     else
-      return edge->getTagsNodesInv();
+      return edge->getTagsNodesReverse();
   }
 
-std::vector<int> XC::CmbEdge::Side::getTagsNodesInv(void) const
+//! @brief Return the identifiers of the nodes of the reverse sequence.
+std::vector<int> XC::CmbEdge::Side::getTagsNodesReverse(void) const
   {
-    if(directo)
-      return edge->getTagsNodesInv();
+    if(forward)
+      return edge->getTagsNodesReverse();
     else
-      return edge->getTagsNodesDir();
+      return edge->getTagsNodesForward();
   }
 
-//! @brief Return the positions of the nodes en sentido directo.
-MatrizPos3d XC::CmbEdge::Side::getNodePosDir(void) const
+//! @brief Return the positions of the nodes of the forward sequence.
+MatrizPos3d XC::CmbEdge::Side::getNodePosForward(void) const
   {
-    if(directo)
-      return edge->getNodePosDir();
+    if(forward)
+      return edge->getNodePosForward();
     else
-      return edge->getNodePosInv();
+      return edge->getNodePosReverse();
   }
 
-//! @brief Return the positions of the nodes en sentido inverso.
-MatrizPos3d XC::CmbEdge::Side::getNodePosInv(void) const
+//! @brief Return the positions of the nodes of the reverse sequence.
+MatrizPos3d XC::CmbEdge::Side::getNodePosReverse(void) const
   {
-    if(directo)
-      return edge->getNodePosInv();
+    if(forward)
+      return edge->getNodePosReverse();
     else
-      return edge->getNodePosDir();
+      return edge->getNodePosForward();
   }
 
 //! @brief Return the node which index is being passed as parameter empezando por el principio.
-XC::Node *XC::CmbEdge::Side::getNodeDir(const size_t &i)
+XC::Node *XC::CmbEdge::Side::getNodeForward(const size_t &i)
   {
     if(!edge)
       return nullptr;
     else
-      if(directo)
-        return edge->getNodeDir(i);
+      if(forward)
+        return edge->getNodeForward(i);
       else
-        return edge->getNodeInv(i);
+        return edge->getNodeReverse(i);
   }
 
 //! @brief Return the node which index is being passed as parameter empezando por el final.
-XC::Node *XC::CmbEdge::Side::getNodeInv(const size_t &i)
+XC::Node *XC::CmbEdge::Side::getNodeReverse(const size_t &i)
   {
     if(!edge)
       return nullptr;
     else
-      if(directo)
-        return edge->getNodeInv(i);
+      if(forward)
+        return edge->getNodeReverse(i);
       else
-        return edge->getNodeDir(i);
+        return edge->getNodeForward(i);
   }
 
 //! @brief Return the node which index is being passed as parameter.
@@ -195,7 +196,7 @@ XC::Node *XC::CmbEdge::Side::getNode(const size_t &i)
     XC::Node *retval= nullptr;
     if(edge)
       {
-        if(directo)
+        if(forward)
           retval=  edge->getNode(i);
         else
           {
@@ -211,7 +212,7 @@ const XC::Node *XC::CmbEdge::Side::getNode(const size_t &i) const
   {
     if(!edge) return nullptr;
     const size_t n= edge->getNumberOfNodes();
-    if(directo)
+    if(forward)
       return edge->getNode(i);
     else
       return edge->getNode(n-i);
@@ -237,7 +238,7 @@ size_t XC::CmbEdge::Side::GetTag(void) const
 bool XC::operator==(const XC::CmbEdge::Side &il1,const XC::CmbEdge::Side &il2)
   {
     if(il1.edge != il2.edge) return false;
-    if(il1.directo != il2.directo) return false;
+    if(il1.forward != il2.forward) return false;
     return true;
   }
 
@@ -601,13 +602,13 @@ void XC::CmbEdge::insert(Edge *l)
           lines.push_back(Side(l,true));
         else
           {
-            if(l->P1()== P2()) //directo.
+            if(l->P1()== P2()) //forward.
               lines.push_back(Side(l,true));
-            else if(l->P2()== P2()) //inverso.
+            else if(l->P2()== P2()) //reverse.
               lines.push_back(Side(l,false));
-            else if(l->P1()== P1()) //inverso
+            else if(l->P1()== P1()) //reverse
               lines.push_front(Side(l,false));
-            else if(l->P2()== P1()) //directo
+            else if(l->P2()== P1()) //forward
               lines.push_front(Side(l,true));
             else
               std::cerr << getClassName() << "::" << __FUNCTION__

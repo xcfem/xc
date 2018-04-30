@@ -206,9 +206,9 @@ size_t XC::Block::index(Face *s) const
     else //Base is already set.
       {
         const Face *base= sups[0].Surface();
-        size_t primero= base->CommonEdge(*s); //Line shared by "s" and the base.
-        if(primero)
-          retval= primero; //Is a side face.
+        size_t first= base->CommonEdge(*s); //Line shared by "s" and the base.
+        if(first)
+          retval= first; //Is a side face.
         else
           retval= 5; //Is the top face.
       }
@@ -218,12 +218,12 @@ size_t XC::Block::index(Face *s) const
 //! @brief Put the sur!face as solid limit.
 void XC::Block::put(const size_t &i,Face *s)
   {
-    size_t primero= 1;
+    size_t first= 1;
     int sentido= 1;
     if( (i>0) && (i<5)) //Is a side face.
       {
         const Face *base= sups[0].Surface();
-        primero= s->CommonEdge(*base); //Index of the line in common with the base.
+        first= s->CommonEdge(*base); //Index of the line in common with the base.
         const Edge *linea= base->getSide(i)->getEdge();
         sentido= base->SenseOfEdge(linea,*s);
       }
@@ -241,10 +241,10 @@ void XC::Block::put(const size_t &i,Face *s)
 	            << " either the 1 , 2 , 3 or 4 faces." << std::endl;
         else
           {
-            primero= face->CommonEdge(*s); //Index of the line in common of s with the face.
-            if(primero) //They have a common edge.
+            first= face->CommonEdge(*s); //Index of the line in common of s with the face.
+            if(first) //They have a common edge.
               {
-                const Edge *linea= face->getSide(primero)->getEdge();
+                const Edge *linea= face->getSide(first)->getEdge();
                 sentido= -face->SenseOfEdge(linea,*s);
               }
             else //They don't share a common edge.
@@ -257,17 +257,17 @@ void XC::Block::put(const size_t &i,Face *s)
               }
           }
       }
-    bool directo= true;
+    bool forward= true;
     if(sentido==1)
-      directo= true;
+      forward= true;
     else
       if(sentido==-1)
-        directo= false;
+        forward= false;
       else
         std::cerr << getClassName() << "::" << __FUNCTION__
 		  << "; the surfaces do not share a common edge."
 		  << std::endl;
-    sups[i]= BodyFace(s,primero,directo);
+    sups[i]= BodyFace(this,s,first,forward);
   }
 
 //! @brief Insert the surface with the identifier passed as parameter

@@ -50,12 +50,12 @@ struct SideSequence
     size_t l2; //!< Index edge 2.
     size_t l3; //!< Index edge 3.
     size_t l4; //!< Index edge 4.
-    bool dirt; //!< Direct or reverse.
+    bool forward; //!< Forward or reverse sequence.
 
-    SideSequence(const size_t primero= 1,const bool &directo= true);
+    SideSequence(const size_t first= 1,const bool &forward= true);
     //! @brief Return true if the edge sequence is direct (edge1 -> edge4).
-    const bool &Directo(void) const
-      { return dirt; }
+    const bool &isDirect(void) const
+      { return forward; }
   };
 
 //! \ingroup MultiBlockTopologyEnt
@@ -67,12 +67,12 @@ class Body: public EntMdlr
     //! \ingroup Geom
     //!
     //! @brief Surface that limits the body (face as seen by the body).
-    class BodyFace
+    class BodyFace: public EntCmd
       {
         Face *surface; //!< Face geometry.
         SideSequence sec_lados; //!< Edge sequence.
       public:
-        BodyFace(Face *ptr= nullptr,const size_t &p=1,const bool &d=true);
+        BodyFace(Body *b= nullptr, Face *ptr= nullptr,const size_t &p=1,const bool &d=true);
 	Face *Surface(void);
         const Face *Surface(void) const;
         void SetSurf(Face *s);
@@ -118,8 +118,6 @@ class Body: public EntMdlr
 
     std::set<SetBase *> get_sets(void) const;
     void add_to_sets(std::set<SetBase *> &);
-
-
   };
 
 std::set<const Body *> getConnectedBodies(const Face &s);

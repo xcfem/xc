@@ -138,7 +138,8 @@ void XC::QuadSurface::SetNDivI(const size_t &ndi)
 void XC::QuadSurface::SetNDivJ(const size_t &ndj)
   {
     if(lines.size()<4)
-      std::cerr << "XC::QuadSurface::SetNDivJ, surface is not a quadrilateral, it has " 
+      std::cerr << getClassName() << "::" << __FUNCTION__
+	        << "; surface is not a quadrilateral, it has " 
                 << lines.size() << " sides." << std::endl;
     else
       {
@@ -229,13 +230,13 @@ void XC::QuadSurface::setPoints(const ID &point_indexes)
   {
     const size_t np= point_indexes.Size(); //Number of indexes.
     if(np!=4)
-      std::cerr << getClassName() << __FUNCTION__
+      std::cerr << getClassName() << "::" << __FUNCTION__
 	        << "; surface definition needs "
                 << 4 << " points, we got: " << np << ".\n";
     else
       {
         if(getNumberOfEdges()>0)
-          std::cerr << getClassName() << __FUNCTION__
+          std::cerr << getClassName() << "::" << __FUNCTION__
 	            << "; warning redefinition of surface: '"
                     << getName() << "'.\n";
 
@@ -313,14 +314,16 @@ void XC::QuadSurface::setPoints(const m_int &point_indexes)
     const size_t nc= point_indexes.getNumberOfColumns(); //No. de columns of points.
     if(nf<2)
       {
-        std::cerr << "Matrix of indexes: '"
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; matrix of indexes: '"
                   << point_indexes 
                   << "' must have at least two rows." << std::endl;
         return;
       }
     if(nc<2)
       {
-        std::cerr << "Matrix of indexes: '"
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; matrix of indexes: '"
                   << point_indexes 
                   << "' must have at least two columns." << std::endl;
         return;
@@ -374,10 +377,10 @@ MatrizPos3d XC::QuadSurface::get_positions(void) const
         return retval;
       }
 
-    MatrizPos3d ptos_l1= lines[0].getNodePosDir();
-    MatrizPos3d ptos_l2= lines[1].getNodePosDir();
-    MatrizPos3d ptos_l3= lines[2].getNodePosInv(); //Ordenados al revés.
-    MatrizPos3d ptos_l4= lines[3].getNodePosInv(); //Ordenados al revés.
+    MatrizPos3d ptos_l1= lines[0].getNodePosForward();
+    MatrizPos3d ptos_l2= lines[1].getNodePosForward();
+    MatrizPos3d ptos_l3= lines[2].getNodePosReverse(); //Ordenados al revés.
+    MatrizPos3d ptos_l4= lines[3].getNodePosReverse(); //Ordenados al revés.
     retval= MatrizPos3d(ptos_l1,ptos_l2,ptos_l3,ptos_l4);
     retval.Trn();
     return retval;
@@ -440,12 +443,12 @@ void XC::QuadSurface::create_nodes(void)
 
         //j=n_rows.
         for(size_t k=1;k<=cols;k++) //En sentido inverso.
-          ttzNodes(1,n_rows,k)= lines[2].getNodeInv(k);
+          ttzNodes(1,n_rows,k)= lines[2].getNodeReverse(k);
 
 
         //k=1
         for(size_t j=2;j<n_rows;j++) //En sentido inverso.
-          ttzNodes(1,j,1)= lines[3].getNodeInv(j);
+          ttzNodes(1,j,1)= lines[3].getNodeReverse(j);
         //k=cols.
         for(size_t j=2;j<n_rows;j++)
           ttzNodes(1,j,cols)= lines[1].getNode(j);

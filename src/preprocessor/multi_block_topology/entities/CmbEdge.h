@@ -57,7 +57,7 @@ class CmbEdge: public Edge
     class Side: public EntCmd
       {
         Edge *edge; //!< Pointer to line.
-        bool directo; //!< true: direct (P1->P2), false: reversed (P2->P1)
+        bool forward; //!< true: forward (P1->P2), false: reversed (P2->P1)
       protected:
     
       public:
@@ -69,25 +69,25 @@ class CmbEdge: public Edge
         const Pnt *P2(void) const;
         bool ExtremosEn(const Pnt *,const Pnt *) const;
         const std::string &getName(void) const;
-        inline bool esDirecto(void) const
-          { return directo; }
+        inline bool isDirect(void) const
+          { return forward; }
         inline void reverse(void)
-	  { directo= !directo; }
+	  { forward= !forward; }
         void SetNDiv(const size_t &nd);
         size_t NDiv(void) const;
         size_t GetTag(void) const;
         MatrizPos3d get_positions(void) const;
-        std::vector<int> getTagsNodesDir(void) const;
-        std::vector<int> getTagsNodesInv(void) const;
-        MatrizPos3d getNodePosDir(void) const;
-        MatrizPos3d getNodePosInv(void) const;
+        std::vector<int> getTagsNodesForward(void) const;
+        std::vector<int> getTagsNodesReverse(void) const;
+        MatrizPos3d getNodePosForward(void) const;
+        MatrizPos3d getNodePosReverse(void) const;
         double getLongitud(void) const;
         Pos3d getCentroid(void) const;	
         bool In(const GeomObj3d &, const double &tol= 0.0) const;
         bool Out(const GeomObj3d &, const double &tol= 0.0) const;
         const Vector &getTang(const double &) const;
-        Node *getNodeDir(const size_t &i);
-        Node *getNodeInv(const size_t &i);
+        Node *getNodeForward(const size_t &i);
+        Node *getNodeReverse(const size_t &i);
         Node *getNode(const size_t &i);
         const Node *getNode(const size_t &i) const;
         void genMesh(meshing_dir dm);

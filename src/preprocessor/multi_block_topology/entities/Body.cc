@@ -40,28 +40,28 @@
 #include "xc_utils/src/geom/pos_vec/MatrizPos3d.h"
 
 //! @brief Constructor
-XC::SideSequence::SideSequence(const size_t primero,const bool &directo)
-  : dirt(directo)
+XC::SideSequence::SideSequence(const size_t first,const bool &_forward)
+  : forward(_forward)
   {
-    if(dirt)
+    if(forward)
       {
-        l1= (primero-1)%4+1;
-        l2= (primero)%4+1;
-        l3= (primero+1)%4+1;
-        l4= (primero+2)%4+1;
+        l1= (first-1)%4+1;
+        l2= (first)%4+1;
+        l3= (first+1)%4+1;
+        l4= (first+2)%4+1;
       }
     else
       {
-        l1= (primero+3)%4+1;
-        l2= (primero+2)%4+1;
-        l3= (primero+1)%4+1;
-        l4= (primero)%4+1;
+        l1= (first+3)%4+1;
+        l2= (first+2)%4+1;
+        l3= (first+1)%4+1;
+        l4= (first)%4+1;
       }
   }
 
 //! @brief Constructor.
-XC::Body::BodyFace::BodyFace(XC::Face *ptr,const size_t &p,const bool &d)
-  : surface(ptr), sec_lados(p,d) {}
+XC::Body::BodyFace::BodyFace(Body *owr, Face *face_ptr,const size_t &p,const bool &d)
+  : EntCmd(owr), surface(face_ptr), sec_lados(p,d) {}
 
 //! @brief Return a pointer to the surface that limits the solid.
 XC::Face *XC::Body::BodyFace::Surface(void)
@@ -122,7 +122,7 @@ const XC::Pnt *XC::Body::BodyFace::getVertex(const size_t &i) const
     const CmbEdge::Side *l= getSide(i);
     if(l)
       {
-        if(sec_lados.Directo())
+        if(sec_lados.isDirect())
           return l->P1();
         else
           return l->P2();
@@ -146,13 +146,15 @@ MatrizPos3d XC::Body::BodyFace::get_positions(void) const
   {
     if(!surface)
       {
-        std::cerr << "Pointer to surface is null." << std::endl;
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; pointer to surface is null." << std::endl;
         return MatrizPos3d(); 
       }
     const int numEdges= surface->getNumberOfEdges();
     if(numEdges!=4)
       {
-        std::cerr << "Can't mesh " << numEdges
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; can't mesh " << numEdges
 	          << " edges surfaces." << std::endl;
         return MatrizPos3d();
       }
@@ -164,18 +166,22 @@ MatrizPos3d XC::Body::BodyFace::get_positions(void) const
     //Columns of point quasi.parallels to l1 and l3 and increasing index from l1 to l3.
     if(l1->NDiv()!=l3->NDiv())
       {
-        std::cerr << "Lines 1 and 3 have different number of divisions. Can't generate mesh." << std::endl;
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; lines 1 and 3 have different number of divisions. "
+	          << "Can't generate mesh." << std::endl;
         return MatrizPos3d();
       }
     if(l2->NDiv()!=l4->NDiv())
       {
-        std::cerr << "Lines 2 and 4 have different number of divisions. Can't generate mesh." << std::endl;
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; lines 2 and 4 have different number of divisions. "
+	          << "Can't generate mesh." << std::endl;
         return MatrizPos3d();
       }
-    MatrizPos3d ptos_l1= l1->getNodePosDir();
-    MatrizPos3d ptos_l2= l2->getNodePosDir();
-    MatrizPos3d ptos_l3= l3->getNodePosInv(); //Reverse order.
-    MatrizPos3d ptos_l4= l4->getNodePosInv(); //Reverse order.
+    MatrizPos3d ptos_l1= l1->getNodePosForward();
+    MatrizPos3d ptos_l2= l2->getNodePosForward();
+    MatrizPos3d ptos_l3= l3->getNodePosReverse(); //Reverse order.
+    MatrizPos3d ptos_l4= l4->getNodePosReverse(); //Reverse order.
     return MatrizPos3d(ptos_l1,ptos_l2,ptos_l3,ptos_l4);
   }
 
@@ -189,8 +195,8 @@ void XC::Body::BodyFace::create_nodes(void)
     if(surface)
       surface->create_nodes();
     else
-      std::cerr << "BodyFace::" << __FUNCTION__
-	        << "; pointer to surface is null." << std::endl;
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; pointer to surface is null." << std::endl;
   }
 
 //! @brief Constructor.
@@ -269,8 +275,8 @@ std::set<XC::SetBase *> XC::Body::get_sets(void) const
         retval= sets.get_sets(this);
       }
     else
-      std::cerr << getClassName() << __FUNCTION__
-	        << "; preprocessor needed." << std::endl;
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; preprocessor needed." << std::endl;
     return retval;
   }
 

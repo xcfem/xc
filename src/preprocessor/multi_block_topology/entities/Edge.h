@@ -106,19 +106,19 @@ class Edge: public EntMdlr
     virtual const Node *getNode(const size_t &i,const size_t &j,const size_t &k=1) const;
     virtual Node *getNode(const size_t &i);
     virtual const Node *getNode(const size_t &i) const;
-    Node *getNodeDir(const size_t &i);
-    const Node *getNodeDir(const size_t &i) const;
-    Node *getNodeInv(const size_t &i);
-    const Node *getNodeInv(const size_t &i) const;
+    Node *getNodeForward(const size_t &i);
+    const Node *getNodeForward(const size_t &i) const;
+    Node *getNodeReverse(const size_t &i);
+    const Node *getNodeReverse(const size_t &i) const;
     Node *getFirstNode(void);
     const Node *getFirstNode(void) const;
     Node *getLastNode(void);
     const Node *getLastNode(void) const;
 
-    std::vector<int> getTagsNodesDir(void) const;
-    std::vector<int> getTagsNodesInv(void) const;
-    MatrizPos3d getNodePosDir(void) const;
-    MatrizPos3d getNodePosInv(void) const;
+    std::vector<int> getTagsNodesForward(void) const;
+    std::vector<int> getTagsNodesReverse(void) const;
+    MatrizPos3d getNodePosForward(void) const;
+    MatrizPos3d getNodePosReverse(void) const;
 
     std::set<SetBase *> get_sets(void) const;
     void add_to_sets(std::set<SetBase *> &);
