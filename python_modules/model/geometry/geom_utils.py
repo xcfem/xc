@@ -12,6 +12,7 @@ from postprocess import extrapolate_elem_attr as extrap
 import numpy as np
 import math
 import geom
+from model.geometry import grid_model as gm
 
 class LineWrapper(object):
   def __init__(self,line):
@@ -136,4 +137,19 @@ def rect2DPolygon(xCent,yCent,Lx,Ly):
     pol.agregaVertice(geom.Pos2d(xCent+Lx/2.0,yCent+Ly/2.0))
     pol.agregaVertice(geom.Pos2d(xCent+Lx/2.0,yCent-Ly/2.0))
     return pol
-    
+
+def def_rg_cooLim(XYZLists,Xcoo,Ycoo,Zcoo):
+  '''Return an XYZ range given a the three lists of coordinates of the grid
+  and the limit coordinates.
+
+  :param XYZList: (xList,yList,zList)
+  :param Xcoo: (xmin,xmax)
+  :param Ycoo: (ymin,ymax)
+  :param Zcoo: (zmin,zmax)
+  '''
+  xLst=XYZLists[0]
+  yLst=XYZLists[1]
+  zLst=XYZLists[2]
+  rg=gm.IJKRange((xLst.index(Xcoo[0]),yLst.index(Ycoo[0]),zLst.index(Zcoo[0])),(xLst.index(Xcoo[1]),yLst.index(Ycoo[1]),zLst.index(Zcoo[1])))
+  return rg
+                                                                                

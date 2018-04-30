@@ -11,8 +11,8 @@ __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
 G= 900e3 # Elastomeric bearing shear modulus.
-a= 0.3 # Width of the bearing (parallel to lintel axis).
-b= 0.3 # Length of the bearing (parallel to bridge axis).
+a= 0.3 # Width of the bearing (parallel to bridge axis).
+b= 0.3 # Length of the bearing (parallel to lintel axis).
 e= 0.002 # Net thickness of the bearing (without steel plates).
 
 neop= bridge_bearings.ElastomericBearing(G,a,b,e)
@@ -23,12 +23,13 @@ KrotationX= neop.getKrotationLintelAxis()
 KrotationZ= neop.getKrotationLintelAxis()
 KrotationY= neop.getKrotationVerticalAxis()
 
-ratio1= abs(8505000000.0-E)/8505000000.0
-ratio2= abs(382725000000.0-Kv)/382725000000.0
+ratio1= abs( 600000000.0-E)/ 600000000.0
+ratio2= abs(27000000000.0-Kv)/27000000000.0
 ratio3= abs(40500000.0-Kh)/40500000.0
 ratio4= abs(956971000.0-KrotationX)/956971000.0
 ratio5= abs(956972000.0-KrotationZ)/956972000.0
 ratio6= abs(510192.0-KrotationY)/510192.0
+
 
 ''' 
 print "E= ",E
