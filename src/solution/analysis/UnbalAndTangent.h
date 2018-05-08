@@ -36,7 +36,7 @@ namespace XC {
 
 //! @ingroup Analysis
 //
-//! @brief Unbalanced force vector and y tangent stiffness matrix.
+//! @brief Unbalanced force vector and tangent stiffness matrix.
 class UnbalAndTangent
   {
   private:
@@ -46,7 +46,7 @@ class UnbalAndTangent
     UnbalAndTangentStorage &unbalAndTangentArray; //!< Reference to array of class wide vectors and matrices
     bool free_mem(void);
     void alloc(void);
-    void copia(const UnbalAndTangent &otro);
+    void copy(const UnbalAndTangent &otro);
 
   public:
     UnbalAndTangent(const size_t &,UnbalAndTangentStorage &);

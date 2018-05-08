@@ -246,7 +246,7 @@ std::deque<size_t> XC::MatrizPtrPnt::copyPoints(const RangoMatriz &rango,const s
           const Pnt *p= operator()(i,j);
           if(p)
             {
-              Pnt *newPt= mbt->getPoints().Copia(p,vectorOffset);
+              Pnt *newPt= mbt->getPoints().Copy(p,vectorOffset);
               (*this)(i+offsetIndices[0],j+offsetIndices[1])= newPt;
               retval.push_back(newPt->GetTag());
             }

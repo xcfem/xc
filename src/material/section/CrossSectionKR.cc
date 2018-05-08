@@ -33,6 +33,7 @@ double XC::CrossSectionKR::vas1= 0.0;
 double XC::CrossSectionKR::vas2= 0.0;
 double XC::CrossSectionKR::vas1as2= 0.0;
 
+//!@brief Release allocated memory.
 void XC::CrossSectionKR::free_mem(void)
   {
     if(R)
@@ -47,6 +48,7 @@ void XC::CrossSectionKR::free_mem(void)
       }
   }
 
+//! @brief Allocate memory.
 void XC::CrossSectionKR::alloc(const size_t &dim)
   {
     free_mem();
@@ -54,7 +56,8 @@ void XC::CrossSectionKR::alloc(const size_t &dim)
     K= new Matrix(kData,dim,dim);
   }
 
-void XC::CrossSectionKR::copia(const CrossSectionKR &otra)
+//! @brief Copy data.
+void XC::CrossSectionKR::copy(const CrossSectionKR &otra)
   {
     free_mem();
     rData[0]= otra.rData[0]; rData[1]= otra.rData[1];
@@ -91,13 +94,13 @@ XC::CrossSectionKR::CrossSectionKR(const size_t &dim)
 XC::CrossSectionKR::CrossSectionKR(const CrossSectionKR &otra)
   : R(nullptr), K(nullptr)
   {
-    copia(otra);
+    copy(otra);
   }
 
 //! @brief Assignment operator.
 XC::CrossSectionKR &XC::CrossSectionKR::operator=(const CrossSectionKR &otro)
   {
-    copia(otro);
+    copy(otro);
     return *this;
   }
 

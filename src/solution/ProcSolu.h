@@ -63,7 +63,7 @@ class ProcSolu: public EntCmd
 
     void free_analysis(void);
     bool alloc_analysis(const std::string &,const std::string &,const std::string &);
-    void copia_analysis(Analysis *);
+    void copy_analysis(Analysis *);
  
     void free_mem(void);
 

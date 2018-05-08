@@ -35,11 +35,11 @@
 XC::DqPtrsConstraint::DqPtrsConstraint(EntCmd *owr)
   : DqPtrs<Constraint>(owr) {}
 
-//! @brief Constructor de copia.
+//! @brief Copy constructor.
 XC::DqPtrsConstraint::DqPtrsConstraint(const std::deque<Constraint *> &ts)
   : DqPtrs<Constraint>(ts) {}
 
-//! @brief Constructor de copia.
+//! @brief Copy constructor.
 XC::DqPtrsConstraint::DqPtrsConstraint(const std::set<const Constraint *> &st)
   : DqPtrs<Constraint>()
   {

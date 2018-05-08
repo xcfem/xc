@@ -89,7 +89,7 @@ class EarthquakePattern : public EQBasePattern
     EarthquakePattern(const EarthquakePattern &otro);
     EarthquakePattern &operator=(const EarthquakePattern &);
   protected:
-    void copia(const Vector *,const Vector *);
+    void copy(const Vector *,const Vector *);
     int addMotion(GroundMotion &);
     int sendData(CommParameters &);
     int recvData(const CommParameters &);

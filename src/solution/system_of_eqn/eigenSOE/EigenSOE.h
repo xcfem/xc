@@ -71,7 +71,7 @@ class EigenSOE : public SystemOfEqn
     EigenSolver *theSolver;
 
     void free_mem(void);
-    void copia(const EigenSolver *);
+    void copy(const EigenSolver *);
     virtual bool setSolver(EigenSolver *);
     void resize_mass_matrix_if_needed(const size_t &);
 

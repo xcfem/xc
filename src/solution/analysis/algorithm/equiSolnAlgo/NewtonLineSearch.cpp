@@ -79,12 +79,12 @@ XC::NewtonLineSearch::NewtonLineSearch(AnalysisAggregation *owr)
 
 XC::NewtonLineSearch::NewtonLineSearch(const NewtonLineSearch &otro)
   : EquiSolnAlgo(otro), theLineSearch(nullptr)
-  { if(otro.theLineSearch) copia(otro.theLineSearch); }
+  { if(otro.theLineSearch) copy(otro.theLineSearch); }
 
 XC::NewtonLineSearch &XC::NewtonLineSearch::operator=(const NewtonLineSearch &otro)
   {
     EquiSolnAlgo::operator=(otro);
-    if(otro.theLineSearch) copia(otro.theLineSearch);
+    if(otro.theLineSearch) copy(otro.theLineSearch);
     return *this;
   }
 
@@ -113,7 +113,7 @@ bool XC::NewtonLineSearch::alloc(const std::string &nmb)
     return (theLineSearch!=nullptr);
   }
 
-void XC::NewtonLineSearch::copia(LineSearch *ptr)
+void XC::NewtonLineSearch::copy(LineSearch *ptr)
   {
     if(ptr)
       {
@@ -122,7 +122,7 @@ void XC::NewtonLineSearch::copia(LineSearch *ptr)
         theLineSearch->set_owner(this);
       }
     else
-     std::cerr << "NewtonLineSearch::copia; pointer to line search is null." << std::endl;
+     std::cerr << "NewtonLineSearch::copy; pointer to line search is null." << std::endl;
   }
 
 XC::NewtonLineSearch::~NewtonLineSearch(void)

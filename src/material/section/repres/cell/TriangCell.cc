@@ -37,7 +37,7 @@ XC::TriangCell::TriangCell(void)
 XC::TriangCell::TriangCell(const XC::Matrix &vertexCoords)
   : Cell(vertexCoords) {}
 
-//! @brief Constructor de copia.
+//! @brief Copy constructor.
 XC::Cell *XC::TriangCell::getCopy(void) const
   { return new TriangCell(*this); }
 

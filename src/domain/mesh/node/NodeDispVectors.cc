@@ -47,10 +47,10 @@ XC::NodeDispVectors::NodeDispVectors(void)
   :NodeVectors(4),incrDisp(nullptr),incrDeltaDisp(nullptr) {}
 
 
-//! @brief Constructor de copia.
+//! @brief Copy constructor.
 XC::NodeDispVectors::NodeDispVectors(const NodeDispVectors &otro)
   : NodeVectors(otro), incrDisp(nullptr), incrDeltaDisp(nullptr)
-  { copia(otro); }
+  { copy(otro); }
 
 XC::NodeDispVectors &XC::NodeDispVectors::operator=(const NodeDispVectors &otro)
   {

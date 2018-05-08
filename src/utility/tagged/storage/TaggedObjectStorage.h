@@ -105,7 +105,7 @@ class TaggedObjectStorage: public EntCmd, public MovableObject
 
     template <class T>
     int receiveData(const CommParameters &,T *(FEM_ObjectBroker::*p)(int));
-    void copia(const TaggedObjectStorage &);
+    void copy(const TaggedObjectStorage &);
   public:
     TaggedObjectStorage(EntCmd *owr,const std::string &containerName);
     virtual ~TaggedObjectStorage(void) {}

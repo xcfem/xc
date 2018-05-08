@@ -44,7 +44,7 @@ XC::DamageModelVector::DamageModelVector(const size_t &nDamageModels,const Damag
       }
   }
 
-//! @brief Copia los dmg_models.
+//! @brief Copy the damage models.
 void XC::DamageModelVector::alloc(const std::vector<DamageModel *> &dmgs)
   {
     clearAll();
@@ -56,7 +56,8 @@ void XC::DamageModelVector::alloc(const std::vector<DamageModel *> &dmgs)
           {
             (*this)[i]= dmgs[i]->getCopy();
             if(!(*this)[i])
-              std::cerr<<" DamageModelVector -- failed allocate damage model pointer\n";
+              std::cerr << getClassName() << "::" << __FUNCTION__
+			<< "; failed allocate damage model pointer\n";
           }
       }
   }

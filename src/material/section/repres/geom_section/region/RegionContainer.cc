@@ -53,7 +53,7 @@ void XC::RegionContainer::free_mem(void)
   }
 
 //! @brief Copy the regions from another container.
-void XC::RegionContainer::copia(const RegionContainer &otra)
+void XC::RegionContainer::copy(const RegionContainer &otra)
   {
     free_mem();
     for(const_iterator i=otra.begin();i!=otra.end();i++)
@@ -67,14 +67,14 @@ XC::RegionContainer::RegionContainer(MaterialHandler *ml)
 //! @brief Copy constructor.
 XC::RegionContainer::RegionContainer(const RegionContainer  &otro)
   : l_reg(), material_handler(otro.material_handler)
-  { copia(otro); }
+  { copy(otro); }
 
 //! @brief Assignment operator.
 XC::RegionContainer &XC::RegionContainer::operator=(const RegionContainer &otro)
   {
     SectionMassProperties::operator=(otro);
     material_handler= otro.material_handler;
-    copia(otro);
+    copy(otro);
     return *this;
   }
 

@@ -78,14 +78,14 @@ XC::MapOfTaggedObjects::MapOfTaggedObjects(EntCmd *owr,const std::string &contai
 XC::MapOfTaggedObjects::MapOfTaggedObjects(const MapOfTaggedObjects &otro)
   : TaggedObjectStorage(otro), myIter(*this)
   {
-    copia(otro);
+    copy(otro);
   }
 
 //! @brief Assignment operator.
 XC::MapOfTaggedObjects &XC::MapOfTaggedObjects::operator=(const MapOfTaggedObjects &otro)
   {
     TaggedObjectStorage::operator=(otro);
-    copia(otro);
+    copy(otro);
     return *this;
   }
 

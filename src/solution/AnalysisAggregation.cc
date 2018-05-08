@@ -108,7 +108,7 @@ bool XC::AnalysisAggregation::alloc_soln_algo(const std::string &nmb)
 //! analysis. It then sets the SolutionAlgorithm 
 //! associated with the analysis to be \p newAlgorithm and sets the
 //! links for this object by invoking set_owner(). 
-void XC::AnalysisAggregation::copia_soln_algo(SolutionAlgorithm *ptr)
+void XC::AnalysisAggregation::copy_soln_algo(SolutionAlgorithm *ptr)
   {
     if(ptr)
       {
@@ -260,7 +260,7 @@ bool XC::AnalysisAggregation::alloc_integrator(const std::string &nmb,const Vect
 //! analysis. It then sets the SolutionAlgorithm 
 //! associated with the analysis to be \p newAlgorithm and sets the
 //! links for this object. It also invokes set_owner().
-void XC::AnalysisAggregation::copia_integrator(Integrator *ptr)
+void XC::AnalysisAggregation::copy_integrator(Integrator *ptr)
   {
     if(ptr)
       {
@@ -354,7 +354,7 @@ bool XC::AnalysisAggregation::alloc_system_of_equations(const std::string &nmb,A
 //! with the analysis. It then sets the SolutionAlgorithm 
 //! associated with the analysis to be \p newSOE.
 //! links for this object. It then invokes set_owner(). 
-void XC::AnalysisAggregation::copia_system_of_equations(SystemOfEqn *ptr)
+void XC::AnalysisAggregation::copy_system_of_equations(SystemOfEqn *ptr)
   {
     if(ptr)
       {
@@ -420,7 +420,7 @@ bool XC::AnalysisAggregation::alloc_conv_test(const std::string &nmb)
     return (theTest!=nullptr);
   }
 
-void XC::AnalysisAggregation::copia_conv_test(ConvergenceTest *ptr)
+void XC::AnalysisAggregation::copy_conv_test(ConvergenceTest *ptr)
   {
     if(ptr)
       {
@@ -449,12 +449,12 @@ void XC::AnalysisAggregation::free_mem(void)
     free_conv_test();
   }
 
-void XC::AnalysisAggregation::copia(const AnalysisAggregation &otro)
+void XC::AnalysisAggregation::copy(const AnalysisAggregation &otro)
   {
-    if(otro.theSolnAlgo) copia_soln_algo(otro.theSolnAlgo);
-    if(otro.theIntegrator) copia_integrator(otro.theIntegrator);
-    if(otro.theSOE) copia_system_of_equations(otro.theSOE);
-    if(otro.theTest) copia_conv_test(otro.theTest);
+    if(otro.theSolnAlgo) copy_soln_algo(otro.theSolnAlgo);
+    if(otro.theIntegrator) copy_integrator(otro.theIntegrator);
+    if(otro.theSOE) copy_system_of_equations(otro.theSOE);
+    if(otro.theTest) copy_conv_test(otro.theTest);
   }
 
 //! @brief Default constructor.
@@ -474,7 +474,7 @@ XC::AnalysisAggregation::AnalysisAggregation(const AnalysisAggregation &otro)
   {
     if(base)
       base->set_owner(this);
-    copia(otro);
+    copy(otro);
   }
 
 
@@ -485,7 +485,7 @@ XC::AnalysisAggregation &XC::AnalysisAggregation::operator=(const AnalysisAggreg
     base= otro.base;
     if(base)
       base->set_owner(this);
-    copia(otro);
+    copy(otro);
     return *this;
   }
 
@@ -727,7 +727,7 @@ const XC::ConvergenceTest *XC::AnalysisAggregation::getConvergenceTestPtr(void) 
 //! @brief Sets the linear system of equations to use in the analysis.
 int XC::AnalysisAggregation::setLinearSOE(LinearSOE &theNewSOE)
   {
-    copia_system_of_equations(&theNewSOE);
+    copy_system_of_equations(&theNewSOE);
     return 0;
   }
 
@@ -742,21 +742,21 @@ int XC::AnalysisAggregation::setEigenSOE(EigenSOE &theSOE)
 //! @brief Sets the integrator to use in the analysis.
 int XC::AnalysisAggregation::setIntegrator(Integrator &theNewIntegrator)
   {
-    copia_integrator(&theNewIntegrator);
+    copy_integrator(&theNewIntegrator);
     return 0;
   }
 
 //! @brief Sets the solution algorithm to use in the analysis.
 int XC::AnalysisAggregation::setAlgorithm(SolutionAlgorithm &theNewAlgorithm) 
   {
-    copia_soln_algo(&theNewAlgorithm);
+    copy_soln_algo(&theNewAlgorithm);
     return 0;
   }
 
 //! @brief Sets the convergence test to use in the analysis.
 int XC::AnalysisAggregation::setConvergenceTest(ConvergenceTest &theNewTest)
   {
-    copia_conv_test(&theNewTest);
+    copy_conv_test(&theNewTest);
     return 0;
   }
 

@@ -60,7 +60,7 @@ class RegionContainer: protected std::list<RegionSecc *>, public SectionMassProp
   private:
     void free_mem(void);
     void free_mem(const size_t i);
-    void copia(const RegionContainer &otra);
+    void copy(const RegionContainer &otra);
   protected:
 
     MaterialHandler *material_handler; //!< Material definition handler (searching,...).

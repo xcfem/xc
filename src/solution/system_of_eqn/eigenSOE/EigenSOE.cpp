@@ -71,7 +71,7 @@ void XC::EigenSOE::free_mem(void)
       }
   }
 
-void XC::EigenSOE::copia(const EigenSolver *newSolver)
+void XC::EigenSOE::copy(const EigenSolver *newSolver)
   {
     if(newSolver)
       {
@@ -80,7 +80,7 @@ void XC::EigenSOE::copia(const EigenSolver *newSolver)
         if(tmp)
           setSolver(tmp);
         else
-	  std::cerr << "Eigen::copia; no se pudo crear the solver."
+	  std::cerr << "Eigen::copy; no se pudo crear the solver."
                     << std::endl;
       }
   }

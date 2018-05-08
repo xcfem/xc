@@ -49,7 +49,7 @@ class CrossSectionKR: public EntCmd
   protected:
     void free_mem(void);
     void alloc(const size_t &dim);
-    void copia(const CrossSectionKR &otra);
+    void copy(const CrossSectionKR &otra);
     inline void updateNMz(const double &f,const double &y)
       {
         rData[0]+= f; //N.

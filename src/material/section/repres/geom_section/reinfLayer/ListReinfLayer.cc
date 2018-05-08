@@ -50,7 +50,7 @@ void XC::ListReinfLayer::free_mem(void)
   }
 
 //! @brief Copy the layers from another container.
-void XC::ListReinfLayer::copia(const ListReinfLayer &otra)
+void XC::ListReinfLayer::copy(const ListReinfLayer &otra)
   {
     free_mem();
     for(const_iterator i=otra.begin();i!=otra.end();i++)
@@ -64,14 +64,14 @@ XC::ListReinfLayer::ListReinfLayer(GeomSection *owr,MaterialHandler *ml)
 //! @brief Copy constructor.
 XC::ListReinfLayer::ListReinfLayer(const ListReinfLayer  &otro)
   : l_reg(), material_handler(otro.material_handler)
-  { copia(otro); }
+  { copy(otro); }
 
 //! @brief Assignment operator.
 XC::ListReinfLayer &XC::ListReinfLayer::operator=(const ListReinfLayer &otro)
   {
     SectionMassProperties::operator=(otro);
     material_handler= otro.material_handler;
-    copia(otro);
+    copy(otro);
     return *this;
   }
 

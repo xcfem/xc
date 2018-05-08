@@ -71,6 +71,7 @@ XC::Bidirectional::Bidirectional(int tag, double e, double sy, double Hi, double
     alpha_n1 = 0.0;
   }
 
+//! @brief Constructor.
 XC::Bidirectional::Bidirectional(int tag)
   : SectionForceDeformation(tag, SEC_TAG_Bidirectional), E(0.0), sigY(0.0), Hiso(0.0), Hkin(0.0)
   {
@@ -85,30 +86,16 @@ XC::Bidirectional::Bidirectional(int tag)
     alpha_n1 = 0.0;
   }
 
-XC::Bidirectional::Bidirectional(void)
-  : SectionForceDeformation(0, SEC_TAG_Bidirectional),
-         E(0.0), sigY(0.0), Hiso(0.0), Hkin(0.0)
-  {
-    for(int i = 0; i < 2; i++)
-      {
-        eP_n[i]  = 0.0;
-        eP_n1[i] = 0.0;
-        q_n[i]  = 0.0;
-        q_n1[i] = 0.0;
-      }
-
-    alpha_n  = 0.0;
-    alpha_n1 = 0.0;
-  }
-
-int XC::Bidirectional::setInitialSectionDeformation(const XC::Vector &e)
+//! @brief Set the value of the initial deformation.
+int XC::Bidirectional::setInitialSectionDeformation(const Vector &e)
   {
     e_n1Inic[0] = e(0);
     e_n1Inic[1] = e(1);
     return 0;
   }
 
-int XC::Bidirectional::setTrialSectionDeformation(const XC::Vector &e)
+//! @brief Set the value of the trial deformation.
+int XC::Bidirectional::setTrialSectionDeformation(const Vector &e)
   {
     e_n1Trial[0] = e(0);
     e_n1Trial[1] = e(1);
@@ -124,7 +111,7 @@ const XC::Matrix &XC::Bidirectional::getSectionTangent(void) const
     s(0) = E*(def[0]-eP_n[0]);
     s(1) = E*(def[1]-eP_n[1]);
 
-    static XC::Vector xsi(2);
+    static Vector xsi(2);
 
     // Predicted stress minus back stress
     xsi(0) = s(0) - q_n[0];
@@ -301,24 +288,27 @@ int XC::Bidirectional::commitState(void)
         return 0;
   }
 
+//! @brief Revert to the last commited state.
 int XC::Bidirectional::revertToLastCommit(void)
   { return 0; }
 
+//! @brief Revert to the last commited state.
 int XC::Bidirectional::revertToStart(void)
   {
-        for (int i = 0; i < 2; i++) {
-                eP_n[i]  = 0.0;
-                eP_n1[i] = 0.0;
-                q_n[i]  = 0.0;
-                q_n1[i] = 0.0;
-        }
+    for (int i = 0; i < 2; i++)
+      {
+	eP_n[i]  = 0.0;
+	eP_n1[i] = 0.0;
+	q_n[i]  = 0.0;
+	q_n1[i] = 0.0;
+      }
 
-        alpha_n  = 0.0;
-        alpha_n1 = 0.0;
-
-        return 0;
+    alpha_n  = 0.0;
+    alpha_n1 = 0.0;
+    return 0;
   }
 
+//! @brief Virtual constructor.
 XC::SectionForceDeformation* XC::Bidirectional::getCopy(void) const
   {
     Bidirectional *theCopy = new Bidirectional (this->getTag(), E, sigY, Hiso, Hkin);
@@ -337,6 +327,7 @@ XC::SectionForceDeformation* XC::Bidirectional::getCopy(void) const
     return theCopy;
   }
 
+//! @brief Get material type.
 const XC::ResponseId &XC::Bidirectional::getType(void) const
   { return RespBidirectional; }
 
@@ -365,7 +356,7 @@ int XC::Bidirectional::recvData(const CommParameters &cp)
     return res;
   }
 
-
+//! @brief Send object through the communicator argument.
 int XC::Bidirectional::sendSelf(CommParameters &cp)
   {
     setDbTag(cp);
@@ -375,10 +366,12 @@ int XC::Bidirectional::sendSelf(CommParameters &cp)
 
     res+= cp.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
-      std::cerr << getClassName() << "sendSelf() - failed to send data\n";
+      std::cerr << getClassName() << "::" << __FUNCTION__
+                << "; failed to send data.\n";
     return res;
   }
 
+//! @brief Receive object through the communicator argument.
 int XC::Bidirectional::recvSelf(const CommParameters &cp)
   {
     inicComm(8);
@@ -386,13 +379,15 @@ int XC::Bidirectional::recvSelf(const CommParameters &cp)
     int res= cp.receiveIdData(getDbTagData(),dataTag);
 
     if(res<0)
-      std::cerr << getClassName() << "::recvSelf - failed to receive ids.\n";
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; failed to receive ids.\n";
     else
       {
         setTag(getDbTagDataPos(0));
         res+= recvData(cp);
         if(res<0)
-          std::cerr << getClassName() << "::recvSelf - failed to receive data.\n";
+          std::cerr << getClassName() << "::" << __FUNCTION__
+		    << "; failed to receive data.\n";
       }
     return res;
   }

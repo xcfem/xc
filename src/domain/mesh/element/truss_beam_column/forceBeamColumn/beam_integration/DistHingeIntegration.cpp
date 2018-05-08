@@ -63,7 +63,7 @@ void XC::DistHingeIntegration::free_mem(void)
     beamInt= nullptr;
   }
 
-void XC::DistHingeIntegration::copia(const BeamIntegration *bi)
+void XC::DistHingeIntegration::copy(const BeamIntegration *bi)
   {
     free_mem();
     if(bi)
@@ -75,7 +75,7 @@ void XC::DistHingeIntegration::copia(const BeamIntegration *bi)
 
 XC::DistHingeIntegration::DistHingeIntegration(double lpi,double lpj,const BeamIntegration &bi)
   : PlasticLengthsBeamIntegration(BEAM_INTEGRATION_TAG_HingeMidpoint,lpi,lpj), beamInt(nullptr), parameterID(0)
-  { copia(&bi); }
+  { copy(&bi); }
 
 XC::DistHingeIntegration::DistHingeIntegration(void)
   : PlasticLengthsBeamIntegration(BEAM_INTEGRATION_TAG_HingeMidpoint), beamInt(nullptr), parameterID(0)
@@ -83,13 +83,13 @@ XC::DistHingeIntegration::DistHingeIntegration(void)
 
 XC::DistHingeIntegration::DistHingeIntegration(const DistHingeIntegration &otro)
   : PlasticLengthsBeamIntegration(otro), beamInt(nullptr), parameterID(otro.parameterID)
-  { copia(otro.beamInt); }
+  { copy(otro.beamInt); }
 
 XC::DistHingeIntegration &XC::DistHingeIntegration::operator=(const DistHingeIntegration &otro)
   {
     PlasticLengthsBeamIntegration::operator=(otro);
     parameterID= otro.parameterID;
-    copia(otro.beamInt);
+    copy(otro.beamInt);
     return *this;
   }
 

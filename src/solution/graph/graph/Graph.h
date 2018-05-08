@@ -99,7 +99,7 @@ class Graph: public MovableObject
     int nextFreeTag;
 
     void inic(const size_t &);
-    void copia(const Graph &other);
+    void copy(const Graph &other);
     int sendData(CommParameters &);
     int recvData(const CommParameters &);
 

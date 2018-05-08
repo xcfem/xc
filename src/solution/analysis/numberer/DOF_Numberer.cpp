@@ -94,8 +94,8 @@ void XC::DOF_Numberer::alloc(const std::string &str)
                 << "' unknown." << std::endl;
   }
 
-//! @brief Copia el numerador de grafos.
-void XC::DOF_Numberer::copia(const GraphNumberer &gn)
+//! @brief Copy the graph numberer.
+void XC::DOF_Numberer::copy(const GraphNumberer &gn)
   {
     free_mem();
     theGraphNumberer= gn.getCopy();
@@ -121,7 +121,7 @@ XC::DOF_Numberer::DOF_Numberer(const DOF_Numberer &otro)
   : MovableObject(otro), EntCmd(otro), theGraphNumberer(nullptr)
   {
     if(otro.theGraphNumberer)
-      copia(*otro.theGraphNumberer);
+      copy(*otro.theGraphNumberer);
   }
   
 
@@ -130,7 +130,7 @@ XC::DOF_Numberer &XC::DOF_Numberer::operator=(const DOF_Numberer &otro)
     MovableObject::operator=(otro);
     EntCmd::operator=(otro);
     if(otro.theGraphNumberer)
-      copia(*otro.theGraphNumberer);
+      copy(*otro.theGraphNumberer);
     return *this;
   }
 

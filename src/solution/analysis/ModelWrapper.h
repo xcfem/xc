@@ -63,18 +63,18 @@ class ModelWrapper: public EntCmd
 
     void free_analysis_model(void);
     void alloc_analysis_model(void);
-    void copia_analysis_model(AnalysisModel *);
+    void copy_analysis_model(AnalysisModel *);
 
     void free_constraint_handler(void);
     bool alloc_constraint_handler(const std::string &);
-    void copia_constraint_handler(const ConstraintHandler *);
+    void copy_constraint_handler(const ConstraintHandler *);
 
     bool setup_numerador(void);
     void free_numerador(void);
     bool alloc_numerador(const std::string &);
-    void copia_numerador(const DOF_Numberer *);
+    void copy_numerador(const DOF_Numberer *);
 
-    void copia(const ModelWrapper &otro);
+    void copy(const ModelWrapper &otro);
     void free_mem(void);
 
     AnalysisAggregation *getAnalysisAggregation(void);

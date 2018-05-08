@@ -35,7 +35,8 @@ void XC::EncapsulatedMaterial::free_mem(void)
     theMaterial= nullptr;
   }
 
-void XC::EncapsulatedMaterial::copia(const UniaxialMaterial *otro)
+//! brief Copy object members.
+void XC::EncapsulatedMaterial::copy(const UniaxialMaterial *otro)
   {
     free_mem();
     if(otro)
@@ -45,7 +46,7 @@ void XC::EncapsulatedMaterial::copia(const UniaxialMaterial *otro)
 XC::EncapsulatedMaterial::EncapsulatedMaterial(int tag, int classTag, UniaxialMaterial &material)
   :UniaxialMaterial(tag,classTag), theMaterial(nullptr)
   {
-    copia(&material);
+    copy(&material);
     if(!theMaterial)
       {
         std::cerr <<  "EncapsulatedMaterial::EncapsulatedMaterial -- failed to get copy of material\n";
@@ -61,12 +62,12 @@ XC::EncapsulatedMaterial::~EncapsulatedMaterial(void)
 
 XC::EncapsulatedMaterial::EncapsulatedMaterial(const EncapsulatedMaterial &otro)
   :UniaxialMaterial(otro), theMaterial(nullptr)
-  { copia(otro.theMaterial); }
+  { copy(otro.theMaterial); }
 
 XC::EncapsulatedMaterial &XC::EncapsulatedMaterial::operator=(const EncapsulatedMaterial &otro)
   {
     UniaxialMaterial::operator=(otro);
-    copia(otro.theMaterial);
+    copy(otro.theMaterial);
     return *this;
   }
 

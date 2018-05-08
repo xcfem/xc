@@ -34,8 +34,8 @@
 #include "utility/actor/actor/MovableVector.h"
 #include "utility/actor/actor/MovableID.h"
 
-//! @brief Copia la lista being passed as parameter.
-void XC::DqUniaxialMaterial::copia_lista(const DqUniaxialMaterial &otro,SectionForceDeformation *s)
+//! @brief Copy the list being passed as parameter.
+void XC::DqUniaxialMaterial::copy_list(const DqUniaxialMaterial &otro,SectionForceDeformation *s)
   {
     free_mem();
     const size_t numMats= otro.size();
@@ -46,7 +46,8 @@ void XC::DqUniaxialMaterial::copia_lista(const DqUniaxialMaterial &otro,SectionF
           {
             if(!otro[i])
               {
-	        std::cerr << "DqUniaxialMaterial::copia_lista; null uniaxial material pointer passed\n";
+	        std::cerr << getClassName() << "::" << __FUNCTION__
+			  << "; null uniaxial material pointer.\n";
                 return;
               }
             if(s)
@@ -55,7 +56,7 @@ void XC::DqUniaxialMaterial::copia_lista(const DqUniaxialMaterial &otro,SectionF
               (*this)[i]= otro[i]->getCopy();
             if(!(*this)[i])
               {
-	        std::cerr << "DqUniaxialMaterial::copia_lista; failed to copy uniaxial material\n";
+	        std::cerr << "DqUniaxialMaterial::copy_list; failed to copy uniaxial material\n";
 	        exit(-1);
               }
           }
@@ -116,19 +117,19 @@ XC::DqUniaxialMaterial::DqUniaxialMaterial(EntCmd *owner,const UniaxialMaterial 
 //! @brief Copy constructor.
 XC::DqUniaxialMaterial::DqUniaxialMaterial(const DqUniaxialMaterial &otro)
   : EntCmd(otro), MovableObject(otro), lst_ptr()
-  { copia_lista(otro); }
+  { copy_list(otro); }
 
 //! @brief Copy constructor.
 XC::DqUniaxialMaterial::DqUniaxialMaterial(const DqUniaxialMaterial &otro,SectionForceDeformation *s)
   : EntCmd(otro), MovableObject(0), lst_ptr()
-  { copia_lista(otro,s); }
+  { copy_list(otro,s); }
 
 //! @brief Assignment operator.
 XC::DqUniaxialMaterial &XC::DqUniaxialMaterial::operator=(const DqUniaxialMaterial &otro)
   {
     EntCmd::operator=(otro);
     MovableObject::operator=(otro);
-    copia_lista(otro);
+    copy_list(otro);
     return *this;
   }
 

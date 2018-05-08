@@ -166,7 +166,7 @@ XC::IntPtrWrapper::IntPtrWrapper(int *d, int size, bool cleanIt)
 //       }
 //   }
 
-//! @brief Constructor de copia.
+//! @brief Copy constructor.
 XC::IntPtrWrapper::IntPtrWrapper(const IntPtrWrapper &other)
   :sz(other.sz), data(other.data), fromFree(0)
   {

@@ -224,8 +224,7 @@ XC::Edge *XC::LineMap::createLineSequence(void)
     return tmp;
   }
 
-//! @brief Creates a new line, copia de la being passed as parameter con
-//! el nombre being passed as parameter.
+//! @brief Return a copy of the argument edge.
 XC::Edge *XC::LineMap::createCopy(const Edge *l)
   {
     Edge *retval= busca(getTag());

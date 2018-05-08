@@ -175,7 +175,7 @@ XC::Pnt *XC::PntMap::New(const size_t &tag,const Pos3d &pos)
 //! the corresponding name according to the value of the tag. The coordinates
 //! of the new point will be those obtained from the addition to the point
 //! the vector being passed as parameter.
-XC::Pnt *XC::PntMap::Copia(const Pnt *p,const Vector3d &v= Vector3d())
+XC::Pnt *XC::PntMap::Copy(const Pnt *p,const Vector3d &v= Vector3d())
   {
     Pnt *retval= busca(getTag());
     if(!p)
@@ -209,13 +209,13 @@ XC::Pnt *XC::PntMap::Copia(const Pnt *p,const Vector3d &v= Vector3d())
 
 //! @brief Create copies of the points which identifiers are being passed as
 //! parameters.
-void XC::PntMap::Copia(const std::vector<Indice> &indices)
+void XC::PntMap::Copy(const std::vector<Indice> &indices)
   {
     for(std::vector<Indice>::const_iterator i= indices.begin();i!=indices.end();i++)
       {
         Pnt *original= busca(*i);
         if(original)
-          Copia(original);
+          Copy(original);
         else
 	  std::cerr << getClassName() << "::" << __FUNCTION__
 	            << "; point: " << *i << " not found.\n";

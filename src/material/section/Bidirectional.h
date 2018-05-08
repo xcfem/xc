@@ -94,8 +94,7 @@ class Bidirectional: public SectionForceDeformation
     int recvData(const CommParameters &);
   public:
     Bidirectional(int tag, double E, double sigY, double Hiso, double Hkin);
-    Bidirectional(int tag);
-    Bidirectional(void);
+    Bidirectional(int tag= 0);
 
     int setInitialSectionDeformation(const Vector &v);
     int setTrialSectionDeformation(const Vector &v);

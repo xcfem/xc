@@ -100,22 +100,22 @@ class AnalysisAggregation: public EntCmd
     friend class FEProblem;
     void free_soln_algo(void);
     bool alloc_soln_algo(const std::string &);
-    void copia_soln_algo(SolutionAlgorithm *);
+    void copy_soln_algo(SolutionAlgorithm *);
 
     void free_integrator(void);
     bool alloc_integrator(const std::string &,const Vector &);
-    void copia_integrator(Integrator *);
+    void copy_integrator(Integrator *);
 
     void free_system_of_equations(void);
     bool alloc_system_of_equations(const std::string &,AnalysisModel *);
-    void copia_system_of_equations(SystemOfEqn *);
+    void copy_system_of_equations(SystemOfEqn *);
 
     void free_conv_test(void);
     bool alloc_conv_test(const std::string &);
-    void copia_conv_test(ConvergenceTest *);
+    void copy_conv_test(ConvergenceTest *);
 
     void free_mem(void);
-    void copia(const AnalysisAggregation &);
+    void copy(const AnalysisAggregation &);
 
   public:
     AnalysisAggregation(Analysis *a= nullptr,ModelWrapper *b= nullptr);

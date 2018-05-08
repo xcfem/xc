@@ -88,7 +88,7 @@ class SetEntities: public PreprocessorContainer, public MovableObject
 
     friend class Set;
     void clearAll(void);
-    void copia_listas(const SetEntities &);
+    void copy_lists(const SetEntities &);
     SetEntities create_copy(const std::string &,const Vector3d &v);
     void extend_lists(const SetEntities &);
     void substract_lists(const SetEntities &);

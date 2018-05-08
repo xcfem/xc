@@ -77,7 +77,7 @@ XC::ReinfBar::ReinfBar(const double &barArea,const double &barDiameter, Material
   : DiscretBase(mat), diameter(barDiameter), area(barArea), posit(position){}
 
 
-//! @brief Constructor de copia.
+//! @brief Copy constructor.
 XC::ReinfBar *XC::ReinfBar::getCopy(void) const
   { return new ReinfBar(*this); }
 

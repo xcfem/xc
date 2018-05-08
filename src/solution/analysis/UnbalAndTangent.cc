@@ -66,7 +66,8 @@ void XC::UnbalAndTangent::alloc(void)
       }             
   }
 
-void XC::UnbalAndTangent::copia(const UnbalAndTangent &otro)
+//! @brief Copy data from the argeument.
+void XC::UnbalAndTangent::copy(const UnbalAndTangent &otro)
   {
     // create matrices and vectors for each object instance
     if(free_mem())
@@ -75,9 +76,9 @@ void XC::UnbalAndTangent::copia(const UnbalAndTangent &otro)
         if(otro.theTangent) theTangent=new Matrix(*otro.theTangent);
         if(theResidual == 0 || theResidual->Size() ==0 ||  theTangent ==0 || theTangent->noRows() ==0)
           {       
-            std::cerr << "UnbalAndTangent::copia() ";
-            std::cerr << " ran out of memory for vector/Matrix of size :";
-            std::cerr << nDOF << std::endl;
+            std::cerr << "UnbalAndTangent::" << __FUNCTION__
+		      << "; ran out of memory for vector/Matrix of size :"
+		      << nDOF << std::endl;
             exit(-1);
           }
       }
@@ -99,7 +100,7 @@ XC::UnbalAndTangent::UnbalAndTangent(const UnbalAndTangent &otro)
   {
     free_mem();
     nDOF= otro.nDOF;
-    copia(otro);
+    copy(otro);
   }
 
 //! @brief Assignment operator.
@@ -108,7 +109,7 @@ XC::UnbalAndTangent &XC::UnbalAndTangent::operator=(const UnbalAndTangent &otro)
     free_mem();
     unbalAndTangentArray= otro.unbalAndTangentArray;
     nDOF= otro.nDOF;
-    copia(otro);
+    copy(otro);
     return *this;
   }
 

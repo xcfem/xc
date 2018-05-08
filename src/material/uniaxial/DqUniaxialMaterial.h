@@ -52,7 +52,7 @@ class DqUniaxialMaterial: public EntCmd, public MovableObject, public std::deque
     typedef lst_ptr::const_reference const_reference;
     typedef lst_ptr::size_type size_type;
   protected:
-    void copia_lista(const DqUniaxialMaterial &,SectionForceDeformation *s= nullptr);
+    void copy_list(const DqUniaxialMaterial &,SectionForceDeformation *s= nullptr);
     int sendData(CommParameters &);  
     int recvData(const CommParameters &);
 

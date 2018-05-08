@@ -101,7 +101,7 @@ bool XC::ProcSolu::alloc_analysis(const std::string &nmb,const std::string &anal
     return (theAnalysis!=nullptr);
   }
 
-void XC::ProcSolu::copia_analysis(Analysis *ptr)
+void XC::ProcSolu::copy_analysis(Analysis *ptr)
   {
     if(ptr)
       {
@@ -110,7 +110,7 @@ void XC::ProcSolu::copia_analysis(Analysis *ptr)
         theAnalysis->set_owner(this);
       }
     else
-     std::cerr << "ProcSolu::copia_analysis; pointer to analysis is null." << std::endl;
+     std::cerr << "ProcSolu::copy_analysis; pointer to analysis is null." << std::endl;
   }
 
 //! @brief Defines type of analysis (static, dynamic,...)
@@ -133,14 +133,14 @@ XC::ProcSolu::ProcSolu(FEProblem *owr)
 //! @brief Copy constructor.
 XC::ProcSolu::ProcSolu(const ProcSolu &otro)
   : EntCmd(otro), solu_control(otro.solu_control), theAnalysis(nullptr)
-  { copia_analysis(otro.theAnalysis); }
+  { copy_analysis(otro.theAnalysis); }
 
 //! @brief Assignment operator.
 XC::ProcSolu &XC::ProcSolu::operator=(const ProcSolu &otro)
   {
     EntCmd::operator=(otro);
     solu_control= otro.solu_control;
-    copia_analysis(otro.theAnalysis);
+    copy_analysis(otro.theAnalysis);
     return *this;
   }
 

@@ -44,7 +44,7 @@
 XC::NodePtrs::NodePtrs(Element *owr,const size_t &sz)
   : EntCmd(owr), vector_ptr_nodes(sz,nullptr) {}
 
-//! @brief Constructor de copia.
+//! @brief Copy constructor.
 XC::NodePtrs::NodePtrs(const NodePtrs &otro)
   : EntCmd(otro), vector_ptr_nodes(otro.size(),nullptr) 
   {

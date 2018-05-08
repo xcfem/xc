@@ -67,8 +67,8 @@ class PntMap: public EntityMap<Pnt>
     Pnt *New(const Pos3d &);
     Pnt *New(const size_t &,const Pos3d &);
 
-    Pnt *Copia(const Pnt *,const Vector3d &v);
-    void Copia(const std::vector<PntMap::Indice> &);
+    Pnt *Copy(const Pnt *,const Vector3d &v);
+    void Copy(const std::vector<PntMap::Indice> &);
     void Transforma(const TrfGeom &trf,const std::vector<PntMap::Indice> &);
     double Dist(const Indice &i,const Indice &j) const;
 

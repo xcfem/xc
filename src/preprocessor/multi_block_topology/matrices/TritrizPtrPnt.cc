@@ -204,7 +204,7 @@ std::deque<size_t> XC::TritrizPtrPnt::copyPoints(const RangoTritriz &rango,const
             const Pnt *p= operator()(i,j,k);
             if(p)
               {
-                Pnt *newPt= mbt->getPoints().Copia(p,vectorOffset);
+                Pnt *newPt= mbt->getPoints().Copy(p,vectorOffset);
                 (*this)(i+offsetIndices[0],j+offsetIndices[1],k+offsetIndices[2])= newPt;
                 retval.push_back(newPt->GetTag());
               }
@@ -340,7 +340,7 @@ XC::MatrizPtrPnt XC::TritrizPtrPnt::getCellPoints(const size_t &i,const size_t &
 //             const Pnt *p= operator()(i,j,k);
 //             if(p)
 //               {
-//                 Pnt *newPt= mbt->getPoints().Copia(p,vectorOffset);
+//                 Pnt *newPt= mbt->getPoints().Copy(p,vectorOffset);
 //                 (*this)(i+offsetIndices[0],j+offsetIndices[1],k+offsetIndices[2])= newPt;
 //                 retval.push_back(newPt->GetTag());
 //               }

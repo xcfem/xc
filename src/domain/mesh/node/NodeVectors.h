@@ -58,7 +58,7 @@ class NodeVectors: public EntCmd, public MovableObject
     int recvData(const CommParameters &);
     int createData(const size_t &);
     void free_mem(void);
-    void copia(const NodeVectors &);
+    void copy(const NodeVectors &);
   public:
     // constructors
     NodeVectors(const size_t &nv= 2);

@@ -97,7 +97,7 @@ XC::FDdecoupledElastic3D::FDdecoupledElastic3D(int tag)
   :FiniteDeformationElastic3D(tag, ND_TAG_FDdecoupledElastic3D, 0.0), W(nullptr)
   {}
 
-//! @brief Constructor de copia.
+//! @brief Copy constructor.
 XC::FDdecoupledElastic3D::FDdecoupledElastic3D(const FDdecoupledElastic3D &fde3d)
   :FiniteDeformationElastic3D(fde3d), W(nullptr)
   {

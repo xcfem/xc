@@ -42,7 +42,7 @@ void XC::NodeVectors::free_mem(void)
     trialData= nullptr;
   }
 
-void XC::NodeVectors::copia(const NodeVectors &otro)
+void XC::NodeVectors::copy(const NodeVectors &otro)
   {
     free_mem();
     numVectors= otro.numVectors;
@@ -65,16 +65,16 @@ XC::NodeVectors::NodeVectors(const size_t &nv)
   :EntCmd(),MovableObject(NOD_TAG_NodeVectors), numVectors(nv), commitData(nullptr),trialData(nullptr), values() {}
 
 
-//! @brief Constructor de copia.
+//! @brief Copy constructor.
 XC::NodeVectors::NodeVectors(const NodeVectors &otro)
   : EntCmd(otro),MovableObject(NOD_TAG_NodeVectors), numVectors(otro.numVectors), commitData(nullptr), trialData(nullptr), values()
-  { copia(otro); }
+  { copy(otro); }
 
 XC::NodeVectors &XC::NodeVectors::operator=(const NodeVectors &otro)
   {
     EntCmd::operator=(otro);
     MovableObject::operator=(otro);
-    copia(otro);
+    copy(otro);
     return *this;
   }
 

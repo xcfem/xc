@@ -52,7 +52,7 @@ XC::SetEntities::SetEntities(Preprocessor *md)
 XC::SetEntities::SetEntities(const SetEntities &other)
   : PreprocessorContainer(other), MovableObject(other)
   {
-    copia_listas(other);
+    copy_lists(other);
   }
 
 //! @brief Assignment operator.
@@ -60,14 +60,14 @@ XC::SetEntities &XC::SetEntities::operator=(const SetEntities &other)
   {
     PreprocessorContainer::operator=(other);
     MovableObject::operator=(other);
-    copia_listas(other);
+    copy_lists(other);
     return *this;
   }
 
 //! @brief Copy the object lists of the set s.
 //!
 //! Append to this object the lists of objects from the argument.
-void XC::SetEntities::copia_listas(const SetEntities &other)
+void XC::SetEntities::copy_lists(const SetEntities &other)
   {
     points= other.points;
     points.set_owner(this);
@@ -298,7 +298,7 @@ XC::SetEntities XC::SetEntities::create_copy(const std::string &name,const Vecto
 	  {
 	    const std::string oldName= (*i)->getName();
 	    const std::string new_name= name+oldName;
-	    Pnt *new_point= preprocessor->getMultiBlockTopology().getPoints().Copia(*i,v);
+	    Pnt *new_point= preprocessor->getMultiBlockTopology().getPoints().Copy(*i,v);
 	    new_point->BorraPtrNodElem();
 	    retval.points.push_back(new_point);
 	    new_points_names[oldName]= new_name;

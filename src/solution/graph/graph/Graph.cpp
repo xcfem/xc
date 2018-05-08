@@ -65,7 +65,7 @@
 void XC::Graph::inic(const size_t &sz)
   { myVertices= ArrayOfTaggedObjects(nullptr,sz,"vertice"); }
 
-void XC::Graph::copia(const Graph &otro)
+void XC::Graph::copy(const Graph &otro)
   {
     const size_t numVertex= otro.getNumVertex();
     if(numVertex>0)
@@ -121,13 +121,13 @@ XC::Graph::Graph(int numVertices)
 //! @brief Copy constructor.
 XC::Graph::Graph(const Graph &other) 
   :MovableObject(other), myVertices(nullptr,32,"vertice"), theVertexIter(&myVertices), numEdge(0), nextFreeTag(START_VERTEX_NUM)
-  { copia(other); }
+  { copy(other); }
 
 //! @brief Assignment operator.
 XC::Graph &XC::Graph::operator=(const Graph &other) 
   {
     MovableObject::operator=(other);
-    copia(other);
+    copy(other);
     nextFreeTag= other.nextFreeTag;
     return *this;
   }

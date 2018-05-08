@@ -130,233 +130,244 @@ XC::AlgorithmIncrements::~AlgorithmIncrements(void)
     
 int XC::AlgorithmIncrements::record(int cTag, double timeStamp)
   {
-  LinearSOE *theSOE = theAlgo->getLinearSOEPtr();
-  if(theSOE == 0)
-    return 0;
-
-
-  const Vector &B = theSOE->getB();
-  const Vector &X = theSOE->getX();
-
-  if (fileName != 0) {
-    if (cTag == 0) {
-
-      if (theFile)
-	theFile.close();
-
-      numRecord = 0;
-
-      theFile.open(fileName, ios::out);
-      if (!theFile) {
-	std::cerr << "WARNING - XC::AlgorithmIncrements::record()";
-	std::cerr << " - could not open file " << fileName << std::endl;
-      } 
-    }
-    if (theFile) {
-      numRecord ++;
-      int i;
-      for (i=0; X.Size(); i++) theFile << X(i);
-      for (i=0; X.Size(); i++) theFile << B(i);
-    }
-  }
-
-  if (displayRecord == true)
-    return this->plotData(X, B);
-
-  return 0;
-}
-
-int XC::AlgorithmIncrements::playback(int cTag)
-{
-
-  if (fileName != 0) {
-
     LinearSOE *theSOE = theAlgo->getLinearSOEPtr();
-    if (theSOE == 0)
+    if(theSOE == 0)
       return 0;
 
-    Vector X(theSOE->getNumEqn());
-    Vector B(theSOE->getNumEqn());
 
-    if (theFile) {
-      theFile.close();
-    }
+    const Vector &B = theSOE->getB();
+    const Vector &X = theSOE->getX();
 
-    ifstream aFile;
-    aFile.open(fileName, ios::in);
-    if (!aFile) {
-      std::cerr << "WARNING - XC::AlgorithmIncrements::playback()";
-      std::cerr << " - could not open file " << fileName << std::endl;
-    }
-    for (int i = 0; i<numRecord; i++) {
-      int ii;
-      for (ii=0; X.Size(); ii++) theFile << X(ii);
-      for (ii=0; X.Size(); ii++) theFile << B(ii);
+    if (fileName != 0)
+      {
+	if (cTag == 0)
+	  {
+	    if(theFile)
+	      theFile.close();
+	    numRecord = 0;
 
-      this->plotData(X,B);
-      //      char c = getchar();
-    }
+	    theFile.open(fileName, ios::out);
+	    if(!theFile)
+	      {
+		std::cerr << getClassName() << "::" << __FUNCTION__
+			  << "; could not open file " << fileName << std::endl;
+	      } 
+	  }
+	if(theFile)
+	  {
+	    numRecord ++;
+	    int i;
+	    for (i=0; X.Size(); i++) theFile << X(i);
+	    for (i=0; X.Size(); i++) theFile << B(i);
+	  }
+      }
+
+    if (displayRecord == true)
+      return this->plotData(X, B);
+
+    return 0;
   }
 
-  return 0;
-}
+int XC::AlgorithmIncrements::playback(int cTag)
+  {
+
+    if(fileName != 0)
+      {
+	LinearSOE *theSOE = theAlgo->getLinearSOEPtr();
+	if(theSOE == nullptr)
+	  return 0;
+
+	Vector X(theSOE->getNumEqn());
+	Vector B(theSOE->getNumEqn());
+
+	if(theFile)
+	  theFile.close();
+
+	ifstream aFile;
+	aFile.open(fileName, ios::in);
+	if(!aFile)
+	  {
+	    std::cerr << getClassName() << "::" << __FUNCTION__
+		      << "; WARNING - could not open file "
+		      << fileName << std::endl;
+	  }
+	for(int i = 0; i<numRecord; i++)
+	  {
+	    int ii;
+	    for (ii=0; X.Size(); ii++) theFile << X(ii);
+	    for (ii=0; X.Size(); ii++) theFile << B(ii);
+
+	    this->plotData(X,B);
+	    //      char c = getchar();
+	  }
+      }
+    return 0;
+  }
 
 int XC::AlgorithmIncrements::restart(void)
   { return 0; }
 
 int XC::AlgorithmIncrements::plotData(const Vector &X, const Vector &B)
-{
+  {
 
-  int size = X.Size();
-  if (size < 2)
-    return 0;
+    int size = X.Size();
+    if (size < 2)
+      return 0;
 
-  /*
-   * first pass plot the unbalance (B in the SOE):
-   *             1) set the port window to be upper half
-   *             2) determine bounds
-   *             3) draw axis and bounds values
-   *             4) draw points
-   */
+    /*
+     * first pass plot the unbalance (B in the SOE):
+     *             1) set the port window to be upper half
+     *             2) determine bounds
+     *             3) draw axis and bounds values
+     *             4) draw points
+     */
 
-//   theRenderer->clearImage();
-//   theRenderer->setPortWindow(-1.0, 1.0, 0.0, 1.0);  // use the whole window
+    //theRenderer->clearImage();
+    //theRenderer->setPortWindow(-1.0, 1.0, 0.0, 1.0);  // use the whole window
 
-   double xMin, xMax, yMin, yMax;
-   xMin = 0.0;
-   xMax = B.Size();
-   yMin = 0.0;
-   yMax = 0.0;
-	int i;
+    double xMin, xMax, yMin, yMax;
+    xMin = 0.0;
+    xMax = B.Size();
+    yMin = 0.0;
+    yMax = 0.0;
 
-   for (i=0; i<size; i++) {
-     double value = B(i);
-     if (value < yMin) yMin = value;
-     if (value > yMax) yMax = value;	  
-   } 
+    for(int i=0; i<size; i++)
+      {
+	const double value= B(i);
+	if (value < yMin) yMin = value;
+	if (value > yMax) yMax = value;	  
+      } 
 
-   if (-yMin > yMax) 
-     yMax = -yMin;
-   else
-     yMin = -yMax;
+    if (-yMin > yMax) 
+      yMax = -yMin;
+    else
+      yMin = -yMax;
 
 
-   // set the window bounds NOTE small border around the edges
-   //double xBnd = (xMax-xMin)/10;
-   //double yBnd = (yMax-yMin)/10;
+    // set the window bounds NOTE small border around the edges
+    //double xBnd = (xMax-xMin)/10;
+    //double yBnd = (yMax-yMin)/10;
     
-//    theRenderer->setViewWindow(xMin-xBnd,xMax+xBnd,yMin-yBnd,yMax+yBnd);
-//    theRenderer->startImage();
+    //theRenderer->setViewWindow(xMin-xBnd,xMax+xBnd,yMin-yBnd,yMax+yBnd);
+    //theRenderer->startImage();
 
-   static Vector pt1(3); 
-   static Vector pt2(3);
-   pt1(2) = 0.0;  pt2(2) = 0.0;
+    static Vector pt1(3); 
+    static Vector pt2(3);
+    pt1(2) = 0.0;  pt2(2) = 0.0;
 
-   // draw the x axis
-   pt1(0) = xMin; pt2(0) = xMax;
-   pt1(1) = 0.0;  pt2(1) = 0.0;
-   //   theRenderer->drawLine(pt1, pt2, 0.0, 0.0);    
+    // draw the x axis
+    pt1(0) = xMin; pt2(0) = xMax;
+    pt1(1) = 0.0;  pt2(1) = 0.0;
+    //   theRenderer->drawLine(pt1, pt2, 0.0, 0.0);    
 
-   // draw the y axis
-   pt1(0) = 0.0; pt2(0) = 0.0;
-   pt1(1) = yMin;  pt2(1) = yMax;
-   //theRenderer->drawLine(pt1, pt2, 0.0, 0.0);        
-
-
-   static char theText[20];
-   if (yMin != 0.0 && -100 *yMin > yMax) {
-     sprintf(theText,"%.2e",yMin);
-     //theRenderer->drawText(pt1, theText, strlen(theText));
-   }
-   if (yMax != 0.0) {
-     sprintf(theText,"%.2e",yMax);
-     //theRenderer->drawText(pt2, theText, strlen(theText));
-   }
-
-   pt1(0) = 1;
-   pt1(1) = B(0);
-
-   for (i=1; i<size; i++) {
-     pt2(0) = i+1; 
-     pt2(1) = B(i);
-     //theRenderer->drawLine(pt1, pt2, 1.0, 1.0);
-     pt1(0) = pt2(0);
-     pt1(1) = pt2(1);
-   }
-
-   //theRenderer->doneImage();
-
-  /*
-   * first pass plot the unbalance (B in the SOE):
-   *             1) set the port window to be upper half
-   *             2) determine bounds
-   *             3) draw axis and bounds values
-   *             4) draw points
-   */
-
-   //  theRenderer->clearImage();
-   //theRenderer->setPortWindow(-1.0, 1.0, -1.0, 0.0);  // use the whole window
-
-   xMin = 0.0;
-   xMax = X.Size();
-   yMin = 0.0;
-   yMax = 0.0;
-
-   for (i=0; i<size; i++) {
-     double value = X(i);
-     if (value < yMin) yMin = value;
-     if (value > yMax) yMax = value;	  
-   } 
-
-   if (-yMin > yMax) 
-     yMax = -yMin;
-   else
-     yMin = -yMax;
+    // draw the y axis
+    pt1(0) = 0.0; pt2(0) = 0.0;
+    pt1(1) = yMin;  pt2(1) = yMax;
+    //theRenderer->drawLine(pt1, pt2, 0.0, 0.0);        
 
 
-   // set the window bounds NOTE small border around the edges
-   //const double xBnd = (xMax-xMin)/10;
-   //const double yBnd = (yMax-yMin)/10;
-    
-//    theRenderer->setViewWindow(xMin-xBnd,xMax+xBnd,yMin-yBnd,yMax+yBnd);
-//    theRenderer->startImage();
+    static char theText[20];
+    if(yMin != 0.0 && -100 *yMin > yMax)
+      {
+	sprintf(theText,"%.2e",yMin);
+	//theRenderer->drawText(pt1, theText, strlen(theText));
+      }
+    if(yMax != 0.0)
+      {
+	sprintf(theText,"%.2e",yMax);
+	//theRenderer->drawText(pt2, theText, strlen(theText));
+      }
 
-   pt1(2) = 0.0;  pt2(2) = 0.0;
+    pt1(0) = 1;
+    pt1(1) = B(0);
 
-   // draw the x axis
-   pt1(0) = xMin; pt2(0) = xMax;
-   pt1(1) = 0.0;  pt2(1) = 0.0;
-   //theRenderer->drawLine(pt1, pt2, 0.0, 0.0);    
+    for(int i=1; i<size; i++)
+      {
+	pt2(0) = i+1; 
+	pt2(1) = B(i);
+	//theRenderer->drawLine(pt1, pt2, 1.0, 1.0);
+	pt1(0) = pt2(0);
+	pt1(1) = pt2(1);
+      }
 
-   // draw the y axis
-   pt1(0) = 0.0; pt2(0) = 0.0;
-   pt1(1) = yMin;  pt2(1) = yMax;
-   //theRenderer->drawLine(pt1, pt2, 0.0, 0.0);        
+    //theRenderer->doneImage();
 
-   if (yMin != 0.0 && -100 *yMin > yMax) {
-     sprintf(theText,"%.2e",yMin);
-     //theRenderer->drawText(pt1, theText, strlen(theText));
-   }
-   if (yMax != 0.0) {
-     sprintf(theText,"%.2e",yMax);
-     //theRenderer->drawText(pt2, theText, strlen(theText));
-   }
+    /*
+     * first pass plot the unbalance (B in the SOE):
+     *             1) set the port window to be upper half
+     *             2) determine bounds
+     *             3) draw axis and bounds values
+     *             4) draw points
+     */
 
-   pt1(0) = 1;
-   pt1(1) = X(0);
+    //  theRenderer->clearImage();
+    //theRenderer->setPortWindow(-1.0, 1.0, -1.0, 0.0);  // use the whole window
 
-   for (i=1; i<size; i++) {
-     pt2(0) = i+1; 
-     pt2(1) = X(i);
-     //theRenderer->drawLine(pt1, pt2, 1.0, 1.0);
-     pt1(0) = pt2(0);
-     pt1(1) = pt2(1);
-   }
+    xMin = 0.0;
+    xMax = X.Size();
+    yMin = 0.0;
+    yMax = 0.0;
 
-   //theRenderer->doneImage();
+    for(int i=0; i<size; i++)
+      {
+	double value = X(i);
+	if(value < yMin) yMin = value;
+	if(value > yMax) yMax = value;	  
+      } 
+
+    if(-yMin > yMax) 
+      yMax = -yMin;
+    else
+      yMin = -yMax;
+
+
+    // set the window bounds NOTE small border around the edges
+    //const double xBnd = (xMax-xMin)/10;
+    //const double yBnd = (yMax-yMin)/10;
+
+    //theRenderer->setViewWindow(xMin-xBnd,xMax+xBnd,yMin-yBnd,yMax+yBnd);
+    //theRenderer->startImage();
+
+    pt1(2) = 0.0;  pt2(2) = 0.0;
+
+    // draw the x axis
+    pt1(0) = xMin; pt2(0) = xMax;
+    pt1(1) = 0.0;  pt2(1) = 0.0;
+    //theRenderer->drawLine(pt1, pt2, 0.0, 0.0);    
+
+    // draw the y axis
+    pt1(0) = 0.0; pt2(0) = 0.0;
+    pt1(1) = yMin;  pt2(1) = yMax;
+    //theRenderer->drawLine(pt1, pt2, 0.0, 0.0);        
+
+    if(yMin != 0.0 && -100 *yMin > yMax)
+      {
+	sprintf(theText,"%.2e",yMin);
+	//theRenderer->drawText(pt1, theText, strlen(theText));
+      }
+
+    if(yMax != 0.0)
+      {
+	sprintf(theText,"%.2e",yMax);
+	//theRenderer->drawText(pt2, theText, strlen(theText));
+      }
+
+    pt1(0) = 1;
+    pt1(1) = X(0);
+
+    for(int i=1; i<size; i++)
+      {
+	pt2(0) = i+1; 
+	pt2(1) = X(i);
+	//theRenderer->drawLine(pt1, pt2, 1.0, 1.0);
+	pt1(0) = pt2(0);
+	pt1(1) = pt2(1);
+      }
+
+    //theRenderer->doneImage();
    
     return 0;
-}
+  }
 
 
 

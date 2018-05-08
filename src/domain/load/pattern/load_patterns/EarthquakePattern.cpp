@@ -66,7 +66,7 @@
 
 #include "utility/actor/actor/ArrayCommMetaData.h"
 
-void XC::EarthquakePattern::copia(const Vector *a,const Vector *b)
+void XC::EarthquakePattern::copy(const Vector *a,const Vector *b)
   {
     if(a)
       uDotG= Vector(*a);

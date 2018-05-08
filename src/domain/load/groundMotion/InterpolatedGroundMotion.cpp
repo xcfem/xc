@@ -73,7 +73,7 @@ void XC::InterpolatedGroundMotion::free_mem(void)
       }
   }
 
-void XC::InterpolatedGroundMotion::copia(const Vector *v)
+void XC::InterpolatedGroundMotion::copy(const Vector *v)
   {
     free_mem();
     if(v)
@@ -86,21 +86,21 @@ XC::InterpolatedGroundMotion::InterpolatedGroundMotion()
 
 XC::InterpolatedGroundMotion::InterpolatedGroundMotion(const InterpolatedGroundMotion &otro)
   :GroundMotion(otro),theMotions(otro.theMotions), factors(nullptr), deltaPeak(otro.deltaPeak)
-  { copia(otro.factors); }
+  { copy(otro.factors); }
 
 XC::InterpolatedGroundMotion::InterpolatedGroundMotion(const vector_motions &groundMotions, const Vector &fact, double dT)
 :GroundMotion(GROUND_MOTION_TAG_InterpolatedGroundMotion),
  theMotions(groundMotions), factors(nullptr), deltaPeak(dT)
   {
     assert(size_t(fact.Size()) == groundMotions.size());
-    copia(&fact);
+    copy(&fact);
   }
 
 XC::InterpolatedGroundMotion &XC::InterpolatedGroundMotion::operator=(const InterpolatedGroundMotion &otro)
   {
     GroundMotion::operator=(otro);
     theMotions= otro.theMotions;
-    copia(otro.factors);
+    copy(otro.factors);
     deltaPeak= otro.deltaPeak;
     return *this;
   }

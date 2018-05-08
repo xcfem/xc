@@ -110,7 +110,7 @@ XC::ArrayOfTaggedObjects::ArrayOfTaggedObjects(EntCmd *owr,int size,const std::s
 //! @brief Copy constructor.
 XC::ArrayOfTaggedObjects::ArrayOfTaggedObjects(const ArrayOfTaggedObjects &otro)
   : TaggedObjectStorage(otro), numComponents(otro.numComponents),sizeComponentArray(otro.sizeComponentArray), positionLastEntry(otro.positionLastEntry), positionLastNoFitEntry(otro.positionLastNoFitEntry),fitFlag(otro.fitFlag), theComponents(otro.theComponents.size(),nullptr), myIter(*this)
-  { copia(otro); }
+  { copy(otro); }
 
 //! @brief Assignment operator.
 XC::ArrayOfTaggedObjects &XC::ArrayOfTaggedObjects::operator=(const ArrayOfTaggedObjects &otro)
@@ -123,7 +123,7 @@ XC::ArrayOfTaggedObjects &XC::ArrayOfTaggedObjects::operator=(const ArrayOfTagge
     fitFlag= otro.fitFlag;
     clearComponents();
     theComponents= tagged_vector(otro.theComponents.size(),nullptr);
-    copia(otro);
+    copy(otro);
     return *this;
   }
 

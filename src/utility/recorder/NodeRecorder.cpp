@@ -93,8 +93,9 @@ void XC::NodeRecorder::setup_dofs(const ID &dofs)
               }
             else
               {
-                std::cerr << "XC::NodeRecorder::NodeRecorder - invalid dof  " << dof;
-                std::cerr << " will be ignored\n";
+                std::cerr << getClassName() << "::" << __FUNCTION__
+			  << "; invalid dof  " << dof
+			  << " will be ignored\n";
               }
           }
       }
@@ -475,7 +476,8 @@ int XC::NodeRecorder::sendSelf(CommParameters &cp)
   {
     int res= 0;
     if(cp.isDatastore() == 1)
-      std::cerr << "NodeRecorder::sendSelf() - does not send data to a datastore\n";
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; does not send data to a datastore\n";
     else
       {
         setDbTag(cp);
@@ -484,8 +486,8 @@ int XC::NodeRecorder::sendSelf(CommParameters &cp)
         res= sendData(cp);
         if(cp.sendIdData(getDbTagData(),dataTag)< 0)
           {
-            std::cerr << "NodeRecorder::sendSelf() "
-                      << "- failed to send data\n";
+            std::cerr << getClassName() << "::" << __FUNCTION__
+		      << "; failed to send data\n";
             return -1;
           }
       }
@@ -498,7 +500,8 @@ int XC::NodeRecorder::recvSelf(const CommParameters &cp)
   {
     int res= 0;
     if(cp.isDatastore() == 1)
-      std::cerr << "ElementRecorderBase::recvSelf() - does not recv data to a datastore\n";
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; does not recv data to a datastore\n";
     else
       {
         inicComm(14);
@@ -506,7 +509,8 @@ int XC::NodeRecorder::recvSelf(const CommParameters &cp)
         res= cp.receiveIdData(getDbTagData(),dataTag);
         if(res < 0)
           {
-            std::cerr << "NodeRecorder::recvSelf() - failed to recv data\n";
+            std::cerr << getClassName() << "::" << __FUNCTION__
+		      << "; failed to recv data\n";
             return res;
           }
         res= receiveData(cp);
@@ -520,7 +524,8 @@ int XC::NodeRecorder::initialize(void)
   {
     if(theDofs == 0 || theNodalTags == 0 || theDomain == 0)
       {
-        std::cerr << "NodeRecorder::initialize() - either nodes, dofs or domain has not been set\n";
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; either nodes, dofs or domain has not been set\n";
         return -1;
       }
 

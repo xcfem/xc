@@ -145,7 +145,7 @@ void XC::MapSet::cierra_set(const std::string &nmb)
       }
   }
 
-//! @bref Creates a structured set copia del que se le being passed as parameter.
+//! @bref Returns a copy of the argument.
 XC::SetEstruct *XC::MapSet::create_set_estruct(const SetEstruct &set_estruct)
   {
     const std::string nmb= set_estruct.getName();

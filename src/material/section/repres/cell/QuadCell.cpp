@@ -63,7 +63,7 @@ XC::QuadCell::QuadCell(void)
 XC::QuadCell::QuadCell(const XC::Matrix &vertexCoords)
   : Cell(vertexCoords) {}
 
-//! @brief Constructor de copia.
+//! @brief Copy constructor.
 XC::Cell *XC::QuadCell::getCopy(void) const
   { return new QuadCell(*this); }
 

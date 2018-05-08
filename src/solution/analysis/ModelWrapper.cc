@@ -60,7 +60,7 @@ void XC::ModelWrapper::alloc_analysis_model(void)
     theModel= new AnalysisModel(this);
   }
 
-void XC::ModelWrapper::copia_analysis_model(AnalysisModel *ptr)
+void XC::ModelWrapper::copy_analysis_model(AnalysisModel *ptr)
   {
     if(ptr)
       {
@@ -69,7 +69,7 @@ void XC::ModelWrapper::copia_analysis_model(AnalysisModel *ptr)
         theModel->set_owner(this);
       }
     else
-      std::cerr << "ModelWrapper::copia_analysis_model; null pointer to analysis model." << std::endl;
+      std::cerr << "ModelWrapper::copy_analysis_model; null pointer to analysis model." << std::endl;
   }
 
 void XC::ModelWrapper::free_constraint_handler(void)
@@ -103,7 +103,7 @@ bool XC::ModelWrapper::alloc_constraint_handler(const std::string &nmb)
     return (theHandler!=nullptr);
   }
 
-void XC::ModelWrapper::copia_constraint_handler(const ConstraintHandler *ptr)
+void XC::ModelWrapper::copy_constraint_handler(const ConstraintHandler *ptr)
   {
     if(ptr)
       {
@@ -112,7 +112,7 @@ void XC::ModelWrapper::copia_constraint_handler(const ConstraintHandler *ptr)
         theHandler->set_owner(this);
       }
     else
-      std::cerr << "ModelWrapper::copia_constraint_handler; null pointer to constraint handler." << std::endl;
+      std::cerr << "ModelWrapper::copy_constraint_handler; null pointer to constraint handler." << std::endl;
   }
 
 //! @brief Create a constraints handler of the type passed as parameter.
@@ -163,7 +163,7 @@ bool XC::ModelWrapper::alloc_numerador(const std::string &nmb)
     return setup_numerador();
   }
 
-void XC::ModelWrapper::copia_numerador(const DOF_Numberer *dn)
+void XC::ModelWrapper::copy_numerador(const DOF_Numberer *dn)
   {
     if(dn)
       {
@@ -173,7 +173,7 @@ void XC::ModelWrapper::copia_numerador(const DOF_Numberer *dn)
         setup_numerador();
       }
     else
-     std::cerr << "ModelWrapper::copia_numerador; null pointer to DOF freedom." << std::endl;
+     std::cerr << "ModelWrapper::copy_numerador; null pointer to DOF freedom." << std::endl;
   }
 
 //! @brief Creates a numberer of the type passed as parameter.
@@ -191,11 +191,11 @@ void XC::ModelWrapper::free_mem(void)
     free_numerador();
   }
 
-void XC::ModelWrapper::copia(const ModelWrapper &otro)
+void XC::ModelWrapper::copy(const ModelWrapper &otro)
   {
-    if(otro.theModel) copia_analysis_model(otro.theModel);
-    if(otro.theHandler) copia_constraint_handler(otro.theHandler);
-    if(otro.theDOFNumberer) copia_numerador(otro.theDOFNumberer);
+    if(otro.theModel) copy_analysis_model(otro.theModel);
+    if(otro.theHandler) copy_constraint_handler(otro.theHandler);
+    if(otro.theDOFNumberer) copy_numerador(otro.theDOFNumberer);
   }
 
 XC::AnalysisAggregation *XC::ModelWrapper::getAnalysisAggregation(void)
@@ -213,13 +213,13 @@ XC::ModelWrapper::ModelWrapper(AnalysisAggregation *owr)
 //! @brief Copy constructor.
 XC::ModelWrapper::ModelWrapper(const ModelWrapper &otro)
   : EntCmd(otro), theModel(nullptr), theHandler(nullptr),theDOFNumberer(nullptr)
-  { copia(otro); }
+  { copy(otro); }
 
 //! @brief Assignment operator.
 XC::ModelWrapper &XC::ModelWrapper::operator=(const ModelWrapper &otro)
   {
     EntCmd::operator=(otro);
-    copia(otro);
+    copy(otro);
     return *this;
   }
 
@@ -283,7 +283,7 @@ void XC::ModelWrapper::brokeAnalysisModel(const CommParameters &cp,const ID &dat
 //! @brief Set the numberer to be used in the analysis.
 int XC::ModelWrapper::setNumberer(DOF_Numberer &theNewNumberer) 
   {
-    copia_numerador(&theNewNumberer);
+    copy_numerador(&theNewNumberer);
     return 0;
   }
 
