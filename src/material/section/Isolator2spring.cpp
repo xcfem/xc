@@ -123,7 +123,7 @@ const XC::Matrix &XC::Isolator2spring::getInitialTangent(void) const
     return ks;
   }
 
-//! @brief Return the resultante de tensiones.
+//! @brief Return the resultant of stresses.
 const XC::Vector &XC::Isolator2spring::getStressResultant(void) const
   {
     double Fy;

@@ -660,7 +660,7 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
     '''
     foundationPlane= self.getFoundationPlane()
     alphaAngle= math.atan(foundationPlane.getSlope())
-    F= R.getResultante()
+    F= R.getResultant()
     F2D= geom.Vector2d(F.x,F.y)
     Ftang= foundationPlane.getVector2dProj(F2D)
     Fnormal= F2D-Ftang
@@ -682,7 +682,7 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
     e= self.getEccentricity(R) #eccentricity
     b= self.getFootingWidth()
     bReduced= 2*(b/2.0+e)
-    F= R.getResultante()
+    F= R.getResultant()
     qu= foundationSoilModel.qu(q,D,self.b,bReduced,F.y,0.0,F.x)
     sigma= F.y/bReduced
     return qu/sigma

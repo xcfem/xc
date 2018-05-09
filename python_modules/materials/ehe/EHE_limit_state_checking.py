@@ -841,7 +841,7 @@ class ShearController(lscb.LimitStateControllerBase):
       if(self.isBending):
         self.eps1= concrFibers.getStrainMax()
         self.E0= concrFibers[0].getMaterial().getInitialTangent()
-        self.concreteAxialForce= concrFibers.ResultanteComp()
+        self.concreteAxialForce= concrFibers.getCompressionResultant()
         self.modElastArmadura= reinfFibers[0].getMaterial().getInitialTangent()
         self.strutWidth= scc.getCompressedStrutWidth() # b0
         self.depthUtil= scc.getEffectiveDepth() # d

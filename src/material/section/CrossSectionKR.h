@@ -118,9 +118,9 @@ class CrossSectionKR: public EntCmd
     inline size_t dim(void) const
       { return ((R) ? R->Size():0); }
 
-    inline const Vector &Resultante(void) const
+    inline const Vector &getResultant(void) const
       { return *R; }
-    inline Vector &Resultante(void)
+    inline Vector &getResultant(void)
       { return *R; }
     inline const Matrix &Stiffness(void) const
       { return *K; }

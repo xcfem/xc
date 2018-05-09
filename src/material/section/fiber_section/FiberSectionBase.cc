@@ -500,7 +500,7 @@ const XC::Matrix &XC::FiberSectionBase::getSectionTangent(void) const
 
 //! @brief Returns the resultant of section stresses.
 const XC::Vector &XC::FiberSectionBase::getStressResultant(void) const
-  { return kr.Resultante(); }
+  { return kr.getResultant(); }
 
 //! @brief Returns i-th component of the stress resultant.
 double XC::FiberSectionBase::getStressResultant(const int &i) const

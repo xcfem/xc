@@ -97,7 +97,7 @@ class RCSets(object):
         '''returns the resultant of compressive stresses in the concrete fibers
         of the section
         '''
-        return self.concrFibers.fSet.ResultanteComp()
+        return self.concrFibers.fSet.getCompressionResultant()
     def getNumTensionRebars(self):
         '''returns the number of reinforcing steel fibers in tension
         '''

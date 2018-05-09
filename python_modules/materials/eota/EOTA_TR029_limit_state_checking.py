@@ -237,7 +237,7 @@ def psiEcVFactor(ev, c1):
   '''
   Coeficiente que introduce la influencia de la variación de los cortantes en los distintos pernos de un grupo, computed according to expression 5.8h del apartado f) of clause 5.2.3.4 of EOTA TR029.
 
-   :param ev: Excentricidad de la resultante de esfuerzos cortantes respecto al centro de gravedad del grupo.
+   :param ev: Eccentricity of the shear forces resultant with respect to the group centroid.
    :param c1: Distancia desde el centro de gravedad del grupo al borde situado frente al cortante.
   '''
   return min(1/(1+2*ev/3/c1),1.0)

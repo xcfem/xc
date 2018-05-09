@@ -110,22 +110,22 @@ class FiberDeque : public EntCmd, public std::deque<Fiber *>
     GeomObj::list_Pos2d getPositions(void) const;
 
     bool hayMomento(const double &tol=1e-4) const;
-    double Resultante(void) const;
+    double getResultant(void) const;
     double getMz(const double &y0= 0.0) const;
     double getMy(const double &z0= 0.0) const;
     double getExcentricidadMz(const double &y0= 0.0) const;
     double getExcentricidadMy(const double &z0= 0.0) const;
     Vector2d getMomentVector(const double &y0=0.0,const double &z0=0.0) const;
-    Pos2d getPosResultante(const double &y0=0.0,const double &z0=0.0) const;
+    Pos2d getResultantPosition(const double &y0=0.0,const double &z0=0.0) const;
     Recta2d getNeutralAxis(void) const;
 
-    double ResultanteComp(void) const;
+    double getCompressionResultant(void) const;
     double getMzComp(const double &y0= 0.0) const;
     double getMyComp(const double &z0= 0.0) const;
     const Vector &baricentroCompresiones(void) const;
     const Vector &baricentroDefMenores(const double &epsRef) const;
 
-    double ResultanteTracc(void) const;
+    double getTensionResultant(void) const;
     double getMzTracc(const double &y0= 0.0) const;
     double getMyTracc(const double &z0= 0.0) const;
     const Vector &baricentroTracciones(void) const;

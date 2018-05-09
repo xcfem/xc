@@ -666,8 +666,8 @@ XC::Vector XC::FiberDeque::getAxis2(const double &y0,const double &z0) const
     return retval;
   }
 
-//! @brief Return the resultante de tensiones.
-double XC::FiberDeque::Resultante(void) const
+//! @brief Return the resultant of stresses.
+double XC::FiberDeque::getResultant(void) const
   {
     register double retval= 0;
     register std::deque<Fiber *>::const_iterator i= begin();
@@ -700,11 +700,11 @@ double XC::FiberDeque::getMy(const double &z0) const
 
 //! @brief Return the eccentricity of Mz (see getMz).
 double XC::FiberDeque::getExcentricidadMz(const double &y0) const
-  { return getMz(y0)/Resultante(); }
+  { return getMz(y0)/getResultant(); }
 
 //! @brief Return the eccentricity of My (see getMy).
 double XC::FiberDeque::getExcentricidadMy(const double &z0) const
-  { return getMy(z0)/Resultante(); }
+  { return getMy(z0)/getResultant(); }
 
 //! @brief Return the moment vector of the fibers forces
 //! with respect to the axis parallel to "y" and z that passes through (y0,z0).
@@ -712,16 +712,16 @@ Vector2d XC::FiberDeque::getMomentVector(const double &y0,const double &z0) cons
   { return Vector2d(getMy(y0),getMz(y0)); }
 
 //! @brief Return the position of the fibers forces resultant.
-Pos2d XC::FiberDeque::getPosResultante(const double &y0,const double &z0) const
+Pos2d XC::FiberDeque::getResultantPosition(const double &y0,const double &z0) const
   {
-    const double R= Resultante();
+    const double R= getResultant();
     return Pos2d(getMz(y0)/R,getMy(z0)/R);
   }
 
 //! @brief Return the neutral axis.
 Recta2d XC::FiberDeque::getNeutralAxis(void) const
   {
-    const double R= Resultante();
+    const double R= getResultant();
     const double My= getMy();
     const double Mz= getMz();
     const Pos2d org(Mz/R,My/R);//Position of the resultant.
@@ -740,8 +740,8 @@ bool XC::FiberDeque::hayMomento(const double &tol) const
       return false;
   }
 
-//! @brief Return the resultante of the compresiones en las fibers.
-double XC::FiberDeque::ResultanteComp(void) const
+//! @brief Return the resultant of the compresiones in the fibers.
+double XC::FiberDeque::getCompressionResultant(void) const
   {
     register double retval= 0;
     register double f= 0;
@@ -753,7 +753,8 @@ double XC::FiberDeque::ResultanteComp(void) const
           if(f<0.0) retval+= f;
         }
       else
-        std::cerr << "FiberDeque::Resultante; Pointer to fiber is null." << std::endl;
+        std::cerr << getClassName() << "::" << __FUNCTION__
+	          << "; pointer to fiber is null." << std::endl;
     return retval;
   }
 
@@ -768,8 +769,9 @@ double XC::FiberDeque::getMzComp(const double &y0) const
     return retval;
   }
 
-//! @brief Return the passing point of the resultante de tensiones menores
-//! que «ref» (por defecto cero) compresiones, si no hay returns (0,0).
+//! @brief Return the passing point of the stress resultant for stresses
+//! that are lower than «ref» (zero by default; compressions), if there are
+//! not such stresses it returns (0,0).
 const XC::Vector &XC::FiberDeque::baricentroCompresiones(void) const
   {
     static Vector retval(2);
@@ -829,8 +831,8 @@ double XC::FiberDeque::getMyComp(const double &z0) const
     return retval;
   }
 
-//! @brief Return the resultante of the tracciones en las fibers.
-double XC::FiberDeque::ResultanteTracc(void) const
+//! @brief Return the resultant of the tensions in the fibers.
+double XC::FiberDeque::getTensionResultant(void) const
   {
     register double retval= 0;
     register double f= 0;
@@ -842,7 +844,8 @@ double XC::FiberDeque::ResultanteTracc(void) const
           if(f>0.0) retval+= f;
         }
       else
-        std::cerr << "FiberDeque::Resultante; Pointer to fiber is null." << std::endl;
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; pointer to fiber is null." << std::endl;
     return retval;
   }
 
@@ -1109,7 +1112,7 @@ XC::ClaseEsfuerzo XC::FiberDeque::getClaseEsfuerzo(const double &tol) const
       }
     else if(epsMax>0) //Bending.
       {
-        const double R= Resultante()/epsMax;
+        const double R= getResultant()/epsMax;
         if(fabs(R)>tol)
           retval= FLEXION_COMPUESTA;
         else

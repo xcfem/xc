@@ -156,12 +156,12 @@ def procesResultVerif(comb):
   tabComb= comb.tag
   nmbComb= comb.getName
   setTotal= preprocessor.getSets.getSet("total")
-  resultante= setTotal.getResistingSVD3d(plano,o,0.01,0)
+  resultant= setTotal.getResistingSVD3d(plano,o,0.01,0)
   global force
-  force= resultante.getResultante()
+  force= resultant.getResultant()
   global moment
-  moment= resultante.getMomento()
-  org= resultante.getOrg
+  moment= resultant.getMomento()
+  org= resultant.getOrg
 
 
 nombrePrevia= ""
