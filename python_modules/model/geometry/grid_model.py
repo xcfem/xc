@@ -204,6 +204,15 @@ class GridModel(object):
     def lastZIndex(self):
         return len(self.gridCoo[2])-1
 
+
+    def getPntGrid(self,indPnt):
+        '''Return the point at indPnt=(i,j,k) index of the grid.
+
+        :param indPnt: grid indices that point to the global (X, Y, Z)
+                 coordinates    
+        '''
+        return self.indices.getPnt(indPnt[0]+1,indPnt[1]+1,indPnt[2]+1)
+
     def getTagPntGrid(self,indPnt):
         '''Return the tag of the point at indPnt=(i,j,k) index of the grid.
 
