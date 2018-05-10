@@ -178,7 +178,7 @@ Vector2d XC::PrismaticBarCrossSection::getVDirWeakAxis(void) const
   { return getAxis2VDir(); }
 
 //! @brief Returns true if the section is subjected to a bending moment.
-bool XC::PrismaticBarCrossSection::hayMomento(const double &tol) const
+bool XC::PrismaticBarCrossSection::isSubjectedToBending(const double &tol) const
   {
     bool retval= false;
     const ResponseId &code= getType();
@@ -221,7 +221,7 @@ Recta2d XC::PrismaticBarCrossSection::getInternalForcesAxis(void) const
   {
     Recta2d retval(getCdg(),Vector2d(1,0));
     const ResponseId &code= getType();
-    if(hayMomento()) //Direction of the bending moment.
+    if(isSubjectedToBending()) //Direction of the bending moment.
       {
         if(code.hasResponse(SECTION_RESPONSE_MY) && code.hasResponse(SECTION_RESPONSE_MZ))
           retval= Recta2d(getCdg(),Vector2d(getStressResultant(SECTION_RESPONSE_MY),getStressResultant(SECTION_RESPONSE_MZ)));

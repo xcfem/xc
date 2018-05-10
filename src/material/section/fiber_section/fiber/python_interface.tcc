@@ -81,7 +81,7 @@ class_<XC::FiberDeque, bases<EntCmd,fiber_ptrs_dq>, boost::noncopyable >("FiberD
 
 //.def("getPositions",&XC::FiberDeque::getPositions)
 
-  .def("hayMomento",&XC::FiberDeque::hayMomento)
+  .def("isSubjectedToBending",&XC::FiberDeque::isSubjectedToBending)
   .def("getResultant",&XC::FiberDeque::getResultant)
   .def("getMz",&XC::FiberDeque::getMz)
   .def("getMy",&XC::FiberDeque::getMy)

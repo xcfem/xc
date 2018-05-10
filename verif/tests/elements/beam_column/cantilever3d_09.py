@@ -89,10 +89,10 @@ elements= preprocessor.getElementHandler
 
 elem1= elements.getElement(1)
 elem1.getResistingForce()
-My1= elem1.getMy1 # Momento en el extremo dorsal de la barra
-My2= elem1.getMy2 # Momento en el extremo frontal de la barra
-Vz1= elem1.getVz1 # Cortante en el extremo dorsal de la barra
-Vz2= elem1.getVz2 # Cortante en el extremo frontal de la barra
+My1= elem1.getMy1 # Moment at the back end of the beam
+My2= elem1.getMy2 # Moment at the front end of the beam
+Vz1= elem1.getVz1 # Shear force at the back end of the beam
+Vz2= elem1.getVz2 # Shear force at the front end of the beam
 
 
 

@@ -142,15 +142,15 @@ void XC::Beam3dUniformLoad::addFixedEndForcesInBasicSystem(const double &L,const
     const double wy = Wy()*loadFactor;  // Transverse
     const double wz = Wz()*loadFactor;  // Transverse
     const double wx = Wx()*loadFactor;  // Axial (+ve from node I to J)
-    //const double tx= Tx()*loadFactor;  // Torsor
+    //const double tx= Tx()*loadFactor; // Torsor
 
     //Forces over the element.
-    const double Mz = wy*L*L/12.0; // Momento flector en z at the ends of the element: wy*L*L/12
-    const double My = wz*L*L/12.0; // Momento flector en y at the ends of the element: wz*L*L/12
+    const double Mz = wy*L*L/12.0; // Bending moment about z axis at the ends of the element: wy*L*L/12
+    const double My = wz*L*L/12.0; // Bending moment about y axis at the ends of the element: wz*L*L/12
     const double P = wx*L; //Axil.
 
     // Fixed end forces in basic system
-    q0[0]+= -0.5*P; //Axil en el extremo dorsal.
+    q0[0]+= -0.5*P; //Axil at the back end.
     q0[1]+= -Mz;  
     q0[2]+= Mz;
     q0[3]+= My;

@@ -62,7 +62,7 @@ def getPadEyeCrushingForce(t, d, fy, gammaM0):
   '''
   return 1.5*t*d*fy/gammaM0
 
-def getBendingMomentoOnBolt(F, b, a, c):
+def getBendingMomentOnBolt(F, b, a, c):
   '''
    Return the maximum bending moment on the bolt from
    the dimensions of the split pin and the pad eye (see figure 3.11).

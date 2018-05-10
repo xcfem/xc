@@ -160,7 +160,7 @@ def procesResultVerif(comb):
   global force
   force= resultant.getResultant()
   global moment
-  moment= resultant.getMomento()
+  moment= resultant.getMoment()
   org= resultant.getOrg
 
 

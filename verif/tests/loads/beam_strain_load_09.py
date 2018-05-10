@@ -98,8 +98,8 @@ elem1.getResistingForce()
 scc0= elem1.getSections()[0]
 
 axil= scc0.getStressResultantComponent("N")
-momentoY= scc0.getStressResultantComponent("My")
-momentoZ= scc0.getStressResultantComponent("Mz")
+Ymoment= scc0.getStressResultantComponent("My")
+Zmoment= scc0.getStressResultantComponent("Mz")
 cortanteY= scc0.getStressResultantComponent("Vy")
 cortanteZ= scc0.getStressResultantComponent("Vz")
 
@@ -115,8 +115,8 @@ print "dZ= ",dZ
 print "N= ",N
 print "axil= ",axil
 print "ratio= ",ratio
-print "momentoY= ",momentoY
-print "momentoZ= ",momentoZ
+print "Ymoment= ",Ymoment
+print "Zmoment= ",Zmoment
 print "cortanteY= ",cortanteY
 print "cortanteZ= ",cortanteZ
    '''
@@ -124,7 +124,7 @@ print "cortanteZ= ",cortanteZ
 import os
 from miscUtils import LogMessages as lmsg
 fname= os.path.basename(__file__)
-if (abs(ratio)<1e-10) & (abs(momentoY)<1e-10) & (abs(momentoZ)<1e-10) & (abs(cortanteY)<1e-10) & (abs(cortanteZ)<1e-10):
+if (abs(ratio)<1e-10) & (abs(Ymoment)<1e-10) & (abs(Zmoment)<1e-10) & (abs(cortanteY)<1e-10) & (abs(cortanteZ)<1e-10):
   print "test ",fname,": ok."
 else:
   lmsg.error(fname+' ERROR.')

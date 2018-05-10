@@ -90,7 +90,7 @@ elem1.getResistingForce()
 scc0= elem1.getSections()[0]
 
 axil= scc0.getStressResultantComponent("N")
-momento= scc0.getStressResultantComponent("Mz")
+moment= scc0.getStressResultantComponent("Mz")
 cortante= scc0.getStressResultantComponent("Vy")
 
 
@@ -102,14 +102,14 @@ ratio= ((axil-N)/N)
 print "N= ",N
 print "axil= ",axil
 print "ratio= ",ratio
-print "momento= ",momento
+print "moment= ",moment
 print "cortante= ",cortante
    '''
 
 import os
 from miscUtils import LogMessages as lmsg
 fname= os.path.basename(__file__)
-if (abs(ratio)<1e-10) & (abs(momento)<1e-10) & (abs(cortante)<1e-10) :
+if (abs(ratio)<1e-10) & (abs(moment)<1e-10) & (abs(cortante)<1e-10) :
   print "test ",fname,": ok."
 else:
   lmsg.error(fname+' ERROR.')
