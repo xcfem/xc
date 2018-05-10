@@ -73,13 +73,13 @@ ratio2= (Mz2-Mz2Dato)/Mz2Dato
 
 ''' 
 print "computed Axil; N1= ",(N1/1e3)," kN \n"
-print "computed Momento z; Mz1= ",(Mz1/1e3)," kN m\n"
-print "Momento z dato; Mz1Dato= ",(Mz1Dato/1e3)," kN \n"
+print "computed moment about z axis; Mz1= ",(Mz1/1e3)," kN m\n"
+print "moment about z axis dato; Mz1Dato= ",(Mz1Dato/1e3)," kN \n"
 print "ratio1= ",(ratio1)
 
 print "computed Axil; N2= ",(N2/1e3)," kN \n"
-print "computed Momento z; Mz2= ",(Mz2/1e3)," kN m\n"
-print "Momento z dato; Mz2Dato= ",(Mz2Dato/1e3)," kN \n"
+print "computed moment about z axis; Mz2= ",(Mz2/1e3)," kN m\n"
+print "moment about z axis dato; Mz2Dato= ",(Mz2Dato/1e3)," kN \n"
 print "ratio2= ",(ratio2)
  '''
 

@@ -7,7 +7,7 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
-# Mésula sometida a momento torsor en su extremo.
+# Cantilever under torque at its front end.
 
 import xc_base
 import geom

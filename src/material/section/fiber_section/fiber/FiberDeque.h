@@ -109,7 +109,7 @@ class FiberDeque : public EntCmd, public std::deque<Fiber *>
 
     GeomObj::list_Pos2d getPositions(void) const;
 
-    bool hayMomento(const double &tol=1e-4) const;
+    bool isSubjectedToBending(const double &tol=1e-4) const;
     double getResultant(void) const;
     double getMz(const double &y0= 0.0) const;
     double getMy(const double &z0= 0.0) const;

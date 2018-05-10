@@ -730,7 +730,7 @@ Recta2d XC::FiberDeque::getNeutralAxis(void) const
   }
 
 //! @brief Returns true if the section is subject to a under bending moment.
-bool XC::FiberDeque::hayMomento(const double &tol) const
+bool XC::FiberDeque::isSubjectedToBending(const double &tol) const
   {
     if(std::abs(getMz())>=tol)
       return true;

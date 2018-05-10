@@ -92,8 +92,8 @@ deltax= nod2.getDisp[0]
 elements= preprocessor.getElementHandler
 elem1= elements.getElement(1)
 elem1.getResistingForce()
-N1= elem1.getN1 # Axil en el extremo dorsal de la barra
-N2= elem1.getN2 # Axil en el extremo frontal de la barra
+N1= elem1.getN1 # Axial force at the back end of the beam
+N2= elem1.getN2 # Axial force at the front end of the beam
 
 deltaxteor= (f*L**2/(2*E*A))
 ratio1= ((deltax-deltaxteor)/deltaxteor)
@@ -127,12 +127,12 @@ deltay= nod2.getDisp[2]
 elements= preprocessor.getElementHandler
 elem1= elements.getElement(1)
 elem1.getResistingForce()
-N1= elem1.getN1 # Axil en el extremo dorsal de la barra
-N2= elem1.getN2 # Axil en el extremo frontal de la barra
-Mz1= elem1.getMz1 # Momento en el extremo dorsal de la barra
-Mz2= elem1.getMz2 # Momento en el extremo frontal de la barra
-Vy1= elem1.getVy1 # Cortante en el extremo dorsal de la barra
-Vy2= elem1.getVy2 # Cortante en el extremo frontal de la barra
+N1= elem1.getN1 # Axial force at the back end of the beam
+N2= elem1.getN2 # Axial force at the front end of the beam
+Mz1= elem1.getMz1 # Moment at the back end of the beam
+Mz2= elem1.getMz2 # Moment at the front end of the beam
+Vy1= elem1.getVy1 # Shear force at the back end of the beam
+Vy2= elem1.getVy2 # Shear force at the front end of the beam
 
 deltaxteor= (1.33*f*L**2/(2*E*A))
 ratio1= (deltax/deltaxteor)

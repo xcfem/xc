@@ -100,7 +100,7 @@ actionNode10Norm= actionNode10.Norm()
 svdAction= nodal_reactions.getSVDfromVDesliz("UVWRxRyRz",n10.get3dCoo,actionNode10)
 svdResid= svdReactionNodes+svdAction
 ratio2= svdResid.getResultant().getModulo()/actionNode10Norm
-ratio3= svdResid.getMomento().getModulo()/actionNode10Norm
+ratio3= svdResid.getMoment().getModulo()/actionNode10Norm
 
 # print "svdAction= ", svdAction
 # print "svdReactionNodes= ", svdReactionNodes
