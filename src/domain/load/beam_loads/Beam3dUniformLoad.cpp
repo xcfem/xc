@@ -121,8 +121,8 @@ void XC::Beam3dUniformLoad::addReactionsInBasicSystem(const double &L,const doub
     //const double tx= Tx()*loadFactor;  // Torsor
 
     //Forces over the element.
-    const double Vy = 0.5*wy*L; // Cortante en y en los extremos of the element.
-    const double Vz = 0.5*wz*L; // Cortante en z.
+    const double Vy = 0.5*wy*L; // Y shear at element ends.
+    const double Vz = 0.5*wz*L; // Z shear.
     const double P = wx*L; //Axil.
 
     // Reactions in basic system

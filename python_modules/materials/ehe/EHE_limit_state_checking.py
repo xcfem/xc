@@ -232,7 +232,7 @@ def getVu(fck, fcd, Nd, Ac, b0, d, z, alpha, theta, AsPas, fyd, AsAct, fpd, sgxd
   vu2= getVu2(fck,Nd,Ac,b0,d,z,alpha,theta,AsPas,fyd,AsAct,fpd,sgxd,sgyd,AsTrsv,fydTrsv)
   return min(vu1,vu2)
 
-def cumpleCortante(fck, fcd, Nd, Ac, b0, d, z, alpha, theta, AsPas, fyd, AsAct, fpd, sgxd, sgyd, AsTrsv, fydTrsv, Vrd):
+def shearOK(fck, fcd, Nd, Ac, b0, d, z, alpha, theta, AsPas, fyd, AsAct, fpd, sgxd, sgyd, AsTrsv, fydTrsv, Vrd):
   '''Check shear.'''
   vu= getVu(fck,fcd,Nd,Ac,b0,d,z,alpha,theta,AsPas,fyd,AsAct,fpd,sgxd,sgyd,AsTrsv,fydTrsv)
   if(Vrd<=vu):
@@ -240,12 +240,12 @@ def cumpleCortante(fck, fcd, Nd, Ac, b0, d, z, alpha, theta, AsPas, fyd, AsAct, 
   else:
     return False
 
-def aprovCortante(fck, fcd, Nd, Ac, b0, d, z, alpha, theta, AsPas, fyd, AsAct, fpd, sgxd, sgyd, AsTrsv, fydTrsv, Vrd):
+def shearExploitationRatioe(fck, fcd, Nd, Ac, b0, d, z, alpha, theta, AsPas, fyd, AsAct, fpd, sgxd, sgyd, AsTrsv, fydTrsv, Vrd):
   '''Shear exploitation ratio.'''
   vu= getVu(fck,fcd,Nd,Ac,b0,d,z,alpha,theta,AsPas,fyd,AsAct,fpd,sgxd,sgyd,AsTrsv,fydTrsv)
   return Vrd/vu
 
-class ParamsCortante(object):
+class ShearDesignParameters(object):
   '''Defines shear design parameters.'''
   def __init__(self):
     self.concreteArea= 0.0 # Concrete section total area.
@@ -259,10 +259,10 @@ class ParamsCortante(object):
     self.sigmaYD= 0.0 # design value of normal stress at the centre of gravity of the section parallel to shear force Vd. Calculated assuming NON CRACKED concrete (clause 44.2.3.2).
     self.angAlpha= math.pi/2 # angle of the shear reinforcement with the part axis (figure 44.2.3.1.a EHE).
     self.angTheta= math.pi/6. # Angle between the concrete compressed struts and the member axis (figure 44.2.3.1.a EHE).
-    self.cortanteUltimo= 0.0
+    self.ultimateShearStrength= 0.0
 #    print 'transv. reinf. area=',self.areaShReinfBranchsTrsv
 
-  def calcCortanteUltimo(self, concreteFibersSet, rebarFibersSet, tensionedRebarsFiberSet, fck, fcd, fyd, fpd, fydTrsv):
+  def computeUltimateShearStrength(self, concreteFibersSet, rebarFibersSet, tensionedRebarsFiberSet, fck, fcd, fyd, fpd, fydTrsv):
     '''Compute section shear strength.'''
     self.concreteArea= concreteFibersSet.getArea()
     self.widthMin= concreteFibersSet.getAnchoMecanico() # Enhance (not valid with non-convex sections).
@@ -272,7 +272,7 @@ class ParamsCortante(object):
     # self.tensionedStrandsArea= 
 
     self.sigmaXD= N/area+Mz/Iz*yCdg+My/Iy*zCdg
-    self.cortanteUltimo= getVu(fck,fcd,N,self.concreteArea,self.widthMin,self.depthUtil,self.mechanicLeverArm,self.angAlpha,self.angTheta,self.tensionedRebarsArea,fyd,self.tensionedStrandsArea,fpd,self.sigmaXD,self.sigmaYD,AsTrsv,self.areaShReinfBranchsTrsv,fydTrsv)
+    self.ultimateShearStrength= getVu(fck,fcd,N,self.concreteArea,self.widthMin,self.depthUtil,self.mechanicLeverArm,self.angAlpha,self.angTheta,self.tensionedRebarsArea,fyd,self.tensionedStrandsArea,fpd,self.sigmaXD,self.sigmaYD,AsTrsv,self.areaShReinfBranchsTrsv,fydTrsv)
 
   def printParams(self):
     '''Print shear checking values.'''
@@ -282,7 +282,7 @@ class ParamsCortante(object):
     print "effective depth; d= ",self.depthUtil," m"
     print "minimal width; b0= ",self.widthMin," m"
     print "mechanic lever arm; z= ",self.mechanicLeverArm," m"
-    print "shear strength; Vu= ",self.cortanteUltimo/1e3," kN"
+    print "shear strength; Vu= ",self.ultimateShearStrength/1e3," kN"
 
 def getF1cdEHE08(fck,fcd):
     '''getF1cdEHE08(fck,fcd)

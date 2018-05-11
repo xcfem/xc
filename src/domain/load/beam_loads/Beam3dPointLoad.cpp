@@ -160,16 +160,16 @@ const XC::Matrix &XC::Beam3dPointLoad::getAppliedSectionForces(const double &L,c
               {
                 retval(0,i)= N;
                 retval(1,i)= -x*Vy1; //Moment about z axis para x<=a.
-                retval(2,i)= -Vy1; //Cortante y para x<=a.
+                retval(2,i)= -Vy1; //y shear para x<=a.
                 retval(3,i)= x*Vz1; //Moment about y axis para x<=a.
-                retval(4,i)= -Vz1; //Cortante z para x<=a.
+                retval(4,i)= -Vz1; //z shear para x<=a.
               }
             else
               {
                 retval(1,i)= -(L-x)*Vy2; //Moment about z axis para x>=a.
-                retval(2,i)= Vy2; //Cortante y para x>=a.
+                retval(2,i)= Vy2; //y shear para x>=a.
                 retval(3,i)= (L-x)*Vz2; //Moment about y axis para x>=a.
-                retval(4,i)= Vz2; //Cortante z para x>=a.
+                retval(4,i)= Vz2; //z shear para x>=a.
               }
           }
       }

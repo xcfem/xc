@@ -190,7 +190,7 @@ bool XC::PrismaticBarCrossSection::isSubjectedToBending(const double &tol) const
   }
 
 //! @brief Returns true if the section is subjected to a shearing force.
-bool XC::PrismaticBarCrossSection::hayCortante(const double &tol) const
+bool XC::PrismaticBarCrossSection::isSubjectedToShear(const double &tol) const
   {
     bool retval= false;
     const ResponseId &code= getType();
@@ -230,7 +230,7 @@ Recta2d XC::PrismaticBarCrossSection::getInternalForcesAxis(void) const
         else if(code.hasResponse(SECTION_RESPONSE_MZ))
           retval= Recta2d(getCdg(),Vector2d(0,1));
       }
-    else if(hayCortante()) //Direction normal to the shear force.
+    else if(isSubjectedToShear()) //Direction normal to the shear force.
       {
         if(code.hasResponse(SECTION_RESPONSE_VY) && code.hasResponse(SECTION_RESPONSE_VZ))
           retval= Recta2d(getCdg(),Vector2d(-getStressResultant(SECTION_RESPONSE_VZ),getStressResultant(SECTION_RESPONSE_VY)));

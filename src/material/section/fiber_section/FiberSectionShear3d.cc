@@ -72,7 +72,7 @@ void XC::FiberSectionShear3d::freeRespVyVzT(void)
 void XC::FiberSectionShear3d::free_mem(void)
   { freeRespVyVzT(); }
 
-//! @brief Asigna el material que define la respuesta a cortante según «y».
+//! @brief Sets the material defining the shear response along the y axis.
 void XC::FiberSectionShear3d::setRespVy(const UniaxialMaterial *rvy)
   {
     if(respVy)
@@ -80,7 +80,7 @@ void XC::FiberSectionShear3d::setRespVy(const UniaxialMaterial *rvy)
     respVy= rvy->getCopy();
   }
 
-//! @brief Asigna el material que define la respuesta a cortante según «z».
+//! @brief Sets the material defining the shear response along the z axis.
 void XC::FiberSectionShear3d::setRespVz(const UniaxialMaterial *rvz)
   {
     if(respVz)
@@ -103,17 +103,17 @@ void XC::FiberSectionShear3d::setRespVyVzT(const UniaxialMaterial *rvy,const Uni
       respVy= rvy->getCopy();
     else
       std::cerr << getClassName() << "::" << __FUNCTION__ << "; "
-                << " no se ha definido la respuesta al cortante según «y»." << std::endl;
+                << " undefined shear response along the y axis." << std::endl;
     if(rvz)
       respVz= rvz->getCopy();
     else
       std::cerr << getClassName() << "::" << __FUNCTION__ << "; "
-                << " no se ha definido la respuesta al cortante según «z»." << std::endl;
+                << " undefined shear response along the z axis." << std::endl;
     if(rt)
       respT= rt->getCopy();
     else
       std::cerr << getClassName() << "::" << __FUNCTION__ << "; "
-                << " no se ha definido la respuesta al torsor." << std::endl;
+                << " undefined respuesta al torsor." << std::endl;
   }
 
 //! @brief Constructor.
@@ -136,7 +136,7 @@ XC::FiberSectionShear3d &XC::FiberSectionShear3d::operator=(const FiberSectionSh
     return *this;
   }
 
-//! @brief Asigna el material que define la respuesta a cortante según «y».
+//! @brief Sets the material defining the shear response along the y axis.
 void XC::FiberSectionShear3d::setRespVyByName(const std::string &nmb_mat)
   {
     const Material *ptr_mat= material_handler->find_ptr(nmb_mat);
@@ -160,7 +160,7 @@ void XC::FiberSectionShear3d::setRespVyByName(const std::string &nmb_mat)
 XC::UniaxialMaterial *XC::FiberSectionShear3d::getRespVy(void)
   { return respVy; }
 
-//! @brief Asigna el material que define la respuesta a cortante según «y».
+//! @brief Sets the material defining the shear response along the y axis.
 void XC::FiberSectionShear3d::setRespVzByName(const std::string &nmb_mat)
   {
     const Material *ptr_mat= material_handler->find_ptr(nmb_mat);
@@ -184,7 +184,7 @@ void XC::FiberSectionShear3d::setRespVzByName(const std::string &nmb_mat)
 XC::UniaxialMaterial *XC::FiberSectionShear3d::getRespVz(void)
   { return respVz; }
 
-//! @brief Asigna el material que define la respuesta a cortante según «y».
+//! @brief Sets the material defining the shear response along the y axis.
 void XC::FiberSectionShear3d::setRespTByName(const std::string &nmb_mat)
   {
     const Material *ptr_mat= material_handler->find_ptr(nmb_mat);

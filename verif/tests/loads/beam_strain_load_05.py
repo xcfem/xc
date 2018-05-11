@@ -94,7 +94,7 @@ scc0= elem1.getSections()[0]
 
 axil= scc0.getStressResultantComponent("N")
 moment= scc0.getStressResultantComponent("Mz")
-cortante= scc0.getStressResultantComponent("Vy")
+shear= scc0.getStressResultantComponent("Vy")
 
 
 
@@ -108,13 +108,13 @@ print "N= ",N
 print "axil= ",axil
 print "ratio= ",ratio
 print "moment= ",moment
-print "cortante= ",cortante
+print "shear= ",shear
    '''
 
 import os
 from miscUtils import LogMessages as lmsg
 fname= os.path.basename(__file__)
-if (abs(dX)<1e-10) & (abs(ratio)<1e-10) & (abs(moment)<1e-10) & (abs(cortante)<1e-10) :
+if (abs(dX)<1e-10) & (abs(ratio)<1e-10) & (abs(moment)<1e-10) & (abs(shear)<1e-10) :
   print "test ",fname,": ok."
 else:
   lmsg.error(fname+' ERROR.')

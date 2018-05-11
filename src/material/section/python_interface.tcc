@@ -51,7 +51,7 @@ class_<XC::PrismaticBarCrossSection, XC::PrismaticBarCrossSection *, bases<XC::S
   .def("getCdgZ",&XC::PrismaticBarCrossSection::getCdgZ)
   .def("isSubjectedToAxialLoad",&XC::PrismaticBarCrossSection::hayAxil,"True if section is in compression (or in tension).")
   .def("isSubjectedToBending",&XC::PrismaticBarCrossSection::isSubjectedToBending,"True if section is bended.")
-  .def("isSubjectedToShear",&XC::PrismaticBarCrossSection::hayCortante,"True if section is subjected to shear.")
+  .def("isSubjectedToShear",&XC::PrismaticBarCrossSection::isSubjectedToShear,"True if section is subjected to shear.")
   .def("isSubjectedToTorsion",&XC::PrismaticBarCrossSection::hayTorsor,"True if section is subjected to torsion.")
   .def("getN",&XC::PrismaticBarCrossSection::getN,"Returns internal axial force.")
   .def("getMy",&XC::PrismaticBarCrossSection::getMy,"Returns internal bending moment around 'y' axis.")

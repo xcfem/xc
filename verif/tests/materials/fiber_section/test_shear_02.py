@@ -121,11 +121,11 @@ analisis= predefined_solutions.simple_newton_raphson(feProblem)
 analOk= analisis.analyze(10)
 
 
-secHAParamsCortante= EHE_limit_state_checking.ShearController('ULS_shear')
+concreteSectionShearParams= EHE_limit_state_checking.ShearController('ULS_shear')
 
-secHAParamsCortante.AsTrsv= EHE_materials.Fi6*numRamas/0.2 # reinforcement area transversal
-secHAParamsCortante.theta= math.radians(45)
-secHAParamsCortante.alpha= math.radians(90)
+concreteSectionShearParams.AsTrsv= EHE_materials.Fi6*numRamas/0.2 # reinforcement area transversal
+concreteSectionShearParams.theta= math.radians(45)
+concreteSectionShearParams.alpha= math.radians(90)
 
 
 secHAParamsTorsion= EHE_limit_state_checking.computeEffectiveHollowSectionParameters(geomSecHA,depth/2.0,cover)
@@ -143,16 +143,16 @@ NTmp= N
 MTmp= math.sqrt((My)**2+(Mz)**2)
 VTmp= math.sqrt((Vy)**2+(Vz)**2)
 TTmp= scc.getStressResultantComponent("Mx")
-secHAParamsCortante.calcVuEHE08(scc,secHAParamsTorsion,concr,B500S,NTmp,MTmp,VTmp,TTmp)
+concreteSectionShearParams.calcVuEHE08(scc,secHAParamsTorsion,concr,B500S,NTmp,MTmp,VTmp,TTmp)
 
 
 
-Vu1A= secHAParamsCortante.Vu1
+Vu1A= concreteSectionShearParams.Vu1
 Vu1ATeor= 1.32e6
-VcuA= secHAParamsCortante.Vcu
+VcuA= concreteSectionShearParams.Vcu
 VcuATeor= 82.607e3
-VsuA= secHAParamsCortante.Vsu
-Vu2A= secHAParamsCortante.Vu2
+VsuA= concreteSectionShearParams.Vsu
+Vu2A= concreteSectionShearParams.Vu2
 
 ratio1= ((Vu1A-Vu1ATeor)/Vu1ATeor)   #high, to be controlled later
 ratio2= ((VcuA-VcuATeor)/VcuATeor)

@@ -32,13 +32,13 @@
 
 
 
-//! @brief Inicializa los pointers to las matrices de cortante.
+//! @brief Inicializa los pointers to the shear matrices.
 void XC::ShellBData::shear_matrix_ptrs_setup(void)
   {
     //shear matrix pointers
     if(GammaB1pointer.empty())
       {
-        GammaB1pointer= std::vector<Matrix>(4);      //four matrix pointers
+        GammaB1pointer= std::vector<Matrix>(4);  //four matrix pointers
         GammaB1pointer[0]= Matrix(1,3);  //
         GammaB1pointer[1]= Matrix(1,3);  //    four
         GammaB1pointer[2]= Matrix(1,3);  //  1x3 matrices

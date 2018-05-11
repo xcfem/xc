@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-# Imprime el encabezamiento para el listado de comprobacion a cortante.
-def printCabeceraListadoCortante(archivo, nmbSecc):
+
+def printShearVerificationListingHeader(archivo, nmbSecc):
+  '''Prints the header of the shear verification listing.'''
   archivo.write("\\begin{center}\n")
   archivo.write("\\begin{footnotesize}\n")
   archivo.write("\\tablefirsthead{%\n")
@@ -29,8 +30,8 @@ def printCabeceraListadoCortante(archivo, nmbSecc):
   archivo.write("\\begin{supertabular}{|l|r|r|r|r|r|r|r|r|r|r|r|}\n")
 
 
-# Imprime el cierre del listado de comprobacion a cortante.
-def printCierreListadoCortante(archivo):
+def printShearVerificationListingFoot(archivo):
+  '''Print the shear verification listing foot.'''
   archivo.write("\\end{supertabular}\n")
   archivo.write("\\end{footnotesize}\n")
   archivo.write("\\end{center}\n")

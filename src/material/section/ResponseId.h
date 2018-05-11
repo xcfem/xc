@@ -51,8 +51,8 @@ const int MEMBRANE_RESPONSE_n12= 13; // Esfuerzo rasante por unidad de longitud.
 const int PLATE_RESPONSE_m1= 14; // Moment per unit length, parallel to axis 1.
 const int PLATE_RESPONSE_m2= 15; // Moment per unit length, parallel to axis 2.
 const int PLATE_RESPONSE_m12= 16; // Esfuerzo torsor por unidad de longitud.
-const int PLATE_RESPONSE_q13= 17; // Cortante por unidad de longitud, perpendicular to axis 1 and parallel to axis 3.
-const int PLATE_RESPONSE_q23= 18; // Cortante por unidad de longitud, perpendicular to axis 2 and parallel to axis 3.
+const int PLATE_RESPONSE_q13= 17; // Shear force per unit length, perpendicular to axis 1 and parallel to axis 3.
+const int PLATE_RESPONSE_q23= 18; // Shear force per unit length, perpendicular to axis 2 and parallel to axis 3.
 
 //! \ingroup MATSCC
 //

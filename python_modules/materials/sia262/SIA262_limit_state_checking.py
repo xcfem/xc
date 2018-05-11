@@ -523,13 +523,13 @@ class FatigueController(lsc.LimitStateControllerBase):
         
         #print "concreteBendingCF= ",controlVars.concreteBendingCF
         section= scc.getProp("datosSecc")
-        secHAParamsCortante= ShearController(self.limitStateLabel)
-        secHAParamsCortante.setSection(section)
+        concreteSectionShearParams= ShearController(self.limitStateLabel)
+        concreteSectionShearParams.setSection(section)
         posEsf= geom.Pos3d(N,My,Mz)
         diagInt= e.getProp("diagInt")
         FCflex= diagInt.getCapacityFactor(posEsf)
         controlVars.Mu= My/FCflex
-        controlVars.Vu= secHAParamsCortante.calcVu(N,My, controlVars.Mu, Vy)
+        controlVars.Vu= concreteSectionShearParams.calcVu(N,My, controlVars.Mu, Vy)
         
         controlVars.shearLimit= getShearLimit(section,controlVars,controlVars.Vu)
         controlVars.concreteShearCF= getShearCF(controlVars)

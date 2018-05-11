@@ -184,7 +184,7 @@ def getFactor2spN(A0spN, AspN):
 
 def shearResistanceWithoutLeverArm(As, fuk):
     '''
-    Resistencia de un perno a cortante according to clause 5.2.3.2 a) of EOTA TR029.
+    Shear strength of a bolt according to clause 5.2.3.2 a) of EOTA TR029.
 
     :param As: stressed cross section of steel.
     :param fuk: characteristic steel ultimate tensile strength (nominal value).
@@ -193,7 +193,7 @@ def shearResistanceWithoutLeverArm(As, fuk):
 
 def shearResistanceGroupWithoutLeverArm(As, fuk, nr):
     '''
-    Resistencia de un grupo de pernos a cortante according to clause 5.2.3.2 a) of EOTA TR029.
+    Shear strenght of a bolt group according to clause 5.2.3.2 a) of EOTA TR029.
      As: stressed cross section of steel.
      fuk: characteristic steel ultimate tensile strength (nominal value).
      n: number of anchors in a group.
@@ -202,7 +202,7 @@ def shearResistanceGroupWithoutLeverArm(As, fuk, nr):
 
 def shearResistanceConcretePryOut(NRkp, NRkc, hEf):
     '''
-    Resistencia de un perno a cortante por desprendimiento de cuña de hormigón
+    Shear strength of a bolt por desprendimiento de cuña de hormigón
      according to expressions 5.7 y 5.7a of clause 5.2.3.3 of EOTA TR029.
 
      :param NRkp: Characteristic resistance of combined pull-out and
@@ -224,7 +224,7 @@ def shearResistanceConcretePryOut(NRkp, NRkc, hEf):
 
 def psiReVFactor(descr):
   '''
-  Coeficiente que introduce la influencia del tipo de refuerzo empleado en cracked concrete  en la expresión 5.8 of EOTA TR029, computed according to apartado g) of clause 5.2.3.4 of EOTA TR029.
+  Coeficiente que introduce la influencia del tipo de refuerzo empleado en cracked concrete  en la expresión 5.8 of EOTA TR029, computed according to section g) of clause 5.2.3.4 of EOTA TR029.
 
   :param descr: Descriptor que puede tomar los valores:
     1: anclaje en cracked concrete o no fisurado sin reinforcement de refuerzo en el borde.
@@ -235,16 +235,21 @@ def psiReVFactor(descr):
 
 def psiEcVFactor(ev, c1):
   '''
-  Coeficiente que introduce la influencia de la variación de los cortantes en los distintos pernos de un grupo, computed according to expression 5.8h del apartado f) of clause 5.2.3.4 of EOTA TR029.
+  Factor that takes account of a group effect when different shear loads are 
+  acting on the individual anchors of a group, computed according to 
+  expression 5.8h del section f) of clause 5.2.3.4 of EOTA TR029.
 
-   :param ev: Eccentricity of the shear forces resultant with respect to the group centroid.
-   :param c1: Distancia desde el centro de gravedad del grupo al borde situado frente al cortante.
+   :param ev: Eccentricity of the shear forces resultant with respect to the 
+              group centroid.
+   :param c1: edge distance in direction 1; in case of anchorages close to an 
+              edge loaded in shear c 1 is the edge distance in direction of 
+              the shear load (see Figure 2.1b and Figure 5.7of EOTA TR029).
   '''
   return min(1/(1+2*ev/3/c1),1.0)
 
 def psiAlphaVFactor(alphaV):
   '''
-  Coeficiente que introduce la influencia del ángulo entre la carga aplicada y la perpendicular al borde libre de la pieza de hormigón (menor de 90 grados) see figure 4.7c y expresión 5.8g del apartado f) of clause 5.2.3.4 of EOTA TR029.
+  Coeficiente que introduce la influencia del ángulo entre la carga aplicada y la perpendicular al borde libre de la pieza de hormigón (menor de 90 grados) see figure 4.7c y expresión 5.8g del section f) of clause 5.2.3.4 of EOTA TR029.
 
   :param alphaV: Ángulo entre la carga aplicada y la perpendicular al borde libre de la pieza de hormigón.
   '''
@@ -258,7 +263,9 @@ def psiHVFactor(h, c1):
   expression 5.8f of the clause 5.2.3.4 of EOTA TR029.
 
   :param h: Concrete part thickness.
-  :param c1: Distancia desde el centro de gravedad del grupo al borde situado frente al cortante.
+  :param c1: edge distance in direction 1; in case of anchorages close to an 
+             edge loaded in shear c 1 is the edge distance in direction of 
+             the shear load (see Figure 2.1b and Figure 5.7of EOTA TR029).
   '''
   return max(sqrt(1.5*c1/h),1.0)
 
@@ -266,17 +273,26 @@ def psiSVFactor(c1, c2):
   '''
   Coeficiente que sirve para introducir en el cálculo la perturbación en la distribución de tensiones en el hormigón que produce la presencia de un segundo borde libre próximo al anclaje. Ver expresión 5.8e of clause 5.2.3.4 of EOTA TR029.
 
-  :param c1: Distancia desde el centro de gravedad del grupo al borde situado frente al cortante.
-  :param c2: Distancia desde el centro de gravedad del grupo al otro borde libre.
+  :param c1: edge distance in direction 1; in case of anchorages close to an 
+             edge loaded in shear c 1 is the edge distance in direction of 
+             the shear load (see Figure 2.1b and Figure 5.7of EOTA TR029).
+  :param c2: edge distance in direction 2; direction 2 is perpendicular to 
+             direction 1.
   '''
   return min((0.7+0.2*c2/c1),1.0)
 
 def areaAcV0(h, c1):
   '''
-  Area del cono de anclaje a cortante para un perno. see figure 5.6 y expresión 5.8d of EOTA TR029.
+  area of concrete cone of an individual anchor at the lateral concrete surface
+  not affected by edges parallel to the assumed loading direction, member 
+  thickness or adjacent anchors, assuming the shape of the fracture area as a 
+  half pyramid with a height equal to c1 and a base-length of 1.5 c1 and 3 c1.
+  See figure 5.6 and expression 5.8d of EOTA TR029.
 
   :param h: Concrete part thickness.
-  :param c1: Distancia desde el centro de gravedad del grupo al borde situado frente al cortante.
+  :param c1: edge distance in direction 1; in case of anchorages close to an 
+             edge loaded in shear c 1 is the edge distance in direction of 
+             the shear load (see Figure 2.1b and Figure 5.7of EOTA TR029).
   '''
   return 3*c1*min(1.5*c1,h)
 
@@ -284,7 +300,9 @@ def AcV2Pernos(h, c1, s2):
   '''
   Area del cono de anclaje para dos pernos. see figure 5.7 b of EOTA TR029.
 
-  :param c1: Distancia desde el centro de gravedad del grupo al borde situado frente al cortante.
+  :param c1: edge distance in direction 1; in case of anchorages close to an 
+             edge loaded in shear c 1 is the edge distance in direction of 
+             the shear load (see Figure 2.1b and Figure 5.7of EOTA TR029).
   :param h: Concrete part thickness.
   :param s2: Distance between the bolts.
   '''
@@ -294,8 +312,11 @@ def AcV2PernosC2(h, c1, c2, s2):
   '''
   Area del cono de anclaje para dos pernos junto a un borde libre. see figure 5.7 b y c of EOTA TR029.
 
-  :param  c1: Distancia desde el centro de gravedad del grupo al borde situado frente al cortante.
-  :param c2: Distancia desde el centro de gravedad del grupo al otro borde.
+  :param c1: edge distance in direction 1; in case of anchorages close to an 
+             edge loaded in shear c 1 is the edge distance in direction of 
+             the shear load (see Figure 2.1b and Figure 5.7of EOTA TR029).
+  :param c2: edge distance in direction 2; direction 2 is perpendicular to 
+             direction 1.
   :param h: Concrete part thickness.
   :param s2: Distance between the bolts.
   '''
@@ -313,15 +334,18 @@ def k1Expr58A(descr):
 
 def VRkC0Expr58(k1, d, hEf, fckCube, c1):
   '''
-  Valor inicial de la resistencia característica of the anchor a cortante por fallo del borde according to expression 5.8a of clause 5.2.3.4 (a) of EOTA TR029.
+  Initial value of the characteristic resistance of an anchor placed in cracked
+  or non-cracked concrete and loaded perpendicular to the edge according to 
+  expression 5.8a of clause 5.2.3.4 (a) of EOTA TR029.
 
   :param d: anchor diameter.
   :param hEf: effective anchorage depth.
   :param fckCube: characteristic concrete compression strength measured 
                   on cubes with a side length of 150 mm (value of concrete 
                   strength class according to ENV 206) (Pa).
-  :param c1: Distancia desde el centro de gravedad del grupo al borde situado frente al cortante.
-
+  :param c1: edge distance in direction 1; in case of anchorages close to an 
+             edge loaded in shear c 1 is the edge distance in direction of 
+             the shear load (see Figure 2.1b and Figure 5.7of EOTA TR029).
   '''
   alpha= tonum(0.1*(hEf/c1)^1.5)
   beta= tonum(0.1*(d/c1)^0.2)
