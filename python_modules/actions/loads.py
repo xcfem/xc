@@ -13,6 +13,7 @@ from actions.earth_pressure import earth_pressure as ep
 from model.sets import sets_mng as sets
 from miscUtils import LogMessages as lmsg
 import numpy as np
+from actions import load_cases
 
 class BaseVectorLoad(object):
     '''Base class for loads introduced using a load as an xcVector 
@@ -76,6 +77,7 @@ class NodalLoad(BaseVectorLoad):
     def appendLoadToCurrentLoadPattern(self):
         for n in self.lstNod:
             n.newLoad(self.loadVector)
+
 
            
 class UniformLoadOnBeams(BaseVectorLoad):
@@ -258,30 +260,35 @@ class EarthPressLoad(BaseVectorLoad):
  
 
 # TO DO: change the method in order to be able to append to current load pattern
-class StrainGradientLoadOnSurfaces(object):
-    '''Strain gradient applied on the shell elements generated from
-    all the surfaces in the xcSet. 
+class StrainLoadOnShells(object):
+    '''Strain load applied on the shell elements in xcSet
     
     :ivar name:  name identifying the load
-    :ivar xcSet: set that contains the surfaces
-    :ivar nabla: strain gradient in the thickness of the elements:
-                 nabla=espilon/thickness    
+    :ivar xcSet: set that contains the elements
+    :ivar DOFstrain: degree of freedom to which apply the strain 
+    :ivar strain: strain (e.g.: alpha x deltaT for thermal expansion)
+
     '''
-    def __init__(self,name, xcSet,nabla):
+    def __init__(self,name, xcSet,DOFstrain,strain):
         self.name=name
         self.xcSet=xcSet
-        self.nabla=nabla
+        self.strain=strain
+        self.DOFstrain=DOFstrain
     
-    def appendLoadToLoadPattern(self,loadPattern):
+    def appendLoadToCurrentLoadPattern(self):
         ''' Append load to the load pattern passed as parameter.'''
+        prep=self.xcSet.getPreprocessor
+        lcm=load_cases.LoadCaseManager(prep)
+        loadPatternName= prep.getLoadHandler.getLoadPatterns.currentLoadPattern
+        loadPattern= prep.getLoadHandler.getLoadPatterns[loadPatternName]
         for s in self.xcSet.getSurfaces:
             for e in s.getElements():
                 eLoad= loadPattern.newElementalLoad("shell_strain_load")
                 eLoad.elementTags= xc.ID([e.tag])
-                eLoad.setStrainComp(0,3,self.nabla)
-                eLoad.setStrainComp(1,3,self.nabla)
-                eLoad.setStrainComp(2,3,self.nabla)
-                eLoad.setStrainComp(3,3,self.nabla)
+                eLoad.setStrainComp(0,self.DOFstrain,self.strain)
+                eLoad.setStrainComp(1,self.DOFstrain,self.strain)
+                eLoad.setStrainComp(2,self.DOFstrain,self.strain)
+                eLoad.setStrainComp(3,self.DOFstrain,self.strain)
 
 class StrainGradientLoadOnBeams(object):
     '''Strain load applied on the beam elements generated from

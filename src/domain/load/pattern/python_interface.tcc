@@ -113,7 +113,7 @@ class_<XC::MapLoadPatterns, bases<XC::LoadHandlerMember>, boost::noncopyable >("
   .add_property("defaultNodeLoadTag", make_function( &XC::MapLoadPatterns::getCurrentElementLoadTag, return_value_policy<copy_const_reference>() ), &XC::MapLoadPatterns::setCurrentElementLoadTag)
   .add_property("currentTimeSeries", make_function( &XC::MapLoadPatterns::getCurrentTimeSeries, return_internal_reference<>() ), &XC::MapLoadPatterns::setCurrentTimeSeries)
   .def("newTimeSeries", &XC::MapLoadPatterns::newTimeSeries,return_internal_reference<>(),"Creates a time load modulation and associates it to the load pattern. Syntax: newTimeSeries(type,name), where type can be equal to 'constant_ts', 'linear_ts', 'path_ts', 'path_time_ts', 'pulse_ts','rectangular_ts', 'triangular_ts', 'trig_ts'")
-  .add_property("currentLoadPattern", make_function( &XC::MapLoadPatterns::getCurrentLoadPattern, return_value_policy<copy_const_reference>() ), &XC::MapLoadPatterns::setCurrentLoadPattern)
+  .add_property("currentLoadPattern", make_function( &XC::MapLoadPatterns::getCurrentLoadPattern, return_value_policy<copy_const_reference>() ), &XC::MapLoadPatterns::setCurrentLoadPattern, "Return the name of the current load pattern object.")
   .def("newLoadPattern", &XC::MapLoadPatterns::newLoadPattern,return_internal_reference<>(),"Creates a load pattern. Syntax: newLoadPattern(type,name), where type can be equal to 'default'(ordinary load pattern,'uniform_excitation','multi_support_pattern' or 'pbowl_loading'")
   .def("addToDomain", &XC::MapLoadPatterns::addToDomain,return_internal_reference<>(),"Applies the load pattern to the domain.")
   .def("removeFromDomain", &XC::MapLoadPatterns::removeFromDomain,return_internal_reference<>(),"Remove load case from the domain.")

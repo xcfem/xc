@@ -106,7 +106,7 @@ class_<XC::BoundaryCondHandler, bases<XC::PrepHandler>, boost::noncopyable >("Bo
 XC::MapLoadPatterns &(XC::LoadHandler::*getLoadPatternsRef)(void)= &XC::LoadHandler::getLoadPatterns;
 XC::LoadCombinationGroup &(XC::LoadHandler::*getLoadCombinationsRef)(void)= &XC::LoadHandler::getLoadCombinations;
 class_<XC::LoadHandler, bases<XC::PrepHandler>, boost::noncopyable >("LoadHandler", no_init)
-  .add_property("getLoadPatterns", make_function( getLoadPatternsRef, return_internal_reference<>() ))
+  .add_property("getLoadPatterns", make_function( getLoadPatternsRef, return_internal_reference<>() ), "Return the load pattern container.")
   .add_property("getLoadCombinations", make_function( getLoadCombinationsRef, return_internal_reference<>() ))
   .def("addToDomain", &XC::LoadHandler::addToDomain,return_internal_reference<>(),"Add combination to the domain.")
   .def("removeFromDomain", &XC::LoadHandler::removeFromDomain,return_internal_reference<>(),"Removes the combination from the domain.")
