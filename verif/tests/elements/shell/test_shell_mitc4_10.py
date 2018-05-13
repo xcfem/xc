@@ -12,7 +12,7 @@ __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
 
-# nverborrea= 0
+# feProblem.setVerbosityLevel(0)
 NumDivI= 8
 NumDivJ= 8
 CooMaxX= 10

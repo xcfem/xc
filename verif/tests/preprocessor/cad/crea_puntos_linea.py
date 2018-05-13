@@ -12,7 +12,7 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
-# nverborrea= 0
+# feProblem.setVerbosityLevel(0)
 NumDiv= 4
 CooMax= NumDiv
 feProblem= xc.FEProblem()
