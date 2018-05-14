@@ -26,32 +26,32 @@
 //----------------------------------------------------------------------------
 
 
-#ifndef TipoMaterialND_H
-#define TipoMaterialND_H
+#ifndef NDMaterialType_H
+#define NDMaterialType_H
 
 #include <string>
 
 namespace XC {
-  const std::string strTipo3D= "3D";
-  const std::string strTipoAxiSymmetric= "AxiSymmetric";
-  const std::string strTipoAxiSymmetric2D= "AxiSymmetric2D";
-  const std::string strTipoBeamFiber= "BeamFiber";
-  const std::string strTipoElasticIsotropic3D= "ElasticIsotropic3D";
-  const std::string strTipoFDEP3D= "FDEP3D";
-  const std::string strTipoFiniteDeformationEP3D= "FiniteDeformationEP3D";
-  const std::string strTipoFluidSolidPorous= "FluidSolidPorous";
-  const std::string strTipoPlaneStress2D= "PlaneStress2D";
-  const std::string strTipoPlaneStress= "PlaneStress";
-  const std::string strTipoPlaneStrain2D= "PlaneStrain2D";
-  const std::string strTipoPlaneStrain= "PlaneStrain";
-  const std::string strTipoPlateFiber= "PlateFiber";
-  const std::string strTipoPressureIndependMultiYield= "PressureIndependMultiYield";
-  const std::string strTipoPressureIndependMultiYield02= "PressureIndependMultiiYield02";
-  const std::string strTipoTemplate3Dep= "Template3Dep";
-  const std::string strTipoThreeDimensional= "ThreeDimensional";
-  const std::string strTipoThreeDimensionalFD= "ThreeDimensionalFD";
+  const std::string strType3D= "3D";
+  const std::string strTypeAxiSymmetric= "AxiSymmetric";
+  const std::string strTypeAxiSymmetric2D= "AxiSymmetric2D";
+  const std::string strTypeBeamFiber= "BeamFiber";
+  const std::string strTypeElasticIsotropic3D= "ElasticIsotropic3D";
+  const std::string strTypeFDEP3D= "FDEP3D";
+  const std::string strTypeFiniteDeformationEP3D= "FiniteDeformationEP3D";
+  const std::string strTypeFluidSolidPorous= "FluidSolidPorous";
+  const std::string strTypePlaneStress2D= "PlaneStress2D";
+  const std::string strTypePlaneStress= "PlaneStress";
+  const std::string strTypePlaneStrain2D= "PlaneStrain2D";
+  const std::string strTypePlaneStrain= "PlaneStrain";
+  const std::string strTypePlateFiber= "PlateFiber";
+  const std::string strTypePressureIndependMultiYield= "PressureIndependMultiYield";
+  const std::string strTypePressureIndependMultiYield02= "PressureIndependMultiiYield02";
+  const std::string strTypeTemplate3Dep= "Template3Dep";
+  const std::string strTypeThreeDimensional= "ThreeDimensional";
+  const std::string strTypeThreeDimensionalFD= "ThreeDimensionalFD";
 
-  const std::string strTipoError= "error";
+  const std::string strTypeError= "error";
 } // end of XC namespace
 
 #endif

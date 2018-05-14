@@ -44,7 +44,7 @@
 #include <material/nD/soil/MultiYieldSurface.h>
 #include <utility/matrix/Matrix.h>
 
-#include "material/nD/TipoMaterialND.h"
+#include "material/nD/NDMaterialType.h"
 
 void XC::PressureIndependMultiYield::setup(int nd, double r, double refShearModul, double refBulkModul, double cohesi, double peakShearStra, double frictionAng, double refPress, double pressDependCoe, int numberOfYieldSurf, double * gredu)
   {
@@ -388,8 +388,8 @@ XC::NDMaterial *XC::PressureIndependMultiYield::getCopy(void) const
 XC::NDMaterial * XC::PressureIndependMultiYield::getCopy(const std::string &code) const
   {
     PressureIndependMultiYield *copy= nullptr;
-    if((code==strTipoPressureIndependMultiYield) || (code==strTipoPlaneStrain)
-        || (code==strTipoThreeDimensional))
+    if((code==strTypePressureIndependMultiYield) || (code==strTypePlaneStrain)
+        || (code==strTypeThreeDimensional))
       copy = new PressureIndependMultiYield(*this);
     return copy;
   }
@@ -398,7 +398,7 @@ XC::NDMaterial * XC::PressureIndependMultiYield::getCopy(const std::string &code
 const std::string &XC::PressureIndependMultiYield::getType(void) const
   {
     int ndm = ndmx[matN];
-    return (ndm == 2) ? strTipoPlaneStrain : strTipoThreeDimensional;
+    return (ndm == 2) ? strTypePlaneStrain : strTypeThreeDimensional;
   }
 
 
@@ -558,7 +558,7 @@ void XC::PressureIndependMultiYield::getBackbone(XC::Matrix & bb)
 }
 
 void XC::PressureIndependMultiYield::Print(std::ostream &s, int flag )
-  {  s << strTipoPressureIndependMultiYield << std::endl; }
+  {  s << strTypePressureIndependMultiYield << std::endl; }
 
 
 const XC::Vector & XC::PressureIndependMultiYield::getCommittedStress(void) const

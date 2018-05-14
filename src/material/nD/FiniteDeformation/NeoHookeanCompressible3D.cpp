@@ -54,7 +54,7 @@
 // w = 0.5*lambda*(lnJ)^2 - G*(lnJ) + 0.5*G*(trace(C)-3)
 
 #include "material/nD/FiniteDeformation/NeoHookeanCompressible3D.h"
-#include "material/nD/TipoMaterialND.h"
+#include "material/nD/NDMaterialType.h"
 
 //-----------------------------------------------------------------------------------------------------------------------------------------------
 XC::NeoHookeanCompressible3D::NeoHookeanCompressible3D(int tag,
@@ -228,7 +228,7 @@ XC::NDMaterial * XC::NeoHookeanCompressible3D::getCopy(const std::string &type) 
 
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 const std::string &XC::NeoHookeanCompressible3D::getType(void) const
-  { return strTipoThreeDimensionalFD; }
+  { return strTypeThreeDimensionalFD; }
 
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 int XC::NeoHookeanCompressible3D::getOrder(void) const

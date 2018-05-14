@@ -51,7 +51,7 @@
 #include "ElasticIsotropicAxiSymm.h"                                                                 
 
 #include <utility/matrix/Matrix.h>
-#include "material/nD/TipoMaterialND.h"
+#include "material/nD/NDMaterialType.h"
 
 XC::Vector XC::ElasticIsotropicAxiSymm::sigma(4);
 XC::Matrix XC::ElasticIsotropicAxiSymm::D(4,4);
@@ -155,7 +155,7 @@ XC::NDMaterial *XC::ElasticIsotropicAxiSymm::getCopy(void) const
   { return new ElasticIsotropicAxiSymm(*this); }
 
 const std::string &XC::ElasticIsotropicAxiSymm::getType(void) const
-  { return strTipoAxiSymmetric; }
+  { return strTypeAxiSymmetric; }
 
 int XC::ElasticIsotropicAxiSymm::getOrder(void) const
   { return 4; }

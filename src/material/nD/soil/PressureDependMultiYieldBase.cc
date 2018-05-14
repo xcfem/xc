@@ -37,7 +37,7 @@
 #include <utility/matrix/Matrix.h>
 #include <utility/matrix/nDarray/Tensor.h>
 #include <utility/matrix/nDarray/stresst.h>
-#include "material/nD/TipoMaterialND.h"
+#include "material/nD/NDMaterialType.h"
 
 double* XC::PressureDependMultiYieldBase::refShearModulusx=0;
 double* XC::PressureDependMultiYieldBase::refBulkModulusx=0;

@@ -60,7 +60,7 @@
 #include <material/nD/FiniteDeformation/fdEvolution/fdEvolution_S.h>
 #include <material/nD/FiniteDeformation/fdEvolution/fdEvolution_T.h>
 #include "utility/matrix/nDarray/BJmatrix.h"
-#include <material/nD/TipoMaterialND.h>
+#include <material/nD/NDMaterialType.h>
 
 const int    Max_Iter  = 40;
 const double tolerance = 1.0e-8;
@@ -356,8 +356,8 @@ XC::NDMaterial* XC::FiniteDeformationEP3D::getCopy(void) const
 XC::NDMaterial* XC::FiniteDeformationEP3D::getCopy(const std::string &code) const
   {
     XC::NDMaterial *tmp= nullptr;
-    if( (code==strTipoFiniteDeformationEP3D)
-         || (code==strTipoFDEP3D) )
+    if( (code==strTypeFiniteDeformationEP3D)
+         || (code==strTypeFDEP3D) )
       tmp= getCopy();
     else
       std::cerr << getClassName()  << "::" << __FUNCTION__
@@ -367,7 +367,7 @@ XC::NDMaterial* XC::FiniteDeformationEP3D::getCopy(const std::string &code) cons
 
 //----------------------------------------------------------------------
 const std::string &XC::FiniteDeformationEP3D::getType(void) const
-  { return strTipoThreeDimensionalFD; }
+  { return strTypeThreeDimensionalFD; }
 
 
 //----------------------------------------------------------------------

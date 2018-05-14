@@ -52,7 +52,7 @@
 #include <material/nD/elastic_isotropic/ElasticIsotropicPlaneStrain2D.h>                                                                        
 
 #include <utility/matrix/Matrix.h>
-#include "material/nD/TipoMaterialND.h"
+#include "material/nD/NDMaterialType.h"
 
 XC::Vector XC::ElasticIsotropicPlaneStrain2D::sigma(3);
 
@@ -176,5 +176,5 @@ XC::NDMaterial *XC::ElasticIsotropicPlaneStrain2D::getCopy(void) const
   { return new ElasticIsotropicPlaneStrain2D(*this); }
 
 const std::string &XC::ElasticIsotropicPlaneStrain2D::getType(void) const
-  { return strTipoPlaneStrain; }
+  { return strTypePlaneStrain; }
 

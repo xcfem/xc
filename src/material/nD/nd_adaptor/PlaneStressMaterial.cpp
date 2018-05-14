@@ -59,7 +59,7 @@
 #include <utility/matrix/Vector.h>
 #include <utility/matrix/Matrix.h>
 #include <utility/matrix/ID.h> 
-#include "material/nD/TipoMaterialND.h"
+#include "material/nD/NDMaterialType.h"
 
 
 //static vector and matrices
@@ -97,7 +97,7 @@ int XC::PlaneStressMaterial::getOrder( ) const
 
 
 const std::string &XC::PlaneStressMaterial::getType( ) const 
-  { return strTipoPlaneStress ; }
+  { return strTypePlaneStress ; }
 
 
 

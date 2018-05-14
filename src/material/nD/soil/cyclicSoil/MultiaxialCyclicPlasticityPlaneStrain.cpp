@@ -55,7 +55,7 @@
  +----+----+----+----+----+----+----+----+----+----+----+----+----+----+----*/
 
 #include <material/nD/soil/cyclicSoil/MultiaxialCyclicPlasticityPlaneStrain.h>
-#include <material/nD/TipoMaterialND.h>
+#include <material/nD/NDMaterialType.h>
 
 //static vectors and matrices
 XC::Vector XC::MultiaxialCyclicPlasticityPlaneStrain::strain_vec(3) ;
@@ -109,7 +109,7 @@ XC::NDMaterial* XC::MultiaxialCyclicPlasticityPlaneStrain::getCopy(void) const
 
 //send back type of material
 const std::string &XC::MultiaxialCyclicPlasticityPlaneStrain::getType( ) const 
-  { return strTipoPlaneStrain2D; }
+  { return strTypePlaneStrain2D; }
 
 
 //send back order of strain in vector form

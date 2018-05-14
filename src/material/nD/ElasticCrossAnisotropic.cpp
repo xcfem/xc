@@ -56,7 +56,7 @@
 #include <material/nD/ElasticCrossAnisotropic.h>
 
 #include <utility/matrix/Matrix.h>
-#include "material/nD/TipoMaterialND.h"
+#include "material/nD/NDMaterialType.h"
 
 //XC::Tensor XC::ElasticCrossAnisotropic::rank2 (2, def_dim_2, 0.0 ) ;
 //XC::Tensor XC::ElasticCrossAnisotropic::rank4 (2, def_dim_2, 0.0 ) ;
@@ -104,7 +104,7 @@ double XC::ElasticCrossAnisotropic::getrho()
 XC::NDMaterial* XC::ElasticCrossAnisotropic::getCopy(const std::string &type) const
   {
     ElasticCrossAnisotropic *theModel= nullptr;
-    if((type==strTipoThreeDimensional))
+    if((type==strTypeThreeDimensional))
       {
         theModel = new ElasticCrossAnisotropic(this->getTag(), Eh, Ev, nuhv, nuhh, Ghv, rho);
             // This function should only be called during element instantiation, so
@@ -255,7 +255,7 @@ XC::NDMaterial *XC::ElasticCrossAnisotropic::getCopy(void) const
   { return new ElasticCrossAnisotropic(*this); }
 
 const std::string &XC::ElasticCrossAnisotropic::getType(void) const
-  { return strTipoThreeDimensional; }
+  { return strTypeThreeDimensional; }
 
 int XC::ElasticCrossAnisotropic::getOrder(void) const
   { return 6; }

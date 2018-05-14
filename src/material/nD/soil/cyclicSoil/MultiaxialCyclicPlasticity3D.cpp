@@ -57,7 +57,7 @@
 
 
 #include <material/nD/soil/cyclicSoil/MultiaxialCyclicPlasticity3D.h>
-#include "material/nD/TipoMaterialND.h"
+#include "material/nD/NDMaterialType.h"
 
 //static vectors and matrices
 XC::Vector XC::MultiaxialCyclicPlasticity3D::strain_vec(6) ;
@@ -113,7 +113,7 @@ XC::NDMaterial* XC::MultiaxialCyclicPlasticity3D::getCopy(void) const
 
 //send back type of material
 const std::string &XC::MultiaxialCyclicPlasticity3D::getType( ) const 
-  { return strTipoThreeDimensional; }
+  { return strTypeThreeDimensional; }
 
 
 //send back order of strain in vector form

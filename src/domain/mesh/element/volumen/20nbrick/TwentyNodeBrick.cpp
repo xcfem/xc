@@ -79,7 +79,7 @@
 #include <utility/matrix/nDarray/straint.h>
 #include <utility/matrix/nDarray/stresst.h>
 #include <cstring>
-#include "material/nD/TipoMaterialND.h"
+#include "material/nD/NDMaterialType.h"
 
 #define FixedOrder 3
 
@@ -3160,7 +3160,7 @@ const XC::Vector XC::TwentyNodeBrick::FormEquiBodyForce(void)
 //    int count  = r_integration_order* s_integration_order * t_integration_order;
 //
 //    //For elastic-isotropic material
-//    if(strcmp(matpoint[i]->matmodel->getType(),strTipoElasticIsotropic3D) == 0)
+//    if(strcmp(matpoint[i]->matmodel->getType(),strTypeElasticIsotropic3D) == 0)
 //    {
 //       for(i = 0; i < count; i++)
 //           (matpoint[i]->matmodel)->setElasticStiffness( p_est );
@@ -3530,7 +3530,7 @@ int XC::TwentyNodeBrick::getResponse (int responseID, Information &eleInfo)
   const std::string &tp = matpoint[1]->getType();
                 int tag = matpoint[1]->getTag();
   //std::cerr << "Materail Tag:" << tag << std::endl;
-  //tp = strTipoElasticIsotropic3D;
+  //tp = strTypeElasticIsotropic3D;
   float height = 1;
             //std::cerr << "height" << height;
   double offset[30];
@@ -3562,7 +3562,7 @@ int XC::TwentyNodeBrick::getResponse (int responseID, Information &eleInfo)
   //offset[4] = 1.287;/*pile no. 3*/  offset[8] = 0.0000;/*pile no. 6    */
 
 
-  if(tp==strTipoElasticIsotropic3D)
+  if(tp==strTypeElasticIsotropic3D)
     {
      wt = getWeightofGP();
             const Vector &end1Crd = theNodes[0]->getCrds();
@@ -3603,7 +3603,7 @@ int XC::TwentyNodeBrick::getResponse (int responseID, Information &eleInfo)
      //    std::cerr << " rs " << rs << "\n "<< Info(i*4+1) << " " ;
      //    std::cerr << Info(i*4+2) << " "<< Info(i*4+3)<< " sts "<< Info(i*4+4) << "\n ";
             //}
-     if(tp==strTipoElasticIsotropic3D)
+     if(tp==strTypeElasticIsotropic3D)
        {
         Mt(GP_c_t-1) += wt(rs)*sts.cval(3,3)*( Info(i*4+1)-offset[tag] )/height;//x--Calculating Moment_y wt(ts) / height = Area corresponding to the gauss point stress
         //Mt(GP_c_t-1) += wt(rs)*sts.cval(3,3)*( Info(i*4+2)-offset[tag] )/height; //y--Calculating Moment_x wt(ts) / height = Area corresponding to the gauss point stress

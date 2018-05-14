@@ -55,7 +55,7 @@
  +----+----+----+----+----+----+----+----+----+----+----+----+----+----+----*/
 
 #include <material/nD/soil/cyclicSoil/MultiaxialCyclicPlasticityAxiSymm.h>
-#include <material/nD/TipoMaterialND.h>
+#include <material/nD/NDMaterialType.h>
 
 using namespace XC;
 //static vectors and matrices
@@ -109,7 +109,7 @@ XC::NDMaterial* XC::MultiaxialCyclicPlasticityAxiSymm::getCopy(void) const
 
 //send back type of material
 const std::string &XC::MultiaxialCyclicPlasticityAxiSymm::getType( ) const 
-  { return strTipoAxiSymmetric ; }
+  { return strTypeAxiSymmetric ; }
 
 
 //send back order of strain in vector form

@@ -37,7 +37,7 @@
 #include <utility/matrix/Matrix.h>
 #include <utility/matrix/nDarray/Tensor.h>
 #include <utility/matrix/nDarray/stresst.h>
-#include "material/nD/TipoMaterialND.h"
+#include "material/nD/NDMaterialType.h"
 
 int XC::PressureMultiYieldBase::matCount=0;
 std::vector<int> XC::PressureMultiYieldBase::loadStagex;  //=0 if elastic; =1 if plastic

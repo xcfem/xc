@@ -79,7 +79,7 @@
 #include <material/nD/j2_plasticity/J2AxiSymm.h>
 #include <material/nD/j2_plasticity/J2PlateFiber.h>
 #include <material/nD/j2_plasticity/J2ThreeDimensional.h> 
-#include "material/nD/TipoMaterialND.h"
+#include "material/nD/NDMaterialType.h"
 
 //this is mike's problem
 XC::Tensor XC::J2Plasticity::rank2(2, def_dim_2, 0.0 ) ;
@@ -413,20 +413,20 @@ strain(3,3)
 XC::NDMaterial *XC::J2Plasticity::getCopy(const std::string &type) const
   {
     NDMaterial *retval= nullptr;
-    if((type==strTipoPlaneStress2D) || (type==strTipoPlaneStress))
+    if((type==strTypePlaneStress2D) || (type==strTypePlaneStress))
       retval= new J2PlaneStress(this->getTag(), bulk, shear, sigma_0,
                                   sigma_infty, delta, Hard, eta) ;
-    else if((type==strTipoPlaneStrain2D) || (type==strTipoPlaneStrain))
+    else if((type==strTypePlaneStrain2D) || (type==strTypePlaneStrain))
       retval= new J2PlaneStrain(this->getTag(), bulk, shear, sigma_0,
                                   sigma_infty, delta, Hard, eta) ;
-    else if((type==strTipoAxiSymmetric2D) || (type==strTipoAxiSymmetric))
+    else if((type==strTypeAxiSymmetric2D) || (type==strTypeAxiSymmetric))
       retval= new J2AxiSymm(this->getTag(), bulk, shear, sigma_0,
                               sigma_infty, delta, Hard, eta) ;
-    else if(((type==strTipoThreeDimensional)) ||
-             ((type==strTipo3D)))
+    else if(((type==strTypeThreeDimensional)) ||
+             ((type==strType3D)))
       retval= new J2ThreeDimensional(this->getTag(), bulk, shear, sigma_0,
                               sigma_infty, delta, Hard, eta) ;
-    else if( ((type==strTipoPlateFiber)) )
+    else if( ((type==strTypePlateFiber)) )
       retval= new J2PlateFiber(this->getTag(), bulk, shear, sigma_0,
                               sigma_infty, delta, Hard, eta) ;
     else // Handle other cases

@@ -75,7 +75,7 @@
 
 #include "utility/matrix/Matrix.h"
 
-#include "material/nD/TipoMaterialND.h"
+#include "material/nD/NDMaterialType.h"
 
 //! @brief Constructor.
 //!
@@ -117,7 +117,7 @@ double XC::ElasticIsotropicMaterial::getnu(void)
 //! This is the prototype method.
 XC::NDMaterial *XC::ElasticIsotropicMaterial::getCopy(const std::string &type) const
   {
-    if((type==strTipoPlaneStress2D) || (type==strTipoPlaneStress))
+    if((type==strTypePlaneStress2D) || (type==strTypePlaneStress))
       {
         ElasticIsotropicPlaneStress2D *theModel;
         theModel = new ElasticIsotropicPlaneStress2D(this->getTag(), E, v, rho);
@@ -128,7 +128,7 @@ XC::NDMaterial *XC::ElasticIsotropicMaterial::getCopy(const std::string &type) c
         return theModel;
       }
 
-    else if((type==strTipoPlaneStrain2D) || (type==strTipoPlaneStrain))
+    else if((type==strTypePlaneStrain2D) || (type==strTypePlaneStrain))
       {
         ElasticIsotropicPlaneStrain2D *theModel;
         theModel = new ElasticIsotropicPlaneStrain2D(this->getTag(), E, v, rho);
@@ -138,7 +138,7 @@ XC::NDMaterial *XC::ElasticIsotropicMaterial::getCopy(const std::string &type) c
                 // prior to copying the material model (calling this function)
         return theModel;
       }
-    else if((type==strTipoAxiSymmetric2D) || (type==strTipoAxiSymmetric))
+    else if((type==strTypeAxiSymmetric2D) || (type==strTypeAxiSymmetric))
       {
         ElasticIsotropicAxiSymm *theModel;
         theModel = new ElasticIsotropicAxiSymm(this->getTag(), E, v, rho);
@@ -149,8 +149,8 @@ XC::NDMaterial *XC::ElasticIsotropicMaterial::getCopy(const std::string &type) c
         return theModel;
       }
 ///////////////////////////////
-    else if((type==strTipoThreeDimensional) || 
-             (type==strTipo3D))
+    else if((type==strTypeThreeDimensional) || 
+             (type==strType3D))
       {
         ElasticIsotropic3D *theModel;
         theModel = new ElasticIsotropic3D(this->getTag(), E, v, rho);
@@ -161,7 +161,7 @@ XC::NDMaterial *XC::ElasticIsotropicMaterial::getCopy(const std::string &type) c
         return theModel;
       }
 ///////////////////////////////
-    else if((type==strTipoPlateFiber))
+    else if((type==strTypePlateFiber))
       {
         ElasticIsotropicPlateFiber *theModel;
         theModel = new ElasticIsotropicPlateFiber(this->getTag(), E, v, rho);
@@ -171,7 +171,7 @@ XC::NDMaterial *XC::ElasticIsotropicMaterial::getCopy(const std::string &type) c
                 // prior to copying the material model (calling this function)
         return theModel;
       }
-    else if((type==strTipoBeamFiber))
+    else if((type==strTypeBeamFiber))
       {
         ElasticIsotropicBeamFiber *theModel;
         theModel = new ElasticIsotropicBeamFiber(this->getTag(), E, v, rho);

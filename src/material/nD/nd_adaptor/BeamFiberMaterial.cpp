@@ -59,7 +59,7 @@
 
 #include <material/nD/nd_adaptor/BeamFiberMaterial.h>
 #include "utility/matrix/ID.h"
-#include "material/nD/TipoMaterialND.h"
+#include "material/nD/NDMaterialType.h"
 
 
 XC::Vector XC::BeamFiberMaterial::stress(3);
@@ -82,7 +82,7 @@ XC::NDMaterial *XC::BeamFiberMaterial::getCopy(void) const
 
 XC::NDMaterial* XC::BeamFiberMaterial::getCopy(const std::string &type) const
   {
-    if((type==strTipoBeamFiber))
+    if((type==strTypeBeamFiber))
       return this->getCopy();
     else
       return nullptr;
@@ -92,7 +92,7 @@ int XC::BeamFiberMaterial::getOrder(void) const
   { return 3; }
 
 const std::string &XC::BeamFiberMaterial::getType(void) const 
-  { return strTipoBeamFiber; }
+  { return strTypeBeamFiber; }
 
 int XC::BeamFiberMaterial::commitState(void)
   {

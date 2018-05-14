@@ -86,7 +86,7 @@
 
 #include <utility/matrix/Vector.h>
 #include <utility/matrix/Matrix.h>
-#include "material/nD/TipoMaterialND.h"
+#include "material/nD/NDMaterialType.h"
 
 //static vectors and matrices
 XC::Vector XC::J2ThreeDimensional::strain_vec(6) ;
@@ -138,7 +138,7 @@ XC::NDMaterial* XC::J2ThreeDimensional::getCopy(void) const
 
 //send back type of material
 const std::string &XC::J2ThreeDimensional::getType( ) const 
-  { return strTipoThreeDimensional; }
+  { return strTypeThreeDimensional; }
 
 
 //send back order of strain in vector form

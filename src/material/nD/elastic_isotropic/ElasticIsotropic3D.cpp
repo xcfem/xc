@@ -54,7 +54,7 @@
 #include <material/nD/elastic_isotropic/ElasticIsotropic3D.h>
 
 #include "utility/matrix/Matrix.h"
-#include "material/nD/TipoMaterialND.h"
+#include "material/nD/NDMaterialType.h"
 
 XC::Matrix XC::ElasticIsotropic3D::D(6,6);	  // global for XC::ElasticIsotropic3D only
 XC::Vector XC::ElasticIsotropic3D::sigma(6);	 // global for XC::ElasticIsotropic3D onyl
@@ -219,14 +219,14 @@ XC::NDMaterial *XC::ElasticIsotropic3D::getCopy(void) const
   { return new ElasticIsotropic3D(*this); }
 
 const std::string &XC::ElasticIsotropic3D::getType(void) const
-  { return strTipoThreeDimensional; }
+  { return strTypeThreeDimensional; }
 
 int XC::ElasticIsotropic3D::getOrder(void) const
   { return 6; }
 
 void XC::ElasticIsotropic3D::Print(std::ostream &s, int flag)
   {
-	s << strTipoElasticIsotropic3D << std::endl;
+	s << strTypeElasticIsotropic3D << std::endl;
 	s << "\ttag: " << this->getTag() << std::endl;
 	s << "\tE: " << E << std::endl;
 	s << "\tv: " << v << std::endl;
